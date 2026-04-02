@@ -9,7 +9,7 @@ import GroupBody from './group-body';
 import RecordsFooter from '../records-footer';
 import ContextMenu from '../../context-menu';
 import RecordDragLayer from './record-drag-layer';
-import { RecordMetrics } from '../../utils/record-metrics';
+import { RecordMetrics } from '../../shared/record-metrics';
 import { TreeMetrics } from '../../utils/tree-metrics';
 import { recalculate } from '../../utils/column';
 import { getVisibleBoundaries } from '../../utils/viewport';

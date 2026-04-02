@@ -3,7 +3,7 @@ import { getCellValueByColumn, getFileNameFromRecord } from '../../../utils/cell
 import { getGroupByPath } from '../../../utils/view';
 import { getColumnByIndex, canEditCell } from '../../../utils/column';
 import { CellType, PRIVATE_COLUMN_KEY, SUPPORT_PREVIEW_COLUMN_TYPES, metadataZIndexes } from '../../../constants';
-import { getGroupRecordByIndex } from './group-metrics';
+import { getGroupRecordByIndex } from '@/components/sf-table/shared/group-metrics';
 import { checkIsDir } from '../../../utils/row';
 
 const SELECT_DIRECTION = {

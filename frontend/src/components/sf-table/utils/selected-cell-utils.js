@@ -3,7 +3,7 @@ import { CELL_MASK as Z_INDEX_CELL_MASK, FROZEN_CELL_MASK as Z_INDEX_FROZEN_CELL
 import { getCellValueByColumn } from './cell';
 import { checkIsColumnEditable, checkIsColumnSupportPreview, getColumnByIndex } from './column';
 import { getGroupByPath } from './group';
-import { getGroupRecordByIndex } from './group-metrics';
+import { getGroupRecordByIndex } from '../shared/group-metrics';
 
 const SELECT_DIRECTION = {
   UP: 'upwards',

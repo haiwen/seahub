@@ -24,10 +24,10 @@ import {
   getSelectedRangeDimensions, getSelectedRow, getSelectedColumn,
   isSelectedCellEditable, getRecordsFromSelectedRange, getSelectedCellValue,
 } from '../../utils/selected-cell-utils';
-import RecordMetrics from '../../utils/record-metrics';
+import RecordMetrics from '@/components/sf-table/shared/record-metrics';
 import setEventTransfer from '../../utils/set-event-transfer';
 import getEventTransfer from '../../utils/get-event-transfer';
-import { getGroupRecordByIndex } from '../../utils/group-metrics';
+import { getGroupRecordByIndex } from '@/components/sf-table/shared/group-metrics';
 import { isNameColumn } from '../../../../utils/column';
 import { openFile } from '../../../../utils/file';
 

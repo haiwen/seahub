@@ -8,11 +8,11 @@ import Record from '../record';
 import { isFrozen, isNameColumn, isColumnSupportDirectEdit, isColumnSupportEdit } from '../../../../../utils/column';
 import { isShiftKeyDown } from '../../../../../../utils/keyboard-utils';
 import { CellType, GROUP_HEADER_HEIGHT, GROUP_ROW_TYPE, GROUP_VIEW_OFFSET, SEQUENCE_COLUMN_WIDTH, EVENT_BUS_TYPE } from '../../../../../constants';
-import RecordMetrics from '../../../utils/record-metrics';
+import RecordMetrics from '@/components/sf-table/shared/record-metrics';
 import { isSelectedCellSupportOpenEditor } from '../../../utils/selected-cell-utils';
 import { getColumnScrollPosition, getColVisibleEndIdx, getColVisibleStartIdx } from '../../../utils/records-body-utils';
 import { addClassName, removeClassName } from '../../../../../../utils/dom';
-import { createGroupMetrics, getGroupRecordByIndex, isNestedGroupRow } from '../../../utils/group-metrics';
+import { createGroupMetrics, getGroupRecordByIndex, isNestedGroupRow } from '@/components/sf-table/shared/group-metrics';
 
 const ROW_HEIGHT = 33;
 const GROUP_OVER_SCAN_ROWS = 10;

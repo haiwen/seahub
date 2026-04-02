@@ -8,7 +8,7 @@ import { EVENT_BUS_TYPE, SEQUENCE_COLUMN_WIDTH } from '../../../../constants';
 import { isShiftKeyDown } from '../../../../../utils/keyboard-utils';
 import { isColumnSupportDirectEdit, isColumnSupportEdit } from '../../../../utils/column';
 import { isSelectedCellSupportOpenEditor } from '../../utils/selected-cell-utils';
-import RecordMetrics from '../../utils/record-metrics';
+import RecordMetrics from '@/components/sf-table/shared/record-metrics';
 import { getColumnScrollPosition, getColVisibleStartIdx, getColVisibleEndIdx } from '../../utils/records-body-utils';
 
 const ROW_HEIGHT = 33;

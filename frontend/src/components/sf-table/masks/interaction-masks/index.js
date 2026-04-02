@@ -20,11 +20,11 @@ import {
   getSelectedRangeDimensions, getSelectedRow, getSelectedColumn,
   getRecordsFromSelectedRange, getSelectedCellValue, checkIsSelectedCellEditable,
 } from '../../utils/selected-cell-utils';
-import { RecordMetrics } from '../../utils/record-metrics';
+import { RecordMetrics } from '../../shared/record-metrics';
 import { TreeMetrics } from '../../utils/tree-metrics';
 import setEventTransfer from '../../utils/set-event-transfer';
 import getEventTransfer from '../../utils/get-event-transfer';
-import { getGroupRecordByIndex } from '../../utils/group-metrics';
+import { getGroupRecordByIndex } from '../../shared/group-metrics';
 import { isSpace } from '../../../../utils/hotkey';
 import EventBus from '../../../common/event-bus';
 import { EVENT_BUS_TYPE } from '../../constants/event-bus-type';

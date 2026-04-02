@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Loading from '../../../loading';
-import { RecordMetrics } from '../../utils/record-metrics';
+import { RecordMetrics } from '../../shared/record-metrics';
 import { TreeMetrics } from '../../utils/tree-metrics';
 import { gettext } from '../../../../utils/constants';
 import { CANVAS_RIGHT_INTERVAL } from '../../constants/grid';

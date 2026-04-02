@@ -4,7 +4,7 @@ import { getColumnByIndex, getColumnOriginName } from '../../../utils/column';
 import { CellType, NOT_SUPPORT_DRAG_COPY_COLUMN_TYPES, PRIVATE_COLUMN_KEY, TRANSFER_TYPES,
   REG_NUMBER_DIGIT, REG_STRING_NUMBER_PARTS, RATE_MAX_NUMBER, PASTE_SOURCE,
 } from '../../../constants';
-import { getGroupRecordByIndex } from './group-metrics';
+import { getGroupRecordByIndex } from '@/components/sf-table/shared/group-metrics';
 import { convertCellValue } from './convert-utils';
 import { Utils } from '../../../../utils/utils';
 

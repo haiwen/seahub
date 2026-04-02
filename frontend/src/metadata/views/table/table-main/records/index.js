@@ -14,7 +14,7 @@ import RecordsHeader from '../records-header';
 import RecordsFooter from '../records-footer';
 import ContextMenu from '../../context-menu';
 import { recalculate } from '../../../../utils/column';
-import RecordMetrics from '../../utils/record-metrics';
+import RecordMetrics from '@/components/sf-table/shared/record-metrics';
 import { isWindowsBrowser, isWebkitBrowser } from '../../utils';
 import { SEQUENCE_COLUMN_WIDTH, CANVAS_RIGHT_INTERVAL, GROUP_ROW_TYPE, EVENT_BUS_TYPE } from '../../../../constants';
 import ExpandedPropertiesDialog from '../../../../components/dialog/expanded-properties';

@@ -4,7 +4,7 @@ import Loading from '../../../loading';
 import { RightScrollbar } from '../../scrollbar';
 import Record from './record';
 import InteractionMasks from '../../masks/interaction-masks';
-import { RecordMetrics } from '../../utils/record-metrics';
+import { RecordMetrics } from '../../shared/record-metrics';
 import { getColumnScrollPosition, getColVisibleStartIdx, getColVisibleEndIdx } from '../../utils/records-body-utils';
 import EventBus from '../../../common/event-bus';
 import { EVENT_BUS_TYPE } from '../../constants/event-bus-type';

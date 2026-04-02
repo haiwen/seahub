@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Loading from '../../../../../components/loading';
-import RecordMetrics from '../../utils/record-metrics';
+import RecordMetrics from '@/components/sf-table/shared/record-metrics';
 import { gettext } from '../../../../../utils/constants';
 import { Utils } from '../../../../../utils/utils';
 import { SEQUENCE_COLUMN_WIDTH, CANVAS_RIGHT_INTERVAL, metadataZIndexes } from '../../../../constants';

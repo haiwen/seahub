@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { TreeMetrics } from '../../utils/tree-metrics';
-import { RecordMetrics } from '../../utils/record-metrics';
+import { RecordMetrics } from '../../shared/record-metrics';
 
 const RecordDragLayer = ({ showRecordAsTree, draggingRecordSource, recordMetrics, treeMetrics, renderCustomDraggedRows }) => {
   const layerRef = useRef(null);

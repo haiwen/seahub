@@ -10,7 +10,7 @@ import Icon from '@/components/icon';
 import TextTranslation from '@/utils/text-translation';
 import { PRIVATE_COLUMN_KEY, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, CellType } from '@/metadata/constants';
 import { useTags } from '@/tag/hooks';
-import { RecordMetrics } from '../../sf-table/utils/record-metrics';
+import { RecordMetrics } from '../../sf-table/shared/record-metrics';
 import { menuHandlers } from '../utils/menuHandlers';
 import { useDirentContextMenu } from '../hooks/useDirentContextMenu';
 import { getCreateMenuList } from '../utils/contextMenuUtils';
