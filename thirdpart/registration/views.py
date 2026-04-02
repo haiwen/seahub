@@ -19,7 +19,7 @@ from seahub.utils.auth import get_login_bg_image_path
 def activate(request, backend,
              template_name='registration/activate.html',
              success_url=None, extra_context=None, **kwargs):
-    """
+    r"""
     Activate a user's account.
 
     The actual activation of the account will be delegated to the

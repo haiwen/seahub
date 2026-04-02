@@ -160,7 +160,7 @@ class UserAgentMiddleWare(MiddlewareMixin):
     user_agents_exception_search = u"(?:%s)" % u'|'.join((
         'ipad',
     ))
-    http_accept_regex = re.compile("application/vnd\.wap\.xhtml\+xml", re.IGNORECASE)
+    http_accept_regex = re.compile(r"application/vnd\.wap\.xhtml\+xml", re.IGNORECASE)
     user_agents_android_search = u"(?:android)"
     user_agents_mobile_search = u"(?:mobile)"
     user_agents_tablets_search = u"(?:%s)" % u'|'.join(('ipad', 'tablet', ))
