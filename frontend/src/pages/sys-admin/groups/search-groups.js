@@ -76,6 +76,24 @@ class SearchGroups extends Component {
     });
   };
 
+  changeGroup2Department = (groupID) => {
+    systemAdminAPI.sysAdminGroup2Department(groupID).then((res) => {
+      let newGroupList = this.state.groupList.map(item => {
+        if (item.id == groupID) {
+          item = res.data;
+        }
+        return item;
+      });
+      this.setState({
+        groupList: newGroupList
+      });
+      toaster.success(gettext('Successfully change the group'));
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
   handleNameInputChange = (e) => {
     this.setState({
       name: e.target.value
@@ -135,6 +153,7 @@ class SearchGroups extends Component {
                   items={this.state.groupList}
                   deleteGroup={this.deleteGroup}
                   transferGroup={this.transferGroup}
+                  changeGroup2Department={this.changeGroup2Department}
                 />
               </div>
             </div>
