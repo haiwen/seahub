@@ -23,7 +23,7 @@ def evaluate_password_strength(password):
     length = len(password)
     has_uppercase = bool(re.search('[A-Z]', password))
     has_lowercase = bool(re.search('[a-z]', password))
-    has_numbers = bool(re.search('\d', password))
+    has_numbers = bool(re.search(r'\d', password))
     has_special_chars = bool(re.search(r'[~!@#$%^&*()_\-+=<>?:"{}|,./;\'\\]', password))
 
     # judge by length
