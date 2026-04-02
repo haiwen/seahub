@@ -218,7 +218,7 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
               />
             </div>
 
-            <div className="seafile-divider"></div>
+            <div className="seafile-search-divider"></div>
 
             <div className="wiki2-search-result-container" style={{ maxHeight: (window.innerHeight - 200) }} ref={searchResultListContainerRef}>
               {isLoading && <Loading />}

@@ -9,7 +9,7 @@
 
 .wiki2-search:hover {
   cursor: pointer;
-  background-color: var(--bs-wiki-nav-hover-bg)!important;
+  background-color: var(--bs-wiki-nav-hover-bg) !important;
   border-radius: 3px;
 }
 
@@ -40,7 +40,7 @@
   width: 100%;
 }
 
-.seafile-divider {
+.seafile-search-divider {
   height: 1px;
   background-color: var(--bs-border-color);
   margin: 16px 0;
