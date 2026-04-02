@@ -499,14 +499,7 @@ class FileView(APIView):
                 error_msg = 'commit_id invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            origin_repo_id = repo_id
-            origin_path = path
-            if should_use_origin_file_history(repo, path):
-                origin_repo_id = repo.origin_repo_id
-                origin_path = normalize_file_path(
-                    posixpath.join(repo.origin_path, path.lstrip('/')))
-
-            if seafile_api.get_file_id_by_path(origin_repo_id, origin_path):
+            if seafile_api.get_file_id_by_path(repo_id, path):
                 # file exists in repo
                 if check_folder_permission(request, repo_id, parent_dir) != PERMISSION_READ_WRITE:
                     error_msg = 'Permission denied.'
@@ -514,7 +507,7 @@ class FileView(APIView):
 
                 # check file lock
                 try:
-                    is_locked, locked_by_me = check_file_lock(origin_repo_id, origin_path, username)
+                    is_locked, locked_by_me = check_file_lock(repo_id, path, username)
                 except Exception as e:
                     logger.error(e)
                     error_msg = 'Internal Server Error'
@@ -531,7 +524,13 @@ class FileView(APIView):
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             try:
-                seafile_api.revert_file(origin_repo_id, commit_id, origin_path, username)
+                if should_use_origin_file_history(repo, path):
+                    origin_repo_id = repo.origin_repo_id
+                    origin_path = normalize_file_path(
+                        posixpath.join(repo.origin_path, path.lstrip('/')))
+                    seafile_api.revert_file(origin_repo_id, commit_id, origin_path, username)
+                else:
+                    seafile_api.revert_file(repo_id, commit_id, path, username)
             except Exception as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'

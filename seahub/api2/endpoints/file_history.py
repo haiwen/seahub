@@ -200,10 +200,7 @@ class NewFileHistoryView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         virtual_path = None
-        if repo.is_virtual:
-            virtual_path= path
-            repo_id = repo.origin_repo_id
-            path = posixpath.join(repo.origin_path, path.lstrip('/'))
+        
 
         # get repo history limit
         try:
@@ -217,7 +214,13 @@ class NewFileHistoryView(APIView):
         count = per_page
 
         try:
-            file_revisions, total_count = get_file_history(repo_id, path, start, count, history_limit)
+            if repo.is_virtual:
+                virtual_path= path
+                origin_repo_id = repo.origin_repo_id
+                real_path = posixpath.join(repo.origin_path, path.lstrip('/'))
+                file_revisions, total_count = get_file_history(origin_repo_id, real_path, start, count, history_limit)
+            else:
+                file_revisions, total_count = get_file_history(repo_id, path, start, count, history_limit)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
