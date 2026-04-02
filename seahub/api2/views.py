@@ -5604,7 +5604,7 @@ class RepoGroupFolderPerm(APIView):
             group = ccnet_api.get_group(group_id)
             result['repo_id'] = repo_id
             result['group_id'] = group_id
-            result['group_name'] = group.group_name
+            result['group_name'] = group.group_name if group else ''
             result['folder_path'] = path
             result['folder_name'] = path if path == '/' else os.path.basename(path.rstrip('/'))
             result['permission'] = perm
