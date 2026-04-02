@@ -310,7 +310,7 @@ def should_use_origin_file_history(repo, path):
         suffix_list = []
 
     filename = os.path.basename(path)
-    _, file_ext = [x.lower() for x in get_file_type_and_ext(filename)]
+    file_type, file_ext = [x.lower() for x in get_file_type_and_ext(filename)]
 
     return file_ext in suffix_list
 
