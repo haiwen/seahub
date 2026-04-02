@@ -1938,10 +1938,10 @@ msgid ""
 msgid_plural ""
 "\n"
 "You've got %(num)s file updates on %(site_name)s:\n"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "\nMasz jedno powiadomienie na stronie %(site_name)s:\n"
+msgstr[1] "\nMasz %(num)s nowych powiadomień na stronie %(site_name)s:\n"
+msgstr[2] "\nMasz %(num)s nowych powiadomień na stronie %(site_name)s:\n"
+msgstr[3] "\nMasz %(num)s nowych powiadomień na stronie %(site_name)s:\n"
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:20
 msgid "Operation"
@@ -2152,7 +2152,7 @@ msgstr "Otrzymujesz tę wiadomość, ponieważ Twoja organizacja %(org_name)s zo
 msgid ""
 "\n"
 "If you like to continue using our site, click <a href=\"%(link)s\">here</a>. Otherwise your account will be deleted in 60 days.\n"
-msgstr ""
+msgstr "\nJeśli chcesz kontynuować korzystanie z naszej strony, kliknij <a href=\"%(link)s\">here</a>. W przeciwnym razie Twoje konto zostanie usunięte w ciągu 60 dni.\n"
 
 #: seahub/organizations/templates/organizations/org_register.html:3
 #: seahub/organizations/templates/organizations/org_register.html:13
@@ -2174,7 +2174,7 @@ msgstr "Witamy ponownie, jesteś już zalogowany."
 #: seahub/organizations/templates/organizations/org_register.html:17
 #: seahub/templates/registration/registration_form.html:18
 msgid "You will be redirected to the home page within 5 seconds."
-msgstr ""
+msgstr "Zostaniesz przekierowany do strony głównej w ciągu 5 sekund."
 
 #: seahub/organizations/templates/organizations/org_register.html:25
 msgid "Organization Name"
@@ -2358,14 +2358,14 @@ msgstr "Kod weryfikacyjny to %(code)s. Jest ważny przez jedną godzinę."
 msgid ""
 "\n"
 "    %(shared_from)s shared a file link with you.\n"
-msgstr ""
+msgstr "\n    %(shared_from)s podzieliłem się z Tobą linkiem do pliku.\n"
 
 #: seahub/share/templates/share/share_link_email.html:14
 #, python-format
 msgid ""
 "\n"
 "You can click <a href=%(url)s>here</a> to verify your email address and visit it.\n"
-msgstr ""
+msgstr "\nMożesz kliknąć <a href=%(url)s>here</a> aby zweryfikować swój adres e-mail i go odwiedzić.\n"
 
 #: seahub/share/templates/share/share_link_email_audit.html:4
 #: seahub/share/templates/share/share_link_email_audit.html:39

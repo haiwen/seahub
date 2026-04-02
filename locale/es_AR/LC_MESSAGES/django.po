@@ -11,14 +11,14 @@
 # Hector Colina <hcolina@gmail.com>, 2013
 # Rodolfo Cossalter <rcoss@dm.uba.ar>, 2014
 # Rodolfo Cossalter <rcoss@dm.uba.ar>, 2014-2021
-# Seafile Info <info@seafile.com>, 2025
+# Seafile Info <info@seafile.com>, 2025-2026
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 10:19+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2025-2026\n"
 "Language-Team: Spanish (Argentina) (http://app.transifex.com/haiwen/seahub/language/es_AR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1923,7 +1923,7 @@ msgstr "{name} ha {op_type} {obj_type} {obj_link} en la biblioteca {repo_link}."
 #: seahub/notifications/models.py:1046
 #, python-brace-format
 msgid "Face recognition is done for library {repo_name}."
-msgstr ""
+msgstr "El reconocimiento facial se hace para la biblioteca {repo_name}."
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:9
 #, python-format

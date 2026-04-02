@@ -11,7 +11,7 @@
 # bits4beats <impiastro@gmail.com>, 2014
 # Paolo Barbolini <paolo@paolo565.org>, 2018
 # Roberto Di Lorenzo <dilorenzo.roberto80@gmail.com>, 2020
-# Seafile Info <info@seafile.com>, 2025
+# Seafile Info <info@seafile.com>, 2025-2026
 # Stefano Ruberti <stefano.ruberti@gmail.com>, 2017-2019,2024
 # Teo <teolo78@gmail.com>, 2014
 msgid ""
@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 10:19+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2025-2026\n"
 "Language-Team: Italian (http://app.transifex.com/haiwen/seahub/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1925,7 +1925,7 @@ msgstr "{name} ha {op_type} {obj_type} {obj_link} nella libreria {repo_link}."
 #: seahub/notifications/models.py:1046
 #, python-brace-format
 msgid "Face recognition is done for library {repo_name}."
-msgstr ""
+msgstr "Il riconoscimento facciale viene effettuato per la libreria {repo_name}."
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:9
 #, python-format

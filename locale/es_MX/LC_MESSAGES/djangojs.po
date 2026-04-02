@@ -427,18 +427,18 @@ msgstr "Sistema"
 #: frontend/src/components/common/notice-item.js:428
 #| msgid "Email notification updated"
 msgid "Mark notification as read"
-msgstr ""
+msgstr "Marcar la notificación como leída"
 
 #: frontend/src/components/common/notice-item.js:451
 #| msgid "All Notifications"
 msgid "View notification"
-msgstr ""
+msgstr "Ver notificación"
 
 #: frontend/src/components/common/notification-popover/index.js:88
 #: frontend/src/user-notifications.js:228
 #| msgid "Generate Link"
 msgid "General"
-msgstr ""
+msgstr "General"
 
 #: frontend/src/components/common/notification-popover/index.js:102
 #: frontend/src/user-notifications.js:240
@@ -465,7 +465,7 @@ msgstr "Marcar todo como leído"
 #: frontend/src/components/common/notification.js:188
 #| msgid "All Notifications"
 msgid "View all notifications"
-msgstr ""
+msgstr "Ver todas las notificaciones"
 
 #: frontend/src/components/common/seahub-modal-close.js:7
 #: frontend/src/components/common/seahub-modal-header.js:8
@@ -505,7 +505,7 @@ msgstr "Un archivo está siendo subido, ¿estás seguro que deseas abandonar est
 #: frontend/src/components/cur-dir-path/dir-path.js:130
 #: frontend/src/components/dir-view-mode/dir-views/index.js:61
 msgid "Views"
-msgstr ""
+msgstr "Vistas"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:136
 #: frontend/src/components/cur-dir-path/dir-path.js:139
@@ -513,7 +513,7 @@ msgstr ""
 #: frontend/src/components/cur-dir-path/dir-path.js:160
 #| msgid "Refresh"
 msgid "Refresh the view"
-msgstr ""
+msgstr "Actualizar la vista"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:174
 #: frontend/src/components/dialog/lib-settings.js:156
@@ -530,11 +530,11 @@ msgstr "Rótulos"
 #: frontend/src/components/cur-dir-path/dir-path.js:253
 #| msgid "Delete page"
 msgid "Close the panel"
-msgstr ""
+msgstr "Cerrar el panel"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:253
 msgid "Open the panel"
-msgstr ""
+msgstr "Abrir el panel"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:266
 #: frontend/src/components/cur-dir-path/dir-path.js:272
@@ -588,7 +588,7 @@ msgstr "Se requiere información de contacto."
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:45
 msgid "Abuse report added"
-msgstr ""
+msgstr "Abuse report added"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:76
 #: frontend/src/components/shared-file-view/shared-file-view.js:164
@@ -985,7 +985,7 @@ msgstr "Nombre"
 #: frontend/src/components/dialog/convert-wiki-dialog.js:94
 #: frontend/src/components/dialog/import-confluence-dialog.js:143
 msgid "Wiki owner"
-msgstr ""
+msgstr "Dueño de la wiki"
 
 #: frontend/src/components/dialog/add-wiki-dialog.js:98
 #: frontend/src/components/dialog/convert-wiki-dialog.js:94
@@ -1010,7 +1010,7 @@ msgstr "Seleccionar un departamento"
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:465
 #: frontend/src/metadata/components/popover/options-popover/index.js:174
 msgid "No options available"
-msgstr ""
+msgstr "Sin opciones disponibles"
 
 #: frontend/src/components/dialog/add-wiki-page-dialog.js:58
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:244
@@ -1019,11 +1019,11 @@ msgstr "Nueva página"
 
 #: frontend/src/components/dialog/change-group-dialog.js:30
 msgid "Are you sure to change group {placeholder} to department ?"
-msgstr ""
+msgstr "¿Estás seguro de cambiar el grupo {placeholder} al departamento ?"
 
 #: frontend/src/components/dialog/change-group-dialog.js:34
 msgid "Change group to department"
-msgstr ""
+msgstr "Cambiar grupo al departamento"
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:50
 msgid "Please enter the old password"
@@ -9792,7 +9792,7 @@ msgstr "Acceder"
 #: frontend/src/pages/sys-admin/logs-page/logs-nav.js:21
 #| msgid "Group members"
 msgid "Group Member"
-msgstr ""
+msgstr "Miembro de grupo"
 
 #: frontend/src/pages/sys-admin/main-panel-topbar.js:20
 #: frontend/src/pages/wiki2/main-panel.js:260
@@ -9912,11 +9912,11 @@ msgstr "Buscar Bibliotecas"
 
 #: frontend/src/pages/sys-admin/repos/search-repos.js:145
 msgid "Tip: you can search by keyword in name or ID."
-msgstr ""
+msgstr "Consejo: puede buscar por palabra clave en el nombre o ID."
 
 #: frontend/src/pages/sys-admin/repos/search-repos.js:148
 msgid "Name or ID"
-msgstr ""
+msgstr "Nombre o ID"
 
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:61
 #: frontend/src/translate.js:18
@@ -9952,20 +9952,20 @@ msgstr "Registros de Admin"
 #: frontend/src/pages/sys-admin/statistic/statistic-metrics.js:173
 #: frontend/src/pages/sys-admin/statistic/statistic-nav.js:21
 msgid "Metrics"
-msgstr ""
+msgstr "Métricas"
 
 #: frontend/src/pages/sys-admin/statistic/statistic-metrics.js:174
 msgid "Node"
-msgstr ""
+msgstr "Nodo"
 
 #: frontend/src/pages/sys-admin/statistic/statistic-metrics.js:175
 msgid "Value"
-msgstr ""
+msgstr "Valor"
 
 #: frontend/src/pages/sys-admin/statistic/statistic-metrics.js:176
 #| msgid "Created time"
 msgid "Collected time"
-msgstr ""
+msgstr "Tiempo Recolectado"
 
 #: frontend/src/pages/sys-admin/terms-and-conditions/content.js:52
 msgid "Created"
@@ -10012,7 +10012,7 @@ msgstr "Establecer Email de Contacto"
 #: frontend/src/pages/sys-admin/users/user-info.js:109
 #| msgid "User"
 msgid "User ID"
-msgstr ""
+msgstr "ID de Usuario"
 
 #: frontend/src/pages/sys-admin/users/user-info.js:125
 msgid "Login ID"
@@ -10021,7 +10021,7 @@ msgstr "Login ID"
 #: frontend/src/pages/sys-admin/users/user-info.js:160
 #| msgid "Set Download Rate Limit"
 msgid "Download Rate Limit"
-msgstr ""
+msgstr "Límite de Descarga"
 
 #: frontend/src/pages/sys-admin/users/user-info.js:183
 #| msgid "Two-Factor Authentication"
@@ -10078,7 +10078,7 @@ msgstr "Fallo al ignorar %(virus_file) de la biblioteca %(library): %(error_msg)
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:48
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:78
 msgid "System settings updated"
-msgstr ""
+msgstr "Configuración del sistema actualizada"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:100
 msgid ""
@@ -10093,7 +10093,7 @@ msgstr "Personalizar"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:106
 msgid "Site title"
-msgstr ""
+msgstr "Título del sitio"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:109
 msgid "Site title shown in a browser tab"
@@ -10102,7 +10102,7 @@ msgstr "Título del sitio mostrado en una pestaña del navegador"
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:113
 #| msgid "File name"
 msgid "Site name"
-msgstr ""
+msgstr "Nombre del sitio"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:116
 msgid "Site name used in email sending"
@@ -10110,21 +10110,21 @@ msgstr "Nombre del sitio utilizado en el envío de email"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:120
 msgid "Logo"
-msgstr ""
+msgstr "Logo"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:129
 #| msgid "icon"
 msgid "Favicon"
-msgstr ""
+msgstr "Favicon"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:138
 #| msgid "Login Background Image"
 msgid "Login background image"
-msgstr ""
+msgstr "Imagen de fondo de inicio de sesión"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:147
 msgid "Enable branding CSS"
-msgstr ""
+msgstr "Habilitar CSS de personalización"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:150
 msgid "Use custom CSS"
@@ -10137,7 +10137,7 @@ msgstr "CSS personalizado"
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:167
 #| msgid "allow new registrations"
 msgid "Allow new registrations"
-msgstr ""
+msgstr "Permitir nuevos registros"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:170
 msgid ""
@@ -10148,7 +10148,7 @@ msgstr "Permitir que nuevos usuarios se registren. Desmarcar ésto para que nadi
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:174
 #| msgid "activate after registration"
 msgid "Activate after registration"
-msgstr ""
+msgstr "Activar después del registro"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:177
 msgid ""
@@ -10159,7 +10159,7 @@ msgstr "Activar el usuario inmediatamente después del registro. Si está desmar
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:181
 #| msgid "send activation email"
 msgid "Send activation email"
-msgstr ""
+msgstr "Enviar email de activación"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:184
 msgid "Send activation Email after user registration."
@@ -10168,7 +10168,7 @@ msgstr "Enviar email de activación después del registro del usuario."
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:188
 #| msgid "keep sign in"
 msgid "Keep sign in"
-msgstr ""
+msgstr "Mantener sesión iniciada"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:191
 msgid "Number of days that keep user sign in."
@@ -10176,7 +10176,7 @@ msgstr "Número de días que el usuario permanece identificado"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:195
 msgid "Login attempt limit"
-msgstr ""
+msgstr "Límite de intentos de acceso"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:198
 msgid "The maximum number of failed login attempts before showing CAPTCHA."
@@ -10184,7 +10184,7 @@ msgstr "El número máximo de intentos de acceso fallidos antes de mostrar el CA
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:202
 msgid "Freeze user on login failed"
-msgstr ""
+msgstr "Congelar usuario en caso de fallo de inicio de sesión"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:205
 msgid "Freeze user account when failed login attempts exceed limit."
@@ -10201,7 +10201,7 @@ msgstr "Habilitar que los usuarios puedan compartir bibliotecas con cualquier gr
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:224
 #| msgid "Confirm password"
 msgid "Strong password"
-msgstr ""
+msgstr "Contraseña segura"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:227
 msgid "Force user to use a strong password when sign up or change password."
@@ -10210,7 +10210,7 @@ msgstr "Forzar a que el usuario utilice una contraseña segura al registrarse o 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:231
 #| msgid "New Password Again"
 msgid "Force password change"
-msgstr ""
+msgstr "Forzar cambio de contraseña"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:234
 msgid ""
@@ -10225,22 +10225,22 @@ msgstr "Habilitar autenticación de dos factores"
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:250
 #| msgid "Library Type"
 msgid "Library history"
-msgstr ""
+msgstr "Historial de biblioteca"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:253
 #| msgid "Allow user to change library history settings"
 msgid "Allow users to change library history settings"
-msgstr ""
+msgstr "Permitir que los usuarios cambien la configuración de historial de biblioteca"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:260
 #| msgid "Allow user to create encrypted libraries"
 msgid "Allow users to create encrypted libraries"
-msgstr ""
+msgstr "Permitir que los usuarios creen bibliotecas encriptadas"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:264
 #| msgid "library password minimum length"
 msgid "Library password minimum length"
-msgstr ""
+msgstr "Longitud mínima de la contraseña de la biblioteca"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:267
 msgid ""
@@ -10250,17 +10250,17 @@ msgstr "El mínimo número de caracteres que debería contener la contraseña de
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:271
 #| msgid "share/upload link force password"
 msgid "Share/upload link force password"
-msgstr ""
+msgstr "Forzar contraseña en enlaces de compartir/subir"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:274
 #| msgid "Force user use password when generating share/upload link."
 msgid "Force users to use password when generating share/upload link."
-msgstr ""
+msgstr "Forzar a que los usuarios utilicen contraseña cuando generen enlaces de compartir o subida."
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:278
 #| msgid "share/upload link password minimum length"
 msgid "Share/upload link password minimum length"
-msgstr ""
+msgstr "Longitud mínima de la contraseña del enlace de compartir/subir"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:281
 msgid ""
@@ -10270,7 +10270,7 @@ msgstr "El mínimo número de caracteres que debería incluir una contraseña de
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:285
 #| msgid "share/upload link password strength level"
 msgid "Share/upload link password strength level"
-msgstr ""
+msgstr "Nivel de seguridad de la contraseña del enlace de compartir/subir"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:288
 msgid ""
@@ -10282,12 +10282,12 @@ msgstr "El nivel (1-4) de seguridad de una contraseña de compartir/enlace de su
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:292
 #| msgid "Allow user to clean library trash"
 msgid "Enable users to clean trash"
-msgstr ""
+msgstr "Habilitar a los usuarios para limpiar la papelera de reciclaje"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:295
 #| msgid "Allow user to clean library trash"
 msgid "Allow users to clean library trash"
-msgstr ""
+msgstr "Permitir al usuario vaciar la papelera de la biblioteca"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:300
 msgid "Online Preview"
@@ -10296,7 +10296,7 @@ msgstr "Vista previa en línea"
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:304
 #| msgid "text file extensions"
 msgid "Text file extensions"
-msgstr ""
+msgstr "Extensiones de archivos de texto"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:307
 msgid ""
@@ -10311,7 +10311,7 @@ msgstr "Sincronizar"
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:314
 #| msgid "Files and folders"
 msgid "Disable sync with any folder"
-msgstr ""
+msgstr "Desactivar sincronización con cualquier carpeta"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:317
 msgid ""
@@ -10322,7 +10322,7 @@ msgstr "Si está activado el cliente de escritorio no podrá sincronizar una car
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:325
 #| msgid "No terms and conditions"
 msgid "Enable terms and conditions"
-msgstr ""
+msgstr "Habilitar términos y condiciones"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:328
 msgid ""
@@ -10337,7 +10337,7 @@ msgstr "Fallo al subir {file_name}."
 #: frontend/src/pages/upload-link/index.js:43
 #| msgid "Upload Files"
 msgid "Upload files to"
-msgstr ""
+msgstr "Subir archivos a"
 
 #: frontend/src/pages/upload-link/index.js:54
 #: frontend/src/shared-dir-view.js:264 frontend/src/shared-dir-view.js:271

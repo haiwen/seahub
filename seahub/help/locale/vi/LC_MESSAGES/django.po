@@ -5,7 +5,7 @@
 # 
 # Translators:
 # ldphuong <ldphuong@gmail.com>, 2024
-# Seafile Info <info@seafile.com>, 2025
+# Seafile Info <info@seafile.com>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Vietnamese (https://app.transifex.com/haiwen/teams/5086/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: templates/help/base.html:34
 msgid "Side Nav Menu"
-msgstr ""
+msgstr "Menu điều hướng bên"
 
 #: templates/help/base.html:48 templates/help/base.html:50
 #: templates/help/introduction.html:6
@@ -428,6 +428,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
 "feature</a>."
 msgstr ""
+"Thiết lập quyền chi tiết cho các thư mục trong thư viện cho người dùng hoặc "
+"các phòng ban con trong bộ phận này. Tính năng này hoạt động giống như <a "
+"href=\"%(SITE_ROOT)shelp/folder_permission/\">tính năng quyền thư mục</a>."
 
 #: templates/help/departments.html:53
 msgid ""
@@ -869,6 +872,9 @@ msgid ""
 "client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
 "the password is not sent to the server."
 msgstr ""
+"Nếu bạn tạo một thư viện mã hóa từ một thư mục cục bộ bằng ứng dụng desktop "
+"(xem <a href=\"%(SITE_ROOT)shelp/install_sync/\">đồng bộ hóa tệp</a>), mật "
+"khẩu sẽ không được gửi đến máy chủ."
 
 #: templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
@@ -1125,10 +1131,13 @@ msgid ""
 "When a locked file's parent folder is renamed or moved inside the same "
 "library, it remains locked after the operation."
 msgstr ""
+"Khi thư mục cha của một tệp đang bị khóa được đổi tên hoặc di chuyển trong "
+"cùng một thư viện, tệp đó vẫn sẽ ở trạng thái bị khóa sau khi thao tác kết "
+"thúc."
 
 #: templates/help/finding_older_version_files.html:6
 msgid "Finding older version of files"
-msgstr ""
+msgstr "Tìm kiếm các phiên bản cũ của tệp"
 
 #: templates/help/finding_older_version_files.html:7
 msgid ""
@@ -1137,10 +1146,14 @@ msgid ""
 "a configurable period. When you want to access an older version of a file, "
 "the file history feature becomes very handy."
 msgstr ""
+"Seafile theo dõi lịch sử sửa đổi của tất cả các tệp. Bất cứ khi nào một tệp "
+"được thay đổi, một phiên bản mới sẽ được tạo ra, trong khi phiên bản cũ vẫn "
+"được giữ lại trong một khoảng thời gian có thể cấu hình. Khi bạn muốn truy "
+"cập một phiên bản cũ của tệp, tính năng lịch sử tệp sẽ trở nên rất hữu ích."
 
 #: templates/help/finding_older_version_files.html:8
 msgid "To list all the versions of a file:"
-msgstr ""
+msgstr "Để liệt kê tất cả các phiên bản của một tệp:"
 
 #: templates/help/finding_older_version_files.html:10
 msgid ""
@@ -1148,16 +1161,22 @@ msgid ""
 "cursor onto the row of that file. An operation menu will appear. You can "
 "click the \"History\" button in that menu."
 msgstr ""
+"Trong Ứng dụng Web Seafile, hãy điều hướng vào thư mục chứa tệp. Di chuyển "
+"con trỏ chuột lên hàng của tệp đó. Một menu thao tác sẽ xuất hiện. Bạn có "
+"thể nhấp vào nút \"Lịch sử\" trong menu đó."
 
 #: templates/help/finding_older_version_files.html:11
 msgid ""
 "A list of all versions of that file will be displayed in time order, from "
 "newer to older. The list also contains the file's rename history."
 msgstr ""
+"Danh sách tất cả các phiên bản của tệp đó sẽ được hiển thị theo thứ tự thời "
+"gian, từ mới nhất đến cũ nhất. Danh sách cũng bao gồm lịch sử đổi tên của "
+"tệp."
 
 #: templates/help/finding_older_version_files.html:12
 msgid "You can download, restore, view any version of the file."
-msgstr ""
+msgstr "Bạn có thể tải xuống, khôi phục, xem bất kỳ phiên bản nào của tệp."
 
 #: templates/help/finding_older_version_files.html:14
 #, python-format
@@ -1166,10 +1185,13 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Bạn có thể cấu hình thời gian lưu giữ các phiên bản tệp: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">thiết lập thời gian lưu "
+"giữ lịch sử</a>."
 
 #: templates/help/folder_permission.html:6
 msgid "Use folder permission for fine-grained access control"
-msgstr ""
+msgstr "Sử dụng quyền thư mục để kiểm soát truy cập chi tiết"
 
 #: templates/help/folder_permission.html:8
 #, python-format
@@ -1180,6 +1202,11 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing libraries</a>."
 " Here are some use cases:"
 msgstr ""
+"Đối với các thư viện hoặc thư mục được chia sẻ, bạn có thể thiết lập quyền "
+"cho các thư mục con của nó cho một cá nhân hoặc một nhóm. Các quyền có sẵn "
+"tương tự như các quyền được mô tả trong <a "
+"href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">chia sẻ thư viện</a>. "
+"Dưới đây là một số trường hợp sử dụng:"
 
 #: templates/help/folder_permission.html:10
 msgid ""
@@ -1187,6 +1214,9 @@ msgid ""
 " to allow a specific member of the group to modify files in one sub-folder. "
 "You can grant write permission of this sub-folder to this person."
 msgstr ""
+"Bạn đã chia sẻ một thư viện cho một nhóm với quyền \"chỉ đọc\". Bạn cũng "
+"muốn cho phép một thành viên cụ thể trong nhóm sửa đổi các tệp trong một thư"
+" mục con. Bạn có thể cấp quyền ghi thư mục con này cho người đó."
 
 #: templates/help/folder_permission.html:11
 msgid ""
@@ -1195,6 +1225,10 @@ msgid ""
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
 msgstr ""
+"Bạn đã chia sẻ một thư viện cho 3 nhóm. Có 3 thư mục con trong thư viện đó, "
+"mỗi thư mục dành cho một nhóm tải tệp lên. Tuy nhiên, bạn không muốn người "
+"dùng thay đổi các tệp không thuộc về nhóm của mình. Bạn có thể chỉ cấp quyền"
+" ghi thư mục con cho chính nhóm đó."
 
 #: templates/help/folder_permission.html:13
 msgid ""
@@ -1203,17 +1237,23 @@ msgid ""
 "should first share the parent library or folder; otherwise the folder "
 "permission won't take effect."
 msgstr ""
+"Quyền thư mục chỉ có hiệu lực đối với các thư viện và thư mục bạn chia sẻ "
+"cho người khác. Để thiết lập quyền thư mục cho các thư mục con một cách hiệu"
+" quả, bạn trước tiên nên chia sẻ thư viện hoặc thư mục cha; nếu không quyền "
+"thư mục sẽ không có tác dụng."
 
 #: templates/help/folder_permission.html:14
 msgid ""
 "One important design goal of folder permission is to support hierarchical "
 "permissions:"
 msgstr ""
+"Một mục tiêu thiết kế quan trọng của quyền thư mục là hỗ trợ các quyền theo "
+"phân cấp:"
 
 #: templates/help/folder_permission.html:16
 msgid ""
 "Sub-folders automatically inherit folder permissions from its parent folder."
-msgstr ""
+msgstr "Các thư mục con tự động kế thừa quyền thư mục từ thư mục cha của nó."
 
 #: templates/help/folder_permission.html:17
 msgid ""
@@ -1223,10 +1263,15 @@ msgid ""
 "\"meeting files/today\" for user A. Then user A's permission to \"meeting "
 "files/today\" is \"read only\"."
 msgstr ""
+"Quyền được thiết lập trên thư mục con sẽ ghi đè lên quyền được thiết lập "
+"trên thư mục cha của nó. Ví dụ, bạn thiết lập quyền \"đọc ghi\" trên thư mục"
+" \"tài liệu họp\" cho người dùng A, và bạn thiết lập quyền \"chỉ đọc\" trên "
+"thư mục con \"tài liệu họp/hôm nay\" cho người dùng A. Khi đó quyền của "
+"người dùng A đối với \"tài liệu họp/hôm nay\" là \"chỉ đọc\"."
 
 #: templates/help/folder_permission.html:19
 msgid "Basic usage"
-msgstr ""
+msgstr "Sử dụng cơ bản"
 
 #: templates/help/folder_permission.html:20
 msgid ""
@@ -1235,6 +1280,10 @@ msgid ""
 "\"permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions on this folder."
 msgstr ""
+"Chỉ chủ sở hữu thư viện mới có thể thiết lập quyền thư mục cho các thư mục "
+"con. Trong giao diện duyệt tệp, nhấp vào nút \"thao tác khác\", chọn "
+"\"quyền\" trong menu thả xuống. Trong cửa sổ bật lên, bạn có thể xem và "
+"thiết lập quyền thư mục trên thư mục này."
 
 #: templates/help/folder_permission.html:21
 msgid ""
@@ -1243,6 +1292,10 @@ msgid ""
 "Permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions in this library."
 msgstr ""
+"Nếu bạn muốn xem tất cả các quyền thư mục được thiết lập trong một thư viện,"
+" hãy di chuột qua thư viện đó. Nhấp vào nút \"thao tác khác\", chọn \"Quyền "
+"thư mục\" trong menu thả xuống. Trong cửa sổ bật lên, bạn có thể xem và "
+"thiết lập các quyền thư mục trong thư viện này."
 
 #: templates/help/folder_permission.html:22
 msgid ""
@@ -1250,16 +1303,22 @@ msgid ""
 "next to \"read only\" sub-folders. When the user navigate into that sub-"
 "folder, he/she won't be able to add/modify/delete files."
 msgstr ""
+"Khi người dùng khác điều hướng vào một thư mục, sẽ có một biểu tượng \"con "
+"mắt\" nhỏ bên cạnh các thư mục con \"chỉ đọc\". Khi người dùng đi vào thư "
+"mục con đó, họ sẽ không thể thêm/sửa đổi/xóa tệp."
 
 #: templates/help/folder_permission.html:24
 msgid ""
 "If a \"read only\" folder is synced to PC with the Seafile desktop App, "
 "changes under a \"read only\" folder won't be uploaded to the cloud."
 msgstr ""
+"Nếu một thư mục \"chỉ đọc\" được đồng bộ hóa với PC bằng Ứng dụng Seafile "
+"desktop, những thay đổi trong thư mục \"chỉ đọc\" đó sẽ không được tải lên "
+"đám mây."
 
 #: templates/help/folder_permission.html:25
 msgid "Advanced: priority between different permissions"
-msgstr ""
+msgstr "Nâng cao: mức độ ưu tiên giữa các quyền khác nhau"
 
 #: templates/help/folder_permission.html:27
 msgid ""
@@ -1269,6 +1328,12 @@ msgid ""
 "library. Then user A only has \"read only\" access to the sub-folder, while "
 "he/she has \"read write\" access to all other sub-folders and files."
 msgstr ""
+"Quyền thư mục có mức độ ưu tiên cao hơn quyền được thiết lập khi chia sẻ. Ví"
+" dụ, nếu bạn chia sẻ một thư viện cho người dùng A với quyền \"đọc ghi\", "
+"đồng thời thiết lập quyền \"chỉ đọc\" cho một thư mục con của thư viện đó. "
+"Khi đó người dùng A chỉ có quyền truy cập \"chỉ đọc\" đối với thư mục con "
+"đó, trong khi họ vẫn có quyền \"đọc ghi\" đối với tất cả các thư mục con và "
+"tệp khác."
 
 #: templates/help/folder_permission.html:28
 msgid ""
@@ -1277,16 +1342,23 @@ msgid ""
 "if the system matches a permission specific to the user, it'll ignore all "
 "permissions set for the groups the user belongs to."
 msgstr ""
+"Quyền thư mục được thiết lập cho một người dùng cụ thể có mức độ ưu tiên cao"
+" hơn quyền được thiết lập cho một nhóm. Nghĩa là, khi kiểm tra quyền cho một"
+" thư mục, nếu hệ thống khớp với một quyền dành riêng cho người dùng đó, nó "
+"sẽ bỏ qua tất cả các quyền được thiết lập cho các nhóm mà người dùng đó tham"
+" gia."
 
 #: templates/help/folder_permission.html:29
 msgid ""
 "Permissions on sub-folders have higher priority than those on parent "
 "folders."
 msgstr ""
+"Quyền trên các thư mục con có mức độ ưu tiên cao hơn quyền trên các thư mục "
+"cha."
 
 #: templates/help/folder_permission.html:31
 msgid "Here is a more complex example:"
-msgstr ""
+msgstr "Dưới đây là một ví dụ phức tạp hơn:"
 
 #: templates/help/folder_permission.html:32
 msgid ""
@@ -1298,6 +1370,13 @@ msgid ""
 "first matched for folder \"A/B\" and user \"John\", which is inherited from "
 "its parent \"A\"."
 msgstr ""
+"Giả sử cấu trúc thư mục là \"A/B\", người dùng \"John\" thuộc nhóm "
+"\"Staff\". Nếu bạn thiết lập quyền \"chỉ đọc\" trên thư mục A cho John, và "
+"đồng thời thiết lập quyền \"đọc ghi\" trên thư mục \"A/B\" cho nhóm "
+"\"Staff\". Khi đó quyền của John đối với thư mục \"A/B\" vẫn chỉ là \"chỉ "
+"đọc\". Đó là bởi vì, theo quy tắc 2, quyền \"chỉ đọc\" được khớp đầu tiên "
+"cho thư mục \"A/B\" và người dùng \"John\", vốn được kế thừa từ thư mục cha "
+"\"A\"."
 
 #: templates/help/full_text_file_search.html:6
 msgid ""
@@ -1305,46 +1384,53 @@ msgid ""
 "as well as the content of certain files, in the Seafile web app. Currently "
 "Seafile can search the contents of the following types of files:"
 msgstr ""
+"Nếu bạn đang sử dụng Máy chủ Phiên bản Pro, bạn có thể tìm kiếm tên tệp và "
+"thư mục, cũng như nội dung của một số tệp nhất định trong ứng dụng web "
+"Seafile. Hiện tại Seafile có thể tìm kiếm nội dung của các loại tệp sau:"
 
 #: templates/help/full_text_file_search.html:8
 #: templates/help/viewing_files_within_web_app.html:8
 msgid "Microsoft Office Doc: .doc, .docx (Pro Edition Server only)"
 msgstr ""
+"Microsoft Office Doc: .doc, .docx (Chỉ dành cho Máy chủ Phiên bản Pro)"
 
 #: templates/help/full_text_file_search.html:9
 #: templates/help/viewing_files_within_web_app.html:9
 msgid "Microsoft Office PowerPoint: .ppt, .pptx (Pro Edition Server only)"
 msgstr ""
+"Microsoft Office PowerPoint: .ppt, .pptx (Chỉ dành cho Máy chủ Phiên bản "
+"Pro)"
 
 #: templates/help/full_text_file_search.html:10
 #: templates/help/viewing_files_within_web_app.html:10
 msgid "Microsoft Office Excel: .xls, .xlsx (Pro Edition Server only)"
 msgstr ""
+"Microsoft Office Excel: .xls, .xlsx (Chỉ dành cho Máy chủ Phiên bản Pro)"
 
 #: templates/help/full_text_file_search.html:11
 #: templates/help/viewing_files_within_web_app.html:11
 msgid "LibreOffice files"
-msgstr ""
+msgstr "Tệp LibreOffice"
 
 #: templates/help/full_text_file_search.html:12
 #: templates/help/viewing_files_within_web_app.html:12
 msgid "PDF files"
-msgstr ""
+msgstr "Tệp PDF"
 
 #: templates/help/full_text_file_search.html:13
 #: templates/help/viewing_files_within_web_app.html:14
 msgid "Markdown files: .md"
-msgstr ""
+msgstr "Tệp Markdown: .md"
 
 #: templates/help/full_text_file_search.html:14
 #: templates/help/viewing_files_within_web_app.html:15
 msgid "Various source code files"
-msgstr ""
+msgstr "Các tệp mã nguồn khác nhau"
 
 #: templates/help/full_text_file_search.html:15
 #: templates/help/viewing_files_within_web_app.html:16
 msgid "Text files: .txt, .log"
-msgstr ""
+msgstr "Tệp văn bản: .txt, .log"
 
 #: templates/help/full_text_file_search.html:17
 msgid ""
@@ -1352,34 +1438,45 @@ msgid ""
 "text search feature. In that case, you can only search file and folder "
 "names."
 msgstr ""
+"Lưu ý rằng quản trị viên hệ thống Seafile của bạn có thể chưa bật tính năng "
+"tìm kiếm toàn văn. Trong trường hợp đó, bạn chỉ có thể tìm kiếm tên tệp và "
+"thư mục."
 
 #: templates/help/groups_managing.html:6
 msgid ""
 "Creating a group is a convenient way to share files to many people. In "
 "Seafile, you can create and manage a group easily."
 msgstr ""
+"Tạo một nhóm là một cách thuận tiện để chia sẻ tệp cho nhiều người. Trong "
+"Seafile, bạn có thể tạo và quản lý một nhóm một cách dễ dàng."
 
 #: templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
-msgstr ""
+msgstr "Dưới đây là cách hoạt động của các nhóm trong Seafile:"
 
 #: templates/help/groups_managing.html:9
 msgid ""
 "Each group has a owner. The owner is the creator of the group by default. "
 "He/she can transfer the ownership of the group to another member."
 msgstr ""
+"Mỗi nhóm có một chủ sở hữu. Theo mặc định, người tạo nhóm là chủ sở hữu. Họ "
+"có thể chuyển quyền sở hữu nhóm cho một thành viên khác."
 
 #: templates/help/groups_managing.html:10
 msgid ""
 "Each group can have multiple admins. The group owner and group admins can "
 "add more group admins."
 msgstr ""
+"Mỗi nhóm có thể có nhiều quản trị viên. Chủ sở hữu nhóm và các quản trị viên"
+" nhóm có thể thêm các quản trị viên nhóm mới."
 
 #: templates/help/groups_managing.html:11
 msgid ""
 "The group admin can add/delete members in the group. And he/she can also "
 "unshare a library in the group."
 msgstr ""
+"Quản trị viên nhóm có thể thêm/xóa thành viên trong nhóm. Và họ cũng có thể "
+"hủy chia sẻ một thư viện trong nhóm."
 
 #: templates/help/groups_managing.html:13
 msgid ""
@@ -1387,6 +1484,9 @@ msgid ""
 "all the groups you're in. Clicking into any group, you'll see the libraries "
 "shared into this group."
 msgstr ""
+"Nhấp vào tab \"Chia sẻ với nhóm\" ở bảng bên trái, bạn sẽ thấy tất cả các "
+"nhóm mà mình tham gia. Nhấp vào bất kỳ nhóm nào, bạn sẽ thấy các thư viện "
+"được chia sẻ trong nhóm này."
 
 #: templates/help/groups_managing.html:14
 msgid ""
@@ -1394,6 +1494,9 @@ msgid ""
 "panel. Then click on \"All Groups\". In the page, you can click the \"New "
 "Group\" button to create a group."
 msgstr ""
+"Để tạo một nhóm mới, nhấp vào tab \"Chia sẻ với nhóm\" ở bảng bên trái. Sau "
+"đó nhấp vào \"Tất cả các nhóm\". Trên trang này, bạn có thể nhấp vào nút "
+"\"Nhóm mới\" để tạo nhóm."
 
 #: templates/help/groups_managing.html:15
 #, python-format
@@ -1401,10 +1504,12 @@ msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
 "and folders</a> about how to share libraries or folders to a group."
 msgstr ""
+"Xem <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">chia sẻ tệp và "
+"thư mục</a> để biết cách chia sẻ thư viện hoặc thư mục cho một nhóm."
 
 #: templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
-msgstr "Không bao gồm các file/folder đang đồng bộ"
+msgstr "Loại trừ các tệp/thư mục khỏi quá trình đồng bộ hóa"
 
 #: templates/help/ignore.html:8
 msgid ""
@@ -1414,14 +1519,19 @@ msgid ""
 "should not sync. Each line in a ignore.txt file specifies a pattern. The "
 "following pattern format are supported."
 msgstr ""
+"Đôi khi bạn không muốn đồng bộ hóa một số tệp hoặc thư mục bên trong một thư"
+" viện. Để làm điều này, hãy tạo một tệp seafile-ignore.txt trong thư mục gốc"
+" của thư viện. Tệp đặc biệt này chỉ định các tệp và thư mục mà Seafile không"
+" nên đồng bộ hóa. Mỗi dòng trong tệp ignore.txt chỉ định một mẫu. Các định "
+"dạng mẫu sau đây được hỗ trợ."
 
 #: templates/help/ignore.html:10
 msgid "A blank line matches no files."
-msgstr "Một dòng trống nghĩa là không có file nào."
+msgstr "Một dòng trống sẽ không khớp với tệp nào."
 
 #: templates/help/ignore.html:11
 msgid "A line starting with # serves as a comment."
-msgstr "Một dòng bắt đầu bằng # được xem như là một lời dẫn giải"
+msgstr "Một dòng bắt đầu bằng # được coi là một bình luận."
 
 #: templates/help/ignore.html:12
 msgid ""
@@ -1431,9 +1541,11 @@ msgid ""
 "the paths under a folder. For instance, \"foo/*.html\" matches "
 "\"foo/a.html\" and \"foo/templates/b.html\"."
 msgstr ""
-"Seafile hỗ trợ các ký hiệu trong mẫu. Ví dụ, \"foo/*\" hợp với \"foo/1\" và "
-"\"foo/hello\". \"foo/?\" hợp với \"foo/?\" chứ không phải \"foo/hello\". Lưu"
-" ý rằng ký tự ký hiệu * phù hợp với tất cả các đường dẫn sau folder."
+"Seafile hỗ trợ các ký tự đại diện trong mẫu. Ví dụ: \"foo/*\" khớp với "
+"\"foo/1\" và \"foo/hello\". \"foo/?\" khớp với \"foo/1\" nhưng không khớp "
+"với \"foo/hello\". Lưu ý rằng ký tự đại diện * sẽ khớp đệ quy với tất cả các"
+" đường dẫn trong một thư mục. Chẳng hạn, \"foo/*.html\" khớp với "
+"\"foo/a.html\" và \"foo/templates/b.html\"."
 
 #: templates/help/ignore.html:13
 msgid ""
@@ -1441,6 +1553,10 @@ msgid ""
 "words, \"foo/\" will match a folder \"foo\" and paths underneath it, but "
 "will not match a regular file or a symbolic link \"foo\"."
 msgstr ""
+"Nếu mẫu kết thúc bằng dấu gạch chéo, nó sẽ chỉ khớp với một thư mục. Nói "
+"cách khác, \"foo/\" sẽ khớp với một thư mục \"foo\" và các đường dẫn bên "
+"dưới nó, nhưng sẽ không khớp với một tệp thông thường hoặc một liên kết biểu"
+" tượng có tên \"foo\"."
 
 #: templates/help/ignore.html:14
 msgid ""
@@ -1449,6 +1565,10 @@ msgid ""
 "symbolic link; while \"foo/\" and \"foo*\" match a folder and paths under "
 "it."
 msgstr ""
+"Nếu một mẫu không kết thúc bằng dấu gạch chéo hoặc ký tự đại diện, nó sẽ "
+"không khớp với một thư mục. Ví dụ, \"foo\" chỉ có thể khớp với tệp thông "
+"thường \"foo\" hoặc một liên kết biểu tượng; trong khi \"foo/\" và \"foo*\" "
+"sẽ khớp với một thư mục và các đường dẫn bên dưới nó."
 
 #: templates/help/ignore.html:18
 msgid "Example"
@@ -1464,6 +1584,9 @@ msgid ""
 "client side. You can still create a file from seahub web interface that's "
 "excluded on the client. In this case,"
 msgstr ""
+"Tệp seafile-ignore.txt chỉ kiểm soát những tệp nào cần loại trừ ở phía máy "
+"khách (client). Bạn vẫn có thể tạo một tệp từ giao diện web seahub dù tệp đó"
+" bị loại trừ trên máy khách. Trong trường hợp này,"
 
 #: templates/help/ignore.html:40
 msgid ""
@@ -1494,7 +1617,7 @@ msgstr ""
 
 #: templates/help/install_sync.html:6
 msgid "Installing Seafile client program"
-msgstr ""
+msgstr "Cài đặt chương trình Seafile client"
 
 #: templates/help/install_sync.html:8
 msgid ""
@@ -1508,7 +1631,7 @@ msgstr "1. Chọn Partition để lưu trữ dữ liệu Seafile "
 
 #: templates/help/install_sync.html:11
 msgid "Selecting a folder to store Seafile data"
-msgstr ""
+msgstr "Chọn một thư mục để lưu trữ dữ liệu Seafile"
 
 #: templates/help/install_sync.html:13
 msgid "2. Add an account"
@@ -1544,7 +1667,7 @@ msgstr "Bạn cũng có thể tạo một thư viện từ folder trên máy tí
 
 #: templates/help/install_sync.html:34
 msgid "5. Browse files on the cloud"
-msgstr ""
+msgstr "5. Duyệt tệp trên đám mây"
 
 #: templates/help/install_sync.html:35
 msgid ""
@@ -1552,12 +1675,18 @@ msgid ""
 "syncing them. Seafile client comes with a \"cloud file browser\" to meet "
 "this need. Click an unsynced library will open the cloud file browser."
 msgstr ""
+"Trong một số trường hợp, bạn muốn sửa đổi các tệp trực tiếp trên đám mây mà "
+"không cần đồng bộ hóa chúng. Seafile client đi kèm với một \"trình duyệt tệp"
+" đám mây\" để đáp ứng nhu cầu này. Nhấp vào một thư viện chưa đồng bộ hóa sẽ"
+" mở trình duyệt tệp đám mây."
 
 #: templates/help/introduction.html:8
 msgid ""
 "Seafile is an enterprise file hosting platform with high reliability and "
 "performance."
 msgstr ""
+"Seafile là nền tảng lưu trữ tệp dành cho doanh nghiệp với độ tin cậy và hiệu"
+" suất cao."
 
 #: templates/help/introduction.html:9
 #, python-format
@@ -1568,6 +1697,11 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/using_drive_client\">the drive client</a>. It also "
 "has mobile clients for Android and iOS."
 msgstr ""
+"Seafile bao gồm một giao diện web để bạn quản lý và chia sẻ tệp. Nó có hai "
+"loại ứng dụng khách cho máy tính để bàn, <a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">ứng dụng đồng bộ hóa tệp</a> và <a "
+"href=\"%(SITE_ROOT)shelp/using_drive_client\">ứng dụng ổ đĩa (drive "
+"client)</a>. Nó cũng có các ứng dụng di động cho Android và iOS."
 
 #: templates/help/introduction.html:10
 msgid ""
@@ -1575,6 +1709,9 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile web "
 "site</a>."
 msgstr ""
+"Bạn có thể tải xuống các ứng dụng khách tại <a "
+"href=\"https://www.seafile.com/en/download/\" target=\"_blank\">trang web "
+"Seafile</a>."
 
 #: templates/help/introduction.html:11
 msgid ""
@@ -1582,6 +1719,9 @@ msgid ""
 "help in our forum: <a href=\"https://forum.seafile.com\" "
 "target=\"_blank\">https://forum.seafile.com</a>."
 msgstr ""
+"Nếu tài liệu này không chứa thông tin bạn cần, bạn có thể tìm kiếm sự trợ "
+"giúp tại diễn đàn của chúng tôi: <a href=\"https://forum.seafile.com\" "
+"target=\"_blank\">https://forum.seafile.com</a>."
 
 #: templates/help/libraries_managing.html:6
 msgid ""
@@ -1631,6 +1771,9 @@ msgid ""
 "You can navigate into a library and manage your files and folders. You can "
 "upload, download, rename, move, copy and delete files."
 msgstr ""
+"Bạn có thể điều hướng vào một thư viện và quản lý các tệp cũng như thư mục "
+"của mình. Bạn có thể tải lên, tải xuống, đổi tên, di chuyển, sao chép và xóa"
+" tệp."
 
 #: templates/help/libraries_managing.html:15
 #, python-format
@@ -1650,6 +1793,11 @@ msgid ""
 "creates a \"snapshot\" of the previous state of the library. The snapshot "
 "contains the complete file and folder structure of the library."
 msgstr ""
+"Seafile theo dõi lịch sử sửa đổi cho toàn bộ thư viện. Bất cứ khi nào một "
+"thao tác tệp được thực hiện đối với một thư viện (cập nhật tệp, xóa tệp, "
+"v.v.), Seafile sẽ tạo một \"snapshot\" (ảnh chụp nhanh) về trạng thái trước "
+"đó của thư viện. Snapshot chứa toàn bộ cấu trúc tệp và thư mục của thư viện "
+"đó."
 
 #: templates/help/library_history_and_snapshots.html:8
 msgid ""
@@ -1660,10 +1808,17 @@ msgid ""
 "files in the library will be restored to that point of time, all at once. It"
 " works like a \"time machine\" for the library."
 msgstr ""
+"Trong một số trường hợp, bạn đã thay đổi rất nhiều tệp trong thư viện và "
+"thấy rằng mình muốn hoàn tác tất cả các thay đổi này. Việc khôi phục nhiều "
+"tệp về phiên bản cũ có thể rất tẻ nhạt. Lúc này, tính năng snapshot sẽ trở "
+"nên rất hữu ích. Bạn có thể khôi phục toàn bộ thư viện về bất kỳ thời điểm "
+"nào trong quá khứ. Tất cả các tệp trong thư viện sẽ được khôi phục về thời "
+"điểm đó cùng một lúc. Nó hoạt động giống như một \"cỗ máy thời gian\" cho "
+"thư viện."
 
 #: templates/help/library_history_and_snapshots.html:9
 msgid "To view library history and snapshots:"
-msgstr ""
+msgstr "Để xem lịch sử thư viện và các bản snapshot:"
 
 #: templates/help/library_history_and_snapshots.html:11
 msgid ""
@@ -1671,12 +1826,18 @@ msgid ""
 "\"History\" icon in the library navigation top bar. All the change record of"
 " the library will be displayed in a list."
 msgstr ""
+"Trong Ứng dụng Web Seafile, hãy điều hướng vào thư mục gốc của một thư viện."
+" Nhấp vào biểu tượng \"Lịch sử\" ở thanh điều hướng trên cùng của thư viện. "
+"Tất cả các bản ghi thay đổi của thư viện sẽ được hiển thị trong một danh "
+"sách."
 
 #: templates/help/library_history_and_snapshots.html:12
 msgid ""
 "Click the \"view snapshot\" link on any modification record. You'll see the "
 "library state at the point of time."
 msgstr ""
+"Nhấp vào liên kết \"xem snapshot\" trên bất kỳ bản ghi sửa đổi nào. Bạn sẽ "
+"thấy trạng thái của thư viện tại thời điểm đó."
 
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
@@ -1685,6 +1846,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Bạn có thể cấu hình thời gian lưu giữ lịch sử thư viện: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">thiết lập thời gian lưu "
+"giữ lịch sử</a>."
 
 #: templates/help/manage_library_as_wiki.html:6
 msgid ""
@@ -1694,6 +1858,12 @@ msgid ""
 "files store textual, tabular as well as graphical information; You can also "
 "add links to other documents in a Markdown file."
 msgstr ""
+"Ghi lại và lưu trữ các dữ liệu có cấu trúc nhỏ một cách dễ sử dụng – đó "
+"chính là mục đích của các wiki trong Seafile. Các trang Wiki được viết bằng "
+"Markdown (MD), một ngôn ngữ đánh dấu đơn giản, để đảm bảo tính tương thích "
+"đa nền tảng. Các tệp MD lưu trữ thông tin văn bản, bảng biểu cũng như đồ "
+"họa; Bạn cũng có thể thêm liên kết đến các tài liệu khác trong một tệp "
+"Markdown."
 
 #: templates/help/manage_library_as_wiki.html:7
 msgid ""
@@ -1702,10 +1872,15 @@ msgid ""
 " Seafile libraries, they can be synced and shared with other users just like"
 " any ordinary library."
 msgstr ""
+"Bạn có thể quản lý một thư viện tiêu chuẩn trong Seafile giống như một Wiki "
+"với tính năng \"Dạng xem cột\" được giới thiệu trong phiên bản 7.0. Vì "
+"Seafile triển khai wiki dưới dạng các thư viện Seafile tiêu chuẩn, chúng có "
+"thể được đồng bộ hóa và chia sẻ với người dùng khác giống như bất kỳ thư "
+"viện thông thường nào."
 
 #: templates/help/manage_library_as_wiki.html:8
 msgid "Column view"
-msgstr ""
+msgstr "Dạng xem cột"
 
 #: templates/help/manage_library_as_wiki.html:9
 msgid ""
@@ -1716,10 +1891,16 @@ msgid ""
 "File actions such as renaming, moving, and opening via client are available "
 "in a right-click-accessible context menu."
 msgstr ""
+"Các Wiki thường có một thanh bên chứa cấu trúc thư mục dạng cây, cho phép "
+"duyệt nhanh và dễ dàng các trang Wiki. Dạng xem cột của Seafile cho phép bạn"
+" quản lý các tệp trong một thư viện theo cách tương tự như một không gian "
+"Wiki. Người dùng có thể duyệt và di chuyển các tệp và thư mục chỉ bằng cách "
+"kéo và thả. Các thao tác tệp như đổi tên, di chuyển và mở qua ứng dụng "
+"client có sẵn trong menu ngữ cảnh khi nhấp chuột phải."
 
 #: templates/help/manage_library_as_wiki.html:12
 msgid "WYSIWYG Markdown editor"
-msgstr ""
+msgstr "Trình soạn thảo Markdown WYSIWYG"
 
 #: templates/help/manage_library_as_wiki.html:13
 msgid ""
@@ -1735,12 +1916,28 @@ msgid ""
 "table’s content: A table can be copied in its entirety or in part without "
 "leaving the WYSIWYG view."
 msgstr ""
+"Các trang Wiki trong Seafile được lưu trữ dưới dạng các tài liệu thông "
+"thường ở định dạng Markdown. Để tạo một trang Wiki mới trong một thư viện, "
+"chỉ cần tạo một tài liệu Markdown mới. Các tệp MD có thể được chỉnh sửa trực"
+" tiếp từ giao diện web của Seafile bằng trình soạn thảo MD trực tuyến. Trình"
+" soạn thảo dựa trên web mang lại trải nghiệm người dùng mượt mà và các tùy "
+"chọn định dạng phong phú cho văn bản, hình ảnh và bảng biểu. Hình ảnh có thể"
+" được nhập vào tệp MD từ các thư viện, bộ nhớ cục bộ cũng như qua các siêu "
+"liên kết. Các chức năng chỉnh sửa hình ảnh cơ bản như thay đổi kích thước "
+"cũng có thể được thực hiện trong giao diện WYSIWYG (những gì bạn thấy là "
+"những gì bạn nhận được) của trình soạn thảo. Các bảng có thể được chèn và "
+"sửa đổi chỉ với vài cú nhấp chuột. Tương tự đối với nội dung của bảng: Một "
+"bảng có thể được sao chép toàn bộ hoặc một phần mà không cần rời khỏi chế độ"
+" xem WYSIWYG."
 
 #: templates/help/manage_library_as_wiki.html:15
 msgid ""
 "The change history of a Markdown file can be easily accessed by clicking the"
 " \"File History\" button in the menu on top of the editor interface."
 msgstr ""
+"Lịch sử thay đổi của một tệp Markdown có thể được truy cập dễ dàng bằng cách"
+" nhấp vào nút \"Lịch sử tệp\" trong menu ở phía trên giao diện trình soạn "
+"thảo."
 
 #: templates/help/manage_library_as_wiki.html:17
 msgid ""
@@ -1748,10 +1945,13 @@ msgid ""
 "Table of contents, file information, and collaborative commenting are "
 "provided in this side bar."
 msgstr ""
+"Bạn có thể mở một thanh bên ẩn ở phía bên phải của trình soạn thảo Markdown."
+" Mục lục, thông tin tệp và các bình luận cộng tác được cung cấp trong thanh "
+"bên này."
 
 #: templates/help/manage_library_as_wiki.html:19
 msgid "File tagging and related documents"
-msgstr ""
+msgstr "Gắn thẻ tệp và các tài liệu liên quan"
 
 #: templates/help/manage_library_as_wiki.html:20
 msgid ""
@@ -1760,22 +1960,30 @@ msgid ""
 "can be managed from the side bar of the Markdown editor, or from the file "
 "browser interface."
 msgstr ""
+"Gắn thẻ tệp là một tính năng quan trọng để quản lý kiến thức. Seafile cho "
+"phép người dùng định nghĩa các thẻ cho mỗi thư viện và áp dụng thẻ cho các "
+"tệp. Các thẻ có thể được quản lý từ thanh bên của trình soạn thảo Markdown "
+"hoặc từ giao diện trình duyệt tệp."
 
 #: templates/help/manage_library_as_wiki.html:23
 msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
 msgstr ""
+"Giao diện trình duyệt tệp cung cấp một bản tóm tắt tất cả các thẻ tệp trong "
+"thư viện hiện tại."
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
 "If you want the be-shared users not be able to modify local copies, you can "
 "consider using the Seafile Drive client."
 msgstr ""
+"Nếu bạn muốn những người dùng được chia sẻ không thể sửa đổi các bản sao cục"
+" bộ, bạn có thể cân nhắc sử dụng Seafile Drive client."
 
 #: templates/help/restoring_deleted_files.html:6
 msgid "Restoring deleted files and folders"
-msgstr ""
+msgstr "Khôi phục các tệp và thư mục đã xóa"
 
 #: templates/help/restoring_deleted_files.html:7
 msgid ""
@@ -1783,16 +1991,21 @@ msgid ""
 "Sometimes you find files are deleted mistakenly. You can find back your "
 "deleted files in the trash bin of each library."
 msgstr ""
+"Mỗi thư viện trong Seafile sẽ tự động theo dõi các thao tác xóa tệp của bạn."
+" Đôi khi bạn thấy tệp bị xóa nhầm. Bạn có thể tìm lại các tệp đã xóa trong "
+"thùng rác của mỗi thư viện."
 
 #: templates/help/restoring_deleted_files.html:8
 msgid "Here is how to use the trash bin feature:"
-msgstr ""
+msgstr "Dưới đây là cách sử dụng tính năng thùng rác:"
 
 #: templates/help/restoring_deleted_files.html:10
 msgid ""
 "In Seafile Web App, navigate into the parent folder containing the deleted "
 "file or folder."
 msgstr ""
+"Trong Ứng dụng Web Seafile, hãy điều hướng vào thư mục cha chứa tệp hoặc thư"
+" mục đã xóa."
 
 #: templates/help/restoring_deleted_files.html:11
 msgid ""
@@ -1800,6 +2013,9 @@ msgid ""
 " folders will be listed in deletion time order. In the bottom of the list, "
 "you can click the \"more\" button to load more deleted files."
 msgstr ""
+"Nhấp vào biểu tượng \"thùng rác\" ở thanh thao tác thư viện. Các tệp và thư "
+"mục đã xóa sẽ được liệt kê theo thứ tự thời gian xóa. Ở cuối danh sách, bạn "
+"có thể nhấp vào nút \"thêm\" để tải thêm các tệp đã xóa."
 
 #: templates/help/restoring_deleted_files.html:12
 msgid ""
@@ -1807,6 +2023,9 @@ msgid ""
 "folder's parent folder has been deleted, it will be restored to the "
 "library's root folder."
 msgstr ""
+"Trong danh sách các tệp đã xóa, bạn có thể khôi phục tệp và thư mục. Nếu thư"
+" mục cha của một tệp hoặc thư mục đã bị xóa, nó sẽ được khôi phục vào thư "
+"mục gốc của thư viện."
 
 #: templates/help/restoring_deleted_files.html:13
 msgid ""
@@ -1814,6 +2033,9 @@ msgid ""
 "the current folder. Files deleted in the sub-folders of the current folder "
 "are also included in the list."
 msgstr ""
+"Lưu ý rằng thùng rác chỉ chứa các tệp và thư mục con bị xóa trong thư mục "
+"hiện tại. Các tệp bị xóa trong các thư mục con của thư mục hiện tại cũng "
+"được bao gồm trong danh sách."
 
 #: templates/help/restoring_deleted_files.html:15
 #, python-format
@@ -1822,6 +2044,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Bạn có thể cấu hình thời gian lưu giữ các tệp đã xóa: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">thiết lập thời gian lưu "
+"giữ lịch sử</a>."
 
 #: templates/help/selective_sync.html:8
 msgid ""
@@ -1830,6 +2055,10 @@ msgid ""
 "selectively sync a sub-folder in a library, instead of syncing the entire "
 "library."
 msgstr ""
+"Bạn có thể có một số thư viện rất lớn trên máy chủ Seafile. Và hiện tại bạn "
+"chỉ quan tâm đến một thư mục con bên trong một thư viện. Khi đó, bạn có thể "
+"đồng bộ hóa có chọn lọc một thư mục con trong thư viện, thay vì đồng bộ hóa "
+"toàn bộ thư viện."
 
 #: templates/help/selective_sync.html:10
 msgid ""
@@ -1838,40 +2067,54 @@ msgid ""
 "folder. Right click on the sub-folder. Choose \"Sync this folder\" in the "
 "pop-up menu."
 msgstr ""
+"Để đồng bộ hóa một thư mục con, hãy mở trình duyệt tệp đám mây bằng cách "
+"nhấp đúp vào một thư viện chưa được đồng bộ hóa. Điều hướng vào thư mục cha "
+"của thư mục con đó. Nhấp chuột phải vào thư mục con. Chọn \"Đồng bộ thư mục "
+"này\" trong menu hiện ra."
 
 #: templates/help/selective_sync.html:14
 msgid ""
 "After syncing the sub-folder, you can see its syncing status in the \"Synced"
 " Libraries\" group in the client's main window."
 msgstr ""
+"Sau khi đồng bộ hóa thư mục con, bạn có thể thấy trạng thái đồng bộ hóa của "
+"nó trong nhóm \"Thư viện đã đồng bộ\" ở cửa sổ chính của ứng dụng client."
 
 #: templates/help/setting_library_history.html:6
 msgid "Setting library history retention period"
-msgstr ""
+msgstr "Thiết lập thời gian lưu giữ lịch sử thư viện"
 
 #: templates/help/setting_library_history.html:7
 msgid ""
 "A library's history retention period length controls how long you can access"
 " your history data in the following features:"
 msgstr ""
+"Độ dài thời gian lưu giữ lịch sử của thư viện kiểm soát việc bạn có thể truy"
+" cập dữ liệu lịch sử của mình trong bao lâu đối với các tính năng sau:"
 
 #: templates/help/setting_library_history.html:9
 msgid ""
 "Restore deleted files: you cannot restore files and folders deleted before "
 "the retention period."
 msgstr ""
+"Khôi phục các tệp đã xóa: bạn không thể khôi phục các tệp và thư mục đã bị "
+"xóa trước thời gian lưu giữ."
 
 #: templates/help/setting_library_history.html:10
 msgid ""
 "File versions: you cannot access file versions older than the retention "
 "period."
 msgstr ""
+"Các phiên bản tệp: bạn không thể truy cập các phiên bản tệp cũ hơn thời gian"
+" lưu giữ."
 
 #: templates/help/setting_library_history.html:11
 msgid ""
 "Library history and snapshots: you cannot access library snapshots older "
 "than the retention period."
 msgstr ""
+"Lịch sử thư viện và snapshot: bạn không thể truy cập các bản snapshot của "
+"thư viện cũ hơn thời gian lưu giữ."
 
 #: templates/help/setting_library_history.html:13
 msgid ""
@@ -1879,51 +2122,73 @@ msgid ""
 "library, separately. You must be the library's owner to set the retention "
 "period. To set retention period length:"
 msgstr ""
+"Thời gian lưu giữ các phiên bản tệp cũ có thể được cấu hình riêng cho từng "
+"thư viện. Bạn phải là chủ sở hữu thư viện để thiết lập thời gian lưu giữ. Để"
+" thiết lập độ dài thời gian lưu giữ:"
 
 #: templates/help/setting_library_history.html:15
 msgid ""
 "In Seafile Web App, click the \"Mine\" tab in the navigation panel (as in "
 "the below screenshot). All libraries owned by you will be listed."
 msgstr ""
+"Trong Ứng dụng Web Seafile, hãy nhấp vào tab \"Của tôi\" trong bảng điều "
+"hướng (như trong ảnh chụp màn hình bên dưới). Tất cả các thư viện do bạn sở "
+"hữu sẽ được liệt kê."
 
 #: templates/help/setting_library_history.html:16
 msgid ""
 "Move the cursor onto the row of the library. An operation menu will appear. "
 "Click \"History Setting\" in the drop-down menu."
 msgstr ""
+"Di chuyển con trỏ chuột lên hàng của thư viện. Một menu thao tác sẽ xuất "
+"hiện. Nhấp vào \"Cài đặt lịch sử\" trong menu thả xuống."
 
 #: templates/help/setting_library_history.html:17
 msgid "In the pop-up dialog, you can set the length of file retention period."
 msgstr ""
+"Trong hộp thoại hiện ra, bạn có thể thiết lập độ dài của thời gian lưu giữ "
+"tệp."
 
 #: templates/help/sharing_files_and_folders.html:6
 msgid ""
 "In Seafile there are a few ways to share files and folders with others:"
 msgstr ""
+"Trong Seafile, có một vài cách để chia sẻ tệp và thư mục với người khác:"
 
 #: templates/help/sharing_files_and_folders.html:8
 msgid ""
 "Using links: there are multiple types of links that can be used to share "
 "with various scope of collaborators."
 msgstr ""
+"Sử dụng liên kết: có nhiều loại liên kết có thể được sử dụng để chia sẻ với "
+"các phạm vi cộng tác viên khác nhau."
 
 #: templates/help/sharing_files_and_folders.html:10
 msgid ""
 "Share links: Any user who has access to the links can access the files or "
 "folders pointed by the link. No login is required."
 msgstr ""
+"Liên kết chia sẻ (Share links): Bất kỳ người dùng nào có quyền truy cập vào "
+"liên kết đều có thể truy cập các tệp hoặc thư mục được chỉ định bởi liên "
+"kết. Không yêu cầu đăng nhập."
 
 #: templates/help/sharing_files_and_folders.html:11
 msgid ""
 "Upload links: Any user who has access to the links can upload files to the "
 "folder pointed by the link. No login is required."
 msgstr ""
+"Liên kết tải lên (Upload links): Bất kỳ người dùng nào có quyền truy cập vào"
+" liên kết đều có thể tải tệp lên thư mục được chỉ định bởi liên kết. Không "
+"yêu cầu đăng nhập."
 
 #: templates/help/sharing_files_and_folders.html:12
 msgid ""
 "Internal links: Only logged in users who have read permission to the file or"
 " folder can access this link. Used for internal file sharing."
 msgstr ""
+"Liên kết nội bộ (Internal links): Chỉ những người dùng đã đăng nhập và có "
+"quyền đọc đối với tệp hoặc thư mục mới có thể truy cập liên kết này. Được sử"
+" dụng để chia sẻ tệp nội bộ."
 
 #: templates/help/sharing_files_and_folders.html:15
 msgid ""
@@ -1931,10 +2196,13 @@ msgid ""
 "library or folder for specific users or groups. Users have to log in to "
 "access the folders."
 msgstr ""
+"Chia sẻ thư viện hoặc thư mục: được sử dụng để thiết lập quyền truy cập vào "
+"một thư viện hoặc thư mục cho những người dùng hoặc nhóm cụ thể. Người dùng "
+"phải đăng nhập để truy cập các thư mục."
 
 #: templates/help/sharing_files_and_folders.html:17
 msgid "Creating share links to files or folders"
-msgstr ""
+msgstr "Tạo liên kết chia sẻ đến các tệp hoặc thư mục"
 
 #: templates/help/sharing_files_and_folders.html:18
 msgid ""
@@ -1942,12 +2210,18 @@ msgid ""
 "anyone, including those who don't have a Seafile account. You can also use "
 "password and expiration time to protect your links."
 msgstr ""
+"Liên kết chia sẻ là các liên kết công khai đến các tệp hoặc thư mục. Chúng "
+"có thể được truy cập bởi bất kỳ ai, kể cả những người không có tài khoản "
+"Seafile. Bạn cũng có thể sử dụng mật khẩu và thời gian hết hạn để bảo vệ các"
+" liên kết của mình."
 
 #: templates/help/sharing_files_and_folders.html:19
 msgid ""
 "You can also set access permission to share links. There are three types of "
 "permissions:"
 msgstr ""
+"Bạn cũng có thể thiết lập quyền truy cập cho các liên kết chia sẻ. Có ba "
+"loại quyền:"
 
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
@@ -1955,6 +2229,9 @@ msgid ""
 "browser, but cannot be downloaded. This is useful for sharing confidential "
 "data."
 msgstr ""
+"Chỉ xem trước: tệp hoặc các tệp trong thư mục chỉ có thể được xem trong "
+"trình duyệt web, nhưng không thể tải xuống. Điều này hữu ích cho việc chia "
+"sẻ dữ liệu bảo mật."
 
 #: templates/help/sharing_files_and_folders.html:23
 msgid ""
@@ -1962,16 +2239,22 @@ msgid ""
 "file can be edited in web browser (e.g. an Office file), any user who has "
 "access to the link is allowed to edit it."
 msgstr ""
+"Chỉnh sửa trên đám mây và tải xuống: Tương tự như \"Xem trước và Tải "
+"xuống\", nhưng nếu tệp có thể được chỉnh sửa trong trình duyệt web (ví dụ: "
+"tệp Office), bất kỳ người dùng nào có quyền truy cập vào liên kết đều được "
+"phép chỉnh sửa nó."
 
 #: templates/help/sharing_files_and_folders.html:25
 msgid "To create a share link in Seafile web app:"
-msgstr ""
+msgstr "Để tạo một liên kết chia sẻ trong ứng dụng web Seafile:"
 
 #: templates/help/sharing_files_and_folders.html:27
 msgid ""
 "Navigate into the parent folder containing the file or folder. Hover your "
 "mouse over the file or folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Điều hướng vào thư mục cha chứa tệp hoặc thư mục. Di chuột qua tệp hoặc thư "
+"mục và nhấp vào biểu tượng \"Chia sẻ\" xuất hiện."
 
 #: templates/help/sharing_files_and_folders.html:28
 msgid ""
@@ -1979,6 +2262,10 @@ msgid ""
 " on the left panel. Then click \"Generate\" button to create a link. You can"
 " use password, expiration time and permission to protect your link."
 msgstr ""
+"Một cửa sổ bật lên sẽ xuất hiện với các tùy chọn chia sẻ. Nhấp vào tab "
+"\"Liên kết chia sẻ\" ở bảng bên trái. Sau đó nhấp vào nút \"Tạo\" để tạo một"
+" liên kết. Bạn có thể sử dụng mật khẩu, thời gian hết hạn và quyền hạn để "
+"bảo vệ liên kết của mình."
 
 #: templates/help/sharing_files_and_folders.html:29
 #: templates/help/sharing_files_and_folders.html:42
@@ -1986,10 +2273,14 @@ msgid ""
 "Copy the link to email, instant messaging client or any other tool to send "
 "it to others."
 msgstr ""
+"Sao chép liên kết vào email, ứng dụng nhắn tin hoặc bất kỳ công cụ nào khác "
+"để gửi cho người khác."
 
 #: templates/help/sharing_files_and_folders.html:31
 msgid "You can also create share links from the desktop clients."
 msgstr ""
+"Bạn cũng có thể tạo các liên kết chia sẻ từ các ứng dụng client trên máy "
+"tính."
 
 #: templates/help/sharing_files_and_folders.html:33
 msgid ""
@@ -1998,6 +2289,10 @@ msgid ""
 " on the file or folder that you want to create a link to. In the pop-up "
 "menu, choose \"Seafile\" then \"Create share link\"."
 msgstr ""
+"Nếu thư viện đã được đồng bộ hóa, hãy nhấp đúp vào thư viện trong cửa sổ "
+"chính của Seafile client. Thư mục cục bộ của thư viện đó sẽ được mở. Nhấp "
+"chuột phải vào tệp hoặc thư mục mà bạn muốn tạo liên kết. Trong menu hiện "
+"ra, chọn \"Seafile\" rồi chọn \"Tạo liên kết chia sẻ\"."
 
 #: templates/help/sharing_files_and_folders.html:34
 msgid ""
@@ -2005,10 +2300,13 @@ msgid ""
 " Seafile client. The cloud file browser window will be opened, and you can "
 "create a link to a file or folder in it."
 msgstr ""
+"Nếu thư viện chưa được đồng bộ hóa, hãy nhấp đúp vào thư viện trong cửa sổ "
+"chính của Seafile client. Cửa sổ trình duyệt tệp đám mây sẽ mở ra và bạn có "
+"thể tạo liên kết đến một tệp hoặc thư mục trong đó."
 
 #: templates/help/sharing_files_and_folders.html:36
 msgid "Creating upload links to folders"
-msgstr ""
+msgstr "Tạo liên kết tải lên cho thư mục"
 
 #: templates/help/sharing_files_and_folders.html:37
 msgid ""
@@ -2016,16 +2314,21 @@ msgid ""
 "upload links for folders. Others cannot see the files in the folders. They "
 "can only upload files to them."
 msgstr ""
+"Bạn có thể sử dụng liên kết tải lên để thu thập tệp từ người khác. Bạn chỉ "
+"có thể tạo liên kết tải lên cho các thư mục. Người khác không thể thấy các "
+"tệp trong thư mục. Họ chỉ có thể tải tệp lên đó."
 
 #: templates/help/sharing_files_and_folders.html:38
 msgid "To create an upload link in Seafile web app:"
-msgstr ""
+msgstr "Để tạo một liên kết tải lên trong ứng dụng web Seafile:"
 
 #: templates/help/sharing_files_and_folders.html:40
 msgid ""
 "Navigate into the parent folder containing the folder. Hover your mouse over"
 " the folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Điều hướng vào thư mục cha chứa thư mục đó. Di chuột qua thư mục và nhấp vào"
+" biểu tượng \"Chia sẻ\" xuất hiện."
 
 #: templates/help/sharing_files_and_folders.html:41
 msgid ""
@@ -2033,10 +2336,13 @@ msgid ""
 "tab on the left panel. Then click \"Generate\" button to create a link. You "
 "can use password to protect your link."
 msgstr ""
+"Một cửa sổ bật lên sẽ xuất hiện với các tùy chọn chia sẻ. Nhấp vào tab "
+"\"Liên kết tải lên\" ở bảng bên trái. Sau đó nhấp vào nút \"Tạo\" để tạo một"
+" liên kết. Bạn có thể sử dụng mật khẩu để bảo vệ liên kết của mình."
 
 #: templates/help/sharing_files_and_folders.html:44
 msgid "Sharing libraries or folders"
-msgstr ""
+msgstr "Chia sẻ thư viện hoặc thư mục"
 
 #: templates/help/sharing_files_and_folders.html:45
 msgid ""
@@ -2044,62 +2350,76 @@ msgid ""
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
 msgstr ""
+"Bạn có thể chia sẻ một thư viện hoặc thư mục cho những người dùng Seafile đã"
+" đăng ký khác. Thư viện hoặc thư mục được chia sẻ có thể được người khác "
+"truy cập thông qua ứng dụng web và các Seafile client."
 
 #: templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
-msgstr ""
+msgstr "Bạn có thể chọn phạm vi chia sẻ:"
 
 #: templates/help/sharing_files_and_folders.html:48
 msgid "Share to user: You can share to one or more users."
 msgstr ""
+"Chia sẻ cho người dùng: Bạn có thể chia sẻ cho một hoặc nhiều người dùng."
 
 #: templates/help/sharing_files_and_folders.html:49
 msgid "Share to group: You can share to a group."
-msgstr ""
+msgstr "Chia sẻ cho nhóm: Bạn có thể chia sẻ cho một nhóm."
 
 #: templates/help/sharing_files_and_folders.html:50
 msgid ""
 "Share to organization: If you're using a private server, sometimes it's "
 "useful to share to all members on the server (the entire organization)."
 msgstr ""
+"Chia sẻ cho tổ chức: Nếu bạn đang sử dụng máy chủ riêng, đôi khi việc chia "
+"sẻ cho tất cả thành viên trên máy chủ (toàn bộ tổ chức) là rất hữu ích."
 
 #: templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
-msgstr ""
+msgstr "Bạn cũng có thể thiết lập quyền hạn khi chia sẻ:"
 
 #: templates/help/sharing_files_and_folders.html:54
 msgid "Read-Write: users can read, write, upload, download and sync files."
 msgstr ""
+"Đọc-Ghi: người dùng có thể đọc, ghi, tải lên, tải xuống và đồng bộ hóa tệp."
 
 #: templates/help/sharing_files_and_folders.html:55
 msgid "Read-only: users can read, download and sync files."
-msgstr ""
+msgstr "Chỉ đọc: người dùng có thể đọc, tải xuống và đồng bộ hóa tệp."
 
 #: templates/help/sharing_files_and_folders.html:56
 msgid "Admin: besides the write permission, users can also share the library."
 msgstr ""
+"Quản trị viên: ngoài quyền ghi, người dùng còn có thể chia sẻ thư viện đó."
 
 #: templates/help/sharing_files_and_folders.html:57
 msgid ""
 "Online Read-Write: users can view and edit files online via a web browser. "
 "The files cannot be downloaded."
 msgstr ""
+"Đọc-Ghi trực tuyến: người dùng có thể xem và chỉnh sửa tệp trực tuyến qua "
+"trình duyệt web. Các tệp không thể tải xuống."
 
 #: templates/help/sharing_files_and_folders.html:58
 msgid ""
 "Online Read-only: users can only view files online via a web browser. The "
 "files cannot be downloaded."
 msgstr ""
+"Chỉ đọc trực tuyến: người dùng chỉ có thể xem tệp trực tuyến qua trình duyệt"
+" web. Các tệp không thể tải xuống."
 
 #: templates/help/sharing_files_and_folders.html:60
 msgid "To share a library or folder to a user or group:"
-msgstr ""
+msgstr "Để chia sẻ một thư viện hoặc thư mục cho một người dùng hoặc nhóm:"
 
 #: templates/help/sharing_files_and_folders.html:62
 msgid ""
 "Hover your mouse over the library or folder and click on the \"Share\" icon "
 "that appears."
 msgstr ""
+"Di chuột qua thư viện hoặc thư mục và nhấp vào biểu tượng \"Chia sẻ\" xuất "
+"hiện."
 
 #: templates/help/sharing_files_and_folders.html:63
 msgid ""
@@ -2107,6 +2427,9 @@ msgid ""
 "or \"Share to group\" tab on the left panel. Select the user or group. Then "
 "click \"Submit\"."
 msgstr ""
+"Một cửa sổ bật lên sẽ xuất hiện với các tùy chọn chia sẻ. Nhấp vào tab "
+"\"Chia sẻ cho người dùng\" hoặc \"Chia sẻ cho nhóm\" ở bảng bên trái. Chọn "
+"người dùng hoặc nhóm. Sau đó nhấp vào \"Gửi\"."
 
 #: templates/help/sharing_files_and_folders.html:65
 msgid ""
@@ -2115,6 +2438,10 @@ msgid ""
 " you share it to a group, the group members can only see it by navigating "
 "into the group."
 msgstr ""
+"Sau khi bạn chia sẻ một thư viện hoặc thư mục cho một người dùng, người dùng"
+" đó có thể thấy nó bằng cách nhấp vào tab \"Được chia sẻ với tôi\" ở bảng "
+"bên trái trong ứng dụng web Seafile. Nếu bạn chia sẻ cho một nhóm, các thành"
+" viên nhóm chỉ có thể thấy nó bằng cách đi vào trong nhóm đó."
 
 #: templates/help/sharing_files_and_folders.html:66
 msgid ""
@@ -2123,10 +2450,14 @@ msgid ""
 "button. In the drop-down menu, you can choose to share an existing library "
 "or create a new library and share it."
 msgstr ""
+"Để chia sẻ một thư viện cho toàn bộ tổ chức: Trong ứng dụng web Seafile, "
+"nhấp vào tab \"Chia sẻ với tất cả\" ở bảng bên trái. Sau đó nhấp vào nút "
+"\"Thêm thư viện\". Trong menu thả xuống, bạn có thể chọn chia sẻ một thư "
+"viện hiện có hoặc tạo một thư viện mới và chia sẻ nó."
 
 #: templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
-msgstr ""
+msgstr "Liên kết nội bộ"
 
 #: templates/help/sharing_files_and_folders.html:68
 msgid ""
@@ -2136,6 +2467,11 @@ msgid ""
 "library. You may just copy the link and paste it into an email or IM "
 "software."
 msgstr ""
+"Chỉ những người dùng đã đăng nhập và có quyền đọc đối với tệp hoặc thư mục "
+"mới có thể truy cập liên kết này. Nó được sử dụng để chia sẻ tệp nội bộ. Đây"
+" là một cách thuận tiện để chia sẻ tệp giữa các thành viên trong nhóm có "
+"quyền truy cập vào một thư viện chung. Bạn chỉ cần sao chép liên kết và dán "
+"vào email hoặc phần mềm nhắn tin."
 
 #: templates/help/sync_interval.html:8
 msgid ""
@@ -2146,10 +2482,17 @@ msgid ""
 "local folder. You can set the interval of this periodic sync. The interval "
 "is set in the unit of seconds."
 msgstr ""
+"Thông thường, Seafile client tự động phát hiện các thay đổi trên thư mục cục"
+" bộ và tải các thay đổi đó lên máy chủ. Tuy nhiên, nếu thư mục cục bộ nằm "
+"trên một ổ đĩa chia sẻ mạng Windows, Seafile client không thể phát hiện các "
+"thay đổi một cách đáng tin cậy. Trong trường hợp này, bạn có thể yêu cầu "
+"Seafile client kiểm tra định kỳ các thay đổi trong thư mục cục bộ. Bạn có "
+"thể thiết lập khoảng thời gian đồng bộ định kỳ này. Khoảng thời gian được "
+"tính bằng đơn vị giây."
 
 #: templates/help/syncing_existing_folders.html:6
 msgid "Syncing with an existing folder"
-msgstr ""
+msgstr "Đồng bộ hóa với một thư mục hiện có"
 
 #: templates/help/syncing_existing_folders.html:8
 #, python-format
@@ -2163,24 +2506,37 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/conflicts/\">conflict files</a> if file contents "
 "are different in the local folder and the library. "
 msgstr ""
+"Đôi khi bạn đã có một thư viện trên máy chủ Seafile (do người khác chia sẻ "
+"hoặc được tải lên từ một máy tính khác). Bạn có thể đồng bộ hóa thư viện này"
+" với một thư mục hiện có trên máy tính của mình. Thư mục cục bộ phải có cùng"
+" tên với thư viện. Các tệp trong thư mục cục bộ sẽ được hợp nhất với các tệp"
+" trong thư viện. Sẽ không có tệp nào trong thư mục cục bộ hoặc thư viện bị "
+"ghi đè hay mất đi. Quá trình hợp nhất sẽ tạo ra một số <a "
+"href=\"%(SITE_ROOT)shelp/conflicts/\">tệp xung đột</a> nếu nội dung tệp ở "
+"thư mục cục bộ và thư viện khác nhau."
 
 #: templates/help/syncing_existing_folders.html:10
 msgid ""
 "To sync a library with an existing folder, right click on the library in "
 "Seafile client's main window and click \"Sync this library\"."
 msgstr ""
+"Để đồng bộ hóa một thư viện với một thư mục hiện có, nhấp chuột phải vào thư"
+" viện trong cửa sổ chính của Seafile client và nhấp vào \"Đồng bộ thư viện "
+"này\"."
 
 #: templates/help/syncing_existing_folders.html:14
 msgid "In the pop-up dialog, click the \"Sync with an existing folder\" link."
 msgstr ""
+"Trong hộp thoại hiện ra, hãy nhấp vào liên kết \"Đồng bộ với một thư mục "
+"hiện có\"."
 
 #: templates/help/syncing_existing_folders.html:18
 msgid "Then choose an existing folder to sync with this library."
-msgstr ""
+msgstr "Sau đó chọn một thư mục hiện có để đồng bộ hóa với thư viện này."
 
 #: templates/help/unsync_resync.html:6
 msgid "Unsync and resync library"
-msgstr ""
+msgstr "Hủy đồng bộ và đồng bộ lại thư viện"
 
 #: templates/help/unsync_resync.html:8
 #, python-format
@@ -2192,6 +2548,13 @@ msgid ""
 "<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
 "folder</a> feature."
 msgstr ""
+"Khi bạn không còn muốn đồng bộ hóa một thư mục cục bộ với một thư viện nữa, "
+"bạn có thể hủy đồng bộ hóa nó. Sau khi bạn hủy đồng bộ hóa một thư viện, các"
+" thay đổi đối với thư mục và tệp cục bộ sẽ không được tải lên và các thay "
+"đổi trong thư viện sẽ không được tải xuống. Nếu bạn muốn đồng bộ hóa lại thư"
+" viện với thư mục cục bộ, bạn có thể sử dụng tính năng <a "
+"href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">đồng bộ với thư mục "
+"hiện có</a>."
 
 #: templates/help/unsync_resync.html:10
 msgid ""
@@ -2200,6 +2563,11 @@ msgid ""
 "unsync and then immediately sync the library with the same folder. You can "
 "find this action in the pop-up menu of the client's main window."
 msgstr ""
+"Đôi khi có những lỗi nội bộ trong ứng dụng client ngăn cản quá trình đồng bộ"
+" hóa. Trong những trường hợp này, việc \"đồng bộ lại\" (resync) thư viện "
+"thường rất hữu ích. Đồng bộ lại có nghĩa là hủy đồng bộ và sau đó ngay lập "
+"tức đồng bộ hóa thư viện với chính thư mục đó. Bạn có thể tìm thấy thao tác "
+"này trong menu hiện ra của cửa sổ chính ứng dụng client."
 
 #: templates/help/using_drive_client.html:7
 msgid ""
@@ -2207,16 +2575,22 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
 "start it by double clicking the \"SeaDrive\" app icon on your desktop."
 msgstr ""
+"Sau khi cài đặt drive client theo hướng dẫn trên <a "
+"href=\"https://www.seafile.com/en/download/\">trang tải xuống</a>, bạn có "
+"thể khởi động nó bằng cách nhấp đúp vào biểu tượng ứng dụng \"SeaDrive\" "
+"trên màn hình nền của bạn."
 
 #: templates/help/using_drive_client.html:8
 msgid ""
 "You'll be asked to choose a drive letter for the virtual drive. By default, "
 "\"S:\" will be used."
 msgstr ""
+"Bạn sẽ được yêu cầu chọn một ký tự ổ đĩa cho ổ đĩa ảo. Theo mặc định, ký tự "
+"\"S:\" sẽ được sử dụng."
 
 #: templates/help/using_drive_client.html:9
 msgid "Then you'll be asked to log into your Seafile server."
-msgstr ""
+msgstr "Sau đó, bạn sẽ được yêu cầu đăng nhập vào máy chủ Seafile của mình."
 
 #: templates/help/using_drive_client.html:12
 msgid ""
@@ -2225,6 +2599,11 @@ msgid ""
 "at this moment. So it'll not take very long. You can let it run in the "
 "background. You'll be noticed when the fetch is done."
 msgstr ""
+"Sau khi đăng nhập thành công vào máy chủ, Drive client sẽ bắt đầu lấy danh "
+"sách thư viện và tệp từ máy chủ. Nội dung tệp sẽ không được tải xuống tại "
+"thời điểm này. Vì vậy, quá trình này sẽ không mất nhiều thời gian. Bạn có "
+"thể để nó chạy ngầm. Bạn sẽ được thông báo khi quá trình lấy dữ liệu hoàn "
+"tất."
 
 #: templates/help/using_drive_client.html:14
 msgid ""
@@ -2234,35 +2613,43 @@ msgid ""
 "when you open a file. Recently opened file will be cached in your local "
 "disk. All cached files will be marked with a green tick."
 msgstr ""
+"Thư mục ổ đĩa ảo sẽ được mở. Bạn sẽ thấy nó hoạt động giống như một ổ cứng "
+"thông thường trên máy tính của bạn. Các thư mục cấp cao nhất trong ổ đĩa ảo "
+"là các thư viện trên máy chủ Seafile. Nội dung tệp sẽ được tải xuống khi bạn"
+" mở một tệp. Các tệp được mở gần đây sẽ được lưu trong bộ nhớ đệm (cache) "
+"trên đĩa cục bộ của bạn. Tất cả các tệp được lưu trong bộ nhớ đệm sẽ được "
+"đánh dấu bằng dấu tích màu xanh lá cây."
 
 #: templates/help/using_drive_client.html:17
 msgid "Synced State"
-msgstr ""
+msgstr "Trạng thái đồng bộ"
 
 #: templates/help/using_drive_client.html:18
 msgid ""
 "Files and folders in the virtual drive are in either cloud-only, synced, or "
 "in partially synced state."
 msgstr ""
+"Các tệp và thư mục trong ổ đĩa ảo có thể ở trạng thái chỉ trên đám mây "
+"(cloud-only), đã đồng bộ (synced) hoặc đồng bộ một phần (partially synced)."
 
 #: templates/help/using_drive_client.html:22
 #: templates/help/using_drive_client.html:51
 msgid "State"
-msgstr ""
+msgstr "Trạng thái"
 
 #: templates/help/using_drive_client.html:23
 #: templates/help/using_drive_client.html:52
 msgid "Icon"
-msgstr ""
+msgstr "Biểu tượng"
 
 #: templates/help/using_drive_client.html:24
 #: templates/help/using_drive_client.html:53
 msgid "Details"
-msgstr ""
+msgstr "Chi tiết"
 
 #: templates/help/using_drive_client.html:29
 msgid "Cloud-only content"
-msgstr ""
+msgstr "Nội dung chỉ có trên đám mây"
 
 #: templates/help/using_drive_client.html:31
 msgid ""
@@ -2272,71 +2659,89 @@ msgid ""
 "downloaded is only information about the file, such as its name, its size "
 "and the date it was updated."
 msgstr ""
+"Nội dung chỉ có trên đám mây hiển thị trong ổ đĩa ảo nhưng không chiếm toàn "
+"bộ dung lượng mà tệp đó vốn có. Trong trình quản lý tệp, bạn có thể thấy tệp"
+" đó, nhưng nội dung chưa được tải xuống đầy đủ cho đến khi bạn cần. Những gì"
+" được tải xuống chỉ là thông tin về tệp như tên, kích thước và ngày cập "
+"nhật."
 
 #: templates/help/using_drive_client.html:34
 msgid "Synced content"
-msgstr ""
+msgstr "Nội dung đã đồng bộ"
 
 #: templates/help/using_drive_client.html:36
 msgid ""
 "Synced content is downloaded and saved on the hard drive of your computer. "
 "You can directly edit these files from applications on your computer."
 msgstr ""
+"Nội dung đã đồng bộ được tải xuống và lưu trên ổ cứng máy tính của bạn. Bạn "
+"có thể chỉnh sửa trực tiếp các tệp này từ các ứng dụng trên máy tính của "
+"mình."
 
 #: templates/help/using_drive_client.html:39
 msgid "Partially synced content"
-msgstr ""
+msgstr "Nội dung đồng bộ một phần"
 
 #: templates/help/using_drive_client.html:41
 msgid ""
 "Partially synced folders contain both synced and cloud-only files or "
 "folders."
 msgstr ""
+"Các thư mục đồng bộ một phần chứa cả các tệp hoặc thư mục đã đồng bộ và chỉ "
+"có trên đám mây."
 
 #: templates/help/using_drive_client.html:46
 msgid "Special States"
-msgstr ""
+msgstr "Trạng thái đặc biệt"
 
 #: templates/help/using_drive_client.html:47
 msgid ""
 "For files that are already synced to local computer, they may be in 3 other "
 "special states, besides the normal \"synced\" state. "
 msgstr ""
+"Đối với các tệp đã được đồng bộ hóa về máy tính cục bộ, chúng có thể ở 3 "
+"trạng thái đặc biệt khác ngoài trạng thái \"đã đồng bộ\" thông thường."
 
 #: templates/help/using_drive_client.html:58
 msgid "Locked by other user"
-msgstr ""
+msgstr "Bị khóa bởi người dùng khác"
 
 #: templates/help/using_drive_client.html:60
 msgid ""
 "The file is locked by other user on the server. You can only open the file "
 "in read-only mode. You cannot modify, delete, rename or move the file."
 msgstr ""
+"Tệp đang bị khóa bởi một người dùng khác trên máy chủ. Bạn chỉ có thể mở tệp"
+" ở chế độ chỉ đọc. Bạn không thể sửa đổi, xóa, đổi tên hoặc di chuyển tệp."
 
 #: templates/help/using_drive_client.html:63
 msgid "Locked by me"
-msgstr ""
+msgstr "Bị khóa bởi tôi"
 
 #: templates/help/using_drive_client.html:65
 msgid ""
 "The file is locked by you. This prevents others from modifying the file."
-msgstr ""
+msgstr "Tệp đang được bạn khóa. Điều này ngăn người khác sửa đổi tệp."
 
 #: templates/help/using_drive_client.html:68
 msgid "Read-only"
-msgstr ""
+msgstr "Chỉ đọc"
 
 #: templates/help/using_drive_client.html:70
 msgid ""
 "The folder or library of this file is shared with read-only permission to "
 "you. You cannot modify, delete or move the file."
 msgstr ""
+"Thư mục hoặc thư viện chứa tệp này được chia sẻ cho bạn với quyền chỉ đọc. "
+"Bạn không thể sửa đổi, xóa hoặc di chuyển tệp."
 
 #: templates/help/using_drive_client.html:74
 msgid ""
 "The Drive client regularly cleans up unused cached files in the background. "
 "You can also limit the local cache space."
 msgstr ""
+"Drive client thường xuyên dọn dẹp các tệp đệm không sử dụng ở chế độ chạy "
+"ngầm. Bạn cũng có thể giới hạn dung lượng bộ nhớ đệm cục bộ."
 
 #: templates/help/using_drive_client.html:76
 msgid ""
@@ -2344,10 +2749,14 @@ msgid ""
 "on the current selected server will be shown in the virtual drive. You can "
 "switch among accounts."
 msgstr ""
+"Bạn có thể đăng nhập vào nhiều tài khoản trong Drive client. Tuy nhiên, chỉ "
+"các tệp trên máy chủ hiện đang được chọn mới được hiển thị trong ổ đĩa ảo. "
+"Bạn có thể chuyển đổi giữa các tài khoản."
 
 #: templates/help/using_drive_client.html:80
 msgid "1. Why can't I create new files or delete folders in root folder?"
 msgstr ""
+"1. Tại sao tôi không thể tạo tệp mới hoặc xóa thư mục trong thư mục gốc?"
 
 #: templates/help/using_drive_client.html:81
 msgid ""
@@ -2358,13 +2767,21 @@ msgid ""
 "represents libraries, we don't want users to delete their libraries by "
 "mistake. So the Drive client doesn't support deleting top level folders."
 msgstr ""
+"Thư mục gốc của ổ đĩa ảo chỉ chứa các thư mục thư viện. Seafile chỉ có thể "
+"đồng bộ hóa các tệp bên trong thư viện. Các tệp trong thư mục gốc không thể "
+"được tải lên máy chủ Seafile. Vì vậy, việc hỗ trợ tạo tệp trong thư mục gốc "
+"là không cần thiết. Vì các thư mục cấp cao nhất trong ổ đĩa ảo đại diện cho "
+"các thư viện, chúng tôi không muốn người dùng vô tình xóa thư viện của mình."
+" Do đó, Drive client không hỗ trợ xóa các thư mục cấp cao nhất."
 
 #: templates/help/viewing_files_within_web_app.html:6
 msgid ""
 "Some types of files can be directly opened and viewed within the Seafile Web"
 " App. Currently they are:"
 msgstr ""
+"Một số loại tệp có thể được mở và xem trực tiếp trong Ứng dụng Web Seafile. "
+"Hiện tại chúng bao gồm:"
 
 #: templates/help/viewing_files_within_web_app.html:13
 msgid "Image files"
-msgstr ""
+msgstr "Các tệp hình ảnh"

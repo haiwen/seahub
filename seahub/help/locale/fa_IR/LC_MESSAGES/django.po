@@ -789,6 +789,9 @@ msgid ""
 "the server. The server uses this password to create the library. But it "
 "doesn't store the plain text password."
 msgstr ""
+"اگر یک کتابخانه رمزگذاری شده در اپلیکیشن وب ایجاد کنید، رمز عبور به سرور "
+"ارسال می‌شود. سرور از این رمز عبور برای ایجاد کتابخانه استفاده می‌کند، اما "
+"رمز عبور را به صورت متن ساده (Plain text) ذخیره نمی‌کند."
 
 #: templates/help/encrypted_libraries.html:13
 #, python-format
@@ -797,10 +800,13 @@ msgid ""
 "client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
 "the password is not sent to the server."
 msgstr ""
+"اگر یک کتابخانه رمزگذاری شده را از یک پوشه محلی با کلاینت دسکتاپ ایجاد کنید "
+"(به <a href=\"%(SITE_ROOT)shelp/install_sync/\">همگام‌سازی فایل</a> مراجعه "
+"کنید)، رمز عبور به سرور ارسال نمی‌شود."
 
 #: templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
-msgstr ""
+msgstr "هنگامی که به کتابخانه رمزگذاری شده دسترسی پیدا می‌کنید:"
 
 #: templates/help/encrypted_libraries.html:19
 msgid ""
@@ -808,6 +814,9 @@ msgid ""
 " will cache the password in encrypted format for 1 hour. It won't store the "
 "password on disk."
 msgstr ""
+"اگر از اپلیکیشن وب استفاده می‌کنید، باید رمز عبور را در سرور وارد کنید. سرور"
+" رمز عبور را به صورت رمزگذاری شده به مدت ۱ ساعت کش (Cache) می‌کند و آن را "
+"روی دیسک ذخیره نخواهد کرد."
 
 #: templates/help/encrypted_libraries.html:20
 msgid ""
@@ -815,22 +824,29 @@ msgid ""
 "the server. The client decrypts and encrypts file contents locally. The "
 "plain text password is not stored on the client disk either."
 msgstr ""
+"اگر از کلاینت دسکتاپ برای همگام‌سازی کتابخانه استفاده می‌کنید، رمز عبور به "
+"سرور ارسال نمی‌شود. کلاینت محتویات فایل را به صورت محلی رمزگذاری و رمزگشایی "
+"می‌کند. رمز عبور به صورت متن ساده روی دیسک کلاینت نیز ذخیره نمی‌شود."
 
 #: templates/help/encrypted_libraries.html:21
 msgid ""
 "iOS client supports client side encryption since version 2.1.6. Android "
 "client supports it since version 2.1.0."
 msgstr ""
+"کلاینت iOS از نسخه ۲.۱.۶ و کلاینت اندروید از نسخه ۲.۱.۰ از رمزگذاری سمت "
+"کلاینت پشتیبانی می‌کنند."
 
 #: templates/help/encrypted_libraries.html:25
 msgid ""
 "Note that encrypted library only encrypts the contents of the files, but not"
 " the folder and file names."
 msgstr ""
+"توجه داشته باشید که کتابخانه رمزگذاری شده فقط محتویات فایل‌ها را رمزگذاری "
+"می‌کند و نام پوشه‌ها و فایل‌ها رمزگذاری نمی‌شوند."
 
 #: templates/help/file_locking.html:5
 msgid "File locking"
-msgstr ""
+msgstr "قفل کردن فایل"
 
 #: templates/help/file_locking.html:6
 msgid ""
@@ -840,22 +856,31 @@ msgid ""
 " the file when one person wants to exclusively modify the file. Seafile "
 "Professional Edition supports file locking."
 msgstr ""
+"وقتی بیش از یک نفر روی یک فایل همکاری می‌کنند، این احتمال وجود دارد که بیش "
+"از یک نفر تقریباً در یک زمان فایل را تغییر دهند. Seafile این وضعیت را به "
+"خوبی با فایل‌های تداخل (Conflict files) مدیریت می‌کند. اما اغلب راحت‌تر است "
+"که وقتی یک نفر می‌خواهد فایل را به طور انحصاری تغییر دهد، آن را قفل کند. "
+"نسخه حرفه‌ای Seafile از قفل کردن فایل پشتیبانی می‌کند."
 
 #: templates/help/file_locking.html:7
 msgid ""
 "File locking works on both the web app and the desktop syncing client. We'll"
 " introduce them one by one."
 msgstr ""
+"قفل کردن فایل هم در اپلیکیشن وب و هم در کلاینت همگام‌سازی دسکتاپ کار می‌کند."
+" ما آن‌ها را یکی یکی معرفی خواهیم کرد."
 
 #: templates/help/file_locking.html:8
 msgid "File locking on the Web App"
-msgstr ""
+msgstr "قفل کردن فایل در اپلیکیشن وب"
 
 #: templates/help/file_locking.html:9
 msgid ""
 "To lock a file, you can navigate into the file's folder on the web app, and "
 "click on the \"operations\" drop-down menu."
 msgstr ""
+"برای قفل کردن یک فایل، می‌توانید در اپلیکیشن وب به پوشه فایل بروید و روی "
+"منوی کشویی \"عملیات\" (operations) کلیک کنید."
 
 #: templates/help/file_locking.html:11
 msgid ""
@@ -864,28 +889,38 @@ msgid ""
 "file. And you can also unlock a file that's locked by you. But you cannot "
 "unlock files locked by others."
 msgstr ""
+"پس از قفل شدن فایل، یک علامت قرمز \"توقف\" در گوشه آیکون فایل مشاهده "
+"می‌کنید. با نگه داشتن ماوس روی علامت توقف، می‌توانید ببینید چه کسی فایل را "
+"قفل کرده است. شما همچنین می‌توانید فایلی را که توسط خودتان قفل شده باز کنید،"
+" اما نمی‌توانید فایل‌های قفل شده توسط دیگران را باز کنید."
 
 #: templates/help/file_locking.html:13
 msgid "File locking on the desktop client"
-msgstr ""
+msgstr "قفل کردن فایل در کلاینت دسکتاپ"
 
 #: templates/help/file_locking.html:14
 msgid ""
 "After a library is synced to the desktop, you can lock/unlock files in that "
 "library inside File Explorer on Windows or Finder on Mac OS."
 msgstr ""
+"پس از همگام‌سازی یک کتابخانه با دسکتاپ، می‌توانید فایل‌های آن کتابخانه را در"
+" File Explorer ویندوز یا Finder مک‌او‌اس قفل یا باز کنید."
 
 #: templates/help/file_locking.html:15
 msgid ""
 "To lock a file, just right click on a synced file and choose \"lock this "
 "file\" in the \"Seafile\" menu."
 msgstr ""
+"برای قفل کردن یک فایل، کافیست روی یک فایل همگام‌سازی شده راست‌کلیک کرده و از"
+" منوی \"Seafile\" گزینه \"lock this file\" را انتخاب کنید."
 
 #: templates/help/file_locking.html:17
 msgid ""
 "If a file is locked by you, you can see an orange \"stop sign\" on the file "
 "icon. You can choose to unlock it."
 msgstr ""
+"اگر فایلی توسط شما قفل شده باشد، یک علامت نارنجی \"توقف\" روی آیکون فایل "
+"می‌بینید و می‌توانید آن را باز کنید."
 
 #: templates/help/file_locking.html:19
 msgid ""
@@ -893,16 +928,21 @@ msgid ""
 "file icon. The file is automatically set to read-only. You cannot modify it "
 "until it's unlocked."
 msgstr ""
+"اگر فایلی توسط کاربر دیگری قفل شده باشد، یک علامت قرمز \"توقف\" روی آیکون "
+"فایل می‌بینید. فایل به طور خودکار در حالت فقط‌خواندنی قرار می‌گیرد و تا "
+"زمانی که باز نشود، نمی‌توانید آن را تغییر دهید."
 
 #: templates/help/file_locking.html:21
 msgid ""
 "If a library is not synced, you can still use cloud file browser to lock and"
 " unlock files in it."
 msgstr ""
+"اگر کتابخانه‌ای همگام‌سازی نشده باشد، همچنان می‌توانید از مرورگر فایل ابری "
+"برای قفل کردن و باز کردن فایل‌های درون آن استفاده کنید."
 
 #: templates/help/file_locking.html:22
 msgid "Auto locking office files"
-msgstr ""
+msgstr "قفل شدن خودکار فایل‌های آفیس"
 
 #: templates/help/file_locking.html:23
 msgid ""
@@ -912,18 +952,24 @@ msgid ""
 " propagated to other computers syncing this library. It prevents concurrent "
 "editing the same Office file and is convenient for collaboration."
 msgstr ""
+"پس از همگام‌سازی یک کتابخانه با دسکتاپ، وقتی یک فایل مایکروسافت آفیس را درون"
+" کتابخانه باز می‌کنید، Seafile به طور خودکار فایل را قفل می‌کند. وقتی فایل "
+"را می‌بندید، Seafile به طور خودکار آن را باز می‌کند. وضعیت قفل به سایر "
+"کامپیوترهایی که این کتابخانه را همگام‌سازی می‌کنند منتقل می‌شود. این کار از "
+"ویرایش همزمان یک فایل آفیس جلوگیری کرده و برای همکاری تیمی بسیار مناسب است."
 
 #: templates/help/file_locking.html:24
 msgid "Details about file locking"
-msgstr ""
+msgstr "جزئیات مربوط به قفل کردن فایل"
 
 #: templates/help/file_locking.html:25
 msgid "There are a few useful tips about how file locking works:"
-msgstr ""
+msgstr "چند نکته مفید درباره نحوه عملکرد قفل فایل وجود دارد:"
 
 #: templates/help/file_locking.html:27
 msgid "A locked file can only be unlocked by the user who locked it."
 msgstr ""
+"یک فایل قفل شده فقط توسط کاربری که آن را قفل کرده است، قابل باز شدن است."
 
 #: templates/help/file_locking.html:28
 msgid ""
@@ -932,16 +978,22 @@ msgid ""
 "locked file. The purpose of file locking is mainly to prevent concurrent "
 "editing."
 msgstr ""
+"یک فایل قفل شده توسط سایر کاربران قابل تغییر، جابجایی، تغییر نام یا حذف "
+"نیست. اما سایر کاربران همچنان می‌توانند پوشه والد یک فایل قفل شده را جابجا "
+"کنند، حذف کنند یا نام آن را تغییر دهند. هدف از قفل کردن فایل عمدتاً جلوگیری "
+"از ویرایش همزمان است."
 
 #: templates/help/file_locking.html:29
 msgid ""
 "When a locked file's parent folder is renamed or moved inside the same "
 "library, it remains locked after the operation."
 msgstr ""
+"هنگامی که پوشه والد یک فایل قفل شده در همان کتابخانه تغییر نام داده یا جابجا"
+" می‌شود، فایل پس از عملیات همچنان قفل باقی می‌ماند."
 
 #: templates/help/finding_older_version_files.html:6
 msgid "Finding older version of files"
-msgstr ""
+msgstr "یافتن نسخه‌های قدیمی‌تر فایل‌ها"
 
 #: templates/help/finding_older_version_files.html:7
 msgid ""
@@ -950,10 +1002,14 @@ msgid ""
 "a configurable period. When you want to access an older version of a file, "
 "the file history feature becomes very handy."
 msgstr ""
+"Seafile تاریخچه تغییرات تمام فایل‌ها را پیگیری می‌کند. هر زمان که فایلی "
+"تغییر داده شود، نسخه جدیدی ایجاد می‌شود، در حالی که نسخه قدیمی برای مدتی "
+"قابل تنظیم نگه داشته می‌شود. وقتی می‌خواهید به نسخه قدیمی‌تر یک فایل دسترسی "
+"پیدا کنید، ویژگی تاریخچه فایل بسیار کاربردی است."
 
 #: templates/help/finding_older_version_files.html:8
 msgid "To list all the versions of a file:"
-msgstr ""
+msgstr "برای مشاهده لیست تمام نسخه‌های یک فایل:"
 
 #: templates/help/finding_older_version_files.html:10
 msgid ""
@@ -961,16 +1017,22 @@ msgid ""
 "cursor onto the row of that file. An operation menu will appear. You can "
 "click the \"History\" button in that menu."
 msgstr ""
+"در اپلیکیشن وب Seafile، به پوشه حاوی فایل بروید. نشانگر ماوس را روی ردیف آن "
+"فایل ببرید. یک منوی عملیاتی ظاهر می‌شود. می‌توانید روی دکمه \"تاریخچه\" "
+"(History) در آن منو کلیک کنید."
 
 #: templates/help/finding_older_version_files.html:11
 msgid ""
 "A list of all versions of that file will be displayed in time order, from "
 "newer to older. The list also contains the file's rename history."
 msgstr ""
+"لیستی از تمام نسخه‌های آن فایل به ترتیب زمانی، از جدیدترین به قدیمی‌ترین "
+"نمایش داده می‌شود. این لیست همچنین تاریخچه تغییر نام فایل را نیز شامل "
+"می‌شود."
 
 #: templates/help/finding_older_version_files.html:12
 msgid "You can download, restore, view any version of the file."
-msgstr ""
+msgstr "شما می‌توانید هر نسخه‌ای از فایل را دانلود، بازیابی یا مشاهده کنید."
 
 #: templates/help/finding_older_version_files.html:14
 #, python-format
@@ -979,10 +1041,13 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"شما می‌توانید دوره نگهداری نسخه‌های فایل را پیکربندی کنید: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">تنظیم دوره نگهداری "
+"تاریخچه</a>."
 
 #: templates/help/folder_permission.html:6
 msgid "Use folder permission for fine-grained access control"
-msgstr ""
+msgstr "استفاده از دسترسی‌های پوشه برای کنترل دقیق دسترسی"
 
 #: templates/help/folder_permission.html:8
 #, python-format
@@ -993,6 +1058,10 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing libraries</a>."
 " Here are some use cases:"
 msgstr ""
+"برای کتابخانه‌ها یا پوشه‌های اشتراک‌گذاری شده، می‌توانید دسترسی زیرپوشه‌های "
+"آن را برای یک شخص یا یک گروه تنظیم کنید. دسترسی‌های موجود مشابه موارد توصیف "
+"شده در <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">اشتراک‌گذاری"
+" کتابخانه‌ها</a> هستند. در اینجا چند مورد استفاده آورده شده است:"
 
 #: templates/help/folder_permission.html:10
 msgid ""
@@ -1000,6 +1069,10 @@ msgid ""
 " to allow a specific member of the group to modify files in one sub-folder. "
 "You can grant write permission of this sub-folder to this person."
 msgstr ""
+"شما کتابخانه‌ای را با دسترسی \"فقط‌خواندنی\" با یک گروه به اشتراک "
+"گذاشته‌اید. همچنین می‌خواهید به یک عضو خاص از آن گروه اجازه دهید فایل‌های یک"
+" زیرپوشه را تغییر دهد. می‌توانید دسترسی نوشتن در این زیرپوشه را به این شخص "
+"بدهید."
 
 #: templates/help/folder_permission.html:11
 msgid ""
@@ -1008,6 +1081,10 @@ msgid ""
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
 msgstr ""
+"شما کتابخانه‌ای را با ۳ گروه به اشتراک گذاشته‌اید. ۳ زیرپوشه در آن کتابخانه "
+"وجود دارد که هر کدام برای آپلود فایل توسط یکی از گروه‌هاست. با این حال، "
+"نمی‌خواهید کاربران فایل‌هایی را که متعلق به گروهشان نیست تغییر دهند. "
+"می‌توانید دسترسی نوشتن یک زیرپوشه را فقط به گروه مربوطه بدهید."
 
 #: templates/help/folder_permission.html:13
 msgid ""
@@ -1016,17 +1093,23 @@ msgid ""
 "should first share the parent library or folder; otherwise the folder "
 "permission won't take effect."
 msgstr ""
+"دسترسی‌های پوشه فقط برای کتابخانه‌ها و پوشه‌هایی که با دیگران به اشتراک "
+"می‌گذارید موثر هستند. برای تنظیم موثر دسترسی‌های یک زیرپوشه، ابتدا باید "
+"کتابخانه یا پوشه والد را به اشتراک بگذارید؛ در غیر این صورت دسترسی پوشه "
+"اعمال نخواهد شد."
 
 #: templates/help/folder_permission.html:14
 msgid ""
 "One important design goal of folder permission is to support hierarchical "
 "permissions:"
 msgstr ""
+"یکی از اهداف مهم طراحی دسترسی پوشه، پشتیبانی از دسترسی‌های سلسله‌مراتبی است:"
 
 #: templates/help/folder_permission.html:16
 msgid ""
 "Sub-folders automatically inherit folder permissions from its parent folder."
 msgstr ""
+"زیرپوشه‌ها به طور خودکار دسترسی‌های پوشه را از پوشه والد خود به ارث می‌برند."
 
 #: templates/help/folder_permission.html:17
 msgid ""
@@ -1036,10 +1119,15 @@ msgid ""
 "\"meeting files/today\" for user A. Then user A's permission to \"meeting "
 "files/today\" is \"read only\"."
 msgstr ""
+"دسترسی‌های تنظیم شده روی زیرپوشه‌ها، دسترسی‌های تنظیم شده روی پوشه والد را "
+"بازنویسی می‌کند. برای مثال، اگر دسترسی \"خواندنی نوشتنی\" را روی پوشه "
+"\"meeting files\" برای کاربر A تنظیم کنید، و دسترسی \"فقط‌خواندنی\" را روی "
+"زیرپوشه \"meeting files/today\" برای همان کاربر تنظیم کنید، آنگاه دسترسی "
+"کاربر A به \"meeting files/today\" به صورت \"فقط‌خواندنی\" خواهد بود."
 
 #: templates/help/folder_permission.html:19
 msgid "Basic usage"
-msgstr ""
+msgstr "استفاده پایه"
 
 #: templates/help/folder_permission.html:20
 msgid ""
@@ -1048,6 +1136,10 @@ msgid ""
 "\"permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions on this folder."
 msgstr ""
+"فقط مالک کتابخانه می‌تواند دسترسی‌های پوشه را برای زیرپوشه‌های آن تنظیم کند."
+" در رابط مرور فایل، روی دکمه \"عملیات بیشتر\" کلیک کنید و در منوی کشویی "
+"گزینه \"دسترسی\" (permission) را انتخاب کنید. در پنجره باز شده، می‌توانید "
+"دسترسی‌های این پوشه را مشاهده و تنظیم کنید."
 
 #: templates/help/folder_permission.html:21
 msgid ""
@@ -1056,6 +1148,10 @@ msgid ""
 "Permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions in this library."
 msgstr ""
+"اگر می‌خواهید تمام دسترسی‌های پوشه تنظیم شده در یک کتابخانه را ببینید، ماوس "
+"را روی کتابخانه نگه دارید. روی دکمه \"عملیات بیشتر\" کلیک کرده و در منوی "
+"کشویی گزینه \"Folder Permission\" را انتخاب کنید. در پنجره باز شده، "
+"می‌توانید دسترسی‌های پوشه را در این کتابخانه مشاهده و تنظیم کنید."
 
 #: templates/help/folder_permission.html:22
 msgid ""
@@ -1063,16 +1159,21 @@ msgid ""
 "next to \"read only\" sub-folders. When the user navigate into that sub-"
 "folder, he/she won't be able to add/modify/delete files."
 msgstr ""
+"وقتی کاربران دیگر به یک پوشه می‌روند، یک آیکون کوچک \"چشم\" در کنار "
+"زیرپوشه‌های \"فقط‌خواندنی\" وجود خواهد داشت. وقتی کاربر وارد آن زیرپوشه شود،"
+" قادر به افزودن، تغییر یا حذف فایل‌ها نخواهد بود."
 
 #: templates/help/folder_permission.html:24
 msgid ""
 "If a \"read only\" folder is synced to PC with the Seafile desktop App, "
 "changes under a \"read only\" folder won't be uploaded to the cloud."
 msgstr ""
+"اگر یک پوشه \"فقط‌خواندنی\" با اپلیکیشن دسکتاپ Seafile با کامپیوتر "
+"همگام‌سازی شود، تغییرات در آن پوشه به ابر آپلود نخواهد شد."
 
 #: templates/help/folder_permission.html:25
 msgid "Advanced: priority between different permissions"
-msgstr ""
+msgstr "پیشرفته: اولویت بین دسترسی‌های مختلف"
 
 #: templates/help/folder_permission.html:27
 msgid ""
@@ -1082,6 +1183,12 @@ msgid ""
 "library. Then user A only has \"read only\" access to the sub-folder, while "
 "he/she has \"read write\" access to all other sub-folders and files."
 msgstr ""
+"دسترسی‌های پوشه اولویت بالاتری نسبت به دسترسی تنظیم شده در اشتراک‌گذاری "
+"(Share) دارند. برای مثال، اگر کتابخانه‌ای را با دسترسی \"خواندنی نوشتنی\" با"
+" کاربر A به اشتراک بگذارید و همچنین دسترسی \"فقط‌خواندنی\" را برای یک "
+"زیرپوشه از آن کتابخانه تنظیم کنید، آنگاه کاربر A فقط دسترسی \"فقط‌خواندنی\" "
+"به آن زیرپوشه خواهد داشت، در حالی که به سایر زیرپوشه‌ها و فایل‌ها دسترسی "
+"\"خواندنی نوشتنی\" دارد."
 
 #: templates/help/folder_permission.html:28
 msgid ""
@@ -1090,16 +1197,22 @@ msgid ""
 "if the system matches a permission specific to the user, it'll ignore all "
 "permissions set for the groups the user belongs to."
 msgstr ""
+"دسترسی‌های پوشه تنظیم شده برای یک کاربر خاص، اولویت بالاتری نسبت به "
+"دسترسی‌های تنظیم شده برای یک گروه دارند. یعنی هنگام بررسی دسترسی یک پوشه، "
+"اگر سیستم دسترسی مخصوصی برای آن کاربر پیدا کند، تمام دسترسی‌های تنظیم شده "
+"برای گروه‌هایی که کاربر عضو آن‌هاست را نادیده می‌گیرد."
 
 #: templates/help/folder_permission.html:29
 msgid ""
 "Permissions on sub-folders have higher priority than those on parent "
 "folders."
 msgstr ""
+"دسترسی‌های روی زیرپوشه‌ها اولویت بالاتری نسبت به دسترسی‌های روی پوشه‌های "
+"والد دارند."
 
 #: templates/help/folder_permission.html:31
 msgid "Here is a more complex example:"
-msgstr ""
+msgstr "در اینجا یک مثال پیچیده‌تر آورده شده است:"
 
 #: templates/help/folder_permission.html:32
 msgid ""
@@ -1111,6 +1224,13 @@ msgid ""
 "first matched for folder \"A/B\" and user \"John\", which is inherited from "
 "its parent \"A\"."
 msgstr ""
+"فرض کنید ساختار پوشه به صورت \"A/B\" است و کاربر \"John\" در گروه \"Staff\" "
+"عضو است. اگر دسترسی \"فقط‌خواندنی\" را روی پوشه A برای John تنظیم کنید و "
+"همچنین دسترسی \"خواندنی نوشتنی\" را روی پوشه \"A/B\" برای گروه \"Staff\" "
+"تنظیم کنید، آنگاه دسترسی John به پوشه \"A/B\" همچنان فقط \"فقط‌خواندنی\" "
+"خواهد بود. دلیل آن این است که طبق قانون ۲، ابتدا دسترسی \"فقط‌خواندنی\" برای"
+" پوشه \"A/B\" و کاربر \"John\" مطابقت داده می‌شود که از والد خود یعنی \"A\" "
+"به ارث رسیده است."
 
 #: templates/help/full_text_file_search.html:6
 msgid ""
@@ -1118,46 +1238,49 @@ msgid ""
 "as well as the content of certain files, in the Seafile web app. Currently "
 "Seafile can search the contents of the following types of files:"
 msgstr ""
+"اگر از سرور نسخه حرفه‌ای (Pro) استفاده می‌کنید، می‌توانید نام فایل‌ها و "
+"پوشه‌ها و همچنین محتوای برخی فایل‌ها را در اپلیکیشن وب Seafile جستجو کنید. "
+"در حال حاضر Seafile می‌تواند محتوای انواع فایل‌های زیر را جستجو کند:"
 
 #: templates/help/full_text_file_search.html:8
 #: templates/help/viewing_files_within_web_app.html:8
 msgid "Microsoft Office Doc: .doc, .docx (Pro Edition Server only)"
-msgstr ""
+msgstr "اسناد مایکروسافت آفیس: .doc, .docx (فقط در سرور نسخه Pro)"
 
 #: templates/help/full_text_file_search.html:9
 #: templates/help/viewing_files_within_web_app.html:9
 msgid "Microsoft Office PowerPoint: .ppt, .pptx (Pro Edition Server only)"
-msgstr ""
+msgstr "پاورپوینت مایکروسافت آفیس: .ppt, .pptx (فقط در سرور نسخه Pro)"
 
 #: templates/help/full_text_file_search.html:10
 #: templates/help/viewing_files_within_web_app.html:10
 msgid "Microsoft Office Excel: .xls, .xlsx (Pro Edition Server only)"
-msgstr ""
+msgstr "اکسل مایکروسافت آفیس: .xls, .xlsx (فقط در سرور نسخه Pro)"
 
 #: templates/help/full_text_file_search.html:11
 #: templates/help/viewing_files_within_web_app.html:11
 msgid "LibreOffice files"
-msgstr ""
+msgstr "فایل‌های LibreOffice"
 
 #: templates/help/full_text_file_search.html:12
 #: templates/help/viewing_files_within_web_app.html:12
 msgid "PDF files"
-msgstr ""
+msgstr "فایل‌های PDF"
 
 #: templates/help/full_text_file_search.html:13
 #: templates/help/viewing_files_within_web_app.html:14
 msgid "Markdown files: .md"
-msgstr ""
+msgstr "فایل‌های Markdown: .md"
 
 #: templates/help/full_text_file_search.html:14
 #: templates/help/viewing_files_within_web_app.html:15
 msgid "Various source code files"
-msgstr ""
+msgstr "انواع فایل‌های سورس کد"
 
 #: templates/help/full_text_file_search.html:15
 #: templates/help/viewing_files_within_web_app.html:16
 msgid "Text files: .txt, .log"
-msgstr ""
+msgstr "فایل‌های متنی: .txt, .log"
 
 #: templates/help/full_text_file_search.html:17
 msgid ""
@@ -1165,34 +1288,45 @@ msgid ""
 "text search feature. In that case, you can only search file and folder "
 "names."
 msgstr ""
+"توجه داشته باشید که مدیر سیستم Seafile شما ممکن است ویژگی جستجوی تمام‌متن را"
+" فعال نکرده باشد. در این صورت، فقط می‌توانید نام فایل‌ها و پوشه‌ها را جستجو "
+"کنید."
 
 #: templates/help/groups_managing.html:6
 msgid ""
 "Creating a group is a convenient way to share files to many people. In "
 "Seafile, you can create and manage a group easily."
 msgstr ""
+"ایجاد یک گروه روشی راحت برای اشتراک‌گذاری فایل‌ها با افراد زیاد است. در "
+"Seafile، می‌توانید به سادگی یک گروه ایجاد و مدیریت کنید."
 
 #: templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
-msgstr ""
+msgstr "نحوه عملکرد گروه‌ها در Seafile به این صورت است:"
 
 #: templates/help/groups_managing.html:9
 msgid ""
 "Each group has a owner. The owner is the creator of the group by default. "
 "He/she can transfer the ownership of the group to another member."
 msgstr ""
+"هر گروه یک مالک دارد. مالک به طور پیش‌فرض سازنده گروه است. او می‌تواند "
+"مالکیت گروه را به عضو دیگری منتقل کند."
 
 #: templates/help/groups_managing.html:10
 msgid ""
 "Each group can have multiple admins. The group owner and group admins can "
 "add more group admins."
 msgstr ""
+"هر گروه می‌تواند چندین مدیر (Admin) داشته باشد. مالک گروه و مدیران گروه "
+"می‌توانند مدیران بیشتری اضافه کنند."
 
 #: templates/help/groups_managing.html:11
 msgid ""
 "The group admin can add/delete members in the group. And he/she can also "
 "unshare a library in the group."
 msgstr ""
+"مدیر گروه می‌تواند اعضا را به گروه اضافه یا از آن حذف کند. او همچنین "
+"می‌تواند اشتراک یک کتابخانه را در گروه لغو کند."
 
 #: templates/help/groups_managing.html:13
 msgid ""
@@ -1200,6 +1334,9 @@ msgid ""
 "all the groups you're in. Clicking into any group, you'll see the libraries "
 "shared into this group."
 msgstr ""
+"روی تب \"اشتراک‌گذاری شده با گروه‌ها\" (Shared with groups) در پنل سمت چپ "
+"کلیک کنید تا تمام گروه‌هایی که در آن‌ها عضو هستید را ببینید. با کلیک روی هر "
+"گروه، کتابخانه‌های اشتراک‌گذاری شده در آن گروه را مشاهده خواهید کرد."
 
 #: templates/help/groups_managing.html:14
 msgid ""
@@ -1207,6 +1344,9 @@ msgid ""
 "panel. Then click on \"All Groups\". In the page, you can click the \"New "
 "Group\" button to create a group."
 msgstr ""
+"برای ایجاد یک گروه جدید، روی تب \"Shared with groups\" در پنل سمت چپ کلیک "
+"کنید. سپس روی \"All Groups\" کلیک کنید. در این صفحه، می‌توانید با کلیک روی "
+"دکمه \"New Group\" یک گروه ایجاد کنید."
 
 #: templates/help/groups_managing.html:15
 #, python-format
@@ -1214,10 +1354,13 @@ msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
 "and folders</a> about how to share libraries or folders to a group."
 msgstr ""
+"برای اطلاع از نحوه اشتراک‌گذاری کتابخانه‌ها یا پوشه‌ها با یک گروه، به <a "
+"href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">اشتراک‌گذاری فایل‌ها و"
+" پوشه‌ها</a> مراجعه کنید."
 
 #: templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
-msgstr ""
+msgstr "مستثنی کردن فایل‌ها/پوشه‌ها از همگام‌سازی"
 
 #: templates/help/ignore.html:8
 msgid ""
@@ -1227,14 +1370,19 @@ msgid ""
 "should not sync. Each line in a ignore.txt file specifies a pattern. The "
 "following pattern format are supported."
 msgstr ""
+"گاهی اوقات نمی‌خواهید برخی فایل‌ها یا پوشه‌های درون یک کتابخانه را "
+"همگام‌سازی کنید. برای این کار، یک فایل seafile-ignore.txt در پوشه ریشه "
+"کتابخانه ایجاد کنید. این فایل ویژه، فایل‌ها و پوشه‌هایی را که Seafile نباید "
+"همگام‌سازی کند مشخص می‌کند. هر خط در فایل ignore.txt یک الگو (pattern) را "
+"تعیین می‌کند. فرمت‌های الگوی زیر پشتیبانی می‌شوند."
 
 #: templates/help/ignore.html:10
 msgid "A blank line matches no files."
-msgstr ""
+msgstr "یک خط خالی با هیچ فایلی مطابقت ندارد."
 
 #: templates/help/ignore.html:11
 msgid "A line starting with # serves as a comment."
-msgstr ""
+msgstr "خطی که با # شروع می‌شود به عنوان کامنت در نظر گرفته می‌شود."
 
 #: templates/help/ignore.html:12
 msgid ""
@@ -1244,6 +1392,11 @@ msgid ""
 "the paths under a folder. For instance, \"foo/*.html\" matches "
 "\"foo/a.html\" and \"foo/templates/b.html\"."
 msgstr ""
+"Seafile از کاراکترهای جانشین (wildcards) در الگو پشتیبانی می‌کند. برای مثال،"
+" \"foo/*\" با \"foo/1\" و \"foo/hello\" مطابقت دارد. \"foo/?\" با \"foo/1\" "
+"مطابقت دارد اما با \"foo/hello\" نه. توجه داشته باشید که کاراکتر جانشین * به"
+" طور بازگشتی با تمام مسیرهای زیر یک پوشه مطابقت دارد. به عنوان مثال، "
+"\"foo/*.html\" با \"foo/a.html\" و \"foo/templates/b.html\" مطابقت دارد."
 
 #: templates/help/ignore.html:13
 msgid ""
@@ -1251,6 +1404,9 @@ msgid ""
 "words, \"foo/\" will match a folder \"foo\" and paths underneath it, but "
 "will not match a regular file or a symbolic link \"foo\"."
 msgstr ""
+"اگر الگو با یک اسلش ختم شود، فقط با یک پوشه مطابقت خواهد داشت. به عبارت "
+"دیگر، \"foo/\" با پوشه \"foo\" و مسیرهای زیر آن مطابقت دارد، اما با یک فایل "
+"معمولی یا یک لینک نمادین (symbolic link) با نام \"foo\" مطابقت نخواهد داشت."
 
 #: templates/help/ignore.html:14
 msgid ""
@@ -1259,14 +1415,18 @@ msgid ""
 "symbolic link; while \"foo/\" and \"foo*\" match a folder and paths under "
 "it."
 msgstr ""
+"اگر یک الگو به اسلش یا کاراکتر جانشین ختم نشود، با یک پوشه مطابقت نخواهد "
+"داشت. برای مثال، \"foo\" فقط می‌تواند با فایل معمولی \"foo\" یا یک لینک "
+"نمادین مطابقت داشته باشد؛ در حالی که \"foo/\" و \"foo*\" با یک پوشه و "
+"مسیرهای زیر آن مطابقت دارند."
 
 #: templates/help/ignore.html:18
 msgid "Example"
-msgstr ""
+msgstr "مثال"
 
 #: templates/help/ignore.html:36
 msgid "Notes"
-msgstr ""
+msgstr "نکات"
 
 #: templates/help/ignore.html:38
 msgid ""
@@ -1274,12 +1434,17 @@ msgid ""
 "client side. You can still create a file from seahub web interface that's "
 "excluded on the client. In this case,"
 msgstr ""
+"فایل seafile-ignore.txt فقط کنترل می‌کند که چه فایل‌هایی در سمت کلاینت "
+"مستثنی شوند. شما همچنان می‌توانید فایلی را از رابط وب Seahub ایجاد کنید که "
+"در کلاینت مستثنی شده است. در این صورت،"
 
 #: templates/help/ignore.html:40
 msgid ""
 "The created file will still be synced back to clients. But any later local "
 "changes to those files will be ignored."
 msgstr ""
+"فایل ایجاد شده همچنان با کلاینت‌ها همگام‌سازی می‌شود، اما هرگونه تغییرات "
+"محلی بعدی در آن فایل‌ها نادیده گرفته خواهد شد."
 
 #: templates/help/ignore.html:41
 msgid ""
@@ -1287,6 +1452,9 @@ msgid ""
 "to clients; If the file on the client is also modified, a conflict file will"
 " be generated on the client."
 msgstr ""
+"اگر فایل در Seahub تغییر یابد، نسخه جدید با کلاینت‌ها همگام‌سازی می‌شود؛ اگر"
+" فایل در کلاینت نیز تغییر یافته باشد، یک فایل تداخل (conflict file) در "
+"کلاینت ایجاد خواهد شد."
 
 #: templates/help/ignore.html:45
 msgid ""
@@ -1294,58 +1462,68 @@ msgid ""
 "already synced, and some time later you add it to the ignore list, its "
 "existing versions won't be removed."
 msgstr ""
+"seafile-ignore.txt فقط فایل‌هایی را نادیده می‌گیرد که هنوز همگام‌سازی "
+"نشده‌اند. اگر فایلی قبلاً همگام‌سازی شده باشد و بعداً آن را به لیست نادیده "
+"گرفتن اضافه کنید، نسخه‌های موجود آن حذف نخواهند شد."
 
 #: templates/help/install_sync.html:6
 msgid "Installing Seafile client program"
-msgstr ""
+msgstr "نصب برنامه کلاینت Seafile"
 
 #: templates/help/install_sync.html:8
 msgid ""
 "After downloading Seafile client program, you have 3 steps left to get it up"
 " and running."
 msgstr ""
+"پس از دانلود برنامه کلاینت Seafile، شما ۳ مرحله برای راه‌اندازی و اجرای آن "
+"پیش رو دارید."
 
 #: templates/help/install_sync.html:10
 msgid "1. Select a disk partition to store local Seafile data"
-msgstr ""
+msgstr "۱. یک پارتیشن دیسک را برای ذخیره داده‌های محلی Seafile انتخاب کنید"
 
 #: templates/help/install_sync.html:11
 msgid "Selecting a folder to store Seafile data"
-msgstr ""
+msgstr "انتخاب یک پوشه برای ذخیره داده‌های Seafile"
 
 #: templates/help/install_sync.html:13
 msgid "2. Add an account"
-msgstr ""
+msgstr "۲. یک حساب کاربری اضافه کنید"
 
 #: templates/help/install_sync.html:14
 msgid "Add an account on your private Seafile server or our public server."
 msgstr ""
+"یک حساب کاربری در سرور اختصاصی Seafile خودتان یا سرور عمومی ما اضافه کنید."
 
 #: templates/help/install_sync.html:18
 msgid "3. Sync a library"
-msgstr ""
+msgstr "۳. یک کتابخانه را همگام‌سازی کنید"
 
 #: templates/help/install_sync.html:20
 msgid "Click the \"Sync this library\" button to sync it with a local folder."
 msgstr ""
+"روی دکمه \"Sync this library\" کلیک کنید تا آن را با یک پوشه محلی همگام‌سازی"
+" کنید."
 
 #: templates/help/install_sync.html:21
 msgid ""
 "Then you add some files into the library. They will be automatically synced "
 "with cloud platform."
 msgstr ""
+"سپس تعدادی فایل به کتابخانه اضافه می‌کنید. آن‌ها به طور خودکار با پلتفرم "
+"ابری همگام‌سازی خواهند شد."
 
 #: templates/help/install_sync.html:26
 msgid "4. (Optional) Create a library"
-msgstr ""
+msgstr "۴. (اختیاری) یک کتابخانه ایجاد کنید"
 
 #: templates/help/install_sync.html:28
 msgid "You can also create a library from a local folder."
-msgstr ""
+msgstr "شما همچنین می‌توانید یک کتابخانه از یک پوشه محلی ایجاد کنید."
 
 #: templates/help/install_sync.html:34
 msgid "5. Browse files on the cloud"
-msgstr ""
+msgstr "۵. مرور فایل‌ها در ابر"
 
 #: templates/help/install_sync.html:35
 msgid ""
@@ -1353,12 +1531,16 @@ msgid ""
 "syncing them. Seafile client comes with a \"cloud file browser\" to meet "
 "this need. Click an unsynced library will open the cloud file browser."
 msgstr ""
+"در برخی موارد، می‌خواهید فایل‌ها را مستقیماً در ابر بدون همگام‌سازی تغییر "
+"دهید. کلاینت Seafile دارای یک \"مرورگر فایل ابری\" برای رفع این نیاز است. "
+"کلیک روی یک کتابخانه همگام‌سازی نشده، مرورگر فایل ابری را باز می‌کند."
 
 #: templates/help/introduction.html:8
 msgid ""
 "Seafile is an enterprise file hosting platform with high reliability and "
 "performance."
 msgstr ""
+"Seafile یک پلتفرم میزبانی فایل سازمانی با قابلیت اطمینان و کارایی بالاست."
 
 #: templates/help/introduction.html:9
 #, python-format
@@ -1369,6 +1551,11 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/using_drive_client\">the drive client</a>. It also "
 "has mobile clients for Android and iOS."
 msgstr ""
+"Seafile شامل یک رابط وب برای مدیریت و اشتراک‌گذاری فایل‌ها است. این برنامه "
+"دارای دو نوع کلاینت دسکتاپ است: <a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">کلاینت همگام‌سازی فایل</a> و <a "
+"href=\"%(SITE_ROOT)shelp/using_drive_client\">کلاینت درایو</a>. همچنین دارای"
+" کلاینت‌های موبایل برای اندروید و iOS می‌باشد."
 
 #: templates/help/introduction.html:10
 msgid ""
@@ -1376,6 +1563,9 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile web "
 "site</a>."
 msgstr ""
+"شما می‌توانید کلاینت‌ها را از <a "
+"href=\"https://www.seafile.com/en/download/\" target=\"_blank\">وب‌سایت "
+"Seafile</a> دانلود کنید."
 
 #: templates/help/introduction.html:11
 msgid ""
@@ -1383,6 +1573,9 @@ msgid ""
 "help in our forum: <a href=\"https://forum.seafile.com\" "
 "target=\"_blank\">https://forum.seafile.com</a>."
 msgstr ""
+"اگر این دفترچه راهنما حاوی اطلاعات مورد نیاز شما نیست، می‌توانید در انجمن ما"
+" کمک بگیرید: <a href=\"https://forum.seafile.com\" "
+"target=\"_blank\">https://forum.seafile.com</a>."
 
 #: templates/help/libraries_managing.html:6
 msgid ""
@@ -1392,6 +1585,11 @@ msgid ""
 "library works mostly like a top level folder. But it also has some special "
 "properties:"
 msgstr ""
+"Seafile از \"کتابخانه‌ها\" برای سازماندهی فایل‌های شما استفاده می‌کند. یک "
+"کتابخانه یک محفظه سطح بالا برای مجموعه‌ای از فایل‌ها و پوشه‌ها است. شما "
+"می‌توانید برای هر پروژه‌ای که روی آن کار می‌کنید یا هر نوع سندی که می‌خواهید"
+" در Seafile ذخیره کنید، یک کتابخانه بسازید. یک کتابخانه عمدتاً مانند یک پوشه"
+" سطح بالا عمل می‌کند، اما ویژگی‌های خاصی نیز دارد:"
 
 #: templates/help/libraries_managing.html:8
 msgid ""
