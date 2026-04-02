@@ -671,5 +671,9 @@
   "Edit_formula": "编辑公式",
   "Toggle_header_one": "可折叠一级标题",
   "Toggle_header_two": "可折叠二级标题",
-  "Toggle_header_three": "可折叠三级标题"
+  "Toggle_header_three": "可折叠三级标题",
+  "Support_Figma_Seatable_link" : "支持 Seatable 和 Figma 链接",
+  "Embed_link_invalid_tip": "嵌入链接无效,需要将其删除并重新添加。",
+  "Embed_link": "嵌入链接",
+  "Add_embed_link": "添加嵌入链接"
 }
