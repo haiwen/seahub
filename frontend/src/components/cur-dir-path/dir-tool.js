@@ -110,7 +110,7 @@ class DirTool extends React.Component {
         <div className="dir-tool-divider" />
         <SortMenu className="ml-2" sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
 
-        {this.props.enableMetadata && (currentMode === LIST_MODE || currentMode === TABLE_MODE) && (
+        {(currentMode === LIST_MODE || currentMode === TABLE_MODE) && (
           <HideColumnSetter
             wrapperClass="ml-2 cur-view-path-btn dir-tool-hide-column-setter"
             target="dir-hide-column-popover"

@@ -7,7 +7,7 @@ const Creator = ({ value, record }) => {
     <CreatorFormatter
       key={record._id}
       className="dir-table-creator-formatter"
-      value={value}
+      value={value || record._modifier_email}
       api={queryUser}
       collaborators={collaborators}
       collaboratorsCache={collaboratorsCache}

@@ -38,7 +38,7 @@ import ViewToolbar from '../../components/toolbar/view-toolbar';
 import EventBus, { eventBus } from '../../components/common/event-bus';
 import WebSocketClient from '../../utils/websocket-service';
 import Column from '@/metadata/model/column';
-import { DIR_METADATA_COLUMNS, getDirHiddenColumnKeys, DIR_BASE_COLUMNS, DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS, getDirTableHiddenColumnKeys, DIR_TABLE_DEFAULT_METADATA_COLUMNS } from '@/constants/dir-column-config';
+import { LIST_VIEW_HIDDEN_COLUMNS_DEFAULT, getDirHiddenColumnKeys, DIR_BASE_COLUMNS, DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS, getDirTableHiddenColumnKeys, DIR_TABLE_DEFAULT_METADATA_COLUMNS } from '@/constants/dir-column-config';
 import { normalizeColumns } from '@/metadata/utils/column';
 import { getDirTableColumnOrder, setDirTableColumnOrder } from '@/components/dir-view-mode/dir-table-view/columns';
 
@@ -113,7 +113,7 @@ class LibContentView extends React.Component {
       columns: DIR_BASE_COLUMNS,
       tableViewColumns: DIR_BASE_COLUMNS,
       tableViewColumnOrder: null,
-      hiddenColumnKeys: this.props.repoID ? JSON.parse(localStorage.getItem(getDirHiddenColumnKeys(this.props.repoID))) || DIR_METADATA_COLUMNS : DIR_METADATA_COLUMNS,
+      hiddenColumnKeys: this.props.repoID ? JSON.parse(localStorage.getItem(getDirHiddenColumnKeys(this.props.repoID))) || LIST_VIEW_HIDDEN_COLUMNS_DEFAULT : LIST_VIEW_HIDDEN_COLUMNS_DEFAULT,
       hiddenTableViewColumnKeys: this.props.repoID ? JSON.parse(localStorage.getItem(getDirTableHiddenColumnKeys(this.props.repoID))) || DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS : DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS,
       enableMetadata: false,
       metadata: null,
@@ -389,7 +389,7 @@ class LibContentView extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.repoID !== this.props.repoID) {
       const repoID = this.props.repoID;
-      const hiddenColumnKeys = repoID ? JSON.parse(localStorage.getItem(getDirHiddenColumnKeys(repoID))) || DIR_METADATA_COLUMNS : DIR_METADATA_COLUMNS;
+      const hiddenColumnKeys = repoID ? JSON.parse(localStorage.getItem(getDirHiddenColumnKeys(repoID))) || LIST_VIEW_HIDDEN_COLUMNS_DEFAULT : LIST_VIEW_HIDDEN_COLUMNS_DEFAULT;
       const hiddenTableViewColumnKeys = repoID ? JSON.parse(localStorage.getItem(getDirTableHiddenColumnKeys(repoID))) || DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS : DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS;
       const tableViewColumnOrder = repoID ? getDirTableColumnOrder() : null;
       this.setState({ hiddenColumnKeys, hiddenTableViewColumnKeys, tableViewColumnOrder });
@@ -694,11 +694,13 @@ class LibContentView extends React.Component {
 
     const normalizedColumns = normalizeColumns(metadata.columns);
     const validColumns = normalizedColumns
-      .filter(col => DIR_METADATA_COLUMNS.includes(col.key))
-      .sort((a, b) => DIR_METADATA_COLUMNS.indexOf(a.key) - DIR_METADATA_COLUMNS.indexOf(b.key));
+      .filter(col => LIST_VIEW_HIDDEN_COLUMNS_DEFAULT.includes(col.key))
+      .sort((a, b) => LIST_VIEW_HIDDEN_COLUMNS_DEFAULT.indexOf(a.key) - LIST_VIEW_HIDDEN_COLUMNS_DEFAULT.indexOf(b.key));
     let columns = DIR_BASE_COLUMNS;
     if (validColumns.length > 0) {
-      columns = [...columns, ...validColumns];
+      const baseColumnKeys = DIR_BASE_COLUMNS.map(col => col.key);
+      const filteredValidColumns = validColumns.filter(col => !baseColumnKeys.includes(col.key));
+      columns = [...columns, ...filteredValidColumns];
     }
 
     this.cachedColumns = columns.map(col => {
