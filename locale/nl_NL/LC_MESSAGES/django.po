@@ -11,6 +11,7 @@
 # jvanattenhoven <jvanattenhoven@naturalsciences.be>, 2014-2015
 # kevinsky25, 2014-2015
 # INTIO <r.schuijff@gmail.com>, 2014
+# Seafile Info <info@seafile.com>, 2026
 # Thijs Broenink <thijsbroenink@home.nl>, 2016
 # Tony den Haan <tony@dhits.nl>, 2014
 # Wijnand Modderman-Lenstra <accounts+transifex@maze.io>, 2014
@@ -20,7 +21,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 10:19+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Harmen <sigmo@sigmo.nl>, 2015-2018,2020\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Dutch (Netherlands) (http://app.transifex.com/haiwen/seahub/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,7 +31,7 @@ msgstr ""
 
 #: seahub/adfs_auth/utils.py:56
 msgid "ADFS/SAML login relevant settings invalid."
-msgstr ""
+msgstr "ADFS/SAML inlog-instellingen zijn ongeldig."
 
 #: seahub/adfs_auth/views.py:59 seahub/adfs_auth/views.py:570
 #: seahub/adfs_auth/views.py:599 seahub/adfs_auth/views.py:639
@@ -39,62 +40,62 @@ msgstr ""
 #: seahub/adfs_auth/views.py:735 seahub/adfs_auth/views.py:739
 #: seahub/adfs_auth/views.py:807 seahub/adfs_auth/views.py:811
 msgid "Internal server error. Please contact system administrator."
-msgstr ""
+msgstr "Interne serverfout. Neem contact op met de systeembeheerder."
 
 #: seahub/adfs_auth/views.py:60
 msgid ""
 "Login failed: Bad response from ADFS/SAML service. Please report to your "
 "organization (company) administrator."
-msgstr ""
+msgstr "Inloggen mislukt: Slechte reactie van ADFS/SAML-service. Rapporteer dit aan de beheerder van uw organisatie (bedrijf)."
 
 #: seahub/adfs_auth/views.py:126 seahub/adfs_auth/views.py:142
 #: seahub/api2/endpoints/admin/users.py:794
 #: seahub/api2/endpoints/admin/users.py:1280 seahub/base/accounts.py:1242
 #: seahub/forms.py:30 seahub/institutions/api_views.py:202
 msgid "The number of users exceeds the limit."
-msgstr "Maximum aantal gebruikers overschreden."
+msgstr "Het aantal gebruikers overschrijdt de limiet."
 
 #: seahub/adfs_auth/views.py:224 seahub/adfs_auth/views.py:429
 msgid "Failed to bind SAML, please login first."
-msgstr ""
+msgstr "SAML koppelen mislukt, log eerst in."
 
 #: seahub/adfs_auth/views.py:274
 #, python-format
 msgid ""
 "Login failed: The email %s is not consistent with the email %s from "
 "ADFS/SAML service"
-msgstr ""
+msgstr "Inloggen mislukt: Het e-mailadres %s komt niet overeen met het e-mailadres %s van de ADFS/SAML-service"
 
 #: seahub/adfs_auth/views.py:307
 #| msgid "User %s not found."
 msgid "User not found in Team."
-msgstr ""
+msgstr "Gebruiker niet gevonden in Team."
 
 #: seahub/adfs_auth/views.py:342 seahub/adfs_auth/views.py:539
 msgid ""
 "Login failed: user is deactivated. Please report to your organization "
 "(company) administrator."
-msgstr ""
+msgstr "Inloggen mislukt: gebruiker is gedeactiveerd. Rapporteer dit aan de beheerder van uw organisatie (bedrijf)."
 
 #: seahub/adfs_auth/views.py:595 seahub/adfs_auth/views.py:655
 #: seahub/adfs_auth/views.py:706
 msgid ""
 "Login failed: ADFS/SAML service error. Please report to your organization "
 "(company) administrator."
-msgstr ""
+msgstr "Inloggen mislukt: ADFS/SAML-servicefout. Rapporteer dit aan de beheerder van uw organisatie (bedrijf)."
 
 #: seahub/adfs_auth/views.py:743
 msgid "Failed to unbind SAML, please set a password first."
-msgstr ""
+msgstr "Ontkoppelen van SAML mislukt, stel eerst een wachtwoord in."
 
 #: seahub/adfs_auth/views.py:746
 #| msgid "Failed to bind SAML, please login first."
 msgid "Failed to unbind SAML, the user is forced login by SSO."
-msgstr ""
+msgstr "Ontkoppelen van SAML mislukt, de gebruiker is verplicht in te loggen via SSO."
 
 #: seahub/adfs_auth/views.py:751
 msgid "Failed to unbind SAML, please set a contact email first."
-msgstr ""
+msgstr "Ontkoppelen van SAML mislukt, stel eerst een contact e-mailadres in."
 
 #: seahub/api2/endpoints/admin/account.py:204
 #: seahub/api2/endpoints/user.py:101 seahub/api2/views.py:380
@@ -143,7 +144,7 @@ msgstr "Moet een getal groter of gelijk aan 0 zijn."
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
 "brackets or underscore."
-msgstr ""
+msgstr "Naam mag alleen letters, getallen, spaties, hyphen, punt, enkeltik, hoorbod of onderbar bevatten."
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:87
 #: seahub/api2/endpoints/admin/groups.py:142
@@ -154,11 +155,11 @@ msgstr "Er is al een groep met die naam"
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:235
 msgid "There are libraries in this department."
-msgstr ""
+msgstr "Er zijn bibliotheeken in deze afdeling."
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:239
 msgid "There are sub-departments in this department."
-msgstr ""
+msgstr "Er zijn subafdelingen in deze afdeling."
 
 #: seahub/api2/endpoints/admin/default_library.py:32
 #: seahub/api2/endpoints/admin/default_library.py:33
@@ -177,14 +178,14 @@ msgstr "Gebruiker %s is al groepseigenaar."
 #, python-format
 msgid ""
 "Failed to add %s to the institution: user already belongs to an institution"
-msgstr ""
+msgstr "Gebruiker %s is reeds lid van een instelling."
 
 #: seahub/api2/endpoints/admin/institution_users.py:174
 #, python-format
 msgid ""
 "Failed to add %s to the institution: user already belongs to this "
 "institution"
-msgstr ""
+msgstr "Gebruiker %s is reeds lid van deze instelling."
 
 #: seahub/api2/endpoints/admin/libraries.py:268 seahub/views/sysadmin.py:712
 msgid "System library can not be deleted."
@@ -193,24 +194,24 @@ msgstr "Systeembibliotheek kan niet verwijderd worden."
 #: seahub/api2/endpoints/admin/libraries.py:390 seahub/api2/views.py:1934
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
-msgstr ""
+msgstr "Transfer mislukt: rol van %s is %s, kan bibliotheek niet toevoegen."
 
 #: seahub/api2/endpoints/admin/libraries.py:416 seahub/api2/views.py:1939
 msgid "Library can not be transferred to owner."
-msgstr ""
+msgstr "Bibliotheek kan niet overgeven worden eigenaar."
 
 #: seahub/api2/endpoints/admin/organizations.py:431
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Your team {org.org_name} has been deactivated"
-msgstr ""
+msgstr "Je teamep {org.org_name} is geactiveerd"
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:155
 #: seahub/api2/endpoints/share_links.py:593
 #: seahub/api2/endpoints/share_links.py:812
 msgid "There is an associated published library."
-msgstr ""
+msgstr "Er is een gerelateerde publiceerde bibliotheek."
 
 #: seahub/api2/endpoints/admin/shares.py:185
 #, python-format
@@ -234,7 +235,7 @@ msgstr "E-mailadres %s is ongeldig"
 #: seahub/api2/endpoints/repo_share_invitations.py:190
 #, python-format
 msgid "This item has been shared to %s."
-msgstr ""
+msgstr "Dit item is gedeeld met %s."
 
 #: seahub/api2/endpoints/admin/statistics.py:399
 #: seahub/base/management/commands/export_user_traffic_report.py:45
@@ -262,13 +263,13 @@ msgstr "Webdownload"
 #: seahub/base/management/commands/export_user_traffic_report.py:46
 #: seahub/organizations/api/admin/statistics.py:337
 msgid "Sync Download"
-msgstr ""
+msgstr "Synchronisatie-download"
 
 #: seahub/api2/endpoints/admin/statistics.py:400
 #: seahub/base/management/commands/export_user_traffic_report.py:46
 #: seahub/organizations/api/admin/statistics.py:337
 msgid "Link Download"
-msgstr ""
+msgstr "Link download"
 
 #: seahub/api2/endpoints/admin/statistics.py:401
 #: seahub/base/management/commands/export_user_traffic_report.py:47
@@ -280,13 +281,13 @@ msgstr "Webupload"
 #: seahub/base/management/commands/export_user_traffic_report.py:47
 #: seahub/organizations/api/admin/statistics.py:338
 msgid "Sync Upload"
-msgstr ""
+msgstr "Synchronisatie-upload"
 
 #: seahub/api2/endpoints/admin/statistics.py:402
 #: seahub/base/management/commands/export_user_traffic_report.py:48
 #: seahub/organizations/api/admin/statistics.py:339
 msgid "Link Upload"
-msgstr ""
+msgstr "Link upload"
 
 #: seahub/api2/endpoints/admin/statistics.py:447
 #: seahub/base/management/commands/export_user_storage_report.py:41
@@ -345,12 +346,12 @@ msgstr "Ruimte Quota"
 #: seahub/api2/endpoints/admin/users.py:692
 #: seahub/organizations/api/admin/users.py:155
 msgid "There are more than 500 users, and sort is not offered."
-msgstr ""
+msgstr "Er zijn meer dan 500 gebruikers, en sort is niet geleverd."
 
 #: seahub/api2/endpoints/admin/users.py:893
 #, python-format
 msgid "Successfully added user %(user)s."
-msgstr ""
+msgstr "Succesvolgevoegde gebruiker %(user)s."
 
 #: seahub/api2/endpoints/admin/users.py:897
 #: seahub/api2/endpoints/admin/users_batch.py:390 seahub/views/sysadmin.py:552
@@ -361,14 +362,14 @@ msgstr "Je bent uitgenodigd voor deelname aan %s"
 #: seahub/api2/endpoints/admin/users.py:901
 #, python-format
 msgid "Successfully added user %(user)s. An email notification has been sent."
-msgstr ""
+msgstr "Succesvolgevoegde gebruiker %(user)s. Een email notificatie werd verstuurd."
 
 #: seahub/api2/endpoints/admin/users.py:904
 #, python-format
 msgid ""
 "Successfully added user %(user)s. But email notification can not be sent, "
 "because Email service is not properly configured."
-msgstr ""
+msgstr "Succesvolgevoegde gebruiker %(user)s. Maar email notificatie kan niet verzonden worden, omdat Emaildienst niet correct geconfigureerd is."
 
 #: seahub/api2/endpoints/admin/users.py:1416
 msgid "Edit succeeded"
@@ -392,7 +393,7 @@ msgstr "Aanpassing gelukt,maar mislukt om email te versturen, controleer je emai
 #: seahub/api2/endpoints/admin/users.py:1495 seahub/auth/forms.py:167
 #: seahub/auth/views.py:365
 msgid "Unable to reset password."
-msgstr ""
+msgstr "Kan wachtwoord niet resetten."
 
 #: seahub/api2/endpoints/admin/users.py:1513 seahub/auth/forms.py:195
 #: seahub/organizations/api/admin/user_set_password.py:74
@@ -404,7 +405,7 @@ msgstr "Verander wachtwoord van %s"
 #: seahub/organizations/api/admin/user_set_password.py:78
 #, python-brace-format
 msgid "A password reset link has been sent to {contact_email}."
-msgstr ""
+msgstr "Een wachtwoord reset link is verstuurd naar {contact_email}."
 
 #: seahub/api2/endpoints/admin/users.py:1535 seahub/views/sysadmin.py:494
 #, python-format
@@ -414,7 +415,7 @@ msgstr "Wachtwoord opnieuw ingesteld op %s"
 #: seahub/api2/endpoints/admin/users.py:1537
 #, python-format
 msgid "Successfully reset password, an email has been sent to %(user)s."
-msgstr ""
+msgstr "Wachtwoord succesvol gereset, een email werd verstuurd naar %(user)s."
 
 #: seahub/api2/endpoints/admin/users.py:1541 seahub/views/sysadmin.py:524
 #, python-format
@@ -444,7 +445,7 @@ msgstr "moet een getal groter of gelijk aan 0 zijn."
 
 #: seahub/api2/endpoints/admin/virus_scan_records.py:201
 msgid "Virus file is not found."
-msgstr ""
+msgstr "Virusbestand is gevonden."
 
 #: seahub/api2/endpoints/admin/virus_scan_records.py:219
 #: seahub/api2/endpoints/admin/virus_scan_records.py:234
@@ -498,12 +499,12 @@ msgstr "Ongeldig bestandspad bestemming"
 #: seahub/seadoc/apis.py:541 seahub/seadoc/apis.py:635
 #: seahub/seadoc/apis.py:3148
 msgid "Out of quota."
-msgstr ""
+msgstr "Quotum overschreden."
 
 #: seahub/api2/endpoints/copy_move_task.py:164
 #, python-format
 msgid "Can not move folder %(src)s to its subfolder %(des)s"
-msgstr ""
+msgstr "Kan map %(src)s niet verplaatsen naar submap %(des)s"
 
 #: seahub/api2/endpoints/copy_move_task.py:180
 #: seahub/api2/endpoints/file.py:322 seahub/api2/endpoints/file.py:402
@@ -528,14 +529,14 @@ msgstr "Gebruikersnaam ongeldig"
 #: seahub/api2/endpoints/group_owned_libraries.py:961
 #, python-format
 msgid "User %s not found."
-msgstr ""
+msgstr "Gebruiker %s niet gevonden."
 
 #: seahub/api2/endpoints/file.py:204 seahub/api2/endpoints/upload_links.py:534
 #: seahub/api2/endpoints/via_repo_token.py:853
 #: seahub/api2/endpoints/wiki2.py:601 seahub/api2/endpoints/wikis.py:135
 #: seahub/api2/views.py:2075 seahub/seadoc/apis.py:3155
 msgid "The number of files in library exceeds the limit"
-msgstr ""
+msgstr "Het aantal bestanden in de bibliotheek overschrijdt de limiet"
 
 #: seahub/api2/endpoints/file.py:310
 #: seahub/api2/endpoints/file_participants.py:113
@@ -559,16 +560,16 @@ msgstr "Toegang geweigerd."
 
 #: seahub/api2/endpoints/file.py:333
 msgid "File extension is not in the whitelist"
-msgstr ""
+msgstr "Bestandsextensie staat niet op de witte lijst"
 
 #: seahub/api2/endpoints/file.py:756 seahub/api2/endpoints/file.py:776
 #: seahub/api2/endpoints/via_repo_token.py:1170
 msgid "File is not locked."
-msgstr ""
+msgstr "Bestand is niet vergrendeld."
 
 #: seahub/api2/endpoints/file.py:803 seahub/api2/endpoints/share_links.py:894
 msgid "You can not refresh this file's lock."
-msgstr ""
+msgstr "U kunt de vergrendeling van dit bestand niet vernieuwen."
 
 #: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2784
 msgid "The participant already exists."
@@ -579,7 +580,7 @@ msgstr "De deelnemer bestaat al."
 #: seahub/api2/endpoints/revision_tag.py:55
 #: seahub/api2/endpoints/revision_tag.py:109
 msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
-msgstr ""
+msgstr "Tag mag alleen letters, cijfers, punt, koppeltekens of underscores bevatten."
 
 #: seahub/api2/endpoints/group_members.py:109
 #: seahub/api2/endpoints/group_members.py:357
@@ -603,7 +604,7 @@ msgstr "Gebruiker %s niet gevonden in organisatie."
 #: seahub/api2/endpoints/group_members.py:533
 #, python-format
 msgid "User %s is an organization user."
-msgstr ""
+msgstr "Gebruiker %s is een organisatie gebruiker."
 
 #: seahub/api2/endpoints/group_members.py:437 seahub/group/error_msg.py:17
 #: seahub/group/error_msg.py:23 seahub/views/file.py:553
@@ -613,7 +614,7 @@ msgstr "Groep bestaat niet"
 #: seahub/api2/endpoints/group_members.py:576
 #| msgid "Email or Username"
 msgid "Email or LoginID"
-msgstr ""
+msgstr "E-mail of loginID"
 
 #: seahub/api2/endpoints/group_members.py:587 seahub/views/sysadmin.py:167
 #: seahub/views/sysadmin.py:275 seahub/views/sysadmin.py:653
@@ -624,12 +625,12 @@ msgstr "Kan niet exporteren naar Excel"
 #: seahub/api2/endpoints/group_owned_libraries.py:398
 #: seahub/api2/endpoints/group_owned_libraries.py:674
 msgid "Permission already exists."
-msgstr ""
+msgstr "Toegang bestaat al."
 
 #: seahub/api2/endpoints/invitation.py:110
 #, python-format
 msgid "%(user)s revoked your access to %(site_name)s."
-msgstr ""
+msgstr "%(user)s heeft uw toegang tot %(site_name)s gerooid."
 
 #: seahub/api2/endpoints/invitations.py:55
 #: seahub/api2/endpoints/invitations.py:119
@@ -682,7 +683,7 @@ msgstr "Wachtwoord is te kort."
 #: seahub/api2/endpoints/upload_links.py:180
 #: seahub/api2/endpoints/webdav_secret.py:64
 msgid "Password is too weak."
-msgstr ""
+msgstr "Wachtwoord is te zwak."
 
 #: seahub/api2/endpoints/multi_share_links.py:118
 #: seahub/api2/endpoints/share_links.py:369
@@ -691,7 +692,7 @@ msgstr ""
 msgid ""
 "Password can only contain number, upper letter, lower letter and other "
 "symbols."
-msgstr ""
+msgstr "Wachtwoord mag alleen cijfers, hoofdletters, kleine letters en andere symbolen bevatten."
 
 #: seahub/api2/endpoints/multi_share_links.py:141
 #: seahub/api2/endpoints/multi_share_links.py:376
@@ -701,7 +702,7 @@ msgstr ""
 #: seahub/api2/endpoints/upload_links.py:391 seahub/api2/views.py:3660
 #, python-format
 msgid "Expire days should be greater or equal to %s"
-msgstr ""
+msgstr "Vervaldagen moeten groter of gelijk zijn aan %s"
 
 #: seahub/api2/endpoints/multi_share_links.py:146
 #: seahub/api2/endpoints/multi_share_links.py:382
@@ -711,7 +712,7 @@ msgstr ""
 #: seahub/api2/endpoints/upload_links.py:397 seahub/api2/views.py:3666
 #, python-format
 msgid "Expire days should be less than or equal to %s"
-msgstr ""
+msgstr "Vervaldagen moeten kleiner of gelijk zijn aan %s"
 
 #: seahub/api2/endpoints/multi_share_links.py:166
 #: seahub/api2/endpoints/multi_share_links.py:404
@@ -721,7 +722,7 @@ msgstr ""
 #: seahub/api2/endpoints/upload_links.py:421
 #, python-format
 msgid "Expiration time should be later than %s."
-msgstr ""
+msgstr "Vervaltijd moet later zijn dan %s."
 
 #: seahub/api2/endpoints/multi_share_links.py:175
 #: seahub/api2/endpoints/multi_share_links.py:413
@@ -731,7 +732,7 @@ msgstr ""
 #: seahub/api2/endpoints/upload_links.py:430
 #, python-format
 msgid "Expiration time should be earlier than %s."
-msgstr ""
+msgstr "Vervaltijd moet eerder zijn dan %s."
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
 #: seahub/seadoc/apis.py:688
@@ -742,7 +743,7 @@ msgstr "Fout"
 
 #: seahub/api2/endpoints/repo_commit_revert.py:66
 msgid "This library has not been decrypted."
-msgstr ""
+msgstr "Deze bibliotheek is niet gedecodeerd."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:45
 #: seahub/api2/endpoints/user.py:90 seahub/api2/endpoints/user.py:97
@@ -754,12 +755,12 @@ msgstr "Functie uitgeschakeld."
 #: seahub/api2/endpoints/repo_send_new_password.py:75
 #: seahub/api2/endpoints/repo_set_password.py:171
 msgid "Can not reset this library's password."
-msgstr ""
+msgstr "Kan het wachtwoord van deze bibliotheek niet resetten."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:82
 #, python-format
 msgid "New password of library %s"
-msgstr ""
+msgstr "Nieuw wachtwoord van bibliotheek %s"
 
 #: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4096
 msgid "Wrong password"
@@ -767,7 +768,7 @@ msgstr "Verkeerd wachtwoord"
 
 #: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4102
 msgid "Decrypt library error"
-msgstr "Decoderen van bibliotheek fout"
+msgstr "Fout bij decoderen van bibliotheek"
 
 #: seahub/api2/endpoints/repo_set_password.py:138
 msgid "Wrong old password"
@@ -779,18 +780,18 @@ msgstr "Onjuist oud wachtwoord"
 #: seahub/api2/endpoints/repos_batch.py:1730
 #, python-format
 msgid "File %s is locked."
-msgstr ""
+msgstr "Bestand %s is vergrendeld."
 
 #: seahub/api2/endpoints/repos_batch.py:1308
 #: seahub/api2/endpoints/repos_batch.py:1567
 #, python-format
 msgid "Can't move folder %s, please check its permission."
-msgstr ""
+msgstr "Kan map %s niet verplaatsen, controleer de machtigingen."
 
 #: seahub/api2/endpoints/repos_batch.py:1657
 #, python-format
 msgid "Can't delete folder %s, please check its permission."
-msgstr ""
+msgstr "Kan map %s niet verwijderen, controleer de machtigingen."
 
 #: seahub/api2/endpoints/send_share_link_email.py:97
 #: seahub/notifications/models.py:965
@@ -805,42 +806,42 @@ msgstr "Er is een bestand met jou gedeeld op %s"
 #: seahub/api2/endpoints/send_share_link_email.py:100
 #: seahub/notifications/models.py:965
 msgid "folder"
-msgstr ""
+msgstr "map"
 
 #: seahub/api2/endpoints/send_share_link_email.py:101
 #, python-format
 msgid "A folder is shared to you on %s"
-msgstr ""
+msgstr "Er is een map met jou gedeeld op %s"
 
 #: seahub/api2/endpoints/send_upload_link_email.py:74
 msgid "email invalid."
-msgstr "ongeldig e-mailadres."
+msgstr "e-mailadres ongeldig."
 
 #: seahub/api2/endpoints/send_upload_link_email.py:92
 #, python-format
 msgid "An upload link is shared to you on %s"
-msgstr "Er is een upload link met je gedeeld op %s"
+msgstr "Er is een uploadlink met je gedeeld op %s"
 
 #: seahub/api2/endpoints/share_link_auth.py:147
 #, python-format
 msgid "User %s does not exist."
-msgstr ""
+msgstr "Gebruiker %s bestaat niet."
 
 #: seahub/api2/endpoints/share_link_auth.py:310
 #, python-format
 msgid "Email %s already exists."
-msgstr ""
+msgstr "E-mail %s bestaat al."
 
 #: seahub/api2/endpoints/share_link_auth.py:316
 #, python-format
 msgid "Email %s is invalid."
-msgstr ""
+msgstr "E-mail %s is ongeldig."
 
 #: seahub/api2/endpoints/share_links.py:498
 #: seahub/api2/endpoints/share_links.py:507
 #, python-format
 msgid "Share link %s already exists."
-msgstr ""
+msgstr "Deel-link %s bestaat al."
 
 #: seahub/api2/endpoints/subscription.py:32
 #: seahub/api2/endpoints/subscription.py:68
@@ -855,16 +856,16 @@ msgstr ""
 #: seahub/work_weixin/views.py:152 seahub/work_weixin/views.py:172
 #: seahub/work_weixin/views.py:233
 msgid "Feature is not enabled."
-msgstr ""
+msgstr "Functie is niet ingeschakeld."
 
 #: seahub/api2/endpoints/user.py:119
 #, python-format
 msgid "Contact email %s already exists."
-msgstr ""
+msgstr "Contact e-mail %s bestaat al."
 
 #: seahub/api2/endpoints/user.py:133
 msgid "telephone is too long (maximum is 100 characters)."
-msgstr ""
+msgstr "telefoonnummer is te lang (maximaal 100 tekens)."
 
 #: seahub/api2/endpoints/user_avatar.py:41
 #: seahub/organizations/api/admin/logo.py:56 seahub/utils/error_msg.py:8
@@ -892,29 +893,29 @@ msgstr "U heeft al %(nb_avatars)d avatars, en het maximum aantal is %(nb_max_ava
 #: seahub/api2/endpoints/webdav_secret.py:56
 #| msgid "Length of WebDav password should be less than 30."
 msgid "Length of WebDAV password should be less than 30."
-msgstr ""
+msgstr "De lengte van het WebDAV-wachtwoord moet korter zijn dan 30 tekens."
 
 #: seahub/api2/endpoints/wiki2.py:220 seahub/api2/endpoints/wiki2.py:1485
 #: seahub/api2/endpoints/wikis.py:219
 msgid "Name can only contain letters, numbers, blank, hyphen or underscore."
-msgstr ""
+msgstr "Naam mag alleen letters, cijfers, spaties, koppeltekens of underscores bevatten."
 
 #: seahub/api2/endpoints/wiki2.py:1335
 msgid "URL is invalid"
-msgstr ""
+msgstr "URL is ongeldig"
 
 #: seahub/api2/endpoints/wiki2.py:1339
 msgid "The custom part of URL should have 5-30 characters."
-msgstr ""
+msgstr "Het aangepaste gedeelte van de URL moet 5-30 tekens bevatten."
 
 #: seahub/api2/endpoints/wiki2.py:1361
 msgid "This custom domain is already in use and cannot be used for your wiki"
-msgstr ""
+msgstr "Dit aangepaste domein is al in gebruik en kan niet worden gebruikt voor uw wiki"
 
 #: seahub/api2/endpoints/wikis.py:122 seahub/api2/endpoints/wikis.py:226
 #, python-format
 msgid "%s is taken by others, please try another name."
-msgstr ""
+msgstr "%s is al in gebruik door anderen, probeer een andere naam."
 
 #: seahub/api2/endpoints/wikis.py:206
 msgid "Wiki not found."
@@ -926,12 +927,12 @@ msgstr "Naam is verplicht"
 
 #: seahub/api2/utils.py:338
 msgid "A share link for you"
-msgstr ""
+msgstr "Een gedeelde link voor u"
 
 #: seahub/api2/views.py:1925
 #| msgid "Permission error: only group staff can add member"
 msgid "Permission error: you are not the admin of the department"
-msgstr ""
+msgstr "Toegangsgestoorde: u bent niet de beheerder van de afdeling"
 
 #: seahub/auth/decorators.py:73
 msgid "Please log in."
@@ -976,7 +977,7 @@ msgstr "Dat e-mail adress is niet gekoppeld aan een gebruikersaccount. Weet u ze
 #: seahub/auth/forms.py:119 seahub/auth/forms.py:120
 #: seahub/templates/registration/login.html:76
 msgid "Please use Single Sign-On to login."
-msgstr ""
+msgstr "Gebruik Single Sign-On om in te loggen."
 
 #: seahub/auth/forms.py:125
 msgid ""
@@ -1037,12 +1038,12 @@ msgstr "E-mail verzenden mislukt. Neem alstublieft contact op met de beheerder."
 
 #: seahub/auth/views.py:454
 msgid "Unable to change password."
-msgstr ""
+msgstr "Kan het wachtwoord niet veranderen."
 
 #: seahub/auth/views.py:537
 #, python-brace-format
 msgid "Team {domain} does not have permission to use ADFS/SAML SSO."
-msgstr ""
+msgstr "Team {domain} heeft geen toegang tot ADFS/SAML SSO."
 
 #: seahub/avatar/models.py:144 seahub/avatar/models.py:172
 #, python-format
@@ -1064,7 +1065,7 @@ msgstr "De geselecteerde avatars zijn succesvol verwijderd."
 #: seahub/base/accounts.py:705 seahub/base/accounts.py:736
 #, python-format
 msgid "Account %(account)s froze on %(site)s."
-msgstr ""
+msgstr "Account %(account)s is op %(site)s geblokkeerd."
 
 #: seahub/base/accounts.py:1220
 msgid "Email address"
@@ -1109,13 +1110,13 @@ msgstr "Bestanden in deze bibliotheek kunnen niet online worden bekeken."
 #: seahub/base/management/commands/check_user_quota.py:58
 #, python-format
 msgid "Your quota is almost full on %s"
-msgstr ""
+msgstr "Uw quota is bijna vol op %s"
 
 #: seahub/base/management/commands/check_user_quota.py:82
 #, python-format
 #| msgid "Your quota is almost full on %s"
 msgid "The team quota is almost full on %s"
-msgstr ""
+msgstr "De team quota is bijna vol op %s"
 
 #: seahub/base/management/commands/createsuperuser.py:26
 msgid "Enter a valid e-mail address."
@@ -1143,11 +1144,11 @@ msgstr "Naam bibliotheek"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "Library ID"
-msgstr ""
+msgstr "Bibliotheek ID"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "Library Owner"
-msgstr ""
+msgstr "Bibliotheek eigenaar"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "File Path"
@@ -1232,12 +1233,12 @@ msgstr "Standaard"
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Team {org_name} is inactive."
-msgstr ""
+msgstr "Team {org_name} is inactive."
 
 #: seahub/base/middleware.py:76
 #, python-brace-format
 msgid "Please contact {SUPPORT_EMAIL} if you want to activate the team."
-msgstr ""
+msgstr "Please contact {SUPPORT_EMAIL} if you want to activate the team."
 
 #: seahub/base/templatetags/seahub_tags.py:141
 msgid "Added"
@@ -1261,11 +1262,11 @@ msgstr "Verplaatst"
 
 #: seahub/base/templatetags/seahub_tags.py:147
 msgid "Added folder"
-msgstr ""
+msgstr " toegevoegd"
 
 #: seahub/base/templatetags/seahub_tags.py:148
 msgid "Removed folder"
-msgstr ""
+msgstr "Verwijderd"
 
 #: seahub/base/templatetags/seahub_tags.py:149
 #: seahub/notifications/management/commands/send_file_updates.py:172
@@ -1295,7 +1296,7 @@ msgstr "Status bestand \"%(file)s\" teruggezet naar status op %(time)s."
 #: seahub/base/templatetags/seahub_tags.py:173
 #: seahub/base/templatetags/seahub_tags.py:244
 msgid "Recovered deleted folder"
-msgstr ""
+msgstr "Verwijderde map hersteld"
 
 #: seahub/base/templatetags/seahub_tags.py:175
 #: seahub/base/templatetags/seahub_tags.py:246 seahub/views/ajax.py:457
@@ -1410,13 +1411,13 @@ msgstr "E-mailadres is verplicht."
 #: seahub/work_weixin/views.py:178 seahub/work_weixin/views.py:183
 #: seahub/work_weixin/views.py:193 seahub/work_weixin/views.py:197
 msgid "Error, please contact administrator."
-msgstr ""
+msgstr "Fout, neem contact op met de beheerder."
 
 #: seahub/dingtalk/views.py:127 seahub/dingtalk/views.py:374
 #: seahub/weixin/views.py:111
 #, python-format
 msgid "User %s not found or inactive."
-msgstr ""
+msgstr "Gebruiker %s is niet gevonden of isactief."
 
 #: seahub/forms.py:59
 msgid "The two passwords didn't match."
@@ -1547,7 +1548,7 @@ msgstr "Hallo, "
 msgid ""
 "%(escaped_nickname)s invited you to join group %(grp_name)s on "
 "%(site_name)s: "
-msgstr ""
+msgstr "%(escaped_nickname)s heeft u uitgenodigd om lid te worden van groep %(grp_name)s op %(site_name)s: "
 
 #: seahub/group/templates/group/group_join_email.html:2
 #, python-format
@@ -1585,11 +1586,11 @@ msgstr "Je bent uitgenodigd voor deelname aan groep %s"
 #: seahub/group/views.py:192
 #| msgid "Group does not exist"
 msgid "Group invite link does not exist"
-msgstr ""
+msgstr "Groepsuitnodigingslink bestaat niet"
 
 #: seahub/group/views.py:200
 msgid "Group invite link broken"
-msgstr ""
+msgstr "Groepsuitnodigingslink is verbroken"
 
 #: seahub/institutions/views.py:185
 msgid "Owner"
@@ -1605,7 +1606,7 @@ msgstr "Verwijderen mislukt: de gebruiker bestaat niet"
 
 #: seahub/institutions/views.py:226
 msgid "Failed to delete: the user is system administrator"
-msgstr ""
+msgstr "Verwijderen mislukt: de gebruiker is een systeembeheerder"
 
 #: seahub/institutions/views.py:230 seahub/views/sysadmin.py:361
 #, python-format
@@ -1615,12 +1616,12 @@ msgstr "%s verwijderd."
 #: seahub/invitations/models.py:96
 #, python-format
 msgid "You are invited to join %(site_name)s."
-msgstr ""
+msgstr "U bent uitgenodigd om lid te worden van %(site_name)s."
 
 #: seahub/invitations/models.py:99
 #, python-brace-format
 msgid "You are invited to join team {org_name}."
-msgstr ""
+msgstr "U bent uitgenodigd om lid te worden van team {org_name}."
 
 #: seahub/invitations/templates/invitations/invitation_email.html:9
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:9
@@ -1650,19 +1651,19 @@ msgstr "Goedendag,"
 #, python-format
 msgid ""
 "You are invited to join team %(org_name)s. Please click the link below:"
-msgstr ""
+msgstr "U bent uitgenodigd om lid te worden van team %(org_name)s. Klik op de onderstaande link:"
 
 #: seahub/invitations/templates/invitations/invitation_email.html:15
 #, python-format
 msgid ""
 "%(inviter_name)s invited you to join %(site_name)s. Please click the link "
 "below:"
-msgstr ""
+msgstr "%(inviter_name)s heeft u uitgenodigd om lid te worden van %(site_name)s. Klik op de onderstaande link:"
 
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:12
 #, python-format
 msgid "%(inviter)s revoked your access to %(site_name)s."
-msgstr ""
+msgstr "%(inviter)s heeft uw toegang tot %(site_name)s ingetrokken."
 
 #: seahub/invitations/templates/invitations/token_view.html:4
 msgid "Create Account"
@@ -1727,7 +1728,7 @@ msgstr "Alle items uit de prullenbak verwijderd."
 #: seahub/notifications/management/commands/send_file_updates.py:127
 #, python-format
 msgid "Removed items older than %s days from trash."
-msgstr ""
+msgstr "Items ouder dan %s dagen verwijderd uit de prullenbak."
 
 #: seahub/notifications/management/commands/send_file_updates.py:135
 msgid "Created file"
@@ -1768,7 +1769,7 @@ msgstr "Map hersteld"
 #: seahub/notifications/management/commands/send_file_updates.py:278
 #, python-format
 msgid "New file updates on %s"
-msgstr ""
+msgstr "Nieuwe bestandsupdates op %s"
 
 #: seahub/notifications/management/commands/send_notices.py:461
 #, python-format
@@ -1778,7 +1779,7 @@ msgstr "Nieuwe aankondiging op %s"
 #: seahub/notifications/management/commands/send_notices_to_social_account.py:252
 #, python-format
 msgid "You've got %(num)s new notices on %(site_name)s:\n"
-msgstr ""
+msgstr "Je hebt %(num)s nieuwe meldingen op %(site_name)s:\n"
 
 #: seahub/notifications/models.py:612
 #, python-format
@@ -1790,19 +1791,19 @@ msgstr "Bestand getiteld <a href='%(file_link)s'>%(file_name)s</a> is geüpload 
 #: seahub/notifications/models.py:619
 #, python-format
 msgid "A file named <strong>%(file_name)s</strong> is uploaded"
-msgstr ""
+msgstr "Een bestand genaamd <strong>%(file_name)s</strong> is geüpload"
 
 #: seahub/notifications/models.py:654
 #, python-format
 msgid ""
 "A folder named <a href='%(folder_link)s'>%(folder_name)s</a> is uploaded to "
 "<a href='%(link)s'>%(name)s</a>"
-msgstr ""
+msgstr "Een map genaamd <a href='%(folder_link)s'>%(folder_name)s</a> is geüpload naar <a href='%(link)s'>%(name)s</a>"
 
 #: seahub/notifications/models.py:661
 #, python-format
 msgid "A folder named <strong>%(folder_name)s</strong> is uploaded"
-msgstr ""
+msgstr "Een map genaamd <strong>%(folder_name)s</strong> is geüpload"
 
 #: seahub/notifications/models.py:795
 #, python-format
@@ -1831,14 +1832,14 @@ msgstr "Het bestand <a href='%(file_url)s'>%(file_name)s</a>  heeft een nieuwe o
 msgid ""
 "<a href='%(file_url)s'>Draft #%(draft_id)s</a> has a new comment from user "
 "%(author)s"
-msgstr ""
+msgstr "<a href='%(file_url)s'>Concept #%(draft_id)s</a> heeft een nieuwe opmerking van gebruiker %(author)s"
 
 #: seahub/notifications/models.py:884
 #, python-format
 msgid ""
 "%(from_user)s has sent you a request for <a href='%(file_url)s'>draft "
 "#%(draft_id)s</a>"
-msgstr ""
+msgstr "%(from_user)s heeft u een verzoek gestuurd voor <a href='%(file_url)s'>concept #%(draft_id)s</a>"
 
 #: seahub/notifications/models.py:907
 #: seahub/notifications/templates/notifications/notice_email.html:66
@@ -1846,7 +1847,7 @@ msgstr ""
 msgid ""
 "Guest %(user)s accepted your <a "
 "href=\"%(url_base)s%(inv_url)s\">invitation</a> at %(time)s."
-msgstr ""
+msgstr "Gast %(user)s heeft uw <a href=\"%(url_base)s%(inv_url)s\">uitnodiging</a> geaccepteerd om %(time)s."
 
 #: seahub/notifications/models.py:931
 #, python-format
@@ -1856,70 +1857,70 @@ msgstr ""
 msgid ""
 "%(user)s has transferred a library named <a "
 "href=\"%(repo_url)s\">%(repo_name)s</a> to you."
-msgstr ""
+msgstr "%(user)s heeft een bibliotheek genaamd <a href=\"%(repo_url)s\">%(repo_name)s</a> aan u overgedragen."
 
 #: seahub/notifications/models.py:1004
 #, python-brace-format
 msgid "{name} created {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} heeft {obj_type} {obj_link} aangemaakt in bibliotheek {repo_link}."
 
 #: seahub/notifications/models.py:1006
 #, python-brace-format
 msgid ""
 "{name} created {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr ""
+msgstr "{name} heeft {obj_type} {obj_link} en {obj_path_count_minus_one} andere {obj_type}(s) aangemaakt in bibliotheek {repo_link}."
 
 #: seahub/notifications/models.py:1011
 #, python-brace-format
 msgid "{name} deleted {obj_type} {obj_name} in library {repo_link}."
-msgstr ""
+msgstr "{name} heeft {obj_type} {obj_name} verwijderd in bibliotheek {repo_link}."
 
 #: seahub/notifications/models.py:1013
 #, python-brace-format
 msgid ""
 "{name} deleted {obj_type} {obj_name} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr ""
+msgstr "{name} heeft {obj_type} {obj_name} en {obj_path_count_minus_one} andere {obj_type}(s) verwijderd in bibliotheek {repo_link}."
 
 #: seahub/notifications/models.py:1017
 #, python-brace-format
 msgid "{name} restored {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} heeft {obj_type} {obj_link} hersteld in bibliotheek {repo_link}."
 
 #: seahub/notifications/models.py:1021
 #, python-brace-format
 msgid ""
 "{name} renamed {obj_type} {old_obj_name} to {obj_link} in library "
 "{repo_link}."
-msgstr ""
+msgstr "{name} heeft {obj_type} {old_obj_name} hernoemd naar {obj_link} in bibliotheek {repo_link}."
 
 #: seahub/notifications/models.py:1026
 #, python-brace-format
 msgid "{name} moved {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} heeft {obj_type} {obj_link} verplaatst in bibliotheek {repo_link}."
 
 #: seahub/notifications/models.py:1028
 #, python-brace-format
 msgid ""
 "{name} moved {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr ""
+msgstr "{name} heeft {obj_type} {obj_link} en {obj_path_count_minus_one} andere {obj_type}(s) verplaatst in bibliotheek {repo_link}."
 
 #: seahub/notifications/models.py:1032
 #, python-brace-format
 msgid "{name} updated {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} heeft {obj_type} {obj_link} bijgewerkt in bibliotheek {repo_link}."
 
 #: seahub/notifications/models.py:1035
 #, python-brace-format
 msgid "{name} {op_type} {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} heeft {obj_type} {obj_link} {op_type} in bibliotheek {repo_link}."
 
 #: seahub/notifications/models.py:1046
 #, python-brace-format
 msgid "Face recognition is done for library {repo_name}."
-msgstr ""
+msgstr "Gezichtsherkenning is voltooid voor bibliotheek {repo_name}."
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:9
 #, python-format
@@ -1929,8 +1930,8 @@ msgid ""
 msgid_plural ""
 "\n"
 "You've got %(num)s file updates on %(site_name)s:\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "\nYou've got 1 new file updates on %(site_name)s:\n"
+msgstr[1] "\nYou've got %(num)s file updates on %(site_name)s:\n"
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:20
 msgid "Operation"
@@ -1975,7 +1976,7 @@ msgid ""
 "A folder named <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a> is"
 " uploaded to your folder <a "
 "href=\"%(url_base)s%(parent_dir_url)s\">%(parent_dir_name)s</a>."
-msgstr ""
+msgstr "Een map genaamd <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a> is geüpload naar uw map <a href=\"%(url_base)s%(parent_dir_url)s\">%(parent_dir_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notice_email.html:57
 #, python-format
@@ -1997,7 +1998,7 @@ msgstr "Gebruiker <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> heeft je toe
 msgid ""
 "File <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> has a new "
 "comment from user %(author)s"
-msgstr ""
+msgstr "Bestand <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> heeft een nieuwe opmerking van gebruiker %(author)s"
 
 #: seahub/notifications/templates/notifications/notice_email.html:69
 #, python-format
@@ -2005,7 +2006,7 @@ msgid ""
 "A large number of files in your library <a "
 "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> has been deleted "
 "recently."
-msgstr ""
+msgstr "Een groot aantal bestanden in uw bibliotheek <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> is onlangs verwijderd."
 
 #: seahub/notifications/templates/notifications/notice_email.html:84
 msgid "Go check out at the following page:"
@@ -2016,7 +2017,7 @@ msgstr "Bekijk de volgende pagina:"
 msgid ""
 "%(user)s has shared a folder named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to you."
-msgstr ""
+msgstr "%(user)s heeft een map genaamd <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> met u gedeeld."
 
 #: seahub/notifications/templates/notifications/notice_msg/folder_share_to_group_msg.html:1
 #, python-format
@@ -2024,7 +2025,7 @@ msgid ""
 "%(user)s has shared a folder named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to group <a "
 "href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
-msgstr ""
+msgstr "%(user)s heeft een map genaamd <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> gedeeld met groep <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notice_msg/repo_share_msg.html:1
 #, python-format
@@ -2039,23 +2040,23 @@ msgid ""
 "%(user)s has shared a library named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to group <a "
 "href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
-msgstr ""
+msgstr "%(user)s heeft een bibliotheek genaamd <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> gedeeld met groep <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notify_virus.html:13
 #, python-format
 msgid ""
 "Virus detected in library %(repo_name)s during regular scanning: "
 "%(file_path)s."
-msgstr ""
+msgstr "Virus gedetecteerd in bibliotheek %(repo_name)s tijdens de reguliere scan: %(file_path)s."
 
 #: seahub/notifications/templates/notifications/notify_virus.html:20
 msgid "Virus is detected on regular scanning:"
-msgstr ""
+msgstr "Virus is gedetecteerd tijdens de reguliere scan:"
 
 #: seahub/notifications/utils.py:471
 #, python-format
 msgid "%(author)s added a new comment in document %(sdoc_name)s"
-msgstr ""
+msgstr "%(author)s heeft een nieuwe opmerking toegevoegd in document %(sdoc_name)s"
 
 #: seahub/notifications/utils.py:478 seahub/notifications/utils.py:498
 msgid "Details"
@@ -2064,7 +2065,7 @@ msgstr "Details"
 #: seahub/notifications/utils.py:484
 #, python-format
 msgid "%(author)s added a new reply in document %(sdoc_name)s"
-msgstr ""
+msgstr "%(author)s heeft een nieuw antwoord toegevoegd in document %(sdoc_name)s"
 
 #: seahub/notifications/utils.py:490
 #, python-format
@@ -2072,14 +2073,14 @@ msgstr ""
 msgid ""
 "%(author)s has marked the comment \"%(resolve_comment)s\" as resolved in "
 "document %(sdoc_name)s\n"
-msgstr ""
+msgstr "%(author)s heeft de opmerking \"%(resolve_comment)s\" als opgelost gemarkeerd in document %(sdoc_name)s\n"
 
 #: seahub/oauth/views.py:225
 #: seahub/templates/remote_user/create_unknown_user_false.html:8
 #: seahub/work_weixin/views.py:111
 msgid ""
 "Error, new user registration is not allowed, please contact administrator."
-msgstr ""
+msgstr "Fout, registratie van nieuwe gebruikers is niet toegestaan, neem contact op met de beheerder."
 
 #: seahub/options/templates/options/set_user_options.html:7
 msgid "Please choose how to view encrypted libraries online:"
@@ -2110,16 +2111,16 @@ msgstr "Tip: de laatste manier is veiliger, maar wordt niet goed ondersteund doo
 #: seahub/organizations/api/admin/users.py:810
 #, python-brace-format
 msgid "Failed. You can only invite {org_members_quota} members."
-msgstr ""
+msgstr "Mislukt. U kunt slechts {org_members_quota} leden uitnodigen."
 
 #: seahub/organizations/api/admin/users.py:814
 msgid "The number of users exceeds the limit"
-msgstr ""
+msgstr "Het aantal gebruikers overschrijdt de limiet"
 
 #: seahub/organizations/api/admin/users.py:832
 #, python-brace-format
 msgid "User {email} already exists."
-msgstr ""
+msgstr "Gebruiker {email} bestaat al."
 
 #: seahub/organizations/forms.py:41 seahub/share/views.py:354
 #: seahub/share/views.py:367
@@ -2134,14 +2135,14 @@ msgstr "E-mailadres is niet geldig"
 msgid ""
 "You are receiving this email because your team %(org_name)s has been "
 "deactivated."
-msgstr ""
+msgstr "U ontvangt deze e-mail omdat uw team %(org_name)s is gedeactiveerd."
 
 #: seahub/organizations/templates/organizations/org_deactivate_email.html:16
 #, python-format
 msgid ""
 "\n"
 "If you like to continue using our site, click <a href=\"%(link)s\">here</a>. Otherwise your account will be deleted in 60 days.\n"
-msgstr ""
+msgstr "\nAls u onze site wilt blijven gebruiken, klik dan <a href=\"%(link)s\">hier</a>. Anders wordt uw account over 60 dagen verwijderd.\n"
 
 #: seahub/organizations/templates/organizations/org_register.html:3
 #: seahub/organizations/templates/organizations/org_register.html:13
@@ -2163,7 +2164,7 @@ msgstr "Welkom terug, je bent reeds ingelogd."
 #: seahub/organizations/templates/organizations/org_register.html:17
 #: seahub/templates/registration/registration_form.html:18
 msgid "You will be redirected to the home page within 5 seconds."
-msgstr ""
+msgstr "U wordt binnen 5 seconden doorgestuurd naar de startpagina."
 
 #: seahub/organizations/templates/organizations/org_register.html:25
 msgid "Organization Name"
@@ -2241,7 +2242,7 @@ msgstr "Ongeldige token."
 #: seahub/organizations/views.py:358
 #| msgid "Expiration"
 msgid "Expired token."
-msgstr ""
+msgstr "Verlopen token."
 
 #: seahub/profile/templates/profile/set_profile_react.html:5
 msgid "Settings"
@@ -2300,7 +2301,7 @@ msgstr "Succesvolle instelling van \"%s\" als je standaard bibliotheek."
 msgid ""
 "Metadata feature is not supported for libraries containing more than %s "
 "files"
-msgstr ""
+msgstr "Metadata-functie wordt niet ondersteund voor bibliotheken met meer dan %s bestanden"
 
 #: seahub/seadoc/views.py:26 seahub/seadoc/views.py:80
 #: seahub/seadoc/views.py:158 seahub/views/__init__.py:454
@@ -2311,23 +2312,23 @@ msgstr "Bibliotheek bestaat niet"
 
 #: seahub/seadoc/views.py:152
 msgid "File path invalid."
-msgstr ""
+msgstr "Bestandspad ongeldig."
 
 #: seahub/share/decorators.py:50
 msgid "Invalid verification code, please try again."
-msgstr ""
+msgstr "Ongeldige verificatiecode, probeer het opnieuw."
 
 #: seahub/share/decorators.py:81
 msgid "Link does not exist."
-msgstr ""
+msgstr "Link bestaat niet."
 
 #: seahub/share/decorators.py:84
 msgid "Link is expired."
-msgstr ""
+msgstr "Link is verlopen."
 
 #: seahub/share/decorators.py:125
 msgid "The number of share link exceeds the limit."
-msgstr ""
+msgstr "Het aantal deellinks overschrijdt de limiet."
 
 #: seahub/share/models.py:127
 msgid "Password can't be empty"
@@ -2340,26 +2341,26 @@ msgstr "Voer het juiste wachtwoord in."
 #: seahub/share/templates/share/audit_code_email.html:10
 #, python-format
 msgid "The verification code is %(code)s. It is valid for one hour."
-msgstr ""
+msgstr "De verificatiecode is %(code)s. Deze is een uur geldig."
 
 #: seahub/share/templates/share/share_link_email.html:9
 #, python-format
 msgid ""
 "\n"
 "    %(shared_from)s shared a file link with you.\n"
-msgstr ""
+msgstr "\n    %(shared_from)s heeft een bestandslink met u gedeeld.\n"
 
 #: seahub/share/templates/share/share_link_email.html:14
 #, python-format
 msgid ""
 "\n"
 "You can click <a href=%(url)s>here</a> to verify your email address and visit it.\n"
-msgstr ""
+msgstr "\nU kunt <a href=%(url)s>hier</a> klikken om uw e-mailadres te verifiëren en de link te bezoeken.\n"
 
 #: seahub/share/templates/share/share_link_email_audit.html:4
 #: seahub/share/templates/share/share_link_email_audit.html:39
 msgid "Email address verification"
-msgstr ""
+msgstr "E-mailadres verificatie"
 
 #: seahub/share/templates/share/share_link_email_audit.html:40
 msgid "Please provide your email address to continue."
@@ -2367,7 +2368,7 @@ msgstr "Geef je e-mailadres op om verder te gaan."
 
 #: seahub/share/templates/share/share_link_email_audit.html:43
 msgid "Enter your email address"
-msgstr ""
+msgstr "Voer uw e-mailadres in"
 
 #: seahub/share/templates/share/share_link_email_audit.html:44
 msgid "Get code"
@@ -2375,19 +2376,19 @@ msgstr "Code ophalen"
 
 #: seahub/share/templates/share/share_link_email_audit.html:46
 msgid "Paste the verification code here"
-msgstr ""
+msgstr "Plak de verificatiecode hier"
 
 #: seahub/share/templates/share/share_link_email_audit.html:79
 msgid "Resend"
-msgstr ""
+msgstr "Opnieuw verzenden"
 
 #: seahub/share/templates/share/share_link_email_audit.html:107
 msgid "A verification code has been sent to the email address."
-msgstr ""
+msgstr "Er is een verificatiecode naar het e-mailadres verzonden."
 
 #: seahub/share/views.py:133
 msgid "Please choose a folder."
-msgstr ""
+msgstr "Kies een map."
 
 #: seahub/share/views.py:157
 msgid "Successfully saved."
@@ -2403,15 +2404,15 @@ msgstr "Alleen voorbeeld"
 
 #: seahub/share/views.py:189
 msgid "Download and upload"
-msgstr ""
+msgstr "Download en upload"
 
 #: seahub/share/views.py:190
 msgid "Edit on cloud and download"
-msgstr ""
+msgstr "Bewerken op cloud en download"
 
 #: seahub/share/views.py:191
 msgid "Edit on cloud only"
-msgstr ""
+msgstr "Bewerken op cloud alleen"
 
 #: seahub/share/views.py:223
 msgid "Share Link"
@@ -2437,7 +2438,7 @@ msgstr "Bibliotheek bestaat niet."
 
 #: seahub/share/views.py:258 seahub/views/ajax.py:383
 msgid "Folder does not exist."
-msgstr ""
+msgstr "De map bestaat niet."
 
 #: seahub/share/views.py:306
 msgid "Only the owner of the library has permission to share it."
@@ -2465,7 +2466,7 @@ msgstr "De opgevraagde pagina kan niet gevonden worden."
 
 #: seahub/templates/base.html:8 seahub/templates/base_for_react.html:9
 msgid "File, Collaboration, Team, Organization"
-msgstr ""
+msgstr "Bestand, Collaboratie, Team, Organisatie"
 
 #: seahub/templates/base.html:35
 msgid "Close"
@@ -2485,15 +2486,15 @@ msgstr "Maak een organisatie account"
 
 #: seahub/templates/client_login_complete.html:6
 msgid "The client has logged in. Please open the client to confirm."
-msgstr ""
+msgstr "De client is ingelogd. Open de client om bevestiging te geven."
 
 #: seahub/templates/client_login_confirm.html:6
 msgid "Client Login Confirm"
-msgstr ""
+msgstr "Client inloggen bevestigen"
 
 #: seahub/templates/client_login_confirm.html:8
 msgid "Do you want to login to your client?"
-msgstr ""
+msgstr "Wilt u inloggen met uw client?"
 
 #: seahub/templates/decrypt_repo_form.html:7
 msgid ""
@@ -2518,7 +2519,7 @@ msgid ""
 "\n"
 "        Click <a href=\"%(link)s\">here</a> to reactivate your team and relogin.\n"
 "      "
-msgstr ""
+msgstr "\n        Klik <a href=\"%(link)s\">hier</a> om uw team te heractiveren en opnieuw in te loggen.\n      "
 
 #: seahub/templates/i18n.html:6
 msgid "Upload Folder"
@@ -2624,11 +2625,11 @@ msgstr "Onthoud me gedurende %(remember_days)s dagen"
 #: seahub/templates/registration/login.html:93
 #: seahub/templates/registration/login.html:97
 msgid "Single Sign-On"
-msgstr ""
+msgstr "Eenmalig inloggen"
 
 #: seahub/templates/registration/login.html:104
 msgid "Login with"
-msgstr ""
+msgstr "Inloggen met"
 
 #: seahub/templates/registration/login.html:130
 msgid "Forgot password?"
@@ -2708,11 +2709,11 @@ msgstr "Mislukt om wachtwoord te resetten: deze link is niet langer beschikbaar.
 msgid ""
 "If your email address is in our database, you will receive a message "
 "shortly."
-msgstr ""
+msgstr "Als je emailadres in onze database is, ontvangt je een bericht binnen."
 
 #: seahub/templates/registration/password_reset_done.html:47
 msgid "Back to login page"
-msgstr ""
+msgstr "Terug naar loginpagina"
 
 #: seahub/templates/registration/password_reset_email.html:12
 #, python-format
@@ -2731,18 +2732,18 @@ msgstr "We sturen je een email om een nieuw wachtwoord in te stellen"
 
 #: seahub/templates/registration/password_reset_form.html:53
 msgid "Your email used in login"
-msgstr ""
+msgstr "Je emailadres is gebruikt om in te loggen"
 
 #: seahub/templates/registration/register_complete_email.html:1
 #, python-format
 msgid ""
 "You're receiving this e-mail because you are the admin of %(site_name)s, and"
 " a new user %(reg_email)s is joined."
-msgstr ""
+msgstr "Je ontvangt deze email omdat u de beheerder van %(site_name)s is en een nieuw gebruiker %(reg_email)s is gejoind."
 
 #: seahub/templates/registration/register_complete_email.html:3
 msgid "Please click the following link to view the new account:"
-msgstr ""
+msgstr "Klik op de volgende link om het nieuw account te bekijken:"
 
 #: seahub/templates/registration/register_complete_email_subject.html:1
 #, python-format
@@ -2804,14 +2805,14 @@ msgstr "Snapshot"
 #: seahub/templates/share_access_validation.html:6
 msgid ""
 "Please input the password if you want to browse the shared file/folder."
-msgstr ""
+msgstr "Voer het wachtwoord in als u de bestandsmap wilt bezoeken."
 
 #: seahub/templates/shared_link_email.html:12
 #, python-format
 msgid ""
 "%(escaped_nickname)s shared a %(file_shared_type)s <span style=\"font-"
 "weight:bold;\">%(escaped_file_shared_name)s</span> to you on %(site_name)s:"
-msgstr ""
+msgstr "%(escaped_nickname)s shared a %(file_shared_type)s <span style=\"font-weight:bold;\">%(escaped_file_shared_name)s</span> to you on %(site_name)s:"
 
 #: seahub/templates/shared_link_email.html:17
 #: seahub/templates/shared_upload_link_email.html:20
@@ -2831,18 +2832,18 @@ msgstr "Je kan naar de volgende pagina gaan en je bestanden uploaden:"
 
 #: seahub/templates/snippets/password_strength_js.html:7
 msgid "Password strength should be strong or very strong"
-msgstr ""
+msgstr "Wachtwoordsterkte moet sterk of zeer sterk zijn"
 
 #: seahub/templates/snippets/password_strength_js.html:12
 #: seahub/templates/snippets/password_strength_js.html:97
 msgid "Password strength"
-msgstr ""
+msgstr "Wachtwoordsterkte"
 
 #: seahub/templates/snippets/password_strength_js.html:19
 msgid ""
 "The password should contain different types of characters to make it strong:"
 " uppercase letters, lowercase letters, numbers and special characters."
-msgstr ""
+msgstr "Het wachtwoord moet verschillende soorten tekens bevatten om het sterk te maken: hoofdletters, kleine letters, cijfers en speciale tekens."
 
 #: seahub/templates/snippets/policy_service_link.html:5
 #: seahub/templates/snippets/policy_service_link.html:9
@@ -2852,7 +2853,7 @@ msgstr "Privacybeleid"
 #: seahub/templates/snippets/policy_service_link.html:7
 #: seahub/templates/snippets/policy_service_link.html:11
 msgid "Terms of Service"
-msgstr ""
+msgstr "Servicevoorwaarden"
 
 #: seahub/templates/snippets/repo_dir_trash_tr.html:6
 msgid "Folder"
@@ -2868,14 +2869,14 @@ msgstr "Terughalen"
 msgid ""
 "The new password of library %(repo_name)s is %(password)s. Please change it "
 "as soon as possible."
-msgstr ""
+msgstr "Het nieuwe wachtwoord van bibliotheek %(repo_name)s is %(password)s. Wijzig dit zo snel mogelijk."
 
 #: seahub/templates/sysadmin/short_time_linving_password_reset_link.html:13
 #, python-format
 msgid ""
 "Administrator on %(site_name)s is resetting your password for %(account)s, "
 "please click the following link to continue: "
-msgstr ""
+msgstr "De beheerder op %(site_name)s stelt uw wachtwoord voor %(account)s opnieuw in, klik op de volgende link om door te gaan: "
 
 #: seahub/templates/sysadmin/sudo_mode.html:39
 msgid "Confirm password to continue"
@@ -2901,13 +2902,13 @@ msgstr "Je account %(username)s op %(site_name)s is geactiveerd."
 msgid ""
 "%(nickname)s invited you to join organization \"%(org_name)s\" on "
 "%(site_name)s."
-msgstr ""
+msgstr "%(nickname)s heeft u uitgenodigd om lid te worden van de organisatie \"%(org_name)s\" op %(site_name)s."
 
 #: seahub/templates/sysadmin/user_add_email.html:13
 #: seahub/templates/sysadmin/user_batch_add_email.html:10
 #, python-format
 msgid "%(nickname)s invited you to join %(site_name)s."
-msgstr ""
+msgstr "%(nickname)s heeft u uitgenodigd om lid te worden van %(site_name)s."
 
 #: seahub/templates/sysadmin/user_add_email.html:18
 #: seahub/templates/sysadmin/user_batch_add_email.html:14
@@ -2917,13 +2918,13 @@ msgstr "Het volgende is je account informatie:"
 #: seahub/templates/sysadmin/user_add_email.html:19
 #: seahub/templates/sysadmin/user_batch_add_email.html:15
 msgid "Email:"
-msgstr ""
+msgstr "E-mail:"
 
 #: seahub/templates/sysadmin/user_freeze_email.html:12
 #, python-format
 msgid ""
 "Account %(user)s froze due to excessive failed logins. Please check at:"
-msgstr ""
+msgstr "Account %(user)s is bevroren vanwege te veel mislukte inlogpogingen. Controleer dit op:"
 
 #: seahub/templates/sysadmin/user_reset_email.html:12
 #, python-format
@@ -2936,7 +2937,7 @@ msgstr "Je wachtwoord op %(site_name)s is gereset. Je huidige wachtwoord is %(pa
 #, python-format
 #| msgid "Your quota is almost full on %(site_name)s."
 msgid "The team quota is almost full on %(site_name)s."
-msgstr ""
+msgstr "Het teamquotum op %(site_name)s is bijna vol."
 
 #: seahub/templates/team_quota_full.html:14
 #: seahub/templates/user_quota_full.html:14
@@ -2971,11 +2972,11 @@ msgstr "na wijzigen"
 #: seahub/templates/user_quota_full.html:12
 #, python-format
 msgid "Your quota is almost full on %(site_name)s."
-msgstr ""
+msgstr "Uw quotum op %(site_name)s is bijna vol."
 
 #: seahub/templates/wiki/wiki.html:24
 msgid "Last modified by"
-msgstr ""
+msgstr "Laatst gewijzigd door"
 
 #: seahub/thumbnail/views.py:48 seahub/thumbnail/views.py:178
 #: seahub/views/__init__.py:495
@@ -2991,7 +2992,7 @@ msgstr "Niet gelukt om miniatuur te maken."
 #: seahub/two_factor/forms.py:297
 #: seahub/two_factor/templates/two_factor/core/setup.html:59
 msgid "Token"
-msgstr ""
+msgstr "Token"
 
 #: seahub/two_factor/templates/two_factor/_wizard_actions.html:5
 #: seahub/two_factor/templates/two_factor/profile/disable.html:11
@@ -3000,7 +3001,7 @@ msgstr "Afbreken"
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:6
 msgid "Backup Tokens"
-msgstr ""
+msgstr "Back-up tokens"
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:8
 #| msgid ""
@@ -3015,19 +3016,19 @@ msgid ""
 "    for login verification. If you've used up all your backup tokens, you\n"
 "    can generate a new set of backup tokens. Only the backup tokens shown\n"
 "    below will be valid."
-msgstr ""
+msgstr "Back-up tokens kunnen worden gebruikt wanneer uw primaire en back-up\n    telefoonnummers niet beschikbaar zijn. De onderstaande back-up tokens kunnen worden gebruikt\n    voor inlogverificatie. Als u al uw back-up tokens heeft verbruikt, kunt u\n    een nieuwe set back-up tokens genereren. Alleen de onderstaande back-up tokens\n    zijn geldig."
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:20
 msgid "Print these tokens and keep them somewhere safe."
-msgstr ""
+msgstr "Print deze tokens en bewaar ze op een veilige plek."
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:22
 msgid "You don't have any backup codes yet."
-msgstr ""
+msgstr "U heeft nog geen back-upcodes."
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:26
 msgid "Generate Tokens"
-msgstr ""
+msgstr "Tokens genereren"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:7
 msgid "Two-Factor Authentication"
@@ -3037,16 +3038,16 @@ msgstr "Tweestapsauthenticatie"
 msgid ""
 "Open the two-factor authentication app on your device to view your "
 "authentication token and verify your identify."
-msgstr ""
+msgstr "Open de tweestapsauthenticatie-app op uw apparaat om uw verificatietoken te bekijken en uw identiteit te verifiëren."
 
 #: seahub/two_factor/templates/two_factor/core/login.html:22
 msgid "Authentication token"
-msgstr ""
+msgstr "Verificatietoken"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:27
 #, python-format
 msgid "Remember this computer for %(remember_days)s days"
-msgstr ""
+msgstr "Onthoud deze computer gedurende %(remember_days)s dagen"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:32
 #: seahub/two_factor/templates/two_factor/core/login.html:52
@@ -3056,25 +3057,25 @@ msgstr "Onjuiste code"
 #: seahub/two_factor/templates/two_factor/core/login.html:36
 #: seahub/two_factor/templates/two_factor/core/login.html:57
 msgid "Verify"
-msgstr ""
+msgstr "Verifiëren"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:41
 msgid "Don't have your phone?"
-msgstr ""
+msgstr "Heeft u uw telefoon niet bij de hand?"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:42
 msgid "Enter a two-factor backup code"
-msgstr ""
+msgstr "Voer een tweestaps-back-upcode in"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:48
 msgid "Backup code"
-msgstr ""
+msgstr "Back-upcode"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:49
 msgid ""
 "You can enter one of your backup codes in case you lost access to your "
 "mobile device."
-msgstr ""
+msgstr "U kunt een van uw back-upcodes invoeren voor het geval u de toegang tot uw mobiele apparaat bent verloren."
 
 #: seahub/two_factor/templates/two_factor/core/setup.html:6
 msgid "Enable Two-Factor Authentication"
@@ -3086,7 +3087,7 @@ msgid ""
 "        smartphone to scan the QR code below. For example, use Google\n"
 "        Authenticator. Then, enter the token generated by the app.\n"
 "        "
-msgstr ""
+msgstr "Om een tokengenerator te gaan gebruiken, gebruikt u uw\n        smartphone om de onderstaande QR-code te scannen. Gebruik bijvoorbeeld Google\n        Authenticator. Voer vervolgens de door de app gegenereerde token in.\n        "
 
 #: seahub/two_factor/templates/two_factor/profile/disable.html:6
 msgid "Disable Two-Factor Authentication"
@@ -3099,11 +3100,11 @@ msgstr "Tweestapsauthenticatie uitschakelen"
 msgid ""
 "You are about to disable two-factor authentication. This compromises your "
 "account security, are you sure?"
-msgstr ""
+msgstr "U staat op het punt tweestapsauthenticatie uit te schakelen. Dit brengt de veiligheid van uw account in gevaar, weet u het zeker?"
 
 #: seahub/two_factor/templates/two_factor/profile/disable.html:10
 msgid "Disable"
-msgstr ""
+msgstr "Uitschakelen"
 
 #: seahub/utils/__init__.py:158
 msgid "permission error"
@@ -3123,7 +3124,7 @@ msgstr "Gelieve de geschiedenis ID te specifiëren"
 
 #: seahub/views/__init__.py:492
 msgid "Successfully restored the library."
-msgstr ""
+msgstr "Bibliotheek herstelt."
 
 #: seahub/views/__init__.py:499
 msgid "History you specified does not exist"
@@ -3211,12 +3212,12 @@ msgstr "Kan bestand niet bekijken"
 #: seahub/views/file.py:844 seahub/views/file.py:1119
 #: seahub/views/file.py:1473 seahub/views/file.py:1721
 msgid "Error when prepare Office Online file preview page."
-msgstr ""
+msgstr "Fout bij het voorbereiden van de Office Online bestandspreviewpagina."
 
 #: seahub/views/file.py:879 seahub/views/file.py:1135
 #: seahub/views/file.py:1493 seahub/views/file.py:1737
 msgid "Error when prepare OnlyOffice file preview page."
-msgstr ""
+msgstr "Fout bij het voorbereiden van de OnlyOffice bestandspreviewpagina."
 
 #: seahub/views/file.py:1263
 msgid "Unable to download file, invalid file path"
@@ -3234,7 +3235,7 @@ msgstr "Kan bestand niet downloaden."
 #: seahub/views/repo.py:325
 #, python-format
 msgid "Share link for %s."
-msgstr ""
+msgstr "Deellink voor %s."
 
 #: seahub/views/file.py:1932 seahub/views/file.py:1937
 msgid "Unable to download file"
@@ -3243,39 +3244,39 @@ msgstr "Kan bestand niet downloaden"
 #: seahub/views/file.py:2185
 #| msgid "Wiki not found."
 msgid "revision not found"
-msgstr ""
+msgstr "revisie niet gevonden"
 
 #: seahub/views/file.py:2192
 msgid "The original file does not exist"
-msgstr ""
+msgstr "Het oorspronkelijke bestand bestaat niet"
 
 #: seahub/views/mobile.py:35
 #, python-brace-format
 msgid "User {token.user} not found"
-msgstr ""
+msgstr "Gebruiker {token.user} niet gevonden"
 
 #: seahub/views/mobile.py:39
 #, python-brace-format
 msgid "User {token.user} inactive"
-msgstr ""
+msgstr "Gebruiker {token.user} is inactief"
 
 #: seahub/views/sso.py:179
 msgid ""
 "This link has already been visited, please click the login button on the "
 "client again"
-msgstr ""
+msgstr "Deze link is al bezocht, klik a.u.b. opnieuw op de inlogknop in de client"
 
 #: seahub/views/sso.py:204
 msgid "Invalid link, please click the login button on the client again"
-msgstr ""
+msgstr "Ongeldige link, klik a.u.b. opnieuw op de inlogknop in de client"
 
 #: seahub/views/sso.py:209
 msgid "Login timeout, please click the login button on the client again"
-msgstr ""
+msgstr "Login time-out, klik a.u.b. opnieuw op de inlogknop in de client"
 
 #: seahub/views/sysadmin.py:176 seahub/views/sysadmin.py:180
 msgid "Login ID"
-msgstr ""
+msgstr "Login-ID"
 
 #: seahub/views/sysadmin.py:310 seahub/views/sysadmin.py:336
 msgid "Failed to set quota: internal server error"
@@ -3368,7 +3369,7 @@ msgstr "Optioneel"
 
 #: seahub/wiki/views.py:159
 msgid "Unable to view Wiki"
-msgstr ""
+msgstr "Kan Wiki niet bekijken"
 
 #~ msgid "We've sent a password reset email to your mailbox."
 #~ msgstr "We've sent a password reset email to your mailbox."

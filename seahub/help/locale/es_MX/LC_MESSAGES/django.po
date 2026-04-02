@@ -754,6 +754,8 @@ msgstr ""
 #: templates/help/drive_client_2.0_for_windows_10.html:50
 msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
 msgstr ""
+" ¿Cómo eliminar los atajos restantes de SeaDrive en el Explorador de "
+"Windows?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
@@ -762,12 +764,19 @@ msgid ""
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
 msgstr ""
+"El acceso directo \"SeaDrive\" en el Explorador de Windows no desaparecerá "
+"después de salir del programa SeaDrive o cambiar de cuentas Seafile en "
+"SeaDrive. Es un comportamiento intencionado. No es necesario quitarlos si "
+"todavía necesita acceder a la cuenta más tarde."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
 "choose \"Remove account information\" in the prompt dialog."
 msgstr ""
+"Por lo general, puede eliminar esos atajos desinstalando el programa "
+"SeaDrive y seleccionando \"Eliminar información de cuenta\" en el cuadro de "
+"diálogo de instrucciones."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -778,6 +787,11 @@ msgid ""
 " in registry editor. Remove the sub-keys correspond to the shortcut you want"
 " to remove."
 msgstr ""
+"Si la desinstalación no elimina los atajos con éxito, puede eliminar el "
+"atajo SeaDrive en el Explorador de Windows editando el registro. Abra la "
+"ruta \"HKCUSoftwareMicrosoftWindowsCurrentVersionExplorerDesktopNameSpace\" "
+"en el editor de registro. Eliminar las sub-teclas corresponden al acceso "
+"directo que desea eliminar."
 
 #: templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
@@ -807,6 +821,9 @@ msgid ""
 "the server. The server uses this password to create the library. But it "
 "doesn't store the plain text password."
 msgstr ""
+"Si creas una biblioteca cifrada en la aplicación web, la contraseña se envía"
+" al servidor. El servidor utiliza esta contraseña para crear la biblioteca. "
+"Pero no almacena la contraseña de texto simple."
 
 #: templates/help/encrypted_libraries.html:13
 #, python-format
@@ -840,18 +857,26 @@ msgid ""
 "the server. The client decrypts and encrypts file contents locally. The "
 "plain text password is not stored on the client disk either."
 msgstr ""
+"Si utiliza el cliente de escritorio para sincronizar la biblioteca, la "
+"contraseña no se envía al servidor. El cliente descifra y cifra el contenido"
+" del archivo localmente. La contraseña de texto simple tampoco se almacena "
+"en el disco del cliente."
 
 #: templates/help/encrypted_libraries.html:21
 msgid ""
 "iOS client supports client side encryption since version 2.1.6. Android "
 "client supports it since version 2.1.0."
 msgstr ""
+"El cliente de iOS soporta el cifrado del lado del cliente desde la versión "
+"2.1.6. El cliente Android lo soporta desde la versión 2.1.0."
 
 #: templates/help/encrypted_libraries.html:25
 msgid ""
 "Note that encrypted library only encrypts the contents of the files, but not"
 " the folder and file names."
 msgstr ""
+"Tenga en cuenta que la biblioteca cifrada solo cifra el contenido de los "
+"archivos, pero no los nombres de carpetas y archivos."
 
 #: templates/help/file_locking.html:5
 msgid "File locking"
@@ -2105,6 +2130,10 @@ msgid ""
 "anyone, including those who don't have a Seafile account. You can also use "
 "password and expiration time to protect your links."
 msgstr ""
+"Los enlaces compartidos son enlaces públicos a archivos o carpetas. "
+"Cualquiera puede acceder a ellos, incluso aquellos que no tienen una cuenta "
+"de Seafile. También puede usar contraseña y tiempo de caducidad para "
+"proteger sus enlaces."
 
 #: templates/help/sharing_files_and_folders.html:19
 msgid ""
@@ -2389,7 +2418,7 @@ msgstr ""
 
 #: templates/help/syncing_existing_folders.html:6
 msgid "Syncing with an existing folder"
-msgstr ""
+msgstr "Sincronización con una carpeta existente"
 
 #: templates/help/syncing_existing_folders.html:8
 #, python-format
@@ -2435,7 +2464,7 @@ msgstr ""
 
 #: templates/help/unsync_resync.html:6
 msgid "Unsync and resync library"
-msgstr ""
+msgstr "Dessincronizar y volver a sincronizar la biblioteca"
 
 #: templates/help/unsync_resync.html:8
 #, python-format
@@ -2447,6 +2476,13 @@ msgid ""
 "<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
 "folder</a> feature."
 msgstr ""
+"Si ya no desea sincronizar una carpeta local con una biblioteca, puede "
+"desincronizarla. Después de desincronizar una biblioteca, los cambios en la "
+"carpeta local y los archivos no se cargarán, y los cambios en la biblioteca "
+"no se descargarán. Si desea sincronizar la biblioteca con la carpeta local "
+"de nuevo, puede usar el<a "
+"href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sincronizar con la "
+"carpeta existente</a> característica."
 
 #: templates/help/unsync_resync.html:10
 msgid ""
@@ -2464,12 +2500,18 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
 "start it by double clicking the \"SeaDrive\" app icon on your desktop."
 msgstr ""
+"Después de instalar un cliente de unidad con las instrucciones en la página "
+"<a href=\"https://www.seafile.com/en/download/\">de descarga</a>, puede "
+"iniciarlo haciendo doble clic en el icono de la aplicación \"SeaDrive\" en "
+"su escritorio."
 
 #: templates/help/using_drive_client.html:8
 msgid ""
 "You'll be asked to choose a drive letter for the virtual drive. By default, "
 "\"S:\" will be used."
 msgstr ""
+"Se le pedirá que elija una letra de unidad para la unidad virtual. Por "
+"defecto, se usará \"S:\"."
 
 #: templates/help/using_drive_client.html:9
 msgid "Then you'll be asked to log into your Seafile server."

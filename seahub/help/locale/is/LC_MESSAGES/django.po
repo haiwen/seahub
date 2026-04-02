@@ -5,7 +5,7 @@
 # 
 # Translators:
 # Hjörleifur Sveinbjörnsson <hjorleifur@gmail.com>, 2024
-# Seafile Info <info@seafile.com>, 2025
+# Seafile Info <info@seafile.com>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Icelandic (https://app.transifex.com/haiwen/teams/5086/is/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1473,7 +1473,7 @@ msgstr ""
 
 #: templates/help/install_sync.html:6
 msgid "Installing Seafile client program"
-msgstr ""
+msgstr "Uppsetning á Seafile biðlaraforritinu"
 
 #: templates/help/install_sync.html:8
 msgid ""
@@ -1489,7 +1489,7 @@ msgstr "1. Veldu svæði á harða disknum þínum til að geyma Seafile gögnin
 
 #: templates/help/install_sync.html:11
 msgid "Selecting a folder to store Seafile data"
-msgstr ""
+msgstr "Val á möppu til að geyma Seafile gögn"
 
 #: templates/help/install_sync.html:13
 msgid "2. Add an account"
@@ -1527,7 +1527,7 @@ msgstr "Þú getur einnig búið til safn út frá skáarsafni á tölvunni þin
 
 #: templates/help/install_sync.html:34
 msgid "5. Browse files on the cloud"
-msgstr ""
+msgstr "5. Skoða skrár í skýinu"
 
 #: templates/help/install_sync.html:35
 msgid ""
@@ -1535,12 +1535,17 @@ msgid ""
 "syncing them. Seafile client comes with a \"cloud file browser\" to meet "
 "this need. Click an unsynced library will open the cloud file browser."
 msgstr ""
+"Í sumum tilfellum viltu breyta skrám beint í skýinu án þess að samstilla "
+"þær. Seafile biðlarinn kemur með „skýjaskráavafra“ til að mæta þessari þörf."
+" Ef smellt er á ósamstillað safn opnast skýjaskráavafrinn."
 
 #: templates/help/introduction.html:8
 msgid ""
 "Seafile is an enterprise file hosting platform with high reliability and "
 "performance."
 msgstr ""
+"Seafile er hýsingarvettvangur fyrir fyrirtæki með mikla áreiðanleika og "
+"afköst."
 
 #: templates/help/introduction.html:9
 #, python-format
@@ -1551,6 +1556,11 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/using_drive_client\">the drive client</a>. It also "
 "has mobile clients for Android and iOS."
 msgstr ""
+"Seafile inniheldur vefviðmót fyrir þig til að sýsla með og deila skrám. Það "
+"hefur tvenns konar tölvubiðlara, <a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">samstillingarbiðlarann</a> og <a "
+"href=\"%(SITE_ROOT)shelp/using_drive_client\">drifbiðlarann</a>. Það hefur "
+"einnig farsímabiðlara fyrir Android og iOS."
 
 #: templates/help/introduction.html:10
 msgid ""
@@ -1558,6 +1568,8 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile web "
 "site</a>."
 msgstr ""
+"Þú getur sótt biðlarana á <a href=\"https://www.seafile.com/en/download/\" "
+"target=\"_blank\">vefsíðu Seafile</a>."
 
 #: templates/help/introduction.html:11
 msgid ""
@@ -1565,6 +1577,9 @@ msgid ""
 "help in our forum: <a href=\"https://forum.seafile.com\" "
 "target=\"_blank\">https://forum.seafile.com</a>."
 msgstr ""
+"Ef þessi handbók inniheldur ekki upplýsingarnar sem þú þarft, geturðu leitað"
+" aðstoðar á spjallborðinu okkar: <a href=\"https://forum.seafile.com\" "
+"target=\"_blank\">https://forum.seafile.com</a>."
 
 #: templates/help/libraries_managing.html:6
 msgid ""
@@ -1574,18 +1589,27 @@ msgid ""
 "library works mostly like a top level folder. But it also has some special "
 "properties:"
 msgstr ""
+"Seafile notar „söfn“ til að skipuleggja skrárnar þínar. Safn er yfirgeymsla "
+"fyrir hóp af skrám og möppum. Þú getur búið til safn fyrir hvert verkefni "
+"sem þú vinnur að, eða hverja skjalagerð sem þú vilt vista í Seafile. Safn "
+"virkar að mestu eins og efsta stigs mappa, en hefur einnig nokkra sérstaka "
+"eiginleika:"
 
 #: templates/help/libraries_managing.html:8
 msgid ""
 "Each library keeps its own file modification history. There is no global "
 "file modification history across all libraries."
 msgstr ""
+"Hvert safn heldur sinni eigin breytingasögu skráa. Það er engin sameiginleg "
+"breytingasaga fyrir öll söfnin."
 
 #: templates/help/libraries_managing.html:9
 msgid ""
 "Each library can be synced to desktop clients separately. You can choose "
 "which libraries to be synced."
 msgstr ""
+"Hvert safn er hægt að samstilla við tölvubiðlara sérstaklega. Þú getur valið"
+" hvaða söfn eigi að samstilla."
 
 #: templates/help/libraries_managing.html:11
 msgid ""
@@ -1594,12 +1618,18 @@ msgid ""
 "can also create more libraries. Here is what it looks like when you've "
 "created a few libraries."
 msgstr ""
+"Þegar þú skráir þig inn í Seafile vefforritið í fyrsta sinn, býr Seafile "
+"sjálfkrafa til sjálfgefið safn sem heitir „Mín söfn“ fyrir þig. Þú getur "
+"líka búið til fleiri söfn. Hér má sjá hvernig það lítur út þegar þú hefur "
+"búið til nokkur söfn."
 
 #: templates/help/libraries_managing.html:13
 msgid ""
 "You can navigate into a library and manage your files and folders. You can "
 "upload, download, rename, move, copy and delete files."
 msgstr ""
+"Þú getur farið inn í safn og sýslað með skrár og möppur. Þú getur hlaðið "
+"upp, sótt, endurnefnt, fært, afritað og eytt skrám."
 
 #: templates/help/libraries_managing.html:15
 #, python-format
@@ -1608,6 +1638,9 @@ msgid ""
 "desktop client</a>, you can do any file operations inside the local library "
 "folder. The operations will be uploaded to the server. "
 msgstr ""
+"Eftir að hafa <a href=\"%(SITE_ROOT)shelp/install_sync/\">samstillt safn við"
+" tölvubiðlara</a> geturðu framkvæmt allar skráaraðgerðir inni í staðbundnu "
+"safnmöppunni. Aðgerðirnar verða sendar upp á þjóninn."
 
 #: templates/help/library_history_and_snapshots.html:7
 msgid ""
@@ -1616,6 +1649,10 @@ msgid ""
 "creates a \"snapshot\" of the previous state of the library. The snapshot "
 "contains the complete file and folder structure of the library."
 msgstr ""
+"Seafile fylgist með breytingasögu fyrir allt safnið. Í hvert sinn sem "
+"skráaraðgerð á sér stað í safni (uppfærsla skráar, eyðing o.s.frv.), býr "
+"Seafile til „skyndimynd“ af fyrra ástandi safnsins. Skyndimyndin inniheldur "
+"fullkomna skráa- og möppuskipan safnsins."
 
 #: templates/help/library_history_and_snapshots.html:8
 msgid ""
@@ -1626,10 +1663,16 @@ msgid ""
 "files in the library will be restored to that point of time, all at once. It"
 " works like a \"time machine\" for the library."
 msgstr ""
+"Í sumum tilfellum hefurðu breytt mörgum skrám í safninu og áttar þig á því "
+"að þú vilt afturkalla allar þessar breytingar. Það getur verið leiðinlegt að"
+" endurheimta margar skrár í gamlar útgáfur. Þá kemur skyndimyndaeiginleikinn"
+" sér mjög vel. Þú getur endurheimt allt safnið á hvaða tímapunkt sem er í "
+"fortíðinni. Allar skrár í safninu verða endurheimtar á þann tíma, allar í "
+"einu. Þetta virkar eins og „tímavél“ fyrir safnið."
 
 #: templates/help/library_history_and_snapshots.html:9
 msgid "To view library history and snapshots:"
-msgstr ""
+msgstr "Til að skoða sögu safns og skyndimyndir:"
 
 #: templates/help/library_history_and_snapshots.html:11
 msgid ""
@@ -1637,12 +1680,17 @@ msgid ""
 "\"History\" icon in the library navigation top bar. All the change record of"
 " the library will be displayed in a list."
 msgstr ""
+"Í Seafile vefforritinu, farðu í rótarmöppu safns. Smelltu á „Saga“ táknið í "
+"efstu leiðsögustiku safnsins. Allar breytingaskráningar safnsins munu "
+"birtast í lista."
 
 #: templates/help/library_history_and_snapshots.html:12
 msgid ""
 "Click the \"view snapshot\" link on any modification record. You'll see the "
 "library state at the point of time."
 msgstr ""
+"Smelltu á tengilinn „skoða skyndimynd“ á hvaða breytingaskráningu sem er. Þú"
+" munt sjá ástand safnsins á þeim tímapunkti."
 
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
@@ -1651,6 +1699,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Þú getur stillt hversu lengi saga safns er geymd: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">stilla geymslutíma "
+"sögu</a>."
 
 #: templates/help/manage_library_as_wiki.html:6
 msgid ""
@@ -1660,6 +1711,11 @@ msgid ""
 "files store textual, tabular as well as graphical information; You can also "
 "add links to other documents in a Markdown file."
 msgstr ""
+"Að fanga og geyma lítið mótuð gögn á auðveldan hátt – það er það sem wiki-"
+"síður Seafile eru fyrir. Wiki-síður eru skrifaðar í Markdown (MD), einföldu "
+"merkimáli, til að tryggja samhæfni milli kerfa. MD skrár geyma texta, töflur"
+" sem og myndrænar upplýsingar; þú getur líka bætt við hlekkjum í önnur skjöl"
+" í Markdown skrá."
 
 #: templates/help/manage_library_as_wiki.html:7
 msgid ""
@@ -1668,10 +1724,14 @@ msgid ""
 " Seafile libraries, they can be synced and shared with other users just like"
 " any ordinary library."
 msgstr ""
+"Þú getur sýslað með venjulegt safn í Seafile eins og Wiki með „Dálkasýn“ sem"
+" kynnt var í útgáfu 7.0. Þar sem Seafile innleiðir wiki-síður sem venjuleg "
+"Seafile söfn, er hægt að samstilla þau og deila þeim með öðrum notendum "
+"alveg eins og venjulegum söfnum."
 
 #: templates/help/manage_library_as_wiki.html:8
 msgid "Column view"
-msgstr ""
+msgstr "Dálkasýn"
 
 #: templates/help/manage_library_as_wiki.html:9
 msgid ""
@@ -1682,10 +1742,16 @@ msgid ""
 "File actions such as renaming, moving, and opening via client are available "
 "in a right-click-accessible context menu."
 msgstr ""
+"Wiki-síður hafa venjulega hliðarstiku sem inniheldur tré-laga möppuskipan "
+"til að gera fljótlega og auðvelda vafra um síður. Dálkasýn Seafile gerir þér"
+" kleift að sýsla með skrár í safni á sama hátt og í wiki-svæði. Notendur "
+"geta vafrað í því og fært skrár og möppur með því einu að draga og sleppa. "
+"Skráaraðgerðir eins og að endurnefna, færa og opna með biðlara eru tiltækar "
+"í flýtivalmynd sem fæst með því að hægrismella."
 
 #: templates/help/manage_library_as_wiki.html:12
 msgid "WYSIWYG Markdown editor"
-msgstr ""
+msgstr "WYSIWYG Markdown ritill"
 
 #: templates/help/manage_library_as_wiki.html:13
 msgid ""
@@ -1701,12 +1767,24 @@ msgid ""
 "table’s content: A table can be copied in its entirety or in part without "
 "leaving the WYSIWYG view."
 msgstr ""
+"Wiki-síður í Seafile eru vistaðar sem venjuleg skjöl á Markdown-sniði. Til "
+"að búa til nýja wiki-síðu í safni þarf bara að búa til nýtt Markdown skjal. "
+"MD skrár er hægt að breyta beint úr vefviðmóti Seafile með MD ritlinum á "
+"netinu. Vef-ritillinn býður upp á flæðandi notendaupplifun og ríka möguleika"
+" til að forma texta, myndir og töflur. Hægt er að flytja myndir inn í MD "
+"skrár úr söfnum og staðbundinni geymslu sem og með hlekkjum. Grunnaðgerðir "
+"myndvinnslu eins og stærðarbreytingar er einnig hægt að gera í WYSIWYG "
+"viðmóti ritilsins. Hægt er að setja inn og breyta töflum með örfáum smellum."
+" Sama gildir um innihald töflu: Hægt er að afrita töflu í heild sinni eða að"
+" hluta án þess að yfirgefa WYSIWYG sýnina."
 
 #: templates/help/manage_library_as_wiki.html:15
 msgid ""
 "The change history of a Markdown file can be easily accessed by clicking the"
 " \"File History\" button in the menu on top of the editor interface."
 msgstr ""
+"Breytingasögu Markdown-skrár er auðvelt að nálgast með því að smella á "
+"hnappinn „Skráarsaga“ í valmyndinni efst á ritilsviðmótinu."
 
 #: templates/help/manage_library_as_wiki.html:17
 msgid ""
@@ -1714,10 +1792,13 @@ msgid ""
 "Table of contents, file information, and collaborative commenting are "
 "provided in this side bar."
 msgstr ""
+"Þú getur opnað falið hliðarspjald hægra megin í Markdown-ritlinum. "
+"Efnisyfirlit, skráarupplýsingar og samvinnuathugasemdir eru í boði á þessu "
+"spjaldi."
 
 #: templates/help/manage_library_as_wiki.html:19
 msgid "File tagging and related documents"
-msgstr ""
+msgstr "Skráarmerkingar og tengd skjöl"
 
 #: templates/help/manage_library_as_wiki.html:20
 msgid ""
@@ -1726,22 +1807,28 @@ msgid ""
 "can be managed from the side bar of the Markdown editor, or from the file "
 "browser interface."
 msgstr ""
+"Merking skráa er mikilvægur eiginleiki fyrir þekkingarstjórnun. Seafile "
+"gerir notendum kleift að skilgreina merki fyrir hvert safn og setja merki á "
+"skrár. Hægt er að sýsla með merki á hliðarstiku Markdown-ritilsins eða í "
+"skráavafranum."
 
 #: templates/help/manage_library_as_wiki.html:23
 msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
-msgstr ""
+msgstr "Skráavafrinn veitir yfirlit yfir öll skráarmerki í núverandi safni."
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
 "If you want the be-shared users not be able to modify local copies, you can "
 "consider using the Seafile Drive client."
 msgstr ""
+"Ef þú vilt að notendur sem þú deilir með geti ekki breytt staðbundnum "
+"afritum, geturðu íhugað að nota Seafile Drive biðlarann."
 
 #: templates/help/restoring_deleted_files.html:6
 msgid "Restoring deleted files and folders"
-msgstr ""
+msgstr "Endurheimt eyddra skráa og mappna"
 
 #: templates/help/restoring_deleted_files.html:7
 msgid ""
@@ -1749,16 +1836,21 @@ msgid ""
 "Sometimes you find files are deleted mistakenly. You can find back your "
 "deleted files in the trash bin of each library."
 msgstr ""
+"Hvert safn í Seafile fylgist sjálfkrafa með eyðingaraðgerðum. Stundum eyðast"
+" skrár fyrir mistök. Þú getur fundið eyddar skrár aftur í ruslafötu hvers "
+"safns."
 
 #: templates/help/restoring_deleted_files.html:8
 msgid "Here is how to use the trash bin feature:"
-msgstr ""
+msgstr "Hér er hvernig á að nota ruslafötu-eiginleikann:"
 
 #: templates/help/restoring_deleted_files.html:10
 msgid ""
 "In Seafile Web App, navigate into the parent folder containing the deleted "
 "file or folder."
 msgstr ""
+"Í Seafile vefforritinu, farðu í yfirmöppuna sem innihélt eyddu skrána eða "
+"möppuna."
 
 #: templates/help/restoring_deleted_files.html:11
 msgid ""
@@ -1766,6 +1858,9 @@ msgid ""
 " folders will be listed in deletion time order. In the bottom of the list, "
 "you can click the \"more\" button to load more deleted files."
 msgstr ""
+"Smelltu á „rusl“ táknið í aðgerðastiku safnsins. Eyddar skrár og möppur "
+"verða listaðar eftir eyðingartíma. Neðst á listanum geturðu smellt á "
+"hnappinn „meira“ til að hlaða inn fleiri eyddum skrám."
 
 #: templates/help/restoring_deleted_files.html:12
 msgid ""
@@ -2223,10 +2318,17 @@ msgid ""
 "local folder. You can set the interval of this periodic sync. The interval "
 "is set in the unit of seconds."
 msgstr ""
+"Venjulega skynjar Seafile biðlarinn sjálfkrafa breytingar á staðbundinni "
+"möppu og sendir breytingarnar á þjóninn. Hins vegar, ef staðbundna mappan er"
+" á sameiginlegu Windows netdrifi, getur Seafile biðlarinn ekki skynjað "
+"breytingar með áreiðanlegum hætti. Í því tilfelli geturðu beðið Seafile "
+"biðlarann um að athuga reglulega með breytingar í staðbundnu möppunni. Þú "
+"getur stillt tímabilið fyrir þessa reglubundnu samstillingu. Tímabilið er "
+"stillt í sekúndum."
 
 #: templates/help/syncing_existing_folders.html:6
 msgid "Syncing with an existing folder"
-msgstr ""
+msgstr "Samstilling við fyrirliggjandi möppu"
 
 #: templates/help/syncing_existing_folders.html:8
 #, python-format
@@ -2240,24 +2342,36 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/conflicts/\">conflict files</a> if file contents "
 "are different in the local folder and the library. "
 msgstr ""
+"Stundum ertu þegar með safn á Seafile þjóninum (deilt af öðrum eða hlaðið "
+"upp frá annarri tölvu). Þú getur samstillað þetta safn við fyrirliggjandi "
+"möppu á tölvunni þinni. Staðbundna mappan verður að hafa sama nafn og "
+"safnið. Skrárnar í staðbundnu möppunni verða sameinaðar við skrárnar í "
+"safninu. Engin skrá í staðbundnu möppunni eða safninu verður yfirskrifuð eða"
+" glatast. Sameiningin mun búa til nokkrar <a "
+"href=\"%(SITE_ROOT)shelp/conflicts/\">ágreiningsskrár</a> ef innihald skráa "
+"er mismunandi í staðbundnu möppunni og í safninu."
 
 #: templates/help/syncing_existing_folders.html:10
 msgid ""
 "To sync a library with an existing folder, right click on the library in "
 "Seafile client's main window and click \"Sync this library\"."
 msgstr ""
+"Til að samstilla safn við fyrirliggjandi möppu skaltu hægrismella á safnið í"
+" aðalglugga Seafile biðlarans og smella á „Samstilla þetta safn“."
 
 #: templates/help/syncing_existing_folders.html:14
 msgid "In the pop-up dialog, click the \"Sync with an existing folder\" link."
 msgstr ""
+"Í sprettiglugganum sem birtist skaltu smella á tengilinn „Samstilla við "
+"fyrirliggjandi möppu“."
 
 #: templates/help/syncing_existing_folders.html:18
 msgid "Then choose an existing folder to sync with this library."
-msgstr ""
+msgstr "Veldu svo fyrirliggjandi möppu til að samstilla við þetta safn."
 
 #: templates/help/unsync_resync.html:6
 msgid "Unsync and resync library"
-msgstr ""
+msgstr "Hætta samstillingu og endursamstilla safn"
 
 #: templates/help/unsync_resync.html:8
 #, python-format
@@ -2269,6 +2383,13 @@ msgid ""
 "<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
 "folder</a> feature."
 msgstr ""
+"Þegar þú vilt ekki lengur samstilla staðbundna möppu við safn geturðu "
+"stöðvað samstillinguna. Eftir að þú hættir samstillingu safns verða "
+"breytingar á staðbundnu möppunni og skrám ekki sendar upp, og breytingar í "
+"safninu verða ekki sóttar. Ef þú vilt samstilla safnið við staðbundnu "
+"möppuna aftur, geturðu notað eiginleikann <a "
+"href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">samstilla við "
+"fyrirliggjandi möppu</a>."
 
 #: templates/help/unsync_resync.html:10
 msgid ""
@@ -2277,6 +2398,11 @@ msgid ""
 "unsync and then immediately sync the library with the same folder. You can "
 "find this action in the pop-up menu of the client's main window."
 msgstr ""
+"Stundum koma upp innri villur í biðlaranum sem hindra samstillingu. Í þeim "
+"tilfellum er yfirleitt gagnlegt að „endursamstilla“ safnið. Endursamstilling"
+" felur í sér að hætta samstillingu og samstilla safnið svo strax aftur við "
+"sömu möppu. Þú finnur þessa aðgerð í flýtivalmyndinni í aðalglugga "
+"biðlarans."
 
 #: templates/help/using_drive_client.html:7
 msgid ""
@@ -2284,16 +2410,21 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
 "start it by double clicking the \"SeaDrive\" app icon on your desktop."
 msgstr ""
+"Eftir að hafa sett upp drifbiðlara samkvæmt leiðbeiningum á <a "
+"href=\"https://www.seafile.com/en/download/\">niðurhalssíðunni</a>, geturðu "
+"ræst hann með því að tvísmella á „SeaDrive“ táknið á skjáborðinu."
 
 #: templates/help/using_drive_client.html:8
 msgid ""
 "You'll be asked to choose a drive letter for the virtual drive. By default, "
 "\"S:\" will be used."
 msgstr ""
+"Þú verður beðin(n) um að velja drifstaf fyrir sýndardrifið. Sjálfgefið er "
+"notast við „S:“."
 
 #: templates/help/using_drive_client.html:9
 msgid "Then you'll be asked to log into your Seafile server."
-msgstr ""
+msgstr "Síðan verðurðu beðin(n) um að skrá þig inn á Seafile þjóninn þinn."
 
 #: templates/help/using_drive_client.html:12
 msgid ""
@@ -2302,6 +2433,10 @@ msgid ""
 "at this moment. So it'll not take very long. You can let it run in the "
 "background. You'll be noticed when the fetch is done."
 msgstr ""
+"Eftir að innskráning á þjóninn hefur tekist byrjar drifbiðlarinn að sækja "
+"lista yfir söfn og skrár frá þjóninum. Innihald skráa er ekki sótt á þessu "
+"augnabliki, svo það tekur ekki langan tíma. Þú getur látið það keyra í "
+"bakgrunni. Þú færð tilkynningu þegar búið er að sækja listann."
 
 #: templates/help/using_drive_client.html:14
 msgid ""
@@ -2311,26 +2446,34 @@ msgid ""
 "when you open a file. Recently opened file will be cached in your local "
 "disk. All cached files will be marked with a green tick."
 msgstr ""
+"Sýndardrifsmappan mun opnast. Þú munt sjá að hún virkar alveg eins og "
+"venjulegur harður diskur í tölvunni þinni. Efsta stigs möppurnar í "
+"sýndardrifinu eru söfn á Seafile þjóninum. Innihald skráa verður sótt þegar "
+"þú opnar skrá. Skrár sem hafa verið opnaðar nýlega verða geymdar í biðminni "
+"á staðbundna disknum þínum. Allar geymdar skrár verða merktar með grænu "
+"hakmerki."
 
 #: templates/help/using_drive_client.html:17
 msgid "Synced State"
-msgstr ""
+msgstr "Samstillt staða"
 
 #: templates/help/using_drive_client.html:18
 msgid ""
 "Files and folders in the virtual drive are in either cloud-only, synced, or "
 "in partially synced state."
 msgstr ""
+"Skrár og möppur í sýndardrifinu eru annaðhvort eingöngu-í-skýi, samstilltar,"
+" eða í hálfsamstilltu ástandi."
 
 #: templates/help/using_drive_client.html:22
 #: templates/help/using_drive_client.html:51
 msgid "State"
-msgstr ""
+msgstr "Staða"
 
 #: templates/help/using_drive_client.html:23
 #: templates/help/using_drive_client.html:52
 msgid "Icon"
-msgstr ""
+msgstr "Tákn"
 
 #: templates/help/using_drive_client.html:24
 #: templates/help/using_drive_client.html:53
@@ -2339,7 +2482,7 @@ msgstr "Í hnotskurn"
 
 #: templates/help/using_drive_client.html:29
 msgid "Cloud-only content"
-msgstr ""
+msgstr "Innihald eingöngu í skýi"
 
 #: templates/help/using_drive_client.html:31
 msgid ""
@@ -2349,71 +2492,89 @@ msgid ""
 "downloaded is only information about the file, such as its name, its size "
 "and the date it was updated."
 msgstr ""
+"Innihald sem er eingöngu í skýi birtist í sýndardrifinu, en notar ekki það "
+"pláss sem skráin myndi annars taka. Í skráavafranum geturðu séð skrána, en "
+"innihaldið er ekki sótt að fullu fyrr en þú þarft á því að halda. Það eina "
+"sem er sótt eru upplýsingar um skrána, svo sem nafn hennar, stærð og "
+"dagsetningu síðustu uppfærslu."
 
 #: templates/help/using_drive_client.html:34
 msgid "Synced content"
-msgstr ""
+msgstr "Samstillt innihald"
 
 #: templates/help/using_drive_client.html:36
 msgid ""
 "Synced content is downloaded and saved on the hard drive of your computer. "
 "You can directly edit these files from applications on your computer."
 msgstr ""
+"Samstillt innihald er sótt og vistað á harða diskinn í tölvunni þinni. Þú "
+"getur breytt þessum skrám beint með forritum í tölvunni þinni."
 
 #: templates/help/using_drive_client.html:39
 msgid "Partially synced content"
-msgstr ""
+msgstr "Hálfsamstillt innihald"
 
 #: templates/help/using_drive_client.html:41
 msgid ""
 "Partially synced folders contain both synced and cloud-only files or "
 "folders."
 msgstr ""
+"Hálfsamstilltar möppur innihalda bæði samstilltar skrár og skrár eða möppur "
+"sem eru eingöngu í skýinu."
 
 #: templates/help/using_drive_client.html:46
 msgid "Special States"
-msgstr ""
+msgstr "Sérstök ástönd"
 
 #: templates/help/using_drive_client.html:47
 msgid ""
 "For files that are already synced to local computer, they may be in 3 other "
 "special states, besides the normal \"synced\" state. "
 msgstr ""
+"Fyrir skrár sem þegar eru samstilltar við staðbundna tölvu geta þær verið í "
+"3 öðrum sérstökum ástöndum, fyrir utan venjulega „samstillta“ ástandið."
 
 #: templates/help/using_drive_client.html:58
 msgid "Locked by other user"
-msgstr ""
+msgstr "Læst af öðrum notanda"
 
 #: templates/help/using_drive_client.html:60
 msgid ""
 "The file is locked by other user on the server. You can only open the file "
 "in read-only mode. You cannot modify, delete, rename or move the file."
 msgstr ""
+"Skráin er læst af öðrum notanda á þjóninum. Þú getur aðeins opnað skrána í "
+"lestrarham. Þú getur ekki breytt henni, eytt henni, endurnefnt eða fært."
 
 #: templates/help/using_drive_client.html:63
 msgid "Locked by me"
-msgstr ""
+msgstr "Læst af mér"
 
 #: templates/help/using_drive_client.html:65
 msgid ""
 "The file is locked by you. This prevents others from modifying the file."
 msgstr ""
+"Skráin er læst af þér. Þetta kemur í veg fyrir að aðrir geti breytt skránni."
 
 #: templates/help/using_drive_client.html:68
 msgid "Read-only"
-msgstr ""
+msgstr "Aðeins-lestur"
 
 #: templates/help/using_drive_client.html:70
 msgid ""
 "The folder or library of this file is shared with read-only permission to "
 "you. You cannot modify, delete or move the file."
 msgstr ""
+"Möppunni eða safninu sem þessi skrá tilheyrir er deilt með þér með "
+"lestrarheimild. Þú getur ekki breytt henni, eytt henni eða fært."
 
 #: templates/help/using_drive_client.html:74
 msgid ""
 "The Drive client regularly cleans up unused cached files in the background. "
 "You can also limit the local cache space."
 msgstr ""
+"Drifbiðlarinn hreinsar reglulega ónotaðar geymdar skrár í bakgrunni. Þú "
+"getur líka takmarkað plássið sem staðbundið biðminni notar."
 
 #: templates/help/using_drive_client.html:76
 msgid ""
@@ -2421,10 +2582,15 @@ msgid ""
 "on the current selected server will be shown in the virtual drive. You can "
 "switch among accounts."
 msgstr ""
+"Þú getur skráð þig inn á marga reikninga í drifbiðlaranum. Hins vegar munu "
+"aðeins skrár á þeim þjóni sem er valinn hverju sinni birtast í "
+"sýndardrifinu. Þú getur skipt á milli reikninga."
 
 #: templates/help/using_drive_client.html:80
 msgid "1. Why can't I create new files or delete folders in root folder?"
 msgstr ""
+"1. Af hverju get ég ekki búið til nýjar skrár eða eytt möppum í "
+"rótarmöppunni?"
 
 #: templates/help/using_drive_client.html:81
 msgid ""
@@ -2435,13 +2601,21 @@ msgid ""
 "represents libraries, we don't want users to delete their libraries by "
 "mistake. So the Drive client doesn't support deleting top level folders."
 msgstr ""
+"Rótarmappa sýndardrifsins inniheldur aðeins safnmöppur. Seafile getur aðeins"
+" samstillað skrár inni í söfnum. Skrár í rótarmöppunni er ekki hægt að senda"
+" upp á Seafile þjóninn. Því er ekki rökrétt að styðja gerð nýrra skráa í "
+"rótarmöppunni. Þar sem efsta stigs möppurnar í sýndardrifinu standa fyrir "
+"söfn, viljum við ekki að notendur eyði söfnum sínum fyrir mistök. Því styður"
+" drifbiðlarinn ekki eyðingu á efsta stigs möppum."
 
 #: templates/help/viewing_files_within_web_app.html:6
 msgid ""
 "Some types of files can be directly opened and viewed within the Seafile Web"
 " App. Currently they are:"
 msgstr ""
+"Sumar tegundir skráa er hægt að opna og skoða beint í Seafile vefforritinu. "
+"Eins og er eru þær:"
 
 #: templates/help/viewing_files_within_web_app.html:13
 msgid "Image files"
-msgstr ""
+msgstr "Myndaskrár"

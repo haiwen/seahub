@@ -8,6 +8,7 @@
 # Klaus Kuusela <kkuusela@gmail.com>, 2015
 # Oskari Teeri <osktee@gmail.com>, 2015
 # Sami Lahtinen <sami.lahtinen@tietovirta.fi>, 2016
+# Seafile Info <info@seafile.com>, 2026
 # Teppo Sarjonen <teppo.sarjonen@gmail.com>, 2017-2018
 msgid ""
 msgstr ""
@@ -15,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 10:19+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Teppo Sarjonen <teppo.sarjonen@gmail.com>, 2017-2018\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Finnish (http://app.transifex.com/haiwen/seahub/language/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,7 +26,7 @@ msgstr ""
 
 #: seahub/adfs_auth/utils.py:56
 msgid "ADFS/SAML login relevant settings invalid."
-msgstr ""
+msgstr "ADFS/SAML-kirjautumiseen liittyvät asetukset ovat virheellisiä."
 
 #: seahub/adfs_auth/views.py:59 seahub/adfs_auth/views.py:570
 #: seahub/adfs_auth/views.py:599 seahub/adfs_auth/views.py:639
@@ -34,13 +35,13 @@ msgstr ""
 #: seahub/adfs_auth/views.py:735 seahub/adfs_auth/views.py:739
 #: seahub/adfs_auth/views.py:807 seahub/adfs_auth/views.py:811
 msgid "Internal server error. Please contact system administrator."
-msgstr ""
+msgstr "Sisäinen palvelinvirhe. Ota yhteyttä järjestelmänvalvojaan."
 
 #: seahub/adfs_auth/views.py:60
 msgid ""
 "Login failed: Bad response from ADFS/SAML service. Please report to your "
 "organization (company) administrator."
-msgstr ""
+msgstr "Kirjautuminen epäonnistui: Virheellinen vastaus ADFS/SAML-palvelusta. Ilmoita organisaatiosi (yrityksesi) järjestelmänvalvojalle."
 
 #: seahub/adfs_auth/views.py:126 seahub/adfs_auth/views.py:142
 #: seahub/api2/endpoints/admin/users.py:794
@@ -51,45 +52,45 @@ msgstr "Käyttäjien määrä on ylittänyt limiitin."
 
 #: seahub/adfs_auth/views.py:224 seahub/adfs_auth/views.py:429
 msgid "Failed to bind SAML, please login first."
-msgstr ""
+msgstr "SAML:n yhdistäminen epäonnistui, kirjaudu ensin sisään."
 
 #: seahub/adfs_auth/views.py:274
 #, python-format
 msgid ""
 "Login failed: The email %s is not consistent with the email %s from "
 "ADFS/SAML service"
-msgstr ""
+msgstr "Kirjautuminen epäonnistui: Sähköpostiosoite %s ei vastaa ADFS/SAML-palvelusta saatuja sähköpostiosoitetta %s"
 
 #: seahub/adfs_auth/views.py:307
 #| msgid "User %s not found."
 msgid "User not found in Team."
-msgstr ""
+msgstr "Käyttäjää ei löydy tiimistä."
 
 #: seahub/adfs_auth/views.py:342 seahub/adfs_auth/views.py:539
 msgid ""
 "Login failed: user is deactivated. Please report to your organization "
 "(company) administrator."
-msgstr ""
+msgstr "Kirjautuminen epäonnistui: käyttäjä on poistettu käytöstä. Ilmoita organisaatiosi (yrityksesi) järjestelmänvalvojalle."
 
 #: seahub/adfs_auth/views.py:595 seahub/adfs_auth/views.py:655
 #: seahub/adfs_auth/views.py:706
 msgid ""
 "Login failed: ADFS/SAML service error. Please report to your organization "
 "(company) administrator."
-msgstr ""
+msgstr "Kirjautuminen epäonnistui: ADFS/SAML-palvelinvirhe. Ilmoita organisaatiosi (yrityksesi) järjestelmänvalvojalle."
 
 #: seahub/adfs_auth/views.py:743
 msgid "Failed to unbind SAML, please set a password first."
-msgstr ""
+msgstr "SAML:n irrottaminen epäonnistui, asenna salasana ensin."
 
 #: seahub/adfs_auth/views.py:746
 #| msgid "Failed to bind SAML, please login first."
 msgid "Failed to unbind SAML, the user is forced login by SSO."
-msgstr ""
+msgstr "SAML:n irrottaminen epäonnistui, käyttäjä on pakotettu kirjautumaan SSO:lla."
 
 #: seahub/adfs_auth/views.py:751
 msgid "Failed to unbind SAML, please set a contact email first."
-msgstr ""
+msgstr "SAML:n irrottaminen epäonnistui, asenna yhteysosoite ensin."
 
 #: seahub/api2/endpoints/admin/account.py:204
 #: seahub/api2/endpoints/user.py:101 seahub/api2/views.py:380
@@ -138,7 +139,7 @@ msgstr "Pitää olla integer joka on suurempi tai samansuuruinen kuin 0."
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
 "brackets or underscore."
-msgstr ""
+msgstr "Nimi voi sisältää vain kirjaimia, numeroita, välilyöntejä, väliviivoja, pisteitä, yksittäisiä lainausmerkkejä, sulkuja tai alaviivoja."
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:87
 #: seahub/api2/endpoints/admin/groups.py:142
@@ -179,7 +180,7 @@ msgstr "Epäonnistui %s lisääminen instituutioon: käyttäjä kuuluu jo instit
 msgid ""
 "Failed to add %s to the institution: user already belongs to this "
 "institution"
-msgstr ""
+msgstr "%s:n lisääminen toimistoon epäonnistui: käyttäjä kuuluu jo tähän toimistoon"
 
 #: seahub/api2/endpoints/admin/libraries.py:268 seahub/views/sysadmin.py:712
 msgid "System library can not be deleted."
@@ -188,24 +189,24 @@ msgstr "Järjestelmäkirjastoa ei voi poistaa."
 #: seahub/api2/endpoints/admin/libraries.py:390 seahub/api2/views.py:1934
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
-msgstr ""
+msgstr "Siirto epäonnistui: %s:n rooli on %s, kirjastoa ei voida lisätä."
 
 #: seahub/api2/endpoints/admin/libraries.py:416 seahub/api2/views.py:1939
 msgid "Library can not be transferred to owner."
-msgstr ""
+msgstr "Kirastoa ei voi siirtää omistajalle."
 
 #: seahub/api2/endpoints/admin/organizations.py:431
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Your team {org.org_name} has been deactivated"
-msgstr ""
+msgstr "Tiimisi {org.org_name} on poistettu käytöstä"
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:155
 #: seahub/api2/endpoints/share_links.py:593
 #: seahub/api2/endpoints/share_links.py:812
 msgid "There is an associated published library."
-msgstr ""
+msgstr "Liittyvä julkaistu kirjasto on olemassa."
 
 #: seahub/api2/endpoints/admin/shares.py:185
 #, python-format
@@ -251,37 +252,37 @@ msgstr "Käyttäjä"
 #: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/organizations/api/admin/statistics.py:336
 msgid "Web Download"
-msgstr ""
+msgstr "Verkko-lataus"
 
 #: seahub/api2/endpoints/admin/statistics.py:400
 #: seahub/base/management/commands/export_user_traffic_report.py:46
 #: seahub/organizations/api/admin/statistics.py:337
 msgid "Sync Download"
-msgstr ""
+msgstr "Synkronisointi-lataus"
 
 #: seahub/api2/endpoints/admin/statistics.py:400
 #: seahub/base/management/commands/export_user_traffic_report.py:46
 #: seahub/organizations/api/admin/statistics.py:337
 msgid "Link Download"
-msgstr ""
+msgstr "Linkkilataus"
 
 #: seahub/api2/endpoints/admin/statistics.py:401
 #: seahub/base/management/commands/export_user_traffic_report.py:47
 #: seahub/organizations/api/admin/statistics.py:338
 msgid "Web Upload"
-msgstr ""
+msgstr "Verkko-siirto"
 
 #: seahub/api2/endpoints/admin/statistics.py:401
 #: seahub/base/management/commands/export_user_traffic_report.py:47
 #: seahub/organizations/api/admin/statistics.py:338
 msgid "Sync Upload"
-msgstr ""
+msgstr "Synkronisointi-siirto"
 
 #: seahub/api2/endpoints/admin/statistics.py:402
 #: seahub/base/management/commands/export_user_traffic_report.py:48
 #: seahub/organizations/api/admin/statistics.py:339
 msgid "Link Upload"
-msgstr ""
+msgstr "Linkkisiirto"
 
 #: seahub/api2/endpoints/admin/statistics.py:447
 #: seahub/base/management/commands/export_user_storage_report.py:41
@@ -340,12 +341,12 @@ msgstr "Tilakiintiö"
 #: seahub/api2/endpoints/admin/users.py:692
 #: seahub/organizations/api/admin/users.py:155
 msgid "There are more than 500 users, and sort is not offered."
-msgstr ""
+msgstr "Käyttäjiä on yli 500, joten lajittelua ei tarjota."
 
 #: seahub/api2/endpoints/admin/users.py:893
 #, python-format
 msgid "Successfully added user %(user)s."
-msgstr ""
+msgstr "Käyttäjä %(user)s lisätty onnistuneesti."
 
 #: seahub/api2/endpoints/admin/users.py:897
 #: seahub/api2/endpoints/admin/users_batch.py:390 seahub/views/sysadmin.py:552
@@ -356,14 +357,14 @@ msgstr "Sinulle on lähetetty kutsu liittyä %s-palveluun"
 #: seahub/api2/endpoints/admin/users.py:901
 #, python-format
 msgid "Successfully added user %(user)s. An email notification has been sent."
-msgstr ""
+msgstr "Käyttäjä %(user)s lisätty onnistuneesti. Sähköposti-ilmoitus on lähetetty."
 
 #: seahub/api2/endpoints/admin/users.py:904
 #, python-format
 msgid ""
 "Successfully added user %(user)s. But email notification can not be sent, "
 "because Email service is not properly configured."
-msgstr ""
+msgstr "Käyttäjä %(user)s lisätty onnistuneesti. Sähköposti-ilmoitusta ei kuitenkaan voida lähettää, sillä sähköpostipalvelua ei ole määritetty oikein."
 
 #: seahub/api2/endpoints/admin/users.py:1416
 msgid "Edit succeeded"
@@ -387,7 +388,7 @@ msgstr "Muokkaus onnistui, mutta sähköpostin lähetys epäonnistui. Ole hyvä 
 #: seahub/api2/endpoints/admin/users.py:1495 seahub/auth/forms.py:167
 #: seahub/auth/views.py:365
 msgid "Unable to reset password."
-msgstr ""
+msgstr "Salasanan palautus epäonnistui."
 
 #: seahub/api2/endpoints/admin/users.py:1513 seahub/auth/forms.py:195
 #: seahub/organizations/api/admin/user_set_password.py:74
@@ -399,7 +400,7 @@ msgstr "Nollaa Salasana %s"
 #: seahub/organizations/api/admin/user_set_password.py:78
 #, python-brace-format
 msgid "A password reset link has been sent to {contact_email}."
-msgstr ""
+msgstr "Salasanan palautuslinkki on lähetetty osoitteeseen {contact_email}."
 
 #: seahub/api2/endpoints/admin/users.py:1535 seahub/views/sysadmin.py:494
 #, python-format
@@ -409,7 +410,7 @@ msgstr "Salasana on nollattu kohteessa %s"
 #: seahub/api2/endpoints/admin/users.py:1537
 #, python-format
 msgid "Successfully reset password, an email has been sent to %(user)s."
-msgstr ""
+msgstr "Salasana palautettu onnistuneesti, sähköposti on lähetetty käyttäjälle %(user)s."
 
 #: seahub/api2/endpoints/admin/users.py:1541 seahub/views/sysadmin.py:524
 #, python-format
@@ -439,7 +440,7 @@ msgstr "pitää olla integer joka on suurempi tai samansuuruinen kuin 0."
 
 #: seahub/api2/endpoints/admin/virus_scan_records.py:201
 msgid "Virus file is not found."
-msgstr ""
+msgstr "Virus-tiedostoa ei löydy."
 
 #: seahub/api2/endpoints/admin/virus_scan_records.py:219
 #: seahub/api2/endpoints/admin/virus_scan_records.py:234
@@ -498,7 +499,7 @@ msgstr "Tila loppu."
 #: seahub/api2/endpoints/copy_move_task.py:164
 #, python-format
 msgid "Can not move folder %(src)s to its subfolder %(des)s"
-msgstr ""
+msgstr "Kansiota %(src)s ei voi siirtää alikansioon %(des)s"
 
 #: seahub/api2/endpoints/copy_move_task.py:180
 #: seahub/api2/endpoints/file.py:322 seahub/api2/endpoints/file.py:402
@@ -530,7 +531,7 @@ msgstr "Käyttäjää %s ei löydy."
 #: seahub/api2/endpoints/wiki2.py:601 seahub/api2/endpoints/wikis.py:135
 #: seahub/api2/views.py:2075 seahub/seadoc/apis.py:3155
 msgid "The number of files in library exceeds the limit"
-msgstr ""
+msgstr "Kiraston tiedostojen määrä ylittää rajan"
 
 #: seahub/api2/endpoints/file.py:310
 #: seahub/api2/endpoints/file_participants.py:113
@@ -554,7 +555,7 @@ msgstr "Pääsy estetty."
 
 #: seahub/api2/endpoints/file.py:333
 msgid "File extension is not in the whitelist"
-msgstr ""
+msgstr "Tiedostopääte ei ole sallittujen luettelossa"
 
 #: seahub/api2/endpoints/file.py:756 seahub/api2/endpoints/file.py:776
 #: seahub/api2/endpoints/via_repo_token.py:1170
@@ -567,7 +568,7 @@ msgstr "Et voi päivittää tiedosto on lukiitu."
 
 #: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2784
 msgid "The participant already exists."
-msgstr ""
+msgstr "Osallistuja on jo olemassa."
 
 #: seahub/api2/endpoints/file_tag.py:256 seahub/api2/endpoints/file_tag.py:280
 #: seahub/api2/endpoints/file_tag.py:300
@@ -598,7 +599,7 @@ msgstr "Käyttäjää %s ei löydy organisaatiosta."
 #: seahub/api2/endpoints/group_members.py:533
 #, python-format
 msgid "User %s is an organization user."
-msgstr ""
+msgstr "Käyttäjä %s on organisaation käyttäjä."
 
 #: seahub/api2/endpoints/group_members.py:437 seahub/group/error_msg.py:17
 #: seahub/group/error_msg.py:23 seahub/views/file.py:553
@@ -608,7 +609,7 @@ msgstr "Ryhmää ei ole olemassa"
 #: seahub/api2/endpoints/group_members.py:576
 #| msgid "Email or Username"
 msgid "Email or LoginID"
-msgstr ""
+msgstr "Sähköposti tai kirjautumistunnus"
 
 #: seahub/api2/endpoints/group_members.py:587 seahub/views/sysadmin.py:167
 #: seahub/views/sysadmin.py:275 seahub/views/sysadmin.py:653
@@ -624,7 +625,7 @@ msgstr "Oikeudet ovat jo olemassa."
 #: seahub/api2/endpoints/invitation.py:110
 #, python-format
 msgid "%(user)s revoked your access to %(site_name)s."
-msgstr ""
+msgstr "%(user)s peruutti pääsynsi sivustoon %(site_name)s."
 
 #: seahub/api2/endpoints/invitations.py:55
 #: seahub/api2/endpoints/invitations.py:119
@@ -677,7 +678,7 @@ msgstr "Salasana on liian lyhyt."
 #: seahub/api2/endpoints/upload_links.py:180
 #: seahub/api2/endpoints/webdav_secret.py:64
 msgid "Password is too weak."
-msgstr ""
+msgstr "Salasana on liian heikko."
 
 #: seahub/api2/endpoints/multi_share_links.py:118
 #: seahub/api2/endpoints/share_links.py:369
@@ -686,7 +687,7 @@ msgstr ""
 msgid ""
 "Password can only contain number, upper letter, lower letter and other "
 "symbols."
-msgstr ""
+msgstr "Salasana voi sisältää vain numeroita, isoja kirjaimia, pieniä kirjaimia ja muita symboleja."
 
 #: seahub/api2/endpoints/multi_share_links.py:141
 #: seahub/api2/endpoints/multi_share_links.py:376
@@ -696,7 +697,7 @@ msgstr ""
 #: seahub/api2/endpoints/upload_links.py:391 seahub/api2/views.py:3660
 #, python-format
 msgid "Expire days should be greater or equal to %s"
-msgstr ""
+msgstr "Vanhenemispäivien tulee olla suurempi tai yhtä suuri kuin %s"
 
 #: seahub/api2/endpoints/multi_share_links.py:146
 #: seahub/api2/endpoints/multi_share_links.py:382
@@ -706,7 +707,7 @@ msgstr ""
 #: seahub/api2/endpoints/upload_links.py:397 seahub/api2/views.py:3666
 #, python-format
 msgid "Expire days should be less than or equal to %s"
-msgstr ""
+msgstr "Vanhenemispäivien tulee olla pienempi tai yhtä suuri kuin %s"
 
 #: seahub/api2/endpoints/multi_share_links.py:166
 #: seahub/api2/endpoints/multi_share_links.py:404
@@ -716,7 +717,7 @@ msgstr ""
 #: seahub/api2/endpoints/upload_links.py:421
 #, python-format
 msgid "Expiration time should be later than %s."
-msgstr ""
+msgstr "Vanhenemisaika tulee olla myöhemmin kuin %s."
 
 #: seahub/api2/endpoints/multi_share_links.py:175
 #: seahub/api2/endpoints/multi_share_links.py:413
@@ -726,7 +727,7 @@ msgstr ""
 #: seahub/api2/endpoints/upload_links.py:430
 #, python-format
 msgid "Expiration time should be earlier than %s."
-msgstr ""
+msgstr "Vanhenemisaika tulee olla aikaisemmin kuin %s."
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
 #: seahub/seadoc/apis.py:688
@@ -737,24 +738,24 @@ msgstr "Virhe"
 
 #: seahub/api2/endpoints/repo_commit_revert.py:66
 msgid "This library has not been decrypted."
-msgstr ""
+msgstr "Tätä kirjastoa ei ole purettu salauksesta."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:45
 #: seahub/api2/endpoints/user.py:90 seahub/api2/endpoints/user.py:97
 #: seahub/api2/endpoints/user.py:113 seahub/group/views.py:187
 #: seahub/organizations/api/admin/users.py:783
 msgid "Feature disabled."
-msgstr ""
+msgstr "Toiminto on poistettu käytöstä."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:75
 #: seahub/api2/endpoints/repo_set_password.py:171
 msgid "Can not reset this library's password."
-msgstr ""
+msgstr "Tämän kiraston salasanaa ei voi palauttaa."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:82
 #, python-format
 msgid "New password of library %s"
-msgstr ""
+msgstr "Kiraston %s uusi salasana"
 
 #: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4096
 msgid "Wrong password"
@@ -774,18 +775,18 @@ msgstr "Väärä vanha salasana"
 #: seahub/api2/endpoints/repos_batch.py:1730
 #, python-format
 msgid "File %s is locked."
-msgstr ""
+msgstr "Tiedosto %s on lukittu."
 
 #: seahub/api2/endpoints/repos_batch.py:1308
 #: seahub/api2/endpoints/repos_batch.py:1567
 #, python-format
 msgid "Can't move folder %s, please check its permission."
-msgstr ""
+msgstr "Kansiota %s ei voi siirtää, tarkista oikeudet."
 
 #: seahub/api2/endpoints/repos_batch.py:1657
 #, python-format
 msgid "Can't delete folder %s, please check its permission."
-msgstr ""
+msgstr "Kansiota %s ei voi poistaa, tarkista oikeudet."
 
 #: seahub/api2/endpoints/send_share_link_email.py:97
 #: seahub/notifications/models.py:965
@@ -800,16 +801,16 @@ msgstr "Sinulle on jaettu tiedosto palvelussa %s"
 #: seahub/api2/endpoints/send_share_link_email.py:100
 #: seahub/notifications/models.py:965
 msgid "folder"
-msgstr ""
+msgstr "kansio"
 
 #: seahub/api2/endpoints/send_share_link_email.py:101
 #, python-format
 msgid "A folder is shared to you on %s"
-msgstr ""
+msgstr "Kansio on jaettu sinulle sivustolla %s"
 
 #: seahub/api2/endpoints/send_upload_link_email.py:74
 msgid "email invalid."
-msgstr ""
+msgstr "Virheellinen sähköpostiosoite."
 
 #: seahub/api2/endpoints/send_upload_link_email.py:92
 #, python-format
@@ -819,23 +820,23 @@ msgstr "Sinulle on jaettu latauslinkki palveluun %s"
 #: seahub/api2/endpoints/share_link_auth.py:147
 #, python-format
 msgid "User %s does not exist."
-msgstr ""
+msgstr "Käyttäjää %s ei ole olemassa."
 
 #: seahub/api2/endpoints/share_link_auth.py:310
 #, python-format
 msgid "Email %s already exists."
-msgstr ""
+msgstr "Sähköpostiosoite %s on jo käytössä."
 
 #: seahub/api2/endpoints/share_link_auth.py:316
 #, python-format
 msgid "Email %s is invalid."
-msgstr ""
+msgstr "Sähköpostiosoite %s on virheellinen."
 
 #: seahub/api2/endpoints/share_links.py:498
 #: seahub/api2/endpoints/share_links.py:507
 #, python-format
 msgid "Share link %s already exists."
-msgstr ""
+msgstr "Jaa-linkki %s on jo olemassa."
 
 #: seahub/api2/endpoints/subscription.py:32
 #: seahub/api2/endpoints/subscription.py:68
@@ -850,16 +851,16 @@ msgstr ""
 #: seahub/work_weixin/views.py:152 seahub/work_weixin/views.py:172
 #: seahub/work_weixin/views.py:233
 msgid "Feature is not enabled."
-msgstr ""
+msgstr "Toimintoa ei ole otettu käyttöön."
 
 #: seahub/api2/endpoints/user.py:119
 #, python-format
 msgid "Contact email %s already exists."
-msgstr ""
+msgstr "Yhteyssähköpostiosoite %s on jo käytössä."
 
 #: seahub/api2/endpoints/user.py:133
 msgid "telephone is too long (maximum is 100 characters)."
-msgstr ""
+msgstr "Puhelinnumero on liian pitkä (enintään 100 merkkiä)."
 
 #: seahub/api2/endpoints/user_avatar.py:41
 #: seahub/organizations/api/admin/logo.py:56 seahub/utils/error_msg.py:8
@@ -887,7 +888,7 @@ msgstr "Sinulla on jo %(nb_avatars)d avataria, maksimi sallittu määrä on %(nb
 #: seahub/api2/endpoints/webdav_secret.py:56
 #| msgid "Length of WebDav password should be less than 30."
 msgid "Length of WebDAV password should be less than 30."
-msgstr ""
+msgstr "WebDAV-salasanan pituuden tulee olla alle 30 merkkiä."
 
 #: seahub/api2/endpoints/wiki2.py:220 seahub/api2/endpoints/wiki2.py:1485
 #: seahub/api2/endpoints/wikis.py:219
@@ -896,15 +897,15 @@ msgstr "Niimi voi ainoastaan sisältää kirjaimia, numeroita, välimerkin, tavu
 
 #: seahub/api2/endpoints/wiki2.py:1335
 msgid "URL is invalid"
-msgstr ""
+msgstr "URL on virheellinen"
 
 #: seahub/api2/endpoints/wiki2.py:1339
 msgid "The custom part of URL should have 5-30 characters."
-msgstr ""
+msgstr "URL:n mukautetun osan tulee olla 5–30 merkkiä pitkä."
 
 #: seahub/api2/endpoints/wiki2.py:1361
 msgid "This custom domain is already in use and cannot be used for your wiki"
-msgstr ""
+msgstr "Tämä mukautettu verkkotunnus on jo käytössä eikä sitä voi käyttää wikissäsi"
 
 #: seahub/api2/endpoints/wikis.py:122 seahub/api2/endpoints/wikis.py:226
 #, python-format
@@ -921,12 +922,12 @@ msgstr "Nimi vaaditaan."
 
 #: seahub/api2/utils.py:338
 msgid "A share link for you"
-msgstr ""
+msgstr "Jakolinkki sinulle"
 
 #: seahub/api2/views.py:1925
 #| msgid "Permission error: only group staff can add member"
 msgid "Permission error: you are not the admin of the department"
-msgstr ""
+msgstr "Oikeusvirhe: et ole osaston järjestelmänvalvoja"
 
 #: seahub/auth/decorators.py:73
 msgid "Please log in."
@@ -971,7 +972,7 @@ msgstr "Sähköpostiosoitteella ei ole vastaavaa käyttäjätunnusta. Oletko var
 #: seahub/auth/forms.py:119 seahub/auth/forms.py:120
 #: seahub/templates/registration/login.html:76
 msgid "Please use Single Sign-On to login."
-msgstr ""
+msgstr "Kirjaudu sisään käyttämällä Single Sign-Onia."
 
 #: seahub/auth/forms.py:125
 msgid ""
@@ -1032,12 +1033,12 @@ msgstr "Sähköpostin lähetys epäonnistui, ottakaa yhteys ylläpitäjään."
 
 #: seahub/auth/views.py:454
 msgid "Unable to change password."
-msgstr ""
+msgstr "Salasanan muuttaminen epäonnistui."
 
 #: seahub/auth/views.py:537
 #, python-brace-format
 msgid "Team {domain} does not have permission to use ADFS/SAML SSO."
-msgstr ""
+msgstr "Tiimillä {domain} ei ole oikeutta käyttää ADFS/SAML SSO:ta."
 
 #: seahub/avatar/models.py:144 seahub/avatar/models.py:172
 #, python-format
@@ -1104,13 +1105,13 @@ msgstr "Tämän kirjaston tiedostoja ei voida näyttää julkisesti."
 #: seahub/base/management/commands/check_user_quota.py:58
 #, python-format
 msgid "Your quota is almost full on %s"
-msgstr ""
+msgstr "Kiintiösi on melkein täynnä sivustolla %s"
 
 #: seahub/base/management/commands/check_user_quota.py:82
 #, python-format
 #| msgid "Your quota is almost full on %s"
 msgid "The team quota is almost full on %s"
-msgstr ""
+msgstr "Tiimin kiintiö on melkein täynnä sivustolla %s"
 
 #: seahub/base/management/commands/createsuperuser.py:26
 msgid "Enter a valid e-mail address."
@@ -1134,19 +1135,19 @@ msgstr "Päiväys"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "Library Name"
-msgstr ""
+msgstr "Kiraston nimi"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "Library ID"
-msgstr ""
+msgstr "Kiraston tunnus"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "Library Owner"
-msgstr ""
+msgstr "Kiraston omistaja"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "File Path"
-msgstr ""
+msgstr "Tiedostopolku"
 
 #: seahub/base/management/commands/export_file_access_log.py:85
 #: seahub/base/templatetags/seahub_tags.py:142
@@ -1227,12 +1228,12 @@ msgstr "Oletus"
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Team {org_name} is inactive."
-msgstr ""
+msgstr "Tiimi {org_name} on poistettu käytöstä."
 
 #: seahub/base/middleware.py:76
 #, python-brace-format
 msgid "Please contact {SUPPORT_EMAIL} if you want to activate the team."
-msgstr ""
+msgstr "Ota yhteyttä {SUPPORT_EMAIL}, jos haluat aktivoida tiimin."
 
 #: seahub/base/templatetags/seahub_tags.py:141
 msgid "Added"
@@ -1256,21 +1257,21 @@ msgstr "Siirretty"
 
 #: seahub/base/templatetags/seahub_tags.py:147
 msgid "Added folder"
-msgstr ""
+msgstr "Kansio lisätty"
 
 #: seahub/base/templatetags/seahub_tags.py:148
 msgid "Removed folder"
-msgstr ""
+msgstr "Kansio poistettu"
 
 #: seahub/base/templatetags/seahub_tags.py:149
 #: seahub/notifications/management/commands/send_file_updates.py:172
 msgid "Renamed folder"
-msgstr ""
+msgstr "Kansio nimetty uudelleen"
 
 #: seahub/base/templatetags/seahub_tags.py:150
 #: seahub/notifications/management/commands/send_file_updates.py:177
 msgid "Moved folder"
-msgstr ""
+msgstr "Kansio siirretty"
 
 #: seahub/base/templatetags/seahub_tags.py:151
 msgid "Added or modified"
@@ -1290,7 +1291,7 @@ msgstr "Palautettu tiedosto\"%(file)s\" statukseen %(time)s."
 #: seahub/base/templatetags/seahub_tags.py:173
 #: seahub/base/templatetags/seahub_tags.py:244
 msgid "Recovered deleted folder"
-msgstr ""
+msgstr "Poistettu kansio palautettu"
 
 #: seahub/base/templatetags/seahub_tags.py:175
 #: seahub/base/templatetags/seahub_tags.py:246 seahub/views/ajax.py:457
@@ -1411,7 +1412,7 @@ msgstr "Virhe, ottakaa yhteyttä ylläpitäjään."
 #: seahub/weixin/views.py:111
 #, python-format
 msgid "User %s not found or inactive."
-msgstr ""
+msgstr "Käyttäjää %s ei löydy tai se on poistettu käytöstä."
 
 #: seahub/forms.py:59
 msgid "The two passwords didn't match."
@@ -1580,11 +1581,11 @@ msgstr "Sinulle on lähetetty kutsu liittyä ryhmään %s"
 #: seahub/group/views.py:192
 #| msgid "Group does not exist"
 msgid "Group invite link does not exist"
-msgstr ""
+msgstr "Ryhmään kutsulinkkiä ei ole olemassa"
 
 #: seahub/group/views.py:200
 msgid "Group invite link broken"
-msgstr ""
+msgstr "Ryhmään kutsulinkki on viallinen"
 
 #: seahub/institutions/views.py:185
 msgid "Owner"
@@ -1600,7 +1601,7 @@ msgstr "Poistaminen epäonnistui: käyttäjää ei ole"
 
 #: seahub/institutions/views.py:226
 msgid "Failed to delete: the user is system administrator"
-msgstr ""
+msgstr "Poistaminen epäonnistui: käyttäjä on järjestelmänvalvoja"
 
 #: seahub/institutions/views.py:230 seahub/views/sysadmin.py:361
 #, python-format
@@ -1610,12 +1611,12 @@ msgstr "Poistettu onnistuneesti %s"
 #: seahub/invitations/models.py:96
 #, python-format
 msgid "You are invited to join %(site_name)s."
-msgstr ""
+msgstr "Sinut on kutsuttu liittymään sivustoon %(site_name)s."
 
 #: seahub/invitations/models.py:99
 #, python-brace-format
 msgid "You are invited to join team {org_name}."
-msgstr ""
+msgstr "Sinut on kutsuttu liittymään tiimiin {org_name}."
 
 #: seahub/invitations/templates/invitations/invitation_email.html:9
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:9
@@ -1645,19 +1646,19 @@ msgstr "Hei,"
 #, python-format
 msgid ""
 "You are invited to join team %(org_name)s. Please click the link below:"
-msgstr ""
+msgstr "Sinut on kutsuttu liittymään tiimiin %(org_name)s. Klikkaa alla olevaa linkkiä:"
 
 #: seahub/invitations/templates/invitations/invitation_email.html:15
 #, python-format
 msgid ""
 "%(inviter_name)s invited you to join %(site_name)s. Please click the link "
 "below:"
-msgstr ""
+msgstr "%(inviter_name)s kutsui sinut liittymään sivustoon %(site_name)s. Klikkaa alla olevaa linkkiä:"
 
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:12
 #, python-format
 msgid "%(inviter)s revoked your access to %(site_name)s."
-msgstr ""
+msgstr "%(inviter)s peruutti pääsynsi sivustoon %(site_name)s."
 
 #: seahub/invitations/templates/invitations/token_view.html:4
 msgid "Create Account"
@@ -1705,7 +1706,7 @@ msgstr[1] "\nSinulla on %(num)s uutta ilmoitusta sivulla %(site_name)s:\n"
 
 #: seahub/notifications/management/commands/send_file_updates.py:115
 msgid "Renamed library"
-msgstr ""
+msgstr "Kirasto nimetty uudelleen"
 
 #: seahub/notifications/management/commands/send_file_updates.py:118
 msgid "Deleted library"
@@ -1713,7 +1714,7 @@ msgstr "Poistettu kirjasto"
 
 #: seahub/notifications/management/commands/send_file_updates.py:121
 msgid "Restored library"
-msgstr ""
+msgstr "Kirasto palautettu"
 
 #: seahub/notifications/management/commands/send_file_updates.py:125
 msgid "Removed all items from trash."
@@ -1722,48 +1723,48 @@ msgstr "Poistettu kaikki kohteet roskiksesta."
 #: seahub/notifications/management/commands/send_file_updates.py:127
 #, python-format
 msgid "Removed items older than %s days from trash."
-msgstr ""
+msgstr "%s päivää vanhempia kohteita poistettiin roskakorista."
 
 #: seahub/notifications/management/commands/send_file_updates.py:135
 msgid "Created file"
-msgstr ""
+msgstr "Tiedosto luotu"
 
 #: seahub/notifications/management/commands/send_file_updates.py:138
 msgid "Deleted file"
-msgstr ""
+msgstr "Tiedosto poistettu"
 
 #: seahub/notifications/management/commands/send_file_updates.py:141
 msgid "Restored file"
-msgstr ""
+msgstr "Tiedosto palautettu"
 
 #: seahub/notifications/management/commands/send_file_updates.py:144
 msgid "Renamed file"
-msgstr ""
+msgstr "Tiedosto nimetty uudelleen"
 
 #: seahub/notifications/management/commands/send_file_updates.py:150
 msgid "Moved file"
-msgstr ""
+msgstr "Tiedosto siirretty"
 
 #: seahub/notifications/management/commands/send_file_updates.py:156
 msgid "Updated file"
-msgstr ""
+msgstr "Tiedosto päivitetty"
 
 #: seahub/notifications/management/commands/send_file_updates.py:163
 msgid "Created folder"
-msgstr ""
+msgstr "Kansio luotu"
 
 #: seahub/notifications/management/commands/send_file_updates.py:166
 msgid "Deleted folder"
-msgstr ""
+msgstr "Kansio poistettu"
 
 #: seahub/notifications/management/commands/send_file_updates.py:169
 msgid "Restored folder"
-msgstr ""
+msgstr "Kansio palautettu"
 
 #: seahub/notifications/management/commands/send_file_updates.py:278
 #, python-format
 msgid "New file updates on %s"
-msgstr ""
+msgstr "Uusia tiedostopäivityksiä sivustolla %s"
 
 #: seahub/notifications/management/commands/send_notices.py:461
 #, python-format
@@ -1773,7 +1774,7 @@ msgstr "Uusi ilmoitus %s"
 #: seahub/notifications/management/commands/send_notices_to_social_account.py:252
 #, python-format
 msgid "You've got %(num)s new notices on %(site_name)s:\n"
-msgstr ""
+msgstr "Sinulla on %(num)s uutta ilmoitusta sivustolla %(site_name)s:\n"
 
 #: seahub/notifications/models.py:612
 #, python-format
@@ -1785,19 +1786,19 @@ msgstr "Tiedosto nimeltä <a href='%(file_link)s'>%(file_name)s</a> on lähetett
 #: seahub/notifications/models.py:619
 #, python-format
 msgid "A file named <strong>%(file_name)s</strong> is uploaded"
-msgstr ""
+msgstr "Tiedosto nimeltä <strong>%(file_name)s</strong> on lähetetty"
 
 #: seahub/notifications/models.py:654
 #, python-format
 msgid ""
 "A folder named <a href='%(folder_link)s'>%(folder_name)s</a> is uploaded to "
 "<a href='%(link)s'>%(name)s</a>"
-msgstr ""
+msgstr "Kansio nimeltä <a href='%(folder_link)s'>%(folder_name)s</a> on lähetetty <a href='%(link)s'>%(name)s</a>-sivustoon"
 
 #: seahub/notifications/models.py:661
 #, python-format
 msgid "A folder named <strong>%(folder_name)s</strong> is uploaded"
-msgstr ""
+msgstr "Kansio nimeltä <strong>%(folder_name)s</strong> on lähetetty"
 
 #: seahub/notifications/models.py:795
 #, python-format
@@ -1826,14 +1827,14 @@ msgstr "Tiedostolla <a href='%(file_url)s'>%(file_name)s</a> on uusi kommentti k
 msgid ""
 "<a href='%(file_url)s'>Draft #%(draft_id)s</a> has a new comment from user "
 "%(author)s"
-msgstr ""
+msgstr "<a href='%(file_url)s'>Luonnos #%(draft_id)s</a> on saanut uuden kommentin käyttäjältä %(author)s"
 
 #: seahub/notifications/models.py:884
 #, python-format
 msgid ""
 "%(from_user)s has sent you a request for <a href='%(file_url)s'>draft "
 "#%(draft_id)s</a>"
-msgstr ""
+msgstr "%(from_user)s on lähettänyt sinulle pyynnön koskien <a href='%(file_url)s'>luonnosta #%(draft_id)s</a>"
 
 #: seahub/notifications/models.py:907
 #: seahub/notifications/templates/notifications/notice_email.html:66
@@ -1851,70 +1852,70 @@ msgstr "Vieras%(user)s hyväksyi teidän <a href=\"%(url_base)s%(inv_url)s\">kut
 msgid ""
 "%(user)s has transferred a library named <a "
 "href=\"%(repo_url)s\">%(repo_name)s</a> to you."
-msgstr ""
+msgstr "%(user)s on siirtänyt kiraston nimeltä <a href=\"%(repo_url)s\">%(repo_name)s</a> sinulle."
 
 #: seahub/notifications/models.py:1004
 #, python-brace-format
 msgid "{name} created {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} loi kohteen {obj_type} {obj_link} kirjastossa {repo_link}."
 
 #: seahub/notifications/models.py:1006
 #, python-brace-format
 msgid ""
 "{name} created {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr ""
+msgstr "{name} loi kohteen {obj_type} {obj_link} ja {obj_path_count_minus_one} muuta {obj_type}(a) kirjastossa {repo_link}."
 
 #: seahub/notifications/models.py:1011
 #, python-brace-format
 msgid "{name} deleted {obj_type} {obj_name} in library {repo_link}."
-msgstr ""
+msgstr "{name} poisti kohteen {obj_type} {obj_name} kirjastosta {repo_link}."
 
 #: seahub/notifications/models.py:1013
 #, python-brace-format
 msgid ""
 "{name} deleted {obj_type} {obj_name} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr ""
+msgstr "{name} poisti kohteen {obj_type} {obj_name} ja {obj_path_count_minus_one} muuta {obj_type}(a) kirjastosta {repo_link}."
 
 #: seahub/notifications/models.py:1017
 #, python-brace-format
 msgid "{name} restored {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} palautti kohteen {obj_type} {obj_link} kirjastoon {repo_link}."
 
 #: seahub/notifications/models.py:1021
 #, python-brace-format
 msgid ""
 "{name} renamed {obj_type} {old_obj_name} to {obj_link} in library "
 "{repo_link}."
-msgstr ""
+msgstr "{name} muutti kohteen {obj_type} {old_obj_name} nimeksi {obj_link} kirjastossa {repo_link}."
 
 #: seahub/notifications/models.py:1026
 #, python-brace-format
 msgid "{name} moved {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} siirsi kohteen {obj_type} {obj_link} kirjastossa {repo_link}."
 
 #: seahub/notifications/models.py:1028
 #, python-brace-format
 msgid ""
 "{name} moved {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr ""
+msgstr "{name} siirsi kohteen {obj_type} {obj_link} ja {obj_path_count_minus_one} muuta {obj_type}(a) kirjastossa {repo_link}."
 
 #: seahub/notifications/models.py:1032
 #, python-brace-format
 msgid "{name} updated {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} päivitti kohteen {obj_type} {obj_link} kirjastossa {repo_link}."
 
 #: seahub/notifications/models.py:1035
 #, python-brace-format
 msgid "{name} {op_type} {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} {op_type} kohteen {obj_type} {obj_link} kirjastossa {repo_link}."
 
 #: seahub/notifications/models.py:1046
 #, python-brace-format
 msgid "Face recognition is done for library {repo_name}."
-msgstr ""
+msgstr "Kasvontunnistus on suoritettu kirjastolle {repo_name}."
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:9
 #, python-format
@@ -1924,8 +1925,8 @@ msgid ""
 msgid_plural ""
 "\n"
 "You've got %(num)s file updates on %(site_name)s:\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "\nYou've got 1 new file updates on %(site_name)s:\n"
+msgstr[1] "\nYou've got %(num)s file updates on %(site_name)s:\n"
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:20
 msgid "Operation"
@@ -1970,7 +1971,7 @@ msgid ""
 "A folder named <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a> is"
 " uploaded to your folder <a "
 "href=\"%(url_base)s%(parent_dir_url)s\">%(parent_dir_name)s</a>."
-msgstr ""
+msgstr "Kansio nimeltä <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a> on lähetetty kansioosi <a href=\"%(url_base)s%(parent_dir_url)s\">%(parent_dir_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notice_email.html:57
 #, python-format
@@ -2000,7 +2001,7 @@ msgid ""
 "A large number of files in your library <a "
 "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> has been deleted "
 "recently."
-msgstr ""
+msgstr "Suuri määrä tiedostoja kirjastossasi <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> on poistettu viime aikoina."
 
 #: seahub/notifications/templates/notifications/notice_email.html:84
 msgid "Go check out at the following page:"
@@ -2041,16 +2042,16 @@ msgstr "%(user)s on jakanut kirjaston nimeltä <a href=\"%(url_base)s%(lib_url)s
 msgid ""
 "Virus detected in library %(repo_name)s during regular scanning: "
 "%(file_path)s."
-msgstr ""
+msgstr "Virus havaittiin kirjastossa %(repo_name)s säännöllisen tarkastuksen aikana: %(file_path)s."
 
 #: seahub/notifications/templates/notifications/notify_virus.html:20
 msgid "Virus is detected on regular scanning:"
-msgstr ""
+msgstr "Virus havaittiin säännöllisessä tarkastuksessa:"
 
 #: seahub/notifications/utils.py:471
 #, python-format
 msgid "%(author)s added a new comment in document %(sdoc_name)s"
-msgstr ""
+msgstr "%(author)s lisäsi uuden kommentin asiakirjaan %(sdoc_name)s"
 
 #: seahub/notifications/utils.py:478 seahub/notifications/utils.py:498
 msgid "Details"
@@ -2059,7 +2060,7 @@ msgstr "Yksityiskohdat"
 #: seahub/notifications/utils.py:484
 #, python-format
 msgid "%(author)s added a new reply in document %(sdoc_name)s"
-msgstr ""
+msgstr "%(author)s lisäsi uuden vastauksen asiakirjaan %(sdoc_name)s"
 
 #: seahub/notifications/utils.py:490
 #, python-format
@@ -2067,14 +2068,14 @@ msgstr ""
 msgid ""
 "%(author)s has marked the comment \"%(resolve_comment)s\" as resolved in "
 "document %(sdoc_name)s\n"
-msgstr ""
+msgstr "%(author)s on merkinnyt kommentin \"%(resolve_comment)s\" ratkaistuksi asiakirjassa %(sdoc_name)s\n"
 
 #: seahub/oauth/views.py:225
 #: seahub/templates/remote_user/create_unknown_user_false.html:8
 #: seahub/work_weixin/views.py:111
 msgid ""
 "Error, new user registration is not allowed, please contact administrator."
-msgstr ""
+msgstr "Virhe, uusia käyttäjiä ei voi rekisteröidä, ota yhteyttä järjestelmänvalvojaan."
 
 #: seahub/options/templates/options/set_user_options.html:7
 msgid "Please choose how to view encrypted libraries online:"
@@ -2105,16 +2106,16 @@ msgstr "Vinkki: jälkimmäinen tapa on turvallisempi, mutta se ei ole tuettu hyv
 #: seahub/organizations/api/admin/users.py:810
 #, python-brace-format
 msgid "Failed. You can only invite {org_members_quota} members."
-msgstr ""
+msgstr "Epäonnistui. Voit kutsua vain {org_members_quota} jäsentä."
 
 #: seahub/organizations/api/admin/users.py:814
 msgid "The number of users exceeds the limit"
-msgstr ""
+msgstr "Käyttäjien määrä ylittää rajan"
 
 #: seahub/organizations/api/admin/users.py:832
 #, python-brace-format
 msgid "User {email} already exists."
-msgstr ""
+msgstr "Käyttäjä {email} on jo olemassa."
 
 #: seahub/organizations/forms.py:41 seahub/share/views.py:354
 #: seahub/share/views.py:367
@@ -2129,14 +2130,14 @@ msgstr "Sähköpostiosoite ei ole kelpo"
 msgid ""
 "You are receiving this email because your team %(org_name)s has been "
 "deactivated."
-msgstr ""
+msgstr "Saat tämän sähköpostin, koska tiimisi %(org_name)s on poistettu käytöstä."
 
 #: seahub/organizations/templates/organizations/org_deactivate_email.html:16
 #, python-format
 msgid ""
 "\n"
 "If you like to continue using our site, click <a href=\"%(link)s\">here</a>. Otherwise your account will be deleted in 60 days.\n"
-msgstr ""
+msgstr "\nJos haluat jatkaa sivustomme käyttöä, klikkaa <a href=\"%(link)s\">tästä</a>. Muuten tilisi poistetaan 60 päivän kuluttua.\n"
 
 #: seahub/organizations/templates/organizations/org_register.html:3
 #: seahub/organizations/templates/organizations/org_register.html:13
@@ -2158,7 +2159,7 @@ msgstr "Tervetuloa takaisin, olet jo kirjautunut sisäään."
 #: seahub/organizations/templates/organizations/org_register.html:17
 #: seahub/templates/registration/registration_form.html:18
 msgid "You will be redirected to the home page within 5 seconds."
-msgstr ""
+msgstr "Sinut ohjataan etusivulle 5 sekunnin kuluessa."
 
 #: seahub/organizations/templates/organizations/org_register.html:25
 msgid "Organization Name"
@@ -2236,7 +2237,7 @@ msgstr "Virheellinen tunniste."
 #: seahub/organizations/views.py:358
 #| msgid "Expiration"
 msgid "Expired token."
-msgstr ""
+msgstr "Vanhentunut tunnus."
 
 #: seahub/profile/templates/profile/set_profile_react.html:5
 msgid "Settings"
@@ -2251,7 +2252,7 @@ msgstr "Nimi: "
 #: seahub/templates/registration/password_set_form.html:4
 #: seahub/templates/registration/password_set_form.html:13
 msgid "Set Password"
-msgstr ""
+msgstr "Aseta salasana"
 
 #: seahub/profile/templates/profile/set_profile_react.html:27
 msgid "Update"
@@ -2295,7 +2296,7 @@ msgstr "Onnistuneesti asetettu \"%s\" sinun oletuskirjastoksi."
 msgid ""
 "Metadata feature is not supported for libraries containing more than %s "
 "files"
-msgstr ""
+msgstr "Metatietotoimintoa ei tueta kirjastoissa, jotka sisältävät yli %s tiedostoa"
 
 #: seahub/seadoc/views.py:26 seahub/seadoc/views.py:80
 #: seahub/seadoc/views.py:158 seahub/views/__init__.py:454
@@ -2306,23 +2307,23 @@ msgstr "Kirjastoa ei ole"
 
 #: seahub/seadoc/views.py:152
 msgid "File path invalid."
-msgstr ""
+msgstr "Virheellinen tiedostopolku."
 
 #: seahub/share/decorators.py:50
 msgid "Invalid verification code, please try again."
-msgstr ""
+msgstr "Virheellinen vahvistuskoodi, yritä uudelleen."
 
 #: seahub/share/decorators.py:81
 msgid "Link does not exist."
-msgstr ""
+msgstr "Linkkiä ei ole olemassa."
 
 #: seahub/share/decorators.py:84
 msgid "Link is expired."
-msgstr ""
+msgstr "Linkki on vanhentunut."
 
 #: seahub/share/decorators.py:125
 msgid "The number of share link exceeds the limit."
-msgstr ""
+msgstr "Jakolinkkien määrä ylittää rajan."
 
 #: seahub/share/models.py:127
 msgid "Password can't be empty"
@@ -2335,26 +2336,26 @@ msgstr "Ole hyvä ja anna oikea salasana."
 #: seahub/share/templates/share/audit_code_email.html:10
 #, python-format
 msgid "The verification code is %(code)s. It is valid for one hour."
-msgstr ""
+msgstr "Vahvistuskoodi on %(code)s. Se on voimassa yhden tunnin ajan."
 
 #: seahub/share/templates/share/share_link_email.html:9
 #, python-format
 msgid ""
 "\n"
 "    %(shared_from)s shared a file link with you.\n"
-msgstr ""
+msgstr "\n    %(shared_from)s jakoi tiedostolinkin kanssasi.\n"
 
 #: seahub/share/templates/share/share_link_email.html:14
 #, python-format
 msgid ""
 "\n"
 "You can click <a href=%(url)s>here</a> to verify your email address and visit it.\n"
-msgstr ""
+msgstr "\nVoit klikata <a href=%(url)s>tästä</a> vahvistaaksesi sähköpostiosoitteesi ja vieraillaksesi sivustolla.\n"
 
 #: seahub/share/templates/share/share_link_email_audit.html:4
 #: seahub/share/templates/share/share_link_email_audit.html:39
 msgid "Email address verification"
-msgstr ""
+msgstr "Sähköpostiosoitteen vahvistus"
 
 #: seahub/share/templates/share/share_link_email_audit.html:40
 msgid "Please provide your email address to continue."
@@ -2362,7 +2363,7 @@ msgstr "Ole hyvä ja anna sähköpostiosoitteesi päästäksesi eteenpäin."
 
 #: seahub/share/templates/share/share_link_email_audit.html:43
 msgid "Enter your email address"
-msgstr ""
+msgstr "Kirjoita sähköpostiosoitteesi"
 
 #: seahub/share/templates/share/share_link_email_audit.html:44
 msgid "Get code"
@@ -2370,19 +2371,19 @@ msgstr "Hanki koodi"
 
 #: seahub/share/templates/share/share_link_email_audit.html:46
 msgid "Paste the verification code here"
-msgstr ""
+msgstr "Liitä vahvistuskoodi tähän"
 
 #: seahub/share/templates/share/share_link_email_audit.html:79
 msgid "Resend"
-msgstr ""
+msgstr "Lähetä uudelleen"
 
 #: seahub/share/templates/share/share_link_email_audit.html:107
 msgid "A verification code has been sent to the email address."
-msgstr ""
+msgstr "Vahvistuskoodi on lähetetty sähköpostiosoitteeseen."
 
 #: seahub/share/views.py:133
 msgid "Please choose a folder."
-msgstr ""
+msgstr "Valitse kansio."
 
 #: seahub/share/views.py:157
 msgid "Successfully saved."
@@ -2398,7 +2399,7 @@ msgstr "Esikatselu ainoastaan"
 
 #: seahub/share/views.py:189
 msgid "Download and upload"
-msgstr ""
+msgstr "Lataa ja lähetä"
 
 #: seahub/share/views.py:190
 msgid "Edit on cloud and download"
@@ -2406,7 +2407,7 @@ msgstr "Muokkaa pilvessä ja lataa"
 
 #: seahub/share/views.py:191
 msgid "Edit on cloud only"
-msgstr ""
+msgstr "Muokkaa vain pilvessä"
 
 #: seahub/share/views.py:223
 msgid "Share Link"
@@ -2432,7 +2433,7 @@ msgstr "Kirjastoa ei ole."
 
 #: seahub/share/views.py:258 seahub/views/ajax.py:383
 msgid "Folder does not exist."
-msgstr ""
+msgstr "Kansiota ei ole olemassa."
 
 #: seahub/share/views.py:306
 msgid "Only the owner of the library has permission to share it."
@@ -2460,7 +2461,7 @@ msgstr "Pahoittelut, mutta pyytämääsi sivua ei löydy."
 
 #: seahub/templates/base.html:8 seahub/templates/base_for_react.html:9
 msgid "File, Collaboration, Team, Organization"
-msgstr ""
+msgstr "Tiedosto, yhteistyö, tiimi, organisaatio"
 
 #: seahub/templates/base.html:35
 msgid "Close"
@@ -2480,15 +2481,15 @@ msgstr "Luo organisaation tili"
 
 #: seahub/templates/client_login_complete.html:6
 msgid "The client has logged in. Please open the client to confirm."
-msgstr ""
+msgstr "Asiakasohjelma on kirjautunut sisään. Avaa asiakasohjelma vahvistaaksesi."
 
 #: seahub/templates/client_login_confirm.html:6
 msgid "Client Login Confirm"
-msgstr ""
+msgstr "Asiakkaan kirjautumisen vahvistus"
 
 #: seahub/templates/client_login_confirm.html:8
 msgid "Do you want to login to your client?"
-msgstr ""
+msgstr "Haluatko kirjautua asiakasohjelmaasi?"
 
 #: seahub/templates/decrypt_repo_form.html:7
 msgid ""
@@ -2513,7 +2514,7 @@ msgid ""
 "\n"
 "        Click <a href=\"%(link)s\">here</a> to reactivate your team and relogin.\n"
 "      "
-msgstr ""
+msgstr "\n        Klikkaa <a href=\"%(link)s\">tästä</a> aktivoidaksesi tiimisi uudelleen ja kirjautuaksesi uudelleen.\n      "
 
 #: seahub/templates/i18n.html:6
 msgid "Upload Folder"
@@ -2623,7 +2624,7 @@ msgstr "Kertakirjautuminen"
 
 #: seahub/templates/registration/login.html:104
 msgid "Login with"
-msgstr ""
+msgstr "Kirjaudu käyttäen"
 
 #: seahub/templates/registration/login.html:130
 msgid "Forgot password?"
@@ -2703,11 +2704,11 @@ msgstr "Salasanan nollaus epäonnistui: tämä linkki ei ole enää saatavilla."
 msgid ""
 "If your email address is in our database, you will receive a message "
 "shortly."
-msgstr ""
+msgstr "Jos sähköpostiosoitteesi on tietokannassamme, saat viestin pian."
 
 #: seahub/templates/registration/password_reset_done.html:47
 msgid "Back to login page"
-msgstr ""
+msgstr "Takaisin kirjautumissivulle"
 
 #: seahub/templates/registration/password_reset_email.html:12
 #, python-format
@@ -2726,7 +2727,7 @@ msgstr "Lähetämme sinulle sähköpostin jonka kautta voit vaihtaa uuden salasa
 
 #: seahub/templates/registration/password_reset_form.html:53
 msgid "Your email used in login"
-msgstr ""
+msgstr "Kirjautumiseen käytetty sähköpostiosoitteesi"
 
 #: seahub/templates/registration/register_complete_email.html:1
 #, python-format
@@ -2794,19 +2795,19 @@ msgstr "Historia"
 
 #: seahub/templates/repo_snapshot_react.html:5
 msgid "Snapshot"
-msgstr ""
+msgstr "Tilannekuva"
 
 #: seahub/templates/share_access_validation.html:6
 msgid ""
 "Please input the password if you want to browse the shared file/folder."
-msgstr ""
+msgstr "Kirjoita salasana, jos haluat selata jaettua tiedostoa/kansiota."
 
 #: seahub/templates/shared_link_email.html:12
 #, python-format
 msgid ""
 "%(escaped_nickname)s shared a %(file_shared_type)s <span style=\"font-"
 "weight:bold;\">%(escaped_file_shared_name)s</span> to you on %(site_name)s:"
-msgstr ""
+msgstr "%(escaped_nickname)s jakoi %(file_shared_type)s <span style=\"font-weight:bold;\">%(escaped_file_shared_name)s</span> sinulle sivustolla %(site_name)s:"
 
 #: seahub/templates/shared_link_email.html:17
 #: seahub/templates/shared_upload_link_email.html:20
@@ -2826,28 +2827,28 @@ msgstr "Voit lähettää tiedostoja palvelimelle tämän linkin kautta:"
 
 #: seahub/templates/snippets/password_strength_js.html:7
 msgid "Password strength should be strong or very strong"
-msgstr ""
+msgstr "Salasanan vahvuuden tulee olla vahva tai erittäin vahva"
 
 #: seahub/templates/snippets/password_strength_js.html:12
 #: seahub/templates/snippets/password_strength_js.html:97
 msgid "Password strength"
-msgstr ""
+msgstr "Salasanan vahvuus"
 
 #: seahub/templates/snippets/password_strength_js.html:19
 msgid ""
 "The password should contain different types of characters to make it strong:"
 " uppercase letters, lowercase letters, numbers and special characters."
-msgstr ""
+msgstr "Salasanan tulee sisältää erilaisia merkkejä, jotta se on vahva: isoja kirjaimia, pieniä kirjaimia, numeroita ja erikoismerkkejä."
 
 #: seahub/templates/snippets/policy_service_link.html:5
 #: seahub/templates/snippets/policy_service_link.html:9
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Tietosuojakäytäntö"
 
 #: seahub/templates/snippets/policy_service_link.html:7
 #: seahub/templates/snippets/policy_service_link.html:11
 msgid "Terms of Service"
-msgstr ""
+msgstr "Palveluehdot"
 
 #: seahub/templates/snippets/repo_dir_trash_tr.html:6
 msgid "Folder"
@@ -2863,14 +2864,14 @@ msgstr "Palauta"
 msgid ""
 "The new password of library %(repo_name)s is %(password)s. Please change it "
 "as soon as possible."
-msgstr ""
+msgstr "Kiraston %(repo_name)s uusi salasana on %(password)s. Muuta se mahdollisimman nopeasti."
 
 #: seahub/templates/sysadmin/short_time_linving_password_reset_link.html:13
 #, python-format
 msgid ""
 "Administrator on %(site_name)s is resetting your password for %(account)s, "
 "please click the following link to continue: "
-msgstr ""
+msgstr "Järjestelmänvalvoja sivustolla %(site_name)s palauttaa salasanasi tilille %(account)s, klikkaa seuraavaa linkkiä jatkaaksesi: "
 
 #: seahub/templates/sysadmin/sudo_mode.html:39
 msgid "Confirm password to continue"
@@ -2896,13 +2897,13 @@ msgstr "Sinun tili %(username)s sivustolla %(site_name)s on aktivoitu."
 msgid ""
 "%(nickname)s invited you to join organization \"%(org_name)s\" on "
 "%(site_name)s."
-msgstr ""
+msgstr "%(nickname)s kutsui sinut liittymään organisaatioon \"%(org_name)s\" sivustolla %(site_name)s."
 
 #: seahub/templates/sysadmin/user_add_email.html:13
 #: seahub/templates/sysadmin/user_batch_add_email.html:10
 #, python-format
 msgid "%(nickname)s invited you to join %(site_name)s."
-msgstr ""
+msgstr "%(nickname)s kutsui sinut liittymään sivustoon %(site_name)s."
 
 #: seahub/templates/sysadmin/user_add_email.html:18
 #: seahub/templates/sysadmin/user_batch_add_email.html:14
@@ -2912,7 +2913,7 @@ msgstr "Tässä on sinulle luodun tilin tiedot:"
 #: seahub/templates/sysadmin/user_add_email.html:19
 #: seahub/templates/sysadmin/user_batch_add_email.html:15
 msgid "Email:"
-msgstr ""
+msgstr "Sähköposti:"
 
 #: seahub/templates/sysadmin/user_freeze_email.html:12
 #, python-format
@@ -2931,7 +2932,7 @@ msgstr "Sinun salasana sivustolla %(site_name)s on nollattu. Salasana on nyt %(p
 #, python-format
 #| msgid "Your quota is almost full on %(site_name)s."
 msgid "The team quota is almost full on %(site_name)s."
-msgstr ""
+msgstr "Tiimin kiintiö on melkein täynnä sivustolla %(site_name)s."
 
 #: seahub/templates/team_quota_full.html:14
 #: seahub/templates/user_quota_full.html:14
@@ -2966,11 +2967,11 @@ msgstr "muokkauksen jälkeen"
 #: seahub/templates/user_quota_full.html:12
 #, python-format
 msgid "Your quota is almost full on %(site_name)s."
-msgstr ""
+msgstr "Kiintiösi on melkein täynnä sivustolla %(site_name)s."
 
 #: seahub/templates/wiki/wiki.html:24
 msgid "Last modified by"
-msgstr ""
+msgstr "Viimeksi muokannut"
 
 #: seahub/thumbnail/views.py:48 seahub/thumbnail/views.py:178
 #: seahub/views/__init__.py:495
@@ -3010,7 +3011,7 @@ msgid ""
 "    for login verification. If you've used up all your backup tokens, you\n"
 "    can generate a new set of backup tokens. Only the backup tokens shown\n"
 "    below will be valid."
-msgstr ""
+msgstr "Varmistustunnuksia voidaan käyttää, kun ensisijainen ja varmenne\n    puhelinnumerosi eivät ole käytettävissä. Alla olevia varmistustunnuksia voidaan käyttää\n    kirjautumisen vahvistukseen. Jos olet käyttänyt kaikki varmistustunnuksesi, voit\n    luoda uuden joukon varmistustunnuksia. Vain alla näytetyt varmistustunnukset\n    ovat voimassa."
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:20
 msgid "Print these tokens and keep them somewhere safe."
@@ -3094,7 +3095,7 @@ msgstr "Poista kaksisuuntainen tunnistautuminen käytöstä"
 msgid ""
 "You are about to disable two-factor authentication. This compromises your "
 "account security, are you sure?"
-msgstr ""
+msgstr "Olet poistamassa käytöstä kaksivaiheista tunnistautumista. Tämä heikentää tilisi turvallisuutta, oletko varma?"
 
 #: seahub/two_factor/templates/two_factor/profile/disable.html:10
 msgid "Disable"
@@ -3229,7 +3230,7 @@ msgstr "Tiedoston lataus epäonnistui."
 #: seahub/views/repo.py:325
 #, python-format
 msgid "Share link for %s."
-msgstr ""
+msgstr "Jakolinkki kohteelle %s."
 
 #: seahub/views/file.py:1932 seahub/views/file.py:1937
 msgid "Unable to download file"
@@ -3238,35 +3239,35 @@ msgstr "Tiedostoa ei voi ladata"
 #: seahub/views/file.py:2185
 #| msgid "Wiki not found."
 msgid "revision not found"
-msgstr ""
+msgstr "versiota ei löydy"
 
 #: seahub/views/file.py:2192
 msgid "The original file does not exist"
-msgstr ""
+msgstr "Alkuperäistä tiedostoa ei ole olemassa"
 
 #: seahub/views/mobile.py:35
 #, python-brace-format
 msgid "User {token.user} not found"
-msgstr ""
+msgstr "Käyttäjää {token.user} ei löydy"
 
 #: seahub/views/mobile.py:39
 #, python-brace-format
 msgid "User {token.user} inactive"
-msgstr ""
+msgstr "Käyttäjä {token.user} on poistettu käytöstä"
 
 #: seahub/views/sso.py:179
 msgid ""
 "This link has already been visited, please click the login button on the "
 "client again"
-msgstr ""
+msgstr "Tämä linkki on jo käytetty, klikkaa asiakasohjelman kirjautumispainiketta uudelleen"
 
 #: seahub/views/sso.py:204
 msgid "Invalid link, please click the login button on the client again"
-msgstr ""
+msgstr "Virheellinen linkki, klikkaa asiakasohjelman kirjautumispainiketta uudelleen"
 
 #: seahub/views/sso.py:209
 msgid "Login timeout, please click the login button on the client again"
-msgstr ""
+msgstr "Kirjautumisen aikakatkaisu, klikkaa asiakasohjelman kirjautumispainiketta uudelleen"
 
 #: seahub/views/sysadmin.py:176 seahub/views/sysadmin.py:180
 msgid "Login ID"
@@ -3363,7 +3364,7 @@ msgstr "Valinnainen"
 
 #: seahub/wiki/views.py:159
 msgid "Unable to view Wiki"
-msgstr ""
+msgstr "Wikin tarkastaminen epäonnistui"
 
 #~ msgid "We've sent a password reset email to your mailbox."
 #~ msgstr "We've sent a password reset email to your mailbox."

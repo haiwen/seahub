@@ -8723,7 +8723,7 @@ msgstr "ID"
 #: frontend/src/pages/org-admin/org-info.js:78
 #| msgid "Active Users"
 msgid "Active users"
-msgstr "激活用户"
+msgstr "活跃用户"
 
 #: frontend/src/pages/org-admin/org-info.js:83
 #| msgid "Total Users"
@@ -9200,7 +9200,7 @@ msgstr "同步端流量"
 #: frontend/src/pages/sys-admin/statistic/statistic-users.js:17
 #: frontend/src/pages/sys-admin/statistic/statistic-users.js:46
 msgid "Active Users"
-msgstr "激活用户"
+msgstr "活跃用户"
 
 #: frontend/src/pages/org-admin/statistic/traffic-table.js:28
 #: frontend/src/pages/sys-admin/statistic/traffic-table.js:28
@@ -9651,7 +9651,7 @@ msgstr "当前连接的设备"
 #: frontend/src/pages/sys-admin/info.js:129
 #: frontend/src/pages/sys-admin/info.js:133
 msgid "Activated Users"
-msgstr "激活用户数"
+msgstr "激活的用户"
 
 #: frontend/src/pages/sys-admin/info.js:129
 #: frontend/src/pages/sys-admin/info.js:133

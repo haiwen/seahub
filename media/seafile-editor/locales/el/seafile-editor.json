@@ -146,7 +146,7 @@
     "title": "Βοήθεια συντομεύσεων",
     "userHelpData": [
       {
-        "shortcutType": "List shortcuts",
+        "shortcutType": "Lists",
         "shortcutData": {
           "Make_list": "Δημιουργία λίστας",
           "Make_ordered_list": "Δημιουργία διατεταγμένης λίστας",
@@ -156,7 +156,7 @@
         }
       },
       {
-        "shortcutType": "Head shortcuts",
+        "shortcutType": "Headings",
         "shortcutData": {
           "Heading_1": "Επικεφαλίδα 1",
           "Heading_2": "Επικεφαλίδα 2",
@@ -167,7 +167,7 @@
         }
       },
       {
-        "shortcutType": "Code block shortcuts",
+        "shortcutType": "Code blocks",
         "shortcutData": {
           "Make_code_block": "Δημιουργία μπλοκ κώδικα",
           "Insert_new_line": "Εισαγωγή νέας γραμμής",
@@ -176,27 +176,27 @@
         }
       },
       {
-        "shortcutType": "Block quote shortcuts",
+        "shortcutType": "Block quotes",
         "shortcutData": {
           "Make_block_quote": "Δημιουργία μπλοκ αναφοράς",
           "Escape_block_quote": "Αποφυγή μπλοκ αναφοράς"
         }
       },
       {
-        "shortcutType": "Table shortcuts",
+        "shortcutType": "Tables",
         "shortcutData": {
           "Insert_table_row": "Εισαγωγή σειράς πίνακα",
           "Escape_table": "Αποφυγή πίνακα"
         }
       },
       {
-        "shortcutType": "Formula shortcuts",
+        "shortcutType": "Math",
         "shortcutData": {
           "Insert_formula": "Εισαγωγή μαθηματικού výrazου"
         }
       },
       {
-        "shortcutType": "Inline shortcuts",
+        "shortcutType": "Emphasis",
         "shortcutData": {
           "Bold": "Έντονα",
           "Italic": "Πλάγια",
@@ -205,13 +205,13 @@
         }
       },
       {
-        "shortcutType": "Save shortcuts",
+        "shortcutType": "Save file",
         "shortcutData": {
           "Save_file": "Αποθήκευση αρχείου"
         }
       },
       {
-        "shortcutType": "Image shortcuts",
+        "shortcutType": "Insert image",
         "shortcutData": {
           "Paste_screen_shot": "Εισαγωγή εικόνας από το πρόγραμμα скриншوت",
           "Drag_image_from_anywhere_to_upload_it": "Μετακίνηση εικόνας από οποιαδήποτε τοποθεσία για να την ανεβάσετε"

@@ -162,7 +162,7 @@
     "title": "Βοήθεια συντομεύσεων",
     "userHelpData": [
       {
-        "shortcutType": "List shortcuts",
+        "shortcutType": "Lists",
         "shortcutData": {
           "Make_list": "Δημιουργία λίστας",
           "Make_ordered_list": "Δημιουργία αριθμημένης λίστας",
@@ -172,7 +172,7 @@
         }
       },
       {
-        "shortcutType": "Head shortcuts",
+        "shortcutType": "Headings",
         "shortcutData": {
           "Heading_1": "Επικεφαλίδα 1",
           "Heading_2": "Επικεφαλίδα 2",
@@ -183,7 +183,7 @@
         }
       },
       {
-        "shortcutType": "Code block shortcuts",
+        "shortcutType": "Code blocks",
         "shortcutData": {
           "Make_code_block": "Δημιουργία μπλοκ κώδικα",
           "Insert_new_line": "Εισαγωγή νέας γραμμής",
@@ -192,27 +192,27 @@
         }
       },
       {
-        "shortcutType": "Block quote shortcuts",
+        "shortcutType": "Block quotes",
         "shortcutData": {
           "Make_Block_quote": "Δημιουργία μπλοκ αναφοράς",
           "Escape_Block_quote": "Αποφυγή μπλοκ αναφοράς"
         }
       },
       {
-        "shortcutType": "Table shortcuts",
+        "shortcutType": "Tables",
         "shortcutData": {
           "Insert_Table_Row": "Εισαγωγή σειράς πίνακα",
           "Escape_table": "Αποφυγή πίνακα"
         }
       },
       {
-        "shortcutType": "Formula shortcuts",
+        "shortcutType": "Math",
         "shortcutData": {
           "Insert_Formula": "Εισαγωγή μαθηματικού τύπου"
         }
       },
       {
-        "shortcutType": "Inline shortcuts",
+        "shortcutType": "Emphasis",
         "shortcutData": {
           "Bold": "Έντονα",
           "Italic": "Πλάγια",
@@ -221,13 +221,13 @@
         }
       },
       {
-        "shortcutType": "Save shortcuts",
+        "shortcutType": "Save file",
         "shortcutData": {
           "Save_file": "Αποθήκευση αρχείου"
         }
       },
       {
-        "shortcutType": "Image shortcuts",
+        "shortcutType": "Insert image",
         "shortcutData": {
           "Paste_screen_shot": "Εισαγωγή εικόνας από το πρόγραμμα скриншوت",
           "Drag_image_from_anywhere_to_upload_it": "Μετακίνηση εικόνας από οποιαδήποτε τοποθεσία για να την ανεβάσετε"
@@ -430,7 +430,7 @@
   "Document_frozen": "Το έγγραφο είναι κλεισμένο",
   "Unfreeze": "Ξεκλεισμός εγγράφου",
   "Search_and_replace": "Αναζήτηση και αντικατάσταση",
-  "Search": "Αναζήτηση",
+  "Search_1": "Αναζήτηση 1",
   "Type_search_content": "Εισαγωγή περιεχομένου αναζήτησης",
   "Replace_as": "Αντικατάσταση ως",
   "Type_replace_content": "Εισαγωγή περιεχομένου αντικατάστασης",
@@ -565,7 +565,7 @@
   "Double_click_to_enter_edit_mode_and_adjust_field_width": "Κάντε διπλό κλικ για να εισαγάγετε το λειτουργία επεξεργασίας και να προσαρμόσετε το πλάτος πεδίου",
   "Enter_comment_Enter_for_new_line_shift_enter_to_send": "Εισαγωγή σχολίου. Πιέστε Enter για νέα γραμμή. Πιέστε Shift+Enter για αποστολή",
   "Sub_table": "Υποπίνακας",
-  "Search_1": "Αναζήτηση 1",
+  "Search": "Αναζήτηση 1",
   "Comment_details": "Λεπτομέρειες σχολίου",
   "Two_column": "Δύο στήλες",
   "Three_column": "Τρία στήλες",
@@ -603,17 +603,14 @@
   "Discard": "Απόρριψη",
   "English": "Αγγλικά",
   "Chinese": "Χίλιοι",
-  "French": "Γαλλικά",
-  "German": "Γερμανικά",
-  "Italian": "Ιταλικά",
   "Ask_AI": "Ερωτήστε το AI",
   "Enter_reply": "Εισαγωγή απάντησης",
   "Processing_content_cannot_be_empty": "Το περιεχόμενο επεξεργασίας δεν μπορεί να είναι κενό",
   "AI_error_message": "Σφάλμα AI",
   "Add_video_link": "Προσθήκη συνδέσμου βίντεο",
-  "Link_video_file": "Σύνδεσμος σε βίντεο αρχείο",
+  "Link_Seafile_video_file": "Σύνδεσμος σε αρχείο Seafile βίντεο",
   "Select_video_file": "Επιλογή βίντεο αρχείου",
-  "Support_YouTube_Bilibili_and_more": "Support YouTube, Bilibili and more",
+  "Support_Youtube_Tencent_Bilibili_and_more": "Υποστηρίζει YouTube, Τencent, Bilibili και περισσότερα",
   "Image_cannot_be_copied_Please_download_the_source_image": "Η εικόνα δεν μπορεί να скопирована. Παρακαλώ κατεβάστε την εικόνα 원본",
   "And_select_insert_-_image_to_upload": "Κάντε κλικ στο εικονίδιο εικόνας για να ανεβάσετε την εικόνα",
   "Image_copy_error": "Σφάλμα αντιγραφής εικόνας",
@@ -629,7 +626,7 @@
   "Insert_chart": "Εισαγωγή διαγράμματος",
   "Edit_chart": "Επεξεργασία διαγράμματος",
   "Please_complete_the_chart_configuration_first": "Παρακαλώ ολοκληρώστε τη διαμόρφωση του διαγράμματος πρώτα",
-  "chart": "Διαγράμματα",
+  "chart": "Διαγράμματος",
   "Image_is_upload_error": "Σφάλμα ανεβασμού εικόνας",
   "Table_not_exist": "Δεν υπάρχει πίνακας",
   "Row_not_exist": "Δεν υπάρχει σειρά",
@@ -639,18 +636,5 @@
   "Comment_list": "Λίστα σχολίων",
   "Add_Comment": "Προσθήκη σχολίου",
   "Finish": "Ολοκλήρωση",
-  "More_fluent": "Περισσότερα εμπεδοποιεί",
-  "Link_Excalidraw_file": "Σύνδεσμος σε αρχείο Excalidraw",
-  "New_Excalidraw_file": "Νέο αρχείο Excalidraw",
-  "Whiteboard": "Γραφίδιο",
-  "Open": "Άνοιγμα",
-  "Icon": "Εικονίδιο",
-  "Select_style": "Επιλογή στυλ",
-  "Edit_link": "Επεξεργασία συνδέσμου",
-  "Remove_link": "Αφαίρεση συνδέσμου",
-  "Preview": "Προεπισκόπηση",
-  "Go_to_link" : "Μετάβαση στο συνδέσμο",
-  "Link_block" : "Στοιχείο συνδέσμου",
-  "The_link_address_or_link_block_is_required": "Απαιτείται διεύθυνση συνδέσμου ή στοιχείο συνδέσμου",
-  "Comment_filter": "Comment filter"
+  "More_fluent": "Περισσότερα εμπεδοποιεί"
 }

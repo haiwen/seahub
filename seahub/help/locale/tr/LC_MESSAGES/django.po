@@ -7,6 +7,7 @@
 # Evrim Güner <evrim.guner@veriyum.net.tr>, 2024
 # Şevval ANLI, 2024
 # Muhammed Şamil Kıvanç, 2024
+# Seafile Info <info@seafile.com>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -15,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: Muhammed Şamil Kıvanç, 2024\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Turkish (https://app.transifex.com/haiwen/teams/5086/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -72,7 +73,7 @@ msgstr "Tam metin dosyası arama"
 
 #: templates/help/base.html:65
 msgid "Sharing and collaboration"
-msgstr ""
+msgstr "Paylaşım ve işbirliği"
 
 #: templates/help/base.html:67 templates/help/sharing_files_and_folders.html:5
 msgid "Sharing files and folders"
@@ -120,7 +121,7 @@ msgstr "Alt klasörleri seçerek senkronize edin"
 
 #: templates/help/base.html:84 templates/help/read-only_syncing.html:5
 msgid "Read-only syncing"
-msgstr ""
+msgstr "Salt okunur senkronizasyon"
 
 #: templates/help/base.html:85
 msgid "Unsync and resync libraries"
@@ -132,7 +133,7 @@ msgstr "Senkronizasyon aralığını ayarlama"
 
 #: templates/help/base.html:87
 msgid "Proxy settings"
-msgstr ""
+msgstr "Proxy ayarları"
 
 #: templates/help/base.html:88 templates/help/conflicts.html:5
 msgid "File conflicts"
@@ -182,6 +183,12 @@ msgid ""
 "author's email address, plus the current time, e.g. test.txt (SFConflict "
 "name@example.com 2015-03-07-11-30-28)."
 msgstr ""
+"Sometimes you and your friends may edit the same file at the same time. Your"
+" changes may conflict with each other's. In this case, Seafile would keep "
+"the first version synced to the cloud unchanged, while rename the other "
+"version to a \"conflict file\". A conflict file's name ends with it's "
+"author's email address, plus the current time, e.g. test.txt (SFConflict "
+"name@example.com 2015-03-07-11-30-28)."
 
 #: templates/help/deleting_a_library.html:6
 msgid ""
@@ -282,6 +289,8 @@ msgid ""
 "The system admin can set up the department hierarchy in two ways: manual "
 "setup or import from Active Directory."
 msgstr ""
+"Sistem yöneticisi departman hiyerarşisini iki şekilde kurabilir: manuel "
+"kurulum veya Active Directory'den içe aktarma."
 
 #: templates/help/departments.html:26
 msgid ""
@@ -291,6 +300,11 @@ msgid ""
 "of each member to 'member' or 'admin'. We'll introduce how a department "
 "admin can manage department later."
 msgstr ""
+"Sistem yöneticisi herhangi bir sayıda üst düzey departman oluşturabilir ve "
+"her departman altında herhangi bir seviyede alt departmanlar oluşturabilir. "
+"Her departman seviyesi üyelerle doldurulabilir. Sistem yöneticisi her üyenin"
+" rolünü 'üye' veya 'yönetici' olarak ayarlayabilir. Bir departman "
+"yöneticisinin departmanı nasıl yönetebileceğini daha sonra açıklayacağız."
 
 #: templates/help/departments.html:27
 msgid ""
@@ -299,12 +313,19 @@ msgid ""
 "under an OU will be imported as sub-departments. Department libraries can be"
 " automatically created in the import process."
 msgstr ""
+"Sistem yöneticisi ayrıca AD'deki OU'lardan (Organizasyon Birimleri) "
+"hiyerarşiyi içe aktarabilir. Her OU bir departman olarak içe aktarılacaktır."
+" Bir OU altındaki alt OU'lar alt departmanlar olarak içe aktarılacaktır. "
+"Departman kütüphaneleri içe aktarma işlemi sırasında otomatik olarak "
+"oluşturulabilir."
 
 #: templates/help/departments.html:28
 msgid ""
 "System admin can also delete a department after all the sub-departments and "
 "libraries are deleted."
 msgstr ""
+"Sistem yöneticisi, tüm alt departmanlar ve kütüphaneler silindikten sonra "
+"bir departmanı da silebilir."
 
 #: templates/help/departments.html:30
 msgid ""
@@ -314,6 +335,11 @@ msgid ""
 "cannot exceed the storage quota. <strong>Please note that the quota of sub-"
 "department doesn't depend on the quota of its parent department.</strong>"
 msgstr ""
+"Bir departman içinde oluşturulan kütüphaneler departmanın kendisine aittir, "
+"herhangi bir bireysel kullanıcıya değil. Bu nedenle sistem yöneticisi bir "
+"departmana depolama kotası atayabilir. Bir departmandaki tüm kütüphanelerin "
+"toplam boyutu depolama kotasını aşamaz. <strong>Lütfen alt departmanın "
+"kotasının, üst departmanın kotasına bağlı olmadığını unutmayın.</strong>"
 
 #: templates/help/departments.html:32
 msgid ""
@@ -321,12 +347,18 @@ msgid ""
 " There is also an option to control whether individual users can share "
 "libraries to a department."
 msgstr ""
+"Departman kütüphaneleri sistem yöneticisi veya departman yöneticisi "
+"tarafından oluşturulabilir. Ayrıca bireysel kullanıcıların kütüphaneleri bir"
+" departmana paylaşıp paylaşamayacağını kontrol etmek için bir seçenek de "
+"vardır."
 
 #: templates/help/departments.html:33
 msgid ""
 "All the above operations can be done in the system admin interface. See the "
 "below screenshot for information."
 msgstr ""
+"Yukarıdaki tüm işlemler sistem yöneticisi arayüzünde yapılabilir. Bilgi için"
+" aşağıdaki ekran görüntüsüne bakın."
 
 #: templates/help/departments.html:36
 msgid ""
@@ -334,6 +366,10 @@ msgid ""
 "admin to some members of a department. Department admins can perform the "
 "following operations in a department after login to his/her own account."
 msgstr ""
+"Yukarıda belirtildiği gibi, departman yöneticisi, sistem yöneticisi "
+"tarafından bir departmanın bazı üyelerine atanan özel bir roldür. Departman "
+"yöneticileri, kendi hesaplarına giriş yaptıktan sonra bir departmanda "
+"aşağıdaki işlemleri gerçekleştirebilir."
 
 #: templates/help/departments.html:38
 msgid "Access to the libraries of the department"
@@ -354,12 +390,19 @@ msgid ""
 " the department. But if the departments are imported from AD, the changes to"
 " membership will be overwritten on the next sync with AD."
 msgstr ""
+"Bir kullanıcı bir departmanın yöneticisi ise, departmandaki üyeleri "
+"ekleyebilir veya silebilir. Sistemde kayıtlı herhangi bir kullanıcı "
+"departman üyesi olarak eklenebilir. Ancak departmanlar AD'den içe "
+"aktarılmışsa, üyelik değişiklikleri bir sonraki AD senkronizasyonunda "
+"üzerine yazılacaktır."
 
 #: templates/help/departments.html:44
 msgid ""
 "Department admin can manage the libraries in the department. The supported "
 "operations are:"
 msgstr ""
+"Departman yöneticisi departmandaki kütüphaneleri yönetebilir. Desteklenen "
+"işlemler şunlardır:"
 
 #: templates/help/departments.html:46
 msgid "Create or delete library"
@@ -374,6 +417,8 @@ msgid ""
 "Share a library to users or groups outside of this department. This is very "
 "useful for cross-department collaboration."
 msgstr ""
+"Bir kütüphaneyi bu departman dışındaki kullanıcılara veya gruplara paylaşın."
+" Bu, departmanlar arası işbirliği için çok kullanışlıdır."
 
 #: templates/help/departments.html:49
 #, python-format
@@ -383,6 +428,10 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
 "feature</a>."
 msgstr ""
+"Bu departmandaki kullanıcılar veya alt departmanlar için kütüphanelerdeki "
+"klasörlere ayrıntılı izinler ayarlayın. Bu, <a "
+"href=\"%(SITE_ROOT)shelp/folder_permission/\">klasör izin özelliği</a> gibi "
+"çalışır."
 
 #: templates/help/departments.html:53
 msgid ""
@@ -395,16 +444,26 @@ msgid ""
 "access to the groups \"EMEA\", \"Sales\" and \"ACME\". The groups for "
 "departments are marked with a \"building\" icon next to its name."
 msgstr ""
+"Departmanın normal bir üyesi departmanı bir grup gibi kullanabilir. Her "
+"departman üyelerine bir grup olarak sunulur. Bir kullanıcı sadece ait olduğu"
+" departmandaki kütüphanelere değil, aynı zamanda departmanının üst "
+"departmanlarındaki kütüphanelere de erişebilir. Örneğin, John \"Sales\" "
+"departmanı altındaki \"EMEA\" alt departmanındaysa ve \"Sales\" şirket "
+"\"ACME\" altında bir alt departmansa, John daha sonra \"EMEA\", \"Sales\" ve"
+" \"ACME\" gruplarına erişebilir. Departmanlar için gruplar, adının yanında "
+"bir \"bina\" simgesiyle işaretlenir."
 
 #: templates/help/desktop_proxy.html:6
 msgid "Using proxy in Seafile client"
-msgstr ""
+msgstr "Seafile istemcisinde proxy kullanma"
 
 #: templates/help/desktop_proxy.html:8
 msgid ""
 "Seafile client supports 3 types of proxy servers: HTTP proxy, SOCKS5 proxy "
 "and system proxy settings."
 msgstr ""
+"Seafile istemcisi 3 tür proxy sunucusunu destekler: HTTP proxy, SOCKS5 proxy"
+" ve sistem proxy ayarları."
 
 #: templates/help/desktop_proxy.html:10
 msgid ""
@@ -414,6 +473,11 @@ msgid ""
 " to auto-detect proxy server information. So you don't have to manually "
 "enter proxy server address."
 msgstr ""
+"HTTP proxy ve SOCKS5 proxy, proxy sunucusunun adresini ve portunu girmenizi "
+"gerektirir. Sistem proxy ayarlarını kullanırsanız, Seafile istemcisi proxy "
+"ayarlarını işletim sisteminden okur. İşletim sisteminin proxy sunucusu "
+"bilgilerini otomatik olarak algılamak için bazı mekanizmaları vardır. Bu "
+"nedenle proxy sunucusu adresini manuel olarak girmeniz gerekmez."
 
 #: templates/help/desktop_proxy.html:12
 msgid ""
@@ -421,6 +485,9 @@ msgid ""
 "area. Choose \"Settings\" in the menu. In the pop-up settings dialog, you "
 "can change proxy settings in the \"Network\" tab."
 msgstr ""
+"Proxy ayarlarını değiştirmek için sistem bildirim alanındaki Seafile "
+"simgesine tıklayın. Menüden \"Ayarlar\" seçeneğini seçin. Açılan ayarlar "
+"iletişim kutusunda, \"Ağ\" sekmesinde proxy ayarlarını değiştirebilirsiniz."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:6
 msgid "SeaDrive 2.0 for Windows 10"
@@ -433,6 +500,11 @@ msgid ""
 "Update for Windows 10) and later versions. We recommend Windows 10 users to "
 "upgrade to SeaDrive 2.0 for more native virtual drive experience."
 msgstr ""
+"SeaDrive 2.0 (ve gelecek sürümler) Windows 10 işletim sistemine daha derin "
+"entegrasyonla yeniden tasarlandı. Windows 10 1709 sürümünü (2017 Sonbahar "
+"Güncellemesi) ve sonraki sürümleri destekler. Daha yerel bir sanal sürücü "
+"deneyimi için Windows 10 kullanıcılarının SeaDrive 2.0'a yükseltme "
+"yapmalarını öneririz."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:10
 msgid "Install and access the Virtual Drive"
@@ -447,6 +519,12 @@ msgid ""
 " your seafile account. The download is progressive, so in the mean time you "
 "can already access some files in the virtual drive."
 msgstr ""
+"SeaDrive 2.0'ı resmi Seafile web sitesinden indirebilirsiniz. Kurulumdan ve "
+"Seafile hesabınıza giriş yaptıktan sonra, SeaDrive sunucudan kütüphane ve "
+"dosya listelerini indirmeye başlayacaktır (SeaDrive 1.0.x'te olduğu gibi). "
+"Seafile hesabınızda bulunan dosya sayısına bağlı olarak biraz zaman "
+"alabilir. İndirme aşamalıdır, bu sırada sanal sürücüdeki bazı dosyalara "
+"zaten erişebilirsiniz."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:12
 msgid ""
@@ -489,6 +567,8 @@ msgid ""
 "<b>Placeholder file</b>: An empty representation of the file and can only be"
 " opened when there is network connection."
 msgstr ""
+"<b>Yer tutucu dosya</b>: Dosyanın boş bir temsili ve yalnızca ağ bağlantısı "
+"olduğunda açılabilir."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:22
 msgid ""
@@ -498,12 +578,19 @@ msgid ""
 "connections. The operating system may decide to clear a full file when more "
 "disk space is needed."
 msgstr ""
+"<b>Tam dosya</b>: Dosya indirilmiş ve yerel olarak kaydedilmiştir. Bir yer "
+"tutucu dosya ilk kez açıldığında indirme otomatiktir. Bu dosyalar, ağ "
+"bağlantılarına bakılmaksızın SeaDrive'ı her açtığınızda kullanılabilir. Daha"
+" fazla disk alanı gerektiğinde işletim sistemi bir tam dosyayı temizlemeye "
+"karar verebilir."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:23
 msgid ""
 "<b>Pinned full file</b>: The file has been downloaded and saved locally. It "
 "is guaranteed to be available offline."
 msgstr ""
+"<b>Sabitlenmiş tam dosya</b>: Dosya indirilmiş ve yerel olarak "
+"kaydedilmiştir. Çevrimdışı kullanılabilir olması garanti edilir."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:26
 msgid ""
@@ -656,7 +743,7 @@ msgstr ""
 
 #: templates/help/drive_client_2.0_for_windows_10.html:50
 msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
-msgstr ""
+msgstr "Windows Explorer'da kalan SeaDrive kısayolları nasıl kaldırılır?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
@@ -665,12 +752,18 @@ msgid ""
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
 msgstr ""
+"Windows Explorer'daki \"SeaDrive\" kısayolu, SeaDrive programından çıktıktan"
+" veya SeaDrive'da Seafile hesaplarını değiştirdikten sonra kaybolmaz. Bu "
+"kasıtlı bir davranıştır. Hesaba daha sonra erişmeniz gerekiyorsa bunları "
+"kaldırmanıza gerek yoktur."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
 "choose \"Remove account information\" in the prompt dialog."
 msgstr ""
+"Genellikle bu kısayolları SeaDrive programını kaldırarak ve istem iletişim "
+"kutusunda \"Hesap bilgilerini kaldır\" seçeneğini seçerek kaldırabilirsiniz."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -681,6 +774,12 @@ msgid ""
 " in registry editor. Remove the sub-keys correspond to the shortcut you want"
 " to remove."
 msgstr ""
+"Kaldırma işlemi kısayolları başarıyla kaldırmazsa, kayıt defterini "
+"düzenleyerek Windows Explorer'daki SeaDrive kısayolunu kaldırabilirsiniz. "
+"Kayıt defteri düzenleyicisinde "
+"\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\\""
+" yolunu açın. Kaldırmak istediğiniz kısayola karşılık gelen alt anahtarları "
+"kaldırın."
 
 #: templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
@@ -710,6 +809,9 @@ msgid ""
 "the server. The server uses this password to create the library. But it "
 "doesn't store the plain text password."
 msgstr ""
+"Web uygulamasında şifreli bir kütüphane oluşturursanız, şifre sunucuya "
+"gönderilir. Sunucu bu şifreyi kütüphaneyi oluşturmak için kullanır. Ancak "
+"düz metin şifreyi saklamaz."
 
 #: templates/help/encrypted_libraries.html:13
 #, python-format
@@ -718,6 +820,9 @@ msgid ""
 "client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
 "the password is not sent to the server."
 msgstr ""
+"Masaüstü istemcisiyle yerel bir klasörden şifreli bir kütüphane "
+"oluşturursanız (bkz. <a href=\"%(SITE_ROOT)shelp/install_sync/\">dosya "
+"senkronizasyonu</a>), şifre sunucuya gönderilmez."
 
 #: templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
@@ -739,18 +844,25 @@ msgid ""
 "the server. The client decrypts and encrypts file contents locally. The "
 "plain text password is not stored on the client disk either."
 msgstr ""
+"Kütüphaneyi senkronize etmek için masaüstü istemcisi kullanırsanız, şifre "
+"sunucuya gönderilmez. İstemci dosya içeriklerini yerel olarak şifreler ve "
+"şifresini çözer. Düz metin şifre de istemci diskinde saklanmaz."
 
 #: templates/help/encrypted_libraries.html:21
 msgid ""
 "iOS client supports client side encryption since version 2.1.6. Android "
 "client supports it since version 2.1.0."
 msgstr ""
+"iOS istemcisi 2.1.6 sürümünden itibaren istemci tarafı şifrelemeyi "
+"destekler. Android istemcisi 2.1.0 sürümünden itibaren destekler."
 
 #: templates/help/encrypted_libraries.html:25
 msgid ""
 "Note that encrypted library only encrypts the contents of the files, but not"
 " the folder and file names."
 msgstr ""
+"Şifreli kütüphanenin yalnızca dosya içeriklerini şifrelediğini, ancak klasör"
+" ve dosya adlarını şifrelemediğini unutmayın."
 
 #: templates/help/file_locking.html:5
 msgid "File locking"
@@ -812,18 +924,25 @@ msgid ""
 "After a library is synced to the desktop, you can lock/unlock files in that "
 "library inside File Explorer on Windows or Finder on Mac OS."
 msgstr ""
+"Bir kütüphane masaüstüne senkronize edildikten sonra, Windows'ta File "
+"Explorer veya Mac OS'ta Finder içindeki o kütüphanedeki dosyaları "
+"kilitleyebilir/açabilirsiniz."
 
 #: templates/help/file_locking.html:15
 msgid ""
 "To lock a file, just right click on a synced file and choose \"lock this "
 "file\" in the \"Seafile\" menu."
 msgstr ""
+"Bir dosyayı kilitlemek için, senkronize edilmiş bir dosyaya sağ tıklayın ve "
+"\"Seafile\" menüsünde \"bu dosyayı kilitle\" seçeneğini seçin."
 
 #: templates/help/file_locking.html:17
 msgid ""
 "If a file is locked by you, you can see an orange \"stop sign\" on the file "
 "icon. You can choose to unlock it."
 msgstr ""
+"Bir dosya sizin tarafınızdan kilitlenmişse, dosya simgesinde turuncu bir "
+"\"dur işareti\" görebilirsiniz. Kilidini açmayı seçebilirsiniz."
 
 #: templates/help/file_locking.html:19
 msgid ""
@@ -831,16 +950,21 @@ msgid ""
 "file icon. The file is automatically set to read-only. You cannot modify it "
 "until it's unlocked."
 msgstr ""
+"Bir dosya başka bir kullanıcı tarafından kilitlenmişse, dosya simgesinde "
+"kırmızı bir \"dur işareti\" görebilirsiniz. Dosya otomatik olarak salt "
+"okunur olarak ayarlanır. Kilidi açılana kadar değiştiremezsiniz."
 
 #: templates/help/file_locking.html:21
 msgid ""
 "If a library is not synced, you can still use cloud file browser to lock and"
 " unlock files in it."
 msgstr ""
+"Bir kütüphane senkronize edilmemişse, içindeki dosyaları kilitlemek ve "
+"kilidini açmak için bulut dosya tarayıcısını kullanabilirsiniz."
 
 #: templates/help/file_locking.html:22
 msgid "Auto locking office files"
-msgstr ""
+msgstr "Office dosyalarını otomatik kilitleme"
 
 #: templates/help/file_locking.html:23
 msgid ""
@@ -850,18 +974,25 @@ msgid ""
 " propagated to other computers syncing this library. It prevents concurrent "
 "editing the same Office file and is convenient for collaboration."
 msgstr ""
+"Bir kütüphane masaüstüne senkronize edildikten sonra, kütüphane içindeki bir"
+" Microsoft Office dosyasını açtığınızda, Seafile dosyayı otomatik olarak "
+"kilitler. Dosyayı kapattığınızda, Seafile dosyayı otomatik olarak açar. "
+"Kilit durumu bu kütüphaneyi senkronize eden diğer bilgisayarlara yayılır. "
+"Aynı Office dosyasının eşzamanlı düzenlenmesini önler ve işbirliği için "
+"uygundur."
 
 #: templates/help/file_locking.html:24
 msgid "Details about file locking"
-msgstr ""
+msgstr "Dosya kilitleme hakkında detaylar"
 
 #: templates/help/file_locking.html:25
 msgid "There are a few useful tips about how file locking works:"
-msgstr ""
+msgstr "Dosya kilitlemenin nasıl çalıştığına dair birkaç faydalı ipucu:"
 
 #: templates/help/file_locking.html:27
 msgid "A locked file can only be unlocked by the user who locked it."
 msgstr ""
+"Kilitli bir dosya yalnızca onu kilitleyen kullanıcı tarafından açılabilir."
 
 #: templates/help/file_locking.html:28
 msgid ""
@@ -870,16 +1001,22 @@ msgid ""
 "locked file. The purpose of file locking is mainly to prevent concurrent "
 "editing."
 msgstr ""
+"Kilitli bir dosya diğer kullanıcılar tarafından değiştirilemez, taşınamaz, "
+"yeniden adlandırılamaz veya silinemez. Ancak diğer kullanıcılar kilitli bir "
+"dosyanın üst klasörünü taşıyabilir, silebilir veya yeniden adlandırabilir. "
+"Dosya kilitlemenin amacı öncelikle eşzamanlı düzenlemeyi önlemektir."
 
 #: templates/help/file_locking.html:29
 msgid ""
 "When a locked file's parent folder is renamed or moved inside the same "
 "library, it remains locked after the operation."
 msgstr ""
+"Kilitli bir dosyanın üst klasörü aynı kütüphane içinde yeniden "
+"adlandırıldığında veya taşındığında, işlemden sonra kilitli kalır."
 
 #: templates/help/finding_older_version_files.html:6
 msgid "Finding older version of files"
-msgstr ""
+msgstr "Dosyaların eski sürümlerini bulma"
 
 #: templates/help/finding_older_version_files.html:7
 msgid ""
@@ -888,10 +1025,14 @@ msgid ""
 "a configurable period. When you want to access an older version of a file, "
 "the file history feature becomes very handy."
 msgstr ""
+"Seafile tüm dosyaların değişiklik geçmişini takip eder. Bir dosya "
+"değiştirildiğinde yeni bir sürüm oluşturulurken, eski sürüm "
+"yapılandırılabilir bir süre boyunca saklanır. Bir dosyanın eski bir sürümüne"
+" erişmek istediğinizde, dosya geçmişi özelliği çok kullanışlı hale gelir."
 
 #: templates/help/finding_older_version_files.html:8
 msgid "To list all the versions of a file:"
-msgstr ""
+msgstr "Bir dosyanın tüm sürümlerini listelemek için:"
 
 #: templates/help/finding_older_version_files.html:10
 msgid ""
@@ -899,16 +1040,24 @@ msgid ""
 "cursor onto the row of that file. An operation menu will appear. You can "
 "click the \"History\" button in that menu."
 msgstr ""
+"Seafile Web Uygulamasında, dosyayı içeren klasöre gidin. İmleci o dosyanın "
+"satırına getirin. Bir işlem menüsü görünecektir. Bu menüdeki \"Geçmiş\" "
+"düğmesine tıklayabilirsiniz."
 
 #: templates/help/finding_older_version_files.html:11
 msgid ""
 "A list of all versions of that file will be displayed in time order, from "
 "newer to older. The list also contains the file's rename history."
 msgstr ""
+"O dosyanın tüm sürümlerinin bir listesi zaman sırasına göre, yeniden eskiye "
+"doğru görüntülenecektir. Liste ayrıca dosyanın yeniden adlandırma geçmişini "
+"de içerir."
 
 #: templates/help/finding_older_version_files.html:12
 msgid "You can download, restore, view any version of the file."
 msgstr ""
+"Dosyanın herhangi bir sürümünü indirebilir, geri yükleyebilir, "
+"görüntüleyebilirsiniz."
 
 #: templates/help/finding_older_version_files.html:14
 #, python-format
@@ -917,10 +1066,13 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Dosya sürümlerinin saklama süresini yapılandırabilirsiniz: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">geçmiş saklama süresini "
+"ayarlama</a>."
 
 #: templates/help/folder_permission.html:6
 msgid "Use folder permission for fine-grained access control"
-msgstr ""
+msgstr "Ayrıntılı erişim kontrolü için klasör izinlerini kullanma"
 
 #: templates/help/folder_permission.html:8
 #, python-format
@@ -931,6 +1083,10 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing libraries</a>."
 " Here are some use cases:"
 msgstr ""
+"Paylaşılan kütüphaneler veya klasörler için, alt klasörlerine bir kişi veya "
+"grup için izin ayarlayabilirsiniz. Mevcut izinler <a "
+"href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">kütüphaneleri "
+"paylaşma</a> bölümünde açıklananlarla aynıdır. İşte bazı kullanım örnekleri:"
 
 #: templates/help/folder_permission.html:10
 msgid ""
@@ -938,6 +1094,9 @@ msgid ""
 " to allow a specific member of the group to modify files in one sub-folder. "
 "You can grant write permission of this sub-folder to this person."
 msgstr ""
+"Bir kütüphaneyi \"salt okunur\" izniyle bir gruba paylaştınız. Ayrıca grubun"
+" belirli bir üyesinin bir alt klasördeki dosyaları değiştirmesine izin "
+"vermek istiyorsunuz. Bu alt klasörün yazma iznini bu kişiye verebilirsiniz."
 
 #: templates/help/folder_permission.html:11
 msgid ""
@@ -946,6 +1105,10 @@ msgid ""
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
 msgstr ""
+"Bir kütüphaneyi 3 gruba paylaştınız. O kütüphane altında her grup için dosya"
+" yüklemek üzere 3 alt klasör vardır. Ancak kullanıcıların kendi grubuna ait "
+"olmayan dosyaları değiştirmesini istemiyorsunuz. Bir alt klasörün yazma "
+"iznini yalnızca kendi grubuna verebilirsiniz."
 
 #: templates/help/folder_permission.html:13
 msgid ""
@@ -954,17 +1117,23 @@ msgid ""
 "should first share the parent library or folder; otherwise the folder "
 "permission won't take effect."
 msgstr ""
+"Klasör izinleri yalnızca başkalarına paylaştığınız kütüphaneler ve klasörler"
+" için geçerlidir. Alt klasörlerine etkili bir şekilde klasör izinleri "
+"ayarlamak için önce üst kütüphaneyi veya klasörü paylaşmalısınız; aksi "
+"takdirde klasör izni geçerli olmaz."
 
 #: templates/help/folder_permission.html:14
 msgid ""
 "One important design goal of folder permission is to support hierarchical "
 "permissions:"
 msgstr ""
+"Klasör izninin önemli bir tasarım hedefi hiyerarşik izinleri desteklemektir:"
 
 #: templates/help/folder_permission.html:16
 msgid ""
 "Sub-folders automatically inherit folder permissions from its parent folder."
 msgstr ""
+"Alt klasörler, klasör izinlerini otomatik olarak üst klasöründen miras alır."
 
 #: templates/help/folder_permission.html:17
 msgid ""
@@ -974,10 +1143,15 @@ msgid ""
 "\"meeting files/today\" for user A. Then user A's permission to \"meeting "
 "files/today\" is \"read only\"."
 msgstr ""
+"Alt klasörlerde ayarlanan izinler, üst klasöründe ayarlanan izinlerin "
+"üzerine yazar. Örneğin, A kullanıcısı için \"toplantı dosyaları\" klasörüne "
+"\"okuma yazma\" izni ayarladınız ve A kullanıcısı için \"toplantı "
+"dosyaları/bugün\" alt klasörüne \"salt okunur\" izni ayarladınız. O zaman A "
+"kullanıcısının \"toplantı dosyaları/bugün\" izni \"salt okunur\" olur."
 
 #: templates/help/folder_permission.html:19
 msgid "Basic usage"
-msgstr ""
+msgstr "Temel kullanım"
 
 #: templates/help/folder_permission.html:20
 msgid ""
@@ -986,6 +1160,10 @@ msgid ""
 "\"permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions on this folder."
 msgstr ""
+"Yalnızca kütüphanenin sahibi alt klasörleri için klasör izinleri "
+"ayarlayabilir. Dosya tarama arayüzünde, \"daha fazla işlem\" düğmesine "
+"tıklayın, açılır menüde \"izin\" seçeneğini seçin. Açılan pencerede bu "
+"klasördeki klasör izinlerini görebilir ve ayarlayabilirsiniz."
 
 #: templates/help/folder_permission.html:21
 msgid ""
@@ -994,6 +1172,10 @@ msgid ""
 "Permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions in this library."
 msgstr ""
+"Bir kütüphanede ayarlanan tüm klasör izinlerini görmek istiyorsanız, fareyi "
+"kütüphanenin üzerine getirin. \"Daha fazla işlem\" düğmesine tıklayın, "
+"açılır menüde \"Klasör İzni\" seçeneğini seçin. Açılan pencerede bu "
+"kütüphanedeki klasör izinlerini görebilir ve ayarlayabilirsiniz."
 
 #: templates/help/folder_permission.html:22
 msgid ""
@@ -1001,16 +1183,22 @@ msgid ""
 "next to \"read only\" sub-folders. When the user navigate into that sub-"
 "folder, he/she won't be able to add/modify/delete files."
 msgstr ""
+"Diğer kullanıcılar bir klasöre gittiğinde, \"salt okunur\" alt klasörlerin "
+"yanında küçük bir \"göz\" simgesi olacaktır. Kullanıcı o alt klasöre "
+"girdiğinde, dosya ekleyemez/değiştiremez/silemez."
 
 #: templates/help/folder_permission.html:24
 msgid ""
 "If a \"read only\" folder is synced to PC with the Seafile desktop App, "
 "changes under a \"read only\" folder won't be uploaded to the cloud."
 msgstr ""
+"\"Salt okunur\" bir klasör Seafile masaüstü Uygulaması ile PC'ye senkronize "
+"edilirse, \"salt okunur\" bir klasör altındaki değişiklikler buluta "
+"yüklenmez."
 
 #: templates/help/folder_permission.html:25
 msgid "Advanced: priority between different permissions"
-msgstr ""
+msgstr "Gelişmiş: farklı izinler arasında öncelik"
 
 #: templates/help/folder_permission.html:27
 msgid ""
@@ -1020,6 +1208,12 @@ msgid ""
 "library. Then user A only has \"read only\" access to the sub-folder, while "
 "he/she has \"read write\" access to all other sub-folders and files."
 msgstr ""
+"Klasör izinleri, paylaşımda ayarlanan izinden daha yüksek önceliğe sahiptir."
+" Örneğin, bir kütüphaneyi A kullanıcısına \"okuma yazma\" izniyle "
+"paylaştıysanız ve ayrıca o kütüphanenin bir alt klasörüne \"salt okunur\" "
+"izin ayarladıysanız. O zaman A kullanıcısı yalnızca alt klasöre \"salt "
+"okunur\" erişime sahipken, diğer tüm alt klasörlere ve dosyalara \"okuma "
+"yazma\" erişimine sahiptir."
 
 #: templates/help/folder_permission.html:28
 msgid ""
@@ -1028,16 +1222,22 @@ msgid ""
 "if the system matches a permission specific to the user, it'll ignore all "
 "permissions set for the groups the user belongs to."
 msgstr ""
+"Belirli bir kullanıcıya ayarlanan klasör izinleri, bir gruba ayarlanan "
+"izinlerden daha yüksek önceliğe sahiptir. Yani, bir klasör için izin kontrol"
+" edilirken, sistem kullanıcıya özgü bir izinle eşleşirse, kullanıcının ait "
+"olduğu gruplar için ayarlanan tüm izinleri yok sayar."
 
 #: templates/help/folder_permission.html:29
 msgid ""
 "Permissions on sub-folders have higher priority than those on parent "
 "folders."
 msgstr ""
+"Alt klasörlerdeki izinler, üst klasörlerdeki izinlerden daha yüksek önceliğe"
+" sahiptir."
 
 #: templates/help/folder_permission.html:31
 msgid "Here is a more complex example:"
-msgstr ""
+msgstr "İşte daha karmaşık bir örnek:"
 
 #: templates/help/folder_permission.html:32
 msgid ""
@@ -1049,6 +1249,13 @@ msgid ""
 "first matched for folder \"A/B\" and user \"John\", which is inherited from "
 "its parent \"A\"."
 msgstr ""
+"Klasör yapısının \"A/B\" gibi göründüğünü varsayalım, kullanıcı \"John\" "
+"\"Personel\" grubundadır. John için A klasörüne \"salt okunur\" izin "
+"ayarladıysanız ve ayrıca \"Personel\" grubu için \"A/B\" klasörüne \"okuma "
+"yazma\" izni ayarladıysanız. O zaman John'un \"A/B\" klasörüne izni hala "
+"yalnızca \"salt okunur\" olur. Bunun nedeni, kural 2'ye göre, \"salt "
+"okunur\" izninin önce \"A/B\" klasörü ve kullanıcı \"John\" için "
+"eşleşmesidir, ki bu da üst öğesi \"A\"'dan miras alınmıştır."
 
 #: templates/help/full_text_file_search.html:6
 msgid ""
@@ -1056,46 +1263,50 @@ msgid ""
 "as well as the content of certain files, in the Seafile web app. Currently "
 "Seafile can search the contents of the following types of files:"
 msgstr ""
+"Pro Edition Server kullanıyorsanız, Seafile web uygulamasında dosya ve "
+"klasör adlarının yanı sıra belirli dosyaların içeriğini de arayabilirsiniz. "
+"Şu anda Seafile aşağıdaki türdeki dosyaların içeriğini arayabilir:"
 
 #: templates/help/full_text_file_search.html:8
 #: templates/help/viewing_files_within_web_app.html:8
 msgid "Microsoft Office Doc: .doc, .docx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Doc: .doc, .docx (Yalnızca Pro Edition Server)"
 
 #: templates/help/full_text_file_search.html:9
 #: templates/help/viewing_files_within_web_app.html:9
 msgid "Microsoft Office PowerPoint: .ppt, .pptx (Pro Edition Server only)"
 msgstr ""
+"Microsoft Office PowerPoint: .ppt, .pptx (Yalnızca Pro Edition Server)"
 
 #: templates/help/full_text_file_search.html:10
 #: templates/help/viewing_files_within_web_app.html:10
 msgid "Microsoft Office Excel: .xls, .xlsx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Excel: .xls, .xlsx (Yalnızca Pro Edition Server)"
 
 #: templates/help/full_text_file_search.html:11
 #: templates/help/viewing_files_within_web_app.html:11
 msgid "LibreOffice files"
-msgstr ""
+msgstr "LibreOffice dosyaları"
 
 #: templates/help/full_text_file_search.html:12
 #: templates/help/viewing_files_within_web_app.html:12
 msgid "PDF files"
-msgstr ""
+msgstr "PDF dosyaları"
 
 #: templates/help/full_text_file_search.html:13
 #: templates/help/viewing_files_within_web_app.html:14
 msgid "Markdown files: .md"
-msgstr ""
+msgstr "Markdown dosyaları: .md"
 
 #: templates/help/full_text_file_search.html:14
 #: templates/help/viewing_files_within_web_app.html:15
 msgid "Various source code files"
-msgstr ""
+msgstr "Çeşitli kaynak kodu dosyaları"
 
 #: templates/help/full_text_file_search.html:15
 #: templates/help/viewing_files_within_web_app.html:16
 msgid "Text files: .txt, .log"
-msgstr ""
+msgstr "Metin dosyaları: .txt, .log"
 
 #: templates/help/full_text_file_search.html:17
 msgid ""
@@ -1103,34 +1314,45 @@ msgid ""
 "text search feature. In that case, you can only search file and folder "
 "names."
 msgstr ""
+"Seafile sistem yöneticinizin tam metin arama özelliğini etkinleştirmemiş "
+"olabileceğini unutmayın. Bu durumda yalnızca dosya ve klasör adlarını "
+"arayabilirsiniz."
 
 #: templates/help/groups_managing.html:6
 msgid ""
 "Creating a group is a convenient way to share files to many people. In "
 "Seafile, you can create and manage a group easily."
 msgstr ""
+"Bir grup oluşturmak, dosyaları birçok kişiyle paylaşmanın uygun bir yoludur."
+" Seafile'da bir grup oluşturabilir ve kolayca yönetebilirsiniz."
 
 #: templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
-msgstr ""
+msgstr "İşte Seafile'da grupların nasıl çalıştığı:"
 
 #: templates/help/groups_managing.html:9
 msgid ""
 "Each group has a owner. The owner is the creator of the group by default. "
 "He/she can transfer the ownership of the group to another member."
 msgstr ""
+"Her grubun bir sahibi vardır. Sahibi varsayılan olarak grubun "
+"oluşturucusudur. Grubun sahipliğini başka bir üyeye devredebilir."
 
 #: templates/help/groups_managing.html:10
 msgid ""
 "Each group can have multiple admins. The group owner and group admins can "
 "add more group admins."
 msgstr ""
+"Her grubun birden fazla yöneticisi olabilir. Grup sahibi ve grup "
+"yöneticileri daha fazla grup yöneticisi ekleyebilir."
 
 #: templates/help/groups_managing.html:11
 msgid ""
 "The group admin can add/delete members in the group. And he/she can also "
 "unshare a library in the group."
 msgstr ""
+"Grup yöneticisi gruptaki üyeleri ekleyebilir/silebilir. Ayrıca gruptaki bir "
+"kütüphanenin paylaşımını kaldırabilir."
 
 #: templates/help/groups_managing.html:13
 msgid ""
@@ -1138,6 +1360,9 @@ msgid ""
 "all the groups you're in. Clicking into any group, you'll see the libraries "
 "shared into this group."
 msgstr ""
+"Sol paneldeki \"Gruplarla paylaşılan\" sekmesine tıklayın ve içinde "
+"olduğunuz tüm grupları göreceksiniz. Herhangi bir gruba tıkladığınızda, bu "
+"gruba paylaşılan kütüphaneleri göreceksiniz."
 
 #: templates/help/groups_managing.html:14
 msgid ""
@@ -1145,6 +1370,9 @@ msgid ""
 "panel. Then click on \"All Groups\". In the page, you can click the \"New "
 "Group\" button to create a group."
 msgstr ""
+"Yeni bir grup oluşturmak için sol paneldeki \"Gruplarla paylaşılan\" "
+"sekmesine tıklayın. Ardından \"Tüm Gruplar\" seçeneğine tıklayın. Sayfada, "
+"bir grup oluşturmak için \"Yeni Grup\" düğmesine tıklayabilirsiniz."
 
 #: templates/help/groups_managing.html:15
 #, python-format
@@ -1152,6 +1380,9 @@ msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
 "and folders</a> about how to share libraries or folders to a group."
 msgstr ""
+"Kütüphaneleri veya klasörleri bir grupla nasıl paylaşacağınız hakkında <a "
+"href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">dosya ve klasörleri "
+"paylaşma</a> bölümüne bakın."
 
 #: templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
@@ -1165,6 +1396,11 @@ msgid ""
 "should not sync. Each line in a ignore.txt file specifies a pattern. The "
 "following pattern format are supported."
 msgstr ""
+"Bazen bir kütüphane içindeki bazı dosya veya klasörleri senkronize etmek "
+"istemezsiniz. Bunu başarmak için, bir kütüphanenin kök klasöründe bir "
+"seafile-ignore.txt dosyası oluşturun. Bu özel dosya, Seafile'ın senkronize "
+"etmemesi gereken dosya ve klasörleri belirtir. Bir ignore.txt dosyasındaki "
+"her satır bir desen belirtir. Aşağıdaki desen formatları desteklenir."
 
 #: templates/help/ignore.html:10
 msgid "A blank line matches no files."
@@ -1195,6 +1431,10 @@ msgid ""
 "words, \"foo/\" will match a folder \"foo\" and paths underneath it, but "
 "will not match a regular file or a symbolic link \"foo\"."
 msgstr ""
+"Desen bir eğik çizgi ile bitiyorsa, yalnızca bir klasörle eşleşir. Başka bir"
+" deyişle, \"foo/\" bir \"foo\" klasörü ve altındaki yollarla eşleşecektir, "
+"ancak normal bir dosya veya sembolik bir bağlantı \"foo\" ile "
+"eşleşmeyecektir."
 
 #: templates/help/ignore.html:14
 msgid ""
@@ -1257,7 +1497,7 @@ msgstr ""
 
 #: templates/help/install_sync.html:6
 msgid "Installing Seafile client program"
-msgstr ""
+msgstr "Seafile istemci programını yükleme"
 
 #: templates/help/install_sync.html:8
 msgid ""
@@ -1273,7 +1513,7 @@ msgstr "1. Yerel Seafile verisini depolamak için bir disk bölümü seçin"
 
 #: templates/help/install_sync.html:11
 msgid "Selecting a folder to store Seafile data"
-msgstr ""
+msgstr "Seafile verilerini depolamak için bir klasör seçme"
 
 #: templates/help/install_sync.html:13
 msgid "2. Add an account"
@@ -1312,7 +1552,7 @@ msgstr "Yerel bir klasör kullanarak da kütüphane oluşturabilirsiniz."
 
 #: templates/help/install_sync.html:34
 msgid "5. Browse files on the cloud"
-msgstr ""
+msgstr "5. Buluttaki dosyalara göz atma"
 
 #: templates/help/install_sync.html:35
 msgid ""
@@ -1320,12 +1560,18 @@ msgid ""
 "syncing them. Seafile client comes with a \"cloud file browser\" to meet "
 "this need. Click an unsynced library will open the cloud file browser."
 msgstr ""
+"Bazı durumlarda, dosyaları senkronize etmeden doğrudan bulutta değiştirmek "
+"istersiniz. Seafile istemcisi bu ihtiyacı karşılamak için bir \"bulut dosya "
+"tarayıcısı\" ile birlikte gelir. Senkronize edilmemiş bir kütüphaneye "
+"tıklamak bulut dosya tarayıcısını açacaktır."
 
 #: templates/help/introduction.html:8
 msgid ""
 "Seafile is an enterprise file hosting platform with high reliability and "
 "performance."
 msgstr ""
+"Seafile, yüksek güvenilirlik ve performansa sahip bir kurumsal dosya "
+"barındırma platformudur."
 
 #: templates/help/introduction.html:9
 #, python-format
@@ -1336,6 +1582,11 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/using_drive_client\">the drive client</a>. It also "
 "has mobile clients for Android and iOS."
 msgstr ""
+"Seafile, dosyaları yönetmek ve paylaşmak için bir web arayüzü içerir. İki "
+"tür masaüstü istemcisi vardır, <a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">dosya senkronizasyon istemcisi</a> "
+"ve <a href=\"%(SITE_ROOT)shelp/using_drive_client\">sürücü istemcisi</a>. "
+"Ayrıca Android ve iOS için mobil istemcileri vardır."
 
 #: templates/help/introduction.html:10
 msgid ""
@@ -1343,6 +1594,8 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile web "
 "site</a>."
 msgstr ""
+"İstemcileri <a href=\"https://www.seafile.com/en/download/\" "
+"target=\"_blank\">Seafile web sitesinden</a> indirebilirsiniz."
 
 #: templates/help/introduction.html:11
 msgid ""
@@ -1350,6 +1603,9 @@ msgid ""
 "help in our forum: <a href=\"https://forum.seafile.com\" "
 "target=\"_blank\">https://forum.seafile.com</a>."
 msgstr ""
+"Bu kılavuz ihtiyacınız olan bilgiyi içermiyorsa, forumumuzda yardım "
+"arayabilirsiniz: <a href=\"https://forum.seafile.com\" "
+"target=\"_blank\">https://forum.seafile.com</a>."
 
 #: templates/help/libraries_managing.html:6
 msgid ""
@@ -1359,18 +1615,28 @@ msgid ""
 "library works mostly like a top level folder. But it also has some special "
 "properties:"
 msgstr ""
+"Seafile dosyalarınızı düzenlemek için \"kütüphaneler\" kullanır. Bir "
+"kütüphane, bir dizi dosya ve klasör için üst düzey bir kapsayıcıdır. "
+"Üzerinde çalıştığınız her proje için veya Seafile'da kaydetmek istediğiniz "
+"her belge türü için bir kütüphane oluşturabilirsiniz. Bir kütüphane "
+"çoğunlukla bir üst düzey klasör gibi çalışır. Ancak aynı zamanda bazı özel "
+"özelliklere sahiptir:"
 
 #: templates/help/libraries_managing.html:8
 msgid ""
 "Each library keeps its own file modification history. There is no global "
 "file modification history across all libraries."
 msgstr ""
+"Her kütüphane kendi dosya değiştirme geçmişini tutar. Tüm kütüphaneler "
+"arasında küresel bir dosya değiştirme geçmişi yoktur."
 
 #: templates/help/libraries_managing.html:9
 msgid ""
 "Each library can be synced to desktop clients separately. You can choose "
 "which libraries to be synced."
 msgstr ""
+"Her kütüphane ayrı ayrı masaüstü istemcileri ile senkronize edilebilir. "
+"Hangi kütüphanelerin senkronize edileceğini seçebilirsiniz."
 
 #: templates/help/libraries_managing.html:11
 msgid ""
@@ -1379,12 +1645,19 @@ msgid ""
 "can also create more libraries. Here is what it looks like when you've "
 "created a few libraries."
 msgstr ""
+"Seafile'in web uygulamasına ilk kez giriş yaptığınızda, Seafile otomatik "
+"olarak size \"Kütüphanem\" adında varsayılan bir kütüphane oluşturur. Ayrıca"
+" daha fazla kütüphane de oluşturabilirsiniz. İşte birkaç kütüphane "
+"oluşturduğunuzda durum budur."
 
 #: templates/help/libraries_managing.html:13
 msgid ""
 "You can navigate into a library and manage your files and folders. You can "
 "upload, download, rename, move, copy and delete files."
 msgstr ""
+"Bir kütüphaneye gidebilir ve dosyalarınızı ile klasörlerinizi "
+"yönetebilirsiniz. Dosyaları yükleyebilir, indirebilir, yeniden "
+"adlandırabilir, taşıyabilir, kopyalayabilir ve silebilirsiniz."
 
 #: templates/help/libraries_managing.html:15
 #, python-format
@@ -1393,6 +1666,9 @@ msgid ""
 "desktop client</a>, you can do any file operations inside the local library "
 "folder. The operations will be uploaded to the server. "
 msgstr ""
+"Bir kütüphaneyi <a href=\"%(SITE_ROOT)shelp/install_sync/\">masaüstü "
+"istemcisi ile senkronize ettikten sonra</a>, yerel kütüphane klasörü içinde "
+"her türlü dosya işlemi yapabilirsiniz. İşlemler sunucuya yüklenecektir."
 
 #: templates/help/library_history_and_snapshots.html:7
 msgid ""
@@ -1401,6 +1677,10 @@ msgid ""
 "creates a \"snapshot\" of the previous state of the library. The snapshot "
 "contains the complete file and folder structure of the library."
 msgstr ""
+"Seafile tüm kütüphane için değiştirme geçmişini takip eder. Bir dosya işlemi"
+" kütüphane üzerinde uygulandığında (dosya güncelleme, dosya silme vb.), "
+"Seafile kütüphanenin önceki durumunun bir \"anlık görüntüsünü\" oluşturur. "
+"Anlık görüntü kütüphanenin tam dosya ve klasör yapısını içerir."
 
 #: templates/help/library_history_and_snapshots.html:8
 msgid ""
@@ -1411,10 +1691,17 @@ msgid ""
 "files in the library will be restored to that point of time, all at once. It"
 " works like a \"time machine\" for the library."
 msgstr ""
+"Bazı durumlarda kütüphanedeki birçok dosyayı değiştirmiş olursunuz ve tüm bu"
+" değişiklikleri geri almak istediğinizde, çok sayıda dosyayı eski "
+"sürümlerine geri yüklemek zahmetli olabilir. Bu noktada anlık görüntü "
+"özelliği oldukça kullanışlı hale gelir. Tüm kütüphaneyi geçmişte herhangi "
+"bir noktaya geri yükleyebilirsiniz. Kütüphanedeki tüm dosyalar aynı anda o "
+"zamana geri döndürülecektir. Bu, kütüphane için bir \"zaman makinesi\" gibi "
+"çalışır."
 
 #: templates/help/library_history_and_snapshots.html:9
 msgid "To view library history and snapshots:"
-msgstr ""
+msgstr "Kütüphane geçmişini ve anlık görüntülerini görmek için:"
 
 #: templates/help/library_history_and_snapshots.html:11
 msgid ""
@@ -1422,12 +1709,17 @@ msgid ""
 "\"History\" icon in the library navigation top bar. All the change record of"
 " the library will be displayed in a list."
 msgstr ""
+"Seafile Web Uygulamasında, bir kütüphanenin kök klasörüne gidin. Kütüphane "
+"gezinme üst çubuğundaki \"Geçmiş\" simgesine tıklayın. Kütüphanenin tüm "
+"değişiklik kayıtları bir listede görüntülenecektir."
 
 #: templates/help/library_history_and_snapshots.html:12
 msgid ""
 "Click the \"view snapshot\" link on any modification record. You'll see the "
 "library state at the point of time."
 msgstr ""
+"Click the \"view snapshot\" link on any modification record. You'll see the "
+"library state at the point of time."
 
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
@@ -1436,6 +1728,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"You can configure the retention period of library history: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
+"retention period</a>."
 
 #: templates/help/manage_library_as_wiki.html:6
 msgid ""
@@ -1445,6 +1740,11 @@ msgid ""
 "files store textual, tabular as well as graphical information; You can also "
 "add links to other documents in a Markdown file."
 msgstr ""
+"Capturing and storing little structured data in an easy-to-use fashion – "
+"that is what Seafile’s wikis are for. Wiki pages are written in Markdown "
+"(MD), a simple markup language, to ensure cross platform compatibility. MD "
+"files store textual, tabular as well as graphical information; You can also "
+"add links to other documents in a Markdown file."
 
 #: templates/help/manage_library_as_wiki.html:7
 msgid ""
@@ -1453,10 +1753,14 @@ msgid ""
 " Seafile libraries, they can be synced and shared with other users just like"
 " any ordinary library."
 msgstr ""
+"7.0 sürümde tanıtılan \"Sütun Görünümü\" ile Seafile'da standart bir "
+"kütüphaneyi Viki gibi yönetebilirsiniz. Seafile vikileri standart Seafile "
+"kütüphaneleri olarak uyguladığı için diğer kullanıcılarla senkronize "
+"edilebilir ve paylaşılabilirler."
 
 #: templates/help/manage_library_as_wiki.html:8
 msgid "Column view"
-msgstr ""
+msgstr "Sütun görünümü"
 
 #: templates/help/manage_library_as_wiki.html:9
 msgid ""
@@ -1467,10 +1771,17 @@ msgid ""
 "File actions such as renaming, moving, and opening via client are available "
 "in a right-click-accessible context menu."
 msgstr ""
+"Vikiler genellikle Viki sayfalarını hızlı ve kolayca gezinmeye olanak "
+"tanıyan ağaç benzeri klasör yapısı içeren bir kenar çubuğuna sahiptir. "
+"Seafile'ın Sütun Görünümü, bir kütüphanedeki dosyaları Viki alanı gibi "
+"yönetmenizi sağlar. Kullanıcılar içinde gezinebilir ve dosyaları ve "
+"klasörleri yalnızca sürükle bırak yöntemiyle taşıyabilir. Yeniden "
+"adlandırma, taşıma ve istemci yoluyla açma gibi dosya işlemleri sağ tıklama "
+"menüsü aracılığıyla erişilebilir."
 
 #: templates/help/manage_library_as_wiki.html:12
 msgid "WYSIWYG Markdown editor"
-msgstr ""
+msgstr "WYSIWYG Markdown editor"
 
 #: templates/help/manage_library_as_wiki.html:13
 msgid ""
@@ -1486,12 +1797,25 @@ msgid ""
 "table’s content: A table can be copied in its entirety or in part without "
 "leaving the WYSIWYG view."
 msgstr ""
+"Wiki pages in Seafile are saved as ordinary documents in Markdown format. To"
+" create a new Wiki page in a library, just create a new Markdown document. "
+"MD files can be edited straight from Seafile’s web interface with the online"
+" MD editor. The web-based editor offers a smooth user experience and rich "
+"formatting options for text, images, and tables. Images can be imported into"
+" MD files from libraries and local storage as well as by hyperlinks. Basic "
+"image editing functions such as scaling can also be performed in the "
+"editor’s what-you-see-is-what-you-get (WYSIWYG) interface. Tables can be "
+"inserted and modified with just a few clicks. The same thing goes for a "
+"table’s content: A table can be copied in its entirety or in part without "
+"leaving the WYSIWYG view."
 
 #: templates/help/manage_library_as_wiki.html:15
 msgid ""
 "The change history of a Markdown file can be easily accessed by clicking the"
 " \"File History\" button in the menu on top of the editor interface."
 msgstr ""
+"The change history of a Markdown file can be easily accessed by clicking the"
+" \"File History\" button in the menu on top of the editor interface."
 
 #: templates/help/manage_library_as_wiki.html:17
 msgid ""
@@ -1499,10 +1823,13 @@ msgid ""
 "Table of contents, file information, and collaborative commenting are "
 "provided in this side bar."
 msgstr ""
+"Markdown düzenleyicinin sağ tarafında gizli bir kenar çubuğu açabilirsiniz. "
+"İçindekiler tablosu, dosya bilgileri ve işbirliğine dayalı yorumlama bu "
+"kenar çubuğunda sağlanır."
 
 #: templates/help/manage_library_as_wiki.html:19
 msgid "File tagging and related documents"
-msgstr ""
+msgstr "Dosya etiketleme ve ilgili belgeler"
 
 #: templates/help/manage_library_as_wiki.html:20
 msgid ""
@@ -1511,22 +1838,30 @@ msgid ""
 "can be managed from the side bar of the Markdown editor, or from the file "
 "browser interface."
 msgstr ""
+"Dosya etiketleme bilgi yönetim için önemli bir özelliktir. Seafile "
+"kullanıcıların her kütüphane için etiket tanımlamasına ve dosyalara etiket "
+"uygulamasına izin verir. Etiketler Markdown düzenleyicinin kenar çubuğundan "
+"veya dosya tarayıcı arayüzünden yönetilebilir."
 
 #: templates/help/manage_library_as_wiki.html:23
 msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
 msgstr ""
+"Dosya tarayıcı arayüzü mevcut kütüphanedeki tüm dosya etiketlerinin bir "
+"özetini sağlar."
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
 "If you want the be-shared users not be able to modify local copies, you can "
 "consider using the Seafile Drive client."
 msgstr ""
+"Paylaşılan kullanıcıların yerel kopyaları değiştirmesini istemiyorsanız "
+"Seafile Drive istemcisini kullanmayı düşünebilirsiniz."
 
 #: templates/help/restoring_deleted_files.html:6
 msgid "Restoring deleted files and folders"
-msgstr ""
+msgstr "Silinen dosyaların ve klasörlerin geri yüklenmesi"
 
 #: templates/help/restoring_deleted_files.html:7
 msgid ""
@@ -1534,16 +1869,21 @@ msgid ""
 "Sometimes you find files are deleted mistakenly. You can find back your "
 "deleted files in the trash bin of each library."
 msgstr ""
+"Seafile'daki her kütüphane dosya silme işlemlerini otomatik olarak takip "
+"eder. Bazen dosyaların yanlışlıkla silindiğini fark edersiniz. Silinen "
+"dosyalarınızı her kütüphanenin çöp kutusunda bulabilirsiniz."
 
 #: templates/help/restoring_deleted_files.html:8
 msgid "Here is how to use the trash bin feature:"
-msgstr ""
+msgstr "İşte çöp kutusu özelliğinin nasıl kullanılacağı:"
 
 #: templates/help/restoring_deleted_files.html:10
 msgid ""
 "In Seafile Web App, navigate into the parent folder containing the deleted "
 "file or folder."
 msgstr ""
+"Seafile Web Uygulamasında, silinen dosya veya klasörü içeren ana klasöre "
+"gidin."
 
 #: templates/help/restoring_deleted_files.html:11
 msgid ""
@@ -1551,6 +1891,10 @@ msgid ""
 " folders will be listed in deletion time order. In the bottom of the list, "
 "you can click the \"more\" button to load more deleted files."
 msgstr ""
+"Kütüphane işlem çubuğundaki \"çöp kutusu\" simgesine tıklayın. Silinen "
+"dosyalar ve klasörler silinme zamanına göre listelenir. Listenin alt "
+"kısmında daha fazla silinmiş dosya yüklemek için \"daha fazla\" düğmesine "
+"tıklayabilirsiniz."
 
 #: templates/help/restoring_deleted_files.html:12
 msgid ""
@@ -1558,6 +1902,9 @@ msgid ""
 "folder's parent folder has been deleted, it will be restored to the "
 "library's root folder."
 msgstr ""
+"Silinen dosyalar listesinde dosya ve klasörleri geri yükleyebilirsiniz. Bir "
+"dosya veya klasörün ana klasörü silinmişse, kütüphanenin kök klasörüne geri "
+"yüklenecektir."
 
 #: templates/help/restoring_deleted_files.html:13
 msgid ""
@@ -1565,6 +1912,9 @@ msgid ""
 "the current folder. Files deleted in the sub-folders of the current folder "
 "are also included in the list."
 msgstr ""
+"Çöp kutusunun yalnızca mevcut klasörün altındaki silinmiş dosyaları ve alt "
+"klasörleri içerdiğini unutmayın. Mevcut klasörün alt klasörlerinde silinen "
+"dosyalar da listeye dahil edilir."
 
 #: templates/help/restoring_deleted_files.html:15
 #, python-format
@@ -1573,6 +1923,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Silinmiş dosyaların saklama süresini yapılandırabilirsiniz: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">geçmiş saklama süresini "
+"ayarlama</a>."
 
 #: templates/help/selective_sync.html:8
 msgid ""
@@ -2034,6 +2387,14 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/conflicts/\">conflict files</a> if file contents "
 "are different in the local folder and the library. "
 msgstr ""
+"Sometimes you already have a library on the Seafile server (shared by "
+"others, or uploaded from another computer). You can sync this library with "
+"an existing folder on your computer. The local folder must have the same "
+"name as the library. The files in the local folder will be merged with the "
+"files in the library. No file in the local folder or the library will be "
+"overwritten or lost. The merge will produce some <a "
+"href=\"%(SITE_ROOT)shelp/conflicts/\">conflict files</a> if file contents "
+"are different in the local folder and the library. "
 
 #: templates/help/syncing_existing_folders.html:10
 msgid ""
@@ -2069,6 +2430,12 @@ msgid ""
 "<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
 "folder</a> feature."
 msgstr ""
+"When you no longer want to sync a local folder with a library, you can "
+"unsync it. After you unsync a library, changes to the local folder and files"
+" will not be uploaded, and changes in the library will not be downloaded. If"
+" you want to sync the library with the local folder again, you can use the "
+"<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
+"folder</a> feature."
 
 #: templates/help/unsync_resync.html:10
 msgid ""
@@ -2140,6 +2507,8 @@ msgid ""
 "Files and folders in the virtual drive are in either cloud-only, synced, or "
 "in partially synced state."
 msgstr ""
+"Files and folders in the virtual drive are in either cloud-only, synced, or "
+"in partially synced state."
 
 #: templates/help/using_drive_client.html:22
 #: templates/help/using_drive_client.html:51
@@ -2168,6 +2537,11 @@ msgid ""
 "downloaded is only information about the file, such as its name, its size "
 "and the date it was updated."
 msgstr ""
+"Cloud-only content shows in the virtual drive, but doesn’t use the full "
+"amount of space that the file would. In your file explorer, you can see the "
+"file, but the content isn’t fully downloaded until you need it. What "
+"downloaded is only information about the file, such as its name, its size "
+"and the date it was updated."
 
 #: templates/help/using_drive_client.html:34
 msgid "Synced content"

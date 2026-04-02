@@ -12,6 +12,7 @@
 # Gergely Kiss <mail.gery@gmail.com>, 2013
 # Mate Ory <orymate@ubuntu.com>, 2013
 # Mátyás Demeter <mathias.demeter@gmail.com>, 2014
+# Seafile Info <info@seafile.com>, 2026
 # Szabolcs Gyuris <szimszon@oregpreshaz.eu>, 2013-2017
 # Szabolcs Gyuris <szimszon@oregpreshaz.eu>, 2013
 msgid ""
@@ -20,7 +21,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 10:19+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Kelemen Norbert <nkelemen18@nkelemen.hu>, 2018,2022-2023\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Hungarian (http://app.transifex.com/haiwen/seahub/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,7 +31,7 @@ msgstr ""
 
 #: seahub/adfs_auth/utils.py:56
 msgid "ADFS/SAML login relevant settings invalid."
-msgstr ""
+msgstr "Az ADFS/SAML bejelentkezéssel kapcsolatos beállítások érvénytelenek."
 
 #: seahub/adfs_auth/views.py:59 seahub/adfs_auth/views.py:570
 #: seahub/adfs_auth/views.py:599 seahub/adfs_auth/views.py:639
@@ -39,62 +40,62 @@ msgstr ""
 #: seahub/adfs_auth/views.py:735 seahub/adfs_auth/views.py:739
 #: seahub/adfs_auth/views.py:807 seahub/adfs_auth/views.py:811
 msgid "Internal server error. Please contact system administrator."
-msgstr ""
+msgstr "Belső szerverhiba. Kérjük, forduljon a rendszergazdához."
 
 #: seahub/adfs_auth/views.py:60
 msgid ""
 "Login failed: Bad response from ADFS/SAML service. Please report to your "
 "organization (company) administrator."
-msgstr ""
+msgstr "Bejelentkezés sikertelen: Hibás válasz az ADFS/SAML szolgáltatástól. Kérjük, jelentse a szervezeti (vállalati) adminisztrátorának."
 
 #: seahub/adfs_auth/views.py:126 seahub/adfs_auth/views.py:142
 #: seahub/api2/endpoints/admin/users.py:794
 #: seahub/api2/endpoints/admin/users.py:1280 seahub/base/accounts.py:1242
 #: seahub/forms.py:30 seahub/institutions/api_views.py:202
 msgid "The number of users exceeds the limit."
-msgstr "A felhasználószám túllépi a maximumot."
+msgstr "A felhasználók száma meghaladja a korlátot."
 
 #: seahub/adfs_auth/views.py:224 seahub/adfs_auth/views.py:429
 msgid "Failed to bind SAML, please login first."
-msgstr ""
+msgstr "SAML-összekapcsolás sikertelen, kérjük, először jelentkezzen be."
 
 #: seahub/adfs_auth/views.py:274
 #, python-format
 msgid ""
 "Login failed: The email %s is not consistent with the email %s from "
 "ADFS/SAML service"
-msgstr ""
+msgstr "Bejelentkezés sikertelen: A(z) %s e-mail cím nem egyezik az ADFS/SAML szolgáltatástól érkező %s e-mail címmel"
 
 #: seahub/adfs_auth/views.py:307
 #| msgid "User %s not found."
 msgid "User not found in Team."
-msgstr ""
+msgstr "A felhasználó nem található a csapatban."
 
 #: seahub/adfs_auth/views.py:342 seahub/adfs_auth/views.py:539
 msgid ""
 "Login failed: user is deactivated. Please report to your organization "
 "(company) administrator."
-msgstr ""
+msgstr "Bejelentkezés sikertelen: a felhasználó inaktiválva van. Kérjük, jelentse a szervezeti (vállalati) adminisztrátorának."
 
 #: seahub/adfs_auth/views.py:595 seahub/adfs_auth/views.py:655
 #: seahub/adfs_auth/views.py:706
 msgid ""
 "Login failed: ADFS/SAML service error. Please report to your organization "
 "(company) administrator."
-msgstr ""
+msgstr "Bejelentkezés sikertelen: ADFS/SAML szolgáltatási hiba. Kérjük, jelentse a szervezeti (vállalati) adminisztrátorának."
 
 #: seahub/adfs_auth/views.py:743
 msgid "Failed to unbind SAML, please set a password first."
-msgstr ""
+msgstr "SAML-szétválasztás sikertelen, kérjük, először állítson be egy jelszót."
 
 #: seahub/adfs_auth/views.py:746
 #| msgid "Failed to bind SAML, please login first."
 msgid "Failed to unbind SAML, the user is forced login by SSO."
-msgstr ""
+msgstr "SAML-szétválasztás sikertelen, a felhasználó számára az SSO-bejelentkezés kötelező."
 
 #: seahub/adfs_auth/views.py:751
 msgid "Failed to unbind SAML, please set a contact email first."
-msgstr ""
+msgstr "SAML-szétválasztás sikertelen, kérjük, először állítson be egy kapcsolattartási e-mailt."
 
 #: seahub/api2/endpoints/admin/account.py:204
 #: seahub/api2/endpoints/user.py:101 seahub/api2/views.py:380
@@ -143,7 +144,7 @@ msgstr "Csak 0 vagy nagyobb egész lehet."
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
 "brackets or underscore."
-msgstr ""
+msgstr "A név csak betűket, számokat, szóközöket, kötőjelet, pontot, szimpla idézőjelet, zárójeleket vagy aláhúzást tartalmazhat."
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:87
 #: seahub/api2/endpoints/admin/groups.py:142
@@ -184,33 +185,33 @@ msgstr "%shozzáadása sikertelen az intézményhez: a felhasználó már egy in
 msgid ""
 "Failed to add %s to the institution: user already belongs to this "
 "institution"
-msgstr ""
+msgstr "Nem sikerült %s hozzáadása az intézményhez: a felhasználó már tagja ennek az intézménynek"
 
 #: seahub/api2/endpoints/admin/libraries.py:268 seahub/views/sysadmin.py:712
 msgid "System library can not be deleted."
-msgstr "A rendszer kötetet nem lehet törölni."
+msgstr "A rendszerkötetet nem lehet törölni."
 
 #: seahub/api2/endpoints/admin/libraries.py:390 seahub/api2/views.py:1934
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
-msgstr ""
+msgstr "Átadás sikertelen: %s szerepköre %s, nem adható hozzá kötet."
 
 #: seahub/api2/endpoints/admin/libraries.py:416 seahub/api2/views.py:1939
 msgid "Library can not be transferred to owner."
-msgstr ""
+msgstr "Kötet nem adható át a tulajdonosának."
 
 #: seahub/api2/endpoints/admin/organizations.py:431
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Your team {org.org_name} has been deactivated"
-msgstr ""
+msgstr "A(z) {org.org_name} csapata inaktiválva lett"
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:155
 #: seahub/api2/endpoints/share_links.py:593
 #: seahub/api2/endpoints/share_links.py:812
 msgid "There is an associated published library."
-msgstr ""
+msgstr "Létezik egy kapcsolódó közzétett kötet."
 
 #: seahub/api2/endpoints/admin/shares.py:185
 #, python-format
@@ -345,12 +346,12 @@ msgstr "Tárhely kvóta"
 #: seahub/api2/endpoints/admin/users.py:692
 #: seahub/organizations/api/admin/users.py:155
 msgid "There are more than 500 users, and sort is not offered."
-msgstr ""
+msgstr "Több mint 500 felhasználó van, a rendezés nem érhető el."
 
 #: seahub/api2/endpoints/admin/users.py:893
 #, python-format
 msgid "Successfully added user %(user)s."
-msgstr ""
+msgstr "%(user)s felhasználó sikeresen hozzáadva."
 
 #: seahub/api2/endpoints/admin/users.py:897
 #: seahub/api2/endpoints/admin/users_batch.py:390 seahub/views/sysadmin.py:552
@@ -361,14 +362,14 @@ msgstr "Önt meghívták ide: %s"
 #: seahub/api2/endpoints/admin/users.py:901
 #, python-format
 msgid "Successfully added user %(user)s. An email notification has been sent."
-msgstr ""
+msgstr "%(user)s felhasználó sikeresen hozzáadva. Az e-mail értesítést elküldtük."
 
 #: seahub/api2/endpoints/admin/users.py:904
 #, python-format
 msgid ""
 "Successfully added user %(user)s. But email notification can not be sent, "
 "because Email service is not properly configured."
-msgstr ""
+msgstr "%(user)s felhasználó sikeresen hozzáadva. Az e-mail értesítést azonban nem sikerült elküldeni, mert az e-mail szolgáltatás nincs megfelelően konfigurálva."
 
 #: seahub/api2/endpoints/admin/users.py:1416
 msgid "Edit succeeded"
@@ -392,29 +393,29 @@ msgstr "Szerkesztés sikeres de az e-mail küldés sikertelen. Ellenőrizze a le
 #: seahub/api2/endpoints/admin/users.py:1495 seahub/auth/forms.py:167
 #: seahub/auth/views.py:365
 msgid "Unable to reset password."
-msgstr ""
+msgstr "A jelszó alaphelyzetbe állítása nem lehetséges."
 
 #: seahub/api2/endpoints/admin/users.py:1513 seahub/auth/forms.py:195
 #: seahub/organizations/api/admin/user_set_password.py:74
 #, python-format
 msgid "Reset Password on %s"
-msgstr "Jelszó átállítása: %s"
+msgstr "Jelszó alaphelyzetbe állítása itt: %s"
 
 #: seahub/api2/endpoints/admin/users.py:1517
 #: seahub/organizations/api/admin/user_set_password.py:78
 #, python-brace-format
 msgid "A password reset link has been sent to {contact_email}."
-msgstr ""
+msgstr "A jelszó-visszaállító linket elküldtük a(z) {contact_email} címre."
 
 #: seahub/api2/endpoints/admin/users.py:1535 seahub/views/sysadmin.py:494
 #, python-format
 msgid "Password has been reset on %s"
-msgstr "Megváltozott jelszó itt: %s"
+msgstr "A jelszó alaphelyzetbe lett állítva itt: %s"
 
 #: seahub/api2/endpoints/admin/users.py:1537
 #, python-format
 msgid "Successfully reset password, an email has been sent to %(user)s."
-msgstr ""
+msgstr "A jelszó sikeresen alaphelyzetbe állítva, az e-mailt elküldtük a következőnek: %(user)s."
 
 #: seahub/api2/endpoints/admin/users.py:1541 seahub/views/sysadmin.py:524
 #, python-format
@@ -444,7 +445,7 @@ msgstr "Csak 0 vagy nagyobb egész lehet."
 
 #: seahub/api2/endpoints/admin/virus_scan_records.py:201
 msgid "Virus file is not found."
-msgstr ""
+msgstr "A vírusos fájl nem található."
 
 #: seahub/api2/endpoints/admin/virus_scan_records.py:219
 #: seahub/api2/endpoints/admin/virus_scan_records.py:234
@@ -503,7 +504,7 @@ msgstr "Kvóta túllépés."
 #: seahub/api2/endpoints/copy_move_task.py:164
 #, python-format
 msgid "Can not move folder %(src)s to its subfolder %(des)s"
-msgstr ""
+msgstr "Nem lehet a(z) %(src)s mappát a saját almappájába (%(des)s) mozgatni."
 
 #: seahub/api2/endpoints/copy_move_task.py:180
 #: seahub/api2/endpoints/file.py:322 seahub/api2/endpoints/file.py:402
@@ -535,7 +536,7 @@ msgstr "%s felhasználó nem található."
 #: seahub/api2/endpoints/wiki2.py:601 seahub/api2/endpoints/wikis.py:135
 #: seahub/api2/views.py:2075 seahub/seadoc/apis.py:3155
 msgid "The number of files in library exceeds the limit"
-msgstr ""
+msgstr "A kötetben lévő fájlok száma meghaladja a korlátot"
 
 #: seahub/api2/endpoints/file.py:310
 #: seahub/api2/endpoints/file_participants.py:113
@@ -559,7 +560,7 @@ msgstr "Jogosultság megtagadva"
 
 #: seahub/api2/endpoints/file.py:333
 msgid "File extension is not in the whitelist"
-msgstr ""
+msgstr "A fájlkiterjesztés nem szerepel a fehérlistán"
 
 #: seahub/api2/endpoints/file.py:756 seahub/api2/endpoints/file.py:776
 #: seahub/api2/endpoints/via_repo_token.py:1170
@@ -572,7 +573,7 @@ msgstr "Nem újíthatja meg a fájl zárolását."
 
 #: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2784
 msgid "The participant already exists."
-msgstr ""
+msgstr "A résztvevő már létezik."
 
 #: seahub/api2/endpoints/file_tag.py:256 seahub/api2/endpoints/file_tag.py:280
 #: seahub/api2/endpoints/file_tag.py:300
@@ -603,17 +604,17 @@ msgstr "%s felhasználó nem található a jelenlegi szervezetben."
 #: seahub/api2/endpoints/group_members.py:533
 #, python-format
 msgid "User %s is an organization user."
-msgstr ""
+msgstr "%s felhasználó szervezeti felhasználó."
 
 #: seahub/api2/endpoints/group_members.py:437 seahub/group/error_msg.py:17
 #: seahub/group/error_msg.py:23 seahub/views/file.py:553
 msgid "Group does not exist"
-msgstr "Nem létezik a csoport"
+msgstr "A csoport nem létezik"
 
 #: seahub/api2/endpoints/group_members.py:576
 #| msgid "Email or Username"
 msgid "Email or LoginID"
-msgstr ""
+msgstr "E-mail vagy bejelentkezési azonosító"
 
 #: seahub/api2/endpoints/group_members.py:587 seahub/views/sysadmin.py:167
 #: seahub/views/sysadmin.py:275 seahub/views/sysadmin.py:653
@@ -629,7 +630,7 @@ msgstr "A jogosultság már létezéik."
 #: seahub/api2/endpoints/invitation.py:110
 #, python-format
 msgid "%(user)s revoked your access to %(site_name)s."
-msgstr ""
+msgstr "%(user)s visszavonta a hozzáférését a(z) %(site_name)s oldalához."
 
 #: seahub/api2/endpoints/invitations.py:55
 #: seahub/api2/endpoints/invitations.py:119
@@ -691,7 +692,7 @@ msgstr "A jelszó túl gyenge"
 msgid ""
 "Password can only contain number, upper letter, lower letter and other "
 "symbols."
-msgstr ""
+msgstr "A jelszó csak számot, nagybetűt, kisbetűt és egyéb szimbólumokat tartalmazhat."
 
 #: seahub/api2/endpoints/multi_share_links.py:141
 #: seahub/api2/endpoints/multi_share_links.py:376
@@ -721,7 +722,7 @@ msgstr "A lejárati napok száma legfeljebb %s"
 #: seahub/api2/endpoints/upload_links.py:421
 #, python-format
 msgid "Expiration time should be later than %s."
-msgstr ""
+msgstr "A lejárati időnek későbbinek kell lennie, mint %s."
 
 #: seahub/api2/endpoints/multi_share_links.py:175
 #: seahub/api2/endpoints/multi_share_links.py:413
@@ -731,7 +732,7 @@ msgstr ""
 #: seahub/api2/endpoints/upload_links.py:430
 #, python-format
 msgid "Expiration time should be earlier than %s."
-msgstr ""
+msgstr "A lejárati időnek korábbinak kell lennie, mint %s."
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
 #: seahub/seadoc/apis.py:688
@@ -742,7 +743,7 @@ msgstr "Hiba"
 
 #: seahub/api2/endpoints/repo_commit_revert.py:66
 msgid "This library has not been decrypted."
-msgstr ""
+msgstr "Ez a kötet még nem lett feloldva."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:45
 #: seahub/api2/endpoints/user.py:90 seahub/api2/endpoints/user.py:97
@@ -779,18 +780,18 @@ msgstr "Hibás régi jelszó"
 #: seahub/api2/endpoints/repos_batch.py:1730
 #, python-format
 msgid "File %s is locked."
-msgstr ""
+msgstr "%s fájl zárolva van."
 
 #: seahub/api2/endpoints/repos_batch.py:1308
 #: seahub/api2/endpoints/repos_batch.py:1567
 #, python-format
 msgid "Can't move folder %s, please check its permission."
-msgstr ""
+msgstr "Nem sikerült a(z) %s mappa mozgatása, kérjük, ellenőrizze a jogosultságokat."
 
 #: seahub/api2/endpoints/repos_batch.py:1657
 #, python-format
 msgid "Can't delete folder %s, please check its permission."
-msgstr ""
+msgstr "Nem sikerült a(z) %s mappa törlése, kérjük, ellenőrizze a jogosultságokat."
 
 #: seahub/api2/endpoints/send_share_link_email.py:97
 #: seahub/notifications/models.py:965
@@ -805,42 +806,42 @@ msgstr "Fájlt osztottak meg Önnel itt: %s"
 #: seahub/api2/endpoints/send_share_link_email.py:100
 #: seahub/notifications/models.py:965
 msgid "folder"
-msgstr ""
+msgstr "mappa"
 
 #: seahub/api2/endpoints/send_share_link_email.py:101
 #, python-format
 msgid "A folder is shared to you on %s"
-msgstr ""
+msgstr "Egy mappát osztottak meg Önnel itt: %s"
 
 #: seahub/api2/endpoints/send_upload_link_email.py:74
 msgid "email invalid."
-msgstr ""
+msgstr "e-mail érvénytelen."
 
 #: seahub/api2/endpoints/send_upload_link_email.py:92
 #, python-format
 msgid "An upload link is shared to you on %s"
-msgstr "Feltöltési linket osztottak meg Önnel itt: %s"
+msgstr "Egy feltöltési linket osztottak meg Önnel itt: %s"
 
 #: seahub/api2/endpoints/share_link_auth.py:147
 #, python-format
 msgid "User %s does not exist."
-msgstr ""
+msgstr "%s felhasználó nem létezik."
 
 #: seahub/api2/endpoints/share_link_auth.py:310
 #, python-format
 msgid "Email %s already exists."
-msgstr ""
+msgstr "A(z) %s e-mail cím már létezik."
 
 #: seahub/api2/endpoints/share_link_auth.py:316
 #, python-format
 msgid "Email %s is invalid."
-msgstr ""
+msgstr "A(z) %s e-mail cím érvénytelen."
 
 #: seahub/api2/endpoints/share_links.py:498
 #: seahub/api2/endpoints/share_links.py:507
 #, python-format
 msgid "Share link %s already exists."
-msgstr ""
+msgstr "A(z) %s megosztási link már létezik."
 
 #: seahub/api2/endpoints/subscription.py:32
 #: seahub/api2/endpoints/subscription.py:68
@@ -855,16 +856,16 @@ msgstr ""
 #: seahub/work_weixin/views.py:152 seahub/work_weixin/views.py:172
 #: seahub/work_weixin/views.py:233
 msgid "Feature is not enabled."
-msgstr ""
+msgstr "A funkció nincs engedélyezve."
 
 #: seahub/api2/endpoints/user.py:119
 #, python-format
 msgid "Contact email %s already exists."
-msgstr ""
+msgstr "A(z) %s kapcsolattartási e-mail már létezik."
 
 #: seahub/api2/endpoints/user.py:133
 msgid "telephone is too long (maximum is 100 characters)."
-msgstr ""
+msgstr "a telefonszám túl hosszú (maximum 100 karakter)."
 
 #: seahub/api2/endpoints/user_avatar.py:41
 #: seahub/organizations/api/admin/logo.py:56 seahub/utils/error_msg.py:8
@@ -892,24 +893,24 @@ msgstr "Már van %(nb_avatars)d avatarja, a maximális engedélyezett szám %(nb
 #: seahub/api2/endpoints/webdav_secret.py:56
 #| msgid "Length of WebDav password should be less than 30."
 msgid "Length of WebDAV password should be less than 30."
-msgstr ""
+msgstr "A WebDAV jelszó hossza nem haladhatja meg a 30 karaktert."
 
 #: seahub/api2/endpoints/wiki2.py:220 seahub/api2/endpoints/wiki2.py:1485
 #: seahub/api2/endpoints/wikis.py:219
 msgid "Name can only contain letters, numbers, blank, hyphen or underscore."
-msgstr "A név kizárólag betűket, számokat szóközt,  kötőjelet vagy aláhúzást tartalmazhat."
+msgstr "A név csak betűket, számokat, szóközt, kötőjelet vagy aláhúzást tartalmazhat."
 
 #: seahub/api2/endpoints/wiki2.py:1335
 msgid "URL is invalid"
-msgstr ""
+msgstr "Az URL érvénytelen"
 
 #: seahub/api2/endpoints/wiki2.py:1339
 msgid "The custom part of URL should have 5-30 characters."
-msgstr ""
+msgstr "Az URL egyéni részének 5-30 karakterből kell állnia."
 
 #: seahub/api2/endpoints/wiki2.py:1361
 msgid "This custom domain is already in use and cannot be used for your wiki"
-msgstr ""
+msgstr "Ez az egyéni domain már használatban van, és nem használható a wikihez"
 
 #: seahub/api2/endpoints/wikis.py:122 seahub/api2/endpoints/wikis.py:226
 #, python-format
@@ -926,12 +927,12 @@ msgstr "Név kötelező."
 
 #: seahub/api2/utils.py:338
 msgid "A share link for you"
-msgstr ""
+msgstr "Egy megosztási link az Ön számára"
 
 #: seahub/api2/views.py:1925
 #| msgid "Permission error: only group staff can add member"
 msgid "Permission error: you are not the admin of the department"
-msgstr ""
+msgstr "Jogosultsági hiba: Ön nem a részleg adminisztrátora"
 
 #: seahub/auth/decorators.py:73
 msgid "Please log in."
@@ -976,7 +977,7 @@ msgstr "Ehhez az e-mail címhez nem tartozik fiók. Biztosan regisztrált már?"
 #: seahub/auth/forms.py:119 seahub/auth/forms.py:120
 #: seahub/templates/registration/login.html:76
 msgid "Please use Single Sign-On to login."
-msgstr ""
+msgstr "Kérjük, használja az egyszeri bejelentkezést (SSO) a belépéshez."
 
 #: seahub/auth/forms.py:125
 msgid ""
@@ -1037,12 +1038,12 @@ msgstr "Az e-mail küldése sikertelen. Vegye fel a kapcsolatot a rendszergazdá
 
 #: seahub/auth/views.py:454
 msgid "Unable to change password."
-msgstr ""
+msgstr "A jelszó módosítása nem lehetséges."
 
 #: seahub/auth/views.py:537
 #, python-brace-format
 msgid "Team {domain} does not have permission to use ADFS/SAML SSO."
-msgstr ""
+msgstr "A(z) {domain} csapatnak nincs jogosultsága az ADFS/SAML SSO használatára."
 
 #: seahub/avatar/models.py:144 seahub/avatar/models.py:172
 #, python-format
@@ -1109,13 +1110,13 @@ msgstr "Ebben a kötetben a fájlok nem nézhetők meg online."
 #: seahub/base/management/commands/check_user_quota.py:58
 #, python-format
 msgid "Your quota is almost full on %s"
-msgstr ""
+msgstr "A kvótája majdnem megtelt itt: %s"
 
 #: seahub/base/management/commands/check_user_quota.py:82
 #, python-format
 #| msgid "Your quota is almost full on %s"
 msgid "The team quota is almost full on %s"
-msgstr ""
+msgstr "A csapat kvótája majdnem megtelt itt: %s"
 
 #: seahub/base/management/commands/createsuperuser.py:26
 msgid "Enter a valid e-mail address."
@@ -1232,12 +1233,12 @@ msgstr "Alapértelmezett"
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Team {org_name} is inactive."
-msgstr ""
+msgstr "A(z) {org_name} csapat inaktív."
 
 #: seahub/base/middleware.py:76
 #, python-brace-format
 msgid "Please contact {SUPPORT_EMAIL} if you want to activate the team."
-msgstr ""
+msgstr "Kérjük, lépjen kapcsolatba a(z) {SUPPORT_EMAIL} címmel, ha aktiválni szeretné a csapatot."
 
 #: seahub/base/templatetags/seahub_tags.py:141
 msgid "Added"
@@ -1261,11 +1262,11 @@ msgstr "Áthelyezve"
 
 #: seahub/base/templatetags/seahub_tags.py:147
 msgid "Added folder"
-msgstr ""
+msgstr "Hozzáadott mappa"
 
 #: seahub/base/templatetags/seahub_tags.py:148
 msgid "Removed folder"
-msgstr ""
+msgstr "Eltávolított mappa"
 
 #: seahub/base/templatetags/seahub_tags.py:149
 #: seahub/notifications/management/commands/send_file_updates.py:172
@@ -1295,7 +1296,7 @@ msgstr "„%(file)s” fájl visszaállítva erre az állapotra: %(time)s."
 #: seahub/base/templatetags/seahub_tags.py:173
 #: seahub/base/templatetags/seahub_tags.py:244
 msgid "Recovered deleted folder"
-msgstr ""
+msgstr "Visszaállított törölt mappa"
 
 #: seahub/base/templatetags/seahub_tags.py:175
 #: seahub/base/templatetags/seahub_tags.py:246 seahub/views/ajax.py:457
@@ -1416,7 +1417,7 @@ msgstr "Hiba, vegye fel a kapcsolatot az adminisztrátorral."
 #: seahub/weixin/views.py:111
 #, python-format
 msgid "User %s not found or inactive."
-msgstr ""
+msgstr "%s felhasználó nem található vagy inaktív."
 
 #: seahub/forms.py:59
 msgid "The two passwords didn't match."
@@ -1585,11 +1586,11 @@ msgstr "Önt meghívták a(z) %s csoportba"
 #: seahub/group/views.py:192
 #| msgid "Group does not exist"
 msgid "Group invite link does not exist"
-msgstr ""
+msgstr "A csoportos meghívó link nem létezik"
 
 #: seahub/group/views.py:200
 msgid "Group invite link broken"
-msgstr ""
+msgstr "A csoportos meghívó link hibás"
 
 #: seahub/institutions/views.py:185
 msgid "Owner"
@@ -1605,22 +1606,22 @@ msgstr "A felhasználó nem létezik, nem lehet törölni"
 
 #: seahub/institutions/views.py:226
 msgid "Failed to delete: the user is system administrator"
-msgstr ""
+msgstr "Törlés sikertelen: a felhasználó rendszergazda"
 
 #: seahub/institutions/views.py:230 seahub/views/sysadmin.py:361
 #, python-format
 msgid "Successfully deleted %s"
-msgstr "%s törlése sikeres"
+msgstr "%s sikeresen törölve"
 
 #: seahub/invitations/models.py:96
 #, python-format
 msgid "You are invited to join %(site_name)s."
-msgstr ""
+msgstr "Meghívást kapott a(z) %(site_name)s oldalához való csatlakozásra."
 
 #: seahub/invitations/models.py:99
 #, python-brace-format
 msgid "You are invited to join team {org_name}."
-msgstr ""
+msgstr "Meghívást kapott a(z) {org_name} csapathoz való csatlakozásra."
 
 #: seahub/invitations/templates/invitations/invitation_email.html:9
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:9
@@ -1644,25 +1645,25 @@ msgstr ""
 #: seahub/templates/team_quota_full.html:9
 #: seahub/templates/user_quota_full.html:9
 msgid "Hi,"
-msgstr "Üdvözlöm "
+msgstr "Üdvözöljük,"
 
 #: seahub/invitations/templates/invitations/invitation_email.html:13
 #, python-format
 msgid ""
 "You are invited to join team %(org_name)s. Please click the link below:"
-msgstr ""
+msgstr "Meghívást kapott a(z) %(org_name)s csapathoz való csatlakozásra. Kérjük, kattintson az alábbi linkre:"
 
 #: seahub/invitations/templates/invitations/invitation_email.html:15
 #, python-format
 msgid ""
 "%(inviter_name)s invited you to join %(site_name)s. Please click the link "
 "below:"
-msgstr ""
+msgstr "%(inviter_name)s meghívta Önt a(z) %(site_name)s oldalához való csatlakozásra. Kérjük, kattintson az alábbi linkre:"
 
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:12
 #, python-format
 msgid "%(inviter)s revoked your access to %(site_name)s."
-msgstr ""
+msgstr "%(inviter)s visszavonta a hozzáférését a(z) %(site_name)s oldalához."
 
 #: seahub/invitations/templates/invitations/token_view.html:4
 msgid "Create Account"
@@ -1727,7 +1728,7 @@ msgstr "Az összes elem eltávolítva a kukából."
 #: seahub/notifications/management/commands/send_file_updates.py:127
 #, python-format
 msgid "Removed items older than %s days from trash."
-msgstr ""
+msgstr "A(z) %s napnál régebbi elemek eltávolítva a kukából."
 
 #: seahub/notifications/management/commands/send_file_updates.py:135
 msgid "Created file"
@@ -1778,7 +1779,7 @@ msgstr "Új üzenet itt: %s"
 #: seahub/notifications/management/commands/send_notices_to_social_account.py:252
 #, python-format
 msgid "You've got %(num)s new notices on %(site_name)s:\n"
-msgstr ""
+msgstr "%(num)s új értesítése érkezett a(z) %(site_name)s oldalon:\n"
 
 #: seahub/notifications/models.py:612
 #, python-format
@@ -1790,19 +1791,19 @@ msgstr "<a href='%(file_link)s'>%(file_name)s</a> feltöltve ide: <a href='%(lin
 #: seahub/notifications/models.py:619
 #, python-format
 msgid "A file named <strong>%(file_name)s</strong> is uploaded"
-msgstr ""
+msgstr "Egy <strong>%(file_name)s</strong> nevű fájl feltöltve"
 
 #: seahub/notifications/models.py:654
 #, python-format
 msgid ""
 "A folder named <a href='%(folder_link)s'>%(folder_name)s</a> is uploaded to "
 "<a href='%(link)s'>%(name)s</a>"
-msgstr ""
+msgstr "Egy <a href='%(folder_link)s'>%(folder_name)s</a> nevű mappa feltöltve ide: <a href='%(link)s'>%(name)s</a>"
 
 #: seahub/notifications/models.py:661
 #, python-format
 msgid "A folder named <strong>%(folder_name)s</strong> is uploaded"
-msgstr ""
+msgstr "Egy <strong>%(folder_name)s</strong> nevű mappa feltöltve"
 
 #: seahub/notifications/models.py:795
 #, python-format
@@ -1831,14 +1832,14 @@ msgstr "A <a href='%(file_url)s'>%(file_name)s</a> fájlhoz új megjegyzést fű
 msgid ""
 "<a href='%(file_url)s'>Draft #%(draft_id)s</a> has a new comment from user "
 "%(author)s"
-msgstr ""
+msgstr "A(z) <a href='%(file_url)s'>#%(draft_id)s piszkozat</a> új megjegyzést kapott %(author)s felhasználótól"
 
 #: seahub/notifications/models.py:884
 #, python-format
 msgid ""
 "%(from_user)s has sent you a request for <a href='%(file_url)s'>draft "
 "#%(draft_id)s</a>"
-msgstr ""
+msgstr "%(from_user)s kérelmet küldött Önnek a(z) <a href='%(file_url)s'>#%(draft_id)s piszkozattal</a> kapcsolatban"
 
 #: seahub/notifications/models.py:907
 #: seahub/notifications/templates/notifications/notice_email.html:66
@@ -1846,7 +1847,7 @@ msgstr ""
 msgid ""
 "Guest %(user)s accepted your <a "
 "href=\"%(url_base)s%(inv_url)s\">invitation</a> at %(time)s."
-msgstr "%(user)sElfogadta a <a href=\"%(url_base)s%(inv_url)s\">meghívását</a> a következő időpontban: %(time)s"
+msgstr "%(user)s vendég elfogadta a <a href=\"%(url_base)s%(inv_url)s\">meghívását</a> ekkor: %(time)s."
 
 #: seahub/notifications/models.py:931
 #, python-format
@@ -1856,70 +1857,70 @@ msgstr "%(user)sElfogadta a <a href=\"%(url_base)s%(inv_url)s\">meghívását</a
 msgid ""
 "%(user)s has transferred a library named <a "
 "href=\"%(repo_url)s\">%(repo_name)s</a> to you."
-msgstr ""
+msgstr "%(user)s átadott Önnek egy <a href=\"%(repo_url)s\">%(repo_name)s</a> nevű kötetet."
 
 #: seahub/notifications/models.py:1004
 #, python-brace-format
 msgid "{name} created {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} létrehozta a(z) {obj_link} {obj_type}-t a(z) {repo_link} kötetben."
 
 #: seahub/notifications/models.py:1006
 #, python-brace-format
 msgid ""
 "{name} created {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr ""
+msgstr "{name} létrehozta a(z) {obj_link} {obj_type}-t és {obj_path_count_minus_one} egyéb {obj_type}-t a(z) {repo_link} kötetben."
 
 #: seahub/notifications/models.py:1011
 #, python-brace-format
 msgid "{name} deleted {obj_type} {obj_name} in library {repo_link}."
-msgstr ""
+msgstr "{name} törölte a(z) {obj_name} {obj_type}-t a(z) {repo_link} kötetben."
 
 #: seahub/notifications/models.py:1013
 #, python-brace-format
 msgid ""
 "{name} deleted {obj_type} {obj_name} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr ""
+msgstr "{name} törölte a(z) {obj_name} {obj_type}-t és {obj_path_count_minus_one} egyéb {obj_type}-t a(z) {repo_link} kötetben."
 
 #: seahub/notifications/models.py:1017
 #, python-brace-format
 msgid "{name} restored {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} visszaállította a(z) {obj_link} {obj_type}-t a(z) {repo_link} kötetben."
 
 #: seahub/notifications/models.py:1021
 #, python-brace-format
 msgid ""
 "{name} renamed {obj_type} {old_obj_name} to {obj_link} in library "
 "{repo_link}."
-msgstr ""
+msgstr "{name} átnevezte a(z) {old_obj_name} {obj_type}-t a következőre: {obj_link} a(z) {repo_link} kötetben."
 
 #: seahub/notifications/models.py:1026
 #, python-brace-format
 msgid "{name} moved {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} átmozgatta a(z) {obj_link} {obj_type}-t a(z) {repo_link} kötetben."
 
 #: seahub/notifications/models.py:1028
 #, python-brace-format
 msgid ""
 "{name} moved {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr ""
+msgstr "{name} átmozgatta a(z) {obj_link} {obj_type}-t és {obj_path_count_minus_one} egyéb {obj_type}-t a(z) {repo_link} kötetben."
 
 #: seahub/notifications/models.py:1032
 #, python-brace-format
 msgid "{name} updated {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} frissítette a(z) {obj_link} {obj_type}-t a(z) {repo_link} kötetben."
 
 #: seahub/notifications/models.py:1035
 #, python-brace-format
 msgid "{name} {op_type} {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} {op_type} műveletet végzett a(z) {obj_link} {obj_type}-en a(z) {repo_link} kötetben."
 
 #: seahub/notifications/models.py:1046
 #, python-brace-format
 msgid "Face recognition is done for library {repo_name}."
-msgstr ""
+msgstr "Az arcfelismerés befejeződött a(z) {repo_name} kötetben."
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:9
 #, python-format
@@ -1929,8 +1930,8 @@ msgid ""
 msgid_plural ""
 "\n"
 "You've got %(num)s file updates on %(site_name)s:\n"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "\nYou've got 1 new file updates on %(site_name)s:\n"
+msgstr[1] "\nYou've got %(num)s file updates on %(site_name)s:\n"
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:20
 msgid "Operation"
@@ -1975,7 +1976,7 @@ msgid ""
 "A folder named <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a> is"
 " uploaded to your folder <a "
 "href=\"%(url_base)s%(parent_dir_url)s\">%(parent_dir_name)s</a>."
-msgstr ""
+msgstr "Egy <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a> nevű mappa feltöltve a(z) <a href=\"%(url_base)s%(parent_dir_url)s\">%(parent_dir_name)s</a> mappájába."
 
 #: seahub/notifications/templates/notifications/notice_email.html:57
 #, python-format
@@ -2005,7 +2006,7 @@ msgid ""
 "A large number of files in your library <a "
 "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> has been deleted "
 "recently."
-msgstr ""
+msgstr "A(z) <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> kötetéből nemrég nagyszámú fájl lett törölve."
 
 #: seahub/notifications/templates/notifications/notice_email.html:84
 msgid "Go check out at the following page:"
@@ -2046,16 +2047,16 @@ msgstr "%(user)s megosztotta a következő kötetet: <a href=\"%(url_base)s%(lib
 msgid ""
 "Virus detected in library %(repo_name)s during regular scanning: "
 "%(file_path)s."
-msgstr ""
+msgstr "Vírus észlelve a(z) %(repo_name)s kötetben a rendszeres vizsgálat során: %(file_path)s."
 
 #: seahub/notifications/templates/notifications/notify_virus.html:20
 msgid "Virus is detected on regular scanning:"
-msgstr ""
+msgstr "Vírus észlelve a rendszeres vizsgálat során:"
 
 #: seahub/notifications/utils.py:471
 #, python-format
 msgid "%(author)s added a new comment in document %(sdoc_name)s"
-msgstr ""
+msgstr "%(author)s új megjegyzést fűzött a(z) %(sdoc_name)s dokumentumhoz"
 
 #: seahub/notifications/utils.py:478 seahub/notifications/utils.py:498
 msgid "Details"
@@ -2064,7 +2065,7 @@ msgstr "Részletek"
 #: seahub/notifications/utils.py:484
 #, python-format
 msgid "%(author)s added a new reply in document %(sdoc_name)s"
-msgstr ""
+msgstr "%(author)s új választ fűzött a(z) %(sdoc_name)s dokumentumhoz"
 
 #: seahub/notifications/utils.py:490
 #, python-format
@@ -2072,14 +2073,14 @@ msgstr ""
 msgid ""
 "%(author)s has marked the comment \"%(resolve_comment)s\" as resolved in "
 "document %(sdoc_name)s\n"
-msgstr ""
+msgstr "%(author)s megoldottnak jelölte a(z) „%(resolve_comment)s” megjegyzést a(z) %(sdoc_name)s dokumentumban\n"
 
 #: seahub/oauth/views.py:225
 #: seahub/templates/remote_user/create_unknown_user_false.html:8
 #: seahub/work_weixin/views.py:111
 msgid ""
 "Error, new user registration is not allowed, please contact administrator."
-msgstr ""
+msgstr "Hiba, új felhasználó regisztrációja nem engedélyezett, kérjük, forduljon az adminisztrátorhoz."
 
 #: seahub/options/templates/options/set_user_options.html:7
 msgid "Please choose how to view encrypted libraries online:"
@@ -2110,21 +2111,21 @@ msgstr "Tipp: ez utóbbi megoldás nagyobb biztonságot ad, de nem minden böng�
 #: seahub/organizations/api/admin/users.py:810
 #, python-brace-format
 msgid "Failed. You can only invite {org_members_quota} members."
-msgstr ""
+msgstr "Sikertelen. Csak {org_members_quota} tagot hívhat meg."
 
 #: seahub/organizations/api/admin/users.py:814
 msgid "The number of users exceeds the limit"
-msgstr ""
+msgstr "A felhasználók száma meghaladja a korlátot"
 
 #: seahub/organizations/api/admin/users.py:832
 #, python-brace-format
 msgid "User {email} already exists."
-msgstr ""
+msgstr "A(z) {email} felhasználó már létezik."
 
 #: seahub/organizations/forms.py:41 seahub/share/views.py:354
 #: seahub/share/views.py:367
 msgid "Email address is not valid"
-msgstr "Érvénytelen email cím"
+msgstr "Az e-mail cím nem érvényes"
 
 #: seahub/organizations/templates/organizations/org_deactivate_email.html:12
 #, python-format
@@ -2134,14 +2135,14 @@ msgstr "Érvénytelen email cím"
 msgid ""
 "You are receiving this email because your team %(org_name)s has been "
 "deactivated."
-msgstr ""
+msgstr "Ezt az e-mailt azért kapja, mert a(z) %(org_name)s csapata inaktiválva lett."
 
 #: seahub/organizations/templates/organizations/org_deactivate_email.html:16
 #, python-format
 msgid ""
 "\n"
 "If you like to continue using our site, click <a href=\"%(link)s\">here</a>. Otherwise your account will be deleted in 60 days.\n"
-msgstr ""
+msgstr "\nHa továbbra is használni szeretné az oldalt, kattintson <a href=\"%(link)s\">ide</a>. Ellenkező esetben a fiókja 60 napon belül törlésre kerül.\n"
 
 #: seahub/organizations/templates/organizations/org_register.html:3
 #: seahub/organizations/templates/organizations/org_register.html:13
@@ -2163,7 +2164,7 @@ msgstr "Üdvözöljük. Már be van jelentkezve."
 #: seahub/organizations/templates/organizations/org_register.html:17
 #: seahub/templates/registration/registration_form.html:18
 msgid "You will be redirected to the home page within 5 seconds."
-msgstr ""
+msgstr "5 másodpercen belül átirányítjuk a kezdőlapra."
 
 #: seahub/organizations/templates/organizations/org_register.html:25
 msgid "Organization Name"
@@ -2241,7 +2242,7 @@ msgstr "Érvénytelen kulcs."
 #: seahub/organizations/views.py:358
 #| msgid "Expiration"
 msgid "Expired token."
-msgstr ""
+msgstr "Lejárt token."
 
 #: seahub/profile/templates/profile/set_profile_react.html:5
 msgid "Settings"
@@ -2300,7 +2301,7 @@ msgstr "Az alapértelmezett kötet mostantól a következő: \"%s\"."
 msgid ""
 "Metadata feature is not supported for libraries containing more than %s "
 "files"
-msgstr ""
+msgstr "A metaadat-funkció nem támogatott a(z) %s fájlnál többet tartalmazó köteteknél"
 
 #: seahub/seadoc/views.py:26 seahub/seadoc/views.py:80
 #: seahub/seadoc/views.py:158 seahub/views/__init__.py:454
@@ -2311,23 +2312,23 @@ msgstr "A kötet nem létezik"
 
 #: seahub/seadoc/views.py:152
 msgid "File path invalid."
-msgstr ""
+msgstr "Fájl elérési útja érvénytelen."
 
 #: seahub/share/decorators.py:50
 msgid "Invalid verification code, please try again."
-msgstr ""
+msgstr "Érvénytelen ellenőrző kód, kérjük, próbálja újra."
 
 #: seahub/share/decorators.py:81
 msgid "Link does not exist."
-msgstr ""
+msgstr "A link nem létezik."
 
 #: seahub/share/decorators.py:84
 msgid "Link is expired."
-msgstr ""
+msgstr "A link lejárt."
 
 #: seahub/share/decorators.py:125
 msgid "The number of share link exceeds the limit."
-msgstr ""
+msgstr "A megosztási linkek száma meghaladja a korlátot."
 
 #: seahub/share/models.py:127
 msgid "Password can't be empty"
@@ -2340,26 +2341,26 @@ msgstr "Adja meg a helyes jelszót."
 #: seahub/share/templates/share/audit_code_email.html:10
 #, python-format
 msgid "The verification code is %(code)s. It is valid for one hour."
-msgstr ""
+msgstr "Az ellenőrző kód: %(code)s. Egy órán keresztül érvényes."
 
 #: seahub/share/templates/share/share_link_email.html:9
 #, python-format
 msgid ""
 "\n"
 "    %(shared_from)s shared a file link with you.\n"
-msgstr ""
+msgstr "\n    %(shared_from)s megosztott Önnel egy fájl-linket.\n"
 
 #: seahub/share/templates/share/share_link_email.html:14
 #, python-format
 msgid ""
 "\n"
 "You can click <a href=%(url)s>here</a> to verify your email address and visit it.\n"
-msgstr ""
+msgstr "\nKattintson <a href=%(url)s>ide</a> az e-mail címe igazolásához és a link megtekintéséhez.\n"
 
 #: seahub/share/templates/share/share_link_email_audit.html:4
 #: seahub/share/templates/share/share_link_email_audit.html:39
 msgid "Email address verification"
-msgstr ""
+msgstr "E-mail cím igazolása"
 
 #: seahub/share/templates/share/share_link_email_audit.html:40
 msgid "Please provide your email address to continue."
@@ -2367,27 +2368,27 @@ msgstr "A folytatáshoz adja meg email címét"
 
 #: seahub/share/templates/share/share_link_email_audit.html:43
 msgid "Enter your email address"
-msgstr ""
+msgstr "Adja meg e-mail címét"
 
 #: seahub/share/templates/share/share_link_email_audit.html:44
 msgid "Get code"
-msgstr "Kód beszerzése"
+msgstr "Kód lekérése"
 
 #: seahub/share/templates/share/share_link_email_audit.html:46
 msgid "Paste the verification code here"
-msgstr ""
+msgstr "Illessze be ide az ellenőrző kódot"
 
 #: seahub/share/templates/share/share_link_email_audit.html:79
 msgid "Resend"
-msgstr ""
+msgstr "Újraküldés"
 
 #: seahub/share/templates/share/share_link_email_audit.html:107
 msgid "A verification code has been sent to the email address."
-msgstr ""
+msgstr "Egy ellenőrző kódot küldtünk az e-mail címére."
 
 #: seahub/share/views.py:133
 msgid "Please choose a folder."
-msgstr ""
+msgstr "Kérjük, válasszon egy mappát."
 
 #: seahub/share/views.py:157
 msgid "Successfully saved."
@@ -2411,7 +2412,7 @@ msgstr "Szerkesztés a felhőben és letöltés"
 
 #: seahub/share/views.py:191
 msgid "Edit on cloud only"
-msgstr ""
+msgstr "Csak a felhőben szerkeszthető"
 
 #: seahub/share/views.py:223
 msgid "Share Link"
@@ -2465,7 +2466,7 @@ msgstr "Sajnáljuk, a kért oldal nem található."
 
 #: seahub/templates/base.html:8 seahub/templates/base_for_react.html:9
 msgid "File, Collaboration, Team, Organization"
-msgstr ""
+msgstr "Fájl, Együttműködés, Csapat, Szervezet"
 
 #: seahub/templates/base.html:35
 msgid "Close"
@@ -2485,15 +2486,15 @@ msgstr "Szervezeti fiók készítése"
 
 #: seahub/templates/client_login_complete.html:6
 msgid "The client has logged in. Please open the client to confirm."
-msgstr ""
+msgstr "A kliens bejelentkezett. Kérjük, a megerősítéshez nyissa meg a klienst."
 
 #: seahub/templates/client_login_confirm.html:6
 msgid "Client Login Confirm"
-msgstr ""
+msgstr "Kliens bejelentkezés megerősítése"
 
 #: seahub/templates/client_login_confirm.html:8
 msgid "Do you want to login to your client?"
-msgstr ""
+msgstr "Szeretne bejelentkezni a kliensébe?"
 
 #: seahub/templates/decrypt_repo_form.html:7
 msgid ""
@@ -2518,7 +2519,7 @@ msgid ""
 "\n"
 "        Click <a href=\"%(link)s\">here</a> to reactivate your team and relogin.\n"
 "      "
-msgstr ""
+msgstr "\n        Kattintson <a href=\"%(link)s\">ide</a> a csapata reaktiválásához és az újbóli bejelentkezéshez.\n      "
 
 #: seahub/templates/i18n.html:6
 msgid "Upload Folder"
@@ -2628,7 +2629,7 @@ msgstr "Single Sign-On"
 
 #: seahub/templates/registration/login.html:104
 msgid "Login with"
-msgstr ""
+msgstr "Bejelentkezés ezzel:"
 
 #: seahub/templates/registration/login.html:130
 msgid "Forgot password?"
@@ -2708,11 +2709,11 @@ msgstr "Jelszó átállítása sikertelen: a hivatkozás már nem érvényes."
 msgid ""
 "If your email address is in our database, you will receive a message "
 "shortly."
-msgstr ""
+msgstr "Ha az e-mail címe szerepel az adatbázisunkban, hamarosan üzenetet fog kapni."
 
 #: seahub/templates/registration/password_reset_done.html:47
 msgid "Back to login page"
-msgstr ""
+msgstr "Vissza a bejelentkezési oldalra"
 
 #: seahub/templates/registration/password_reset_email.html:12
 #, python-format
@@ -2731,7 +2732,7 @@ msgstr "Hamarosan küldünk egy e-mailt a jelszóváltoztatáshoz"
 
 #: seahub/templates/registration/password_reset_form.html:53
 msgid "Your email used in login"
-msgstr ""
+msgstr "A bejelentkezéshez használt e-mail címe"
 
 #: seahub/templates/registration/register_complete_email.html:1
 #, python-format
@@ -2804,14 +2805,14 @@ msgstr "Pillanatkép"
 #: seahub/templates/share_access_validation.html:6
 msgid ""
 "Please input the password if you want to browse the shared file/folder."
-msgstr ""
+msgstr "Kérjük, adja meg a jelszót a megosztott fájl/mappa böngészéséhez."
 
 #: seahub/templates/shared_link_email.html:12
 #, python-format
 msgid ""
 "%(escaped_nickname)s shared a %(file_shared_type)s <span style=\"font-"
 "weight:bold;\">%(escaped_file_shared_name)s</span> to you on %(site_name)s:"
-msgstr ""
+msgstr "%(escaped_nickname)s megosztott Önnel egy %(file_shared_type)s-t (név: <span style=\"font-weight:bold;\">%(escaped_file_shared_name)s</span>) a(z) %(site_name)s oldalon:"
 
 #: seahub/templates/shared_link_email.html:17
 #: seahub/templates/shared_upload_link_email.html:20
@@ -2831,18 +2832,18 @@ msgstr "Navigáljon a következő oldalra a fájlok feltöltéséhez:"
 
 #: seahub/templates/snippets/password_strength_js.html:7
 msgid "Password strength should be strong or very strong"
-msgstr ""
+msgstr "A jelszó erősségének erősnek vagy nagyon erősnek kell lennie"
 
 #: seahub/templates/snippets/password_strength_js.html:12
 #: seahub/templates/snippets/password_strength_js.html:97
 msgid "Password strength"
-msgstr ""
+msgstr "Jelszó erőssége"
 
 #: seahub/templates/snippets/password_strength_js.html:19
 msgid ""
 "The password should contain different types of characters to make it strong:"
 " uppercase letters, lowercase letters, numbers and special characters."
-msgstr ""
+msgstr "A jelszónak különböző típusú karaktereket kell tartalmaznia az erősség érdekében: nagybetűket, kisbetűket, számokat és speciális karaktereket."
 
 #: seahub/templates/snippets/policy_service_link.html:5
 #: seahub/templates/snippets/policy_service_link.html:9
@@ -2868,14 +2869,14 @@ msgstr "Visszaállítás"
 msgid ""
 "The new password of library %(repo_name)s is %(password)s. Please change it "
 "as soon as possible."
-msgstr ""
+msgstr "A(z) %(repo_name)s kötet új jelszava: %(password)s. Kérjük, amint lehet, változtassa meg."
 
 #: seahub/templates/sysadmin/short_time_linving_password_reset_link.html:13
 #, python-format
 msgid ""
 "Administrator on %(site_name)s is resetting your password for %(account)s, "
 "please click the following link to continue: "
-msgstr ""
+msgstr "A(z) %(site_name)s adminisztrátora alaphelyzetbe állítja a(z) %(account)s fiókhoz tartozó jelszavát; a folytatáshoz kattintson az alábbi linkre: "
 
 #: seahub/templates/sysadmin/sudo_mode.html:39
 msgid "Confirm password to continue"
@@ -2901,13 +2902,13 @@ msgstr "%(username)s felhasználói fiók aktiválásra került itt: %(site_name
 msgid ""
 "%(nickname)s invited you to join organization \"%(org_name)s\" on "
 "%(site_name)s."
-msgstr ""
+msgstr "%(nickname)s meghívta Önt a(z) „%(org_name)s” szervezetbe a(z) %(site_name)s oldalon."
 
 #: seahub/templates/sysadmin/user_add_email.html:13
 #: seahub/templates/sysadmin/user_batch_add_email.html:10
 #, python-format
 msgid "%(nickname)s invited you to join %(site_name)s."
-msgstr ""
+msgstr "%(nickname)s meghívta Önt a(z) %(site_name)s oldalára."
 
 #: seahub/templates/sysadmin/user_add_email.html:18
 #: seahub/templates/sysadmin/user_batch_add_email.html:14
@@ -2917,7 +2918,7 @@ msgstr "A felhasználói fiókjának adatai:"
 #: seahub/templates/sysadmin/user_add_email.html:19
 #: seahub/templates/sysadmin/user_batch_add_email.html:15
 msgid "Email:"
-msgstr ""
+msgstr "E-mail:"
 
 #: seahub/templates/sysadmin/user_freeze_email.html:12
 #, python-format
@@ -2936,7 +2937,7 @@ msgstr "%(site_name)s -on/ön a jelszó megváltoztatva. Az új jelszó %(passwo
 #, python-format
 #| msgid "Your quota is almost full on %(site_name)s."
 msgid "The team quota is almost full on %(site_name)s."
-msgstr ""
+msgstr "A csapat kvótája majdnem megtelt a(z) %(site_name)s oldalon."
 
 #: seahub/templates/team_quota_full.html:14
 #: seahub/templates/user_quota_full.html:14
@@ -2971,7 +2972,7 @@ msgstr "módosítás után"
 #: seahub/templates/user_quota_full.html:12
 #, python-format
 msgid "Your quota is almost full on %(site_name)s."
-msgstr ""
+msgstr "A kvótája majdnem megtelt a(z) %(site_name)s oldalon."
 
 #: seahub/templates/wiki/wiki.html:24
 msgid "Last modified by"
@@ -3015,7 +3016,7 @@ msgid ""
 "    for login verification. If you've used up all your backup tokens, you\n"
 "    can generate a new set of backup tokens. Only the backup tokens shown\n"
 "    below will be valid."
-msgstr ""
+msgstr "A tartalék kódok akkor használhatók, ha az elsődleges és tartalék\n    telefonszámai nem érhetők el. Az alábbi tartalék kódok használhatók\n    a bejelentkezési ellenőrzéshez. Ha az összes tartalék kódját elhasználta,\n    generálhat egy új készletet. Csak az alább látható tartalék kódok\n    lesznek érvényesek."
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:20
 msgid "Print these tokens and keep them somewhere safe."
@@ -3099,7 +3100,7 @@ msgstr "Kétlépcsős azonosítás kikapcsolása"
 msgid ""
 "You are about to disable two-factor authentication. This compromises your "
 "account security, are you sure?"
-msgstr ""
+msgstr "A kétlépcsős azonosítás kikapcsolására készül. Ez rontja a fiókja biztonságát. Biztos benne?"
 
 #: seahub/two_factor/templates/two_factor/profile/disable.html:10
 msgid "Disable"
@@ -3234,44 +3235,44 @@ msgstr "Fájl letöltése sikertelen."
 #: seahub/views/repo.py:325
 #, python-format
 msgid "Share link for %s."
-msgstr ""
+msgstr "Megosztási link ehhez: %s."
 
 #: seahub/views/file.py:1932 seahub/views/file.py:1937
 msgid "Unable to download file"
-msgstr "Nem lehet fájlt letölteni"
+msgstr "A fájl letöltése nem lehetséges"
 
 #: seahub/views/file.py:2185
 #| msgid "Wiki not found."
 msgid "revision not found"
-msgstr ""
+msgstr "revízió nem található"
 
 #: seahub/views/file.py:2192
 msgid "The original file does not exist"
-msgstr ""
+msgstr "Az eredeti fájl nem létezik"
 
 #: seahub/views/mobile.py:35
 #, python-brace-format
 msgid "User {token.user} not found"
-msgstr ""
+msgstr "{token.user} felhasználó nem található"
 
 #: seahub/views/mobile.py:39
 #, python-brace-format
 msgid "User {token.user} inactive"
-msgstr ""
+msgstr "{token.user} felhasználó inaktív"
 
 #: seahub/views/sso.py:179
 msgid ""
 "This link has already been visited, please click the login button on the "
 "client again"
-msgstr ""
+msgstr "Ezt a linket már felkeresték, kérjük, kattintson újra a bejelentkezés gombra a kliensben"
 
 #: seahub/views/sso.py:204
 msgid "Invalid link, please click the login button on the client again"
-msgstr ""
+msgstr "Érvénytelen link, kérjük, kattintson újra a bejelentkezés gombra a kliensben"
 
 #: seahub/views/sso.py:209
 msgid "Login timeout, please click the login button on the client again"
-msgstr ""
+msgstr "Bejelentkezési időtúllépés, kérjük, kattintson újra a bejelentkezés gombra a kliensben"
 
 #: seahub/views/sysadmin.py:176 seahub/views/sysadmin.py:180
 msgid "Login ID"

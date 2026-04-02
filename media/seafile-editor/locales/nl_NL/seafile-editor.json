@@ -83,7 +83,7 @@
   "Upload_local_image": "Lokale afbeelding uploaden",
   "Add_link": "Link toevoegen",
   "File_history": "Bestandsgeschiedenis",
-  "History_version": "History versions",
+  "History_version": "Geschiedenis versie",
   "Back_to_viewer": "Terug Naar Lezer",
   "Link_title": "Linktitel",
   "Local_draft": "Lokaal concept",
@@ -115,7 +115,7 @@
   "Date": "Datum",
   "Participants": "Deelnemers",
   "Meeting_note": "Vergaderingsnotitie",
-  "Chooser_document_type": "Chooser document type",
+  "Chooser_document_type": "Documenttype kiezen",
   "Empty": "Leeg",
   "No_related_files": "Geen gerelateerde bestanden",
   "Outline": "Uitlijnen",
@@ -151,12 +151,12 @@
           "Make_list": "Lijst maken",
           "Make_ordered_list": "Gesorteerde lijst maken",
           "Insert_new_item": " Nieuw item toevoegen",
-          "Insert_child_in_item": "Insert child in item",
-          "Increase_depth": "Increase depth"
+          "Insert_child_in_item": "Kinderitem toevoegen",
+          "Increase_depth": "Diepte verhogen"
         }
       },
       {
-        "shortcutType": "Head shortcuts",
+        "shortcutType": "Kopjes",
         "shortcutData": {
           "Heading_1": "Kop 1",
           "Heading_2": "Kop 2",
@@ -167,73 +167,73 @@
         }
       },
       {
-        "shortcutType": "Code block shortcuts",
+        "shortcutType": "Codeblokken",
         "shortcutData": {
-          "Make_code_block": "Make code block",
-          "Insert_new_line": "Insert new line",
-          "Escape_code_block": "Escape code block",
-          "Insert_indent": "Insert indent"
+          "Make_code_block": "Codeblok maken",
+          "Insert_new_line": "Nieuw regel invoegen",
+          "Escape_code_block": "Codeblok afbreken",
+          "Insert_indent": "Inspringen invoegen"
         }
       },
       {
-        "shortcutType": "Block quote shortcuts",
+        "shortcutType": "Zitatblokken",
         "shortcutData": {
-          "Make_block_quote": "Make block quote",
-          "Escape_block_quote": "Escape block quote"
+          "Make_block_quote": "Zitatblok maken",
+          "Escape_block_quote": "Zitatblok afbreken"
         }
       },
       {
-        "shortcutType": "Table shortcuts",
+        "shortcutType": "Tabelblokken",
         "shortcutData": {
-          "Insert_table_row": "Insert table row",
-          "Escape_table": "Escape table"
+          "Insert_table_row": "Tabelrij invoegen",
+          "Escape_table": "Tabel afbreken"
         }
       },
       {
-        "shortcutType": "Formula shortcuts",
+        "shortcutType": "Formuleblokken",
         "shortcutData": {
           "Insert_formula": "Formule invoegen"
         }
       },
       {
-        "shortcutType": "Inline shortcuts",
+        "shortcutType": "Vet en cursief",
         "shortcutData": {
           "Bold": "Vet",
           "Italic": "Cursief",
-          "Italic_bold": "Italic bold",
+          "Italic_bold": "Cursief vet",
           "Inline_code": "Code inlijnen"
         }
       },
       {
-        "shortcutType": "Save shortcuts",
+        "shortcutType": "Opslaan",
         "shortcutData": {
           "Save_file": "Bestand opslaan"
         }
       },
       {
-        "shortcutType": "Image shortcuts",
+        "shortcutType": "Afbeeldingen",
         "shortcutData": {
-          "Paste_screen_shot": "Paste screen shot",
-          "Drag_image_from_anywhere_to_upload_it": "Drag image from anywhere to upload it"
+          "Paste_screen_shot": "Schermafbeelding plakken",
+          "Drag_image_from_anywhere_to_upload_it": "Afbeelding van elke plaats naar hier verplaatsen om te uploaden"
         }
       }
     ]
   },
-  "Select_field": "Select field",
-  "Font_style": "Font style",
-  "Open_link": "Open link",
-  "Image_is_uploading": "Image is uploading",
-  "Image_loading_failed": "Image loading failed",
-  "Expand_editor": "Expand editor",
-  "Insert_below": "Insert below",
-  "Insert_above": "Insert above",
-  "Insert_on_the_right": "Insert on the right",
-  "Insert_on_the_left": "Insert on the left",
-  "Row(s)": "row(s)",
-  "Column(s)": "column(s)",
-  "Insert": "Insert",
-  "Horizontal_align": "Horizontal align",
-  "Underline": "Underline",
-  "Row_number": "Row number",
-  "Column_number": "Column number"
+  "Select_field": "Selecteer veld",
+  "Font_style": "Lettertype",
+  "Open_link": "Open koppeling",
+  "Image_is_uploading": "Afbeelding wordt geüpload",
+  "Image_loading_failed": "Afbeelding laden mislukt",
+  "Expand_editor": "Bekijk volledig editor",
+  "Insert_below": "Onder invoegen",
+  "Insert_above": "Boven invoegen",
+  "Insert_on_the_right": "Rechts invoegen",
+  "Insert_on_the_left": "Links invoegen",
+  "Row(s)": "Rijen",
+  "Column(s)": "Kolommen",
+  "Insert": "Invoegen",
+  "Horizontal_align": "Horizontaal uitlijnen",
+  "Underline": "Onderlijnen",
+  "Row_number": "Rijnummer",
+  "Column_number": "Kolomnummer"
 }
