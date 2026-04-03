@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { Utils } from '../../utils/utils';
-import { gettext, siteRoot, filePath, historyRepoID } from '../../utils/constants';
+import { gettext, siteRoot, filePath, historyRepoID, isVirtualRepo } from '../../utils/constants';
 import URLDecorator from '../../utils/url-decorator';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import Icon from '../../components/icon';
@@ -126,7 +126,7 @@ class MoreMenu extends React.PureComponent {
           {index !== 0 && <a href="#" onClick={onItemRestore}><DropdownItem>{gettext('Restore')}</DropdownItem></a>}
           {canDownload && <a href={downloadUrl}><DropdownItem>{gettext('Download')}</DropdownItem></a>}
           <a href={viewUrl}><DropdownItem>{gettext('View')}</DropdownItem></a>
-          {index != 0 && <DropdownItem tag="a" href={snapshotURL} target="_blank">{gettext('View Related Snapshot')}</DropdownItem>}
+          {index != 0 && !isVirtualRepo && <DropdownItem tag="a" href={snapshotURL} target="_blank">{gettext('View Related Snapshot')}</DropdownItem>}
         </DropdownMenu>
       </Dropdown>
     );

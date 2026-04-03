@@ -55,7 +55,7 @@ from seahub.utils import render_error, is_org_context, \
     get_conf_text_ext, PREVIEW_FILEEXT, \
     normalize_file_path, get_service_url, \
     normalize_cache_key, gen_file_get_url_by_sharelink, gen_file_get_url_new, \
-    get_site_scheme_and_netloc
+    get_site_scheme_and_netloc, get_file_history_suffix
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_types import (IMAGE, PDF, SVG, AUDIO,
                                      MARKDOWN, TEXT, VIDEO, SEADOC, TLDRAW, EXCALIDRAW, EXCALIDRAW)
@@ -298,6 +298,21 @@ def get_file_view_path_and_perm(request, repo_id, obj_id, path,
         outer_url = gen_file_get_url(token, filename)
         inner_url = gen_inner_file_get_url(token, filename)
         return (outer_url, inner_url, user_perm)
+
+def should_use_origin_file_history(repo, path):
+    if not repo.is_virtual:
+        return False
+
+    suffix_list = get_file_history_suffix()
+    if suffix_list and isinstance(suffix_list, list):
+        suffix_list = [x.lower() for x in suffix_list]
+    else:
+        suffix_list = []
+
+    filename = os.path.basename(path)
+    file_type, file_ext = [x.lower() for x in get_file_type_and_ext(filename)]
+
+    return file_ext in suffix_list
 
 def handle_textual_file(request, filetype, raw_path, ret_dict):
     # encoding option a user chose
@@ -1078,7 +1093,7 @@ def view_history_file_common(request, repo_id, ret_dict):
 
     path = request.GET.get('p', '/')
     path = normalize_file_path(path)
-
+    
     ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo)
 
     commit_id = request.GET.get('commit_id', '')
@@ -1091,7 +1106,15 @@ def view_history_file_common(request, repo_id, ret_dict):
 
     # construct some variables
     u_filename = os.path.basename(path)
-    current_commit = get_commit(repo.id, repo.version, commit_id)
+    if should_use_origin_file_history(repo, path):
+        origin_repo_id = repo.origin_repo_id
+        origin_repo = get_repo(origin_repo_id)
+        if not origin_repo:
+            raise Http404
+        current_commit = get_commit(origin_repo.id, origin_repo.version, commit_id)
+    else:
+        current_commit = get_commit(repo_id, repo.version, commit_id)
+    
     if not current_commit:
         raise Http404
 

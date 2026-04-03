@@ -722,6 +722,7 @@ def file_revisions(request, repo_id):
         'can_revert_file': can_revert_file,
         'can_download_file': parse_repo_perm(repo_perm).can_download,
         'use_new_api': use_new_api,
+        'is_virtual_repo': repo.is_virtual,
     })
 
 

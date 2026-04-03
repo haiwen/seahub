@@ -63,42 +63,12 @@ class FileHistory extends React.Component {
   };
 
   initNewRecords(result) {
-    if (result.total_count < 5) {
-      if (result.data.length) {
-        let commitID = result.data[result.data.length - 1].commit_id;
-        let path = result.data[result.data.length - 1].path;
-        let oldPath = result.data[result.data.length - 1].old_path;
-        path = oldPath ? oldPath : path;
-        seafileAPI.listOldFileHistoryRecords(historyRepoID, path, commitID).then((res) => {
-          if (!res.data) {
-            this.setState({ isLoading: false });
-            throw Error('There is an error in server.');
-          }
-          this.setState({
-            historyList: result.data.concat(res.data.data.slice(1, res.data.data.length)),
-            isLoading: false,
-          });
-        });
-      } else {
-        seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath).then((res) => {
-          if (!res.data) {
-            this.setState({ isLoading: false });
-            throw Error('There is an error in server.');
-          }
-          this.setState({
-            historyList: res.data.data,
-            isLoading: false,
-          });
-        });
-      }
-    } else {
-      this.setState({
-        historyList: result.data,
-        currentPage: result.page,
-        hasMore: result.total_count > (PER_PAGE * this.state.currentPage),
-        isLoading: false,
-      });
-    }
+    this.setState({
+      historyList: result.data,
+      currentPage: result.page,
+      hasMore: result.total_count > (PER_PAGE * result.page),
+      isLoading: false,
+    });
   }
 
   initOldRecords(result) {
