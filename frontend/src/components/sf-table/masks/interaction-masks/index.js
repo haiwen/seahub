@@ -947,12 +947,15 @@ class InteractionMasks extends React.Component {
   };
 
   handleDragCopy = (draggedRange) => {
-    const { columns, groupMetrics } = this.props;
+    const { columns, groupMetrics, table, modifyRecords } = this.props;
+    const rows = table?.rows || [];
+    const idRowMap = table?.id_row_map || {};
     // compute the new records
-    const newRecords = this.props.getUpdateDraggedRecords(draggedRange, columns, groupMetrics);
-    if (this.props.modifyRecords) {
-      this.props.modifyRecords({ ...newRecords, isCopyPaste: true });
-    }
+    const newRecords = this.props.getUpdateDraggedRecords(draggedRange, columns, rows, idRowMap, groupMetrics);
+
+    const { recordIds, idRecordUpdates, idOriginalRecordUpdates, idOriginalOldRecordData, idOldRecordData } = newRecords;
+    modifyRecords && modifyRecords(recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData);
+
   };
 
   handleDragStart = (e) => {
@@ -1106,6 +1109,7 @@ class InteractionMasks extends React.Component {
 InteractionMasks.propTypes = {
   contextmenu: PropTypes.element,
   tableId: PropTypes.string,
+  table: PropTypes.object,
   columns: PropTypes.array,
   canAddRow: PropTypes.bool,
   isGroupView: PropTypes.bool,

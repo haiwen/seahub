@@ -108,7 +108,7 @@ const Cell = React.memo(({
   }, []);
 
   const onDragOver = useCallback((event) => {
-    event.stopPropagation();
+    // Do not call stopPropagation() here - we need dragover to bubble to Record for drag-fill support
     event.preventDefault();
   }, []);
 

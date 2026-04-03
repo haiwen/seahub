@@ -29,6 +29,7 @@ const SFTable = ({
   onGridKeyUp,
   loadMore,
   loadAll,
+  updateFileTags,
   ...customProps
 }) => {
   const containerRef = useRef(null);
@@ -109,6 +110,7 @@ const SFTable = ({
         getTreeNodeByIndex={getTreeNodeByIndex}
         recordGetterById={recordGetterById}
         recordGetterByIndex={recordGetterByIndex}
+        updateFileTags={updateFileTags}
       />
     </div>
   );
@@ -169,6 +171,7 @@ SFTable.propTypes = {
   updateSelectedRecordIds: PropTypes.func,
   onRecordSelected: PropTypes.func,
   onTableDragStart: PropTypes.func,
+  updateFileTags: PropTypes.func,
 };
 
 export default SFTable;

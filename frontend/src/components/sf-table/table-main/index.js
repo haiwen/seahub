@@ -34,6 +34,7 @@ const TableMain = ({
   recordGetterByIndex,
   recordGetterById,
   getClientCellValueDisplayString,
+  updateFileTags,
   ...customProps
 }) => {
 
@@ -41,8 +42,9 @@ const TableMain = ({
     return new GridUtils(recordsIds, {
       recordGetterByIndex,
       recordGetterById,
+      updateFileTags,
     });
-  }, [recordsIds, recordGetterByIndex, recordGetterById]);
+  }, [recordsIds, recordGetterByIndex, recordGetterById, updateFileTags]);
 
   const tableId = useMemo(() => {
     return (table && table._id) || '';
@@ -84,6 +86,12 @@ const TableMain = ({
   const getCopiedRecordsAndColumnsFromRange = useCallback(({ type, copied, columns, isGroupView }) => {
     return gridUtils.getCopiedContent({ type, copied, isGroupView, columns });
   }, [gridUtils]);
+
+  const getUpdateDraggedRecords = useCallback((draggedRange, columns, groupMetrics) => {
+    const rows = table?.rows || [];
+    const idRowMap = table?.id_row_map || {};
+    return gridUtils.getUpdateDraggedRecords(draggedRange, columns, rows, idRowMap, groupMetrics);
+  }, [gridUtils, table]);
 
   const getInternalClientCellValueDisplayString = useCallback((record, column) => {
     if (getClientCellValueDisplayString) {
@@ -137,6 +145,7 @@ const TableMain = ({
           recordGetterByIndex={recordGetterByIndex}
           getClientCellValueDisplayString={getInternalClientCellValueDisplayString}
           getCopiedRecordsAndColumnsFromRange={getCopiedRecordsAndColumnsFromRange}
+          getUpdateDraggedRecords={getUpdateDraggedRecords}
         />
       )}
     </div>
@@ -160,6 +169,7 @@ TableMain.propTypes = {
   loadMore: PropTypes.func,
   loadAll: PropTypes.func,
   isLoading: PropTypes.bool,
+  updateFileTags: PropTypes.func,
 };
 
 export default TableMain;

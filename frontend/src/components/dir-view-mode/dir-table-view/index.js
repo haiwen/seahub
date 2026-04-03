@@ -166,6 +166,36 @@ const DirTableView = ({
     });
   }, [getDirentByRowId, onItemRename, tableData, enrichedColumns, handleDirentMetadata]);
 
+  // Batch modify records for drag-fill support
+  const modifyRecords = useCallback((recordIds, idRecordUpdates) => {
+    if (!recordIds || !idRecordUpdates) return;
+    recordIds.forEach(rowId => {
+      const updates = idRecordUpdates[rowId];
+      if (!updates) return;
+      const dirent = getDirentByRowId(rowId);
+      if (!dirent) return;
+      const record = getRowById(tableData, rowId);
+      if (!record) return;
+
+      Object.entries(updates).forEach(([key, value]) => {
+        if (key === PRIVATE_COLUMN_KEY.FILE_NAME) {
+          onItemRename(dirent, value);
+        } else {
+          let update = { [key]: value };
+          const column = getColumnByKey(enrichedColumns, key);
+          if (column) {
+            if (column.type === CellType.SINGLE_SELECT) {
+              update = { [key]: getColumnOptionNameById(column, value) };
+            } else if (column.type === CellType.MULTIPLE_SELECT) {
+              update = { [key]: getColumnOptionNamesByIds(column, value) };
+            }
+          }
+          handleDirentMetadata(rowId, record._name, update);
+        }
+      });
+    });
+  }, [getDirentByRowId, getRowById, onItemRename, tableData, enrichedColumns, handleDirentMetadata]);
+
   const toggleSubMenu = (e, subMenuOptionKey) => {
     e.stopPropagation();
     if (!subMenuOptionKey) {
@@ -457,9 +487,11 @@ const DirTableView = ({
         modifyColumnOrder={modifyColumnOrder}
         checkCanModifyRecord={checkCanModifyRecord}
         modifyRecord={modifyRecord}
+        modifyRecords={modifyRecords}
         supportCopy={false}
         supportPaste={false}
-        supportDragFill={false}
+        supportDragFill={true}
+        canModifyRecords={true}
         supportCut={false}
         isGroupView={false}
         showRecordAsTree={false}
