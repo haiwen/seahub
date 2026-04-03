@@ -85,12 +85,16 @@
 
 .group-select .selected-option-show .selected-option-item .selected-option-item-name {
   font-size: 13px;
-  color: var(--bs-body-color);
+  color: #212519;
 }
 
-.group-select .selected-option-show .selected-option-item .seafile-multicolor-icon-x-01 {
+.group-select .selected-option-show .selected-option-item .seafile-multicolor-icon {
   width: 12px;
   height: 12px;
   cursor: pointer;
-  color: rgb(103, 103, 103);
+  color: #909090;
+}
+
+.group-select .selected-option-show .selected-option-item .seafile-multicolor-icon:hover {
+  color: #666;
 }
