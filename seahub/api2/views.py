@@ -94,7 +94,7 @@ from seahub.utils.timeutils import utc_to_local, \
         timestamp_to_isoformat_timestr
 from seahub.views import is_registered_user, check_folder_permission, \
     create_default_library, list_inner_pub_repos
-from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg, can_edit_file
+from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg, can_edit_file, should_use_origin_file_history
 if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
     from seahub.search.utils import search_files, get_search_repos_map, SEARCH_FILEEXT, ai_search_files, \
         RELATED_REPOS_PREFIX, SEARCH_REPOS_LIMIT, RELATED_REPOS_CACHE_TIMEOUT, format_repos, is_invisible_path, \
@@ -3544,12 +3544,26 @@ class FileRevision(APIView):
         if path is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         file_name = os.path.basename(path)
         commit_id = request.GET.get('commit_id', None)
 
         try:
-            obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path(
-                repo_id, commit_id, path)
+            if should_use_origin_file_history(repo, path):
+                origin_repo_id = repo.origin_repo_id
+                origin_repo = get_repo(origin_repo_id)
+                real_path = posixpath.join(repo.origin_path, path.lstrip('/'))
+                if not origin_repo:
+                    error_msg = 'Origin library %s not found.' % origin_repo_id
+                    return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+                obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path(
+                    origin_repo_id, commit_id, real_path)
+            else:
+                obj_id = seafile_api.get_file_id_by_commit_and_path(repo_id, commit_id, path)
         except:
             return api_error(status.HTTP_404_NOT_FOUND, 'Revision not found.')
 
