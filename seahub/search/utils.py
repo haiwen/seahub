@@ -278,12 +278,15 @@ def format_repos(repos):
         origin_repo_id = repo[1]
         origin_path = repo[2]
         repo_name = repo[3]
+        last_modifier = repo[4]
+        last_modify = repo[5]
+        size = repo[6]
         searched_repos.append((real_repo_id, origin_repo_id, origin_path))
 
         if origin_repo_id:
-            repos_map[origin_repo_id] = (real_repo_id, origin_path, repo_name)
+            repos_map[origin_repo_id] = (real_repo_id, origin_path, repo_name, last_modifier, last_modify, size)
             continue
-        repos_map[real_repo_id] = (real_repo_id, origin_path, repo_name)
+        repos_map[real_repo_id] = (real_repo_id, origin_path, repo_name, last_modifier, last_modify, size)
     return searched_repos, repos_map
 
 

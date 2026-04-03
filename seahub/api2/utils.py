@@ -323,12 +323,12 @@ def get_search_repos(username, org_id):
 
             if origin_path is None:
                 # current repo is not a shared subfolder
-                search_repo_id_to_repo_info[repo_id] = (repo.id, repo.origin_repo_id, repo.origin_path, repo.name)
+                search_repo_id_to_repo_info[repo_id] = (repo.id, repo.origin_repo_id, repo.origin_path, repo.name, repo.last_modifier, repo.last_modify, repo.size)
             elif len(pre_origin_path.split('/')) > len(origin_path.split('/')):
                 # the previously shared subfolder level is deeper than current shared subfolder
-                search_repo_id_to_repo_info[repo_id] = (repo.id, repo.origin_repo_id, repo.origin_path, repo.name)
+                search_repo_id_to_repo_info[repo_id] = (repo.id, repo.origin_repo_id, repo.origin_path, repo.name, repo.last_modifier, repo.last_modify, repo.size)
         else:
-            search_repo_id_to_repo_info[repo_id] = (repo.id, repo.origin_repo_id, repo.origin_path, repo.name)
+            search_repo_id_to_repo_info[repo_id] = (repo.id, repo.origin_repo_id, repo.origin_path, repo.name, repo.last_modifier, repo.last_modify, repo.size)
 
     search_repos = list(search_repo_id_to_repo_info.values())
 
@@ -351,7 +351,7 @@ def is_valid_internal_jwt(auth, provided_key=None):
     key = JWT_PRIVATE_KEY
     if provided_key == 'seadoc':
         key = SEADOC_PRIVATE_KEY
-    
+
     if not auth or auth[0].lower()!= 'token' or len(auth) != 2:
         return False
 
@@ -374,7 +374,7 @@ def is_valid_internal_jwt(auth, provided_key=None):
 def send_comment_update_event(file_uuid):
     if not settings.ENABLE_NOTIFICATION_SERVER:
         return
-    
+
     uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
     if not uuid_map:
         return
@@ -403,8 +403,8 @@ def send_comment_update_event(file_uuid):
             logger.error(f'Send comment update event failed: {resp.content}')
     except Exception as e:
         logger.error(f'Send comment update event error. ERROR: {e}')
-        
-        
+
+
 def get_user_contact_email(username):
     if not username:
         return ''
@@ -413,7 +413,7 @@ def get_user_contact_email(username):
     contact_email = cache.get(key)
     if contact_email and contact_email.strip():
         return contact_email
-    
+
     profile = Profile.objects.get_profile_by_user(username)
     contact_email = profile.contact_email if profile and profile.contact_email else ''
     if contact_email:
