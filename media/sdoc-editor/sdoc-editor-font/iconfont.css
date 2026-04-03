@@ -1,11 +1,11 @@
 @font-face {
   font-family: "sdocfont"; /* Project id 5078528 */
-  src: url('iconfont.eot?t=1774682583544'); /* IE9 */
-  src: url('iconfont.eot?t=1774682583544#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('iconfont.woff2?t=1774682583544') format('woff2'),
-       url('iconfont.woff?t=1774682583544') format('woff'),
-       url('iconfont.ttf?t=1774682583544') format('truetype'),
-       url('iconfont.svg?t=1774682583544#sdocfont') format('svg');
+  src: url('iconfont.eot?t=1774950639901'); /* IE9 */
+  src: url('iconfont.eot?t=1774950639901#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1774950639901') format('woff2'),
+       url('iconfont.woff?t=1774950639901') format('woff'),
+       url('iconfont.ttf?t=1774950639901') format('truetype'),
+       url('iconfont.svg?t=1774950639901#sdocfont') format('svg');
 }
 
 .sdocfont {
@@ -14,6 +14,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.sdoc-divider:before {
+  content: "\e609";
 }
 
 .sdoc-embed-link:before {

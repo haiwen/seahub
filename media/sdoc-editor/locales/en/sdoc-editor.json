@@ -676,5 +676,6 @@
   "Support_Figma_Seatable_link" : "Support Seatable and Figma link",
   "Embed_link_invalid_tip": "The embed link is invalid, it needs to be deleted and added again.",
   "Embed_link": "Embed link",
-  "Add_embed_link": "Add embed link"
+  "Add_embed_link": "Add embed link",
+  "Divider": "Divider"
 }
