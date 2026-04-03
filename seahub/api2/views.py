@@ -3563,7 +3563,7 @@ class FileRevision(APIView):
                 obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path(
                     origin_repo_id, commit_id, real_path)
             else:
-                obj_id = seafile_api.get_file_id_by_commit_and_path(repo_id, commit_id, path)
+                obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path(repo_id, commit_id, path)
         except:
             return api_error(status.HTTP_404_NOT_FOUND, 'Revision not found.')
 
