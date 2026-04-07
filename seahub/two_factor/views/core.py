@@ -188,6 +188,7 @@ class SetupView(CheckTwoFactorEnabledMixin, IdempotentSessionWizardView):
             b32key = b32encode(rawkey).decode('utf-8')
             self.request.session[QR_SESSION_KEY] = b32key
             context.update({'QR_URL': reverse(self.qrcode_url)})
+            context.update({'QR_KEY': b32key})
         elif self.steps.current == 'validation':
             context['device'] = self.get_device()
         context['cancel_url'] = reverse('edit_profile')
