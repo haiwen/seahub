@@ -25,4 +25,6 @@ EditorContainer.propTypes = {
   openEditorMode: PropTypes.string,
 };
 
+EditorContainer.displayName = 'EditorContainer';
+
 export default EditorContainer;

@@ -994,8 +994,6 @@ class Records extends Component {
             <RecordsHeader
               onRef={(ref) => this.headerFrozenRef = ref}
               containerWidth={containerWidth}
-              ColumnDropdownMenu={this.props.ColumnDropdownMenu}
-              NewColumnComponent={this.props.NewColumnComponent}
               headerSettings={this.props.headerSettings}
               columnMetrics={columnMetrics}
               colOverScanStartIdx={colOverScanStartIdx}
@@ -1013,6 +1011,14 @@ class Records extends Component {
               modifyColumnOrder={this.props.modifyColumnOrder}
               modifyColumnWidth={this.props.modifyColumnWidth}
               insertColumn={this.props.insertColumn}
+              // Metadata dropdown props
+              canEditColumnInfo={this.props.canEditColumnInfo}
+              ColumnDropdownMenu={this.props.ColumnDropdownMenu}
+              view={this.props.view}
+              renameColumn={this.props.renameColumn}
+              modifyColumnData={this.props.modifyColumnData}
+              deleteColumn={this.props.deleteColumn}
+              {...this.props}
             />
             {this.renderRecordsBody({ containerWidth, recordDraggable })}
           </div>
@@ -1097,6 +1103,7 @@ Records.propTypes = {
   onRecordSelected: PropTypes.func,
   onTableDragStart: PropTypes.func,
   checkCanModifyRecord: PropTypes.func,
+  modifyRecord: PropTypes.func,
 };
 
 export default Records;

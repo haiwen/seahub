@@ -43,4 +43,6 @@ FileTagsFormatter.propTypes = {
   showName: PropTypes.bool,
 };
 
+FileTagsFormatter.displayName = 'FileTagsFormatter';
+
 export default FileTagsFormatter;

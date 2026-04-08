@@ -106,16 +106,16 @@ class GridUtils {
   }
 
   async paste({ type, copied, multiplePaste, pasteRange, isGroupView, columns, viewId, pasteSource, cutPosition }) {
-    const { row_ids: renderRecordIds } = this.metadata;
+    const { row_ids: renderRecordIds } = this.metadata || {};
     const { topLeft, bottomRight = {} } = pasteRange;
     const { rowIdx: startRecordIndex, idx: startColumnIndex, groupRecordIndex } = topLeft;
     const { rowIdx: endRecordIndex, idx: endColumnIndex } = bottomRight;
-    const { copiedRecords, copiedColumns } = copied;
+    const { copiedRecords, copiedColumns } = copied || {};
     const copiedRecordsLen = copiedRecords.length;
     const copiedColumnsLen = copiedColumns.length;
     const pasteRecordsLen = multiplePaste ? endRecordIndex - startRecordIndex + 1 : copiedRecordsLen;
     const pasteColumnsLen = multiplePaste ? endColumnIndex - startColumnIndex + 1 : copiedColumnsLen;
-    const renderRecordsCount = renderRecordIds.length;
+    const renderRecordsCount = Array.isArray(renderRecordIds) ? renderRecordIds.length : 0;
 
     const isFromCut = pasteSource === PASTE_SOURCE.CUT && type === TRANSFER_TYPES.METADATA_FRAGMENT;
     if (isFromCut) {
@@ -130,7 +130,7 @@ class GridUtils {
     // need expand records
     const startExpandRecordIndex = renderRecordsCount - startRecordIndex;
 
-    if ((copiedRecordsLen > startExpandRecordIndex)) return;
+    if (renderRecordsCount === 0 || isNaN(startExpandRecordIndex) || (copiedRecordsLen > startExpandRecordIndex)) return;
 
     let updateTags = [];
     let updateRecordIds = [];

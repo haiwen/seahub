@@ -4,12 +4,19 @@ const TEXT = 'text/plain';
 const FILES = 'files';
 const METADATA_FRAGMENT = 'sf-metadata-fragment';
 
+// Paste source type
+const PASTE_SOURCE = {
+  COPY: 'copy',
+  CUT: 'cut',
+};
+
 const TRANSFER_TYPES = {
   FRAGMENT,
   HTML,
   TEXT,
   FILES,
   METADATA_FRAGMENT,
+  PASTE_SOURCE,
 };
 
 export default TRANSFER_TYPES;

@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import Cell from './cell';
 import ActionsCell from './actions-cell';
-import InsertColumn from './insert-column';
+import InsertColumn from '../../../../../components/sf-table/table-main/records-header/insert-column';
 import { isMobile } from '../../../../../utils/utils';
 import { isFrozen, recalculateColumnMetricsByResizeColumn, getFrozenColumns } from '../../../../utils/column';
 import { isEmptyObject } from '../../../../utils/common';

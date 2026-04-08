@@ -32,7 +32,7 @@ const ColumnDropdownItem = ({
   if (!disabled) {
     return (
       <DropdownItem id={target} onClick={onChange} onMouseEnter={onMouseEnter} className={className}>
-        <Icon symbol={iconName} />
+        <Icon className="sf-metadata-icon" symbol={iconName} />
         <span className="item-text">{title}</span>
       </DropdownItem>
     );
@@ -47,10 +47,10 @@ const ColumnDropdownItem = ({
         onMouseEnter={onMouseEnter}
         id={target}
       >
-        <Icon symbol={iconName} />
+        <Icon className="sf-metadata-icon" symbol={iconName} />
         <span className="item-text">{title}</span>
         {isShowToolTip && (
-          <UncontrolledTooltip placement="right" target={target} fade={false} delay={{ show: 0, hide: 0 }} className="sf-table-tooltip">
+          <UncontrolledTooltip placement="right" target={target} fade={false} delay={{ show: 0, hide: 0 }} className="sf-metadata-tooltip">
             {tip}
           </UncontrolledTooltip>
         )}

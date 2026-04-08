@@ -1,6 +1,7 @@
 import TRANSFER_TYPES from '../constants/transfer-types';
 import { getColumnByIndex } from './column';
 import { toggleSelection } from './toggle-selection';
+import { setCopiedData } from './copied-data-cache';
 
 const { TEXT, FRAGMENT } = TRANSFER_TYPES;
 
@@ -13,12 +14,16 @@ function setEventTransfer({
     const copiedText = Array.isArray(selectedRecordIds) && selectedRecordIds.length > 0 ?
       getCopiedTextFormSelectedRecordIds(selectedRecordIds, tableData, recordGetterById, getClientCellValueDisplayString) :
       getCopiedTextFromSelectedCells(copiedRange, tableData, isGroupView, recordGetterByIndex, getClientCellValueDisplayString);
+
+    // Store copied records and columns in cache to avoid circular reference errors
+    // Use a unique ID to retrieve them later during paste
+    const cacheId = setCopiedData({ copiedRecords, copiedColumns });
+
     const copiedGrid = {
       selectedRecordIds,
       copiedRange,
-      copiedColumns,
-      copiedRecords,
       copiedTableId,
+      _cacheId: cacheId, // Reference to cached data for paste retrieval
     };
     const serializeCopiedGrid = JSON.stringify(copiedGrid);
     if (transfer) {

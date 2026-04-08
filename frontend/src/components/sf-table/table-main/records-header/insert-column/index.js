@@ -1,13 +1,28 @@
-import React, { useCallback, useEffect, useMemo, useRef, cloneElement } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Dropdown, DropdownToggle } from 'reactstrap';
 import PropTypes from 'prop-types';
-import Icon from '../../../../icon';
-import { isEnter } from '../../../../../utils/hotkey';
+import ColumnPopover from '@/metadata/components/popover/column-popover';
+import Icon from '@/components/icon';
+import { gettext } from '@/utils/constants';
+import { getEventClassName } from '@/utils/dom';
+import ColumnTypeDropdownMenu from '@/metadata/components/popover/column-popover/column-type-dropdown-menu';
+import { useMetadataView } from '@/metadata/hooks/metadata-view';
+import { ValidateColumnFormFields } from '@/metadata/components/popover/column-popover/utils';
+import { COMMON_FORM_FIELD_TYPE } from '@/metadata/components/popover/column-popover/constants';
+import toaster from '@/components/toast';
+import { getColumnDisplayName } from '@/metadata/utils/column';
 
 import './index.css';
 
-const InsertColumn = ({ lastColumn, height, groupOffsetLeft, NewColumnComponent, insertColumn: insertColumnAPI }) => {
+const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: insertColumnAPI }) => {
+  const [isColumnMenuOpen, setColumnMenuOpen] = useState(false);
+  const [isColumnPopoverShow, setColumnPopoverShow] = useState(false);
+  const [selectedColumn, setSelectedColumn] = useState(null);
+
+  const { metadata } = useMetadataView();
+
   const id = useMemo(() => 'sf-table-add-column', []);
-  const ref = useRef(null);
+
   const style = useMemo(() => {
     return {
       height: height,
@@ -17,38 +32,99 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, NewColumnComponent,
       left: lastColumn.left + lastColumn.width + groupOffsetLeft,
       position: 'absolute',
     };
-  }, [lastColumn, height, groupOffsetLeft]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastColumn, lastColumn.left, height, groupOffsetLeft]);
 
-  const openPopover = useCallback(() => {
-    ref?.current?.click();
-  }, [ref]);
+  const toggleAddColumn = useCallback(() => {
+    setColumnMenuOpen(!isColumnMenuOpen);
+  }, [isColumnMenuOpen]);
 
-  const insertColumn = useCallback((name, type, { key, data }) => {
+  const handleCancel = useCallback(() => {
+    setColumnMenuOpen(false);
+    setColumnPopoverShow(false);
+    setSelectedColumn(null);
+  }, []);
+
+  const handleSubmit = useCallback((name, type, { key, data }) => {
     insertColumnAPI(name, type, { key, data });
+    setColumnPopoverShow(false);
   }, [insertColumnAPI]);
 
-  const onHotKey = useCallback((event) => {
-    if (isEnter(event) && document.activeElement && document.activeElement.id === id) {
-      openPopover();
+  const handleSelect = useCallback((column) => {
+    setColumnMenuOpen(false);
+    setSelectedColumn(column);
+    if (column.groupby === 'predefined' && !column.canSetData) {
+      const columnName = getColumnDisplayName(column.key, column.name);
+      const columnNameError = ValidateColumnFormFields[COMMON_FORM_FIELD_TYPE.COLUMN_NAME]({ columnName, metadata, gettext });
+      if (columnNameError) {
+        toaster.danger(columnNameError.tips);
+        return;
+      }
+      handleSubmit(column.key, column.type, { key: column.key, data: column.data || {} });
+      return;
     }
-  }, [id, openPopover]);
+    setColumnPopoverShow(true);
+  }, [handleSubmit, metadata]);
+
+  const handleClickOutside = useCallback((event) => {
+    if (!isColumnPopoverShow) return;
+    if (!event.target) return;
+    const className = getEventClassName(event);
+
+    // Filter out clicks on dropdown items (column type selector)
+    if (className.indexOf('column-type-item') > -1) return;
+    // Filter out clicks on submit/cancel buttons inside ColumnPopover
+    if (className.indexOf('btn-primary') > -1 || className.indexOf('btn-secondary') > -1) return;
+
+    // Filter out clicks on ColumnPopover itself and its children
+    const popover = document.querySelector('.sf-table-column-popover');
+    if (popover && (popover === event.target || popover.contains(event.target))) return;
+
+    // Filter out clicks on dropdown menu
+    const dropdownMenu = document.querySelector('.sf-table-column-type-dropdown-menu');
+    if (dropdownMenu && event.target.closest('.sf-table-column-type-dropdown-menu')) return;
+
+    setColumnPopoverShow(false);
+  }, [isColumnPopoverShow]);
 
   useEffect(() => {
-    document.addEventListener('keydown', onHotKey);
+    document.addEventListener('mousedown', handleClickOutside);
+
     return () => {
-      document.removeEventListener('keydown', onHotKey);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   return (
     <>
-      <div className="sf-table-header-cell">
-        <div className="sf-table-cell column insert-column" style={style} id={id} ref={ref}>
+      <Dropdown
+        id={id}
+        className="sf-table-record-header-cell sf-table-column-type"
+        isOpen={isColumnMenuOpen}
+        direction="down"
+        toggle={toggleAddColumn}
+        style={style}
+      >
+        <DropdownToggle
+          tag="span"
+          tabIndex="0"
+          className="sf-table-result-table-cell column insert-column"
+          aria-label={gettext('Add column')}
+          role="button"
+        >
           <Icon symbol="add-table" />
-        </div>
-      </div>
-      {cloneElement(NewColumnComponent, { target: id, onChange: insertColumn })}
+        </DropdownToggle>
+        <ColumnTypeDropdownMenu onSelect={handleSelect} />
+      </Dropdown>
+      {isColumnPopoverShow && !isColumnMenuOpen && (
+        <ColumnPopover
+          target={id}
+          column={selectedColumn}
+          onSelect={handleSelect}
+          onCancel={handleCancel}
+          onSubmit={handleSubmit}
+        />
+      )}
     </>
   );
 };
@@ -57,7 +133,6 @@ InsertColumn.propTypes = {
   lastColumn: PropTypes.object.isRequired,
   height: PropTypes.number,
   groupOffsetLeft: PropTypes.number,
-  NewColumnComponent: PropTypes.object,
   insertColumn: PropTypes.func.isRequired,
 };
 

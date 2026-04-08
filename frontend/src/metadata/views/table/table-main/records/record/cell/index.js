@@ -5,8 +5,7 @@ import Formatter from './formatter';
 import { Utils } from '../../../../../../../utils/utils';
 import ObjectUtils from '../../../../../../../utils/object';
 import { isCellValueChanged, getCellValueByColumn } from '../../../../../../utils/cell';
-import { CellType, PRIVATE_COLUMN_KEYS, TABLE_SUPPORT_EDIT_TYPE_MAP, EDITOR_TYPE, EVENT_BUS_TYPE } from '../../../../../../constants';
-import { checkIsDir } from '../../../../../../utils/row';
+import { PRIVATE_COLUMN_KEYS, TABLE_SUPPORT_EDIT_TYPE_MAP, EDITOR_TYPE, EVENT_BUS_TYPE } from '../../../../../../constants';
 import { openFile } from '../../../../../../utils/file';
 import { useTags } from '../../../../../../../tag/hooks';
 
@@ -32,9 +31,8 @@ const Cell = React.memo(({
     const { type } = column;
     if (!window.sfMetadataContext.canModifyColumn(column)) return false;
     if (!TABLE_SUPPORT_EDIT_TYPE_MAP[type]) return false;
-    if (type === CellType.TAGS) return !checkIsDir(record);
     return true;
-  }, [column, record]);
+  }, [column]);
 
   const className = useMemo(() => {
     const { type } = column;

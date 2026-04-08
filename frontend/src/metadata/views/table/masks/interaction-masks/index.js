@@ -145,10 +145,35 @@ class InteractionMasks extends React.Component {
 
   onSelectCell = (cell, openEditor) => {
     const { selectedPosition, isEditorEnabled } = this.state;
-    const callback = openEditor ? this.openEditor : () => null;
 
     if (isEditorEnabled) {
+      // Capture position BEFORE closeEditor() re-renders and clears this.selectionMask
+      const position = this.getEditorPosition();
       this.closeEditor();
+      this.setState((prevState) => {
+        const next = { ...selectedPosition, ...cell };
+        if (this.isCellWithinBounds(next)) {
+          return {
+            selectedPosition: next,
+            selectedRange: {
+              topLeft: next,
+              bottomRight: next,
+              startCell: next,
+              cursorCell: next,
+              isDragging: false,
+            }
+          };
+        }
+        return prevState;
+      }, () => {
+        if (openEditor) {
+          // Use setTimeout to ensure DOM has updated and SelectionMask is re-rendered
+          setTimeout(() => {
+            this.openEditor(null, position);
+          }, 0);
+        }
+      });
+      return;
     }
 
     this.setState((prevState) => {
@@ -166,7 +191,7 @@ class InteractionMasks extends React.Component {
         };
       }
       return prevState;
-    }, callback);
+    }, openEditor ? this.openEditor : () => null);
   };
 
   selectNone = () => {
@@ -211,7 +236,9 @@ class InteractionMasks extends React.Component {
   };
 
   // onCellSelect || onKeyDown
-  openEditor = (event = null) => {
+  // position parameter is optional and used when called from onSelectCell callback
+  // to avoid getEditorPosition() returning undefined after closeEditor() re-renders
+  openEditor = (event = null, position) => {
     if (this.isSelectedCellIsLongText()) {
       event && event.stopPropagation();
       event && event.preventDefault();
@@ -229,10 +256,13 @@ class InteractionMasks extends React.Component {
     // 1. editor is closed
     // 2. record-cell is editable or open editor with preview mode
     if (((this.isSelectedCellEditable() || _isNameColumn || (openEditorMode === EDITOR_TYPE.PREVIEWER && READONLY_PREVIEW_COLUMNS.includes(columnType))) && !this.state.isEditorEnabled)) {
+      // Use pre-computed position if provided (from onSelectCell callback),
+      // otherwise calculate it now (for keyboard-triggered opens)
+      const editorPosition = position !== undefined ? position : this.getEditorPosition();
       this.setState({
         isEditorEnabled: true,
         firstEditorKeyDown: key,
-        editorPosition: this.getEditorPosition()
+        editorPosition: editorPosition
       });
     }
   };
@@ -1143,6 +1173,7 @@ class InteractionMasks extends React.Component {
     const showDragHandle = (isDragEnabled && canEdit);
     const column = getSelectedColumn({ selectedPosition, columns });
     const { type: columnType } = column || {};
+
     if (isEditorEnabled && columnType !== CellType.RATE && columnType !== CellType.CHECKBOX && columnType !== CellType.FILE_NAME) {
       return null;
     }

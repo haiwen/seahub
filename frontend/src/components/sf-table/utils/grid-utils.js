@@ -7,6 +7,7 @@ import { getCellValueByColumn } from './cell';
 import { CellType } from '../../../metadata/constants';
 import { NOT_SUPPORT_DRAG_COPY_COLUMN_TYPES } from '../../../metadata/constants/view/table';
 import { getGroupRecordByIndex } from '../shared/group-metrics';
+import { checkIsDir } from '../../../metadata/utils/row/core';
 
 const NORMAL_RULE = ({ value }) => {
   return value;
@@ -426,6 +427,9 @@ class GridUtils {
       for (let j = startColumnIdx; j <= endColumnIdx; j++) {
         let column = shownColumns[j];
         let { key: cellKey, type } = column;
+        // Skip TAGS and LONG_TEXT for folder records (folders don't support these)
+        const isFolder = checkIsDir(dragRow);
+        if (isFolder && (type === CellType.TAGS || type === CellType.LONG_TEXT)) continue;
         if (canModifyColumn && !canModifyColumn(column)) continue;
         if (NOT_SUPPORT_DRAG_COPY_COLUMN_TYPES && NOT_SUPPORT_DRAG_COPY_COLUMN_TYPES.includes(type)) continue;
 

@@ -35,32 +35,37 @@ const TableMain = ({
   recordGetterById,
   getClientCellValueDisplayString,
   updateFileTags,
+  gridUtils: injectedGridUtils,
   ...customProps
 }) => {
 
+  // Use injected GridUtils if provided, otherwise create one internally
   const gridUtils = useMemo(() => {
+    if (injectedGridUtils) {
+      return injectedGridUtils;
+    }
     return new GridUtils(recordsIds, {
       recordGetterByIndex,
       recordGetterById,
       updateFileTags,
     });
-  }, [recordsIds, recordGetterByIndex, recordGetterById, updateFileTags]);
+  }, [injectedGridUtils, recordsIds, recordGetterByIndex, recordGetterById, updateFileTags]);
 
   const tableId = useMemo(() => {
     return (table && table._id) || '';
   }, [table]);
 
   const recordsCount = useMemo(() => {
-    return recordsIds.length;
+    return (recordsIds || []).length;
   }, [recordsIds]);
 
   const treeNodesCount = useMemo(() => {
-    return recordsTree.length;
+    return (recordsTree || []).length;
   }, [recordsTree]);
 
   const treeNodeKeyRecordIdMap = useMemo(() => {
     // treeNodeKeyRecordIdMap: { [node_key]: _id, ... }
-    return generateKeyTreeNodeRowIdMap(recordsTree);
+    return recordsTree ? generateKeyTreeNodeRowIdMap(recordsTree) : {};
   }, [recordsTree]);
 
   const hasNoRecords = useMemo(() => {
@@ -76,7 +81,7 @@ const TableMain = ({
   }, [showSequenceColumn]);
 
   const groupbysCount = useMemo(() => {
-    return groupbys.length;
+    return (groupbys || []).length;
   }, [groupbys]);
 
   const groupOffset = useMemo(() => {
@@ -119,6 +124,7 @@ const TableMain = ({
       {!isLoading && !hasNoRecords && (
         <Records
           {...customProps}
+          table={table}
           tableId={tableId}
           tableColumns={tableColumns}
           columns={visibleColumns}
@@ -146,6 +152,7 @@ const TableMain = ({
           getClientCellValueDisplayString={getInternalClientCellValueDisplayString}
           getCopiedRecordsAndColumnsFromRange={getCopiedRecordsAndColumnsFromRange}
           getUpdateDraggedRecords={getUpdateDraggedRecords}
+          updateFileTags={updateFileTags}
         />
       )}
     </div>
@@ -164,12 +171,18 @@ TableMain.propTypes = {
   noRecordsTipsText: PropTypes.string,
   recordsTree: PropTypes.array,
   showRecordAsTree: PropTypes.bool,
+  modifyRecord: PropTypes.func,
   modifyRecords: PropTypes.func,
   enableScrollToLoad: PropTypes.bool,
   loadMore: PropTypes.func,
   loadAll: PropTypes.func,
   isLoading: PropTypes.bool,
   updateFileTags: PropTypes.func,
+  /**
+   * External GridUtils instance. If provided, this will be used instead of
+   * internally creating one. Useful for metadata tables.
+   */
+  gridUtils: PropTypes.object,
 };
 
 export default TableMain;

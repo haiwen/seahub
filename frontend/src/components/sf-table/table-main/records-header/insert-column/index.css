@@ -1,9 +1,12 @@
-.sf-table-header-cell .sf-table-cell.insert-column {
+.insert-column {
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  color: var(--bs-icon-secondary-color);
 }
 
-.sf-table-header-cell .sf-table-cell.insert-column:hover {
-  cursor: pointer;
+.insert-column:hover .seafile-multicolor-icon {
+  color: var(--bs-icon-color);
 }

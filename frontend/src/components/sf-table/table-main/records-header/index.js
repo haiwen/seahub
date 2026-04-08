@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState, isValidElement } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import Cell from './cell';
 import ActionsCell from './actions-cell';
@@ -19,7 +19,6 @@ const RecordsHeader = ({
   lastFrozenColumnKey,
   groupOffsetLeft,
   ColumnDropdownMenu,
-  NewColumnComponent,
   headerSettings,
   columnMetrics: propsColumnMetrics,
   colOverScanStartIdx,
@@ -30,7 +29,7 @@ const RecordsHeader = ({
   modifyColumnWidth: modifyColumnWidthAPI,
   modifyColumnOrder: modifyColumnOrderAPI,
   insertColumn,
-  ...customProps
+  ...props
 }) => {
   const [resizingColumnMetrics, setResizingColumnMetrics] = useState(null);
   const [draggingColumnKey, setDraggingCellKey] = useState(null);
@@ -128,8 +127,8 @@ const RecordsHeader = ({
             const isLastFrozenCell = key === lastFrozenColumnKey;
             return (
               <Cell
-                {...customProps}
                 key={`sf-table-frozen-header-cell-${key}`}
+                {...props}
                 frozen
                 moveable={moveable}
                 resizable={resizable}
@@ -160,7 +159,7 @@ const RecordsHeader = ({
           return (
             <Cell
               key={`sf-table-header-cell-${column.key}`}
-              {...customProps}
+              {...props}
               moveable={moveable}
               resizable={resizable}
               ColumnDropdownMenu={ColumnDropdownMenu}
@@ -181,12 +180,12 @@ const RecordsHeader = ({
             />
           );
         })}
-        {(insertColumn && isValidElement(NewColumnComponent)) && (
+        {(props.canInsertColumn && insertColumn) && (
           <InsertColumn
             lastColumn={columnMetrics.columns[columnMetrics.columns.length - 1]}
             groupOffsetLeft={groupOffsetLeft}
             height={height}
-            NewColumnComponent={NewColumnComponent}
+            metadata={props.table}
             insertColumn={insertColumn}
           />
         )}

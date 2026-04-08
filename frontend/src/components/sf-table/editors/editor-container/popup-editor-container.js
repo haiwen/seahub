@@ -6,11 +6,15 @@ import Editor from './editor';
 import { Utils } from '../../../../utils/utils';
 import { EDITOR_CONTAINER as Z_INDEX_EDITOR_CONTAINER } from '../../constants/z-index';
 import EventBus from '../../../common/event-bus';
-import { checkIsPrivateColumn, getColumnOriginName } from '../../utils/column';
+import { checkIsColumnEditable, getColumnOriginName } from '../../utils/column';
 import { checkCellValueChanged } from '../../utils/cell-comparer';
-import { getCellValueByColumn } from '../../utils/cell';
+import { getCellValueByColumn, getColumnOptionNameById, getColumnOptionNamesByIds, getFileNameFromRecord } from '../../utils/cell';
 import { EVENT_BUS_TYPE } from '../../constants/event-bus-type';
-import { CellType } from '../../../../metadata/constants';
+import { CellType, PRIVATE_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../../../../metadata/constants';
+
+const NOT_SUPPORT_EDITOR_COLUMN_TYPES = [
+  CellType.CTIME, CellType.MTIME, CellType.CREATOR, CellType.LAST_MODIFIER, CellType.FILE_NAME,
+];
 
 const TAGS_EDITOR_WIDTH = 400;
 
@@ -20,21 +24,32 @@ class PopupEditorContainer extends React.Component {
 
   constructor(props) {
     super(props);
-    const { width, height, left, top, column } = this.props;
+    // editorPosition: DOM-based position for PopupEditor's style (left, top from bounding rect)
+    // getSelectedDimensions: GRID-based position for TagsEditor customStyle (left, top, width, height)
+    const { width, height, left, top, column, editorPosition } = this.props;
+    const editorLeft = editorPosition?.left ?? left;
+    const editorTop = editorPosition?.top ?? top;
+
     let additionalStyles = {};
     if (column.type === CellType.SINGLE_SELECT || column.type === CellType.MULTIPLE_SELECT) {
       additionalStyles = { width, height };
     }
+
+    // Calculate final style position
+    // For TAGS: apply horizontal offset to DOM-based editorPosition to align TagsEditor's left edge with cell's left edge
+    let finalLeft = editorLeft;
+    let finalTop = editorTop;
     if (column.type === CellType.TAGS) {
-      additionalStyles = { left: left - (TAGS_EDITOR_WIDTH - column.width) };
+      finalLeft = editorLeft - (TAGS_EDITOR_WIDTH - column.width);
     }
+
     this.state = {
       isInvalid: false,
       style: {
         position: 'absolute',
         zIndex: Z_INDEX_EDITOR_CONTAINER,
-        left,
-        top,
+        left: finalLeft,
+        top: finalTop,
         width,
         height,
         ...additionalStyles
@@ -66,10 +81,15 @@ class PopupEditorContainer extends React.Component {
   };
 
   computeTagsEditorCustomStyle = () => {
+    // Only handle vertical positioning here (top/bottom)
+    // Horizontal position is handled in constructor via style.left
     const { top, height } = this.props;
     const vh = window.innerHeight || 0;
     const spaceBelow = vh - (top + height);
     const spaceAbove = top;
+
+    // Determine if TagsEditor should display above or below the cell
+    // TagsEditor height is approximately 400px
     if (spaceBelow >= 400 || spaceBelow >= spaceAbove) {
       return { top: 0, bottom: 'auto' };
     }
@@ -77,8 +97,18 @@ class PopupEditorContainer extends React.Component {
   };
 
   createEditor = () => {
-    const { column, record, height, onPressTab, editorPosition, columns, modifyColumnData, readOnly, operation } = this.props;
-    const value = this.getInitialValue();
+    const { column, record, height, onPressTab, editorPosition, columns, modifyColumnData, readOnly, operation, onSelectTag, onDeselectTag } = this.props;
+
+    const computedReadOnly = readOnly !== undefined ? readOnly : !checkIsColumnEditable(column) || NOT_SUPPORT_EDITOR_COLUMN_TYPES.includes(column.type);
+
+    if (column.type === CellType.GEOLOCATION) {
+      const fileName = getFileNameFromRecord(record);
+      if (!Utils.imageCheck(fileName)) {
+        return null;
+      }
+    }
+
+    const value = this.getInitialValue(computedReadOnly);
 
     let editorProps = {
       ref: this.setEditorRef,
@@ -90,7 +120,7 @@ class PopupEditorContainer extends React.Component {
       onCommitCancel: this.commitCancel,
       onClose: this.closeEditor,
       onEscape: this.closeEditor,
-      editorContainer: document.body,
+      editorContainer: this.getEditorContainer(),
       modifyColumnData,
       editorPosition,
       editingRowId: this.editingRowId,
@@ -98,21 +128,46 @@ class PopupEditorContainer extends React.Component {
       height,
       columns,
       column,
-      readOnly,
+      readOnly: computedReadOnly,
       onPressTab,
       operation,
     };
 
-    if (column.type === CellType.LINK || column.type === CellType.TAGS) {
+    // DATE: handle format
+    if (column.type === CellType.DATE) {
+      editorProps.format = column?.data?.format;
+      if (column.key === PRIVATE_COLUMN_KEY.CAPTURE_TIME) {
+        // convert hh:mm:ss to hh:mm if exists
+        editorProps.format = editorProps.format?.replace('HH:mm:ss', 'HH:mm');
+      }
+    }
+
+    // TAGS: handle canEditData and canAddTag
+    if (column.type === CellType.TAGS) {
+      const customStyle = this.computeTagsEditorCustomStyle();
       editorProps = {
+        customStyle, // Put customStyle first so it won't be overwritten
         ...editorProps,
-        customStyle: this.computeTagsEditorCustomStyle()
+        onSelect: onSelectTag,
+        onDeselect: onDeselectTag,
+        canEditData: this.props.canEditData,
+        canAddTag: !readOnly,
+        column: {
+          ...column,
+          width: TAGS_EDITOR_WIDTH,
+        },
       };
     }
 
     return (
-      <Editor ref={this.setEditorRef} column={column} editorProps={editorProps} />
+      <Editor ref={this.setEditorRef} {...editorProps} />
     );
+  };
+
+  getEditorContainer = () => {
+    const { column } = this.props;
+    if (column.type === CellType.DATE) return document.body;
+    return null;
   };
 
   getRecordMetaData = () => {
@@ -128,10 +183,15 @@ class PopupEditorContainer extends React.Component {
     return this.editor;
   };
 
-  getInitialValue = () => {
-    const { firstEditorKeyDown: key, value } = this.props;
+  getInitialValue = (readOnly) => {
+    const { firstEditorKeyDown: key, value, column } = this.props;
     if (key === 'Enter') {
       return value;
+    }
+    // LONG_TEXT: special handling for space key and readOnly
+    if (column.type === CellType.LONG_TEXT) {
+      if (key === ' ') return value;
+      return readOnly ? value : key || value;
     }
     return key || value;
   };
@@ -151,30 +211,93 @@ class PopupEditorContainer extends React.Component {
   };
 
   // The input area in the interface loses focus. Use this.getEditor().getValue() to get data.
-  commit = (closeEditor) => {
-    const { record } = this.props;
+  commit = () => {
+    const { record, column } = this.props;
     if (!record || !record._id) return;
-    const updated = (this.getEditor() && this.getEditor().getValue()) || {};
-    this.commitData(updated, closeEditor);
+    const editor = this.getEditor();
+    if (!editor) return;
+
+    if (column.type === CellType.GEOLOCATION) {
+      if (editor.getValue) {
+        const geolocationValue = editor.getValue();
+        const { position, location_translated } = geolocationValue || { position: null, location_translated: null };
+        const updated = { [column.key]: position };
+        updated[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED] = location_translated;
+        this.commitData(updated, true);
+      }
+      if (editor.onClose) {
+        editor.onClose();
+      }
+      return;
+    }
+
+    let newValue = editor.getValue();
+    const { key: columnKey, type: columnType } = column;
+
+    // DATE: handle time format conversion for CAPTURE_TIME
+    if (columnType === CellType.DATE && columnKey === PRIVATE_COLUMN_KEY.CAPTURE_TIME && typeof newValue === 'string') {
+      if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/.test(newValue)) {
+        newValue = newValue + ':00';
+      }
+    }
+
+    let updated = columnType === CellType.DATE ? { [columnKey]: newValue } : newValue;
+    if (columnType === CellType.SINGLE_SELECT) {
+      updated[columnKey] = newValue[columnKey] ? getColumnOptionNameById(column, newValue[columnKey]) : '';
+    } else if (columnType === CellType.MULTIPLE_SELECT) {
+      updated[columnKey] = newValue[columnKey] ? getColumnOptionNamesByIds(column, newValue[columnKey]) : [];
+    }
+
+    this.commitData(updated, columnType !== CellType.LONG_TEXT);
   };
 
   // This is the updated data obtained by manually clicking the button
   commitData = (updated, closeEditor = false) => {
     const { onCommit, column, record } = this.props;
-    const { key: columnKey, name: columnName } = column;
+    const { key: columnKey, type: columnType, name: columnName } = column;
     const originalOldCellValue = getCellValueByColumn(record, column);
     let originalUpdates = { ...updated };
-    if (!checkCellValueChanged(originalOldCellValue, originalUpdates[columnKey]) || !this.isNewValueValid(updated)) {
-      if (closeEditor && typeof this.editor.onClose === 'function') {
+
+    // GEOLOCATION: check both position and translated location
+    let hasChanged;
+    if (columnType === CellType.GEOLOCATION) {
+      const currentLocation = originalOldCellValue;
+      const newLocation = originalUpdates[columnKey];
+      const currentTranslated = record[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED];
+      const newTranslated = originalUpdates[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED];
+
+      hasChanged = checkCellValueChanged(currentLocation, newLocation) ||
+                  (currentTranslated !== newTranslated);
+    } else {
+      hasChanged = checkCellValueChanged(originalOldCellValue, originalUpdates[columnKey]);
+    }
+    if (!hasChanged || !this.isNewValueValid(updated)) {
+      if (closeEditor && typeof this.editor?.onClose === 'function') {
         this.editor.onClose();
       }
+      this.isClosed = true;
+      this.props.onCommitCancel();
       return;
     }
+
     this.changeCommitted = true;
     const rowId = record._id;
-    const key = Object.keys(updated)[0];
-    const value = updated[key];
-    const updates = checkIsPrivateColumn(column) ? { [columnKey]: value } : { [columnName]: value };
+
+    let updates;
+    if (columnType === CellType.GEOLOCATION) {
+      updates = {};
+      const locationValue = updated[columnKey];
+      if (PRIVATE_COLUMN_KEYS.includes(columnKey)) {
+        updates[columnKey] = locationValue;
+      } else {
+        updates[columnName] = locationValue;
+      }
+      updates[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED] = updated[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED];
+    } else {
+      const key = Object.keys(updated)[0];
+      const value = updated[key];
+      updates = PRIVATE_COLUMN_KEYS.includes(columnKey) ? { [columnKey]: value } : { [columnName]: value };
+    }
     const { oldRowData, originalOldRowData } = this.getOldRowData(originalOldCellValue);
 
     // updates used for update remote record data
@@ -203,6 +326,9 @@ class PopupEditorContainer extends React.Component {
   };
 
   closeEditor = (isEscapeKeydown) => {
+    // DATE: only close on escape keydown, not on blur/click outside
+    const { column } = this.props;
+    if (column.type === CellType.DATE && !isEscapeKeydown) return null;
     !this.isClosed && this.onClickOutside(isEscapeKeydown);
   };
 

@@ -30,6 +30,7 @@ const SFTable = ({
   loadMore,
   loadAll,
   updateFileTags,
+  gridUtils,
   ...customProps
 }) => {
   const containerRef = useRef(null);
@@ -111,6 +112,7 @@ const SFTable = ({
         recordGetterById={recordGetterById}
         recordGetterByIndex={recordGetterByIndex}
         updateFileTags={updateFileTags}
+        gridUtils={gridUtils}
       />
     </div>
   );
@@ -172,6 +174,12 @@ SFTable.propTypes = {
   onRecordSelected: PropTypes.func,
   onTableDragStart: PropTypes.func,
   updateFileTags: PropTypes.func,
+  /**
+   * External GridUtils instance. If provided, this will be used instead of
+   * internally creating one. Useful for metadata tables that need to share
+   * GridUtils state with external components.
+   */
+  gridUtils: PropTypes.object,
 };
 
 export default SFTable;

@@ -28,7 +28,6 @@ const TagsEditorWrapper = forwardRef((props, ref) => {
       column={{ ...column, width: 400 }}
       record={record}
       value={value}
-      canEditData={true}
       canAddTag={true}
       onSelect={handleSelect}
       onDeselect={handleDeselect}

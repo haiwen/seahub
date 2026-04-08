@@ -285,8 +285,9 @@ class Record extends React.Component {
     e.preventDefault();
     e.stopPropagation();
     this.setState({ canDropTip: false });
+    if (!this.props.recordDragDropEvents) return;
     if (!this.checkHasDraggedRecord() || this.checkOverDraggingRecord()) {
-      this.props.recordDragDropEvents.onDragEnd();
+      this.props.recordDragDropEvents?.onDragEnd?.();
       return;
     }
     const { record, treeNodeKey } = this.props;
@@ -295,7 +296,7 @@ class Record extends React.Component {
   };
 
   onDragEnd = () => {
-    this.props.recordDragDropEvents.onDragEnd();
+    this.props.recordDragDropEvents?.onDragEnd?.();
   };
 
   render() {

@@ -20,6 +20,8 @@ import {
   getSelectedRangeDimensions, getSelectedRow, getSelectedColumn,
   getRecordsFromSelectedRange, getSelectedCellValue, checkIsSelectedCellEditable,
 } from '../../utils/selected-cell-utils';
+import { checkIsNameColumn, checkIsColumnSupportPreview, getColumnIndexByKey } from '../../utils/column';
+import { CellType, PRIVATE_COLUMN_KEY } from '../../../../metadata/constants';
 import { RecordMetrics } from '../../shared/record-metrics';
 import { TreeMetrics } from '../../utils/tree-metrics';
 import setEventTransfer from '../../utils/set-event-transfer';
@@ -29,7 +31,6 @@ import { isSpace } from '../../../../utils/hotkey';
 import EventBus from '../../../common/event-bus';
 import { EVENT_BUS_TYPE } from '../../constants/event-bus-type';
 import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../../utils/keyboard-utils';
-import { checkIsColumnSupportPreview, getColumnIndexByKey } from '../../utils/column';
 
 import './index.css';
 
@@ -127,12 +128,84 @@ class InteractionMasks extends React.Component {
     }
   };
 
+  /**
+   * Handle tag selection for Tags column editor.
+   * Called when a tag is clicked in the TagsEditor.
+   * @param {string|number} tagId - The ID of the tag to select
+   */
+  handleSelectTags = (tagId) => {
+    const { selectedPosition, isGroupView } = this.state;
+    const { columns, updateFileTags, recordGetterByIndex } = this.props;
+    if (!updateFileTags) return;
+
+    const record = getSelectedRow({ selectedPosition, isGroupView, recordGetterByIndex });
+    if (!record) return;
+
+    const recordId = record._id;
+    const value = getSelectedCellValue({ selectedPosition, columns, isGroupView, recordGetterByIndex }) || [];
+    const ids = value.map(item => item.row_id);
+    const newValue = ids.slice(0);
+    if (!newValue.includes(tagId)) {
+      newValue.push(tagId);
+    }
+    updateFileTags([{ record_id: recordId, tags: newValue, old_tags: Array.isArray(value) ? value.map(i => i.row_id) : [] }]);
+  };
+
+  /**
+   * Handle tag deselection for Tags column editor.
+   * Called when a tag is deselected in the TagsEditor.
+   * @param {string|number} tagId - The ID of the tag to deselect
+   */
+  handleDeselectTags = (tagId) => {
+    const { selectedPosition, isGroupView } = this.state;
+    const { columns, updateFileTags, recordGetterByIndex } = this.props;
+    if (!updateFileTags) return;
+
+    const record = getSelectedRow({ selectedPosition, isGroupView, recordGetterByIndex });
+    if (!record) return;
+
+    const recordId = record._id;
+    const value = getSelectedCellValue({ selectedPosition, columns, isGroupView, recordGetterByIndex }) || [];
+    const ids = value.map(item => item.row_id);
+    const newValue = ids.slice(0);
+    const tagIndex = newValue.indexOf(tagId);
+    if (tagIndex > -1) {
+      newValue.splice(tagIndex, 1);
+    }
+    updateFileTags([{ record_id: recordId, tags: newValue, old_tags: Array.isArray(value) ? value.map(i => i.row_id) : [] }]);
+  };
+
   onSelectCell = (cell, openEditor) => {
     const { selectedPosition, isEditorEnabled } = this.state;
-    const callback = openEditor ? this.openEditor : () => null;
 
     if (isEditorEnabled) {
+      // Capture position BEFORE closeEditor() re-renders and clears this.selectionMask
+      const position = this.getEditorPosition();
       this.closeEditor();
+      this.setState((prevState) => {
+        const next = { ...selectedPosition, ...cell };
+        if (this.isCellWithinBounds(next)) {
+          return {
+            selectedPosition: next,
+            selectedRange: {
+              topLeft: next,
+              bottomRight: next,
+              startCell: next,
+              cursorCell: next,
+              isDragging: false,
+            }
+          };
+        }
+        return prevState;
+      }, () => {
+        if (openEditor) {
+          // Use setTimeout to ensure DOM has updated and SelectionMask is re-rendered
+          setTimeout(() => {
+            this.openEditor(null, position);
+          }, 0);
+        }
+      });
+      return;
     }
 
     this.setState((prevState) => {
@@ -150,7 +223,7 @@ class InteractionMasks extends React.Component {
         };
       }
       return prevState;
-    }, callback);
+    }, openEditor ? this.openEditor : () => null);
   };
 
   selectNone = () => {
@@ -195,19 +268,24 @@ class InteractionMasks extends React.Component {
   };
 
   // onCellSelect || onKeyDown
-  openEditor = (event = null) => {
+  // position parameter is optional and used when called from onSelectCell callback
+  // to avoid getEditorPosition() returning undefined after closeEditor() re-renders
+  openEditor = (event = null, position) => {
     const { key } = event || {};
     const { isEditorEnabled, selectedPosition, openEditorMode } = this.state;
     const { columns } = this.props;
     const selectedColumn = getSelectedColumn({ selectedPosition, columns });
     // how to open editors?
     // 1. editor is closed
-    // 2. record-cell is editable or open editor with preview mode
-    if (!isEditorEnabled && (this.checkIsSelectedCellEditable() || (openEditorMode === EDITOR_TYPE.PREVIEWER && checkIsColumnSupportPreview(selectedColumn)))) {
+    // 2. record-cell is editable or is name column or open editor with preview mode
+    if (!isEditorEnabled && (this.checkIsSelectedCellEditable() || checkIsNameColumn(selectedColumn) || (openEditorMode === EDITOR_TYPE.PREVIEWER && checkIsColumnSupportPreview(selectedColumn)))) {
+      // Use pre-computed position if provided (from onSelectCell callback),
+      // otherwise calculate it now (for keyboard-triggered opens)
+      const editorPosition = position !== undefined ? position : this.getEditorPosition();
       this.setState({
         isEditorEnabled: true,
         firstEditorKeyDown: key,
-        editorPosition: this.getEditorPosition()
+        editorPosition: editorPosition
       });
     }
   };
@@ -411,24 +489,36 @@ class InteractionMasks extends React.Component {
       const { left: selectionMaskLeft, top: selectionMaskTop } = this.selectionMask.getBoundingClientRect();
       if (editorPortalTarget === document.body) {
         const { scrollLeft, scrollTop } = document.scrollingElement || document.documentElement;
-        return {
-          left: selectionMaskLeft + scrollLeft,
-          top: selectionMaskTop + scrollTop
-        };
+        return { left: selectionMaskLeft + scrollLeft, top: selectionMaskTop + scrollTop };
       }
 
       const { left: portalTargetLeft, top: portalTargetTop } = editorPortalTarget.getBoundingClientRect();
       const { scrollLeft, scrollTop } = editorPortalTarget;
-      return {
-        left: selectionMaskLeft - portalTargetLeft + scrollLeft,
-        top: selectionMaskTop - portalTargetTop + scrollTop
-      };
+      return { left: selectionMaskLeft - portalTargetLeft + scrollLeft, top: selectionMaskTop - portalTargetTop + scrollTop };
     }
   };
 
   onCommit = (updated, closeEditor = true) => {
-    if (this.props.modifyRecord) {
-      this.props.modifyRecord(updated);
+    const { column, record, modifyRecord, updateFileTags } = this.props;
+
+    // Handle TAGS type separately - uses updateFileTags API
+    if (column && column.type === CellType.TAGS && updateFileTags) {
+      const recordId = record._id;
+      const currentTags = record[PRIVATE_COLUMN_KEY.TAGS] || [];
+      const newTags = updated[column.key] || [];
+      updateFileTags([{
+        record_id: recordId,
+        tags: newTags,
+        old_tags: Array.isArray(currentTags) ? currentTags.map(t => t.row_id) : []
+      }]);
+      if (closeEditor) {
+        this.closeEditor();
+      }
+      return;
+    }
+
+    if (modifyRecord) {
+      modifyRecord(updated);
     }
     if (closeEditor) {
       this.closeEditor();
@@ -1002,7 +1092,7 @@ class InteractionMasks extends React.Component {
   renderSingleCellSelectView = () => {
     const { isEditorEnabled, selectedPosition } = this.state;
     const isDragEnabled = this.checkIsSelectedCellEditable();
-    const showDragHandle = (isDragEnabled && this.props.canModifyRecords);
+    const showDragHandle = (isDragEnabled && this.props.supportDragFill);
     if (isEditorEnabled) {
       return null;
     }
@@ -1024,7 +1114,7 @@ class InteractionMasks extends React.Component {
     const { selectedRange } = this.state;
     const { columns, rowHeight } = this.props;
     const isDragEnabled = this.checkIsSelectedCellEditable();
-    const showDragHandle = (isDragEnabled && this.props.canModifyRecords);
+    const showDragHandle = (isDragEnabled && this.props.supportDragFill);
     return [
       <SelectionRangeMask
         key="range-mask"
@@ -1047,7 +1137,7 @@ class InteractionMasks extends React.Component {
 
   render() {
     const { selectedRange, isEditorEnabled, draggedRange, selectedPosition, firstEditorKeyDown, openEditorMode, editorPosition, selectedOperation } = this.state;
-    const { columns, isGroupView = false, recordGetterByIndex, scrollTop, getScrollLeft, editorPortalTarget, contextMenu } = this.props;
+    const { table, columns, isGroupView = false, recordGetterByIndex, scrollTop, getScrollLeft, editorPortalTarget, contextMenu } = this.props;
     const isSelectedSingleCell = selectedRangeIsSingleCell(selectedRange);
     return (
       <div
@@ -1068,6 +1158,7 @@ class InteractionMasks extends React.Component {
         {isEditorEnabled && (
           <EditorPortal target={editorPortalTarget}>
             <EditorContainer
+              table={table}
               columns={columns}
               scrollTop={scrollTop}
               firstEditorKeyDown={firstEditorKeyDown}
@@ -1077,15 +1168,15 @@ class InteractionMasks extends React.Component {
               record={getSelectedRow({ selectedPosition, isGroupView, recordGetterByIndex })}
               column={getSelectedColumn({ selectedPosition, columns })}
               value={getSelectedCellValue({ selectedPosition, columns, isGroupView, recordGetterByIndex })}
-              editorPosition={editorPosition}
               onCommit={this.onCommit}
               onCommitCancel={this.onCommitCancel}
               modifyColumnData={this.props.modifyColumnData}
               operation={selectedOperation}
-              {...{
-                ...this.getSelectedDimensions(selectedPosition),
-                ...this.state.editorPosition
-              }}
+              // Tags-specific callbacks
+              onSelectTag={this.handleSelectTags}
+              onDeselectTag={this.handleDeselectTags}
+              editorPosition={editorPosition}
+              {...this.getSelectedDimensions(selectedPosition)}
             />
           </EditorPortal>
         )}
@@ -1143,6 +1234,7 @@ InteractionMasks.propTypes = {
   recordGetterByIndex: PropTypes.func,
   recordGetterById: PropTypes.func,
   modifyRecords: PropTypes.func,
+  updateFileTags: PropTypes.func,
   deleteRecordsLinks: PropTypes.func,
   paste: PropTypes.func,
   editMobileCell: PropTypes.func,

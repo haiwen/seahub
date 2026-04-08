@@ -1,4 +1,5 @@
 import TRANSFER_TYPES from '../constants/transfer-types';
+import { getCopiedData } from './copied-data-cache';
 
 const { FRAGMENT, HTML, TEXT } = TRANSFER_TYPES;
 
@@ -11,7 +12,16 @@ function getEventTransfer(event) {
 
   // paste sf-metadata
   if (dtableFragment) {
-    return { [TRANSFER_TYPES.METADATA_FRAGMENT]: JSON.parse(dtableFragment), type: TRANSFER_TYPES.METADATA_FRAGMENT };
+    const parsedFragment = JSON.parse(dtableFragment);
+    // If there's a cache ID, retrieve the copied records and columns from cache
+    if (parsedFragment._cacheId) {
+      const cachedData = getCopiedData(parsedFragment._cacheId);
+      if (cachedData) {
+        parsedFragment.copiedRecords = cachedData.copiedRecords;
+        parsedFragment.copiedColumns = cachedData.copiedColumns;
+      }
+    }
+    return { [TRANSFER_TYPES.METADATA_FRAGMENT]: parsedFragment, type: TRANSFER_TYPES.METADATA_FRAGMENT };
   }
 
   // paste html

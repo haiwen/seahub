@@ -104,7 +104,7 @@ class NormalEditorContainer extends React.Component {
     };
 
     return (
-      <Editor ref={editorProps.ref} column={column} editorProps={editorProps} />
+      <Editor ref={this.setEditorRef} {...editorProps} />
     );
   };
 
@@ -322,8 +322,12 @@ class NormalEditorContainer extends React.Component {
   };
 
   render() {
-    const { width, height, left, top } = this.props;
-    const style = { position: 'absolute', height, width, left, top, zIndex: Z_INDEX_EDITOR_CONTAINER };
+    const { width, height, left, top, editorPosition } = this.props;
+    // Use editorPosition if available (contains scroll-adjusted coordinates from getEditorPosition),
+    // otherwise fall back to left/top from getSelectedDimensions
+    const finalLeft = editorPosition?.left !== undefined ? editorPosition.left : left;
+    const finalTop = editorPosition?.top !== undefined ? editorPosition.top : top;
+    const style = { position: 'absolute', height, width, left: finalLeft, top: finalTop, zIndex: Z_INDEX_EDITOR_CONTAINER };
     return (
       <ClickOutside onClickOutside={this.onClickOutside}>
         <div

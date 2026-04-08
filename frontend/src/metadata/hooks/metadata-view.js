@@ -246,7 +246,7 @@ export const MetadataViewProvider = ({
     });
   };
 
-  const modifyRecord = (rowId, updates, oldRowData, originalUpdates, originalOldRowData, isCopyPaste, { success_callback, fail_callback } = {}) => {
+  const modifyRecord = ({ rowId, updates, oldRowData, originalUpdates, originalOldRowData, isCopyPaste, success_callback, fail_callback } = {}) => {
     const rowIds = [rowId];
     const idRowUpdates = { [rowId]: updates };
     const idOriginalRowUpdates = { [rowId]: originalUpdates };
@@ -339,8 +339,8 @@ export const MetadataViewProvider = ({
     storeRef.current.modifyColumnData(columnKey, newData, oldData, { optionModifyType });
   }, [storeRef]);
 
-  const modifyColumnWidth = useCallback((columnKey, newWidth) => {
-    storeRef.current.modifyColumnWidth(columnKey, newWidth);
+  const modifyColumnWidth = useCallback((column, newWidth) => {
+    storeRef.current.modifyColumnWidth(column.key, newWidth);
   }, [storeRef]);
 
   const modifyColumnOrder = useCallback((sourceColumnKey, targetColumnKey) => {

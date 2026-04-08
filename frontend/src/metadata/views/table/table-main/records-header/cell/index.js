@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { UncontrolledTooltip } from 'reactstrap';
 import Icon from '../../../../../../components/icon';
 import ResizeColumnHandle from './resize-column-handle';
-import DropdownMenu from './dropdown-menu';
+import DropdownMenu from '../../../../../../components/sf-table/table-main/records-header/dropdown-menu';
 import { gettext } from '../../../../../../utils/constants';
 import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../../../constants';
 import { Utils } from '../../../../../../utils/utils';

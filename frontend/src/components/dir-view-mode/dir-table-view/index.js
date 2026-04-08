@@ -194,7 +194,7 @@ const DirTableView = ({
         }
       });
     });
-  }, [getDirentByRowId, getRowById, onItemRename, tableData, enrichedColumns, handleDirentMetadata]);
+  }, [getDirentByRowId, onItemRename, tableData, enrichedColumns, handleDirentMetadata]);
 
   const toggleSubMenu = (e, subMenuOptionKey) => {
     e.stopPropagation();

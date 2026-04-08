@@ -109,6 +109,7 @@ const Cell = React.memo(({
 
   const onDragOver = useCallback((event) => {
     // Do not call stopPropagation() here - we need dragover to bubble to Record for drag-fill support
+    event.stopPropagation();
     event.preventDefault();
   }, []);
 
@@ -223,5 +224,7 @@ Cell.propTypes = {
   modifyRecord: PropTypes.func,
   toggleExpandTreeNode: PropTypes.func,
 };
+
+Cell.displayName = 'Cell';
 
 export default Cell;

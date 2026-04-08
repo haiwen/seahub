@@ -565,9 +565,10 @@ class Store {
 
   // column
   insertColumn = (name, columnType, { key, data }) => {
+    const column = { key, name, type: columnType, data };
     const operationType = OPERATION_TYPE.INSERT_COLUMN;
     const operation = this.createOperation({
-      type: operationType, repo_id: this.repoId, name, column_type: columnType, column_key: key, data
+      type: operationType, repo_id: this.repoId, name, column_type: columnType, column_key: key, data, column
     });
     this.applyOperation(operation);
   };
