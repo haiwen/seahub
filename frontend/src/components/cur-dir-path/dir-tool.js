@@ -106,7 +106,7 @@ class DirTool extends React.Component {
     const columns = this.props.columns.filter(col => col.key !== PRIVATE_COLUMN_KEY.FILE_NAME);
     return (
       <div className="dir-tool d-flex">
-        <ViewModes currentViewMode={currentMode} switchViewMode={this.props.switchViewMode} />
+        <ViewModes currentViewMode={currentMode} switchViewMode={this.props.switchViewMode} isSupportTable={true} />
         <div className="dir-tool-divider" />
         <SortMenu className="ml-2" sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
 
