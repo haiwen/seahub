@@ -10,7 +10,8 @@ import '../css/view-modes.css';
 
 const propTypes = {
   currentViewMode: PropTypes.string.isRequired,
-  switchViewMode: PropTypes.func.isRequired
+  switchViewMode: PropTypes.func.isRequired,
+  isSupportTable: PropTypes.bool,
 };
 
 class ViewModes extends React.Component {
@@ -50,13 +51,16 @@ class ViewModes extends React.Component {
 
   render() {
     const { isDropdownMenuOpen } = this.state;
-    const { currentViewMode } = this.props;
+    const { currentViewMode, isSupportTable = false } = this.props;
     const shortcutMain = Utils.isMac() ? '⇧ ⌘' : 'Ctrl + Shift +';
-    const options = [
+    let options = [
       { 'icon': 'list-view', 'text': gettext('List view'), 'value': LIST_MODE, 'shortcut': `${shortcutMain} 1` },
       { 'icon': 'grid-view', 'text': gettext('Grid view'), 'value': GRID_MODE, 'shortcut': `${shortcutMain} 2` },
-      { 'icon': 'table', 'text': gettext('Table view'), 'value': TABLE_MODE, 'shortcut': `${shortcutMain} 3` }
     ];
+    if (isSupportTable) {
+      options.push({ 'icon': 'table', 'text': gettext('Table view'), 'value': TABLE_MODE, 'shortcut': `${shortcutMain} 3` });
+    }
+
     return (
       <Dropdown
         isOpen={isDropdownMenuOpen}
