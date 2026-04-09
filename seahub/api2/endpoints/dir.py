@@ -254,13 +254,6 @@ class DirView(APIView):
 
         with_parents = to_python_boolean(with_parents)
 
-        with_metadata = request.GET.get('with_metadata', 'false')
-        if with_metadata not in ('true', 'false'):
-            error_msg = 'with_metadata invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        with_metadata = to_python_boolean(with_metadata)
-
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -348,93 +341,90 @@ class DirView(APIView):
         response_dict["user_perm"] = permission
         response_dict["dir_id"] = dir_id
 
-        if with_metadata:
+        # Check if metadata is enabled for this repo
+        repo_metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if repo_metadata and repo_metadata.enabled and not with_parents:
             try:
-                # Check if metadata is enabled for this repo
-                metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
-                if metadata and metadata.enabled:
-                    # Check if user has permission to read metadata
-                    from seahub.repo_metadata.utils import can_read_metadata
-                    if not can_read_metadata(request, repo_id):
-                        logger.debug(f"User {username} does not have permission to read metadata for repo {repo_id}")
-                    else:
-                        from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
-                        from seafevents.repo_metadata.constants import METADATA_TABLE
+                # Check if user has permission to read metadata
+                from seahub.repo_metadata.utils import can_read_metadata
+                if not can_read_metadata(request, repo_id):
+                    logger.debug(f"User {username} does not have permission to read metadata for repo {repo_id}")
+                else:
+                    from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
+                    from seafevents.repo_metadata.constants import METADATA_TABLE
 
-                        # Build entries list (files + directories from current path)
-                        entries = []
-                        for file_info in file_info_list:
+                    # Build entries list (files + directories from current path)
+                    entries = []
+                    for file_info in file_info_list:
+                        entries.append({
+                            'parent_dir': file_info.get('parent_dir', parent_dir),
+                            'file_name': file_info['name'],
+                            'is_dir': False
+                        })
+
+                    if current_dir_info_list:
+                        for dir_info in current_dir_info_list:
                             entries.append({
-                                'parent_dir': file_info.get('parent_dir', parent_dir),
-                                'file_name': file_info['name'],
-                                'is_dir': False
+                                'parent_dir': dir_info.get('parent_dir', parent_dir),
+                                'file_name': dir_info['name'],
+                                'is_dir': True
                             })
 
-                        if current_dir_info_list:
-                            for dir_info in current_dir_info_list:
-                                entries.append({
-                                    'parent_dir': dir_info.get('parent_dir', parent_dir),
-                                    'file_name': dir_info['name'],
-                                    'is_dir': True
-                                })
+                    metadata_server_api = MetadataServerAPI(repo_id, username)
+                    columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
+                    all_columns = columns_data.get('columns', [])
+                    metadata_columns = []
+                    for column in all_columns:
+                        metadata_columns.append({
+                            'key': column.get('key'),
+                            'name': column.get('name'),
+                            'type': column.get('type'),
+                            'data': column.get('data', {})
+                        })
+                    if entries:
+                        where_conditions = []
+                        parameters = []
 
-                        metadata_server_api = MetadataServerAPI(repo_id, username)
-                        columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
-                        all_columns = columns_data.get('columns', [])
-                        metadata_columns = []
-                        for column in all_columns:
-                            metadata_columns.append({
-                                'key': column.get('key'),
-                                'name': column.get('name'),
-                                'type': column.get('type'),
-                                'data': column.get('data', {})
-                            })
-                        if entries:
-                            where_conditions = []
-                            parameters = []
+                        for entry in entries:
+                            entry_parent_dir = entry.get('parent_dir')
+                            entry_file_name = entry.get('file_name')
+                            entry_is_dir = entry.get('is_dir', False)
 
-                            for entry in entries:
-                                entry_parent_dir = entry.get('parent_dir')
-                                if entry_parent_dir and entry_parent_dir != '/' and entry_parent_dir.endswith('/'):
-                                    entry_parent_dir = entry_parent_dir.rstrip('/')
-                                entry_file_name = entry.get('file_name')
-                                entry_is_dir = entry.get('is_dir', False)
+                            if not entry_parent_dir or not entry_file_name:
+                                continue
 
-                                if not entry_parent_dir or not entry_file_name:
-                                    continue
+                            # Add _is_dir condition to distinguish files from directories
+                            if entry_is_dir:
+                                where_conditions.append(
+                                    f'(`{METADATA_TABLE.columns.parent_dir.name}`=? AND `{METADATA_TABLE.columns.file_name.name}`=? AND `{METADATA_TABLE.columns.is_dir.name}`=TRUE)'
+                                )
+                            else:
+                                where_conditions.append(
+                                    f'(`{METADATA_TABLE.columns.parent_dir.name}`=? AND `{METADATA_TABLE.columns.file_name.name}`=? AND `{METADATA_TABLE.columns.is_dir.name}`=FALSE)'
+                                )
+                            parameters.extend([entry_parent_dir, entry_file_name])
 
-                                # Add _is_dir condition to distinguish files from directories
-                                if entry_is_dir:
-                                    where_conditions.append(
-                                        f'(`{METADATA_TABLE.columns.parent_dir.name}`=? AND `{METADATA_TABLE.columns.file_name.name}`=? AND `{METADATA_TABLE.columns.is_dir.name}`=TRUE)'
-                                    )
-                                else:
-                                    where_conditions.append(
-                                        f'(`{METADATA_TABLE.columns.parent_dir.name}`=? AND `{METADATA_TABLE.columns.file_name.name}`=? AND `{METADATA_TABLE.columns.is_dir.name}`=FALSE)'
-                                    )
-                                parameters.extend([entry_parent_dir, entry_file_name])
+                        if where_conditions:
+                            where_clause = ' OR '.join(where_conditions)
+                            sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE {where_clause};'
 
-                            if where_conditions:
-                                where_clause = ' OR '.join(where_conditions)
-                                sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE {where_clause};'
+                            try:
+                                query_result = metadata_server_api.query_rows(sql, parameters)
+                                rows = query_result.get('results', [])
+                                if rows:
+                                    metadata = {}
+                                    metadata['columns'] = metadata_columns
+                                    metadata['rows'] = rows
+                                    response_dict['metadata'] = metadata
 
-                                try:
-                                    query_result = metadata_server_api.query_rows(sql, parameters)
-                                    rows = query_result.get('results', [])
-                                    if rows:
-                                        metadata = {}
-                                        metadata['columns'] = metadata_columns
-                                        metadata['rows'] = rows
-                                        response_dict['metadata'] = metadata
-
-                                except Exception as e:
-                                    logger.error(f"Failed to fetch metadata for repo {repo_id}: {e}")
-                                    pass
-                        else:
-                            response_dict['metadata'] = {
-                                'columns': metadata_columns,
-                                'rows': []
-                            }
+                            except Exception as e:
+                                logger.error(f"Failed to fetch metadata for repo {repo_id}: {e}")
+                                pass
+                    else:
+                        response_dict['metadata'] = {
+                            'columns': metadata_columns,
+                            'rows': []
+                        }
             except Exception as e:
                 logger.error(f"Metadata enrichment failed for repo {repo_id}: {e}")
                 pass

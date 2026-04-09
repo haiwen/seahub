@@ -220,7 +220,7 @@ class LibContentView extends React.Component {
         }
       }
     } else if (noticeData.type === 'repo-update') {
-      seafileAPI.listDir(this.props.repoID, this.state.path, { 'with_thumbnail': true, 'with_metadata': true }).then(async res => {
+      seafileAPI.listDir(this.props.repoID, this.state.path, { 'with_thumbnail': true }).then(async res => {
         const { dirent_list, user_perm: userPerm, dir_id: dirID, metadata } = res.data;
 
         const columns = this.enrichColumns(metadata);
@@ -842,7 +842,6 @@ class LibContentView extends React.Component {
     try {
       const direntRes = await seafileAPI.listDir(repoID, path, {
         with_thumbnail: true,
-        with_metadata: true,
       });
       const {
         dirent_list,
@@ -2788,7 +2787,6 @@ class LibContentView extends React.Component {
       }
     }
 
-    this.loadDirentList(this.state.path);
     this.props.eventBus.dispatch(EVENT_BUS_TYPE.TAG_STATUS, enableTags);
   };
 
