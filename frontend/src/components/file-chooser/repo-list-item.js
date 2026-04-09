@@ -68,6 +68,8 @@ class RepoListItem extends React.Component {
 
   componentDidUpdate(prevProps) {
     const { repo, selectedRepo, selectedPath, newFolderName } = this.props;
+    if (!newFolderName) return;
+
     let parentPath;
     if (selectedPath == '/' + newFolderName) {
       parentPath = '/';
@@ -84,7 +86,7 @@ class RepoListItem extends React.Component {
       seafileAPI.listDir(repo.repo_id, parentPath).then(res => {
         const { dirent_list = [], dir_id = '', user_perm = 'r' } = res?.data || {};
         const dirent = dirent_list.find(item => item.type === 'dir' && item.name === newFolderName);
-        const direntData = dirent || new Dirent({ name: newFolderName, tye: 'dir', id: dir_id, permission: user_perm });
+        const direntData = dirent || new Dirent({ name: newFolderName, type: 'dir', id: dir_id, permission: user_perm });
         const object = new Dirent(direntData);
         const direntNode = new TreeNode({ object });
         const newTreeData = treeHelper.addNodeToParentByPath(this.state.treeData, direntNode, parentPath);
