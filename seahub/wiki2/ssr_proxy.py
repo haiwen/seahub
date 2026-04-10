@@ -30,8 +30,8 @@ def _ssr_url(publish_url: str, page_id: str | None) -> str:
     """Build the internal Next.js SSR endpoint URL."""
     base = WIKI_SSR_SERVER_URL.rstrip('/')
     if page_id:
-        return f"{base}/wiki-ssr/{publish_url}/{page_id}"
-    return f"{base}/wiki-ssr/{publish_url}"
+        return f"{base}/wiki/publish/{publish_url}/{page_id}"
+    return f"{base}/wiki/publish/{publish_url}"
 
 
 def proxy_to_ssr(request, wiki, publish_url: str, page_id: str | None) -> HttpResponse | None:
@@ -53,6 +53,7 @@ def proxy_to_ssr(request, wiki, publish_url: str, page_id: str | None) -> HttpRe
         return None
 
     target_url = _ssr_url(publish_url, page_id)
+    print(target_url)
 
     headers = {
         'X-Wiki-SSR-Secret':    WIKI_SSR_INTERNAL_SECRET,
