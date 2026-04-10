@@ -178,20 +178,22 @@ class SdocFileHistory extends React.Component {
 
   getTopLevelChanges = (changes) => {
     const topLevelChanges = [];
-    changes.forEach((item) => {
+    const articleEl = document.getElementById('sdoc-editor');
+    for (let i = 0; i < changes.length; i++) {
+      const item = changes[i];
       let dom = document.querySelectorAll(`[data-id="${item}"]`)[0];
-      if (!dom) return [];
-      while (dom?.dataset?.root !== 'true') {
+      if (!dom) continue;
+      while (dom?.parentNode !== articleEl) {
         if (!dom?.parentNode || dom instanceof Document) break;
         const parentNode = dom.parentNode;
         if (parentNode instanceof Document) {
           break;
-        } else {
-          dom = parentNode;
         }
+        dom = parentNode;
       }
+      if (!dom.dataset.id) continue;
       topLevelChanges.push(dom.dataset.id);
-    });
+    }
     return Array.from(new Set(topLevelChanges));
   };
 
@@ -200,31 +202,54 @@ class SdocFileHistory extends React.Component {
     const topLevelChangesValue = [];
     const changes = [];
 
-    diffValue.forEach((item) => {
+    diffValue.forEach((item, index) => {
       if (topLevelChanges.includes(item.id)) {
         const obj = {
           id: item.id,
-          value: item
+          value: item,
+          index,
         };
         topLevelChangesValue.push(obj);
       }
     });
 
-    topLevelChangesValue.forEach((item) => {
-      const preChange = changes[changes.length - 1]?.value;
-      const curChange = item.value;
-      if (curChange?.add && preChange?.add) return;
-      if (curChange?.delete && preChange?.delete) return;
-      changes.push(item);
-    });
+    for (let i = topLevelChangesValue.length - 1; i >= 0; i--) {
+      const curItem = topLevelChangesValue[i];
+      if (changes.length === 0) {
+        changes.push(curItem);
+        continue;
+      }
+
+      const nextItem = changes[0];
+      const curChange = curItem?.value;
+      const nextChange = nextItem?.value;
+      const isAdjacent = nextItem && nextItem.index === curItem.index + 1;
+      if (isAdjacent && curChange?.add && nextChange?.add) {
+        changes.shift();
+        changes.unshift(curItem);
+        continue;
+      }
+      if (isAdjacent && curChange?.delete && nextChange?.delete) {
+        changes.shift();
+        changes.unshift(curItem);
+        continue;
+      }
+      changes.unshift(curItem);
+    }
+
     return changes.map(item => item.id);
   };
 
   setDiffCount = (diff = { value: [], changes: [] }) => {
-    const { changes, value } = diff;
-    const topLevelChanges = this.getTopLevelChanges(changes);
-    const mergedChanges = this.getMergedChanges(topLevelChanges, value);
-    this.setState({ changes: mergedChanges, currentDiffIndex: 0 });
+    // Article rendering is delayed, so we need to wait for the Article to render before we can get the changes
+    setTimeout(() => {
+      const { changes, value } = diff;
+      if (changes?.length !== 0) {
+        const topLevelChanges = this.getTopLevelChanges(changes);
+        const mergedChanges = this.getMergedChanges(topLevelChanges, value);
+        this.setState({ changes: mergedChanges, currentDiffIndex: 0 });
+      }
+    }, 100);
   };
 
   jumpToElement = (currentDiffIndex) => {
