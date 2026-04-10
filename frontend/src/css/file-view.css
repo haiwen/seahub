@@ -35,20 +35,20 @@ body {
 #unfold-onlyoffice-file-view-header {
   position: absolute;
   top: 0;
-  right: 40px;
+  right: 140px;
   width: 28px;
   height: 28px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.6) !important;
   border-radius: 0 0 14px 14px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
   cursor: pointer;
 }
 
 #unfold-onlyoffice-file-view-header:hover {
-  background: rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, 1) !important;
 }
 
 .file-view-header .file-toolbar-btn {
