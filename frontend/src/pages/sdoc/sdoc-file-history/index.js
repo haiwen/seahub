@@ -243,7 +243,7 @@ class SdocFileHistory extends React.Component {
   setDiffCount = (diff = { value: [], changes: [] }) => {
     // Article rendering is delayed, so we need to wait for the Article to render before we can get the changes
     setTimeout(() => {
-      const { changes, value } = diff || {};
+      const { changes, value } = diff;
       if (changes?.length !== 0) {
         const topLevelChanges = this.getTopLevelChanges(changes);
         const mergedChanges = this.getMergedChanges(topLevelChanges, value);
