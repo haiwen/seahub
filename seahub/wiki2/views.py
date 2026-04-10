@@ -79,19 +79,19 @@ def wiki_view(request, wiki_id, page_id=None):
         publish_url = publish_config.publish_url
     except Wiki2Publish.DoesNotExist:
         publish_url = ''
-    
+
     try:
         admin_repos = list_user_admin_reops(request)
     except Exception as e:
         logger.error(e)
         admin_repos = []
-    
+
     display_repos = []
     for r in admin_repos:
         if r.get('encrypted'):
             continue
         display_repos.append(r)
-    
+
     settings_obj = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
     if settings_obj:
         linked_repos = settings_obj.get_linked_repos()
@@ -225,23 +225,6 @@ def wiki_history_view(request, wiki_id):
         'assets_url': '/api/v2.1/seadoc/download-image/' + file_uuid,
         "seadoc_access_token": gen_seadoc_access_token(file_uuid, file_name, username, permission='rw'),
         "seadoc_server_url": SEADOC_SERVER_URL
-    })
-
-def wiki_repo_view(request, wiki_id, view_id):
-
-    # get wikiView object or 404
-    wikiFileView = WikiFileViews.objects.get_view(wiki_id, view_id)
-    if not wikiFileView:
-        raise Http404
-
-    repo_id = wikiFileView['linked_repo_id']
-    repo = seafile_api.get_repo(repo_id)
-
-    return render(request, "wiki_repo_view.html", {
-        'repo': repo,
-        'wiki_id': wiki_id,
-        'view_id': view_id,
-        'repo_id': repo_id,
     })
 
 

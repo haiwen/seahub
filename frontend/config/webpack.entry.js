@@ -45,7 +45,6 @@ const entryFiles = {
   uploadLink: '/pages/upload-link',
   subscription: '/subscription.js',
   institutionAdmin: '/pages/institution-admin/index.js',
-  wikiRepoView: '/wiki-repo-view.js'
 };
 
 const getEntries = (isEnvDevelopment) => {
