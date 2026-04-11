@@ -86,7 +86,9 @@ const Cell = ({
 
   const onDragStart = useCallback((event) => {
     if (dropdownRef.current && dropdownRef.current.isPopoverShow()) return false;
-    const dragData = JSON.stringify({ type: 'sf-metadata-view-header-order', column_key: column.key, column });
+    // Strip React elements (editor, formatter) from column to avoid circular JSON error
+    const { editor, formatter, ...dragSafeColumn } = column;
+    const dragData = JSON.stringify({ type: 'sf-metadata-view-header-order', column_key: column.key, column: dragSafeColumn });
     event.dataTransfer.effectAllowed = 'move';
     event.dataTransfer.setData('application/drag-sf-metadata-view-header-order', dragData);
     updateDraggingKey(column.key);
@@ -131,7 +133,7 @@ const Cell = ({
       if (!dragData) return false;
       dragData = JSON.parse(dragData);
       if (dragData.type !== 'sf-metadata-view-header-order' || !dragData.column_key) return false;
-      if (dragData.column_key !== column.key && dragData.column.frozen === column.frozen) {
+      if (dragData.column_key !== column.key && dragData.column?.frozen === column.frozen) {
         onMove && onMove({ key: dragData.column_key }, { key: column.key });
       }
     }
@@ -140,7 +142,6 @@ const Cell = ({
   const onDragEnd = useCallback(() => {
     updateDraggingKey(null);
     updateDragOverKey(null);
-    window.sfMetadataBody.clearHorizontalScroll();
   }, [updateDraggingKey, updateDragOverKey]);
 
   const { key, display_name, icon_name, icon_tooltip } = column;
@@ -184,7 +185,7 @@ const Cell = ({
         className={classnames('sf-table-cell column', { 'table-last--frozen': isLastFrozenCell, 'name-column': isNameColumn })}
         ref={headerCellRef}
         style={style}
-        id={`sf-metadata-column-${key}`}
+        id={`sf-table-column-${key}`}
         tabIndex="0"
         role="button"
         onClick={() => handleHeaderCellClick(column, frozen)}

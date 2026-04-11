@@ -413,6 +413,10 @@
   transform: translateZ(10px);
 }
 
+.sf-metadata-container .sf-table-records-wrapper {
+  flex: 0;
+}
+
 .sf-metadata-result-table .group-header-left .formatter-show {
   display: inline-flex;
   flex: 1;

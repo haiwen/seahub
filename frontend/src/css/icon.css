@@ -18,6 +18,7 @@
   color: #bdbdbd;
 }
 
-.sf-metadata-icon {
+.sf-metadata-icon,
+.sf-table-icon {
   vertical-align: -0.15em;
 }

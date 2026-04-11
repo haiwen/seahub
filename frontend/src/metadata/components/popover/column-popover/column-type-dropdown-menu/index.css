@@ -11,7 +11,8 @@
   background-color: var(--bs-dropdown-tertiary-bg);
 }
 
-.column-type-item .sf-metadata-icon {
+.column-type-item .sf-metadata-icon,
+.column-type-item .sf-table-icon {
   color: var(--bs-icon-secondary-color);
   margin-right: 8px;
   flex-shrink: 0;

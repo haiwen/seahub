@@ -145,6 +145,34 @@ const Table = () => {
     return containerRef?.current?.getBoundingClientRect() || { x: 0, right: window.innerWidth };
   }, [containerRef]);
 
+  // Filter visible columns (same logic as original TableMain)
+  const visibleColumns = useMemo(() => {
+    if (!metadata?.view) return [];
+    const { columns, hidden_columns } = metadata.view;
+    return columns.filter(column =>
+      !globalHiddenColumns.includes(column.key) &&
+      !hidden_columns.includes(column.key) &&
+      !TABLE_NOT_DISPLAY_COLUMN_KEYS.includes(column.key)
+    );
+  }, [metadata, globalHiddenColumns]);
+
+  // Create GridUtils adapter using metadata's GridUtils
+  const gridUtilsAdapter = useMetadataTableAdapter({
+    metadata,
+    modifyRecord,
+    modifyRecords,
+    recordGetterByIndex,
+    recordGetterById,
+    modifyColumnData,
+    updateFileTags,
+    deleteRecords,
+    updateRecordDetails,
+    updateFaceRecognition,
+    updateRecordDescription,
+    onOCR,
+    generateFileTags,
+  });
+
   // Paste callback - delegates to gridUtilsAdapter.paste()
   const paste = useCallback(({ type, copied, multiplePaste, pasteRange, isGroupView, pasteSource, cutPosition, columns }) => {
     const { search } = window.location;
@@ -163,27 +191,6 @@ const Table = () => {
     });
   }, [gridUtilsAdapter, visibleColumns]);
 
-  // Create GridUtils adapter using metadata's GridUtils
-  const gridUtilsAdapter = useMetadataTableAdapter({
-    metadata,
-    modifyRecord,
-    modifyRecords,
-    recordGetterByIndex,
-    recordGetterById,
-    modifyColumnData,
-    updateFileTags,
-  });
-
-  // Filter visible columns (same logic as original TableMain)
-  const visibleColumns = useMemo(() => {
-    if (!metadata?.view) return [];
-    const { columns, hidden_columns } = metadata.view;
-    return columns.filter(column =>
-      !globalHiddenColumns.includes(column.key) &&
-      !hidden_columns.includes(column.key) &&
-      !TABLE_NOT_DISPLAY_COLUMN_KEYS.includes(column.key)
-    );
-  }, [metadata, globalHiddenColumns]);
 
   // Transform metadata columns to SFTable-compatible columns
   const sfTableColumns = useMemo(() => {
@@ -224,6 +231,7 @@ const Table = () => {
         updateFileTags={updateFileTags}
         updateSelectedRecordIds={updateSelectedRecordIds}
         checkCanModifyRecord={checkCanModifyRecord}
+        canModifyRecords={canModify}
         supportCopy={true}
         supportPaste={true}
         paste={paste}
@@ -251,6 +259,8 @@ const Table = () => {
         onOCR={onOCR}
         // Pass tagsData to SFTable for Cell formatter to render tags
         tagsData={tagsData}
+        // Use SFTable's context menu with metadata's options
+        createContextMenuOptions={gridUtilsAdapter.createContextMenuOptions}
       />
     </div>
   );

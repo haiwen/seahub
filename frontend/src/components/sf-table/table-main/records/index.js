@@ -911,19 +911,23 @@ class Records extends Component {
   };
 
   renderRecordsBody = ({ containerWidth, recordDraggable }) => {
-    const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx, draggingRecordSource } = this.state;
+    const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx, draggingRecordSource, selectedPosition, selectedRange } = this.state;
     const { columns, allColumns, totalWidth, lastFrozenColumnKey, frozenColumnsWidth } = columnMetrics;
     const recordDragDropEvents = this.getRecordDragDropEvents();
+    // Create ContextMenu with createContextMenuOptions from props (if provided, e.g., from metadata table)
+    const contextMenu = this.props.createContextMenuOptions ? (
+      <ContextMenu
+        {...this.props}
+        recordMetrics={recordMetrics}
+        selectedPosition={selectedPosition}
+        selectedRange={selectedRange}
+      />
+    ) : null;
     const commonProps = {
       ...this.props,
       columns, allColumns, totalWidth, lastFrozenColumnKey, frozenColumnsWidth,
       recordMetrics, colOverScanStartIdx, colOverScanEndIdx, recordDraggable, recordDragDropEvents, draggingRecordSource,
-      contextMenu: (
-        <ContextMenu
-          {...this.props}
-          recordMetrics={recordMetrics}
-        />
-      ),
+      contextMenu,
       hasSelectedRecord: this.checkHasSelectedRecord(),
       getColumnVisibleEnd: this.getColumnVisibleEnd,
       getScrollLeft: this.getScrollLeft,

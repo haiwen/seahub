@@ -11,6 +11,7 @@ import { EVENT_BUS_TYPE } from '../../constants/event-bus-type';
 import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
 import { checkEditableViaClickCell, checkIsColumnSupportDirectEdit, getColumnByIndex, getColumnIndexByKey } from '../../utils/column';
 import { checkIsCellSupportOpenEditor } from '../../utils/selected-cell-utils';
+import { SEQUENCE_COLUMN_WIDTH } from '../../constants/grid';
 
 const ROW_HEIGHT = 33;
 const RENDER_MORE_NUMBER = 10;
@@ -586,7 +587,7 @@ class RecordsBody extends Component {
             getCopiedRecordsAndColumnsFromRange={this.props.getCopiedRecordsAndColumnsFromRange}
             getTableCanvasContainerRect={this.props.getTableCanvasContainerRect}
           />
-          <div className="sf-table-records-wrapper" ref={this.setResultRef}>
+          <div className="sf-table-records-wrapper" style={{ width: this.props.totalWidth + SEQUENCE_COLUMN_WIDTH }} ref={this.setResultRef}>
             {this.renderRecords()}
           </div>
         </div>

@@ -86,8 +86,7 @@ const RecordsHeader = ({
   }, [modifyColumnWidthAPI]);
 
   const modifyColumnOrder = useCallback((source, target) => {
-    // Pass full source and target objects to preserve draggingColumnIndex and columnIndex
-    modifyColumnOrderAPI && modifyColumnOrderAPI(source, target);
+    modifyColumnOrderAPI && modifyColumnOrderAPI(source.key, target.key);
   }, [modifyColumnOrderAPI]);
 
   const updateDraggingKey = useCallback((cellKey) => {
