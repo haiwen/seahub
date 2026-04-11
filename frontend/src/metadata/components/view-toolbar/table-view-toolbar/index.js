@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { FilterSetter, GroupbySetter, SortSetter, HideColumnSetter, Search } from '../../data-process-setter';
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
 import { useMetadataStatus } from '../../../../hooks';
+import SetRowHeight from '../../../../components/set-row-height';
 
 const TableViewToolbar = ({
   readOnly,
@@ -12,7 +13,8 @@ const TableViewToolbar = ({
   modifySorts,
   modifyGroupbys,
   modifyHiddenColumns,
-  modifyColumnOrder
+  modifyColumnOrder,
+  modifyRowHeight,
 }) => {
   const { globalHiddenColumns } = useMetadataStatus();
   const viewType = useMemo(() => view.type, [view]);
@@ -68,6 +70,11 @@ const TableViewToolbar = ({
           modifyHiddenColumns={modifyHiddenColumns}
           modifyColumnOrder={modifyColumnOrder}
         />
+        <SetRowHeight
+          iconClass="sf-metadata-view-tool-operation-btn"
+          rowHeight={view.row_height}
+          modifyRowHeight={modifyRowHeight}
+        />
       </div>
       <div className="sf-metadata-tool-right-operations"></div>
     </>
@@ -83,6 +90,7 @@ TableViewToolbar.propTypes = {
   modifyGroupbys: PropTypes.func,
   modifyHiddenColumns: PropTypes.func,
   modifyColumnOrder: PropTypes.func,
+  modifyRowHeight: PropTypes.func,
 };
 
 export default TableViewToolbar;

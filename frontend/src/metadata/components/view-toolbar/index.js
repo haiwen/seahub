@@ -38,6 +38,10 @@ const ViewToolBar = ({ viewId, isCustomPermission, onToggleDetail, onCloseDetail
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_COLUMN_ORDER, sourceColumnKey, targetColumnKey);
   }, []);
 
+  const modifyRowHeight = useCallback((rowHeight) => {
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_ROW_HEIGHT, rowHeight);
+  }, []);
+
   const viewChange = useCallback((view) => {
     setView(view);
   }, []);
@@ -80,6 +84,7 @@ const ViewToolBar = ({ viewId, isCustomPermission, onToggleDetail, onCloseDetail
           modifyGroupbys={modifyGroupbys}
           modifyHiddenColumns={modifyHiddenColumns}
           modifyColumnOrder={modifyColumnOrder}
+          modifyRowHeight={modifyRowHeight}
         />
       )}
       {viewType === VIEW_TYPE.GALLERY && (

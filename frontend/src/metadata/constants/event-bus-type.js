@@ -73,6 +73,9 @@ export const EVENT_BUS_TYPE = {
   // column
   MODIFY_COLUMN_ORDER: 'modify_column_order',
 
+  // row
+  MODIFY_ROW_HEIGHT: 'modify_row_height',
+
   // data status
   SAVING: 'saving',
   SAVED: 'saved',

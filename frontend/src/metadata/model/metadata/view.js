@@ -1,5 +1,12 @@
 import { getColumnByKey } from '../../utils/column';
-import { VIEW_NOT_DISPLAY_COLUMN_KEYS, VIEW_TYPE_DEFAULT_BASIC_FILTER, VIEW_TYPE, VIEW_TYPE_DEFAULT_SORTS, VIEW_DEFAULT_SETTINGS } from '../../constants';
+import {
+  VIEW_NOT_DISPLAY_COLUMN_KEYS,
+  VIEW_TYPE_DEFAULT_BASIC_FILTER,
+  VIEW_TYPE,
+  VIEW_TYPE_DEFAULT_SORTS,
+  VIEW_DEFAULT_SETTINGS,
+  ROW_HEIGHT
+} from '../../constants';
 
 class View {
 
@@ -39,6 +46,9 @@ class View {
 
     // rows
     this.rows = object.rows || [];
+
+    // row height
+    this.row_height = object.row_height || ROW_HEIGHT;
 
     // columns
     this.available_columns = columns || [];

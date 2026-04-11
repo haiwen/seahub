@@ -1,7 +1,7 @@
 .sf-metadata-ui.file-name-formatter {
   width: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .sf-metadata-ui.file-name-formatter .sf-metadata-file-icon-container {

@@ -354,6 +354,11 @@ export const MetadataViewProvider = ({
     storeRef.current.insertColumn(name, type, { key, data });
   }, [storeRef]);
 
+  const modifyRowHeight = useCallback((rowHeight) => {
+    storeRef.current.modifyRowHeight(rowHeight);
+    setTimeout(() => notifyTableChanged(EVENT_BUS_TYPE.MODIFY_ROW_HEIGHT), 0);
+  }, [storeRef, notifyTableChanged]);
+
   const updateFileTags = useCallback((data) => {
     const { record_id, tags } = data[0];
     modifyLocalFileTags(record_id, tags);
@@ -998,6 +1003,7 @@ export const MetadataViewProvider = ({
     const unsubscribeModifyGroupbys = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_GROUPBYS, modifyGroupbys);
     const unsubscribeModifyHiddenColumns = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_HIDDEN_COLUMNS, modifyHiddenColumns);
     const unsubscribeModifyColumnOrder = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_COLUMN_ORDER, modifyColumnOrder);
+    const unsubscribeModifyRowHeight = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_ROW_HEIGHT, modifyRowHeight);
     const unsubscribeModifySettings = eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_SETTINGS, modifySettings);
     const unsubscribeLocalRecordChanged = eventBus.subscribe(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, updateLocalRecord);
     const unsubscribeLocalColumnChanged = eventBus.subscribe(EVENT_BUS_TYPE.LOCAL_COLUMN_DATA_CHANGED, updateLocalColumnData);
@@ -1031,6 +1037,7 @@ export const MetadataViewProvider = ({
       unsubscribeModifyGroupbys();
       unsubscribeModifyHiddenColumns();
       unsubscribeModifyColumnOrder();
+      unsubscribeModifyRowHeight();
       unsubscribeModifySettings();
       unsubscribeLocalRecordChanged();
       unsubscribeLocalColumnChanged();

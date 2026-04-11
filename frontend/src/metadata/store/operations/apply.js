@@ -173,6 +173,11 @@ export default function apply(data, operation) {
       data.view.hidden_columns = hidden_columns;
       return data;
     }
+    case OPERATION_TYPE.MODIFY_ROW_HEIGHT: {
+      const { row_height } = operation;
+      data.view.row_height = row_height;
+      return data;
+    }
     case OPERATION_TYPE.MODIFY_LOCAL_VIEW: {
       const { update } = operation;
       data.view = { ...data.view, ...update };
