@@ -111,6 +111,12 @@ class GridUtils {
     const { rowIdx: startRecordIndex, idx: startColumnIndex, groupRecordIndex } = topLeft;
     const { rowIdx: endRecordIndex, idx: endColumnIndex } = bottomRight;
     const { copiedRecords, copiedColumns } = copied || {};
+
+    // Validate copied data has required structure
+    if (!Array.isArray(copiedRecords) || !Array.isArray(copiedColumns)) {
+      return;
+    }
+
     const copiedRecordsLen = copiedRecords.length;
     const copiedColumnsLen = copiedColumns.length;
     const pasteRecordsLen = multiplePaste ? endRecordIndex - startRecordIndex + 1 : copiedRecordsLen;

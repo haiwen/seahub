@@ -519,6 +519,7 @@ class RecordsBody extends Component {
           recordDraggable={this.props.recordDraggable}
           recordDragDropEvents={this.props.recordDragDropEvents}
           draggingRecordSource={this.props.draggingRecordSource}
+          onShowExpandedPropsDialog={this.props.onShowExpandedPropsDialog}
         />
       );
     });
@@ -655,6 +656,7 @@ RecordsBody.propTypes = {
   onCellContextMenu: PropTypes.func,
   getTableCanvasContainerRect: PropTypes.func,
   createContextMenuOptions: PropTypes.func,
+  onShowExpandedPropsDialog: PropTypes.func,
 };
 
 export default RecordsBody;

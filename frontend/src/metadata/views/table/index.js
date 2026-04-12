@@ -7,16 +7,24 @@ import { useMetadataStatus } from '../../../hooks';
 import { Utils } from '../../../utils/utils';
 import { isModZ, isModShiftZ } from '../../../utils/hotkey';
 import { getValidGroupbys } from '../../utils/group';
-import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, MAX_LOAD_NUMBER, TABLE_NOT_DISPLAY_COLUMN_KEYS } from '../../constants';
+import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, MAX_LOAD_NUMBER, TABLE_NOT_DISPLAY_COLUMN_KEYS, NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP, PRIVATE_COLUMN_KEY } from '../../constants';
 import { adaptMetadataColumnsToSfTable, useMetadataTableAdapter } from './adapter';
-
-import './index.css';
+import ExpandedPropertiesDialog from '../../components/dialog/expanded-properties';
+import { openFile } from '../../utils/file';
+import { EDITOR_TYPE } from '../../../components/sf-table/constants/grid';
+import EventBus from '../../../components/common/event-bus';
+import { getCellValueByColumn, getTagsFromRecord, isValidCellValue } from '../../utils/cell';
+import { getFormatRecordData } from '../../utils/cell/cell-format-utils';
+import CellType from '@/metadata/constants/column/type';
 import HeaderDropdownMenu from '@/components/sf-table/table-main/records-header/dropdown-menu';
 import { useTags } from '@/tag/hooks';
+
+import './index.css';
 
 
 const Table = () => {
   const [isLoadingMore, setLoadingMore] = useState(false);
+  const [expandedRecordId, setExpandedRecordId] = useState(null);
   const {
     repoID,
     isLoading,
@@ -52,6 +60,99 @@ const Table = () => {
   const focusDataGrid = useCallback(() => {
     setTimeout(() => window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.FOCUS_CANVAS), 0);
   }, []);
+
+  const onShowExpandedPropsDialog = useCallback((recordId) => {
+    setExpandedRecordId(recordId);
+  }, []);
+
+  const toggleExpandedPropsDialog = useCallback(() => {
+    setExpandedRecordId(null);
+  }, []);
+
+  const handleSpaceKeyDown = useCallback((record) => {
+    openFile(repoID, record, () => {
+      // Use EventBus.getInstance() to dispatch to SFTable's InteractionMasks listener
+      EventBus.getInstance().dispatch(EVENT_BUS_TYPE.OPEN_EDITOR, EDITOR_TYPE.PREVIEWER);
+    });
+  }, [repoID]);
+
+  const handleSelectCellsDelete = useCallback((records, columns) => {
+    if (!records || records.length === 0 || !columns || columns.length === 0) return;
+
+    // Filter to only editable records
+    const editableRecords = records.filter(record => window.sfMetadataContext.canModifyRow(record));
+    if (editableRecords.length === 0) return;
+
+    // Get editable columns (exclude LINK, CHECKBOX, RATE and non-modifiable columns)
+    const editableColumns = columns.filter(column => {
+      if (!column) return false;
+      if (NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP[column.type]) return false;
+      if (!window.sfMetadataContext.canModifyColumn(column)) return false;
+      return true;
+    });
+
+    if (editableColumns.length === 0) return;
+
+    let updateRecordIds = [];
+    let idRecordUpdates = {};
+    let idOriginalRecordUpdates = {};
+    let idOldRecordData = {};
+    let idOriginalOldRecordData = {};
+    let tagsUpdate = [];
+
+    editableRecords.forEach(record => {
+      const { _id } = record;
+      let originalUpdate = {};
+      let originalOldRecordData = {};
+      let hasTagsColumn = false;
+
+      editableColumns.forEach(column => {
+        const { key, type } = column;
+        const cellVal = getCellValueByColumn(record, column);
+        if (isValidCellValue(cellVal)) {
+          if (type === CellType.TAGS) {
+            hasTagsColumn = true;
+          } else if (type === CellType.GEOLOCATION) {
+            originalOldRecordData[key] = cellVal;
+            originalUpdate[key] = null;
+
+            const locationTranslatedVal = record[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED];
+            if (locationTranslatedVal) {
+              originalOldRecordData[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED] = locationTranslatedVal;
+              originalUpdate[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED] = null;
+            }
+          } else {
+            originalOldRecordData[key] = cellVal;
+            originalUpdate[key] = null;
+          }
+        }
+      });
+
+      // Handle tags separately
+      if (hasTagsColumn) {
+        const oldValue = getTagsFromRecord(record);
+        tagsUpdate.push({ record_id: _id, tags: [], old_tags: Array.isArray(oldValue) ? oldValue.map(i => i.row_id) : [] });
+      }
+
+      if (Object.keys(originalUpdate).length > 0) {
+        updateRecordIds.push(_id);
+        const update = getFormatRecordData(editableColumns, originalUpdate);
+        const oldRecordData = getFormatRecordData(editableColumns, originalOldRecordData);
+        idRecordUpdates[_id] = update;
+        idOriginalRecordUpdates[_id] = originalUpdate;
+        idOldRecordData[_id] = oldRecordData;
+        idOriginalOldRecordData[_id] = originalOldRecordData;
+      }
+    });
+
+    if (tagsUpdate.length > 0) {
+      updateFileTags(tagsUpdate);
+    }
+
+    if (updateRecordIds.length > 0) {
+      modifyRecords(updateRecordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData);
+    }
+  }, [modifyRecords, updateFileTags]);
 
   const onHotKey = useCallback((event) => {
     if (event.keyCode === toKeyCode('mod+shift')) return;
@@ -228,6 +329,8 @@ const Table = () => {
         getTableContentRect={getTableContentRect}
         onGridKeyDown={onHotKey}
         onGridKeyUp={onHotKeyUp}
+        handleSpaceKeyDown={handleSpaceKeyDown}
+        handleSelectCellsDelete={handleSelectCellsDelete}
         updateFileTags={updateFileTags}
         updateSelectedRecordIds={updateSelectedRecordIds}
         checkCanModifyRecord={checkCanModifyRecord}
@@ -261,7 +364,20 @@ const Table = () => {
         tagsData={tagsData}
         // Use SFTable's context menu with metadata's options
         createContextMenuOptions={gridUtilsAdapter.createContextMenuOptions}
+        // Expanded props dialog for actions cell
+        onShowExpandedPropsDialog={onShowExpandedPropsDialog}
       />
+      {expandedRecordId && (
+        <ExpandedPropertiesDialog
+          metadata={metadata}
+          modifyRecord={modifyRecord}
+          modifyColumnData={modifyColumnData}
+          updateFileTags={updateFileTags}
+          recordId={expandedRecordId}
+          columns={visibleColumns}
+          toggle={toggleExpandedPropsDialog}
+        />
+      )}
     </div>
   );
 };

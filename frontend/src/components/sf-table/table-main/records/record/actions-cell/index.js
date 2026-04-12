@@ -5,6 +5,7 @@ import { Tooltip } from 'reactstrap';
 import { isMobile, Utils } from '../../../../../../utils/utils';
 import { gettext } from '../../../../../../utils/constants';
 import { SEQUENCE_COLUMN_WIDTH } from '../../../../constants/grid';
+import IconBtn from '../../../../../../components/icon-btn';
 
 import './index.css';
 
@@ -49,6 +50,13 @@ class ActionsCell extends Component {
         {gettext('The row is locked and cannot be modified')}
       </Tooltip>
     );
+  };
+
+  handleShowExpandedProps = () => {
+    const { onShowExpandedPropsDialog, recordId } = this.props;
+    if (onShowExpandedPropsDialog) {
+      onShowExpandedPropsDialog(recordId);
+    }
   };
 
   getRecordNo = () => {
@@ -98,6 +106,17 @@ class ActionsCell extends Component {
             />
           </div>
         </label>
+        {this.props.onShowExpandedPropsDialog && (
+          <IconBtn
+            symbol="expand"
+            className="row-expand"
+            iconClassName="row-expand-icon"
+            onClick={this.handleShowExpandedProps}
+            tabIndex="0"
+            role="button"
+            onKeyDown={Utils.onKeyDown}
+          />
+        )}
         {/* {this.getLockedRowTooltip()} */}
       </div>
     );
@@ -115,6 +134,7 @@ ActionsCell.propTypes = {
   onSelectRecord: PropTypes.func,
   handleDragStart: PropTypes.func,
   canModify: PropTypes.bool,
+  onShowExpandedPropsDialog: PropTypes.func,
 };
 
 export default ActionsCell;

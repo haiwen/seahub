@@ -20,7 +20,7 @@ import {
   getSelectedRangeDimensions, getSelectedRow, getSelectedColumn,
   getRecordsFromSelectedRange, getSelectedCellValue, checkIsSelectedCellEditable,
 } from '../../utils/selected-cell-utils';
-import { checkIsNameColumn, checkIsColumnSupportPreview, getColumnIndexByKey } from '../../utils/column';
+import { checkIsNameColumn, getColumnIndexByKey } from '../../utils/column';
 import { CellType, PRIVATE_COLUMN_KEY } from '../../../../metadata/constants';
 import { RecordMetrics } from '../../shared/record-metrics';
 import { TreeMetrics } from '../../utils/tree-metrics';
@@ -33,6 +33,15 @@ import { EVENT_BUS_TYPE } from '../../constants/event-bus-type';
 import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../../utils/keyboard-utils';
 
 import './index.css';
+
+const READONLY_PREVIEW_COLUMNS = [
+  CellType.FILE_NAME,
+];
+
+const NOT_SUPPORT_OPEN_EDITOR_COLUMN_TYPES = [
+  CellType.CHECKBOX,
+  CellType.RATE,
+];
 
 class InteractionMasks extends React.Component {
 
@@ -57,6 +66,7 @@ class InteractionMasks extends React.Component {
     this.eventBus = EventBus.getInstance();
     this.pasteSource = PASTE_SOURCE.COPY;
     this.cutPosition = null;
+    this.viewId = '';
     this.selectionMask = null;
   }
 
@@ -175,6 +185,29 @@ class InteractionMasks extends React.Component {
     updateFileTags([{ record_id: recordId, tags: newValue, old_tags: Array.isArray(value) ? value.map(i => i.row_id) : [] }]);
   };
 
+  /**
+   * Handle preview image position change for image preview navigation.
+   * Called when navigating between images in preview mode.
+   * @param {number} newRowIdx - The new row index to preview
+   */
+  handlePreviewImageChange = (newRowIdx) => {
+    const { selectedPosition } = this.state;
+    if (selectedPosition.rowIdx !== newRowIdx) {
+      const newPosition = {
+        ...selectedPosition,
+        rowIdx: newRowIdx,
+        groupRecordIndex: this.props.isGroupView ? newRowIdx : -1,
+      };
+
+      if (this.isCellWithinBounds(newPosition)) {
+        this.setState({
+          selectedPosition: newPosition,
+          editorPosition: this.getEditorPosition(),
+        });
+      }
+    }
+  };
+
   onSelectCell = (cell, openEditor) => {
     const { selectedPosition, isEditorEnabled } = this.state;
 
@@ -271,14 +304,23 @@ class InteractionMasks extends React.Component {
   // position parameter is optional and used when called from onSelectCell callback
   // to avoid getEditorPosition() returning undefined after closeEditor() re-renders
   openEditor = (event = null, position) => {
+    if (this.isSelectedCellIsLongText()) {
+      event && event.stopPropagation();
+      event && event.preventDefault();
+    }
     const { key } = event || {};
     const { isEditorEnabled, selectedPosition, openEditorMode } = this.state;
     const { columns } = this.props;
     const selectedColumn = getSelectedColumn({ selectedPosition, columns });
+    const _isNameColumn = checkIsNameColumn(selectedColumn);
+    const { type: columnType } = selectedColumn;
+
+    if (NOT_SUPPORT_OPEN_EDITOR_COLUMN_TYPES.includes(columnType)) return null;
+
     // how to open editors?
     // 1. editor is closed
-    // 2. record-cell is editable or is name column or open editor with preview mode
-    if (!isEditorEnabled && (this.checkIsSelectedCellEditable() || checkIsNameColumn(selectedColumn) || (openEditorMode === EDITOR_TYPE.PREVIEWER && checkIsColumnSupportPreview(selectedColumn)))) {
+    // 2. record-cell is editable or open editor with preview mode
+    if (((this.checkIsSelectedCellEditable() || _isNameColumn || (openEditorMode === EDITOR_TYPE.PREVIEWER && READONLY_PREVIEW_COLUMNS.includes(columnType))) && !isEditorEnabled)) {
       // Use pre-computed position if provided (from onSelectCell callback),
       // otherwise calculate it now (for keyboard-triggered opens)
       const editorPosition = position !== undefined ? position : this.getEditorPosition();
@@ -288,6 +330,13 @@ class InteractionMasks extends React.Component {
         editorPosition: editorPosition
       });
     }
+  };
+
+  isSelectedCellIsLongText = () => {
+    const { columns } = this.props;
+    const { selectedPosition } = this.state;
+    const column = getSelectedColumn({ selectedPosition, columns });
+    return column && column.type === CellType.LONG_TEXT;
   };
 
   closeEditor = () => {
@@ -530,6 +579,7 @@ class InteractionMasks extends React.Component {
   };
 
   handleSpaceKeyDown = (e) => {
+    e.preventDefault();
     e.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
     const { selectedPosition } = this.state;
@@ -537,6 +587,11 @@ class InteractionMasks extends React.Component {
     const record = getSelectedRow({ selectedPosition, isGroupView, recordGetterByIndex });
     if (this.props.handleSpaceKeyDown) {
       this.props.handleSpaceKeyDown(record);
+    } else if (this.props.openFile) {
+      // Support metadata-style file preview when openFile prop is provided
+      this.props.openFile(record, () => {
+        this.eventBus.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR, EDITOR_TYPE.PREVIEWER);
+      });
     }
   };
 
@@ -575,7 +630,7 @@ class InteractionMasks extends React.Component {
 
       const { idx: startColumnIdx } = topLeft;
       const { idx: endColumnIdx } = bottomRight;
-      const columnsFromSelectedRange = columns.slice(startColumnIdx, endColumnIdx);
+      const columnsFromSelectedRange = columns.slice(startColumnIdx, endColumnIdx + 1);
       if (columnsFromSelectedRange.length === 0) {
         return;
       }
@@ -663,6 +718,7 @@ class InteractionMasks extends React.Component {
         isGroupView,
         pasteSource: this.pasteSource,
         cutPosition: this.cutPosition,
+        viewId: this.viewId,
       });
       if (!multiplePaste) {
         this.setPasteRange(copiedRecordsCount, copiedColumnsCount);
@@ -705,6 +761,10 @@ class InteractionMasks extends React.Component {
     if (copiedCellsCount > 0) {
       this.pasteSource = PASTE_SOURCE.CUT;
       this.cutPosition = { ...selectedPosition };
+      // Capture viewId from URL for cross-view cut-paste safety
+      const { search } = window.location;
+      const urlParams = new URLSearchParams(search);
+      this.viewId = urlParams.has('view') ? urlParams.get('view') : '';
     }
   };
 
@@ -772,6 +832,7 @@ class InteractionMasks extends React.Component {
     });
     this.cutPosition = null;
     this.pasteSource = PASTE_SOURCE.COPY;
+    this.viewId = '';
   };
 
   isMultiplePaste = (copiedRecordsCount, copiedColumnsCount) => {
@@ -1176,7 +1237,11 @@ class InteractionMasks extends React.Component {
               onSelectTag={this.handleSelectTags}
               onDeselectTag={this.handleDeselectTags}
               editorPosition={editorPosition}
+              // Metadata-compatible props
+              deleteRecords={this.props.deleteRecords}
+              onChangePosition={this.handlePreviewImageChange}
               {...this.getSelectedDimensions(selectedPosition)}
+              {...this.state.editorPosition}
             />
           </EditorPortal>
         )}
@@ -1236,6 +1301,7 @@ InteractionMasks.propTypes = {
   modifyRecords: PropTypes.func,
   updateFileTags: PropTypes.func,
   deleteRecordsLinks: PropTypes.func,
+  deleteRecords: PropTypes.func,
   paste: PropTypes.func,
   editMobileCell: PropTypes.func,
   getVisibleIndex: PropTypes.func,
@@ -1254,6 +1320,8 @@ InteractionMasks.propTypes = {
   onCommit: PropTypes.func,
   getTableCanvasContainerRect: PropTypes.func,
   handleSpaceKeyDown: PropTypes.func,
+  openFile: PropTypes.func,
+  onChangePosition: PropTypes.func,
 };
 
 export default InteractionMasks;

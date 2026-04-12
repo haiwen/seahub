@@ -346,6 +346,7 @@ class Record extends React.Component {
               recordDraggable={this.props.recordDraggable}
               handleDragStart={this.handleDragStart}
               canModify={canModify}
+              onShowExpandedPropsDialog={this.props.onShowExpandedPropsDialog}
             />
           }
           {frozenCells}
@@ -392,6 +393,7 @@ Record.propTypes = {
   hasChildNodes: PropTypes.bool,
   isFoldedTreeNode: PropTypes.bool,
   toggleExpandTreeNode: PropTypes.func,
+  onShowExpandedPropsDialog: PropTypes.func,
 };
 
 export default Record;

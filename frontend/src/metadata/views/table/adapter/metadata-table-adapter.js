@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import GridUtils from '../utils/grid-utils';
 import CellFormatter from '../../../components/cell-formatter';
 import Editor from '../../../components/cell-editors/editor';
-import { CellType, EVENT_BUS_TYPE } from '@/metadata/constants';
+import { CellType, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '@/metadata/constants';
 import { getColumnDisplayName } from '../../../utils/column';
 import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME } from '../../../constants/column/icon';
 import { buildTableMenuOptions } from '@/metadata/utils/menu-builder';
@@ -135,7 +135,7 @@ export const createMetadataContextMenuOptions = ({
     // Handle single cell selection (lowest priority)
     const { groupRecordIndex, rowIdx: recordIndex, idx } = selectedPosition;
     const column = metadata?.columns?.[idx];
-    isNameColumn = column && (column.key === '_file_name');
+    isNameColumn = column && (column.key === PRIVATE_COLUMN_KEY.FILE_NAME);
 
     const record = recordGetterByIndex ? recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex }) : null;
     if (record) {
