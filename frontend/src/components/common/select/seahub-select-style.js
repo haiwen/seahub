@@ -1,20 +1,36 @@
 // Seahub select is based on seafile-ui.css, so use the following content to override the default react-select style
 const DEFAULT_CONTROL_STYLE = {
-  border: '1px solid var(--bs-border-color) !important',
+  fontSize: '14px',
+  padding: '0 4px',
+  border: '1px solid rgba(0, 40, 100, 0.12) !important',
+  boxShadow: 'none',
   backgroundColor: 'var(--bs-popover-bg)',
+  borderRadius: '4px',
+  outline: '0',
 };
 
 const FOCUS_CONTROL_STYLE = {
   fontSize: '14px',
+  padding: '0 4px',
+  border: '1px solid #3e84f7',
+  boxShadow: 'none',
   backgroundColor: 'var(--bs-popover-bg)',
-  borderColor: '#1991eb',
+  borderRadius: '4px',
   outline: '0',
-  boxShadow: '0 0 0 2px rgba(70, 127, 207, 0.25)',
 };
 
 const controlCallback = (provided, state) => {
   const { isDisabled, isFocused } = state;
-  if (isFocused && !isDisabled) {
+  if (isDisabled) {
+    return {
+      ...provided,
+      ...DEFAULT_CONTROL_STYLE,
+      cursor: 'default',
+      backgroundColor: '#f5f5f5',
+      opacity: 0.65,
+    };
+  }
+  if (isFocused) {
     return {
       ...provided,
       ...FOCUS_CONTROL_STYLE,
@@ -37,22 +53,59 @@ const controlCallback = (provided, state) => {
 };
 
 const MenuSelectStyle = {
+  // .react-select__menu / react-select-2-listbox
   menu: (base) => {
     return ({
       ...base,
+      padding: '8px 0 8px 8px',
       backgroundColor: 'var(--bs-popover-bg)',
       border: '1px solid var(--bs-border-secondary-color)',
+      borderRadius: '4px',
+      boxShadow: '0px 6px 14px rgba(0, 0, 0, 0.1)',
     });
   },
+  // .react-select__menu-list）
+  menuList: (provided) => ({
+    ...provided,
+    paddingRight: '8px',
+  }),
   option: (provided, state) => {
-    const { isDisabled, isSelected, isFocused } = state;
+    const { isDisabled, isSelected, isFocused, isActive, isVisited } = state;
+    let bgColor;
+    if (isSelected) {
+      bgColor = 'rgba(0, 0, 0, 0.04)';
+    } else if (isActive || isVisited) {
+      bgColor = 'rgba(0, 0, 0, 0.06)';
+    } else if (isFocused) {
+      bgColor = 'var(--bs-bg-color)';
+    } else {
+      bgColor = 'var(--bs-popover-bg)';
+    }
     return ({
       ...provided,
+      color: 'var(--bs-body-color)',
+      borderRadius: '4px',
+      height: '32px',
+      padding: '6px 12px',
       cursor: isDisabled ? 'default' : 'pointer',
-      backgroundColor: isSelected ? '#20a0ff' : (isFocused ? 'var(--bs-bg-color)' : 'var(--bs-popover-bg)'),
+      backgroundColor: `${bgColor} !important`,
       '.header-icon .dtable-font': {
-        color: isSelected ? '#fff' : '#aaa',
+        color: '#aaa',
       },
+      ...(isSelected && {
+        paddingRight: '36px',
+        position: 'relative',
+        '&::after': {
+          content: '"✓"',
+          position: 'absolute',
+          right: '8px',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          fontSize: '14px',
+          color: '#666',
+          fontWeight: '500',
+        },
+      }),
     });
   },
   control: controlCallback,
@@ -87,6 +140,14 @@ const MenuSelectStyle = {
     ...styles,
     color: 'var(--bs-body-color)',
   }),
+  placeholder: (provided, state) => {
+    const { isDisabled } = state;
+    return {
+      ...provided,
+      color: '#868e96',
+      opacity: isDisabled ? 0.65 : 1,
+    };
+  },
   indicatorSeparator: (styles, state) => {
     if (state.selectProps.isMulti) {
       return styles;
