@@ -7,6 +7,7 @@ import { gettext, lang } from '../../utils/constants';
 import { OCRResultPopover } from '../components/popover';
 import FileTagsDialog from '../components/dialog/file-tags-dialog';
 
+// 元数据的 AI 操作相关的 hook
 // This hook provides content related to metadata ai operation
 const MetadataAIOperationsContext = React.createContext(null);
 
@@ -25,7 +26,9 @@ export const MetadataAIOperationsProvider = ({
   const targetRef = useRef(null);
   const opCallBack = useRef(null);
 
+  // 获取资料库的权限（存在问题，如果是自定义共享权限，这里判断结果是错误的，都判断成 'r' 只读权限）
   const permission = useMemo(() => repoInfo.permission !== 'admin' && repoInfo.permission !== 'rw' ? 'r' : 'rw', [repoInfo]);
+  // 通过权限判断是否能修改（直接传递给下层组件，不严谨）
   const canModify = useMemo(() => permission === 'rw', [permission]);
 
   const closeFileTagsDialog = useCallback(() => {
@@ -41,6 +44,7 @@ export const MetadataAIOperationsProvider = ({
     setOcrResultDialogShow(false);
   }, []);
 
+  // 点击 OCR 回到函数
   const onOCR = useCallback((record, { success_callback }, target) => {
     targetRef.current = target;
     recordRef.current = record;
@@ -48,6 +52,7 @@ export const MetadataAIOperationsProvider = ({
     setOcrResultDialogShow(true);
   }, []);
 
+  // OCR 图片成功回调函数
   const onOCRByImageDialog = useCallback(({ parentDir, fileName } = {}, target) => {
     recordRef.current = {
       [PRIVATE_COLUMN_KEY.PARENT_DIR]: parentDir,
@@ -55,6 +60,9 @@ export const MetadataAIOperationsProvider = ({
     };
     targetRef.current = target;
 
+    // 把 OCR 结果转换成 update 对象
+    // 然后更改记录
+    // 更改记录后，从全局获取 eventBus 对象，发出本地当前文件更新的事件
     opCallBack.current = (description) => {
       const update = { [PRIVATE_COLUMN_KEY.FILE_DESCRIPTION]: description };
       metadataAPI.modifyRecord(repoID, { parentDir, fileName }, update).then(res => {
