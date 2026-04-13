@@ -39,6 +39,7 @@ class ProfileManager(models.Manager):
         if lang_code is not None:
             profile.lang_code = lang_code
         if login_id is not None:
+            login_id = str(login_id)
             login_id = login_id.strip()
             profile.login_id = login_id
         if contact_email is not None:
