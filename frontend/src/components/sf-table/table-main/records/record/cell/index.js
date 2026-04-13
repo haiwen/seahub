@@ -171,7 +171,7 @@ const Cell = React.memo(({
   };
 
   const renderCellContent = useCallback(() => {
-    const columnFormatter = isValidElement(column.formatter) && cloneElement(column.formatter, { isCellSelected, value: cellValue, column, record, treeNodeIndex, onChange: modifyRecord });
+    const columnFormatter = isValidElement(column.formatter) && cloneElement(column.formatter, { isCellSelected, value: cellValue, field: column, record, treeNodeIndex, onChange: modifyRecord });
     if (showRecordAsTree && isNameColumn) {
       return (
         <div className="sf-table-cell-tree-node">

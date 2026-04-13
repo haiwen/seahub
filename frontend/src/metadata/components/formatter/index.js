@@ -19,8 +19,8 @@ import { CellType } from '../../constants';
 
 import './index.css';
 
-const Formatter = React.memo(({ column, value, isSample, queryUserAPI, emptyTip, tagsData, ...params }) => {
-  const { type } = column || {};
+const Formatter = React.memo(({ field, value, isSample, queryUserAPI, emptyTip, tagsData, ...params }) => {
+  const { type } = field || {};
   const className = `sf-metadata-${type}-formatter`;
   switch (type) {
     case CellType.TEXT: {
@@ -55,21 +55,21 @@ const Formatter = React.memo(({ column, value, isSample, queryUserAPI, emptyTip,
     }
     case CellType.DATE: {
       return (
-        <DateFormatter value={value} format={column.data?.format} className={className}>
+        <DateFormatter value={value} format={field.data?.format} className={className}>
           <Empty fieldType={type} placeholder={emptyTip} />
         </DateFormatter>
       );
     }
     case CellType.SINGLE_SELECT: {
       return (
-        <SingleSelectFormatter value={value} options={column.data?.options || []} className={className}>
+        <SingleSelectFormatter value={value} options={field.data?.options || []} className={className}>
           <Empty fieldType={type} placeholder={emptyTip} />
         </SingleSelectFormatter>
       );
     }
     case CellType.MULTIPLE_SELECT: {
       return (
-        <MultipleSelectFormatter value={value} options={column.data?.options || []} className={className}>
+        <MultipleSelectFormatter value={value} options={field.data?.options || []} className={className}>
           <Empty fieldType={type} placeholder={emptyTip} />
         </MultipleSelectFormatter>
       );
@@ -90,7 +90,7 @@ const Formatter = React.memo(({ column, value, isSample, queryUserAPI, emptyTip,
     }
     case CellType.GEOLOCATION: {
       return (
-        <GeolocationFormatter {...params} format={column.data?.geo_format} value={value} className={className}>
+        <GeolocationFormatter {...params} format={field.data?.geo_format} value={value} className={className}>
           <Empty fieldType={type} placeholder={emptyTip} />
         </GeolocationFormatter>
       );
@@ -104,14 +104,14 @@ const Formatter = React.memo(({ column, value, isSample, queryUserAPI, emptyTip,
     }
     case CellType.NUMBER: {
       return (
-        <NumberFormatter value={value} formats={column?.data} className={className}>
+        <NumberFormatter value={value} formats={field?.data} className={className}>
           <Empty fieldType={type} placeholder={emptyTip} />
         </NumberFormatter>
       );
     }
     case CellType.RATE: {
       return (
-        <RateFormatter value={value} data={column?.data} className={className}>
+        <RateFormatter value={value} data={field?.data} className={className}>
           <Empty fieldType={type} placeholder={emptyTip} />
         </RateFormatter>
       );

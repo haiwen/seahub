@@ -48,7 +48,7 @@ const Header = ({ readonly, haveFreezed, value, groupByColumn, cardsQuantity, ta
   return (
     <div className="sf-metadata-view-kanban-board-header" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       <div className="sf-metadata-view-kanban-board-header-title" ref={headerRef}>
-        {value ? (
+        {titleValue !== null ? (
           <CellFormatter value={titleValue} field={groupByColumn} readonly={true} tagsData={tagsData} />
         ) : (
           <span>{gettext('Uncategorized')}</span>

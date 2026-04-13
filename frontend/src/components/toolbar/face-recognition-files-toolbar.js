@@ -3,7 +3,7 @@ import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { gettext } from '../../utils/constants';
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../metadata/constants';
 import { useFileOperations } from '../../hooks/file-operations';
-import RowUtils from '../../metadata/views/table/utils/row-utils';
+import RowUtils from '../sf-table/utils/row-utils';
 import { buildGalleryToolbarMenuOptions } from '../../metadata/utils/menu-builder';
 import { getColumnByKey } from '../sf-table/utils/column';
 import { useMetadataStatus } from '../../hooks';

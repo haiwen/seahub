@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import TRANSFER_TYPES from '../constants/transfer-types';
-import { getColumnByIndex } from './column';
+import { TRANSFER_TYPES } from '../constants/transfer-types';
+import { getColumnByIndex, getColumnOriginName } from './column';
 import { REG_STRING_NUMBER_PARTS, REG_NUMBER_DIGIT } from '../constants/reg';
 import { RATE_MAX_NUMBER } from '../constants/column';
 import { getCellValueByColumn } from './cell';
@@ -296,9 +296,12 @@ class GridUtils {
     let draggedRangeRuleMatrix = {};
     draggedRangeMatrix.forEach((valueList, i) => {
       let column = columns[i + startColumnIdx];
+      if (!column) return; // Skip if column is undefined
       let { type, data, key } = column;
       let ruleMatrixItem = NORMAL_RULE;
-      if (valueList.length > 1) {
+      // For TAGS and other special column types, always set specific rules
+      // For other types, only set rules when there's sequence to detect (valueList.length > 1)
+      if (valueList.length > 1 || type === CellType.TAGS) {
         switch (type) {
           case CellType.DATE: {
             let format = data && data.format && data.format.indexOf('HH:mm') > -1 ? 'YYYY-MM-DD HH:mm' : 'YYYY-MM-DD';
@@ -341,10 +344,17 @@ class GridUtils {
           }
           case CellType.TAGS: {
             // For TAGS column type, return the tag row_ids for drag-fill
-            ruleMatrixItem = ({ value }) => {
-              if (!value) return [];
-              if (!Array.isArray(value) || value.length === 0) return [];
-              return value.map(item => item.row_id);
+            // valueList is draggedRangeMatrix[i] which contains source cell values
+            // For a single cell selection, valueList = [[tagObj]], so valueList[0][0] = tagObj
+            // For multiple cells, valueList[j][0] = tagObj for each column j
+            const tagSourceData = valueList[0]; // This is the source cell value (tagObj array)
+            ruleMatrixItem = ({ value, n }) => {
+              // Use source data from valueList instead of current cell value
+              const sourceValue = tagSourceData;
+              if (!sourceValue) return [];
+              if (!Array.isArray(sourceValue) || sourceValue.length === 0) return [];
+              // Return the same tag row_ids for each fill (copy mode)
+              return sourceValue.map(item => item.row_id);
             };
             break;
           }
@@ -402,22 +412,28 @@ class GridUtils {
     const selectedRowLength = draggedRangeMatrix[0] ? draggedRangeMatrix[0].length : 0;
     let fillingIndex = selectedRowLength;
 
-    // if group view then use index of groupRows which is different from the normal rows(they represent DOMs)
-    let currentGroupRowIndex = groupRecordIndex ? groupRecordIndex + 1 : null;
+    // if group view then use index of groupRows which is different from the normal rows
+    // Only set currentGroupRowIndex when groupRecordIndex is explicitly set (not null/undefined)
+    let currentGroupRowIndex = groupRecordIndex != null ? groupRecordIndex + 1 : null;
+    const isGroupViewMode = groupRecordIndex != null;
+
     for (let i = endRecordIdx + 1; i <= overRecordIdx; i++) {
       let dragRow;
       // find the row that need to be updated (it's dragged)
-      if (currentGroupRowIndex) {
+      if (isGroupViewMode && currentGroupRowIndex != null) {
         const groupRow = getGroupRecordByIndex(currentGroupRowIndex, groupMetrics);
         dragRow = idRowMap[groupRow?.rowId];
       } else {
         dragRow = rows[i];
       }
-      if (!dragRow) continue;
+      if (!dragRow) {
+        if (isGroupViewMode) currentGroupRowIndex++;
+        continue;
+      }
       const { _id: dragRowId } = dragRow;
       fillingIndex++;
       if (canModifyRow && !canModifyRow(dragRow)) {
-        currentGroupRowIndex++;
+        if (isGroupViewMode) currentGroupRowIndex++;
         continue;
       }
       rowIds.push(dragRowId);
@@ -427,15 +443,25 @@ class GridUtils {
       for (let j = startColumnIdx; j <= endColumnIdx; j++) {
         let column = shownColumns[j];
         let { key: cellKey, type } = column;
+        const columnName = getColumnOriginName(column);
+
         // Skip TAGS and LONG_TEXT for folder records (folders don't support these)
         const isFolder = checkIsDir(dragRow);
-        if (isFolder && (type === CellType.TAGS || type === CellType.LONG_TEXT)) continue;
-        if (canModifyColumn && !canModifyColumn(column)) continue;
-        if (NOT_SUPPORT_DRAG_COPY_COLUMN_TYPES && NOT_SUPPORT_DRAG_COPY_COLUMN_TYPES.includes(type)) continue;
+        if (isFolder && (type === CellType.TAGS || type === CellType.LONG_TEXT)) {
+          continue;
+        }
+        if (canModifyColumn && !canModifyColumn(column)) {
+          continue;
+        }
+        if (NOT_SUPPORT_DRAG_COPY_COLUMN_TYPES && NOT_SUPPORT_DRAG_COPY_COLUMN_TYPES.includes(type)) {
+          continue;
+        }
 
         let rule = rules[cellKey];
+        // Get source value from draggedRangeMatrix instead of target row
+        const sourceValue = draggedRangeMatrix[j - startColumnIdx]?.[fillingIndex - selectedRowLength - 1] || draggedRangeMatrix[j - startColumnIdx]?.[0];
         let oldCellValue = getCellValueByColumn(dragRow, column);
-        let fillValue = rule ? rule({ value: oldCellValue, n: fillingIndex }) : oldCellValue;
+        let fillValue = rule ? rule({ value: sourceValue, n: fillingIndex }) : sourceValue;
 
         // Skip empty values for non-tags columns (empty drag-fill is meaningless)
         if (type === CellType.TAGS) {
@@ -451,11 +477,11 @@ class GridUtils {
           // Skip if fillValue is empty/undefined/null and equals old value
           if (fillValue !== undefined && fillValue !== null && fillValue !== '') {
             updatedRows[dragRowId] = updatedRows[dragRowId] || {};
-            updatedRows[dragRowId][cellKey] = fillValue;
+            updatedRows[dragRowId][columnName] = fillValue;
           }
         }
       }
-      currentGroupRowIndex++;
+      if (isGroupViewMode) currentGroupRowIndex++;
     }
 
     Object.keys(updatedRows).forEach(rowId => {

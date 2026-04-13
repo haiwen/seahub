@@ -1,4 +1,4 @@
-import TRANSFER_TYPES from '../constants/transfer-types';
+import { TRANSFER_TYPES } from '../constants/transfer-types';
 import { getColumnByIndex } from './column';
 import { toggleSelection } from './toggle-selection';
 import { setCopiedData } from './copied-data-cache';

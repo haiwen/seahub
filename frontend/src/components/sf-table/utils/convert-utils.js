@@ -1,13 +1,17 @@
+/**
+ * Cell value type conversion utilities for paste operations
+ * Handles conversion between different column types when pasting data
+ */
 import {
   getDateDisplayString, getNumberDisplayString, formatStringToNumber, getOptionName, getCollaboratorsName, getFloatNumber, getColumnOptionNamesByIds,
   getOption, checkIsPredefinedOption, getColumnOptionNameById,
   getTagsDisplayString,
-} from '../../../utils/cell';
-import { getColumnOptions, generatorCellOption, generatorCellOptions, isLongTextValueExceedLimit, getValidLongTextValue } from '../../../utils/column';
-import { isNumber } from '../../../utils/number';
-import { formatTextToDate } from '../../../utils/date';
-import { CellType, DEFAULT_DATE_FORMAT } from '../../../constants';
-import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
+} from '@/metadata/utils/cell';
+import { getColumnOptions, generatorCellOption, generatorCellOptions, isLongTextValueExceedLimit, getValidLongTextValue } from '@/metadata/utils/column';
+import { isNumber } from '@/metadata/utils/number';
+import { formatTextToDate } from '@/metadata/utils/date';
+import { CellType, DEFAULT_DATE_FORMAT } from '@/metadata/constants';
+import { COLUMN_DATA_OPERATION_TYPE } from '@/metadata/store/operations';
 
 const SUPPORT_PASTE_FROM_COLUMN = {
   [CellType.MULTIPLE_SELECT]: [CellType.MULTIPLE_SELECT, CellType.TEXT, CellType.SINGLE_SELECT],
@@ -347,6 +351,15 @@ const convert2Tags = (cellValue, oldCellValue, fromColumn, targetColumn, api) =>
   return;
 };
 
+/**
+ * Main conversion function - converts cell value from source column type to target column type
+ * @param {*} cellValue - Value from source cell
+ * @param {*} oldCellValue - Current value in target cell
+ * @param {Object} targetColumn - Target column definition
+ * @param {Object} fromColumn - Source column definition
+ * @param {Object} api - API for modifying column data (for creating new options)
+ * @returns {*} Converted value
+ */
 function convertCellValue(cellValue, oldCellValue, targetColumn, fromColumn, api) {
   const { type: fromColumnType, data: fromColumnData } = fromColumn;
   const { type: targetColumnType, data: targetColumnData } = targetColumn;
@@ -388,3 +401,4 @@ function convertCellValue(cellValue, oldCellValue, targetColumn, fromColumn, api
 }
 
 export { convertCellValue };
+export default convertCellValue;

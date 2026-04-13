@@ -122,7 +122,7 @@ const createColumnFormatter = ({ repoID, record, column, value, queryUserAPI, ta
     case CellType.CTIME:
     case CellType.MTIME: {
       return (
-        <CTimeFormatterWrapper value={value} className={className} {...otherProps} />
+        <CTimeFormatterWrapper value={value} className={className} column={column} {...otherProps} />
       );
     }
     case CellType.CREATOR:

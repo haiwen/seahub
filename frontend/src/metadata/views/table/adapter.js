@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react';
-import GridUtils from '../utils/grid-utils';
-import CellFormatter from '../../../components/cell-formatter';
-import Editor from '../../../components/cell-editors/editor';
-import { CellType, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '@/metadata/constants';
-import { getColumnDisplayName } from '../../../utils/column';
-import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME } from '../../../constants/column/icon';
+import GridUtils from '@/components/sf-table/utils/grid-utils';
+import PasteUtils from '@/components/sf-table/utils/paste';
+import CellFormatter from '../../components/cell-formatter';
+import Editor from '../../components/cell-editors/editor';
+import { CellType, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '@/metadata/constants';
+import { getColumnDisplayName } from '../../utils/column';
+import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME } from '../../constants/column/icon';
 import { buildTableMenuOptions } from '@/metadata/utils/menu-builder';
 import { checkIsDir } from '@/metadata/utils/row';
 import { getParentDirFromRecord, getRecordIdFromRecord } from '@/metadata/utils/cell';
@@ -12,7 +13,6 @@ import TextTranslation from '@/utils/text-translation';
 import { openInNewTab, openParentFolder } from '@/metadata/utils/file';
 import { DropdownItem, Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import Icon from '@/components/icon';
-
 
 const POPUP_EDITOR_COLUMN_TYPES = [
   CellType.DATE,
@@ -47,6 +47,7 @@ export const adaptMetadataColumnsToSfTable = (repoID, metadataColumns, tagsData,
       is_support_preview: [CellType.FILE_NAME].includes(column?.type),
       is_support_direct_edit: [CellType.CHECKBOX].includes(column?.type),
       editable_via_click_cell: column.editable,
+      is_private: PRIVATE_COLUMN_KEYS.includes(column.key),
     };
   });
 };
@@ -56,7 +57,18 @@ class MetadataGridUtilsAdapter {
   constructor(metadata, api) {
     this.metadata = metadata;
     this.api = api;
-    this.gridUtils = new GridUtils(metadata, api);
+
+    // Transform metadata to sf-table's expected structure:
+    // sf-table expects metadata.row_ids (via view.rows) for PasteUtils
+    const metadataForSfTable = {
+      ...metadata,
+      row_ids: metadata?.view?.rows || [],
+    };
+
+    // Use sf-table's GridUtils for getCopiedContent and getUpdateDraggedRecords
+    this.gridUtils = new GridUtils(metadata?.view?.rows || [], api);
+    // Use sf-table's PasteUtils for paste and clearCutData
+    this.pasteUtils = new PasteUtils(metadataForSfTable, api);
   }
 
   getCopiedContent({ type, copied, isGroupView, columns }) {
@@ -68,7 +80,11 @@ class MetadataGridUtilsAdapter {
   }
 
   paste({ type, copied, multiplePaste, pasteRange, isGroupView, columns, pasteSource, cutPosition, viewId }) {
-    return this.gridUtils.paste({ type, copied, multiplePaste, pasteRange, isGroupView, columns, pasteSource, cutPosition, viewId });
+    return this.pasteUtils.paste({ type, copied, multiplePaste, pasteRange, isGroupView, columns, pasteSource, cutPosition, viewId });
+  }
+
+  clearCutData(cutPosition, cutData, isGroupView) {
+    return this.pasteUtils.clearCutData(cutPosition, cutData, isGroupView);
   }
 }
 
@@ -379,5 +395,3 @@ export const adaptSfTablePropsToMetadata = (sfTableProps, metadataProps) => {
     getCopiedRecordsAndColumnsFromRange,
   };
 };
-
-export default MetadataGridUtilsAdapter;

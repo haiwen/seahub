@@ -217,6 +217,8 @@ class PopupEditorContainer extends React.Component {
     const editor = this.getEditor();
     if (!editor) return;
 
+    if (column.type === CellType.TAGS) return;
+
     if (column.type === CellType.GEOLOCATION) {
       if (editor.getValue) {
         const geolocationValue = editor.getValue();

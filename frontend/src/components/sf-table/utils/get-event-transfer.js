@@ -1,4 +1,4 @@
-import TRANSFER_TYPES from '../constants/transfer-types';
+import { TRANSFER_TYPES } from '../constants/transfer-types';
 import { getCopiedData } from './copied-data-cache';
 
 const { FRAGMENT, HTML, TEXT } = TRANSFER_TYPES;

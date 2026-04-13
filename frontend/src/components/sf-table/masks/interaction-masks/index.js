@@ -13,7 +13,7 @@ import { Utils } from '../../../../utils/utils';
 import { isEmptyObject } from '../../../../utils/object';
 import { KeyCodes } from '../../../../constants';
 import { GROUP_ROW_TYPE } from '../../constants/group';
-import TRANSFER_TYPES from '../../constants/transfer-types';
+import { TRANSFER_TYPES } from '../../constants/transfer-types';
 import { GRID_HEADER_DOUBLE_HEIGHT, GRID_HEADER_DEFAULT_HEIGHT, HEADER_HEIGHT_TYPE, PASTE_SOURCE, EDITOR_TYPE } from '../../constants/grid';
 import {
   getNewSelectedRange, getSelectedDimensions, selectedRangeIsSingleCell,
@@ -1106,7 +1106,6 @@ class InteractionMasks extends React.Component {
 
     const { recordIds, idRecordUpdates, idOriginalRecordUpdates, idOriginalOldRecordData, idOldRecordData } = newRecords;
     modifyRecords && modifyRecords(recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData);
-
   };
 
   handleDragStart = (e) => {

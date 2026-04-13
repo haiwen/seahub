@@ -1,15 +1,16 @@
 import { getColumnByIndex, getColumnOriginName } from './column';
 import { getCellValueByColumn, getFileNameFromRecord, isCellValueChanged } from './cell';
-import { PRIVATE_COLUMN_KEY, PASTE_SOURCE, TRANSFER_TYPES } from '../constants/transfer-types';
-import { CellType } from '../../../metadata/constants';
-import { Utils } from '../../../../utils/utils';
+import { PASTE_SOURCE, TRANSFER_TYPES } from '../constants/transfer-types';
+import { CellType, PRIVATE_COLUMN_KEY } from '../../../metadata/constants';
+import { Utils } from '@/utils/utils';
+import { convertCellValue } from './convert-utils';
 
 const isCopyPaste = true;
 
 /**
  * Paste utility for sf-table
  * Handles paste operations including:
- * - Multi-row/column paste with循环模式
+ * - Multi-row/column paste
  * - Type conversion between different column types
  * - TAGS field special handling via updateFileTags API
  * - Cut-paste operations (clearing source after paste)
@@ -206,7 +207,7 @@ class PasteUtils {
           : null;
 
         // Convert cell value based on column types
-        const update = this.convertCellValue(copiedCellValue, pasteCellValue, pasteColumn, copiedColumn);
+        const update = convertCellValue(copiedCellValue, pasteCellValue, pasteColumn, copiedColumn, this.api);
 
         if (!isCellValueChanged(pasteCellValue, update, pasteColumn.type)) {
           continue;
@@ -254,27 +255,6 @@ class PasteUtils {
       idOriginalOldRecordData,
       isCopyPaste
     );
-  }
-
-  /**
-   * Convert cell value from source column type to target column type
-   * @param {*} cellValue - Value from source cell
-   * @param {*} oldCellValue - Current value in target cell
-   * @param {Object} targetColumn - Target column definition
-   * @param {Object} sourceColumn - Source column definition
-   * @returns {*} Converted value
-   */
-  convertCellValue(cellValue, oldCellValue, targetColumn, sourceColumn) {
-    const { type: sourceType } = sourceColumn || {};
-    const { type: targetType, data: targetData } = targetColumn || {};
-
-    // Same column type, return as is
-    if (sourceType === targetType) {
-      return cellValue;
-    }
-
-    // Default: return old value (no conversion possible)
-    return oldCellValue;
   }
 }
 

@@ -5,12 +5,12 @@ const FILES = 'files';
 const METADATA_FRAGMENT = 'sf-metadata-fragment';
 
 // Paste source type
-const PASTE_SOURCE = {
+export const PASTE_SOURCE = {
   COPY: 'copy',
   CUT: 'cut',
 };
 
-const TRANSFER_TYPES = {
+export const TRANSFER_TYPES = {
   FRAGMENT,
   HTML,
   TEXT,
@@ -18,5 +18,3 @@ const TRANSFER_TYPES = {
   METADATA_FRAGMENT,
   PASTE_SOURCE,
 };
-
-export default TRANSFER_TYPES;
