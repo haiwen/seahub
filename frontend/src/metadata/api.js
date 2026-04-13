@@ -3,8 +3,10 @@ import Cookies from 'js-cookie';
 import { siteRoot } from '../utils/constants';
 import { VIEW_TYPE_DEFAULT_BASIC_FILTER, VIEW_TYPE_DEFAULT_SORTS } from './constants';
 
+// 元数据相关 API
 class MetadataManagerAPI {
 
+  // 初始化 token （和其他一样）
   init({ server, username, password, token }) {
     this.server = server;
     this.username = username;
@@ -35,6 +37,7 @@ class MetadataManagerAPI {
     return this;
   }
 
+  // 封装 POST 请求
   _sendPostRequest(url, form) {
     if (form.getHeaders) {
       return this.req.post(url, form, {
@@ -45,11 +48,13 @@ class MetadataManagerAPI {
     }
   }
 
+  // 获取资料库相关协作人？？？
   getCollaborators = (repoID) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/related-users/';
     return this.req.get(url);
   };
 
+  // 获取元数据是否开启状态
   getMetadataStatus(repoID) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/';
     return this.req.get(url);
@@ -60,16 +65,19 @@ class MetadataManagerAPI {
     return this.req.get(url);
   }
 
+  // 创建元数据（开启资料库元数据开关） 
   createMetadata(repoID) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/';
     return this.req.put(url);
   }
 
+  // 删除元数据
   deleteMetadata(repoID) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/';
     return this.req.delete(url);
   }
 
+  // 更改元数细节设置
   modifyMetadataDetailsSettings(repoID, settings) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/details-settings/';
     const data = { settings: settings };
@@ -82,11 +90,13 @@ class MetadataManagerAPI {
     return this.req.put(url, data);
   }
 
+  // 获取元数据
   getMetadata(repoID, params) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/records/';
     return this.req.get(url, { params: params });
   }
 
+  // 更改某个记录
   modifyRecords = (repoID, recordsData, is_copy_paste = false) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/records/';
     let data = { records_data: recordsData };
@@ -96,6 +106,7 @@ class MetadataManagerAPI {
     return this.req.put(url, data);
   };
 
+  // 获取记录（后面三个可选参数）
   getRecord(repoID, { recordId, parentDir, fileName }, fallBackToBasicInfo) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/record/';
     let params = {};
@@ -120,6 +131,7 @@ class MetadataManagerAPI {
     return this.req.post(url, { files: files });
   }
 
+  // 更改记录
   modifyRecord(repoID, { recordId, parentDir, fileName }, updateData) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/record/';
     let data = {
@@ -138,6 +150,7 @@ class MetadataManagerAPI {
     return this.req.put(url, data);
   }
 
+  // 列出用户信息列表
   listUserInfo = (userIds) => {
     const url = this.server + '/api/v2.1/user-list/';
     const params = { user_id_list: userIds };
@@ -145,6 +158,7 @@ class MetadataManagerAPI {
   };
 
   // views
+  // 文件夹相关
   addFolder = (repoID, name) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/folders/';
     const params = { name };
@@ -166,6 +180,7 @@ class MetadataManagerAPI {
     return this.req.delete(url, { data: params });
   };
 
+  // 视图相关 API
   listViews = (repoID) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/views/';
     return this.req.get(url);
@@ -176,6 +191,7 @@ class MetadataManagerAPI {
     return this.req.get(url);
   };
 
+  // 增加视图，包括了排序和过滤，文件夹
   addView = (repoID, name, type = 'table', folder_id = '') => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/views/';
     let params = {
@@ -192,6 +208,7 @@ class MetadataManagerAPI {
     return this._sendPostRequest(url, params, { headers: { 'Content-type': 'application/json' } });
   };
 
+  // 复制视图
   duplicateView = (repoID, viewId, folder_id = '') => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/duplicate-view/';
     let params = { view_id: viewId };
@@ -201,6 +218,7 @@ class MetadataManagerAPI {
     return this._sendPostRequest(url, params, { headers: { 'Content-type': 'application/json' } });
   };
 
+  // 更改视图数据
   modifyView = (repoID, viewId, viewData) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/views/';
     const params = {
@@ -219,6 +237,7 @@ class MetadataManagerAPI {
     return this.req.delete(url, { data: params });
   };
 
+  // 移动视图
   moveView = (repoID, source_view_id, source_folder_id, target_view_id, target_folder_id, is_above_folder) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/move-views/';
     const params = {
@@ -275,6 +294,7 @@ class MetadataManagerAPI {
   };
 
   // ai
+  // 生成描述（普通文本文件）
   generateDescription = (repoID, filePath) => {
     const url = this.server + '/api/v2.1/ai/generate-summary/';
     const params = {
@@ -284,6 +304,7 @@ class MetadataManagerAPI {
     return this.req.post(url, params);
   };
 
+  // 生成图片描述
   imageCaption = (repoID, filePath, lang, recordId) => {
     const url = this.server + '/api/v2.1/ai/image-caption/';
     const params = {
@@ -295,6 +316,7 @@ class MetadataManagerAPI {
     return this.req.post(url, params);
   };
 
+  // 创建文件标签
   generateFileTags = (repoID, filePath) => {
     const url = this.server + '/api/v2.1/ai/generate-file-tags/';
     const params = {
@@ -304,6 +326,7 @@ class MetadataManagerAPI {
     return this.req.post(url, params);
   };
 
+  // 提取文件细节
   extractFileDetails = (repoID, objIds) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/extract-file-details/';
     const params = {
@@ -312,6 +335,7 @@ class MetadataManagerAPI {
     return this.req.post(url, params);
   };
 
+  // 压缩下载（和seafile-API中的一样）
   zipDownload(repoID, parent_dir, dirents) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/zip-task/';
     const form = new FormData();
@@ -323,6 +347,7 @@ class MetadataManagerAPI {
     return this._sendPostRequest(url, form);
   }
 
+  // 批量删除文件（画廊视图删除图片）
   /**
    * Delete multiple files or folders in a repository, used to delete images in gallery originally
    * @param {string} repoID - The ID of the repository
@@ -338,6 +363,7 @@ class MetadataManagerAPI {
     return this.req.delete(url, { data });
   }
 
+  // 人脸识别相关
   // face recognition
   getFaceRecognitionStatus(repoID) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/face-recognition/';
@@ -354,6 +380,7 @@ class MetadataManagerAPI {
     return this.req.delete(url);
   };
 
+  // 识别人脸
   recognizeFaces = (repoID, objIds) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/recognize-faces/';
     const params = {
@@ -362,11 +389,13 @@ class MetadataManagerAPI {
     return this.req.post(url, params);
   };
 
+  // 获取人脸识别数据
   getFaceData = (repoID, start = 0, limit = 1000) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/face-records/?start=' + start + '&limit=' + limit;
     return this.req.get(url);
   };
 
+  // 对某一条人脸数据重命名
   renamePeople = (repoID, recordId, name) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/face-record/';
     const params = {
@@ -376,6 +405,7 @@ class MetadataManagerAPI {
     return this.req.put(url, params);
   };
 
+  // 获取多个人脸照片（1000个批量加载）
   getPeoplePhotos = (repoID, peopleId, start = 0, limit = 1000) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/people-photos/' + peopleId + '/?start=' + start + '&limit=' + limit;
     return this.req.get(url);
@@ -406,6 +436,7 @@ class MetadataManagerAPI {
     return this.req.put(url, params);
   };
 
+  // 图像识别
   // ocr
   ocr = (repoID, filePath) => {
     const url = this.server + '/api/v2.1/ai/ocr/';

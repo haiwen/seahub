@@ -63,6 +63,7 @@ const GLOBAL_CONFIGURABLE_COLUMNS = [
   }
 ];
 
+// 元数据状态管理对话框（开启关闭状态，确定关闭对话框）
 const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns: oldHiddenColumns, toggleDialog: toggle, submit, modifyHiddenColumns }) => {
   const [value, setValue] = useState(oldValue);
   const [submitting, setSubmitting] = useState(false);
@@ -98,6 +99,7 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
         return;
       }
       setSubmitting(true);
+      // 开启元数据
       metadataAPI.createMetadata(repoID).then(res => {
         submit(true);
       }).catch(error => {
@@ -113,6 +115,7 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
     setShowTurnOffConfirmDialog(!showTurnOffConfirmDialog);
   }, [showTurnOffConfirmDialog]);
 
+  // 关闭元数据
   const turnOffConfirmSubmit = useCallback(() => {
     setShowTurnOffConfirmDialog(false);
     setSubmitting(true);

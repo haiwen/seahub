@@ -116,18 +116,16 @@ https://github.com/haiwen/seahub/pull/5998
 ├── sdoc
 │   ├── sdoc-editor
 │   │   ├── external-operations.js
-│   │   ├── index.css
 │   │   └── index.js
 │   ├── sdoc-file-history
 │   │   ├── helper.js
 │   │   ├── history-version.js
-│   │   ├── index.css
 │   │   ├── index.js
 │   │   └── side-panel.js
-│   └── sdoc-published-revision
-│       └── index.js
-├── sdoc-revision sdoc 历史版本
-│   └── index.js
+
+sdoc-revision 历史版本
+sdoc-published-revision
+
 
 ## 旧版维基
 

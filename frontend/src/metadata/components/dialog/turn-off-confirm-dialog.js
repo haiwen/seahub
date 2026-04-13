@@ -4,6 +4,7 @@ import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
+// 关闭确认对话框（公共组件）
 const TurnOffConfirmDialog = ({ title, children, toggle, submit }) => {
   return (
     <Modal isOpen={true} toggle={toggle}>
