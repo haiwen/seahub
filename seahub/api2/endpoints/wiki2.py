@@ -2436,7 +2436,7 @@ class Wiki2FileViewRecords(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            results = list_metadata_view_records(repo_id, username, view, False, start, limit)
+            results = list_metadata_view_records(repo_id, username, view, True, start, limit)
         except Exception as err:
             logger.error(err)
             error_msg = 'Internal Server Error'
