@@ -1,15 +1,11 @@
 .permission-editor-explanation {
   user-select: none;
   padding-left: 10px;
-  color: #9c9c9c;
+  color: var(--bs-icon-color);
   font-size: 12px;
   word-break: keep-all;
   word-wrap: break-word;
   white-space: pre-wrap;
-}
-
-.permission-editor__option--is-selected .permission-editor-explanation {
-  color: inherit;
 }
 
 .permission-editor .permission-editor__option {
