@@ -95,7 +95,7 @@ class SeahubSelect extends React.Component {
         components={{ Option, DropdownIndicator, MenuList, ClearIndicator }}
         placeholder={placeholder}
         isSearchable={isSearchable}
-        isClearable={isClearable && value && value.label !== '--'}
+        isClearable={false}
         menuPosition={menuPosition || 'fixed'} // when use default menuPosition(absolute), menuPortalTarget is unnecessary.
         menuShouldScrollIntoView
         menuPortalTarget={this.getMenuPortalTarget()}
