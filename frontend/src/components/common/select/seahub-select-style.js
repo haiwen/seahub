@@ -2,7 +2,7 @@
 const DEFAULT_CONTROL_STYLE = {
   fontSize: '14px',
   padding: '0 4px',
-  border: '1px solid rgba(0, 40, 100, 0.12) !important',
+  border: '1px solid var(--bs-border-color) !important',
   boxShadow: 'none',
   backgroundColor: 'var(--bs-popover-bg)',
   borderRadius: '4px',
@@ -102,7 +102,7 @@ const MenuSelectStyle = {
           top: '50%',
           transform: 'translateY(-50%)',
           fontSize: '14px',
-          color: '#666',
+          color: 'var(--bs-icon-color)',
           fontWeight: '500',
         },
       }),
@@ -133,7 +133,7 @@ const MenuSelectStyle = {
     color: '#909090',
     ':hover': {
       backgroundColor: 'transparent',
-      color: '#666',
+      color: 'var(--bs-icon-color)',
     },
   }),
   input: (styles) => ({
