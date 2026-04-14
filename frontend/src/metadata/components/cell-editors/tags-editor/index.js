@@ -29,7 +29,7 @@ const TagsEditor = forwardRef(({
 }, ref) => {
   const { tagsData, context, addTag } = useTags();
 
-  const [value, setValue] = useState((oldValue || []).map(item => item.row_id).filter(item => getRowById(tagsData, item)));
+  const [value, setValue] = useState((oldValue || []).map(item => item?.row_id).filter(item => getRowById(tagsData, item)));
   const [searchValue, setSearchValue] = useState('');
   const [highlightNodeIndex, setHighlightNodeIndex] = useState(-1);
   const [maxItemNum, setMaxItemNum] = useState(0);

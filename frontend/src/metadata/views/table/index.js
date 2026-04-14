@@ -47,11 +47,11 @@ const Table = () => {
     onOCR,
     generateFileTags,
   } = useMetadataView();
-  const { globalHiddenColumns } = useMetadataStatus();
+  const { globalHiddenColumns, enableFaceRecognition, enableTags } = useMetadataStatus();
   const { tagsData } = useTags();
   const containerRef = useRef(null);
 
-  const canModify = useMemo(() => window.sfMetadataContext.canModify(), []);
+  const canModify = useMemo(() => store.context.canModify(), [store]);
 
   const checkCanModifyRecord = useCallback((record) => {
     return record._permission !== 'r';
@@ -259,7 +259,10 @@ const Table = () => {
 
   // Create GridUtils adapter using metadata's GridUtils
   const gridUtilsAdapter = useMetadataTableAdapter({
+    repoID,
     metadata,
+    canModify,
+    enableFaceRecognition, enableTags,
     modifyRecord,
     modifyRecords,
     recordGetterByIndex,

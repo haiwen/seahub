@@ -7,7 +7,7 @@ import TextEditor from './text-editor';
 import { checkIsDir } from '../../utils/row';
 
 const FileNameEditor = React.forwardRef((props, ref) => {
-  const { repoID: repo_id, repoInfo: repo_info, column, record, mode } = props;
+  const { repoID, repoInfo, column, record, mode } = props;
   const textEditorRef = useRef(null);
 
   useImperativeHandle(ref, () => {
@@ -46,8 +46,6 @@ const FileNameEditor = React.forwardRef((props, ref) => {
 
   if (mode === EDITOR_TYPE.PREVIEWER) {
     const fileType = getFileType();
-    const repoID = window.sfMetadataContext && window.sfMetadataContext.getSetting('repoID') || repo_id;
-    const repoInfo = window.sfMetadataContext && window.sfMetadataContext.getSetting('repoInfo') || repo_info;
     const canDelete = window.sfMetadataContext && window.sfMetadataContext.checkCanDeleteRow();
 
     if (fileType === 'image') {

@@ -102,7 +102,7 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepo
           />
         </DetailItem>
       )}
-      {enableMetadata && <MetadataDetails readOnly={readOnly} tagsData={tagsData} />}
+      {enableMetadata && <MetadataDetails repoID={repoID} readOnly={readOnly} tagsData={tagsData} />}
     </>
   );
 

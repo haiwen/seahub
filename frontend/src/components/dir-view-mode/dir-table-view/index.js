@@ -17,12 +17,11 @@ import { getCreateMenuList } from '../utils/contextMenuUtils';
 import EventBus from '@/components/common/event-bus';
 import { EVENT_BUS_TYPE } from '@/components/sf-table/constants/event-bus-type';
 import { getRowById, getRowsByIds } from '@/components/sf-table/utils/table';
-import { openFile } from '@/metadata/utils/file';
-import { EDITOR_TYPE } from '@/components/sf-table/constants/grid';
 import { useMetadataStatus } from '@/hooks';
 import { metadataAPI } from '@/metadata';
 import { getColumnByKey } from '@/components/sf-table/utils/column';
 import { getColumnOptionNameById, getColumnOptionNamesByIds } from '@/metadata/utils/cell';
+import tagsAPI from '@/tag/api';
 
 import './index.css';
 
@@ -74,20 +73,11 @@ const DirTableView = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [direntList, repoID, sortBy, sortOrder]);
 
-
-  const onFileNameClick = useCallback((e, record) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const value = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-    if (Utils.imageCheck(value)) {
-      openFile(repoID, record, () => {
-        sfTableEventBus.current.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR, EDITOR_TYPE.PREVIEWER);
-      });
-      return;
-    }
-    const dirent = direntList.find(item => item.name === value);
-    onItemClick && onItemClick(dirent);
-  }, [repoID, direntList, onItemClick]);
+  const enrichedColumns = useMemo(() => {
+    const visibleColumns = columns.filter(col => !globalHiddenColumns.includes(col.key) && !hiddenColumnKeys.includes(col.key));
+    return createDirentTableColumns(repoID, repoInfo, visibleColumns);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [repoID, repoInfo, columns, globalHiddenColumns, hiddenColumnKeys, columnWidthVersion]);
 
   const updateDirentDetail = useCallback((parentDir, fileName, update) => {
     if (!isDirentDetailShow || window?.sfMetadataContext?.eventBus) return;
@@ -108,12 +98,6 @@ const DirTableView = ({
     updateDirentMetadata(direntName, update);
     updateDirentDetail(parentDir, direntName, update);
   }, [direntList, path, repoID, updateDirentDetail, updateDirentMetadata]);
-
-  const enrichedColumns = useMemo(() => {
-    const validColumns = columns.filter(col => !globalHiddenColumns.includes(col.key));
-    return createDirentTableColumns(validColumns, hiddenColumnKeys, { repoID, repoInfo, tableData, onFileNameClick, onDirentMetadata: handleDirentMetadata, columns, tagsData: tagsData || {} });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [columns, hiddenColumnKeys, repoID, repoInfo, tableData, onFileNameClick, updateDirentMetadata, columnWidthVersion, tagsData]);
 
   const modifyColumnWidth = useCallback((column, newWidth) => {
     setDirTableColumnWidth(column.key, newWidth);
@@ -195,6 +179,56 @@ const DirTableView = ({
       });
     });
   }, [getDirentByRowId, onItemRename, tableData, enrichedColumns, handleDirentMetadata]);
+
+  const updateFileTags = useCallback((data) => {
+    const recordID = data[0].record_id;
+    const tagIds = Array.isArray(data[0].tags) && data[0].tags.length > 0 ? data[0].tags : [];
+    const tags = getRowsByIds(tagsData, tagIds).map(tag => ({ row_id: tag._id, display_value: tag._name }));
+    const record = getRowById(tableData, recordID);
+    handleDirentMetadata(recordID, record._name, { [PRIVATE_COLUMN_KEY.TAGS]: tags });
+    tagsAPI.updateFileTags(repoID, [{ record_id: recordID, tags: tagIds }]);
+  }, [tagsData, tableData, handleDirentMetadata, repoID]);
+
+  const handleSelectCellsDelete = useCallback((records, columns) => {
+    if (!records || records.length === 0 || !columns || columns.length === 0) return;
+
+    // Build a map of record id to record for quick lookup
+    const recordMap = {};
+    records.forEach(record => {
+      recordMap[record._id] = record;
+    });
+
+    // Process each record
+    records.forEach(record => {
+      const { _id, _name } = record;
+
+      // Check if this record has any tags column
+      const hasTagsColumn = columns.some(col => col && col.type === CellType.TAGS);
+
+      // If has tags column, clear tags
+      if (hasTagsColumn) {
+        tagsAPI.updateFileTags(repoID, [{ record_id: _id, tags: [] }]);
+        handleDirentMetadata(_id, _name, { [PRIVATE_COLUMN_KEY.TAGS]: [] });
+      }
+
+      // Clear other editable columns (set to null)
+      columns.forEach(column => {
+        if (!column) return;
+        const { key, type } = column;
+
+        // Skip TAGS as it's handled above
+        if (type === CellType.TAGS) return;
+
+        // Skip FILE_NAME and other non-editable columns
+        if (key === PRIVATE_COLUMN_KEY.FILE_NAME) return;
+
+        // Skip columns that don't support editing
+        if (!column.editable) return;
+
+        handleDirentMetadata(_id, _name, { [key]: null });
+      });
+    });
+  }, [repoID, handleDirentMetadata]);
 
   const toggleSubMenu = (e, subMenuOptionKey) => {
     e.stopPropagation();
@@ -502,6 +536,8 @@ const DirTableView = ({
         selectedDirentList={selectedDirentList}
         updateSelectedRecordIds={handleSelectedRecord}
         onTableDragStart={onTableDragStart}
+        updateFileTags={updateFileTags}
+        handleSelectCellsDelete={handleSelectCellsDelete}
       />
     </div>
   );

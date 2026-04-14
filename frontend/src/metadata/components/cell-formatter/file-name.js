@@ -30,12 +30,11 @@ const FileName = ({ repoID, record, className: propsClassName, value, hideIcon =
     const defaultIconUrl = Utils.getFileIconUrl(value);
     if (Utils.imageCheck(value)) {
       const path = Utils.encodePath(Utils.joinPath(parentDir, value));
-      const repoID = window.sfMetadataStore?.repoId || params.repoID;
       const thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}${path}?mtime=${getFileMTimeFromRecord(record)}`;
       return { iconUrl: thumbnail, defaultIconUrl };
     }
     return { iconUrl: defaultIconUrl, defaultIconUrl };
-  }, [isDir, hideIcon, value, parentDir, record, params.repoID]);
+  }, [isDir, hideIcon, value, parentDir, record, repoID]);
 
   const handleFilenameClick = useCallback((event) => {
     event.preventDefault();

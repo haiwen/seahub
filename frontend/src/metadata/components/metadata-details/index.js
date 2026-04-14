@@ -15,7 +15,7 @@ import Location from './location';
 
 import './index.css';
 
-const MetadataDetails = ({ readOnly, tagsData }) => {
+const MetadataDetails = ({ repoID, readOnly, tagsData }) => {
   const { globalHiddenColumns } = useMetadataStatus();
   const { canModifyRecord, record, columns, onChange, modifyColumnData, updateFileTags } = useMetadataDetails();
 
@@ -57,6 +57,7 @@ const MetadataDetails = ({ readOnly, tagsData }) => {
               />
               :
               <CellFormatter
+                repoID={repoID}
                 readonly={true}
                 field={field}
                 value={value}

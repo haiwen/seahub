@@ -69,12 +69,15 @@ class ActionsCell extends Component {
       height,
       width: SEQUENCE_COLUMN_WIDTH,
       minWidth: SEQUENCE_COLUMN_WIDTH,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
     };
     return (
       <div
         className={classnames('sf-table-cell column actions-cell', { 'table-last--frozen': isLastFrozenCell })}
         id={`action-cell-${recordId}`}
-        style={{ ...cellStyle }}
+        style={cellStyle}
         onMouseEnter={this.onCellMouseEnter}
         onMouseLeave={this.onCellMouseLeave}
       >

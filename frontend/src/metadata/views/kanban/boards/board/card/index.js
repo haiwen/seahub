@@ -5,6 +5,7 @@ import Formatter from '../formatter';
 import { getCellValueByColumn, isValidCellValue } from '../../../../../utils/cell';
 import { CellType } from '../../../../../constants';
 import { Utils } from '../../../../../../utils/utils';
+import { useMetadataView } from '../../../../../hooks/metadata-view';
 
 import './index.css';
 
@@ -20,6 +21,7 @@ const Card = ({
   onSelectCard,
   onContextMenu,
 }) => {
+  const { repoID } = useMetadataView();
   const titleValue = getCellValueByColumn(record, titleColumn);
 
   const handleClickCard = useCallback((event) => {
@@ -51,7 +53,7 @@ const Card = ({
     >
       {titleColumn && (
         <div className="sf-metadata-kanban-card-header">
-          <Formatter value={titleValue} column={titleColumn} record={record} onFileNameClick={handleFilenameClick} tagsData={tagsData} />
+          <Formatter value={titleValue} column={titleColumn} record={record} onFileNameClick={handleFilenameClick} tagsData={tagsData} repoID={repoID} />
         </div>
       )}
       <div className="sf-metadata-kanban-card-body">
@@ -71,7 +73,7 @@ const Card = ({
           return (
             <div className="sf-metadata-kanban-card-record" key={column.key}>
               {displayColumnName && (<div className="sf-metadata-kanban-card-record-name">{column.name}</div>)}
-              <Formatter value={value} column={column} record={record} tagsData={tagsData} />
+              <Formatter value={value} column={column} record={record} tagsData={tagsData} repoID={repoID} />
             </div>
           );
         })}

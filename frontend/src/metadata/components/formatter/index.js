@@ -19,7 +19,7 @@ import { CellType } from '../../constants';
 
 import './index.css';
 
-const Formatter = React.memo(({ field, value, isSample, queryUserAPI, emptyTip, tagsData, ...params }) => {
+const Formatter = React.memo(({ field, value, isSample, queryUserAPI, emptyTip, ...params }) => {
   const { type } = field || {};
   const className = `sf-metadata-${type}-formatter`;
   switch (type) {
@@ -118,7 +118,7 @@ const Formatter = React.memo(({ field, value, isSample, queryUserAPI, emptyTip, 
     }
     case CellType.TAGS: {
       return (
-        <FileTagsFormatter value={value} tagsData={tagsData} className={className} showName={true}>
+        <FileTagsFormatter value={value} className={className} showName={true}>
           <Empty fieldType={type} placeholder={emptyTip} />
         </FileTagsFormatter>
       );

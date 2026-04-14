@@ -10,11 +10,12 @@ const FileName = ({ repoID, column, record, className: propsClassName, value, hi
   const isDir = useMemo(() => record.is_dir, [record]);
 
   const className = useMemo(() => {
-    if (!Utils.imageCheck(value)) return propsClassName;
+    if (!value || !Utils.imageCheck(value)) return propsClassName;
     return classnames(propsClassName, 'sf-metadata-image-file-formatter');
   }, [propsClassName, value]);
 
   const iconUrl = useMemo(() => {
+    if (!value) return {};
     if (hideIcon) return {};
     if (isDir) {
       const icon = Utils.getFolderIconUrl();

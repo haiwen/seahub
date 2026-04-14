@@ -11,7 +11,7 @@ export function createHistoryColumns({ repoID }) {
   let baseColumns = [
     {
       key: 'obj_name',
-      name: gettext('File name'),
+      name: 'obj_name',
       display_name: gettext('File name'),
       icon_name: 'text',
       type: 'text',
@@ -25,7 +25,7 @@ export function createHistoryColumns({ repoID }) {
     },
     {
       key: 'parent_dir',
-      name: gettext('Original path'),
+      name: 'parent_dir',
       display_name: gettext('Original path'),
       icon_name: 'text',
       type: 'text',
@@ -37,7 +37,7 @@ export function createHistoryColumns({ repoID }) {
     },
     {
       key: 'deleted_time',
-      name: gettext('Deleted time'),
+      name: 'deleted_time',
       display_name: gettext('Deleted time'),
       icon_name: 'date',
       type: 'date',
@@ -49,7 +49,7 @@ export function createHistoryColumns({ repoID }) {
     },
     {
       key: 'size',
-      name: gettext('Size'),
+      name: 'size',
       display_name: gettext('Size'),
       data: { format: 'byte' },
       icon_name: 'number',

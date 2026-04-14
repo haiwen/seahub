@@ -49,6 +49,10 @@
   box-shadow: inset 0 0 0 2px rgb(0 0 0 / 10%);
 }
 
+.sf-metadata-wrapper .grid-header .frozen-columns .sf-table-cell.column {
+  justify-content: space-between;
+}
+
 .sf-metadata-result.success {
   display: flex;
   flex-direction: column;
@@ -98,18 +102,6 @@
 
 .static-sf-metadata-result-content .sf-metadata-result-table-row .frozen-columns {
   background-color: var(--bs-th-bg);
-}
-
-.record-HeaderCell__draggable {
-  position: absolute;
-  top: 0px;
-  right: -2px;
-  width: 5px;
-  border-radius: 3px;
-  margin: 3px 0px;
-  height: 80%;
-  cursor: col-resize;
-  z-index: 1;
 }
 
 .record-HeaderCell__draggable:hover {

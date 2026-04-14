@@ -25,7 +25,7 @@ const POPUP_EDITOR_COLUMN_TYPES = [
   CellType.GEOLOCATION,
 ];
 
-export const adaptMetadataColumnsToSfTable = (repoID, metadataColumns, tagsData, onFileNameClick) => {
+export const adaptMetadataColumnsToSfTable = (repoID, metadataColumns, tagsData) => {
   if (!Array.isArray(metadataColumns)) {
     return metadataColumns;
   }
@@ -40,7 +40,7 @@ export const adaptMetadataColumnsToSfTable = (repoID, metadataColumns, tagsData,
       display_name: displayName,
       icon_name: iconName,
       icon_tooltip: iconTooltip,
-      formatter: <CellFormatter repoID={repoID} tagsData={tagsData} />,
+      formatter: <CellFormatter repoID={repoID} />,
       editor: <Editor />,
       is_name_column: column.type === CellType.FILE_NAME,
       is_popup_editor: POPUP_EDITOR_COLUMN_TYPES.includes(column.type),
@@ -91,6 +91,10 @@ class MetadataGridUtilsAdapter {
 // Create context menu options for SFTable using metadata's menu pattern
 // This replicates the logic from metadata/views/table/context-menu.js
 export const createMetadataContextMenuOptions = ({
+  repoID,
+  canModify,
+  enableFaceRecognition,
+  enableTags,
   recordMetrics,
   selectedPosition,
   selectedRange,
@@ -105,16 +109,11 @@ export const createMetadataContextMenuOptions = ({
   generateFileTags,
   hideMenu,
 }) => {
-  // Get metadata status
-  const repoID = window.sfMetadataStore?.repoId;
-  const { enableFaceRecognition, enableTags } = window.sfMetadataContext?.getMetadataStatus?.() || { enableFaceRecognition: false, enableTags: false };
   const metadataStatus = {
     enableFaceRecognition,
-    enableGenerateDescription: metadata?.columns?.some(c => c.key === '_file_description') || false,
+    enableGenerateDescription: metadata?.columns?.some(c => c.key === PRIVATE_COLUMN_KEY.FILE_DESCRIPTION) || false,
     enableTags,
   };
-
-  const readOnly = !window.sfMetadataContext?.canModify?.();
 
   // Get selected records from recordMetrics
   const selectedIds = recordMetrics ? Object.keys(recordMetrics.idSelectedRecordMap || {}).filter(id => recordMetrics.idSelectedRecordMap[id]) : [];
@@ -165,6 +164,7 @@ export const createMetadataContextMenuOptions = ({
   }
 
   // Build menu options using metadata's buildTableMenuOptions
+  const readOnly = !canModify;
   const menuOptions = buildTableMenuOptions(
     records,
     readOnly,
@@ -326,7 +326,9 @@ export const createMetadataContextMenuOptions = ({
 };
 
 export const useMetadataTableAdapter = ({
+  repoID,
   metadata,
+  canModify,
   modifyRecord,
   modifyRecords,
   recordGetterByIndex,
@@ -354,7 +356,9 @@ export const useMetadataTableAdapter = ({
     // Attach context menu options creator
     adapter.createContextMenuOptions = (props) => createMetadataContextMenuOptions({
       ...props,
+      repoID,
       metadata,
+      canModify,
       deleteRecords,
       updateRecordDetails,
       updateFaceRecognition,
@@ -364,7 +368,7 @@ export const useMetadataTableAdapter = ({
     });
 
     return adapter;
-  }, [metadata, modifyRecord, modifyRecords, recordGetterByIndex, recordGetterById, modifyColumnData, updateFileTags, deleteRecords, updateRecordDetails, updateFaceRecognition, updateRecordDescription, onOCR, generateFileTags]);
+  }, [modifyRecord, modifyRecords, recordGetterByIndex, recordGetterById, modifyColumnData, updateFileTags, metadata, repoID, canModify, deleteRecords, updateRecordDetails, updateFaceRecognition, updateRecordDescription, onOCR, generateFileTags]);
 };
 
 export const adaptSfTablePropsToMetadata = (sfTableProps, metadataProps) => {

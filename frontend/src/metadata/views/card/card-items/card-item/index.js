@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react'
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Formatter from './formatter';
+import { useMetadataView } from '../../../../hooks/metadata-view';
 import {
   getCellValueByColumn,
   isValidCellValue,
@@ -28,6 +29,7 @@ const CardItem = ({
   onSelectCard,
   onContextMenu,
 }) => {
+  const { repoID } = useMetadataView();
   const [isUsingIcon, setIsUsingIcon] = useState(false);
   const [showScrollbar, setShowScrollbar] = useState(false);
   const imgRef = useRef(null);
@@ -66,12 +68,11 @@ const CardItem = ({
     const fileIconURL = Utils.getFileIconUrl(value);
     if (shouldUseThumbnail) {
       const path = Utils.encodePath(Utils.joinPath(parentDir, value));
-      const repoID = window.sfMetadataStore.repoId;
       const thumbnailURL = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}?mtime=${getFileMTimeFromRecord(record)}`;
       return { URL: thumbnailURL, iconURL: fileIconURL };
     }
     return { URL: fileIconURL, iconURL: fileIconURL };
-  }, [isDir, fileNameValue, parentDir, record, shouldUseThumbnail]);
+  }, [isDir, fileNameValue, parentDir, record, shouldUseThumbnail, repoID]);
 
   const onLoadError = useCallback(() => {
     setIsUsingIcon(true);
@@ -132,10 +133,9 @@ const CardItem = ({
   const metadataVideo = useRef(null);
 
   const videoSrc = useMemo(() => {
-    const repoID = window.sfMetadataStore.repoId;
     const filePath = Utils.encodePath(Utils.joinPath(parentDir, fileNameValue));
     return `${fileServerRoot}repos/${repoID}/files${filePath}?op=download`;
-  }, [fileNameValue, parentDir]);
+  }, [fileNameValue, parentDir, repoID]);
 
   const handleGridItemMouseEnter = useCallback((e) => {
     if (!Utils.videoCheck(fileNameValue)) return;
@@ -354,10 +354,11 @@ const CardItem = ({
           hideIcon={true}
           onFileNameClick={handleFilenameClick}
           tagsData={tagsData}
+          repoID={repoID}
         />
         <div className="sf-metadata-card-last-modified-info">
-          <Formatter value={modifierValue} column={modifierColumn} record={record} tagsData={tagsData} />
-          <Formatter value={mtimeValue} format="relativeTime" column={mtimeColumn} record={record} tagsData={tagsData} />
+          <Formatter value={modifierValue} column={modifierColumn} record={record} tagsData={tagsData} repoID={repoID} />
+          <Formatter value={mtimeValue} format="relativeTime" column={mtimeColumn} record={record} tagsData={tagsData} repoID={repoID} />
         </div>
         {displayColumns.map((column) => {
           const value = getCellValueByColumn(record, column);
@@ -377,7 +378,7 @@ const CardItem = ({
               {displayColumnName && (
                 <span className="sf-metadata-card-item-field-name">{column.name}</span>
               )}
-              <Formatter value={value} column={column} record={record} tagsData={tagsData} />
+              <Formatter value={value} column={column} record={record} tagsData={tagsData} repoID={repoID} />
             </div>
           );
         })}
