@@ -250,9 +250,14 @@ function clear_sessions () {
 }
 
 function stop_seahub () {
-    if [[ -f ${pidfile} ]]; then
+    if ! pgrep -f "seahub.wsgi:application" 2>/dev/null 1>&2; then
+        echo "Seahub is not running"
+        rm -f ${pidfile}
+        return 1
+    else
         echo "Stopping seahub ..."
         pkill -f "thirdpart/bin/gunicorn"
+        wait
         sleep 1
         if pgrep -f "thirdpart/bin/gunicorn" 2>/dev/null 1>&2 ; then
             echo 'Failed to stop seahub.'
@@ -260,8 +265,6 @@ function stop_seahub () {
         fi
         rm -f ${pidfile}
         return 0
-    else
-        echo "Seahub is not running"
     fi
 }
 
