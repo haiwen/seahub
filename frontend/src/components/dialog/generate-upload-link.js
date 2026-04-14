@@ -384,17 +384,11 @@ class GenerateUploadLink extends React.Component {
       <Form className="generate-upload-link">
         <FormGroup check>
           <Label check>
-            {shareLinkForceUsePassword ? (
-              <Label check>
-                <Input type="checkbox" className="form-check-input" checked readOnly disabled />
-                <span>{gettext('Add password protection')}</span>
-              </Label>
-            ) : (
-              <Label check>
-                <Input type="checkbox" onChange={this.addPassword} onKeyDown={Utils.onKeyDown} />
-                <span>{gettext('Add password protection')}</span>
-              </Label>
-            )}
+            {shareLinkForceUsePassword ?
+              <Input type="checkbox" className="form-check-input" checked readOnly disabled /> :
+              <Input type="checkbox" onChange={this.addPassword} onKeyDown={Utils.onKeyDown} />
+            }
+            <span>{gettext('Add password protection')}</span>
           </Label>
           {this.state.showPasswordInput &&
           <div className="ml-4">
