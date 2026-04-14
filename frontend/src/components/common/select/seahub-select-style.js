@@ -86,7 +86,7 @@ const MenuSelectStyle = {
       color: 'var(--bs-body-color)',
       borderRadius: '4px',
       height: '32px',
-      padding: '6px 12px',
+      padding: '6px 12px 6px 8px',
       cursor: isDisabled ? 'default' : 'pointer',
       backgroundColor: `${bgColor} !important`,
       '.header-icon .dtable-font': {

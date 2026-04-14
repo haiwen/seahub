@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
 import { MenuSelectStyle } from './seahub-select-style';
 import Icon from '../../icon';
+import './seahub-select.css';
 
 const DropdownIndicator = props => {
   return (
@@ -69,7 +70,16 @@ class SeahubSelect extends React.Component {
   render() {
     const { options = [], onChange, value = {}, isSearchable = true, placeholder = '',
       isMulti = false, menuPosition, isClearable = true, noOptionsMessage = (() => { return null; }),
-      classNamePrefix, innerRef, isDisabled = false, form, className } = this.props;
+      classNamePrefix, innerRef, isDisabled = false, form, className = '' } = this.props;
+
+    if (isClearable) {
+      if (value && value.label !== '--' && options[0].label !== '--') {
+        options.unshift({ value: null, label: '--' });
+      }
+      if (value && value.label === '--' && options[0].label === '--') {
+        options.shift();
+      }
+    }
 
     return (
       <Select
@@ -80,12 +90,12 @@ class SeahubSelect extends React.Component {
         options={options}
         isMulti={isMulti}
         className={className}
-        classNamePrefix={classNamePrefix}
+        classNamePrefix={value && value.label == '--' ? 'select-clear-option ' + classNamePrefix : classNamePrefix}
         styles={MenuSelectStyle}
         components={{ Option, DropdownIndicator, MenuList, ClearIndicator }}
         placeholder={placeholder}
         isSearchable={isSearchable}
-        isClearable={isClearable}
+        isClearable={isClearable && value && value.label !== '--'}
         menuPosition={menuPosition || 'fixed'} // when use default menuPosition(absolute), menuPortalTarget is unnecessary.
         menuShouldScrollIntoView
         menuPortalTarget={this.getMenuPortalTarget()}
