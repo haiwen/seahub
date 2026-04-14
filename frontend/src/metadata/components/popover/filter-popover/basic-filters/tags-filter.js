@@ -62,7 +62,7 @@ const TagsFilter = ({ value: oldValue, onChange: onChangeAPI }) => {
           target={invalidFilterTip}
           placement='bottom'
           fade={false}
-          className="sf-metadata-tooltip"
+          className="sf-tooltip"
         >
           {gettext('Invalid filter')}
         </UncontrolledTooltip>

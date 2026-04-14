@@ -6,7 +6,7 @@ import Editor from './editor';
 import { EDITOR_CONTAINER as Z_INDEX_EDITOR_CONTAINER } from '../../constants/z-index';
 import { Utils } from '../../../../utils/utils';
 import { getEventClassName } from '../../../../utils/dom';
-import { checkCellValueChanged } from '../../utils/cell-comparer';
+import { checkCellValueChanged } from '../../utils/selection';
 import { getCellValueByColumn } from '../../utils/cell';
 import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../../utils/keyboard-utils';
 import EventBus from '../../../common/event-bus';

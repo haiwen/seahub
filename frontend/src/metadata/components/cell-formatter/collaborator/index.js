@@ -6,13 +6,17 @@ import './index.css';
 
 const Collaborator = ({ enableDelete = false, collaborator, onDelete }) => {
   if (!collaborator) return null;
-  if (collaborator.email.includes('@seafile_group')) {
+  // Defensive check: ensure collaborator has required string fields
+  const name = typeof collaborator.name === 'string' ? collaborator.name : '';
+  const avatar_url = typeof collaborator.avatar_url === 'string' ? collaborator.avatar_url : '';
+  const emailValue = typeof collaborator.email === 'string' ? collaborator.email : '';
+  if (emailValue.includes('@seafile_group')) {
     return (
-      <div className="sf-metadata-ui collaborator-item" title={collaborator.name}>
+      <div className="sf-metadata-ui collaborator-item" title={name}>
         <span className="department-icon-container">
           <Icon symbol="department" />
         </span>
-        <span className="collaborator-name">{collaborator.name}</span>
+        <span className="collaborator-name">{name}</span>
         {enableDelete && (
           <span className="collaborator-remove" onClick={onDelete}>
             <Icon symbol="delete" />
@@ -22,11 +26,11 @@ const Collaborator = ({ enableDelete = false, collaborator, onDelete }) => {
     );
   } else {
     return (
-      <div className="sf-metadata-ui collaborator-item" title={collaborator.name}>
+      <div className="sf-metadata-ui collaborator-item" title={name}>
         <span className="collaborator-avatar">
-          <img className="collaborator-avatar-icon" alt={collaborator.name} src={collaborator.avatar_url} />
+          <img className="collaborator-avatar-icon" alt={name} src={avatar_url} />
         </span>
-        <span className="collaborator-name">{collaborator.name}</span>
+        <span className="collaborator-name">{name}</span>
         {enableDelete && (
           <span className="collaborator-remove" onClick={onDelete}>
             <Icon symbol="delete" />

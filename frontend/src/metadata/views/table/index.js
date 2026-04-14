@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { toKeyCode } from 'is-hotkey';
 import toaster from '../../../components/toast';
 import SFTable from '../../../components/sf-table';
@@ -7,20 +7,14 @@ import { useMetadataStatus } from '../../../hooks';
 import { Utils } from '../../../utils/utils';
 import { isModZ, isModShiftZ } from '../../../utils/hotkey';
 import { getValidGroupbys } from '../../utils/group';
-import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, MAX_LOAD_NUMBER, TABLE_NOT_DISPLAY_COLUMN_KEYS, NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP, PRIVATE_COLUMN_KEY } from '../../constants';
+import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, MAX_LOAD_NUMBER, TABLE_NOT_DISPLAY_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../../constants';
 import { adaptMetadataColumnsToSfTable, useMetadataTableAdapter } from './adapter';
 import ExpandedPropertiesDialog from '../../components/dialog/expanded-properties';
-import { openFile } from '../../utils/file';
-import { EDITOR_TYPE } from '../../../components/sf-table/constants/grid';
-import EventBus from '../../../components/common/event-bus';
 import { getCellValueByColumn, getTagsFromRecord, isValidCellValue } from '../../utils/cell';
 import { getFormatRecordData } from '../../utils/cell/cell-format-utils';
 import CellType from '@/metadata/constants/column/type';
 import HeaderDropdownMenu from '@/components/sf-table/table-main/records-header/dropdown-menu';
 import { useTags } from '@/tag/hooks';
-
-import './index.css';
-
 
 const Table = () => {
   const [isLoadingMore, setLoadingMore] = useState(false);
@@ -49,13 +43,18 @@ const Table = () => {
   } = useMetadataView();
   const { globalHiddenColumns, enableFaceRecognition, enableTags } = useMetadataStatus();
   const { tagsData } = useTags();
-  const containerRef = useRef(null);
 
-  const canModify = useMemo(() => store.context.canModify(), [store]);
-
-  const checkCanModifyRecord = useCallback((record) => {
-    return record._permission !== 'r';
-  }, []);
+  const permission = useMemo(() => {
+    return {
+      canModify: () => store.context.canModify(),
+      canModifyRow: (record) => store.context.canModifyRow(record),
+      canModifyColumn: (column) => store.context.canModifyColumn(column),
+      canModifyView: () => store.context.canModifyView(),
+      canModifyColumnData: (column) => store.context.canModifyColumnData(column),
+      canDeleteColumn: (column) => store.context.canDeleteColumn(column),
+      canRenameColumn: (column) => store.context.canRenameColumn(column),
+    };
+  }, [store.context]);
 
   const focusDataGrid = useCallback(() => {
     setTimeout(() => window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.FOCUS_CANVAS), 0);
@@ -69,30 +68,7 @@ const Table = () => {
     setExpandedRecordId(null);
   }, []);
 
-  const handleSpaceKeyDown = useCallback((record) => {
-    openFile(repoID, record, () => {
-      // Use EventBus.getInstance() to dispatch to SFTable's InteractionMasks listener
-      EventBus.getInstance().dispatch(EVENT_BUS_TYPE.OPEN_EDITOR, EDITOR_TYPE.PREVIEWER);
-    });
-  }, [repoID]);
-
   const handleSelectCellsDelete = useCallback((records, columns) => {
-    if (!records || records.length === 0 || !columns || columns.length === 0) return;
-
-    // Filter to only editable records
-    const editableRecords = records.filter(record => window.sfMetadataContext.canModifyRow(record));
-    if (editableRecords.length === 0) return;
-
-    // Get editable columns (exclude LINK, CHECKBOX, RATE and non-modifiable columns)
-    const editableColumns = columns.filter(column => {
-      if (!column) return false;
-      if (NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP[column.type]) return false;
-      if (!window.sfMetadataContext.canModifyColumn(column)) return false;
-      return true;
-    });
-
-    if (editableColumns.length === 0) return;
-
     let updateRecordIds = [];
     let idRecordUpdates = {};
     let idOriginalRecordUpdates = {};
@@ -100,13 +76,13 @@ const Table = () => {
     let idOriginalOldRecordData = {};
     let tagsUpdate = [];
 
-    editableRecords.forEach(record => {
+    records.forEach(record => {
       const { _id } = record;
       let originalUpdate = {};
       let originalOldRecordData = {};
       let hasTagsColumn = false;
 
-      editableColumns.forEach(column => {
+      columns.forEach(column => {
         const { key, type } = column;
         const cellVal = getCellValueByColumn(record, column);
         if (isValidCellValue(cellVal)) {
@@ -136,8 +112,8 @@ const Table = () => {
 
       if (Object.keys(originalUpdate).length > 0) {
         updateRecordIds.push(_id);
-        const update = getFormatRecordData(editableColumns, originalUpdate);
-        const oldRecordData = getFormatRecordData(editableColumns, originalOldRecordData);
+        const update = getFormatRecordData(columns, originalUpdate);
+        const oldRecordData = getFormatRecordData(columns, originalOldRecordData);
         idRecordUpdates[_id] = update;
         idOriginalRecordUpdates[_id] = originalUpdate;
         idOldRecordData[_id] = oldRecordData;
@@ -158,21 +134,18 @@ const Table = () => {
     if (event.keyCode === toKeyCode('mod+shift')) return;
     if (event.target.className.includes('sf-metadata-editor-main')) return;
 
-    const activeElement = document.activeElement;
-    if (!containerRef.current.contains(activeElement)) return;
-
     if (isModZ(event)) {
       event.preventDefault();
-      if (!canModify) return;
+      if (!permission.canModify()) return;
       store.undoOperation();
       focusDataGrid();
     } else if (isModShiftZ(event)) {
       event.preventDefault();
-      if (!canModify) return;
+      if (!permission.canModify()) return;
       store.redoOperation();
       focusDataGrid();
     }
-  }, [canModify, store, focusDataGrid]);
+  }, [permission, store, focusDataGrid]);
 
   const onHotKeyUp = useCallback((event) => {
     if (event.target.className.includes('sf-metadata-editor-main')) return;
@@ -230,21 +203,9 @@ const Table = () => {
     return recordId && recordGetterById(recordId);
   }, [metadata, recordGetterById]);
 
-  const groupRecordGetter = useCallback((groupRecordIndex) => {
-    if (!window.sfMetadataBody || !window.sfMetadataBody.getGroupRecordByIndex) return null;
-    const groupRecord = window.sfMetadataBody.getGroupRecordByIndex(groupRecordIndex);
-    const recordId = groupRecord.rowId;
-    return recordId && recordGetterById(recordId);
-  }, [recordGetterById]);
-
-  const recordGetterByIndex = useCallback(({ isGroupView, groupRecordIndex, recordIndex }) => {
-    if (isGroupView) return groupRecordGetter(groupRecordIndex);
+  const recordGetterByIndex = useCallback(({ recordIndex }) => {
     return recordGetter(recordIndex);
-  }, [groupRecordGetter, recordGetter]);
-
-  const getTableContentRect = useCallback(() => {
-    return containerRef?.current?.getBoundingClientRect() || { x: 0, right: window.innerWidth };
-  }, [containerRef]);
+  }, [recordGetter]);
 
   // Filter visible columns (same logic as original TableMain)
   const visibleColumns = useMemo(() => {
@@ -261,7 +222,7 @@ const Table = () => {
   const gridUtilsAdapter = useMetadataTableAdapter({
     repoID,
     metadata,
-    canModify,
+    readOnly: !permission.canModify(),
     enableFaceRecognition, enableTags,
     modifyRecord,
     modifyRecords,
@@ -275,6 +236,7 @@ const Table = () => {
     updateRecordDescription,
     onOCR,
     generateFileTags,
+    tagsData,
   });
 
   // Paste callback - delegates to gridUtilsAdapter.paste()
@@ -292,14 +254,14 @@ const Table = () => {
       pasteSource,
       cutPosition,
       viewId,
+      canModifyRow: permission.canModifyRow,
+      canModifyColumn: permission.canModifyColumn,
     });
-  }, [gridUtilsAdapter, visibleColumns]);
+  }, [gridUtilsAdapter, visibleColumns, permission]);
 
-
-  // Transform metadata columns to SFTable-compatible columns
   const sfTableColumns = useMemo(() => {
-    return adaptMetadataColumnsToSfTable(repoID, visibleColumns, tagsData);
-  }, [repoID, visibleColumns, tagsData]);
+    return adaptMetadataColumnsToSfTable(repoID, visibleColumns);
+  }, [repoID, visibleColumns]);
 
   // SFTable uses 'recordsIds' instead of metadata.view.rows
   const recordsIds = metadata?.view?.rows || [];
@@ -312,8 +274,10 @@ const Table = () => {
   }), [metadata, sfTableColumns]);
 
   return (
-    <div className="sf-metadata-container sf-metadata-container-transform" ref={containerRef}>
+    <>
       <SFTable
+        {...permission}
+        repoID={repoID}
         table={table}
         visibleColumns={sfTableColumns}
         recordsIds={recordsIds}
@@ -329,24 +293,18 @@ const Table = () => {
         gridUtils={gridUtilsAdapter}
         recordGetterById={recordGetterById}
         recordGetterByIndex={recordGetterByIndex}
-        getTableContentRect={getTableContentRect}
         onGridKeyDown={onHotKey}
         onGridKeyUp={onHotKeyUp}
-        handleSpaceKeyDown={handleSpaceKeyDown}
         handleSelectCellsDelete={handleSelectCellsDelete}
         updateFileTags={updateFileTags}
         updateSelectedRecordIds={updateSelectedRecordIds}
-        checkCanModifyRecord={checkCanModifyRecord}
-        canModifyRecords={canModify}
         supportCopy={true}
         supportPaste={true}
         paste={paste}
         supportDragFill={true}
         supportCut={true}
         // Metadata-specific header dropdown menu component
-        canEditColumnInfo={true}
-        ColumnDropdownMenu={HeaderDropdownMenu}
-        canInsertColumn={window.sfMetadataContext.canInsertColumn()}
+        columnDropdownMenu={HeaderDropdownMenu}
         // Metadata-specific props passed via customProps to HeaderDropdownMenu
         view={metadata?.view}
         modifyRecord={modifyRecord}
@@ -381,7 +339,7 @@ const Table = () => {
           toggle={toggleExpandedPropsDialog}
         />
       )}
-    </div>
+    </>
   );
 };
 

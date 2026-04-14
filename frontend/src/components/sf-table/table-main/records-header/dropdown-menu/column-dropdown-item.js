@@ -50,7 +50,7 @@ const ColumnDropdownItem = ({
         <Icon className="sf-metadata-icon" symbol={iconName} />
         <span className="item-text">{title}</span>
         {isShowToolTip && (
-          <UncontrolledTooltip placement="right" target={target} fade={false} delay={{ show: 0, hide: 0 }} className="sf-metadata-tooltip">
+          <UncontrolledTooltip placement="right" target={target} fade={false} delay={{ show: 0, hide: 0 }} className="sf-tooltip">
             {tip}
           </UncontrolledTooltip>
         )}

@@ -165,7 +165,7 @@ function convert2LongText(cellValue, oldCellValue, fromColumn) {
   }
 }
 
-function convert2Text(cellValue, oldCellValue, fromColumn) {
+function convert2Text(cellValue, oldCellValue, fromColumn, api) {
   const { type: fromColumnType, data: fromColumnData } = fromColumn;
   switch (fromColumnType) {
     case CellType.TEXT: {
@@ -196,7 +196,7 @@ function convert2Text(cellValue, oldCellValue, fromColumn) {
       return getOptionName(options, cellValue) || null;
     }
     case CellType.COLLABORATOR: {
-      const collaborators = window.sfMetadata.getCollaborators();
+      const collaborators = api?.getCollaborators ? api.getCollaborators() : [];
       return getCollaboratorsName(collaborators, cellValue);
     }
     case CellType.CREATOR:
@@ -204,12 +204,12 @@ function convert2Text(cellValue, oldCellValue, fromColumn) {
       if (!cellValue) {
         return null;
       }
-      const collaborators = window.sfMetadata.getCollaborators();
+      const collaborators = api?.getCollaborators ? api.getCollaborators() : [];
       return getCollaboratorsName(collaborators, [cellValue]);
     }
     case CellType.TAGS: {
       if (!Array.isArray(cellValue) || cellValue.length === 0) return null;
-      const tagsData = window?.sfTagsDataStore?.data || {};
+      const tagsData = api?.getTagsData ? api.getTagsData() : {};
       return getTagsDisplayString(tagsData, cellValue);
     }
     default: {
@@ -218,13 +218,13 @@ function convert2Text(cellValue, oldCellValue, fromColumn) {
   }
 }
 
-function convert2Collaborator(cellValue, oldCellValue, fromColumnType) {
+function convert2Collaborator(cellValue, oldCellValue, fromColumnType, api) {
+  const collaborators = api?.getCollaborators ? api.getCollaborators() : [];
   switch (fromColumnType) {
     case CellType.COLLABORATOR: {
       if (!Array.isArray(cellValue) || cellValue.length === 0) {
         return null;
       }
-      const collaborators = window.sfMetadata.getCollaborators();
       let validEmailMap = {};
       collaborators.forEach(collaborator => validEmailMap[collaborator.email] = true);
       return cellValue.filter(email => !!validEmailMap[email]);
@@ -237,7 +237,6 @@ function convert2Collaborator(cellValue, oldCellValue, fromColumnType) {
       if (userNames.length === 0) {
         return oldCellValue;
       }
-      const collaborators = window.sfMetadata.getCollaborators();
       let nameCollaboratorMap = {};
       collaborators.forEach(collaborator => nameCollaboratorMap[collaborator.name] = collaborator);
       const emails = userNames.map(name => {
@@ -251,7 +250,6 @@ function convert2Collaborator(cellValue, oldCellValue, fromColumnType) {
     }
     case CellType.CREATOR:
     case CellType.LAST_MODIFIER: {
-      const collaborators = window.sfMetadata.getCollaborators();
       let validEmailMap = {};
       collaborators.forEach(collaborator => validEmailMap[collaborator.email] = true);
       if (!cellValue || !validEmailMap[cellValue]) {
@@ -333,7 +331,7 @@ const convert2MultipleSelect = (copiedCellVal, pasteCellVal, copiedColumn, paste
 
   // the target column have no options with the same name
   if (newCellOptions && newCellOptions.length > 0) {
-    if (!window.sfMetadataContext.canModifyColumnData(pasteColumn)) return null;
+    if (!pasteColumn.editable) return null;
     const updatedPasteOptions = [...pasteOptions, ...newCellOptions];
     if (!newColumn.data) {
       newColumn.data = {};
@@ -383,10 +381,10 @@ function convertCellValue(cellValue, oldCellValue, targetColumn, fromColumn, api
       return convert2LongText(cellValue, oldCellValue, fromColumn);
     }
     case CellType.TEXT: {
-      return convert2Text(cellValue, oldCellValue, fromColumn);
+      return convert2Text(cellValue, oldCellValue, fromColumn, api);
     }
     case CellType.COLLABORATOR: {
-      return convert2Collaborator(cellValue, oldCellValue, fromColumnType);
+      return convert2Collaborator(cellValue, oldCellValue, fromColumnType, api);
     }
     case CellType.RATE: {
       return convert2Rate(cellValue, oldCellValue, fromColumn, targetColumn);

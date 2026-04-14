@@ -118,7 +118,7 @@ class Record extends React.Component {
           column={column}
           sequenceColumnWidth={sequenceColumnWidth}
           cellMetaData={cellMetaData}
-          checkCanModifyRecord={this.props.checkCanModifyRecord}
+          canModify={this.props.canModify}
           checkCellValueChanged={this.props.checkCellValueChanged}
           reloadCurrentRecord={this.reloadCurrentRecord}
           highlightClassName={highlightClassName}
@@ -187,7 +187,7 @@ class Record extends React.Component {
           sequenceColumnWidth={sequenceColumnWidth}
           needBindEvents={needBindEvents}
           cellMetaData={cellMetaData}
-          checkCanModifyRecord={this.props.checkCanModifyRecord}
+          canModify={this.props.canModify}
           checkCellValueChanged={this.props.checkCellValueChanged}
           reloadCurrentRecord={this.reloadCurrentRecord}
           highlightClassName={highlightClassName}
@@ -308,7 +308,7 @@ class Record extends React.Component {
 
     const frozenCells = this.getFrozenCells();
     const columnCells = this.getColumnCells();
-    const canModify = this.props.checkCanModifyRecord(record);
+    const canModify = this.props.canModify(record);
 
     return (
       <div
@@ -381,7 +381,7 @@ Record.propTypes = {
   recordDraggable: PropTypes.bool,
   selectNoneCells: PropTypes.func,
   onSelectRecord: PropTypes.func,
-  checkCanModifyRecord: PropTypes.func,
+  canModify: PropTypes.func,
   checkCellValueChanged: PropTypes.func,
   reloadRecords: PropTypes.func,
   searchResult: PropTypes.object,

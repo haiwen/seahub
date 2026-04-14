@@ -6,12 +6,12 @@ import InteractionMasks from '../../../masks/interaction-masks';
 import GroupContainer from './group-container';
 import Record from '../record';
 import { isShiftKeyDown } from '../../../../../utils/keyboard-utils';
-import { RecordMetrics } from '../../../shared/record-metrics';
-import { getColumnScrollPosition, getColVisibleEndIdx, getColVisibleStartIdx } from '../../../utils/records-body-utils';
+import { RecordMetrics } from '../../../utils/record-metrics';
+import { getColumnScrollPosition, getColVisibleEndIdx, getColVisibleStartIdx } from '../../../utils/records-body';
 import { addClassName, removeClassName } from '../../../../../utils/dom';
-import { createGroupMetrics, getGroupRecordByIndex, isNestedGroupRow } from '../../../shared/group-metrics';
+import { createGroupMetrics, getGroupRecordByIndex, isNestedGroupRow } from '../../../utils/group-metrics';
 import { checkIsColumnSupportDirectEdit, checkIsColumnFrozen, checkIsNameColumn, getColumnByIndex, checkIsColumnEditable } from '../../../utils/column';
-import { checkIsCellSupportOpenEditor } from '../../../utils/selected-cell-utils';
+import { checkIsCellSupportOpenEditor } from '../../../utils/selection';
 import { GROUP_HEADER_HEIGHT, GROUP_ROW_TYPE, GROUP_VIEW_OFFSET } from '../../../constants/group';
 import { EVENT_BUS_TYPE } from '../../../constants/event-bus-type';
 import EventBus from '../../../../common/event-bus';
@@ -415,10 +415,10 @@ class GroupBody extends Component {
       const isFromKeyboard = true;
       this.selectUpdate(cell, isFromKeyboard);
     } else {
-      const { columns, recordGetterByIndex, checkCanModifyRecord } = this.props;
+      const { columns, recordGetterByIndex, canModify } = this.props;
       const column = getColumnByIndex(cell.idx, columns);
       const supportOpenEditor = checkIsColumnSupportDirectEdit(column);
-      const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, true, recordGetterByIndex, checkCanModifyRecord);
+      const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, true, recordGetterByIndex, canModify);
       this.selectCell(cell, supportOpenEditor && hasOpenPermission);
     }
     this.props.onCellClick(cell);
@@ -426,10 +426,10 @@ class GroupBody extends Component {
   };
 
   onCellDoubleClick = (cell, e) => {
-    const { columns, recordGetterByIndex, checkCanModifyRecord } = this.props;
+    const { columns, recordGetterByIndex, canModify } = this.props;
     const column = getColumnByIndex(cell.idx, columns);
     const supportOpenEditor = checkIsColumnEditable(column);
-    const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, true, recordGetterByIndex, checkCanModifyRecord);
+    const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, true, recordGetterByIndex, canModify);
     this.selectCell(cell, supportOpenEditor && hasOpenPermission);
   };
 
@@ -828,7 +828,7 @@ class GroupBody extends Component {
             hasSelectedCell={hasSelectedCell}
             selectedPosition={this.state.selectedPosition}
             selectNoneCells={this.selectNoneCells}
-            checkCanModifyRecord={this.props.checkCanModifyRecord}
+            canModify={this.props.canModify}
             checkCellValueChanged={this.props.checkCellValueChanged}
             onSelectRecord={this.props.onSelectRecord}
             modifyRecord={this.props.modifyRecord}
@@ -968,7 +968,7 @@ GroupBody.propTypes = {
   paste: PropTypes.func,
   selectNone: PropTypes.func,
   onSelectRecord: PropTypes.func,
-  checkCanModifyRecord: PropTypes.func,
+  canModify: PropTypes.func,
   checkCellValueChanged: PropTypes.func,
   expandRow: PropTypes.func,
   onDeleteRecords: PropTypes.func,

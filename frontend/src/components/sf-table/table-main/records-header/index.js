@@ -18,7 +18,7 @@ const RecordsHeader = ({
   isSelectedAll,
   lastFrozenColumnKey,
   groupOffsetLeft,
-  ColumnDropdownMenu,
+  columnDropdownMenu,
   headerSettings,
   columnMetrics: propsColumnMetrics,
   colOverScanStartIdx,
@@ -138,7 +138,7 @@ const RecordsHeader = ({
                 groupOffsetLeft={groupOffsetLeft}
                 isLastFrozenCell={isLastFrozenCell}
                 frozenColumnsWidth={frozenColumnsWidth}
-                ColumnDropdownMenu={ColumnDropdownMenu}
+                columnDropdownMenu={columnDropdownMenu}
                 draggingColumnKey={draggingColumnKey}
                 draggingColumnIndex={draggingColumnIndex}
                 dragOverColumnKey={dragOverColumnKey}
@@ -151,9 +151,7 @@ const RecordsHeader = ({
             );
           })}
         </div>
-        {/* scroll */}
         {displayColumns.map((column, displayIndex) => {
-          // fullIndex is the column's index in the complete columnMetrics.columns array
           const fullIndex = colOverScanStartIdx + displayIndex;
           return (
             <Cell
@@ -161,7 +159,7 @@ const RecordsHeader = ({
               {...props}
               moveable={moveable}
               resizable={resizable}
-              ColumnDropdownMenu={ColumnDropdownMenu}
+              columnDropdownMenu={columnDropdownMenu}
               groupOffsetLeft={groupOffsetLeft}
               height={height}
               column={column}

@@ -26,8 +26,9 @@ class PasteUtils {
    * @param {Object} cutPosition - Position where cut started
    * @param {Object} cutData - Data that was cut { copiedRecords, copiedColumns }
    * @param {boolean} isGroupView - Whether in group view mode
+   * @param {Function} canModifyRow - Permission function: (record) => boolean
    */
-  clearCutData(cutPosition, cutData, isGroupView) {
+  clearCutData(cutPosition, cutData, isGroupView, canModifyRow) {
     let { rowIdx: startRecordIndex, groupRecordIndex } = cutPosition;
     const { copiedColumns, copiedRecords } = cutData;
     let updateRecordIds = [];
@@ -40,7 +41,7 @@ class PasteUtils {
       const cutRecord = this.api.recordGetterByIndex({ isGroupView, groupRecordIndex: groupRecordIndex, recordIndex: cutRowIdx });
       groupRecordIndex++;
       const cutRecordId = cutRecord._id;
-      const canModify = window.sfMetadataContext?.canModifyRow(cutRecord);
+      const canModify = canModifyRow ? canModifyRow(cutRecord) : true;
       if (canModify) {
         updateRecordIds.push(cutRecordId);
         copiedColumns.forEach((copiedColumn) => {
@@ -86,6 +87,8 @@ class PasteUtils {
    * @param {string} params.viewId - Current view ID
    * @param {string} params.pasteSource - Paste source type (CUT, COPY)
    * @param {Object} params.cutPosition - Position where cut started (for cut-paste)
+   * @param {Function} params.canModifyRow - Permission function: (record) => boolean
+   * @param {Function} params.canModifyColumn - Permission function: (column) => boolean
    */
   async paste({
     type,
@@ -97,6 +100,8 @@ class PasteUtils {
     viewId,
     pasteSource,
     cutPosition,
+    canModifyRow,
+    canModifyColumn,
   }) {
     const { row_ids: renderRecordIds } = this.metadata || {};
     const { topLeft, bottomRight = {} } = pasteRange;
@@ -169,7 +174,6 @@ class PasteUtils {
       let originalOldRecordData = {};
       let originalKeyOldRecordData = {};
 
-      const { canModifyRow, canModifyColumn } = window.sfMetadataContext || {};
       const filename = getFileNameFromRecord(pasteRecord);
 
       for (let j = 0; j < pasteColumnsLen; j++) {

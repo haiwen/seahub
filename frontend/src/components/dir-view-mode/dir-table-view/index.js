@@ -10,7 +10,7 @@ import Icon from '@/components/icon';
 import TextTranslation from '@/utils/text-translation';
 import { PRIVATE_COLUMN_KEY, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, CellType } from '@/metadata/constants';
 import { useTags } from '@/tag/hooks';
-import { RecordMetrics } from '../../sf-table/shared/record-metrics';
+import { RecordMetrics } from '../../sf-table/utils/record-metrics';
 import { menuHandlers } from '../utils/menuHandlers';
 import { useDirentContextMenu } from '../hooks/useDirentContextMenu';
 import { getCreateMenuList } from '../utils/contextMenuUtils';
@@ -19,9 +19,10 @@ import { EVENT_BUS_TYPE } from '@/components/sf-table/constants/event-bus-type';
 import { getRowById, getRowsByIds } from '@/components/sf-table/utils/table';
 import { useMetadataStatus } from '@/hooks';
 import { metadataAPI } from '@/metadata';
-import { getColumnByKey } from '@/components/sf-table/utils/column';
+import { getColumnByKey, getColumnOriginName } from '@/components/sf-table/utils/column';
 import { getColumnOptionNameById, getColumnOptionNamesByIds } from '@/metadata/utils/cell';
 import tagsAPI from '@/tag/api';
+import DirTableGridUtilsAdapter from './dir-table-grid-utils-adapter';
 
 import './index.css';
 
@@ -68,6 +69,15 @@ const DirTableView = ({
 
   const { getBatchMenuList, getItemMenuList } = useDirentContextMenu({ repoInfo });
 
+  const permission = useMemo(() => {
+    const repoCanModify = repoInfo.permission === 'rw' || repoInfo.permission === 'admin';
+    return {
+      canModify: () => repoCanModify,
+      canModifyRow: (record) => repoCanModify && record._permission !== 'r',
+      canModifyColumn: (column) => repoCanModify && column.editable === true,
+    };
+  }, [repoInfo]);
+
   const tableData = useMemo(() => {
     return transformDirentsToTableData(direntList, repoID);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -106,13 +116,8 @@ const DirTableView = ({
 
   const modifyColumnOrder = useCallback((source, target) => {
     if (!onColumnOrderChange) return;
-    // Pass full source and target objects to preserve draggingColumnIndex and columnIndex
     onColumnOrderChange(source, target);
   }, [onColumnOrderChange]);
-
-  const checkCanModifyRecord = (record) => {
-    return record._permission !== 'r';
-  };
 
   const getDirentByRowId = useCallback((id) => {
     const record = getRowById(tableData, id);
@@ -151,7 +156,8 @@ const DirTableView = ({
   }, [getDirentByRowId, onItemRename, tableData, enrichedColumns, handleDirentMetadata]);
 
   // Batch modify records for drag-fill support
-  const modifyRecords = useCallback((recordIds, idRecordUpdates) => {
+  // Accepts extended signature: (recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData, isFromCut)
+  const modifyRecords = useCallback((recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData, isFromCut) => {
     if (!recordIds || !idRecordUpdates) return;
     recordIds.forEach(rowId => {
       const updates = idRecordUpdates[rowId];
@@ -162,23 +168,19 @@ const DirTableView = ({
       if (!record) return;
 
       Object.entries(updates).forEach(([key, value]) => {
-        if (key === PRIVATE_COLUMN_KEY.FILE_NAME) {
-          onItemRename(dirent, value);
-        } else {
-          let update = { [key]: value };
-          const column = getColumnByKey(enrichedColumns, key);
-          if (column) {
-            if (column.type === CellType.SINGLE_SELECT) {
-              update = { [key]: getColumnOptionNameById(column, value) };
-            } else if (column.type === CellType.MULTIPLE_SELECT) {
-              update = { [key]: getColumnOptionNamesByIds(column, value) };
-            }
+        let update = { [key]: value };
+        const column = getColumnByKey(enrichedColumns, key);
+        if (column) {
+          if (column.type === CellType.SINGLE_SELECT) {
+            update = { [key]: getColumnOptionNameById(column, value) };
+          } else if (column.type === CellType.MULTIPLE_SELECT) {
+            update = { [key]: getColumnOptionNamesByIds(column, value) };
           }
-          handleDirentMetadata(rowId, record._name, update);
         }
+        handleDirentMetadata(rowId, record._name, update);
       });
     });
-  }, [getDirentByRowId, onItemRename, tableData, enrichedColumns, handleDirentMetadata]);
+  }, [getDirentByRowId, tableData, enrichedColumns, handleDirentMetadata]);
 
   const updateFileTags = useCallback((data) => {
     const recordID = data[0].record_id;
@@ -190,45 +192,68 @@ const DirTableView = ({
   }, [tagsData, tableData, handleDirentMetadata, repoID]);
 
   const handleSelectCellsDelete = useCallback((records, columns) => {
-    if (!records || records.length === 0 || !columns || columns.length === 0) return;
-
-    // Build a map of record id to record for quick lookup
-    const recordMap = {};
-    records.forEach(record => {
-      recordMap[record._id] = record;
-    });
-
-    // Process each record
     records.forEach(record => {
       const { _id, _name } = record;
-
-      // Check if this record has any tags column
       const hasTagsColumn = columns.some(col => col && col.type === CellType.TAGS);
-
-      // If has tags column, clear tags
       if (hasTagsColumn) {
         tagsAPI.updateFileTags(repoID, [{ record_id: _id, tags: [] }]);
         handleDirentMetadata(_id, _name, { [PRIVATE_COLUMN_KEY.TAGS]: [] });
       }
 
-      // Clear other editable columns (set to null)
       columns.forEach(column => {
-        if (!column) return;
         const { key, type } = column;
-
-        // Skip TAGS as it's handled above
         if (type === CellType.TAGS) return;
-
-        // Skip FILE_NAME and other non-editable columns
         if (key === PRIVATE_COLUMN_KEY.FILE_NAME) return;
-
-        // Skip columns that don't support editing
         if (!column.editable) return;
-
-        handleDirentMetadata(_id, _name, { [key]: null });
+        // Use getColumnOriginName for most columns, but handle COLLABORATOR specially
+        // since collaborator data is stored under FILE_COLLABORATORS key, not column.name
+        let fieldKey = getColumnOriginName(column);
+        if (type === CellType.COLLABORATOR) {
+          fieldKey = PRIVATE_COLUMN_KEY.FILE_COLLABORATORS;
+        }
+        handleDirentMetadata(_id, _name, { [fieldKey]: null });
       });
     });
   }, [repoID, handleDirentMetadata]);
+
+  // Record getter for gridUtils adapter
+  const recordGetterByIndex = useCallback(({ isGroupView, groupRecordIndex, recordIndex }) => {
+    const recordId = tableData.row_ids[recordIndex];
+    return recordId && tableData.id_row_map[recordId];
+  }, [tableData]);
+
+  // Create GridUtils adapter for copy/paste and drag-fill
+  const gridUtilsAdapter = useMemo(() => {
+    return new DirTableGridUtilsAdapter({
+      renderRecordsIds: tableData.row_ids || [],
+      recordGetterById: (id) => tableData.id_row_map?.[id],
+      recordGetterByIndex,
+      modifyRecords: (recordIds, idRecordUpdates) => modifyRecords(recordIds, idRecordUpdates),
+      updateFileTags,
+      getTagsData: () => tagsData || {},
+      getCollaborators: () => [],
+    });
+  }, [tableData, recordGetterByIndex, modifyRecords, updateFileTags, tagsData]);
+
+  // Paste callback - delegates to gridUtilsAdapter.paste()
+  const paste = useCallback(({ type, copied, multiplePaste, pasteRange, isGroupView, pasteSource, cutPosition, columns }) => {
+    const { search } = window.location;
+    const urlParams = new URLSearchParams(search);
+    const viewId = urlParams.has('view') ? urlParams.get('view') : null;
+    gridUtilsAdapter.paste({
+      type,
+      copied,
+      multiplePaste,
+      pasteRange,
+      isGroupView,
+      columns: enrichedColumns,
+      pasteSource,
+      cutPosition,
+      viewId,
+      canModifyRow: permission.canModifyRow,
+      canModifyColumn: permission.canModifyColumn,
+    });
+  }, [gridUtilsAdapter, enrichedColumns, permission]);
 
   const toggleSubMenu = (e, subMenuOptionKey) => {
     e.stopPropagation();
@@ -243,6 +268,16 @@ const DirTableView = ({
   const onRenameEditor = () => {
     sfTableEventBus.current.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR);
   };
+
+  // Handle keyboard shortcuts for copy/paste
+  const onGridKeyDown = useCallback((e) => {
+    // Skip if in editor or input field
+    if (e.target.className.includes('sf-metadata-editor-main')) return;
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+    // Let SFTable handle copy/paste shortcuts when a cell is selected
+    // The document-level listeners in SFTable's InteractionMasks will handle these
+  }, []);
 
   const onOptionClick = (e, option, dirent, selectedDirents) => {
     e.preventDefault();
@@ -503,6 +538,8 @@ const DirTableView = ({
   return (
     <div className="dir-table-view dir-table-wrapper">
       <SFTable
+        {...permission}
+        repoID={repoID}
         table={tableData}
         visibleColumns={enrichedColumns}
         recordsIds={tableData.row_ids}
@@ -519,15 +556,16 @@ const DirTableView = ({
         enableScrollToLoad={false}
         modifyColumnWidth={modifyColumnWidth}
         modifyColumnOrder={modifyColumnOrder}
-        checkCanModifyRecord={checkCanModifyRecord}
         modifyRecord={modifyRecord}
         modifyRecords={modifyRecords}
-        supportCopy={false}
-        supportPaste={false}
+        supportCopy={true}
+        supportPaste={true}
+        paste={paste}
         supportDragFill={true}
-        canModifyRecords={true}
-        supportCut={false}
+        supportCut={true}
         isGroupView={false}
+        onGridKeyDown={onGridKeyDown}
+        gridUtils={gridUtilsAdapter}
         showRecordAsTree={false}
         createContextMenuOptions={createContextMenuOptions}
         onRecordSelected={onRecordSelected}

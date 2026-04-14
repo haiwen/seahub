@@ -51,9 +51,7 @@ const AsyncCollaborator = ({ value, mediaUrl, api, collaborators, collaboratorsC
       isMounted && setCollaborator(collaborator);
     });
     return () => isMounted = false;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+  }, [value, collaborators, collaboratorsCache, api, mediaUrl, updateCollaboratorsCache]);
   if (!collaborator) return null;
 
   return (

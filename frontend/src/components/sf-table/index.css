@@ -253,33 +253,6 @@
   background-color: #f9f9f9;
 }
 
-.sf-table-tooltip .tooltip-inner {
-  max-width: 242px;
-  font-weight: lighter;
-  text-align: start;
-  background-color: #303133;
-}
-
-.sf-table-tooltip .bs-tooltip-right .arrow::before,
-.sf-table-tooltip .bs-tooltip-auto[x-placement^="right"] .arrow::before {
-  border-right-color: #303133;
-}
-
-.sf-table-tooltip .bs-tooltip-top .arrow::before,
-.sf-table-tooltip .bs-tooltip-auto[x-placement^="top"] .arrow::before {
-  border-top-color: #303133;
-}
-
-.sf-table-tooltip .bs-tooltip-bottom .arrow::before,
-.sf-table-tooltip .bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
-  border-bottom-color: #303133;
-}
-
-.sf-table-tooltip .bs-tooltip-left .arrow::before,
-.sf-table-tooltip .bs-tooltip-auto[x-placement^="left"] .arrow::before {
-  border-left-color: #303133;
-}
-
 .formula-formatter-content-item {
   margin-right: 10px;
   font-size: 13px;
@@ -319,12 +292,6 @@
 
 .checkbox-editor-rows-container .grid-checkbox-row-checkbox {
   margin-top: 0;
-}
-
-/* common */
-.sf-metadata-result-container.horizontal-scroll .table-last--frozen,
-.sf-table-result-container.horizontal-scroll .table-last--frozen {
-  box-shadow: 2px 0 5px -2px rgb(136 136 136 / 30%) !important;
 }
 
 .table-last--frozen {
@@ -369,74 +336,6 @@
 
 .rdg-editor-container .checkbox-editor-rows-container {
   justify-content: center;
-}
-
-.geolocation-editor-container {
-  background: var(--bs-body-bg);
-  box-shadow: 0 0 5px #ccc;
-  border-radius: 4px;
-  position: relative;
-  display: inline-block;
-  min-width: max-content;
-  width: 400px;
-}
-
-.geolocation-editor-container .geolocation-selector-container {
-  position: absolute;
-  min-width: 400px;
-  top: 100%;
-  left: 0;
-  background: var(--bs-body-bg);
-  box-shadow: 0 0 5px #ccc;
-  min-height: 165px;
-}
-
-.geolocation-editor-container .geolocation-selector-header {
-  height: 45px;
-  display: flex;
-  border-bottom: 1px solid var(--bs-border-secondary-color);
-  padding: 5px 20px 0 20px;
-  align-items: flex-end;
-}
-
-.geolocation-editor-container .geolocation-selector-header-item {
-  border: 1px solid var(--bs-border-secondary-color);
-  height: 35px;
-  margin-right: 10px;
-  display: flex;
-  margin-bottom: -1px;
-  border-radius: 3px 3px 0 0;
-  padding: 10px;
-  line-height: 15px;
-  cursor: pointer;
-  font-size: 14px;
-  word-break: keep-all;
-}
-
-.geolocation-editor-container .selected-geolocation-selector-header-item {
-  border-bottom: 1px solid var(--bs-border-secondary-color);
-}
-
-.geolocation-editor-container .geolocation-map-editor {
-  height: 384px;
-  width: 500px;
-  display: flex;
-  flex-direction: column;
-}
-
-.sf-metadata-wrapper .sf-metadata-main {
-  flex: 1;
-  overflow: hidden;
-}
-
-.sf-metadata-wrapper .sf-metadata-main .sf-metadata-container {
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-}
-
-.sf-metadata-wrapper .sf-metadata-main .sf-metadata-container-transform {
-  transform: translateZ(10px);
 }
 
 .sf-table-records-wrapper .group-header-left .formatter-show {

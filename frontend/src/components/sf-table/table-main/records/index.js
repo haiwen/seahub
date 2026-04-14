@@ -9,10 +9,10 @@ import GroupBody from './group-body';
 import RecordsFooter from '../records-footer';
 import ContextMenu from '../../context-menu';
 import RecordDragLayer from './record-drag-layer';
-import { RecordMetrics } from '../../shared/record-metrics';
+import { RecordMetrics } from '../../utils/record-metrics';
 import { TreeMetrics } from '../../utils/tree-metrics';
 import { recalculate } from '../../utils/column';
-import { getVisibleBoundaries } from '../../utils/viewport';
+import { getVisibleBoundaries } from '../../utils/records-body';
 import { getColOverScanEndIdx, getColOverScanStartIdx } from '../../utils/grid';
 import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
 import { isMobile } from '../../../../utils/utils';
@@ -1017,7 +1017,7 @@ class Records extends Component {
               insertColumn={this.props.insertColumn}
               // Metadata dropdown props
               canEditColumnInfo={this.props.canEditColumnInfo}
-              ColumnDropdownMenu={this.props.ColumnDropdownMenu}
+              columnDropdownMenu={this.props.columnDropdownMenu}
               view={this.props.view}
               renameColumn={this.props.renameColumn}
               modifyColumnData={this.props.modifyColumnData}
@@ -1050,7 +1050,7 @@ class Records extends Component {
             selectedRange={selectedRange}
             isGroupView={isGroupView}
             hasSelectedRecord={hasSelectedRecord}
-            isLoadingMoreRecords={this.props.isLoadingMoreRecords}
+            isLoadingMore={this.props.isLoadingMore}
             recordGetterById={this.props.recordGetterById}
             recordGetterByIndex={this.props.recordGetterByIndex}
             getRecordsSummaries={this.getRecordsSummaries}
@@ -1068,13 +1068,13 @@ Records.propTypes = {
   tableColumns: PropTypes.array,
   columns: PropTypes.array,
   columnEditable: PropTypes.bool,
-  ColumnDropdownMenu: PropTypes.object,
+  columnDropdownMenu: PropTypes.object,
   NewColumnComponent: PropTypes.object,
   headerSettings: PropTypes.object,
   showSequenceColumn: PropTypes.bool,
   sequenceColumnWidth: PropTypes.number,
   hasMoreRecords: PropTypes.bool,
-  isLoadingMoreRecords: PropTypes.bool,
+  isLoadingMore: PropTypes.bool,
   isGroupView: PropTypes.bool,
   showRecordAsTree: PropTypes.bool,
   groupOffsetLeft: PropTypes.number,
@@ -1106,7 +1106,7 @@ Records.propTypes = {
   updateSelectedRecordIds: PropTypes.func,
   onRecordSelected: PropTypes.func,
   onTableDragStart: PropTypes.func,
-  checkCanModifyRecord: PropTypes.func,
+  canModify: PropTypes.func,
   modifyRecord: PropTypes.func,
 };
 

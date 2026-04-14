@@ -5,7 +5,7 @@ import FileName from './file-name';
 import { useCollaborators } from '../../hooks';
 import { CellType } from '../../constants';
 
-const CellFormatter = React.memo(({ readonly, value, field, record, ...params }) => {
+const CellFormatter = React.memo(({ readonly, value, column, record, ...params }) => {
   const { collaborators, collaboratorsCache, updateCollaboratorsCache, queryUser } = useCollaborators();
   const props = useMemo(() => {
     return {
@@ -14,13 +14,13 @@ const CellFormatter = React.memo(({ readonly, value, field, record, ...params })
       updateCollaboratorsCache,
       readonly,
       value,
-      field,
+      column,
       queryUserAPI: queryUser,
       record,
     };
-  }, [readonly, value, field, collaborators, collaboratorsCache, updateCollaboratorsCache, queryUser, record]);
+  }, [readonly, value, column, collaborators, collaboratorsCache, updateCollaboratorsCache, queryUser, record]);
 
-  if (field.type === CellType.FILE_NAME) {
+  if (column.type === CellType.FILE_NAME) {
     return (<FileName { ...props } { ...params } record={record} />);
   }
 
@@ -34,7 +34,7 @@ CellFormatter.displayName = 'CellFormatter';
 CellFormatter.propTypes = {
   readonly: PropTypes.bool,
   value: PropTypes.any,
-  field: PropTypes.object.isRequired,
+  column: PropTypes.object,
   record: PropTypes.object,
   tagsData: PropTypes.object,
 };

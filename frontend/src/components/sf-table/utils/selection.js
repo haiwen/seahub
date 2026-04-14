@@ -1,14 +1,77 @@
-// import { Utils } from '../../../utils/utils';
-import { CELL_MASK as Z_INDEX_CELL_MASK, FROZEN_CELL_MASK as Z_INDEX_FROZEN_CELL_MASK } from '../constants/z-index';
+import ObjectUtils, { isEmptyObject } from '../../../utils/object';
 import { getCellValueByColumn } from './cell';
 import { checkIsColumnEditable, checkIsColumnSupportPreview, getColumnByIndex } from './column';
 import { getGroupByPath } from './group';
-import { getGroupRecordByIndex } from '../shared/group-metrics';
+import { getGroupRecordByIndex } from './group-metrics';
+import { CELL_MASK as Z_INDEX_CELL_MASK, FROZEN_CELL_MASK as Z_INDEX_FROZEN_CELL_MASK } from '../constants/z-index';
 
 const SELECT_DIRECTION = {
   UP: 'upwards',
   DOWN: 'downwards',
 };
+
+export const checkCellValueChanged = (oldVal, newVal) => {
+  if (oldVal === newVal) return false;
+  if (oldVal === undefined || oldVal === null || oldVal === '') {
+    if (newVal === undefined || newVal === null || newVal === '') return false;
+    if (typeof newVal === 'object' && isEmptyObject(newVal)) return false;
+    if (Array.isArray(newVal)) return newVal.length !== 0;
+    if (typeof newVal === 'boolean') return newVal !== false;
+  }
+  if (Array.isArray(oldVal) && Array.isArray(newVal)) {
+    return JSON.stringify(oldVal) !== JSON.stringify(newVal);
+  }
+  if (typeof oldVal === 'object' && typeof newVal === 'object' && newVal !== null) {
+    return !ObjectUtils.isSameObject(oldVal, newVal);
+  }
+  return oldVal !== newVal;
+};
+
+export const cellCompare = (props, nextProps) => {
+  const {
+    record: oldRecord, column, isCellSelected, isLastCell, highlightClassName, height, bgColor,
+    showRecordAsTree, treeNodeIndex, treeNodeDepth, hasChildNodes, isFoldedTreeNode,
+  } = props;
+  const {
+    record: newRecord, highlightClassName: newHighlightClassName, height: newHeight, column: newColumn, bgColor: newBgColor,
+  } = nextProps;
+
+  const oldValue = getCellValueByColumn(oldRecord, column);
+  const newValue = getCellValueByColumn(newRecord, column);
+  let isCustomCellValueChanged = false;
+  if (props.checkCellValueChanged) {
+    isCustomCellValueChanged = props.checkCellValueChanged(column, oldRecord, newRecord);
+  }
+  let isLockStatusChanged = false;
+  if (oldRecord._is_locked !== undefined) {
+    isLockStatusChanged = oldRecord._is_locked !== newRecord._is_locked || oldRecord._is_freezed !== newRecord._is_freezed;
+  }
+  return (
+    isCustomCellValueChanged ||
+    checkCellValueChanged(oldValue, newValue) ||
+    oldRecord._last_modifier !== newRecord._last_modifier ||
+    isLockStatusChanged ||
+    isCellSelected !== nextProps.isCellSelected ||
+    isLastCell !== nextProps.isLastCell ||
+    highlightClassName !== newHighlightClassName ||
+    height !== newHeight ||
+    column.name !== newColumn.name ||
+    column.left !== newColumn.left ||
+    column.width !== newColumn.width ||
+    !ObjectUtils.isSameObject(column.data, newColumn.data) ||
+    bgColor !== newBgColor ||
+    showRecordAsTree !== nextProps.showRecordAsTree ||
+    treeNodeIndex !== nextProps.treeNodeIndex ||
+    treeNodeDepth !== nextProps.treeNodeDepth ||
+    hasChildNodes !== nextProps.hasChildNodes ||
+    isFoldedTreeNode !== nextProps.isFoldedTreeNode ||
+    props.groupRecordIndex !== nextProps.groupRecordIndex ||
+    props.recordIndex !== nextProps.recordIndex
+  );
+};
+
+export const CELL_MASK = Z_INDEX_CELL_MASK;
+export const FROZEN_CELL_MASK = Z_INDEX_FROZEN_CELL_MASK;
 
 export const getRowTop = (rowIdx, rowHeight) => rowIdx * rowHeight;
 
@@ -28,11 +91,10 @@ export const getSelectedCellValue = ({ selectedPosition, columns, isGroupView, r
   return getCellValueByColumn(record, column);
 };
 
-export const checkIsCellSupportOpenEditor = (cell, column, isGroupView, recordGetterByIndex, checkCanModifyRecord) => {
+export const checkIsCellSupportOpenEditor = (cell, column, isGroupView, recordGetterByIndex, canModify) => {
   const { groupRecordIndex, rowIdx } = cell;
   if (!column) return false;
 
-  // open the editor to preview cell value
   if (checkIsColumnSupportPreview(column)) {
     return true;
   }
@@ -42,21 +104,21 @@ export const checkIsCellSupportOpenEditor = (cell, column, isGroupView, recordGe
   }
 
   const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex: rowIdx });
-  if (!record || !checkCanModifyRecord) return false;
-  return !!checkCanModifyRecord(record);
+  if (!record || !canModify) return false;
+  return !!canModify(record);
 };
 
-export const checkIsSelectedCellEditable = ({ enableCellSelect, selectedPosition, columns, isGroupView, recordGetterByIndex, checkCanModifyRecord }) => {
+export const checkIsSelectedCellEditable = ({ enableCellSelect, selectedPosition, columns, isGroupView, recordGetterByIndex, canModify }) => {
   const column = getSelectedColumn({ selectedPosition, columns });
   if (!checkIsColumnEditable(column)) {
     return false;
   }
 
   const row = getSelectedRow({ selectedPosition, isGroupView, recordGetterByIndex });
-  if (!row || !checkCanModifyRecord) {
+  if (!row || !canModify) {
     return false;
   }
-  return checkCanModifyRecord(row);
+  return canModify(row);
 };
 
 export function selectedRangeIsSingleCell(selectedRange) {
@@ -86,7 +148,6 @@ export const getSelectedDimensions = ({
     let top;
     if (isGroupView) {
       left += groupOffsetLeft;
-      // group view uses border-top, No group view uses border-bottom (for group animation) so selected top should be increased 1
       top = getRecordTopFromRecordsBody(groupRecordIndex) + 1;
     } else {
       top = getRecordTopFromRecordsBody(rowIdx);
@@ -151,21 +212,18 @@ export const getSelectedRangeDimensions = ({
     }
 
     if (startGroupPathString === endGroupPathString) {
-      // within the same group.
       height = (Math.abs(endGroupRecordIndex - startGroupRecordIndex) + 1) * rowHeight;
     } else if (selectDirection === SELECT_DIRECTION.DOWN) {
-      // within different group: select cells from top to bottom.
       const groupPath = startGroupRow.groupPath;
       const group = getGroupByPath(groupPath, groups);
       const groupRowIds = group.row_ids || [];
       height = (groupRowIds.length - startGroupRow.rowIdx || 0) * rowHeight;
     } else if (selectDirection === SELECT_DIRECTION.UP) {
-      // within different group: select cells from bottom to top.
       const startGroupRowIdx = startGroupRow.rowIdx || 0;
       topGroupRowIndex = startGroupRecordIndex - startGroupRowIdx;
       height = (startGroupRowIdx + 1) * rowHeight;
     }
-    height += 1; // record height: 32
+    height += 1;
     left += groupOffsetLeft;
     top = getRecordTopFromRecordsBody(topGroupRowIndex);
   } else {

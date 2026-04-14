@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import GridUtils from '@/components/sf-table/utils/grid-utils';
+import GridUtils from '@/components/sf-table/utils/grid';
 import PasteUtils from '@/components/sf-table/utils/paste';
 import CellFormatter from '../../components/cell-formatter';
 import Editor from '../../components/cell-editors/editor';
@@ -25,7 +25,7 @@ const POPUP_EDITOR_COLUMN_TYPES = [
   CellType.GEOLOCATION,
 ];
 
-export const adaptMetadataColumnsToSfTable = (repoID, metadataColumns, tagsData) => {
+export const adaptMetadataColumnsToSfTable = (repoID, metadataColumns) => {
   if (!Array.isArray(metadataColumns)) {
     return metadataColumns;
   }
@@ -52,6 +52,10 @@ export const adaptMetadataColumnsToSfTable = (repoID, metadataColumns, tagsData)
   });
 };
 
+/**
+ * GridUtils and PasteUtils adapter for metadata table.
+ * Provides a unified interface for drag-fill and paste operations.
+ */
 class MetadataGridUtilsAdapter {
 
   constructor(metadata, api) {
@@ -75,16 +79,30 @@ class MetadataGridUtilsAdapter {
     return this.gridUtils.getCopiedContent({ type, copied, isGroupView, columns });
   }
 
-  getUpdateDraggedRecords(draggedRange, shownColumns, rows, idRowMap, groupMetrics) {
-    return this.gridUtils.getUpdateDraggedRecords(draggedRange, shownColumns, rows, idRowMap, groupMetrics);
+  /**
+   * @param {Object} draggedRange - The dragged range
+   * @param {Array} shownColumns - Columns to update
+   * @param {Array} rows - All rows
+   * @param {Object} idRowMap - Map of row id to row
+   * @param {Object} groupMetrics - Group metrics for group view
+   * @param {Function} canModifyRow - Permission function: (record) => boolean
+   * @param {Function} canModifyColumn - Permission function: (column) => boolean
+   */
+  getUpdateDraggedRecords(draggedRange, shownColumns, rows, idRowMap, groupMetrics, canModifyRow, canModifyColumn) {
+    return this.gridUtils.getUpdateDraggedRecords(draggedRange, shownColumns, rows, idRowMap, groupMetrics, canModifyRow, canModifyColumn);
   }
 
-  paste({ type, copied, multiplePaste, pasteRange, isGroupView, columns, pasteSource, cutPosition, viewId }) {
-    return this.pasteUtils.paste({ type, copied, multiplePaste, pasteRange, isGroupView, columns, pasteSource, cutPosition, viewId });
+  /**
+   * @param {Object} params - Paste parameters
+   * @param {Function} canModifyRow - Permission function: (record) => boolean
+   * @param {Function} canModifyColumn - Permission function: (column) => boolean
+   */
+  paste({ type, copied, multiplePaste, pasteRange, isGroupView, columns, pasteSource, cutPosition, viewId, canModifyRow, canModifyColumn }) {
+    return this.pasteUtils.paste({ type, copied, multiplePaste, pasteRange, isGroupView, columns, pasteSource, cutPosition, viewId, canModifyRow, canModifyColumn });
   }
 
-  clearCutData(cutPosition, cutData, isGroupView) {
-    return this.pasteUtils.clearCutData(cutPosition, cutData, isGroupView);
+  clearCutData(cutPosition, cutData, isGroupView, canModifyRow) {
+    return this.pasteUtils.clearCutData(cutPosition, cutData, isGroupView, canModifyRow);
   }
 }
 
@@ -92,7 +110,7 @@ class MetadataGridUtilsAdapter {
 // This replicates the logic from metadata/views/table/context-menu.js
 export const createMetadataContextMenuOptions = ({
   repoID,
-  canModify,
+  readOnly,
   enableFaceRecognition,
   enableTags,
   recordMetrics,
@@ -163,8 +181,6 @@ export const createMetadataContextMenuOptions = ({
     return [];
   }
 
-  // Build menu options using metadata's buildTableMenuOptions
-  const readOnly = !canModify;
   const menuOptions = buildTableMenuOptions(
     records,
     readOnly,
@@ -328,7 +344,7 @@ export const createMetadataContextMenuOptions = ({
 export const useMetadataTableAdapter = ({
   repoID,
   metadata,
-  canModify,
+  readOnly,
   modifyRecord,
   modifyRecords,
   recordGetterByIndex,
@@ -341,6 +357,8 @@ export const useMetadataTableAdapter = ({
   updateRecordDescription,
   onOCR,
   generateFileTags,
+  tagsData,
+  collaborators,
 }) => {
   return useMemo(() => {
     const api = {
@@ -350,6 +368,11 @@ export const useMetadataTableAdapter = ({
       recordGetterById,
       modifyColumnData,
       updateFileTags,
+      getTagsData: () => tagsData || {},
+      getCollaborators: () => {
+        if (!window.sfMetadata) return [];
+        return window.sfMetadata.getCollaborators() || [];
+      },
     };
     const adapter = new MetadataGridUtilsAdapter(metadata, api);
 
@@ -358,7 +381,7 @@ export const useMetadataTableAdapter = ({
       ...props,
       repoID,
       metadata,
-      canModify,
+      readOnly,
       deleteRecords,
       updateRecordDetails,
       updateFaceRecognition,
@@ -368,7 +391,7 @@ export const useMetadataTableAdapter = ({
     });
 
     return adapter;
-  }, [modifyRecord, modifyRecords, recordGetterByIndex, recordGetterById, modifyColumnData, updateFileTags, metadata, repoID, canModify, deleteRecords, updateRecordDetails, updateFaceRecognition, updateRecordDescription, onOCR, generateFileTags]);
+  }, [modifyRecord, modifyRecords, recordGetterByIndex, recordGetterById, modifyColumnData, updateFileTags, metadata, repoID, readOnly, deleteRecords, updateRecordDetails, updateFaceRecognition, updateRecordDescription, onOCR, generateFileTags, tagsData]);
 };
 
 export const adaptSfTablePropsToMetadata = (sfTableProps, metadataProps) => {

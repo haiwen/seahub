@@ -1,4 +1,4 @@
-import { COLUMNS_ICON_CONFIG, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '@/metadata/constants';
+import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '@/metadata/constants';
 import CellFormatter from '@/metadata/components/cell-formatter';
 import Editor from '@/metadata/components/cell-editors/editor';
 
@@ -78,7 +78,7 @@ export const createDirentTableColumns = (repoID, repoInfo, columns) => {
     const display_name = name;
     const icon_name = COLUMNS_ICON_CONFIG[type];
 
-    const formatter = <CellFormatter repoID={repoID} />;
+    const formatter = <CellFormatter repoID={repoID} column={column} />;
     const editor = <Editor repoID={repoID} repoInfo={repoInfo} />;
 
     const is_private = PRIVATE_COLUMN_KEYS.includes(key);
@@ -89,6 +89,7 @@ export const createDirentTableColumns = (repoID, repoInfo, columns) => {
     const editable_via_click_cell = is_private && EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS.includes(key) || true;
     const is_popup_editor = is_private && POPUP_EDITOR_COLUMN_KEYS.includes(key) || false;
     const is_support_preview = is_private && SUPPORT_PREVIEW_COLUMN_KEYS.includes(key) || false;
+    const icon_tooltip = COLUMNS_ICON_NAME[column.type] || 'Text';
 
     const savedWidth = savedWidths[key];
     if (savedWidth) {
@@ -118,6 +119,9 @@ export const createDirentTableColumns = (repoID, repoInfo, columns) => {
     }
     if (is_support_preview) {
       normalizedColumn.is_support_preview = is_support_preview;
+    }
+    if (icon_tooltip) {
+      normalizedColumn.icon_tooltip = icon_tooltip;
     }
     return normalizedColumn;
   });

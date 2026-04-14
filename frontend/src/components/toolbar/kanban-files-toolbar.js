@@ -4,7 +4,7 @@ import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { gettext } from '../../utils/constants';
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../metadata/constants';
 import TextTranslation from '../../utils/text-translation';
-import RowUtils from '../sf-table/utils/row-utils';
+import RowUtils from '../sf-table/utils/row';
 import { checkIsDir } from '../../metadata/utils/row';
 import { Utils } from '../../utils/utils';
 import OpIcon from '../../components/op-icon';

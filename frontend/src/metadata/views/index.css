@@ -1,3 +1,15 @@
+.sf-metadata-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  position: relative;
+  border: none;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
 .sf-metadata-view-setting-panel .sf-metadata-setting-divide-line {
   width: 100%;
   height: 1px;
@@ -29,4 +41,8 @@
 
 .rc-calendar.sf-metadata-rc-calendar {
   font-family: var(--bs-body-font-family);
+}
+
+.sf-metadata-wrapper .sf-table-records-wrapper {
+  flex: 0;
 }

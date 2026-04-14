@@ -1,0 +1,31 @@
+.sf-tooltip .tooltip-inner {
+  max-width: 242px;
+  font-weight: lighter;
+  text-align: start;
+  background-color: var(--bs-emphasis-color);
+  color: var(--bs-body-bg);
+}
+
+.sf-tooltip .bs-tooltip-right .arrow::before,
+.sf-tooltip .bs-tooltip-auto[x-placement^="right"] .arrow::before {
+  border-right-color: var(--bs-emphasis-color);
+}
+
+.sf-tooltip .bs-tooltip-top .arrow::before,
+.sf-tooltip .bs-tooltip-auto[x-placement^="top"] .arrow::before {
+  border-top-color: var(--bs-emphasis-color);
+}
+
+.sf-tooltip .bs-tooltip-bottom .arrow::before,
+.sf-tooltip .bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
+  border-bottom-color: var(--bs-emphasis-color);
+}
+
+.sf-tooltip .bs-tooltip-left .arrow::before,
+.sf-tooltip .bs-tooltip-auto[x-placement^="left"] .arrow::before {
+  border-left-color: var(--bs-emphasis-color);
+}
+
+.sf-tooltip .bs-tooltip-auto[data-popper-placement^=left] .tooltip-arrow:before {
+  border-left-color: var(--bs-emphasis-color);
+}

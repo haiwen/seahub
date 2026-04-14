@@ -77,7 +77,7 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepo
       </DetailItem>
       <DetailItem field={lastModifierField} className="sf-metadata-property-detail-formatter">
         <Formatter
-          field={lastModifierField}
+          column={lastModifierField}
           value={direntDetail.last_modifier_email}
           collaborators={[{
             name: direntDetail.last_modifier_name,
@@ -88,7 +88,7 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepo
         />
       </DetailItem >
       <DetailItem field={lastModifiedTimeField} className="sf-metadata-property-detail-formatter">
-        <Formatter field={lastModifiedTimeField} value={direntDetail.last_modified}/>
+        <Formatter column={lastModifiedTimeField} value={direntDetail.last_modified}/>
       </DetailItem>
       {isShowRepoTags && window.app.pageOptions.enableFileTags && !enableMetadata && (
         <DetailItem field={tagsField} className="sf-metadata-property-detail-formatter">
@@ -165,5 +165,7 @@ FileDetails.propTypes = {
   tagsData: PropTypes.object,
   onFileTagChanged: PropTypes.func,
 };
+
+FileDetails.displayName = 'FileDetails';
 
 export default FileDetails;

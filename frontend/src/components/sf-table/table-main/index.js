@@ -9,7 +9,7 @@ import { gettext } from '../../../utils/constants';
 import { GROUP_VIEW_OFFSET } from '../constants/group';
 import { SEQUENCE_COLUMN_WIDTH } from '../constants/grid';
 import { getCellValueByColumn } from '../utils/cell';
-import GridUtils from '../utils/grid-utils';
+import GridUtils from '../utils/grid';
 import { generateKeyTreeNodeRowIdMap } from '../utils/tree';
 
 const TableMain = ({
@@ -22,7 +22,7 @@ const TableMain = ({
   showSequenceColumn,
   noRecordsTipsText,
   hasMoreRecords,
-  isLoadingMoreRecords,
+  isLoadingMore,
   isLoading = false,
   showGridFooter,
   recordsTree,
@@ -92,11 +92,9 @@ const TableMain = ({
     return gridUtils.getCopiedContent({ type, copied, isGroupView, columns });
   }, [gridUtils]);
 
-  const getUpdateDraggedRecords = useCallback((draggedRange, columns, groupMetrics) => {
-    const rows = table?.rows || [];
-    const idRowMap = table?.id_row_map || {};
-    return gridUtils.getUpdateDraggedRecords(draggedRange, columns, rows, idRowMap, groupMetrics);
-  }, [gridUtils, table]);
+  const getUpdateDraggedRecords = useCallback((draggedRange, columns, rows, idRowMap, groupMetrics, canModifyRow, canModifyColumn) => {
+    return gridUtils.getUpdateDraggedRecords(draggedRange, columns, rows, idRowMap, groupMetrics, canModifyRow, canModifyColumn);
+  }, [gridUtils]);
 
   const getInternalClientCellValueDisplayString = useCallback((record, column) => {
     if (getClientCellValueDisplayString) {
@@ -145,7 +143,7 @@ const TableMain = ({
           scrollToLoadMore={enableScrollToLoad ? loadMore : undefined}
           loadMore={loadMore}
           loadAll={loadAll}
-          isLoadingMoreRecords={isLoadingMoreRecords}
+          isLoadingMore={isLoadingMore}
           getTreeNodeByIndex={getTreeNodeByIndex}
           recordGetterById={recordGetterById}
           recordGetterByIndex={recordGetterByIndex}

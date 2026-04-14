@@ -93,7 +93,7 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  });
+  }, [handleClickOutside]);
 
   return (
     <>

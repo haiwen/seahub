@@ -22,7 +22,7 @@ const Cell = ({
   groupOffsetLeft,
   isLastFrozenCell,
   height,
-  ColumnDropdownMenu,
+  columnDropdownMenu,
   column,
   columnIndex,
   fullIndex,
@@ -37,6 +37,11 @@ const Cell = ({
   updateDraggingKey,
   updateDragOverKey,
   canEditColumnInfo = false,
+  // Permission functions for HeaderDropdownMenu
+  canModifyView,
+  canModifyColumnData,
+  canDeleteColumn,
+  canRenameColumn,
   ...props
 }) => {
   const headerCellRef = useRef(null);
@@ -109,22 +114,7 @@ const Cell = ({
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
     updateDragOverKey(column.key);
-    if (!window.sfMetadataBody) return;
-    let defaultColumnWidth = 200;
-    const offsetX = event.clientX;
-    const width = document.querySelector('#sf-metadata-wrapper')?.clientWidth;
-    const left = window.innerWidth - width;
-    if (width <= 800) {
-      defaultColumnWidth = 20;
-    }
-    if (offsetX > window.innerWidth - defaultColumnWidth) {
-      window.sfMetadataBody.scrollToRight();
-    } else if (offsetX < frozenColumnsWidth + defaultColumnWidth + left) {
-      window.sfMetadataBody.scrollToLeft();
-    } else {
-      window.sfMetadataBody.clearHorizontalScroll();
-    }
-  }, [column, frozenColumnsWidth, updateDragOverKey, draggingColumnKey]);
+  }, [column, updateDragOverKey, draggingColumnKey]);
 
   const onDrop = useCallback((event) => {
     if (!dropdownRef.current || !dropdownRef.current.isPopoverShow()) {
@@ -154,7 +144,7 @@ const Cell = ({
           {icon_name && <Icon symbol={icon_name} className="sf-metadata-icon sf-table-column-icon" />}
         </span>
         {icon_tooltip &&
-          <UncontrolledTooltip placement="bottom" target={`header-icon-${key}`} fade={false} trigger="hover" className="sf-table-tooltip">
+          <UncontrolledTooltip placement="bottom" target={`header-icon-${key}`} fade={false} trigger="hover" className="sf-tooltip">
             {icon_tooltip}
           </UncontrolledTooltip>
         }
@@ -203,12 +193,16 @@ const Cell = ({
             renameColumn={props.renameColumn}
             deleteColumn={props.deleteColumn}
             modifyColumnData={props.modifyColumnData}
+            canModifyView={canModifyView}
+            canModifyColumnData={canModifyColumnData}
+            canDeleteColumn={canDeleteColumn}
+            canRenameColumn={canRenameColumn}
           />
         )}
         <ResizeColumnHandle onDrag={onDraggingColumnWidth} onDragEnd={handleDragEndColumnWidth} />
       </div>
     );
-  }, [isLastFrozenCell, isNameColumn, style, key, onContextMenu, cellContent, canEditColumnInfo, column, props.view, props.renameColumn, props.deleteColumn, props.modifyColumnData, onDraggingColumnWidth, handleDragEndColumnWidth, handleHeaderCellClick, frozen]);
+  }, [isLastFrozenCell, isNameColumn, style, key, onContextMenu, cellContent, canEditColumnInfo, column, props.view, props.renameColumn, props.deleteColumn, props.modifyColumnData, canModifyView, canModifyColumnData, canDeleteColumn, canRenameColumn, onDraggingColumnWidth, handleDragEndColumnWidth, handleHeaderCellClick, frozen]);
 
   if (!moveable || isNameColumn) {
     return (
@@ -248,7 +242,7 @@ Cell.propTypes = {
   groupOffsetLeft: PropTypes.number,
   height: PropTypes.number,
   column: PropTypes.object,
-  ColumnDropdownMenu: PropTypes.object,
+  columnDropdownMenu: PropTypes.object,
   columnIndex: PropTypes.number,
   fullIndex: PropTypes.number,
   style: PropTypes.object,
@@ -260,8 +254,17 @@ Cell.propTypes = {
   draggingColumnIndex: PropTypes.number,
   dragOverColumnKey: PropTypes.string,
   modifyLocalColumnWidth: PropTypes.func,
+  modifyColumnWidth: PropTypes.func,
   updateDraggingKey: PropTypes.func,
   updateDragOverKey: PropTypes.func,
+  onMove: PropTypes.func,
+  canEditColumnInfo: PropTypes.bool,
+  canModifyView: PropTypes.func,
+  canModifyColumnData: PropTypes.func,
+  canDeleteColumn: PropTypes.func,
+  canRenameColumn: PropTypes.func,
+  showRecordAsTree: PropTypes.bool,
+  frozenColumnsWidth: PropTypes.number,
 };
 
 export default Cell;

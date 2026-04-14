@@ -1,5 +1,7 @@
 import isHotkey from 'is-hotkey';
 
+export const isModC = isHotkey('mod+c');
+export const isModV = isHotkey('mod+v');
 export const isModS = isHotkey('mod+s');
 export const isModZ = isHotkey('mod+z');
 export const isModL = isHotkey('mod+l');

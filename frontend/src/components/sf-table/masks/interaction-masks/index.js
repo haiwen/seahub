@@ -19,18 +19,18 @@ import {
   getNewSelectedRange, getSelectedDimensions, selectedRangeIsSingleCell,
   getSelectedRangeDimensions, getSelectedRow, getSelectedColumn,
   getRecordsFromSelectedRange, getSelectedCellValue, checkIsSelectedCellEditable,
-} from '../../utils/selected-cell-utils';
+} from '../../utils/selection';
 import { checkIsNameColumn, getColumnIndexByKey } from '../../utils/column';
 import { CellType, PRIVATE_COLUMN_KEY } from '../../../../metadata/constants';
-import { RecordMetrics } from '../../shared/record-metrics';
+import { RecordMetrics } from '../../utils/record-metrics';
+import { getGroupRecordByIndex } from '../../utils/group-metrics';
 import { TreeMetrics } from '../../utils/tree-metrics';
-import setEventTransfer from '../../utils/set-event-transfer';
-import getEventTransfer from '../../utils/get-event-transfer';
-import { getGroupRecordByIndex } from '../../shared/group-metrics';
+import getEventTransfer, { setEventTransfer } from '../../utils/event-transfer';
 import { isSpace } from '../../../../utils/hotkey';
 import EventBus from '../../../common/event-bus';
 import { EVENT_BUS_TYPE } from '../../constants/event-bus-type';
 import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../../utils/keyboard-utils';
+import { openFile } from '@/metadata/utils/file';
 
 import './index.css';
 
@@ -432,9 +432,9 @@ class InteractionMasks extends React.Component {
   };
 
   checkIsSelectedCellEditable = () => {
-    const { enableCellSelect = true, columns, isGroupView = false, recordGetterByIndex, checkCanModifyRecord } = this.props;
+    const { enableCellSelect = true, columns, isGroupView = false, recordGetterByIndex, canModify } = this.props;
     const { selectedPosition } = this.state;
-    return checkIsSelectedCellEditable({ enableCellSelect, columns, isGroupView, selectedPosition, recordGetterByIndex, checkCanModifyRecord });
+    return checkIsSelectedCellEditable({ enableCellSelect, columns, isGroupView, selectedPosition, recordGetterByIndex, canModify });
   };
 
   isGridSelected = () => {
@@ -583,16 +583,11 @@ class InteractionMasks extends React.Component {
     e.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
     const { selectedPosition } = this.state;
-    const { isGroupView = false, recordGetterByIndex } = this.props;
+    const { repoID, isGroupView = false, recordGetterByIndex } = this.props;
     const record = getSelectedRow({ selectedPosition, isGroupView, recordGetterByIndex });
-    if (this.props.handleSpaceKeyDown) {
-      this.props.handleSpaceKeyDown(record);
-    } else if (this.props.openFile) {
-      // Support metadata-style file preview when openFile prop is provided
-      this.props.openFile(record, () => {
-        this.eventBus.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR, EDITOR_TYPE.PREVIEWER);
-      });
-    }
+    openFile(repoID, record, () => {
+      this.eventBus.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR, EDITOR_TYPE.PREVIEWER);
+    });
   };
 
   onKeyDown = (e) => {
@@ -610,8 +605,10 @@ class InteractionMasks extends React.Component {
     } else if (isKeyPrintable(keyCode) || keyCode === KeyCodes.Enter) {
       this.openEditor(e);
     } else if (keyCode === KeyCodes.Backspace || keyCode === KeyCodes.Delete) {
-      const name = e.target.className;
-      if (name === 'rdg-selected') {
+      // Check if the event target or any of its ancestors has the 'rdg-selected' class
+      // e.target may be cell content (span, img, etc.) rather than SelectionMask overlay
+      const closestSelected = e.target.closest?.('.rdg-selected');
+      if (closestSelected) {
         e.preventDefault();
         this.handleSelectCellsDelete();
       }
@@ -619,14 +616,14 @@ class InteractionMasks extends React.Component {
   };
 
   handleSelectCellsDelete = () => {
-    if (this.props.handleSelectCellsDelete) {
-      const { isGroupView = false, recordGetterByIndex, columns } = this.props;
+    const { canModify, handleSelectCellsDelete, isGroupView = false, recordGetterByIndex, columns } = this.props;
+    if (!canModify()) return;
+
+    if (handleSelectCellsDelete) {
       const { selectedRange } = this.state;
       const { topLeft, bottomRight } = selectedRange;
       const recordsFromSelectedRange = getRecordsFromSelectedRange({ selectedRange, isGroupView, recordGetterByIndex });
-      if (recordsFromSelectedRange.length === 0) {
-        return;
-      }
+      if (recordsFromSelectedRange.length === 0) return;
 
       const { idx: startColumnIdx } = topLeft;
       const { idx: endColumnIdx } = bottomRight;
@@ -676,7 +673,7 @@ class InteractionMasks extends React.Component {
 
   onPaste = (e) => {
     // when activeElement is not cellMask or has no permission, can't paste cell
-    if (!this.isCellMaskActive() || !this.props.canModifyRecords) return;
+    if (!this.isCellMaskActive() || !this.props.canModify()) return;
     const { columns, isGroupView = false } = this.props;
     const { selectedPosition, selectedRange } = this.state;
     const { idx, rowIdx } = selectedPosition;
@@ -728,7 +725,7 @@ class InteractionMasks extends React.Component {
 
   onCut = (event) => {
     // when activeElement is not cellMask or has no permission, can't paste cell
-    if (!this.isCellMaskActive() || !this.props.canModifyRecords) return;
+    if (!this.isCellMaskActive() || !this.props.canModify) return;
     const { selectedPosition, selectedRange } = this.state;
     const { idx, rowIdx } = selectedPosition;
     if (idx === -1 || rowIdx === -1) return; // prevent paste when no cell selected
@@ -1098,11 +1095,11 @@ class InteractionMasks extends React.Component {
   };
 
   handleDragCopy = (draggedRange) => {
-    const { columns, groupMetrics, table, modifyRecords } = this.props;
+    const { columns, groupMetrics, table, modifyRecords, canModifyRow, canModifyColumn } = this.props;
     const rows = table?.rows || [];
     const idRowMap = table?.id_row_map || {};
     // compute the new records
-    const newRecords = this.props.getUpdateDraggedRecords(draggedRange, columns, rows, idRowMap, groupMetrics);
+    const newRecords = this.props.getUpdateDraggedRecords(draggedRange, columns, rows, idRowMap, groupMetrics, canModifyRow, canModifyColumn);
 
     const { recordIds, idRecordUpdates, idOriginalRecordUpdates, idOriginalOldRecordData, idOldRecordData } = newRecords;
     modifyRecords && modifyRecords(recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData);
@@ -1197,7 +1194,7 @@ class InteractionMasks extends React.Component {
 
   render() {
     const { selectedRange, isEditorEnabled, draggedRange, selectedPosition, firstEditorKeyDown, openEditorMode, editorPosition, selectedOperation } = this.state;
-    const { table, columns, isGroupView = false, recordGetterByIndex, scrollTop, getScrollLeft, editorPortalTarget, contextMenu } = this.props;
+    const { repoID, table, columns, isGroupView = false, recordGetterByIndex, scrollTop, getScrollLeft, editorPortalTarget, contextMenu } = this.props;
     const isSelectedSingleCell = selectedRangeIsSingleCell(selectedRange);
     return (
       <div
@@ -1218,6 +1215,7 @@ class InteractionMasks extends React.Component {
         {isEditorEnabled && (
           <EditorPortal target={editorPortalTarget}>
             <EditorContainer
+              repoID={repoID}
               table={table}
               columns={columns}
               scrollTop={scrollTop}
@@ -1279,7 +1277,6 @@ InteractionMasks.propTypes = {
   treeNodeKeyRecordIdMap: PropTypes.object,
   treeMetrics: PropTypes.object,
   enableCellSelect: PropTypes.bool,
-  canModifyRecords: PropTypes.bool,
   getRowTop: PropTypes.func,
   scrollTop: PropTypes.number,
   getScrollLeft: PropTypes.func,
@@ -1291,7 +1288,9 @@ InteractionMasks.propTypes = {
   onCellRangeSelectionUpdated: PropTypes.func,
   onCellRangeSelectionCompleted: PropTypes.func,
   selectNone: PropTypes.func,
-  checkCanModifyRecord: PropTypes.func,
+  canModify: PropTypes.func,
+  canModifyRow: PropTypes.func,
+  canModifyColumn: PropTypes.func,
   editorPortalTarget: PropTypes.instanceOf(Element).isRequired,
   modifyRecord: PropTypes.func,
   modifyColumnData: PropTypes.func,

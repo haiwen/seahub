@@ -20,7 +20,7 @@ const SFTable = ({
   treeNodeKeyRecordIdMap,
   keyTreeNodeFoldedMap,
   noRecordsTipsText,
-  isLoadingMoreRecords = false,
+  isLoadingMore = false,
   isLoading = false,
   hasMoreRecords = false,
   showGridFooter = true,
@@ -98,7 +98,7 @@ const SFTable = ({
         isGroupView={isGroupView}
         noRecordsTipsText={noRecordsTipsText}
         hasMoreRecords={hasMoreRecords}
-        isLoadingMoreRecords={isLoadingMoreRecords}
+        isLoadingMore={isLoadingMore}
         isLoading={isLoading}
         showGridFooter={showGridFooter}
         showRecordAsTree={showRecordAsTree}
@@ -143,11 +143,10 @@ SFTable.propTypes = {
   isGroupView: PropTypes.bool,
   noRecordsTipsText: PropTypes.string,
   hasMoreRecords: PropTypes.bool,
-  isLoadingMoreRecords: PropTypes.bool,
+  isLoadingMore: PropTypes.bool,
   isLoading: PropTypes.bool,
   showGridFooter: PropTypes.bool,
   enableScrollToLoad: PropTypes.bool,
-  canModifyRecords: PropTypes.bool,
   supportCopy: PropTypes.bool,
   supportCut: PropTypes.bool,
   supportPaste: PropTypes.bool,
@@ -162,7 +161,9 @@ SFTable.propTypes = {
    */
   recordsTree: PropTypes.array,
   keyTreeNodeFoldedMap: PropTypes.object,
-  checkCanModifyRecord: PropTypes.func,
+  canModify: PropTypes.func,
+  canModifyRow: PropTypes.func,
+  canModifyColumn: PropTypes.func,
   checkCellValueChanged: PropTypes.func, // for complex cell value compare
   onGridKeyDown: PropTypes.func,
   onGridKeyUp: PropTypes.func,
@@ -174,12 +175,32 @@ SFTable.propTypes = {
   onRecordSelected: PropTypes.func,
   onTableDragStart: PropTypes.func,
   updateFileTags: PropTypes.func,
-  /**
-   * External GridUtils instance. If provided, this will be used instead of
-   * internally creating one. Useful for metadata tables that need to share
-   * GridUtils state with external components.
-   */
   gridUtils: PropTypes.object,
+  // Props passed via customProps to TableMain
+  repoID: PropTypes.string,
+  modifyColumnWidth: PropTypes.func,
+  modifyColumnOrder: PropTypes.func,
+  modifyRecord: PropTypes.func,
+  modifyRecords: PropTypes.func,
+  deleteRecords: PropTypes.func,
+  handleSelectCellsDelete: PropTypes.func,
+  createContextMenuOptions: PropTypes.func,
+  recordGetterById: PropTypes.func,
+  recordGetterByIndex: PropTypes.func,
+  paste: PropTypes.func,
+  columnDropdownMenu: PropTypes.elementType,
+  view: PropTypes.object,
+  modifyColumnData: PropTypes.func,
+  insertColumn: PropTypes.func,
+  renameColumn: PropTypes.func,
+  deleteColumn: PropTypes.func,
+  generateFileTags: PropTypes.func,
+  updateRecordDetails: PropTypes.func,
+  updateFaceRecognition: PropTypes.func,
+  updateRecordDescription: PropTypes.func,
+  onOCR: PropTypes.func,
+  tagsData: PropTypes.object,
+  onShowExpandedPropsDialog: PropTypes.func,
 };
 
 export default SFTable;

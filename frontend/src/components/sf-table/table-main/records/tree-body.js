@@ -8,9 +8,9 @@ import EventBus from '../../../common/event-bus';
 import { EVENT_BUS_TYPE } from '../../constants/event-bus-type';
 import { checkIsTreeNodeShown, checkTreeNodeHasChildNodes, getTreeNodeId, getTreeNodeKey, getValidKeyTreeNodeFoldedMap } from '../../utils/tree';
 import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
-import { getColumnScrollPosition, getColVisibleStartIdx, getColVisibleEndIdx } from '../../utils/records-body-utils';
+import { getColumnScrollPosition, getColVisibleStartIdx, getColVisibleEndIdx } from '../../utils/records-body';
 import { checkEditableViaClickCell, checkIsColumnSupportDirectEdit, getColumnByIndex, getColumnIndexByKey } from '../../utils/column';
-import { checkIsCellSupportOpenEditor } from '../../utils/selected-cell-utils';
+import { checkIsCellSupportOpenEditor } from '../../utils/selection';
 import { LOCAL_KEY_TREE_NODE_FOLDED } from '../../constants/tree';
 import { TreeMetrics } from '../../utils/tree-metrics';
 import { checkHasSearchResult } from '../../utils/search';
@@ -411,10 +411,10 @@ class TreeBody extends Component {
       const isFromKeyboard = true;
       this.selectUpdate(cell, isFromKeyboard);
     } else {
-      const { columns, recordGetterByIndex, checkCanModifyRecord } = this.props;
+      const { columns, recordGetterByIndex, canModify } = this.props;
       const column = getColumnByIndex(cell.idx, columns);
       const supportOpenEditor = checkIsColumnSupportDirectEdit(column);
-      const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, false, recordGetterByIndex, checkCanModifyRecord);
+      const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, false, recordGetterByIndex, canModify);
       this.selectCell(cell, supportOpenEditor && hasOpenPermission);
     }
     this.props.onCellClick(cell);
@@ -422,10 +422,10 @@ class TreeBody extends Component {
   };
 
   onCellDoubleClick = (cell, e) => {
-    const { columns, recordGetterByIndex, checkCanModifyRecord } = this.props;
+    const { columns, recordGetterByIndex, canModify } = this.props;
     const column = getColumnByIndex(cell.idx, columns);
     const supportOpenEditor = checkEditableViaClickCell(column);
-    const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, false, recordGetterByIndex, checkCanModifyRecord);
+    const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, false, recordGetterByIndex, canModify);
     this.selectCell(cell, supportOpenEditor && hasOpenPermission);
   };
 
@@ -604,7 +604,7 @@ class TreeBody extends Component {
           treeNodeDepth={node_depth}
           hasChildNodes={hasChildNodes}
           isFoldedTreeNode={isFoldedNode}
-          checkCanModifyRecord={this.props.checkCanModifyRecord}
+          canModify={this.props.canModify}
           checkCellValueChanged={this.props.checkCellValueChanged}
           hasSelectedCell={hasSelectedCell}
           selectedPosition={selectedPosition}
@@ -719,7 +719,7 @@ TreeBody.propTypes = {
   onCellClick: PropTypes.func,
   onCellRangeSelectionUpdated: PropTypes.func,
   onSelectRecord: PropTypes.func,
-  checkCanModifyRecord: PropTypes.func,
+  canModify: PropTypes.func,
   paste: PropTypes.func,
   searchResult: PropTypes.object,
   frozenColumnsWidth: PropTypes.number,

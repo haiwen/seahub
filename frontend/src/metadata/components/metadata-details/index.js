@@ -59,7 +59,7 @@ const MetadataDetails = ({ repoID, readOnly, tagsData }) => {
               <CellFormatter
                 repoID={repoID}
                 readonly={true}
-                field={field}
+                column={field}
                 value={value}
                 emptyTip={gettext('Empty')}
                 className="sf-metadata-property-detail-formatter"

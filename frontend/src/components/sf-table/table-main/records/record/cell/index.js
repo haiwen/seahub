@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { Utils } from '../../../../../../utils/utils';
 import OpIcon from '../../../../../../components/op-icon';
 import { getCellValueByColumn } from '../../../../utils/cell';
-import { cellCompare, checkCellValueChanged } from '../../../../utils/cell-comparer';
+import { cellCompare, checkCellValueChanged } from '../../../../utils/selection';
 import { checkIsColumnEditable, checkIsNameColumn } from '../../../../utils/column';
 import { NODE_CONTENT_LEFT_INDENT, NODE_ICON_LEFT_INDENT } from '../../../../constants/tree';
 import { gettext } from '@/utils/constants';
@@ -30,12 +30,12 @@ const Cell = React.memo(({
   treeNodeDepth,
   hasChildNodes,
   isFoldedTreeNode,
-  checkCanModifyRecord,
+  canModify,
   toggleExpandTreeNode,
 }) => {
   const cellEditable = useMemo(() => {
-    return checkIsColumnEditable(column) && checkCanModifyRecord && checkCanModifyRecord(record);
-  }, [column, record, checkCanModifyRecord]);
+    return checkIsColumnEditable(column) && canModify && canModify(record);
+  }, [column, record, canModify]);
 
   const isNameColumn = useMemo(() => {
     return checkIsNameColumn(column);
@@ -171,7 +171,7 @@ const Cell = React.memo(({
   };
 
   const renderCellContent = useCallback(() => {
-    const columnFormatter = isValidElement(column.formatter) && cloneElement(column.formatter, { isCellSelected, value: cellValue, field: column, record, treeNodeIndex, onChange: modifyRecord });
+    const columnFormatter = isValidElement(column.formatter) && cloneElement(column.formatter, { isCellSelected, value: cellValue, column, record, treeNodeIndex, onChange: modifyRecord });
     if (showRecordAsTree && isNameColumn) {
       return (
         <div className="sf-table-cell-tree-node">

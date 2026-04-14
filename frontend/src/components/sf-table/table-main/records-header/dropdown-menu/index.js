@@ -1,8 +1,10 @@
 import React, { createRef, useState, useCallback, useMemo, forwardRef, useImperativeHandle } from 'react';
+import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import classnames from 'classnames';
 import ModalPortal from '@/components/modal-portal';
 import Icon from '@/components/icon';
+import EventBus from '@/components/common/event-bus';
 import { RenamePopover, OptionsPopover } from '@/metadata/components/popover';
 import NumberFormatPopover from './number-format-popover';
 import ColumnDropdownItem from './column-dropdown-item';
@@ -14,7 +16,17 @@ import { CellType, DEFAULT_DATE_FORMAT, SORT_COLUMN_OPTIONS, SHOW_DISABLED_SORT_
 
 import './index.css';
 
-const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColumnData, deleteColumn }, ref) => {
+const HeaderDropdownMenu = forwardRef(({
+  column,
+  view,
+  renameColumn,
+  modifyColumnData,
+  deleteColumn,
+  canModifyView,
+  canModifyColumnData,
+  canDeleteColumn,
+  canRenameColumn,
+}, ref) => {
   const menuRef = createRef();
   const dropdownDomRef = createRef();
   const [isMenuShow, setMenuShow] = useState(false);
@@ -97,7 +109,7 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
   }, [column, modifyColumnData]);
 
   const onDelete = useCallback(() => {
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
+    EventBus.getInstance().dispatch(EVENT_BUS_TYPE.SELECT_NONE);
     deleteColumn(column.key, column);
   }, [column, deleteColumn]);
 
@@ -175,7 +187,6 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
   }, [today, column, isMenuShow, isSubMenuShow, onChangeDateFormat, openSubMenu, isPrivateColumn]);
 
   const modifySort = useCallback((type, event) => {
-    const canModifyView = window.sfMetadataContext.canModifyView();
     if (!canModifyView) {
       event.stopPropagation();
       return;
@@ -185,7 +196,7 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
     const sortIndex = sorts.findIndex(sort => sort.column_key === key);
     const sort = sorts[sortIndex];
     const newSort = { column_key: column.key, sort_type: type };
-    const eventBus = window.sfMetadataContext.eventBus;
+    const eventBus = EventBus.getInstance();
     if (!sort) {
       sorts.push(newSort);
       eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_SORTS, sorts, true);
@@ -197,7 +208,7 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
       return;
     }
     eventBus.dispatch(EVENT_BUS_TYPE.DISPLAY_SORTS);
-  }, [view, column]);
+  }, [view, column, canModifyView]);
 
   useImperativeHandle(ref, () => ({
     isPopoverShow: () => {
@@ -207,10 +218,10 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
 
   const renderDropdownMenu = useCallback(() => {
     const { type } = column;
-    const canModifyColumnData = window.sfMetadataContext.canModifyColumnData(column);
-    const canDeleteColumn = window.sfMetadataContext.canDeleteColumn(column);
-    const canRenameColumn = window.sfMetadataContext.canRenameColumn(column);
-    const canModifyView = window.sfMetadataContext.canModifyView();
+    const canModifyColumnDataFn = canModifyColumnData ? canModifyColumnData(column) : false;
+    const canDeleteColumnFn = canDeleteColumn ? canDeleteColumn(column) : false;
+    const canRenameColumnFn = canRenameColumn ? canRenameColumn(column) : false;
+    const canModifyViewFn = canModifyView ? canModifyView() : false;
 
     return (
       <DropdownMenu ref={menuRef} className="sf-metadata-column-dropdown-menu">
@@ -218,7 +229,7 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
           {type === CellType.SINGLE_SELECT && (
             <>
               <ColumnDropdownItem
-                disabled={!canModifyColumnData}
+                disabled={!canModifyColumnDataFn}
                 target="sf-metadata-edit-column-options"
                 iconName="single-select"
                 title={gettext('Edit single select')}
@@ -229,7 +240,7 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
           )}
           {type === CellType.MULTIPLE_SELECT && (
             <ColumnDropdownItem
-              disabled={!canModifyColumnData}
+              disabled={!canModifyColumnDataFn}
               target="sf-metadata-edit-column-options"
               iconName="multiple-select"
               title={gettext('Edit multiple select')}
@@ -238,11 +249,11 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
             />
           )}
           {type === CellType.DATE && (
-            <>{renderDateFormat(canModifyColumnData)}</>
+            <>{renderDateFormat(canModifyColumnDataFn)}</>
           )}
           {type === CellType.NUMBER && (
             <ColumnDropdownItem
-              disabled={!canModifyColumnData}
+              disabled={!canModifyColumnDataFn}
               target="sf-metadata-edit-number-format"
               iconName="set-up"
               title={gettext('Edit format settings')}
@@ -255,7 +266,7 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
             <DropdownItem key="divider-item" divider />
           )}
           <ColumnDropdownItem
-            disabled={!canRenameColumn}
+            disabled={!canRenameColumnFn}
             target="sf-metadata-rename-column"
             iconName="rename"
             title={gettext('Rename property')}
@@ -266,27 +277,27 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
           {(SORT_COLUMN_OPTIONS.includes(column.type) || SHOW_DISABLED_SORT_COLUMNS.includes(column.type)) && (
             <>
               <ColumnDropdownItem
-                disabled={!canModifyView || SHOW_DISABLED_SORT_COLUMNS.includes(column.type)}
+                disabled={!canModifyViewFn || SHOW_DISABLED_SORT_COLUMNS.includes(column.type)}
                 target="sf-metadata-sort-ascending-column"
                 iconName="sort-ascending"
                 title={gettext('Sort ascending')}
-                tip={!canModifyView ? gettext('You do not have permission') : gettext('This property does not support sorting')}
+                tip={!canModifyViewFn ? gettext('You do not have permission') : gettext('This property does not support sorting')}
                 onChange={() => modifySort(SORT_TYPE.UP)}
                 onMouseEnter={hideSubMenu}
               />
               <ColumnDropdownItem
-                disabled={!canModifyView || SHOW_DISABLED_SORT_COLUMNS.includes(column.type)}
+                disabled={!canModifyViewFn || SHOW_DISABLED_SORT_COLUMNS.includes(column.type)}
                 target="sf-metadata-sort-descending-column"
                 iconName="sort-descending"
                 title={gettext('Sort descending')}
-                tip={!canModifyView ? gettext('You do not have permission') : gettext('This property does not support sorting')}
+                tip={!canModifyViewFn ? gettext('You do not have permission') : gettext('This property does not support sorting')}
                 onChange={() => modifySort(SORT_TYPE.DOWN)}
                 onMouseEnter={hideSubMenu}
               />
             </>
           )}
           <ColumnDropdownItem
-            disabled={!canDeleteColumn}
+            disabled={!canDeleteColumnFn}
             target="sf-metadata-delete-column"
             iconName="delete"
             title={gettext('Delete property')}
@@ -297,7 +308,7 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
         </div>
       </DropdownMenu>
     );
-  }, [column, menuRef, dropdownDomRef, isPrivateColumn, openOptionPopover, renderDateFormat, openNumberFormatPopover, hideSubMenu, openRenamePopover, onDelete, modifySort]);
+  }, [column, menuRef, dropdownDomRef, isPrivateColumn, openOptionPopover, renderDateFormat, openNumberFormatPopover, hideSubMenu, openRenamePopover, onDelete, modifySort, canModifyColumnData, canDeleteColumn, canRenameColumn, canModifyView]);
 
   return (
     <>
@@ -353,5 +364,17 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
     </>
   );
 });
+
+HeaderDropdownMenu.propTypes = {
+  column: PropTypes.object.isRequired,
+  view: PropTypes.object,
+  renameColumn: PropTypes.func,
+  modifyColumnData: PropTypes.func,
+  deleteColumn: PropTypes.func,
+  canModifyView: PropTypes.func,
+  canModifyColumnData: PropTypes.func,
+  canDeleteColumn: PropTypes.func,
+  canRenameColumn: PropTypes.func,
+};
 
 export default HeaderDropdownMenu;
