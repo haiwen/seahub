@@ -1,6 +1,7 @@
 body {
   overflow: hidden;
 }
+
 #wrapper {
   height: 100%;
 }
@@ -13,10 +14,12 @@ body {
   padding: 0rem 1rem 8rem;
   overflow: auto;
 }
+
 .setting-item {
   font-size: 0.875rem;
   padding: 1em 0 3em;
 }
+
 .setting-item-heading {
   font-size: 0.9375rem;
   font-weight: normal;
@@ -24,9 +27,11 @@ body {
   border-bottom: 1px solid var(--bs-border-color);
   margin-bottom: 0.7rem;
 }
+
 .user-avatar {
   border-radius: 3px;
 }
+
 .avatar-edit {
   position: absolute;
   left: 0.75rem;
@@ -41,21 +46,26 @@ body {
   text-align: center;
   cursor: pointer;
 }
+
 .eye-icon {
   color: var(--bs-icon-color);
 }
+
 .input-tip {
   padding-top: calc(0.375rem + 1px);
   color: var(--bs-body-secondary-color);
 }
+
 @media (min-width: 768px) {
   .input-tip {
     padding-left: 0;
   }
 }
+
 .language-selector {
   width: 260px;
 }
+
 .setting-item .btn {
   min-width: 60px;
 }
