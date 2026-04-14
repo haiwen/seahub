@@ -38,6 +38,7 @@ const DirTableView = ({
   path,
   sortBy,
   sortOrder,
+  rowHeight,
   columns,
   hiddenColumnKeys,
   eventBus,
@@ -536,6 +537,7 @@ const DirTableView = ({
         {...permission}
         repoID={repoID}
         table={tableData}
+        rowHeight={rowHeight}
         visibleColumns={enrichedColumns}
         recordsIds={tableData.row_ids}
         headerSettings={{}}
@@ -583,6 +585,7 @@ DirTableView.propTypes = {
   path: PropTypes.string.isRequired,
   sortBy: PropTypes.string,
   sortOrder: PropTypes.string,
+  rowHeight: PropTypes.number,
   columns: PropTypes.array,
   hiddenColumnKeys: PropTypes.array,
   eventBus: PropTypes.object,

@@ -8,6 +8,7 @@
   padding: 4px 8px;
   display: flex;
   justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .sf-table-cell:not(.table-cell-uneditable):hover {
@@ -31,6 +32,10 @@
   padding: 0 8px;
 }
 
+.sf-table-cell.actions-cell {
+  padding: 4px 8px;
+}
+
 .sf-table-cell .select-cell-checkbox-container,
 .sf-table-cell .select-all-checkbox-container {
   display: flex;
@@ -38,6 +43,10 @@
   justify-content: center;
   height: 100%;
   width: 100%;
+}
+
+.sf-table-cell .select-cell-checkbox-container {
+  height: auto;
 }
 
 .sf-table-cell .select-cell-checkbox-container:hover,
@@ -55,7 +64,6 @@
 
 /* cell formatter */
 .sf-table-cell .sf-metadata-ui.cell-formatter-container {
-  height: 100%;
   display: flex;
   align-items: center;
   line-height: 20px;

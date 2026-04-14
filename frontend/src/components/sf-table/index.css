@@ -200,6 +200,7 @@
 
 .sf-table-column-content.row-index {
   text-align: center;
+  line-height: var(--bs-body-line-height);
 }
 
 .sf-table-column-content .sf-metadata-font {

@@ -12,8 +12,8 @@ import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
 import { checkEditableViaClickCell, checkIsColumnSupportDirectEdit, getColumnByIndex, getColumnIndexByKey } from '../../utils/column';
 import { checkIsCellSupportOpenEditor } from '../../utils/selection';
 import { SEQUENCE_COLUMN_WIDTH } from '../../constants/grid';
+import { ROW_HEIGHT } from '../../../../metadata/constants';
 
-const ROW_HEIGHT = 33;
 const RENDER_MORE_NUMBER = 10;
 const CONTENT_HEIGHT = window.innerHeight - 174;
 const { max, min, ceil, round } = Math;
@@ -21,9 +21,12 @@ const { max, min, ceil, round } = Math;
 class RecordsBody extends Component {
   constructor(props) {
     super(props);
+    let { rowHeight } = props;
+    rowHeight = rowHeight || ROW_HEIGHT; // ROW_HEIGHT for 'trash view', 'history view'
     this.state = {
+      rowHeight,
       startRenderIndex: 0,
-      endRenderIndex: this.getInitEndIndex(props),
+      endRenderIndex: this.getInitEndIndex(props, rowHeight),
       activeRecords: [],
       selectedPosition: null,
       isScrollingRightScrollbar: false,
@@ -33,7 +36,7 @@ class RecordsBody extends Component {
     this.resultRef = null;
     this.recordFrozenRefs = [];
     this.rowVisibleStart = 0;
-    this.rowVisibleEnd = this.setRecordVisibleEnd();
+    this.rowVisibleEnd = this.setRecordVisibleEnd(rowHeight);
     this.columnVisibleStart = 0;
     this.columnVisibleEnd = this.props.getColumnVisibleEnd();
     this.timer = null;
@@ -47,7 +50,14 @@ class RecordsBody extends Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    const { recordsCount, recordIds } = nextProps;
+    const { recordsCount, recordIds, rowHeight: newRowHeight } = nextProps;
+    const { rowHeight } = this.state;
+    if (
+      newRowHeight && // for 'trash view', 'history view'
+      rowHeight != newRowHeight
+    ) {
+      this.setState({ rowHeight: newRowHeight });
+    }
     if (recordsCount !== this.props.recordsCount || recordIds !== this.props.recordIds) {
       this.recalculateRenderIndex(recordIds);
     }
@@ -93,16 +103,16 @@ class RecordsBody extends Component {
     return this.getShownRecordIds().map((id) => this.props.recordGetterById(id));
   };
 
-  setRecordVisibleEnd = () => {
-    return max(ceil(CONTENT_HEIGHT / ROW_HEIGHT), 0);
+  setRecordVisibleEnd = (rowHeight) => {
+    return max(ceil(CONTENT_HEIGHT / rowHeight), 0);
   };
 
   recalculateRenderIndex = (recordIds) => {
-    const { startRenderIndex, endRenderIndex } = this.state;
+    const { rowHeight, startRenderIndex, endRenderIndex } = this.state;
     const contentScrollTop = this.resultContentRef.scrollTop;
-    const start = Math.max(0, Math.floor(contentScrollTop / ROW_HEIGHT) - RENDER_MORE_NUMBER);
+    const start = Math.max(0, Math.floor(contentScrollTop / rowHeight) - RENDER_MORE_NUMBER);
     const { height } = this.props.getTableContentRect();
-    const end = Math.min(Math.ceil((contentScrollTop + height) / ROW_HEIGHT) + RENDER_MORE_NUMBER, recordIds.length);
+    const end = Math.min(Math.ceil((contentScrollTop + height) / rowHeight) + RENDER_MORE_NUMBER, recordIds.length);
     if (start !== startRenderIndex) {
       this.setState({ startRenderIndex: start });
     }
@@ -111,8 +121,8 @@ class RecordsBody extends Component {
     }
   };
 
-  getInitEndIndex = (props) => {
-    return Math.min(Math.ceil(window.innerHeight / ROW_HEIGHT) + RENDER_MORE_NUMBER, props.recordsCount);
+  getInitEndIndex = (props, rowHeight) => {
+    return Math.min(Math.ceil(window.innerHeight / rowHeight) + RENDER_MORE_NUMBER, props.recordsCount);
   };
 
   getShownRecordIds = () => {
@@ -122,11 +132,13 @@ class RecordsBody extends Component {
   };
 
   getRowTop = (rowIdx) => {
-    return ROW_HEIGHT * rowIdx;
+    const { rowHeight } = this.state;
+    return rowHeight * rowIdx;
   };
 
   getRowHeight = () => {
-    return ROW_HEIGHT;
+    const { rowHeight } = this.state;
+    return rowHeight;
   };
 
   jumpToRow = (scrollToRowIndex) => {
@@ -197,16 +209,16 @@ class RecordsBody extends Component {
 
   onScroll = () => {
     const { recordsCount } = this.props;
-    const { startRenderIndex, endRenderIndex } = this.state;
+    const { rowHeight, startRenderIndex, endRenderIndex } = this.state;
     const { offsetHeight, scrollTop: contentScrollTop } = this.resultContentRef;
 
     // Calculate the start rendering row index, and end rendering row index
-    const start = Math.max(0, Math.floor(contentScrollTop / ROW_HEIGHT) - RENDER_MORE_NUMBER);
-    const end = Math.min(Math.ceil((contentScrollTop + this.resultContentRef.offsetHeight) / ROW_HEIGHT) + RENDER_MORE_NUMBER, recordsCount);
+    const start = Math.max(0, Math.floor(contentScrollTop / rowHeight) - RENDER_MORE_NUMBER);
+    const end = Math.min(Math.ceil((contentScrollTop + this.resultContentRef.offsetHeight) / rowHeight) + RENDER_MORE_NUMBER, recordsCount);
 
     this.oldScrollTop = contentScrollTop;
-    const renderedRecordsCount = ceil(this.resultContentRef.offsetHeight / ROW_HEIGHT);
-    const newRecordVisibleStart = max(0, round(contentScrollTop / ROW_HEIGHT));
+    const renderedRecordsCount = ceil(this.resultContentRef.offsetHeight / rowHeight);
+    const newRecordVisibleStart = max(0, round(contentScrollTop / rowHeight));
     const newRecordVisibleEnd = min(newRecordVisibleStart + renderedRecordsCount, recordsCount);
     this.rowVisibleStart = newRecordVisibleStart;
     this.rowVisibleEnd = newRecordVisibleEnd;
@@ -475,12 +487,11 @@ class RecordsBody extends Component {
       recordsCount, columns, totalWidth, sequenceColumnWidth, colOverScanStartIdx, colOverScanEndIdx, lastFrozenColumnKey,
       recordMetrics, showSequenceColumn, showCellColoring, columnColors,
     } = this.props;
-    const { startRenderIndex, endRenderIndex, selectedPosition } = this.state;
+    const { rowHeight, startRenderIndex, endRenderIndex, selectedPosition } = this.state;
     const cellMetaData = this.getCellMetaData();
     const lastRecordIndex = recordsCount - 1;
     const shownRecordIds = this.getShownRecordIds();
     const scrollLeft = this.props.getScrollLeft();
-    const rowHeight = this.getRowHeight();
     let shownRecords = shownRecordIds.map((recordId, index) => {
       const record = this.props.recordGetterById(recordId);
       const isSelected = RecordMetrics.isRecordSelected(recordId, recordMetrics);
@@ -524,8 +535,8 @@ class RecordsBody extends Component {
       );
     });
 
-    const upperHeight = startRenderIndex * ROW_HEIGHT;
-    const belowHeight = (recordsCount - endRenderIndex) * ROW_HEIGHT;
+    const upperHeight = startRenderIndex * rowHeight;
+    const belowHeight = (recordsCount - endRenderIndex) * rowHeight;
 
     // add top placeholder
     if (upperHeight > 0) {

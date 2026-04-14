@@ -87,6 +87,7 @@ const propTypes = {
   columns: PropTypes.array,
   hiddenColumnKeys: PropTypes.array,
   onColumnOrderChange: PropTypes.func,
+  rowHeight: PropTypes.number,
 };
 
 class DirColumnView extends React.Component {
@@ -146,7 +147,7 @@ class DirColumnView extends React.Component {
   };
 
   render() {
-    const { currentMode, isTreePanelShown } = this.props;
+    const { currentMode, isTreePanelShown, rowHeight } = this.props;
     const { navRate, inResizing } = this.state;
     const dirContentMainStyle = {
       userSelect: inResizing ? 'none' : '',
@@ -331,6 +332,7 @@ class DirColumnView extends React.Component {
               path={this.props.path}
               sortBy={this.props.sortBy}
               sortOrder={this.props.sortOrder}
+              rowHeight={rowHeight}
               columns={this.props.columns}
               eventBus={this.props.eventBus}
               hiddenColumnKeys={this.props.hiddenColumnKeys}

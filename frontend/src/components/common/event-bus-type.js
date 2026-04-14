@@ -53,6 +53,9 @@ export const EVENT_BUS_TYPE = {
   HIDDEN_COLUMNS_CHANGED: 'hidden_columns_changed',
   HIDDEN_TABLE_VIEW_COLUMNS_CHANGED: 'hidden_table_view_columns_changed',
 
+  // row
+  MODIFY_ROW_HEIGHT: 'modify_row_height',
+
   // dirent properties
   DIRENT_METADATA_CHANGED: 'dirent_metadata_changed',
   COLUMN_DATA_MODIFIED: 'column_data_modified',
