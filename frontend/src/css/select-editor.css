@@ -75,9 +75,4 @@
 .permission-editor .seafile-multicolor-icon-down {
   width: 14px;
   height: 14px;
-  color: #999;
-}
-
-.permission-editor .seafile-multicolor-icon-down:hover {
-  color: #666;
 }

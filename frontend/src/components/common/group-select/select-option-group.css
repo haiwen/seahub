@@ -21,10 +21,31 @@
   width: 100%;
   padding: 6px 10px;
   min-width: 170px;
+  position: relative;
+  padding: 0;
+  height: 32px;
+  border-bottom: 1px solid var(--bs-border-color);
 }
 
-.option-group-search .form-control {
+.option-group .option-group-search .form-control {
   height: 31px;
+  border: none;
+  padding: .375rem 1rem;
+  cursor: pointer;
+}
+
+.option-group .option-group-search .form-control:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.option-group .option-group-search .input-icon-addon {
+  z-index: 1;
+}
+
+.option-group .option-group-search .input-icon-addon svg {
+  color: #999;
+  cursor: pointer;
 }
 
 .option-group .none-search-result {
@@ -37,13 +58,15 @@
 .option-group .option-group-content {
   max-height: 252px;
   overflow-y: auto;
+  padding: 8px;
 }
 
 .option {
   display: block;
   width: 100%;
   line-height: 24px;
-  padding: 6px 10px;
+  padding: 4px 8px;
+  border-radius: 4px;
   clear: both;
   font-weight: 400;
   text-align: inherit;
@@ -58,15 +81,8 @@
 }
 
 .option.option-active {
-  background-color: #20a0ff;
-  color: #fff;
+  background-color: var(--bs-bg-color);
   cursor: pointer;
-}
-
-.option.option-active .sf2-icon-tick,
-.option.option-active .select-option-name,
-.option.option-active .seafile-multicolor-icon {
-  color: #fff !important;
 }
 
 .option .select-option-name .single-select-option {

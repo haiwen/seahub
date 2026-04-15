@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Utils } from '../utils/utils';
+import Icon from './icon';
 
 const propTypes = {
   placeholder: PropTypes.string,
@@ -99,7 +100,9 @@ class SearchInput extends Component {
       return <ClearIndicator clearValue={this.clearSearch} />;
     }
     return (
-      <i className={classnames('search-text-clear input-icon-addon', clearClassName)} onClick={this.clearSearch}>×</i>
+      <span className={classnames('search-text-clear input-icon-addon', clearClassName)} onClick={this.clearSearch}>
+        <Icon symbol="close" />
+      </span>
     );
   };
 

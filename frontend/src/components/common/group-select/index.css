@@ -4,7 +4,7 @@
 
 .group-select.custom-select {
   display: flex;
-  padding: 5px 10px;
+  padding: 7px 16px 7px 8px;
   border-radius: 3px;
   align-items: center;
   justify-content: space-between;
@@ -19,8 +19,7 @@
 
 .group-select.custom-select:focus,
 .group-select.custom-select.focus {
-  border-color: #1991eb !important;
-  box-shadow: 0 0 0 2px rgba(70, 127, 207, 0.25);
+  border: 1px solid #3e84f7;
 }
 
 .group-select.custom-select.disabled:focus,
@@ -34,11 +33,8 @@
 .group-select .seafile-multicolor-icon-down {
   width: 14px;
   height: 14px;
-  color: #999;
-}
-
-.group-select .seafile-multicolor-icon-down:hover {
-  color: #666;
+  margin-left: 16px;
+  flex-shrink: 0;
 }
 
 .group-select .selected-option {
@@ -77,24 +73,22 @@
 }
 
 .group-select .selected-option-show .selected-option-item {
-  background-color: rgb(240, 240, 240);
-  border-radius: 16px;
+  background-color: #F7F7F5;
+  border-radius: 4px;
   display: flex;
   align-items: center;
+  padding: 0 4px;
 }
 
 .group-select .selected-option-show .selected-option-item .selected-option-item-name {
-  font-size: 13px;
+  font-size: 14px;
   color: #212519;
+  margin-right: 8px;
 }
 
 .group-select .selected-option-show .selected-option-item .seafile-multicolor-icon {
   width: 12px;
   height: 12px;
   cursor: pointer;
-  color: #909090;
-}
-
-.group-select .selected-option-show .selected-option-item .seafile-multicolor-icon:hover {
-  color: #666;
+  color: var(--bs-icon-color);
 }
