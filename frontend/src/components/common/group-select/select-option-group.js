@@ -175,6 +175,7 @@ class SelectOptionGroup extends Component {
         opacity: 0,
       };
     }
+    style.top = style.top + 4;
     return (
       <div
         className={classnames('pt-0 option-group', className ? 'option-group-' + className : '')}
@@ -182,13 +183,14 @@ class SelectOptionGroup extends Component {
         style={style}
         onMouseDown={this.onMouseDown}
       >
-        <div className="option-group-search position-relative">
+        <div className="option-group-search">
           <SearchInput
             className="option-search-control"
             autoFocus={isInModal}
             placeholder={searchPlaceholder}
             onChange={this.onChangeSearch}
             ref={this.searchInputRef}
+            isClearable={true}
           />
         </div>
         <div className="option-group-content" ref={(ref) => this.optionGroupContentRef = ref}>

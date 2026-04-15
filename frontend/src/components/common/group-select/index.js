@@ -85,9 +85,9 @@ class GroupSelect extends Component {
           {selectedOptions.length > 0 ?
             <span className="selected-option-show">
               {selectedOptions.map(item =>
-                <span key={item.id} className="selected-option-item mr-1 px-1">
+                <span key={item.id} className="selected-option-item">
                   <span className='selected-option-item-name'>{item.name}</span>
-                  <span className="d-flex align-items-center ml-1" onClick={() => {this.props.onDeleteOption(item);}}><Icon symbol="close" /></span>
+                  <span className="d-flex align-items-center" onClick={() => {this.props.onDeleteOption(item);}}><Icon symbol="close" /></span>
                 </span>
               )}
             </span>
