@@ -124,3 +124,7 @@
   white-space: nowrap;
   color: var(--bs-body-secondary-color);
 }
+
+.seafile-customize-select .seafile-select-option {
+  justify-content: start;
+}
