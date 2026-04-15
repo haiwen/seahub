@@ -13,12 +13,18 @@ import requests
 
 from django.http import HttpResponse
 
+from seaserv import seafile_api
 from seahub.settings import (
-    WIKI_SSR_SERVER_URL,
-    WIKI_SSR_INTERNAL_SECRET,
     SEADOC_SERVER_URL,
+    WIKI_SSR_SERVER_URL, WIKI_SSR_INTERNAL_SECRET,
+    SITE_ROOT, MEDIA_URL, FILE_SERVER_ROOT,
+    ENABLE_THUMBNAIL_SERVER,
+    THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_SIZE_FOR_ORIGINAL,
 )
 from seahub.utils import get_service_url
+from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url
+from seahub.views import get_seadoc_file_uuid
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +40,8 @@ def _ssr_url(publish_url: str, page_id: str | None) -> str:
     return f"{base}/wiki/publish/{publish_url}"
 
 
-def proxy_to_ssr(request, wiki, publish_url: str, page_id: str | None) -> HttpResponse | None:
+def proxy_to_ssr(request, wiki, publish_url: str,
+                 page_id: str, file_path: str) -> HttpResponse | None:
     """
     Forward the incoming request to the Next.js SSR service and return its
     response as a Django HttpResponse.
@@ -55,11 +62,29 @@ def proxy_to_ssr(request, wiki, publish_url: str, page_id: str | None) -> HttpRe
     target_url = _ssr_url(publish_url, page_id)
     print(target_url)
 
+    username = request.user.username
+    avatar_url, _, _ = api_avatar_url(username)
+    repo = seafile_api.get_repo(wiki.repo_id)
+    file_uuid = get_seadoc_file_uuid(repo, file_path)
     headers = {
-        'X-Wiki-SSR-Secret':    WIKI_SSR_INTERNAL_SECRET,
-        'X-Wiki-Id':            wiki.id,          # UUID of the wiki repo
-        'X-Repo-Name':          wiki.name or '',
+        'X-Seadoc-Server-Url': SEADOC_SERVER_URL,
         'X-Seahub-Service-URL': get_service_url(),
+        'X-Wiki-SSR-Secret': WIKI_SSR_INTERNAL_SECRET,
+        'X-Site-Root': SITE_ROOT,
+        'X-Media-Url': MEDIA_URL,
+        'X-Thumbnail-Default-Size': str(THUMBNAIL_DEFAULT_SIZE),
+        'X-File-Server-Root': FILE_SERVER_ROOT,
+        'X-Thumbnail-Size-For-Original': str(THUMBNAIL_SIZE_FOR_ORIGINAL),
+        'X-Enable-Thumbnail-Server': str(ENABLE_THUMBNAIL_SERVER),
+
+        'X-Wiki-Id': wiki.id,
+        'X-Repo-Name': wiki.name or '',
+        'X-Assets-Url': f'/api/v2.1/seadoc/download-image/{file_uuid}/',
+        'X-Name': email2nickname(username),
+        'X-Username': username,
+        'X-Avatar-Url': avatar_url,
+        'X-Lang': request.LANGUAGE_CODE,
+
         # Forward original client IP so Next.js can log it
         'X-Forwarded-For':      _get_client_ip(request),
         'Accept':               'text/html',

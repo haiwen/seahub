@@ -145,7 +145,7 @@ def wiki_publish_view(request, publish_url, page_id=None):
     service is unreachable (e.g. not yet deployed) this view behaves exactly
     as before.
     """
-    # ── 1. Resolve wiki ──────────────────────────────────────────────────────
+    # Resolve wiki
     wiki_publish = Wiki2Publish.objects.filter(publish_url=publish_url).first()
     if not wiki_publish:
         raise Http404
@@ -158,16 +158,24 @@ def wiki_publish_view(request, publish_url, page_id=None):
     repo_owner = get_repo_owner(request, wiki_id)
     wiki.owner = repo_owner
 
-    # ── 2. Update visit counter ──────────────────────────────────────────────
+    # Update visit counter
     try:
         wiki_publish.visit_count = (wiki_publish.visit_count or 0) + 1
         wiki_publish.save(update_fields=['visit_count'])
     except Exception as e:
         logger.warning('[wiki_publish_view] Failed to update visit_count: %s', e)
 
-    # ── 3. Try SSR proxy ─────────────────────────────────────────────────────
+    # get file_path
+    wiki_config = get_wiki_config(wiki.repo_id, '')
+    pages = wiki_config.get('pages', [])
+    page_info = next(filter(lambda t: t['id'] == page_id, pages), {})
+    file_path = page_info.get('path', '')
+    if not page_id:
+        page_id = pages[0]['id']
+
+    # Try SSR proxy
     if _HAS_SSR_PROXY:
-        ssr_response = proxy_to_ssr(request, wiki, publish_url, page_id)
+        ssr_response = proxy_to_ssr(request, wiki, publish_url, page_id, file_path)
         if ssr_response is not None:
             return ssr_response
         # Fall through to the legacy render on proxy failure.
@@ -177,14 +185,7 @@ def wiki_publish_view(request, publish_url, page_id=None):
             publish_url, page_id,
         )
 
-    # ── 4. Fallback: original template render ────────────────────────────────
-    file_path = ''
-    if page_id:
-        wiki_config = get_wiki_config(wiki.repo_id, '')
-        pages = wiki_config.get('pages', [])
-        page_info = next(filter(lambda t: t['id'] == page_id, pages), {})
-        file_path = page_info.get('path', '')
-
+    # original template render
     is_page = bool(file_path)
     latest_contributor = ''
     last_modified = 0
