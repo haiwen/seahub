@@ -17,7 +17,7 @@ future==1.0.*
 gunicorn==25.0.*
 mysqlclient==2.2.*
 qrcode==8.2.*
-pillow==12.1.*
+pillow==12.2.*
 chardet==5.2.*
 cffi==2.0.*
 captcha==0.7.*
