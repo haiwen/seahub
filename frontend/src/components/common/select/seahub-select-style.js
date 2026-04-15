@@ -57,11 +57,12 @@ const MenuSelectStyle = {
   menu: (base) => {
     return ({
       ...base,
-      padding: '8px 0 8px 8px',
+      padding: '4px 0 4px 8px',
       backgroundColor: 'var(--bs-popover-bg)',
       border: '1px solid var(--bs-border-secondary-color)',
       borderRadius: '4px',
       boxShadow: '0px 6px 14px rgba(0, 0, 0, 0.1)',
+      marginTop: '4px',
     });
   },
   // .react-select__menu-list）
@@ -70,11 +71,9 @@ const MenuSelectStyle = {
     paddingRight: '8px',
   }),
   option: (provided, state) => {
-    const { isDisabled, isSelected, isFocused, isActive, isVisited } = state;
+    const { isDisabled, isFocused, isActive, isVisited } = state;
     let bgColor;
-    if (isSelected) {
-      bgColor = 'rgba(0, 0, 0, 0.04)';
-    } else if (isActive || isVisited) {
+    if (isActive || isVisited) {
       bgColor = 'rgba(0, 0, 0, 0.06)';
     } else if (isFocused) {
       bgColor = 'var(--bs-bg-color)';
@@ -89,23 +88,6 @@ const MenuSelectStyle = {
       padding: '6px 12px 6px 8px',
       cursor: isDisabled ? 'default' : 'pointer',
       backgroundColor: `${bgColor} !important`,
-      '.header-icon .dtable-font': {
-        color: '#aaa',
-      },
-      ...(isSelected && {
-        paddingRight: '36px',
-        position: 'relative',
-        '&::after': {
-          content: '"✓"',
-          position: 'absolute',
-          right: '8px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          fontSize: '14px',
-          color: 'var(--bs-icon-color)',
-          fontWeight: '500',
-        },
-      }),
     });
   },
   control: controlCallback,

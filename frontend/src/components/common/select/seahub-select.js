@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
 import { MenuSelectStyle } from './seahub-select-style';
 import Icon from '../../icon';
-import './seahub-select.css';
 
 const DropdownIndicator = props => {
   return (
@@ -60,6 +59,28 @@ Option.propTypes = {
   }),
 };
 
+const ValueContainer = ({ children, ...props }) => {
+  // Do not show '--'
+  const isClearOption = props.selectProps.value?.data?.value === null && props.selectProps.value?.data?.label === '--';
+  if (isClearOption) {
+    return (
+      <components.ValueContainer {...props}/>
+    );
+  }
+  // Do not show check mark
+  const modifiedChildren = React.Children.map(children, child => {
+    if (child && child.type === 'span' && React.Children.count(child.props.children) > 1) {
+      return React.Children.toArray(child.props.children)[0];
+    }
+    return child;
+  });
+  return (
+    <components.ValueContainer {...props}>
+      {modifiedChildren}
+    </components.ValueContainer>
+  );
+};
+
 class SeahubSelect extends React.Component {
 
   getMenuPortalTarget = () => {
@@ -80,6 +101,19 @@ class SeahubSelect extends React.Component {
         options.shift();
       }
     }
+    const optionsWithCheck = options.map(option => {
+      const isSelected = value && value.value === option.value;
+      return {
+        ...option,
+        data: option,
+        label: (
+          <span className="d-flex align-items-center justify-content-between">
+            {option.label}
+            {isSelected && <Icon symbol="check" style={{ width: '12px', height: '12px' }} />}
+          </span>
+        )
+      };
+    });
 
     return (
       <Select
@@ -87,12 +121,12 @@ class SeahubSelect extends React.Component {
         isDisabled={isDisabled}
         ref={innerRef}
         onChange={onChange}
-        options={options}
+        options={optionsWithCheck}
         isMulti={isMulti}
         className={className}
-        classNamePrefix={value && value.label == '--' ? 'select-clear-option ' + classNamePrefix : classNamePrefix}
+        classNamePrefix={classNamePrefix}
         styles={MenuSelectStyle}
-        components={{ Option, DropdownIndicator, MenuList, ClearIndicator }}
+        components={{ Option, DropdownIndicator, MenuList, ClearIndicator, ValueContainer }}
         placeholder={placeholder}
         isSearchable={isSearchable}
         isClearable={false}
