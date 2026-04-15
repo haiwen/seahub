@@ -1,6 +1,5 @@
 .permission-editor-explanation {
   user-select: none;
-  padding-left: 10px;
   color: var(--bs-icon-color);
   font-size: 12px;
   word-break: keep-all;
@@ -37,27 +36,24 @@
 .permission-editor__menu .permission-editor__option--is-disabled {
   color: #9c9c9c;
   border-top: 1px solid var(--bs-border-color);
-}
-
-.permission-editor__menu .permission-editor__option--is-disabled:hover {
-  background-color: var(--bs-nav-hover-bg) !important;
-  color: #9c9c9c !important;
+  margin-top: 8px;
+  border-radius: 0px;
+  padding: 0;
+  padding-top: 8px;
 }
 
 .permission-editor-btn-add-custom-permission {
   display: flex;
   align-items: center;
-  padding: .5rem 0;
-  font-size: 12px;
-  line-height: 13px;
+  padding: 6px 8px;
+  line-height: 20px;
   cursor: pointer;
   color: var(--bs-body-color);
+  border-radius: 4px;
 }
 
-.permission-editor-btn-add-custom-permission .sf3-font {
-  font-size: 12px;
-  line-height: 13px;
-  margin-right: .25rem;
+.permission-editor-btn-add-custom-permission:hover {
+  background-color: var(--bs-bg-color) !important;
 }
 
 .share-dialog-main .permission-editor .permission-editor__placeholder,
