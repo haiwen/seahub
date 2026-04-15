@@ -6,8 +6,6 @@ import SelectOptionGroup from './select-option-group.js';
 import { Utils } from '../../utils/utils.js';
 import Icon from '../icon';
 
-// import './index.css';
-
 class RepoSelect extends Component {
 
   constructor(props) {

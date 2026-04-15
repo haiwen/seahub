@@ -7,8 +7,6 @@ import Option from './option';
 import { Utils } from '../../utils/utils';
 import Icon from '../icon';
 
-// import './select-option-group.css';
-
 const OPTION_HEIGHT = 32;
 
 class SelectOptionGroup extends Component {
