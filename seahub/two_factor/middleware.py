@@ -2,7 +2,6 @@
 
 import re
 
-from django.utils.deprecation import MiddlewareMixin
 from constance import config
 from django.urls import reverse
 from django.http import HttpResponseRedirect
@@ -11,6 +10,7 @@ from . import DEVICE_ID_SESSION_KEY
 from .models import Device
 from seahub.options.models import UserOptions
 from seahub.settings import SITE_ROOT, ENABLE_FORCE_2FA_TO_ALL_USERS
+from seahub.utils.mixin import MiddlewareMixin
 
 
 class IsVerified(object):

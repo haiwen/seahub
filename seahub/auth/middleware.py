@@ -4,12 +4,12 @@ import logging
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.deprecation import MiddlewareMixin
 from django.shortcuts import render
 
 from seahub import auth
 from seahub.base.sudo_mode import update_sudo_mode_ts
 from seahub.auth.backends import SeafileRemoteUserBackend
+from seahub.utils.mixin import MiddlewareMixin
 
 from seahub.api2.utils import get_api_token
 
