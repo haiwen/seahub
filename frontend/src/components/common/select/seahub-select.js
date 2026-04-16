@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
 import { MenuSelectStyle } from './seahub-select-style';
 import Icon from '../../icon';
+import './seahub-select.css';
 
 const DropdownIndicator = props => {
   return (
@@ -67,16 +68,9 @@ const ValueContainer = ({ children, ...props }) => {
       <components.ValueContainer {...props}/>
     );
   }
-  // Do not show check mark
-  const modifiedChildren = React.Children.map(children, child => {
-    if (child && child.type === 'span' && React.Children.count(child.props.children) > 1) {
-      return React.Children.toArray(child.props.children)[0];
-    }
-    return child;
-  });
   return (
-    <components.ValueContainer {...props}>
-      {modifiedChildren}
+    <components.ValueContainer {...props} className='seahub-select-value-container'>
+      {children}
     </components.ValueContainer>
   );
 };

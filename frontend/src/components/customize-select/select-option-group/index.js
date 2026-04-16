@@ -143,7 +143,7 @@ class SelectOptionGroup extends Component {
     return this.filterOptions.map((opt, i) => {
       let key = opt.value.column ? opt.value.column.key : i;
       let isActive = this.state.activeIndex === i;
-      const isSelected = value && opt.value === value.value;
+      const isSelected = value && (opt.value === value.value || JSON.stringify(opt.value) === JSON.stringify(value.value));
       return (
         <Option
           key={key}

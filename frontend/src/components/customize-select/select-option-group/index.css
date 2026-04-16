@@ -7,7 +7,7 @@
   max-width: 15rem;
   box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.1);
   background: var(--bs-popover-bg);
-  border: 1px solid var(--bs-border-secondary-color);
+  border: 1px solid rgba(0, 40, 100, 0.12);
   border-radius: 3px;
   z-index: 10001;
 }

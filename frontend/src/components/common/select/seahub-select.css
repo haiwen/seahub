@@ -1,0 +1,4 @@
+/* hide checkbox in select value container */
+.seahub-select-value-container .seafile-multicolor-icon-check {
+  display: none;
+}
