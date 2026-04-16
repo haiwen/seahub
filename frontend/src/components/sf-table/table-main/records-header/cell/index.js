@@ -36,8 +36,6 @@ const Cell = ({
   onMove,
   updateDraggingKey,
   updateDragOverKey,
-  canEditColumnInfo = false,
-  // Permission functions for HeaderDropdownMenu
   canModifyView,
   canModifyColumnData,
   canDeleteColumn,
@@ -55,6 +53,8 @@ const Cell = ({
     }
     return value;
   }, [frozen, groupOffsetLeft, column, height, propsStyle]);
+
+  const canModifyColumnInfo = useMemo(() => canModifyColumnData && canModifyColumnData(column), [canModifyColumnData, column]);
 
   const getWidthFromMouseEvent = useCallback((e) => {
     let right = e.pageX || (e.touches && e.touches[0] && e.touches[0].pageX) || (e.changedTouches && e.changedTouches[e.changedTouches.length - 1].pageX);
@@ -185,7 +185,7 @@ const Cell = ({
         <div className="sf-table-column-content sf-table-header-cell-left d-flex align-items-center text-truncate">
           {cellContent}
         </div>
-        {canEditColumnInfo && (
+        {canModifyColumnInfo && (
           <HeaderDropdownMenu
             ref={dropdownRef}
             column={column}
@@ -202,7 +202,7 @@ const Cell = ({
         <ResizeColumnHandle onDrag={onDraggingColumnWidth} onDragEnd={handleDragEndColumnWidth} />
       </div>
     );
-  }, [isLastFrozenCell, isNameColumn, style, key, onContextMenu, cellContent, canEditColumnInfo, column, props.view, props.renameColumn, props.deleteColumn, props.modifyColumnData, canModifyView, canModifyColumnData, canDeleteColumn, canRenameColumn, onDraggingColumnWidth, handleDragEndColumnWidth, handleHeaderCellClick, frozen]);
+  }, [isLastFrozenCell, isNameColumn, style, key, onContextMenu, cellContent, canModifyColumnInfo, column, props.view, props.renameColumn, props.deleteColumn, props.modifyColumnData, canModifyView, canModifyColumnData, canDeleteColumn, canRenameColumn, onDraggingColumnWidth, handleDragEndColumnWidth, handleHeaderCellClick, frozen]);
 
   if (!moveable || isNameColumn) {
     return (
@@ -258,7 +258,6 @@ Cell.propTypes = {
   updateDraggingKey: PropTypes.func,
   updateDragOverKey: PropTypes.func,
   onMove: PropTypes.func,
-  canEditColumnInfo: PropTypes.bool,
   canModifyView: PropTypes.func,
   canModifyColumnData: PropTypes.func,
   canDeleteColumn: PropTypes.func,

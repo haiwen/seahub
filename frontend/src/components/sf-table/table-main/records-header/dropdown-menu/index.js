@@ -1,5 +1,4 @@
 import React, { createRef, useState, useCallback, useMemo, forwardRef, useImperativeHandle } from 'react';
-import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import classnames from 'classnames';
 import ModalPortal from '@/components/modal-portal';
@@ -154,7 +153,7 @@ const HeaderDropdownMenu = forwardRef(({
     ];
 
     return (
-      <Dropdown className="sf-metadata-dropdown-menu w-100" isOpen={isSubMenuShow} direction="right">
+      <Dropdown className="w-100" isOpen={isSubMenuShow} direction="right">
         <DropdownToggle
           tag="span"
           role="button"
@@ -224,7 +223,7 @@ const HeaderDropdownMenu = forwardRef(({
     const canModifyViewFn = canModifyView ? canModifyView() : false;
 
     return (
-      <DropdownMenu ref={menuRef} className="sf-metadata-column-dropdown-menu">
+      <DropdownMenu ref={menuRef} className="sf-table-column-dropdown-menu">
         <div ref={dropdownDomRef}>
           {type === CellType.SINGLE_SELECT && (
             <>
@@ -312,12 +311,12 @@ const HeaderDropdownMenu = forwardRef(({
 
   return (
     <>
-      <Dropdown className="sf-metadata-dropdown-menu" isOpen={isMenuShow} toggle={onToggle}>
+      <Dropdown isOpen={isMenuShow} toggle={onToggle}>
         <DropdownToggle
           tag="span"
           tabIndex={0}
           role="button"
-          className="d-flex align-items-center"
+          className="sf-table-header-dropdown-toggle"
           title={gettext('More operations')}
           data-toggle="dropdown"
           aria-expanded={isMenuShow}
@@ -327,14 +326,14 @@ const HeaderDropdownMenu = forwardRef(({
         </DropdownToggle>
         {isMenuShow && !isMobile &&
           <ModalPortal>
-            <div className="sf-metadata-dropdown-menu large">{renderDropdownMenu()}</div>
+            <div className="large">{renderDropdownMenu()}</div>
           </ModalPortal>
         }
       </Dropdown>
       {isRenamePopoverShow && (
         <ModalPortal>
           <RenamePopover
-            target={`sf-metadata-column-${column.key}`}
+            target={`sf-table-column-${column.key}`}
             value={column.name}
             onToggle={closeRenamePopover}
             onSubmit={onRename}
@@ -344,7 +343,7 @@ const HeaderDropdownMenu = forwardRef(({
       {isOptionPopoverShow && (
         <ModalPortal>
           <OptionsPopover
-            target={`sf-metadata-column-${column.key}`}
+            target={`sf-table-column-${column.key}`}
             column={column}
             onToggle={closeOptionPopover}
             onSubmit={onUpdateOptions}
@@ -354,7 +353,7 @@ const HeaderDropdownMenu = forwardRef(({
       {isNumberFormatPopoverShow && (
         <ModalPortal>
           <NumberFormatPopover
-            target={`sf-metadata-column-${column.key}`}
+            target={`sf-table-column-${column.key}`}
             column={column}
             onToggle={closeNumberFormatPopover}
             onSubmit={onUpdateNumberFormat}
@@ -365,16 +364,6 @@ const HeaderDropdownMenu = forwardRef(({
   );
 });
 
-HeaderDropdownMenu.propTypes = {
-  column: PropTypes.object.isRequired,
-  view: PropTypes.object,
-  renameColumn: PropTypes.func,
-  modifyColumnData: PropTypes.func,
-  deleteColumn: PropTypes.func,
-  canModifyView: PropTypes.func,
-  canModifyColumnData: PropTypes.func,
-  canDeleteColumn: PropTypes.func,
-  canRenameColumn: PropTypes.func,
-};
+HeaderDropdownMenu.displayName = 'HeaderDropdownMenu';
 
 export default HeaderDropdownMenu;

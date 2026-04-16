@@ -24,8 +24,6 @@ class PopupEditorContainer extends React.Component {
 
   constructor(props) {
     super(props);
-    // editorPosition: DOM-based position for PopupEditor's style (left, top from bounding rect)
-    // getSelectedDimensions: GRID-based position for TagsEditor customStyle (left, top, width, height)
     const { width, height, left, top, column, editorPosition } = this.props;
     const editorLeft = editorPosition?.left ?? left;
     const editorTop = editorPosition?.top ?? top;
@@ -35,12 +33,10 @@ class PopupEditorContainer extends React.Component {
       additionalStyles = { width, height };
     }
 
-    // Calculate final style position
-    // For TAGS: apply horizontal offset to DOM-based editorPosition to align TagsEditor's left edge with cell's left edge
-    let finalLeft = editorLeft;
-    let finalTop = editorTop;
     if (column.type === CellType.TAGS) {
-      finalLeft = editorLeft - (TAGS_EDITOR_WIDTH - column.width);
+      additionalStyles = {
+        left: editorLeft - (TAGS_EDITOR_WIDTH - column.width),
+      };
     }
 
     this.state = {
@@ -48,8 +44,8 @@ class PopupEditorContainer extends React.Component {
       style: {
         position: 'absolute',
         zIndex: Z_INDEX_EDITOR_CONTAINER,
-        left: finalLeft,
-        top: finalTop,
+        left,
+        top: editorTop,
         width,
         height,
         ...additionalStyles
@@ -81,15 +77,11 @@ class PopupEditorContainer extends React.Component {
   };
 
   computeTagsEditorCustomStyle = () => {
-    // Only handle vertical positioning here (top/bottom)
-    // Horizontal position is handled in constructor via style.left
     const { top, height } = this.props;
     const vh = window.innerHeight || 0;
     const spaceBelow = vh - (top + height);
     const spaceAbove = top;
 
-    // Determine if TagsEditor should display above or below the cell
-    // TagsEditor height is approximately 400px
     if (spaceBelow >= 400 || spaceBelow >= spaceAbove) {
       return { top: 0, bottom: 'auto' };
     }
@@ -133,20 +125,14 @@ class PopupEditorContainer extends React.Component {
       operation,
     };
 
-    // DATE: handle format
     if (column.type === CellType.DATE) {
       editorProps.format = column?.data?.format;
-      if (column.key === PRIVATE_COLUMN_KEY.CAPTURE_TIME) {
-        // convert hh:mm:ss to hh:mm if exists
-        editorProps.format = editorProps.format?.replace('HH:mm:ss', 'HH:mm');
-      }
     }
 
-    // TAGS: handle canEditData and canAddTag
     if (column.type === CellType.TAGS) {
       const customStyle = this.computeTagsEditorCustomStyle();
       editorProps = {
-        customStyle, // Put customStyle first so it won't be overwritten
+        customStyle,
         ...editorProps,
         onSelect: onSelectTag,
         onDeselect: onDeselectTag,
@@ -171,8 +157,6 @@ class PopupEditorContainer extends React.Component {
   };
 
   getRecordMetaData = () => {
-    // clone row data so editor cannot actually change this
-    // convention based method to get corresponding Id or Name of any Name or Id property
     if (typeof this.props.column.getRecordMetaData === 'function') {
       const { record, column } = this.props;
       return this.props.column.getRecordMetaData(record, column);
@@ -188,7 +172,6 @@ class PopupEditorContainer extends React.Component {
     if (key === 'Enter') {
       return value;
     }
-    // LONG_TEXT: special handling for space key and readOnly
     if (column.type === CellType.LONG_TEXT) {
       if (key === ' ') return value;
       return readOnly ? value : key || value;
@@ -243,7 +226,7 @@ class PopupEditorContainer extends React.Component {
       }
     }
 
-    let updated = columnType === CellType.DATE ? { [columnKey]: newValue } : newValue;
+    let updated = newValue;
     if (columnType === CellType.SINGLE_SELECT) {
       updated[columnKey] = newValue[columnKey] ? getColumnOptionNameById(column, newValue[columnKey]) : '';
     } else if (columnType === CellType.MULTIPLE_SELECT) {

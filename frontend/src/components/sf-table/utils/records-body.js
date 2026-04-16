@@ -1,3 +1,13 @@
+/**
+ * Viewport and visible column calculation utilities.
+ * Handles scroll position, visible column range, and column scroll offset calculations.
+ *
+ * Key concepts:
+ * - Used for render optimization (only visible columns are rendered)
+ * - Handles frozen column offset calculations
+ * - "records-body" refers to the main scrollable body area of the table
+ */
+
 import { isMobile } from '../../../utils/utils';
 import { checkIsColumnFrozen } from './column';
 

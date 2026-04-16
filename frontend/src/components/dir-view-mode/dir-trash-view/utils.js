@@ -6,12 +6,21 @@ import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import FileName from './formatter/file-name';
 
+export const PRIVATE_COLUMN_KEY = {
+  OBJ_NAME: 'obj_name',
+  PARENT_DIR: 'parent_dir',
+  DELETED_TIME: 'deleted_time',
+  SIZE: 'size',
+};
+
+export const PRIVATE_COLUMN_KEYS = Object.values(PRIVATE_COLUMN_KEY);
+
 export function createHistoryColumns({ repoID }) {
 
   let baseColumns = [
     {
       key: 'obj_name',
-      name: 'obj_name',
+      name: gettext('File name'),
       display_name: gettext('File name'),
       icon_name: 'text',
       type: 'text',
@@ -25,7 +34,7 @@ export function createHistoryColumns({ repoID }) {
     },
     {
       key: 'parent_dir',
-      name: 'parent_dir',
+      name: gettext('Original path'),
       display_name: gettext('Original path'),
       icon_name: 'text',
       type: 'text',
@@ -37,7 +46,7 @@ export function createHistoryColumns({ repoID }) {
     },
     {
       key: 'deleted_time',
-      name: 'deleted_time',
+      name: gettext('Deleted time'),
       display_name: gettext('Deleted time'),
       icon_name: 'date',
       type: 'date',
@@ -49,7 +58,7 @@ export function createHistoryColumns({ repoID }) {
     },
     {
       key: 'size',
-      name: 'size',
+      name: gettext('Size'),
       display_name: gettext('Size'),
       data: { format: 'byte' },
       icon_name: 'number',

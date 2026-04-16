@@ -118,7 +118,7 @@ class Record extends React.Component {
           column={column}
           sequenceColumnWidth={sequenceColumnWidth}
           cellMetaData={cellMetaData}
-          canModify={this.props.canModify}
+          canModifyRow={this.props.canModifyRow}
           checkCellValueChanged={this.props.checkCellValueChanged}
           reloadCurrentRecord={this.reloadCurrentRecord}
           highlightClassName={highlightClassName}
@@ -187,7 +187,7 @@ class Record extends React.Component {
           sequenceColumnWidth={sequenceColumnWidth}
           needBindEvents={needBindEvents}
           cellMetaData={cellMetaData}
-          canModify={this.props.canModify}
+          canModifyRow={this.props.canModifyRow}
           checkCellValueChanged={this.props.checkCellValueChanged}
           reloadCurrentRecord={this.reloadCurrentRecord}
           highlightClassName={highlightClassName}
@@ -308,7 +308,7 @@ class Record extends React.Component {
 
     const frozenCells = this.getFrozenCells();
     const columnCells = this.getColumnCells();
-    const canModify = this.props.canModify(record);
+    const canModifyRow = this.props.canModifyRow;
 
     return (
       <div
@@ -345,7 +345,7 @@ class Record extends React.Component {
               height={cellHeight}
               recordDraggable={this.props.recordDraggable}
               handleDragStart={this.handleDragStart}
-              canModify={canModify}
+              canModifyRow={canModifyRow}
               onShowExpandedPropsDialog={this.props.onShowExpandedPropsDialog}
             />
           }

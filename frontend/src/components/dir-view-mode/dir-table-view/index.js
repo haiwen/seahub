@@ -22,7 +22,7 @@ import { metadataAPI } from '@/metadata';
 import { getColumnByKey, getColumnOriginName } from '@/components/sf-table/utils/column';
 import { getColumnOptionNameById, getColumnOptionNamesByIds } from '@/metadata/utils/cell';
 import tagsAPI from '@/tag/api';
-import DirTableGridUtilsAdapter from './dir-table-grid-utils-adapter';
+import { GridUtilsAdapter } from '@/components/sf-table/utils/grid-utils-adapter';
 
 import './index.css';
 
@@ -205,38 +205,35 @@ const DirTableView = ({
         if (type === CellType.TAGS) return;
         if (key === PRIVATE_COLUMN_KEY.FILE_NAME) return;
         if (!column.editable) return;
-        // Use getColumnOriginName for most columns, but handle COLLABORATOR specially
-        // since collaborator data is stored under FILE_COLLABORATORS key, not column.name
-        let fieldKey = getColumnOriginName(column);
-        if (type === CellType.COLLABORATOR) {
-          fieldKey = PRIVATE_COLUMN_KEY.FILE_COLLABORATORS;
-        }
+        const fieldKey = getColumnOriginName(column);
         handleDirentMetadata(_id, _name, { [fieldKey]: null });
       });
     });
   }, [repoID, handleDirentMetadata]);
 
   // Record getter for gridUtils adapter
-  const recordGetterByIndex = useCallback(({ isGroupView, groupRecordIndex, recordIndex }) => {
+  const recordGetterByIndex = useCallback(({ recordIndex }) => {
     const recordId = tableData.row_ids[recordIndex];
     return recordId && tableData.id_row_map[recordId];
   }, [tableData]);
 
   // Create GridUtils adapter for copy/paste and drag-fill
   const gridUtilsAdapter = useMemo(() => {
-    return new DirTableGridUtilsAdapter({
+    return new GridUtilsAdapter({
       renderRecordsIds: tableData.row_ids || [],
-      recordGetterById: (id) => tableData.id_row_map?.[id],
-      recordGetterByIndex,
-      modifyRecords: (recordIds, idRecordUpdates) => modifyRecords(recordIds, idRecordUpdates),
-      updateFileTags,
-      getTagsData: () => tagsData || {},
-      getCollaborators: () => [],
+      api: {
+        recordGetterById: (id) => tableData.id_row_map?.[id],
+        recordGetterByIndex,
+        modifyRecords: (recordIds, idRecordUpdates) => modifyRecords(recordIds, idRecordUpdates),
+        updateFileTags,
+        getTagsData: () => tagsData || {},
+        getCollaborators: () => [],
+      },
     });
   }, [tableData, recordGetterByIndex, modifyRecords, updateFileTags, tagsData]);
 
   // Paste callback - delegates to gridUtilsAdapter.paste()
-  const paste = useCallback(({ type, copied, multiplePaste, pasteRange, isGroupView, pasteSource, cutPosition, columns }) => {
+  const paste = useCallback(({ type, copied, multiplePaste, pasteRange, isGroupView, pasteSource, cutPosition }) => {
     const { search } = window.location;
     const urlParams = new URLSearchParams(search);
     const viewId = urlParams.has('view') ? urlParams.get('view') : null;
@@ -268,16 +265,6 @@ const DirTableView = ({
   const onRenameEditor = () => {
     sfTableEventBus.current.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR);
   };
-
-  // Handle keyboard shortcuts for copy/paste
-  const onGridKeyDown = useCallback((e) => {
-    // Skip if in editor or input field
-    if (e.target.className.includes('sf-metadata-editor-main')) return;
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-
-    // Let SFTable handle copy/paste shortcuts when a cell is selected
-    // The document-level listeners in SFTable's InteractionMasks will handle these
-  }, []);
 
   const onOptionClick = (e, option, dirent, selectedDirents) => {
     e.preventDefault();
@@ -564,7 +551,6 @@ const DirTableView = ({
         supportDragFill={true}
         supportCut={true}
         isGroupView={false}
-        onGridKeyDown={onGridKeyDown}
         gridUtils={gridUtilsAdapter}
         showRecordAsTree={false}
         createContextMenuOptions={createContextMenuOptions}

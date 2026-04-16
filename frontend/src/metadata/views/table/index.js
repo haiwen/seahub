@@ -53,6 +53,7 @@ const Table = () => {
       canModifyColumnData: (column) => store.context.canModifyColumnData(column),
       canDeleteColumn: (column) => store.context.canDeleteColumn(column),
       canRenameColumn: (column) => store.context.canRenameColumn(column),
+      canInsertColumn: () => store.context.canInsertColumn(),
     };
   }, [store.context]);
 

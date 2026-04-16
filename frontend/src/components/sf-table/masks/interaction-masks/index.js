@@ -34,15 +34,6 @@ import { openFile } from '@/metadata/utils/file';
 
 import './index.css';
 
-const READONLY_PREVIEW_COLUMNS = [
-  CellType.FILE_NAME,
-];
-
-const NOT_SUPPORT_OPEN_EDITOR_COLUMN_TYPES = [
-  CellType.CHECKBOX,
-  CellType.RATE,
-];
-
 class InteractionMasks extends React.Component {
 
   throttle = null;
@@ -313,16 +304,11 @@ class InteractionMasks extends React.Component {
     const { columns } = this.props;
     const selectedColumn = getSelectedColumn({ selectedPosition, columns });
     const _isNameColumn = checkIsNameColumn(selectedColumn);
-    const { type: columnType } = selectedColumn;
-
-    if (NOT_SUPPORT_OPEN_EDITOR_COLUMN_TYPES.includes(columnType)) return null;
 
     // how to open editors?
     // 1. editor is closed
     // 2. record-cell is editable or open editor with preview mode
-    if (((this.checkIsSelectedCellEditable() || _isNameColumn || (openEditorMode === EDITOR_TYPE.PREVIEWER && READONLY_PREVIEW_COLUMNS.includes(columnType))) && !isEditorEnabled)) {
-      // Use pre-computed position if provided (from onSelectCell callback),
-      // otherwise calculate it now (for keyboard-triggered opens)
+    if (((this.checkIsSelectedCellEditable() || _isNameColumn || (openEditorMode === EDITOR_TYPE.PREVIEWER)) && !isEditorEnabled)) {
       const editorPosition = position !== undefined ? position : this.getEditorPosition();
       this.setState({
         isEditorEnabled: true,
@@ -432,9 +418,9 @@ class InteractionMasks extends React.Component {
   };
 
   checkIsSelectedCellEditable = () => {
-    const { enableCellSelect = true, columns, isGroupView = false, recordGetterByIndex, canModify } = this.props;
+    const { enableCellSelect = true, columns, isGroupView = false, recordGetterByIndex, canModifyRow } = this.props;
     const { selectedPosition } = this.state;
-    return checkIsSelectedCellEditable({ enableCellSelect, columns, isGroupView, selectedPosition, recordGetterByIndex, canModify });
+    return checkIsSelectedCellEditable({ enableCellSelect, columns, isGroupView, selectedPosition, recordGetterByIndex, canModifyRow });
   };
 
   isGridSelected = () => {

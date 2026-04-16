@@ -18,6 +18,8 @@ import Empty from './empty';
 import { CellType } from '../../constants';
 
 import './index.css';
+import RateEditor from '../cell-editors/rate-editor';
+import CheckboxEditor from '../cell-editors/checkbox-editor';
 
 const Formatter = React.memo(({ column, value, isSample, queryUserAPI, emptyTip, ...params }) => {
   const { type } = column || {};
@@ -82,6 +84,13 @@ const Formatter = React.memo(({ column, value, isSample, queryUserAPI, emptyTip,
       );
     }
     case CellType.CHECKBOX: {
+      if (column.editable) {
+        return (
+          <CheckboxEditor value={value} className={className} field={column} {...params}>
+            <Empty fieldType={type} placeholder={emptyTip} />
+          </CheckboxEditor>
+        );
+      }
       return (
         <CheckboxFormatter value={value} className={className}>
           <Empty fieldType={type} placeholder={emptyTip} />
@@ -110,6 +119,13 @@ const Formatter = React.memo(({ column, value, isSample, queryUserAPI, emptyTip,
       );
     }
     case CellType.RATE: {
+      if (column.editable) {
+        return (
+          <RateEditor value={value} field={column} className={className} {...params}>
+            <Empty fieldType={type} placeholder={emptyTip} />
+          </RateEditor>
+        );
+      }
       return (
         <RateFormatter value={value} data={column?.data} className={className}>
           <Empty fieldType={type} placeholder={emptyTip} />

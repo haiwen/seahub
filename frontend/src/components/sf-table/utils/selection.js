@@ -91,7 +91,7 @@ export const getSelectedCellValue = ({ selectedPosition, columns, isGroupView, r
   return getCellValueByColumn(record, column);
 };
 
-export const checkIsCellSupportOpenEditor = (cell, column, isGroupView, recordGetterByIndex, canModify) => {
+export const checkIsCellSupportOpenEditor = (cell, column, isGroupView, recordGetterByIndex, canModifyRow) => {
   const { groupRecordIndex, rowIdx } = cell;
   if (!column) return false;
 
@@ -104,21 +104,21 @@ export const checkIsCellSupportOpenEditor = (cell, column, isGroupView, recordGe
   }
 
   const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex: rowIdx });
-  if (!record || !canModify) return false;
-  return !!canModify(record);
+  if (!record || !canModifyRow) return false;
+  return !!canModifyRow(record);
 };
 
-export const checkIsSelectedCellEditable = ({ enableCellSelect, selectedPosition, columns, isGroupView, recordGetterByIndex, canModify }) => {
+export const checkIsSelectedCellEditable = ({ enableCellSelect, selectedPosition, columns, isGroupView, recordGetterByIndex, canModifyRow }) => {
   const column = getSelectedColumn({ selectedPosition, columns });
   if (!checkIsColumnEditable(column)) {
     return false;
   }
 
   const row = getSelectedRow({ selectedPosition, isGroupView, recordGetterByIndex });
-  if (!row || !canModify) {
+  if (!row || !canModifyRow) {
     return false;
   }
-  return canModify(row);
+  return canModifyRow(row);
 };
 
 export function selectedRangeIsSingleCell(selectedRange) {

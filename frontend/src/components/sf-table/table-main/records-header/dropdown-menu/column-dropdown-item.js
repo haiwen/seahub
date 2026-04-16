@@ -68,7 +68,7 @@ ColumnDropdownItem.propTypes = {
   tip: PropTypes.string.isRequired,
   className: PropTypes.string,
   onChange: PropTypes.func.isRequired,
-  onMouseEnter: PropTypes.func.isRequired,
+  onMouseEnter: PropTypes.func,
 };
 
 export default ColumnDropdownItem;

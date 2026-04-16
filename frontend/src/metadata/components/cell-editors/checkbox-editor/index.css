@@ -23,6 +23,8 @@
 }
 
 .sf-table-row:hover .sf-metadata-checkbox-editor-content,
-.sf-table-checkbox-cell.cell-selected .sf-metadata-checkbox-editor-content {
+.sf-table-checkbox-cell.cell-selected .sf-metadata-checkbox-editor-content,
+.sf-metadata-result-table-row:hover .sf-metadata-checkbox-editor-content,
+.sf-metadata-result-table-checkbox-cell.cell-selected .sf-metadata-checkbox-editor-content {
   border-color: #e0e0e0;
 }

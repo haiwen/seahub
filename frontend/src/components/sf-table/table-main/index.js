@@ -176,6 +176,7 @@ TableMain.propTypes = {
   loadAll: PropTypes.func,
   isLoading: PropTypes.bool,
   updateFileTags: PropTypes.func,
+  canModifyColumn: PropTypes.func,
   /**
    * External GridUtils instance. If provided, this will be used instead of
    * internally creating one. Useful for metadata tables.

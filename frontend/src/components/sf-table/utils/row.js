@@ -1,3 +1,13 @@
+/**
+ * Row data access utilities.
+ * Provides helpers for reading row/record properties and ID lookups.
+ *
+ * Key concepts:
+ * - "Row" refers to a record in the rendered table view
+ * - RowUtils.get() handles both Immutable.js objects and plain objects
+ * - getRecordById() performs ID -> record lookup from id_row_map
+ */
+
 const RowUtils = {
 
   get: function (row, property) {

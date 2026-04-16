@@ -41,7 +41,6 @@ const Editor = React.forwardRef((props, ref) => {
       return (<LongTextEditor ref={ref} { ...props } lang={lang} />);
     }
     case CellType.TAGS: {
-      // Tags are not supported for directories
       if (checkIsDir(props.record)) return null;
       return (<TagsEditor ref={ref} { ...props } />);
     }

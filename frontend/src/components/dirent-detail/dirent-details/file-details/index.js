@@ -73,7 +73,7 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepo
   let component = (
     <>
       <DetailItem field={sizeField} className="sf-metadata-property-detail-formatter">
-        <Formatter field={sizeField} value={Utils.bytesToSize(direntDetail.size)} />
+        <Formatter column={sizeField} value={Utils.bytesToSize(direntDetail.size)} />
       </DetailItem>
       <DetailItem field={lastModifierField} className="sf-metadata-property-detail-formatter">
         <Formatter

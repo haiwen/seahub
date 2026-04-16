@@ -411,10 +411,10 @@ class TreeBody extends Component {
       const isFromKeyboard = true;
       this.selectUpdate(cell, isFromKeyboard);
     } else {
-      const { columns, recordGetterByIndex, canModify } = this.props;
+      const { columns, recordGetterByIndex, canModifyRow } = this.props;
       const column = getColumnByIndex(cell.idx, columns);
       const supportOpenEditor = checkIsColumnSupportDirectEdit(column);
-      const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, false, recordGetterByIndex, canModify);
+      const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, false, recordGetterByIndex, canModifyRow);
       this.selectCell(cell, supportOpenEditor && hasOpenPermission);
     }
     this.props.onCellClick(cell);
@@ -422,10 +422,10 @@ class TreeBody extends Component {
   };
 
   onCellDoubleClick = (cell, e) => {
-    const { columns, recordGetterByIndex, canModify } = this.props;
+    const { columns, recordGetterByIndex, canModifyRow } = this.props;
     const column = getColumnByIndex(cell.idx, columns);
     const supportOpenEditor = checkEditableViaClickCell(column);
-    const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, false, recordGetterByIndex, canModify);
+    const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, false, recordGetterByIndex, canModifyRow);
     this.selectCell(cell, supportOpenEditor && hasOpenPermission);
   };
 

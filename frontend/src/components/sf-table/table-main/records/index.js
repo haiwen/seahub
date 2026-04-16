@@ -1016,7 +1016,7 @@ class Records extends Component {
               modifyColumnWidth={this.props.modifyColumnWidth}
               insertColumn={this.props.insertColumn}
               // Metadata dropdown props
-              canEditColumnInfo={this.props.canEditColumnInfo}
+              canModifyColumn={this.props.canModifyColumn}
               columnDropdownMenu={this.props.columnDropdownMenu}
               view={this.props.view}
               renameColumn={this.props.renameColumn}

@@ -1,1 +1,0 @@
-export { RATE_COLORS, RATE_MAX_NUMBER, RATE_TYPES, DEFAULT_RATE_DATA } from './rate';

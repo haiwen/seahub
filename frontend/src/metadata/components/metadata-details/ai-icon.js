@@ -133,7 +133,7 @@ const AIIcon = () => {
   if (!enableMetadata || !canModifyRecord || !record || options.length === 0) return null;
 
   return (
-    <Dropdown className="sf-metadata-dropdown-menu" isOpen={isMenuShow} toggle={onToggle}>
+    <Dropdown isOpen={isMenuShow} toggle={onToggle}>
       <DropdownToggle
         className="border-0 p-0 bg-transparent detail-control mr-2"
         ref={menuToggleRef}

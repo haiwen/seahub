@@ -64,14 +64,11 @@ class ActionsCell extends Component {
   };
 
   render() {
-    const { isSelected, isLastFrozenCell, height, recordId, canModify = true, recordDraggable } = this.props;
+    const { isSelected, isLastFrozenCell, height, recordId, canModifyRow = true, recordDraggable } = this.props;
     const cellStyle = {
       height,
       width: SEQUENCE_COLUMN_WIDTH,
       minWidth: SEQUENCE_COLUMN_WIDTH,
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
     };
     return (
       <div
@@ -81,7 +78,7 @@ class ActionsCell extends Component {
         onMouseEnter={this.onCellMouseEnter}
         onMouseLeave={this.onCellMouseLeave}
       >
-        {(recordDraggable && canModify) &&
+        {(recordDraggable && canModifyRow) &&
           <div
             draggable
             className="drag-handler"

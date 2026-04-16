@@ -41,14 +41,14 @@ const LibDetail = React.memo(({ currentRepoInfo, onClose, isInSearch }) => {
           :
           <div className="detail-content">
             <DetailItem field={filesField} value={repo.file_count || 0} className="sf-metadata-property-detail-formatter">
-              <Formatter field={filesField} value={repo.file_count || 0} />
+              <Formatter column={filesField} value={repo.file_count || 0} />
             </DetailItem>
             <DetailItem field={sizeField} value={repo.size} className="sf-metadata-property-detail-formatter">
-              <Formatter field={sizeField} value={repo.size} />
+              <Formatter column={sizeField} value={repo.size} />
             </DetailItem>
             <DetailItem field={creatorField} className="sf-metadata-property-detail-formatter">
               <Formatter
-                field={creatorField}
+                column={creatorField}
                 value={repo.owner_email}
                 collaborators={[{
                   name: repo.owner_name,
@@ -59,7 +59,7 @@ const LibDetail = React.memo(({ currentRepoInfo, onClose, isInSearch }) => {
               />
             </DetailItem>
             <DetailItem field={mtimeField} className="sf-metadata-property-detail-formatter">
-              <Formatter field={mtimeField} value={repo.last_modified} />
+              <Formatter column={mtimeField} value={repo.last_modified} />
             </DetailItem>
           </div>
         }

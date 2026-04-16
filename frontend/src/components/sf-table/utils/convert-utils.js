@@ -220,6 +220,11 @@ function convert2Text(cellValue, oldCellValue, fromColumn, api) {
 
 function convert2Collaborator(cellValue, oldCellValue, fromColumnType, api) {
   const collaborators = api?.getCollaborators ? api.getCollaborators() : [];
+
+  if (collaborators.length === 0) {
+    return cellValue;
+  }
+
   switch (fromColumnType) {
     case CellType.COLLABORATOR: {
       if (!Array.isArray(cellValue) || cellValue.length === 0) {

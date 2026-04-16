@@ -415,10 +415,10 @@ class GroupBody extends Component {
       const isFromKeyboard = true;
       this.selectUpdate(cell, isFromKeyboard);
     } else {
-      const { columns, recordGetterByIndex, canModify } = this.props;
+      const { columns, recordGetterByIndex, canModifyRow } = this.props;
       const column = getColumnByIndex(cell.idx, columns);
       const supportOpenEditor = checkIsColumnSupportDirectEdit(column);
-      const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, true, recordGetterByIndex, canModify);
+      const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, true, recordGetterByIndex, canModifyRow);
       this.selectCell(cell, supportOpenEditor && hasOpenPermission);
     }
     this.props.onCellClick(cell);
@@ -426,10 +426,10 @@ class GroupBody extends Component {
   };
 
   onCellDoubleClick = (cell, e) => {
-    const { columns, recordGetterByIndex, canModify } = this.props;
+    const { columns, recordGetterByIndex, canModifyRow } = this.props;
     const column = getColumnByIndex(cell.idx, columns);
     const supportOpenEditor = checkIsColumnEditable(column);
-    const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, true, recordGetterByIndex, canModify);
+    const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, true, recordGetterByIndex, canModifyRow);
     this.selectCell(cell, supportOpenEditor && hasOpenPermission);
   };
 

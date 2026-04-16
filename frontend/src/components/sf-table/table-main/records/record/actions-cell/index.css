@@ -13,6 +13,12 @@
   opacity: 1;
 }
 
+.sf-table-cell.actions-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .sf-table-row:hover .sf-table-cell.actions-cell .row-expand {
   display: flex;
   justify-content: center;

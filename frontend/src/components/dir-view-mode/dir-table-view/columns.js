@@ -1,4 +1,4 @@
-import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '@/metadata/constants';
+import { CellType, COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '@/metadata/constants';
 import CellFormatter from '@/metadata/components/cell-formatter';
 import Editor from '@/metadata/components/cell-editors/editor';
 
@@ -28,18 +28,21 @@ export const EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS = [
   PRIVATE_COLUMN_KEY.TAGS,
 ];
 
-export const POPUP_EDITOR_COLUMN_KEYS = [
-  PRIVATE_COLUMN_KEY.FILE_STATUS,
-  PRIVATE_COLUMN_KEY.FILE_COLLABORATORS,
-  PRIVATE_COLUMN_KEY.FILE_EXPIRE_TIME,
-  PRIVATE_COLUMN_KEY.TAGS,
+export const POPUP_EDITOR_COLUMN_TYPES = [
+  CellType.DATE,
+  CellType.COLLABORATOR,
+  CellType.SINGLE_SELECT,
+  CellType.MULTIPLE_SELECT,
+  CellType.LONG_TEXT,
+  CellType.TAGS,
+  CellType.GEOLOCATION,
 ];
 
 export const SUPPORT_PREVIEW_COLUMN_KEYS = [
   PRIVATE_COLUMN_KEY.FILE_NAME,
 ];
 
-const DEFAULT_NAME_COLUMN_WIDTH = 200;
+const DEFAULT_NAME_COLUMN_WIDTH = 250;
 const DEFAULT_COLUMN_WIDTH = 200;
 
 const DIR_TABLE_COLUMNS_WIDTH_KEY = 'sf_dir_table_columns_width';
@@ -87,14 +90,14 @@ export const createDirentTableColumns = (repoID, repoInfo, columns) => {
       editable = EDITABLE_COLUMN_KEYS.includes(key);
     }
     const editable_via_click_cell = is_private && EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS.includes(key) || true;
-    const is_popup_editor = is_private && POPUP_EDITOR_COLUMN_KEYS.includes(key) || false;
+    const is_popup_editor = is_private && POPUP_EDITOR_COLUMN_TYPES.includes(type) || false;
     const is_support_preview = is_private && SUPPORT_PREVIEW_COLUMN_KEYS.includes(key) || false;
     const icon_tooltip = COLUMNS_ICON_NAME[column.type] || 'Text';
 
     const savedWidth = savedWidths[key];
     if (savedWidth) {
       column.width = savedWidth;
-    } else if (!column.width) {
+    } else {
       column.width = key === PRIVATE_COLUMN_KEY.FILE_NAME ? DEFAULT_NAME_COLUMN_WIDTH : DEFAULT_COLUMN_WIDTH;
     }
 

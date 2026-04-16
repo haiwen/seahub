@@ -30,12 +30,12 @@ const Cell = React.memo(({
   treeNodeDepth,
   hasChildNodes,
   isFoldedTreeNode,
-  canModify,
+  canModifyRow,
   toggleExpandTreeNode,
 }) => {
   const cellEditable = useMemo(() => {
-    return checkIsColumnEditable(column) && canModify && canModify(record);
-  }, [column, record, canModify]);
+    return checkIsColumnEditable(column) && canModifyRow && canModifyRow(record);
+  }, [column, record, canModifyRow]);
 
   const isNameColumn = useMemo(() => {
     return checkIsNameColumn(column);
@@ -108,7 +108,6 @@ const Cell = React.memo(({
   }, []);
 
   const onDragOver = useCallback((event) => {
-    // Do not call stopPropagation() here - we need dragover to bubble to Record for drag-fill support
     event.stopPropagation();
     event.preventDefault();
   }, []);

@@ -29,19 +29,19 @@ const DirDetails = ({ repoID, readOnly = false, direntDetail, tagsData }) => {
         <>
           <DetailItem field={filesField} value={file_count} className="sf-metadata-property-detail-formatter">
             {special_folder ?
-              <Formatter field={{ type: CellType.TEXT }} value={'--'} /> :
-              <Formatter field={filesField} value={file_count} />}
+              <Formatter column={{ type: CellType.TEXT }} value={'--'} /> :
+              <Formatter column={filesField} value={file_count} />}
           </DetailItem>
           <DetailItem field={sizeField} value={size} className="sf-metadata-property-detail-formatter">
             {special_folder ?
-              <Formatter field={{ type: CellType.TEXT }} value={'--'} /> :
-              <Formatter field={sizeField} value={size} />}
+              <Formatter column={{ type: CellType.TEXT }} value={'--'} /> :
+              <Formatter column={sizeField} value={size} />}
           </DetailItem>
           <MetadataDetails repoID={repoID} readOnly={readOnly} tagsData={tagsData} />
         </>
       )}
       <DetailItem field={lastModifiedTimeField} className="sf-metadata-property-detail-formatter">
-        <Formatter field={lastModifiedTimeField} value={direntDetail.mtime} />
+        <Formatter column={lastModifiedTimeField} value={direntDetail.mtime} />
       </DetailItem>
     </>
   );

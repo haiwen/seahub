@@ -208,6 +208,7 @@ RecordsHeader.propTypes = {
   selectNoneRecords: PropTypes.func,
   selectAllRecords: PropTypes.func,
   insertColumn: PropTypes.func,
+  canModifyColumn: PropTypes.func,
 };
 
 export default RecordsHeader;

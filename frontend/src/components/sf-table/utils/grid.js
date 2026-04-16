@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
 import { OVER_SCAN_COLUMNS } from '../constants/grid';
-import { getColumnByIndex } from './column';
+import { getColumnByIndex, getColumnOriginName } from './column';
 import { TRANSFER_TYPES } from '../constants/transfer-types';
 import { REG_STRING_NUMBER_PARTS, REG_NUMBER_DIGIT } from '../constants/reg';
-import { RATE_MAX_NUMBER } from '../constants/column';
+import { RATE_MAX_NUMBER } from '../constants/rate';
 import { getCellValueByColumn } from './cell';
 import { CellType } from '../../../metadata/constants';
 import { NOT_SUPPORT_DRAG_COPY_COLUMN_TYPES } from '../../../metadata/constants/view/table';
@@ -443,7 +443,7 @@ class GridUtils {
       for (let j = startColumnIdx; j <= endColumnIdx; j++) {
         let column = shownColumns[j];
         let { key: cellKey, type } = column;
-        const columnName = column.name;
+        const columnName = getColumnOriginName(column);
 
         const isFolder = checkIsDir(dragRow);
         if (isFolder && (type === CellType.TAGS || type === CellType.LONG_TEXT)) {

@@ -71,16 +71,12 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
     if (!event.target) return;
     const className = getEventClassName(event);
 
-    // Filter out clicks on dropdown items (column type selector)
     if (className.indexOf('column-type-item') > -1) return;
-    // Filter out clicks on submit/cancel buttons inside ColumnPopover
     if (className.indexOf('btn-primary') > -1 || className.indexOf('btn-secondary') > -1) return;
 
-    // Filter out clicks on ColumnPopover itself and its children
     const popover = document.querySelector('.sf-table-column-popover');
     if (popover && (popover === event.target || popover.contains(event.target))) return;
 
-    // Filter out clicks on dropdown menu
     const dropdownMenu = document.querySelector('.sf-table-column-type-dropdown-menu');
     if (dropdownMenu && event.target.closest('.sf-table-column-type-dropdown-menu')) return;
 

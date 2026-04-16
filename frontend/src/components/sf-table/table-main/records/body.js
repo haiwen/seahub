@@ -293,10 +293,10 @@ class RecordsBody extends Component {
       const isFromKeyboard = true;
       this.selectUpdate(cell, isFromKeyboard);
     } else {
-      const { columns, recordGetterByIndex, canModify } = this.props;
+      const { columns, recordGetterByIndex, canModifyRow } = this.props;
       const column = getColumnByIndex(cell.idx, columns);
       const supportOpenEditor = checkIsColumnSupportDirectEdit(column);
-      const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, false, recordGetterByIndex, canModify);
+      const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, false, recordGetterByIndex, canModifyRow);
       this.selectCell(cell, supportOpenEditor && hasOpenPermission);
     }
     this.props.onCellClick(cell);
@@ -304,10 +304,10 @@ class RecordsBody extends Component {
   };
 
   onCellDoubleClick = (cell, e) => {
-    const { columns, recordGetterByIndex, canModify, onCellDoubleClick } = this.props;
+    const { columns, recordGetterByIndex, canModifyRow, onCellDoubleClick } = this.props;
     const column = getColumnByIndex(cell.idx, columns);
     const supportOpenEditor = checkEditableViaClickCell(column);
-    const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, false, recordGetterByIndex, canModify);
+    const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, false, recordGetterByIndex, canModifyRow);
     this.selectCell(cell, supportOpenEditor && hasOpenPermission);
     // Call the onCellDoubleClick prop if provided, special for history view
     if (onCellDoubleClick) {
@@ -510,7 +510,7 @@ class RecordsBody extends Component {
           cellMetaData={cellMetaData}
           columnColor={columnColor}
           searchResult={this.props.searchResult}
-          canModify={this.props.canModify}
+          canModifyRow={this.props.canModifyRow}
           checkCellValueChanged={this.props.checkCellValueChanged}
           hasSelectedCell={hasSelectedCell}
           selectedPosition={this.state.selectedPosition}
@@ -638,7 +638,7 @@ RecordsBody.propTypes = {
   onCellClick: PropTypes.func,
   onCellRangeSelectionUpdated: PropTypes.func,
   onSelectRecord: PropTypes.func,
-  canModify: PropTypes.func,
+  canModifyRow: PropTypes.func,
   deleteRecordsLinks: PropTypes.func,
   paste: PropTypes.func,
   searchResult: PropTypes.object,

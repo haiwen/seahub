@@ -21,7 +21,6 @@ const FileName = ({ repoID, record, className: propsClassName, value, hideIcon =
   }, [propsClassName, value]);
 
   const iconUrl = useMemo(() => {
-    if (!value) return;
     if (hideIcon) return {};
     if (isDir) {
       const icon = Utils.getFolderIconUrl();

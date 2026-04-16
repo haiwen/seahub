@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
-import GridUtils from '@/components/sf-table/utils/grid';
-import PasteUtils from '@/components/sf-table/utils/paste';
+import { GridUtilsAdapter } from '@/components/sf-table/utils/grid-utils-adapter';
 import CellFormatter from '../../components/cell-formatter';
 import Editor from '../../components/cell-editors/editor';
 import { CellType, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '@/metadata/constants';
@@ -56,55 +55,8 @@ export const adaptMetadataColumnsToSfTable = (repoID, metadataColumns) => {
  * GridUtils and PasteUtils adapter for metadata table.
  * Provides a unified interface for drag-fill and paste operations.
  */
-class MetadataGridUtilsAdapter {
-
-  constructor(metadata, api) {
-    this.metadata = metadata;
-    this.api = api;
-
-    // Transform metadata to sf-table's expected structure:
-    // sf-table expects metadata.row_ids (via view.rows) for PasteUtils
-    const metadataForSfTable = {
-      ...metadata,
-      row_ids: metadata?.view?.rows || [],
-    };
-
-    // Use sf-table's GridUtils for getCopiedContent and getUpdateDraggedRecords
-    this.gridUtils = new GridUtils(metadata?.view?.rows || [], api);
-    // Use sf-table's PasteUtils for paste and clearCutData
-    this.pasteUtils = new PasteUtils(metadataForSfTable, api);
-  }
-
-  getCopiedContent({ type, copied, isGroupView, columns }) {
-    return this.gridUtils.getCopiedContent({ type, copied, isGroupView, columns });
-  }
-
-  /**
-   * @param {Object} draggedRange - The dragged range
-   * @param {Array} shownColumns - Columns to update
-   * @param {Array} rows - All rows
-   * @param {Object} idRowMap - Map of row id to row
-   * @param {Object} groupMetrics - Group metrics for group view
-   * @param {Function} canModifyRow - Permission function: (record) => boolean
-   * @param {Function} canModifyColumn - Permission function: (column) => boolean
-   */
-  getUpdateDraggedRecords(draggedRange, shownColumns, rows, idRowMap, groupMetrics, canModifyRow, canModifyColumn) {
-    return this.gridUtils.getUpdateDraggedRecords(draggedRange, shownColumns, rows, idRowMap, groupMetrics, canModifyRow, canModifyColumn);
-  }
-
-  /**
-   * @param {Object} params - Paste parameters
-   * @param {Function} canModifyRow - Permission function: (record) => boolean
-   * @param {Function} canModifyColumn - Permission function: (column) => boolean
-   */
-  paste({ type, copied, multiplePaste, pasteRange, isGroupView, columns, pasteSource, cutPosition, viewId, canModifyRow, canModifyColumn }) {
-    return this.pasteUtils.paste({ type, copied, multiplePaste, pasteRange, isGroupView, columns, pasteSource, cutPosition, viewId, canModifyRow, canModifyColumn });
-  }
-
-  clearCutData(cutPosition, cutData, isGroupView, canModifyRow) {
-    return this.pasteUtils.clearCutData(cutPosition, cutData, isGroupView, canModifyRow);
-  }
-}
+export { GridUtilsAdapter } from '@/components/sf-table/utils/grid-utils-adapter';
+export { GridUtilsAdapter as MetadataGridUtilsAdapter } from '@/components/sf-table/utils/grid-utils-adapter';
 
 // Create context menu options for SFTable using metadata's menu pattern
 // This replicates the logic from metadata/views/table/context-menu.js
@@ -133,10 +85,7 @@ export const createMetadataContextMenuOptions = ({
     enableTags,
   };
 
-  // Get selected records from recordMetrics
   const selectedIds = recordMetrics ? Object.keys(recordMetrics.idSelectedRecordMap || {}).filter(id => recordMetrics.idSelectedRecordMap[id]) : [];
-
-  // Determine records based on selection type - ORDER MATTERS!
   let records = [];
   let isSelectedRange = false;
   let isNameColumn = false;
@@ -374,7 +323,10 @@ export const useMetadataTableAdapter = ({
         return window.sfMetadata.getCollaborators() || [];
       },
     };
-    const adapter = new MetadataGridUtilsAdapter(metadata, api);
+    const adapter = new GridUtilsAdapter({
+      renderRecordsIds: metadata?.view?.rows || [],
+      api,
+    });
 
     // Attach context menu options creator
     adapter.createContextMenuOptions = (props) => createMetadataContextMenuOptions({
