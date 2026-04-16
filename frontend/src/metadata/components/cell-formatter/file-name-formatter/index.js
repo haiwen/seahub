@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Utils } from '../../../../utils/utils';
@@ -13,9 +13,12 @@ const FileNameFormatter = ({
   children,
   iconUrl,
   defaultIconUrl,
+  height,
+  cellRef,
   onClickName = () => {}
 }) => {
   const [icon, setIcon] = useState(iconUrl);
+  const [iconContainerStyle, setIconContainerStyle] = useState({});
 
   const { lockedImageUrl, lockedMessage, lockedInfo } = useMemo(() => {
     if (!record) return { lockedImageUrl: null, lockedMessage: null, lockedInfo: null };
@@ -35,6 +38,16 @@ const FileNameFormatter = ({
     onClickName(e, record);
   }, [onClickName, record]);
 
+  useEffect(() => {
+    if (cellRef.current) {
+      const cellComputedStyle = window.getComputedStyle(cellRef.current);
+      const paddingTop = parseFloat(cellComputedStyle.paddingTop);
+      const paddingBottom = parseFloat(cellComputedStyle.paddingBottom);
+      const size = height - paddingTop - paddingBottom;
+      setIconContainerStyle({ width: size, height: size });
+    }
+  }, [cellRef, height]);
+
   if (!value) return children || null;
 
   return (
@@ -43,7 +56,7 @@ const FileNameFormatter = ({
       title={value}
     >
       {icon &&
-        <div className="sf-metadata-file-icon-container">
+        <div className="sf-metadata-file-icon-container" style={iconContainerStyle}>
           <img className="sf-metadata-file-icon" src={icon} onError={onLoadError} alt='' />
           {record?._is_locked && <img className="locked" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo} />}
         </div>

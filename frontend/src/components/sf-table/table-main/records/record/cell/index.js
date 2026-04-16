@@ -1,4 +1,4 @@
-import React, { cloneElement, isValidElement, useCallback, useMemo } from 'react';
+import React, { cloneElement, isValidElement, useCallback, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Utils } from '../../../../../../utils/utils';
@@ -33,6 +33,8 @@ const Cell = React.memo(({
   canModifyRow,
   toggleExpandTreeNode,
 }) => {
+  const cellRef = useRef(null);
+
   const cellEditable = useMemo(() => {
     return checkIsColumnEditable(column) && canModifyRow && canModifyRow(record);
   }, [column, record, canModifyRow]);
@@ -170,7 +172,7 @@ const Cell = React.memo(({
   };
 
   const renderCellContent = useCallback(() => {
-    const columnFormatter = isValidElement(column.formatter) && cloneElement(column.formatter, { isCellSelected, value: cellValue, column, record, treeNodeIndex, onChange: modifyRecord });
+    const columnFormatter = isValidElement(column.formatter) && cloneElement(column.formatter, { isCellSelected, height, cellRef, value: cellValue, column, record, treeNodeIndex, onChange: modifyRecord });
     if (showRecordAsTree && isNameColumn) {
       return (
         <div className="sf-table-cell-tree-node">
@@ -190,10 +192,10 @@ const Cell = React.memo(({
       );
     }
     return columnFormatter;
-  }, [isNameColumn, column, isCellSelected, cellValue, record, showRecordAsTree, treeNodeIndex, treeNodeDepth, hasChildNodes, isFoldedTreeNode, modifyRecord, toggleExpandTreeNode]);
+  }, [isNameColumn, column, isCellSelected, height, cellValue, record, showRecordAsTree, treeNodeIndex, treeNodeDepth, hasChildNodes, isFoldedTreeNode, modifyRecord, toggleExpandTreeNode]);
 
   return (
-    <div key={`${record._id}-${column.key}`} {...containerProps}>
+    <div key={`${record._id}-${column.key}`} {...containerProps} ref={cellRef}>
       {renderCellContent()}
     </div>
   );
