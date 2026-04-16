@@ -61,7 +61,7 @@ Option.propTypes = {
 
 const ValueContainer = ({ children, ...props }) => {
   // Do not show '--'
-  const isClearOption = props.selectProps.value?.value === null && props.selectProps.value?.label === '--';
+  const isClearOption = props.selectProps.value?.value === null;
   if (isClearOption) {
     return (
       <components.ValueContainer {...props}/>
