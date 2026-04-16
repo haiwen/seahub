@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { useDrag, useDrop } from 'react-dnd';
@@ -68,10 +68,12 @@ const GroupbyItem = ({ showDragBtn, index, readOnly, groupby, columns, onDelete,
       return {
         value: { column },
         label: (
-          <Fragment>
-            <span className="sf-metadata-filter-header-icon"><Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[type]} /></span>
+          <div>
+            <span className="sf-metadata-filter-header-icon">
+              <Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[type]} />
+            </span>
             <span className="select-option-name">{name}</span>
-          </Fragment>
+          </div>
         )
       };
     });

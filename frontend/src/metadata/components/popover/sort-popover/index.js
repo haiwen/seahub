@@ -143,10 +143,12 @@ class SortPopover extends Component {
       return {
         value: { column },
         label: (
-          <Fragment>
-            <span className="sf-metadata-filter-header-icon"><Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[type]} /></span>
+          <div>
+            <span className="sf-metadata-filter-header-icon">
+              <Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[type]} />
+            </span>
             <span className=''>{name}</span>
-          </Fragment>
+          </div>
         )
       };
     });

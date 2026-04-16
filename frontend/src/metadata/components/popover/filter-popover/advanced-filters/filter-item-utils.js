@@ -1,44 +1,53 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import Icon from '../../../../../components/icon';
 import { gettext } from '../../../../../utils/constants';
 import { COLUMNS_ICON_CONFIG, FILTER_PREDICATE_SHOW, FILTER_TERM_MODIFIER_SHOW } from '../../../../constants';
 
 class FilterItemUtils {
 
-  static generatorColumnOption(column) {
+  static generateColumnOption(column) {
     if (!column) return null;
     const { type, name } = column;
     return {
       value: { column },
       label: (
-        <Fragment>
-          <span className="sf-metadata-filter-header-icon"><Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[type]} /></span>
+        <div>
+          <span className="sf-metadata-filter-header-icon">
+            <Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[type]} />
+          </span>
           <span className="select-option-name">{name}</span>
-        </Fragment>
+        </div>
       )
     };
   }
 
-  static generatorPredicateOption(filterPredicate) {
+  static generatePredicateOption(filterPredicate) {
     return {
       value: { filterPredicate },
       label: <span className="select-option-name">{FILTER_PREDICATE_SHOW[filterPredicate]}</span>
     };
   }
 
-  static generatorTermModifierOption(filterTermModifier) {
+  static generateTermModifierOption(filterTermModifier) {
     return {
       value: { filterTermModifier },
       label: <span className="select-option-name">{FILTER_TERM_MODIFIER_SHOW[filterTermModifier]}</span>
     };
   }
 
-  static generatorSingleSelectOption(option, selectedOption) {
+  static generateSingleSelectOption(option, selectedOption) {
     return {
       value: { columnOption: option },
       label: (
         <div className="select-option-name single-option-name">
-          <div className="single-select-option" style={{ background: option.color, color: option.textColor || null }} title={option.name} aria-label={option.name}>{option.name}</div>
+          <div
+            className="single-select-option"
+            style={{ background: option.color, color: option.textColor || null }}
+            title={option.name}
+            aria-label={option.name}
+          >
+            {option.name}
+          </div>
           <div className="single-check-icon">
             {selectedOption?.id === option.id && <Icon symbol="check-thin" />}
           </div>
@@ -47,12 +56,19 @@ class FilterItemUtils {
     };
   }
 
-  static generatorMultipleSelectOption(option, filterTerm) {
+  static generateMultipleSelectOption(option, filterTerm) {
     return {
       value: { columnOption: option },
       label: (
         <div className="select-option-name multiple-option-name">
-          <div className="multiple-select-option" style={{ background: option.color, color: option.textColor }} title={option.name} aria-label={option.name}>{option.name}</div>
+          <div
+            className="multiple-select-option"
+            style={{ background: option.color, color: option.textColor || null }}
+            title={option.name}
+            aria-label={option.name}
+          >
+            {option.name}
+          </div>
           <div className="multiple-check-icon">
             {filterTerm.indexOf(option.id) > -1 && <Icon symbol="check-thin" />}
           </div>
@@ -61,7 +77,7 @@ class FilterItemUtils {
     };
   }
 
-  static generatorConjunctionOptions() {
+  static generateConjunctionOptions() {
     return [
       {
         value: { filterConjunction: 'And' },

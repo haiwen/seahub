@@ -327,12 +327,6 @@
   background-color: field !important;
 }
 
-.seafile-select-option:hover .sf-metadata-filter-header-icon .seafile-multicolor-icon,
-.seafile-select-option.seafile-select-option-active .sf-metadata-filter-header-icon .seafile-multicolor-icon,
-.sf-metadata-setting-selector__menu .sf-metadata-setting-selector__option--is-selected .seafile-multicolor-icon {
-  color: #fff;
-}
-
 .seafile-select-option:not(.seafile-select-option-active):hover .sf-metadata-filter-header-icon .sf2-icon-tick {
   color: var(--bs-icon-secondary-color);
 }

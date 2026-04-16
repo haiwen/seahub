@@ -55,7 +55,7 @@ class AdvancedFilters extends Component {
 
   getConjunctionOptions = () => {
     if (!this.conjunctionOptions) {
-      this.conjunctionOptions = FilterItemUtils.generatorConjunctionOptions();
+      this.conjunctionOptions = FilterItemUtils.generateConjunctionOptions();
     }
     return this.conjunctionOptions;
   };
@@ -72,7 +72,7 @@ class AdvancedFilters extends Component {
     if (!this.columnOptions) {
       const filterColumns = this.getFilterColumns();
       this.columnOptions = filterColumns.map(column => {
-        return FilterItemUtils.generatorColumnOption(column);
+        return FilterItemUtils.generateColumnOption(column);
       });
     }
     return this.columnOptions;

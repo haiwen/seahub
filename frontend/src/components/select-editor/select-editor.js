@@ -130,7 +130,7 @@ class SelectEditor extends React.Component {
 
   render() {
     const {
-      currentOption, isTextMode, autoFocus = false, isEditIconShow
+      currentOption, isTextMode, autoFocus = false, isEditIconShow, isSearchable = false
     } = this.props;
     return (
       <div className="permission-editor" onClick={this.onSelectHandler}>
@@ -149,6 +149,7 @@ class SelectEditor extends React.Component {
             components={{ DropdownIndicator }}
             onMenuClose={this.onMenuClose}
             autoFocus={autoFocus}
+            isSearchable={isSearchable}
             menuShouldScrollIntoView
           />
         }

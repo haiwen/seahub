@@ -110,7 +110,7 @@ class CustomizeSelect extends Component {
             (enableDeleteSelected ?
               <span className="selected-option-show-container">
                 <span className='selected-option-show'>{value.label}</span>
-                <span className='selected-option-delete ml-1' onClick={this.props.deleteSelected}>
+                <span className='selected-option-delete ml-2' onClick={this.props.deleteSelected}>
                   <Icon symbol="close" />
                 </span>
               </span>

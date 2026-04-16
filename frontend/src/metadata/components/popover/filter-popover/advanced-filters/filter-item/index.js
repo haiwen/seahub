@@ -87,7 +87,7 @@ class FilterItem extends React.Component {
     let { filterPredicateList, filterTermModifierList } = getColumnOptions(filterColumn, value);
     // The value of the calculation formula column does not exist in the shared view
     this.filterPredicateOptions = filterPredicateList ? filterPredicateList.map(predicate => {
-      return FilterItemUtils.generatorPredicateOption(predicate);
+      return FilterItemUtils.generatePredicateOption(predicate);
     }).filter(item => item) : [];
 
     const { filter_predicate } = filter;
@@ -96,7 +96,7 @@ class FilterItem extends React.Component {
         filterTermModifierList = filterTermModifierIsWithin;
       }
       this.filterTermModifierOptions = filterTermModifierList.map(termModifier => {
-        return FilterItemUtils.generatorTermModifierOption(termModifier);
+        return FilterItemUtils.generateTermModifierOption(termModifier);
       });
     }
   };
@@ -339,7 +339,7 @@ class FilterItem extends React.Component {
     const selectedOptionNames = labelArray.length > 0 ? { label: (<Fragment>{labelArray}</Fragment>) } : {};
 
     const dataOptions = options.map(option => {
-      return FilterItemUtils.generatorMultipleSelectOption(option, filterTerm);
+      return FilterItemUtils.generateMultipleSelectOption(option, filterTerm);
     });
     return (
       <CustomizeSelect
@@ -449,7 +449,7 @@ class FilterItem extends React.Component {
         }
 
         let dataOptions = options.map(option => {
-          return FilterItemUtils.generatorSingleSelectOption(option);
+          return FilterItemUtils.generateSingleSelectOption(option);
         });
 
         return (
@@ -564,12 +564,12 @@ class FilterItem extends React.Component {
     const { filterPredicateOptions, filterTermModifierOptions } = this;
     const { filter, filterColumn, filterColumnOptions, readOnly } = this.props;
     const { filter_predicate, filter_term_modifier } = filter;
-    const activeColumn = FilterItemUtils.generatorColumnOption(filterColumn);
-    const activePredicate = FilterItemUtils.generatorPredicateOption(filter_predicate);
+    const activeColumn = FilterItemUtils.generateColumnOption(filterColumn);
+    const activePredicate = FilterItemUtils.generatePredicateOption(filter_predicate);
     let activeTermModifier = null;
     let _isCheckboxColumn = false;
     if (isDateColumn(filterColumn)) {
-      activeTermModifier = FilterItemUtils.generatorTermModifierOption(filter_term_modifier);
+      activeTermModifier = FilterItemUtils.generateTermModifierOption(filter_term_modifier);
     } else if (isCheckboxColumn(filterColumn)) {
       _isCheckboxColumn = true;
     }
