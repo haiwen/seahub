@@ -1,6 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from django.conf import settings
-from django.utils.deprecation import MiddlewareMixin
+from seahub.utils.mixin import MiddlewareMixin
 
 from seahub.institutions.models import InstitutionAdmin
 

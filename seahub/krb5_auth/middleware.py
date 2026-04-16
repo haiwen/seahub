@@ -2,7 +2,7 @@
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.deprecation import MiddlewareMixin
+from seahub.utils.mixin import MiddlewareMixin
 
 from seahub import auth
 
