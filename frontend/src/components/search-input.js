@@ -73,7 +73,8 @@ class SearchInput extends Component {
     this.onChange(e);
   };
 
-  clearSearch = () => {
+  clearSearch = (e) => {
+    e && e.stopPropagation && e.stopPropagation();
     const { clearValue } = this.props;
     this.setState({ searchValue: '' }, () => {
       clearValue && clearValue();
@@ -107,13 +108,16 @@ class SearchInput extends Component {
   };
 
   render() {
-    const { placeholder, autoFocus, className, onKeyDown, disabled = false, style } = this.props;
+    const { placeholder, autoFocus, className, onKeyDown, disabled = false, style = {}, isClearable } = this.props;
     const { searchValue } = this.state;
+    const inputWidth = (isClearable && searchValue) ? 'calc(100% - 40px)' : '100%';
+    style.width = inputWidth;
 
     return (
       <Fragment>
         <input
           type="text"
+          name="search-input"
           value={searchValue}
           className={classnames('form-control', className)}
           onChange={this.onChange}

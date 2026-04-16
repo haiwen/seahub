@@ -206,6 +206,7 @@ class TransferDialog extends React.Component {
                 <TabPane tabId="transDepart" role="tabpanel" id="transfer-depart-panel">
                   <Label className='transfer-repo-label'>{gettext('Departments')}</Label>
                   <CustomizeSelect
+                    className="pl-2"
                     readOnly={false}
                     value={this.state.selectedOption}
                     options={this.state.options}

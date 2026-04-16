@@ -27,10 +27,12 @@ const Settings = ({
       .map(col => ({
         value: col.key,
         label: (
-          <>
-            <span className="sf-metadata-select-icon"><Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[col.type]} /></span>
+          <div>
+            <span className="sf-metadata-select-icon">
+              <Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[col.type]} />
+            </span>
             <span>{col.name}</span>
-          </>
+          </div>
         )
       }));
   }, [validColumns]);
@@ -39,10 +41,12 @@ const Settings = ({
       .map(col => ({
         value: col.key,
         label: (
-          <>
-            <span className="sf-metadata-select-icon"><Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[col.type]} /></span>
+          <div>
+            <span className="sf-metadata-select-icon">
+              <Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[col.type]} />
+            </span>
             <span>{col.name}</span>
-          </>
+          </div>
         )
       }));
   }, [validColumns]);

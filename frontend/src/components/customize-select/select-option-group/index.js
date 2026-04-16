@@ -128,6 +128,10 @@ class SelectOptionGroup extends Component {
     }
   };
 
+  clearSearch = () => {
+    this.setState({ searchVal: '', activeIndex: -1, });
+  };
+
   renderOptGroup = (searchVal) => {
     let { noOptionsPlaceholder, onSelectOption, value } = this.props;
     this.filterOptions = this.props.getFilterOptions(searchVal);
@@ -176,6 +180,7 @@ class SelectOptionGroup extends Component {
         opacity: 0,
       };
     }
+    style.top = style.top + 4;
     return (
       <ClickOutside onClickOutside={this.props.onClickOutside}>
         <div
@@ -196,7 +201,9 @@ class SelectOptionGroup extends Component {
                 className="option-search-control"
                 placeholder={searchPlaceholder}
                 onChange={this.onChangeSearch}
+                clearValue={this.clearSearch}
                 autoFocus={true}
+                isClearable={true}
               />
             </div>
           )}

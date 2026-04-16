@@ -61,7 +61,7 @@ Option.propTypes = {
 
 const ValueContainer = ({ children, ...props }) => {
   // Do not show '--'
-  const isClearOption = props.selectProps.value?.data?.value === null && props.selectProps.value?.data?.label === '--';
+  const isClearOption = props.selectProps.value?.value === null && props.selectProps.value?.label === '--';
   if (isClearOption) {
     return (
       <components.ValueContainer {...props}/>
@@ -89,7 +89,7 @@ class SeahubSelect extends React.Component {
   };
 
   render() {
-    const { options = [], onChange, value = {}, isSearchable = true, placeholder = '',
+    const { options = [], onChange, value = {}, isSearchable = false, placeholder = '',
       isMulti = false, menuPosition, isClearable = true, noOptionsMessage = (() => { return null; }),
       classNamePrefix, innerRef, isDisabled = false, form, className = '' } = this.props;
 
@@ -105,7 +105,6 @@ class SeahubSelect extends React.Component {
       const isSelected = value && value.value === option.value;
       return {
         ...option,
-        data: option,
         label: (
           <span className="d-flex align-items-center justify-content-between">
             {option.label}

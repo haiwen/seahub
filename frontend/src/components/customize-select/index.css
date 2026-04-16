@@ -1,8 +1,8 @@
 .seafile-customize-select {
   position: relative;
   display: flex;
-  padding: 0 10px;
-  border-radius: 3px;
+  padding: 0 16px;
+  border-radius: 4px;
   align-items: center;
   justify-content: space-between;
   max-width: 900px;
@@ -12,12 +12,12 @@
   background-image: none;
   font-size: 14px;
   color: var(--bs-body-color);
+  border: 1px solid rgba(0, 40, 100, 0.12);
 }
 
 .seafile-customize-select:focus,
 .seafile-customize-select.focus {
-  border-color: #1991eb !important;
-  box-shadow: 0 0 0 2px rgba(70, 127, 207, 0.25);
+  border-color: #3E84F7 !important;
 }
 
 .seafile-customize-select.disabled:focus,
@@ -36,7 +36,7 @@
 .seafile-customize-select .seafile-multicolor-icon-down {
   width: 12px;
   height: 12px;
-  color: #999;
+  color: var(--bs-icon-color);
 }
 
 .seafile-customize-select .selected-option {
@@ -50,23 +50,25 @@
 }
 
 .seafile-customize-select .selected-option .selected-option-show-container {
-  background: #f0f0f0;
-  border-radius: 10px;
-  padding-right: 6px;
-  padding-left: 12px;
-  margin-right: 6px;
+  background: #f7f7f5;
+  border-radius: 4px;
+  padding: 0px 6px;
+  margin-right: 4px;
+  height: 24px;
+  display: flex;
+  align-items: center;
 }
 
 .seafile-customize-select .selected-option .selected-option-show-container .seafile-multicolor-icon-x-01 {
   width: 12px;
   height: 12px;
-  color: #999;
+  color: var(--bs-icon-color);
 }
 
 .seafile-customize-select .selected-option .custom-select-dropdown-icon {
   height: 12px;
   width: 12px;
-  color: #999;
+  color: var(--bs-icon-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -111,20 +113,12 @@
 }
 
 .seafile-customize-select .selected-option-delete .seafile-multicolor-icon {
-  color: #909090;
-}
-
-.seafile-customize-select .selected-option-delete .seafile-multicolor-icon:hover {
-  color: #666;
+  color: var(--bs-icon-color);
 }
 
 .seafile-customize-select .select-placeholder {
   line-height: 1;
   font-size: 14px;
   white-space: nowrap;
-  color: var(--bs-body-secondary-color);
-}
-
-.seafile-customize-select .seafile-select-option {
-  justify-content: start;
+  color: #868E96;
 }
