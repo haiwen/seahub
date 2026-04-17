@@ -98,7 +98,7 @@ class FileContent extends React.Component {
             <Icon symbol="down" className="rotate-270" />
           </a>
         )}
-        <img src={thumbnailURL || rawPath} alt={fileName} id="image-view" onError={this.handleLoadFailure} style={style} />
+        <img className={this.props.imgClass || ''} src={thumbnailURL || rawPath} alt={fileName} id="image-view" onError={this.handleLoadFailure} style={style} />
       </div>
     );
   }
@@ -109,6 +109,7 @@ FileContent.propTypes = {
   scale: PropTypes.number,
   angle: PropTypes.number,
   offset: PropTypes.object,
+  imgClass: PropTypes.string,
 };
 
 export default FileContent;
