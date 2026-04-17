@@ -81,53 +81,6 @@ def latest_entry(request, repo_id, size, path):
         logger.error(e, exc_info=True)
         return None
 
-
-@login_required
-@condition(last_modified_func=latest_entry)
-def thumbnail_get(request, repo_id, size, path):
-    """ handle thumbnail src from repo file list
-
-    return thumbnail file to web
-    """
-    repo = get_repo(repo_id)
-    obj_id = get_file_id_by_path(repo_id, path)
-
-    # check if file exist
-    if not repo or not obj_id:
-        return HttpResponse()
-
-    # check if is allowed
-    if repo.encrypted or check_folder_permission(request, repo_id, path) is None:
-        return HttpResponse()
-
-    try:
-        size = int(size)
-    except ValueError as e:
-        logger.error(e)
-        return HttpResponse()
-
-    # Use MD5 of repo_id + path as thumbnail filename
-    thumbnail_key = generate_thumbnail_key(repo_id, path)
-    thumbnail_file = os.path.join(THUMBNAIL_ROOT, str(size), thumbnail_key)
-    
-    success, status_code = generate_thumbnail(request, repo_id, size, path)
-
-    if success:
-        try:
-            with open(thumbnail_file, 'rb') as f:
-                thumbnail = f.read()
-            resp = HttpResponse(content=thumbnail,
-                                content_type='image/' + THUMBNAIL_EXTENSION)
-
-            resp['Cache-Control'] = 'private, max-age=%s' % (3600 * 24 * THUMBNAIL_CACHE_DAYS)
-            return resp
-        except IOError as e:
-            logger.error(e)
-            return HttpResponse(status=500)
-    else:
-        return HttpResponse(status=status_code)
-
-
 def get_real_path_by_fs_and_req_path(fileshare, req_path):
     """ Return the real path of a file.
 

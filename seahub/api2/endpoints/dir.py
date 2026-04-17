@@ -17,7 +17,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error, to_python_boolean
 from seahub.api2.views import get_dir_file_recursively
 
-from seahub.thumbnail.utils import get_thumbnail_src
+from seahub.thumbnail.utils import generate_thumbnail_key, get_thumbnail_src
 from seahub.views import check_folder_permission
 from seahub.utils import check_filename_with_rename, is_valid_dirent_name, \
         normalize_dir_path, is_pro_version, FILEEXT_TYPE_MAP
@@ -177,8 +177,10 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
                     # if thumbnail has already been created, return its src.
                     # Then web browser will use this src to get thumbnail instead of
                     # recreating it.
+                    file_path = os.path.join(parent_dir, file_name)
+                    thumbnail_key = generate_thumbnail_key(repo_id, file_path)
                     thumbnail_file_path = os.path.join(THUMBNAIL_ROOT,
-                            str(thumbnail_size), file_obj_id)
+                            str(thumbnail_size), thumbnail_key)
 
                     src = get_thumbnail_src(repo_id, thumbnail_size, file_path)
                     if ENABLE_THUMBNAIL_SERVER:
