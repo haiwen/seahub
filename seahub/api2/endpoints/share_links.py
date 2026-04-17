@@ -45,7 +45,7 @@ from seahub.utils.file_tags import get_tagged_files, get_files_tags_in_dir
 from seahub.utils.timeutils import datetime_to_isoformat_timestr, \
         timestamp_to_isoformat_timestr
 from seahub.utils.repo import parse_repo_perm
-from seahub.thumbnail.utils import get_share_link_thumbnail_src
+from seahub.thumbnail.utils import generate_thumbnail_key, get_share_link_thumbnail_src
 from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, \
         SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_LOGIN_REQUIRED, \
         SHARE_LINK_EXPIRE_DAYS_DEFAULT, THUMBNAIL_DEFAULT_SIZE, \
@@ -1011,13 +1011,14 @@ class ShareLinkDirents(APIView):
                 dirent_info['is_dir'] = False
                 dirent_info['file_path'] = normalize_file_path(dirent_path)
                 dirent_info['file_name'] = dirent.obj_name
-
+                real_file_path = os.path.join(path, dirent.obj_name)
+                thumbnail_key = generate_thumbnail_key(repo_id, real_file_path)
                 file_type, file_ext = get_file_type_and_ext(dirent.obj_name)
                 if file_type == IMAGE or \
                         (file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL) or \
                         (file_type == PDF and ENABLE_PDF_THUMBNAIL):
 
-                    if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(thumbnail_size), dirent.obj_id)):
+                    if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(thumbnail_size), thumbnail_key)):
                         req_image_path = posixpath.join(request_path, dirent.obj_name)
                         src = get_share_link_thumbnail_src(token, thumbnail_size, req_image_path)
                         dirent_info['encoded_thumbnail_src'] = quote(src)
