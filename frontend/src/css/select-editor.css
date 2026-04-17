@@ -72,3 +72,7 @@
   width: 14px;
   height: 14px;
 }
+
+.permission-editor-value-container .seafile-multicolor-icon-check {
+  display: none;
+}
