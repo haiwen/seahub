@@ -44,6 +44,7 @@ class ThumbnailGet(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
+    
     @method_decorator(condition(last_modified_func=latest_entry))
     def get(self, request, repo_id, size, path):
         """ handle thumbnail src from repo file list
