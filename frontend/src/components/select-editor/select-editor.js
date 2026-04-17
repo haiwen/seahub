@@ -132,11 +132,24 @@ class SelectEditor extends React.Component {
     const {
       currentOption, isTextMode, autoFocus = false, isEditIconShow, isSearchable = false
     } = this.props;
+    const optionsWithCheck = this.state.options.map(option => {
+      return {
+        ...option,
+        label: (
+          <span className="d-flex align-items-center justify-content-between">
+            {option.label}
+            {currentOption === option.value &&
+              <Icon className="flex-shrink-0" symbol="check" style={{ width: '12px', height: '12px' }} />
+            }
+          </span>
+        )
+      };
+    });
     return (
       <div className="permission-editor" onClick={this.onSelectHandler}>
         {(!isTextMode || this.state.isEditing) &&
           <Select
-            options={this.state.options}
+            options={optionsWithCheck}
             className="permission-editor-select"
             classNamePrefix="permission-editor"
             value={this.state.options.filter(item => item.value == currentOption)[0]}
