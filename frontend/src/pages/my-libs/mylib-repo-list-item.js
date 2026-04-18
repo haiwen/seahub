@@ -302,23 +302,17 @@ class MylibRepoListItem extends React.Component {
     let iconTitle = Utils.getLibIconTitle(repo);
     let repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
     return currentViewMode == LIST_MODE ? (
-      <tr
-        className={this.state.highlight ? 'tr-highlight' : ''}
+      <div
+        className={`repo-list-item ${this.state.highlight ? 'hover' : ''}`}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         onFocus={this.onMouseEnter}
         onContextMenu={this.handleContextMenu}
       >
-        <td className="text-center">
-          <OpIcon
-            className="star-icon"
-            symbol={this.state.isStarred ? 'starred' : 'unstarred'}
-            title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
-            op={this.onToggleStarRepo}
-          />
-        </td>
-        <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
-        <td>
+        <div className="repo-item-icon">
+          <img src={iconUrl} title={iconTitle} alt={iconTitle} width="20" />
+        </div>
+        <div className="repo-item-name">
           {this.state.isRenaming && (
             <Rename
               name={repo.repo_name}
@@ -330,13 +324,20 @@ class MylibRepoListItem extends React.Component {
             <>
               <Link to={repoURL}>{repo.repo_name}</Link>
               <ArchiveIcon currentRepoInfo={repo} />
+              {isStarred && (
+                <OpIcon
+                  className="star-icon"
+                  symbol="starred"
+                  title={gettext('Unstar')}
+                />
+              )}
             </>
           )}
           {!this.state.isRenaming && !repo.repo_name &&
             (gettext('Broken (please contact your administrator to fix this library)'))
           }
-        </td>
-        <td>
+        </div>
+        <div className="repo-item-actions">
           {(repo.repo_name && this.state.isOpIconShow) && (
             <div className="d-flex align-items-center lh-1">
               <OpIcon
@@ -354,50 +355,46 @@ class MylibRepoListItem extends React.Component {
               <LibraryOpMenu
                 isPC={true}
                 repo={this.props.repo}
+                isStarred={this.state.isStarred}
                 onMenuItemClick={this.onMenuItemClick}
                 onFreezedItem={this.props.onFreezedItem}
                 onUnfreezedItem={this.onUnfreezedItem}
               />
             </div>
           )}
-        </td>
-        <td>{repo.size}</td>
-        {(storages.length > 0 && !inAllLibs) && <td>{repo.storage_name}</td>}
-        <td title={formatWithTimezone(repo.last_modified)}>{dayjs(repo.last_modified).fromNow()}</td>
-      </tr>
+        </div>
+        <div className="repo-item-size">{repo.size}</div>
+        {(storages.length > 0 && !inAllLibs) && <div className="repo-item-size">{repo.storage_name}</div>}
+        <div className="repo-item-time" title={formatWithTimezone(repo.last_modified)}>{dayjs(repo.last_modified).fromNow()}</div>
+      </div>
     ) : (
       <div
-        className="library-grid-item px-3 d-flex justify-content-between align-items-center"
+        className="library-grid-item"
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         onFocus={this.onMouseEnter}
         onContextMenu={this.handleContextMenu}
       >
-        <div className="d-flex align-items-center text-truncate">
-          <img src={iconUrl} title={iconTitle} alt={iconTitle} width="36" className="mr-2" />
-          {this.state.isRenaming && (
-            <Rename
-              name={repo.repo_name}
-              onRenameConfirm={this.onRenameConfirm}
-              onRenameCancel={this.onRenameCancel}
-            />
-          )}
-          {!this.state.isRenaming && repo.repo_name && (
-            <Fragment>
-              <Link to={repoURL} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
-              {isStarred &&
-                <OpIcon
-                  className="op-icon library-grid-item-icon"
-                  symbol="starred"
-                  title={gettext('Unstar')}
-                  op={this.onToggleStarRepo}
-                />
-              }
-            </Fragment>
-          )}
-          {!this.state.isRenaming && !repo.repo_name &&
-            (<span>{gettext('Broken (please contact your administrator to fix this library)')}</span>)
-          }
+        <div className="d-flex align-items-center">
+          <img src={iconUrl} title={iconTitle} alt={iconTitle} width="40" className="mr-3" />
+          <div className="d-flex flex-column justify-content-center">
+            {this.state.isRenaming && (
+              <Rename
+                name={repo.repo_name}
+                onRenameConfirm={this.onRenameConfirm}
+                onRenameCancel={this.onRenameCancel}
+              />
+            )}
+            {!this.state.isRenaming && repo.repo_name && (
+              <>
+                <Link to={repoURL} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
+                <span className="library-size">{repo.size}</span>
+              </>
+            )}
+            {!this.state.isRenaming && !repo.repo_name &&
+              (<span>{gettext('Broken (please contact your administrator to fix this library)')}</span>)
+            }
+          </div>
         </div>
         {(repo.repo_name && this.state.isOpIconShow) && (
           <div className="flex-shrink-0 d-flex align-items-center">
@@ -433,9 +430,14 @@ class MylibRepoListItem extends React.Component {
     let repoURL = this.repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
 
     return (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td onClick={this.visitRepo}><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
-        <td onClick={this.visitRepo}>
+      <div
+        className={`repo-list-item ${this.state.highlight ? 'hover' : ''}`}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        onClick={this.visitRepo}
+      >
+        <div className="d-flex align-items-center text-truncate">
+          <img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" className="mr-2" />
           {this.state.isRenaming && (
             <Rename
               name={repo.repo_name}
@@ -452,21 +454,12 @@ class MylibRepoListItem extends React.Component {
           {!this.state.isRenaming && !repo.repo_name &&
             <div>(gettext('Broken (please contact your administrator to fix this library)'))</div>
           }
+        </div>
+        <div className="d-flex align-items-center text-truncate mt-1">
           <span className="item-meta-info">{repo.size}</span>
           <span className="item-meta-info" title={formatWithTimezone(repo.last_modified)}>{dayjs(repo.last_modified).fromNow()}</span>
-        </td>
-        <td>
-          {repo.repo_name && (
-            <LibraryOpMenu
-              repo={this.props.repo}
-              isStarred={this.state.isStarred}
-              onMenuItemClick={this.onMenuItemClick}
-              onFreezedItem={this.props.onFreezedItem}
-              onUnfreezedItem={this.onUnfreezedItem}
-            />
-          )}
-        </td>
-      </tr>
+        </div>
+      </div>
     );
   };
 

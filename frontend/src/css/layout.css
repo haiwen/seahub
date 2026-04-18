@@ -41,10 +41,14 @@ select {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: var(--bs-body-bg);
+  background: #fafafa;
   transition: flex 0.3s ease-in-out;
   -webkit-transition: flex 0.3s ease-in-out;
   -moz-transition: flex 0.3s ease-in-out;
+}
+
+[data-bs-theme="dark"] .side-panel {
+  background-color: var(--bs-body-bg);
 }
 
 .user-panel .side-panel-north {
@@ -162,7 +166,7 @@ select {
 
 .cur-view-path {
   padding: 8px 16px;
-  height: 48px;
+  height: 40px;
   display: flex;
   align-items: center;
   flex-shrink: 0;
@@ -235,7 +239,7 @@ select {
 }
 
 .cur-view-content {
-  padding: 0rem 1rem;
+  padding: 1rem;
   flex: 1;
   min-height: 0;
   overflow: auto;
@@ -251,6 +255,53 @@ select {
 .repos-container {
   padding-bottom: 10rem;
   background-color: var(--bs-body-bg);
+}
+
+.repos-container .library-list-header {
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: .875rem;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.repos-container .library-list-header .seafile-multicolor-icon {
+  color: var(--bs-icon-secondary-color);
+}
+
+.repos-container .library-list-header .library-list-title {
+  margin-right: 8px;
+  cursor: default;
+}
+
+.repos-container .library-list-header .seafile-multicolor-icon-new {
+  color: var(--bs-icon-color);
+}
+
+.repos-container .library-list-header .op-icon {
+  font-size: 14px;
+}
+
+.repos-container .library-list-header .btn.btn-secondary {
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 4px;
+  border: 1px solid var(--bs-border-color);
+}
+
+.repos-container .library-list-header .btn.btn-secondary:hover {
+  background-color: rgba(0, 0, 0, .04);
+}
+
+[data-bs-theme="dark"] .repos-container .library-list-header .btn.btn-secondary:hover {
+  background-color: 1px solid rgba(255, 255, 255, .1);
+}
+
+.cur-view-container .repos-container .libraries-empty-tip-in-list-mode {
+  border: none;
+  margin-bottom: 24px;
 }
 
 .table-drop-active::before {

@@ -1,6 +1,12 @@
 #notifications {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 32px;
+  height: 32px;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 4px;
 }
 
 #notice-icon {
@@ -30,7 +36,11 @@
 }
 
 #notifications .sf-icon-bell:hover {
-  background-color: var(--bs-hover-bg);
+  background-color: rgba(0, 0, 0, .04);
+}
+
+[data-bs-theme="dark"] #notifications .sf-icon-bell:hover {
+  background-color: rgba(255, 255, 255, .1);
 }
 
 #notifications .num {

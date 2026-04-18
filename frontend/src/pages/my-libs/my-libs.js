@@ -166,8 +166,8 @@ class MyLibraries extends Component {
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              <h3 className="sf-heading m-0 d-flex align-items-center">
-                {gettext('My Libraries')}
+              <div className="librarary-list-header">
+                <span className="library-list-title">{gettext('My Libraries')}</span>
                 <SingleDropdownToolbar
                   withPlusIcon={true}
                   opList={[
@@ -175,7 +175,7 @@ class MyLibraries extends Component {
                     { 'text': gettext('Deleted Libraries'), 'onClick': this.toggleDeletedReposDialog }
                   ]}
                 />
-              </h3>
+              </div>
               {isDesktop ? (
                 <div className="d-flex align-items-center">
                   <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />

@@ -1,0 +1,178 @@
+.repo-list-card {
+  border: 1px solid #eaeaea;
+  border-radius: 4px;
+  margin-bottom: 24px;
+}
+
+[data-bs-theme='dark'] .repo-list-card {
+  border: 1px solid rgba(255, 255, 255, .2);
+}
+
+.repo-list-card-header {
+  height: 36px;
+  display: flex;
+  padding: 8px 16px;
+  background: var(--bs-th-secondary-bg);
+  border-bottom: 1px solid #eaeaea;
+  color: #666;
+  font-size: 14px;
+  box-sizing: border-box;
+  cursor: default;
+}
+
+[data-bs-theme='dark'] .repo-list-card-header {
+  border-bottom: 1px solid rgba(255, 255, 255, .2);
+}
+
+.repo-list-card-header > span {
+  box-sizing: border-box;
+}
+
+.repo-list-card-header .repo-list-col-icon {
+  width: 34px;
+  flex-shrink: 0;
+}
+
+.repo-list-card-header .repo-list-col-name {
+  width: calc(35% - 60px);
+  flex-shrink: 0;
+  padding-right: 16px;
+}
+
+.repo-list-card-header .repo-list-col-actions {
+  width: 10%;
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+.repo-list-card-header .repo-list-col-size {
+  width: 14%;
+  flex-shrink: 0;
+  cursor: default;
+}
+
+.repo-list-card-header .repo-list-col-time {
+  width: 17%;
+  flex-shrink: 0;
+  cursor: default;
+}
+
+.repo-list-card-header .repo-list-col-owner {
+  width: 17%;
+  flex-shrink: 0;
+  cursor: default;
+}
+
+.repo-list-item {
+  height: 40px;
+  display: flex;
+  padding: 0 16px;
+  border-bottom: 1px solid #eaeaea;
+  align-items: center;
+  box-sizing: border-box;
+  transition: none;
+}
+
+[data-bs-theme='dark'] .repo-list-item {
+  border-bottom: 1px solid rgba(255, 255, 255, .2);
+}
+
+.repo-list-item:last-child {
+  border-bottom: none;
+}
+
+.repo-list-item:hover {
+  background: var(--bs-tr-hover-bg);
+}
+
+.repo-list-item > div {
+  flex-shrink: 0;
+}
+
+.repo-list-item .repo-item-icon {
+  display: flex;
+  align-items: center;
+  height: 20px;
+  flex-shrink: 0;
+  margin-right: 12px;
+}
+
+.repo-list-item .repo-item-name {
+  width: calc(35% - 60px);
+  height: 39px;
+  flex-shrink: 0;
+  padding-right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 39px;
+}
+
+.repo-list-item .repo-item-actions {
+  width: 10%;
+  min-width: 80px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.repo-list-item .repo-item-size {
+  width: 14%;
+  flex-shrink: 0;
+  cursor: default;
+}
+
+.repo-list-item .repo-item-time {
+  width: 17%;
+  flex-shrink: 0;
+  cursor: default;
+}
+
+.repo-list-item .repo-item-owner {
+  width: 17%;
+  flex-shrink: 0;
+  cursor: default;
+}
+
+.repo-list-item .star-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .repo-list-card-header {
+    display: none;
+  }
+
+  .repo-list-item {
+    flex-wrap: wrap;
+    padding: 12px;
+  }
+
+  .repo-list-item .repo-item-icon {
+    display: none;
+  }
+
+  .repo-list-item .repo-item-name {
+    width: 100%;
+    flex-shrink: 0;
+    margin-bottom: 8px;
+  }
+
+  .repo-list-item .repo-item-size,
+  .repo-list-item .repo-item-time,
+  .repo-list-item .repo-item-owner {
+    width: 33.33%;
+    flex-shrink: 0;
+    font-size: 12px;
+  }
+
+  .repo-list-item .repo-item-actions {
+    width: 100%;
+    flex-shrink: 0;
+    justify-content: flex-end;
+    margin-top: 8px;
+  }
+}

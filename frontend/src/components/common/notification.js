@@ -176,7 +176,7 @@ class Notification extends React.Component {
   render() {
     const { totalUnseenCount, currentTab, generalNoticeList, discussionNoticeList, generalNoticeListUnseen, discussionNoticeListUnseen } = this.state;
     return (
-      <div id="notifications">
+      <div id="notifications" className="ml-3">
         <a href="#" onClick={this.onClick} className="no-deco" id="notice-icon" title={gettext('Notifications')} aria-label={gettext('Notifications')}>
           <IconBtn id="notification-popover" symbol="notification" size={32} className="sf-icon-bell" />
           <span className={`num ${totalUnseenCount ? '' : 'hide'}`}>{totalUnseenCount < 1000 ? totalUnseenCount : '999+'}</span>

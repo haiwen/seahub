@@ -12,6 +12,7 @@ import SortOptionsDialog from '../../components/dialog/sort-options';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import Content from './content';
 import Icon from '../../components/icon';
+import OpIcon from '@/components/op-icon';
 
 class SharedLibraries extends Component {
   constructor(props) {
@@ -116,12 +117,10 @@ class SharedLibraries extends Component {
       <Fragment>
         {inAllLibs ? (
           <>
-            <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == LIST_MODE ? 'sf-border-bottom' : ''}`}>
-              <h4 className="sf-heading m-0 d-flex align-items-center">
-                <span className="nav-icon"><Icon symbol="share-with-me" /></span>
-                {gettext('Shared with me')}
-              </h4>
-              {this.renderSortIconInMobile()}
+            <div className="library-list-header">
+              <Icon symbol="share-with-me" className="w-4 h-4 mr-2" />
+              <span className="library-list-title">{gettext('Shared with me')}</span>
+              {(!Utils.isDesktop() && this.state.items.length > 0) && <OpIcon className="op-icon" symbol="sort-mobile" op={this.toggleSortOptionsDialog} title={gettext('Sort')} />}
             </div>
             {this.renderContent(currentViewMode)}
           </>
@@ -129,7 +128,7 @@ class SharedLibraries extends Component {
           <div className="main-panel-center">
             <div className="cur-view-container">
               <div className="cur-view-path">
-                <h3 className="sf-heading m-0">{gettext('Shared with me')}</h3>
+                <h3 className="sf-heading mb-3">{gettext('Shared with me')}</h3>
                 {Utils.isDesktop() && (
                   <div className="d-flex align-items-center">
                     <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />

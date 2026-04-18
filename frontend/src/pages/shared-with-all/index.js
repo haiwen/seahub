@@ -234,11 +234,11 @@ class SharedWithAll extends React.Component {
     if (inAllLibs) {
       return (
         <>
-          <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == LIST_MODE ? 'sf-border-bottom' : ''}`}>
-            <h4 className="sf-heading m-0 d-flex align-items-center">
+          <div className="d-flex justify-content-between">
+            <div className="library-list-header">
               <span className="nav-icon" aria-hidden="true"><Icon symbol="share-with-all" /></span>
               {gettext('Shared with all')}
-            </h4>
+            </div>
             {this.renderSortIconInMobile()}
           </div>
           {this.renderContent(currentViewMode)}
@@ -251,8 +251,8 @@ class SharedWithAll extends React.Component {
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              <h3 className="sf-heading m-0 d-flex align-items-center">
-                {gettext('Shared with all')}
+              <div className="library-list-header">
+                <span className="library-list-title">{gettext('Shared with all')}</span>
                 {canAddPublicRepo &&
                 <SingleDropdownToolbar
                   withPlusIcon={true}
@@ -262,7 +262,7 @@ class SharedWithAll extends React.Component {
                   ]}
                 />
                 }
-              </h3>
+              </div>
               {Utils.isDesktop() && (
                 <div className="d-flex align-items-center">
                   <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />

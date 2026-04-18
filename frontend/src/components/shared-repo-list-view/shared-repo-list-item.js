@@ -170,6 +170,9 @@ class SharedRepoListItem extends React.Component {
       case 'Rename':
         this.onItemRenameToggle();
         break;
+      case 'Star':
+        this.onToggleStarRepo();
+        break;
       case 'Transfer':
         this.onTransferToggle();
         break;
@@ -330,6 +333,9 @@ class SharedRepoListItem extends React.Component {
       case 'Rename':
         translateResult = gettext('Rename');
         break;
+      case 'Star':
+        translateResult = this.state.isStarred ? gettext('Unstar') : gettext('Star');
+        break;
       case 'Transfer':
         translateResult = gettext('Transfer');
         break;
@@ -408,7 +414,7 @@ class SharedRepoListItem extends React.Component {
         if (isStaff) {
           if (repo.owner_email == currentGroup.id + '@seafile_group') {
             this.isDepartmentOwnerGroupMember = true;
-            operations = ['Rename', 'Transfer'];
+            operations = ['Rename', 'Star', 'Transfer'];
             if (folderPermEnabled) {
               operations.push('Folder Permission');
             }
@@ -627,59 +633,63 @@ class SharedRepoListItem extends React.Component {
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
     const { repo, currentViewMode } = this.props;
     return currentViewMode == LIST_MODE ? (
-      <tr
-        className={this.state.highlight ? 'tr-highlight' : ''}
+      <div
+        className={`repo-list-item ${this.state.highlight ? 'hover' : ''}`}
         onMouseEnter={this.onMouseEnter}
         onMouseOver={this.onMouseOver}
         onMouseLeave={this.onMouseLeave}
         onFocus={this.onMouseEnter}
         onContextMenu={this.handleContextMenu}
       >
-        <td className="text-center">
-          <OpIcon
-            className="star-icon"
-            symbol={this.state.isStarred ? 'starred' : 'unstarred'}
-            title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
-            op={this.onToggleStarRepo}
-          />
-        </td>
-        <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
-        <td>
+        <div className="repo-item-icon">
+          <img src={iconUrl} title={iconTitle} alt={iconTitle} width="20" />
+        </div>
+        <div className="repo-item-name">
           {this.state.isRenaming ?
             <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
             <Link to={libPath}>{repo.repo_name}</Link>
           }
           <ArchiveIcon currentRepoInfo={repo} />
-        </td>
-        <td>{this.state.isOperationShow && this.generatorPCMenu()}</td>
-        <td>{repo.size}</td>
-        <td title={formatWithTimezone(repo.last_modified)}>{dayjs(repo.last_modified).fromNow()}</td>
-        <td title={repo.owner_contact_email}>{repo.owner_name}</td>
-      </tr>
+          {isStarred && (
+            <OpIcon
+              className="star-icon"
+              symbol="starred"
+              title={gettext('Starred')}
+            />
+          )}
+        </div>
+        <div className="repo-item-actions">
+          {this.state.isOperationShow && this.generatorPCMenu()}
+        </div>
+        <div className="repo-item-size">
+          {repo.size}
+        </div>
+        <div className="repo-item-time" title={formatWithTimezone(repo.last_modified)}>
+          {dayjs(repo.last_modified).fromNow()}
+        </div>
+        <div className="repo-item-owner" title={repo.owner_contact_email}>
+          {repo.owner_name}
+        </div>
+      </div>
     ) : (
       <div
-        className="library-grid-item px-3 d-flex justify-content-between align-items-center"
+        className="library-grid-item"
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         onFocus={this.onMouseEnter}
         onContextMenu={this.handleContextMenu}
       >
-        <div className="d-flex align-items-center text-truncate">
-          <img src={iconUrl} title={iconTitle} alt={iconTitle} width="36" className="mr-2" />
-          {this.state.isRenaming ?
-            <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
-            <Fragment>
-              <Link to={libPath} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
-              {isStarred &&
-              <OpIcon
-                className="op-icon library-grid-item-icon"
-                symbol="starred"
-                title={gettext('Unstar')}
-                op={this.onToggleStarRepo}
-              />
-              }
-            </Fragment>
-          }
+        <div className="d-flex align-items-center">
+          <img src={iconUrl} title={iconTitle} alt={iconTitle} width="40" className="mr-3" />
+          <div className="d-flex flex-column justify-content-center">
+            {this.state.isRenaming ?
+              <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
+              <Fragment>
+                <Link to={libPath} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
+                <span className="library-size">{repo.size}</span>
+              </Fragment>
+            }
+          </div>
         </div>
         <div className="flex-shrink-0">
           {this.state.isOperationShow && this.generatorPCMenu()}
@@ -699,25 +709,29 @@ class SharedRepoListItem extends React.Component {
     let { repo } = this.props;
     this.repoURL = libPath;
     return (
-      <Fragment>
-        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
-          <td onClick={this.visitRepo}><img src={iconUrl} title={iconTitle} width="24" alt={iconTitle}/></td>
-          <td onClick={this.visitRepo}>
-            {this.state.isRenaming ?
-              <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
-              <>
-                <Link to={libPath}>{repo.repo_name}</Link>
-                {repo.archive_status === 'archived' && <Icon className="ml-1" symbol="archive"></Icon>}
-              </>
-            }
-            <br />
-            <span className="item-meta-info" title={repo.owner_contact_email}>{repo.owner_name}</span>
-            <span className="item-meta-info">{repo.size}</span>
-            <span className="item-meta-info" title={formatWithTimezone(repo.last_modified)}>{dayjs(repo.last_modified).fromNow()}</span>
-          </td>
-          <td>{this.generatorMobileMenu()}</td>
-        </tr>
-      </Fragment>
+      <div
+        className={`repo-list-item ${this.state.highlight ? 'hover' : ''}`}
+        onMouseEnter={this.onMouseEnter}
+        onMouseOver={this.onMouseOver}
+        onMouseLeave={this.onMouseLeave}
+        onClick={this.visitRepo}
+      >
+        <div className="d-flex align-items-center text-truncate">
+          <img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" className="mr-2" />
+          {this.state.isRenaming ?
+            <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
+            <>
+              <Link to={libPath}>{repo.repo_name}</Link>
+              {repo.archive_status === 'archived' && <Icon className="ml-1" symbol="archive"></Icon>}
+            </>
+          }
+        </div>
+        <div className="d-flex align-items-center text-truncate mt-1">
+          <span className="item-meta-info" title={repo.owner_contact_email}>{repo.owner_name}</span>
+          <span className="item-meta-info">{repo.size}</span>
+          <span className="item-meta-info" title={formatWithTimezone(repo.last_modified)}>{dayjs(repo.last_modified).fromNow()}</span>
+        </div>
+      </div>
     );
   };
 
