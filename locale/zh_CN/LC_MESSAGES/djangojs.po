@@ -3948,7 +3948,7 @@ msgstr "转让资料库 {library_name}"
 #: frontend/src/components/dialog/transfer-group-dialog.js:44
 #| msgid "Group has been transfered"
 msgid "Group has been transferred"
-msgstr "群组已被转移"
+msgstr "群组已被转让"
 
 #: frontend/src/components/dialog/transfer-group-dialog.js:60
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:104
@@ -3957,7 +3957,7 @@ msgstr "转让群组"
 
 #: frontend/src/components/dialog/transfer-group-dialog.js:62
 msgid "Transfer group to"
-msgstr "转换群组给"
+msgstr "转让群组给"
 
 #: frontend/src/components/dialog/transfer-group-dialog.js:65
 msgid "Please enter 1 or more character"
@@ -8782,14 +8782,14 @@ msgstr "只显示"
 #: frontend/src/pages/sys-admin/logs-page/file-transfer-log.js:428
 #| msgid "Transfer Group"
 msgid "Transfer From"
-msgstr "转换自"
+msgstr "转让自"
 
 #: frontend/src/pages/org-admin/org-logs-file-transfer.js:73
 #: frontend/src/pages/sys-admin/logs-page/file-transfer-log.js:45
 #: frontend/src/pages/sys-admin/logs-page/file-transfer-log.js:438
 #| msgid "Transfer"
 msgid "Transfer To"
-msgstr "转换到"
+msgstr "转让到"
 
 #: frontend/src/pages/org-admin/org-logs-file-transfer.js:74
 #: frontend/src/pages/org-admin/org-logs-group-member-audit.js:73
@@ -8883,7 +8883,7 @@ msgstr "文件更新"
 #: frontend/src/pages/sys-admin/logs-page/logs-nav.js:20
 #| msgid "Transfer"
 msgid "Repo Transfer"
-msgstr "资料库转换"
+msgstr "资料库转让"
 
 #: frontend/src/pages/org-admin/org-logs.js:81
 #| msgid "deleted"
