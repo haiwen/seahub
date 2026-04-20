@@ -64,7 +64,7 @@ class RepoMetadata(models.Model):
     created_time = models.DateTimeField(auto_now_add=True)
     modified_time = models.DateTimeField(auto_now=True)
     enabled = models.BooleanField(db_index=True)
-    face_recognition_enabled = models.BooleanField(db_index=True)
+    face_recognition_enabled = models.BooleanField()
     from_commit = models.CharField(max_length=40)
     to_commit = models.CharField(max_length=40)
     tags_enabled = models.BooleanField(db_index=True)

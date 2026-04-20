@@ -425,6 +425,9 @@ class UserNotification(models.Model):
 
     class Meta:
         ordering = ["-timestamp"]
+        indexes = [
+            models.Index(fields=['to_user', 'seen']),
+        ]
 
     def __unicode__(self):
         return '%s|%s|%s' % (self.to_user, self.msg_type, self.detail)

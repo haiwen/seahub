@@ -21,3 +21,7 @@ CREATE TABLE IF NOT EXISTS `org_quota_usage` (
   UNIQUE KEY `idx_org_quota_usage_org_id` (`org_id`),
   KEY `idx_org_quota_usage_timestamp` (`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Performance optimization: Add composite index for Activity duplicate detection query
+-- This query runs on every file operation: WHERE timestamp > ? AND repo_id = ?
+CREATE INDEX idx_activity_repo_timestamp ON Activity(repo_id, timestamp);
