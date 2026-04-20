@@ -59,6 +59,7 @@ class RepoShareAdminDialog extends React.Component {
         <Modal isOpen={true} className="repo-share-admin-container share-dialog" style={LARGE_DIALOG_STYLE } toggle={this.props.toggleDialog}>
           <SeahubModalHeader toggle={this.props.toggleDialog}>
             <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
+            <span className="tip font-weight-normal">{gettext('Manage all shares and share links in this library')}</span>
           </SeahubModalHeader>
           <ModalBody className="repo-share-admin-content-container share-dialog-content" role="tablist">
             <Fragment>
