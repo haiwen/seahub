@@ -31,7 +31,7 @@ class ColorMode extends Component {
       <IconBtn
         symbol={symbol}
         size={32}
-        className="sf-icon-color-mode ml-2"
+        className="sf-icon-color-mode"
         title={title}
         onClick={this.onColorModeChange}
         tabIndex={0}

@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import { DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -10,7 +9,6 @@ import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
-import MobileItemMenu from '../../components/mobile-item-menu';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import OpIcon from '../../components/op-icon';
 import { formatWithTimezone } from '../../utils/time';
@@ -157,26 +155,27 @@ class Item extends Component {
       return (
         <Fragment>
           {currentViewMode == LIST_MODE ? (
-            <tr
-              className={this.state.highlight ? 'tr-highlight' : ''}
+            <div
+              className={`repo-list-item ${this.state.highlight ? 'hover' : ''}`}
               onMouseOver={this.handleMouseOver}
               onMouseOut={this.handleMouseOut}
               onFocus={this.handleMouseOver}
               onContextMenu={this.handleContextMenu}
             >
-              <td className="text-center">
-                <OpIcon
-                  className="star-icon"
-                  symbol={this.state.isStarred ? 'starred' : 'unstarred'}
-                  title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
-                  op={this.onToggleStarRepo}
-                />
-              </td>
-              <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
-              <td>
+              <div className="repo-item-icon">
+                <img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="20" />
+              </div>
+              <div className="repo-item-name">
                 <Link to={shareRepoUrl}>{data.repo_name}</Link>
-              </td>
-              <td>
+                {isStarred && (
+                  <OpIcon
+                    className="star-icon ml-1"
+                    symbol="starred"
+                    title={gettext('Unstar')}
+                  />
+                )}
+              </div>
+              <div className="repo-item-actions">
                 <div className="d-flex align-items-center">
                   {(isPro && data.is_admin) &&
                   <OpIcon
@@ -193,30 +192,25 @@ class Item extends Component {
                     op={this.leaveShare}
                   />
                 </div>
-              </td>
-              <td>{data.size}</td>
-              <td title={formatWithTimezone(data.last_modified)}>{dayjs(data.last_modified).fromNow()}</td>
-              <td title={data.owner_contact_email}>{data.owner_name}</td>
-            </tr>
+              </div>
+              <div className="repo-item-size">{data.size}</div>
+              <div className="repo-item-time" title={formatWithTimezone(data.last_modified)}>{dayjs(data.last_modified).fromNow()}</div>
+              <div className="repo-item-owner" title={data.owner_contact_email}>{data.owner_name}</div>
+            </div>
           ) : (
             <div
-              className="library-grid-item px-3 d-flex justify-content-between align-items-center"
+              className="library-grid-item"
               onMouseOver={this.handleMouseOver}
               onMouseOut={this.handleMouseOut}
               onFocus={this.handleMouseOver}
               onContextMenu={this.handleContextMenu}
             >
-              <div className="d-flex align-items-center text-truncate">
-                <img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="36" className="mr-2" />
-                <Link to={shareRepoUrl} className="text-truncate library-name" title={data.repo_name}>{data.repo_name}</Link>
-                {isStarred &&
-                <OpIcon
-                  className="op-icon library-grid-item-icon"
-                  symbol='starred'
-                  title={gettext('Unstar')}
-                  op={this.onToggleStarRepo}
-                />
-                }
+              <div className="d-flex align-items-center">
+                <img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="40" className="mr-3" />
+                <div className="d-flex flex-column justify-content-center">
+                  <Link to={shareRepoUrl} className="text-truncate library-name" title={data.repo_name}>{data.repo_name}</Link>
+                  <span className="library-size">{data.size}</span>
+                </div>
               </div>
               <div className="flex-shrink-0 d-flex align-items-center">
                 {(isPro && data.is_admin) &&
@@ -255,27 +249,22 @@ class Item extends Component {
     } else {
       return (
         <Fragment>
-          <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-            <td onClick={this.visitRepo}><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
-            <td onClick={this.visitRepo}>
+          <div
+            className={`repo-list-item ${this.state.highlight ? 'highlight' : ''}`}
+            onMouseOver={this.handleMouseOver}
+            onMouseOut={this.handleMouseOut}
+            onClick={this.visitRepo}
+          >
+            <div className="d-flex align-items-center text-truncate">
+              <img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" className="mr-2" />
               <Link to={shareRepoUrl}>{data.repo_name}</Link>
-              <br />
+            </div>
+            <div className="d-flex align-items-center text-truncate mt-1">
               <span className="item-meta-info" title={data.owner_contact_email}>{data.owner_name}</span>
               <span className="item-meta-info">{data.size}</span>
               <span className="item-meta-info" title={formatWithTimezone(data.last_modified)}>{dayjs(data.last_modified).fromNow()}</span>
-            </td>
-            <td>
-              <MobileItemMenu isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-                <DropdownItem className="mobile-menu-item" onClick={this.onToggleStarRepo}>
-                  {this.state.isStarred ? gettext('Unstar') : gettext('Star')}
-                </DropdownItem>
-                {(isPro && data.is_admin) &&
-                  <DropdownItem className="mobile-menu-item" onClick={this.share}>{gettext('Share')}</DropdownItem>
-                }
-                <DropdownItem className="mobile-menu-item" onClick={this.leaveShare}>{gettext('Leave Share')}</DropdownItem>
-              </MobileItemMenu>
-            </td>
-          </tr>
+            </div>
+          </div>
           {this.state.isShowSharedDialog && (
             <ModalPortal>
               <ShareDialog

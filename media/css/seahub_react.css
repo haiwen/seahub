@@ -1722,7 +1722,6 @@ a.table-sort-op:hover {
 
 .side-panel .side-nav .side-nav-con .nav-item {
   position: relative;
-  background-color: var(--bs-body-bg);
 }
 
 .side-panel .side-nav .side-nav-con .nav-item.active::before {

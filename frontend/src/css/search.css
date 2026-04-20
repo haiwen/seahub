@@ -33,7 +33,7 @@
 
 .search-container .input-icon {
   position: relative;
-  margin: 0 16px;
+  margin: 0 12px;
 }
 
 .search-container .input-icon svg.input-icon-addon {
@@ -102,10 +102,11 @@
 }
 
 .search-input {
-  height: 1.875rem;
+  height: 2rem;
   width: 15rem;
   font-size: .875rem;
   background-color: var(--bs-body-bg);
+  border-radius: 4px;
 }
 
 .search-container.show .search-input {

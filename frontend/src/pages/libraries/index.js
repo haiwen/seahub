@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'reactstrap';
 import Cookies from 'js-cookie';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -10,7 +11,6 @@ import ModalPortal from '../../components/modal-portal';
 import Loading from '../../components/loading';
 import ViewModes from '../../components/view-modes';
 import ReposSortMenu from '../../components/sort-menu';
-import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import GuideForNewDialog from '../../components/dialog/guide-for-new-dialog';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
@@ -25,6 +25,7 @@ import EventBus from '../../components/common/event-bus';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import Icon from '../../components/icon';
+import OpIcon from '../../components/op-icon';
 
 import '../../css/files.css';
 
@@ -435,7 +436,6 @@ class Libraries extends Component {
   render() {
     const { isLoading, currentViewMode, sortBy, sortOrder, groupList } = this.state;
     const isDesktop = Utils.isDesktop();
-    const sortIcon = <span className="d-flex justify-content-center align-items-center ml-1"><Icon symbol="down" className={`w-3 h-3 ${sortOrder === 'asc' ? 'rotate-180' : ''}`} /></span>;
 
     return (
       <>
@@ -453,40 +453,22 @@ class Libraries extends Component {
             <div className="cur-view-content repos-container" id="files-content-container">
               {isLoading ? <Loading /> : (
                 <>
-                  {(Utils.isDesktop() && currentViewMode == LIST_MODE) && (
-                    <table className="my-3">
-                      <thead>
-                        <tr>
-                          <th width="4%"></th>
-                          <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
-                          <th width="35%"><a className="d-flex align-items-center table-sort-op" href="#" onClick={this.toggleSortOrder.bind(this, 'name')}>{gettext('Name')} {sortBy === 'name' && sortIcon}</a></th>
-                          <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
-                          <th width="14%"><a className="d-flex align-items-center table-sort-op" href="#" onClick={this.toggleSortOrder.bind(this, 'size')}>{gettext('Size')} {sortBy === 'size' && sortIcon}</a></th>
-                          <th width="17%"><a className="d-flex align-items-center table-sort-op" href="#" onClick={this.toggleSortOrder.bind(this, 'time')}>{gettext('Last Update')} {sortBy === 'time' && sortIcon}</a></th>
-                          <th width="17%">{gettext('Owner')}</th>
-                        </tr>
-                      </thead>
-                    </table>
-                  )}
-
                   {canAddRepo && (
-                    <div className="pb-3">
-                      <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == LIST_MODE ? 'sf-border-bottom' : ''}`}>
-                        <h4 className="sf-heading m-0 d-flex align-items-center">
-                          <span className="nav-icon d-flex align-items-center"><Icon symbol="my-libraries" className="w-4 h-4" /></span>
-                          {gettext('My Libraries')}
-                          <SingleDropdownToolbar
-                            withPlusIcon={true}
-                            opList={[
-                              { 'text': gettext('New Library'), 'onClick': this.toggleCreateRepoDialog },
-                              { 'text': gettext('Deleted Libraries'), 'onClick': this.toggleDeletedReposDialog }
-                            ]}
-                          />
-                        </h4>
+                    <>
+                      <div className="library-list-header justify-content-between">
+                        <div className="d-flex align-items-center">
+                          <Icon symbol="my-libraries" className="w-4 h-4 mr-2" />
+                          <span className="library-list-title">{gettext('My Libraries')}</span>
+                          <OpIcon id="new-library-btn" className="op-icon" symbol="new" op={this.toggleCreateRepoDialog} tooltip={gettext('New Library')} />
+                        </div>
+                        <Button onClick={this.toggleDeletedReposDialog} title={gettext('Deleted Libraries')} size="sm">
+                          {gettext('Deleted Libraries')}
+                        </Button>
                         {(!Utils.isDesktop() && this.state.repoList.length > 0) &&
                           <span className="action-icon" onClick={this.toggleSortOptionsDialog}><Icon symbol="sort-mobile" /></span>
                         }
                       </div>
+
                       {this.state.errorMsg
                         ? <p className="error text-center mt-8">{this.state.errorMsg}</p>
                         : this.state.repoList.length == 0
@@ -507,36 +489,30 @@ class Libraries extends Component {
                             />
                           )
                       }
-                    </div>
+                    </>
                   )}
 
-                  <div className="pb-3">
-                    <SharedLibraries
-                      repoList={this.state.sharedRepoList}
-                      inAllLibs={true}
-                      currentViewMode={currentViewMode}
-                    />
-                  </div>
+                  <SharedLibraries
+                    repoList={this.state.sharedRepoList}
+                    inAllLibs={true}
+                    currentViewMode={currentViewMode}
+                  />
 
-                  {canViewOrg &&
-                  <div className="pb-3">
+                  {canViewOrg && (
                     <SharedWithAll
                       repoList={this.state.publicRepoList}
                       inAllLibs={true}
                       currentViewMode={currentViewMode}
                     />
-                  </div>
-                  }
+                  )}
 
                   {enableOCM &&
-                  <div className="pb-3">
                     <SharedWithOCM
                       inAllLibs={true}
                       currentViewMode={currentViewMode}
                       sortBy={this.state.sortBy}
                       sortOrder={this.state.sortOrder}
                     />
-                  </div>
                   }
 
                   {groupList.length > 0 && groupList.map((group) => {

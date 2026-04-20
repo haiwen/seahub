@@ -5,7 +5,6 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import Cookies from 'js-cookie';
 import classnames from 'classnames';
 import { Link, navigate } from '@gatsbyjs/reach-router';
-import { DropdownItem } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -15,11 +14,10 @@ import EmptyTip from '../../components/empty-tip';
 import ViewModes from '../../components/view-modes';
 import ReposSortMenu from '../../components/sort-menu';
 import SortOptionsDialog from '../../components/dialog/sort-options';
-import LibsMobileThead from '../../components/libs-mobile-thead';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
-import MobileItemMenu from '../../components/mobile-item-menu';
 import OpIcon from '../../components/op-icon';
 import Icon from '../../components/icon';
+import RepoListCard from '../../components/repo-list-card/repo-list-card';
 
 const propTypes = {
   currentViewMode: PropTypes.string,
@@ -29,13 +27,6 @@ const propTypes = {
 dayjs.extend(relativeTime);
 
 class Content extends Component {
-
-  sortByName = (e) => {
-    e.preventDefault();
-    const sortBy = 'name';
-    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
-    this.props.sortItems(sortBy, sortOrder);
-  };
 
   renderItems = () => {
     const { items, currentViewMode, inAllLibs } = this.props;
@@ -59,7 +50,7 @@ class Content extends Component {
   };
 
   render() {
-    const { loading, errorMsg, items, sortOrder, currentViewMode, inAllLibs } = this.props;
+    const { loading, errorMsg, items, currentViewMode, inAllLibs } = this.props;
 
     if (loading) {
       return <Loading />;
@@ -69,7 +60,7 @@ class Content extends Component {
       if (items.length == 0) {
         const emptyTipTitle = gettext('No libraries have been shared with you');
         const emptyTip = inAllLibs
-          ? <p className={`libraries-empty-tip-in-${currentViewMode}-mode`}>{emptyTipTitle}</p>
+          ? <span className={`libraries-empty-tip-in-${currentViewMode}-mode`}>{emptyTipTitle}</span>
           : (
             <EmptyTip
               title={emptyTipTitle}
@@ -82,51 +73,27 @@ class Content extends Component {
 
       const isDesktop = Utils.isDesktop();
       if (isDesktop) {
-        const sortIcon = <span className="d-flex justify-content-center align-items-center ml-1"><Icon symbol="down" className={`w-3 h-3 ${sortOrder === 'asc' ? 'rotate-180' : ''}`} /></span>;
-
         return currentViewMode == LIST_MODE
           ? (
-            <table className={classnames({ 'table-thead-hidden': inAllLibs })}>
-              <thead>
-                <tr>
-                  <th width="4%"></th>
-                  <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
-                  <th width="35%"><a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {this.props.sortBy === 'name' && sortIcon}</a></th>
-                  <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
-                  {inAllLibs
-                    ? (
-                      <>
-                        <th width="14%">{gettext('Size')}</th>
-                        <th width="17%">{gettext('Last Update')}</th>
-                      </>
-                    )
-                    : (
-                      <>
-                        <th width="31%">{gettext('At server')}</th>
-                      </>
-                    )}
-                  <th width="17%">{gettext('Owner')}</th>
-                </tr>
-              </thead>
-              <tbody>
+            <>
+              <RepoListCard>
                 {this.renderItems()}
-              </tbody>
-            </table>
+              </RepoListCard>
+            </>
           )
           : (
-            <div className="d-flex justify-content-between flex-wrap">
+            <div className="repo-grid-container">
               {this.renderItems()}
             </div>
           );
 
       } else { // mobile
         return (
-          <table className="table-thead-hidden">
-            <LibsMobileThead inAllLibs={inAllLibs} />
-            <tbody>
+          <>
+            <RepoListCard>
               {this.renderItems()}
-            </tbody>
-          </table>
+            </RepoListCard>
+          </>
         );
       }
 
@@ -192,48 +159,53 @@ class Item extends Component {
     if (isDesktop) {
       return currentViewMode == LIST_MODE
         ? (
-          <tr
-            className={isHighlighted ? 'tr-highlight' : ''}
+          <div
+            className={`repo-list-item ${isHighlighted ? 'highlight' : ''}`}
             onMouseOver={this.handleMouseOver}
             onMouseOut={this.handleMouseOut}
             onFocus={this.handleMouseOver}
           >
-            <td></td>
-            <td><img src={item.icon_url} title={item.icon_title} alt={item.icon_title} width="24" /></td>
-            <td><Link to={shareRepoUrl}>{item.repo_name}</Link></td>
-            <td>
+            <div className="repo-item-icon"></div>
+            <div className="repo-item-name">
+              <img src={item.icon_url} title={item.icon_title} alt={item.icon_title} width="24" className="mr-2" />
+              <Link to={shareRepoUrl}>{item.repo_name}</Link>
+            </div>
+            <div className="repo-item-actions">
               <OpIcon
                 symbol="close"
                 className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
                 title={gettext('Leave Share')}
                 op={this.leaveShare}
               />
-            </td>
+            </div>
             {inAllLibs
               ? (
                 <>
-                  <td></td>
-                  <td></td>
+                  <div className="repo-item-size"></div>
+                  <div className="repo-item-time"></div>
                 </>
               )
               : (
                 <>
-                  <td>{item.from_server_url}</td>
+                  <div className="repo-item-server">{item.from_server_url}</div>
                 </>
               )}
-            <td>{item.from_user}</td>
-          </tr>
+            <div className="repo-item-owner">{item.from_user}</div>
+          </div>
         )
         : (
           <div
-            className="library-grid-item px-3 d-flex justify-content-between align-items-center"
+            className="library-grid-item"
             onMouseOver={this.handleMouseOver}
             onMouseOut={this.handleMouseOut}
             onFocus={this.handleMouseOver}
           >
-            <div className="d-flex align-items-center text-truncate">
-              <img src={item.icon_url} title={item.icon_title} alt={item.icon_title} width="36" className="mr-2" />
-              <Link to={shareRepoUrl} className="library-name text-truncate" title={item.repo_name}>{item.repo_name}</Link>
+            <div className="d-flex align-items-center">
+              <img src={item.icon_url} title={item.icon_title} alt={item.icon_title} width="40" className="mr-3" />
+              <div className="d-flex flex-column justify-content-center">
+                <Link to={shareRepoUrl} className="library-name text-truncate" title={item.repo_name}>{item.repo_name}</Link>
+                <span className="library-size">{item.size}</span>
+              </div>
             </div>
             <div className="flex-shrink-0">
               <OpIcon
@@ -249,29 +221,25 @@ class Item extends Component {
     } else {
       // mobile
       return (
-        <tr
-          className={isHighlighted ? 'tr-highlight' : ''}
+        <div
+          className={`repo-list-item ${isHighlighted ? 'highlight' : ''}`}
           onMouseOver={this.handleMouseOver}
           onMouseOut={this.handleMouseOut}
+          onClick={this.visitRepo}
         >
-          <td onClick={this.visitRepo}>
-            <img src={item.icon_url} title={item.icon_title} alt={item.icon_title} width="24" />
-          </td>
-          <td onClick={this.visitRepo}>
+          <div className="d-flex align-items-center text-truncate">
+            <img src={item.icon_url} title={item.icon_title} alt={item.icon_title} width="24" className="mr-2" />
             {item.repo_name && (
               <div>
                 <Link to={shareRepoUrl}>{item.repo_name}</Link>
               </div>
             )}
+          </div>
+          <div className="d-flex align-items-center text-truncate mt-1">
             <span className="item-meta-info">{item.from_user}</span>
             <span className="item-meta-info">{item.from_server_url}</span>
-          </td>
-          <td>
-            <MobileItemMenu isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-              <DropdownItem className="mobile-menu-item" onClick={this.leaveShare}>{gettext('Leave Share')}</DropdownItem>
-            </MobileItemMenu>
-          </td>
-        </tr>
+          </div>
+        </div>
       );
 
     }
@@ -418,11 +386,9 @@ class SharedWithOCM extends Component {
         {inAllLibs
           ? (
             <>
-              <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == LIST_MODE ? 'sf-border-bottom' : ''}`}>
-                <h4 className="sf-heading m-0 d-flex align-items-center">
-                  <span className="nav-icon" aria-hidden="true"><Icon symbol="share-with-me" /></span>
-                  {gettext('Shared from other servers')}
-                </h4>
+              <div className="library-list-header">
+                <Icon symbol="share-with-me" className="w-4 h-4 mr-2" />
+                <span className="library-list-title">{gettext('Shared from other servers')}</span>
               </div>
               {this.renderContent(currentViewMode)}
             </>
@@ -431,7 +397,7 @@ class SharedWithOCM extends Component {
             <div className="main-panel-center">
               <div className="cur-view-container">
                 <div className="cur-view-path">
-                  <h3 className="sf-heading m-0">{gettext('Shared from other servers')}</h3>
+                  <h3 className="library-list-header">{gettext('Shared from other servers')}</h3>
                   {Utils.isDesktop() && (
                     <div className="d-flex align-items-center">
                       <ViewModes

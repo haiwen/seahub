@@ -15,7 +15,7 @@
   color: #666;
   text-align: center;
   padding: 4px 0;
-  border-bottom: 1px solid var(--bs-border-secondary-color);
+  cursor: default;
 }
 
 #files-content-container .libraries-empty-tip-in-grid-mode {
@@ -25,20 +25,56 @@
   line-height: 52px;
   border: 2px dashed var(--bs-border-secondary-color);
   border-radius: 4px;
+  margin-bottom: 24px;
+  cursor: default;
 }
 
 .library-grid-item {
-  width: 48%;
-  height: 56px;
-  border-radius: 3px;
+  height: 72px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  border-radius: 4px;
+  border: 1px solid #eaeaea;
+}
+
+[data-bs-theme='dark'] .library-grid-item {
+  border: 1px solid var(--bs-border-color);
 }
 
 .library-grid-item:hover {
-  background: var(--bs-tr-hover-bg);
+  background-color: rgba(0, 0, 0, .04);
+}
+
+[data-bs-theme='dark'] .library-grid-item:hover {
+  background-color: rgba(255, 255, 255, .1);
+}
+
+.repo-grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.repo-grid-container .library-grid-item {
+  width: 100%;
 }
 
 .library-grid-item .library-name {
   color: var(--bs-body-color);
+  font-size: 14px;
+  height: 22px;
+  line-height: 22px;
+}
+
+.library-grid-item .library-size {
+  color: var(--bs-body-secondary-color);
+  font-size: 12px;
+  height: 20px;
+  line-height: 20px;
+  cursor: default;
 }
 
 .library-grid-item .library-grid-item-icon {

@@ -78,20 +78,18 @@ class GroupItem extends React.Component {
     const emptyTip = <p className={`libraries-empty-tip-in-${currentViewMode}-mode`}>{gettext('No libraries')}</p>;
 
     return (
-      <div className="pb-3">
-        <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == LIST_MODE ? 'sf-border-bottom' : ''}`}>
-          <h4 className="sf-heading m-0 d-flex align-items-center">
-            <span className="nav-icon"><Icon symbol={group.parent_group_id == 0 ? 'group' : 'department'} /></span>
-            <a href={`${siteRoot}group/${group.id}/`} title={group.name} className="ellipsis">{group.name}</a>
-            <GroupOperationMenu
-              group={group}
-              addNewRepo={this.addNewRepo}
-              onGroupNameChanged={this.onGroupNameChanged}
-              onGroupTransferred={this.props.onGroupTransferred}
-              onGroupDeleted={this.onGroupDeleted}
-              onLeavingGroup={this.onLeavingGroup}
-            />
-          </h4>
+      <>
+        <div className="library-list-header">
+          <Icon symbol={group.parent_group_id == 0 ? 'group' : 'department'} className="w-4 h-4 mr-2" />
+          <a href={`${siteRoot}group/${group.id}/`} title={group.name} className="ellipsis">{group.name}</a>
+          <GroupOperationMenu
+            group={group}
+            addNewRepo={this.addNewRepo}
+            onGroupNameChanged={this.onGroupNameChanged}
+            onGroupTransferred={this.props.onGroupTransferred}
+            onGroupDeleted={this.onGroupDeleted}
+            onLeavingGroup={this.onLeavingGroup}
+          />
         </div>
         {group.repos.length === 0 && emptyTip}
         {group.repos.length !== 0 && (
@@ -110,7 +108,7 @@ class GroupItem extends React.Component {
             updateRepoStatus={this.props.updateRepoStatus}
           />
         )}
-      </div>
+      </>
     );
   }
 }

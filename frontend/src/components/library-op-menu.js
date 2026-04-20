@@ -95,7 +95,13 @@ class LibraryOperationMenu extends React.Component {
   generatorOperations = () => {
     let repo = this.props.repo;
     let showResetPasswordMenuItem = isPro && repo.encrypted && enableResetEncryptedRepoPassword && isEmailConfigured;
-    let operations = ['Rename', 'Transfer'];
+    let operations = ['Rename'];
+    if (this.props.isStarred) {
+      operations.push('Unstar');
+    } else {
+      operations.push('Star');
+    }
+    operations.push('Transfer');
     if (folderPermEnabled) {
       operations.push('Folder Permission');
     }

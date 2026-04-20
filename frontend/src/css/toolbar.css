@@ -46,10 +46,6 @@
   align-items: center;
 }
 
-.common-toolbar > div {
-  margin-left: .5rem;
-}
-
 .common-toolbar .logout-icon.sf-icon-color-mode {
   display: flex;
   align-items: center;
@@ -66,10 +62,15 @@
   font-size: 16px;
   color: var(--bs-icon-color);
   border-radius: 4px;
+  border: 1px solid var(--bs-border-color);
 }
 
 .common-toolbar .sf-icon-color-mode:hover {
-  background-color: var(--bs-hover-bg);
+  background-color: rgba(0, 0, 0, .04);
+}
+
+[data-bs-theme="dark"] .common-toolbar .sf-icon-color-mode:hover {
+  background-color: rgba(255, 255, 255, .1);
 }
 
 .common-toolbar .account-toggle.mobile-icon {

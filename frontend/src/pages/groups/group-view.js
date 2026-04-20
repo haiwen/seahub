@@ -298,7 +298,7 @@ class GroupView extends React.Component {
             <div className="cur-view-path">
               {currentGroup && (
                 <Fragment>
-                  <div className="sf-heading d-flex align-items-center">
+                  <div className="library-list-header">
                     {isDepartmentGroup &&
                     <Icon symbol="department" className="nav-icon mr-2" title={gettext('This is a special group representing a department.')} aria-hidden="true" />
                     }
