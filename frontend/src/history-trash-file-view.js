@@ -27,7 +27,7 @@ class HistoryTrashFileView extends React.Component {
     let content;
     switch (fileType) {
       case 'Image':
-        content = <Image tip={<FileViewTip />} />;
+        content = <Image imgClass="mw-100 mh-100" tip={<FileViewTip />} />;
         break;
       case 'SVG':
         content = <SVG />;
