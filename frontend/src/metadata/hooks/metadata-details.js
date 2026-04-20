@@ -217,27 +217,29 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
     setLoading(true);
     direntRef.current = dirent;
     const fallBackToBasicInfo = true;
-    metadataAPI.getRecord(repoID, { parentDir, fileName }, fallBackToBasicInfo).then(res => {
-      const { results, metadata } = res.data;
-      const record = Array.isArray(results) && results.length > 0 ? results[0] : {};
-      const allColumns = normalizeFields(metadata).map(field => new Column(field));
-      allColumnsRef.current = allColumns;
-      const columns = allColumns.filter(c => !NOT_DISPLAY_COLUMN_KEYS.includes(c.key));
-      setRecord(record);
-      setOriginColumns(columns);
-      setLoading(false);
-    }).catch(error => {
-      setRecord(null);
-      if (error.response && error.response.status === 404 && onErrMessage) {
-        const err = `${direntType === 'file' ? 'File' : 'Folder' } does not exist`;
-        onErrMessage(err);
+    if (direntType === 'file') {
+      metadataAPI.getRecord(repoID, { parentDir, fileName }, fallBackToBasicInfo).then(res => {
+        const { results, metadata } = res.data;
+        const record = Array.isArray(results) && results.length > 0 ? results[0] : {};
+        const allColumns = normalizeFields(metadata).map(field => new Column(field));
+        allColumnsRef.current = allColumns;
+        const columns = allColumns.filter(c => !NOT_DISPLAY_COLUMN_KEYS.includes(c.key));
+        setRecord(record);
+        setOriginColumns(columns);
         setLoading(false);
-        return;
-      }
-      const errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-      setLoading(false);
-    });
+      }).catch(error => {
+        setRecord(null);
+        if (error.response && error.response.status === 404 && onErrMessage) {
+          const err = `${direntType === 'file' ? 'File' : 'Folder' } does not exist`;
+          onErrMessage(err);
+          setLoading(false);
+          return;
+        }
+        const errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+        setLoading(false);
+      });
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enableMetadata, repoID, path, direntType, dirent, direntDetail]);
 
