@@ -58,7 +58,7 @@ class FileContent extends React.Component {
               <Icon symbol="down" className="rotate-270" />
             </a>
           )}
-          <img src={thumbnailURL || rawPath} alt={fileName} id="image-view" />
+          <img src={thumbnailURL || rawPath} alt={fileName} id="image-view" className="mw-100 mh-100" />
         </div>
       </div>
     );
