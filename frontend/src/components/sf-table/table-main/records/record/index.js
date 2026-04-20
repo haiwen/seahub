@@ -260,9 +260,9 @@ class Record extends React.Component {
       this.setState({ canDropTip: true });
     }
     // Propagate drag enter to cellMetaData for drag-fill support
-    const { cellMetaData, index } = this.props;
+    const { cellMetaData, index, groupRecordIndex } = this.props;
     if (cellMetaData && cellMetaData.onDragEnter) {
-      cellMetaData.onDragEnter({ overRecordIdx: index, overGroupRecordIndex: null });
+      cellMetaData.onDragEnter({ overRecordIdx: index, overGroupRecordIndex: groupRecordIndex });
     }
   };
 

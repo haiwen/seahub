@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { GridUtilsAdapter } from '@/components/sf-table/utils/grid-utils-adapter';
 import CellFormatter from '../../components/cell-formatter';
 import Editor from '../../components/cell-editors/editor';
@@ -211,9 +211,13 @@ export const createMetadataContextMenuOptions = ({
         // Handled by SFTable's copy mechanism
         break;
       case TextTranslation.EXTRACT_FILE_DETAIL.key:
-      case TextTranslation.EXTRACT_FILE_DETAILS.key:
         if (singleRecord) {
           updateRecordDetails([singleRecord]);
+        }
+        break;
+      case TextTranslation.EXTRACT_FILE_DETAILS.key:
+        if (records.length > 0) {
+          updateRecordDetails(records);
         }
         break;
       case TextTranslation.DETECT_FACES.key:
@@ -243,6 +247,44 @@ export const createMetadataContextMenuOptions = ({
     hideMenu?.(false);
   };
 
+  // Inner component: owns its own isOpen state so hover works
+  const SubMenuDropdown = ({ option }) => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    return (
+      <Dropdown
+        key={option.key}
+        direction="right"
+        className="w-100"
+        isOpen={isOpen}
+        toggle={() => {}}
+        onMouseEnter={() => setIsOpen(true)}
+        onMouseLeave={() => setIsOpen(false)}
+      >
+        <DropdownToggle
+          tag="span"
+          className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center"
+          onMouseEnter={() => setIsOpen(true)}
+        >
+          <span className="mr-auto">{option.value}</span>
+          <Icon symbol="down" className="rotate-270" />
+        </DropdownToggle>
+        <DropdownMenu>
+          {option.subOpList.map((subItem, subIndex) => {
+            if (subItem === 'Divider') {
+              return <DropdownItem key={`sub-divider-${subIndex}`} divider />;
+            }
+            return (
+              <DropdownItem key={subItem.key} onClick={(e) => { e.stopPropagation(); handleOptionClick(subItem, e); }}>
+                {subItem.value}
+              </DropdownItem>
+            );
+          })}
+        </DropdownMenu>
+      </Dropdown>
+    );
+  };
+
   // Render menu options as React elements
   const renderOptions = () => {
     return menuOptions.map((option, index) => {
@@ -250,34 +292,7 @@ export const createMetadataContextMenuOptions = ({
         return <DropdownItem key={`divider-${index}`} divider />;
       }
       if (option.subOpList) {
-        return (
-          <Dropdown
-            key={option.key}
-            direction="right"
-            className="w-100"
-            toggle={() => {}}
-          >
-            <DropdownToggle
-              tag="span"
-              className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center"
-            >
-              <span className="mr-auto">{option.value}</span>
-              <Icon symbol="down" className="rotate-270" />
-            </DropdownToggle>
-            <DropdownMenu>
-              {option.subOpList.map((subItem, subIndex) => {
-                if (subItem === 'Divider') {
-                  return <DropdownItem key={`sub-divider-${subIndex}`} divider />;
-                }
-                return (
-                  <DropdownItem key={subItem.key} onClick={(e) => { e.stopPropagation(); handleOptionClick(subItem, e); }}>
-                    {subItem.value}
-                  </DropdownItem>
-                );
-              })}
-            </DropdownMenu>
-          </Dropdown>
-        );
+        return <SubMenuDropdown key={option.key} option={option} />;
       }
       return (
         <DropdownItem key={option.key} onClick={(e) => { e.stopPropagation(); handleOptionClick(option, e); }}>

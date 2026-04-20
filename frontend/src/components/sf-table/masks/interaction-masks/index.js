@@ -135,7 +135,8 @@ class InteractionMasks extends React.Component {
    * @param {string|number} tagId - The ID of the tag to select
    */
   handleSelectTags = (tagId) => {
-    const { selectedPosition, isGroupView } = this.state;
+    const { selectedPosition } = this.state;
+    const { isGroupView = false } = this.props;
     const { columns, updateFileTags, recordGetterByIndex } = this.props;
     if (!updateFileTags) return;
 
@@ -158,7 +159,8 @@ class InteractionMasks extends React.Component {
    * @param {string|number} tagId - The ID of the tag to deselect
    */
   handleDeselectTags = (tagId) => {
-    const { selectedPosition, isGroupView } = this.state;
+    const { selectedPosition } = this.state;
+    const { isGroupView = false } = this.props;
     const { columns, updateFileTags, recordGetterByIndex } = this.props;
     if (!updateFileTags) return;
 
