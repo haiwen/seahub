@@ -267,6 +267,14 @@ select {
   margin-bottom: 12px;
 }
 
+.repos-container .library-list-header > a {
+  color: var(--bs-body-color);
+}
+
+.repos-container .library-list-header > a:hover {
+  text-decoration: underline;
+}
+
 .repos-container .library-list-header .seafile-multicolor-icon {
   color: var(--bs-icon-secondary-color);
 }
