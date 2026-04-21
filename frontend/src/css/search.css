@@ -109,6 +109,10 @@
   border-radius: 4px;
 }
 
+.search-input .search-text-clear svg {
+  color: var(--bs-icon-secondary-color);
+}
+
 .search-container.show .search-input {
   height: 38px;
   background-color: inherit;

@@ -1,9 +1,23 @@
 .selected-user-item-container {
+  appearance: none;
+  background-clip: padding-box;
+  border-radius: 4px;
+  font-size: .875rem;
+  font-weight: 400;
+  line-height: 1.6;
+  padding: 0.375rem 1rem;
+  width: 100%;
+  border: 1px solid var(--bs-border-color);
+  color: var(--bs-body-color);
   flex-wrap: wrap;
   min-height: 38px;
   background-color: inherit;
   position: relative;
   padding-right: 40px;
+}
+
+.selected-user-item-container.focus {
+  border: 1px solid #3E84F7;
 }
 
 .selected-user-item-container .user-select-placeholder {
@@ -15,17 +29,36 @@
 }
 
 .user-select-container .user-search-container {
-  padding: 10px 10px 0 10px;
+  width: 100%;
+  padding: 6px 10px;
+  min-width: 170px;
+  position: relative;
+  padding: 0;
+  height: 32px;
+  border-bottom: 1px solid var(--bs-border-color);
 }
 
-.user-select-container .user-search-container input {
-  height: 28px;
+.user-select-container .user-search-container .form-control {
+  height: 31px;
+  border: none;
+  padding: .375rem 1rem;
+  cursor: pointer;
+}
+
+.user-select-container .user-search-container .form-control:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.user-select-container .user-search-container .input-icon-addon {
+  cursor: pointer;
+  pointer-events: auto;
 }
 
 .user-select-container .user-list-container {
-  min-height: 160px;
+  min-height: 40px;
   max-height: 200px;
-  margin: 10px 0;
+  margin: 8px;
   overflow: auto;
 }
 .user-select-container .user-list-container .user-item-container {
@@ -36,6 +69,7 @@
   padding: 0 10px;
   font-size: 14px;
   cursor: pointer;
+  border-radius: 4px;
 }
 
 .user-select-container .user-list-container .user-item-container:hover,
@@ -47,14 +81,18 @@
 .no-search-result {
   color: var(--bs-body-secondary-color);
   font-size: 14px;
-  padding-left: 10px;
   padding: 10px;
   overflow: auto;
+  text-align: center;
 }
 
 .user-select-popover .popover {
-  width: 385px;
-  max-width: 385px;
+  margin-top: -4px;
+  max-width: max-content;
+  background: var(--bs-popover-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 4px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05);
 }
 
 .user-select-popover .popover .user-item {

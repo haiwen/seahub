@@ -33,6 +33,7 @@ class UserSelect extends React.Component {
       searchedUsers: [],
       searchValue: '',
       highlightIndex: -1,
+      popoverWidth: 385,
     };
   }
 
@@ -50,7 +51,7 @@ class UserSelect extends React.Component {
       seafileAPI.searchUsers(newSearchValue.trim()).then((res) => {
         this.setState({
           searchedUsers: res.data.users,
-          highlightIndex: res.data.users.length > 0 ? 0 : -1,
+          highlightIndex: -1,
         });
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
@@ -72,6 +73,11 @@ class UserSelect extends React.Component {
         itemHeight: parseInt(getComputedStyle(this.userItem, null).height)
       });
     }
+    if (this.selectedUserItemContainer) {
+      this.setState({
+        popoverWidth: this.selectedUserItemContainer.offsetWidth
+      });
+    }
     document.addEventListener('keydown', this.onHotKey, true);
   }
 
@@ -80,7 +86,7 @@ class UserSelect extends React.Component {
   }
 
   onClickOutside = (e) => {
-    if (e.target.id !== 'user-select' && this.state.isPopoverOpen) {
+    if (!this.selectedUserItemContainer.contains(e.target) && this.state.isPopoverOpen) {
       this.setState({
         isPopoverOpen: false,
         searchedUsers: [],
@@ -212,7 +218,7 @@ class UserSelect extends React.Component {
       <ClickOutside onClickOutside={this.onClickOutside}>
         <>
           <div
-            className={classnames('selected-user-item-container form-control d-flex align-items-center', className, { 'focus': this.state.isPopoverOpen })}
+            className={classnames('selected-user-item-container d-flex align-items-center', className, { 'focus': this.state.isPopoverOpen })}
             id="user-select"
             tabIndex={0}
             role="button"
@@ -220,6 +226,7 @@ class UserSelect extends React.Component {
             aria-expanded={this.state.isPopoverOpen}
             onClick={this.onTogglePopover}
             onKeyDown={Utils.onKeyDown}
+            ref={ref => this.selectedUserItemContainer = ref}
           >
             {selectedUsers.map((user, index) => {
               return (
@@ -241,10 +248,11 @@ class UserSelect extends React.Component {
           <Popover
             placement="bottom-start"
             isOpen={this.state.isPopoverOpen}
-            target={'user-select'}
+            target='user-select'
             hideArrow={true}
             fade={false}
             className="user-select-popover"
+            style={{ width: this.state.popoverWidth }}
           >
             <div className="user-select-container" ref={ref => this.ref = ref} onMouseDown={e => e.stopPropagation()}>
               <div className="user-search-container">
@@ -254,6 +262,7 @@ class UserSelect extends React.Component {
                   value={searchValue}
                   onChange={this.onValueChanged}
                   onKeyDown={this.onKeyDown}
+                  isClearable={true}
                 />
               </div>
               <div className="user-list-container" ref={ref => this.container = ref}>
