@@ -3,7 +3,6 @@
   border: 1px solid #eaeaea;
   border-radius: 8px;
   margin-bottom: 24px;
-  overflow: hidden;
 }
 
 [data-bs-theme='dark'] .repo-list-card {
@@ -16,6 +15,7 @@
   padding: 8px 16px;
   background: var(--bs-th-secondary-bg);
   border-bottom: 1px solid #eaeaea;
+  border-radius: 8px 8px 0 0;
   color: #666;
   font-size: 14px;
   box-sizing: border-box;
