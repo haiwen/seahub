@@ -289,6 +289,7 @@ select {
   padding: 0 8px;
   border-radius: 4px;
   border: 1px solid var(--bs-border-color);
+  font-weight: normal;
 }
 
 .repos-container .library-list-header .btn.btn-secondary:hover {
@@ -296,7 +297,7 @@ select {
 }
 
 [data-bs-theme="dark"] .repos-container .library-list-header .btn.btn-secondary:hover {
-  background-color: 1px solid rgba(255, 255, 255, .1);
+  background-color: rgba(255, 255, 255, .1);
 }
 
 .cur-view-container .repos-container .libraries-empty-tip-in-list-mode {
