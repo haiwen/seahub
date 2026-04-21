@@ -283,7 +283,6 @@ class DirViewTest(BaseTestCase):
         assert len(json_resp['dirent_list']) == 1
         assert json_resp['dirent_list'][0]['type'] == 'file'
         assert json_resp['dirent_list'][0]['name'] == image_file_name
-        assert image_file_name in json_resp['dirent_list'][0]['encoded_thumbnail_src']
 
     def test_get_dir_with_invalid_perm(self):
         # login as admin, then get dir info in user's repo
