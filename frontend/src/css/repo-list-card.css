@@ -36,7 +36,7 @@
 }
 
 .repo-list-card-header .repo-list-col-name {
-  width: calc(35% - 60px);
+  width: calc(42% - 64px);
   flex-shrink: 0;
   padding-right: 16px;
 }
@@ -100,7 +100,7 @@
 }
 
 .repo-list-item .repo-item-name {
-  width: calc(35% - 60px);
+  width: calc(42% - 64px);
   height: 39px;
   flex-shrink: 0;
   padding-right: 16px;

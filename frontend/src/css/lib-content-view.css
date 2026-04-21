@@ -6,7 +6,7 @@
   padding: 0;
   background: var(--bs-body-bg);
   position: absolute;
-  top: 48px;
+  top: 40px;
   width: 100%;
   height: calc(100% - 48px);
   flex-direction: row;
