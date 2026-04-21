@@ -102,11 +102,18 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
       });
       setTrashList(newTrashList);
       toaster.success(gettext('Restored 1 item'));
+
+      // at present, when right click a cell, the row it belongs to is selected.
+      setSelectIds([]);
+      const eventBus = EventBus.getInstance();
+      eventBus.dispatch(EVENT_BUS_TYPE.SELECT_TRASH, []);
+      eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE, []);
+      toggleShowDirentToolbar(false);
     }).catch(error => {
       const errorMessage = Utils.getErrorMsg(error);
       toaster.danger(errorMessage);
     });
-  }, [repoID, trashList]);
+  }, [repoID, trashList, toggleShowDirentToolbar]);
 
   const onTrashSearchValueChange = useCallback((value) => {
     if (!value && !isFiltersValid(trashFilters)) {
