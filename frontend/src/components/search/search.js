@@ -916,9 +916,14 @@ class Search extends Component {
     const item = results[highlightIndex];
     if (!item) return null;
     const repoID = item.repo_id;
+    const type = item.is_dir ? 'dir' : 'file';
+    let name = item.name;
+    if (type === 'dir') {
+      name = item.path.split('/').filter(Boolean).pop();
+    }
     const dirent = {
-      name: item.name,
-      type: item.is_dir ? 'dir' : 'file',
+      name,
+      type,
       isLib: item.path === '/',
       file_tags: [],
       path: item.path
