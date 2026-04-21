@@ -7,6 +7,7 @@ import { MenuSelectStyle } from '../common/select';
 import OpIcon from '../../components/op-icon';
 import Icon from '../icon';
 import { Utils } from '../../utils/utils';
+import SelectDropdownIndicator from '../select-dropdown-indicator';
 
 import '../../css/select-editor.css';
 
@@ -28,13 +29,9 @@ const propTypes = {
 
 const DropdownIndicator = props => {
   return (
-    components.DropdownIndicator && (
-      <components.DropdownIndicator {...props}>
-        <span className="d-flex align-items-center" style={{ marginLeft: '-2px' }} aria-hidden="true">
-          <Icon symbol="down" style={{ width: '14px', height: '14px' }} />
-        </span>
-      </components.DropdownIndicator>
-    )
+    <components.DropdownIndicator {...props}>
+      <SelectDropdownIndicator />
+    </components.DropdownIndicator>
   );
 };
 

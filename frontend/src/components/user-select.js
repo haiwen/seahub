@@ -11,6 +11,7 @@ import SearchInput from './search-input';
 import UserItem from '../components/user-item';
 import ClickOutside from './click-outside';
 import Icon from './icon';
+import SelectDropdownIndicator from './select-dropdown-indicator';
 
 import '../css/user-select.css';
 
@@ -235,6 +236,7 @@ class UserSelect extends React.Component {
                 {this.props.placeholder || gettext('Select users')}
               </div>
             )}
+            <SelectDropdownIndicator />
           </div>
           <Popover
             placement="bottom-start"

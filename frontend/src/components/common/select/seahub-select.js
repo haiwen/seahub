@@ -3,17 +3,14 @@ import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
 import { MenuSelectStyle } from './seahub-select-style';
 import Icon from '../../icon';
+import SelectDropdownIndicator from '../../select-dropdown-indicator';
 import './seahub-select.css';
 
 const DropdownIndicator = props => {
   return (
-    components.DropdownIndicator && (
-      <components.DropdownIndicator {...props}>
-        <span className="d-flex align-items-center" style={{ marginLeft: '-2px' }} aria-hidden="true">
-          <Icon symbol="down" style={{ width: '12px', height: '12px' }} />
-        </span>
-      </components.DropdownIndicator>
-    )
+    <components.DropdownIndicator {...props}>
+      <SelectDropdownIndicator />
+    </components.DropdownIndicator>
   );
 };
 
