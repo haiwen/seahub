@@ -327,7 +327,7 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
 
   const handleCellDoubleClick = () => {};
 
-  const checkCanModifyRecord = () => {};
+  const canModify = () => {};
 
   const handleColumnWidthChange = useCallback((column, newWidth) => {
     setColumnWidths(prevState => ({
@@ -402,7 +402,7 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
         loadMore={loadNextPage}
         modifyColumnWidth={handleColumnWidthChange}
         onCellDoubleClick={handleCellDoubleClick}
-        checkCanModifyRecord={checkCanModifyRecord}
+        canModify={canModify}
         supportCopy={false}
         supportPaste={false}
         supportDragFill={false}

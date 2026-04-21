@@ -7,6 +7,7 @@ import { checkHasSearchResult } from '../utils/search';
 import { EVENT_BUS_TYPE } from '../../../metadata/constants';
 import OpIcon from '../../../components/op-icon';
 import Icon from '../../icon';
+import EventBus from '@/components/common/event-bus';
 
 const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells, closeSearcher, focusNextMatchedCell, focusPreviousMatchedCell, showResultNavigation = true }) => {
   const [isSearchActive, setIsSearchActive] = useState(false);
@@ -20,7 +21,7 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
     setIsSearchActive(!isSearchActive);
   };
 
-  const handleCloseSearcher = useCallback(() => {
+  const handleResetSearch = useCallback(() => {
     setIsSearchActive(false);
     closeSearcher && closeSearcher();
   }, [closeSearcher]);
@@ -29,7 +30,7 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
     const isEmptySearchResult = !hasSearchResult;
     if (e.keyCode === KeyCodes.Escape) {
       e.preventDefault();
-      handleCloseSearcher();
+      handleResetSearch();
     } else if (isModG(e)) {
       e.preventDefault();
       if (isEmptySearchResult) return;
@@ -75,13 +76,12 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
   };
 
   useEffect(() => {
-    const eventBus = window.sfMetadataContext && window.sfMetadataContext.eventBus;
-    const unsubscribeResetSearchBar = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.RESET_SEARCH_BAR, handleCloseSearcher);
+    const unsubscribeResetSearchBar = EventBus.getInstance().subscribe(EVENT_BUS_TYPE.RESET_SEARCH_BAR, handleResetSearch);
 
     return () => {
       unsubscribeResetSearchBar && unsubscribeResetSearchBar();
     };
-  }, [handleCloseSearcher]);
+  }, [handleResetSearch]);
 
   return (
     <div className="sf-table-searcher-container">
@@ -108,7 +108,7 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
             title={gettext('Close')}
             className="btn-close-searcher-wrapper input-icon-addon"
             symbol="close"
-            op={handleCloseSearcher}
+            op={handleResetSearch}
           />
         </div>
       )}

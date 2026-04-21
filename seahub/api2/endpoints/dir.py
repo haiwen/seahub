@@ -272,7 +272,7 @@ class DirView(APIView):
 
         # permission check
         permission = check_folder_permission(request, repo_id, parent_dir)
-       
+
         if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -413,11 +413,10 @@ class DirView(APIView):
                             try:
                                 query_result = metadata_server_api.query_rows(sql, parameters)
                                 rows = query_result.get('results', [])
-                                if rows:
-                                    metadata = {}
-                                    metadata['columns'] = metadata_columns
-                                    metadata['rows'] = rows
-                                    response_dict['metadata'] = metadata
+                                metadata = {}
+                                metadata['columns'] = metadata_columns
+                                metadata['rows'] = rows
+                                response_dict['metadata'] = metadata
 
                             except Exception as e:
                                 logger.error(f"Failed to fetch metadata for repo {repo_id}: {e}")

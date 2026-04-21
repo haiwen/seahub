@@ -18,15 +18,17 @@ import Empty from './empty';
 import { CellType } from '../../constants';
 
 import './index.css';
+import RateEditor from '../cell-editors/rate-editor';
+import CheckboxEditor from '../cell-editors/checkbox-editor';
 
-const Formatter = React.memo(({ field, value, isSample, queryUserAPI, emptyTip, tagsData, ...params }) => {
-  const { type: fieldType } = field || {};
-  const className = `sf-metadata-${fieldType}-formatter`;
-  switch (fieldType) {
+const Formatter = React.memo(({ column, value, isSample, queryUserAPI, emptyTip, ...params }) => {
+  const { type } = column || {};
+  const className = `sf-metadata-${type}-formatter`;
+  switch (type) {
     case CellType.TEXT: {
       return (
         <TextFormatter value={value} className={className}>
-          <Empty fieldType={fieldType} placeholder={emptyTip} />
+          <Empty fieldType={type} placeholder={emptyTip} />
         </TextFormatter>
       );
     }
@@ -34,7 +36,7 @@ const Formatter = React.memo(({ field, value, isSample, queryUserAPI, emptyTip, 
     case CellType.MTIME: {
       return (
         <CTimeFormatter value={value} className={className} {...params}>
-          <Empty fieldType={fieldType} placeholder={emptyTip} />
+          <Empty fieldType={type} placeholder={emptyTip} />
         </CTimeFormatter>
       );
     }
@@ -42,91 +44,105 @@ const Formatter = React.memo(({ field, value, isSample, queryUserAPI, emptyTip, 
     case CellType.LAST_MODIFIER: {
       return (
         <CreatorFormatter value={value} className={className} api={queryUserAPI} {...params}>
-          <Empty fieldType={fieldType} placeholder={emptyTip} />
+          <Empty fieldType={type} placeholder={emptyTip} />
         </CreatorFormatter>
       );
     }
     case CellType.FILE_NAME: {
       return (
         <FileNameFormatter value={value} className={className} {...params}>
-          <Empty fieldType={fieldType} placeholder={emptyTip} />
+          <Empty fieldType={type} placeholder={emptyTip} />
         </FileNameFormatter>
       );
     }
     case CellType.DATE: {
       return (
-        <DateFormatter value={value} format={field.data?.format} className={className}>
-          <Empty fieldType={fieldType} placeholder={emptyTip} />
+        <DateFormatter value={value} format={column.data?.format} className={className}>
+          <Empty fieldType={type} placeholder={emptyTip} />
         </DateFormatter>
       );
     }
     case CellType.SINGLE_SELECT: {
       return (
-        <SingleSelectFormatter value={value} options={field.data?.options || []} className={className}>
-          <Empty fieldType={fieldType} placeholder={emptyTip} />
+        <SingleSelectFormatter value={value} options={column.data?.options || []} className={className}>
+          <Empty fieldType={type} placeholder={emptyTip} />
         </SingleSelectFormatter>
       );
     }
     case CellType.MULTIPLE_SELECT: {
       return (
-        <MultipleSelectFormatter value={value} options={field.data?.options || []} className={className}>
-          <Empty fieldType={fieldType} placeholder={emptyTip} />
+        <MultipleSelectFormatter value={value} options={column.data?.options || []} className={className}>
+          <Empty fieldType={type} placeholder={emptyTip} />
         </MultipleSelectFormatter>
       );
     }
     case CellType.COLLABORATOR: {
       return (
         <CollaboratorsFormatter value={value} className={className} api={queryUserAPI} {...params}>
-          <Empty fieldType={fieldType} placeholder={emptyTip} />
+          <Empty fieldType={type} placeholder={emptyTip} />
         </CollaboratorsFormatter>
       );
     }
     case CellType.CHECKBOX: {
+      if (column.editable) {
+        return (
+          <CheckboxEditor value={value} className={className} field={column} {...params}>
+            <Empty fieldType={type} placeholder={emptyTip} />
+          </CheckboxEditor>
+        );
+      }
       return (
         <CheckboxFormatter value={value} className={className}>
-          <Empty fieldType={fieldType} placeholder={emptyTip} />
+          <Empty fieldType={type} placeholder={emptyTip} />
         </CheckboxFormatter>
       );
     }
     case CellType.GEOLOCATION: {
       return (
-        <GeolocationFormatter {...params} format={field.data?.geo_format} value={value} className={className}>
-          <Empty fieldType={fieldType} placeholder={emptyTip} />
+        <GeolocationFormatter {...params} format={column.data?.geo_format} value={value} className={className}>
+          <Empty fieldType={type} placeholder={emptyTip} />
         </GeolocationFormatter>
       );
     }
     case CellType.LONG_TEXT: {
       return (
         <LongTextFormatter {...params} value={value} className={className}>
-          <Empty fieldType={fieldType} placeholder={emptyTip} />
+          <Empty fieldType={type} placeholder={emptyTip} />
         </LongTextFormatter>
       );
     }
     case CellType.NUMBER: {
       return (
-        <NumberFormatter value={value} formats={field?.data} className={className}>
-          <Empty fieldType={fieldType} placeholder={emptyTip} />
+        <NumberFormatter value={value} formats={column?.data} className={className}>
+          <Empty fieldType={type} placeholder={emptyTip} />
         </NumberFormatter>
       );
     }
     case CellType.RATE: {
+      if (column.editable) {
+        return (
+          <RateEditor value={value} field={column} className={className} {...params}>
+            <Empty fieldType={type} placeholder={emptyTip} />
+          </RateEditor>
+        );
+      }
       return (
-        <RateFormatter value={value} data={field?.data} className={className}>
-          <Empty fieldType={fieldType} placeholder={emptyTip} />
+        <RateFormatter value={value} data={column?.data} className={className}>
+          <Empty fieldType={type} placeholder={emptyTip} />
         </RateFormatter>
       );
     }
     case CellType.TAGS: {
       return (
-        <FileTagsFormatter value={value} tagsData={tagsData} className={className} showName={true}>
-          <Empty fieldType={fieldType} placeholder={emptyTip} />
+        <FileTagsFormatter value={value} className={className} showName={true}>
+          <Empty fieldType={type} placeholder={emptyTip} />
         </FileTagsFormatter>
       );
     }
     default: {
       return (
         <TextFormatter value={value} className={className}>
-          <Empty fieldType={fieldType} placeholder={emptyTip} />
+          <Empty fieldType={type} placeholder={emptyTip} />
         </TextFormatter>
       );
     }
@@ -135,9 +151,11 @@ const Formatter = React.memo(({ field, value, isSample, queryUserAPI, emptyTip, 
 
 Formatter.propTypes = {
   isSample: PropTypes.bool,
-  field: PropTypes.object.isRequired,
+  column: PropTypes.object,
   value: PropTypes.any,
   tagsData: PropTypes.object,
 };
+
+Formatter.displayName = 'Formatter';
 
 export default Formatter;

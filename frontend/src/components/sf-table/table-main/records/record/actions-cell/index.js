@@ -5,6 +5,7 @@ import { Tooltip } from 'reactstrap';
 import { isMobile, Utils } from '../../../../../../utils/utils';
 import { gettext } from '../../../../../../utils/constants';
 import { SEQUENCE_COLUMN_WIDTH } from '../../../../constants/grid';
+import IconBtn from '../../../../../../components/icon-btn';
 
 import './index.css';
 
@@ -51,12 +52,19 @@ class ActionsCell extends Component {
     );
   };
 
+  handleShowExpandedProps = () => {
+    const { onShowExpandedPropsDialog, recordId } = this.props;
+    if (onShowExpandedPropsDialog) {
+      onShowExpandedPropsDialog(recordId);
+    }
+  };
+
   getRecordNo = () => {
     return (this.props.showRecordAsTree ? this.props.treeNodeIndex : this.props.index) + 1;
   };
 
   render() {
-    const { isSelected, isLastFrozenCell, height, recordId, canModify = true, recordDraggable } = this.props;
+    const { isSelected, isLastFrozenCell, height, recordId, canModifyRow = true, recordDraggable } = this.props;
     const cellStyle = {
       height,
       width: SEQUENCE_COLUMN_WIDTH,
@@ -66,11 +74,11 @@ class ActionsCell extends Component {
       <div
         className={classnames('sf-table-cell column actions-cell', { 'table-last--frozen': isLastFrozenCell })}
         id={`action-cell-${recordId}`}
-        style={{ ...cellStyle }}
+        style={cellStyle}
         onMouseEnter={this.onCellMouseEnter}
         onMouseLeave={this.onCellMouseLeave}
       >
-        {(recordDraggable && canModify) &&
+        {(recordDraggable && canModifyRow) &&
           <div
             draggable
             className="drag-handler"
@@ -98,6 +106,17 @@ class ActionsCell extends Component {
             />
           </div>
         </label>
+        {this.props.onShowExpandedPropsDialog && (
+          <IconBtn
+            symbol="expand"
+            className="row-expand"
+            iconClassName="row-expand-icon"
+            onClick={this.handleShowExpandedProps}
+            tabIndex="0"
+            role="button"
+            onKeyDown={Utils.onKeyDown}
+          />
+        )}
         {/* {this.getLockedRowTooltip()} */}
       </div>
     );
@@ -115,6 +134,7 @@ ActionsCell.propTypes = {
   onSelectRecord: PropTypes.func,
   handleDragStart: PropTypes.func,
   canModify: PropTypes.bool,
+  onShowExpandedPropsDialog: PropTypes.func,
 };
 
 export default ActionsCell;

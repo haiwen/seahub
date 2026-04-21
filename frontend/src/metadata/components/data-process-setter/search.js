@@ -24,20 +24,7 @@ const Search = ({ viewId, columns }) => {
   const closeSearcher = useCallback(() => {
     setSearchValue('');
     setSearchResult(null);
-    window.sfMetadataContext.eventBus && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SEARCH_ROWS);
-  }, []);
-
-  // Listen for search bar reset events from the context
-  useEffect(() => {
-    const handleResetSearchBar = () => {
-      setSearchValue('');
-      setSearchResult(null);
-    };
-
-    if (window.sfMetadataContext?.eventBus) {
-      const unsubscribe = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.RESET_SEARCH_BAR, handleResetSearchBar);
-      return unsubscribe;
-    }
+    window.sfMetadataContext.eventBus && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SEARCH_ROWS, '');
   }, []);
 
   // Reset search when viewId changes

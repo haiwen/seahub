@@ -24,6 +24,7 @@ import { useTags } from '../../tag/hooks';
 import { useFileOperations, useMetadataAIOperations, useMetadataStatus } from '../../hooks';
 import { getColumnByKey } from '../utils/column';
 import { getSearchRule } from '../../components/sf-table/utils/search';
+import EventBus, { eventBus } from '@/components/common/event-bus';
 
 const MetadataViewContext = React.createContext(null);
 
@@ -89,9 +90,8 @@ export const MetadataViewProvider = ({
       }
       if (searchState.isActive) {
         clearSearchState();
-        if (window.sfMetadataContext?.eventBus) {
-          window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.RESET_SEARCH_BAR);
-        }
+        eventBus.getInstance().dispatch(EVENT_BUS_TYPE.RESET_SEARCH_BAR);
+
       }
     }
   }, [searchState.isActive, clearSearchState]);
@@ -246,7 +246,7 @@ export const MetadataViewProvider = ({
     });
   };
 
-  const modifyRecord = (rowId, updates, oldRowData, originalUpdates, originalOldRowData, isCopyPaste, { success_callback, fail_callback } = {}) => {
+  const modifyRecord = ({ rowId, updates, oldRowData, originalUpdates, originalOldRowData, isCopyPaste, success_callback, fail_callback } = {}) => {
     const rowIds = [rowId];
     const idRowUpdates = { [rowId]: updates };
     const idOriginalRowUpdates = { [rowId]: originalUpdates };
@@ -339,13 +339,12 @@ export const MetadataViewProvider = ({
     storeRef.current.modifyColumnData(columnKey, newData, oldData, { optionModifyType });
   }, [storeRef]);
 
-  const modifyColumnWidth = useCallback((columnKey, newWidth) => {
-    storeRef.current.modifyColumnWidth(columnKey, newWidth);
+  const modifyColumnWidth = useCallback((column, newWidth) => {
+    storeRef.current.modifyColumnWidth(column.key, newWidth);
   }, [storeRef]);
 
   const modifyColumnOrder = useCallback((sourceColumnKey, targetColumnKey) => {
     storeRef.current.modifyColumnOrder(sourceColumnKey, targetColumnKey);
-    // Column order changes preserve search context
     setTimeout(() => notifyTableChanged(EVENT_BUS_TYPE.MODIFY_COLUMN_ORDER), 0);
   }, [storeRef, notifyTableChanged]);
 
@@ -880,7 +879,7 @@ export const MetadataViewProvider = ({
       setMetadata(newMetadata);
       if (searchState.isActive) {
         clearSearchState();
-        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.RESET_SEARCH_BAR);
+        EventBus.getInstance().dispatch(EVENT_BUS_TYPE.RESET_SEARCH_BAR);
       }
     }
   }, [searchState, shouldPreserveSearch, reapplySearchToMetadata, clearSearchState]);

@@ -5,12 +5,13 @@ import { RightScrollbar } from '../../scrollbar';
 import Record from './record';
 import InteractionMasks from '../../masks/interaction-masks';
 import { RecordMetrics } from '../../utils/record-metrics';
-import { getColumnScrollPosition, getColVisibleStartIdx, getColVisibleEndIdx } from '../../utils/records-body-utils';
+import { getColumnScrollPosition, getColVisibleStartIdx, getColVisibleEndIdx } from '../../utils/records-body';
 import EventBus from '../../../common/event-bus';
 import { EVENT_BUS_TYPE } from '../../constants/event-bus-type';
 import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
 import { checkEditableViaClickCell, checkIsColumnSupportDirectEdit, getColumnByIndex, getColumnIndexByKey } from '../../utils/column';
-import { checkIsCellSupportOpenEditor } from '../../utils/selected-cell-utils';
+import { checkIsCellSupportOpenEditor } from '../../utils/selection';
+import { SEQUENCE_COLUMN_WIDTH } from '../../constants/grid';
 
 const ROW_HEIGHT = 33;
 const RENDER_MORE_NUMBER = 10;
@@ -292,10 +293,10 @@ class RecordsBody extends Component {
       const isFromKeyboard = true;
       this.selectUpdate(cell, isFromKeyboard);
     } else {
-      const { columns, recordGetterByIndex, checkCanModifyRecord } = this.props;
+      const { columns, recordGetterByIndex, canModifyRow } = this.props;
       const column = getColumnByIndex(cell.idx, columns);
       const supportOpenEditor = checkIsColumnSupportDirectEdit(column);
-      const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, false, recordGetterByIndex, checkCanModifyRecord);
+      const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, false, recordGetterByIndex, canModifyRow);
       this.selectCell(cell, supportOpenEditor && hasOpenPermission);
     }
     this.props.onCellClick(cell);
@@ -303,10 +304,10 @@ class RecordsBody extends Component {
   };
 
   onCellDoubleClick = (cell, e) => {
-    const { columns, recordGetterByIndex, checkCanModifyRecord, onCellDoubleClick } = this.props;
+    const { columns, recordGetterByIndex, canModifyRow, onCellDoubleClick } = this.props;
     const column = getColumnByIndex(cell.idx, columns);
     const supportOpenEditor = checkEditableViaClickCell(column);
-    const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, false, recordGetterByIndex, checkCanModifyRecord);
+    const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, false, recordGetterByIndex, canModifyRow);
     this.selectCell(cell, supportOpenEditor && hasOpenPermission);
     // Call the onCellDoubleClick prop if provided, special for history view
     if (onCellDoubleClick) {
@@ -509,7 +510,7 @@ class RecordsBody extends Component {
           cellMetaData={cellMetaData}
           columnColor={columnColor}
           searchResult={this.props.searchResult}
-          checkCanModifyRecord={this.props.checkCanModifyRecord}
+          canModifyRow={this.props.canModifyRow}
           checkCellValueChanged={this.props.checkCellValueChanged}
           hasSelectedCell={hasSelectedCell}
           selectedPosition={this.state.selectedPosition}
@@ -518,6 +519,7 @@ class RecordsBody extends Component {
           recordDraggable={this.props.recordDraggable}
           recordDragDropEvents={this.props.recordDragDropEvents}
           draggingRecordSource={this.props.draggingRecordSource}
+          onShowExpandedPropsDialog={this.props.onShowExpandedPropsDialog}
         />
       );
     });
@@ -586,7 +588,7 @@ class RecordsBody extends Component {
             getCopiedRecordsAndColumnsFromRange={this.props.getCopiedRecordsAndColumnsFromRange}
             getTableCanvasContainerRect={this.props.getTableCanvasContainerRect}
           />
-          <div className="sf-table-records-wrapper" ref={this.setResultRef}>
+          <div className="sf-table-records-wrapper" style={{ width: this.props.totalWidth + SEQUENCE_COLUMN_WIDTH }} ref={this.setResultRef}>
             {this.renderRecords()}
           </div>
         </div>
@@ -636,7 +638,7 @@ RecordsBody.propTypes = {
   onCellClick: PropTypes.func,
   onCellRangeSelectionUpdated: PropTypes.func,
   onSelectRecord: PropTypes.func,
-  checkCanModifyRecord: PropTypes.func,
+  canModifyRow: PropTypes.func,
   deleteRecordsLinks: PropTypes.func,
   paste: PropTypes.func,
   searchResult: PropTypes.object,
@@ -654,6 +656,7 @@ RecordsBody.propTypes = {
   onCellContextMenu: PropTypes.func,
   getTableCanvasContainerRect: PropTypes.func,
   createContextMenuOptions: PropTypes.func,
+  onShowExpandedPropsDialog: PropTypes.func,
 };
 
 export default RecordsBody;

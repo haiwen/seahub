@@ -1,16 +1,16 @@
-import React, { useRef, useCallback, useMemo, isValidElement, useState } from 'react';
+import React, { useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { UncontrolledTooltip } from 'reactstrap';
 import Icon from '../../../../icon';
 import ResizeColumnHandle from '../resize-column-handle';
-import HeaderDropdownMenu from '../dropdown-menu';
 import EventBus from '../../../../common/event-bus';
 import { EVENT_BUS_TYPE } from '../../../constants/event-bus-type';
 import { checkIsNameColumn } from '../../../utils/column';
 import { MIN_COLUMN_WIDTH } from '../../../constants/grid';
 import { NODE_CONTENT_LEFT_INDENT, NODE_ICON_LEFT_INDENT } from '../../../constants/tree';
 import { Utils } from '../../../../../utils/utils';
+import HeaderDropdownMenu from '@/components/sf-table/table-main/records-header/dropdown-menu';
 
 import './index.css';
 
@@ -22,7 +22,7 @@ const Cell = ({
   groupOffsetLeft,
   isLastFrozenCell,
   height,
-  ColumnDropdownMenu,
+  columnDropdownMenu,
   column,
   columnIndex,
   fullIndex,
@@ -36,9 +36,15 @@ const Cell = ({
   onMove,
   updateDraggingKey,
   updateDragOverKey,
+  canModifyView,
+  canModifyColumnData,
+  canDeleteColumn,
+  canRenameColumn,
+  ...props
 }) => {
-  const [disableDragColumn, setDisableDragColumn] = useState(false);
   const headerCellRef = useRef(null);
+  const dropdownRef = useRef(null);
+
   const style = useMemo(() => {
     const { left, width } = column;
     let value = Object.assign({ width, maxWidth: width, minWidth: width, height }, propsStyle);
@@ -47,6 +53,8 @@ const Cell = ({
     }
     return value;
   }, [frozen, groupOffsetLeft, column, height, propsStyle]);
+
+  const canModifyColumnInfo = useMemo(() => canModifyColumnData && canModifyColumnData(column), [canModifyColumnData, column]);
 
   const getWidthFromMouseEvent = useCallback((e) => {
     let right = e.pageX || (e.touches && e.touches[0] && e.touches[0].pageX) || (e.changedTouches && e.changedTouches[e.changedTouches.length - 1].pageX);
@@ -82,13 +90,14 @@ const Cell = ({
   }, []);
 
   const onDragStart = useCallback((event) => {
-    if (disableDragColumn) return false;
-    // Use fullIndex since draggingColumnIndex (React state) is stale at drag start
-    const dragData = JSON.stringify({ type: 'sf-table-header-order', column_key: column.key, frozen: column.frozen, draggingColumnIndex: fullIndex });
+    if (dropdownRef.current && dropdownRef.current.isPopoverShow()) return false;
+    // Strip React elements (editor, formatter) from column to avoid circular JSON error
+    const { editor, formatter, ...dragSafeColumn } = column;
+    const dragData = JSON.stringify({ type: 'sf-metadata-view-header-order', column_key: column.key, column: dragSafeColumn });
     event.dataTransfer.effectAllowed = 'move';
-    event.dataTransfer.setData('application/drag-sf-table-header-order', dragData);
+    event.dataTransfer.setData('application/drag-sf-metadata-view-header-order', dragData);
     updateDraggingKey(column.key);
-  }, [column, disableDragColumn, updateDraggingKey, fullIndex]);
+  }, [column, dropdownRef, updateDraggingKey]);
 
   const onDragEnter = useCallback(() => {
     if (!draggingColumnKey) return;
@@ -105,53 +114,25 @@ const Cell = ({
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
     updateDragOverKey(column.key);
-    if (!window.sfTableBody) return;
-    let defaultColumnWidth = 200;
-    const offsetX = event.clientX;
-    const width = document.querySelector('.sf-table-wrapper')?.clientWidth;
-    const left = window.innerWidth - width;
-    if (width <= 800) {
-      defaultColumnWidth = 20;
-    }
-    if (offsetX > window.innerWidth - defaultColumnWidth) {
-      window.sfTableBody.scrollToRight();
-    } else if (offsetX < frozenColumnsWidth + defaultColumnWidth + left) {
-      window.sfTableBody.scrollToLeft();
-    } else {
-      window.sfTableBody.clearHorizontalScroll();
-    }
-  }, [column, frozenColumnsWidth, updateDragOverKey, draggingColumnKey]);
+  }, [column, updateDragOverKey, draggingColumnKey]);
 
   const onDrop = useCallback((event) => {
-    if (!disableDragColumn) {
+    if (!dropdownRef.current || !dropdownRef.current.isPopoverShow()) {
       event.stopPropagation();
-      let dragData = event.dataTransfer.getData('application/drag-sf-table-header-order');
+      let dragData = event.dataTransfer.getData('application/drag-sf-metadata-view-header-order');
       if (!dragData) return false;
       dragData = JSON.parse(dragData);
-      if (dragData.type !== 'sf-table-header-order' || !dragData.column_key) return false;
-      if (dragData.column_key !== column.key && dragData.frozen === column.frozen) {
-        onMove && onMove({ key: dragData.column_key, draggingColumnIndex: dragData.draggingColumnIndex }, { key: column.key, columnIndex: fullIndex });
+      if (dragData.type !== 'sf-metadata-view-header-order' || !dragData.column_key) return false;
+      if (dragData.column_key !== column.key && dragData.column?.frozen === column.frozen) {
+        onMove && onMove({ key: dragData.column_key }, { key: column.key });
       }
     }
-  }, [column, onMove, disableDragColumn, fullIndex]);
+  }, [column, onMove]);
 
   const onDragEnd = useCallback(() => {
     updateDraggingKey(null);
     updateDragOverKey(null);
-    window.sfTableBody.clearHorizontalScroll();
   }, [updateDraggingKey, updateDragOverKey]);
-
-  const dragDropEvents = useMemo(() => {
-    if (!moveable) return {};
-    return {
-      onDragStart,
-      onDragEnter,
-      onDragLeave,
-      onDragOver,
-      onDrop,
-      onDragEnd,
-    };
-  }, [moveable, onDragStart, onDragEnter, onDragLeave, onDragOver, onDrop, onDragEnd]);
 
   const { key, display_name, icon_name, icon_tooltip } = column;
   const isNameColumn = checkIsNameColumn(column);
@@ -163,7 +144,7 @@ const Cell = ({
           {icon_name && <Icon symbol={icon_name} className="sf-metadata-icon sf-table-column-icon" />}
         </span>
         {icon_tooltip &&
-          <UncontrolledTooltip placement="bottom" target={`header-icon-${key}`} fade={false} trigger="hover" className="sf-table-tooltip">
+          <UncontrolledTooltip placement="bottom" target={`header-icon-${key}`} fade={false} trigger="hover" className="sf-tooltip">
             {icon_tooltip}
           </UncontrolledTooltip>
         }
@@ -194,7 +175,7 @@ const Cell = ({
         className={classnames('sf-table-cell column', { 'table-last--frozen': isLastFrozenCell, 'name-column': isNameColumn })}
         ref={headerCellRef}
         style={style}
-        id={`sf-metadata-column-${key}`}
+        id={`sf-table-column-${key}`}
         tabIndex="0"
         role="button"
         onClick={() => handleHeaderCellClick(column, frozen)}
@@ -204,11 +185,24 @@ const Cell = ({
         <div className="sf-table-column-content sf-table-header-cell-left d-flex align-items-center text-truncate">
           {cellContent}
         </div>
-        {isValidElement(ColumnDropdownMenu) && <HeaderDropdownMenu ColumnDropdownMenu={ColumnDropdownMenu} column={column} setDisableDragColumn={setDisableDragColumn} />}
-        {resizable && <ResizeColumnHandle onDrag={onDraggingColumnWidth} onDragEnd={handleDragEndColumnWidth} />}
+        {canModifyColumnInfo && (
+          <HeaderDropdownMenu
+            ref={dropdownRef}
+            column={column}
+            view={props.view}
+            renameColumn={props.renameColumn}
+            deleteColumn={props.deleteColumn}
+            modifyColumnData={props.modifyColumnData}
+            canModifyView={canModifyView}
+            canModifyColumnData={canModifyColumnData}
+            canDeleteColumn={canDeleteColumn}
+            canRenameColumn={canRenameColumn}
+          />
+        )}
+        <ResizeColumnHandle onDrag={onDraggingColumnWidth} onDragEnd={handleDragEndColumnWidth} />
       </div>
     );
-  }, [ColumnDropdownMenu, cellContent, key, column, style, frozen, resizable, isLastFrozenCell, isNameColumn, handleDragEndColumnWidth, handleHeaderCellClick, onContextMenu, onDraggingColumnWidth]);
+  }, [isLastFrozenCell, isNameColumn, style, key, onContextMenu, cellContent, canModifyColumnInfo, column, props.view, props.renameColumn, props.deleteColumn, props.modifyColumnData, canModifyView, canModifyColumnData, canDeleteColumn, canRenameColumn, onDraggingColumnWidth, handleDragEndColumnWidth, handleHeaderCellClick, frozen]);
 
   if (!moveable || isNameColumn) {
     return (
@@ -231,7 +225,12 @@ const Cell = ({
           'rdg-dropping-position-right': isOver && draggingColumnIndex < fullIndex,
           'rdg-dropping-position-none': isOver && draggingColumnIndex === fullIndex
         })}
-        {...dragDropEvents}
+        onDragStart={onDragStart}
+        onDragEnter={onDragEnter}
+        onDragLeave={onDragLeave}
+        onDragOver={onDragOver}
+        onDrop={onDrop}
+        onDragEnd={onDragEnd}
       >
         {cell}
       </div>
@@ -243,7 +242,7 @@ Cell.propTypes = {
   groupOffsetLeft: PropTypes.number,
   height: PropTypes.number,
   column: PropTypes.object,
-  ColumnDropdownMenu: PropTypes.object,
+  columnDropdownMenu: PropTypes.object,
   columnIndex: PropTypes.number,
   fullIndex: PropTypes.number,
   style: PropTypes.object,
@@ -255,8 +254,16 @@ Cell.propTypes = {
   draggingColumnIndex: PropTypes.number,
   dragOverColumnKey: PropTypes.string,
   modifyLocalColumnWidth: PropTypes.func,
+  modifyColumnWidth: PropTypes.func,
   updateDraggingKey: PropTypes.func,
   updateDragOverKey: PropTypes.func,
+  onMove: PropTypes.func,
+  canModifyView: PropTypes.func,
+  canModifyColumnData: PropTypes.func,
+  canDeleteColumn: PropTypes.func,
+  canRenameColumn: PropTypes.func,
+  showRecordAsTree: PropTypes.bool,
+  frozenColumnsWidth: PropTypes.number,
 };
 
 export default Cell;

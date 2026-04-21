@@ -52,10 +52,9 @@ const HideColumnItem = ({
     dragData = JSON.parse(dragData);
     if (dragData.type !== 'sf-metadata-field-display-setting' || !dragData.column_key) return false;
     if (dragData.column_key !== column.key) {
-      // Pass position info: draggingColumnIndex to determine insert position
-      onMove && onMove({ key: dragData.column_key, draggingColumnIndex: dragData.draggingColumnIndex }, { key: column.key, columnIndex });
+      onMove && onMove(dragData.column_key, column.key);
     }
-  }, [column, onMove, columnIndex]);
+  }, [column, onMove]);
 
   const onDragEnd = useCallback(() => {
     updateDraggingKey(null);

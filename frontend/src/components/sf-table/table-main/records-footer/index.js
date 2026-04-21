@@ -7,7 +7,7 @@ import { gettext } from '../../../../utils/constants';
 import { CANVAS_RIGHT_INTERVAL } from '../../constants/grid';
 import { GRID_FOOTER as Z_INDEX_GRID_FOOTER } from '../../constants/z-index';
 import { addClassName, removeClassName } from '../../../../utils/dom';
-import { getRecordsFromSelectedRange } from '../../utils/selected-cell-utils';
+import { getRecordsFromSelectedRange } from '../../utils/selection';
 
 import './index.css';
 
@@ -44,7 +44,7 @@ class RecordsFooter extends React.Component {
   };
 
   onLoadMore = () => {
-    if (this.props.isLoadingMoreRecords) {
+    if (this.props.isLoadingMore) {
       return;
     }
     if (this.props.loadMore) {
@@ -91,8 +91,8 @@ class RecordsFooter extends React.Component {
   };
 
   getSummaryItems = () => {
-    const { columns, sequenceColumnWidth, hasMoreRecords, isLoadingMoreRecords } = this.props;
-    const displayColumns = isLoadingMoreRecords || hasMoreRecords ? columns.slice(1, columns.length) : columns;
+    const { columns, sequenceColumnWidth, hasMoreRecords, isLoadingMore } = this.props;
+    const displayColumns = isLoadingMore || hasMoreRecords ? columns.slice(1, columns.length) : columns;
     let totalWidth = sequenceColumnWidth;
     let summaryItems = Array.isArray(displayColumns) && displayColumns.map((column, columnIndex) => {
       let summaryItem;
@@ -133,18 +133,18 @@ class RecordsFooter extends React.Component {
   };
 
   render() {
-    const { hasMoreRecords, isLoadingMoreRecords, columns, sequenceColumnWidth, groupOffsetLeft } = this.props;
+    const { hasMoreRecords, isLoadingMore, columns, sequenceColumnWidth, groupOffsetLeft } = this.props;
     let { summaryItems, totalWidth } = this.getSummaryItems();
-    const recordWidth = (isLoadingMoreRecords || hasMoreRecords ? sequenceColumnWidth + columns[0].width : sequenceColumnWidth) + groupOffsetLeft;
+    const recordWidth = (isLoadingMore || hasMoreRecords ? sequenceColumnWidth + columns[0].width : sequenceColumnWidth) + groupOffsetLeft;
 
     return (
       <div className="sf-table-footer" style={{ zIndex: Z_INDEX_GRID_FOOTER }} ref={ref => this.ref = ref}>
         <div className="rows-record d-flex text-nowrap" style={{ width: recordWidth }}>
           <span>{this.getRecord()}</span>
-          {(!isLoadingMoreRecords && hasMoreRecords && (this.props.loadMore || this.props.loadAll)) &&
+          {(!isLoadingMore && hasMoreRecords && (this.props.loadMore || this.props.loadAll)) &&
             <span className="load-all ml-4" onClick={this.onLoadMore}>{this.props.loadMore ? gettext('Load more') : gettext('Load all')}</span>
           }
-          {isLoadingMoreRecords &&
+          {isLoadingMore &&
             <span className="loading-message ml-4">
               <span className="mr-2">{gettext('Loading')}</span>
               <Loading className="sf-metadata-loading-tip center" />
@@ -165,7 +165,7 @@ class RecordsFooter extends React.Component {
 
 RecordsFooter.propTypes = {
   hasMoreRecords: PropTypes.bool,
-  isLoadingMoreRecords: PropTypes.bool,
+  isLoadingMore: PropTypes.bool,
   isGroupView: PropTypes.bool,
   hasSelectedRecord: PropTypes.bool,
   recordsCount: PropTypes.number,

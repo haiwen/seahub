@@ -105,7 +105,7 @@ export default class OptionFooter extends React.Component {
     return (
       <div className='option-editor-footer'>
         <span className="option-editor-tips" id="edit-option-tip" aria-hidden="true"><Icon symbol="help" /></span>
-        <UncontrolledTooltip delay={{ show: 0, hide: 0 }} target="edit-option-tip" placement="bottom" className="sf-metadata-tooltip">
+        <UncontrolledTooltip delay={{ show: 0, hide: 0 }} target="edit-option-tip" placement="bottom" className="sf-tooltip">
           {gettext('Use the import/export function to transfer options quickly. (The export is in JSON format.) By pasting cells, copied from a text column, an Excel or a TXT file, you can also add options quickly.')}
         </UncontrolledTooltip>
         <input

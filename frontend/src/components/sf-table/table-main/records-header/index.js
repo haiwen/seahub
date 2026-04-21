@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState, isValidElement } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import Cell from './cell';
 import ActionsCell from './actions-cell';
@@ -18,8 +18,7 @@ const RecordsHeader = ({
   isSelectedAll,
   lastFrozenColumnKey,
   groupOffsetLeft,
-  ColumnDropdownMenu,
-  NewColumnComponent,
+  columnDropdownMenu,
   headerSettings,
   columnMetrics: propsColumnMetrics,
   colOverScanStartIdx,
@@ -30,7 +29,7 @@ const RecordsHeader = ({
   modifyColumnWidth: modifyColumnWidthAPI,
   modifyColumnOrder: modifyColumnOrderAPI,
   insertColumn,
-  ...customProps
+  ...props
 }) => {
   const [resizingColumnMetrics, setResizingColumnMetrics] = useState(null);
   const [draggingColumnKey, setDraggingCellKey] = useState(null);
@@ -87,8 +86,7 @@ const RecordsHeader = ({
   }, [modifyColumnWidthAPI]);
 
   const modifyColumnOrder = useCallback((source, target) => {
-    // Pass full source and target objects to preserve draggingColumnIndex and columnIndex
-    modifyColumnOrderAPI && modifyColumnOrderAPI(source, target);
+    modifyColumnOrderAPI && modifyColumnOrderAPI(source.key, target.key);
   }, [modifyColumnOrderAPI]);
 
   const updateDraggingKey = useCallback((cellKey) => {
@@ -128,8 +126,8 @@ const RecordsHeader = ({
             const isLastFrozenCell = key === lastFrozenColumnKey;
             return (
               <Cell
-                {...customProps}
                 key={`sf-table-frozen-header-cell-${key}`}
+                {...props}
                 frozen
                 moveable={moveable}
                 resizable={resizable}
@@ -140,7 +138,7 @@ const RecordsHeader = ({
                 groupOffsetLeft={groupOffsetLeft}
                 isLastFrozenCell={isLastFrozenCell}
                 frozenColumnsWidth={frozenColumnsWidth}
-                ColumnDropdownMenu={ColumnDropdownMenu}
+                columnDropdownMenu={columnDropdownMenu}
                 draggingColumnKey={draggingColumnKey}
                 draggingColumnIndex={draggingColumnIndex}
                 dragOverColumnKey={dragOverColumnKey}
@@ -153,17 +151,15 @@ const RecordsHeader = ({
             );
           })}
         </div>
-        {/* scroll */}
         {displayColumns.map((column, displayIndex) => {
-          // fullIndex is the column's index in the complete columnMetrics.columns array
           const fullIndex = colOverScanStartIdx + displayIndex;
           return (
             <Cell
               key={`sf-table-header-cell-${column.key}`}
-              {...customProps}
+              {...props}
               moveable={moveable}
               resizable={resizable}
-              ColumnDropdownMenu={ColumnDropdownMenu}
+              columnDropdownMenu={columnDropdownMenu}
               groupOffsetLeft={groupOffsetLeft}
               height={height}
               column={column}
@@ -181,12 +177,12 @@ const RecordsHeader = ({
             />
           );
         })}
-        {(insertColumn && isValidElement(NewColumnComponent)) && (
+        {(props.canInsertColumn && insertColumn) && (
           <InsertColumn
             lastColumn={columnMetrics.columns[columnMetrics.columns.length - 1]}
             groupOffsetLeft={groupOffsetLeft}
             height={height}
-            NewColumnComponent={NewColumnComponent}
+            metadata={props.table}
             insertColumn={insertColumn}
           />
         )}
@@ -212,6 +208,7 @@ RecordsHeader.propTypes = {
   selectNoneRecords: PropTypes.func,
   selectAllRecords: PropTypes.func,
   insertColumn: PropTypes.func,
+  canModifyColumn: PropTypes.func,
 };
 
 export default RecordsHeader;

@@ -1,3 +1,13 @@
+/**
+ * Selection state management for table records.
+ * Handles record selection/deselection, selected IDs tracking, and drag-selection logic.
+ *
+ * Key concepts:
+ * - Record selection is stored in `idSelectedRecordMap` (recordId -> boolean)
+ * - "Record" refers to the data model row in table data
+ * - Used by SelectionMask, CellMask, and other selection-related components
+ */
+
 function selectRecord(recordId, recordMetrics) {
   if (isRecordSelected(recordId, recordMetrics)) {
     return;

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import FileNameFormatter from './file-name-formatter';
@@ -6,11 +6,16 @@ import { Utils } from '../../../utils/utils';
 import { siteRoot, thumbnailDefaultSize } from '../../../utils/constants';
 import { getParentDirFromRecord, getFileMTimeFromRecord } from '../../utils/cell';
 import { checkIsDir } from '../../utils/row';
+import EventBus from '@/components/common/event-bus';
+import { openFile } from '@/metadata/utils/file';
+import { EDITOR_TYPE } from '@/components/sf-table/constants/grid';
+import { EVENT_BUS_TYPE } from '@/components/sf-table/constants/event-bus-type';
 
-const FileName = ({ record, className: propsClassName, value, hideIcon = false, onFileNameClick, ...params }) => {
+const FileName = ({ repoID, record, className: propsClassName, value, hideIcon = false, isCellSelected, ...params }) => {
   const parentDir = useMemo(() => getParentDirFromRecord(record), [record]);
   const isDir = useMemo(() => checkIsDir(record), [record]);
   const className = useMemo(() => {
+    if (!value) return;
     if (!Utils.imageCheck(value)) return propsClassName;
     return classnames(propsClassName, 'sf-metadata-image-file-formatter');
   }, [propsClassName, value]);
@@ -24,14 +29,25 @@ const FileName = ({ record, className: propsClassName, value, hideIcon = false, 
     const defaultIconUrl = Utils.getFileIconUrl(value);
     if (Utils.imageCheck(value)) {
       const path = Utils.encodePath(Utils.joinPath(parentDir, value));
-      const repoID = window.sfMetadataStore?.repoId || params.repoID;
       const thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}${path}?mtime=${getFileMTimeFromRecord(record)}`;
       return { iconUrl: thumbnail, defaultIconUrl };
     }
     return { iconUrl: defaultIconUrl, defaultIconUrl };
-  }, [isDir, hideIcon, value, parentDir, record, params.repoID]);
+  }, [isDir, hideIcon, value, parentDir, record, repoID]);
 
-  return (<FileNameFormatter { ...params } className={className} value={value} record={record} onClickName={onFileNameClick} { ...iconUrl } />);
+  const handleFilenameClick = useCallback((event) => {
+    event.preventDefault();
+    event.nativeEvent.stopImmediatePropagation();
+
+    if (!isCellSelected) return;
+
+    const eventBus = EventBus.getInstance();
+    openFile(repoID, record, () => {
+      eventBus.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR, EDITOR_TYPE.PREVIEWER);
+    });
+  }, [isCellSelected, record, repoID]);
+
+  return (<FileNameFormatter { ...params } className={className} value={value} record={record} onClickName={handleFilenameClick} { ...iconUrl } />);
 
 };
 

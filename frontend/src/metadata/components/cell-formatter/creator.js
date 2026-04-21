@@ -16,10 +16,6 @@ const CreatorFormatter = React.memo(({ value, className, api, collaborators = []
       return () => isMounted = false;
     }
 
-    if (processedValuesRef.current.has(value)) {
-      return;
-    }
-
     let collaborator = collaborators && collaborators.find(c => c.email === value);
     if (collaborator) {
       isMounted && setCollaborator(prev => prev === collaborator ? prev : collaborator);
@@ -64,7 +60,9 @@ const CreatorFormatter = React.memo(({ value, className, api, collaborators = []
     return () => isMounted = false;
   }, [value, collaborators, collaboratorsCache, api]);
 
-  if (!collaborator) return emptyFormatter || null;
+  if (!collaborator) {
+    return emptyFormatter || null;
+  }
   return (
     <div className={classnames('sf-metadata-ui cell-formatter-container creator-formatter', className)}>
       <Collaborator collaborator={collaborator} />

@@ -73,11 +73,11 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepo
   let component = (
     <>
       <DetailItem field={sizeField} className="sf-metadata-property-detail-formatter">
-        <Formatter field={sizeField} value={Utils.bytesToSize(direntDetail.size)} />
+        <Formatter column={sizeField} value={Utils.bytesToSize(direntDetail.size)} />
       </DetailItem>
       <DetailItem field={lastModifierField} className="sf-metadata-property-detail-formatter">
         <Formatter
-          field={lastModifierField}
+          column={lastModifierField}
           value={direntDetail.last_modifier_email}
           collaborators={[{
             name: direntDetail.last_modifier_name,
@@ -88,7 +88,7 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepo
         />
       </DetailItem >
       <DetailItem field={lastModifiedTimeField} className="sf-metadata-property-detail-formatter">
-        <Formatter field={lastModifiedTimeField} value={direntDetail.last_modified}/>
+        <Formatter column={lastModifiedTimeField} value={direntDetail.last_modified}/>
       </DetailItem>
       {isShowRepoTags && window.app.pageOptions.enableFileTags && !enableMetadata && (
         <DetailItem field={tagsField} className="sf-metadata-property-detail-formatter">
@@ -102,7 +102,7 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepo
           />
         </DetailItem>
       )}
-      {enableMetadata && <MetadataDetails readOnly={readOnly} tagsData={tagsData} />}
+      {enableMetadata && <MetadataDetails repoID={repoID} readOnly={readOnly} tagsData={tagsData} />}
     </>
   );
 
@@ -165,5 +165,7 @@ FileDetails.propTypes = {
   tagsData: PropTypes.object,
   onFileTagChanged: PropTypes.func,
 };
+
+FileDetails.displayName = 'FileDetails';
 
 export default FileDetails;

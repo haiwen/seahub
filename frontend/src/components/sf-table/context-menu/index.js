@@ -19,6 +19,7 @@ const ContextMenu = ({
   const handleHide = useCallback((event) => {
     if (!menuRef.current || !menuRef.current.contains(event.target)) {
       setVisible(false);
+      setPosition({ top: 0, left: 0 });
     }
   }, []);
 

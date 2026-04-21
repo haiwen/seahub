@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import DateEditor from './date-editor';
 import FileNameEditor from './file-name-editor';
 import TextEditor from './text-editor';
@@ -12,8 +11,8 @@ import TagsEditor from './tags-editor';
 import TableGeolocationEditor from './geolocation-editor/table-geolocation-editor';
 import { lang } from '../../../utils/constants';
 import { CellType } from '../../constants';
+import { checkIsDir } from '../../utils/row';
 
-// eslint-disable-next-line react/display-name
 const Editor = React.forwardRef((props, ref) => {
 
   switch (props.column.type) {
@@ -42,6 +41,7 @@ const Editor = React.forwardRef((props, ref) => {
       return (<LongTextEditor ref={ref} { ...props } lang={lang} />);
     }
     case CellType.TAGS: {
+      if (checkIsDir(props.record)) return null;
       return (<TagsEditor ref={ref} { ...props } />);
     }
     case CellType.GEOLOCATION: {
@@ -56,8 +56,6 @@ const Editor = React.forwardRef((props, ref) => {
   }
 });
 
-Editor.propTypes = {
-  column: PropTypes.object.isRequired,
-};
+Editor.displayName = 'CellEditor';
 
 export default Editor;

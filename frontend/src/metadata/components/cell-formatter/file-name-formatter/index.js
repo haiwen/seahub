@@ -31,6 +31,10 @@ const FileNameFormatter = ({
     defaultIconUrl && setIcon(defaultIconUrl);
   }, [defaultIconUrl]);
 
+  const onClick = useCallback((e) => {
+    onClickName(e, record);
+  }, [onClickName, record]);
+
   if (!value) return children || null;
 
   return (
@@ -48,7 +52,7 @@ const FileNameFormatter = ({
         tabIndex="0"
         role="button"
         className="sf-metadata-file-name"
-        onClick={(e) => onClickName(e, record)}
+        onClick={onClick}
         onKeyDown={Utils.onKeyDown}
       >
         {value}

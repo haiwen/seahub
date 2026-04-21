@@ -1,5 +1,4 @@
 import React, { forwardRef, useMemo, useCallback, useState, useRef, useEffect, useImperativeHandle } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import CommonAddTool from '../../../../components/common-add-tool';
 import SearchInput from '../../../../components/search-input';
@@ -24,14 +23,13 @@ const TagsEditor = forwardRef(({
   onPressTab,
   onSelect,
   onDeselect,
-  canEditData = false,
   canAddTag = false,
   showRecentlyUsed = true,
   customStyle = {},
 }, ref) => {
   const { tagsData, context, addTag } = useTags();
 
-  const [value, setValue] = useState((oldValue || []).map(item => item.row_id).filter(item => getRowById(tagsData, item)));
+  const [value, setValue] = useState((oldValue || []).map(item => item?.row_id).filter(item => getRowById(tagsData, item)));
   const [searchValue, setSearchValue] = useState('');
   const [highlightNodeIndex, setHighlightNodeIndex] = useState(-1);
   const [maxItemNum, setMaxItemNum] = useState(0);
@@ -54,9 +52,9 @@ const TagsEditor = forwardRef(({
 
   const isShowCreateBtn = useMemo(() => {
     if (!canAddTag) return false;
-    if (!canEditData || !searchValue) return false;
+    if (!searchValue) return false;
     return !getTagByName(displayTags, searchValue);
-  }, [canEditData, displayTags, searchValue, canAddTag]);
+  }, [displayTags, searchValue, canAddTag]);
 
   const style = useMemo(() => {
     return { width: column.width };
@@ -440,14 +438,6 @@ const TagsEditor = forwardRef(({
   );
 });
 
-TagsEditor.propTypes = {
-  column: PropTypes.object,
-  value: PropTypes.array,
-  onPressTab: PropTypes.func,
-  onSelect: PropTypes.func,
-  onDeselect: PropTypes.func,
-  canEditData: PropTypes.bool,
-  canAddTag: PropTypes.bool,
-};
+TagsEditor.displayName = 'TagsEditor';
 
 export default TagsEditor;

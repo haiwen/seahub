@@ -17,12 +17,12 @@ import { getCreateMenuList } from '../utils/contextMenuUtils';
 import EventBus from '@/components/common/event-bus';
 import { EVENT_BUS_TYPE } from '@/components/sf-table/constants/event-bus-type';
 import { getRowById, getRowsByIds } from '@/components/sf-table/utils/table';
-import { openFile } from '@/metadata/utils/file';
-import { EDITOR_TYPE } from '@/components/sf-table/constants/grid';
 import { useMetadataStatus } from '@/hooks';
 import { metadataAPI } from '@/metadata';
-import { getColumnByKey } from '@/components/sf-table/utils/column';
+import { getColumnByKey, getColumnOriginName } from '@/components/sf-table/utils/column';
 import { getColumnOptionNameById, getColumnOptionNamesByIds } from '@/metadata/utils/cell';
+import tagsAPI from '@/tag/api';
+import { GridUtilsAdapter } from '@/components/sf-table/utils/grid-utils-adapter';
 
 import './index.css';
 
@@ -69,25 +69,25 @@ const DirTableView = ({
 
   const { getBatchMenuList, getItemMenuList } = useDirentContextMenu({ repoInfo });
 
+  const permission = useMemo(() => {
+    const repoCanModify = repoInfo.permission === 'rw' || repoInfo.permission === 'admin';
+    return {
+      canModify: () => repoCanModify,
+      canModifyRow: (record) => repoCanModify && record._permission !== 'r',
+      canModifyColumn: (column) => repoCanModify && column.editable === true,
+    };
+  }, [repoInfo]);
+
   const tableData = useMemo(() => {
     return transformDirentsToTableData(direntList, repoID);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [direntList, repoID, sortBy, sortOrder]);
 
-
-  const onFileNameClick = useCallback((e, record) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const value = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-    if (Utils.imageCheck(value)) {
-      openFile(repoID, record, () => {
-        sfTableEventBus.current.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR, EDITOR_TYPE.PREVIEWER);
-      });
-      return;
-    }
-    const dirent = direntList.find(item => item.name === value);
-    onItemClick && onItemClick(dirent);
-  }, [repoID, direntList, onItemClick]);
+  const enrichedColumns = useMemo(() => {
+    const visibleColumns = columns.filter(col => !globalHiddenColumns.includes(col.key) && !hiddenColumnKeys.includes(col.key));
+    return createDirentTableColumns(repoID, repoInfo, visibleColumns);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [repoID, repoInfo, columns, globalHiddenColumns, hiddenColumnKeys, columnWidthVersion]);
 
   const updateDirentDetail = useCallback((parentDir, fileName, update) => {
     if (!isDirentDetailShow || window?.sfMetadataContext?.eventBus) return;
@@ -109,12 +109,6 @@ const DirTableView = ({
     updateDirentDetail(parentDir, direntName, update);
   }, [direntList, path, repoID, updateDirentDetail, updateDirentMetadata]);
 
-  const enrichedColumns = useMemo(() => {
-    const validColumns = columns.filter(col => !globalHiddenColumns.includes(col.key));
-    return createDirentTableColumns(validColumns, hiddenColumnKeys, { repoID, repoInfo, tableData, onFileNameClick, onDirentMetadata: handleDirentMetadata, columns, tagsData: tagsData || {} });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [columns, hiddenColumnKeys, repoID, repoInfo, tableData, onFileNameClick, updateDirentMetadata, columnWidthVersion, tagsData]);
-
   const modifyColumnWidth = useCallback((column, newWidth) => {
     setDirTableColumnWidth(column.key, newWidth);
     setColumnWidthVersion(prev => prev + 1);
@@ -122,13 +116,8 @@ const DirTableView = ({
 
   const modifyColumnOrder = useCallback((source, target) => {
     if (!onColumnOrderChange) return;
-    // Pass full source and target objects to preserve draggingColumnIndex and columnIndex
     onColumnOrderChange(source, target);
   }, [onColumnOrderChange]);
-
-  const checkCanModifyRecord = (record) => {
-    return record._permission !== 'r';
-  };
 
   const getDirentByRowId = useCallback((id) => {
     const record = getRowById(tableData, id);
@@ -165,6 +154,103 @@ const DirTableView = ({
       }
     });
   }, [getDirentByRowId, onItemRename, tableData, enrichedColumns, handleDirentMetadata]);
+
+  // Batch modify records for drag-fill support
+  // Accepts extended signature: (recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData, isFromCut)
+  const modifyRecords = useCallback((recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData, isFromCut) => {
+    if (!recordIds || !idRecordUpdates) return;
+    recordIds.forEach(rowId => {
+      const updates = idRecordUpdates[rowId];
+      if (!updates) return;
+      const dirent = getDirentByRowId(rowId);
+      if (!dirent) return;
+      const record = getRowById(tableData, rowId);
+      if (!record) return;
+
+      Object.entries(updates).forEach(([key, value]) => {
+        let update = { [key]: value };
+        const column = getColumnByKey(enrichedColumns, key);
+        if (column) {
+          if (column.type === CellType.SINGLE_SELECT) {
+            update = { [key]: getColumnOptionNameById(column, value) };
+          } else if (column.type === CellType.MULTIPLE_SELECT) {
+            update = { [key]: getColumnOptionNamesByIds(column, value) };
+          }
+        }
+        handleDirentMetadata(rowId, record._name, update);
+      });
+    });
+  }, [getDirentByRowId, tableData, enrichedColumns, handleDirentMetadata]);
+
+  const updateFileTags = useCallback((data) => {
+    const recordID = data[0].record_id;
+    const tagIds = Array.isArray(data[0].tags) && data[0].tags.length > 0 ? data[0].tags : [];
+    const tags = getRowsByIds(tagsData, tagIds).map(tag => ({ row_id: tag._id, display_value: tag._name }));
+    const record = getRowById(tableData, recordID);
+    handleDirentMetadata(recordID, record._name, { [PRIVATE_COLUMN_KEY.TAGS]: tags });
+    tagsAPI.updateFileTags(repoID, [{ record_id: recordID, tags: tagIds }]);
+  }, [tagsData, tableData, handleDirentMetadata, repoID]);
+
+  const handleSelectCellsDelete = useCallback((records, columns) => {
+    records.forEach(record => {
+      const { _id, _name } = record;
+      const hasTagsColumn = columns.some(col => col && col.type === CellType.TAGS);
+      if (hasTagsColumn) {
+        tagsAPI.updateFileTags(repoID, [{ record_id: _id, tags: [] }]);
+        handleDirentMetadata(_id, _name, { [PRIVATE_COLUMN_KEY.TAGS]: [] });
+      }
+
+      columns.forEach(column => {
+        const { key, type } = column;
+        if (type === CellType.TAGS) return;
+        if (key === PRIVATE_COLUMN_KEY.FILE_NAME) return;
+        if (!column.editable) return;
+        const fieldKey = getColumnOriginName(column);
+        handleDirentMetadata(_id, _name, { [fieldKey]: null });
+      });
+    });
+  }, [repoID, handleDirentMetadata]);
+
+  // Record getter for gridUtils adapter
+  const recordGetterByIndex = useCallback(({ recordIndex }) => {
+    const recordId = tableData.row_ids[recordIndex];
+    return recordId && tableData.id_row_map[recordId];
+  }, [tableData]);
+
+  // Create GridUtils adapter for copy/paste and drag-fill
+  const gridUtilsAdapter = useMemo(() => {
+    return new GridUtilsAdapter({
+      renderRecordsIds: tableData.row_ids || [],
+      api: {
+        recordGetterById: (id) => tableData.id_row_map?.[id],
+        recordGetterByIndex,
+        modifyRecords: (recordIds, idRecordUpdates) => modifyRecords(recordIds, idRecordUpdates),
+        updateFileTags,
+        getTagsData: () => tagsData || {},
+        getCollaborators: () => [],
+      },
+    });
+  }, [tableData, recordGetterByIndex, modifyRecords, updateFileTags, tagsData]);
+
+  // Paste callback - delegates to gridUtilsAdapter.paste()
+  const paste = useCallback(({ type, copied, multiplePaste, pasteRange, isGroupView, pasteSource, cutPosition }) => {
+    const { search } = window.location;
+    const urlParams = new URLSearchParams(search);
+    const viewId = urlParams.has('view') ? urlParams.get('view') : null;
+    gridUtilsAdapter.paste({
+      type,
+      copied,
+      multiplePaste,
+      pasteRange,
+      isGroupView,
+      columns: enrichedColumns,
+      pasteSource,
+      cutPosition,
+      viewId,
+      canModifyRow: permission.canModifyRow,
+      canModifyColumn: permission.canModifyColumn,
+    });
+  }, [gridUtilsAdapter, enrichedColumns, permission]);
 
   const toggleSubMenu = (e, subMenuOptionKey) => {
     e.stopPropagation();
@@ -439,6 +525,8 @@ const DirTableView = ({
   return (
     <div className="dir-table-view dir-table-wrapper">
       <SFTable
+        {...permission}
+        repoID={repoID}
         table={tableData}
         visibleColumns={enrichedColumns}
         recordsIds={tableData.row_ids}
@@ -455,13 +543,15 @@ const DirTableView = ({
         enableScrollToLoad={false}
         modifyColumnWidth={modifyColumnWidth}
         modifyColumnOrder={modifyColumnOrder}
-        checkCanModifyRecord={checkCanModifyRecord}
         modifyRecord={modifyRecord}
-        supportCopy={false}
-        supportPaste={false}
-        supportDragFill={false}
-        supportCut={false}
+        modifyRecords={modifyRecords}
+        supportCopy={true}
+        supportPaste={true}
+        paste={paste}
+        supportDragFill={true}
+        supportCut={true}
         isGroupView={false}
+        gridUtils={gridUtilsAdapter}
         showRecordAsTree={false}
         createContextMenuOptions={createContextMenuOptions}
         onRecordSelected={onRecordSelected}
@@ -470,6 +560,8 @@ const DirTableView = ({
         selectedDirentList={selectedDirentList}
         updateSelectedRecordIds={handleSelectedRecord}
         onTableDragStart={onTableDragStart}
+        updateFileTags={updateFileTags}
+        handleSelectCellsDelete={handleSelectCellsDelete}
       />
     </div>
   );

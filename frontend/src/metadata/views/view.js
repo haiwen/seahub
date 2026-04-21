@@ -59,9 +59,7 @@ const View = () => {
 
   return (
     <div className="sf-metadata-wrapper" id="sf-metadata-wrapper">
-      <div className="sf-metadata-main">
-        {errorMessage ? <div className="d-center-middle error">{errorMessage}</div> : renderView(metadata)}
-      </div>
+      {errorMessage ? <div className="d-center-middle error">{errorMessage}</div> : renderView(metadata)}
     </div>
   );
 

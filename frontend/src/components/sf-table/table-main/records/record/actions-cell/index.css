@@ -1,19 +1,48 @@
-.sf-table-row .rdg-row-expand-icon {
+.sf-table-row .row-expand-icon {
   opacity: 0;
   width: 20px;
   height: 20px;
-  border-radius: 50%;
   text-align: center;
   line-height: 20px;
   flex-shrink: 0;
   cursor: pointer;
+  color: #467fcf;
 }
 
-.sf-table-row:hover .rdg-row-expand-icon {
+.sf-table-row:hover .row-expand-icon {
   opacity: 1;
 }
 
+.sf-table-cell.actions-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sf-table-row:hover .sf-table-cell.actions-cell .row-expand {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+
+.sf-table-row:hover .sf-table-cell.actions-cell .row-expand .row-expand-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  transform: scale(.8);
+}
+
+.sf-table-row .sf-table-cell.actions-cell .row-expand-icon {
+  display: none;
+}
+
+.sf-table-row .sf-table-cell.actions-cell .row-expand:hover {
+  background-color: #c2f5e9;
+}
+
 .sf-table-row .sf-table-column-content.actions-checkbox {
+  width: 40px;
   text-align: center;
   display: none;
 }

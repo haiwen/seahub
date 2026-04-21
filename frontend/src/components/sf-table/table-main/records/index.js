@@ -12,7 +12,7 @@ import RecordDragLayer from './record-drag-layer';
 import { RecordMetrics } from '../../utils/record-metrics';
 import { TreeMetrics } from '../../utils/tree-metrics';
 import { recalculate } from '../../utils/column';
-import { getVisibleBoundaries } from '../../utils/viewport';
+import { getVisibleBoundaries } from '../../utils/records-body';
 import { getColOverScanEndIdx, getColOverScanStartIdx } from '../../utils/grid';
 import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
 import { isMobile } from '../../../../utils/utils';
@@ -911,19 +911,23 @@ class Records extends Component {
   };
 
   renderRecordsBody = ({ containerWidth, recordDraggable }) => {
-    const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx, draggingRecordSource } = this.state;
+    const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx, draggingRecordSource, selectedPosition, selectedRange } = this.state;
     const { columns, allColumns, totalWidth, lastFrozenColumnKey, frozenColumnsWidth } = columnMetrics;
     const recordDragDropEvents = this.getRecordDragDropEvents();
+    // Create ContextMenu with createContextMenuOptions from props (if provided, e.g., from metadata table)
+    const contextMenu = this.props.createContextMenuOptions ? (
+      <ContextMenu
+        {...this.props}
+        recordMetrics={recordMetrics}
+        selectedPosition={selectedPosition}
+        selectedRange={selectedRange}
+      />
+    ) : null;
     const commonProps = {
       ...this.props,
       columns, allColumns, totalWidth, lastFrozenColumnKey, frozenColumnsWidth,
       recordMetrics, colOverScanStartIdx, colOverScanEndIdx, recordDraggable, recordDragDropEvents, draggingRecordSource,
-      contextMenu: (
-        <ContextMenu
-          {...this.props}
-          recordMetrics={recordMetrics}
-        />
-      ),
+      contextMenu,
       hasSelectedRecord: this.checkHasSelectedRecord(),
       getColumnVisibleEnd: this.getColumnVisibleEnd,
       getScrollLeft: this.getScrollLeft,
@@ -994,8 +998,6 @@ class Records extends Component {
             <RecordsHeader
               onRef={(ref) => this.headerFrozenRef = ref}
               containerWidth={containerWidth}
-              ColumnDropdownMenu={this.props.ColumnDropdownMenu}
-              NewColumnComponent={this.props.NewColumnComponent}
               headerSettings={this.props.headerSettings}
               columnMetrics={columnMetrics}
               colOverScanStartIdx={colOverScanStartIdx}
@@ -1013,6 +1015,14 @@ class Records extends Component {
               modifyColumnOrder={this.props.modifyColumnOrder}
               modifyColumnWidth={this.props.modifyColumnWidth}
               insertColumn={this.props.insertColumn}
+              // Metadata dropdown props
+              canModifyColumn={this.props.canModifyColumn}
+              columnDropdownMenu={this.props.columnDropdownMenu}
+              view={this.props.view}
+              renameColumn={this.props.renameColumn}
+              modifyColumnData={this.props.modifyColumnData}
+              deleteColumn={this.props.deleteColumn}
+              {...this.props}
             />
             {this.renderRecordsBody({ containerWidth, recordDraggable })}
           </div>
@@ -1040,7 +1050,7 @@ class Records extends Component {
             selectedRange={selectedRange}
             isGroupView={isGroupView}
             hasSelectedRecord={hasSelectedRecord}
-            isLoadingMoreRecords={this.props.isLoadingMoreRecords}
+            isLoadingMore={this.props.isLoadingMore}
             recordGetterById={this.props.recordGetterById}
             recordGetterByIndex={this.props.recordGetterByIndex}
             getRecordsSummaries={this.getRecordsSummaries}
@@ -1058,13 +1068,13 @@ Records.propTypes = {
   tableColumns: PropTypes.array,
   columns: PropTypes.array,
   columnEditable: PropTypes.bool,
-  ColumnDropdownMenu: PropTypes.object,
+  columnDropdownMenu: PropTypes.object,
   NewColumnComponent: PropTypes.object,
   headerSettings: PropTypes.object,
   showSequenceColumn: PropTypes.bool,
   sequenceColumnWidth: PropTypes.number,
   hasMoreRecords: PropTypes.bool,
-  isLoadingMoreRecords: PropTypes.bool,
+  isLoadingMore: PropTypes.bool,
   isGroupView: PropTypes.bool,
   showRecordAsTree: PropTypes.bool,
   groupOffsetLeft: PropTypes.number,
@@ -1096,7 +1106,8 @@ Records.propTypes = {
   updateSelectedRecordIds: PropTypes.func,
   onRecordSelected: PropTypes.func,
   onTableDragStart: PropTypes.func,
-  checkCanModifyRecord: PropTypes.func,
+  canModify: PropTypes.func,
+  modifyRecord: PropTypes.func,
 };
 
 export default Records;

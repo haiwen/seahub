@@ -38,10 +38,6 @@
   z-index: 2;
 }
 
-.rdg-selected:hover .drag-handle .glyphicon-arrow-down {
-  display: 'block';
-}
-
 .react-grid-cell-dragged-over-down {
   border-top-width: 0;
 }

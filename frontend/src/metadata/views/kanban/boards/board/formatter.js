@@ -24,7 +24,7 @@ const Formatter = ({ value, column, record, tagsData, ...params }) => {
     }
   }
 
-  return (<CellFormatter { ...params } readonly={true} className={className} value={value} field={column} record={record} tagsData={tagsData} />);
+  return (<CellFormatter { ...params } readonly={true} className={className} value={value} column={column} record={record} tagsData={tagsData} />);
 };
 
 Formatter.propTypes = {

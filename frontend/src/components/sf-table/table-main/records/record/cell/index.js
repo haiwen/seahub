@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { Utils } from '../../../../../../utils/utils';
 import OpIcon from '../../../../../../components/op-icon';
 import { getCellValueByColumn } from '../../../../utils/cell';
-import { cellCompare, checkCellValueChanged } from '../../../../utils/cell-comparer';
+import { cellCompare, checkCellValueChanged } from '../../../../utils/selection';
 import { checkIsColumnEditable, checkIsNameColumn } from '../../../../utils/column';
 import { NODE_CONTENT_LEFT_INDENT, NODE_ICON_LEFT_INDENT } from '../../../../constants/tree';
 import { gettext } from '@/utils/constants';
@@ -30,12 +30,12 @@ const Cell = React.memo(({
   treeNodeDepth,
   hasChildNodes,
   isFoldedTreeNode,
-  checkCanModifyRecord,
+  canModifyRow,
   toggleExpandTreeNode,
 }) => {
   const cellEditable = useMemo(() => {
-    return checkIsColumnEditable(column) && checkCanModifyRecord && checkCanModifyRecord(record);
-  }, [column, record, checkCanModifyRecord]);
+    return checkIsColumnEditable(column) && canModifyRow && canModifyRow(record);
+  }, [column, record, canModifyRow]);
 
   const isNameColumn = useMemo(() => {
     return checkIsNameColumn(column);
@@ -223,5 +223,7 @@ Cell.propTypes = {
   modifyRecord: PropTypes.func,
   toggleExpandTreeNode: PropTypes.func,
 };
+
+Cell.displayName = 'Cell';
 
 export default Cell;

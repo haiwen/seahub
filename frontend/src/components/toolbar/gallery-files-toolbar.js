@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { gettext } from '../../utils/constants';
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../metadata/constants';
-import RowUtils from '../../metadata/views/table/utils/row-utils';
+import RowUtils from '../sf-table/utils/row';
 import { buildGalleryToolbarMenuOptions } from '../../metadata/utils/menu-builder';
 import TextTranslation from '../../utils/text-translation';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';

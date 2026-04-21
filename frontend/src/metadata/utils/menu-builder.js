@@ -315,7 +315,7 @@ export const buildGalleryMenuOptions = (selectedImages, readOnly, metadataStatus
       });
     }
 
-    if (isSomeone !== null && !readOnly) {
+    if (isSomeone && !readOnly) {
       const { canRemovePhotoFromPeople, canAddPhotoToPeople } = faceRecognitionPermission;
       if (menuOptions.length > 0) {
         menuOptions.push('Divider');

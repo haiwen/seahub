@@ -118,7 +118,7 @@ class Record extends React.Component {
           column={column}
           sequenceColumnWidth={sequenceColumnWidth}
           cellMetaData={cellMetaData}
-          checkCanModifyRecord={this.props.checkCanModifyRecord}
+          canModifyRow={this.props.canModifyRow}
           checkCellValueChanged={this.props.checkCellValueChanged}
           reloadCurrentRecord={this.reloadCurrentRecord}
           highlightClassName={highlightClassName}
@@ -187,7 +187,7 @@ class Record extends React.Component {
           sequenceColumnWidth={sequenceColumnWidth}
           needBindEvents={needBindEvents}
           cellMetaData={cellMetaData}
-          checkCanModifyRecord={this.props.checkCanModifyRecord}
+          canModifyRow={this.props.canModifyRow}
           checkCellValueChanged={this.props.checkCellValueChanged}
           reloadCurrentRecord={this.reloadCurrentRecord}
           highlightClassName={highlightClassName}
@@ -259,6 +259,11 @@ class Record extends React.Component {
     if (this.checkHasDraggedRecord() && !this.checkOverDraggingRecord()) {
       this.setState({ canDropTip: true });
     }
+    // Propagate drag enter to cellMetaData for drag-fill support
+    const { cellMetaData, index, groupRecordIndex } = this.props;
+    if (cellMetaData && cellMetaData.onDragEnter) {
+      cellMetaData.onDragEnter({ overRecordIdx: index, overGroupRecordIndex: groupRecordIndex });
+    }
   };
 
   handleDragLeave = (e) => {
@@ -280,8 +285,9 @@ class Record extends React.Component {
     e.preventDefault();
     e.stopPropagation();
     this.setState({ canDropTip: false });
+    if (!this.props.recordDragDropEvents) return;
     if (!this.checkHasDraggedRecord() || this.checkOverDraggingRecord()) {
-      this.props.recordDragDropEvents.onDragEnd();
+      this.props.recordDragDropEvents?.onDragEnd?.();
       return;
     }
     const { record, treeNodeKey } = this.props;
@@ -290,7 +296,7 @@ class Record extends React.Component {
   };
 
   onDragEnd = () => {
-    this.props.recordDragDropEvents.onDragEnd();
+    this.props.recordDragDropEvents?.onDragEnd?.();
   };
 
   render() {
@@ -302,7 +308,7 @@ class Record extends React.Component {
 
     const frozenCells = this.getFrozenCells();
     const columnCells = this.getColumnCells();
-    const canModify = this.props.checkCanModifyRecord(record);
+    const canModifyRow = this.props.canModifyRow;
 
     return (
       <div
@@ -339,7 +345,8 @@ class Record extends React.Component {
               height={cellHeight}
               recordDraggable={this.props.recordDraggable}
               handleDragStart={this.handleDragStart}
-              canModify={canModify}
+              canModifyRow={canModifyRow}
+              onShowExpandedPropsDialog={this.props.onShowExpandedPropsDialog}
             />
           }
           {frozenCells}
@@ -374,7 +381,7 @@ Record.propTypes = {
   recordDraggable: PropTypes.bool,
   selectNoneCells: PropTypes.func,
   onSelectRecord: PropTypes.func,
-  checkCanModifyRecord: PropTypes.func,
+  canModify: PropTypes.func,
   checkCellValueChanged: PropTypes.func,
   reloadRecords: PropTypes.func,
   searchResult: PropTypes.object,
@@ -386,6 +393,7 @@ Record.propTypes = {
   hasChildNodes: PropTypes.bool,
   isFoldedTreeNode: PropTypes.bool,
   toggleExpandTreeNode: PropTypes.func,
+  onShowExpandedPropsDialog: PropTypes.func,
 };
 
 export default Record;

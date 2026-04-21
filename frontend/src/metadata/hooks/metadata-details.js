@@ -151,7 +151,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
     const { record_id, tags } = updateRecords[0];
 
     tagsAPI.updateFileTags(repoID, [{ record_id, tags }]).then(res => {
-      const newValue = tags ? tags.map(id => ({ row_id: id, display_value: id })) : [];
+      const newValue = tags ? tags.map(id => ({ row_id: id })) : [];
       const update = { [PRIVATE_COLUMN_KEY.TAGS]: newValue };
       setRecord({ ...record, ...update });
       modifyLocalFileTags && modifyLocalFileTags(record_id, tags);

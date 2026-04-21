@@ -163,7 +163,7 @@ const DirHistoryView = ({ repoID, userPerm }) => {
     }));
   }, []);
 
-  const checkCanModifyRecord = useCallback((_record) => {
+  const canModify = useCallback((_record) => {
     return userPerm === PERMISSION_READ_WRITE;
   }, [userPerm]);
 
@@ -303,7 +303,7 @@ const DirHistoryView = ({ repoID, userPerm }) => {
         loadMore={loadNextPage}
         modifyColumnWidth={handleColumnWidthChange}
         onCellDoubleClick={handleCellDoubleClick}
-        checkCanModifyRecord={checkCanModifyRecord}
+        canModify={canModify}
         supportCopy={false}
         supportPaste={false}
         supportDragFill={false}

@@ -1,11 +1,13 @@
 import { cloneElement, forwardRef, isValidElement } from 'react';
 
-const Editor = forwardRef(({ column, editorProps }, ref) => {
+const Editor = forwardRef((props, ref) => {
 
-  if (!isValidElement(column.editor)) {
+  if (!isValidElement(props.column.editor)) {
     return null;
   }
-  return cloneElement(column.editor, { ...editorProps, ref });
+  return cloneElement(props.column.editor, { ...props, ref });
 });
+
+Editor.displayName = 'EditorClone';
 
 export default Editor;
