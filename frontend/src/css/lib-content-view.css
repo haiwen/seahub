@@ -8,7 +8,7 @@
   position: absolute;
   top: 40px;
   width: 100%;
-  height: calc(100% - 48px);
+  height: calc(100% - 40px);
   flex-direction: row;
   min-height: 0;
 }

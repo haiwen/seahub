@@ -111,7 +111,6 @@
 }
 
 .repo-list-item .repo-item-name > a {
-  width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   text-wrap: nowrap;
