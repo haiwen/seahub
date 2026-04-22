@@ -4,7 +4,7 @@
 
 .group-select.custom-select {
   display: flex;
-  padding: 7px 16px 7px 8px;
+  padding: 7px 28px 7px 8px;
   border-radius: 3px;
   align-items: center;
   justify-content: space-between;
@@ -28,13 +28,6 @@
   border-color: rgba(0, 40, 100, 0.12) !important;
   box-shadow: unset;
   cursor: default;
-}
-
-.group-select .seafile-multicolor-icon-down {
-  width: 14px;
-  height: 14px;
-  margin-left: 16px;
-  flex-shrink: 0;
 }
 
 .group-select .selected-option {
