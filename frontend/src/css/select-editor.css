@@ -2,7 +2,7 @@
   user-select: none;
   color: var(--bs-icon-color);
   font-size: 12px;
-  word-break: keep-all;
+  word-break: normal;
   word-wrap: break-word;
   white-space: pre-wrap;
 }
@@ -50,6 +50,7 @@
   cursor: pointer;
   color: var(--bs-body-color);
   border-radius: 4px;
+  width: 100%;
 }
 
 .permission-editor-btn-add-custom-permission:hover {
@@ -60,7 +61,7 @@
 .share-dialog-main .true__menu,
 .share-dialog-main .true__placeholder,
 .permission-editor .btn-add-custom-permission span {
-  word-break: keep-all;
+  word-break: normal;
 }
 
 .permission-editor__control {
