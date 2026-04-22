@@ -13,7 +13,7 @@ import { PRIVATE_COLUMN_KEY, ALL_TAGS_ID } from '../constants';
 import { getColumnOriginName } from '../../metadata/utils/column';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
-const TagsContext = React.createContext(null);
+export const TagsContext = React.createContext(null);
 
 export const TagsProvider = ({ repoID, currentPath, selectTagsView, tagsChangedCallback, children, ...params }) => {
 
