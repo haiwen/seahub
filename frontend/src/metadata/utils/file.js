@@ -25,7 +25,7 @@ const _getFileType = (fileName, isDir) => {
 
 const _getParentDir = (record) => {
   const parentDir = getParentDirFromRecord(record);
-  if (parentDir === '/') {
+  if (!parentDir || parentDir === '/') {
     return '';
   }
   return parentDir;

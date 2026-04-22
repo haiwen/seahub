@@ -11,7 +11,7 @@ import { openFile } from '@/metadata/utils/file';
 import { EDITOR_TYPE } from '@/components/sf-table/constants/grid';
 import { EVENT_BUS_TYPE } from '@/components/sf-table/constants/event-bus-type';
 
-const FileName = ({ repoID, record, className: propsClassName, value, hideIcon = false, isCellSelected, ...params }) => {
+const FileName = ({ repoID, record, className: propsClassName, value, hideIcon = false, isCellSelected, onItemClick, ...params }) => {
   const parentDir = useMemo(() => getParentDirFromRecord(record), [record]);
   const isDir = useMemo(() => checkIsDir(record), [record]);
   const className = useMemo(() => {
@@ -41,11 +41,18 @@ const FileName = ({ repoID, record, className: propsClassName, value, hideIcon =
 
     if (!isCellSelected) return;
 
+    // For directories, use onItemClick to navigate within dirtableview
+    if (isDir && onItemClick) {
+      onItemClick(record);
+      return;
+    }
+
+    // For files, open in new window or preview
     const eventBus = EventBus.getInstance();
     openFile(repoID, record, () => {
       eventBus.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR, EDITOR_TYPE.PREVIEWER);
     });
-  }, [isCellSelected, record, repoID]);
+  }, [isCellSelected, isDir, onItemClick, record, repoID]);
 
   return (<FileNameFormatter { ...params } className={className} value={value} record={record} onClickName={handleFilenameClick} { ...iconUrl } />);
 
@@ -57,6 +64,7 @@ FileName.propTypes = {
   record: PropTypes.object,
   className: PropTypes.string,
   onFileNameClick: PropTypes.func,
+  onItemClick: PropTypes.func,
 };
 
 export default FileName;
