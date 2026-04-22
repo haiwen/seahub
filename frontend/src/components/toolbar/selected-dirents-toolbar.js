@@ -11,6 +11,8 @@ import { Dirent } from '../../models';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import Icon from '../icon';
 import { lockFile, unlockFile, freezeDocument, exportDocx, exportSdoc, toggleStar, openHistory, openViaClient } from '../../utils/dirent-operations';
+import EventBus from '../common/event-bus';
+import { EVENT_BUS_TYPE as TABLE_EVENT_BUS_TYPE } from '@/metadata/constants';
 
 import '../../css/selected-dirents-toolbar.css';
 
@@ -246,6 +248,11 @@ class SelectedDirentsToolbar extends React.Component {
     if (dirent) return Utils.joinPath(this.props.path, dirent.name);
   };
 
+  handleUnselect = () => {
+    EventBus.getInstance().dispatch(TABLE_EVENT_BUS_TYPE.SELECT_NONE);
+    this.props.unSelectDirent();
+  };
+
   render() {
     const { userPerm, selectedDirentList } = this.props;
     const selectedLen = selectedDirentList.length;
@@ -286,7 +293,7 @@ class SelectedDirentsToolbar extends React.Component {
         <OpElement
           className="cur-view-path-btn px-2"
           title={gettext('Unselect')}
-          op={this.props.unSelectDirent}
+          op={this.handleUnselect}
         >
           <span className="d-flex align-items-center justify-content-center mr-2">
             <Icon symbol="close" />

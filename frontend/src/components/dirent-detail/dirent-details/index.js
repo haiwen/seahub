@@ -171,6 +171,7 @@ class DirentDetails extends React.Component {
               <div className="detail-content">
                 {dirent.type !== 'file' ? (
                   <DirDetails
+                    repoID={repoID}
                     direntDetail={direntDetail}
                     tagsData={this.props.tagsData}
                     addTag={this.props.addTag}

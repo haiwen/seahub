@@ -9,7 +9,7 @@ import EventBus from '../../../common/event-bus';
 import { checkIsColumnEditable, getColumnOriginName } from '../../utils/column';
 import { checkCellValueChanged } from '../../utils/selection';
 import { getCellValueByColumn, getColumnOptionNameById, getColumnOptionNamesByIds, getFileNameFromRecord } from '../../utils/cell';
-import { EVENT_BUS_TYPE } from '../../constants/event-bus-type';
+import { EVENT_BUS_TYPE } from '@/metadata/constants';
 import { CellType, PRIVATE_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../../../../metadata/constants';
 
 const NOT_SUPPORT_EDITOR_COLUMN_TYPES = [

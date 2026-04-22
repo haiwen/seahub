@@ -220,6 +220,7 @@ class LibContentView extends React.Component {
         }
       }
     } else if (noticeData.type === 'repo-update') {
+      if (this.state.path.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES)) return;
       seafileAPI.listDir(this.props.repoID, this.state.path, { 'with_thumbnail': true }).then(async res => {
         const { dirent_list, user_perm: userPerm, dir_id: dirID, metadata } = res.data;
 

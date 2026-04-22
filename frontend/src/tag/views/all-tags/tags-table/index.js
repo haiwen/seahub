@@ -11,7 +11,6 @@ import { PRIVATE_COLUMN_KEY, VISIBLE_COLUMNS_KEYS } from '../../../constants';
 import { useTags } from '../../../hooks';
 import EventBus from '../../../../components/common/event-bus';
 import { EVENT_BUS_TYPE } from '../../../../metadata/constants';
-import { EVENT_BUS_TYPE as TABLE_EVENT_BUS_TYPE } from '../../../../components/sf-table/constants/event-bus-type';
 import { LOCAL_KEY_TREE_NODE_FOLDED } from '../../../../components/sf-table/constants/tree';
 import { isNumber } from '../../../../utils/number';
 import { getTreeNodeByKey, getTreeNodeId } from '../../../../components/sf-table/utils/tree';
@@ -115,7 +114,7 @@ const TagsTable = ({
   const onDeleteTags = useCallback((tagsIds) => {
     deleteTags(tagsIds);
     toggleShowDirentToolbar(false);
-    eventBus.dispatch(TABLE_EVENT_BUS_TYPE.SELECT_NONE);
+    eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
   }, [eventBus, deleteTags, toggleShowDirentToolbar]);
 
   const onNewSubTag = useCallback((parentTagId) => {

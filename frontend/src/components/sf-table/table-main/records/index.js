@@ -19,11 +19,11 @@ import { isMobile } from '../../../../utils/utils';
 import { addClassName, removeClassName, getEventClassName } from '../../../../utils/dom';
 import { isWindowsBrowser, isWebkitBrowser } from '../../utils';
 import EventBus from '../../../common/event-bus';
-import { EVENT_BUS_TYPE } from '../../constants/event-bus-type';
 import { CANVAS_RIGHT_INTERVAL } from '../../constants/grid';
 import { GROUP_ROW_TYPE } from '../../constants/group';
 import { isNumber } from '../../../../utils/number';
 import { getTreeNodeKey } from '../../utils/tree';
+import { EVENT_BUS_TYPE } from '@/metadata/constants';
 
 class Records extends Component {
 

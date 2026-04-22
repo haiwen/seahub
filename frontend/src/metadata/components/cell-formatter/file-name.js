@@ -9,7 +9,7 @@ import { checkIsDir } from '../../utils/row';
 import EventBus from '@/components/common/event-bus';
 import { openFile } from '@/metadata/utils/file';
 import { EDITOR_TYPE } from '@/components/sf-table/constants/grid';
-import { EVENT_BUS_TYPE } from '@/components/sf-table/constants/event-bus-type';
+import { EVENT_BUS_TYPE } from '@/metadata/constants';
 
 const FileName = ({ repoID, record, className: propsClassName, value, hideIcon = false, isCellSelected, onItemClick, ...params }) => {
   const parentDir = useMemo(() => getParentDirFromRecord(record), [record]);
