@@ -175,42 +175,38 @@ const TableFilesToolbar = ({ repoID }) => {
       {!readOnly && (!isMultiple || areRecordsInSameFolder) && (
         <>
           <OpIcon
-            className="cur-view-path-btn sf3-font"
+            className="cur-view-path-btn"
+            symbol="move"
             title={gettext('Move')}
             aria-label={gettext('Move')}
             op={toggleMoveDialog}
-          >
-            <Icon symbol="move" />
-          </OpIcon>
-          <span
+          />
+          <OpIcon
             className="cur-view-path-btn"
-            onClick={toggleCopyDialog}
+            symbol="copy"
             title={gettext('Copy')}
             aria-label={gettext('Copy')}
-          >
-            <Icon symbol="copy" />
-          </span>
+            op={toggleCopyDialog}
+          />
         </>
       )}
 
       <OpIcon
-        className="cur-view-path-btn sf3-font"
+        className="cur-view-path-btn"
+        symbol="download"
         title={gettext('Download')}
         aria-label={gettext('Download')}
         op={downloadRecords}
-      >
-        <Icon symbol="download" />
-      </OpIcon>
+      />
 
       {!readOnly && (
         <OpIcon
-          className="cur-view-path-btn sf3-font"
+          className="cur-view-path-btn"
+          symbol="delete1"
           title={gettext('Delete')}
           aria-label={gettext('Delete')}
           op={deleteRecords}
-        >
-          <Icon symbol="delete1" />
-        </OpIcon>
+        />
       )}
 
       {length > 0 && (

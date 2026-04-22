@@ -12,17 +12,8 @@ import TextTranslation from '@/utils/text-translation';
 import { openInNewTab, openParentFolder } from '@/metadata/utils/file';
 import { DropdownItem, Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import Icon from '@/components/icon';
-
-const POPUP_EDITOR_COLUMN_TYPES = [
-  CellType.DATE,
-  CellType.COLLABORATOR,
-  CellType.SINGLE_SELECT,
-  CellType.MULTIPLE_SELECT,
-  CellType.LONG_TEXT,
-  CellType.LINK,
-  CellType.TAGS,
-  CellType.GEOLOCATION,
-];
+import { POPUP_EDITOR_COLUMN_TYPES } from '@/metadata/constants/column/type';
+import { EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS } from '@/metadata/constants/column/private';
 
 export const adaptMetadataColumnsToSfTable = (repoID, metadataColumns) => {
   if (!Array.isArray(metadataColumns)) {
@@ -33,6 +24,7 @@ export const adaptMetadataColumnsToSfTable = (repoID, metadataColumns) => {
     const displayName = getColumnDisplayName(column.key, column.name);
     const iconName = COLUMNS_ICON_CONFIG[column.type] || 'text';
     const iconTooltip = COLUMNS_ICON_NAME[column.type] || 'Text';
+    const is_private = PRIVATE_COLUMN_KEYS.includes(column.key);
 
     return {
       ...column,
@@ -45,8 +37,8 @@ export const adaptMetadataColumnsToSfTable = (repoID, metadataColumns) => {
       is_popup_editor: POPUP_EDITOR_COLUMN_TYPES.includes(column.type),
       is_support_preview: [CellType.FILE_NAME].includes(column?.type),
       is_support_direct_edit: [CellType.CHECKBOX].includes(column?.type),
-      editable_via_click_cell: column.editable,
-      is_private: PRIVATE_COLUMN_KEYS.includes(column.key),
+      editable_via_click_cell: is_private && EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS.includes(column.key) || false,
+      is_private,
     };
   });
 };

@@ -14,6 +14,10 @@
   cursor: pointer;
 }
 
+.sf-table-cell.sf-table-file-name-cell:hover {
+  cursor: default;
+}
+
 .sf-table-cell.index {
   width: 90px;
   height: 100%;
