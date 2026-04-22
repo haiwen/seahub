@@ -7,7 +7,7 @@ import InteractionMasks from '../../masks/interaction-masks';
 import { RecordMetrics } from '../../utils/record-metrics';
 import { getColumnScrollPosition, getColVisibleStartIdx, getColVisibleEndIdx } from '../../utils/records-body';
 import EventBus from '../../../common/event-bus';
-import { EVENT_BUS_TYPE } from '../../constants/event-bus-type';
+import { EVENT_BUS_TYPE } from '@/metadata/constants';
 import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
 import { checkEditableViaClickCell, checkIsColumnSupportDirectEdit, getColumnByIndex, getColumnIndexByKey } from '../../utils/column';
 import { checkIsCellSupportOpenEditor } from '../../utils/selection';

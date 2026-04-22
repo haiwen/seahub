@@ -24,7 +24,7 @@ import { useTags } from '../../tag/hooks';
 import { useFileOperations, useMetadataAIOperations, useMetadataStatus } from '../../hooks';
 import { getColumnByKey } from '../utils/column';
 import { getSearchRule } from '../../components/sf-table/utils/search';
-import EventBus, { eventBus } from '@/components/common/event-bus';
+import EventBus from '@/components/common/event-bus';
 
 const MetadataViewContext = React.createContext(null);
 
@@ -61,6 +61,8 @@ export const MetadataViewProvider = ({
   const delayReloadDataTimer = useRef(null);
   const collaboratorsRef = useRef(collaborators);
 
+  const eventBus = EventBus.getInstance();
+
   const shouldPreserveSearch = useCallback((operationType) => {
     if (!searchState.isActive || !searchState.searchValue) return false;
     return shouldPreserveSearchForOperation(operationType);
@@ -90,7 +92,7 @@ export const MetadataViewProvider = ({
       }
       if (searchState.isActive) {
         clearSearchState();
-        eventBus.getInstance().dispatch(EVENT_BUS_TYPE.RESET_SEARCH_BAR);
+        EventBus.getInstance().dispatch(EVENT_BUS_TYPE.RESET_SEARCH_BAR);
 
       }
     }
@@ -362,9 +364,9 @@ export const MetadataViewProvider = ({
     toggleShowDirentToolbar(ids.length > 0);
     const data = isSomeone !== undefined ? faceMetadata : metadata;
     setTimeout(() => {
-      window.sfMetadataContext && window.sfMetadataContext.eventBus && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_RECORDS, ids, data, isSomeone);
+      eventBus.dispatch(EVENT_BUS_TYPE.SELECT_RECORDS, ids, data, isSomeone);
     }, 0);
-  }, [metadata, toggleShowDirentToolbar]);
+  }, [eventBus, metadata, toggleShowDirentToolbar]);
 
   const updateRecordDetails = useCallback((records) => {
     const recordObjIds = records.map(record => getFileObjIdFromRecord(record));
@@ -580,7 +582,7 @@ export const MetadataViewProvider = ({
       });
 
       const callback = (destRepo, destDirentPath, isByDialog = false) => {
-        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
+        eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
         const updateData = calculateBatchMoveUpdateData(records, destRepo.repo_id, destDirentPath, path);
 
         storeRef.current.moveRecords(recordIds, destRepo.repo_id, dirents, destDirentPath, path, updateData, {
@@ -614,7 +616,7 @@ export const MetadataViewProvider = ({
       const fileName = getFileNameFromRecord(records[0]);
       const dirent = new Dirent({ name: fileName, is_dir: checkIsDir(records[0]) });
       const callback = (...params) => {
-        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
+        eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
         moveRecord && moveRecord(currentRecordId, ...params);
       };
       handleMove(path, dirent, false, callback);
@@ -637,7 +639,7 @@ export const MetadataViewProvider = ({
       });
 
       const callback = (destRepo, destDirentPath, isByDialog = false) => {
-        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
+        eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
         storeRef.current.duplicateRecords(recordIds, destRepo.repo_id, dirents, destDirentPath, path, {
           success_callback: (operation) => {
             if (selectedDirentList.length > 0) {
@@ -673,7 +675,7 @@ export const MetadataViewProvider = ({
       const fileName = getFileNameFromRecord(records[0]);
       const dirent = new Dirent({ name: fileName, is_dir: checkIsDir(records[0]) });
       const callback = (...params) => {
-        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
+        eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
         duplicateRecord && duplicateRecord(currentRecordId, ...params);
       };
       handleCopy(path, dirent, false, callback);
@@ -698,7 +700,7 @@ export const MetadataViewProvider = ({
     });
 
     handleDownload(path, direntList);
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
+    eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
   };
 
   const getSearchableValue = useCallback((row, column, collaborators, tagsData, collaboratorsCache) => {
@@ -985,7 +987,7 @@ export const MetadataViewProvider = ({
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
-    const eventBus = window.sfMetadataContext.eventBus;
+
     const unsubscribeServerTableChanged = eventBus.subscribe(EVENT_BUS_TYPE.SERVER_TABLE_CHANGED, serverTableChanged);
     const unsubscribeTableChanged = eventBus.subscribe(EVENT_BUS_TYPE.LOCAL_TABLE_CHANGED, tableChanged);
     const unsubscribeHandleTableError = eventBus.subscribe(EVENT_BUS_TYPE.TABLE_ERROR, handleTableError);

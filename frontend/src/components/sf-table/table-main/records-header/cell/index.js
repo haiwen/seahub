@@ -5,7 +5,7 @@ import { UncontrolledTooltip } from 'reactstrap';
 import Icon from '../../../../icon';
 import ResizeColumnHandle from '../resize-column-handle';
 import EventBus from '../../../../common/event-bus';
-import { EVENT_BUS_TYPE } from '../../../constants/event-bus-type';
+import { EVENT_BUS_TYPE } from '@/metadata/constants';
 import { checkIsNameColumn } from '../../../utils/column';
 import { MIN_COLUMN_WIDTH } from '../../../constants/grid';
 import { NODE_CONTENT_LEFT_INDENT, NODE_ICON_LEFT_INDENT } from '../../../constants/tree';

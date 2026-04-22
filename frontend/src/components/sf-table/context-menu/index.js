@@ -114,7 +114,7 @@ const ContextMenu = ({
     const trashWrapper = document.querySelector('.sf-trash-wrapper');
     trashWrapper && trashWrapper.addEventListener('contextmenu', handleShow);
 
-    const dirTableWrapper = document.querySelector('.sf-table-records-wrapper');
+    const dirTableWrapper = document.querySelector('.dir-table-wrapper');
     dirTableWrapper && dirTableWrapper.addEventListener('contextmenu', handleShow);
 
     const dirTableCanvasCtxWrapper = document.querySelector('.sf-table-canvas-ctx-wrapper');
@@ -130,7 +130,7 @@ const ContextMenu = ({
       const trashWrapper = document.querySelector('.sf-trash-wrapper');
       trashWrapper && trashWrapper.removeEventListener('contextmenu', handleShow);
 
-      const dirTableWrapper = document.querySelector('.sf-table-records-wrapper');
+      const dirTableWrapper = document.querySelector('.dir-table-wrapper');
       dirTableWrapper && dirTableWrapper.removeEventListener('contextmenu', handleShow);
 
       const dirTableCanvasCtxWrapper = document.querySelector('.sf-table-canvas-ctx-wrapper');

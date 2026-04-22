@@ -10,7 +10,7 @@ import { checkCellValueChanged } from '../../utils/selection';
 import { getCellValueByColumn } from '../../utils/cell';
 import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../../utils/keyboard-utils';
 import EventBus from '../../../common/event-bus';
-import { EVENT_BUS_TYPE } from '../../constants/event-bus-type';
+import { EVENT_BUS_TYPE } from '@/metadata/constants';
 import { checkIsPrivateColumn } from '../../utils/column';
 
 class NormalEditorContainer extends React.Component {

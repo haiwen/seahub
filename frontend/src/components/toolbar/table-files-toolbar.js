@@ -14,6 +14,7 @@ import { buildTableToolbarMenuOptions } from '../../metadata/utils/menu-builder'
 import { useMetadataStatus } from '../../hooks';
 import { getColumnByKey } from '../sf-table/utils/column';
 import Icon from '../icon';
+import EventBus from '../common/event-bus';
 
 const TableFilesToolbar = ({ repoID }) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
@@ -24,6 +25,7 @@ const TableFilesToolbar = ({ repoID }) => {
   const { enableFaceRecognition, enableTags } = useMetadataStatus();
 
   const eventBus = window.sfMetadataContext && window.sfMetadataContext.eventBus;
+  const sfEventBus = EventBus.getInstance();
 
   const records = useMemo(() => selectedRecordIds.map(id => RowUtils.getRecordById(id, metadataRef.current)).filter(Boolean) || [], [selectedRecordIds]);
 
@@ -56,16 +58,16 @@ const TableFilesToolbar = ({ repoID }) => {
   const unSelect = useCallback(() => {
     setSelectedRecordIds([]);
     eventBus && eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_SELECTED_RECORD_IDS, []);
-    eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
-  }, [eventBus]);
+    sfEventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
+  }, [eventBus, sfEventBus]);
 
   const deleteRecords = useCallback(() => {
     eventBus && eventBus.dispatch(EVENT_BUS_TYPE.DELETE_RECORDS, selectedRecordIds, {
       success_callback: () => {
-        eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
+        sfEventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
       }
     });
-  }, [eventBus, selectedRecordIds]);
+  }, [eventBus, sfEventBus, selectedRecordIds]);
 
   const toggleMoveDialog = useCallback(() => {
     eventBus && eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, records);

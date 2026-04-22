@@ -38,7 +38,7 @@ class Context {
     const localStorageName = viewID ? `sf-metadata-${repoID}-${viewID}` : `sf-metadata-${repoID}`;
     this.localStorage = new LocalStorage(localStorageName);
 
-    const eventBus = new EventBus();
+    const eventBus = EventBus.getInstance();
     this.eventBus = eventBus;
 
     this.permission = repoInfo.permission !== 'admin' && repoInfo.permission !== 'rw' ? 'r' : 'rw';

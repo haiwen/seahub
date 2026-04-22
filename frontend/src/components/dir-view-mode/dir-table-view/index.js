@@ -8,14 +8,13 @@ import { siteRoot, enableSeadoc, enableWhiteboard } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import Icon from '@/components/icon';
 import TextTranslation from '@/utils/text-translation';
-import { PRIVATE_COLUMN_KEY, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, CellType } from '@/metadata/constants';
+import { PRIVATE_COLUMN_KEY, EVENT_BUS_TYPE, CellType } from '@/metadata/constants';
 import { useTags } from '@/tag/hooks';
 import { RecordMetrics } from '../../sf-table/utils/record-metrics';
 import { menuHandlers } from '../utils/menuHandlers';
 import { useDirentContextMenu } from '../hooks/useDirentContextMenu';
 import { getCreateMenuList } from '../utils/contextMenuUtils';
 import EventBus from '@/components/common/event-bus';
-import { EVENT_BUS_TYPE } from '@/components/sf-table/constants/event-bus-type';
 import { getRowById, getRowsByIds } from '@/components/sf-table/utils/table';
 import { useMetadataStatus } from '@/hooks';
 import { metadataAPI } from '@/metadata';
@@ -101,7 +100,7 @@ const DirTableView = ({
   const updateDirentDetail = useCallback((parentDir, fileName, update) => {
     if (!isDirentDetailShow || window?.sfMetadataContext?.eventBus) return;
     window.sfMetadataContext.eventBus.dispatch(
-      METADATA_EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED,
+      EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED,
       { parentDir, fileName },
       update
     );

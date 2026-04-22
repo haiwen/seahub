@@ -13,7 +13,7 @@ import { createGroupMetrics, getGroupRecordByIndex, isNestedGroupRow } from '../
 import { checkIsColumnSupportDirectEdit, checkIsColumnFrozen, checkIsNameColumn, getColumnByIndex, checkIsColumnEditable } from '../../../utils/column';
 import { checkIsCellSupportOpenEditor } from '../../../utils/selection';
 import { GROUP_HEADER_HEIGHT, GROUP_ROW_TYPE, GROUP_VIEW_OFFSET } from '../../../constants/group';
-import { EVENT_BUS_TYPE } from '../../../constants/event-bus-type';
+import { EVENT_BUS_TYPE } from '@/metadata/constants';
 import EventBus from '../../../../common/event-bus';
 
 const ROW_HEIGHT = 33;

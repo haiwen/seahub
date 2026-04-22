@@ -2,7 +2,7 @@ import React from 'react';
 import { gettext } from '../../../../utils/constants';
 import { checkIsNameColumn, getColumnByIndex } from '../../../../components/sf-table/utils/column';
 import EventBus from '../../../../components/common/event-bus';
-import { EVENT_BUS_TYPE } from '../../../../components/sf-table/constants/event-bus-type';
+import { EVENT_BUS_TYPE } from '@/metadata/constants';
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
 import { TreeMetrics } from '../../../../components/sf-table/utils/tree-metrics';
 import { RecordMetrics } from '../../../../components/sf-table/utils/record-metrics';

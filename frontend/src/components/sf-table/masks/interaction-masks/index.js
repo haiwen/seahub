@@ -28,7 +28,7 @@ import { TreeMetrics } from '../../utils/tree-metrics';
 import getEventTransfer, { setEventTransfer } from '../../utils/event-transfer';
 import { isSpace } from '../../../../utils/hotkey';
 import EventBus from '../../../common/event-bus';
-import { EVENT_BUS_TYPE } from '../../constants/event-bus-type';
+import { EVENT_BUS_TYPE } from '@/metadata/constants';
 import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../../utils/keyboard-utils';
 import { openFile } from '@/metadata/utils/file';
 
