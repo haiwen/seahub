@@ -85,9 +85,18 @@ const DirTableView = ({
 
   const enrichedColumns = useMemo(() => {
     const visibleColumns = columns.filter(col => !globalHiddenColumns.includes(col.key) && !hiddenColumnKeys.includes(col.key));
-    return createDirentTableColumns(repoID, repoInfo, visibleColumns);
+
+    const handleItemClickByRecord = (record) => {
+      if (!onItemClick || !record) return;
+      const dirent = direntList.find(d => d.name === record._name);
+      if (dirent) {
+        onItemClick(dirent);
+      }
+    };
+
+    return createDirentTableColumns(repoID, repoInfo, visibleColumns, handleItemClickByRecord);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [repoID, repoInfo, columns, globalHiddenColumns, hiddenColumnKeys, columnWidthVersion]);
+  }, [repoID, repoInfo, columns, globalHiddenColumns, hiddenColumnKeys, columnWidthVersion, direntList, onItemClick]);
 
   const updateDirentDetail = useCallback((parentDir, fileName, update) => {
     if (!isDirentDetailShow || window?.sfMetadataContext?.eventBus) return;

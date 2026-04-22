@@ -73,7 +73,7 @@ export const setDirTableColumnOrder = (columnKeys) => {
   localStorage.setItem(DIR_TABLE_COLUMNS_ORDER_KEY, JSON.stringify(columnKeys));
 };
 
-export const createDirentTableColumns = (repoID, repoInfo, columns) => {
+export const createDirentTableColumns = (repoID, repoInfo, columns, onItemClick) => {
   const savedWidths = getDirTableColumnWidths();
 
   return columns.map(column => {
@@ -81,7 +81,7 @@ export const createDirentTableColumns = (repoID, repoInfo, columns) => {
     const display_name = name;
     const icon_name = COLUMNS_ICON_CONFIG[type];
 
-    const formatter = <CellFormatter repoID={repoID} column={column} />;
+    const formatter = <CellFormatter repoID={repoID} column={column} onItemClick={onItemClick} />;
     const editor = <Editor repoID={repoID} repoInfo={repoInfo} />;
 
     const is_private = PRIVATE_COLUMN_KEYS.includes(key);
