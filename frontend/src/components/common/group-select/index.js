@@ -5,6 +5,7 @@ import ModalPortal from '../../modal-portal';
 import SelectOptionGroup from './select-option-group.js';
 import Icon from '../../icon.js';
 import { Utils } from '../../../utils/utils';
+import SelectDropdownIndicator from '../../select-dropdown-indicator';
 
 import './index.css';
 
@@ -94,7 +95,7 @@ class GroupSelect extends Component {
             :
             <span className="select-placeholder">{placeholder}</span>
           }
-          <Icon symbol="down" />
+          <SelectDropdownIndicator />
         </div>
         {this.state.isShowSelectOptions && !isInModal && (
           <SelectOptionGroup
