@@ -37,7 +37,7 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  width: 40px;
+  width: 100%;
 }
 
 .sf-table-cell .select-cell-checkbox-container:hover,

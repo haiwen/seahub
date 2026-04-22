@@ -46,3 +46,8 @@
 .sf-metadata-wrapper .sf-table-records-wrapper {
   flex: 0;
 }
+
+.sf-metadata-wrapper .sf-table-cell .select-all-checkbox-container,
+.sf-metadata-wrapper .sf-table-cell .select-cell-checkbox-container {
+  width: 40px;
+}
