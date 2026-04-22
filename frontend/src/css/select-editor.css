@@ -50,6 +50,7 @@
   cursor: pointer;
   color: var(--bs-body-color);
   border-radius: 4px;
+  width: 100%;
 }
 
 .permission-editor-btn-add-custom-permission:hover {
