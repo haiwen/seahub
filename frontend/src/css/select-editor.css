@@ -68,11 +68,6 @@
   border: 1px solid var(--bs-border-color);
 }
 
-.permission-editor .seafile-multicolor-icon-down {
-  width: 14px;
-  height: 14px;
-}
-
 .permission-editor-value-container .seafile-multicolor-icon-check {
   display: none;
 }

@@ -1,0 +1,12 @@
+.select-dropdown-indicator {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  margin-left: -2px;
+}
+
+.select-dropdown-indicator svg {
+  width: 12px;
+  height: 12px;
+}
