@@ -25,8 +25,8 @@ export function setCopiedData(data) {
 
 export function getCopiedData(cacheId) {
   const entry = copiedDataCache.get(cacheId);
-  // Clean up cache after retrieval to avoid memory leaks
-  copiedDataCache.delete(cacheId);
+  // Note: Cache entries are NOT deleted after retrieval to support "copy once, paste many"
+  // The TTL mechanism (1 minute) handles automatic cleanup to avoid memory leaks
   return entry ? entry.data : undefined;
 }
 
