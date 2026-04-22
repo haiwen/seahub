@@ -264,7 +264,6 @@ class DirView(APIView):
 
         parent_dir = request.GET.get('p', '/')
         parent_dir = normalize_dir_path(parent_dir)
-        print('parent_dir:', parent_dir)
 
         dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
         if not dir_id:
@@ -372,7 +371,6 @@ class DirView(APIView):
                                 'file_name': dir_info['name'],
                                 'is_dir': True
                             })
-                    print('entries:', entries)
 
                     metadata_server_api = MetadataServerAPI(repo_id, username)
                     columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
@@ -409,12 +407,10 @@ class DirView(APIView):
                                     f'(`{METADATA_TABLE.columns.parent_dir.name}`=? AND `{METADATA_TABLE.columns.file_name.name}`=? AND `{METADATA_TABLE.columns.is_dir.name}`=FALSE)'
                                 )
                             parameters.extend([entry_parent_dir, entry_file_name])
-                            print('parameters:', parameters)
 
                         if where_conditions:
                             where_clause = ' OR '.join(where_conditions)
                             sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE {where_clause};'
-                            print('sql:', sql)
 
                             try:
                                 query_result = metadata_server_api.query_rows(sql, parameters)
