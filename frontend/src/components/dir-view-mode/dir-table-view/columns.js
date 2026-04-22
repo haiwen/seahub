@@ -1,42 +1,8 @@
-import { CellType, COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '@/metadata/constants';
+import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '@/metadata/constants';
 import CellFormatter from '@/metadata/components/cell-formatter';
 import Editor from '@/metadata/components/cell-editors/editor';
-
-export const EDITABLE_COLUMN_KEYS = [
-  PRIVATE_COLUMN_KEY.FILE_NAME,
-  PRIVATE_COLUMN_KEY.FILE_STATUS,
-  PRIVATE_COLUMN_KEY.FILE_COLLABORATORS,
-  PRIVATE_COLUMN_KEY.FILE_REVIEWER,
-  PRIVATE_COLUMN_KEY.FILE_EXPIRE_TIME,
-  PRIVATE_COLUMN_KEY.FILE_DESCRIPTION,
-  PRIVATE_COLUMN_KEY.CAPTURE_TIME,
-  PRIVATE_COLUMN_KEY.OWNER,
-  PRIVATE_COLUMN_KEY.FILE_RATE,
-  PRIVATE_COLUMN_KEY.TAGS,
-];
-
-export const EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS = [
-  PRIVATE_COLUMN_KEY.FILE_NAME,
-  PRIVATE_COLUMN_KEY.FILE_STATUS,
-  PRIVATE_COLUMN_KEY.FILE_COLLABORATORS,
-  PRIVATE_COLUMN_KEY.FILE_REVIEWER,
-  PRIVATE_COLUMN_KEY.FILE_EXPIRE_TIME,
-  PRIVATE_COLUMN_KEY.FILE_DESCRIPTION,
-  PRIVATE_COLUMN_KEY.CAPTURE_TIME,
-  PRIVATE_COLUMN_KEY.OWNER,
-  PRIVATE_COLUMN_KEY.FILE_RATE,
-  PRIVATE_COLUMN_KEY.TAGS,
-];
-
-export const POPUP_EDITOR_COLUMN_TYPES = [
-  CellType.DATE,
-  CellType.COLLABORATOR,
-  CellType.SINGLE_SELECT,
-  CellType.MULTIPLE_SELECT,
-  CellType.LONG_TEXT,
-  CellType.TAGS,
-  CellType.GEOLOCATION,
-];
+import { EDITABLE_PRIVATE_COLUMN_KEYS, EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS } from '@/metadata/constants/column/private';
+import { POPUP_EDITOR_COLUMN_TYPES } from '@/metadata/constants/column/type';
 
 export const SUPPORT_PREVIEW_COLUMN_KEYS = [
   PRIVATE_COLUMN_KEY.FILE_NAME,
@@ -87,9 +53,9 @@ export const createDirentTableColumns = (repoID, repoInfo, columns, onItemClick)
     const is_private = PRIVATE_COLUMN_KEYS.includes(key);
     let editable = true;
     if (is_private) {
-      editable = EDITABLE_COLUMN_KEYS.includes(key);
+      editable = EDITABLE_PRIVATE_COLUMN_KEYS.includes(key);
     }
-    const editable_via_click_cell = is_private && EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS.includes(key) || true;
+    const editable_via_click_cell = is_private && EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS.includes(key) || false;
     const is_popup_editor = is_private && POPUP_EDITOR_COLUMN_TYPES.includes(type) || false;
     const is_support_preview = is_private && SUPPORT_PREVIEW_COLUMN_KEYS.includes(key) || false;
     const icon_tooltip = COLUMNS_ICON_NAME[column.type] || 'Text';
@@ -109,6 +75,7 @@ export const createDirentTableColumns = (repoID, repoInfo, columns, onItemClick)
       normalizedColumn.formatter = formatter;
     }
     if (editable) {
+      normalizedColumn.editable = editable;
       normalizedColumn.editor = editor;
     }
     if (icon_name) {

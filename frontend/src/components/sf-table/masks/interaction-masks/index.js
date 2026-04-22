@@ -1135,10 +1135,12 @@ class InteractionMasks extends React.Component {
   };
 
   renderSingleCellSelectView = () => {
+    const { columns } = this.props;
     const { isEditorEnabled, selectedPosition } = this.state;
     const isDragEnabled = this.checkIsSelectedCellEditable();
-    const showDragHandle = (isDragEnabled && this.props.supportDragFill);
-    if (isEditorEnabled) {
+    const column = getSelectedColumn({ selectedPosition, columns });
+    const { type } = column || {};
+    if (isEditorEnabled && type !== CellType.RATE && type !== CellType.CHECKBOX && type === CellType.FILE_NAME) {
       return null;
     }
     if (!this.isGridSelected()) return null;
@@ -1148,6 +1150,8 @@ class InteractionMasks extends React.Component {
       selectedPosition,
       getSelectedDimensions: this.getSelectedDimensions,
     };
+
+    const showDragHandle = (isDragEnabled && this.props.supportDragFill && type !== CellType.FILE_NAME);
     return (
       <SelectionMask {...props}>
         {showDragHandle ? <DragHandler onDragStart={this.handleDragStart} onDragEnd={this.handleDragEnd} /> : null}
