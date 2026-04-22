@@ -1,14 +1,16 @@
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { getRowById } from '../../../../components/sf-table/utils/table';
 import { getTagColor, getTagName } from '../../../../tag/utils/cell';
-import { useTags } from '@/tag/hooks';
+import { TagsContext } from '@/tag/hooks';
 
 import './index.css';
 
-const FileTagsFormatter = ({ value: oldValue, className, children: emptyFormatter, showName = false }) => {
-  const { tagsData } = useTags();
+const FileTagsFormatter = ({ value: oldValue, className, children: emptyFormatter, showName = false, tagsData: tagsDataProp }) => {
+  // Use context directly to safely check if provider exists
+  const context = useContext(TagsContext);
+  const tagsData = tagsDataProp || context?.tagsData;
 
   const value = useMemo(() => {
     if (!Array.isArray(oldValue) || oldValue.length === 0) return [];

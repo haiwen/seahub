@@ -134,7 +134,7 @@ const Formatter = React.memo(({ column, value, isSample, queryUserAPI, emptyTip,
     }
     case CellType.TAGS: {
       return (
-        <FileTagsFormatter value={value} className={className} showName={true}>
+        <FileTagsFormatter value={value} className={className} showName={true} tagsData={params.tagsData}>
           <Empty fieldType={type} placeholder={emptyTip} />
         </FileTagsFormatter>
       );
