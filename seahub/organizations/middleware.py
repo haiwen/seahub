@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 
 from django.conf import settings
 from django.http import HttpResponseRedirect
-from seahub.utils.mixin import MiddlewareMixin
+from django.utils.deprecation import MiddlewareMixin
 
 from .settings import ORG_REDIRECT
 from seahub.utils import get_service_url, get_site_scheme_and_netloc

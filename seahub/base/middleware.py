@@ -6,12 +6,12 @@ from django.urls import reverse
 from django.core.cache import cache
 from django.http import HttpResponseRedirect
 from django.utils.translation import gettext as _
+from django.utils.deprecation import MiddlewareMixin
 
 from seaserv import ccnet_api
 
 from seahub.auth import logout
 from seahub.utils import render_error
-from seahub.utils.mixin import MiddlewareMixin
 from seahub.organizations.models import OrgSettings
 from seahub.organizations.utils import generate_org_reactivate_link
 from seahub.notifications.models import Notification

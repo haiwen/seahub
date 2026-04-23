@@ -3,9 +3,9 @@ import json
 
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.utils.deprecation import MiddlewareMixin
 
 from seahub.utils.ip import get_remote_ip
-from seahub.utils.mixin import MiddlewareMixin
 from seahub.trusted_ip.models import TrustedIP
 from seahub.settings import ENABLE_LIMIT_IPADDRESS, TRUSTED_IP_LIST
 

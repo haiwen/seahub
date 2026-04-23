@@ -15,7 +15,11 @@ try:
 except ImportError:
     from django.core.urlresolvers import reverse
 
-from seahub.utils.mixin import MiddlewareMixin
+try:
+    # Django > 1.10 uses MiddlewareMixin
+    from django.utils.deprecation import MiddlewareMixin
+except ImportError:
+    MiddlewareMixin = object
 
 import django
 
