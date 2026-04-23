@@ -4,6 +4,10 @@
   }
 }
 
+.repo-share-admin-container .modal-title {
+  display: flex;
+}
+
 .repo-share-admin-content-container {
   max-height: 500px;
 }

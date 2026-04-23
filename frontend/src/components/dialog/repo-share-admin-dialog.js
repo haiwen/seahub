@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import { gettext, canGenerateShareLink, canGenerateUploadLink, LARGE_DIALOG_STYLE } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import IconButton from '../../components/icon-button';
 import RepoShareAdminShareLinks from './repo-share-admin/share-links';
 import RepoShareAdminUploadLinks from './repo-share-admin/upload-links';
 import RepoShareAdminUserShares from './repo-share-admin/user-shares';
@@ -58,8 +59,12 @@ class RepoShareAdminDialog extends React.Component {
       <div>
         <Modal isOpen={true} className="repo-share-admin-container share-dialog" style={LARGE_DIALOG_STYLE } toggle={this.props.toggleDialog}>
           <SeahubModalHeader toggle={this.props.toggleDialog}>
-            <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
-            <span className="tip font-weight-normal">{gettext('Manage all shares and share links in this library')}</span>
+            <span dangerouslySetInnerHTML={{ __html: title }} className="d-inline-flex mw-100"></span>
+            <IconButton
+              id="repo-share-admin-dialog-tip"
+              icon="question-circle-stroked"
+              text={gettext('Manage all shares and share links in this library')}
+            />
           </SeahubModalHeader>
           <ModalBody className="repo-share-admin-content-container share-dialog-content" role="tablist">
             <Fragment>
