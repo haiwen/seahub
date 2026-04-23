@@ -80,7 +80,7 @@ class GroupItem extends React.Component {
     return (
       <>
         <div className="library-list-header">
-          <Icon symbol={group.parent_group_id == 0 ? 'group' : 'department'} className="w-4 h-4 mr-2" />
+          <Icon symbol={group.parent_group_id == 0 ? 'group' : 'department'} className="role-icon" />
           <a href={`${siteRoot}group/${group.id}/`} title={group.name} className="ellipsis">{group.name}</a>
           <GroupOperationMenu
             group={group}

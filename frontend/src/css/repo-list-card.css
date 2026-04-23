@@ -3,6 +3,7 @@
   border: 1px solid #eaeaea;
   border-radius: 8px;
   margin-bottom: 24px;
+  overflow: hidden;
 }
 
 [data-bs-theme='dark'] .repo-list-card {
@@ -65,6 +66,10 @@
   cursor: default;
 }
 
+.repo-list-card-body {
+  border-radius: 0 0 8px 8px;
+}
+
 .repo-list-item {
   height: 40px;
   display: flex;
@@ -75,12 +80,12 @@
   transition: none;
 }
 
-[data-bs-theme='dark'] .repo-list-item {
-  border-bottom: 1px solid rgba(255, 255, 255, .15);
-}
-
 .repo-list-item:last-child {
   border-bottom: none;
+}
+
+[data-bs-theme='dark'] .repo-list-item {
+  border-bottom: 1px solid rgba(255, 255, 255, .15);
 }
 
 .repo-list-item:hover {
