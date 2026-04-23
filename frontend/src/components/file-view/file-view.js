@@ -228,7 +228,6 @@ class FileView extends React.Component {
     const fileExtension = Utils.getFileExtension(fileName, true);
     let className = `${fileExtension}-view-header`;
     if (documentVendor) {
-      console.log(documentVendor);
       if (documentVendor === 'onlyOffice') {
         className = 'sf-only-office ' + className;
       } else if (documentVendor === 'collaboraOnline') {
