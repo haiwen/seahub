@@ -168,6 +168,10 @@
   text-decoration: underline;
 }
 
+.notification-body:has(.notification-list-container .notice-list:empty) .notification-footer {
+  border-top: none !important;
+}
+
 .notification-container .notification-body .mark-notifications {
   display: flex;
   justify-content: space-between;

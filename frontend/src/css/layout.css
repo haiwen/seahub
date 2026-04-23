@@ -478,7 +478,7 @@ img[src=""], img:not([src]) {
 .nav-indicator-container::before {
   content: '';
   position: absolute;
-  bottom: -2px;
+  bottom: 1px;
   height: 2px;
   width: var(--indicator-width);
   background: #ED7109;
