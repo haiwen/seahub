@@ -51,6 +51,31 @@ body {
   background: rgba(255, 255, 255, 1);
 }
 
+.exdraw-view-header #unfold-onlyoffice-file-view-header {
+  right: 152px;
+  z-index: 6
+}
+
+.sf-only-office.doc-view-header #unfold-onlyoffice-file-view-header,
+.sf-only-office.odp-view-header #unfold-onlyoffice-file-view-header,
+.sf-only-office.ods-view-header #unfold-onlyoffice-file-view-header,
+.sf-only-office.odt-view-header #unfold-onlyoffice-file-view-header,
+.sf-only-office.ppsx-view-header #unfold-onlyoffice-file-view-header,
+.sf-only-office.ppt-view-header #unfold-onlyoffice-file-view-header,
+.sf-only-office.xls-view-header #unfold-onlyoffice-file-view-header {
+  right: 172px;
+}
+
+.sf-collabora-online #unfold-onlyoffice-file-view-header {
+  right: 200px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.sf-collabora-online #unfold-onlyoffice-file-view-header:hover {
+  background: rgba(255, 255, 255, 1);
+}
+
+
 .file-view-header .file-toolbar-btn {
   position: relative;
   min-width: 0;
