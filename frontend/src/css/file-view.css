@@ -68,11 +68,11 @@ body {
 
 .sf-collabora-online #unfold-onlyoffice-file-view-header {
   right: 200px;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.6) !important;
 }
 
 .sf-collabora-online #unfold-onlyoffice-file-view-header:hover {
-  background: rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, 1) !important;
 }
 
 
