@@ -259,7 +259,7 @@ class QRGeneratorView(View):
     View returns an SVG image with the OTP token information
     """
     http_method_names = ['get']
-    default_qr_factory = 'qrcode.image.svg.SvgPathImage'
+    default_qr_factory = 'qrcode.image.svg.SvgPathFillImage'
 
     # The qrcode library only supports PNG and SVG for now
     image_content_types = {
