@@ -4,6 +4,8 @@ import { EVENT_BUS_TYPE } from '../../constants';
 import CardItems from './card-items';
 import Settings from './settings';
 
+import './index.css';
+
 const Card = () => {
   const [isShowSettings, setShowSettings] = useState(false);
 
@@ -41,7 +43,7 @@ const Card = () => {
 
   return (
     <div className="sf-metadata-container">
-      <div className="sf-metadata-view-card flex-fill o-auto position-relative">
+      <div className="sf-metadata-view-card">
         <CardItems
           modifyRecord={modifyRecord}
           deleteRecords={deleteRecords}

@@ -132,11 +132,11 @@ export const createTableHeaders = (
         sortBy === 'creator' && sortIcon
       )
     }] : []),
-    ...(isColumnVisible(PRIVATE_COLUMN_KEY.FILE_MODIFIER) ? [{
+    ...(isColumnVisible(PRIVATE_COLUMN_KEY.LAST_MODIFIER) ? [{
       key: PRIVATE_COLUMN_KEY.LAST_MODIFIER,
-      width: COLUMN_CONFIG.file_modifier.width,
-      className: COLUMN_CONFIG.file_modifier.className,
-      minWidth: COLUMN_CONFIG.file_modifier.width,
+      width: COLUMN_CONFIG.last_modifier.width,
+      className: COLUMN_CONFIG.last_modifier.className,
+      minWidth: COLUMN_CONFIG.last_modifier.width,
       children: React.createElement(
         'span',
         {

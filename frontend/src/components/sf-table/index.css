@@ -114,6 +114,10 @@
   overflow-y: hidden;
 }
 
+.sf-table-result-container.horizontal-scroll .table-last--frozen {
+  box-shadow: 2px 0 5px -2px hsla(0,0%,53%,.3) !important;
+}
+
 .sf-table-result-content {
   height: 100%;
   min-width: 100%;

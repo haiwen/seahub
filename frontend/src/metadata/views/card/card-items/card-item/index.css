@@ -121,6 +121,7 @@
 }
 
 .sf-metadata-card-item-text-container .sf-metadata-card-last-modified-info .collaborator-item {
+  width: 100%;
   color: var(--bs-body-color);
   background-color: transparent;
   padding: 0;
