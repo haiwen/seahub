@@ -457,7 +457,7 @@ class Libraries extends Component {
                     <>
                       <div className="library-list-header justify-content-between">
                         <div className="d-flex align-items-center">
-                          <Icon symbol="my-libraries" className="w-4 h-4 mr-2" />
+                          <Icon symbol="my-libraries" className="role-icon" />
                           <span className="library-list-title">{gettext('My Libraries')}</span>
                           <OpIcon id="new-library-btn" className="op-icon" symbol="new" op={this.toggleCreateRepoDialog} tooltip={gettext('New Library')} />
                         </div>

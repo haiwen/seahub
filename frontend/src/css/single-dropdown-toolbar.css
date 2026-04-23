@@ -19,5 +19,6 @@
 }
 
 .sf-dropdown-combined-toggle .seafile-multicolor-icon-down {
+  font-size: .75rem;
   transform: translateY(1px);
 }

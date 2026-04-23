@@ -275,21 +275,24 @@ select {
   text-decoration: underline;
 }
 
-.repos-container .library-list-header .seafile-multicolor-icon {
-  color: var(--bs-icon-secondary-color);
-}
-
 .repos-container .library-list-header .library-list-title {
   margin-right: 8px;
   cursor: default;
 }
 
-.repos-container .library-list-header .seafile-multicolor-icon-new {
-  color: var(--bs-icon-color);
+.repos-container .library-list-header .role-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--bs-icon-secondary-color);
+  margin-right: 8px;
 }
 
 .repos-container .library-list-header .op-icon {
   font-size: 14px;
+}
+
+.repos-container .library-list-header .op-icon:hover {
+  background-color: var(--bs-hover-bg);
 }
 
 .repos-container .library-list-header .btn.btn-secondary {

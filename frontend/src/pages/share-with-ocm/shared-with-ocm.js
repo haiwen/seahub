@@ -387,7 +387,7 @@ class SharedWithOCM extends Component {
           ? (
             <>
               <div className="library-list-header">
-                <Icon symbol="share-with-me" className="w-4 h-4 mr-2" />
+                <Icon symbol="share-with-me" className="role-icon" />
                 <span className="library-list-title">{gettext('Shared from other servers')}</span>
               </div>
               {this.renderContent(currentViewMode)}
