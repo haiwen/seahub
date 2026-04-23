@@ -5,13 +5,14 @@
 # Translators:
 # Translators:
 # K.S. <adrespubliczny+transifex@gmail.com>, 2015-2018
+# Seafile Info <info@seafile.com>, 2026
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 10:19+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
-"Last-Translator: K.S. <adrespubliczny+transifex@gmail.com>, 2015-2018\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Polish (http://app.transifex.com/haiwen/seahub/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,7 +31,7 @@ msgstr "Wstecz"
 #: frontend/src/components/btn-qr-code.js:38
 #: frontend/src/components/share-link-panel/link-item.js:181
 msgid "Scan the QR code to view the shared content directly"
-msgstr ""
+msgstr "Zeskanuj kod QR, aby bezpośrednio wyświetlić udostępnioną zawartość"
 
 #: frontend/src/components/common/account.js:109
 msgid "Exit System Admin"
@@ -38,11 +39,11 @@ msgstr "Wyjdź z administracji"
 
 #: frontend/src/components/common/account.js:114
 msgid "Exit Organization Admin"
-msgstr ""
+msgstr "Wyjdź z administracji organizacji"
 
 #: frontend/src/components/common/account.js:119
 msgid "Exit Institution Admin"
-msgstr ""
+msgstr "Wyjdź z administracji instytucji"
 
 #: frontend/src/components/common/account.js:127
 #: frontend/src/pages/sys-admin/side-panel.js:33
@@ -55,7 +56,7 @@ msgstr "Administrator organizacji"
 
 #: frontend/src/components/common/account.js:137
 msgid "Institution Admin"
-msgstr ""
+msgstr "Administrator instytucji"
 
 #: frontend/src/components/common/account.js:152
 #: frontend/src/components/common/account.js:155
@@ -68,7 +69,7 @@ msgstr "Wykorzystane:"
 
 #: frontend/src/components/common/account.js:172
 msgid "AI credit used:"
-msgstr ""
+msgstr "Użyte kredity AI:"
 
 #: frontend/src/components/common/account.js:181
 #: frontend/src/components/dialog/lib-settings.js:75
@@ -91,7 +92,7 @@ msgstr "Ustawienia"
 #: frontend/src/components/common/account.js:184
 #| msgid "Custom properties"
 msgid "Customer Portal"
-msgstr ""
+msgstr "Portał klienta"
 
 #: frontend/src/components/common/account.js:185
 #: frontend/src/components/common/logout.js:6
@@ -103,11 +104,11 @@ msgstr "Wyloguj się"
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1250
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1278
 msgid "Undo"
-msgstr ""
+msgstr "Cofnij"
 
 #: frontend/src/components/common/go-back/index.js:15
 msgid "Go back"
-msgstr ""
+msgstr "Wróć"
 
 #: frontend/src/components/common/group-select/index.js:93
 #: frontend/src/components/customize-select/index.js:117
@@ -452,7 +453,7 @@ msgstr "Powiadomienia"
 #: frontend/src/components/common/notification.js:186
 #| msgid "Notifications"
 msgid "Notification"
-msgstr ""
+msgstr "Powiadomienie"
 
 #: frontend/src/components/common/notification.js:187
 #| msgid "Mark all read"
@@ -462,7 +463,7 @@ msgstr "Oznacz wszystkie jako przeczytane"
 #: frontend/src/components/common/notification.js:188
 #| msgid "All Notifications"
 msgid "View all notifications"
-msgstr ""
+msgstr "Zobacz wszystkie powiadomienia"
 
 #: frontend/src/components/common/seahub-modal-close.js:7
 #: frontend/src/components/common/seahub-modal-header.js:8
@@ -497,12 +498,12 @@ msgstr "Zamknij"
 #: frontend/src/components/main-side-nav-folded.js:91
 #: frontend/src/components/main-side-nav.js:84
 msgid "A file is being uploaded. Are you sure you want to leave this page?"
-msgstr ""
+msgstr "Czy na pewno chcesz opuścić tę stronę? Wszystkie nieprzesłane pliki zostaną utracone."
 
 #: frontend/src/components/cur-dir-path/dir-path.js:130
 #: frontend/src/components/dir-view-mode/dir-views/index.js:61
 msgid "Views"
-msgstr ""
+msgstr "Widoki"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:136
 #: frontend/src/components/cur-dir-path/dir-path.js:139
@@ -510,7 +511,7 @@ msgstr ""
 #: frontend/src/components/cur-dir-path/dir-path.js:160
 #| msgid "Refresh"
 msgid "Refresh the view"
-msgstr ""
+msgstr "Odśwież widok"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:174
 #: frontend/src/components/dialog/lib-settings.js:156
@@ -527,11 +528,11 @@ msgstr "Tagi"
 #: frontend/src/components/cur-dir-path/dir-path.js:253
 #| msgid "Delete page"
 msgid "Close the panel"
-msgstr ""
+msgstr "Zamknij panel"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:253
 msgid "Open the panel"
-msgstr ""
+msgstr "Otwórz panel"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:266
 #: frontend/src/components/cur-dir-path/dir-path.js:272
@@ -564,42 +565,42 @@ msgstr "O nas"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:29
 msgid "Copyright Infringement"
-msgstr ""
+msgstr "Naruszenie praw autorskich"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:30
 msgid "Virus"
-msgstr ""
+msgstr "Wirus"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:31
 msgid "Abuse Content"
-msgstr ""
+msgstr "Zawartość naruszenia"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:32
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:256
 msgid "Other"
-msgstr ""
+msgstr "Inne"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:39
 msgid "Contact information is required."
-msgstr ""
+msgstr "Wymagane jest podanie informacji kontaktowej."
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:45
 msgid "Abuse report added"
-msgstr ""
+msgstr "Zgłoszenie naruszenia zostało dodane"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:76
 #: frontend/src/components/shared-file-view/shared-file-view.js:164
 msgid "Report Abuse"
-msgstr ""
+msgstr "Zgłoś naruszenie"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:80
 #: frontend/src/pages/sys-admin/abuse-reports.js:94
 msgid "Abuse Type"
-msgstr ""
+msgstr "Typ naruszenia"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:89
 msgid "Contact Information"
-msgstr ""
+msgstr "Informacje kontaktowe"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:98
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:123
@@ -982,7 +983,7 @@ msgstr "Nazwa"
 #: frontend/src/components/dialog/convert-wiki-dialog.js:94
 #: frontend/src/components/dialog/import-confluence-dialog.js:143
 msgid "Wiki owner"
-msgstr ""
+msgstr "Właściciel Wiki"
 
 #: frontend/src/components/dialog/add-wiki-dialog.js:98
 #: frontend/src/components/dialog/convert-wiki-dialog.js:94
@@ -995,7 +996,7 @@ msgstr "Opcjonalny"
 #: frontend/src/components/dialog/import-confluence-dialog.js:148
 #: frontend/src/components/dialog/transfer-dialog.js:215
 msgid "Select a department"
-msgstr ""
+msgstr "Wybierz dział"
 
 #: frontend/src/components/dialog/add-wiki-dialog.js:106
 #: frontend/src/components/dialog/convert-wiki-dialog.js:102
@@ -1007,7 +1008,7 @@ msgstr ""
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:465
 #: frontend/src/metadata/components/popover/options-popover/index.js:174
 msgid "No options available"
-msgstr ""
+msgstr "Brak opcji dostępnych"
 
 #: frontend/src/components/dialog/add-wiki-page-dialog.js:58
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:244
@@ -1016,11 +1017,11 @@ msgstr "Nowa strona"
 
 #: frontend/src/components/dialog/change-group-dialog.js:30
 msgid "Are you sure to change group {placeholder} to department ?"
-msgstr ""
+msgstr "Czy na pewno chcesz zmienić grupę {placeholder} na dział ?"
 
 #: frontend/src/components/dialog/change-group-dialog.js:34
 msgid "Change group to department"
-msgstr ""
+msgstr "Zmień grupę na dział"
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:50
 msgid "Please enter the old password"
@@ -1061,7 +1062,7 @@ msgstr "Nowe hasło"
 #: frontend/src/components/dialog/change-repo-password-dialog.js:121
 #: frontend/src/components/dialog/create-repo-dialog.js:250
 msgid "(at least {placeholder} characters)"
-msgstr ""
+msgstr "(co najmniej {placeholder} znaków)"
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:132
 msgid "New Password Again"
@@ -1090,7 +1091,7 @@ msgstr "wszystko"
 #: frontend/src/components/dialog/clean-trash.js:48
 #: frontend/src/components/dialog/wiki-clean-trash.js:48
 msgid "Clean succeeded."
-msgstr ""
+msgstr "Wyczyściło się pomyślnie."
 
 #: frontend/src/components/dialog/clean-trash.js:64
 #: frontend/src/components/dialog/trash-dialog/index.js:241
@@ -1175,14 +1176,14 @@ msgstr "Czy na pewno chcesz usunąć swoje konto?"
 #: frontend/src/components/user-settings/social-login-weixin.js:41
 #: frontend/src/components/user-settings/social-login.js:41
 msgid "Disconnect"
-msgstr ""
+msgstr "Odłącz"
 
 #: frontend/src/components/dialog/confirm-disconnect-dingtalk.js:30
 #: frontend/src/components/dialog/confirm-disconnect-wechat.js:30
 #: frontend/src/components/dialog/confirm-disconnect-weixin.js:30
 #: frontend/src/components/user-settings/social-login-saml.js:63
 msgid "Are you sure you want to disconnect?"
-msgstr ""
+msgstr "Czy na pewno chcesz odłączyć się?"
 
 #: frontend/src/components/dialog/confirm-restore-repo.js:32
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:273
@@ -1246,7 +1247,7 @@ msgstr "Odłącz"
 
 #: frontend/src/components/dialog/convert-wiki-dialog.js:82
 msgid "Convert Wiki"
-msgstr ""
+msgstr "Przekonwertuj Wiki"
 
 #: frontend/src/components/dialog/copy-dirent-dialog.js:97
 #: frontend/src/components/dialog/copy-dirent-dialog.js:142
@@ -1263,11 +1264,11 @@ msgstr "Nie można przenieść folderu %(src)s do jego podfolderu %(des)s"
 
 #: frontend/src/components/dialog/copy-dirent-dialog.js:157
 msgid "Can not copy folder %(src)s to its subfolder %(des)s"
-msgstr ""
+msgstr "Nie można skopiować folderu %(src)s do jego podfolderu %(des)s"
 
 #: frontend/src/components/dialog/copy-dirent-dialog.js:303
 msgid "Copy {placeholder} to"
-msgstr ""
+msgstr "Kopiuj {placeholder} do"
 
 #: frontend/src/components/dialog/copy-dirent-dialog.js:306
 msgid "Copy selected item(s) to:"
@@ -1289,11 +1290,11 @@ msgstr "Szukaj"
 
 #: frontend/src/components/dialog/copy-move-dirent-progress-dialog.js:20
 msgid "Move {num} items"
-msgstr ""
+msgstr "Przenieś {num} elementów"
 
 #: frontend/src/components/dialog/copy-move-dirent-progress-dialog.js:20
 msgid "Copy {num} items"
-msgstr ""
+msgstr "Kopiuj {num} elementów"
 
 #: frontend/src/components/dialog/create-department-repo-dialog.js:57
 #: frontend/src/components/dialog/create-group-dialog.js:51
@@ -1323,7 +1324,7 @@ msgstr "Nazwa nie powinna zawierać '/'."
 
 #: frontend/src/components/dialog/create-department-repo-dialog.js:78
 msgid "New Department Library"
-msgstr ""
+msgstr "Nowa biblioteka działu"
 
 #: frontend/src/components/dialog/create-file-dialog.js:66
 #: frontend/src/components/dialog/create-folder-dialog.js:58
@@ -1333,7 +1334,7 @@ msgstr ""
 #: frontend/src/metadata/hooks/metadata-view.js:188
 #: frontend/src/tag/hooks/tag-view.js:147
 msgid "The name \"{name}\" is already taken. Please choose a different name."
-msgstr ""
+msgstr "Nazwa \"{name}\" jest już zajęta. Proszę wybrać inną nazwę."
 
 #: frontend/src/components/dialog/create-file-dialog.js:92
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:181
@@ -1405,7 +1406,7 @@ msgstr "Szablon"
 #: frontend/src/components/dialog/create-repo-dialog.js:214
 #: frontend/src/pages/my-libs/mylib-repo-list-view.js:127
 msgid "Storage Backend"
-msgstr ""
+msgstr "Backend przechowywania"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:226
 #: frontend/src/components/dialog/custom-permission/list-custom-permissions.js:21
@@ -1497,16 +1498,16 @@ msgstr "Opis jest wymagany"
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:100
 #: frontend/src/components/dialog/custom-permission/list-custom-permissions.js:23
 msgid "Add permission"
-msgstr ""
+msgstr "Dodaj uprawnienia"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:100
 msgid "Edit permission"
-msgstr ""
+msgstr "Edytuj uprawnienia"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:119
 #: frontend/src/components/dialog/custom-permission/list-custom-permissions.js:30
 msgid "Permission name"
-msgstr ""
+msgstr "Nazwa uprawnienia"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:137
 #: frontend/src/components/file-uploader/file-uploader.js:736
@@ -1569,11 +1570,11 @@ msgstr "Utwórz"
 #: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:97
 #: frontend/src/translate.js:7
 msgid "Modify"
-msgstr ""
+msgstr "Zmodyfikuj"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:178
 msgid "Modify includes modify file, move/rename file and folder"
-msgstr ""
+msgstr "Modyfikacja obejmuje modyfikację pliku, przeniesienie/zmianę nazwy pliku i folderu"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:190
 #: frontend/src/components/dialog/group-invite-members-dialog.js:88
@@ -1606,11 +1607,11 @@ msgstr "Kopiuj"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:212
 msgid "Preview online"
-msgstr ""
+msgstr "Przeglądaj online"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:223
 msgid "Generate share link"
-msgstr ""
+msgstr "Wygeneruj link udostępniania"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-item.js:76
 #: frontend/src/components/dialog/generate-upload-link.js:340
@@ -1639,16 +1640,16 @@ msgstr "Edytuj"
 
 #: frontend/src/components/dialog/delete-dialog.js:22
 msgid "Delete File"
-msgstr ""
+msgstr "Usuń plik"
 
 #: frontend/src/components/dialog/delete-dialog.js:24
 #: frontend/src/components/dialog/delete-folder-dialog.js:57
 msgid "Delete Folder"
-msgstr ""
+msgstr "Usuń folder"
 
 #: frontend/src/components/dialog/delete-dialog.js:30
 msgid "Are you sure you want to delete"
-msgstr ""
+msgstr "Czy na pewno chcesz usunąć"
 
 #: frontend/src/components/dialog/delete-folder-dialog.js:46
 #: frontend/src/components/dialog/delete-repo-dialog.js:54
@@ -1672,19 +1673,19 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/user-repos.js:190
 #: frontend/src/pages/sys-admin/users/users-content.js:402
 msgid "Are you sure you want to delete {placeholder} ?"
-msgstr ""
+msgstr "Czy na pewno chcesz usunąć {placeholder} ?"
 
 #: frontend/src/components/dialog/delete-folder-dialog.js:50
 msgid ""
 "This folder has been shared to {user_amount} user(s) and {group_amount} "
 "group(s)."
-msgstr ""
+msgstr "Ten folder został udostępniony {user_amount} użytkownikowi(i) i {group_amount} grupie(g)."
 
 #: frontend/src/components/dialog/delete-repo-dialog.js:59
 msgid ""
 "This library has been shared to {user_amount} user(s) and {group_amount} "
 "group(s)."
-msgstr ""
+msgstr "Ta biblioteka została udostępniona {user_amount} użytkownikowi(i) i {group_amount} grupie(g)."
 
 #: frontend/src/components/dialog/delete-repo-dialog.js:68
 #: frontend/src/components/dialog/org-delete-repo-dialog.js:33
@@ -1700,12 +1701,12 @@ msgstr "Usuń bibliotekę"
 #: frontend/src/components/dialog/department-detail-dialog.js:234
 #| msgid "Search groups"
 msgid "Select group members"
-msgstr ""
+msgstr "Wybierz członków grupy"
 
 #: frontend/src/components/dialog/department-detail-dialog.js:234
 #| msgid "Select a user"
 msgid "Select shared users"
-msgstr ""
+msgstr "Wybierz użytkowników udostępnianych"
 
 #: frontend/src/components/dialog/department-detail-dialog.js:276
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:312
@@ -1725,12 +1726,12 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/index.js:100
 #: frontend/src/pages/sys-admin/users/search-users.js:315
 msgid "Search users"
-msgstr ""
+msgstr "Wyszukaj użytkowników"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-member-selected.js:76
 #| msgid "selected"
 msgid "Selected"
-msgstr ""
+msgstr "Wybierane"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-member-selected.js:97
 #: frontend/src/components/dialog/department-detail-widget/department-group-member-selected.js:100
@@ -1742,21 +1743,21 @@ msgstr "Dodaj"
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:111
 #| msgid "Members"
 msgid "members"
-msgstr ""
+msgstr "Członkowie grupy"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:128
 #| msgid "No libraries shared with this group"
 msgid "User is already in this group"
-msgstr ""
+msgstr "Użytkownik jest już członkiem tej grupy"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:128
 msgid "It is already shared to user"
-msgstr ""
+msgstr "Ten użytkownik jest już udostępniony."
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:134
 #| msgid "Search groups"
 msgid "Search results"
-msgstr ""
+msgstr "Wyniki wyszukiwania"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:145
 #: frontend/src/components/sf-table/table-main/records-header/select-all.js:51
@@ -1770,19 +1771,19 @@ msgstr ""
 #: frontend/src/tag/views/tag-files/list/index.js:119
 #: frontend/src/tag/views/tag-files/list/index.js:120
 msgid "Select all"
-msgstr ""
+msgstr "Wybierz wszystkie"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:155
 #: frontend/src/tag/views/tag-files/list/index.js:119
 #: frontend/src/tag/views/tag-files/list/index.js:120
 #| msgid "Select all"
 msgid "Unselect all"
-msgstr ""
+msgstr "Odznacz wszystkie"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:185
 #| msgid "No users"
 msgid "No users found"
-msgstr ""
+msgstr "Nie znaleziono użytkowników"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:185
 #: frontend/src/pages/org-admin/departments/department.js:193
@@ -1809,7 +1810,7 @@ msgstr "Brak członków"
 #: frontend/src/metadata/views/kanban/boards/board/header/index.js:62
 #| msgid "Folder"
 msgid "Fold"
-msgstr ""
+msgstr "Zwiń"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group.js:74
 #: frontend/src/components/dialog/image-dialog/index.js:77
@@ -1828,12 +1829,12 @@ msgstr ""
 #: frontend/src/metadata/components/data-process-setter/field-display-settings/index.js:56
 #: frontend/src/metadata/views/kanban/boards/board/header/index.js:62
 msgid "Unfold"
-msgstr ""
+msgstr "Rozwiń"
 
 #: frontend/src/components/dialog/dismiss-group-dialog.js:16
 #| msgid "deleted"
 msgid "Group deleted"
-msgstr ""
+msgstr "Grupa usunięta"
 
 #: frontend/src/components/dialog/dismiss-group-dialog.js:26
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:105
@@ -1844,7 +1845,7 @@ msgstr "Usuń grupę"
 
 #: frontend/src/components/dialog/dismiss-group-dialog.js:28
 msgid "Really want to delete this group?"
-msgstr ""
+msgstr "Czy na pewno chcesz usunąć tę grupę?"
 
 #: frontend/src/components/dialog/edit-repo-commit-labels.js:48
 msgid "Successfully edited labels."
@@ -1858,11 +1859,11 @@ msgstr "Edytuj etykiety"
 #, javascript-format
 #| msgid "Add option"
 msgid "Add option: %s"
-msgstr ""
+msgstr "Dodaj opcję: %s"
 
 #: frontend/src/components/dialog/file-access-log.js:87
 msgid "{placeholder} Access Log"
-msgstr ""
+msgstr "Log dostępu {placeholder}"
 
 #: frontend/src/components/dialog/file-access-log.js:103
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:293
@@ -1952,14 +1953,14 @@ msgstr "Dostęp do tego pliku (najwyraźniej) nie został nigdy uzyskany"
 #: frontend/src/components/dialog/set-webdav-password.js:30
 #: frontend/src/components/share-link-panel/link-creation.js:188
 msgid "Please enter a password."
-msgstr ""
+msgstr "Proszę podać hasło."
 
 #: frontend/src/components/dialog/generate-upload-link.js:146
 #: frontend/src/components/dialog/reset-webdav-password.js:34
 #: frontend/src/components/dialog/set-webdav-password.js:34
 #: frontend/src/components/share-link-panel/link-creation.js:192
 msgid "The password is too short."
-msgstr ""
+msgstr "Hasło jest zbyt krótkie."
 
 #: frontend/src/components/dialog/generate-upload-link.js:154
 #: frontend/src/components/dialog/reset-webdav-password.js:39
@@ -1968,12 +1969,12 @@ msgstr ""
 msgid ""
 "The password is too weak. It should include at least {passwordStrengthLevel}"
 " of the following: number, upper letter, lower letter and other symbols."
-msgstr ""
+msgstr "Hasło jest zbyt słabe. Powinna zawierać co najmniej {passwordStrengthLevel} z następujących: cyfra, wielką literę, małą literę i inne znaki."
 
 #: frontend/src/components/dialog/generate-upload-link.js:162
 #: frontend/src/components/share-link-panel/link-creation.js:208
 msgid "Please select an expiration time"
-msgstr ""
+msgstr "Proszę wybrać termin ważności."
 
 #: frontend/src/components/dialog/generate-upload-link.js:170
 #: frontend/src/components/share-link-panel/link-creation.js:217
@@ -1989,7 +1990,7 @@ msgstr "Proszę podać nieujemną liczbę"
 
 #: frontend/src/components/dialog/generate-upload-link.js:206
 msgid "Upload link is copied to the clipboard."
-msgstr ""
+msgstr "Link przesyłania został skopiowany do schowka."
 
 #: frontend/src/components/dialog/generate-upload-link.js:276
 #: frontend/src/components/dialog/reset-webdav-password.js:69
@@ -1999,7 +2000,7 @@ msgid ""
 "(at least {passwordMinLength} characters and includes "
 "{passwordStrengthLevel} of the following: number, upper letter, lower letter"
 " and other symbols)"
-msgstr ""
+msgstr "Hasło powinno mieć co najmniej {passwordMinLength} znaków i zawierać co najmniej {passwordStrengthLevel} z następujących: cyfra, wielką literę, małą literę i inne znaki."
 
 #: frontend/src/components/dialog/generate-upload-link.js:285
 #: frontend/src/components/dialog/share-dialog.js:121
@@ -2022,7 +2023,7 @@ msgstr "Pokaż"
 #: frontend/src/components/share-link-panel/link-details.js:213
 #| msgid "Expiration days"
 msgid "Expiration date"
-msgstr ""
+msgstr "Termin ważności"
 
 #: frontend/src/components/dialog/generate-upload-link.js:332
 #: frontend/src/components/share-link-panel/link-details.js:229
@@ -2060,51 +2061,51 @@ msgstr "Wygeneruj"
 #: frontend/src/components/dialog/group-invite-members-dialog.js:65
 #| msgid "Internal link has been copied to clipboard"
 msgid "Invitation link has been copied to clipboard"
-msgstr ""
+msgstr "Link zaproszenia został skopiowany do schowka"
 
 #: frontend/src/components/dialog/group-invite-members-dialog.js:80
 #: frontend/src/pages/groups/group-op-menu.js:173
 #| msgid "Invite users"
 msgid "Invite members"
-msgstr ""
+msgstr "Zaproś członków"
 
 #: frontend/src/components/dialog/group-invite-members-dialog.js:84
 #| msgid "No invitations"
 msgid "Group invitation link"
-msgstr ""
+msgstr "Link zaproszenia do grupy"
 
 #: frontend/src/components/dialog/group-invite-members-dialog.js:98
 msgid ""
 "No group invitation link yet. Group invitation link let registered users to "
 "join the group by clicking a link."
-msgstr ""
+msgstr "Brak linku zaproszenia do grupy. Link zaproszenia pozwala zarejestrowanym użytkownikom dołączyć do grupy poprzez kliknięcie linku."
 
 #: frontend/src/components/dialog/group-members-dialog.js:86
 msgid "Group members"
-msgstr ""
+msgstr "Członkowie grupy"
 
 #: frontend/src/components/dialog/guide-for-new-dialog.js:28
 #| msgid "Upload files to {folder_name_placeholder}"
 msgid "Welcome to {site_name_placeholder}"
-msgstr ""
+msgstr "Witamy w {site_name_placeholder}"
 
 #: frontend/src/components/dialog/guide-for-new-dialog.js:30
 msgid ""
 "{site_name_placeholder} organizes files into libraries. Each library can be "
 "synced and shared separately. We have created a personal library for you. "
 "You can create more libraries later."
-msgstr ""
+msgstr "{site_name_placeholder} organizuje pliki w bibliotekach. Każda biblioteka może być synchronizowana i udostępniana osobno. Utworzyliśmy dla Ciebie osobistą bibliotekę. Możesz utworzyć więcej bibliotek później."
 
 #: frontend/src/components/dialog/guide-for-new-dialog.js:31
 msgid ""
 "{site_name_placeholder} organizes files into libraries. Each library can be "
 "synced and shared separately. However, since you are a guest user now, you "
 "can not create libraries."
-msgstr ""
+msgstr "{site_name_placeholder} organizuje pliki w bibliotekach. Każda biblioteka może być synchronizowana i udostępniana osobno. Jednak ponieważ jesteś teraz użytkownikiem gościnnym, nie możesz tworzyć bibliotek."
 
 #: frontend/src/components/dialog/image-dialog/index.js:105
 msgid "The image could not be previewed."
-msgstr ""
+msgstr "Nie można wyświetlić podglądu obrazu."
 
 #: frontend/src/components/dialog/image-dialog/index.js:106
 msgid "Previous (Left arrow key)"
@@ -2124,81 +2125,81 @@ msgstr "Zamknij (Esc)"
 #: frontend/src/metadata/components/data-process-setter/gallery-slider-setter/index.js:71
 #: frontend/src/metadata/components/data-process-setter/gallery-slider-setter/index.js:72
 msgid "Zoom in"
-msgstr ""
+msgstr "Powiększ"
 
 #: frontend/src/components/dialog/image-dialog/index.js:110
 #: frontend/src/components/file-view/image-zoomer.js:119
 #: frontend/src/metadata/components/data-process-setter/gallery-slider-setter/index.js:50
 #: frontend/src/metadata/components/data-process-setter/gallery-slider-setter/index.js:51
 msgid "Zoom out"
-msgstr ""
+msgstr "Pomniejsz"
 
 #: frontend/src/components/dialog/image-dialog/index.js:115
 msgid "View original image"
-msgstr ""
+msgstr "Zobacz oryginalny obraz"
 
 #: frontend/src/components/dialog/image-dialog/index.js:118
 msgid "OCR"
-msgstr ""
+msgstr "OCR"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:69
 #| msgid "Please select an expiration time"
 msgid "Select a Confluence HTML exported file (.html.zip)"
-msgstr ""
+msgstr "Wybierz wyeksportowany plik HTML Confluence (.html.zip)"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:81
 #| msgid "Please select an expiration time"
 msgid "Select a Confluence exported file"
-msgstr ""
+msgstr "Wybierz wyeksportowany plik Confluence"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:90
 msgid "Confluence file imported"
-msgstr ""
+msgstr "Plik Confluence zaimportowany"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:95
 #| msgid "Failed to restore {name}"
 msgid "Failed to import Confluence file"
-msgstr ""
+msgstr "Nie udało się zaimportować pliku Confluence"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:119
 msgid "Import Confluence Wiki"
-msgstr ""
+msgstr "Importuj Wiki Confluence"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:121
 #| msgid "Please select an expiration time"
 msgid "Confluence export file"
-msgstr ""
+msgstr "Wyeksportowany plik Confluence"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:131
 #: frontend/src/components/dialog/insert-file-dialog.js:56
 msgid "Select File"
-msgstr ""
+msgstr "Wybierz plik"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:134
 #| msgid "Clear selected"
 msgid "No file selected"
-msgstr ""
+msgstr "Nie wybrano pliku"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:138
 #| msgid "Please select an expiration time"
 msgid "Select a Confluence HTML export file (.html.zip)"
-msgstr ""
+msgstr "Wybierz wyeksportowany plik HTML Confluence (.html.zip)"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:157
 msgid ""
 "The import process may take several minutes depending on the size of your "
 "Confluence export."
-msgstr ""
+msgstr "Proces importu może zająć kilka minut w zależności od rozmiaru Twojego eksportu Confluence."
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:168
 #| msgid "Exporting..."
 msgid "Importing..."
-msgstr ""
+msgstr "Importowanie..."
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:168
 #| msgid "Import tags"
 msgid "Import"
-msgstr ""
+msgstr "Importuj"
 
 #: frontend/src/components/dialog/import-members-dialog.js:38
 #: frontend/src/components/dialog/org-import-users-dialog.js:38
@@ -2208,7 +2209,7 @@ msgstr "Wybierz plik .xlsx"
 
 #: frontend/src/components/dialog/import-members-dialog.js:51
 msgid "Import members from a .xlsx file"
-msgstr ""
+msgstr "Importuj członków z pliku .xlsx"
 
 #: frontend/src/components/dialog/import-members-dialog.js:54
 #: frontend/src/components/dialog/org-import-users-dialog.js:53
@@ -2227,24 +2228,24 @@ msgstr "Prześlij plik"
 #: frontend/src/components/dialog/import-tags-dialog.js:27
 #: frontend/src/tag/components/tag-view-name/all-tags-operation-toolbar/index.js:86
 msgid "Import tags"
-msgstr ""
+msgstr "Importuj etykiety"
 
 #: frontend/src/components/dialog/import-tags-dialog.js:31
 #| msgid "Import tags"
 msgid "Importing tags..."
-msgstr ""
+msgstr "Importowanie etykiet..."
 
 #: frontend/src/components/dialog/import-wiki-page-dialog.js:27
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-dropdownmenu.js:198
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:230
 #| msgid "Import tags"
 msgid "Import page"
-msgstr ""
+msgstr "Importuj stronę"
 
 #: frontend/src/components/dialog/import-wiki-page-dialog.js:31
 #| msgid "Import tags"
 msgid "Importing page..."
-msgstr ""
+msgstr "Importowanie strony..."
 
 #: frontend/src/components/dialog/internal-link-dialog.js:54
 #: frontend/src/components/dialog/internal-link.js:41
@@ -2264,21 +2265,21 @@ msgstr "Wewnętrzny link do strony w Wiki"
 #: frontend/src/components/dialog/share-dialog.js:278
 #: frontend/src/components/operations/internal-link-operation.js:30
 msgid "Internal Link"
-msgstr ""
+msgstr "Link wewnętrzny"
 
 #: frontend/src/components/dialog/invitation-revoke-dialog.js:35
 msgid "Successfully revoked access of user {placeholder}."
-msgstr ""
+msgstr "Pomyślnie odwołano dostęp użytkownika {placeholder}."
 
 #: frontend/src/components/dialog/invitation-revoke-dialog.js:48
 msgid "Are you sure to revoke access of user {placeholder} ?"
-msgstr ""
+msgstr "Czy na pewno chcesz odwołać dostęp użytkownika {placeholder}?"
 
 #: frontend/src/components/dialog/invitation-revoke-dialog.js:52
 #: frontend/src/pages/invitations/invitations-view.js:104
 #: frontend/src/pages/invitations/invitations-view.js:126
 msgid "Revoke Access"
-msgstr ""
+msgstr "Odwołaj dostęp"
 
 #: frontend/src/components/dialog/invite-people-dialog.js:50
 #: frontend/src/components/dialog/label-repo-state-dialog.js:56
@@ -2293,7 +2294,7 @@ msgstr "Wymagane."
 #: frontend/src/components/dialog/invite-people-dialog.js:66
 #: frontend/src/components/dialog/share-to-invite-people.js:215
 msgid "Email is invalid."
-msgstr ""
+msgstr "Email jest nieprawidłowy."
 
 #: frontend/src/components/dialog/invite-people-dialog.js:80
 #: frontend/src/components/dialog/share-to-invite-people.js:230
@@ -2314,12 +2315,12 @@ msgstr "Pomyślnie zaproszono %(email) i %(num) innych osób."
 #: frontend/src/pages/invitations/invitations-view.js:275
 #: frontend/src/pages/invitations/invitations-view.js:278
 msgid "Invite Guest"
-msgstr ""
+msgstr "Zaproś gościa"
 
 #: frontend/src/components/dialog/invite-people-dialog.js:110
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:67
 msgid "Emails"
-msgstr ""
+msgstr "Emaile"
 
 #: frontend/src/components/dialog/invite-people-dialog.js:115
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:71
@@ -2338,22 +2339,22 @@ msgstr "Pomyślnie dodano etykiety do biblioteki {placeholder}"
 #: frontend/src/components/library-op-menu.js:169
 #: frontend/src/utils/text-translation.js:196
 msgid "Label Current State"
-msgstr ""
+msgstr "Aktualny stan etykiety"
 
 #: frontend/src/components/dialog/leave-group-dialog.js:25
 msgid "Leave Group"
-msgstr ""
+msgstr "Opuść grupę"
 
 #: frontend/src/components/dialog/leave-group-dialog.js:27
 msgid "Really want to leave this group?"
-msgstr ""
+msgstr "Czy na pewno chcesz opuścić tę grupę?"
 
 #: frontend/src/components/dialog/leave-group-dialog.js:31
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:261
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:297
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:309
 msgid "Leave"
-msgstr ""
+msgstr "Opuść"
 
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:63
 #| msgid "Reset library password"
@@ -2380,16 +2381,16 @@ msgstr "Historia"
 
 #: frontend/src/components/dialog/lib-settings.js:109
 msgid "Auto deletion"
-msgstr ""
+msgstr "Automatyczne usuwanie"
 
 #: frontend/src/components/dialog/lib-settings.js:126
 msgid "Extended properties"
-msgstr ""
+msgstr "Rozszerzone właściwości"
 
 #: frontend/src/components/dialog/lib-settings.js:141
 #: frontend/src/metadata/components/dialog/metadata-face-recognition-dialog/index.js:73
 msgid "Face recognition"
-msgstr ""
+msgstr "Rozpoznawanie twarzy"
 
 #: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:61
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:63
@@ -2398,7 +2399,7 @@ msgstr "Pomyślnie ustawiono historię biblioteki."
 
 #: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:117
 msgid "Setting library history is disabled by Admin."
-msgstr ""
+msgstr "Ustawianie historii biblioteki jest wyłączone przez Administratora."
 
 #: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:121
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:124
@@ -2424,19 +2425,19 @@ msgstr "dni"
 
 #: frontend/src/components/dialog/lib-settings/lib-old-files-auto-del-setting-panel.js:47
 msgid "Please enter a positive integer"
-msgstr ""
+msgstr "Proszę podać nieujemną liczbę"
 
 #: frontend/src/components/dialog/lib-settings/lib-old-files-auto-del-setting-panel.js:61
 msgid "Successfully set it."
-msgstr ""
+msgstr "Pomyślnie ustawiono."
 
 #: frontend/src/components/dialog/lib-settings/lib-old-files-auto-del-setting-panel.js:101
 msgid "Do not automatically delete files"
-msgstr ""
+msgstr "Nie automatycznie usuń plików"
 
 #: frontend/src/components/dialog/lib-settings/lib-old-files-auto-del-setting-panel.js:105
 msgid "Automatically delete files that are not modified within certain days:"
-msgstr ""
+msgstr "Automatycznie usuń pliki, które nie zostały zmodyfikowane w ciągu określonej liczby dni:"
 
 #: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:50
 msgid "User Permission"
@@ -2452,13 +2453,13 @@ msgstr "Uprawnienia folderu {placeholder}"
 
 #: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:91
 msgid "Set permission of {placeholder}"
-msgstr ""
+msgstr "Ustaw uprawnienia folderu {placeholder}"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:313
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:276
 #| msgid "Folder"
 msgid "Add Folder"
-msgstr ""
+msgstr "Dodaj folder"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:330
 #: frontend/src/components/dialog/share-to-group.js:413
@@ -2492,7 +2493,7 @@ msgstr "Folder"
 msgid ""
 "Folder permission is only effective after the library is shared to users or "
 "groups. It is used to fine tune sub-folder permissions."
-msgstr ""
+msgstr "Uprawnienia folderu są tylko aktywne po udostępnieniu biblioteki użytkownikom lub grupom. Służy do szczegółowego ustawienia uprawnień podfolderów."
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:352
 #: frontend/src/components/dialog/share-to-group.js:442
@@ -2527,11 +2528,11 @@ msgstr "Brak wyników"
 #: frontend/src/metadata/views/card/card-items/index.js:155
 #| msgid "items"
 msgid "No items"
-msgstr ""
+msgstr "Brak elementów"
 
 #: frontend/src/components/dialog/list-created-files-dialog.js:27
 msgid "Created Files"
-msgstr ""
+msgstr "Utworzone pliki"
 
 #: frontend/src/components/dialog/list-created-files-dialog.js:33
 #: frontend/src/components/dialog/repo-history.js:107
@@ -2550,7 +2551,7 @@ msgstr "Czas"
 
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:80
 msgid "Tagged Files"
-msgstr ""
+msgstr "Otagowane pliki"
 
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:86
 #: frontend/src/components/dialog/search-file-dialog.js:98
@@ -2620,7 +2621,7 @@ msgstr "Ostatnia aktualizacja"
 #: frontend/src/pages/starred/starred.js:195
 #: frontend/src/pages/starred/starred.js:240
 msgid "deleted"
-msgstr ""
+msgstr "Usunięty"
 
 #: frontend/src/components/dialog/move-dirent-dialog.js:308
 msgid "Move selected item(s) to:"
@@ -2628,7 +2629,7 @@ msgstr "Przenieś wybrane elementy do:"
 
 #: frontend/src/components/dialog/move-dirent-dialog.js:310
 msgid "Move {placeholder} to"
-msgstr ""
+msgstr "Przenieś {placeholder} do"
 
 #: frontend/src/components/dialog/my-deleted-repos-dialog/index.js:39
 #: frontend/src/pages/libraries/index.js:442
@@ -2640,18 +2641,18 @@ msgstr "Usunięte biblioteki"
 #: frontend/src/components/dialog/my-deleted-repos-dialog/index.js:48
 #: frontend/src/pages/my-libs/my-libs-deleted.js:61
 msgid "No deleted libraries"
-msgstr ""
+msgstr "Brak usuniętych bibliotek"
 
 #: frontend/src/components/dialog/my-deleted-repos-dialog/index.js:49
 #: frontend/src/pages/my-libs/my-libs-deleted.js:62
 msgid ""
 "You have not deleted any libraries in the last {placeholder} days. A deleted"
 " library will be cleaned automatically after this period."
-msgstr ""
+msgstr "Nie usunięto żadnych bibliotek w ostatnich {placeholder} dniach. Usunięta biblioteka zostanie automatycznie wyczyszczona po tym okresie."
 
 #: frontend/src/components/dialog/my-deleted-repos-dialog/repo-item.js:35
 msgid "Successfully restored the library {library_name}."
-msgstr ""
+msgstr "Pomyślnie przywrócono bibliotekę {library_name}."
 
 #: frontend/src/components/dialog/my-deleted-repos-dialog/repos.js:11
 #: frontend/src/pages/my-libs/my-libs-deleted.js:92
@@ -2760,28 +2761,28 @@ msgstr "Więcej operacji"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-batch-add-admin-dialog.js:41
 #: frontend/src/pages/sys-admin/users/index.js:77
 msgid "Add Admin"
-msgstr ""
+msgstr "Dodaj administratora"
 
 #: frontend/src/components/dialog/org-add-admin-dialog.js:58
 msgid "Select a user as admin"
-msgstr ""
+msgstr "Wybierz użytkownika jako administratora"
 
 #: frontend/src/components/dialog/org-add-department-dialog.js:67
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-department-dialog.js:67
 msgid "New Sub-department"
-msgstr ""
+msgstr "Nowy poddział"
 
 #: frontend/src/components/dialog/org-add-department-dialog.js:67
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-department-dialog.js:67
 #: frontend/src/pages/org-admin/departments/departments-tree-panel.js:48
 #: frontend/src/pages/sys-admin/departments/departments-tree-panel.js:48
 msgid "New Department"
-msgstr ""
+msgstr "Nowy dział"
 
 #: frontend/src/components/dialog/org-add-user-dialog.js:101
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:52
 msgid "email is required"
-msgstr ""
+msgstr "Email jest wymagany"
 
 #: frontend/src/components/dialog/org-add-user-dialog.js:135
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:106
@@ -2811,36 +2812,36 @@ msgstr "Potwierdź hasło"
 #: frontend/src/components/dialog/org-admin-delete-org-dialog.js:42
 #| msgid "Passwords don't match"
 msgid "Names don't match"
-msgstr ""
+msgstr "Nazwy nie pasują"
 
 #: frontend/src/components/dialog/org-admin-delete-org-dialog.js:59
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:228
 #| msgid "Delete Time"
 msgid "Delete Team"
-msgstr ""
+msgstr "Usuń zespół"
 
 #: frontend/src/components/dialog/org-admin-delete-org-dialog.js:63
 msgid "To confirm, type \"{placeholder}\" in the box below"
-msgstr ""
+msgstr "Aby potwierdzić, wpisz \"{placeholder}\" w polu poniżej"
 
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:62
 #: frontend/src/pages/org-admin/org-users-users.js:276
 #: frontend/src/pages/org-admin/org-users-users.js:277
 msgid "Invite users"
-msgstr ""
+msgstr "Zaproś użytkowników"
 
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:64
 msgid ""
 "You can enter multiple emails. An invitation link will be sent to each of "
 "them."
-msgstr ""
+msgstr "Możesz wprowadzić wiele adresów email. Link zaproszenia zostanie wysłany do każdego z nich."
 
 #: frontend/src/components/dialog/org-admin-logs-export-excel-dialog.js:63
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:64
 msgid ""
 "Failed to export. Please check whether the size of table attachments exceeds"
 " the limit."
-msgstr ""
+msgstr "Eksport nie powiódł się. Sprawdź, czy rozmiar załączników tabeli nie przekracza limitu."
 
 #: frontend/src/components/dialog/org-admin-logs-export-excel-dialog.js:95
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:96
@@ -2857,31 +2858,31 @@ msgstr "Wewnętrzny błąd serwera"
 #: frontend/src/components/dialog/org-admin-logs-export-excel-dialog.js:116
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:116
 msgid "Date Invalid."
-msgstr ""
+msgstr "Data nieprawidłowa."
 
 #: frontend/src/components/dialog/org-admin-logs-export-excel-dialog.js:150
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:151
 msgid "Choose date"
-msgstr ""
+msgstr "Wybierz datę"
 
 #: frontend/src/components/dialog/org-admin-logs-export-excel-dialog.js:153
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:154
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:151
 #: frontend/src/components/search/search-filters/filter-by-date.js:240
 msgid "Start date"
-msgstr ""
+msgstr "Data rozpoczęcia"
 
 #: frontend/src/components/dialog/org-admin-logs-export-excel-dialog.js:162
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:163
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:161
 #: frontend/src/components/search/search-filters/filter-by-date.js:250
 msgid "End date"
-msgstr ""
+msgstr "Data zakończenia"
 
 #: frontend/src/components/dialog/org-delete-department-dialog.js:39
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-delete-department-dialog.js:40
 msgid "Delete Department"
-msgstr ""
+msgstr "Usuń dział"
 
 #: frontend/src/components/dialog/org-import-users-dialog.js:51
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:52
@@ -2891,22 +2892,22 @@ msgstr "Importuj użytkowników z pliku .xlsx"
 #: frontend/src/components/dialog/org-rename-department-dialog.js:42
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:72
 msgid "Name updated"
-msgstr ""
+msgstr "Nazwa zaktualizowana"
 
 #: frontend/src/components/dialog/org-rename-department-dialog.js:81
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:76
 msgid "Rename Department"
-msgstr ""
+msgstr "Zmień nazwę działu"
 
 #: frontend/src/components/dialog/org-set-group-quota-dialog.js:40
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:40
 msgid "Quota is invalid."
-msgstr ""
+msgstr "Przydział jest nieprawidłowy."
 
 #: frontend/src/components/dialog/org-set-group-quota-dialog.js:60
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:60
 msgid "The current quota for {group_name} is {quota}"
-msgstr ""
+msgstr "Aktualny przydział dla {group_name} wynosi {quota}"
 
 #: frontend/src/components/dialog/org-set-group-quota-dialog.js:63
 #: frontend/src/components/dialog/sysadmin-dialog/set-quota.js:50
@@ -2920,58 +2921,58 @@ msgstr "Ogranicz przestrzeń"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:66
 #| msgid "Please enter a new password"
 msgid "Please enter a new quota"
-msgstr ""
+msgstr "Proszę wprowadzić nowy przydział"
 
 #: frontend/src/components/dialog/org-set-group-quota-dialog.js:77
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:77
 msgid "An integer that is greater than 0 or equal to -2."
-msgstr ""
+msgstr "Liczba całkowita większa niż 0 lub równa -2."
 
 #: frontend/src/components/dialog/org-set-group-quota-dialog.js:78
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:78
 msgid "Tip: -2 means no limit."
-msgstr ""
+msgstr "Wskazówka: -2 oznacza brak limitu."
 
 #: frontend/src/components/dialog/publish-wiki-dialog.js:66
 msgid "Wiki custom URL deleted"
-msgstr ""
+msgstr "Niestandardowy URL Wiki został usunięty"
 
 #: frontend/src/components/dialog/publish-wiki-dialog.js:91
 msgid "URL is required"
-msgstr ""
+msgstr "URL jest wymagany"
 
 #: frontend/src/components/dialog/publish-wiki-dialog.js:99
 msgid "URL is copied to the clipboard"
-msgstr ""
+msgstr "URL został skopiowany do schowka"
 
 #: frontend/src/components/dialog/publish-wiki-dialog.js:109
 msgid "Publish Wiki"
-msgstr ""
+msgstr "Opublikuj Wiki"
 
 #: frontend/src/components/dialog/publish-wiki-dialog.js:111
 msgid "Customize URL"
-msgstr ""
+msgstr "Dostosuj URL"
 
 #: frontend/src/components/dialog/publish-wiki-dialog.js:127
 msgid ""
 "The custom part of the URL must be between 5 and 30 characters long and may "
 "only contain letters (a-z), numbers, and hyphens."
-msgstr ""
+msgstr "Niestandardowa część URL musi mieć od 5 do 30 znaków i może zawierać tylko litery (a-z), cyfry i myślniki."
 
 #: frontend/src/components/dialog/publish-wiki-dialog.js:133
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:252
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:283
 #| msgid "Publish"
 msgid "Unpublish"
-msgstr ""
+msgstr "Cofnij publikację"
 
 #: frontend/src/components/dialog/remove-webdav-password.js:34
 msgid "Delete WebDAV Password"
-msgstr ""
+msgstr "Usuń hasło WebDAV"
 
 #: frontend/src/components/dialog/remove-webdav-password.js:36
 msgid "Are you sure you want to delete WebDAV password?"
-msgstr ""
+msgstr "Czy na pewno chcesz usunąć hasło WebDAV?"
 
 #: frontend/src/components/dialog/rename-dialog.js:95
 #: frontend/src/metadata/components/dialog/rename-dialog/index.js:59
@@ -2986,25 +2987,25 @@ msgstr "Zmień nazwę folderu"
 #: frontend/src/components/dialog/rename-dialog.js:98
 #| msgid "Rename file"
 msgid "Rename file to"
-msgstr ""
+msgstr "Zmień nazwę pliku na"
 
 #: frontend/src/components/dialog/rename-dialog.js:98
 #| msgid "Rename folder"
 msgid "Rename folder to"
-msgstr ""
+msgstr "Zmień nazwę folderu na"
 
 #: frontend/src/components/dialog/rename-group-dialog.js:55
 msgid "Rename Group"
-msgstr ""
+msgstr "Zmień nazwę grupy"
 
 #: frontend/src/components/dialog/rename-group-dialog.js:57
 msgid "Rename group to"
-msgstr ""
+msgstr "Zmień nazwę grupy na"
 
 #: frontend/src/components/dialog/rename-repo.js:59
 #| msgid "Renamed library"
 msgid "Rename Library"
-msgstr ""
+msgstr "Zmień nazwę biblioteki"
 
 #: frontend/src/components/dialog/rename-wiki-dialog.js:56
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog.js:68
@@ -3014,16 +3015,16 @@ msgstr "Nazwa jest wymagana."
 
 #: frontend/src/components/dialog/rename-wiki-dialog.js:70
 msgid "Rename Wiki"
-msgstr ""
+msgstr "Zmień nazwę Wiki"
 
 #: frontend/src/components/dialog/rename-wiki-dialog.js:72
 #| msgid "Rename Wiki"
 msgid "Rename Wiki to"
-msgstr ""
+msgstr "Zmień nazwę Wiki na"
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:56
 msgid "API token is copied to the clipboard."
-msgstr ""
+msgstr "Token API został skopiowany do schowka."
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:135
 #: frontend/src/components/dialog/trash-dialog/index.js:169
@@ -3082,17 +3083,17 @@ msgstr "Proszę sprawdzić sieć."
 #: frontend/src/components/dialog/repo-api-token-dialog.js:241
 #| msgid "Name"
 msgid "App Name"
-msgstr ""
+msgstr "Nazwa aplikacji"
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:302
 #| msgid "{placeholder} Access Log"
 msgid "{placeholder} API Token"
-msgstr ""
+msgstr "{placeholder} Token API"
 
 #: frontend/src/components/dialog/repo-history.js:73
 #: frontend/src/repo-history.js:96
 msgid "{placeholder} Modification History"
-msgstr ""
+msgstr "{placeholder} Historia modyfikacji"
 
 #: frontend/src/components/dialog/repo-history.js:82
 #: frontend/src/repo-history.js:115
@@ -3171,20 +3172,20 @@ msgstr "Pokaż migawkę"
 #: frontend/src/components/dialog/repo-office-suite-dialog.js:43
 #| msgid "Successfully change the group"
 msgid "Successfully changed the office suite."
-msgstr ""
+msgstr "Pomyślnie zmieniono narzędzie biurowe."
 
 #: frontend/src/components/dialog/repo-office-suite-dialog.js:88
 #| msgid "Select all"
 msgid "Select an office suite"
-msgstr ""
+msgstr "Wybierz narzędzie biurowe"
 
 #: frontend/src/components/dialog/repo-office-suite-dialog.js:103
 msgid "{library_name} Office Suite"
-msgstr ""
+msgstr "Narzędzie biurowe {library_name}"
 
 #: frontend/src/components/dialog/repo-share-admin-dialog.js:55
 msgid "{placeholder} Share Admin"
-msgstr ""
+msgstr "Administrator udostępniania {placeholder}"
 
 #: frontend/src/components/dialog/repo-share-admin-dialog.js:70
 #: frontend/src/components/dialog/repo-share-admin/share-links.js:314
@@ -3204,11 +3205,11 @@ msgstr "Łącza przesyłania"
 
 #: frontend/src/components/dialog/repo-share-admin-dialog.js:83
 msgid "User Shares"
-msgstr ""
+msgstr "Udostępnione grupy"
 
 #: frontend/src/components/dialog/repo-share-admin-dialog.js:88
 msgid "Group Shares"
-msgstr ""
+msgstr "Udostępnione grupy"
 
 #: frontend/src/components/dialog/repo-share-admin/share-links.js:265
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:255
@@ -3230,13 +3231,13 @@ msgstr "Wygaśnięcie"
 #: frontend/src/components/share-link-panel/link-list.js:138
 #: frontend/src/pages/share-admin/share-links.js:621
 msgid "Delete share links"
-msgstr ""
+msgstr "Usuń łącza udostępniania"
 
 #: frontend/src/components/dialog/repo-share-admin/share-links.js:361
 #: frontend/src/components/share-link-panel/link-list.js:139
 #: frontend/src/pages/share-admin/share-links.js:622
 msgid "Are you sure you want to delete the selected share link(s) ?"
-msgstr ""
+msgstr "Czy na pewno chcesz usunąć wybrane łącza udostępniania?"
 
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:164
 #| msgid "Successfully deleted 1 item."
@@ -3247,13 +3248,13 @@ msgstr "Pomyślnie usunięto 1 element"
 #: frontend/src/pages/share-admin/upload-links.js:367
 #| msgid "Successfully deleted 1 share link"
 msgid "Successfully deleted 1 upload link"
-msgstr ""
+msgstr "Pomyślnie usunięto 1 łącze przesyłania"
 
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:223
 #: frontend/src/pages/share-admin/upload-links.js:368
 #| msgid "Successfully deleted {number_placeholder} share links"
 msgid "Successfully deleted {number_placeholder} upload links"
-msgstr ""
+msgstr "Pomyślnie usunięto {number_placeholder} łącze przesyłania"
 
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:248
 #: frontend/src/components/share-link-panel/link-list.js:91
@@ -3261,7 +3262,7 @@ msgstr ""
 #: frontend/src/pages/share-admin/upload-links.js:77
 #| msgid "Select all"
 msgid "Unselect items"
-msgstr ""
+msgstr "Odznacz elementy"
 
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:248
 #: frontend/src/components/share-link-panel/link-list.js:91
@@ -3269,7 +3270,7 @@ msgstr ""
 #: frontend/src/pages/share-admin/upload-links.js:77
 #| msgid "Select all"
 msgid "Select items"
-msgstr ""
+msgstr "Wybierz elementy"
 
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:252
 #: frontend/src/components/dirent-detail/lib-details.js:20
@@ -3306,45 +3307,45 @@ msgstr "Wizyty"
 #: frontend/src/pages/share-admin/upload-links.js:448
 #| msgid "No upload links"
 msgid "Delete upload links"
-msgstr ""
+msgstr "Usuń łącza przesyłania"
 
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:351
 #: frontend/src/pages/share-admin/upload-links.js:449
 #| msgid "Are you sure you want to delete the selected share link(s) ?"
 msgid "Are you sure you want to delete the selected upload link(s) ?"
-msgstr ""
+msgstr "Czy na pewno chcesz usunąć wybrane łącza przesyłania?"
 
 #: frontend/src/components/dialog/reset-encrypted-repo-password-dialog.js:43
 msgid ""
 "New password has been sent to your email {mail}. Please check your mailbox. "
 "If you don’t receive the password, please check if your email address is "
 "properly configured."
-msgstr ""
+msgstr "Nowa hasło zostało wysłane na Twój adres email {mail}. Proszę sprawdzić swoją skrzynkę pocztową. Jeśli nie otrzymałeś hasła, proszę sprawdzić, czy adres email jest poprawnie skonfigurowany."
 
 #: frontend/src/components/dialog/reset-encrypted-repo-password-dialog.js:48
 msgid "Reset library password"
-msgstr ""
+msgstr "Zresetuj hasło biblioteki"
 
 #: frontend/src/components/dialog/reset-encrypted-repo-password-dialog.js:52
 msgid "Sending new password..."
-msgstr ""
+msgstr "Wysyłanie nowego hasła..."
 
 #: frontend/src/components/dialog/reset-webdav-password.js:73
 msgid "Reset WebDAV Password"
-msgstr ""
+msgstr "Zresetuj hasło WebDAV"
 
 #: frontend/src/components/dialog/save-shared-dir-dialog.js:56
 #: frontend/src/components/dialog/save-shared-file-dialog.js:64
 msgid "Save to:"
-msgstr ""
+msgstr "Zapisz do:"
 
 #: frontend/src/components/dialog/seahub-io-dialog.js:25
 msgid "Exporting"
-msgstr ""
+msgstr "Eksportowanie"
 
 #: frontend/src/components/dialog/seahub-io-dialog.js:30
 msgid "Exporting..."
-msgstr ""
+msgstr "Eksportowanie..."
 
 #: frontend/src/components/dialog/search-file-dialog.js:84
 #: frontend/src/components/search/search-by-name.js:58
@@ -3359,7 +3360,7 @@ msgstr "Brak rezultatu"
 #: frontend/src/components/dialog/select-dirent-body.js:81
 #| msgid "Please select a library to share."
 msgid "Please select a library or folder first."
-msgstr ""
+msgstr "Proszę wybrać bibliotekę lub folder first."
 
 #: frontend/src/components/dialog/select-dirent-body.js:149
 #: frontend/src/components/file-chooser/repo-list-wrapper.js:58
@@ -3376,20 +3377,20 @@ msgstr "Inne biblioteki"
 #: frontend/src/components/dialog/select-dirent-body.js:163
 #| msgid "Space Used"
 msgid "Recently Used"
-msgstr ""
+msgstr "Ostatnio używane"
 
 #: frontend/src/components/dialog/select-dirent-body.js:199
 #| msgid "New Folder"
 msgid "New folder"
-msgstr ""
+msgstr "Nowy folder"
 
 #: frontend/src/components/dialog/set-org-user-contact-email.js:58
 msgid "Set user contact email"
-msgstr ""
+msgstr "Ustaw kontaktowy email użytkownika"
 
 #: frontend/src/components/dialog/set-org-user-default-quota.js:64
 msgid "Set user default quota"
-msgstr ""
+msgstr "Ustaw domyślny limit przestrzeni dla użytkownika"
 
 #: frontend/src/components/dialog/set-org-user-default-quota.js:71
 #: frontend/src/components/dialog/set-org-user-quota.js:73
@@ -3404,15 +3405,15 @@ msgstr "Ustaw nazwę użytkownika"
 
 #: frontend/src/components/dialog/set-org-user-quota.js:66
 msgid "Set user quota"
-msgstr ""
+msgstr "Ustaw limit przestrzeni dla użytkownika"
 
 #: frontend/src/components/dialog/set-webdav-password.js:73
 msgid "Set WebDAV Password"
-msgstr ""
+msgstr "Ustaw hasło WebDAV"
 
 #: frontend/src/components/dialog/share-admin-link.js:23
 msgid "The link is copied to the clipboard."
-msgstr ""
+msgstr "Link został skopiowany do schowka."
 
 #: frontend/src/components/dialog/share-dialog.js:114
 #: frontend/src/components/dialog/share-dialog.js:272
@@ -3434,11 +3435,11 @@ msgstr "Udostępnij grupie"
 
 #: frontend/src/components/dialog/share-dialog.js:151
 msgid "Custom sharing permissions"
-msgstr ""
+msgstr "Własne uprawnienia udostępniania"
 
 #: frontend/src/components/dialog/share-dialog.js:167
 msgid "Share to other server"
-msgstr ""
+msgstr "Udostępnij innemu serwerowi"
 
 #: frontend/src/components/dialog/share-dialog.js:329
 #: frontend/src/components/dialog/share-wiki-dialog.js:161
@@ -3473,7 +3474,7 @@ msgstr "ikona"
 
 #: frontend/src/components/dialog/share-repo-dialog.js:109
 msgid "Please select a library to share."
-msgstr ""
+msgstr "Proszę wybrać bibliotekę do udostępnienia."
 
 #: frontend/src/components/dialog/share-repo-dialog.js:125
 msgid "Select libraries to share"
@@ -3488,13 +3489,13 @@ msgstr "Zapraszający"
 #: frontend/src/components/dialog/share-to-other-server.js:233
 #| msgid "At server"
 msgid "Server"
-msgstr ""
+msgstr "Serwer"
 
 #: frontend/src/components/dialog/share-to-other-server.js:91
 #: frontend/src/components/dialog/share-to-other-server.js:234
 #| msgid "Email"
 msgid "User Email"
-msgstr ""
+msgstr "Email użytkownika"
 
 #: frontend/src/components/dialog/share-to-other-server.js:205
 #: frontend/src/components/share-link-panel/link-authenticated-emails.js:118
@@ -3506,7 +3507,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/users.js:293
 #: frontend/src/pages/sys-admin/users/users.js:317
 msgid "It may take some time, please wait."
-msgstr ""
+msgstr "Może to zająć trochę czasu, proszę czekać."
 
 #: frontend/src/components/dialog/share-to-other-server.js:211
 #: frontend/src/pages/invitations/invitations-view.js:53
@@ -3534,7 +3535,7 @@ msgstr "Pomyślnie usunięto 1 element."
 #: frontend/src/components/dialog/share-to-other-server.js:243
 #| msgid "Select a user"
 msgid "Select a server"
-msgstr ""
+msgstr "Wybierz serwer"
 
 #: frontend/src/components/dialog/share-to-user.js:345
 #: frontend/src/components/dialog/share-to-user.js:370
@@ -3542,7 +3543,7 @@ msgstr ""
 #: frontend/src/components/dialog/share-to-user.js:499
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:183
 msgid "Library can not be shared to owner."
-msgstr ""
+msgstr "Biblioteka nie może być udostępniona właścicielowi."
 
 #: frontend/src/components/dialog/share-to-user.js:547
 #| msgid "Search users"
@@ -3551,47 +3552,47 @@ msgstr "Przeszukaj użytkowników..."
 
 #: frontend/src/components/dialog/sort-options.js:19
 msgid "By name ascending"
-msgstr ""
+msgstr "Według nazwy rosnąco"
 
 #: frontend/src/components/dialog/sort-options.js:20
 msgid "By name descending"
-msgstr ""
+msgstr "Według nazwy malejąco"
 
 #: frontend/src/components/dialog/sort-options.js:21
 msgid "By size ascending"
-msgstr ""
+msgstr "Według rozmiaru rosnąco"
 
 #: frontend/src/components/dialog/sort-options.js:22
 msgid "By size descending"
-msgstr ""
+msgstr "Według rozmiaru malejąco"
 
 #: frontend/src/components/dialog/sort-options.js:23
 msgid "By time ascending"
-msgstr ""
+msgstr "Według czasu rosnąco"
 
 #: frontend/src/components/dialog/sort-options.js:24
 msgid "By time descending"
-msgstr ""
+msgstr "Według czasu malejąco"
 
 #: frontend/src/components/dialog/sysadmin-dialog/add-department-v2-dialog.js:73
 #| msgid "No department"
 msgid "Add department at"
-msgstr ""
+msgstr "Dodaj dział w"
 
 #: frontend/src/components/dialog/sysadmin-dialog/add-department-v2-dialog.js:75
 #| msgid "Change to department"
 msgid "Create top department"
-msgstr ""
+msgstr "Utwórz główny dział"
 
 #: frontend/src/components/dialog/sysadmin-dialog/delete-department-v2-confirm-dialog.js:19
 #| msgid "Delete Department"
 msgid "Delete department"
-msgstr ""
+msgstr "Usuń dział"
 
 #: frontend/src/components/dialog/sysadmin-dialog/delete-department-v2-confirm-dialog.js:23
 #| msgid "Are you sure to delete "
 msgid "Are you sure to delete"
-msgstr ""
+msgstr "Czy na pewno chcesz usunąć"
 
 #: frontend/src/components/dialog/sysadmin-dialog/rename-department-v2-dialog.js:68
 #: frontend/src/components/library-op-menu.js:154
@@ -3615,11 +3616,11 @@ msgstr "Liczba większa lub równa 0."
 
 #: frontend/src/components/dialog/sysadmin-dialog/set-upload-download-rate-limit.js:51
 msgid "Set Upload Rate Limit"
-msgstr ""
+msgstr "Ustaw limit prędkości wysyłania"
 
 #: frontend/src/components/dialog/sysadmin-dialog/set-upload-download-rate-limit.js:51
 msgid "Set Download Rate Limit"
-msgstr ""
+msgstr "Ustaw limit prędkości pobierania"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-depart-member-v2-dialog.js:59
 #: frontend/src/pages/org-admin/departments/departments-node-dropdown-menu.js:19
@@ -3644,15 +3645,15 @@ msgstr "Dodaj członka"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog.js:72
 msgid "Version Number is required."
-msgstr ""
+msgstr "Numer wersji jest wymagany."
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog.js:76
 msgid "Version Number must be a number."
-msgstr ""
+msgstr "Numer wersji musi być liczbą."
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog.js:80
 msgid "Text is required."
-msgstr ""
+msgstr "Tekst jest wymagany."
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog.js:103
 msgid "Update Terms and Conditions"
@@ -3688,12 +3689,12 @@ msgstr "Wyłączone"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-org-dialog.js:76
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-user-dialog.js:103
 msgid "Passwords do not match."
-msgstr ""
+msgstr "Hasła nie pasują do siebie."
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-org-dialog.js:92
 #: frontend/src/pages/sys-admin/orgs/orgs.js:147
 msgid "Add Organization"
-msgstr ""
+msgstr "Dodaj organizację"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-org-dialog.js:101
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-group-dialog.js:77
@@ -3767,7 +3768,7 @@ msgstr "(Jeśli puste, właścicielem będzie admin)"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog.js:52
 #: frontend/src/components/dialog/transfer-dialog.js:190
 msgid "Select a user"
-msgstr ""
+msgstr "Wybierz użytkownika"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-delete-member-dialog.js:41
 #: frontend/src/pages/org-admin/departments/member-item.js:130
@@ -3779,7 +3780,7 @@ msgstr "Usuń członka"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog.js:43
 msgid "Transfer Group {placeholder} to"
-msgstr ""
+msgstr "Przenieś grupę {placeholder} do"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:113
 msgid "{placeholder} History Setting"
@@ -3787,69 +3788,69 @@ msgstr "Ustawienia historii {placeholder}"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-move-group-dialog.js:130
 msgid "Department moved successfully"
-msgstr ""
+msgstr "Dział został pomyślnie przeniesiony"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-move-group-dialog.js:142
 #| msgid "Change to department"
 msgid "Move to department"
-msgstr ""
+msgstr "Przenieś do działu"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-move-group-dialog.js:158
 #| msgid "Select a department"
 msgid "Select target department"
-msgstr ""
+msgstr "Wybierz docelowy dział"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-move-group-dialog.js:174
 #| msgid "Select a department"
 msgid "Search departments"
-msgstr ""
+msgstr "Wyszukaj działy"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-move-group-dialog.js:196
 #| msgid "User not found"
 msgid "Department not found"
-msgstr ""
+msgstr "Dział nie znaleziony"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-move-group-dialog.js:196
 #: frontend/src/components/user-select.js:278
 #: frontend/src/pages/dashboard/log-repo-selector.js:132
 #: frontend/src/pages/dashboard/log-user-selector.js:165
 msgid "Enter characters to start searching"
-msgstr ""
+msgstr "Wprowadź znaki, aby rozpocząć wyszukiwanie"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:37
 msgid "Department renamed"
-msgstr ""
+msgstr "Nazwa działu została zmieniona"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-max-user-number-dialog.js:51
 msgid "Set max number of members"
-msgstr ""
+msgstr "Ustaw maksymalną liczbę członków"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-name-dialog.js:51
 #: frontend/src/pages/sys-admin/users/user-info.js:68
 msgid "Set Name"
-msgstr ""
+msgstr "Ustaw nazwę"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-user-deactivate-dialog.js:34
 #: frontend/src/pages/org-admin/org-user-item.js:197
 #| msgid "Set user name"
 msgid "Set user inactive"
-msgstr ""
+msgstr "Ustaw użytkownika jako nieaktywnego"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-user-deactivate-dialog.js:39
 #| msgid "Are you sure you want to delete the selected share link(s) ?"
 msgid "Do you want to keep the library sharing relationships?"
-msgstr ""
+msgstr "Czy chcesz zachować relacje udostępniania biblioteki?"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-user-deactivate-dialog.js:50
 #: frontend/src/components/dialog/transfer-dialog.js:201
 #: frontend/src/components/dialog/transfer-dialog.js:227
 msgid "Keep sharing"
-msgstr ""
+msgstr "Zachowaj udostępnianie"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-user-deactivate-dialog.js:63
 #| msgid "Keep sharing"
 msgid "Do not keep sharing"
-msgstr ""
+msgstr "Nie zachowuj udostępniania"
 
 #: frontend/src/components/dialog/terms-editor-dialog.js:44
 #: frontend/src/components/dialog/terms-preview-dialog.js:21
@@ -3858,25 +3859,25 @@ msgstr ""
 #: frontend/src/components/main-side-nav.js:335
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:322
 msgid "Terms"
-msgstr ""
+msgstr "Warunki"
 
 #: frontend/src/components/dialog/tip-dialog.js:10
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:224
 msgid "Import sdoc"
-msgstr ""
+msgstr "Importuj sdoc"
 
 #: frontend/src/components/dialog/tip-dialog.js:13
 #| msgid "Converting, please wait..."
 msgid "Importing sdoc, please wait..."
-msgstr ""
+msgstr "Importowanie sdoc, proszę czekać..."
 
 #: frontend/src/components/dialog/transfer-dialog.js:166
 msgid "Transfer to user"
-msgstr ""
+msgstr "Przenieś do użytkownika"
 
 #: frontend/src/components/dialog/transfer-dialog.js:177
 msgid "Transfer to department"
-msgstr ""
+msgstr "Przenieś do działu"
 
 #: frontend/src/components/dialog/transfer-dialog.js:187
 #: frontend/src/pages/institution-admin/side-panel.js:28
@@ -3902,7 +3903,7 @@ msgstr "Użytkownicy"
 #| msgid ""
 #| "the library is shared to another user, the sharing will be ketp."
 msgid "If the library is shared to another user, the sharing will be kept."
-msgstr ""
+msgstr "Jeśli biblioteka jest udostępniona innemu użytkownikowi, udostępnianie zostanie zachowane."
 
 #: frontend/src/components/dialog/transfer-dialog.js:207
 #: frontend/src/pages/org-admin/departments/departments.js:387
@@ -3910,7 +3911,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/departments/departments.js:415
 #: frontend/src/pages/sys-admin/side-panel.js:126
 msgid "Departments"
-msgstr ""
+msgstr "Działy"
 
 #: frontend/src/components/dialog/transfer-dialog.js:216
 #| msgid "Select a department"
@@ -3922,16 +3923,16 @@ msgstr "Wyszukaj dział"
 #| " library is shared to another department, the sharing will be ketp."
 msgid ""
 "If the library is shared to another department, the sharing will be kept."
-msgstr ""
+msgstr "Jeśli biblioteka jest udostępniona innemu działowi, udostępnianie zostanie zachowane."
 
 #: frontend/src/components/dialog/transfer-dialog.js:245
 msgid "Transfer Library {library_name}"
-msgstr ""
+msgstr "Przenieś bibliotekę {library_name}"
 
 #: frontend/src/components/dialog/transfer-group-dialog.js:44
 #| msgid "Group has been transfered"
 msgid "Group has been transferred"
-msgstr ""
+msgstr "Grupa została przeniesiona"
 
 #: frontend/src/components/dialog/transfer-group-dialog.js:60
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:104
@@ -3940,7 +3941,7 @@ msgstr "Prześlij grupę"
 
 #: frontend/src/components/dialog/transfer-group-dialog.js:62
 msgid "Transfer group to"
-msgstr ""
+msgstr "Przenieś grupę do"
 
 #: frontend/src/components/dialog/transfer-group-dialog.js:65
 msgid "Please enter 1 or more character"
@@ -3949,27 +3950,27 @@ msgstr "Proszę podać 1 lub więcej znaków"
 #: frontend/src/components/dialog/trash-dialog/index.js:105
 #| msgid "Search files"
 msgid "Search failed"
-msgstr ""
+msgstr "Wyszukiwanie nie powiodło się"
 
 #: frontend/src/components/dialog/trash-dialog/index.js:229
 #: frontend/src/repo-folder-trash.js:186
 msgid "{placeholder} Trash"
-msgstr ""
+msgstr "{placeholder} Kosz"
 
 #: frontend/src/components/dialog/trash-dialog/index.js:239
 msgid "Visit old version page"
-msgstr ""
+msgstr "Odwiedź stronę starej wersji"
 
 #: frontend/src/components/dialog/trash-dialog/index.js:264
 #| msgid "Search"
 msgid "Search in trash"
-msgstr ""
+msgstr "Wyszukaj w koszu"
 
 #: frontend/src/components/dialog/trash-dialog/index.js:268
 #: frontend/src/components/dirent-grid-view/dirent-grid-view.js:883
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:808
 msgid "No file"
-msgstr ""
+msgstr "Brak pliku"
 
 #: frontend/src/components/dialog/trash-dialog/index.js:273
 #: frontend/src/components/shared-file-view/shared-file-view.js:135
@@ -3984,7 +3985,7 @@ msgstr "Aktualna ścieżka: "
 #: frontend/src/repo-folder-trash.js:343 frontend/src/repo-snapshot.js:278
 #| msgid "Restored file"
 msgid "Restored 1 item"
-msgstr ""
+msgstr "Przywrócono 1 element"
 
 #: frontend/src/components/dialog/trash-dialog/table/file-records/file-record.js:84
 #: frontend/src/components/dialog/trash-dialog/table/file-records/file-record.js:128
@@ -4004,7 +4005,7 @@ msgstr "Plik"
 #: frontend/src/components/dialog/trash-dialog/table/index.js:13
 #: frontend/src/repo-folder-trash.js:254
 msgid "Original path"
-msgstr ""
+msgstr "Oryginalna ścieżka"
 
 #: frontend/src/components/dialog/trash-dialog/table/index.js:14
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:24
@@ -4014,54 +4015,54 @@ msgstr ""
 #: frontend/src/repo-folder-trash.js:255
 #| msgid "Deleted Time"
 msgid "Deleted time"
-msgstr ""
+msgstr "Czas usunięcia"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-creator.js:106
 #| msgid "Deleted"
 msgid "Deleted by"
-msgstr ""
+msgstr "Usunięty przez"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-creator.js:125
 #: frontend/src/components/search/search-filters/filter-by-creator.js:125
 #| msgid "Search users"
 msgid "Search user"
-msgstr ""
+msgstr "Wyszukaj użytkownika"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:32
 #: frontend/src/components/search/search-filters/filter-by-date.js:58
 #: frontend/src/metadata/constants/filter/filter-modifier.js:28
 msgid "Today"
-msgstr ""
+msgstr "Dzisiaj"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:35
 #: frontend/src/components/search/search-filters/filter-by-date.js:61
 #| msgid "Last Update"
 msgid "Last 7 days"
-msgstr ""
+msgstr "Ostatnie 7 dni"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:38
 #: frontend/src/components/search/search-filters/filter-by-date.js:64
 #| msgid "Last Update"
 msgid "Last 30 days"
-msgstr ""
+msgstr "Ostatnie 30 dni"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:43
 #: frontend/src/components/search/search-filters/filter-by-date.js:69
 #| msgid "Custom properties"
 msgid "Custom time"
-msgstr ""
+msgstr "Niestandardowy czas"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-suffix.js:57
 #: frontend/src/components/search/search-filters/filter-by-suffix.js:54
 #: frontend/src/metadata/utils/column/index.js:215
 #| msgid "File status"
 msgid "File suffix"
-msgstr ""
+msgstr "Rozszerzenie pliku"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-suffix.js:66
 #: frontend/src/components/search/search-filters/filter-by-suffix.js:63
 msgid "Separate multiple suffixes by \",\"(like sdoc, pdf)"
-msgstr ""
+msgstr "Oddziel wiele rozszerzeń przecinkiem \"\" (np. sdoc, pdf)"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-suffix.js:78
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-suffix.js:79
@@ -4079,12 +4080,12 @@ msgstr "Wyczyść"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-trash.js:90
 msgid "Search failed. Please try again."
-msgstr ""
+msgstr "Wyszukiwanie nie powiodło się. Spróbuj ponownie."
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-trash.js:122
 #| msgid "Search users"
 msgid "Search in trash..."
-msgstr ""
+msgstr "Wyszukaj w koszu..."
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-trash.js:133
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-trash.js:134
@@ -4094,21 +4095,21 @@ msgstr ""
 #: frontend/src/components/search/search.js:1025
 #| msgid "Clear Trash"
 msgid "Clear search"
-msgstr ""
+msgstr "Wyczyść wyszukiwanie"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-trash.js:139
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-trash.js:140
 #: frontend/src/components/search/search.js:975
 #: frontend/src/components/search/search.js:976
 msgid "Hide advanced search"
-msgstr ""
+msgstr "Ukryj zaawansowane wyszukiwanie"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-trash.js:139
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-trash.js:140
 #: frontend/src/components/search/search.js:975
 #: frontend/src/components/search/search.js:976
 msgid "Show advanced search"
-msgstr ""
+msgstr "Pokaż zaawansowane wyszukiwanie"
 
 #: frontend/src/components/dialog/upload-remind-dialog.js:36
 msgid "Replace file {filename}?"
@@ -4139,7 +4140,7 @@ msgid ""
 "Password must be at least 8 characters long and contain different "
 "characters: uppercase letters, lowercase letters, numbers, and special "
 "symbols"
-msgstr ""
+msgstr "Hasło musi mieć co najmniej 8 znaków i zawierać różne znaki: wielkie litery, małe litery, cyfry i znaki specjalne"
 
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:23
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:28
@@ -4153,16 +4154,16 @@ msgstr "Siła hasła powinna być silna lub bardzo silna"
 
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:42
 msgid "Password set"
-msgstr ""
+msgstr "Hasło ustawione"
 
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:54
 msgid "Set password"
-msgstr ""
+msgstr "Ustaw hasło"
 
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:64
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:76
 msgid "Confirm password"
-msgstr ""
+msgstr "Potwierdź hasło"
 
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:24
 msgid "Current password cannot be blank"
@@ -4170,20 +4171,20 @@ msgstr "Aktualne hasło nie może być puste"
 
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:40
 msgid "New password cannot be the same as old password"
-msgstr ""
+msgstr "Nowe hasło nie może być takie samo jak stare hasło"
 
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:49
 #: frontend/src/components/user-settings/webdav-password.js:37
 msgid "Password updated"
-msgstr ""
+msgstr "Hasło zaktualizowane"
 
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:60
 msgid "Update password"
-msgstr ""
+msgstr "Zaktualizuj hasło"
 
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:65
 msgid "Current password"
-msgstr ""
+msgstr "Aktualne hasło"
 
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:71
 msgid "New password"
@@ -4191,21 +4192,21 @@ msgstr "Nowe hasło"
 
 #: frontend/src/components/dialog/view-link-dialog.js:22
 msgid "Link has been copied to clipboard"
-msgstr ""
+msgstr "Link został skopiowany do schowka"
 
 #: frontend/src/components/dialog/wiki-convert-status-dialog.js:25
 #| msgid "Convert Wiki"
 msgid "Converting"
-msgstr ""
+msgstr "Konwertowanie"
 
 #: frontend/src/components/dialog/wiki-convert-status-dialog.js:30
 #| msgid "Exporting..."
 msgid "Converting..."
-msgstr ""
+msgstr "Konwertowanie..."
 
 #: frontend/src/components/dialog/zip-download-dialog.js:73
 msgid "Failed to download. The total size of the files exceeded the limit."
-msgstr ""
+msgstr "Nie udało się pobrać. Całkowity rozmiar plików przekroczył limit."
 
 #: frontend/src/components/dialog/zip-download-dialog.js:153
 msgid "Packaging..."
@@ -4214,7 +4215,7 @@ msgstr "Pakowanie..."
 #: frontend/src/components/dir-view-mode/dir-others/index.js:64
 #: frontend/src/metadata/constants/view/statistics.js:12
 msgid "Others"
-msgstr ""
+msgstr "Inne"
 
 #: frontend/src/components/dir-view-mode/dir-others/index.js:80
 #: frontend/src/components/history-trash-file-view/file-view.js:33
@@ -4229,7 +4230,7 @@ msgstr "Kosz"
 #: frontend/src/components/dir-view-mode/dir-others/library-more-operations/my-library-more-operations.js:119
 #| msgid "Successfully restored the library."
 msgid "Successfully renamed the library."
-msgstr ""
+msgstr "Pomyślnie zmieniono nazwę biblioteki."
 
 #: frontend/src/components/dir-view-mode/dir-others/library-more-operations/department-library-more-operations.js:114
 #: frontend/src/components/dir-view-mode/dir-others/library-more-operations/my-library-more-operations.js:131
@@ -4254,22 +4255,22 @@ msgstr "Więcej"
 #: frontend/src/components/dir-view-mode/dir-others/watch-unwatch-file-changes.js:26
 #| msgid "Successfully restored the library."
 msgid "Successfully watched the library."
-msgstr ""
+msgstr "Pomyślnie obserwowano bibliotekę."
 
 #: frontend/src/components/dir-view-mode/dir-others/watch-unwatch-file-changes.js:38
 #| msgid "Successfully restored the library."
 msgid "Successfully unwatched the library."
-msgstr ""
+msgstr "Pomyślnie zaprzestano obserwacji biblioteki."
 
 #: frontend/src/components/dir-view-mode/dir-others/watch-unwatch-file-changes.js:50
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:332
 msgid "Unwatch File Changes"
-msgstr ""
+msgstr "Przestań obserwować zmiany plików"
 
 #: frontend/src/components/dir-view-mode/dir-others/watch-unwatch-file-changes.js:50
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:329
 msgid "Watch File Changes"
-msgstr ""
+msgstr "Obserwuj zmiany plików"
 
 #: frontend/src/components/dir-view-mode/dir-tags/index.js:49
 #: frontend/src/components/dir-view-mode/dir-tags/index.js:70
@@ -4277,21 +4278,21 @@ msgstr ""
 #: frontend/src/tag/components/tag-view-name/all-tags-operation-toolbar/index.js:92
 #| msgid "New Tag"
 msgid "New tag"
-msgstr ""
+msgstr "Nowy tag"
 
 #: frontend/src/components/dir-view-mode/extension-prompts/index.js:15
 msgid "Extension Prompts"
-msgstr ""
+msgstr "Podpowiedzi rozszerzeń"
 
 #: frontend/src/components/dir-view-mode/extension-prompts/index.js:19
 msgid "Bell Icon"
-msgstr ""
+msgstr "Ikona dzwonka"
 
 #: frontend/src/components/dir-view-mode/extension-prompts/index.js:23
 msgid ""
 "Turn on extensible properties and views to experience a new way of managing "
 "files"
-msgstr ""
+msgstr "Włącz rozszerzalne właściwości i widoki, aby doświadczyć nowego sposobu zarządzania plikami"
 
 #: frontend/src/components/dirent-detail/detail-list-view.js:72
 #: frontend/src/components/dirent-detail/detail-list-view.js:96
@@ -4303,7 +4304,7 @@ msgstr "Położenie"
 #: frontend/src/components/dirent-detail/detail-list-view.js:79
 #: frontend/src/components/dirent-detail/detail-list-view.js:102
 msgid "Edit metadata properties"
-msgstr ""
+msgstr "Edytuj właściwości metadanych"
 
 #: frontend/src/components/dirent-detail/dirent-details/dir-details.js:15
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:65
@@ -4312,68 +4313,68 @@ msgstr ""
 #: frontend/src/components/search/search-filters/filter-by-date.js:49
 #: frontend/src/metadata/utils/column/index.js:171
 msgid "Last modified time"
-msgstr ""
+msgstr "Czas ostatniej modyfikacji"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/file-tag.js:32
 #: frontend/src/components/dirent-detail/multi-selection-details/dirents-tags-editor.js:184
 #: frontend/src/metadata/components/detail-editor/tags-editor/index.js:136
 #| msgid "Edit Quota"
 msgid "Edit tags"
-msgstr ""
+msgstr "Edytuj tagi"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:22
 msgid "Dimensions"
-msgstr ""
+msgstr "Wymiary"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:24
 msgid "Device make"
-msgstr ""
+msgstr "Marka urządzenia"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:26
 msgid "Device model"
-msgstr ""
+msgstr "Model urządzenia"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:28
 msgid "Color space"
-msgstr ""
+msgstr "Przestrzeń kolorów"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:30
 #: frontend/src/metadata/utils/column/index.js:207
 msgid "Capture time"
-msgstr ""
+msgstr "Czas przechwytywania"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:32
 msgid "Focal length"
-msgstr ""
+msgstr "Ogniskowa"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:34
 msgid "F number"
-msgstr ""
+msgstr "Przysłona"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:36
 msgid "Exposure time"
-msgstr ""
+msgstr "Czas naświetlania"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:50
 msgid "mm"
-msgstr ""
+msgstr "mm"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:52
 msgid "s"
-msgstr ""
+msgstr "s"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:64
 #: frontend/src/metadata/utils/column/index.js:177
 msgid "Last modifier"
-msgstr ""
+msgstr "Ostatni modyfikujący"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:116
 msgid "General information"
-msgstr ""
+msgstr "Informacje ogólne"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:120
 msgid "Capture information"
-msgstr ""
+msgstr "Informacje o przechwycie"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:125
 #: frontend/src/components/dirent-detail/multi-selection-details/dirents-tags-editor.js:179
@@ -4399,25 +4400,25 @@ msgstr "Pusto"
 #: frontend/src/components/dirent-detail/multi-selection-details/index.js:205
 #| msgid "xxx cells selected"
 msgid "{xxx} items have been selected"
-msgstr ""
+msgstr "{xxx} elementów zostało wybranych"
 
 #: frontend/src/components/dirent-detail/multi-selection-details/index.js:209
 #| msgid "Loading"
 msgid "Loading metadata..."
-msgstr ""
+msgstr "Ładowanie metadanych..."
 
 #: frontend/src/components/dirent-detail/people/index.js:28
 #: frontend/src/components/dirent-detail/people/index.js:29
 #: frontend/src/metadata/views/face-recognition/index.js:40
 #: frontend/src/metadata/views/face-recognition/peoples/people/index.js:31
 msgid "Unknown people"
-msgstr ""
+msgstr "Nieznane osoby"
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:356
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:771
 #: frontend/src/pages/wiki2/top-nav/index.js:37
 msgid "freezed"
-msgstr ""
+msgstr "zamrożony"
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:356
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:771
@@ -4429,26 +4430,26 @@ msgstr "zablokowany"
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:357
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:765
 msgid "Frozen by {name}"
-msgstr ""
+msgstr "Zamrożony przez {name}"
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:357
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:765
 msgid "locked by {name}"
-msgstr ""
+msgstr "zablokowany przez {name}"
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-view.js:477
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:234
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:88
 #| msgid "Successfully unstarred {library_name_placeholder}."
 msgid "Successfully unstarred {name_placeholder}."
-msgstr ""
+msgstr "Pomyślnie usunięto gwiazdkę z {name_placeholder}."
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-view.js:487
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:244
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:98
 #| msgid "Successfully starred {library_name_placeholder}."
 msgid "Successfully starred {name_placeholder}."
-msgstr ""
+msgstr "Pomyślnie dodano gwiazdkę do {name_placeholder}."
 
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:801
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:802
@@ -4456,7 +4457,7 @@ msgstr ""
 #: frontend/src/pages/share-admin/upload-links.js:197
 #| msgid "Unselect"
 msgid "Unselect this item"
-msgstr ""
+msgstr "Odznacz ten element"
 
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:801
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:802
@@ -4464,7 +4465,7 @@ msgstr ""
 #: frontend/src/pages/share-admin/upload-links.js:197
 #| msgid "Select File"
 msgid "Select this item"
-msgstr ""
+msgstr "Zaznacz ten element"
 
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:812
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:896
@@ -4497,28 +4498,28 @@ msgstr "Gwiazdka"
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:680
 #| msgid "Select all"
 msgid "Unselect all items"
-msgstr ""
+msgstr "Odznacz wszystkie elementy"
 
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:679
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:680
 #| msgid "Select all"
 msgid "Select all items"
-msgstr ""
+msgstr "Zaznacz wszystkie elementy"
 
 #: frontend/src/components/dirent-list-view/dirent-none-view.js:156
 msgid "This folder has no content at this time."
-msgstr ""
+msgstr "Ten folder nie ma teraz zawartości."
 
 #: frontend/src/components/dirent-list-view/dirent-none-view.js:159
 msgid "You can create files quickly"
-msgstr ""
+msgstr "Możesz szybko tworzyć pliki"
 
 #: frontend/src/components/file-chooser/index.js:308
 #: frontend/src/components/file-chooser/repo-list-wrapper.js:31
 #: frontend/src/components/search/search.js:598
 #: frontend/src/components/search/wiki-search.js:193
 msgid "No results matching"
-msgstr ""
+msgstr "Brak pasujących wyników"
 
 #: frontend/src/components/file-chooser/repo-list-wrapper.js:123
 #: frontend/src/components/main-side-nav-folded.js:151
@@ -4542,7 +4543,7 @@ msgstr "Biblioteki"
 
 #: frontend/src/components/file-content-view/image.js:95
 msgid "you can also press →"
-msgstr ""
+msgstr "możesz również nacisnąć →"
 
 #: frontend/src/components/file-uploader/file-uploader.js:146
 #: frontend/src/components/file-uploader/file-uploader.js:266
@@ -4551,25 +4552,25 @@ msgstr ""
 #: frontend/src/pages/upload-link/file-uploader.js:142
 #: frontend/src/pages/upload-link/file-uploader.js:233
 msgid "Please upload no more than {maxFiles} files at a time."
-msgstr ""
+msgstr "Proszę przesłać nie więcej niż {maxFiles} plików naraz."
 
 #: frontend/src/components/file-uploader/file-uploader.js:438
 #: frontend/src/components/shared-link-file-uploader/file-uploader.js:447
 #: frontend/src/pages/upload-link/file-uploader.js:428
 msgid "File is locked by others."
-msgstr ""
+msgstr "Plik jest zablokowany przez innych."
 
 #: frontend/src/components/file-uploader/file-uploader.js:439
 msgid "Invalid filename."
-msgstr ""
+msgstr "Nieprawidłowa nazwa pliku."
 
 #: frontend/src/components/file-uploader/file-uploader.js:440
 msgid "File already exists."
-msgstr ""
+msgstr "Plik już istnieje."
 
 #: frontend/src/components/file-uploader/file-uploader.js:441
 msgid "File size is too large."
-msgstr ""
+msgstr "Rozmiar pliku jest za duży."
 
 #: frontend/src/components/file-uploader/file-uploader.js:442
 msgid "Out of quota."
@@ -4589,19 +4590,19 @@ msgstr "Błąd sieci"
 #: frontend/src/pages/upload-link/forbid-upload-list-item.js:24
 #: frontend/src/pages/upload-link/forbid-upload-list-item.js:33
 msgid "File too large"
-msgstr ""
+msgstr "Plik za duży"
 
 #: frontend/src/components/file-uploader/upload-list-item.js:94
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:94
 #: frontend/src/pages/upload-link/upload-list-item.js:94
 msgid "Preparing to upload..."
-msgstr ""
+msgstr "Przygotowywanie do przesłania..."
 
 #: frontend/src/components/file-uploader/upload-list-item.js:95
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:95
 #: frontend/src/pages/upload-link/upload-list-item.js:95
 msgid "Remaining"
-msgstr ""
+msgstr "Pozostało"
 
 #: frontend/src/components/file-uploader/upload-list-item.js:96
 #: frontend/src/components/file-uploader/upload-list-item.js:122
@@ -4622,20 +4623,20 @@ msgstr "Zapisywanie..."
 #: frontend/src/pages/upload-link/upload-list-item.js:125
 #| msgid "Saving..."
 msgid "Waiting..."
-msgstr ""
+msgstr "Oczekiwanie..."
 
 #: frontend/src/components/file-uploader/upload-list-item.js:118
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:118
 #: frontend/src/pages/upload-link/upload-list-item.js:126
 msgid "Uploading..."
-msgstr ""
+msgstr "Wysyłanie..."
 
 #: frontend/src/components/file-uploader/upload-list-item.js:131
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:131
 #: frontend/src/pages/upload-link/upload-list-item.js:139
 #| msgid "Upload"
 msgid "Uploaded"
-msgstr ""
+msgstr "Wysłano"
 
 #: frontend/src/components/file-uploader/upload-list-item.js:135
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:135
@@ -4643,25 +4644,25 @@ msgstr ""
 #: frontend/src/pages/upload-link/upload-list-item.js:146
 #| msgid "Upload Files"
 msgid "Upload failed"
-msgstr ""
+msgstr "Wysyłanie nie powiodło się"
 
 #: frontend/src/components/file-uploader/upload-list-item.js:147
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:147
 #: frontend/src/pages/upload-link/upload-list-item.js:161
 msgid "Retry"
-msgstr ""
+msgstr "Ponów próbę"
 
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:52
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:48
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:43
 msgid "{uploaded_files_num}/{all_files_num} Files"
-msgstr ""
+msgstr "{uploaded_files_num}/{all_files_num} Plików"
 
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:60
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:56
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:50
 msgid "{failed_files_num} file(s) failed to upload"
-msgstr ""
+msgstr "{failed_files_num} plik(ów) nie udało się przesłać"
 
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:71
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:67
@@ -4674,12 +4675,12 @@ msgstr "Wysyłanie pliku..."
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:82
 #| msgid "All records loaded"
 msgid "All files uploaded"
-msgstr ""
+msgstr "Wszystkie pliki przesłane"
 
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:100
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:96
 msgid "Retry All"
-msgstr ""
+msgstr "Ponów wszystkie"
 
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:107
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:103
@@ -4698,28 +4699,28 @@ msgstr "nazwa"
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:111
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:100
 msgid "size"
-msgstr ""
+msgstr "rozmiar"
 
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:116
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:112
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:101
 #| msgid "In progress"
 msgid "progress"
-msgstr ""
+msgstr "postęp"
 
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:117
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:113
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:102
 msgid "state"
-msgstr ""
+msgstr "stan"
 
 #: frontend/src/components/file-view/comment-widget/comment-body-header.js:14
 msgid "Total {comments_count} comment"
-msgstr ""
+msgstr "Łącznie {comments_count} komentarz"
 
 #: frontend/src/components/file-view/comment-widget/comment-body-header.js:18
 msgid "Total {comments_count} comments"
-msgstr ""
+msgstr "Łącznie {comments_count} komentarzy"
 
 #: frontend/src/components/file-view/comment-widget/comment-body-header.js:25
 #: frontend/src/components/file-view/comment-widget/comment-body-header.js:31
@@ -4794,11 +4795,11 @@ msgstr "Odblokuj"
 
 #: frontend/src/components/file-view/file-toolbar.js:152
 msgid "Rotate"
-msgstr ""
+msgstr "Obróć"
 
 #: frontend/src/components/file-view/file-toolbar.js:163
 msgid "Find"
-msgstr ""
+msgstr "Szukaj"
 
 #: frontend/src/components/file-view/file-toolbar.js:170
 msgid "Print"
@@ -4826,13 +4827,13 @@ msgstr "Komentarz"
 #: frontend/src/components/file-view/file-toolbar.js:251
 #| msgid "Open via Client"
 msgid "Open via client"
-msgstr ""
+msgstr "Otwórz za pomocą klienta"
 
 #: frontend/src/components/file-view/file-toolbar.js:263
 #: frontend/src/components/file-view/file-toolbar.js:330
 #: frontend/src/components/shared-file-view/shared-file-view.js:171
 msgid "Line wrapping"
-msgstr ""
+msgstr "Obrót linii"
 
 #: frontend/src/components/file-view/file-toolbar.js:271
 #: frontend/src/components/file-view/file-toolbar.js:304
@@ -4847,16 +4848,16 @@ msgstr "Otwórz folder nadrzędny"
 #: frontend/src/components/history-trash-file-view/file-view-tip.js:17
 #: frontend/src/components/shared-file-view/shared-file-view-tip.js:15
 msgid "Online view is not applicable to this file format"
-msgstr ""
+msgstr "Widok online nie jest dostępny dla tego formatu pliku."
 
 #: frontend/src/components/file-view/image-zoomer.js:11
 #| msgid "Images"
 msgid "Page fit"
-msgstr ""
+msgstr "Zajmij stronę"
 
 #: frontend/src/components/file-view/image-zoomer.js:12
 msgid "Actual size"
-msgstr ""
+msgstr "Rzeczywisty rozmiar"
 
 #: frontend/src/components/files-sub-nav.js:61
 #: frontend/src/pages/libraries/index.js:437
@@ -4890,7 +4891,7 @@ msgstr "Udostępnione wszystkim"
 #: frontend/src/pages/share-with-ocm/shared-with-ocm.js:433
 #| msgid "Share to other server"
 msgid "Shared from other servers"
-msgstr ""
+msgstr "Udostępnione z innych serwerów"
 
 #: frontend/src/components/group-members.js:74
 #: frontend/src/components/group-members.js:119
@@ -4934,7 +4935,7 @@ msgstr "Członek"
 #: frontend/src/pages/sys-admin/repos/repos.js:139
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:159
 msgid "Successfully deleted {name}."
-msgstr ""
+msgstr "Pomyślnie usunięto {name}."
 
 #: frontend/src/components/history-trash-file-view/file-view.js:33
 msgid "Current Path: "
@@ -4988,11 +4989,11 @@ msgstr "Udostępnianie"
 #: frontend/src/metadata/components/popover/filter-popover/index.js:144
 #: frontend/src/utils/text-translation.js:186
 msgid "Advanced"
-msgstr ""
+msgstr "Zaawansowane"
 
 #: frontend/src/components/library-op-menu.js:181
 msgid "Office Suite"
-msgstr ""
+msgstr "Pakiet biurowy"
 
 #: frontend/src/components/libs-mobile-thead.js:17
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:156
@@ -5038,7 +5039,7 @@ msgstr "Aktywności"
 #: frontend/src/pages/sys-admin/repos/repos-nav.js:20
 #: frontend/src/pages/wikis/wikis.js:424
 msgid "Wikis"
-msgstr ""
+msgstr "Wiki"
 
 #: frontend/src/components/main-side-nav-folded.js:230
 #: frontend/src/components/main-side-nav-folded.js:232
@@ -5064,7 +5065,7 @@ msgstr "O..."
 #: frontend/src/components/main-side-nav-folded.js:289
 #: frontend/src/components/main-side-nav-folded.js:290
 msgid "Unfold the sidebar"
-msgstr ""
+msgstr "Rozwiń panel boczny"
 
 #: frontend/src/components/main-side-nav.js:161
 #: frontend/src/components/main-side-nav.js:163
@@ -5086,32 +5087,32 @@ msgstr "Foldery"
 #: frontend/src/components/main-side-nav.js:242
 #| msgid "Color space"
 msgid "Workspace"
-msgstr ""
+msgstr "Obszar roboczy"
 
 #: frontend/src/components/main-side-nav.js:320
 msgid "Help and resources"
-msgstr ""
+msgstr "Pomoc i zasoby"
 
 #: frontend/src/components/main-side-nav.js:386
 msgid "Fold the sidebar"
-msgstr ""
+msgstr "Zwiń panel boczny"
 
 #: frontend/src/components/manage-members-dialog.js:178
 msgid "Manage group members"
-msgstr ""
+msgstr "Zarządzaj członkami grupy"
 
 #: frontend/src/components/manage-members-dialog.js:180
 msgid "Add group member"
-msgstr ""
+msgstr "Dodaj członka grupy"
 
 #: frontend/src/components/manage-members-dialog.js:208
 #| msgid "Search groups"
 msgid "Search group members"
-msgstr ""
+msgstr "Wyszukaj członków grupy"
 
 #: frontend/src/components/more.js:14
 msgid "show more"
-msgstr ""
+msgstr "pokaż więcej"
 
 #: frontend/src/components/org-admin-group-nav.js:26
 #: frontend/src/pages/groups/group-op-menu.js:168
@@ -5127,16 +5128,16 @@ msgstr "Członkowie"
 #: frontend/src/pages/institution-admin/user-content/index.js:8
 #: frontend/src/pages/sys-admin/users/user-nav.js:19
 msgid "Owned Libraries"
-msgstr ""
+msgstr "Własne biblioteki"
 
 #: frontend/src/components/org-admin-user-nav.js:26
 #: frontend/src/pages/sys-admin/users/user-nav.js:20
 msgid "Shared Libraries"
-msgstr ""
+msgstr "Udostępnione biblioteki"
 
 #: frontend/src/components/paginator.js:62
 msgid "{number_placeholder} / Page"
-msgstr ""
+msgstr "{number_placeholder} / Strona"
 
 #: frontend/src/components/paginator.js:90
 #: frontend/src/components/paginator.js:91
@@ -5166,7 +5167,7 @@ msgstr "Następny"
 
 #: frontend/src/components/pdf-viewer.js:20
 msgid "Thumbnail"
-msgstr ""
+msgstr "Miniatura"
 
 #: frontend/src/components/pdf-viewer.js:21
 msgid "Outline"
@@ -5175,18 +5176,18 @@ msgstr "Wstęp"
 #: frontend/src/components/pdf-viewer.js:337
 #| msgid "Document"
 msgid "Decrypt document"
-msgstr ""
+msgstr "Odszyfruj dokument"
 
 #: frontend/src/components/pdf-viewer.js:417
 #| msgid "Document"
 msgid "Print document"
-msgstr ""
+msgstr "Wydrukuj dokument"
 
 #: frontend/src/components/permission-denied-tip.js:6
 msgid ""
 "Permission denied. Please try {placeholder-left}login again.{placeholder-"
 "right}"
-msgstr ""
+msgstr "Odmowa dostępu. Spróbuj {placeholder-left}zalogować się ponownie.{placeholder-right}"
 
 #: frontend/src/components/popover/edit-filetag-popover.js:141
 #: frontend/src/tag/views/all-tags/tags-table/index.js:318
@@ -5199,7 +5200,7 @@ msgstr "Brak dostępnych opcji"
 
 #: frontend/src/components/popover/edit-filetag-popover.js:158
 msgid "Find a tag"
-msgstr ""
+msgstr "Znajdź tag"
 
 #: frontend/src/components/popover/edit-filetag-popover.js:186
 msgid "Create a new tag"
@@ -5213,23 +5214,23 @@ msgstr "Opublikowany"
 #: frontend/src/components/published-wiki-entrance.js:36
 #| msgid "Wiki published"
 msgid "View published page"
-msgstr ""
+msgstr "Zobacz opublikowaną stronę"
 
 #: frontend/src/components/repo-info-bar-migrate.js:19
 msgid ""
 "Tips: There are tags of old version. Please migrate tags to new version."
-msgstr ""
+msgstr "Wskazówka: Istnieją tagi starej wersji. Proszę zmigrować tagi do nowej wersji."
 
 #: frontend/src/components/repo-info-bar-migrate.js:20
 #| msgid "Migrate User"
 msgid "Migrate"
-msgstr ""
+msgstr "Migruj"
 
 #: frontend/src/components/repo-info-bar-migrate.js:23
 msgid ""
 "Tips: These are tags of old version. The feature is deprecated and can no "
 "longer be used."
-msgstr ""
+msgstr "Wskazówka: Są to tagi starej wersji. Funkcja jest przestarzała i nie może być już używana."
 
 #: frontend/src/components/sdoc-wiki-page-viewer/index.js:132
 #: frontend/src/components/seafile-markdown-viewer/index.js:147
@@ -5246,84 +5247,84 @@ msgstr "Biblioteka nie istnieje"
 #: frontend/src/pages/wiki/main-panel.js:95
 #: frontend/src/pages/wiki/main-panel.js:112
 msgid "Search files"
-msgstr ""
+msgstr "Wyszukaj pliki"
 
 #: frontend/src/components/search/search-filters/filter-by-date.js:29
 #: frontend/src/components/search/search-filters/filter-by-date.js:33
 #: frontend/src/components/search/search-filters/filter-by-date.js:46
 #| msgid "Created time"
 msgid "Create time"
-msgstr ""
+msgstr "Czas utworzenia"
 
 #: frontend/src/components/search/search-filters/filter-by-text.js:17
 #| msgid "File name"
 msgid "File name and content"
-msgstr ""
+msgstr "Nazwa pliku i zawartość"
 
 #: frontend/src/components/search/search-filters/filter-by-text.js:20
 #| msgid "File name"
 msgid "File name only"
-msgstr ""
+msgstr "Tylko nazwa pliku"
 
 #: frontend/src/components/search/search-tags/index.js:61
 #: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:163
 #: frontend/src/tag/views/all-tags/tags-table/editors/tag-name.js:34
 #| msgid "Edit Quota"
 msgid "Edit tag"
-msgstr ""
+msgstr "Edytuj tag"
 
 #: frontend/src/components/search/search.js:586
 #: frontend/src/components/search/wiki2-search.js:190
 msgid "Type characters to start search"
-msgstr ""
+msgstr "Wprowadź znaki, aby rozpocząć wyszukiwanie"
 
 #: frontend/src/components/search/search.js:619
 #: frontend/src/components/search/search.js:691
 #: frontend/src/components/search/search.js:722
 msgid "in all libraries"
-msgstr ""
+msgstr "we wszystkich bibliotekach"
 
 #: frontend/src/components/search/search.js:665
 #: frontend/src/components/search/search.js:709
 #| msgid "Search files in this library"
 msgid "in this library"
-msgstr ""
+msgstr "w tej bibliotece"
 
 #: frontend/src/components/search/search.js:678
 #| msgid "Parent folder"
 msgid "in this folder"
-msgstr ""
+msgstr "w tym folderze"
 
 #: frontend/src/components/search/search.js:798
 msgid "Search results visited recently"
-msgstr ""
+msgstr "Ostatnio odwiedzane wyniki wyszukiwania"
 
 #: frontend/src/components/search/wiki2-search-result.js:31
 msgid "Current page"
-msgstr ""
+msgstr "Bieżąca strona"
 
 #: frontend/src/components/select-editor/select-editor.js:76
 #: frontend/src/components/select-editor/select-editor.js:87
 msgid "Add custom permission"
-msgstr ""
+msgstr "Dodaj niestandardowe uprawnienie"
 
 #: frontend/src/components/select-editor/share-link-scope-editor.js:17
 #: frontend/src/components/share-link-panel/link-creation.js:393
 #: frontend/src/components/share-link-panel/link-item.js:121
 msgid "Anyone with the link"
-msgstr ""
+msgstr "Każdy z linkiem"
 
 #: frontend/src/components/select-editor/share-link-scope-editor.js:21
 #: frontend/src/components/share-link-panel/link-creation.js:399
 #: frontend/src/components/share-link-panel/link-item.js:124
 msgid "Specific users in the team"
-msgstr ""
+msgstr "Określeni użytkownicy w zespole"
 
 #: frontend/src/components/select-editor/share-link-scope-editor.js:25
 #: frontend/src/components/share-link-panel/link-creation.js:414
 #: frontend/src/components/share-link-panel/link-item.js:127
 msgid "Specific people with email address"
-msgstr ""
+msgstr "Określone osoby z adresem email"
 
 #: frontend/src/components/select-editor/sysadmin-user-role-editor.js:19
 #: frontend/src/pages/sys-admin/invitations/invitations.js:185
@@ -5344,7 +5345,7 @@ msgstr "Gość"
 #: frontend/src/components/select-members-to-share-with.js:59
 #| msgid "Select a department"
 msgid "Select members from department"
-msgstr ""
+msgstr "Wybierz członków z działu"
 
 #: frontend/src/components/send-link.js:45
 msgid "Please input at least an email."
@@ -5356,7 +5357,7 @@ msgstr "Pomyślnie wysłano do {placeholder}"
 
 #: frontend/src/components/send-link.js:69
 msgid "Failed to send to {email_placeholder}: {errorMsg_placeholder}"
-msgstr ""
+msgstr "Nie udało się wysłać do {email_placeholder}: {errorMsg_placeholder}"
 
 #: frontend/src/components/send-link.js:90
 msgid "Send to:"
@@ -5372,90 +5373,90 @@ msgstr "Wysyłanie..."
 
 #: frontend/src/components/set-link-expiration.js:36
 msgid "{minDays_placeholder} - {maxDays_placeholder} days"
-msgstr ""
+msgstr "{minDays_placeholder} - {maxDays_placeholder} dni"
 
 #: frontend/src/components/set-link-expiration.js:40
 msgid "Greater than or equal to {minDays_placeholder} days"
-msgstr ""
+msgstr "Większe lub równe {minDays_placeholder} dni"
 
 #: frontend/src/components/set-link-expiration.js:43
 msgid "Less than or equal to {maxDays_placeholder} days"
-msgstr ""
+msgstr "Mniejsze lub równe {maxDays_placeholder} dni"
 
 #: frontend/src/components/set-link-expiration.js:82
 msgid "Expiration days"
-msgstr ""
+msgstr "Dni wygaśnięcia"
 
 #: frontend/src/components/set-link-expiration.js:99
 msgid "Expiration time"
-msgstr ""
+msgstr "Czas wygaśnięcia"
 
 #: frontend/src/components/sf-table/masks/interaction-masks/index.js:578
 #| msgid "xxx cells selected"
 msgid "xxx cells cut"
-msgstr ""
+msgstr "xxx komórek wyciętych"
 
 #: frontend/src/components/sf-table/masks/interaction-masks/index.js:578
 #: frontend/src/metadata/views/table/masks/interaction-masks/index.js:677
 #| msgid "1 cell copied"
 msgid "1 cell cut"
-msgstr ""
+msgstr "1 komórka wycięta"
 
 #: frontend/src/components/sf-table/masks/interaction-masks/index.js:615
 msgid "xxx rows are copied."
-msgstr ""
+msgstr "xxx wierszy skopiowanych."
 
 #: frontend/src/components/sf-table/masks/interaction-masks/index.js:615
 #: frontend/src/metadata/views/table/masks/interaction-masks/index.js:717
 msgid "1 row is copied."
-msgstr ""
+msgstr "1 wiersz skopiowany."
 
 #: frontend/src/components/sf-table/masks/interaction-masks/index.js:646
 msgid "xxx cells copied"
-msgstr ""
+msgstr "xxx komórek skopiowanych"
 
 #: frontend/src/components/sf-table/masks/interaction-masks/index.js:646
 #: frontend/src/metadata/views/table/masks/interaction-masks/index.js:749
 msgid "1 cell copied"
-msgstr ""
+msgstr "1 komórka skopiowana"
 
 #: frontend/src/components/sf-table/table-main/index.js:93
 #: frontend/src/metadata/views/gallery/content.js:213
 #: frontend/src/metadata/views/table/table-main/records/index.js:709
 msgid "No record"
-msgstr ""
+msgstr "Brak rekordu"
 
 #: frontend/src/components/sf-table/table-main/records-footer/index.js:112
 msgid "xxx records selected"
-msgstr ""
+msgstr "xxx rekordów wybranych"
 
 #: frontend/src/components/sf-table/table-main/records-footer/index.js:112
 #: frontend/src/metadata/views/table/table-main/records-footer/index.js:106
 msgid "1 record selected"
-msgstr ""
+msgstr "1 rekord wybrany"
 
 #: frontend/src/components/sf-table/table-main/records-footer/index.js:116
 msgid "xxx cells selected"
-msgstr ""
+msgstr "xxx komórek wybranych"
 
 #: frontend/src/components/sf-table/table-main/records-footer/index.js:121
 msgid "xxx records"
-msgstr ""
+msgstr "xxx rekordów"
 
 #: frontend/src/components/sf-table/table-main/records-footer/index.js:123
 msgid "xxx record"
-msgstr ""
+msgstr "xxx rekord"
 
 #: frontend/src/components/sf-table/table-main/records-footer/index.js:141
 #: frontend/src/metadata/views/table/table-main/records-footer/index.js:140
 #: frontend/src/metadata/views/table/table-main/records-footer/index.js:143
 msgid "Load all"
-msgstr ""
+msgstr "Załaduj wszystkie"
 
 #: frontend/src/components/sf-table/table-main/records-footer/index.js:145
 #: frontend/src/metadata/views/table/table-main/records-footer/index.js:148
 msgid "Loading"
-msgstr ""
+msgstr "Ładowanie"
 
 #: frontend/src/components/sf-table/table-main/records/group-body/group-container/group-header-left.js:45
 #: frontend/src/metadata/views/table/table-main/records/group-body/group-container/group-header-left.js:42
@@ -5465,7 +5466,7 @@ msgstr "Ilość"
 #: frontend/src/components/sf-table/table-main/records/record/actions-cell/index.js:49
 #: frontend/src/metadata/views/table/table-main/records/record/actions-cell/index.js:50
 msgid "The row is locked and cannot be modified"
-msgstr ""
+msgstr "Wiersz jest zablokowany i nie może być modyfikowany"
 
 #: frontend/src/components/sf-table/table-main/records/record/actions-cell/index.js:95
 #: frontend/src/components/sf-table/table-main/records/record/actions-cell/index.js:96
@@ -5480,60 +5481,60 @@ msgstr "Wybierz"
 #: frontend/src/components/share-link-panel/index.js:135
 #: frontend/src/pages/share-admin/share-links.js:539
 msgid "Successfully deleted 1 share link"
-msgstr ""
+msgstr "Pomyślnie usunięto 1 link udostępniania"
 
 #: frontend/src/components/share-link-panel/index.js:136
 #: frontend/src/pages/share-admin/share-links.js:540
 msgid "Successfully deleted {number_placeholder} share links"
-msgstr ""
+msgstr "Pomyślnie usunięto {number_placeholder} linków udostępniania"
 
 #: frontend/src/components/share-link-panel/link-authenticated-emails.js:124
 #: frontend/src/components/share-link-panel/link-authenticated-users.js:129
 #, javascript-format
 #| msgid "successfully added user %s."
 msgid "Successfully added %s."
-msgstr ""
+msgstr "Pomyślnie dodano %s."
 
 #: frontend/src/components/share-link-panel/link-authenticated-emails.js:189
 #: frontend/src/components/share-link-panel/link-details.js:280
 #| msgid "Activated Users"
 msgid "Authenticated emails"
-msgstr ""
+msgstr "Uwierzytelnione emaile"
 
 #: frontend/src/components/share-link-panel/link-authenticated-users.js:187
 #: frontend/src/components/share-link-panel/link-details.js:277
 #| msgid "Activated Users"
 msgid "Authenticated users"
-msgstr ""
+msgstr "Uwierzytelnieni użytkownicy"
 
 #: frontend/src/components/share-link-panel/link-creation.js:153
 msgid ""
 "Share links cannot be generated because \"Invisible\", \"Online Read-Write\""
 " or \"Online Read-Only\" is set for you on some folder(s) in the library."
-msgstr ""
+msgstr "Linki udostępniania nie mogą być generowane, ponieważ ustawiono dla Ciebie \"Niewidoczny\", \"Online Read-Write\" lub \"Online Read-Only\" w niektórych folderach biblioteki."
 
 #: frontend/src/components/share-link-panel/link-creation.js:177
 msgid "Please enter an integer bigger than 1 as number of links."
-msgstr ""
+msgstr "Proszę wprowadzić liczbę całkowitą większą niż 1 jako liczbę linków."
 
 #: frontend/src/components/share-link-panel/link-creation.js:181
 msgid ""
 "Please enter an integer not bigger than {max_number} as number of links."
-msgstr ""
+msgstr "Proszę wprowadzić liczbę całkowitą nie większą niż {max_number} jako liczbę linków."
 
 #: frontend/src/components/share-link-panel/link-creation.js:289
 #: frontend/src/components/share-link-panel/link-list.js:65
 msgid "Generate links in batch"
-msgstr ""
+msgstr "Generuj linki zbiorczo"
 
 #: frontend/src/components/share-link-panel/link-creation.js:289
 #: frontend/src/components/share-link-panel/link-list.js:64
 msgid "Generate Link"
-msgstr ""
+msgstr "Wygeneruj link"
 
 #: frontend/src/components/share-link-panel/link-creation.js:295
 msgid "Number of links"
-msgstr ""
+msgstr "Liczba linków"
 
 #: frontend/src/components/share-link-panel/link-creation.js:371
 #| msgid "Edit permission"
@@ -5543,49 +5544,49 @@ msgstr "Ustaw uprawnienia"
 #: frontend/src/components/share-link-panel/link-creation.js:388
 #| msgid "Access Log"
 msgid "Set access scope"
-msgstr ""
+msgstr "Ustaw zakres dostępu"
 
 #: frontend/src/components/share-link-panel/link-details.js:51
 #: frontend/src/components/share-link-panel/link-item.js:86
 msgid "Share link is copied to the clipboard."
-msgstr ""
+msgstr "Link udostępniania został skopiowany do schowka."
 
 #: frontend/src/components/share-link-panel/link-details.js:57
 msgid "Direct download link is copied to the clipboard."
-msgstr ""
+msgstr "Bezpośredni link do pobrania został skopiowany do schowka."
 
 #: frontend/src/components/share-link-panel/link-details.js:182
 msgid "Direct download link"
-msgstr ""
+msgstr "Bezpośredni link do pobrania"
 
 #: frontend/src/components/share-link-panel/link-details.js:266
 #: frontend/src/components/share-link-panel/link-list.js:96
 #: frontend/src/components/share-link-panel/link-list.js:110
 #| msgid "Access Log"
 msgid "Access scope"
-msgstr ""
+msgstr "Zakres dostępu"
 
 #: frontend/src/components/share-link-panel/link-details.js:301
 #: frontend/src/components/share-link-panel/link-item.js:190
 #| msgid "Delete share links"
 msgid "Delete share link"
-msgstr ""
+msgstr "Usuń link udostępniania"
 
 #: frontend/src/components/share-link-panel/link-details.js:302
 #: frontend/src/components/share-link-panel/link-item.js:191
 #| msgid "Are you sure you want to delete the selected share link(s) ?"
 msgid "Are you sure you want to delete the share link?"
-msgstr ""
+msgstr "Czy na pewno chcesz usunąć link udostępniania?"
 
 #: frontend/src/components/share-link-panel/link-item.js:175
 #| msgid "Code"
 msgid "QR Code"
-msgstr ""
+msgstr "Kod QR"
 
 #: frontend/src/components/share-link-panel/link-list.js:71
 #: frontend/src/utils/text-translation.js:100
 msgid "Export"
-msgstr ""
+msgstr "Eksportuj"
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:49
 #: frontend/src/pages/markdown-editor/index.js:366
@@ -5593,7 +5594,7 @@ msgstr ""
 #: frontend/src/pages/tldraw-editor/index.js:38
 #: frontend/src/view-file-text.js:90
 msgid "Successfully saved"
-msgstr ""
+msgstr "Pomyślnie zapisano"
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:77
 #: frontend/src/shared-dir-view.js:106
@@ -5604,11 +5605,11 @@ msgstr "Pobieranie plików jest wyłączone: transfer właściciela łącza zost
 #: frontend/src/pages/upload-link/index.js:47
 #| msgid "Shared by"
 msgid "Shared by:"
-msgstr ""
+msgstr "Udostępnione przez:"
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:152
 msgid "Save as ..."
-msgstr ""
+msgstr "Zapisz jako..."
 
 #: frontend/src/components/shared-link.js:27
 msgid "Expired"
@@ -5623,7 +5624,7 @@ msgstr "Niepowodzenie. Proszę sprawdzić sieć."
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:273
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:261
 msgid "Failed to delete {name}."
-msgstr ""
+msgstr "Nie udało się usunąć {name}."
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:314
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:456
@@ -5639,24 +5640,24 @@ msgstr "Wyłącz udostępnianie"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:341
 msgid "SeaTable integration"
-msgstr ""
+msgstr "Integracja SeaTable"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:553
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:140
 #: frontend/src/pages/shared-libs/item.js:100
 msgid "Successfully unstarred {library_name_placeholder}."
-msgstr ""
+msgstr "Pomyślnie usunięto gwiazdkę z {library_name_placeholder}."
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:563
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:150
 #: frontend/src/pages/shared-libs/item.js:110
 msgid "Successfully starred {library_name_placeholder}."
-msgstr ""
+msgstr "Pomyślnie dodano gwiazdkę do {library_name_placeholder}."
 
 #: frontend/src/components/single-selector.js:78
 #| msgid "Clear selected"
 msgid "Toggle selector menu"
-msgstr ""
+msgstr "Przełącz menu selektora"
 
 #: frontend/src/components/sort-menu.js:21
 #: frontend/src/metadata/constants/view/statistics.js:34
@@ -5666,7 +5667,7 @@ msgstr ""
 #: frontend/src/utils/text-translation.js:301
 #| msgid "locked by {name}"
 msgid "Ascending by name"
-msgstr ""
+msgstr "Rosnąco według nazwy"
 
 #: frontend/src/components/sort-menu.js:22
 #: frontend/src/metadata/constants/view/statistics.js:35
@@ -5676,30 +5677,30 @@ msgstr ""
 #: frontend/src/utils/text-translation.js:305
 #| msgid "locked by {name}"
 msgid "Descending by name"
-msgstr ""
+msgstr "Malejąco według nazwy"
 
 #: frontend/src/components/sort-menu.js:23
 msgid "Ascending by size"
-msgstr ""
+msgstr "Rosnąco według rozmiaru"
 
 #: frontend/src/components/sort-menu.js:24
 #: frontend/src/pages/org-admin/libraries/org-repo-nav.js:24
 #: frontend/src/pages/sys-admin/repos/repos-nav.js:26
 msgid "Descending by size"
-msgstr ""
+msgstr "Malejąco według rozmiaru"
 
 #: frontend/src/components/sort-menu.js:25
 msgid "Ascending by time"
-msgstr ""
+msgstr "Rosnąco według czasu"
 
 #: frontend/src/components/sort-menu.js:26
 msgid "Descending by time"
-msgstr ""
+msgstr "Malejąco według czasu"
 
 #: frontend/src/components/sort-menu.js:60
 #: frontend/src/components/sort-menu.js:62
 msgid "Switch sort mode"
-msgstr ""
+msgstr "Przełącz tryb sortowania"
 
 #: frontend/src/components/toolbar/all-tags-toolbar.js:66
 #: frontend/src/components/toolbar/card-files-toolbar.js:174
@@ -5714,7 +5715,7 @@ msgstr ""
 #: frontend/src/pages/share-admin/upload-links.js:395
 #: frontend/src/shared-dir-view.js:859
 msgid "Unselect"
-msgstr ""
+msgstr "Odznacz"
 
 #: frontend/src/components/toolbar/all-tags-toolbar.js:69
 #: frontend/src/components/toolbar/card-files-toolbar.js:178
@@ -5728,7 +5729,7 @@ msgstr ""
 #: frontend/src/pages/share-admin/upload-links.js:399
 #: frontend/src/shared-dir-view.js:863
 msgid "selected"
-msgstr ""
+msgstr "wybrane"
 
 #: frontend/src/components/toolbar/card-files-toolbar.js:185
 #: frontend/src/components/toolbar/face-recognition-files-toolbar.js:174
@@ -5744,17 +5745,17 @@ msgstr "Przenieś"
 
 #: frontend/src/components/toolbar/common-toolbar.js:134
 msgid "Dark mode"
-msgstr ""
+msgstr "Tryb ciemny"
 
 #: frontend/src/components/toolbar/common-toolbar.js:134
 #| msgid "Switch sort mode"
 msgid "Light mode"
-msgstr ""
+msgstr "Tryb jasny"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:71
 #| msgid "Link has been copied to clipboard"
 msgid "The path has been copied to the clipboard"
-msgstr ""
+msgstr "Ścieżka została skopiowana do schowka"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:162
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:60
@@ -5771,13 +5772,13 @@ msgstr "Wyślij folder"
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:185
 #: frontend/src/utils/text-translation.js:40
 msgid "New SeaDoc File"
-msgstr ""
+msgstr "Nowy plik SeaDoc"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:186
 #: frontend/src/utils/text-translation.js:36
 #| msgid "New Excel File"
 msgid "New Excalidraw File"
-msgstr ""
+msgstr "Nowy plik Excalidraw"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:189
 #: frontend/src/utils/text-translation.js:16
@@ -5802,13 +5803,13 @@ msgstr "Nowy plik Word"
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:195
 #| msgid "New SeaDoc File"
 msgid "New Docxf File"
-msgstr ""
+msgstr "Nowy plik Docxf"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:198
 #: frontend/src/utils/text-translation.js:32
 #| msgid "New Word File"
 msgid "New Whiteboard File"
-msgstr ""
+msgstr "Nowy plik Whiteboard"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:202
 msgid "New"
@@ -5817,7 +5818,7 @@ msgstr "Nowy"
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:217
 #| msgid "Copy"
 msgid "Copy path"
-msgstr ""
+msgstr "Kopiuj ścieżkę"
 
 #: frontend/src/components/toolbar/single-dropdown-toolbar.js:51
 #: frontend/src/pages/institution-admin/user-content/user-groups.js:40
@@ -5844,12 +5845,12 @@ msgstr "Usuń"
 #: frontend/src/components/user-select.js:234
 #| msgid "Select a user"
 msgid "Select users"
-msgstr ""
+msgstr "Wybierz użytkowników"
 
 #: frontend/src/components/user-select.js:278
 #: frontend/src/pages/dashboard/log-user-selector.js:165
 msgid "User not found"
-msgstr ""
+msgstr "Użytkownik nie znaleziony"
 
 #: frontend/src/components/user-settings/delete-account.js:37
 msgid "This operation will not be reverted. Please think twice!"
@@ -5858,59 +5859,59 @@ msgstr "Ta operacja jest nieodwracalna. Dobrze się zastanów!"
 #: frontend/src/components/user-settings/email-notice.js:19
 #: frontend/src/components/user-settings/email-notice.js:27
 msgid "Don't send emails"
-msgstr ""
+msgstr "Nie wysyłaj emaili"
 
 #: frontend/src/components/user-settings/email-notice.js:20
 #: frontend/src/components/user-settings/email-notice.js:28
 msgid "Per hour"
-msgstr ""
+msgstr "Co godzinę"
 
 #: frontend/src/components/user-settings/email-notice.js:21
 msgid "Per 4 hours"
-msgstr ""
+msgstr "Co 4 godziny"
 
 #: frontend/src/components/user-settings/email-notice.js:22
 msgid "Per day"
-msgstr ""
+msgstr "Codziennie"
 
 #: frontend/src/components/user-settings/email-notice.js:23
 msgid "Per week"
-msgstr ""
+msgstr "Co tydzień"
 
 #: frontend/src/components/user-settings/email-notice.js:28
 msgid ""
 "If notifications have not been read within one hour, they will be sent to "
 "your mailbox."
-msgstr ""
+msgstr "Jeśli powiadomienia nie zostaną przeczytane w ciągu godziny, zostaną wysłane na Twoją skrzynkę pocztową."
 
 #: frontend/src/components/user-settings/email-notice.js:57
 msgid "Email notification updated"
-msgstr ""
+msgstr "Powiadomienia email zaktualizowane"
 
 #: frontend/src/components/user-settings/email-notice.js:68
 #: frontend/src/settings.js:61
 msgid "Email Notification"
-msgstr ""
+msgstr "Powiadomienia Email"
 
 #: frontend/src/components/user-settings/email-notice.js:70
 msgid "Notifications of file changes"
-msgstr ""
+msgstr "Powiadomienia o zmianach plików"
 
 #: frontend/src/components/user-settings/email-notice.js:71
 msgid ""
 "The list of added, deleted and modified files will be sent to your mailbox."
-msgstr ""
+msgstr "Lista dodanych, usuniętych i zmodyfikowanych plików zostanie wysłana na Twoją skrzynkę pocztową."
 
 #: frontend/src/components/user-settings/email-notice.js:81
 #| msgid "Notifications of file changes"
 msgid "Notifications of collaboration"
-msgstr ""
+msgstr "Powiadomienia o współpracy"
 
 #: frontend/src/components/user-settings/email-notice.js:82
 msgid ""
 "Whether the notifications of collaboration such as sharing library or "
 "joining group should be sent to your mailbox."
-msgstr ""
+msgstr "Czy powiadomienia o współpracy, takie jak udostępnianie biblioteki lub dołączanie do grupy, powinny być wysyłane na Twoją skrzynkę pocztową."
 
 #: frontend/src/components/user-settings/language-setting.js:26
 msgid "Language Setting"
@@ -5921,7 +5922,7 @@ msgid ""
 "No linked devices. You have not accessed your files with any client (desktop"
 " or mobile) yet. Configure clients on your devices to access your data more "
 "comfortably."
-msgstr ""
+msgstr "Brak podłączonych urządzeń. Nie uzyskałeś jeszcze dostępu do swoich plików przy użyciu żadnego klienta (desktop lub mobilny). Skonfiguruj klientów na swoich urządzeniach, aby wygodniej uzyskiwać dostęp do swoich danych."
 
 #: frontend/src/components/user-settings/linked-devices.js:34
 #: frontend/src/pages/linked-devices/linked-devices.js:36
@@ -5941,7 +5942,7 @@ msgstr "Ostatni dostęp"
 #: frontend/src/pages/linked-devices/linked-devices.js:119
 #| msgid "Successfully copied %(name)s."
 msgid "Successfully unlinked %(name)s."
-msgstr ""
+msgstr "Pomyślnie odłączono %(name)s."
 
 #: frontend/src/components/user-settings/linked-devices.js:229
 #: frontend/src/pages/linked-devices/linked-devices.js:216
@@ -5966,19 +5967,19 @@ msgstr "Umieść swoje konto w globalnej książce adresowej, aby inni użytkown
 #: frontend/src/components/user-settings/social-login.js:38
 #: frontend/src/settings.js:63
 msgid "Single Sign On (SSO)"
-msgstr ""
+msgstr "Logowanie Jednokrotne (SSO)"
 
 #: frontend/src/components/user-settings/social-login-dingtalk.js:42
 #: frontend/src/components/user-settings/social-login-saml.js:55
 #: frontend/src/components/user-settings/social-login-weixin.js:42
 #: frontend/src/components/user-settings/social-login.js:42
 msgid "Connect"
-msgstr ""
+msgstr "Połącz"
 
 #: frontend/src/components/user-settings/two-factor-auth.js:18
 #: frontend/src/pages/sys-admin/users/user-info.js:173
 msgid "Status: enabled"
-msgstr ""
+msgstr "Status: włączone"
 
 #: frontend/src/components/user-settings/two-factor-auth.js:20
 #| msgid "Two-Factor Authentication"
@@ -5993,11 +5994,11 @@ msgstr "Jeżeli nie masz żadnego urządzenia ze sobą, możesz uzyskać dostęp
 
 #: frontend/src/components/user-settings/two-factor-auth.js:24
 msgid "You have only one backup code remaining."
-msgstr ""
+msgstr "Pozostał Ci tylko jeden kod zapasowy."
 
 #: frontend/src/components/user-settings/two-factor-auth.js:25
 msgid "You have {num} backup codes remaining."
-msgstr ""
+msgstr "Pozostało Ci {num} kodów zapasowych."
 
 #: frontend/src/components/user-settings/two-factor-auth.js:28
 #| msgid "Show changes"
@@ -6022,19 +6023,19 @@ msgstr "Uwierzytelnianie dwuskładnikowe"
 
 #: frontend/src/components/user-settings/user-avatar-form.js:33
 msgid "Please choose an image file."
-msgstr ""
+msgstr "Proszę wybrać plik obrazu."
 
 #: frontend/src/components/user-settings/user-avatar-form.js:42
 msgid "File extensions can only be {placeholder}."
-msgstr ""
+msgstr "Rozszerzenia plików mogą być tylko {placeholder}."
 
 #: frontend/src/components/user-settings/user-avatar-form.js:50
 msgid "The file is too large. Allowed maximum size is 1MB."
-msgstr ""
+msgstr "Plik jest za duży. Maksymalny dozwolony rozmiar to 1MB."
 
 #: frontend/src/components/user-settings/user-avatar-form.js:59
 msgid "Avatar updated"
-msgstr ""
+msgstr "Awatar zaktualizowany"
 
 #: frontend/src/components/user-settings/user-avatar-form.js:92
 #| msgid "Avatar"
@@ -6059,46 +6060,46 @@ msgstr "Twoje powiadomienia będą wysyłane na ten adres email."
 
 #: frontend/src/components/user-settings/web-api-auth-token.js:38
 msgid "Auth Token created"
-msgstr ""
+msgstr "Token uwierzytelniania utworzony"
 
 #: frontend/src/components/user-settings/web-api-auth-token.js:51
 msgid "Auth Token deleted"
-msgstr ""
+msgstr "Token uwierzytelniania usunięty"
 
 #: frontend/src/components/user-settings/web-api-auth-token.js:75
 #: frontend/src/settings.js:57
 msgid "Web API Auth Token"
-msgstr ""
+msgstr "Token uwierzytelniania Web API"
 
 #: frontend/src/components/user-settings/web-api-auth-token.js:79
 msgid "Token:"
-msgstr ""
+msgstr "Token:"
 
 #: frontend/src/components/user-settings/webdav-password.js:54
 msgid "Password reset"
-msgstr ""
+msgstr "Reset hasła"
 
 #: frontend/src/components/user-settings/webdav-password.js:74
 msgid "Password removed"
-msgstr ""
+msgstr "Hasło usunięte"
 
 #: frontend/src/components/user-settings/webdav-password.js:93
 #: frontend/src/settings.js:58
 msgid "WebDAV Access"
-msgstr ""
+msgstr "Dostęp WebDAV"
 
 #: frontend/src/components/user-settings/webdav-password.js:95
 msgid "WebDAV username:"
-msgstr ""
+msgstr "Nazwa użytkownika WebDAV:"
 
 #: frontend/src/components/user-settings/webdav-password.js:98
 #: frontend/src/components/user-settings/webdav-password.js:103
 msgid "WebDAV password:"
-msgstr ""
+msgstr "Hasło WebDAV:"
 
 #: frontend/src/components/user-settings/webdav-password.js:98
 msgid "not set"
-msgstr ""
+msgstr "nie ustawiono"
 
 #: frontend/src/components/user-settings/webdav-password.js:99
 msgid "Set Password"
@@ -6106,28 +6107,28 @@ msgstr "Ustaw hasło"
 
 #: frontend/src/components/user-settings/webdav-password.js:105
 msgid "Delete Password"
-msgstr ""
+msgstr "Usuń hasło"
 
 #: frontend/src/components/view-modes.js:53
 msgid "List view"
-msgstr ""
+msgstr "Widok listy"
 
 #: frontend/src/components/view-modes.js:54
 msgid "Grid view"
-msgstr ""
+msgstr "Widok siatki"
 
 #: frontend/src/components/view-modes.js:66
 #: frontend/src/components/view-modes.js:68
 msgid "Switch view mode"
-msgstr ""
+msgstr "Przełącz tryb widoku"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:118
 msgid "Wiki published"
-msgstr ""
+msgstr "Wiki opublikowane"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:224
 msgid "Visit the wiki"
-msgstr ""
+msgstr "Odwiedź wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:247
 #: frontend/src/pages/sdoc-revision/index.js:122
@@ -6137,100 +6138,100 @@ msgstr "Opublikuj"
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:258
 #| msgid "Convert Wiki"
 msgid "Convert to new Wiki"
-msgstr ""
+msgstr "Konwertuj na nowe Wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:281
 #| msgid "Publish Wiki"
 msgid "Unpublish Wiki"
-msgstr ""
+msgstr "Cofnij publikację Wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:282
 #| msgid "Are you sure you want to unlink this device?"
 msgid "Are you sure you want to unpublish Wiki"
-msgstr ""
+msgstr "Czy na pewno chcesz cofnąć publikację Wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:289
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:301
 #| msgid "Delete File"
 msgid "Delete Wiki"
-msgstr ""
+msgstr "Usuń Wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:290
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:302
 #| msgid "Are you sure you want to delete"
 msgid "Are you sure you want to delete Wiki"
-msgstr ""
+msgstr "Czy na pewno chcesz usunąć Wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:295
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:307
 #| msgid "Leave Share"
 msgid "Leave Share Wiki"
-msgstr ""
+msgstr "Opuść udostępnione Wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:296
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:308
 #| msgid "Are you sure you want to delete %s ?"
 msgid "Are you sure you want to leave share Wiki"
-msgstr ""
+msgstr "Czy na pewno chcesz opuścić udostępnione Wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-view.js:88
 msgid "My Wikis"
-msgstr ""
+msgstr "Moje Wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-view.js:109
 #| msgid "No shared links"
 msgid "No shared Wikis"
-msgstr ""
+msgstr "Brak udostępnionych Wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-view.js:144
 msgid "Old Wikis"
-msgstr ""
+msgstr "Stare Wiki"
 
 #: frontend/src/file-history-old.js:244
 #: frontend/src/pages/file-history/side-panel.js:105
 #: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:271
 msgid "History Versions"
-msgstr ""
+msgstr "Wersje historii"
 
 #: frontend/src/file-view.js:53
 #| msgid "Images"
 msgid "Image saved"
-msgstr ""
+msgstr "Obraz zapisany"
 
 #: frontend/src/metadata/components/cell-editors/collaborator-editor/index.js:214
 msgid "No collaborators available"
-msgstr ""
+msgstr "Brak dostępnych współpracowników"
 
 #: frontend/src/metadata/components/cell-editors/collaborator-editor/index.js:214
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/collaborator-filter/index.js:88
 msgid "No collaborators"
-msgstr ""
+msgstr "Brak współpracowników"
 
 #: frontend/src/metadata/components/cell-editors/collaborator-editor/index.js:250
 msgid "Search collaborators"
-msgstr ""
+msgstr "Wyszukaj współpracowników"
 
 #: frontend/src/metadata/components/cell-editors/date-editor.js:193
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-calendar.js:121
 #| msgid "End date"
 msgid "Enter date"
-msgstr ""
+msgstr "Wprowadź datę"
 
 #: frontend/src/metadata/components/cell-editors/date-editor.js:221
 #| msgid "Please select a file"
 msgid "Please select"
-msgstr ""
+msgstr "Proszę wybrać"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/custom-label.js:30
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/custom-label.js:58
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/location-controls.js:18
 msgid "Address"
-msgstr ""
+msgstr "Adres"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/custom-label.js:33
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/custom-label.js:61
 msgid "Fill in"
-msgstr ""
+msgstr "Wypełnij"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/location-controls.js:21
 msgid "Full screen"
@@ -6240,13 +6241,13 @@ msgstr "Pełny ekran"
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/location-controls.js:28
 #| msgid "Deleted option"
 msgid "Delete location"
-msgstr ""
+msgstr "Usuń lokalizację"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:12
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:170
 #| msgid "is not empty"
 msgid "Map is not ready"
-msgstr ""
+msgstr "Mapa nie jest gotowa"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:27
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:35
@@ -6257,19 +6258,19 @@ msgstr ""
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:112
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:117
 msgid "Search service unavailable"
-msgstr ""
+msgstr "Usługa wyszukiwania niedostępna"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:41
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:62
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:111
 #| msgid "No results"
 msgid "No results found"
-msgstr ""
+msgstr "Nie znaleziono wyników"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:217
 #| msgid "Please enter the old password"
 msgid "Please enter the address"
-msgstr ""
+msgstr "Proszę wprowadzić adres"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:260
 #| msgid "Saving..."
@@ -6279,7 +6280,7 @@ msgstr "Wyszukiwanie..."
 #: frontend/src/metadata/components/cell-editors/multiple-select-editor/index.js:213
 #: frontend/src/metadata/components/cell-editors/single-select-editor/index.js:212
 msgid "No option"
-msgstr ""
+msgstr "Brak opcji"
 
 #: frontend/src/metadata/components/cell-editors/multiple-select-editor/index.js:252
 #: frontend/src/metadata/components/cell-editors/single-select-editor/index.js:250
@@ -6293,22 +6294,22 @@ msgstr "Wyszukaj opcję"
 #: frontend/src/metadata/components/cell-editors/single-select-editor/index.js:263
 #: frontend/src/metadata/components/popover/options-popover/index.js:232
 msgid "Add option"
-msgstr ""
+msgstr "Dodaj opcję"
 
 #: frontend/src/metadata/components/cell-editors/tags-editor/index.js:361
 #| msgid "No options available"
 msgid "No tags available"
-msgstr ""
+msgstr "Brak dostępnych tagów"
 
 #: frontend/src/metadata/components/cell-editors/tags-editor/index.js:361
 #| msgid "No tags"
 msgid "No tag"
-msgstr ""
+msgstr "Brak tagu"
 
 #: frontend/src/metadata/components/cell-editors/tags-editor/index.js:369
 #| msgid "Space Used"
 msgid "Recently used tags"
-msgstr ""
+msgstr "Ostatnio używane tagi"
 
 #: frontend/src/metadata/components/cell-editors/tags-editor/index.js:374
 #: frontend/src/tag/components/tag-view-name/all-tags-operation-toolbar/index.js:64
@@ -6317,22 +6318,22 @@ msgstr ""
 #: frontend/src/tag/tags-tree-view/all-tags/index.js:28
 #| msgid "No tags"
 msgid "All tags"
-msgstr ""
+msgstr "Wszystkie tagi"
 
 #: frontend/src/metadata/components/cell-editors/tags-editor/index.js:407
 #| msgid "Search"
 msgid "Search tag"
-msgstr ""
+msgstr "Wyszukaj tag"
 
 #: frontend/src/metadata/components/cell-editors/tags-editor/index.js:431
 #| msgid "Add User"
 msgid "Add tag"
-msgstr ""
+msgstr "Dodaj tag"
 
 #: frontend/src/metadata/components/cell-editors/tags-editor/tag-item/index.js:40
 #| msgid "Select Image"
 msgid "Select tag"
-msgstr ""
+msgstr "Wybierz tag"
 
 #: frontend/src/metadata/components/data-process-setter/filter-setter.js:37
 msgid "1 filter"
@@ -6340,7 +6341,7 @@ msgstr "1 Filtr"
 
 #: frontend/src/metadata/components/data-process-setter/filter-setter.js:38
 msgid "Filters"
-msgstr ""
+msgstr "Filtry"
 
 #: frontend/src/metadata/components/data-process-setter/filter-setter.js:39
 msgid "Filter"
@@ -6348,15 +6349,15 @@ msgstr "Filtr"
 
 #: frontend/src/metadata/components/data-process-setter/gallery-group-by-setter.js:9
 msgid "Year"
-msgstr ""
+msgstr "Rok"
 
 #: frontend/src/metadata/components/data-process-setter/gallery-group-by-setter.js:10
 msgid "Month"
-msgstr ""
+msgstr "Miesiąc"
 
 #: frontend/src/metadata/components/data-process-setter/gallery-group-by-setter.js:11
 msgid "Day"
-msgstr ""
+msgstr "Dzień"
 
 #: frontend/src/metadata/components/data-process-setter/gallery-group-by-setter.js:12
 #: frontend/src/pages/org-admin/libraries/org-repo-nav.js:18
@@ -6374,54 +6375,54 @@ msgstr "Wszystkie"
 
 #: frontend/src/metadata/components/data-process-setter/groupby-setter.js:31
 msgid "Grouped by 1 property"
-msgstr ""
+msgstr "Pogrupowane według 1 właściwości"
 
 #: frontend/src/metadata/components/data-process-setter/groupby-setter.js:32
 #| msgid "Grouped by xxx properties"
 msgid "Grouped by {name_placeholder} properties"
-msgstr ""
+msgstr "Pogrupowane według {name_placeholder} właściwości"
 
 #: frontend/src/metadata/components/data-process-setter/groupby-setter.js:34
 #: frontend/src/metadata/views/kanban/settings/index.js:103
 msgid "Group by"
-msgstr ""
+msgstr "Grupuj według"
 
 #: frontend/src/metadata/components/data-process-setter/hide-column-setter.js:24
 msgid "1 hidden property"
-msgstr ""
+msgstr "1 ukryta właściwość"
 
 #: frontend/src/metadata/components/data-process-setter/hide-column-setter.js:25
 #| msgid "Failed to modify hidden properties"
 msgid "{name_placeholder} hidden properties"
-msgstr ""
+msgstr "{name_placeholder} ukryte właściwości"
 
 #: frontend/src/metadata/components/data-process-setter/hide-column-setter.js:26
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:152
 msgid "Hide properties"
-msgstr ""
+msgstr "Ukryj właściwości"
 
 #: frontend/src/metadata/components/data-process-setter/map-type-setter.js:8
 #: frontend/src/metadata/constants/view/index.js:38
 #| msgid "Max"
 msgid "Map"
-msgstr ""
+msgstr "Mapa"
 
 #: frontend/src/metadata/components/data-process-setter/map-type-setter.js:9
 msgid "Satellite"
-msgstr ""
+msgstr "Satelita"
 
 #: frontend/src/metadata/components/data-process-setter/pre-hide-column-setter.js:46
 msgid "Preset hide properties"
-msgstr ""
+msgstr "Wstępnie ukryte właściwości"
 
 #: frontend/src/metadata/components/data-process-setter/pre-hide-column-setter.js:48
 msgid "1 preset hidden property"
-msgstr ""
+msgstr "1 wstępnie ukryta właściwość"
 
 #: frontend/src/metadata/components/data-process-setter/pre-hide-column-setter.js:50
 #| msgid "xxx preset hidden properties"
 msgid "{name_placeholder} preset hidden properties"
-msgstr ""
+msgstr "{name_placeholder} wstępnie ukryte właściwości"
 
 #: frontend/src/metadata/components/data-process-setter/sort-setter.js:20
 msgid "1 sort"
@@ -6438,50 +6439,50 @@ msgstr "Sortuj"
 
 #: frontend/src/metadata/components/dialog/delete-confirm-dialog/index.js:13
 msgid "Are you sure to delete "
-msgstr ""
+msgstr "Czy na pewno chcesz usunąć "
 
 #: frontend/src/metadata/components/dialog/file-tags-dialog/index.js:55
 #| msgid "Failed to generate image description"
 msgid "Failed to generate file tags"
-msgstr ""
+msgstr "Nie udało się wygenerować tagów pliku"
 
 #: frontend/src/metadata/components/dialog/file-tags-dialog/index.js:149
 #| msgid "No tags"
 msgid "tags"
-msgstr ""
+msgstr "tagi"
 
 #: frontend/src/metadata/components/dialog/file-tags-dialog/index.js:156
 #| msgid "Set Quota"
 msgid "Matching tags"
-msgstr ""
+msgstr "Pasujące tagi"
 
 #: frontend/src/metadata/components/dialog/file-tags-dialog/index.js:176
 #| msgid "No results matching"
 msgid "No matching tags"
-msgstr ""
+msgstr "Brak pasujących tagów"
 
 #: frontend/src/metadata/components/dialog/file-tags-dialog/index.js:180
 msgid "Recommended new tags"
-msgstr ""
+msgstr "Zalecane nowe tagi"
 
 #: frontend/src/metadata/components/dialog/file-tags-dialog/index.js:198
 msgid "No recommended new tags"
-msgstr ""
+msgstr "Brak zalecanych nowych tagów"
 
 #: frontend/src/metadata/components/dialog/metadata-face-recognition-dialog/index.js:65
 #: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:92
 #| msgid "Turn off extended properties"
 msgid "Please turn on extended properties setting first"
-msgstr ""
+msgstr "Proszę najpierw włączyć ustawienia rozszerzonych właściwości"
 
 #: frontend/src/metadata/components/dialog/metadata-face-recognition-dialog/index.js:76
 msgid "Enable face recognition to identify people in your photos."
-msgstr ""
+msgstr "Włącz rozpoznawanie twarzy, aby identyfikować osoby na zdjęciach."
 
 #: frontend/src/metadata/components/dialog/metadata-face-recognition-dialog/index.js:86
 #| msgid "Face recognition"
 msgid "Turn off face recognition"
-msgstr ""
+msgstr "Wyłącz rozpoznawanie twarzy"
 
 #: frontend/src/metadata/components/dialog/metadata-face-recognition-dialog/index.js:87
 #| msgid ""
@@ -6490,75 +6491,75 @@ msgstr ""
 msgid ""
 "Do you really want to turn off face recognition? Existing results will all "
 "be deleted."
-msgstr ""
+msgstr "Czy na pewno chcesz wyłączyć rozpoznawanie twarzy? Wszystkie istniejące wyniki zostaną usunięte."
 
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:154
 #| msgid "1 hidden property"
 msgid "1 Hidden property"
-msgstr ""
+msgstr "1 Ukryta właściwość"
 
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:156
 #| msgid "Hide properties"
 msgid "Hidden properties"
-msgstr ""
+msgstr "Ukryte właściwości"
 
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:171
 msgid "Enable extended properties"
-msgstr ""
+msgstr "Włącz rozszerzone właściwości"
 
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:174
 msgid ""
 "After enable extended properties for files, you can add different properties"
 " to files, like collaborators, file expiring time, file description. You can"
 " also create different views for files based extended properties."
-msgstr ""
+msgstr "Po włączeniu rozszerzonych właściwości dla plików możesz dodawać różne właściwości do plików, takie jak współpracownicy, czas wygaśnięcia pliku, opis pliku. Możesz również tworzyć różne widoki dla plików na podstawie rozszerzonych właściwości."
 
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:178
 #| msgid "xxx hidden properties"
 msgid "Global hidden properties"
-msgstr ""
+msgstr "Globalne ukryte właściwości"
 
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:180
 msgid "Global hidden properties will not be displayed in all views."
-msgstr ""
+msgstr "Globalne ukryte właściwości nie będą wyświetlane we wszystkich widokach."
 
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:212
 msgid "Turn off extended properties"
-msgstr ""
+msgstr "Wyłącz rozszerzone właściwości"
 
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:213
 msgid ""
 "Do you really want to turn off extended properties? Existing properties will"
 " all be deleted."
-msgstr ""
+msgstr "Czy na pewno chcesz wyłączyć rozszerzone właściwości? Wszystkie istniejące właściwości zostaną usunięte."
 
 #: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:50
 msgid "Tags migrated successfully"
-msgstr ""
+msgstr "Tagi zostały pomyślnie zmigrowane"
 
 #: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:103
 msgid "Enable tags to add tags to files and search files by tags."
-msgstr ""
+msgstr "Włącz tagi, aby dodawać tagi do plików i wyszukiwać pliki według tagów."
 
 #: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:107
 msgid "Language for tags generated by AI"
-msgstr ""
+msgstr "Język dla tagów generowanych przez AI"
 
 #: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:119
 msgid ""
 "This library contains tags of old version. Do you like to migrate the tags "
 "to new version?"
-msgstr ""
+msgstr "Ta biblioteka zawiera tagi starej wersji. Czy chcesz zmigrować tagi do nowej wersji?"
 
 #: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:124
 #| msgid "Visit old version page"
 msgid "Migrate old version tags"
-msgstr ""
+msgstr "Migruj tagi starej wersji"
 
 #: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:136
 #| msgid "Turn off"
 msgid "Turn off tags"
-msgstr ""
+msgstr "Wyłącz tagi"
 
 #: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:137
 #| msgid ""
@@ -6566,124 +6567,124 @@ msgstr ""
 #| "deleted."
 msgid ""
 "Do you really want to turn off tags? Existing tags will all be deleted."
-msgstr ""
+msgstr "Czy na pewno chcesz wyłączyć tagi? Wszystkie istniejące tagi zostaną usunięte."
 
 #: frontend/src/metadata/components/dialog/peoples-dialog/index.js:68
 #: frontend/src/metadata/components/dialog/peoples-dialog/index.js:71
 #: frontend/src/metadata/utils/view/core.js:14
 msgid "People"
-msgstr ""
+msgstr "Ludzie"
 
 #: frontend/src/metadata/components/dialog/peoples-dialog/people.js:7
 #: frontend/src/metadata/views/face-recognition/index.js:40
 #: frontend/src/metadata/views/face-recognition/peoples/people/index.js:31
 msgid "Person image"
-msgstr ""
+msgstr "Obraz osoby"
 
 #: frontend/src/metadata/components/dialog/rename-dialog/index.js:62
 msgid "New folder name"
-msgstr ""
+msgstr "Nazwa nowego folderu"
 
 #: frontend/src/metadata/components/dialog/rename-dialog/index.js:62
 msgid "New file name"
-msgstr ""
+msgstr "Nazwa nowego pliku"
 
 #: frontend/src/metadata/components/dialog/turn-off-confirm-dialog.js:16
 msgid "Turn off"
-msgstr ""
+msgstr "Wyłącz"
 
 #: frontend/src/metadata/components/metadata-details/ai-icon.js:42
 #: frontend/src/utils/text-translation.js:261
 msgid "Generate description"
-msgstr ""
+msgstr "Wygeneruj opis"
 
 #: frontend/src/metadata/components/metadata-details/ai-icon.js:48
 #: frontend/src/utils/text-translation.js:273
 #| msgid "Exact date"
 msgid "Extract text"
-msgstr ""
+msgstr "Wyodrębnij tekst"
 
 #: frontend/src/metadata/components/metadata-details/ai-icon.js:52
 #: frontend/src/utils/text-translation.js:229
 msgid "Extract file detail"
-msgstr ""
+msgstr "Wyodrębnij szczegóły pliku"
 
 #: frontend/src/metadata/components/metadata-details/ai-icon.js:56
 #: frontend/src/utils/text-translation.js:265
 #| msgid "Generate image description"
 msgid "Generate file tags"
-msgstr ""
+msgstr "Wygeneruj tagi pliku"
 
 #: frontend/src/metadata/components/popover/column-popover/column-name.js:31
 msgid "Property name"
-msgstr ""
+msgstr "Nazwa właściwości"
 
 #: frontend/src/metadata/components/popover/column-popover/column-type-dropdown-menu/constants.js:80
 msgid "Long text"
-msgstr ""
+msgstr "Długi tekst"
 
 #: frontend/src/metadata/components/popover/column-popover/column-type-dropdown-menu/constants.js:87
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/number-format-popover/index.js:33
 msgid "Number"
-msgstr ""
+msgstr "Liczba"
 
 #: frontend/src/metadata/components/popover/column-popover/column-type-dropdown-menu/constants.js:94
 msgid "Collaborator"
-msgstr ""
+msgstr "Współpracownik"
 
 #: frontend/src/metadata/components/popover/column-popover/column-type-dropdown-menu/constants.js:101
 msgid "Checkbox"
-msgstr ""
+msgstr "Pole wyboru"
 
 #: frontend/src/metadata/components/popover/column-popover/column-type-dropdown-menu/constants.js:116
 msgid "Single select"
-msgstr ""
+msgstr "Pojedynczy wybór"
 
 #: frontend/src/metadata/components/popover/column-popover/column-type-dropdown-menu/constants.js:123
 msgid "Multiple select"
-msgstr ""
+msgstr "Wielokrotny wybór"
 
 #: frontend/src/metadata/components/popover/column-popover/column-type-dropdown-menu/constants.js:130
 msgid "Rate"
-msgstr ""
+msgstr "Oceń"
 
 #: frontend/src/metadata/components/popover/column-popover/column-type-dropdown-menu/index.js:57
 #| msgid "Search property"
 msgid "Search properties"
-msgstr ""
+msgstr "Wyszukaj właściwości"
 
 #: frontend/src/metadata/components/popover/column-popover/column-type-dropdown-menu/index.js:93
 msgid "Custom properties"
-msgstr ""
+msgstr "Niestandardowe właściwości"
 
 #: frontend/src/metadata/components/popover/column-popover/data/date-data/index.js:34
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/index.js:139
 msgid "ISO"
-msgstr ""
+msgstr "ISO"
 
 #: frontend/src/metadata/components/popover/column-popover/data/date-data/index.js:38
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/index.js:140
 msgid "US"
-msgstr ""
+msgstr "USA"
 
 #: frontend/src/metadata/components/popover/column-popover/data/date-data/index.js:42
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/index.js:141
 msgid "European"
-msgstr ""
+msgstr "Europejski"
 
 #: frontend/src/metadata/components/popover/column-popover/data/date-data/index.js:46
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/index.js:142
 msgid "Germany Russia etc"
-msgstr ""
+msgstr "Niemcy Rosja itp."
 
 #: frontend/src/metadata/components/popover/column-popover/data/date-data/index.js:71
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/number-format-popover/index.js:295
 msgid "Format"
-msgstr ""
+msgstr "Format"
 
 #: frontend/src/metadata/components/popover/column-popover/data/date-data/index.js:86
 msgid "Accurate to minute"
-msgstr ""
+msgstr "Dokładny do minuty"
 
 #: frontend/src/metadata/components/popover/column-popover/data/rate-data/index.js:55
 msgid "Style"
@@ -6691,37 +6692,37 @@ msgstr "Styl"
 
 #: frontend/src/metadata/components/popover/column-popover/data/rate-data/index.js:91
 msgid "Max"
-msgstr ""
+msgstr "Maks."
 
 #: frontend/src/metadata/components/popover/column-popover/utils.js:7
 #: frontend/src/metadata/components/popover/column-popover/utils.js:66
 msgid "This is required"
-msgstr ""
+msgstr "To jest wymagane"
 
 #: frontend/src/metadata/components/popover/column-popover/utils.js:11
 msgid "Name cannot contain dots"
-msgstr ""
+msgstr "Nazwa nie może zawierać kropek"
 
 #: frontend/src/metadata/components/popover/column-popover/utils.js:17
 #: frontend/src/utils/utils.js:1981
 msgid "Name cannot contain backtick"
-msgstr ""
+msgstr "Nazwa nie może zawierać backtick"
 
 #: frontend/src/metadata/components/popover/column-popover/utils.js:23
 msgid "Name cannot contain curly braces"
-msgstr ""
+msgstr "Nazwa nie może zawierać nawiasów klamrowych"
 
 #: frontend/src/metadata/components/popover/column-popover/utils.js:32
 msgid "There is another property with this name"
-msgstr ""
+msgstr "Istnieje inna właściwość o tej nazwie"
 
 #: frontend/src/metadata/components/popover/column-popover/utils.js:42
 msgid "Another property has this property type"
-msgstr ""
+msgstr "Inna właściwość ma ten typ właściwości"
 
 #: frontend/src/metadata/components/popover/column-popover/utils.js:54
 msgid "Invalid regular expression"
-msgstr ""
+msgstr "Nieprawidłowe wyrażenie regularne"
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item-utils.js:68
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item-utils.js:81
@@ -6743,7 +6744,7 @@ msgstr "Wybierz opcję(y)"
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:445
 msgid "deleted option"
-msgstr ""
+msgstr "usunięta opcja"
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:462
 msgid "Select an option"
@@ -6751,13 +6752,13 @@ msgstr "Wybierz opcję"
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:480
 msgid "Select collaborators"
-msgstr ""
+msgstr "Wybierz współpracowników"
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:536
 msgid ""
 "If there are multiple items in the cell, a random one will be chosen and be "
 "compared with the filter value."
-msgstr ""
+msgstr "Jeśli w komórce znajduje się wiele elementów, zostanie wybrany losowy i porównany z wartością filtra."
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:557
 #: frontend/src/metadata/components/popover/filter-popover/basic-filters/tags-filter.js:67
@@ -6769,40 +6770,40 @@ msgstr "Nieprawidłowy filtr"
 #: frontend/src/metadata/components/popover/hidden-column-popover/index.js:107
 #: frontend/src/metadata/components/popover/sort-popover/index.js:218
 msgid "Search property"
-msgstr ""
+msgstr "Wyszukaj właściwość"
 
 #: frontend/src/metadata/components/popover/filter-popover/basic-filters/file-folder-filter.js:7
 msgid "Only files"
-msgstr ""
+msgstr "Tylko pliki"
 
 #: frontend/src/metadata/components/popover/filter-popover/basic-filters/file-folder-filter.js:8
 msgid "Only folders"
-msgstr ""
+msgstr "Tylko foldery"
 
 #: frontend/src/metadata/components/popover/filter-popover/basic-filters/file-folder-filter.js:9
 msgid "Files and folders"
-msgstr ""
+msgstr "Pliki i foldery"
 
 #: frontend/src/metadata/components/popover/filter-popover/basic-filters/gallery-file-type-filter.js:7
 msgid "Only pictures"
-msgstr ""
+msgstr "Tylko obrazy"
 
 #: frontend/src/metadata/components/popover/filter-popover/basic-filters/gallery-file-type-filter.js:8
 msgid "Only videos"
-msgstr ""
+msgstr "Tylko filmy"
 
 #: frontend/src/metadata/components/popover/filter-popover/basic-filters/gallery-file-type-filter.js:9
 msgid "Pictures and videos"
-msgstr ""
+msgstr "Obrazy i filmy"
 
 #: frontend/src/metadata/components/popover/filter-popover/basic-filters/index.js:41
 msgid "Basic"
-msgstr ""
+msgstr "Podstawowe"
 
 #: frontend/src/metadata/components/popover/filter-popover/basic-filters/table-file-type-filter.js:37
 #: frontend/src/metadata/utils/column/index.js:185
 msgid "File type"
-msgstr ""
+msgstr "Typ pliku"
 
 #: frontend/src/metadata/components/popover/filter-popover/index.js:150
 msgid "No filters"
@@ -6826,45 +6827,45 @@ msgstr "W dół"
 
 #: frontend/src/metadata/components/popover/groupbys-popover/groupbys/groupby-item.js:102
 msgid "By day"
-msgstr ""
+msgstr "Według dnia"
 
 #: frontend/src/metadata/components/popover/groupbys-popover/groupbys/groupby-item.js:103
 msgid "By week"
-msgstr ""
+msgstr "Według tygodnia"
 
 #: frontend/src/metadata/components/popover/groupbys-popover/groupbys/groupby-item.js:104
 msgid "By month"
-msgstr ""
+msgstr "Według miesiąca"
 
 #: frontend/src/metadata/components/popover/groupbys-popover/groupbys/groupby-item.js:105
 msgid "By quarter"
-msgstr ""
+msgstr "Według kwartału"
 
 #: frontend/src/metadata/components/popover/groupbys-popover/groupbys/groupby-item.js:106
 msgid "By year"
-msgstr ""
+msgstr "Według roku"
 
 #: frontend/src/metadata/components/popover/groupbys-popover/groupbys/index.js:20
 msgid "No groupings applied to this view."
-msgstr ""
+msgstr "Brak zastosowanych grupowań w tym widoku."
 
 #: frontend/src/metadata/components/popover/groupbys-popover/index.js:121
 msgid "Add group"
-msgstr ""
+msgstr "Dodaj grupę"
 
 #: frontend/src/metadata/components/popover/groupbys-popover/index.js:133
 #: frontend/src/metadata/components/popover/groupbys-popover/index.js:135
 msgid "Collapse all"
-msgstr ""
+msgstr "Zwiń wszystkie"
 
 #: frontend/src/metadata/components/popover/groupbys-popover/index.js:143
 #: frontend/src/metadata/components/popover/groupbys-popover/index.js:145
 msgid "Expand all"
-msgstr ""
+msgstr "Rozwiń wszystkie"
 
 #: frontend/src/metadata/components/popover/hidden-column-popover/hidden-columns/index.js:30
 msgid "No properties available to be hidden"
-msgstr ""
+msgstr "Brak właściwości dostępnych do ukrycia"
 
 #: frontend/src/metadata/components/popover/hidden-column-popover/index.js:117
 #: frontend/src/metadata/components/popover/hidden-column-popover/index.js:120
@@ -6883,83 +6884,83 @@ msgstr "Pokaż wszystkie"
 #: frontend/src/metadata/components/popover/kanban-add-category-popover/index.js:38
 #: frontend/src/metadata/components/popover/options-popover/index.js:57
 msgid "There is another option with this name"
-msgstr ""
+msgstr "Istnieje inna opcja o tej nazwie"
 
 #: frontend/src/metadata/components/popover/ocr-result-popover/index.js:133
 #| msgid "Failed to extract file details"
 msgid "Failed to extract text"
-msgstr ""
+msgstr "Nie udało się wyodrębnić tekstu"
 
 #: frontend/src/metadata/components/popover/ocr-result-popover/index.js:151
 #| msgid "result"
 msgid "OCR result"
-msgstr ""
+msgstr "Wynik OCR"
 
 #: frontend/src/metadata/components/popover/ocr-result-popover/index.js:157
 #| msgid "Converting, please wait..."
 msgid "Extracting text, please wait..."
-msgstr ""
+msgstr "Wyodrębnianie tekstu, proszę czekać..."
 
 #: frontend/src/metadata/components/popover/ocr-result-popover/index.js:165
 #| msgid "File details"
 msgid "No text extracted"
-msgstr ""
+msgstr "Nie wyodrębniono tekstu"
 
 #: frontend/src/metadata/components/popover/ocr-result-popover/index.js:171
 #| msgid "Failed to delete property"
 msgid "Save to description field"
-msgstr ""
+msgstr "Zapisz w polu opisu"
 
 #: frontend/src/metadata/components/popover/options-popover/confirm-delete-popover/index.js:28
 msgid "{name} rows use this option."
-msgstr ""
+msgstr "{name} wierszy używa tej opcji."
 
 #: frontend/src/metadata/components/popover/options-popover/confirm-delete-popover/index.js:29
 #| msgid "Are you sure you want to delete this page?"
 msgid "Are you sure you want to delete this option?"
-msgstr ""
+msgstr "Czy na pewno chcesz usunąć tę opcję?"
 
 #: frontend/src/metadata/components/popover/options-popover/index.js:175
 msgid "No options"
-msgstr ""
+msgstr "Brak opcji"
 
 #: frontend/src/metadata/components/popover/options-popover/options-footer.js:61
 msgid "Please select a file"
-msgstr ""
+msgstr "Proszę wybrać plik"
 
 #: frontend/src/metadata/components/popover/options-popover/options-footer.js:76
 #: frontend/src/metadata/components/popover/options-popover/options-footer.js:80
 msgid "The imported options are invalid"
-msgstr ""
+msgstr "Zaimportowane opcje są nieprawidłowe"
 
 #: frontend/src/metadata/components/popover/options-popover/options-footer.js:87
 #| msgid "The imported option already exists"
 msgid "The imported options already exists"
-msgstr ""
+msgstr "Zaimportowane opcje już istnieją"
 
 #: frontend/src/metadata/components/popover/options-popover/options-footer.js:92
 msgid "Options imported"
-msgstr ""
+msgstr "Opcje zaimportowane"
 
 #: frontend/src/metadata/components/popover/options-popover/options-footer.js:96
 msgid "Failed imported options"
-msgstr ""
+msgstr "Nieudane zaimportowane opcje"
 
 #: frontend/src/metadata/components/popover/options-popover/options-footer.js:108
 msgid ""
 "Use the import/export function to transfer options quickly. (The export is "
 "in JSON format.) By pasting cells, copied from a text column, an Excel or a "
 "TXT file, you can also add options quickly."
-msgstr ""
+msgstr "Użyj funkcji importu/eksportu, aby szybko przenieść opcje. (Eksport jest w formacie JSON.) Wklejając komórki skopiowane z kolumny tekstowej, pliku Excel lub TXT, możesz również szybko dodawać opcje."
 
 #: frontend/src/metadata/components/popover/options-popover/options-footer.js:117
 msgid "Import options"
-msgstr ""
+msgstr "Importuj opcje"
 
 #: frontend/src/metadata/components/popover/options-popover/options-footer.js:124
 #| msgid "Import options"
 msgid "Export options"
-msgstr ""
+msgstr "Eksportuj opcje"
 
 #: frontend/src/metadata/components/popover/sort-popover/index.js:256
 #| msgid "sorts"
@@ -6973,7 +6974,7 @@ msgstr "Dodaj sort"
 
 #: frontend/src/metadata/components/view-details/index.js:19
 msgid "There is no information to display."
-msgstr ""
+msgstr "Brak informacji do wyświetlenia."
 
 #: frontend/src/metadata/components/view-toolbar/card-view-toolbar/index.js:81
 #: frontend/src/metadata/components/view-toolbar/face-recognition/index.js:58
@@ -6983,99 +6984,99 @@ msgstr ""
 #: frontend/src/metadata/views/kanban/settings/index.js:152
 #: frontend/src/utils/text-translation.js:132
 msgid "Properties"
-msgstr ""
+msgstr "Właściwości"
 
 #: frontend/src/metadata/constants/column/limit.js:15
 msgid ""
 "The content of the document has exceeded the limit of 100000 characters, and"
 " the content cannot be saved"
-msgstr ""
+msgstr "Zawartość dokumentu przekroczyła limit 100000 znaków i nie można zapisać zawartości"
 
 #: frontend/src/metadata/constants/column/limit.js:16
 msgid ""
 "The content of the document has exceeded the limit of 100000 characters, and"
 " only the first 100000 characters are saved"
-msgstr ""
+msgstr "Zawartość dokumentu przekroczyła limit 100000 znaków i zapisano tylko pierwsze 100000 znaków"
 
 #: frontend/src/metadata/constants/filter/filter-modifier.js:29
 msgid "Tomorrow"
-msgstr ""
+msgstr "Jutro"
 
 #: frontend/src/metadata/constants/filter/filter-modifier.js:30
 msgid "Yesterday"
-msgstr ""
+msgstr "Wczoraj"
 
 #: frontend/src/metadata/constants/filter/filter-modifier.js:31
 msgid "One week ago"
-msgstr ""
+msgstr "Tydzień temu"
 
 #: frontend/src/metadata/constants/filter/filter-modifier.js:32
 msgid "One week from now"
-msgstr ""
+msgstr "Za tydzień"
 
 #: frontend/src/metadata/constants/filter/filter-modifier.js:33
 msgid "One month ago"
-msgstr ""
+msgstr "Miesiąc temu"
 
 #: frontend/src/metadata/constants/filter/filter-modifier.js:34
 msgid "One month from now"
-msgstr ""
+msgstr "Za miesiąc"
 
 #: frontend/src/metadata/constants/filter/filter-modifier.js:35
 msgid "Number of days ago"
-msgstr ""
+msgstr "Liczba dni temu"
 
 #: frontend/src/metadata/constants/filter/filter-modifier.js:36
 msgid "Number of days from now"
-msgstr ""
+msgstr "Liczba dni od teraz"
 
 #: frontend/src/metadata/constants/filter/filter-modifier.js:37
 msgid "Exact date"
-msgstr ""
+msgstr "Dokładna data"
 
 #: frontend/src/metadata/constants/filter/filter-modifier.js:38
 msgid "The past week"
-msgstr ""
+msgstr "Ostatni tydzień"
 
 #: frontend/src/metadata/constants/filter/filter-modifier.js:39
 msgid "The past month"
-msgstr ""
+msgstr "Ostatni miesiąc"
 
 #: frontend/src/metadata/constants/filter/filter-modifier.js:40
 msgid "The past year"
-msgstr ""
+msgstr "Ostatni rok"
 
 #: frontend/src/metadata/constants/filter/filter-modifier.js:41
 msgid "The next week"
-msgstr ""
+msgstr "Następny tydzień"
 
 #: frontend/src/metadata/constants/filter/filter-modifier.js:42
 msgid "The next month"
-msgstr ""
+msgstr "Następny miesiąc"
 
 #: frontend/src/metadata/constants/filter/filter-modifier.js:43
 msgid "The next year"
-msgstr ""
+msgstr "Następny rok"
 
 #: frontend/src/metadata/constants/filter/filter-modifier.js:44
 msgid "The next numbers of days"
-msgstr ""
+msgstr "Następna liczba dni"
 
 #: frontend/src/metadata/constants/filter/filter-modifier.js:45
 msgid "The past numbers of days"
-msgstr ""
+msgstr "Poprzednia liczba dni"
 
 #: frontend/src/metadata/constants/filter/filter-modifier.js:46
 msgid "This week"
-msgstr ""
+msgstr "W tym tygodniu"
 
 #: frontend/src/metadata/constants/filter/filter-modifier.js:47
 msgid "This month"
-msgstr ""
+msgstr "W tym miesiącu"
 
 #: frontend/src/metadata/constants/filter/filter-modifier.js:48
 msgid "This year"
-msgstr ""
+msgstr "W tym roku"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:32
 msgid "contains"
@@ -7103,39 +7104,39 @@ msgstr "Nie pusty"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:44
 msgid "is within..."
-msgstr ""
+msgstr "Jest w zakresie..."
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:45
 msgid "is before..."
-msgstr ""
+msgstr "Jest przed..."
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:46
 msgid "is after..."
-msgstr ""
+msgstr "Jest po..."
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:47
 msgid "is on or before..."
-msgstr ""
+msgstr "Jest w dniu lub przed..."
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:48
 msgid "is on or after..."
-msgstr ""
+msgstr "Jest w dniu lub po..."
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:49
 msgid "has any of..."
-msgstr ""
+msgstr "Ma którykolwiek z..."
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:50
 msgid "has all of..."
-msgstr ""
+msgstr "Ma wszystkie z..."
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:51
 msgid "has none of..."
-msgstr ""
+msgstr "Nie ma żadnego z..."
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:52
 msgid "is exactly..."
-msgstr ""
+msgstr "Jest dokładnie..."
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:53
 msgid "is current user's ID"
@@ -7147,16 +7148,16 @@ msgstr "Zawiera mnie"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:55
 msgid "is any of..."
-msgstr ""
+msgstr "Jest którymkolwiek z..."
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:56
 msgid "is none of..."
-msgstr ""
+msgstr "Nie jest żadnym z..."
 
 #: frontend/src/metadata/constants/view/index.js:35
 #: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:71
 msgid "Gallery"
-msgstr ""
+msgstr "Galeria"
 
 #: frontend/src/metadata/constants/view/index.js:36
 msgid "Table"
@@ -7164,7 +7165,7 @@ msgstr "Tabela"
 
 #: frontend/src/metadata/constants/view/index.js:37
 msgid "Kanban"
-msgstr ""
+msgstr "Kanban"
 
 #: frontend/src/metadata/constants/view/index.js:39
 msgid "Card"
@@ -7173,17 +7174,17 @@ msgstr "Karta"
 #: frontend/src/metadata/constants/view/index.js:40
 #| msgid "Status"
 msgid "Statistics"
-msgstr ""
+msgstr "Statystyki"
 
 #: frontend/src/metadata/constants/view/statistics.js:5
 #: frontend/src/metadata/utils/column/index.js:283
 msgid "Picture"
-msgstr ""
+msgstr "Obraz"
 
 #: frontend/src/metadata/constants/view/statistics.js:6
 #: frontend/src/metadata/utils/column/index.js:286
 msgid "Document"
-msgstr ""
+msgstr "Dokument"
 
 #: frontend/src/metadata/constants/view/statistics.js:7
 #: frontend/src/metadata/utils/column/index.js:289
@@ -7886,33 +7887,33 @@ msgstr "Przywrócono bibliotekę"
 
 #: frontend/src/pages/dashboard/activity-item.js:83
 msgid "Cleaned trash"
-msgstr ""
+msgstr "Opróżniono kosz"
 
 #: frontend/src/pages/dashboard/activity-item.js:85
 #| msgid "Removed all items from trash."
 msgid "Removed all items from trash"
-msgstr ""
+msgstr "Usunięto wszystkie elementy z kosza"
 
 #: frontend/src/pages/dashboard/activity-item.js:87
 #| msgid "Removed items older than {n} days from trash."
 msgid "Removed items older than {n} days from trash"
-msgstr ""
+msgstr "Usunięto elementy starsze niż {n} dni z kosza"
 
 #: frontend/src/pages/dashboard/activity-item.js:96
 msgid "{file} and {n} other files"
-msgstr ""
+msgstr "{file} i {n} innych plików"
 
 #: frontend/src/pages/dashboard/activity-item.js:99
 msgid "Created {n} files"
-msgstr ""
+msgstr "Utworzono {n} plików"
 
 #: frontend/src/pages/dashboard/activity-item.js:103
 msgid "details"
-msgstr ""
+msgstr "szczegóły"
 
 #: frontend/src/pages/dashboard/activity-item.js:117
 msgid "Created draft"
-msgstr ""
+msgstr "Utworzono szkic"
 
 #: frontend/src/pages/dashboard/activity-item.js:117
 msgid "Created file"
@@ -7920,7 +7921,7 @@ msgstr "Plik utworzono"
 
 #: frontend/src/pages/dashboard/activity-item.js:122
 msgid "Deleted draft"
-msgstr ""
+msgstr "Usunięto szkic"
 
 #: frontend/src/pages/dashboard/activity-item.js:122
 msgid "Deleted file"
@@ -7940,7 +7941,7 @@ msgstr "Plik przeniesiono"
 
 #: frontend/src/pages/dashboard/activity-item.js:144
 msgid "Updated draft"
-msgstr ""
+msgstr "Zaktualizowano szkic"
 
 #: frontend/src/pages/dashboard/activity-item.js:144
 msgid "Updated file"
@@ -7968,28 +7969,28 @@ msgstr "Folder przeniesiono"
 
 #: frontend/src/pages/dashboard/content.js:22
 msgid "No more activities"
-msgstr ""
+msgstr "Brak więcej aktywności"
 
 #: frontend/src/pages/dashboard/files-activities.js:285
 #| msgid "All Notifications"
 msgid "All Activities"
-msgstr ""
+msgstr "Wszystkie aktywności"
 
 #: frontend/src/pages/dashboard/files-activities.js:288
 #| msgid "No more activities"
 msgid "My Activities"
-msgstr ""
+msgstr "Moje aktywności"
 
 #: frontend/src/pages/dashboard/log-repo-selector.js:96
 #: frontend/src/pages/dashboard/log-repo-selector.js:98
 #| msgid "Single select"
 msgid "Toggle repo selector"
-msgstr ""
+msgstr "Przełącznik wybierania repozytorium"
 
 #: frontend/src/pages/dashboard/log-repo-selector.js:122
 #| msgid "in all libraries"
 msgid "Find libraries"
-msgstr ""
+msgstr "Wyszukaj biblioteki"
 
 #: frontend/src/pages/dashboard/log-repo-selector.js:129
 #: frontend/src/pages/dashboard/log-user-selector.js:162
@@ -8000,51 +8001,51 @@ msgstr "Wczytywanie..."
 #: frontend/src/pages/dashboard/log-repo-selector.js:132
 #| msgid "Tag not found"
 msgid "Library not found"
-msgstr ""
+msgstr "Biblioteka nie znaleziona"
 
 #: frontend/src/pages/dashboard/log-user-selector.js:127
 #: frontend/src/pages/dashboard/log-user-selector.js:129
 #: frontend/src/pages/dashboard/user-selector.js:80
 #| msgid "Please select a file"
 msgid "Toggle user selector"
-msgstr ""
+msgstr "Przełącznik wybierania użytkownika"
 
 #: frontend/src/pages/dashboard/log-user-selector.js:155
 #| msgid "Add user"
 msgid "Find users"
-msgstr ""
+msgstr "Wyszukaj użytkowników"
 
 #: frontend/src/pages/dashboard/user-selector.js:85
 msgid "Modified by:"
-msgstr ""
+msgstr "Zmodyfikowany przez:"
 
 #: frontend/src/pages/dashboard/user-selector.js:88
 msgid "Modified by"
-msgstr ""
+msgstr "Zmodyfikowany przez"
 
 #: frontend/src/pages/dashboard/user-selector.js:111
 msgid "Find modifiers"
-msgstr ""
+msgstr "Wyszukaj modyfikatorów"
 
 #: frontend/src/pages/excalidraw-editable-viewer/index.js:83
 #| msgid "Set user name"
 msgid "Your name"
-msgstr ""
+msgstr "Twoje imię"
 
 #: frontend/src/pages/excalidraw-editor/editor/index.js:187
 msgid ""
 "The uploaded image has not been saved yet. Please close this page later."
-msgstr ""
+msgstr "Prześlij obrazek, aby zapisać go. Po tym możesz zamknąć tę stronę."
 
 #: frontend/src/pages/excalidraw-editor/editor/index.js:236
 #| msgid "Person image"
 msgid "Link image"
-msgstr ""
+msgstr "Linkuj obrazek"
 
 #: frontend/src/pages/excalidraw-editor/extension/select-image-dialog/index.js:72
 #| msgid "Select Image"
 msgid "Select image"
-msgstr ""
+msgstr "Wybierz obrazek"
 
 #: frontend/src/pages/file-history-old/history-item.js:54
 msgid "(current version)"
@@ -8061,12 +8062,12 @@ msgstr "Wyświetl"
 
 #: frontend/src/pages/file-history-old/history-item.js:127
 msgid "View Related Snapshot"
-msgstr ""
+msgstr "Wyświetl powiązany zrzut"
 
 #: frontend/src/pages/file-history/side-panel.js:92
 #: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:122
 msgid "Successfully restored."
-msgstr ""
+msgstr "Przywrócono."
 
 #: frontend/src/pages/groups/group-item.js:77
 #: frontend/src/pages/groups/group-view.js:134
@@ -8082,19 +8083,19 @@ msgstr "Brak bibliotek"
 #: frontend/src/pages/groups/group-op-menu.js:122
 #| msgid "Successfully sent to {placeholder}"
 msgid "Successfully imported {user_placeholder}"
-msgstr ""
+msgstr "Pomyślnie zaimportowano {user_placeholder}"
 
 #: frontend/src/pages/groups/group-op-menu.js:170
 msgid "Import members"
-msgstr ""
+msgstr "Zaimportuj członków"
 
 #: frontend/src/pages/groups/group-op-menu.js:171
 msgid "Manage members"
-msgstr ""
+msgstr "Zarządzaj członkami"
 
 #: frontend/src/pages/groups/group-op-menu.js:181
 msgid "Delete group"
-msgstr ""
+msgstr "Usuń grupę"
 
 #: frontend/src/pages/groups/group-op-menu.js:187
 msgid "Leave group"
@@ -8102,7 +8103,7 @@ msgstr "Opuść grupę"
 
 #: frontend/src/pages/groups/group-view.js:127
 msgid "No libraries shared with this group"
-msgstr ""
+msgstr "Brak bibliotek udostępnionych z tą grupą"
 
 #: frontend/src/pages/groups/group-view.js:128
 #| msgid ""
@@ -8115,18 +8116,18 @@ msgid ""
 "group can be accessed by all group members. You can share a library with a "
 "group in \"My Libraries\". You can also create a new library to be shared "
 "with this group by clicking the \"New Library\" item in the dropdown menu."
-msgstr ""
+msgstr "Brak bibliotek udostępnionych z tą grupą. Biblioteki udostępniane z grupą mogą być dostępne dla wszystkich członków grupy. Możesz udostępnić bibliotekę z grupą w \"Moje biblioteki\". Możesz również utworzyć nową bibliotekę, która będzie udostępniona z tą grupą, klikając na \"Nowa biblioteka\" w menu rozwijanym."
 
 #: frontend/src/pages/groups/group-view.js:140
 #| msgid "n create libraries by clicking the \"New Library\" button above."
 msgid ""
 "You can create libraries by clicking the \"New Library\" item in the "
 "dropdown menu."
-msgstr ""
+msgstr "Możesz utworzyć bibliotekę, klikając na \"Nowa biblioteka\" w menu rozwijanym."
 
 #: frontend/src/pages/groups/group-view.js:290
 msgid "This is a special group representing a department."
-msgstr ""
+msgstr "To jest specjalna grupa reprezentująca dział."
 
 #: frontend/src/pages/institution-admin/user-content/index.js:7
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:179
@@ -8181,7 +8182,7 @@ msgstr "Wykorzystane miejsce / Quota"
 #: frontend/src/pages/sys-admin/users/user-shared-repos.js:88
 #| msgid "Move {placeholder} to"
 msgid "Broken ({repo_id_placeholder})"
-msgstr ""
+msgstr "Zawartość uszkodzona ({repo_id_placeholder})"
 
 #: frontend/src/pages/institution-admin/user-list-search/index.js:68
 #: frontend/src/pages/institution-admin/user-list/index.js:109
@@ -8277,7 +8278,7 @@ msgstr "Zaakceptowane"
 
 #: frontend/src/pages/invitations/invitations-view.js:181
 msgid "No guest invitations"
-msgstr ""
+msgstr "Brak zaproszeń gości"
 
 #: frontend/src/pages/invitations/invitations-view.js:182
 #| msgid ""
@@ -8289,63 +8290,63 @@ msgid ""
 "through the web interface allowing more efficient ways to collaborate than "
 "through links. You can invite a guest by clicking the \"Invite Guest\" item "
 "in the dropdown menu."
-msgstr ""
+msgstr "Nie zaprosiłeś jeszcze żadnych gości. Gość może uzyskać dostęp do udostępnionych bibliotek za pośrednictwem interfejsu internetowego, co pozwala na bardziej efektywną współpracę niż za pomocą linków. Możesz zaprosić gościa, klikając element \"Zaproś gościa\" w menu rozwijanym."
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:728
 msgid "Failed to move files to another library."
-msgstr ""
+msgstr "Nie udało się przenieść plików do innej biblioteki."
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:730
 #: frontend/src/shared-dir-view.js:417
 msgid "Failed to copy files to another library."
-msgstr ""
+msgstr "Nie udało się skopiować plików do innej biblioteki."
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:760
 msgid "Successfully moved files to another library."
-msgstr ""
+msgstr "Pomyślnie przeniesiono pliki do innej biblioteki."
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:762
 #: frontend/src/shared-dir-view.js:431
 msgid "Successfully copied files to another library."
-msgstr ""
+msgstr "Pomyślnie skopiowano pliki do innej biblioteki."
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:972
 msgid "Restored {name} and {n} other items"
-msgstr ""
+msgstr "Przywrócono {name} i {n} innych elementów"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:973
 msgid "Restored {name}"
-msgstr ""
+msgstr "Przywrócono {name}"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:980
 msgid "Failed to restore {name} and {n} other items"
-msgstr ""
+msgstr "Nie udało się przywrócić {name} i {n} innych elementów"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:981
 msgid "Failed to restore {name}"
-msgstr ""
+msgstr "Nie udało się przywrócić {name}"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1003
 msgid "Successfully deleted {name} and {n} other items."
-msgstr ""
+msgstr "Pomyślnie usunięto {name} i {n} innych elementów."
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1020
 msgid "Failed to delete {name} and {n} other items."
-msgstr ""
+msgstr "Nie udało się usunąć {name} i {n} innych elementów."
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1258
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1286
 msgid "Failed to delete {name}"
-msgstr ""
+msgstr "Nie udało się usunąć {name}"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1359
 #| msgid "Successfully deleted {name} and {n} other items"
 msgid "Successfully moved {name} and {n} other items"
-msgstr ""
+msgstr "Pomyślnie przeniesiono {name} i {n} innych elementów"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1363
 msgid "Successfully moved {name}."
-msgstr ""
+msgstr "Pomyślnie przeniesiono {name}."
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1388
 msgid "Failed to move {name}."
@@ -8354,7 +8355,7 @@ msgstr "Nie udało się przenieść {name}."
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1445
 #| msgid "Successfully deleted {name} and {n} other items"
 msgid "Successfully copied {name} and {n} other items"
-msgstr ""
+msgstr "Pomyślnie skopiowano {name} i {n} innych elementów"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1449
 #: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:139
@@ -8368,16 +8369,16 @@ msgstr "Nie można skopiować %(name)s"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1496
 msgid "Failed to convert {name}."
-msgstr ""
+msgstr "Nie udało się przekonwertować {name}."
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1507
 msgid "Successfully converted the file."
-msgstr ""
+msgstr "Pomyślnie przekonwertowano plik."
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1514
 #: frontend/src/tag/views/tag-files/index.js:80
 msgid "Converting, please wait..."
-msgstr ""
+msgstr "Konwertowanie, proszę czekać..."
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:2399
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:280
@@ -8392,7 +8393,7 @@ msgstr "Opuść udział"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:2485
 msgid "This library has been set to read-only by admin and cannot be updated."
-msgstr ""
+msgstr "Ta biblioteka została ustawiona jako tylko do odczytu przez administratora i nie można jej aktualizować."
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:2654
 #: frontend/src/pages/wiki/main-panel.js:82
@@ -8402,13 +8403,13 @@ msgstr "Folder nie istnieje."
 
 #: frontend/src/pages/linked-devices/linked-devices.js:28
 msgid "No linked devices"
-msgstr ""
+msgstr "Brak podłączonych urządzeń"
 
 #: frontend/src/pages/linked-devices/linked-devices.js:29
 msgid ""
 "You have not accessed your files with any client (desktop or mobile) yet. "
 "Configure clients on your devices to access your data more comfortably."
-msgstr ""
+msgstr "Nie uzyskałeś jeszcze dostępu do swoich plików za pomocą żadnego klienta (stacjonarnego lub mobilnego). Skonfiguruj klientów na swoich urządzeniach, aby wygodniej uzyskiwać dostęp do swoich danych."
 
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:68
 msgid "Switch to plain text editor"
@@ -8428,18 +8429,18 @@ msgstr "Odśwież"
 
 #: frontend/src/pages/markdown-editor/index.js:127
 msgid "Another user is editing this file!"
-msgstr ""
+msgstr "Inny użytkownik edytuje ten plik!"
 
 #: frontend/src/pages/markdown-editor/index.js:269
 #: frontend/src/pages/plain-markdown-editor/index.js:99
 msgid "Leave this page? The system may not save your changes."
-msgstr ""
+msgstr "Opuścić tę stronę? System może nie zapisać Twoich zmian."
 
 #: frontend/src/pages/markdown-editor/index.js:376
 #: frontend/src/pages/plain-markdown-editor/index.js:175
 #: frontend/src/pages/tldraw-editor/index.js:40
 msgid "Failed to save"
-msgstr ""
+msgstr "Nie udało się zapisać"
 
 #: frontend/src/pages/my-libs/my-libs-deleted.js:145
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:172
@@ -8459,7 +8460,7 @@ msgid ""
 " your files and folders. A library can also be shared with others and synced"
 " to your connected devices. You can create a library by clicking the \"New "
 "Library\" item in the dropdown menu."
-msgstr ""
+msgstr "Nie utworzyłeś jeszcze żadnych bibliotek. Biblioteka to kontener do organizowania plików i folderów. Bibliotekę można również udostępniać innym i synchronizować z podłączonymi urządzeniami. Możesz utworzyć bibliotekę, klikając element \"Nowa biblioteka\" w menu rozwijanym."
 
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:307
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:367
@@ -8474,17 +8475,17 @@ msgstr "Uszkodzona (proszę się skontaktować z administratorem w celu naprawy
 #: frontend/src/pages/shared-libs/item.js:80
 #: frontend/src/pages/shared-with-all/index.js:76
 msgid "Successfully unshared {name}"
-msgstr ""
+msgstr "Pomyślnie cofnięto udostępnianie {name}"
 
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:166
 #| msgid "No libraries have been shared with you"
 msgid "No files or folders have been shared with you"
-msgstr ""
+msgstr "Żadne pliki ani foldery nie zostały Ci udostępnione"
 
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:167
 #| msgid "No libraries have been shared with you from other servers."
 msgid "No files or folders have been shared with you from other servers."
-msgstr ""
+msgstr "Żadne pliki ani foldery nie zostały Ci udostępnione z innych serwerów."
 
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:179
 #: frontend/src/pages/org-admin/org-group-repos.js:91
@@ -8495,29 +8496,29 @@ msgstr "Udostępniony przez"
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:180
 #| msgid "Shared with me"
 msgid "Sharing Time"
-msgstr ""
+msgstr "Czas udostępnienia"
 
 #: frontend/src/pages/org-admin/departments/department.js:39
 #: frontend/src/pages/sys-admin/departments/department.js:49
 msgid "Ascending by role"
-msgstr ""
+msgstr "Rosnąco według roli"
 
 #: frontend/src/pages/org-admin/departments/department.js:40
 #: frontend/src/pages/sys-admin/departments/department.js:50
 msgid "Descending by role"
-msgstr ""
+msgstr "Malejąco według roli"
 
 #: frontend/src/pages/org-admin/departments/department.js:170
 #: frontend/src/pages/sys-admin/departments/department.js:197
 #| msgid "Contact Email"
 msgid "Contact email"
-msgstr ""
+msgstr "Email kontaktowy"
 
 #: frontend/src/pages/org-admin/departments/departments-node-dropdown-menu.js:13
 #: frontend/src/pages/sys-admin/departments/departments-node-dropdown-menu.js:13
 #| msgid "No sub-departments"
 msgid "Add sub-department"
-msgstr ""
+msgstr "Dodaj pododdział"
 
 #: frontend/src/pages/org-admin/departments/departments-node-dropdown-menu.js:16
 #: frontend/src/pages/sys-admin/departments/departments-node-dropdown-menu.js:16
@@ -8529,7 +8530,7 @@ msgstr "Dodaj bibliotekę"
 #: frontend/src/pages/sys-admin/departments/departments-node-dropdown-menu.js:28
 #| msgid "No department"
 msgid "Move department"
-msgstr ""
+msgstr "Przenieś dział"
 
 #: frontend/src/pages/org-admin/departments/departments-node-dropdown-menu.js:31
 #: frontend/src/pages/sys-admin/departments/departments-node-dropdown-menu.js:31
@@ -8541,29 +8542,29 @@ msgstr "Przydziel przestrzeń"
 #: frontend/src/pages/sys-admin/departments/departments-node-dropdown-menu.js:34
 #| msgid "Departments"
 msgid "Department ID"
-msgstr ""
+msgstr "ID działu"
 
 #: frontend/src/pages/org-admin/departments/departments.js:433
 #: frontend/src/pages/sys-admin/departments/departments.js:466
 #| msgid "Rename Department"
 msgid "Enable departments feature"
-msgstr ""
+msgstr "Włącz funkcję działów"
 
 #: frontend/src/pages/org-admin/departments/tree-node.js:132
 #: frontend/src/pages/org-admin/departments/tree-node.js:133
 msgid "Toggle children"
-msgstr ""
+msgstr "Przełącz dzieci"
 
 #: frontend/src/pages/org-admin/devices/devices-by-platform.js:130
 #: frontend/src/pages/sys-admin/devices/devices-by-platform.js:134
 msgid "Successfully unlinked the device."
-msgstr ""
+msgstr "Pomyślnie odłączono urządzenie."
 
 #: frontend/src/pages/org-admin/devices/devices-errors.js:176
 #: frontend/src/pages/sys-admin/devices/index.js:23
 #| msgid "Successfully cleared trash."
 msgid "Successfully cleaned all errors."
-msgstr ""
+msgstr "Pomyślnie wyczyszczono wszystkie błędy."
 
 #: frontend/src/pages/org-admin/devices/devices-nav.js:15
 #: frontend/src/pages/sys-admin/devices/devices-nav.js:16
@@ -8582,13 +8583,13 @@ msgstr "Błędy"
 
 #: frontend/src/pages/org-admin/input-item.js:71
 msgid "Verified"
-msgstr ""
+msgstr "Zweryfikowano"
 
 #: frontend/src/pages/org-admin/input-item.js:76
 msgid ""
 "Copy the IdP's certificate and paste it here. The certificate format is as "
 "follows:"
-msgstr ""
+msgstr "Skopiuj certyfikat IdP i wklej go tutaj. Format certyfikatu jest następujący:"
 
 #: frontend/src/pages/org-admin/libraries/org-all-repos.js:217
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:181
@@ -8606,22 +8607,22 @@ msgstr "Biblioteka do odczytu i zapisu"
 #: frontend/src/pages/sys-admin/repos/repos-nav.js:25
 #| msgid "Deleted files"
 msgid "Descending by files"
-msgstr ""
+msgstr "Malejąco według plików"
 
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:263
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:262
 msgid "Are you sure you want to delete {placeholder} completely?"
-msgstr ""
+msgstr "Czy na pewno chcesz całkowicie usunąć {placeholder}?"
 
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:274
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:273
 msgid "Are you sure you want to restore {placeholder}?"
-msgstr ""
+msgstr "Czy na pewno chcesz przywrócić {placeholder}?"
 
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:369
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:363
 msgid "Successfully cleared trash."
-msgstr ""
+msgstr "Pomyślnie opróżniono kosz."
 
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:408
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:417
@@ -8639,7 +8640,7 @@ msgstr "Czy na pewno chcesz opróżnić kosz?"
 #: frontend/src/pages/sys-admin/users/ldap-users.js:46
 #: frontend/src/pages/sys-admin/users/users-content.js:70
 msgid "Quota"
-msgstr ""
+msgstr "Przydział"
 
 #: frontend/src/pages/org-admin/org-admin-list.js:53
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:157
@@ -8664,7 +8665,7 @@ msgstr "Utworzono"
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:271
 #: frontend/src/pages/sys-admin/groups/search-groups.js:114
 msgid "Search Groups"
-msgstr ""
+msgstr "Wyszukaj grupy"
 
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:286
 #: frontend/src/pages/org-admin/org-users-search-users.js:189
@@ -8678,12 +8679,12 @@ msgstr "Wynik"
 #: frontend/src/pages/org-admin/org-groups.js:147
 #: frontend/src/pages/sys-admin/groups/groups.js:123
 msgid "Successfully change the group"
-msgstr ""
+msgstr "Pomyślnie zmieniono grupę"
 
 #: frontend/src/pages/org-admin/org-groups.js:160
 #: frontend/src/pages/sys-admin/groups/groups.js:132
 msgid "Search groups by name"
-msgstr ""
+msgstr "Wyszukaj grupy według nazwy"
 
 #: frontend/src/pages/org-admin/org-groups.js:173
 msgid "All Groups"
@@ -8692,51 +8693,51 @@ msgstr "Wszystkie grupy"
 #: frontend/src/pages/org-admin/org-groups.js:331
 #: frontend/src/pages/sys-admin/groups/groups-content.js:210
 msgid "Change to department"
-msgstr ""
+msgstr "Zmień na dział"
 
 #: frontend/src/pages/org-admin/org-info.js:62
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:145
 msgid "Team name"
-msgstr ""
+msgstr "Nazwa zespołu"
 
 #: frontend/src/pages/org-admin/org-info.js:70
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: frontend/src/pages/org-admin/org-info.js:78
 #| msgid "Active Users"
 msgid "Active users"
-msgstr ""
+msgstr "Aktywni użytkownicy"
 
 #: frontend/src/pages/org-admin/org-info.js:83
 #| msgid "Total Users"
 msgid "Total users"
-msgstr ""
+msgstr "Wszyscy użytkownicy"
 
 #: frontend/src/pages/org-admin/org-info.js:89
 msgid "User number limit"
-msgstr ""
+msgstr "Limit liczby użytkowników"
 
 #: frontend/src/pages/org-admin/org-info.js:97
 #| msgid "Space Used"
 msgid "Space used"
-msgstr ""
+msgstr "Wykorzystane miejsce"
 
 #: frontend/src/pages/org-admin/org-info.js:114
 #| msgid "This month"
 msgid "Traffic this month"
-msgstr ""
+msgstr "Ruch w tym miesiącu"
 
 #: frontend/src/pages/org-admin/org-info.js:120
 msgid ""
 "After exceeding the traffic limit, the file download speed will be "
 "restricted."
-msgstr ""
+msgstr "Po przekroczeniu limitu ruchu prędkość pobierania plików zostanie ograniczona."
 
 #: frontend/src/pages/org-admin/org-info.js:139
 #| msgid "This month"
 msgid "AI credit used this month"
-msgstr ""
+msgstr "Kredyt AI wykorzystany w tym miesiącu"
 
 #: frontend/src/pages/org-admin/org-links.js:97
 msgid "All Public Links"
@@ -8746,11 +8747,11 @@ msgstr "Wszystkie publiczne łącza"
 #: frontend/src/pages/sys-admin/links/share-links.js:55
 #: frontend/src/pages/sys-admin/links/upload-links.js:51
 msgid "Visit count"
-msgstr ""
+msgstr "Liczba wizyt"
 
 #: frontend/src/pages/org-admin/org-links.js:219
 msgid "View Link"
-msgstr ""
+msgstr "Zobacz łącze"
 
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:190
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:231
@@ -8758,21 +8759,21 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-logs-file-update.js:242
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:163
 msgid "Only Show"
-msgstr ""
+msgstr "Pokaż tylko"
 
 #: frontend/src/pages/org-admin/org-logs-file-transfer.js:72
 #: frontend/src/pages/sys-admin/logs-page/file-transfer-log.js:44
 #: frontend/src/pages/sys-admin/logs-page/file-transfer-log.js:428
 #| msgid "Transfer Group"
 msgid "Transfer From"
-msgstr ""
+msgstr "Przeniesienie z"
 
 #: frontend/src/pages/org-admin/org-logs-file-transfer.js:73
 #: frontend/src/pages/sys-admin/logs-page/file-transfer-log.js:45
 #: frontend/src/pages/sys-admin/logs-page/file-transfer-log.js:438
 #| msgid "Transfer"
 msgid "Transfer To"
-msgstr ""
+msgstr "Przeniesienie do"
 
 #: frontend/src/pages/org-admin/org-logs-file-transfer.js:74
 #: frontend/src/pages/org-admin/org-logs-group-member-audit.js:73
@@ -8782,7 +8783,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/logs-page/group-member-audit-logs.js:333
 #| msgid "Operation"
 msgid "Operator"
-msgstr ""
+msgstr "Operator"
 
 #: frontend/src/pages/org-admin/org-logs-file-transfer.js:143
 #: frontend/src/pages/org-admin/org-logs-file-transfer.js:154
@@ -8807,19 +8808,19 @@ msgstr "Usunięte"
 #: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:48
 #: frontend/src/pages/sys-admin/logs-page/group-member-audit-logs.js:46
 msgid "Action"
-msgstr ""
+msgstr "Akcja"
 
 #: frontend/src/pages/org-admin/org-logs-group-member-audit.js:126
 #: frontend/src/pages/sys-admin/logs-page/group-member-audit-logs.js:119
 #| msgid "Add Member"
 msgid "Add member"
-msgstr ""
+msgstr "Dodaj członka"
 
 #: frontend/src/pages/org-admin/org-logs-group-member-audit.js:128
 #: frontend/src/pages/sys-admin/logs-page/group-member-audit-logs.js:121
 #| msgid "Delete Member"
 msgid "Delete member"
-msgstr ""
+msgstr "Usuń członka"
 
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:80
 #: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:44
@@ -8855,31 +8856,31 @@ msgstr "Wyeksportuj do Excel"
 #: frontend/src/pages/org-admin/org-logs.js:57
 #: frontend/src/pages/sys-admin/logs-page/logs-nav.js:17
 msgid "File Access"
-msgstr ""
+msgstr "Dostęp do plików"
 
 #: frontend/src/pages/org-admin/org-logs.js:63
 #: frontend/src/pages/sys-admin/logs-page/logs-nav.js:18
 msgid "File Update"
-msgstr ""
+msgstr "Aktualizacja plików"
 
 #: frontend/src/pages/org-admin/org-logs.js:75
 #: frontend/src/pages/sys-admin/logs-page/logs-nav.js:20
 #| msgid "Transfer"
 msgid "Repo Transfer"
-msgstr ""
+msgstr "Przeniesienie repozytorium"
 
 #: frontend/src/pages/org-admin/org-logs.js:81
 #| msgid "deleted"
 msgid "Group Invite"
-msgstr ""
+msgstr "Zaproszenie do grupy"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:65
 msgid "SAML config updated"
-msgstr ""
+msgstr "Konfiguracja SAML zaktualizowana"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:76
 msgid "Domain verified"
-msgstr ""
+msgstr "Domena zweryfikowana"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:85
 msgid "Copied"
@@ -8888,50 +8889,50 @@ msgstr "Skopiowano"
 #: frontend/src/pages/org-admin/org-saml-config.js:100
 #: frontend/src/pages/org-admin/side-panel.js:116
 msgid "SAML config"
-msgstr ""
+msgstr "Konfiguracja SAML"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:107
 msgid "Configure your Identity Provider"
-msgstr ""
+msgstr "Skonfiguruj swojego dostawcę tożsamości"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:108
 msgid "Use these values to configure your Identity Provider"
-msgstr ""
+msgstr "Użyj tych wartości do skonfigurowania swojego dostawcy tożsamości"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:160
 msgid "Configure Seafile"
-msgstr ""
+msgstr "Skonfiguruj Seafile"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:161
 msgid "Use information from your Identity Provider to configure Seafile"
-msgstr ""
+msgstr "Użyj informacji od swojego dostawcy tożsamości do skonfigurowania Seafile"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:174
 msgid "Certificate"
-msgstr ""
+msgstr "Certyfikat"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:180
 msgid "Verify Domain"
-msgstr ""
+msgstr "Zweryfikuj domenę"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:181
 msgid "Create a DNS TXT record to confirm the ownership of your Email Domain."
-msgstr ""
+msgstr "Utwórz rekord DNS TXT, aby potwierdzić własność swojej domeny e-mail."
 
 #: frontend/src/pages/org-admin/org-saml-config.js:187
 msgid "Email Domain"
-msgstr ""
+msgstr "Domena e-mail"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:193
 msgid "DNS TXT Value"
-msgstr ""
+msgstr "Wartość DNS TXT"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:204
 msgid ""
 "Copy the domain DNS TXT and add it to your domain's DNS records, then click "
 "the button to verify domain ownership. You must verify the ownership of "
 "domain before Single Sign-On."
-msgstr ""
+msgstr "Skopiuj domenę DNS TXT i dodaj ją do rekordów DNS swojej domeny, a następnie kliknij przycisk, aby zweryfikować własność domeny. Musisz zweryfikować własność domeny przed logowaniem jednokrotnym."
 
 #: frontend/src/pages/org-admin/org-saml-config.js:210
 msgid "Verify"

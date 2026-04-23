@@ -7,7 +7,7 @@
 # ugusta <ugusta@hotmail.com>, 2024
 # Robert Högberg <robert.hogberg@gmail.com>, 2024
 # Radapompa <radapompa@gmail.com>, 2024
-# Seafile Info <info@seafile.com>, 2025
+# Seafile Info <info@seafile.com>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Swedish (https://app.transifex.com/haiwen/teams/5086/sv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -731,10 +731,16 @@ msgid ""
 "Because placeholders are just normal files created on your local disk, your "
 "cache size is only limited by the available disk space on your computer."
 msgstr ""
+"Du kan välja att cacha specifika mappar eller filer lokalt. Om du hittar en "
+"mapp som använder för mycket utrymme, välj \"Frigör utrymme\" för att tömma "
+"alla cachade filer i den mappen. Du behöver inte ställa in tid för att rensa"
+" cache eller cachegräns som i SeaDrive 1.0. Eftersom placeholder-filer är "
+"bara vanliga filer som skapas på din lokala disk, är din cache-storlek "
+"endast begränsad av tillgängligt utrymme på din dator."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:50
 msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
-msgstr ""
+msgstr "Hur tar jag bort återstående SeaDrive genvägar i Windows Explorer?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
@@ -865,6 +871,11 @@ msgid ""
 " the file when one person wants to exclusively modify the file. Seafile "
 "Professional Edition supports file locking."
 msgstr ""
+"När fler än en person samarbetar på en fil är det troligt att fler än en "
+"person modifierar filen ungefär samtidigt. Seafile hanterar denna situation "
+"bra med konfliktsfiler. Men det är ofta bekvämare att låsa filen när en "
+"person vill modifiera filen exklusivt. Seafile  Professional Edition stöder "
+"fillåsning."
 
 #: templates/help/file_locking.html:7
 msgid ""
@@ -969,6 +980,7 @@ msgstr "Detaljer om fil låsning"
 #: templates/help/file_locking.html:25
 msgid "There are a few useful tips about how file locking works:"
 msgstr ""
+"Observera att det finns några användbara tips om hur fil låsning fungerar:"
 
 #: templates/help/file_locking.html:27
 msgid "A locked file can only be unlocked by the user who locked it."
@@ -982,6 +994,10 @@ msgid ""
 "locked file. The purpose of file locking is mainly to prevent concurrent "
 "editing."
 msgstr ""
+"Observera att en låst fil kan inte ändras, flyttas, omdirigeras eller tömmas"
+" av andra användare. Men andra användare kan fortfarande flytta, tömma eller"
+" omdirigera den överordnade mappen för en låst fil. Låsningssyftet är främst"
+" att förhindra samtidig redigering."
 
 #: templates/help/file_locking.html:29
 msgid ""
@@ -1138,6 +1154,10 @@ msgid ""
 "\"permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions on this folder."
 msgstr ""
+"Observera att endast ägare av en katalog kan ställa in katalogrättigheter "
+"för underordnade kataloger. I filutforskningsgränssnittet, klicka på \"mer "
+"operationer\" knappen, välj \"rättigheter\" i dropdown-menyn. I popup-"
+"fönstret, kan du se och ställa in katalogrättigheter för denna katalog."
 
 #: templates/help/folder_permission.html:21
 msgid ""
@@ -1146,6 +1166,12 @@ msgid ""
 "Permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions in this library."
 msgstr ""
+"Observera att du kan se och ställa in katalogrättigheter för alla "
+"underordnade kataloger i en katalog. I filutforskningsgränssnittet, "
+"högerklicka på en katalog, välj \"mer operationer\" från dropdown-menyn, "
+"välj \"rättigheter\" från dropdown-menyn. I popup-fönstret, kan du se och "
+"ställa in katalogrättigheter för alla underordnade kataloger i den här "
+"katalogen."
 
 #: templates/help/folder_permission.html:22
 msgid ""
@@ -1153,16 +1179,25 @@ msgid ""
 "next to \"read only\" sub-folders. When the user navigate into that sub-"
 "folder, he/she won't be able to add/modify/delete files."
 msgstr ""
+"Observera att när andra användare navigerar in i en katalog, kommer det att "
+"vara en liten \"ögon\" ikon bredvid \"endast läsa\" underkataloger. När "
+"användaren navigerar in i den här underkatalogen, kommer han/hon inte kunna "
+"lägga till/ändra/ta bort filer."
 
 #: templates/help/folder_permission.html:24
 msgid ""
 "If a \"read only\" folder is synced to PC with the Seafile desktop App, "
 "changes under a \"read only\" folder won't be uploaded to the cloud."
 msgstr ""
+"Observera att när en \"endast läsa\" katalog synkas till en PC med Seafile "
+"skrivbordsprogrammet, kommer ändringar under den här katalogen inte att "
+"uppladdas till molnet."
 
 #: templates/help/folder_permission.html:25
 msgid "Advanced: priority between different permissions"
 msgstr ""
+"Observera att katalogrättigheter har högre prioritet än de rättigheter som "
+"ställs in vid delning."
 
 #: templates/help/folder_permission.html:27
 msgid ""
@@ -1172,6 +1207,14 @@ msgid ""
 "library. Then user A only has \"read only\" access to the sub-folder, while "
 "he/she has \"read write\" access to all other sub-folders and files."
 msgstr ""
+"Observera att när en \"endast läsa\" katalog synkas till en PC med Seafile "
+"skrivbordsprogrammet, kommer ändringar under den här katalogen inte att "
+"uppladdas till molnet.Observera att när du delar en katalog med en användare"
+" och ställer in \"läsa och skriva\" rättigheter för den här katalogen, och "
+"även ställer in \"läsa endast\" rättigheter för en underkatalog, kommer "
+"användaren endast att ha \"läsa endast\" rättigheter till den "
+"underkatalogen, medan han/hon har \"läsa och skriva\" rättigheter till alla "
+"andra underkataloger och filer."
 
 #: templates/help/folder_permission.html:28
 msgid ""
@@ -1180,16 +1223,23 @@ msgid ""
 "if the system matches a permission specific to the user, it'll ignore all "
 "permissions set for the groups the user belongs to."
 msgstr ""
+"Observera att när du ställer in katalogrättigheter för en specifik "
+"användare, kommer ha högre prioritet än de rättigheter som ställs in för en "
+"grupp."
 
 #: templates/help/folder_permission.html:29
 msgid ""
 "Permissions on sub-folders have higher priority than those on parent "
 "folders."
 msgstr ""
+"Observera att när du ställer in katalogrättigheter för en underkatalog, "
+"kommer ha högre prioritet än de rättigheter som ställs in för den "
+"överordnade katalogen."
 
 #: templates/help/folder_permission.html:31
 msgid "Here is a more complex example:"
 msgstr ""
+"Observera att när du ställer in katalogrättigheter för en underkatalog"
 
 #: templates/help/folder_permission.html:32
 msgid ""
@@ -1201,6 +1251,13 @@ msgid ""
 "first matched for folder \"A/B\" and user \"John\", which is inherited from "
 "its parent \"A\"."
 msgstr ""
+"Supposed the folder structure looks like \"A/B\", user \"John\" is in group "
+"\"Staff\". If you set \"read only\" permission on folder A for John, and, "
+"you also set \"read write\" permission on folder \"A/B\" for group "
+"\"Staff\". Then John's permission to folder \"A/B\" is still only \"read "
+"only\". That's because, according to rule 2, \"read only\" permission is "
+"first matched for folder \"A/B\" and user \"John\", which is inherited from "
+"its parent \"A\"."
 
 #: templates/help/full_text_file_search.html:6
 msgid ""
@@ -1208,46 +1265,49 @@ msgid ""
 "as well as the content of certain files, in the Seafile web app. Currently "
 "Seafile can search the contents of the following types of files:"
 msgstr ""
+"Observera att du kan söka efter fil- och katalognamn, samt innehållet i "
+"bestämda filer, i Seafile webbapplikationen. Nuvarande versionen av Seafile "
+"kan söka innehållet i följande typer av filer:"
 
 #: templates/help/full_text_file_search.html:8
 #: templates/help/viewing_files_within_web_app.html:8
 msgid "Microsoft Office Doc: .doc, .docx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Doc: .doc, .docx (endast Pro Edition Server)"
 
 #: templates/help/full_text_file_search.html:9
 #: templates/help/viewing_files_within_web_app.html:9
 msgid "Microsoft Office PowerPoint: .ppt, .pptx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office PowerPoint: .ppt, .pptx (endast Pro Edition Server)"
 
 #: templates/help/full_text_file_search.html:10
 #: templates/help/viewing_files_within_web_app.html:10
 msgid "Microsoft Office Excel: .xls, .xlsx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Excel: .xls, .xlsx (endast Pro Edition Server)"
 
 #: templates/help/full_text_file_search.html:11
 #: templates/help/viewing_files_within_web_app.html:11
 msgid "LibreOffice files"
-msgstr ""
+msgstr "LibreOffice-filer"
 
 #: templates/help/full_text_file_search.html:12
 #: templates/help/viewing_files_within_web_app.html:12
 msgid "PDF files"
-msgstr ""
+msgstr "PDF-filer"
 
 #: templates/help/full_text_file_search.html:13
 #: templates/help/viewing_files_within_web_app.html:14
 msgid "Markdown files: .md"
-msgstr ""
+msgstr "Markdown-filer: .md"
 
 #: templates/help/full_text_file_search.html:14
 #: templates/help/viewing_files_within_web_app.html:15
 msgid "Various source code files"
-msgstr ""
+msgstr "Olika källkodsfiler"
 
 #: templates/help/full_text_file_search.html:15
 #: templates/help/viewing_files_within_web_app.html:16
 msgid "Text files: .txt, .log"
-msgstr ""
+msgstr "Textfiler: .txt, .log"
 
 #: templates/help/full_text_file_search.html:17
 msgid ""
@@ -1255,34 +1315,44 @@ msgid ""
 "text search feature. In that case, you can only search file and folder "
 "names."
 msgstr ""
+"Observera att din Seafile-systemadministratör kanske inte har aktiverat "
+"fulltextsökning. I så fall kan du bara söka efter fil- och mappnamn."
 
 #: templates/help/groups_managing.html:6
 msgid ""
 "Creating a group is a convenient way to share files to many people. In "
 "Seafile, you can create and manage a group easily."
 msgstr ""
+"Att skapa en grupp är ett bekvämt sätt att dela filer med många personer. I "
+"Seafile kan du enkelt skapa och hantera en grupp."
 
 #: templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
-msgstr ""
+msgstr "Så här fungerar grupper i Seafile:"
 
 #: templates/help/groups_managing.html:9
 msgid ""
 "Each group has a owner. The owner is the creator of the group by default. "
 "He/she can transfer the ownership of the group to another member."
 msgstr ""
+"Varje grupp har en ägare. Ägaren är som standard skaparen av gruppen. "
+"Han/hon kan överföra ägarskapet för gruppen till en annan medlem."
 
 #: templates/help/groups_managing.html:10
 msgid ""
 "Each group can have multiple admins. The group owner and group admins can "
 "add more group admins."
 msgstr ""
+"Varje grupp kan ha flera administratörer. Gruppägaren och "
+"gruppadministratörer kan lägga till fler gruppadministratörer."
 
 #: templates/help/groups_managing.html:11
 msgid ""
 "The group admin can add/delete members in the group. And he/she can also "
 "unshare a library in the group."
 msgstr ""
+"Gruppadministratören kan lägga till/ta bort medlemmar i gruppen. Och han/hon"
+" kan också avdela ett bibliotek i gruppen."
 
 #: templates/help/groups_managing.html:13
 msgid ""
@@ -1290,6 +1360,9 @@ msgid ""
 "all the groups you're in. Clicking into any group, you'll see the libraries "
 "shared into this group."
 msgstr ""
+"Klicka på fliken \"Delad med grupper\" i den vänstra panelen, så ser du alla"
+" grupper du är med i. Genom att klicka på vilken grupp som helst ser du "
+"biblioteken som delas i denna grupp."
 
 #: templates/help/groups_managing.html:14
 msgid ""
@@ -1297,6 +1370,9 @@ msgid ""
 "panel. Then click on \"All Groups\". In the page, you can click the \"New "
 "Group\" button to create a group."
 msgstr ""
+"För att skapa en ny grupp, klicka på fliken \"Delad med grupper\" i den "
+"vänstra panelen. Klicka sedan på \"Alla grupper\". På sidan kan du klicka på"
+" knappen \"Ny grupp\" för att skapa en grupp."
 
 #: templates/help/groups_managing.html:15
 #, python-format
@@ -1304,6 +1380,8 @@ msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
 "and folders</a> about how to share libraries or folders to a group."
 msgstr ""
+"Se <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">dela filer och "
+"mappar</a> om hur du delar bibliotek eller mappar med en grupp."
 
 #: templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
@@ -1414,7 +1492,7 @@ msgstr ""
 
 #: templates/help/install_sync.html:6
 msgid "Installing Seafile client program"
-msgstr ""
+msgstr "Installera Seafile-klientprogram"
 
 #: templates/help/install_sync.html:8
 msgid ""
@@ -1738,7 +1816,7 @@ msgstr ""
 
 #: templates/help/manage_library_as_wiki.html:19
 msgid "File tagging and related documents"
-msgstr ""
+msgstr "Filtaggning och relaterade dokument"
 
 #: templates/help/manage_library_as_wiki.html:20
 msgid ""
@@ -1747,18 +1825,26 @@ msgid ""
 "can be managed from the side bar of the Markdown editor, or from the file "
 "browser interface."
 msgstr ""
+"Filtaggning är en viktig funktion för kunskapshantering. Seafile tillåter "
+"användare att definiera taggar för varje bibliotek och tillämpa taggar på "
+"filer. Taggar kan hanteras från sidofältet i Markdown-redigeraren, eller "
+"från fil- bläddrar-gränssnittet."
 
 #: templates/help/manage_library_as_wiki.html:23
 msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
 msgstr ""
+"Filbläddrar-gränssnittet ger en sammanfattning av alla filtaggar i det "
+"aktuella biblioteket."
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
 "If you want the be-shared users not be able to modify local copies, you can "
 "consider using the Seafile Drive client."
 msgstr ""
+"Om du vill att delade användare inte ska kunna modifiera lokala kopior, kan "
+"du överväga att använda Seafile Drive-klienten."
 
 #: templates/help/restoring_deleted_files.html:6
 msgid "Restoring deleted files and folders"

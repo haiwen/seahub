@@ -4,13 +4,14 @@
 # 
 # Translators:
 # Translators:
+# Seafile Info <info@seafile.com>, 2026
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 10:19+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Vietnamese (http://app.transifex.com/haiwen/seahub/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,7 +21,7 @@ msgstr ""
 
 #: seahub/adfs_auth/utils.py:56
 msgid "ADFS/SAML login relevant settings invalid."
-msgstr ""
+msgstr "Cài đặt liên quan đến đăng nhập ADFS/SAML không hợp lệ."
 
 #: seahub/adfs_auth/views.py:59 seahub/adfs_auth/views.py:570
 #: seahub/adfs_auth/views.py:599 seahub/adfs_auth/views.py:639
@@ -29,88 +30,88 @@ msgstr ""
 #: seahub/adfs_auth/views.py:735 seahub/adfs_auth/views.py:739
 #: seahub/adfs_auth/views.py:807 seahub/adfs_auth/views.py:811
 msgid "Internal server error. Please contact system administrator."
-msgstr ""
+msgstr "Lỗi máy chủ nội bộ. Vui lòng liên hệ với quản trị viên hệ thống."
 
 #: seahub/adfs_auth/views.py:60
 msgid ""
 "Login failed: Bad response from ADFS/SAML service. Please report to your "
 "organization (company) administrator."
-msgstr ""
+msgstr "Đăng nhập thất bại: Phản hồi không hợp lệ từ dịch vụ ADFS/SAML. Vui lòng báo cáo cho quản trị viên tổ chức (công ty) của bạn."
 
 #: seahub/adfs_auth/views.py:126 seahub/adfs_auth/views.py:142
 #: seahub/api2/endpoints/admin/users.py:794
 #: seahub/api2/endpoints/admin/users.py:1280 seahub/base/accounts.py:1242
 #: seahub/forms.py:30 seahub/institutions/api_views.py:202
 msgid "The number of users exceeds the limit."
-msgstr ""
+msgstr "Số lượng người dùng vượt quá giới hạn."
 
 #: seahub/adfs_auth/views.py:224 seahub/adfs_auth/views.py:429
 msgid "Failed to bind SAML, please login first."
-msgstr ""
+msgstr "Liên kết SAML thất bại, vui lòng đăng nhập trước."
 
 #: seahub/adfs_auth/views.py:274
 #, python-format
 msgid ""
 "Login failed: The email %s is not consistent with the email %s from "
 "ADFS/SAML service"
-msgstr ""
+msgstr "Đăng nhập thất bại: Email %s không khớp với email %s từ dịch vụ ADFS/SAML"
 
 #: seahub/adfs_auth/views.py:307
 #| msgid "User %s not found."
 msgid "User not found in Team."
-msgstr ""
+msgstr "Không tìm thấy người dùng trong Nhóm."
 
 #: seahub/adfs_auth/views.py:342 seahub/adfs_auth/views.py:539
 msgid ""
 "Login failed: user is deactivated. Please report to your organization "
 "(company) administrator."
-msgstr ""
+msgstr "Đăng nhập thất bại: người dùng đã bị vô hiệu hóa. Vui lòng báo cáo cho quản trị viên tổ chức (công ty) của bạn."
 
 #: seahub/adfs_auth/views.py:595 seahub/adfs_auth/views.py:655
 #: seahub/adfs_auth/views.py:706
 msgid ""
 "Login failed: ADFS/SAML service error. Please report to your organization "
 "(company) administrator."
-msgstr ""
+msgstr "Đăng nhập thất bại: Lỗi dịch vụ ADFS/SAML. Vui lòng báo cáo cho quản trị viên tổ chức (công ty) của bạn."
 
 #: seahub/adfs_auth/views.py:743
 msgid "Failed to unbind SAML, please set a password first."
-msgstr ""
+msgstr "Hủy liên kết SAML thất bại, vui lòng đặt mật khẩu trước."
 
 #: seahub/adfs_auth/views.py:746
 #| msgid "Failed to bind SAML, please login first."
 msgid "Failed to unbind SAML, the user is forced login by SSO."
-msgstr ""
+msgstr "Hủy liên kết SAML thất bại, người dùng bắt buộc phải đăng nhập bằng SSO."
 
 #: seahub/adfs_auth/views.py:751
 msgid "Failed to unbind SAML, please set a contact email first."
-msgstr ""
+msgstr "Hủy liên kết SAML thất bại, vui lòng đặt email liên hệ trước."
 
 #: seahub/api2/endpoints/admin/account.py:204
 #: seahub/api2/endpoints/user.py:101 seahub/api2/views.py:380
 msgid "Name is too long (maximum is 64 characters)"
-msgstr ""
+msgstr "Tên quá dài (tối đa 64 ký tự)"
 
 #: seahub/api2/endpoints/admin/account.py:208
 #: seahub/api2/endpoints/user.py:105 seahub/api2/views.py:384
 #: seahub/forms.py:44 seahub/profile/forms.py:27
 msgid "Name should not include '/'."
-msgstr ""
+msgstr "Tên không thể chứa dấu '/'."
 
 #: seahub/api2/endpoints/admin/account.py:223
 msgid "Login id can't be empty"
-msgstr ""
+msgstr "ID đăng nhập không được để trống"
 
 #: seahub/api2/endpoints/admin/account.py:227
 #: seahub/api2/endpoints/admin/users.py:879
 #: seahub/api2/endpoints/admin/users.py:1308
 #, python-format
 msgid "Login id %s already exists."
-msgstr ""
+msgstr "ID đăng nhập %s đã tồn tại."
 
 #: seahub/api2/endpoints/admin/account.py:234
 msgid "Department is too long (maximum is 512 characters)"
-msgstr ""
+msgstr "Tên phòng ban quá dài (tối đa 512 ký tự)"
 
 #: seahub/api2/endpoints/admin/account.py:250 seahub/forms.py:155
 msgid "Space quota can't be empty"
@@ -123,7 +124,7 @@ msgstr "Định mức không được để trống"
 #: seahub/api2/endpoints/admin/users.py:1377
 #: seahub/institutions/api_views.py:174
 msgid "Must be an integer that is greater than or equal to 0."
-msgstr ""
+msgstr "Phải là một số nguyên lớn hơn hoặc bằng 0."
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:82
 #: seahub/api2/endpoints/admin/groups.py:135
@@ -133,7 +134,7 @@ msgstr ""
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
 "brackets or underscore."
-msgstr ""
+msgstr "Tên chỉ có thể chứa chữ cái, số, khoảng trắng, dấu gạch ngang, dấu chấm, dấu nháy đơn, dấu ngoặc hoặc dấu gạch dưới."
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:87
 #: seahub/api2/endpoints/admin/groups.py:142
@@ -144,11 +145,11 @@ msgstr "Đã tồn tại tên nhóm này"
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:235
 msgid "There are libraries in this department."
-msgstr ""
+msgstr "Có các thư viện trong phòng ban này."
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:239
 msgid "There are sub-departments in this department."
-msgstr ""
+msgstr "Có các phòng ban con trong phòng ban này."
 
 #: seahub/api2/endpoints/admin/default_library.py:32
 #: seahub/api2/endpoints/admin/default_library.py:33
@@ -161,20 +162,20 @@ msgstr "Thư viện của tôi"
 #: seahub/api2/endpoints/groups.py:324
 #, python-format
 msgid "User %s is already group owner."
-msgstr ""
+msgstr "Người dùng %s đã là chủ sở hữu nhóm."
 
 #: seahub/api2/endpoints/admin/institution_users.py:169
 #, python-format
 msgid ""
 "Failed to add %s to the institution: user already belongs to an institution"
-msgstr ""
+msgstr "Thêm %s vào tổ chức thất bại: người dùng đã thuộc về một tổ chức khác"
 
 #: seahub/api2/endpoints/admin/institution_users.py:174
 #, python-format
 msgid ""
 "Failed to add %s to the institution: user already belongs to this "
 "institution"
-msgstr ""
+msgstr "Thêm %s vào tổ chức thất bại: người dùng đã thuộc về tổ chức này"
 
 #: seahub/api2/endpoints/admin/libraries.py:268 seahub/views/sysadmin.py:712
 msgid "System library can not be deleted."
@@ -183,29 +184,29 @@ msgstr "Không thể xóa thư viện hệ thống."
 #: seahub/api2/endpoints/admin/libraries.py:390 seahub/api2/views.py:1934
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
-msgstr ""
+msgstr "Chuyển nhượng thất bại: vai trò của %s là %s, không thể thêm thư viện."
 
 #: seahub/api2/endpoints/admin/libraries.py:416 seahub/api2/views.py:1939
 msgid "Library can not be transferred to owner."
-msgstr ""
+msgstr "Thư viện không thể chuyển nhượng cho chính chủ sở hữu."
 
 #: seahub/api2/endpoints/admin/organizations.py:431
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Your team {org.org_name} has been deactivated"
-msgstr ""
+msgstr "Nhóm {org.org_name} của bạn đã bị vô hiệu hóa"
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:155
 #: seahub/api2/endpoints/share_links.py:593
 #: seahub/api2/endpoints/share_links.py:812
 msgid "There is an associated published library."
-msgstr ""
+msgstr "Có một thư viện đã xuất bản được liên kết."
 
 #: seahub/api2/endpoints/admin/shares.py:185
 #, python-format
 msgid "User %s is already library owner."
-msgstr ""
+msgstr "Người dùng %s đã là chủ sở hữu thư viện."
 
 #: seahub/api2/endpoints/admin/shares.py:193
 #: seahub/api2/endpoints/invitations.py:51
@@ -213,7 +214,7 @@ msgstr ""
 #: seahub/api2/endpoints/repo_share_invitations.py:156
 #, python-format
 msgid "Email %s invalid."
-msgstr ""
+msgstr "Email %s không hợp lệ."
 
 #: seahub/api2/endpoints/admin/shares.py:211
 #: seahub/api2/endpoints/admin/shares.py:268
@@ -224,7 +225,7 @@ msgstr ""
 #: seahub/api2/endpoints/repo_share_invitations.py:190
 #, python-format
 msgid "This item has been shared to %s."
-msgstr ""
+msgstr "Mục này đã được chia sẻ cho %s."
 
 #: seahub/api2/endpoints/admin/statistics.py:399
 #: seahub/base/management/commands/export_user_traffic_report.py:45
@@ -246,37 +247,37 @@ msgstr "Người dùng"
 #: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/organizations/api/admin/statistics.py:336
 msgid "Web Download"
-msgstr ""
+msgstr "Tải xuống qua Web"
 
 #: seahub/api2/endpoints/admin/statistics.py:400
 #: seahub/base/management/commands/export_user_traffic_report.py:46
 #: seahub/organizations/api/admin/statistics.py:337
 msgid "Sync Download"
-msgstr ""
+msgstr "Tải xuống đồng bộ"
 
 #: seahub/api2/endpoints/admin/statistics.py:400
 #: seahub/base/management/commands/export_user_traffic_report.py:46
 #: seahub/organizations/api/admin/statistics.py:337
 msgid "Link Download"
-msgstr ""
+msgstr "Tải xuống qua liên kết"
 
 #: seahub/api2/endpoints/admin/statistics.py:401
 #: seahub/base/management/commands/export_user_traffic_report.py:47
 #: seahub/organizations/api/admin/statistics.py:338
 msgid "Web Upload"
-msgstr ""
+msgstr "Tải lên qua Web"
 
 #: seahub/api2/endpoints/admin/statistics.py:401
 #: seahub/base/management/commands/export_user_traffic_report.py:47
 #: seahub/organizations/api/admin/statistics.py:338
 msgid "Sync Upload"
-msgstr ""
+msgstr "Tải lên đồng bộ"
 
 #: seahub/api2/endpoints/admin/statistics.py:402
 #: seahub/base/management/commands/export_user_traffic_report.py:48
 #: seahub/organizations/api/admin/statistics.py:339
 msgid "Link Upload"
-msgstr ""
+msgstr "Tải lên qua liên kết"
 
 #: seahub/api2/endpoints/admin/statistics.py:447
 #: seahub/base/management/commands/export_user_storage_report.py:41
@@ -310,7 +311,7 @@ msgstr "Tên"
 #: seahub/templates/registration/password_set_form.html:17
 #: seahub/views/sysadmin.py:176 seahub/views/sysadmin.py:180
 msgid "Contact Email"
-msgstr ""
+msgstr "Email liên hệ"
 
 #: seahub/api2/endpoints/admin/statistics.py:448
 #: seahub/base/management/commands/export_user_storage_report.py:42
@@ -319,7 +320,7 @@ msgstr ""
 #: seahub/organizations/api/admin/statistics.py:383
 #: seahub/views/sysadmin.py:177 seahub/views/sysadmin.py:181
 msgid "Space Usage"
-msgstr ""
+msgstr "Dung lượng đã sử dụng"
 
 #: seahub/api2/endpoints/admin/statistics.py:448
 #: seahub/base/management/commands/export_user_storage_report.py:42
@@ -329,18 +330,18 @@ msgstr ""
 #: seahub/views/sysadmin.py:177 seahub/views/sysadmin.py:181
 #: seahub/views/sysadmin.py:789 seahub/views/sysadmin.py:803
 msgid "Space Quota"
-msgstr ""
+msgstr "Định mức dung lượng"
 
 #: seahub/api2/endpoints/admin/users.py:655
 #: seahub/api2/endpoints/admin/users.py:692
 #: seahub/organizations/api/admin/users.py:155
 msgid "There are more than 500 users, and sort is not offered."
-msgstr ""
+msgstr "Có hơn 500 người dùng, vì vậy chức năng sắp xếp không được cung cấp."
 
 #: seahub/api2/endpoints/admin/users.py:893
 #, python-format
 msgid "Successfully added user %(user)s."
-msgstr ""
+msgstr "Đã thêm người dùng %(user)s thành công."
 
 #: seahub/api2/endpoints/admin/users.py:897
 #: seahub/api2/endpoints/admin/users_batch.py:390 seahub/views/sysadmin.py:552
@@ -351,14 +352,14 @@ msgstr "Bạn được mời sử dụng lưu trữ đám mây %s"
 #: seahub/api2/endpoints/admin/users.py:901
 #, python-format
 msgid "Successfully added user %(user)s. An email notification has been sent."
-msgstr ""
+msgstr "Đã thêm người dùng %(user)s thành công. Một email thông báo đã được gửi đi."
 
 #: seahub/api2/endpoints/admin/users.py:904
 #, python-format
 msgid ""
 "Successfully added user %(user)s. But email notification can not be sent, "
 "because Email service is not properly configured."
-msgstr ""
+msgstr "Đã thêm người dùng %(user)s thành công. Tuy nhiên, không thể gửi email thông báo vì dịch vụ Email chưa được cấu hình đúng cách."
 
 #: seahub/api2/endpoints/admin/users.py:1416
 msgid "Edit succeeded"
@@ -382,7 +383,7 @@ msgstr "Sửa đổi thành công, nhưng không thể gởi mail, vui lòng ki�
 #: seahub/api2/endpoints/admin/users.py:1495 seahub/auth/forms.py:167
 #: seahub/auth/views.py:365
 msgid "Unable to reset password."
-msgstr ""
+msgstr "Không thể thay đổi mật khẩu."
 
 #: seahub/api2/endpoints/admin/users.py:1513 seahub/auth/forms.py:195
 #: seahub/organizations/api/admin/user_set_password.py:74
@@ -394,7 +395,7 @@ msgstr "Thay đổi mật khẩu trong %s"
 #: seahub/organizations/api/admin/user_set_password.py:78
 #, python-brace-format
 msgid "A password reset link has been sent to {contact_email}."
-msgstr ""
+msgstr "Một liên kết thay đổi mật khẩu đã được gửi đến {contact_email}."
 
 #: seahub/api2/endpoints/admin/users.py:1535 seahub/views/sysadmin.py:494
 #, python-format
@@ -404,7 +405,7 @@ msgstr "Mật khẩu đã được thay đổi trên %s"
 #: seahub/api2/endpoints/admin/users.py:1537
 #, python-format
 msgid "Successfully reset password, an email has been sent to %(user)s."
-msgstr ""
+msgstr "Thay đổi mật khẩu thành công, email đã được gửi đến %(user)s."
 
 #: seahub/api2/endpoints/admin/users.py:1541 seahub/views/sysadmin.py:524
 #, python-format
@@ -430,11 +431,11 @@ msgstr "Thay đổi mật khẩu thành công sang %(passwd)s cho người dùng
 
 #: seahub/api2/endpoints/admin/users_batch.py:173
 msgid "must be an integer that is greater than or equal to 0."
-msgstr ""
+msgstr "Phải là số nguyên lớn hơn hoặc bằng 0."
 
 #: seahub/api2/endpoints/admin/virus_scan_records.py:201
 msgid "Virus file is not found."
-msgstr ""
+msgstr "Tệp virus không tìm thấy."
 
 #: seahub/api2/endpoints/admin/virus_scan_records.py:219
 #: seahub/api2/endpoints/admin/virus_scan_records.py:234
@@ -488,12 +489,12 @@ msgstr "Đường dẫn không hợp lệ"
 #: seahub/seadoc/apis.py:541 seahub/seadoc/apis.py:635
 #: seahub/seadoc/apis.py:3148
 msgid "Out of quota."
-msgstr ""
+msgstr "Vượt hạn dung lượng."
 
 #: seahub/api2/endpoints/copy_move_task.py:164
 #, python-format
 msgid "Can not move folder %(src)s to its subfolder %(des)s"
-msgstr ""
+msgstr "Không thể di chuyển thư mục %(src)s vào thư mục con %(des)s"
 
 #: seahub/api2/endpoints/copy_move_task.py:180
 #: seahub/api2/endpoints/file.py:322 seahub/api2/endpoints/file.py:402
@@ -507,25 +508,25 @@ msgstr "Dữ liệu bị khóa"
 
 #: seahub/api2/endpoints/copy_move_task.py:247
 msgid "Cancel failed"
-msgstr ""
+msgstr "Hủy thất bại"
 
 #: seahub/api2/endpoints/dir_shared_items.py:356
 #: seahub/api2/endpoints/group_owned_libraries.py:952
 msgid "username invalid."
-msgstr ""
+msgstr "tên người dùng không hợp lệ."
 
 #: seahub/api2/endpoints/dir_shared_items.py:365
 #: seahub/api2/endpoints/group_owned_libraries.py:961
 #, python-format
 msgid "User %s not found."
-msgstr ""
+msgstr "Không tìm thấy người dùng %s."
 
 #: seahub/api2/endpoints/file.py:204 seahub/api2/endpoints/upload_links.py:534
 #: seahub/api2/endpoints/via_repo_token.py:853
 #: seahub/api2/endpoints/wiki2.py:601 seahub/api2/endpoints/wikis.py:135
 #: seahub/api2/views.py:2075 seahub/seadoc/apis.py:3155
 msgid "The number of files in library exceeds the limit"
-msgstr ""
+msgstr "Số lượng tệp trong thư viện vượt quá giới hạn"
 
 #: seahub/api2/endpoints/file.py:310
 #: seahub/api2/endpoints/file_participants.py:113
@@ -545,38 +546,38 @@ msgstr ""
 #: seahub/views/ajax.py:83 seahub/views/ajax.py:113 seahub/views/ajax.py:119
 #: seahub/views/sso.py:250
 msgid "Permission denied."
-msgstr ""
+msgstr "Quyền bị từ chối."
 
 #: seahub/api2/endpoints/file.py:333
 msgid "File extension is not in the whitelist"
-msgstr ""
+msgstr "Phần mở rộng tệp không nằm trong danh sách trắng"
 
 #: seahub/api2/endpoints/file.py:756 seahub/api2/endpoints/file.py:776
 #: seahub/api2/endpoints/via_repo_token.py:1170
 msgid "File is not locked."
-msgstr ""
+msgstr "Tệp không bị khóa."
 
 #: seahub/api2/endpoints/file.py:803 seahub/api2/endpoints/share_links.py:894
 msgid "You can not refresh this file's lock."
-msgstr ""
+msgstr "Bạn không thể làm mới khóa của tệp này."
 
 #: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2784
 msgid "The participant already exists."
-msgstr ""
+msgstr "Người tham gia đã tồn tại."
 
 #: seahub/api2/endpoints/file_tag.py:256 seahub/api2/endpoints/file_tag.py:280
 #: seahub/api2/endpoints/file_tag.py:300
 #: seahub/api2/endpoints/revision_tag.py:55
 #: seahub/api2/endpoints/revision_tag.py:109
 msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
-msgstr ""
+msgstr "Thẻ chỉ có thể chứa chữ cái, số, dấu chấm, dấu gạch ngang hoặc dấu gạch dưới."
 
 #: seahub/api2/endpoints/group_members.py:109
 #: seahub/api2/endpoints/group_members.py:357
 #: seahub/api2/endpoints/group_members.py:516
 #, python-format
 msgid "User %s is already a group member."
-msgstr ""
+msgstr "Người dùng %s đã là thành viên nhóm."
 
 #: seahub/api2/endpoints/group_members.py:115
 #: seahub/api2/endpoints/group_members.py:366
@@ -586,52 +587,52 @@ msgstr ""
 #: seahub/organizations/api/admin/users.py:339
 #, python-format
 msgid "User %s not found in organization."
-msgstr ""
+msgstr "Không tìm thấy người dùng %s trong tổ chức."
 
 #: seahub/api2/endpoints/group_members.py:118
 #: seahub/api2/endpoints/group_members.py:374
 #: seahub/api2/endpoints/group_members.py:533
 #, python-format
 msgid "User %s is an organization user."
-msgstr ""
+msgstr "Người dùng %s là người dùng của tổ chức."
 
 #: seahub/api2/endpoints/group_members.py:437 seahub/group/error_msg.py:17
 #: seahub/group/error_msg.py:23 seahub/views/file.py:553
 msgid "Group does not exist"
-msgstr "Group không tồn tại"
+msgstr "Nhóm không tồn tại"
 
 #: seahub/api2/endpoints/group_members.py:576
 #| msgid "Email or Username"
 msgid "Email or LoginID"
-msgstr ""
+msgstr "Email hoặc ID đăng nhập"
 
 #: seahub/api2/endpoints/group_members.py:587 seahub/views/sysadmin.py:167
 #: seahub/views/sysadmin.py:275 seahub/views/sysadmin.py:653
 #: seahub/views/sysadmin.py:665 seahub/views/sysadmin.py:813
 msgid "Failed to export Excel"
-msgstr ""
+msgstr "Xuất tệp Excel thất bại"
 
 #: seahub/api2/endpoints/group_owned_libraries.py:398
 #: seahub/api2/endpoints/group_owned_libraries.py:674
 msgid "Permission already exists."
-msgstr ""
+msgstr "Quyền đã tồn tại."
 
 #: seahub/api2/endpoints/invitation.py:110
 #, python-format
 msgid "%(user)s revoked your access to %(site_name)s."
-msgstr ""
+msgstr "%(user)s đã thu hồi quyền truy cập của bạn vào %(site_name)s."
 
 #: seahub/api2/endpoints/invitations.py:55
 #: seahub/api2/endpoints/invitations.py:119
 #: seahub/api2/endpoints/repo_share_invitations.py:163
 msgid "The email address is not allowed to be invited as a guest."
-msgstr ""
+msgstr "Địa chỉ email này không được phép mời làm khách."
 
 #: seahub/api2/endpoints/invitations.py:60
 #: seahub/api2/endpoints/invitations.py:128
 #, python-format
 msgid "%s is already invited."
-msgstr ""
+msgstr "%s đã được mời rồi."
 
 #: seahub/api2/endpoints/invitations.py:68
 #: seahub/api2/endpoints/invitations.py:140
@@ -640,7 +641,7 @@ msgstr ""
 #: seahub/organizations/api/admin/users.py:270
 #, python-format
 msgid "User %s already exists."
-msgstr ""
+msgstr "Người dùng %s đã tồn tại."
 
 #: seahub/api2/endpoints/invitations.py:154
 #: seahub/api2/endpoints/repo_share_invitations.py:215
@@ -665,14 +666,14 @@ msgstr "Yêu cầu mật khẩu."
 #: seahub/api2/endpoints/upload_links.py:176
 #: seahub/api2/endpoints/webdav_secret.py:60
 msgid "Password is too short."
-msgstr ""
+msgstr "Mật khẩu quá ngắn."
 
 #: seahub/api2/endpoints/multi_share_links.py:114
 #: seahub/api2/endpoints/share_links.py:365
 #: seahub/api2/endpoints/upload_links.py:180
 #: seahub/api2/endpoints/webdav_secret.py:64
 msgid "Password is too weak."
-msgstr ""
+msgstr "Mật khẩu quá yếu."
 
 #: seahub/api2/endpoints/multi_share_links.py:118
 #: seahub/api2/endpoints/share_links.py:369
@@ -681,7 +682,7 @@ msgstr ""
 msgid ""
 "Password can only contain number, upper letter, lower letter and other "
 "symbols."
-msgstr ""
+msgstr "Mật khẩu chỉ có thể chứa số, chữ hoa, chữ thường và các ký tự đặc biệt khác."
 
 #: seahub/api2/endpoints/multi_share_links.py:141
 #: seahub/api2/endpoints/multi_share_links.py:376
@@ -691,7 +692,7 @@ msgstr ""
 #: seahub/api2/endpoints/upload_links.py:391 seahub/api2/views.py:3660
 #, python-format
 msgid "Expire days should be greater or equal to %s"
-msgstr ""
+msgstr "Số ngày hết hạn phải lớn hơn hoặc bằng %s"
 
 #: seahub/api2/endpoints/multi_share_links.py:146
 #: seahub/api2/endpoints/multi_share_links.py:382
@@ -701,7 +702,7 @@ msgstr ""
 #: seahub/api2/endpoints/upload_links.py:397 seahub/api2/views.py:3666
 #, python-format
 msgid "Expire days should be less than or equal to %s"
-msgstr ""
+msgstr "Số ngày hết hạn phải nhỏ hơn hoặc bằng %s"
 
 #: seahub/api2/endpoints/multi_share_links.py:166
 #: seahub/api2/endpoints/multi_share_links.py:404
@@ -711,7 +712,7 @@ msgstr ""
 #: seahub/api2/endpoints/upload_links.py:421
 #, python-format
 msgid "Expiration time should be later than %s."
-msgstr ""
+msgstr "Thời gian hết hạn phải sau %s."
 
 #: seahub/api2/endpoints/multi_share_links.py:175
 #: seahub/api2/endpoints/multi_share_links.py:413
@@ -721,7 +722,7 @@ msgstr ""
 #: seahub/api2/endpoints/upload_links.py:430
 #, python-format
 msgid "Expiration time should be earlier than %s."
-msgstr ""
+msgstr "Thời gian hết hạn phải trước %s."
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
 #: seahub/seadoc/apis.py:688
@@ -732,24 +733,24 @@ msgstr "Lỗi"
 
 #: seahub/api2/endpoints/repo_commit_revert.py:66
 msgid "This library has not been decrypted."
-msgstr ""
+msgstr "Thư viện này chưa được giải mã."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:45
 #: seahub/api2/endpoints/user.py:90 seahub/api2/endpoints/user.py:97
 #: seahub/api2/endpoints/user.py:113 seahub/group/views.py:187
 #: seahub/organizations/api/admin/users.py:783
 msgid "Feature disabled."
-msgstr ""
+msgstr "Tính năng đã bị vô hiệu hóa."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:75
 #: seahub/api2/endpoints/repo_set_password.py:171
 msgid "Can not reset this library's password."
-msgstr ""
+msgstr "Không thể đặt lại mật khẩu của thư viện này."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:82
 #, python-format
 msgid "New password of library %s"
-msgstr ""
+msgstr "Mật khẩu mới của thư viện %s"
 
 #: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4096
 msgid "Wrong password"
@@ -757,11 +758,11 @@ msgstr "Sai mật khẩu"
 
 #: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4102
 msgid "Decrypt library error"
-msgstr "Lỗi giải mã"
+msgstr "Lỗi giải mã thư viện"
 
 #: seahub/api2/endpoints/repo_set_password.py:138
 msgid "Wrong old password"
-msgstr ""
+msgstr "Mật khẩu cũ không đúng"
 
 #: seahub/api2/endpoints/repos_batch.py:1298
 #: seahub/api2/endpoints/repos_batch.py:1557
@@ -769,68 +770,68 @@ msgstr ""
 #: seahub/api2/endpoints/repos_batch.py:1730
 #, python-format
 msgid "File %s is locked."
-msgstr ""
+msgstr "Tệp %s đã bị khóa."
 
 #: seahub/api2/endpoints/repos_batch.py:1308
 #: seahub/api2/endpoints/repos_batch.py:1567
 #, python-format
 msgid "Can't move folder %s, please check its permission."
-msgstr ""
+msgstr "Không thể di chuyển thư mục %s, vui lòng kiểm tra quyền truy cập."
 
 #: seahub/api2/endpoints/repos_batch.py:1657
 #, python-format
 msgid "Can't delete folder %s, please check its permission."
-msgstr ""
+msgstr "Không thể xóa thư mục %s, vui lòng kiểm tra quyền truy cập."
 
 #: seahub/api2/endpoints/send_share_link_email.py:97
 #: seahub/notifications/models.py:965
 msgid "file"
-msgstr ""
+msgstr "tệp"
 
 #: seahub/api2/endpoints/send_share_link_email.py:98
 #, python-format
 msgid "A file is shared to you on %s"
-msgstr "Bạn được chia sẻ một file trên %s"
+msgstr "Một tệp đã được chia sẻ cho bạn trên %s"
 
 #: seahub/api2/endpoints/send_share_link_email.py:100
 #: seahub/notifications/models.py:965
 msgid "folder"
-msgstr ""
+msgstr "thư mục"
 
 #: seahub/api2/endpoints/send_share_link_email.py:101
 #, python-format
 msgid "A folder is shared to you on %s"
-msgstr ""
+msgstr "Một thư mục đã được chia sẻ cho bạn trên %s"
 
 #: seahub/api2/endpoints/send_upload_link_email.py:74
 msgid "email invalid."
-msgstr ""
+msgstr "email không hợp lệ."
 
 #: seahub/api2/endpoints/send_upload_link_email.py:92
 #, python-format
 msgid "An upload link is shared to you on %s"
-msgstr "Một link tải lên được chia sẻ với bạn tại %s"
+msgstr "Một liên kết tải lên đã được chia sẻ cho bạn trên %s"
 
 #: seahub/api2/endpoints/share_link_auth.py:147
 #, python-format
 msgid "User %s does not exist."
-msgstr ""
+msgstr "Người dùng %s không tồn tại."
 
 #: seahub/api2/endpoints/share_link_auth.py:310
 #, python-format
 msgid "Email %s already exists."
-msgstr ""
+msgstr "Email %s đã tồn tại."
 
 #: seahub/api2/endpoints/share_link_auth.py:316
 #, python-format
 msgid "Email %s is invalid."
-msgstr ""
+msgstr "Email %s không hợp lệ."
 
 #: seahub/api2/endpoints/share_links.py:498
 #: seahub/api2/endpoints/share_links.py:507
 #, python-format
 msgid "Share link %s already exists."
-msgstr ""
+msgstr "Liên kết chia sẻ %s đã tồn tại."
 
 #: seahub/api2/endpoints/subscription.py:32
 #: seahub/api2/endpoints/subscription.py:68
@@ -845,16 +846,16 @@ msgstr ""
 #: seahub/work_weixin/views.py:152 seahub/work_weixin/views.py:172
 #: seahub/work_weixin/views.py:233
 msgid "Feature is not enabled."
-msgstr ""
+msgstr "Tính năng chưa được bật."
 
 #: seahub/api2/endpoints/user.py:119
 #, python-format
 msgid "Contact email %s already exists."
-msgstr ""
+msgstr "Email liên hệ %s đã tồn tại."
 
 #: seahub/api2/endpoints/user.py:133
 msgid "telephone is too long (maximum is 100 characters)."
-msgstr ""
+msgstr "Số điện thoại quá dài (tối đa 100 ký tự)."
 
 #: seahub/api2/endpoints/user_avatar.py:41
 #: seahub/organizations/api/admin/logo.py:56 seahub/utils/error_msg.py:8
@@ -877,38 +878,38 @@ msgstr "File của bạn quá lớn (%(size)s), tối đa là %(max_valid_size)s
 msgid ""
 "You already have %(nb_avatars)d avatars, and the maximum allowed is "
 "%(nb_max_avatars)d."
-msgstr ""
+msgstr "Bạn đã có %(nb_avatars)d ảnh đại diện, và số lượng tối đa cho phép là %(nb_max_avatars)d."
 
 #: seahub/api2/endpoints/webdav_secret.py:56
 #| msgid "Length of WebDav password should be less than 30."
 msgid "Length of WebDAV password should be less than 30."
-msgstr ""
+msgstr "Độ dài mật khẩu WebDAV phải nhỏ hơn 30 ký tự."
 
 #: seahub/api2/endpoints/wiki2.py:220 seahub/api2/endpoints/wiki2.py:1485
 #: seahub/api2/endpoints/wikis.py:219
 msgid "Name can only contain letters, numbers, blank, hyphen or underscore."
-msgstr ""
+msgstr "Tên chỉ có thể chứa chữ cái, số, khoảng trắng, dấu gạch ngang hoặc dấu gạch dưới."
 
 #: seahub/api2/endpoints/wiki2.py:1335
 msgid "URL is invalid"
-msgstr ""
+msgstr "URL không hợp lệ"
 
 #: seahub/api2/endpoints/wiki2.py:1339
 msgid "The custom part of URL should have 5-30 characters."
-msgstr ""
+msgstr "Phần tùy chỉnh của URL phải có từ 5-30 ký tự."
 
 #: seahub/api2/endpoints/wiki2.py:1361
 msgid "This custom domain is already in use and cannot be used for your wiki"
-msgstr ""
+msgstr "Tên miền tùy chỉnh này đã được sử dụng và không thể dùng cho wiki của bạn"
 
 #: seahub/api2/endpoints/wikis.py:122 seahub/api2/endpoints/wikis.py:226
 #, python-format
 msgid "%s is taken by others, please try another name."
-msgstr ""
+msgstr "%s đã được người khác sử dụng, vui lòng thử tên khác."
 
 #: seahub/api2/endpoints/wikis.py:206
 msgid "Wiki not found."
-msgstr ""
+msgstr "Không tìm thấy Wiki."
 
 #: seahub/api2/endpoints/wikis.py:215
 msgid "Name is required."
@@ -916,12 +917,12 @@ msgstr "Yêu cầu tên."
 
 #: seahub/api2/utils.py:338
 msgid "A share link for you"
-msgstr ""
+msgstr "Một liên kết chia sẻ cho bạn"
 
 #: seahub/api2/views.py:1925
 #| msgid "Permission error: only group staff can add member"
 msgid "Permission error: you are not the admin of the department"
-msgstr ""
+msgstr "Lỗi phân quyền: bạn không phải là quản trị viên của bộ phận"
 
 #: seahub/auth/decorators.py:73
 msgid "Please log in."
@@ -966,7 +967,7 @@ msgstr "Email này không tồn tại trên hệ thống. Vui lòng kiểm tra c
 #: seahub/auth/forms.py:119 seahub/auth/forms.py:120
 #: seahub/templates/registration/login.html:76
 msgid "Please use Single Sign-On to login."
-msgstr ""
+msgstr "Vui lòng sử dụng Đăng nhập một lần (SSO) để đăng nhập."
 
 #: seahub/auth/forms.py:125
 msgid ""
@@ -1015,7 +1016,7 @@ msgstr "Email này đã tồn tại."
 
 #: seahub/auth/views.py:157
 msgid "This account has been frozen due to too many failed login attempts."
-msgstr ""
+msgstr "Tài khoản này đã bị đóng băng do đăng nhập sai quá nhiều lần."
 
 #: seahub/auth/views.py:323
 msgid "Logged out"
@@ -1027,12 +1028,12 @@ msgstr "Gửi email thất bại, vui lòng liên hệ với admin."
 
 #: seahub/auth/views.py:454
 msgid "Unable to change password."
-msgstr ""
+msgstr "Không thể thay đổi mật khẩu."
 
 #: seahub/auth/views.py:537
 #, python-brace-format
 msgid "Team {domain} does not have permission to use ADFS/SAML SSO."
-msgstr ""
+msgstr "Nhóm {domain} không có quyền sử dụng ADFS/SAML SSO."
 
 #: seahub/avatar/models.py:144 seahub/avatar/models.py:172
 #, python-format
@@ -1054,7 +1055,7 @@ msgstr "Đã xóa thành công hình đại diện."
 #: seahub/base/accounts.py:705 seahub/base/accounts.py:736
 #, python-format
 msgid "Account %(account)s froze on %(site)s."
-msgstr ""
+msgstr "Tài khoản %(account)s đã bị đóng băng trên %(site)s."
 
 #: seahub/base/accounts.py:1220
 msgid "Email address"
@@ -1099,13 +1100,13 @@ msgstr "Các file trong thư viện này không thể xem trực tuyến"
 #: seahub/base/management/commands/check_user_quota.py:58
 #, python-format
 msgid "Your quota is almost full on %s"
-msgstr ""
+msgstr "Hạn mức của bạn sắp đầy trên %s"
 
 #: seahub/base/management/commands/check_user_quota.py:82
 #, python-format
 #| msgid "Your quota is almost full on %s"
 msgid "The team quota is almost full on %s"
-msgstr ""
+msgstr "Hạn mức của nhóm sắp đầy trên %s"
 
 #: seahub/base/management/commands/createsuperuser.py:26
 msgid "Enter a valid e-mail address."
@@ -1113,7 +1114,7 @@ msgstr "Nhập địa chỉ email."
 
 #: seahub/base/management/commands/export_file_access_log.py:58
 msgid "Type"
-msgstr ""
+msgstr "Loại"
 
 #: seahub/base/management/commands/export_file_access_log.py:58
 msgid "IP"
@@ -1121,7 +1122,7 @@ msgstr "Địa chỉ IP"
 
 #: seahub/base/management/commands/export_file_access_log.py:58
 msgid "Device"
-msgstr ""
+msgstr "Thiết bị"
 
 #: seahub/base/management/commands/export_file_access_log.py:58
 msgid "Date"
@@ -1129,19 +1130,19 @@ msgstr "Ngày"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "Library Name"
-msgstr ""
+msgstr "Tên thư viện"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "Library ID"
-msgstr ""
+msgstr "ID thư viện"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "Library Owner"
-msgstr ""
+msgstr "Chủ sở hữu thư viện"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "File Path"
-msgstr ""
+msgstr "Đường dẫn tệp"
 
 #: seahub/base/management/commands/export_file_access_log.py:85
 #: seahub/base/templatetags/seahub_tags.py:142
@@ -1151,7 +1152,7 @@ msgstr "Đã xóa"
 #: seahub/base/management/commands/export_file_access_log.py:88
 #: seahub/templates/snippets/add_watermark.html:10
 msgid "Anonymous User"
-msgstr ""
+msgstr "Người dùng không xác định"
 
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
@@ -1188,7 +1189,7 @@ msgstr "Admin"
 #: seahub/base/management/commands/export_users.py:49
 #: seahub/views/sysadmin.py:178 seahub/views/sysadmin.py:182
 msgid "LDAP(imported)"
-msgstr ""
+msgstr "LDAP(đã nhập)"
 
 #: seahub/base/management/commands/export_users.py:118
 #: seahub/views/sysadmin.py:238
@@ -1222,12 +1223,12 @@ msgstr "Mặc định"
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Team {org_name} is inactive."
-msgstr ""
+msgstr "Nhóm {org_name} không hoạt động."
 
 #: seahub/base/middleware.py:76
 #, python-brace-format
 msgid "Please contact {SUPPORT_EMAIL} if you want to activate the team."
-msgstr ""
+msgstr "Vui lòng liên hệ {SUPPORT_EMAIL} nếu bạn muốn kích hoạt nhóm."
 
 #: seahub/base/templatetags/seahub_tags.py:141
 msgid "Added"
@@ -1251,21 +1252,21 @@ msgstr "Đã di chuyển"
 
 #: seahub/base/templatetags/seahub_tags.py:147
 msgid "Added folder"
-msgstr ""
+msgstr "Đã thêm thư mục"
 
 #: seahub/base/templatetags/seahub_tags.py:148
 msgid "Removed folder"
-msgstr ""
+msgstr "Đã xóa thư mục"
 
 #: seahub/base/templatetags/seahub_tags.py:149
 #: seahub/notifications/management/commands/send_file_updates.py:172
 msgid "Renamed folder"
-msgstr ""
+msgstr "Đã đổi tên thư mục"
 
 #: seahub/base/templatetags/seahub_tags.py:150
 #: seahub/notifications/management/commands/send_file_updates.py:177
 msgid "Moved folder"
-msgstr ""
+msgstr "Đã di chuyển thư mục"
 
 #: seahub/base/templatetags/seahub_tags.py:151
 msgid "Added or modified"
@@ -1285,7 +1286,7 @@ msgstr "File \"%(file)s\" đã trở lại trạng thái lúc %(time)s"
 #: seahub/base/templatetags/seahub_tags.py:173
 #: seahub/base/templatetags/seahub_tags.py:244
 msgid "Recovered deleted folder"
-msgstr ""
+msgstr "Đã khôi phục thư mục bị xóa"
 
 #: seahub/base/templatetags/seahub_tags.py:175
 #: seahub/base/templatetags/seahub_tags.py:246 seahub/views/ajax.py:457
@@ -1345,32 +1346,32 @@ msgstr "Chỉ xem"
 #, python-format
 msgid "%(size)d byte"
 msgid_plural "%(size)d bytes"
-msgstr[0] ""
+msgstr[0] "%(size)d byte"
 
 #: seahub/base/templatetags/seahub_tags.py:543
 #, python-format
 msgid "%s KB"
-msgstr ""
+msgstr "%s KB"
 
 #: seahub/base/templatetags/seahub_tags.py:545
 #, python-format
 msgid "%s MB"
-msgstr ""
+msgstr "%s MB"
 
 #: seahub/base/templatetags/seahub_tags.py:547
 #, python-format
 msgid "%s GB"
-msgstr ""
+msgstr "%s GB"
 
 #: seahub/base/templatetags/seahub_tags.py:549
 #, python-format
 msgid "%s TB"
-msgstr ""
+msgstr "%s TB"
 
 #: seahub/base/templatetags/seahub_tags.py:551
 #, python-format
 msgid "%s PB"
-msgstr ""
+msgstr "%s PB"
 
 #: seahub/contacts/models.py:78
 msgid "Email is required."
@@ -1395,13 +1396,13 @@ msgstr "Yêu cầu email."
 #: seahub/work_weixin/views.py:178 seahub/work_weixin/views.py:183
 #: seahub/work_weixin/views.py:193 seahub/work_weixin/views.py:197
 msgid "Error, please contact administrator."
-msgstr ""
+msgstr "Lỗi, vui lòng liên hệ quản trị viên."
 
 #: seahub/dingtalk/views.py:127 seahub/dingtalk/views.py:374
 #: seahub/weixin/views.py:111
 #, python-format
 msgid "User %s not found or inactive."
-msgstr ""
+msgstr "Người dùng %s không tìm thấy hoặc không hoạt động."
 
 #: seahub/forms.py:59
 msgid "The two passwords didn't match."
@@ -1465,11 +1466,11 @@ msgstr "Yêu cầu tên"
 
 #: seahub/forms.py:185
 msgid "Please enter a valid number"
-msgstr ""
+msgstr "Vui lòng nhập số nguyên hợp lệ"
 
 #: seahub/forms.py:186
 msgid "Text is required"
-msgstr ""
+msgstr "Yêu cầu văn bản."
 
 #: seahub/group/error_msg.py:8
 msgid "The group has already created"
@@ -1532,7 +1533,7 @@ msgstr "Hi,"
 msgid ""
 "%(escaped_nickname)s invited you to join group %(grp_name)s on "
 "%(site_name)s: "
-msgstr ""
+msgstr "%(escaped_nickname)s đã mời bạn vào nhóm %(grp_name)s trên %(site_name)s: "
 
 #: seahub/group/templates/group/group_join_email.html:2
 #, python-format
@@ -1570,19 +1571,19 @@ msgstr "Bạn được mời tham gia vào Group %s"
 #: seahub/group/views.py:192
 #| msgid "Group does not exist"
 msgid "Group invite link does not exist"
-msgstr ""
+msgstr "Liên kết mời vào nhóm không tồn tại"
 
 #: seahub/group/views.py:200
 msgid "Group invite link broken"
-msgstr ""
+msgstr "Liên kết mời vào nhóm bị hỏng"
 
 #: seahub/institutions/views.py:185
 msgid "Owner"
-msgstr ""
+msgstr "Chủ sở hữu"
 
 #: seahub/institutions/views.py:189
 msgid "Member"
-msgstr ""
+msgstr "Thành viên"
 
 #: seahub/institutions/views.py:222 seahub/views/sysadmin.py:371
 msgid "Failed to delete: the user does not exist"
@@ -1590,7 +1591,7 @@ msgstr "Xóa thất bại: người dùng không tồn tại"
 
 #: seahub/institutions/views.py:226
 msgid "Failed to delete: the user is system administrator"
-msgstr ""
+msgstr "Xóa thất bại: người dùng là quản trị viên hệ thống"
 
 #: seahub/institutions/views.py:230 seahub/views/sysadmin.py:361
 #, python-format
@@ -1600,12 +1601,12 @@ msgstr "Xóa %s thành công"
 #: seahub/invitations/models.py:96
 #, python-format
 msgid "You are invited to join %(site_name)s."
-msgstr ""
+msgstr "Bạn được mời tham gia %(site_name)s."
 
 #: seahub/invitations/models.py:99
 #, python-brace-format
 msgid "You are invited to join team {org_name}."
-msgstr ""
+msgstr "Bạn được mời tham gia nhóm {org_name}."
 
 #: seahub/invitations/templates/invitations/invitation_email.html:9
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:9
@@ -1635,27 +1636,27 @@ msgstr "Xin chào,"
 #, python-format
 msgid ""
 "You are invited to join team %(org_name)s. Please click the link below:"
-msgstr ""
+msgstr "Bạn được mời tham gia nhóm %(org_name)s. Vui lòng nhấp vào liên kết bên dưới:"
 
 #: seahub/invitations/templates/invitations/invitation_email.html:15
 #, python-format
 msgid ""
 "%(inviter_name)s invited you to join %(site_name)s. Please click the link "
 "below:"
-msgstr ""
+msgstr "%(inviter_name)s đã mời bạn tham gia %(site_name)s. Vui lòng nhấp vào liên kết bên dưới:"
 
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:12
 #, python-format
 msgid "%(inviter)s revoked your access to %(site_name)s."
-msgstr ""
+msgstr "%(inviter)s đã thu hồi quyền truy cập của bạn vào %(site_name)s."
 
 #: seahub/invitations/templates/invitations/token_view.html:4
 msgid "Create Account"
-msgstr ""
+msgstr "Tạo tài khoản"
 
 #: seahub/invitations/templates/invitations/token_view.html:8
 msgid "Set your password"
-msgstr ""
+msgstr "Thiết lập mật khẩu của bạn"
 
 #: seahub/invitations/templates/invitations/token_view.html:17
 #: seahub/options/templates/options/set_user_options.html:14
@@ -1668,18 +1669,18 @@ msgstr ""
 #: seahub/templates/registration/password_set_form.html:27
 #: seahub/templates/share_access_validation.html:29
 msgid "Submit"
-msgstr "Cập nhật"
+msgstr "Gửi"
 
 #: seahub/invitations/templates/invitations/token_view.html:26
 msgid "It is required."
-msgstr "Điều này được yêu cầu"
+msgstr "Trường này là bắt buộc."
 
 #: seahub/notifications/management/commands/notify_admins_on_virus.py:68
 #: seahub/notifications/management/commands/notify_admins_on_virus.py:83
 #: seahub/notifications/management/commands/notify_admins_on_virus.py:104
 #, python-format
 msgid "Virus detected on %s"
-msgstr ""
+msgstr "Phát hiện virus trên %s"
 
 #: seahub/notifications/management/commands/send_dingtalk_notifications.py:185
 #: seahub/notifications/templates/notifications/notice_email.html:9
@@ -1694,99 +1695,99 @@ msgstr[0] "\nBạn có %(num)s thông báo mới trên %(site_name)s:\n"
 
 #: seahub/notifications/management/commands/send_file_updates.py:115
 msgid "Renamed library"
-msgstr ""
+msgstr "Đã đổi tên thư viện"
 
 #: seahub/notifications/management/commands/send_file_updates.py:118
 msgid "Deleted library"
-msgstr "Xóa thư viện"
+msgstr "Đã xóa thư viện"
 
 #: seahub/notifications/management/commands/send_file_updates.py:121
 msgid "Restored library"
-msgstr ""
+msgstr "Đã khôi phục thư viện"
 
 #: seahub/notifications/management/commands/send_file_updates.py:125
 msgid "Removed all items from trash."
-msgstr ""
+msgstr "Đã xóa tất cả các mục khỏi thùng rác."
 
 #: seahub/notifications/management/commands/send_file_updates.py:127
 #, python-format
 msgid "Removed items older than %s days from trash."
-msgstr ""
+msgstr "Đã xóa các mục cũ hơn %s ngày khỏi thùng rác."
 
 #: seahub/notifications/management/commands/send_file_updates.py:135
 msgid "Created file"
-msgstr ""
+msgstr "Đã tạo tệp"
 
 #: seahub/notifications/management/commands/send_file_updates.py:138
 msgid "Deleted file"
-msgstr ""
+msgstr "Đã xóa tệp"
 
 #: seahub/notifications/management/commands/send_file_updates.py:141
 msgid "Restored file"
-msgstr ""
+msgstr "Đã khôi phục tệp"
 
 #: seahub/notifications/management/commands/send_file_updates.py:144
 msgid "Renamed file"
-msgstr ""
+msgstr "Đã đổi tên tệp"
 
 #: seahub/notifications/management/commands/send_file_updates.py:150
 msgid "Moved file"
-msgstr ""
+msgstr "Đã di chuyển tệp"
 
 #: seahub/notifications/management/commands/send_file_updates.py:156
 msgid "Updated file"
-msgstr ""
+msgstr "Đã cập nhật tệp"
 
 #: seahub/notifications/management/commands/send_file_updates.py:163
 msgid "Created folder"
-msgstr ""
+msgstr "Đã tạo thư mục"
 
 #: seahub/notifications/management/commands/send_file_updates.py:166
 msgid "Deleted folder"
-msgstr ""
+msgstr "Đã xóa thư mục"
 
 #: seahub/notifications/management/commands/send_file_updates.py:169
 msgid "Restored folder"
-msgstr ""
+msgstr "Đã khôi phục thư mục"
 
 #: seahub/notifications/management/commands/send_file_updates.py:278
 #, python-format
 msgid "New file updates on %s"
-msgstr ""
+msgstr "Cập nhật tệp mới trên %s"
 
 #: seahub/notifications/management/commands/send_notices.py:461
 #, python-format
 msgid "New notice on %s"
-msgstr "Ghi chú mới trên %s"
+msgstr "Thông báo mới trên %s"
 
 #: seahub/notifications/management/commands/send_notices_to_social_account.py:252
 #, python-format
 msgid "You've got %(num)s new notices on %(site_name)s:\n"
-msgstr ""
+msgstr "Bạn có %(num)s thông báo mới trên %(site_name)s:\n"
 
 #: seahub/notifications/models.py:612
 #, python-format
 msgid ""
 "A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a "
 "href='%(link)s'>%(name)s</a>"
-msgstr "Một file <a href='%(file_link)s'>%(file_name)s</a> đã được tải lên tại <a href='%(link)s'>%(name)s</a>"
+msgstr "Một tệp có tên <a href='%(file_link)s'>%(file_name)s</a> đã được tải lên <a href='%(link)s'>%(name)s</a>"
 
 #: seahub/notifications/models.py:619
 #, python-format
 msgid "A file named <strong>%(file_name)s</strong> is uploaded"
-msgstr ""
+msgstr "Một tệp có tên <strong>%(file_name)s</strong> đã được tải lên"
 
 #: seahub/notifications/models.py:654
 #, python-format
 msgid ""
 "A folder named <a href='%(folder_link)s'>%(folder_name)s</a> is uploaded to "
 "<a href='%(link)s'>%(name)s</a>"
-msgstr ""
+msgstr "Một thư mục có tên <a href='%(folder_link)s'>%(folder_name)s</a> đã được tải lên <a href='%(link)s'>%(name)s</a>"
 
 #: seahub/notifications/models.py:661
 #, python-format
 msgid "A folder named <strong>%(folder_name)s</strong> is uploaded"
-msgstr ""
+msgstr "Một thư mục có tên <strong>%(folder_name)s</strong> đã được tải lên"
 
 #: seahub/notifications/models.py:795
 #, python-format
@@ -1794,35 +1795,35 @@ msgid ""
 "User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a "
 "href='%(href)s'>%(group_name)s</a>, verification message: "
 "%(join_request_msg)s"
-msgstr "Người dùng <a href='%(user_profile)s'>%(username)s</a> vừa xin gia nhập Group <a href='%(href)s'>%(group_name)s</a>, tin nhắn xác minh: %(join_request_msg)s"
+msgstr "Người dùng <a href='%(user_profile)s'>%(username)s</a> đã yêu cầu tham gia nhóm <a href='%(href)s'>%(group_name)s</a>, tin nhắn xác minh: %(join_request_msg)s"
 
 #: seahub/notifications/models.py:824
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group "
 "<a href='%(href)s'>%(group_name)s</a>"
-msgstr "Người dùng <a href='%(user_profile)s'>%(group_staff)s</a> vừa thêm bạn vào Group <a href='%(href)s'>%(group_name)s</a>"
+msgstr "Người dùng <a href='%(user_profile)s'>%(group_staff)s</a> đã thêm bạn vào nhóm <a href='%(href)s'>%(group_name)s</a>"
 
 #: seahub/notifications/models.py:850
 #, python-format
 msgid ""
 "File <a href='%(file_url)s'>%(file_name)s</a> has a new comment from user "
 "%(author)s"
-msgstr ""
+msgstr "Tệp <a href='%(file_url)s'>%(file_name)s</a> có bình luận mới từ người dùng %(author)s"
 
 #: seahub/notifications/models.py:867
 #, python-format
 msgid ""
 "<a href='%(file_url)s'>Draft #%(draft_id)s</a> has a new comment from user "
 "%(author)s"
-msgstr ""
+msgstr "<a href='%(file_url)s'>Bản nháp #%(draft_id)s</a> có bình luận mới từ người dùng %(author)s"
 
 #: seahub/notifications/models.py:884
 #, python-format
 msgid ""
 "%(from_user)s has sent you a request for <a href='%(file_url)s'>draft "
 "#%(draft_id)s</a>"
-msgstr ""
+msgstr "%(from_user)s đã gửi cho bạn một yêu cầu cho <a href='%(file_url)s'>bản nháp #%(draft_id)s</a>"
 
 #: seahub/notifications/models.py:907
 #: seahub/notifications/templates/notifications/notice_email.html:66
@@ -1830,7 +1831,7 @@ msgstr ""
 msgid ""
 "Guest %(user)s accepted your <a "
 "href=\"%(url_base)s%(inv_url)s\">invitation</a> at %(time)s."
-msgstr ""
+msgstr "Khách %(user)s đã chấp nhận <a href=\"%(url_base)s%(inv_url)s\">lời mời</a> của bạn vào lúc %(time)s."
 
 #: seahub/notifications/models.py:931
 #, python-format
@@ -1840,70 +1841,70 @@ msgstr ""
 msgid ""
 "%(user)s has transferred a library named <a "
 "href=\"%(repo_url)s\">%(repo_name)s</a> to you."
-msgstr ""
+msgstr "%(user)s đã chuyển một thư viện có tên <a href=\"%(repo_url)s\">%(repo_name)s</a> cho bạn."
 
 #: seahub/notifications/models.py:1004
 #, python-brace-format
 msgid "{name} created {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} đã tạo {obj_type} {obj_link} trong thư viện {repo_link}."
 
 #: seahub/notifications/models.py:1006
 #, python-brace-format
 msgid ""
 "{name} created {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr ""
+msgstr "{name} đã tạo {obj_type} {obj_link} và {obj_path_count_minus_one} {obj_type} khác trong thư viện {repo_link}."
 
 #: seahub/notifications/models.py:1011
 #, python-brace-format
 msgid "{name} deleted {obj_type} {obj_name} in library {repo_link}."
-msgstr ""
+msgstr "{name} đã xóa {obj_type} {obj_name} trong thư viện {repo_link}."
 
 #: seahub/notifications/models.py:1013
 #, python-brace-format
 msgid ""
 "{name} deleted {obj_type} {obj_name} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr ""
+msgstr "{name} đã xóa {obj_type} {obj_name} và {obj_path_count_minus_one} {obj_type} khác trong thư viện {repo_link}."
 
 #: seahub/notifications/models.py:1017
 #, python-brace-format
 msgid "{name} restored {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} đã khôi phục {obj_type} {obj_link} trong thư viện {repo_link}."
 
 #: seahub/notifications/models.py:1021
 #, python-brace-format
 msgid ""
 "{name} renamed {obj_type} {old_obj_name} to {obj_link} in library "
 "{repo_link}."
-msgstr ""
+msgstr "{name} đã đổi tên {obj_type} {old_obj_name} thành {obj_link} trong thư viện {repo_link}."
 
 #: seahub/notifications/models.py:1026
 #, python-brace-format
 msgid "{name} moved {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} đã di chuyển {obj_type} {obj_link} trong thư viện {repo_link}."
 
 #: seahub/notifications/models.py:1028
 #, python-brace-format
 msgid ""
 "{name} moved {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr ""
+msgstr "{name} đã di chuyển {obj_type} {obj_link} và {obj_path_count_minus_one} {obj_type} khác trong thư viện {repo_link}."
 
 #: seahub/notifications/models.py:1032
 #, python-brace-format
 msgid "{name} updated {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} đã cập nhật {obj_type} {obj_link} trong thư viện {repo_link}."
 
 #: seahub/notifications/models.py:1035
 #, python-brace-format
 msgid "{name} {op_type} {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} {op_type} {obj_type} {obj_link} trong thư viện {repo_link}."
 
 #: seahub/notifications/models.py:1046
 #, python-brace-format
 msgid "Face recognition is done for library {repo_name}."
-msgstr ""
+msgstr "Nhận diện khuôn mặt đã hoàn thành cho thư viện {repo_name}."
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:9
 #, python-format
@@ -1913,11 +1914,11 @@ msgid ""
 msgid_plural ""
 "\n"
 "You've got %(num)s file updates on %(site_name)s:\n"
-msgstr[0] ""
+msgstr[0] "\nAnh có %(num)s file update trên %(site_name)s:\n"
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:20
 msgid "Operation"
-msgstr ""
+msgstr "Thao tác"
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:21
 #: seahub/templates/snippets/repo_dir_trash_tr.html:21
@@ -1958,7 +1959,7 @@ msgid ""
 "A folder named <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a> is"
 " uploaded to your folder <a "
 "href=\"%(url_base)s%(parent_dir_url)s\">%(parent_dir_name)s</a>."
-msgstr ""
+msgstr "Một thư mục có tên <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a> đã được tải lên thư mục <a href=\"%(url_base)s%(parent_dir_url)s\">%(parent_dir_name)s</a> của bạn."
 
 #: seahub/notifications/templates/notifications/notice_email.html:57
 #, python-format
@@ -1966,21 +1967,21 @@ msgid ""
 "User <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> has asked to join "
 "group <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>, verification "
 "message: %(msg)s"
-msgstr ""
+msgstr "Người dùng <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> đã yêu cầu tham gia nhóm <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>, tin nhắn xác minh: %(msg)s"
 
 #: seahub/notifications/templates/notifications/notice_email.html:60
 #, python-format
 msgid ""
 "User <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> has added you to "
 "group <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>"
-msgstr "Người dùng <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> vừa thêm bạn vào nhóm group <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>"
+msgstr "Người dùng <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> đã thêm bạn vào nhóm <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>"
 
 #: seahub/notifications/templates/notifications/notice_email.html:63
 #, python-format
 msgid ""
 "File <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> has a new "
 "comment from user %(author)s"
-msgstr ""
+msgstr "Tệp <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> có bình luận mới từ người dùng %(author)s"
 
 #: seahub/notifications/templates/notifications/notice_email.html:69
 #, python-format
@@ -1988,18 +1989,18 @@ msgid ""
 "A large number of files in your library <a "
 "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> has been deleted "
 "recently."
-msgstr ""
+msgstr "Một số lượng lớn tệp trong thư viện <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> của bạn đã bị xóa gần đây."
 
 #: seahub/notifications/templates/notifications/notice_email.html:84
 msgid "Go check out at the following page:"
-msgstr "Kiểm tra trang tiếp theo:"
+msgstr "Vui lòng kiểm tra tại trang sau:"
 
 #: seahub/notifications/templates/notifications/notice_msg/folder_share_msg.html:1
 #, python-format
 msgid ""
 "%(user)s has shared a folder named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to you."
-msgstr ""
+msgstr "%(user)s đã chia sẻ một thư mục có tên <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> cho bạn."
 
 #: seahub/notifications/templates/notifications/notice_msg/folder_share_to_group_msg.html:1
 #, python-format
@@ -2007,14 +2008,14 @@ msgid ""
 "%(user)s has shared a folder named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to group <a "
 "href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
-msgstr ""
+msgstr "%(user)s đã chia sẻ một thư mục có tên <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> cho nhóm <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notice_msg/repo_share_msg.html:1
 #, python-format
 msgid ""
 "%(user)s has shared a library named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to you."
-msgstr "%(user)s chia sẻ thư viện <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a>"
+msgstr "%(user)s đã chia sẻ một thư viện có tên <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> cho bạn."
 
 #: seahub/notifications/templates/notifications/notice_msg/repo_share_to_group_msg.html:1
 #, python-format
@@ -2022,32 +2023,32 @@ msgid ""
 "%(user)s has shared a library named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to group <a "
 "href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
-msgstr ""
+msgstr "%(user)s đã chia sẻ một thư viện có tên <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> cho nhóm <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notify_virus.html:13
 #, python-format
 msgid ""
 "Virus detected in library %(repo_name)s during regular scanning: "
 "%(file_path)s."
-msgstr ""
+msgstr "Phát hiện virus trong thư viện %(repo_name)s trong quá trình quét định kỳ: %(file_path)s."
 
 #: seahub/notifications/templates/notifications/notify_virus.html:20
 msgid "Virus is detected on regular scanning:"
-msgstr ""
+msgstr "Phát hiện virus trong quá trình quét định kỳ:"
 
 #: seahub/notifications/utils.py:471
 #, python-format
 msgid "%(author)s added a new comment in document %(sdoc_name)s"
-msgstr ""
+msgstr "%(author)s đã thêm một bình luận mới trong tài liệu %(sdoc_name)s"
 
 #: seahub/notifications/utils.py:478 seahub/notifications/utils.py:498
 msgid "Details"
-msgstr ""
+msgstr "Chi tiết"
 
 #: seahub/notifications/utils.py:484
 #, python-format
 msgid "%(author)s added a new reply in document %(sdoc_name)s"
-msgstr ""
+msgstr "%(author)s đã thêm một phản hồi mới trong tài liệu %(sdoc_name)s"
 
 #: seahub/notifications/utils.py:490
 #, python-format
@@ -2055,14 +2056,14 @@ msgstr ""
 msgid ""
 "%(author)s has marked the comment \"%(resolve_comment)s\" as resolved in "
 "document %(sdoc_name)s\n"
-msgstr ""
+msgstr "%(author)s đã đánh dấu bình luận \"%(resolve_comment)s\" là đã giải quyết trong tài liệu %(sdoc_name)s\n"
 
 #: seahub/oauth/views.py:225
 #: seahub/templates/remote_user/create_unknown_user_false.html:8
 #: seahub/work_weixin/views.py:111
 msgid ""
 "Error, new user registration is not allowed, please contact administrator."
-msgstr ""
+msgstr "Lỗi, việc đăng ký người dùng mới không được phép, vui lòng liên hệ quản trị viên."
 
 #: seahub/options/templates/options/set_user_options.html:7
 msgid "Please choose how to view encrypted libraries online:"
@@ -2088,26 +2089,26 @@ msgstr "File sẽ được giải mã trên trình duyệt của bạn khi bạn
 msgid ""
 "Tip: the latter way is more secure, but it is not supported well by all "
 "browsers. We advise you to use the latest version of Chrome or Firefox."
-msgstr ""
+msgstr "Mẹo: cách sau bảo mật hơn, nhưng không được hỗ trợ tốt bởi tất cả các trình duyệt. Chúng tôi khuyên bạn nên sử dụng phiên bản Chrome hoặc Firefox mới nhất."
 
 #: seahub/organizations/api/admin/users.py:810
 #, python-brace-format
 msgid "Failed. You can only invite {org_members_quota} members."
-msgstr ""
+msgstr "Thất bại. Bạn chỉ có thể mời {org_members_quota} thành viên."
 
 #: seahub/organizations/api/admin/users.py:814
 msgid "The number of users exceeds the limit"
-msgstr ""
+msgstr "Số lượng người dùng vượt quá giới hạn"
 
 #: seahub/organizations/api/admin/users.py:832
 #, python-brace-format
 msgid "User {email} already exists."
-msgstr ""
+msgstr "Người dùng {email} đã tồn tại."
 
 #: seahub/organizations/forms.py:41 seahub/share/views.py:354
 #: seahub/share/views.py:367
 msgid "Email address is not valid"
-msgstr ""
+msgstr "Địa chỉ email không hợp lệ"
 
 #: seahub/organizations/templates/organizations/org_deactivate_email.html:12
 #, python-format
@@ -2117,14 +2118,14 @@ msgstr ""
 msgid ""
 "You are receiving this email because your team %(org_name)s has been "
 "deactivated."
-msgstr ""
+msgstr "Bạn nhận được email này vì nhóm %(org_name)s của bạn đã bị vô hiệu hóa."
 
 #: seahub/organizations/templates/organizations/org_deactivate_email.html:16
 #, python-format
 msgid ""
 "\n"
 "If you like to continue using our site, click <a href=\"%(link)s\">here</a>. Otherwise your account will be deleted in 60 days.\n"
-msgstr ""
+msgstr "\nNếu bạn muốn tiếp tục sử dụng trang web của chúng tôi, hãy nhấp vào <a href=\"%(link)s\">đây</a>. Nếu không, tài khoản của bạn sẽ bị xóa sau 60 ngày.\n"
 
 #: seahub/organizations/templates/organizations/org_register.html:3
 #: seahub/organizations/templates/organizations/org_register.html:13
@@ -2141,24 +2142,24 @@ msgstr "Đăng ký"
 #: seahub/organizations/templates/organizations/org_register.html:16
 #: seahub/templates/registration/registration_form.html:17
 msgid "Welcome back, you are already signed in."
-msgstr "Chào mừng trở lại."
+msgstr "Chào mừng trở lại, bạn đã đăng nhập rồi."
 
 #: seahub/organizations/templates/organizations/org_register.html:17
 #: seahub/templates/registration/registration_form.html:18
 msgid "You will be redirected to the home page within 5 seconds."
-msgstr ""
+msgstr "Bạn sẽ được chuyển hướng đến trang chủ trong vòng 5 giây."
 
 #: seahub/organizations/templates/organizations/org_register.html:25
 msgid "Organization Name"
-msgstr ""
+msgstr "Tên tổ chức"
 
 #: seahub/organizations/templates/organizations/org_register.html:39
 msgid "Admin Name"
-msgstr ""
+msgstr "Tên quản trị viên"
 
 #: seahub/organizations/templates/organizations/org_register.html:44
 msgid "Admin Email"
-msgstr ""
+msgstr "Email quản trị viên"
 
 #: seahub/organizations/templates/organizations/org_register.html:52
 #: seahub/templates/registration/password_change_form.html:21
@@ -2214,17 +2215,17 @@ msgstr "Tiếp theo"
 #: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:12
 #: seahub/templates/snippets/admin_paginator.html:12
 msgid "Per page: "
-msgstr ""
+msgstr "Mỗi trang: "
 
 #: seahub/organizations/views.py:325 seahub/organizations/views.py:355
 #: seahub/thumbnail/views.py:160
 msgid "Invalid token."
-msgstr ""
+msgstr "Token không hợp lệ."
 
 #: seahub/organizations/views.py:358
 #| msgid "Expiration"
 msgid "Expired token."
-msgstr ""
+msgstr "Token đã hết hạn."
 
 #: seahub/profile/templates/profile/set_profile_react.html:5
 msgid "Settings"
@@ -2239,7 +2240,7 @@ msgstr "Tên:"
 #: seahub/templates/registration/password_set_form.html:4
 #: seahub/templates/registration/password_set_form.html:13
 msgid "Set Password"
-msgstr ""
+msgstr "Cài đặt mật khẩu"
 
 #: seahub/profile/templates/profile/set_profile_react.html:27
 msgid "Update"
@@ -2283,7 +2284,7 @@ msgstr "Cài đặt \"%s\" thành thư viện mặc định thành công "
 msgid ""
 "Metadata feature is not supported for libraries containing more than %s "
 "files"
-msgstr ""
+msgstr "Tính năng siêu dữ liệu (Metadata) không được hỗ trợ cho các thư viện chứa nhiều hơn %s tệp"
 
 #: seahub/seadoc/views.py:26 seahub/seadoc/views.py:80
 #: seahub/seadoc/views.py:158 seahub/views/__init__.py:454
@@ -2294,23 +2295,23 @@ msgstr "Thư viện không tồn tại"
 
 #: seahub/seadoc/views.py:152
 msgid "File path invalid."
-msgstr ""
+msgstr "Đường dẫn tệp không hợp lệ."
 
 #: seahub/share/decorators.py:50
 msgid "Invalid verification code, please try again."
-msgstr ""
+msgstr "Mã xác minh không hợp lệ, vui lòng thử lại."
 
 #: seahub/share/decorators.py:81
 msgid "Link does not exist."
-msgstr ""
+msgstr "Liên kết không tồn tại."
 
 #: seahub/share/decorators.py:84
 msgid "Link is expired."
-msgstr ""
+msgstr "Liên kết đã hết hạn."
 
 #: seahub/share/decorators.py:125
 msgid "The number of share link exceeds the limit."
-msgstr ""
+msgstr "Số lượng liên kết chia sẻ vượt quá giới hạn."
 
 #: seahub/share/models.py:127
 msgid "Password can't be empty"
@@ -2323,54 +2324,54 @@ msgstr "Vui lòng điền chính xác mật khẩu."
 #: seahub/share/templates/share/audit_code_email.html:10
 #, python-format
 msgid "The verification code is %(code)s. It is valid for one hour."
-msgstr ""
+msgstr "Mã xác minh là %(code)s. Mã có hiệu lực trong một giờ."
 
 #: seahub/share/templates/share/share_link_email.html:9
 #, python-format
 msgid ""
 "\n"
 "    %(shared_from)s shared a file link with you.\n"
-msgstr ""
+msgstr "\n    %(shared_from)s đã chia sẻ một liên kết tệp với bạn.\n"
 
 #: seahub/share/templates/share/share_link_email.html:14
 #, python-format
 msgid ""
 "\n"
 "You can click <a href=%(url)s>here</a> to verify your email address and visit it.\n"
-msgstr ""
+msgstr "\nBạn có thể nhấp vào <a href=%(url)s>đây</a> để xác minh địa chỉ email và truy cập nó.\n"
 
 #: seahub/share/templates/share/share_link_email_audit.html:4
 #: seahub/share/templates/share/share_link_email_audit.html:39
 msgid "Email address verification"
-msgstr ""
+msgstr "Xác minh địa chỉ email"
 
 #: seahub/share/templates/share/share_link_email_audit.html:40
 msgid "Please provide your email address to continue."
-msgstr ""
+msgstr "Vui lòng cung cấp địa chỉ email của bạn để tiếp tục."
 
 #: seahub/share/templates/share/share_link_email_audit.html:43
 msgid "Enter your email address"
-msgstr ""
+msgstr "Nhập địa chỉ email của bạn"
 
 #: seahub/share/templates/share/share_link_email_audit.html:44
 msgid "Get code"
-msgstr ""
+msgstr "Lấy mã"
 
 #: seahub/share/templates/share/share_link_email_audit.html:46
 msgid "Paste the verification code here"
-msgstr ""
+msgstr "Dán mã xác minh vào đây"
 
 #: seahub/share/templates/share/share_link_email_audit.html:79
 msgid "Resend"
-msgstr ""
+msgstr "Gửi lại"
 
 #: seahub/share/templates/share/share_link_email_audit.html:107
 msgid "A verification code has been sent to the email address."
-msgstr ""
+msgstr "Một mã xác minh đã được gửi đến địa chỉ email."
 
 #: seahub/share/views.py:133
 msgid "Please choose a folder."
-msgstr ""
+msgstr "Vui lòng chọn một thư mục."
 
 #: seahub/share/views.py:157
 msgid "Successfully saved."
@@ -2386,15 +2387,15 @@ msgstr "Chỉ xem trước"
 
 #: seahub/share/views.py:189
 msgid "Download and upload"
-msgstr ""
+msgstr "Tải xuống và tải lên"
 
 #: seahub/share/views.py:190
 msgid "Edit on cloud and download"
-msgstr ""
+msgstr "Chỉnh sửa trên đám mây và tải xuống"
 
 #: seahub/share/views.py:191
 msgid "Edit on cloud only"
-msgstr ""
+msgstr "Chỉ chỉnh sửa trên đám mây"
 
 #: seahub/share/views.py:223
 msgid "Share Link"
@@ -2420,7 +2421,7 @@ msgstr "Thư viện không tồn tại."
 
 #: seahub/share/views.py:258 seahub/views/ajax.py:383
 msgid "Folder does not exist."
-msgstr ""
+msgstr "Thư mục không tồn tại."
 
 #: seahub/share/views.py:306
 msgid "Only the owner of the library has permission to share it."
@@ -2432,15 +2433,15 @@ msgstr "Vui lòng kiểm tra địa chỉ email(s) bạn khai báo"
 
 #: seahub/share/views.py:360
 msgid "Share link is not found"
-msgstr ""
+msgstr "Không tìm thấy liên kết chia sẻ"
 
 #: seahub/share/views.py:375
 msgid "Verification code"
-msgstr ""
+msgstr "Mã xác minh"
 
 #: seahub/share/views.py:386
 msgid "Failed to send a verification code, please try again later."
-msgstr ""
+msgstr "Gửi mã xác minh thất bại, vui lòng thử lại sau."
 
 #: seahub/templates/404.html:7
 msgid "Sorry, but the requested page could not be found."
@@ -2448,7 +2449,7 @@ msgstr "Không thể tìm thấy trang được yêu cầu"
 
 #: seahub/templates/base.html:8 seahub/templates/base_for_react.html:9
 msgid "File, Collaboration, Team, Organization"
-msgstr ""
+msgstr "Tệp, Cộng tác, Nhóm, Tổ chức"
 
 #: seahub/templates/base.html:35
 msgid "Close"
@@ -2468,15 +2469,15 @@ msgstr "Tạo một tài khoản cho tổ chức"
 
 #: seahub/templates/client_login_complete.html:6
 msgid "The client has logged in. Please open the client to confirm."
-msgstr ""
+msgstr "Client đã đăng nhập. Vui lòng mở client để xác nhận."
 
 #: seahub/templates/client_login_confirm.html:6
 msgid "Client Login Confirm"
-msgstr ""
+msgstr "Xác nhận đăng nhập Client"
 
 #: seahub/templates/client_login_confirm.html:8
 msgid "Do you want to login to your client?"
-msgstr ""
+msgstr "Bạn có muốn đăng nhập vào client của mình không?"
 
 #: seahub/templates/decrypt_repo_form.html:7
 msgid ""
@@ -2501,7 +2502,7 @@ msgid ""
 "\n"
 "        Click <a href=\"%(link)s\">here</a> to reactivate your team and relogin.\n"
 "      "
-msgstr ""
+msgstr "\n        Nhấp vào <a href=\"%(link)s\">đây</a> để kích hoạt lại nhóm của bạn và đăng nhập lại.\n      "
 
 #: seahub/templates/i18n.html:6
 msgid "Upload Folder"
@@ -2607,15 +2608,15 @@ msgstr "Ghi nhớ đăng nhập trong %(remember_days)s ngày "
 #: seahub/templates/registration/login.html:93
 #: seahub/templates/registration/login.html:97
 msgid "Single Sign-On"
-msgstr ""
+msgstr "Đăng nhập một lần (SSO)"
 
 #: seahub/templates/registration/login.html:104
 msgid "Login with"
-msgstr ""
+msgstr "Đăng nhập với"
 
 #: seahub/templates/registration/login.html:130
 msgid "Forgot password?"
-msgstr ""
+msgstr "Quên mật khẩu?"
 
 #: seahub/templates/registration/login.html:198
 msgid "Failed to refresh the CAPTCHA, please try again later."
@@ -2641,7 +2642,7 @@ msgstr "Thay đổi mật khẩu"
 
 #: seahub/templates/registration/password_change_form.html:15
 msgid "Please update your password before continue."
-msgstr ""
+msgstr "Vui lòng cập nhật mật khẩu của bạn trước khi tiếp tục."
 
 #: seahub/templates/registration/password_change_form.html:17
 msgid "Current Password"
@@ -2691,11 +2692,11 @@ msgstr "Đổi mật khẩu thất bại: link này không còn khả dụng"
 msgid ""
 "If your email address is in our database, you will receive a message "
 "shortly."
-msgstr ""
+msgstr "Nếu địa chỉ email của bạn có trong cơ sở dữ liệu của chúng tôi, bạn sẽ sớm nhận được tin nhắn."
 
 #: seahub/templates/registration/password_reset_done.html:47
 msgid "Back to login page"
-msgstr ""
+msgstr "Quay lại trang đăng nhập"
 
 #: seahub/templates/registration/password_reset_email.html:12
 #, python-format
@@ -2714,23 +2715,23 @@ msgstr "Chúng tôi sẽ gửi một email để lập lại mật khẩu"
 
 #: seahub/templates/registration/password_reset_form.html:53
 msgid "Your email used in login"
-msgstr ""
+msgstr "Email của bạn dùng để đăng nhập"
 
 #: seahub/templates/registration/register_complete_email.html:1
 #, python-format
 msgid ""
 "You're receiving this e-mail because you are the admin of %(site_name)s, and"
 " a new user %(reg_email)s is joined."
-msgstr ""
+msgstr "Bạn nhận được email này vì bạn là quản trị viên của %(site_name)s và một người dùng mới %(reg_email)s đã tham gia."
 
 #: seahub/templates/registration/register_complete_email.html:3
 msgid "Please click the following link to view the new account:"
-msgstr ""
+msgstr "Vui lòng nhấp vào liên kết sau để xem tài khoản mới:"
 
 #: seahub/templates/registration/register_complete_email_subject.html:1
 #, python-format
 msgid "New account created on %(site_name)s"
-msgstr ""
+msgstr "Tài khoản mới đã được tạo trên %(site_name)s"
 
 #: seahub/templates/registration/registration_complete.html:4
 #: seahub/templates/shibboleth/complete.html:4
@@ -2770,7 +2771,7 @@ msgstr "Ghi chú"
 msgid ""
 "Your account is created successfully, please wait for administrator to "
 "activate your account."
-msgstr ""
+msgstr "Tài khoản của bạn đã được tạo thành công, vui lòng chờ quản trị viên kích hoạt tài khoản."
 
 #: seahub/templates/repo_folder_trash_react.html:5
 msgid "Trash"
@@ -2782,19 +2783,19 @@ msgstr "Lịch sử"
 
 #: seahub/templates/repo_snapshot_react.html:5
 msgid "Snapshot"
-msgstr ""
+msgstr "Ảnh chụp nhanh (Snapshot)"
 
 #: seahub/templates/share_access_validation.html:6
 msgid ""
 "Please input the password if you want to browse the shared file/folder."
-msgstr ""
+msgstr "Vui lòng nhập mật khẩu nếu bạn muốn xem tệp/thư mục được chia sẻ."
 
 #: seahub/templates/shared_link_email.html:12
 #, python-format
 msgid ""
 "%(escaped_nickname)s shared a %(file_shared_type)s <span style=\"font-"
 "weight:bold;\">%(escaped_file_shared_name)s</span> to you on %(site_name)s:"
-msgstr ""
+msgstr "%(escaped_nickname)s đã chia sẻ một %(file_shared_type)s <span style=\"font-weight:bold;\">%(escaped_file_shared_name)s</span> cho bạn trên %(site_name)s:"
 
 #: seahub/templates/shared_link_email.html:17
 #: seahub/templates/shared_upload_link_email.html:20
@@ -2806,36 +2807,36 @@ msgstr "Mật khẩu:"
 #: seahub/templates/shared_upload_link_email.html:11
 #, python-format
 msgid "%(escaped_nickname)s shared an upload link to you on %(site_name)s."
-msgstr ""
+msgstr "%(escaped_nickname)s đã chia sẻ một liên kết tải lên cho bạn trên %(site_name)s."
 
 #: seahub/templates/shared_upload_link_email.html:15
 msgid "You can go to the following page and upload your files:"
-msgstr "Bạn có thể đến trang tiếp theo và upload file của bạn:"
+msgstr "Bạn có thể truy cập trang sau và tải lên các tệp của mình:"
 
 #: seahub/templates/snippets/password_strength_js.html:7
 msgid "Password strength should be strong or very strong"
-msgstr ""
+msgstr "Độ mạnh mật khẩu phải là mạnh hoặc rất mạnh"
 
 #: seahub/templates/snippets/password_strength_js.html:12
 #: seahub/templates/snippets/password_strength_js.html:97
 msgid "Password strength"
-msgstr ""
+msgstr "Độ mạnh mật khẩu"
 
 #: seahub/templates/snippets/password_strength_js.html:19
 msgid ""
 "The password should contain different types of characters to make it strong:"
 " uppercase letters, lowercase letters, numbers and special characters."
-msgstr ""
+msgstr "Mật khẩu nên chứa các loại ký tự khác nhau để trở nên mạnh hơn: chữ hoa, chữ thường, số và ký tự đặc biệt."
 
 #: seahub/templates/snippets/policy_service_link.html:5
 #: seahub/templates/snippets/policy_service_link.html:9
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Chính sách bảo mật"
 
 #: seahub/templates/snippets/policy_service_link.html:7
 #: seahub/templates/snippets/policy_service_link.html:11
 msgid "Terms of Service"
-msgstr ""
+msgstr "Điều khoản dịch vụ"
 
 #: seahub/templates/snippets/repo_dir_trash_tr.html:6
 msgid "Folder"
@@ -2851,14 +2852,14 @@ msgstr "Khôi phục"
 msgid ""
 "The new password of library %(repo_name)s is %(password)s. Please change it "
 "as soon as possible."
-msgstr ""
+msgstr "Mật khẩu mới của thư viện %(repo_name)s là %(password)s. Vui lòng thay đổi nó sớm nhất có thể."
 
 #: seahub/templates/sysadmin/short_time_linving_password_reset_link.html:13
 #, python-format
 msgid ""
 "Administrator on %(site_name)s is resetting your password for %(account)s, "
 "please click the following link to continue: "
-msgstr ""
+msgstr "Quản trị viên trên %(site_name)s đang đặt lại mật khẩu cho tài khoản %(account)s của bạn, vui lòng nhấp vào liên kết sau để tiếp tục: "
 
 #: seahub/templates/sysadmin/sudo_mode.html:39
 msgid "Confirm password to continue"
@@ -2868,7 +2869,7 @@ msgstr "Xác nhận mật khẩu để tiếp tục"
 msgid ""
 "You are entering admin area, we won't ask for your password again for a few "
 "hours."
-msgstr "Bạn đang truy cập bảng quản lý, hệ thống sẽ không hỏi mật khẩu trong vài giờ."
+msgstr "Bạn đang truy cập khu vực quản trị, chúng tôi sẽ không yêu cầu lại mật khẩu trong vài giờ."
 
 #: seahub/templates/sysadmin/sudo_mode.html:47
 msgid "Incorrect password"
@@ -2884,56 +2885,56 @@ msgstr "Tài khoản %(username)s trên %(site_name)s đã được kích hoạt
 msgid ""
 "%(nickname)s invited you to join organization \"%(org_name)s\" on "
 "%(site_name)s."
-msgstr ""
+msgstr "%(nickname)s đã mời bạn tham gia tổ chức \"%(org_name)s\" trên %(site_name)s."
 
 #: seahub/templates/sysadmin/user_add_email.html:13
 #: seahub/templates/sysadmin/user_batch_add_email.html:10
 #, python-format
 msgid "%(nickname)s invited you to join %(site_name)s."
-msgstr ""
+msgstr "%(nickname)s đã mời bạn tham gia %(site_name)s."
 
 #: seahub/templates/sysadmin/user_add_email.html:18
 #: seahub/templates/sysadmin/user_batch_add_email.html:14
 msgid "Here is your account information:"
-msgstr "Sau đây là thông tin tài khoản của bạn:"
+msgstr "Dưới đây là thông tin tài khoản của bạn:"
 
 #: seahub/templates/sysadmin/user_add_email.html:19
 #: seahub/templates/sysadmin/user_batch_add_email.html:15
 msgid "Email:"
-msgstr ""
+msgstr "Email:"
 
 #: seahub/templates/sysadmin/user_freeze_email.html:12
 #, python-format
 msgid ""
 "Account %(user)s froze due to excessive failed logins. Please check at:"
-msgstr ""
+msgstr "Tài khoản %(user)s đã bị đóng băng do đăng nhập sai quá nhiều lần. Vui lòng kiểm tra tại:"
 
 #: seahub/templates/sysadmin/user_reset_email.html:12
 #, python-format
 msgid ""
 "Your password on %(site_name)s has been reset. Now it is %(password)s. "
 "Please change it as soon as possible. "
-msgstr "Mật khẩu của bạn trên %(site_name)s đã được thay đổi. Mật khẩu hiện tại là: %(password)s. Vui lòng sớm thay đổi mật khẩu mới. "
+msgstr "Mật khẩu của bạn trên %(site_name)s đã được đặt lại. Hiện tại là %(password)s. Vui lòng thay đổi nó sớm nhất có thể. "
 
 #: seahub/templates/team_quota_full.html:12
 #, python-format
 #| msgid "Your quota is almost full on %(site_name)s."
 msgid "The team quota is almost full on %(site_name)s."
-msgstr ""
+msgstr "Dung lượng của nhóm trên %(site_name)s đã gần đầy."
 
 #: seahub/templates/team_quota_full.html:14
 #: seahub/templates/user_quota_full.html:14
 msgid "Used:"
-msgstr "Đã dùng"
+msgstr "Đã dùng:"
 
 #: seahub/templates/text_diff.html:12
 msgid "modification details"
-msgstr ""
+msgstr "chi tiết sửa đổi"
 
 #: seahub/templates/text_diff.html:15
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:27
 msgid "Back"
-msgstr ""
+msgstr "Quay lại"
 
 #: seahub/templates/text_diff.html:21
 msgid "Current Path:"
@@ -2954,27 +2955,27 @@ msgstr "sau khi sửa đổi"
 #: seahub/templates/user_quota_full.html:12
 #, python-format
 msgid "Your quota is almost full on %(site_name)s."
-msgstr ""
+msgstr "Dung lượng của bạn trên %(site_name)s đã gần đầy."
 
 #: seahub/templates/wiki/wiki.html:24
 msgid "Last modified by"
-msgstr ""
+msgstr "Sửa đổi lần cuối bởi"
 
 #: seahub/thumbnail/views.py:48 seahub/thumbnail/views.py:178
 #: seahub/views/__init__.py:495
 msgid "Invalid arguments."
-msgstr ""
+msgstr "Đối số không hợp lệ."
 
 #: seahub/thumbnail/views.py:65 seahub/thumbnail/views.py:191
 msgid "Failed to create thumbnail."
-msgstr ""
+msgstr "Tạo ảnh thu nhỏ thất bại."
 
 #: seahub/two_factor/forms.py:39 seahub/two_factor/forms.py:63
 #: seahub/two_factor/forms.py:167 seahub/two_factor/forms.py:173
 #: seahub/two_factor/forms.py:297
 #: seahub/two_factor/templates/two_factor/core/setup.html:59
 msgid "Token"
-msgstr ""
+msgstr "Mã thông báo (Token)"
 
 #: seahub/two_factor/templates/two_factor/_wizard_actions.html:5
 #: seahub/two_factor/templates/two_factor/profile/disable.html:11
@@ -2983,7 +2984,7 @@ msgstr "Hủy"
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:6
 msgid "Backup Tokens"
-msgstr ""
+msgstr "Mã thông báo dự phòng"
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:8
 #| msgid ""
@@ -2998,70 +2999,70 @@ msgid ""
 "    for login verification. If you've used up all your backup tokens, you\n"
 "    can generate a new set of backup tokens. Only the backup tokens shown\n"
 "    below will be valid."
-msgstr ""
+msgstr "Mã dự phòng có thể được sử dụng khi số điện thoại chính và dự phòng của bạn\n    không khả dụng. Các mã dự phòng bên dưới có thể được dùng để xác minh đăng nhập.\n    Nếu bạn đã dùng hết tất cả mã dự phòng, bạn có thể tạo một bộ mã mới.\n    Chỉ những mã dự phòng hiển thị bên dưới mới có giá trị."
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:20
 msgid "Print these tokens and keep them somewhere safe."
-msgstr ""
+msgstr "In các mã này và giữ chúng ở nơi an toàn."
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:22
 msgid "You don't have any backup codes yet."
-msgstr ""
+msgstr "Bạn chưa có bất kỳ mã dự phòng nào."
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:26
 msgid "Generate Tokens"
-msgstr ""
+msgstr "Tạo mã thông báo"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:7
 msgid "Two-Factor Authentication"
-msgstr ""
+msgstr "Xác thực hai yếu tố"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:19
 msgid ""
 "Open the two-factor authentication app on your device to view your "
 "authentication token and verify your identify."
-msgstr ""
+msgstr "Mở ứng dụng xác thực hai yếu tố trên thiết bị của bạn để xem mã xác thực và xác minh danh tính của bạn."
 
 #: seahub/two_factor/templates/two_factor/core/login.html:22
 msgid "Authentication token"
-msgstr ""
+msgstr "Mã xác thực"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:27
 #, python-format
 msgid "Remember this computer for %(remember_days)s days"
-msgstr ""
+msgstr "Ghi nhớ máy tính này trong %(remember_days)s ngày"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:32
 #: seahub/two_factor/templates/two_factor/core/login.html:52
 msgid "Incorrect code"
-msgstr ""
+msgstr "Sai mã"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:36
 #: seahub/two_factor/templates/two_factor/core/login.html:57
 msgid "Verify"
-msgstr ""
+msgstr "Xác minh"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:41
 msgid "Don't have your phone?"
-msgstr ""
+msgstr "Không có điện thoại?"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:42
 msgid "Enter a two-factor backup code"
-msgstr ""
+msgstr "Nhập mã dự phòng hai yếu tố"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:48
 msgid "Backup code"
-msgstr ""
+msgstr "Mã dự phòng"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:49
 msgid ""
 "You can enter one of your backup codes in case you lost access to your "
 "mobile device."
-msgstr ""
+msgstr "Bạn có thể nhập một trong các mã dự phòng của mình trong trường hợp mất quyền truy cập vào thiết bị di động."
 
 #: seahub/two_factor/templates/two_factor/core/setup.html:6
 msgid "Enable Two-Factor Authentication"
-msgstr ""
+msgstr "Bật xác thực hai yếu tố"
 
 #: seahub/two_factor/templates/two_factor/core/setup.html:15
 msgid ""
@@ -3069,11 +3070,11 @@ msgid ""
 "        smartphone to scan the QR code below. For example, use Google\n"
 "        Authenticator. Then, enter the token generated by the app.\n"
 "        "
-msgstr ""
+msgstr "Để bắt đầu sử dụng trình tạo mã, vui lòng sử dụng điện thoại thông minh\n        để quét mã QR bên dưới. Ví dụ: sử dụng Google Authenticator.\n        Sau đó, nhập mã được tạo bởi ứng dụng.\n        "
 
 #: seahub/two_factor/templates/two_factor/profile/disable.html:6
 msgid "Disable Two-Factor Authentication"
-msgstr ""
+msgstr "Tắt xác thực hai yếu tố"
 
 #: seahub/two_factor/templates/two_factor/profile/disable.html:8
 #| msgid ""
@@ -3082,39 +3083,39 @@ msgstr ""
 msgid ""
 "You are about to disable two-factor authentication. This compromises your "
 "account security, are you sure?"
-msgstr ""
+msgstr "Bạn sắp tắt xác thực hai yếu tố. Điều này làm giảm tính bảo mật cho tài khoản của bạn, bạn có chắc chắn không?"
 
 #: seahub/two_factor/templates/two_factor/profile/disable.html:10
 msgid "Disable"
-msgstr ""
+msgstr "Tắt"
 
 #: seahub/utils/__init__.py:158
 msgid "permission error"
-msgstr ""
+msgstr "lỗi quyền truy cập"
 
 #: seahub/views/__init__.py:314
 msgid "Unable to view recycle page"
-msgstr ""
+msgstr "Không thể xem trang thùng rác"
 
 #: seahub/views/__init__.py:369
 msgid "Unable to view library modification"
-msgstr "Không thể xem sự sửa đổi của thư viện"
+msgstr "Không thể xem các sửa đổi của thư viện"
 
 #: seahub/views/__init__.py:488
 msgid "Please specify history ID"
-msgstr "Vui lòng ghi rõ lịch sử ID"
+msgstr "Vui lòng chỉ định ID lịch sử"
 
 #: seahub/views/__init__.py:492
 msgid "Successfully restored the library."
-msgstr ""
+msgstr "Đã khôi phục thư viện thành công."
 
 #: seahub/views/__init__.py:499
 msgid "History you specified does not exist"
-msgstr "Lịch sử mà bạn chỉ định không tồn tại"
+msgstr "Lịch sử bạn chỉ định không tồn tại"
 
 #: seahub/views/__init__.py:501
 msgid "Unknown error"
-msgstr ""
+msgstr "Lỗi không xác định"
 
 #: seahub/views/__init__.py:805 seahub/views/repo.py:291
 #, python-format
@@ -3124,64 +3125,64 @@ msgstr "\"%s\" không tồn tại."
 #: seahub/views/__init__.py:837
 #, python-format
 msgid "Unable to download \"%s\""
-msgstr "Không thể downlad \"%s\""
+msgstr "Không thể tải xuống \"%s\""
 
 #: seahub/views/ajax.py:161 seahub/views/ajax.py:438
 msgid "Library is encrypted."
-msgstr "Thư viện được mã hóa."
+msgstr "Thư viện đã được mã hóa."
 
 #: seahub/views/ajax.py:167
 msgid "Error: no head commit id"
-msgstr ""
+msgstr "Lỗi: không có head commit id"
 
 #: seahub/views/ajax.py:318
 msgid "Wrong repo id"
-msgstr ""
+msgstr "ID thư viện sai"
 
 #: seahub/views/ajax.py:329 seahub/views/ajax.py:361
 msgid "Bad upload link token."
-msgstr ""
+msgstr "Mã thông báo liên kết tải lên không hợp lệ."
 
 #: seahub/views/ajax.py:335 seahub/views/file.py:547 seahub/views/file.py:579
 #: seahub/views/file.py:1320 seahub/views/file.py:1622
 #: seahub/views/file.py:2199 seahub/views/file.py:2204
 #: seahub/views/file.py:2211
 msgid "File does not exist"
-msgstr "File không tồn tại"
+msgstr "Tệp không tồn tại"
 
 #: seahub/views/ajax.py:368
 msgid "Bad repo id in upload link."
-msgstr ""
+msgstr "ID thư viện trong liên kết tải lên không hợp lệ."
 
 #: seahub/views/ajax.py:460
 msgid "No conflict in the merge."
-msgstr "Không có xung đột trong khi hợp nhất."
+msgstr "Không có xung đột trong quá trình hợp nhất."
 
 #: seahub/views/file.py:237
 msgid "HTTPError: failed to open file online"
-msgstr "Lỗi HTTP: mở file trực tuyến thất bại"
+msgstr "Lỗi HTTP: không thể mở tệp trực tuyến"
 
 #: seahub/views/file.py:241
 msgid "URLError: failed to open file online"
-msgstr "Lỗi URL: mở file trực tuyến thất bại"
+msgstr "Lỗi URL: không thể mở tệp trực tuyến"
 
 #: seahub/views/file.py:248
 msgid "The encoding you chose is not proper."
-msgstr ""
+msgstr "Mã hóa bạn chọn không phù hợp."
 
 #: seahub/views/file.py:265 seahub/views/file.py:268
 msgid "Unknown file encoding"
-msgstr ""
+msgstr "Mã hóa tệp không xác định"
 
 #: seahub/views/file.py:381 seahub/views/file.py:818 seahub/views/file.py:971
 #: seahub/views/file.py:1007
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
-msgstr "Dung lượng %s quá nặng, không thể mở trực tuyến"
+msgstr "Kích thước tệp vượt quá %s, không thể mở trực tuyến."
 
 #: seahub/views/file.py:397 seahub/views/file.py:814
 msgid "The library is encrypted, can not open file online."
-msgstr " Thư viện đã mã hóa, không thể mở file trực tuyến"
+msgstr "Thư viện đã được mã hóa, không thể mở tệp trực tuyến."
 
 #: seahub/views/file.py:534 seahub/views/file.py:556 seahub/views/file.py:561
 #: seahub/views/file.py:615 seahub/views/file.py:1171
@@ -3189,80 +3190,80 @@ msgstr " Thư viện đã mã hóa, không thể mở file trực tuyến"
 #: seahub/views/file.py:1376 seahub/views/file.py:1664
 #: seahub/views/file.py:2163
 msgid "Unable to view file"
-msgstr ""
+msgstr "Không thể xem tệp"
 
 #: seahub/views/file.py:844 seahub/views/file.py:1119
 #: seahub/views/file.py:1473 seahub/views/file.py:1721
 msgid "Error when prepare Office Online file preview page."
-msgstr ""
+msgstr "Lỗi khi chuẩn bị trang xem trước tệp Office Online."
 
 #: seahub/views/file.py:879 seahub/views/file.py:1135
 #: seahub/views/file.py:1493 seahub/views/file.py:1737
 msgid "Error when prepare OnlyOffice file preview page."
-msgstr ""
+msgstr "Lỗi khi chuẩn bị trang xem trước tệp OnlyOffice."
 
 #: seahub/views/file.py:1263
 msgid "Unable to download file, invalid file path"
-msgstr ""
+msgstr "Không thể tải tệp, đường dẫn tệp không hợp lệ"
 
 #: seahub/views/file.py:1272
 msgid "Unable to download file, wrong file path"
-msgstr ""
+msgstr "Không thể tải tệp, sai đường dẫn tệp"
 
 #: seahub/views/file.py:1279
 msgid "Unable to download file."
-msgstr ""
+msgstr "Không thể tải tệp xuống."
 
 #: seahub/views/file.py:1522 seahub/views/file.py:1793
 #: seahub/views/repo.py:325
 #, python-format
 msgid "Share link for %s."
-msgstr ""
+msgstr "Liên kết chia sẻ cho %s."
 
 #: seahub/views/file.py:1932 seahub/views/file.py:1937
 msgid "Unable to download file"
-msgstr "Không thể tải file"
+msgstr "Không thể tải tệp xuống"
 
 #: seahub/views/file.py:2185
 #| msgid "Wiki not found."
 msgid "revision not found"
-msgstr ""
+msgstr "không tìm thấy phiên bản"
 
 #: seahub/views/file.py:2192
 msgid "The original file does not exist"
-msgstr ""
+msgstr "Tệp gốc không tồn tại"
 
 #: seahub/views/mobile.py:35
 #, python-brace-format
 msgid "User {token.user} not found"
-msgstr ""
+msgstr "Không tìm thấy người dùng {token.user}"
 
 #: seahub/views/mobile.py:39
 #, python-brace-format
 msgid "User {token.user} inactive"
-msgstr ""
+msgstr "Người dùng {token.user} không hoạt động"
 
 #: seahub/views/sso.py:179
 msgid ""
 "This link has already been visited, please click the login button on the "
 "client again"
-msgstr ""
+msgstr "Liên kết này đã được truy cập, vui lòng nhấp lại vào nút đăng nhập trên ứng dụng client"
 
 #: seahub/views/sso.py:204
 msgid "Invalid link, please click the login button on the client again"
-msgstr ""
+msgstr "Liên kết không hợp lệ, vui lòng nhấp lại vào nút đăng nhập trên ứng dụng client"
 
 #: seahub/views/sso.py:209
 msgid "Login timeout, please click the login button on the client again"
-msgstr ""
+msgstr "Hết thời gian đăng nhập, vui lòng nhấp lại vào nút đăng nhập trên ứng dụng client"
 
 #: seahub/views/sysadmin.py:176 seahub/views/sysadmin.py:180
 msgid "Login ID"
-msgstr ""
+msgstr "ID Đăng nhập"
 
 #: seahub/views/sysadmin.py:310 seahub/views/sysadmin.py:336
 msgid "Failed to set quota: internal server error"
-msgstr ""
+msgstr "Cài đặt định mức thất bại: lỗi máy chủ nội bộ"
 
 #: seahub/views/sysadmin.py:357
 msgid "Failed to delete: the user is an organization creator"
@@ -3347,11 +3348,11 @@ msgstr "Thiết lập quyền admin cho %s thất bại: người dùng này kh�
 #: seahub/views/sysadmin.py:789 seahub/views/sysadmin.py:802
 #: seahub/views/sysadmin.py:803
 msgid "Optional"
-msgstr ""
+msgstr "Tùy chọn"
 
 #: seahub/wiki/views.py:159
 msgid "Unable to view Wiki"
-msgstr ""
+msgstr "Không thể xem Wiki"
 
 #~ msgid "We've sent a password reset email to your mailbox."
 #~ msgstr "We've sent a password reset email to your mailbox."

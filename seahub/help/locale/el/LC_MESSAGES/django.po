@@ -6,7 +6,7 @@
 # Translators:
 # Efstathios Iosifidis <eiosifidis@gmail.com>, 2024
 # nikolaosp <nikolaosp@gmail.com>, 2024
-# Seafile Info <info@seafile.com>, 2025
+# Seafile Info <info@seafile.com>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Greek (https://app.transifex.com/haiwen/teams/5086/el/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,7 +25,7 @@ msgstr ""
 
 #: templates/help/base.html:34
 msgid "Side Nav Menu"
-msgstr ""
+msgstr "Πλευρικό Μενού Πλοήγησης"
 
 #: templates/help/base.html:48 templates/help/base.html:50
 #: templates/help/introduction.html:6
@@ -182,36 +182,54 @@ msgid ""
 "author's email address, plus the current time, e.g. test.txt (SFConflict "
 "name@example.com 2015-03-07-11-30-28)."
 msgstr ""
+"Μερικές φορές εσείς και οι φίλοι σας μπορεί να επεξεργαστείτε το ίδιο αρχείο"
+" ταυτόχρονα. Οι αλλαγές σας μπορεί να συγκρούονται μεταξύ τους. Σε αυτή την "
+"περίπτωση, το Seafile θα διατηρούσε την πρώτη έκδοση που συγχρονίστηκε στο "
+"cloud αμετάβλητη, ενώ θα μετονομάσει την άλλη έκδοση σε \"αρχείο "
+"σύγκρουσης\". Το όνομα ενός αρχείου σύγκρουσης τελειώνει με τη διεύθυνση "
+"email του συγγραφέα του, συν την τρέχουσα ώρα, π.χ. test.txt (SFConflict "
+"name@example.com 2015-03-07-11-30-28)."
 
 #: templates/help/deleting_a_library.html:6
 msgid ""
 "You can delete a library owned by you. A deleted library can be restored by "
 "you or Seafile server's administrator."
 msgstr ""
+"Μπορείτε να διαγράψετε μια βιβλιοθήκη που σας ανήκει. Μια διαγραμμένη "
+"βιβλιοθήκη μπορεί να αποκατασταθεί από εσάς ή από τον διαχειριστή του "
+"διακομιστή Seafile."
 
 #: templates/help/deleting_a_library.html:7
 msgid "After a library is deleted, it has following effects:"
-msgstr ""
+msgstr "Μετά τη διαγραφή μιας βιβλιοθήκης, υπάρχουν τα ακόλουθα αποτελέσματα:"
 
 #: templates/help/deleting_a_library.html:9
 msgid "Share of the files and folders within this library are all canceled."
 msgstr ""
+"Η κοινή χρήση των αρχείων και των φακέλων εντός αυτής της βιβλιοθήκης "
+"ακυρώνεται."
 
 #: templates/help/deleting_a_library.html:10
 msgid ""
 "Desktop clients synced with this library cannot sync with it any more. But "
 "the local files on the client won't be deleted."
 msgstr ""
+"Οι εφαρμογές επιφάνειας εργασίας που είναι συγχρονισμένες με αυτήν τη "
+"βιβλιοθήκη δεν μπορούν πλέον να συγχρονιστούν με αυτήν. Αλλά τα τοπικά "
+"αρχεία στην εφαρμογή δεν θα διαγραφούν."
 
 #: templates/help/departments.html:5
 msgid "Managing and using departments"
-msgstr ""
+msgstr "Διαχείριση και χρήση τμημάτων"
 
 #: templates/help/departments.html:6
 msgid ""
 "Some organizations consist of complex department hierarchy. There are "
 "usually two common use cases for file management in these organizations:"
 msgstr ""
+"Ορισμένοι οργανισμοί αποτελούνται από πολύπλοκη ιεραρχία τμημάτων. Υπάρχουν "
+"συνήθως δύο κοινές περιπτώσεις χρήσης για τη διαχείριση αρχείων σε αυτούς "
+"τους οργανισμούς:"
 
 #: templates/help/departments.html:8
 msgid ""
@@ -219,6 +237,10 @@ msgid ""
 " hierarchy should map the department hierarchy. There will be separate "
 "folder or space assigned to each department."
 msgstr ""
+"Θα πρέπει να υπάρχει ένας κοινός χώρος κοινής χρήσης αρχείων για τον "
+"οργανισμό. Η ιεραρχία των φακέλων θα πρέπει να αντιστοιχεί στην ιεραρχία των"
+" τμημάτων. Θα υπάρχει ξεχωριστός φάκελος ή χώρος που θα εκχωρείται σε κάθε "
+"τμήμα."
 
 #: templates/help/departments.html:9
 msgid ""
@@ -226,46 +248,55 @@ msgid ""
 "individual employees. So that the ownership of files doesn't have to be "
 "changed when an employee leaves the organization."
 msgstr ""
+"Ο χώρος κοινής χρήσης θα πρέπει να ανήκει και να τυγχάνει διαχείρισης από "
+"τον οργανισμό και όχι από μεμονωμένους υπαλλήλους. Έτσι ώστε η ιδιοκτησία "
+"των αρχείων να μην χρειάζεται να αλλάζει όταν ένας υπάλληλος αποχωρεί από "
+"τον οργανισμό."
 
 #: templates/help/departments.html:11
 msgid ""
 "The \"Departments\" feature is designed to meet the above two use cases. "
 "We'll introduce this feature from 3 different perspectives:"
 msgstr ""
+"Η δυνατότητα \"Τμήματα\" έχει σχεδιαστεί για να καλύπτει τις παραπάνω δύο "
+"περιπτώσεις χρήσης. Θα παρουσιάσουμε αυτή τη δυνατότητα από 3 διαφορετικές "
+"οπτικές γωνίες:"
 
 #: templates/help/departments.html:13 templates/help/departments.html:17
 msgid "System admin"
-msgstr ""
+msgstr "Διαχειριστής συστήματος"
 
 #: templates/help/departments.html:14 templates/help/departments.html:35
 msgid "Department admin"
-msgstr ""
+msgstr "Διαχειριστής τμήματος"
 
 #: templates/help/departments.html:15 templates/help/departments.html:52
 msgid "Department members"
-msgstr ""
+msgstr "Μέλη τμήματος"
 
 #: templates/help/departments.html:18
 msgid "The system admin can:"
-msgstr ""
+msgstr "Ο διαχειριστής συστήματος μπορεί:"
 
 #: templates/help/departments.html:20 templates/help/departments.html:24
 msgid "Manage department hierarchy and members"
-msgstr ""
+msgstr "Διαχείριση ιεραρχίας τμημάτων και μελών"
 
 #: templates/help/departments.html:21 templates/help/departments.html:29
 msgid "Assign storage quota for departments"
-msgstr ""
+msgstr "Εκχώρηση ορίου αποθηκευτικού χώρου για τμήματα"
 
 #: templates/help/departments.html:22 templates/help/departments.html:31
 msgid "Create and manage shared libraries in departments"
-msgstr ""
+msgstr "Δημιουργία και διαχείριση κοινόχρηστων βιβλιοθηκών σε τμήματα"
 
 #: templates/help/departments.html:25
 msgid ""
 "The system admin can set up the department hierarchy in two ways: manual "
 "setup or import from Active Directory."
 msgstr ""
+"Ο διαχειριστής συστήματος μπορεί να ρυθμίσει την ιεραρχία των τμημάτων με "
+"δύο τρόπους: χειροκίνητη ρύθμιση ή εισαγωγή από το Active Directory."
 
 #: templates/help/departments.html:26
 msgid ""
@@ -275,6 +306,12 @@ msgid ""
 "of each member to 'member' or 'admin'. We'll introduce how a department "
 "admin can manage department later."
 msgstr ""
+"Ο διαχειριστής συστήματος μπορεί να δημιουργήσει οποιονδήποτε αριθμό "
+"τμημάτων ανώτατου επιπέδου και να δημιουργήσει οποιαδήποτε επίπεδα "
+"υποτμημάτων κάτω από κάθε τμήμα. Και κάθε επίπεδο τμήματος μπορεί να "
+"συμπληρωθεί με μέλη. Ο διαχειριστής συστήματος μπορεί να ορίσει τον ρόλο "
+"κάθε μέλους σε 'μέλος' ή 'διαχειριστής'. Θα παρουσιάσουμε αργότερα πώς ένας "
+"διαχειριστής τμήματος μπορεί να διαχειριστεί ένα τμήμα."
 
 #: templates/help/departments.html:27
 msgid ""
@@ -283,12 +320,18 @@ msgid ""
 "under an OU will be imported as sub-departments. Department libraries can be"
 " automatically created in the import process."
 msgstr ""
+"Ο διαχειριστής συστήματος μπορεί επίσης να εισαγάγει την ιεραρχία από OUs "
+"(Organizational Units) στο AD. Κάθε OU θα εισαχθεί ως τμήμα. Και οι υπο-OUs "
+"κάτω από ένα OU θα εισαχθούν ως υποτμήματα. Οι βιβλιοθήκες τμημάτων μπορούν "
+"να δημιουργηθούν αυτόματα κατά τη διαδικασία εισαγωγής."
 
 #: templates/help/departments.html:28
 msgid ""
 "System admin can also delete a department after all the sub-departments and "
 "libraries are deleted."
 msgstr ""
+"Ο διαχειριστής συστήματος μπορεί επίσης να διαγράψει ένα τμήμα αφού "
+"διαγραφούν όλα τα υποτμήματα και οι βιβλιοθήκες."
 
 #: templates/help/departments.html:30
 msgid ""
@@ -298,6 +341,12 @@ msgid ""
 "cannot exceed the storage quota. <strong>Please note that the quota of sub-"
 "department doesn't depend on the quota of its parent department.</strong>"
 msgstr ""
+"Οι βιβλιοθήκες που δημιουργούνται μέσα σε ένα τμήμα ανήκουν στο ίδιο το "
+"τμήμα και όχι σε κάποιον μεμονωμένο χρήστη. Έτσι, ο διαχειριστής συστήματος "
+"μπορεί να εκχωρήσει όριο αποθηκευτικού χώρου σε ένα τμήμα. Το συνολικό "
+"μέγεθος όλων των βιβλιοθηκών σε ένα τμήμα δεν μπορεί να υπερβαίνει το όριο "
+"αποθηκευτικού χώρου. <strong>Σημειώστε ότι το όριο του υποτμήματος δεν "
+"εξαρτάται από το όριο του γονικού του τμήματος.</strong>"
 
 #: templates/help/departments.html:32
 msgid ""
@@ -305,12 +354,18 @@ msgid ""
 " There is also an option to control whether individual users can share "
 "libraries to a department."
 msgstr ""
+"Οι βιβλιοθήκες τμημάτων μπορούν να δημιουργηθούν από τον διαχειριστή "
+"συστήματος ή τον διαχειριστή τμήματος. Υπάρχει επίσης μια επιλογή για τον "
+"έλεγχο του αν οι μεμονωμένοι χρήστες μπορούν να μοιράζονται βιβλιοθήκες σε "
+"ένα τμήμα."
 
 #: templates/help/departments.html:33
 msgid ""
 "All the above operations can be done in the system admin interface. See the "
 "below screenshot for information."
 msgstr ""
+"Όλες οι παραπάνω λειτουργίες μπορούν να γίνουν στη διεπαφή διαχειριστή "
+"συστήματος. Δείτε το παρακάτω στιγμιότυπο οθόνης για πληροφορίες."
 
 #: templates/help/departments.html:36
 msgid ""
@@ -318,18 +373,22 @@ msgid ""
 "admin to some members of a department. Department admins can perform the "
 "following operations in a department after login to his/her own account."
 msgstr ""
+"Όπως σημειώθηκε παραπάνω, ο διαχειριστής τμήματος είναι ένας ειδικός ρόλος "
+"που ανατίθεται από τον διαχειριστή συστήματος σε ορισμένα μέλη ενός "
+"τμήματος. Οι διαχειριστές τμημάτων μπορούν να εκτελέσουν τις ακόλουθες "
+"λειτουργίες σε ένα τμήμα αφού συνδεθούν στον δικό τους λογαριασμό."
 
 #: templates/help/departments.html:38
 msgid "Access to the libraries of the department"
-msgstr ""
+msgstr "Πρόσβαση στις βιβλιοθήκες του τμήματος"
 
 #: templates/help/departments.html:39
 msgid "Manage members in his/her department"
-msgstr ""
+msgstr "Διαχείριση μελών στο τμήμα του/της"
 
 #: templates/help/departments.html:40
 msgid "Manage libraries in his/her department"
-msgstr ""
+msgstr "Διαχείριση βιβλιοθηκών στο τμήμα του/της"
 
 #: templates/help/departments.html:42
 msgid ""
@@ -338,26 +397,35 @@ msgid ""
 " the department. But if the departments are imported from AD, the changes to"
 " membership will be overwritten on the next sync with AD."
 msgstr ""
+"Εάν ένας χρήστης είναι διαχειριστής ενός τμήματος, μπορεί να προσθέσει ή να "
+"διαγράψει μέλη στο τμήμα. Οποιοσδήποτε χρήστης είναι εγγεγραμμένος στο "
+"σύστημα μπορεί να προστεθεί ως μέλος του τμήματος. Αλλά εάν τα τμήματα "
+"εισάγονται από το AD, οι αλλαγές στην ιδιότητα μέλους θα αντικατασταθούν "
+"στον επόμενο συγχρονισμό με το AD."
 
 #: templates/help/departments.html:44
 msgid ""
 "Department admin can manage the libraries in the department. The supported "
 "operations are:"
 msgstr ""
+"Ο διαχειριστής τμήματος μπορεί να διαχειριστεί τις βιβλιοθήκες στο τμήμα. Οι"
+" υποστηριζόμενες λειτουργίες είναι:"
 
 #: templates/help/departments.html:46
 msgid "Create or delete library"
-msgstr ""
+msgstr "Δημιουργία ή διαγραφή βιβλιοθήκης"
 
 #: templates/help/departments.html:47
 msgid "Change library name"
-msgstr ""
+msgstr "Αλλαγή ονόματος βιβλιοθήκης"
 
 #: templates/help/departments.html:48
 msgid ""
 "Share a library to users or groups outside of this department. This is very "
 "useful for cross-department collaboration."
 msgstr ""
+"Κοινή χρήση μιας βιβλιοθήκης με χρήστες ή ομάδες εκτός αυτού του τμήματος. "
+"Αυτό είναι πολύ χρήσιμο για τη συνεργασία μεταξύ τμημάτων."
 
 #: templates/help/departments.html:49
 #, python-format
@@ -367,6 +435,10 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
 "feature</a>."
 msgstr ""
+"Ορίστε λεπτομερή δικαιώματα σε φακέλους στις βιβλιοθήκες για χρήστες ή "
+"υποτμήματα σε αυτό το τμήμα. Αυτό λειτουργεί όπως η <a "
+"href=\"%(SITE_ROOT)shelp/folder_permission/\">δυνατότητα δικαιωμάτων "
+"φακέλων</a>."
 
 #: templates/help/departments.html:53
 msgid ""
@@ -379,16 +451,27 @@ msgid ""
 "access to the groups \"EMEA\", \"Sales\" and \"ACME\". The groups for "
 "departments are marked with a \"building\" icon next to its name."
 msgstr ""
+"Ένα κανονικό μέλος του τμήματος μπορεί να χρησιμοποιήσει το τμήμα ακριβώς "
+"όπως μια ομάδα. Κάθε τμήμα παρουσιάζεται στα μέλη του ως ομάδα. Ένας χρήστης"
+" μπορεί όχι μόνο να έχει πρόσβαση στις βιβλιοθήκες του τμήματος στο οποίο "
+"ανήκει, αλλά και στις βιβλιοθήκες στα γονικά τμήματα του τμήματός του. Για "
+"παράδειγμα, εάν ο John βρίσκεται στο υποτμήμα \"EMEA\" κάτω από το τμήμα "
+"\"Πωλήσεις\" και οι \"Πωλήσεις\" είναι ένα υποτμήμα κάτω από την εταιρεία "
+"\"ACME\", ο John μπορεί τότε να έχει πρόσβαση στις ομάδες \"EMEA\", "
+"\"Πωλήσεις\" και \"ACME\". Οι ομάδες για τμήματα σημειώνονται με ένα "
+"εικονίδιο \"κτιρίου\" δίπλα στο όνομά τους."
 
 #: templates/help/desktop_proxy.html:6
 msgid "Using proxy in Seafile client"
-msgstr ""
+msgstr "Χρήση διακομιστή μεσολάβησης στον πελάτη Seafile"
 
 #: templates/help/desktop_proxy.html:8
 msgid ""
 "Seafile client supports 3 types of proxy servers: HTTP proxy, SOCKS5 proxy "
 "and system proxy settings."
 msgstr ""
+"Ο πελάτης Seafile υποστηρίζει 3 τύπους διακομιστών μεσολάβησης: HTTP proxy, "
+"SOCKS5 proxy και ρυθμίσεις διακομιστή μεσολάβησης συστήματος."
 
 #: templates/help/desktop_proxy.html:10
 msgid ""
@@ -398,6 +481,13 @@ msgid ""
 " to auto-detect proxy server information. So you don't have to manually "
 "enter proxy server address."
 msgstr ""
+"Ο HTTP proxy και ο SOCKS5 proxy απαιτούν να εισαγάγετε τη διεύθυνση και τη "
+"θύρα του διακομιστή μεσολάβησης. Εάν χρησιμοποιείτε ρυθμίσεις διακομιστή "
+"μεσολάβησης συστήματος, ο πελάτης Seafile διαβάζει τις ρυθμίσεις διακομιστή "
+"μεσολάβησης από το λειτουργικό σύστημα. Το λειτουργικό σύστημα διαθέτει "
+"ορισμένους μηχανισμούς για την αυτόματη ανίχνευση πληροφοριών διακομιστή "
+"μεσολάβησης. Επομένως, δεν χρειάζεται να εισαγάγετε χειροκίνητα τη διεύθυνση"
+" του διακομιστή μεσολάβησης."
 
 #: templates/help/desktop_proxy.html:12
 msgid ""
@@ -405,10 +495,14 @@ msgid ""
 "area. Choose \"Settings\" in the menu. In the pop-up settings dialog, you "
 "can change proxy settings in the \"Network\" tab."
 msgstr ""
+"Για να αλλάξετε τις ρυθμίσεις διακομιστή μεσολάβησης, κάντε κλικ στο "
+"εικονίδιο Seafile στην περιοχή ειδοποιήσεων συστήματος. Επιλέξτε "
+"\"Ρυθμίσεις\" στο μενού. Στο αναδυόμενο παράθυρο ρυθμίσεων, μπορείτε να "
+"αλλάξετε τις ρυθμίσεις διακομιστή μεσολάβησης στην καρτέλα \"Δίκτυο\"."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:6
 msgid "SeaDrive 2.0 for Windows 10"
-msgstr ""
+msgstr "SeaDrive 2.0 για Windows 10"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:8
 msgid ""
@@ -417,10 +511,15 @@ msgid ""
 "Update for Windows 10) and later versions. We recommend Windows 10 users to "
 "upgrade to SeaDrive 2.0 for more native virtual drive experience."
 msgstr ""
+"Το SeaDrive 2.0 (και μελλοντικές εκδόσεις) έχει επανασχεδιαστεί με βαθύτερη "
+"ενοποίηση στο λειτουργικό σύστημα Windows 10. Υποστηρίζει την έκδοση Windows"
+" 10 1709 (Φθινοπωρινή Ενημέρωση 2017 για Windows 10) και μεταγενέστερες "
+"εκδόσεις. Συνιστούμε στους χρήστες των Windows 10 να αναβαθμίσουν σε "
+"SeaDrive 2.0 για μια πιο εγγενή εμπειρία εικονικού δίσκου."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:10
 msgid "Install and access the Virtual Drive"
-msgstr ""
+msgstr "Εγκατάσταση και πρόσβαση στον εικονικό δίσκο"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:11
 msgid ""
@@ -431,40 +530,60 @@ msgid ""
 " your seafile account. The download is progressive, so in the mean time you "
 "can already access some files in the virtual drive."
 msgstr ""
+"Μπορείτε να κατεβάσετε το SeaDrive 2.0 από τον επίσημο ιστότοπο του Seafile."
+" Μετά την εγκατάσταση και τη σύνδεση στον λογαριασμό σας Seafile, το "
+"SeaDrive θα αρχίσει να κατεβάζει λίστες βιβλιοθηκών και αρχείων από τον "
+"διακομιστή (όπως και στο SeaDrive 1.0.x). Μπορεί να πάρει κάποιο χρόνο, "
+"ανάλογα με τον αριθμό των αρχείων που είναι διαθέσιμα στον λογαριασμό σας "
+"seafile. Η λήψη είναι προοδευτική, επομένως στο μεταξύ μπορείτε ήδη να έχετε"
+" πρόσβαση σε ορισμένα αρχεία στον εικονικό δίσκο."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:12
 msgid ""
 "To access the virtual drive, just open Windows file explorer. There is a "
 "\"seadrive\" node in the navigation pane of Windows file explorer."
 msgstr ""
+"Για να αποκτήσετε πρόσβαση στον εικονικό δίσκο, απλώς ανοίξτε την εξερεύνηση"
+" αρχείων των Windows. Υπάρχει ένας κόμβος \"seadrive\" στο παράθυρο "
+"πλοήγησης της εξερεύνησης αρχείων των Windows."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:16
 msgid "Accessing files in the Virtual Drive"
-msgstr ""
+msgstr "Πρόσβαση σε αρχεία στον εικονικό δίσκο"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:17
 msgid ""
 "Libraries are grouped into 4 categories in the virtual drive: My Libraries, "
 "Shared with me, Shared with groups and Shared with all."
 msgstr ""
+"Οι βιβλιοθήκες ομαδοποιούνται σε 4 κατηγορίες στον εικονικό δίσκο: Οι "
+"Βιβλιοθήκες μου, Κοινόχρηστα με εμένα, Κοινόχρηστα με ομάδες και Κοινόχρηστα"
+" με όλους."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:18
 msgid ""
 "As you can see, the file status icons is more integrated into Windows file "
 "explorer. The icons are a bit different form version 1.0."
 msgstr ""
+"Όπως μπορείτε να δείτε, τα εικονίδια κατάστασης αρχείου είναι πιο "
+"ενσωματωμένα στην εξερεύνηση αρχείων των Windows. Τα εικονίδια είναι λίγο "
+"διαφορετικά από την έκδοση 1.0."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:19
 msgid ""
 "Files in the virtual drive are created as \"placeholders\" in the local file"
 " system. They may be in 3 states:"
 msgstr ""
+"Τα αρχεία στον εικονικό δίσκο δημιουργούνται ως \"placeholders\" στο τοπικό "
+"σύστημα αρχείων. Μπορεί να βρίσκονται σε 3 καταστάσεις:"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:21
 msgid ""
 "<b>Placeholder file</b>: An empty representation of the file and can only be"
 " opened when there is network connection."
 msgstr ""
+"<b>Αρχείο placeholder</b>: Μια κενή αναπαράσταση του αρχείου και μπορεί να "
+"ανοίξει μόνο όταν υπάρχει σύνδεση δικτύου."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:22
 msgid ""
@@ -474,12 +593,19 @@ msgid ""
 "connections. The operating system may decide to clear a full file when more "
 "disk space is needed."
 msgstr ""
+"<b>Πλήρες αρχείο</b>: Το αρχείο έχει ληφθεί και αποθηκευτεί τοπικά. Η λήψη "
+"είναι αυτόματη όταν ένα αρχείο placeholder ανοίγει για πρώτη φορά. Αυτά τα "
+"αρχεία είναι διαθέσιμα κάθε φορά που ανοίγετε το SeaDrive ανεξάρτητα από τις"
+" συνδέσεις δικτύου. Το λειτουργικό σύστημα μπορεί να αποφασίσει να καθαρίσει"
+" ένα πλήρες αρχείο όταν χρειάζεται περισσότερος χώρος στο δίσκο."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:23
 msgid ""
 "<b>Pinned full file</b>: The file has been downloaded and saved locally. It "
 "is guaranteed to be available offline."
 msgstr ""
+"<b>Καρφιτσωμένο πλήρες αρχείο</b>: Το αρχείο έχει ληφθεί και αποθηκευτεί "
+"τοπικά. Είναι εγγυημένο ότι θα είναι διαθέσιμο εκτός σύνδεσης."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:26
 msgid ""
@@ -489,6 +615,12 @@ msgid ""
 "locally; choose \"Free up space\" when you want to clean the cache for a "
 "file or folder."
 msgstr ""
+"Μπορείτε να ελέγξετε ποια αρχεία ή φάκελοι αποθηκεύονται τοπικά στην "
+"προσωρινή μνήμη. Αυτό μπορεί να αλλάξει από το μενού περιβάλλοντος όταν "
+"κάνετε δεξί κλικ σε ένα αρχείο ή φάκελο. Επιλέξτε \"Να διατηρείται πάντα σε "
+"αυτήν τη συσκευή\" όταν θέλετε να καρφιτσώσετε ένα αρχείο ή φάκελο τοπικά. "
+"επιλέξτε \"Ελευθέρωση χώρου\" όταν θέλετε να καθαρίσετε την προσωρινή μνήμη "
+"για ένα αρχείο ή φάκελο."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:28
 msgid ""
@@ -496,10 +628,13 @@ msgid ""
 "updated on the server. In SeaDrive 2.0, full and pinned files are "
 "automatically kept in sync with the server."
 msgstr ""
+"Στο SeaDrive 1.0, τα αρχεία στην προσωρινή μνήμη δεν ενημερώνονται αυτόματα "
+"όταν ενημερώνονται στον διακομιστή. Στο SeaDrive 2.0, τα πλήρη και "
+"καρφιτσωμένα αρχεία διατηρούνται αυτόματα σε συγχρονισμό με τον διακομιστή."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:30
 msgid "File Download and Control"
-msgstr ""
+msgstr "Λήψη και Έλεγχος Αρχείων"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:31
 msgid ""
@@ -508,6 +643,10 @@ msgid ""
 "download, there will be a progress bar shown up in file explorer and you may"
 " cancel the download."
 msgstr ""
+"Κάθε φορά που ανοίγετε ένα αρχείο placeholder, το λειτουργικό σύστημα θα "
+"ξεκινήσει αυτόματα τη λήψη του. Εάν το αρχείο μπορεί να χρειαστεί λίγο χρόνο"
+" για τη λήψη του, θα εμφανιστεί μια γραμμή προόδου στην εξερεύνηση αρχείων "
+"και μπορείτε να ακυρώσετε τη λήψη."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:32
 msgid ""
@@ -516,15 +655,20 @@ msgid ""
 "operating system about this and you may choose to cancel the download or "
 "disallow the application from automatically downloading files in the future."
 msgstr ""
+"Μερικές φορές μια εφαρμογή παρασκηνίου μπορεί να προσπαθήσει να κατεβάσει "
+"ένα αρχείο στον εικονικό δίσκο (όπως ένα λογισμικό προστασίας από ιούς). Θα "
+"ειδοποιηθείτε από το λειτουργικό σύστημα για αυτό και μπορείτε να επιλέξετε "
+"να ακυρώσετε τη λήψη ή να μην επιτρέψετε στην εφαρμογή να κατεβάζει αυτόματα"
+" αρχεία στο μέλλον."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:34
 #: templates/help/using_drive_client.html:79
 msgid "FAQ"
-msgstr ""
+msgstr "Συχνές Ερωτήσεις"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:35
 msgid "Can I create, delete, rename libraries?"
-msgstr ""
+msgstr "Μπορώ να δημιουργήσω, να διαγράψω, να μετονομάσω βιβλιοθήκες;"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:36
 msgid ""
@@ -533,10 +677,16 @@ msgid ""
 " rename libraries under the \"My Libraries\" category. Creating, deleting or"
 " renaming libraries in other categories will be ignored."
 msgstr ""
+"Ναι. Όταν δημιουργείτε, διαγράφετε ή μετονομάζετε φακέλους βιβλιοθήκης στον "
+"εικονικό δίσκο, η λειτουργία θα αντικατοπτρίζεται στον διακομιστή. Μπορείτε "
+"να δημιουργήσετε, να διαγράψετε, να μετονομάσετε βιβλιοθήκες μόνο στην "
+"κατηγορία \"Οι Βιβλιοθήκες μου\". Η δημιουργία, η διαγραφή ή η μετονομασία "
+"βιβλιοθηκών σε άλλες κατηγορίες θα αγνοηθεί."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:38
 msgid "Can I create files or folders outside of a library folder?"
 msgstr ""
+"Μπορώ να δημιουργήσω αρχεία ή φακέλους έξω από έναν φάκελο βιβλιοθήκης;"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:39
 msgid ""
@@ -544,10 +694,14 @@ msgid ""
 "synced to the server. A new folder under the \"My Libraries\" folder will be"
 " handled as a new library."
 msgstr ""
+"Ναι. Αλλά τα αρχεία που δημιουργούνται έξω από έναν φάκελο βιβλιοθήκης θα "
+"αγνοούνται και ΔΕΝ θα συγχρονίζονται με τον διακομιστή. Ένας νέος φάκελος "
+"κάτω από το φάκελο \"Οι Βιβλιοθήκες μου\" θα αντιμετωπίζεται ως μια νέα "
+"βιβλιοθήκη."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:41
 msgid "Can I access encrypted libraries?"
-msgstr ""
+msgstr "Μπορώ να έχω πρόσβαση σε κρυπτογραφημένες βιβλιοθήκες;"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:42
 msgid ""
@@ -557,10 +711,17 @@ msgid ""
 " area and choose \"Show encrypted libraries\". A window will show up and you"
 " can choose to sync or unsync an encrypted library."
 msgstr ""
+"Ναι. Από προεπιλογή, οι κρυπτογραφημένες βιβλιοθήκες δεν συγχρονίζονται και "
+"δεν εμφανίζονται στον εικονικό δίσκο. Πρέπει να επιλέξετε μη αυτόματα ποιες "
+"κρυπτογραφημένες βιβλιοθήκες θα συγχρονίσετε και να εισαγάγετε τον κωδικό "
+"πρόσβασης. Απλώς κάντε δεξί κλικ στο εικονίδιο SeaDrive στην περιοχή του "
+"δίσκου συστήματος και επιλέξτε \"Εμφάνιση κρυπτογραφημένων βιβλιοθηκών\". Θα"
+" εμφανιστεί ένα παράθυρο και μπορείτε να επιλέξετε να συγχρονίσετε ή να "
+"αποσυγχρονίσετε μια κρυπτογραφημένη βιβλιοθήκη."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
-msgstr ""
+msgstr "Είναι συμβατό με το SeaDrive 1.0;"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:45
 msgid ""
@@ -570,10 +731,17 @@ msgid ""
 " be accessible in 2.0 version. You can start SeaDrive 1.0 again to upload "
 "the files to server or copy them out."
 msgstr ""
+"Το SeaDrive 2.0 θα χρησιμοποιεί τυχόν υπάρχοντες λογαριασμούς και τα "
+"μεταδεδομένα τους (που είναι αποθηκευμένα στο φάκελο "
+"C:\\users\\username\\seadrive\\). Αλλά δεν θα χρησιμοποιήσει τα αποθηκευμένα"
+" αρχεία από το SeaDrive 1.0. Έτσι, τυχόν τοπικά αποθηκευμένα αρχεία στην "
+"έκδοση 1.0 δεν θα είναι προσβάσιμα στην έκδοση 2.0. Μπορείτε να ξεκινήσετε "
+"ξανά το SeaDrive 1.0 για να ανεβάσετε τα αρχεία στον διακομιστή ή να τα "
+"αντιγράψετε."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:47
 msgid "How do I clean the cache?"
-msgstr ""
+msgstr "Πώς καθαρίζω την προσωρινή μνήμη;"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:48
 msgid ""
@@ -584,10 +752,21 @@ msgid ""
 "Because placeholders are just normal files created on your local disk, your "
 "cache size is only limited by the available disk space on your computer."
 msgstr ""
+"Μπορείτε να επιλέξετε μη αυτόματα ποιοι φάκελοι ή αρχεία θα αποθηκευτούν "
+"τοπικά στην προσωρινή μνήμη. Εάν διαπιστώσετε ότι ένας φάκελος καταναλώνει "
+"πολύ χώρο, απλώς επιλέξτε \"Ελευθέρωση χώρου\" σε αυτόν τον φάκελο και όλα "
+"τα αρχεία που είναι αποθηκευμένα σε αυτόν τον φάκελο θα καθαριστούν. Δεν "
+"χρειάζεται να ορίσετε χρόνο καθαρισμού της προσωρινής μνήμης και όριο "
+"μεγέθους προσωρινής μνήμης όπως στο SeaDrive 1.0. Επειδή τα placeholders "
+"είναι απλώς κανονικά αρχεία που δημιουργούνται στον τοπικό σας δίσκο, το "
+"μέγεθος της προσωρινής μνήμης περιορίζεται μόνο από τον διαθέσιμο χώρο στο "
+"δίσκο του υπολογιστή σας."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:50
 msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
 msgstr ""
+"Πώς να αφαιρέσετε τα εναπομείναντα shortcuts του SeaDrive στον Windows "
+"Explorer;"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
@@ -596,12 +775,20 @@ msgid ""
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
 msgstr ""
+"Η συντόμευση \"SeaDrive\" στον Windows Explorer δεν θα εξαφανιστεί αφού "
+"βγείτε από το πρόγραμμα SeaDrive ή αλλάξετε λογαριασμούς Seafile στο "
+"SeaDrive. Αυτή είναι μια επιδιωκόμενη συμπεριφορά. Δεν χρειάζεται να τις "
+"αφαιρέσετε εάν εξακολουθείτε να χρειάζεται να έχετε πρόσβαση στον λογαριασμό"
+" αργότερα."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
 "choose \"Remove account information\" in the prompt dialog."
 msgstr ""
+"Συνήθως μπορείτε να αφαιρέσετε αυτές τις συντομεύσεις απεγκαθιστώντας το "
+"πρόγραμμα SeaDrive και επιλέγοντας \"Κατάργηση πληροφοριών λογαριασμού\" στο"
+" παράθυρο διαλόγου."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -612,10 +799,16 @@ msgid ""
 " in registry editor. Remove the sub-keys correspond to the shortcut you want"
 " to remove."
 msgstr ""
+"Εάν η απεγκατάσταση δεν καταργήσει επιτυχώς τις συντομεύσεις, μπορείτε να "
+"αφαιρέσετε τη συντόμευση SeaDrive στον Windows Explorer επεξεργαζόμενοι το "
+"μητρώο. Ανοίξτε τη διαδρομή "
+"\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\\""
+" στον επεξεργαστή μητρώου. Αφαιρέστε τα δευτερεύοντα κλειδιά που "
+"αντιστοιχούν στη συντόμευση που θέλετε να καταργήσετε."
 
 #: templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
-msgstr ""
+msgstr "Πώς να χρησιμοποιήσετε κρυπτογραφημένες βιβλιοθήκες"
 
 #: templates/help/encrypted_libraries.html:8
 msgid ""
@@ -625,10 +818,17 @@ msgid ""
 "stored on the server. So even the server administrator can't access your "
 "file contents."
 msgstr ""
+"Το Seafile παρέχει κρυπτογράφηση δεδομένων από άκρο σε άκρο από την πλευρά "
+"του πελάτη. Μπορείτε να δημιουργήσετε κρυπτογραφημένες βιβλιοθήκες για να "
+"χρησιμοποιήσετε αυτήν τη δυνατότητα. Το περιεχόμενο των αρχείων σε "
+"κρυπτογραφημένες βιβλιοθήκες κρυπτογραφείται από την πλευρά του πελάτη. Ο "
+"κωδικός πρόσβασης κρυπτογράφησης δεν αποθηκεύεται στον διακομιστή. Επομένως,"
+" ακόμη και ο διαχειριστής του διακομιστή δεν μπορεί να έχει πρόσβαση στο "
+"περιεχόμενο των αρχείων σας."
 
 #: templates/help/encrypted_libraries.html:10
 msgid "When creating an encrypted library:"
-msgstr ""
+msgstr "Κατά τη δημιουργία μιας κρυπτογραφημένης βιβλιοθήκης:"
 
 #: templates/help/encrypted_libraries.html:12
 msgid ""
@@ -636,6 +836,10 @@ msgid ""
 "the server. The server uses this password to create the library. But it "
 "doesn't store the plain text password."
 msgstr ""
+"Εάν δημιουργήσετε μια κρυπτογραφημένη βιβλιοθήκη στην εφαρμογή web, ο "
+"κωδικός πρόσβασης αποστέλλεται στον διακομιστή. Ο διακομίστής χρησιμοποιεί "
+"αυτόν τον κωδικό πρόσβασης για να δημιουργήσει τη βιβλιοθήκη. Αλλά δεν "
+"αποθηκεύει τον κωδικό πρόσβασης σε απλό κείμενο."
 
 #: templates/help/encrypted_libraries.html:13
 #, python-format
@@ -644,10 +848,14 @@ msgid ""
 "client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
 "the password is not sent to the server."
 msgstr ""
+"Εάν δημιουργήσετε μια κρυπτογραφημένη βιβλιοθήκη από έναν τοπικό φάκελο με "
+"τον πελάτη επιφάνειας εργασίας (δείτε <a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">συγχρονισμός αρχείων</a>), ο "
+"κωδικός πρόσβασης δεν αποστέλλεται στον διακομιστή."
 
 #: templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
-msgstr ""
+msgstr "Όταν έχετε πρόσβαση στην κρυπτογραφημένη βιβλιοθήκη:"
 
 #: templates/help/encrypted_libraries.html:19
 msgid ""
@@ -655,6 +863,10 @@ msgid ""
 " will cache the password in encrypted format for 1 hour. It won't store the "
 "password on disk."
 msgstr ""
+"Εάν χρησιμοποιείτε την εφαρμογή web, πρέπει να εισαγάγετε τον κωδικό "
+"πρόσβασης στον διακομιστή. Ο διακομιστής θα αποθηκεύσει τον κωδικό πρόσβασης"
+" σε κρυπτογραφημένη μορφή για 1 ώρα. Δεν θα αποθηκεύσει τον κωδικό πρόσβασης"
+" στο δίσκο."
 
 #: templates/help/encrypted_libraries.html:20
 msgid ""
@@ -662,22 +874,31 @@ msgid ""
 "the server. The client decrypts and encrypts file contents locally. The "
 "plain text password is not stored on the client disk either."
 msgstr ""
+"Εάν χρησιμοποιείτε πελάτη επιφάνειας εργασίας για να συγχρονίσετε τη "
+"βιβλιοθήκη, ο κωδικός πρόσβασης δεν αποστέλλεται στον διακομιστή. Ο πελάτης "
+"αποκρυπτογραφεί και κρυπτογραφεί τα περιεχόμενα των αρχείων τοπικά. Ο "
+"κωδικός πρόσβασης σε απλό κείμενο δεν αποθηκεύεται ούτε στον δίσκο του "
+"πελάτη."
 
 #: templates/help/encrypted_libraries.html:21
 msgid ""
 "iOS client supports client side encryption since version 2.1.6. Android "
 "client supports it since version 2.1.0."
 msgstr ""
+"Ο πελάτης iOS υποστηρίζει κρυπτογράφηση από την πλευρά του πελάτη από την "
+"έκδοση 2.1.6. Ο πελάτης Android την υποστηρίζει από την έκδοση 2.1.0."
 
 #: templates/help/encrypted_libraries.html:25
 msgid ""
 "Note that encrypted library only encrypts the contents of the files, but not"
 " the folder and file names."
 msgstr ""
+"Σημειώστε ότι η κρυπτογραφημένη βιβλιοθήκη κρυπτογραφεί μόνο το περιεχόμενο "
+"των αρχείων, αλλά όχι τα ονόματα των φακέλων και των αρχείων."
 
 #: templates/help/file_locking.html:5
 msgid "File locking"
-msgstr ""
+msgstr "Κλείδωμα αρχείων"
 
 #: templates/help/file_locking.html:6
 msgid ""
@@ -687,22 +908,33 @@ msgid ""
 " the file when one person wants to exclusively modify the file. Seafile "
 "Professional Edition supports file locking."
 msgstr ""
+"Όταν περισσότερα από ένα άτομα συνεργάζονται σε ένα αρχείο, είναι πιθανό "
+"περισσότερα από ένα άτομα να τροποποιήσουν το αρχείο την ίδια περίπου ώρα. "
+"Το Seafile χειρίζεται αυτήν την κατάσταση όμορφα με αρχεία σύγκρουσης. Συχνά"
+" όμως είναι πιο βολικό να κλειδώνετε το αρχείο όταν ένα άτομο θέλει να "
+"τροποποιήσει αποκλειστικά το αρχείο. Η έκδοση Seafile Professional Edition "
+"υποστηρίζει κλείδωμα αρχείων."
 
 #: templates/help/file_locking.html:7
 msgid ""
 "File locking works on both the web app and the desktop syncing client. We'll"
 " introduce them one by one."
 msgstr ""
+"Το κλείδωμα αρχείων λειτουργεί τόσο στην εφαρμογή web όσο και στον πελάτη "
+"συγχρονισμού επιφάνειας εργασίας. Θα τα παρουσιάσουμε ένα προς ένα."
 
 #: templates/help/file_locking.html:8
 msgid "File locking on the Web App"
-msgstr ""
+msgstr "Κλείδωμα αρχείων στην εφαρμογή Web"
 
 #: templates/help/file_locking.html:9
 msgid ""
 "To lock a file, you can navigate into the file's folder on the web app, and "
 "click on the \"operations\" drop-down menu."
 msgstr ""
+"Για να κλειδώσετε ένα αρχείο, μπορείτε να πλοηγηθείτε στον φάκελο του "
+"αρχείου στην εφαρμογή web και να κάνετε κλικ στο αναπτυσσόμενο μενού "
+"\"λειτουργίες\"."
 
 #: templates/help/file_locking.html:11
 msgid ""
@@ -711,28 +943,41 @@ msgid ""
 "file. And you can also unlock a file that's locked by you. But you cannot "
 "unlock files locked by others."
 msgstr ""
+"Αφού κλειδωθεί το αρχείο, μπορείτε να δείτε ένα κόκκινο \"σήμα stop\" στη "
+"γωνία του εικονιδίου του αρχείου. Μετακινώντας το ποντίκι στο σήμα stop, "
+"μπορείτε να δείτε ποιος κλειδώνει το αρχείο. Και μπορείτε επίσης να "
+"ξεκλειδώσετε ένα αρχείο που είναι κλειδωμένο από εσάς. Αλλά δεν μπορείτε να "
+"ξεκλειδώσετε αρχεία που έχουν κλειδωθεί από άλλους."
 
 #: templates/help/file_locking.html:13
 msgid "File locking on the desktop client"
-msgstr ""
+msgstr "Κλείδωμα αρχείων στον πελάτη επιφάνειας εργασίας"
 
 #: templates/help/file_locking.html:14
 msgid ""
 "After a library is synced to the desktop, you can lock/unlock files in that "
 "library inside File Explorer on Windows or Finder on Mac OS."
 msgstr ""
+"Αφού συγχρονιστεί μια βιβλιοθήκη στην επιφάνεια εργασίας, μπορείτε να "
+"κλειδώσετε/ξεκλειδώσετε αρχεία σε αυτήν τη βιβλιοθήκη μέσα στην Εξερεύνηση "
+"αρχείων στα Windows ή στο Finder στο Mac OS."
 
 #: templates/help/file_locking.html:15
 msgid ""
 "To lock a file, just right click on a synced file and choose \"lock this "
 "file\" in the \"Seafile\" menu."
 msgstr ""
+"Για να κλειδώσετε ένα αρχείο, απλώς κάντε δεξί κλικ σε ένα συγχρονισμένο "
+"αρχείο και επιλέξτε \"κλείδωμα αυτού του αρχείου\" στο μενού \"Seafile\"."
 
 #: templates/help/file_locking.html:17
 msgid ""
 "If a file is locked by you, you can see an orange \"stop sign\" on the file "
 "icon. You can choose to unlock it."
 msgstr ""
+"Εάν ένα αρχείο είναι κλειδωμένο από εσάς, μπορείτε να δείτε ένα πορτοκαλί "
+"\"σήμα stop\" στο εικονίδιο του αρχείου. Μπορείτε να επιλέξετε να το "
+"ξεκλειδώσετε."
 
 #: templates/help/file_locking.html:19
 msgid ""
@@ -740,16 +985,23 @@ msgid ""
 "file icon. The file is automatically set to read-only. You cannot modify it "
 "until it's unlocked."
 msgstr ""
+"Εάν ένα αρχείο είναι κλειδωμένο από άλλο χρήστη, μπορείτε να δείτε ένα "
+"κόκκινο \"σήμα stop\" στο εικονίδιο του αρχείου. Το αρχείο ορίζεται αυτόματα"
+" σε λειτουργία μόνο για ανάγνωση. Δεν μπορείτε να το τροποποιήσετε μέχρι να "
+"ξεκλειδωθεί."
 
 #: templates/help/file_locking.html:21
 msgid ""
 "If a library is not synced, you can still use cloud file browser to lock and"
 " unlock files in it."
 msgstr ""
+"Εάν μια βιβλιοθήκη δεν είναι συγχρονισμένη, μπορείτε ακόμα να "
+"χρησιμοποιήσετε το πρόγραμμα περιήγησης αρχείων cloud για να κλειδώσετε και "
+"να ξεκλειδώσετε αρχεία σε αυτήν."
 
 #: templates/help/file_locking.html:22
 msgid "Auto locking office files"
-msgstr ""
+msgstr "Αυτόματο κλείδωμα αρχείων office"
 
 #: templates/help/file_locking.html:23
 msgid ""
@@ -759,18 +1011,28 @@ msgid ""
 " propagated to other computers syncing this library. It prevents concurrent "
 "editing the same Office file and is convenient for collaboration."
 msgstr ""
+"Αφού συγχρονιστεί μια βιβλιοθήκη στην επιφάνεια εργασίας, όταν ανοίγετε ένα "
+"αρχείο Microsoft Office μέσα στη βιβλιοθήκη, το Seafile κλειδώνει αυτόματα "
+"το αρχείο. Όταν κλείνετε το αρχείο, το Seafile ξεκλειδώνει αυτόματα το "
+"αρχείο. Η κατάσταση κλειδώματος διαδίδεται σε άλλους υπολογιστές που "
+"συγχρονίζουν αυτήν τη βιβλιοθήκη. Αποτρέπει την ταυτόχρονη επεξεργασία του "
+"ίδιου αρχείου Office και είναι βολικό για συνεργασία."
 
 #: templates/help/file_locking.html:24
 msgid "Details about file locking"
-msgstr ""
+msgstr "Λεπτομέρειες σχετικά με το κλείδωμα αρχείων"
 
 #: templates/help/file_locking.html:25
 msgid "There are a few useful tips about how file locking works:"
 msgstr ""
+"Υπάρχουν μερικές χρήσιμες συμβουλές για το πώς λειτουργεί το κλείδωμα "
+"αρχείων:"
 
 #: templates/help/file_locking.html:27
 msgid "A locked file can only be unlocked by the user who locked it."
 msgstr ""
+"Ένα κλειδωμένο αρχείο μπορεί να ξεκλειδωθεί μόνο από τον χρήστη που το "
+"κλείδωσε."
 
 #: templates/help/file_locking.html:28
 msgid ""
@@ -779,16 +1041,23 @@ msgid ""
 "locked file. The purpose of file locking is mainly to prevent concurrent "
 "editing."
 msgstr ""
+"Ένα κλειδωμένο αρχείο δεν μπορεί να τροποποιηθεί, να μετακινηθεί, να "
+"μετονομαστεί ή να διαγραφεί από άλλους χρήστες. Αλλά άλλοι χρήστες μπορούν "
+"ακόμα να μετακινήσουν, να διαγράψουν ή να μετονομάσουν τον γονικό φάκελο "
+"ενός κλειδωμένου αρχείου. Ο σκοπός του κλειδώματος αρχείων είναι κυρίως να "
+"αποτρέψει την ταυτόχρονη επεξεργασία."
 
 #: templates/help/file_locking.html:29
 msgid ""
 "When a locked file's parent folder is renamed or moved inside the same "
 "library, it remains locked after the operation."
 msgstr ""
+"Όταν ο γονικός φάκελος ενός κλειδωμένου αρχείου μετονομάζεται ή μετακινείται"
+" μέσα στην ίδια βιβλιοθήκη, παραμένει κλειδωμένος μετά τη λειτουργία."
 
 #: templates/help/finding_older_version_files.html:6
 msgid "Finding older version of files"
-msgstr ""
+msgstr "Εύρεση παλαιότερων εκδόσεων αρχείων"
 
 #: templates/help/finding_older_version_files.html:7
 msgid ""
@@ -797,10 +1066,15 @@ msgid ""
 "a configurable period. When you want to access an older version of a file, "
 "the file history feature becomes very handy."
 msgstr ""
+"Το Seafile παρακολουθεί το ιστορικό τροποποιήσεων όλων των αρχείων. Κάθε "
+"φορά που ένα αρχείο τροποποιείται, δημιουργείται μια νέα έκδοση, ενώ η παλιά"
+" έκδοση διατηρείται ακόμα για μια ρυθμιζόμενη περίοδο. Όταν θέλετε να "
+"αποκτήσετε πρόσβαση σε μια παλαιότερη έκδοση ενός αρχείου, η δυνατότητα "
+"ιστορικού αρχείων γίνεται πολύ χρήσιμη."
 
 #: templates/help/finding_older_version_files.html:8
 msgid "To list all the versions of a file:"
-msgstr ""
+msgstr "Για να παραθέσετε όλες τις εκδόσεις ενός αρχείου:"
 
 #: templates/help/finding_older_version_files.html:10
 msgid ""
@@ -808,16 +1082,25 @@ msgid ""
 "cursor onto the row of that file. An operation menu will appear. You can "
 "click the \"History\" button in that menu."
 msgstr ""
+"Στην εφαρμογή Web Seafile, μεταβείτε στον φάκελο που περιέχει το αρχείο. "
+"Μετακινήστε τον κέρσορα στη σειρά αυτού του αρχείου. Θα εμφανιστεί ένα μενού"
+" λειτουργιών. Μπορείτε να κάνετε κλικ στο κουμπί \"Ιστορικό\" σε αυτό το "
+"μενού."
 
 #: templates/help/finding_older_version_files.html:11
 msgid ""
 "A list of all versions of that file will be displayed in time order, from "
 "newer to older. The list also contains the file's rename history."
 msgstr ""
+"Θα εμφανιστεί μια λίστα με όλες τις εκδόσεις αυτού του αρχείου με "
+"χρονολογική σειρά, από τη νεότερη προς την παλαιότερη. Η λίστα περιέχει "
+"επίσης το ιστορικό μετονομασίας του αρχείου."
 
 #: templates/help/finding_older_version_files.html:12
 msgid "You can download, restore, view any version of the file."
 msgstr ""
+"Μπορείτε να κατεβάσετε, να επαναφέρετε, να προβάλετε οποιαδήποτε έκδοση του "
+"αρχείου."
 
 #: templates/help/finding_older_version_files.html:14
 #, python-format
@@ -826,10 +1109,13 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Μπορείτε να διαμορφώσετε την περίοδο διατήρησης των εκδόσεων αρχείων: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">ρύθμιση περιόδου "
+"διατήρησης ιστορικού</a>."
 
 #: templates/help/folder_permission.html:6
 msgid "Use folder permission for fine-grained access control"
-msgstr ""
+msgstr "Χρησιμοποιήστε δικαιώματα φακέλων για λεπτομερή έλεγχο πρόσβασης"
 
 #: templates/help/folder_permission.html:8
 #, python-format
@@ -840,6 +1126,11 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing libraries</a>."
 " Here are some use cases:"
 msgstr ""
+"Για κοινόχρηστες βιβλιοθήκες ή φακέλους, μπορείτε να ορίσετε δικαιώματα "
+"στους υποφακέλους τους για ένα άτομο ή μια ομάδα. Τα διαθέσιμα δικαιώματα "
+"είναι τα ίδια με αυτά που περιγράφονται στο <a "
+"href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">κοινή χρήση "
+"βιβλιοθηκών</a>. Ακολουθούν ορισμένες περιπτώσεις χρήσης:"
 
 #: templates/help/folder_permission.html:10
 msgid ""
@@ -847,6 +1138,10 @@ msgid ""
 " to allow a specific member of the group to modify files in one sub-folder. "
 "You can grant write permission of this sub-folder to this person."
 msgstr ""
+"Μοιραστήκατε μια βιβλιοθήκη σε μια ομάδα με άδεια \"μόνο για ανάγνωση\". "
+"Θέλετε επίσης να επιτρέψετε σε ένα συγκεκριμένο μέλος της ομάδας να "
+"τροποποιεί αρχεία σε έναν υποφάκελο. Μπορείτε να παραχωρήσετε άδεια εγγραφής"
+" αυτού του υποφακέλου σε αυτό το άτομο."
 
 #: templates/help/folder_permission.html:11
 msgid ""
@@ -855,6 +1150,10 @@ msgid ""
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
 msgstr ""
+"Μοιραστήκατε μια βιβλιοθήκη σε 3 ομάδες. Υπάρχουν 3 υποφάκελοι κάτω από "
+"αυτήν τη βιβλιοθήκη, ένας για κάθε ομάδα για τη μεταφόρτωση αρχείων. Ωστόσο,"
+" δεν θέλετε οι χρήστες να αλλάζουν αρχεία που δεν ανήκουν στην ομάδα τους. "
+"Μπορείτε να εκχωρήσετε άδεια εγγραφής ενός υποφακέλου μόνο στην ομάδα του."
 
 #: templates/help/folder_permission.html:13
 msgid ""
@@ -863,17 +1162,25 @@ msgid ""
 "should first share the parent library or folder; otherwise the folder "
 "permission won't take effect."
 msgstr ""
+"Τα δικαιώματα φακέλων είναι αποτελεσματικά μόνο για βιβλιοθήκες και φακέλους"
+" που μοιράζεστε με άλλους. Για να ορίσετε αποτελεσματικά δικαιώματα φακέλων "
+"στους υποφακέλους του, θα πρέπει πρώτα να μοιραστείτε τη γονική βιβλιοθήκη ή"
+" τον φάκελο. διαφορετικά το δικαίωμα φακέλου δεν θα τεθεί σε ισχύ."
 
 #: templates/help/folder_permission.html:14
 msgid ""
 "One important design goal of folder permission is to support hierarchical "
 "permissions:"
 msgstr ""
+"Ένας σημαντικός σχεδιαστικός στόχος της άδειας φακέλων είναι η υποστήριξη "
+"ιεραρχικών αδειών:"
 
 #: templates/help/folder_permission.html:16
 msgid ""
 "Sub-folders automatically inherit folder permissions from its parent folder."
 msgstr ""
+"Οι υποφάκελοι κληρονομούν αυτόματα τα δικαιώματα φακέλων από τον γονικό τους"
+" φάκελο."
 
 #: templates/help/folder_permission.html:17
 msgid ""
@@ -883,10 +1190,16 @@ msgid ""
 "\"meeting files/today\" for user A. Then user A's permission to \"meeting "
 "files/today\" is \"read only\"."
 msgstr ""
+"Τα δικαιώματα που έχουν οριστεί σε υποφακέλους αντικαθιστούν τα δικαιώματα "
+"που έχουν οριστεί στον γονικό τους φάκελο. Για παράδειγμα, ορίζετε δικαίωμα "
+"\"ανάγνωσης εγγραφής\" στον φάκελο \"αρχεία συσκέψεων\" για τον χρήστη Α και"
+" ορίζετε δικαίωμα \"μόνο για ανάγνωση\" στον υποφάκελο \"αρχεία "
+"συσκέψεων/σήμερα\" για τον χρήστη Α. Στη συνέχεια, το δικαίωμα του χρήστη Α "
+"για το \"αρχεία συσκέψεων/σήμερα\" είναι \"μόνο για ανάγνωση\"."
 
 #: templates/help/folder_permission.html:19
 msgid "Basic usage"
-msgstr ""
+msgstr "Βασική χρήση"
 
 #: templates/help/folder_permission.html:20
 msgid ""
@@ -895,6 +1208,11 @@ msgid ""
 "\"permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions on this folder."
 msgstr ""
+"Μόνο ο κάτοχος της βιβλιοθήκης μπορεί να ορίσει δικαιώματα φακέλων για τους "
+"υποφακέλους της. Στη διεπαφή περιήγησης αρχείων, κάντε κλικ στο κουμπί "
+"\"περισσότερες λειτουργίες\", επιλέξτε \"δικαίωμα\" στο αναπτυσσόμενο μενού."
+" Στο αναδυόμενο παράθυρο, μπορείτε να δείτε και να ορίσετε δικαιώματα "
+"φακέλων σε αυτόν τον φάκελο."
 
 #: templates/help/folder_permission.html:21
 msgid ""
@@ -903,6 +1221,11 @@ msgid ""
 "Permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions in this library."
 msgstr ""
+"Εάν θέλετε να δείτε όλα τα δικαιώματα φακέλων που έχουν οριστεί σε μια "
+"βιβλιοθήκη, τοποθετήστε το ποντίκι πάνω στη βιβλιοθήκη. Κάντε κλικ στο "
+"κουμπί \"περισσότερες λειτουργίες\", επιλέξτε \"Δικαίωμα φακέλου\" στο "
+"αναπτυσσόμενο μενού. Στο αναδυόμενο παράθυρο, μπορείτε να δείτε και να "
+"ορίσετε δικαιώματα φακέλων σε αυτήν τη βιβλιοθήκη."
 
 #: templates/help/folder_permission.html:22
 msgid ""
@@ -910,16 +1233,23 @@ msgid ""
 "next to \"read only\" sub-folders. When the user navigate into that sub-"
 "folder, he/she won't be able to add/modify/delete files."
 msgstr ""
+"Όταν άλλοι χρήστες πλοηγούνται σε έναν φάκελο, θα υπάρχει ένα μικρό "
+"εικονίδιο \"ματιού\" δίπλα στους υποφακέλους \"μόνο για ανάγνωση\". Όταν ο "
+"χρήστης πλοηγηθεί σε αυτόν τον υποφάκελο, δεν θα μπορεί να "
+"προσθέσει/τροποποιήσει/διαγράψει αρχεία."
 
 #: templates/help/folder_permission.html:24
 msgid ""
 "If a \"read only\" folder is synced to PC with the Seafile desktop App, "
 "changes under a \"read only\" folder won't be uploaded to the cloud."
 msgstr ""
+"Εάν ένας φάκελος \"μόνο για ανάγνωση\" συγχρονιστεί με τον υπολογιστή με την"
+" εφαρμογή Seafile desktop, οι αλλαγές στον φάκελο \"μόνο για ανάγνωση\" δεν "
+"θα μεταφορτωθούν στο cloud."
 
 #: templates/help/folder_permission.html:25
 msgid "Advanced: priority between different permissions"
-msgstr ""
+msgstr "Για προχωρημένους: προτεραιότητα μεταξύ διαφορετικών αδειών"
 
 #: templates/help/folder_permission.html:27
 msgid ""
@@ -929,6 +1259,12 @@ msgid ""
 "library. Then user A only has \"read only\" access to the sub-folder, while "
 "he/she has \"read write\" access to all other sub-folders and files."
 msgstr ""
+"Τα δικαιώματα φακέλων έχουν υψηλότερη προτεραιότητα από την άδεια που έχει "
+"οριστεί στην κοινή χρήση. Για παράδειγμα, εάν μοιράζεστε μια βιβλιοθήκη στον"
+" χρήστη Α με άδεια \"ανάγνωσης εγγραφής\" και ορίσετε επίσης άδεια \"μόνο "
+"για ανάγνωση\" σε έναν υποφάκελο αυτής της βιβλιοθήκης. Στη συνέχεια, ο "
+"χρήστης Α έχει πρόσβαση μόνο για ανάγνωση στον υποφάκελο, ενώ έχει πρόσβαση "
+"\"ανάγνωσης εγγραφής\" σε όλους τους άλλους υποφακέλους και αρχεία."
 
 #: templates/help/folder_permission.html:28
 msgid ""
@@ -937,16 +1273,23 @@ msgid ""
 "if the system matches a permission specific to the user, it'll ignore all "
 "permissions set for the groups the user belongs to."
 msgstr ""
+"Τα δικαιώματα φακέλων που έχουν οριστεί για έναν συγκεκριμένο χρήστη έχουν "
+"υψηλότερη προτεραιότητα από τα δικαιώματα που έχουν οριστεί για μια ομάδα. "
+"Δηλαδή, κατά τον έλεγχο των δικαιωμάτων για έναν φάκελο, εάν το σύστημα "
+"ταιριάζει με μια άδεια ειδικά για τον χρήστη, θα αγνοήσει όλες τις άδειες "
+"που έχουν οριστεί για τις ομάδες στις οποίες ανήκει ο χρήστης."
 
 #: templates/help/folder_permission.html:29
 msgid ""
 "Permissions on sub-folders have higher priority than those on parent "
 "folders."
 msgstr ""
+"Τα δικαιώματα στους υποφακέλους έχουν υψηλότερη προτεραιότητα από αυτά στους"
+" γονικούς φακέλους."
 
 #: templates/help/folder_permission.html:31
 msgid "Here is a more complex example:"
-msgstr ""
+msgstr "Εδώ είναι ένα πιο περίπλοκο παράδειγμα:"
 
 #: templates/help/folder_permission.html:32
 msgid ""
@@ -958,6 +1301,14 @@ msgid ""
 "first matched for folder \"A/B\" and user \"John\", which is inherited from "
 "its parent \"A\"."
 msgstr ""
+"Ας υποθέσουμε ότι η δομή του φακέλου μοιάζει με \"Α/Β\", ο χρήστης \"John\" "
+"είναι στην ομάδα \"Προσωπικό\". Εάν ορίσετε άδεια \"μόνο για ανάγνωση\" στον"
+" φάκελο Α για τον John και, ορίσετε επίσης άδεια \"ανάγνωσης εγγραφής\" στον"
+" φάκελο \"Α/Β\" για την ομάδα \"Προσωπικό\". Τότε η άδεια του John για τον "
+"φάκελο \"Α/Β\" είναι ακόμα μόνο \"μόνο για ανάγνωση\". Αυτό συμβαίνει "
+"επειδή, σύμφωνα με τον κανόνα 2, η άδεια \"μόνο για ανάγνωση\" "
+"αντιστοιχίζεται πρώτα για τον φάκελο \"Α/Β\" και τον χρήστη \"John\", η "
+"οποία κληρονομείται από τον γονέα του \"Α\"."
 
 #: templates/help/full_text_file_search.html:6
 msgid ""
@@ -965,46 +1316,51 @@ msgid ""
 "as well as the content of certain files, in the Seafile web app. Currently "
 "Seafile can search the contents of the following types of files:"
 msgstr ""
+"Εάν χρησιμοποιείτε διακομιστή Pro Edition, μπορείτε να αναζητήσετε ονόματα "
+"αρχείων και φακέλων, καθώς και το περιεχόμενο ορισμένων αρχείων, στην "
+"εφαρμογή web Seafile. Επί του παρόντος, το Seafile μπορεί να αναζητήσει το "
+"περιεχόμενο των ακόλουθων τύπων αρχείων:"
 
 #: templates/help/full_text_file_search.html:8
 #: templates/help/viewing_files_within_web_app.html:8
 msgid "Microsoft Office Doc: .doc, .docx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Doc: .doc, .docx (Μόνο διακομιστής Pro Edition)"
 
 #: templates/help/full_text_file_search.html:9
 #: templates/help/viewing_files_within_web_app.html:9
 msgid "Microsoft Office PowerPoint: .ppt, .pptx (Pro Edition Server only)"
 msgstr ""
+"Microsoft Office PowerPoint: .ppt, .pptx (Μόνο διακομιστής Pro Edition)"
 
 #: templates/help/full_text_file_search.html:10
 #: templates/help/viewing_files_within_web_app.html:10
 msgid "Microsoft Office Excel: .xls, .xlsx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Excel: .xls, .xlsx (Μόνο διακομιστής Pro Edition)"
 
 #: templates/help/full_text_file_search.html:11
 #: templates/help/viewing_files_within_web_app.html:11
 msgid "LibreOffice files"
-msgstr ""
+msgstr "Αρχεία LibreOffice"
 
 #: templates/help/full_text_file_search.html:12
 #: templates/help/viewing_files_within_web_app.html:12
 msgid "PDF files"
-msgstr ""
+msgstr "Αρχεία PDF"
 
 #: templates/help/full_text_file_search.html:13
 #: templates/help/viewing_files_within_web_app.html:14
 msgid "Markdown files: .md"
-msgstr ""
+msgstr "Αρχεία Markdown: .md"
 
 #: templates/help/full_text_file_search.html:14
 #: templates/help/viewing_files_within_web_app.html:15
 msgid "Various source code files"
-msgstr ""
+msgstr "Διάφορα αρχεία πηγαίου κώδικα"
 
 #: templates/help/full_text_file_search.html:15
 #: templates/help/viewing_files_within_web_app.html:16
 msgid "Text files: .txt, .log"
-msgstr ""
+msgstr "Αρχεία κειμένου: .txt, .log"
 
 #: templates/help/full_text_file_search.html:17
 msgid ""
@@ -1012,34 +1368,49 @@ msgid ""
 "text search feature. In that case, you can only search file and folder "
 "names."
 msgstr ""
+"Σημειώστε ότι ο διαχειριστής του συστήματός σας Seafile ενδέχεται να μην "
+"έχει ενεργοποιήσει τη δυνατότητα αναζήτησης πλήρους κειμένου. Σε αυτήν την "
+"περίπτωση, μπορείτε να αναζητήσετε μόνο ονόματα αρχείων και φακέλων."
 
 #: templates/help/groups_managing.html:6
 msgid ""
 "Creating a group is a convenient way to share files to many people. In "
 "Seafile, you can create and manage a group easily."
 msgstr ""
+"Η δημιουργία μιας ομάδας είναι ένας βολικός τρόπος για να μοιράζεστε αρχεία "
+"με πολλά άτομα. Στο Seafile, μπορείτε να δημιουργήσετε και να διαχειριστείτε"
+" μια ομάδα εύκολα."
 
 #: templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
-msgstr ""
+msgstr "Δείτε πώς λειτουργούν οι ομάδες στο Seafile:"
 
 #: templates/help/groups_managing.html:9
 msgid ""
 "Each group has a owner. The owner is the creator of the group by default. "
 "He/she can transfer the ownership of the group to another member."
 msgstr ""
+"Κάθε ομάδα έχει έναν ιδιοκτήτη. Ο ιδιοκτήτης είναι ο δημιουργός της ομάδας "
+"από προεπιλογή. Αυτός/αυτή μπορεί να μεταβιβάσει την ιδιοκτησία της ομάδας "
+"σε άλλο μέλος."
 
 #: templates/help/groups_managing.html:10
 msgid ""
 "Each group can have multiple admins. The group owner and group admins can "
 "add more group admins."
 msgstr ""
+"Κάθε ομάδα μπορεί να έχει πολλούς διαχειριστές. Ο ιδιοκτήτης της ομάδας και "
+"οι διαχειριστές της ομάδας μπορούν να προσθέσουν περισσότερους διαχειριστές "
+"ομάδας."
 
 #: templates/help/groups_managing.html:11
 msgid ""
 "The group admin can add/delete members in the group. And he/she can also "
 "unshare a library in the group."
 msgstr ""
+"Ο διαχειριστής της ομάδας μπορεί να προσθέσει/διαγράψει μέλη στην ομάδα. Και"
+" αυτός/αυτή μπορεί επίσης να ακυρώσει την κοινή χρήση μιας βιβλιοθήκης στην "
+"ομάδα."
 
 #: templates/help/groups_managing.html:13
 msgid ""
@@ -1047,6 +1418,9 @@ msgid ""
 "all the groups you're in. Clicking into any group, you'll see the libraries "
 "shared into this group."
 msgstr ""
+"Κάντε κλικ στην καρτέλα \"Κοινόχρηστα με ομάδες\" στο αριστερό πλαίσιο και "
+"θα δείτε όλες τις ομάδες στις οποίες ανήκετε. Κάνοντας κλικ σε οποιαδήποτε "
+"ομάδα, θα δείτε τις βιβλιοθήκες που μοιράζονται σε αυτήν την ομάδα."
 
 #: templates/help/groups_managing.html:14
 msgid ""
@@ -1054,6 +1428,10 @@ msgid ""
 "panel. Then click on \"All Groups\". In the page, you can click the \"New "
 "Group\" button to create a group."
 msgstr ""
+"Για να δημιουργήσετε μια νέα ομάδα, κάντε κλικ στην καρτέλα \"Κοινόχρηστα με"
+" ομάδες\" στο αριστερό πλαίσιο. Στη συνέχεια κάντε κλικ στο \"Όλες οι "
+"ομάδες\". Στη σελίδα, μπορείτε να κάνετε κλικ στο κουμπί \"Νέα ομάδα\" για "
+"να δημιουργήσετε μια ομάδα."
 
 #: templates/help/groups_managing.html:15
 #, python-format
@@ -1061,6 +1439,9 @@ msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
 "and folders</a> about how to share libraries or folders to a group."
 msgstr ""
+"Δείτε το <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">κοινή "
+"χρήση αρχείων και φακέλων</a> σχετικά με τον τρόπο κοινής χρήσης βιβλιοθηκών"
+" ή φακέλων σε μια ομάδα."
 
 #: templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
@@ -1074,6 +1455,12 @@ msgid ""
 "should not sync. Each line in a ignore.txt file specifies a pattern. The "
 "following pattern format are supported."
 msgstr ""
+"Μερικές φορές δεν θέλετε να συγχρονίσετε ορισμένα αρχεία ή φακέλους μέσα σε "
+"μια βιβλιοθήκη. Για να το πετύχετε αυτό, δημιουργήστε ένα αρχείο seafile-"
+"ignore.txt στον ριζικό φάκελο μιας βιβλιοθήκης. Αυτό το ειδικό αρχείο "
+"καθορίζει τα αρχεία και τους φακέλους που δεν πρέπει να συγχρονίζει το "
+"Seafile. Κάθε γραμμή σε ένα αρχείο ignore.txt καθορίζει ένα μοτίβο. "
+"Υποστηρίζονται οι ακόλουθες μορφές μοτίβων."
 
 #: templates/help/ignore.html:10
 msgid "A blank line matches no files."
@@ -1103,6 +1490,10 @@ msgid ""
 "words, \"foo/\" will match a folder \"foo\" and paths underneath it, but "
 "will not match a regular file or a symbolic link \"foo\"."
 msgstr ""
+"Εάν το μοτίβο τελειώνει με κάθετο, θα ταιριάζει μόνο με έναν φάκελο. Με άλλα"
+" λόγια, το \"foo/\" θα ταιριάζει με έναν φάκελο \"foo\" και τις διαδρομές "
+"κάτω από αυτόν, αλλά δεν θα ταιριάζει με ένα κανονικό αρχείο ή έναν "
+"συμβολικό σύνδεσμο \"foo\"."
 
 #: templates/help/ignore.html:14
 msgid ""
@@ -1164,7 +1555,7 @@ msgstr ""
 
 #: templates/help/install_sync.html:6
 msgid "Installing Seafile client program"
-msgstr ""
+msgstr "Εγκατάσταση του προγράμματος πελάτη Seafile"
 
 #: templates/help/install_sync.html:8
 msgid ""
@@ -1182,7 +1573,7 @@ msgstr ""
 
 #: templates/help/install_sync.html:11
 msgid "Selecting a folder to store Seafile data"
-msgstr ""
+msgstr "Επιλογή φακέλου για την αποθήκευση δεδομένων Seafile"
 
 #: templates/help/install_sync.html:13
 msgid "2. Add an account"
@@ -1223,7 +1614,7 @@ msgstr ""
 
 #: templates/help/install_sync.html:34
 msgid "5. Browse files on the cloud"
-msgstr ""
+msgstr "5. Περιήγηση αρχείων στο cloud"
 
 #: templates/help/install_sync.html:35
 msgid ""
@@ -1231,12 +1622,19 @@ msgid ""
 "syncing them. Seafile client comes with a \"cloud file browser\" to meet "
 "this need. Click an unsynced library will open the cloud file browser."
 msgstr ""
+"Σε ορισμένες περιπτώσεις, θέλετε να τροποποιήσετε αρχεία στο cloud απευθείας"
+" χωρίς να τα συγχρονίσετε. Ο πελάτης Seafile συνοδεύεται από ένα \"πρόγραμμα"
+" περιήγησης αρχείων cloud\" για να καλύψει αυτήν την ανάγκη. Κάνοντας κλικ "
+"σε μια μη συγχρονισμένη βιβλιοθήκη θα ανοίξει το πρόγραμμα περιήγησης "
+"αρχείων cloud."
 
 #: templates/help/introduction.html:8
 msgid ""
 "Seafile is an enterprise file hosting platform with high reliability and "
 "performance."
 msgstr ""
+"Το Seafile είναι μια πλατφόρμα φιλοξενίας αρχείων για επιχειρήσεις με υψηλή "
+"αξιοπιστία και απόδοση."
 
 #: templates/help/introduction.html:9
 #, python-format
@@ -1247,6 +1645,11 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/using_drive_client\">the drive client</a>. It also "
 "has mobile clients for Android and iOS."
 msgstr ""
+"Το Seafile περιλαμβάνει μια διεπαφή web για τη διαχείριση και την κοινή "
+"χρήση αρχείων. Διαθέτει δύο είδη πελατών επιφάνειας εργασίας, <a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">τον πελάτη συγχρονισμού αρχείων</a>"
+" και <a href=\"%(SITE_ROOT)shelp/using_drive_client\">τον πελάτη drive</a>. "
+"Διαθέτει επίσης πελάτες κινητής τηλεφωνίας για Android και iOS."
 
 #: templates/help/introduction.html:10
 msgid ""
@@ -1254,6 +1657,9 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile web "
 "site</a>."
 msgstr ""
+"Μπορείτε να κατεβάσετε τους πελάτες στον <a "
+"href=\"https://www.seafile.com/en/download/\" target=\"_blank\">ιστότοπο "
+"Seafile</a>."
 
 #: templates/help/introduction.html:11
 msgid ""
@@ -1261,6 +1667,9 @@ msgid ""
 "help in our forum: <a href=\"https://forum.seafile.com\" "
 "target=\"_blank\">https://forum.seafile.com</a>."
 msgstr ""
+"Εάν αυτό το εγχειρίδιο δεν περιέχει τις πληροφορίες που χρειάζεστε, μπορείτε"
+" να ζητήσετε βοήθεια στο φόρουμ μας: <a href=\"https://forum.seafile.com\" "
+"target=\"_blank\">https://forum.seafile.com</a>."
 
 #: templates/help/libraries_managing.html:6
 msgid ""
@@ -1270,18 +1679,28 @@ msgid ""
 "library works mostly like a top level folder. But it also has some special "
 "properties:"
 msgstr ""
+"Το Seafile χρησιμοποιεί \"βιβλιοθήκες\" για να οργανώσει τα αρχεία σας. Μια "
+"βιβλιοθήκη είναι ένα κοντέινερ ανώτατου επιπέδου για ένα σύνολο αρχείων και "
+"φακέλων. Μπορείτε να δημιουργήσετε μια βιβλιοθήκη για κάθε έργο στο οποίο "
+"εργάζεστε ή για κάθε τύπο εγγράφου που θέλετε να αποθηκεύσετε στο Seafile. "
+"Μια βιβλιοθήκη λειτουργεί κυρίως σαν φάκελος ανώτατου επιπέδου. Έχει όμως "
+"και μερικές ειδικές ιδιότητες:"
 
 #: templates/help/libraries_managing.html:8
 msgid ""
 "Each library keeps its own file modification history. There is no global "
 "file modification history across all libraries."
 msgstr ""
+"Κάθε βιβλιοθήκη διατηρεί το δικό της ιστορικό τροποποιήσεων αρχείων. Δεν "
+"υπάρχει παγκόσμιο ιστορικό τροποποίησης αρχείων σε όλες τις βιβλιοθήκες."
 
 #: templates/help/libraries_managing.html:9
 msgid ""
 "Each library can be synced to desktop clients separately. You can choose "
 "which libraries to be synced."
 msgstr ""
+"Κάθε βιβλιοθήκη μπορεί να συγχρονιστεί με πελάτες επιφάνειας εργασίας "
+"ξεχωριστά. Μπορείτε να επιλέξετε ποιες βιβλιοθήκες θα συγχρονιστούν."
 
 #: templates/help/libraries_managing.html:11
 msgid ""
@@ -1290,12 +1709,19 @@ msgid ""
 "can also create more libraries. Here is what it looks like when you've "
 "created a few libraries."
 msgstr ""
+"Όταν συνδέεστε στην εφαρμογή web του Seafile για πρώτη φορά, το Seafile "
+"δημιουργεί αυτόματα μια προεπιλεγμένη βιβλιοθήκη με το όνομα \"Η Βιβλιοθήκη "
+"μου\" για εσάς. Μπορείτε επίσης να δημιουργήσετε περισσότερες βιβλιοθήκες. "
+"Δείτε πώς μοιάζει όταν έχετε δημιουργήσει μερικές βιβλιοθήκες."
 
 #: templates/help/libraries_managing.html:13
 msgid ""
 "You can navigate into a library and manage your files and folders. You can "
 "upload, download, rename, move, copy and delete files."
 msgstr ""
+"Μπορείτε να πλοηγηθείτε σε μια βιβλιοθήκη και να διαχειριστείτε τα αρχεία "
+"και τους φακέλους σας. Μπορείτε να ανεβάσετε, να κατεβάσετε, να "
+"μετονομάσετε, να μετακινήσετε, να αντιγράψετε και να διαγράψετε αρχεία."
 
 #: templates/help/libraries_managing.html:15
 #, python-format
@@ -1304,6 +1730,10 @@ msgid ""
 "desktop client</a>, you can do any file operations inside the local library "
 "folder. The operations will be uploaded to the server. "
 msgstr ""
+"Μετά τον <a href=\"%(SITE_ROOT)shelp/install_sync/\">συγχρονισμό μιας "
+"βιβλιοθήκης με τον πελάτη επιφάνειας εργασίας</a>, μπορείτε να κάνετε "
+"οποιεσδήποτε λειτουργίες αρχείων μέσα στον τοπικό φάκελο της βιβλιοθήκης. Οι"
+" λειτουργίες θα μεταφορτωθούν στον διακομιστή."
 
 #: templates/help/library_history_and_snapshots.html:7
 msgid ""
@@ -1312,6 +1742,11 @@ msgid ""
 "creates a \"snapshot\" of the previous state of the library. The snapshot "
 "contains the complete file and folder structure of the library."
 msgstr ""
+"Το Seafile παρακολουθεί το ιστορικό τροποποιήσεων για ολόκληρη τη "
+"βιβλιοθήκη. Κάθε φορά που μια λειτουργία αρχείου εφαρμόζεται σε μια "
+"βιβλιοθήκη (ενημέρωση αρχείου, διαγραφή αρχείου κ.λπ.), το Seafile "
+"δημιουργεί ένα \"στιγμιότυπο\" της προηγούμενης κατάστασης της βιβλιοθήκης. "
+"Το στιγμιότυπο περιέχει την πλήρη δομή αρχείων και φακέλων της βιβλιοθήκης."
 
 #: templates/help/library_history_and_snapshots.html:8
 msgid ""
@@ -1322,10 +1757,17 @@ msgid ""
 "files in the library will be restored to that point of time, all at once. It"
 " works like a \"time machine\" for the library."
 msgstr ""
+"Σε ορισμένες περιπτώσεις, έχετε αλλάξει πολλά αρχεία στη βιβλιοθήκη και "
+"διαπιστώνετε ότι θέλετε να αναιρέσετε όλες αυτές τις αλλαγές. Η επαναφορά "
+"πολλών αρχείων στις παλιές τους εκδόσεις μπορεί να είναι κουραστική. Αυτή τη"
+" στιγμή, η λειτουργία στιγμιότυπου γίνεται πολύ χρήσιμη. Μπορείτε να "
+"επαναφέρετε ολόκληρη τη βιβλιοθήκη σε οποιοδήποτε σημείο στο παρελθόν. Όλα "
+"τα αρχεία στη βιβλιοθήκη θα αποκατασταθούν σε εκείνο το χρονικό σημείο, όλα "
+"μαζί. Λειτουργεί σαν μια \"μηχανή του χρόνου\" για τη βιβλιοθήκη."
 
 #: templates/help/library_history_and_snapshots.html:9
 msgid "To view library history and snapshots:"
-msgstr ""
+msgstr "Για να δείτε το ιστορικό και τα στιγμιότυπα της βιβλιοθήκης:"
 
 #: templates/help/library_history_and_snapshots.html:11
 msgid ""
@@ -1333,12 +1775,19 @@ msgid ""
 "\"History\" icon in the library navigation top bar. All the change record of"
 " the library will be displayed in a list."
 msgstr ""
+"Στην εφαρμογή Web Seafile, μεταβείτε στον ριζικό φάκελο μιας βιβλιοθήκης. "
+"Κάντε κλικ στο εικονίδιο \"Ιστορικό\" στην επάνω γραμμή πλοήγησης της "
+"βιβλιοθήκης. Όλο το αρχείο αλλαγών της βιβλιοθήκης θα εμφανιστεί σε μια "
+"λίστα."
 
 #: templates/help/library_history_and_snapshots.html:12
 msgid ""
 "Click the \"view snapshot\" link on any modification record. You'll see the "
 "library state at the point of time."
 msgstr ""
+"Κάντε κλικ στον σύνδεσμο \"προβολή στιγμιότυπου\" σε οποιοδήποτε αρχείο "
+"τροποποίησης. Θα δείτε την κατάσταση της βιβλιοθήκης εκείνη τη χρονική "
+"στιγμή."
 
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
@@ -1347,6 +1796,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Μπορείτε να διαμορφώσετε την περίοδο διατήρησης του ιστορικού βιβλιοθήκης: "
+"<a href=\"%(SITE_ROOT)shelp/setting_library_history/\">ρύθμιση περιόδου "
+"διατήρησης ιστορικού</a>."
 
 #: templates/help/manage_library_as_wiki.html:6
 msgid ""
@@ -1356,6 +1808,12 @@ msgid ""
 "files store textual, tabular as well as graphical information; You can also "
 "add links to other documents in a Markdown file."
 msgstr ""
+"Η λήψη και η αποθήκευση λίγων δομημένων δεδομένων με εύχρηστο τρόπο – γι' "
+"αυτό χρησιμεύουν τα wiki του Seafile. Οι σελίδες Wiki είναι γραμμένες σε "
+"Markdown (MD), μια απλή γλώσσα σήμανσης, για τη διασφάλιση της συμβατότητας "
+"μεταξύ των πλατφορμών. Τα αρχεία MD αποθηκεύουν κειμενικές, πίνακες καθώς "
+"και γραφικές πληροφορίες. Μπορείτε επίσης να προσθέσετε συνδέσμους προς άλλα"
+" έγγραφα σε ένα αρχείο Markdown."
 
 #: templates/help/manage_library_as_wiki.html:7
 msgid ""
@@ -1364,10 +1822,14 @@ msgid ""
 " Seafile libraries, they can be synced and shared with other users just like"
 " any ordinary library."
 msgstr ""
+"Μπορείτε να διαχειριστείτε μια τυπική βιβλιοθήκη στο Seafile όπως ένα Wiki, "
+"με την \"Προβολή στηλών\" που εισήχθη στην έκδοση 7.0. Επειδή το Seafile "
+"εφαρμόζει τα wiki ως τυπικές βιβλιοθήκες Seafile, μπορούν να συγχρονιστούν "
+"και να μοιραστούν με άλλους χρήστες όπως κάθε συνηθισμένη βιβλιοθήκη."
 
 #: templates/help/manage_library_as_wiki.html:8
 msgid "Column view"
-msgstr ""
+msgstr "Προβολή στηλών"
 
 #: templates/help/manage_library_as_wiki.html:9
 msgid ""
@@ -1378,10 +1840,18 @@ msgid ""
 "File actions such as renaming, moving, and opening via client are available "
 "in a right-click-accessible context menu."
 msgstr ""
+"Τα Wiki συνήθως έχουν μια πλευρική γραμμή που περιέχει μια δομή φακέλων που "
+"μοιάζει με δέντρο, για να επιτρέπει τη γρήγορη και εύκολη περιήγηση στις "
+"σελίδες Wiki. Η προβολή στηλών του Seafile σάς επιτρέπει να διαχειρίζεστε τα"
+" αρχεία σε μια βιβλιοθήκη με τον ίδιο τρόπο όπως έναν χώρο Wiki. Οι χρήστες "
+"μπορούν να περιηγηθούν σε αυτόν και να μετακινήσουν αρχεία και φακέλους απλά"
+" με μεταφορά και απόθεση. Οι ενέργειες αρχείων, όπως η μετονομασία, η "
+"μετακίνηση και το άνοιγμα μέσω πελάτη, είναι διαθέσιμες σε ένα μενού "
+"περιβάλλοντος προσβάσιμο με δεξί κλικ."
 
 #: templates/help/manage_library_as_wiki.html:12
 msgid "WYSIWYG Markdown editor"
-msgstr ""
+msgstr "Επεξεργαστής Markdown WYSIWYG"
 
 #: templates/help/manage_library_as_wiki.html:13
 msgid ""
@@ -1397,12 +1867,28 @@ msgid ""
 "table’s content: A table can be copied in its entirety or in part without "
 "leaving the WYSIWYG view."
 msgstr ""
+"Οι σελίδες Wiki στο Seafile αποθηκεύονται ως συνηθισμένα έγγραφα σε μορφή "
+"Markdown. Για να δημιουργήσετε μια νέα σελίδα Wiki σε μια βιβλιοθήκη, απλώς "
+"δημιουργήστε ένα νέο έγγραφο Markdown. Τα αρχεία MD μπορούν να επεξεργαστούν"
+" απευθείας από τη διεπαφή ιστού του Seafile με τον ηλεκτρονικό επεξεργαστή "
+"MD. Ο επεξεργαστής που βασίζεται στο web προσφέρει μια ομαλή εμπειρία χρήστη"
+" και πλούσιες επιλογές μορφοποίησης για κείμενο, εικόνες και πίνακες. Οι "
+"εικόνες μπορούν να εισαχθούν σε αρχεία MD από βιβλιοθήκες και τοπικό χώρο "
+"αποθήκευσης καθώς και μέσω υπερσυνδέσμων. Βασικές λειτουργίες επεξεργασίας "
+"εικόνας, όπως η κλιμάκωση, μπορούν επίσης να εκτελεστούν στη διεπαφή what-"
+"you-see-is-what-you-get (WYSIWYG) του επεξεργαστή. Οι πίνακες μπορούν να "
+"εισαχθούν και να τροποποιηθούν με λίγα μόνο κλικ. Το ίδιο ισχύει και για το "
+"περιεχόμενο ενός πίνακα: Ένας πίνακας μπορεί να αντιγραφεί στο σύνολό του ή "
+"εν μέρει χωρίς να φύγει από την προβολή WYSIWYG."
 
 #: templates/help/manage_library_as_wiki.html:15
 msgid ""
 "The change history of a Markdown file can be easily accessed by clicking the"
 " \"File History\" button in the menu on top of the editor interface."
 msgstr ""
+"Το ιστορικό αλλαγών ενός αρχείου Markdown είναι εύκολα προσβάσιμο κάνοντας "
+"κλικ στο κουμπί \"Ιστορικό αρχείου\" στο μενού στο επάνω μέρος της διεπαφής "
+"του προγράμματος επεξεργασίας."
 
 #: templates/help/manage_library_as_wiki.html:17
 msgid ""
@@ -1410,10 +1896,13 @@ msgid ""
 "Table of contents, file information, and collaborative commenting are "
 "provided in this side bar."
 msgstr ""
+"Μπορείτε να ανοίξετε μια κρυφή πλευρική γραμμή στη δεξιά πλευρά του "
+"προγράμματος επεξεργασίας Markdown. Πίνακας περιεχομένων, πληροφορίες "
+"αρχείων και συνεργατικά σχόλια παρέχονται σε αυτήν την πλευρική γραμμή."
 
 #: templates/help/manage_library_as_wiki.html:19
 msgid "File tagging and related documents"
-msgstr ""
+msgstr "Ετικέτες αρχείων και σχετικά έγγραφα"
 
 #: templates/help/manage_library_as_wiki.html:20
 msgid ""
@@ -1422,22 +1911,32 @@ msgid ""
 "can be managed from the side bar of the Markdown editor, or from the file "
 "browser interface."
 msgstr ""
+"Η προσθήκη ετικετών σε αρχεία είναι ένα σημαντικό χαρακτηριστικό για τη "
+"διαχείριση γνώσης. Το Seafile επιτρέπει στους χρήστες να ορίζουν ετικέτες "
+"για κάθε βιβλιοθήκη και να εφαρμόζουν ετικέτες σε αρχεία. Η διαχείριση των "
+"ετικετών μπορεί να γίνει από την πλευρική γραμμή του προγράμματος "
+"επεξεργασίας Markdown ή από τη διεπαφή του προγράμματος περιήγησης αρχείων."
 
 #: templates/help/manage_library_as_wiki.html:23
 msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
 msgstr ""
+"Η διεπαφή του προγράμματος περιήγησης αρχείων παρέχει μια περίληψη όλων των "
+"ετικετών αρχείων στην τρέχουσα βιβλιοθήκη."
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
 "If you want the be-shared users not be able to modify local copies, you can "
 "consider using the Seafile Drive client."
 msgstr ""
+"Εάν θέλετε οι χρήστες με τους οποίους μοιράζεστε αρχεία να μην μπορούν να "
+"τροποποιούν τοπικά αντίγραφα, μπορείτε να σκεφτείτε να χρησιμοποιήσετε τον "
+"πελάτη Seafile Drive."
 
 #: templates/help/restoring_deleted_files.html:6
 msgid "Restoring deleted files and folders"
-msgstr ""
+msgstr "Επαναφορά διαγραμμένων αρχείων και φακέλων"
 
 #: templates/help/restoring_deleted_files.html:7
 msgid ""
@@ -1445,16 +1944,23 @@ msgid ""
 "Sometimes you find files are deleted mistakenly. You can find back your "
 "deleted files in the trash bin of each library."
 msgstr ""
+"Κάθε βιβλιοθήκη στο Seafile παρακολουθεί αυτόματα τις λειτουργίες διαγραφής "
+"αρχείων σας. Μερικές φορές διαπιστώνετε ότι τα αρχεία διαγράφονται κατά "
+"λάθος. Μπορείτε να βρείτε ξανά τα διαγραμμένα αρχεία σας στον κάδο "
+"απορριμμάτων κάθε βιβλιοθήκης."
 
 #: templates/help/restoring_deleted_files.html:8
 msgid "Here is how to use the trash bin feature:"
 msgstr ""
+"Δείτε πώς μπορείτε να χρησιμοποιήσετε τη δυνατότητα κάδου απορριμμάτων:"
 
 #: templates/help/restoring_deleted_files.html:10
 msgid ""
 "In Seafile Web App, navigate into the parent folder containing the deleted "
 "file or folder."
 msgstr ""
+"Στην εφαρμογή Web Seafile, μεταβείτε στον γονικό φάκελο που περιέχει το "
+"διαγραμμένο αρχείο ή φάκελο."
 
 #: templates/help/restoring_deleted_files.html:11
 msgid ""
@@ -1462,6 +1968,10 @@ msgid ""
 " folders will be listed in deletion time order. In the bottom of the list, "
 "you can click the \"more\" button to load more deleted files."
 msgstr ""
+"Κάντε κλικ στο εικονίδιο \"σκουπίδια\" στη γραμμή λειτουργιών της "
+"βιβλιοθήκης. Τα διαγραμμένα αρχεία και οι φάκελοι θα εμφανίζονται με σειρά "
+"χρόνου διαγραφής. Στο κάτω μέρος της λίστας, μπορείτε να κάνετε κλικ στο "
+"κουμπί \"περισσότερα\" για να φορτώσετε περισσότερα διαγραμμένα αρχεία."
 
 #: templates/help/restoring_deleted_files.html:12
 msgid ""
@@ -1469,6 +1979,9 @@ msgid ""
 "folder's parent folder has been deleted, it will be restored to the "
 "library's root folder."
 msgstr ""
+"Στη λίστα διαγραμμένων αρχείων, μπορείτε να επαναφέρετε αρχεία και φακέλους."
+" Εάν ο γονικός φάκελος ενός αρχείου ή φακέλου έχει διαγραφεί, θα "
+"αποκατασταθεί στον ριζικό φάκελο της βιβλιοθήκης."
 
 #: templates/help/restoring_deleted_files.html:13
 msgid ""
@@ -1476,6 +1989,9 @@ msgid ""
 "the current folder. Files deleted in the sub-folders of the current folder "
 "are also included in the list."
 msgstr ""
+"Σημειώστε ότι ο κάδος απορριμμάτων περιέχει μόνο αρχεία και υποφακέλους που "
+"διαγράφηκαν στον τρέχοντα φάκελο. Στη λίστα περιλαμβάνονται επίσης αρχεία "
+"που έχουν διαγραφεί στους υποφακέλους του τρέχοντος φακέλου."
 
 #: templates/help/restoring_deleted_files.html:15
 #, python-format
@@ -1484,6 +2000,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Μπορείτε να διαμορφώσετε την περίοδο διατήρησης των διαγραμμένων αρχείων: <a"
+" href=\"%(SITE_ROOT)shelp/setting_library_history/\">ρύθμιση περιόδου "
+"διατήρησης ιστορικού</a>."
 
 #: templates/help/selective_sync.html:8
 msgid ""
@@ -1492,6 +2011,10 @@ msgid ""
 "selectively sync a sub-folder in a library, instead of syncing the entire "
 "library."
 msgstr ""
+"Μπορεί να έχετε ορισμένες πολύ μεγάλες βιβλιοθήκες στον διακομιστή Seafile. "
+"Και αυτή τη στιγμή ενδιαφέρεστε μόνο για έναν υποφάκελο μέσα σε μια "
+"βιβλιοθήκη. Στη συνέχεια, μπορείτε να συγχρονίσετε επιλεκτικά έναν υποφάκελο"
+" σε μια βιβλιοθήκη, αντί να συγχρονίσετε ολόκληρη τη βιβλιοθήκη."
 
 #: templates/help/selective_sync.html:10
 msgid ""
@@ -1500,40 +2023,56 @@ msgid ""
 "folder. Right click on the sub-folder. Choose \"Sync this folder\" in the "
 "pop-up menu."
 msgstr ""
+"Για να συγχρονίσετε έναν υποφάκελο, ανοίξτε το πρόγραμμα περιήγησης αρχείων "
+"cloud κάνοντας διπλό κλικ σε μια βιβλιοθήκη που δεν έχει συγχρονιστεί. "
+"Μεταβείτε στον γονικό φάκελο αυτού του υποφακέλου. Κάντε δεξί κλικ στον "
+"υποφάκελο. Επιλέξτε \"Συγχρονισμός αυτού του φακέλου\" στο αναδυόμενο μενού."
 
 #: templates/help/selective_sync.html:14
 msgid ""
 "After syncing the sub-folder, you can see its syncing status in the \"Synced"
 " Libraries\" group in the client's main window."
 msgstr ""
+"Αφού συγχρονίσετε τον υποφάκελο, μπορείτε να δείτε την κατάσταση "
+"συγχρονισμού του στην ομάδα \"Συγχρονισμένες βιβλιοθήκες\" στο κύριο "
+"παράθυρο του πελάτη."
 
 #: templates/help/setting_library_history.html:6
 msgid "Setting library history retention period"
-msgstr ""
+msgstr "Ρύθμιση περιόδου διατήρησης ιστορικού βιβλιοθήκης"
 
 #: templates/help/setting_library_history.html:7
 msgid ""
 "A library's history retention period length controls how long you can access"
 " your history data in the following features:"
 msgstr ""
+"Η διάρκεια της περιόδου διατήρησης ιστορικού μιας βιβλιοθήκης ελέγχει για "
+"πόσο χρόνο μπορείτε να έχετε πρόσβαση στα δεδομένα του ιστορικού σας στις "
+"ακόλουθες δυνατότητες:"
 
 #: templates/help/setting_library_history.html:9
 msgid ""
 "Restore deleted files: you cannot restore files and folders deleted before "
 "the retention period."
 msgstr ""
+"Επαναφορά διαγραμμένων αρχείων: δεν μπορείτε να επαναφέρετε αρχεία και "
+"φακέλους που διαγράφηκαν πριν από την περίοδο διατήρησης."
 
 #: templates/help/setting_library_history.html:10
 msgid ""
 "File versions: you cannot access file versions older than the retention "
 "period."
 msgstr ""
+"Εκδόσεις αρχείων: δεν μπορείτε να έχετε πρόσβαση σε εκδόσεις αρχείων "
+"παλαιότερες από την περίοδο διατήρησης."
 
 #: templates/help/setting_library_history.html:11
 msgid ""
 "Library history and snapshots: you cannot access library snapshots older "
 "than the retention period."
 msgstr ""
+"Ιστορικό βιβλιοθήκης και στιγμιότυπα: δεν μπορείτε να έχετε πρόσβαση σε "
+"στιγμιότυπα βιβλιοθήκης παλαιότερα από την περίοδο διατήρησης."
 
 #: templates/help/setting_library_history.html:13
 msgid ""
@@ -1541,51 +2080,75 @@ msgid ""
 "library, separately. You must be the library's owner to set the retention "
 "period. To set retention period length:"
 msgstr ""
+"Η περίοδος διατήρησης παλαιών εκδόσεων αρχείων μπορεί να διαμορφωθεί για "
+"κάθε βιβλιοθήκη ξεχωριστά. Πρέπει να είστε ο κάτοχος της βιβλιοθήκης για να "
+"ορίσετε την περίοδο διατήρησης. Για να ορίσετε τη διάρκεια της περιόδου "
+"διατήρησης:"
 
 #: templates/help/setting_library_history.html:15
 msgid ""
 "In Seafile Web App, click the \"Mine\" tab in the navigation panel (as in "
 "the below screenshot). All libraries owned by you will be listed."
 msgstr ""
+"Στην εφαρμογή Web Seafile, κάντε κλικ στην καρτέλα \"Δικά μου\" στο παράθυρο"
+" πλοήγησης (όπως στο παρακάτω στιγμιότυπο οθόνης). Θα εμφανιστούν όλες οι "
+"βιβλιοθήκες που σας ανήκουν."
 
 #: templates/help/setting_library_history.html:16
 msgid ""
 "Move the cursor onto the row of the library. An operation menu will appear. "
 "Click \"History Setting\" in the drop-down menu."
 msgstr ""
+"Μετακινήστε τον κέρσορα στη σειρά της βιβλιοθήκης. Θα εμφανιστεί ένα μενού "
+"λειτουργιών. Κάντε κλικ στο \"Ρύθμιση ιστορικού\" στο αναπτυσσόμενο μενού."
 
 #: templates/help/setting_library_history.html:17
 msgid "In the pop-up dialog, you can set the length of file retention period."
 msgstr ""
+"Στο αναδυόμενο παράθυρο διαλόγου, μπορείτε να ορίσετε τη διάρκεια της "
+"περιόδου διατήρησης αρχείων."
 
 #: templates/help/sharing_files_and_folders.html:6
 msgid ""
 "In Seafile there are a few ways to share files and folders with others:"
 msgstr ""
+"Στο Seafile υπάρχουν μερικοί τρόποι για να μοιράζεστε αρχεία και φακέλους με"
+" άλλους:"
 
 #: templates/help/sharing_files_and_folders.html:8
 msgid ""
 "Using links: there are multiple types of links that can be used to share "
 "with various scope of collaborators."
 msgstr ""
+"Χρήση συνδέσμων: υπάρχουν πολλοί τύποι συνδέσμων που μπορούν να "
+"χρησιμοποιηθούν για κοινή χρήση με διάφορα πεδία συνεργατών."
 
 #: templates/help/sharing_files_and_folders.html:10
 msgid ""
 "Share links: Any user who has access to the links can access the files or "
 "folders pointed by the link. No login is required."
 msgstr ""
+"Σύνδεσμοι κοινής χρήσης: Οποιοσδήποτε χρήστης έχει πρόσβαση στους συνδέσμους"
+" μπορεί να έχει πρόσβαση στα αρχεία ή στους φακέλους που υποδεικνύονται από "
+"τον σύνδεσμο. Δεν απαιτείται σύνδεση."
 
 #: templates/help/sharing_files_and_folders.html:11
 msgid ""
 "Upload links: Any user who has access to the links can upload files to the "
 "folder pointed by the link. No login is required."
 msgstr ""
+"Σύνδεσμοι μεταφόρτωσης: Οποιοσδήποτε χρήστης έχει πρόσβαση στους συνδέσμους "
+"μπορεί να ανεβάσει αρχεία στον φάκελο που υποδεικνύεται από τον σύνδεσμο. "
+"Δεν απαιτείται σύνδεση."
 
 #: templates/help/sharing_files_and_folders.html:12
 msgid ""
 "Internal links: Only logged in users who have read permission to the file or"
 " folder can access this link. Used for internal file sharing."
 msgstr ""
+"Εσωτερικοί σύνδεσμοι: Μόνο οι συνδεδεμένοι χρήστες που έχουν άδεια ανάγνωσης"
+" στο αρχείο ή στο φάκελο μπορούν να έχουν πρόσβαση σε αυτόν τον σύνδεσμο. "
+"Χρησιμοποιείται για εσωτερική κοινή χρήση αρχείων."
 
 #: templates/help/sharing_files_and_folders.html:15
 msgid ""
@@ -1593,10 +2156,13 @@ msgid ""
 "library or folder for specific users or groups. Users have to log in to "
 "access the folders."
 msgstr ""
+"Κοινή χρήση βιβλιοθηκών ή φακέλων: χρησιμοποιείται για τον ορισμό "
+"δικαιωμάτων πρόσβασης σε βιβλιοθήκη ή φάκελο για συγκεκριμένους χρήστες ή "
+"ομάδες. Οι χρήστες πρέπει να συνδεθούν για να έχουν πρόσβαση στους φακέλους."
 
 #: templates/help/sharing_files_and_folders.html:17
 msgid "Creating share links to files or folders"
-msgstr ""
+msgstr "Δημιουργία συνδέσμων κοινής χρήσης σε αρχεία ή φακέλους"
 
 #: templates/help/sharing_files_and_folders.html:18
 msgid ""
@@ -1604,12 +2170,18 @@ msgid ""
 "anyone, including those who don't have a Seafile account. You can also use "
 "password and expiration time to protect your links."
 msgstr ""
+"Οι σύνδεσμοι κοινής χρήσης είναι δημόσιοι σύνδεσμοι προς αρχεία ή φακέλους. "
+"Είναι προσβάσιμοι από οποιονδήποτε, συμπεριλαμβανομένων εκείνων που δεν "
+"έχουν λογαριασμό Seafile. Μπορείτε επίσης να χρησιμοποιήσετε κωδικό "
+"πρόσβασης και χρόνο λήξης για να προστατεύσετε τους συνδέσμους σας."
 
 #: templates/help/sharing_files_and_folders.html:19
 msgid ""
 "You can also set access permission to share links. There are three types of "
 "permissions:"
 msgstr ""
+"Μπορείτε επίσης να ορίσετε άδεια πρόσβασης για την κοινή χρήση συνδέσμων. "
+"Υπάρχουν τρεις τύποι αδειών:"
 
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
@@ -1617,6 +2189,9 @@ msgid ""
 "browser, but cannot be downloaded. This is useful for sharing confidential "
 "data."
 msgstr ""
+"Μόνο προεπισκόπηση: το αρχείο ή τα αρχεία στον φάκελο μπορούν να προβληθούν "
+"μόνο σε πρόγραμμα περιήγησης ιστού, αλλά δεν μπορούν να ληφθούν. Αυτό είναι "
+"χρήσιμο για την κοινή χρήση εμπιστευτικών δεδομένων."
 
 #: templates/help/sharing_files_and_folders.html:23
 msgid ""
@@ -1624,16 +2199,24 @@ msgid ""
 "file can be edited in web browser (e.g. an Office file), any user who has "
 "access to the link is allowed to edit it."
 msgstr ""
+"Επεξεργασία στο cloud και λήψη: Παρόμοια με την \"Προεπισκόπηση και λήψη\", "
+"αλλά εάν το αρχείο μπορεί να επεξεργαστεί σε πρόγραμμα περιήγησης ιστού "
+"(π.χ. αρχείο Office), οποιοσδήποτε χρήστης έχει πρόσβαση στον σύνδεσμο "
+"επιτρέπεται να το επεξεργαστεί."
 
 #: templates/help/sharing_files_and_folders.html:25
 msgid "To create a share link in Seafile web app:"
 msgstr ""
+"Για να δημιουργήσετε έναν σύνδεσμο κοινής χρήσης στην εφαρμογή web Seafile:"
 
 #: templates/help/sharing_files_and_folders.html:27
 msgid ""
 "Navigate into the parent folder containing the file or folder. Hover your "
 "mouse over the file or folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Μεταβείτε στον γονικό φάκελο που περιέχει το αρχείο ή το φάκελο. Τοποθετήστε"
+" το ποντίκι σας πάνω από το αρχείο ή το φάκελο και κάντε κλικ στο εικονίδιο "
+"\"Κοινή χρήση\" που εμφανίζεται."
 
 #: templates/help/sharing_files_and_folders.html:28
 msgid ""
@@ -1641,6 +2224,11 @@ msgid ""
 " on the left panel. Then click \"Generate\" button to create a link. You can"
 " use password, expiration time and permission to protect your link."
 msgstr ""
+"Θα εμφανιστεί ένα αναδυόμενο παράθυρο με επιλογές κοινής χρήσης. Κάντε κλικ "
+"στην καρτέλα \"Σύνδεσμος κοινής χρήσης\" στο αριστερό πλαίσιο. Στη συνέχεια,"
+" κάντε κλικ στο κουμπί \"Δημιουργία\" για να δημιουργήσετε έναν σύνδεσμο. "
+"Μπορείτε να χρησιμοποιήσετε κωδικό πρόσβασης, χρόνο λήξης και άδεια για να "
+"προστατεύσετε τον σύνδεσμό σας."
 
 #: templates/help/sharing_files_and_folders.html:29
 #: templates/help/sharing_files_and_folders.html:42
@@ -1648,10 +2236,14 @@ msgid ""
 "Copy the link to email, instant messaging client or any other tool to send "
 "it to others."
 msgstr ""
+"Αντιγράψτε τον σύνδεσμο σε email, πρόγραμμα ανταλλαγής άμεσων μηνυμάτων ή "
+"οποιοδήποτε άλλο εργαλείο για να τον στείλετε σε άλλους."
 
 #: templates/help/sharing_files_and_folders.html:31
 msgid "You can also create share links from the desktop clients."
 msgstr ""
+"Μπορείτε επίσης να δημιουργήσετε συνδέσμους κοινής χρήσης από τους πελάτες "
+"επιφάνειας εργασίας."
 
 #: templates/help/sharing_files_and_folders.html:33
 msgid ""
@@ -1660,6 +2252,11 @@ msgid ""
 " on the file or folder that you want to create a link to. In the pop-up "
 "menu, choose \"Seafile\" then \"Create share link\"."
 msgstr ""
+"Εάν η βιβλιοθήκη είναι συγχρονισμένη, κάντε διπλό κλικ στη βιβλιοθήκη στο "
+"κύριο παράθυρο του πελάτη Seafile. Θα ανοίξει ο τοπικός φάκελος αυτής της "
+"βιβλιοθήκης. Κάντε δεξί κλικ στο αρχείο ή το φάκελο για τον οποίο θέλετε να "
+"δημιουργήσετε έναν σύνδεσμο. Στο αναδυόμενο μενού, επιλέξτε \"Seafile\" και "
+"μετά \"Δημιουργία συνδέσμου κοινής χρήσης\"."
 
 #: templates/help/sharing_files_and_folders.html:34
 msgid ""
@@ -1667,10 +2264,14 @@ msgid ""
 " Seafile client. The cloud file browser window will be opened, and you can "
 "create a link to a file or folder in it."
 msgstr ""
+"Εάν η βιβλιοθήκη δεν είναι συγχρονισμένη, κάντε διπλό κλικ στη βιβλιοθήκη "
+"στο κύριο παράθυρο του πελάτη Seafile. Θα ανοίξει το παράθυρο του "
+"προγράμματος περιήγησης αρχείων cloud και μπορείτε να δημιουργήσετε έναν "
+"σύνδεσμο προς ένα αρχείο ή φάκελο σε αυτό."
 
 #: templates/help/sharing_files_and_folders.html:36
 msgid "Creating upload links to folders"
-msgstr ""
+msgstr "Δημιουργία συνδέσμων μεταφόρτωσης σε φακέλους"
 
 #: templates/help/sharing_files_and_folders.html:37
 msgid ""
@@ -1678,16 +2279,24 @@ msgid ""
 "upload links for folders. Others cannot see the files in the folders. They "
 "can only upload files to them."
 msgstr ""
+"Μπορείτε να χρησιμοποιήσετε συνδέσμους μεταφόρτωσης για να συλλέξετε αρχεία "
+"από άλλους. Μπορείτε να δημιουργήσετε συνδέσμους μεταφόρτωσης μόνο για "
+"φακέλους. Άλλοι δεν μπορούν να δουν τα αρχεία στους φακέλους. Μπορούν μόνο "
+"να ανεβάσουν αρχεία σε αυτούς."
 
 #: templates/help/sharing_files_and_folders.html:38
 msgid "To create an upload link in Seafile web app:"
 msgstr ""
+"Για να δημιουργήσετε έναν σύνδεσμο μεταφόρτωσης στην εφαρμογή web Seafile:"
 
 #: templates/help/sharing_files_and_folders.html:40
 msgid ""
 "Navigate into the parent folder containing the folder. Hover your mouse over"
 " the folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Μεταβείτε στον γονικό φάκελο που περιέχει το φάκελο. Τοποθετήστε το ποντίκι "
+"σας πάνω από το φάκελο και κάντε κλικ στο εικονίδιο \"Κοινή χρήση\" που "
+"εμφανίζεται."
 
 #: templates/help/sharing_files_and_folders.html:41
 msgid ""
@@ -1695,10 +2304,15 @@ msgid ""
 "tab on the left panel. Then click \"Generate\" button to create a link. You "
 "can use password to protect your link."
 msgstr ""
+"Θα εμφανιστεί ένα αναδυόμενο παράθυρο με επιλογές κοινής χρήσης. Κάντε κλικ "
+"στην καρτέλα \"Σύνδεσμος μεταφόρτωσης\" στο αριστερό πλαίσιο. Στη συνέχεια, "
+"κάντε κλικ στο κουμπί \"Δημιουργία\" για να δημιουργήσετε έναν σύνδεσμο. "
+"Μπορείτε να χρησιμοποιήσετε κωδικό πρόσβασης για να προστατεύσετε τον "
+"σύνδεσμό σας."
 
 #: templates/help/sharing_files_and_folders.html:44
 msgid "Sharing libraries or folders"
-msgstr ""
+msgstr "Κοινή χρήση βιβλιοθηκών ή φακέλων"
 
 #: templates/help/sharing_files_and_folders.html:45
 msgid ""
@@ -1706,62 +2320,85 @@ msgid ""
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
 msgstr ""
+"Μπορείτε να μοιραστείτε μια βιβλιοθήκη ή έναν φάκελο με άλλους "
+"εγγεγραμμένους χρήστες του Seafile. Η κοινόχρηστη βιβλιοθήκη ή ο φάκελος "
+"είναι προσβάσιμος από άλλους με την εφαρμογή web και τους πελάτες Seafile."
 
 #: templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
-msgstr ""
+msgstr "Μπορείτε να επιλέξετε το εύρος της κοινής χρήσης:"
 
 #: templates/help/sharing_files_and_folders.html:48
 msgid "Share to user: You can share to one or more users."
 msgstr ""
+"Κοινή χρήση σε χρήστη: Μπορείτε να μοιραστείτε σε έναν ή περισσότερους "
+"χρήστες."
 
 #: templates/help/sharing_files_and_folders.html:49
 msgid "Share to group: You can share to a group."
-msgstr ""
+msgstr "Κοινή χρήση σε ομάδα: Μπορείτε να μοιραστείτε σε μια ομάδα."
 
 #: templates/help/sharing_files_and_folders.html:50
 msgid ""
 "Share to organization: If you're using a private server, sometimes it's "
 "useful to share to all members on the server (the entire organization)."
 msgstr ""
+"Κοινή χρήση στον οργανισμό: Εάν χρησιμοποιείτε ιδιωτικό διακομιστή, μερικές "
+"φορές είναι χρήσιμο να μοιράζεστε με όλα τα μέλη του διακομιστή (ολόκληρο "
+"τον οργανισμό)."
 
 #: templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
-msgstr ""
+msgstr "Μπορείτε επίσης να ορίσετε άδεια για την κοινή χρήση:"
 
 #: templates/help/sharing_files_and_folders.html:54
 msgid "Read-Write: users can read, write, upload, download and sync files."
 msgstr ""
+"Ανάγνωση-Εγγραφή: οι χρήστες μπορούν να διαβάζουν, να γράφουν, να ανεβάζουν,"
+" να κατεβάζουν και να συγχρονίζουν αρχεία."
 
 #: templates/help/sharing_files_and_folders.html:55
 msgid "Read-only: users can read, download and sync files."
 msgstr ""
+"Μόνο για ανάγνωση: οι χρήστες μπορούν να διαβάζουν, να κατεβάζουν και να "
+"συγχρονίζουν αρχεία."
 
 #: templates/help/sharing_files_and_folders.html:56
 msgid "Admin: besides the write permission, users can also share the library."
 msgstr ""
+"Διαχειριστής: εκτός από την άδεια εγγραφής, οι χρήστες μπορούν επίσης να "
+"μοιράζονται τη βιβλιοθήκη."
 
 #: templates/help/sharing_files_and_folders.html:57
 msgid ""
 "Online Read-Write: users can view and edit files online via a web browser. "
 "The files cannot be downloaded."
 msgstr ""
+"Online Ανάγνωση-Εγγραφή: οι χρήστες μπορούν να προβάλλουν και να "
+"επεξεργάζονται αρχεία online μέσω προγράμματος περιήγησης ιστού. Δεν είναι "
+"δυνατή η λήψη των αρχείων."
 
 #: templates/help/sharing_files_and_folders.html:58
 msgid ""
 "Online Read-only: users can only view files online via a web browser. The "
 "files cannot be downloaded."
 msgstr ""
+"Online Μόνο για ανάγνωση: οι χρήστες μπορούν να προβάλλουν αρχεία μόνο "
+"online μέσω προγράμματος περιήγησης ιστού. Δεν είναι δυνατή η λήψη των "
+"αρχείων."
 
 #: templates/help/sharing_files_and_folders.html:60
 msgid "To share a library or folder to a user or group:"
 msgstr ""
+"Για να μοιραστείτε μια βιβλιοθήκη ή έναν φάκελο με έναν χρήστη ή μια ομάδα:"
 
 #: templates/help/sharing_files_and_folders.html:62
 msgid ""
 "Hover your mouse over the library or folder and click on the \"Share\" icon "
 "that appears."
 msgstr ""
+"Τοποθετήστε το ποντίκι σας πάνω από τη βιβλιοθήκη ή το φάκελο και κάντε κλικ"
+" στο εικονίδιο \"Κοινή χρήση\" που εμφανίζεται."
 
 #: templates/help/sharing_files_and_folders.html:63
 msgid ""
@@ -1769,6 +2406,10 @@ msgid ""
 "or \"Share to group\" tab on the left panel. Select the user or group. Then "
 "click \"Submit\"."
 msgstr ""
+"Θα εμφανιστεί ένα αναδυόμενο παράθυρο με επιλογές κοινής χρήσης. Κάντε κλικ "
+"στην καρτέλα \"Κοινή χρήση σε χρήστη\" ή \"Κοινή χρήση σε ομάδα\" στο "
+"αριστερό πλαίσιο. Επιλέξτε το χρήστη ή την ομάδα. Στη συνέχεια κάντε κλικ "
+"στο \"Υποβολή\"."
 
 #: templates/help/sharing_files_and_folders.html:65
 msgid ""
@@ -1777,6 +2418,10 @@ msgid ""
 " you share it to a group, the group members can only see it by navigating "
 "into the group."
 msgstr ""
+"Αφού μοιραστείτε μια βιβλιοθήκη ή έναν φάκελο με έναν χρήστη, ο χρήστης "
+"μπορεί να τον δει κάνοντας κλικ στην καρτέλα \"Κοινόχρηστα με εμένα\" στο "
+"αριστερό πλαίσιο στην εφαρμογή web Seafile. Εάν το μοιραστείτε σε μια ομάδα,"
+" τα μέλη της ομάδας μπορούν να το δουν μόνο πλοηγώντας στην ομάδα."
 
 #: templates/help/sharing_files_and_folders.html:66
 msgid ""
@@ -1785,10 +2430,15 @@ msgid ""
 "button. In the drop-down menu, you can choose to share an existing library "
 "or create a new library and share it."
 msgstr ""
+"Για να μοιραστείτε μια βιβλιοθήκη με ολόκληρο τον οργανισμό: Στην εφαρμογή "
+"web Seafile, κάντε κλικ στην καρτέλα \"Κοινόχρηστα με όλους\" στο αριστερό "
+"πλαίσιο. Στη συνέχεια, κάντε κλικ στο κουμπί \"Προσθήκη βιβλιοθήκης\". Στο "
+"αναπτυσσόμενο μενού, μπορείτε να επιλέξετε να μοιραστείτε μια υπάρχουσα "
+"βιβλιοθήκη ή να δημιουργήσετε μια νέα βιβλιοθήκη και να τη μοιραστείτε."
 
 #: templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
-msgstr ""
+msgstr "Εσωτερικοί σύνδεσμοι"
 
 #: templates/help/sharing_files_and_folders.html:68
 msgid ""
@@ -1798,6 +2448,12 @@ msgid ""
 "library. You may just copy the link and paste it into an email or IM "
 "software."
 msgstr ""
+"Μόνο οι συνδεδεμένοι χρήστες που έχουν άδεια ανάγνωσης στο αρχείο ή στο "
+"φάκελο μπορούν να έχουν πρόσβαση σε αυτόν τον σύνδεσμο. Χρησιμοποιείται για "
+"εσωτερική κοινή χρήση αρχείων. Είναι ένας βολικός τρόπος για την κοινή χρήση"
+" αρχείων μεταξύ μελών της ομάδας που έχουν πρόσβαση σε μια κοινή βιβλιοθήκη."
+" Μπορείτε απλώς να αντιγράψετε τον σύνδεσμο και να τον επικολλήσετε σε ένα "
+"email ή λογισμικό IM."
 
 #: templates/help/sync_interval.html:8
 msgid ""
@@ -1808,10 +2464,17 @@ msgid ""
 "local folder. You can set the interval of this periodic sync. The interval "
 "is set in the unit of seconds."
 msgstr ""
+"Συνήθως ο πελάτης Seafile ανιχνεύει αυτόματα τις αλλαγές στον τοπικό φάκελο "
+"και ανεβάζει τις αλλαγές στον διακομιστή. Ωστόσο, εάν ο τοπικός φάκελος "
+"βρίσκεται σε μονάδα κοινής χρήσης δικτύου των Windows, ο πελάτης Seafile δεν"
+" μπορεί να ανιχνεύσει αξιόπιστα τις αλλαγές. Σε αυτήν την περίπτωση, "
+"μπορείτε να ζητήσετε από τον πελάτη Seafile να ελέγχει περιοδικά για αλλαγές"
+" στον τοπικό φάκελο. Μπορείτε να ορίσετε το διάστημα αυτού του περιοδικού "
+"συγχρονισμού. Το διάστημα ορίζεται σε μονάδα δευτερολέπτων."
 
 #: templates/help/syncing_existing_folders.html:6
 msgid "Syncing with an existing folder"
-msgstr ""
+msgstr "Συγχρονισμός με υπάρχοντα φάκελο"
 
 #: templates/help/syncing_existing_folders.html:8
 #, python-format
@@ -1825,24 +2488,41 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/conflicts/\">conflict files</a> if file contents "
 "are different in the local folder and the library. "
 msgstr ""
+"Μερικές φορές έχετε ήδη μια βιβλιοθήκη στον διακομιστή Seafile (που "
+"μοιράζεται από άλλους ή μεταφορτώνεται από άλλο υπολογιστή). Μπορείτε να "
+"συγχρονίσετε αυτήν τη βιβλιοθήκη με έναν υπάρχοντα φάκελο στον υπολογιστή "
+"σας. Ο τοπικός φάκελος πρέπει να έχει το ίδιο όνομα με τη βιβλιοθήκη. Τα "
+"αρχεία στον τοπικό φάκελο θα συγχωνευθούν με τα αρχεία στη βιβλιοθήκη. "
+"Κανένα αρχείο στον τοπικό φάκελο ή στη βιβλιοθήκη δεν θα αντικατασταθεί ή θα"
+" χαθεί. Η συγχώνευση θα δημιουργήσει ορισμένα <a "
+"href=\"%(SITE_ROOT)shelp/conflicts/\">αρχεία σύγκρουσης</a> εάν το "
+"περιεχόμενο των αρχείων είναι διαφορετικό στον τοπικό φάκελο και στη "
+"βιβλιοθήκη."
 
 #: templates/help/syncing_existing_folders.html:10
 msgid ""
 "To sync a library with an existing folder, right click on the library in "
 "Seafile client's main window and click \"Sync this library\"."
 msgstr ""
+"Για να συγχρονίσετε μια βιβλιοθήκη με έναν υπάρχοντα φάκελο, κάντε δεξί κλικ"
+" στη βιβλιοθήκη στο κύριο παράθυρο του πελάτη Seafile και κάντε κλικ στο "
+"\"Συγχρονισμός αυτής της βιβλιοθήκης\"."
 
 #: templates/help/syncing_existing_folders.html:14
 msgid "In the pop-up dialog, click the \"Sync with an existing folder\" link."
 msgstr ""
+"Στο αναδυόμενο παράθυρο διαλόγου, κάντε κλικ στον σύνδεσμο \"Συγχρονισμός με"
+" υπάρχοντα φάκελο\"."
 
 #: templates/help/syncing_existing_folders.html:18
 msgid "Then choose an existing folder to sync with this library."
 msgstr ""
+"Στη συνέχεια, επιλέξτε έναν υπάρχοντα φάκελο για συγχρονισμό με αυτήν τη "
+"βιβλιοθήκη."
 
 #: templates/help/unsync_resync.html:6
 msgid "Unsync and resync library"
-msgstr ""
+msgstr "Αποσυγχρονισμός και εκ νέου συγχρονισμός βιβλιοθήκης"
 
 #: templates/help/unsync_resync.html:8
 #, python-format
@@ -1854,6 +2534,13 @@ msgid ""
 "<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
 "folder</a> feature."
 msgstr ""
+"Όταν δεν θέλετε πλέον να συγχρονίζετε έναν τοπικό φάκελο με μια βιβλιοθήκη, "
+"μπορείτε να τον αποσυγχρονίσετε. Αφού αποσυγχρονίσετε μια βιβλιοθήκη, οι "
+"αλλαγές στον τοπικό φάκελο και τα αρχεία δεν θα μεταφορτωθούν και οι αλλαγές"
+" στη βιβλιοθήκη δεν θα ληφθούν. Εάν θέλετε να συγχρονίσετε ξανά τη "
+"βιβλιοθήκη με τον τοπικό φάκελο, μπορείτε να χρησιμοποιήσετε τη δυνατότητα "
+"<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">συγχρονισμός με "
+"υπάρχοντα φάκελο</a>."
 
 #: templates/help/unsync_resync.html:10
 msgid ""
@@ -1862,6 +2549,12 @@ msgid ""
 "unsync and then immediately sync the library with the same folder. You can "
 "find this action in the pop-up menu of the client's main window."
 msgstr ""
+"Μερικές φορές υπάρχουν εσωτερικά σφάλματα στον πελάτη που εμποδίζουν τον "
+"συγχρονισμό. Σε αυτές τις περιπτώσεις, είναι συνήθως χρήσιμο να "
+"\"συγχρονίσετε εκ νέου\" τη βιβλιοθήκη. Ο επανασυγχρονισμός σημαίνει "
+"αποσυγχρονισμός και στη συνέχεια άμεσος συγχρονισμός της βιβλιοθήκης με τον "
+"ίδιο φάκελο. Μπορείτε να βρείτε αυτήν την ενέργεια στο αναδυόμενο μενού του "
+"κύριου παραθύρου του πελάτη."
 
 #: templates/help/using_drive_client.html:7
 msgid ""
@@ -1869,16 +2562,22 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
 "start it by double clicking the \"SeaDrive\" app icon on your desktop."
 msgstr ""
+"Μετά την εγκατάσταση ενός drive client με τις οδηγίες στη <a "
+"href=\"https://www.seafile.com/en/download/\">σελίδα λήψης</a>, μπορείτε να "
+"τον ξεκινήσετε κάνοντας διπλό κλικ στο εικονίδιο της εφαρμογής \"SeaDrive\" "
+"στην επιφάνεια εργασίας σας."
 
 #: templates/help/using_drive_client.html:8
 msgid ""
 "You'll be asked to choose a drive letter for the virtual drive. By default, "
 "\"S:\" will be used."
 msgstr ""
+"Θα σας ζητηθεί να επιλέξετε ένα γράμμα μονάδας δίσκου για τον εικονικό "
+"δίσκο. Από προεπιλογή, θα χρησιμοποιηθεί το \"S:\"."
 
 #: templates/help/using_drive_client.html:9
 msgid "Then you'll be asked to log into your Seafile server."
-msgstr ""
+msgstr "Στη συνέχεια, θα σας ζητηθεί να συνδεθείτε στον διακομιστή Seafile."
 
 #: templates/help/using_drive_client.html:12
 msgid ""
@@ -1887,6 +2586,11 @@ msgid ""
 "at this moment. So it'll not take very long. You can let it run in the "
 "background. You'll be noticed when the fetch is done."
 msgstr ""
+"Μετά την επιτυχή σύνδεση στον διακομιστή, ο πελάτης Drive αρχίζει να ανακτά "
+"τη βιβλιοθήκη και τη λίστα αρχείων από τον διακομιστή. Τα περιεχόμενα των "
+"αρχείων δεν λαμβάνονται αυτή τη στιγμή. Έτσι δεν θα πάρει πολύ χρόνο. "
+"Μπορείτε να τον αφήσετε να τρέχει στο παρασκήνιο. Θα ειδοποιηθείτε όταν "
+"ολοκληρωθεί η ανάκτηση."
 
 #: templates/help/using_drive_client.html:14
 msgid ""
@@ -1896,21 +2600,31 @@ msgid ""
 "when you open a file. Recently opened file will be cached in your local "
 "disk. All cached files will be marked with a green tick."
 msgstr ""
+"Θα ανοίξει ο φάκελος του εικονικού δίσκου. Θα διαπιστώσετε ότι λειτουργεί "
+"ακριβώς όπως ένας συνηθισμένος σκληρός δίσκος στον υπολογιστή σας. Οι "
+"φάκελοι ανώτατου επιπέδου στον εικονικό δίσκο είναι βιβλιοθήκες στον "
+"διακομιστή Seafile. Το περιεχόμενο των αρχείων θα ληφθεί όταν ανοίγετε ένα "
+"αρχείο. Το αρχείο που ανοίχτηκε πρόσφατα θα αποθηκευτεί τοπικά στον δίσκο "
+"σας. Όλα τα αποθηκευμένα αρχεία θα επισημαίνονται με ένα πράσινο σημάδι "
+"ελέγχου."
 
 #: templates/help/using_drive_client.html:17
 msgid "Synced State"
-msgstr ""
+msgstr "Κατάσταση συγχρονισμού"
 
 #: templates/help/using_drive_client.html:18
 msgid ""
 "Files and folders in the virtual drive are in either cloud-only, synced, or "
 "in partially synced state."
 msgstr ""
+"Τα αρχεία και οι φάκελοι στον εικονικό δίσκο βρίσκονται είτε σε κατάσταση "
+"μόνο στο cloud, είτε σε συγχρονισμένη κατάσταση είτε σε μερικώς "
+"συγχρονισμένη κατάσταση."
 
 #: templates/help/using_drive_client.html:22
 #: templates/help/using_drive_client.html:51
 msgid "State"
-msgstr ""
+msgstr "Κατάσταση"
 
 #: templates/help/using_drive_client.html:23
 #: templates/help/using_drive_client.html:52
@@ -1924,7 +2638,7 @@ msgstr "Λεπτομέρειες"
 
 #: templates/help/using_drive_client.html:29
 msgid "Cloud-only content"
-msgstr ""
+msgstr "Περιεχόμενο μόνο στο cloud"
 
 #: templates/help/using_drive_client.html:31
 msgid ""
@@ -1934,71 +2648,96 @@ msgid ""
 "downloaded is only information about the file, such as its name, its size "
 "and the date it was updated."
 msgstr ""
+"Το περιεχόμενο μόνο στο cloud εμφανίζεται στον εικονικό δίσκο, αλλά δεν "
+"χρησιμοποιεί το πλήρες μέγεθος του χώρου που θα χρησιμοποιούσε το αρχείο. "
+"Στην εξερεύνηση αρχείων σας, μπορείτε να δείτε το αρχείο, αλλά το "
+"περιεχόμενο δεν λαμβάνεται πλήρως μέχρι να το χρειαστείτε. Αυτό που "
+"κατεβαίνει είναι μόνο πληροφορίες για το αρχείο, όπως το όνομά του, το "
+"μέγεθός του και η ημερομηνία ενημέρωσης του."
 
 #: templates/help/using_drive_client.html:34
 msgid "Synced content"
-msgstr ""
+msgstr "Συγχρονισμένο περιεχόμενο"
 
 #: templates/help/using_drive_client.html:36
 msgid ""
 "Synced content is downloaded and saved on the hard drive of your computer. "
 "You can directly edit these files from applications on your computer."
 msgstr ""
+"Το συγχρονισμένο περιεχόμενο λαμβάνεται και αποθηκεύεται στον σκληρό δίσκο "
+"του υπολογιστή σας. Μπορείτε να επεξεργαστείτε απευθείας αυτά τα αρχεία από "
+"εφαρμογές στον υπολογιστή σας."
 
 #: templates/help/using_drive_client.html:39
 msgid "Partially synced content"
-msgstr ""
+msgstr "Μερικώς συγχρονισμένο περιεχόμενο"
 
 #: templates/help/using_drive_client.html:41
 msgid ""
 "Partially synced folders contain both synced and cloud-only files or "
 "folders."
 msgstr ""
+"Οι μερικώς συγχρονισμένοι φάκελοι περιέχουν τόσο συγχρονισμένα αρχεία όσο "
+"και αρχεία ή φακέλους μόνο στο cloud."
 
 #: templates/help/using_drive_client.html:46
 msgid "Special States"
-msgstr ""
+msgstr "Ειδικές Καταστάσεις"
 
 #: templates/help/using_drive_client.html:47
 msgid ""
 "For files that are already synced to local computer, they may be in 3 other "
 "special states, besides the normal \"synced\" state. "
 msgstr ""
+"Για αρχεία που είναι ήδη συγχρονισμένα στον τοπικό υπολογιστή, ενδέχεται να "
+"βρίσκονται σε 3 άλλες ειδικές καταστάσεις, εκτός από την κανονική κατάσταση "
+"\"συγχρονισμένο\"."
 
 #: templates/help/using_drive_client.html:58
 msgid "Locked by other user"
-msgstr ""
+msgstr "Κλειδωμένο από άλλο χρήστη"
 
 #: templates/help/using_drive_client.html:60
 msgid ""
 "The file is locked by other user on the server. You can only open the file "
 "in read-only mode. You cannot modify, delete, rename or move the file."
 msgstr ""
+"Το αρχείο είναι κλειδωμένο από άλλο χρήστη στον διακομιστή. Μπορείτε να "
+"ανοίξετε το αρχείο μόνο σε λειτουργία ανάγνωσης. Δεν μπορείτε να "
+"τροποποιήσετε, να διαγράψετε, να μετονομάσετε ή να μετακινήσετε το αρχείο."
 
 #: templates/help/using_drive_client.html:63
 msgid "Locked by me"
-msgstr ""
+msgstr "Κλειδωμένο από εμένα"
 
 #: templates/help/using_drive_client.html:65
 msgid ""
 "The file is locked by you. This prevents others from modifying the file."
 msgstr ""
+"Το αρχείο είναι κλειδωμένο από εσάς. Αυτό εμποδίζει άλλους να τροποποιήσουν "
+"το αρχείο."
 
 #: templates/help/using_drive_client.html:68
 msgid "Read-only"
-msgstr ""
+msgstr "Μόνο για ανάγνωση"
 
 #: templates/help/using_drive_client.html:70
 msgid ""
 "The folder or library of this file is shared with read-only permission to "
 "you. You cannot modify, delete or move the file."
 msgstr ""
+"Ο φάκελος ή η βιβλιοθήκη αυτού του αρχείου μοιράζεται με άδεια μόνο για "
+"ανάγνωση σε εσάς. Δεν μπορείτε να τροποποιήσετε, να διαγράψετε ή να "
+"μετακινήσετε το αρχείο."
 
 #: templates/help/using_drive_client.html:74
 msgid ""
 "The Drive client regularly cleans up unused cached files in the background. "
 "You can also limit the local cache space."
 msgstr ""
+"Ο πελάτης Drive καθαρίζει τακτικά τα αχρησιμοποίητα αρχεία προσωρινής μνήμης"
+" στο παρασκήνιο. Μπορείτε επίσης να περιορίσετε τον τοπικό χώρο προσωρινής "
+"μνήμης."
 
 #: templates/help/using_drive_client.html:76
 msgid ""
@@ -2006,10 +2745,15 @@ msgid ""
 "on the current selected server will be shown in the virtual drive. You can "
 "switch among accounts."
 msgstr ""
+"Μπορείτε να συνδεθείτε σε πολλούς λογαριασμούς στον πελάτη Drive. Ωστόσο, "
+"μόνο αρχεία στον τρέχοντα επιλεγμένο διακομιστή θα εμφανίζονται στον "
+"εικονικό δίσκο. Μπορείτε να κάνετε εναλλαγή μεταξύ λογαριασμών."
 
 #: templates/help/using_drive_client.html:80
 msgid "1. Why can't I create new files or delete folders in root folder?"
 msgstr ""
+"1. Γιατί δεν μπορώ να δημιουργήσω νέα αρχεία ή να διαγράψω φακέλους στον "
+"ριζικό φάκελο;"
 
 #: templates/help/using_drive_client.html:81
 msgid ""
@@ -2020,6 +2764,14 @@ msgid ""
 "represents libraries, we don't want users to delete their libraries by "
 "mistake. So the Drive client doesn't support deleting top level folders."
 msgstr ""
+"Ο ριζικός φάκελος του εικονικού δίσκου περιέχει μόνο φακέλους βιβλιοθήκης. "
+"Το Seafile μπορεί να συγχρονίσει μόνο αρχεία μέσα σε βιβλιοθήκες. Τα αρχεία "
+"στον ριζικό φάκελο δεν μπορούν να μεταφορτωθούν στον διακομιστή Seafile. "
+"Επομένως, δεν έχει νόημα να υποστηρίζεται η δημιουργία αρχείων στον ριζικό "
+"φάκελο. Εφόσον οι φάκελοι ανώτατου επιπέδου στον εικονικό δίσκο "
+"αντιπροσωπεύουν βιβλιοθήκες, δεν θέλουμε οι χρήστες να διαγράφουν τις "
+"βιβλιοθήκες τους κατά λάθος. Επομένως, ο πελάτης Drive δεν υποστηρίζει τη "
+"διαγραφή φακέλων ανώτατου επιπέδου."
 
 #: templates/help/viewing_files_within_web_app.html:6
 msgid ""

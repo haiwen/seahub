@@ -488,7 +488,7 @@ msgstr ""
 
 #: templates/help/drive_client_2.0_for_windows_10.html:6
 msgid "SeaDrive 2.0 for Windows 10"
-msgstr ""
+msgstr "SeaDrive 2.0 dla systemu Windows 10"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:8
 msgid ""
@@ -497,10 +497,15 @@ msgid ""
 "Update for Windows 10) and later versions. We recommend Windows 10 users to "
 "upgrade to SeaDrive 2.0 for more native virtual drive experience."
 msgstr ""
+"SeaDrive 2.0 (i przyszłe wersje) zostały przeprojektowane z głębszą "
+"integracją z systemem operacyjnym Windows 10. Obsługuje wersję 1709 systemu "
+"Windows 10 (2017 Fall Update dla systemu Windows 10) i nowsze wersje. "
+"Zalecamy użytkownikom systemu Windows 10 uaktualnienie do wersji SeaDrive "
+"2.0, aby uzyskać bardziej natywne doświadczenie z dyskiem wirtualnym."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:10
 msgid "Install and access the Virtual Drive"
-msgstr ""
+msgstr "Instalacja i dostęp do dysku wirtualnego"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:11
 msgid ""
@@ -511,40 +516,58 @@ msgid ""
 " your seafile account. The download is progressive, so in the mean time you "
 "can already access some files in the virtual drive."
 msgstr ""
+"Możesz pobrać SeaDrive 2.0 z oficjalnej strony Seafile. Po instalacji i "
+"zalogowaniu się do konta Seafile SeaDrive zacznie pobierać biblioteki i "
+"listy plików z serwera (tak jak w SeaDrive 1.0.x). Może to zająć trochę "
+"czasu, w zależności od liczby plików dostępnych na koncie Seafile. "
+"Pobieranie jest progresywne, więc w międzyczasie możesz już uzyskać dostęp "
+"do niektórych plików na dysku wirtualnym."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:12
 msgid ""
 "To access the virtual drive, just open Windows file explorer. There is a "
 "\"seadrive\" node in the navigation pane of Windows file explorer."
 msgstr ""
+"Aby uzyskać dostęp do dysku wirtualnego, po prostu otwórz Eksplorator plików"
+" systemu Windows. W okienku nawigacji Eksploratora plików systemu Windows "
+"znajduje się węzeł \"seadrive\"."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:16
 msgid "Accessing files in the Virtual Drive"
-msgstr ""
+msgstr "Dostęp do plików na dysku wirtualnym"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:17
 msgid ""
 "Libraries are grouped into 4 categories in the virtual drive: My Libraries, "
 "Shared with me, Shared with groups and Shared with all."
 msgstr ""
+"Biblioteki są podzielone na 4 kategorie na dysku wirtualnym: Moje "
+"biblioteki, Udostępnione ze mną, Udostępnione z grupami i Udostępnione ze "
+"wszystkimi."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:18
 msgid ""
 "As you can see, the file status icons is more integrated into Windows file "
 "explorer. The icons are a bit different form version 1.0."
 msgstr ""
+"Jak widać, ikony statusu pliku są bardziej zintegrowane z Eksploratorem "
+"plików systemu Windows. Ikony są nieco inne od wersji 1.0."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:19
 msgid ""
 "Files in the virtual drive are created as \"placeholders\" in the local file"
 " system. They may be in 3 states:"
 msgstr ""
+"Pliki na dysku wirtualnym są tworzone jako \"placeholders\" w lokalnym "
+"systemie plików. Mogą być w trzech stanach:"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:21
 msgid ""
 "<b>Placeholder file</b>: An empty representation of the file and can only be"
 " opened when there is network connection."
 msgstr ""
+"<b>Placeholder file</b>: Pusta reprezentacja pliku i może być otwarta tylko "
+"wtedy, gdy jest połączenie sieciowe."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:22
 msgid ""
@@ -554,12 +577,19 @@ msgid ""
 "connections. The operating system may decide to clear a full file when more "
 "disk space is needed."
 msgstr ""
+"<b>Full file</b>: Plik został pobrany i zapisany lokalnie. Pobieranie jest "
+"automatyczne, gdy po raz pierwszy otwiera się plik zastępcy miejsca. Pliki "
+"te są dostępne za każdym razem, gdy otwierasz SeaDrive niezależnie od "
+"połączeń sieciowych. System operacyjny może zdecydować się wyczyścić pełny "
+"plik, gdy potrzeba więcej miejsca na dysku."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:23
 msgid ""
 "<b>Pinned full file</b>: The file has been downloaded and saved locally. It "
 "is guaranteed to be available offline."
 msgstr ""
+"<b>Pinned full file</b>: Plik został pobrany i zapisany lokalnie. "
+"Zapewniono, że będzie dostępny offline."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:26
 msgid ""
@@ -569,6 +599,11 @@ msgid ""
 "locally; choose \"Free up space\" when you want to clean the cache for a "
 "file or folder."
 msgstr ""
+"Możesz kontrolować, które pliki lub foldery są przechowywane lokalnie. "
+"Możesz to zmienić z menu kontekstowego, gdy klikniesz prawym przyciskiem "
+"myszy plik lub folder. Wybierz opcję \"Zawsze zachować na tym urządzeniu\", "
+"gdy chcesz założyć plik lub folder lokalnie; wybierz \"Uwolnij miejsce\", "
+"gdy chcesz oczyścić pamięć podręczną dla pliku lub folderu."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:28
 msgid ""
@@ -576,10 +611,13 @@ msgid ""
 "updated on the server. In SeaDrive 2.0, full and pinned files are "
 "automatically kept in sync with the server."
 msgstr ""
+"W SeaDrive 1.0 pliki pamięci podręcznej nie są automatycznie aktualizowane, "
+"gdy są aktualizowane na serwerze. W SeaDrive 2.0 pełne i załączone pliki są "
+"automatycznie synchronizowane z serwerem."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:30
 msgid "File Download and Control"
-msgstr ""
+msgstr "Pobieranie plików i kontrola"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:31
 msgid ""
@@ -588,6 +626,10 @@ msgid ""
 "download, there will be a progress bar shown up in file explorer and you may"
 " cancel the download."
 msgstr ""
+"Za każdym razem, gdy otworzysz plik zastępczy, system operacyjny "
+"automatycznie zacznie go pobierać. Jeśli pobranie pliku może zająć trochę "
+"czasu, w przeglądarce plików pojawi się paska postępu i możesz anulować "
+"pobranie."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:32
 msgid ""
@@ -596,15 +638,19 @@ msgid ""
 "operating system about this and you may choose to cancel the download or "
 "disallow the application from automatically downloading files in the future."
 msgstr ""
+"Czasami aplikacja w tle może spróbować pobrać plik na dysku wirtualnym (np. "
+"oprogramowanie antywirusowe). Zostaniesz o tym powiadomiony przez system "
+"operacyjny i możesz zdecydować się anulować pobranie lub uniemożliwić "
+"aplikacji automatyczne pobieranie plików w przyszłości."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:34
 #: templates/help/using_drive_client.html:79
 msgid "FAQ"
-msgstr ""
+msgstr "FAQ"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:35
 msgid "Can I create, delete, rename libraries?"
-msgstr ""
+msgstr "Czy mogę tworzyć, usuwać lub zmieniać nazwę bibliotek?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:36
 msgid ""
@@ -613,10 +659,15 @@ msgid ""
 " rename libraries under the \"My Libraries\" category. Creating, deleting or"
 " renaming libraries in other categories will be ignored."
 msgstr ""
+"Tak. - Tak. Po utworzeniu, usunięciu lub zmianie nazwy folderów biblioteki "
+"na dysku wirtualnym operacja zostanie odzwierciedlana na serwerze. Możesz "
+"tworzyć, usuwać, zmieniać nazwę bibliotek tylko w kategorii \"Moje "
+"biblioteki\". Tworzenie, usuwanie lub zmiana nazwy bibliotek w innych "
+"kategoriach zostanie zignorowane."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:38
 msgid "Can I create files or folders outside of a library folder?"
-msgstr ""
+msgstr "Czy mogę utworzyć pliki lub foldery poza folderem biblioteki?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:39
 msgid ""
@@ -624,10 +675,13 @@ msgid ""
 "synced to the server. A new folder under the \"My Libraries\" folder will be"
 " handled as a new library."
 msgstr ""
+"Tak. Ale pliki utworzone poza folderem biblioteki będą ignorowane i NIE "
+"synchronizowane z serwerem. Nowy folder w folderze \"Moje biblioteki\" "
+"będzie traktowany jako nowa biblioteka."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:41
 msgid "Can I access encrypted libraries?"
-msgstr ""
+msgstr "Czy mogę uzyskać dostęp do zaszyfrowanych bibliotek?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:42
 msgid ""
@@ -637,10 +691,16 @@ msgid ""
 " area and choose \"Show encrypted libraries\". A window will show up and you"
 " can choose to sync or unsync an encrypted library."
 msgstr ""
+"Tak. Domyślnie zaszyfrowane biblioteki nie są synchronizowane i wyświetlane "
+"na dysku wirtualnym. Musisz ręcznie wybrać zaszyfrowane biblioteki do "
+"synchronizacji i wpisać hasło. Wystarczy kliknąć prawym przyciskiem myszy "
+"ikonę SeaDrive w obszarze tacy systemowej i wybrać \"Pokaż zaszyfrowane "
+"biblioteki\". Pojawi się okno, w którym możesz wybrać synchronizację lub "
+"usunchronizację zaszyfrowanej biblioteki."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
-msgstr ""
+msgstr "Czy jest kompatybilny z SeaDrive 1.0?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:45
 msgid ""
@@ -650,10 +710,16 @@ msgid ""
 " be accessible in 2.0 version. You can start SeaDrive 1.0 again to upload "
 "the files to server or copy them out."
 msgstr ""
+"SeaDrive 2.0 będzie używać wszelkich istniejących kont i ich metadanych "
+"(przechowywanych w folderze C:usersusernameseadrive). Ale nie będzie używać "
+"plików pamięci podręcznej z SeaDrive 1.0. Tak więc wszystkie pliki lokalnie "
+"przechowywane w bufie w wersji 1.0 nie będą dostępne w wersji 2.0. Możesz "
+"ponownie uruchomić SeaDrive 1.0, aby przesłać pliki na serwer lub skopiować "
+"je."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:47
 msgid "How do I clean the cache?"
-msgstr ""
+msgstr "Jak oczyścić pamięć podręczną?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:48
 msgid ""
@@ -664,10 +730,19 @@ msgid ""
 "Because placeholders are just normal files created on your local disk, your "
 "cache size is only limited by the available disk space on your computer."
 msgstr ""
+"Możesz ręcznie wybrać, które foldery lub pliki mają być przechowywane "
+"lokalnie. Jeśli zauważysz, że folder zużywa zbyt dużo miejsca, po prostu "
+"wybierz opcję \"Uwolnij miejsce\" w tym folderze, a wszystkie pliki "
+"przechowywane w pamięci podręcznej w tym folderze zostaną oczyszczone. Nie "
+"ma potrzeby ustawiania limitu czasu czyszczenia pamięci podręcznej i "
+"rozmiaru pamięci podręcznej, jak w SeaDrive 1.0. Ponieważ zastawcy miejsca "
+"to tylko normalne pliki utworzone na dysku lokalnym, rozmiar pamięci "
+"podręcznej jest ograniczony tylko dostępną przestrzeń na dysku na "
+"komputerze."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:50
 msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
-msgstr ""
+msgstr "Jak usunąć pozostałe skróty SeaDrive w Eksploratorze Windows?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
@@ -676,12 +751,18 @@ msgid ""
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
 msgstr ""
+"Skrót \"SeaDrive\" w Eksploratorze Windows nie zniknie po zakończeniu "
+"programu SeaDrive lub przełączeniu kont Seafile w SeaDrive. Jest to "
+"zamierzone zachowanie. Nie musisz ich usuwać, jeśli nadal musisz uzyskać "
+"dostęp do konta później."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
 "choose \"Remove account information\" in the prompt dialog."
 msgstr ""
+"Zazwyczaj można usunąć te skróty, odinstalując program SeaDrive i wybierając"
+" \"Usuń informacje o koncie\" w oknie dialogowym."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -692,6 +773,11 @@ msgid ""
 " in registry editor. Remove the sub-keys correspond to the shortcut you want"
 " to remove."
 msgstr ""
+"Jeśli odinstalacja nie usunie skrótów z powodzeniem, można usunąć skrót "
+"SeaDrive w Eksploratorze systemu Windows, edytując rejestr. Otwórz ścieżkę "
+"\"HKCUSoftwareMicrosoftWindowsCurrentVersionExplorerDesktopNameSpace\" w "
+"edytorze rejestru. Usuń podklawisze odpowiadają skrótowi, który chcesz "
+"usunąć."
 
 #: templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
@@ -720,6 +806,9 @@ msgid ""
 "the server. The server uses this password to create the library. But it "
 "doesn't store the plain text password."
 msgstr ""
+"Jeśli utworzysz zaszyfrowaną bibliotekę w aplikacji internetowej, hasło "
+"zostanie wysłane na serwer. Serwer używa tego hasła do tworzenia biblioteki."
+" Ale nie przechowuje hasła zwykłego tekstu."
 
 #: templates/help/encrypted_libraries.html:13
 #, python-format
@@ -728,6 +817,9 @@ msgid ""
 "client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
 "the password is not sent to the server."
 msgstr ""
+"Jeśli utworzysz zaszyfrowaną bibliotekę z folderu lokalnego z klientem "
+"pulpitu (zobacz <a href=\"%(SITE_ROOT)shelp/install_sync/\">file "
+"syncing</a>), hasło nie jest wysyłane do serwera."
 
 #: templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
@@ -1086,6 +1178,10 @@ msgid ""
 "Permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions in this library."
 msgstr ""
+"Jeśli chcesz zobaczyć wszystkie uprawnienia do folderów ustawione w "
+"bibliotece, przenieś myszką na bibliotekę. Kliknij przycisk \"więcej "
+"operacji\", wybierz \"Folder permission\" w menu rozwijanym. W wyskakującym "
+"oknie można zobaczyć i ustawić uprawnienia folderów w tej bibliotece."
 
 #: templates/help/folder_permission.html:22
 msgid ""
@@ -1408,7 +1504,7 @@ msgstr ""
 
 #: templates/help/install_sync.html:6
 msgid "Installing Seafile client program"
-msgstr ""
+msgstr "Instalacja programu klienta Seafile"
 
 #: templates/help/install_sync.html:8
 msgid ""
@@ -2195,16 +2291,20 @@ msgid ""
 "Online Read-only: users can only view files online via a web browser. The "
 "files cannot be downloaded."
 msgstr ""
+"Tylko do odczytu online: użytkownicy mogą wyświetlać pliki online tylko za "
+"pośrednictwem przeglądarki internetowej. Plików nie można pobrać."
 
 #: templates/help/sharing_files_and_folders.html:60
 msgid "To share a library or folder to a user or group:"
-msgstr ""
+msgstr "Aby udostępnić bibliotekę lub folder użytkownikowi lub grupie:"
 
 #: templates/help/sharing_files_and_folders.html:62
 msgid ""
 "Hover your mouse over the library or folder and click on the \"Share\" icon "
 "that appears."
 msgstr ""
+"Przesuń myszką myszkę nad biblioteką lub folderem i kliknij wyświetlaną "
+"ikonę \"Udostępnij\"."
 
 #: templates/help/sharing_files_and_folders.html:63
 msgid ""
@@ -2212,6 +2312,9 @@ msgid ""
 "or \"Share to group\" tab on the left panel. Select the user or group. Then "
 "click \"Submit\"."
 msgstr ""
+"Pojawi się wyskakujące okno z opcjami udostępniania. Kliknij zakładkę "
+"\"Udostępnij użytkownikowi\" lub \"Udostępnij grupie\" w lewym panelu. "
+"Wybierz użytkownika lub grupę. Następnie kliknij \"Prześlij\"."
 
 #: templates/help/sharing_files_and_folders.html:65
 msgid ""
@@ -2220,6 +2323,10 @@ msgid ""
 " you share it to a group, the group members can only see it by navigating "
 "into the group."
 msgstr ""
+"Po udostępnieniu biblioteki lub folderu użytkownikowi, użytkownik może go "
+"zobaczyć, klikając kartę \"Udostępnione ze mną\" na lewym panelu w aplikacji"
+" internetowej Seafile. Jeśli udostępniasz go grupie, członkowie grupy mogą "
+"go zobaczyć tylko po przejściu do grupy."
 
 #: templates/help/sharing_files_and_folders.html:66
 msgid ""
@@ -2228,10 +2335,15 @@ msgid ""
 "button. In the drop-down menu, you can choose to share an existing library "
 "or create a new library and share it."
 msgstr ""
+"Aby udostępnić bibliotekę całej organizacji: W aplikacji internetowej "
+"Seafile kliknij zakładkę Udostępnione ze wszystkimi na lewym panelu. "
+"Następnie kliknij przycisk \"Dodaj bibliotekę\". W menu rozwijanym możesz "
+"wybrać udostępnienie istniejącej biblioteki lub utworzenie nowej biblioteki "
+"i udostępnienie jej."
 
 #: templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
-msgstr ""
+msgstr "Linki wewnętrzne"
 
 #: templates/help/sharing_files_and_folders.html:68
 msgid ""
@@ -2241,6 +2353,11 @@ msgid ""
 "library. You may just copy the link and paste it into an email or IM "
 "software."
 msgstr ""
+"Tylko zalogowani użytkownicy, którzy mają uprawnienia do odczytu pliku lub "
+"folderu, mogą uzyskać dostęp do tego linku. Jest to wygodny sposób "
+"udostępniania plików między członkami zespołu, którzy mają dostęp do "
+"wspólnej biblioteki. Możesz po prostu skopiować link i wklejyć go do "
+"wiadomości e-mail lub oprogramowania IM."
 
 #: templates/help/sync_interval.html:8
 msgid ""
@@ -2259,7 +2376,7 @@ msgstr ""
 
 #: templates/help/syncing_existing_folders.html:6
 msgid "Syncing with an existing folder"
-msgstr ""
+msgstr "Synchronizacja z istniejącym folderem"
 
 #: templates/help/syncing_existing_folders.html:8
 #, python-format
@@ -2303,7 +2420,7 @@ msgstr ""
 
 #: templates/help/unsync_resync.html:6
 msgid "Unsync and resync library"
-msgstr ""
+msgstr "Odsynchronizuj i ponownie synchronizuj bibliotekę"
 
 #: templates/help/unsync_resync.html:8
 #, python-format
@@ -2315,6 +2432,13 @@ msgid ""
 "<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
 "folder</a> feature."
 msgstr ""
+"Jeśli nie chcesz już synchronizować folderu lokalnego z biblioteką, możesz "
+"go odsynchronizować. Po odsynchronizowaniu biblioteki zmiany w folderze "
+"lokalnym i plikach nie będą przesyłane, a zmiany w bibliotece nie będą "
+"pobierane. Jeśli chcesz ponownie synchronizować bibliotekę z folderem "
+"lokalnym, możesz użyć <a "
+"href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">existing folder</a> "
+"feature."
 
 #: templates/help/unsync_resync.html:10
 msgid ""
@@ -2335,16 +2459,21 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
 "start it by double clicking the \"SeaDrive\" app icon on your desktop."
 msgstr ""
+"Po zainstalowaniu klienta dysku z instrukcjami na<a "
+"href=\"https://www.seafile.com/en/download/\">download page</a>, Możesz go "
+"uruchomić klikając dwukrotnie ikonę aplikacji \"SeaDrive\" na pulpicie."
 
 #: templates/help/using_drive_client.html:8
 msgid ""
 "You'll be asked to choose a drive letter for the virtual drive. By default, "
 "\"S:\" will be used."
 msgstr ""
+"Zostaniesz poproszony o wybór litery dysku dla dysku wirtualnego. Domyślnie "
+"użyto \"S:\"."
 
 #: templates/help/using_drive_client.html:9
 msgid "Then you'll be asked to log into your Seafile server."
-msgstr ""
+msgstr "Następnie zostaniesz poproszony o zalogowanie się na serwer Seafile."
 
 #: templates/help/using_drive_client.html:12
 msgid ""
@@ -2353,6 +2482,10 @@ msgid ""
 "at this moment. So it'll not take very long. You can let it run in the "
 "background. You'll be noticed when the fetch is done."
 msgstr ""
+"Po pomyślnym zalogowaniu się do serwera klient dysku zaczyna pobierać listę "
+"bibliotek i plików z serwera. Zawartość pliku nie jest w tej chwili "
+"pobierana. Więc to nie potrwa długo. Możesz pozwolić, aby działał w tle. "
+"Zostaniesz zauważony, gdy odbiór zostanie zakończony."
 
 #: templates/help/using_drive_client.html:14
 msgid ""
@@ -2362,21 +2495,29 @@ msgid ""
 "when you open a file. Recently opened file will be cached in your local "
 "disk. All cached files will be marked with a green tick."
 msgstr ""
+"Zostanie otwarty folder wirtualnego dysku. Znajdziesz, że działa jak zwykły "
+"dysk twardy na komputerze. Foldery najwyższego poziomu na dysku wirtualnym "
+"to biblioteki na serwerze Seafile. Zawartość pliku zostanie pobrana po "
+"otwarciu pliku. Niedawno otwarty plik będzie przechowywany w pamięci "
+"podręcznej na lokalnym dysku. Wszystkie pliki przechowywane w pamięci "
+"podręcznej zostaną zaznaczone zieloną zaznaczeniem."
 
 #: templates/help/using_drive_client.html:17
 msgid "Synced State"
-msgstr ""
+msgstr "Synchronizowany stan"
 
 #: templates/help/using_drive_client.html:18
 msgid ""
 "Files and folders in the virtual drive are in either cloud-only, synced, or "
 "in partially synced state."
 msgstr ""
+"Pliki i foldery na dysku wirtualnym znajdują się w stanie tylko w chmurze, "
+"synchronizowanym lub częściowo synchronizowanym."
 
 #: templates/help/using_drive_client.html:22
 #: templates/help/using_drive_client.html:51
 msgid "State"
-msgstr ""
+msgstr "Państwo"
 
 #: templates/help/using_drive_client.html:23
 #: templates/help/using_drive_client.html:52

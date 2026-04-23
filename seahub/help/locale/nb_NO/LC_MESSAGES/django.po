@@ -26,7 +26,7 @@ msgstr ""
 
 #: templates/help/base.html:34
 msgid "Side Nav Menu"
-msgstr ""
+msgstr "Meny for side navigasjon"
 
 #: templates/help/base.html:48 templates/help/base.html:50
 #: templates/help/introduction.html:6
@@ -35,28 +35,28 @@ msgstr "Introduksjon"
 
 #: templates/help/base.html:53
 msgid "Managing files and folders"
-msgstr ""
+msgstr "Hantering av filer og mappper"
 
 #: templates/help/base.html:55 templates/help/libraries_managing.html:5
 msgid "Managing files with libraries"
-msgstr ""
+msgstr "Hantering av filer med bibliotek"
 
 #: templates/help/base.html:56
 msgid "Restoring deleted files"
-msgstr ""
+msgstr "Restorer av slettede filer"
 
 #: templates/help/base.html:57
 msgid "Finding old file versions"
-msgstr ""
+msgstr "Søk etter gamle filversjoner"
 
 #: templates/help/base.html:58
 #: templates/help/library_history_and_snapshots.html:6
 msgid "Library history and snapshots"
-msgstr ""
+msgstr "Bibliotekshistorie og snapskott"
 
 #: templates/help/base.html:59
 msgid "Setting history retention period"
-msgstr ""
+msgstr "Opprett historieperiod"
 
 #: templates/help/base.html:60 templates/help/deleting_a_library.html:5
 msgid "Deleting a library"
@@ -65,51 +65,51 @@ msgstr "Slette et bibliotek"
 #: templates/help/base.html:61
 #: templates/help/viewing_files_within_web_app.html:5
 msgid "Viewing files within Web App"
-msgstr ""
+msgstr "Visning av filer i Web-app"
 
 #: templates/help/base.html:62 templates/help/full_text_file_search.html:5
 msgid "Full text file search"
-msgstr ""
+msgstr "Fulltexttsøk av filer"
 
 #: templates/help/base.html:65
 msgid "Sharing and collaboration"
-msgstr ""
+msgstr "Deling og samarbeid"
 
 #: templates/help/base.html:67 templates/help/sharing_files_and_folders.html:5
 msgid "Sharing files and folders"
-msgstr ""
+msgstr "Deling av filer og mappper"
 
 #: templates/help/base.html:68 templates/help/groups_managing.html:5
 msgid "Managing groups"
-msgstr ""
+msgstr "Hantering av grupper"
 
 #: templates/help/base.html:69
 msgid "Locking files"
-msgstr ""
+msgstr "Låning av filer"
 
 #: templates/help/base.html:70
 msgid "Folder permission"
-msgstr ""
+msgstr "Mappe tillatelse"
 
 #: templates/help/base.html:71
 msgid "Departments sharing"
-msgstr ""
+msgstr "Avdelingsdeling"
 
 #: templates/help/base.html:74
 msgid "Wiki and knowledge management"
-msgstr ""
+msgstr "Wiki og kunnskapshåndtering"
 
 #: templates/help/base.html:76 templates/help/manage_library_as_wiki.html:5
 msgid "Managing a library as Wiki"
-msgstr ""
+msgstr "Hantering av bibliotek som Wiki"
 
 #: templates/help/base.html:79
 msgid "Desktop client and syncing"
-msgstr ""
+msgstr "Desktop-klient og synkronisering"
 
 #: templates/help/base.html:81
 msgid "Install and sync files"
-msgstr ""
+msgstr "Installering og synkronisering av filer"
 
 #: templates/help/base.html:82
 msgid "Syncing existing folders"
@@ -117,11 +117,11 @@ msgstr "Synkroniserer eksiterende mapper"
 
 #: templates/help/base.html:83 templates/help/selective_sync.html:6
 msgid "Selectively sync sub-folders"
-msgstr ""
+msgstr "Valgfri synkronisering av undermappper"
 
 #: templates/help/base.html:84 templates/help/read-only_syncing.html:5
 msgid "Read-only syncing"
-msgstr ""
+msgstr "Kun lesingssynkronisering"
 
 #: templates/help/base.html:85
 msgid "Unsync and resync libraries"
@@ -145,19 +145,19 @@ msgstr "Utelate filer"
 
 #: templates/help/base.html:92
 msgid "Drive client"
-msgstr ""
+msgstr "Drive-klient"
 
 #: templates/help/base.html:94 templates/help/using_drive_client.html:6
 msgid "Using Seafile drive client"
-msgstr ""
+msgstr "Bruk av Seafile Drive-klient"
 
 #: templates/help/base.html:95
 msgid "Using drive client 2.0 on Windows"
-msgstr ""
+msgstr "Bruk av Drive.0 på Windows"
 
 #: templates/help/base.html:98
 msgid "Security and encryption"
-msgstr ""
+msgstr "Sikkerhet og kryptering"
 
 #: templates/help/base.html:100
 msgid "How to use encrypted libraries"
@@ -195,30 +195,36 @@ msgid ""
 "You can delete a library owned by you. A deleted library can be restored by "
 "you or Seafile server's administrator."
 msgstr ""
+"Du kan slette et bibliotek som du eier. Et slettet bibliotek kan restoreres "
+"av deg eller av en administrator av Seafile-serveren."
 
 #: templates/help/deleting_a_library.html:7
 msgid "After a library is deleted, it has following effects:"
-msgstr ""
+msgstr "Et slettet bibliotek har følgende effekter:"
 
 #: templates/help/deleting_a_library.html:9
 msgid "Share of the files and folders within this library are all canceled."
-msgstr ""
+msgstr "Deling av filer og mappper i dette biblioteket ble alltid avsluttet."
 
 #: templates/help/deleting_a_library.html:10
 msgid ""
 "Desktop clients synced with this library cannot sync with it any more. But "
 "the local files on the client won't be deleted."
 msgstr ""
+"Desktop-klientene synkroniserer ikke med dette biblioteket mer. Men local "
+"filene på klienten vil ikke slettes."
 
 #: templates/help/departments.html:5
 msgid "Managing and using departments"
-msgstr ""
+msgstr "Hantering og bruk av avdelinger"
 
 #: templates/help/departments.html:6
 msgid ""
 "Some organizations consist of complex department hierarchy. There are "
 "usually two common use cases for file management in these organizations:"
 msgstr ""
+"Det er ofte to vanlige brukerfelle for filhåndtering i disse "
+"organisasjonene:"
 
 #: templates/help/departments.html:8
 msgid ""
@@ -226,6 +232,9 @@ msgid ""
 " hierarchy should map the department hierarchy. There will be separate "
 "folder or space assigned to each department."
 msgstr ""
+"Det bør være en vanlig fildelingsrom for organisasjonen. Mappehierarkien bør"
+" mappehierarkien. Det vil være en separat mappe eller rom til hvert "
+"avdeling."
 
 #: templates/help/departments.html:9
 msgid ""
@@ -233,46 +242,51 @@ msgid ""
 "individual employees. So that the ownership of files doesn't have to be "
 "changed when an employee leaves the organization."
 msgstr ""
+"Delildelingsromet bør være egenomganget av organisasjonen, men ikke av en "
+"enkel person. Så at egenomganget av filene ikke må endres når en person "
+"avslutter organisasjonen."
 
 #: templates/help/departments.html:11
 msgid ""
 "The \"Departments\" feature is designed to meet the above two use cases. "
 "We'll introduce this feature from 3 different perspectives:"
-msgstr ""
+msgstr "Vi vil introduksere denne funksjonen fra 3inkler:"
 
 #: templates/help/departments.html:13 templates/help/departments.html:17
 msgid "System admin"
-msgstr ""
+msgstr "Systemadmin"
 
 #: templates/help/departments.html:14 templates/help/departments.html:35
 msgid "Department admin"
-msgstr ""
+msgstr "Avdelingsadmin"
 
 #: templates/help/departments.html:15 templates/help/departments.html:52
 msgid "Department members"
-msgstr ""
+msgstr "Avdelingsmedlemmer"
 
 #: templates/help/departments.html:18
 msgid "The system admin can:"
-msgstr ""
+msgstr "Systemadmin kan:"
 
 #: templates/help/departments.html:20 templates/help/departments.html:24
 msgid "Manage department hierarchy and members"
-msgstr ""
+msgstr "Hantering av avdelingshierarkie og medlemmer"
 
 #: templates/help/departments.html:21 templates/help/departments.html:29
 msgid "Assign storage quota for departments"
-msgstr ""
+msgstr "Tildel lagringsskota for avdelinger"
 
 #: templates/help/departments.html:22 templates/help/departments.html:31
 msgid "Create and manage shared libraries in departments"
-msgstr ""
+msgstr "Opprett og hanter delinger av avdelinger"
 
 #: templates/help/departments.html:25
 msgid ""
 "The system admin can set up the department hierarchy in two ways: manual "
 "setup or import from Active Directory."
 msgstr ""
+"Systemadmin kan opprette avdelingshierarkien i to måte: manuelt eller ved "
+"importering fra Active Directory."
 
 #: templates/help/departments.html:26
 msgid ""
@@ -282,6 +296,11 @@ msgid ""
 "of each member to 'member' or 'admin'. We'll introduce how a department "
 "admin can manage department later."
 msgstr ""
+"Systemadmin kan opprette en eller flere top-nivå-avdelinger og opprette en "
+"eller flere underavdelinger under hvert avdeling. Hvert avdeling kan "
+"populeres med medlemmer. Systemadmin kan opprette avdelingshierarkien med "
+"manuelt eller ved importering fra Active Directory. Vi vil introduksere "
+"hvordan en avdelingsadmin kan hanter avdelinger senere."
 
 #: templates/help/departments.html:27
 msgid ""
@@ -290,12 +309,18 @@ msgid ""
 "under an OU will be imported as sub-departments. Department libraries can be"
 " automatically created in the import process."
 msgstr ""
+"Systemadmin kan også importere avdelingshierarkien fra OUs (Organizational "
+"Units) i AD. Hvert OU vil importeres som en avdeling. Under-OUs under et OU "
+"vil importeres som underavdelinger. Avdelingsbibliotek kan automatisk "
+"opprettes i importprosessen."
 
 #: templates/help/departments.html:28
 msgid ""
 "System admin can also delete a department after all the sub-departments and "
 "libraries are deleted."
 msgstr ""
+"Systemadmin kan også slette en avdeling etter at alle underavdelinger og "
+"bibliotekene er slettet."
 
 #: templates/help/departments.html:30
 msgid ""
@@ -305,6 +330,10 @@ msgid ""
 "cannot exceed the storage quota. <strong>Please note that the quota of sub-"
 "department doesn't depend on the quota of its parent department.</strong>"
 msgstr ""
+"Bibliotekene innenfor en avdeling er egenomganget av avdelingen, men ikke av"
+" en enkel person. Så at egenomganget av filene ikke må endres når en person "
+"avslutter avdelingen. <strong>Obs! Underavdelinger kan ikke ha en "
+"lagringsskota, men kan delinger av avdelinger.</strong>"
 
 #: templates/help/departments.html:32
 msgid ""
@@ -312,12 +341,16 @@ msgid ""
 " There is also an option to control whether individual users can share "
 "libraries to a department."
 msgstr ""
+"Avdelingsbibliotek kan opprettes av systemadmin eller avdelingsadmin. Det er"
+" også en mulighet å kontrollere om en enkel person kan del av en avdeling."
 
 #: templates/help/departments.html:33
 msgid ""
 "All the above operations can be done in the system admin interface. See the "
 "below screenshot for information."
 msgstr ""
+"Alle overordnete operasjoner kan utføres i systemadmin grunnsiden. Se bilden"
+" for mer informasjon."
 
 #: templates/help/departments.html:36
 msgid ""
@@ -325,18 +358,20 @@ msgid ""
 "admin to some members of a department. Department admins can perform the "
 "following operations in a department after login to his/her own account."
 msgstr ""
+"Avdelingsadmin kan utføre følgende operasjoner i en avdeling etter at han "
+"har logget inn med sin egen konto."
 
 #: templates/help/departments.html:38
 msgid "Access to the libraries of the department"
-msgstr ""
+msgstr "Tilgang til avdelingsbibliotekene"
 
 #: templates/help/departments.html:39
 msgid "Manage members in his/her department"
-msgstr ""
+msgstr "Hantering av avdelingsmedlemmer"
 
 #: templates/help/departments.html:40
 msgid "Manage libraries in his/her department"
-msgstr ""
+msgstr "Hantering av avdelingsbibliotekene"
 
 #: templates/help/departments.html:42
 msgid ""
@@ -345,26 +380,30 @@ msgid ""
 " the department. But if the departments are imported from AD, the changes to"
 " membership will be overwritten on the next sync with AD."
 msgstr ""
+"Hvis en bruker er avdelingsadmin, kan han eller han kan legge til eller "
+"slette medlemmer i avdelingen. Alle registrerte brukere kan legges til som "
+"medlem av avdelingen. Men om avdelingerene importeres fra AD, vil "
+"endringerene til medlemskapet overrider på neste synkronisering med AD."
 
 #: templates/help/departments.html:44
 msgid ""
 "Department admin can manage the libraries in the department. The supported "
 "operations are:"
-msgstr ""
+msgstr "Hantering av avdelingsbibliotekene"
 
 #: templates/help/departments.html:46
 msgid "Create or delete library"
-msgstr ""
+msgstr "Opprett eller slett bibliotek"
 
 #: templates/help/departments.html:47
 msgid "Change library name"
-msgstr ""
+msgstr "Endre navn på bibliotek"
 
 #: templates/help/departments.html:48
 msgid ""
 "Share a library to users or groups outside of this department. This is very "
 "useful for cross-department collaboration."
-msgstr ""
+msgstr "Det er veldig nyttig for kollaborasjon mellom avdelinger."
 
 #: templates/help/departments.html:49
 #, python-format
@@ -374,6 +413,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
 "feature</a>."
 msgstr ""
+"Satt finn-grained rettigheter til mappper i bibliotekene for brukere eller "
+"underavdelinger i avdelingen. Det virker som <a "
+"href=\"%(SITE_ROOT)shelp/folder_permission/\">mappperettigheter</a>."
 
 #: templates/help/departments.html:53
 msgid ""
@@ -385,17 +427,19 @@ msgid ""
 "\"Sales\" is a sub-department under the company \"ACME\", John can then "
 "access to the groups \"EMEA\", \"Sales\" and \"ACME\". The groups for "
 "departments are marked with a \"building\" icon next to its name."
-msgstr ""
+msgstr "Avdelinger er markert med et bygningsikon ved navnet av avdelingen."
 
 #: templates/help/desktop_proxy.html:6
 msgid "Using proxy in Seafile client"
-msgstr ""
+msgstr "Bruk proxy i Seafile klient"
 
 #: templates/help/desktop_proxy.html:8
 msgid ""
 "Seafile client supports 3 types of proxy servers: HTTP proxy, SOCKS5 proxy "
 "and system proxy settings."
 msgstr ""
+" Seafile klient støter 3 typer av proxy-servere: HTTP proxy, SOCKS5 proxy og"
+" system proxy innstillinger."
 
 #: templates/help/desktop_proxy.html:10
 msgid ""
@@ -405,17 +449,22 @@ msgid ""
 " to auto-detect proxy server information. So you don't have to manually "
 "enter proxy server address."
 msgstr ""
+"Bruk HTTP proxy og SOCKS5 proxy for å oppgi proxy-serverens adresse og port."
+" Hvis du bruker system proxy innstillinger, leser Seafile klient inn proxy "
+"innstillinger fra operativsystemet. Operativsystemet har noen mekanism for å"
+" auto-detectere proxy-serverens informasjon. Så trenger du ikke manuelt "
+"oppgi proxy-serverens adresse."
 
 #: templates/help/desktop_proxy.html:12
 msgid ""
 "To change proxy settings, click the Seafile icon in the system notification "
 "area. Choose \"Settings\" in the menu. In the pop-up settings dialog, you "
 "can change proxy settings in the \"Network\" tab."
-msgstr ""
+msgstr "Du kan endre proxy innstillinger i \"Netverk\"-fanen i pop-up dialogen. "
 
 #: templates/help/drive_client_2.0_for_windows_10.html:6
 msgid "SeaDrive 2.0 for Windows 10"
-msgstr ""
+msgstr "SeaDrive 2.0 for Windows 10"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:8
 msgid ""
@@ -424,10 +473,12 @@ msgid ""
 "Update for Windows 10) and later versions. We recommend Windows 10 users to "
 "upgrade to SeaDrive 2.0 for more native virtual drive experience."
 msgstr ""
+"Det er veldig nyttig for kollaborasjon mellom avdelinger. Det er veldig "
+"nyttig for kollaborasjon mellom avdelinger."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:10
 msgid "Install and access the Virtual Drive"
-msgstr ""
+msgstr "Installere og tilgang til virtuell drive"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:11
 msgid ""
@@ -437,41 +488,51 @@ msgid ""
 "1.0.x). It may take some time, depending on the number of files available in"
 " your seafile account. The download is progressive, so in the mean time you "
 "can already access some files in the virtual drive."
-msgstr ""
+msgstr "Du kan allerede tilgang til noen filer i virtuell drive."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:12
 msgid ""
 "To access the virtual drive, just open Windows file explorer. There is a "
 "\"seadrive\" node in the navigation pane of Windows file explorer."
 msgstr ""
+"Du kan tilgang til virtuell drive ved å åpne Windows fil utforsker. Det er "
+"en node \"seadrive\" i navigasjonen av Windows fil utforsker."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:16
 msgid "Accessing files in the Virtual Drive"
-msgstr ""
+msgstr "Tilgang til filer i virtuell drive"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:17
 msgid ""
 "Libraries are grouped into 4 categories in the virtual drive: My Libraries, "
 "Shared with me, Shared with groups and Shared with all."
 msgstr ""
+"Biblioteker er gruppert i 4 kategorier på den virtuelle stasjonen: Mine "
+"biblioteker, Delt med meg, Delt med grupper og Delt med alle."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:18
 msgid ""
 "As you can see, the file status icons is more integrated into Windows file "
 "explorer. The icons are a bit different form version 1.0."
 msgstr ""
+"Som du ser, er filstatusikoner mer integrert i Windows filutforsker. Ikonene"
+" er litt forskjellige fra versjon 1.0."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:19
 msgid ""
 "Files in the virtual drive are created as \"placeholders\" in the local file"
 " system. They may be in 3 states:"
 msgstr ""
+"Filer på den virtuelle stasjonen opprettes som «plassholdere» i lokalt "
+"filsystem. De kan være i 3 tilstander:"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:21
 msgid ""
 "<b>Placeholder file</b>: An empty representation of the file and can only be"
 " opened when there is network connection."
 msgstr ""
+"<b>Plassholderfil</b>: En tom representasjon av filen og kan kun åpnes når "
+"det er nettverkstilkobling."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:22
 msgid ""
@@ -481,12 +542,19 @@ msgid ""
 "connections. The operating system may decide to clear a full file when more "
 "disk space is needed."
 msgstr ""
+"<b>Full fil</b>: Filen er lastet ned og lagret lokalt. Nedlasting skjer "
+"automatisk når en plassholderfil åpnes for første gang. Disse filene er "
+"tilgjengelige hver gang du åpner SeaDrive, uavhengig av nettverkstilkobling."
+" Operativsystemet kan velge å fjerne en full fil når det trenges mer "
+"diskplass."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:23
 msgid ""
 "<b>Pinned full file</b>: The file has been downloaded and saved locally. It "
 "is guaranteed to be available offline."
 msgstr ""
+"<b>Fastgjort full fil</b>: Filen er lastet ned og lagret lokalt. Den er "
+"garantert tilgjengelig offline."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:26
 msgid ""
@@ -496,6 +564,11 @@ msgid ""
 "locally; choose \"Free up space\" when you want to clean the cache for a "
 "file or folder."
 msgstr ""
+"Du kan styre hvilke filer eller mapper som blir mellomlagret lokalt. Dette "
+"kan endres fra hurtigmenyen når du høyreklikker på en fil eller mappe. Velg "
+"«Hold alltid på denne enheten» hvis du vil fastgjøre en fil eller mappe "
+"lokalt; velg «Frigjør plass» hvis du vil renske mellomlageret for en fil "
+"eller mappe."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:28
 msgid ""
@@ -503,10 +576,13 @@ msgid ""
 "updated on the server. In SeaDrive 2.0, full and pinned files are "
 "automatically kept in sync with the server."
 msgstr ""
+"I SeaDrive 1.0 blir ikke mellomlagrede filer automatisk oppdatert når de "
+"endres på serveren. I SeaDrive 2.0 holdes fullstendige og fastgjorte filer "
+"automatisk synkronisert med serveren."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:30
 msgid "File Download and Control"
-msgstr ""
+msgstr "Filnedlasting og kontroll"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:31
 msgid ""
@@ -515,6 +591,9 @@ msgid ""
 "download, there will be a progress bar shown up in file explorer and you may"
 " cancel the download."
 msgstr ""
+"Hver gang du åpner en plassholderfil, starter operativsystemet automatisk å "
+"laste den ned. Hvis det tar tid å laste ned filen, vises en fremdriftslinje "
+"i filutforskeren, og du kan avbryte nedlastingen."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:32
 msgid ""
@@ -523,15 +602,19 @@ msgid ""
 "operating system about this and you may choose to cancel the download or "
 "disallow the application from automatically downloading files in the future."
 msgstr ""
+"Iblandt kan en bakgrunnsprogg forsøke å laste ned en fil på den virtuelle "
+"stasjonen (som et antivirusprogram). Du får en melding fra operativsystemet "
+"om dette, og du kan velge å avbryte nedlastingen eller forby programmet fra "
+"å laste ned filer automatisk i fremtiden."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:34
 #: templates/help/using_drive_client.html:79
 msgid "FAQ"
-msgstr ""
+msgstr "Ofte stilte spørsmål"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:35
 msgid "Can I create, delete, rename libraries?"
-msgstr ""
+msgstr "Kan jeg opprette, slette eller gi nytt navn til biblioteker?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:36
 msgid ""
@@ -540,10 +623,15 @@ msgid ""
 " rename libraries under the \"My Libraries\" category. Creating, deleting or"
 " renaming libraries in other categories will be ignored."
 msgstr ""
+"Ja. Når du oppretter, sletter eller gir nytt navn til biblioteksmapper på "
+"den virtuelle stasjonen, vil handlingen vises på serveren. Du kan kun "
+"opprette, slette og gi nytt navn til biblioteker under kategorien «Mine "
+"biblioteker». Opprettelse, sletting eller endring av navn på biblioteker i "
+"andre kategorier blir ignorert."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:38
 msgid "Can I create files or folders outside of a library folder?"
-msgstr ""
+msgstr "Kan jeg opprette filer eller mapper utenfor en biblioteksmappe?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:39
 msgid ""
@@ -551,10 +639,13 @@ msgid ""
 "synced to the server. A new folder under the \"My Libraries\" folder will be"
 " handled as a new library."
 msgstr ""
+"Ja. Men filer opprettet utenfor en biblioteksmappe blir ignorert og blir "
+"IKKE synkronisert med serveren. En ny mappe under «Mine biblioteker» blir "
+"behandlet som et nytt bibliotek."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:41
 msgid "Can I access encrypted libraries?"
-msgstr ""
+msgstr "Kan jeg få tilgang til krypterte biblioteker?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:42
 msgid ""
@@ -564,10 +655,16 @@ msgid ""
 " area and choose \"Show encrypted libraries\". A window will show up and you"
 " can choose to sync or unsync an encrypted library."
 msgstr ""
+"Ja. Som standard blir ikke krypterte biblioteker synkronisert og vist på den"
+" virtuelle stasjonen. Du må manuelt velge hvilke krypterte biblioteker som "
+"skal synkroniseres og skrive inn passordet. Høyreklikk på SeaDrive-ikonet i "
+"systemkurvområdet og velg «Vis krypterte biblioteker». Et vindu vises, og du"
+" kan velge å synkronisere eller avbryte synkronisering av et kryptert "
+"bibliotek."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
-msgstr ""
+msgstr "Er den kompatibel med SeaDrive 1.0?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:45
 msgid ""
@@ -577,10 +674,15 @@ msgid ""
 " be accessible in 2.0 version. You can start SeaDrive 1.0 again to upload "
 "the files to server or copy them out."
 msgstr ""
+"SeaDrive 2.0 bruker eksisterende kontoer og deres metadata (lagret under "
+"mappen C:\\users\\brukernavn\\seadrive\\). Men den bruker ikke mellomlagrede"
+" filer fra SeaDrive 1.0. Derfor er ingen lokalt mellomlagrede filer fra "
+"versjon 1.0 tilgjengelige i versjon 2.0. Du kan starte SeaDrive 1.0 igjen "
+"for å laste opp filene til serveren eller kopiere dem ut."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:47
 msgid "How do I clean the cache?"
-msgstr ""
+msgstr "Hvordan renser jeg mellomlageret?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:48
 msgid ""
@@ -591,10 +693,17 @@ msgid ""
 "Because placeholders are just normal files created on your local disk, your "
 "cache size is only limited by the available disk space on your computer."
 msgstr ""
+"Du kan manuelt velge hvilke mapper eller filer som skal mellomlagres lokalt."
+" Hvis du finner at en mappe bruker for mye plass, velg bare «Frigjør plass» "
+"på den mappen, og alle mellomlagrede filer i den mappen blir slettet. Det er"
+" ikke nødvendig å angi tid for rensking av mellomlager eller "
+"størrelsesbegrensning som i SeaDrive 1.0. Siden plassholdere bare er vanlige"
+" filer opprettet på lokal disk, er mellomlagerstørrelsen kun begrenset av "
+"tilgjengelig diskplass på datamaskinen din."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:50
 msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
-msgstr ""
+msgstr "Hvordan fjerne gjenværende SeaDrive-snarveier i Windows Filutforsker?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
@@ -603,12 +712,18 @@ msgid ""
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
 msgstr ""
+"Snarveien «SeaDrive» i Windows Filutforsker forsvinner ikke etter at du "
+"avslutter SeaDrive-programmet eller bytter Seafile-kontoer i SeaDrive. Dette"
+" er en tilsiktet funksjon. Du trenger ikke fjerne dem hvis du fortsatt "
+"trenger å få tilgang til kontoen senere."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
 "choose \"Remove account information\" in the prompt dialog."
 msgstr ""
+"Du kan vanligvis fjerne disse snarveiene ved å avinstallere SeaDrive-"
+"programmet og velge «Fjern kontoinformasjon» i dialogboksen som vises."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -619,10 +734,15 @@ msgid ""
 " in registry editor. Remove the sub-keys correspond to the shortcut you want"
 " to remove."
 msgstr ""
+"Hvis avinstalleringen ikke fjerner snarveiene, kan du fjerne SeaDrive-"
+"snarveien i Windows Filutforsker ved å redigere registeret. Åpne stien "
+"«HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\»"
+" i registerredigeringsprogrammet. Fjern undernøkler som tilsvarer snarveien "
+"du vil fjerne."
 
 #: templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
-msgstr ""
+msgstr "Hvordan bruke krypterte biblioteker"
 
 #: templates/help/encrypted_libraries.html:8
 msgid ""
@@ -632,6 +752,11 @@ msgid ""
 "stored on the server. So even the server administrator can't access your "
 "file contents."
 msgstr ""
+"Seafile tilbyr ende-til-ende-kryptering på klientsiden. Du kan opprette "
+"krypterte biblioteker for å bruke denne funksjonen. Filinnhold i krypterte "
+"biblioteker krypteres på klientsiden. Krypteringspassordet lagres ikke på "
+"serveren. Selv serveradministratoren kan derfor ikke få tilgang til "
+"filinnholdet ditt."
 
 #: templates/help/encrypted_libraries.html:10
 msgid "When creating an encrypted library:"
@@ -643,6 +768,9 @@ msgid ""
 "the server. The server uses this password to create the library. But it "
 "doesn't store the plain text password."
 msgstr ""
+"Hvis du oppretter et kryptert bibliotek i nettappen, sendes passordet til "
+"serveren. Serveren bruker passordet til å opprette biblioteket, men lagrer "
+"ikke passordet i klartekst."
 
 #: templates/help/encrypted_libraries.html:13
 #, python-format
@@ -651,10 +779,14 @@ msgid ""
 "client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
 "the password is not sent to the server."
 msgstr ""
+"Hvis du oppretter et kryptert bibliotek fra en lokal mappe med "
+"skrivebordsklienten (se <a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">filsynkronisering</a>), sendes "
+"passordet ikke til serveren."
 
 #: templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
-msgstr ""
+msgstr "Når du får tilgang til det krypterte biblioteket:"
 
 #: templates/help/encrypted_libraries.html:19
 msgid ""
@@ -662,6 +794,9 @@ msgid ""
 " will cache the password in encrypted format for 1 hour. It won't store the "
 "password on disk."
 msgstr ""
+"Hvis du bruker nettappen, må du skrive inn passordet til serveren. Serveren "
+"mellomlagrer passordet i kryptert format i 1 time og lagrer det ikke på "
+"disk."
 
 #: templates/help/encrypted_libraries.html:20
 msgid ""
@@ -669,22 +804,29 @@ msgid ""
 "the server. The client decrypts and encrypts file contents locally. The "
 "plain text password is not stored on the client disk either."
 msgstr ""
+"Hvis du bruker skrivebordsklienten til å synkronisere biblioteket, sendes "
+"passordet ikke til serveren. Klienten dekrypterer og krypterer filinnhold "
+"lokalt. Passordet i klartekst lagres heller ikke på klientdisken."
 
 #: templates/help/encrypted_libraries.html:21
 msgid ""
 "iOS client supports client side encryption since version 2.1.6. Android "
 "client supports it since version 2.1.0."
 msgstr ""
+"iOS-klienten støtter kryptering på klientsiden fra versjon 2.1.6. Android-"
+"klienten støtter det fra versjon 2.1.0."
 
 #: templates/help/encrypted_libraries.html:25
 msgid ""
 "Note that encrypted library only encrypts the contents of the files, but not"
 " the folder and file names."
 msgstr ""
+"Merk at krypterte biblioteker kun krypterer innholdet i filene, ikke mappe- "
+"og filnavn."
 
 #: templates/help/file_locking.html:5
 msgid "File locking"
-msgstr ""
+msgstr "Fillåsing"
 
 #: templates/help/file_locking.html:6
 msgid ""
@@ -694,22 +836,31 @@ msgid ""
 " the file when one person wants to exclusively modify the file. Seafile "
 "Professional Edition supports file locking."
 msgstr ""
+"Når flere personer samarbeider på en fil, er det sannsynlig at flere endrer "
+"filen omtrent samtidig. Seafile håndterer denne situasjonen godt med "
+"konfliktfiler. Men det er ofte mer praktisk å låse filen når en person "
+"ønsker å endre den eksklusivt. Seafile Professional Edition støtter "
+"fillåsing."
 
 #: templates/help/file_locking.html:7
 msgid ""
 "File locking works on both the web app and the desktop syncing client. We'll"
 " introduce them one by one."
 msgstr ""
+"Fillåsing fungerer både i nettappen og skrivebordssynkroniseringsklienten. "
+"Vi introduserer dem en etter en."
 
 #: templates/help/file_locking.html:8
 msgid "File locking on the Web App"
-msgstr ""
+msgstr "Fillåsing i nettappen"
 
 #: templates/help/file_locking.html:9
 msgid ""
 "To lock a file, you can navigate into the file's folder on the web app, and "
 "click on the \"operations\" drop-down menu."
 msgstr ""
+"For å låse en fil, går du til filens mappe i nettappen og klikker på "
+"rullemenyen «handlinger»."
 
 #: templates/help/file_locking.html:11
 msgid ""
@@ -718,28 +869,38 @@ msgid ""
 "file. And you can also unlock a file that's locked by you. But you cannot "
 "unlock files locked by others."
 msgstr ""
+"Etter at filen er låst, ser du en rød «stoppskilt» i hjørnet av filikonet. "
+"Når du holder musepekeren over stoppskiltet, kan du se hvem som har låst "
+"filen. Du kan også låse opp en fil du selv har låst, men ikke filer låst av "
+"andre."
 
 #: templates/help/file_locking.html:13
 msgid "File locking on the desktop client"
-msgstr ""
+msgstr "Fillåsing i skrivebordsklienten"
 
 #: templates/help/file_locking.html:14
 msgid ""
 "After a library is synced to the desktop, you can lock/unlock files in that "
 "library inside File Explorer on Windows or Finder on Mac OS."
 msgstr ""
+"Etter at et bibliotek er synkronisert til skrivebordet, kan du låse/låse opp"
+" filer i dette biblioteket i Filutforsker på Windows eller Finder på Mac OS."
 
 #: templates/help/file_locking.html:15
 msgid ""
 "To lock a file, just right click on a synced file and choose \"lock this "
 "file\" in the \"Seafile\" menu."
 msgstr ""
+"For å låse en fil, høyreklikk på en synkronisert fil og velg «lås denne "
+"filen» i menyen «Seafile»."
 
 #: templates/help/file_locking.html:17
 msgid ""
 "If a file is locked by you, you can see an orange \"stop sign\" on the file "
 "icon. You can choose to unlock it."
 msgstr ""
+"Hvis en fil er låst av deg, ser du en oransje «stoppskilt» på filikonet. Du "
+"kan velge å låse den opp."
 
 #: templates/help/file_locking.html:19
 msgid ""
@@ -747,16 +908,21 @@ msgid ""
 "file icon. The file is automatically set to read-only. You cannot modify it "
 "until it's unlocked."
 msgstr ""
+"Hvis en fil er låst av en annen bruker, ser du en rød «stoppskilt» på "
+"filikonet. Filen settes automatisk til bare lese. Du kan ikke endre den før "
+"den er låst opp."
 
 #: templates/help/file_locking.html:21
 msgid ""
 "If a library is not synced, you can still use cloud file browser to lock and"
 " unlock files in it."
 msgstr ""
+"Hvis et bibliotek ikke er synkronisert, kan du fortsatt bruke "
+"skyfilutforskeren til å låse og låse opp filer i det."
 
 #: templates/help/file_locking.html:22
 msgid "Auto locking office files"
-msgstr ""
+msgstr "Automatisk låsing av Office-filer"
 
 #: templates/help/file_locking.html:23
 msgid ""
@@ -766,18 +932,23 @@ msgid ""
 " propagated to other computers syncing this library. It prevents concurrent "
 "editing the same Office file and is convenient for collaboration."
 msgstr ""
+"Etter at et bibliotek er synkronisert til skrivebordet, låser Seafile "
+"automatisk filen når du åpner en Microsoft Office-fil i biblioteket. Når du "
+"lukker filen, låser Seafile den automatisk opp. Låsetilstanden overføres til"
+" andre datamaskiner som synkroniserer dette biblioteket. Dette forhindrer "
+"samtidig redigering av samme Office-fil og er praktisk for samarbeid."
 
 #: templates/help/file_locking.html:24
 msgid "Details about file locking"
-msgstr ""
+msgstr "Detaljer om fillåsing"
 
 #: templates/help/file_locking.html:25
 msgid "There are a few useful tips about how file locking works:"
-msgstr ""
+msgstr "Her er noen nyttige tips om hvordan fillåsing fungerer:"
 
 #: templates/help/file_locking.html:27
 msgid "A locked file can only be unlocked by the user who locked it."
-msgstr ""
+msgstr "En låst fil kan kun låses opp av brukeren som låste den."
 
 #: templates/help/file_locking.html:28
 msgid ""
@@ -786,16 +957,22 @@ msgid ""
 "locked file. The purpose of file locking is mainly to prevent concurrent "
 "editing."
 msgstr ""
+"En låst fil kan ikke endres, flyttes, gis nytt navn eller slettes av andre "
+"brukere. Andre brukere kan fortsatt flytte, slette eller gi nytt navn til "
+"overordnet mappe til en låst fil. Hensikten med fillåsing er hovedsakelig å "
+"forhindre samtidig redigering."
 
 #: templates/help/file_locking.html:29
 msgid ""
 "When a locked file's parent folder is renamed or moved inside the same "
 "library, it remains locked after the operation."
 msgstr ""
+"Når en låst fils overordnede mappe får nytt navn eller flyttes innenfor "
+"samme bibliotek, forblir den låst etter handlingen."
 
 #: templates/help/finding_older_version_files.html:6
 msgid "Finding older version of files"
-msgstr ""
+msgstr "Finne eldre versjoner av filer"
 
 #: templates/help/finding_older_version_files.html:7
 msgid ""
@@ -804,10 +981,14 @@ msgid ""
 "a configurable period. When you want to access an older version of a file, "
 "the file history feature becomes very handy."
 msgstr ""
+"Seafile sporer endreingshistorikken til alle filer. Hver gang en fil endres,"
+" opprettes en ny versjon, mens den gamle versjonen beholdes i en "
+"konfigurerbar periode. Når du vil få tilgang til en eldre versjon av en fil,"
+" er filhistorikkfunksjonen veldig praktisk."
 
 #: templates/help/finding_older_version_files.html:8
 msgid "To list all the versions of a file:"
-msgstr ""
+msgstr "Slik viser du alle versjoner av en fil:"
 
 #: templates/help/finding_older_version_files.html:10
 msgid ""
@@ -815,16 +996,22 @@ msgid ""
 "cursor onto the row of that file. An operation menu will appear. You can "
 "click the \"History\" button in that menu."
 msgstr ""
+"I Seafile Web App går du til mappen som inneholder filen. Flytt markøren til"
+" filens rad. En handlingsmeny vises. Du kan klikke på «Historikk»-knappen i "
+"denne menyen."
 
 #: templates/help/finding_older_version_files.html:11
 msgid ""
 "A list of all versions of that file will be displayed in time order, from "
 "newer to older. The list also contains the file's rename history."
 msgstr ""
+"En liste over alle versjoner av filen vises i rekkefølge etter tid, fra "
+"nyeste til eldste. Listen inneholder også filens historie med navnendringer."
 
 #: templates/help/finding_older_version_files.html:12
 msgid "You can download, restore, view any version of the file."
 msgstr ""
+"Du kan laste ned, gjenopprette og vise hvilken som helst versjon av filen."
 
 #: templates/help/finding_older_version_files.html:14
 #, python-format
@@ -833,10 +1020,13 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Du kan konfigurere oppbevaringsperioden for filversjoner: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">innstilling av "
+"historikkens oppbevaringsperiode</a>."
 
 #: templates/help/folder_permission.html:6
 msgid "Use folder permission for fine-grained access control"
-msgstr ""
+msgstr "Bruk mappetillatelser for detaljert tilgangskontroll"
 
 #: templates/help/folder_permission.html:8
 #, python-format
@@ -847,6 +1037,10 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing libraries</a>."
 " Here are some use cases:"
 msgstr ""
+"For delte biblioteker eller mapper kan du angi tillatelser for undermapper "
+"for en person eller gruppe. Tilgjengelige tillatelser er de samme som "
+"beskrevet i <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">deling "
+"av biblioteker</a>. Her er noen bruksområder:"
 
 #: templates/help/folder_permission.html:10
 msgid ""
@@ -854,6 +1048,9 @@ msgid ""
 " to allow a specific member of the group to modify files in one sub-folder. "
 "You can grant write permission of this sub-folder to this person."
 msgstr ""
+"Du har delt et bibliotek med en gruppe med «bare lese»-tilgang. Du ønsker "
+"også å tillate en bestemt medlem i gruppen å endre filer i en undermappe. Du"
+" kan gi denne personen skrivetilgang til denne undermappen."
 
 #: templates/help/folder_permission.html:11
 msgid ""
@@ -862,6 +1059,10 @@ msgid ""
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
 msgstr ""
+"Du har delt et bibliotek med 3 grupper. Det finnes 3 undermapper under dette"
+" biblioteket, en for hver gruppe å laste opp filer til. Du vil imidlertid "
+"ikke at brukere skal endre filer som ikke tilhører deres egen gruppe. Du kan"
+" gi skrivetilgang til en undermappe kun til dens tilhørende gruppe."
 
 #: templates/help/folder_permission.html:13
 msgid ""
@@ -870,17 +1071,23 @@ msgid ""
 "should first share the parent library or folder; otherwise the folder "
 "permission won't take effect."
 msgstr ""
+"Mappetillatelser er kun gyldige for biblioteker og mapper du deler med "
+"andre. For å angi mappetillatelser effektivt for undermapper, bør du først "
+"dele overordnet bibliotek eller mappe; ellers trer mappetillatelsen ikke i "
+"kraft."
 
 #: templates/help/folder_permission.html:14
 msgid ""
 "One important design goal of folder permission is to support hierarchical "
 "permissions:"
 msgstr ""
+"Et viktig designmål for mappetillatelser er å støtte hierarkiske "
+"tillatelser:"
 
 #: templates/help/folder_permission.html:16
 msgid ""
 "Sub-folders automatically inherit folder permissions from its parent folder."
-msgstr ""
+msgstr "Undermapper arver automatisk mappetillatelser fra overordnet mappe."
 
 #: templates/help/folder_permission.html:17
 msgid ""
@@ -890,10 +1097,14 @@ msgid ""
 "\"meeting files/today\" for user A. Then user A's permission to \"meeting "
 "files/today\" is \"read only\"."
 msgstr ""
+"Tillatelser satt på undermapper overstyrer tillatelser satt på overordnet "
+"mappe. For eksempel: du setter «les- og skrivetilgang» på mappen «møtefiler»"
+" for bruker A, og du setter «bare lese» på undermappen «møtefiler/i dag» for"
+" bruker A. Så har bruker A «bare lese»-tilgang til «møtefiler/i dag»."
 
 #: templates/help/folder_permission.html:19
 msgid "Basic usage"
-msgstr ""
+msgstr "Grunnleggende bruk"
 
 #: templates/help/folder_permission.html:20
 msgid ""
@@ -902,6 +1113,10 @@ msgid ""
 "\"permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions on this folder."
 msgstr ""
+"Bare bibliotekseieren kan angi mappetillatelser for undermapper. I "
+"filutforskergrensesnittet klikker du på «flere handlinger»-knappen, velger "
+"«tillatelse» i rullemenyen. I vinduet som vises kan du se og angi "
+"mappetillatelser for denne mappen."
 
 #: templates/help/folder_permission.html:21
 msgid ""
@@ -910,6 +1125,10 @@ msgid ""
 "Permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions in this library."
 msgstr ""
+"Hvis du vil se alle mappetillatelser satt i et bibliotek, hold musepekeren "
+"over biblioteket. Klikk på «flere handlinger»-knappen, velg "
+"«Mappetillatelse» i rullemenyen. I vinduet som vises kan du se og angi "
+"mappetillatelser i dette biblioteket."
 
 #: templates/help/folder_permission.html:22
 msgid ""
@@ -917,16 +1136,22 @@ msgid ""
 "next to \"read only\" sub-folders. When the user navigate into that sub-"
 "folder, he/she won't be able to add/modify/delete files."
 msgstr ""
+"Når andre brukere går inn i en mappe, vises et lite «øye»-ikon ved siden av "
+"«bare lese»-undermapper. Når brukeren går inn i denne undermappen, kan "
+"han/hun ikke legge til, endre eller slette filer."
 
 #: templates/help/folder_permission.html:24
 msgid ""
 "If a \"read only\" folder is synced to PC with the Seafile desktop App, "
 "changes under a \"read only\" folder won't be uploaded to the cloud."
 msgstr ""
+"Hvis en «bare lese»-mappe synkroniseres til PC med Seafile "
+"skrivebordsprogram, blir endringer under en «bare lese»-mappe ikke lastet "
+"opp til skyen."
 
 #: templates/help/folder_permission.html:25
 msgid "Advanced: priority between different permissions"
-msgstr ""
+msgstr "Avansert: prioritet mellom forskjellige tillatelser"
 
 #: templates/help/folder_permission.html:27
 msgid ""
@@ -936,6 +1161,11 @@ msgid ""
 "library. Then user A only has \"read only\" access to the sub-folder, while "
 "he/she has \"read write\" access to all other sub-folders and files."
 msgstr ""
+"Mappetillatelser har høyere prioritet enn tillatelser satt i delingen. For "
+"eksempel: hvis du deler et bibliotek med bruker A med «les- og "
+"skrivetilgang», og også setter «bare lese»-tilgang til en undermappe i dette"
+" biblioteket, har bruker A kun «bare lese»-tilgang til undermappen, mens "
+"han/hun har «les- og skrivetilgang» til alle andre undermapper og filer."
 
 #: templates/help/folder_permission.html:28
 msgid ""
@@ -944,16 +1174,22 @@ msgid ""
 "if the system matches a permission specific to the user, it'll ignore all "
 "permissions set for the groups the user belongs to."
 msgstr ""
+"Mappetillatelser satt for en spesifikk bruker har høyere prioritet enn "
+"tillatelser satt for en gruppe. Det vil si: når systemet sjekker tillatelse "
+"for en mappe, hvis det finnes en tilpasset tillatelse for brukeren, "
+"ignorerer det alle tillatelser satt for gruppene brukeren tilhører."
 
 #: templates/help/folder_permission.html:29
 msgid ""
 "Permissions on sub-folders have higher priority than those on parent "
 "folders."
 msgstr ""
+"Tillatelser på undermapper har høyere prioritet enn tilatelser på "
+"overordnede mapper."
 
 #: templates/help/folder_permission.html:31
 msgid "Here is a more complex example:"
-msgstr ""
+msgstr "Her er et mer komplisert eksempel:"
 
 #: templates/help/folder_permission.html:32
 msgid ""
@@ -965,6 +1201,12 @@ msgid ""
 "first matched for folder \"A/B\" and user \"John\", which is inherited from "
 "its parent \"A\"."
 msgstr ""
+"Anta at mappestrukturen er «A/B», bruker «John» er i gruppen «Ansatte». Hvis"
+" du setter «bare lese»-tilgang på mappe A for John, og også setter «les- og "
+"skrivetilgang» på mappen «A/B» for gruppen «Ansatte», har John fortsatt kun "
+"«bare lese»-tilgang til mappen «A/B». Dette er fordi, i henhold til regel 2,"
+" blir «bare lese»-tilgangen først matchet for mappen «A/B» og bruker «John»,"
+" som arves fra overordnet mappe «A»."
 
 #: templates/help/full_text_file_search.html:6
 msgid ""
@@ -972,46 +1214,49 @@ msgid ""
 "as well as the content of certain files, in the Seafile web app. Currently "
 "Seafile can search the contents of the following types of files:"
 msgstr ""
+"Hvis du bruker en Pro Edition-server, kan du søke i fil- og mappenavn, samt "
+"innholdet i visse filer, i Seafile nettappen. For øyeblikket kan Seafile "
+"søke i innholdet i følgende filtyper:"
 
 #: templates/help/full_text_file_search.html:8
 #: templates/help/viewing_files_within_web_app.html:8
 msgid "Microsoft Office Doc: .doc, .docx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Doc: .doc, .docx (kun Pro Edition-server)"
 
 #: templates/help/full_text_file_search.html:9
 #: templates/help/viewing_files_within_web_app.html:9
 msgid "Microsoft Office PowerPoint: .ppt, .pptx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office PowerPoint: .ppt, .pptx (kun Pro Edition-server)"
 
 #: templates/help/full_text_file_search.html:10
 #: templates/help/viewing_files_within_web_app.html:10
 msgid "Microsoft Office Excel: .xls, .xlsx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Excel: .xls, .xlsx (kun Pro Edition-server)"
 
 #: templates/help/full_text_file_search.html:11
 #: templates/help/viewing_files_within_web_app.html:11
 msgid "LibreOffice files"
-msgstr ""
+msgstr "LibreOffice-filer"
 
 #: templates/help/full_text_file_search.html:12
 #: templates/help/viewing_files_within_web_app.html:12
 msgid "PDF files"
-msgstr ""
+msgstr "PDF-filer"
 
 #: templates/help/full_text_file_search.html:13
 #: templates/help/viewing_files_within_web_app.html:14
 msgid "Markdown files: .md"
-msgstr ""
+msgstr "Markdown-filer: .md"
 
 #: templates/help/full_text_file_search.html:14
 #: templates/help/viewing_files_within_web_app.html:15
 msgid "Various source code files"
-msgstr ""
+msgstr "Ulike kildekodefiler"
 
 #: templates/help/full_text_file_search.html:15
 #: templates/help/viewing_files_within_web_app.html:16
 msgid "Text files: .txt, .log"
-msgstr ""
+msgstr "Tekstfiler: .txt, .log"
 
 #: templates/help/full_text_file_search.html:17
 msgid ""
@@ -1019,34 +1264,44 @@ msgid ""
 "text search feature. In that case, you can only search file and folder "
 "names."
 msgstr ""
+"Merk at systemadministratoren din kanskje ikke har aktivert "
+"fulltekstsøkefunksjonen. I så fall kan du kun søke i fil- og mappenavn."
 
 #: templates/help/groups_managing.html:6
 msgid ""
 "Creating a group is a convenient way to share files to many people. In "
 "Seafile, you can create and manage a group easily."
 msgstr ""
+"Å opprette en gruppe er en praktisk måte å dele filer med mange personer. I "
+"Seafile kan du enkelt opprette og administrere en gruppe."
 
 #: templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
-msgstr ""
+msgstr "Slik fungerer grupper i Seafile:"
 
 #: templates/help/groups_managing.html:9
 msgid ""
 "Each group has a owner. The owner is the creator of the group by default. "
 "He/she can transfer the ownership of the group to another member."
 msgstr ""
+"Hver gruppe har en eier. Eieren er som standard oppretter av gruppen. "
+"Han/hun kan overføre eierskapet av gruppen til et annet medlem."
 
 #: templates/help/groups_managing.html:10
 msgid ""
 "Each group can have multiple admins. The group owner and group admins can "
 "add more group admins."
 msgstr ""
+"Hver gruppe kan ha flere administratorer. Gruppeier og gruppeadministratorer"
+" kan legge til flere gruppeadministratorer."
 
 #: templates/help/groups_managing.html:11
 msgid ""
 "The group admin can add/delete members in the group. And he/she can also "
 "unshare a library in the group."
 msgstr ""
+"Gruppeadministratoren kan legge til/slette medlemmer i gruppen. Han/hun kan "
+"også fjerne delingen av et bibliotek i gruppen."
 
 #: templates/help/groups_managing.html:13
 msgid ""
@@ -1054,6 +1309,9 @@ msgid ""
 "all the groups you're in. Clicking into any group, you'll see the libraries "
 "shared into this group."
 msgstr ""
+"Klikk på fanen «Delt med grupper» i venstre panel, og du ser alle gruppene "
+"du er med i. Når du klikker inn i en gruppe, ser du bibliotekene delt inn i "
+"denne gruppen."
 
 #: templates/help/groups_managing.html:14
 msgid ""
@@ -1061,6 +1319,9 @@ msgid ""
 "panel. Then click on \"All Groups\". In the page, you can click the \"New "
 "Group\" button to create a group."
 msgstr ""
+"For å opprette en ny gruppe, klikk på fanen «Delt med grupper» i venstre "
+"panel. Klikk deretter på «Alle grupper». På denne siden kan du klikke på «Ny"
+" gruppe»-knappen for å opprette en gruppe."
 
 #: templates/help/groups_managing.html:15
 #, python-format
@@ -1068,6 +1329,8 @@ msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
 "and folders</a> about how to share libraries or folders to a group."
 msgstr ""
+"Se <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">deling av filer "
+"og mapper</a> for hvordan du deler biblioteker eller mapper med en gruppe."
 
 #: templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
@@ -1081,6 +1344,11 @@ msgid ""
 "should not sync. Each line in a ignore.txt file specifies a pattern. The "
 "following pattern format are supported."
 msgstr ""
+"Iblandt vil du ikke synkronisere visse filer eller mapper inni et bibliotek."
+" For å oppnå dette, opprett en fil med navn seafile-ignore.txt i rotmappen "
+"til et bibliotek. Denne spesielle filen angir hvilke filer og mapper Seafile"
+" ikke skal synkronisere. Hver linje i en ignore.txt-fil angir et mønster. "
+"Følgende mønsterformater støttes."
 
 #: templates/help/ignore.html:10
 msgid "A blank line matches no files."
@@ -1109,6 +1377,9 @@ msgid ""
 "words, \"foo/\" will match a folder \"foo\" and paths underneath it, but "
 "will not match a regular file or a symbolic link \"foo\"."
 msgstr ""
+"Hvis mønsteret slutter med en skråstrek, matcher det kun en mappe. Med andre"
+" ord: «foo/» vil matche en mappe «foo» og stier under den, men ikke en "
+"vanlig fil eller symbolsk lenke med navn «foo»."
 
 #: templates/help/ignore.html:14
 msgid ""
@@ -1170,15 +1441,15 @@ msgstr ""
 
 #: templates/help/install_sync.html:6
 msgid "Installing Seafile client program"
-msgstr ""
+msgstr "Installering av Seafile-klientprogram"
 
 #: templates/help/install_sync.html:8
 msgid ""
 "After downloading Seafile client program, you have 3 steps left to get it up"
 " and running."
 msgstr ""
-"Etter nedlasting av klientprogrammet for Seafile, har du 3 steg igjen for å "
-"komme i gang."
+"Etter nedlasting av Seafile-klientprogrammet har du 3 trinn igjen for å få "
+"det i gang."
 
 #: templates/help/install_sync.html:10
 msgid "1. Select a disk partition to store local Seafile data"
@@ -1186,7 +1457,7 @@ msgstr "1. Velg en diskpartisjon for å lagre lokale Seafile-data"
 
 #: templates/help/install_sync.html:11
 msgid "Selecting a folder to store Seafile data"
-msgstr ""
+msgstr "Velg en mappe til lagring av Seafile-data"
 
 #: templates/help/install_sync.html:13
 msgid "2. Add an account"
@@ -1195,8 +1466,7 @@ msgstr "2. Legg til en konto"
 #: templates/help/install_sync.html:14
 msgid "Add an account on your private Seafile server or our public server."
 msgstr ""
-"Legg til en konto på din private Seafile-server eller på vår offentlige "
-"server."
+"Legg til en konto på din private Seafile-server eller vår offentlige server."
 
 #: templates/help/install_sync.html:18
 msgid "3. Sync a library"
@@ -1205,15 +1475,15 @@ msgstr "3. Synkroniser et bibliotek"
 #: templates/help/install_sync.html:20
 msgid "Click the \"Sync this library\" button to sync it with a local folder."
 msgstr ""
-"Klikk på \"Synkroniser dette biblioteket\"-knappen for å synkronisere det "
-"med en lokal mappe."
+"Klikk på «Synkroniser dette biblioteket»-knappen for å synkronisere det med "
+"en lokal mappe."
 
 #: templates/help/install_sync.html:21
 msgid ""
 "Then you add some files into the library. They will be automatically synced "
 "with cloud platform."
 msgstr ""
-"Så legger du til noen filer i biblioteket. Disse vil automatisk bli "
+"Deretter legger du til noen filer i biblioteket. Disse blir automatisk "
 "synkronisert med skyplattformen."
 
 #: templates/help/install_sync.html:26
@@ -1226,7 +1496,7 @@ msgstr "Du kan også lage et bibliotek fra en lokal mappe."
 
 #: templates/help/install_sync.html:34
 msgid "5. Browse files on the cloud"
-msgstr ""
+msgstr "5. Bla gjennom filer i skyen"
 
 #: templates/help/install_sync.html:35
 msgid ""
@@ -1234,12 +1504,16 @@ msgid ""
 "syncing them. Seafile client comes with a \"cloud file browser\" to meet "
 "this need. Click an unsynced library will open the cloud file browser."
 msgstr ""
+"I enkelte tilfeller ønsker du å endre filer i skyen direkte uten å "
+"synkronisere dem. Seafile-klienten har en «skyfilutforsker» for å møte dette"
+" behovet. Klikk på et usynkronisert bibliotek for å åpne skyfilutforskeren."
 
 #: templates/help/introduction.html:8
 msgid ""
 "Seafile is an enterprise file hosting platform with high reliability and "
 "performance."
 msgstr ""
+"Seafile er en bedriftsfildeling plattform med høy pålitelighet og ytelse."
 
 #: templates/help/introduction.html:9
 #, python-format
@@ -1250,6 +1524,11 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/using_drive_client\">the drive client</a>. It also "
 "has mobile clients for Android and iOS."
 msgstr ""
+"Seafile har et nettgrensesnitt for å administrere og dele filer. Den har to "
+"typer skrivebordsklienter: <a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">filsynkroniseringsklient</a> og <a "
+"href=\"%(SITE_ROOT)shelp/using_drive_client\">drive-klient</a>. Den har også"
+" mobilklienter for Android og iOS."
 
 #: templates/help/introduction.html:10
 msgid ""
@@ -1257,6 +1536,9 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile web "
 "site</a>."
 msgstr ""
+"Du kan laste ned klientene på <a "
+"href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile-"
+"nettsiden</a>."
 
 #: templates/help/introduction.html:11
 msgid ""
@@ -1264,6 +1546,9 @@ msgid ""
 "help in our forum: <a href=\"https://forum.seafile.com\" "
 "target=\"_blank\">https://forum.seafile.com</a>."
 msgstr ""
+"Hvis denne manualen ikke inneholder informasjonen du trenger, kan du søke "
+"hjelp i forumet vårt: <a href=\"https://forum.seafile.com\" "
+"target=\"_blank\">https://forum.seafile.com</a>."
 
 #: templates/help/libraries_managing.html:6
 msgid ""
@@ -1273,18 +1558,27 @@ msgid ""
 "library works mostly like a top level folder. But it also has some special "
 "properties:"
 msgstr ""
+"Seafile bruker «biblioteker» til å organisere filene dine. Et bibliotek er "
+"en øverste beholder for en samling filer og mapper. Du kan opprette et "
+"bibliotek for hvert prosjekt du jobber med, eller hver dokumenttype du vil "
+"lagre i Seafile. Et bibliotek fungerer stort sett som en øverste mappe, men "
+"har også noen spesielle egenskaper:"
 
 #: templates/help/libraries_managing.html:8
 msgid ""
 "Each library keeps its own file modification history. There is no global "
 "file modification history across all libraries."
 msgstr ""
+"Hvert bibliotek beholder sin egen filendreingshistorikk. Det finnes ingen "
+"global filendreingshistorikk på tvers av alle biblioteker."
 
 #: templates/help/libraries_managing.html:9
 msgid ""
 "Each library can be synced to desktop clients separately. You can choose "
 "which libraries to be synced."
 msgstr ""
+"Hvert bibliotek kan synkroniseres til skrivebordsklienter separat. Du kan "
+"velge hvilke biblioteker som skal synkroniseres."
 
 #: templates/help/libraries_managing.html:11
 msgid ""
@@ -1293,12 +1587,18 @@ msgid ""
 "can also create more libraries. Here is what it looks like when you've "
 "created a few libraries."
 msgstr ""
+"Når du logger inn i Seafiles nettapp for første gang, oppretter Seafile "
+"automatisk et standardbibliotek med navn «Mitt bibliotek» for deg. Du kan "
+"også opprette flere biblioteker. Slik ser det ut når du har opprettet noen "
+"få biblioteker."
 
 #: templates/help/libraries_managing.html:13
 msgid ""
 "You can navigate into a library and manage your files and folders. You can "
 "upload, download, rename, move, copy and delete files."
 msgstr ""
+"Du kan gå inn i et bibliotek og administrere filer og mapper. Du kan laste "
+"opp, laste ned, gi nytt navn, flytte, kopiere og slette filer."
 
 #: templates/help/libraries_managing.html:15
 #, python-format
@@ -1307,6 +1607,10 @@ msgid ""
 "desktop client</a>, you can do any file operations inside the local library "
 "folder. The operations will be uploaded to the server. "
 msgstr ""
+"Etter å ha <a href=\"%(SITE_ROOT)shelp/install_sync/\">synkronisert et "
+"bibliotek med skrivebordsklienten</a>, kan du utføre alle filhandlinger "
+"innenfor den lokale biblioteksmappen. Handlingene blir lastet opp til "
+"serveren."
 
 #: templates/help/library_history_and_snapshots.html:7
 msgid ""
@@ -1315,6 +1619,11 @@ msgid ""
 "creates a \"snapshot\" of the previous state of the library. The snapshot "
 "contains the complete file and folder structure of the library."
 msgstr ""
+"Seafile sporer endreingshistorikk for hele biblioteket. Hver gang en "
+"filhandling gjøres på et bibliotek (filoppdatering, sletting av fil osv.), "
+"oppretter Seafile et «øyeblikksbilde» av bibliotekets forrige tilstand. "
+"Øyeblikksbildet inneholder den komplette fil- og mappestrukturen til "
+"biblioteket."
 
 #: templates/help/library_history_and_snapshots.html:8
 msgid ""
@@ -1325,10 +1634,16 @@ msgid ""
 "files in the library will be restored to that point of time, all at once. It"
 " works like a \"time machine\" for the library."
 msgstr ""
+"I enkelte tilfeller har du endret mange filer i biblioteket og ønsker å "
+"angre alle disse endringene. Å gjenopprette mange filer til deres eldre "
+"versjoner kan være tidkrevende. Da blir øyeblikksbildefunksjonen veldig "
+"praktisk. Du kan gjenopprette hele biblioteket til ethvert tidspunkt i "
+"fortiden. Alle filer i biblioteket gjenopprettes til den tidspunktet, alle "
+"på én gang. Den fungerer som en «tidsmaskin» for biblioteket."
 
 #: templates/help/library_history_and_snapshots.html:9
 msgid "To view library history and snapshots:"
-msgstr ""
+msgstr "Slik viser du bibliotekshistorikk og øyeblikksbilder:"
 
 #: templates/help/library_history_and_snapshots.html:11
 msgid ""
@@ -1336,12 +1651,17 @@ msgid ""
 "\"History\" icon in the library navigation top bar. All the change record of"
 " the library will be displayed in a list."
 msgstr ""
+"I Seafile Web App går du til rotmappen til et bibliotek. Klikk på "
+"«Historikk»-ikonet i bibliotekets øverste navigasjonslinje. Alle "
+"endringslogger for biblioteket vises i en liste."
 
 #: templates/help/library_history_and_snapshots.html:12
 msgid ""
 "Click the \"view snapshot\" link on any modification record. You'll see the "
 "library state at the point of time."
 msgstr ""
+"Klikk på lenken «vis øyeblikksbilde» på en hvilken som helst endringslogg. "
+"Du ser da bibliotekets tilstand på det tidspunktet."
 
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
@@ -1350,6 +1670,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Du kan konfigurere oppbevaringsperioden for bibliotekshistorikk: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">innstilling av "
+"historikkens oppbevaringsperiode</a>."
 
 #: templates/help/manage_library_as_wiki.html:6
 msgid ""
@@ -1359,6 +1682,11 @@ msgid ""
 "files store textual, tabular as well as graphical information; You can also "
 "add links to other documents in a Markdown file."
 msgstr ""
+"Å fange og lagre lite strukturert data på en brukervennlig måte – dette er "
+"hva Seafiles wikier er til for. Wikisider skrives i Markdown (MD), et enkelt"
+" oppmerkingsspråk, for å sikre plattformuavhengig kompatibilitet. MD-filer "
+"lagrer tekst-, tabell- og bildeinformasjon; du kan også legge til lenker til"
+" andre dokumenter i en Markdown-fil."
 
 #: templates/help/manage_library_as_wiki.html:7
 msgid ""
@@ -1367,10 +1695,14 @@ msgid ""
 " Seafile libraries, they can be synced and shared with other users just like"
 " any ordinary library."
 msgstr ""
+"Du kan administrere et standardbibliotek i Seafile som en wiki, med "
+"«Kolonneringsvisning» som ble introdusert i versjon 7.0. Siden Seafile "
+"bruker wikier som vanlige Seafile-biblioteker, kan de synkroniseres og deles"
+" med andre brukere på samme måte som ethvert annet bibliotek."
 
 #: templates/help/manage_library_as_wiki.html:8
 msgid "Column view"
-msgstr ""
+msgstr "Kolonneringsvisning"
 
 #: templates/help/manage_library_as_wiki.html:9
 msgid ""
@@ -1381,10 +1713,16 @@ msgid ""
 "File actions such as renaming, moving, and opening via client are available "
 "in a right-click-accessible context menu."
 msgstr ""
+"Wikier har vanligvis en sidestolpe med en treaktig mappestruktur, slik at du"
+" raskt og enkelt kan bla gjennom wikisider. Seafiles kolonneringsvisning lar"
+" deg administrere filer i et bibliotek på samme måte som et wikiområde. "
+"Brukere kan bla i det og flytte filer og mapper bare ved å dra og slippe. "
+"Filhandlinger som å gi nytt navn, flytte og åpne via klienten er "
+"tilgjengelige i en høyreklikkbar hurtigmeny."
 
 #: templates/help/manage_library_as_wiki.html:12
 msgid "WYSIWYG Markdown editor"
-msgstr ""
+msgstr "WYSIWYG Markdown-redigering"
 
 #: templates/help/manage_library_as_wiki.html:13
 msgid ""
@@ -1400,12 +1738,25 @@ msgid ""
 "table’s content: A table can be copied in its entirety or in part without "
 "leaving the WYSIWYG view."
 msgstr ""
+"Wikisider i Seafile lagres som vanlige dokumenter i Markdown-format. For å "
+"lage en ny wikiside i et bibliotek, trenger du bare å opprette et nytt "
+"Markdown-dokument. MD-filer kan redigeres direkte fra Seafiles "
+"nettgrensesnitt med den online MD-redigereren. Den nettbaserte redigereren "
+"gir en jevn brukeropplevelse og rike formateringsalternativer for tekst, "
+"bilder og tabeller. Bilder kan importeres til MD-filer både fra biblioteker "
+"og lokalt lager, samt via hyperlenker. Enkle bilderedigeringsfunksjoner som "
+"skalering kan også utføres i redigererens what-you-see-is-what-you-get "
+"(WYSIWYG)-grensesnitt. Tabeller kan settes inn og endres med bare noen få "
+"klikk. Det samme gjelder for en tabells innhold: En tabell kan kopieres helt"
+" eller delvis uten å forlate WYSIWYG-visningen."
 
 #: templates/help/manage_library_as_wiki.html:15
 msgid ""
 "The change history of a Markdown file can be easily accessed by clicking the"
 " \"File History\" button in the menu on top of the editor interface."
 msgstr ""
+"Endreingshistorikken til en Markdown-fil kan enkelt åpnes ved å klikke på "
+"«Filhistorikk»-knappen i menyen øverst i redigeringsgrensesnittet."
 
 #: templates/help/manage_library_as_wiki.html:17
 msgid ""
@@ -1413,10 +1764,13 @@ msgid ""
 "Table of contents, file information, and collaborative commenting are "
 "provided in this side bar."
 msgstr ""
+"Du kan åpne en skjult sidestolpe til høyre i Markdown-redigereren. "
+"Innholdsfortegnelse, filinformasjon og samarbeidskommentarer er "
+"tilgjengelige i denne sidestolpen."
 
 #: templates/help/manage_library_as_wiki.html:19
 msgid "File tagging and related documents"
-msgstr ""
+msgstr "Filmerking og relaterte dokumenter"
 
 #: templates/help/manage_library_as_wiki.html:20
 msgid ""
@@ -1425,22 +1779,30 @@ msgid ""
 "can be managed from the side bar of the Markdown editor, or from the file "
 "browser interface."
 msgstr ""
+"Filmerking er en viktig funksjon for kunnskapsstyring. Seafile lar brukere "
+"definere merker for hvert bibliotek og legge merker til filer. Merker kan "
+"administreres fra sidestolpen i Markdown-redigereren, eller fra "
+"filutforskergrensesnittet."
 
 #: templates/help/manage_library_as_wiki.html:23
 msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
 msgstr ""
+"Filutforskergrensesnittet gir en oversikt over alle filmerker i det "
+"gjeldende biblioteket."
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
 "If you want the be-shared users not be able to modify local copies, you can "
 "consider using the Seafile Drive client."
 msgstr ""
+"Hvis du vil at delte brukere ikke skal kunne endre lokale kopier, kan du "
+"vurdere å bruke Seafile Drive-klienten."
 
 #: templates/help/restoring_deleted_files.html:6
 msgid "Restoring deleted files and folders"
-msgstr ""
+msgstr "Gjenopprette slettede filer og mapper"
 
 #: templates/help/restoring_deleted_files.html:7
 msgid ""
@@ -1448,16 +1810,21 @@ msgid ""
 "Sometimes you find files are deleted mistakenly. You can find back your "
 "deleted files in the trash bin of each library."
 msgstr ""
+"Hvert bibliotek i Seafile sporer dine sletteoperasjoner automatisk. Iblandt "
+"oppdager du at filer er slettet ved en feil. Du kan finne tilbake dine "
+"slettede filer i papirkurven til hvert bibliotek."
 
 #: templates/help/restoring_deleted_files.html:8
 msgid "Here is how to use the trash bin feature:"
-msgstr ""
+msgstr "Slik bruker du papirkurvsfunksjonen:"
 
 #: templates/help/restoring_deleted_files.html:10
 msgid ""
 "In Seafile Web App, navigate into the parent folder containing the deleted "
 "file or folder."
 msgstr ""
+"I Seafile Web App går du til overordnet mappe som inneholder den slettede "
+"filen eller mappen."
 
 #: templates/help/restoring_deleted_files.html:11
 msgid ""
@@ -1465,6 +1832,9 @@ msgid ""
 " folders will be listed in deletion time order. In the bottom of the list, "
 "you can click the \"more\" button to load more deleted files."
 msgstr ""
+"Klikk på «papirkurv»-ikonet i biblioteksfunksjonslinjen. De slettede filene "
+"og mappene vises i rekkefølge etter slettetidspunkt. Nederst i listen kan du"
+" klikke på «mer»-knappen for å laste flere slettede filer."
 
 #: templates/help/restoring_deleted_files.html:12
 msgid ""
@@ -1472,6 +1842,9 @@ msgid ""
 "folder's parent folder has been deleted, it will be restored to the "
 "library's root folder."
 msgstr ""
+"I listen over slettede filer kan du gjenopprette filer og mapper. Hvis en "
+"fils eller mappes overordnede mappe er slettet, gjenopprettes den til "
+"bibliotekets rotmappe."
 
 #: templates/help/restoring_deleted_files.html:13
 msgid ""
@@ -1479,6 +1852,9 @@ msgid ""
 "the current folder. Files deleted in the sub-folders of the current folder "
 "are also included in the list."
 msgstr ""
+"Merk at papirkurven kun inneholder filer og undermapper slettet under den "
+"gjeldende mappen. Filer slettet i undermapper til gjeldende mappe er også "
+"med i listen."
 
 #: templates/help/restoring_deleted_files.html:15
 #, python-format
@@ -1487,6 +1863,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Du kan konfigurere oppbevaringsperioden for slettede filer: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">innstilling av "
+"historikkens oppbevaringsperiode</a>."
 
 #: templates/help/selective_sync.html:8
 msgid ""
@@ -1495,6 +1874,10 @@ msgid ""
 "selectively sync a sub-folder in a library, instead of syncing the entire "
 "library."
 msgstr ""
+"Du kan ha veldig store biblioteker på Seafile-serveren. Og du er for "
+"øyeblikket bare interessert i en undermappe inni ett bibliotek. Da kan du "
+"synkronisere en undermappe i et bibliotek selektivt, i stedet for å "
+"synkronisere hele biblioteket."
 
 #: templates/help/selective_sync.html:10
 msgid ""
@@ -1503,40 +1886,54 @@ msgid ""
 "folder. Right click on the sub-folder. Choose \"Sync this folder\" in the "
 "pop-up menu."
 msgstr ""
+"For å synkronisere en undermappe åpner du skyfilutforskeren ved å "
+"dobbeltklikke på et bibliotek som ikke er synkronisert. Gå til overordnet "
+"mappe til denne undermappen. Høyreklikk på undermappen. Velg «Synkroniser "
+"denne mappen» i hurtigmenyen."
 
 #: templates/help/selective_sync.html:14
 msgid ""
 "After syncing the sub-folder, you can see its syncing status in the \"Synced"
 " Libraries\" group in the client's main window."
 msgstr ""
+"Etter at du har synkronisert undermappen, kan du se synkroniseringsstatusen "
+"i gruppen «Synkroniserte biblioteker» i klientens hovedvindu."
 
 #: templates/help/setting_library_history.html:6
 msgid "Setting library history retention period"
-msgstr ""
+msgstr "Innstillinger for bibliotekets historikkoppbevaring"
 
 #: templates/help/setting_library_history.html:7
 msgid ""
 "A library's history retention period length controls how long you can access"
 " your history data in the following features:"
 msgstr ""
+"Lengden på et biblioteks historikkoppbevaringsperiode bestemmer hvor lenge "
+"du kan få tilgang til dine historikkdata i følgende funksjoner:"
 
 #: templates/help/setting_library_history.html:9
 msgid ""
 "Restore deleted files: you cannot restore files and folders deleted before "
 "the retention period."
 msgstr ""
+"Gjenopprette slettede filer: du kan ikke gjenopprette filer og mapper "
+"slettet før oppbevaringsperioden."
 
 #: templates/help/setting_library_history.html:10
 msgid ""
 "File versions: you cannot access file versions older than the retention "
 "period."
 msgstr ""
+"Filversjoner: du kan ikke få tilgang til filversjoner eldre enn "
+"oppbevaringsperioden."
 
 #: templates/help/setting_library_history.html:11
 msgid ""
 "Library history and snapshots: you cannot access library snapshots older "
 "than the retention period."
 msgstr ""
+"Bibliotekshistorikk og øyeblikksbilder: du kan ikke få tilgang til "
+"bibliotekøyeblikksbilder eldre enn oppbevaringsperioden."
 
 #: templates/help/setting_library_history.html:13
 msgid ""
@@ -1544,51 +1941,67 @@ msgid ""
 "library, separately. You must be the library's owner to set the retention "
 "period. To set retention period length:"
 msgstr ""
+"Oppbevaringsperioden for gamle filversjoner kan konfigureres for hvert "
+"bibliotek separat. Du må være eier av biblioteket for å angi "
+"oppbevaringsperioden. Slik angir du lengden på oppbevaringsperioden:"
 
 #: templates/help/setting_library_history.html:15
 msgid ""
 "In Seafile Web App, click the \"Mine\" tab in the navigation panel (as in "
 "the below screenshot). All libraries owned by you will be listed."
 msgstr ""
+"I Seafile Web App klikker du på fanen «Mine» i navigasjonspanelet (som på "
+"skjermbildet nedenfor). Alle biblioteker du eier vises i en liste."
 
 #: templates/help/setting_library_history.html:16
 msgid ""
 "Move the cursor onto the row of the library. An operation menu will appear. "
 "Click \"History Setting\" in the drop-down menu."
 msgstr ""
+"Flytt markøren til bibliotekets rad. En funksjonsmeny vises. Klikk på "
+"«Historikkinnstillinger» i rullemenyen."
 
 #: templates/help/setting_library_history.html:17
 msgid "In the pop-up dialog, you can set the length of file retention period."
 msgstr ""
+"I dialogboksen som vises kan du angi lengden på filoppbevaringsperioden."
 
 #: templates/help/sharing_files_and_folders.html:6
 msgid ""
 "In Seafile there are a few ways to share files and folders with others:"
-msgstr ""
+msgstr "I Seafile finnes det flere måter å dele filer og mapper med andre på:"
 
 #: templates/help/sharing_files_and_folders.html:8
 msgid ""
 "Using links: there are multiple types of links that can be used to share "
 "with various scope of collaborators."
 msgstr ""
+"Bruke lenker: det finnes flere typer lenker som kan brukes til å dele med "
+"ulike grupper av samarbeidspartnere."
 
 #: templates/help/sharing_files_and_folders.html:10
 msgid ""
 "Share links: Any user who has access to the links can access the files or "
 "folders pointed by the link. No login is required."
 msgstr ""
+"Delelenker: Enhver bruker som har tilgang til lenken kan åpne filene eller "
+"mappene lenken peker til. Ingen innlogging kreves."
 
 #: templates/help/sharing_files_and_folders.html:11
 msgid ""
 "Upload links: Any user who has access to the links can upload files to the "
 "folder pointed by the link. No login is required."
 msgstr ""
+"Last-opp-lenker: Enhver bruker som har tilgang til lenken kan laste opp "
+"filer til mappen lenken peker til. Ingen innlogging kreves."
 
 #: templates/help/sharing_files_and_folders.html:12
 msgid ""
 "Internal links: Only logged in users who have read permission to the file or"
 " folder can access this link. Used for internal file sharing."
 msgstr ""
+"Interne lenker: Bare innloggede brukere som har lesetilgang til filen eller "
+"mappen kan åpne denne lenken. Brukes til intern fildeling."
 
 #: templates/help/sharing_files_and_folders.html:15
 msgid ""
@@ -1596,10 +2009,13 @@ msgid ""
 "library or folder for specific users or groups. Users have to log in to "
 "access the folders."
 msgstr ""
+"Deling av biblioteker eller mapper: brukes til å angi tilgangstillatelser "
+"for et bibliotek eller mappe for bestemte brukere eller grupper. Brukere må "
+"logge inn for å få tilgang til mappene."
 
 #: templates/help/sharing_files_and_folders.html:17
 msgid "Creating share links to files or folders"
-msgstr ""
+msgstr "Opprette delelenker til filer eller mapper"
 
 #: templates/help/sharing_files_and_folders.html:18
 msgid ""
@@ -1607,12 +2023,17 @@ msgid ""
 "anyone, including those who don't have a Seafile account. You can also use "
 "password and expiration time to protect your links."
 msgstr ""
+"Delelenker er offentlige lenker til filer eller mapper. De kan åpnes av hvem"
+" som helst, også de som ikke har en Seafile-konto. Du kan også bruke passord"
+" og utløpstid for å beskytte lenkene dine."
 
 #: templates/help/sharing_files_and_folders.html:19
 msgid ""
 "You can also set access permission to share links. There are three types of "
 "permissions:"
 msgstr ""
+"Du kan også angi tilgangstillatelser for delelenker. Det finnes tre typer "
+"tillatelser:"
 
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
@@ -1620,6 +2041,8 @@ msgid ""
 "browser, but cannot be downloaded. This is useful for sharing confidential "
 "data."
 msgstr ""
+"Bare forhåndsvisning: filen eller filene i mappen kan kun vises i nettleser,"
+" men ikke lastes ned. Dette er nyttig for deling av konfidensiell data."
 
 #: templates/help/sharing_files_and_folders.html:23
 msgid ""
@@ -1627,16 +2050,21 @@ msgid ""
 "file can be edited in web browser (e.g. an Office file), any user who has "
 "access to the link is allowed to edit it."
 msgstr ""
+"Rediger i skyen og last ned: Tilsvarende «Forhåndsvis og last ned», men hvis"
+" filen kan redigeres i nettleser (f.eks. en Office-fil), kan enhver bruker "
+"som har tilgang til lenken redigere den."
 
 #: templates/help/sharing_files_and_folders.html:25
 msgid "To create a share link in Seafile web app:"
-msgstr ""
+msgstr "Slik oppretter du en delelenke i Seafile Web App:"
 
 #: templates/help/sharing_files_and_folders.html:27
 msgid ""
 "Navigate into the parent folder containing the file or folder. Hover your "
 "mouse over the file or folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Gå til overordnet mappe som inneholder filen eller mappen. Hold musepekeren "
+"over filen eller mappen og klikk på «Del»-ikonet som vises."
 
 #: templates/help/sharing_files_and_folders.html:28
 msgid ""
@@ -1644,6 +2072,9 @@ msgid ""
 " on the left panel. Then click \"Generate\" button to create a link. You can"
 " use password, expiration time and permission to protect your link."
 msgstr ""
+"Et vindu med delingsalternativer vises. Klikk på fanen «Delelenke» i venstre"
+" panel. Klikk deretter på «Generer»-knappen for å lage en lenke. Du kan "
+"bruke passord, utløpstid og tillatelser for å beskytte lenken."
 
 #: templates/help/sharing_files_and_folders.html:29
 #: templates/help/sharing_files_and_folders.html:42
@@ -1651,10 +2082,12 @@ msgid ""
 "Copy the link to email, instant messaging client or any other tool to send "
 "it to others."
 msgstr ""
+"Kopier lenken til e-post, chattklient eller annet verktøy for å sende den "
+"til andre."
 
 #: templates/help/sharing_files_and_folders.html:31
 msgid "You can also create share links from the desktop clients."
-msgstr ""
+msgstr "Du kan også opprette delelenker fra skrivebordsklientene."
 
 #: templates/help/sharing_files_and_folders.html:33
 msgid ""
@@ -1663,6 +2096,10 @@ msgid ""
 " on the file or folder that you want to create a link to. In the pop-up "
 "menu, choose \"Seafile\" then \"Create share link\"."
 msgstr ""
+"Hvis biblioteket er synkronisert, dobbeltklikker du på biblioteket i "
+"hovedvinduet til Seafile-klienten. Den lokale mappen til dette biblioteket "
+"åpnes. Høyreklikk på filen eller mappen du vil lage en lenke til. I "
+"hurtigmenyen velger du først «Seafile», deretter «Opprett delelenke»."
 
 #: templates/help/sharing_files_and_folders.html:34
 msgid ""
@@ -1670,10 +2107,13 @@ msgid ""
 " Seafile client. The cloud file browser window will be opened, and you can "
 "create a link to a file or folder in it."
 msgstr ""
+"Hvis biblioteket ikke er synkronisert, dobbeltklikker du på biblioteket i "
+"hovedvinduet til Seafile-klienten. Skyfilutforsker-vinduet åpnes, og du kan "
+"opprette en lenke til en fil eller mappe der."
 
 #: templates/help/sharing_files_and_folders.html:36
 msgid "Creating upload links to folders"
-msgstr ""
+msgstr "Opprette last-opp-lenker til mapper"
 
 #: templates/help/sharing_files_and_folders.html:37
 msgid ""
@@ -1681,16 +2121,21 @@ msgid ""
 "upload links for folders. Others cannot see the files in the folders. They "
 "can only upload files to them."
 msgstr ""
+"Du kan bruke last-opp-lenker for å samle filer fra andre. Du kan kun "
+"opprette last-opp-lenker for mapper. Andre kan ikke se filene i mappene. De "
+"kan kun laste opp filer til dem."
 
 #: templates/help/sharing_files_and_folders.html:38
 msgid "To create an upload link in Seafile web app:"
-msgstr ""
+msgstr "Slik oppretter du en last-opp-lenke i Seafile Web App:"
 
 #: templates/help/sharing_files_and_folders.html:40
 msgid ""
 "Navigate into the parent folder containing the folder. Hover your mouse over"
 " the folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Gå til overordnet mappe som inneholder mappen. Hold musepekeren over mappen "
+"og klikk på «Del»-ikonet som vises."
 
 #: templates/help/sharing_files_and_folders.html:41
 msgid ""
@@ -1698,10 +2143,13 @@ msgid ""
 "tab on the left panel. Then click \"Generate\" button to create a link. You "
 "can use password to protect your link."
 msgstr ""
+"Et vindu med delingsalternativer vises. Klikk på fanen «Last-opp-lenke» i "
+"venstre panel. Klikk deretter på «Generer»-knappen for å lage en lenke. Du "
+"kan bruke passord for å beskytte lenken."
 
 #: templates/help/sharing_files_and_folders.html:44
 msgid "Sharing libraries or folders"
-msgstr ""
+msgstr "Deling av biblioteker eller mapper"
 
 #: templates/help/sharing_files_and_folders.html:45
 msgid ""
@@ -1709,62 +2157,75 @@ msgid ""
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
 msgstr ""
+"Du kan dele et bibliotek eller mappe med andre registrerte Seafile-brukere. "
+"Det delte biblioteket eller mappen kan åpnes av andre via nettappen og "
+"Seafile-klienter."
 
 #: templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
-msgstr ""
+msgstr "Du kan velge omfanget av delingen:"
 
 #: templates/help/sharing_files_and_folders.html:48
 msgid "Share to user: You can share to one or more users."
-msgstr ""
+msgstr "Del til bruker: Du kan dele med en eller flere brukere."
 
 #: templates/help/sharing_files_and_folders.html:49
 msgid "Share to group: You can share to a group."
-msgstr ""
+msgstr "Del til gruppe: Du kan dele med en gruppe."
 
 #: templates/help/sharing_files_and_folders.html:50
 msgid ""
 "Share to organization: If you're using a private server, sometimes it's "
 "useful to share to all members on the server (the entire organization)."
 msgstr ""
+"Del til organisasjon: Hvis du bruker en privat server, er det iblandt nyttig"
+" å dele med alle medlemmer på serveren (hele organisasjonen)."
 
 #: templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
-msgstr ""
+msgstr "Du kan også angi tillatelser for delingen:"
 
 #: templates/help/sharing_files_and_folders.html:54
 msgid "Read-Write: users can read, write, upload, download and sync files."
 msgstr ""
+"Les- og skrivetilgang: brukere kan lese, skrive, laste opp, laste ned og "
+"synkronisere filer."
 
 #: templates/help/sharing_files_and_folders.html:55
 msgid "Read-only: users can read, download and sync files."
-msgstr ""
+msgstr "Bare lesetilgang: brukere kan lese, laste ned og synkronisere filer."
 
 #: templates/help/sharing_files_and_folders.html:56
 msgid "Admin: besides the write permission, users can also share the library."
-msgstr ""
+msgstr "Admin: i tillegg til skrivetilgang kan brukere også dele biblioteket."
 
 #: templates/help/sharing_files_and_folders.html:57
 msgid ""
 "Online Read-Write: users can view and edit files online via a web browser. "
 "The files cannot be downloaded."
 msgstr ""
+"Online les- og skrivetilgang: brukere kan vise og redigere filer online via "
+"nettleser. Filene kan ikke lastes ned."
 
 #: templates/help/sharing_files_and_folders.html:58
 msgid ""
 "Online Read-only: users can only view files online via a web browser. The "
 "files cannot be downloaded."
 msgstr ""
+"Online bare lesetilgang: brukere kan kun vise filer online via nettleser. "
+"Filene kan ikke lastes ned."
 
 #: templates/help/sharing_files_and_folders.html:60
 msgid "To share a library or folder to a user or group:"
-msgstr ""
+msgstr "Slik deler du et bibliotek eller mappe med en bruker eller gruppe:"
 
 #: templates/help/sharing_files_and_folders.html:62
 msgid ""
 "Hover your mouse over the library or folder and click on the \"Share\" icon "
 "that appears."
 msgstr ""
+"Hold musepekeren over biblioteket eller mappen og klikk på «Del»-ikonet som "
+"vises."
 
 #: templates/help/sharing_files_and_folders.html:63
 msgid ""
@@ -1772,6 +2233,9 @@ msgid ""
 "or \"Share to group\" tab on the left panel. Select the user or group. Then "
 "click \"Submit\"."
 msgstr ""
+"Et vindu med delingsalternativer vises. Klikk på fanen «Del til bruker» "
+"eller «Del til gruppe» i venstre panel. Velg bruker eller gruppe. Klikk "
+"deretter «Send inn»."
 
 #: templates/help/sharing_files_and_folders.html:65
 msgid ""
@@ -1780,6 +2244,10 @@ msgid ""
 " you share it to a group, the group members can only see it by navigating "
 "into the group."
 msgstr ""
+"Etter at du har delt et bibliotek eller mappe med en bruker, kan brukeren se"
+" det ved å klikke på fanen «Delt med meg» i venstre panel i Seafile Web App."
+" Hvis du deler det med en gruppe, kan gruppemedlemmene kun se det ved å gå "
+"inn i gruppen."
 
 #: templates/help/sharing_files_and_folders.html:66
 msgid ""
@@ -1788,10 +2256,14 @@ msgid ""
 "button. In the drop-down menu, you can choose to share an existing library "
 "or create a new library and share it."
 msgstr ""
+"Slik deler du et bibliotek med hele organisasjonen: I Seafile Web App "
+"klikker du på fanen «Delt med alle» i venstre panel. Klikk deretter på «Legg"
+" til bibliotek»-knappen. I rullemenyen kan du velge å dele et eksisterende "
+"bibliotek eller opprette et nytt bibliotek og dele det."
 
 #: templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
-msgstr ""
+msgstr "Interne lenker"
 
 #: templates/help/sharing_files_and_folders.html:68
 msgid ""
@@ -1801,6 +2273,10 @@ msgid ""
 "library. You may just copy the link and paste it into an email or IM "
 "software."
 msgstr ""
+"Bare innloggede brukere som har lesetilgang til filen eller mappen kan åpne "
+"denne lenken. Den brukes til intern fildeling. Det er en praktisk måte å "
+"dele filer mellom teammedlemmer som har tilgang til et felles bibliotek. Du "
+"kan bare kopiere lenken og lime den inn i en e-post eller chattprogram."
 
 #: templates/help/sync_interval.html:8
 msgid ""
@@ -1811,10 +2287,16 @@ msgid ""
 "local folder. You can set the interval of this periodic sync. The interval "
 "is set in the unit of seconds."
 msgstr ""
+"Vanligvis oppdager Seafile-klienten automatisk endringer i lokal mappe og "
+"laster endringene opp til serveren. Hvis den lokale mappen imidlertid ligger"
+" på en Windows-nettverksdrevet stasjon, kan ikke Seafile-klienten oppdage "
+"endringer pålitelig. I dette tilfellet kan du be Seafile-klienten om å "
+"periodisk sjekke etter endringer i den lokal mappen. Du kan angi intervallet"
+" for denne periodiske synkroniseringen. Intervallet angis i sekunder."
 
 #: templates/help/syncing_existing_folders.html:6
 msgid "Syncing with an existing folder"
-msgstr ""
+msgstr "Synkronisering med en eksisterende mappe"
 
 #: templates/help/syncing_existing_folders.html:8
 #, python-format
@@ -1828,24 +2310,38 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/conflicts/\">conflict files</a> if file contents "
 "are different in the local folder and the library. "
 msgstr ""
+"Iblandt har du allerede et bibliotek på Seafile-serveren (delt av andre, "
+"eller lastet opp fra en annen datamaskin). Du kan synkronisere dette "
+"biblioteket med en eksisterende mappe på datamaskinen din. Den lokale mappen"
+" må ha samme navn som biblioteket. Filene i den lokale mappen slås sammen "
+"med filene i biblioteket. Ingen filer i den lokale mappen eller biblioteket "
+"blir overskrevet eller tapt. Sammenslåingen kan opprette noen <a "
+"href=\"%(SITE_ROOT)shelp/conflicts/\">konfliktfiler</a> hvis filinnholdet er"
+" forskjellig i den lokale mappen og biblioteket. "
 
 #: templates/help/syncing_existing_folders.html:10
 msgid ""
 "To sync a library with an existing folder, right click on the library in "
 "Seafile client's main window and click \"Sync this library\"."
 msgstr ""
+"For å synkronisere et bibliotek med en eksisterende mappe, høyreklikker du "
+"på biblioteket i hovedvinduet til Seafile-klienten og klikker «Synkroniser "
+"dette biblioteket»."
 
 #: templates/help/syncing_existing_folders.html:14
 msgid "In the pop-up dialog, click the \"Sync with an existing folder\" link."
 msgstr ""
+"I dialogboksen som vises klikker du på lenken «Synkroniser med en "
+"eksisterende mappe»."
 
 #: templates/help/syncing_existing_folders.html:18
 msgid "Then choose an existing folder to sync with this library."
 msgstr ""
+"Velg deretter en eksisterende mappe å synkronisere med dette biblioteket."
 
 #: templates/help/unsync_resync.html:6
 msgid "Unsync and resync library"
-msgstr ""
+msgstr "Avbryte og gjenopprette synkronisering av bibliotek"
 
 #: templates/help/unsync_resync.html:8
 #, python-format
@@ -1857,6 +2353,13 @@ msgid ""
 "<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
 "folder</a> feature."
 msgstr ""
+"Når du ikke lenger vil synkronisere en lokal mappe med et bibliotek, kan du "
+"avbryte synkroniseringen. Etter at du har avbrutt synkroniseringen av et "
+"bibliotek, blir endringer i den lokale mappen og filene ikke lastet opp, og "
+"endringer i biblioteket blir ikke lastet ned. Hvis du vil synkronisere "
+"biblioteket med den lokale mappen igjen, kan du bruke funksjonen <a "
+"href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">synkroniser med "
+"eksisterende mappe</a>."
 
 #: templates/help/unsync_resync.html:10
 msgid ""
@@ -1865,6 +2368,11 @@ msgid ""
 "unsync and then immediately sync the library with the same folder. You can "
 "find this action in the pop-up menu of the client's main window."
 msgstr ""
+"Iblandt oppstår interne feil i klienten som stopper synkroniseringen. I "
+"disse tilfellene er det vanligvis nyttig å «gjenopprette synkroniseringen» "
+"av biblioteket. Gjenopprett synkronisering betyr å avbryte synkroniseringen "
+"og deretter umiddelbart synkronisere biblioteket med samme mappe. Du kan "
+"finne denne handlingen i hurtigmenyen til klientens hovedvindu."
 
 #: templates/help/using_drive_client.html:7
 msgid ""
@@ -1872,16 +2380,21 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
 "start it by double clicking the \"SeaDrive\" app icon on your desktop."
 msgstr ""
+"Etter å ha installert en drive-klient i henhold til instruksjonene på <a "
+"href=\"https://www.seafile.com/en/download/\">nedlastingssiden</a>, kan du "
+"starte den ved å dobbeltklikke på «SeaDrive»-appikonet på skrivebordet ditt."
 
 #: templates/help/using_drive_client.html:8
 msgid ""
 "You'll be asked to choose a drive letter for the virtual drive. By default, "
 "\"S:\" will be used."
 msgstr ""
+"Du blir bedt om å velge en stasjonsbokstav for den virtuelle stasjonen. Som "
+"standard blir «S:» brukt."
 
 #: templates/help/using_drive_client.html:9
 msgid "Then you'll be asked to log into your Seafile server."
-msgstr ""
+msgstr "Deretter blir du bedt om å logge inn på din Seafile-server."
 
 #: templates/help/using_drive_client.html:12
 msgid ""
@@ -1890,6 +2403,10 @@ msgid ""
 "at this moment. So it'll not take very long. You can let it run in the "
 "background. You'll be noticed when the fetch is done."
 msgstr ""
+"Etter vellykket innlogging på serveren begynner Drive-klienten å hente "
+"biblioteks- og filliste fra serveren. Filinnholdet lastes ikke ned akkurat "
+"nå. Så det tar ikke veldig lang tid. Du kan la den kjøre i bakgrunnen. Du "
+"får en melding når hentingen er ferdig."
 
 #: templates/help/using_drive_client.html:14
 msgid ""
@@ -1899,21 +2416,28 @@ msgid ""
 "when you open a file. Recently opened file will be cached in your local "
 "disk. All cached files will be marked with a green tick."
 msgstr ""
+"Den virtuelle stasjonsmappen åpnes. Du vil merke at den fungerer akkurat som"
+" en vanlig harddisk på datamaskinen din. Øverste nivå mapper på den "
+"virtuelle stasjonen er biblioteker på Seafile-serveren. Filinnhold lastes "
+"ned når du åpner en fil. Nylig åpnede filer blir mellomlagret på din lokale "
+"disk. Alle mellomlagrede filer blir markert med en grønn hake."
 
 #: templates/help/using_drive_client.html:17
 msgid "Synced State"
-msgstr ""
+msgstr "Synkronisert tilstand"
 
 #: templates/help/using_drive_client.html:18
 msgid ""
 "Files and folders in the virtual drive are in either cloud-only, synced, or "
 "in partially synced state."
 msgstr ""
+"Filer og mapper på den virtuelle stasjonen er enten bare i skyen, "
+"synkronisert eller delvis synkronisert."
 
 #: templates/help/using_drive_client.html:22
 #: templates/help/using_drive_client.html:51
 msgid "State"
-msgstr ""
+msgstr "Tilstand"
 
 #: templates/help/using_drive_client.html:23
 #: templates/help/using_drive_client.html:52
@@ -1927,7 +2451,7 @@ msgstr "Detaljer"
 
 #: templates/help/using_drive_client.html:29
 msgid "Cloud-only content"
-msgstr ""
+msgstr "Innhold kun i skyen"
 
 #: templates/help/using_drive_client.html:31
 msgid ""
@@ -1937,71 +2461,89 @@ msgid ""
 "downloaded is only information about the file, such as its name, its size "
 "and the date it was updated."
 msgstr ""
+"Innhold kun i skyen vises på den virtuelle stasjonen, men bruker ikke hele "
+"plassmengden filen ville tatt. I filutforskeren din kan du se filen, men "
+"innholdet lastes ikke helt ned før du trenger det. Det som lastes ned er kun"
+" informasjon om filen, som navn, størrelse og dato for siste oppdatering."
 
 #: templates/help/using_drive_client.html:34
 msgid "Synced content"
-msgstr ""
+msgstr "Synkronisert innhold"
 
 #: templates/help/using_drive_client.html:36
 msgid ""
 "Synced content is downloaded and saved on the hard drive of your computer. "
 "You can directly edit these files from applications on your computer."
 msgstr ""
+"Synkronisert innhold er lastet ned og lagret på harddisken til datamaskinen "
+"din. Du kan redigere disse filene direkte fra programmer på datamaskinen "
+"din."
 
 #: templates/help/using_drive_client.html:39
 msgid "Partially synced content"
-msgstr ""
+msgstr "Delvis synkronisert innhold"
 
 #: templates/help/using_drive_client.html:41
 msgid ""
 "Partially synced folders contain both synced and cloud-only files or "
 "folders."
 msgstr ""
+"Delvis synkroniserte mapper inneholder både synkroniserte og skybaserte "
+"filer eller mapper."
 
 #: templates/help/using_drive_client.html:46
 msgid "Special States"
-msgstr ""
+msgstr "Spesielle tilstander"
 
 #: templates/help/using_drive_client.html:47
 msgid ""
 "For files that are already synced to local computer, they may be in 3 other "
 "special states, besides the normal \"synced\" state. "
 msgstr ""
+"For filer som allerede er synkronisert til lokal datamaskin, kan de være i 3"
+" andre spesielle tilstander, i tillegg til den normale «synkroniserte» "
+"tilstanden. "
 
 #: templates/help/using_drive_client.html:58
 msgid "Locked by other user"
-msgstr ""
+msgstr "Låst av annen bruker"
 
 #: templates/help/using_drive_client.html:60
 msgid ""
 "The file is locked by other user on the server. You can only open the file "
 "in read-only mode. You cannot modify, delete, rename or move the file."
 msgstr ""
+"Filen er låst av en annen bruker på serveren. Du kan kun åpne filen i "
+"lesebare modus. Du kan ikke endre, slette, gi nytt navn eller flytte filen."
 
 #: templates/help/using_drive_client.html:63
 msgid "Locked by me"
-msgstr ""
+msgstr "Låst av meg"
 
 #: templates/help/using_drive_client.html:65
 msgid ""
 "The file is locked by you. This prevents others from modifying the file."
-msgstr ""
+msgstr "Filen er låst av deg. Dette forhindrer andre i å endre filen."
 
 #: templates/help/using_drive_client.html:68
 msgid "Read-only"
-msgstr ""
+msgstr "Bare lese"
 
 #: templates/help/using_drive_client.html:70
 msgid ""
 "The folder or library of this file is shared with read-only permission to "
 "you. You cannot modify, delete or move the file."
 msgstr ""
+"Mappen eller biblioteket til denne filen er delt med bare lesetilgang for "
+"deg. Du kan ikke endre, slette eller flytte filen."
 
 #: templates/help/using_drive_client.html:74
 msgid ""
 "The Drive client regularly cleans up unused cached files in the background. "
 "You can also limit the local cache space."
 msgstr ""
+"Drive-klienten rydder jevnlig opp i ubrukte mellomlagrede filer i "
+"bakgrunnen. Du kan også begrense plassen til lokal mellomlager."
 
 #: templates/help/using_drive_client.html:76
 msgid ""
@@ -2009,10 +2551,14 @@ msgid ""
 "on the current selected server will be shown in the virtual drive. You can "
 "switch among accounts."
 msgstr ""
+"Du kan logge inn på flere kontoer i Drive-klienten. Imidlertid vises kun "
+"filer på den nåværende valgte serveren på den virtuelle stasjonen. Du kan "
+"bytte mellom kontoer."
 
 #: templates/help/using_drive_client.html:80
 msgid "1. Why can't I create new files or delete folders in root folder?"
 msgstr ""
+"1. Hvorfor kan jeg ikke opprette nye filer eller slette mapper i rotmappen?"
 
 #: templates/help/using_drive_client.html:81
 msgid ""
@@ -2023,13 +2569,22 @@ msgid ""
 "represents libraries, we don't want users to delete their libraries by "
 "mistake. So the Drive client doesn't support deleting top level folders."
 msgstr ""
+"Rotmappen til den virtuelle stasjonen inneholder kun biblioteksmapper. "
+"Seafile kan kun synkronisere filer inni biblioteker. Filer i rotmappen kan "
+"ikke lastes opp til Seafile-serveren. Så det er ikke meningsfullt å støtte "
+"opprettelse av filer i rotmappen. Siden øverste nivå mapper på den virtuelle"
+" stasjonen representerer biblioteker, vil vi ikke at brukere skal slette "
+"bibliotekene sine ved en feil. Derfor støtter ikke Drive-klienten sletting "
+"av øverste nivå mapper."
 
 #: templates/help/viewing_files_within_web_app.html:6
 msgid ""
 "Some types of files can be directly opened and viewed within the Seafile Web"
 " App. Currently they are:"
 msgstr ""
+"Noen typer filer kan åpnes og vises direkte i Seafile Web App. For "
+"øyeblikket er dette:"
 
 #: templates/help/viewing_files_within_web_app.html:13
 msgid "Image files"
-msgstr ""
+msgstr "Bildefiler"

@@ -9,6 +9,7 @@
 # Jorgen vd Meulen <j.van.der.meulen@unacle.nl>, 2024
 # jvanattenhoven <jvanattenhoven@naturalsciences.be>, 2024
 # Harmen <sigmo@sigmo.nl>, 2024
+# Seafile Info <info@seafile.com>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -17,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: Harmen <sigmo@sigmo.nl>, 2024\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Dutch (Netherlands) (https://app.transifex.com/haiwen/teams/5086/nl_NL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,7 +28,7 @@ msgstr ""
 
 #: templates/help/base.html:34
 msgid "Side Nav Menu"
-msgstr ""
+msgstr "Sideraal navigatiemenu"
 
 #: templates/help/base.html:48 templates/help/base.html:50
 #: templates/help/introduction.html:6
@@ -36,28 +37,28 @@ msgstr "Inleiding"
 
 #: templates/help/base.html:53
 msgid "Managing files and folders"
-msgstr ""
+msgstr "Bestanden en mappen beheren"
 
 #: templates/help/base.html:55 templates/help/libraries_managing.html:5
 msgid "Managing files with libraries"
-msgstr ""
+msgstr "Bestanden beheren met bibliotheken"
 
 #: templates/help/base.html:56
 msgid "Restoring deleted files"
-msgstr ""
+msgstr "Verwijderde bestanden herstellen"
 
 #: templates/help/base.html:57
 msgid "Finding old file versions"
-msgstr ""
+msgstr "Oude bestandsversies vinden"
 
 #: templates/help/base.html:58
 #: templates/help/library_history_and_snapshots.html:6
 msgid "Library history and snapshots"
-msgstr ""
+msgstr "Bibliotheekgeschiedenis en momentopnamen"
 
 #: templates/help/base.html:59
 msgid "Setting history retention period"
-msgstr ""
+msgstr "Geschiedenisretentieperiode instellen"
 
 #: templates/help/base.html:60 templates/help/deleting_a_library.html:5
 msgid "Deleting a library"
@@ -66,51 +67,51 @@ msgstr "Een bibliotheek verwijderen"
 #: templates/help/base.html:61
 #: templates/help/viewing_files_within_web_app.html:5
 msgid "Viewing files within Web App"
-msgstr ""
+msgstr "Bestanden weergeven in de Web-app"
 
 #: templates/help/base.html:62 templates/help/full_text_file_search.html:5
 msgid "Full text file search"
-msgstr ""
+msgstr " Volledige tekstbestandszoeken"
 
 #: templates/help/base.html:65
 msgid "Sharing and collaboration"
-msgstr ""
+msgstr "Delen en samenwerken"
 
 #: templates/help/base.html:67 templates/help/sharing_files_and_folders.html:5
 msgid "Sharing files and folders"
-msgstr ""
+msgstr "Bestanden en mappen delen"
 
 #: templates/help/base.html:68 templates/help/groups_managing.html:5
 msgid "Managing groups"
-msgstr ""
+msgstr "Groepen beheren"
 
 #: templates/help/base.html:69
 msgid "Locking files"
-msgstr ""
+msgstr "Bestanden vergrendelen"
 
 #: templates/help/base.html:70
 msgid "Folder permission"
-msgstr ""
+msgstr "Mapmachtigingen"
 
 #: templates/help/base.html:71
 msgid "Departments sharing"
-msgstr ""
+msgstr "Afdelingsdeling"
 
 #: templates/help/base.html:74
 msgid "Wiki and knowledge management"
-msgstr ""
+msgstr "Wiki en kennisbeheer"
 
 #: templates/help/base.html:76 templates/help/manage_library_as_wiki.html:5
 msgid "Managing a library as Wiki"
-msgstr ""
+msgstr "Bibliotheek beheren als Wiki"
 
 #: templates/help/base.html:79
 msgid "Desktop client and syncing"
-msgstr ""
+msgstr "Desktopclient en synchronisatie"
 
 #: templates/help/base.html:81
 msgid "Install and sync files"
-msgstr ""
+msgstr "Bestanden installeren en synchroniseren"
 
 #: templates/help/base.html:82
 msgid "Syncing existing folders"
@@ -118,15 +119,15 @@ msgstr "Bestaande mappen synchroniseren"
 
 #: templates/help/base.html:83 templates/help/selective_sync.html:6
 msgid "Selectively sync sub-folders"
-msgstr ""
+msgstr "Selectieve synchronisatie van submappen"
 
 #: templates/help/base.html:84 templates/help/read-only_syncing.html:5
 msgid "Read-only syncing"
-msgstr ""
+msgstr "Alleen-lezen synchronisatie"
 
 #: templates/help/base.html:85
 msgid "Unsync and resync libraries"
-msgstr ""
+msgstr "Bibliotheken ontsynchroniseren en opnieuw synchroniseren"
 
 #: templates/help/base.html:86 templates/help/sync_interval.html:6
 msgid "Setting sync interval"
@@ -146,19 +147,19 @@ msgstr "Bestanden uitsluiten"
 
 #: templates/help/base.html:92
 msgid "Drive client"
-msgstr ""
+msgstr "Drive-client"
 
 #: templates/help/base.html:94 templates/help/using_drive_client.html:6
 msgid "Using Seafile drive client"
-msgstr ""
+msgstr "Hoe de Drive-client gebruiken"
 
 #: templates/help/base.html:95
 msgid "Using drive client 2.0 on Windows"
-msgstr ""
+msgstr "Hoe de Drive-client 2.0 op Windows gebruiken"
 
 #: templates/help/base.html:98
 msgid "Security and encryption"
-msgstr ""
+msgstr "Beveiliging en versleuteling"
 
 #: templates/help/base.html:100
 msgid "How to use encrypted libraries"
@@ -170,6 +171,10 @@ msgid ""
 "you may add, delete or edit files in the library together. Every change you "
 "make to the library would be automatically synced to others' computers."
 msgstr ""
+"Zodra u en uw vrienden een gedeelde bestandsbibliotheek op uw computers "
+"hebben gesynchroniseerd, kunt u bestanden in de bibliotheek samen toevoegen,"
+" verwijderen of bewerken. Elke wijziging die u in de bibliotheek maakt, "
+"wordt automatisch gesynchroniseerd met de computers van anderen."
 
 #: templates/help/conflicts.html:9
 msgid ""
@@ -192,30 +197,39 @@ msgid ""
 "You can delete a library owned by you. A deleted library can be restored by "
 "you or Seafile server's administrator."
 msgstr ""
+"Een bibliotheek die je eigenaar bent, kan verwijderd worden. Een verwijderde"
+" bibliotheek kan door jou of de beheerder van de Seafile-server hersteld "
+"worden."
 
 #: templates/help/deleting_a_library.html:7
 msgid "After a library is deleted, it has following effects:"
-msgstr ""
+msgstr "Na verwijdering van een bibliotheek heeft deze de volgende effecten:"
 
 #: templates/help/deleting_a_library.html:9
 msgid "Share of the files and folders within this library are all canceled."
 msgstr ""
+"Alle gedeelde bestanden en mappen binnen deze bibliotheek worden ongedaan "
+"gemaakt."
 
 #: templates/help/deleting_a_library.html:10
 msgid ""
 "Desktop clients synced with this library cannot sync with it any more. But "
 "the local files on the client won't be deleted."
 msgstr ""
+"Hetzelfde geldt voor desktop-clients die deze bibliotheek synchroniseren. De"
+" lokale bestanden op de client worden niet verwijderd."
 
 #: templates/help/departments.html:5
 msgid "Managing and using departments"
-msgstr ""
+msgstr "Groepen beheren en gebruiken"
 
 #: templates/help/departments.html:6
 msgid ""
 "Some organizations consist of complex department hierarchy. There are "
 "usually two common use cases for file management in these organizations:"
 msgstr ""
+"In deze organisaties zijn er meestal twee gemeenschappelijke "
+"gebruiksscenario's voor bestandsbeheer:"
 
 #: templates/help/departments.html:8
 msgid ""
@@ -223,6 +237,9 @@ msgid ""
 " hierarchy should map the department hierarchy. There will be separate "
 "folder or space assigned to each department."
 msgstr ""
+"Er moet een gemeenschappelijk gedeelde ruimte zijn voor de organisatie. De "
+"mapstructuur moet de afdelingsstructuur mappen. Er wordt een afzonderlijke "
+"map of ruimte toegewezen aan elke afdeling."
 
 #: templates/help/departments.html:9
 msgid ""
@@ -230,46 +247,54 @@ msgid ""
 "individual employees. So that the ownership of files doesn't have to be "
 "changed when an employee leaves the organization."
 msgstr ""
+"De gedeelde ruimte moet eigendom zijn van de organisatie, niet van "
+"individuele werknemers. Zo wordt de eigenaar van bestanden niet veranderd "
+"wanneer een werknemer de organisatie verlaten."
 
 #: templates/help/departments.html:11
 msgid ""
 "The \"Departments\" feature is designed to meet the above two use cases. "
 "We'll introduce this feature from 3 different perspectives:"
 msgstr ""
+"Deze functie is ontworpen om de bovenstaande twee gebruiksscenario's te "
+"ondersteunen. We introduceren deze functie vanaf 3 verschillende "
+"perspectieven:"
 
 #: templates/help/departments.html:13 templates/help/departments.html:17
 msgid "System admin"
-msgstr ""
+msgstr "Systeembeheerder"
 
 #: templates/help/departments.html:14 templates/help/departments.html:35
 msgid "Department admin"
-msgstr ""
+msgstr "Afdelingsbeheerder"
 
 #: templates/help/departments.html:15 templates/help/departments.html:52
 msgid "Department members"
-msgstr ""
+msgstr "Afdelingsleden"
 
 #: templates/help/departments.html:18
 msgid "The system admin can:"
-msgstr ""
+msgstr "De systeembeheerder kan:"
 
 #: templates/help/departments.html:20 templates/help/departments.html:24
 msgid "Manage department hierarchy and members"
-msgstr ""
+msgstr "Afdelingsstructuur beheren en leden beheren"
 
 #: templates/help/departments.html:21 templates/help/departments.html:29
 msgid "Assign storage quota for departments"
-msgstr ""
+msgstr "Opslagquota voor afdelingen toewijzen"
 
 #: templates/help/departments.html:22 templates/help/departments.html:31
 msgid "Create and manage shared libraries in departments"
-msgstr ""
+msgstr "Gedeelde bibliotheken in afdelingen maken en beheren"
 
 #: templates/help/departments.html:25
 msgid ""
 "The system admin can set up the department hierarchy in two ways: manual "
 "setup or import from Active Directory."
 msgstr ""
+"De systeembeheerder kan de afdelingsstructuur manueel instellen of "
+"importeren vanuit Active Directory."
 
 #: templates/help/departments.html:26
 msgid ""
@@ -279,6 +304,10 @@ msgid ""
 "of each member to 'member' or 'admin'. We'll introduce how a department "
 "admin can manage department later."
 msgstr ""
+"De systeembeheerder kan elke afdeling op elk niveau maken en elk niveau "
+"onder een afdeling. Elk niveau van afdeling kan worden bevolkt met leden. De"
+" systeembeheerder kan de rol van elk lid instellen op 'lid' of 'beheerder'. "
+"We introduceren hoe een afdelingsbeheerder de afdeling beheren kan."
 
 #: templates/help/departments.html:27
 msgid ""
@@ -287,12 +316,19 @@ msgid ""
 "under an OU will be imported as sub-departments. Department libraries can be"
 " automatically created in the import process."
 msgstr ""
+"De systeembeheerder kan ook de afdelingsstructuur importeren vanuit OUs "
+"(Organisatieenheden) in Active Directory. Elke OU wordt geïmporteerd als een"
+" afdeling. En elke sub-OU onder een OU wordt geïmporteerd als een sub-"
+"afdeling. Bibliotheken kunnen automatisch worden gemaakt in de "
+"importprocess."
 
 #: templates/help/departments.html:28
 msgid ""
 "System admin can also delete a department after all the sub-departments and "
 "libraries are deleted."
 msgstr ""
+"De systeembeheerder kan ook een afdeling verwijderen nadat alle sub-"
+"afdelingen en bibliotheken verwijderd zijn."
 
 #: templates/help/departments.html:30
 msgid ""
@@ -302,6 +338,11 @@ msgid ""
 "cannot exceed the storage quota. <strong>Please note that the quota of sub-"
 "department doesn't depend on the quota of its parent department.</strong>"
 msgstr ""
+"De systeembeheerder kan opslagquota toewijzen aan een afdeling. De totale "
+"grootte van alle bibliotheken in een afdeling mag niet groter zijn dan het "
+"opslagquota. <strong>Let op: het opslagquota van een sub-afdeling heeft "
+"niets te maken met het opslagquota van zijn/haar bovenliggende "
+"afdeling.</strong>"
 
 #: templates/help/departments.html:32
 msgid ""
@@ -309,12 +350,15 @@ msgid ""
 " There is also an option to control whether individual users can share "
 "libraries to a department."
 msgstr ""
+"De systeembeheerder of een afdelingsbeheerder kan bibliotheken maken in een "
+"afdeling. Er is ook een optie om te controleren of individuele gebruikers "
+"bibliotheken kunnen delen met een afdeling."
 
 #: templates/help/departments.html:33
 msgid ""
 "All the above operations can be done in the system admin interface. See the "
 "below screenshot for information."
-msgstr ""
+msgstr "Zie de onderstaande schermafbeelding voor informatie."
 
 #: templates/help/departments.html:36
 msgid ""
@@ -322,18 +366,22 @@ msgid ""
 "admin to some members of a department. Department admins can perform the "
 "following operations in a department after login to his/her own account."
 msgstr ""
+"De afdelingsbeheerder is een speciale rol die door de systeembeheerder wordt"
+" toegekend aan sommige leden van een afdeling. De afdelingsbeheerder kan de "
+"volgende bewerkingen uitvoeren in een afdeling na login met zijn eigen "
+"account."
 
 #: templates/help/departments.html:38
 msgid "Access to the libraries of the department"
-msgstr ""
+msgstr "Toegang tot de bibliotheken van de afdeling"
 
 #: templates/help/departments.html:39
 msgid "Manage members in his/her department"
-msgstr ""
+msgstr "Leden beheren in zijn/haar afdeling"
 
 #: templates/help/departments.html:40
 msgid "Manage libraries in his/her department"
-msgstr ""
+msgstr "Bibliotheken beheren in zijn/haar afdeling"
 
 #: templates/help/departments.html:42
 msgid ""
@@ -342,26 +390,35 @@ msgid ""
 " the department. But if the departments are imported from AD, the changes to"
 " membership will be overwritten on the next sync with AD."
 msgstr ""
+"Als een gebruiker de beheerder is van een afdeling, kan hij/zij leden "
+"toevoegen of verwijderen in de afdeling. Alle gebruikers die geregistreerd "
+"zijn in het systeem kunnen worden toegevoegd als lid van de afdeling. Maar "
+"als de afdelingen zijn geïmporteerd vanuit AD, worden de wijzigingen aan de "
+"lidmaatregelingen overschreven bij de volgende synchronisatie met AD."
 
 #: templates/help/departments.html:44
 msgid ""
 "Department admin can manage the libraries in the department. The supported "
 "operations are:"
 msgstr ""
+"De afdelingsbeheerder kan de volgende bewerkingen uitvoeren in de "
+"bibliotheken van de afdeling:"
 
 #: templates/help/departments.html:46
 msgid "Create or delete library"
-msgstr ""
+msgstr "Bibliotheken maken of verwijderen"
 
 #: templates/help/departments.html:47
 msgid "Change library name"
-msgstr ""
+msgstr "Bibliotheksnaam wijzigen"
 
 #: templates/help/departments.html:48
 msgid ""
 "Share a library to users or groups outside of this department. This is very "
 "useful for cross-department collaboration."
 msgstr ""
+"Bibliotheken delen met gebruikers of groepen buiten de afdeling. Dit is zeer"
+" nuttig voor cross-afdelingswerking."
 
 #: templates/help/departments.html:49
 #, python-format
@@ -371,6 +428,10 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
 "feature</a>."
 msgstr ""
+"De afdelingsbeheerder kan fine-grained machtigingen instellen voor mappen in"
+" de bibliotheken voor gebruikers of sub-afdelingen in de afdeling. Dit werkt"
+" als de <a "
+"href=\"%(SITE_ROOT)shelp/folder_permission/\">mapmachtigingsfunctie</a>."
 
 #: templates/help/departments.html:53
 msgid ""
@@ -383,10 +444,19 @@ msgid ""
 "access to the groups \"EMEA\", \"Sales\" and \"ACME\". The groups for "
 "departments are marked with a \"building\" icon next to its name."
 msgstr ""
+"Elk lid van een afdeling kan de afdeling gebruiken zoals een groep. Elke "
+"afdeling wordt weergegeven aan zijn/haar leden als een groep. Een gebruiker "
+"kan niet alleen toegang krijgen tot de bibliotheken in de afdeling waarin "
+"hij/zij lid is, maar ook de bibliotheken in de bovenliggende afdelingen van "
+"zijn/haar afdeling. Bijvoorbeeld, als John in de \"EMEA\"-sub-afdeling onder"
+" de \"Sales\"-afdeling zit, en \"Sales\" een sub-afdeling is onder de "
+"bedrijf \"ACME\", kan John vervolgens toegang krijgen tot de groepen "
+"\"EMEA\", \"Sales\" en \"ACME\". De groepen voor afdelingen worden "
+"aangegeven met een \" gebouw\"-icoon naast hun naam."
 
 #: templates/help/desktop_proxy.html:6
 msgid "Using proxy in Seafile client"
-msgstr ""
+msgstr "Proxy-instellingen gebruiken in de Seafile-applicatie"
 
 #: templates/help/desktop_proxy.html:8
 msgid ""
@@ -404,6 +474,12 @@ msgid ""
 " to auto-detect proxy server information. So you don't have to manually "
 "enter proxy server address."
 msgstr ""
+"HTTP-proxy en SOCKS5-proxy vereisen dat u het adres en de poort van de "
+"proxyserver invoert. Als u de systeemproxy-instellingen gebruikt, leest de "
+"Seafile-client de proxy-instellingen van het besturingssysteem. Het "
+"besturingssysteem heeft mechanismen om proxyserverinformatie automatisch te "
+"detecteren. U hoeft het adres van de proxyserver dus niet handmatig in te "
+"voeren."
 
 #: templates/help/desktop_proxy.html:12
 msgid ""
@@ -411,10 +487,14 @@ msgid ""
 "area. Choose \"Settings\" in the menu. In the pop-up settings dialog, you "
 "can change proxy settings in the \"Network\" tab."
 msgstr ""
+"Om de proxy-instellingen te wijzigen, klikt u op het Seafile-pictogram in "
+"het systeemvak. Kies \"Instellingen\" in het menu. In het dialoogvenster met"
+" instellingen dat verschijnt, kunt u de proxy-instellingen wijzigen op het "
+"tabblad \"Netwerk\"."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:6
 msgid "SeaDrive 2.0 for Windows 10"
-msgstr ""
+msgstr "SeaDrive 2.0 voor Windows 10"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:8
 msgid ""
@@ -423,10 +503,15 @@ msgid ""
 "Update for Windows 10) and later versions. We recommend Windows 10 users to "
 "upgrade to SeaDrive 2.0 for more native virtual drive experience."
 msgstr ""
+"SeaDrive 2.0 (en later versies) is ontworpen met diepere integratie met de "
+"Windows 10-besturingssysteem. Het ondersteunt de Windows 10-versie 1709 "
+"(2017 Fall Update voor Windows 10) en later versies. We raden Windows "
+"10-gebruikers aan om naar SeaDrive 2.0 te upgraden voor een betere virtuele "
+"drive ervaring."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:10
 msgid "Install and access the Virtual Drive"
-msgstr ""
+msgstr "De Virtuele Drive installeren en toegang krijgen"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:11
 msgid ""
@@ -437,40 +522,61 @@ msgid ""
 " your seafile account. The download is progressive, so in the mean time you "
 "can already access some files in the virtual drive."
 msgstr ""
+"U kunt SeaDrive 2.0 downloaden van de officiële Seafile website. Na de "
+"installatie en het inloggen in uw Seafile-account begint SeaDrive met het "
+"downloaden van bibliotheek- en bestandslijsten van de server (net als in "
+"SeaDrive 1.0.x). Het kan enige tijd duren, afhankelijk van het aantal "
+"bestanden dat beschikbaar is in uw seafile-account. De download is "
+"progressief, dus in de tussentijd kunt u al toegang tot sommige bestanden in"
+" de virtuele schijf."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:12
 msgid ""
 "To access the virtual drive, just open Windows file explorer. There is a "
 "\"seadrive\" node in the navigation pane of Windows file explorer."
 msgstr ""
+"Om toegang te krijgen tot de virtuele drive, open gewoon de Windows-"
+"bestandsexplorer. Er is een \"seadrive\"-node in de navigeringspaneel van de"
+" Windows-bestandsexplorer."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:16
 msgid "Accessing files in the Virtual Drive"
-msgstr ""
+msgstr "Toegang tot bestanden in de virtuele schijf"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:17
 msgid ""
 "Libraries are grouped into 4 categories in the virtual drive: My Libraries, "
 "Shared with me, Shared with groups and Shared with all."
 msgstr ""
+"De bibliotheken worden in de virtuele drive groeperd in 4 categorieën: Mijn "
+"bibliotheken, Gedeeld met mij, Gedeeld met groepen en Gedeeld met alle "
+"gebruikers."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:18
 msgid ""
 "As you can see, the file status icons is more integrated into Windows file "
 "explorer. The icons are a bit different form version 1.0."
 msgstr ""
+"De bestandsstatus-icoontjes zijn meer geïntegreerd in de Windows-"
+"bestandsexplorer. De icoontjes zijn een beetje verschillend van de versie "
+"1.0."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:19
 msgid ""
 "Files in the virtual drive are created as \"placeholders\" in the local file"
 " system. They may be in 3 states:"
 msgstr ""
+"De bestanden in de virtuele drive worden gemaakt als "
+"\"placeholder\"-bestanden in het lokale bestandsysteem. Ze kunnen in 3 "
+"statussen zijn:"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:21
 msgid ""
 "<b>Placeholder file</b>: An empty representation of the file and can only be"
 " opened when there is network connection."
 msgstr ""
+"<b>Plaatshouderbestand</b>: Een lege weergave van het bestand dat alleen kan"
+" worden geopend wanneer er een netwerkverbinding is."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:22
 msgid ""
@@ -480,12 +586,19 @@ msgid ""
 "connections. The operating system may decide to clear a full file when more "
 "disk space is needed."
 msgstr ""
+"<b>Volledig bestand</b>: Het bestand is gedownload en lokaal opgeslagen. "
+"Download is automatisch wanneer een plaatshouderbestand voor de eerste keer "
+"wordt geopend. Deze bestanden zijn beschikbaar wanneer u SeaDrive opent, "
+"ongeacht netwerkverbindingen. Het besturingssysteem kan besluiten een "
+"volledig bestand te wissen wanneer er meer schijfruimte nodig is."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:23
 msgid ""
 "<b>Pinned full file</b>: The file has been downloaded and saved locally. It "
 "is guaranteed to be available offline."
 msgstr ""
+"<b>Vastgezette volledig bestand</b>: Het bestand is gedownload en lokaal "
+"opgeslagen. Het is gegarandeerd offline beschikbaar."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:26
 msgid ""
@@ -495,6 +608,11 @@ msgid ""
 "locally; choose \"Free up space\" when you want to clean the cache for a "
 "file or folder."
 msgstr ""
+"U kunt bepalen welke bestanden of mappen lokaal worden gecached. Dit kan "
+"worden gewijzigd vanuit het contextmenu wanneer u met de rechtermuisknop op "
+"een bestand of map klikt. Kies \"Altijd op dit apparaat bewaren\" wanneer u "
+"een bestand of map lokaal wilt vastzetten; kies \"Ruimte vrijmaken\" wanneer"
+" u de cache voor een bestand of map wilt opschonen."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:28
 msgid ""
@@ -502,10 +620,13 @@ msgid ""
 "updated on the server. In SeaDrive 2.0, full and pinned files are "
 "automatically kept in sync with the server."
 msgstr ""
+"De bestanden in de virtuele drive worden automatisch bijgewerkt wanneer ze "
+"worden bijgewerkt op de server. In SeaDrive 2.0, volledige en vastgehouden "
+"bestanden worden automatisch bijgehouden met de server."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:30
 msgid "File Download and Control"
-msgstr ""
+msgstr "Bestandsdownload en beheer"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:31
 msgid ""
@@ -514,6 +635,10 @@ msgid ""
 "download, there will be a progress bar shown up in file explorer and you may"
 " cancel the download."
 msgstr ""
+"Elke keer dat u een placeholder-bestand opent, wordt de besturingssysteem "
+"automatisch de download starten. Als het bestand wat tijd nodig heeft om te "
+"downloaden, wordt er een voortgangsbalk weergegeven in de bestandsexplorer "
+"en u kunt de download annuleren."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:32
 msgid ""
@@ -522,15 +647,19 @@ msgid ""
 "operating system about this and you may choose to cancel the download or "
 "disallow the application from automatically downloading files in the future."
 msgstr ""
+"Als een achtergrondtoepassing probeert een bestand in de virtuele drive te "
+"downloaden (zoals een Anti-Virus-software), wordt de besturingssysteem op de"
+" hoogte gebracht en u kunt kiezen om de download te annuleren of de "
+"toepassing niet meer automatisch bestanden te downloaden."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:34
 #: templates/help/using_drive_client.html:79
 msgid "FAQ"
-msgstr ""
+msgstr "Veelgestelde vragen"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:35
 msgid "Can I create, delete, rename libraries?"
-msgstr ""
+msgstr "Kan ik bibliotheken maken, verwijderen of hernoemen?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:36
 msgid ""
@@ -539,10 +668,15 @@ msgid ""
 " rename libraries under the \"My Libraries\" category. Creating, deleting or"
 " renaming libraries in other categories will be ignored."
 msgstr ""
+"Ja. Wanneer u bibliotheken maakt, verwijderd of hernoemt bibliotheekmapen in"
+" de virtuele drive, wordt de bewerking ook op de server uitgevoerd. U kunt "
+"alleen bibliotheken maken, verwijderen of hernoemen onder de \"Mijn "
+"bibliotheken\" categorie. Maken, verwijderen of hernoemen van bibliotheken "
+"in andere categorieën wordt genegeerd."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:38
 msgid "Can I create files or folders outside of a library folder?"
-msgstr ""
+msgstr "Kan ik bestanden of mappen maken buiten een bibliotheekmap?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:39
 msgid ""
@@ -550,10 +684,13 @@ msgid ""
 "synced to the server. A new folder under the \"My Libraries\" folder will be"
 " handled as a new library."
 msgstr ""
+"Ja. Maar bestanden die buiten een bibliotheekmap worden gemaakt, worden "
+"genegeerd en niet bijgehouden op de server. Een nieuwe map onder de \"Mijn "
+"bibliotheken\" map wordt beschouwd als een nieuwe bibliotheek."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:41
 msgid "Can I access encrypted libraries?"
-msgstr ""
+msgstr "Kan ik toegang krijgen tot versleutelde bibliotheken?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:42
 msgid ""
@@ -563,10 +700,17 @@ msgid ""
 " area and choose \"Show encrypted libraries\". A window will show up and you"
 " can choose to sync or unsync an encrypted library."
 msgstr ""
+"Ja. Door default worden versleutelde bibliotheken niet bijgehouden en worden"
+" niet weergegeven in de virtuele drive. U moet handmatig kiezen welke "
+"versleutelde bibliotheken u wilt bijhouden en het wachtwoord invoeren. Klik "
+"gewoon met de rechter muisknop op de SeaDrive icoon in de systeemtray en "
+"kies \"Toegang krijgen tot versleutelde bibliotheken\". Een venster wordt "
+"weergegeven en u kunt kiezen om een versleutelde bibliotheek te bijhouden of"
+" niet meer te bijhouden."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
-msgstr ""
+msgstr " Zijn SeaDrive 2.0 compatibel met SeaDrive 1.0?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:45
 msgid ""
@@ -576,10 +720,16 @@ msgid ""
 " be accessible in 2.0 version. You can start SeaDrive 1.0 again to upload "
 "the files to server or copy them out."
 msgstr ""
+"Ja. SeaDrive 2.0 wordt automatisch alle bestaande accounts en hun metadata "
+"(opgeslagen in de map C:\\users\\username\\seadrive\\) gebruiken. Maar het "
+"gebruikt niet de gecachte bestanden van SeaDrive 1.0. Dus alle bestanden die"
+" zijn gecached in de 1.0 versie zijn niet toegankelijk in de 2.0 versie. U "
+"kunt SeaDrive 1.0 opnieuw starten om de bestanden op te uploaden naar de "
+"server of ze kopiëren naar een andere locatie."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:47
 msgid "How do I clean the cache?"
-msgstr ""
+msgstr "Hoe kan ik de cache opschonen?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:48
 msgid ""
@@ -590,10 +740,18 @@ msgid ""
 "Because placeholders are just normal files created on your local disk, your "
 "cache size is only limited by the available disk space on your computer."
 msgstr ""
+"U kunt handmatig kiezen welke mappen of bestanden lokaal worden gecached. "
+"Als u merkt dat een map te veel ruimte verbruikt, kiest u gewoon \"Ruimte "
+"vrijmaken\" voor die map en alle gecachte bestanden in die map worden "
+"opgeschoond. Er is geen noodzaak om cache-opruimingstijd en cache-"
+"groottelimiet in te stellen zoals in SeaDrive 1.0. Omdat plaatshouders "
+"gewoon normale bestanden zijn die op uw lokale schijf zijn gemaakt, wordt uw"
+" cachegrootte alleen beperkt door de beschikbare schijfruimte op uw "
+"computer."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:50
 msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
-msgstr ""
+msgstr "Hoe verwijder ik overgebleven SeaDrive shortcuts in Windows Explorer?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
@@ -602,12 +760,19 @@ msgid ""
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
 msgstr ""
+"De \"SeaDrive\" snelkoppeling in Windows Explorer verdwijnt niet nadat u het"
+" SeaDrive programma heeft afgesloten of van Seafile account gewisseld in "
+"SeaDrive. Dit is een opzettelijk gedrag. U hoeft ze niet te verwijderen als "
+"u het account later nog nodig heeft."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
 "choose \"Remove account information\" in the prompt dialog."
 msgstr ""
+"U kunt deze snelkoppelingen meestal verwijderen door het SeaDrive programma "
+"te verwijderen en \"Accountinformatie verwijderen\" te kiezen in het "
+"promptvenster."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -618,6 +783,12 @@ msgid ""
 " in registry editor. Remove the sub-keys correspond to the shortcut you want"
 " to remove."
 msgstr ""
+"Als verwijdering de snelkoppelingen niet succesvol verwijdert, kunt u de "
+"SeaDrive snelkoppeling in Windows Explorer verwijderen door het register te "
+"bewerken. Open het pad "
+"\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\\""
+" in de register-editor. Verwijder de sub-sleutels die overeenkomen met de "
+"snelkoppeling die u wilt verwijderen."
 
 #: templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
@@ -631,6 +802,11 @@ msgid ""
 "stored on the server. So even the server administrator can't access your "
 "file contents."
 msgstr ""
+"Seafile biedt client-side end-to-end gegevensversleuteling. U kunt "
+"versleutelde bibliotheken aanmaken om deze functie te gebruiken. "
+"Bestandsinhoud in versleutelde bibliotheken wordt versleuteld aan "
+"clientzijde. Het versleutelingswachtwoord wordt niet op de server "
+"opgeslagen. Zelfs de serverbeheerder kan dus niet bij uw bestandsinhoud."
 
 #: templates/help/encrypted_libraries.html:10
 msgid "When creating an encrypted library:"
@@ -642,6 +818,10 @@ msgid ""
 "the server. The server uses this password to create the library. But it "
 "doesn't store the plain text password."
 msgstr ""
+"Als u een versleutelde bibliotheek in de web-app aanmaakt, wordt het "
+"wachtwoord naar de server gestuurd. De server gebruikt dit wachtwoord om de "
+"bibliotheek aan te maken. Maar het slaat het wachtwoord in platte tekst niet"
+" op."
 
 #: templates/help/encrypted_libraries.html:13
 #, python-format
@@ -650,10 +830,14 @@ msgid ""
 "client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
 "the password is not sent to the server."
 msgstr ""
+"Als u een versleutelde bibliotheek aanmaakt vanuit een lokale map met de "
+"desktopclient (zie <a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">bestandssynchronisatie</a>), wordt "
+"het wachtwoord niet naar de server gestuurd."
 
 #: templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
-msgstr "Wanneer je de versleutelde bibliotheek raadpleegt:"
+msgstr "Wanneer u de versleutelde bibliotheek raadpleegt:"
 
 #: templates/help/encrypted_libraries.html:19
 msgid ""
@@ -661,6 +845,9 @@ msgid ""
 " will cache the password in encrypted format for 1 hour. It won't store the "
 "password on disk."
 msgstr ""
+"Als u de web-app gebruikt, moet u het wachtwoord naar de server invoeren. De"
+" server zal het wachtwoord in versleutelde vorm 1 uur in cache houden. Het "
+"zal het wachtwoord niet op schijf opslaan."
 
 #: templates/help/encrypted_libraries.html:20
 msgid ""
@@ -668,22 +855,30 @@ msgid ""
 "the server. The client decrypts and encrypts file contents locally. The "
 "plain text password is not stored on the client disk either."
 msgstr ""
+"Als u de desktopclient gebruikt om de bibliotheek te synchroniseren, wordt "
+"het wachtwoord niet naar de server gestuurd. De client decodeert en codeert "
+"bestandsinhoud lokaal. Het wachtwoord in platte tekst wordt ook niet op de "
+"client-schijf opgeslagen."
 
 #: templates/help/encrypted_libraries.html:21
 msgid ""
 "iOS client supports client side encryption since version 2.1.6. Android "
 "client supports it since version 2.1.0."
 msgstr ""
+"iOS-client ondersteunt client-side versleuteling sinds versie 2.1.6. "
+"Android-client ondersteunt dit sinds versie 2.1.0."
 
 #: templates/help/encrypted_libraries.html:25
 msgid ""
 "Note that encrypted library only encrypts the contents of the files, but not"
 " the folder and file names."
 msgstr ""
+"Let op dat versleutelde bibliotheek alleen de inhoud van de bestanden "
+"versleutelt, maar niet de map- en bestandsnamen."
 
 #: templates/help/file_locking.html:5
 msgid "File locking"
-msgstr ""
+msgstr "Bestandsvergrendeling"
 
 #: templates/help/file_locking.html:6
 msgid ""
@@ -693,22 +888,32 @@ msgid ""
 " the file when one person wants to exclusively modify the file. Seafile "
 "Professional Edition supports file locking."
 msgstr ""
+"Wanneer meer dan één persoon samenwerkt aan een bestand, is het "
+"waarschijnlijk dat meer dan één persoon het bestand ongeveer tegelijkertijd "
+"wijzigt. Seafile behandelt deze situatie netjes met conflictbestanden. Maar "
+"het is vaak handiger om het bestand te vergrendelen wanneer één persoon het "
+"bestand exclusief wil wijzigen. Seafile Professional Edition ondersteunt "
+"bestandsvergrendeling."
 
 #: templates/help/file_locking.html:7
 msgid ""
 "File locking works on both the web app and the desktop syncing client. We'll"
 " introduce them one by one."
 msgstr ""
+"Bestandsvergrendeling werkt zowel in de web-app als in de desktop-"
+"synchronisatieclient. We zullen ze één voor één introduceren."
 
 #: templates/help/file_locking.html:8
 msgid "File locking on the Web App"
-msgstr ""
+msgstr "Bestandsvergrendeling in de Web-App"
 
 #: templates/help/file_locking.html:9
 msgid ""
 "To lock a file, you can navigate into the file's folder on the web app, and "
 "click on the \"operations\" drop-down menu."
 msgstr ""
+"Om een bestand te vergrendelen, kunt u naar de map van het bestand in de "
+"web-app navigeren en op het \"bewerkingen\" vervolgmenu klikken."
 
 #: templates/help/file_locking.html:11
 msgid ""
@@ -717,28 +922,41 @@ msgid ""
 "file. And you can also unlock a file that's locked by you. But you cannot "
 "unlock files locked by others."
 msgstr ""
+"Nadat het bestand is vergrendeld, kunt u een rood \"stopbord\" zien in de "
+"hoek van het bestandspictogram. Door de muis op het stopbord te bewegen, "
+"kunt u zien wie het bestand vergrendelt. En u kunt ook een bestand "
+"ontgrendelen dat door u is vergrendeld. Maar u kunt bestanden die door "
+"anderen zijn vergrendeld niet ontgrendelen."
 
 #: templates/help/file_locking.html:13
 msgid "File locking on the desktop client"
-msgstr ""
+msgstr "Bestandsvergrendeling in de desktopclient"
 
 #: templates/help/file_locking.html:14
 msgid ""
 "After a library is synced to the desktop, you can lock/unlock files in that "
 "library inside File Explorer on Windows or Finder on Mac OS."
 msgstr ""
+"Nadat een bibliotheek naar de desktop is gesynchroniseerd, kunt u bestanden "
+"in die bibliotheek vergrendelen/ontgrendelen in File Explorer op Windows of "
+"Finder op Mac OS."
 
 #: templates/help/file_locking.html:15
 msgid ""
 "To lock a file, just right click on a synced file and choose \"lock this "
 "file\" in the \"Seafile\" menu."
 msgstr ""
+"Om een bestand te vergrendelen, klikt u met de rechtermuisknop op een "
+"gesynchroniseerd bestand en kiest u \"dit bestand vergrendelen\" in het "
+"\"Seafile\" menu."
 
 #: templates/help/file_locking.html:17
 msgid ""
 "If a file is locked by you, you can see an orange \"stop sign\" on the file "
 "icon. You can choose to unlock it."
 msgstr ""
+"Als een bestand door u is vergrendeld, kunt u een oranje \"stopbord\" op het"
+" bestandspictogram zien. U kunt ervoor kiezen om het te ontgrendelen."
 
 #: templates/help/file_locking.html:19
 msgid ""
@@ -746,16 +964,22 @@ msgid ""
 "file icon. The file is automatically set to read-only. You cannot modify it "
 "until it's unlocked."
 msgstr ""
+"Als een bestand door een andere gebruiker is vergrendeld, kunt u een rood "
+"\"stopbord\" op het bestandspictogram zien. Het bestand wordt automatisch op"
+" alleen-lezen gezet. U kunt het niet wijzigen totdat het is ontgrendeld."
 
 #: templates/help/file_locking.html:21
 msgid ""
 "If a library is not synced, you can still use cloud file browser to lock and"
 " unlock files in it."
 msgstr ""
+"Als een bibliotheek niet is gesynchroniseerd, kunt u nog steeds de "
+"cloudbestandsbrowser gebruiken om bestanden erin te vergrendelen en te "
+"ontgrendelen."
 
 #: templates/help/file_locking.html:22
 msgid "Auto locking office files"
-msgstr ""
+msgstr "Automatisch vergrendelen van Office-bestanden"
 
 #: templates/help/file_locking.html:23
 msgid ""
@@ -765,18 +989,26 @@ msgid ""
 " propagated to other computers syncing this library. It prevents concurrent "
 "editing the same Office file and is convenient for collaboration."
 msgstr ""
+"Nadat een bibliotheek naar de desktop is gesynchroniseerd, wanneer u een "
+"Microsoft Office-bestand in de bibliotheek opent, vergrendelt Seafile het "
+"bestand automatisch. Wanneer u het bestand sluit, ontgrendelt Seafile het "
+"bestand automatisch. De vergrendelingsstatus wordt doorgegeven aan andere "
+"computers die deze bibliotheek synchroniseren. Het voorkomt gelijktijdig "
+"bewerken van hetzelfde Office-bestand en is handig voor samenwerking."
 
 #: templates/help/file_locking.html:24
 msgid "Details about file locking"
-msgstr ""
+msgstr "Details over bestandsvergrendeling"
 
 #: templates/help/file_locking.html:25
 msgid "There are a few useful tips about how file locking works:"
-msgstr ""
+msgstr "Er zijn enkele nuttige tips over hoe bestandsvergrendeling werkt:"
 
 #: templates/help/file_locking.html:27
 msgid "A locked file can only be unlocked by the user who locked it."
 msgstr ""
+"Een vergrendeld bestand kan alleen worden ontgrendeld door de gebruiker die "
+"het heeft vergrendeld."
 
 #: templates/help/file_locking.html:28
 msgid ""
@@ -785,16 +1017,24 @@ msgid ""
 "locked file. The purpose of file locking is mainly to prevent concurrent "
 "editing."
 msgstr ""
+"Een vergrendeld bestand kan niet worden gewijzigd, verplaatst, hernoemd of "
+"verwijderd door andere gebruikers. Maar andere gebruikers kunnen nog steeds "
+"de bovenliggende map van een vergrendeld bestand verplaatsen, verwijderen of"
+" hernoemen. Het doel van bestandsvergrendeling is voornamelijk om "
+"gelijktijdig bewerken te voorkomen."
 
 #: templates/help/file_locking.html:29
 msgid ""
 "When a locked file's parent folder is renamed or moved inside the same "
 "library, it remains locked after the operation."
 msgstr ""
+"Wanneer de bovenliggende map van een vergrendeld bestand wordt hernoemd of "
+"verplaatst binnen dezelfde bibliotheek, blijft het vergrendeld na de "
+"bewerking."
 
 #: templates/help/finding_older_version_files.html:6
 msgid "Finding older version of files"
-msgstr ""
+msgstr "Oudere versies van bestanden vinden"
 
 #: templates/help/finding_older_version_files.html:7
 msgid ""
@@ -803,10 +1043,15 @@ msgid ""
 "a configurable period. When you want to access an older version of a file, "
 "the file history feature becomes very handy."
 msgstr ""
+"Seafile volgt de wijzigingsgeschiedenis van alle bestanden. Wanneer een "
+"bestand wordt gewijzigd, wordt een nieuwe versie gemaakt, terwijl de oude "
+"versie nog wordt bewaard voor een configureerbare periode. Wanneer u een "
+"oudere versie van een bestand wilt raadplegen, wordt de "
+"bestandsgeschichtisfunctie erg handig."
 
 #: templates/help/finding_older_version_files.html:8
 msgid "To list all the versions of a file:"
-msgstr ""
+msgstr "Om alle versies van een bestand weer te geven:"
 
 #: templates/help/finding_older_version_files.html:10
 msgid ""
@@ -814,16 +1059,22 @@ msgid ""
 "cursor onto the row of that file. An operation menu will appear. You can "
 "click the \"History\" button in that menu."
 msgstr ""
+"In Seafile Web App, navigeer naar de map die het bestand bevat. Beweeg de "
+"cursor over de rij van dat bestand. Er verschijnt een bewerkingsmenu. U kunt"
+" op de \"Geschiedenis\" knop in dat menu klikken."
 
 #: templates/help/finding_older_version_files.html:11
 msgid ""
 "A list of all versions of that file will be displayed in time order, from "
 "newer to older. The list also contains the file's rename history."
 msgstr ""
+"Een lijst met alle versies van dat bestand wordt weergegeven in "
+"tijdvolgorde, van nieuwer naar ouder. De lijst bevat ook de "
+"hernoemgeschiedenis van het bestand."
 
 #: templates/help/finding_older_version_files.html:12
 msgid "You can download, restore, view any version of the file."
-msgstr ""
+msgstr "U kunt elke versie van het bestand downloaden, herstellen, bekijken."
 
 #: templates/help/finding_older_version_files.html:14
 #, python-format
@@ -832,10 +1083,13 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"U kunt de bewaarperiode van bestandsversies configureren: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">geschiedenis "
+"bewaarperiode instellen</a>."
 
 #: templates/help/folder_permission.html:6
 msgid "Use folder permission for fine-grained access control"
-msgstr ""
+msgstr "Gebruik mapmachtigingen voor fijnmazige toegangscontrole"
 
 #: templates/help/folder_permission.html:8
 #, python-format
@@ -846,6 +1100,11 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing libraries</a>."
 " Here are some use cases:"
 msgstr ""
+"Voor gedeelde bibliotheken of mappen kunt u machtigingen instellen voor "
+"submappen voor een persoon of een groep. Beschikbare machtigingen zijn de "
+"zelfde als die beschreven in <a "
+"href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">bibliotheken "
+"delen</a>. Hier zijn enkele gebruiksscenario's:"
 
 #: templates/help/folder_permission.html:10
 msgid ""
@@ -853,6 +1112,10 @@ msgid ""
 " to allow a specific member of the group to modify files in one sub-folder. "
 "You can grant write permission of this sub-folder to this person."
 msgstr ""
+"U heeft een bibliotheek gedeeld met een groep met \"alleen lezen\" "
+"machtiging. U wilt ook een specifiek lid van de groep toestaan bestanden in "
+"één submap te wijzigen. U kunt schrijfmachtiging van deze submap aan deze "
+"persoon verlenen."
 
 #: templates/help/folder_permission.html:11
 msgid ""
@@ -861,6 +1124,10 @@ msgid ""
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
 msgstr ""
+"U heeft een bibliotheek gedeeld met 3 groepen. Er zijn 3 submappen onder die"
+" bibliotheek, één voor elke groep om bestanden te uploaden. U wilt echter "
+"niet dat gebruikers bestanden wijzigen die niet tot zijn/haar groep behoren."
+" U kunt schrijfmachtiging van een submap alleen aan zijn groep verlenen."
 
 #: templates/help/folder_permission.html:13
 msgid ""
@@ -869,17 +1136,24 @@ msgid ""
 "should first share the parent library or folder; otherwise the folder "
 "permission won't take effect."
 msgstr ""
+"Mapmachtigingen zijn alleen effectief voor bibliotheken en mappen die u met "
+"anderen deelt. Om mapmachtigingen effectief in te stellen voor submappen, "
+"moet u eerst de bovenliggende bibliotheek of map delen; anders heeft de "
+"mapmachtiging geen effect."
 
 #: templates/help/folder_permission.html:14
 msgid ""
 "One important design goal of folder permission is to support hierarchical "
 "permissions:"
 msgstr ""
+"Een belangrijk ontwerpdoel van mapmachtigingen is het ondersteunen van "
+"hiërarchische machtigingen:"
 
 #: templates/help/folder_permission.html:16
 msgid ""
 "Sub-folders automatically inherit folder permissions from its parent folder."
 msgstr ""
+"Submappen erven automatisch mapmachtigingen van hun bovenliggende map."
 
 #: templates/help/folder_permission.html:17
 msgid ""
@@ -889,10 +1163,16 @@ msgid ""
 "\"meeting files/today\" for user A. Then user A's permission to \"meeting "
 "files/today\" is \"read only\"."
 msgstr ""
+"Machtigingen ingesteld op submappen overschrijven machtigingen ingesteld op "
+"hun bovenliggende map. Bijvoorbeeld, u stelt \"lezen schrijven\" machtiging "
+"in op map \"vergaderbestanden\" voor gebruiker A, en u stelt \"alleen "
+"lezen\" machtiging in op submap \"vergaderbestanden/vandaag\" voor gebruiker"
+" A. Dan is de machtiging van gebruiker A voor \"vergaderbestanden/vandaag\" "
+"\"alleen lezen\"."
 
 #: templates/help/folder_permission.html:19
 msgid "Basic usage"
-msgstr ""
+msgstr "Basisgebruik"
 
 #: templates/help/folder_permission.html:20
 msgid ""
@@ -901,6 +1181,10 @@ msgid ""
 "\"permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions on this folder."
 msgstr ""
+"Alleen de eigenaar van de bibliotheek kan mapmachtigingen instellen voor "
+"submappen. Klik in de bestandsbrowserinterface op de \"meer bewerkingen\" "
+"knop, kies \"machtiging\" in het vervolgmenu. In het pop-upvenster kunt u "
+"mapmachtigingen op deze map zien en instellen."
 
 #: templates/help/folder_permission.html:21
 msgid ""
@@ -909,6 +1193,10 @@ msgid ""
 "Permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions in this library."
 msgstr ""
+"Als u alle mapmachtigingen wilt zien die in een bibliotheek zijn ingesteld, "
+"beweegt u de muis over de bibliotheek. Klik op de \"meer bewerkingen\" knop,"
+" kies \"Mapmachtiging\" in het vervolgmenu. In het pop-upvenster kunt u "
+"mapmachtigingen in deze bibliotheek zien en instellen."
 
 #: templates/help/folder_permission.html:22
 msgid ""
@@ -916,16 +1204,23 @@ msgid ""
 "next to \"read only\" sub-folders. When the user navigate into that sub-"
 "folder, he/she won't be able to add/modify/delete files."
 msgstr ""
+"Wanneer andere gebruikers naar een map navigeren, zal er een klein "
+"\"oog\"-pictogram verschijnen naast \"alleen lezen\" submappen. Wanneer de "
+"gebruiker naar die submap navigeert, kan hij/zij geen bestanden "
+"toevoegen/wijzigen/verwijderen."
 
 #: templates/help/folder_permission.html:24
 msgid ""
 "If a \"read only\" folder is synced to PC with the Seafile desktop App, "
 "changes under a \"read only\" folder won't be uploaded to the cloud."
 msgstr ""
+"Als een \"alleen lezen\" map naar de PC is gesynchroniseerd met de Seafile "
+"desktop App, worden wijzigingen onder een \"alleen lezen\" map niet naar de "
+"cloud geüpload."
 
 #: templates/help/folder_permission.html:25
 msgid "Advanced: priority between different permissions"
-msgstr ""
+msgstr "Geavanceerd: prioriteit tussen verschillende machtigingen"
 
 #: templates/help/folder_permission.html:27
 msgid ""
@@ -935,6 +1230,12 @@ msgid ""
 "library. Then user A only has \"read only\" access to the sub-folder, while "
 "he/she has \"read write\" access to all other sub-folders and files."
 msgstr ""
+"Mapmachtigingen hebben een hogere prioriteit dan de machtiging ingesteld in "
+"delen. Bijvoorbeeld, als u een bibliotheek deelt met gebruiker A met \"lezen"
+" schrijven\" machtiging, en ook \"alleen lezen\" machtiging instelt op een "
+"submap van die bibliotheek. Dan heeft gebruiker A alleen \"alleen lezen\" "
+"toegang tot de submap, terwijl hij/zij \"lezen schrijven\" toegang heeft tot"
+" alle andere submappen en bestanden."
 
 #: templates/help/folder_permission.html:28
 msgid ""
@@ -943,16 +1244,23 @@ msgid ""
 "if the system matches a permission specific to the user, it'll ignore all "
 "permissions set for the groups the user belongs to."
 msgstr ""
+"Mapmachtigingen ingesteld voor een specifieke gebruiker hebben een hogere "
+"prioriteit dan machtigingen ingesteld voor een groep. Dat wil zeggen, bij "
+"het controleren van machtiging voor een map, als het systeem een machtiging "
+"specifiek voor de gebruiker vindt, negeert het alle machtigingen ingesteld "
+"voor de groepen waar de gebruiker toe behoort."
 
 #: templates/help/folder_permission.html:29
 msgid ""
 "Permissions on sub-folders have higher priority than those on parent "
 "folders."
 msgstr ""
+"Machtigingen op submappen hebben een hogere prioriteit dan die op "
+"bovenliggende mappen."
 
 #: templates/help/folder_permission.html:31
 msgid "Here is a more complex example:"
-msgstr ""
+msgstr "Hier is een complexer voorbeeld:"
 
 #: templates/help/folder_permission.html:32
 msgid ""
@@ -964,6 +1272,13 @@ msgid ""
 "first matched for folder \"A/B\" and user \"John\", which is inherited from "
 "its parent \"A\"."
 msgstr ""
+"Stel dat de mapstructuur eruitziet als \"A/B\", gebruiker \"John\" zit in "
+"groep \"Personeel\". Als u \"alleen lezen\" machtiging instelt op map A voor"
+" John, en u stelt ook \"lezen schrijven\" machtiging in op map \"A/B\" voor "
+"groep \"Personeel\". Dan is de machtiging van John voor map \"A/B\" nog "
+"steeds alleen \"alleen lezen\". Dat komt omdat, volgens regel 2, \"alleen "
+"lezen\" machtiging eerst wordt gevonden voor map \"A/B\" en gebruiker "
+"\"John\", die wordt geërfd van zijn bovenliggende map \"A\"."
 
 #: templates/help/full_text_file_search.html:6
 msgid ""
@@ -971,46 +1286,49 @@ msgid ""
 "as well as the content of certain files, in the Seafile web app. Currently "
 "Seafile can search the contents of the following types of files:"
 msgstr ""
+"Als u een Pro Edition Server gebruikt, kunt u bestands- en mapnamen zoeken, "
+"evenals de inhoud van bepaalde bestanden, in de Seafile web-app. Momenteel "
+"kan Seafile de inhoud van de volgende soorten bestanden zoeken:"
 
 #: templates/help/full_text_file_search.html:8
 #: templates/help/viewing_files_within_web_app.html:8
 msgid "Microsoft Office Doc: .doc, .docx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Doc: .doc, .docx (alleen Pro Edition Server)"
 
 #: templates/help/full_text_file_search.html:9
 #: templates/help/viewing_files_within_web_app.html:9
 msgid "Microsoft Office PowerPoint: .ppt, .pptx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office PowerPoint: .ppt, .pptx (alleen Pro Edition Server)"
 
 #: templates/help/full_text_file_search.html:10
 #: templates/help/viewing_files_within_web_app.html:10
 msgid "Microsoft Office Excel: .xls, .xlsx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Excel: .xls, .xlsx (alleen Pro Edition Server)"
 
 #: templates/help/full_text_file_search.html:11
 #: templates/help/viewing_files_within_web_app.html:11
 msgid "LibreOffice files"
-msgstr ""
+msgstr "LibreOffice bestanden"
 
 #: templates/help/full_text_file_search.html:12
 #: templates/help/viewing_files_within_web_app.html:12
 msgid "PDF files"
-msgstr ""
+msgstr "PDF bestanden"
 
 #: templates/help/full_text_file_search.html:13
 #: templates/help/viewing_files_within_web_app.html:14
 msgid "Markdown files: .md"
-msgstr ""
+msgstr "Markdown bestanden: .md"
 
 #: templates/help/full_text_file_search.html:14
 #: templates/help/viewing_files_within_web_app.html:15
 msgid "Various source code files"
-msgstr ""
+msgstr "Diverse broncodebestanden"
 
 #: templates/help/full_text_file_search.html:15
 #: templates/help/viewing_files_within_web_app.html:16
 msgid "Text files: .txt, .log"
-msgstr ""
+msgstr "Tekstbestanden: .txt, .log"
 
 #: templates/help/full_text_file_search.html:17
 msgid ""
@@ -1018,34 +1336,45 @@ msgid ""
 "text search feature. In that case, you can only search file and folder "
 "names."
 msgstr ""
+"Let op dat uw Seafile systeembeheerder de full-text zoekfunctie mogelijk "
+"niet heeft ingeschakeld. In dat geval kunt u alleen bestands- en mapnamen "
+"zoeken."
 
 #: templates/help/groups_managing.html:6
 msgid ""
 "Creating a group is a convenient way to share files to many people. In "
 "Seafile, you can create and manage a group easily."
 msgstr ""
+"Het aanmaken van een groep is een handige manier om bestanden met veel "
+"mensen te delen. In Seafile kunt u een groep eenvoudig aanmaken en beheren."
 
 #: templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
-msgstr ""
+msgstr "Hier is hoe groepen werken in Seafile:"
 
 #: templates/help/groups_managing.html:9
 msgid ""
 "Each group has a owner. The owner is the creator of the group by default. "
 "He/she can transfer the ownership of the group to another member."
 msgstr ""
+"Elke groep heeft een eigenaar. De eigenaar is standaard de maker van de "
+"groep. Hij/zij kan het eigendom van de groep overdragen aan een ander lid."
 
 #: templates/help/groups_managing.html:10
 msgid ""
 "Each group can have multiple admins. The group owner and group admins can "
 "add more group admins."
 msgstr ""
+"Elke groep kan meerdere beheerders hebben. De groepeigenaar en "
+"groepsbeheerders kunnen meer groepsbeheerders toevoegen."
 
 #: templates/help/groups_managing.html:11
 msgid ""
 "The group admin can add/delete members in the group. And he/she can also "
 "unshare a library in the group."
 msgstr ""
+"De groepsbeheerder kan leden in de groep toevoegen/verwijderen. En hij/zij "
+"kan ook een bibliotheek in de groep stoppen met delen."
 
 #: templates/help/groups_managing.html:13
 msgid ""
@@ -1053,6 +1382,9 @@ msgid ""
 "all the groups you're in. Clicking into any group, you'll see the libraries "
 "shared into this group."
 msgstr ""
+"Klik op het tabblad \"Gedeeld met groepen\" in het linkerdeelvenster, en u "
+"ziet alle groepen waar u in zit. Door op een groep te klikken, ziet u de "
+"bibliotheken die met deze groep zijn gedeeld."
 
 #: templates/help/groups_managing.html:14
 msgid ""
@@ -1060,6 +1392,9 @@ msgid ""
 "panel. Then click on \"All Groups\". In the page, you can click the \"New "
 "Group\" button to create a group."
 msgstr ""
+"Om een nieuwe groep aan te maken, klikt u op het tabblad \"Gedeeld met "
+"groepen\" in het linkerdeelvenster. Klik dan op \"Alle groepen\". Op de "
+"pagina kunt u op de knop \"Nieuwe groep\" klikken om een groep aan te maken."
 
 #: templates/help/groups_managing.html:15
 #, python-format
@@ -1067,6 +1402,8 @@ msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
 "and folders</a> about how to share libraries or folders to a group."
 msgstr ""
+"Zie <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">bestanden en "
+"mappen delen</a> over hoe bibliotheken of mappen met een groep te delen."
 
 #: templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
@@ -1080,6 +1417,12 @@ msgid ""
 "should not sync. Each line in a ignore.txt file specifies a pattern. The "
 "following pattern format are supported."
 msgstr ""
+"Soms wilt u sommige bestanden of mappen in een bibliotheek niet "
+"synchroniseren. Om dit te bereiken, maakt u een seafile-ignore.txt-bestand "
+"in de rootmap van een bibliotheek. Dit speciale bestand specificeert de "
+"bestanden en mappen die Seafile niet mag synchroniseren. Elke regel in een "
+"ignore.txt-bestand geeft een patroon aan. Het volgende patroonformaat wordt "
+"ondersteund."
 
 #: templates/help/ignore.html:10
 msgid "A blank line matches no files."
@@ -1109,6 +1452,10 @@ msgid ""
 "words, \"foo/\" will match a folder \"foo\" and paths underneath it, but "
 "will not match a regular file or a symbolic link \"foo\"."
 msgstr ""
+"Als het patroon eindigt met een slash, komt het alleen overeen met een map. "
+"Met andere woorden, \"foo/\" zal overeenkomen met een map \"foo\" en paden "
+"daaronder, maar zal niet overeenkomen met een normaal bestand of een "
+"symbolische link \"foo\"."
 
 #: templates/help/ignore.html:14
 msgid ""
@@ -1172,7 +1519,7 @@ msgstr ""
 
 #: templates/help/install_sync.html:6
 msgid "Installing Seafile client program"
-msgstr ""
+msgstr "Seafile-clientprogramma installeren"
 
 #: templates/help/install_sync.html:8
 msgid ""
@@ -1188,7 +1535,7 @@ msgstr "1. Kies een schijf partitie om de lokale Seafile gegevens op te slaan"
 
 #: templates/help/install_sync.html:11
 msgid "Selecting a folder to store Seafile data"
-msgstr ""
+msgstr "Een map selecteren om Seafile-gegevens op te slaan"
 
 #: templates/help/install_sync.html:13
 msgid "2. Add an account"
@@ -1235,12 +1582,18 @@ msgid ""
 "syncing them. Seafile client comes with a \"cloud file browser\" to meet "
 "this need. Click an unsynced library will open the cloud file browser."
 msgstr ""
+"In sommige gevallen wilt u bestanden in de cloud direct wijzigen zonder ze "
+"te synchroniseren. Seafile client wordt geleverd met een \"cloud "
+"bestandsbrowser\" om aan deze behoefte te voldoen. Klikken op een niet-"
+"gesynchroniseerde bibliotheek opent de cloud bestandsbrowser."
 
 #: templates/help/introduction.html:8
 msgid ""
 "Seafile is an enterprise file hosting platform with high reliability and "
 "performance."
 msgstr ""
+"Seafile is een enterprise bestandshostingplatform met hoge betrouwbaarheid "
+"en prestaties."
 
 #: templates/help/introduction.html:9
 #, python-format
@@ -1251,6 +1604,11 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/using_drive_client\">the drive client</a>. It also "
 "has mobile clients for Android and iOS."
 msgstr ""
+"Seafile bevat een webinterface voor u om bestanden te beheren en te delen. "
+"Het heeft twee soorten desktopclients, <a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">de bestandssynchronisatieclient</a>"
+" en <a href=\"%(SITE_ROOT)shelp/using_drive_client\">de drive client</a>. "
+"Het heeft ook mobiele clients voor Android en iOS."
 
 #: templates/help/introduction.html:10
 msgid ""
@@ -1258,6 +1616,9 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile web "
 "site</a>."
 msgstr ""
+"U kunt de clients downloaden op <a "
+"href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile "
+"website</a>."
 
 #: templates/help/introduction.html:11
 msgid ""
@@ -1265,6 +1626,9 @@ msgid ""
 "help in our forum: <a href=\"https://forum.seafile.com\" "
 "target=\"_blank\">https://forum.seafile.com</a>."
 msgstr ""
+"Als deze handleiding niet de informatie bevat die u nodig heeft, kunt u hulp"
+" zoeken in ons forum: <a href=\"https://forum.seafile.com\" "
+"target=\"_blank\">https://forum.seafile.com</a>."
 
 #: templates/help/libraries_managing.html:6
 msgid ""
@@ -1274,18 +1638,28 @@ msgid ""
 "library works mostly like a top level folder. But it also has some special "
 "properties:"
 msgstr ""
+"Seafile gebruikt \"bibliotheken\" om uw bestanden te organiseren. Een "
+"bibliotheek is een top-level container voor een set bestanden en mappen. U "
+"kunt een bibliotheek aanmaken voor elk project waar u aan werkt, of elk "
+"documenttype dat u in Seafile wilt opslaan. Een bibliotheek werkt meestal "
+"als een top-level map. Maar het heeft ook enkele speciale eigenschappen:"
 
 #: templates/help/libraries_managing.html:8
 msgid ""
 "Each library keeps its own file modification history. There is no global "
 "file modification history across all libraries."
 msgstr ""
+"Elke bibliotheek houdt zijn eigen bestandswijzigingsgeschiedenis bij. Er is "
+"geen globale bestandswijzigingsgeschiedenis over alle bibliotheken heen."
 
 #: templates/help/libraries_managing.html:9
 msgid ""
 "Each library can be synced to desktop clients separately. You can choose "
 "which libraries to be synced."
 msgstr ""
+"Elke bibliotheek kan afzonderlijk naar desktopclients worden "
+"gesynchroniseerd. U kunt kiezen welke bibliotheken moeten worden "
+"gesynchroniseerd."
 
 #: templates/help/libraries_managing.html:11
 msgid ""
@@ -1294,12 +1668,19 @@ msgid ""
 "can also create more libraries. Here is what it looks like when you've "
 "created a few libraries."
 msgstr ""
+"Wanneer u voor de eerste keer inlogt op Seafile's web-app, maakt Seafile "
+"automatisch een standaardbibliotheek met de naam \"Mijn bibliotheek\" voor u"
+" aan. U kunt ook meer bibliotheken aanmaken. Hier is hoe het eruitziet "
+"wanneer u een paar bibliotheken heeft aangemaakt."
 
 #: templates/help/libraries_managing.html:13
 msgid ""
 "You can navigate into a library and manage your files and folders. You can "
 "upload, download, rename, move, copy and delete files."
 msgstr ""
+"U kunt naar een bibliotheek navigeren en uw bestanden en mappen beheren. U "
+"kunt bestanden uploaden, downloaden, hernoemen, verplaatsen, kopiëren en "
+"verwijderen."
 
 #: templates/help/libraries_managing.html:15
 #, python-format
@@ -1308,6 +1689,10 @@ msgid ""
 "desktop client</a>, you can do any file operations inside the local library "
 "folder. The operations will be uploaded to the server. "
 msgstr ""
+"Na <a href=\"%(SITE_ROOT)shelp/install_sync/\">synchroniseren van een "
+"bibliotheek met desktop client</a>, kunt u alle bestandsbewerkingen in de "
+"lokale bibliotheekmap uitvoeren. De bewerkingen worden naar de server "
+"geüpload."
 
 #: templates/help/library_history_and_snapshots.html:7
 msgid ""
@@ -1316,6 +1701,11 @@ msgid ""
 "creates a \"snapshot\" of the previous state of the library. The snapshot "
 "contains the complete file and folder structure of the library."
 msgstr ""
+"Seafile volgt de wijzigingsgeschiedenis voor de gehele bibliotheek. Wanneer "
+"een bestandsbewerking van toepassing is op een bibliotheek (bestandsupdate, "
+"bestandsverwijdering etc.), maakt Seafile een \"snapshot\" van de vorige "
+"staat van de bibliotheek. De snapshot bevat de complete bestands- en "
+"mapstructuur van de bibliotheek."
 
 #: templates/help/library_history_and_snapshots.html:8
 msgid ""
@@ -1326,10 +1716,17 @@ msgid ""
 "files in the library will be restored to that point of time, all at once. It"
 " works like a \"time machine\" for the library."
 msgstr ""
+"In sommige gevallen heeft u veel bestanden in de bibliotheek gewijzigd, en "
+"merkt u dat u al deze wijzigingen ongedaan wilt maken. Het herstellen van "
+"veel bestanden naar hun oude versies kan vervelend zijn. Op dit moment wordt"
+" de snapshot-functie erg handig. U kunt de gehele bibliotheek herstellen "
+"naar elk punt in het verleden. Alle bestanden in de bibliotheek worden in "
+"één keer hersteld naar dat tijdstip. Het werkt als een \"tijdmachine\" voor "
+"de bibliotheek."
 
 #: templates/help/library_history_and_snapshots.html:9
 msgid "To view library history and snapshots:"
-msgstr ""
+msgstr "Om bibliotheekgeschiedenis en snapshots te bekijken:"
 
 #: templates/help/library_history_and_snapshots.html:11
 msgid ""
@@ -1337,12 +1734,17 @@ msgid ""
 "\"History\" icon in the library navigation top bar. All the change record of"
 " the library will be displayed in a list."
 msgstr ""
+"In Seafile Web App, navigeer naar de hoofdmap van een bibliotheek. Klik op "
+"het \"Geschiedenis\" pictogram in de navigatiebalk bovenaan de bibliotheek. "
+"Alle wijzigingsrecords van de bibliotheek worden weergegeven in een lijst."
 
 #: templates/help/library_history_and_snapshots.html:12
 msgid ""
 "Click the \"view snapshot\" link on any modification record. You'll see the "
 "library state at the point of time."
 msgstr ""
+"Klik op de \"snapshot bekijken\" link bij elk wijzigingsrecord. U ziet de "
+"bibliotheekstatus op dat tijdstip."
 
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
@@ -1351,6 +1753,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"U kunt de bewaarperiode van bibliotheekgeschiedenis configureren: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">geschiedenis "
+"bewaarperiode instellen</a>."
 
 #: templates/help/manage_library_as_wiki.html:6
 msgid ""
@@ -1360,6 +1765,12 @@ msgid ""
 "files store textual, tabular as well as graphical information; You can also "
 "add links to other documents in a Markdown file."
 msgstr ""
+"Het vastleggen en opslaan van gestructureerde gegevens op een "
+"gebruiksvriendelijke manier – dat is waar Seafile's wiki's voor dienen. "
+"Wiki-pagina's zijn geschreven in Markdown (MD), een eenvoudige opmaaktaal, "
+"om cross-platform compatibiliteit te garanderen. MD-bestanden slaan "
+"tekstuele, tabellaire evenals grafische informatie op; U kunt ook links naar"
+" andere documenten toevoegen in een Markdown-bestand."
 
 #: templates/help/manage_library_as_wiki.html:7
 msgid ""
@@ -1368,10 +1779,15 @@ msgid ""
 " Seafile libraries, they can be synced and shared with other users just like"
 " any ordinary library."
 msgstr ""
+"U kunt een standaardbibliotheek in Seafile als een Wiki beheren, met de "
+"\"Kolomweergave\" geïntroduceerd in versie 7.0. Omdat Seafile wiki's "
+"implementeert als standaard Seafile bibliotheken, kunnen ze worden "
+"gesynchroniseerd en gedeeld met andere gebruikers, net als elke gewone "
+"bibliotheek."
 
 #: templates/help/manage_library_as_wiki.html:8
 msgid "Column view"
-msgstr ""
+msgstr "Kolomweergave"
 
 #: templates/help/manage_library_as_wiki.html:9
 msgid ""
@@ -1382,10 +1798,17 @@ msgid ""
 "File actions such as renaming, moving, and opening via client are available "
 "in a right-click-accessible context menu."
 msgstr ""
+"Wiki's hebben meestal een zijbalk met een boomachtige mapstructuur, om snel "
+"en eenvoudig door Wiki-pagina's te bladeren. Seafile's Kolomweergave staat u"
+" toe de bestanden in een bibliotheek op dezelfde manier te beheren als een "
+"Wiki-ruimte. Gebruikers kunnen erin bladeren en bestanden en mappen "
+"verplaatsen door simpelweg te slepen en neer te zetten. Bestandsacties zoals"
+" hernoemen, verplaatsen en openen via client zijn beschikbaar in een "
+"rechtsklikbaar contextmenu."
 
 #: templates/help/manage_library_as_wiki.html:12
 msgid "WYSIWYG Markdown editor"
-msgstr ""
+msgstr "WYSIWYG Markdown editor"
 
 #: templates/help/manage_library_as_wiki.html:13
 msgid ""
@@ -1401,12 +1824,28 @@ msgid ""
 "table’s content: A table can be copied in its entirety or in part without "
 "leaving the WYSIWYG view."
 msgstr ""
+"Wiki-pagina's in Seafile worden opgeslagen als gewone documenten in "
+"Markdown-formaat. Om een nieuwe Wiki-pagina in een bibliotheek te maken, "
+"maakt u gewoon een nieuw Markdown-document aan. MD-bestanden kunnen "
+"rechtstreeks vanuit Seafile's webinterface worden bewerkt met de online MD-"
+"editor. De webbased editor biedt een soepele gebruikerservaring en rijke "
+"opmaakopties voor tekst, afbeeldingen en tabellen. Afbeeldingen kunnen "
+"worden geïmporteerd in MD-bestanden vanuit bibliotheken en lokale opslag "
+"evenals via hyperlinks. Basisafbeeldingsbewerkingsfuncties zoals schalen "
+"kunnen ook worden uitgevoerd in de what-you-see-is-what-you-get (WYSIWYG) "
+"interface van de editor. Tabellen kunnen met een paar klikken worden "
+"ingevoegd en gewijzigd. Hetzelfde geldt voor de inhoud van een tabel: een "
+"tabel kan in zijn geheel of gedeeltelijk worden gekopieerd zonder de "
+"WYSIWYG-weergave te verlaten."
 
 #: templates/help/manage_library_as_wiki.html:15
 msgid ""
 "The change history of a Markdown file can be easily accessed by clicking the"
 " \"File History\" button in the menu on top of the editor interface."
 msgstr ""
+"De wijzigingsgeschiedenis van een Markdown-bestand kan eenvoudig worden "
+"geraadpleegd door op de \"Bestandsgeschiedenis\" knop in het menu boven de "
+"editorinterface te klikken."
 
 #: templates/help/manage_library_as_wiki.html:17
 msgid ""
@@ -1414,10 +1853,13 @@ msgid ""
 "Table of contents, file information, and collaborative commenting are "
 "provided in this side bar."
 msgstr ""
+"U kunt een verborgen zijbalk openen aan de rechterkant van de Markdown-"
+"editor. Inhoudsopgave, bestandsinformatie en samenwerkingscommentaar worden "
+"in deze zijbalk aangeboden."
 
 #: templates/help/manage_library_as_wiki.html:19
 msgid "File tagging and related documents"
-msgstr ""
+msgstr "Bestandstags en gerelateerde documenten"
 
 #: templates/help/manage_library_as_wiki.html:20
 msgid ""
@@ -1426,22 +1868,30 @@ msgid ""
 "can be managed from the side bar of the Markdown editor, or from the file "
 "browser interface."
 msgstr ""
+"Bestandstags zijn een belangrijke functie voor kennismanagement. Seafile "
+"staat gebruikers toe om tags te definiëren voor elke bibliotheek en tags op "
+"bestanden toe te passen. Tags kunnen worden beheerd vanuit de zijbalk van de"
+" Markdown-editor, of vanuit de bestandsbrowserinterface."
 
 #: templates/help/manage_library_as_wiki.html:23
 msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
 msgstr ""
+"De bestandsbrowserinterface biedt een samenvatting van alle bestandstags in "
+"de huidige bibliotheek."
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
 "If you want the be-shared users not be able to modify local copies, you can "
 "consider using the Seafile Drive client."
 msgstr ""
+"Als u wilt dat de gedeelde gebruikers de lokale kopieën niet kunnen "
+"wijzigen, kunt u overwegen de Seafile Drive client te gebruiken."
 
 #: templates/help/restoring_deleted_files.html:6
 msgid "Restoring deleted files and folders"
-msgstr ""
+msgstr "Verwijderde bestanden en mappen herstellen"
 
 #: templates/help/restoring_deleted_files.html:7
 msgid ""
@@ -1449,16 +1899,21 @@ msgid ""
 "Sometimes you find files are deleted mistakenly. You can find back your "
 "deleted files in the trash bin of each library."
 msgstr ""
+"Elke bibliotheek in Seafile volgt uw bestandsverwijderingsbewerkingen "
+"automatisch. Soms merkt u dat bestanden per ongeluk zijn verwijderd. U kunt "
+"uw verwijderde bestanden terugvinden in de prullenbak van elke bibliotheek."
 
 #: templates/help/restoring_deleted_files.html:8
 msgid "Here is how to use the trash bin feature:"
-msgstr ""
+msgstr "Hier is hoe u de prullenbakfunctie gebruikt:"
 
 #: templates/help/restoring_deleted_files.html:10
 msgid ""
 "In Seafile Web App, navigate into the parent folder containing the deleted "
 "file or folder."
 msgstr ""
+"In Seafile Web App, navigeer naar de bovenliggende map die het verwijderde "
+"bestand of de verwijderde map bevat."
 
 #: templates/help/restoring_deleted_files.html:11
 msgid ""
@@ -1466,6 +1921,10 @@ msgid ""
 " folders will be listed in deletion time order. In the bottom of the list, "
 "you can click the \"more\" button to load more deleted files."
 msgstr ""
+"Klik op het \"prullenbak\" pictogram in de bibliotheekbewerkingsbalk. De "
+"verwijderde bestanden en mappen worden weergegeven in "
+"verwijderingstijdvolgorde. Onderaan de lijst kunt u op de \"meer\" knop "
+"klikken om meer verwijderde bestanden te laden."
 
 #: templates/help/restoring_deleted_files.html:12
 msgid ""
@@ -1473,6 +1932,9 @@ msgid ""
 "folder's parent folder has been deleted, it will be restored to the "
 "library's root folder."
 msgstr ""
+"In de lijst met verwijderde bestanden kunt u bestanden en mappen herstellen."
+" Als de bovenliggende map van een bestand of map is verwijderd, wordt deze "
+"hersteld naar de hoofdmap van de bibliotheek."
 
 #: templates/help/restoring_deleted_files.html:13
 msgid ""
@@ -1480,6 +1942,9 @@ msgid ""
 "the current folder. Files deleted in the sub-folders of the current folder "
 "are also included in the list."
 msgstr ""
+"Let op dat de prullenbak alleen bestanden en submappen bevat die onder de "
+"huidige map zijn verwijderd. Bestanden die in de submappen van de huidige "
+"map zijn verwijderd, zijn ook opgenomen in de lijst."
 
 #: templates/help/restoring_deleted_files.html:15
 #, python-format
@@ -1488,6 +1953,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"U kunt de bewaarperiode van verwijderde bestanden configureren: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">geschiedenis "
+"bewaarperiode instellen</a>."
 
 #: templates/help/selective_sync.html:8
 msgid ""
@@ -1496,6 +1964,10 @@ msgid ""
 "selectively sync a sub-folder in a library, instead of syncing the entire "
 "library."
 msgstr ""
+"U kunt enkele zeer grote bibliotheken op de Seafile server hebben. En u bent"
+" momenteel alleen geïnteresseerd in een submap in één bibliotheek. Dan kunt "
+"u selectief een submap in een bibliotheek synchroniseren, in plaats van de "
+"gehele bibliotheek te synchroniseren."
 
 #: templates/help/selective_sync.html:10
 msgid ""
@@ -1504,40 +1976,54 @@ msgid ""
 "folder. Right click on the sub-folder. Choose \"Sync this folder\" in the "
 "pop-up menu."
 msgstr ""
+"Om een submap te synchroniseren, opent u de cloud bestandsbrowser door "
+"dubbel te klikken op een bibliotheek die niet is gesynchroniseerd. Navigeer "
+"naar de bovenliggende map van die submap. Klik met de rechtermuisknop op de "
+"submap. Kies \"Deze map synchroniseren\" in het pop-upmenu."
 
 #: templates/help/selective_sync.html:14
 msgid ""
 "After syncing the sub-folder, you can see its syncing status in the \"Synced"
 " Libraries\" group in the client's main window."
 msgstr ""
+"Na synchronisatie van de submap kunt u de synchronisatiestatus zien in de "
+"\"Gesynchroniseerde bibliotheken\" groep in het hoofdvenster van de client."
 
 #: templates/help/setting_library_history.html:6
 msgid "Setting library history retention period"
-msgstr ""
+msgstr "Bewaarperiode bibliotheekgeschiedenis instellen"
 
 #: templates/help/setting_library_history.html:7
 msgid ""
 "A library's history retention period length controls how long you can access"
 " your history data in the following features:"
 msgstr ""
+"De lengte van de bewaarperiode van de bibliotheekgeschiedenis bepaalt hoe "
+"lang u uw geschiedenisgegevens kunt raadplegen in de volgende functies:"
 
 #: templates/help/setting_library_history.html:9
 msgid ""
 "Restore deleted files: you cannot restore files and folders deleted before "
 "the retention period."
 msgstr ""
+"Verwijderde bestanden herstellen: u kunt bestanden en mappen die vóór de "
+"bewaarperiode zijn verwijderd niet herstellen."
 
 #: templates/help/setting_library_history.html:10
 msgid ""
 "File versions: you cannot access file versions older than the retention "
 "period."
 msgstr ""
+"Bestandsversies: u kunt geen bestandsversies raadplegen die ouder zijn dan "
+"de bewaarperiode."
 
 #: templates/help/setting_library_history.html:11
 msgid ""
 "Library history and snapshots: you cannot access library snapshots older "
 "than the retention period."
 msgstr ""
+"Bibliotheekgeschiedenis en snapshots: u kunt geen bibliotheeksnapshots "
+"raadplegen die ouder zijn dan de bewaarperiode."
 
 #: templates/help/setting_library_history.html:13
 msgid ""
@@ -1545,51 +2031,75 @@ msgid ""
 "library, separately. You must be the library's owner to set the retention "
 "period. To set retention period length:"
 msgstr ""
+"De bewaarperiode van oude bestandsversies kan voor elke bibliotheek "
+"afzonderlijk worden geconfigureerd. U moet de eigenaar van de bibliotheek "
+"zijn om de bewaarperiode in te stellen. Om de lengte van de bewaarperiode in"
+" te stellen:"
 
 #: templates/help/setting_library_history.html:15
 msgid ""
 "In Seafile Web App, click the \"Mine\" tab in the navigation panel (as in "
 "the below screenshot). All libraries owned by you will be listed."
 msgstr ""
+"In Seafile Web App, klik op het \"Mijn\" tabblad in het navigatiepaneel "
+"(zoals in de onderstaande schermafbeelding). Alle bibliotheken die u bezit, "
+"worden weergegeven."
 
 #: templates/help/setting_library_history.html:16
 msgid ""
 "Move the cursor onto the row of the library. An operation menu will appear. "
 "Click \"History Setting\" in the drop-down menu."
 msgstr ""
+"Beweeg de cursor over de rij van de bibliotheek. Er verschijnt een "
+"bewerkingsmenu. Klik op \"Geschiedenisinstelling\" in het vervolgmenu."
 
 #: templates/help/setting_library_history.html:17
 msgid "In the pop-up dialog, you can set the length of file retention period."
 msgstr ""
+"In het pop-updialoogvenster kunt u de lengte van de bestandsbewaarperiode "
+"instellen."
 
 #: templates/help/sharing_files_and_folders.html:6
 msgid ""
 "In Seafile there are a few ways to share files and folders with others:"
 msgstr ""
+"In Seafile zijn er een paar manieren om bestanden en mappen met anderen te "
+"delen:"
 
 #: templates/help/sharing_files_and_folders.html:8
 msgid ""
 "Using links: there are multiple types of links that can be used to share "
 "with various scope of collaborators."
 msgstr ""
+"Gebruik van links: er zijn meerdere soorten links die kunnen worden gebruikt"
+" om te delen met verschillende reikwijdten van samenwerkers."
 
 #: templates/help/sharing_files_and_folders.html:10
 msgid ""
 "Share links: Any user who has access to the links can access the files or "
 "folders pointed by the link. No login is required."
 msgstr ""
+"Deel links: Elke gebruiker die toegang heeft tot de links kan de bestanden "
+"of mappen raadplegen die door de link worden aangewezen. Inloggen is niet "
+"vereist."
 
 #: templates/help/sharing_files_and_folders.html:11
 msgid ""
 "Upload links: Any user who has access to the links can upload files to the "
 "folder pointed by the link. No login is required."
 msgstr ""
+"Upload links: Elke gebruiker die toegang heeft tot de links kan bestanden "
+"uploaden naar de map die door de link wordt aangewezen. Inloggen is niet "
+"vereist."
 
 #: templates/help/sharing_files_and_folders.html:12
 msgid ""
 "Internal links: Only logged in users who have read permission to the file or"
 " folder can access this link. Used for internal file sharing."
 msgstr ""
+"Interne links: Alleen ingelogde gebruikers die leesmachtiging hebben voor "
+"het bestand of de map kunnen deze link raadplegen. Gebruikt voor interne "
+"bestandsdeling."
 
 #: templates/help/sharing_files_and_folders.html:15
 msgid ""
@@ -1597,10 +2107,13 @@ msgid ""
 "library or folder for specific users or groups. Users have to log in to "
 "access the folders."
 msgstr ""
+"Bibliotheken of mappen delen: gebruikt voor het instellen van "
+"toegangsmachtigingen voor een bibliotheek of map voor specifieke gebruikers "
+"of groepen. Gebruikers moeten inloggen om de mappen te raadplegen."
 
 #: templates/help/sharing_files_and_folders.html:17
 msgid "Creating share links to files or folders"
-msgstr ""
+msgstr "Deel links naar bestanden of mappen maken"
 
 #: templates/help/sharing_files_and_folders.html:18
 msgid ""
@@ -1608,12 +2121,18 @@ msgid ""
 "anyone, including those who don't have a Seafile account. You can also use "
 "password and expiration time to protect your links."
 msgstr ""
+"Deel links zijn openbare links naar bestanden of mappen. Ze kunnen worden "
+"geraadpleegd door iedereen, inclusief degenen die geen Seafile-account "
+"hebben. U kunt ook wachtwoord en vervaltijd gebruiken om uw links te "
+"beschermen."
 
 #: templates/help/sharing_files_and_folders.html:19
 msgid ""
 "You can also set access permission to share links. There are three types of "
 "permissions:"
 msgstr ""
+"U kunt ook toegangsmachtiging instellen voor deel links. Er zijn drie "
+"soorten machtigingen:"
 
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
@@ -1621,6 +2140,9 @@ msgid ""
 "browser, but cannot be downloaded. This is useful for sharing confidential "
 "data."
 msgstr ""
+"Alleen voorbeeld: het bestand of de bestanden in de map kunnen alleen in de "
+"webbrowser worden bekeken, maar kunnen niet worden gedownload. Dit is handig"
+" voor het delen van vertrouwelijke gegevens."
 
 #: templates/help/sharing_files_and_folders.html:23
 msgid ""
@@ -1628,16 +2150,23 @@ msgid ""
 "file can be edited in web browser (e.g. an Office file), any user who has "
 "access to the link is allowed to edit it."
 msgstr ""
+"Bewerken in cloud en downloaden: Vergelijkbaar met \"Voorbeeld en "
+"Downloaden\", maar als het bestand in de webbrowser kan worden bewerkt "
+"(bijvoorbeeld een Office-bestand), is elke gebruiker die toegang heeft tot "
+"de link toegestaan het te bewerken."
 
 #: templates/help/sharing_files_and_folders.html:25
 msgid "To create a share link in Seafile web app:"
-msgstr ""
+msgstr "Om een deel link te maken in Seafile web app:"
 
 #: templates/help/sharing_files_and_folders.html:27
 msgid ""
 "Navigate into the parent folder containing the file or folder. Hover your "
 "mouse over the file or folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Navigeer naar de bovenliggende map die het bestand of de map bevat. Beweeg "
+"uw muis over het bestand of de map en klik op het \"Delen\" pictogram dat "
+"verschijnt."
 
 #: templates/help/sharing_files_and_folders.html:28
 msgid ""
@@ -1645,6 +2174,10 @@ msgid ""
 " on the left panel. Then click \"Generate\" button to create a link. You can"
 " use password, expiration time and permission to protect your link."
 msgstr ""
+"Er verschijnt een pop-upvenster met deelopties. Klik op het tabblad \"Deel "
+"Link\" in het linkerdeelvenster. Klik vervolgens op de knop \"Genereren\" om"
+" een link te maken. U kunt wachtwoord, vervaltijd en machtiging gebruiken om"
+" uw link te beschermen."
 
 #: templates/help/sharing_files_and_folders.html:29
 #: templates/help/sharing_files_and_folders.html:42
@@ -1652,10 +2185,12 @@ msgid ""
 "Copy the link to email, instant messaging client or any other tool to send "
 "it to others."
 msgstr ""
+"Kopieer de link naar e-mail, instant messaging client of een ander "
+"hulpmiddel om deze naar anderen te sturen."
 
 #: templates/help/sharing_files_and_folders.html:31
 msgid "You can also create share links from the desktop clients."
-msgstr ""
+msgstr "U kunt ook deel links maken vanuit de desktopclients."
 
 #: templates/help/sharing_files_and_folders.html:33
 msgid ""
@@ -1664,6 +2199,11 @@ msgid ""
 " on the file or folder that you want to create a link to. In the pop-up "
 "menu, choose \"Seafile\" then \"Create share link\"."
 msgstr ""
+"Als de bibliotheek is gesynchroniseerd, dubbelklik op de bibliotheek in het "
+"hoofdvenster van de Seafile client. De lokale map van die bibliotheek wordt "
+"geopend. Klik met de rechtermuisknop op het bestand of de map waarvoor u een"
+" link wilt maken. Kies in het pop-upmenu \"Seafile\" en vervolgens \"Deel "
+"link maken\"."
 
 #: templates/help/sharing_files_and_folders.html:34
 msgid ""
@@ -1671,10 +2211,13 @@ msgid ""
 " Seafile client. The cloud file browser window will be opened, and you can "
 "create a link to a file or folder in it."
 msgstr ""
+"Als de bibliotheek niet is gesynchroniseerd, dubbelklik op de bibliotheek in"
+" het hoofdvenster van de Seafile client. Het cloud bestandsbrowservenster "
+"wordt geopend en u kunt een link maken naar een bestand of map erin."
 
 #: templates/help/sharing_files_and_folders.html:36
 msgid "Creating upload links to folders"
-msgstr ""
+msgstr "Upload links naar mappen maken"
 
 #: templates/help/sharing_files_and_folders.html:37
 msgid ""
@@ -1682,16 +2225,21 @@ msgid ""
 "upload links for folders. Others cannot see the files in the folders. They "
 "can only upload files to them."
 msgstr ""
+"U kunt upload links gebruiken om bestanden van anderen te verzamelen. U kunt"
+" alleen upload links voor mappen maken. Anderen kunnen de bestanden in de "
+"mappen niet zien. Ze kunnen alleen bestanden ernaar uploaden."
 
 #: templates/help/sharing_files_and_folders.html:38
 msgid "To create an upload link in Seafile web app:"
-msgstr ""
+msgstr "Om een upload link te maken in Seafile web app:"
 
 #: templates/help/sharing_files_and_folders.html:40
 msgid ""
 "Navigate into the parent folder containing the folder. Hover your mouse over"
 " the folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Navigeer naar de bovenliggende map die de map bevat. Beweeg uw muis over de "
+"map en klik op het \"Delen\" pictogram dat verschijnt."
 
 #: templates/help/sharing_files_and_folders.html:41
 msgid ""
@@ -1699,10 +2247,13 @@ msgid ""
 "tab on the left panel. Then click \"Generate\" button to create a link. You "
 "can use password to protect your link."
 msgstr ""
+"Er verschijnt een pop-upvenster met deelopties. Klik op het tabblad \"Upload"
+" Link\" in het linkerdeelvenster. Klik vervolgens op de knop \"Genereren\" "
+"om een link te maken. U kunt wachtwoord gebruiken om uw link te beschermen."
 
 #: templates/help/sharing_files_and_folders.html:44
 msgid "Sharing libraries or folders"
-msgstr ""
+msgstr "Bibliotheken of mappen delen"
 
 #: templates/help/sharing_files_and_folders.html:45
 msgid ""
@@ -1710,62 +2261,79 @@ msgid ""
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
 msgstr ""
+"U kunt een bibliotheek of map delen met andere geregistreerde Seafile "
+"gebruikers. De gedeelde bibliotheek of map kan door anderen worden "
+"geraadpleegd met de web-app en Seafile clients."
 
 #: templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
-msgstr ""
+msgstr "U kunt het bereik van de deling kiezen:"
 
 #: templates/help/sharing_files_and_folders.html:48
 msgid "Share to user: You can share to one or more users."
-msgstr ""
+msgstr "Delen met gebruiker: U kunt met één of meer gebruikers delen."
 
 #: templates/help/sharing_files_and_folders.html:49
 msgid "Share to group: You can share to a group."
-msgstr ""
+msgstr "Delen met groep: U kunt met een groep delen."
 
 #: templates/help/sharing_files_and_folders.html:50
 msgid ""
 "Share to organization: If you're using a private server, sometimes it's "
 "useful to share to all members on the server (the entire organization)."
 msgstr ""
+"Delen met organisatie: Als u een privéserver gebruikt, is het soms nuttig om"
+" met alle leden op de server te delen (de hele organisatie)."
 
 #: templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
-msgstr ""
+msgstr "U kunt ook machtiging instellen op de deling:"
 
 #: templates/help/sharing_files_and_folders.html:54
 msgid "Read-Write: users can read, write, upload, download and sync files."
 msgstr ""
+"Lezen-Schrijven: gebruikers kunnen bestanden lezen, schrijven, uploaden, "
+"downloaden en synchroniseren."
 
 #: templates/help/sharing_files_and_folders.html:55
 msgid "Read-only: users can read, download and sync files."
 msgstr ""
+"Alleen-lezen: gebruikers kunnen bestanden lezen, downloaden en "
+"synchroniseren."
 
 #: templates/help/sharing_files_and_folders.html:56
 msgid "Admin: besides the write permission, users can also share the library."
 msgstr ""
+"Beheerder: naast de schrijfmachtiging kunnen gebruikers ook de bibliotheek "
+"delen."
 
 #: templates/help/sharing_files_and_folders.html:57
 msgid ""
 "Online Read-Write: users can view and edit files online via a web browser. "
 "The files cannot be downloaded."
 msgstr ""
+"Online Lezen-Schrijven: gebruikers kunnen bestanden online bekijken en "
+"bewerken via een webbrowser. De bestanden kunnen niet worden gedownload."
 
 #: templates/help/sharing_files_and_folders.html:58
 msgid ""
 "Online Read-only: users can only view files online via a web browser. The "
 "files cannot be downloaded."
 msgstr ""
+"Online Alleen-lezen: gebruikers kunnen alleen bestanden online bekijken via "
+"een webbrowser. De bestanden kunnen niet worden gedownload."
 
 #: templates/help/sharing_files_and_folders.html:60
 msgid "To share a library or folder to a user or group:"
-msgstr ""
+msgstr "Om een bibliotheek of map met een gebruiker of groep te delen:"
 
 #: templates/help/sharing_files_and_folders.html:62
 msgid ""
 "Hover your mouse over the library or folder and click on the \"Share\" icon "
 "that appears."
 msgstr ""
+"Beweeg uw muis over de bibliotheek of map en klik op het \"Delen\" pictogram"
+" dat verschijnt."
 
 #: templates/help/sharing_files_and_folders.html:63
 msgid ""
@@ -1773,6 +2341,9 @@ msgid ""
 "or \"Share to group\" tab on the left panel. Select the user or group. Then "
 "click \"Submit\"."
 msgstr ""
+"Er verschijnt een pop-upvenster met deelopties. Klik op het tabblad \"Delen "
+"met gebruiker\" of \"Delen met groep\" in het linkerdeelvenster. Selecteer "
+"de gebruiker of groep. Klik vervolgens op \"Indienen\"."
 
 #: templates/help/sharing_files_and_folders.html:65
 msgid ""
@@ -1781,6 +2352,11 @@ msgid ""
 " you share it to a group, the group members can only see it by navigating "
 "into the group."
 msgstr ""
+"Nadat u een bibliotheek of map met een gebruiker heeft gedeeld, kan de "
+"gebruiker deze zien door op het tabblad \"Gedeeld met mij\" in het "
+"linkerdeelvenster in Seafile web app te klikken. Als u deze met een groep "
+"deelt, kunnen de groepsleden deze alleen zien door naar de groep te "
+"navigeren."
 
 #: templates/help/sharing_files_and_folders.html:66
 msgid ""
@@ -1789,10 +2365,15 @@ msgid ""
 "button. In the drop-down menu, you can choose to share an existing library "
 "or create a new library and share it."
 msgstr ""
+"Om een bibliotheek met de hele organisatie te delen: Klik in Seafile web app"
+" op het tabblad \"Gedeeld met iedereen\" in het linkerdeelvenster. Klik "
+"vervolgens op de knop \"Bibliotheek toevoegen\". In het vervolgmenu kunt u "
+"kiezen om een bestaande bibliotheek te delen of een nieuwe bibliotheek te "
+"maken en deze te delen."
 
 #: templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
-msgstr ""
+msgstr "Interne links"
 
 #: templates/help/sharing_files_and_folders.html:68
 msgid ""
@@ -1802,6 +2383,11 @@ msgid ""
 "library. You may just copy the link and paste it into an email or IM "
 "software."
 msgstr ""
+"Alleen ingelogde gebruikers die leesmachtiging hebben voor het bestand of de"
+" map kunnen deze link raadplegen. Het wordt gebruikt voor interne "
+"bestandsdeling. Het is een handige manier om bestanden te delen tussen "
+"teamleden die toegang hebben tot een gemeenschappelijke bibliotheek. U kunt "
+"de link gewoon kopiëren en in een e-mail of IM-software plakken."
 
 #: templates/help/sync_interval.html:8
 msgid ""
@@ -1812,10 +2398,17 @@ msgid ""
 "local folder. You can set the interval of this periodic sync. The interval "
 "is set in the unit of seconds."
 msgstr ""
+"Meestal detecteert Seafile client automatisch wijzigingen in de lokale map "
+"en uploadt de wijzigingen naar de server. Als de lokale map zich echter op "
+"een Windows netwerkgedeelde schijf bevindt, kan Seafile client wijzigingen "
+"niet betrouwbaar detecteren. In dit geval kunt u Seafile client vragen "
+"periodiek te controleren op wijzigingen in de lokale map. U kunt het "
+"interval van deze periodieke synchronisatie instellen. Het interval wordt "
+"ingesteld in eenheden van seconden."
 
 #: templates/help/syncing_existing_folders.html:6
 msgid "Syncing with an existing folder"
-msgstr ""
+msgstr "Synchroniseren met een bestaande map"
 
 #: templates/help/syncing_existing_folders.html:8
 #, python-format
@@ -1829,16 +2422,30 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/conflicts/\">conflict files</a> if file contents "
 "are different in the local folder and the library. "
 msgstr ""
+"Soms heeft u al een bibliotheek op de Seafile server (gedeeld door anderen, "
+"of geüpload vanaf een andere computer). U kunt deze bibliotheek "
+"synchroniseren met een bestaande map op uw computer. De lokale map moet de "
+"zelfde naam hebben als de bibliotheek. De bestanden in de lokale map worden "
+"samengevoegd met de bestanden in de bibliotheek. Geen enkel bestand in de "
+"lokale map of de bibliotheek wordt overschreven of verloren. De samenvoeging"
+" zal enkele <a href=\"%(SITE_ROOT)shelp/conflicts/\">conflictbestanden</a> "
+"produceren als de bestandsinhoud verschillend is in de lokale map en de "
+"bibliotheek."
 
 #: templates/help/syncing_existing_folders.html:10
 msgid ""
 "To sync a library with an existing folder, right click on the library in "
 "Seafile client's main window and click \"Sync this library\"."
 msgstr ""
+"Om een bibliotheek te synchroniseren met een bestaande map, klikt u met de "
+"rechtermuisknop op de bibliotheek in het hoofdvenster van de Seafile client "
+"en klikt u op \"Deze bibliotheek synchroniseren\"."
 
 #: templates/help/syncing_existing_folders.html:14
 msgid "In the pop-up dialog, click the \"Sync with an existing folder\" link."
 msgstr ""
+"Klik in het pop-updialoogvenster op de link \"Synchroniseren met een "
+"bestaande map\"."
 
 #: templates/help/syncing_existing_folders.html:18
 msgid "Then choose an existing folder to sync with this library."
@@ -1847,7 +2454,7 @@ msgstr ""
 
 #: templates/help/unsync_resync.html:6
 msgid "Unsync and resync library"
-msgstr ""
+msgstr "Bibliotheek ontkoppelen en opnieuw synchroniseren"
 
 #: templates/help/unsync_resync.html:8
 #, python-format
@@ -1859,6 +2466,13 @@ msgid ""
 "<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
 "folder</a> feature."
 msgstr ""
+"Wanneer u een lokale map niet langer met een bibliotheek wilt "
+"synchroniseren, kunt u deze ontkoppelen. Nadat u een bibliotheek hebt "
+"ontkoppeld, worden wijzigingen in de lokale map en bestanden niet geüpload "
+"en worden wijzigingen in de bibliotheek niet gedownload. Als u de "
+"bibliotheek opnieuw met de lokale map wilt synchroniseren, kunt u de functie"
+" <a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">synchroniseren met "
+"bestaande map</a> gebruiken."
 
 #: templates/help/unsync_resync.html:10
 msgid ""
@@ -1867,6 +2481,11 @@ msgid ""
 "unsync and then immediately sync the library with the same folder. You can "
 "find this action in the pop-up menu of the client's main window."
 msgstr ""
+"Soms zijn er interne fouten in de client die synchronisatie blokkeren. In "
+"deze gevallen is het meestal nuttig om de bibliotheek \"opnieuw te "
+"synchroniseren\". Opnieuw synchroniseren betekent ontkoppelen en vervolgens "
+"onmiddellijk de bibliotheek met dezelfde map synchroniseren. U kunt deze "
+"actie vinden in het pop-upmenu van het hoofdvenster van de client."
 
 #: templates/help/using_drive_client.html:7
 msgid ""
@@ -1874,16 +2493,22 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
 "start it by double clicking the \"SeaDrive\" app icon on your desktop."
 msgstr ""
+"Na het installeren van een drive client met de instructies op de <a "
+"href=\"https://www.seafile.com/en/download/\">downloadpagina</a>, kunt u "
+"deze starten door te dubbelklikken op het \"SeaDrive\" app-pictogram op uw "
+"bureaublad."
 
 #: templates/help/using_drive_client.html:8
 msgid ""
 "You'll be asked to choose a drive letter for the virtual drive. By default, "
 "\"S:\" will be used."
 msgstr ""
+"U wordt gevraagd een stationsletter te kiezen voor het virtuele station. "
+"Standaard wordt \"S:\" gebruikt."
 
 #: templates/help/using_drive_client.html:9
 msgid "Then you'll be asked to log into your Seafile server."
-msgstr ""
+msgstr "Vervolgens wordt u gevraagd in te loggen op uw Seafile server."
 
 #: templates/help/using_drive_client.html:12
 msgid ""
@@ -1892,6 +2517,11 @@ msgid ""
 "at this moment. So it'll not take very long. You can let it run in the "
 "background. You'll be noticed when the fetch is done."
 msgstr ""
+"Na succesvol inloggen op de server, begint de Drive-client bibliotheken en "
+"bestandslijsten van de server op te halen. De bestandsinhoud wordt op dit "
+"moment nog niet gedownload. Dus het duurt niet erg lang. U kunt het op de "
+"achtergrond laten draaien. U wordt op de hoogte gebracht wanneer het ophalen"
+" is voltooid."
 
 #: templates/help/using_drive_client.html:14
 msgid ""
@@ -1901,26 +2531,34 @@ msgid ""
 "when you open a file. Recently opened file will be cached in your local "
 "disk. All cached files will be marked with a green tick."
 msgstr ""
+"De virtuele drive-map wordt geopend. U zult merken dat het net als een "
+"gewone harde schijf op uw computer werkt. De mappen op het hoogste niveau in"
+" de virtuele drive zijn bibliotheken op de Seafile-server. Bestandsinhoud "
+"wordt gedownload wanneer u een bestand opent. Recente geopende bestanden "
+"worden in uw lokale schijf in de cache opgeslagen. Alle bestanden in de "
+"cache worden gemarkeerd met een groen vinkje."
 
 #: templates/help/using_drive_client.html:17
 msgid "Synced State"
-msgstr ""
+msgstr "Gesynchroniseerde status"
 
 #: templates/help/using_drive_client.html:18
 msgid ""
 "Files and folders in the virtual drive are in either cloud-only, synced, or "
 "in partially synced state."
 msgstr ""
+"Bestanden en mappen in de virtuele drive bevinden zich in een cloud-alleen, "
+"gesynchroniseerde of gedeeltelijk gesynchroniseerde status."
 
 #: templates/help/using_drive_client.html:22
 #: templates/help/using_drive_client.html:51
 msgid "State"
-msgstr ""
+msgstr "Status"
 
 #: templates/help/using_drive_client.html:23
 #: templates/help/using_drive_client.html:52
 msgid "Icon"
-msgstr ""
+msgstr "Pictogram"
 
 #: templates/help/using_drive_client.html:24
 #: templates/help/using_drive_client.html:53
@@ -1929,7 +2567,7 @@ msgstr "Details"
 
 #: templates/help/using_drive_client.html:29
 msgid "Cloud-only content"
-msgstr ""
+msgstr "Alleen-cloudinhoud"
 
 #: templates/help/using_drive_client.html:31
 msgid ""
@@ -1939,71 +2577,94 @@ msgid ""
 "downloaded is only information about the file, such as its name, its size "
 "and the date it was updated."
 msgstr ""
+"Alleen-cloudinhoud wordt weergegeven in de virtuele schijf, maar verbruikt "
+"niet de volledige hoeveelheid ruimte die het bestand normaal gesproken zou "
+"innemen. In uw bestandsverkenner kunt u het bestand zien, maar de inhoud "
+"wordt pas volledig gedownload wanneer u deze nodig hebt. Wat wordt "
+"gedownload is alleen informatie over het bestand, zoals de naam, de grootte "
+"en de datum waarop het is bijgewerkt."
 
 #: templates/help/using_drive_client.html:34
 msgid "Synced content"
-msgstr ""
+msgstr "Gesynchroniseerde inhoud"
 
 #: templates/help/using_drive_client.html:36
 msgid ""
 "Synced content is downloaded and saved on the hard drive of your computer. "
 "You can directly edit these files from applications on your computer."
 msgstr ""
+"Gesynchroniseerde inhoud wordt gedownload en opgeslagen op de harde schijf "
+"van uw computer. U kunt deze bestanden rechtstreeks bewerken met applicaties"
+" op uw computer."
 
 #: templates/help/using_drive_client.html:39
 msgid "Partially synced content"
-msgstr ""
+msgstr "Gedeeltelijk gesynchroniseerde inhoud"
 
 #: templates/help/using_drive_client.html:41
 msgid ""
 "Partially synced folders contain both synced and cloud-only files or "
 "folders."
 msgstr ""
+"Gedeeltelijk gesynchroniseerde mappen bevatten zowel gesynchroniseerde "
+"bestanden als alleen-cloudbestanden of -mappen."
 
 #: templates/help/using_drive_client.html:46
 msgid "Special States"
-msgstr ""
+msgstr "Speciale statussen"
 
 #: templates/help/using_drive_client.html:47
 msgid ""
 "For files that are already synced to local computer, they may be in 3 other "
 "special states, besides the normal \"synced\" state. "
 msgstr ""
+"Voor bestanden die al naar de lokale computer zijn gesynchroniseerd, kunnen "
+"er naast de normale status \"gesynchroniseerd\" nog 3 andere speciale "
+"statussen zijn."
 
 #: templates/help/using_drive_client.html:58
 msgid "Locked by other user"
-msgstr ""
+msgstr "Vergrendeld door andere gebruiker"
 
 #: templates/help/using_drive_client.html:60
 msgid ""
 "The file is locked by other user on the server. You can only open the file "
 "in read-only mode. You cannot modify, delete, rename or move the file."
 msgstr ""
+"Het bestand is vergrendeld door een andere gebruiker op de server. U kunt "
+"het bestand alleen openen in de modus alleen-lezen. U kunt het bestand niet "
+"wijzigen, verwijderen, hernoemen of verplaatsen."
 
 #: templates/help/using_drive_client.html:63
 msgid "Locked by me"
-msgstr ""
+msgstr "Door mij vergrendeld"
 
 #: templates/help/using_drive_client.html:65
 msgid ""
 "The file is locked by you. This prevents others from modifying the file."
 msgstr ""
+"Het bestand is door u vergrendeld. Dit voorkomt dat anderen het bestand "
+"wijzigen."
 
 #: templates/help/using_drive_client.html:68
 msgid "Read-only"
-msgstr ""
+msgstr "Alleen-lezen"
 
 #: templates/help/using_drive_client.html:70
 msgid ""
 "The folder or library of this file is shared with read-only permission to "
 "you. You cannot modify, delete or move the file."
 msgstr ""
+"De map of bibliotheek van dit bestand is met alleen-lezen permissies met u "
+"gedeeld. U kunt het bestand niet wijzigen, verwijderen of verplaatsen."
 
 #: templates/help/using_drive_client.html:74
 msgid ""
 "The Drive client regularly cleans up unused cached files in the background. "
 "You can also limit the local cache space."
 msgstr ""
+"De Drive-client schoont regelmatig ongebruikte cachebestanden op de "
+"achtergrond op. U kunt ook de lokale cacheruimte beperken."
 
 #: templates/help/using_drive_client.html:76
 msgid ""
@@ -2011,10 +2672,15 @@ msgid ""
 "on the current selected server will be shown in the virtual drive. You can "
 "switch among accounts."
 msgstr ""
+"U kunt inloggen op meerdere accounts in de Drive-client. Alleen bestanden op"
+" de momenteel geselecteerde server worden echter weergegeven in de virtuele "
+"schijf. U kunt tussen accounts schakelen."
 
 #: templates/help/using_drive_client.html:80
 msgid "1. Why can't I create new files or delete folders in root folder?"
 msgstr ""
+"1. Waarom kan ik geen nieuwe bestanden maken of mappen verwijderen in de "
+"hoofdmap?"
 
 #: templates/help/using_drive_client.html:81
 msgid ""
@@ -2025,13 +2691,23 @@ msgid ""
 "represents libraries, we don't want users to delete their libraries by "
 "mistake. So the Drive client doesn't support deleting top level folders."
 msgstr ""
+"De hoofdmap van de virtuele schijf bevat alleen bibliotheekmappen. Seafile "
+"kan alleen bestanden binnen bibliotheken synchroniseren. Bestanden in de "
+"hoofdmap kunnen niet worden geüpload naar de Seafile-server. Het heeft "
+"daarom geen zin om het maken van bestanden in de hoofdmap te ondersteunen. "
+"Aangezien de mappen op het hoogste niveau in de virtuele schijf bibliotheken"
+" vertegenwoordigen, willen we niet dat gebruikers per ongeluk hun "
+"bibliotheken verwijderen. Daarom ondersteunt de Drive-client het verwijderen"
+" van mappen op het hoogste niveau niet."
 
 #: templates/help/viewing_files_within_web_app.html:6
 msgid ""
 "Some types of files can be directly opened and viewed within the Seafile Web"
 " App. Currently they are:"
 msgstr ""
+"Sommige bestandstypen kunnen rechtstreeks worden geopend en bekeken in de "
+"Seafile Web App. Momenteel zijn dit:"
 
 #: templates/help/viewing_files_within_web_app.html:13
 msgid "Image files"
-msgstr ""
+msgstr "Afbeeldingsbestanden"

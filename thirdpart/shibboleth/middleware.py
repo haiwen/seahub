@@ -5,7 +5,7 @@ import os
 import sys
 
 from django.conf import settings
-from django.contrib.auth.middleware import RemoteUserMiddleware
+from django.utils.deprecation import MiddlewareMixin
 from django.core.exceptions import ImproperlyConfigured
 from django.urls import reverse
 from django.http import HttpResponseRedirect
@@ -38,10 +38,11 @@ except KeyError:
 SHIBBOLETH_PROVIDER_IDENTIFIER = getattr(settings, 'SHIBBOLETH_PROVIDER_IDENTIFIER', 'shibboleth')
 
 
-class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
+class ShibbolethRemoteUserMiddleware(MiddlewareMixin):
     """
     Authentication Middleware for use with Shibboleth.
     """
+
     def process_request(self, request):
         if request.path.rstrip('/') != settings.SITE_ROOT + 'sso':
             return
@@ -108,10 +109,10 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
             self.make_profile(user, shib_meta)
 
             db_api = CcnetDB()
-            db_user_role =  db_api.get_user_role_from_db(user.email)
+            db_user_role = db_api.get_user_role_from_db(user.email)
             if db_user_role.is_manual_set:
                 user_role = db_user_role.role
-            
+
             else:
                 if CUSTOM_SHIBBOLETH_GET_USER_ROLE:
                     user_role = custom_shibboleth_get_user_role(shib_meta)
@@ -131,7 +132,6 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
 
     def process_response(self, request, response):
         if getattr(request, 'shib_login', False):
-            print('%s: set shibboleth cookie!' % id(self))
             self._set_auth_cookie(request, response)
         return response
 
