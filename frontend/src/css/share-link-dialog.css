@@ -19,12 +19,6 @@
   width: 75%;
 }
 
-.share-dialog .share-dialog-content .share-list-container .seafile-multicolor-icon {
-  width: 16px;
-  height: 16px;
-  color: var(--bs-icon-color);
-}
-
 .share-dialog .share-dialog-content .share-list-container table td {
   padding: 0rem 0.1875rem;
 }
