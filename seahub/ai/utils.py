@@ -115,3 +115,9 @@ def is_ai_usage_over_limit(user, org_id):
         return False
 
     return ai_credit <= round(cost, 2)
+
+def sdoc_general_assistant(params):
+    headers = gen_headers()
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/sdoc-general-assistant/')
+    resp = requests.post(url, json=params, headers=headers, timeout=30)
+    return resp
