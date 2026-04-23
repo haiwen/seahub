@@ -14,7 +14,7 @@ const {
 class ViewFileCollaboraOnline extends React.Component {
   render() {
     return (
-      <FileView content={<FileContent />} isOnlyofficeFile={true} />
+      <FileView content={<FileContent />} isOnlyofficeFile={true} documentVendor={'collaboraOnline'} />
     );
   }
 }

@@ -29,6 +29,7 @@ const propTypes = {
   isSaving: PropTypes.bool,
   needSave: PropTypes.bool,
   isOnlyofficeFile: PropTypes.bool,
+  documentVendor: PropTypes.string,
   setImageScale: PropTypes.func,
   rotateImage: PropTypes.func
 };
@@ -37,6 +38,7 @@ const { isStarred, isLocked, lockedByMe,
   repoID, fileUuid, filePath, filePerm, enableWatermark, userNickName,
   fileName, repoEncrypted, isRepoAdmin, fileType
 } = window.app.pageOptions;
+
 const MIN_PANEL_WIDTH = 360;
 const MAX_PANEL_WIDTH = 620;
 
@@ -220,6 +222,21 @@ class FileView extends React.Component {
     LocalStorage.setItem(`${newfileType}_detail_storage`, JSON.stringify({ ...settings, panelWidth: width }));
   };
 
+  getHeaderClassName = () => {
+    const { isOnlyofficeFile = false, documentVendor } = this.props;
+    if (!isOnlyofficeFile) return '';
+    const fileExtension = Utils.getFileExtension(fileName, true);
+    let className = `${fileExtension}-view-header`;
+    if (documentVendor) {
+      if (documentVendor === 'onlyOffice') {
+        className = 'sf-only-office ' + className;
+      } else if (documentVendor === 'collaboraOnline') {
+        className = 'sf-collabora-online ' + className;
+      }
+    }
+    return className;
+  };
+
   render() {
     const { isOnlyofficeFile = false } = this.props;
     const { isDetailsPanelOpen, isHeaderShown, isShareEnabled } = this.state;
@@ -228,10 +245,11 @@ class FileView extends React.Component {
       encrypted: repoEncrypted,
       is_admin: isRepoAdmin,
     };
+    const className = this.getHeaderClassName();
     return (
       <I18nextProvider i18n={ i18n }>
         <Suspense fallback={<Loading />}>
-          <div className="h-100 d-flex flex-column">
+          <div className={`h-100 d-flex flex-column ${className}`}>
             <div className={`file-view-header d-flex justify-content-between align-items-center d-print-none ${isOnlyofficeFile ? (isHeaderShown ? 'onlyoffice-file-view-header-shown' : 'onlyoffice-file-view-header-hidden') : ''}`}>
               <FileInfo
                 isStarred={this.state.isStarred}
