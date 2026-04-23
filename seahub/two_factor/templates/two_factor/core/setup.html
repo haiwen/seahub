@@ -53,6 +53,18 @@
 {% endblock %}
 
 {% block extra_script %}
+<script type="text/javascript">
+  (function() {
+    var colorMode = null;
+    try {
+      colorMode = window.localStorage.getItem('sf_color_mode');
+    } catch (e) {}
+    if (colorMode !== 'dark' && colorMode !== 'light') {
+      colorMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.body.setAttribute('data-bs-theme', colorMode);
+  })();
+</script>
 <script type="text/javascript" src="{{MEDIA_URL}}js/2fa-page.js"></script>
 <script type="text/javascript">
   $('input[type="text"], input[type="number"]', $('.tfa-panel')).trigger('focus');
