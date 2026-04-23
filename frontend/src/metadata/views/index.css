@@ -43,7 +43,15 @@
   font-family: var(--bs-body-font-family);
 }
 
-.sf-metadata-wrapper .sf-table-cell .select-all-checkbox-container,
+.sf-metadata-wrapper .sf-table-cell .select-all-checkbox-container {
+  width: 100%;
+  margin-right: 20px;
+}
+
 .sf-metadata-wrapper .sf-table-cell .select-cell-checkbox-container {
   width: 40px;
+}
+
+.sf-metadata-container {
+  height: 100%;
 }

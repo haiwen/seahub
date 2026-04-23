@@ -28,7 +28,7 @@ export const COLUMN_CONFIG = {
     width: 100,
     className: 'dirent-property dirent-property-creator',
   },
-  file_modifier: {
+  last_modifier: {
     width: 120,
     className: 'dirent-property dirent-property-last-modifier',
   },

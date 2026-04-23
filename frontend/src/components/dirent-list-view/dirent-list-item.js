@@ -574,7 +574,7 @@ class DirentListItem extends React.Component {
     const showSize = visibleColumnKeys.includes(DIR_COLUMN_KEYS.SIZE);
     const showModified = visibleColumnKeys.includes(DIR_COLUMN_KEYS.MTIME);
     const showCreator = visibleColumnKeys.includes(PRIVATE_COLUMN_KEY.FILE_CREATOR);
-    const showLastModifier = visibleColumnKeys.includes(PRIVATE_COLUMN_KEY.FILE_MODIFIER);
+    const showLastModifier = visibleColumnKeys.includes(PRIVATE_COLUMN_KEY.LAST_MODIFIER);
     const showStatus = visibleColumnKeys.includes(PRIVATE_COLUMN_KEY.FILE_STATUS);
     const statusCol = columns.find(col => col.key === PRIVATE_COLUMN_KEY.FILE_STATUS);
     const showTags = visibleColumnKeys.includes(PRIVATE_COLUMN_KEY.TAGS);
@@ -779,11 +779,11 @@ class DirentListItem extends React.Component {
 
         {showLastModifier && (
           <div className="dirent-property dirent-property-last-modifier">
-            <Formatter
-              field={{ type: CellType.LAST_MODIFIER, name: gettext('Last modifier') }}
-              value={showMetadata ? dirent.metadata[PRIVATE_COLUMN_KEY.FILE_MODIFIER] : dirent.modifier_email}
+            <CreatorFormatter
+              value={showMetadata ? dirent.metadata[PRIVATE_COLUMN_KEY.LAST_MODIFIER] : dirent.modifier_email}
               collaborators={this.props.collaborators}
               queryUserAPI={this.props.queryUser}
+              collaboratorsCache={this.props.collaboratorsCache}
             />
           </div>
         )}
