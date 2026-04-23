@@ -16,7 +16,7 @@
 .sf-table-cell.actions-cell {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .sf-table-row:hover .sf-table-cell.actions-cell .row-expand {
