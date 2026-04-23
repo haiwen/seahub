@@ -5,7 +5,6 @@ import os
 import sys
 
 from django.conf import settings
-from django.contrib.auth.middleware import RemoteUserMiddleware
 from django.core.exceptions import ImproperlyConfigured
 from django.urls import reverse
 from django.http import HttpResponseRedirect
@@ -20,6 +19,7 @@ from seahub.profile.models import Profile
 from seahub.utils.file_size import get_quota_from_string
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
 from seahub.utils.ccnet_db import CcnetDB
+from seahub.utils.mixin import MiddlewareMixin
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -38,7 +38,7 @@ except KeyError:
 SHIBBOLETH_PROVIDER_IDENTIFIER = getattr(settings, 'SHIBBOLETH_PROVIDER_IDENTIFIER', 'shibboleth')
 
 
-class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
+class ShibbolethRemoteUserMiddleware(MiddlewareMixin):
     """
     Authentication Middleware for use with Shibboleth.
     """

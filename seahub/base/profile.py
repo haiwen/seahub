@@ -31,7 +31,8 @@ except ImportError:
 import pstats
 from io import StringIO
 from django.conf import settings
-from django.utils.deprecation import MiddlewareMixin
+from seahub.utils.mixin import MiddlewareMixin
+
 
 class ProfilerMiddleware(MiddlewareMixin):
     """

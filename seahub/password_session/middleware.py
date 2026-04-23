@@ -1,6 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from django.contrib.auth import logout
-from django.utils.deprecation import MiddlewareMixin
+from seahub.utils.mixin import MiddlewareMixin
 
 from .handlers import get_password_hash, PASSWORD_HASH_KEY
 

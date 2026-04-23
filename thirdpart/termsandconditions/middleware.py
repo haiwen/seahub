@@ -1,5 +1,5 @@
 """Terms and Conditions Middleware"""
-from django.utils.deprecation import MiddlewareMixin
+from seahub.utils.mixin import MiddlewareMixin
 
 from .models import TermsAndConditions
 from django.conf import settings
