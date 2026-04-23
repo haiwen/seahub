@@ -32,14 +32,14 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.6) !important;
   border-radius: 0 0 14px 14px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
   cursor: pointer;
 }
 
 #unfold-onlyoffice-file-view-header:hover {
-  background: rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, 1) !important;
 }
 
 .exdraw-view-header #unfold-onlyoffice-file-view-header {
@@ -49,23 +49,21 @@ body {
 
 .sf-only-office.doc-view-header #unfold-onlyoffice-file-view-header,
 .sf-only-office.odp-view-header #unfold-onlyoffice-file-view-header,
+.sf-only-office.fodp-view-header #unfold-onlyoffice-file-view-header,
 .sf-only-office.ods-view-header #unfold-onlyoffice-file-view-header,
+.sf-only-office.fods-view-header #unfold-onlyoffice-file-view-header,
 .sf-only-office.odt-view-header #unfold-onlyoffice-file-view-header,
+.sf-only-office.fodt-view-header #unfold-onlyoffice-file-view-header,
 .sf-only-office.ppsx-view-header #unfold-onlyoffice-file-view-header,
 .sf-only-office.ppt-view-header #unfold-onlyoffice-file-view-header,
+.sf-only-office.pps-view-header #unfold-onlyoffice-file-view-header,
 .sf-only-office.xls-view-header #unfold-onlyoffice-file-view-header {
   right: 172px;
 }
 
 .sf-collabora-online #unfold-onlyoffice-file-view-header {
   right: 200px;
-  background: rgba(255, 255, 255, 0.6);
 }
-
-.sf-collabora-online #unfold-onlyoffice-file-view-header:hover {
-  background: rgba(255, 255, 255, 1);
-}
-
 
 .file-view-header .file-toolbar-btn {
   position: relative;
@@ -93,7 +91,7 @@ body {
 }
 
 .file-view-header .file-toolbar-btn:hover {
-  background-color: var(--bs-hover-bg)!important;
+  background-color: var(--bs-hover-bg) !important;
 }
 
 .file-view-header .file-toolbar-btn.disabled {
