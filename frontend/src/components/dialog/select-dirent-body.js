@@ -147,7 +147,7 @@ class SelectDirentBody extends React.Component {
 
     return (
       <Row>
-        <Col xs="12" md="4" className='repo-list-col border-end'>
+        <Col xs="12" md="3" className='repo-list-col border-end'>
           <LibraryOption
             mode={MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY}
             label={gettext('Current Library')}
@@ -175,7 +175,7 @@ class SelectDirentBody extends React.Component {
             onUpdateMode={this.selectMode}
           />
         </Col>
-        <Col xs="12" md="8" className='file-list-col'>
+        <Col xs="12" md="9" className='file-list-col'>
           <ModalBody>
             <RepoListWrapper
               key={repoListWrapperKey}
