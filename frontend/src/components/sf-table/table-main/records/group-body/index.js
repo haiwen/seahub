@@ -834,6 +834,7 @@ class GroupBody extends Component {
             modifyRecord={this.props.modifyRecord}
             reloadRecords={this.props.reloadRecords}
             columnColor={columnColor}
+            onShowRowDetails={this.props.onShowRowDetails}
           />
         );
       }
@@ -984,6 +985,7 @@ GroupBody.propTypes = {
   onCellContextMenu: PropTypes.func,
   getTableCanvasContainerRect: PropTypes.func,
   scrollToRowIndex: PropTypes.number,
+  onShowRowDetails: PropTypes.func,
 };
 
 export default GroupBody;
