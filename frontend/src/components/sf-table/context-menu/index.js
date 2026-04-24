@@ -164,7 +164,7 @@ const ContextMenu = ({
       <div
         ref={menuRef}
         className='dropdown-menu sf-table-context-menu'
-        style={position}
+        style={{ ...position, 'visibility': position.left === 0 && position.top === 0 ? 'hidden' : 'visible' }}
       >
         {options}
       </div>

@@ -914,7 +914,6 @@ class Records extends Component {
     const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx, draggingRecordSource, selectedPosition, selectedRange } = this.state;
     const { columns, allColumns, totalWidth, lastFrozenColumnKey, frozenColumnsWidth } = columnMetrics;
     const recordDragDropEvents = this.getRecordDragDropEvents();
-    // Create ContextMenu with createContextMenuOptions from props (if provided, e.g., from metadata table)
     const contextMenu = this.props.createContextMenuOptions ? (
       <ContextMenu
         {...this.props}
