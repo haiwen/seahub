@@ -39,6 +39,7 @@
 .dirent-detail-item-value:not(.editable) .sf-metadata-property-detail-formatter.collaborators-formatter,
 .dirent-detail-item-value:not(.editable) .sf-metadata-single-select-formatter,
 .dirent-detail-item-value:not(.editable) .sf-metadata-long-text-formatter {
+  width: 100%;
   padding: 7px 6px;
 }
 

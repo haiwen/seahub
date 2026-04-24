@@ -4,6 +4,7 @@
   justify-content: space-between;
   margin-bottom: 4px;
   font-size: 14px;
+  overflow: hidden;
 }
 
 .dirent-detail-item:last-child {
@@ -11,7 +12,8 @@
 }
 
 .dirent-detail-item .dirent-detail-item-name {
-  width: 160px;
+  flex: 1 0 50%;
+  max-width: 200px;
   padding: 6.5px 0px;
   min-height: 34px;
   height: fit-content;
@@ -37,10 +39,15 @@
 }
 
 .dirent-detail-item .dirent-detail-item-value {
-  width: 200px;
+  flex: 1 0 50%;
   display: flex;
   height: fit-content;
   min-height: 34px;
+}
+
+.dirent-detail-item:not(.cur-view-detail-large) .dirent-detail-item-value {
+  width: 50%;
+  overflow: hidden;
 }
 
 .dirent-detail-item .dirent-detail-item-value.editable:hover {
@@ -53,15 +60,6 @@
   cursor: pointer;
 }
 
-/* media */
-.cur-view-detail-small .dirent-detail-item .dirent-detail-item-name {
-  width: calc((100% - 8px) * 0.44);
-}
-
-.cur-view-detail-small .dirent-detail-item .dirent-detail-item-value {
-  width: calc((100% - 8px) * 0.56);
-}
-
 .cur-view-detail-large .dirent-detail-item .dirent-detail-item-name {
   width: 160px;
   margin-right: 8px;
@@ -69,6 +67,10 @@
 
 .cur-view-detail-large .dirent-detail-item .dirent-detail-item-value {
   flex: 1;
+}
+
+.cur-view-detail-large .dirent-detail-item .dirent-detail-item-value .sf-metadata-ui.collaborator-item {
+  width: fit-content;
 }
 
 .dirent-detail-item .dirent-detail-item-value:not(.editable) .sf-metadata-record-cell-empty {
@@ -99,6 +101,11 @@
   text-align: left;
 }
 
-.dirent-detail-item-value .creator-formatter {
+.dirent-detail-item .dirent-detail-item-value .creator-formatter {
+  width: 100%;
   padding: 7px 6px;
+}
+
+.dirent-detail-item .dirent-detail-item-value .sf-metadata-ui.collaborator-item {
+  max-width: 100%;
 }
