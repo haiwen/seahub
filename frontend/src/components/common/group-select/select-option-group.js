@@ -178,7 +178,7 @@ class SelectOptionGroup extends Component {
     style.top = style.top + 4;
     return (
       <div
-        className={classnames('pt-0 option-group', className ? 'option-group-' + className : '')}
+        className={classnames('py-0 option-group', className ? 'option-group-' + className : '')}
         ref={(ref) => this.optionGroupRef = ref}
         style={style}
         onMouseDown={this.onMouseDown}
