@@ -11,27 +11,25 @@ const propTypes = {
   showSearch: PropTypes.bool
 };
 
-class SettingTopToolbar extends React.Component {
-
-  render() {
-    const { onShowSidePanel, onSearchedClick, children, showSearch } = this.props;
-    return (
-      <div className={`main-panel-north ${children ? 'border-left-show' : ''}`}>
-        <div className="cur-view-toolbar">
-          <span title="Side Nav Menu" onClick={onShowSidePanel} className="side-nav-toggle hidden-md-up d-md-none d-flex align-items-center">
-            <Icon symbol="menu" />
-          </span>
-          {this.props.children}
-        </div>
-        <CommonToolbar
-          showSearch={showSearch}
-          searchPlaceholder={this.props.searchPlaceholder}
-          onSearchedClick={onSearchedClick}
-        />
+const SettingTopToolbar = ({ onShowSidePanel, onSearchedClick, searchPlaceholder, children, showSearch }) => {
+  return (
+    <div className={`main-panel-north ${children ? 'border-left-show' : ''}`}>
+      <div className="cur-view-toolbar">
+        <span title="Side Nav Menu" onClick={onShowSidePanel} className="side-nav-toggle hidden-md-up d-md-none d-flex align-items-center">
+          <Icon symbol="menu" />
+        </span>
+        {children}
       </div>
-    );
-  }
-}
+      <CommonToolbar
+        showSearch={showSearch}
+        searchPlaceholder={searchPlaceholder}
+        onSearchedClick={onSearchedClick}
+        isShowSearch={false}
+        isShowNotice={false}
+      />
+    </div>
+  );
+};
 
 SettingTopToolbar.propTypes = propTypes;
 

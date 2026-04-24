@@ -23,6 +23,8 @@ const propTypes = {
   eventBus: PropTypes.object,
   isViewFile: PropTypes.bool,
   searchType: PropTypes.string, // 'files' or 'wikis'
+  isShowSearch: PropTypes.bool,
+  isShowNotice: PropTypes.bool,
 };
 
 class CommonToolbar extends React.Component {
@@ -135,11 +137,12 @@ class CommonToolbar extends React.Component {
   };
 
   render() {
+    const { isShowSearch = true, isShowNotice = true } = this.props;
     return (
       <div className="common-toolbar">
-        {this.renderSearch()}
+        {isShowSearch && this.renderSearch()}
         <ColorMode />
-        <Notification />
+        {isShowNotice && <Notification />}
         <Account />
         {showLogoutIcon && (<Logout />)}
       </div>
