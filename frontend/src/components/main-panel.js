@@ -1,20 +1,17 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 const propTypes = {
   children: PropTypes.any.isRequired,
 };
 
-class MainPanel extends Component {
-
-  render() {
-    return (
-      <div className="main-panel">
-        {this.props.children}
-      </div>
-    );
-  }
-}
+const MainPanel = ({ children }) => {
+  return (
+    <div className="main-panel">
+      {children}
+    </div>
+  );
+};
 
 MainPanel.propTypes = propTypes;
 
