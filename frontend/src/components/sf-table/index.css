@@ -299,7 +299,7 @@
 }
 
 .table-last--frozen {
-  border-right: 1px solid var(--bs-border-secondary-color) !important;
+  border-right: 1px solid var(--bs-border-tertiary-color) !important;
 }
 
 .row-locked .actions-cell::after {
