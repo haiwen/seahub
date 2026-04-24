@@ -200,7 +200,7 @@ SFTable.propTypes = {
   updateRecordDescription: PropTypes.func,
   onOCR: PropTypes.func,
   tagsData: PropTypes.object,
-  onShowExpandedPropsDialog: PropTypes.func,
+  onShowRowDetails: PropTypes.func,
 };
 
 export default SFTable;

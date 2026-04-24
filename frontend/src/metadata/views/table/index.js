@@ -61,7 +61,7 @@ const Table = () => {
     setTimeout(() => window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.FOCUS_CANVAS), 0);
   }, []);
 
-  const onShowExpandedPropsDialog = useCallback((recordId) => {
+  const onShowRowDetails = useCallback((recordId) => {
     setExpandedRecordId(recordId);
   }, []);
 
@@ -327,7 +327,7 @@ const Table = () => {
         // Use SFTable's context menu with metadata's options
         createContextMenuOptions={gridUtilsAdapter.createContextMenuOptions}
         // Expanded props dialog for actions cell
-        onShowExpandedPropsDialog={onShowExpandedPropsDialog}
+        onShowRowDetails={onShowRowDetails}
       />
       {expandedRecordId && (
         <ExpandedPropertiesDialog

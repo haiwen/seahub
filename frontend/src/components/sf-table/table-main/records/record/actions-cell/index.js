@@ -53,9 +53,9 @@ class ActionsCell extends Component {
   };
 
   handleShowExpandedProps = () => {
-    const { onShowExpandedPropsDialog, recordId } = this.props;
-    if (onShowExpandedPropsDialog) {
-      onShowExpandedPropsDialog(recordId);
+    const { onShowRowDetails, recordId } = this.props;
+    if (onShowRowDetails) {
+      onShowRowDetails(recordId);
     }
   };
 
@@ -106,7 +106,7 @@ class ActionsCell extends Component {
             />
           </div>
         </label>
-        {this.props.onShowExpandedPropsDialog && (
+        {this.props.onShowRowDetails && (
           <IconBtn
             symbol="expand"
             className="row-expand"
@@ -134,7 +134,7 @@ ActionsCell.propTypes = {
   onSelectRecord: PropTypes.func,
   handleDragStart: PropTypes.func,
   canModify: PropTypes.bool,
-  onShowExpandedPropsDialog: PropTypes.func,
+  onShowRowDetails: PropTypes.func,
 };
 
 export default ActionsCell;
