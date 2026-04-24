@@ -15,6 +15,10 @@
   margin: 5px 10px 5px 0;
 }
 
+.cur-view-detail-large .sf-metadata-collaborator-property-detail-editor .sf-metadata-delete-collaborator .collaborator {
+  width: fit-content;
+}
+
 .sf-metadata-collaborator-property-editor-popover .popover {
   max-width: unset;
 }
