@@ -27,6 +27,8 @@ class SettingTopToolbar extends React.Component {
           showSearch={showSearch}
           searchPlaceholder={this.props.searchPlaceholder}
           onSearchedClick={onSearchedClick}
+          isShowSearch={false}
+          isShowNotice={false}
         />
       </div>
     );
