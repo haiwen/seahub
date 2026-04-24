@@ -5,7 +5,7 @@
 .group-select.custom-select {
   display: flex;
   padding: 7px 28px 7px 8px;
-  border-radius: 3px;
+  border-radius: 4px;
   align-items: center;
   justify-content: space-between;
   max-width: 900px;
@@ -71,6 +71,8 @@
   display: flex;
   align-items: center;
   padding: 0 4px;
+  height: 24px;
+  line-height: 24px;
 }
 
 .group-select .selected-option-show .selected-option-item .selected-option-item-name {

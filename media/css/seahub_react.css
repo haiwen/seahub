@@ -1812,6 +1812,10 @@ a.table-sort-op:hover {
   color: var(--bs-body-color);
 }
 
+.custom-select {
+  border-radius: 4px;
+}
+
 [data-bs-theme=dark] .modal {
   --bs-modal-border-color: rgba(51, 52, 53, 1);
   --bs-modal-bg: rgba(28, 29, 31, 1);
