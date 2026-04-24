@@ -15,12 +15,6 @@ try:
 except ImportError:
     from django.core.urlresolvers import reverse
 
-try:
-    # Django > 1.10 uses MiddlewareMixin
-    from django.utils.deprecation import MiddlewareMixin
-except ImportError:
-    MiddlewareMixin = object
-
 import django
 
 from .views import login as cas_login, logout as cas_logout
@@ -29,10 +23,13 @@ from seahub.auth.views import login, logout
 __all__ = ['CASMiddleware']
 
 
-class CASMiddleware(MiddlewareMixin):
+class CASMiddleware:
     """Middleware that allows CAS authentication on admin pages"""
 
-    def process_request(self, request):
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
         """Checks that the authentication middleware is installed"""
 
         error = ("The Django CAS middleware requires authentication "
@@ -40,6 +37,9 @@ class CASMiddleware(MiddlewareMixin):
                  "setting to insert 'django.contrib.auth.middleware."
                  "AuthenticationMiddleware'.")
         assert hasattr(request, 'user'), error
+
+        response = self.get_response(request)
+        return response
 
     def process_view(self, request, view_func, view_args, view_kwargs):
         """Forwards unauthenticated requests to the admin page to the CAS

@@ -2,7 +2,7 @@
 import os
 
 from django.test import TestCase, Client
-from django_liveserver.testcases import LiveServerTestCase
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.common.action_chains import ActionChains
