@@ -244,9 +244,8 @@ class WikiNav extends Component {
               className="op-icon mr-0"
               title={gettext('New page')}
               op={this.props.handleAddNewPage}
-            >
-              <Icon symbol="new" />
-            </OpIcon>
+              symbol="new"
+            />
           </div>
           }
         </div>

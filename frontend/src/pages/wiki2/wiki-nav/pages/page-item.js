@@ -373,9 +373,8 @@ const PageItem = ({
                 className="op-icon mr-0"
                 op={toggleInsertPage}
                 title={gettext('Add page inside')}
-              >
-                <Icon symbol="new" />
-              </OpIcon>
+                symbol="new"
+              />
             </div>
             }
             {isShowInsertPage && (
