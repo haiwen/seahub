@@ -41,9 +41,11 @@ const FileNameFormatter = ({
   useEffect(() => {
     if (cellRef.current) {
       const cellComputedStyle = window.getComputedStyle(cellRef.current);
-      const paddingTop = parseFloat(cellComputedStyle.paddingTop);
-      const paddingBottom = parseFloat(cellComputedStyle.paddingBottom);
-      const size = height - paddingTop - paddingBottom;
+      const borderTop = parseFloat(cellComputedStyle.borderTopWidth) || 0;
+      const borderBottom = parseFloat(cellComputedStyle.borderBottomWidth) || 0;
+      const paddingTop = parseFloat(cellComputedStyle.paddingTop) || 0;
+      const paddingBottom = parseFloat(cellComputedStyle.paddingBottom) || 0;
+      const size = height - borderTop - borderBottom - paddingTop - paddingBottom;
       setIconContainerStyle({ width: size, height: size });
     }
   }, [cellRef, height]);
