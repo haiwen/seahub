@@ -117,6 +117,9 @@ const ContextMenu = ({
     const dirTableWrapper = document.querySelector('.dir-table-wrapper');
     dirTableWrapper && dirTableWrapper.addEventListener('contextmenu', handleShow);
 
+    const metadataTableWrapper = document.querySelector('.sf-metadata-wrapper');
+    metadataTableWrapper && metadataTableWrapper.addEventListener('contextmenu', handleShow);
+
     const dirTableCanvasCtxWrapper = document.querySelector('.sf-table-canvas-ctx-wrapper');
     dirTableCanvasCtxWrapper && dirTableCanvasCtxWrapper.addEventListener('contextmenu', handleShow);
 
@@ -132,6 +135,9 @@ const ContextMenu = ({
 
       const dirTableWrapper = document.querySelector('.dir-table-wrapper');
       dirTableWrapper && dirTableWrapper.removeEventListener('contextmenu', handleShow);
+
+      const metadataTableWrapper = document.querySelector('.sf-metadata-wrapper');
+      metadataTableWrapper && metadataTableWrapper.removeEventListener('contextmenu', handleShow);
 
       const dirTableCanvasCtxWrapper = document.querySelector('.sf-table-canvas-ctx-wrapper');
       dirTableCanvasCtxWrapper && dirTableCanvasCtxWrapper.removeEventListener('contextmenu', handleShow);
