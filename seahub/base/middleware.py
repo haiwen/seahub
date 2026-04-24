@@ -6,7 +6,6 @@ from django.urls import reverse
 from django.core.cache import cache
 from django.http import HttpResponseRedirect
 from django.utils.translation import gettext as _
-from django.utils.deprecation import MiddlewareMixin
 
 from seaserv import ccnet_api
 
@@ -30,30 +29,32 @@ except ImportError:
     MULTI_TENANCY = False
 
 
-class BaseMiddleware(MiddlewareMixin):
+class BaseMiddleware:
     """
     Middleware that add organization, group info to user.
     """
 
-    def process_request(self, request):
+    def __init__(self, get_response):
+        self.get_response = get_response
 
+    def __call__(self, request):
         username = request.user.username
         request.user.org = None
 
         # not enable multi-tenancy
         request.cloud_mode = CLOUD_MODE
         if not CLOUD_MODE or not MULTI_TENANCY:
-            return None
+            return self.get_response(request)
 
         # not org user
         orgs = ccnet_api.get_orgs_by_user(username)
         if not orgs:
-            return None
+            return self.get_response(request)
 
         # org is active
         request.user.org = orgs[0]
         if OrgSettings.objects.get_is_active_by_org(request.user.org):
-            return None
+            return self.get_response(request)
 
         # handle inactive org
         org_id = request.user.org.org_id
@@ -78,27 +79,26 @@ class BaseMiddleware(MiddlewareMixin):
 
         return render_error(request, error_msg, extra_ctx)
 
-    def process_response(self, request, response):
-        return response
 
-
-class InfobarMiddleware(MiddlewareMixin):
+class InfobarMiddleware:
     """Query info bar close status, and store into request."""
+
+    def __init__(self, get_response):
+        self.get_response = get_response
 
     def get_from_db(self):
         ret = Notification.objects.all().filter(primary=1)
         refresh_cache()
         return ret
 
-    def process_request(self, request):
-
+    def __call__(self, request):
         # filter AJAX request out
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            return None
+            return self.get_response(request)
 
         # filter API request out
         if "api2/" in request.path or "api/v2.1/" in request.path:
-            return None
+            return self.get_response(request)
 
         topinfo_close = request.COOKIES.get('info_id', '')
 
@@ -112,13 +112,13 @@ class InfobarMiddleware(MiddlewareMixin):
             else:
                 request.cur_note = cur_note[0]
 
-        return None
-
-    def process_response(self, request, response):
-        return response
+        return self.get_response(request)
 
 
-class ForcePasswdChangeMiddleware(MiddlewareMixin):
+class ForcePasswdChangeMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
     def _request_in_black_list(self, request):
         path = request.path
         black_list = (r'^%s$' % SITE_ROOT, r'home/.+', r'repo/.+',
@@ -130,13 +130,15 @@ class ForcePasswdChangeMiddleware(MiddlewareMixin):
                 return True
         return False
 
-    def process_request(self, request):
+    def __call__(self, request):
         if request.session.get('force_passwd_change', False):
             if self._request_in_black_list(request):
                 return HttpResponseRedirect(reverse('auth_password_change'))
 
+        return self.get_response(request)
 
-class UserAgentMiddleWare(MiddlewareMixin):
+
+class UserAgentMiddleWare:
     user_agents_test_match = (
         "w3c ", "acs-", "alav", "alca", "amoi", "audi",
         "avan", "benq", "bird", "blac", "blaz", "brew",
@@ -165,8 +167,7 @@ class UserAgentMiddleWare(MiddlewareMixin):
     user_agents_mobile_search = u"(?:mobile)"
     user_agents_tablets_search = u"(?:%s)" % u'|'.join(('ipad', 'tablet', ))
 
-    def __init__(self, get_response=None):
-        super().__init__(get_response)
+    def __init__(self, get_response):
         self.get_response = get_response
         # these for detect mobile
         user_agents_test_match = r'^(?:%s)' % '|'.join(self.user_agents_test_match)
@@ -179,7 +180,7 @@ class UserAgentMiddleWare(MiddlewareMixin):
         self.user_agents_mobile_search_regex = re.compile(self.user_agents_mobile_search, re.IGNORECASE)
         self.user_agents_tablets_search_regex = re.compile(self.user_agents_tablets_search, re.IGNORECASE)
 
-    def process_request(self, request):
+    def __call__(self, request):
         is_mobile = False
         is_tablet = False
 
@@ -214,3 +215,5 @@ class UserAgentMiddleWare(MiddlewareMixin):
 
         request.is_mobile = is_mobile
         request.is_tablet = is_tablet
+
+        return self.get_response(request)

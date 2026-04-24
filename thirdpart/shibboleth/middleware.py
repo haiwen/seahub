@@ -5,7 +5,6 @@ import os
 import sys
 
 from django.conf import settings
-from django.utils.deprecation import MiddlewareMixin
 from django.core.exceptions import ImproperlyConfigured
 from django.urls import reverse
 from django.http import HttpResponseRedirect
@@ -38,14 +37,17 @@ except KeyError:
 SHIBBOLETH_PROVIDER_IDENTIFIER = getattr(settings, 'SHIBBOLETH_PROVIDER_IDENTIFIER', 'shibboleth')
 
 
-class ShibbolethRemoteUserMiddleware(MiddlewareMixin):
+class ShibbolethRemoteUserMiddleware:
     """
     Authentication Middleware for use with Shibboleth.
     """
 
-    def process_request(self, request):
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
         if request.path.rstrip('/') != settings.SITE_ROOT + 'sso':
-            return
+            return self.get_response(request)
 
         # AuthenticationMiddleware is required so that request.user exists.
         if not hasattr(request, 'user'):
@@ -59,7 +61,7 @@ class ShibbolethRemoteUserMiddleware(MiddlewareMixin):
         # To support logout.  If this variable is True, do not
         # authenticate user and return now.
         if request.session.get(LOGOUT_SESSION_KEY) is True:
-            return
+            return self.get_response(request)
         else:
             # Delete the shib reauth session key if present.
             request.session.pop(LOGOUT_SESSION_KEY, None)
@@ -72,7 +74,7 @@ class ShibbolethRemoteUserMiddleware(MiddlewareMixin):
             # If specified header doesn't exist then return (leaving
             # request.user set to AnonymousUser by the
             # AuthenticationMiddleware).
-            return
+            return self.get_response(request)
 
         second_uid = request.META.get(SHIB_USER_HEADER_SECOND_UID, '')
 
@@ -80,7 +82,7 @@ class ShibbolethRemoteUserMiddleware(MiddlewareMixin):
         # getting passed in the headers, then the correct user is already
         # persisted in the session and we don't need to continue.
         if request.user.is_authenticated:
-            return
+            return self.get_response(request)
 
         # Make sure we have all required Shiboleth elements before proceeding.
         shib_meta, error = self.parse_attributes(request)
@@ -112,7 +114,6 @@ class ShibbolethRemoteUserMiddleware(MiddlewareMixin):
             db_user_role = db_api.get_user_role_from_db(user.email)
             if db_user_role.is_manual_set:
                 user_role = db_user_role.role
-
             else:
                 if CUSTOM_SHIBBOLETH_GET_USER_ROLE:
                     user_role = custom_shibboleth_get_user_role(shib_meta)
@@ -130,8 +131,10 @@ class ShibbolethRemoteUserMiddleware(MiddlewareMixin):
             self.setup_session(request)
             request.shib_login = True
 
-    def process_response(self, request, response):
+        response = self.get_response(request)
+
         if getattr(request, 'shib_login', False):
+            print('%s: set shibboleth cookie!' % id(self))
             self._set_auth_cookie(request, response)
         return response
 

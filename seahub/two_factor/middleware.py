@@ -2,7 +2,6 @@
 
 import re
 
-from django.utils.deprecation import MiddlewareMixin
 from constance import config
 from django.urls import reverse
 from django.http import HttpResponseRedirect
@@ -22,7 +21,7 @@ class IsVerified(object):
         return (self.user.otp_device is not None)
 
 
-class OTPMiddleware(MiddlewareMixin):
+class OTPMiddleware:
     """
     This must be installed after
     :class:`~django.contrib.auth.middleware.AuthenticationMiddleware` and
@@ -33,36 +32,41 @@ class OTPMiddleware(MiddlewareMixin):
     verified.  As a convenience, this also installs ``user.is_verified()``,
     which returns ``True`` if ``user.otp_device`` is not ``None``.
     """
-    def process_request(self, request):
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
         if not config.ENABLE_TWO_FACTOR_AUTH:
-            return None
+            return self.get_response(request)
 
         user = getattr(request, 'user', None)
 
         if user is None:
-            return None
+            return self.get_response(request)
 
         user.otp_device = None
         user.is_verified = IsVerified(user)
 
-        if user.is_anonymous:
-            return None
+        if not user.is_anonymous:
+            device_id = request.session.get(DEVICE_ID_SESSION_KEY)
+            device = Device.from_persistent_id(device_id) if device_id else None
 
-        device_id = request.session.get(DEVICE_ID_SESSION_KEY)
-        device = Device.from_persistent_id(device_id) if device_id else None
+            if (device is not None) and (device.user != user.email):
+                device = None
 
-        if (device is not None) and (device.user != user.email):
-            device = None
+            if (device is None) and (DEVICE_ID_SESSION_KEY in request.session):
+                del request.session[DEVICE_ID_SESSION_KEY]
 
-        if (device is None) and (DEVICE_ID_SESSION_KEY in request.session):
-            del request.session[DEVICE_ID_SESSION_KEY]
+            user.otp_device = device
 
-        user.otp_device = device
-
-        return None
+        return self.get_response(request)
 
 
-class ForceTwoFactorAuthMiddleware(MiddlewareMixin):
+class ForceTwoFactorAuthMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
     def filter_request(self, request):
         path = request.path
         black_list = (r'^%s$' % SITE_ROOT, r'sys/.+', r'repo/.+', r'lib/', r'profile/$')
@@ -72,25 +76,25 @@ class ForceTwoFactorAuthMiddleware(MiddlewareMixin):
                 return True
         return False
 
-    def process_request(self, request):
+    def __call__(self, request):
         if not config.ENABLE_TWO_FACTOR_AUTH:
-            return None
+            return self.get_response(request)
 
         user = getattr(request, 'user', None)
         if user is None:
-            return None
+            return self.get_response(request)
 
         if user.is_anonymous:
-            return None
+            return self.get_response(request)
 
         if not self.filter_request(request):
-            return None
+            return self.get_response(request)
 
         if user.otp_device is not None:
-            return None
+            return self.get_response(request)
 
         if (ENABLE_FORCE_2FA_TO_ALL_USERS or UserOptions.objects.is_force_2fa(user.username)) \
                 and not request.session.get('is_sso_user'):
             return HttpResponseRedirect(reverse('two_factor:setup'))
 
-        return None
+        return self.get_response(request)

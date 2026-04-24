@@ -1,14 +1,16 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from django.conf import settings
-from django.utils.deprecation import MiddlewareMixin
 
 from seahub.institutions.models import InstitutionAdmin
 
 
-class InstitutionMiddleware(MiddlewareMixin):
-    def process_request(self, request):
+class InstitutionMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
         if not getattr(settings, 'MULTI_INSTITUTION', False):
-            return None
+            return self.get_response(request)
 
         username = request.user.username
 
@@ -18,8 +20,9 @@ class InstitutionMiddleware(MiddlewareMixin):
             inst_admin = InstitutionAdmin.objects.get(user=username)
         except InstitutionAdmin.DoesNotExist:
             request.user.inst_admin = False
-            return None
+            return self.get_response(request)
 
         request.user.institution = inst_admin.institution
         request.user.inst_admin = True
-        return None
+
+        return self.get_response(request)

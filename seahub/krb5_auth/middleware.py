@@ -2,12 +2,11 @@
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.deprecation import MiddlewareMixin
 
 from seahub import auth
 
 
-class RemoteKrbMiddleware(MiddlewareMixin):
+class RemoteKrbMiddleware:
     """
     Middleware for utilizing Web-server-provided authentication.
 
@@ -26,7 +25,10 @@ class RemoteKrbMiddleware(MiddlewareMixin):
     # all uppercase and the addition of "HTTP_" prefix apply.
     header = "REMOTE_USER"
 
-    def process_request(self, request):
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
         # AuthenticationMiddleware is required so that request.user exists.
         if not hasattr(request, 'user'):
             raise ImproperlyConfigured(
@@ -35,13 +37,14 @@ class RemoteKrbMiddleware(MiddlewareMixin):
                 " MIDDLEWARE_CLASSES setting to insert"
                 " 'django.contrib.auth.middleware.AuthenticationMiddleware'"
                 " before the RemoteUserMiddleware class.")
+
         try:
             username = request.META[self.header]
         except KeyError:
             # If specified header doesn't exist then return
             # directly(request.user could be AnonymousUser or authed user set
             # by AuthenticationMiddleware)
-            return
+            return self.get_response(request)
 
         if settings.KRB5_USERNAME_SUFFIX:
             username = username.split('@')[0] + settings.KRB5_USERNAME_SUFFIX
@@ -54,23 +57,24 @@ class RemoteKrbMiddleware(MiddlewareMixin):
         if request.user.is_authenticated:
             if request.user.username == self.clean_username(username, request):
                 request.krb5_login = True
-                return
             else:
                 auth.logout(request)
-        # We are seeing this user for the first time in this session, attempt
-        # to authenticate the user.
-        user = auth.authenticate(remote_user=username)
-        if user and user.is_active:
-            # User is valid.  Set request.user and persist user in the session
-            # by logging the user in.
-            request.user = user
-            auth.login(request, user)
-            request.krb5_login = True
         else:
-            # explicit redirect to login url to avoid redirect loop in some case
-            return HttpResponseRedirect(settings.LOGIN_URL)
+            # We are seeing this user for the first time in this session, attempt
+            # to authenticate the user.
+            user = auth.authenticate(remote_user=username)
+            if user and user.is_active:
+                # User is valid.  Set request.user and persist user in the session
+                # by logging the user in.
+                request.user = user
+                auth.login(request, user)
+                request.krb5_login = True
+            else:
+                # explicit redirect to login url to avoid redirect loop in some case
+                return HttpResponseRedirect(settings.LOGIN_URL)
 
-    def process_response(self, request, response):
+        response = self.get_response(request)
+
         if getattr(request, 'krb5_login', False):
             print('%s: set kerberos cookie!' % id(self))
             self._set_auth_cookie(request, response)

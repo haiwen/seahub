@@ -6,7 +6,7 @@ unittest). These will both pass when you run "manage.py test".
 Replace these with more appropriate tests for your application.
 """
 
-from django.utils import unittest
+import unittest
 from django.test.client import Client, RequestFactory
 from django.test import TestCase
 
