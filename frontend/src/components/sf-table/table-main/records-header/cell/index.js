@@ -1,7 +1,6 @@
 import React, { useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { UncontrolledTooltip } from 'reactstrap';
 import Icon from '../../../../icon';
 import ResizeColumnHandle from '../resize-column-handle';
 import EventBus from '../../../../common/event-bus';
@@ -11,6 +10,7 @@ import { MIN_COLUMN_WIDTH } from '../../../constants/grid';
 import { NODE_CONTENT_LEFT_INDENT, NODE_ICON_LEFT_INDENT } from '../../../constants/tree';
 import { Utils } from '../../../../../utils/utils';
 import HeaderDropdownMenu from '@/components/sf-table/table-main/records-header/dropdown-menu';
+import SfTooltip from '@/components/tooltip';
 
 import './index.css';
 
@@ -140,14 +140,15 @@ const Cell = ({
   const cellName = useMemo(() => {
     return (
       <>
-        <span className="mr-2" id={`header-icon-${key}`}>
-          {icon_name && <Icon symbol={icon_name} className="sf-metadata-icon sf-table-column-icon" />}
+        <span className="h-4 d-flex align-items-center mr-2" id={`header-icon-${key}`}>
+          {icon_name && (
+            <>
+              <Icon symbol={icon_name} className="sf-metadata-icon sf-table-column-icon" />
+              {icon_tooltip && <SfTooltip target={`header-icon-${key}`}>{icon_tooltip}</SfTooltip>}
+            </>
+          )}
         </span>
-        {icon_tooltip &&
-          <UncontrolledTooltip placement="bottom" target={`header-icon-${key}`} fade={false} trigger="hover" className="sf-tooltip">
-            {icon_tooltip}
-          </UncontrolledTooltip>
-        }
+
         <div className="header-name d-flex">
           <span title={display_name} className={classnames('header-name-text', { 'double': height === 56 })}>{display_name}</span>
         </div>

@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext } from '../../../../../../../utils/constants';
 import Icon from '../../../../../../../components/icon';
+import SfTooltip from '@/components/tooltip';
 
-const OpMenu = ({ onDelete, onFreezed, onUnFreezed }) => {
+const OpMenu = ({ idx, onDelete, onFreezed, onUnFreezed }) => {
   let [isShow, setShow] = useState(false);
 
   const toggle = useCallback((event) => {
@@ -30,17 +31,17 @@ const OpMenu = ({ onDelete, onFreezed, onUnFreezed }) => {
   }, []);
 
   return (
-    <Dropdown isOpen={isShow} toggle={toggle}>
+    <Dropdown id={`header-dropdown-btn-${idx}`} isOpen={isShow} toggle={toggle}>
       <DropdownToggle
         tag="span"
         role="button"
         tabIndex="0"
         className="sf-dropdown-toggle kanban-header-op-btn kanban-more-operations-toggle"
-        title={gettext('More operations')}
         aria-label={gettext('More operations')}
         data-toggle="dropdown"
       >
         <Icon symbol="more-level" />
+        <SfTooltip target={`header-dropdown-btn-${idx}`}>{gettext('More operations')}</SfTooltip>
       </DropdownToggle>
       <DropdownMenu>
         <DropdownItem onClick={handleDelete}>{gettext('Delete')}</DropdownItem>
@@ -50,6 +51,7 @@ const OpMenu = ({ onDelete, onFreezed, onUnFreezed }) => {
 };
 
 OpMenu.propTypes = {
+  idx: PropTypes.number,
   onRename: PropTypes.func,
   onFreezed: PropTypes.func,
   onUnFreezed: PropTypes.func,

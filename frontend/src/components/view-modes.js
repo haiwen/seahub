@@ -5,6 +5,7 @@ import { Utils } from '../utils/utils';
 import { gettext } from '../utils/constants';
 import { GRID_MODE, LIST_MODE, TABLE_MODE } from './dir-view-mode/constants';
 import Icon from './icon';
+import SfTooltip from './tooltip';
 
 import '../css/view-modes.css';
 
@@ -60,6 +61,7 @@ class ViewModes extends React.Component {
     if (isSupportTable) {
       options.push({ 'icon': 'table', 'text': gettext('Table view'), 'value': TABLE_MODE, 'shortcut': `${shortcutMain} 3` });
     }
+    const symbol = currentViewMode === LIST_MODE ? 'list-view' : currentViewMode === GRID_MODE ? 'grid-view' : currentViewMode === TABLE_MODE ? 'table' : 'list-view';
 
     return (
       <Dropdown
@@ -67,20 +69,17 @@ class ViewModes extends React.Component {
         toggle={this.toggleDropdownMenu}
       >
         <DropdownToggle
+          id="switch-view-mode-icon"
           tag="span"
           role="button"
           tabIndex="0"
           className="cur-view-path-btn px-1"
-          title={gettext('Switch view mode')}
           data-toggle="dropdown"
           aria-label={gettext('Switch view mode')}
           aria-expanded={isDropdownMenuOpen}
         >
-          <Icon symbol={
-            currentViewMode === LIST_MODE ? 'list-view' :
-              currentViewMode === GRID_MODE ? 'grid-view' :
-                currentViewMode === TABLE_MODE ? 'table' : 'list-view'
-          } />
+          <Icon symbol={symbol} />
+          <SfTooltip target="switch-view-mode-icon">{gettext('Switch view mode')}</SfTooltip>
         </DropdownToggle>
         <DropdownMenu className="mt-1">
           {options.map((item, index) => {

@@ -13,6 +13,7 @@ import Icon from '../icon';
 import { lockFile, unlockFile, freezeDocument, exportDocx, exportSdoc, toggleStar, openHistory, openViaClient } from '../../utils/dirent-operations';
 import EventBus from '../common/event-bus';
 import { EVENT_BUS_TYPE as TABLE_EVENT_BUS_TYPE } from '@/metadata/constants';
+import SfTooltip from '../tooltip';
 
 import '../../css/selected-dirents-toolbar.css';
 
@@ -288,55 +289,72 @@ class SelectedDirentsToolbar extends React.Component {
       canDelete = permission.delete;
     }
 
+    const modifiers = [{
+      name: 'offset',
+      options: {
+        offset: [0, 4],
+      },
+    }];
+
     return (
       <div className="selected-dirents-toolbar">
         <OpElement
           className="cur-view-path-btn px-2"
-          title={gettext('Unselect')}
           op={this.handleUnselect}
         >
           <span className="d-flex align-items-center justify-content-center mr-2">
-            <Icon symbol="close" />
+            <Icon id="close-selected-toolbar-icon" symbol="close" />
+            <SfTooltip target="close-selected-toolbar-icon">{gettext('Unselect')}</SfTooltip>
           </span>
           <span>{selectedLen}{' '}{gettext('selected')}</span>
         </OpElement>
         {canDownload &&
           <OpIcon
+            id="cur-view-path-btn-download"
             className="cur-view-path-btn"
             symbol="download"
-            title={gettext('Download')}
+            tooltip={gettext('Download')}
+            modifiers={modifiers}
             op={this.onDownload}
           />
         }
         {canDelete &&
           <OpIcon
+            id="cur-view-path-btn-delete"
             className="cur-view-path-btn"
             symbol="delete1"
-            title={gettext('Delete')}
+            tooltip={gettext('Delete')}
+            modifiers={modifiers}
             op={this.onItemsDelete}
           />
         }
         {selectedLen == 1 && this.getDirentSharePerm() &&
           <OpIcon
+            id="cur-view-path-btn-share"
             className="cur-view-path-btn"
             symbol="share"
-            title={gettext('Share')}
+            tooltip={gettext('Share')}
+            modifiers={modifiers}
             op={this.onShare}
           />
         }
         {canModify &&
           <OpIcon
+            id="cur-view-path-btn-move"
             className="cur-view-path-btn"
             symbol="move"
-            title={gettext('Move')}
+            tooltip={gettext('Move')}
+            modifiers={modifiers}
             op={this.onMove}
           />
         }
         {canCopy &&
           <OpIcon
-            className="cur-view-path-btn"
+            id="cur-view-path-btn-copy"
+            className="cur-view-path-btn position-relative"
             symbol="copy"
-            title={gettext('Copy')}
+            tooltip={gettext('Copy')}
+            modifiers={modifiers}
             op={this.onCopy}
           />
         }
@@ -344,7 +362,6 @@ class SelectedDirentsToolbar extends React.Component {
           <ItemDropdownMenu
             item={this.props.selectedDirentList[0]}
             toggleClass={'cur-view-path-btn'}
-            toggleChildren={<Icon symbol="more-level" />}
             onMenuItemClick={this.onMenuItemClick}
             getMenuList={this.getDirentMenuList}
           />

@@ -89,6 +89,7 @@ class SharedRepoListView extends React.Component {
         {this.props.repoList.map((repo, index) => {
           return (
             <SharedRepoListItem
+              idx={index}
               ref={this.setRepoItemRef(index)}
               key={repo.repo_id}
               repo={repo}

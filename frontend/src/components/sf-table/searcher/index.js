@@ -87,9 +87,10 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
     <div className="sf-table-searcher-container">
       {!isSearchActive && (
         <OpIcon
+          id="sf-table-search-icon"
           className="sf-table-searcher-btn active-search m-0"
           symbol="search"
-          title={gettext('Search')}
+          tooltip={gettext('Search')}
           op={onToggleSearch}
         />
       )}
@@ -105,9 +106,10 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
           />
           {renderSearchButtons()}
           <OpIcon
-            title={gettext('Close')}
+            id="search-close-btn"
             className="btn-close-searcher-wrapper input-icon-addon"
             symbol="close"
+            tooltip={gettext('Close')}
             op={handleResetSearch}
           />
         </div>

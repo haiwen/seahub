@@ -6,6 +6,8 @@ import InlineNameEditor from './inline-name-editor';
 import { useMetadata } from '../hooks';
 import { validateName } from '../utils/validate';
 import { VIEW_TYPE, VIEW_TYPE_ICON } from '../constants';
+import SfTooltip from '@/components/tooltip';
+import { gettext } from '@/utils/constants';
 
 const NewView = ({ newView, leftIndent, addView }) => {
   const { type: newViewType } = newView;
@@ -35,8 +37,9 @@ const NewView = ({ newView, leftIndent, addView }) => {
           />
         </div>
         <div className="left-icon" style={{ left: leftIndent - 40 }}>
-          <span className="tree-node-icon">
+          <span id="tree-node-create-view-btn" className="tree-node-icon">
             <Icon symbol={VIEW_TYPE_ICON[newViewType] || VIEW_TYPE.TABLE} className="metadata-views-icon" />
+            <SfTooltip target="tree-node-create-view-btn">{gettext('New view')}</SfTooltip>
           </span>
         </div>
       </div>

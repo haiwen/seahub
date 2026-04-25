@@ -5,6 +5,7 @@ import { gettext, isPro, folderPermEnabled, enableRepoSnapshotLabel, enableReset
 import { Utils } from '../utils/utils';
 import MobileItemMenu from '../components/mobile-item-menu';
 import Icon from './icon';
+import SfTooltip from './tooltip';
 
 const propTypes = {
   isPC: PropTypes.bool,
@@ -227,6 +228,7 @@ class LibraryOperationMenu extends React.Component {
           className={isLibView ? 'd-block' : ''}
         >
           <DropdownToggle
+            id="more-level-icon"
             tag={isLibView ? 'div' : 'span'}
             className={isLibView ? 'dir-others-item' : 'op-icon'}
             role="button"
@@ -237,7 +239,12 @@ class LibraryOperationMenu extends React.Component {
             onKeyDown={this.onDropdownToggleKeyDown}
             data-toggle="dropdown"
           >
-            {isLibView ? children : <Icon symbol="more-level" />}
+            {isLibView ? children : (
+              <>
+                <Icon symbol="more-level" />
+                <SfTooltip target="more-level-icon">{isLibView ? gettext('More') : gettext('More operations')}</SfTooltip>
+              </>
+            )}
           </DropdownToggle>
           <DropdownMenu onMouseMove={this.onDropDownMouseMove} container={isLibView ? 'body' : ''}>
             {operations.map((item, index) => {

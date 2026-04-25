@@ -1,11 +1,12 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Alert, FormGroup, Input, Label, Tooltip } from 'reactstrap';
+import { Alert, FormGroup, Input, Label } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import Loading from '../../loading';
 import BackIcon from '../../back-icon';
 import Icon from '../../icon';
 import { Utils } from '../../../utils/utils';
+import SfTooltip from '@/components/tooltip';
 
 class CustomPermissionEditor extends React.Component {
   constructor(props) {
@@ -170,14 +171,7 @@ class CustomPermissionEditor extends React.Component {
                     />
                     <span>{gettext('Modify')}</span>
                     <span id="modify-tip" className="ml-2" style={{ color: '#999' }} aria-hidden="true"><Icon symbol="about" /></span>
-                    <Tooltip
-                      toggle={this.toggle}
-                      delay={{ show: 0, hide: 0 }}
-                      target={'modify-tip'}
-                      placement='bottom'
-                      isOpen={this.state.tooltipOpen}>
-                      ({gettext('Modify includes modify file, move/rename file and folder')})
-                    </Tooltip>
+                    <SfTooltip target='modify-tip' placement='bottom'>{gettext('Modify includes modify file, move/rename file and folder')}</SfTooltip>
                   </Label>
                 </FormGroup>
                 <FormGroup check>

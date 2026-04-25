@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import IconBtn from '../../../../components/icon-btn';
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { FilterSetter, SortSetter } from '../../data-process-setter';
 import { gettext } from '../../../../utils/constants';
@@ -63,23 +62,22 @@ const CardViewToolbar = ({
           modifySorts={modifySorts}
         />
         {!readOnly && (
-          <IconBtn
+          <OpIcon
+            id="set-up-btn"
             symbol="set-up"
             className="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-setting"
-            size={24}
-            role="button"
+            tooltip={gettext('Settings')}
             aria-label={gettext('Settings')}
-            title={gettext('Settings')}
-            tabIndex={0}
-            onClick={onToggleSettings}
+            op={onToggleSettings}
             onKeyDown={Utils.onKeyDown}
           />
         )}
         {!isCustomPermission && (
           <OpIcon
+            id="info-btn"
             className="cur-view-path-btn ml-2"
             symbol="info"
-            title={gettext('Properties')}
+            tooltip={gettext('Properties')}
             op={toggleDetails}
           />
         )}

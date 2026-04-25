@@ -1,41 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../utils/utils';
-import { Tooltip } from 'reactstrap';
 import Icon from './icon';
+import SfTooltip from './tooltip';
 
 const propTypes = {
-  id: PropTypes.string,
-  className: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  className: PropTypes.string,
   style: PropTypes.object,
   op: PropTypes.func,
   title: PropTypes.string,
-  symbol: PropTypes.string,
+  symbol: PropTypes.string.isRequired,
   tooltip: PropTypes.string,
   placement: PropTypes.string,
+  modifiers: PropTypes.array,
 };
 
 class OpIcon extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      tooltipOpen: false
-    };
   }
 
-  toggle = () => {
-    this.setState({
-      tooltipOpen: !this.state.tooltipOpen
-    });
-  };
-
   render() {
-    const { id, className, style, op, title, symbol, tooltip, placement = 'bottom', ...others } = this.props;
-
-    const iconElement = symbol ? (
-      <Icon symbol={symbol} />
-    ) : null;
-
+    const { id, className, style, op, title, symbol, tooltip, placement, modifiers, ...others } = this.props;
     const iconWrapper = (
       <span
         {...others}
@@ -48,7 +35,7 @@ class OpIcon extends React.Component {
         onClick={op}
         onKeyDown={Utils.onKeyDown}
       >
-        {iconElement}
+        <Icon symbol={symbol} />
       </span>
     );
 
@@ -56,15 +43,13 @@ class OpIcon extends React.Component {
       return (
         <>
           {iconWrapper}
-          <Tooltip
-            toggle={this.toggle}
-            delay={{ show: 0, hide: 0 }}
+          <SfTooltip
             target={id}
             placement={placement}
-            isOpen={this.state.tooltipOpen}
+            modifiers={modifiers}
           >
             {tooltip}
-          </Tooltip>
+          </SfTooltip>
         </>
       );
     }

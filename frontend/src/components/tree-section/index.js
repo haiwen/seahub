@@ -84,10 +84,11 @@ const TreeSection = ({ repoID, stateStorageKey, title, children, renderHeaderOpe
         <div className="tree-section-header-operations">
           {renderOperations()}
           <OpIcon
+            id={`tree-fold-btn-${title}`}
             className={`tree-section-header-operation ${showChildren ? '' : 'rotate-90'}`}
             symbol="down"
             op={toggleShowChildren}
-            title={showChildren ? gettext('Fold') : gettext('Unfold')}
+            tooltip={showChildren ? gettext('Fold') : gettext('Unfold')}
           />
         </div>
       </div>

@@ -16,6 +16,7 @@ import { getTrashPath } from '../dir-view-mode/dir-trash-view/utils';
 import EventBus from '../common/event-bus';
 import CleanTrash from '../dialog/clean-trash';
 import ArchiveIcon from '../archive-icon';
+import SfTooltip from '../tooltip';
 
 const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
@@ -179,9 +180,13 @@ class DirPath extends React.Component {
           onKeyDown={Utils.onKeyDown}
         >
           <Icon symbol="refresh" />
-          <UncontrolledTooltip target="sf-metadata-view-refresh" placement="bottom">
+          <SfTooltip
+            target="sf-metadata-view-refresh"
+            placement="bottom"
+            confirmText={gettext('test')}
+          >
             {gettext('Refresh the view')}
-          </UncontrolledTooltip>
+          </SfTooltip>
         </div>
       </>
     );
@@ -403,12 +408,16 @@ class DirPath extends React.Component {
     const pathElem = this.turnPathToLink(currentPath);
     const isTrashMode = this.isTrashMode();
     const isHistoryMode = this.isHistoryMode();
+    const tip = isTreePanelShown ? gettext('Close the panel') : gettext('Open the panel');
     return (
       <div className="path-container dir-view-path">
         <OpIcon
+          id="sf-side-panel-icon-btn"
           className="cur-view-path-btn mr-1"
           symbol="side-bar"
-          title={isTreePanelShown ? gettext('Close the panel') : gettext('Open the panel')}
+          title={tip}
+          tooltip={tip}
+          placement="top"
           op={this.props.toggleTreePanel}
         />
         {this.props.pathPrefix && this.props.pathPrefix.map((item, index) => {

@@ -1,4 +1,4 @@
-.sf-table-row .row-expand-icon {
+.sf-table-row .seafile-multicolor-icon-expand {
   opacity: 0;
   width: 20px;
   height: 20px;
@@ -9,7 +9,7 @@
   color: #467fcf;
 }
 
-.sf-table-row:hover .row-expand-icon {
+.sf-table-row:hover .seafile-multicolor-icon-expand {
   opacity: 1;
 }
 
@@ -26,14 +26,14 @@
   border-radius: 50%;
 }
 
-.sf-table-row:hover .sf-table-cell.actions-cell .row-expand .row-expand-icon {
+.sf-table-row:hover .sf-table-cell.actions-cell .row-expand .seafile-multicolor-icon-expand {
   width: 16px;
   height: 16px;
   display: block;
   transform: scale(.8);
 }
 
-.sf-table-row .sf-table-cell.actions-cell .row-expand-icon {
+.sf-table-row .sf-table-cell.actions-cell .row-expand-icon .seafile-multicolor-icon-expand {
   display: none;
 }
 

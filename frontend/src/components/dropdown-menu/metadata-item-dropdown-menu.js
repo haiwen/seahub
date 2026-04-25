@@ -11,6 +11,7 @@ import Icon from '../icon';
 import '../../css/item-dropdown-menu.css';
 
 const propTypes = {
+  target: PropTypes.string,
   tagName: PropTypes.string,
   item: PropTypes.object.isRequired,
   toggleClass: PropTypes.string,
@@ -153,7 +154,7 @@ class ItemDropdownMenu extends React.Component {
 
   render() {
     const menuList = this.state.menuList;
-    const { toggleClass, toggleChildren, tagName, menuStyle = {} } = this.props;
+    const { target, toggleClass, toggleChildren, tagName, menuStyle = {} } = this.props;
 
     if (!menuList.length) {
       return '';
@@ -161,7 +162,7 @@ class ItemDropdownMenu extends React.Component {
 
     if (tagName && tagName === 'button') {
       return (
-        <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick}>
+        <Dropdown id={target} isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick}>
           <DropdownToggle
             tag="span"
             className={classnames('more-dropdown-toggle', toggleClass)}
@@ -196,13 +197,12 @@ class ItemDropdownMenu extends React.Component {
     }
 
     return (
-      <Dropdown tag="span" isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick} className="vam">
+      <Dropdown id={target} tag="span" isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick} className="vam">
         <DropdownToggle
           tag={tagName || 'span'}
           role="button"
           tabIndex="0"
           className={classnames('more-dropdown-toggle', toggleClass)}
-          title={gettext('More operations')}
           data-toggle="dropdown"
           aria-expanded={this.state.isItemMenuShow}
           aria-label={gettext('More operations')}

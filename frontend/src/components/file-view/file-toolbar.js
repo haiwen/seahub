@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button, ButtonGroup, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Tooltip } from 'reactstrap';
+import { Button, ButtonGroup, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import Switch from '../switch';
 import IconButton from '../icon-button';
 import { gettext, siteRoot } from '../../utils/constants';
@@ -9,6 +9,7 @@ import ModalPortal from '../modal-portal';
 import ShareDialog from '../dialog/share-dialog';
 import Icon from '../../components/icon';
 import ImageZoomer from './image-zoomer';
+import SfTooltip from '../tooltip';
 
 const propTypes = {
   isLocked: PropTypes.bool.isRequired,
@@ -47,13 +48,8 @@ class FileToolbar extends React.Component {
     this.state = {
       dropdownOpen: false,
       moreDropdownOpen: false,
-      moreTooltipOpen: false,
     };
   }
-
-  toggleMoreTooltip = () => {
-    this.setState({ moreTooltipOpen: !this.state.moreTooltipOpen });
-  };
 
   toggleMoreOpMenu = (event) => {
     if (this.state.moreDropdownOpen) {
@@ -122,7 +118,8 @@ class FileToolbar extends React.Component {
             <IconButton
               id="seafile-pdf-find"
               icon="search"
-              text={`${gettext('Find')}(${shortcutMain}F)`}
+              text={gettext('Find')}
+              shortcut={[shortcutMain + 'F']}
             />
           )}
           {(fileType == 'PDF' && canDownloadFile) && (
@@ -207,15 +204,12 @@ class FileToolbar extends React.Component {
               role='button'
             >
               <Icon symbol="more-level" />
-              <Tooltip
-                toggle={this.toggleMoreTooltip}
-                delay={{ show: 0, hide: 0 }}
+              <SfTooltip
                 target="more-operations"
                 placement='bottom'
-                isOpen={this.state.moreTooltipOpen}
               >
                 {gettext('More operations')}
-              </Tooltip>
+              </SfTooltip>
             </DropdownToggle>
             <DropdownMenu>
               {fileExt == 'csv' && enableOnlyoffice && (

@@ -13,6 +13,7 @@ import toaster from '@/components/toast';
 import { getColumnDisplayName } from '@/metadata/utils/column';
 
 import './index.css';
+import SfTooltip from '@/components/tooltip';
 
 const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: insertColumnAPI }) => {
   const [isColumnMenuOpen, setColumnMenuOpen] = useState(false);
@@ -109,6 +110,7 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
           role="button"
         >
           <Icon symbol="add-table" />
+          <SfTooltip target={id}>{gettext('Add column')}</SfTooltip>
         </DropdownToggle>
         <ColumnTypeDropdownMenu onSelect={handleSelect} />
       </Dropdown>

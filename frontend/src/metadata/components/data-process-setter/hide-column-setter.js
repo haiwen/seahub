@@ -1,14 +1,14 @@
 import React, { useMemo, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import IconBtn from '../../../components/icon-btn';
 import { HideColumnPopover } from '../popover';
 import { gettext } from '../../../utils/constants';
 import { isEnter, isSpace } from '../../../utils/hotkey';
 import { TABLE_NOT_DISPLAY_COLUMN_KEYS } from '../../constants';
 import { useMetadataStatus } from '../../../hooks';
+import OpIcon from '@/components/op-icon';
 
-const HideColumnSetter = ({ readOnly, columns, wrapperClass, target, hiddenColumns, modifyHiddenColumns, modifyColumnOrder }) => {
+const HideColumnSetter = ({ readOnly, columns, wrapperClass, hiddenColumns, modifyHiddenColumns, modifyColumnOrder }) => {
   const [isShowSetter, setShowSetter] = useState(false);
 
   const { globalHiddenColumns } = useMetadataStatus();
@@ -42,23 +42,12 @@ const HideColumnSetter = ({ readOnly, columns, wrapperClass, target, hiddenColum
   const className = classnames(wrapperClass, { 'active': validHiddenColumns.length > 0 });
   return (
     <>
-      <IconBtn
-        symbol="hide"
-        size={24}
-        className={className}
-        onClick={onSetterToggle}
-        role="button"
-        onKeyDown={onKeyDown}
-        title={message}
-        aria-label={message}
-        tabIndex={0}
-        id={target}
-      />
+      <OpIcon id="hide-column-setter-icon" symbol="hide" tooltip={message} className={className} op={onSetterToggle} onKeyDown={onKeyDown} />
       {isShowSetter && (
         <HideColumnPopover
           readOnly={readOnly}
           hiddenColumns={validHiddenColumns}
-          target={target}
+          target="hide-column-setter-icon"
           placement="bottom-end"
           columns={validColumns}
           hidePopover={onSetterToggle}
@@ -73,7 +62,6 @@ const HideColumnSetter = ({ readOnly, columns, wrapperClass, target, hiddenColum
 HideColumnSetter.propTypes = {
   readOnly: PropTypes.bool,
   wrapperClass: PropTypes.string,
-  target: PropTypes.string,
   hiddenColumns: PropTypes.array,
   columns: PropTypes.array,
   modifyHiddenColumns: PropTypes.func,

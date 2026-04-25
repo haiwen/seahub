@@ -9,6 +9,7 @@ import { getFileNameFromRecord, getFileObjIdFromRecord, getParentDirFromRecord, 
 import { getColumnByKey } from '../../utils/column';
 import { PRIVATE_COLUMN_KEY } from './constants';
 import { checkIsDir } from '../../utils/row';
+import SfTooltip from '@/components/tooltip';
 
 const OPERATION = {
   GENERATE_DESCRIPTION: 'generate-description',
@@ -135,6 +136,7 @@ const AIIcon = () => {
   return (
     <Dropdown isOpen={isMenuShow} toggle={onToggle}>
       <DropdownToggle
+        id="ai-icon"
         className="border-0 p-0 bg-transparent detail-control mr-2"
         ref={menuToggleRef}
         data-toggle="dropdown"
@@ -144,6 +146,7 @@ const AIIcon = () => {
         tabIndex={0}
       >
         <Icon symbol="ai" className="detail-control-icon" />
+        <SfTooltip target="ai-icon">{gettext('AI')}</SfTooltip>
       </DropdownToggle>
       {isMenuShow && (
         <div className="sf-metadata-ai-dropdown-menu large">

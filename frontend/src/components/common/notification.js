@@ -5,7 +5,7 @@ import { gettext } from '../../utils/constants';
 import NoticeItem from './notice-item';
 import UserNotificationsDialog from '../../user-notifications';
 import { Utils } from '../../utils/utils';
-import IconBtn from '../icon-btn';
+import OpIcon from '../op-icon';
 
 import '../../css/notification.css';
 
@@ -176,11 +176,9 @@ class Notification extends React.Component {
   render() {
     const { totalUnseenCount, currentTab, generalNoticeList, discussionNoticeList, generalNoticeListUnseen, discussionNoticeListUnseen } = this.state;
     return (
-      <div id="notifications" className="ml-3">
-        <a href="#" onClick={this.onClick} className="no-deco" id="notice-icon" title={gettext('Notifications')} aria-label={gettext('Notifications')}>
-          <IconBtn id="notification-popover" symbol="notification" size={32} className="sf-icon-bell" />
-          <span className={`num ${totalUnseenCount ? '' : 'hide'}`}>{totalUnseenCount < 1000 ? totalUnseenCount : '999+'}</span>
-        </a>
+      <div id="notifications">
+        <OpIcon id="notification-icon-btn" symbol="notification" tooltip={gettext('Notifications')} className="notification-icon-btn" op={this.onClick} />
+        <span className={`num ${totalUnseenCount ? '' : 'hide'}`}>{totalUnseenCount < 1000 ? totalUnseenCount : '999+'}</span>
         {this.state.showNotice &&
           <NotificationPopover
             headerText={gettext('Notification')}

@@ -37,3 +37,8 @@
 .side-panel .side-nav-folded .side-nav-con .sharp {
   width: 1rem;
 }
+
+.folded-side-nav-icon-tooltip.sf-tooltip .tooltip-inner {
+  transform: translateX(14px);
+  transition: all 250ms cubic-bezier(0.25, 0.1, 0.25, 0.1);
+}

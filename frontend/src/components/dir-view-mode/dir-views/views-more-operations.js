@@ -6,6 +6,8 @@ import EventBus from '../../common/event-bus';
 import { EVENT_BUS_TYPE, VIEW_TYPE } from '../../../metadata/constants';
 import { getNewViewSubMenu, KEY_ADD_VIEW_MAP } from './new-view-menu';
 import Icon from '../../icon';
+import SfTooltip from '@/components/tooltip';
+import { gettext } from '@/utils/constants';
 
 const ViewsMoreOperations = ({ menuProps }) => {
   const eventBus = EventBus.getInstance();
@@ -62,16 +64,23 @@ const ViewsMoreOperations = ({ menuProps }) => {
     ];
   }, []);
 
+  const target = 'new-view-btn';
   return (
     <div className="tree-section-header-operation tree-section-more-operation">
       <ItemDropdownMenu
         {...menuProps}
+        target={target}
         item={{ name: 'views' }}
         menuClassname="metadata-views-dropdown-menu"
         menuStyle={isMobile ? { zIndex: 1050 } : {}}
         getMenuList={getMoreOperationsMenus}
         onMenuItemClick={clickMenu}
-        toggleChildren={<Icon symbol="new" />}
+        toggleChildren={
+          <>
+            <Icon symbol="new" />
+            <SfTooltip target={target}>{gettext('New view')}</SfTooltip>
+          </>
+        }
       />
     </div>
   );

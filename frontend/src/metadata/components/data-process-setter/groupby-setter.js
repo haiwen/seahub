@@ -1,12 +1,12 @@
 import React, { useMemo, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import IconBtn from '../../../components/icon-btn';
 import { GroupbysPopover } from '../popover';
 import { gettext } from '../../../utils/constants';
 import { SUPPORT_GROUP_COLUMN_TYPES } from '../../constants';
 import { isEnter, isSpace } from '../../../utils/hotkey';
 import { getValidGroupbys } from '../../utils/group';
+import OpIcon from '@/components/op-icon';
 
 const GroupbySetter = ({
   target = 'sf-metadata-groupby-popover',
@@ -51,18 +51,7 @@ const GroupbySetter = ({
   const className = classnames(wrapperClass, { 'active': groupbys.length > 0 });
   return (
     <>
-      <IconBtn
-        symbol="groupby"
-        size={24}
-        className={className}
-        onClick={onSetterToggle}
-        role="button"
-        onKeyDown={onKeyDown}
-        title={message}
-        aria-label={message}
-        tabIndex={0}
-        id={target}
-      />
+      <OpIcon id={target} symbol="groupby" className={className} tooltip={message} aria-label={message} op={onSetterToggle} onKeyDown={onKeyDown} />
       {isShowSetter && (
         <GroupbysPopover
           readOnly={readOnly}

@@ -9,6 +9,7 @@ import Icon from '../../../../components/icon';
 import { Utils } from '../../../../utils/utils';
 
 import './index.css';
+import SfTooltip from '@/components/tooltip';
 
 const FIELD_ITEM_HEIGHT = 30;
 const BANNER_HEIGHT = 24;
@@ -58,8 +59,9 @@ const FieldDisplaySettings = ({ fieldIconConfig, fields, textProperties, onToggl
         tabIndex={0}
       >
         <Label className="mb-0">{textProperties.titleValue}</Label>
-        <div className="sf-metadata-field-display-toggle-btn">
+        <div id="expand-btn" className="sf-metadata-field-display-toggle-btn">
           <Icon symbol="down" className={classnames({ 'rotate-270': isCollapsed })} />
+          <SfTooltip target="expand-btn">{isCollapsed ? gettext('Unfold') : gettext('Fold')}</SfTooltip>
         </div>
       </div>
       <Transition nodeRef={nodeRef} in={!isCollapsed} timeout={DURATION}>

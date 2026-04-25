@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import IconBtn from '../../../../../components/icon-btn';
 import { useCollaborators } from '../../../../hooks';
+import OpIcon from '@/components/op-icon';
+import { gettext } from '@/utils/constants';
 
 import './index.css';
 
@@ -10,7 +11,7 @@ const DeleteCollaborator = ({ value, onDelete }) => {
 
   return (
     <div className="sf-metadata-delete-collaborator">
-      {Array.isArray(value) && value.map(email => {
+      {Array.isArray(value) && value.map((email, idx) => {
         const collaborator = getCollaborator(email);
         if (!collaborator) return null;
         const { name, avatar_url } = collaborator;
@@ -20,7 +21,7 @@ const DeleteCollaborator = ({ value, onDelete }) => {
               <img className="collaborator-avatar m-0" alt={name} src={avatar_url} />
             </span>
             <span className="collaborator-name text-truncate" title={name} aria-label={name}>{name}</span>
-            <IconBtn className="collaborator-remove" onClick={(event) => onDelete(email, event)} symbol="close" />
+            <OpIcon id={`delete-collaborator-icon-${idx}`} className="collaborator-remove" symbol="close" tooltip={gettext('Remove')} op={(e) => onDelete(email, e)} />
           </div>
         );
       })}

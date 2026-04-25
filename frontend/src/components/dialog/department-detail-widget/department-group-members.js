@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Tooltip } from 'reactstrap';
 import { gettext, mediaUrl } from '../../../utils/constants';
 import EmptyTip from '../../empty-tip';
 import Loading from '../../loading';
 import Icon from '../../icon';
 import { Utils } from '../../../utils/utils';
+import SfTooltip from '@/components/tooltip';
 
 const ItemPropTypes = {
   member: PropTypes.object,
@@ -20,8 +20,7 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      highlight: false,
-      tooltipOpen: false,
+      highlight: false
     };
   }
 
@@ -36,10 +35,6 @@ class Item extends Component {
   onChange = (e) => {
     const { member } = this.props;
     this.props.onUserChecked(member);
-  };
-
-  toggleTooltip = () => {
-    this.setState({ tooltipOpen: !this.state.tooltipOpen });
   };
 
   render() {
@@ -60,9 +55,7 @@ class Item extends Component {
             <span className="d-inline-flex align-items-center">
               <Icon symbol="about" />
             </span>
-            <Tooltip placement='bottom' isOpen={this.state.tooltipOpen} toggle={this.toggleTooltip} target={`no-select-${index}`} delay={{ show: 0, hide: 0 }} fade={false}>
-              {tip}
-            </Tooltip>
+            <SfTooltip target={`no-select-${index}`} placement="bottom">{tip}</SfTooltip>
           </td>
         </tr>
       );

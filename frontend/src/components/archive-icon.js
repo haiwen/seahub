@@ -1,7 +1,7 @@
 import React from 'react';
 import Icon from './icon';
-import { UncontrolledTooltip } from 'reactstrap';
 import { gettext } from '../utils/constants';
+import SfTooltip from './tooltip';
 
 export default function ArchiveIcon({ currentRepoInfo, className = 'ml-1' }) {
 
@@ -10,12 +10,7 @@ export default function ArchiveIcon({ currentRepoInfo, className = 'ml-1' }) {
   return (
     <>
       <Icon id={id} className={className} symbol="archive"></Icon>
-      <UncontrolledTooltip
-        target={id}
-        placement="bottom"
-      >
-        {gettext('This library has been archived, cannot be updated.')}
-      </UncontrolledTooltip>
+      <SfTooltip target={id} placement='bottom'>{gettext('This library has been archived, cannot be updated.')}</SfTooltip>
     </>
   );
 }

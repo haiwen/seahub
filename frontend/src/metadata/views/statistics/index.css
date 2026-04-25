@@ -86,12 +86,25 @@
 }
 
 .chart-header .dropdown {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
   color: var(--bs-icon-color);
 }
 
 .chart-header .dropdown:hover {
   background-color: var(--bs-hover-bg);
   border-radius: 3px;
+}
+
+.chart-header .dropdown span {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .pie-chart-container,

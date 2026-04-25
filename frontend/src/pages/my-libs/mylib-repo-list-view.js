@@ -67,6 +67,7 @@ class MylibRepoListView extends React.Component {
           return (
             <MylibRepoListItem
               ref={this.setRepoItemRef(index)}
+              idx={index}
               key={item.repo_id}
               repo={item}
               isItemFreezed={this.state.isItemFreezed}

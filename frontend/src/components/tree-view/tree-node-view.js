@@ -11,6 +11,7 @@ import Icon from '../icon';
 const LEFT_INDENT = 20;
 
 const propTypes = {
+  idx: PropTypes.number,
   userPerm: PropTypes.string,
   node: PropTypes.object.isRequired,
   currentPath: PropTypes.string.isRequired,
@@ -246,9 +247,10 @@ class TreeNodeView extends React.Component {
     }
     return (
       <div className="children">
-        {node.children.map(item => {
+        {node.children.map((item, idx) => {
           return (
             <TreeNodeView
+              idx={idx}
               key={item.path}
               node={item}
               leftIndent={this.props.leftIndent + LEFT_INDENT}
@@ -277,7 +279,7 @@ class TreeNodeView extends React.Component {
   };
 
   render() {
-    let { currentPath, node, isNodeMenuShow, userPerm, leftIndent } = this.props;
+    let { idx, currentPath, node, isNodeMenuShow, userPerm, leftIndent } = this.props;
     let { type, icon } = this.getNodeTypeAndIcon();
     let hlClass = this.state.isHighlight ? 'tree-node-inner-hover ' : '';
     if (node.path === currentPath) {
@@ -319,9 +321,10 @@ class TreeNodeView extends React.Component {
           <div className="left-icon" style={{ left: leftIndent - 40 }}>
             {type === 'dir' && (!node.isLoaded || (node.isLoaded && node.hasChildren())) && (
               <OpIcon
+                id="tree-node-fold-btn"
                 className={`folder-toggle-icon ${node.isExpanded ? '' : 'rotate-270'}`}
                 symbol="down"
-                title={node.isExpanded ? gettext('Fold') : gettext('Unfold')}
+                tooltip={node.isExpanded ? gettext('Fold') : gettext('Unfold')}
                 onMouseDown={e => e.stopPropagation()}
                 op={this.onLoadToggle}
               />
@@ -331,6 +334,7 @@ class TreeNodeView extends React.Component {
           {isNodeMenuShow && ((userPerm === 'rw' || permission || isCustomPermission) && this.state.isShowOperationMenu) && (
             <div className="right-icon">
               <ItemDropdownMenu
+                target={`tree-node-dropdown-btn-${idx}`}
                 item={this.props.node}
                 getMenuList={this.calculateMenuList}
                 onMenuItemClick={this.onMenuItemClick}

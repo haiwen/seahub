@@ -112,8 +112,7 @@ class DirTool extends React.Component {
 
         {(currentMode === LIST_MODE || currentMode === TABLE_MODE) && (
           <HideColumnSetter
-            wrapperClass="ml-2 cur-view-path-btn dir-tool-hide-column-setter"
-            target="dir-hide-column-popover"
+            wrapperClass="ml-2 cur-view-path-btn dir-tool-hide-column-setter position-relative"
             readOnly={isCustomPermission}
             columns={columns}
             hiddenColumns={this.props.hiddenColumnKeys}
@@ -124,9 +123,10 @@ class DirTool extends React.Component {
 
         {(!isCustomPermission) &&
           <OpIcon
-            className="cur-view-path-btn ml-2"
+            id="info-icon"
+            className="cur-view-path-btn ml-2 position-relative"
             symbol="info"
-            title={propertiesText}
+            tooltip={propertiesText}
             op={onToggleDetail}
           />
         }

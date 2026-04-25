@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { EXTERNAL_EVENTS, EventBus } from '@seafile/seafile-editor';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Tooltip } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext, canGenerateShareLink } from '../../../utils/constants';
 import Icon from '../../../components/icon';
+import SfTooltip from '@/components/tooltip';
 
 const { canDownloadFile } = window.app.pageOptions;
 
@@ -25,14 +26,9 @@ class MoreMenu extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      tooltipOpen: false,
       dropdownOpen: false
     };
   }
-
-  tooltipToggle = () => {
-    this.setState({ tooltipOpen: !this.state.tooltipOpen });
-  };
 
   dropdownToggle = () => {
     this.setState({ dropdownOpen: !this.state.dropdownOpen });
@@ -61,8 +57,7 @@ class MoreMenu extends React.PureComponent {
           aria-label={gettext('More operations')}
         >
           <Icon symbol="more-level" />
-          <Tooltip toggle={this.tooltipToggle} delay={{ show: 0, hide: 0 }} target="moreButton" placement='bottom' isOpen={this.state.tooltipOpen}>{gettext('More')}
-          </Tooltip>
+          <SfTooltip target="moreButton" placement='bottom'>{gettext('More')}</SfTooltip>
         </DropdownToggle>
         <DropdownMenu className="drop-list">
           {(!this.props.readOnly && editorMode === 'rich') &&

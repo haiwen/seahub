@@ -2,12 +2,12 @@ import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import deepCopy from 'deep-copy';
-import IconBtn from '../../../components/icon-btn';
 import { FilterPopover } from '../popover';
 import { getValidFilters } from '../../utils/filter';
 import { gettext } from '../../../utils/constants';
 import { isEnter, isSpace } from '../../../utils/hotkey';
 import { VIEW_TYPE } from '../../constants';
+import OpIcon from '@/components/op-icon';
 
 const FilterSetter = ({
   readOnly,
@@ -58,18 +58,7 @@ const FilterSetter = ({
   const className = classnames(wrapperClass, { 'active': filtersCount > 0 });
   return (
     <>
-      <IconBtn
-        symbol="filter"
-        size={24}
-        className={className}
-        onClick={onSetterToggle}
-        role="button"
-        onKeyDown={onKeyDown}
-        title={message}
-        aria-label={message}
-        tabIndex={0}
-        id={target}
-      />
+      <OpIcon id={target} symbol="filter" className={className} tooltip={message} aria-label={message} op={onSetterToggle} onKeyDown={onKeyDown} />
       {isShowSetter &&
         <FilterPopover
           placement="bottom-end"
