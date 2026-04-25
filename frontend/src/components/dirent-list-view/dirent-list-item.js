@@ -800,7 +800,7 @@ class DirentListItem extends React.Component {
         )}
 
         {showTags && (
-          <div className="dirent-property dirent-property-tags">
+          <div className="dirent-property dirent-property-tags text-truncate">
             <FileTagsFormatter value={showMetadata ? dirent.metadata[PRIVATE_COLUMN_KEY.TAGS] : ''} tagsData={this.props.tagsData} className="sf-metadata-tags-formatter" />
           </div>
         )}
