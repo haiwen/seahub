@@ -211,17 +211,40 @@ def wiki_publish_view(request, publish_url, page_id=None):
     wiki_title = os.path.splitext(wiki_file_name)[0]
 
     # get wiki navigation
-    def add_url_recursive(item):
-        item['url'] = f"/wiki/publish/{publish_url}/{item['id']}/"
-        item['name'] = id_name_dict[item['id']]
-        if 'children' in item:
-            for child in item['children']:
-                add_url_recursive(child)
-        return item
+    page_map = {page['id']: page for page in pages}
 
-    id_name_dict = {page['id']: page['name'] for page in pages}
+    def normalize_navigation_item(item):
+        page = page_map.get(item.get('id'))
+        if not page:
+            return None
+
+        normalized_item = {
+            'id': item['id'],
+            'type': item.get('type', 'page'),
+            'name': page.get('name', ''),
+            'icon': page.get('icon', ''),
+            'path': page.get('path', ''),
+            'locked': page.get('locked', False),
+            'url': f"/wiki/publish/{publish_url}/{item['id']}/",
+        }
+
+        children = []
+        for child in item.get('children', []) or []:
+            normalized_child = normalize_navigation_item(child)
+            if normalized_child:
+                children.append(normalized_child)
+
+        if 'children' in item or children:
+            normalized_item['children'] = children
+
+        return normalized_item
+
     wiki_navigation = wiki_config.get('navigation', [])
-    wiki_navigation = [add_url_recursive(item) for item in wiki_navigation]
+    wiki_navigation = [
+        item for item in
+        (normalize_navigation_item(nav_item) for nav_item in wiki_navigation)
+        if item
+    ]
 
     # get wiki html
     file_id = seafile_api.get_file_id_by_path(wiki_id, file_path)

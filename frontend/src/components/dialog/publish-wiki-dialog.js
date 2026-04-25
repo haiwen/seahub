@@ -149,9 +149,9 @@ class PublishWikiDialog extends React.Component {
             style={{ borderTop: '1px solid var(--border-color, #dee2e6)' }}
           >
             <div style={{ flex: 1 }}>
-              <p className="mb-0 fw-semibold">{gettext('SEO: Enable server-side rendering')}</p>
+              <p className="mb-0 fw-semibold">{gettext('SEO: Pre-render published pages')}</p>
               <p className="mb-0 sf-tip-default" style={{ fontSize: '0.85em' }}>
-                {gettext('Render page content on the server so search engines can index it without running JavaScript.')}
+                {gettext('Pre-render published wiki pages on the server so search engines can index their content more reliably.')}
               </p>
             </div>
             <div className="form-check form-switch ms-3 mb-0">
@@ -182,4 +182,3 @@ class PublishWikiDialog extends React.Component {
 PublishWikiDialog.propTypes = propTypes;
 
 export default PublishWikiDialog;
-
