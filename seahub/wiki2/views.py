@@ -198,12 +198,19 @@ def wiki_publish_view(request, publish_url, page_id=None):
     # the page content without executing JavaScript.
     # ------------------------------------------------------------------
 
+    wiki_config = get_wiki_config(wiki.repo_id, '')
+    pages = wiki_config.get('pages', [])
+    if not pages:
+        return render(request, template_name, render_context)
+
     if not page_id:
-        wiki_config = get_wiki_config(wiki.repo_id, '')
-        pages = wiki_config.get('pages', [])
         page_id = pages[0]['id']
 
     page_info = next(filter(lambda t: t['id'] == page_id, pages), {})
+    if not page_info:
+        page_id = pages[0]['id']
+        page_info = pages[0]
+
     file_path = page_info.get('path', '')
 
     # get wiki title
@@ -213,11 +220,34 @@ def wiki_publish_view(request, publish_url, page_id=None):
     # get wiki navigation
     page_map = {page['id']: page for page in pages}
 
-    def normalize_navigation_item(item):
+    def find_navigation_path(items, target_id):
+        for nav_item in items:
+            if nav_item.get('id') == target_id:
+                return [nav_item]
+
+            children = nav_item.get('children') or []
+            child_path = find_navigation_path(children, target_id)
+            if child_path:
+                return [nav_item] + child_path
+
+        return []
+
+    navigation = wiki_config.get('navigation', [])
+    current_path = find_navigation_path(navigation, page_id)
+    current_path_ids = {item.get('id') for item in current_path}
+
+    def normalize_navigation_item(item, depth=0):
         page = page_map.get(item.get('id'))
         if not page:
             return None
 
+        children = []
+        for child in item.get('children', []) or []:
+            normalized_child = normalize_navigation_item(child, depth + 1)
+            if normalized_child:
+                children.append(normalized_child)
+
+        has_children = bool(children)
         normalized_item = {
             'id': item['id'],
             'type': item.get('type', 'page'),
@@ -226,25 +256,36 @@ def wiki_publish_view(request, publish_url, page_id=None):
             'path': page.get('path', ''),
             'locked': page.get('locked', False),
             'url': f"/wiki/publish/{publish_url}/{item['id']}/",
+            'depth': depth,
+            'has_children': has_children,
+            'is_current': item['id'] == page_id,
+            'is_expanded': item['id'] in current_path_ids and item['id'] != page_id,
         }
 
-        children = []
-        for child in item.get('children', []) or []:
-            normalized_child = normalize_navigation_item(child)
-            if normalized_child:
-                children.append(normalized_child)
-
-        if 'children' in item or children:
+        if has_children or 'children' in item:
             normalized_item['children'] = children
 
         return normalized_item
 
-    wiki_navigation = wiki_config.get('navigation', [])
     wiki_navigation = [
         item for item in
-        (normalize_navigation_item(nav_item) for nav_item in wiki_navigation)
+        (normalize_navigation_item(nav_item) for nav_item in navigation)
         if item
     ]
+
+    wiki_breadcrumb = []
+    for breadcrumb_item in current_path:
+        page = page_map.get(breadcrumb_item.get('id'))
+        if not page:
+            continue
+
+        wiki_breadcrumb.append({
+            'id': breadcrumb_item['id'],
+            'name': page.get('name', ''),
+            'icon': page.get('icon', ''),
+            'url': f"/wiki/publish/{publish_url}/{breadcrumb_item['id']}/",
+            'has_children': bool(breadcrumb_item.get('children')),
+        })
 
     # get wiki html
     file_id = seafile_api.get_file_id_by_path(wiki_id, file_path)
@@ -269,7 +310,8 @@ def wiki_publish_view(request, publish_url, page_id=None):
         "wiki_repo_name": wiki.name,
         "wiki_title": wiki_title,
         "wiki_html": wiki_html,
-        "wiki_navigation": wiki_navigation
+        "wiki_navigation": wiki_navigation,
+        "wiki_breadcrumb": wiki_breadcrumb,
     })
     return render(request, template_name, render_context)
 

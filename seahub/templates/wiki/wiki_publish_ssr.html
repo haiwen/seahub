@@ -41,8 +41,11 @@
             <div class="wiki-nav-group-header wiki-nav-pages">
               <h2 class="wiki-nav-group-title">{% trans "Pages" %}</h2>
             </div>
-            {# Tree populated by JS #}
-            <ul class="wiki-nav-tree" id="wiki-nav-tree" role="tree" aria-label="{% trans 'Pages' %}"></ul>
+            <ul class="wiki-nav-tree" id="wiki-nav-tree" role="tree" aria-label="{% trans 'Pages' %}">
+              {% for item in wiki_navigation %}
+                {% include "wiki/_wiki_publish_ssr_nav_item.html" with item=item %}
+              {% endfor %}
+            </ul>
           </div>
         </div>
       </div>
@@ -70,8 +73,33 @@
           </svg>
         </button>
 
-        {# Breadcrumb is rendered client-side from the same nav tree data #}
-        <nav class="wiki2-top-nav" id="wiki-breadcrumb" aria-label="{% trans 'Breadcrumb' %}"></nav>
+        <nav class="wiki2-top-nav" id="wiki-breadcrumb" aria-label="{% trans 'Breadcrumb' %}">
+          {% for item in wiki_breadcrumb %}
+          <a class="wiki2-top-nav-item"
+             href="{{ item.url }}"
+             title="{{ item.name }}"
+             {% if forloop.last %}aria-current="page"{% endif %}>
+            <span class="nav-icon">
+              {% if item.icon %}
+              <span style="font-size: 14px;">{{ item.icon }}</span>
+              {% elif item.has_children %}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 7.5A1.5 1.5 0 0 1 4.5 6H10l1.5 2H19.5A1.5 1.5 0 0 1 21 9.5v7A1.5 1.5 0 0 1 19.5 18h-15A1.5 1.5 0 0 1 3 16.5z"></path>
+              </svg>
+              {% else %}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+              {% endif %}
+            </span>
+            <span class="nav-label">{{ item.name }}</span>
+          </a>
+          {% if not forloop.last %}
+          <span class="item-split" aria-hidden="true">/</span>
+          {% endif %}
+          {% endfor %}
+        </nav>
       </div>
     </div>
 
@@ -107,134 +135,12 @@
 {# Mobile overlay backdrop for the side panel #}
 <div class="wiki-mobile-overlay" id="wiki-mobile-overlay" aria-hidden="true"></div>
 
-{# Navigation tree data injected by Django as safe JSON #}
-{{ wiki_navigation|json_script:"wiki-nav-data" }}
-
-{# Runtime config shared by the SSR page script #}
-<script>
-  window._wikiSSR = {
-    wikiId: '{{ wiki.id|escapejs }}',
-    publishUrl: '{{ publish_url|escapejs }}'
-  };
-</script>
-
 <script>
 (function () {
   'use strict';
 
   function getElement(id) {
     return document.getElementById(id);
-  }
-
-  // Runtime config injected by Django. Keep this as the only source of truth
-  // for publish URL data used to build navigation links.
-  var ssrConfig = window._wikiSSR || {};
-  var publishUrl = ssrConfig.publishUrl || '';
-
-  // Read the server-provided navigation tree exactly once.
-  function parseNavigationData() {
-    try {
-      var navEl = getElement('wiki-nav-data');
-      return navEl ? JSON.parse(navEl.textContent || '[]') : [];
-    } catch (e) {
-      return [];
-    }
-  }
-
-  // Extract the current page ID from the publish URL.
-  // Expected path: /wiki/publish/{publishUrl}/{pageId}/
-  function getCurrentPageIdFromLocation() {
-    var pathParts = window.location.pathname.replace(/\/$/, '').split('/').filter(Boolean);
-    var pageId = pathParts[pathParts.length - 1] || '';
-    return pageId.length === 4 ? pageId : null;
-  }
-
-  var navData = parseNavigationData();
-  var currentPageId = getCurrentPageIdFromLocation();
-
-  /**
-   * Construct a page URL entirely from trusted, statically-known components:
-   *   - the literal string '/wiki/publish/'
-   *   - publishUrl  → comes from window._wikiSSR (Django escapejs, not DOM text)
-   *   - pageId      → a 4-char alphanumeric ID from navData JSON
-   * Neither component is read from DOM text, so no taint flows to .href.
-   */
-  function pageUrl(id) {
-    return '/wiki/publish/' + encodeURIComponent(publishUrl) + '/' + encodeURIComponent(id) + '/';
-  }
-
-  function hasChildren(node) {
-    return !!(node.children && node.children.length);
-  }
-
-  // Return the full ancestor chain for the selected page.
-  function findPath(items, targetId) {
-    for (var i = 0; i < items.length; i++) {
-      if (items[i].id === targetId) return [items[i]];
-      var sub = findPath(items[i].children || [], targetId);
-      if (sub.length) return [items[i]].concat(sub);
-    }
-    return [];
-  }
-
-  // Track expanded nodes in-memory. We pre-expand every ancestor of the
-  // current page so the selected page is visible on first render.
-  var expandedIds = {};
-  findPath(navData, currentPageId).slice(0, -1).forEach(function (n) {
-    expandedIds[n.id] = true;
-  });
-
-  // Build SVG nodes with DOM APIs only. This keeps the template free from
-  // innerHTML string assembly and makes icon rendering easier to follow.
-  var SVG_NS = 'http://www.w3.org/2000/svg';
-
-  function makeSvg(attrs, children) {
-    var svg = document.createElementNS(SVG_NS, 'svg');
-    Object.keys(attrs).forEach(function (k) { svg.setAttribute(k, attrs[k]); });
-    children.forEach(function (c) {
-      var el = document.createElementNS(SVG_NS, c.tag);
-      Object.keys(c).forEach(function (k) { if (k !== 'tag') el.setAttribute(k, c[k]); });
-      svg.appendChild(el);
-    });
-    return svg;
-  }
-
-  function makeFileIcon() {
-    return makeSvg(
-      { viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': '1.5', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' },
-      [{ tag: 'path', d: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z' },
-       { tag: 'polyline', points: '14 2 14 8 20 8' }]
-    );
-  }
-
-  function makeFolderIcon() {
-    return makeSvg(
-      { viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': '1.5', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' },
-      [
-        { tag: 'path', d: 'M3 7.5A1.5 1.5 0 0 1 4.5 6H10l1.5 2H19.5A1.5 1.5 0 0 1 21 9.5v7A1.5 1.5 0 0 1 19.5 18h-15A1.5 1.5 0 0 1 3 16.5z' }
-      ]
-    );
-  }
-
-  function makeArrowIcon() {
-    return makeSvg(
-      { viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': '2.5', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' },
-      [{ tag: 'polyline', points: '9 18 15 12 9 6' }]
-    );
-  }
-
-  // Render a custom emoji/icon when present. Otherwise fall back to the
-  // built-in file or folder glyph based on whether the node has children.
-  function makeIconSpan(icon, cls, hasChildren) {
-    var el = document.createElement('span');
-    el.className = cls;
-    if (icon && icon.trim()) {
-      el.style.fontSize = '14px';
-      el.textContent = icon;
-    } else {
-      el.appendChild(hasChildren ? makeFolderIcon() : makeFileIcon());
-    }
-    return el;
   }
 
   function setChildrenExpanded(childrenEl, expanded) {
@@ -259,149 +165,47 @@
     childrenEl.style.height = '0';
   }
 
-  // Create the expand/collapse control for a parent node.
-  function createToggleControl(node, li, childrenEl, expanded) {
-    var toggle = document.createElement('div');
-    toggle.className = 'wiki-nav-item-icon';
-    toggle.setAttribute('tabindex', '0');
-    toggle.setAttribute('role', 'button');
-    toggle.appendChild(makeArrowIcon());
+  var navToggles = document.querySelectorAll('.wiki-nav-item-icon');
 
-    if (expanded) {
-      toggle.classList.add('expanded');
+  function toggleNavSection(toggle) {
+    var wrapper = toggle.closest('.wiki-page-item-wrapper');
+    if (!wrapper) return;
+
+    var childrenEl = null;
+    for (var i = 0; i < wrapper.children.length; i++) {
+      if (wrapper.children[i].classList && wrapper.children[i].classList.contains('wiki-nav-children')) {
+        childrenEl = wrapper.children[i];
+        break;
+      }
     }
+    if (!childrenEl) return;
 
+    var open = !toggle.classList.contains('expanded');
+    wrapper.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.classList.toggle('expanded', open);
+    setChildrenExpanded(childrenEl, open);
+  }
+
+  navToggles.forEach(function (toggle) {
     toggle.addEventListener('click', function (e) {
       e.preventDefault();
       e.stopPropagation();
-
-      var open = !expandedIds[node.id];
-      expandedIds[node.id] = open;
-      li.setAttribute('aria-expanded', String(open));
-      toggle.classList.toggle('expanded', open);
-      setChildrenExpanded(childrenEl, open);
+      toggleNavSection(toggle);
     });
 
-    return toggle;
-  }
-
-  // Create the nested <ul> that holds a node's child pages.
-  function createChildrenContainer(node, depth, expanded) {
-    var childrenEl = document.createElement('ul');
-    childrenEl.className = 'wiki-nav-children' + (expanded ? '' : ' collapsed');
-    childrenEl.setAttribute('role', 'group');
-    childrenEl.style.height = expanded ? 'auto' : '0';
-
-    node.children.forEach(function (child) {
-      childrenEl.appendChild(createNavItem(child, depth + 1));
+    toggle.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault();
+      e.stopPropagation();
+      toggleNavSection(toggle);
     });
+  });
 
-    return childrenEl;
-  }
-
-  // Create the clickable content area inside a single nav row.
-  function createPageContent(node, depth, li, childrenEl, nodeHasChildren, expanded) {
-    var content = document.createElement('div');
-    content.className = 'wiki-page-content';
-
-    if (depth > 0) {
-      content.style.marginLeft = (depth * 24) + 'px';
-    }
-
-    if (nodeHasChildren) {
-      content.appendChild(createToggleControl(node, li, childrenEl, expanded));
-    }
-
-    content.appendChild(makeIconSpan(node.icon, 'nav-item-icon', nodeHasChildren));
-
-    var label = document.createElement('span');
-    label.className = 'wiki-page-title text-truncate';
-    label.textContent = node.name || '';
-    content.appendChild(label);
-
-    return content;
-  }
-
-  // Create a single navigation row, plus its subtree when children exist.
-  function createNavItem(node, depth) {
-    var nodeHasChildren = hasChildren(node);
-    var isActive = node.id === currentPageId;
-    var expanded = !!expandedIds[node.id];
-
-    var li = document.createElement('li');
-    li.className = 'wiki-page-item-wrapper';
-    li.setAttribute('role', 'treeitem');
-    li.setAttribute('aria-expanded', nodeHasChildren ? String(expanded) : 'false');
-
-    var row = document.createElement('div');
-    row.className = 'wiki-page-item readonly' + (isActive ? ' selected-page' : '')
-                  + (depth > 0 ? ' indent-' + Math.min(depth, 5) : '');
-
-    var childrenEl = null;
-    if (nodeHasChildren) {
-      childrenEl = createChildrenContainer(node, depth, expanded);
-    }
-
-    // Build the row as a link so the whole title area behaves like the regular
-    // wiki navigation, while the expand arrow remains a separate control.
-    var link = document.createElement('a');
-    link.className = 'wiki-page-item-main';
-    link.href = pageUrl(node.id);
-    link.setAttribute('aria-current', isActive ? 'page' : 'false');
-    link.setAttribute('title', node.name || '');
-    link.appendChild(createPageContent(node, depth, li, childrenEl, nodeHasChildren, expanded));
-
-    row.appendChild(link);
-    li.appendChild(row);
-    if (childrenEl) li.appendChild(childrenEl);
-    return li;
-  }
-
-  // Render the entire left-hand tree from the server-provided navigation data.
-  function renderNavTree() {
-    var treeEl = getElement('wiki-nav-tree');
-    if (!treeEl) return;
-
-    treeEl.innerHTML = '';
-    navData.forEach(function (node) {
-      treeEl.appendChild(createNavItem(node, 0));
-    });
-
-    var active = treeEl.querySelector('.selected-page');
-    if (active) {
-      requestAnimationFrame(function () {
-        active.scrollIntoView({ block: 'nearest' });
-      });
-    }
-  }
-
-  // Render the breadcrumb from the same navigation path used by the side tree.
-  function renderBreadcrumb() {
-    var bcEl = getElement('wiki-breadcrumb');
-    if (!bcEl || !currentPageId) return;
-
-    var path = findPath(navData, currentPageId);
-    path.forEach(function (node, idx) {
-      var a = document.createElement('a');
-      a.className = 'wiki2-top-nav-item';
-      a.href = pageUrl(node.id);
-      if (idx === path.length - 1) a.setAttribute('aria-current', 'page');
-      a.setAttribute('title', node.name || '');
-      a.appendChild(makeIconSpan(node.icon, 'nav-icon', hasChildren(node)));
-
-      var lbl = document.createElement('span');
-      lbl.className = 'nav-label';
-      lbl.textContent = node.name || '';
-      a.appendChild(lbl);
-      bcEl.appendChild(a);
-
-      if (idx < path.length - 1) {
-        var sep = document.createElement('span');
-        sep.className = 'item-split';
-        sep.setAttribute('aria-hidden', 'true');
-        sep.textContent = '/';
-        bcEl.appendChild(sep);
-      }
+  var active = document.querySelector('#wiki-nav-tree .selected-page');
+  if (active) {
+    requestAnimationFrame(function () {
+      active.scrollIntoView({ block: 'nearest' });
     });
   }
 
@@ -487,11 +291,6 @@
   }
 
   window.addEventListener('popstate', reloadCurrentPage);
-
-  // Initial render order matters: build the side tree first, then derive the
-  // breadcrumb from the same data so both views stay consistent.
-  renderNavTree();
-  renderBreadcrumb();
 
 })();
 </script>
