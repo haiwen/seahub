@@ -4,7 +4,6 @@ import logging
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.deprecation import MiddlewareMixin
 from django.shortcuts import render
 
 from seahub import auth
@@ -24,8 +23,11 @@ class LazyUser(object):
         return request._cached_user
 
 
-class AuthenticationMiddleware(MiddlewareMixin):
-    def process_request(self, request):
+class AuthenticationMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
         assert hasattr(
             request, 'session'
         ), "The Django authentication middleware requires session middleware to be installed. Edit your MIDDLEWARE setting to insert 'django.contrib.sessions.middleware.SessionMiddleware'."
@@ -33,11 +35,12 @@ class AuthenticationMiddleware(MiddlewareMixin):
         if request.user.is_authenticated and not request.user.is_active:
             request.session.clear()
             request.session.delete()
-        return None
+
+        response = self.get_response(request)
+        return response
 
 
-# https://docs.djangoproject.com/en/2.2/topics/http/middleware/#upgrading-pre-django-1-10-style-middleware
-class SeafileRemoteUserMiddleware(MiddlewareMixin):
+class SeafileRemoteUserMiddleware:
     """
     Middleware for utilizing Web-server-provided authentication.
 
@@ -69,11 +72,13 @@ class SeafileRemoteUserMiddleware(MiddlewareMixin):
         'sso',
     ])
 
-    def process_request(self, request):
+    def __init__(self, get_response):
+        self.get_response = get_response
 
+    def __call__(self, request):
         protected_paths = [item.strip().strip('/') for item in self.protected_paths]
         if request.path.strip('/') not in protected_paths:
-            return
+            return self.get_response(request)
 
         # AuthenticationMiddleware is required so that request.user exists.
         if not hasattr(request, 'user'):
@@ -94,7 +99,7 @@ class SeafileRemoteUserMiddleware(MiddlewareMixin):
             # AnonymousUser by the AuthenticationMiddleware).
             if self.force_logout_if_no_header and request.user.is_authenticated:
                 self._remove_invalid_user(request)
-            return
+            return self.get_response(request)
 
         if self.remote_user_domain:
             username = username.split('@')[0] + '@' + self.remote_user_domain
@@ -103,27 +108,24 @@ class SeafileRemoteUserMiddleware(MiddlewareMixin):
         # getting passed in the headers, then the correct user is already
         # persisted in the session and we don't need to continue.
         if request.user.is_authenticated:
-            if request.user.get_username() == self.clean_username(
-                    username, request):
+            if request.user.get_username() == self.clean_username(username, request):
                 if request.user.is_staff:
                     update_sudo_mode_ts(request)
                 # add a mark to generate api token and set cookie
                 request.remote_user_authentication = True
-                return
             else:
                 # An authenticated user is associated with the request, but
                 # it does not match the authorized user in the header.
                 self._remove_invalid_user(request)
+        else:
+            # We are seeing this user for the first time in this session, attempt
+            # to authenticate the user.
+            user = auth.authenticate(request=request, remote_user=username)
+            if not user:
+                if not getattr(settings, 'REMOTE_USER_CREATE_UNKNOWN_USER', True):
+                    return render(request, 'remote_user/create_unknown_user_false.html')
+                return render(request, 'remote_user/error.html')
 
-        # We are seeing this user for the first time in this session, attempt
-        # to authenticate the user.
-        user = auth.authenticate(request=request, remote_user=username)
-        if not user:
-            if not getattr(settings, 'REMOTE_USER_CREATE_UNKNOWN_USER', True):
-                return render(request, 'remote_user/create_unknown_user_false.html')
-            return render(request, 'remote_user/error.html')
-
-        if user:
             if not user.is_active:
                 return render(request, 'remote_user/not_active.html')
 
@@ -135,7 +137,8 @@ class SeafileRemoteUserMiddleware(MiddlewareMixin):
             # add a mark to generate api token and set cookie
             request.remote_user_authentication = True
 
-    def process_response(self, request, response):
+        response = self.get_response(request)
+
         if getattr(request, 'remote_user_authentication', False):
             self._set_auth_cookie(request, response)
         return response

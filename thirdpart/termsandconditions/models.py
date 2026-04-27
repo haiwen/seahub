@@ -25,6 +25,7 @@ class UserTermsAndConditions(models.Model):
 
     class Meta:
         """Model Meta Information"""
+        app_label = 'termsandconditions'
         get_latest_by = 'date_accepted'
         verbose_name = 'User Terms and Conditions'
         verbose_name_plural = 'User Terms and Conditions'
@@ -45,6 +46,7 @@ class TermsAndConditions(models.Model):
 
     class Meta:
         """Model Meta Information"""
+        app_label = 'termsandconditions'
         ordering = ['-date_active', ]
         get_latest_by = 'date_active'
         verbose_name = 'Terms and Conditions'

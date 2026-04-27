@@ -3,6 +3,7 @@ import pytest
 
 from mock import patch
 from django.conf import settings
+from django.http import HttpResponse
 from django.test import RequestFactory, override_settings
 
 from seahub.base.accounts import User
@@ -28,21 +29,17 @@ SHIBBOLETH_PROVIDER_IDENTIFIER = getattr(settings, 'SHIBBOLETH_PROVIDER_IDENTIFI
 
 class ShibbolethRemoteUserMiddlewareTest(BaseTestCase):
 
-    def get_response(req):
-        from django.http import HttpResponse
-        response = HttpResponse()
-        return response
+    def get_response(self, req):
+        return HttpResponse()
 
     def setUp(self):
         self.remove_user('sampledeveloper@school.edu')
 
         self.middleware = ShibbolethRemoteUserMiddleware(self.get_response)
         self.factory = RequestFactory()
-        # Create an instance of a GET request.
         self.request = self.factory.get('/sso/')
 
         self.request.user = self.user
-        # self.request.user.is_authenticated = lambda: False
         self.request.cloud_mode = False
         self.request.session = self.client.session
 
@@ -54,7 +51,6 @@ class ShibbolethRemoteUserMiddlewareTest(BaseTestCase):
         self.request.META['Shibboleth-displayName'] = 'Sample Developer'
         self.request.META['Shibboleth-affiliation'] = 'employee@school.edu;member@school.edu;faculty@school.edu;staff@school.edu'
 
-        # default settings
         assert getattr(settings, 'SHIB_ACTIVATE_AFTER_CREATION', True) is True
 
     @patch('shibboleth.middleware.SHIB_ATTRIBUTE_MAP', {
@@ -68,13 +64,13 @@ class ShibbolethRemoteUserMiddlewareTest(BaseTestCase):
     def test_can_process(self):
         assert len(Profile.objects.all()) == 0
 
-        # logout first
         from seahub.auth.models import AnonymousUser
         self.request.session.flush()
         self.request.user = AnonymousUser()
 
-        # then login user via thibboleth
-        self.middleware.process_request(self.request)
+        # Authentication now runs via __call__ instead of the old process_request path.
+        self.middleware(self.request)
+
         shib_user = SocialAuthUser.objects.get_by_provider_and_uid(
             SHIBBOLETH_PROVIDER_IDENTIFIER, 'sampledeveloper@school.edu')
         assert self.request.user.username == shib_user.username
@@ -101,13 +97,12 @@ class ShibbolethRemoteUserMiddlewareTest(BaseTestCase):
     def test_can_process_user_role(self):
         assert len(Profile.objects.all()) == 0
 
-        # logout first
         from seahub.auth.models import AnonymousUser
         self.request.session.flush()
         self.request.user = AnonymousUser()
 
-        # then login user via thibboleth
-        self.middleware.process_request(self.request)
+        self.middleware(self.request)
+
         shib_user = SocialAuthUser.objects.get_by_provider_and_uid(
             SHIBBOLETH_PROVIDER_IDENTIFIER, 'sampledeveloper@school.edu')
         assert self.request.user.username == shib_user.username
@@ -120,20 +115,30 @@ class ShibbolethRemoteUserMiddlewareTest(BaseTestCase):
 
     @pytest.mark.skipif(TRAVIS, reason="TODO: this test can only be run seperately due to the url module init in django, we may need to reload url conf: https://gist.github.com/anentropic/9ac47f6518c88fa8d2b0")
     def test_process_inactive_user(self):
-        """Inactive user is created, and no profile is created.
-        """
+        """Inactive user is created, and no profile is created."""
         assert len(Profile.objects.all()) == 0
 
         with self.settings(SHIB_ACTIVATE_AFTER_CREATION=False):
-            # reload our shibboleth.backends module, so it picks up the settings change
             importlib.reload(backends)
 
-            resp = self.middleware.process_request(self.request)
+            # After the refactor, __call__ returns HttpResponseRedirect directly.
+            resp = self.middleware(self.request)
             assert resp.url == '/shib-complete/'
             assert len(Profile.objects.all()) == 0
 
-        # now reload again, so it reverts to original settings
         importlib.reload(backends)
+
+    def test_non_sso_path_passes_through(self):
+        """Pass through without authentication when the request path is not /sso/."""
+        request = self.factory.get('/home/')
+        request.user = self.user
+        request.session = self.client.session
+        request.META = {}
+
+        response = self.middleware(request)
+
+        # get_response is called and authentication is not triggered.
+        assert not getattr(request, 'shib_login', False)
 
     def test_make_profile_for_display_name(self):
         assert len(Profile.objects.all()) == 0
@@ -199,7 +204,6 @@ class ShibbolethRemoteUserMiddlewareTest(BaseTestCase):
         assert obj._get_role_by_affiliation('member@school.edu') == 'staff'
         assert obj._get_role_by_affiliation('student@school.edu') == 'student'
 
-        # test jokers
         assert obj._get_role_by_affiliation('student1@school.edu') == 'student'
         assert obj._get_role_by_affiliation('a@x.edu') == 'aaa'
         assert obj._get_role_by_affiliation('a@x.com') == 'guest'
