@@ -37,7 +37,7 @@ dayjs.extend(relativeTime);
 
 class NoticeItem extends React.Component {
 
-  generatorNoticeInfo() {
+  generateNoticeInfo() {
     let noticeItem = this.props.noticeItem;
     let noticeType = noticeItem.type;
     let detail = noticeItem.detail;
@@ -49,7 +49,7 @@ class NoticeItem extends React.Component {
       let fileName = detail.file_name;
       let fileUrl = siteRoot + 'lib/' + repo_id + '/' + 'file' + detail.file_path;
       // 1. handle translate
-      let notice = gettext('File {file_link} has a new comment form user {author}.');
+      let notice = gettext('File {file_link} has a new comment from user {author}.');
       // 2. handle xss(cross-site scripting)
       notice = notice.replace('{file_link}', `{tagA}${fileName}{/tagA}`);
       notice = notice.replace('{author}', author);
@@ -279,7 +279,7 @@ class NoticeItem extends React.Component {
             notice = gettext('{user} restored file {fileName} in library {libraryName}.');
             break;
           case 'rename':
-            notice = gettext('{user} renamed file {oldFileName} {fileName} in library {libraryName}.');
+            notice = gettext('{user} renamed file {oldFileName} to {fileName} in library {libraryName}.');
             notice = notice.replace('{oldFileName}', Utils.getFileName(old_obj_path_list[0]));
             break;
           case 'move':
@@ -308,7 +308,7 @@ class NoticeItem extends React.Component {
             notice = gettext('{user} restored folder {folderName} in library {libraryName}.');
             break;
           case 'rename':
-            notice = gettext('{user} renamed folder {oldFolderName} {folderName} in library {libraryName}.');
+            notice = gettext('{user} renamed folder {oldFolderName} to {folderName} in library {libraryName}.');
             notice = notice.replace('{oldFolderName}', Utils.getFolderName(old_obj_path_list[0]));
             break;
           case 'move':
@@ -446,7 +446,7 @@ class NoticeItem extends React.Component {
 
   render() {
     let noticeItem = this.props.noticeItem;
-    let { avatar_url, username, notice } = this.generatorNoticeInfo();
+    let { avatar_url, username, notice } = this.generateNoticeInfo();
     if (!avatar_url && !notice) {
       return '';
     }
