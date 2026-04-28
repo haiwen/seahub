@@ -55,6 +55,13 @@ export const exportDocx = (repoID, path, dirent) => {
   window.location.href = exportUrl;
 };
 
+export const exportMarkdown = (repoID, path, dirent) => {
+  const serviceUrl = window.app.config.serviceURL;
+  const filePath = Utils.joinPath(path, dirent.name);
+  const exportUrl = `${serviceUrl}/repo/sdoc_export_to_markdown/${repoID}/?file_path=${encodeURIComponent(filePath)}`;
+  window.location.href = exportUrl;
+};
+
 export const exportSdoc = (repoID, path, dirent) => {
   const serviceUrl = window.app.config.serviceURL;
   const filePath = Utils.joinPath(path, dirent.name);

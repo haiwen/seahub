@@ -17,7 +17,7 @@ from seahub.views import check_folder_permission, validate_owner, get_seadoc_fil
 from seahub.tags.models import FileUUIDMap
 from seahub.seadoc.models import SeadocRevision
 
-from seahub.api2.endpoints.utils import sdoc_export_to_docx
+from seahub.api2.endpoints.utils import sdoc_export_to_docx, sdoc_export_to_md
 from .utils import is_seadoc_revision, get_seadoc_download_link, gen_path_link
 
 
@@ -194,6 +194,51 @@ def sdoc_to_docx(request, repo_id):
     return response
 
 
+@login_required
+def sdoc_to_markdown(request, repo_id):
+
+    # argument check
+    file_path = request.GET.get('file_path')
+    file_path = normalize_file_path(file_path)
+    if not file_path:
+        error_msg = _("File path invalid.")
+        return render_error(request, error_msg)
+
+    # resource check
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        error_msg = _("Library does not exist")
+        return render_error(request, error_msg)
+
+    file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+    if not file_id:
+        error_msg = 'File %s not found.' % file_path
+        return render_error(request, error_msg)
+
+    # permission check
+    if not check_folder_permission(request, repo_id, '/'):
+        error_msg = _("Permission denied.")
+        return render_error(request, error_msg)
+
+    username = request.user.username
+    filename = os.path.basename(file_path)
+    doc_uuid = get_seadoc_file_uuid(repo, file_path)
+    download_token = seafile_api.get_fileserver_access_token(repo_id, file_id,
+                                                             'download', username)
+    download_url = gen_file_get_url(download_token, filename)
+
+    src_type = 'sdoc'
+    dst_type = 'md'
+    resp_with_md_file = sdoc_export_to_md(file_path, doc_uuid,
+                                          download_url, src_type, dst_type)
+
+    response = HttpResponse(content_type='text/markdown; charset=utf-8')
+    new_file_name = quote(f'{filename[:-5]}.md')
+    response['Content-Disposition'] = f'attachment; filename={new_file_name}'
+    response.write(resp_with_md_file.content)
+    return response
+
+
 def sdoc_preview(request, repo_id, file_path):
 
     file_path = normalize_file_path(file_path)
@@ -239,6 +284,5 @@ def sdoc_preview(request, repo_id, file_path):
     }
 
     return render(request, 'sdoc_preview.html', return_dict)
-
 
 

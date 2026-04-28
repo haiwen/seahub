@@ -10,7 +10,7 @@ import toaster from '../toast';
 import { Dirent } from '../../models';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import Icon from '../icon';
-import { lockFile, unlockFile, freezeDocument, exportDocx, exportSdoc, toggleStar, openHistory, openViaClient } from '../../utils/dirent-operations';
+import { lockFile, unlockFile, freezeDocument, exportDocx, exportSdoc, toggleStar, openHistory, openViaClient, exportMarkdown } from '../../utils/dirent-operations';
 import EventBus from '../common/event-bus';
 import { EVENT_BUS_TYPE as TABLE_EVENT_BUS_TYPE } from '@/metadata/constants';
 
@@ -194,6 +194,10 @@ class SelectedDirentsToolbar extends React.Component {
         this.exportDocx(dirent);
         break;
       }
+      case 'Export markdown': {
+        this.exportMarkdown(dirent);
+        break;
+      }
       case 'Export sdoc': {
         this.exportSdoc(dirent);
         break;
@@ -206,6 +210,11 @@ class SelectedDirentsToolbar extends React.Component {
   exportDocx = (dirent) => {
     const { repoID, path } = this.props;
     exportDocx(repoID, path, dirent);
+  };
+
+  exportMarkdown = (dirent) => {
+    const { repoID, path } = this.props;
+    exportMarkdown(repoID, path, dirent);
   };
 
   exportSdoc = (dirent) => {
