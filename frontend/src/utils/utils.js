@@ -718,7 +718,7 @@ export const Utils = {
 
       if (dirent.name.endsWith('.sdoc')) {
         if (Utils.isDesktop()) {
-          let subOpList = [CONVERT_TO_MARKDOWN, CONVERT_TO_DOCX, EXPORT_DOCX, EXPORT_MARKDOWN, EXPORT_SDOC];
+          let subOpList = [CONVERT_TO_MARKDOWN, CONVERT_TO_DOCX, EXPORT_MARKDOWN, EXPORT_DOCX, EXPORT_SDOC];
           list.push({ ...CONVERT_AND_EXPORT, subOpList });
         } else {
           list.push(CONVERT_TO_MARKDOWN);

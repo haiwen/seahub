@@ -137,7 +137,7 @@ const TextTranslation = {
   },
   EXPORT_MARKDOWN: {
     key: 'Export markdown',
-    value: gettext('Export as markdown')
+    value: gettext('Export as Markdown')
   },
   HISTORY: {
     key: 'History',
