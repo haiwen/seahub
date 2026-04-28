@@ -51,3 +51,27 @@ ALTER TABLE `organizations_orgsettings` ADD COLUMN `monthly_traffic_limit` bigin
 ALTER TABLE `share_uploadlinkshare` ADD COLUMN `description` LONGTEXT NOT NULL DEFAULT '';
 
 ALTER TABLE `share_fileshare` ADD COLUMN `description` LONGTEXT NOT NULL DEFAULT '';
+
+DROP INDEX IF EXISTS `sdoc_revision_repo_id` ON `sdoc_revision`;
+DROP INDEX IF EXISTS `ix_wiki2_publish_repo_id` ON `wiki_wiki2_publish`;
+DROP INDEX IF EXISTS `ix_org_last_active_time_org_id` ON `org_last_active_time`;
+DROP INDEX IF EXISTS `ix_repo_extra_repo_id` ON `repo_extra_config`;
+DROP INDEX IF EXISTS `ix_stats_ai_by_team_org_id_month` ON `stats_ai_by_team`;
+DROP INDEX IF EXISTS `ix_stats_ai_by_owner_username_month` ON `stats_ai_by_owner`;
+DROP INDEX IF EXISTS `sdoc_operation_log_doc_uuid` ON `sdoc_operation_log`;
+DROP INDEX IF EXISTS `base_usermonitoredrepos_email_55ead1b9` ON `base_usermonitoredrepos`;
+DROP INDEX IF EXISTS `history_name_doc_uuid` ON `history_name`;
+DROP INDEX IF EXISTS `organizations_orgadminsettings_org_id_4f70d186` ON `organizations_orgadminsettings`;
+DROP INDEX IF EXISTS `key_repo_metadata_face_recognition_enabled` ON `repo_metadata`;
+
+ALTER TABLE `FileTrash` ADD INDEX `idx_filetrash_repo_delete_time` (`repo_id`, `delete_time`);
+ALTER TABLE `FileTrash` ADD INDEX `idx_filetrash_delete_time` (`delete_time`);
+DROP INDEX IF EXISTS `ix_FileTrash_repo_id` ON `FileTrash`;
+
+DROP INDEX IF EXISTS `share_fileshare_s_type_724eb6c1` ON `share_fileshare`;
+DROP INDEX IF EXISTS `share_fileshare_permission_d12c353f` ON `share_fileshare`;
+
+DROP INDEX IF EXISTS `notifications_usernotification_to_user_6cadafa1` ON `notifications_usernotification`;
+
+ALTER TABLE notifications_usernotification
+ADD INDEX idx_usernotification_user_seen (to_user, seen);
