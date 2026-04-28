@@ -303,10 +303,11 @@ class WikiAPI {
     });
   }
 
-  publishWiki(wikiId, publish_url) {
+  publishWiki(wikiId, publish_url, enable_server_render = false) {
     const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/publish/';
     let form = new FormData();
     form.append('publish_url', publish_url);
+    form.append('enable_server_render', enable_server_render ? 'true' : 'false');
     return this._sendPostRequest(url, form);
   }
 

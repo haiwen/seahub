@@ -119,22 +119,34 @@ class Wikis2View(APIView):
             user_groups = ccnet_api.get_org_groups_by_user(org_id, username, return_ancestors=True)
         else:
             user_groups = ccnet_api.get_groups(username, return_ancestors=True)
+
         owned_wikis = [r for r in owned if is_wiki_repo(r)]
         shared_wikis = [r for r in shared if is_wiki_repo(r)]
         group_wikis = [r for r in groups if is_wiki_repo(r)]
+
         wiki_ids = [w.repo_id for w in owned_wikis + shared_wikis + group_wikis]
         link_prefix = get_service_url().rstrip('/') + '/wiki/publish/'
+
         publish_wikis_dict = {}
+        server_render_wikis_dict = {}
+
         published_wikis = Wiki2Publish.objects.filter(repo_id__in=wiki_ids)
         for w in published_wikis:
             publish_wikis_dict[w.repo_id] = w.publish_url
+            server_render_wikis_dict[w.repo_id] = w.enable_server_render
+
         wiki_list = []
         for r in owned_wikis:
+
             r.owner = username
             r.permission = 'rw'
+
             wiki = Wiki(r)
             wiki_info = wiki.to_dict()
+
             is_published = True if publish_wikis_dict.get(r.id) else False
+            enable_server_render = True if is_published and server_render_wikis_dict.get(r.id) else False
+
             public_url_suffix = publish_wikis_dict.get(r.id) if is_published else ""
             link = link_prefix + public_url_suffix if public_url_suffix else ""
             repo_info = {
@@ -143,8 +155,10 @@ class Wikis2View(APIView):
                     "owner_nickname": email2nickname(username),
                     "public_url_suffix": public_url_suffix,
                     "public_url": link,
-                    "is_published": is_published
+                    "is_published": is_published,
+                    "enable_server_render": enable_server_render
                 }
+
             wiki_info.update(repo_info)
             wiki_list.append(wiki_info)
 
@@ -1378,16 +1392,19 @@ class Wiki2PublishView(APIView):
             creator = publish_config.username
             created_at = publish_config.created_at
             visit_count = publish_config.visit_count
+            enable_server_render = publish_config.enable_server_render
         except Wiki2Publish.DoesNotExist:
             publish_url = ''
             creator = ''
             created_at = ''
             visit_count = 0
+            enable_server_render = False
         publish_info = {
             'publish_url': publish_url,
             'creator': creator,
             'created_at': created_at,
-            'visit_count': visit_count
+            'visit_count': visit_count,
+            'enable_server_render': enable_server_render,
         }
         return Response(publish_info)
 
@@ -1422,21 +1439,41 @@ class Wiki2PublishView(APIView):
         if not check_wiki_admin_permission(wiki, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        enable_server_render_str = request.data.get('enable_server_render', 'false')
+        enable_server_render = to_python_boolean(enable_server_render_str) \
+            if enable_server_render_str in ('true', 'false') else False
+
         wiki_pub = Wiki2Publish.objects.filter(publish_url=publish_url).first()
         if wiki_pub:
             if wiki_pub.repo_id != wiki_id:
                 error_msg = _('This custom domain is already in use and cannot be used for your wiki')
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-            return Response({"publish_url": publish_url})
+
+            wiki_pub.enable_server_render = enable_server_render
+            wiki_pub.save()
+            return Response({
+                "publish_url": publish_url,
+                "enable_server_render": wiki_pub.enable_server_render,
+            })
 
         wiki_publish = Wiki2Publish.objects.filter(repo_id=wiki.repo_id).first()
         if not wiki_publish:
-            wiki_publish = Wiki2Publish(repo_id=wiki.repo_id, username=username, publish_url=publish_url)
+            wiki_publish = Wiki2Publish(
+                repo_id=wiki.repo_id,
+                username=username,
+                publish_url=publish_url,
+                enable_server_render=enable_server_render,
+            )
         else:
             wiki_publish.publish_url = publish_url
+            wiki_publish.enable_server_render = enable_server_render
         wiki_publish.save()
 
-        return Response({"publish_url": publish_url})
+        return Response({
+            "publish_url": publish_url,
+            "enable_server_render": wiki_publish.enable_server_render,
+        })
 
     def delete(self, request, wiki_id):
         wiki = Wiki.objects.get(wiki_id=wiki_id)

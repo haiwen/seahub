@@ -1,10 +1,12 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
+import json
 import logging
 import posixpath
-import json
 from datetime import datetime
 
+import bleach
+from bleach.css_sanitizer import CSSSanitizer
 from constance import config
 from seaserv import seafile_api
 
@@ -12,20 +14,50 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from seahub.api2.endpoints.repos import ReposView
 from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki2.models import Wiki2Publish, WikiFileViews, Wiki2Settings
 from seahub.utils import get_file_type_and_ext, render_permission_error
 from seahub.utils.file_types import SEADOC
 from seahub.auth.decorators import login_required
 from seahub.wiki2.utils import check_wiki_permission, get_wiki_config
-
+from seahub.views import get_seadoc_file_uuid
+from seahub.utils import gen_file_get_url
 from seahub.utils.repo import get_repo_owner, is_repo_admin, list_user_admin_reops
-from seahub.settings import SEADOC_SERVER_URL, SITE_ROOT
+from seahub.settings import SEADOC_SERVER_URL
 from seahub.seadoc.utils import gen_seadoc_access_token
+from seahub.api2.endpoints.utils import sdoc_export_to_html
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+SDOC_HTML_TAGS = {
+    'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'b', 'i', 'strong', 'em', 'tt', 'u', 's',
+    'p', 'pre', 'br',
+    'span', 'div', 'blockquote', 'code', 'hr',
+    'ul', 'ol', 'li', 'dd', 'dt',
+    'img', 'a', 'sub', 'sup',
+    'table', 'colgroup', 'col', 'thead', 'tbody', 'tr', 'th', 'td',
+    'input',
+}
+
+SDOC_HTML_ATTRS = {
+    '*': ['id', 'class', 'width', 'height', 'style'],
+    'img': ['src', 'alt', 'title'],
+    'a': ['href', 'alt', 'title'],
+    'input': ['type', 'disabled', 'checked'],
+    'span': ['data-username'],
+}
+
+SDOC_HTML_CSS_SANITIZER = CSSSanitizer(allowed_css_properties=[
+    'width',
+    'height',
+    'background-color',
+    'text-align',
+    'font-size',
+    'font-family',
+    'color',
+])
 
 
 @login_required
@@ -175,7 +207,8 @@ def wiki_publish_view(request, publish_url, page_id=None):
     except Exception as e:
         logger.warning(e)
 
-    return render(request, "wiki/wiki_publish.html", {
+    template_name = 'wiki/wiki_publish.html'
+    render_context = {
         "wiki": wiki,
         "file_path": file_path,
         "repo_name": repo.name if repo else '',
@@ -183,8 +216,147 @@ def wiki_publish_view(request, publish_url, page_id=None):
         "modify_time": last_modified,
         "seadoc_server_url": SEADOC_SERVER_URL,
         "permission": 'public',
-        "publish_url": publish_url
-    })
+        "publish_url": publish_url,
+    }
+
+    if not wiki_publish.enable_server_render:
+        return render(request, template_name, render_context)
+
+    # ------------------------------------------------------------------
+    # SEO: server-side rendering of sdoc → HTML
+    # When enable_server_render is True, convert the .sdoc file to HTML
+    # in Python before responding, so search-engine crawlers can index
+    # the page content without executing JavaScript.
+    # ------------------------------------------------------------------
+
+    try:
+        wiki_config = get_wiki_config(wiki.repo_id, '')
+        pages = wiki_config.get('pages', [])
+        if not pages:
+            return render(request, template_name, render_context)
+
+        if not page_id:
+            page_id = pages[0]['id']
+
+        page_info = next(filter(lambda t: t['id'] == page_id, pages), {})
+        if not page_info:
+            page_id = pages[0]['id']
+            page_info = pages[0]
+
+        file_path = page_info.get('path', '')
+
+        wiki_file_name = os.path.basename(file_path)
+        wiki_title = os.path.splitext(wiki_file_name)[0]
+        page_map = {page['id']: page for page in pages}
+
+        def find_navigation_path(items, target_id):
+            for nav_item in items:
+                if nav_item.get('id') == target_id:
+                    return [nav_item]
+
+                children = nav_item.get('children') or []
+                child_path = find_navigation_path(children, target_id)
+                if child_path:
+                    return [nav_item] + child_path
+
+            return []
+
+        navigation = wiki_config.get('navigation', [])
+        current_path = find_navigation_path(navigation, page_id)
+        current_path_ids = {item.get('id') for item in current_path}
+
+        def normalize_navigation_item(item, depth=0):
+            page = page_map.get(item.get('id'))
+            if not page:
+                return None
+
+            children = []
+            for child in item.get('children', []) or []:
+                normalized_child = normalize_navigation_item(child, depth + 1)
+                if normalized_child:
+                    children.append(normalized_child)
+
+            has_children = bool(children)
+            normalized_item = {
+                'id': item['id'],
+                'type': item.get('type', 'page'),
+                'name': page.get('name', ''),
+                'icon': page.get('icon', ''),
+                'path': page.get('path', ''),
+                'locked': page.get('locked', False),
+                'url': f"/wiki/publish/{publish_url}/{item['id']}/",
+                'depth': depth,
+                'has_children': has_children,
+                'is_current': item['id'] == page_id,
+                'is_expanded': item['id'] in current_path_ids and item['id'] != page_id,
+            }
+
+            if has_children or 'children' in item:
+                normalized_item['children'] = children
+
+            return normalized_item
+
+        wiki_navigation = [
+            item for item in
+            (normalize_navigation_item(nav_item) for nav_item in navigation)
+            if item
+        ]
+
+        wiki_breadcrumb = []
+        for breadcrumb_item in current_path:
+            page = page_map.get(breadcrumb_item.get('id'))
+            if not page:
+                continue
+
+            wiki_breadcrumb.append({
+                'id': breadcrumb_item['id'],
+                'name': page.get('name', ''),
+                'icon': page.get('icon', ''),
+                'url': f"/wiki/publish/{publish_url}/{breadcrumb_item['id']}/",
+                'has_children': bool(breadcrumb_item.get('children')),
+            })
+
+        file_id = seafile_api.get_file_id_by_path(wiki_id, file_path)
+        download_token = seafile_api.get_fileserver_access_token(wiki_id,
+                                                                 file_id,
+                                                                 'download',
+                                                                 '',
+                                                                 use_onetime=False)
+        src_type = 'sdoc'
+        dst_type = 'html'
+        filename = os.path.basename(file_path)
+        doc_uuid = get_seadoc_file_uuid(repo, file_path)
+        download_url = gen_file_get_url(download_token, filename)
+        html_resp = sdoc_export_to_html(file_path, '', doc_uuid,
+                                        download_url, src_type, dst_type)
+        if not html_resp.ok:
+            raise ValueError('converter returned non-success status {}'.format(html_resp.status_code))
+
+        # Public wiki content is rendered as safe HTML only after a second,
+        # local bleach pass. This keeps the template contract explicit even
+        # though the upstream converter already returns HTML.
+        wiki_html = html_resp.content.decode('utf-8')
+        wiki_html = bleach.clean(
+            wiki_html,
+            tags=SDOC_HTML_TAGS,
+            attributes=SDOC_HTML_ATTRS,
+            css_sanitizer=SDOC_HTML_CSS_SANITIZER,
+            strip=True,
+        )
+
+        template_name = 'wiki/wiki_publish_ssr.html'
+        render_context.update({
+            "wiki_repo_name": wiki.name,
+            "wiki_title": wiki_title,
+            "wiki_html": wiki_html,
+            "wiki_navigation": wiki_navigation,
+            "wiki_breadcrumb": wiki_breadcrumb,
+        })
+        return render(request, template_name, render_context)
+    except Exception as e:
+        logger.warning('SSR fallback for published wiki %s: %s', wiki_id, e)
+        return render(request, template_name, render_context)
+
 
 def wiki_history_view(request, wiki_id):
     """ view wiki history page. for wiki2
