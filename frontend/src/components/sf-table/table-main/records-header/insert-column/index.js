@@ -11,9 +11,9 @@ import { ValidateColumnFormFields } from '@/metadata/components/popover/column-p
 import { COMMON_FORM_FIELD_TYPE } from '@/metadata/components/popover/column-popover/constants';
 import toaster from '@/components/toast';
 import { getColumnDisplayName } from '@/metadata/utils/column';
+import SfTooltip from '@/components/tooltip';
 
 import './index.css';
-import SfTooltip from '@/components/tooltip';
 
 const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: insertColumnAPI }) => {
   const [isColumnMenuOpen, setColumnMenuOpen] = useState(false);

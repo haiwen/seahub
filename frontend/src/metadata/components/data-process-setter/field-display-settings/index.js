@@ -7,9 +7,9 @@ import FieldItem from './field-item';
 import { gettext } from '@/utils/constants';
 import Icon from '../../../../components/icon';
 import { Utils } from '../../../../utils/utils';
+import SfTooltip from '@/components/tooltip';
 
 import './index.css';
-import SfTooltip from '@/components/tooltip';
 
 const FIELD_ITEM_HEIGHT = 30;
 const BANNER_HEIGHT = 24;

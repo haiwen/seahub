@@ -5,9 +5,9 @@ import Icon from '../../../../components/icon';
 import { gettext } from '../../../../utils/constants';
 import { EVENT_BUS_TYPE, GALLERY_ZOOM_GEAR_MIN, GALLERY_ZOOM_GEAR_MAX, STORAGE_GALLERY_ZOOM_GEAR_KEY } from '../../../constants';
 import { Utils } from '../../../../utils/utils';
+import SfTooltip from '@/components/tooltip';
 
 import './index.css';
-import SfTooltip from '@/components/tooltip';
 
 const GallerySliderSetter = ({ viewID }) => {
   const [sliderValue, setSliderValue] = useState(() => {
