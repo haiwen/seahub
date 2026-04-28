@@ -610,7 +610,7 @@ def user_add(request):
                     messages.success(request, _('Successfully added user %s. An email notification has been sent.') % email)
                 except Exception as e:
                     logger.error(str(e))
-                    messages.success(request, _('Successfully added user %s. An error accurs when sending email notification, please check your email configuration.') % email)
+                    messages.success(request, _('Successfully added user %s. An error occurs when sending email notification, please check your email configuration.') % email)
             else:
                 messages.success(request, _('Successfully added user %s.') % email)
 
@@ -623,7 +623,7 @@ def user_add(request):
                         messages.success(request, _('Successfully added user %s. An email notification has been sent.') % email)
                     except Exception as e:
                         logger.error(str(e))
-                        messages.success(request, _('Successfully added user %s. An error accurs when sending email notification, please check your email configuration.') % email)
+                        messages.success(request, _('Successfully added user %s. An error occurs when sending email notification, please check your email configuration.') % email)
                 else:
                     messages.success(request, _('Successfully added user %s.') % email)
             else:
