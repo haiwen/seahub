@@ -51,7 +51,7 @@ class PublishWikiDialog extends React.Component {
 
   handleServerRenderToggle = (e) => {
     this.setState({
-      isSubmitBtnActive: !!e.target.value.trim(),
+      isSubmitBtnActive: !!this.state.url.trim(),
       enableServerRender: e.target.checked
     });
   };

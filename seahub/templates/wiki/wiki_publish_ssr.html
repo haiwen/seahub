@@ -165,7 +165,7 @@
     childrenEl.style.height = '0';
   }
 
-  var navToggles = document.querySelectorAll('.wiki-nav-item-icon');
+  var navToggles = document.querySelectorAll('button.wiki-nav-item-icon');
 
   function toggleNavSection(toggle) {
     var wrapper = toggle.closest('.wiki-page-item-wrapper');
@@ -189,8 +189,6 @@
 
   navToggles.forEach(function (toggle) {
     toggle.addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
       toggleNavSection(toggle);
     });
 
