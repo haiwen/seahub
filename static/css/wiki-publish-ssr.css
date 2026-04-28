@@ -133,6 +133,7 @@ html, body {
   text-decoration: none;
   color: inherit;
   box-sizing: border-box;
+  gap: 0;
 }
 
 .wiki-page-item:hover {
@@ -190,11 +191,24 @@ html, body {
   font-size: 12px;
   border-radius: 3px;
   flex-shrink: 0;
+  border: none;
+  background: transparent;
+  padding: 0;
 }
 
 .wiki-nav-item-icon:hover {
   background-color: #e5e5e5;
   cursor: pointer;
+}
+
+.wiki-nav-item-icon:focus-visible {
+  outline: 2px solid #57a5ff;
+  outline-offset: 1px;
+}
+
+.wiki-nav-item-icon-placeholder:hover {
+  background-color: transparent;
+  cursor: default;
 }
 
 .wiki-nav-item-icon svg {
@@ -225,7 +239,7 @@ html, body {
   margin-left: 22px;
 }
 
-.wiki-page-content:has(.wiki-nav-item-icon) .nav-item-icon {
+.wiki-page-item > .wiki-nav-item-icon + .wiki-page-item-main .nav-item-icon {
   margin-left: 0;
 }
 

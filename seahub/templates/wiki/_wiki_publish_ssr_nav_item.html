@@ -1,19 +1,21 @@
 {% load i18n %}
 <li class="wiki-page-item-wrapper" role="treeitem" aria-expanded="{% if item.has_children %}{% if item.is_expanded %}true{% else %}false{% endif %}{% else %}false{% endif %}">
   <div class="wiki-page-item readonly{% if item.is_current %} selected-page{% endif %}">
+    {% if item.has_children %}
+    <button type="button" class="wiki-nav-item-icon{% if item.is_expanded %} expanded{% endif %}" aria-label="{% trans 'Toggle navigation section' %}" aria-expanded="{% if item.is_expanded %}true{% else %}false{% endif %}"{% if item.depth > 0 %} style="margin-left: {% widthratio item.depth 1 24 %}px;"{% endif %}>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+    {% else %}
+    <span class="wiki-nav-item-icon wiki-nav-item-icon-placeholder" aria-hidden="true"{% if item.depth > 0 %} style="margin-left: {% widthratio item.depth 1 24 %}px;"{% endif %}></span>
+    {% endif %}
+
     <a class="wiki-page-item-main"
        href="{{ item.url }}"
        {% if item.is_current %}aria-current="page"{% else %}aria-current="false"{% endif %}
        title="{{ item.name }}">
-      <div class="wiki-page-content"{% if item.depth > 0 %} style="margin-left: {% widthratio item.depth 1 24 %}px;"{% endif %}>
-        {% if item.has_children %}
-        <div class="wiki-nav-item-icon{% if item.is_expanded %} expanded{% endif %}" tabindex="0" role="button" aria-label="{% trans 'Toggle navigation section' %}" aria-expanded="{% if item.is_expanded %}true{% else %}false{% endif %}">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </div>
-        {% endif %}
-
+      <div class="wiki-page-content">
         <span class="nav-item-icon">
           {% if item.icon %}
           <span style="font-size: 14px;">{{ item.icon }}</span>
