@@ -21,7 +21,7 @@ class SeadocHistoryNameManager(models.Manager):
 
 
 class SeadocHistoryName(models.Model):
-    doc_uuid = models.CharField(max_length=36, db_index=True)
+    doc_uuid = models.CharField(max_length=36)
     obj_id = models.CharField(max_length=40)
     name = models.CharField(max_length=255)
 
@@ -145,7 +145,7 @@ class SeadocRevision(models.Model):
     """
     doc_uuid = models.CharField(max_length=36, unique=True)
     origin_doc_uuid = models.CharField(max_length=36, db_index=True)
-    repo_id = models.CharField(max_length=36, db_index=True)
+    repo_id = models.CharField(max_length=36)
     revision_id = models.IntegerField()  # revision_id in repo
     origin_doc_path = models.TextField()  # used when origin file deleted
     username = models.CharField(max_length=255, db_index=True)
