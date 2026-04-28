@@ -575,9 +575,9 @@ CREATE TABLE `notifications_usernotification` (
   `timestamp` datetime NOT NULL,
   `seen` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `notifications_usernotification_to_user_6cadafa1` (`to_user`),
   KEY `notifications_usernotification_msg_type_985afd02` (`msg_type`),
-  KEY `notifications_usernotification_timestamp_125067e8` (`timestamp`)
+  KEY `notifications_usernotification_timestamp_125067e8` (`timestamp`),
+  KEY `idx_usernotification_user_seen` (`to_user`, `seen`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -618,6 +618,7 @@ CREATE TABLE `organizations_orgsettings` (
   `org_id` int(11) NOT NULL,
   `role` varchar(100) DEFAULT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `monthly_traffic_limit` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `organizations_orgsettings_org_id_630f6843_uniq` (`org_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -951,6 +952,7 @@ CREATE TABLE `share_fileshare` (
   `permission` varchar(50) NOT NULL,
   `authed_details` longtext DEFAULT NULL,
   `user_scope` varchar(225) DEFAULT 'all_users',
+  `description` LONGTEXT NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `token` (`token`),
   KEY `share_fileshare_username_5cb6de75` (`username`),
@@ -1010,6 +1012,7 @@ CREATE TABLE `share_uploadlinkshare` (
   `view_cnt` int(11) NOT NULL,
   `password` varchar(128) DEFAULT NULL,
   `expire_date` datetime DEFAULT NULL,
+  `description` LONGTEXT NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `token` (`token`),
   KEY `share_uploadlinkshare_username_3203c243` (`username`),
@@ -1494,7 +1497,7 @@ CREATE TABLE `FileTrash` (
   `size` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_filetrash_repo_delete_time` (`repo_id`, `delete_time`),
-  KEY `idx_fileTrash_delete_time` (`delete_time`)
+  KEY `idx_filetrash_delete_time` (`delete_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `WikiPageTrash` (
@@ -1688,4 +1691,40 @@ CREATE TABLE `wiki_file_views` (
   `details` longtext NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_wiki_file_views_wiki_id` (`wiki_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `webhook_jobs` (
+`id` int(11) NOT NULL AUTO_INCREMENT,
+`webhook_id` int(11) NOT NULL,
+`created_at` datetime,
+`trigger_at` datetime DEFAULT NULL,
+`status` tinyint(1) DEFAULT NULL,
+`url` varchar(2000) NOT NULL,
+`request_headers` text DEFAULT NULL,
+`request_body` text,
+`response_status` int(5) DEFAULT NULL,
+`response_body` longtext DEFAULT NULL,
+PRIMARY KEY (`id`),
+KEY `webhook_id_key` (`webhook_id`),
+KEY `status_b7n3m0x1_key` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ;
+
+CREATE TABLE `webhooks` (
+`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+`repo_id` varchar(36) NOT NULL,
+`url` varchar(2000) NOT NULL,
+`settings` text DEFAULT NULL,
+`creator` varchar(255) NOT NULL,
+`created_at` datetime,
+`is_valid` tinyint(1) DEFAULT 1,
+PRIMARY KEY (`id`),
+KEY `repo_id_key` (`repo_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `repo_archive_status` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `repo_id` varchar(36) NOT NULL,
+  `status` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_repo_archive_status_repo_id` (`repo_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
