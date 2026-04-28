@@ -74,6 +74,9 @@ export const createSingleMenuHandlers = (handlers) => {
     [TextTranslation.EXPORT_DOCX.key]: (operation, currentObject) => {
       handlers.onExportDocx && handlers.onExportDocx(currentObject);
     },
+    [TextTranslation.EXPORT_MARKDOWN.key]: (operation, currentObject) => {
+      handlers.onExportMarkdown && handlers.onExportMarkdown(currentObject);
+    },
     [TextTranslation.EXPORT_SDOC.key]: (operation, currentObject) => {
       handlers.onExportSdoc && handlers.onExportSdoc(currentObject);
     },

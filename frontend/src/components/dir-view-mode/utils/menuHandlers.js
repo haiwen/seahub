@@ -1,5 +1,5 @@
 import TextTranslation from '@/utils/text-translation';
-import { lockFile, unlockFile, freezeDocument, exportDocx, exportSdoc, openHistory, openViaClient, openByDefault, openWithOnlyOffice, toggleStar } from '@/utils/dirent-operations';
+import { lockFile, unlockFile, freezeDocument, exportDocx, exportMarkdown, exportSdoc, openHistory, openViaClient, openByDefault, openWithOnlyOffice, toggleStar } from '@/utils/dirent-operations';
 import { EVENT_BUS_TYPE } from '@/components/common/event-bus-type';
 import { Dirent } from '@/models';
 import { Utils } from '@/utils/utils';
@@ -83,6 +83,10 @@ export const menuHandlers = {
 
   [TextTranslation.EXPORT_DOCX.key]: ({ repoID, path, dirent }) => {
     exportDocx(repoID, path, dirent);
+  },
+
+  [TextTranslation.EXPORT_MARKDOWN.key]: ({ repoID, path, dirent }) => {
+    exportMarkdown(repoID, path, dirent);
   },
 
   [TextTranslation.CONVERT_TO_SDOC.key]: ({ onItemConvert, dirent }) => {
