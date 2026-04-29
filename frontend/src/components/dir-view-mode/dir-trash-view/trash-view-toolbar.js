@@ -84,9 +84,10 @@ const TrashViewToolbar = () => {
         <div className="sf-table-searcher-container lh-1">
           {!isSearchActive && (
             <OpIcon
+              id="sf-trash-toolbar-search-btn"
               className="sf-table-searcher-btn active-search m-0"
               symbol="search"
-              title={gettext('Search')}
+              tooltip={gettext('Search')}
               op={onToggleSearch}
             />
           )}
@@ -104,7 +105,8 @@ const TrashViewToolbar = () => {
                 onKeyDown={onKeyDown}
               />
               <OpIcon
-                title={gettext('Close')}
+                id="sf-trash-view-search-close-btn"
+                tooltip={gettext('Close')}
                 className="btn-close-searcher-wrapper input-icon-addon"
                 symbol="close"
                 op={handleCloseSearcher}
@@ -123,4 +125,3 @@ const TrashViewToolbar = () => {
 };
 
 export default TrashViewToolbar;
-

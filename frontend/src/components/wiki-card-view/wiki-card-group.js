@@ -87,6 +87,7 @@ class WikiCardGroup extends Component {
           {wikis.map((wiki, index) => {
             return (isGroup ?
               <WikiCardItem
+                idx={index}
                 key={index + wiki.id + wiki.name}
                 group={group}
                 wiki={wiki}
@@ -99,6 +100,7 @@ class WikiCardGroup extends Component {
               />
               :
               <WikiCardItem
+                idx={index}
                 key={index + wiki.id + wiki.name}
                 wiki={wiki}
                 deleteWiki={this.props.deleteWiki}

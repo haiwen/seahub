@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledTooltip } from 'reactstrap';
+import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import { Link } from '@gatsbyjs/reach-router';
 import DirOperationToolbar from '../../components/toolbar/dir-operation-toolbar';
 import MetadataViewName from '../../metadata/components/metadata-view-name';
@@ -325,11 +325,7 @@ class DirPath extends React.Component {
           tabIndex={0}
         >
           <Icon symbol="question-circle-stroked" />
-          <UncontrolledTooltip target="sf-history-mode-tip" placement="bottom" style={{
-            maxWidth: '260px',
-          }}>
-            {gettext('Tip: a snapshot will be generated after modification, which records the library state after the modification')}
-          </UncontrolledTooltip>
+          <SfTooltip target="sf-history-mode-tip" placement='bottom'>{gettext('Tip: a snapshot will be generated after modification, which records the library state after the modification')}</SfTooltip>
         </div>
       </>
     );

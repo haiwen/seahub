@@ -270,7 +270,7 @@ class MainSideNav extends React.Component {
 
   render() {
     let showActivity = isPro || !isDBSqlite3;
-    const { filesNavUnfolded, groupItems } = this.state;
+    const { filesNavUnfolded, groupItems, sharedExtended } = this.state;
     return (
       <Fragment>
         <div className="side-nav">
@@ -284,9 +284,10 @@ class MainSideNav extends React.Component {
                     <span className="nav-text">{gettext('Libraries')}</span>
                   </div>
                   <OpIcon
+                    id="nav-fold-btn"
                     className={`op-icon ${filesNavUnfolded ? '' : 'rotate-90'}`}
                     symbol="down"
-                    title={filesNavUnfolded ? gettext('Fold') : gettext('Unfold')}
+                    tooltip={filesNavUnfolded ? gettext('Fold') : gettext('Unfold')}
                     op={this.toggleLibrariesNav}
                   />
                 </Link>
@@ -351,9 +352,7 @@ class MainSideNav extends React.Component {
                     <Icon symbol="share-admin" />
                     <span className="nav-text">{gettext('Share Admin')}</span>
                   </div>
-                  <span className="op-icon">
-                    <Icon symbol="down" className={`${this.state.sharedExtended ? '' : 'rotate-90'}`} />
-                  </span>
+                  <OpIcon id="shared-nav-fold-btn" symbol="down" className={`op-icon ${this.state.sharedExtended ? '' : 'rotate-90'}`} tooltip={sharedExtended ? gettext('Fold') : gettext('Unfold')} />
                 </div>
                 {this.renderSharedAdmin()}
               </li>

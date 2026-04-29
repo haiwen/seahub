@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { UncontrolledTooltip } from 'reactstrap';
-import { gettext } from '@/utils/constants';
 
 import '../css/tooltip.css';
 
@@ -9,55 +8,21 @@ const propTypes = {
   target: PropTypes.string.isRequired,
   placement: PropTypes.oneOf(['top', 'bottom', 'left', 'right']),
   className: PropTypes.string,
-  // Basic tooltip
   children: PropTypes.node,
-  // Shortcut variant
   shortcut: PropTypes.arrayOf(PropTypes.string),
-  // Confirm variant
-  confirmText: PropTypes.string,
-  onConfirm: PropTypes.func,
-  onCancel: PropTypes.func,
-  // Popper.js modifiers
-  modifiers: PropTypes.array,
 };
 
-/**
- * Tooltip component wrapping reactstrap's Tooltip with three variants:
- * - Basic: Simple text tooltip
- * - Shortcut: Text with keyboard shortcut hint
- * - Confirm: Text with confirmation button
- */
 const SfTooltip = ({
   target,
   placement = 'bottom',
   className,
   children,
-  shortcut,
-  confirmText,
-  onConfirm,
-  modifiers,
+  shortcut
 }) => {
 
-  const handleConfirm = (e) => {
-    e.stopPropagation();
-    onConfirm?.();
-  };
-
   const hasShortcut = Boolean(shortcut);
-  const hasConfirm = Boolean(confirmText);
 
   const renderContent = () => {
-    if (hasConfirm) {
-      return (
-        <div className="sf-tooltip-confirm-content">
-          <div className="sf-tooltip-text">{children}</div>
-          <div className="sf-tooltip-confirm">
-            <span onClick={handleConfirm}>{gettext('Known')}</span>
-          </div>
-        </div>
-      );
-    }
-
     if (hasShortcut) {
       return (
         <div className="sf-tooltip-shortcut-inner">

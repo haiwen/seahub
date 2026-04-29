@@ -1,22 +1,19 @@
-.sf-tooltip {
-  z-index: 1090;
-}
-
 .sf-tooltip .tooltip {
   max-width: 242px;
+  opacity: 1;
 }
 
 .sf-tooltip .tooltip .tooltip-inner {
-  font-size: .875rem;
+  font-size: 14px;
   text-align: start;
-  background-color: var(--bs-emphasis-color);
+  background-color: var(--bs-body-color);
   color: var(--bs-body-bg);
   border-radius: 4px;
   padding: 4px 8px;
   line-height: 20px;
+  font-weight: normal;
 }
 
-/* Shortcut variant */
 .sf-tooltip-shortcut-inner {
   display: flex;
   align-items: center;
@@ -39,30 +36,4 @@
   border-radius: 4px;
   white-space: nowrap;
   line-height: 14px;
-}
-
-/* Confirm variant */
-.sf-tooltip-confirm-content {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.sf-tooltip-text {
-  font-size: .875rem;
-}
-
-.sf-tooltip-confirm {
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.sf-tooltip-confirm span {
-  font-size: .875rem;
-  color: #999;
-  line-height: 22px;
 }
