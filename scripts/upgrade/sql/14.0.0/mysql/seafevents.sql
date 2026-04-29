@@ -1,12 +1,3 @@
-CREATE TABLE IF NOT EXISTS `repo_archive_status` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `repo_id` varchar(36) NOT NULL,
-  `status` varchar(32) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `idx_repo_archive_status_repo_id` (`repo_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
 ALTER TABLE `Activity` ADD INDEX `idx_activity_repo_timestamp` (`repo_id`, `timestamp`);
 ALTER TABLE `FileHistory` ADD INDEX `ix_FileHistory_repo_id_path_md5` (`repo_id_path_md5`);
 ALTER TABLE `FileAudit` ADD INDEX `idx_file_audit_orgid_eid` (`org_id`,`eid`);

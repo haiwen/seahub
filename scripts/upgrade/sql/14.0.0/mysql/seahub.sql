@@ -1,3 +1,11 @@
+CREATE TABLE IF NOT EXISTS `repo_archive_status` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `repo_id` varchar(36) NOT NULL,
+  `status` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_repo_archive_status_repo_id` (`repo_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 CREATE TABLE IF NOT EXISTS `wiki_settings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `wiki_id` varchar(36) NOT NULL,
@@ -66,8 +74,8 @@ DROP INDEX `ix_org_last_active_time_org_id` ON `org_last_active_time`;
 DROP INDEX `ix_repo_extra_repo_id` ON `repo_extra_config`;
 DROP INDEX `ix_stats_ai_by_team_org_id_month` ON `stats_ai_by_team`;
 DROP INDEX `ix_stats_ai_by_owner_username_month` ON `stats_ai_by_owner`;
-DROP INDEX IF `sdoc_operation_log_doc_uuid` ON `sdoc_operation_log`;
-DROP INDEX IF `base_usermonitoredrepos_email_55ead1b9` ON `base_usermonitoredrepos`;
-DROP INDEX IF `history_name_doc_uuid` ON `history_name`;
-DROP INDEX IF `organizations_orgadminsettings_org_id_4f70d186` ON `organizations_orgadminsettings`;
-DROP INDEX IF `key_repo_metadata_face_recognition_enabled` ON `repo_metadata`;
+DROP INDEX `sdoc_operation_log_doc_uuid` ON `sdoc_operation_log`;
+DROP INDEX `base_usermonitoredrepos_email_55ead1b9` ON `base_usermonitoredrepos`;
+DROP INDEX `history_name_doc_uuid` ON `history_name`;
+DROP INDEX `organizations_orgadminsettings_org_id_4f70d186` ON `organizations_orgadminsettings`;
+DROP INDEX `key_repo_metadata_face_recognition_enabled` ON `repo_metadata`;
