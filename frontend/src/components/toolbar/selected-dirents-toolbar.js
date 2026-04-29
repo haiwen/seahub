@@ -10,7 +10,7 @@ import toaster from '../toast';
 import { Dirent } from '../../models';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import Icon from '../icon';
-import { lockFile, unlockFile, freezeDocument, exportDocx, exportSdoc, toggleStar, openHistory, openViaClient, exportMarkdown } from '../../utils/dirent-operations';
+import { lockFile, unlockFile, freezeDocument, exportDocx, exportSdoc, toggleStar, openHistory, openByDefault, openViaClient, exportMarkdown } from '../../utils/dirent-operations';
 import EventBus from '../common/event-bus';
 import { EVENT_BUS_TYPE as TABLE_EVENT_BUS_TYPE } from '@/metadata/constants';
 
@@ -175,6 +175,9 @@ class SelectedDirentsToolbar extends React.Component {
       case 'Properties':
         this.props.showDirentDetail('info');
         break;
+      case 'Open with Default':
+        this.onOpenByDefault(dirent);
+        break;
       case 'Open via Client':
         this.onOpenViaClient(dirent);
         break;
@@ -235,6 +238,11 @@ class SelectedDirentsToolbar extends React.Component {
   onFreezeDocument = (dirent) => {
     const { repoID, path, updateDirent } = this.props;
     freezeDocument(repoID, path, dirent, updateDirent);
+  };
+
+  onOpenByDefault = (dirent) => {
+    const { repoID, path } = this.props;
+    openByDefault(repoID, path, dirent);
   };
 
   onOpenViaClient = (dirent) => {
