@@ -10,7 +10,7 @@ import toaster from '../toast';
 import { Dirent } from '../../models';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import Icon from '../icon';
-import { lockFile, unlockFile, freezeDocument, exportDocx, exportSdoc, toggleStar, openHistory, openByDefault, openViaClient, exportMarkdown } from '../../utils/dirent-operations';
+import { lockFile, unlockFile, freezeDocument, exportDocx, exportSdoc, toggleStar, openHistory, openByDefault, openViaClient, openWithOnlyOffice, exportMarkdown } from '../../utils/dirent-operations';
 import EventBus from '../common/event-bus';
 import { EVENT_BUS_TYPE as TABLE_EVENT_BUS_TYPE } from '@/metadata/constants';
 
@@ -181,6 +181,9 @@ class SelectedDirentsToolbar extends React.Component {
       case 'Open via Client':
         this.onOpenViaClient(dirent);
         break;
+      case 'Open with OnlyOffice':
+        this.onOpenWithOnlyOffice(dirent);
+        break;
       case 'Convert to Markdown': {
         this.props.onItemConvert(dirent, 'markdown');
         break;
@@ -248,6 +251,11 @@ class SelectedDirentsToolbar extends React.Component {
   onOpenViaClient = (dirent) => {
     const { repoID, path } = this.props;
     openViaClient(repoID, path, dirent);
+  };
+
+  onOpenWithOnlyOffice = (dirent) => {
+    const { repoID, path } = this.props;
+    openWithOnlyOffice(repoID, path, dirent);
   };
 
   onHistory = (dirent) => {
