@@ -8,7 +8,7 @@ from rest_framework import status
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.endpoints.utils import event_export_status, event_import_status
-from seahub.api2.permissions import IsProVersion
+from rest_framework.permissions import IsAuthenticated
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 
@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 class SeahubIOStatus(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsProVersion,)
+    permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):

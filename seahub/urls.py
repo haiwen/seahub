@@ -562,6 +562,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/cancel-zip-task/$', CancelZipTaskView.as_view(), name='api-v2.1-cancel-zip-task'),
     re_path(r'^api/v2.1/copy-move-task/$', CopyMoveTaskView.as_view(), name='api-v2.1-copy-move-task'),
     re_path(r'^api/v2.1/query-copy-move-progress/$', QueryCopyMoveProgressView.as_view(), name='api-v2.1-query-copy-move-progress'),
+    re_path(r'^api/v2.1/query-io-status/$', SeahubIOStatus.as_view(), name='api-v2.1-query-export-status'),
 
     re_path(r'^api/v2.1/move-folder-merge/$', MoveFolderMergeView.as_view(), name='api-v2.1-move-folder-merge'),
 
@@ -997,7 +998,6 @@ if is_pro_version():
         re_path(r'^api/v2.1/admin/logs/perm-audit/$', PermAudit.as_view(), name='api-v2.1-admin-logs-perm-audit'),
 
         re_path(r'^api/v2.1/admin/logs/export-excel/$', SysLogsExport.as_view(), name='api-v2.1-admin-logs-export-excel'),
-        re_path(r'^api/v2.1/query-io-status/$', SeahubIOStatus.as_view(), name='api-v2.1-query-export-status'),
         path('sys/log/export-excel/', sys_log_export_excel, name='sys_log_export_excel'),
 
 
