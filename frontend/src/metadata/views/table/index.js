@@ -302,8 +302,8 @@ const Table = () => {
         supportCopy={true}
         supportPaste={true}
         paste={paste}
-        supportDragFill={true}
-        supportCut={true}
+        supportDragFill={false}
+        supportCut={false}
         // Metadata-specific header dropdown menu component
         columnDropdownMenu={HeaderDropdownMenu}
         // Metadata-specific props passed via customProps to HeaderDropdownMenu

@@ -150,6 +150,7 @@ SFTable.propTypes = {
   supportCopy: PropTypes.bool,
   supportCut: PropTypes.bool,
   supportPaste: PropTypes.bool,
+  supportMultiCopyPaste: PropTypes.bool,
   supportDragFill: PropTypes.bool,
   showRecordAsTree: PropTypes.bool,
   /**
