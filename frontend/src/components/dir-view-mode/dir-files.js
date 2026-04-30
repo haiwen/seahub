@@ -340,6 +340,7 @@ class DirFiles extends React.Component {
           getMenuList={this.getMenuList}
           onMenuItemClick={this.onMoreOperationClick}
           tickable={true}
+          tooltip={gettext('More operations')}
         />
       </div>
     );
