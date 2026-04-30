@@ -16,7 +16,7 @@
 .sf-table-cell.actions-cell {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .sf-table-row:hover .sf-table-cell.actions-cell .row-expand {
@@ -64,5 +64,5 @@
 }
 
 .actions-checkbox .select-cell-checkbox.form-check-input {
-  margin: 0;
+  margin: 3px 0;
 }

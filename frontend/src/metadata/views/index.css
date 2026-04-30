@@ -17,13 +17,6 @@
   background-color: var(--bs-border-secondary-color);
 }
 
-.sf-metadata-ui.file-name-formatter.sf-metadata-image-file-formatter .sf-metadata-file-icon {
-  transform: translateY(0);
-  max-width: 24px;
-  max-height: 24px;
-  height: unset;
-}
-
 .sf-metadata-loading-wrapper {
   display: flex;
   flex-direction: column;

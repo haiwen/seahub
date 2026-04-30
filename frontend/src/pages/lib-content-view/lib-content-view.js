@@ -9,10 +9,21 @@ import { Modal } from 'reactstrap';
 import { navigate } from '@gatsbyjs/reach-router';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { enableThumbnailServer, gettext, SF_DIRECTORY_TREE_SORT_BY_KEY, SF_DIRECTORY_TREE_SORT_ORDER_KEY, siteRoot, thumbnailSizeForOriginal, username } from '../../utils/constants';
+
+import {
+  enableThumbnailServer,
+  gettext,
+  SF_DIRECTORY_TREE_SORT_BY_KEY,
+  SF_DIRECTORY_TREE_SORT_ORDER_KEY,
+  siteRoot,
+  thumbnailSizeForOriginal,
+  username
+} from '../../utils/constants';
+
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { Dirent, FileTag, RepoTag, RepoInfo } from '../../models';
+
 import TreeNode from '../../components/tree-view/tree-node';
 import treeHelper from '../../components/tree-view/tree-helper';
 import toaster from '../../components/toast';
@@ -21,14 +32,34 @@ import LibDecryptDialog from '../../components/dialog/lib-decrypt-dialog';
 import FileUploader from '../../components/file-uploader/file-uploader';
 import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dirent-progress-dialog';
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
+
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
-import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY, RECENTLY_USED_LIST_KEY } from '../../constants';
-import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE } from '../../metadata/constants';
-import { MetadataStatusProvider, FileOperationsProvider, MetadataMiddlewareProvider } from '../../hooks';
+import {
+  PRIVATE_FILE_TYPE,
+  DIRENT_DETAIL_SHOW_KEY,
+  TREE_PANEL_STATE_KEY,
+  RECENTLY_USED_LIST_KEY
+} from '../../constants';
+
+import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, ROW_HEIGHT } from '../../metadata/constants';
+import {
+  MetadataStatusProvider,
+  FileOperationsProvider,
+  MetadataMiddlewareProvider
+} from '../../hooks';
 import { MetadataProvider } from '../../metadata/hooks';
 import metadataAPI from '../../metadata/api';
 import { PRIVATE_COLUMN_KEY } from '../../metadata/constants/column/private';
-import { LIST_MODE, TABLE_MODE, METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH_MODE } from '../../components/dir-view-mode/constants';
+
+import {
+  LIST_MODE,
+  TABLE_MODE,
+  METADATA_MODE,
+  TAGS_MODE,
+  HISTORY_MODE,
+  TRASH_MODE
+} from '../../components/dir-view-mode/constants';
+
 import CurDirPath from '../../components/cur-dir-path';
 import DirTool from '../../components/cur-dir-path/dir-tool';
 import Detail from '../../components/dirent-detail';
@@ -38,9 +69,21 @@ import ViewToolbar from '../../components/toolbar/view-toolbar';
 import EventBus, { eventBus } from '../../components/common/event-bus';
 import WebSocketClient from '../../utils/websocket-service';
 import Column from '@/metadata/model/column';
-import { LIST_VIEW_HIDDEN_COLUMNS_DEFAULT, getDirHiddenColumnKeys, DIR_BASE_COLUMNS, DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS, getDirTableHiddenColumnKeys, DIR_TABLE_DEFAULT_METADATA_COLUMNS } from '@/constants/dir-column-config';
+
+import {
+  LIST_VIEW_HIDDEN_COLUMNS_DEFAULT,
+  getDirHiddenColumnKeys,
+  DIR_BASE_COLUMNS,
+  DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS,
+  getDirTableHiddenColumnKeys,
+  DIR_TABLE_DEFAULT_METADATA_COLUMNS
+} from '@/constants/dir-column-config';
+
 import { normalizeColumns } from '@/metadata/utils/column';
-import { getDirTableColumnOrder, setDirTableColumnOrder } from '@/components/dir-view-mode/dir-table-view/columns';
+import {
+  getDirTableColumnOrder,
+  setDirTableColumnOrder
+} from '@/components/dir-view-mode/dir-table-view/columns';
 
 import '../../css/lib-content-view.css';
 
@@ -118,6 +161,7 @@ class LibContentView extends React.Component {
       enableMetadata: false,
       metadata: null,
       isCrossRepoMove: false,
+      rowHeight: Number(localStorage.getItem(`${this.props.repoID}-dir-table-row-height`)) || ROW_HEIGHT
     };
     this.oldOnpopstate = window.onpopstate;
     window.onpopstate = this.onpopstate;
@@ -162,14 +206,17 @@ class LibContentView extends React.Component {
 
   componentDidMount() {
     this.unsubscribeEvent = this.props.eventBus.subscribe(EVENT_BUS_TYPE.SEARCH_LIBRARY_CONTENT, this.onSearchedClick);
-    this.unsubscribeOpenTreePanel = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_TREE_PANEL, this.openTreePanel);
     this.unsubscribeSelectSearchedTag = this.props.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_TAG, this.onTreeNodeClick);
+
+    this.unsubscribeOpenTreePanel = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_TREE_PANEL, this.openTreePanel);
     this.unsubscribeSwitchToHistoryView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_HISTORY_VIEW, this.switchToHistoryView);
     this.unsubscribeSwitchToTrashView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_TRASH_VIEW, this.switchToTrashView);
     this.unsubscribeUpdateTrashPath = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_TRASH_PATH, this.updateTrashPath);
 
     this.unsubscribeColumnVisibilityChanged = this.props.eventBus.subscribe(EVENT_BUS_TYPE.HIDDEN_COLUMNS_CHANGED, this.onHiddenColumnKeys);
     this.unsubscribeTableViewColumnVisibilityChanged = this.props.eventBus.subscribe(EVENT_BUS_TYPE.HIDDEN_TABLE_VIEW_COLUMNS_CHANGED, this.onHiddenTableViewColumnKeys);
+    this.unsubscribeModifyRowHeight = this.props.eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_ROW_HEIGHT, this.onModifyRowHeight);
+
     this.unsubscribeDirentMetadataChanged = eventBus.subscribe(EVENT_BUS_TYPE.DIRENT_METADATA_CHANGED, this.updateDirentMetadata);
     this.unsubscribeColumnDataModified = eventBus.subscribe(EVENT_BUS_TYPE.COLUMN_DATA_MODIFIED, this.onColumnDataModified);
 
@@ -375,6 +422,7 @@ class LibContentView extends React.Component {
     this.unsubscribeTableViewColumnVisibilityChanged && this.unsubscribeTableViewColumnVisibilityChanged();
     this.unsubscribeDirentStatusChanged && this.unsubscribeDirentStatusChanged();
     this.unsubscribeColumnDataModified && this.unsubscribeColumnDataModified();
+    this.unsubscribeModifyRowHeight && this.unsubscribeModifyRowHeight();
     this.props.eventBus.dispatch(EVENT_BUS_TYPE.CURRENT_LIBRARY_CHANGED, {
       repoID: '',
       repoName: '',
@@ -2273,6 +2321,13 @@ class LibContentView extends React.Component {
     });
   };
 
+  onModifyRowHeight = (rowHeight) => {
+    if (!this.props.repoID) return;
+    const key = `${this.props.repoID}-dir-table-row-height`;
+    localStorage.setItem(key, rowHeight);
+    this.setState({ rowHeight: rowHeight });
+  };
+
   onHiddenColumnKeys = (colKeys) => {
     localStorage.setItem(getDirHiddenColumnKeys(this.props.repoID), JSON.stringify(colKeys));
     this.setState({ hiddenColumnKeys: colKeys });
@@ -2804,7 +2859,7 @@ class LibContentView extends React.Component {
   render() {
     const { repoID } = this.props;
     let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen, errorMsg,
-      path, usedRepoTags, isDirentSelected, currentMode, currentNode, viewId } = this.state;
+      path, usedRepoTags, isDirentSelected, currentMode, currentNode, viewId, rowHeight } = this.state;
 
     if (this.state.libNeedDecrypt) {
       return (
@@ -3013,6 +3068,7 @@ class LibContentView extends React.Component {
                           enableMetadata={this.state.enableMetadata}
                           columns={this.state.currentMode === TABLE_MODE ? this.state.tableViewColumns : this.state.columns}
                           hiddenColumnKeys={this.state.currentMode === TABLE_MODE ? this.state.hiddenTableViewColumnKeys : this.state.hiddenColumnKeys}
+                          rowHeight={rowHeight}
                           modifyColumnOrder={this.onTableViewColumnOrder}
                         />
                       </div>
@@ -3090,6 +3146,7 @@ class LibContentView extends React.Component {
                           columns={this.state.currentMode === TABLE_MODE ? this.state.tableViewColumns : this.state.columns}
                           hiddenColumnKeys={this.state.currentMode === TABLE_MODE ? this.state.hiddenTableViewColumnKeys : this.state.hiddenColumnKeys}
                           onColumnOrderChange={this.onTableViewColumnOrder}
+                          rowHeight={rowHeight}
                         />
                         :
                         <div className="message err-tip">{gettext('Folder does not exist.')}</div>

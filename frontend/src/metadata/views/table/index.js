@@ -280,6 +280,7 @@ const Table = () => {
         {...permission}
         repoID={repoID}
         table={table}
+        rowHeight={metadata.view.row_height}
         visibleColumns={sfTableColumns}
         recordsIds={recordsIds}
         headerSettings={{}}

@@ -13,6 +13,7 @@ import AllTagsSortSetter from '../../tag/views/all-tags/tags-table/all-tags-sort
 import TagFilesViewToolbar from '../../tag/components/tag-files-view-toolbar';
 import OpIcon from '../../components/op-icon';
 import { HideColumnSetter } from '../../metadata/components/data-process-setter';
+import SetRowHeight from '../../components/set-row-height';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import TrashViewToolbar from '../dir-view-mode/dir-trash-view/trash-view-toolbar';
 import { PRIVATE_COLUMN_KEY } from '@/metadata/constants';
@@ -36,6 +37,7 @@ const propTypes = {
   columns: PropTypes.array,
   hiddenColumnKeys: PropTypes.array,
   modifyColumnOrder: PropTypes.func,
+  rowHeight: PropTypes.number,
 };
 
 class DirTool extends React.Component {
@@ -54,8 +56,25 @@ class DirTool extends React.Component {
     }
   };
 
+  modifyRowHeight = (rowHeight) => {
+    const { eventBus, currentMode } = this.props;
+    if (currentMode === TABLE_MODE) {
+      eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_ROW_HEIGHT, rowHeight);
+    }
+  };
+
   render() {
-    const { currentMode, currentPath, sortBy, sortOrder, viewId, isCustomPermission, onToggleDetail, onCloseDetail } = this.props;
+    const {
+      currentMode,
+      currentPath,
+      sortBy,
+      sortOrder,
+      viewId,
+      rowHeight,
+      isCustomPermission,
+      onToggleDetail,
+      onCloseDetail
+    } = this.props;
 
     const isMetadataView = currentPath.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/');
     if (isMetadataView) {
@@ -119,6 +138,14 @@ class DirTool extends React.Component {
             hiddenColumns={this.props.hiddenColumnKeys}
             modifyHiddenColumns={this.modifyHiddenColumns}
             modifyColumnOrder={currentMode === TABLE_MODE ? this.props.modifyColumnOrder : undefined}
+          />
+        )}
+
+        {currentMode === TABLE_MODE && (
+          <SetRowHeight
+            iconClass="cur-view-path-btn ml-2"
+            rowHeight={rowHeight}
+            modifyRowHeight={this.modifyRowHeight}
           />
         )}
 

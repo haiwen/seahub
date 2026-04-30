@@ -64,6 +64,7 @@ export const createDirentTableColumns = (repoID, repoInfo, columns, onItemClick)
     if (savedWidth) {
       column.width = savedWidth;
     } else {
+      // Use default width based on column type
       column.width = key === PRIVATE_COLUMN_KEY.FILE_NAME ? DEFAULT_NAME_COLUMN_WIDTH : DEFAULT_COLUMN_WIDTH;
     }
 

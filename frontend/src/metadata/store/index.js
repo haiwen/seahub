@@ -619,6 +619,17 @@ class Store {
     this.applyOperation(operation);
   };
 
+  modifyRowHeight = (rowHeight) => {
+    const type = OPERATION_TYPE.MODIFY_ROW_HEIGHT;
+    const operation = this.createOperation({
+      type,
+      repo_id: this.repoId,
+      view_id: this.viewId,
+      row_height: rowHeight,
+    });
+    this.applyOperation(operation);
+  };
+
   checkIsRenameFileOperator = (rows_ids, id_original_row_updates) => {
     if (rows_ids.length > 1) {
       return false;

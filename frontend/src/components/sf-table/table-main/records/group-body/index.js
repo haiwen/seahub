@@ -15,8 +15,8 @@ import { checkIsCellSupportOpenEditor } from '../../../utils/selection';
 import { GROUP_HEADER_HEIGHT, GROUP_ROW_TYPE, GROUP_VIEW_OFFSET } from '../../../constants/group';
 import { EVENT_BUS_TYPE } from '@/metadata/constants';
 import EventBus from '../../../../common/event-bus';
+import { ROW_HEIGHT } from '../../../../../metadata/constants';
 
-const ROW_HEIGHT = 33;
 const GROUP_OVER_SCAN_ROWS = 10;
 const MAX_ANIMATION_ROWS = 50;
 const LOCAL_FOLDED_GROUP_KEY = 'path_folded_group';
@@ -27,11 +27,13 @@ class GroupBody extends Component {
   constructor(props) {
     super(props);
     const { groups, groupbys, allColumns } = props;
-    const rowHeight = this.getRowHeight();
+    let { rowHeight } = props;
+    rowHeight = rowHeight || ROW_HEIGHT;
     const pathFoldedGroupMap = this.getFoldedGroups();
     const groupMetrics = createGroupMetrics(groups, groupbys, pathFoldedGroupMap, allColumns, rowHeight, false);
     const { startRenderIndex, endRenderIndex } = this.getGroupVisibleBoundaries(window.innerHeight, 0, groupMetrics, rowHeight);
     this.state = {
+      rowHeight,
       activeRecords: [],
       groupMetrics,
       startRenderIndex,
@@ -58,6 +60,17 @@ class GroupBody extends Component {
     this.unSubscribeCollapseAllGroups = this.eventBus.subscribe(EVENT_BUS_TYPE.COLLAPSE_ALL_GROUPS, this.collapseAllGroups);
     this.unSubscribeExpandAllGroups = this.eventBus.subscribe(EVENT_BUS_TYPE.EXPAND_ALL_GROUPS, this.expandAllGroups);
     this.unsubscribeFocus = this.eventBus.subscribe(EVENT_BUS_TYPE.FOCUS_CANVAS, this.onFocus);
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    const { rowHeight: newRowHeight } = nextProps;
+    const { rowHeight } = this.state;
+    if (
+      newRowHeight &&
+      rowHeight != newRowHeight
+    ) {
+      this.setState({ rowHeight: newRowHeight });
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -189,7 +202,8 @@ class GroupBody extends Component {
   };
 
   getRowHeight = () => {
-    return ROW_HEIGHT;
+    const { rowHeight } = this.state;
+    return rowHeight;
   };
 
   getRowTop = (groupRecordIndex) => {

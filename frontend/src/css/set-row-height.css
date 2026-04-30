@@ -1,0 +1,16 @@
+.set-row-height-popover .popover {
+  min-width: 200px;
+}
+
+.set-row-height-popover-content .hd {
+  color: var(--bs-body-secondary-color);
+  font-size: 13px;
+}
+
+.set-row-height-popover-content .option-item {
+  cursor: pointer;
+}
+
+.set-row-height-popover-content .option-item:hover {
+  background: var(--bs-body-secondary-bg);
+}

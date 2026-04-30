@@ -384,11 +384,12 @@ export const normalizeColumns = (columns) => {
   const validColumns = columns.map((column) => {
     const { type, key, ...params } = column;
     const columnType = getNormalizedColumnType(key, type);
+    const defaultWidth = key == PRIVATE_COLUMN_KEY.FILE_NAME ? 250 : 200;
     return {
       ...params,
       key,
       type: columnType,
-      width: columnsWidth[key] || 200,
+      width: columnsWidth[key] || defaultWidth,
     };
   }).filter(column => !NOT_DISPLAY_COLUMN_KEYS.includes(column.key));
   let displayColumns = [];

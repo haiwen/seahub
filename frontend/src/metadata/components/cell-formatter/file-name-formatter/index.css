@@ -16,7 +16,9 @@
 }
 
 .sf-metadata-ui.file-name-formatter .sf-metadata-file-icon-container .sf-metadata-file-icon {
-  height: 24px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .sf-metadata-ui.file-name-formatter .sf-metadata-file-name {

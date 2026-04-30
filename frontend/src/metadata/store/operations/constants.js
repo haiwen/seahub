@@ -17,6 +17,9 @@ export const OPERATION_TYPE = {
   MODIFY_COLUMN_WIDTH: 'modify_column_width',
   MODIFY_COLUMN_ORDER: 'modify_column_order',
 
+  // row
+  MODIFY_ROW_HEIGHT: 'modify_row_height',
+
   // record
   MODIFY_RECORDS: 'modify_records',
   DELETE_RECORDS: 'delete_records',
@@ -75,6 +78,8 @@ export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.MODIFY_COLUMN_WIDTH]: ['column_key', 'new_width', 'old_width'],
   [OPERATION_TYPE.MODIFY_COLUMN_ORDER]: ['repo_id', 'view_id', 'new_columns_keys', 'old_columns_keys'],
 
+  [OPERATION_TYPE.MODIFY_ROW_HEIGHT]: ['repo_id', 'view_id', 'row_height'],
+
   [OPERATION_TYPE.RENAME_PEOPLE_NAME]: ['repo_id', 'people_id', 'new_name', 'old_name'],
   [OPERATION_TYPE.DELETE_PEOPLE_PHOTOS]: ['repo_id', 'people_id', 'deleted_photos'],
   [OPERATION_TYPE.REMOVE_PEOPLE_PHOTOS]: ['repo_id', 'people_id', 'removed_photos', 'success_callback'],
@@ -128,6 +133,7 @@ export const VIEW_OPERATION = [
   OPERATION_TYPE.MODIFY_GROUPBYS,
   OPERATION_TYPE.MODIFY_HIDDEN_COLUMNS,
   OPERATION_TYPE.MODIFY_VIEW_TYPE,
+  OPERATION_TYPE.MODIFY_ROW_HEIGHT,
 ];
 
 export const COLUMN_OPERATION = [
