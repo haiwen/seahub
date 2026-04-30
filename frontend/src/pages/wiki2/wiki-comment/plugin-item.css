@@ -11,7 +11,7 @@
 }
 
 .wiki-plugin-operation-btn-container:hover {
-  background-color: #efefef;
+  background-color: var(--bs-icon-btn-hover-bg-color);
   cursor: pointer
 }
 

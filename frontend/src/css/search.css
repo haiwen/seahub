@@ -83,7 +83,7 @@
 }
 
 .search-icon-right:hover {
-  background-color: var(--bs-hover-bg);
+  background-color: var(--bs-icon-btn-hover-bg-color);
   border-radius: 3px;
 }
 
@@ -224,7 +224,7 @@
 }
 
 .search-result-item .search-icon-right:hover {
-  background-color: #dbdbdb;
+  background-color: var(--bs-icon-btn-hover-bg-color);
 }
 
 [data-bs-theme=dark] .search-result-item .search-icon-right:hover {

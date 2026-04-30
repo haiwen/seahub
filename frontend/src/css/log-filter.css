@@ -20,7 +20,7 @@
 }
 
 .cur-activity-modifiers:hover {
-  background: var(--bs-body-secondary-bg);
+  background-color: var(--bs-icon-btn-hover-bg-color);
   cursor: pointer;
 }
 
