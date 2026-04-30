@@ -3,7 +3,7 @@ import { Button } from 'reactstrap';
 import Cookies from 'js-cookie';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, canAddRepo, canViewOrg, enableOCM } from '../../utils/constants';
+import { gettext, canAddRepo, canViewOrg, canAddGroup, enableOCM } from '../../utils/constants';
 import Repo from '../../models/repo';
 import Group from '../../models/group';
 import toaster from '../../components/toast';
@@ -15,6 +15,7 @@ import SortOptionsDialog from '../../components/dialog/sort-options';
 import GuideForNewDialog from '../../components/dialog/guide-for-new-dialog';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import DeletedReposDialog from '../../components/dialog/my-deleted-repos-dialog';
+import CreateGroupDialog from '../../components/dialog/create-group-dialog';
 import MylibRepoListView from '../../pages/my-libs/mylib-repo-list-view';
 import SharedLibraries from '../../pages/shared-libs';
 import SharedWithAll from '../../pages/shared-with-all';
@@ -45,6 +46,7 @@ class Libraries extends Component {
       publicRepoList: [],
       isCreateRepoDialogOpen: false,
       isDeletedReposDialogOpen: false,
+      isCreateGroupDialogOpen: false,
       currentViewMode: localStorage.getItem('sf_repo_list_view_mode') || LIST_MODE,
       sortBy: localStorage.getItem('sf_repos_sort_by') || 'name', // 'name' or 'time'
       sortOrder: localStorage.getItem('sf_repos_sort_order') || 'asc', // 'asc' or 'desc'
@@ -433,6 +435,21 @@ class Libraries extends Component {
     this.setState({ groupList: updatedGroups });
   };
 
+  onCreateGroup = (groupData) => {
+    const newGroup = new Group(groupData);
+    const { groupList: newList } = this.state;
+    newList.push(newGroup);
+    this.setState({
+      groupList: newList
+    });
+  };
+
+  toggleCreateGroupDialog = () => {
+    this.setState({
+      isCreateGroupDialogOpen: !this.state.isCreateGroupDialogOpen
+    });
+  };
+
   render() {
     const { isLoading, currentViewMode, sortBy, sortOrder, groupList } = this.state;
     const isDesktop = Utils.isDesktop();
@@ -535,6 +552,26 @@ class Libraries extends Component {
                       />
                     );
                   })}
+
+                  {canAddGroup && (
+                    <>
+                      <Button
+                        id="lib-list-new-group"
+                        className='d-flex align-items-center'
+                        onClick={this.toggleCreateGroupDialog}
+                      >
+                        <Icon symbol="new" className="mr-2" />
+                        <span>{gettext('New Group')}</span>
+                      </Button>
+                      {this.state.isCreateGroupDialogOpen &&
+                      <CreateGroupDialog
+                        toggleDialog={this.toggleCreateGroupDialog}
+                        onCreateGroup={this.onCreateGroup}
+                      />
+                      }
+                    </>
+                  )}
+
                 </>
               )}
             </div>

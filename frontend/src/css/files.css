@@ -80,3 +80,12 @@
 .library-grid-item .library-grid-item-icon {
   margin-left: 6px;
 }
+
+#lib-list-new-group {
+  align-self: flex-start;
+  font-weight: normal;
+  color: var(--bs-body-color);
+  padding: 3px 12px;
+  border: 1px solid var(--bs-border-color);
+  margin-top: -8px;
+}
