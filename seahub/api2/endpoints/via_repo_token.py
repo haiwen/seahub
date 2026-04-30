@@ -2830,7 +2830,7 @@ class ViaRepoRecentlyChangedFiles(APIView):
         metadata_server_api = MetadataServerAPI(repo_id, username)
         from seafevents.repo_metadata.constants import METADATA_TABLE
 
-        sql = f"""SELECT `_ctime`, `_creator`, `_last_modifier`, `_mtime`, _file_creator`, `_file_ctime`, `_file_modifier`, 
+        sql = f"""SELECT `_id`, `_ctime`, `_creator`, `_last_modifier`, `_mtime`, _file_creator`, `_file_ctime`, `_file_modifier`, 
         `_file_mtime`, `_parent_dir`, _name`, `_size`, `_description`, `_tags`
         FROM `{METADATA_TABLE.name}` WHERE `_mtime`>"{since}" AND `_is_dir`=false ORDER BY `_mtime` LIMIT {start}, {limit}"""
 
