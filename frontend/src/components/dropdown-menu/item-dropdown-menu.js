@@ -25,6 +25,7 @@ const propTypes = {
   unfreezeItem: PropTypes.func,
   menuStyle: PropTypes.object,
   tickable: PropTypes.bool,
+  tooltip: PropTypes.string,
 };
 
 class ItemDropdownMenu extends React.Component {
@@ -175,7 +176,7 @@ class ItemDropdownMenu extends React.Component {
 
   render() {
     const { menuList } = this.state;
-    const { target = 'dropdown-toggle-btn', toggleClass, toggleChildren, tagName, menuStyle = {} } = this.props;
+    const { target = 'more-level-icon', toggleClass, toggleChildren, tagName, menuStyle = {}, tooltip } = this.props;
 
     if (!menuList.length) {
       return '';
@@ -188,7 +189,6 @@ class ItemDropdownMenu extends React.Component {
             tag="span"
             className={classNames('more-dropdown-toggle', toggleClass)}
             data-toggle="dropdown"
-            title={gettext('More operations')}
             aria-label={gettext('More operations')}
             aria-expanded={this.state.isItemMenuShow}
             onKeyDown={this.onDropdownToggleKeyDown}
@@ -226,7 +226,6 @@ class ItemDropdownMenu extends React.Component {
         direction={this.mainMenuDirection}
       >
         <DropdownToggle
-          id="more-level-icon"
           tag={tagName || 'span'}
           role="button"
           tabIndex="0"
@@ -238,7 +237,7 @@ class ItemDropdownMenu extends React.Component {
           innerRef={this.dropdownRef}
         >
           <Icon symbol="more-level" />
-          <Tooltip target={target}>{gettext('More operations')}</Tooltip>
+          {tooltip && <Tooltip target={target}>{tooltip}</Tooltip>}
         </DropdownToggle>
         <ModalPortal>
           <DropdownMenu
