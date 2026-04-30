@@ -652,16 +652,18 @@ class InteractionMasks extends React.Component {
       return;
     }
 
-    // when activeElement is not cellMask, can't copy cell
     if (!this.isCellMaskActive()) {
+      return;
+    }
+    if (this.isMultipleSelectedRange() && !this.props.supportMultiCopyPaste) {
       return;
     }
     this.onCopyCells(e);
   };
 
   onPaste = (e) => {
-    // when activeElement is not cellMask or has no permission, can't paste cell
     if (!this.isCellMaskActive() || !this.props.canModify()) return;
+    if (this.isMultipleSelectedRange() && !this.props.supportMultiCopyPaste) return;
     const { columns, isGroupView = false } = this.props;
     const { selectedPosition, selectedRange } = this.state;
     const { idx, rowIdx } = selectedPosition;
@@ -712,8 +714,8 @@ class InteractionMasks extends React.Component {
   };
 
   onCut = (event) => {
-    // when activeElement is not cellMask or has no permission, can't paste cell
     if (!this.isCellMaskActive() || !this.props.canModify) return;
+    if (this.isMultipleSelectedRange() && !this.props.supportMultiCopyPaste) return;
     const { selectedPosition, selectedRange } = this.state;
     const { idx, rowIdx } = selectedPosition;
     if (idx === -1 || rowIdx === -1) return; // prevent paste when no cell selected
@@ -746,7 +748,6 @@ class InteractionMasks extends React.Component {
     if (copiedCellsCount > 0) {
       this.pasteSource = PASTE_SOURCE.CUT;
       this.cutPosition = { ...selectedPosition };
-      // Capture viewId from URL for cross-view cut-paste safety
       const { search } = window.location;
       const urlParams = new URLSearchParams(search);
       this.viewId = urlParams.has('view') ? urlParams.get('view') : '';
@@ -826,6 +827,12 @@ class InteractionMasks extends React.Component {
     const { idx: startColumnIndex, rowIdx: startRecordIndex } = topLeft;
     const { idx: endColumnIndex, rowIdx: endRecordIndex } = bottomRight;
     return Number.isInteger((endColumnIndex - startColumnIndex + 1) / copiedColumnsCount) && Number.isInteger((endRecordIndex - startRecordIndex + 1) / copiedRecordsCount);
+  };
+
+  isMultipleSelectedRange = () => {
+    const { selectedRange } = this.state;
+    const { topLeft, bottomRight } = selectedRange;
+    return topLeft.idx !== bottomRight.idx || topLeft.rowIdx !== bottomRight.rowIdx;
   };
 
   setPasteRange = (copiedRecordsCount, copiedColumnsCount) => {

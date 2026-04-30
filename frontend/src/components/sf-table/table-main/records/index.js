@@ -1087,6 +1087,7 @@ Records.propTypes = {
   supportCopy: PropTypes.bool,
   supportCut: PropTypes.bool,
   supportPaste: PropTypes.bool,
+  supportMultiCopyPaste: PropTypes.bool,
   gridScroll: PropTypes.object,
   getTableContentRect: PropTypes.func,
   storeGridScroll: PropTypes.func,
