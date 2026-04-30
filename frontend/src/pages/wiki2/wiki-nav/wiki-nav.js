@@ -11,6 +11,7 @@ import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 import Icon from '../../../components/icon';
 import OpIcon from '../../../components/op-icon';
+import Tooltip from '@/components/tooltip';
 
 import '../css/wiki-nav.css';
 
@@ -191,6 +192,7 @@ class WikiNav extends Component {
           <div className='d-none d-md-flex'>
             {isHeaderHovered &&
             <Dropdown
+              id="wiki-nav-more-operations"
               isOpen={this.state.isShowOperationDropdown}
               toggle={this.toggleDropdown}
               className="page-operation-dropdown"
@@ -202,10 +204,10 @@ class WikiNav extends Component {
                 tabIndex={0}
                 data-toggle="dropdown"
                 aria-expanded={this.state.isShowOperationDropdown}
-                title={gettext('More operations')}
                 aria-label={gettext('More operations')}
               >
                 <Icon symbol="more-level" />
+                <Tooltip target="wiki-nav-more-operations">{gettext('More operations')}</Tooltip>
               </DropdownToggle>
               <DropdownMenu
                 className="page-operation-dropdown-menu dtable-dropdown-menu large position-fixed"
@@ -241,8 +243,9 @@ class WikiNav extends Component {
             </Dropdown>
             }
             <OpIcon
+              id="new-wiki-page-btn"
               className="op-icon mr-0"
-              title={gettext('New page')}
+              tooltip={gettext('New page')}
               op={this.props.handleAddNewPage}
               symbol="new"
             />
