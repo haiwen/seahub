@@ -7,6 +7,7 @@ import EventBus from '../common/event-bus';
 import OpElement from '../../components/op-element';
 import OpIcon from '../../components/op-icon';
 import Icon from '../icon';
+import Tooltip from '../tooltip';
 
 const AllTagsToolbar = () => {
   const [selectedTagIds, setSelectedTagIds] = useState([]);
@@ -74,17 +75,24 @@ const AllTagsToolbar = () => {
       </OpElement>
       {canDelete &&
         <OpIcon
+          id="delete-btn"
           className="cur-view-path-btn"
           symbol="delete1"
-          title={gettext('Delete')}
+          tooltip={gettext('Delete')}
           op={deleteTags}
         />
       }
       {length > 0 && (
         <ItemDropdownMenu
+          target="all-tags-more-operations-btn"
           item={{}}
           toggleClass={'cur-view-path-btn'}
-          toggleChildren={<Icon symbol="more-level" />}
+          toggleChildren={
+            <>
+              <Icon symbol="more-level" />
+              <Tooltip target="all-tags-more-operations-btn">{gettext('More operations')}</Tooltip>
+            </>
+          }
           onMenuItemClick={onMenuItemClick}
           getMenuList={getMenuList}
         />

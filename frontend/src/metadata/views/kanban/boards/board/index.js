@@ -65,6 +65,7 @@ const Board = ({
   return (
     <section draggable={false} className="sf-metadata-view-kanban-board">
       <Header
+        idx={boardIndex}
         readonly={readonly}
         value={board.value}
         groupByColumn={groupByColumn}

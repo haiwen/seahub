@@ -11,6 +11,7 @@ import { ValidateColumnFormFields } from '@/metadata/components/popover/column-p
 import { COMMON_FORM_FIELD_TYPE } from '@/metadata/components/popover/column-popover/constants';
 import toaster from '@/components/toast';
 import { getColumnDisplayName } from '@/metadata/utils/column';
+import Tooltip from '@/components/tooltip';
 
 import './index.css';
 
@@ -109,6 +110,7 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
           role="button"
         >
           <Icon symbol="add-table" />
+          <Tooltip target={id}>{gettext('Add column')}</Tooltip>
         </DropdownToggle>
         <ColumnTypeDropdownMenu onSelect={handleSelect} />
       </Dropdown>

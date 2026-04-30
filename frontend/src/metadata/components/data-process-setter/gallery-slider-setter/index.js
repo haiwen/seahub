@@ -5,6 +5,7 @@ import Icon from '../../../../components/icon';
 import { gettext } from '../../../../utils/constants';
 import { EVENT_BUS_TYPE, GALLERY_ZOOM_GEAR_MIN, GALLERY_ZOOM_GEAR_MAX, STORAGE_GALLERY_ZOOM_GEAR_KEY } from '../../../constants';
 import { Utils } from '../../../../utils/utils';
+import Tooltip from '@/components/tooltip';
 
 import './index.css';
 
@@ -44,14 +45,15 @@ const GallerySliderSetter = ({ viewID }) => {
   return (
     <div className='metadata-slider-container'>
       <Button
+        id="zoom-out-btn"
         className="metadata-slider-icon-button"
         onClick={handleImageShrink}
         disabled={sliderValue <= GALLERY_ZOOM_GEAR_MIN}
         aria-label={gettext('Zoom out')}
-        title={gettext('Zoom out')}
         onKeyDown={Utils.onKeyDown}
       >
         <Icon symbol="minus-sign" className="metadata-slider-icon" />
+        <Tooltip target="zoom-out-btn">{gettext('Zoom out')}</Tooltip>
       </Button>
       <Input
         type="range"
@@ -65,14 +67,15 @@ const GallerySliderSetter = ({ viewID }) => {
         className="metadata-slider"
       />
       <Button
+        id="zoom-in-btn"
         className="metadata-slider-icon-button"
         onClick={handleImageExpand}
         disabled={sliderValue >= GALLERY_ZOOM_GEAR_MAX}
         aria-label={gettext('Zoom in')}
-        title={gettext('Zoom in')}
         onKeyDown={Utils.onKeyDown}
       >
         <Icon symbol="plus-sign" className="metadata-slider-icon" />
+        <Tooltip target="zoom-in-btn">{gettext('Zoom in')}</Tooltip>
       </Button>
     </div>
   );

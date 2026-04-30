@@ -25,7 +25,7 @@ class NotificationPopover extends React.Component {
   }
 
   handleOutsideClick = (e) => {
-    if (!this.notificationContainerRef.contains(e.target) && !document.getElementById('notice-icon').contains(e.target)) {
+    if (!this.notificationContainerRef.contains(e.target) && !document.getElementById('notification-icon-btn').contains(e.target)) {
       this.props.onNotificationListToggle();
     }
   };
@@ -55,7 +55,7 @@ class NotificationPopover extends React.Component {
     return (
       <Popover
         className="notification-wrapper"
-        target="notification-popover"
+        target="notification-icon-btn"
         isOpen={true}
         fade={false}
         hideArrow={true}

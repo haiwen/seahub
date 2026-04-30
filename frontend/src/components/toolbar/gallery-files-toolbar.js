@@ -12,6 +12,7 @@ import { checkIsDir } from '../../metadata/utils/row';
 import { useMetadataStatus } from '../../hooks';
 import { getColumnByKey } from '../../metadata/utils/column';
 import Icon from '../icon';
+import OpIcon from '../op-icon';
 
 const GalleryFilesToolbar = () => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
@@ -155,22 +156,12 @@ const GalleryFilesToolbar = () => {
       </span>
       {length === 1 && !readOnly && (
         <>
-          <span className="cur-view-path-btn" onClick={onMoveClick} title={gettext('Move')} aria-label={gettext('Move')}>
-            <Icon symbol="move" />
-          </span>
-          <span className="cur-view-path-btn" onClick={onCopyClick} title={gettext('Copy')} aria-label={gettext('Copy')}>
-            <Icon symbol="copy" />
-          </span>
+          <OpIcon id="move-btn" symbol="move" className="cur-view-path-btn" tooltip={gettext('Move')} aria-label={gettext('Move')} op={onMoveClick} />
+          <OpIcon id="copy-btn" symbol="copy" className="cur-view-path-btn" tooltip={gettext('Copy')} aria-label={gettext('Copy')} op={onCopyClick} />
         </>
       )}
-      <span className="cur-view-path-btn" onClick={onDownloadClick} title={gettext('Download')} aria-label={gettext('Download')}>
-        <Icon symbol="download" />
-      </span>
-      {!readOnly && (
-        <span className="cur-view-path-btn" onClick={onDeleteClick} title={gettext('Delete')} aria-label={gettext('Delete')}>
-          <Icon symbol="delete1" />
-        </span>
-      )}
+      <OpIcon id="download-btn" symbol="download" className="cur-view-path-btn" tooltip={gettext('Download')} aria-label={gettext('Download')} op={onDownloadClick} />
+      {!readOnly && <OpIcon id="delete-btn" symbol="delete1" className="cur-view-path-btn" tooltip={gettext('Delete')} aria-label={gettext('Delete')} op={onDeleteClick} />}
 
       {toolbarMenuOptions.length > 0 && (
         <ItemDropdownMenu

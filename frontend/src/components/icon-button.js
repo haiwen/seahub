@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Button, Tooltip } from 'reactstrap';
+import { Button } from 'reactstrap';
 import Icon from './icon';
+import Tooltip from './tooltip';
 
 const propTypes = {
   id: PropTypes.string.isRequired,
@@ -10,63 +11,51 @@ const propTypes = {
   text: PropTypes.string.isRequired,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
-  href: PropTypes.string
+  href: PropTypes.string,
+  shortcut: PropTypes.arrayOf(PropTypes.string),
 };
 
 class IconButton extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      tooltipOpen: false
-    };
   }
 
-  toggle = () => {
-    this.setState({
-      tooltipOpen: !this.state.tooltipOpen
-    });
-  };
-
   render() {
-    const btnContent = (
+    const { id, icon, text, onClick, disabled, href, shortcut } = this.props;
+    const button = (href ? (
+      <a
+        id={id}
+        className={classNames('file-toolbar-btn', { 'disabled': disabled })}
+        aria-label={text}
+        href={href}
+      >
+        <Icon symbol={icon} />
+      </a>
+    ) : (
+      <Button
+        id={id}
+        className={classNames('border-0 p-0 bg-transparent file-toolbar-btn', { 'disabled': disabled })}
+        onClick={disabled ? () => {} : onClick}
+        aria-label={text}
+        data-active={!disabled}
+      >
+        <Icon symbol={icon} />
+      </Button>
+    ));
+
+    return (
       <>
-        <Icon symbol={this.props.icon} />
+        {button}
         <Tooltip
-          toggle={this.toggle}
-          delay={{ show: 0, hide: 0 }}
-          target={this.props.id}
+          target={id}
           placement='bottom'
-          isOpen={this.state.tooltipOpen}
+          shortcut={shortcut}
         >
-          {this.props.text}
+          {text}
         </Tooltip>
       </>
     );
-    if (this.props.href) {
-      return (
-        <a
-          id={this.props.id}
-          className={classNames('file-toolbar-btn', { 'disabled': this.props.disabled })}
-          aria-label={this.props.text}
-          href={this.props.href}
-        >
-          {btnContent}
-        </a>
-      );
-    } else {
-      return (
-        <Button
-          id={this.props.id}
-          className={classNames('border-0 p-0 bg-transparent file-toolbar-btn', { 'disabled': this.props.disabled })}
-          onClick={this.props.disabled ? () => {} : this.props.onClick}
-          aria-label={this.props.text}
-          data-active={!this.props.disabled}
-        >
-          {btnContent}
-        </Button>
-      );
-    }
   }
 }
 IconButton.propTypes = propTypes;

@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import IconBtn from '../../icon-btn';
 import HistoryFilterPopover from './history-filter-popover';
 import { gettext } from '../../../utils/constants';
 import { isEnter, isSpace } from '../../../utils/hotkey';
 import { HISTORY_MODE } from '../constants';
+import OpIcon from '@/components/op-icon';
 
 const DEFAULT_FILTER = {
   date: { value: '', from: null, to: null },
@@ -65,14 +65,12 @@ const HistoryFilterSetter = ({ mode = HISTORY_MODE, filters = DEFAULT_FILTER, on
 
   return (
     <div className="history-filter-setter-wrapper">
-      <IconBtn
+      <OpIcon
         symbol="filter"
-        size={24}
         className={className}
-        onClick={onToggle}
-        role="button"
+        op={onToggle}
         onKeyDown={onKeyDown}
-        title={message}
+        tooltip={message}
         aria-label={message}
         tabIndex={0}
         id="history-filter-popover-target"
@@ -101,4 +99,3 @@ HistoryFilterSetter.propTypes = {
 };
 
 export default HistoryFilterSetter;
-

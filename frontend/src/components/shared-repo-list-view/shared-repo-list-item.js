@@ -27,10 +27,12 @@ import Icon from '../icon';
 import RepoWebhookDialog from '../dialog/repo-webhook-dialog';
 import RepoArchiveDialog from '../dialog/repo-archive-dialog';
 import ArchiveIcon from '../archive-icon';
+import Tooltip from '../tooltip';
 
 dayjs.extend(relativeTime);
 
 const propTypes = {
+  idx: PropTypes.number,
   currentViewMode: PropTypes.string,
   currentGroup: PropTypes.object,
   libraryType: PropTypes.string,
@@ -483,6 +485,7 @@ class SharedRepoListItem extends React.Component {
   };
 
   generatorPCMenu = () => {
+    const { idx } = this.props;
     let operations = [];
     if (this.props.libraryType && this.props.libraryType === 'public') {
       let isRepoOwner = this.props.repo.owner_email === username;
@@ -494,25 +497,28 @@ class SharedRepoListItem extends React.Component {
     }
     const shareOperation = (
       <OpIcon
+        id={`share-icon-${idx}`}
         className="op-icon"
         symbol="share"
-        title={gettext('Share')}
+        tooltip={gettext('Share')}
         op={this.onItemShare}
       />
     );
     const unshareOperation = (
       <OpIcon
+        id={`unshare-icon-${idx}`}
         className="op-icon"
         symbol="close"
-        title={gettext('Unshare')}
+        tooltip={gettext('Unshare')}
         op={this.onItemUnshare}
       />
     );
     const deleteOperation = (
       <OpIcon
+        id={`delete-icon-${idx}`}
         className="op-icon"
         symbol="delete1"
-        title={gettext('Delete')}
+        tooltip={gettext('Delete')}
         role="button" aria-label={gettext('Delete')}
         op={this.onItemDeleteToggle}
       />
@@ -526,11 +532,11 @@ class SharedRepoListItem extends React.Component {
           {deleteOperation}
           <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
             <DropdownToggle
+              id="more-level-icon"
               tag="span"
               role="button"
               tabIndex="0"
               className="op-icon"
-              title={gettext('More operations')}
               aria-label={gettext('More operations')}
               data-toggle="dropdown"
               aria-expanded={this.state.isItemMenuShow}
@@ -540,6 +546,7 @@ class SharedRepoListItem extends React.Component {
               onKeyDown={this.onDropdownToggleKeyDown}
             >
               <Icon symbol="more-level" className="w-4 h-4" />
+              <Tooltip target="more-level-icon">{gettext('More operations')}</Tooltip>
             </DropdownToggle>
             <DropdownMenu onMouseMove={this.onDropDownMouseMove}>
               {operations.map((item, index) => {
@@ -631,7 +638,7 @@ class SharedRepoListItem extends React.Component {
   renderPCUI = () => {
     const { isStarred } = this.state;
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
-    const { repo, currentViewMode } = this.props;
+    const { idx, repo, currentViewMode } = this.props;
     return currentViewMode == LIST_MODE ? (
       <div
         className={`repo-list-item ${this.state.highlight ? 'hover' : ''}`}
@@ -652,9 +659,10 @@ class SharedRepoListItem extends React.Component {
           <ArchiveIcon currentRepoInfo={repo} />
           {isStarred && (
             <OpIcon
+              id={`starred-icon-${idx}`}
               className="star-icon"
               symbol="starred"
-              title={gettext('Starred')}
+              tooltip={gettext('Starred')}
             />
           )}
         </div>

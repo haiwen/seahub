@@ -9,7 +9,7 @@ import OpIcon from '../../../../../../components/op-icon';
 
 import './index.css';
 
-const Header = ({ readonly, haveFreezed, value, groupByColumn, cardsQuantity, tagsData, onDelete, onFreezed, onUnFreezed, isCollapsed, onCollapse }) => {
+const Header = ({ idx, readonly, haveFreezed, value, groupByColumn, cardsQuantity, tagsData, onDelete, onFreezed, onUnFreezed, isCollapsed, onCollapse }) => {
   // eslint-disable-next-line no-unused-vars
   const [active, setActive] = useState(false);
 
@@ -56,12 +56,13 @@ const Header = ({ readonly, haveFreezed, value, groupByColumn, cardsQuantity, ta
         <span className="cards-quantity">{cardsQuantity}</span>
       </div>
       <div className="board-header-operation-btn">
-        {value && !readonly && <OpMenu onDelete={onDelete} onFreezed={onFreezed} onUnFreezed={handleUnFreezed} />}
+        {value && !readonly && <OpMenu idx={idx} onDelete={onDelete} onFreezed={onFreezed} onUnFreezed={handleUnFreezed} />}
         <OpIcon
+          id={`expand-btn-${idx}`}
           symbol="down"
+          tooltip={isCollapsed ? gettext('Expand') : gettext('Collapse')}
           className={classNames('kanban-header-op-btn kanban-header-collapse-btn', { 'rotate-90': isCollapsed })}
           op={handleCollapse}
-          title={isCollapsed ? gettext('Expand') : gettext('Collapse')}
         />
       </div>
     </div>

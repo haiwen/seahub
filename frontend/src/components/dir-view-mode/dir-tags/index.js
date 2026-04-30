@@ -44,10 +44,11 @@ const DirTags = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
     if (enableTags && canAdd) {
       operations.push(
         <OpIcon
+          id="new-tag-btn"
           key='0'
           className="tree-section-header-operation tree-section-create-operation"
           symbol="new"
-          title={gettext('New tag')}
+          tooltip={gettext('New tag')}
           op={openAddTag}
         />
       );

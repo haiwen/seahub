@@ -15,10 +15,12 @@ import toaster from '../toast';
 import ConvertWikiDialog from '../dialog/convert-wiki-dialog';
 import PublishedWikiExtrance from '../published-wiki-entrance';
 import Icon from '../icon';
+import Tooltip from '../tooltip';
 
 dayjs.extend(relativeTime);
 
 const propTypes = {
+  idx: PropTypes.number,
   wiki: PropTypes.object.isRequired,
   group: PropTypes.object,
   deleteWiki: PropTypes.func.isRequired,
@@ -159,7 +161,7 @@ class WikiCardItem extends Component {
   };
 
   render() {
-    const { wiki, isDepartment, isShowAvatar } = this.props;
+    const { idx, wiki, isDepartment, isShowAvatar } = this.props;
 
     let isAdmin = false;
     if (wiki.admins) {
@@ -228,13 +230,12 @@ class WikiCardItem extends Component {
             <span className="wiki-icon"><Icon symbol="wiki" className="w-5 h-5" /></span>
             {this.state.customUrlString && <PublishedWikiExtrance wikiID={wiki.id} customURLPart={this.state.customUrlString} />}
             {showDropdownMenu &&
-              <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleDropDownMenu} onClick={this.onClickDropdown} className="ml-auto">
+              <Dropdown id={`wiki-card-more-op-${idx}`} isOpen={this.state.isItemMenuShow} toggle={this.toggleDropDownMenu} onClick={this.onClickDropdown} className="ml-auto">
                 <DropdownToggle
                   tag="i"
                   role="button"
                   tabIndex="0"
                   className="op-icon op-icon-bg-light"
-                  title={gettext('More operations')}
                   aria-label={gettext('More operations')}
                   data-toggle="dropdown"
                   aria-expanded={this.state.isItemMenuShow}
@@ -242,6 +243,7 @@ class WikiCardItem extends Component {
                   style={{ 'minWidth': '0' }}
                 >
                   <Icon symbol="more-level" className="w-4 h-4" />
+                  <Tooltip target={`wiki-card-more-op-${idx}`}>{gettext('More operations')}</Tooltip>
                 </DropdownToggle>
                 <DropdownMenu className="dtable-dropdown-menu">
                   {showRename &&

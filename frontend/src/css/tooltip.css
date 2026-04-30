@@ -1,31 +1,45 @@
-.sf-tooltip .tooltip-inner {
+.sf-tooltip {
+  position: absolute;
+  z-index: 1070;
+}
+
+.sf-tooltip .tooltip {
   max-width: 242px;
-  font-weight: lighter;
+  opacity: 1;
+}
+
+.sf-tooltip .tooltip .tooltip-inner {
+  font-size: 14px;
   text-align: start;
-  background-color: var(--bs-emphasis-color);
+  background-color: var(--bs-body-color);
   color: var(--bs-body-bg);
+  border-radius: 4px;
+  padding: 4px 8px;
+  line-height: 20px;
+  font-weight: normal;
+  white-space: nowrap;
 }
 
-.sf-tooltip .bs-tooltip-right .arrow::before,
-.sf-tooltip .bs-tooltip-auto[x-placement^="right"] .arrow::before {
-  border-right-color: var(--bs-emphasis-color);
+.sf-tooltip-shortcut-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  line-height: 20px;
 }
 
-.sf-tooltip .bs-tooltip-top .arrow::before,
-.sf-tooltip .bs-tooltip-auto[x-placement^="top"] .arrow::before {
-  border-top-color: var(--bs-emphasis-color);
+.sf-tooltip-shortcut-keys {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
 }
 
-.sf-tooltip .bs-tooltip-bottom .arrow::before,
-.sf-tooltip .bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
-  border-bottom-color: var(--bs-emphasis-color);
-}
-
-.sf-tooltip .bs-tooltip-left .arrow::before,
-.sf-tooltip .bs-tooltip-auto[x-placement^="left"] .arrow::before {
-  border-left-color: var(--bs-emphasis-color);
-}
-
-.sf-tooltip .bs-tooltip-auto[data-popper-placement^=left] .tooltip-arrow:before {
-  border-left-color: var(--bs-emphasis-color);
+.sf-tooltip-shortcut-key {
+  display: inline-block;
+  padding: 2px 8px;
+  border: 1px solid #999;
+  border-radius: 4px;
+  white-space: nowrap;
+  line-height: 14px;
 }

@@ -7,11 +7,24 @@
   height: 32px;
   border: 1px solid var(--bs-border-color);
   border-radius: 4px;
+  margin-left: 12px;
 }
 
-#notice-icon {
-  position: relative;
-  display: block;
+.notification-icon-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+}
+
+.notification-icon-btn:hover {
+  background-color: rgba(0, 0, 0, .04);
+}
+
+[data-bs-theme="dark"] #notifications .notification-icon-btn:hover {
+  background-color: rgba(255, 255, 255, .1);
 }
 
 @media (max-width: 390px) {
@@ -35,17 +48,10 @@
   border-radius: 4px;
 }
 
-#notifications .sf-icon-bell:hover {
-  background-color: rgba(0, 0, 0, .04);
-}
-
-[data-bs-theme="dark"] #notifications .sf-icon-bell:hover {
-  background-color: rgba(255, 255, 255, .1);
-}
-
 #notifications .num {
   position: absolute;
   left: 18px;
+  top: -4px;
   padding: 0 2px;
   min-width: 14px;
   height: 14px;

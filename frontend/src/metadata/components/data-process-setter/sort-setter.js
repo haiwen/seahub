@@ -1,12 +1,12 @@
 import React, { useCallback, useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import IconBtn from '../../../components/icon-btn';
 import { SortPopover } from '../popover';
 import { gettext } from '../../../utils/constants';
 import { getValidSorts } from '../../utils/sort';
 import { EVENT_BUS_TYPE } from '../../constants';
 import { Utils } from '../../../utils/utils';
+import OpIcon from '@/components/op-icon';
 
 const SortSetter = ({ target = 'sf-metadata-sort-popover', type, sorts: propsSorts, readOnly, columns, wrapperClass, modifySorts }) => {
   const [isShowSetter, setShowSetter] = useState(false);
@@ -48,18 +48,7 @@ const SortSetter = ({ target = 'sf-metadata-sort-popover', type, sorts: propsSor
 
   return (
     <>
-      <IconBtn
-        symbol="sort"
-        size={24}
-        className={classnames(wrapperClass, { 'active': sorts.length > 0 })}
-        onClick={onSetterToggle}
-        tabIndex={0}
-        role="button"
-        onKeyDown={Utils.onKeyDown}
-        title={sortMessage}
-        aria-label={gettext('Sort')}
-        id={target}
-      />
+      <OpIcon id={target} symbol="sort" className={classnames(wrapperClass, { 'active': sorts.length > 0 })} tooltip={sortMessage} aria-label={sortMessage} op={onSetterToggle} onKeyDown={Utils.onKeyDown} />
       {isShowSetter && (
         <SortPopover
           readOnly={readOnly}

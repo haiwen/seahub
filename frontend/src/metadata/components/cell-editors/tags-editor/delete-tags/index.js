@@ -1,6 +1,6 @@
 import React from './index';
 import PropTypes from 'prop-types';
-import IconBtn from '../../../../../components/icon-btn';
+import OpIcon from '@/components/op-icon';
 import { getRowById } from '../../../../../components/sf-table/utils/table';
 import { getTagColor, getTagName } from '../../../../../tag/utils/cell';
 import { Utils } from '../../../../../utils/utils';
@@ -11,7 +11,7 @@ import './index.css';
 const DeleteTag = ({ value, tags, onDelete }) => {
   return (
     <div className="sf-metadata-delete-select-tags">
-      {Array.isArray(value) && value.map(tagId => {
+      {Array.isArray(value) && value.map((tagId, idx) => {
         const tag = getRowById(tags, tagId);
         if (!tag) return null;
         const tagName = getTagName(tag);
@@ -20,13 +20,13 @@ const DeleteTag = ({ value, tags, onDelete }) => {
           <div className="sf-metadata-delete-select-tag" key={tagId}>
             <div className="sf-metadata-delete-select-tag-color" style={{ backgroundColor: tagColor }}></div>
             <div className="sf-metadata-delete-select-tag-name">{tagName}</div>
-            <IconBtn
-              className="sf-metadata-delete-select-remove"
-              onClick={(event) => onDelete(tagId, event)}
+            <OpIcon
+              id={`remove-tag-icon-${idx}`}
               symbol="close"
-              tabIndex={0}
-              role="button"
+              className="sf-metadata-delete-select-remove"
+              tooltip={gettext('Remove')}
               aria-label={gettext('Delete')}
+              op={(event) => onDelete(tagId, event)}
               onKeyDown={Utils.onKeyDown}
             />
           </div>

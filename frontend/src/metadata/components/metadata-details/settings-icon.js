@@ -5,6 +5,7 @@ import Icon from '../../../components/icon';
 import HideColumnPopover from '../popover/hidden-column-popover';
 import { useMetadataDetails } from '../../hooks';
 import { useMetadataStatus } from '../../../hooks';
+import Tooltip from '@/components/tooltip';
 
 const SettingsIcon = () => {
   const [isShowSetter, setShowSetter] = useState(false);
@@ -23,8 +24,9 @@ const SettingsIcon = () => {
 
   return (
     <>
-      <Button className="border-0 p-0 bg-transparent detail-control mr-2" id={target} onClick={onSetterToggle} title={gettext('Settings')}>
+      <Button className="border-0 p-0 bg-transparent detail-control mr-2" id={target} onClick={onSetterToggle}>
         <Icon symbol="set-up" className="detail-control-icon" />
+        <Tooltip target={target}>{gettext('Settings')}</Tooltip>
       </Button>
       {isShowSetter && (
         <HideColumnPopover

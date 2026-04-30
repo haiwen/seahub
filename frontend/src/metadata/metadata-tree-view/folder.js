@@ -14,9 +14,11 @@ import { validateName } from '../utils/validate';
 import { METADATA_VIEWS_DRAG_DATA_KEY, METADATA_VIEWS_KEY, TREE_NODE_LEFT_INDENT, VIEW_TYPE, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW } from '../constants';
 import { getNewViewMenuItem, KEY_ADD_VIEW_MAP } from '../../components/dir-view-mode/dir-views/new-view-menu';
 import Icon from '../../components/icon';
+import Tooltip from '@/components/tooltip';
+import { gettext } from '@/utils/constants';
 
 const ViewsFolder = ({
-  leftIndent, folder, currentPath, userPerm, canDeleteView, getFoldersNames, getMoveableFolders, generateNewViewDefaultName,
+  idx, leftIndent, folder, currentPath, userPerm, canDeleteView, getFoldersNames, getMoveableFolders, generateNewViewDefaultName,
   setDragMode, getDragMode, selectView, modifyView,
 }) => {
   const {
@@ -314,9 +316,15 @@ const ViewsFolder = ({
         <div className="right-icon">
           {(highlight && folderMoreOperationMenus.length > 0) && (
             <ItemDropdownMenu
+              target={`view-folder-dropdown-btn${idx}`}
               item={{ name: 'metadata-folder' }}
               menuClassname="metadata-views-dropdown-menu"
-              toggleChildren={<Icon symbol="more-level" />}
+              toggleChildren={
+                <>
+                  <Icon symbol="more-level" />
+                  <Tooltip target={`view-folder-dropdown-btn${idx}`}>{gettext('More operations')}</Tooltip>
+                </>
+              }
               freezeItem={freezeItem}
               unfreezeItem={unfreezeItem}
               getMenuList={() => folderMoreOperationMenus}

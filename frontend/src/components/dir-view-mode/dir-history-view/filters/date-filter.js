@@ -209,8 +209,9 @@ const HistoryDateFilter = ({ mode = HISTORY_MODE, value: propsValue = { value: '
           <div className="filter-by-date-menu-toolbar">
             <span className="filter-by-date-toolbar-label">{copyRight}</span>
             <OpIcon
+              id="delete-btn"
               className="op-icon"
-              title={gettext('Delete')}
+              tooltip={gettext('Delete')}
               symbol="delete1"
               op={onClearDate}
             />
@@ -273,4 +274,3 @@ HistoryDateFilter.propTypes = {
 };
 
 export default HistoryDateFilter;
-

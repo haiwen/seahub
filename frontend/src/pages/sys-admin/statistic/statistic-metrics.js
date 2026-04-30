@@ -4,22 +4,15 @@ import Loading from '../../../components/loading';
 import Icon from '../../../components/icon';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
-import { Tooltip } from 'reactstrap';
+import Tooltip from '@/components/tooltip';
 
 class ComponentMetricsTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      hoveredRow: null,
-      tooltipOpen: null
+      hoveredRow: null
     };
   }
-
-  toggleTooltip = (id) => {
-    this.setState(prevState => ({
-      tooltipOpen: prevState.tooltipOpen === id ? null : id
-    }));
-  };
 
   handleRowHover = (id) => {
     this.setState({ hoveredRow: id });
@@ -31,7 +24,7 @@ class ComponentMetricsTable extends Component {
 
   render() {
     const { componentName, metrics } = this.props;
-    const { hoveredRow, tooltipOpen } = this.state;
+    const { hoveredRow } = this.state;
     return (
       <>
         <tr className="component-header">
@@ -64,18 +57,7 @@ class ComponentMetricsTable extends Component {
                           >
                             <Icon symbol="help" />
                           </span>
-                          <Tooltip
-                            placement='right'
-                            isOpen={tooltipOpen === rowId && hoveredRow === rowId}
-                            toggle={() => this.toggleTooltip(rowId)}
-                            target={rowId}
-                            delay={{ show: 200, hide: 0 }}
-                            fade={true}
-                            className="metric-tooltip"
-                            hideArrow={true}
-                          >
-                            {metric.help}
-                          </Tooltip>
+                          <Tooltip target={rowId} placement='right' className="metric-tooltip">{metric.help}</Tooltip>
                         </>
                       )}
                     </div>

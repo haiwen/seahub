@@ -31,6 +31,7 @@ import Icon from '../../components/icon';
 import ArchiveIcon from '../../components/archive-icon';
 
 const propTypes = {
+  idx: PropTypes.number,
   currentViewMode: PropTypes.string,
   repo: PropTypes.object.isRequired,
   inAllLibs: PropTypes.bool,
@@ -297,7 +298,7 @@ class MylibRepoListItem extends React.Component {
 
   renderPCUI = () => {
     const { isStarred } = this.state;
-    const { repo, currentViewMode = LIST_MODE, inAllLibs } = this.props;
+    const { idx, repo, currentViewMode = LIST_MODE, inAllLibs } = this.props;
     let iconUrl = Utils.getLibIconUrl(repo);
     let iconTitle = Utils.getLibIconTitle(repo);
     let repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
@@ -326,9 +327,10 @@ class MylibRepoListItem extends React.Component {
               <ArchiveIcon currentRepoInfo={repo} />
               {isStarred && (
                 <OpIcon
+                  id={`star-icon-${idx}`}
                   className="star-icon"
                   symbol="starred"
-                  title={gettext('Unstar')}
+                  tooltip={gettext('Unstar')}
                 />
               )}
             </>
@@ -341,15 +343,17 @@ class MylibRepoListItem extends React.Component {
           {(repo.repo_name && this.state.isOpIconShow) && (
             <div className="d-flex align-items-center lh-1">
               <OpIcon
+                id={`share-icon-${idx}`}
                 className="op-icon"
                 symbol="share"
-                title={gettext('Share')}
+                tooltip={gettext('Share')}
                 op={this.onShareToggle}
               />
               <OpIcon
+                id={`delete-icon-${idx}`}
                 className="op-icon"
                 symbol="delete1"
-                title={gettext('Delete')}
+                tooltip={gettext('Delete')}
                 op={this.onDeleteToggle}
               />
               <LibraryOpMenu
@@ -399,12 +403,14 @@ class MylibRepoListItem extends React.Component {
         {(repo.repo_name && this.state.isOpIconShow) && (
           <div className="flex-shrink-0 d-flex align-items-center">
             <OpIcon
+              id={`share-icon-${idx}`}
               className="op-icon"
               symbol="share"
-              title={gettext('Share')}
+              tooltip={gettext('Share')}
               op={this.onShareToggle}
             />
             <OpIcon
+              id={`delete-icon-${idx}`}
               className="op-icon"
               symbol="delete1"
               title={gettext('Delete')}

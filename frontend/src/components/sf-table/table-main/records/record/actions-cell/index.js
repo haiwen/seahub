@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { Tooltip } from 'reactstrap';
 import { isMobile, Utils } from '../../../../../../utils/utils';
 import { gettext } from '../../../../../../utils/constants';
 import { SEQUENCE_COLUMN_WIDTH } from '../../../../constants/grid';
-import IconBtn from '../../../../../../components/icon-btn';
+import Tooltip from '@/components/tooltip';
+import OpIcon from '@/components/op-icon';
 
 import './index.css';
 
@@ -39,16 +39,7 @@ class ActionsCell extends Component {
   getLockedRowTooltip = () => {
     const { recordId } = this.props;
     return (
-      <Tooltip
-        target={`action-cell-${recordId}`}
-        placement='bottom'
-        isOpen={this.state.isLockedRowTooltipShow}
-        fade={false}
-        hideArrow={true}
-        className="readonly-cell-tooltip"
-      >
-        {gettext('The row is locked and cannot be modified')}
-      </Tooltip>
+      <Tooltip target={`action-cell-${recordId}`} placement='bottom' className="readonly-cell-tooltip">{gettext('The row is locked and cannot be modified')}</Tooltip>
     );
   };
 
@@ -107,15 +98,7 @@ class ActionsCell extends Component {
           </div>
         </label>
         {this.props.onShowRowDetails && (
-          <IconBtn
-            symbol="expand"
-            className="row-expand"
-            iconClassName="row-expand-icon"
-            onClick={this.handleShowExpandedProps}
-            tabIndex="0"
-            role="button"
-            onKeyDown={Utils.onKeyDown}
-          />
+          <OpIcon id={`row-expand-icon-${recordId}`} symbol="expand" className="row-expand" tooltip={gettext('Expand')} op={this.handleShowExpandedProps} onKeyDown={Utils.onKeyDown} />
         )}
         {/* {this.getLockedRowTooltip()} */}
       </div>

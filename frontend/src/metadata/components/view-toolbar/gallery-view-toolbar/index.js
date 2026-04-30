@@ -49,9 +49,10 @@ const GalleryViewToolbar = ({
         />
         {!isCustomPermission && (
           <OpIcon
+            id="info-btn"
             className="cur-view-path-btn ml-2"
             symbol="info"
-            title={gettext('Properties')}
+            tooltip={gettext('Properties')}
             op={onToggleDetail}
           />
         )}

@@ -7,6 +7,7 @@ import FieldItem from './field-item';
 import { gettext } from '@/utils/constants';
 import Icon from '../../../../components/icon';
 import { Utils } from '../../../../utils/utils';
+import Tooltip from '@/components/tooltip';
 
 import './index.css';
 
@@ -58,8 +59,9 @@ const FieldDisplaySettings = ({ fieldIconConfig, fields, textProperties, onToggl
         tabIndex={0}
       >
         <Label className="mb-0">{textProperties.titleValue}</Label>
-        <div className="sf-metadata-field-display-toggle-btn">
+        <div id="expand-btn" className="sf-metadata-field-display-toggle-btn">
           <Icon symbol="down" className={classnames({ 'rotate-270': isCollapsed })} />
+          <Tooltip target="expand-btn">{isCollapsed ? gettext('Unfold') : gettext('Fold')}</Tooltip>
         </div>
       </div>
       <Transition nodeRef={nodeRef} in={!isCollapsed} timeout={DURATION}>

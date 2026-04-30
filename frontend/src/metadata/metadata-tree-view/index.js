@@ -105,9 +105,10 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
     };
   }, [prepareAddView, eventBus]);
 
-  const renderFolder = (folder) => {
+  const renderFolder = (folder, idx) => {
     return (
       <ViewsFolder
+        idx={idx}
         key={`metadata-views-folder-${folder._id}`}
         leftIndent={TREE_NODE_LEFT_INDENT * 2}
         folder={folder}
@@ -125,11 +126,12 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
     );
   };
 
-  const renderView = (view) => {
+  const renderView = (view, idx) => {
     const viewPath = '/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/' + view._id;
     const isSelected = currentPath.includes(viewPath);
     return (
       <ViewItem
+        idx={idx}
         key={`metadata-views-folder-${view._id}`}
         leftIndent={TREE_NODE_LEFT_INDENT * 2}
         canDelete={canDeleteView}

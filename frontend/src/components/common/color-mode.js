@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { getColorScheme, Utils } from '../../utils/utils';
+import { getColorScheme } from '../../utils/utils';
 import { gettext, SF_COLOR_MODE } from '../../utils/constants';
-import IconBtn from '../icon-btn';
+import OpIcon from '../op-icon';
 
 class ColorMode extends Component {
   constructor(props) {
@@ -28,17 +28,7 @@ class ColorMode extends Component {
     const symbol = colorMode === 'light' ? 'dark-mode' : 'light-mode';
     const title = colorMode === 'light' ? gettext('Dark mode') : gettext('Light mode');
     return (
-      <IconBtn
-        symbol={symbol}
-        size={32}
-        className="sf-icon-color-mode"
-        title={title}
-        onClick={this.onColorModeChange}
-        tabIndex={0}
-        role="button"
-        aria-label={title}
-        onKeyDown={Utils.onKeyDown}
-      />
+      <OpIcon id="color-mode-icon-btn" symbol={symbol} className="sf-icon-color-mode" tooltip={title} style={{ width: 32, height: 32 }} op={this.onColorModeChange} />
     );
   }
 }

@@ -172,9 +172,10 @@ class Item extends Component {
             </div>
             <div className="repo-item-actions">
               <OpIcon
+                id="close-icon"
                 symbol="close"
                 className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
-                title={gettext('Leave Share')}
+                tooltip={gettext('Leave Share')}
                 op={this.leaveShare}
               />
             </div>
@@ -209,9 +210,10 @@ class Item extends Component {
             </div>
             <div className="flex-shrink-0">
               <OpIcon
+                id="close-icon"
                 symbol="close"
                 className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
-                title={gettext('Leave Share')}
+                tooltip={gettext('Leave Share')}
                 op={this.leaveShare}
               />
             </div>

@@ -44,9 +44,10 @@ const TrashToolbar = () => {
         <span>{length}{' '}{gettext('selected')}</span>
       </OpElement>
       <OpIcon
+        id="restore-btn"
         className="cur-view-path-btn"
         symbol="revoke"
-        title={gettext('Restore')}
+        tooltip={gettext('Restore')}
         op={restoreItems}
       />
     </div>

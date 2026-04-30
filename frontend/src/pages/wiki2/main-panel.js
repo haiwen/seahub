@@ -22,6 +22,7 @@ import Icon from '../../components/icon';
 import WikiCollaboratorsOperation from './wiki-collaborators-operation';
 import { seafileAPI } from '../../utils/seafile-api';
 import isHotkey from 'is-hotkey';
+import Tooltip from '@/components/tooltip';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -320,19 +321,18 @@ class MainPanel extends Component {
             {menuItems.length > 0 && <CommentPlugin unseenNotificationsCount={this.state.unseenNotificationsCount} setIsShowRightPanel={this.setIsShowRightPanel} />}
             {menuItems.length > 0 && <WikiCollaboratorsOperation isOpenSocket={isOpenSocket} docUuid={this.state.docUuid} token={seadoc_access_token} />}
             {menuItems.length > 0 &&
-            <Dropdown isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu} className='wiki2-file-history-button'>
+            <Dropdown id="wiki-more-operations" isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu} className="wiki2-file-history-button">
               <DropdownToggle
                 tag="span"
                 tabIndex={0}
                 role="button"
-                id="cur-folder-more-op-toggle"
                 className='wiki2-file-history-button'
                 data-toggle="dropdown"
-                title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 aria-expanded={isDropdownMenuOpen}
               >
                 <Icon symbol="more-level" />
+                <Tooltip target="wiki-more-operations">{gettext('More operations')}</Tooltip>
               </DropdownToggle>
               <DropdownMenu>
                 {menuItems.map((menuItem, index) => {

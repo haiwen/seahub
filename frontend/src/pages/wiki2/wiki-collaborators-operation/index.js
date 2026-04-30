@@ -3,6 +3,8 @@ import { EventBus, SocketManager } from '@seafile/sdoc-editor';
 import CollaboratorsPopover from './collaborators-popover.js';
 import Icon from '../../../components/icon.js';
 import SDocServerApi from '../../../utils/sdoc-server-api.js';
+import Tooltip from '@/components/tooltip.js';
+import { gettext } from '@/utils/constants.js';
 
 import './index.css';
 
@@ -111,6 +113,7 @@ class CollaboratorsOperation extends React.PureComponent {
       <>
         <span className='wiki-collaborators-btn-container' id="collaborators">
           <Icon symbol='sdoc-user' />
+          <Tooltip target="collaborators">{gettext('Collaborators')}</Tooltip>
           {shownCollaborators.length}
         </span>
         <CollaboratorsPopover collaborators={shownCollaborators} />

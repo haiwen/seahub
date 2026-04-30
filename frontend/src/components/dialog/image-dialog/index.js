@@ -109,6 +109,7 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
       downloadImageTip={gettext('Download')}
       openMetadataTip={gettext('Open metadata')}
       closeMetadataTip={gettext('Close metadata')}
+      closeTip={gettext('Close')}
       onClickMetadata={onToggleSidePanel}
       enableRotate={enableRotate}
       onClickDownload={() => downloadImage(imageItems[imageIndex].downloadURL)}

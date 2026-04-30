@@ -8,10 +8,12 @@ import { Utils } from '../../utils/utils';
 import ModalPortal from '../modal-portal';
 import DropdownMenuItem from './dropdown-menu-item';
 import Icon from '../icon';
+import Tooltip from '../tooltip';
 
 import '../../css/item-dropdown-menu.css';
 
 const propTypes = {
+  target: PropTypes.string,
   tagName: PropTypes.string,
   item: PropTypes.object.isRequired,
   toggleClass: PropTypes.string,
@@ -173,7 +175,7 @@ class ItemDropdownMenu extends React.Component {
 
   render() {
     const { menuList } = this.state;
-    const { toggleClass, toggleChildren, tagName, menuStyle = {} } = this.props;
+    const { target = 'dropdown-toggle-btn', toggleClass, toggleChildren, tagName, menuStyle = {} } = this.props;
 
     if (!menuList.length) {
       return '';
@@ -181,7 +183,7 @@ class ItemDropdownMenu extends React.Component {
 
     if (tagName && tagName === 'button') {
       return (
-        <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick}>
+        <Dropdown id={target} isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick}>
           <DropdownToggle
             tag="span"
             className={classNames('more-dropdown-toggle', toggleClass)}
@@ -217,17 +219,18 @@ class ItemDropdownMenu extends React.Component {
 
     return (
       <Dropdown
+        id={target}
         isOpen={this.state.isItemMenuShow}
         toggle={this.onDropdownToggleClick}
         className="vam"
         direction={this.mainMenuDirection}
       >
         <DropdownToggle
+          id="more-level-icon"
           tag={tagName || 'span'}
           role="button"
           tabIndex="0"
           className={classNames('more-dropdown-toggle', toggleClass)}
-          title={gettext('More operations')}
           data-toggle="dropdown"
           aria-expanded={this.state.isItemMenuShow}
           aria-label={gettext('More operations')}
@@ -235,6 +238,7 @@ class ItemDropdownMenu extends React.Component {
           innerRef={this.dropdownRef}
         >
           <Icon symbol="more-level" />
+          <Tooltip target={target}>{gettext('More operations')}</Tooltip>
         </DropdownToggle>
         <ModalPortal>
           <DropdownMenu
