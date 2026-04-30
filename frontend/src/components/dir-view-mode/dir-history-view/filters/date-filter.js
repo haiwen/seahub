@@ -24,8 +24,8 @@ const HistoryDateFilter = ({ mode = HISTORY_MODE, value: propsValue = { value: '
   const [isOpen, setIsOpen] = useState(false);
   const [isCustomDate, setIsCustomDate] = useState(propsValue.value === DATE_OPTION.CUSTOM);
   const [time, setTime] = useState({
-    from: propsValue.from,
-    to: propsValue.to,
+    from: propsValue.from ? dayjs.unix(propsValue.from) : null,
+    to: propsValue.to ? dayjs.unix(propsValue.to) : null,
   });
 
   const labelValue = useMemo(() => {
@@ -98,22 +98,22 @@ const HistoryDateFilter = ({ mode = HISTORY_MODE, value: propsValue = { value: '
     switch (option) {
       case DATE_OPTION.TODAY: {
         setTime({
-          from: dayjs().startOf('day').unix(),
-          to: today.unix()
+          from: dayjs().startOf('day'),
+          to: today
         });
         break;
       }
       case DATE_OPTION.LAST_7_DAYS: {
         setTime({
-          from: dayjs().subtract(6, 'day').startOf('day').unix(),
-          to: today.unix()
+          from: dayjs().subtract(6, 'day').startOf('day'),
+          to: today
         });
         break;
       }
       case DATE_OPTION.LAST_30_DAYS: {
         setTime({
-          from: dayjs().subtract(29, 'day').startOf('day').unix(),
-          to: today.unix()
+          from: dayjs().subtract(29, 'day').startOf('day'),
+          to: today
         });
         break;
       }
@@ -150,11 +150,13 @@ const HistoryDateFilter = ({ mode = HISTORY_MODE, value: propsValue = { value: '
 
   useEffect(() => {
     if (!isOpen) {
-      if (time.from !== propsValue.from || time.to !== propsValue.to) {
+      const prevFrom = propsValue.from ? dayjs.unix(propsValue.from) : null;
+      const prevTo = propsValue.to ? dayjs.unix(propsValue.to) : null;
+      if (!time.from?.isSame(prevFrom) || !time.to?.isSame(prevTo)) {
         onChange({
           value,
-          from: time.from,
-          to: time.to,
+          from: time.from?.unix(),
+          to: time.to?.unix(),
         });
       }
     }
@@ -163,11 +165,13 @@ const HistoryDateFilter = ({ mode = HISTORY_MODE, value: propsValue = { value: '
 
   useEffect(() => {
     if (isCustomDate) {
-      if (time.from !== propsValue.from || time.to !== propsValue.to) {
+      const prevFrom = propsValue.from ? dayjs.unix(propsValue.from) : null;
+      const prevTo = propsValue.to ? dayjs.unix(propsValue.to) : null;
+      if (!time.from?.isSame(prevFrom) || !time.to?.isSame(prevTo)) {
         onChange({
           value,
-          from: time.from,
-          to: time.to,
+          from: time.from?.unix(),
+          to: time.to?.unix(),
         });
       }
       if (time.from && time.to) {

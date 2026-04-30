@@ -112,7 +112,7 @@ class LibContentView extends React.Component {
       currentDirent: null,
       columns: DIR_BASE_COLUMNS,
       tableViewColumns: DIR_BASE_COLUMNS,
-      tableViewColumnOrder: null,
+      tableViewColumnOrder: this.props.repoID ? getDirTableColumnOrder(this.props.repoID) : null,
       hiddenColumnKeys: this.props.repoID ? JSON.parse(localStorage.getItem(getDirHiddenColumnKeys(this.props.repoID))) || LIST_VIEW_HIDDEN_COLUMNS_DEFAULT : LIST_VIEW_HIDDEN_COLUMNS_DEFAULT,
       hiddenTableViewColumnKeys: this.props.repoID ? JSON.parse(localStorage.getItem(getDirTableHiddenColumnKeys(this.props.repoID))) || DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS : DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS,
       enableMetadata: false,
@@ -392,7 +392,7 @@ class LibContentView extends React.Component {
       const repoID = this.props.repoID;
       const hiddenColumnKeys = repoID ? JSON.parse(localStorage.getItem(getDirHiddenColumnKeys(repoID))) || LIST_VIEW_HIDDEN_COLUMNS_DEFAULT : LIST_VIEW_HIDDEN_COLUMNS_DEFAULT;
       const hiddenTableViewColumnKeys = repoID ? JSON.parse(localStorage.getItem(getDirTableHiddenColumnKeys(repoID))) || DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS : DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS;
-      const tableViewColumnOrder = repoID ? getDirTableColumnOrder() : null;
+      const tableViewColumnOrder = repoID ? getDirTableColumnOrder(repoID) : null;
       this.setState({ hiddenColumnKeys, hiddenTableViewColumnKeys, tableViewColumnOrder });
       this.calculatePara(this.props);
     }
@@ -2290,8 +2290,6 @@ class LibContentView extends React.Component {
     // Handle both string keys (from HideColumn) and objects (from SFTable header)
     const sourceKey = typeof source === 'string' ? source : source.key;
     const targetKey = typeof target === 'string' ? target : target.key;
-    const draggingColumnIndex = typeof source === 'string' ? undefined : source.draggingColumnIndex;
-    const targetColumnIndex = typeof target === 'string' ? undefined : target.columnIndex;
 
     // Build current order from tableViewColumnOrder or from current tableViewColumns keys
     const currentOrder = tableViewColumnOrder || tableViewColumns.map(col => col.key);
@@ -2302,24 +2300,13 @@ class LibContentView extends React.Component {
 
     if (sourceIndex === -1 || targetIndex === -1 || sourceIndex === targetIndex) return;
 
+    // Remove source first, then insert at target's position
     newOrder.splice(sourceIndex, 1);
-
-    let insertIndex;
-    if (draggingColumnIndex !== undefined && targetColumnIndex !== undefined) {
-      if (draggingColumnIndex < targetColumnIndex) {
-        insertIndex = newOrder.indexOf(targetKey) + 1;
-      } else {
-        insertIndex = newOrder.indexOf(targetKey);
-      }
-    } else {
-      insertIndex = newOrder.indexOf(targetKey);
-    }
-
-    newOrder.splice(insertIndex, 0, sourceKey);
+    newOrder.splice(targetIndex, 0, sourceKey);
 
     const newTableViewColumns = this.applyColumnOrder(tableViewColumns, newOrder);
 
-    setDirTableColumnOrder(newOrder);
+    setDirTableColumnOrder(this.props.repoID, newOrder);
     this.setState({
       tableViewColumnOrder: newOrder,
       tableViewColumns: newTableViewColumns,

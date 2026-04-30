@@ -124,10 +124,13 @@ const Cell = ({
       dragData = JSON.parse(dragData);
       if (dragData.type !== 'sf-metadata-view-header-order' || !dragData.column_key) return false;
       if (dragData.column_key !== column.key && dragData.column?.frozen === column.frozen) {
-        onMove && onMove({ key: dragData.column_key }, { key: column.key });
+        onMove && onMove(
+          { key: dragData.column_key, draggingColumnIndex },
+          { key: column.key, columnIndex: fullIndex }
+        );
       }
     }
-  }, [column, onMove]);
+  }, [column.frozen, column.key, draggingColumnIndex, fullIndex, onMove]);
 
   const onDragEnd = useCallback(() => {
     updateDraggingKey(null);
