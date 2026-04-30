@@ -14,7 +14,7 @@ import { validateName } from '../utils/validate';
 import { METADATA_VIEWS_DRAG_DATA_KEY, METADATA_VIEWS_KEY, TREE_NODE_LEFT_INDENT, VIEW_TYPE, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW } from '../constants';
 import { getNewViewMenuItem, KEY_ADD_VIEW_MAP } from '../../components/dir-view-mode/dir-views/new-view-menu';
 import Icon from '../../components/icon';
-import SfTooltip from '@/components/tooltip';
+import Tooltip from '@/components/tooltip';
 import { gettext } from '@/utils/constants';
 
 const ViewsFolder = ({
@@ -322,7 +322,7 @@ const ViewsFolder = ({
               toggleChildren={
                 <>
                   <Icon symbol="more-level" />
-                  <SfTooltip target={`view-folder-dropdown-btn${idx}`}>{gettext('More operations')}</SfTooltip>
+                  <Tooltip target={`view-folder-dropdown-btn${idx}`}>{gettext('More operations')}</Tooltip>
                 </>
               }
               freezeItem={freezeItem}

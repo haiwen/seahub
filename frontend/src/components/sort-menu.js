@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext } from '../utils/constants';
 import Icon from './icon';
-import SfTooltip from './tooltip';
+import Tooltip from './tooltip';
 
 import '../css/item-dropdown-menu.css';
 
@@ -65,7 +65,7 @@ class SortMenu extends React.Component {
           aria-expanded={isDropdownMenuOpen}
         >
           <Icon symbol="sort" />
-          <SfTooltip target="sort-icon">{gettext('Switch sort mode')}</SfTooltip>
+          <Tooltip target="sort-icon">{gettext('Switch sort mode')}</Tooltip>
         </DropdownToggle>
         <DropdownMenu className="mt-1">
           {sortOptions.map((item, index) => {

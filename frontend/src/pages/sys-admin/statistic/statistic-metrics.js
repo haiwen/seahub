@@ -4,7 +4,7 @@ import Loading from '../../../components/loading';
 import Icon from '../../../components/icon';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
-import SfTooltip from '@/components/tooltip';
+import Tooltip from '@/components/tooltip';
 
 class ComponentMetricsTable extends Component {
   constructor(props) {
@@ -57,7 +57,7 @@ class ComponentMetricsTable extends Component {
                           >
                             <Icon symbol="help" />
                           </span>
-                          <SfTooltip target={rowId} placement='right' className="metric-tooltip">{metric.help}</SfTooltip>
+                          <Tooltip target={rowId} placement='right' className="metric-tooltip">{metric.help}</Tooltip>
                         </>
                       )}
                     </div>

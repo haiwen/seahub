@@ -8,7 +8,7 @@ import { Utils } from '../../utils/utils';
 import ModalPortal from '../modal-portal';
 import DropdownMenuItem from './dropdown-menu-item';
 import Icon from '../icon';
-import SfTooltip from '../tooltip';
+import Tooltip from '../tooltip';
 
 import '../../css/item-dropdown-menu.css';
 
@@ -238,7 +238,7 @@ class ItemDropdownMenu extends React.Component {
           innerRef={this.dropdownRef}
         >
           <Icon symbol="more-level" />
-          <SfTooltip target={target}>{gettext('More operations')}</SfTooltip>
+          <Tooltip target={target}>{gettext('More operations')}</Tooltip>
         </DropdownToggle>
         <ModalPortal>
           <DropdownMenu

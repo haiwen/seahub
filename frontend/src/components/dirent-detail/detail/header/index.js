@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { gettext } from '../../../../utils/constants';
 import Icon from '../../../icon';
-import SfTooltip from '@/components/tooltip';
+import Tooltip from '@/components/tooltip';
 
 import './index.css';
 
@@ -15,7 +15,7 @@ const Header = ({ title, icon, iconSize = 32, onClose, children, component = {} 
         {showCloseIcon && (
           <div id="details-arrow-close-icon" className="detail-header-close">
             <Icon className="close-button" symbol="arrow-right" />
-            <SfTooltip target="details-arrow-close-icon">{gettext('Close')}</SfTooltip>
+            <Tooltip target="details-arrow-close-icon">{gettext('Close')}</Tooltip>
           </div>
         )}
         {icon && (
@@ -33,7 +33,7 @@ const Header = ({ title, icon, iconSize = 32, onClose, children, component = {} 
               {closeIcon ? closeIcon : (
                 <>
                   <Icon symbol="close" className="detail-control-icon" />
-                  <SfTooltip target="details-close-icon">{gettext('Close')}</SfTooltip>
+                  <Tooltip target="details-close-icon">{gettext('Close')}</Tooltip>
                 </>
               )}
             </Button>

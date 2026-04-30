@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../utils/utils';
 import Icon from './icon';
-import SfTooltip from './tooltip';
+import Tooltip from './tooltip';
 
 const propTypes = {
   id: PropTypes.string.isRequired,
@@ -43,13 +43,13 @@ class OpIcon extends React.Component {
       return (
         <>
           {iconWrapper}
-          <SfTooltip
+          <Tooltip
             target={id}
             placement={placement}
             modifiers={modifiers}
           >
             {tooltip}
-          </SfTooltip>
+          </Tooltip>
         </>
       );
     }

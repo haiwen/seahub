@@ -16,7 +16,7 @@ import { FOLDED_SIDE_NAV_FILES, FOLDED_SIDE_NAV } from '../constants/zIndexes';
 import { isWorkWeixin } from './wechat/weixin-utils';
 import WechatDialog from './wechat/wechat-dialog';
 import Icon from '../components/icon';
-import SfTooltip from './tooltip';
+import Tooltip from './tooltip';
 
 import '../css/main-side-nav-folded.css';
 
@@ -261,7 +261,7 @@ class MainSideNavFolded extends React.Component {
                     >
                       <Icon symbol="favorites" />
                     </span>
-                    <SfTooltip className="folded-side-nav-icon-tooltip" target="main-side-nav-folded-starred" placement='right'>{gettext('Favorites')}</SfTooltip>
+                    <Tooltip className="folded-side-nav-icon-tooltip" target="main-side-nav-folded-starred" placement='right'>{gettext('Favorites')}</Tooltip>
                   </Link>
                 </li>
 
@@ -281,7 +281,7 @@ class MainSideNavFolded extends React.Component {
                       >
                         <Icon symbol="activities" />
                       </span>
-                      <SfTooltip className="folded-side-nav-icon-tooltip" target="main-side-nav-folded-dashboard" placement='right'>{gettext('Activities')}</SfTooltip>
+                      <Tooltip className="folded-side-nav-icon-tooltip" target="main-side-nav-folded-dashboard" placement='right'>{gettext('Activities')}</Tooltip>
                     </Link>
                   </li>
                 </>
@@ -302,7 +302,7 @@ class MainSideNavFolded extends React.Component {
                     >
                       <Icon symbol="wiki" />
                     </span>
-                    <SfTooltip className="folded-side-nav-icon-tooltip" target="main-side-nav-folded-wikis" placement='right'>{gettext('Wikis')}</SfTooltip>
+                    <Tooltip className="folded-side-nav-icon-tooltip" target="main-side-nav-folded-wikis" placement='right'>{gettext('Wikis')}</Tooltip>
                   </Link>
                 </li>
                 }
@@ -321,7 +321,7 @@ class MainSideNavFolded extends React.Component {
                     >
                       <Icon symbol="invite-guests" />
                     </span>
-                    <SfTooltip className="folded-side-nav-icon-tooltip" target="main-side-nav-folded-invitations" placement='right'>{gettext('Invite Guest')}</SfTooltip>
+                    <Tooltip className="folded-side-nav-icon-tooltip" target="main-side-nav-folded-invitations" placement='right'>{gettext('Invite Guest')}</Tooltip>
                   </Link>
                 </li>
                 }
@@ -363,7 +363,7 @@ class MainSideNavFolded extends React.Component {
                       <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-help">
                         <Icon symbol="help" />
                       </span>
-                      <SfTooltip className="folded-side-nav-icon-tooltip" target="main-side-nav-folded-help" placement='right'>{gettext('Help')}</SfTooltip>
+                      <Tooltip className="folded-side-nav-icon-tooltip" target="main-side-nav-folded-help" placement='right'>{gettext('Help')}</Tooltip>
                     </a>
                   </li>
                   {enableTC &&
@@ -373,7 +373,7 @@ class MainSideNavFolded extends React.Component {
                         <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-terms">
                           <Icon symbol="terms" />
                         </span>
-                        <SfTooltip className="folded-side-nav-icon-tooltip" target="main-side-nav-folded-terms" placement='right'>{gettext('Terms')}</SfTooltip>
+                        <Tooltip className="folded-side-nav-icon-tooltip" target="main-side-nav-folded-terms" placement='right'>{gettext('Terms')}</Tooltip>
                       </a>
                     </li>
                   </>
@@ -383,7 +383,7 @@ class MainSideNavFolded extends React.Component {
                       <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-clients">
                         <Icon symbol="clients" />
                       </span>
-                      <SfTooltip className="folded-side-nav-icon-tooltip" target="main-side-nav-folded-clients" placement='right'>{gettext('Clients')}</SfTooltip>
+                      <Tooltip className="folded-side-nav-icon-tooltip" target="main-side-nav-folded-clients" placement='right'>{gettext('Clients')}</Tooltip>
                     </a>
                   </li>
                   {enableShowAbout &&
@@ -399,7 +399,7 @@ class MainSideNavFolded extends React.Component {
                       <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-about">
                         <Icon symbol="about" />
                       </span>
-                      <SfTooltip className="folded-side-nav-icon-tooltip" target="main-side-nav-folded-about" placement='right'>{gettext('About')}</SfTooltip>
+                      <Tooltip className="folded-side-nav-icon-tooltip" target="main-side-nav-folded-about" placement='right'>{gettext('About')}</Tooltip>
                     </div>
                   </li>
                   }
@@ -416,7 +416,7 @@ class MainSideNavFolded extends React.Component {
                       <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-wechat">
                         <Icon symbol="hi" />
                       </span>
-                      <SfTooltip className="folded-side-nav-icon-tooltip" target="main-side-nav-folded-wechat" placement='right'>{`加入${this.isWorkWeixin ? '企业' : ''}微信咨询群`}</SfTooltip>
+                      <Tooltip className="folded-side-nav-icon-tooltip" target="main-side-nav-folded-wechat" placement='right'>{`加入${this.isWorkWeixin ? '企业' : ''}微信咨询群`}</Tooltip>
                     </div>
                   </li>
                   }
@@ -433,7 +433,7 @@ class MainSideNavFolded extends React.Component {
               >
                 <Icon symbol="unfold-sidebar" className="mr-0" />
                 {this.state.showBottomToolbarTip && (
-                  <SfTooltip className="folded-side-nav-icon-tooltip" target="side-nav-bottom-toolbar-toggle" placement='right'>{gettext('Unfold the sidebar')}</SfTooltip>
+                  <Tooltip className="folded-side-nav-icon-tooltip" target="side-nav-bottom-toolbar-toggle" placement='right'>{gettext('Unfold the sidebar')}</Tooltip>
                 )}
               </div>
             </div>

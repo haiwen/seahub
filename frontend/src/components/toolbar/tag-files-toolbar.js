@@ -119,32 +119,24 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
       </OpElement>
       {(selectedFilesLen === 1 && canModify) &&
         <>
-          <OpIcon
-            className="cur-view-path-btn"
-            symbol="move"
-            title={gettext('Move')}
-            op={moveTagFile}
-          />
-          <OpIcon
-            className="cur-view-path-btn"
-            symbol="copy"
-            title={gettext('Copy')}
-            op={copyTagFile}
-          />
+          <OpIcon id="move-btn" symbol="move" className="cur-view-path-btn" tooltip={gettext('Move')} aria-label={gettext('Move')} op={moveTagFile} />
+          <OpIcon id="copy-btn" symbol="copy" className="cur-view-path-btn" tooltip={gettext('Copy')} aria-label={gettext('Copy')} op={copyTagFile} />
         </>
       }
       {canModify &&
         <>
           <OpIcon
+            id="delete-btn"
             className="cur-view-path-btn"
             symbol="delete1"
-            title={gettext('Delete')}
+            tooltip={gettext('Delete')}
             op={deleteTagFiles}
           />
           <OpIcon
+            id="download-btn"
             className="cur-view-path-btn"
             symbol="download"
-            title={gettext('Download')}
+            tooltip={gettext('Download')}
             op={downloadTagFiles}
           />
         </>

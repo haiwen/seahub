@@ -6,7 +6,7 @@ import Loading from '../../loading';
 import BackIcon from '../../back-icon';
 import Icon from '../../icon';
 import { Utils } from '../../../utils/utils';
-import SfTooltip from '@/components/tooltip';
+import Tooltip from '@/components/tooltip';
 
 class CustomPermissionEditor extends React.Component {
   constructor(props) {
@@ -25,7 +25,6 @@ class CustomPermissionEditor extends React.Component {
         download_external_link: false,
       },
       errMessage: '',
-      tooltipOpen: false,
     };
   }
 
@@ -91,10 +90,6 @@ class CustomPermissionEditor extends React.Component {
       return;
     }
     this.props.onUpdateCustomPermission(permission_name, permission_desc, permission);
-  };
-
-  toggle = () => {
-    this.setState({ tooltipOpen: !this.state.tooltipOpen });
   };
 
   render() {
@@ -171,7 +166,7 @@ class CustomPermissionEditor extends React.Component {
                     />
                     <span>{gettext('Modify')}</span>
                     <span id="modify-tip" className="ml-2" style={{ color: '#999' }} aria-hidden="true"><Icon symbol="about" /></span>
-                    <SfTooltip target='modify-tip' placement='bottom'>{gettext('Modify includes modify file, move/rename file and folder')}</SfTooltip>
+                    <Tooltip target='modify-tip' placement='bottom'>{gettext('Modify includes modify file, move/rename file and folder')}</Tooltip>
                   </Label>
                 </FormGroup>
                 <FormGroup check>

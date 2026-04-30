@@ -10,7 +10,7 @@ import { MIN_COLUMN_WIDTH } from '../../../constants/grid';
 import { NODE_CONTENT_LEFT_INDENT, NODE_ICON_LEFT_INDENT } from '../../../constants/tree';
 import { Utils } from '../../../../../utils/utils';
 import HeaderDropdownMenu from '@/components/sf-table/table-main/records-header/dropdown-menu';
-import SfTooltip from '@/components/tooltip';
+import Tooltip from '@/components/tooltip';
 
 import './index.css';
 
@@ -144,7 +144,7 @@ const Cell = ({
           {icon_name && (
             <>
               <Icon symbol={icon_name} className="sf-metadata-icon sf-table-column-icon" />
-              {icon_tooltip && <SfTooltip target={`header-icon-${key}`}>{icon_tooltip}</SfTooltip>}
+              {icon_tooltip && <Tooltip target={`header-icon-${key}`}>{icon_tooltip}</Tooltip>}
             </>
           )}
         </span>

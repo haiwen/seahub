@@ -13,7 +13,7 @@ import Icon from '../icon';
 import { lockFile, unlockFile, freezeDocument, exportDocx, exportSdoc, toggleStar, openHistory, openViaClient } from '../../utils/dirent-operations';
 import EventBus from '../common/event-bus';
 import { EVENT_BUS_TYPE as TABLE_EVENT_BUS_TYPE } from '@/metadata/constants';
-import SfTooltip from '../tooltip';
+import Tooltip from '../tooltip';
 
 import '../../css/selected-dirents-toolbar.css';
 
@@ -304,7 +304,7 @@ class SelectedDirentsToolbar extends React.Component {
         >
           <span className="d-flex align-items-center justify-content-center mr-2">
             <Icon id="close-selected-toolbar-icon" symbol="close" />
-            <SfTooltip target="close-selected-toolbar-icon">{gettext('Unselect')}</SfTooltip>
+            <Tooltip target="close-selected-toolbar-icon">{gettext('Unselect')}</Tooltip>
           </span>
           <span>{selectedLen}{' '}{gettext('selected')}</span>
         </OpElement>

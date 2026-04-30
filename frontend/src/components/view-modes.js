@@ -5,7 +5,7 @@ import { Utils } from '../utils/utils';
 import { gettext } from '../utils/constants';
 import { GRID_MODE, LIST_MODE, TABLE_MODE } from './dir-view-mode/constants';
 import Icon from './icon';
-import SfTooltip from './tooltip';
+import Tooltip from './tooltip';
 
 import '../css/view-modes.css';
 
@@ -79,7 +79,7 @@ class ViewModes extends React.Component {
           aria-expanded={isDropdownMenuOpen}
         >
           <Icon symbol={symbol} />
-          <SfTooltip target="switch-view-mode-icon">{gettext('Switch view mode')}</SfTooltip>
+          <Tooltip target="switch-view-mode-icon">{gettext('Switch view mode')}</Tooltip>
         </DropdownToggle>
         <DropdownMenu className="mt-1">
           {options.map((item, index) => {

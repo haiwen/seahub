@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { isMobile, Utils } from '../../../../../../utils/utils';
 import { gettext } from '../../../../../../utils/constants';
 import { SEQUENCE_COLUMN_WIDTH } from '../../../../constants/grid';
-import SfTooltip from '@/components/tooltip';
+import Tooltip from '@/components/tooltip';
 import OpIcon from '@/components/op-icon';
 
 import './index.css';
@@ -39,7 +39,7 @@ class ActionsCell extends Component {
   getLockedRowTooltip = () => {
     const { recordId } = this.props;
     return (
-      <SfTooltip target={`action-cell-${recordId}`} placement='bottom' className="readonly-cell-tooltip">{gettext('The row is locked and cannot be modified')}</SfTooltip>
+      <Tooltip target={`action-cell-${recordId}`} placement='bottom' className="readonly-cell-tooltip">{gettext('The row is locked and cannot be modified')}</Tooltip>
     );
   };
 

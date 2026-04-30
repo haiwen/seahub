@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Button } from 'reactstrap';
 import Icon from './icon';
-import SfTooltip from './tooltip';
+import Tooltip from './tooltip';
 
 const propTypes = {
   id: PropTypes.string.isRequired,
@@ -47,13 +47,13 @@ class IconButton extends React.Component {
     return (
       <>
         {button}
-        <SfTooltip
+        <Tooltip
           target={id}
           placement='bottom'
           shortcut={shortcut}
         >
           {text}
-        </SfTooltip>
+        </Tooltip>
       </>
     );
   }

@@ -9,7 +9,7 @@ import ModalPortal from '../modal-portal';
 import ShareDialog from '../dialog/share-dialog';
 import Icon from '../../components/icon';
 import ImageZoomer from './image-zoomer';
-import SfTooltip from '../tooltip';
+import Tooltip from '../tooltip';
 
 const propTypes = {
   isLocked: PropTypes.bool.isRequired,
@@ -204,12 +204,12 @@ class FileToolbar extends React.Component {
               role='button'
             >
               <Icon symbol="more-level" />
-              <SfTooltip
+              <Tooltip
                 target="more-operations"
                 placement='bottom'
               >
                 {gettext('More operations')}
-              </SfTooltip>
+              </Tooltip>
             </DropdownToggle>
             <DropdownMenu>
               {fileExt == 'csv' && enableOnlyoffice && (

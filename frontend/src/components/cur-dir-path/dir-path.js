@@ -16,7 +16,7 @@ import { getTrashPath } from '../dir-view-mode/dir-trash-view/utils';
 import EventBus from '../common/event-bus';
 import CleanTrash from '../dialog/clean-trash';
 import ArchiveIcon from '../archive-icon';
-import SfTooltip from '../tooltip';
+import Tooltip from '../tooltip';
 
 const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
@@ -180,13 +180,12 @@ class DirPath extends React.Component {
           onKeyDown={Utils.onKeyDown}
         >
           <Icon symbol="refresh" />
-          <SfTooltip
+          <Tooltip
             target="sf-metadata-view-refresh"
             placement="bottom"
-            confirmText={gettext('test')}
           >
             {gettext('Refresh the view')}
-          </SfTooltip>
+          </Tooltip>
         </div>
       </>
     );
@@ -325,7 +324,7 @@ class DirPath extends React.Component {
           tabIndex={0}
         >
           <Icon symbol="question-circle-stroked" />
-          <SfTooltip target="sf-history-mode-tip" placement='bottom'>{gettext('Tip: a snapshot will be generated after modification, which records the library state after the modification')}</SfTooltip>
+          <Tooltip target="sf-history-mode-tip" placement='bottom'>{gettext('Tip: a snapshot will be generated after modification, which records the library state after the modification')}</Tooltip>
         </div>
       </>
     );

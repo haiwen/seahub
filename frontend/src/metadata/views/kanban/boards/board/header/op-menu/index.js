@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext } from '../../../../../../../utils/constants';
 import Icon from '../../../../../../../components/icon';
-import SfTooltip from '@/components/tooltip';
+import Tooltip from '@/components/tooltip';
 
 const OpMenu = ({ idx, onDelete, onFreezed, onUnFreezed }) => {
   let [isShow, setShow] = useState(false);
@@ -41,7 +41,7 @@ const OpMenu = ({ idx, onDelete, onFreezed, onUnFreezed }) => {
         data-toggle="dropdown"
       >
         <Icon symbol="more-level" />
-        <SfTooltip target={`header-dropdown-btn-${idx}`}>{gettext('More operations')}</SfTooltip>
+        <Tooltip target={`header-dropdown-btn-${idx}`}>{gettext('More operations')}</Tooltip>
       </DropdownToggle>
       <DropdownMenu>
         <DropdownItem onClick={handleDelete}>{gettext('Delete')}</DropdownItem>

@@ -4,7 +4,7 @@ import { EXTERNAL_EVENTS, EventBus } from '@seafile/seafile-editor';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext, canGenerateShareLink } from '../../../utils/constants';
 import Icon from '../../../components/icon';
-import SfTooltip from '@/components/tooltip';
+import Tooltip from '@/components/tooltip';
 
 const { canDownloadFile } = window.app.pageOptions;
 
@@ -57,7 +57,7 @@ class MoreMenu extends React.PureComponent {
           aria-label={gettext('More operations')}
         >
           <Icon symbol="more-level" />
-          <SfTooltip target="moreButton" placement='bottom'>{gettext('More')}</SfTooltip>
+          <Tooltip target="moreButton" placement='bottom'>{gettext('More')}</Tooltip>
         </DropdownToggle>
         <DropdownMenu className="drop-list">
           {(!this.props.readOnly && editorMode === 'rich') &&

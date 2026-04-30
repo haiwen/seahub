@@ -15,7 +15,7 @@ import toaster from '../toast';
 import ConvertWikiDialog from '../dialog/convert-wiki-dialog';
 import PublishedWikiExtrance from '../published-wiki-entrance';
 import Icon from '../icon';
-import SfTooltip from '../tooltip';
+import Tooltip from '../tooltip';
 
 dayjs.extend(relativeTime);
 
@@ -243,7 +243,7 @@ class WikiCardItem extends Component {
                   style={{ 'minWidth': '0' }}
                 >
                   <Icon symbol="more-level" className="w-4 h-4" />
-                  <SfTooltip target={`wiki-card-more-op-${idx}`}>{gettext('More operations')}</SfTooltip>
+                  <Tooltip target={`wiki-card-more-op-${idx}`}>{gettext('More operations')}</Tooltip>
                 </DropdownToggle>
                 <DropdownMenu className="dtable-dropdown-menu">
                   {showRename &&

@@ -1,3 +1,8 @@
+.sf-tooltip {
+  position: absolute;
+  z-index: 1070;
+}
+
 .sf-tooltip .tooltip {
   max-width: 242px;
   opacity: 1;
@@ -12,6 +17,7 @@
   padding: 4px 8px;
   line-height: 20px;
   font-weight: normal;
+  white-space: nowrap;
 }
 
 .sf-tooltip-shortcut-inner {

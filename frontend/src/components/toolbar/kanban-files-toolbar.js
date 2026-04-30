@@ -178,41 +178,27 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
 
       {!isMultiple && !readOnly && (
         <>
-          <OpIcon
-            className="cur-view-path-btn"
-            title={gettext('Move')}
-            aria-label={gettext('Move')}
-            op={toggleMoveDialog}
-          >
-            <Icon symbol="move" />
-          </OpIcon>
-          <span
-            className="cur-view-path-btn"
-            onClick={toggleCopyDialog}
-            title={gettext('Copy')}
-            aria-label={gettext('Copy')}
-          >
-            <Icon symbol="copy" />
-          </span>
+          <OpIcon id="move-btn" symbol="move" className="cur-view-path-btn" tooltip={gettext('Move')} aria-label={gettext('Move')} op={toggleMoveDialog} />
+          <OpIcon id="copy-btn" symbol="copy" className="cur-view-path-btn" tooltip={gettext('Copy')} aria-label={gettext('Copy')} op={toggleCopyDialog} />
         </>
       )}
       <OpIcon
+        id="download-btn"
+        symbol="download"
         className="cur-view-path-btn"
-        title={gettext('Download')}
+        tooltip={gettext('Download')}
         aria-label={gettext('Download')}
         op={downloadRecords}
-      >
-        <Icon symbol="download" />
-      </OpIcon>
+      />
       {!readOnly && (
         <OpIcon
+          id="delete-btn"
+          symbol="delete1"
           className="cur-view-path-btn"
-          title={gettext('Delete')}
+          tooltip={gettext('Delete')}
           aria-label={gettext('Delete')}
           op={deleteRecords}
-        >
-          <Icon symbol="delete1" />
-        </OpIcon>
+        />
       )}
       {length > 0 && (
         <ItemDropdownMenu

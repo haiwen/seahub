@@ -12,7 +12,7 @@ const propTypes = {
   shortcut: PropTypes.arrayOf(PropTypes.string),
 };
 
-const SfTooltip = ({
+const Tooltip = ({
   target,
   placement = 'bottom',
   className,
@@ -72,6 +72,6 @@ const SfTooltip = ({
   );
 };
 
-SfTooltip.propTypes = propTypes;
+Tooltip.propTypes = propTypes;
 
-export default SfTooltip;
+export default Tooltip;

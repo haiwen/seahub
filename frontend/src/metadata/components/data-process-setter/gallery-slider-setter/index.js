@@ -5,7 +5,7 @@ import Icon from '../../../../components/icon';
 import { gettext } from '../../../../utils/constants';
 import { EVENT_BUS_TYPE, GALLERY_ZOOM_GEAR_MIN, GALLERY_ZOOM_GEAR_MAX, STORAGE_GALLERY_ZOOM_GEAR_KEY } from '../../../constants';
 import { Utils } from '../../../../utils/utils';
-import SfTooltip from '@/components/tooltip';
+import Tooltip from '@/components/tooltip';
 
 import './index.css';
 
@@ -53,7 +53,7 @@ const GallerySliderSetter = ({ viewID }) => {
         onKeyDown={Utils.onKeyDown}
       >
         <Icon symbol="minus-sign" className="metadata-slider-icon" />
-        <SfTooltip target="zoom-out-btn">{gettext('Zoom out')}</SfTooltip>
+        <Tooltip target="zoom-out-btn">{gettext('Zoom out')}</Tooltip>
       </Button>
       <Input
         type="range"
@@ -75,7 +75,7 @@ const GallerySliderSetter = ({ viewID }) => {
         onKeyDown={Utils.onKeyDown}
       >
         <Icon symbol="plus-sign" className="metadata-slider-icon" />
-        <SfTooltip target="zoom-in-btn">{gettext('Zoom in')}</SfTooltip>
+        <Tooltip target="zoom-in-btn">{gettext('Zoom in')}</Tooltip>
       </Button>
     </div>
   );

@@ -14,7 +14,7 @@ import {
   VIEW_TYPE, VIEW_TYPE_LABEL, VIEW_TYPE_ICON, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW
 } from '../constants';
 import { validateName } from '../utils/validate';
-import SfTooltip from '@/components/tooltip';
+import Tooltip from '@/components/tooltip';
 
 const MOVE_TO_FOLDER_PREFIX = 'move_to_folder_';
 const TURN_VIEW_INTO_PREFIX = 'turn_view_into_';
@@ -281,7 +281,7 @@ const ViewItem = ({
                 toggleChildren={
                   <>
                     <Icon symbol="more-level" />
-                    <SfTooltip target={`view-dropdown-btn-${idx}`}>{gettext('More operations')}</SfTooltip>
+                    <Tooltip target={`view-dropdown-btn-${idx}`}>{gettext('More operations')}</Tooltip>
                   </>
                 }
                 freezeItem={freezeItem}

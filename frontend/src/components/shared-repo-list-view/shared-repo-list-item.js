@@ -27,7 +27,7 @@ import Icon from '../icon';
 import RepoWebhookDialog from '../dialog/repo-webhook-dialog';
 import RepoArchiveDialog from '../dialog/repo-archive-dialog';
 import ArchiveIcon from '../archive-icon';
-import SfTooltip from '../tooltip';
+import Tooltip from '../tooltip';
 
 dayjs.extend(relativeTime);
 
@@ -546,7 +546,7 @@ class SharedRepoListItem extends React.Component {
               onKeyDown={this.onDropdownToggleKeyDown}
             >
               <Icon symbol="more-level" className="w-4 h-4" />
-              <SfTooltip target="more-level-icon">{gettext('More operations')}</SfTooltip>
+              <Tooltip target="more-level-icon">{gettext('More operations')}</Tooltip>
             </DropdownToggle>
             <DropdownMenu onMouseMove={this.onDropDownMouseMove}>
               {operations.map((item, index) => {

@@ -5,7 +5,7 @@ import EmptyTip from '../../empty-tip';
 import Loading from '../../loading';
 import Icon from '../../icon';
 import { Utils } from '../../../utils/utils';
-import SfTooltip from '@/components/tooltip';
+import Tooltip from '@/components/tooltip';
 
 const ItemPropTypes = {
   member: PropTypes.object,
@@ -55,7 +55,7 @@ class Item extends Component {
             <span className="d-inline-flex align-items-center">
               <Icon symbol="about" />
             </span>
-            <SfTooltip target={`no-select-${index}`} placement="bottom">{tip}</SfTooltip>
+            <Tooltip target={`no-select-${index}`} placement="bottom">{tip}</Tooltip>
           </td>
         </tr>
       );

@@ -1,7 +1,7 @@
 import React from 'react';
 import Icon from './icon';
 import { gettext } from '../utils/constants';
-import SfTooltip from './tooltip';
+import Tooltip from './tooltip';
 
 export default function ArchiveIcon({ currentRepoInfo, className = 'ml-1' }) {
 
@@ -10,7 +10,7 @@ export default function ArchiveIcon({ currentRepoInfo, className = 'ml-1' }) {
   return (
     <>
       <Icon id={id} className={className} symbol="archive"></Icon>
-      <SfTooltip target={id} placement='bottom'>{gettext('This library has been archived, cannot be updated.')}</SfTooltip>
+      <Tooltip target={id} placement='bottom'>{gettext('This library has been archived, cannot be updated.')}</Tooltip>
     </>
   );
 }

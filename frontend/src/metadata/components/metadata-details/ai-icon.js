@@ -9,7 +9,7 @@ import { getFileNameFromRecord, getFileObjIdFromRecord, getParentDirFromRecord, 
 import { getColumnByKey } from '../../utils/column';
 import { PRIVATE_COLUMN_KEY } from './constants';
 import { checkIsDir } from '../../utils/row';
-import SfTooltip from '@/components/tooltip';
+import Tooltip from '@/components/tooltip';
 
 const OPERATION = {
   GENERATE_DESCRIPTION: 'generate-description',
@@ -146,7 +146,7 @@ const AIIcon = () => {
         tabIndex={0}
       >
         <Icon symbol="ai" className="detail-control-icon" />
-        <SfTooltip target="ai-icon">{gettext('AI')}</SfTooltip>
+        <Tooltip target="ai-icon">{gettext('AI')}</Tooltip>
       </DropdownToggle>
       {isMenuShow && (
         <div className="sf-metadata-ai-dropdown-menu large">
