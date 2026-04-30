@@ -236,6 +236,7 @@ class DirPath extends React.Component {
       <>
         <Dropdown className='trash-path-dropdown' isOpen={this.state.isDesktopMenuOpen} toggle={this.toggleDesktopOpMenu}>
           <DropdownToggle
+            id="trash-more-operations"
             tag="span"
             role="button"
             tabIndex="0"
@@ -246,6 +247,7 @@ class DirPath extends React.Component {
             aria-expanded={this.state.isDesktopMenuOpen}
           >
             <Icon symbol="down" className="path-item-dropdown-toggle" />
+            <Tooltip target="trash-more-operations">{gettext('More operations')}</Tooltip>
           </DropdownToggle>
           <DropdownMenu onMouseMove={this.onDropDownMouseMove} className='position-fixed'>
             <DropdownItem onClick={this.toggleCleanTrashDialog}>{gettext('Clean trash')}</DropdownItem>
@@ -412,7 +414,6 @@ class DirPath extends React.Component {
           symbol="side-bar"
           title={tip}
           tooltip={tip}
-          placement="top"
           op={this.props.toggleTreePanel}
         />
         {this.props.pathPrefix && this.props.pathPrefix.map((item, index) => {

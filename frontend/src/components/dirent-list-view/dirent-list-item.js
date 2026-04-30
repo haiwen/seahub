@@ -748,6 +748,7 @@ class DirentListItem extends React.Component {
                   onMenuItemClick={this.onMenuItemClick}
                   freezeItem={this.props.freezeItem}
                   unfreezeItem={this.unfreezeItem}
+                  tooltip={gettext('More operations')}
                 />
               )}
             </div>

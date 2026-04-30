@@ -4,7 +4,6 @@ import { permission } from '../../utils/constants';
 import TextTranslation from '../../utils/text-translation';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { Utils, isMobile } from '../../utils/utils';
-import { gettext } from '@/utils/constants';
 import OpIcon from '../../components/op-icon';
 import Icon from '../icon';
 
@@ -324,7 +323,6 @@ class TreeNodeView extends React.Component {
                 id="tree-node-fold-btn"
                 className={`folder-toggle-icon ${node.isExpanded ? '' : 'rotate-270'}`}
                 symbol="down"
-                tooltip={node.isExpanded ? gettext('Fold') : gettext('Unfold')}
                 onMouseDown={e => e.stopPropagation()}
                 op={this.onLoadToggle}
               />

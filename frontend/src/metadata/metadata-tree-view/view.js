@@ -14,7 +14,6 @@ import {
   VIEW_TYPE, VIEW_TYPE_LABEL, VIEW_TYPE_ICON, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW
 } from '../constants';
 import { validateName } from '../utils/validate';
-import Tooltip from '@/components/tooltip';
 
 const MOVE_TO_FOLDER_PREFIX = 'move_to_folder_';
 const TURN_VIEW_INTO_PREFIX = 'turn_view_into_';
@@ -275,15 +274,9 @@ const ViewItem = ({
           <div className="right-icon" id={`metadata-view-dropdown-item-${viewId}`} >
             {highlight && (
               <ItemDropdownMenu
-                target={`view-dropdown-btn-${idx}`}
                 item={{ name: 'metadata-view' }}
                 menuClassname="metadata-views-dropdown-menu"
-                toggleChildren={
-                  <>
-                    <Icon symbol="more-level" />
-                    <Tooltip target={`view-dropdown-btn-${idx}`}>{gettext('More operations')}</Tooltip>
-                  </>
-                }
+                toggleChildren={<Icon symbol="more-level" />}
                 freezeItem={freezeItem}
                 unfreezeItem={unfreezeItem}
                 getMenuList={() => operations}

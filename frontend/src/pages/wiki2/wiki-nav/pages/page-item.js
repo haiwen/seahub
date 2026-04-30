@@ -370,9 +370,10 @@ const PageItem = ({
                 importPage={importPage}
               />
               <OpIcon
+                id="add-new-page"
                 className="op-icon mr-0"
                 op={toggleInsertPage}
-                title={gettext('Add page inside')}
+                tooltip={gettext('Add page inside')}
                 symbol="new"
               />
             </div>

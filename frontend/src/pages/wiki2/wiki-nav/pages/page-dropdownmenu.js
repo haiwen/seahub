@@ -6,6 +6,7 @@ import { gettext } from '../../../../utils/constants';
 import { getWikPageLink } from '../../utils';
 import { INSERT_POSITION } from '../constants';
 import Icon from '../../../../components/icon';
+import Tooltip from '@/components/tooltip';
 
 const { serviceURL: serviceUrl } = window.app.config;
 
@@ -152,6 +153,7 @@ export default class PageDropdownMenu extends Component {
     const { isMenuOpen } = this.state;
     return (
       <Dropdown
+        id="wiki-nav-item-more-operations"
         isOpen={isMenuOpen}
         toggle={this.onDropdownToggle}
         className="page-operation-dropdown"
@@ -162,10 +164,10 @@ export default class PageDropdownMenu extends Component {
           data-toggle="dropdown"
           role="button"
           tabIndex={0}
-          title={gettext('More operations')}
           aria-label={gettext('More operations')}
         >
           <Icon symbol="more-level" />
+          <Tooltip target="wiki-nav-item-more-operations">{gettext('More operations')}</Tooltip>
         </DropdownToggle>
         <DropdownMenu
           className="page-operation-dropdown-menu dtable-dropdown-menu large position-fixed"
