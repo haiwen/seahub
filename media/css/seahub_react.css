@@ -546,12 +546,12 @@ textarea::placeholder {
   color: var(--bs-icon-color);
   /* to overwrite the styles for `a:hover` */
   text-decoration: none;
-  background: var(--bs-hover-secondary-bg);
+  background: var(--bs-icon-btn-hover-bg-color);
 }
 
 .op-icon-bg-light:focus,
 .op-icon-bg-light:hover {
-  background: var(--bs-hover-bg);
+  background: var(--bs-icon-btn-hover-bg-color);
   /* for .op-icon shown in white containers */
 }
 

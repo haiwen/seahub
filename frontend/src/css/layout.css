@@ -227,7 +227,7 @@ select {
 
 .cur-view-path .cur-view-path-btn:hover,
 .cur-view-path .cur-view-tip:hover {
-  background-color: var(--bs-hover-bg);
+  background-color: var(--bs-icon-btn-hover-bg-color);
 }
 
 .cur-view-path:after {
@@ -289,10 +289,6 @@ select {
 
 .repos-container .library-list-header .op-icon {
   font-size: 14px;
-}
-
-.repos-container .library-list-header .op-icon:hover {
-  background-color: var(--bs-hover-bg);
 }
 
 .repos-container .library-list-header .btn.btn-secondary {

@@ -387,7 +387,7 @@
 
 .dir-view-path .path-item:hover,
 .dir-view-path .path-dropdown-item:hover {
-  background: var(--bs-nav-hover-bg);
+  background: var(--bs-icon-btn-hover-bg-color);
 }
 
 .dir-view-path .path-item.path-item-read-only:hover {

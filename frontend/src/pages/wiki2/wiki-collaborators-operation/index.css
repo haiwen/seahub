@@ -2,30 +2,30 @@
   height: 24px;
   width: auto;
   padding: 0 4px;
-  border-radius: 3px;
+  border-radius: 4px;
   cursor: pointer;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-right: 10px;
-  color: #666666;
+  color: var(--bs-icon-color);
 }
 
 .wiki-collaborators-btn-container svg {
   width: 16px;
   height: 16px;
-  color: #666666;
-  fill: #666;
+  color: var(--bs-icon-color);
+  fill: var(--bs-icon-color);
   cursor: pointer;
 } 
 
 .wiki-collaborators-btn-container:hover {
-  background-color: #efefef;
+  background-color: var(--bs-icon-btn-hover-bg-color);
   cursor: pointer
 }
 
 .wiki-collaborators-btn-container .sdocfont {
-  color: #666666;
+  color: var(--bs-icon-color);
   cursor: pointer;
 }

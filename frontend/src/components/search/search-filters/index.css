@@ -29,7 +29,7 @@
 
 .search-filters-container .search-filter .search-filter-toggle:hover,
 .search-filter-menu .search-filter-toggle:hover {
-  background-color: var(--bs-hover-bg);
+  background-color: var(--bs-icon-btn-hover-bg-color);
 }
 
 .search-filters-container .search-filter .filter-label {

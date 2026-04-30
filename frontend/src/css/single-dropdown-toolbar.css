@@ -10,7 +10,7 @@
 .sf-dropdown-combined-toggle:active,
 .sf-dropdown-combined-toggle:hover {
   color: var(--bs-icon-color)!important;
-  background: var(--bs-hover-bg)!important;
+  background: var(--bs-icon-btn-hover-bg-color)!important;
 }
 
 .sf-dropdown-combined-toggle .new-icon {

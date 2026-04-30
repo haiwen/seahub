@@ -57,11 +57,11 @@ body {
   align-items: center;
   cursor: pointer;
   border-radius: 3px;
-  color: #666666;
+  color: var(--bs-icon-color);
 }
 
 .wiki2-main-panel .wiki2-main-panel-north .wiki2-file-history-button:hover {
-  background-color: var(--bs-hover-bg);
+  background-color: var(--bs-icon-btn-hover-bg-color);
 }
 
 .wiki2-main-panel .wiki2-main-panel-north .wiki2-file-history-button svg {
