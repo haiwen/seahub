@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
+import { components } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import { MenuSelectStyle } from '../common/select/seahub-select-style';
+import SelectDropdownIndicator from '../select-dropdown-indicator';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import Icon from '@/components/icon';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -15,6 +18,29 @@ const propTypes = {
   commitLabels: PropTypes.array.isRequired,
   updateCommitLabels: PropTypes.func.isRequired,
   toggleDialog: PropTypes.func.isRequired
+};
+
+const DropdownIndicator = props => {
+  return (
+    <components.DropdownIndicator {...props}>
+      <SelectDropdownIndicator />
+    </components.DropdownIndicator>
+  );
+};
+
+const ClearIndicator = ({ innerProps, ...props }) => {
+  const onMouseDown = e => {
+    e.nativeEvent.stopImmediatePropagation();
+    innerProps.onMouseDown(e);
+  };
+  props.innerProps = { ...innerProps, onMouseDown };
+  return (
+    <components.ClearIndicator {...props} >
+      <span className="d-flex align-items-center" style={{ marginRight: '16px' }} aria-hidden="true">
+        <Icon symbol="close" style={{ width: '12px', height: '12px' }} />
+      </span>
+    </components.ClearIndicator>
+  );
 };
 
 class UpdateRepoCommitLabels extends React.Component {
@@ -74,6 +100,7 @@ class UpdateRepoCommitLabels extends React.Component {
               noOptionsMessage={() => {return gettext('No options available');}}
               formatCreateLabel={(inputValue) => {return gettext('Add option: %s').replace('%s', inputValue);}}
               styles={MenuSelectStyle}
+              components={{ DropdownIndicator, ClearIndicator }}
             />
             {formErrorMsg && <p className="error m-0 mt-2">{formErrorMsg}</p>}
           </React.Fragment>

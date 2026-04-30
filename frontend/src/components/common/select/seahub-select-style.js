@@ -131,9 +131,6 @@ const MenuSelectStyle = {
     };
   },
   indicatorSeparator: (styles, state) => {
-    if (state.selectProps.isMulti) {
-      return styles;
-    }
     return {
       'display': 'none'
     };
