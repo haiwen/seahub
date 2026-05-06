@@ -128,7 +128,7 @@ class SharedLibraries extends Component {
           <div className="main-panel-center">
             <div className="cur-view-container">
               <div className="cur-view-path">
-                <h3 className="sf-heading mb-3">{gettext('Shared with me')}</h3>
+                <h3 className="sf-heading">{gettext('Shared with me')}</h3>
                 {Utils.isDesktop() && (
                   <div className="d-flex align-items-center">
                     <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />

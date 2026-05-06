@@ -399,7 +399,7 @@ class SharedWithOCM extends Component {
             <div className="main-panel-center">
               <div className="cur-view-container">
                 <div className="cur-view-path">
-                  <h3 className="library-list-header">{gettext('Shared from other servers')}</h3>
+                  <h3 className="sf-heading">{gettext('Shared from other servers')}</h3>
                   {Utils.isDesktop() && (
                     <div className="d-flex align-items-center">
                       <ViewModes

@@ -298,11 +298,11 @@ class GroupView extends React.Component {
             <div className="cur-view-path">
               {currentGroup && (
                 <Fragment>
-                  <div className="library-list-header">
+                  <div className="d-flex align-items-center">
                     {isDepartmentGroup && (
-                      <Icon symbol="department" className="role-icon" title={gettext('This is a special group representing a department.')} aria-hidden="true" />
+                      <Icon symbol="department" className="role-icon mr-2" title={gettext('This is a special group representing a department.')} aria-hidden="true" />
                     )}
-                    <span>{currentGroup.name}</span>
+                    <h3 className="sf-heading">{currentGroup.name}</h3>
                     <GroupOperationMenu
                       group={currentGroup}
                       addNewRepo={this.addNewRepo}

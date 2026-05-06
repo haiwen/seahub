@@ -166,7 +166,7 @@ class MyLibraries extends Component {
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              <div className="librarary-list-header">
+              <div className="d-flex align-items-center">
                 <span className="library-list-title">{gettext('My Libraries')}</span>
                 <SingleDropdownToolbar
                   withPlusIcon={true}
