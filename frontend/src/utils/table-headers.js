@@ -116,22 +116,6 @@ export const createTableHeaders = (
         sortBy === 'time' && sortIcon
       )
     }] : []),
-    ...(isColumnVisible(PRIVATE_COLUMN_KEY.FILE_CREATOR) ? [{
-      key: PRIVATE_COLUMN_KEY.FILE_CREATOR,
-      width: COLUMN_CONFIG.file_creator.width,
-      className: COLUMN_CONFIG.file_creator.className,
-      minWidth: COLUMN_CONFIG.file_creator.width,
-      children: React.createElement(
-        'span',
-        {
-          className: 'd-flex align-items-center table-sort-op',
-          href: '#',
-          onClick: (e) => { e.preventDefault(); onSort && onSort('creator'); }
-        },
-        gettext('Creator'),
-        sortBy === 'creator' && sortIcon
-      )
-    }] : []),
     ...(isColumnVisible(PRIVATE_COLUMN_KEY.FILE_MODIFIER) ? [{
       key: PRIVATE_COLUMN_KEY.FILE_MODIFIER,
       width: COLUMN_CONFIG.file_modifier.width,
@@ -146,6 +130,22 @@ export const createTableHeaders = (
         },
         gettext('Last modifier'),
         sortBy === 'file_modifier' && sortIcon
+      )
+    }] : []),
+    ...(isColumnVisible(PRIVATE_COLUMN_KEY.FILE_CREATOR) ? [{
+      key: PRIVATE_COLUMN_KEY.FILE_CREATOR,
+      width: COLUMN_CONFIG.file_creator.width,
+      className: COLUMN_CONFIG.file_creator.className,
+      minWidth: COLUMN_CONFIG.file_creator.width,
+      children: React.createElement(
+        'span',
+        {
+          className: 'd-flex align-items-center table-sort-op',
+          href: '#',
+          onClick: (e) => { e.preventDefault(); onSort && onSort('creator'); }
+        },
+        gettext('Creator'),
+        sortBy === 'creator' && sortIcon
       )
     }] : []),
     ...(isColumnVisible(PRIVATE_COLUMN_KEY.FILE_STATUS) ? [{

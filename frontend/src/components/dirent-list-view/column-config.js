@@ -24,13 +24,13 @@ export const COLUMN_CONFIG = {
     width: 120,
     className: 'dirent-property dirent-property-modified',
   },
-  file_creator: {
-    width: 100,
-    className: 'dirent-property dirent-property-creator',
-  },
   file_modifier: {
     width: 120,
     className: 'dirent-property dirent-property-last-modifier',
+  },
+  file_creator: {
+    width: 100,
+    className: 'dirent-property dirent-property-creator',
   },
   status: {
     width: 120,
