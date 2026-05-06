@@ -1,7 +1,6 @@
 import requests, jwt, time
 from seahub.settings import METADATA_SERVER_URL, JWT_PRIVATE_KEY
 
-
 def list_metadata_records(repo_id, user, parent_dir=None, name=None, is_dir=None, start=0, limit=1000, order_by=None):
     from seafevents.repo_metadata.constants import METADATA_TABLE
     sql = f'SELECT * FROM `{METADATA_TABLE.name}`'
@@ -102,6 +101,30 @@ def list_metadata_view_records(repo_id, user, view, tags_enabled, start=0, limit
     response_results = metadata_server_api.query_rows(sql, [])
     return response_results
 
+def list_repo_file_view_records(repo_id, user, view):
+    from seahub.api2.views import get_recursive_file_list
+    view_copy = view.copy()
+    basic_filters = view_copy.get('basic_filters', [])
+    sorts = view_copy.get('sorts', [])
+    parent_path = '/'
+    order_by = None
+    desc = False
+    for basic_filter in basic_filters:
+        if basic_filter.get('column_key') == '_parent_dir':
+            filter_term = basic_filter.get('filter_term', [])
+            if filter_term:
+                parent_path = filter_term[0]
+                break
+    for sort in sorts:
+        sort_column = sort.get('column_key')
+        order_by = sort_column
+        sort_type = sort.get('sort_type')
+        if sort_type == 'down':
+            desc = True
+        break
+    results = get_recursive_file_list(user, repo_id, parent_path, [], order_by=order_by, desc=desc)
+    return results
+            
 
 def parse_response(response):
     if response.status_code >= 300 or response.status_code < 200:

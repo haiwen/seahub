@@ -31,7 +31,7 @@ from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki.models import Wiki as OldWiki
 from seahub.wiki2.models import WikiPageTrash, Wiki2Publish, WikiFileViews, Wiki2Settings
 from seahub.repo_metadata.models import RepoMetadata
-from seahub.repo_metadata.metadata_server_api import list_metadata_view_records
+from seahub.repo_metadata.metadata_server_api import list_metadata_view_records, list_repo_file_view_records
 from seahub.wiki2.utils import get_wiki_config, WIKI_PAGES_DIR, is_group_wiki, \
     check_wiki_admin_permission, check_wiki_permission, get_all_wiki_ids, get_and_gen_page_nav_by_id, \
     get_current_level_page_ids, save_wiki_config, gen_unique_id, gen_new_page_nav_by_id, pop_nav, \
@@ -2430,16 +2430,20 @@ class Wiki2FileViewRecords(APIView):
 
         # metadata enable check
         repo_id = file_view.linked_repo_id
+        metadata_enabled = True
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
         if not metadata or not metadata.enabled:
-            error_msg = f'The metadata module is disabled for repo {repo_id}.'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
+            metadata_enabled = False
         try:
-            results = list_metadata_view_records(repo_id, username, view, True, start, limit)
+            if metadata_enabled:
+                results = list_metadata_view_records(repo_id, username, view, True, start, limit)
+                return Response(results)
+            else:
+                results = list_repo_file_view_records(repo_id, username, view)
+                return Response({'results': results, 'metadata': []})
+                
         except Exception as err:
             logger.error(err)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response(results)

@@ -2126,8 +2126,8 @@ class MetadataTags(APIView):
 
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
         if not metadata or not metadata.enabled or not metadata.tags_enabled:
-            error_msg = f'The tags is disabled for repo {repo_id}.'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+            return Response({'results': [], 'metadata': []})
+            
 
         repo = seafile_api.get_repo(repo_id)
         if not repo:

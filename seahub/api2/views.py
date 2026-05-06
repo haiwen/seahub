@@ -8,6 +8,7 @@ import json
 import datetime
 import posixpath
 import re
+import hashlib
 from dateutil.relativedelta import relativedelta
 from urllib.parse import quote
 
@@ -2336,6 +2337,52 @@ def get_dir_file_recursively(username, repo_id, path, all_dirs):
             get_dir_file_recursively(username, repo_id, sub_path, all_dirs)
 
     return all_dirs
+
+
+RECURSIVE_FILE_LIST_MAX_COUNT = 200
+def get_recursive_file_list(username, repo_id, path, all_files, order_by=None, desc=False):
+    if len(all_files) >= RECURSIVE_FILE_LIST_MAX_COUNT:
+        return all_files
+
+    path_id = seafile_api.get_dir_id_by_path(repo_id, path)
+    dirs = seafile_api.list_dir_with_perm(repo_id, path, path_id, username, -1, -1)
+
+    for dirent in dirs:
+        if len(all_files) >= RECURSIVE_FILE_LIST_MAX_COUNT:
+            break
+
+        if dirent.permission == PERMISSION_INVISIBLE:
+            continue
+
+        if path == '/' and dirent.obj_name in ('_Internal', 'images'):
+            continue
+
+        if stat.S_ISDIR(dirent.mode):
+            sub_path = posixpath.join(path, dirent.obj_name)
+            get_recursive_file_list(username, repo_id, sub_path, all_files, order_by, desc)
+            continue
+        
+        all_files.append({
+            'type': 'file',
+            '_parent_dir': path,
+            '_is_dir': False,
+            '_obj_id': dirent.obj_id,
+            'id': hashlib.md5((repo_id + path + dirent.obj_name).encode('utf-8')).hexdigest(),
+            '_name': dirent.obj_name,
+            '_mtime': timestamp_to_isoformat_timestr(dirent.mtime),
+            '_last_modifier': dirent.modifier,
+            '_size': dirent.size,
+            'permission': dirent.permission,
+            '_file_mtime': timestamp_to_isoformat_timestr(dirent.mtime),
+        })
+
+    if order_by in ('_size', '_mtime', '_name', '_file_mtime'):
+        if order_by == '_name':
+            all_files.sort(key=lambda item: item[order_by].lower(), reverse=desc)
+        else:
+            all_files.sort(key=lambda item: item[order_by], reverse=desc)
+
+    return all_files
 
 def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
     """ Get dirents in a dir
