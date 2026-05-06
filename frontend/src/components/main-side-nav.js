@@ -278,10 +278,12 @@ class MainSideNav extends React.Component {
             <h2 className="mb-2 px-2 font-weight-normal heading">{gettext('Workspace')}</h2>
             <ul className="nav nav-pills flex-column nav-container">
               <li id="files" className={`nav-item flex-column ${this.getLibrariesSectionActiveClass()}`}>
-                <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis justify-content-between ${this.getLibrariesSectionActiveClass()}`} title={gettext('Libraries')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
+                <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis justify-content-between ${this.getLibrariesSectionActiveClass()}`} onClick={(e) => this.tabItemClick(e, 'libraries')}>
                   <div className="d-flex align-items-center">
                     <Icon symbol="libraries" />
-                    <span className="nav-text">{gettext('Libraries')}</span>
+                    <span className="nav-text" title={gettext('Libraries')}>
+                      {gettext('Libraries')}
+                    </span>
                   </div>
                   <OpIcon
                     id="nav-fold-btn"
@@ -342,7 +344,6 @@ class MainSideNav extends React.Component {
               <li id="share-admin-nav" className={`nav-item flex-column ${this.getShareAdminSectionActiveClass()}`}>
                 <div
                   className={`nav-link ellipsis justify-content-between ${this.getShareAdminSectionActiveClass()}`}
-                  title={gettext('Share Admin')}
                   onClick={this.shExtend}
                   tabIndex={0}
                   role="button"
@@ -350,7 +351,9 @@ class MainSideNav extends React.Component {
                 >
                   <div className="d-flex align-items-center overflow-hidden">
                     <Icon symbol="share-admin" />
-                    <span className="nav-text">{gettext('Share Admin')}</span>
+                    <span className="nav-text" title={gettext('Share Admin')}>
+                      {gettext('Share Admin')}
+                    </span>
                   </div>
                   <OpIcon id="shared-nav-fold-btn" symbol="down" className={`op-icon ${this.state.sharedExtended ? '' : 'rotate-90'}`} tooltip={sharedExtended ? gettext('Fold') : gettext('Unfold')} />
                 </div>

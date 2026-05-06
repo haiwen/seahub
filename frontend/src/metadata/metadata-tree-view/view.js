@@ -14,6 +14,7 @@ import {
   VIEW_TYPE, VIEW_TYPE_LABEL, VIEW_TYPE_ICON, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW
 } from '../constants';
 import { validateName } from '../utils/validate';
+import Tooltip from '@/components/tooltip';
 
 const MOVE_TO_FOLDER_PREFIX = 'move_to_folder_';
 const TURN_VIEW_INTO_PREFIX = 'turn_view_into_';
@@ -237,7 +238,6 @@ const ViewItem = ({
     <div className={classnames('tree-node', { 'tree-node-sort': isSortShow })}>
       <div
         className={classnames('tree-node-inner text-nowrap', { 'tree-node-inner-hover': highlight, 'tree-node-hight-light': isSelected })}
-        title={viewName}
         aria-label={viewName}
         onMouseEnter={onMouseEnter}
         onMouseOver={onMouseOver}
@@ -249,6 +249,7 @@ const ViewItem = ({
       >
         <div
           className="tree-node-text"
+          title={viewName}
           draggable={!isRenaming && canUpdate}
           onDragStart={onDragStart}
           onDragEnter={onDragEnter}
@@ -276,7 +277,12 @@ const ViewItem = ({
               <ItemDropdownMenu
                 item={{ name: 'metadata-view' }}
                 menuClassname="metadata-views-dropdown-menu"
-                toggleChildren={<Icon symbol="more-level" />}
+                toggleChildren={
+                  <>
+                    <Icon symbol="more-level" />
+                    <Tooltip target={`metadata-view-dropdown-item-${viewId}`}>{gettext('More operations')}</Tooltip>
+                  </>
+                }
                 freezeItem={freezeItem}
                 unfreezeItem={unfreezeItem}
                 getMenuList={() => operations}

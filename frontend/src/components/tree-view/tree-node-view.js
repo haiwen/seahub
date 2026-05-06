@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { permission } from '../../utils/constants';
+import { gettext, permission } from '../../utils/constants';
 import TextTranslation from '../../utils/text-translation';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { Utils, isMobile } from '../../utils/utils';
@@ -295,7 +295,6 @@ class TreeNodeView extends React.Component {
         <div
           type={type}
           className={`tree-node-inner text-nowrap ${hlClass} ${node.path === '/' ? 'hide' : ''} ${this.state.isNodeDropShow ? 'tree-node-drop' : ''}`}
-          title={node.object.name}
           onMouseEnter={this.onMouseEnter}
           onMouseOver={this.onMouseOver}
           onMouseLeave={this.onMouseLeave}
@@ -308,6 +307,7 @@ class TreeNodeView extends React.Component {
         >
           <div
             className="tree-node-text"
+            title={node.object.name}
             draggable={this.canDrag}
             onDragStart={this.onNodeDragStart}
             onDragEnter={this.onNodeDragEnter}
@@ -315,7 +315,8 @@ class TreeNodeView extends React.Component {
             onDragOver={this.onNodeDragMove}
             onDrop={this.onNodeDrop}
             style={{ paddingLeft: leftIndent + 5 }}
-          >{node.object.name}
+          >
+            {node.object.name}
           </div>
           <div className="left-icon" style={{ left: leftIndent - 40 }}>
             {type === 'dir' && (!node.isLoaded || (node.isLoaded && node.hasChildren())) && (
@@ -333,6 +334,7 @@ class TreeNodeView extends React.Component {
             <div className="right-icon">
               <ItemDropdownMenu
                 target={`tree-node-dropdown-btn-${idx}`}
+                tooltip={gettext('More operations')}
                 item={this.props.node}
                 getMenuList={this.calculateMenuList}
                 onMenuItemClick={this.onMenuItemClick}
