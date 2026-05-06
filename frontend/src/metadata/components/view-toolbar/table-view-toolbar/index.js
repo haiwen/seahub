@@ -72,6 +72,7 @@ const TableViewToolbar = ({
         />
         <SetRowHeight
           iconClass="sf-metadata-view-tool-operation-btn"
+          readOnly={readOnly}
           rowHeight={view.row_height}
           modifyRowHeight={modifyRowHeight}
         />

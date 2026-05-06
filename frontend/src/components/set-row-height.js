@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { UncontrolledPopover } from 'reactstrap';
+import classNames from 'classnames';
 import IconBtn from './icon-btn';
 import { Utils } from '../utils/utils';
 import { gettext } from '../utils/constants';
@@ -16,7 +17,7 @@ const ROW_HEIGHT_OPTIONS = [
   { label: gettext('Quadruple'), icon: 'quadruple', value: 128 },
 ];
 
-const SetRowHeight = ({ rowHeight = ROW_HEIGHT, modifyRowHeight, iconClass }) => {
+const SetRowHeight = ({ rowHeight = ROW_HEIGHT, modifyRowHeight, iconClass, readOnly = false }) => {
   const [isShowSetter, setShowSetter] = useState(false);
 
   const onSetterToggle = useCallback(() => {
@@ -80,10 +81,14 @@ const SetRowHeight = ({ rowHeight = ROW_HEIGHT, modifyRowHeight, iconClass }) =>
               return (
                 <li
                   key={index}
-                  tabIndex="0"
+                  tabIndex={readOnly ? -1 : 0}
                   role="menuitem"
-                  className="option-item h-6 py-1 px-3 d-flex justify-content-between align-items-center"
-                  onClick={() => {onChangeRowHeight(item.value);}}
+                  className={classNames('option-item h-6 py-1 px-3 d-flex justify-content-between align-items-center', { 'option-item-enabled': !readOnly })}
+                  onClick={() => {
+                    if (!readOnly) {
+                      onChangeRowHeight(item.value);
+                    }
+                  }}
                   onKeyDown={Utils.onKeyDown}
                 >
                   <div>

@@ -7,10 +7,10 @@
   font-size: 13px;
 }
 
-.set-row-height-popover-content .option-item {
+.set-row-height-popover-content .option-item-enabled {
   cursor: pointer;
 }
 
-.set-row-height-popover-content .option-item:hover {
+.set-row-height-popover-content .option-item-enabled:hover {
   background: var(--bs-body-secondary-bg);
 }
