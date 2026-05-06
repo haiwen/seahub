@@ -103,3 +103,8 @@
   background-color: rgba(0, 120, 215, 0.3);
   border: 1px solid rgba(0, 120, 215, 0.8);
 }
+
+.sf-metadata-gallery-container .grid-video-preview video {
+  max-width: 100%;
+  max-height: 100%;
+}

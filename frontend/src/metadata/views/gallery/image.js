@@ -39,24 +39,7 @@ const Image = ({
       metadataVideo.current.preload = 'metadata';
       metadataVideo.current.src = img.downloadURL;
       metadataVideo.current.onloadedmetadata = () => {
-        const maxSize = 96;
-        const videoWidth = metadataVideo.current.videoWidth;
-        const videoHeight = metadataVideo.current.videoHeight;
-        const aspectRatio = videoWidth / videoHeight;
-
-        let displayWidth;
-        let displayHeight;
-        if (aspectRatio > 1) {
-          // Landscape
-          displayWidth = Math.min(videoWidth, maxSize);
-          displayHeight = displayWidth / aspectRatio;
-        } else {
-          // Portrait
-          displayHeight = Math.min(videoHeight, maxSize);
-          displayWidth = displayHeight * aspectRatio;
-        }
-
-        setVideoDimensions({ width: displayWidth, height: displayHeight });
+        setVideoDimensions({ width: metadataVideo.current.videoWidth, height: metadataVideo.current.videoHeight });
       };
     }
 
