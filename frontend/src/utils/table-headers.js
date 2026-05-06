@@ -132,20 +132,20 @@ export const createTableHeaders = (
         sortBy === 'creator' && sortIcon
       )
     }] : []),
-    ...(isColumnVisible(PRIVATE_COLUMN_KEY.LAST_MODIFIER) ? [{
-      key: PRIVATE_COLUMN_KEY.LAST_MODIFIER,
-      width: COLUMN_CONFIG.last_modifier.width,
-      className: COLUMN_CONFIG.last_modifier.className,
-      minWidth: COLUMN_CONFIG.last_modifier.width,
+    ...(isColumnVisible(PRIVATE_COLUMN_KEY.FILE_MODIFIER) ? [{
+      key: PRIVATE_COLUMN_KEY.FILE_MODIFIER,
+      width: COLUMN_CONFIG.file_modifier.width,
+      className: COLUMN_CONFIG.file_modifier.className,
+      minWidth: COLUMN_CONFIG.file_modifier.width,
       children: React.createElement(
         'span',
         {
           className: 'd-flex align-items-center table-sort-op',
           href: '#',
-          onClick: (e) => { e.preventDefault(); onSort && onSort('last_modifier'); }
+          onClick: (e) => { e.preventDefault(); onSort && onSort('file_modifier'); }
         },
         gettext('Last modifier'),
-        sortBy === 'last_modifier' && sortIcon
+        sortBy === 'file_modifier' && sortIcon
       )
     }] : []),
     ...(isColumnVisible(PRIVATE_COLUMN_KEY.FILE_STATUS) ? [{
