@@ -16,6 +16,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from seahub.repo_metadata.utils import FAKE_METADATA
 from seaserv import seafile_api, check_quota
 from pysearpc import SearpcError
 from django.utils.translation import gettext as _
@@ -2440,7 +2441,7 @@ class Wiki2FileViewRecords(APIView):
                 return Response(results)
             else:
                 results = list_repo_file_view_records(repo_id, username, view)
-                return Response({'results': results, 'metadata': []})
+                return Response({'results': results, 'metadata': FAKE_METADATA})
                 
         except Exception as err:
             logger.error(err)

@@ -14,6 +14,81 @@ from seaserv import seafile_api
 
 FACES_SAVE_PATH = '_Internal/Faces'
 
+# fake metadata for metadata views of repo without metadata enabled, to avoid frontend error. 
+# The metadata is not real and only used for display.
+FAKE_METADATA = [
+        {
+            "key": "_id",
+            "name": "_id",
+            "type": "text",
+            "data": None
+        },
+        
+        {
+            "key": "_last_modifier",
+            "name": "_last_modifier",
+            "type": "text",
+            "data": None
+        },
+        {
+            "key": "_mtime",
+            "name": "_mtime",
+            "type": "date",
+            "data": None
+        },
+        
+        {
+            "key": "_file_modifier",
+            "name": "_file_modifier",
+            "type": "text",
+            "data": None
+        },
+        {
+            "key": "_file_mtime",
+            "name": "_file_mtime",
+            "type": "date",
+            "data": None
+        },
+        {
+            "key": "_parent_dir",
+            "name": "_parent_dir",
+            "type": "text",
+            "data": None
+        },
+        {
+            "key": "_name",
+            "name": "_name",
+            "type": "text",
+            "data": None
+        },
+        {
+            "key": "_is_dir",
+            "name": "_is_dir",
+            "type": "checkbox",
+            "data": None
+        },
+
+        {
+            "key": "_obj_id",
+            "name": "_obj_id",
+            "type": "text",
+            "data": None
+        },
+        {
+            "key": "_size",
+            "name": "_size",
+            "type": "number",
+            "data": None
+        },
+        {
+            "key": "_suffix",
+            "name": "_suffix",
+            "type": "text",
+            "data": None
+        },
+         
+    ]
+
 
 def add_init_metadata_task(params):
     payload = {'exp': int(time.time()) + 300, }

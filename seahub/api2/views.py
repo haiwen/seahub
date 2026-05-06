@@ -2367,13 +2367,15 @@ def get_recursive_file_list(username, repo_id, path, all_files, order_by=None, d
             '_parent_dir': path,
             '_is_dir': False,
             '_obj_id': dirent.obj_id,
-            'id': hashlib.md5((repo_id + path + dirent.obj_name).encode('utf-8')).hexdigest(),
+            '_id': hashlib.md5((repo_id + path + dirent.obj_name).encode('utf-8')).hexdigest(),
             '_name': dirent.obj_name,
             '_mtime': timestamp_to_isoformat_timestr(dirent.mtime),
             '_last_modifier': dirent.modifier,
+            '_file_modifier': dirent.modifier,
             '_size': dirent.size,
             'permission': dirent.permission,
             '_file_mtime': timestamp_to_isoformat_timestr(dirent.mtime),
+            '_suffix': dirent.obj_name.split('.')[-1] if '.' in dirent.obj_name else ''
         })
 
     if order_by in ('_size', '_mtime', '_name', '_file_mtime'):
