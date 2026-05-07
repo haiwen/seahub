@@ -243,6 +243,13 @@ class Record extends React.Component {
     return !!this.props.draggingRecordSource;
   };
 
+  checkExternalFileDrag = (event) => {
+    const dataTransfer = event?.dataTransfer;
+    if (!dataTransfer) return false;
+    if (dataTransfer.files && dataTransfer.files.length > 0) return true;
+    return Array.from(dataTransfer.types || []).includes('Files');
+  };
+
   checkOverDraggingRecord = () => {
     const { draggingRecordSource, record, treeNodeKey, showRecordAsTree } = this.props;
     if (!this.checkHasDraggedRecord()) return false;
@@ -255,6 +262,10 @@ class Record extends React.Component {
   };
 
   handleDragEnter = (e) => {
+    if (this.checkExternalFileDrag(e)) {
+      this.setState({ canDropTip: false });
+      return;
+    }
     e.preventDefault();
     if (this.checkHasDraggedRecord() && !this.checkOverDraggingRecord()) {
       this.setState({ canDropTip: true });
@@ -274,6 +285,10 @@ class Record extends React.Component {
   };
 
   handleDragOver = (e) => {
+    if (this.checkExternalFileDrag(e)) {
+      this.setState({ canDropTip: false });
+      return;
+    }
     e.preventDefault();
     e.dataTransfer.dropEffect = this.checkHasDraggedRecord() ? 'move' : 'copy';
     if (this.checkHasDraggedRecord() && !this.checkOverDraggingRecord()) {
@@ -282,6 +297,10 @@ class Record extends React.Component {
   };
 
   handleDrop = (e) => {
+    if (this.checkExternalFileDrag(e)) {
+      this.setState({ canDropTip: false });
+      return;
+    }
     e.preventDefault();
     e.stopPropagation();
     this.setState({ canDropTip: false });

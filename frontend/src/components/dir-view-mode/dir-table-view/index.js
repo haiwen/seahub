@@ -30,6 +30,13 @@ const DIR_TABLE_UNSUPPORTED_MENU_OPTION_KEYS = [
   TextTranslation.UNSTAR.key,
 ];
 
+const isExternalFileDrag = (event) => {
+  const dataTransfer = event?.dataTransfer;
+  if (!dataTransfer) return false;
+  if (dataTransfer.files && dataTransfer.files.length > 0) return true;
+  return Array.from(dataTransfer.types || []).includes('Files');
+};
+
 const DirTableView = ({
   direntList,
   isDirentListLoading,
@@ -61,8 +68,10 @@ const DirTableView = ({
   const [isSubMenuShown, setSubMenuShown] = useState(false);
   const [hoveredOptionKey, setHoveredOptionKey] = useState('');
   const [columnWidthVersion, setColumnWidthVersion] = useState(0);
+  const [isListDropTipShow, setListDropTipShow] = useState(false);
   const hideMenuRef = useRef(null);
   const sfTableEventBus = useRef(EventBus.getInstance());
+  const enteredCounter = useRef(0);
 
   const { globalHiddenColumns } = useMetadataStatus();
   const { tagsData } = useTags();
@@ -70,13 +79,62 @@ const DirTableView = ({
   const { getBatchMenuList, getItemMenuList } = useDirentContextMenu({ repoInfo });
 
   const permission = useMemo(() => {
+    let canDrop = repoInfo.permission === 'rw';
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(repoInfo.permission);
+    if (isCustomPermission) {
+      canDrop = customPermission.permission.modify;
+    }
+
     const repoCanModify = repoInfo.permission === 'rw' || repoInfo.permission === 'admin';
     return {
       canModify: () => repoCanModify,
       canModifyRow: (record) => repoCanModify && record._permission !== 'r',
       canModifyColumn: (column) => repoCanModify && column.editable === true,
+      canDrop,
     };
   }, [repoInfo]);
+
+  const clearDropState = useCallback(() => {
+    enteredCounter.current = 0;
+    setListDropTipShow(false);
+  }, []);
+
+  const onTableDragEnter = useCallback((event) => {
+    if (Utils.isIEBrowser() || !permission.canDrop || !isExternalFileDrag(event)) {
+      return;
+    }
+    enteredCounter.current += 1;
+    setListDropTipShow(true);
+  }, [permission.canDrop]);
+
+  const onTableDragOver = useCallback((event) => {
+    if (Utils.isIEBrowser() || !permission.canDrop || !isExternalFileDrag(event)) {
+      return;
+    }
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'copy';
+    if (!isListDropTipShow) {
+      setListDropTipShow(true);
+    }
+  }, [isListDropTipShow, permission.canDrop]);
+
+  const onTableDragLeave = useCallback((event) => {
+    if (Utils.isIEBrowser() || !permission.canDrop || !isExternalFileDrag(event)) {
+      return;
+    }
+    enteredCounter.current -= 1;
+    if (enteredCounter.current <= 0) {
+      clearDropState();
+    }
+  }, [clearDropState, permission.canDrop]);
+
+  const onTableDrop = useCallback((event) => {
+    if (Utils.isIEBrowser() || !permission.canDrop || !isExternalFileDrag(event)) {
+      return;
+    }
+    event.preventDefault();
+    clearDropState();
+  }, [clearDropState, permission.canDrop]);
 
   const tableData = useMemo(() => {
     return transformDirentsToTableData(direntList, repoID);
@@ -532,10 +590,17 @@ const DirTableView = ({
   }, [path, getDirentByRowId, selectedDirentList]);
 
   return (
-    <div className="dir-table-view dir-table-wrapper">
+    <div
+      className={`dir-table-view dir-table-wrapper ${(isListDropTipShow && permission.canDrop) ? 'table-drop-active' : ''}`}
+      onDragEnter={onTableDragEnter}
+      onDragOver={onTableDragOver}
+      onDragLeave={onTableDragLeave}
+      onDrop={onTableDrop}
+    >
       <SFTable
         {...permission}
         repoID={repoID}
+        allowExternalFileDrop={true}
         table={tableData}
         rowHeight={rowHeight}
         visibleColumns={enrichedColumns}

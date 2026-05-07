@@ -46,6 +46,7 @@ class Dirent {
       this.modifier_name = json.modifier_name || '';
       this.modifier_email = json.modifier_email || '';
       this.modifier_contact_email = json.modifier_contact_email || '';
+      this.file_modifier = json.modifier_email || '';
       this.parent_dir = json.parent_dir || '';
       let file_tags = [];
       if (json.file_tags) {

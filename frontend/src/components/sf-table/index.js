@@ -6,6 +6,13 @@ import TableMain from './table-main';
 import './index.css';
 import './tree.css';
 
+const isExternalFileDrag = (event) => {
+  const dataTransfer = event?.dataTransfer;
+  if (!dataTransfer) return false;
+  if (dataTransfer.files && dataTransfer.files.length > 0) return true;
+  return Array.from(dataTransfer.types || []).includes('Files');
+};
+
 const SFTable = ({
   table,
   visibleColumns,
@@ -31,6 +38,7 @@ const SFTable = ({
   loadAll,
   updateFileTags,
   gridUtils,
+  allowExternalFileDrop = false,
   ...customProps
 }) => {
   const containerRef = useRef(null);
@@ -82,8 +90,26 @@ const SFTable = ({
     window.addEventListener('beforeunload', beforeUnloadHandler, false);
   });
 
+  const onDragOver = useCallback((event) => {
+    if (allowExternalFileDrop || !isExternalFileDrag(event)) return;
+    event.preventDefault();
+    event.stopPropagation();
+    event.dataTransfer.dropEffect = 'none';
+  }, [allowExternalFileDrop]);
+
+  const onDrop = useCallback((event) => {
+    if (allowExternalFileDrop || !isExternalFileDrag(event)) return;
+    event.preventDefault();
+    event.stopPropagation();
+  }, [allowExternalFileDrop]);
+
   return (
-    <div className={classnames('sf-table-wrapper', { 'no-sequence-column': !showSequenceColumn })} ref={containerRef}>
+    <div
+      className={classnames('sf-table-wrapper', { 'no-sequence-column': !showSequenceColumn })}
+      ref={containerRef}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
+    >
       <TableMain
         {...customProps}
         table={table}
@@ -202,6 +228,7 @@ SFTable.propTypes = {
   onOCR: PropTypes.func,
   tagsData: PropTypes.object,
   onShowRowDetails: PropTypes.func,
+  allowExternalFileDrop: PropTypes.bool,
 };
 
 export default SFTable;

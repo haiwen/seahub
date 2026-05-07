@@ -2136,6 +2136,13 @@ class LibContentView extends React.Component {
     } else {
       // use current dirent parent's permission as it's permission
       direntObject.permission = this.state.userPerm;
+      direntObject.modifier_email = username;
+      direntObject.ctime = direntObject.mtime.valueOf();
+      if (this.state.enableMetadata) {
+        direntObject.metadata = {
+          _file_creator: username,
+        };
+      }
       dirent = new Dirent(direntObject);
 
       this.setState(prevState => ({
@@ -3154,7 +3161,7 @@ class LibContentView extends React.Component {
                       )}
                     </div>
                   </div>
-                  {canUpload && this.state.pathExist && !this.state.isViewFile && ![METADATA_MODE, TAGS_MODE].includes(this.state.currentMode) && (
+                  {canUpload && this.state.pathExist && !this.state.isViewFile && ![METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH_MODE].includes(this.state.currentMode) && (
                     <FileUploader
                       ref={uploader => this.uploader = uploader}
                       dragAndDrop={true}

@@ -110,6 +110,11 @@ const Cell = React.memo(({
   }, []);
 
   const onDragOver = useCallback((event) => {
+    const dataTransfer = event?.dataTransfer;
+    const isFileDrag = !!dataTransfer && ((dataTransfer.files && dataTransfer.files.length > 0) || Array.from(dataTransfer.types || []).includes('Files'));
+    if (isFileDrag) {
+      return;
+    }
     event.stopPropagation();
     event.preventDefault();
   }, []);
