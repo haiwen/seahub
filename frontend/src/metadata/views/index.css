@@ -37,8 +37,9 @@
 }
 
 .sf-metadata-wrapper .sf-table-cell .select-all-checkbox-container {
-  width: 100%;
+  width: 40px;
   margin-right: 20px;
+  justify-content: center;
 }
 
 .sf-metadata-wrapper .sf-table-cell .select-cell-checkbox-container {

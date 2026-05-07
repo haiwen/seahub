@@ -56,6 +56,10 @@
   cursor: pointer;
 }
 
+.sf-table-cell .select-all-checkbox-container input {
+  margin: 0;
+}
+
 .sf-table-cell .file-cell-content {
   flex: 1;
   display: flex;

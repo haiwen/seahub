@@ -78,28 +78,32 @@ class ActionsCell extends Component {
           </div>
         }
         {!isSelected && <div className="sf-table-column-content row-index text-truncate">{this.getRecordNo()}</div>}
-        <label
-          className="sf-table-column-content actions-checkbox"
-          htmlFor={`select-cell-checkbox-${recordId}`}
-          title={gettext('Select')}
-          aria-label={gettext('Select')}
-        >
-          <div className="select-cell-checkbox-container">
-            <input
-              id={`select-cell-checkbox-${recordId}`}
-              className="select-cell-checkbox form-check-input"
-              type='checkbox'
-              name='row-selection'
-              checked={isSelected || false}
-              onClick={this.props.onSelectRecord}
-              onKeyDown={Utils.onKeyDown}
-              readOnly
-            />
-          </div>
-        </label>
-        {this.props.onShowRowDetails && (
-          <OpIcon id={`row-expand-icon-${recordId}`} symbol="expand" className="row-expand" tooltip={gettext('Expand')} op={this.handleShowExpandedProps} onKeyDown={Utils.onKeyDown} />
-        )}
+        <div className="action-cell-content">
+          <label
+            className="sf-table-column-content actions-checkbox"
+            htmlFor={`select-cell-checkbox-${recordId}`}
+            title={gettext('Select')}
+            aria-label={gettext('Select')}
+          >
+            <div className="select-cell-checkbox-container">
+              <input
+                id={`select-cell-checkbox-${recordId}`}
+                className="select-cell-checkbox form-check-input"
+                type='checkbox'
+                name='row-selection'
+                checked={isSelected || false}
+                onClick={this.props.onSelectRecord}
+                onKeyDown={Utils.onKeyDown}
+                readOnly
+              />
+            </div>
+          </label>
+          {this.props.onShowRowDetails && (
+            <div className="row-expand-container">
+              <OpIcon id={`row-expand-icon-${recordId}`} symbol="expand" className="row-expand" tooltip={gettext('Expand')} op={this.handleShowExpandedProps} onKeyDown={Utils.onKeyDown} />
+            </div>
+          )}
+        </div>
         {/* {this.getLockedRowTooltip()} */}
       </div>
     );
