@@ -120,7 +120,7 @@
 }
 
 .tree-section .tree-section-body .right-icon:hover {
-  background-color: var(--bs-hover-tertiary-bg);
+  background-color: var(--bs-icon-btn-hover-bg-color);
   cursor: pointer;
   border-radius: 3px;
 }
