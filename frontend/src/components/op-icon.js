@@ -30,7 +30,6 @@ class OpIcon extends React.Component {
         className={className}
         style={style}
         role="button"
-        tabIndex="0"
         aria-label={title}
         onClick={op}
         onKeyDown={Utils.onKeyDown}

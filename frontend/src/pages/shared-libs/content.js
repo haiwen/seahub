@@ -71,6 +71,7 @@ class Content extends Component {
         <>
           {items.map((item, index) => {
             return <Item
+              idx={index}
               ref={this.setLibItemRef(index)}
               key={index}
               data={item}

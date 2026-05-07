@@ -393,10 +393,10 @@ textarea::placeholder {
   margin-left: 0.5rem;
   vertical-align: middle;
   font-style: normal;
-  font-size: 1rem;
+  font-size: .75rem;
   line-height: 1;
   cursor: pointer;
-  color: #999;
+  color: var(--bs-icon-color);
 }
 
 .sf-dropdown-toggle:focus,

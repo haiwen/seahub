@@ -48,7 +48,7 @@ const Tooltip = ({
     innerClassName: hasShortcut ? 'sf-tooltip-shortcut-inner' : '',
     delay: { show: 0, hide: 0 },
     hideArrow: true,
-    autohide: false,
+    autohide: true,
     modifiers: [
       {
         name: 'offset',

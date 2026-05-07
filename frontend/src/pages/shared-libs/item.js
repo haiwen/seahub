@@ -186,9 +186,10 @@ class Item extends Component {
                   />
                   }
                   <OpIcon
+                    id={`leave-share-btn-${this.props.idx}`}
                     className={leaveShareIconClassName}
                     symbol="close"
-                    title={gettext('Leave Share')}
+                    tooltip={gettext('Leave Share')}
                     op={this.leaveShare}
                   />
                 </div>
@@ -288,6 +289,7 @@ class Item extends Component {
 }
 
 Item.propTypes = {
+  idx: PropTypes.number.isRequired,
   currentViewMode: PropTypes.string,
   isDesktop: PropTypes.bool.isRequired,
   data: PropTypes.object.isRequired,

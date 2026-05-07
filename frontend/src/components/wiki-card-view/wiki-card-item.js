@@ -234,7 +234,6 @@ class WikiCardItem extends Component {
                 <DropdownToggle
                   tag="i"
                   role="button"
-                  tabIndex="0"
                   className="op-icon op-icon-bg-light"
                   aria-label={gettext('More operations')}
                   data-toggle="dropdown"
@@ -245,7 +244,7 @@ class WikiCardItem extends Component {
                   <Icon symbol="more-level" className="w-4 h-4" />
                   <Tooltip target={`wiki-card-more-op-${idx}`}>{gettext('More operations')}</Tooltip>
                 </DropdownToggle>
-                <DropdownMenu className="dtable-dropdown-menu">
+                <DropdownMenu className="dtable-dropdown-menu" container="body">
                   {showRename &&
                     <DropdownItem onClick={this.onRenameToggle}>{gettext('Rename')}</DropdownItem>}
                   {showPublish && canPublishWiki &&
