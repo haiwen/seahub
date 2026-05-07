@@ -1318,7 +1318,7 @@ INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
 
 if os.environ.get('ENABLE_METADATA_MANAGEMENT'):
     ENABLE_METADATA_MANAGEMENT = os.environ.get('ENABLE_METADATA_MANAGEMENT', 'false').lower() == 'true'
-METADATA_SERVER_URL = os.environ.get('INNER_METADATA_SERVER_URL', 'http://127.0.0.1:8084') or INNER_METADATA_SERVER_URL
+METADATA_SERVER_URL = os.environ.get('INNER_METADATA_SERVER_URL', '') or INNER_METADATA_SERVER_URL
 
 if os.environ.get('ENABLE_SEAFILE_AI'):
     ENABLE_SEAFILE_AI = os.environ.get('ENABLE_SEAFILE_AI', 'false').lower() == 'true'
