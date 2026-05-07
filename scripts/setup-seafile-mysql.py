@@ -1342,8 +1342,7 @@ seafdav_config = SeafDavConfigurator()
 gunicorn_config = GunicornConfigurator()
 seahub_config = SeahubConfigurator()
 user_manuals_handler = UserManualHandler()
-if env_mgr.is_pro:
-    pro_config = ProfessionalConfigurator()
+pro_config = ProfessionalConfigurator()
 # Would be created after AbstractDBConfigurator.ask_use_existing_db()
 db_config = None
 need_pause = True
@@ -1489,8 +1488,7 @@ def main():
     ccnet_config.ask_questions()
     seafile_config.ask_questions()
     seahub_config.ask_questions()
-    if env_mgr.is_pro:
-        pro_config.ask_questions()
+    pro_config.ask_questions()
 
     # pylint: disable=redefined-variable-type
     if not db_config:
@@ -1509,13 +1507,12 @@ def main():
     seafdav_config.generate()
     gunicorn_config.generate()
     seahub_config.generate()
-    if env_mgr.is_pro:
-        pro_config.generate()
-        pro_config.do_syncdb()
+    pro_config.generate()
 
     ccnet_config.do_syncdb()
     seafile_config.do_syncdb()
     seahub_config.do_syncdb()
+    pro_config.do_syncdb()
     seahub_config.prepare_avatar_dir()
 
     user_manuals_handler.copy_user_manuals()
