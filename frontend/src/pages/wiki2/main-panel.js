@@ -72,7 +72,6 @@ class MainPanel extends Component {
     const appConfig = window.app.config;
     const pageOptions = window.app.pageOptions;
     const { repos = [], wikiSettings = {} } = window.wiki.config;
-    const enableMetadataRepos = repos.filter(item => item.enable_metadata);
     const { assetsUrl, seadocServerUrl: sdocServer, publishUrl, wikiId, navConfig, permission } = window.wiki.config;
 
     const currentPageConfig = getCurrentPageConfig(config.pages, currentPageId);
@@ -90,7 +89,7 @@ class MainPanel extends Component {
       publishUrl,
       wikiId,
       navConfig,
-      repos: enableMetadataRepos,
+      repos: repos,
       wikiSettings,
       isLocked: currentPageConfig?.locked,
       permission

@@ -33,8 +33,6 @@ export default function LinkedRepoPanel() {
       return repo;
     });
 
-    repoList = repoList.filter(item => item.enable_metadata);
-
     const options = repoList.map(item => {
       return {
         id: item.repo_id,
