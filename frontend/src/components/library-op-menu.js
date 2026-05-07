@@ -11,6 +11,7 @@ const propTypes = {
   isPC: PropTypes.bool,
   isLibView: PropTypes.bool,
   isDepartmentRepo: PropTypes.bool,
+  menuContainer: PropTypes.string,
   repo: PropTypes.object.isRequired,
   isStarred: PropTypes.bool,
   onFreezedItem: PropTypes.func,
@@ -216,7 +217,7 @@ class LibraryOperationMenu extends React.Component {
     let operations = this.generatorOperations();
     const advancedOperations = this.getAdvancedOperations();
 
-    const { children, isLibView } = this.props;
+    const { children, isLibView, menuContainer } = this.props;
 
     // pc menu
     if (this.props.isPC) {
@@ -233,7 +234,6 @@ class LibraryOperationMenu extends React.Component {
             className={isLibView ? 'dir-others-item' : 'op-icon'}
             role="button"
             tabIndex="0"
-            title={isLibView ? gettext('More') : gettext('More operations')}
             aria-label={gettext('More operations')}
             onClick={this.onDropdownToggleClick}
             onKeyDown={this.onDropdownToggleKeyDown}
@@ -246,7 +246,7 @@ class LibraryOperationMenu extends React.Component {
               </>
             )}
           </DropdownToggle>
-          <DropdownMenu onMouseMove={this.onDropDownMouseMove} container={isLibView ? 'body' : ''}>
+          <DropdownMenu onMouseMove={this.onDropDownMouseMove} container={menuContainer || (isLibView ? 'body' : '')}>
             {operations.map((item, index) => {
               if (item == 'Divider') {
                 return <DropdownItem key={index} divider />;

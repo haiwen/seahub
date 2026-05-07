@@ -358,6 +358,7 @@ class MylibRepoListItem extends React.Component {
               />
               <LibraryOpMenu
                 isPC={true}
+                menuContainer="body"
                 repo={this.props.repo}
                 isStarred={this.state.isStarred}
                 onMenuItemClick={this.onMenuItemClick}
@@ -418,6 +419,7 @@ class MylibRepoListItem extends React.Component {
             />
             <LibraryOpMenu
               isPC={true}
+              menuContainer="body"
               repo={this.props.repo}
               onMenuItemClick={this.onMenuItemClick}
               onFreezedItem={this.props.onFreezedItem}
