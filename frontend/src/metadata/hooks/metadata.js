@@ -54,7 +54,7 @@ export const MetadataProvider = ({ repoID, currentPath, selectMetadataView, chil
         if (Array.isArray(views)) {
           let idViewMap = {};
           views.forEach(view => {
-            idViewMap[view._id] = { ...view, name: getViewName(view) };
+            idViewMap[view._id] = { ...view, name: getViewName(view), type: view.type || VIEW_TYPE.TABLE }; // for compatible with old data which doesn't have type field
           });
           setIdViewMap(idViewMap);
         }
