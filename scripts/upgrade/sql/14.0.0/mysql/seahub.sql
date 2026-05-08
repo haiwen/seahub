@@ -58,13 +58,19 @@ KEY `repo_id_key` (`repo_id`)
 ALTER TABLE `organizations_orgsettings` ADD COLUMN `monthly_traffic_limit` bigint(20) NOT NULL;
 ALTER TABLE `share_uploadlinkshare` ADD COLUMN `description` LONGTEXT NOT NULL DEFAULT '';
 ALTER TABLE `share_fileshare` ADD COLUMN `description` LONGTEXT NOT NULL DEFAULT '';
-ALTER TABLE `FileTrash` ADD INDEX `idx_filetrash_repo_delete_time` (`repo_id`, `delete_time`);
+ALTER TABLE notifications_usernotification ADD INDEX idx_usernotification_user_seen (to_user, seen);
+
+ALTER TABLE `Activity` ADD INDEX `idx_activity_repo_timestamp` (`repo_id`, `timestamp`);
+ALTER TABLE `FileHistory` ADD INDEX `ix_FileHistory_repo_id_path_md5` (`repo_id_path_md5`);
+ALTER TABLE `FileAudit` ADD INDEX `idx_file_audit_orgid_eid` (`org_id`,`eid`);
+ALTER TABLE `FileUpdate` ADD INDEX `idx_file_update_orgid_eid` (`org_id`,`eid`);
+ALTER TABLE `FileOpsStat` ADD INDEX `idx_file_ops_org_time` (`org_id`,`timestamp`);
+ALTER TABLE `PermAudit` ADD INDEX `idx_perm_audit_orgid_eid` (`org_id`,`eid`);
+ALTER TABLE `PermAudit` ADD INDEX `ix_perm_audit_timestamp` (`timestamp`);
+ALTER TABLE `VirusFile` ADD INDEX `ix_VirusFile_repo_id` (`repo_id`);
 ALTER TABLE `FileTrash` ADD INDEX `idx_filetrash_delete_time` (`delete_time`);
-ALTER TABLE notifications_usernotification
-ADD INDEX idx_usernotification_user_seen (to_user, seen);
+ALTER TABLE `FileTrash` ADD INDEX `idx_filetrash_repo_delete_time` (`repo_id`, `delete_time`);
 
-
-DROP INDEX `ix_FileTrash_repo_id` ON `FileTrash`;
 DROP INDEX `share_fileshare_s_type_724eb6c1` ON `share_fileshare`;
 DROP INDEX `share_fileshare_permission_d12c353f` ON `share_fileshare`;
 DROP INDEX `notifications_usernotification_to_user_6cadafa1` ON `notifications_usernotification`;
@@ -79,3 +85,8 @@ DROP INDEX `base_usermonitoredrepos_email_55ead1b9` ON `base_usermonitoredrepos`
 DROP INDEX `history_name_doc_uuid` ON `history_name`;
 DROP INDEX `organizations_orgadminsettings_org_id_4f70d186` ON `organizations_orgadminsettings`;
 DROP INDEX `key_repo_metadata_face_recognition_enabled` ON `repo_metadata`;
+
+DROP INDEX `ix_FileTrash_repo_id` ON `FileTrash`;
+DROP INDEX `ix_FileAudit_user` ON `FileAudit`;
+DROP INDEX `ix_FileAudit_repo_id` ON `FileAudit`;
+DROP INDEX `idx_file_ops_time_org` ON `FileOpsStat`;

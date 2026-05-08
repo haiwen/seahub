@@ -1512,7 +1512,6 @@ def main():
     ccnet_config.do_syncdb()
     seafile_config.do_syncdb()
     seahub_config.do_syncdb()
-    pro_config.do_syncdb()
     seahub_config.prepare_avatar_dir()
 
     user_manuals_handler.copy_user_manuals()
