@@ -82,7 +82,7 @@ const DirTableView = ({
     let canDrop = repoInfo.permission === 'rw';
     const { isCustomPermission, customPermission } = Utils.getUserPermission(repoInfo.permission);
     if (isCustomPermission) {
-      canDrop = customPermission.permission.modify;
+      canDrop = customPermission.permission.upload;
     }
 
     const repoCanModify = repoInfo.permission === 'rw' || repoInfo.permission === 'admin';

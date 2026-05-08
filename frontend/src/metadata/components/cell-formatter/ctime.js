@@ -4,16 +4,20 @@ import classnames from 'classnames';
 import dayjs from 'dayjs';
 import { formatWithTimezone } from '../../../utils/time';
 
-const CTimeFormatter = ({ value, className, children: emptyFormatter, format, record }) => {
+const CTimeFormatter = ({ value, className, children: emptyFormatter, format }) => {
   const displayValue = useMemo(() => {
-    if (value) return value;
-    if (dayjs.isDayjs(record?._mtime)) {
-      return record._mtime.valueOf();
+    if (dayjs.isDayjs(value)) {
+      return value.valueOf();
     }
-    return null;
-  }, [value, record]);
+    if (typeof value === 'number') {
+      // Some sources provide Unix seconds, normalize them to milliseconds
+      return value < 1000000000000 ? value * 1000 : value;
+    }
+    return value;
+  }, [value]);
 
   if (!displayValue) return emptyFormatter || null;
+
   return (
     <div
       className={classnames('sf-metadata-ui cell-formatter-container ctime-formatter', className)}
@@ -29,7 +33,6 @@ CTimeFormatter.propTypes = {
   value: PropTypes.any,
   className: PropTypes.string,
   children: PropTypes.any,
-  record: PropTypes.object,
 };
 
 export default CTimeFormatter;

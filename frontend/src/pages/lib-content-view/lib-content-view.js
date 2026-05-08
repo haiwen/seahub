@@ -2137,10 +2137,10 @@ class LibContentView extends React.Component {
       // use current dirent parent's permission as it's permission
       direntObject.permission = this.state.userPerm;
       direntObject.modifier_email = username;
-      direntObject.ctime = direntObject.mtime.valueOf();
       if (this.state.enableMetadata) {
         direntObject.metadata = {
           _file_creator: username,
+          _file_ctime: dayjs.unix(direntObject.mtime).format('YYYY-MM-DD HH:mm:ss'),
         };
       }
       dirent = new Dirent(direntObject);
