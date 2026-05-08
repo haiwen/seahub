@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `webhook_jobs` (
 `response_body` longtext DEFAULT NULL,
 PRIMARY KEY (`id`),
 KEY `webhook_id_key` (`webhook_id`),
-KEY `status_b7n3m0x1_key` (`status`)
+KEY `webhook_jobs_status_key` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ;
 
 
