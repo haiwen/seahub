@@ -182,7 +182,8 @@ class TreeNodeView extends React.Component {
     let icon = '';
     let type = '';
     if (node.object.type === 'dir') {
-      icon = <Icon symbol="folder" className="sf3-font-folder-icon" />;
+      const { isExpanded } = node;
+      icon = <Icon symbol={isExpanded ? 'folder-open' : 'folder'} className="sf3-font-folder-icon" />;
       type = 'dir';
     } else {
       let index = node.object.name.lastIndexOf('.');

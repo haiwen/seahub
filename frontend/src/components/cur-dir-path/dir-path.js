@@ -410,12 +410,13 @@ class DirPath extends React.Component {
       <div className="path-container dir-view-path">
         <OpIcon
           id="sf-side-panel-icon-btn"
-          className="cur-view-path-btn mr-1"
+          className="cur-view-path-btn"
           symbol="side-bar"
           title={tip}
           tooltip={tip}
           op={this.props.toggleTreePanel}
         />
+        <span className="icon-path-split mx-2"></span>
         {this.props.pathPrefix && this.props.pathPrefix.map((item, index) => {
           return (
             <Fragment key={index}>

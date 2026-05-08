@@ -310,7 +310,7 @@ const ViewsFolder = ({
             <Icon symbol="down" className={classnames({ 'rotate-270': !expanded })} />
           </span>
           <span className="tree-node-icon">
-            <Icon symbol="folder" />
+            <Icon symbol={expanded ? 'folder-open' : 'folder'} />
           </span>
         </div>
         <div className="right-icon">

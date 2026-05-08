@@ -164,20 +164,19 @@
 .tree-node-icon {
   display: flex;
   align-items: center;
-  width: 1rem;
   text-align: center;
   color: var(--bs-icon-color);
 }
 
 .tree-node-icon .seafile-multicolor-icon {
-  width: 1rem;
-  height: 1rem;
+  width: .875rem;
+  height: .875rem;
 }
 
 .tree-node-inner .right-icon {
   position: absolute;
   top: 2px;
-  right: 0.5rem;
+  right: 0.25rem;
   bottom: 0;
   width: 1rem;
   color: var(--bs-icon-color);
@@ -282,11 +281,20 @@
 }
 
 .cur-view-path.lib-cur-view-path {
-  padding-left: 12px;
+  padding-left: 8px;
 }
 
 .cur-view-path.lib-cur-view-path .selected-dirents-toolbar {
   padding-left: 4px;
+}
+
+.dir-view-path .icon-path-split {
+  height: 16px;
+  border-left: 1.5px solid #eaeaea;
+}
+
+[data-bs-theme='dark'] .dir-view-path .icon-path-split {
+  border-left: 1.5px solid rgba(255, 255, 255, .15);
 }
 
 .dir-view-path .path-label {
