@@ -293,6 +293,7 @@ select {
 
 .repos-container .library-list-header .btn.btn-secondary {
   height: 26px;
+  line-height: 26px;
   padding: 0 8px;
   border-radius: 4px;
   border: 1px solid var(--bs-border-color);
