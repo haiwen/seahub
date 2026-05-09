@@ -317,8 +317,8 @@ class RepoShareAdminShareLinks extends Component {
           <div className="d-flex">
             {selectedLinks.length > 0 && (
               <>
-                <button className="btn btn-sm btn-secondary mr-2" onClick={this.cancelSelectAllLinks}>{gettext('Cancel')}</button>
-                <button className="btn btn-sm btn-secondary mr-2" onClick={this.toggleDeleteShareLinksDialog}>{gettext('Delete')}</button>
+                <button className="btn btn-sm btn-secondary mr-2 px-3" onClick={this.cancelSelectAllLinks}>{gettext('Cancel')}</button>
+                <button className="btn btn-sm btn-secondary mr-2 px-3" onClick={this.toggleDeleteShareLinksDialog}>{gettext('Delete')}</button>
               </>
             )}
           </div>

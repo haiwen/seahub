@@ -11,4 +11,5 @@
    height: 24px;
    position: relative;
    animation: displaySelectedToolbar .3s ease-in-out 1;
+   display: flex;
 }

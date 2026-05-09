@@ -407,7 +407,9 @@ class ShareAdminUploadLinks extends Component {
                       className="cur-view-path-btn ml-4"
                       symbol="delete1"
                       title={gettext('Delete')}
+                      tooltip={gettext('Delete')}
                       op={this.toggleDeleteLinksDialog}
+                      id="share-admin-upload-links-delete"
                     />
                   </div>
                 )

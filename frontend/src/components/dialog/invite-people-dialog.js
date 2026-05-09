@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import { Modal, ModalBody, ModalFooter, Input, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Input, Button, Label } from 'reactstrap';
 import toaster from '../toast';
 import Loading from '../loading';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
@@ -107,7 +107,7 @@ class InvitePeopleDialog extends React.Component {
       <Modal isOpen={true} toggle={this.props.toggleDialog}>
         <SeahubModalHeader toggle={this.props.toggleDialog}>{gettext('Invite Guest')}</SeahubModalHeader>
         <ModalBody>
-          <label htmlFor="emails">{gettext('Emails')}</label>
+          <Label for="emails">{gettext('Emails')}</Label>
           <Input
             type="text"
             id="emails"

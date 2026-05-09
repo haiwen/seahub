@@ -92,6 +92,7 @@ class Item extends React.Component {
             onMouseLeave={this.onMouseLeave}
             onFocus={this.onMouseEnter}
             tabIndex="0"
+            style={{ height: '44px' }}
           >
             <td>{item.accepter}</td>
             <td>{dayjs(item.invite_time).format('YYYY-MM-DD')}</td>

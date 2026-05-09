@@ -579,7 +579,9 @@ class ShareAdminShareLinks extends Component {
                       className="cur-view-path-btn ml-4"
                       symbol="delete1"
                       title={gettext('Delete')}
+                      tooltip={gettext('Delete')}
                       op={this.toggleDeleteShareLinksDialog}
+                      id="share-admin-share-links-delete"
                     />
                   </div>
                 )

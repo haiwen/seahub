@@ -59,7 +59,7 @@ class RepoShareAdminDialog extends React.Component {
       <div>
         <Modal isOpen={true} className="repo-share-admin-container share-dialog" style={LARGE_DIALOG_STYLE } toggle={this.props.toggleDialog}>
           <SeahubModalHeader toggle={this.props.toggleDialog}>
-            <span dangerouslySetInnerHTML={{ __html: title }} className="d-inline-flex mw-100"></span>
+            <span dangerouslySetInnerHTML={{ __html: title }} className="d-inline-flex align-items-center mw-100"></span>
             <IconButton
               id="repo-share-admin-dialog-tip"
               icon="question-circle-stroked"

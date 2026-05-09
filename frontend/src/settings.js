@@ -169,7 +169,7 @@ class Settings extends React.Component {
                 {canUpdatePassword &&
                 <div id="update-user-passwd" className="setting-item">
                   <h3 className="setting-item-heading">{gettext('Password')}</h3>
-                  <button className="btn btn-outline-primary ml-2 mb-2" onClick={this.togglePassword}>{passwordOperationText}</button>
+                  <button className="btn btn-outline-primary mb-2" onClick={this.togglePassword}>{passwordOperationText}</button>
                 </div>
                 }
                 {enableGetAuthToken && <WebAPIAuthToken />}
