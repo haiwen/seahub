@@ -166,8 +166,9 @@ const GalleryFilesToolbar = () => {
       {toolbarMenuOptions.length > 0 && (
         <ItemDropdownMenu
           ref={menuRef}
+          target="gallery-files-toolbar-menu-toggle"
           toggleClass="cur-view-path-btn"
-          toggleChildren={<Icon symbol="more-level" />}
+          tooltip={gettext('More operations')}
           item={{}}
           freezeItem={() => {}}
           unfreezeItem={() => {}}

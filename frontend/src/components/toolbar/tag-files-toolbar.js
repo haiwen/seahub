@@ -143,9 +143,10 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
       }
       {selectedFilesLen === 1 &&
         <ItemDropdownMenu
+          target="tag-files-toolbar-menu"
           item={{}}
           toggleClass={'cur-view-path-btn'}
-          toggleChildren={<Icon symbol="more-level" />}
+          tooltip={gettext('More operations')}
           onMenuItemClick={onMenuItemClick}
           getMenuList={getMenuList}
         />

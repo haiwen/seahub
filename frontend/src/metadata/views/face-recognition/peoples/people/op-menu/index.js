@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext } from '../../../../../../utils/constants';
 import Icon from '../../../../../../components/icon';
+import Tooltip from '@/components/tooltip';
 
 const OpMenu = ({ onRename, onFreezed, onUnFreezed }) => {
   let [isShow, setShow] = useState(false);
@@ -33,15 +34,18 @@ const OpMenu = ({ onRename, onFreezed, onUnFreezed }) => {
   return (
     <Dropdown isOpen={isShow} toggle={toggle}>
       <DropdownToggle
+        id="people-more-operations-toggle"
         tag="i"
         role="button"
         tabIndex="0"
         className="sf-dropdown-toggle op-icon face-recognition-more-operations-toggle"
-        title={gettext('More operations')}
         aria-label={gettext('More operations')}
         data-toggle="dropdown"
       >
         <Icon symbol="more-level" />
+        <Tooltip target="people-more-operations-toggle">
+          {gettext('More operations')}
+        </Tooltip>
       </DropdownToggle>
       <DropdownMenu>
         <DropdownItem onClick={handleRename}>{gettext('Rename')}</DropdownItem>

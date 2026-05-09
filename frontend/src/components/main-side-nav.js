@@ -191,18 +191,22 @@ class MainSideNav extends React.Component {
     if (canGenerateShareLink) {
       linksNavItem = (
         <li className={`nav-item ${this.getActiveClass('share-admin-share-links')}`}>
-          <Link to={siteRoot + 'share-admin-share-links/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-share-links')}`} title={gettext('Links')} onClick={(e) => this.tabItemClick(e, 'share-admin-share-links')}>
+          <Link to={siteRoot + 'share-admin-share-links/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-share-links')}`} onClick={(e) => this.tabItemClick(e, 'share-admin-share-links')}>
             <span aria-hidden="true" className="sharp">#</span>
-            <span className="nav-text">{gettext('Links')}</span>
+            <span className="nav-text" title={gettext('Links')}>
+              {gettext('Links')}
+            </span>
           </Link>
         </li>
       );
     } else if (canGenerateUploadLink) {
       linksNavItem = (
         <li className={`nav-item ${this.getActiveClass('share-admin-upload-links')}`}>
-          <Link to={siteRoot + 'share-admin-upload-links/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-upload-links')}`} title={gettext('Links')} onClick={(e) => this.tabItemClick(e, 'share-admin-upload-links')}>
+          <Link to={siteRoot + 'share-admin-upload-links/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-upload-links')}`} onClick={(e) => this.tabItemClick(e, 'share-admin-upload-links')}>
             <span aria-hidden="true" className="sharp">#</span>
-            <span className="nav-text">{gettext('Links')}</span>
+            <span className="nav-text" title={gettext('Links')}>
+              {gettext('Links')}
+            </span>
           </Link>
         </li>
       );
@@ -215,17 +219,21 @@ class MainSideNav extends React.Component {
       >
         {canAddRepo && canShareRepo && height !== 0 && (
           <li className={`nav-item ${this.getActiveClass('share-admin-libs')}`}>
-            <Link to={siteRoot + 'share-admin-libs/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-libs')}`} title={gettext('Libraries')} onClick={(e) => this.tabItemClick(e, 'share-admin-libs')}>
+            <Link to={siteRoot + 'share-admin-libs/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-libs')}`} onClick={(e) => this.tabItemClick(e, 'share-admin-libs')}>
               <span aria-hidden="true" className="sharp">#</span>
-              <span className="nav-text">{gettext('Libraries')}</span>
+              <span className="nav-text" title={gettext('Libraries')}>
+                {gettext('Libraries')}
+              </span>
             </Link>
           </li>
         )}
         {canShareRepo && height !== 0 && (
           <li className={`nav-item ${this.getActiveClass('share-admin-folders')}`}>
-            <Link to={siteRoot + 'share-admin-folders/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-folders')}`} title={gettext('Folders')} onClick={(e) => this.tabItemClick(e, 'share-admin-folders')}>
+            <Link to={siteRoot + 'share-admin-folders/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-folders')}`} onClick={(e) => this.tabItemClick(e, 'share-admin-folders')}>
               <span aria-hidden="true" className="sharp">#</span>
-              <span className="nav-text">{gettext('Folders')}</span>
+              <span className="nav-text" title={gettext('Folders')}>
+                {gettext('Folders')}
+              </span>
             </Link>
           </li>
         )}
@@ -239,9 +247,11 @@ class MainSideNav extends React.Component {
       customNavItems.map((item, idx) => {
         return (
           <li key={idx} className='nav-item'>
-            <a href={item.link} className="nav-link ellipsis" title={item.desc}>
+            <a href={item.link} className="nav-link ellipsis">
               <span className={item.icon} aria-hidden="true"></span>
-              <span className="nav-text">{item.desc}</span>
+              <span className="nav-text" title={item.desc}>
+                {item.desc}
+              </span>
             </a>
           </li>
         );
@@ -312,32 +322,38 @@ class MainSideNav extends React.Component {
               </li>
 
               <li className={`nav-item ${this.getActiveClass('starred')}`}>
-                <Link className={`nav-link ellipsis ${this.getActiveClass('starred')}`} to={siteRoot + 'starred/'} title={gettext('Favorites')} onClick={(e) => this.tabItemClick(e, 'starred')}>
+                <Link className={`nav-link ellipsis ${this.getActiveClass('starred')}`} to={siteRoot + 'starred/'} onClick={(e) => this.tabItemClick(e, 'starred')}>
                   <Icon symbol="favorites" />
-                  <span className="nav-text">{gettext('Favorites')}</span>
+                  <span className="nav-text" title={gettext('Favorites')}>
+                    {gettext('Favorites')}
+                  </span>
                 </Link>
               </li>
               {showActivity &&
               <li className={`nav-item ${this.getActiveClass('dashboard')}`}>
-                <Link className={`nav-link ellipsis ${this.getActiveClass('dashboard')}`} to={siteRoot + 'activities/all'} title={gettext('Activities')} onClick={(e) => this.tabItemClick(e, 'dashboard')}>
+                <Link className={`nav-link ellipsis ${this.getActiveClass('dashboard')}`} to={siteRoot + 'activities/all'} onClick={(e) => this.tabItemClick(e, 'dashboard')}>
                   <Icon symbol="activities" />
-                  <span className="nav-text">{gettext('Activities')}</span>
+                  <span className="nav-text" title={gettext('Activities')}>
+                    {gettext('Activities')}
+                  </span>
                 </Link>
               </li>
               }
               {canCreateWiki &&
               <li className={`nav-item ${this.getActiveClass('published')}`}>
-                <Link className={`nav-link ellipsis ${this.getActiveClass('published')}`} to={siteRoot + 'published/'} title={gettext('Wikis')} onClick={(e) => this.tabItemClick(e, 'published')}>
+                <Link className={`nav-link ellipsis ${this.getActiveClass('published')}`} to={siteRoot + 'published/'} onClick={(e) => this.tabItemClick(e, 'published')}>
                   <Icon symbol="wiki" />
-                  <span className="nav-text">{gettext('Wikis')}</span>
+                  <span className="nav-text" title={gettext('Wikis')}>
+                    {gettext('Wikis')}
+                  </span>
                 </Link>
               </li>
               }
               {canInvitePeople &&
               <li className={`nav-item ${this.getActiveClass('invitations')}`}>
-                <Link className={`nav-link ellipsis ${this.getActiveClass('invitations')}`} to={siteRoot + 'invitations/'} title={gettext('Invite Guest')} onClick={(e) => this.tabItemClick(e, 'invitations')}>
+                <Link className={`nav-link ellipsis ${this.getActiveClass('invitations')}`} to={siteRoot + 'invitations/'} onClick={(e) => this.tabItemClick(e, 'invitations')}>
                   <Icon symbol="invite-guests" />
-                  <span className="nav-text">{gettext('Invite Guest')}</span>
+                  <span className="nav-text" title={gettext('Invite Guest')}>{gettext('Invite Guest')}</span>
                 </Link>
               </li>
               }
@@ -368,23 +384,27 @@ class MainSideNav extends React.Component {
             ) : (
               <ul className="nav nav-pills flex-column nav-container">
                 <li className='nav-item'>
-                  <a className={'nav-link'} href={helpLink || siteRoot + 'help/'} title={gettext('Help')}>
+                  <a className={'nav-link'} href={helpLink || siteRoot + 'help/'}>
                     <Icon symbol="help" />
-                    <span className="nav-text">{gettext('Help')}</span>
+                    <span className="nav-text" title={gettext('Help')}>
+                      {gettext('Help')}
+                    </span>
                   </a>
                 </li>
                 {enableTC &&
                 <li className='nav-item'>
                   <a href={`${siteRoot}terms/`} className="nav-link">
                     <Icon symbol="terms" />
-                    <span className="nav-text">{gettext('Terms')}</span>
+                    <span className="nav-text" title={gettext('Terms')}>
+                      {gettext('Terms')}
+                    </span>
                   </a>
                 </li>
                 }
                 <li className='nav-item'>
                   <a href={siteRoot + 'download_client_program/'} className="nav-link">
                     <Icon symbol="clients" />
-                    <span className="nav-text">{gettext('Clients')}</span>
+                    <span className="nav-text" title={gettext('Clients')}>{gettext('Clients')}</span>
                   </a>
                 </li>
                 {enableShowAbout &&
@@ -397,7 +417,9 @@ class MainSideNav extends React.Component {
                     onKeyDown={Utils.onKeyDown}
                   >
                     <Icon symbol="about" />
-                    <span className="nav-text">{gettext('About')}</span>
+                    <span className="nav-text" title={gettext('About')}>
+                      {gettext('About')}
+                    </span>
                   </div>
                 </li>
                 }

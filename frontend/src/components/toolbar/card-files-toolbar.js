@@ -205,10 +205,11 @@ const CardFilesToolbar = ({ repoID, updateCurrentDirent }) => {
 
       {length > 0 && (
         <ItemDropdownMenu
+          target="card-files-toolbar-menu"
           ref={menuRef}
           item={{}}
           toggleClass="cur-view-path-btn"
-          toggleChildren={<Icon symbol="more-level" />}
+          tooltip={gettext('More operations')}
           onMenuItemClick={onMenuItemClick}
           getMenuList={getMenuList}
         />

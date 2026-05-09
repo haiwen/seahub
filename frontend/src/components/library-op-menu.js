@@ -229,7 +229,7 @@ class LibraryOperationMenu extends React.Component {
           className={isLibView ? 'd-block' : ''}
         >
           <DropdownToggle
-            id="more-level-icon"
+            id={isLibView ? 'library-more-operations-btn' : 'more-operations-btn'}
             tag={isLibView ? 'div' : 'span'}
             className={isLibView ? 'dir-others-item' : 'op-icon'}
             role="button"
@@ -242,7 +242,9 @@ class LibraryOperationMenu extends React.Component {
             {isLibView ? children : (
               <>
                 <Icon symbol="more-level" />
-                <Tooltip target="more-level-icon">{isLibView ? gettext('More') : gettext('More operations')}</Tooltip>
+                <Tooltip target={isLibView ? 'library-more-operations-btn' : 'more-operations-btn'}>
+                  {isLibView ? gettext('More') : gettext('More operations')}
+                </Tooltip>
               </>
             )}
           </DropdownToggle>

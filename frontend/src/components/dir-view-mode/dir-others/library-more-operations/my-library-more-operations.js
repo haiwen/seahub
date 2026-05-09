@@ -177,7 +177,9 @@ class LibraryMoreOperations extends React.Component {
         >
           <>
             <span className="d-flex align-items-center"><Icon symbol="more-level" /></span>
-            <span className="dir-others-item-text">{gettext('More')}</span>
+            <span className="dir-others-item-text" title={gettext('More')}>
+              {gettext('More')}
+            </span>
           </>
         </LibraryOpMenu>
         {isRenameRepoDialogOpen && (

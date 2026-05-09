@@ -171,19 +171,14 @@ const FaceRecognitionFilesToolbar = ({ repoID }) => {
           <OpIcon id="copy-btn" symbol="copy" className="cur-view-path-btn" tooltip={gettext('Copy')} aria-label={gettext('Copy')} op={onCopyClick} />
         </>
       )}
-      <span className="cur-view-path-btn" onClick={handleDownload} title={gettext('Download')} aria-label={gettext('Download')}>
-        <Icon symbol="download" />
-      </span>
-      {!readOnly &&
-        <span className="cur-view-path-btn" onClick={deleteRecords} title={gettext('Delete')} aria-label={gettext('Delete')}>
-          <Icon symbol="delete1" />
-        </span>
-      }
+      <OpIcon id="download-btn" symbol="download" className="cur-view-path-btn" tooltip={gettext('Download')} aria-label={gettext('Download')} op={handleDownload} />
+      {!readOnly && <OpIcon id="delete-btn" symbol="delete1" className="cur-view-path-btn" tooltip={gettext('Delete')} aria-label={gettext('Delete')} op={deleteRecords} />}
       <ItemDropdownMenu
         ref={menuRef}
+        target="face-recognition-files-toolbar-menu-toggle"
         item={{}}
         toggleClass="cur-view-path-btn"
-        toggleChildren={<Icon symbol="more-level" />}
+        tooltip={gettext('More operations')}
         onMenuItemClick={onMenuItemClick}
         getMenuList={() => toolbarMenuOptions}
       />
