@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkseahub_frontend=self.webpackChunkseahub_frontend||[]).push([[744],{50744:function(e,n,r){r.r(n),r.d(n,{WardleyModule:function(){return u.t},createWardleyServices:function(){return u.J}});var u=r(39720);r(24194)}}]);

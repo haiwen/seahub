@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkseahub_frontend=self.webpackChunkseahub_frontend||[]).push([[4606],{44606:function(e,n,u){u.r(n),u.d(n,{PieModule:function(){return r.B},createPieServices:function(){return r.f}});var r=u(40972);u(24194)}}]);
