@@ -39,7 +39,7 @@ const FileNameFormatter = ({
   }, [onClickName, record]);
 
   useEffect(() => {
-    if (cellRef.current) {
+    if (cellRef?.current) {
       const cellComputedStyle = window.getComputedStyle(cellRef.current);
       const borderTop = parseFloat(cellComputedStyle.borderTopWidth) || 0;
       const borderBottom = parseFloat(cellComputedStyle.borderBottomWidth) || 0;
