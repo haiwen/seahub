@@ -31,9 +31,8 @@ except ImportError:
 import pstats
 from io import StringIO
 from django.conf import settings
-from django.utils.deprecation import MiddlewareMixin
 
-class ProfilerMiddleware(MiddlewareMixin):
+class ProfilerMiddleware:
     """
     Simple profile middleware to profile django views. To run it, add ?prof to
     the URL like this:
@@ -59,6 +58,10 @@ class ProfilerMiddleware(MiddlewareMixin):
     This is adapted from an example found here:
     http://www.slideshare.net/zeeg/django-con-high-performance-django-presentation.
     """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
     def can(self, request):
         return settings.DEBUG and request.GET.get('__prof__', False) == 'true'
 
@@ -68,7 +71,8 @@ class ProfilerMiddleware(MiddlewareMixin):
             args = (request,) + callback_args
             return self.profiler.runcall(callback, *args, **callback_kwargs)
 
-    def process_response(self, request, response):
+    def __call__(self, request):
+        response = self.get_response(request)
         if self.can(request):
             self.profiler.create_stats()
             io = StringIO()
