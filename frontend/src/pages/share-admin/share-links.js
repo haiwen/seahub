@@ -572,7 +572,7 @@ class ShareAdminShareLinks extends Component {
                       op={this.cancelSelectAllLinks}
                       title={gettext('Unselect')}
                     >
-                      <span className="mr-2"><Icon symbol="close" /></span>
+                      <span className="d-flex align-items-center justify-content-center mr-2"><Icon symbol="close" /></span>
                       <span>{`${selectedLinksLen} ${gettext('selected')}`}</span>
                     </OpElement>
                     <OpIcon
