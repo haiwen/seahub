@@ -10,6 +10,7 @@ import DeleteWikiDialog from '../dialog/delete-wiki-dialog';
 import RenameWikiDialog from '../dialog/rename-wiki-dialog';
 import ShareWikiDialog from '../dialog/share-wiki-dialog';
 import PublishWikiDialog from '../dialog/publish-wiki-dialog';
+import TransferDialog from '../dialog/transfer-dialog';
 import wikiAPI from '../../utils/wiki-api';
 import toaster from '../toast';
 import ConvertWikiDialog from '../dialog/convert-wiki-dialog';
@@ -26,6 +27,7 @@ const propTypes = {
   deleteWiki: PropTypes.func.isRequired,
   unshareGroupWiki: PropTypes.func.isRequired,
   renameWiki: PropTypes.func.isRequired,
+  transferWiki: PropTypes.func.isRequired,
   convertWiki: PropTypes.func,
   isDepartment: PropTypes.bool.isRequired,
   isShowAvatar: PropTypes.bool.isRequired,
@@ -41,6 +43,7 @@ class WikiCardItem extends Component {
       isShowShareDialog: false,
       isShowPublishDialog: false,
       isShowConvertDialog: false,
+      isShowTransferDialog: false,
       customUrlString: this.props.wiki.public_url_suffix,
     };
   }
@@ -77,6 +80,12 @@ class WikiCardItem extends Component {
     });
   };
 
+  onTransferToggle = () => {
+    this.setState({
+      isShowTransferDialog: !this.state.isShowTransferDialog,
+    });
+  };
+
   handleCustomUrl = (url) => {
     this.setState({
       customUrlString: url,
@@ -110,6 +119,11 @@ class WikiCardItem extends Component {
       this.props.renameWiki(this.props.wiki, newName);
     }
     this.setState({ isShowRenameDialog: false });
+  };
+
+  transferWiki = (owner, reshare) => {
+    this.props.transferWiki(this.props.wiki, owner, reshare);
+    this.setState({ isShowTransferDialog: false });
   };
 
   publishWiki = (url) => {
@@ -183,6 +197,7 @@ class WikiCardItem extends Component {
     let showDropdownMenu = false;
     let showPublish = false;
     let showWikiConvert = false;
+    let showTransfer = false;
 
     if (isDepartment) {
       if (isAdmin) {
@@ -191,6 +206,7 @@ class WikiCardItem extends Component {
           showShare = true;
           showRename = true;
           showPublish = true;
+          showTransfer = !isOldVersion;
           if (isOldVersion) {
             showWikiConvert = true;
           }
@@ -204,6 +220,7 @@ class WikiCardItem extends Component {
         showDelete = true;
         showRename = true;
         showPublish = true;
+        showTransfer = !isOldVersion;
         if (isOldVersion) {
           showWikiConvert = true;
         }
@@ -212,7 +229,7 @@ class WikiCardItem extends Component {
       }
     }
 
-    if (isOldVersion || showRename || showShare || showDelete || showLeaveShare) {
+    if (isOldVersion || showRename || showShare || showDelete || showLeaveShare || showTransfer) {
       showDropdownMenu = true;
     }
 
@@ -251,6 +268,9 @@ class WikiCardItem extends Component {
                     <DropdownItem onClick={this.onPublishToggle}>{gettext('Publish')}</DropdownItem>}
                   {showShare &&
                     <DropdownItem onClick={this.onShareToggle}>{gettext('Share')}</DropdownItem>
+                  }
+                  {showTransfer &&
+                    <DropdownItem onClick={this.onTransferToggle}>{gettext('Transfer')}</DropdownItem>
                   }
                   {isOldVersion &&
                     <DropdownItem onClick={this.onDeleteToggle}>{gettext('Unpublish')}</DropdownItem>
@@ -355,6 +375,15 @@ class WikiCardItem extends Component {
               toggleCancel={this.onConvertToggle}
               convertWiki={this.props.convertWiki}
               wiki={this.props.wiki}
+            />
+          </ModalPortal>
+        }
+        {this.state.isShowTransferDialog &&
+          <ModalPortal>
+            <TransferDialog
+              itemName={wiki.name}
+              toggleDialog={this.onTransferToggle}
+              onTransferRepo={this.transferWiki}
             />
           </ModalPortal>
         }

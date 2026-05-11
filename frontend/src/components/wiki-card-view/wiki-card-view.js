@@ -12,6 +12,7 @@ const propTypes = {
   data: PropTypes.object.isRequired,
   deleteWiki: PropTypes.func.isRequired,
   renameWiki: PropTypes.func.isRequired,
+  transferWiki: PropTypes.func.isRequired,
   leaveSharedWiki: PropTypes.func.isRequired,
   unshareGroupWiki: PropTypes.func.isRequired,
   convertWiki: PropTypes.func.isRequired,
@@ -80,6 +81,7 @@ class WikiCardView extends Component {
         key='my-Wikis'
         deleteWiki={this.props.deleteWiki}
         renameWiki={this.props.renameWiki}
+        transferWiki={this.props.transferWiki}
         unshareGroupWiki={this.props.unshareGroupWiki}
         sidePanelRate={sidePanelRate}
         isSidePanelFolded={isSidePanelFolded}
@@ -96,6 +98,7 @@ class WikiCardView extends Component {
         key='shared-Wikis'
         deleteWiki={this.props.leaveSharedWiki}
         renameWiki={this.props.renameWiki}
+        transferWiki={this.props.transferWiki}
         unshareGroupWiki={this.props.unshareGroupWiki}
         wikis={sharedWikis}
         title={gettext('Shared with me')}
@@ -117,6 +120,7 @@ class WikiCardView extends Component {
             deleteWiki={this.props.deleteWiki}
             unshareGroupWiki={this.props.unshareGroupWiki}
             renameWiki={this.props.renameWiki}
+            transferWiki={this.props.transferWiki}
             sidePanelRate={sidePanelRate}
             isSidePanelFolded={isSidePanelFolded}
             group={groupWiki}
@@ -135,6 +139,7 @@ class WikiCardView extends Component {
           key='old-Wikis'
           deleteWiki={this.props.deleteWiki}
           renameWiki={this.props.renameWiki}
+          transferWiki={this.props.transferWiki}
           unshareGroupWiki={this.props.unshareGroupWiki}
           convertWiki={this.props.convertWiki}
           isSidePanelFolded={isSidePanelFolded}

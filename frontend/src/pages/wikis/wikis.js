@@ -349,6 +349,26 @@ class Wikis extends Component {
     }
   };
 
+  transferWiki = (wiki, owner, reshare) => {
+    if (wiki.version !== 'v2') {
+      return;
+    }
+
+    const isGroupWiki = wiki.owner.includes('@seafile_group');
+    const request = isGroupWiki ? userAPI.depAdminTransferRepo(wiki.repo_id, wiki.owner.split('@')[0], owner, reshare) : userAPI.transferRepo(wiki.repo_id, owner, reshare);
+
+    request.then(() => {
+      toaster.success(gettext('Successfully transferred the library.'));
+      this.getWikis();
+    }).catch((error) => {
+      if (error.response) {
+        toaster.danger(error.response.data.error_msg || gettext('Error'), { duration: 3 });
+      } else {
+        toaster.danger(gettext('Failed. Please check the network.'), { duration: 3 });
+      }
+    });
+  };
+
   convertWiki = (wiki, wikiName, departmentID) => {
     let task_id = '';
     this.setState({
@@ -456,6 +476,7 @@ class Wikis extends Component {
                   leaveSharedWiki={this.leaveSharedWiki}
                   unshareGroupWiki={this.unshareGroupWiki}
                   renameWiki={this.renameWiki}
+                  transferWiki={this.transferWiki}
                   convertWiki={this.convertWiki}
                   toggleAddWikiDialog={this.toggleAddWikiDialog}
                   sidePanelRate={this.props.sidePanelRate}

@@ -11,6 +11,7 @@ const propTypes = {
   group: PropTypes.object,
   deleteWiki: PropTypes.func.isRequired,
   unshareGroupWiki: PropTypes.func.isRequired,
+  transferWiki: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   isDepartment: PropTypes.bool.isRequired,
   isShowAvatar: PropTypes.bool.isRequired,
@@ -93,6 +94,7 @@ class WikiCardGroup extends Component {
                 wiki={wiki}
                 deleteWiki={this.props.deleteWiki}
                 unshareGroupWiki={this.props.unshareGroupWiki}
+                transferWiki={this.props.transferWiki}
                 isDepartment={isDepartment}
                 isShowAvatar={this.props.isShowAvatar}
                 renameWiki={this.props.renameWiki}
@@ -105,6 +107,7 @@ class WikiCardGroup extends Component {
                 wiki={wiki}
                 deleteWiki={this.props.deleteWiki}
                 unshareGroupWiki={this.props.unshareGroupWiki}
+                transferWiki={this.props.transferWiki}
                 isDepartment={isDepartment}
                 isShowAvatar={this.props.isShowAvatar}
                 renameWiki={this.props.renameWiki}
