@@ -679,6 +679,7 @@ class DirentListItem extends React.Component {
           onKeyDown={(e) => e.key === 'Enter' && this.onItemSelected(e)}
           role="button"
           tabIndex={0}
+          title={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
           aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
         >
           {isSelected ? (
@@ -686,7 +687,6 @@ class DirentListItem extends React.Component {
           ) : (
             <div className="dirent-checkbox-unchecked form-check-input" />
           )}
-          <Tooltip target={`checkbox-${dirent.id}`}>{isSelected ? gettext('Unselect this item') : gettext('Select this item')}</Tooltip>
         </div>
 
         {/* Star */}

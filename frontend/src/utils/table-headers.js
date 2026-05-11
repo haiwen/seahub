@@ -1,7 +1,6 @@
 import React from 'react';
 import { gettext } from './constants';
 import Icon from '../components/icon';
-import Tooltip from '../components/tooltip';
 import { DIR_COLUMN_KEYS } from '../constants/dir-column-config';
 import { COLUMN_CONFIG } from '../components/dirent-list-view/column-config';
 import { PRIVATE_COLUMN_KEY } from '@/metadata/constants';
@@ -47,6 +46,7 @@ export const createTableHeaders = (
             onKeyDown: (e) => e.key === 'Enter' && onAllItemSelected(),
             role: 'button',
             tabIndex: 0,
+            title: selectAllTooltip,
             'aria-label': selectAllTooltip
           },
           isPartiallySelected
@@ -58,11 +58,6 @@ export const createTableHeaders = (
               onChange: () => {},
               readOnly: true
             })
-        ),
-        React.createElement(
-          Tooltip,
-          { target: 'table-header-select-all-checkbox' },
-          selectAllTooltip
         )
       )
     },
