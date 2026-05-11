@@ -9,7 +9,7 @@
   line-height: 24px;
   margin: 0 0 4px;
   padding: 0 12px 4px;
-  border-bottom: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
 }
 
 .set-row-height-dropdown-menu .dropdown-item {
