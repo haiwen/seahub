@@ -236,6 +236,9 @@
   "Underline": "下划线",
   "Row_number": "行数",
   "Column_number": "列数",
+  "This_link_is_not_verified": "此链接未经验证",
+  "This_link_is_not_verified_tip": "在继续之前，请确保你信任此链接。如果你不信任该URL，请不要打开链接以访问该网站。",
+  "Copy_link": "复制链接",
   "Zoom_in": "放大",
   "Zoom_out": "缩小"
 }

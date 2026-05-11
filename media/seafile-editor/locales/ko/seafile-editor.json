@@ -235,5 +235,10 @@
   "Horizontal_align": "수평 정렬",
   "Underline": "밑줄",
   "Row_number": "행 갯수",
-  "Column_number": "열 갯수"
+  "Column_number": "열 갯수",
+  "This_link_is_not_verified": "This link is not verified",
+  "This_link_is_not_verified_tip": "Before continuing, please ensure you trust this link. If you do not trust the URL, do not open the link to access the site.",
+  "Copy_link": "링크 복사",
+  "Zoom_in": "확대",
+  "Zoom_out": "축소"
 }

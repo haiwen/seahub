@@ -235,5 +235,10 @@
   "Horizontal_align": "Navpično poravnava",
   "Underline": "Podčrtani",
   "Row_number": "Številka vrstice",
-  "Column_number": "Številka stolpca"
+  "Column_number": "Številka stolpca",
+  "This_link_is_not_verified": "This link is not verified",
+  "This_link_is_not_verified_tip": "Before continuing, please ensure you trust this link. If you do not trust the URL, do not open the link to access the site.",
+  "Copy_link": "Kopiraj povezavo",
+  "Zoom_in": "Povečaj",
+  "Zoom_out": "Pomanjšaj"
 }

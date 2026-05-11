@@ -235,5 +235,10 @@
   "Horizontal_align": "Alinhamento horizontal",
   "Underline": "Sublinhado",
   "Row_number": "Número da linha",
-  "Column_number": "Número da coluna"
+  "Column_number": "Número da coluna",
+  "This_link_is_not_verified": "This link is not verified",
+  "This_link_is_not_verified_tip": "Before continuing, please ensure you trust this link. If you do not trust the URL, do not open the link to access the site.",
+  "Copy_link": "Copiar link",
+  "Zoom_in": "Aproximar",
+  "Zoom_out": "Afastar"
 }

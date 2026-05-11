@@ -235,5 +235,10 @@
   "Horizontal_align": "水平對齊",
   "Underline": "下劃線",
   "Row_number": "行號",
-  "Column_number": "列號"
+  "Column_number": "列號",
+  "This_link_is_not_verified": "This link is not verified",
+  "This_link_is_not_verified_tip": "Before continuing, please ensure you trust this link. If you do not trust the URL, do not open the link to access the site.",
+  "Copy_link": "複製連結",
+  "Zoom_in": "放大 (Ctrl + 鼠標滾輪)",
+  "Zoom_out": "縮小 (Ctrl - 鼠標滾輪)"
 }

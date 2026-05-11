@@ -235,5 +235,10 @@
   "Horizontal_align": "Вирівнювання по горизонталі",
   "Underline": "Підкреслений",
   "Row_number": "Номер рядка",
-  "Column_number": "Номер стовпця"
+  "Column_number": "Номер стовпця",
+  "This_link_is_not_verified": "This link is not verified",
+  "This_link_is_not_verified_tip": "Before continuing, please ensure you trust this link. If you do not trust the URL, do not open the link to access the site.",
+  "Copy_link": "Копіювати посилання",
+  "Zoom_in": "Наблизити",
+  "Zoom_out": "Віддалити"
 }
