@@ -10,6 +10,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../toast';
 import { MODE_TYPE_MAP } from '../../constants';
 import Icon from '../icon';
+import Tooltip from '../tooltip';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -324,15 +325,17 @@ class MoveDirentDialog extends React.Component {
         <ModalHeader toggle={this.toggle}
           close={
             <div className="header-buttons">
-              <button type="button" className="close seahub-modal-btn" data-dismiss="modal" aria-label={gettext('Close')} title={gettext('Close')} onClick={this.toggle}>
-                <span className="seahub-modal-btn-inner">
+              <button type="button" className="close seahub-modal-btn" data-dismiss="modal" aria-label={gettext('Close')} onClick={this.toggle}>
+                <span id="close-btn" className="seahub-modal-btn-inner">
                   <Icon symbol="close" />
+                  <Tooltip target="close-btn">{gettext('Close')}</Tooltip>
                 </span>
               </button>
               {(isPro && !showSearchBar) &&
-                <button type="button" className="close seahub-modal-btn" data-dismiss="modal" aria-label={gettext('Search')} title={gettext('Search')} onClick={this.onOpenSearchBar}>
-                  <span className="seahub-modal-btn-inner">
+                <button type="button" className="close seahub-modal-btn" data-dismiss="modal" aria-label={gettext('Search')} onClick={this.onOpenSearchBar}>
+                  <span id="search-btn" className="seahub-modal-btn-inner">
                     <Icon symbol="search" />
+                    <Tooltip target="search-btn">{gettext('Search')}</Tooltip>
                   </span>
                 </button>
               }

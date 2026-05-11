@@ -181,6 +181,7 @@
 
 .filter-by-date-menu .filter-by-date-menu-toolbar .filter-by-date-type-toggle .seafile-multicolor-icon {
   color: var(--bs-icon-color);
+  font-size: .75rem;
 }
 
 .filter-by-date-menu .filter-by-date-custom-date-container {

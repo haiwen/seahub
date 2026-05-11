@@ -24,6 +24,7 @@ import { menuHandlers } from '../dir-view-mode/utils/menuHandlers';
 import FileTagsFormatter from '@/metadata/components/cell-formatter/file-tags';
 import { getNumberDisplayString } from '@/metadata/utils/cell';
 import TextTranslation from '@/utils/text-translation';
+import Tooltip from '../tooltip';
 
 import '../../css/dirent-list-item.css';
 import '../../metadata/components/cell-formatter/collaborator/index.css';
@@ -672,19 +673,20 @@ class DirentListItem extends React.Component {
       >
         {/* Checkbox */}
         <div
+          id={`checkbox-${dirent.id}`}
           className={classnames('dirent-checkbox-wrapper', { 'tr-drag-effect': this.state.isDragTipShow && canDrag })}
           onClick={this.onItemSelected}
           onKeyDown={(e) => e.key === 'Enter' && this.onItemSelected(e)}
           role="button"
           tabIndex={0}
           aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
-          title={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
         >
           {isSelected ? (
             <Icon symbol="checkbox" />
           ) : (
             <div className="dirent-checkbox-unchecked form-check-input" />
           )}
+          <Tooltip target={`checkbox-${dirent.id}`}>{isSelected ? gettext('Unselect this item') : gettext('Select this item')}</Tooltip>
         </div>
 
         {/* Star */}
@@ -742,6 +744,7 @@ class DirentListItem extends React.Component {
               </span>
               {this.state.isOperationShow && (
                 <ItemDropdownMenu
+                  target={`item-dropdown-${dirent.id}`}
                   toggleClass="op-icon mr-0"
                   item={dirent}
                   getMenuList={(item) => this.props.getDirentItemMenuList(item, true)}

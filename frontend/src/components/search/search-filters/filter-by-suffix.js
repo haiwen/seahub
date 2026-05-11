@@ -7,6 +7,7 @@ import ModalPortal from '../../modal-portal';
 import { SEARCH_FILTERS_KEY } from '../../../constants';
 import Icon from '../../icon';
 import { Utils } from '../../../utils/utils';
+import Tooltip from '@/components/tooltip';
 
 const FilterBySuffix = ({ suffixes, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -69,14 +70,15 @@ const FilterBySuffix = ({ suffixes, onChange }) => {
             />
             {inputValue.length > 0 && (
               <button
+                id="clear-suffix-input-btn"
                 type="button"
                 className="clear-icon-right"
                 onClick={handleClearInput}
                 onKeyDown={Utils.onKeyDown}
                 aria-label={gettext('Clear')}
-                title={gettext('Clear')}
               >
                 <Icon symbol="close" />
+                <Tooltip target="clear-suffix-input-btn">{gettext('Clear')}</Tooltip>
               </button>
             )}
           </DropdownMenu>

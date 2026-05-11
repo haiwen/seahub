@@ -16,10 +16,11 @@ import { SEARCH_MASK, SEARCH_CONTAINER } from '../../constants/zIndexes';
 import { PRIVATE_FILE_TYPE, SEARCH_FILTER_BY_DATE_OPTION_KEY, SEARCH_FILTER_BY_DATE_TYPE_KEY, SEARCH_FILTERS_KEY, SEARCH_FILTERS_SHOW_KEY } from '../../constants';
 import SearchFilters from './search-filters';
 import SearchTags from './search-tags';
-import IconBtn from '../icon-btn';
 import SearchedItemDetails from './details';
 import { CollaboratorsProvider } from '../../metadata';
 import Icon from '../icon';
+import OpIcon from '../op-icon';
+import Tooltip from '../tooltip';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -1123,28 +1124,28 @@ class Search extends Component {
                   autoComplete="off"
                   ref={this.inputRef}
                 />
-                {isCloseShow &&
+                {isCloseShow && (
                   <button
+                    id="clear-search-btn"
                     type="button"
                     className="search-icon-right"
                     onClick={this.onClearSearch}
                     aria-label={gettext('Clear search')}
-                    title={gettext('Clear search')}
                   >
                     <Icon symbol="close" />
+                    <Tooltip target="clear-search-btn">{gettext('Clear search')}</Tooltip>
                   </button>
+                )
                 }
                 {isMaskShow && (
-                  <IconBtn
+                  <OpIcon
+                    id="search-filter-btn"
                     symbol="search-filter"
                     size={20}
                     className={classnames('search-icon-right input-icon-addon search-filter-controller', { 'active': isFilterControllerActive })}
-                    onClick={this.handleFiltersShow}
-                    title={isFiltersShow ? gettext('Hide advanced search') : gettext('Show advanced search')}
+                    op={this.handleFiltersShow}
+                    tooltip={isFiltersShow ? gettext('Hide advanced search') : gettext('Show advanced search')}
                     aria-label={isFiltersShow ? gettext('Hide advanced search') : gettext('Show advanced search')}
-                    tabIndex={0}
-                    role="button"
-                    onKeyDown={Utils.onKeyDown}
                   />
                 )}
               </div>
@@ -1186,15 +1187,16 @@ class Search extends Component {
                     onChange={this.onChangeHandler}
                     autoComplete="off"
                   />
-                  {this.state.isCloseShow &&
-                    <IconBtn
+                  {this.state.isCloseShow && (
+                    <OpIcon
+                      id="clear-search-btn"
                       symbol="close"
                       className="search-icon-right input-icon-addon"
-                      onClick={this.onClearSearch}
+                      op={this.onClearSearch}
+                      tooltip={gettext('Clear search')}
                       aria-label={gettext('Clear search')}
-                      title={gettext('Clear search')}
                     />
-                  }
+                  )}
                 </div>
                 <div className="search-result-container dropdown-search-result-container">
                   {this.renderSearchResult()}

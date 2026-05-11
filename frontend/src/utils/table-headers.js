@@ -1,6 +1,7 @@
 import React from 'react';
 import { gettext } from './constants';
 import Icon from '../components/icon';
+import Tooltip from '../components/tooltip';
 import { DIR_COLUMN_KEYS } from '../constants/dir-column-config';
 import { COLUMN_CONFIG } from '../components/dirent-list-view/column-config';
 import { PRIVATE_COLUMN_KEY } from '@/metadata/constants';
@@ -12,6 +13,8 @@ export const createTableHeaders = (
 ) => {
   const { sortBy, sortOrder, onSort } = sortOptions;
   const { isAllSelected, onAllItemSelected, isPartiallySelected } = selectionOptions;
+  const shouldUnselectAll = isAllSelected || isPartiallySelected;
+  const selectAllTooltip = shouldUnselectAll ? gettext('Unselect all items') : gettext('Select all items');
 
   const sortIcon = React.createElement(
     'span',
@@ -33,25 +36,34 @@ export const createTableHeaders = (
       className: COLUMN_CONFIG.checkbox.headerClassName,
       minWidth: COLUMN_CONFIG.checkbox.width,
       children: React.createElement(
-        'div',
-        {
-          className: 'select-all-checkbox-wrapper',
-          onClick: onAllItemSelected,
-          onKeyDown: (e) => e.key === 'Enter' && onAllItemSelected(),
-          role: 'button',
-          tabIndex: 0,
-          'aria-label': isAllSelected ? gettext('Unselect all items') : gettext('Select all items'),
-          title: isAllSelected ? gettext('Unselect all items') : gettext('Select all items')
-        },
-        isPartiallySelected
-          ? React.createElement(Icon, { symbol: 'partially-selected' })
-          : React.createElement('input', {
-            type: 'checkbox',
-            className: 'cursor-pointer form-check-input',
-            checked: isAllSelected,
-            onChange: () => {},
-            readOnly: true
-          })
+        React.Fragment,
+        null,
+        React.createElement(
+          'div',
+          {
+            id: 'table-header-select-all-checkbox',
+            className: 'select-all-checkbox-wrapper',
+            onClick: onAllItemSelected,
+            onKeyDown: (e) => e.key === 'Enter' && onAllItemSelected(),
+            role: 'button',
+            tabIndex: 0,
+            'aria-label': selectAllTooltip
+          },
+          isPartiallySelected
+            ? React.createElement(Icon, { symbol: 'partially-selected' })
+            : React.createElement('input', {
+              type: 'checkbox',
+              className: 'cursor-pointer form-check-input',
+              checked: isAllSelected,
+              onChange: () => {},
+              readOnly: true
+            })
+        ),
+        React.createElement(
+          Tooltip,
+          { target: 'table-header-select-all-checkbox' },
+          selectAllTooltip
+        )
       )
     },
     {

@@ -385,6 +385,8 @@ class SelectedDirentsToolbar extends React.Component {
         }
         {selectedLen === 1 &&
           <ItemDropdownMenu
+            target="selected-item-dropdown-menu"
+            tooltip={gettext('More operations')}
             item={this.props.selectedDirentList[0]}
             toggleClass={'cur-view-path-btn'}
             onMenuItemClick={this.onMenuItemClick}

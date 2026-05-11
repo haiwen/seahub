@@ -211,12 +211,15 @@ const FilterByDate = ({ date, onChange }) => {
                   })}
                 </DropdownMenu>
               </Dropdown>
-              <OpIcon
-                className="op-icon"
-                title={gettext('Delete')}
-                symbol="delete1"
-                op={onClearDate}
-              />
+              {isOpen && (
+                <OpIcon
+                  id="clear-date-btn"
+                  className="op-icon"
+                  tooltip={gettext('Delete')}
+                  symbol="delete1"
+                  op={onClearDate}
+                />
+              )}
             </div>
             {options.map((option, i) => {
               const isSelected = option.key === value;

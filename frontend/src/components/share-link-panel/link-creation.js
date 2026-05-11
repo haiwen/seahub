@@ -12,6 +12,7 @@ import SetLinkExpiration from '../set-link-expiration';
 import UserSelect from '../user-select';
 import BackIcon from '../../components/back-icon';
 import Icon from '../icon';
+import Tooltip from '../tooltip';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -335,11 +336,13 @@ class LinkCreation extends React.Component {
                   <span className="tip">{gettext('(at least {passwordMinLength} characters and includes {passwordStrengthLevel} of the following: number, upper letter, lower letter and other symbols)').replace('{passwordMinLength}', shareLinkPasswordMinLength).replace('{passwordStrengthLevel}', shareLinkPasswordStrengthLevel)}</span>
                   <InputGroup style={{ width: inputWidth }}>
                     <Input id="passwd" type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password || ''} onChange={this.inputPassword} />
-                    <Button className="d-flex align-items-center" onClick={this.togglePasswordVisible}>
+                    <Button id="password-toggle-btn" className="d-flex align-items-center" aria-label={this.state.isPasswordVisible ? gettext('Hide password') : gettext('Show password')} onClick={this.togglePasswordVisible}>
                       <Icon symbol={this.state.isPasswordVisible ? 'eye' : 'eye-slash'} className="link-operation-icon" />
+                      <Tooltip target="password-toggle-btn">{this.state.isPasswordVisible ? gettext('Hide password') : gettext('Show password')}</Tooltip>
                     </Button>
-                    <Button className="d-flex align-items-center" onClick={this.generatePassword}>
+                    <Button id="password-generate-btn" className="d-flex align-items-center" aria-label={gettext('Generate password')} onClick={this.generatePassword}>
                       <Icon symbol="magic" className="link-operation-icon" />
+                      <Tooltip target="password-generate-btn">{gettext('Generate password')}</Tooltip>
                     </Button>
                   </InputGroup>
                 </FormGroup>

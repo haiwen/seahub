@@ -10,6 +10,7 @@ import { gettext, isPro } from '../../utils/constants';
 import { RepoInfo } from '../../models';
 import toaster from '../toast';
 import Icon from '../icon';
+import Tooltip from '../tooltip';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -324,14 +325,16 @@ class CopyDirent extends React.Component {
           close={
             <div className="header-buttons">
               <button type="button" className="close seahub-modal-btn" data-dismiss="modal" aria-label={gettext('Close')} title={gettext('Close')} onClick={this.toggle}>
-                <span className="seahub-modal-btn-inner">
+                <span id="close-btn" className="seahub-modal-btn-inner">
                   <Icon symbol="close" />
+                  <Tooltip target="close-btn">{gettext('Close')}</Tooltip>
                 </span>
               </button>
               {(isPro && !showSearchBar) &&
                 <button type="button" className="close seahub-modal-btn" data-dismiss="modal" aria-label={gettext('Search')} title={gettext('Search')} onClick={this.onOpenSearchBar}>
-                  <span className="seahub-modal-btn-inner">
+                  <span id="search-btn" className="seahub-modal-btn-inner">
                     <Icon symbol="search" />
+                    <Tooltip target="search-btn">{gettext('Search')}</Tooltip>
                   </span>
                 </button>
               }

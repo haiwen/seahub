@@ -632,7 +632,6 @@ class DirentListView extends React.Component {
     return createTableHeaders(sortOptions, selectionOptions, visibleColumnKeys);
   };
 
-
   render() {
     const { direntList, userPerm } = this.props;
 
