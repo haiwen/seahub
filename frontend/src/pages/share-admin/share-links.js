@@ -16,12 +16,12 @@ import ShareLinkPermissionSelect from '../../components/dialog/share-link-permis
 import ShareAdminLink from '../../components/dialog/share-admin-link';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 import Selector from '../../components/single-selector';
-import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import FixedWidthTable from '../../components/common/fixed-width-table';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import OpElement from '../../components/op-element';
 import OpIcon from '../../components/op-icon';
 import Icon from '../../components/icon';
+import CustomDropdown from '../../components/dropdown';
 
 import '../../css/share-admin-links.css';
 
@@ -590,8 +590,13 @@ class ShareAdminShareLinks extends Component {
                     <li className="nav-item">
                       <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link active">
                         {gettext('Share Links')}
-                        <SingleDropdownToolbar
-                          opList={[{ 'text': gettext('Clean invalid share links'), 'onClick': this.toggleCleanInvalidShareLinksDialog }]}
+                        <CustomDropdown
+                          items={[{ key: 'clean-invalid-share-links', label: gettext('Clean invalid share links'), onClick: this.toggleCleanInvalidShareLinksDialog }]}
+                          onItemClick={(selectedItem) => selectedItem.onClick?.()}
+                          trigger={<Icon symbol="down" className="down-icon" />}
+                          triggerClassName="ml-1 sf-dropdown-toggle"
+                          toggleProps={{ tag: 'span', 'aria-label': gettext('Operations') }}
+                          menuPortal={false}
                         />
                       </Link>
                     </li>

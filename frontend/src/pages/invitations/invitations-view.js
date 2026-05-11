@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React from 'react';
 import { DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
@@ -6,7 +6,6 @@ import classnames from 'classnames';
 import { gettext, mediaUrl } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import InvitePeopleDialog from '../../components/dialog/invite-people-dialog';
 import InvitationRevokeDialog from '../../components/dialog/invitation-revoke-dialog';
 import Loading from '../../components/loading';
@@ -15,6 +14,7 @@ import EmptyTip from '../../components/empty-tip';
 import OpIcon from '../../components/op-icon';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import Icon from '../../components/icon';
+import CustomDropdown from '../../components/dropdown';
 
 import '../../css/invitations.css';
 
@@ -82,7 +82,7 @@ class Item extends React.Component {
     const item = this.props.invitation;
 
     return (
-      <Fragment>
+      <>
         {this.props.isDesktop ?
           <tr
             className={classnames({
@@ -142,7 +142,7 @@ class Item extends React.Component {
           toggleDialog={this.toggleRevokeDialog}
         />
         }
-      </Fragment>
+      </>
     );
   }
 }
@@ -155,7 +155,7 @@ const ItemPropTypes = {
 
 Item.propTypes = ItemPropTypes;
 
-class Content extends Component {
+class Content extends React.Component {
 
   constructor(props) {
     super(props);
@@ -270,16 +270,26 @@ class InvitationsView extends React.Component {
   };
 
   render() {
+    const invitationActions = [{ key: 'invite-guest', label: gettext('Invite Guest'), onClick: this.toggleInvitePeopleDialog }];
     return (
-      <Fragment>
+      <>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
               <div className="d-flex">
                 <h3 className="sf-heading">{gettext('Invite Guest')}</h3>
-                <SingleDropdownToolbar
-                  withPlusIcon={true}
-                  opList={[{ 'text': gettext('Invite Guest'), 'onClick': this.toggleInvitePeopleDialog }]}
+                <CustomDropdown
+                  items={invitationActions}
+                  onItemClick={(selectedItem) => selectedItem.onClick?.()}
+                  trigger={(
+                    <>
+                      <Icon symbol="new" className="new-icon" />
+                      <Icon symbol="down" className="down-icon" />
+                    </>
+                  )}
+                  triggerClassName="ml-2 sf-dropdown-combined-toggle"
+                  toggleProps={{ tag: 'span', 'aria-label': gettext('Operations') }}
+                  menuPortal={false}
                 />
               </div>
             </div>
@@ -297,7 +307,7 @@ class InvitationsView extends React.Component {
           toggleDialog={this.toggleInvitePeopleDialog}
         />
         }
-      </Fragment>
+      </>
     );
   }
 }

@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { gettext } from '../../utils/constants';
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../metadata/constants';
 import { useFileOperations } from '../../hooks/file-operations';
@@ -14,6 +13,7 @@ import { getFileNameFromRecord } from '../../metadata/utils/cell';
 import { Utils } from '../../utils/utils';
 import Icon from '../icon';
 import OpIcon from '../op-icon';
+import CustomDropdown from '../dropdown';
 
 const FaceRecognitionFilesToolbar = ({ repoID }) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
@@ -173,14 +173,14 @@ const FaceRecognitionFilesToolbar = ({ repoID }) => {
       )}
       <OpIcon id="download-btn" symbol="download" className="cur-view-path-btn" tooltip={gettext('Download')} aria-label={gettext('Download')} op={handleDownload} />
       {!readOnly && <OpIcon id="delete-btn" symbol="delete1" className="cur-view-path-btn" tooltip={gettext('Delete')} aria-label={gettext('Delete')} op={deleteRecords} />}
-      <ItemDropdownMenu
-        ref={menuRef}
+      <CustomDropdown
         target="face-recognition-files-toolbar-menu-toggle"
-        item={{}}
-        toggleClass="cur-view-path-btn"
+        forwardedRef={menuRef}
+        items={toolbarMenuOptions}
+        trigger={<Icon symbol="more-level" />}
+        triggerClassName="cur-view-path-btn"
         tooltip={gettext('More operations')}
-        onMenuItemClick={onMenuItemClick}
-        getMenuList={() => toolbarMenuOptions}
+        onItemClick={(selectedItem) => onMenuItemClick(selectedItem.key)}
       />
     </div>
   );

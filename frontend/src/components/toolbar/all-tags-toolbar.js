@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { gettext } from '../../utils/constants';
-import ItemDropdownMenu from '../dropdown-menu/metadata-item-dropdown-menu';
 import { EVENT_BUS_TYPE } from '../../metadata/constants';
 import TextTranslation from '../../utils/text-translation';
 import EventBus from '../common/event-bus';
@@ -8,6 +7,7 @@ import OpElement from '../../components/op-element';
 import OpIcon from '../../components/op-icon';
 import Icon from '../icon';
 import Tooltip from '../tooltip';
+import CustomDropdown from '../dropdown';
 
 const AllTagsToolbar = () => {
   const [selectedTagIds, setSelectedTagIds] = useState([]);
@@ -83,18 +83,17 @@ const AllTagsToolbar = () => {
         />
       }
       {length > 0 && (
-        <ItemDropdownMenu
+        <CustomDropdown
           target="all-tags-more-operations-btn"
-          item={{}}
-          toggleClass={'cur-view-path-btn'}
-          toggleChildren={
+          items={getMenuList()}
+          trigger={(
             <>
               <Icon symbol="more-level" />
               <Tooltip target="all-tags-more-operations-btn">{gettext('More operations')}</Tooltip>
             </>
-          }
-          onMenuItemClick={onMenuItemClick}
-          getMenuList={getMenuList}
+          )}
+          triggerClassName="cur-view-path-btn"
+          onItemClick={(selectedItem, event) => onMenuItemClick(selectedItem.key, event)}
         />
       )}
     </div>

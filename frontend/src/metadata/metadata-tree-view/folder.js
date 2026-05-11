@@ -2,7 +2,6 @@ import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import ViewItem from './view';
-import ItemDropdownMenu from '../../components/dropdown-menu/metadata-item-dropdown-menu';
 import toaster from '../../components/toast';
 import NewView from './new-view';
 import InlineNameEditor from './inline-name-editor';
@@ -16,6 +15,7 @@ import { getNewViewMenuItem, KEY_ADD_VIEW_MAP } from '../../components/dir-view-
 import Icon from '../../components/icon';
 import Tooltip from '@/components/tooltip';
 import { gettext } from '@/utils/constants';
+import CustomDropdown from '../../components/dropdown';
 
 const ViewsFolder = ({
   idx, leftIndent, folder, currentPath, userPerm, canDeleteView, getFoldersNames, getMoveableFolders, generateNewViewDefaultName,
@@ -315,20 +315,19 @@ const ViewsFolder = ({
         </div>
         <div className="right-icon">
           {(highlight && folderMoreOperationMenus.length > 0) && (
-            <ItemDropdownMenu
+            <CustomDropdown
               target={`view-folder-dropdown-btn${idx}`}
-              item={{ name: 'metadata-folder' }}
-              menuClassname="metadata-views-dropdown-menu"
-              toggleChildren={
+              items={folderMoreOperationMenus}
+              menuClassName="metadata-views-dropdown-menu"
+              trigger={(
                 <>
                   <Icon symbol="more-level" />
                   <Tooltip target={`view-folder-dropdown-btn${idx}`}>{gettext('More operations')}</Tooltip>
                 </>
-              }
+              )}
               freezeItem={freezeItem}
               unfreezeItem={unfreezeItem}
-              getMenuList={() => folderMoreOperationMenus}
-              onMenuItemClick={clickMenu}
+              onItemClick={(selectedItem, event) => clickMenu(selectedItem.key, event)}
               menuStyle={isMobile ? { zIndex: 1050 } : {}}
             />
           )}

@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import ItemDropdownMenu from '../../dropdown-menu/metadata-item-dropdown-menu';
 import TextTranslation from '../../../utils/text-translation';
 import { isMobile } from '../../../utils/utils';
 import EventBus from '../../common/event-bus';
@@ -8,6 +7,7 @@ import { getNewViewSubMenu, KEY_ADD_VIEW_MAP } from './new-view-menu';
 import Icon from '../../icon';
 import Tooltip from '@/components/tooltip';
 import { gettext } from '@/utils/constants';
+import CustomDropdown from '../../dropdown';
 
 const ViewsMoreOperations = ({ menuProps }) => {
   const eventBus = EventBus.getInstance();
@@ -67,20 +67,18 @@ const ViewsMoreOperations = ({ menuProps }) => {
   const target = 'new-view-btn';
   return (
     <div className="tree-section-header-operation tree-section-more-operation">
-      <ItemDropdownMenu
+      <CustomDropdown
         {...menuProps}
         target={target}
-        item={{ name: 'views' }}
-        menuClassname="metadata-views-dropdown-menu"
-        menuStyle={isMobile ? { zIndex: 1050 } : {}}
-        getMenuList={getMoreOperationsMenus}
-        onMenuItemClick={clickMenu}
-        toggleChildren={
+        items={getMoreOperationsMenus()}
+        menuClassName="metadata-views-dropdown-menu"
+        onItemClick={(selectedItem) => clickMenu(selectedItem.key)}
+        trigger={(
           <>
             <Icon symbol="new" />
             <Tooltip target={target}>{gettext('New view')}</Tooltip>
           </>
-        }
+        )}
       />
     </div>
   );

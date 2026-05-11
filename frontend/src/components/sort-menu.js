@@ -5,8 +5,6 @@ import { gettext } from '../utils/constants';
 import Icon from './icon';
 import Tooltip from './tooltip';
 
-import '../css/item-dropdown-menu.css';
-
 const propTypes = {
   className: PropTypes.string,
   sortBy: PropTypes.string,

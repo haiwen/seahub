@@ -11,13 +11,13 @@ import EmptyTip from '../../components/empty-tip';
 import ModalPortal from '../../components/modal-portal';
 import ViewModes from '../../components/view-modes';
 import ReposSortMenu from '../../components/sort-menu';
-import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import DeletedReposDialog from '../../components/dialog/my-deleted-repos-dialog';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import MylibRepoListView from './mylib-repo-list-view';
 import Icon from '../../components/icon';
+import CustomDropdown from '../../components/dropdown';
 
 class MyLibraries extends Component {
   constructor(props) {
@@ -161,6 +161,10 @@ class MyLibraries extends Component {
   render() {
     const { isLoading, errorMsg, currentViewMode, sortBy, sortOrder, repoList } = this.state;
     const isDesktop = Utils.isDesktop();
+    const libraryActions = [
+      { key: 'new-library', label: gettext('New Library'), onClick: this.toggleCreateRepoDialog },
+      { key: 'deleted-libraries', label: gettext('Deleted Libraries'), onClick: this.toggleDeletedReposDialog }
+    ];
     return (
       <Fragment>
         <div className="main-panel-center flex-row">
@@ -169,12 +173,18 @@ class MyLibraries extends Component {
               <div className="d-flex align-items-center">
                 <span className="d-flex align-items-center"><Icon symbol="my-libraries" className="role-icon" /></span>
                 <span className="library-list-title">{gettext('My Libraries')}</span>
-                <SingleDropdownToolbar
-                  withPlusIcon={true}
-                  opList={[
-                    { 'text': gettext('New Library'), 'onClick': this.toggleCreateRepoDialog },
-                    { 'text': gettext('Deleted Libraries'), 'onClick': this.toggleDeletedReposDialog }
-                  ]}
+                <CustomDropdown
+                  items={libraryActions}
+                  onItemClick={(selectedItem) => selectedItem.onClick?.()}
+                  trigger={(
+                    <>
+                      <Icon symbol="new" className="new-icon" />
+                      <Icon symbol="down" className="down-icon" />
+                    </>
+                  )}
+                  triggerClassName="ml-2 sf-dropdown-combined-toggle"
+                  toggleProps={{ tag: 'span', 'aria-label': gettext('Operations') }}
+                  menuPortal={false}
                 />
               </div>
               {isDesktop ? (

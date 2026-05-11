@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { gettext } from '../../utils/constants';
 import { EVENT_BUS_TYPE } from '../../metadata/constants';
 import TextTranslation from '../../utils/text-translation';
@@ -7,6 +6,7 @@ import { getFileById, getFileName, getTagFileOperationList } from '../../tag/uti
 import OpIcon from '../../components/op-icon';
 import OpElement from '../../components/op-element';
 import Icon from '../icon';
+import CustomDropdown from '../dropdown';
 
 const TagFilesToolbar = ({ currentRepoInfo }) => {
   const [selectedFileIds, setSelectedFileIds] = useState([]);
@@ -142,13 +142,13 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
         </>
       }
       {selectedFilesLen === 1 &&
-        <ItemDropdownMenu
+        <CustomDropdown
           target="tag-files-toolbar-menu"
-          item={{}}
-          toggleClass={'cur-view-path-btn'}
+          items={getMenuList()}
+          trigger={<Icon symbol="more-level" />}
+          triggerClassName="cur-view-path-btn"
           tooltip={gettext('More operations')}
-          onMenuItemClick={onMenuItemClick}
-          getMenuList={getMenuList}
+          onItemClick={(selectedItem) => onMenuItemClick(selectedItem.key)}
         />
       }
     </div>

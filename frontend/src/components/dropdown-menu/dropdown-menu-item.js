@@ -1,45 +1,24 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { DropdownItem } from 'reactstrap';
-import classNames from 'classnames';
-import Icon from '../icon';
+import CustomDropdownItem from '../dropdown/custom-dropdown-item';
 
-const DropdownMenuItem = ({
-  menuItem,
-  onClick,
-  onKeyDown,
-  onMouseMove,
-  tickable = false,
-  isSubMenuItem = false
-}) => {
-  const handleClick = useCallback((event) => {
-    if (onClick) {
-      onClick(event);
-    }
-  }, [onClick]);
-
-  const handleKeyDown = useCallback((event) => {
-    if (onKeyDown) {
-      onKeyDown(event);
-    }
-  }, [onKeyDown]);
-
+const DropdownMenuItem = ({ menuItem, onClick, onKeyDown, onMouseMove, tickable = false, isSubMenuItem = false }) => {
   return (
-    <DropdownItem
-      className={classNames({
-        'position-relative pl-5': tickable && !isSubMenuItem
-      })}
-      data-toggle={menuItem.key}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
+    <CustomDropdownItem
+      item={{
+        ...menuItem,
+        label: menuItem.value,
+        icon: menuItem.icon_dom,
+        checked: !isSubMenuItem && tickable && menuItem.tick,
+      }}
+      onClick={onClick}
+      onKeyDown={onKeyDown}
       onMouseMove={isSubMenuItem ? undefined : onMouseMove}
-    >
-      {!isSubMenuItem && menuItem.tick && (
-        <span className="dropdown-item-tick"><Icon symbol="check-thin" /></span>
-      )}
-      {menuItem.icon_dom || null}
-      {isSubMenuItem ? <span>{menuItem.value}</span> : menuItem.value}
-    </DropdownItem>
+      showCheckPlaceholder={tickable && !isSubMenuItem}
+      showShortcutPlaceholder={false}
+      tabIndex={-1}
+      tag="div"
+    />
   );
 };
 

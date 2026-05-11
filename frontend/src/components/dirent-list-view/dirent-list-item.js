@@ -10,7 +10,6 @@ import { imageThumbnailCenter, videoThumbnailCenter } from '../../utils/thumbnai
 import Rename from '../rename';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import OpIcon from '../../components/op-icon';
-import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import { Dirent } from '../../models';
 import { formatUnixWithTimezone } from '../../utils/time';
@@ -24,6 +23,7 @@ import { menuHandlers } from '../dir-view-mode/utils/menuHandlers';
 import FileTagsFormatter from '@/metadata/components/cell-formatter/file-tags';
 import { getNumberDisplayString } from '@/metadata/utils/cell';
 import TextTranslation from '@/utils/text-translation';
+import CustomDropdown from '../dropdown';
 
 import '../../css/dirent-list-item.css';
 import '../../metadata/components/cell-formatter/collaborator/index.css';
@@ -158,7 +158,7 @@ class DirentListItem extends React.Component {
       });
       this.thumbnailCenter = null;
     }
-    this.setState = () => {};
+    this.setState = () => { };
   }
 
   checkGenerateThumbnail = (dirent) => {
@@ -413,7 +413,7 @@ class DirentListItem extends React.Component {
       });
       selectedList = JSON.stringify(selectedList);
       e.dataTransfer.setData('application/drag-item-info', selectedList);
-      return ;
+      return;
     }
 
     if (e.dataTransfer && e.dataTransfer.setDragImage) {
@@ -489,12 +489,12 @@ class DirentListItem extends React.Component {
 
       let selectedPath = Utils.joinPath(this.props.path, this.props.dirent.name);
 
-      if (direntPaths.some(direntPath => { return direntPath === selectedPath;})) {
+      if (direntPaths.some(direntPath => { return direntPath === selectedPath; })) {
         return;
       }
 
       this.props.onItemsMove(this.props.currentRepoInfo, selectedPath);
-      return ;
+      return;
     }
 
     let { nodeDirent, nodeParentPath, nodeRootPath } = dragStartItemData;
@@ -742,15 +742,15 @@ class DirentListItem extends React.Component {
                 }
               </span>
               {this.state.isOperationShow && (
-                <ItemDropdownMenu
+                <CustomDropdown
                   target={`item-dropdown-${dirent.id}`}
-                  toggleClass="op-icon mr-0"
-                  item={dirent}
-                  getMenuList={(item) => this.props.getDirentItemMenuList(item, true)}
-                  onMenuItemClick={this.onMenuItemClick}
+                  items={this.props.getDirentItemMenuList(dirent, true)}
+                  trigger={<Icon symbol="more-level" />}
+                  triggerClassName="op-icon mr-0"
                   freezeItem={this.props.freezeItem}
                   unfreezeItem={this.unfreezeItem}
                   tooltip={gettext('More operations')}
+                  onItemClick={(selectedItem, event) => this.onMenuItemClick(selectedItem.key, event)}
                 />
               )}
             </div>

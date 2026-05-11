@@ -5,7 +5,6 @@ import TreeView from '../tree-view/tree-view';
 import ModalPortal from '../modal-portal';
 import ImageDialog from '../dialog/image-dialog';
 import toaster from '../toast';
-import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { fileServerRoot, gettext, siteRoot, thumbnailSizeForOriginal, thumbnailDefaultSize, SF_DIRECTORY_TREE_SORT_BY_KEY, SF_DIRECTORY_TREE_SORT_ORDER_KEY } from '../../utils/constants';
 import { isMobile, updateImageThumbnail, Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
@@ -13,6 +12,8 @@ import TreeSection from '../tree-section';
 import imageAPI from '../../utils/image-api';
 import { seafileAPI } from '../../utils/seafile-api';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
+import Icon from '../icon';
+import CustomDropdown from '../dropdown';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -333,14 +334,13 @@ class DirFiles extends React.Component {
   renderTreeSectionHeaderOperations = (props) => {
     const moreOperation = (
       <div className="tree-section-header-operation tree-section-more-operation" key='tree-section-more-operation'>
-        <ItemDropdownMenu
+        <CustomDropdown
           {...props}
-          item={{ name: 'files' }}
-          menuStyle={isMobile ? { zIndex: 1050 } : {}}
-          getMenuList={this.getMenuList}
-          onMenuItemClick={this.onMoreOperationClick}
-          tickable={true}
+          items={this.getMenuList()}
+          trigger={<Icon symbol="more-level" />}
+          normalizeOptions={{ tickable: true }}
           tooltip={gettext('More operations')}
+          onItemClick={(selectedItem) => this.onMoreOperationClick(selectedItem.key)}
         />
       </div>
     );

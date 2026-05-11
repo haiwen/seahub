@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { gettext } from '../../utils/constants';
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../metadata/constants';
 import TextTranslation from '../../utils/text-translation';
@@ -15,6 +14,7 @@ import { useMetadataStatus } from '../../hooks';
 import { getColumnByKey } from '../sf-table/utils/column';
 import Icon from '../icon';
 import EventBus from '../common/event-bus';
+import CustomDropdown from '../dropdown';
 
 const TableFilesToolbar = ({ repoID }) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
@@ -216,14 +216,14 @@ const TableFilesToolbar = ({ repoID }) => {
       )}
 
       {length > 0 && (
-        <ItemDropdownMenu
+        <CustomDropdown
           target="table-files-toolbar-menu"
-          ref={menuRef}
-          item={{}}
-          toggleClass="cur-view-path-btn"
+          forwardedRef={menuRef}
+          items={getMenuList()}
+          trigger={<Icon symbol="more-level" />}
+          triggerClassName="cur-view-path-btn"
           tooltip={gettext('More operations')}
-          onMenuItemClick={onMenuItemClick}
-          getMenuList={getMenuList}
+          onItemClick={(selectedItem) => onMenuItemClick(selectedItem.key)}
         />
       )}
     </div>

@@ -4,7 +4,6 @@ import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../metadata/constants';
 import RowUtils from '../sf-table/utils/row';
 import { buildGalleryToolbarMenuOptions } from '../../metadata/utils/menu-builder';
 import TextTranslation from '../../utils/text-translation';
-import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { getFileNameFromRecord } from '../../metadata/utils/cell/core';
 import { Utils } from '../../utils/utils';
 import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
@@ -13,6 +12,7 @@ import { useMetadataStatus } from '../../hooks';
 import { getColumnByKey } from '../../metadata/utils/column';
 import Icon from '../icon';
 import OpIcon from '../op-icon';
+import CustomDropdown from '../dropdown';
 
 const GalleryFilesToolbar = () => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
@@ -164,17 +164,14 @@ const GalleryFilesToolbar = () => {
       {!readOnly && <OpIcon id="delete-btn" symbol="delete1" className="cur-view-path-btn" tooltip={gettext('Delete')} aria-label={gettext('Delete')} op={onDeleteClick} />}
 
       {toolbarMenuOptions.length > 0 && (
-        <ItemDropdownMenu
-          ref={menuRef}
+        <CustomDropdown
           target="gallery-files-toolbar-menu-toggle"
-          toggleClass="cur-view-path-btn"
+          forwardedRef={menuRef}
+          items={toolbarMenuOptions}
+          trigger={<Icon symbol="more-level" />}
+          triggerClassName="cur-view-path-btn"
           tooltip={gettext('More operations')}
-          item={{}}
-          freezeItem={() => {}}
-          unfreezeItem={() => {}}
-          toggleItemMenuShow={() => {}}
-          getMenuList={() => toolbarMenuOptions}
-          onMenuItemClick={onMenuItemClick}
+          onItemClick={(selectedItem) => onMenuItemClick(selectedItem.key)}
         />
       )}
     </div>

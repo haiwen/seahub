@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext, permission } from '../../utils/constants';
 import TextTranslation from '../../utils/text-translation';
-import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { Utils, isMobile } from '../../utils/utils';
 import OpIcon from '../../components/op-icon';
 import Icon from '../icon';
+import CustomDropdown from '../dropdown';
 
 const LEFT_INDENT = 20;
 
@@ -333,15 +333,15 @@ class TreeNodeView extends React.Component {
           </div>
           {isNodeMenuShow && ((userPerm === 'rw' || permission || isCustomPermission) && this.state.isShowOperationMenu) && (
             <div className="right-icon">
-              <ItemDropdownMenu
+              <CustomDropdown
                 target={`tree-node-dropdown-btn-${idx}`}
-                tooltip={gettext('More operations')}
-                item={this.props.node}
-                getMenuList={this.calculateMenuList}
-                onMenuItemClick={this.onMenuItemClick}
+                items={this.calculateMenuList(this.props.node)}
+                trigger={<Icon symbol="more-level" />}
                 freezeItem={this.props.freezeItem}
                 unfreezeItem={this.unfreezeItem}
+                tooltip={gettext('More operations')}
                 menuStyle={isMobile ? { zIndex: 1050 } : {}}
+                onItemClick={(selectedItem, event) => this.onMenuItemClick(selectedItem.key, event, this.props.node)}
               />
             </div>
           )}

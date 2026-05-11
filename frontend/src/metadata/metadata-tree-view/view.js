@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { baiduMapKey, gettext, googleMapKey } from '../../utils/constants';
 import Icon from '../../components/icon';
-import ItemDropdownMenu from '../../components/dropdown-menu/metadata-item-dropdown-menu';
 import toaster from '../../components/toast';
 import InlineNameEditor from './inline-name-editor';
 import { Utils, isMobile } from '../../utils/utils';
@@ -15,6 +14,7 @@ import {
 } from '../constants';
 import { validateName } from '../utils/validate';
 import Tooltip from '@/components/tooltip';
+import CustomDropdown from '../../components/dropdown';
 
 const MOVE_TO_FOLDER_PREFIX = 'move_to_folder_';
 const TURN_VIEW_INTO_PREFIX = 'turn_view_into_';
@@ -274,19 +274,19 @@ const ViewItem = ({
         {operations.length > 0 && (
           <div className="right-icon" id={`metadata-view-dropdown-item-${viewId}`} >
             {highlight && (
-              <ItemDropdownMenu
-                item={{ name: 'metadata-view' }}
-                menuClassname="metadata-views-dropdown-menu"
-                toggleChildren={
+              <CustomDropdown
+                target={`metadata-view-dropdown-item-${viewId}`}
+                items={operations}
+                menuClassName="metadata-views-dropdown-menu"
+                trigger={(
                   <>
                     <Icon symbol="more-level" />
                     <Tooltip target={`metadata-view-dropdown-item-${viewId}`}>{gettext('More operations')}</Tooltip>
                   </>
-                }
+                )}
                 freezeItem={freezeItem}
                 unfreezeItem={unfreezeItem}
-                getMenuList={() => operations}
-                onMenuItemClick={operationClick}
+                onItemClick={(selectedItem, event) => operationClick(selectedItem.key, event)}
                 menuStyle={isMobile ? { zIndex: 1050 } : {}}
               />
             )}

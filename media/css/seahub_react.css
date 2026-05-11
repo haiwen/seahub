@@ -1317,23 +1317,26 @@ a.table-sort-op:hover {
   vertical-align: middle;
 }
 
-.dropdown-menu {
-  min-width: 200px;
-  box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.1);
-}
-
 .dropdown-item {
   height: 32px;
-  padding: 0.25rem 1rem;
+  display: flex;
+  align-items: center;
   line-height: 1.5;
   cursor: pointer;
   color: var(--bs-body-color);
-  font-size: 14px;
+  font-size: .875rem;
+  border-radius: 4px;
+  padding: 0;
 }
 
 .dropdown-item .sf3-font,
 .dropdown-item .sf2-icon-tick {
   color: #666;
+}
+
+.dropdown-item:active {
+  background-color: var(--bs-dropdown-link-hover-bg);
+  color: var(--bs-body-color);
 }
 
 [data-bs-theme="dark"] .dropdown-item .sf3-font,
@@ -1352,22 +1355,6 @@ a.table-sort-op:hover {
 .show>.btn-secondary.dropdown-toggle.dropdown-item {
   color: #fff;
   background-color: #20a0ff;
-}
-
-.show>.btn-secondary.dropdown-toggle.dropdown-item .dropdown-item-icon,
-.dropdown-item:hover .sf3-font,
-.dropdown-item:focus .sf3-font,
-.dropdown-item:hover .dropdown-item-icon,
-.dropdown-item:hover .btn .dropdown-item-icon,
-.dropdown-item:focus .dropdown-item-icon,
-.dropdown-item:focus .btn .dropdown-item-icon,
-.dropdown-item:hover .sf2-icon-tick,
-.dropdown-item:focus .sf2-icon-tick,
-.dropdown-item:hover .seafile-multicolor-icon,
-.dropdown-item:focus .seafile-multicolor-icon,
-.dropdown-item:hover .metadata-view-icon,
-.dropdown-item:focus .metadata-view-icon {
-  color: #fff;
 }
 
 .err-tip {

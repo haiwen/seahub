@@ -5,7 +5,6 @@ import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import OpIcon from '../../components/op-icon';
 import OpElement from '../../components/op-element';
-import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import toaster from '../toast';
 import { Dirent } from '../../models';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
@@ -14,6 +13,7 @@ import { lockFile, unlockFile, freezeDocument, exportDocx, exportSdoc, toggleSta
 import EventBus from '../common/event-bus';
 import { EVENT_BUS_TYPE as TABLE_EVENT_BUS_TYPE } from '@/metadata/constants';
 import Tooltip from '../tooltip';
+import CustomDropdown from '../dropdown';
 
 import '../../css/selected-dirents-toolbar.css';
 
@@ -384,13 +384,13 @@ class SelectedDirentsToolbar extends React.Component {
           />
         }
         {selectedLen === 1 &&
-          <ItemDropdownMenu
+          <CustomDropdown
             target="selected-item-dropdown-menu"
+            items={this.getDirentMenuList(this.props.selectedDirentList[0])}
+            trigger={<Icon symbol="more-level" />}
+            triggerClassName="cur-view-path-btn"
             tooltip={gettext('More operations')}
-            item={this.props.selectedDirentList[0]}
-            toggleClass={'cur-view-path-btn'}
-            onMenuItemClick={this.onMenuItemClick}
-            getMenuList={this.getDirentMenuList}
+            onItemClick={(selectedItem, event) => this.onMenuItemClick(selectedItem.key, event)}
           />
         }
       </div>

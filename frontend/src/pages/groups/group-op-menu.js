@@ -14,8 +14,9 @@ import ImportMembersDialog from '../../components/dialog/import-members-dialog';
 import ManageMembersDialog from '../../components/manage-members-dialog';
 import DepartmentDetailDialog from '../../components/dialog/department-detail-dialog';
 import LeaveGroupDialog from '../../components/dialog/leave-group-dialog';
-import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import InviteMembersDialog from '../../components/dialog/group-invite-members-dialog';
+import CustomDropdown from '../../components/dropdown';
+import Icon from '../../components/icon';
 
 import '../../css/group-view.css';
 
@@ -202,12 +203,25 @@ class GroupOperationMenu extends React.Component {
     const isOwner = owner === username;
 
     const opList = this.getOpList();
+    const groupActions = opList.map((item, index) => item === 'Divider'
+      ? 'Divider'
+      : { key: item.key || `group-action-${index}`, label: item.text, onClick: item.onClick }
+    );
     return (
       <Fragment>
         {group && (
-          <SingleDropdownToolbar
-            withPlusIcon={this.newLibraryEnabled}
-            opList={opList}
+          <CustomDropdown
+            items={groupActions}
+            onItemClick={(selectedItem) => selectedItem.onClick?.()}
+            trigger={(
+              <>
+                {this.newLibraryEnabled && <Icon symbol="new" className="new-icon" />}
+                {groupActions.length > 0 && <Icon symbol="down" className="down-icon" />}
+              </>
+            )}
+            triggerClassName={this.newLibraryEnabled ? 'ml-2 sf-dropdown-combined-toggle' : 'ml-1 sf-dropdown-toggle'}
+            toggleProps={{ tag: 'span', 'aria-label': gettext('Operations') }}
+            menuPortal={false}
           />
         )}
         {isCreateRepoDialogOpen &&

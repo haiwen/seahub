@@ -11,9 +11,9 @@ import WikiCardView from '../../components/wiki-card-view/wiki-card-view';
 import { seafileAPI } from '../../utils/seafile-api';
 import { userAPI } from '../../utils/user-api';
 import WikiConvertStatusDialog from '../../components/dialog/wiki-convert-status-dialog';
-import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import ImportConfluenceDialog from '../../components/dialog/import-confluence-dialog';
 import Icon from '../../components/icon';
+import CustomDropdown from '../../components/dropdown';
 
 
 const propTypes = {
@@ -458,12 +458,21 @@ class Wikis extends Component {
               <div className="path-container">
                 <h3 className="sf-heading m-0">{gettext('Wikis')}</h3>
                 {canCreateWiki &&
-                  <SingleDropdownToolbar
-                    withPlusIcon={true}
-                    opList={[
-                      { 'text': gettext('Add Wiki'), 'onClick': () => this.toggleAddWikiDialog() },
-                      { 'text': gettext('Import Confluence'), 'onClick': () => this.toggleImportConfluenceDialog() }
+                  <CustomDropdown
+                    items={[
+                      { key: 'add-wiki', label: gettext('Add Wiki'), onClick: () => this.toggleAddWikiDialog() },
+                      { key: 'import-confluence', label: gettext('Import Confluence'), onClick: () => this.toggleImportConfluenceDialog() }
                     ]}
+                    onItemClick={(selectedItem) => selectedItem.onClick?.()}
+                    trigger={(
+                      <>
+                        <Icon symbol="new" className="new-icon" />
+                        <Icon symbol="down" className="down-icon" />
+                      </>
+                    )}
+                    triggerClassName="ml-2 sf-dropdown-combined-toggle"
+                    toggleProps={{ tag: 'span', 'aria-label': gettext('Operations') }}
+                    menuPortal={false}
                   />
                 }
               </div>
