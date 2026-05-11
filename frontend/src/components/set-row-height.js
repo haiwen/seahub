@@ -1,12 +1,10 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { UncontrolledPopover } from 'reactstrap';
-import classNames from 'classnames';
-import IconBtn from './icon-btn';
-import { Utils } from '../utils/utils';
+import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext } from '../utils/constants';
 import { ROW_HEIGHT } from '../metadata/constants';
 import Icon from './icon';
+import Tooltip from './tooltip';
 
 import '../css/set-row-height.css';
 
@@ -17,101 +15,85 @@ const ROW_HEIGHT_OPTIONS = [
   { label: gettext('Quadruple'), icon: 'quadruple', value: 128 },
 ];
 
-const SetRowHeight = ({ rowHeight = ROW_HEIGHT, modifyRowHeight, iconClass, readOnly = false }) => {
-  const [isShowSetter, setShowSetter] = useState(false);
-
-  const onSetterToggle = useCallback(() => {
-    setShowSetter(!isShowSetter);
-  }, [isShowSetter]);
-
-  const onChangeRowHeight = useCallback((value) => {
-    if (value == rowHeight) return;
-    modifyRowHeight(value);
-    setShowSetter(false);
-  }, [rowHeight, modifyRowHeight]);
-
-  // click outside to close the popover
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!isShowSetter) return;
-      const popover = document.querySelector('.set-row-height-popover');
-      const btn = document.getElementById('set-row-height-btn');
-      if (
-        !popover.contains(event.target) &&
-        !btn.contains(event.target)
-      ) {
-        setShowSetter(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside, true);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside, true);
-    };
-  }, [isShowSetter]);
-
-  return (
-    <>
-      <IconBtn
-        symbol="row-height-default"
-        className={iconClass}
-        size={24}
-        onClick={onSetterToggle}
-        role="button"
-        onKeyDown={Utils.onKeyDown}
-        title={gettext('Set row height')}
-        aria-label={gettext('Set row height')}
-        tabIndex={0}
-        id="set-row-height-btn"
-      />
-      {isShowSetter &&
-      <UncontrolledPopover
-        placement="bottom-end"
-        isOpen={isShowSetter}
-        target="set-row-height-btn"
-        fade={false}
-        hideArrow={true}
-        className="set-row-height-popover"
-        boundariesElement={document.body}
-      >
-        <div className="set-row-height-popover-content py-2">
-          <h5 className='hd font-weight-normal px-3'>{gettext('Select row height')}</h5>
-          <ul className="option-list list-unstyled" role="menu">
-            {ROW_HEIGHT_OPTIONS.map((item, index) => {
-              return (
-                <li
-                  key={index}
-                  tabIndex={readOnly ? -1 : 0}
-                  role="menuitem"
-                  className={classNames('option-item h-6 py-1 px-3 d-flex justify-content-between align-items-center', { 'option-item-enabled': !readOnly })}
-                  onClick={() => {
-                    if (!readOnly) {
-                      onChangeRowHeight(item.value);
-                    }
-                  }}
-                  onKeyDown={Utils.onKeyDown}
-                >
-                  <div>
-                    <Icon symbol={`row-height-${item.icon}`} />
-                    <span className="option-item-text flex-shrink-0 mr-3 ml-2">{item.label}</span>
-                  </div>
-                  <Icon symbol="check-thin" className={item.value === rowHeight ? '' : 'invisible'} />
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </UncontrolledPopover>
-      }
-    </>
-  );
-
-};
-
-SetRowHeight.propTypes = {
+const propTypes = {
   rowHeight: PropTypes.number,
   modifyRowHeight: PropTypes.func,
   iconClass: PropTypes.string,
+  readOnly: PropTypes.bool,
 };
+
+class SetRowHeight extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isDropdownMenuOpen: false,
+    };
+  }
+
+  toggleDropdownMenu = () => {
+    this.setState({
+      isDropdownMenuOpen: !this.state.isDropdownMenuOpen,
+    });
+  };
+
+  onChangeRowHeight = (value) => {
+    const { readOnly = false, rowHeight = ROW_HEIGHT, modifyRowHeight } = this.props;
+    if (readOnly || value === rowHeight) return;
+
+    modifyRowHeight(value);
+    this.setState({
+      isDropdownMenuOpen: false,
+    });
+  };
+
+  render() {
+    const { isDropdownMenuOpen } = this.state;
+    const { rowHeight = ROW_HEIGHT, iconClass } = this.props;
+    const currentOption = ROW_HEIGHT_OPTIONS.find(item => item.value === rowHeight) || ROW_HEIGHT_OPTIONS[0];
+
+    return (
+      <Dropdown isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu}>
+        <DropdownToggle
+          id="set-row-height-toggle"
+          tag="span"
+          role="button"
+          tabIndex="0"
+          className={iconClass}
+          data-toggle="dropdown"
+          aria-label={gettext('Set row height')}
+          aria-expanded={isDropdownMenuOpen}
+        >
+          <Icon symbol={`row-height-${currentOption.icon}`} />
+          <Tooltip target="set-row-height-toggle">{gettext('Set row height')}</Tooltip>
+        </DropdownToggle>
+        <DropdownMenu className="mt-1 set-row-height-dropdown-menu">
+          <div className="set-row-height-dropdown-title">{gettext('Select row height')}</div>
+          {ROW_HEIGHT_OPTIONS.map((item, index) => {
+            return (
+              <DropdownItem
+                className="p-0"
+                key={index}
+                onClick={() => this.onChangeRowHeight(item.value)}
+              >
+                <div className="set-row-height-dropdown-wrapper">
+                  <span className="set-row-height-dropdown-tick">
+                    {rowHeight === item.value && <Icon symbol="check-thin" className="dropdown-item-icon" />}
+                  </span>
+                  <span className="set-row-height-dropdown-content d-flex align-items-center">
+                    <Icon symbol={`row-height-${item.icon}`} className="dropdown-item-icon mr-2" />
+                    <span>{item.label}</span>
+                  </span>
+                </div>
+              </DropdownItem>
+            );
+          })}
+        </DropdownMenu>
+      </Dropdown>
+    );
+  }
+}
+
+SetRowHeight.propTypes = propTypes;
 
 export default SetRowHeight;
