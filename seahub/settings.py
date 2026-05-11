@@ -6,6 +6,7 @@ import sys
 import os
 import re
 import copy
+import json
 
 from seaserv import FILE_SERVER_PORT
 
@@ -1292,6 +1293,12 @@ elif CACHE_PROVIDER == 'memcached':
     }
 else:
     raise ValueError(f'Invalid CACHE_PROVIDER: {CACHE_PROVIDER}')
+
+if os.environ.get('CSRF_TRUSTED_ORIGINS'):
+    try:
+        CSRF_TRUSTED_ORIGINS = json.loads(os.environ.get('CSRF_TRUSTED_ORIGINS'))
+    except:
+        pass
 
 if os.environ.get('ENABLE_SEADOC'):
     ENABLE_SEADOC = os.environ.get('ENABLE_SEADOC', 'false').lower() == 'true'
