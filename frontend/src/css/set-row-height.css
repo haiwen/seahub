@@ -13,6 +13,7 @@
 }
 
 .set-row-height-dropdown-menu .dropdown-item {
+  color: var(--bs-body-color);
   padding-left: 12px !important;
 }
 
