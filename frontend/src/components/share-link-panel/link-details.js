@@ -52,10 +52,10 @@ class LinkDetails extends React.Component {
     toaster.success(gettext('Share link is copied to the clipboard.'));
   };
 
-  onCopyDownloadLink = () => {
+  onCopyRawFileLink = () => {
     const { sharedLinkInfo } = this.props;
     copy(`${sharedLinkInfo.download_link}?op=view`);
-    toaster.success(gettext('Direct download link is copied to the clipboard.'));
+    toaster.success(gettext('Raw file link is copied to the clipboard.'));
   };
 
   toggleStoredPasswordVisible = () => {
@@ -180,12 +180,12 @@ class LinkDetails extends React.Component {
           </dd>
           {!sharedLinkInfo.is_dir && sharedLinkInfo.permissions.can_download && sharedLinkInfo.show_download_link && ( // just for file
             <>
-              <dt className="text-secondary font-weight-normal">{gettext('Direct download link')}</dt>
+              <dt className="text-secondary font-weight-normal">{gettext('Raw file link')}</dt>
               <dd>
                 <SharedLink
                   link={`${sharedLinkInfo.download_link}?op=view`}
                   linkExpired={sharedLinkInfo.is_expired}
-                  copyLink={this.onCopyDownloadLink}
+                  copyLink={this.onCopyRawFileLink}
                 />
               </dd>
             </>
