@@ -99,9 +99,7 @@ class ActionsCell extends Component {
             </div>
           </label>
           {this.props.onShowRowDetails && (
-            <div className="row-expand-container">
-              <OpIcon id={`row-expand-icon-${recordId}`} symbol="expand" className="row-expand" tooltip={gettext('Expand')} op={this.handleShowExpandedProps} onKeyDown={Utils.onKeyDown} />
-            </div>
+            <OpIcon id={`row-expand-icon-${recordId}`} symbol="expand" className="row-expand" tooltip={gettext('Expand')} op={this.handleShowExpandedProps} onKeyDown={Utils.onKeyDown} />
           )}
         </div>
         {/* {this.getLockedRowTooltip()} */}
