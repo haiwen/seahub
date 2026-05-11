@@ -108,7 +108,6 @@
 
 .grid-file-img-link.video-preview-container {
   overflow: hidden;
-  width: fit-content;
 }
 
 .grid-file-img-link.video-preview-container::before {
@@ -143,8 +142,11 @@
 }
 
 .video-wrapper {
+  height: 100%;
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .grid-video-preview video {

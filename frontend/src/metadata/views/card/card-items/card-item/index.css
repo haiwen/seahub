@@ -233,3 +233,13 @@
   box-shadow: none;
   border-color: rgba(255, 255, 255, 0.2);
 }
+
+.sf-metadata-card-item .grid-video-preview video {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.sf-metadata-card-item .grid-video-hover-overlay .grid-video-play {
+  width: 48px;
+  height: 48px;
+}
