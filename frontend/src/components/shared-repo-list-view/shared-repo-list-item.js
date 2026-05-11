@@ -548,7 +548,7 @@ class SharedRepoListItem extends React.Component {
               <Icon symbol="more-level" className="w-4 h-4" />
               <Tooltip target="more-level-icon">{gettext('More operations')}</Tooltip>
             </DropdownToggle>
-            <DropdownMenu onMouseMove={this.onDropDownMouseMove}>
+            <DropdownMenu container="body" onMouseMove={this.onDropDownMouseMove}>
               {operations.map((item, index) => {
                 if (item == 'Divider') {
                   return <DropdownItem key={index} divider />;
