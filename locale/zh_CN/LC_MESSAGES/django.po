@@ -844,7 +844,7 @@ msgstr "在 %s 上，有一文件夹共享给你。"
 #, python-format
 #| msgid "Password has been reset on %s"
 msgid "Password for the shared %s on %s"
-msgstr "分享的 %s 的密码"
+msgstr "在 %s 分享的 %s 的密码"
 
 #: seahub/api2/endpoints/send_upload_link_email.py:73
 #, python-format
