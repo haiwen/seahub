@@ -557,7 +557,7 @@ class Libraries extends Component {
                     <>
                       <Button
                         id="lib-list-new-group"
-                        className='d-flex align-items-center'
+                        className='d-flex align-items-center btn-sm'
                         onClick={this.toggleCreateGroupDialog}
                       >
                         <Icon symbol="new" className="mr-2" />
