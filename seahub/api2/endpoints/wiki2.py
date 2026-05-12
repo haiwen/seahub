@@ -40,11 +40,12 @@ from seahub.wiki2.utils import get_wiki_config, WIKI_PAGES_DIR, is_group_wiki, \
     import_conflunece_to_wiki, import_wiki_page
 
 from seahub.utils import is_org_context, get_user_repos, is_pro_version, is_valid_dirent_name, \
-    get_no_duplicate_obj_name, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_get_url, get_service_url
+    get_no_duplicate_obj_name, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_get_url, get_service_url, normalize_dir_path
 if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
     from seahub.search.utils import search_wikis, ai_search_wikis, SEARCH_REPOS_LIMIT
 
 from seahub.views import check_folder_permission
+from seahub.api2.endpoints.dir import get_dir_file_info_list
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.file_op import check_file_lock
 from seahub.utils.repo import get_repo_owner, is_valid_repo_id_format, is_group_repo_staff, is_repo_owner
@@ -2448,3 +2449,67 @@ class Wiki2FileViewRecords(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+
+class Wiki2LinkedRepoDirView(APIView):
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, wiki_id, linked_repo_id):
+        # resource check
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = 'Wiki not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+
+        username = request.user.username
+        permission = check_wiki_permission(wiki, username)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
+        if not wiki_settings or not wiki_settings.enable_link_repos:
+            error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        linked_repos = wiki_settings.get_linked_repos()
+        if linked_repo_id not in linked_repos:
+            error_msg = f'The repo {linked_repo_id} is not linked to wiki {wiki_id}.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        repo = seafile_api.get_repo(linked_repo_id)
+        if not repo:
+            error_msg = f'Library {linked_repo_id} not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        parent_dir = request.GET.get('p', '/')
+        parent_dir = normalize_dir_path(parent_dir)
+
+        dir_id = seafile_api.get_dir_id_by_path(linked_repo_id, parent_dir)
+        if not dir_id:
+            error_msg = f'Folder {parent_dir} not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        repo_perm = check_folder_permission(request, linked_repo_id, '/')
+        if not repo_perm:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            dir_info_list, file_info_list = get_dir_file_info_list(username,
+                    '', repo, parent_dir, False, 0)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        response_dict = {}
+        response_dict['dirent_list'] = dir_info_list + file_info_list
+
+        return Response(response_dict)
+        
