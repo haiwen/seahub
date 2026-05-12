@@ -1825,7 +1825,7 @@ class DownloadRepo(APIView):
             client = 'seafile'
 
         username = request.user.username
-        perm = seafile_api.check_permission_by_path(repo_id, '/', username)
+        perm = seafile_api.check_permission(repo_id, username)
 
         if client == 'seafile' and not perm:
             error_msg = 'You do not have permission to access this library.'
