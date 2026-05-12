@@ -389,7 +389,7 @@ class SharedWithOCM extends Component {
           ? (
             <>
               <div className="library-list-header">
-                <Icon symbol="share-with-me" className="role-icon" />
+                <span className="d-flex align-items-center"><Icon symbol="share-with-me" className="role-icon" /></span>
                 <span className="library-list-title">{gettext('Shared from other servers')}</span>
               </div>
               {this.renderContent(currentViewMode)}
@@ -399,7 +399,10 @@ class SharedWithOCM extends Component {
             <div className="main-panel-center">
               <div className="cur-view-container">
                 <div className="cur-view-path">
-                  <span className="library-list-title">{gettext('Shared from other servers')}</span>
+                  <div className="d-flex align-items-center">
+                    <span className="d-flex align-items-center"><Icon symbol="share-with-me" className="role-icon" /></span>
+                    <span className="library-list-title">{gettext('Shared from other servers')}</span>
+                  </div>
                   {Utils.isDesktop() && (
                     <div className="d-flex align-items-center">
                       <ViewModes

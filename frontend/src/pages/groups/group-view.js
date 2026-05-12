@@ -299,9 +299,9 @@ class GroupView extends React.Component {
               {currentGroup && (
                 <Fragment>
                   <div className="d-flex align-items-center">
-                    {isDepartmentGroup && (
-                      <Icon symbol="department" className="role-icon mr-2" title={gettext('This is a special group representing a department.')} aria-hidden="true" />
-                    )}
+                    <span className="d-flex align-items-center">
+                      <Icon symbol={isDepartmentGroup ? 'department' : 'group'} className="role-icon mr-2" title={gettext('This is a special group representing a department.')} aria-hidden="true" />
+                    </span>
                     <span className="library-list-title">{currentGroup.name}</span>
                     <GroupOperationMenu
                       group={currentGroup}

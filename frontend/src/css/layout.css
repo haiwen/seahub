@@ -281,7 +281,7 @@ select {
   cursor: default;
 }
 
-.repos-container .library-list-header .role-icon {
+.seafile-multicolor-icon.role-icon {
   width: 16px;
   height: 16px;
   color: var(--bs-icon-secondary-color);

@@ -118,7 +118,7 @@ class SharedLibraries extends Component {
         {inAllLibs ? (
           <>
             <div className="library-list-header">
-              <Icon symbol="share-with-me" className="role-icon" />
+              <span className="d-flex align-items-center"><Icon symbol="share-with-me" className="role-icon" /></span>
               <span className="library-list-title">{gettext('Shared with me')}</span>
               {(!Utils.isDesktop() && this.state.items.length > 0) && <OpIcon className="op-icon" symbol="sort-mobile" op={this.toggleSortOptionsDialog} title={gettext('Sort')} />}
             </div>
@@ -128,7 +128,10 @@ class SharedLibraries extends Component {
           <div className="main-panel-center">
             <div className="cur-view-container">
               <div className="cur-view-path">
-                <span className="library-list-title">{gettext('Shared with me')}</span>
+                <div className="d-flex align-items-center">
+                  <span className="d-flex align-items-center"><Icon symbol="share-with-me" className="role-icon" /></span>
+                  <span className="library-list-title">{gettext('Shared with me')}</span>
+                </div>
                 {Utils.isDesktop() && (
                   <div className="d-flex align-items-center">
                     <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />

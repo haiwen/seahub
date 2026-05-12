@@ -236,7 +236,7 @@ class SharedWithAll extends React.Component {
         <>
           <div className="d-flex justify-content-between">
             <div className="library-list-header">
-              <span className="nav-icon" aria-hidden="true"><Icon symbol="share-with-all" /></span>
+              <span className="d-flex align-items-center"><Icon symbol="share-with-all" className="role-icon" /></span>
               {gettext('Shared with all')}
             </div>
             {this.renderSortIconInMobile()}
@@ -252,6 +252,7 @@ class SharedWithAll extends React.Component {
           <div className="cur-view-container">
             <div className="cur-view-path">
               <div className="library-list-header">
+                <span className="d-flex align-items-center"><Icon symbol="share-with-all" className="role-icon" /></span>
                 <span className="library-list-title">{gettext('Shared with all')}</span>
                 {canAddPublicRepo &&
                 <SingleDropdownToolbar

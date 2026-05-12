@@ -167,6 +167,7 @@ class MyLibraries extends Component {
           <div className="cur-view-container">
             <div className="cur-view-path">
               <div className="d-flex align-items-center">
+                <span className="d-flex align-items-center"><Icon symbol="my-libraries" className="role-icon" /></span>
                 <span className="library-list-title">{gettext('My Libraries')}</span>
                 <SingleDropdownToolbar
                   withPlusIcon={true}
