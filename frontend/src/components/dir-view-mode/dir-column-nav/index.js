@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Loading from '../../loading';
+import DirNew from '../dir-new';
 import DirFiles from '../dir-files';
 import DirViews from '../dir-views';
 import DirTags from '../dir-tags';
@@ -50,30 +51,44 @@ class DirColumnNav extends React.Component {
       <div className="dir-content-nav" role="navigation" style={{ flex: (flex), userSelect: select }} onScroll={this.stopTreeScrollPropagation}>
         {isTreeDataLoading ? <Loading /> : (
           <>
-            <DirFiles
+            <DirNew
               repoID={repoID}
-              currentPath={currentPath}
-              treeData={treeData}
+              path={'/'}
+              repoName={currentRepoInfo.name}
+              repoEncrypted={currentRepoInfo.encrypted}
               userPerm={userPerm}
-              currentRepoInfo={currentRepoInfo}
+              onUploadFile={this.props.onUploadFile}
+              onUploadFolder={this.props.onUploadFolder}
               direntList={this.props.direntList}
-              currentNode={this.props.currentNode}
               eventBus={this.props.eventBus}
-              getMenuContainerSize={this.props.getMenuContainerSize}
-              onNodeClick={this.props.onNodeClick}
-              onNodeCollapse={this.props.onNodeCollapse}
-              onNodeExpanded={this.props.onNodeExpanded}
-              onRenameNode={this.props.onRenameNode}
-              onDeleteNode={this.props.onDeleteNode}
-              onItemMove={this.props.onItemMove}
-              onItemsMove={this.props.onItemsMove}
-              updateDirent={this.props.updateDirent}
-              updateTreeNode={this.props.updateTreeNode}
-              sortTreeNode={this.props.sortTreeNode}
+              loadDirentList={this.props.loadDirentList}
             />
-            <DirViews repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
-            <DirTags repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
-            <DirOthers repoID={repoID} userPerm={userPerm} currentRepoInfo={currentRepoInfo} currentMode={this.props.currentMode} updateRepoInfo={this.props.updateRepoInfo} />
+            <div className='flex-fill o-auto'>
+              <DirFiles
+                repoID={repoID}
+                currentPath={currentPath}
+                treeData={treeData}
+                userPerm={userPerm}
+                currentRepoInfo={currentRepoInfo}
+                direntList={this.props.direntList}
+                currentNode={this.props.currentNode}
+                eventBus={this.props.eventBus}
+                getMenuContainerSize={this.props.getMenuContainerSize}
+                onNodeClick={this.props.onNodeClick}
+                onNodeCollapse={this.props.onNodeCollapse}
+                onNodeExpanded={this.props.onNodeExpanded}
+                onRenameNode={this.props.onRenameNode}
+                onDeleteNode={this.props.onDeleteNode}
+                onItemMove={this.props.onItemMove}
+                onItemsMove={this.props.onItemsMove}
+                updateDirent={this.props.updateDirent}
+                updateTreeNode={this.props.updateTreeNode}
+                sortTreeNode={this.props.sortTreeNode}
+              />
+              <DirViews repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
+              <DirTags repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
+              <DirOthers repoID={repoID} userPerm={userPerm} currentRepoInfo={currentRepoInfo} currentMode={this.props.currentMode} updateRepoInfo={this.props.updateRepoInfo} />
+            </div>
           </>
         )}
       </div>

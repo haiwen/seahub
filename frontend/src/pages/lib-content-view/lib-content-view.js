@@ -3142,6 +3142,8 @@ class LibContentView extends React.Component {
                           hiddenColumnKeys={this.state.currentMode === TABLE_MODE ? this.state.hiddenTableViewColumnKeys : this.state.hiddenColumnKeys}
                           onColumnOrderChange={this.onTableViewColumnOrder}
                           rowHeight={rowHeight}
+                          onUploadFile={this.onUploadFile}
+                          onUploadFolder={this.onUploadFolder}
                         />
                         :
                         <div className="message err-tip">{gettext('Folder does not exist.')}</div>

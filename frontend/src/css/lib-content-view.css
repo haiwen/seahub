@@ -46,8 +46,10 @@
   border-right: 1px solid var(--bs-border-secondary-color);
 }
 
-.dir-content-nav:hover {
-  overflow: auto;
+.dir-content-nav .dir-new-btn {
+  height: 2rem;
+  color: var(--bs-body-color);
+  border: 1px solid var(--bs-border-color);
 }
 
 .dir-content-main {
