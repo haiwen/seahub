@@ -302,7 +302,7 @@ class GroupView extends React.Component {
                     {isDepartmentGroup && (
                       <Icon symbol="department" className="role-icon mr-2" title={gettext('This is a special group representing a department.')} aria-hidden="true" />
                     )}
-                    <h3 className="sf-heading">{currentGroup.name}</h3>
+                    <span className="library-list-title">{currentGroup.name}</span>
                     <GroupOperationMenu
                       group={currentGroup}
                       addNewRepo={this.addNewRepo}

@@ -476,7 +476,7 @@ class Libraries extends Component {
                         <div className="d-flex align-items-center">
                           <Icon symbol="my-libraries" className="role-icon" />
                           <span className="library-list-title">{gettext('My Libraries')}</span>
-                          <OpIcon id="new-library-btn" className="op-icon" symbol="new" op={this.toggleCreateRepoDialog} tooltip={gettext('New Library')} />
+                          <OpIcon id="new-library-btn" className="op-icon ml-2" symbol="new" op={this.toggleCreateRepoDialog} tooltip={gettext('New Library')} />
                         </div>
                         <Button onClick={this.toggleDeletedReposDialog} title={gettext('Deleted Libraries')} size="sm">
                           {gettext('Deleted Libraries')}
