@@ -126,19 +126,19 @@ class DirOperationToolbar extends React.Component {
           opList.push({
             key: 'upload-files',
             label: gettext('Upload Files'),
-            icon_dom: <Icon symbol="upload-files" className="mr-2 dropdown-item-icon" />,
+            icon_dom: <Icon symbol="upload-files" className="dropdown-item-icon" />,
             onClick: this.onUploadFile
           }, {
             key: 'upload-folder',
             label: gettext('Upload Folder'),
-            icon_dom: <Icon symbol="upload-folder" className="mr-2 dropdown-item-icon" />,
+            icon_dom: <Icon symbol="upload-folder" className="dropdown-item-icon" />,
             onClick: this.onUploadFolder
           });
         } else {
           opList.push({
             key: 'upload',
             label: gettext('Upload'),
-            icon_dom: <Icon symbol="upload-files" className="mr-2 dropdown-item-icon" />,
+            icon_dom: <Icon symbol="upload-files" className="dropdown-item-icon" />,
             onClick: this.onUploadFile
           });
         }
@@ -169,7 +169,7 @@ class DirOperationToolbar extends React.Component {
         opList.push({
           key: 'new',
           label: gettext('New'),
-          icon_dom: <Icon symbol="new" className="mr-2 dropdown-item-icon" />,
+          icon_dom: <Icon symbol="new" className="dropdown-item-icon" />,
           children: newSubOpList
         });
       }
@@ -178,7 +178,7 @@ class DirOperationToolbar extends React.Component {
         opList.push({
           key: 'share',
           label: gettext('Share'),
-          icon_dom: <Icon symbol="share" className="mr-2 dropdown-item-icon" />,
+          icon_dom: <Icon symbol="share" className="dropdown-item-icon" />,
           onClick: this.onShareClick
         });
       }
@@ -186,7 +186,7 @@ class DirOperationToolbar extends React.Component {
       opList.push({
         key: 'copy-path',
         label: gettext('Copy path'),
-        icon_dom: <Icon symbol="copy" className="mr-2 dropdown-item-icon" />,
+        icon_dom: <Icon symbol="copy" className="dropdown-item-icon" />,
         onClick: this.copyPath
       });
 
@@ -194,7 +194,7 @@ class DirOperationToolbar extends React.Component {
         opList.push('Divider', {
           key: 'import-sdoc',
           label: gettext('Import sdoc'),
-          icon_dom: <Icon symbol="import-sdoc" className="mr-2 dropdown-item-icon" />,
+          icon_dom: <Icon symbol="import-sdoc" className="dropdown-item-icon" />,
           onClick: this.onUploadSdoc
         });
       }

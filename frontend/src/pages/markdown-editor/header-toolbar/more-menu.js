@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { EXTERNAL_EVENTS, EventBus } from '@seafile/seafile-editor';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext, canGenerateShareLink } from '../../../utils/constants';
 import Icon from '../../../components/icon';
 import Tooltip from '@/components/tooltip';
+import CustomDropdown from '../../../components/dropdown';
 
 const { canDownloadFile } = window.app.pageOptions;
 
@@ -22,18 +22,6 @@ const MoreMenuPropTypes = {
 };
 
 class MoreMenu extends React.PureComponent {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      dropdownOpen: false
-    };
-  }
-
-  dropdownToggle = () => {
-    this.setState({ dropdownOpen: !this.state.dropdownOpen });
-  };
-
   onHelpModuleToggle = (event) => {
     const eventBus = EventBus.getInstance();
     eventBus.dispatch(EXTERNAL_EVENTS.ON_HELP_INFO_TOGGLE, true);
@@ -46,38 +34,47 @@ class MoreMenu extends React.PureComponent {
   render() {
     const editorMode = this.props.editorMode;
     const isSmall = this.props.isSmallScreen;
+    const menuItems = [];
+    if (!this.props.readOnly && editorMode === 'rich') {
+      menuItems.push({ key: 'switch-plain', label: gettext('Switch to plain text editor'), onClick: this.props.onEdit.bind(this, 'plain') });
+    }
+    if (!this.props.readOnly && editorMode === 'plain') {
+      menuItems.push({ key: 'switch-rich', label: gettext('Switch to rich text editor'), onClick: this.props.onEdit.bind(this, 'rich') });
+    }
+    if (!isSmall && this.props.showFileHistory) {
+      menuItems.push({ key: 'history', label: gettext('History'), onClick: this.props.toggleHistory });
+    }
+    if (this.props.openDialogs && editorMode === 'rich') {
+      menuItems.push({ key: 'help', label: gettext('Help'), onClick: this.onHelpModuleToggle });
+    }
+    if (isSmall && this.props.onCommentPanelToggle) {
+      menuItems.push({ key: 'comment', label: gettext('Comment'), onClick: this.props.onCommentPanelToggle });
+    }
+    if (isSmall && canGenerateShareLink) {
+      menuItems.push({ key: 'share', label: gettext('Share'), onClick: this.props.toggleShareLinkDialog });
+    }
+    if (isSmall && canDownloadFile) {
+      menuItems.push({ key: 'download', label: gettext('Download'), onClick: this.downloadFile });
+    }
+    menuItems.push('Divider');
+    menuItems.push({ key: 'open-parent-folder', label: gettext('Open parent folder'), onClick: this.props.openParentDirectory });
+
     return (
-      <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down">
-        <DropdownToggle
-          className='sf-md-header-more-tool'
-          id="moreButton"
-          tag="div"
-          role="button"
-          tabIndex="0"
-          aria-label={gettext('More operations')}
-        >
-          <Icon symbol="more-level" />
-          <Tooltip target="moreButton" placement='bottom'>{gettext('More')}</Tooltip>
-        </DropdownToggle>
-        <DropdownMenu className="drop-list">
-          {(!this.props.readOnly && editorMode === 'rich') &&
-            <DropdownItem onClick={this.props.onEdit.bind(this, 'plain')}>{gettext('Switch to plain text editor')}</DropdownItem>}
-          {(!this.props.readOnly && editorMode === 'plain') &&
-            <DropdownItem onClick={this.props.onEdit.bind(this, 'rich')}>{gettext('Switch to rich text editor')}</DropdownItem>}
-          {!isSmall && this.props.showFileHistory &&
-            <DropdownItem onClick={this.props.toggleHistory}>{gettext('History')}</DropdownItem>}
-          {(this.props.openDialogs && editorMode === 'rich') &&
-            <DropdownItem onClick={this.onHelpModuleToggle}>{gettext('Help')}</DropdownItem>
-          }
-          {isSmall && this.props.onCommentPanelToggle && <DropdownItem onClick={this.props.onCommentPanelToggle}>{gettext('Comment')}</DropdownItem>}
-          {isSmall && canGenerateShareLink && <DropdownItem onClick={this.props.toggleShareLinkDialog}>{gettext('Share')}</DropdownItem>}
-          {isSmall && canDownloadFile &&
-            <DropdownItem onClick={this.downloadFile}>{gettext('Download')}</DropdownItem>
-          }
-          <div className='sf-operator-folder-divider'></div>
-          <DropdownItem onClick={this.props.openParentDirectory}>{gettext('Open parent folder')}</DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
+      <CustomDropdown
+        target="moreButton"
+        items={menuItems}
+        trigger={(
+          <>
+            <Icon symbol="more-level" />
+            <Tooltip target="moreButton" placement='bottom'>{gettext('More')}</Tooltip>
+          </>
+        )}
+        triggerClassName="sf-md-header-more-tool"
+        toggleProps={{ tag: 'div', 'aria-label': gettext('More operations') }}
+        menuClassName="drop-list"
+        menuPortal={false}
+        onItemClick={(selectedItem) => selectedItem.onClick?.()}
+      />
     );
   }
 }

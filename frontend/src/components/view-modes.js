@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { Utils } from '../utils/utils';
 import { gettext } from '../utils/constants';
 import { GRID_MODE, LIST_MODE, TABLE_MODE } from './dir-view-mode/constants';
 import Icon from './icon';
 import Tooltip from './tooltip';
+import CustomDropdown from './dropdown';
 
 import '../css/view-modes.css';
 
@@ -16,14 +16,6 @@ const propTypes = {
 };
 
 class ViewModes extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      isDropdownMenuOpen: false
-    };
-  }
-
   componentDidMount() {
     document.addEventListener('keydown', this.onKeyDown);
   }
@@ -44,62 +36,34 @@ class ViewModes extends React.Component {
     }
   };
 
-  toggleDropdownMenu = () => {
-    this.setState({
-      isDropdownMenuOpen: !this.state.isDropdownMenuOpen
-    });
-  };
-
   render() {
-    const { isDropdownMenuOpen } = this.state;
     const { currentViewMode, isSupportTable = false } = this.props;
     const shortcutMain = Utils.isMac() ? '⇧ ⌘' : 'Ctrl + Shift +';
     let options = [
-      { 'icon': 'list-view', 'text': gettext('List view'), 'value': LIST_MODE, 'shortcut': `${shortcutMain} 1` },
-      { 'icon': 'grid-view', 'text': gettext('Grid view'), 'value': GRID_MODE, 'shortcut': `${shortcutMain} 2` },
+      { key: LIST_MODE, label: gettext('List view'), icon_dom: <Icon symbol="list-view" />, shortcut: `${shortcutMain} 1`, checked: currentViewMode === LIST_MODE },
+      { key: GRID_MODE, label: gettext('Grid view'), icon_dom: <Icon symbol="grid-view" />, shortcut: `${shortcutMain} 2`, checked: currentViewMode === GRID_MODE },
     ];
     if (isSupportTable) {
-      options.push({ 'icon': 'table', 'text': gettext('Table view'), 'value': TABLE_MODE, 'shortcut': `${shortcutMain} 3` });
+      options.push({ key: TABLE_MODE, label: gettext('Table view'), icon_dom: <Icon symbol="table" />, shortcut: `${shortcutMain} 3`, checked: currentViewMode === TABLE_MODE });
     }
     const symbol = currentViewMode === LIST_MODE ? 'list-view' : currentViewMode === GRID_MODE ? 'grid-view' : currentViewMode === TABLE_MODE ? 'table' : 'list-view';
 
     return (
-      <Dropdown
-        isOpen={isDropdownMenuOpen}
-        toggle={this.toggleDropdownMenu}
-      >
-        <DropdownToggle
-          id="switch-view-mode-icon"
-          tag="span"
-          role="button"
-          tabIndex="0"
-          className="cur-view-path-btn px-1"
-          data-toggle="dropdown"
-          aria-label={gettext('Switch view mode')}
-          aria-expanded={isDropdownMenuOpen}
-        >
-          <Icon symbol={symbol} />
-          <Tooltip target="switch-view-mode-icon">{gettext('Switch view mode')}</Tooltip>
-        </DropdownToggle>
-        <DropdownMenu className="mt-1">
-          {options.map((item, index) => {
-            return (
-              <DropdownItem className='p-0' key={index} onClick={this.props.switchViewMode.bind(this, item.value)}>
-                <div className="view-modes-dropdown-wrapper">
-                  <span className='view-modes-dropdown-tick'>
-                    {currentViewMode === item.value && <Icon symbol="check-thin" />}
-                  </span>
-                  <span className="view-modes-dropdown-content d-flex align-items-center">
-                    <Icon symbol={item.icon} className="mr-2" />
-                    <span>{item.text}</span>
-                  </span>
-                  <span className="view-modes-dropdown-shortcut ml-4 d-flex align-items-center">{item.shortcut}</span>
-                </div>
-              </DropdownItem>
-            );
-          })}
-        </DropdownMenu>
-      </Dropdown>
+      <CustomDropdown
+        target="switch-view-mode-icon"
+        items={options}
+        variant="control"
+        trigger={(
+          <>
+            <Icon symbol={symbol} />
+            <Tooltip target="switch-view-mode-icon">{gettext('Switch view mode')}</Tooltip>
+          </>
+        )}
+        triggerClassName="cur-view-path-btn px-1"
+        toggleProps={{ tag: 'span', 'aria-label': gettext('Switch view mode') }}
+        menuPortal={false}
+        onItemClick={(selectedItem) => this.props.switchViewMode(selectedItem.key)}
+      />
     );
   }
 

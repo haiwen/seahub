@@ -1,13 +1,13 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button, ButtonGroup, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import Switch from '../switch';
+import { Button, ButtonGroup } from 'reactstrap';
 import IconButton from '../icon-button';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils, isImageRotateable } from '../../utils/utils';
 import Icon from '../../components/icon';
 import ImageZoomer from './image-zoomer';
 import Tooltip from '../tooltip';
+import CustomDropdown from '../dropdown';
 
 const propTypes = {
   isLocked: PropTypes.bool.isRequired,
@@ -40,44 +40,86 @@ const {
 
 class FileToolbar extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      dropdownOpen: false,
-      moreDropdownOpen: false,
-    };
-  }
-
-  toggleMoreOpMenu = (event) => {
-    if (this.state.moreDropdownOpen) {
-      const el = document.getElementById('txt-line-wrap-menu');
-      if (el && el.contains(event.target)) {
-        return;
-      }
-    }
-    this.setState({
-      moreDropdownOpen: !this.state.moreDropdownOpen
-    });
+  handleOpenWithOnlyOffice = () => {
+    location.href = '?open_with_onlyoffice=true';
   };
 
-  toggle = (event) => {
-    if (this.state.dropdownOpen) {
-      const el = document.getElementById('mobile-txt-line-wrap-menu');
-      if (el && el.contains(event.target)) {
-        return;
+  handleOpenWithClient = () => {
+    location.href = `seafile://openfile?repo_id=${encodeURIComponent(repoID)}&path=${encodeURIComponent(filePath)}`;
+  };
+
+  handleOpenHistory = () => {
+    location.href = `${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`;
+  };
+
+  handleOpenParentFolder = () => {
+    location.href = `${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`;
+  };
+
+  handleDownload = () => {
+    location.href = '?dl=1';
+  };
+
+  toggleLineWrapping = () => {
+    this.props.updateLineWrapping(!this.props.lineWrapping);
+  };
+
+  getDesktopMenuItems = () => {
+    const items = [];
+    if (fileExt == 'csv' && enableOnlyoffice) {
+      items.push({ key: 'open-with-onlyoffice', label: gettext('Open with OnlyOffice'), onClick: this.handleOpenWithOnlyOffice });
+    }
+    if (filePerm == 'rw') {
+      items.push({ key: 'open-with-client', label: gettext('Open with client'), onClick: this.handleOpenWithClient });
+    }
+    if (filePerm == 'rw') {
+      items.push({ key: 'history', label: gettext('History'), onClick: this.handleOpenHistory });
+    }
+    if (fileType == 'Text') {
+      items.push({ key: 'line-wrapping', label: gettext('Line wrapping'), keepOpen: true, onClick: this.toggleLineWrapping });
+    }
+    items.push('Divider');
+    items.push({ key: 'open-parent-folder', label: gettext('Open parent folder'), onClick: this.handleOpenParentFolder });
+    return items;
+  };
+
+  getMobileMenuItems = () => {
+    const items = [];
+    const { isLocked, lockedByMe, isShareEnabled } = this.props;
+    let showLockUnlockBtn;
+    let lockUnlockText;
+    if (canLockUnlockFile) {
+      if (!isLocked) {
+        showLockUnlockBtn = true;
+        lockUnlockText = gettext('Lock');
+      } else if (lockedByMe) {
+        showLockUnlockBtn = true;
+        lockUnlockText = gettext('Unlock');
       }
     }
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen
-    });
+    items.push({ key: 'open-parent-folder', label: gettext('Open parent folder'), onClick: this.handleOpenParentFolder });
+    if (showLockUnlockBtn) {
+      items.push({ key: 'lock-unlock', label: lockUnlockText, onClick: this.props.toggleLockFile });
+    }
+    if (isShareEnabled) {
+      items.push({ key: 'share', label: gettext('Share'), onClick: this.props.toggleShareDialog });
+    }
+    if (canDownloadFile) {
+      items.push({ key: 'download', label: gettext('Download'), onClick: this.handleDownload });
+    }
+    items.push({ key: 'comment', label: gettext('Comment'), onClick: this.props.toggleCommentPanel });
+    items.push({ key: 'details', label: gettext('Details'), onClick: this.props.toggleDetailsPanel });
+    if (fileType == 'Text') {
+      items.push({ key: 'line-wrapping', label: gettext('Line wrapping'), keepOpen: true, onClick: this.toggleLineWrapping });
+    }
+    return items;
   };
 
   render() {
-    const { moreDropdownOpen } = this.state;
-
     const { isLocked, lockedByMe, isCommentUpdated, isShareEnabled } = this.props;
     let showLockUnlockBtn = false;
-    let lockUnlockText; let lockUnlockIcon;
+    let lockUnlockText;
+    let lockUnlockIcon;
     if (canLockUnlockFile) {
       if (!isLocked) {
         showLockUnlockBtn = true;
@@ -89,9 +131,7 @@ class FileToolbar extends React.Component {
         lockUnlockIcon = 'unlock';
       }
     }
-
     const shortcutMain = Utils.isMac() ? '⌘ + ' : 'Ctrl + ';
-    const isTxt = fileExt && fileExt.toLowerCase() === 'txt';
 
     return (
       <Fragment>
@@ -191,118 +231,55 @@ class FileToolbar extends React.Component {
               onClick={this.props.toggleShareDialog}
             />
           )}
-          <Dropdown isOpen={moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
-            <DropdownToggle
-              id="more-operations"
-              className="file-toolbar-btn"
-              aria-label={gettext('More operations')}
-              tag="span"
-              tabIndex="0"
-              role='button'
-            >
-              <Icon symbol="more-level" />
-              <Tooltip
-                target="more-operations"
-                placement='bottom'
-              >
-                {gettext('More operations')}
-              </Tooltip>
-            </DropdownToggle>
-            <DropdownMenu>
-              {fileExt == 'csv' && enableOnlyoffice && (
-                <DropdownItem href={'?open_with_onlyoffice=true'}>
-                  {gettext('Open with OnlyOffice')}
-                </DropdownItem>
-              )}
-              {filePerm == 'rw' && (
-                <DropdownItem href={`seafile://openfile?repo_id=${encodeURIComponent(repoID)}&path=${encodeURIComponent(filePath)}`}>
-                  {gettext('Open with client')}
-                </DropdownItem>
-              )}
-              {filePerm == 'rw' && (
-                <DropdownItem href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`}>
-                  {gettext('History')}
-                </DropdownItem>
-              )}
-              {isTxt &&
-                <DropdownItem id='txt-line-wrap-menu' className='dropdown-item'>
-                  <Switch
-                    checked={this.props.lineWrapping}
-                    placeholder={gettext('Line wrapping')}
-                    className="txt-line-wrap-menu w-100"
-                    onChange={() => this.props.updateLineWrapping(!this.props.lineWrapping)}
-                  />
-                </DropdownItem>
-              }
-              <div className='file-operator-folder-divider'></div>
-              <DropdownItem href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`}>
-                {gettext('Open parent folder')}
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+          <CustomDropdown
+            target="more-operations"
+            items={this.getDesktopMenuItems()}
+            trigger={(
+              <>
+                <Icon symbol="more-level" />
+                <Tooltip target="more-operations" placement='bottom'>
+                  {gettext('More operations')}
+                </Tooltip>
+              </>
+            )}
+            triggerClassName="file-toolbar-btn"
+            toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
+            menuPortal={false}
+            onItemClick={(selectedItem) => selectedItem.onClick?.()}
+          />
         </div>
-
-        <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} className="d-block d-md-none flex-shrink-0 ml-4">
-          <ButtonGroup >
-            {(canEditFile && fileType != 'SDoc' && !err) &&
-              (this.props.isSaving ?
-                <button type='button' aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary'}>
-                  <Icon symbol="spinner" />
-                </button>
-                :
-                (this.props.needSave ?
-                  <IconButton
-                    text={gettext('Save')}
-                    id="save-file"
-                    icon='save'
-                    onClick={this.props.onSave}
-                  />
-                  :
-                  <button type='button' className={'btn btn-icon btn-secondary'} disabled>
-                    <Icon symbol="save" />
+        <CustomDropdown
+          target="file-toolbar-mobile-more"
+          items={this.getMobileMenuItems()}
+          className="d-block d-md-none flex-shrink-0 ml-4"
+          trigger={
+            <ButtonGroup>
+              {(canEditFile && fileType != 'SDoc' && !err) &&
+                (this.props.isSaving ?
+                  <button type='button' aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary'}>
+                    <Icon symbol="spinner" />
                   </button>
-                ))}
-          </ButtonGroup>
-          <DropdownToggle tag="span" className="mx-1" aria-label={gettext('More operations')}>
-            <Icon symbol="more-level" />
-          </DropdownToggle>
-          <DropdownMenu>
-            <DropdownItem>
-              <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="text-inherit">
-                {gettext('Open parent folder')}
-              </a>
-            </DropdownItem>
-            {showLockUnlockBtn && (
-              <DropdownItem onClick={this.props.toggleLockFile}>
-                {lockUnlockText}
-              </DropdownItem>
-            )}
-            {isShareEnabled && (
-              <DropdownItem onClick={this.props.toggleShareDialog}>
-                {gettext('Share')}
-              </DropdownItem>
-            )}
-            {canDownloadFile && (
-              <DropdownItem>
-                <a href="?dl=1" className="text-inherit">
-                  {gettext('Download')}
-                </a>
-              </DropdownItem>
-            )}
-            <DropdownItem onClick={this.props.toggleCommentPanel}>{gettext('Comment')}</DropdownItem>
-            <DropdownItem onClick={this.props.toggleDetailsPanel}>{gettext('Details')}</DropdownItem>
-            {isTxt &&
-              <DropdownItem id='mobile-txt-line-wrap-menu' className='dropdown-item'>
-                <Switch
-                  checked={this.props.lineWrapping}
-                  placeholder={gettext('Line wrapping')}
-                  className="txt-line-wrap-menu w-100"
-                  onChange={() => this.props.updateLineWrapping(!this.props.lineWrapping)}
-                />
-              </DropdownItem>
-            }
-          </DropdownMenu>
-        </Dropdown>
+                  :
+                  (this.props.needSave ?
+                    <IconButton
+                      text={gettext('Save')}
+                      id="save-file"
+                      icon='save'
+                      onClick={this.props.onSave}
+                    />
+                    :
+                    <button type='button' className={'btn btn-icon btn-secondary'} disabled>
+                      <Icon symbol="save" />
+                    </button>
+                  ))}
+              <span className="mx-1"><Icon symbol="more-level" /></span>
+            </ButtonGroup>
+          }
+          triggerClassName=""
+          toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
+          menuPortal={false}
+          onItemClick={(selectedItem) => selectedItem.onClick?.()}
+        />
       </Fragment>
     );
   }

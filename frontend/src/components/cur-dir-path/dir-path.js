@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import { Link } from '@gatsbyjs/reach-router';
 import DirOperationToolbar from '../../components/toolbar/dir-operation-toolbar';
 import MetadataViewName from '../../metadata/components/metadata-view-name';
@@ -17,6 +16,7 @@ import EventBus from '../common/event-bus';
 import CleanTrash from '../dialog/clean-trash';
 import ArchiveIcon from '../archive-icon';
 import Tooltip from '../tooltip';
+import CustomDropdown from '../dropdown';
 
 const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
@@ -234,25 +234,22 @@ class DirPath extends React.Component {
 
     return (
       <>
-        <Dropdown className='trash-path-dropdown' isOpen={this.state.isDesktopMenuOpen} toggle={this.toggleDesktopOpMenu}>
-          <DropdownToggle
-            id="trash-more-operations"
-            tag="span"
-            role="button"
-            tabIndex="0"
-            className="trash-path-item"
-            onClick={this.toggleDesktopOpMenu}
-            data-toggle="dropdown"
-            aria-label={gettext('More operations')}
-            aria-expanded={this.state.isDesktopMenuOpen}
-          >
-            <Icon symbol="down" className="path-item-dropdown-toggle" />
-            <Tooltip target="trash-more-operations">{gettext('More operations')}</Tooltip>
-          </DropdownToggle>
-          <DropdownMenu onMouseMove={this.onDropDownMouseMove} className='position-fixed'>
-            <DropdownItem onClick={this.toggleCleanTrashDialog}>{gettext('Clean trash')}</DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
+        <CustomDropdown
+          target="trash-more-operations"
+          className="trash-path-dropdown"
+          items={[{ key: 'clean-trash', label: gettext('Clean trash'), onClick: this.toggleCleanTrashDialog }]}
+          trigger={(
+            <>
+              <Icon symbol="down" className="path-item-dropdown-toggle" />
+              <Tooltip target="trash-more-operations">{gettext('More operations')}</Tooltip>
+            </>
+          )}
+          triggerClassName="trash-path-item"
+          toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
+          menuClassName="position-fixed"
+          menuPortal={false}
+          onItemClick={(selectedItem) => selectedItem.onClick?.()}
+        />
         {this.state.isCleanTrashDialogOpen && (
           <CleanTrash
             repoID={this.props.repoID}

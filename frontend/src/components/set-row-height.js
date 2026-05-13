@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext } from '../utils/constants';
 import { ROW_HEIGHT } from '../metadata/constants';
 import Icon from './icon';
 import Tooltip from './tooltip';
-
-import '../css/set-row-height.css';
+import CustomDropdown from './dropdown';
 
 const ROW_HEIGHT_OPTIONS = [
   { label: gettext('Default'), icon: 'default', value: ROW_HEIGHT },
@@ -23,73 +21,48 @@ const propTypes = {
 };
 
 class SetRowHeight extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      isDropdownMenuOpen: false,
-    };
-  }
-
-  toggleDropdownMenu = () => {
-    this.setState({
-      isDropdownMenuOpen: !this.state.isDropdownMenuOpen,
-    });
-  };
-
   onChangeRowHeight = (value) => {
     const { readOnly = false, rowHeight = ROW_HEIGHT, modifyRowHeight } = this.props;
     if (readOnly || value === rowHeight) return;
 
     modifyRowHeight(value);
-    this.setState({
-      isDropdownMenuOpen: false,
-    });
   };
 
   render() {
-    const { isDropdownMenuOpen } = this.state;
     const { rowHeight = ROW_HEIGHT, iconClass } = this.props;
     const currentOption = ROW_HEIGHT_OPTIONS.find(item => item.value === rowHeight) || ROW_HEIGHT_OPTIONS[0];
+    const menuItems = [{
+      type: 'header',
+      key: 'set-row-height-title',
+      label: gettext('Select row height'),
+    }, {
+      type: 'divider',
+      className: 'header-divider',
+    }, ...ROW_HEIGHT_OPTIONS.map((item) => ({
+      key: String(item.value),
+      label: item.label,
+      checked: rowHeight === item.value,
+      icon_dom: <Icon symbol={`row-height-${item.icon}`} className="dropdown-item-icon" />,
+      onClick: () => this.onChangeRowHeight(item.value),
+    }))];
 
     return (
-      <Dropdown isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu}>
-        <DropdownToggle
-          id="set-row-height-toggle"
-          tag="span"
-          role="button"
-          tabIndex="0"
-          className={iconClass}
-          data-toggle="dropdown"
-          aria-label={gettext('Set row height')}
-          aria-expanded={isDropdownMenuOpen}
-        >
-          <Icon symbol={`row-height-${currentOption.icon}`} />
-          <Tooltip target="set-row-height-toggle">{gettext('Set row height')}</Tooltip>
-        </DropdownToggle>
-        <DropdownMenu className="mt-1 set-row-height-dropdown-menu">
-          <div className="set-row-height-dropdown-title">{gettext('Select row height')}</div>
-          {ROW_HEIGHT_OPTIONS.map((item, index) => {
-            return (
-              <DropdownItem
-                className="p-0"
-                key={index}
-                onClick={() => this.onChangeRowHeight(item.value)}
-              >
-                <div className="set-row-height-dropdown-wrapper">
-                  <span className="set-row-height-dropdown-tick">
-                    {rowHeight === item.value && <Icon symbol="check-thin" className="dropdown-item-icon" />}
-                  </span>
-                  <span className="set-row-height-dropdown-content d-flex align-items-center">
-                    <Icon symbol={`row-height-${item.icon}`} className="dropdown-item-icon mr-2" />
-                    <span>{item.label}</span>
-                  </span>
-                </div>
-              </DropdownItem>
-            );
-          })}
-        </DropdownMenu>
-      </Dropdown>
+      <CustomDropdown
+        target="set-row-height-toggle"
+        items={menuItems}
+        variant="control"
+        trigger={(
+          <>
+            <Icon symbol={`row-height-${currentOption.icon}`} />
+            <Tooltip target="set-row-height-toggle">{gettext('Set row height')}</Tooltip>
+          </>
+        )}
+        triggerClassName={iconClass}
+        toggleProps={{ tag: 'span', 'aria-label': gettext('Set row height') }}
+        menuClassName="mt-1 set-row-height-dropdown-menu"
+        menuPortal={false}
+        onItemClick={(selectedItem) => selectedItem.onClick?.()}
+      />
     );
   }
 }

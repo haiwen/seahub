@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { gettext } from '../../utils/constants';
 import { EVENT_BUS_TYPE } from '../../metadata/constants';
 import TextTranslation from '../../utils/text-translation';
@@ -24,17 +24,23 @@ const AllTagsToolbar = () => {
     eventBus && eventBus.dispatch(EVENT_BUS_TYPE.DELETE_TAGS, selectedTagIds);
   }, [selectedTagIds, eventBus]);
 
-  const getMenuList = useCallback(() => {
-    if (!canModify) return [];
-    const { MERGE_TAGS, NEW_CHILD_TAG } = TextTranslation;
-    const list = [];
-    if (selectedTagIds.length > 1) {
-      list.push(MERGE_TAGS);
-      return list;
-    }
-    list.push(NEW_CHILD_TAG);
-    return list;
-  }, [selectedTagIds, canModify]);
+  const menuItems = useMemo(() => {
+    if (!canModify) {
+    return [];
+  }
+
+  if (selectedTagIds.length > 1) {
+    return [{
+      key: TextTranslation.MERGE_TAGS.key,
+      label: TextTranslation.MERGE_TAGS.value,
+    }];
+  }
+
+  return [{
+    key: TextTranslation.NEW_CHILD_TAG.key,
+    label: TextTranslation.NEW_CHILD_TAG.value,
+  }];
+  }, [canModify, selectedTagIds])
 
   const onMenuItemClick = useCallback((operation, e) => {
     switch (operation) {
@@ -85,7 +91,7 @@ const AllTagsToolbar = () => {
       {length > 0 && (
         <CustomDropdown
           target="all-tags-more-operations-btn"
-          items={getMenuList()}
+          items={menuItems}
           trigger={(
             <>
               <Icon symbol="more-level" />

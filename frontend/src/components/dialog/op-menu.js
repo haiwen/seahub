@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
 import Icon from '../icon';
+import CustomDropdown from '../dropdown';
 
 const propTypes = {
   onFreezedItem: PropTypes.func.isRequired,
@@ -14,56 +13,22 @@ const propTypes = {
 };
 
 class OpMenu extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      isItemMenuShow: false
-    };
-  }
-
-  onMenuItemClick = (e) => {
-    let operation = Utils.getEventData(e, 'op');
-    this.props.onMenuItemClick(operation);
-  };
-
-  onDropdownToggleClick = (e) => {
-    this.toggleOperationMenu(e);
-  };
-
-  toggleOperationMenu = (e) => {
-    this.setState(
-      { isItemMenuShow: !this.state.isItemMenuShow },
-      () => {
-        if (this.state.isItemMenuShow) {
-          this.props.onFreezedItem();
-        } else {
-          this.props.onUnfreezedItem();
-        }
-      }
-    );
-  };
-
   render() {
     const { operations, translateOperations } = this.props;
+    const menuItems = operations.map((item) => ({ key: item, label: translateOperations(item) }));
     return (
-      <Dropdown className="lh-1" isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-        <DropdownToggle
-          tag="span"
-          className="op-icon"
-          title={gettext('More operations')}
-          aria-label={gettext('More operations')}
-          data-toggle="dropdown"
-          aria-expanded={this.state.isItemMenuShow}
-        >
-          <Icon symbol="more-level" />
-        </DropdownToggle>
-        <DropdownMenu className="my-1 mr-2">
-          {operations.map((item, index) => {
-            return (<DropdownItem key={index} data-op={item} onClick={this.onMenuItemClick}>{translateOperations(item)}</DropdownItem>);
-          })}
-        </DropdownMenu>
-      </Dropdown>
+      <CustomDropdown
+        items={menuItems}
+        className="lh-1"
+        trigger={<Icon symbol="more-level" />}
+        triggerClassName="op-icon"
+        toggleProps={{ tag: 'span', 'aria-label': gettext('More operations'), title: gettext('More operations') }}
+        menuClassName="my-1 mr-2"
+        menuPortal={false}
+        freezeItem={this.props.onFreezedItem}
+        unfreezeItem={this.props.onUnfreezedItem}
+        onItemClick={(selectedItem) => this.props.onMenuItemClick(selectedItem.key)}
+      />
     );
   }
 }

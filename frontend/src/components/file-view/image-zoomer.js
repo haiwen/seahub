@@ -1,9 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Input, Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
+import { Input } from 'reactstrap';
 import IconButton from '../../components/icon-button';
 import Icon from '../../components/icon';
 import { gettext } from '../../utils/constants';
+import CustomDropdown from '../../components/dropdown';
 
 const SCALE_OPTIONS = [0.15, 0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4];
 const SCALE_MIN = SCALE_OPTIONS[0];
@@ -19,11 +20,6 @@ const ImageZoomer = ({ setImageScale, setDefaultPageFitScale }) => {
   const [curScale, setScale] = useState(1);
   const [curScaleText, setScaleText] = useState(DEFAULT_SCALE.text); // for the text shown in the input
   const [selectedScale, setSelectedScale] = useState(DEFAULT_SCALE.value); // for the scale menu
-  const [isScaleMenuOpen, setScaleMenuOpen] = useState(false);
-
-  const toggleMenu = useCallback(() => {
-    setScaleMenuOpen(!isScaleMenuOpen);
-  }, [isScaleMenuOpen, setScaleMenuOpen]);
 
   const scaleImage = useCallback((scale) => {
     setImageScale(scale);
@@ -99,18 +95,26 @@ const ImageZoomer = ({ setImageScale, setDefaultPageFitScale }) => {
       }
       setScaleText(SCALE_OPTIONS_2.filter(item => item.value == value)[0].text);
     }
-    setScaleMenuOpen(false);
-  }, [scaleImage, setScaleMenuOpen, scaleImageToPageFit]);
-
-  const onMenuItemKeyDown = useCallback((e, value) => {
-    if (e.key == 'Enter' || e.key == 'Space') {
-      onMenuItemClick(value);
-    }
-  }, [onMenuItemClick]);
+  }, [scaleImage, scaleImageToPageFit]);
 
   useEffect(() => {
     scaleImageToPageFit();
   }, [scaleImageToPageFit]);
+
+  const scaleMenuItems = [
+    ...SCALE_OPTIONS.map((item) => ({
+      key: String(item),
+      label: `${item * 100}%`,
+      checked: selectedScale == item,
+      onClick: () => onMenuItemClick(item),
+    })),
+    ...SCALE_OPTIONS_2.map((item) => ({
+      key: item.value,
+      label: item.text,
+      checked: selectedScale == item.value,
+      onClick: () => onMenuItemClick(item.value),
+    })),
+  ];
 
   return (
     <div className='d-flex align-items-center image-zoomer'>
@@ -121,60 +125,23 @@ const ImageZoomer = ({ setImageScale, setDefaultPageFitScale }) => {
         onClick={zoomOut}
         disabled={curScale == SCALE_MIN}
       />
-      <Dropdown
-        isOpen={isScaleMenuOpen}
-        toggle={toggleMenu}
+      <CustomDropdown
+        target="image-zoomer-scale-menu"
+        items={scaleMenuItems}
+        variant="control"
         className="vam"
-        direction='down'
-      >
-        <DropdownToggle
-          tag='div'
-          role='button'
-          tabIndex="0"
-          className="position-relative d-flex align-items-center"
-          data-toggle="dropdown"
-          aria-expanded={isScaleMenuOpen}
-        >
-          <Input id="cur-scale-input" type="text" value={curScaleText} readOnly={true} tabIndex="-1" />
-          <Icon id="scale-menu-caret" symbol="down" />
-        </DropdownToggle>
-        <DropdownMenu id="scale-menu">
-          {SCALE_OPTIONS.map((item, index) => {
-            return (
-              <DropdownItem
-                key={index}
-                className="position-relative pl-5"
-                onClick={() => {onMenuItemClick(item);}}
-                onKeyDown={(e) => {onMenuItemKeyDown(e, item);}}
-              >
-                {selectedScale == item && (
-                  <span className="dropdown-item-tick">
-                    <Icon symbol="check-thin" />
-                  </span>
-                )}
-                <span>{`${item * 100}%`}</span>
-              </DropdownItem>
-            );
-          })}
-          {SCALE_OPTIONS_2.map((item, index) => {
-            return (
-              <DropdownItem
-                key={index}
-                className="position-relative pl-5"
-                onClick={() => {onMenuItemClick(item.value);}}
-                onKeyDown={(e) => {onMenuItemKeyDown(e, item.value);}}
-              >
-                {selectedScale == item.value && (
-                  <span className="dropdown-item-tick">
-                    <Icon symbol="check-thin" />
-                  </span>
-                )}
-                <span>{item.text}</span>
-              </DropdownItem>
-            );
-          })}
-        </DropdownMenu>
-      </Dropdown>
+        trigger={(
+          <>
+            <Input id="cur-scale-input" type="text" value={curScaleText} readOnly={true} tabIndex="-1" />
+            <Icon id="scale-menu-caret" symbol="down" />
+          </>
+        )}
+        triggerClassName="position-relative d-flex align-items-center"
+        toggleProps={{ tag: 'div', 'aria-label': gettext('Scale menu') }}
+        menuClassName="position-fixed"
+        menuPortal={false}
+        onItemClick={(selectedItem) => selectedItem.onClick?.()}
+      />
       <IconButton
         id="zoom-in-image"
         icon="plus-sign"
@@ -187,7 +154,8 @@ const ImageZoomer = ({ setImageScale, setDefaultPageFitScale }) => {
 };
 
 ImageZoomer.propTypes = {
-  setImageScale: PropTypes.func
+  setImageScale: PropTypes.func,
+  setDefaultPageFitScale: PropTypes.func,
 };
 
 export default ImageZoomer;

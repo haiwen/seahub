@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { Link, navigate } from '@gatsbyjs/reach-router';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, isPro, username, folderPermEnabled, isSystemStaff, enableResetEncryptedRepoPassword, isEmailConfigured, enableStorageClasses } from '../../utils/constants';
@@ -28,6 +27,8 @@ import RepoWebhookDialog from '../dialog/repo-webhook-dialog';
 import RepoArchiveDialog from '../dialog/repo-archive-dialog';
 import ArchiveIcon from '../archive-icon';
 import Tooltip from '../tooltip';
+import CustomDropdown from '../dropdown';
+import CustomDropdownItem from '../dropdown/custom-dropdown-item';
 
 dayjs.extend(relativeTime);
 
@@ -55,8 +56,6 @@ class SharedRepoListItem extends React.Component {
     this.state = {
       highlight: false,
       isOperationShow: false,
-      isItemMenuShow: false,
-      isAdvancedMenuShown: false,
       isShowSharedDialog: false,
       isRenaming: false,
       isStarred: this.props.repo.starred,
@@ -70,6 +69,7 @@ class SharedRepoListItem extends React.Component {
       isResetPasswordDialogShow: false,
     };
     this.isDepartmentOwnerGroupMember = false;
+    this.keepFrozenOnClose = false;
   }
 
   onMouseEnter = () => {
@@ -99,58 +99,6 @@ class SharedRepoListItem extends React.Component {
     }
   };
 
-  clickOperationMenuToggle = (e) => {
-    this.toggleOperationMenu(e);
-  };
-
-  onDropdownToggleKeyDown = (e) => {
-    if (e.key == 'Enter' || e.key == 'Space') {
-      this.clickOperationMenuToggle(e);
-    }
-  };
-
-  toggleOperationMenu = (e) => {
-    let dataset = e.target ? e.target.dataset : null;
-    if (dataset && dataset.toggle && dataset.toggle === 'Rename') {
-      this.setState({ isItemMenuShow: !this.state.isItemMenuShow });
-      return;
-    }
-
-    this.setState(
-      { isItemMenuShow: !this.state.isItemMenuShow },
-      () => {
-        if (this.state.isItemMenuShow) {
-          this.props.onFreezedItem();
-        } else {
-          this.props.onUnfreezedItem();
-          this.setState({
-            highlight: false,
-            isOperationShow: false,
-          });
-        }
-      }
-    );
-  };
-
-  toggleAdvancedMenuShown = (e) => {
-    this.setState({ isAdvancedMenuShown: true });
-  };
-
-  toggleAdvancedMenu = (e) => {
-    e.stopPropagation();
-    this.setState({ isAdvancedMenuShown: !this.state.isAdvancedMenuShown }, () => {
-      this.toggleOperationMenu(e);
-    });
-  };
-
-  onDropDownMouseMove = (e) => {
-    if (this.state.isAdvancedMenuShown && e.target && e.target.className === 'dropdown-item') {
-      this.setState({
-        isAdvancedMenuShown: false
-      });
-    }
-  };
-
   getRepoComputeParams = () => {
     const { repo } = this.props;
     const iconUrl = Utils.getLibIconUrl(repo);
@@ -160,16 +108,10 @@ class SharedRepoListItem extends React.Component {
     return { iconUrl, iconTitle, libPath };
   };
 
-  onMenuItemKeyDown = (e) => {
-    if (e.key == 'Enter' || e.key == 'Space') {
-      this.onMenuItemClick(e);
-    }
-  };
-
-  onMenuItemClick = (e) => {
-    let operation = e.target.dataset.toggle || e.target.dataset.operation;
+  onMenuItemClick = (operation) => {
     switch (operation) {
       case 'Rename':
+        this.keepFrozenOnClose = true;
         this.onItemRenameToggle();
         break;
       case 'Star':
@@ -207,6 +149,19 @@ class SharedRepoListItem extends React.Component {
         break;
       // no default
     }
+  };
+
+  handleMenuClose = () => {
+    if (this.keepFrozenOnClose) {
+      this.keepFrozenOnClose = false;
+      return;
+    }
+
+    this.props.onUnfreezedItem();
+    this.setState({
+      highlight: false,
+      isOperationShow: false,
+    });
   };
 
   onItemRenameToggle = () => {
@@ -403,6 +358,30 @@ class SharedRepoListItem extends React.Component {
     return operations;
   };
 
+  buildMenuItems = (operations, advancedOperations = []) => {
+    return operations.map((item) => {
+      if (item === 'Divider') {
+        return item;
+      }
+
+      if (item === 'Advanced') {
+        return {
+          key: 'Advanced',
+          label: this.translateMenuItem(item),
+          children: advancedOperations.map((advancedItem) => ({
+            key: advancedItem,
+            label: this.translateMenuItem(advancedItem),
+          })),
+        };
+      }
+
+      return {
+        key: item,
+        label: this.translateMenuItem(item),
+      };
+    });
+  };
+
   generatorOperations = () => {
     let { repo, currentGroup } = this.props;
     // todo this have a bug; use current api is not return admins param;
@@ -477,7 +456,12 @@ class SharedRepoListItem extends React.Component {
       <MobileItemMenu isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
         {operations.map((item, index) => {
           return (
-            <DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick}>{this.translateMenuItem(item)}</DropdownItem>
+            <CustomDropdownItem
+              key={index}
+              item={{ key: item, label: this.translateMenuItem(item), className: 'mobile-menu-item' }}
+              onClick={() => this.onMenuItemClick(item)}
+              tag="div"
+            />
           );
         })}
       </MobileItemMenu>
@@ -526,66 +510,28 @@ class SharedRepoListItem extends React.Component {
 
     if (this.isDepartmentOwnerGroupMember) {
       const advancedOperations = this.getAdvancedOperations();
+      const menuItems = this.buildMenuItems(operations, advancedOperations);
+      const target = `shared-repo-more-level-icon-${idx}`;
       return (
         <div className="d-flex align-items-center lh-1">
           {shareOperation}
           {deleteOperation}
-          <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-            <DropdownToggle
-              id="more-level-icon"
-              tag="span"
-              role="button"
-              tabIndex="0"
-              className="op-icon"
-              aria-label={gettext('More operations')}
-              data-toggle="dropdown"
-              aria-expanded={this.state.isItemMenuShow}
-              aria-haspopup={true}
-              style={{ 'minWidth': '0' }}
-              onClick={this.clickOperationMenuToggle}
-              onKeyDown={this.onDropdownToggleKeyDown}
-            >
-              <Icon symbol="more-level" className="w-4 h-4" />
-              <Tooltip target="more-level-icon">{gettext('More operations')}</Tooltip>
-            </DropdownToggle>
-            <DropdownMenu container="body" onMouseMove={this.onDropDownMouseMove}>
-              {operations.map((item, index) => {
-                if (item == 'Divider') {
-                  return <DropdownItem key={index} divider />;
-                } else if (item == 'Advanced') {
-                  return (
-                    <Dropdown
-                      key={index}
-                      direction="right"
-                      className="w-100"
-                      isOpen={this.state.isAdvancedMenuShown}
-                      toggle={this.toggleAdvancedMenu}
-                      onMouseMove={(e) => {e.stopPropagation();}}
-                    >
-                      <DropdownToggle
-                        tag="span"
-                        role="button"
-                        tabIndex="0"
-                        className="dropdown-item font-weight-normal rounded-0 d-flex justify-content-between align-items-center pr-2"
-                        onMouseEnter={this.toggleAdvancedMenuShown}
-                        onKeyDown={this.toggleAdvancedMenuShown}
-                      >
-                        {this.translateMenuItem(item)}
-                        <Icon symbol="down" className="w-3 h-3 rotate-270" />
-                      </DropdownToggle>
-                      <DropdownMenu>
-                        {advancedOperations.map((item, index) => {
-                          return (<DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>{this.translateMenuItem(item)}</DropdownItem>);
-                        })}
-                      </DropdownMenu>
-                    </Dropdown>
-                  );
-                } else {
-                  return (<DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>{this.translateMenuItem(item)}</DropdownItem>);
-                }
-              })}
-            </DropdownMenu>
-          </Dropdown>
+          <CustomDropdown
+            target={target}
+            items={menuItems}
+            trigger={(
+              <>
+                <Icon symbol="more-level" className="w-4 h-4" />
+                <Tooltip target={target}>{gettext('More operations')}</Tooltip>
+              </>
+            )}
+            triggerClassName="op-icon"
+            toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
+            menuProps={{ container: 'body' }}
+            freezeItem={this.props.onFreezedItem}
+            unfreezeItem={this.handleMenuClose}
+            onItemClick={(selectedItem) => this.onMenuItemClick(selectedItem.key)}
+          />
         </div>
       );
     } else {

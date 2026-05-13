@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext } from '../utils/constants';
 import Icon from './icon';
 import Tooltip from './tooltip';
+import CustomDropdown from './dropdown';
 
 const propTypes = {
   className: PropTypes.string,
@@ -13,69 +13,51 @@ const propTypes = {
   onSelectSortOption: PropTypes.func.isRequired
 };
 
-class SortMenu extends React.Component {
+const DEFAULT_SORT_OPTIONS = [
+  { value: 'name-asc', text: gettext('Ascending by name') },
+  { value: 'name-desc', text: gettext('Descending by name') },
+  { value: 'size-asc', text: gettext('Ascending by size') },
+  { value: 'size-desc', text: gettext('Descending by size') },
+  { value: 'time-asc', text: gettext('Ascending by time') },
+  { value: 'time-desc', text: gettext('Descending by time') }
+];
 
+const buildSortMenuItems = ({ sortOptions, sortBy, sortOrder }) => {
+  return sortOptions.map((item) => ({
+    key: item.value,
+    label: item.text,
+    checked: item.value === `${sortBy}-${sortOrder}`,
+    sortOption: item,
+  }));
+};
+
+class SortMenu extends React.Component {
   constructor(props) {
     super(props);
-    this.sortOptions = this.props.sortOptions || [
-      { value: 'name-asc', text: gettext('Ascending by name') },
-      { value: 'name-desc', text: gettext('Descending by name') },
-      { value: 'size-asc', text: gettext('Ascending by size') },
-      { value: 'size-desc', text: gettext('Descending by size') },
-      { value: 'time-asc', text: gettext('Ascending by time') },
-      { value: 'time-desc', text: gettext('Descending by time') }
-    ];
-    this.state = {
-      isDropdownMenuOpen: false
-    };
+    this.sortOptions = this.props.sortOptions || DEFAULT_SORT_OPTIONS;
   }
 
-  toggleDropdownMenu = () => {
-    this.setState({
-      isDropdownMenuOpen: !this.state.isDropdownMenuOpen
-    });
-  };
-
   render() {
-    const { isDropdownMenuOpen } = this.state;
     const { sortBy, sortOrder, className } = this.props;
-    const sortOptions = this.sortOptions.map(item => {
-      return {
-        ...item,
-        isSelected: item.value == `${sortBy}-${sortOrder}`
-      };
-    });
+    const sortOptions = buildSortMenuItems({ sortOptions: this.sortOptions, sortBy, sortOrder });
 
     return (
-      <Dropdown
-        isOpen={isDropdownMenuOpen}
-        toggle={this.toggleDropdownMenu}
+      <CustomDropdown
+        target="sort-icon"
+        items={sortOptions}
+        variant="control"
         className={className || ''}
-      >
-        <DropdownToggle
-          id="sort-icon"
-          tag="span"
-          role="button"
-          tabIndex="0"
-          className="cur-view-path-btn px-1"
-          data-toggle="dropdown"
-          aria-label={gettext('Switch sort mode')}
-          aria-expanded={isDropdownMenuOpen}
-        >
-          <Icon symbol="sort" />
-          <Tooltip target="sort-icon">{gettext('Switch sort mode')}</Tooltip>
-        </DropdownToggle>
-        <DropdownMenu className="mt-1">
-          {sortOptions.map((item, index) => {
-            return (
-              <DropdownItem key={index} onClick={this.props.onSelectSortOption.bind(this, item)} className="pl-5 position-relative">
-                {item.isSelected && <span className="dropdown-item-tick"><Icon symbol="check-thin" /></span>}
-                {item.text}
-              </DropdownItem>
-            );
-          })}
-        </DropdownMenu>
-      </Dropdown>
+        trigger={(
+          <>
+            <Icon symbol="sort" />
+            <Tooltip target="sort-icon">{gettext('Switch sort mode')}</Tooltip>
+          </>
+        )}
+        triggerClassName="cur-view-path-btn px-1"
+        toggleProps={{ tag: 'span', 'aria-label': gettext('Switch sort mode') }}
+        menuPortal={false}
+        onItemClick={(selectedItem) => this.props.onSelectSortOption(selectedItem.sortOption)}
+      />
     );
   }
 
