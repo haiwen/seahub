@@ -14,7 +14,7 @@ from seaserv import seafile_api
 from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_INVISIBLE
 from seahub.utils import gen_inner_file_get_url, gen_inner_file_upload_url
 from seahub.group.utils import is_group_admin
-from seahub.settings import SECRET_KEY, SEAFEVENTS_SERVER_URL
+from seahub.settings import SECRET_KEY, SEAHUB_IO_LOCAL_SERVER_URL
 
 
 logger = logging.getLogger(__name__)
@@ -340,7 +340,7 @@ def add_convert_wiki_task(params):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
-    url = urljoin(SEAFEVENTS_SERVER_URL, '/add-convert-wiki-task')
+    url = urljoin(SEAHUB_IO_LOCAL_SERVER_URL, '/add-convert-wiki-task')
     resp = requests.get(url, params=params, headers=headers)
     return json.loads(resp.content)['task_id']
 
@@ -349,7 +349,7 @@ def import_conflunece_to_wiki(params):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
-    url = urljoin(SEAFEVENTS_SERVER_URL, '/import-confluence-to-wiki')
+    url = urljoin(SEAHUB_IO_LOCAL_SERVER_URL, '/import-confluence-to-wiki')
     resp = requests.post(url, json=params, headers=headers, timeout=30)
     return json.loads(resp.content)['task_id']
 
@@ -358,6 +358,6 @@ def import_wiki_page(params):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
-    url = urljoin(SEAFEVENTS_SERVER_URL, '/import-wiki-page')
+    url = urljoin(SEAHUB_IO_LOCAL_SERVER_URL, '/import-wiki-page')
     resp = requests.post(url, json=params, headers=headers, timeout=30)
     return json.loads(resp.content)['task_id']

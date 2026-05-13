@@ -89,7 +89,7 @@ class ImageCaption(APIView):
         }
         metadata_server_api = MetadataServerAPI(repo_id, user=request.user.username)
 
-        from seafevents.repo_metadata.constants import METADATA_TABLE
+        from seahub_io.repo_metadata.constants import METADATA_TABLE
 
         sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}`=?;'
         parameters = [record_id]
@@ -253,7 +253,7 @@ class GenerateFileTags(APIView):
             params['lang'] = record.tags_lang if record and record.tags_enabled else None
         else:
             from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
-            from seafevents.repo_metadata.constants import TAGS_TABLE
+            from seahub_io.repo_metadata.constants import TAGS_TABLE
             metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
             sql = f'SELECT `{TAGS_TABLE.columns.name.name}` FROM `{TAGS_TABLE.name}`'

@@ -8,7 +8,7 @@ import time
 from django.core.cache import cache
 from urllib.parse import urljoin
 
-from seahub.settings import EVENTS_CONFIG_FILE, CLOUD_MODE, SECRET_KEY, SEAFEVENTS_SERVER_URL
+from seahub.settings import EVENTS_CONFIG_FILE, CLOUD_MODE, SECRET_KEY, SEAHUB_IO_LOCAL_SERVER_URL
 from seahub.utils.file_types import IMAGE, DOCUMENT, SPREADSHEET, SVG, PDF, \
         MARKDOWN, VIDEO, AUDIO, TEXT, SEADOC
 from seahub.utils import get_user_repos, normalize_cache_key
@@ -258,7 +258,7 @@ def ai_search_wikis(params):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
-    url = urljoin(SEAFEVENTS_SERVER_URL, '/search-wikis')
+    url = urljoin(SEAHUB_IO_LOCAL_SERVER_URL, '/search-wikis')
     resp = requests.post(url, json=params, headers=headers)
     if resp.status_code == 500:
         raise Exception('search in wikis error status: %s body: %s', resp.status_code, resp.text)
@@ -272,7 +272,7 @@ def search(params):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
-    url = urljoin(SEAFEVENTS_SERVER_URL, '/search')
+    url = urljoin(SEAHUB_IO_LOCAL_SERVER_URL, '/search')
     resp = requests.post(url, json=params, headers=headers)
     return resp
 

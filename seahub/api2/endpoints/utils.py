@@ -20,7 +20,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_e
 from seahub.utils import get_log_events_by_time, is_pro_version, is_org_context
 
 from seahub.settings import SEADOC_PRIVATE_KEY, FILE_CONVERTER_SERVER_URL, SECRET_KEY, \
-                            SEAFEVENTS_SERVER_URL
+                            SEAFEVENTS_SERVER_URL, SEAHUB_IO_LOCAL_SERVER_URL
 
 
 try:
@@ -319,9 +319,9 @@ def export_logs_to_excel(start, end, log_type, org_id=None):
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
     if not org_id:
-        url = urljoin(SEAFEVENTS_SERVER_URL, '/add-export-log-task')
+        url = urljoin(SEAHUB_IO_LOCAL_SERVER_URL, '/add-export-log-task')
     else:
-        url = urljoin(SEAFEVENTS_SERVER_URL, '/add-org-export-log-task')
+        url = urljoin(SEAHUB_IO_LOCAL_SERVER_URL, '/add-org-export-log-task')
     params = {'start_time': start_time, 'end_time': end_time, 'log_type': log_type, 'org_id': org_id}
     resp = requests.get(url, params=params, headers=headers)
     return json.loads(resp.content)['task_id']
@@ -331,7 +331,7 @@ def event_export_status(task_id):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
-    url = urljoin(SEAFEVENTS_SERVER_URL, '/query-export-status')
+    url = urljoin(SEAHUB_IO_LOCAL_SERVER_URL, '/query-export-status')
     params = {'task_id': task_id}
     resp = requests.get(url, params=params, headers=headers)
 
@@ -342,7 +342,7 @@ def event_import_status(task_id):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
-    url = urljoin(SEAFEVENTS_SERVER_URL, '/query-import-status')
+    url = urljoin(SEAHUB_IO_LOCAL_SERVER_URL, '/query-import-status')
     params = {'task_id': task_id}
     resp = requests.get(url, params=params, headers=headers)
 
@@ -353,7 +353,7 @@ def delete_user_monitored_cache(params):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
-    url = urljoin(SEAFEVENTS_SERVER_URL, '/delete-repo-monitored-user-cache')
+    url = urljoin(SEAHUB_IO_LOCAL_SERVER_URL, '/delete-repo-monitored-user-cache')
     resp = requests.post(url, json=params, headers=headers)
     return resp
 
@@ -371,7 +371,7 @@ def add_repo_archive_task_request(repo_id, orig_storage_id, dest_storage_id, op_
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
-    url = urljoin(SEAFEVENTS_SERVER_URL, '/add-repo-archive-task')
+    url = urljoin(SEAHUB_IO_LOCAL_SERVER_URL, '/add-repo-archive-task')
     params = {
         'repo_id': repo_id,
         'orig_storage_id': orig_storage_id,
@@ -387,7 +387,7 @@ def event_archive_status(task_id):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
-    url = urljoin(SEAFEVENTS_SERVER_URL, '/query-archive-status')
+    url = urljoin(SEAHUB_IO_LOCAL_SERVER_URL, '/query-archive-status')
     params = {'task_id': task_id}
     resp = requests.get(url, params=params, headers=headers)
     return resp

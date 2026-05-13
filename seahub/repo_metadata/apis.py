@@ -240,7 +240,7 @@ class MetadataCheckRecordsLimit(APIView):
             record = RepoMetadata.objects.filter(repo_id=repo_id).first()
             if record and record.enabled:
                 metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-                from seafevents.repo_metadata.constants import METADATA_TABLE
+                from seahub_io.repo_metadata.constants import METADATA_TABLE
                 sql = f'SELECT COUNT(1) AS records_count FROM `{METADATA_TABLE.name}`'
                 query_result = metadata_server_api.query_rows(sql)
                 results = query_result.get('results') or []
@@ -447,7 +447,7 @@ class MetadataRecords(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
-        from seafevents.repo_metadata.constants import METADATA_TABLE
+        from seahub_io.repo_metadata.constants import METADATA_TABLE
         try:
             columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
             columns = columns_data.get('columns', [])
@@ -550,7 +550,7 @@ class MetadataRecord(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
-        from seafevents.repo_metadata.constants import METADATA_TABLE
+        from seahub_io.repo_metadata.constants import METADATA_TABLE
 
         sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}`=?;'
         parameters = [record_id]
@@ -638,7 +638,7 @@ class MetadataRecord(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
-        from seafevents.repo_metadata.constants import METADATA_TABLE
+        from seahub_io.repo_metadata.constants import METADATA_TABLE
         try:
             columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
             columns = columns_data.get('columns', [])
@@ -721,7 +721,7 @@ class MetadataColumns(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
-        from seafevents.repo_metadata.constants import METADATA_TABLE, MetadataColumn
+        from seahub_io.repo_metadata.constants import METADATA_TABLE, MetadataColumn
         columns = metadata_server_api.list_columns(METADATA_TABLE.id).get('columns')
         column_keys = set()
         column_names = set()
@@ -781,7 +781,7 @@ class MetadataColumns(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        from seafevents.repo_metadata.constants import METADATA_TABLE, MetadataColumn
+        from seahub_io.repo_metadata.constants import METADATA_TABLE, MetadataColumn
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         columns = metadata_server_api.list_columns(METADATA_TABLE.id).get('columns')
         try:
@@ -827,7 +827,7 @@ class MetadataColumns(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        from seafevents.repo_metadata.constants import METADATA_TABLE
+        from seahub_io.repo_metadata.constants import METADATA_TABLE
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         columns = metadata_server_api.list_columns(METADATA_TABLE.id).get('columns')
@@ -883,7 +883,7 @@ class MetadataBatchRecords(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
-        from seafevents.repo_metadata.constants import METADATA_TABLE
+        from seahub_io.repo_metadata.constants import METADATA_TABLE
 
         try:
             columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
@@ -1459,8 +1459,8 @@ class FacesRecords(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
-        from seafevents.repo_metadata.constants import FACES_TABLE
-        from seafevents.face_recognition.constants import UNKNOWN_PEOPLE_NAME
+        from seahub_io.repo_metadata.constants import FACES_TABLE
+        from seahub_io.face_recognition.constants import UNKNOWN_PEOPLE_NAME
         sql = f'SELECT * FROM `{FACES_TABLE.name}` LIMIT {start}, {limit}'
 
         try:
@@ -1513,7 +1513,7 @@ class FacesRecord(APIView):
         name = request.data.get('name')
         record_id = request.data.get('record_id')
 
-        from seafevents.face_recognition.constants import UNKNOWN_PEOPLE_NAME
+        from seahub_io.face_recognition.constants import UNKNOWN_PEOPLE_NAME
         if not name or name == UNKNOWN_PEOPLE_NAME:
             error_msg = 'name invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -1538,7 +1538,7 @@ class FacesRecord(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-        from seafevents.repo_metadata.constants import FACES_TABLE
+        from seahub_io.repo_metadata.constants import FACES_TABLE
 
         try:
             faces_table = get_table_by_name(metadata_server_api, FACES_TABLE.name)
@@ -1616,7 +1616,7 @@ class PeoplePhotos(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-        from seafevents.repo_metadata.constants import METADATA_TABLE, FACES_TABLE
+        from seahub_io.repo_metadata.constants import METADATA_TABLE, FACES_TABLE
 
         sql = f'SELECT `{FACES_TABLE.columns.photo_links.name}`, `{FACES_TABLE.columns.excluded_photo_links.name}`, `{FACES_TABLE.columns.included_photo_links.name}` FROM `{FACES_TABLE.name}` WHERE `{FACES_TABLE.columns.id.name}` = "{people_id}"'
 
@@ -1641,8 +1641,8 @@ class PeoplePhotos(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        from seafevents.repo_metadata.utils import gen_sorts_sql
-        from seafevents.repo_metadata.constants import PrivatePropertyKeys
+        from seahub_io.repo_metadata.utils import gen_sorts_sql
+        from seahub_io.repo_metadata.constants import PrivatePropertyKeys
         try:
             columns = metadata_server_api.list_columns(METADATA_TABLE.id).get('columns')
             order_sql = gen_sorts_sql(METADATA_TABLE, columns, view.get('sorts'))
@@ -1702,8 +1702,8 @@ class PeoplePhotos(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        from seafevents.repo_metadata.constants import FACES_TABLE
-        from seafevents.face_recognition.constants import UNKNOWN_PEOPLE_NAME
+        from seahub_io.repo_metadata.constants import FACES_TABLE
+        from seahub_io.face_recognition.constants import UNKNOWN_PEOPLE_NAME
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         try:
             faces_table = get_table_by_name(metadata_server_api, FACES_TABLE.name)
@@ -1791,7 +1791,7 @@ class PeoplePhotos(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        from seafevents.repo_metadata.constants import FACES_TABLE
+        from seahub_io.repo_metadata.constants import FACES_TABLE
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         try:
             faces_table = get_table_by_name(metadata_server_api, FACES_TABLE.name)
@@ -2162,7 +2162,7 @@ class MetadataTags(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-        from seafevents.repo_metadata.constants import TAGS_TABLE
+        from seahub_io.repo_metadata.constants import TAGS_TABLE
 
         sql = f'SELECT * FROM `{TAGS_TABLE.name}` ORDER BY `_ctime` LIMIT {start}, {limit}'
         try:
@@ -2197,7 +2197,7 @@ class MetadataTags(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
-        from seafevents.repo_metadata.constants import TAGS_TABLE
+        from seahub_io.repo_metadata.constants import TAGS_TABLE
         try:
             tags_table = get_table_by_name(metadata_server_api, TAGS_TABLE.name)
         except Exception as e:
@@ -2278,7 +2278,7 @@ class MetadataTags(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
-        from seafevents.repo_metadata.constants import TAGS_TABLE
+        from seahub_io.repo_metadata.constants import TAGS_TABLE
         try:
             tags_table = get_table_by_name(metadata_server_api, TAGS_TABLE.name)
         except Exception as e:
@@ -2363,7 +2363,7 @@ class MetadataTags(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
-        from seafevents.repo_metadata.constants import TAGS_TABLE
+        from seahub_io.repo_metadata.constants import TAGS_TABLE
         try:
             tags_table = get_table_by_name(metadata_server_api, TAGS_TABLE.name)
         except Exception as e:
@@ -2423,7 +2423,7 @@ class MetadataTagsLinks(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        from seafevents.repo_metadata.constants import TAGS_TABLE
+        from seahub_io.repo_metadata.constants import TAGS_TABLE
         tables = metadata.get('tables', [])
         tags_table_id = [table['id'] for table in tables if table['name'] == TAGS_TABLE.name]
         tags_table_id = tags_table_id[0] if tags_table_id else None
@@ -2500,7 +2500,7 @@ class MetadataTagsLinks(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        from seafevents.repo_metadata.constants import TAGS_TABLE
+        from seahub_io.repo_metadata.constants import TAGS_TABLE
         tables = metadata.get('tables', [])
         tags_table_id = [table['id'] for table in tables if table['name'] == TAGS_TABLE.name]
         tags_table_id = tags_table_id[0] if tags_table_id else None
@@ -2568,7 +2568,7 @@ class MetadataTagsLinks(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        from seafevents.repo_metadata.constants import TAGS_TABLE
+        from seahub_io.repo_metadata.constants import TAGS_TABLE
         tables = metadata.get('tables', [])
         tags_table_id = [table['id'] for table in tables if table['name'] == TAGS_TABLE.name]
         tags_table_id = tags_table_id[0] if tags_table_id else None
@@ -2629,7 +2629,7 @@ class MetadataFileTags(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        from seafevents.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
+        from seahub_io.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
         row_id_map = {}
@@ -2676,7 +2676,7 @@ class MetadataTagFiles(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
-        from seafevents.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
+        from seahub_io.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
 
         tag_files_record_sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.id.name}` = "{tag_id}"'
         try:
@@ -2736,7 +2736,7 @@ class MetadataTagsFiles(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
-        from seafevents.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
+        from seahub_io.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
 
         tags_ids_str = ', '.join([f'"{id}"' for id in tags_ids])
         sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.id.name}` in ({tags_ids_str})'
@@ -2811,7 +2811,7 @@ class MetadataMergeTags(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        from seafevents.repo_metadata.constants import TAGS_TABLE
+        from seahub_io.repo_metadata.constants import TAGS_TABLE
         tables = metadata.get('tables', [])
         tags_table_id = [table['id'] for table in tables if table['name'] == TAGS_TABLE.name]
         tags_table_id = tags_table_id[0] if tags_table_id else None
@@ -2944,7 +2944,7 @@ class PeopleCoverPhoto(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
-        from seafevents.repo_metadata.constants import METADATA_TABLE
+        from seahub_io.repo_metadata.constants import METADATA_TABLE
 
         sql = f'SELECT `{METADATA_TABLE.columns.obj_id.name}`, `{METADATA_TABLE.columns.parent_dir.name}`, `{METADATA_TABLE.columns.file_name.name}` FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}` = "{record_id}"'
 
@@ -3133,7 +3133,7 @@ class MetadataMigrateTags(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        from seafevents.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
+        from seahub_io.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
         tags_table = get_table_by_name(metadata_server_api, TAGS_TABLE.name)
         if not tags_table:
             return api_error(status.HTTP_404_NOT_FOUND, 'tags table not found')
@@ -3202,7 +3202,7 @@ class MetadataExportTags(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
-        from seafevents.repo_metadata.constants import TAGS_TABLE
+        from seahub_io.repo_metadata.constants import TAGS_TABLE
 
 
         export_data = []
@@ -3339,7 +3339,7 @@ class MetadataImportTags(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-        from seafevents.repo_metadata.constants import TAGS_TABLE
+        from seahub_io.repo_metadata.constants import TAGS_TABLE
         try:
             tags_table = get_table_by_name(metadata_server_api, TAGS_TABLE.name)
             if not tags_table:
@@ -3413,7 +3413,7 @@ class MetadataStatistics(APIView):
 
         try:
             metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-            from seafevents.repo_metadata.constants import METADATA_TABLE
+            from seahub_io.repo_metadata.constants import METADATA_TABLE
 
             statistics = self._get_sql_statistics(metadata_server_api, METADATA_TABLE)
 
