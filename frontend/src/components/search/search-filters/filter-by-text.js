@@ -52,7 +52,7 @@ const FilterByText = ({ searchFilenameOnly, onChange }) => {
             {options.map((option) => {
               const isSelected = option.key === value;
               return (
-                <DropdownItem key={option.key} data-toggle={option.key} onClick={onOptionClick}>
+                <DropdownItem key={option.key} data-toggle={option.key} className="justify-content-between" onClick={onOptionClick}>
                   {option.label}
                   {isSelected && <Icon symbol="check-thin" className="dropdown-item-tick" />}
                 </DropdownItem>

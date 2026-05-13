@@ -167,9 +167,10 @@ class SelectEditor extends React.Component {
           <div className="d-flex align-item-center">
             <span>{this.props.translateOption(currentOption)}</span>
             <OpIcon
+              id="permission-editor-edit-btn"
               className={classnames('op-icon ml-1', { 'invisible': !isEditIconShow })}
               symbol="rename"
-              title={gettext('Edit')}
+              tooltip={gettext('Edit')}
               op={this.onEditPermission}
             />
           </div>

@@ -1,4 +1,5 @@
 .seahub-switch .custom-switch {
+  display: flex;
   cursor: pointer;
 }
 

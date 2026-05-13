@@ -50,6 +50,7 @@ const PageItem = ({
   const [pageName, setPageName] = useState(page.name || '');
   const [isSelected, setIsSelected] = useState(page.id === getCurrentPageId());
   const [isMouseEntered, setIsMouseEntered] = useState(false);
+  const [isDropdownFrozen, setIsDropdownFrozen] = useState(false);
 
   const ref = useRef(null);
   const wrapperRef = useRef(null);
@@ -165,6 +166,14 @@ const PageItem = ({
 
   const onMouseLeave = () => {
     setIsMouseEntered(false);
+  };
+
+  const onDropdownFreeze = () => {
+    setIsDropdownFrozen(true);
+  };
+
+  const onDropdownUnfreeze = () => {
+    setIsDropdownFrozen(false);
   };
 
   const onClickPageItem = () => {
@@ -357,7 +366,7 @@ const PageItem = ({
                 )}
               </div>
             </div>
-            {isMouseEntered &&
+            {(isMouseEntered || isDropdownFrozen) &&
             <div className="d-none d-md-flex">
               <PageDropdownMenu
                 page={page}
@@ -368,6 +377,8 @@ const PageItem = ({
                 onDeletePage={() => onDeletePage(page.id)}
                 toggleInsertSiblingPage={toggleInsertSiblingPage}
                 importPage={importPage}
+                freezeItem={onDropdownFreeze}
+                unfreezeItem={onDropdownUnfreeze}
               />
               <OpIcon
                 id="add-new-page"

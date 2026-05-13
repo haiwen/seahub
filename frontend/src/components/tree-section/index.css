@@ -59,8 +59,6 @@
 }
 
 .tree-section .tree-section-header-operation .dropdown {
-  height: 100%;
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -68,8 +66,11 @@
 
 .tree-section .tree-section-header-operation .dropdown .more-dropdown-toggle,
 .tree-section .tree-section-header-operation.tree-section-create-operation {
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
+  justify-content: center;
   color: #666;
 }
 
@@ -109,15 +110,6 @@
 .tree-section .tree-section-body .tree-view {
   margin-left: 0px;
   padding: 0px;
-}
-
-.tree-section .tree-section-body .right-icon {
-  width: 20px;
-  height: 20px;
-  top: 4px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .tree-section .tree-section-body .right-icon:hover {

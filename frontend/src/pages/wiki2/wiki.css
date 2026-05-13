@@ -163,20 +163,20 @@ body {
   width: 100%;
 }
 
-.wiki2-file-history-button .freeze-document-switch .custom-switch-description {
+.dropdown-item .freeze-document-switch .custom-switch-description {
   margin-left: 0;
   color: var(--bs-body-color);
   transition: none;
 }
 
-.wiki2-file-history-button .freeze-document-switch:hover .custom-switch-description {
+.dropdown-item:hover .freeze-document-switch .custom-switch-description {
   color: #fff;
   transition: none;
 }
 
-.wiki2-file-history-button .freeze-document-switch .custom-switch-indicator {
+.dropdown-item .freeze-document-switch .custom-switch-indicator {
   position: absolute;
-  right: 16px;
+  right: 12px;
 }
 
 .wiki2-top-nav .locked {

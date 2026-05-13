@@ -1,13 +1,50 @@
 import React, { useCallback } from 'react';
 import TextTranslation from '../../../utils/text-translation';
-import { isMobile } from '../../../utils/utils';
+import { baiduMapKey, gettext, googleMapKey } from '@/utils/constants';
 import EventBus from '../../common/event-bus';
-import { EVENT_BUS_TYPE, VIEW_TYPE } from '../../../metadata/constants';
-import { getNewViewSubMenu, KEY_ADD_VIEW_MAP } from './new-view-menu';
+import { EVENT_BUS_TYPE, VIEW_TYPE, VIEW_TYPE_ICON, VIEW_TYPE_LABEL } from '../../../metadata/constants';
 import Icon from '../../icon';
 import Tooltip from '@/components/tooltip';
-import { gettext } from '@/utils/constants';
 import CustomDropdown from '../../dropdown';
+
+export const ADD_VIEW_KEY = {
+  ADD_FOLDER: 'ADD_FOLDER',
+  ADD_TABLE: 'ADD_TABLE',
+  ADD_GALLERY: 'ADD_GALLERY',
+  ADD_KANBAN: 'ADD_KANBAN',
+  ADD_MAP: 'ADD_MAP',
+  ADD_CARD: 'ADD_CARD',
+  ADD_STATISTICS: 'ADD_STATISTICS',
+};
+
+const ADD_VIEW_OPTIONS = [
+  { key: ADD_VIEW_KEY.ADD_TABLE, type: VIEW_TYPE.TABLE },
+  { key: ADD_VIEW_KEY.ADD_GALLERY, type: VIEW_TYPE.GALLERY },
+  { key: ADD_VIEW_KEY.ADD_KANBAN, type: VIEW_TYPE.KANBAN },
+  { key: ADD_VIEW_KEY.ADD_CARD, type: VIEW_TYPE.CARD },
+  { key: ADD_VIEW_KEY.ADD_STATISTICS, type: VIEW_TYPE.STATISTICS },
+];
+
+export const getNewViewSubMenu = () => {
+  const options = [...ADD_VIEW_OPTIONS];
+  const hasMapOption = options.some((option) => option.type === VIEW_TYPE.MAP);
+
+  if (!hasMapOption && (baiduMapKey || googleMapKey)) {
+    options.push({ key: ADD_VIEW_KEY.ADD_MAP, type: VIEW_TYPE.MAP });
+  }
+
+  return options.map(({ key, type }) => ({
+    key,
+    label: VIEW_TYPE_LABEL[type],
+    icon_dom: <Icon symbol={VIEW_TYPE_ICON[type] || VIEW_TYPE.TABLE} className="metadata-view-icon" />,
+  }));
+};
+
+export const getNewViewMenuItem = () => ({
+  ...TextTranslation.ADD_VIEW,
+  subOpListHeader: gettext('New view'),
+  children: getNewViewSubMenu(),
+});
 
 const ViewsMoreOperations = ({ menuProps }) => {
   const eventBus = EventBus.getInstance();
@@ -18,31 +55,31 @@ const ViewsMoreOperations = ({ menuProps }) => {
 
   const clickMenu = (option) => {
     switch (option) {
-      case KEY_ADD_VIEW_MAP.ADD_FOLDER: {
+      case ADD_VIEW_KEY.ADD_FOLDER: {
         eventBus.dispatch(EVENT_BUS_TYPE.ADD_FOLDER);
         return;
       }
-      case KEY_ADD_VIEW_MAP.ADD_TABLE: {
+      case ADD_VIEW_KEY.ADD_TABLE: {
         addView(VIEW_TYPE.TABLE);
         return;
       }
-      case KEY_ADD_VIEW_MAP.ADD_GALLERY: {
+      case ADD_VIEW_KEY.ADD_GALLERY: {
         addView(VIEW_TYPE.GALLERY);
         return;
       }
-      case KEY_ADD_VIEW_MAP.ADD_KANBAN: {
+      case ADD_VIEW_KEY.ADD_KANBAN: {
         addView(VIEW_TYPE.KANBAN);
         return;
       }
-      case KEY_ADD_VIEW_MAP.ADD_MAP: {
+      case ADD_VIEW_KEY.ADD_MAP: {
         addView(VIEW_TYPE.MAP);
         return;
       }
-      case KEY_ADD_VIEW_MAP.ADD_CARD: {
+      case ADD_VIEW_KEY.ADD_CARD: {
         addView(VIEW_TYPE.CARD);
         return;
       }
-      case KEY_ADD_VIEW_MAP.ADD_STATISTICS: {
+      case ADD_VIEW_KEY.ADD_STATISTICS: {
         addView(VIEW_TYPE.STATISTICS);
         return;
       }
@@ -55,8 +92,8 @@ const ViewsMoreOperations = ({ menuProps }) => {
   const getMoreOperationsMenus = useCallback(() => {
     return [
       {
-        key: KEY_ADD_VIEW_MAP.ADD_FOLDER,
-        value: TextTranslation.ADD_FOLDER.value,
+        key: ADD_VIEW_KEY.ADD_FOLDER,
+        label: TextTranslation.ADD_FOLDER.value,
         icon_dom: <Icon symbol="folder" className="metadata-view-icon" />
       },
       'Divider',

@@ -406,7 +406,6 @@ img[src=""], img:not([src]) {
   align-items: center;
   word-break: keep-all;
   height: 24px;
-  overflow: hidden;
 }
 
 .path-container .path-item {

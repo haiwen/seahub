@@ -9,13 +9,13 @@ import { useMetadata } from '../hooks';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { Utils, isMobile } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
+import { gettext } from '../../utils/constants';
 import { validateName } from '../utils/validate';
 import { METADATA_VIEWS_DRAG_DATA_KEY, METADATA_VIEWS_KEY, TREE_NODE_LEFT_INDENT, VIEW_TYPE, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW } from '../constants';
-import { getNewViewMenuItem, KEY_ADD_VIEW_MAP } from '../../components/dir-view-mode/dir-views/new-view-menu';
 import Icon from '../../components/icon';
 import Tooltip from '@/components/tooltip';
-import { gettext } from '@/utils/constants';
 import CustomDropdown from '../../components/dropdown';
+import { getNewViewMenuItem, ADD_VIEW_KEY } from '../../components/dir-view-mode/dir-views/views-more-operations';
 
 const ViewsFolder = ({
   idx, leftIndent, folder, currentPath, userPerm, canDeleteView, getFoldersNames, getMoveableFolders, generateNewViewDefaultName,
@@ -100,27 +100,27 @@ const ViewsFolder = ({
 
   const clickMenu = useCallback((operationKey) => {
     switch (operationKey) {
-      case KEY_ADD_VIEW_MAP.ADD_TABLE: {
+      case ADD_VIEW_KEY.ADD_TABLE: {
         prepareAddView(VIEW_TYPE.TABLE);
         return;
       }
-      case KEY_ADD_VIEW_MAP.ADD_GALLERY: {
+      case ADD_VIEW_KEY.ADD_GALLERY: {
         prepareAddView(VIEW_TYPE.GALLERY);
         return;
       }
-      case KEY_ADD_VIEW_MAP.ADD_KANBAN: {
+      case ADD_VIEW_KEY.ADD_KANBAN: {
         prepareAddView(VIEW_TYPE.KANBAN);
         return;
       }
-      case KEY_ADD_VIEW_MAP.ADD_MAP: {
+      case ADD_VIEW_KEY.ADD_MAP: {
         prepareAddView(VIEW_TYPE.MAP);
         return;
       }
-      case KEY_ADD_VIEW_MAP.ADD_CARD: {
+      case ADD_VIEW_KEY.ADD_CARD: {
         prepareAddView(VIEW_TYPE.CARD);
         return;
       }
-      case KEY_ADD_VIEW_MAP.ADD_STATISTICS: {
+      case ADD_VIEW_KEY.ADD_STATISTICS: {
         prepareAddView(VIEW_TYPE.STATISTICS);
         return;
       }

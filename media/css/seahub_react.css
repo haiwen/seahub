@@ -424,21 +424,6 @@ textarea::placeholder {
   text-align: center;
 }
 
-.link-dropdown-item {
-  display: block;
-  padding: 0.25rem 1.5rem;
-  color: #6e7687;
-}
-
-.link-dropdown-item:hover {
-  color: #fff;
-  text-decoration: none;
-}
-
-.link-dropdown-item:active {
-  color: #fff;
-}
-
 .side-nav-toggle {
   /* just for control side-panel */
   margin-right: 0.9375rem;
@@ -1334,9 +1319,18 @@ a.table-sort-op:hover {
   color: #666;
 }
 
+.dropdown-item:hover {
+  background-color: var(--bs-dropdown-link-hover-bg);
+  color: var(--bs-body-color);
+}
+
 .dropdown-item:active {
   background-color: var(--bs-dropdown-link-hover-bg);
   color: var(--bs-body-color);
+}
+
+.dropdown-item:focus-visible {
+  outline: none;
 }
 
 [data-bs-theme="dark"] .dropdown-item .sf3-font,

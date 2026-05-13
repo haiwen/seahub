@@ -27,7 +27,3 @@
 .wiki-nav-body .dropdown-item .seafile-multicolor-icon {
   fill: #666666 !important;
 }
-
-.wiki-nav-body .dropdown-item:hover .seafile-multicolor-icon {
-  fill: #fff !important;
-}

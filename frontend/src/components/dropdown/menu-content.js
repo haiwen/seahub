@@ -142,6 +142,7 @@ const MenuSubmenu = ({
             },
           },
         ]}
+        flip={false}
         data-depth={depth + 1}
         onMouseEnter={openSubmenu}
         onMouseLeave={closeSubmenu}
@@ -177,6 +178,7 @@ const MenuSubmenu = ({
             <CustomDropdownItem
               key={subItem.key || index}
               item={subItem}
+              rightSlot={subItem.right_slot}
               onClick={(event) => onItemSelect(subItem, event)}
               onKeyDown={(event) => {
                 if (event.key === 'Enter' || event.key === ' ') {
@@ -255,6 +257,7 @@ export const CustomDropdownMenuContent = ({
           <CustomDropdownItem
             key={menuItem.key || index}
             item={menuItem}
+            rightSlot={menuItem.right_slot}
             onClick={(event) => onItemClick(menuItem, event)}
             onMouseMove={() => activePath.length > 0 && setActivePath([])}
             onKeyDown={(event) => {
