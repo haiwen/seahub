@@ -690,6 +690,9 @@ class Records extends Component {
     }
     let updatedTreeMetrics = { ...treeMetrics };
     TreeMetrics.deselectAllTreeNodes(updatedTreeMetrics);
+    if (this.props.updateSelectedRecordIds) {
+      this.props.updateSelectedRecordIds(TreeMetrics.getSelectedIds(updatedTreeMetrics));
+    }
     this.setState({
       treeMetrics: updatedTreeMetrics,
       lastRowIdxUiSelected: { groupRecordIndex: -1, recordIndex: -1 },
