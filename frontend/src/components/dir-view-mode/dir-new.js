@@ -46,11 +46,13 @@ class DirNew extends React.Component {
   };
 
   onUploadFile = (e) => {
-    this.props.onUploadFile(e);
+    const uploadToRoot = true;
+    this.props.onUploadFile(e, uploadToRoot);
   };
 
   onUploadFolder = (e) => {
-    this.props.onUploadFolder(e);
+    const uploadToRoot = true;
+    this.props.onUploadFolder(e, uploadToRoot);
   };
 
   onCreateFolder = () => {
