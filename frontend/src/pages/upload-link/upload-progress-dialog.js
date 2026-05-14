@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Button } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
 import UploadListItem from './upload-list-item';
 import ForbidUploadListItem from './forbid-upload-list-item';
+import CustomDropdown from '../../components/dropdown';
 
 const propTypes = {
   totalProgress: PropTypes.number.isRequired,
@@ -23,17 +24,11 @@ const propTypes = {
 
 class UploadProgressDialog extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      dropdownOpen: false
-    };
-  }
-
-  toggleDropdown = () => {
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen
-    });
+  getMenuItems = () => {
+    return [
+      { key: 'upload-files', label: gettext('Upload Files'), onClick: this.props.onFileUpload },
+      { key: 'upload-folder', label: gettext('Upload Folder'), onClick: this.props.onFolderUpload },
+    ];
   };
 
   render() {
@@ -54,13 +49,11 @@ class UploadProgressDialog extends React.Component {
     return (
       <Fragment>
         <div className="text-center">
-          <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggleDropdown}>
-            <DropdownToggle color="primary" caret>{gettext('Upload')}</DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem onClick={this.props.onFileUpload}>{gettext('Upload Files')}</DropdownItem>
-              <DropdownItem onClick={this.props.onFolderUpload}>{gettext('Upload Folder')}</DropdownItem>
-            </DropdownMenu>
-          </ButtonDropdown>
+          <CustomDropdown
+            items={this.getMenuItems()}
+            trigger={gettext('Upload')}
+            toggleProps={{ color: 'primary', caret: true }}
+          />
           <Button color="primary" outline={true} className="ml-4"
             onClick={this.props.onCancelAllUploading}
             disabled={!isUploading}>

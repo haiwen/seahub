@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import className from 'classnames';
 import { navigate } from '@gatsbyjs/reach-router';
-import { Button, DropdownMenu, Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import { Button } from 'reactstrap';
 import { gettext } from '../utils/constants';
 import Icon from './icon';
+import CustomDropdown from './dropdown';
 
 import '../css/pagination.css';
 
@@ -25,7 +26,7 @@ class Paginator extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isMenuShow: false
+      isMenuOpen: false
     };
   }
 
@@ -63,22 +64,18 @@ class Paginator extends Component {
     return gettext('{number_placeholder} / Page').replace('{number_placeholder}', perPage);
   };
 
-  toggleOperationMenu = (e) => {
-    e.stopPropagation();
-    this.setState({ isMenuShow: !this.state.isMenuShow });
+  handleMenuToggle = () => {
+    this.setState({ isMenuOpen: !this.state.isMenuOpen });
   };
 
-  renderDropdownItem = (curPerPage, perPage) => {
-    return (
-      <DropdownItem onClick={() => {this.resetPerPage(perPage);}} key={perPage} className='paginator-dropdown-item'>
-        <span className='paginator-dropdown-tick'>
-          {curPerPage === perPage && <Icon symbol="check-thin" />}
-        </span>
-        <span>
-          {this.getPerPageText(perPage)}
-        </span>
-      </DropdownItem>
-    );
+  getMenuItems = () => {
+    const { curPerPage } = this.props;
+    return PER_PAGES.map((perPage) => ({
+      key: perPage,
+      label: this.getPerPageText(perPage),
+      checked: curPerPage === perPage,
+      onClick: () => { this.resetPerPage(perPage); },
+    }));
   };
 
   render() {
@@ -102,25 +99,25 @@ class Paginator extends Component {
         >
           <Icon symbol="down" className="rotate-270" />
         </Button>
-        <Dropdown isOpen={this.state.isMenuShow} toggle={this.toggleOperationMenu} direction="up" className="paginator-dropdown ml-6">
-          <DropdownToggle
-            tag="button"
-            data-toggle="dropdown"
-            className="btn btn-secondary d-flex align-items-center"
-            aria-expanded={this.state.isMenuShow}
-            onClick={this.toggleOperationMenu}
-          >
-            <span className='pr-3'>{this.getPerPageText(curPerPage)}</span>
-            <span aria-hidden="true" className={className('d-inline-flex align-items-center', { 'rotate-180': this.state.isMenuShow })}>
-              <Icon symbol="down" />
-            </span>
-          </DropdownToggle>
-          <DropdownMenu className="paginator-dropdown-menu">
-            {PER_PAGES.map(perPage => {
-              return this.renderDropdownItem(curPerPage, perPage);
-            })}
-          </DropdownMenu>
-        </Dropdown>
+        <CustomDropdown
+          variant="control"
+          items={this.getMenuItems()}
+          trigger={(
+            <>
+              <span className='pr-3'>{this.getPerPageText(curPerPage)}</span>
+              <span aria-hidden="true" className={className('d-inline-flex align-items-center', { 'rotate-180': this.state.isMenuOpen })}>
+                <Icon symbol="down" />
+              </span>
+            </>
+          )}
+          triggerClassName="btn btn-secondary d-flex align-items-center"
+          toggleProps={{ tag: 'button' }}
+          menuClassName="paginator-dropdown-menu"
+          className="paginator-dropdown ml-6"
+          placement="top"
+          menuPortal={false}
+          onToggle={this.handleMenuToggle}
+        />
       </div>
     );
   }

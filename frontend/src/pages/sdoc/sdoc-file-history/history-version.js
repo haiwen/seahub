@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Modal, ModalBody } from 'reactstrap';
+import { Modal, ModalBody } from 'reactstrap';
 import classnames from 'classnames';
 import { gettext, filePath } from '../../../utils/constants';
 import URLDecorator from '../../../utils/url-decorator';
 import Rename from '../../../components/rename';
 import { isMobile } from '../../../utils/utils';
+import CustomDropdown from '../../../components/dropdown';
 
 import '../../../css/history-record-item.css';
 
@@ -156,22 +157,17 @@ class HistoryVersion extends React.Component {
               </Modal>
             </>
             :
-            <Dropdown isOpen={this.state.isMenuShow} toggle={this.onToggleClick}>
-              <DropdownToggle
-                tag='a'
-                className={`sf3-font sf3-font-more ${(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}`}
-                data-toggle="dropdown"
-                aria-expanded={this.state.isMenuShow}
-                title={gettext('More operations')}
-                aria-label={gettext('More operations')}
-              />
-              <DropdownMenu>
-                {(path[0] + path[1] + path[2] !== 0) && <DropdownItem onClick={this.onRestore}>{gettext('Restore')}</DropdownItem>}
-                <DropdownItem tag='a' href={url} onClick={this.onItemDownLoad}>{gettext('Download')}</DropdownItem>
-                {(path[0] !== 0 && path[1] !== 0 && path[2] !== 0) && <DropdownItem onClick={this.onItemCopy}>{gettext('Copy')}</DropdownItem>}
-                <DropdownItem onClick={this.toggleRename}>{gettext('Rename')}</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+            <CustomDropdown
+              items={[
+                ...(path[0] + path[1] + path[2] !== 0 ? [{ key: 'restore', label: gettext('Restore'), onClick: this.onRestore }] : []),
+                { key: 'download', label: gettext('Download'), onClick: () => { window.location = url; } },
+                ...(path[0] !== 0 && path[1] !== 0 && path[2] !== 0 ? [{ key: 'copy', label: gettext('Copy'), onClick: this.onItemCopy }] : []),
+                { key: 'rename', label: gettext('Rename'), onClick: this.toggleRename },
+              ]}
+              trigger={<></>}
+              triggerClassName={`sf3-font sf3-font-more ${(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}`}
+              toggleProps={{ tag: 'a', 'aria-label': gettext('More operations'), title: gettext('More operations') }}
+            />
           }
         </div>
       </li>

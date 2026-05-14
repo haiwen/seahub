@@ -23,7 +23,6 @@ class OpMenu extends React.Component {
         trigger={<Icon symbol="more-level" />}
         triggerClassName="op-icon"
         toggleProps={{ tag: 'span', 'aria-label': gettext('More operations'), title: gettext('More operations') }}
-        menuClassName="my-1 mr-2"
         menuPortal={false}
         freezeItem={this.props.onFreezedItem}
         unfreezeItem={this.props.onUnfreezedItem}

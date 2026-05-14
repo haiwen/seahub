@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext, filePath } from '../../utils/constants';
 import URLDecorator from '../../utils/url-decorator';
 import Icon from '../icon';
+import CustomDropdown from '../dropdown';
 
 import '../../css/history-record-item.css';
 
@@ -26,7 +26,7 @@ class HistoryListItem extends React.Component {
     super(props);
     this.state = {
       isShowOperationIcon: false,
-      isMenuShow: false,
+      isDropdownFrozen: false,
     };
   }
 
@@ -42,13 +42,18 @@ class HistoryListItem extends React.Component {
     }
   };
 
-  onToggleClick = (e) => {
-    this.setState({ isMenuShow: !this.state.isMenuShow });
+  handleDropdownOpen = () => {
+    this.setState({ isDropdownFrozen: true });
+    this.props.onFreezedItemToggle();
+  };
+
+  handleDropdownClose = () => {
+    this.setState({ isDropdownFrozen: false, isShowOperationIcon: false });
     this.props.onFreezedItemToggle();
   };
 
   onItemClick = () => {
-    this.setState({ isShowOperationIcon: false }); // restore to default state
+    this.setState({ isShowOperationIcon: false });
     if (this.props.item.commit_id === this.props.currentItem.commit_id) {
       return;
     }
@@ -60,8 +65,16 @@ class HistoryListItem extends React.Component {
     this.props.onItemRestore(this.props.currentItem);
   };
 
-  onItemDownload = () => {
-    // nothing todo
+  getMenuItems = () => {
+    if (!this.props.currentItem) return [];
+    let objID = this.props.currentItem.rev_file_id;
+    let url = URLDecorator.getUrl({ type: 'download_historic_file', filePath: filePath, objID: objID });
+    const items = [];
+    if (this.props.index !== 0) {
+      items.push({ key: 'restore', label: gettext('Restore'), onClick: this.onItemRestore });
+    }
+    items.push({ key: 'download', label: gettext('Download'), onClick: () => { window.location = url; } });
+    return items;
   };
 
   render() {
@@ -74,8 +87,6 @@ class HistoryListItem extends React.Component {
     if (this.props.item && this.props.currentItem) {
       isHighlightItem = this.props.item.commit_id === this.props.currentItem.commit_id;
     }
-    let objID = this.props.currentItem.rev_file_id;
-    let url = URLDecorator.getUrl({ type: 'download_historic_file', filePath: filePath, objID: objID });
     return (
       <li
         className={`history-list-item ${isHighlightItem ? 'item-active' : ''}`}
@@ -91,22 +102,14 @@ class HistoryListItem extends React.Component {
           </div>
         </div>
         <div className="history-operation">
-          <Dropdown isOpen={this.state.isMenuShow} toggle={this.onToggleClick}>
-            <DropdownToggle
-              tag='span'
-              className={(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}
-              data-toggle="dropdown"
-              aria-expanded={this.state.isMenuShow}
-              title={gettext('More operations')}
-              aria-label={gettext('More operations')}
-            >
-              <Icon symbol="more-level" />
-            </DropdownToggle>
-            <DropdownMenu>
-              {(this.props.index !== 0) && <DropdownItem onClick={this.onItemRestore}>{gettext('Restore')}</DropdownItem>}
-              <DropdownItem tag='a' href={url} onClick={this.onItemDownLoad}>{gettext('Download')}</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+          <CustomDropdown
+            items={this.getMenuItems()}
+            trigger={<Icon symbol="more-level" />}
+            triggerClassName={(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}
+            toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
+            freezeItem={this.handleDropdownOpen}
+            unfreezeItem={this.handleDropdownClose}
+          />
         </div>
       </li>
     );

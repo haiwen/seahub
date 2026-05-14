@@ -1,14 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import PropTypes from 'prop-types';
-import ModalPortal from '../../../components/modal-portal';
-import { Utils } from '../../../utils/utils';
 import { gettext } from '../../../utils/constants';
 import { SEARCH_FILTERS_KEY } from '../../../constants';
 import Icon from '../../icon';
+import CustomDropdown from '../../dropdown';
 
 const FilterByText = ({ searchFilenameOnly, onChange }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState(searchFilenameOnly ? SEARCH_FILTERS_KEY.SEARCH_FILENAME_ONLY : SEARCH_FILTERS_KEY.SEARCH_FILENAME_AND_CONTENT);
 
   const options = useMemo(() => {
@@ -22,45 +19,38 @@ const FilterByText = ({ searchFilenameOnly, onChange }) => {
       }
     ];
   }, []);
-  const toggle = useCallback(() => setIsOpen(!isOpen), [isOpen]);
-
-  const onOptionClick = useCallback((e) => {
-    const option = Utils.getEventData(e, 'toggle') ?? e.currentTarget.getAttribute('data-toggle');
-    setValue(option);
-    const isSearchFilenameOnly = option === SEARCH_FILTERS_KEY.SEARCH_FILENAME_ONLY;
-    onChange(SEARCH_FILTERS_KEY.SEARCH_FILENAME_ONLY, isSearchFilenameOnly);
-  }, [onChange]);
 
   const label = options.find((option) => option.key === value).label;
 
+  const items = useMemo(() => {
+    return options.map((option) => ({
+      ...option,
+      checked: option.key === value,
+    }));
+  }, [options, value]);
+
+  const onItemClick = useCallback((item) => {
+    setValue(item.key);
+    const isSearchFilenameOnly = item.key === SEARCH_FILTERS_KEY.SEARCH_FILENAME_ONLY;
+    onChange(SEARCH_FILTERS_KEY.SEARCH_FILENAME_ONLY, isSearchFilenameOnly);
+  }, [onChange]);
+
   return (
     <div className="search-filter filter-by-text-container">
-      <Dropdown isOpen={isOpen} toggle={toggle}>
-        <DropdownToggle
-          tag="div"
-          className="search-filter-toggle"
-          tabIndex={0}
-          role="button"
-          aria-haspopup={true}
-          aria-expanded={isOpen}
-        >
-          <span className="filter-label" title={label}>{label}</span>
-          <Icon symbol="down" className="w-3 h-3 ml-1" />
-        </DropdownToggle>
-        <ModalPortal>
-          <DropdownMenu className="search-filter-menu filter-by-text-menu">
-            {options.map((option) => {
-              const isSelected = option.key === value;
-              return (
-                <DropdownItem key={option.key} data-toggle={option.key} className="justify-content-between" onClick={onOptionClick}>
-                  {option.label}
-                  {isSelected && <Icon symbol="check-thin" className="dropdown-item-tick" />}
-                </DropdownItem>
-              );
-            })}
-          </DropdownMenu>
-        </ModalPortal>
-      </Dropdown>
+      <CustomDropdown
+        variant="control"
+        items={items}
+        trigger={(
+          <>
+            <span className="filter-label" title={label}>{label}</span>
+            <Icon symbol="down" className="w-3 h-3 ml-1" />
+          </>
+        )}
+        triggerClassName="search-filter-toggle"
+        toggleProps={{ tag: 'div' }}
+        menuClassName="search-filter-menu filter-by-text-menu"
+        onItemClick={onItemClick}
+      />
     </div>
   );
 };

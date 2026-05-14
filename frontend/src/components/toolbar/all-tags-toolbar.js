@@ -26,21 +26,21 @@ const AllTagsToolbar = () => {
 
   const menuItems = useMemo(() => {
     if (!canModify) {
-    return [];
-  }
+      return [];
+    }
 
-  if (selectedTagIds.length > 1) {
+    if (selectedTagIds.length > 1) {
+      return [{
+        key: TextTranslation.MERGE_TAGS.key,
+        label: TextTranslation.MERGE_TAGS.value,
+      }];
+    }
+
     return [{
-      key: TextTranslation.MERGE_TAGS.key,
-      label: TextTranslation.MERGE_TAGS.value,
+      key: TextTranslation.NEW_CHILD_TAG.key,
+      label: TextTranslation.NEW_CHILD_TAG.value,
     }];
-  }
-
-  return [{
-    key: TextTranslation.NEW_CHILD_TAG.key,
-    label: TextTranslation.NEW_CHILD_TAG.value,
-  }];
-  }, [canModify, selectedTagIds])
+  }, [canModify, selectedTagIds]);
 
   const onMenuItemClick = useCallback((operation, e) => {
     switch (operation) {

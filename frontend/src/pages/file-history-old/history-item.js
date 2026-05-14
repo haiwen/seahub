@@ -4,8 +4,8 @@ import dayjs from 'dayjs';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, filePath, historyRepoID, isVirtualRepo } from '../../utils/constants';
 import URLDecorator from '../../utils/url-decorator';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import Icon from '../../components/icon';
+import CustomDropdown from '../../components/dropdown';
 
 dayjs.locale(window.app.config.lang);
 
@@ -97,38 +97,33 @@ const MoreMenuPropTypes = {
 
 class MoreMenu extends React.PureComponent {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      dropdownOpen: false
-    };
-  }
-
-  dropdownToggle = () => {
-    this.setState({ dropdownOpen: !this.state.dropdownOpen });
+  getMenuItems = () => {
+    const { index, downloadUrl, viewUrl, snapshotURL, onItemRestore, canDownload } = this.props;
+    const items = [];
+    if (index !== 0) {
+      items.push({ key: 'restore', label: gettext('Restore'), onClick: onItemRestore });
+    }
+    if (canDownload) {
+      items.push({ key: 'download', label: gettext('Download'), onClick: () => { window.location = downloadUrl; } });
+    }
+    items.push({ key: 'view', label: gettext('View'), onClick: () => { window.location = viewUrl; } });
+    if (index != 0 && !isVirtualRepo) {
+      items.push({ key: 'snapshot', label: gettext('View Related Snapshot'), onClick: () => { window.open(snapshotURL, '_blank'); } });
+    }
+    return items;
   };
 
   render() {
-    const { index, downloadUrl, viewUrl, snapshotURL, onItemRestore, canDownload, className } = this.props;
+    const { className } = this.props;
     return (
-      <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className={`mx-1 old-history-more-operation ${className}`}>
-        <DropdownToggle
-          tag='span'
-          className='op-icon'
-          title={gettext('More operations')}
-          aria-label={gettext('More operations')}
-          data-toggle="dropdown"
-          aria-expanded={this.state.dropdownOpen}
-        >
-          <Icon symbol="more-level" />
-        </DropdownToggle>
-        <DropdownMenu className="drop-list">
-          {index !== 0 && <a href="#" onClick={onItemRestore}><DropdownItem>{gettext('Restore')}</DropdownItem></a>}
-          {canDownload && <a href={downloadUrl}><DropdownItem>{gettext('Download')}</DropdownItem></a>}
-          <a href={viewUrl}><DropdownItem>{gettext('View')}</DropdownItem></a>
-          {index != 0 && !isVirtualRepo && <DropdownItem tag="a" href={snapshotURL} target="_blank">{gettext('View Related Snapshot')}</DropdownItem>}
-        </DropdownMenu>
-      </Dropdown>
+      <CustomDropdown
+        items={this.getMenuItems()}
+        className={`mx-1 old-history-more-operation ${className}`}
+        trigger={<Icon symbol="more-level" />}
+        triggerClassName="op-icon"
+        toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
+        menuClassName="drop-list"
+      />
     );
   }
 }

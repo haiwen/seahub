@@ -45,7 +45,7 @@ class SortMenu extends React.Component {
       <CustomDropdown
         target="sort-icon"
         items={sortOptions}
-        variant="control"
+        variant="action"
         className={className || ''}
         trigger={(
           <>

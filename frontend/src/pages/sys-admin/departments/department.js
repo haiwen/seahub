@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownToggle } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import SortMenu from '../../../components/sort-menu';
 import Paginator from '../../../components/paginator';
@@ -8,10 +7,11 @@ import Loading from '../../../components/loading';
 import EmptyTip from '../../../components/empty-tip';
 import ModalPortal from '../../../components/modal-portal';
 import DeleteRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-repo-dialog';
-import DepartmentNodeMenu from './departments-node-dropdown-menu';
+import { getDepartmentMenuItems } from './departments-node-dropdown-menu';
 import MemberItem from './member-item';
 import RepoItem from './repo-item';
 import Icon from '../../../components/icon';
+import CustomDropdown from '../../../components/dropdown';
 
 const propTypes = {
   rootNodes: PropTypes.array,
@@ -41,7 +41,6 @@ class Department extends React.Component {
       repos: [],
       deletedRepo: {},
       showDeleteRepoDialog: false,
-      dropdownOpen: false,
     };
 
     this.sortOptions = [
@@ -119,11 +118,6 @@ class Department extends React.Component {
     });
   };
 
-  dropdownToggle = (e) => {
-    e.stopPropagation();
-    this.setState({ dropdownOpen: !this.state.dropdownOpen });
-  };
-
   render() {
     const { activeNav, repos } = this.state;
     const { membersList, isMembersListLoading, sortBy, sortOrder } = this.props;
@@ -134,33 +128,22 @@ class Department extends React.Component {
       <div className="department-content-main d-flex flex-column">
         <div className="cur-view-path justify-content-start">
           <h4 className="sf-heading">{currentDepartment.name}</h4>
-          <Dropdown
-            isOpen={this.state.dropdownOpen}
-            toggle={(e) => this.dropdownToggle(e)}
-            direction="down"
+          <CustomDropdown
             className="department-dropdown-menu"
-          >
-            <DropdownToggle
-              tag='span'
-              role="button"
-              className="d-flex align-items-center ml-1 sf-dropdown-toggle"
-              title={gettext('More operations')}
-              aria-label={gettext('More operations')}
-              data-toggle="dropdown"
-            >
-              <Icon symbol="down" />
-            </DropdownToggle>
-            <DepartmentNodeMenu
-              node={currentDepartment}
-              toggleAddDepartment={this.props.toggleAddDepartment}
-              toggleSetQuotaDialog={this.props.toggleSetQuotaDialog}
-              toggleAddLibrary={this.props.toggleAddLibrary}
-              toggleAddMembers={this.props.toggleAddMembers}
-              toggleMoveDepartment={this.props.toggleMoveDepartment}
-              toggleRename={this.props.toggleRename}
-              toggleDelete={this.props.toggleDelete}
-            />
-          </Dropdown>
+            items={getDepartmentMenuItems({
+              node: currentDepartment,
+              toggleAddDepartment: this.props.toggleAddDepartment,
+              toggleSetQuotaDialog: this.props.toggleSetQuotaDialog,
+              toggleAddLibrary: this.props.toggleAddLibrary,
+              toggleAddMembers: this.props.toggleAddMembers,
+              toggleMoveDepartment: this.props.toggleMoveDepartment,
+              toggleRename: this.props.toggleRename,
+              toggleDelete: this.props.toggleDelete,
+            })}
+            trigger={<Icon symbol="down" />}
+            triggerClassName="d-flex align-items-center ml-1 sf-dropdown-toggle"
+            toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
+          />
         </div>
 
         <div className="cur-view-path tab-nav-container">

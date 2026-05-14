@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { siteRoot, gettext, orgID } from '../../utils/constants';
 import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
@@ -10,6 +9,7 @@ import Icon from '../../components/icon';
 import OrgGroupInfo from '../../models/org-group';
 import MainPanelTopbar from './main-panel-topbar';
 import ChangeGroupDialog from '../../components/dialog/change-group-dialog';
+import CustomDropdown from '../../components/dropdown';
 
 class Search extends React.Component {
 
@@ -230,7 +230,7 @@ class GroupItem extends React.Component {
     this.state = {
       highlight: false,
       showMenu: false,
-      isItemMenuShow: false,
+      isDropdownFrozen: false,
       isChangeDialogOpen: false,
     };
   }
@@ -253,25 +253,21 @@ class GroupItem extends React.Component {
     }
   };
 
-  onDropdownToggleClick = (e) => {
-    this.toggleOperationMenu(e);
+  handleDropdownOpen = () => {
+    this.props.onFreezedItem();
+    this.setState({ isDropdownFrozen: true, showMenu: true, highlight: true });
   };
 
-  toggleOperationMenu = (e) => {
-    e.stopPropagation();
-    this.setState(
-      { isItemMenuShow: !this.state.isItemMenuShow }, () => {
-        if (this.state.isItemMenuShow) {
-          this.props.onFreezedItem();
-        } else {
-          this.setState({
-            highlight: false,
-            showMenu: false,
-          });
-          this.props.onUnfreezedItem();
-        }
-      }
-    );
+  handleDropdownClose = () => {
+    this.props.onUnfreezedItem();
+    this.setState({ isDropdownFrozen: false, highlight: false, showMenu: false });
+  };
+
+  getMenuItems = () => {
+    return [
+      { key: 'delete', label: gettext('Delete'), onClick: this.toggleDelete },
+      { key: 'change-department', label: gettext('Change to department'), onClick: this.toggleChangeDialog },
+    ];
   };
 
   toggleDelete = () => {
@@ -309,7 +305,7 @@ class GroupItem extends React.Component {
 
   render() {
     let { group } = this.props;
-    let isOperationMenuShow = (group.creatorName != 'system admin') && this.state.showMenu;
+    let isOperationMenuShow = (group.creatorName != 'system admin');
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td>
@@ -318,23 +314,16 @@ class GroupItem extends React.Component {
         {this.renderGroupCreator(group)}
         <td>{group.ctime}</td>
         <td className="text-center cursor-pointer">
-          <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-            <DropdownToggle
-              tag="span"
-              className={`op-icon ${isOperationMenuShow ? '' : 'invisible'}`}
-              title={gettext('More operations')}
-              aria-label={gettext('More operations')}
-              data-toggle="dropdown"
-              aria-expanded={this.state.isItemMenuShow}
-              onClick={this.onDropdownToggleClick}
-            >
-              <Icon symbol="more-level" />
-            </DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem onClick={this.toggleDelete}>{gettext('Delete')}</DropdownItem>
-              <DropdownItem onClick={this.toggleChangeDialog}>{gettext('Change to department')}</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+          {(this.state.showMenu || this.state.isDropdownFrozen) && isOperationMenuShow && (
+            <CustomDropdown
+              items={this.getMenuItems()}
+              trigger={<Icon symbol="more-level" />}
+              triggerClassName="op-icon"
+              toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
+              freezeItem={this.handleDropdownOpen}
+              unfreezeItem={this.handleDropdownClose}
+            />
+          )}
           {this.state.isChangeDialogOpen &&
             <ChangeGroupDialog
               groupName={group.groupName}

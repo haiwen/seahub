@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownToggle } from 'reactstrap';
 import Loading from '../../../components/loading';
 import EmptyTip from '../../../components/empty-tip';
 import SortMenu from '../../../components/sort-menu';
 import { gettext } from '../../../utils/constants';
 import MemberItem from './member-item';
 import RepoItem from './repo-item';
-import DepartmentNodeMenu from './departments-node-dropdown-menu';
+import { getDepartmentMenuItems } from './departments-node-dropdown-menu';
 import Icon from '../../../components/icon';
+import CustomDropdown from '../../../components/dropdown';
 
 const propTypes = {
   rootNodes: PropTypes.array,
@@ -31,7 +31,6 @@ class Department extends React.Component {
       isItemFreezed: false,
       activeNav: 'members',
       repos: [],
-      dropdownOpen: false,
     };
 
     this.sortOptions = [
@@ -91,11 +90,6 @@ class Department extends React.Component {
     });
   };
 
-  dropdownToggle = (e) => {
-    e.stopPropagation();
-    this.setState({ dropdownOpen: !this.state.dropdownOpen });
-  };
-
   onDeleteRepo = (repoID) => {
     const { repos } = this.state;
     this.setState({ repos: repos.filter(item => item.repo_id != repoID) });
@@ -111,33 +105,22 @@ class Department extends React.Component {
       <div className="department-content-main d-flex flex-column">
         <div className="cur-view-path justify-content-start">
           <h4 className="sf-heading">{currentDepartment.name}</h4>
-          <Dropdown
-            isOpen={this.state.dropdownOpen}
-            toggle={(e) => this.dropdownToggle(e)}
-            direction="down"
+          <CustomDropdown
             className="department-dropdown-menu"
-          >
-            <DropdownToggle
-              tag='span'
-              role="button"
-              className="ml-1 sf-dropdown-toggle d-flex align-items-center"
-              title={gettext('More operations')}
-              aria-label={gettext('More operations')}
-              data-toggle="dropdown"
-            >
-              <Icon symbol="down" />
-            </DropdownToggle>
-            <DepartmentNodeMenu
-              node={currentDepartment}
-              toggleAddDepartment={this.props.toggleAddDepartment}
-              toggleSetQuotaDialog={this.props.toggleSetQuotaDialog}
-              toggleAddLibrary={this.props.toggleAddLibrary}
-              toggleAddMembers={this.props.toggleAddMembers}
-              toggleRename={this.props.toggleRename}
-              toggleDelete={this.props.toggleDelete}
-              toggleMoveDepartment={this.props.toggleMoveDepartment}
-            />
-          </Dropdown>
+            items={getDepartmentMenuItems({
+              node: currentDepartment,
+              toggleAddDepartment: this.props.toggleAddDepartment,
+              toggleSetQuotaDialog: this.props.toggleSetQuotaDialog,
+              toggleAddLibrary: this.props.toggleAddLibrary,
+              toggleAddMembers: this.props.toggleAddMembers,
+              toggleRename: this.props.toggleRename,
+              toggleDelete: this.props.toggleDelete,
+              toggleMoveDepartment: this.props.toggleMoveDepartment,
+            })}
+            trigger={<Icon symbol="down" />}
+            triggerClassName="ml-1 sf-dropdown-toggle d-flex align-items-center"
+            toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
+          />
         </div>
 
         <div className="cur-view-path tab-nav-container">

@@ -1,56 +1,37 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext } from '../../../../../../utils/constants';
 import Icon from '../../../../../../components/icon';
-import Tooltip from '@/components/tooltip';
+import CustomDropdown from '../../../../../../components/dropdown';
 
 const OpMenu = ({ onRename, onFreezed, onUnFreezed }) => {
-  let [isShow, setShow] = useState(false);
+  const handleFreeze = useCallback(() => {
+    onFreezed();
+  }, [onFreezed]);
 
-  const toggle = useCallback((event) => {
-    event.stopPropagation();
-    if (isShow) {
-      const isClickToggleBtn = event.target.className?.includes('face-recognition-more-operations-toggle');
-      onUnFreezed(isClickToggleBtn);
-    } else {
-      onFreezed();
-    }
-    setShow(!isShow);
-  }, [isShow, onFreezed, onUnFreezed, setShow]);
+  const handleUnfreeze = useCallback(() => {
+    onUnFreezed(false);
+  }, [onUnFreezed]);
 
   const handleRename = useCallback(() => {
     onRename();
-    setShow(false);
-  }, [onRename, setShow]);
+  }, [onRename]);
 
-  useEffect(() => {
-    return () => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      setShow = () => {};
-    };
-  }, []);
+  const items = [
+    { key: 'rename', label: gettext('Rename'), onClick: handleRename },
+  ];
 
   return (
-    <Dropdown isOpen={isShow} toggle={toggle}>
-      <DropdownToggle
-        id="people-more-operations-toggle"
-        tag="i"
-        role="button"
-        tabIndex="0"
-        className="sf-dropdown-toggle op-icon face-recognition-more-operations-toggle"
-        aria-label={gettext('More operations')}
-        data-toggle="dropdown"
-      >
-        <Icon symbol="more-level" />
-        <Tooltip target="people-more-operations-toggle">
-          {gettext('More operations')}
-        </Tooltip>
-      </DropdownToggle>
-      <DropdownMenu>
-        <DropdownItem onClick={handleRename}>{gettext('Rename')}</DropdownItem>
-      </DropdownMenu>
-    </Dropdown>
+    <CustomDropdown
+      target="people-more-operations-toggle"
+      items={items}
+      trigger={<Icon symbol="more-level" />}
+      tooltip={gettext('More operations')}
+      triggerClassName="sf-dropdown-toggle op-icon face-recognition-more-operations-toggle"
+      toggleProps={{ tag: 'i', 'aria-label': gettext('More operations') }}
+      freezeItem={handleFreeze}
+      unfreezeItem={handleUnfreeze}
+    />
   );
 };
 

@@ -1,6 +1,6 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import React, { useCallback, useRef } from 'react';
 import Icon from '../../../components/icon';
+import CustomDropdown from '../../../components/dropdown';
 import { useMetadataDetails } from '../../hooks';
 import { useMetadataStatus, useMetadataAIOperations } from '../../../hooks';
 import { gettext } from '../../../utils/constants';
@@ -19,15 +19,13 @@ const OPERATION = {
 };
 
 const AIIcon = () => {
-  const menuToggleRef = useRef(null);
-
-  const [isMenuShow, setMenuShow] = useState(false);
+  const forwardedRef = useRef({});
 
   const { enableMetadata, enableTags } = useMetadataStatus();
   const { canModifyRecord, columns, record, onChange, onLocalRecordChange, updateFileTags, updateDescription } = useMetadataDetails();
   const { generateDescription, extractFileDetails, onOCR, generateFileTags } = useMetadataAIOperations();
 
-  const options = useMemo(() => {
+  const getItems = useCallback(() => {
     if (!canModifyRecord || !record || checkIsDir(record)) return [];
     const descriptionColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION);
     const fileName = getFileNameFromRecord(record);
@@ -39,35 +37,31 @@ const AIIcon = () => {
 
     if (descriptionColumn && isDescribableDoc) {
       list.push({
-        value: OPERATION.GENERATE_DESCRIPTION,
+        key: OPERATION.GENERATE_DESCRIPTION,
         label: gettext('Generate description'),
-        record
+        opData: { type: OPERATION.GENERATE_DESCRIPTION, record }
       });
     }
 
     if (isImage || isPdf) {
-      list.push({ value: OPERATION.OCR, label: gettext('Extract text'), record });
+      list.push({ key: OPERATION.OCR, label: gettext('Extract text'), opData: { type: OPERATION.OCR, record } });
     }
 
     if (isImage || isVideo) {
-      list.push({ value: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), record });
+      list.push({ key: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), opData: { type: OPERATION.FILE_DETAIL, record } });
     }
 
     if (enableTags && isDescribableDoc && !isVideo) {
-      list.push({ value: OPERATION.FILE_TAGS, label: gettext('Generate file tags'), record });
+      list.push({ key: OPERATION.FILE_TAGS, label: gettext('Generate file tags'), opData: { type: OPERATION.FILE_TAGS, record } });
     }
 
     return list;
   }, [enableTags, canModifyRecord, columns, record]);
 
-  const onToggle = useCallback((event) => {
-    event && event.preventDefault();
-    event && event.stopPropagation();
-    setMenuShow(!isMenuShow);
-  }, [isMenuShow]);
-
-  const handleOperation = useCallback((op) => {
-    const { value: opType, record } = op;
+  const handleOperation = useCallback((item) => {
+    const { opData } = item;
+    if (!opData) return;
+    const { type: opType, record } = opData;
     const recordId = getRecordIdFromRecord(record);
     const parentDir = getParentDirFromRecord(record);
     const fileName = getFileNameFromRecord(record);
@@ -86,7 +80,7 @@ const AIIcon = () => {
       case OPERATION.OCR: {
         onOCR(record, {
           success_callback: updateDescription
-        }, menuToggleRef.current);
+        }, forwardedRef.current?.dropdownRef?.current);
         break;
       }
       case OPERATION.FILE_TAGS: {
@@ -124,38 +118,27 @@ const AIIcon = () => {
         });
         break;
       }
-      default: {
-        setMenuShow(false);
-        break;
-      }
     }
   }, [columns, generateDescription, onOCR, generateFileTags, extractFileDetails, onChange, onLocalRecordChange, updateFileTags, updateDescription]);
 
-  if (!enableMetadata || !canModifyRecord || !record || options.length === 0) return null;
+  if (!enableMetadata || !canModifyRecord || !record) return null;
 
   return (
-    <Dropdown isOpen={isMenuShow} toggle={onToggle}>
-      <DropdownToggle
-        id="ai-icon"
-        className="border-0 p-0 bg-transparent detail-control mr-2"
-        innerRef={menuToggleRef}
-        data-toggle="dropdown"
-        aria-expanded={isMenuShow}
-        title='AI'
-        aria-label='AI'
-        tabIndex={0}
-      >
-        <Icon symbol="ai" className="detail-control-icon" />
-        <Tooltip target="ai-icon">{gettext('AI')}</Tooltip>
-      </DropdownToggle>
-      {isMenuShow && (
-        <div className="sf-metadata-ai-dropdown-menu large">
-          <DropdownMenu>
-            {options.map(op => (<DropdownItem key={op.value} onClick={() => handleOperation(op)}>{op.label}</DropdownItem>))}
-          </DropdownMenu>
-        </div>
+    <CustomDropdown
+      target="ai-icon"
+      getItems={getItems}
+      trigger={(
+        <>
+          <Icon symbol="ai" className="detail-control-icon" />
+          <Tooltip target="ai-icon">{gettext('AI')}</Tooltip>
+        </>
       )}
-    </Dropdown>
+      triggerClassName="border-0 p-0 bg-transparent detail-control mr-2"
+      menuClassName="sf-metadata-ai-dropdown-menu large"
+      forwardedRef={forwardedRef}
+      onItemClick={handleOperation}
+      toggleProps={{ 'aria-label': 'AI' }}
+    />
   );
 };
 

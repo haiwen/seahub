@@ -1,12 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Form, FormGroup, Input, Col } from 'reactstrap';
+import { Form, FormGroup, Input, Col } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { orgAdminAPI } from '../../utils/org-admin-api';
 import { gettext, orgID, siteRoot } from '../../utils/constants';
 import toaster from '../../components/toast';
 import OrgGroupInfo from '../../models/org-group';
 import Icon from '../../components/icon';
+import CustomDropdown from '../../components/dropdown';
 
 class GroupItem extends React.Component {
 
@@ -15,7 +16,7 @@ class GroupItem extends React.Component {
     this.state = {
       highlight: false,
       showMenu: false,
-      isItemMenuShow: false
+      isDropdownFrozen: false
     };
   }
 
@@ -37,25 +38,20 @@ class GroupItem extends React.Component {
     }
   };
 
-  onDropdownToggleClick = (e) => {
-    this.toggleOperationMenu(e);
+  handleDropdownOpen = () => {
+    this.props.onFreezedItem();
+    this.setState({ isDropdownFrozen: true, showMenu: true, highlight: true });
   };
 
-  toggleOperationMenu = (e) => {
-    e.stopPropagation();
-    this.setState(
-      { isItemMenuShow: !this.state.isItemMenuShow }, () => {
-        if (this.state.isItemMenuShow) {
-          this.props.onFreezedItem();
-        } else {
-          this.setState({
-            highlight: false,
-            showMenu: false,
-          });
-          this.props.onUnfreezedItem();
-        }
-      }
-    );
+  handleDropdownClose = () => {
+    this.props.onUnfreezedItem();
+    this.setState({ isDropdownFrozen: false, highlight: false, showMenu: false });
+  };
+
+  getMenuItems = () => {
+    return [
+      { key: 'delete', label: gettext('Delete'), onClick: this.toggleDelete },
+    ];
   };
 
   toggleDelete = () => {
@@ -90,7 +86,7 @@ class GroupItem extends React.Component {
 
   render() {
     let { group } = this.props;
-    let isOperationMenuShow = (group.creatorName != 'system admin') && this.state.showMenu;
+    let isOperationMenuShow = (group.creatorName != 'system admin');
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td>
@@ -99,24 +95,16 @@ class GroupItem extends React.Component {
         {this.renderGroupCreator(group)}
         <td>{group.ctime}</td>
         <td className="text-center cursor-pointer">
-          {isOperationMenuShow &&
-            <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-              <DropdownToggle
-                tag="span"
-                className="op-icon"
-                title={gettext('More operations')}
-                aria-label={gettext('More operations')}
-                data-toggle="dropdown"
-                aria-expanded={this.state.isItemMenuShow}
-                onClick={this.onDropdownToggleClick}
-              >
-                <Icon symbol="more-level" />
-              </DropdownToggle>
-              <DropdownMenu>
-                <DropdownItem onClick={this.toggleDelete}>{gettext('Delete')}</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          }
+          {(this.state.showMenu || this.state.isDropdownFrozen) && isOperationMenuShow && (
+            <CustomDropdown
+              items={this.getMenuItems()}
+              trigger={<Icon symbol="more-level" />}
+              triggerClassName="op-icon"
+              toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
+              freezeItem={this.handleDropdownOpen}
+              unfreezeItem={this.handleDropdownClose}
+            />
+          )}
         </td>
       </tr>
     );

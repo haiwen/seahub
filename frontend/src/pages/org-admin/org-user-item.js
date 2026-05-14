@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext, siteRoot, orgID, username } from '../../utils/constants';
 import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
@@ -8,6 +7,7 @@ import toaster from '../../components/toast';
 import Selector from '../../components/single-selector';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 import Icon from '../../components/icon';
+import CustomDropdown from '../../components/dropdown';
 
 const propTypes = {
   user: PropTypes.object,
@@ -28,7 +28,7 @@ class UserItem extends React.Component {
     this.state = {
       highlight: false,
       showMenu: false,
-      isItemMenuShow: false
+      isDropdownFrozen: false
     };
   }
 
@@ -85,25 +85,25 @@ class UserItem extends React.Component {
     this.props.changeStatus(this.props.user.email, isActive);
   };
 
-  onDropdownToggleClick = (e) => {
-    this.toggleOperationMenu(e);
+  handleDropdownOpen = () => {
+    this.props.onFreezedItem();
+    this.setState({ isDropdownFrozen: true, showMenu: true, highlight: true });
   };
 
-  toggleOperationMenu = (e) => {
-    e.stopPropagation();
-    this.setState(
-      { isItemMenuShow: !this.state.isItemMenuShow }, () => {
-        if (this.state.isItemMenuShow) {
-          this.props.onFreezedItem();
-        } else {
-          this.setState({
-            highlight: false,
-            showMenu: false,
-          });
-          this.props.onUnfreezedItem();
-        }
-      }
-    );
+  handleDropdownClose = () => {
+    this.props.onUnfreezedItem();
+    this.setState({ isDropdownFrozen: false, highlight: false, showMenu: false });
+  };
+
+  getMenuItems = () => {
+    const items = [
+      { key: 'delete', label: gettext('Delete'), onClick: this.toggleDelete },
+      { key: 'reset-pwd', label: gettext('ResetPwd'), onClick: this.toggleResetPW },
+    ];
+    if (this.props.currentTab === 'admins') {
+      items.push({ key: 'revoke-admin', label: gettext('Revoke Admin'), onClick: this.toggleRevokeAdmin });
+    }
+    return items;
   };
 
   getQuotaTotal = (data) => {
@@ -132,9 +132,9 @@ class UserItem extends React.Component {
 
   render() {
     const { highlight, isConfirmInactiveDialogOpen } = this.state;
-    let { user, currentTab } = this.props;
+    let { user } = this.props;
     let href = siteRoot + 'org/useradmin/info/' + encodeURIComponent(user.email) + '/';
-    let isOperationMenuShow = (user.email !== username) && this.state.showMenu;
+    let isOperationMenuShow = (user.email !== username);
 
     // for 'user status'
     const curStatus = user.is_active ? 'active' : 'inactive';
@@ -173,25 +173,15 @@ class UserItem extends React.Component {
             {user.last_login ? user.last_login : '--'}
           </td>
           <td className="text-center cursor-pointer">
-            {isOperationMenuShow && (
-              <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-                <DropdownToggle
-                  tag="span"
-                  className="op-icon"
-                  title={gettext('More operations')}
-                  aria-label={gettext('More operations')}
-                  data-toggle="dropdown"
-                  aria-expanded={this.state.isItemMenuShow}
-                  onClick={this.onDropdownToggleClick}
-                >
-                  <Icon symbol="more-level" />
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem onClick={this.toggleDelete}>{gettext('Delete')}</DropdownItem>
-                  <DropdownItem onClick={this.toggleResetPW}>{gettext('ResetPwd')}</DropdownItem>
-                  {currentTab == 'admins' && <DropdownItem onClick={this.toggleRevokeAdmin}>{gettext('Revoke Admin')}</DropdownItem>}
-                </DropdownMenu>
-              </Dropdown>
+            {(this.state.showMenu || this.state.isDropdownFrozen) && isOperationMenuShow && (
+              <CustomDropdown
+                items={this.getMenuItems()}
+                trigger={<Icon symbol="more-level" />}
+                triggerClassName="op-icon"
+                toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
+                freezeItem={this.handleDropdownOpen}
+                unfreezeItem={this.handleDropdownClose}
+              />
             )}
           </td>
         </tr>

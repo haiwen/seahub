@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Dropdown, DropdownToggle } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import Icon from '../../../components/icon';
-import DepartmentNodeMenu from './departments-node-dropdown-menu';
+import { getDepartmentMenuItems } from './departments-node-dropdown-menu';
+import CustomDropdown from '../../../components/dropdown';
 
 const departmentsTreeNodePropTypes = {
   node: PropTypes.object,
@@ -26,7 +26,7 @@ class DepartmentsTreeNode extends Component {
     super(props);
     this.state = {
       isChildrenShow: false,
-      dropdownOpen: false,
+      isDropdownFrozen: false,
       active: false
     };
   }
@@ -55,9 +55,12 @@ class DepartmentsTreeNode extends Component {
     });
   };
 
-  dropdownToggle = (e) => {
-    e.stopPropagation();
-    this.setState({ dropdownOpen: !this.state.dropdownOpen });
+  handleDropdownOpen = () => {
+    this.setState({ isDropdownFrozen: true });
+  };
+
+  handleDropdownClose = () => {
+    this.setState({ isDropdownFrozen: false, active: false });
   };
 
   onMouseEnter = () => {
@@ -65,7 +68,7 @@ class DepartmentsTreeNode extends Component {
   };
 
   onMouseLeave = () => {
-    if (this.state.dropdownOpen) return;
+    if (this.state.isDropdownFrozen) return;
     this.setState({ active: false });
   };
 
@@ -109,7 +112,8 @@ class DepartmentsTreeNode extends Component {
 
   render() {
     const { node, checkedDepartmentId } = this.props;
-    const { isChildrenShow, dropdownOpen, active } = this.state;
+    const { isChildrenShow, isDropdownFrozen, active } = this.state;
+
     let nodeInnerClass = classNames({
       'tree-node': true,
       'active': checkedDepartmentId === node.id
@@ -126,34 +130,25 @@ class DepartmentsTreeNode extends Component {
             <Icon symbol="down" className={isChildrenShow ? '' : 'rotate-270'} aria-hidden="true" />
           </span>
           <span className="departments-v2-tree-node-text text-truncate">{node.name}</span>
-          {active &&
-            <Dropdown
-              isOpen={dropdownOpen}
-              toggle={(e) => this.dropdownToggle(e)}
-              direction="down"
+          {(active || isDropdownFrozen) &&
+            <CustomDropdown
               className="mr-2"
-            >
-              <DropdownToggle
-                tag='span'
-                role="button"
-                className='right-icon'
-                title={gettext('More operations')}
-                aria-label={gettext('More operations')}
-                data-toggle="dropdown"
-              >
-                <Icon symbol="more-level" />
-              </DropdownToggle>
-              <DepartmentNodeMenu
-                node={node}
-                toggleAddDepartment={this.props.toggleAddDepartment}
-                toggleSetQuotaDialog={this.props.toggleSetQuotaDialog}
-                toggleAddLibrary={this.props.toggleAddLibrary}
-                toggleAddMembers={this.props.toggleAddMembers}
-                toggleMoveDepartment={this.props.toggleMoveDepartment}
-                toggleRename={this.props.toggleRename}
-                toggleDelete={this.props.toggleDelete}
-              />
-            </Dropdown>
+              items={getDepartmentMenuItems({
+                node,
+                toggleAddDepartment: this.props.toggleAddDepartment,
+                toggleSetQuotaDialog: this.props.toggleSetQuotaDialog,
+                toggleAddLibrary: this.props.toggleAddLibrary,
+                toggleAddMembers: this.props.toggleAddMembers,
+                toggleMoveDepartment: this.props.toggleMoveDepartment,
+                toggleRename: this.props.toggleRename,
+                toggleDelete: this.props.toggleDelete,
+              })}
+              trigger={<Icon symbol="more-level" />}
+              triggerClassName="right-icon"
+              toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
+              freezeItem={this.handleDropdownOpen}
+              unfreezeItem={this.handleDropdownClose}
+            />
           }
         </div>
         {this.state.isChildrenShow &&

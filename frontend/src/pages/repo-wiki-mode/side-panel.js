@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, permission } from '../../utils/constants';
-import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import TreeView from '../../components/tree-view/tree-view';
 import Logo from '../../components/logo';
 import Loading from '../../components/loading';
@@ -11,6 +10,7 @@ import Rename from '../../components/dialog/rename-dialog';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import Icon from '../../components/icon';
+import CustomDropdown from '../../components/dropdown';
 
 const propTypes = {
   currentNode: PropTypes.object,
@@ -36,7 +36,6 @@ class SidePanel extends Component {
       opNode: null,
       isLoadFailed: false,
       isMenuIconShow: false,
-      isHeaderMenuShow: false,
       isDeleteDialogShow: false,
       isAddFileDialogShow: false,
       isAddFolderDialogShow: false,
@@ -55,15 +54,6 @@ class SidePanel extends Component {
 
   onMouseLeave = () => {
     this.setState({ isMenuIconShow: false });
-  };
-
-  onDropdownToggleClick = (e) => {
-    e.preventDefault();
-    this.toggleOperationMenu();
-  };
-
-  toggleOperationMenu = () => {
-    this.setState({ isHeaderMenuShow: !this.state.isHeaderMenuShow });
   };
 
   onNodeClick = (node) => {
@@ -161,22 +151,14 @@ class SidePanel extends Component {
             {gettext('Files')}
             <div className="heading-icon">
               {(permission && this.state.isMenuIconShow) && (
-                <Dropdown isOpen={this.state.isHeaderMenuShow} toggle={this.toggleOperationMenu}>
-                  <DropdownToggle
-                    tag="span"
-                    title={gettext('More operations')}
-                    aria-label={gettext('More operations')}
-                    data-toggle="dropdown"
-                    aria-expanded={this.state.isHeaderMenuShow}
-                    onClick={this.onDropdownToggleClick}
-                  >
-                    <Icon symbol="more-level" />
-                  </DropdownToggle>
-                  <DropdownMenu>
-                    <DropdownItem onClick={this.onAddFolderToggle.bind(this, 'root')}>{gettext('New Folder')}</DropdownItem>
-                    <DropdownItem onClick={this.onAddFileToggle.bind(this, 'root')}>{gettext('New File')}</DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
+                <CustomDropdown
+                  items={[
+                    { key: 'new-folder', label: gettext('New Folder'), onClick: () => this.onAddFolderToggle('root') },
+                    { key: 'new-file', label: gettext('New File'), onClick: () => this.onAddFileToggle('root') },
+                  ]}
+                  trigger={<Icon symbol="more-level" />}
+                  toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
+                />
               )}
             </div>
           </h3>

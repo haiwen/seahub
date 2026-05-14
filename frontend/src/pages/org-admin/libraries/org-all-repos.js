@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { gettext, siteRoot, orgID } from '../../../utils/constants';
@@ -15,6 +14,7 @@ import OrgAdminRepo from '../../../models/org-admin-repo';
 import MainPanelTopbar from '../main-panel-topbar';
 import ReposNav from './org-repo-nav';
 import Icon from '../../../components/icon';
+import CustomDropdown from '../../../components/dropdown';
 
 
 class Content extends Component {
@@ -137,7 +137,7 @@ class RepoItem extends React.Component {
     this.state = {
       highlight: false,
       showMenu: false,
-      isItemMenuShow: false,
+      isDropdownFrozen: false,
       isTransferDialogShow: false,
     };
   }
@@ -160,25 +160,21 @@ class RepoItem extends React.Component {
     }
   };
 
-  onDropdownToggleClick = (e) => {
-    this.toggleOperationMenu(e);
+  handleDropdownOpen = () => {
+    this.props.onFreezedItem();
+    this.setState({ isDropdownFrozen: true, showMenu: true, highlight: true });
   };
 
-  toggleOperationMenu = (e) => {
-    e.stopPropagation();
-    this.setState(
-      { isItemMenuShow: !this.state.isItemMenuShow }, () => {
-        if (this.state.isItemMenuShow) {
-          this.props.onFreezedItem();
-        } else {
-          this.setState({
-            highlight: false,
-            showMenu: false,
-          });
-          this.props.onUnfreezedItem();
-        }
-      }
-    );
+  handleDropdownClose = () => {
+    this.props.onUnfreezedItem();
+    this.setState({ isDropdownFrozen: false, highlight: false, showMenu: false });
+  };
+
+  getMenuItems = () => {
+    return [
+      { key: 'delete', label: gettext('Delete'), onClick: this.toggleDelete },
+      { key: 'transfer', label: gettext('Transfer'), onClick: this.toggleTransfer },
+    ];
   };
 
   toggleDelete = () => {
@@ -214,7 +210,7 @@ class RepoItem extends React.Component {
 
   render() {
     let { repo } = this.props;
-    let isOperationMenuShow = this.state.showMenu;
+    let isOperationMenuShow = this.state.showMenu || this.state.isDropdownFrozen;
     let iconTitle = repo.encrypted ? gettext('Encrypted library') : gettext('Read-Write library');
     return (
       <Fragment>
@@ -227,24 +223,16 @@ class RepoItem extends React.Component {
           <td>{repo.repoID}</td>
           <td><a href={this.renderRepoOwnerHref(repo)}>{repo.ownerName}</a></td>
           <td className="text-center">
-            <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-              <DropdownToggle
-                tag="span"
-                role="button"
-                className={`op-icon ${isOperationMenuShow ? '' : 'invisible'}`}
-                title={gettext('More operations')}
-                aria-label={gettext('More operations')}
-                data-toggle="dropdown"
-                aria-expanded={this.state.isItemMenuShow}
-                onClick={this.onDropdownToggleClick}
-              >
-                <Icon symbol="more-level" />
-              </DropdownToggle>
-              <DropdownMenu>
-                <DropdownItem onClick={this.toggleDelete}>{gettext('Delete')}</DropdownItem>
-                <DropdownItem onClick={this.toggleTransfer}>{gettext('Transfer')}</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+            {isOperationMenuShow && (
+              <CustomDropdown
+                items={this.getMenuItems()}
+                trigger={<Icon symbol="more-level" />}
+                triggerClassName="op-icon"
+                toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
+                freezeItem={this.handleDropdownOpen}
+                unfreezeItem={this.handleDropdownClose}
+              />
+            )}
           </td>
         </tr>
         {this.state.isTransferDialogShow && (

@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import { gettext, isPro } from '../../../utils/constants';
 import Icon from '../../../components/icon';
+import CustomDropdown from '../../../components/dropdown';
 
 const DingtalkDepartmentsTreeNodePropTypes = {
   index: PropTypes.number,
@@ -20,7 +20,7 @@ class DingtalkDepartmentsTreeNode extends Component {
     super(props);
     this.state = {
       isChildrenShow: false,
-      dropdownOpen: false,
+      isDropdownFrozen: false,
       active: false,
     };
   }
@@ -33,9 +33,12 @@ class DingtalkDepartmentsTreeNode extends Component {
     });
   };
 
-  dropdownToggle = (e) => {
-    e.stopPropagation();
-    this.setState({ dropdownOpen: !this.state.dropdownOpen });
+  handleDropdownOpen = () => {
+    this.setState({ isDropdownFrozen: true, active: true });
+  };
+
+  handleDropdownClose = () => {
+    this.setState({ isDropdownFrozen: false, active: false });
   };
 
   onMouseEnter = () => {
@@ -43,7 +46,7 @@ class DingtalkDepartmentsTreeNode extends Component {
   };
 
   onMouseLeave = () => {
-    if (this.state.dropdownOpen) return;
+    if (this.state.isDropdownFrozen) return;
     this.setState({ active: false });
   };
 
@@ -108,30 +111,20 @@ class DingtalkDepartmentsTreeNode extends Component {
             </span>
             <span className="tree-node-text">{department.name}</span>
             {isPro &&
-            <Dropdown
-              isOpen={this.state.dropdownOpen}
-              toggle={(e) => this.dropdownToggle(e)}
-              direction="down"
-              style={this.state.active ? {} : { opacity: 0 }}
-            >
-              <DropdownToggle
-                tag='span'
-                className='cursor-pointer right-icon'
-                title={gettext('More operations')}
-                aria-label={gettext('More operations')}
-                data-toggle="dropdown"
-                aria-expanded={this.state.dropdownOpen}
-              >
-                <Icon symbol="more-level" />
-              </DropdownToggle>
-              <DropdownMenu className="drop-list">
-                <DropdownItem
-                  onClick={this.importDepartmentDialogToggle.bind(this, department)}
-                  id={department.id}
-                >{'导入部门'}
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+            <CustomDropdown
+              dropdownProps={{ style: this.state.active ? {} : { opacity: 0 } }}
+              items={[{
+                key: `${department.id}`,
+                label: '导入部门',
+                onClick: () => this.importDepartmentDialogToggle(department),
+              }]}
+              trigger={<Icon symbol="more-level" />}
+              triggerClassName="cursor-pointer right-icon"
+              toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
+              menuClassName="drop-list"
+              freezeItem={this.handleDropdownOpen}
+              unfreezeItem={this.handleDropdownClose}
+            />
             }
           </div>
         }

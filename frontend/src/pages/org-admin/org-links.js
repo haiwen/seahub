@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { orgAdminAPI } from '../../utils/org-admin-api';
 import { siteRoot, gettext, serviceURL } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -10,6 +9,7 @@ import toaster from '../../components/toast';
 import MainPanelTopbar from './main-panel-topbar';
 import ViewLinkDialog from '../../components/dialog/view-link-dialog';
 import Icon from '../../components/icon';
+import CustomDropdown from '../../components/dropdown';
 
 dayjs.extend(relativeTime);
 
@@ -157,7 +157,7 @@ class RepoItem extends React.Component {
     this.state = {
       highlight: false,
       showMenu: false,
-      isItemMenuShow: false,
+      isDropdownFrozen: false,
     };
   }
 
@@ -173,29 +173,26 @@ class RepoItem extends React.Component {
     }
   };
 
-  onDropdownToggleClick = (e) => {
-    this.toggleOperationMenu(e);
+  handleDropdownOpen = () => {
+    this.props.onFreezedItem();
+    this.setState({ isDropdownFrozen: true, showMenu: true, highlight: true });
   };
 
-  toggleOperationMenu = (e) => {
-    e.stopPropagation();
-    this.setState(
-      { isItemMenuShow: !this.state.isItemMenuShow }, () => {
-        if (this.state.isItemMenuShow) {
-          this.props.onFreezedItem();
-        } else {
-          this.setState({
-            highlight: false,
-            showMenu: false,
-          });
-          this.props.onUnfreezedItem();
-        }
-      }
-    );
+  handleDropdownClose = () => {
+    this.props.onUnfreezedItem();
+    this.setState({ isDropdownFrozen: false, highlight: false, showMenu: false });
+  };
+
+  getMenuItems = () => {
+    const { link, deleteOrgLink } = this.props;
+    return [
+      { key: 'delete', label: gettext('Delete'), onClick: deleteOrgLink.bind(this, link.token) },
+      { key: 'view-link', label: gettext('View Link'), onClick: this.props.openLinkDialog.bind(this, link) },
+    ];
   };
 
   render() {
-    const { link, deleteOrgLink } = this.props;
+    const { link } = this.props;
     const href = siteRoot + 'org/useradmin/info/' + encodeURIComponent(link.owner_email) + '/';
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} >
@@ -204,23 +201,16 @@ class RepoItem extends React.Component {
         <td>{dayjs(link.created_time).fromNow()}</td>
         <td>{link.view_count}</td>
         <td className="cursor-pointer text-center">
-          <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-            <DropdownToggle
-              tag="span"
-              className={`op-icon ${this.state.showMenu ? '' : 'invisible'}`}
-              title={gettext('More operations')}
-              aria-label={gettext('More operations')}
-              data-toggle="dropdown"
-              aria-expanded={this.state.isItemMenuShow}
-              onClick={this.onDropdownToggleClick}
-            >
-              <Icon symbol="more-level" />
-            </DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem onClick={deleteOrgLink.bind(this, link.token)}>{gettext('Delete')}</DropdownItem>
-              <DropdownItem onClick={this.props.openLinkDialog.bind(this, link)}>{gettext('View Link')}</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+          {(this.state.showMenu || this.state.isDropdownFrozen) && (
+            <CustomDropdown
+              items={this.getMenuItems()}
+              trigger={<Icon symbol="more-level" />}
+              triggerClassName="op-icon"
+              toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
+              freezeItem={this.handleDropdownOpen}
+              unfreezeItem={this.handleDropdownClose}
+            />
+          )}
         </td>
       </tr>
     );

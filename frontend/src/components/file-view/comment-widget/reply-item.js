@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { SeafileCommentEditor, commentProcessor } from '@seafile/comment-editor';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import CommentDeletePopover from './comment-delete-popover';
 import Icon from '../../icon';
+import CustomDropdown from '../../dropdown';
 
 const { username } = window.app.pageOptions;
 
@@ -21,7 +21,6 @@ class ReplyItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dropdownOpen: false,
       html: '',
       newReply: this.props.item.reply,
       editable: false,
@@ -36,12 +35,6 @@ class ReplyItem extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.convertComment(nextProps.item.reply);
   }
-
-  toggleDropDownMenu = () => {
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen,
-    });
-  };
 
   convertComment = (mdFile) => {
     commentProcessor.process(mdFile).then((result) => {
@@ -123,43 +116,18 @@ class ReplyItem extends React.Component {
             <div className="comment-author-time">{this.props.time}</div>
           </div>
           {(item.user_email === username) &&
-          <Dropdown
-            isOpen={this.state.dropdownOpen}
-            size="sm"
+          <CustomDropdown
+            target={replyOpToolsId}
+            dropdownProps={{ size: 'sm' }}
             className="seafile-comment-dropdown"
-            toggle={this.toggleDropDownMenu}
-            id={replyOpToolsId}
-          >
-            <DropdownToggle
-              tag="span"
-              role="button"
-              tabIndex="0"
-              className="seafile-comment-dropdown-btn sf-dropdown-toggle"
-              title={gettext('More operations')}
-              aria-label={gettext('More operations')}
-              data-toggle="dropdown"
-              aria-expanded={this.state.dropdownOpen}
-              aria-haspopup={true}
-            >
-              <Icon symbol="more-level" />
-            </DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem
-                onClick={this.toggleShowDeletePopover}
-                className="delete-comment"
-                id={item.id}
-              >
-                {gettext('Delete')}
-              </DropdownItem>
-              <DropdownItem
-                onClick={this.toggleEditComment}
-                className="edit-comment"
-                id={item.id}
-              >
-                {gettext('Edit')}
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+            items={[
+              { key: 'delete', label: gettext('Delete'), onClick: this.toggleShowDeletePopover },
+              { key: 'edit', label: gettext('Edit'), onClick: this.toggleEditComment },
+            ]}
+            trigger={<Icon symbol="more-level" />}
+            triggerClassName="seafile-comment-dropdown-btn sf-dropdown-toggle"
+            toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
+          />
           }
         </div>
         <div

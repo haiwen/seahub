@@ -1,58 +1,45 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext } from '../../../../../../../utils/constants';
 import Icon from '../../../../../../../components/icon';
-import Tooltip from '@/components/tooltip';
+import CustomDropdown from '../../../../../../../components/dropdown';
 
 const OpMenu = ({ idx, onDelete, onFreezed, onUnFreezed }) => {
-  let [isShow, setShow] = useState(false);
+  const handleFreeze = useCallback(() => {
+    onFreezed();
+  }, [onFreezed]);
 
-  const toggle = useCallback((event) => {
-    event.stopPropagation();
-    if (isShow) {
-      onUnFreezed(event);
-    } else {
-      onFreezed();
-    }
-    setShow(!isShow);
-  }, [isShow, onFreezed, onUnFreezed, setShow]);
+  const handleUnfreeze = useCallback(() => {
+    onUnFreezed(false);
+  }, [onUnFreezed]);
 
   const handleDelete = useCallback(() => {
     onDelete();
-    setShow(false);
-  }, [onDelete, setShow]);
+  }, [onDelete]);
 
-  useEffect(() => {
-    return () => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      setShow = () => {};
-    };
-  }, []);
+  const items = [
+    { key: 'delete', label: gettext('Delete'), onClick: handleDelete },
+  ];
+
+  const toggleId = `header-dropdown-btn-${idx}`;
 
   return (
-    <Dropdown id={`header-dropdown-btn-${idx}`} isOpen={isShow} toggle={toggle}>
-      <DropdownToggle
-        tag="span"
-        role="button"
-        tabIndex="0"
-        className="sf-dropdown-toggle kanban-header-op-btn kanban-more-operations-toggle"
-        aria-label={gettext('More operations')}
-        data-toggle="dropdown"
-      >
-        <Icon symbol="more-level" />
-        <Tooltip target={`header-dropdown-btn-${idx}`}>{gettext('More operations')}</Tooltip>
-      </DropdownToggle>
-      <DropdownMenu>
-        <DropdownItem onClick={handleDelete}>{gettext('Delete')}</DropdownItem>
-      </DropdownMenu>
-    </Dropdown>
+    <CustomDropdown
+      target={toggleId}
+      items={items}
+      trigger={<Icon symbol="more-level" />}
+      tooltip={gettext('More operations')}
+      triggerClassName="sf-dropdown-toggle kanban-header-op-btn kanban-more-operations-toggle"
+      toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
+      freezeItem={handleFreeze}
+      unfreezeItem={handleUnfreeze}
+    />
   );
 };
 
 OpMenu.propTypes = {
   idx: PropTypes.number,
-  onRename: PropTypes.func,
+  onDelete: PropTypes.func,
   onFreezed: PropTypes.func,
   onUnFreezed: PropTypes.func,
 };

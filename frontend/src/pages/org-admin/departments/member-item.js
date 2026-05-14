@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import RoleSelector from '../../../components/single-selector';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import { gettext, siteRoot } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import Icon from '../../../components/icon';
+import CustomDropdown from '../../../components/dropdown';
 
 const propTypes = {
   isItemFreezed: PropTypes.bool,
@@ -22,7 +22,7 @@ class DepartmentsV2MembersItem extends React.Component {
     super(props);
     this.state = {
       highlighted: false,
-      isItemMenuShow: false,
+      isDropdownFrozen: false,
       isDeleteMemberDialogOpen: false
     };
     this.roleOptions = [
@@ -50,16 +50,20 @@ class DepartmentsV2MembersItem extends React.Component {
     this.props.deleteMember(member.email);
   };
 
-  toggleDropdownMenu = () => {
-    this.setState({
-      isItemMenuShow: !this.state.isItemMenuShow
-    }, () => {
-      if (this.state.isItemMenuShow && typeof(this.props.freezeItem) === 'function') {
-        this.props.freezeItem();
-      } else if (!this.state.isItemMenuShow && typeof(this.props.unfreezeItem) === 'function') {
-        this.props.unfreezeItem();
-      }
-    });
+  handleDropdownOpen = () => {
+    this.props.freezeItem();
+    this.setState({ isDropdownFrozen: true });
+  };
+
+  handleDropdownClose = () => {
+    this.props.unfreezeItem();
+    this.setState({ isDropdownFrozen: false, highlighted: false });
+  };
+
+  getMenuItems = () => {
+    return [
+      { key: 'delete', label: gettext('Delete'), onClick: this.toggleDeleteMemberDialog },
+    ];
   };
 
   toggleItemFreezed = (freezed) => {
@@ -79,7 +83,7 @@ class DepartmentsV2MembersItem extends React.Component {
 
   render() {
     const { member } = this.props;
-    const { highlighted, isItemMenuShow, isDeleteMemberDialogOpen } = this.state;
+    const { highlighted, isDropdownFrozen, isDeleteMemberDialogOpen } = this.state;
 
     this.roleOptions = this.roleOptions.map(item => {
       item.isSelected = item.value == member.role;
@@ -105,26 +109,15 @@ class DepartmentsV2MembersItem extends React.Component {
           </td>
           <td>{member.contact_email}</td>
           <td>
-            {highlighted &&
-            <Dropdown
-              isOpen={isItemMenuShow}
-              toggle={this.toggleDropdownMenu}
-              direction="down"
-            >
-              <DropdownToggle
-                tag='span'
-                role="button"
-                className='op-icon'
-                title={gettext('More operations')}
-                aria-label={gettext('More operations')}
-                data-toggle="dropdown"
-              >
-                <Icon symbol="more-level" />
-              </DropdownToggle>
-              <DropdownMenu>
-                <DropdownItem key='delete' onClick={this.toggleDeleteMemberDialog}>{gettext('Delete')}</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+            {(highlighted || isDropdownFrozen) &&
+            <CustomDropdown
+              items={this.getMenuItems()}
+              trigger={<Icon symbol="more-level" />}
+              triggerClassName="op-icon"
+              toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
+              freezeItem={this.handleDropdownOpen}
+              unfreezeItem={this.handleDropdownClose}
+            />
             }
           </td>
         </tr>

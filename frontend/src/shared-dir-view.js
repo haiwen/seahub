@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createRoot } from 'react-dom/client';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { DropdownItem } from 'reactstrap';
 import dayjs from 'dayjs';
 import classnames from 'classnames';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -34,6 +34,7 @@ import { formatWithTimezone } from './utils/time';
 import OpIcon from './components/op-icon';
 import OpElement from './components/op-element';
 import Icon from './components/icon';
+import CustomDropdown from './components/dropdown';
 
 import './css/layout.css';
 import './css/header.css';
@@ -72,7 +73,6 @@ class SharedDirView extends React.Component {
       path: relativePath,
       dirPath: '',
 
-      isDropdownMenuOpen: false,
       currentMode: mode,
 
       isAllItemsSelected: false,
@@ -226,12 +226,6 @@ class SharedDirView extends React.Component {
     getThumbnail(0);
   };
 
-  toggleDropdownMenu = () => {
-    this.setState({
-      isDropdownMenuOpen: !this.state.isDropdownMenuOpen
-    });
-  };
-
   visitFolder = (folderPath) => {
     this.setState({
       path: folderPath
@@ -322,47 +316,32 @@ class SharedDirView extends React.Component {
         {(!showDownloadIcon && !canUpload)
           ? <span className="path-item" title={zipped[zipped.length - 1].name}>{zipped[zipped.length - 1].name}</span>
           : (
-            <Dropdown isOpen={this.state.isDropdownMenuOpen} toggle={this.toggleDropdownMenu}>
-              <DropdownToggle
-                tag="div"
-                role="button"
-                tabIndex={0}
-                className="path-item path-item-dropdown-toggle"
-                onClick={this.toggleDropdownMenu}
-                onKeyDown={Utils.onKeyDown}
-                data-toggle="dropdown"
-              >
-                <span title={zipped[zipped.length - 1].name}>{zipped[zipped.length - 1].name}</span>
-                {canUpload ? (
-                  <span className="d-flex align-items-center">
-                    <Icon symbol="new" className="main-icon ml-2" />
-                    <Icon symbol="down" />
-                  </span>
-                ) : (
-                  <Icon symbol="down" className="ml-1" />
-                )}
-              </DropdownToggle>
-              <DropdownMenu className='position-fixed'>
-                {opList.map((item, index) => {
-                  if (item == 'Divider') {
-                    return <DropdownItem key={index} divider />;
-                  } else {
-                    return (
-                      <DropdownItem
-                        className="d-flex align-items-center"
-                        key={index}
-                        onClick={item.onClick}
-                        disabled={item.disabled || false}
-                        title={item.title || ''}
-                      >
-                        <Icon symbol={item.icon} className="dropdown-item-icon mr-2" />
-                        {item.text}
-                      </DropdownItem>
-                    );
-                  }
-                })}
-              </DropdownMenu>
-            </Dropdown>
+            <CustomDropdown
+              items={opList.map((item, index) => ({
+                key: item.text || index,
+                label: item.text,
+                icon_dom: item.icon ? <Icon symbol={item.icon} className="dropdown-item-icon mr-2" /> : undefined,
+                onClick: item.onClick,
+                disabled: item.disabled || false,
+              }))}
+              trigger={(
+                <>
+                  <span title={zipped[zipped.length - 1].name}>{zipped[zipped.length - 1].name}</span>
+                  {canUpload ? (
+                    <span className="d-flex align-items-center">
+                      <Icon symbol="new" className="main-icon ml-2" />
+                      <Icon symbol="down" />
+                    </span>
+                  ) : (
+                    <Icon symbol="down" className="ml-1" />
+                  )}
+                </>
+              )}
+              triggerClassName="path-item path-item-dropdown-toggle"
+              toggleProps={{ tag: 'div' }}
+              menuClassName="position-fixed"
+              menuPortal={false}
+            />
           )
         }
       </React.Fragment>
