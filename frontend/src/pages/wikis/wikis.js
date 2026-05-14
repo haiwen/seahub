@@ -358,7 +358,7 @@ class Wikis extends Component {
     const request = isGroupWiki ? userAPI.depAdminTransferRepo(wiki.repo_id, wiki.owner.split('@')[0], owner, reshare) : userAPI.transferRepo(wiki.repo_id, owner, reshare);
 
     request.then(() => {
-      toaster.success(gettext('Successfully transferred the library.'));
+      toaster.success(gettext('Successfully transferred the wiki.'));
       this.getWikis();
     }).catch((error) => {
       if (error.response) {
