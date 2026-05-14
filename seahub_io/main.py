@@ -3,13 +3,13 @@ import argparse
 
 from seahub_io.db import create_db_tables, prepare_db_tables
 from seahub_io.utils import write_pidfile
+from seahub_io.app.app import App
 from seahub_io.app.log import LogConfigurator
 from seahub_io.app.config import get_config, is_syslog_enabled
-from seahub_io.server import SeafEventServer
 
 
 def main():
-    parser = argparse.ArgumentParser(description='seahub_io server')
+    parser = argparse.ArgumentParser(description='seahub_io main program')
     parser.add_argument('--config-file', default=os.path.join(os.getcwd(), 'seafevents.conf'), help='config file')
     parser.add_argument('--logfile', help='log file')
     parser.add_argument('--loglevel', default='info', help='log level')
@@ -46,9 +46,8 @@ def main():
     seasearch_log_path = os.path.join(os.environ.get('SEAHUB_IO_LOG_DIR', ''), 'seasearch_index.log')
     app_logger.add_seasearch_logger(seasearch_log_path)
 
-    server = SeafEventServer(config)
-    server.start()
-    server.join()
+    app = App(config)
+    app.serve_forever()
 
 
 if __name__ == '__main__':

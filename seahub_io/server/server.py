@@ -3,8 +3,6 @@ from threading import Thread
 
 from waitress import serve
 
-from seahub_io.app.mq_handler import EventsHandler, init_message_handlers
-from seahub_io.tasks import CountUserActivity, CountTrafficInfo
 from seahub_io.server.request_handler import app as application
 from seahub_io.server.task_manager import task_manager
 from seahub_io.server.export_task_manager import event_export_task_manager
@@ -19,15 +17,10 @@ logger = logging.getLogger(__name__)
 
 class SeafEventServer(Thread):
 
-    def __init__(self, config, app=None):
+    def __init__(self, app, config):
         Thread.__init__(self)
         self.app = app
         self._parse_config(config)
-
-        init_message_handlers(config)
-        self._events_handler = EventsHandler(config)
-        self._count_traffic_task = CountTrafficInfo(config)
-        self._count_user_activity_task = CountUserActivity(config)
 
         task_manager.init(self.app, self._workers, self._task_expire_time)
         event_export_task_manager.init(self.app, self._workers, self._task_expire_time)
@@ -64,9 +57,5 @@ class SeafEventServer(Thread):
             self._task_expire_time = 30 * 60
 
     def run(self):
-        self._events_handler.start()
-        self._count_user_activity_task.start()
-        self._count_traffic_task.start()
-
         logger.info('Start seahub_io server at %s:%s', self._host, self._port)
         serve(application, host=self._host, port=self._port)
