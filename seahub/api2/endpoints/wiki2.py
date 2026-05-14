@@ -40,7 +40,7 @@ from seahub.wiki2.utils import get_wiki_config, WIKI_PAGES_DIR, is_group_wiki, \
     import_conflunece_to_wiki, import_wiki_page
 
 from seahub.utils import is_org_context, get_user_repos, is_pro_version, is_valid_dirent_name, \
-    get_no_duplicate_obj_name, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_get_url, get_service_url, normalize_dir_path
+    get_no_duplicate_obj_name, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_get_url, get_service_url, normalize_dir_path, normalize_file_path
 if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
     from seahub.search.utils import search_wikis, ai_search_wikis, SEARCH_REPOS_LIMIT
 
@@ -2512,4 +2512,86 @@ class Wiki2LinkedRepoDirView(APIView):
         response_dict['dirent_list'] = dir_info_list + file_info_list
 
         return Response(response_dict)
+
+class Wiki2LinkedRepoFileUuidView(APIView):
+
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, wiki_id, linked_repo_id):
+        """ Get file_uuid of a file/dir.
+        """
+        # resource check
+        repo_id = linked_repo_id
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = 'Wiki not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+
+        path = request.GET.get('p', None)
+        if not path:
+            error_msg = 'path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        username = request.user.username
+        permission = check_wiki_permission(wiki, username)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
+        wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
+        if not wiki_settings or not wiki_settings.enable_link_repos:
+            error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        linked_repos = wiki_settings.get_linked_repos()
+        if repo_id not in linked_repos:
+            error_msg = f'The repo {repo_id} is not linked to wiki {wiki_id}.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_file_id_by_path(repo_id, normalize_file_path(path)):
+            error_msg = 'File %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if not check_folder_permission(request, repo_id, path):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # make sure path:
+        # 1. starts with '/'
+        # 2. NOT ends with '/'
+        path = normalize_file_path(path)
+        parent_dir = os.path.dirname(path)
+        dirent_name = os.path.basename(path)
+
+        # get file/dir uuid
+        if repo.is_virtual:
+            repo_id = repo.origin_repo_id
+            path = posixpath.join(repo.origin_path, path.strip('/'))
+            path = os.path.normpath(path)
+
+            path = normalize_file_path(path)
+            parent_dir = os.path.dirname(path)
+            dirent_name = os.path.basename(path)
+
+        try:
+            uuid_map = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id,
+                                                                     parent_dir,
+                                                                     dirent_name,
+                                                                     is_dir=False)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'file_uuid': str(uuid_map.uuid)}) 
