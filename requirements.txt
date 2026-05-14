@@ -29,4 +29,14 @@ pypinyin==0.55.*
 dnspython==2.8.*
 pillow-heif==1.2.*
 redis==7.1.*
+SQLAlchemy==2.0.*
+pymysql==1.1.*
+Flask==3.1.*
+pyexiftool==0.5.*
+waitress==3.0.*
+markdown-it-py==4.0.*
+beautifulsoup4==4.14.*
+mdit_py_plugins==0.5.*
+scikit-learn==1.8.*
+python-memcached==1.62
 cairosvg==2.8.*
