@@ -114,7 +114,13 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
           <Tooltip target={id}>{gettext('Add column')}</Tooltip>
         </DropdownToggle>
         <ModalPortal>
-          <ColumnTypeDropdownMenu onSelect={handleSelect} />
+          <ColumnTypeDropdownMenu
+            modifiers={[{
+              name: 'offset',
+              options: { offset: [0, 4] },
+            }]}
+            onSelect={handleSelect}
+          />
         </ModalPortal>
       </Dropdown>
       {isColumnPopoverShow && !isColumnMenuOpen && (

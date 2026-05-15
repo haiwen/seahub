@@ -1,14 +1,9 @@
-.search-column-container {
-  padding: 8px 16px;
-}
-
 .search-column-container .form-control {
   height: 2rem;
 }
 
-.column-type-item:hover {
-  color: var(--bs-body-color);
-  background-color: var(--bs-dropdown-tertiary-bg);
+.column-type-item {
+  padding: 0 12px;
 }
 
 .column-type-item .sf-metadata-icon,
@@ -23,5 +18,6 @@
 }
 
 .sf-metadata-column-type-dropdown-menu .column-type-item.dropdown-item .seafile-multicolor-icon-down {
+  font-size: .75rem;
   color: var(--bs-icon-color);
 }

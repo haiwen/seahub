@@ -50,8 +50,8 @@ const ColumnTypeDropdownMenu = ({ modifiers, onSelect }) => {
   }, [onSelect]);
 
   return (
-    <DropdownMenu className="sf-metadata-column-type-dropdown-menu" modifiers={modifiers} style={{ zIndex: 1061 }}>
-      <div className="search-column-container">
+    <DropdownMenu role="menu" className="sf-metadata-column-type-dropdown-menu" modifiers={modifiers}>
+      <div className="search-column-container mb-2">
         <Input
           onChange={onSearchColumn}
           placeholder={gettext('Search properties')}
@@ -83,7 +83,7 @@ const ColumnTypeDropdownMenu = ({ modifiers, onSelect }) => {
                 isOpen={isCustomPropertiesOpen}
                 toggle={toggleCustomProperties}
                 onMouseEnter={() => setCustomPropertiesOpen(true)}
-                onMouseMove={(e) => {e.stopPropagation();}}
+                onMouseMove={(e) => { e.stopPropagation(); }}
               >
                 <DropdownToggle
                   tag='span'
@@ -93,7 +93,12 @@ const ColumnTypeDropdownMenu = ({ modifiers, onSelect }) => {
                   <span className="mr-auto">{gettext('Custom properties')}</span>
                   <Icon symbol="down" className="rotate-270" />
                 </DropdownToggle>
-                <DropdownMenu>
+                <DropdownMenu
+                  modifiers={[{
+                    name: 'offset',
+                    options: { offset: [-8, 12] },
+                  }]}
+                >
                   {basicsColumns.map((item, index) => (
                     <DropdownItem
                       key={index}

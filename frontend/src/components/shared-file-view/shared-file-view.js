@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import watermark from 'watermark-dom';
 import classNames from 'classnames';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import Account from '../common/account';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -11,6 +10,7 @@ import AddAbuseReportDialog from '../../components/dialog/add-abuse-report-dialo
 import toaster from '../toast';
 import Switch from '../switch';
 import Icon from '../icon';
+import CustomDropdown from '../dropdown';
 
 import '../../css/header.css';
 import '../../css/shared-file-view.css';
@@ -30,7 +30,6 @@ class SharedFileView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      moreDropdownOpen: false,
       showSaveSharedFileDialog: false,
       isAddAbuseReportDialogOpen: false
     };
@@ -60,16 +59,51 @@ class SharedFileView extends React.Component {
     });
   };
 
-  toggleMoreOpMenu = (event) => {
-    if (this.state.moreDropdownOpen) {
-      const el = document.getElementById('txt-line-wrap-menu');
-      if (el && el.contains(event.target)) {
-        return;
-      }
+  getMenuItems = () => {
+    const items = [];
+
+    if (canDownload && loginUser && (loginUser !== sharedBy)) {
+      items.push({
+        key: 'save-as',
+        label: gettext('Save as ...'),
+        onClick: this.handleSaveSharedFileDialog,
+      });
     }
-    this.setState({
-      moreDropdownOpen: !this.state.moreDropdownOpen
-    });
+
+    if (canDownload && !trafficOverLimit) {
+      items.push({
+        key: 'download',
+        label: `${gettext('Download')} (${Utils.bytesToSize(fileSize)})`,
+        onClick: () => {
+          window.location = zipped ? `?p=${encodeURIComponent(filePath)}&dl=1` : sharedFileDownloadURL;
+        },
+      });
+    }
+
+    if (enableShareLinkReportAbuse && (loginUser !== sharedBy)) {
+      items.push({
+        key: 'report-abuse',
+        label: gettext('Report Abuse'),
+        onClick: this.toggleAddAbuseReportDialog,
+      });
+    }
+
+    if (this.props.canWrapLine) {
+      items.push({
+        key: 'line-wrapping',
+        label: gettext('Line wrapping'),
+        right_slot: (
+          <Switch
+            checked={this.props.lineWrapping}
+            className="txt-line-wrap-menu"
+            onChange={() => this.props.updateLineWrapping(!this.props.lineWrapping)}
+          />
+        ),
+        keepOpen: true,
+      });
+    }
+
+    return items;
   };
 
   componentDidMount() {
@@ -129,47 +163,12 @@ class SharedFileView extends React.Component {
           }
         </div>
         <div className="flex-shrink-0 ml-4">
-          <Dropdown isOpen={this.state.moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
-            <DropdownToggle
-              tag="span"
-              role="button"
-              tabIndex={0}
-              className="op-icon m-0"
-              aria-label={gettext('More operations')}
-              title={gettext('More operations')}
-            >
-              <Icon symbol="more-level" />
-            </DropdownToggle>
-            <DropdownMenu>
-              {(canDownload && loginUser && (loginUser !== sharedBy)) && (
-                <DropdownItem onClick={this.handleSaveSharedFileDialog}>
-                  {gettext('Save as ...')}
-                </DropdownItem>
-              )}
-              {(canDownload && !trafficOverLimit) &&
-              <DropdownItem
-                href={`${zipped ? '?p=' + encodeURIComponent(filePath) + '&dl=1' : sharedFileDownloadURL}`}
-              >
-                {gettext('Download')} ({Utils.bytesToSize(fileSize)})
-              </DropdownItem>
-              }
-              {(enableShareLinkReportAbuse && (loginUser !== sharedBy)) && (
-                <DropdownItem onClick={this.toggleAddAbuseReportDialog}>
-                  {gettext('Report Abuse')}
-                </DropdownItem>
-              )}
-              {this.props.canWrapLine && (
-                <DropdownItem id='txt-line-wrap-menu' className='dropdown-item'>
-                  <Switch
-                    checked={this.props.lineWrapping}
-                    placeholder={gettext('Line wrapping')}
-                    className="txt-line-wrap-menu w-100"
-                    onChange={() => this.props.updateLineWrapping(!this.props.lineWrapping)}
-                  />
-                </DropdownItem>
-              )}
-            </DropdownMenu>
-          </Dropdown>
+          <CustomDropdown
+            items={this.getMenuItems()}
+            trigger={<Icon symbol="more-level" />}
+            triggerClassName="op-icon m-0"
+            toggleProps={{ tag: 'span', 'aria-label': gettext('More operations'), title: gettext('More operations') }}
+          />
         </div>
       </>
     );

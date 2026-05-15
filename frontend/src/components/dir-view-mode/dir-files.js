@@ -6,7 +6,7 @@ import ModalPortal from '../modal-portal';
 import ImageDialog from '../dialog/image-dialog';
 import toaster from '../toast';
 import { fileServerRoot, gettext, siteRoot, thumbnailSizeForOriginal, thumbnailDefaultSize, SF_DIRECTORY_TREE_SORT_BY_KEY, SF_DIRECTORY_TREE_SORT_ORDER_KEY } from '../../utils/constants';
-import { isMobile, updateImageThumbnail, Utils } from '../../utils/utils';
+import { updateImageThumbnail, Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import TreeSection from '../tree-section';
 import imageAPI from '../../utils/image-api';
