@@ -1,14 +1,20 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { GalleryGroupBySetter, FilterSetter, SortSetter } from '../../data-process-setter';
-import { PRIVATE_COLUMN_KEY } from '../../../constants';
-import { gettext } from '../../../../utils/constants';
-import { useMetadataStatus } from '../../../../hooks';
-import OpIcon from '../../../../components/op-icon';
+import { FilterSetter, GroupbySetter, SortSetter, HideColumnSetter, Search } from '../data-process-setter';
+import { PRIVATE_COLUMN_KEY } from '../../constants';
+import { useMetadataStatus } from '../../../hooks';
+import SetRowHeight from '../../../components/set-row-height';
 
-const GalleryViewToolbar = ({
-  readOnly, isCustomPermission, view, collaborators,
-  modifyFilters, modifySorts, onToggleDetail,
+const TableViewToolbar = ({
+  readOnly,
+  view,
+  collaborators,
+  modifyFilters,
+  modifySorts,
+  modifyGroupbys,
+  modifyHiddenColumns,
+  modifyColumnOrder,
+  modifyRowHeight,
 }) => {
   const { globalHiddenColumns } = useMetadataStatus();
   const viewType = useMemo(() => view.type, [view]);
@@ -24,7 +30,7 @@ const GalleryViewToolbar = ({
   return (
     <>
       <div className="sf-metadata-tool-left-operations">
-        <GalleryGroupBySetter viewID={view._id} />
+        <Search viewId={view._id} columns={viewColumns} />
         <FilterSetter
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-filter"
           filtersClassName="sf-metadata-filters"
@@ -47,29 +53,45 @@ const GalleryViewToolbar = ({
           columns={viewColumns}
           modifySorts={modifySorts}
         />
-        {!isCustomPermission && (
-          <OpIcon
-            id="info-btn"
-            className="cur-view-path-btn ml-2"
-            symbol="info"
-            tooltip={gettext('Properties')}
-            op={onToggleDetail}
-          />
-        )}
+        <GroupbySetter
+          wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-groupby"
+          target="sf-metadata-groupby-popover"
+          readOnly={readOnly}
+          columns={viewColumns}
+          groupbys={view.groupbys}
+          modifyGroupbys={modifyGroupbys}
+        />
+        <HideColumnSetter
+          wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-hide-column"
+          target="sf-metadata-hide-column-popover"
+          readOnly={readOnly}
+          columns={viewColumns.slice(1)}
+          hiddenColumns={view.hidden_columns || []}
+          modifyHiddenColumns={modifyHiddenColumns}
+          modifyColumnOrder={modifyColumnOrder}
+        />
+        <SetRowHeight
+          iconClass="sf-metadata-view-tool-operation-btn"
+          readOnly={readOnly}
+          rowHeight={view.row_height}
+          modifyRowHeight={modifyRowHeight}
+        />
       </div>
       <div className="sf-metadata-tool-right-operations"></div>
     </>
   );
 };
 
-GalleryViewToolbar.propTypes = {
+TableViewToolbar.propTypes = {
   readOnly: PropTypes.bool,
-  isCustomPermission: PropTypes.bool,
   view: PropTypes.object.isRequired,
   collaborators: PropTypes.array,
   modifyFilters: PropTypes.func,
   modifySorts: PropTypes.func,
-  onToggleDetail: PropTypes.func,
+  modifyGroupbys: PropTypes.func,
+  modifyHiddenColumns: PropTypes.func,
+  modifyColumnOrder: PropTypes.func,
+  modifyRowHeight: PropTypes.func,
 };
 
-export default GalleryViewToolbar;
+export default TableViewToolbar;

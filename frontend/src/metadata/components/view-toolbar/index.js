@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { EVENT_BUS_TYPE, VIEW_TYPE } from '../../constants';
 import TableViewToolbar from './table-view-toolbar';
 import GalleryViewToolbar from './gallery-view-toolbar';
-import FaceRecognitionViewToolbar from './face-recognition';
+import FaceRecognitionViewToolbar from './face-recognition-view-toolbar';
 import KanbanViewToolBar from './kanban-view-toolbar';
 import CardViewToolBar from './card-view-toolbar';
 import MapViewToolBar from './map-view-toolbar';

@@ -24,7 +24,6 @@ import { menuHandlers } from '../dir-view-mode/utils/menuHandlers';
 import FileTagsFormatter from '@/metadata/components/cell-formatter/file-tags';
 import { getNumberDisplayString } from '@/metadata/utils/cell';
 import TextTranslation from '@/utils/text-translation';
-import Tooltip from '../tooltip';
 
 import '../../css/dirent-list-item.css';
 import '../../metadata/components/cell-formatter/collaborator/index.css';

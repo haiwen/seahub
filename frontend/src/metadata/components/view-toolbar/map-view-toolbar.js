@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { PRIVATE_COLUMN_KEY, VIEW_TYPE } from '../../../constants';
-import { FilterSetter, MapTypeSetter } from '../../data-process-setter';
+import { PRIVATE_COLUMN_KEY, VIEW_TYPE } from '../../constants';
+import { FilterSetter, MapTypeSetter } from '../data-process-setter';
 
 const MapViewToolBar = ({
   readOnly,
