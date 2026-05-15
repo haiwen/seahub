@@ -7,7 +7,7 @@ import { gettext } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import Loading from './components/loading';
 import NoticeItem from './components/common/notice-item';
-import Icon from './components/icon';
+import OpIcon from './components/op-icon';
 import CustomDropdown from './components/dropdown';
 
 import './css/toolbar.css';
@@ -179,15 +179,12 @@ class UserNotificationsDialog extends React.Component {
 
   renderHeaderRowBtn = () => {
     return (
-      <div className="notification-header-close">
+      <div className="notification-header-operations">
         <CustomDropdown
           items={this.getMenuItems()}
-          trigger={<span className="seahub-modal-btn-inner"><Icon symbol="more-level" className="w-4 h-4" /></span>}
-          triggerClassName="notification-dropdown-toggle seahub-modal-btn border-0 p-0 bg-transparent"
-          toggleProps={{ 'aria-label': gettext('More operations') }}
-          menuClassName="dtable-dropdown-menu large"
           menuPortal={false}
         />
+        <OpIcon id="notification-dialog-close-btn" symbol="close" tooltip={gettext('Close')} className="notification-header-close op-icon" op={this.toggle} />
       </div>
     );
   };

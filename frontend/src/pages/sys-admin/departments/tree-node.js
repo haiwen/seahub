@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { gettext } from '../../../utils/constants';
 import Icon from '../../../components/icon';
 import { getDepartmentMenuItems } from './departments-node-dropdown-menu';
 import CustomDropdown from '../../../components/dropdown';
@@ -145,7 +144,6 @@ class DepartmentsTreeNode extends Component {
               })}
               trigger={<Icon symbol="more-level" />}
               triggerClassName="right-icon"
-              toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
               freezeItem={this.handleDropdownOpen}
               unfreezeItem={this.handleDropdownClose}
             />

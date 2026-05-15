@@ -63,6 +63,7 @@ class Content extends Component {
                 {items.map((item, index) => {
                   return (<Item
                     key={index}
+                    idx={index}
                     item={item}
                     deleteShareLink={this.props.deleteShareLink}
                   />);
@@ -139,7 +140,7 @@ class Item extends Component {
 
   render() {
     let { isOpIconShown, isHighlighted } = this.state;
-    let { item } = this.props;
+    let { item, idx } = this.props;
     return (
       <tr
         className={classnames({
@@ -156,9 +157,10 @@ class Item extends Component {
         <td>{this.renderExpiration()}</td>
         <td>
           <OpIcon
+            id={`delete-link-${idx}`}
             className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
             symbol="delete1"
-            title={gettext('Remove')}
+            tooltip={gettext('Remove')}
             op={this.deleteShareLink}
           />
         </td>
@@ -169,6 +171,7 @@ class Item extends Component {
 
 
 Item.propTypes = {
+  idx: PropTypes.number.isRequired,
   item: PropTypes.object.isRequired,
   deleteShareLink: PropTypes.func.isRequired,
 };

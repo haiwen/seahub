@@ -47,7 +47,6 @@ const FilterByText = ({ searchFilenameOnly, onChange }) => {
           </>
         )}
         triggerClassName="search-filter-toggle"
-        toggleProps={{ tag: 'div' }}
         menuClassName="search-filter-menu filter-by-text-menu"
         onItemClick={onItemClick}
       />

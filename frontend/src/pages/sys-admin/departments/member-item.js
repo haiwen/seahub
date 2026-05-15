@@ -111,14 +111,13 @@ class MemberItem extends React.Component {
           <td>{member.contact_email}</td>
           <td>
             {(highlighted || isDropdownFrozen) &&
-            <CustomDropdown
-              items={this.getMenuItems()}
-              trigger={<Icon symbol="more-level" />}
-              triggerClassName="op-icon"
-              toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
-              freezeItem={this.handleDropdownOpen}
-              unfreezeItem={this.handleDropdownClose}
-            />
+              <CustomDropdown
+                items={this.getMenuItems()}
+                trigger={<Icon symbol="more-level" />}
+                triggerClassName="op-icon"
+                freezeItem={this.handleDropdownOpen}
+                unfreezeItem={this.handleDropdownClose}
+              />
             }
           </td>
         </tr>

@@ -211,7 +211,6 @@ class DirOperationToolbar extends React.Component {
             )}
             triggerClassName="path-dropdown-item"
             menuClassName="position-fixed"
-            toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
             menuPortal={false}
           />
         </>
@@ -239,7 +238,6 @@ class DirOperationToolbar extends React.Component {
           )}
           triggerClassName="path-item"
           menuClassName="position-fixed"
-          toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
           menuPortal={false}
         />
       );
@@ -253,9 +251,9 @@ class DirOperationToolbar extends React.Component {
             {content}
           </div>
         )}
-        {this.state.isImportingSdoc && <TipDialog/>}
+        {this.state.isImportingSdoc && <TipDialog />}
         <div>
-          <input className="d-none" type="file" onChange={this.uploadSdoc} ref={this.fileInputRef} accept=".sdoczip"/>
+          <input className="d-none" type="file" onChange={this.uploadSdoc} ref={this.fileInputRef} accept=".sdoczip" />
         </div>
       </>
     );

@@ -157,7 +157,6 @@ class PermAuditItem extends React.Component {
         <a href={siteRoot + 'org/useradmin/info/' + permEvent.from_user_email + '/'}>{permEvent.from_user_name}</a>{' '}
         <CustomDropdown
           className={this.state.highlight ? '' : 'vh'}
-          dropdownProps={{ size: 'sm', tag: 'span' }}
           items={[{
             key: 'only-show',
             label: <>{gettext('Only Show')} <span className="font-weight-bold">{permEvent.from_user_name}</span></>,
@@ -165,7 +164,6 @@ class PermAuditItem extends React.Component {
           }]}
           trigger={<Icon symbol="more-level" />}
           triggerClassName="op-icon sf-dropdown-toggle"
-          toggleProps={{ tag: 'span' }}
         />
       </span>
     );

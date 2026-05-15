@@ -5,6 +5,7 @@ import IconButton from '../icon-button';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils, isImageRotateable } from '../../utils/utils';
 import Icon from '../../components/icon';
+import Switch from '../../components/switch';
 import ImageZoomer from './image-zoomer';
 import Tooltip from '../tooltip';
 import CustomDropdown from '../dropdown';
@@ -23,6 +24,8 @@ const propTypes = {
   isCommentUpdated: PropTypes.bool,
   isShareEnabled: PropTypes.bool,
   toggleShareDialog: PropTypes.func.isRequired,
+  lineWrapping: PropTypes.bool,
+  updateLineWrapping: PropTypes.func,
 };
 
 const {
@@ -66,20 +69,26 @@ class FileToolbar extends React.Component {
 
   getDesktopMenuItems = () => {
     const items = [];
-    if (fileExt == 'csv' && enableOnlyoffice) {
+    if (fileExt === 'csv' && enableOnlyoffice) {
       items.push({ key: 'open-with-onlyoffice', label: gettext('Open with OnlyOffice'), onClick: this.handleOpenWithOnlyOffice });
     }
-    if (filePerm == 'rw') {
+    if (filePerm === 'rw') {
       items.push({ key: 'open-with-client', label: gettext('Open with client'), onClick: this.handleOpenWithClient });
     }
-    if (filePerm == 'rw') {
+    if (filePerm === 'rw') {
       items.push({ key: 'history', label: gettext('History'), onClick: this.handleOpenHistory });
     }
-    if (fileType == 'Text') {
-      items.push({ key: 'line-wrapping', label: gettext('Line wrapping'), keepOpen: true, onClick: this.toggleLineWrapping });
+    if (fileType === 'Text') {
+      items.push({
+        key: 'line-wrapping',
+        label: gettext('Line wrapping'),
+        right_slot: <Switch className="txt-line-wrap-menu mr-3" checked={this.props.lineWrapping} onChange={this.toggleLineWrapping} />,
+        keepOpen: true,
+      });
     }
     items.push('Divider');
     items.push({ key: 'open-parent-folder', label: gettext('Open parent folder'), onClick: this.handleOpenParentFolder });
+
     return items;
   };
 
@@ -243,7 +252,6 @@ class FileToolbar extends React.Component {
               </>
             )}
             triggerClassName="file-toolbar-btn"
-            toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
             menuPortal={false}
             onItemClick={(selectedItem) => selectedItem.onClick?.()}
           />
@@ -254,7 +262,7 @@ class FileToolbar extends React.Component {
           className="d-block d-md-none flex-shrink-0 ml-4"
           trigger={
             <ButtonGroup>
-              {(canEditFile && fileType != 'SDoc' && !err) &&
+              {(canEditFile && fileType !== 'SDoc' && !err) &&
                 (this.props.isSaving ?
                   <button type='button' aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary'}>
                     <Icon symbol="spinner" />
@@ -275,8 +283,6 @@ class FileToolbar extends React.Component {
               <span className="mx-1"><Icon symbol="more-level" /></span>
             </ButtonGroup>
           }
-          triggerClassName=""
-          toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
           menuPortal={false}
           onItemClick={(selectedItem) => selectedItem.onClick?.()}
         />

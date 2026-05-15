@@ -77,6 +77,19 @@ class CommentItem extends React.Component {
     }
   };
 
+  getMenuItems = () => {
+    const items = [
+      { key: 'delete', label: gettext('Delete'), onClick: this.toggleShowDeletePopover },
+      { key: 'edit', label: gettext('Edit'), onClick: this.toggleEditComment },
+    ];
+    if (!this.props.item.resolved) {
+      items.push({ key: 'resolve', label: gettext('Mark as resolved'), onClick: () => this.props.resolveComment(this.props.item, 'true') });
+    } else {
+      items.push({ key: 'resubmit', label: gettext('Resubmit'), onClick: () => this.props.resolveComment(this.props.item, 'false') });
+    }
+    return items;
+  };
+
   toggleShowDeletePopover = () => {
     this.setState({
       isShowDeletePopover: !this.state.isShowDeletePopover
@@ -92,7 +105,7 @@ class CommentItem extends React.Component {
       return (
         <li className="seafile-comment-item" id={item.id}>
           <div className="seafile-comment-info">
-            <img className="avatar mt-1" src={item.avatar_url} alt=""/>
+            <img className="avatar mt-1" src={item.avatar_url} alt="" />
             <div className="comment-author-info">
               <div className="comment-author-name ellipsis">{item.user_name}</div>
               <div className="comment-author-time">{time}</div>
@@ -116,7 +129,7 @@ class CommentItem extends React.Component {
     return (
       <li className={'seafile-comment-item'} id={item.id}>
         <div className="seafile-comment-info">
-          <img className="avatar mt-1" src={item.avatar_url} alt=""/>
+          <img className="avatar mt-1" src={item.avatar_url} alt="" />
           <div className="comment-author-info">
             <div className="comment-author-name ellipsis">{item.user_name}</div>
             <div className="comment-author-time">
@@ -127,20 +140,13 @@ class CommentItem extends React.Component {
             </div>
           </div>
           {(item.user_email === username) &&
-          <CustomDropdown
-            target={commentOpToolsId}
-            dropdownProps={{ size: 'sm' }}
-            className="seafile-comment-dropdown"
-            items={[
-              { key: 'delete', label: gettext('Delete'), onClick: this.toggleShowDeletePopover },
-              { key: 'edit', label: gettext('Edit'), onClick: this.toggleEditComment },
-              ...(!item.resolved ? [{ key: 'resolve', label: gettext('Mark as resolved'), onClick: () => this.props.resolveComment(this.props.item, 'true') }] : []),
-              ...(item.resolved ? [{ key: 'resubmit', label: gettext('Resubmit'), onClick: () => this.props.resolveComment(this.props.item, 'false') }] : []),
-            ]}
-            trigger={<Icon symbol="more-level" />}
-            triggerClassName="seafile-comment-dropdown-btn sf-dropdown-toggle"
-            toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
-          />
+            <CustomDropdown
+              target={commentOpToolsId}
+              className="seafile-comment-dropdown"
+              items={this.getMenuItems()}
+              trigger={<Icon symbol="more-level" />}
+              triggerClassName="seafile-comment-dropdown-btn sf-dropdown-toggle"
+            />
           }
         </div>
         <div

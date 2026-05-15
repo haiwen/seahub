@@ -319,7 +319,6 @@ class GroupItem extends React.Component {
               items={this.getMenuItems()}
               trigger={<Icon symbol="more-level" />}
               triggerClassName="op-icon"
-              toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
               freezeItem={this.handleDropdownOpen}
               unfreezeItem={this.handleDropdownClose}
             />

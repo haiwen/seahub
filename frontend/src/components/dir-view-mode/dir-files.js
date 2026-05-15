@@ -338,7 +338,6 @@ class DirFiles extends React.Component {
           {...props}
           items={this.getMenuList()}
           trigger={<Icon symbol="more-level" />}
-          normalizeOptions={{ tickable: true }}
           tooltip={gettext('More operations')}
           onItemClick={(selectedItem) => this.onMoreOperationClick(selectedItem.key)}
         />

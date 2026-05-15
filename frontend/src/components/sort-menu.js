@@ -54,7 +54,7 @@ class SortMenu extends React.Component {
           </>
         )}
         triggerClassName="cur-view-path-btn px-1"
-        toggleProps={{ tag: 'span', 'aria-label': gettext('Switch sort mode') }}
+        toggleProps={{ 'aria-label': gettext('Switch sort mode') }}
         menuPortal={false}
         onItemClick={(selectedItem) => this.props.onSelectSortOption(selectedItem.sortOption)}
       />

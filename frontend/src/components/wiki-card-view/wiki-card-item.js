@@ -158,7 +158,7 @@ class WikiCardItem extends Component {
     const { owner_nickname, owner_avatar_url } = this.props.wiki;
     return (
       <div className="wiki-card-item-avatar-container">
-        <img className="wiki-card-item-avatar" src={owner_avatar_url} alt={owner_nickname}/>
+        <img className="wiki-card-item-avatar" src={owner_avatar_url} alt={owner_nickname} />
         <span className="wiki-card-item-owner text-truncate" title={owner_nickname}>{owner_nickname}</span>
       </div>
     );
@@ -284,7 +284,6 @@ class WikiCardItem extends Component {
                   </>
                 )}
                 triggerClassName="op-icon op-icon-bg-light"
-                toggleProps={{ tag: 'i', 'aria-label': gettext('More operations'), style: { minWidth: '0' } }}
                 menuClassName="dtable-dropdown-menu"
                 onToggle={this.toggleDropDownMenu}
                 onMenuHide={() => this.setState({ isItemMenuShow: false })}
@@ -356,7 +355,7 @@ class WikiCardItem extends Component {
               itemName={wiki.name}
               itemPath={'/'}
               repoID={wiki.repo_id}
-              repoEncrypted={ false }
+              repoEncrypted={false}
               enableDirPrivateShare={true}
               toggleDialog={this.onShareToggle}
             />

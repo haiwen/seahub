@@ -158,8 +158,8 @@ class DirPath extends React.Component {
           role={children ? 'button' : null}
           tabIndex={children ? 0 : -1}
           aria-label={children ? gettext('Refresh the view') : ''}
-          onClick={children ? this.handleRefresh : () => {}}
-          onKeyDown={children ? Utils.onKeyDown : () => {}}
+          onClick={children ? this.handleRefresh : () => { }}
+          onKeyDown={children ? Utils.onKeyDown : () => { }}
           title={children ? gettext('Refresh the view') : ''}
         >
           {viewId && <MetadataViewName id={viewId} />}
@@ -245,7 +245,6 @@ class DirPath extends React.Component {
             </>
           )}
           triggerClassName="trash-path-item"
-          toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
           menuClassName="position-fixed"
           menuPortal={false}
           onItemClick={(selectedItem) => selectedItem.onClick?.()}

@@ -1,8 +1,4 @@
-import React from 'react';
-
 export const DEFAULT_MENU_WIDTH = 200;
-export const DEFAULT_MENU_MAX_WIDTH = 240;
-export const DEFAULT_MENU_MAX_HEIGHT = 600;
 export const DEFAULT_MENU_OFFSET_SKIDDING = 0;
 export const DEFAULT_MENU_OFFSET_DISTANCE = 4;
 export const DEFAULT_SUBMENU_OFFSET_SKIDDING = -10;
@@ -12,15 +8,7 @@ export const isDividerNode = (item) => item === 'Divider' || item?.type === 'div
 
 export const isHeaderNode = (item) => item?.type === 'header';
 
-export const isSubmenuNode = (item) => Array.isArray(item?.children) || Array.isArray(item?.subOpList);
-
-export const normalizeDropdownItems = (items = [], options = {}) => {
-  const {
-    tickable = false,
-    itemClassName,
-    itemLabelKey,
-  } = options;
-
+export const normalizeDropdownItems = (items = []) => {
   return items.reduce((normalized, item, index) => {
     if (isDividerNode(item)) {
       normalized.push({ type: 'divider', key: `divider-${index}`, className: item.className || '' });
@@ -41,17 +29,17 @@ export const normalizeDropdownItems = (items = [], options = {}) => {
     }
 
     const children = item.children || item.subOpList;
-    const label = item.label || item.value || item.text || item[itemLabelKey] || '';
+    const label = item.label || item.value || item.text || '';
     const normalizedItem = {
       ...item,
       type: item.type || 'item',
       key: item.key || item.value || item.text || `item-${index}`,
       label,
-      checked: Boolean(item.checked ?? (tickable && item.tick)),
+      checked: Boolean(item.checked),
       icon: item.icon || item.icon_dom || null,
-      className: item.className || itemClassName,
+      className: item.className,
       children: Array.isArray(children)
-        ? normalizeDropdownItems(children, options)
+        ? normalizeDropdownItems(children)
         : undefined,
     };
 
@@ -62,14 +50,14 @@ export const normalizeDropdownItems = (items = [], options = {}) => {
 
 export const getDirectionByPlacement = (placement) => {
   if (placement?.startsWith('top')) return 'up';
-  if (placement?.startsWith('left')) return 'left';
-  if (placement?.startsWith('right')) return 'right';
+  if (placement?.startsWith('end')) return 'end';
+  if (placement?.startsWith('start')) return 'start';
   return 'down';
 };
 
-export const getSubmenuDirection = (menuElement, fallback = 'right') => {
+export const getSubmenuDirection = (menuElement) => {
   if (!menuElement || typeof window === 'undefined') {
-    return fallback;
+    return 'end';
   }
 
   const targetElement = menuElement instanceof HTMLElement
@@ -79,13 +67,13 @@ export const getSubmenuDirection = (menuElement, fallback = 'right') => {
       : null;
 
   if (!targetElement || typeof targetElement.getBoundingClientRect !== 'function') {
-    return fallback;
+    return 'end';
   }
 
   const rect = targetElement.getBoundingClientRect();
   const spaceRight = window.innerWidth - rect.right;
   const spaceLeft = rect.left;
-  return spaceRight >= DEFAULT_MENU_WIDTH || spaceRight >= spaceLeft ? 'right' : 'left';
+  return spaceRight >= DEFAULT_MENU_WIDTH || spaceRight >= spaceLeft ? 'end' : 'start';
 };
 
 export const focusMenuItem = (container, selector) => {
@@ -103,18 +91,7 @@ export const focusMenuItem = (container, selector) => {
   }
 };
 
-export const getMenuItemSelectors = () => [
-  '[data-dropdown-item="true"]:not([aria-disabled="true"])',
-  '[data-dropdown-submenu-trigger="true"]:not([aria-disabled="true"])',
-].join(', ');
-
-export const renderNodeContent = (content) => {
-  if (React.isValidElement(content)) {
-    return content;
-  }
-
-  return content || null;
-};
+export const MENU_ITEM_SELECTORS = '[role="menuitem"]:not([aria-disabled="true"])';
 
 export const getMenuSlotConfig = (items = [], variant = 'action') => {
   const actionItems = items.filter((item) => !isDividerNode(item) && !isHeaderNode(item));

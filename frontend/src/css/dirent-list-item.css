@@ -195,6 +195,7 @@
   background: transparent;
   border: none;
   text-align: center;
+  justify-content: center;
   line-height: 1;
   width: 100%;
   font-size: 14px;

@@ -119,7 +119,6 @@ class Department extends React.Component {
             })}
             trigger={<Icon symbol="down" />}
             triggerClassName="ml-1 sf-dropdown-toggle d-flex align-items-center"
-            toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
           />
         </div>
 
@@ -133,12 +132,12 @@ class Department extends React.Component {
             </li>
           </ul>
           {showSortIcon &&
-          <SortMenu
-            sortBy={sortBy}
-            sortOrder={sortOrder}
-            sortOptions={this.sortOptions}
-            onSelectSortOption={this.onSelectSortOption}
-          />
+            <SortMenu
+              sortBy={sortBy}
+              sortOrder={sortOrder}
+              sortOptions={this.sortOptions}
+              onSelectSortOption={this.onSelectSortOption}
+            />
           }
         </div>
 

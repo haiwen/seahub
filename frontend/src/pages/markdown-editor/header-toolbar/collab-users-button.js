@@ -16,7 +16,6 @@ class CollabUsersButton extends React.PureComponent {
         target={this.props.id}
         items={items}
         trigger={<><i className="iconfont icon-users"></i> {this.props.users.length}</>}
-        toggleProps={{ tag: 'span' }}
         menuClassName="drop-list"
         menuPortal={false}
       />

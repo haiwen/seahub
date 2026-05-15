@@ -27,7 +27,7 @@ const ContextMenuItem = ({
   if (isSubMenuItem) {
     return (
       <DropdownItem onClick={handleClick}>
-        {option.value}
+        <span className="dropdown-item-main-slot">{option.value}</span>
       </DropdownItem>
     );
   }
@@ -38,7 +38,7 @@ const ContextMenuItem = ({
       onClick={handleClick}
       onMouseMove={handleMouseMove}
     >
-      {option.value}
+      <span className="dropdown-item-main-slot">{option.value}</span>
     </button>
   );
 };

@@ -1,7 +1,8 @@
-import React, { useId, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap';
+import { gettext } from '@/utils/constants';
 import ModalPortal from '../modal-portal';
 import Icon from '../icon';
 import Tooltip from '../tooltip';
@@ -10,35 +11,30 @@ import {
   DEFAULT_MENU_OFFSET_DISTANCE,
   DEFAULT_MENU_OFFSET_SKIDDING,
   focusMenuItem,
+  MENU_ITEM_SELECTORS,
   getDirectionByPlacement,
-  getMenuItemSelectors,
-  normalizeDropdownItems,
 } from './utils';
 
 import './index.css';
 
 export const CustomDropdown = ({
   target,
+  forwardedRef,
+  variant = 'action',
+  placement = 'down',
+  modifier,
   trigger,
-  tooltip,
   triggerClassName,
   menuClassName,
+  className,
   items,
-  getItems,
-  item,
   onItemClick,
-  variant = 'action',
-  placement = 'bottom-start',
-  modifier,
   menuPortal = true,
   freezeItem,
   unfreezeItem,
-  className,
-  normalizeOptions,
-  dropdownProps,
   toggleProps,
+  dropdownProps,
   onMenuHide,
-  forwardedRef,
   onToggle,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,10 +42,13 @@ export const CustomDropdown = ({
   const menuRef = useRef(null);
   const generatedId = useId().replace(/:/g, '');
   const menuId = target || `dropdown-${generatedId}`;
-  const normalizedItems = useMemo(() => normalizeDropdownItems(
-    typeof getItems === 'function' ? getItems(item) : items,
-    normalizeOptions,
-  ), [getItems, item, items, normalizeOptions]);
+
+  useEffect(() => {
+    if (forwardedRef) {
+      forwardedRef.current = { dropdownRef, menuRef };
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleToggle = (nextOpen) => {
     setIsOpen(nextOpen);
@@ -78,7 +77,7 @@ export const CustomDropdown = ({
     }
 
     selectedItem.onClick?.(event, selectedItem);
-    onItemClick?.(selectedItem, event, item);
+    onItemClick?.(selectedItem, event);
 
     if (!selectedItem.keepOpen) {
       closeMenu();
@@ -97,13 +96,13 @@ export const CustomDropdown = ({
       if (!isOpen) {
         handleToggle(true);
       } else {
-        focusMenuItem(menuRef.current, getMenuItemSelectors());
+        focusMenuItem(menuRef.current, MENU_ITEM_SELECTORS);
       }
     }
   };
 
   const onMenuKeyDown = (event) => {
-    const selectors = getMenuItemSelectors();
+    const selectors = MENU_ITEM_SELECTORS;
     const interactiveItems = menuRef.current ? Array.from(menuRef.current.querySelectorAll(selectors)) : [];
     const currentIndex = interactiveItems.findIndex((node) => node === document.activeElement);
 
@@ -131,7 +130,7 @@ export const CustomDropdown = ({
   const menuContent = (
     <DropdownMenu
       ref={menuRef}
-      className={classNames('dropdown-menu', menuClassName)}
+      className={menuClassName}
       modifiers={modifier || [{
         name: 'preventOverflow',
         options: { boundary: document.body }
@@ -140,20 +139,18 @@ export const CustomDropdown = ({
         options: { offset: [DEFAULT_MENU_OFFSET_SKIDDING, DEFAULT_MENU_OFFSET_DISTANCE] },
       }]}
       onKeyDown={onMenuKeyDown}
-      data-placement={placement}
       role="menu"
     >
       <CustomDropdownMenuContent
-        items={normalizedItems}
+        items={items}
         variant={variant}
         menuClassName={menuClassName}
-        menuRef={menuRef}
         onItemClick={onMenuItemSelect}
       />
     </DropdownMenu>
   );
 
-  if (!normalizedItems.length) {
+  if (!items?.length) {
     return null;
   }
 
@@ -163,25 +160,29 @@ export const CustomDropdown = ({
       isOpen={isOpen}
       toggle={toggle}
       direction={getDirectionByPlacement(placement)}
-      className={classNames(className, dropdownProps?.className)}
+      className={className}
     >
       <DropdownToggle
-        {...toggleProps}
         id={menuId}
         innerRef={dropdownRef}
-        tag={toggleProps?.tag || 'span'}
-        role={toggleProps?.tag === 'button' ? undefined : 'button'}
+        tag="span"
+        role="button"
         tabIndex={toggleProps?.disabled ? -1 : 0}
-        className={classNames('more-dropdown-toggle', triggerClassName, toggleProps?.className)}
+        className={classNames('more-dropdown-toggle', triggerClassName)}
+        aria-label={gettext('More operations')}
         aria-expanded={isOpen}
         data-toggle="dropdown"
         onClick={toggle}
         onKeyDown={onToggleKeyDown}
+        {...toggleProps}
       >
-        {trigger || <Icon symbol="more-level" />}
-        {tooltip && <Tooltip target={menuId}>{tooltip}</Tooltip>}
+        {trigger || (
+          <>
+            <Icon symbol="more-level" />
+            <Tooltip target={menuId}>{gettext('More operations')}</Tooltip>
+          </>
+        )}
       </DropdownToggle>
-      {forwardedRef && (forwardedRef.current = { dropdownRef, menuRef })}
       {menuPortal ? <ModalPortal>{menuContent}</ModalPortal> : menuContent}
     </Dropdown>
   );
@@ -190,12 +191,9 @@ export const CustomDropdown = ({
 CustomDropdown.propTypes = {
   target: PropTypes.string,
   trigger: PropTypes.node,
-  tooltip: PropTypes.string,
   triggerClassName: PropTypes.string,
   menuClassName: PropTypes.string,
   items: PropTypes.array,
-  getItems: PropTypes.func,
-  item: PropTypes.object,
   onItemClick: PropTypes.func,
   variant: PropTypes.oneOf(['action', 'control']),
   placement: PropTypes.string,
@@ -204,9 +202,8 @@ CustomDropdown.propTypes = {
   freezeItem: PropTypes.func,
   unfreezeItem: PropTypes.func,
   className: PropTypes.string,
-  normalizeOptions: PropTypes.object,
-  dropdownProps: PropTypes.object,
   toggleProps: PropTypes.object,
+  dropdownProps: PropTypes.object,
   onMenuHide: PropTypes.func,
   forwardedRef: PropTypes.object,
   onToggle: PropTypes.func,

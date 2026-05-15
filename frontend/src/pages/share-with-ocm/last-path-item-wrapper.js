@@ -39,7 +39,6 @@ class LastPathItemWrapper extends React.Component {
             </>
           )}
           triggerClassName="path-item"
-          toggleProps={{ tag: 'div', 'aria-label': gettext('More operations') }}
           menuClassName="position-fixed"
           menuPortal={false}
         />

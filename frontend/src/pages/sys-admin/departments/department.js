@@ -142,7 +142,6 @@ class Department extends React.Component {
             })}
             trigger={<Icon symbol="down" />}
             triggerClassName="d-flex align-items-center ml-1 sf-dropdown-toggle"
-            toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
           />
         </div>
 
@@ -157,12 +156,12 @@ class Department extends React.Component {
           </ul>
 
           {showSortIcon &&
-          <SortMenu
-            sortBy={sortBy}
-            sortOrder={sortOrder}
-            sortOptions={this.sortOptions}
-            onSelectSortOption={this.onSelectSortOption}
-          />
+            <SortMenu
+              sortBy={sortBy}
+              sortOrder={sortOrder}
+              sortOptions={this.sortOptions}
+              onSelectSortOption={this.onSelectSortOption}
+            />
           }
         </div>
 
@@ -201,15 +200,15 @@ class Department extends React.Component {
                       </tbody>
                     </table>
                     {this.props.currentPageInfo &&
-                    <Paginator
-                      gotoPreviousPage={this.props.getPreviousPageList}
-                      gotoNextPage={this.props.getNextPageList}
-                      currentPage={this.props.currentPageInfo.current_page}
-                      hasNextPage={this.props.currentPageInfo.has_next_page}
-                      curPerPage={this.props.perPage}
-                      resetPerPage={this.props.resetPerPage}
-                      noURLUpdate={true}
-                    />
+                      <Paginator
+                        gotoPreviousPage={this.props.getPreviousPageList}
+                        gotoNextPage={this.props.getNextPageList}
+                        currentPage={this.props.currentPageInfo.current_page}
+                        hasNextPage={this.props.currentPageInfo.has_next_page}
+                        curPerPage={this.props.perPage}
+                        resetPerPage={this.props.resetPerPage}
+                        noURLUpdate={true}
+                      />
                     }
                   </div>
                 )}

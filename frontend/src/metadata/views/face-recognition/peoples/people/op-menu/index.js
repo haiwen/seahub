@@ -28,7 +28,6 @@ const OpMenu = ({ onRename, onFreezed, onUnFreezed }) => {
       trigger={<Icon symbol="more-level" />}
       tooltip={gettext('More operations')}
       triggerClassName="sf-dropdown-toggle op-icon face-recognition-more-operations-toggle"
-      toggleProps={{ tag: 'i', 'aria-label': gettext('More operations') }}
       freezeItem={handleFreeze}
       unfreezeItem={handleUnfreeze}
     />

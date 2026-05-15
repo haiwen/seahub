@@ -97,7 +97,7 @@ class WikiNav extends Component {
         const selectedFile = e.target.files[0];
         this.props.importPage(
           { file: selectedFile },
-          () => {},
+          () => { },
           () => {
             toaster.danger(gettext('Failed to import page'));
           }
@@ -189,32 +189,31 @@ class WikiNav extends Component {
         >
           <h2 className="h6 font-weight-normal m-0">{gettext('Pages')}</h2>
           {isDesktop && wikiPermission === 'rw' &&
-          <div className='d-none d-md-flex'>
-            <CustomDropdown
-              target="wiki-nav-more-operations"
-              items={pageOperationItems}
-              className="page-operation-dropdown"
-              trigger={(
-                <>
-                  <Icon symbol="more-level" />
-                  <Tooltip target="wiki-nav-more-operations">{gettext('More operations')}</Tooltip>
-                </>
-              )}
-              triggerClassName={classNames('op-icon', { 'invisible': !isHeaderHovered && !isDropdownOpen })}
-              toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
-              menuClassName="page-operation-dropdown-menu dtable-dropdown-menu large position-fixed"
-              freezeItem={this.handleDropdownOpen}
-              unfreezeItem={this.handleDropdownClose}
-              onItemClick={(selectedItem) => selectedItem.onClick?.()}
-            />
-            <OpIcon
-              id="new-wiki-page-btn"
-              className="op-icon mr-0"
-              tooltip={gettext('New page')}
-              op={this.props.handleAddNewPage}
-              symbol="new"
-            />
-          </div>
+            <div className='d-none d-md-flex'>
+              <CustomDropdown
+                target="wiki-nav-more-operations"
+                items={pageOperationItems}
+                className="page-operation-dropdown"
+                trigger={(
+                  <>
+                    <Icon symbol="more-level" />
+                    <Tooltip target="wiki-nav-more-operations">{gettext('More operations')}</Tooltip>
+                  </>
+                )}
+                triggerClassName={classNames('op-icon', { 'invisible': !isHeaderHovered && !isDropdownOpen })}
+                menuClassName="page-operation-dropdown-menu dtable-dropdown-menu large position-fixed"
+                freezeItem={this.handleDropdownOpen}
+                unfreezeItem={this.handleDropdownClose}
+                onItemClick={(selectedItem) => selectedItem.onClick?.()}
+              />
+              <OpIcon
+                id="new-wiki-page-btn"
+                className="op-icon mr-0"
+                tooltip={gettext('New page')}
+                op={this.props.handleAddNewPage}
+                symbol="new"
+              />
+            </div>
           }
         </div>
         {navigation.map((item, index) => {

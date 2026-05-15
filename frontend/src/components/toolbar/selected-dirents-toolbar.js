@@ -127,14 +127,12 @@ class SelectedDirentsToolbar extends React.Component {
     const isContextmenu = true;
     let opList = Utils.getDirentOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
     const list = ['Move', 'Copy', 'Delete', 'Download', 'Share'];
-    if (dirent.type == 'dir') {
-      opList = opList.filter((item, index) => {
-        return list.indexOf(item.key) == -1 && item != 'Divider';
-      });
-    } else {
-      opList = opList.filter((item, index) => {
-        return list.indexOf(item.key) == -1;
-      });
+    opList = opList.filter((item) => {
+      return list.indexOf(item.key) == -1;
+    });
+    // Remove leading orphaned dividers
+    while (opList.length > 0 && opList[0] === 'Divider') {
+      opList.shift();
     }
     return opList;
   };

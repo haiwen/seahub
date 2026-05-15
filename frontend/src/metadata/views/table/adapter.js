@@ -242,6 +242,24 @@ export const createMetadataContextMenuOptions = ({
   // Inner component: owns its own isOpen state so hover works
   const SubMenuDropdown = ({ option }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const closeTimerRef = React.useRef(null);
+
+    const onMouseEnter = (e) => {
+      e.stopPropagation();
+      if (closeTimerRef.current) {
+        clearTimeout(closeTimerRef.current);
+        closeTimerRef.current = null;
+      }
+      setIsOpen(true);
+    };
+
+    const onMouseLeave = (e) => {
+      e.stopPropagation();
+      closeTimerRef.current = setTimeout(() => {
+        setIsOpen(false);
+        closeTimerRef.current = null;
+      }, 300);
+    };
 
     return (
       <Dropdown
@@ -250,18 +268,28 @@ export const createMetadataContextMenuOptions = ({
         className="w-100"
         isOpen={isOpen}
         toggle={() => { }}
-        onMouseEnter={() => setIsOpen(true)}
-        onMouseLeave={() => setIsOpen(false)}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
       >
         <DropdownToggle
           tag="span"
-          className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center"
-          onMouseEnter={() => setIsOpen(true)}
+          className="dropdown-item"
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
         >
           <span className="mr-auto">{option.value}</span>
           <Icon symbol="down" className="rotate-270" />
         </DropdownToggle>
-        <DropdownMenu>
+        <DropdownMenu
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+          modifiers={[{
+            name: 'offset',
+            options: {
+              offset: [-8, 12],
+            },
+          }]}
+        >
           {option.subOpList.map((subItem, subIndex) => {
             if (subItem === 'Divider') {
               return <DropdownItem key={`sub-divider-${subIndex}`} divider />;
@@ -273,7 +301,7 @@ export const createMetadataContextMenuOptions = ({
             );
           })}
         </DropdownMenu>
-      </Dropdown>
+      </Dropdown >
     );
   };
 

@@ -73,6 +73,13 @@ class ReplyItem extends React.Component {
     }
   };
 
+  getMenuItems = () => {
+    return [
+      { key: 'delete', label: gettext('Delete'), onClick: this.toggleShowDeletePopover },
+      { key: 'edit', label: gettext('Edit'), onClick: this.toggleEditComment },
+    ];
+  };
+
   toggleShowDeletePopover = () => {
     this.setState({
       isShowDeletePopover: !this.state.isShowDeletePopover
@@ -86,7 +93,7 @@ class ReplyItem extends React.Component {
       return (
         <li className="seafile-comment-item" id={item.id}>
           <div className="seafile-comment-info mt-1">
-            <img className="avatar" src={item.avatar_url} alt=""/>
+            <img className="avatar" src={item.avatar_url} alt="" />
             <div className="comment-author-info">
               <div className="comment-author-name ellipsis">{item.user_name}</div>
               <div className="comment-author-time">{this.props.time}</div>
@@ -110,24 +117,19 @@ class ReplyItem extends React.Component {
     return (
       <li className={'seafile-comment-item'} id={item.id}>
         <div className="seafile-comment-info mt-1">
-          <img className="avatar" src={item.avatar_url} alt=""/>
+          <img className="avatar" src={item.avatar_url} alt="" />
           <div className="comment-author-info">
             <div className="comment-author-name ellipsis">{item.user_name}</div>
             <div className="comment-author-time">{this.props.time}</div>
           </div>
           {(item.user_email === username) &&
-          <CustomDropdown
-            target={replyOpToolsId}
-            dropdownProps={{ size: 'sm' }}
-            className="seafile-comment-dropdown"
-            items={[
-              { key: 'delete', label: gettext('Delete'), onClick: this.toggleShowDeletePopover },
-              { key: 'edit', label: gettext('Edit'), onClick: this.toggleEditComment },
-            ]}
-            trigger={<Icon symbol="more-level" />}
-            triggerClassName="seafile-comment-dropdown-btn sf-dropdown-toggle"
-            toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
-          />
+            <CustomDropdown
+              target={replyOpToolsId}
+              className="seafile-comment-dropdown"
+              items={this.getMenuItems()}
+              trigger={<Icon symbol="more-level" />}
+              triggerClassName="seafile-comment-dropdown-btn sf-dropdown-toggle"
+            />
           }
         </div>
         <div

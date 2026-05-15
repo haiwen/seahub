@@ -121,7 +121,6 @@ class MoreMenu extends React.PureComponent {
         className={`mx-1 old-history-more-operation ${className}`}
         trigger={<Icon symbol="more-level" />}
         triggerClassName="op-icon"
-        toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
         menuClassName="drop-list"
       />
     );

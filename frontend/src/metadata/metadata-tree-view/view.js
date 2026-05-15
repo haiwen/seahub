@@ -5,7 +5,7 @@ import { baiduMapKey, gettext, googleMapKey } from '../../utils/constants';
 import Icon from '../../components/icon';
 import toaster from '../../components/toast';
 import InlineNameEditor from './inline-name-editor';
-import { Utils, isMobile } from '../../utils/utils';
+import { Utils } from '../../utils/utils';
 import { useMetadata } from '../hooks';
 import {
   FACE_RECOGNITION_VIEW_ID, METADATA_VIEWS_DRAG_DATA_KEY, METADATA_VIEWS_KEY,
@@ -287,7 +287,6 @@ const ViewItem = ({
                 freezeItem={freezeItem}
                 unfreezeItem={unfreezeItem}
                 onItemClick={(selectedItem, event) => operationClick(selectedItem.key, event)}
-                menuStyle={isMobile ? { zIndex: 1050 } : {}}
               />
             )}
           </div>

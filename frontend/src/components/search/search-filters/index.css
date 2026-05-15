@@ -20,11 +20,13 @@
 
 .search-filters-container .search-filter .search-filter-toggle,
 .search-filter-menu .search-filter-toggle {
+  width: auto;
   display: flex;
   align-items: center;
   cursor: pointer;
   padding: 2px 4px;
   border-radius: 3px;
+  color: var(--bs-body-color);
 }
 
 .search-filters-container .search-filter .search-filter-toggle:hover,
@@ -49,6 +51,7 @@
 .search-filter-menu.filter-by-date-menu,
 .search-filter-menu.filter-by-creator-menu {
   width: 280px;
+  max-width: 280px;
 }
 
 .search-filter-menu.filter-by-suffix-menu {
@@ -87,8 +90,13 @@
 }
 
 .search-filter-menu .dropdown-item {
+  justify-content: space-between;
   position: relative;
-  padding: 0.25rem 10px;
+  padding: 0.25rem 12px;
+}
+
+.search-filter-menu.filter-by-text-menu .dropdown-item {
+  padding: 0;
 }
 
 .search-filter-menu .dropdown-item .dropdown-item-tick {
@@ -168,7 +176,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 12px;
+  padding: 4px 8px;
 }
 
 .filter-by-date-menu .filter-by-date-menu-toolbar .filter-by-date-type-toggle {
@@ -190,7 +198,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 16px;
+  padding: 4px 12px;
   gap: 8px;
 }
 

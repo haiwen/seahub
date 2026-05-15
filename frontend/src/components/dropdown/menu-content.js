@@ -2,16 +2,16 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import Icon from '../icon';
-import CustomDropdownItem from './custom-dropdown-item';
+import CustomDropdownItem from './item';
 import {
   focusMenuItem,
-  getMenuItemSelectors,
   getMenuSlotConfig,
   getSubmenuDirection,
   isDividerNode,
   normalizeDropdownItems,
   DEFAULT_SUBMENU_OFFSET_SKIDDING,
   DEFAULT_SUBMENU_OFFSET_DISTANCE,
+  MENU_ITEM_SELECTORS,
 } from './utils';
 
 const MenuSubmenu = ({
@@ -29,7 +29,7 @@ const MenuSubmenu = ({
   const menuRef = useRef(null);
   const closeTimerRef = useRef(null);
   const isOpen = activePath[depth] === item.key;
-  const direction = getSubmenuDirection(parentMenuRef?.current, 'right');
+  const direction = getSubmenuDirection(parentMenuRef?.current);
   const submenuPath = activePath.slice(0, depth).concat(item.key);
   const submenuItems = item.children || [];
 
@@ -52,7 +52,10 @@ const MenuSubmenu = ({
     }
 
     closeTimerRef.current = window.setTimeout(() => {
-      setActivePath((prev) => prev.slice(0, depth));
+      setActivePath((prev) => {
+        if (prev[depth] !== item.key) return prev;
+        return prev.slice(0, depth);
+      });
       closeTimerRef.current = null;
     }, 300);
   };
@@ -70,7 +73,7 @@ const MenuSubmenu = ({
       event.preventDefault();
       openSubmenu();
       window.requestAnimationFrame(() => {
-        focusMenuItem(menuRef.current, getMenuItemSelectors());
+        focusMenuItem(menuRef.current, MENU_ITEM_SELECTORS);
       });
       return;
     }
@@ -86,7 +89,7 @@ const MenuSubmenu = ({
       event.preventDefault();
       openSubmenu();
       window.requestAnimationFrame(() => {
-        focusMenuItem(menuRef.current, getMenuItemSelectors());
+        focusMenuItem(menuRef.current, MENU_ITEM_SELECTORS);
       });
     }
   };
@@ -103,7 +106,6 @@ const MenuSubmenu = ({
     <Dropdown
       direction={direction}
       className="w-100 dropdown-submenu"
-      data-direction={direction}
       isOpen={isOpen}
       toggle={openSubmenu}
       onMouseEnter={openSubmenu}
@@ -118,7 +120,6 @@ const MenuSubmenu = ({
       >
         <CustomDropdownItem
           item={item}
-          isSubmenuTrigger={true}
           rightSlot={<Icon symbol="down" className="rotate-270 dropdown-submenu-arrow mr-2" />}
           onKeyDown={onTriggerKeyDown}
           tabIndex={-1}
@@ -142,8 +143,7 @@ const MenuSubmenu = ({
             },
           },
         ]}
-        flip={false}
-        data-depth={depth + 1}
+        flip={true}
         onMouseEnter={openSubmenu}
         onMouseLeave={closeSubmenu}
         onKeyDown={onSubmenuKeyDown}
@@ -179,11 +179,11 @@ const MenuSubmenu = ({
               key={subItem.key || index}
               item={subItem}
               rightSlot={subItem.right_slot}
-              onClick={(event) => onItemSelect(subItem, event)}
+              onClick={(event) => onItemSelect?.(subItem, event)}
               onKeyDown={(event) => {
                 if (event.key === 'Enter' || event.key === ' ') {
                   event.preventDefault();
-                  onItemSelect(subItem, event);
+                  onItemSelect?.(subItem, event);
                 }
               }}
               showCheckPlaceholder={menuSlotConfig.showCheckPlaceholder}
@@ -203,7 +203,7 @@ MenuSubmenu.propTypes = {
   depth: PropTypes.number.isRequired,
   activePath: PropTypes.array.isRequired,
   setActivePath: PropTypes.func.isRequired,
-  onItemSelect: PropTypes.func.isRequired,
+  onItemSelect: PropTypes.func,
   variant: PropTypes.oneOf(['action', 'control']),
   menuClassName: PropTypes.string,
   parentMenuRef: PropTypes.object,
@@ -218,15 +218,13 @@ export const CustomDropdownMenuContent = ({
   variant = 'action',
   menuClassName,
   onItemClick,
-  menuRef,
-  normalizeOptions,
 }) => {
   const [activePath, setActivePath] = useState([]);
-  const normalizedItems = useMemo(() => normalizeDropdownItems(items, normalizeOptions), [items, normalizeOptions]);
+  const normalizedItems = useMemo(() => normalizeDropdownItems(items), [items]);
   const menuSlotConfig = useMemo(() => getMenuSlotConfig(normalizedItems, variant), [normalizedItems, variant]);
 
   return (
-    <div ref={menuRef}>
+    <>
       {normalizedItems.map((menuItem, index) => {
         if (isDividerNode(menuItem)) {
           return <DropdownItem key={menuItem.key || index} divider className={menuItem.className} />;
@@ -247,7 +245,6 @@ export const CustomDropdownMenuContent = ({
               onItemSelect={onItemClick}
               variant={variant}
               menuClassName={menuClassName}
-              parentMenuRef={menuRef}
               menuSlotConfig={menuSlotConfig}
             />
           );
@@ -258,12 +255,12 @@ export const CustomDropdownMenuContent = ({
             key={menuItem.key || index}
             item={menuItem}
             rightSlot={menuItem.right_slot}
-            onClick={(event) => onItemClick(menuItem, event)}
+            onClick={(event) => onItemClick?.(menuItem, event)}
             onMouseMove={() => activePath.length > 0 && setActivePath([])}
             onKeyDown={(event) => {
               if (event.key === 'Enter' || event.key === ' ') {
                 event.preventDefault();
-                onItemClick(menuItem, event);
+                onItemClick?.(menuItem, event);
               }
             }}
             showCheckPlaceholder={menuSlotConfig.showCheckPlaceholder}
@@ -273,7 +270,7 @@ export const CustomDropdownMenuContent = ({
           />
         );
       })}
-    </div>
+    </>
   );
 };
 
@@ -281,7 +278,5 @@ CustomDropdownMenuContent.propTypes = {
   items: PropTypes.array.isRequired,
   variant: PropTypes.oneOf(['action', 'control']),
   menuClassName: PropTypes.string,
-  onItemClick: PropTypes.func.isRequired,
-  menuRef: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({ current: PropTypes.any })]),
-  normalizeOptions: PropTypes.object,
+  onItemClick: PropTypes.func,
 };

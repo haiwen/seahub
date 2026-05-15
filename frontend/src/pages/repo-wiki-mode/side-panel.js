@@ -157,14 +157,13 @@ class SidePanel extends Component {
                     { key: 'new-file', label: gettext('New File'), onClick: () => this.onAddFileToggle('root') },
                   ]}
                   trigger={<Icon symbol="more-level" />}
-                  toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
                 />
               )}
             </div>
           </h3>
           <div className="wiki-pages-container">
             {this.props.isTreeDataLoading ?
-              (<Loading/>) :
+              (<Loading />) :
               (<TreeView
                 isNodeMenuShow={this.isNodeMenuShow}
                 treeData={this.props.treeData}

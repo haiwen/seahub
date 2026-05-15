@@ -75,27 +75,26 @@ class ViewFileToolbar extends React.Component {
     return (
       <Fragment>
         {opList.length > 0 &&
-        <CustomDropdown
-          className="view-file-toolbar-dropdown"
-          items={opList.map((item, index) => item === 'Divider' ? item : {
-            key: item.key || item.text || `view-file-op-${index}`,
-            label: item.text,
-            icon_dom: item.icon ? <Icon symbol={item.icon} className="mr-2 dropdown-item-icon" /> : null,
-            onClick: item.onClick,
-            subOpList: item.subOpList,
-          })}
-          trigger={(
-            <>
-              {this.props.children}
-              <Icon symbol="down" className="ml-1 path-item-dropdown-toggle" />
-            </>
-          )}
-          triggerClassName="path-item"
-          menuClassName="position-fixed"
-          toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
-          menuPortal={false}
-          onItemClick={(selectedItem) => selectedItem.onClick?.()}
-        />
+          <CustomDropdown
+            className="view-file-toolbar-dropdown"
+            items={opList.map((item, index) => item === 'Divider' ? item : {
+              key: item.key || item.text || `view-file-op-${index}`,
+              label: item.text,
+              icon_dom: item.icon ? <Icon symbol={item.icon} className="mr-2 dropdown-item-icon" /> : null,
+              onClick: item.onClick,
+              subOpList: item.subOpList,
+            })}
+            trigger={(
+              <>
+                {this.props.children}
+                <Icon symbol="down" className="ml-1 path-item-dropdown-toggle" />
+              </>
+            )}
+            triggerClassName="path-item"
+            menuClassName="position-fixed"
+            menuPortal={false}
+            onItemClick={(selectedItem) => selectedItem.onClick?.()}
+          />
         }
         {this.state.isShareDialogShow && (
           <ModalPortal>

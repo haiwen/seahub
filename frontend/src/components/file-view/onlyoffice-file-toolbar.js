@@ -72,7 +72,6 @@ class OnlyofficeFileToolbar extends React.Component {
             items={desktopMenuItems}
             trigger={<Icon symbol="more-level" />}
             triggerClassName="file-toolbar-btn"
-            toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
             menuPortal={false}
             onItemClick={(selectedItem) => selectedItem.onClick?.()}
           />
@@ -90,7 +89,6 @@ class OnlyofficeFileToolbar extends React.Component {
           className="d-block d-md-none flex-shrink-0 ml-4"
           trigger={<Icon symbol="more-level" />}
           triggerClassName="mx-1"
-          toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
           menuPortal={false}
           onItemClick={(selectedItem) => selectedItem.onClick?.()}
         />

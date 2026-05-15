@@ -60,7 +60,7 @@ class Content extends Component {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
       const emptyTip = (
-        <EmptyTip text={gettext('No libraries')}/>
+        <EmptyTip text={gettext('No libraries')} />
       );
       const table = (
         <Fragment>
@@ -228,7 +228,6 @@ class RepoItem extends React.Component {
                 items={this.getMenuItems()}
                 trigger={<Icon symbol="more-level" />}
                 triggerClassName="op-icon"
-                toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
                 freezeItem={this.handleDropdownOpen}
                 unfreezeItem={this.handleDropdownClose}
               />

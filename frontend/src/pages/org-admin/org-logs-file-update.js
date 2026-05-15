@@ -205,7 +205,6 @@ class FileUpdateItem extends React.Component {
         <a href={siteRoot + 'org/useradmin/info/' + fileEvent.user_email + '/'}>{fileEvent.user_name}</a>{' '}
         <CustomDropdown
           className={this.state.highlight ? '' : 'vh'}
-          dropdownProps={{ size: 'sm', tag: 'span' }}
           items={[{
             key: 'only-show',
             label: <>{gettext('Only Show')} <span className="font-weight-bold">{fileEvent.user_name}</span></>,
@@ -213,7 +212,6 @@ class FileUpdateItem extends React.Component {
           }]}
           trigger={<Icon symbol="more-level" />}
           triggerClassName="op-icon sf-dropdown-toggle"
-          toggleProps={{ tag: 'span' }}
         />
       </span>
     );
@@ -230,7 +228,6 @@ class FileUpdateItem extends React.Component {
         { fileEvent.repo_name &&
           <CustomDropdown
             className={this.state.highlight ? '' : 'vh'}
-            dropdownProps={{ size: 'sm' }}
             items={[{
               key: 'only-show',
               label: <>{gettext('Only Show')} <span className="font-weight-bold">{fileEvent.repo_name}</span></>,
@@ -238,7 +235,6 @@ class FileUpdateItem extends React.Component {
             }]}
             trigger={<Icon symbol="more-level" />}
             triggerClassName="op-icon sf-dropdown-toggle"
-            toggleProps={{ tag: 'span' }}
           />
         }
       </span>

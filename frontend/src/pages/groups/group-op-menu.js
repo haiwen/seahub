@@ -220,7 +220,6 @@ class GroupOperationMenu extends React.Component {
               </>
             )}
             triggerClassName={this.newLibraryEnabled ? 'ml-2 sf-dropdown-combined-toggle' : 'ml-1 sf-dropdown-toggle'}
-            toggleProps={{ tag: 'span', 'aria-label': gettext('Operations') }}
             menuPortal={false}
           />
         )}

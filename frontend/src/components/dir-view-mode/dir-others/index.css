@@ -4,6 +4,7 @@
   padding-left: 10px;
   cursor: pointer;
   display: flex;
+  justify-content: flex-start;
   align-items: center;
 }
 
@@ -37,10 +38,15 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: var(--bs-body-color);
 }
 
 .dir-others .dir-others-item .seafile-multicolor-icon {
   width: 1rem;
   height: 1rem;
   color: var(--bs-icon-color);
+}
+
+.dir-others .dir-others-item.more-dropdown-toggle {
+  width: 100%;
 }

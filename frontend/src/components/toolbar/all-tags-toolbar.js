@@ -63,7 +63,7 @@ const AllTagsToolbar = () => {
     return () => {
       unsubscribeSelectTags && unsubscribeSelectTags();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const length = selectedTagIds.length;

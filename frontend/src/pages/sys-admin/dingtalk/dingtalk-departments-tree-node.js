@@ -111,20 +111,18 @@ class DingtalkDepartmentsTreeNode extends Component {
             </span>
             <span className="tree-node-text">{department.name}</span>
             {isPro &&
-            <CustomDropdown
-              dropdownProps={{ style: this.state.active ? {} : { opacity: 0 } }}
-              items={[{
-                key: `${department.id}`,
-                label: '导入部门',
-                onClick: () => this.importDepartmentDialogToggle(department),
-              }]}
-              trigger={<Icon symbol="more-level" />}
-              triggerClassName="cursor-pointer right-icon"
-              toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
-              menuClassName="drop-list"
-              freezeItem={this.handleDropdownOpen}
-              unfreezeItem={this.handleDropdownClose}
-            />
+              <CustomDropdown
+                items={[{
+                  key: `${department.id}`,
+                  label: '导入部门',
+                  onClick: () => this.importDepartmentDialogToggle(department),
+                }]}
+                trigger={<Icon symbol="more-level" />}
+                triggerClassName="cursor-pointer right-icon"
+                menuClassName="drop-list"
+                freezeItem={this.handleDropdownOpen}
+                unfreezeItem={this.handleDropdownClose}
+              />
             }
           </div>
         }

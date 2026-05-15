@@ -1,6 +1,9 @@
 .sf-table-context-menu {
   display: block;
   opacity: 1;
-  box-shadow: 0 0 5px #ccc;
   position: fixed;
+}
+
+.sf-table-context-menu .dropdown-item {
+  padding: 0 12px;
 }

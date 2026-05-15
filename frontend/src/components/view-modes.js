@@ -60,7 +60,7 @@ class ViewModes extends React.Component {
           </>
         )}
         triggerClassName="cur-view-path-btn px-1"
-        toggleProps={{ tag: 'span', 'aria-label': gettext('Switch view mode') }}
+        toggleProps={{ 'aria-label': gettext('Switch view mode') }}
         menuPortal={false}
         onItemClick={(selectedItem) => this.props.switchViewMode(selectedItem.key)}
       />

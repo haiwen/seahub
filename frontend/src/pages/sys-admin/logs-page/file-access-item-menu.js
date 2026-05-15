@@ -37,7 +37,6 @@ class FilterMenu extends React.Component {
         items={this.getMenuItems()}
         trigger={<Icon symbol="down" />}
         triggerClassName="sf-dropdown-toggle"
-        toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
         freezeItem={this.handleDropdownOpen}
         unfreezeItem={this.handleDropdownClose}
       />

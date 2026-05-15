@@ -471,7 +471,6 @@ class Wikis extends Component {
                       </>
                     )}
                     triggerClassName="ml-2 sf-dropdown-combined-toggle"
-                    toggleProps={{ tag: 'span', 'aria-label': gettext('Operations') }}
                     menuPortal={false}
                   />
                 }

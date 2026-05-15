@@ -106,7 +106,6 @@ class HistoryListItem extends React.Component {
             items={this.getMenuItems()}
             trigger={<Icon symbol="more-level" />}
             triggerClassName={(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}
-            toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
             freezeItem={this.handleDropdownOpen}
             unfreezeItem={this.handleDropdownClose}
           />

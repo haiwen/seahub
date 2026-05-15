@@ -5,7 +5,7 @@ import MobileItemMenu from '../components/mobile-item-menu';
 import Icon from './icon';
 import Tooltip from './tooltip';
 import CustomDropdown from './dropdown';
-import CustomDropdownItem from './dropdown/custom-dropdown-item';
+import CustomDropdownItem from './dropdown/item';
 
 const propTypes = {
   isPC: PropTypes.bool,
@@ -189,17 +189,16 @@ class LibraryOperationMenu extends React.Component {
     const advancedOperations = this.getAdvancedOperations();
     const menuItems = this.buildMenuItems(operations, advancedOperations);
 
-    const { children, isLibView, menuContainer, placement } = this.props;
+    const { children, isLibView, menuContainer } = this.props;
 
     // pc menu
     if (this.props.isPC) {
       return (
         <CustomDropdown
           items={menuItems}
-          dropdownProps={{ direction: isLibView ? 'end' : 'down' }}
           className={isLibView ? 'd-block' : ''}
           target={isLibView ? 'library-more-operations-btn' : 'more-operations-btn'}
-          placement={placement || (isLibView ? 'right' : 'bottom-start')}
+          placement={isLibView ? 'end' : 'down'}
           trigger={isLibView ? children : (
             <>
               <Icon symbol="more-level" />
@@ -209,7 +208,6 @@ class LibraryOperationMenu extends React.Component {
             </>
           )}
           triggerClassName={isLibView ? 'dir-others-item' : 'op-icon'}
-          toggleProps={{ tag: isLibView ? 'div' : 'span', 'aria-label': gettext('More operations') }}
           menuProps={{ container: menuContainer || (isLibView ? 'body' : '') }}
           freezeItem={this.props.onFreezedItem}
           unfreezeItem={this.props.onUnfreezedItem}

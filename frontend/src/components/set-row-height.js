@@ -58,8 +58,8 @@ class SetRowHeight extends React.Component {
           </>
         )}
         triggerClassName={iconClass}
-        toggleProps={{ tag: 'span', 'aria-label': gettext('Set row height') }}
-        menuClassName="mt-1 set-row-height-dropdown-menu"
+        toggleProps={{ 'aria-label': gettext('Set row height') }}
+        menuClassName="set-row-height-dropdown-menu"
         menuPortal={false}
         onItemClick={(selectedItem) => selectedItem.onClick?.()}
       />

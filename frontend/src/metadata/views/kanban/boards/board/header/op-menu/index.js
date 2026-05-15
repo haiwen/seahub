@@ -30,7 +30,6 @@ const OpMenu = ({ idx, onDelete, onFreezed, onUnFreezed }) => {
       trigger={<Icon symbol="more-level" />}
       tooltip={gettext('More operations')}
       triggerClassName="sf-dropdown-toggle kanban-header-op-btn kanban-more-operations-toggle"
-      toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
       freezeItem={handleFreeze}
       unfreezeItem={handleUnfreeze}
     />

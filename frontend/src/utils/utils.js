@@ -729,6 +729,8 @@ export const Utils = {
       }
     }
 
+    list.push('Divider');
+
     let fileExt = Utils.getFileExtension(dirent.name, true);
     if (currentRepoInfo.enable_onlyoffice && (fileExt == 'csv' || fileExt == 'pdf')) {
       let subOpList = [];

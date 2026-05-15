@@ -595,7 +595,6 @@ class ShareAdminShareLinks extends Component {
                           onItemClick={(selectedItem) => selectedItem.onClick?.()}
                           trigger={<Icon symbol="down" className="down-icon" />}
                           triggerClassName="ml-1 sf-dropdown-toggle"
-                          toggleProps={{ tag: 'span', 'aria-label': gettext('Operations') }}
                           menuPortal={false}
                         />
                       </Link>

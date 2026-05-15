@@ -84,6 +84,7 @@ body {
 
 /* toolbar  */
 #shared-dir-view .path-container .path-item {
+  width: auto;
   display: inline-flex;
   align-items: center;
   min-width: 0;

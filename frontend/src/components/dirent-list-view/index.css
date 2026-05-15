@@ -69,3 +69,7 @@
 .seafile-contextmenu {
   width: 200px;
 }
+
+.seafile-contextmenu .dropdown-item.dropdown-item-main-slot {
+  width: 100%;
+}

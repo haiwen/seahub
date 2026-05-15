@@ -6,8 +6,10 @@ import dayjs from 'dayjs';
 import classnames from 'classnames';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Account from './components/common/account';
-import { useGoFileserver, fileServerRoot, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle,
-  thumbnailSizeForOriginal, thumbnailDefaultSize, thumbnailSizeForGrid } from './utils/constants';
+import {
+  useGoFileserver, fileServerRoot, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle,
+  thumbnailSizeForOriginal, thumbnailDefaultSize, thumbnailSizeForGrid
+} from './utils/constants';
 import { Utils } from './utils/utils';
 import { seafileAPI } from './utils/seafile-api';
 import Loading from './components/loading';
@@ -196,12 +198,12 @@ class SharedDirView extends React.Component {
     let items = this.state.items.filter((item) => {
       return !item.is_dir &&
         (Utils.imageCheck(item.file_name) ||
-        (enableVideoThumbnail && Utils.videoCheck(item.file_name)) ||
-        (enablePDFThumbnail && Utils.pdfCheck(item.file_name))) &&
+          (enableVideoThumbnail && Utils.videoCheck(item.file_name)) ||
+          (enablePDFThumbnail && Utils.pdfCheck(item.file_name))) &&
         !item.encoded_thumbnail_src;
     });
     if (items.length == 0) {
-      return ;
+      return;
     }
 
     const len = items.length;
@@ -338,9 +340,6 @@ class SharedDirView extends React.Component {
                 </>
               )}
               triggerClassName="path-item path-item-dropdown-toggle"
-              toggleProps={{ tag: 'div' }}
-              menuClassName="position-fixed"
-              menuPortal={false}
             />
           )
         }
@@ -843,14 +842,14 @@ class SharedDirView extends React.Component {
               </div>
             </div>
             {isDesktop &&
-            <ResizeBar
-              resizeBarRef={this.resizeBarRef}
-              dragHandlerRef={this.dragHandlerRef}
-              resizeBarStyle={{ left: `calc(${sidePanelRate ? sidePanelRate * 100 + '%' : `${INIT_SIDE_PANEL_RATE * 100}%`} - 1px)` }}
-              dragHandlerStyle={{ height: DRAG_HANDLER_HEIGHT }}
-              onResizeMouseDown={this.onResizeMouseDown}
-              onResizeMouseOver={this.onResizeMouseOver}
-            />
+              <ResizeBar
+                resizeBarRef={this.resizeBarRef}
+                dragHandlerRef={this.dragHandlerRef}
+                resizeBarStyle={{ left: `calc(${sidePanelRate ? sidePanelRate * 100 + '%' : `${INIT_SIDE_PANEL_RATE * 100}%`} - 1px)` }}
+                dragHandlerStyle={{ height: DRAG_HANDLER_HEIGHT }}
+                onResizeMouseDown={this.onResizeMouseDown}
+                onResizeMouseOver={this.onResizeMouseOver}
+              />
             }
             <div className="main-panel cur-view-container" style={mainPanelStyle}>
               <div className="cur-view-path d-flex justify-content-between align-items-center">
@@ -873,12 +872,12 @@ class SharedDirView extends React.Component {
                           op={this.zipDownloadSelectedItems}
                         />
                         {(canDownload && loginUser && (loginUser !== sharedBy)) &&
-                        <OpIcon
-                          className="cur-view-path-btn ml-4"
-                          symbol="save"
-                          op={this.saveSelectedItems}
-                          title={gettext('Save')}
-                        />
+                          <OpIcon
+                            className="cur-view-path-btn ml-4"
+                            symbol="save"
+                            op={this.saveSelectedItems}
+                            title={gettext('Save')}
+                          />
                         }
                       </div>
                     )
@@ -941,14 +940,14 @@ class SharedDirView extends React.Component {
           </div>
         </div>
         {this.state.isZipDialogOpen &&
-        <ModalPortal>
-          <ZipDownloadDialog
-            token={token}
-            path={this.state.zipFolderPath}
-            target={this.state.selectedItems}
-            toggleDialog={this.closeZipDialog}
-          />
-        </ModalPortal>
+          <ModalPortal>
+            <ZipDownloadDialog
+              token={token}
+              path={this.state.zipFolderPath}
+              target={this.state.selectedItems}
+              toggleDialog={this.closeZipDialog}
+            />
+          </ModalPortal>
         }
         {this.state.isSaveSharedDirDialogShow &&
           <SaveSharedDirDialog
@@ -968,19 +967,19 @@ class SharedDirView extends React.Component {
           />
         )}
         {this.state.isImagePopupOpen &&
-        <ModalPortal>
-          <ImageDialog
-            repoID={repoID}
-            repoInfo={{ 'permission': 'r' }}
-            imageItems={this.state.imageItems}
-            imageIndex={this.state.imageIndex}
-            closeImagePopup={this.closeImagePopup}
-            moveToPrevImage={this.moveToPrevImage}
-            moveToNextImage={this.moveToNextImage}
-            enableRotate={false}
-            isCustomPermission={true}
-          />
-        </ModalPortal>
+          <ModalPortal>
+            <ImageDialog
+              repoID={repoID}
+              repoInfo={{ 'permission': 'r' }}
+              imageItems={this.state.imageItems}
+              imageIndex={this.state.imageIndex}
+              closeImagePopup={this.closeImagePopup}
+              moveToPrevImage={this.moveToPrevImage}
+              moveToNextImage={this.moveToNextImage}
+              enableRotate={false}
+              isCustomPermission={true}
+            />
+          </ModalPortal>
         }
       </MetadataAIOperationsProvider>
     );
@@ -1069,15 +1068,15 @@ class Content extends React.Component {
           <thead>
             <tr>
               {showDownloadIcon &&
-              <th width="3%" className="text-center">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  checked={isAllItemsSelected}
-                  onChange={this.props.toggleAllSelected}
-                  onKeyDown={Utils.onKeyDown}
-                />
-              </th>
+                <th width="3%" className="text-center">
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    checked={isAllItemsSelected}
+                    onChange={this.props.toggleAllSelected}
+                    onKeyDown={Utils.onKeyDown}
+                  />
+                </th>
               }
               <th width="5%"></th>
               <th width={showDownloadIcon ? '50%' : '53%'}><a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortBy == 'name' && sortIcon}</a></th>
@@ -1213,12 +1212,12 @@ class Item extends React.Component {
           <td title={formatWithTimezone(item.last_modified)}>{dayjs(item.last_modified).fromNow()}</td>
           <td>
             {showDownloadIcon &&
-            <OpIcon
-              className={`op-icon ${isIconShown ? '' : ' invisible'}`}
-              symbol="download"
-              title={gettext('Download')}
-              op={this.zipDownloadFolder}
-            />
+              <OpIcon
+                className={`op-icon ${isIconShown ? '' : ' invisible'}`}
+                symbol="download"
+                title={gettext('Download')}
+                op={this.zipDownloadFolder}
+              />
             }
           </td>
         </tr>
@@ -1272,9 +1271,9 @@ class Item extends React.Component {
           <td title={formatWithTimezone(item.last_modified)}>{dayjs(item.last_modified).fromNow()}</td>
           <td>
             {showDownloadIcon &&
-            <a className={`op-icon ${isIconShown ? '' : ' invisible'}`} href={`${fileURL}&dl=1`} title={gettext('Download')} aria-label={gettext('Download')}>
-              <Icon symbol="download" />
-            </a>
+              <a className={`op-icon ${isIconShown ? '' : ' invisible'}`} href={`${fileURL}&dl=1`} title={gettext('Download')} aria-label={gettext('Download')}>
+                <Icon symbol="download" />
+              </a>
             }
           </td>
         </tr>

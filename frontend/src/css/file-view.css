@@ -163,6 +163,11 @@ body {
   width: 100%;
 }
 
+.file-view-header .image-zoomer .dropdown .more-dropdown-toggle {
+  width: fit-content;
+  height: fit-content;
+}
+
 .file-title {
   font-size: 1.2rem;
   font-weight: bold;

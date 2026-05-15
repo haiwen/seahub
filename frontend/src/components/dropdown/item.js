@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { DropdownItem } from 'reactstrap';
 import Icon from '../icon';
-import { renderNodeContent } from './utils';
 
 export const CustomDropdownItem = ({
   item,
@@ -13,7 +12,6 @@ export const CustomDropdownItem = ({
   className,
   showCheckPlaceholder = false,
   showShortcutPlaceholder = false,
-  isSubmenuTrigger = false,
   rightSlot,
   tabIndex = -1,
   tag,
@@ -21,15 +19,13 @@ export const CustomDropdownItem = ({
   const checked = Boolean(item.checked);
   const shortcut = item.shortcut;
   const icon = item.icon;
-  const label = renderNodeContent(item.label);
+  const label = item.label;
   const showLeftSlot = checked || showCheckPlaceholder;
-  const showRightSlot = Boolean(rightSlot) || (showShortcutPlaceholder && shortcut);
+  const showRightSlot = Boolean(rightSlot) || showShortcutPlaceholder;
 
   return (
     <DropdownItem
       tag={tag}
-      data-dropdown-item={!isSubmenuTrigger ? 'true' : undefined}
-      data-dropdown-submenu-trigger={isSubmenuTrigger ? 'true' : undefined}
       className={classNames(className, item.className, {
         'is-danger': item.danger,
         'is-checked': checked,
@@ -50,12 +46,12 @@ export const CustomDropdownItem = ({
         </span>
       )}
       <span className="dropdown-item-main-slot">
-        {icon && <span className="dropdown-item-icon mr-2">{renderNodeContent(icon)}</span>}
+        {icon && <span className="dropdown-item-icon mr-2">{icon}</span>}
         <span className="dropdown-item-label" title={label}>{label}</span>
       </span>
       {showRightSlot && (
         <span className="dropdown-item-right-slot" aria-hidden="true">
-          {rightSlot || (showShortcutPlaceholder && shortcut ? <span className="dropdown-item-shortcut mr-3">{shortcut}</span> : null)}
+          {rightSlot || (showShortcutPlaceholder ? <span className="dropdown-item-shortcut mr-3">{shortcut}</span> : null)}
         </span>
       )}
     </DropdownItem>
@@ -70,7 +66,6 @@ CustomDropdownItem.propTypes = {
   className: PropTypes.string,
   showCheckPlaceholder: PropTypes.bool,
   showShortcutPlaceholder: PropTypes.bool,
-  isSubmenuTrigger: PropTypes.bool,
   rightSlot: PropTypes.node,
   tabIndex: PropTypes.number,
   tag: PropTypes.oneOfType([PropTypes.string, PropTypes.elementType]),

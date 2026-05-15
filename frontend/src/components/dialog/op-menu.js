@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
 import Icon from '../icon';
 import CustomDropdown from '../dropdown';
 
@@ -22,7 +21,6 @@ class OpMenu extends React.Component {
         className="lh-1"
         trigger={<Icon symbol="more-level" />}
         triggerClassName="op-icon"
-        toggleProps={{ tag: 'span', 'aria-label': gettext('More operations'), title: gettext('More operations') }}
         menuPortal={false}
         freezeItem={this.props.onFreezedItem}
         unfreezeItem={this.props.onUnfreezedItem}

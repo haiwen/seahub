@@ -90,11 +90,6 @@
   color: rgba(255, 255, 255, 0.5);
 }
 
-.tree-section .tree-section-more-operation .dropdown .sf-dropdown-toggle.sf3-font-new,
-.tree-section .tree-section-create-operation .sf3-font-new {
-  font-size: 12px;
-}
-
 .tree-section .tree-section-header .tree-section-more-operation,
 .tree-section .tree-section-header .tree-section-create-operation {
   display: none;

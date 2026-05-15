@@ -110,8 +110,7 @@ class Paginator extends Component {
               </span>
             </>
           )}
-          triggerClassName="btn btn-secondary d-flex align-items-center"
-          toggleProps={{ tag: 'button' }}
+          triggerClassName="btn btn-secondary"
           menuClassName="paginator-dropdown-menu"
           className="paginator-dropdown ml-6"
           placement="top"

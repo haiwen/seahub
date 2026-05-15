@@ -81,11 +81,13 @@ const HeaderDropdownMenu = forwardRef(({
     deleteColumn(column.key, column);
   }, [column, deleteColumn]);
 
-  const openRenamePopover = useCallback(() => {
+  const openRenamePopover = useCallback((e) => {
+    e && e.stopPropagation();
     setRenamePopoverShow(true);
   }, []);
 
-  const closeRenamePopover = useCallback(() => {
+  const closeRenamePopover = useCallback((e) => {
+    e && e.stopPropagation();
     setRenamePopoverShow(false);
   }, []);
 
@@ -141,7 +143,7 @@ const HeaderDropdownMenu = forwardRef(({
     ];
   }, [today, column, onChangeDateFormat, canModifyColumnData]);
 
-  const getItems = useCallback(() => {
+  const menuItems = useMemo(() => {
     const { type } = column;
     const canModifyColumnDataFn = canModifyColumnData ? canModifyColumnData(column) : false;
     const canDeleteColumnFn = canDeleteColumn ? canDeleteColumn(column) : false;
@@ -235,10 +237,9 @@ const HeaderDropdownMenu = forwardRef(({
   return (
     <>
       <CustomDropdown
-        getItems={getItems}
+        items={menuItems}
         trigger={<Icon symbol="down" />}
         triggerClassName="sf-table-header-dropdown-toggle"
-        toggleProps={{ tag: 'span', 'aria-label': gettext('More operations'), title: gettext('More operations') }}
         menuClassName="sf-table-column-dropdown-menu"
       />
       {isRenamePopoverShow && (

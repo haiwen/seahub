@@ -70,7 +70,6 @@ class MoreMenu extends React.PureComponent {
           </>
         )}
         triggerClassName="sf-md-header-more-tool"
-        toggleProps={{ tag: 'div', 'aria-label': gettext('More operations') }}
         menuClassName="drop-list"
         menuPortal={false}
         onItemClick={(selectedItem) => selectedItem.onClick?.()}

@@ -28,7 +28,7 @@ import RepoArchiveDialog from '../dialog/repo-archive-dialog';
 import ArchiveIcon from '../archive-icon';
 import Tooltip from '../tooltip';
 import CustomDropdown from '../dropdown';
-import CustomDropdownItem from '../dropdown/custom-dropdown-item';
+import CustomDropdownItem from '../dropdown/item';
 
 dayjs.extend(relativeTime);
 
@@ -526,8 +526,6 @@ class SharedRepoListItem extends React.Component {
               </>
             )}
             triggerClassName="op-icon"
-            toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
-            menuProps={{ container: 'body' }}
             freezeItem={this.props.onFreezedItem}
             unfreezeItem={this.handleMenuClose}
             onItemClick={(selectedItem) => this.onMenuItemClick(selectedItem.key)}
@@ -599,7 +597,7 @@ class SharedRepoListItem extends React.Component {
         </div>
         <div className="repo-item-name">
           {this.state.isRenaming ?
-            <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
+            <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
             <Link to={libPath}>{repo.repo_name}</Link>
           }
           <ArchiveIcon currentRepoInfo={repo} />

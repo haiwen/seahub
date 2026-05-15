@@ -1,10 +1,12 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import PropTypes from 'prop-types';
 import SFTable from '../../sf-table';
 import { transformDirentsToTableData } from './data-transformer';
 import { createDirentTableColumns, setDirTableColumnWidth } from './columns';
 import { siteRoot, enableSeadoc, enableWhiteboard } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
+import Icon from '@/components/icon';
 import TextTranslation from '@/utils/text-translation';
 import { PRIVATE_COLUMN_KEY, EVENT_BUS_TYPE, CellType } from '@/metadata/constants';
 import { useTags } from '@/tag/hooks';
@@ -63,6 +65,8 @@ const DirTableView = ({
   onSelectedDirentListUpdate,
   onColumnOrderChange,
 }) => {
+  const [isSubMenuShown, setSubMenuShown] = useState(false);
+  const [hoveredOptionKey, setHoveredOptionKey] = useState('');
   const [columnWidthVersion, setColumnWidthVersion] = useState(0);
   const [isListDropTipShow, setListDropTipShow] = useState(false);
   const hideMenuRef = useRef(null);
@@ -134,7 +138,7 @@ const DirTableView = ({
 
   const tableData = useMemo(() => {
     return transformDirentsToTableData(direntList, repoID);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [direntList, repoID, sortBy, sortOrder]);
 
   const enrichedColumns = useMemo(() => {
@@ -149,7 +153,7 @@ const DirTableView = ({
     };
 
     return createDirentTableColumns(repoID, repoInfo, visibleColumns, handleItemClickByRecord);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, repoInfo, columns, globalHiddenColumns, hiddenColumnKeys, columnWidthVersion, direntList, onItemClick]);
 
   const updateDirentDetail = useCallback((parentDir, fileName, update) => {
@@ -315,11 +319,21 @@ const DirTableView = ({
     });
   }, [gridUtilsAdapter, enrichedColumns, permission]);
 
+  const toggleSubMenu = (e, subMenuOptionKey) => {
+    e.stopPropagation();
+    if (!subMenuOptionKey) {
+      setSubMenuShown(!isSubMenuShown);
+      return;
+    }
+    setSubMenuShown(true);
+    setHoveredOptionKey(subMenuOptionKey);
+  };
+
   const onRenameEditor = () => {
     sfTableEventBus.current.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR);
   };
 
-  const onOptionClick = useCallback((e, option, dirent, selectedDirents) => {
+  const onOptionClick = (e, option, dirent, selectedDirents) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -346,25 +360,7 @@ const DirTableView = ({
     }
 
     hideMenuRef.current && hideMenuRef.current();
-  }, [direntList, eventBus, onItemConvert, onItemDelete, onItemsDelete, path, repoID, showDirentDetail, updateDirent]);
-
-  const buildMenuItems = useCallback((options, dirent, selectedDirents) => {
-    return options.map((option, index) => {
-      if (option === 'Divider') {
-        return option;
-      }
-
-      return {
-        key: option.key || `dir-table-option-${index}`,
-        label: option.label || option.value,
-        children: option.subOpList ? buildMenuItems(option.subOpList, dirent, selectedDirents) : undefined,
-        onClick: (event) => {
-          event.stopPropagation();
-          onOptionClick(event, option, dirent, selectedDirents);
-        },
-      };
-    });
-  }, [onOptionClick]);
+  };
 
   const createContextMenuOptions = (tableProps) => {
     const { hideMenu, recordMetrics, selectedPosition } = tableProps;
@@ -386,14 +382,35 @@ const DirTableView = ({
         isRepoEncrypted: repoInfo.encrypted
       });
 
-      return buildMenuItems(createMenuOptions, null, selectedDirents);
+      return createMenuOptions.map((option, index) => {
+        if (option === 'Divider') {
+          return <div key={index} className="seafile-divider dropdown-divider"></div>;
+        }
+        return (
+          <button
+            key={option.key}
+            className="seafile-contextmenu-item dropdown-item dir-table-menu-item"
+            onClick={(e) => onOptionClick(e, option, null, selectedDirents)}
+          >
+            {option.value}
+          </button>
+        );
+      });
     }
 
     // Show batch operations menu
     if (selectedDirents.length > 1) {
       const batchOptions = getBatchMenuList(selectedDirents);
 
-      return buildMenuItems(batchOptions, null, selectedDirents);
+      return batchOptions.map((option, index) => (
+        <button
+          key={option.key}
+          className="seafile-contextmenu-item dropdown-item dir-table-menu-item"
+          onClick={(e) => onOptionClick(e, option, null, selectedDirents)}
+        >
+          {option.value}
+        </button>
+      ));
     }
 
     // Single dirent menu
@@ -406,7 +423,69 @@ const DirTableView = ({
       options = options.filter(op => op.key !== TextTranslation.RENAME.key);
     }
 
-    return buildMenuItems(options, dirent, selectedDirents);
+    return options.map((option, index) => {
+      if (option === 'Divider') {
+        return <div key={index} className="seafile-divider dropdown-divider"></div>;
+      } else if (option.subOpList) {
+        return (
+          <Dropdown
+            key={index}
+            direction="right"
+            className="w-100"
+            isOpen={isSubMenuShown && option.key === hoveredOptionKey}
+            toggle={toggleSubMenu}
+            onMouseMove={(e) => { e.stopPropagation(); }}
+          >
+            <DropdownToggle
+              tag="span"
+              className="dropdown-item"
+              onMouseEnter={(e) => toggleSubMenu(e, option.key)}
+            >
+              <span className="mr-auto">{option.value}</span>
+              <Icon symbol="down" className="rotate-270" />
+            </DropdownToggle>
+            <DropdownMenu
+              modifiers={[{
+                name: 'offset',
+                options: {
+                  offset: [-8, 12],
+                },
+              }]}
+            >
+              {option.subOpList.map((subOp, subIndex) => {
+                if (subOp == 'Divider') {
+                  return <DropdownItem key={subIndex} divider />;
+                } else {
+                  return (
+                    <DropdownItem
+                      key={subIndex}
+                      data-operation={subOp.key}
+                      onClick={(e) => onOptionClick(e, subOp, dirent, selectedDirents)}
+                      onContextMenu={(e) => e.stopPropagation()}
+                    >
+                      {subOp.value}
+                    </DropdownItem>
+                  );
+                }
+              })}
+            </DropdownMenu>
+          </Dropdown>
+        );
+      } else {
+        return (
+          <button
+            key={index}
+            className="seafile-contextmenu-item dropdown-item dir-table-menu-item"
+            data-op={option.key}
+            onClick={(e) => onOptionClick(e, option, dirent, selectedDirents)}
+            onContextMenu={(e) => e.stopPropagation()}
+            onMouseMove={() => { setSubMenuShown(false); }}
+          >
+            {option.value}
+          </button>
+        );
+      }
+    });
   };
 
   const handleSelectedRecord = useCallback((ids) => {

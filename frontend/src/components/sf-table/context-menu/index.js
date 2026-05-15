@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import ModalPortal from '../../modal-portal';
-import { CustomDropdownMenuContent } from '../../dropdown/menu-content';
 
 import './index.css';
 
@@ -167,16 +166,7 @@ const ContextMenu = ({
         className='dropdown-menu sf-table-context-menu'
         style={{ ...position, 'visibility': position.left === 0 && position.top === 0 ? 'hidden' : 'visible' }}
       >
-        {Array.isArray(options) && options.length > 0 && typeof options[0] === 'object' && !React.isValidElement(options[0]) ? (
-          <CustomDropdownMenuContent
-            items={options}
-            menuClassName="sf-table-context-menu-content"
-            menuRef={menuRef}
-            onItemClick={(selectedItem, event) => {
-              selectedItem.onClick?.(event, selectedItem);
-            }}
-          />
-        ) : options}
+        {options}
       </div>
     </ModalPortal>
   );

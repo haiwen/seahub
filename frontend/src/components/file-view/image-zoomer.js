@@ -136,8 +136,7 @@ const ImageZoomer = ({ setImageScale, setDefaultPageFitScale }) => {
             <Icon id="scale-menu-caret" symbol="down" />
           </>
         )}
-        triggerClassName="position-relative d-flex align-items-center"
-        toggleProps={{ tag: 'div', 'aria-label': gettext('Scale menu') }}
+        toggleProps={{ 'aria-label': gettext('Scale menu') }}
         menuClassName="position-fixed"
         menuPortal={false}
         onItemClick={(selectedItem) => selectedItem.onClick?.()}

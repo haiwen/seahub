@@ -4,6 +4,7 @@
 }
 
 .paginator .btn.btn-secondary {
+  width: fit-content;
   height: 38px;
   display: inline-flex;
   align-items: center;

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext, permission } from '../../utils/constants';
 import TextTranslation from '../../utils/text-translation';
-import { Utils, isMobile } from '../../utils/utils';
+import { Utils } from '../../utils/utils';
 import OpIcon from '../../components/op-icon';
 import Icon from '../icon';
 import CustomDropdown from '../dropdown';
@@ -340,7 +340,6 @@ class TreeNodeView extends React.Component {
                 freezeItem={this.props.freezeItem}
                 unfreezeItem={this.unfreezeItem}
                 tooltip={gettext('More operations')}
-                menuStyle={isMobile ? { zIndex: 1050 } : {}}
                 onItemClick={(selectedItem, event) => this.onMenuItemClick(selectedItem.key, event, this.props.node)}
               />
             </div>

@@ -60,7 +60,7 @@ export default class PageDropdownMenu extends Component {
 
   duplicatePage = () => {
     const { page } = this.props;
-    this.props.duplicatePage({ from_page_id: page.id }, () => {}, this.duplicatePageFailure);
+    this.props.duplicatePage({ from_page_id: page.id }, () => { }, this.duplicatePageFailure);
   };
 
   importPage = (suffix) => {
@@ -75,7 +75,7 @@ export default class PageDropdownMenu extends Component {
         const selectedFile = e.target.files[0];
         this.props.importPage(
           { from_page_id: page.id, file: selectedFile },
-          () => {},
+          () => { },
           this.importPageFailure
         );
       }
@@ -187,7 +187,6 @@ export default class PageDropdownMenu extends Component {
           </>
         )}
         triggerClassName="op-icon"
-        toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
         menuClassName="page-operation-dropdown-menu dtable-dropdown-menu large position-fixed"
         modifier={[
           { name: 'preventOverflow', options: { boundary: 'window', padding: 8 } },

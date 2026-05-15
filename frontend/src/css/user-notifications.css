@@ -8,12 +8,23 @@
   height: 100%;
 }
 
-.notification-header-close {
+.notification-header-operations {
   display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.notification-header-close .seahub-modal-btn {
-  padding: 14px 12px;
+.notification-header-operations .more-dropdown-toggle,
+.notification-header-operations .notification-header-close {
+  width: 28px;
+  height: 28px;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.notification-header-operations .more-dropdown-toggle:hover,
+.notification-header-operations .notification-header-close:hover {
+  background-color: var(--bs-icon-btn-hover-bg-color);
 }
 
 .notification-list-content .notification-modal-body {

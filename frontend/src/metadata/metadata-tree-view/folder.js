@@ -7,7 +7,7 @@ import NewView from './new-view';
 import InlineNameEditor from './inline-name-editor';
 import { useMetadata } from '../hooks';
 import { PRIVATE_FILE_TYPE } from '../../constants';
-import { Utils, isMobile } from '../../utils/utils';
+import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import { gettext } from '../../utils/constants';
 import { validateName } from '../utils/validate';
@@ -328,7 +328,6 @@ const ViewsFolder = ({
               freezeItem={freezeItem}
               unfreezeItem={unfreezeItem}
               onItemClick={(selectedItem, event) => clickMenu(selectedItem.key, event)}
-              menuStyle={isMobile ? { zIndex: 1050 } : {}}
             />
           )}
         </div>

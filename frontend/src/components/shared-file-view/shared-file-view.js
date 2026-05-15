@@ -167,7 +167,6 @@ class SharedFileView extends React.Component {
             items={this.getMenuItems()}
             trigger={<Icon symbol="more-level" />}
             triggerClassName="op-icon m-0"
-            toggleProps={{ tag: 'span', 'aria-label': gettext('More operations'), title: gettext('More operations') }}
           />
         </div>
       </>

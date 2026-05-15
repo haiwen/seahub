@@ -149,7 +149,6 @@ class DepartmentsV2TreeNode extends Component {
               })}
               trigger={<Icon symbol="more-level" />}
               triggerClassName="right-icon"
-              toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
               freezeItem={this.handleDropdownOpen}
               unfreezeItem={this.handleDropdownClose}
             />

@@ -83,7 +83,6 @@ const AllTagsOperationToolbar = ({ repoID }) => {
           )}
           triggerClassName="path-dropdown-item all-tags-operation-toggle"
           menuClassName="position-fixed"
-          toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
           menuPortal={false}
           onItemClick={(selectedItem) => selectedItem.onClick?.()}
         />

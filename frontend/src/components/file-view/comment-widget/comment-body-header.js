@@ -3,8 +3,7 @@ import { gettext } from '../../../utils/constants';
 import CustomDropdown from '../../dropdown';
 
 import './comment-body-header.css';
-
-const t = gettext;
+import Icon from '@/components/icon';
 
 const getText = (type) => {
   switch (type) {
@@ -31,27 +30,30 @@ const CommentBodyHeader = ({ commentList = [], commentType, setCommentType }) =>
   }
 
   const items = [
-    { key: 'All comments', label: t('All comments') },
-    { key: 'Resolved comments', label: t('Resolved comments') },
-    { key: 'Unresolved comments', label: t('Unresolved comments') },
+    { key: 'All comments', label: gettext('All comments') },
+    { key: 'Resolved comments', label: gettext('Resolved comments') },
+    { key: 'Unresolved comments', label: gettext('Unresolved comments') },
   ];
 
   return (
-    <div className='comments-panel-body__header'>
+    <div className="comments-panel-body__header">
       <div className="comments-types-count">
-        <div id="comment-types" className='comment-type'>
+        <div id="comment-types" className="comment-type">
           <CustomDropdown
             items={items}
-            trigger={<div id={'comment-type-controller'}>{getText(commentType)}</div>}
-            triggerClassName="d-flex align-items-center justify-content-center"
-            toggleProps={{ tag: 'div', caret: true }}
+            trigger={(
+              <div id='comment-type-controller'>
+                {getText(commentType)}
+                <Icon symbol="down" className="ml-1" />
+              </div>
+            )}
+            triggerClassName="w-auto d-flex align-items-center justify-content-center"
             menuClassName="sdoc-dropdown-menu sdoc-comment-filter-dropdown"
-            dropdownProps={{ container: 'comment-types' }}
             menuPortal={false}
             onItemClick={(item) => setCommentType(null, item.key)}
           />
         </div>
-        <div className='comment-count-tip'>{commentTip}</div>
+        <div className="comment-count-tip">{commentTip}</div>
       </div>
     </div>
   );

@@ -166,7 +166,6 @@ class HistoryVersion extends React.Component {
               ]}
               trigger={<></>}
               triggerClassName={`sf3-font sf3-font-more ${(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}`}
-              toggleProps={{ tag: 'a', 'aria-label': gettext('More operations'), title: gettext('More operations') }}
             />
           }
         </div>

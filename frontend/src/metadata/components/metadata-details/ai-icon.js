@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import Icon from '../../../components/icon';
 import CustomDropdown from '../../../components/dropdown';
 import { useMetadataDetails } from '../../hooks';
@@ -25,7 +25,7 @@ const AIIcon = () => {
   const { canModifyRecord, columns, record, onChange, onLocalRecordChange, updateFileTags, updateDescription } = useMetadataDetails();
   const { generateDescription, extractFileDetails, onOCR, generateFileTags } = useMetadataAIOperations();
 
-  const getItems = useCallback(() => {
+  const getItems = useMemo(() => {
     if (!canModifyRecord || !record || checkIsDir(record)) return [];
     const descriptionColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION);
     const fileName = getFileNameFromRecord(record);
@@ -126,7 +126,7 @@ const AIIcon = () => {
   return (
     <CustomDropdown
       target="ai-icon"
-      getItems={getItems}
+      items={getItems}
       trigger={(
         <>
           <Icon symbol="ai" className="detail-control-icon" />
@@ -137,7 +137,7 @@ const AIIcon = () => {
       menuClassName="sf-metadata-ai-dropdown-menu large"
       forwardedRef={forwardedRef}
       onItemClick={handleOperation}
-      toggleProps={{ 'aria-label': 'AI' }}
+      toggleProps={{ 'aria-label': gettext('AI') }}
     />
   );
 };

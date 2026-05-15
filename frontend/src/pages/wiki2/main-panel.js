@@ -315,7 +315,6 @@ class MainPanel extends Component {
                 </>
               )}
               triggerClassName="wiki2-file-history-button"
-              toggleProps={{ tag: 'span', 'aria-label': gettext('More operations') }}
               menuClassName="dtable-dropdown-menu large"
             />
           </div>
