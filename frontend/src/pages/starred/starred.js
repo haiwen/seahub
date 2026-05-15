@@ -13,13 +13,14 @@ import Loading from '../../components/loading';
 import toaster from '../../components/toast';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import OpIcon from '../../components/op-icon';
+import SortMenu from '../../components/sort-menu';
 
 dayjs.extend(relativeTime);
 
 class Content extends Component {
 
   render() {
-    const { loading, errorMsg, items } = this.props.data;
+    const { loading, errorMsg, items } = this.props;
 
     if (loading) {
       return <Loading />;
@@ -64,7 +65,8 @@ class Content extends Component {
 }
 
 Content.propTypes = {
-  data: PropTypes.object,
+  loading: PropTypes.bool,
+  errorMsg: PropTypes.string,
   items: PropTypes.array,
 };
 
@@ -295,18 +297,31 @@ Item.propTypes = {
 class Starred extends Component {
   constructor(props) {
     super(props);
+    this.sortOptions = [
+      { value: 'name-asc', text: gettext('Ascending by name') },
+      { value: 'name-desc', text: gettext('Descending by name') },
+      { value: 'time-asc', text: gettext('Ascending by time') },
+      { value: 'time-desc', text: gettext('Descending by time') }
+    ];
     this.state = {
       loading: true,
       errorMsg: '',
+      sortBy: localStorage.getItem('sf_favorites_sort_by') || 'time',
+      sortOrder: localStorage.getItem('sf_favorites_sort_order') || 'desc',
       items: []
     };
   }
 
   componentDidMount() {
+    const { sortBy, sortOrder } = this.state;
     seafileAPI.listStarredItems().then((res) => {
+      let items = res.data.starred_item_list; // already sorted in the server (by time, desc)
+      if (!(sortBy == 'time' && sortOrder == 'desc')) {
+        items = Utils.sortFavorites(items, sortBy, sortOrder);
+      }
       this.setState({
         loading: false,
-        items: res.data.starred_item_list
+        items: items
       });
     }).catch((error) => {
       this.setState({
@@ -316,15 +331,44 @@ class Starred extends Component {
     });
   }
 
+  sortItems = (sortBy, sortOrder) => {
+    const { items } = this.state;
+    const sortedItems = Utils.sortFavorites(items, sortBy, sortOrder);
+    localStorage.setItem('sf_favorites_sort_by', sortBy);
+    localStorage.setItem('sf_favorites_sort_order', sortOrder);
+    this.setState({
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+      items: sortedItems
+    });
+  };
+
+  onSelectSortOption = (item) => {
+    const [sortBy, sortOrder] = item.value.split('-');
+    this.sortItems(sortBy, sortOrder);
+  };
+
   render() {
+    const { sortBy, sortOrder, loading, errorMsg, items } = this.state;
     return (
       <div className="main-panel-center">
         <div className="cur-view-container" id="starred">
           <div className="cur-view-path">
             <h3 className="sf-heading">{gettext('Favorites')}</h3>
+            <SortMenu
+              className="ml-2"
+              sortBy={sortBy}
+              sortOrder={sortOrder}
+              sortOptions={this.sortOptions}
+              onSelectSortOption={this.onSelectSortOption}
+            />
           </div>
           <div className="cur-view-content">
-            <Content data={this.state} />
+            <Content
+              loading={loading}
+              errorMsg={errorMsg}
+              items={items}
+            />
           </div>
         </div>
       </div>

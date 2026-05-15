@@ -1388,6 +1388,56 @@ export const Utils = {
     return items;
   },
 
+  // sort starred items(repo, folder, file) for the "Favorites" page
+  sortFavorites: function (items, sortBy, sortOrder) {
+    const _this = this;
+    let comparator;
+
+    switch (`${sortBy}-${sortOrder}`) {
+      case 'name-asc':
+        comparator = function (a, b) {
+          var result = _this.compareTwoWord(a.obj_name, b.obj_name);
+          return result;
+        };
+        break;
+      case 'name-desc':
+        comparator = function (a, b) {
+          var result = _this.compareTwoWord(a.obj_name, b.obj_name);
+          return -result;
+        };
+        break;
+      case 'time-asc':
+        comparator = function (a, b) {
+          return a.mtime < b.mtime ? -1 : 1;
+        };
+        break;
+      case 'time-desc':
+        comparator = function (a, b) {
+          return a.mtime < b.mtime ? 1 : -1;
+        };
+        break;
+    }
+
+    items.sort((a, b) => {
+      if (a.is_dir && b.is_dir) {
+        if (a.path == '/' && b.path != '/') {
+          return -1;
+        }
+        if (a.path != '/' && b.path == '/') {
+          return 1;
+        }
+        return comparator(a, b);
+      } else if (a.is_dir && !b.is_dir) {
+        return -1;
+      } else if (!a.is_dir && b.is_dir) {
+        return 1;
+      } else {
+        return comparator(a, b);
+      }
+    });
+    return items;
+  },
+
   // sort dirents in shared folder
   sortDirentsInSharedDir: function (items, sortBy, sortOrder) {
     const _this = this;
