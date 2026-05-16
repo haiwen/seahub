@@ -19,8 +19,7 @@ from seahub.api2.utils import api_error
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.utils import get_log_events_by_time, is_pro_version, is_org_context
 
-from seahub.settings import SEADOC_PRIVATE_KEY, FILE_CONVERTER_SERVER_URL, SECRET_KEY, \
-                            SEAFEVENTS_SERVER_URL, SEAHUB_IO_LOCAL_SERVER_URL
+from seahub.settings import SEADOC_PRIVATE_KEY, FILE_CONVERTER_SERVER_URL, SECRET_KEY, SEAHUB_IO_LOCAL_SERVER_URL
 
 
 try:
@@ -362,7 +361,7 @@ def get_seafevents_metrics():
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
-    url = urljoin(SEAFEVENTS_SERVER_URL, '/metrics')
+    url = urljoin(SEAHUB_IO_LOCAL_SERVER_URL, '/metrics')
     resp = requests.get(url, headers=headers)
     return resp
 

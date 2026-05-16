@@ -3,9 +3,11 @@ import threading
 import logging
 import time
 import uuid
-
+import json
 from seahub_io.db import init_db_session_class
 from seahub_io.server.utils import do_archive
+from seahub_io.events.metrics import METRIC_CHANNEL_NAME, NODE_NAME
+from seahub_io.app.event_redis import redis_cache
 
 logger = logging.getLogger('seahub_io')
 
@@ -36,6 +38,21 @@ class RepoArchiveTaskManager(object):
 
     def is_valid_task_id(self, task_id):
         return task_id in (self.tasks_map.keys() | self.task_results_map.keys())
+    
+    def publish_io_qsize_metric(self, qsize):
+        publish_metric = {
+            "metric_name": "repo_archive_task_queue_size",
+            "metric_type": "gauge",
+            "metric_help": "The size of the repo archive task queue",
+            "component_name": "seahub_io",
+            "node_name": NODE_NAME,
+            "metric_value": qsize,
+            "details": {}
+        }
+        try:
+            redis_cache.publish(METRIC_CHANNEL_NAME, json.dumps(publish_metric))
+        except Exception as e:
+            logger.warning("Failed to publish metrics: %s", e)
 
     def add_repo_archive_task(self, repo_id, orig_storage_id, dest_storage_id, op_type, username):
         task_id = str(uuid.uuid4())
@@ -43,6 +60,7 @@ class RepoArchiveTaskManager(object):
 
         self.tasks_queue.put(task_id)
         self.tasks_map[task_id] = task
+        self.publish_io_qsize_metric(self.tasks_queue.qsize())
         return task_id
 
     def query_status(self, task_id):
@@ -83,6 +101,7 @@ class RepoArchiveTaskManager(object):
                 # run
                 task[0](*task[1])
                 self.task_results_map[task_id] = 'success'
+                self.publish_io_qsize_metric(self.tasks_queue.qsize())
                 finish_time = time.time()
                 logging.info('Run task success: %s cost %ds \n' % (task_info, int(finish_time - start_time)))
                 self.current_task_info.pop(task_id, None)
