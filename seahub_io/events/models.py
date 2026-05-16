@@ -4,7 +4,7 @@ import hashlib
 
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.sql.sqltypes import Integer, String, DateTime, Text, BigInteger
-from sqlalchemy.sql.schema import Index, ForeignKey
+from sqlalchemy.sql.schema import Index
 
 from seahub_io.db import Base
 

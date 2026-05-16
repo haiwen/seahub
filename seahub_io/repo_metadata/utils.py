@@ -13,7 +13,6 @@ from datetime import timedelta, timezone, datetime
 from seafobj import fs_mgr
 
 from seahub_io.app.config import METADATA_FILE_TYPES, BAIDU_MAP_KEY, BAIDU_MAP_URL, SERVER_GOOGLE_MAP_KEY, GOOGLE_MAP_GEOCODE_API_URL
-from seahub_io.repo_metadata.view_data_sql import view_data_2_sql, sort_data_2_sql
 from seahub_io.utils import timestamp_to_isoformat_timestr
 from seahub_io.repo_metadata.constants import PrivatePropertyKeys, METADATA_OP_LIMIT, METADATA_TABLE, \
     FILE_DETAIL_EXTRACT_CONTENT_LIMIT, EXTRACT_DETAIL_FILE_SIZE_LIMIT
@@ -440,13 +439,3 @@ def query_metadata_rows(repo_id, metadata_server_api, sql):
         start += offset
 
     return rows
-
-
-def gen_view_data_sql(table, columns, view, start, limit, params):
-    """ generate view data sql """
-    return view_data_2_sql(table, columns, view, start, limit, params)
-
-
-def gen_sorts_sql(table, columns, sorts):
-    """ generate sorts sql """
-    return sort_data_2_sql(table, columns, sorts)

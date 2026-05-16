@@ -19,55 +19,6 @@ USER_ACTIVITIES_GENERATE_LIMIT = 50
 ACTIVITY_MAX_AGGREGATE_ITEMS = 200
 
 
-class UserEventDetail(object):
-    """Regular objects which can be used by seahub without worrying about ORM"""
-    def __init__(self, org_id, user_name, event):
-        self.org_id = org_id
-        self.username = user_name
-
-        self.etype = event.etype
-        self.timestamp = event.timestamp
-        self.uuid = event.uuid
-
-        dt = json.loads(event.detail)
-        for key in dt:
-            self.__dict__[key] = dt[key]
-
-class UserActivityDetail(object):
-    """Regular objects which can be used by seahub without worrying about ORM"""
-    def __init__(self, event, username=None):
-        self.username = username
-
-        self.id = event.id
-        self.op_type = event.op_type
-        self.op_user = event.op_user
-        self.obj_type = event.obj_type
-        self.repo_id = event.repo_id
-        self.commit_id = event.commit_id
-        self.timestamp = event.timestamp
-        self.path = event.path
-
-        dt = json.loads(event.detail)
-        
-        # Handle batch operations (detail is an array)
-        if isinstance(dt, list):
-            self.details = dt
-            self.count = len(dt)
-            if dt:
-                first_item = dt[0]
-                if isinstance(first_item, dict):
-                    for key in first_item:
-                        if key not in self.__dict__:
-                            self.__dict__[key] = first_item[key]
-        else:
-            # Single operation (detail is a dict)
-            self.details = [dt] if dt else []
-            self.count = 1
-            for key in dt:
-                self.__dict__[key] = dt[key]
-
-    def __getitem__(self, key):
-        return self.__dict__[key]
 
 
 BATCH_AGGREGATE_TIME_THRESHOLD = 5
@@ -184,29 +135,6 @@ def restore_repo_trash(session, record):
                                     FileTrash.path == record['path'])
     session.execute(stmt)
     session.commit()
-
-def clean_up_repo_trash(session, repo_id, keep_days):
-    if keep_days == 0:
-        stmt = delete(FileTrash).where(FileTrash.repo_id == repo_id)
-        session.execute(stmt)
-        session.commit()
-    else:
-        _timestamp = datetime.datetime.now() - timedelta(days=keep_days)
-        stmt = delete(FileTrash).where(FileTrash.repo_id == repo_id, FileTrash.delete_time < _timestamp)
-        session.execute(stmt)
-        session.commit()
-        
-def clean_up_all_repo_trash(session, keep_days):
-    if keep_days == 0:
-        stmt = delete(FileTrash)
-        session.execute(stmt)
-        session.commit()
-    else:
-        _timestamp = datetime.datetime.now() - timedelta(days=keep_days)
-        stmt = delete(FileTrash).where(FileTrash.delete_time < _timestamp)
-        session.execute(stmt)
-        session.commit()
-
 
 def update_user_activity_timestamp(session, activity_id, record):
     activity_stmt = update(Activity).where(Activity.id == activity_id).\

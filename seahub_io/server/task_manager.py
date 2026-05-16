@@ -11,57 +11,6 @@ from seahub_io.repo_metadata.constants import ZERO_OBJ_ID
 
 logger = logging.getLogger(__name__)
 
-
-class IndexTask:
-
-    def __init__(self, task_id, readable_id, func, args):
-        self.id = task_id
-        self.readable_id = readable_id
-        self.func = func
-        self.args = args
-
-        self.status = 'init'
-
-        self.started_at = None
-        self.finished_at = None
-
-        self.result = None
-        self.error = None
-
-    @staticmethod
-    def get_readable_id(readable_id):
-        return readable_id
-
-    def run(self):
-        self.status = 'running'
-        self.started_at = datetime.now()
-        return self.func(*self.args)
-
-    def set_result(self, result):
-        self.result = result
-        self.status = 'success'
-        self.finished_at = datetime.now()
-
-    def set_error(self, error):
-        self.error = error
-        self.status = 'error'
-        self.finished_at = datetime.now()
-
-    def is_finished(self):
-        return self.status in ['error', 'success']
-
-    def get_cost_time(self):
-        if self.started_at and self.finished_at:
-            return (self.finished_at - self.started_at).seconds
-        return None
-
-    def get_info(self):
-        return f'{self.id}--{self.readable_id}--{self.func}'
-
-    def __str__(self):
-        return f'<IndexTask {self.id} {self.readable_id} {self.func.__name__} {self.status}>'
-
-
 class TaskManager:
 
     def __init__(self):
