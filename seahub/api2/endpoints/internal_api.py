@@ -2,6 +2,7 @@
 import logging
 import os
 import re
+import tempfile
 from io import BytesIO
 import requests
 import json
@@ -21,6 +22,7 @@ from seahub.share.models import UploadLinkShare, FileShare, check_share_link_acc
 from seaserv import seafile_api
 
 from seahub.tags.models import FileUUIDMap
+from seahub.repo_metadata.utils import FACES_SAVE_PATH
 from seahub.utils.repo import parse_repo_perm
 from seahub.views.file import send_file_access_msg, FILE_TYPE_FOR_NEW_FILE_LINK
 from seahub.utils import normalize_file_path, get_file_type_and_ext
@@ -248,7 +250,55 @@ class CheckThumbnailAccessByUserToken(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         return Response({'success': True})
-    
+
+
+class SeafileSaveFaceView(APIView):
+    authentication_classes = ()
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request, repo_id):
+        auth = request.headers.get('authorization', '').split()
+        if not is_valid_internal_jwt(auth):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        image = request.FILES.get('image', None)
+        if not image:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'image invalid')
+
+        filename = request.data.get('filename', '')
+        if not filename or filename != os.path.basename(filename):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'filename invalid')
+
+        replace = request.data.get('replace', False)
+        if isinstance(replace, str):
+            replace = replace.lower() in ('1', 'true', 't')
+        else:
+            replace = bool(replace)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)
+
+        tmp_file_path = ''
+        try:
+            with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
+                for chunk in image.chunks():
+                    tmp_file.write(chunk)
+                tmp_file_path = tmp_file.name
+
+            if replace:
+                seafile_api.del_file(repo_id, FACES_SAVE_PATH, json.dumps([filename]), 'system')
+            seafile_api.post_file(repo_id, tmp_file_path, FACES_SAVE_PATH, filename, 'system')
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+        finally:
+            if tmp_file_path and os.path.exists(tmp_file_path):
+                os.remove(tmp_file_path)
+
+        return Response({'success': True})
+
 class CheckShareLinkThumbnailAccess(APIView):
     authentication_classes = (SessionCRSFCheckFreeAuthentication,)
     

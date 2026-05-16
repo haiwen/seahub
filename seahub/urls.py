@@ -7,7 +7,7 @@ from seahub.api2.endpoints.file_comments import FileCommentsView, FileCommentVie
 from seahub.api2.endpoints.share_link_auth import ShareLinkUserAuthView, ShareLinkEmailAuthView
 from seahub.api2.endpoints.internal_api import InternalUserListView, InternalCheckShareLinkAccess, \
     InternalCheckFileOperationAccess, CheckThumbnailAccess, CheckShareLinkThumbnailAccess, \
-    CheckThumbnailAccessByUserToken, InternalConvertSeadocImage
+    CheckThumbnailAccessByUserToken, InternalConvertSeadocImage, SeafileSaveFaceView
 from seahub.auth.views import multi_adfs_sso, login_simple_check
 from seahub.views import *
 from seahub.views.mobile import mobile_login
@@ -890,6 +890,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/internal/repos/(?P<repo_id>[-0-9a-f]{36})/check-access/$', InternalCheckFileOperationAccess.as_view(), name="api-v2.1-internal-check-file-op-access"),
     re_path(r'^api/v2.1/internal/repos/(?P<repo_id>[-0-9a-f]{36})/check-thumbnail/$', CheckThumbnailAccess.as_view(), name='api-v2.1-internal-check-thumbnail-access'),
     re_path(r'^api/v2.1/internal/repos/(?P<repo_id>[-0-9a-f]{36})/check-thumbnail/user-token/$', CheckThumbnailAccessByUserToken.as_view(), name='api-v2.1-internal-check-thumbnail-access-by-user-token'),
+    re_path(r'^api/v2.1/internal/repos/(?P<repo_id>[-0-9a-f]{36})/save-face/$', SeafileSaveFaceView.as_view(), name='api-v2.1-internal-save-face'),
     re_path(r'^api/v2.1/internal/check-share-link-thumbnail/$', CheckShareLinkThumbnailAccess.as_view(), name='api-v2.1-internal-check-share-link-thumbnail-access'),
     re_path(r'^api/v2.1/internal/convert-seadoc-image/(?P<doc_uuid>[-0-9a-f]{36})/$', InternalConvertSeadocImage.as_view(), name="api-v2.1-internal-file-download-link-access"),
 
