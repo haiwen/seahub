@@ -57,6 +57,8 @@ class FileUploader extends React.Component {
     this.isCancellingAll = false;
     this.uploadSession = 0;
     this.suppressAdds = false;
+    this.uploadLinkPromises = {};
+    this.uploadLinkCache = {};
   }
 
   componentDidMount() {
@@ -159,7 +161,8 @@ class FileUploader extends React.Component {
   onChunkingComplete = (resumableFile) => {
 
     // get parent_dir relative_path
-    let path = this.props.path === '/' ? '/' : this.props.path + '/';
+    let parentDir = this.getUploadParentDir(resumableFile);
+    let path = parentDir === '/' ? '/' : parentDir + '/';
     let fileName = resumableFile.fileName;
     let relativePath = resumableFile.relativePath;
     let isFile = fileName === relativePath;
@@ -188,6 +191,7 @@ class FileUploader extends React.Component {
       try { this.resumable.removeFile(resumableFile); } catch (e) { /* noop */ }
       return;
     }
+    this.freezeUploadContext(resumableFile);
     let isFile = resumableFile.fileName === resumableFile.relativePath;
     // uploading is file and only upload one file
     if (isFile && files.length === 1) {
@@ -208,11 +212,9 @@ class FileUploader extends React.Component {
         });
       } else {
         this.setUploadFileList(this.resumable.files);
-        let { token, relativePath } = this.props;
         const sessionAtRequest = this.uploadSession;
-        seafileAPI.sharedLinkGetFileUploadUrl(token, relativePath).then(res => {
+        this.ensureUploadLink(resumableFile).then(() => {
           if (this.isCancellingAll || this.suppressAdds || this.uploadSession !== sessionAtRequest) return;
-          this.resumable.opts.target = res.data.upload_link + '?ret-json=1';
           this.resumableUpload(resumableFile);
         }).catch(error => {
           let errMessage = Utils.getErrorMsg(error);
@@ -221,25 +223,26 @@ class FileUploader extends React.Component {
       }
     } else {
       this.setUploadFileList(this.resumable.files);
-      if (!this.isUploadLinkLoaded) {
-        this.isUploadLinkLoaded = true;
-        let { token, relativePath } = this.props;
-        const sessionAtRequest = this.uploadSession;
-        seafileAPI.sharedLinkGetFileUploadUrl(token, relativePath).then(res => {
-          if (this.isCancellingAll || this.suppressAdds || this.uploadSession !== sessionAtRequest) return;
-          this.resumable.opts.target = res.data.upload_link + '?ret-json=1';
+      const sessionAtRequest = this.uploadSession;
+      this.ensureUploadLink(resumableFile).then(() => {
+        if (this.isCancellingAll || this.suppressAdds || this.uploadSession !== sessionAtRequest) return;
+        if (!this.resumable.isUploading()) {
           this.resumable.upload();
-        }).catch(error => {
-          let errMessage = Utils.getErrorMsg(error);
-          toaster.danger(errMessage);
-        });
-      }
+        }
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
     }
   };
 
   resumableUpload = (resumableFile) => {
-    let { repoID, path } = this.props;
+    let { repoID } = this.props;
+    let path = this.getUploadParentDir(resumableFile);
     const sessionAtRequest = this.uploadSession;
+    if (resumableFile.uploadLink) {
+      this.resumable.opts.target = resumableFile.uploadLink;
+    }
     seafileAPI.getFileUploadedBytes(repoID, path, resumableFile.fileName).then(res => {
       if (this.isCancellingAll || this.suppressAdds || this.uploadSession !== sessionAtRequest) return;
       let uploadedBytes = res.data.uploadedBytes;
@@ -471,6 +474,7 @@ class FileUploader extends React.Component {
     this.notifiedFolders = [];
     // reset upload link loaded
     this.isUploadLinkLoaded = false;
+    this.clearUploadLinkContext();
   };
 
   onPause = () => {
@@ -480,6 +484,7 @@ class FileUploader extends React.Component {
   onError = (message) => {
     // reset upload link loaded
     this.isUploadLinkLoaded = false;
+    this.clearUploadLinkContext();
     // After the error, the user can switch windows
     Utils.registerGlobalVariable('uploader', 'totalProgress', 100);
   };
@@ -497,6 +502,9 @@ class FileUploader extends React.Component {
   };
 
   setHeaders = (resumableFile, resumable) => {
+    if (resumableFile.uploadLink) {
+      this.resumable.opts.target = resumableFile.uploadLink;
+    }
     let offset = resumable.offset;
     let chunkSize = resumable.getOpt('chunkSize');
     let fileSize = resumableFile.size === 0 ? 1 : resumableFile.size;
@@ -517,8 +525,75 @@ class FileUploader extends React.Component {
   };
 
   setQuery = (resumableFile) => {
+    if (resumableFile.uploadLink) {
+      this.resumable.opts.target = resumableFile.uploadLink;
+    }
     let formData = resumableFile.formData;
     return formData;
+  };
+
+  freezeUploadContext = (resumableFile) => {
+    if (!resumableFile.uploadParentDir) {
+      resumableFile.uploadParentDir = this.props.path;
+    }
+    if (!resumableFile.uploadRelativePath) {
+      resumableFile.uploadRelativePath = this.props.relativePath;
+    }
+  };
+
+  getUploadParentDir = (resumableFile) => {
+    return resumableFile.uploadParentDir || this.props.path;
+  };
+
+  getUploadRelativePath = (resumableFile) => {
+    return resumableFile.uploadRelativePath || this.props.relativePath;
+  };
+
+  getUploadLinkKey = (resumableFile) => {
+    return this.getUploadRelativePath(resumableFile);
+  };
+
+  clearUploadLinkContext = () => {
+    this.uploadLinkPromises = {};
+    this.uploadLinkCache = {};
+  };
+
+  ensureUploadLink = (resumableFile, forceRefresh = false) => {
+    this.freezeUploadContext(resumableFile);
+
+    if (resumableFile.uploadLink && !forceRefresh) {
+      return Promise.resolve(resumableFile.uploadLink);
+    }
+
+    let { token } = this.props;
+    let relativePath = this.getUploadRelativePath(resumableFile);
+    let cacheKey = this.getUploadLinkKey(resumableFile);
+
+    if (forceRefresh) {
+      delete this.uploadLinkPromises[cacheKey];
+      delete this.uploadLinkCache[cacheKey];
+      delete resumableFile.uploadLink;
+    }
+
+    if (this.uploadLinkCache[cacheKey]) {
+      resumableFile.uploadLink = this.uploadLinkCache[cacheKey];
+      return Promise.resolve(resumableFile.uploadLink);
+    }
+
+    if (!this.uploadLinkPromises[cacheKey]) {
+      this.uploadLinkPromises[cacheKey] = seafileAPI.sharedLinkGetFileUploadUrl(token, relativePath).then(res => {
+        let uploadLink = res.data.upload_link + '?ret-json=1';
+        this.uploadLinkCache[cacheKey] = uploadLink;
+        return uploadLink;
+      }).finally(() => {
+        delete this.uploadLinkPromises[cacheKey];
+      });
+    }
+
+    return this.uploadLinkPromises[cacheKey].then(uploadLink => {
+      resumableFile.uploadLink = uploadLink;
+      return uploadLink;
+    });
   };
 
   generateUniqueIdentifier = (file) => {
@@ -554,6 +629,7 @@ class FileUploader extends React.Component {
     this.resumable.files = [];
     // reset upload link loaded
     this.isUploadLinkLoaded = false;
+    this.clearUploadLinkContext();
     this.setState({ isUploadProgressDialogShow: false, uploadFileList: [], forbidUploadFileList: [] });
     Utils.registerGlobalVariable('uploader', 'isUploadProgressDialogShow', false);
   };
@@ -594,16 +670,14 @@ class FileUploader extends React.Component {
     });
     // reset upload link loaded
     this.isUploadLinkLoaded = false;
+    this.clearUploadLinkContext();
 
     setTimeout(() => { this.isCancellingAll = false; }, 0);
   };
 
   onUploadRetry = (resumableFile) => {
-
-    let { token, relativePath } = this.props;
-    seafileAPI.sharedLinkGetFileUploadUrl(token, relativePath).then(res => {
-      this.resumable.opts.target = res.data.upload_link + '?ret-json=1';
-
+    this.ensureUploadLink(resumableFile, true).then(uploadLink => {
+      this.resumable.opts.target = uploadLink;
       let retryFileList = this.state.retryFileList.filter(item => {
         return item.uniqueIdentifier !== resumableFile.uniqueIdentifier;
       });
@@ -626,21 +700,17 @@ class FileUploader extends React.Component {
   };
 
   onUploadRetryAll = () => {
-
-    let { token, relativePath } = this.props;
-    seafileAPI.sharedLinkGetFileUploadUrl(token, relativePath).then(res => {
-      this.resumable.opts.target = res.data.upload_link + '?ret-json=1';
-      this.state.retryFileList.forEach(item => {
+    Promise.all(this.state.retryFileList.map(item => {
+      return this.ensureUploadLink(item, true).then(() => {
         item.error = false;
         this.retryUploadFile(item);
       });
-
+    })).then(() => {
       let uploadFileList = this.state.uploadFileList.slice(0);
       this.setState({
         retryFileList: [],
         uploadFileList: uploadFileList
       });
-
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -648,7 +718,8 @@ class FileUploader extends React.Component {
   };
 
   retryUploadFile = (resumableFile) => {
-    let { repoID, path } = this.props;
+    let { repoID } = this.props;
+    let path = this.getUploadParentDir(resumableFile);
     let fileName = resumableFile.fileName;
     let isFile = resumableFile.fileName === resumableFile.relativePath;
     if (!isFile) {
@@ -667,6 +738,9 @@ class FileUploader extends React.Component {
           let offset = Math.floor(uploadedBytes / blockSize);
           resumableFile.markChunksCompleted(offset);
 
+          if (resumableFile.uploadLink) {
+            this.resumable.opts.target = resumableFile.uploadLink;
+          }
           resumableFile.resumableObj.upload();
 
         }).catch(error => {
@@ -681,9 +755,8 @@ class FileUploader extends React.Component {
   uploadFile = () => {
     let resumableFile = this.resumable.files[this.resumable.files.length - 1];
 
-    let { token, relativePath } = this.props;
-    seafileAPI.sharedLinkGetFileUploadUrl(token, relativePath).then(res => {
-      this.resumable.opts.target = res.data.upload_link + '?ret-json=1';
+    this.ensureUploadLink(resumableFile).then(uploadLink => {
+      this.resumable.opts.target = uploadLink;
       this.setState({
         isUploadRemindDialogShow: false,
         isUploadProgressDialogShow: true,
