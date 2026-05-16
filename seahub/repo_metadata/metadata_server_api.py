@@ -2,7 +2,7 @@ import requests, jwt, time
 from seahub.settings import METADATA_SERVER_URL, JWT_PRIVATE_KEY
 
 def list_metadata_records(repo_id, user, parent_dir=None, name=None, is_dir=None, start=0, limit=1000, order_by=None):
-    from seahub_io.repo_metadata.constants import METADATA_TABLE
+    from seafevents.repo_metadata.constants import METADATA_TABLE
     sql = f'SELECT * FROM `{METADATA_TABLE.name}`'
 
     parameters = []
@@ -45,7 +45,7 @@ def list_metadata_records(repo_id, user, parent_dir=None, name=None, is_dir=None
 def collect_all_tag_ids(tag_ids, metadata_server_api):
     """Recursively collect all tag ids including sub_links."""
 
-    from seahub_io.repo_metadata.constants import TAGS_TABLE
+    from seafevents.repo_metadata.constants import TAGS_TABLE
 
     all_ids = set(tag_ids)
     to_check = set(tag_ids)
@@ -65,8 +65,8 @@ def collect_all_tag_ids(tag_ids, metadata_server_api):
 
 
 def list_metadata_view_records(repo_id, user, view, tags_enabled, start=0, limit=1000):
-    from seahub_io.repo_metadata.constants import METADATA_TABLE, TAGS_TABLE, PrivatePropertyKeys
-    from seahub_io.repo_metadata.utils import gen_view_data_sql
+    from seafevents.repo_metadata.constants import METADATA_TABLE, TAGS_TABLE, PrivatePropertyKeys
+    from seafevents.repo_metadata.utils import gen_view_data_sql
     metadata_server_api = MetadataServerAPI(repo_id, user)
     columns = metadata_server_api.list_columns(METADATA_TABLE.id).get('columns')
 

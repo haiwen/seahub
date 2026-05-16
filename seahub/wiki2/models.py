@@ -178,7 +178,7 @@ class WikiFileViewsManager(models.Manager):
     def add_view(self, file_view_id, view_type='table', view_data={}):
         wiki_views = self.filter(pk=file_view_id).first()
         if not view_data:
-            from seahub_io.repo_metadata.constants import METADATA_TABLE
+            from seafevents.repo_metadata.constants import METADATA_TABLE
             view_data = {
                 'basic_filters': [{ 'column_key': METADATA_TABLE.columns.is_dir.key, 'filter_predicate': 'is', 'filter_term': 'file' }],
                 'sorts': [{ 'column_key': METADATA_TABLE.columns.file_mtime.key, 'sort_type': 'down' }]
@@ -257,7 +257,7 @@ class WikiFileViews(models.Model):
         res.update(views_dict)
         return res
     def refresh_views(self):
-        from seahub_io.repo_metadata.constants import METADATA_TABLE
+        from seafevents.repo_metadata.constants import METADATA_TABLE
         views = json.loads(self.details).get('views')
         view_data = {
                 'basic_filters': [{ 'column_key': METADATA_TABLE.columns.is_dir.key, 'filter_predicate': 'is', 'filter_term': 'file' }],

@@ -353,7 +353,7 @@ class DirView(APIView):
                     logger.debug(f"User {username} does not have permission to read metadata for repo {repo_id}")
                 else:
                     from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
-                    from seahub_io.repo_metadata.constants import METADATA_TABLE
+                    from seafevents.repo_metadata.constants import METADATA_TABLE
 
                     # Build entries list (files + directories from current path)
                     entries = []
@@ -699,7 +699,7 @@ class DirDetailView(APIView):
         # metadata enable check
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
         if metadata and metadata.enabled:
-            from seahub_io.repo_metadata.constants import METADATA_TABLE
+            from seafevents.repo_metadata.constants import METADATA_TABLE
             metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
             try:
                 sql = f"""

@@ -149,7 +149,7 @@ def gen_unique_id(id_set, length=4):
         _id = generator_base64_code(length)
 
 def get_face_columns():
-    from seahub_io.repo_metadata.constants import FACES_TABLE
+    from seafevents.repo_metadata.constants import FACES_TABLE
     columns = [
         FACES_TABLE.columns.vector.to_dict(),
         FACES_TABLE.columns.name.to_dict(),
@@ -166,7 +166,7 @@ def get_table_by_name(metadata_server_api, table_name):
 
 
 def get_unmodifiable_columns():
-    from seahub_io.repo_metadata.constants import METADATA_TABLE
+    from seafevents.repo_metadata.constants import METADATA_TABLE
     columns = [
         METADATA_TABLE.columns.file_creator.to_dict(),
         METADATA_TABLE.columns.file_ctime.to_dict(),
@@ -186,7 +186,7 @@ def get_unmodifiable_columns():
 
 
 def init_metadata(metadata_server_api):
-    from seahub_io.repo_metadata.constants import METADATA_TABLE, METADATA_TABLE_SYS_COLUMNS
+    from seafevents.repo_metadata.constants import METADATA_TABLE, METADATA_TABLE_SYS_COLUMNS
 
     # delete base to prevent dirty data caused by last failure
     metadata_server_api.delete_base()
@@ -198,7 +198,7 @@ def init_metadata(metadata_server_api):
 
 
 def init_faces(metadata_server_api):
-    from seahub_io.repo_metadata.constants import METADATA_TABLE, FACES_TABLE
+    from seafevents.repo_metadata.constants import METADATA_TABLE, FACES_TABLE
 
     remove_faces_table(metadata_server_api)
     resp = metadata_server_api.create_table(FACES_TABLE.name)
@@ -244,7 +244,7 @@ def init_faces(metadata_server_api):
 
 
 def remove_faces_table(metadata_server_api):
-    from seahub_io.repo_metadata.constants import METADATA_TABLE, FACES_TABLE
+    from seafevents.repo_metadata.constants import METADATA_TABLE, FACES_TABLE
     metadata = metadata_server_api.get_metadata()
 
     tables = metadata.get('tables', [])
@@ -265,7 +265,7 @@ def remove_faces_table(metadata_server_api):
 
 # tag
 def get_tag_columns(table_id):
-    from seahub_io.repo_metadata.constants import TAGS_TABLE
+    from seafevents.repo_metadata.constants import TAGS_TABLE
     columns = [
         TAGS_TABLE.columns.name.to_dict(),
         TAGS_TABLE.columns.color.to_dict(),
@@ -275,7 +275,7 @@ def get_tag_columns(table_id):
 
 
 def init_tag_file_links_column(metadata_server_api, tag_table_id):
-    from seahub_io.repo_metadata.constants import METADATA_TABLE, TAGS_TABLE
+    from seafevents.repo_metadata.constants import METADATA_TABLE, TAGS_TABLE
 
     file_link_id = TAGS_TABLE.file_link_id
     table_id = METADATA_TABLE.id
@@ -294,7 +294,7 @@ def init_tag_file_links_column(metadata_server_api, tag_table_id):
 
 
 def init_tag_self_link_columns(metadata_server_api, tag_table_id):
-    from seahub_io.repo_metadata.constants import TAGS_TABLE
+    from seafevents.repo_metadata.constants import TAGS_TABLE
     link_id = TAGS_TABLE.self_link_id
     table_id = tag_table_id
     other_table_id = tag_table_id
@@ -316,7 +316,7 @@ def init_tag_self_link_columns(metadata_server_api, tag_table_id):
 
 
 def init_tags(metadata_server_api):
-    from seahub_io.repo_metadata.constants import METADATA_TABLE, TAGS_TABLE
+    from seafevents.repo_metadata.constants import METADATA_TABLE, TAGS_TABLE
 
     remove_tags_table(metadata_server_api)
     resp = metadata_server_api.create_table(TAGS_TABLE.name)
@@ -333,7 +333,7 @@ def init_tags(metadata_server_api):
 
 
 def remove_tags_table(metadata_server_api):
-    from seahub_io.repo_metadata.constants import METADATA_TABLE, TAGS_TABLE
+    from seafevents.repo_metadata.constants import METADATA_TABLE, TAGS_TABLE
     metadata = metadata_server_api.get_metadata()
 
     tables = metadata.get('tables', [])
@@ -359,7 +359,7 @@ def can_read_metadata(request, repo_id):
 
 
 def get_column_valid_value(column, value):
-    from seahub_io.repo_metadata.constants import PropertyTypes
+    from seafevents.repo_metadata.constants import PropertyTypes
     if value and column['type'] == PropertyTypes.DATE:
         column_data = column.get('data', {})
         format = column_data.get('format', 'YYYY-MM-DD')

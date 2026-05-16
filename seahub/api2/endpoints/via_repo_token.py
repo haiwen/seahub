@@ -1495,7 +1495,7 @@ class ViaRepoMetadataRecords(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, username)
 
-        from seahub_io.repo_metadata.constants import METADATA_TABLE
+        from seafevents.repo_metadata.constants import METADATA_TABLE
         try:
             columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
             columns = columns_data.get('columns', [])
@@ -1927,7 +1927,7 @@ class ViaRepoMetadataTags(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         metadata_server_api = MetadataServerAPI(repo_id, username)
-        from seahub_io.repo_metadata.constants import TAGS_TABLE
+        from seafevents.repo_metadata.constants import TAGS_TABLE
 
         sql = f'SELECT * FROM `{TAGS_TABLE.name}` ORDER BY `_ctime` LIMIT {start}, {limit}'
         try:
@@ -1966,7 +1966,7 @@ class ViaRepoMetadataTags(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, username)
 
-        from seahub_io.repo_metadata.constants import TAGS_TABLE
+        from seafevents.repo_metadata.constants import TAGS_TABLE
         try:
             tags_table = get_table_by_name(metadata_server_api, TAGS_TABLE.name)
         except Exception as e:
@@ -2051,7 +2051,7 @@ class ViaRepoMetadataTags(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, username)
 
-        from seahub_io.repo_metadata.constants import TAGS_TABLE
+        from seafevents.repo_metadata.constants import TAGS_TABLE
         try:
             tags_table = get_table_by_name(metadata_server_api, TAGS_TABLE.name)
         except Exception as e:
@@ -2139,7 +2139,7 @@ class ViaRepoMetadataTags(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, username)
 
-        from seahub_io.repo_metadata.constants import TAGS_TABLE
+        from seafevents.repo_metadata.constants import TAGS_TABLE
         try:
             tags_table = get_table_by_name(metadata_server_api, TAGS_TABLE.name)
         except Exception as e:
@@ -2283,7 +2283,7 @@ class ViaRepoMetadataTagsLinks(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        from seahub_io.repo_metadata.constants import TAGS_TABLE
+        from seafevents.repo_metadata.constants import TAGS_TABLE
         tables = metadata.get('tables', [])
         tags_table_id = [table['id'] for table in tables if table['name'] == TAGS_TABLE.name]
         tags_table_id = tags_table_id[0] if tags_table_id else None
@@ -2362,7 +2362,7 @@ class ViaRepoMetadataTagsLinks(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        from seahub_io.repo_metadata.constants import TAGS_TABLE
+        from seafevents.repo_metadata.constants import TAGS_TABLE
         tables = metadata.get('tables', [])
         tags_table_id = [table['id'] for table in tables if table['name'] == TAGS_TABLE.name]
         tags_table_id = tags_table_id[0] if tags_table_id else None
@@ -2432,7 +2432,7 @@ class ViaRepoMetadataTagsLinks(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        from seahub_io.repo_metadata.constants import TAGS_TABLE
+        from seafevents.repo_metadata.constants import TAGS_TABLE
         tables = metadata.get('tables', [])
         tags_table_id = [table['id'] for table in tables if table['name'] == TAGS_TABLE.name]
         tags_table_id = tags_table_id[0] if tags_table_id else None
@@ -2493,7 +2493,7 @@ class ViaRepoMetadataFileTags(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        from seahub_io.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
+        from seafevents.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
         success_records = []
@@ -2535,7 +2535,7 @@ class ViaRepoMetadataTagFiles(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
-        from seahub_io.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
+        from seafevents.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
 
         tag_files_record_sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.id.name}` = "{tag_id}"'
         try:
@@ -2595,7 +2595,7 @@ class ViaRepoMetadataTagsFiles(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
-        from seahub_io.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
+        from seafevents.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
 
         tags_ids_str = ', '.join([f'"{id}"' for id in tags_ids])
         sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.id.name}` in ({tags_ids_str})'
@@ -2670,7 +2670,7 @@ class ViaRepoMetadataMergeTags(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        from seahub_io.repo_metadata.constants import TAGS_TABLE
+        from seafevents.repo_metadata.constants import TAGS_TABLE
         tables = metadata.get('tables', [])
         tags_table_id = [table['id'] for table in tables if table['name'] == TAGS_TABLE.name]
         tags_table_id = tags_table_id[0] if tags_table_id else None
@@ -2828,7 +2828,7 @@ class ViaRepoRecentlyChangedFiles(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         metadata_server_api = MetadataServerAPI(repo_id, username)
-        from seahub_io.repo_metadata.constants import METADATA_TABLE
+        from seafevents.repo_metadata.constants import METADATA_TABLE
 
         sql = f"""SELECT `_id`, `_ctime`, `_creator`, `_last_modifier`, `_mtime`, `_file_creator`, `_file_ctime`, `_file_modifier`, 
         `_file_mtime`, `_parent_dir`, `_name`, `_size`, `_description`, `_tags`
