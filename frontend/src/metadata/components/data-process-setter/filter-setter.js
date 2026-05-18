@@ -30,7 +30,12 @@ const FilterSetter = ({
   }, [propsFilters, columns]);
 
   const filtersCount = useMemo(() => {
-    return filters.length + basicFilters.length;
+    const basicCount = basicFilters.filter(item => {
+      const term = item.filter_term;
+      if (Array.isArray(term)) return term.length > 0;
+      return !!term;
+    }).length;
+    return filters.length + basicCount;
   }, [filters, basicFilters]);
 
   const message = useMemo(() => {
