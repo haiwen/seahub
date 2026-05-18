@@ -37,7 +37,7 @@ export const adaptMetadataColumnsToSfTable = (repoID, metadataColumns) => {
       is_popup_editor: POPUP_EDITOR_COLUMN_TYPES.includes(column.type),
       is_support_preview: [CellType.FILE_NAME].includes(column?.type),
       is_support_direct_edit: [CellType.CHECKBOX].includes(column?.type),
-      editable_via_click_cell: is_private && EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS.includes(column.key) || false,
+      editable_via_click_cell: is_private ? EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS.includes(column.key) : true,
       is_private,
     };
   });
@@ -249,7 +249,7 @@ export const createMetadataContextMenuOptions = ({
         direction="right"
         className="w-100"
         isOpen={isOpen}
-        toggle={() => {}}
+        toggle={() => { }}
         onMouseEnter={() => setIsOpen(true)}
         onMouseLeave={() => setIsOpen(false)}
       >
@@ -314,7 +314,6 @@ export const useMetadataTableAdapter = ({
   onOCR,
   generateFileTags,
   tagsData,
-  collaborators,
 }) => {
   return useMemo(() => {
     const api = {
@@ -351,33 +350,4 @@ export const useMetadataTableAdapter = ({
 
     return adapter;
   }, [modifyRecord, modifyRecords, recordGetterByIndex, recordGetterById, modifyColumnData, updateFileTags, metadata, repoID, readOnly, deleteRecords, updateRecordDetails, updateFaceRecognition, updateRecordDescription, onOCR, generateFileTags, tagsData]);
-};
-
-export const adaptSfTablePropsToMetadata = (sfTableProps, metadataProps) => {
-  const {
-    table,
-    visibleColumns,
-    recordsIds,
-    groupbys,
-    groups,
-    modifyRecords,
-    recordGetterByIndex,
-    recordGetterById,
-    getUpdateDraggedRecords,
-    getCopiedRecordsAndColumnsFromRange,
-  } = sfTableProps;
-
-  return {
-    table,
-    columns: visibleColumns,
-    recordIds: recordsIds,
-    groupbys,
-    groups,
-    modifyRecords,
-    recordGetterByIndex,
-    recordGetterById,
-    gridUtils: metadataProps?.gridUtils,
-    getUpdateDraggedRecords,
-    getCopiedRecordsAndColumnsFromRange,
-  };
 };
