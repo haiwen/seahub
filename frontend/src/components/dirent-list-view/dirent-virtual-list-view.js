@@ -60,42 +60,24 @@ const DirentVirtualListView = ({
   const scrollContainerRef = useRef(null);
   const headerRef = useRef(null);
   const [scrollTop, setScrollTop] = useState(0);
-  const [containerWidth, setContainerWidth] = useState(0);
 
-  const tableWrapperWidth = useMemo(() => {
-    if (containerWidth === 0 || !Utils.isDesktop()) {
-      return '100%';
-    }
-    return containerWidth > 768 ? containerWidth : 768;
-  }, [containerWidth]);
+  const gridStyle = useMemo(() => {
+    if (!Utils.isDesktop()) return undefined;
+    const teplate = headers.map(header => {
+      const { key, width } = header;
+      if (key === 'name') {
+        return `minmax(${width}px, 1fr)`;
+      }
+      return `${width}px`;
+    });
+
+    return {
+      display: 'grid',
+      gridTemplateColumns: teplate.join(' '),
+    };
+  }, [headers]);
 
   const { collaborators, collaboratorsCache, updateCollaboratorsCache, queryUser } = useCollaborators();
-
-
-  useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-
-    const updateWidth = () => {
-      const style = window.getComputedStyle(container);
-      const paddingLeft = parseFloat(style.paddingLeft) || 0;
-      const paddingRight = parseFloat(style.paddingRight) || 0;
-      const contentWidth = Math.max(
-        container.clientWidth - paddingLeft - paddingRight,
-        0
-      );
-      setContainerWidth(contentWidth);
-    };
-
-    updateWidth();
-
-    const resizeObserver = new ResizeObserver(updateWidth);
-    resizeObserver.observe(container);
-
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, []);
 
   const handleScroll = (e) => {
     const { scrollTop: st, scrollLeft } = e.target;
@@ -114,52 +96,52 @@ const DirentVirtualListView = ({
         className="dirent-virtual-scroll-container"
         onScroll={handleScroll}
       >
-        <div style={{ width: tableWrapperWidth }}>
-          {Utils.isDesktop() && (
-            <div
-              ref={headerRef}
-              className="d-flex dirent-virtual-list-header"
-            >
-              {headers.map((header, index) => {
-                const { className: headerClassName, children } = header;
-                return (
-                  <div
-                    key={index}
-                    className={`dirent-virtual-list-header-cell ${headerClassName || ''}`}
-                  >
-                    {children}
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          <div className="dirent-virtual-list-body">
-            <VirtualList
-              items={items}
-              itemHeight={itemHeight}
-              overscan={overscan}
-              scrollTop={scrollTop}
-              scrollContainerRef={scrollContainerRef}
-              renderItem={({ item }) => (
-                <DirentItemWrapper
-                  key={item.name}
-                  dirent={item}
-                  path={path}
-                  repoID={repoID}
-                  registerExecuteOperation={registerExecuteOperation}
-                  unregisterExecuteOperation={unregisterExecuteOperation}
-                  collaborators={collaborators}
-                  collaboratorsCache={collaboratorsCache}
-                  updateCollaboratorsCache={updateCollaboratorsCache}
-                  queryUser={queryUser}
-                  columns={columns}
-                  tagsData={tagsData}
-                  {...itemProps}
-                />
-              )}
-            />
+        {Utils.isDesktop() && (
+          <div
+            ref={headerRef}
+            className="dirent-virtual-list-header"
+            style={gridStyle}
+          >
+            {headers.map((header, index) => {
+              const { className: headerClassName, children } = header;
+              return (
+                <div
+                  key={index}
+                  className={`dirent-virtual-list-header-cell ${headerClassName || ''}`}
+                >
+                  {children}
+                </div>
+              );
+            })}
           </div>
+        )}
+
+        <div className="dirent-virtual-list-body">
+          <VirtualList
+            items={items}
+            itemHeight={itemHeight}
+            overscan={overscan}
+            scrollTop={scrollTop}
+            scrollContainerRef={scrollContainerRef}
+            renderItem={({ item }) => (
+              <DirentItemWrapper
+                key={item.name}
+                dirent={item}
+                path={path}
+                repoID={repoID}
+                registerExecuteOperation={registerExecuteOperation}
+                unregisterExecuteOperation={unregisterExecuteOperation}
+                collaborators={collaborators}
+                collaboratorsCache={collaboratorsCache}
+                updateCollaboratorsCache={updateCollaboratorsCache}
+                queryUser={queryUser}
+                columns={columns}
+                tagsData={tagsData}
+                gridStyle={gridStyle}
+                {...itemProps}
+              />
+            )}
+          />
         </div>
       </div>
     </div>

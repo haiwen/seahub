@@ -2,7 +2,6 @@ import React from 'react';
 import { gettext } from './constants';
 import Icon from '../components/icon';
 import { DIR_COLUMN_KEYS } from '../constants/dir-column-config';
-import { COLUMN_CONFIG } from '../components/dirent-list-view/column-config';
 import { PRIVATE_COLUMN_KEY } from '@/metadata/constants';
 
 export const createTableHeaders = (
@@ -31,9 +30,8 @@ export const createTableHeaders = (
   const baseHeaders = [
     {
       key: 'checkbox',
-      width: COLUMN_CONFIG.checkbox.width,
-      className: COLUMN_CONFIG.checkbox.headerClassName,
-      minWidth: COLUMN_CONFIG.checkbox.width,
+      width: 32,
+      className: 'pl10 pr-2 cursor-pointer',
       children: React.createElement(
         React.Fragment,
         null,
@@ -55,7 +53,7 @@ export const createTableHeaders = (
               type: 'checkbox',
               className: 'cursor-pointer form-check-input',
               checked: isAllSelected,
-              onChange: () => {},
+              onChange: () => { },
               readOnly: true
             })
         )
@@ -63,23 +61,20 @@ export const createTableHeaders = (
     },
     {
       key: 'star',
-      width: COLUMN_CONFIG.star.width,
-      className: COLUMN_CONFIG.star.className,
-      minWidth: COLUMN_CONFIG.star.width,
+      width: 32,
+      className: 'dirent-operation dirent-operation-star',
       children: null
     },
     {
       key: 'icon',
-      width: COLUMN_CONFIG.icon.width,
-      className: COLUMN_CONFIG.icon.className,
-      minWidth: COLUMN_CONFIG.icon.width,
+      width: 40,
+      className: 'dirent-thumbnail',
       children: null
     },
     {
       key: 'name',
-      width: 0.5,
-      className: COLUMN_CONFIG.name.className,
-      minWidth: COLUMN_CONFIG.name.width,
+      width: 120,
+      className: 'dirent-property dirent-item-name',
       children: React.createElement(
         'span',
         {
@@ -93,9 +88,8 @@ export const createTableHeaders = (
     },
     ...(isColumnVisible(DIR_COLUMN_KEYS.SIZE) ? [{
       key: DIR_COLUMN_KEYS.SIZE,
-      width: COLUMN_CONFIG.size.width,
-      className: COLUMN_CONFIG.size.className,
-      minWidth: COLUMN_CONFIG.size.width,
+      width: 100,
+      className: 'dirent-property dirent-property-size',
       children: React.createElement(
         'span',
         {
@@ -109,9 +103,8 @@ export const createTableHeaders = (
     }] : []),
     ...(isColumnVisible(DIR_COLUMN_KEYS.MTIME) ? [{
       key: DIR_COLUMN_KEYS.MTIME,
-      width: COLUMN_CONFIG.modified.width,
-      className: COLUMN_CONFIG.modified.className,
-      minWidth: COLUMN_CONFIG.modified.width,
+      width: 120,
+      className: 'dirent-property dirent-property-modified',
       children: React.createElement(
         'span',
         {
@@ -125,9 +118,8 @@ export const createTableHeaders = (
     }] : []),
     ...(isColumnVisible(PRIVATE_COLUMN_KEY.FILE_MODIFIER) ? [{
       key: PRIVATE_COLUMN_KEY.FILE_MODIFIER,
-      width: COLUMN_CONFIG.file_modifier.width,
-      className: COLUMN_CONFIG.file_modifier.className,
-      minWidth: COLUMN_CONFIG.file_modifier.width,
+      width: 120,
+      className: 'dirent-property dirent-property-last-modifier',
       children: React.createElement(
         'span',
         {
@@ -141,9 +133,8 @@ export const createTableHeaders = (
     }] : []),
     ...(isColumnVisible(PRIVATE_COLUMN_KEY.FILE_CREATOR) ? [{
       key: PRIVATE_COLUMN_KEY.FILE_CREATOR,
-      width: COLUMN_CONFIG.file_creator.width,
-      className: COLUMN_CONFIG.file_creator.className,
-      minWidth: COLUMN_CONFIG.file_creator.width,
+      width: 120,
+      className: 'dirent-property dirent-property-creator',
       children: React.createElement(
         'span',
         {
@@ -157,9 +148,8 @@ export const createTableHeaders = (
     }] : []),
     ...(isColumnVisible(PRIVATE_COLUMN_KEY.FILE_STATUS) ? [{
       key: PRIVATE_COLUMN_KEY.FILE_STATUS,
-      width: COLUMN_CONFIG.status.width,
-      className: COLUMN_CONFIG.status.className,
-      minWidth: COLUMN_CONFIG.status.width,
+      width: 120,
+      className: 'dirent-property dirent-property-status',
       children: React.createElement(
         'span',
         {},
@@ -168,9 +158,8 @@ export const createTableHeaders = (
     }] : []),
     ...(isColumnVisible(PRIVATE_COLUMN_KEY.TAGS) ? [{
       key: PRIVATE_COLUMN_KEY.TAGS,
-      width: COLUMN_CONFIG.tags.width,
-      className: COLUMN_CONFIG.tags.className,
-      minWidth: COLUMN_CONFIG.tags.width,
+      width: 100,
+      className: 'dirent-property dirent-property-tags',
       children: React.createElement(
         'span',
         {},

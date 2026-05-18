@@ -9,12 +9,13 @@
   overflow: auto;
   height: 100%;
   width: 100%;
+  min-width: fit-content;
   padding: 0 16px 160px;
   overflow-x: auto;
 }
 
 .dirent-virtual-list-header {
-  display: grid;
+  display: flex;
   height: 40px;
   border-bottom: 1px solid var(--bs-border-secondary-color);
   align-items: center;
@@ -34,11 +35,15 @@
 .dirent-virtual-list-body {
   flex: 1;
   min-height: 0;
-  overflow: hidden;
+  overflow-y: hidden;
+}
+
+.dirent-virtual-list-body .virtual-scroll-list {
+  overflow-x: visible;
 }
 
 .dirent-virtual-item {
-  display: grid;
+  display: flex;
   height: 42px;
   width: 100%;
   border-bottom: 1px solid var(--bs-border-secondary-color);

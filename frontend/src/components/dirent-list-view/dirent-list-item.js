@@ -158,7 +158,7 @@ class DirentListItem extends React.Component {
       });
       this.thumbnailCenter = null;
     }
-    this.setState = () => {};
+    this.setState = () => { };
   }
 
   checkGenerateThumbnail = (dirent) => {
@@ -413,7 +413,7 @@ class DirentListItem extends React.Component {
       });
       selectedList = JSON.stringify(selectedList);
       e.dataTransfer.setData('application/drag-item-info', selectedList);
-      return ;
+      return;
     }
 
     if (e.dataTransfer && e.dataTransfer.setDragImage) {
@@ -489,12 +489,12 @@ class DirentListItem extends React.Component {
 
       let selectedPath = Utils.joinPath(this.props.path, this.props.dirent.name);
 
-      if (direntPaths.some(direntPath => { return direntPath === selectedPath;})) {
+      if (direntPaths.some(direntPath => { return direntPath === selectedPath; })) {
         return;
       }
 
       this.props.onItemsMove(this.props.currentRepoInfo, selectedPath);
-      return ;
+      return;
     }
 
     let { nodeDirent, nodeParentPath, nodeRootPath } = dragStartItemData;
@@ -553,7 +553,7 @@ class DirentListItem extends React.Component {
 
   render() {
     let dirent = this.props.dirent;
-    const { columns, hiddenColumnKeys } = this.props;
+    const { columns, hiddenColumnKeys, gridStyle } = this.props;
 
     let iconUrl = Utils.getDirentIcon(dirent);
 
@@ -653,10 +653,11 @@ class DirentListItem extends React.Component {
     return (
       <div
         className={classnames(
-          'dirent-virtual-item d-flex',
+          'dirent-virtual-item',
           { 'tr-drop-effect': this.state.isDropTipShow },
           { 'tr-active': isSelected },
         )}
+        style={gridStyle || undefined}
         draggable={canDrag}
         onFocus={this.onMouseEnter}
         onMouseEnter={this.onMouseEnter}
@@ -764,19 +765,8 @@ class DirentListItem extends React.Component {
         )}
 
         {showModified && (
-          <div className="d-block dirent-property dirent-property-modified" title={formatUnixWithTimezone(dirent.mtime)}>
+          <div className="dirent-property dirent-property-modified" title={formatUnixWithTimezone(dirent.mtime)}>
             {dirent.mtime_relative}
-          </div>
-        )}
-
-        {showCreator && (
-          <div className="dirent-property dirent-property-creator">
-            <CreatorFormatter
-              value={showMetadata ? dirent.metadata[PRIVATE_COLUMN_KEY.FILE_CREATOR] : ''}
-              collaborators={this.props.collaborators}
-              queryUserAPI={this.props.queryUser}
-              collaboratorsCache={this.props.collaboratorsCache}
-            />
           </div>
         )}
 
@@ -784,6 +774,17 @@ class DirentListItem extends React.Component {
           <div className="dirent-property dirent-property-last-modifier">
             <CreatorFormatter
               value={showMetadata ? dirent.metadata[PRIVATE_COLUMN_KEY.FILE_MODIFIER] : dirent.modifier_email}
+              collaborators={this.props.collaborators}
+              queryUserAPI={this.props.queryUser}
+              collaboratorsCache={this.props.collaboratorsCache}
+            />
+          </div>
+        )}
+
+        {showCreator && (
+          <div className="dirent-property dirent-property-creator">
+            <CreatorFormatter
+              value={showMetadata ? dirent.metadata[PRIVATE_COLUMN_KEY.FILE_CREATOR] : ''}
               collaborators={this.props.collaborators}
               queryUserAPI={this.props.queryUser}
               collaboratorsCache={this.props.collaboratorsCache}
