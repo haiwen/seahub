@@ -18,7 +18,7 @@ from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthenti
 from seahub.utils import get_file_type_and_ext, IMAGE
 from seahub.views import check_folder_permission
 from seahub.ai.utils import image_caption, translate, writing_assistant, verify_ai_config, generate_summary, \
-    generate_file_tags, ocr, is_ai_usage_over_limit
+    generate_file_tags, ocr, is_ai_usage_over_limit, sdoc_general_assistant
 
 logger = logging.getLogger(__name__)
 
@@ -424,3 +424,68 @@ class WritingAssistant(APIView):
 
         return Response(resp_json, resp.status_code)
 
+class SdocGeneralAssistant(APIView):
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request):
+        if not verify_ai_config():
+            return api_error(status.HTTP_400_BAD_REQUEST, 'AI server not configured')
+
+        repo_id = request.data.get('repo_id')
+        file_path = request.data.get('file_path')
+        custom_prompt = request.data.get('custom_prompt')
+        org_id =  request.user.org.org_id if request.user.org else None
+        username = request.user.username
+
+        if not repo_id:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
+        if not file_path:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'file_path invalid')
+        if not custom_prompt:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'custom_prompt invalid')
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        permission = check_folder_permission(request, repo_id, os.path.dirname(file_path))
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if is_ai_usage_over_limit(request.user, org_id):
+            return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
+
+        try:
+            file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+        except SearpcError as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        if not file_id:
+            return api_error(status.HTTP_404_NOT_FOUND, f"File {file_path} not found")
+
+        token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', request.user.username, use_onetime=True)
+        if not token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        params = {
+            'file_path': file_path,
+            'download_token': token,
+            'custom_prompt': custom_prompt,
+            'org_id': org_id,
+            'username': username
+        }
+
+        try:
+            resp = sdoc_general_assistant(params)
+            resp_json = resp.json()
+        except Exception as e:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response(resp_json, resp.status_code)
