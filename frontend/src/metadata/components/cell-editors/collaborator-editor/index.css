@@ -1,7 +1,8 @@
 .sf-metadata-collaborator-editor {
   width: 300px;
-  padding: 0;
+  height: fit-content;
   min-height: 160px;
+  padding: 0;
   overflow: hidden;
   opacity: 1;
   background: var(--bs-body-bg);
