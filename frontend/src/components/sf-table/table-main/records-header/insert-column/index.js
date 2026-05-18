@@ -12,6 +12,7 @@ import { COMMON_FORM_FIELD_TYPE } from '@/metadata/components/popover/column-pop
 import toaster from '@/components/toast';
 import { getColumnDisplayName } from '@/metadata/utils/column';
 import Tooltip from '@/components/tooltip';
+import ModalPortal from '@/components/modal-portal';
 
 import './index.css';
 
@@ -33,7 +34,7 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
       left: lastColumn.left + lastColumn.width + groupOffsetLeft,
       position: 'absolute',
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastColumn, lastColumn.left, height, groupOffsetLeft]);
 
   const toggleAddColumn = useCallback(() => {
@@ -75,11 +76,11 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
     if (className.indexOf('column-type-item') > -1) return;
     if (className.indexOf('btn-primary') > -1 || className.indexOf('btn-secondary') > -1) return;
 
-    const popover = document.querySelector('.sf-table-column-popover');
+    const popover = document.querySelector('.sf-metadata-column-popover');
     if (popover && (popover === event.target || popover.contains(event.target))) return;
 
-    const dropdownMenu = document.querySelector('.sf-table-column-type-dropdown-menu');
-    if (dropdownMenu && event.target.closest('.sf-table-column-type-dropdown-menu')) return;
+    const dropdownMenu = document.querySelector('.sf-metadata-column-type-dropdown-menu');
+    if (dropdownMenu && event.target.closest('.sf-metadata-column-type-dropdown-menu')) return;
 
     setColumnPopoverShow(false);
   }, [isColumnPopoverShow]);
@@ -112,7 +113,9 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
           <Icon symbol="add-table" />
           <Tooltip target={id}>{gettext('Add column')}</Tooltip>
         </DropdownToggle>
-        <ColumnTypeDropdownMenu onSelect={handleSelect} />
+        <ModalPortal>
+          <ColumnTypeDropdownMenu onSelect={handleSelect} />
+        </ModalPortal>
       </Dropdown>
       {isColumnPopoverShow && !isColumnMenuOpen && (
         <ColumnPopover
