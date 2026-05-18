@@ -57,7 +57,18 @@ class Content extends Component {
               </tr>
             </thead>
           }
-          <TableBody items={items} isDesktop={isDesktop} />
+          <tbody>
+            {items.map((item, index) => {
+              return (
+                <Item
+                  key={index}
+                  data={item}
+                  isDesktop={isDesktop}
+                  updateItems={this.props.updateItems}
+                />
+              );
+            })}
+          </tbody>
         </table>
       );
     }
@@ -68,70 +79,7 @@ Content.propTypes = {
   loading: PropTypes.bool,
   errorMsg: PropTypes.string,
   items: PropTypes.array,
-};
-
-class TableBody extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: this.props.items
-    };
-  }
-
-  componentDidMount() {
-    this.getThumbnails();
-  }
-
-  getThumbnails() {
-    let items = this.state.items.filter((item) => {
-      return (Utils.imageCheck(item.obj_name) ||
-          (enableVideoThumbnail && Utils.videoCheck(item.obj_name)) ||
-          (enablePDFThumbnail && Utils.pdfCheck(item.obj_name))) &&
-          !item.repo_encrypted && !item.encoded_thumbnail_src && !item.deleted;
-    });
-    if (items.length == 0) {
-      return ;
-    }
-
-    const len = items.length;
-    const _this = this;
-    let getThumbnail = function (i) {
-      const curItem = items[i];
-      seafileAPI.createThumbnail(curItem.repo_id, curItem.path, thumbnailDefaultSize).then((res) => {
-        curItem.encoded_thumbnail_src = res.data.encoded_thumbnail_src;
-      }).catch((error) => {
-        // do nothing
-      }).then(() => {
-        if (i < len - 1) {
-          getThumbnail(++i);
-        } else {
-          // when done, `setState()`
-          _this.setState({
-            items: _this.state.items
-          });
-        }
-      });
-    };
-    getThumbnail(0);
-  }
-
-  render() {
-    const { items } = this.state;
-    return (
-      <tbody>
-        {items.map((item, index) => {
-          return <Item key={index} data={item} isDesktop={this.props.isDesktop} />;
-        })}
-      </tbody>
-    );
-  }
-}
-
-TableBody.propTypes = {
-  data: PropTypes.object,
-  items: PropTypes.array,
-  isDesktop: PropTypes.bool.isRequired,
+  updateItems: PropTypes.func
 };
 
 class Item extends Component {
@@ -140,8 +88,7 @@ class Item extends Component {
     super(props);
     this.state = {
       isHighlighted: false,
-      showOpIcon: false,
-      unstarred: false
+      showOpIcon: false
     };
   }
 
@@ -162,7 +109,7 @@ class Item extends Component {
   unstar = () => {
     const data = this.props.data;
     seafileAPI.unstarItem(data.repo_id, data.path).then((res) => {
-      this.setState({ unstarred: true });
+      this.props.updateItems(data);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -281,9 +228,6 @@ class Item extends Component {
 
     item.mtime_relative = item.mtime ? dayjs(item.mtime).fromNow() : '--';
 
-    if (this.state.unstarred) {
-      return null;
-    }
     return this.props.isDesktop ? this.renderDesktop() : this.renderMobile();
   }
 }
@@ -292,6 +236,7 @@ Item.propTypes = {
   data: PropTypes.object,
   items: PropTypes.array,
   isDesktop: PropTypes.bool.isRequired,
+  updateItems: PropTypes.func
 };
 
 class Starred extends Component {
@@ -322,6 +267,8 @@ class Starred extends Component {
       this.setState({
         loading: false,
         items: items
+      }, () => {
+        this.getThumbnails();
       });
     }).catch((error) => {
       this.setState({
@@ -329,6 +276,39 @@ class Starred extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
+  }
+
+  getThumbnails() {
+    let items = this.state.items.filter((item) => {
+      return (Utils.imageCheck(item.obj_name) ||
+          (enableVideoThumbnail && Utils.videoCheck(item.obj_name)) ||
+          (enablePDFThumbnail && Utils.pdfCheck(item.obj_name))) &&
+          !item.repo_encrypted && !item.encoded_thumbnail_src && !item.deleted;
+    });
+    if (items.length == 0) {
+      return ;
+    }
+
+    const len = items.length;
+    const _this = this;
+    let getThumbnail = function (i) {
+      const curItem = items[i];
+      seafileAPI.createThumbnail(curItem.repo_id, curItem.path, thumbnailDefaultSize).then((res) => {
+        curItem.encoded_thumbnail_src = res.data.encoded_thumbnail_src;
+      }).catch((error) => {
+        // do nothing
+      }).then(() => {
+        if (i < len - 1) {
+          getThumbnail(++i);
+        } else {
+          // when done, `setState()`
+          _this.setState({
+            items: _this.state.items
+          });
+        }
+      });
+    };
+    getThumbnail(0);
   }
 
   sortItems = (sortBy, sortOrder) => {
@@ -346,6 +326,15 @@ class Starred extends Component {
   onSelectSortOption = (item) => {
     const [sortBy, sortOrder] = item.value.split('-');
     this.sortItems(sortBy, sortOrder);
+  };
+
+  updateItems = (targetItem) => {
+    const { items } = this.state;
+    this.setState({
+      items: items.filter(item => {
+        return !(item.repo_id == targetItem.repo_id && item.path == targetItem.path);
+      })
+    });
   };
 
   render() {
@@ -368,6 +357,7 @@ class Starred extends Component {
               loading={loading}
               errorMsg={errorMsg}
               items={items}
+              updateItems={this.updateItems}
             />
           </div>
         </div>
