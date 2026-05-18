@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-11 11:58+0800\n"
+"POT-Creation-Date: 2026-05-18 09:55+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Vietnamese (http://app.transifex.com/haiwen/seahub/language/vi/)\n"
@@ -25,8 +25,8 @@ msgstr ""
 msgid "This library has been archived, cannot be updated."
 msgstr ""
 
-#: frontend/src/components/back-icon.js:11
-#: frontend/src/components/back-icon.js:12
+#: frontend/src/components/back-icon.js:13
+#: frontend/src/components/back-icon.js:17
 #: frontend/src/file-history-old.js:208 frontend/src/file-history-old.js:211
 #: frontend/src/file-history.js:59 frontend/src/file-history.js:62
 #: frontend/src/repo-folder-trash.js:206 frontend/src/repo-folder-trash.js:209
@@ -76,10 +76,10 @@ msgstr "Số lượng AI credit đã dùng"
 #: frontend/src/components/dialog/lib-settings.js:75
 #: frontend/src/components/dir-view-mode/dir-others/index.js:72
 #: frontend/src/metadata/components/metadata-details/settings-icon.js:29
-#: frontend/src/metadata/components/view-toolbar/card-view-toolbar/index.js:69
-#: frontend/src/metadata/components/view-toolbar/card-view-toolbar/index.js:70
-#: frontend/src/metadata/components/view-toolbar/kanban-view-toolbar/index.js:69
-#: frontend/src/metadata/components/view-toolbar/kanban-view-toolbar/index.js:70
+#: frontend/src/metadata/components/view-toolbar/card-view-toolbar.js:69
+#: frontend/src/metadata/components/view-toolbar/card-view-toolbar.js:70
+#: frontend/src/metadata/components/view-toolbar/kanban-view-toolbar.js:69
+#: frontend/src/metadata/components/view-toolbar/kanban-view-toolbar.js:70
 #: frontend/src/metadata/views/card/settings/index.js:78
 #: frontend/src/metadata/views/kanban/settings/index.js:102
 #: frontend/src/pages/org-admin/side-panel.js:57
@@ -328,13 +328,16 @@ msgid "View all notifications"
 msgstr "Xem tất cả thông báo"
 
 #: frontend/src/components/common/seahub-modal-close.js:8
-#: frontend/src/components/common/seahub-modal-header.js:9
+#: frontend/src/components/common/seahub-modal-header.js:11
+#: frontend/src/components/common/seahub-modal-header.js:14
 #: frontend/src/components/dialog/about-dialog.js:68
 #: frontend/src/components/dialog/about-dialog.js:81
+#: frontend/src/components/dialog/copy-dirent-dialog.js:330
 #: frontend/src/components/dialog/guide-for-new-dialog.js:22
 #: frontend/src/components/dialog/image-dialog/index.js:112
 #: frontend/src/components/dialog/list-created-files-dialog.js:81
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:109
+#: frontend/src/components/dialog/move-dirent-dialog.js:331
 #: frontend/src/components/dialog/search-file-dialog.js:119
 #: frontend/src/components/dialog/share-admin-link.js:36
 #: frontend/src/components/dialog/share-repo-dialog.js:153
@@ -386,7 +389,7 @@ msgstr "Làm mới trang xem"
 #: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:100
 #: frontend/src/metadata/components/popover/filter-popover/basic-filters/tags-filter.js:86
 #: frontend/src/metadata/utils/column/index.js:213
-#: frontend/src/utils/table-headers.js:170
+#: frontend/src/utils/table-headers.js:177
 #: frontend/src/utils/text-translation.js:156
 msgid "Tags"
 msgstr "Thẻ"
@@ -396,7 +399,7 @@ msgstr "Thẻ"
 #: frontend/src/components/dialog/op-menu.js:54
 #: frontend/src/components/dialog/op-menu.js:55
 #: frontend/src/components/dir-view-mode/dir-files.js:343
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:751
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:753
 #: frontend/src/components/dropdown-menu/item-dropdown-menu.js:192
 #: frontend/src/components/dropdown-menu/item-dropdown-menu.js:235
 #: frontend/src/components/dropdown-menu/metadata-item-dropdown-menu.js:170
@@ -428,11 +431,12 @@ msgstr "Thẻ"
 #: frontend/src/components/toolbar/face-recognition-files-toolbar.js:181
 #: frontend/src/components/toolbar/gallery-files-toolbar.js:171
 #: frontend/src/components/toolbar/kanban-files-toolbar.js:209
+#: frontend/src/components/toolbar/selected-dirents-toolbar.js:389
 #: frontend/src/components/toolbar/table-files-toolbar.js:224
 #: frontend/src/components/toolbar/tag-files-toolbar.js:149
 #: frontend/src/components/tree-view/tree-node-view.js:338
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:238
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:245
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:255
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:262
 #: frontend/src/metadata/views/face-recognition/peoples/people/op-menu/index.js:42
 #: frontend/src/metadata/views/face-recognition/peoples/people/op-menu/index.js:47
 #: frontend/src/metadata/views/kanban/boards/board/header/op-menu/index.js:40
@@ -535,7 +539,7 @@ msgstr "Mở panel"
 #: frontend/src/components/dir-view-mode/dir-files.js:372
 #: frontend/src/components/dirent-detail/dirent-details/dir-details.js:17
 #: frontend/src/components/dirent-detail/lib-details.js:18
-#: frontend/src/components/search/search.js:957
+#: frontend/src/components/search/search.js:958
 #: frontend/src/metadata/views/statistics/charts/summary-cards.js:13
 #: frontend/src/metadata/views/statistics/charts/summary-cards.js:14
 #: frontend/src/metadata/views/statistics/charts/summary-cards.js:18
@@ -603,7 +607,7 @@ msgstr "Thông tin liên hệ"
 #: frontend/src/components/dialog/generate-upload-link.js:458
 #: frontend/src/components/dir-view-mode/dir-history-view/columns.js:29
 #: frontend/src/components/dir-view-mode/dir-history-view/columns.js:30
-#: frontend/src/components/share-link-panel/link-creation.js:452
+#: frontend/src/components/share-link-panel/link-creation.js:455
 #: frontend/src/components/share-link-panel/link-list.js:98
 #: frontend/src/components/share-link-panel/link-list.js:113
 #: frontend/src/metadata/utils/column/index.js:195
@@ -878,13 +882,13 @@ msgstr "Cập nhật"
 
 #: frontend/src/components/dialog/add-wiki-dialog.js:49
 #: frontend/src/components/dialog/convert-wiki-dialog.js:48
-#: frontend/src/components/wiki-card-view/wiki-card-view.js:87
+#: frontend/src/components/wiki-card-view/wiki-card-view.js:89
 msgid "My Wikis"
 msgstr "Wiki của tôi"
 
 #: frontend/src/components/dialog/add-wiki-dialog.js:99
 #: frontend/src/components/wiki-card-view/wiki-card-item-add.js:16
-#: frontend/src/pages/wikis/wikis.js:444 frontend/src/pages/wikis/wikis.js:473
+#: frontend/src/pages/wikis/wikis.js:464 frontend/src/pages/wikis/wikis.js:494
 msgid "Add Wiki"
 msgstr "Thêm Wiki"
 
@@ -991,7 +995,7 @@ msgstr "Thêm Wiki"
 #: frontend/src/shared-dir-view.js:1104
 #: frontend/src/tag/components/dialog/edit-tag-dialog/index.js:100
 #: frontend/src/tag/views/tag-files/list/index.js:145
-#: frontend/src/utils/table-headers.js:83
+#: frontend/src/utils/table-headers.js:90
 msgid "Name"
 msgstr "Tên"
 
@@ -1223,7 +1227,7 @@ msgstr "Bạn có thật sự muốn xóa tài khoản của bạn?"
 #: frontend/src/components/file-view/comment-widget/reply-item.js:152
 #: frontend/src/components/group-members.js:170
 #: frontend/src/components/library-op-menu.js:171
-#: frontend/src/components/search/search-filters/filter-by-date.js:216
+#: frontend/src/components/search/search-filters/filter-by-date.js:218
 #: frontend/src/components/search/search-filters/user-item.js:20
 #: frontend/src/components/search/search-result-item.js:81
 #: frontend/src/components/share-link-panel/link-authenticated-emails.js:60
@@ -1251,9 +1255,9 @@ msgstr "Bạn có thật sự muốn xóa tài khoản của bạn?"
 #: frontend/src/components/toolbar/tag-files-toolbar.js:132
 #: frontend/src/components/user-settings/delete-account.js:38
 #: frontend/src/components/user-settings/web-api-auth-token.js:93
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:259
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:295
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:307
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:279
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:315
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:327
 #: frontend/src/metadata/components/cell-editors/tags-editor/delete-tags/index.js:28
 #: frontend/src/metadata/components/dialog/delete-confirm-dialog/index.js:18
 #: frontend/src/metadata/components/popover/filter-popover/basic-filters/tags-filter.js:118
@@ -1419,33 +1423,33 @@ msgstr "Bỏ liên kết"
 msgid "Convert Wiki"
 msgstr "Chuyển đổi Wiki"
 
-#: frontend/src/components/dialog/copy-dirent-dialog.js:98
-#: frontend/src/components/dialog/copy-dirent-dialog.js:143
-#: frontend/src/components/dialog/move-dirent-dialog.js:98
-#: frontend/src/components/dialog/move-dirent-dialog.js:150
+#: frontend/src/components/dialog/copy-dirent-dialog.js:99
+#: frontend/src/components/dialog/copy-dirent-dialog.js:144
+#: frontend/src/components/dialog/move-dirent-dialog.js:99
+#: frontend/src/components/dialog/move-dirent-dialog.js:151
 msgid "Invalid destination path"
 msgstr "Đường dẫn không hợp lệ"
 
-#: frontend/src/components/dialog/copy-dirent-dialog.js:129
-#: frontend/src/components/dialog/move-dirent-dialog.js:135
-#: frontend/src/components/dialog/move-dirent-dialog.js:171
+#: frontend/src/components/dialog/copy-dirent-dialog.js:130
+#: frontend/src/components/dialog/move-dirent-dialog.js:136
+#: frontend/src/components/dialog/move-dirent-dialog.js:172
 msgid "Can not move folder %(src)s to its subfolder %(des)s"
 msgstr "Không thể di chuyển thư mục %(src)s vào thư mục con %(des)s"
 
-#: frontend/src/components/dialog/copy-dirent-dialog.js:158
+#: frontend/src/components/dialog/copy-dirent-dialog.js:159
 msgid "Can not copy folder %(src)s to its subfolder %(des)s"
 msgstr "Không thể sao chép thư mục %(src)s vào thư mục con %(des)s"
 
-#: frontend/src/components/dialog/copy-dirent-dialog.js:304
+#: frontend/src/components/dialog/copy-dirent-dialog.js:305
 msgid "Copy {placeholder} to"
 msgstr "Sao chép {placeholder} tới"
 
-#: frontend/src/components/dialog/copy-dirent-dialog.js:307
+#: frontend/src/components/dialog/copy-dirent-dialog.js:308
 msgid "Copy selected item(s) to:"
 msgstr "Sao chép mục đã chọn tới:"
 
-#: frontend/src/components/dialog/copy-dirent-dialog.js:332
-#: frontend/src/components/dialog/move-dirent-dialog.js:333
+#: frontend/src/components/dialog/copy-dirent-dialog.js:337
+#: frontend/src/components/dialog/move-dirent-dialog.js:338
 #: frontend/src/components/dialog/search-file-dialog.js:81
 #: frontend/src/components/dialog/search-file-dialog.js:85
 #: frontend/src/components/dir-view-mode/dir-history-view/history-view-toolbar.js:82
@@ -1453,7 +1457,7 @@ msgstr "Sao chép mục đã chọn tới:"
 #: frontend/src/components/dir-view-mode/dir-trash-view/trash-view-toolbar.js:90
 #: frontend/src/components/dir-view-mode/dir-trash-view/trash-view-toolbar.js:104
 #: frontend/src/components/file-chooser/index.js:452
-#: frontend/src/components/file-chooser/searcher/index.js:117
+#: frontend/src/components/file-chooser/searcher/index.js:118
 #: frontend/src/components/search/wiki2-global-search.js:292
 #: frontend/src/components/search/wiki2-global-search.js:334
 #: frontend/src/components/search/wiki2-search.js:193
@@ -1559,7 +1563,7 @@ msgstr "Mật khẩu quá ngắn"
 #: frontend/src/components/dialog/org-add-user-dialog.js:126
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:31
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:36
-#: frontend/src/components/share-link-panel/link-creation.js:211
+#: frontend/src/components/share-link-panel/link-creation.js:212
 msgid "Passwords don't match"
 msgstr "Mật khẩu không trùng khớp"
 
@@ -1569,8 +1573,8 @@ msgstr "Mật khẩu không trùng khớp"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog.js:58
 #: frontend/src/pages/groups/group-op-menu.js:166
 #: frontend/src/pages/libraries/index.js:479
-#: frontend/src/pages/my-libs/my-libs.js:174
-#: frontend/src/pages/shared-with-all/index.js:261
+#: frontend/src/pages/my-libs/my-libs.js:175
+#: frontend/src/pages/shared-with-all/index.js:262
 #: frontend/src/pages/sys-admin/libraries-and-links.js:179
 #: frontend/src/pages/sys-admin/libraries-and-links.js:181
 msgid "New Library"
@@ -1650,7 +1654,7 @@ msgstr "Mã hóa"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-org-dialog.js:110
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-user-dialog.js:157
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:59
-#: frontend/src/components/share-link-panel/link-creation.js:334
+#: frontend/src/components/share-link-panel/link-creation.js:335
 #: frontend/src/components/share-link-panel/link-details.js:195
 #: frontend/src/components/share-link-panel/link-list.js:99
 #: frontend/src/components/share-link-panel/link-list.js:114
@@ -1663,7 +1667,7 @@ msgstr "Mật khẩu"
 #: frontend/src/components/dialog/generate-upload-link.js:409
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-org-dialog.js:114
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-user-dialog.js:169
-#: frontend/src/components/share-link-panel/link-creation.js:347
+#: frontend/src/components/share-link-panel/link-creation.js:350
 msgid "Password again"
 msgstr "Nhập lại mật khẩu"
 
@@ -2074,40 +2078,40 @@ msgstr "Tập tin này chưa được truy cập."
 #: frontend/src/components/dialog/generate-upload-link.js:158
 #: frontend/src/components/dialog/reset-webdav-password.js:31
 #: frontend/src/components/dialog/set-webdav-password.js:31
-#: frontend/src/components/share-link-panel/link-creation.js:203
+#: frontend/src/components/share-link-panel/link-creation.js:204
 msgid "Please enter a password."
 msgstr "Vui lòng nhập mật khẩu."
 
 #: frontend/src/components/dialog/generate-upload-link.js:162
 #: frontend/src/components/dialog/reset-webdav-password.js:35
 #: frontend/src/components/dialog/set-webdav-password.js:35
-#: frontend/src/components/share-link-panel/link-creation.js:207
+#: frontend/src/components/share-link-panel/link-creation.js:208
 msgid "The password is too short."
 msgstr "Mật khẩu quá ngắn."
 
 #: frontend/src/components/dialog/generate-upload-link.js:170
 #: frontend/src/components/dialog/reset-webdav-password.js:40
 #: frontend/src/components/dialog/set-webdav-password.js:40
-#: frontend/src/components/share-link-panel/link-creation.js:215
+#: frontend/src/components/share-link-panel/link-creation.js:216
 msgid ""
 "The password is too weak. It should include at least {passwordStrengthLevel}"
 " of the following: number, upper letter, lower letter and other symbols."
 msgstr "Mật khẩu quá yếu. Nó phải bao gồm ít nhất {passwordStrengthLevel} trong các ký tự sau: chữ hoa, chữ thường, số và ký tự đặc biệt."
 
 #: frontend/src/components/dialog/generate-upload-link.js:178
-#: frontend/src/components/share-link-panel/link-creation.js:223
+#: frontend/src/components/share-link-panel/link-creation.js:224
 msgid "Please select an expiration time"
 msgstr "Vui lòng chọn thời gian hết hạn."
 
 #: frontend/src/components/dialog/generate-upload-link.js:186
-#: frontend/src/components/share-link-panel/link-creation.js:232
+#: frontend/src/components/share-link-panel/link-creation.js:233
 msgid "Please enter days"
 msgstr "Vui lòng nhập số ngày"
 
 #: frontend/src/components/dialog/generate-upload-link.js:190
 #: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:56
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:58
-#: frontend/src/components/share-link-panel/link-creation.js:236
+#: frontend/src/components/share-link-panel/link-creation.js:237
 msgid "Please enter a non-negative integer"
 msgstr "Vui lòng nhập số không âm"
 
@@ -2118,7 +2122,7 @@ msgstr "Liên kết tải lên đã được sao chép vào clipboard."
 #: frontend/src/components/dialog/generate-upload-link.js:292
 #: frontend/src/components/dialog/reset-webdav-password.js:70
 #: frontend/src/components/dialog/set-webdav-password.js:70
-#: frontend/src/components/share-link-panel/link-creation.js:335
+#: frontend/src/components/share-link-panel/link-creation.js:336
 msgid ""
 "(at least {passwordMinLength} characters and includes "
 "{passwordStrengthLevel} of the following: number, upper letter, lower letter"
@@ -2161,26 +2165,26 @@ msgid "Send"
 msgstr "Gởi"
 
 #: frontend/src/components/dialog/generate-upload-link.js:391
-#: frontend/src/components/share-link-panel/link-creation.js:318
-#: frontend/src/components/share-link-panel/link-creation.js:328
+#: frontend/src/components/share-link-panel/link-creation.js:319
+#: frontend/src/components/share-link-panel/link-creation.js:329
 msgid "Add password protection"
 msgstr "Thêm bảo mật mật khẩu"
 
 #: frontend/src/components/dialog/generate-upload-link.js:427
-#: frontend/src/components/share-link-panel/link-creation.js:365
+#: frontend/src/components/share-link-panel/link-creation.js:368
 #| msgid "Add option"
 msgid "Add auto expiration"
 msgstr "Thêm hết hạn tự động"
 
 #: frontend/src/components/dialog/generate-upload-link.js:453
-#: frontend/src/components/share-link-panel/link-creation.js:447
+#: frontend/src/components/share-link-panel/link-creation.js:450
 #| msgid "Description"
 msgid "Add description"
 msgstr ""
 
 #: frontend/src/components/dialog/generate-upload-link.js:471
 #: frontend/src/components/dialog/group-invite-members-dialog.js:101
-#: frontend/src/components/share-link-panel/link-creation.js:466
+#: frontend/src/components/share-link-panel/link-creation.js:469
 #: frontend/src/components/user-settings/web-api-auth-token.js:96
 #| msgid "Generate Link"
 msgid "Generate"
@@ -2476,7 +2480,7 @@ msgstr "Email"
 #: frontend/src/components/dialog/share-to-invite-people.js:306
 #: frontend/src/components/send-link.js:114
 #: frontend/src/components/share-link-panel/link-authenticated-emails.js:199
-#: frontend/src/components/share-link-panel/link-creation.js:432
+#: frontend/src/components/share-link-panel/link-creation.js:435
 msgid "Emails, separated by ','"
 msgstr "Email, phân tách bằng dấu ','"
 
@@ -2499,9 +2503,9 @@ msgid "Really want to leave this group?"
 msgstr "Bạn có chắc chắn muốn rời khỏi nhóm này không?"
 
 #: frontend/src/components/dialog/leave-group-dialog.js:31
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:265
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:301
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:313
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:285
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:321
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:333
 msgid "Leave"
 msgstr "Rời khỏi"
 
@@ -2679,7 +2683,7 @@ msgstr "Không có mục"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:255
 #: frontend/src/components/manage-members-dialog.js:185
 #: frontend/src/components/share-link-panel/link-authenticated-users.js:199
-#: frontend/src/components/share-link-panel/link-creation.js:419
+#: frontend/src/components/share-link-panel/link-creation.js:422
 #: frontend/src/components/user-select.js:261
 #: frontend/src/pages/institution-admin/main-panel.js:23
 #: frontend/src/pages/org-admin/org-users-search-users.js:178
@@ -2759,7 +2763,7 @@ msgstr "Tệp có thẻ"
 #: frontend/src/repo-folder-trash.js:257 frontend/src/repo-snapshot.js:203
 #: frontend/src/shared-dir-view.js:1106
 #: frontend/src/tag/views/tag-files/list/index.js:159
-#: frontend/src/utils/table-headers.js:99
+#: frontend/src/utils/table-headers.js:106
 msgid "Size"
 msgstr "Dung lượng"
 
@@ -2787,11 +2791,11 @@ msgstr "Cập nhật"
 msgid "deleted"
 msgstr "Đã xóa"
 
-#: frontend/src/components/dialog/move-dirent-dialog.js:309
+#: frontend/src/components/dialog/move-dirent-dialog.js:310
 msgid "Move selected item(s) to:"
 msgstr "Di chuyển mục đã chọn đến:"
 
-#: frontend/src/components/dialog/move-dirent-dialog.js:311
+#: frontend/src/components/dialog/move-dirent-dialog.js:312
 msgid "Move {placeholder} to"
 msgstr "Di chuyển {placeholder} đến"
 
@@ -2799,7 +2803,7 @@ msgstr "Di chuyển {placeholder} đến"
 #: frontend/src/pages/libraries/index.js:481
 #: frontend/src/pages/libraries/index.js:482
 #: frontend/src/pages/my-libs/my-libs-deleted.js:55
-#: frontend/src/pages/my-libs/my-libs.js:175
+#: frontend/src/pages/my-libs/my-libs.js:176
 msgid "Deleted Libraries"
 msgstr "Thư viện đã xóa"
 
@@ -2944,7 +2948,7 @@ msgstr "Chọn ngày"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:154
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:152
 #: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:244
-#: frontend/src/components/search/search-filters/filter-by-date.js:242
+#: frontend/src/components/search/search-filters/filter-by-date.js:245
 msgid "Start date"
 msgstr "Ngày bắt đầu"
 
@@ -2952,7 +2956,7 @@ msgstr "Ngày bắt đầu"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:163
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:162
 #: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:254
-#: frontend/src/components/search/search-filters/filter-by-date.js:252
+#: frontend/src/components/search/search-filters/filter-by-date.js:255
 msgid "End date"
 msgstr "Ngày kết thúc"
 
@@ -3037,8 +3041,8 @@ msgid ""
 msgstr "Phần tùy chỉnh của URL phải có độ dài từ 5 đến 30 ký tự và chỉ có thể chứa chữ cái (a-z), chữ số và dấu gạch ngang."
 
 #: frontend/src/components/dialog/publish-wiki-dialog.js:133
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:256
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:287
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:276
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:307
 #| msgid "Publish"
 msgid "Unpublish"
 msgstr "Hủy xuất bản"
@@ -3138,8 +3142,8 @@ msgstr "Quyền truy cập bị từ chối"
 #: frontend/src/pages/sys-admin/devices/devices-errors.js:53
 #: frontend/src/pages/upload-link/file-uploader.js:465
 #: frontend/src/pages/wiki2/wiki-trash-dialog.js:250
-#: frontend/src/repo-folder-trash.js:138 frontend/src/repo-folder-trash.js:348
-#: frontend/src/utils/utils.js:1481
+#: frontend/src/pages/wikis/wikis.js:365 frontend/src/repo-folder-trash.js:138
+#: frontend/src/repo-folder-trash.js:348 frontend/src/utils/utils.js:1481
 msgid "Error"
 msgstr "Lỗi"
 
@@ -3325,7 +3329,7 @@ msgstr "Chọn các mục"
 #: frontend/src/pages/org-admin/org-groups.js:183
 #: frontend/src/pages/sys-admin/orgs/org-groups.js:40
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:58
-#: frontend/src/utils/table-headers.js:147
+#: frontend/src/utils/table-headers.js:154
 msgid "Creator"
 msgstr "Người tạo"
 
@@ -3590,7 +3594,7 @@ msgstr "Chia sẻ đến máy chủ khác"
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:213
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:361
 #: frontend/src/components/toolbar/view-file-toolbar.js:112
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:253
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:270
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:182
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:73
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:349
@@ -3726,7 +3730,7 @@ msgstr "Bạn có chắc chắn muốn xóa"
 #: frontend/src/components/dialog/sysadmin-dialog/rename-department-v2-dialog.js:68
 #: frontend/src/components/library-op-menu.js:174
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:336
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:249
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:266
 #: frontend/src/metadata/metadata-tree-view/view.js:64
 #: frontend/src/metadata/views/face-recognition/peoples/people/op-menu/index.js:51
 #: frontend/src/pages/groups/group-op-menu.js:176
@@ -4109,7 +4113,7 @@ msgstr "Tìm trong thùng rác"
 
 #: frontend/src/components/dialog/trash-dialog/index.js:269
 #: frontend/src/components/dirent-grid-view/dirent-grid-view.js:854
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:717
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:716
 msgid "No file"
 msgstr "Không có tệp"
 
@@ -4211,7 +4215,7 @@ msgstr "Thời gian tùy chỉnh"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-suffix.js:59
 #: frontend/src/components/dir-view-mode/dir-trash-view/file-suffix-filter/index.js:56
-#: frontend/src/components/search/search-filters/filter-by-suffix.js:55
+#: frontend/src/components/search/search-filters/filter-by-suffix.js:56
 #: frontend/src/metadata/utils/column/index.js:215
 #| msgid "File status"
 msgid "File suffix"
@@ -4219,7 +4223,7 @@ msgstr "Hậu tố tệp"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-suffix.js:68
 #: frontend/src/components/dir-view-mode/dir-trash-view/file-suffix-filter/index.js:64
-#: frontend/src/components/search/search-filters/filter-by-suffix.js:64
+#: frontend/src/components/search/search-filters/filter-by-suffix.js:65
 msgid "Separate multiple suffixes by \",\"(like sdoc, pdf)"
 msgstr "Phân cách nhiều hậu tố bằng dấu \",\" (ví dụ: sdoc, pdf)"
 
@@ -4228,8 +4232,8 @@ msgstr "Phân cách nhiều hậu tố bằng dấu \",\" (ví dụ: sdoc, pdf)"
 #: frontend/src/components/dir-view-mode/dir-trash-view/file-suffix-filter/index.js:78
 #: frontend/src/components/dir-view-mode/dir-trash-view/file-suffix-filter/index.js:79
 #: frontend/src/components/manage-members-dialog.js:219
-#: frontend/src/components/search/search-filters/filter-by-suffix.js:76
-#: frontend/src/components/search/search-filters/filter-by-suffix.js:77
+#: frontend/src/components/search/search-filters/filter-by-suffix.js:78
+#: frontend/src/components/search/search-filters/filter-by-suffix.js:81
 #: frontend/src/metadata/components/cell-editors/tags-editor/index.js:419
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:411
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:420
@@ -4248,25 +4252,26 @@ msgstr "Tìm trong thùng rác..."
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-trash.js:136
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-trash.js:137
-#: frontend/src/components/search/search.js:1131
-#: frontend/src/components/search/search.js:1132
-#: frontend/src/components/search/search.js:1194
-#: frontend/src/components/search/search.js:1195
+#: frontend/src/components/file-chooser/searcher/index.js:128
+#: frontend/src/components/search/search.js:1133
+#: frontend/src/components/search/search.js:1136
+#: frontend/src/components/search/search.js:1196
+#: frontend/src/components/search/search.js:1197
 #| msgid "Clear Trash"
 msgid "Clear search"
 msgstr "Xóa tìm kiếm"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-trash.js:142
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-trash.js:143
-#: frontend/src/components/search/search.js:1143
-#: frontend/src/components/search/search.js:1144
+#: frontend/src/components/search/search.js:1147
+#: frontend/src/components/search/search.js:1148
 msgid "Hide advanced search"
 msgstr "Ẩn tìm kiếm nâng cao"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-trash.js:142
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-trash.js:143
-#: frontend/src/components/search/search.js:1143
-#: frontend/src/components/search/search.js:1144
+#: frontend/src/components/search/search.js:1147
+#: frontend/src/components/search/search.js:1148
 msgid "Show advanced search"
 msgstr "Hiện tìm kiếm nâng cao"
 
@@ -4569,6 +4574,34 @@ msgstr "Chỉnh sửa thuộc tính siêu dữ liệu"
 msgid "Last modified time"
 msgstr "Thời gian sửa đổi cuối"
 
+#: frontend/src/components/dirent-detail/dirent-details/file-details/collapse/index.js:26
+#: frontend/src/components/file-view/onlyoffice-file-toolbar.js:91
+#: frontend/src/components/file-view/onlyoffice-file-toolbar.js:101
+#: frontend/src/components/main-side-nav.js:302
+#: frontend/src/components/main-side-nav.js:374
+#: frontend/src/components/sf-table/table-main/records/record/cell/index.js:189
+#: frontend/src/components/shared-dir-tree-view/tree-node-view.js:151
+#: frontend/src/components/tree-section/index.js:91
+#: frontend/src/metadata/components/cell-editors/tags-editor/tag-item/index.js:52
+#: frontend/src/metadata/components/data-process-setter/field-display-settings/index.js:58
+#: frontend/src/metadata/components/data-process-setter/field-display-settings/index.js:64
+#| msgid "Folder"
+msgid "Fold"
+msgstr "Thu gọn"
+
+#: frontend/src/components/dirent-detail/dirent-details/file-details/collapse/index.js:26
+#: frontend/src/components/file-view/file-view.js:307
+#: frontend/src/components/main-side-nav.js:302
+#: frontend/src/components/main-side-nav.js:374
+#: frontend/src/components/sf-table/table-main/records/record/cell/index.js:189
+#: frontend/src/components/shared-dir-tree-view/tree-node-view.js:151
+#: frontend/src/components/tree-section/index.js:91
+#: frontend/src/metadata/components/cell-editors/tags-editor/tag-item/index.js:52
+#: frontend/src/metadata/components/data-process-setter/field-display-settings/index.js:58
+#: frontend/src/metadata/components/data-process-setter/field-display-settings/index.js:64
+msgid "Unfold"
+msgstr "Mở rộng"
+
 #: frontend/src/components/dirent-detail/dirent-details/file-details/file-tag.js:32
 #: frontend/src/components/dirent-detail/multi-selection-details/dirents-tags-editor.js:184
 #: frontend/src/metadata/components/detail-editor/tags-editor/index.js:136
@@ -4620,7 +4653,7 @@ msgstr "s"
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:64
 #: frontend/src/constants/dir-column-config.js:16
 #: frontend/src/metadata/utils/column/index.js:177
-#: frontend/src/utils/table-headers.js:131
+#: frontend/src/utils/table-headers.js:138
 msgid "Last modifier"
 msgstr "Người sửa đổi cuối"
 
@@ -4670,13 +4703,13 @@ msgid "Unknown people"
 msgstr "Người không xác định"
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:532
-#: frontend/src/metadata/views/card/card-items/card-item/index.js:326
+#: frontend/src/metadata/views/card/card-items/card-item/index.js:309
 #: frontend/src/metadata/views/gallery/image.js:189
 msgid "Unmute"
 msgstr ""
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:532
-#: frontend/src/metadata/views/card/card-items/card-item/index.js:326
+#: frontend/src/metadata/views/card/card-items/card-item/index.js:309
 #: frontend/src/metadata/views/gallery/image.js:189
 msgid "Mute"
 msgstr ""
@@ -4708,23 +4741,23 @@ msgstr "Đã bị đóng băng bởi {name}"
 msgid "locked by {name}"
 msgstr "đã bị khóa bởi {name}"
 
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:680
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:681
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:682
 #: frontend/src/pages/share-admin/share-links.js:297
 #: frontend/src/pages/share-admin/upload-links.js:199
 #| msgid "Unselect"
 msgid "Unselect this item"
 msgstr "Bỏ chọn mục này"
 
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:680
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:681
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:682
 #: frontend/src/pages/share-admin/share-links.js:297
 #: frontend/src/pages/share-admin/upload-links.js:199
 #| msgid "Select File"
 msgid "Select this item"
 msgstr "Chọn mục này"
 
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:697
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:698
 #: frontend/src/components/library-op-menu.js:165
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:339
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:333
@@ -4735,7 +4768,7 @@ msgstr "Chọn mục này"
 msgid "Unstar"
 msgstr "Hủy đánh dấu"
 
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:697
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:698
 #: frontend/src/components/library-op-menu.js:162
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:339
 #: frontend/src/utils/text-translation.js:176
@@ -4752,7 +4785,7 @@ msgstr "Bạn có thể tạo tệp nhanh chóng"
 
 #: frontend/src/components/file-chooser/index.js:308
 #: frontend/src/components/file-chooser/repo-list-wrapper.js:32
-#: frontend/src/components/search/search.js:770
+#: frontend/src/components/search/search.js:771
 #: frontend/src/components/search/wiki-search.js:194
 msgid "No results matching"
 msgstr "Không tìm thấy kết quả phù hợp"
@@ -4764,7 +4797,7 @@ msgstr "Không tìm thấy kết quả phù hợp"
 #: frontend/src/components/main-side-nav.js:294
 #: frontend/src/components/main-side-nav.js:295
 #: frontend/src/components/org-admin-group-nav.js:23
-#: frontend/src/components/search/search.js:800
+#: frontend/src/components/search/search.js:801
 #: frontend/src/components/share-admin-sub-nav.js:16
 #: frontend/src/pages/dashboard/log-repo-selector.js:103
 #: frontend/src/pages/dashboard/log-repo-selector.js:106
@@ -4780,6 +4813,18 @@ msgstr "Không tìm thấy kết quả phù hợp"
 #: frontend/src/pages/sys-admin/side-panel.js:101
 msgid "Libraries"
 msgstr "Thư viện"
+
+#: frontend/src/components/file-content-view/image.js:92
+#: frontend/src/shared-file-view-image.js:52
+#| msgid "you can also press ← "
+msgid "You can also press ← "
+msgstr ""
+
+#: frontend/src/components/file-content-view/image.js:97
+#: frontend/src/shared-file-view-image.js:57
+#| msgid "you can also press →"
+msgid "You can also press →"
+msgstr ""
 
 #: frontend/src/components/file-uploader/file-uploader.js:146
 #: frontend/src/components/file-uploader/file-uploader.js:266
@@ -5089,18 +5134,6 @@ msgstr "Mở thư mục cha"
 msgid "Online view is not applicable to this file format"
 msgstr "Xem trực tuyến không áp dụng cho định dạng tệp này"
 
-#: frontend/src/components/file-view/file-view.js:307
-#: frontend/src/components/main-side-nav.js:302
-#: frontend/src/components/main-side-nav.js:374
-#: frontend/src/components/sf-table/table-main/records/record/cell/index.js:189
-#: frontend/src/components/shared-dir-tree-view/tree-node-view.js:151
-#: frontend/src/components/tree-section/index.js:91
-#: frontend/src/metadata/components/cell-editors/tags-editor/tag-item/index.js:52
-#: frontend/src/metadata/components/data-process-setter/field-display-settings/index.js:58
-#: frontend/src/metadata/components/data-process-setter/field-display-settings/index.js:64
-msgid "Unfold"
-msgstr "Mở rộng"
-
 #: frontend/src/components/file-view/image-zoomer.js:12
 #| msgid "Images"
 msgid "Page fit"
@@ -5109,20 +5142,6 @@ msgstr "Vừa trang"
 #: frontend/src/components/file-view/image-zoomer.js:13
 msgid "Actual size"
 msgstr "Kích thước thực tế"
-
-#: frontend/src/components/file-view/onlyoffice-file-toolbar.js:91
-#: frontend/src/components/file-view/onlyoffice-file-toolbar.js:101
-#: frontend/src/components/main-side-nav.js:302
-#: frontend/src/components/main-side-nav.js:374
-#: frontend/src/components/sf-table/table-main/records/record/cell/index.js:189
-#: frontend/src/components/shared-dir-tree-view/tree-node-view.js:151
-#: frontend/src/components/tree-section/index.js:91
-#: frontend/src/metadata/components/cell-editors/tags-editor/tag-item/index.js:52
-#: frontend/src/metadata/components/data-process-setter/field-display-settings/index.js:58
-#: frontend/src/metadata/components/data-process-setter/field-display-settings/index.js:64
-#| msgid "Folder"
-msgid "Fold"
-msgstr "Thu gọn"
 
 #: frontend/src/components/group-members.js:74
 #: frontend/src/components/group-members.js:119
@@ -5174,19 +5193,20 @@ msgstr "Đường dẫn hiện tại"
 
 #: frontend/src/components/libraries-sub-nav.js:66
 #: frontend/src/pages/my-libs/my-libs-deleted.js:53
-#: frontend/src/pages/my-libs/my-libs.js:170
+#: frontend/src/pages/my-libs/my-libs.js:171
 msgid "My Libraries"
 msgstr "Thư viện của tôi"
 
 #: frontend/src/components/libraries-sub-nav.js:79
-#: frontend/src/components/wiki-card-view/wiki-card-view.js:101
-#: frontend/src/pages/shared-libs/index.js:131
+#: frontend/src/components/wiki-card-view/wiki-card-view.js:104
+#: frontend/src/pages/shared-libs/index.js:122
+#: frontend/src/pages/shared-libs/index.js:133
 msgid "Shared with me"
 msgstr "Được chia sẻ với tôi"
 
 #: frontend/src/components/libraries-sub-nav.js:92
 #: frontend/src/pages/shared-with-all/index.js:240
-#: frontend/src/pages/shared-with-all/index.js:255
+#: frontend/src/pages/shared-with-all/index.js:256
 #| msgid "Shared with me"
 msgid "Shared with all"
 msgstr "Được chia sẻ với tất cả"
@@ -5198,13 +5218,15 @@ msgstr "Được chia sẻ với tất cả"
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:359
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:361
 #: frontend/src/pages/share-with-ocm/remote-dir-path.js:64
-#: frontend/src/pages/share-with-ocm/shared-with-ocm.js:402
+#: frontend/src/pages/share-with-ocm/shared-with-ocm.js:393
+#: frontend/src/pages/share-with-ocm/shared-with-ocm.js:404
 #| msgid "Share to other server"
 msgid "Shared from other servers"
 msgstr "Được chia sẻ từ máy chủ khác"
 
 #: frontend/src/components/library-op-menu.js:177
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:342
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:273
 #: frontend/src/pages/groups/group-op-menu.js:178
 #: frontend/src/pages/org-admin/libraries/org-all-repos.js:245
 #: frontend/src/pages/sys-admin/groups/groups-content.js:207
@@ -5281,7 +5303,7 @@ msgstr "Hoạt động"
 #: frontend/src/components/main-side-nav.js:346
 #: frontend/src/components/main-side-nav.js:347
 #: frontend/src/pages/sys-admin/repos/repos-nav.js:20
-#: frontend/src/pages/wikis/wikis.js:439
+#: frontend/src/pages/wikis/wikis.js:459
 msgid "Wikis"
 msgstr "Wiki"
 
@@ -5497,7 +5519,7 @@ msgstr "Mẹo: Đây là các thẻ của phiên bản cũ. Tính năng này đ�
 #: frontend/src/components/repo-list-card/repo-list-card.js:18
 #: frontend/src/constants/dir-column-config.js:15
 #: frontend/src/tag/views/tag-files/list/index.js:167
-#: frontend/src/utils/table-headers.js:115
+#: frontend/src/utils/table-headers.js:122
 #| msgid "Last modifier"
 msgid "Last modified"
 msgstr ""
@@ -5536,29 +5558,29 @@ msgstr "Chỉ tên tệp"
 msgid "Edit tag"
 msgstr "Chỉnh sửa thẻ"
 
-#: frontend/src/components/search/search.js:758
+#: frontend/src/components/search/search.js:759
 #: frontend/src/components/search/wiki2-global-search.js:226
 #: frontend/src/components/search/wiki2-search.js:226
 msgid "Type characters to start search"
 msgstr "Nhập ký tự để bắt đầu tìm kiếm"
 
-#: frontend/src/components/search/search.js:834
-#: frontend/src/components/search/search.js:863
+#: frontend/src/components/search/search.js:835
+#: frontend/src/components/search/search.js:864
 #| msgid "Search files in this library"
 msgid "in this library"
 msgstr "trong thư viện này"
 
-#: frontend/src/components/search/search.js:842
+#: frontend/src/components/search/search.js:843
 #| msgid "Parent folder"
 msgid "in this folder"
 msgstr "trong thư mục này"
 
-#: frontend/src/components/search/search.js:850
-#: frontend/src/components/search/search.js:871
+#: frontend/src/components/search/search.js:851
+#: frontend/src/components/search/search.js:872
 msgid "in all libraries"
 msgstr "trong tất cả thư viện"
 
-#: frontend/src/components/search/search.js:955
+#: frontend/src/components/search/search.js:956
 msgid "Search results visited recently"
 msgstr "Kết quả tìm kiếm đã truy cập gần đây"
 
@@ -5595,25 +5617,25 @@ msgid "Add custom permission"
 msgstr "Thêm quyền tùy chỉnh"
 
 #: frontend/src/components/select-editor/share-link-scope-editor.js:17
-#: frontend/src/components/share-link-panel/link-creation.js:408
+#: frontend/src/components/share-link-panel/link-creation.js:411
 #: frontend/src/components/share-link-panel/link-item.js:104
 msgid "Anyone with the link"
 msgstr "Bất kỳ ai có liên kết"
 
 #: frontend/src/components/select-editor/share-link-scope-editor.js:21
-#: frontend/src/components/share-link-panel/link-creation.js:414
+#: frontend/src/components/share-link-panel/link-creation.js:417
 #: frontend/src/components/share-link-panel/link-item.js:107
 msgid "Specific users in the team"
 msgstr "Các người dùng cụ thể trong nhóm"
 
 #: frontend/src/components/select-editor/share-link-scope-editor.js:25
-#: frontend/src/components/share-link-panel/link-creation.js:429
+#: frontend/src/components/share-link-panel/link-creation.js:432
 #: frontend/src/components/share-link-panel/link-item.js:110
 msgid "Specific people with email address"
 msgstr "Những người cụ thể với địa chỉ email"
 
 #: frontend/src/components/select-editor/sysadmin-user-role-editor.js:19
-#: frontend/src/components/set-row-height.js:14
+#: frontend/src/components/set-row-height.js:12
 #: frontend/src/pages/sys-admin/invitations/invitations.js:185
 #: frontend/src/pages/sys-admin/invitations/invitations.js:188
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:185
@@ -5686,24 +5708,24 @@ msgstr "Số ngày hết hạn"
 msgid "Expiration time"
 msgstr "Thời gian hết hạn"
 
-#: frontend/src/components/set-row-height.js:15
+#: frontend/src/components/set-row-height.js:13
 msgid "Double"
 msgstr ""
 
-#: frontend/src/components/set-row-height.js:16
+#: frontend/src/components/set-row-height.js:14
 msgid "Triple"
 msgstr ""
 
-#: frontend/src/components/set-row-height.js:17
+#: frontend/src/components/set-row-height.js:15
 msgid "Quadruple"
 msgstr ""
 
-#: frontend/src/components/set-row-height.js:62
-#: frontend/src/components/set-row-height.js:63
+#: frontend/src/components/set-row-height.js:64
+#: frontend/src/components/set-row-height.js:68
 msgid "Set row height"
 msgstr ""
 
-#: frontend/src/components/set-row-height.js:78
+#: frontend/src/components/set-row-height.js:71
 #| msgid "Select all"
 msgid "Select row height"
 msgstr ""
@@ -5971,7 +5993,7 @@ msgstr "Hàng này đã bị khóa và không thể sửa đổi"
 msgid "Select"
 msgstr "Chọn"
 
-#: frontend/src/components/sf-table/table-main/records/record/actions-cell/index.js:103
+#: frontend/src/components/sf-table/table-main/records/record/actions-cell/index.js:102
 #: frontend/src/metadata/views/kanban/boards/board/header/index.js:63
 #| msgid "Expand all"
 msgid "Expand"
@@ -5996,41 +6018,59 @@ msgstr "Các email đã xác thực"
 msgid "Authenticated users"
 msgstr "Các người dùng đã xác thực"
 
-#: frontend/src/components/share-link-panel/link-creation.js:168
+#: frontend/src/components/share-link-panel/link-creation.js:169
 msgid ""
 "Share links cannot be generated because \"Invisible\", \"Online Read-Write\""
 " or \"Online Read-Only\" is set for you on some folder(s) in the library."
 msgstr "Không thể tạo liên kết chia sẻ vì quyền \"Ẩn\", \"Đọc-Ghi trực tuyến\" hoặc \"Chỉ đọc trực tuyến\" đã được thiết lập cho bạn trên một số thư mục trong thư viện."
 
-#: frontend/src/components/share-link-panel/link-creation.js:192
+#: frontend/src/components/share-link-panel/link-creation.js:193
 msgid "Please enter an integer bigger than 1 as number of links."
 msgstr "Vui lòng nhập một số nguyên lớn hơn 1 cho số lượng liên kết."
 
-#: frontend/src/components/share-link-panel/link-creation.js:196
+#: frontend/src/components/share-link-panel/link-creation.js:197
 msgid ""
 "Please enter an integer not bigger than {max_number} as number of links."
 msgstr "Vui lòng nhập một số nguyên không lớn hơn {max_number} cho số lượng liên kết."
 
-#: frontend/src/components/share-link-panel/link-creation.js:304
+#: frontend/src/components/share-link-panel/link-creation.js:305
 #: frontend/src/components/share-link-panel/link-list.js:65
 msgid "Generate links in batch"
 msgstr "Tạo liên kết hàng loạt"
 
-#: frontend/src/components/share-link-panel/link-creation.js:304
+#: frontend/src/components/share-link-panel/link-creation.js:305
 #: frontend/src/components/share-link-panel/link-list.js:64
 msgid "Generate Link"
 msgstr "Tạo liên kết"
 
-#: frontend/src/components/share-link-panel/link-creation.js:310
+#: frontend/src/components/share-link-panel/link-creation.js:311
 msgid "Number of links"
 msgstr "Số lượng liên kết"
 
-#: frontend/src/components/share-link-panel/link-creation.js:386
+#: frontend/src/components/share-link-panel/link-creation.js:339
+#: frontend/src/components/share-link-panel/link-creation.js:341
+#| msgid "Set password"
+msgid "Hide password"
+msgstr ""
+
+#: frontend/src/components/share-link-panel/link-creation.js:339
+#: frontend/src/components/share-link-panel/link-creation.js:341
+#| msgid "New password"
+msgid "Show password"
+msgstr ""
+
+#: frontend/src/components/share-link-panel/link-creation.js:343
+#: frontend/src/components/share-link-panel/link-creation.js:345
+#| msgid "Set password"
+msgid "Generate password"
+msgstr ""
+
+#: frontend/src/components/share-link-panel/link-creation.js:389
 #| msgid "Edit permission"
 msgid "Set permission"
 msgstr "Cài đặt quyền"
 
-#: frontend/src/components/share-link-panel/link-creation.js:403
+#: frontend/src/components/share-link-panel/link-creation.js:406
 #| msgid "Access Log"
 msgid "Set access scope"
 msgstr "Thiết lập phạm vi truy cập"
@@ -6109,6 +6149,7 @@ msgstr "Đã hết hạn"
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:235
 #: frontend/src/pages/my-libs/my-libs-deleted.js:152
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:261
+#: frontend/src/pages/wikis/wikis.js:367
 msgid "Failed. Please check the network."
 msgstr "Thất bại. Vui lòng kiểm tra lại network."
 
@@ -6626,64 +6667,64 @@ msgstr ""
 msgid "Switch view mode"
 msgstr "Chuyển đổi chế độ xem"
 
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:121
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:135
 msgid "Wiki published"
 msgstr "Wiki đã được xuất bản"
 
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:227
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:244
 msgid "Visit the wiki"
 msgstr "Truy cập wiki"
 
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:251
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:268
 #: frontend/src/pages/sdoc-revision/index.js:123
 msgid "Publish"
 msgstr "Xuất bản"
 
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:262
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:282
 #| msgid "Convert Wiki"
 msgid "Convert to new Wiki"
 msgstr "Chuyển đổi sang Wiki mới"
 
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:285
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:305
 #| msgid "Publish Wiki"
 msgid "Unpublish Wiki"
 msgstr "Hủy xuất bản Wiki"
 
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:286
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:306
 #| msgid "Are you sure you want to unlink this device?"
 msgid "Are you sure you want to unpublish Wiki"
 msgstr "Bạn có chắc chắn muốn hủy xuất bản Wiki"
 
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:293
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:305
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:313
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:325
 #| msgid "Delete File"
 msgid "Delete Wiki"
 msgstr "Xóa Wiki"
 
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:294
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:306
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:314
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:326
 #| msgid "Are you sure you want to delete"
 msgid "Are you sure you want to delete Wiki"
 msgstr "Bạn có chắc chắn muốn xóa Wiki"
 
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:299
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:311
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:319
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:331
 #| msgid "Leave Share"
 msgid "Leave Share Wiki"
 msgstr "Rời khỏi Wiki chia sẻ"
 
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:300
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:312
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:320
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:332
 #| msgid "Are you sure you want to delete %s ?"
 msgid "Are you sure you want to leave share Wiki"
 msgstr "Bạn có chắc chắn muốn rời khỏi Wiki chia sẻ"
 
-#: frontend/src/components/wiki-card-view/wiki-card-view.js:108
+#: frontend/src/components/wiki-card-view/wiki-card-view.js:111
 #| msgid "No shared links"
 msgid "No shared Wikis"
 msgstr "Không có Wiki được chia sẻ"
 
-#: frontend/src/components/wiki-card-view/wiki-card-view.js:143
+#: frontend/src/components/wiki-card-view/wiki-card-view.js:148
 msgid "Old Wikis"
 msgstr "Wiki cũ"
 
@@ -7456,10 +7497,10 @@ msgstr "Thêm sắp xếp"
 msgid "There is no information to display."
 msgstr "Không có thông tin để hiển thị."
 
-#: frontend/src/metadata/components/view-toolbar/card-view-toolbar/index.js:80
-#: frontend/src/metadata/components/view-toolbar/face-recognition/index.js:59
-#: frontend/src/metadata/components/view-toolbar/gallery-view-toolbar/index.js:55
-#: frontend/src/metadata/components/view-toolbar/kanban-view-toolbar/index.js:80
+#: frontend/src/metadata/components/view-toolbar/card-view-toolbar.js:80
+#: frontend/src/metadata/components/view-toolbar/face-recognition-view-toolbar.js:59
+#: frontend/src/metadata/components/view-toolbar/gallery-view-toolbar.js:55
+#: frontend/src/metadata/components/view-toolbar/kanban-view-toolbar.js:80
 #: frontend/src/metadata/views/card/settings/index.js:111
 #: frontend/src/metadata/views/kanban/settings/index.js:156
 #: frontend/src/utils/text-translation.js:152
@@ -8517,7 +8558,7 @@ msgstr "Email liên hệ"
 #: frontend/src/pages/sys-admin/users/users-filter-bar.js:60
 #: frontend/src/pages/sys-admin/virus-scan/all-virus-files.js:170
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:189
-#: frontend/src/utils/table-headers.js:159
+#: frontend/src/utils/table-headers.js:166
 msgid "Status"
 msgstr "Trạng thái"
 
@@ -8695,7 +8736,7 @@ msgstr "Đã chuyển đổi tệp thành công."
 msgid "Converting, please wait..."
 msgstr "Đang chuyển đổi, vui lòng chờ..."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:2882
+#: frontend/src/pages/lib-content-view/lib-content-view.js:2883
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:281
 #: frontend/src/pages/share-with-ocm/shared-with-ocm.js:178
 #: frontend/src/pages/share-with-ocm/shared-with-ocm.js:216
@@ -8704,11 +8745,11 @@ msgstr "Đang chuyển đổi, vui lòng chờ..."
 msgid "Leave Share"
 msgstr "Rời khỏi chia sẻ"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:2965
+#: frontend/src/pages/lib-content-view/lib-content-view.js:2966
 msgid "This library has been set to read-only by admin and cannot be updated."
 msgstr "Thư viện này đã được quản trị viên thiết lập ở chế độ chỉ đọc và không thể cập nhật."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:3146
+#: frontend/src/pages/lib-content-view/lib-content-view.js:3147
 #: frontend/src/pages/wiki/main-panel.js:83
 #: frontend/src/pages/wiki2/main-panel.js:403
 msgid "Folder does not exist."
@@ -9730,7 +9771,7 @@ msgstr "Hủy chia sẻ {name} thất bại"
 msgid "No public libraries"
 msgstr "Không có thư viện công khai"
 
-#: frontend/src/pages/shared-with-all/index.js:260
+#: frontend/src/pages/shared-with-all/index.js:261
 #| msgid "Shared Libraries"
 msgid "Share existing libraries"
 msgstr "Chia sẻ thư viện hiện có"
@@ -10903,16 +10944,21 @@ msgstr "Đã nhập Confluence"
 msgid "Failed to import Confluence"
 msgstr "Không thể nhập Confluence"
 
-#: frontend/src/pages/wikis/wikis.js:445
+#: frontend/src/pages/wikis/wikis.js:361
+#| msgid "Successfully transferred the library."
+msgid "Successfully transferred the wiki."
+msgstr ""
+
+#: frontend/src/pages/wikis/wikis.js:465
 #| msgid "Import sdoc"
 msgid "Import Confluence"
 msgstr "Nhập Confluence"
 
-#: frontend/src/pages/wikis/wikis.js:469
+#: frontend/src/pages/wikis/wikis.js:490
 msgid "No Wikis"
 msgstr "Không có Wiki nào"
 
-#: frontend/src/pages/wikis/wikis.js:472
+#: frontend/src/pages/wikis/wikis.js:493
 msgid "You can click the \"Add Wiki\" button below to add a new Wiki."
 msgstr "Bạn có thể nhấp vào nút \"Thêm Wiki\" bên dưới để thêm Wiki mới."
 
@@ -11317,19 +11363,22 @@ msgstr "Đánh dấu đã đọc"
 msgid "Update time"
 msgstr "Thời gian cập nhật"
 
-#: frontend/src/utils/dirent-operations.js:85
+#: frontend/src/utils/dirent-operations.js:84
 #| msgid "Successfully unstarred {library_name_placeholder}."
-msgid "Successfully unstarred {name_placeholder}."
-msgstr "Đã hủy đánh dấu {name_placeholder} thành công."
+msgid "Successfully unstarred {name_placeholder}"
+msgstr ""
 
-#: frontend/src/utils/table-headers.js:43
-#: frontend/src/utils/table-headers.js:44
+#: frontend/src/utils/dirent-operations.js:86
+#| msgid "Successfully starred {library_name_placeholder}."
+msgid "Successfully starred {name_placeholder}"
+msgstr ""
+
+#: frontend/src/utils/table-headers.js:16
 #| msgid "Select all"
 msgid "Unselect all items"
 msgstr "Bỏ chọn tất cả"
 
-#: frontend/src/utils/table-headers.js:43
-#: frontend/src/utils/table-headers.js:44
+#: frontend/src/utils/table-headers.js:16
 #| msgid "Select all"
 msgid "Select all items"
 msgstr "Chọn tất cả"
@@ -11604,17 +11653,14 @@ msgstr "Lỗi khi di chuyển %(name)s."
 msgid "Name cannot be double dots"
 msgstr "Tên không thể chứa dấu chấm kép."
 
+#~ msgid "Upload Rate Limit"
+#~ msgstr "Set Upload Rate Limit"
+
 #~ msgid "Scan the QR code to view the shared content directly"
 #~ msgstr "Scan the QR code to view the shared content directly"
 
 #~ msgid "Bell Icon"
 #~ msgstr "Bell Icon"
-
-#~ msgid "Successfully starred {name_placeholder}."
-#~ msgstr "Successfully starred {library_name_placeholder}."
-
-#~ msgid "you can also press →"
-#~ msgstr "you can also press →"
 
 #~ msgid "Message (optional):"
 #~ msgstr "Message (optional):"
@@ -11847,9 +11893,6 @@ msgstr "Tên không thể chứa dấu chấm kép."
 
 #~ msgid "By expiration ascending"
 #~ msgstr "By time ascending"
-
-#~ msgid "you can also press ← "
-#~ msgstr "you can also press ← "
 
 #~ msgid "Sub tags"
 #~ msgstr "No tags"

@@ -4,10 +4,8 @@ import { gettext, name } from './constants';
 import URLDecorator from './url-decorator';
 import toaster from '../components/toast';
 
-// Generic error handling
 export const handleError = (error) => {
-  const errMessage = Utils.getErrorMsg(error);
-  toaster.danger(errMessage);
+  toaster.danger(Utils.getErrorMsg(error));
 };
 
 // Core operation functions (pure functions, can be called directly by any component)
@@ -80,11 +78,13 @@ export const toggleStar = async (repoID, path, dirent, updateState) => {
     }
     if (updateState) {
       updateState(dirent, { starred: !currentState });
+    }    
+    let msg = '';
+    if (currentState) {
+      msg = gettext('Successfully unstarred {name_placeholder}').replace('{name_placeholder}', dirent.name);
+    } else {
+      msg = gettext('Successfully starred {name_placeholder}').replace('{name_placeholder}', dirent.name);
     }
-    const msg = gettext(currentState ?
-      'Successfully unstarred {name_placeholder}.' :
-      'Successfully starred {name_placeholder}.'
-    ).replace('{name_placeholder}', dirent.name);
     toaster.success(msg);
     return { success: true };
   } catch (error) {

@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Seafile Info <info@seafile.com>, 2025
+# Seafile Info <info@seafile.com>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Indonesian (https://app.transifex.com/haiwen/teams/5086/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,7 +28,7 @@ msgstr "Menu Navigasi Samping"
 #: templates/help/base.html:48 templates/help/base.html:50
 #: templates/help/introduction.html:6
 msgid "Introduction"
-msgstr "Pengenalan"
+msgstr "Pendahuluan"
 
 #: templates/help/base.html:53
 msgid "Managing files and folders"
@@ -44,7 +44,7 @@ msgstr "Memulihkan file yang dihapus"
 
 #: templates/help/base.html:57
 msgid "Finding old file versions"
-msgstr "Mencari versi file lama"
+msgstr "Menemukan versi file lama"
 
 #: templates/help/base.html:58
 #: templates/help/library_history_and_snapshots.html:6
@@ -53,7 +53,7 @@ msgstr "Riwayat pustaka dan snapshot"
 
 #: templates/help/base.html:59
 msgid "Setting history retention period"
-msgstr "Mengatur periode retensi riwayat"
+msgstr "Mengatur periode penyimpanan riwayat"
 
 #: templates/help/base.html:60 templates/help/deleting_a_library.html:5
 msgid "Deleting a library"
@@ -62,11 +62,11 @@ msgstr "Menghapus pustaka"
 #: templates/help/base.html:61
 #: templates/help/viewing_files_within_web_app.html:5
 msgid "Viewing files within Web App"
-msgstr "Melihat file dalam Aplikasi Web"
+msgstr "Melihat file di dalam Aplikasi Web"
 
 #: templates/help/base.html:62 templates/help/full_text_file_search.html:5
 msgid "Full text file search"
-msgstr "Pencarian file teks lengkap"
+msgstr "Pencarian teks lengkap file"
 
 #: templates/help/base.html:65
 msgid "Sharing and collaboration"
@@ -90,7 +90,7 @@ msgstr "Izin folder"
 
 #: templates/help/base.html:71
 msgid "Departments sharing"
-msgstr "Berbagi antar departemen"
+msgstr "Berbagi departemen"
 
 #: templates/help/base.html:74
 msgid "Wiki and knowledge management"
@@ -106,23 +106,23 @@ msgstr "Klien desktop dan sinkronisasi"
 
 #: templates/help/base.html:81
 msgid "Install and sync files"
-msgstr "Instal dan sinkronisasi file"
+msgstr "Menginstal dan menyinkronkan file"
 
 #: templates/help/base.html:82
 msgid "Syncing existing folders"
-msgstr "Sinkronisasi folder yang sudah ada"
+msgstr "Menyinkronkan folder yang sudah ada"
 
 #: templates/help/base.html:83 templates/help/selective_sync.html:6
 msgid "Selectively sync sub-folders"
-msgstr "Sinkronisasi sub-folder secara selektif"
+msgstr "Menyinkronkan sub-folder secara selektif"
 
 #: templates/help/base.html:84 templates/help/read-only_syncing.html:5
 msgid "Read-only syncing"
-msgstr "Sinkronisasi hanya baca"
+msgstr "Sinkronisasi baca-saja"
 
 #: templates/help/base.html:85
 msgid "Unsync and resync libraries"
-msgstr "Membatalkan sinkronisasi dan mensinkronisasi ulang pustaka"
+msgstr "Berhenti sinkronisasi dan sinkronisasi ulang pustaka"
 
 #: templates/help/base.html:86 templates/help/sync_interval.html:6
 msgid "Setting sync interval"
@@ -130,7 +130,7 @@ msgstr "Mengatur interval sinkronisasi"
 
 #: templates/help/base.html:87
 msgid "Proxy settings"
-msgstr "Pengaturan proxy"
+msgstr "Pengaturan proksi"
 
 #: templates/help/base.html:88 templates/help/conflicts.html:5
 msgid "File conflicts"
@@ -138,19 +138,19 @@ msgstr "Konflik file"
 
 #: templates/help/base.html:89
 msgid "Excluding files"
-msgstr "Mengeluarkan file"
+msgstr "Mengecualikan file"
 
 #: templates/help/base.html:92
 msgid "Drive client"
-msgstr "Klien Drive"
+msgstr "Klien drive"
 
 #: templates/help/base.html:94 templates/help/using_drive_client.html:6
 msgid "Using Seafile drive client"
-msgstr "Menggunakan klien Drive Seafile"
+msgstr "Menggunakan klien drive Seafile"
 
 #: templates/help/base.html:95
 msgid "Using drive client 2.0 on Windows"
-msgstr "Menggunakan klien Drive 2.0 di Windows"
+msgstr "Menggunakan klien drive 2.0 di Windows"
 
 #: templates/help/base.html:98
 msgid "Security and encryption"
@@ -166,10 +166,10 @@ msgid ""
 "you may add, delete or edit files in the library together. Every change you "
 "make to the library would be automatically synced to others' computers."
 msgstr ""
-"Setelah Anda dan teman - teman Anda mensinkronkan pustaka file bersama ke "
-"komputer Anda, Anda dapat menambahkan, menghapus, atau mengedit file di "
-"pustaka tersebut bersama - sama. Setiap perubahan yang Anda buat pada "
-"pustaka akan secara otomatis disinkronkan ke komputer orang lain."
+"Setelah Anda dan teman Anda menyinkronkan pustaka file bersama ke komputer "
+"Anda, Anda dapat menambah, menghapus, atau mengedit file dalam pustaka "
+"secara bersama-sama. Setiap perubahan yang Anda buat pada pustaka akan "
+"disinkronkan secara otomatis ke komputer orang lain."
 
 #: templates/help/conflicts.html:9
 msgid ""
@@ -180,37 +180,38 @@ msgid ""
 "author's email address, plus the current time, e.g. test.txt (SFConflict "
 "name@example.com 2015-03-07-11-30-28)."
 msgstr ""
-"Terkadang Anda dan teman - teman Anda mungkin mengedit file yang sama pada "
-"waktu yang sama. Perubahan Anda mungkin bertentangan dengan perubahan "
-"mereka. Dalam hal ini, Seafile akan mempertahankan versi pertama yang "
-"disinkronkan ke cloud tetap tidak berubah, sementara mengganti nama versi "
-"lain menjadi \"file konflik\". Nama file konflik diakhiri dengan alamat "
-"email penulisnya, ditambah waktu saat ini, misalnya test.txt (SFConflict "
-"name@example.com 2015 - 03 - 07 - 11 - 30 - 28)."
+"Terkadang Anda dan teman Anda mungkin mengedit file yang sama di waktu yang "
+"sama. Perubahan Anda mungkin berkonflik satu sama lain. Dalam kasus ini, "
+"Seafile akan menyimpan versi pertama yang disinkronkan ke cloud tanpa "
+"perubahan, sementara menamai ulang versi lainnya menjadi \"file konflik\". "
+"Nama file konflik diakhiri dengan alamat email penulisnya, ditambah waktu "
+"saat ini, contohnya test.txt (SFConflict name@example.com "
+"2015-03-07-11-30-28)."
 
 #: templates/help/deleting_a_library.html:6
 msgid ""
 "You can delete a library owned by you. A deleted library can be restored by "
 "you or Seafile server's administrator."
 msgstr ""
-"Anda dapat menghapus pustaka yang dimiliki oleh Anda. Pustaka yang dihapus "
-"dapat dipulihkan oleh Anda atau administrator server Seafile."
+"Anda dapat menghapus pustaka milik Anda. Pustaka yang dihapus dapat "
+"dipulihkan oleh Anda atau administrator server Seafile."
 
 #: templates/help/deleting_a_library.html:7
 msgid "After a library is deleted, it has following effects:"
-msgstr "Setelah sebuah pustaka dihapus, ini memiliki efek berikut:"
+msgstr "Setelah pustaka dihapus, hal tersebut memberikan efek berikut:"
 
 #: templates/help/deleting_a_library.html:9
 msgid "Share of the files and folders within this library are all canceled."
-msgstr "Semua berbagi file dan folder dalam pustaka ini dibatalkan."
+msgstr "Berbagi file dan folder di dalam pustaka ini semuanya dibatalkan."
 
 #: templates/help/deleting_a_library.html:10
 msgid ""
 "Desktop clients synced with this library cannot sync with it any more. But "
 "the local files on the client won't be deleted."
 msgstr ""
-"Klien desktop yang disinkronkan dengan pustaka ini tidak dapat disinkronkan "
-"lagi dengannya. Tetapi file lokal di klien tidak akan dihapus."
+"Klien desktop yang disinkronkan dengan pustaka ini tidak dapat lagi "
+"melakukan sinkronisasi dengannya. Tetapi file lokal pada klien tidak akan "
+"dihapus."
 
 #: templates/help/departments.html:5
 msgid "Managing and using departments"
@@ -222,8 +223,8 @@ msgid ""
 "usually two common use cases for file management in these organizations:"
 msgstr ""
 "Beberapa organisasi terdiri dari hierarki departemen yang kompleks. Biasanya"
-" ada dua kasus penggunaan umum untuk manajemen file di organisasi - "
-"organisasi ini:"
+" ada dua kasus penggunaan umum untuk manajemen file di organisasi-organisasi"
+" ini:"
 
 #: templates/help/departments.html:8
 msgid ""
@@ -231,9 +232,9 @@ msgid ""
 " hierarchy should map the department hierarchy. There will be separate "
 "folder or space assigned to each department."
 msgstr ""
-"Harus ada ruang berbagi file umum untuk organisasi. Hierarki folder harus "
-"mencerminkan hierarki departemen. Akan ada folder atau ruang terpisah yang "
-"ditugaskan untuk setiap departemen."
+"Harus ada ruang berbagi file bersama untuk organisasi tersebut. Hierarki "
+"folder harus memetakan hierarki departemen. Akan ada folder atau ruang "
+"terpisah yang ditugaskan untuk setiap departemen."
 
 #: templates/help/departments.html:9
 msgid ""
@@ -242,7 +243,7 @@ msgid ""
 "changed when an employee leaves the organization."
 msgstr ""
 "Ruang berbagi harus dimiliki dan dikelola oleh organisasi, bukan oleh "
-"karyawan individu. Sehingga kepemilikan file tidak perlu diubah ketika "
+"masing-masing karyawan. Sehingga kepemilikan file tidak harus diubah ketika "
 "seorang karyawan meninggalkan organisasi."
 
 #: templates/help/departments.html:11
@@ -271,7 +272,7 @@ msgstr "Admin sistem dapat:"
 
 #: templates/help/departments.html:20 templates/help/departments.html:24
 msgid "Manage department hierarchy and members"
-msgstr "Mengelola hierarki departemen dan anggota"
+msgstr "Mengelola hierarki dan anggota departemen"
 
 #: templates/help/departments.html:21 templates/help/departments.html:29
 msgid "Assign storage quota for departments"
@@ -286,8 +287,8 @@ msgid ""
 "The system admin can set up the department hierarchy in two ways: manual "
 "setup or import from Active Directory."
 msgstr ""
-"Admin sistem dapat mengatur hierarki departemen dengan dua cara: pengaturan "
-"manual atau mengimpor dari Active Directory."
+"Admin sistem dapat mengatur hierarki departemen dalam dua cara: pengaturan "
+"manual atau impor dari Active Directory."
 
 #: templates/help/departments.html:26
 msgid ""
@@ -298,10 +299,10 @@ msgid ""
 "admin can manage department later."
 msgstr ""
 "Admin sistem dapat membuat sejumlah departemen tingkat atas dan membuat "
-"berbagai tingkatan sub-departemen di bawah setiap departemen. Dan setiap "
+"beberapa tingkat sub-departemen di bawah setiap departemen. Dan setiap "
 "tingkat departemen dapat diisi dengan anggota. Admin sistem dapat menetapkan"
-" peran setiap anggota menjadi 'anggota' atau 'admin'. Kami akan "
-"memperkenalkan bagaimana admin departemen dapat mengelola departemen nanti."
+" peran setiap anggota ke 'anggota' atau 'admin'. Kami akan memperkenalkan "
+"bagaimana admin departemen dapat mengelola departemen nanti."
 
 #: templates/help/departments.html:27
 msgid ""
@@ -310,18 +311,18 @@ msgid ""
 "under an OU will be imported as sub-departments. Department libraries can be"
 " automatically created in the import process."
 msgstr ""
-"Admin sistem juga dapat mengimpor hierarki dari OU (Organizational Units) di"
-" AD. Setiap OU akan diimpor sebagai departemen. Dan sub-OU di bawah sebuah "
-"OU akan diimpor sebagai sub-departemen. Pustaka departemen dapat dibuat "
-"secara otomatis dalam proses impor."
+"Admin sistem juga dapat mengimpor hierarki dari OU (Unit Organisasi) di AD. "
+"Setiap OU akan diimpor sebagai departemen. Dan sub-OU di bawah sebuah OU "
+"akan diimpor sebagai sub-departemen. Pustaka departemen dapat dibuat secara "
+"otomatis dalam proses impor."
 
 #: templates/help/departments.html:28
 msgid ""
 "System admin can also delete a department after all the sub-departments and "
 "libraries are deleted."
 msgstr ""
-"Admin sistem juga dapat menghapus sebuah departemen setelah semua sub-"
-"departemen dan pustaka dihapus."
+"Admin sistem juga dapat menghapus departemen setelah semua sub-departemen "
+"dan pustaka dihapus."
 
 #: templates/help/departments.html:30
 msgid ""
@@ -331,12 +332,12 @@ msgid ""
 "cannot exceed the storage quota. <strong>Please note that the quota of sub-"
 "department doesn't depend on the quota of its parent department.</strong>"
 msgstr ""
-"Pustaka yang dibuat di dalam sebuah departemen dimiliki oleh departemen "
-"sendiri, bukan oleh pengguna individu. Jadi admin sistem dapat menetapkan "
-"kuota penyimpanan untuk sebuah departemen. Total ukuran semua pustaka di "
-"sebuah departemen tidak dapat melebihi kuota penyimpanan. <strong>Harap "
-"perhatikan bahwa kuota sub-departemen tidak bergantung pada kuota departemen"
-" induknya.</strong>"
+"Pustaka yang dibuat di dalam departemen dimiliki oleh departemen itu "
+"sendiri, bukan oleh pengguna individu mana pun. Jadi admin sistem dapat "
+"menetapkan kuota penyimpanan ke sebuah departemen. Ukuran total semua "
+"pustaka dalam sebuah departemen tidak dapat melebihi kuota penyimpanan. "
+"<strong>Harap diperhatikan bahwa kuota sub-departemen tidak bergantung pada "
+"kuota departemen induknya.</strong>"
 
 #: templates/help/departments.html:32
 msgid ""
@@ -345,8 +346,8 @@ msgid ""
 "libraries to a department."
 msgstr ""
 "Pustaka departemen dapat dibuat oleh admin sistem atau admin departemen. Ada"
-" juga opsi untuk mengontrol apakah pengguna individu dapat berbagi pustaka "
-"ke sebuah departemen."
+" juga opsi untuk mengontrol apakah pengguna individu dapat membagikan "
+"pustaka ke sebuah departemen."
 
 #: templates/help/departments.html:33
 msgid ""
@@ -354,7 +355,7 @@ msgid ""
 "below screenshot for information."
 msgstr ""
 "Semua operasi di atas dapat dilakukan di antarmuka admin sistem. Lihat "
-"tangkapan layar di bawah untuk informasi."
+"tangkapan layar di bawah untuk informasi selengkapnya."
 
 #: templates/help/departments.html:36
 msgid ""
@@ -363,13 +364,13 @@ msgid ""
 "following operations in a department after login to his/her own account."
 msgstr ""
 "Seperti disebutkan di atas, admin departemen adalah peran khusus yang "
-"diberikan oleh admin sistem kepada beberapa anggota sebuah departemen. Admin"
-" departemen dapat melakukan operasi berikut di sebuah departemen setelah "
-"masuk ke akunnya sendiri."
+"ditugaskan oleh admin sistem kepada beberapa anggota departemen. Admin "
+"departemen dapat melakukan operasi berikut di sebuah departemen setelah "
+"login ke akun miliknya sendiri."
 
 #: templates/help/departments.html:38
 msgid "Access to the libraries of the department"
-msgstr "Akses ke pustaka departemen"
+msgstr "Mengakses pustaka milik departemen"
 
 #: templates/help/departments.html:39
 msgid "Manage members in his/her department"
@@ -386,10 +387,10 @@ msgid ""
 " the department. But if the departments are imported from AD, the changes to"
 " membership will be overwritten on the next sync with AD."
 msgstr ""
-"Jika seorang pengguna adalah admin departemen, dia dapat menambahkan atau "
-"menghapus anggota di departemen tersebut. Setiap pengguna yang terdaftar "
-"dalam sistem dapat ditambahkan sebagai anggota departemen. Tetapi jika "
-"departemen - departemen diimpor dari AD, perubahan keanggotaan akan ditimpa "
+"Jika seorang pengguna adalah admin dari sebuah departemen, ia dapat menambah"
+" atau menghapus anggota di departemen tersebut. Pengguna mana pun yang "
+"terdaftar dalam sistem dapat ditambahkan sebagai anggota departemen. Namun "
+"jika departemen diimpor dari AD, perubahan pada keanggotaan akan ditimpa "
 "pada sinkronisasi berikutnya dengan AD."
 
 #: templates/help/departments.html:44
@@ -402,19 +403,19 @@ msgstr ""
 
 #: templates/help/departments.html:46
 msgid "Create or delete library"
-msgstr "Buat atau hapus pustaka"
+msgstr "Membuat atau menghapus pustaka"
 
 #: templates/help/departments.html:47
 msgid "Change library name"
-msgstr "Ubah nama pustaka"
+msgstr "Mengubah nama pustaka"
 
 #: templates/help/departments.html:48
 msgid ""
 "Share a library to users or groups outside of this department. This is very "
 "useful for cross-department collaboration."
 msgstr ""
-"Bagikan sebuah pustaka kepada pengguna atau grup di luar departemen ini. Ini"
-" sangat berguna untuk kolaborasi lintas - departemen."
+"Membagikan pustaka ke pengguna atau grup di luar departemen ini. Ini sangat "
+"berguna untuk kolaborasi lintas departemen."
 
 #: templates/help/departments.html:49
 #, python-format
@@ -424,8 +425,8 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
 "feature</a>."
 msgstr ""
-"Atur izin yang terperinci untuk folder - folder di pustaka bagi pengguna "
-"atau sub - departemen di departemen ini. Ini bekerja seperti <a "
+"Menetapkan izin terperinci ke folder dalam pustaka untuk pengguna atau sub-"
+"departemen di departemen ini. Ini berfungsi seperti <a "
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">fitur izin folder</a>."
 
 #: templates/help/departments.html:53
@@ -439,26 +440,27 @@ msgid ""
 "access to the groups \"EMEA\", \"Sales\" and \"ACME\". The groups for "
 "departments are marked with a \"building\" icon next to its name."
 msgstr ""
-"Seorang anggota biasa departemen dapat menggunakan departemen seperti sebuah"
-" grup. Setiap departemen ditampilkan kepada anggotanya sebagai sebuah grup. "
-"Seorang pengguna tidak hanya dapat mengakses pustaka di departemen tempat ia"
-" berada, tetapi juga pustaka di departemen induk departemennya. Misalnya, "
-"jika John berada di sub - departemen \"EMEA\" di bawah departemen \"Sales\","
-" dan \"Sales\" adalah sub - departemen di bawah perusahaan \"ACME\", John "
-"kemudian dapat mengakses grup \"EMEA\", \"Sales\", dan \"ACME\". Grup - grup"
-" untuk departemen ditandai dengan ikon \"gedung\" di samping namanya."
+"Anggota biasa dari departemen dapat menggunakan departemen tersebut seperti "
+"sebuah grup. Setiap departemen disajikan kepada anggotanya sebagai sebuah "
+"grup. Seorang pengguna tidak hanya dapat mengakses pustaka di departemen "
+"tempat ia bergabung, tetapi juga pustaka di departemen induk dari "
+"departemennya. Sebagai contoh, jika John berada di sub-departemen \"EMEA\" "
+"di bawah departemen \"Sales\", dan \"Sales\" adalah sub-departemen di bawah "
+"perusahaan \"ACME\", John kemudian dapat mengakses grup \"EMEA\", \"Sales\","
+" dan \"ACME\". Grup untuk departemen ditandai dengan ikon \"bangunan\" di "
+"sebelah namanya."
 
 #: templates/help/desktop_proxy.html:6
 msgid "Using proxy in Seafile client"
-msgstr "Menggunakan proxy di klien Seafile"
+msgstr "Menggunakan proksi di klien Seafile"
 
 #: templates/help/desktop_proxy.html:8
 msgid ""
 "Seafile client supports 3 types of proxy servers: HTTP proxy, SOCKS5 proxy "
 "and system proxy settings."
 msgstr ""
-"Klien Seafile mendukung 3 jenis server proxy: proxy HTTP, proxy SOCKS5, dan "
-"pengaturan proxy sistem."
+"Klien Seafile mendukung 3 jenis server proksi: proksi HTTP, proksi SOCKS5 "
+"dan pengaturan proksi sistem."
 
 #: templates/help/desktop_proxy.html:10
 msgid ""
@@ -468,11 +470,11 @@ msgid ""
 " to auto-detect proxy server information. So you don't have to manually "
 "enter proxy server address."
 msgstr ""
-"Proxy HTTP dan proxy SOCKS5 mengharuskan Anda memasukkan alamat dan port "
-"server proxy. Jika Anda menggunakan pengaturan proxy sistem, klien Seafile "
-"membaca pengaturan proxy dari sistem operasi. Sistem operasi memiliki "
-"beberapa mekanisme untuk mendeteksi otomatis informasi server proxy. Jadi "
-"Anda tidak perlu memasukkan alamat server proxy secara manual."
+"Proksi HTTP dan proksi SOCKS5 mengharuskan Anda memasukkan alamat dan port "
+"server proksi. Jika Anda menggunakan pengaturan proksi sistem, klien Seafile"
+" membaca pengaturan proksi dari sistem operasi. Sistem operasi memiliki "
+"beberapa mekanisme untuk mendeteksi otomatis informasi server proksi. Jadi "
+"Anda tidak perlu secara manual memasukkan alamat server proksi."
 
 #: templates/help/desktop_proxy.html:12
 msgid ""
@@ -480,9 +482,9 @@ msgid ""
 "area. Choose \"Settings\" in the menu. In the pop-up settings dialog, you "
 "can change proxy settings in the \"Network\" tab."
 msgstr ""
-"Untuk mengubah pengaturan proxy, klik ikon Seafile di area notifikasi "
-"sistem. Pilih \"Pengaturan\" di menu. Dalam dialog pengaturan yang muncul, "
-"Anda dapat mengubah pengaturan proxy di tab \"Jaringan\"."
+"Untuk mengubah pengaturan proksi, klik ikon Seafile di area notifikasi "
+"sistem. Pilih \"Settings\" di menu. Pada dialog pengaturan yang muncul, Anda"
+" dapat mengubah pengaturan proksi di tab \"Network\"."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:6
 msgid "SeaDrive 2.0 for Windows 10"
@@ -495,11 +497,11 @@ msgid ""
 "Update for Windows 10) and later versions. We recommend Windows 10 users to "
 "upgrade to SeaDrive 2.0 for more native virtual drive experience."
 msgstr ""
-"SeaDrive 2.0 (dan versi - versi mendatang) didesain ulang dengan integrasi "
-"yang lebih dalam ke sistem operasi Windows 10. Ini mendukung versi Windows "
-"10 1709 (Pembaruan Musim Gugur 2017 untuk Windows 10) dan versi yang lebih "
-"baru. Kami menyarankan pengguna Windows 10 untuk mengupgrade ke SeaDrive 2.0"
-" untuk pengalaman drive virtual yang lebih asli."
+"SeaDrive 2.0 (dan versi mendatang) dirancang ulang dengan integrasi yang "
+"lebih mendalam ke sistem operasi Windows 10. Ini mendukung Windows 10 versi "
+"1709 (Pembaruan Musim Gugur 2017 untuk Windows 10) dan versi yang lebih "
+"baru. Kami merekomendasikan pengguna Windows 10 untuk meningkatkan ke "
+"SeaDrive 2.0 untuk pengalaman drive virtual yang lebih asli (native)."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:10
 msgid "Install and access the Virtual Drive"
@@ -516,18 +518,18 @@ msgid ""
 msgstr ""
 "Anda dapat mengunduh SeaDrive 2.0 dari situs web resmi Seafile. Setelah "
 "instalasi dan masuk ke akun Seafile Anda, SeaDrive akan mulai mengunduh "
-"daftar pustaka dan file dari server (sama seperti di SeaDrive 1.0.x). Proses"
-" ini mungkin membutuhkan beberapa waktu, tergantung pada jumlah file yang "
-"tersedia di akun Seafile Anda. Unduhan dilakukan secara bertahap, jadi "
-"sementara itu Anda sudah dapat mengakses beberapa file di drive virtual."
+"daftar pustaka dan file dari server (sama seperti di SeaDrive 1.0.x). Ini "
+"mungkin memakan waktu, tergantung pada jumlah file yang tersedia di akun "
+"Seafile Anda. Pengunduhan bersifat progresif, jadi dalam waktu yang sama "
+"Anda sudah dapat mengakses beberapa file di drive virtual."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:12
 msgid ""
 "To access the virtual drive, just open Windows file explorer. There is a "
 "\"seadrive\" node in the navigation pane of Windows file explorer."
 msgstr ""
-"Untuk mengakses drive virtual, cukup buka Windows File Explorer. Ada simpul "
-"\"seadrive\" di panel navigasi Windows File Explorer."
+"Untuk mengakses drive virtual, cukup buka Windows file explorer. Ada node "
+"\"seadrive\" di panel navigasi Windows file explorer."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:16
 msgid "Accessing files in the Virtual Drive"
@@ -538,32 +540,32 @@ msgid ""
 "Libraries are grouped into 4 categories in the virtual drive: My Libraries, "
 "Shared with me, Shared with groups and Shared with all."
 msgstr ""
-"Pustaka dikelompokkan menjadi 4 kategori di drive virtual: Pustaka Saya, "
-"Dibagikan dengan Saya, Dibagikan dengan Grup, dan Dibagikan dengan Semua."
+"Pustaka dikelompokkan ke dalam 4 kategori di drive virtual: Pustaka Saya, "
+"Dibagikan dengan saya, Dibagikan dengan grup, dan Dibagikan dengan semua."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:18
 msgid ""
 "As you can see, the file status icons is more integrated into Windows file "
 "explorer. The icons are a bit different form version 1.0."
 msgstr ""
-"Seperti yang Anda lihat, ikon status file lebih terintegrasi ke Windows File"
-" Explorer. Ikonnya sedikit berbeda dari versi 1.0."
+"Seperti yang Anda lihat, ikon status file lebih terintegrasi ke dalam "
+"Windows file explorer. Ikon-ikon tersebut sedikit berbeda dari versi 1.0."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:19
 msgid ""
 "Files in the virtual drive are created as \"placeholders\" in the local file"
 " system. They may be in 3 states:"
 msgstr ""
-"File di drive virtual dibuat sebagai \"tempat penampung\" (placeholder) di "
-"sistem file lokal. Mereka mungkin berada dalam 3 keadaan:"
+"File di drive virtual dibuat sebagai \"placeholder\" dalam sistem file "
+"lokal. Mereka dapat berada dalam 3 status:"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:21
 msgid ""
 "<b>Placeholder file</b>: An empty representation of the file and can only be"
 " opened when there is network connection."
 msgstr ""
-"<b>File placeholder</b>: Representasi kosong dari file dan hanya dapat "
-"dibuka ketika ada koneksi jaringan."
+"<b>File placeholder</b>: Representasi kosong dari file tersebut dan hanya "
+"dapat dibuka ketika ada koneksi jaringan."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:22
 msgid ""
@@ -573,11 +575,11 @@ msgid ""
 "connections. The operating system may decide to clear a full file when more "
 "disk space is needed."
 msgstr ""
-"<b>File lengkap</b>: File telah diunduh dan disimpan secara lokal. Unduhan "
-"berlangsung secara otomatis ketika file placeholder dibuka untuk pertama "
-"kalinya. File - file ini tersedia setiap kali Anda membuka SeaDrive tanpa "
-"memperhatikan koneksi jaringan. Sistem operasi mungkin memutuskan untuk "
-"menghapus file lengkap ketika lebih banyak ruang disk diperlukan."
+"<b>File lengkap</b>: File telah diunduh dan disimpan secara lokal. "
+"Pengunduhan otomatis saat file placeholder dibuka untuk pertama kalinya. "
+"File-file ini tersedia kapan pun Anda membuka SeaDrive terlepas dari koneksi"
+" jaringan. Sistem operasi dapat memutuskan untuk membersihkan file lengkap "
+"saat lebih banyak ruang disk diperlukan."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:23
 msgid ""
@@ -585,7 +587,7 @@ msgid ""
 "is guaranteed to be available offline."
 msgstr ""
 "<b>File lengkap yang disematkan</b>: File telah diunduh dan disimpan secara "
-"lokal. File ini dijamin tersedia secara offline."
+"lokal. Dipastikan akan tersedia secara offline."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:26
 msgid ""
@@ -595,12 +597,11 @@ msgid ""
 "locally; choose \"Free up space\" when you want to clean the cache for a "
 "file or folder."
 msgstr ""
-"Anda dapat mengontrol file atau folder mana yang akan disimpan dalam cache "
-"secara lokal. Hal ini dapat diubah dari menu konteks saat Anda klik kanan "
-"pada sebuah file atau folder. Pilih \"Selalu simpan di perangkat ini\" "
-"ketika Anda ingin menempelkan sebuah file atau folder secara lokal; pilih "
-"\"Bebaskan ruang\" ketika Anda ingin membersihkan cache untuk sebuah file "
-"atau folder."
+"Anda dapat mengontrol file atau folder mana yang di-cache secara lokal. Ini "
+"dapat diubah dari menu konteks saat Anda mengeklik kanan pada file atau "
+"folder. Pilih \"Always keep on this device\" ketika Anda ingin menyematkan "
+"file atau folder secara lokal; pilih \"Free up space\" ketika Anda ingin "
+"membersihkan cache untuk file atau folder tersebut."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:28
 msgid ""
@@ -608,14 +609,13 @@ msgid ""
 "updated on the server. In SeaDrive 2.0, full and pinned files are "
 "automatically kept in sync with the server."
 msgstr ""
-"Di SeaDrive 1.0, file yang disimpan dalam cache tidak diperbarui secara "
-"otomatis ketika mereka diperbarui di server. Di SeaDrive 2.0, file lengkap "
-"dan file lengkap yang disematkan secara otomatis tetap sinkron dengan "
-"server."
+"Di SeaDrive 1.0, file yang di-cache tidak diperbarui secara otomatis saat "
+"diperbarui di server. Di SeaDrive 2.0, file lengkap dan yang disematkan "
+"secara otomatis tetap sinkron dengan server."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:30
 msgid "File Download and Control"
-msgstr "Unduhan dan Pengontrolan File"
+msgstr "Unduhan dan Kontrol File"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:31
 msgid ""
@@ -625,9 +625,9 @@ msgid ""
 " cancel the download."
 msgstr ""
 "Setiap kali Anda membuka file placeholder, sistem operasi akan secara "
-"otomatis mulai mengunduhnya. Jika file tersebut membutuhkan beberapa waktu "
-"untuk diunduh, akan ada bilah progres yang muncul di File Explorer dan Anda "
-"dapat membatalkan unduhan."
+"otomatis mulai mengunduhnya. Jika pengunduhan file memakan waktu, akan ada "
+"bilah progres yang muncul di file explorer dan Anda dapat membatalkan "
+"pengunduhan."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:32
 msgid ""
@@ -637,19 +637,19 @@ msgid ""
 "disallow the application from automatically downloading files in the future."
 msgstr ""
 "Terkadang aplikasi latar belakang mungkin mencoba mengunduh file di drive "
-"virtual (seperti perangkat lunak Anti - Virus). Anda akan diberitahu oleh "
-"sistem operasi tentang hal ini dan Anda dapat memilih untuk membatalkan "
-"unduhan atau melarang aplikasi tersebut mengunduh file secara otomatis di "
-"masa depan."
+"virtual (seperti perangkat lunak Anti-Virus). Anda akan diberitahu oleh "
+"sistem operasi mengenai hal ini dan Anda dapat memilih untuk membatalkan "
+"pengunduhan atau melarang aplikasi tersebut mengunduh file secara otomatis "
+"di masa mendatang."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:34
 #: templates/help/using_drive_client.html:79
 msgid "FAQ"
-msgstr "FAQ"
+msgstr "Pertanyaan Umum (FAQ)"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:35
 msgid "Can I create, delete, rename libraries?"
-msgstr "Bisakah saya membuat, menghapus, mengganti nama pustaka?"
+msgstr "Dapatkah saya membuat, menghapus, menamai ulang pustaka?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:36
 msgid ""
@@ -658,15 +658,15 @@ msgid ""
 " rename libraries under the \"My Libraries\" category. Creating, deleting or"
 " renaming libraries in other categories will be ignored."
 msgstr ""
-"Ya. Ketika Anda membuat, menghapus, atau mengganti nama folder pustaka di "
-"drive virtual, operasi tersebut akan tercermin di server. Anda hanya dapat "
-"membuat, menghapus, mengganti nama pustaka di bawah kategori \"Pustaka "
-"Saya\". Membuat, menghapus, atau mengganti nama pustaka di kategori lain "
-"akan diabaikan."
+"Ya. Saat Anda membuat, menghapus, atau menamai ulang folder pustaka di drive"
+" virtual, operasi tersebut akan tercermin di server. Anda hanya dapat "
+"membuat, menghapus, menamai ulang pustaka di bawah kategori \"Pustaka "
+"Saya\". Membuat, menghapus, atau menamai ulang pustaka di kategori lain akan"
+" diabaikan."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:38
 msgid "Can I create files or folders outside of a library folder?"
-msgstr "Bisakah saya membuat file atau folder di luar folder pustaka?"
+msgstr "Dapatkah saya membuat file atau folder di luar folder pustaka?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:39
 msgid ""
@@ -674,13 +674,13 @@ msgid ""
 "synced to the server. A new folder under the \"My Libraries\" folder will be"
 " handled as a new library."
 msgstr ""
-"Ya. Tetapi file yang dibuat di luar folder pustaka akan diabaikan dan TIDAK "
+"Ya. Namun file yang dibuat di luar folder pustaka akan diabaikan dan TIDAK "
 "disinkronkan ke server. Folder baru di bawah folder \"Pustaka Saya\" akan "
-"ditulang sebagai pustaka baru."
+"ditangani sebagai pustaka baru."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:41
 msgid "Can I access encrypted libraries?"
-msgstr "Bisakah saya mengakses pustaka terenkripsi?"
+msgstr "Dapatkah saya mengakses pustaka terenkripsi?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:42
 msgid ""
@@ -690,12 +690,12 @@ msgid ""
 " area and choose \"Show encrypted libraries\". A window will show up and you"
 " can choose to sync or unsync an encrypted library."
 msgstr ""
-"Ya. Secara default, pustaka terenkripsi tidak disinkronkan dan tidak "
-"ditampilkan di drive virtual. Anda perlu secara manual memilih pustaka "
-"terenkripsi mana yang akan disinkronkan dan memasukkan kata sandinya. Cukup "
-"klik kanan pada ikon SeaDrive di area sistem tray dan pilih \"Tampilkan "
-"pustaka terenkripsi\". Sebuah jendela akan muncul dan Anda dapat memilih "
-"untuk menyinkronkan atau mencabut sinkronisasi pustaka terenkripsi."
+"Ya. Secara default, pustaka terenkripsi tidak disinkronkan dan ditampilkan "
+"di drive virtual. Anda perlu secara manual memilih pustaka terenkripsi mana "
+"yang akan disinkronkan dan memasukkan kata sandi. Cukup klik kanan pada ikon"
+" SeaDrive di area system tray dan pilih \"Show encrypted libraries\". Sebuah"
+" jendela akan muncul dan Anda dapat memilih untuk menyinkronkan atau "
+"membatalkan sinkronisasi pustaka terenkripsi."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
@@ -709,12 +709,12 @@ msgid ""
 " be accessible in 2.0 version. You can start SeaDrive 1.0 again to upload "
 "the files to server or copy them out."
 msgstr ""
-"SeaDrive 2.0 akan menggunakan akun yang sudah ada dan metadata mereka "
-"(disimpan di folder C:\\users\\username\\seadrive\\). Namun, ia tidak akan "
-"menggunakan file yang disimpan di cache dari SeaDrive 1.0. Jadi, semua file "
-"yang disimpan di cache secara lokal di versi 1.0 tidak akan dapat diakses di"
-" versi 2.0. Anda dapat memulai SeaDrive 1.0 lagi untuk mengunggah file ke "
-"server atau menyalinnya."
+"SeaDrive 2.0 akan menggunakan akun yang ada dan metadatanya (disimpan di "
+"bawah folder C:\\users\\username\\seadrive\\). Tetapi ini tidak akan "
+"menggunakan file yang di-cache dari SeaDrive 1.0. Jadi file apa pun yang di-"
+"cache secara lokal di versi 1.0 tidak akan dapat diakses di versi 2.0. Anda "
+"dapat memulai kembali SeaDrive 1.0 untuk mengunggah file ke server atau "
+"menyalinnya keluar."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:47
 msgid "How do I clean the cache?"
@@ -729,19 +729,19 @@ msgid ""
 "Because placeholders are just normal files created on your local disk, your "
 "cache size is only limited by the available disk space on your computer."
 msgstr ""
-"Anda dapat secara manual memilih folder atau file mana yang akan disimpan di"
-" cache secara lokal. Jika Anda menemukan suatu folder mengkonsumsi terlalu "
-"banyak ruang, cukup pilih \"Bebaskan ruang\" pada folder tersebut dan semua "
-"file yang disimpan di cache dalam folder tersebut akan dibersihkan. Tidak "
-"perlu mengatur waktu pembersihan cache dan batas ukuran cache seperti di "
-"SeaDrive 1.0. Karena placeholder hanyalah file normal yang dibuat di disk "
-"lokal Anda, ukuran cache Anda hanya dibatasi oleh ruang disk yang tersedia "
-"di komputer Anda."
+"Anda dapat secara manual memilih folder atau file mana yang akan di-cache "
+"secara lokal. Jika Anda menemukan sebuah folder menghabiskan terlalu banyak "
+"ruang, cukup pilih \"Free up space\" pada folder tersebut dan semua file "
+"yang di-cache di folder itu akan dibersihkan. Tidak ada kebutuhan untuk "
+"mengatur waktu pembersihan cache dan batas ukuran cache seperti di SeaDrive "
+"1.0. Karena placeholder hanyalah file normal yang dibuat di disk lokal Anda,"
+" ukuran cache Anda hanya dibatasi oleh ruang disk yang tersedia di komputer "
+"Anda."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:50
 msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
 msgstr ""
-"Bagaimana cara menghapus shortcut SeaDrive yang tersisa di Windows Explorer?"
+"Bagaimana cara menghapus pintasan SeaDrive yang tersisa di Windows Explorer?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
@@ -750,8 +750,8 @@ msgid ""
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
 msgstr ""
-"Shortcut \"SeaDrive\" di Windows Explorer tidak akan hilang setelah Anda "
-"keluar dari program SeaDrive atau berganti akun Seafile di SeaDrive. Ini "
+"Pintasan \"SeaDrive\" di Windows Explorer tidak akan hilang setelah Anda "
+"keluar dari program SeaDrive atau berpindah akun Seafile di SeaDrive. Ini "
 "adalah perilaku yang disengaja. Anda tidak perlu menghapusnya jika Anda "
 "masih perlu mengakses akun tersebut nanti."
 
@@ -760,8 +760,9 @@ msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
 "choose \"Remove account information\" in the prompt dialog."
 msgstr ""
-"Anda biasanya dapat menghapus shortcut tersebut dengan menguninstall program"
-" SeaDrive dan memilih \"Hapus informasi akun\" di dialog peringatan."
+"Anda biasanya dapat menghapus pintasan tersebut dengan menghapus instalasi "
+"program SeaDrive dan memilih \"Remove account information\" pada dialog yang"
+" muncul."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -772,11 +773,11 @@ msgid ""
 " in registry editor. Remove the sub-keys correspond to the shortcut you want"
 " to remove."
 msgstr ""
-"Jika penguninstallan tidak berhasil menghapus shortcut tersebut, Anda dapat "
-"menghapus shortcut SeaDrive di Windows Explorer dengan mengedit registry. "
+"Jika penghapusan instalasi tidak berhasil menghapus pintasan, Anda dapat "
+"menghapus pintasan SeaDrive di Windows Explorer dengan mengedit registri. "
 "Buka jalur "
 "\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\\""
-" di editor registry. Hapus sub-kunci yang sesuai dengan shortcut yang ingin "
+" di registry editor. Hapus sub-key yang sesuai dengan pintasan yang ingin "
 "Anda hapus."
 
 #: templates/help/encrypted_libraries.html:6
@@ -792,10 +793,10 @@ msgid ""
 "file contents."
 msgstr ""
 "Seafile menyediakan enkripsi data end-to-end di sisi klien. Anda dapat "
-"membuat pustaka terenkripsi untuk menggunakan fitur ini. Isi file di pustaka"
-" terenkripsi dienkripsi di sisi klien. Kata sandi enkripsi tidak disimpan di"
-" server. Jadi, bahkan administrator server tidak dapat mengakses isi file "
-"Anda."
+"membuat pustaka terenkripsi untuk menggunakan fitur ini. Konten file dalam "
+"pustaka terenkripsi dienkripsi di sisi klien. Kata sandi enkripsi tidak "
+"disimpan di server. Jadi, administrator server sekalipun tidak dapat "
+"mengakses konten file Anda."
 
 #: templates/help/encrypted_libraries.html:10
 msgid "When creating an encrypted library:"
@@ -807,9 +808,9 @@ msgid ""
 "the server. The server uses this password to create the library. But it "
 "doesn't store the plain text password."
 msgstr ""
-"Jika Anda membuat pustaka terenkripsi di web app, kata sandi dikirim ke "
-"server. Server menggunakan kata sandi ini untuk membuat pustaka. Namun, ia "
-"tidak menyimpan kata sandi dalam teks biasa."
+"Jika Anda membuat pustaka terenkripsi di aplikasi web, kata sandi dikirim ke"
+" server. Server menggunakan kata sandi ini untuk membuat pustaka. Namun "
+"server tidak menyimpan kata sandi dalam bentuk teks biasa."
 
 #: templates/help/encrypted_libraries.html:13
 #, python-format
@@ -832,9 +833,9 @@ msgid ""
 " will cache the password in encrypted format for 1 hour. It won't store the "
 "password on disk."
 msgstr ""
-"Jika Anda menggunakan web app, Anda harus memasukkan kata sandi ke server. "
-"Server akan menyimpan kata sandi dalam format terenkripsi selama 1 jam. Ia "
-"tidak akan menyimpan kata sandi di disk."
+"Jika Anda menggunakan aplikasi web, Anda harus memasukkan kata sandi ke "
+"server. Server akan menyimpan cache kata sandi dalam format terenkripsi "
+"selama 1 jam. Server tidak akan menyimpan kata sandi di disk."
 
 #: templates/help/encrypted_libraries.html:20
 msgid ""
@@ -843,8 +844,8 @@ msgid ""
 "plain text password is not stored on the client disk either."
 msgstr ""
 "Jika Anda menggunakan klien desktop untuk menyinkronkan pustaka, kata sandi "
-"tidak dikirim ke server. Klien mendekripsi dan mengenkripsi isi file secara "
-"lokal. Kata sandi teks biasa juga tidak disimpan di disk klien."
+"tidak dikirim ke server. Klien mendekripsi dan mengenkripsi konten file "
+"secara lokal. Kata sandi teks biasa juga tidak disimpan di disk klien."
 
 #: templates/help/encrypted_libraries.html:21
 msgid ""
@@ -859,8 +860,8 @@ msgid ""
 "Note that encrypted library only encrypts the contents of the files, but not"
 " the folder and file names."
 msgstr ""
-"Perhatikan bahwa pustaka terenkripsi hanya mengenkripsi isi file, bukan nama"
-" folder dan file."
+"Perhatikan bahwa pustaka terenkripsi hanya mengenkripsi isi file, tetapi "
+"tidak mengenkripsi nama folder dan file."
 
 #: templates/help/file_locking.html:5
 msgid "File locking"
@@ -874,32 +875,32 @@ msgid ""
 " the file when one person wants to exclusively modify the file. Seafile "
 "Professional Edition supports file locking."
 msgstr ""
-"Saat lebih dari satu orang berkolaborasi pada sebuah file, kemungkinan lebih"
-" dari satu orang akan mengubah file pada waktu yang hampir bersamaan. "
-"Seafile menangani situasi ini dengan baik menggunakan file konflik. Namun, "
-"seringkali lebih nyaman untuk mengunci file ketika seseorang ingin secara "
-"eksklusif mengubah file. Seafile Professional Edition mendukung penguncian "
-"file."
+"Ketika lebih dari satu orang berkolaborasi pada suatu file, kemungkinan "
+"besar lebih dari satu orang memodifikasi file tersebut pada waktu yang "
+"hampir bersamaan. Seafile menangani situasi ini dengan baik menggunakan file"
+" konflik. Namun sering kali lebih nyaman untuk mengunci file tersebut ketika"
+" satu orang ingin memodifikasi file secara eksklusif. Seafile Professional "
+"Edition mendukung penguncian file."
 
 #: templates/help/file_locking.html:7
 msgid ""
 "File locking works on both the web app and the desktop syncing client. We'll"
 " introduce them one by one."
 msgstr ""
-"Penguncian file berfungsi baik di web app maupun klien sinkronisasi desktop."
-" Kami akan memperkenalkannya satu per satu."
+"Penguncian file berfungsi baik di aplikasi web maupun klien sinkronisasi "
+"desktop. Kami akan memperkenalkannya satu per satu."
 
 #: templates/help/file_locking.html:8
 msgid "File locking on the Web App"
-msgstr "Penguncian file di Web App"
+msgstr "Penguncian file di Aplikasi Web"
 
 #: templates/help/file_locking.html:9
 msgid ""
 "To lock a file, you can navigate into the file's folder on the web app, and "
 "click on the \"operations\" drop-down menu."
 msgstr ""
-"Untuk mengunci sebuah file, Anda dapat menavigasi ke folder file di web app,"
-" dan klik pada menu tarik-turun \"operasi\"."
+"Untuk mengunci file, Anda dapat menavigasi ke folder file di aplikasi web, "
+"dan klik pada menu tarik-turun \"operations\"."
 
 #: templates/help/file_locking.html:11
 msgid ""
@@ -908,11 +909,11 @@ msgid ""
 "file. And you can also unlock a file that's locked by you. But you cannot "
 "unlock files locked by others."
 msgstr ""
-"Setelah file dikunci, Anda dapat melihat tanda \"berhenti\" berwarna merah "
-"di sudut ikon file. Menggerakkan mouse ke tanda berhenti, Anda dapat melihat"
-" siapa yang mengunci file. Dan Anda juga dapat membuka kunci file yang "
-"dikunci oleh Anda. Namun, Anda tidak dapat membuka kunci file yang dikunci "
-"oleh orang lain."
+"Setelah file terkunci, Anda dapat melihat ikon berhenti berwarna merah di "
+"pojok ikon file. Mengarahkan mouse ke ikon berhenti, Anda dapat melihat "
+"siapa yang mengunci file tersebut. Anda juga dapat membuka kunci file yang "
+"Anda kunci. Namun Anda tidak dapat membuka kunci file yang dikunci oleh "
+"orang lain."
 
 #: templates/help/file_locking.html:13
 msgid "File locking on the desktop client"
@@ -923,24 +924,24 @@ msgid ""
 "After a library is synced to the desktop, you can lock/unlock files in that "
 "library inside File Explorer on Windows or Finder on Mac OS."
 msgstr ""
-"Setelah sebuah pustaka disinkronkan ke desktop, Anda dapat mengunci/membuka "
-"kunci file di pustaka tersebut di dalam File Explorer di Windows atau Finder"
-" di Mac OS."
+"Setelah pustaka disinkronkan ke desktop, Anda dapat mengunci/membuka kunci "
+"file dalam pustaka tersebut di dalam File Explorer pada Windows atau Finder "
+"pada Mac OS."
 
 #: templates/help/file_locking.html:15
 msgid ""
 "To lock a file, just right click on a synced file and choose \"lock this "
 "file\" in the \"Seafile\" menu."
 msgstr ""
-"Untuk mengunci sebuah file, cukup klik kanan pada file yang telah "
-"disinkronkan dan pilih \"kunci file ini\" di menu \"Seafile\"."
+"Untuk mengunci file, cukup klik kanan pada file yang disinkronkan dan pilih "
+"\"lock this file\" di menu \"Seafile\"."
 
 #: templates/help/file_locking.html:17
 msgid ""
 "If a file is locked by you, you can see an orange \"stop sign\" on the file "
 "icon. You can choose to unlock it."
 msgstr ""
-"Jika sebuah file dikunci oleh Anda, Anda dapat melihat tanda \"berhenti\" "
+"Jika sebuah file dikunci oleh Anda, Anda dapat melihat ikon berhenti "
 "berwarna oranye pada ikon file. Anda dapat memilih untuk membuka kuncinya."
 
 #: templates/help/file_locking.html:19
@@ -949,19 +950,21 @@ msgid ""
 "file icon. The file is automatically set to read-only. You cannot modify it "
 "until it's unlocked."
 msgstr ""
-"Jika sebuah file dikunci oleh pengguna lain, Anda dapat melihat tanda "
-"\"berhenti\" berwarna merah pada ikon file. File secara otomatis diatur ke "
-"mode hanya-baca. Anda tidak dapat mengubahnya sampai kuncinya dibuka."
+"Jika sebuah file dikunci oleh pengguna lain, Anda dapat melihat ikon "
+"berhenti berwarna merah pada ikon file. File tersebut secara otomatis diatur"
+" menjadi baca-saja. Anda tidak dapat memodifikasinya sampai kuncinya dibuka."
 
 #: templates/help/file_locking.html:21
 msgid ""
 "If a library is not synced, you can still use cloud file browser to lock and"
 " unlock files in it."
 msgstr ""
+"Jika pustaka tidak disinkronkan, Anda masih dapat menggunakan cloud file "
+"browser untuk mengunci dan membuka kunci file di dalamnya."
 
 #: templates/help/file_locking.html:22
 msgid "Auto locking office files"
-msgstr ""
+msgstr "Penguncian otomatis file office"
 
 #: templates/help/file_locking.html:23
 msgid ""
@@ -971,18 +974,27 @@ msgid ""
 " propagated to other computers syncing this library. It prevents concurrent "
 "editing the same Office file and is convenient for collaboration."
 msgstr ""
+"Setelah pustaka disinkronkan ke desktop, saat Anda membuka file Microsoft "
+"Office di dalam pustaka, Seafile secara otomatis mengunci file tersebut. "
+"Saat Anda menutup file, Seafile secara otomatis membuka kunci file tersebut."
+" Status penguncian disebarkan ke komputer lain yang menyinkronkan pustaka "
+"ini. Hal ini mencegah pengeditan bersamaan pada file Office yang sama dan "
+"memudahkan kolaborasi."
 
 #: templates/help/file_locking.html:24
 msgid "Details about file locking"
-msgstr ""
+msgstr "Detail tentang penguncian file"
 
 #: templates/help/file_locking.html:25
 msgid "There are a few useful tips about how file locking works:"
 msgstr ""
+"Berikut adalah beberapa tips berguna tentang cara kerja penguncian file:"
 
 #: templates/help/file_locking.html:27
 msgid "A locked file can only be unlocked by the user who locked it."
 msgstr ""
+"File yang terkunci hanya dapat dibuka kuncinya oleh pengguna yang "
+"menguncinya."
 
 #: templates/help/file_locking.html:28
 msgid ""
@@ -991,16 +1003,24 @@ msgid ""
 "locked file. The purpose of file locking is mainly to prevent concurrent "
 "editing."
 msgstr ""
+"File yang terkunci tidak dapat dimodifikasi, dipindahkan, dinamai ulang, "
+"atau dihapus oleh pengguna lain. Namun pengguna lain masih dapat "
+"memindahkan, menghapus, atau menamai ulang folder induk dari file yang "
+"terkunci. Tujuan penguncian file terutama untuk mencegah pengeditan "
+"bersamaan."
 
 #: templates/help/file_locking.html:29
 msgid ""
 "When a locked file's parent folder is renamed or moved inside the same "
 "library, it remains locked after the operation."
 msgstr ""
+"Ketika folder induk dari file yang terkunci dinamai ulang atau dipindahkan "
+"di dalam pustaka yang sama, file tersebut tetap terkunci setelah operasi "
+"tersebut."
 
 #: templates/help/finding_older_version_files.html:6
 msgid "Finding older version of files"
-msgstr ""
+msgstr "Menemukan versi file yang lebih lama"
 
 #: templates/help/finding_older_version_files.html:7
 msgid ""
@@ -1009,10 +1029,14 @@ msgid ""
 "a configurable period. When you want to access an older version of a file, "
 "the file history feature becomes very handy."
 msgstr ""
+"Seafile melacak riwayat modifikasi semua file. Setiap kali sebuah file "
+"dimodifikasi, versi baru akan dibuat, sementara versi lama tetap disimpan "
+"untuk periode yang dapat dikonfigurasi. Ketika Anda ingin mengakses versi "
+"file yang lebih lama, fitur riwayat file menjadi sangat berguna."
 
 #: templates/help/finding_older_version_files.html:8
 msgid "To list all the versions of a file:"
-msgstr ""
+msgstr "Untuk menampilkan semua versi dari suatu file:"
 
 #: templates/help/finding_older_version_files.html:10
 msgid ""
@@ -1020,16 +1044,23 @@ msgid ""
 "cursor onto the row of that file. An operation menu will appear. You can "
 "click the \"History\" button in that menu."
 msgstr ""
+"Di Aplikasi Web Seafile, navigasikan ke folder yang berisi file tersebut. "
+"Pindahkan kursor ke baris file tersebut. Menu operasi akan muncul. Anda "
+"dapat mengeklik tombol \"History\" di menu tersebut."
 
 #: templates/help/finding_older_version_files.html:11
 msgid ""
 "A list of all versions of that file will be displayed in time order, from "
 "newer to older. The list also contains the file's rename history."
 msgstr ""
+"Daftar semua versi file tersebut akan ditampilkan berdasarkan urutan waktu, "
+"dari yang terbaru ke yang terlama. Daftar ini juga berisi riwayat perubahan "
+"nama file."
 
 #: templates/help/finding_older_version_files.html:12
 msgid "You can download, restore, view any version of the file."
 msgstr ""
+"Anda dapat mengunduh, memulihkan, melihat versi apa pun dari file tersebut."
 
 #: templates/help/finding_older_version_files.html:14
 #, python-format
@@ -1038,10 +1069,13 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Anda dapat mengonfigurasi periode penyimpanan versi file: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">mengatur periode "
+"penyimpanan riwayat</a>."
 
 #: templates/help/folder_permission.html:6
 msgid "Use folder permission for fine-grained access control"
-msgstr ""
+msgstr "Menggunakan izin folder untuk kontrol akses yang terperinci"
 
 #: templates/help/folder_permission.html:8
 #, python-format
@@ -1052,6 +1086,11 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing libraries</a>."
 " Here are some use cases:"
 msgstr ""
+"For shared libraries or folders, you can set permission to its sub-folders "
+"for a person or a group. Available permissions are the same as the ones "
+"described in <a "
+"href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing libraries</a>."
+" Here are some use cases:"
 
 #: templates/help/folder_permission.html:10
 msgid ""
@@ -1059,6 +1098,10 @@ msgid ""
 " to allow a specific member of the group to modify files in one sub-folder. "
 "You can grant write permission of this sub-folder to this person."
 msgstr ""
+"Anda membagikan pustaka ke grup dengan izin \"read only\". Anda juga ingin "
+"mengizinkan anggota tertentu dari grup tersebut untuk memodifikasi file di "
+"satu sub-folder. Anda dapat memberikan izin tulis (write) sub-folder ini "
+"kepada orang tersebut."
 
 #: templates/help/folder_permission.html:11
 msgid ""
@@ -1067,6 +1110,10 @@ msgid ""
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
 msgstr ""
+"Anda membagikan pustaka ke 3 grup. Ada 3 sub-folder di bawah pustaka "
+"tersebut, satu untuk setiap grup untuk mengunggah file. Namun Anda tidak "
+"ingin pengguna mengubah file yang bukan milik grupnya. Anda dapat memberikan"
+" izin tulis sub-folder hanya kepada grupnya."
 
 #: templates/help/folder_permission.html:13
 msgid ""
@@ -1075,17 +1122,23 @@ msgid ""
 "should first share the parent library or folder; otherwise the folder "
 "permission won't take effect."
 msgstr ""
+"Izin folder hanya efektif untuk pustaka dan folder yang Anda bagikan kepada "
+"orang lain. Untuk menetapkan izin folder secara efektif ke sub-foldernya, "
+"Anda harus terlebih dahulu membagikan pustaka atau folder induknya; jika "
+"tidak, izin folder tidak akan berlaku."
 
 #: templates/help/folder_permission.html:14
 msgid ""
 "One important design goal of folder permission is to support hierarchical "
 "permissions:"
 msgstr ""
+"Salah satu tujuan desain penting dari izin folder adalah untuk mendukung "
+"izin hierarkis:"
 
 #: templates/help/folder_permission.html:16
 msgid ""
 "Sub-folders automatically inherit folder permissions from its parent folder."
-msgstr ""
+msgstr "Sub-folder secara otomatis mewarisi izin folder dari folder induknya."
 
 #: templates/help/folder_permission.html:17
 msgid ""
@@ -1095,10 +1148,15 @@ msgid ""
 "\"meeting files/today\" for user A. Then user A's permission to \"meeting "
 "files/today\" is \"read only\"."
 msgstr ""
+"Izin yang ditetapkan pada sub-folder menimpa izin yang ditetapkan pada "
+"folder induknya. Sebagai contoh, Anda menetapkan izin \"read write\" pada "
+"folder \"meeting files\" untuk pengguna A, dan Anda menetapkan izin \"read "
+"only\" pada sub-folder \"meeting files/today\" untuk pengguna A. Maka izin "
+"pengguna A untuk \"meeting files/today\" adalah \"read only\"."
 
 #: templates/help/folder_permission.html:19
 msgid "Basic usage"
-msgstr ""
+msgstr "Penggunaan dasar"
 
 #: templates/help/folder_permission.html:20
 msgid ""
@@ -1107,6 +1165,10 @@ msgid ""
 "\"permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions on this folder."
 msgstr ""
+"Hanya pemilik pustaka yang dapat mengatur izin folder untuk sub-foldernya. "
+"Di antarmuka penjelajahan file, klik tombol \"more operations\", pilih "
+"\"permission\" di menu tarik-turun. Pada jendela yang muncul, Anda dapat "
+"melihat dan mengatur izin folder pada folder ini."
 
 #: templates/help/folder_permission.html:21
 msgid ""
@@ -1115,6 +1177,10 @@ msgid ""
 "Permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions in this library."
 msgstr ""
+"Jika Anda ingin melihat semua izin folder yang ditetapkan dalam sebuah "
+"pustaka, arahkan mouse ke pustaka tersebut. Klik tombol \"more operations\","
+" pilih \"Folder Permission\" di menu tarik-turun. Pada jendela yang muncul, "
+"Anda dapat melihat dan mengatur izin folder dalam pustaka ini."
 
 #: templates/help/folder_permission.html:22
 msgid ""
@@ -1122,16 +1188,22 @@ msgid ""
 "next to \"read only\" sub-folders. When the user navigate into that sub-"
 "folder, he/she won't be able to add/modify/delete files."
 msgstr ""
+"Ketika pengguna lain menavigasi ke dalam sebuah folder, akan ada ikon "
+"\"mata\" kecil di samping sub-folder \"read only\". Ketika pengguna masuk ke"
+" sub-folder tersebut, ia tidak akan dapat menambah/mengubah/menghapus file."
 
 #: templates/help/folder_permission.html:24
 msgid ""
 "If a \"read only\" folder is synced to PC with the Seafile desktop App, "
 "changes under a \"read only\" folder won't be uploaded to the cloud."
 msgstr ""
+"Jika folder \"read only\" disinkronkan ke PC dengan Aplikasi desktop "
+"Seafile, perubahan di bawah folder \"read only\" tidak akan diunggah ke "
+"cloud."
 
 #: templates/help/folder_permission.html:25
 msgid "Advanced: priority between different permissions"
-msgstr ""
+msgstr "Lanjutan: prioritas di antara izin yang berbeda"
 
 #: templates/help/folder_permission.html:27
 msgid ""
@@ -1141,6 +1213,12 @@ msgid ""
 "library. Then user A only has \"read only\" access to the sub-folder, while "
 "he/she has \"read write\" access to all other sub-folders and files."
 msgstr ""
+"Izin folder memiliki prioritas lebih tinggi daripada izin yang ditetapkan "
+"dalam berbagi (share). Sebagai contoh, jika Anda membagikan pustaka kepada "
+"pengguna A dengan izin \"read write\", dan juga menetapkan izin \"read "
+"only\" ke sub-folder dari pustaka tersebut. Maka pengguna A hanya memiliki "
+"akses \"read only\" ke sub-folder itu, sementara ia memiliki akses \"read "
+"write\" ke semua sub-folder dan file lainnya."
 
 #: templates/help/folder_permission.html:28
 msgid ""
@@ -1149,16 +1227,23 @@ msgid ""
 "if the system matches a permission specific to the user, it'll ignore all "
 "permissions set for the groups the user belongs to."
 msgstr ""
+"Izin folder yang ditetapkan untuk pengguna tertentu memiliki prioritas lebih"
+" tinggi daripada izin yang ditetapkan untuk grup. Artinya, saat memeriksa "
+"izin untuk sebuah folder, jika sistem menemukan izin yang spesifik untuk "
+"pengguna tersebut, sistem akan mengabaikan semua izin yang ditetapkan untuk "
+"grup tempat pengguna tersebut bergabung."
 
 #: templates/help/folder_permission.html:29
 msgid ""
 "Permissions on sub-folders have higher priority than those on parent "
 "folders."
 msgstr ""
+"Izin pada sub-folder memiliki prioritas lebih tinggi daripada izin pada "
+"folder induk."
 
 #: templates/help/folder_permission.html:31
 msgid "Here is a more complex example:"
-msgstr ""
+msgstr "Berikut adalah contoh yang lebih kompleks:"
 
 #: templates/help/folder_permission.html:32
 msgid ""
@@ -1170,6 +1255,13 @@ msgid ""
 "first matched for folder \"A/B\" and user \"John\", which is inherited from "
 "its parent \"A\"."
 msgstr ""
+"Misalkan struktur folder terlihat seperti \"A/B\", pengguna \"John\" berada "
+"di grup \"Staff\". Jika Anda menetapkan izin \"read only\" pada folder A "
+"untuk John, dan, Anda juga menetapkan izin \"read write\" pada folder "
+"\"A/B\" untuk grup \"Staff\". Maka izin John untuk folder \"A/B\" tetap "
+"hanya \"read only\". Itu karena, menurut aturan nomor 2, izin \"read only\" "
+"adalah yang pertama dicocokkan untuk folder \"A/B\" dan pengguna \"John\", "
+"yang diwarisi dari induknya \"A\"."
 
 #: templates/help/full_text_file_search.html:6
 msgid ""
@@ -1177,11 +1269,14 @@ msgid ""
 "as well as the content of certain files, in the Seafile web app. Currently "
 "Seafile can search the contents of the following types of files:"
 msgstr ""
+"Jika Anda menggunakan Server Edisi Pro, Anda dapat mencari nama file dan "
+"folder, serta konten dari file tertentu, di aplikasi web Seafile. Saat ini "
+"Seafile dapat mencari konten dari jenis file berikut:"
 
 #: templates/help/full_text_file_search.html:8
 #: templates/help/viewing_files_within_web_app.html:8
 msgid "Microsoft Office Doc: .doc, .docx (Pro Edition Server only)"
-msgstr "Dokumen Microsoft Office: .doc, .docx (Hanya Server Edisi Pro)"
+msgstr "Microsoft Office Doc: .doc, .docx (Hanya Server Edisi Pro)"
 
 #: templates/help/full_text_file_search.html:9
 #: templates/help/viewing_files_within_web_app.html:9
@@ -1224,7 +1319,7 @@ msgid ""
 "text search feature. In that case, you can only search file and folder "
 "names."
 msgstr ""
-"Perhatikan bahwa administrator sistem Seafile Anda mungkin belum "
+"Harap dicatat bahwa administrator sistem Seafile Anda mungkin belum "
 "mengaktifkan fitur pencarian teks lengkap. Dalam hal ini, Anda hanya dapat "
 "mencari nama file dan folder."
 
@@ -1238,15 +1333,15 @@ msgstr ""
 
 #: templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
-msgstr "Berikut cara kerja grup di Seafile:"
+msgstr "Berikut adalah cara kerja grup di Seafile:"
 
 #: templates/help/groups_managing.html:9
 msgid ""
 "Each group has a owner. The owner is the creator of the group by default. "
 "He/she can transfer the ownership of the group to another member."
 msgstr ""
-"Setiap grup memiliki pemilik. Pemilik adalah pembuat grup secara default. "
-"Dia dapat mentransfer kepemilikan grup ke anggota lain."
+"Setiap grup memiliki pemilik. Pemilik adalah pembuat grup secara default. Ia"
+" dapat mentransfer kepemilikan grup ke anggota lainnya."
 
 #: templates/help/groups_managing.html:10
 msgid ""
@@ -1261,8 +1356,8 @@ msgid ""
 "The group admin can add/delete members in the group. And he/she can also "
 "unshare a library in the group."
 msgstr ""
-"Admin grup dapat menambahkan/menghapus anggota dalam grup. Dan dia juga "
-"dapat membatalkan berbagi perpustakaan dalam grup."
+"Admin grup dapat menambah/menghapus anggota di dalam grup. Dan ia juga dapat"
+" membatalkan berbagi pustaka di dalam grup tersebut."
 
 #: templates/help/groups_managing.html:13
 msgid ""
@@ -1270,9 +1365,9 @@ msgid ""
 "all the groups you're in. Clicking into any group, you'll see the libraries "
 "shared into this group."
 msgstr ""
-"Klik tab \"Dibagikan dengan grup\" di panel kiri, dan Anda akan melihat "
-"semua grup yang Anda ikuti. Mengklik grup mana pun, Anda akan melihat "
-"perpustakaan yang dibagikan ke grup ini."
+"Klik pada tab \"Shared with groups\" di panel sebelah kiri, dan Anda akan "
+"melihat semua grup tempat Anda bergabung. Mengklik grup mana pun, Anda akan "
+"melihat pustaka yang dibagikan ke grup ini."
 
 #: templates/help/groups_managing.html:14
 msgid ""
@@ -1280,9 +1375,9 @@ msgid ""
 "panel. Then click on \"All Groups\". In the page, you can click the \"New "
 "Group\" button to create a group."
 msgstr ""
-"Untuk membuat grup baru, klik tab \"Dibagikan dengan grup\" di panel kiri. "
-"Kemudian klik \"Semua Grup\". Di halaman tersebut, Anda dapat mengklik "
-"tombol \"Grup Baru\" untuk membuat grup."
+"Untuk membuat grup baru, klik pada tab \"Shared with groups\" di panel "
+"sebelah kiri. Lalu klik pada \"All Groups\". Di halaman tersebut, Anda dapat"
+" mengeklik tombol \"New Group\" untuk membuat sebuah grup."
 
 #: templates/help/groups_managing.html:15
 #, python-format
@@ -1291,7 +1386,7 @@ msgid ""
 "and folders</a> about how to share libraries or folders to a group."
 msgstr ""
 "Lihat <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">berbagi file "
-"dan folder</a> tentang cara berbagi perpustakaan atau folder ke grup."
+"dan folder</a> mengenai cara membagikan pustaka atau folder ke grup."
 
 #: templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
@@ -1306,14 +1401,14 @@ msgid ""
 "following pattern format are supported."
 msgstr ""
 "Terkadang Anda tidak ingin menyinkronkan beberapa file atau folder di dalam "
-"perpustakaan. Untuk mencapai ini, buat file seafile-ignore.txt di folder "
-"root perpustakaan. File khusus ini menentukan file dan folder yang tidak "
-"boleh disinkronkan oleh Seafile. Setiap baris dalam file ignore.txt "
-"menentukan pola. Format pola berikut didukung."
+"pustaka. Untuk mencapai ini, buat file seafile-ignore.txt di folder root "
+"sebuah pustaka. File khusus ini menentukan file dan folder yang tidak boleh "
+"disinkronkan oleh Seafile. Setiap baris dalam file ignore.txt menentukan "
+"sebuah pola. Format pola berikut ini didukung."
 
 #: templates/help/ignore.html:10
 msgid "A blank line matches no files."
-msgstr "Baris kosong tidak cocok dengan file apa pun."
+msgstr "Baris kosong tidak mencocokkan file apa pun."
 
 #: templates/help/ignore.html:11
 msgid "A line starting with # serves as a comment."
@@ -1327,11 +1422,11 @@ msgid ""
 "the paths under a folder. For instance, \"foo/*.html\" matches "
 "\"foo/a.html\" and \"foo/templates/b.html\"."
 msgstr ""
-"Seafile mendukung wildcard dalam pola. Misalnya, \"foo/*\" cocok dengan "
-"\"foo/1\" dan \"foo/hello\". \"foo/?\" cocok dengan \"foo/1\" tetapi tidak "
-"dengan \"foo/hello\". Perhatikan bahwa karakter wildcard * secara rekursif "
-"cocok dengan semua jalur di bawah folder. Misalnya, \"foo/*.html\" cocok "
-"dengan \"foo/a.html\" dan \"foo/templates/b.html\"."
+"Seafile mendukung wildcard dalam pola. Contohnya, \"foo/*\" mencocokkan "
+"\"foo/1\" dan \"foo/hello\". \"foo/?\" mencocokkan \"foo/1\" tetapi bukan "
+"\"foo/hello\". Perhatikan bahwa karakter wildcard * secara rekursif "
+"mencocokkan semua jalur di bawah folder. Sebagai contoh, \"foo/*.html\" "
+"mencocokkan \"foo/a.html\" dan \"foo/templates/b.html\"."
 
 #: templates/help/ignore.html:13
 msgid ""
@@ -1339,10 +1434,10 @@ msgid ""
 "words, \"foo/\" will match a folder \"foo\" and paths underneath it, but "
 "will not match a regular file or a symbolic link \"foo\"."
 msgstr ""
-"Jika pola diakhiri dengan garis miring, itu hanya akan cocok dengan folder. "
-"Dengan kata lain, \"foo/\" akan cocok dengan folder \"foo\" dan jalur di "
-"bawahnya, tetapi tidak akan cocok dengan file reguler atau tautan simbolik "
-"\"foo\"."
+"Jika pola diakhiri dengan garis miring, pola tersebut hanya akan mencocokkan"
+" folder. Dengan kata lain, \"foo/\" akan mencocokkan folder \"foo\" dan "
+"jalur di bawahnya, tetapi tidak akan mencocokkan file biasa atau tautan "
+"simbolik \"foo\"."
 
 #: templates/help/ignore.html:14
 msgid ""
@@ -1351,14 +1446,18 @@ msgid ""
 "symbolic link; while \"foo/\" and \"foo*\" match a folder and paths under "
 "it."
 msgstr ""
+"Jika pola tidak diakhiri dengan garis miring atau wildcard, pola tersebut "
+"tidak akan mencocokkan folder. Contohnya, \"foo\" hanya dapat mencocokkan "
+"file biasa \"foo\" atau tautan simbolik; sementara \"foo/\" dan \"foo*\" "
+"mencocokkan folder dan jalur di bawahnya."
 
 #: templates/help/ignore.html:18
 msgid "Example"
-msgstr ""
+msgstr "Contoh"
 
 #: templates/help/ignore.html:36
 msgid "Notes"
-msgstr ""
+msgstr "Catatan"
 
 #: templates/help/ignore.html:38
 msgid ""
@@ -1366,12 +1465,17 @@ msgid ""
 "client side. You can still create a file from seahub web interface that's "
 "excluded on the client. In this case,"
 msgstr ""
+"File seafile-ignore.txt hanya mengontrol file mana yang dikecualikan di sisi"
+" klien. Anda masih dapat membuat file dari antarmuka web seahub yang "
+"dikecualikan di klien. Dalam kasus ini,"
 
 #: templates/help/ignore.html:40
 msgid ""
 "The created file will still be synced back to clients. But any later local "
 "changes to those files will be ignored."
 msgstr ""
+"File yang dibuat akan tetap disinkronkan kembali ke klien. Namun setiap "
+"perubahan lokal berikutnya pada file tersebut akan diabaikan."
 
 #: templates/help/ignore.html:41
 msgid ""
@@ -1379,6 +1483,9 @@ msgid ""
 "to clients; If the file on the client is also modified, a conflict file will"
 " be generated on the client."
 msgstr ""
+"Jika file dimodifikasi di seahub, versi baru juga akan disinkronkan kembali "
+"ke klien; Jika file di klien juga dimodifikasi, file konflik akan dihasilkan"
+" di klien."
 
 #: templates/help/ignore.html:45
 msgid ""
@@ -1386,58 +1493,68 @@ msgid ""
 "already synced, and some time later you add it to the ignore list, its "
 "existing versions won't be removed."
 msgstr ""
+"seafile-ignore.txt hanya mengabaikan file yang belum disinkronkan. Jika "
+"sebuah file sudah disinkronkan, dan di kemudian hari Anda menambahkannya ke "
+"daftar abaikan, versi yang sudah ada tidak akan dihapus."
 
 #: templates/help/install_sync.html:6
 msgid "Installing Seafile client program"
-msgstr ""
+msgstr "Menginstal program klien Seafile"
 
 #: templates/help/install_sync.html:8
 msgid ""
 "After downloading Seafile client program, you have 3 steps left to get it up"
 " and running."
 msgstr ""
+"Setelah mengunduh program klien Seafile, Anda memiliki 3 langkah tersisa "
+"untuk mengaktifkan dan menjalankannya."
 
 #: templates/help/install_sync.html:10
 msgid "1. Select a disk partition to store local Seafile data"
-msgstr ""
+msgstr "1. Pilih partisi disk untuk menyimpan data lokal Seafile"
 
 #: templates/help/install_sync.html:11
 msgid "Selecting a folder to store Seafile data"
-msgstr ""
+msgstr "Memilih folder untuk menyimpan data Seafile"
 
 #: templates/help/install_sync.html:13
 msgid "2. Add an account"
-msgstr ""
+msgstr "2. Tambahkan akun"
 
 #: templates/help/install_sync.html:14
 msgid "Add an account on your private Seafile server or our public server."
 msgstr ""
+"Tambahkan akun di server Seafile pribadi Anda atau server publik kami."
 
 #: templates/help/install_sync.html:18
 msgid "3. Sync a library"
-msgstr ""
+msgstr "3. Sinkronkan pustaka"
 
 #: templates/help/install_sync.html:20
 msgid "Click the \"Sync this library\" button to sync it with a local folder."
 msgstr ""
+"Klik tombol \"Sync this library\" untuk menyinkronkannya dengan folder "
+"lokal."
 
 #: templates/help/install_sync.html:21
 msgid ""
 "Then you add some files into the library. They will be automatically synced "
 "with cloud platform."
 msgstr ""
+"Kemudian Anda menambahkan beberapa file ke dalam pustaka. Mereka akan secara"
+" otomatis disinkronkan dengan platform cloud."
 
 #: templates/help/install_sync.html:26
 msgid "4. (Optional) Create a library"
-msgstr ""
+msgstr "4. (Opsional) Buat pustaka"
 
 #: templates/help/install_sync.html:28
 msgid "You can also create a library from a local folder."
-msgstr ""
+msgstr "Anda juga dapat membuat pustaka dari folder lokal."
 
 #: templates/help/install_sync.html:34
 msgid "5. Browse files on the cloud"
-msgstr ""
+msgstr "5. Jelajahi file di cloud"
 
 #: templates/help/install_sync.html:35
 msgid ""
@@ -1445,12 +1562,18 @@ msgid ""
 "syncing them. Seafile client comes with a \"cloud file browser\" to meet "
 "this need. Click an unsynced library will open the cloud file browser."
 msgstr ""
+"Dalam beberapa kesempatan, Anda ingin memodifikasi file di cloud secara "
+"langsung tanpa menyinkronkannya. Klien Seafile dilengkapi dengan \"cloud "
+"file browser\" untuk memenuhi kebutuhan ini. Klik pustaka yang tidak "
+"disinkronkan akan membuka cloud file browser."
 
 #: templates/help/introduction.html:8
 msgid ""
 "Seafile is an enterprise file hosting platform with high reliability and "
 "performance."
 msgstr ""
+"Seafile adalah platform hosting file perusahaan dengan keandalan dan kinerja"
+" tinggi."
 
 #: templates/help/introduction.html:9
 #, python-format
@@ -1461,6 +1584,11 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/using_drive_client\">the drive client</a>. It also "
 "has mobile clients for Android and iOS."
 msgstr ""
+"Seafile memiliki antarmuka web bagi Anda untuk mengelola dan berbagi file. "
+"Seafile memiliki dua jenis klien desktop, <a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">klien sinkronisasi file</a> dan <a "
+"href=\"%(SITE_ROOT)shelp/using_drive_client\">klien drive</a>. Seafile juga "
+"memiliki klien seluler untuk Android dan iOS."
 
 #: templates/help/introduction.html:10
 msgid ""
@@ -1468,6 +1596,9 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile web "
 "site</a>."
 msgstr ""
+"Anda dapat mengunduh klien di <a "
+"href=\"https://www.seafile.com/en/download/\" target=\"_blank\">situs web "
+"Seafile</a>."
 
 #: templates/help/introduction.html:11
 msgid ""
@@ -1475,6 +1606,9 @@ msgid ""
 "help in our forum: <a href=\"https://forum.seafile.com\" "
 "target=\"_blank\">https://forum.seafile.com</a>."
 msgstr ""
+"Jika panduan ini tidak berisi informasi yang Anda butuhkan, Anda dapat "
+"mencari bantuan di forum kami: <a href=\"https://forum.seafile.com\" "
+"target=\"_blank\">https://forum.seafile.com</a>."
 
 #: templates/help/libraries_managing.html:6
 msgid ""
@@ -1484,18 +1618,27 @@ msgid ""
 "library works mostly like a top level folder. But it also has some special "
 "properties:"
 msgstr ""
+"Seafile menggunakan \"pustaka\" (libraries) untuk mengelola file Anda. "
+"Pustaka adalah wadah tingkat atas untuk kumpulan file dan folder. Anda dapat"
+" membuat pustaka untuk setiap proyek yang Anda kerjakan, atau setiap jenis "
+"dokumen yang ingin Anda simpan di Seafile. Pustaka bekerja hampir seperti "
+"folder tingkat atas. Tetapi ia juga memiliki beberapa properti khusus:"
 
 #: templates/help/libraries_managing.html:8
 msgid ""
 "Each library keeps its own file modification history. There is no global "
 "file modification history across all libraries."
 msgstr ""
+"Setiap pustaka menyimpan riwayat modifikasi filenya sendiri. Tidak ada "
+"riwayat modifikasi file global di semua pustaka."
 
 #: templates/help/libraries_managing.html:9
 msgid ""
 "Each library can be synced to desktop clients separately. You can choose "
 "which libraries to be synced."
 msgstr ""
+"Setiap pustaka dapat disinkronkan ke klien desktop secara terpisah. Anda "
+"dapat memilih pustaka mana yang akan disinkronkan."
 
 #: templates/help/libraries_managing.html:11
 msgid ""
@@ -1504,12 +1647,19 @@ msgid ""
 "can also create more libraries. Here is what it looks like when you've "
 "created a few libraries."
 msgstr ""
+"Saat Anda masuk ke aplikasi web Seafile untuk pertama kalinya, Seafile "
+"secara otomatis membuat pustaka default bernama \"Pustaka Saya\" untuk Anda."
+" Anda juga dapat membuat lebih banyak pustaka. Berikut tampilannya saat Anda"
+" sudah membuat beberapa pustaka."
 
 #: templates/help/libraries_managing.html:13
 msgid ""
 "You can navigate into a library and manage your files and folders. You can "
 "upload, download, rename, move, copy and delete files."
 msgstr ""
+"Anda dapat masuk ke dalam pustaka dan mengelola file dan folder Anda. Anda "
+"dapat mengunggah, mengunduh, menamai ulang, memindahkan, menyalin, dan "
+"menghapus file."
 
 #: templates/help/libraries_managing.html:15
 #, python-format
@@ -1518,6 +1668,9 @@ msgid ""
 "desktop client</a>, you can do any file operations inside the local library "
 "folder. The operations will be uploaded to the server. "
 msgstr ""
+"Setelah <a href=\"%(SITE_ROOT)shelp/install_sync/\">menyinkronkan pustaka "
+"dengan klien desktop</a>, Anda dapat melakukan operasi file apa pun di dalam"
+" folder pustaka lokal. Operasi tersebut akan diunggah ke server. "
 
 #: templates/help/library_history_and_snapshots.html:7
 msgid ""
@@ -1526,6 +1679,10 @@ msgid ""
 "creates a \"snapshot\" of the previous state of the library. The snapshot "
 "contains the complete file and folder structure of the library."
 msgstr ""
+"Seafile melacak riwayat modifikasi untuk seluruh pustaka. Setiap kali sebuah"
+" operasi file diterapkan pada pustaka (pembaruan file, penghapusan file, "
+"dll.), Seafile membuat \"snapshot\" dari status pustaka sebelumnya. Snapshot"
+" tersebut berisi struktur file dan folder pustaka yang lengkap."
 
 #: templates/help/library_history_and_snapshots.html:8
 msgid ""
@@ -1536,10 +1693,17 @@ msgid ""
 "files in the library will be restored to that point of time, all at once. It"
 " works like a \"time machine\" for the library."
 msgstr ""
+"Dalam beberapa kasus, Anda telah mengubah banyak file dalam pustaka, dan "
+"mendapati bahwa Anda ingin mengembalikan semua perubahan tersebut. "
+"Memulihkan banyak file ke versi lamanya bisa melelahkan. Pada saat ini, "
+"fitur snapshot menjadi sangat berguna. Anda dapat memulihkan seluruh pustaka"
+" ke titik mana pun di masa lalu. Semua file dalam pustaka akan dipulihkan ke"
+" titik waktu tersebut, secara bersamaan. Fitur ini bekerja seperti \"mesin "
+"waktu\" untuk pustaka."
 
 #: templates/help/library_history_and_snapshots.html:9
 msgid "To view library history and snapshots:"
-msgstr ""
+msgstr "Untuk melihat riwayat pustaka dan snapshot:"
 
 #: templates/help/library_history_and_snapshots.html:11
 msgid ""
@@ -1547,12 +1711,17 @@ msgid ""
 "\"History\" icon in the library navigation top bar. All the change record of"
 " the library will be displayed in a list."
 msgstr ""
+"Di Aplikasi Web Seafile, navigasikan ke folder root pustaka. Klik ikon "
+"\"History\" di bilah navigasi atas pustaka. Semua catatan perubahan pustaka "
+"akan ditampilkan dalam sebuah daftar."
 
 #: templates/help/library_history_and_snapshots.html:12
 msgid ""
 "Click the \"view snapshot\" link on any modification record. You'll see the "
 "library state at the point of time."
 msgstr ""
+"Klik tautan \"view snapshot\" pada catatan modifikasi mana pun. Anda akan "
+"melihat status pustaka pada titik waktu tersebut."
 
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
@@ -1561,6 +1730,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Anda dapat mengonfigurasi periode penyimpanan riwayat pustaka: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">mengatur periode "
+"penyimpanan riwayat</a>."
 
 #: templates/help/manage_library_as_wiki.html:6
 msgid ""
@@ -1570,6 +1742,12 @@ msgid ""
 "files store textual, tabular as well as graphical information; You can also "
 "add links to other documents in a Markdown file."
 msgstr ""
+"Menangkap dan menyimpan data terstruktur kecil dengan cara yang mudah "
+"digunakan – itulah tujuan dari wiki Seafile. Halaman wiki ditulis dalam "
+"Markdown (MD), bahasa markup sederhana, untuk memastikan kompatibilitas "
+"lintas platform. File MD menyimpan informasi tekstual, tabular, serta "
+"grafis; Anda juga dapat menambahkan tautan ke dokumen lain dalam file "
+"Markdown."
 
 #: templates/help/manage_library_as_wiki.html:7
 msgid ""
@@ -1578,10 +1756,15 @@ msgid ""
 " Seafile libraries, they can be synced and shared with other users just like"
 " any ordinary library."
 msgstr ""
+"Anda dapat mengelola pustaka standar di Seafile seperti Wiki, dengan "
+"\"Column View\" yang diperkenalkan pada versi 7.0. Karena Seafile "
+"mengimplementasikan wiki sebagai pustaka standar Seafile, mereka dapat "
+"disinkronkan dan dibagikan dengan pengguna lain seperti pustaka biasa "
+"lainnya."
 
 #: templates/help/manage_library_as_wiki.html:8
 msgid "Column view"
-msgstr ""
+msgstr "Tampilan kolom"
 
 #: templates/help/manage_library_as_wiki.html:9
 msgid ""
@@ -1592,10 +1775,18 @@ msgid ""
 "File actions such as renaming, moving, and opening via client are available "
 "in a right-click-accessible context menu."
 msgstr ""
+"Wiki biasanya memiliki bilah sisi yang berisi struktur folder seperti pohon,"
+" untuk memungkinkan penjelajahan halaman Wiki yang cepat dan mudah. Column "
+"View Seafile memungkinkan Anda mengelola file dalam pustaka dengan cara yang"
+" sama seperti ruang Wiki. Pengguna dapat menjelajah di dalamnya dan "
+"memindahkan file serta folder cukup dengan menyeret dan menjatuhkan (drag "
+"and drop). Tindakan file seperti menamai ulang, memindahkan, dan membuka "
+"melalui klien tersedia dalam menu konteks yang dapat diakses dengan klik "
+"kanan."
 
 #: templates/help/manage_library_as_wiki.html:12
 msgid "WYSIWYG Markdown editor"
-msgstr ""
+msgstr "Editor Markdown WYSIWYG"
 
 #: templates/help/manage_library_as_wiki.html:13
 msgid ""
@@ -1611,12 +1802,26 @@ msgid ""
 "table’s content: A table can be copied in its entirety or in part without "
 "leaving the WYSIWYG view."
 msgstr ""
+"Halaman wiki di Seafile disimpan sebagai dokumen biasa dalam format "
+"Markdown. Untuk membuat halaman Wiki baru di sebuah pustaka, cukup buat "
+"dokumen Markdown baru. File MD dapat diedit langsung dari antarmuka web "
+"Seafile dengan editor MD daring. Editor berbasis web menawarkan pengalaman "
+"pengguna yang lancar dan opsi pemformatan yang kaya untuk teks, gambar, dan "
+"tabel. Gambar dapat diimpor ke dalam file MD dari pustaka dan penyimpanan "
+"lokal serta melalui hyperlink. Fungsi pengeditan gambar dasar seperti "
+"penskalaan juga dapat dilakukan di antarmuka editor what-you-see-is-what-"
+"you-get (WYSIWYG). Tabel dapat dimasukkan dan dimodifikasi hanya dengan "
+"beberapa klik. Hal yang sama berlaku untuk konten tabel: Sebuah tabel dapat "
+"disalin secara keseluruhan atau sebagian tanpa meninggalkan tampilan "
+"WYSIWYG."
 
 #: templates/help/manage_library_as_wiki.html:15
 msgid ""
 "The change history of a Markdown file can be easily accessed by clicking the"
 " \"File History\" button in the menu on top of the editor interface."
 msgstr ""
+"Riwayat perubahan file Markdown dapat dengan mudah diakses dengan mengeklik "
+"tombol \"File History\" di menu di bagian atas antarmuka editor."
 
 #: templates/help/manage_library_as_wiki.html:17
 msgid ""
@@ -1624,10 +1829,13 @@ msgid ""
 "Table of contents, file information, and collaborative commenting are "
 "provided in this side bar."
 msgstr ""
+"Anda dapat membuka bilah sisi tersembunyi di sisi kanan editor Markdown. "
+"Daftar isi, informasi file, dan komentar kolaboratif disediakan di bilah "
+"sisi ini."
 
 #: templates/help/manage_library_as_wiki.html:19
 msgid "File tagging and related documents"
-msgstr ""
+msgstr "Tag file dan dokumen terkait"
 
 #: templates/help/manage_library_as_wiki.html:20
 msgid ""
@@ -1636,22 +1844,30 @@ msgid ""
 "can be managed from the side bar of the Markdown editor, or from the file "
 "browser interface."
 msgstr ""
+"Tag file adalah fitur penting untuk manajemen pengetahuan. Seafile "
+"memungkinkan pengguna untuk menentukan tag untuk setiap pustaka dan "
+"menerapkan tag ke file. Tag dapat dikelola dari bilah sisi editor Markdown, "
+"atau dari antarmuka file browser."
 
 #: templates/help/manage_library_as_wiki.html:23
 msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
 msgstr ""
+"Antarmuka file browser memberikan ringkasan semua tag file di pustaka saat "
+"ini."
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
 "If you want the be-shared users not be able to modify local copies, you can "
 "consider using the Seafile Drive client."
 msgstr ""
+"Jika Anda ingin pengguna yang dibagikan tidak dapat mengubah salinan lokal, "
+"Anda dapat mempertimbangkan untuk menggunakan klien Seafile Drive."
 
 #: templates/help/restoring_deleted_files.html:6
 msgid "Restoring deleted files and folders"
-msgstr ""
+msgstr "Memulihkan file dan folder yang dihapus"
 
 #: templates/help/restoring_deleted_files.html:7
 msgid ""
@@ -1659,16 +1875,22 @@ msgid ""
 "Sometimes you find files are deleted mistakenly. You can find back your "
 "deleted files in the trash bin of each library."
 msgstr ""
+"Setiap pustaka di Seafile melacak operasi penghapusan file Anda secara "
+"otomatis. Terkadang Anda mendapati file dihapus karena kesalahan. Anda dapat"
+" menemukan kembali file yang dihapus di kotak sampah (trash bin) dari setiap"
+" pustaka."
 
 #: templates/help/restoring_deleted_files.html:8
 msgid "Here is how to use the trash bin feature:"
-msgstr ""
+msgstr "Berikut cara menggunakan fitur trash bin:"
 
 #: templates/help/restoring_deleted_files.html:10
 msgid ""
 "In Seafile Web App, navigate into the parent folder containing the deleted "
 "file or folder."
 msgstr ""
+"Di Aplikasi Web Seafile, navigasikan ke folder induk yang berisi file atau "
+"folder yang dihapus."
 
 #: templates/help/restoring_deleted_files.html:11
 msgid ""
@@ -1676,6 +1898,10 @@ msgid ""
 " folders will be listed in deletion time order. In the bottom of the list, "
 "you can click the \"more\" button to load more deleted files."
 msgstr ""
+"Klik ikon \"trash\" di bilah operasi pustaka. File dan folder yang dihapus "
+"akan dicantumkan berdasarkan urutan waktu penghapusan. Di bagian bawah "
+"daftar, Anda dapat mengeklik tombol \"more\" untuk memuat lebih banyak file "
+"yang dihapus."
 
 #: templates/help/restoring_deleted_files.html:12
 msgid ""
@@ -1683,6 +1909,9 @@ msgid ""
 "folder's parent folder has been deleted, it will be restored to the "
 "library's root folder."
 msgstr ""
+"Dalam daftar file yang dihapus, Anda dapat memulihkan file dan folder. Jika "
+"folder induk dari file atau folder telah dihapus, item tersebut akan "
+"dipulihkan ke folder root pustaka."
 
 #: templates/help/restoring_deleted_files.html:13
 msgid ""
@@ -1690,6 +1919,9 @@ msgid ""
 "the current folder. Files deleted in the sub-folders of the current folder "
 "are also included in the list."
 msgstr ""
+"Perhatikan bahwa trash bin hanya berisi file dan sub-folder yang dihapus di "
+"bawah folder saat ini. File yang dihapus di sub-folder dari folder saat ini "
+"juga disertakan dalam daftar."
 
 #: templates/help/restoring_deleted_files.html:15
 #, python-format
@@ -1698,6 +1930,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Anda dapat mengonfigurasi periode penyimpanan file yang dihapus: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">mengatur periode "
+"penyimpanan riwayat</a>."
 
 #: templates/help/selective_sync.html:8
 msgid ""
@@ -1706,6 +1941,10 @@ msgid ""
 "selectively sync a sub-folder in a library, instead of syncing the entire "
 "library."
 msgstr ""
+"Anda mungkin memiliki beberapa pustaka yang sangat besar di server Seafile. "
+"Dan saat ini Anda hanya tertarik pada satu sub-folder di dalam sebuah "
+"pustaka. Maka Anda dapat menyinkronkan sub-folder secara selektif dalam "
+"sebuah pustaka, alih-alih menyinkronkan seluruh pustaka."
 
 #: templates/help/selective_sync.html:10
 msgid ""
@@ -1714,40 +1953,54 @@ msgid ""
 "folder. Right click on the sub-folder. Choose \"Sync this folder\" in the "
 "pop-up menu."
 msgstr ""
+"Untuk menyinkronkan sub-folder, buka cloud file browser dengan mengeklik dua"
+" kali pustaka yang belum disinkronkan. Masuk ke folder induk dari sub-folder"
+" tersebut. Klik kanan pada sub-folder tersebut. Pilih \"Sync this folder\" "
+"pada menu yang muncul."
 
 #: templates/help/selective_sync.html:14
 msgid ""
 "After syncing the sub-folder, you can see its syncing status in the \"Synced"
 " Libraries\" group in the client's main window."
 msgstr ""
+"Setelah menyinkronkan sub-folder, Anda dapat melihat status sinkronisasinya "
+"di grup \"Synced Libraries\" pada jendela utama klien."
 
 #: templates/help/setting_library_history.html:6
 msgid "Setting library history retention period"
-msgstr ""
+msgstr "Mengatur periode penyimpanan riwayat pustaka"
 
 #: templates/help/setting_library_history.html:7
 msgid ""
 "A library's history retention period length controls how long you can access"
 " your history data in the following features:"
 msgstr ""
+"Lama periode penyimpanan riwayat pustaka mengontrol berapa lama Anda dapat "
+"mengakses data riwayat Anda pada fitur-fitur berikut:"
 
 #: templates/help/setting_library_history.html:9
 msgid ""
 "Restore deleted files: you cannot restore files and folders deleted before "
 "the retention period."
 msgstr ""
+"Memulihkan file yang dihapus: Anda tidak dapat memulihkan file dan folder "
+"yang dihapus sebelum periode penyimpanan."
 
 #: templates/help/setting_library_history.html:10
 msgid ""
 "File versions: you cannot access file versions older than the retention "
 "period."
 msgstr ""
+"Versi file: Anda tidak dapat mengakses versi file yang lebih lama dari "
+"periode penyimpanan."
 
 #: templates/help/setting_library_history.html:11
 msgid ""
 "Library history and snapshots: you cannot access library snapshots older "
 "than the retention period."
 msgstr ""
+"Riwayat pustaka dan snapshot: Anda tidak dapat mengakses snapshot pustaka "
+"yang lebih lama dari periode penyimpanan."
 
 #: templates/help/setting_library_history.html:13
 msgid ""
@@ -1755,51 +2008,72 @@ msgid ""
 "library, separately. You must be the library's owner to set the retention "
 "period. To set retention period length:"
 msgstr ""
+"Periode penyimpanan versi file lama dapat dikonfigurasi untuk setiap pustaka"
+" secara terpisah. Anda harus menjadi pemilik pustaka untuk mengatur periode "
+"penyimpanan. Untuk mengatur lama periode penyimpanan:"
 
 #: templates/help/setting_library_history.html:15
 msgid ""
 "In Seafile Web App, click the \"Mine\" tab in the navigation panel (as in "
 "the below screenshot). All libraries owned by you will be listed."
 msgstr ""
+"Di Aplikasi Web Seafile, klik tab \"Mine\" pada panel navigasi (seperti pada"
+" tangkapan layar di bawah). Semua pustaka milik Anda akan dicantumkan."
 
 #: templates/help/setting_library_history.html:16
 msgid ""
 "Move the cursor onto the row of the library. An operation menu will appear. "
 "Click \"History Setting\" in the drop-down menu."
 msgstr ""
+"Pindahkan kursor ke baris pustaka. Menu operasi akan muncul. Klik \"History "
+"Setting\" di menu tarik-turun."
 
 #: templates/help/setting_library_history.html:17
 msgid "In the pop-up dialog, you can set the length of file retention period."
 msgstr ""
+"Pada dialog yang muncul, Anda dapat mengatur lama periode penyimpanan file."
 
 #: templates/help/sharing_files_and_folders.html:6
 msgid ""
 "In Seafile there are a few ways to share files and folders with others:"
 msgstr ""
+"Di Seafile ada beberapa cara untuk berbagi file dan folder dengan orang "
+"lain:"
 
 #: templates/help/sharing_files_and_folders.html:8
 msgid ""
 "Using links: there are multiple types of links that can be used to share "
 "with various scope of collaborators."
 msgstr ""
+"Menggunakan tautan: ada beberapa jenis tautan yang dapat digunakan untuk "
+"berbagi dengan berbagai cakupan kolaborator."
 
 #: templates/help/sharing_files_and_folders.html:10
 msgid ""
 "Share links: Any user who has access to the links can access the files or "
 "folders pointed by the link. No login is required."
 msgstr ""
+"Tautan berbagi: Setiap pengguna yang memiliki akses ke tautan dapat "
+"mengakses file atau folder yang dituju oleh tautan tersebut. Tidak "
+"diperlukan login."
 
 #: templates/help/sharing_files_and_folders.html:11
 msgid ""
 "Upload links: Any user who has access to the links can upload files to the "
 "folder pointed by the link. No login is required."
 msgstr ""
+"Tautan unggahan: Setiap pengguna yang memiliki akses ke tautan dapat "
+"mengunggah file ke folder yang dituju oleh tautan tersebut. Tidak diperlukan"
+" login."
 
 #: templates/help/sharing_files_and_folders.html:12
 msgid ""
 "Internal links: Only logged in users who have read permission to the file or"
 " folder can access this link. Used for internal file sharing."
 msgstr ""
+"Tautan internal: Hanya pengguna terdaftar yang memiliki izin baca ke file "
+"atau folder yang dapat mengakses tautan ini. Digunakan untuk berbagi file "
+"secara internal."
 
 #: templates/help/sharing_files_and_folders.html:15
 msgid ""
@@ -1807,10 +2081,13 @@ msgid ""
 "library or folder for specific users or groups. Users have to log in to "
 "access the folders."
 msgstr ""
+"Membagikan pustaka atau folder: digunakan untuk menetapkan izin akses ke "
+"pustaka atau folder bagi pengguna atau grup tertentu. Pengguna harus login "
+"untuk mengakses folder tersebut."
 
 #: templates/help/sharing_files_and_folders.html:17
 msgid "Creating share links to files or folders"
-msgstr ""
+msgstr "Membuat tautan berbagi ke file atau folder"
 
 #: templates/help/sharing_files_and_folders.html:18
 msgid ""
@@ -1818,12 +2095,18 @@ msgid ""
 "anyone, including those who don't have a Seafile account. You can also use "
 "password and expiration time to protect your links."
 msgstr ""
+"Tautan berbagi adalah tautan publik ke file atau folder. Tautan ini dapat "
+"diakses oleh siapa saja, termasuk mereka yang tidak memiliki akun Seafile. "
+"Anda juga dapat menggunakan kata sandi dan waktu kedaluwarsa untuk "
+"melindungi tautan Anda."
 
 #: templates/help/sharing_files_and_folders.html:19
 msgid ""
 "You can also set access permission to share links. There are three types of "
 "permissions:"
 msgstr ""
+"Anda juga dapat menetapkan izin akses ke tautan berbagi. Ada tiga jenis "
+"izin:"
 
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
@@ -1831,6 +2114,9 @@ msgid ""
 "browser, but cannot be downloaded. This is useful for sharing confidential "
 "data."
 msgstr ""
+"Hanya pratinjau: file atau kumpulan file dalam folder hanya dapat dilihat di"
+" browser web, tetapi tidak dapat diunduh. Ini berguna untuk berbagi data "
+"rahasia."
 
 #: templates/help/sharing_files_and_folders.html:23
 msgid ""
@@ -1838,16 +2124,21 @@ msgid ""
 "file can be edited in web browser (e.g. an Office file), any user who has "
 "access to the link is allowed to edit it."
 msgstr ""
+"Edit di cloud dan unduh: Mirip dengan \"Pratinjau dan Unduh\", tetapi jika "
+"file tersebut dapat diedit di browser web (contohnya file Office), pengguna "
+"mana pun yang memiliki akses ke tautan tersebut diizinkan untuk mengeditnya."
 
 #: templates/help/sharing_files_and_folders.html:25
 msgid "To create a share link in Seafile web app:"
-msgstr ""
+msgstr "Untuk membuat tautan berbagi di aplikasi web Seafile:"
 
 #: templates/help/sharing_files_and_folders.html:27
 msgid ""
 "Navigate into the parent folder containing the file or folder. Hover your "
 "mouse over the file or folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Navigasikan ke folder induk yang berisi file atau folder tersebut. Arahkan "
+"mouse ke file atau folder dan klik ikon \"Share\" yang muncul."
 
 #: templates/help/sharing_files_and_folders.html:28
 msgid ""
@@ -1855,6 +2146,10 @@ msgid ""
 " on the left panel. Then click \"Generate\" button to create a link. You can"
 " use password, expiration time and permission to protect your link."
 msgstr ""
+"Jendela baru akan muncul dengan opsi berbagi. Klik tab \"Share Link\" di "
+"panel sebelah kiri. Kemudian klik tombol \"Generate\" untuk membuat tautan. "
+"Anda dapat menggunakan kata sandi, waktu kedaluwarsa, dan izin untuk "
+"melindungi tautan Anda."
 
 #: templates/help/sharing_files_and_folders.html:29
 #: templates/help/sharing_files_and_folders.html:42
@@ -1862,10 +2157,12 @@ msgid ""
 "Copy the link to email, instant messaging client or any other tool to send "
 "it to others."
 msgstr ""
+"Salin tautan ke email, aplikasi pesan instan, atau alat lainnya untuk "
+"mengirimkannya ke orang lain."
 
 #: templates/help/sharing_files_and_folders.html:31
 msgid "You can also create share links from the desktop clients."
-msgstr ""
+msgstr "Anda juga dapat membuat tautan berbagi dari klien desktop."
 
 #: templates/help/sharing_files_and_folders.html:33
 msgid ""
@@ -1874,6 +2171,10 @@ msgid ""
 " on the file or folder that you want to create a link to. In the pop-up "
 "menu, choose \"Seafile\" then \"Create share link\"."
 msgstr ""
+"Jika pustaka disinkronkan, klik dua kali pustaka di jendela utama klien "
+"Seafile. Folder lokal dari pustaka tersebut akan dibuka. Klik kanan pada "
+"file atau folder yang ingin Anda buat tautannya. Pada menu yang muncul, "
+"pilih \"Seafile\" lalu \"Create share link\"."
 
 #: templates/help/sharing_files_and_folders.html:34
 msgid ""
@@ -1881,10 +2182,13 @@ msgid ""
 " Seafile client. The cloud file browser window will be opened, and you can "
 "create a link to a file or folder in it."
 msgstr ""
+"Jika pustaka tidak disinkronkan, klik dua kali pustaka di jendela utama "
+"klien Seafile. Jendela cloud file browser akan terbuka, dan Anda dapat "
+"membuat tautan ke file atau folder di dalamnya."
 
 #: templates/help/sharing_files_and_folders.html:36
 msgid "Creating upload links to folders"
-msgstr ""
+msgstr "Membuat tautan unggahan ke folder"
 
 #: templates/help/sharing_files_and_folders.html:37
 msgid ""
@@ -1892,16 +2196,22 @@ msgid ""
 "upload links for folders. Others cannot see the files in the folders. They "
 "can only upload files to them."
 msgstr ""
+"Anda dapat menggunakan tautan unggahan untuk mengumpulkan file dari orang "
+"lain. Anda hanya dapat membuat tautan unggahan untuk folder. Orang lain "
+"tidak dapat melihat file di dalam folder tersebut. Mereka hanya dapat "
+"mengunggah file ke dalamnya."
 
 #: templates/help/sharing_files_and_folders.html:38
 msgid "To create an upload link in Seafile web app:"
-msgstr ""
+msgstr "Untuk membuat tautan unggahan di aplikasi web Seafile:"
 
 #: templates/help/sharing_files_and_folders.html:40
 msgid ""
 "Navigate into the parent folder containing the folder. Hover your mouse over"
 " the folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Navigasikan ke folder induk yang berisi folder tersebut. Arahkan mouse ke "
+"folder dan klik ikon \"Share\" yang muncul."
 
 #: templates/help/sharing_files_and_folders.html:41
 msgid ""
@@ -1909,10 +2219,13 @@ msgid ""
 "tab on the left panel. Then click \"Generate\" button to create a link. You "
 "can use password to protect your link."
 msgstr ""
+"Jendela baru akan muncul dengan opsi berbagi. Klik tab \"Upload Link\" di "
+"panel sebelah kiri. Kemudian klik tombol \"Generate\" untuk membuat tautan. "
+"Anda dapat menggunakan kata sandi untuk melindungi tautan Anda."
 
 #: templates/help/sharing_files_and_folders.html:44
 msgid "Sharing libraries or folders"
-msgstr ""
+msgstr "Membagikan pustaka atau folder"
 
 #: templates/help/sharing_files_and_folders.html:45
 msgid ""
@@ -1920,62 +2233,76 @@ msgid ""
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
 msgstr ""
+"Anda dapat membagikan pustaka atau folder kepada pengguna Seafile terdaftar "
+"lainnya. Pustaka atau folder yang dibagikan dapat diakses oleh orang lain "
+"dengan aplikasi web dan klien Seafile."
 
 #: templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
-msgstr ""
+msgstr "Anda dapat memilih cakupan berbagi:"
 
 #: templates/help/sharing_files_and_folders.html:48
 msgid "Share to user: You can share to one or more users."
 msgstr ""
+"Berbagi ke pengguna: Anda dapat membagikan ke satu atau beberapa pengguna."
 
 #: templates/help/sharing_files_and_folders.html:49
 msgid "Share to group: You can share to a group."
-msgstr ""
+msgstr "Berbagi ke grup: Anda dapat membagikan ke sebuah grup."
 
 #: templates/help/sharing_files_and_folders.html:50
 msgid ""
 "Share to organization: If you're using a private server, sometimes it's "
 "useful to share to all members on the server (the entire organization)."
 msgstr ""
+"Berbagi ke organisasi: Jika Anda menggunakan server pribadi, terkadang "
+"berguna untuk membagikan ke semua anggota di server (seluruh organisasi)."
 
 #: templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
-msgstr ""
+msgstr "Anda juga dapat menetapkan izin pada bagian yang dibagikan:"
 
 #: templates/help/sharing_files_and_folders.html:54
 msgid "Read-Write: users can read, write, upload, download and sync files."
 msgstr ""
+"Baca-Tulis (Read-Write): pengguna dapat membaca, menulis, mengunggah, "
+"mengunduh, dan menyinkronkan file."
 
 #: templates/help/sharing_files_and_folders.html:55
 msgid "Read-only: users can read, download and sync files."
 msgstr ""
+"Baca-saja (Read-only): pengguna dapat membaca, mengunduh, dan menyinkronkan "
+"file."
 
 #: templates/help/sharing_files_and_folders.html:56
 msgid "Admin: besides the write permission, users can also share the library."
-msgstr ""
+msgstr "Admin: selain izin tulis, pengguna juga dapat membagikan pustaka."
 
 #: templates/help/sharing_files_and_folders.html:57
 msgid ""
 "Online Read-Write: users can view and edit files online via a web browser. "
 "The files cannot be downloaded."
 msgstr ""
+"Baca-Tulis Daring: pengguna dapat melihat dan mengedit file secara daring "
+"melalui browser web. File tidak dapat diunduh."
 
 #: templates/help/sharing_files_and_folders.html:58
 msgid ""
 "Online Read-only: users can only view files online via a web browser. The "
 "files cannot be downloaded."
 msgstr ""
+"Baca-saja Daring: pengguna hanya dapat melihat file secara daring melalui "
+"browser web. File tidak dapat diunduh."
 
 #: templates/help/sharing_files_and_folders.html:60
 msgid "To share a library or folder to a user or group:"
-msgstr ""
+msgstr "Untuk membagikan pustaka atau folder kepada pengguna atau grup:"
 
 #: templates/help/sharing_files_and_folders.html:62
 msgid ""
 "Hover your mouse over the library or folder and click on the \"Share\" icon "
 "that appears."
-msgstr ""
+msgstr "Arahkan mouse ke pustaka atau folder dan klik ikon \"Share\" yang muncul."
 
 #: templates/help/sharing_files_and_folders.html:63
 msgid ""
@@ -1983,6 +2310,9 @@ msgid ""
 "or \"Share to group\" tab on the left panel. Select the user or group. Then "
 "click \"Submit\"."
 msgstr ""
+"Jendela baru akan muncul dengan opsi berbagi. Klik tab \"Share to user\" "
+"atau \"Share to group\" di panel sebelah kiri. Pilih pengguna atau grup. "
+"Lalu klik \"Submit\"."
 
 #: templates/help/sharing_files_and_folders.html:65
 msgid ""
@@ -1991,6 +2321,10 @@ msgid ""
 " you share it to a group, the group members can only see it by navigating "
 "into the group."
 msgstr ""
+"Setelah Anda membagikan pustaka atau folder kepada pengguna, pengguna "
+"tersebut dapat melihatnya dengan mengeklik tab \"Shared with me\" di panel "
+"kiri pada aplikasi web Seafile. Jika Anda membagikannya ke grup, anggota "
+"grup hanya dapat melihatnya dengan menavigasi ke dalam grup tersebut."
 
 #: templates/help/sharing_files_and_folders.html:66
 msgid ""
@@ -1999,10 +2333,14 @@ msgid ""
 "button. In the drop-down menu, you can choose to share an existing library "
 "or create a new library and share it."
 msgstr ""
+"Untuk membagikan pustaka ke seluruh organisasi: Di aplikasi web Seafile, "
+"klik tab \"Shared with all\" di panel sebelah kiri. Kemudian klik tombol "
+"\"Add Library\". Pada menu tarik-turun, Anda dapat memilih untuk membagikan "
+"pustaka yang sudah ada atau membuat pustaka baru dan membagikannya."
 
 #: templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
-msgstr ""
+msgstr "Tautan internal"
 
 #: templates/help/sharing_files_and_folders.html:68
 msgid ""
@@ -2012,6 +2350,11 @@ msgid ""
 "library. You may just copy the link and paste it into an email or IM "
 "software."
 msgstr ""
+"Hanya pengguna terdaftar yang memiliki izin baca ke file atau folder yang "
+"dapat mengakses tautan ini. Digunakan untuk berbagi file secara internal. "
+"Ini adalah cara yang mudah untuk berbagi file di antara anggota tim yang "
+"memiliki akses ke pustaka bersama. Anda cukup menyalin tautan dan "
+"menempelkannya ke dalam email atau aplikasi pesan instan (IM)."
 
 #: templates/help/sync_interval.html:8
 msgid ""
@@ -2022,10 +2365,17 @@ msgid ""
 "local folder. You can set the interval of this periodic sync. The interval "
 "is set in the unit of seconds."
 msgstr ""
+"Biasanya klien Seafile mendeteksi perubahan pada folder lokal secara "
+"otomatis dan mengunggah perubahan tersebut ke server. Namun, jika folder "
+"lokal berada di drive jaringan Windows share, klien Seafile tidak dapat "
+"mendeteksi perubahan dengan andal. Dalam kasus ini, Anda dapat meminta klien"
+" Seafile untuk memeriksa perubahan secara berkala di folder lokal. Anda "
+"dapat mengatur interval sinkronisasi berkala ini. Interval diatur dalam "
+"satuan detik."
 
 #: templates/help/syncing_existing_folders.html:6
 msgid "Syncing with an existing folder"
-msgstr ""
+msgstr "Sinkronisasi dengan folder yang sudah ada"
 
 #: templates/help/syncing_existing_folders.html:8
 #, python-format
@@ -2039,24 +2389,36 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/conflicts/\">conflict files</a> if file contents "
 "are different in the local folder and the library. "
 msgstr ""
+"Terkadang Anda sudah memiliki pustaka di server Seafile (dibagikan oleh "
+"orang lain, atau diunggah dari komputer lain). Anda dapat menyinkronkan "
+"pustaka ini dengan folder yang sudah ada di komputer Anda. Folder lokal "
+"harus memiliki nama yang sama dengan pustaka. File-file di dalam folder "
+"lokal akan digabungkan dengan file-file di dalam pustaka. Tidak ada file di "
+"folder lokal atau pustaka yang akan ditimpa atau hilang. Penggabungan akan "
+"menghasilkan beberapa <a href=\"%(SITE_ROOT)shelp/conflicts/\">file "
+"konflik</a> jika konten file berbeda antara folder lokal dan pustaka "
+"tersebut. "
 
 #: templates/help/syncing_existing_folders.html:10
 msgid ""
 "To sync a library with an existing folder, right click on the library in "
 "Seafile client's main window and click \"Sync this library\"."
 msgstr ""
+"Untuk menyinkronkan pustaka dengan folder yang sudah ada, klik kanan pada "
+"pustaka di jendela utama klien Seafile dan klik \"Sync this library\"."
 
 #: templates/help/syncing_existing_folders.html:14
 msgid "In the pop-up dialog, click the \"Sync with an existing folder\" link."
-msgstr ""
+msgstr "Pada dialog yang muncul, klik tautan \"Sync with an existing folder\"."
 
 #: templates/help/syncing_existing_folders.html:18
 msgid "Then choose an existing folder to sync with this library."
 msgstr ""
+"Lalu pilih folder yang sudah ada untuk disinkronkan dengan pustaka ini."
 
 #: templates/help/unsync_resync.html:6
 msgid "Unsync and resync library"
-msgstr ""
+msgstr "Batal sinkronisasi dan sinkronisasi ulang pustaka"
 
 #: templates/help/unsync_resync.html:8
 #, python-format
@@ -2068,6 +2430,13 @@ msgid ""
 "<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
 "folder</a> feature."
 msgstr ""
+"Ketika Anda tidak lagi ingin menyinkronkan folder lokal dengan pustaka, Anda"
+" dapat membatalkan sinkronisasinya (unsync). Setelah Anda membatalkan "
+"sinkronisasi pustaka, perubahan pada folder lokal dan file tidak akan "
+"diunggah, dan perubahan di pustaka tidak akan diunduh. Jika Anda ingin "
+"menyinkronkan kembali pustaka dengan folder lokal, Anda dapat menggunakan "
+"fitur <a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sinkronisasi "
+"dengan folder yang ada</a>."
 
 #: templates/help/unsync_resync.html:10
 msgid ""
@@ -2076,6 +2445,11 @@ msgid ""
 "unsync and then immediately sync the library with the same folder. You can "
 "find this action in the pop-up menu of the client's main window."
 msgstr ""
+"Terkadang ada kesalahan internal pada klien yang menghambat sinkronisasi. "
+"Dalam kasus ini, biasanya sangat membantu untuk melakukan \"sinkronisasi "
+"ulang\" (resync) pustaka tersebut. Resync berarti membatalkan sinkronisasi "
+"dan kemudian segera menyinkronkan kembali pustaka dengan folder yang sama. "
+"Anda dapat menemukan tindakan ini di menu pop-up pada jendela utama klien."
 
 #: templates/help/using_drive_client.html:7
 msgid ""
@@ -2083,16 +2457,22 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
 "start it by double clicking the \"SeaDrive\" app icon on your desktop."
 msgstr ""
+"Setelah menginstal klien drive dengan instruksi pada <a "
+"href=\"https://www.seafile.com/en/download/\">halaman unduhan</a>, Anda "
+"dapat memulainya dengan mengeklik dua kali ikon aplikasi \"SeaDrive\" di "
+"desktop Anda."
 
 #: templates/help/using_drive_client.html:8
 msgid ""
 "You'll be asked to choose a drive letter for the virtual drive. By default, "
 "\"S:\" will be used."
 msgstr ""
+"Anda akan diminta untuk memilih huruf drive untuk drive virtual tersebut. "
+"Secara default, huruf \"S:\" akan digunakan."
 
 #: templates/help/using_drive_client.html:9
 msgid "Then you'll be asked to log into your Seafile server."
-msgstr ""
+msgstr "Kemudian Anda akan diminta untuk masuk ke server Seafile Anda."
 
 #: templates/help/using_drive_client.html:12
 msgid ""
@@ -2101,6 +2481,10 @@ msgid ""
 "at this moment. So it'll not take very long. You can let it run in the "
 "background. You'll be noticed when the fetch is done."
 msgstr ""
+"Setelah berhasil masuk ke server, klien Drive mulai mengambil daftar pustaka"
+" dan file dari server. Isi file tidak diunduh pada saat ini. Jadi prosesnya "
+"tidak akan memakan waktu lama. Anda dapat membiarkannya berjalan di latar "
+"belakang. Anda akan diberitahu ketika proses pengambilan selesai."
 
 #: templates/help/using_drive_client.html:14
 msgid ""
@@ -2110,26 +2494,34 @@ msgid ""
 "when you open a file. Recently opened file will be cached in your local "
 "disk. All cached files will be marked with a green tick."
 msgstr ""
+"Folder drive virtual akan dibuka. Anda akan mendapati fiturnya bekerja "
+"seperti hard drive biasa di komputer Anda. Folder tingkat atas di drive "
+"virtual adalah pustaka di server Seafile. Isi file akan diunduh saat Anda "
+"membuka sebuah file. File yang baru saja dibuka akan disimpan (cache) di "
+"disk lokal Anda. Semua file yang di-cache akan ditandai dengan centang "
+"hijau."
 
 #: templates/help/using_drive_client.html:17
 msgid "Synced State"
-msgstr ""
+msgstr "Status Sinkronisasi"
 
 #: templates/help/using_drive_client.html:18
 msgid ""
 "Files and folders in the virtual drive are in either cloud-only, synced, or "
 "in partially synced state."
 msgstr ""
+"File dan folder di drive virtual berada dalam status cloud-only, synced, "
+"atau partially synced."
 
 #: templates/help/using_drive_client.html:22
 #: templates/help/using_drive_client.html:51
 msgid "State"
-msgstr ""
+msgstr "Status"
 
 #: templates/help/using_drive_client.html:23
 #: templates/help/using_drive_client.html:52
 msgid "Icon"
-msgstr ""
+msgstr "Ikon"
 
 #: templates/help/using_drive_client.html:24
 #: templates/help/using_drive_client.html:53
@@ -2138,7 +2530,7 @@ msgstr "Detail"
 
 #: templates/help/using_drive_client.html:29
 msgid "Cloud-only content"
-msgstr ""
+msgstr "Konten Cloud-only"
 
 #: templates/help/using_drive_client.html:31
 msgid ""
@@ -2148,71 +2540,93 @@ msgid ""
 "downloaded is only information about the file, such as its name, its size "
 "and the date it was updated."
 msgstr ""
+"Konten cloud-only muncul di drive virtual, tetapi tidak menggunakan seluruh "
+"ruang yang dibutuhkan file tersebut. Di file explorer, Anda dapat melihat "
+"file tersebut, tetapi isinya tidak diunduh sepenuhnya sampai Anda "
+"membutuhkannya. Yang diunduh hanya informasi mengenai file, seperti nama, "
+"ukuran, dan tanggal pembaruannya."
 
 #: templates/help/using_drive_client.html:34
 msgid "Synced content"
-msgstr ""
+msgstr "Konten Tersinkronisasi"
 
 #: templates/help/using_drive_client.html:36
 msgid ""
 "Synced content is downloaded and saved on the hard drive of your computer. "
 "You can directly edit these files from applications on your computer."
 msgstr ""
+"Konten tersinkronisasi (synced) diunduh dan disimpan di hard drive komputer "
+"Anda. Anda dapat langsung mengedit file-file ini melalui aplikasi di "
+"komputer Anda."
 
 #: templates/help/using_drive_client.html:39
 msgid "Partially synced content"
-msgstr ""
+msgstr "Konten Tersinkronisasi Sebagian"
 
 #: templates/help/using_drive_client.html:41
 msgid ""
 "Partially synced folders contain both synced and cloud-only files or "
 "folders."
 msgstr ""
+"Folder tersinkronisasi sebagian (partially synced) berisi campuran file atau"
+" folder berstatus synced dan cloud-only."
 
 #: templates/help/using_drive_client.html:46
 msgid "Special States"
-msgstr ""
+msgstr "Status Khusus"
 
 #: templates/help/using_drive_client.html:47
 msgid ""
 "For files that are already synced to local computer, they may be in 3 other "
 "special states, besides the normal \"synced\" state. "
 msgstr ""
+"Untuk file yang sudah disinkronkan ke komputer lokal, item tersebut mungkin "
+"berada dalam 3 status khusus lainnya, selain status normal \"synced\". "
 
 #: templates/help/using_drive_client.html:58
 msgid "Locked by other user"
-msgstr ""
+msgstr "Dikunci oleh pengguna lain"
 
 #: templates/help/using_drive_client.html:60
 msgid ""
 "The file is locked by other user on the server. You can only open the file "
 "in read-only mode. You cannot modify, delete, rename or move the file."
 msgstr ""
+"File dikunci oleh pengguna lain di server. Anda hanya dapat membuka file "
+"tersebut dalam mode baca-saja. Anda tidak dapat memodifikasi, menghapus, "
+"menamai ulang, atau memindahkan file."
 
 #: templates/help/using_drive_client.html:63
 msgid "Locked by me"
-msgstr ""
+msgstr "Dikunci oleh saya"
 
 #: templates/help/using_drive_client.html:65
 msgid ""
 "The file is locked by you. This prevents others from modifying the file."
 msgstr ""
+"File dikunci oleh Anda. Ini mencegah orang lain untuk memodifikasi file "
+"tersebut."
 
 #: templates/help/using_drive_client.html:68
 msgid "Read-only"
-msgstr ""
+msgstr "Baca-saja"
 
 #: templates/help/using_drive_client.html:70
 msgid ""
 "The folder or library of this file is shared with read-only permission to "
 "you. You cannot modify, delete or move the file."
 msgstr ""
+"Folder atau pustaka dari file ini dibagikan dengan izin baca-saja kepada "
+"Anda. Anda tidak dapat memodifikasi, menghapus, atau memindahkan file "
+"tersebut."
 
 #: templates/help/using_drive_client.html:74
 msgid ""
 "The Drive client regularly cleans up unused cached files in the background. "
 "You can also limit the local cache space."
 msgstr ""
+"Klien Drive secara rutin membersihkan file cache yang tidak digunakan di "
+"latar belakang. Anda juga dapat membatasi ruang cache lokal."
 
 #: templates/help/using_drive_client.html:76
 msgid ""
@@ -2220,10 +2634,15 @@ msgid ""
 "on the current selected server will be shown in the virtual drive. You can "
 "switch among accounts."
 msgstr ""
+"Anda dapat masuk ke beberapa akun di klien Drive. Namun, hanya file pada "
+"server yang saat ini dipilih yang akan ditampilkan di drive virtual. Anda "
+"dapat berpindah-pindah akun."
 
 #: templates/help/using_drive_client.html:80
 msgid "1. Why can't I create new files or delete folders in root folder?"
 msgstr ""
+"1. Mengapa saya tidak bisa membuat file baru atau menghapus folder di folder"
+" root?"
 
 #: templates/help/using_drive_client.html:81
 msgid ""
@@ -2234,13 +2653,22 @@ msgid ""
 "represents libraries, we don't want users to delete their libraries by "
 "mistake. So the Drive client doesn't support deleting top level folders."
 msgstr ""
+"Folder root dari drive virtual hanya berisi folder pustaka. Seafile hanya "
+"dapat menyinkronkan file di dalam pustaka. File di folder root tidak dapat "
+"diunggah ke server Seafile. Jadi tidak masuk akal untuk mendukung pembuatan "
+"file di folder root. Karena folder tingkat atas di drive virtual "
+"mempresentasikan pustaka, kami tidak ingin pengguna menghapus pustaka mereka"
+" secara tidak sengaja. Oleh karena itu, klien Drive tidak mendukung "
+"penghapusan folder tingkat atas."
 
 #: templates/help/viewing_files_within_web_app.html:6
 msgid ""
 "Some types of files can be directly opened and viewed within the Seafile Web"
 " App. Currently they are:"
 msgstr ""
+"Beberapa jenis file dapat dibuka dan dilihat langsung di dalam Aplikasi Web "
+"Seafile. Saat ini jenis file tersebut adalah:"
 
 #: templates/help/viewing_files_within_web_app.html:13
 msgid "Image files"
-msgstr ""
+msgstr "File gambar"

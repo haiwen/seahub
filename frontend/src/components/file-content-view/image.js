@@ -17,10 +17,10 @@ const {
 let previousImageUrl;
 let nextImageUrl;
 if (previousImage) {
-  previousImageUrl = `${siteRoot}lib/${repoID}/file${Utils.encodePath(previousImage)}`;
+  previousImageUrl = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(previousImage);
 }
 if (nextImage) {
-  nextImageUrl = `${siteRoot}lib/${repoID}/file${Utils.encodePath(nextImage)}`;
+  nextImageUrl = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(nextImage);
 }
 
 class FileContent extends React.Component {
@@ -59,17 +59,17 @@ class FileContent extends React.Component {
     let thumbnailURL = '';
     const fileExtList = ['tif', 'tiff', 'psd', 'psb', 'heic'];
     if (!repoEncrypted && fileExtList.includes(fileExt)) {
-      thumbnailURL = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${Utils.encodePath(filePath)}?mtime=${lastModificationTime}`;
+      thumbnailURL = siteRoot + 'thumbnail/' + repoID + '/' + thumbnailSizeForOriginal + Utils.encodePath(filePath) + '?mtime=' + lastModificationTime;
     }
 
     const { scale, angle, offset } = this.props;
     let transforms = [];
 
     if (scale) {
-      transforms.push(`scale(${scale})`);
+      transforms.push('scale(' + scale + ')');
     }
     if (angle !== undefined) {
-      transforms.push(`rotate(${angle}deg)`);
+      transforms.push('rotate(' + angle + 'deg)');
     }
 
     let style = {};
@@ -89,12 +89,12 @@ class FileContent extends React.Component {
     return (
       <div className="file-view-content flex-1 image-file-view d-flex align-items-center justify-content-center">
         {previousImage && (
-          <a href={previousImageUrl} id="img-prev" title={gettext('you can also press ← ')}>
+          <a href={previousImageUrl} id="img-prev" title={gettext('You can also press ← ')}>
             <Icon symbol="down" className="rotate-90" />
           </a>
         )}
         {nextImage && (
-          <a href={nextImageUrl} id="img-next" title={gettext('you can also press →')}>
+          <a href={nextImageUrl} id="img-next" title={gettext('You can also press →')}>
             <Icon symbol="down" className="rotate-270" />
           </a>
         )}

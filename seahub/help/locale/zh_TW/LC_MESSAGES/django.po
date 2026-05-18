@@ -8,7 +8,7 @@
 # carylorrk <carylorrk@gmail.com>, 2024
 # aa bbb <lung375706226@gmail.com>, 2024
 # david082321 <david082321@gmail.com>, 2024
-# Seafile Info <info@seafile.com>, 2025
+# Seafile Info <info@seafile.com>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Chinese (Taiwan) (https://app.transifex.com/haiwen/teams/5086/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2118,7 +2118,7 @@ msgstr "只读"
 msgid ""
 "The folder or library of this file is shared with read-only permission to "
 "you. You cannot modify, delete or move the file."
-msgstr "该文件所在的文件夹或库被共享给您，以只读权限。您不能修改、删除或移动该文件。"
+msgstr "该文件所在的目錄或库被共享给您，以只读权限。您不能修改、删除或移动该文件。"
 
 #: templates/help/using_drive_client.html:74
 msgid ""
@@ -2135,7 +2135,7 @@ msgstr "你可以在客户端登录多个帐户。但是，只有当前选定服
 
 #: templates/help/using_drive_client.html:80
 msgid "1. Why can't I create new files or delete folders in root folder?"
-msgstr "1. 为什么我不能在根文件夹中创建新文件或删除文件夹？"
+msgstr "1. 为什么我不能在根目錄中创建新文件或删除目錄？"
 
 #: templates/help/using_drive_client.html:81
 msgid ""
@@ -2146,8 +2146,8 @@ msgid ""
 "represents libraries, we don't want users to delete their libraries by "
 "mistake. So the Drive client doesn't support deleting top level folders."
 msgstr ""
-"虚拟硬盘的根文件夹仅包含资料库文件夹。Seafile 只能同步资料库内的文件。根文件夹中的文件无法上传到 Seafile "
-"服务器。因此不支持在根文件夹中创建文件。由于虚拟硬盘的顶层文件夹代表资料库，我们不想让用户误删他们的资料库，所以客户端不支持删除顶层文件夹。"
+"虚拟硬盘的根目錄仅包含资料库目錄。Seafile 只能同步资料库内的文件。根目錄中的文件无法上传到 Seafile "
+"服务器。因此不支持在根目錄中创建文件。由于虚拟硬盘的顶层目錄代表资料库，我们不想让用户误删他们的资料库，所以客户端不支持删除顶层目錄。"
 
 #: templates/help/viewing_files_within_web_app.html:6
 msgid ""
