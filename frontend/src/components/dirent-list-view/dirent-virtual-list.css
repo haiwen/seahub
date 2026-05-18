@@ -20,7 +20,6 @@
   align-items: center;
   background: var(--bs-body-bg);
   position: relative;
-  z-index: 10;
   flex-shrink: 0;
 }
 
