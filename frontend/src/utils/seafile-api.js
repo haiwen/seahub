@@ -402,7 +402,7 @@ class SeafileAPI {
   // for repo & folder
   getRepoFolderShareInfo(repoID, path) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/share-info/';
-    let params = { };
+    let params = {};
     if (path != undefined) {
       params.path = path;
     }
@@ -808,24 +808,25 @@ class SeafileAPI {
   searchFiles(searchParams, cancelToken) {
     let url = this.server + '/api2/search/';
     url = url + '?q=' + searchParams.q;
-    if (searchParams.search_repo) {url = url + '&search_repo=' + searchParams.search_repo;}
-    if (searchParams.search_ftypes) {url = url + '&search_ftypes=' + searchParams.search_ftypes;}
-    if (searchParams.page) {url = url + '&page=' + searchParams.page;}
-    if (searchParams.per_page) {url = url + '&per_page=' + searchParams.per_page;}
-    if (searchParams.search_path) {url = url + '&search_path=' + encodeURIComponent(searchParams.search_path);}
-    if (searchParams.obj_type) {url = url + '&obj_type=' + searchParams.obj_type;}
-    if (searchParams.input_fexts) {url = url + '&input_fexts=' + searchParams.input_fexts;}
-    if (searchParams.with_permission) {url = url + '&with_permission=' + searchParams.with_permission;}
-    if (searchParams.time_from) {url = url + '&time_from=' + searchParams.time_from;}
-    if (searchParams.time_to) {url = url + '&time_to=' + searchParams.time_to;}
-    if (searchParams.size_from) {url = url + '&size_from=' + searchParams.size_from;}
-    if (searchParams.size_to) {url = url + '&size_to=' + searchParams.size_to;}
-    if (searchParams.shared_from) {url = url + '&shared_from=' + searchParams.shared_from;}
-    if (searchParams.not_shared_from) {url = url + '&not_shared_from=' + searchParams.not_shared_from;}
-    if (searchParams.search_filename_only) {url = url + '&search_filename_only=' + searchParams.search_filename_only;}
+    if (searchParams.search_repo) { url = url + '&search_repo=' + searchParams.search_repo; }
+    if (searchParams.search_ftypes) { url = url + '&search_ftypes=' + searchParams.search_ftypes; }
+    if (searchParams.page) { url = url + '&page=' + searchParams.page; }
+    if (searchParams.per_page) { url = url + '&per_page=' + searchParams.per_page; }
+    if (searchParams.search_path) { url = url + '&search_path=' + encodeURIComponent(searchParams.search_path); }
+    if (searchParams.obj_type) { url = url + '&obj_type=' + searchParams.obj_type; }
+    if (searchParams.input_fexts) { url = url + '&input_fexts=' + searchParams.input_fexts; }
+    if (searchParams.with_permission) { url = url + '&with_permission=' + searchParams.with_permission; }
+    if (searchParams.time_from) { url = url + '&time_from=' + searchParams.time_from; }
+    if (searchParams.time_to) { url = url + '&time_to=' + searchParams.time_to; }
+    if (searchParams.size_from) { url = url + '&size_from=' + searchParams.size_from; }
+    if (searchParams.size_to) { url = url + '&size_to=' + searchParams.size_to; }
+    if (searchParams.shared_from) { url = url + '&shared_from=' + searchParams.shared_from; }
+    if (searchParams.not_shared_from) { url = url + '&not_shared_from=' + searchParams.not_shared_from; }
+    if (searchParams.search_filename_only) { url = url + '&search_filename_only=' + searchParams.search_filename_only; }
     if (searchParams.ftype) {
       for (let i = 0; i < searchParams.ftype.length; i++) {
-        url = url + '&ftype=' + searchParams.ftype[i];}
+        url = url + '&ftype=' + searchParams.ftype[i];
+      }
     }
     return this.req.get(url, { cancelToken: cancelToken });
   }
@@ -1555,7 +1556,7 @@ class SeafileAPI {
   // ---- Thumbnail API
   createThumbnail(repo_id, path, thumbnail_size) {
     const url = this.server + '/thumbnail/' + repo_id + '/create/?path=' +
-    encodeURIComponent(path) + '&size=' + thumbnail_size;
+      encodeURIComponent(path) + '&size=' + thumbnail_size;
     return this.req.get(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
   }
 

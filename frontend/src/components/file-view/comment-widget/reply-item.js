@@ -115,7 +115,7 @@ class ReplyItem extends React.Component {
     }
     return (
       <li className={'seafile-comment-item'} id={item.id}>
-        <div className="seafile-comment-info mt-1">
+        <div className="seafile-comment-info">
           <img className="avatar" src={item.avatar_url} alt="" />
           <div className="comment-author-info">
             <div className="comment-author-name ellipsis">{item.user_name}</div>
@@ -124,9 +124,8 @@ class ReplyItem extends React.Component {
           {(item.user_email === username) &&
             <CustomDropdown
               target={replyOpToolsId}
-              className="seafile-comment-dropdown"
               items={this.getMenuItems()}
-              triggerClassName="seafile-comment-dropdown-btn sf-dropdown-toggle"
+              triggerClassName="op-icon"
             />
           }
         </div>

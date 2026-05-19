@@ -57,7 +57,7 @@ class CommentItemReadOnly extends React.Component {
     return (
       <li className={'seafile-comment-item'} id={item.id} onClick={() => this.props.onClickComment(item)}>
         <div className="seafile-comment-info">
-          <img className="avatar mt-1" src={item.avatar_url} alt=""/>
+          <img className="avatar" src={item.avatar_url} alt="" />
           <div className="comment-author-info">
             <div className="comment-author-name ellipsis">{item.user_name}</div>
             <div className="comment-author-time">
@@ -82,7 +82,7 @@ class CommentItemReadOnly extends React.Component {
             </span>
             <div className="comment-author">
               <span className="comment-author__avatar">
-                <img alt="" src={lastReply.avatar_url}/>
+                <img alt="" src={lastReply.avatar_url} />
               </span>
               <div className="comment-author__latest-reply">
                 <p>{lastReply.reply}</p>

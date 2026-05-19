@@ -72,10 +72,23 @@
 }
 
 .seafile-comment-item .seafile-comment-info {
-  padding-bottom: 0.5em;
-  height: 3em;
   display: flex;
   justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.seafile-comment-item .seafile-comment-info .avatar {
+  width: 24px;
+  height: 24px;
+  flex: 0;
+  margin-right: 10px;
+}
+
+.seafile-comment-item .seafile-comment-info .comment-author-info {
+  flex: 1;
+  width: calc(100% - 86px);
+  display: flex;
+  flex-direction: column;
 }
 
 .seafile-comment-item .seafile-comment-info .comment-author-name {
@@ -83,16 +96,6 @@
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
-}
-
-.seafile-comment-item .seafile-comment-info .avatar {
-  width: 24px;
-  height: 24px;
-}
-
-.seafile-comment-item .seafile-comment-info .comment-author-info {
-  padding-left: 10px;
-  max-width: 75%;
 }
 
 .seafile-comment-item .seafile-comment-info .comment-author-time {

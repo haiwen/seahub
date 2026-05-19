@@ -8,7 +8,7 @@ import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
 import CommentItem from './comment-item';
 import ReplyItem from './reply-item';
-import Icon from '../../icon';
+import OpIcon from '@/components/op-icon';
 
 const { username, repoID, filePath } = window.app.pageOptions;
 
@@ -71,7 +71,7 @@ class ReplyList extends React.Component {
   };
 
   checkParticipant = (email) => {
-    return this.props.participants.map((participant) => {return participant.email;}).includes(email);
+    return this.props.participants.map((participant) => { return participant.email; }).includes(email);
   };
 
   addParticipant = (email) => {
@@ -87,15 +87,11 @@ class ReplyList extends React.Component {
 
         <div className="seafile-comment-title">
           <div className="comments-panel-header-left">
-            <span className="sdoc-icon-btn mr-1" onClick={this.props.clearCurrentComment}>
-              <Icon symbol="arrow-left" />
-            </span>
+            <OpIcon id="back-to-comment-list" className="op-icon" symbol="arrow-left" tooltip={gettext('Back')} op={this.props.clearCurrentComment} />
             <span className="title">{gettext('Comment details')}</span>
           </div>
           <div className="comments-panel-header-right">
-            <span className="sdoc-icon-btn" onClick={this.props.toggleCommentList}>
-              <Icon symbol="md-close" />
-            </span>
+            <OpIcon id="comment-close" className="op-icon" symbol="md-close" tooltip={gettext('Close')} op={this.props.toggleCommentList} />
           </div>
         </div>
 
@@ -140,7 +136,7 @@ class ReplyList extends React.Component {
             insertContent={this.onSubmit}
             collaborators={this.props.relatedUsers ? this.props.relatedUsers : []}
             participants={this.props.participants ? this.props.participants : []}
-            addParticipants={(email) => {this.addParticipant(email);}}
+            addParticipants={(email) => { this.addParticipant(email); }}
           />
         </div>
       </div>

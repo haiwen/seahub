@@ -128,7 +128,7 @@ class CommentItem extends React.Component {
     return (
       <li className={'seafile-comment-item'} id={item.id}>
         <div className="seafile-comment-info">
-          <img className="avatar mt-1" src={item.avatar_url} alt="" />
+          <img className="avatar" src={item.avatar_url} alt="" />
           <div className="comment-author-info">
             <div className="comment-author-name ellipsis">{item.user_name}</div>
             <div className="comment-author-time">
@@ -141,9 +141,8 @@ class CommentItem extends React.Component {
           {(item.user_email === username) &&
             <CustomDropdown
               target={commentOpToolsId}
-              className="seafile-comment-dropdown"
               items={this.getMenuItems()}
-              triggerClassName="seafile-comment-dropdown-btn sf-dropdown-toggle"
+              triggerClassName="op-icon"
             />
           }
         </div>
