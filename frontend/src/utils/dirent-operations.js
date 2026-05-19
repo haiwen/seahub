@@ -78,7 +78,7 @@ export const toggleStar = async (repoID, path, dirent, updateState) => {
     }
     if (updateState) {
       updateState(dirent, { starred: !currentState });
-    }    
+    }
     let msg = '';
     if (currentState) {
       msg = gettext('Successfully unstarred {name_placeholder}').replace('{name_placeholder}', dirent.name);

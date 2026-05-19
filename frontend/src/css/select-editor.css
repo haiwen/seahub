@@ -42,6 +42,15 @@
   padding-top: 8px;
 }
 
+.permission-editor__option.permission-editor__option--is-selected,
+.permission-editor__option:hover {
+  background-color: var(--bs-bg-color) !important;
+}
+
+.permission-editor__menu .permission-editor__option--is-disabled:hover {
+  background-color: var(--bs-popover-bg) !important;
+}
+
 .permission-editor-btn-add-custom-permission {
   display: flex;
   align-items: center;

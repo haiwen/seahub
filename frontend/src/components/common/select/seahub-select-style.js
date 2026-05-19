@@ -71,12 +71,10 @@ const MenuSelectStyle = {
     paddingRight: '8px',
   }),
   option: (provided, state) => {
-    const { isDisabled, isFocused, isActive, isVisited } = state;
+    const { isDisabled, isActive, isVisited } = state;
     let bgColor;
     if (isActive || isVisited) {
       bgColor = 'rgba(0, 0, 0, 0.06)';
-    } else if (isFocused) {
-      bgColor = 'var(--bs-bg-color)';
     } else {
       bgColor = 'var(--bs-popover-bg)';
     }
