@@ -312,8 +312,8 @@
 .sf-metadata-filter-header-icon,
 .sf-metadata-select-icon {
   display: inline-block;
-  padding: 0 0.3125rem;
-  margin-left: -0.3125rem;
+  padding: 0 8px;
+  margin-left: -8px;
 }
 
 .sf-metadata-filter-header-icon .seafile-multicolor-icon,
