@@ -18,6 +18,7 @@ from seahub.api2.utils import api_error, user_to_dict, to_python_boolean, send_c
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.base.models import FileComment
 from seahub.utils.repo import get_repo_owner
+from seahub.share.utils import is_repo_admin
 from seahub.signals import comment_file_successful
 from seahub.api2.endpoints.utils import generate_links_header_for_paginator
 from seahub.views import check_folder_permission
@@ -165,6 +166,11 @@ class FileCommentView(APIView):
         if str(file_comment.uuid.uuid) != file_uuid:
             return api_error(status.HTTP_404_NOT_FOUND, 'comment not found: %s' % comment_id)
 
+        # permission check
+        username = request.user.username
+        if username != file_comment.author and not is_repo_admin(username, repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         file_comment.delete()
         SeadocCommentReply.objects.filter(comment_id=comment_id).delete()
         send_comment_update_event(file_uuid)
@@ -188,6 +194,15 @@ class FileCommentView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         if str(file_comment.uuid.uuid) != file_uuid:
             return api_error(status.HTTP_404_NOT_FOUND, 'comment not found: %s' % comment_id)
+
+        # permission check
+        username = request.user.username
+        # editing comment content requires being the author
+        if (detail is not None or comment is not None) and username != file_comment.author:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        # setting resolved allowed for author or repo admin
+        if resolved is not None and username != file_comment.author and not is_repo_admin(username, repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         if resolved is not None:
             # do not refresh updated_at
@@ -356,6 +371,12 @@ class FileCommentReplyView(APIView):
             id=reply_id, doc_uuid=file_uuid, comment_id=comment_id).first()
         if not reply:
             return api_error(status.HTTP_404_NOT_FOUND, 'reply not found.')
+
+        # permission check
+        username = request.user.username
+        if username != reply.author and not is_repo_admin(username, repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         reply.delete()
         send_comment_update_event(file_uuid)
         return Response({'success': True})
@@ -376,6 +397,11 @@ class FileCommentReplyView(APIView):
             id=reply_id, doc_uuid=file_uuid, comment_id=comment_id).first()
         if not reply:
             return api_error(status.HTTP_404_NOT_FOUND, 'reply not found.')
+
+        # permission check
+        username = request.user.username
+        if username != reply.author:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # save
         reply.reply = str(reply_content)
