@@ -32,8 +32,8 @@ class ShareAdminLink extends React.Component {
           <a href={link}>{link}</a>
         </ModalBody>
         <ModalFooter>
+          <Button color="secondary" onClick={toggleDialog}>{gettext('Cancel')}</Button>
           <Button color="primary" onClick={this.copyToClipboard}>{gettext('Copy')}</Button>
-          <Button color="secondary" onClick={toggleDialog}>{gettext('Close')}</Button>
         </ModalFooter>
       </Modal>
     );
