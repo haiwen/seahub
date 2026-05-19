@@ -32,9 +32,10 @@ class FileInfo extends React.PureComponent {
         <h2 className="file-title d-flex align-items-center">
           <span className="file-name text-truncate" title={fileName}>{fileName}</span>
           <OpIcon
+            id="file-star"
             className="ml-2 file-star"
             symbol={isStarred ? 'starred' : 'unstarred'}
-            title={starredText}
+            tooltip={starredText}
             op={this.props.toggleStar}
           />
           <InternalLinkOperation repoID={repoID} path={filePath} />

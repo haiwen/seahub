@@ -5,8 +5,6 @@ import Switch from '../switch';
 import IconButton from '../icon-button';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils, isImageRotateable } from '../../utils/utils';
-import ModalPortal from '../modal-portal';
-import ShareDialog from '../dialog/share-dialog';
 import Icon from '../../components/icon';
 import ImageZoomer from './image-zoomer';
 import Tooltip from '../tooltip';
@@ -29,9 +27,8 @@ const propTypes = {
 
 const {
   canLockUnlockFile,
-  repoID, repoName, repoEncrypted, parentDir, filePerm, filePath,
+  repoID, repoName, parentDir, filePerm, filePath,
   fileType, fileExt,
-  fileName,
   canEditFile, err,
   // fileEnc, // for 'edit', not undefined only for some kinds of files (e.g. text file)
   canDownloadFile,
@@ -248,23 +245,23 @@ class FileToolbar extends React.Component {
         <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} className="d-block d-md-none flex-shrink-0 ml-4">
           <ButtonGroup >
             {(canEditFile && fileType != 'SDoc' && !err) &&
-                (this.props.isSaving ?
-                  <button type='button' aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary'}>
-                    <Icon symbol="spinner" />
-                  </button>
+              (this.props.isSaving ?
+                <button type='button' aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary'}>
+                  <Icon symbol="spinner" />
+                </button>
+                :
+                (this.props.needSave ?
+                  <IconButton
+                    text={gettext('Save')}
+                    id="save-file"
+                    icon='save'
+                    onClick={this.props.onSave}
+                  />
                   :
-                  (this.props.needSave ?
-                    <IconButton
-                      text={gettext('Save')}
-                      id="save-file"
-                      icon='save'
-                      onClick={this.props.onSave}
-                    />
-                    :
-                    <button type='button' className={'btn btn-icon btn-secondary'} disabled>
-                      <Icon symbol="save" />
-                    </button>
-                  ))}
+                  <button type='button' className={'btn btn-icon btn-secondary'} disabled>
+                    <Icon symbol="save" />
+                  </button>
+                ))}
           </ButtonGroup>
           <DropdownToggle tag="span" className="mx-1" aria-label={gettext('More operations')}>
             <Icon symbol="more-level" />
@@ -306,20 +303,6 @@ class FileToolbar extends React.Component {
             }
           </DropdownMenu>
         </Dropdown>
-
-        {this.state.isShareDialogOpen && (
-          <ModalPortal>
-            <ShareDialog
-              itemType='file'
-              itemName={fileName}
-              itemPath={filePath}
-              userPerm={filePerm}
-              repoID={repoID}
-              repoEncrypted={repoEncrypted}
-              toggleDialog={this.toggleShareDialog}
-            />
-          </ModalPortal>
-        )}
       </Fragment>
     );
   }
