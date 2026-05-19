@@ -1,4 +1,5 @@
 {% load i18n static %}
+{% load render_bundle from webpack_loader %}
 {% load seahub_tags %}
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE|default:'en' }}">
@@ -6,142 +7,279 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ wiki_title }} - {{ wiki_repo_name }}</title>
-
-  {# OGP / SEO meta #}
+  <meta name="keywords" content="{% trans 'File, Collaboration, Team, Organization' %}">
+  {% if site_description != '' %}<meta name="description" content="{{ site_description }}">{% endif %}
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="{{ site_name }}">
   <meta property="og:url" content="{{ service_url }}{{ request.path }}">
   <meta property="og:title" content="{{ wiki_title }} - {{ wiki_repo_name }}">
   <meta property="og:description" content="{{ wiki_title }}">
-
-  {# Seafile / sdoc fonts (needed for sf3-font icon glyphs used in wiki CSS) #}
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="color-scheme" content="dark light">
+  <link rel="icon" href="{{ MEDIA_URL }}{{ favicon_path }}" type="image/x-icon" id="favicon">
+  <link rel="apple-touch-icon" href="{{ MEDIA_URL }}{{ apple_touch_icon_path }}">
+  <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/sf_font3/iconfont.css">
+  <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css?t=20260224">
+  <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=20260105">
   <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}seafile-editor/seafile-editor-font.css">
   <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-font.css">
-
   <link rel="stylesheet" type="text/css" href="{% static 'css/wiki-publish-ssr.css' %}">
+  {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}">{% endif %}
+  {% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}">{% endif %}
 </head>
-<body>
-
+<body data-bs-theme="{% if request.session.dark_mode %}dark{% else %}light{% endif %}">
 <div id="wiki-ssr-root">
-
-  {# Left navigation panel #}
-  <aside class="wiki2-side-panel" id="wiki-side-panel" aria-label="{% trans 'Wiki navigation' %}">
-    <div class="wiki2-side-panel-top">
-      <h1 title="{{ wiki_repo_name }}">{{ wiki_repo_name }}</h1>
-      <button class="wiki-mobile-close" id="side-panel-close"
-              aria-label="{% trans 'Close navigation' %}" title="{% trans 'Close' %}">
-        &times;
-      </button>
-    </div>
-
-    <div class="wiki2-side-nav">
-      <div class="wiki2-pages-container">
-        <div class="wiki-nav">
-          <div class="wiki-nav-body" id="wiki-nav-body">
-            <div class="wiki-nav-group-header wiki-nav-pages">
-              <h2 class="wiki-nav-group-title">{% trans "Pages" %}</h2>
-            </div>
-            <ul class="wiki-nav-tree" id="wiki-nav-tree" role="tree" aria-label="{% trans 'Pages' %}">
-              {% for item in wiki_navigation %}
+            {# Left navigation panel #}
+            <aside class="wiki2-side-panel" id="wiki-side-panel" aria-label="{% trans 'Wiki navigation' %}">
+                <div class="wiki2-side-panel-top">
+                    <h1 title="{{ wiki_repo_name }}">{{ wiki_repo_name }}</h1>
+                    <button
+                        class="wiki-mobile-close"
+                        id="side-panel-close"
+                        aria-label="{% trans 'Close navigation' %}"
+                        title="{% trans 'Close' %}"
+                    >
+                        &times;
+                    </button>
+                </div>
+                <div class="wiki2-side-nav">
+                    <div class="wiki2-pages-container">
+                        <div class="wiki-nav">
+                            <div class="wiki-nav-body" id="wiki-nav-body">
+                                <div class="wiki-nav-group-header wiki-nav-pages">
+                                    <h2 class="wiki-nav-group-title">{% trans "Pages" %}</h2>
+                                </div>
+                                <ul
+                                    class="wiki-nav-tree"
+                                    id="wiki-nav-tree"
+                                    role="tree"
+                                    aria-label="{% trans 'Pages' %}"
+                                >
+                                    {% for item in wiki_navigation %}
                 {% include "wiki/_wiki_publish_ssr_nav_item.html" with item=item %}
               {% endfor %}
-            </ul>
-          </div>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+            {# Desktop resize handle for the left navigation panel #}
+            <div id="wiki-resize-handle" role="separator" aria-orientation="vertical" aria-label="{% trans 'Resize navigation panel' %}"></div>
+            {# Main reading area #}
+            <main class="wiki2-main-panel" id="wiki-main-panel">
+                {# Top bar with breadcrumb and mobile menu trigger #}
+                   <div class="wiki2-main-panel-north" id="wiki-top-bar">
+                      <div class="wiki2-main-panel-north-content">
+                        <button class="wiki-mobile-btn" id="menu-toggle-btn"
+                                aria-label="{% trans 'Open navigation' %}" title="{% trans 'Navigation' %}">
+                          {# Mobile menu icon #}
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                          </svg>
+                        </button>
+                        <nav class="wiki2-top-nav" id="wiki-breadcrumb" aria-label="{% trans 'Breadcrumb' %}"></nav>
+                    </div>
+                </div>
+                {# Scrollable content container #}
+                <div class="main-panel-center">
+                    <div class="cur-view-content">
+                        <div class="sdoc-scroll-container" id="wiki-scroll-container">
+                            <div class="wiki-editor-container">
+                                {# Server-rendered page title #}
+                                <div class="wiki-page-title-wrapper">
+                                    <h1 class="wiki-sdoc-title" id="wiki-page-title">{{ wiki_title }}</h1>
+                                </div>
+                                {# Server-rendered page body converted from the source sdoc file #}
+                                <div id="wiki-sdoc-previewer">
+                                    <div class="sdoc-editor-container">
+                                      <div class="sdoc-content-wrapper">
+                                        <div class="sdoc-editor-content">
+                                          <div class="sdoc-article-container">
+                                              <article class="article sdoc-editor__article readonly" id="wiki-content">
+                                                <div id="sdoc-editor">
+                                                  {{ wiki_html|safe }}
+                                                </div>
+                                              </article>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
         </div>
-      </div>
-    </div>
-  </aside>
-
-  {# Desktop resize handle for the left navigation panel #}
-  <div id="wiki-resize-handle" role="separator" aria-orientation="vertical"
-       aria-label="{% trans 'Resize navigation panel' %}"></div>
-
-  {# Main reading area #}
-  <main class="wiki2-main-panel" id="wiki-main-panel">
-
-    {# Top bar with breadcrumb and mobile menu trigger #}
-    <div class="wiki2-main-panel-north" id="wiki-top-bar">
-      <div class="wiki2-main-panel-north-content">
-        <button class="wiki-mobile-btn" id="menu-toggle-btn"
-                aria-label="{% trans 'Open navigation' %}" title="{% trans 'Navigation' %}">
-          {# Mobile menu icon #}
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
-
-        <nav class="wiki2-top-nav" id="wiki-breadcrumb" aria-label="{% trans 'Breadcrumb' %}">
-          {% for item in wiki_breadcrumb %}
-          <a class="wiki2-top-nav-item"
-             href="{{ item.url }}"
-             title="{{ item.name }}"
-             {% if forloop.last %}aria-current="page"{% endif %}>
-            <span class="nav-icon">
-              {% if item.icon %}
-              <span style="font-size: 14px;">{{ item.icon }}</span>
-              {% elif item.has_children %}
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 7.5A1.5 1.5 0 0 1 4.5 6H10l1.5 2H19.5A1.5 1.5 0 0 1 21 9.5v7A1.5 1.5 0 0 1 19.5 18h-15A1.5 1.5 0 0 1 3 16.5z"></path>
-              </svg>
-              {% else %}
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
-              </svg>
-              {% endif %}
-            </span>
-            <span class="nav-label">{{ item.name }}</span>
-          </a>
-          {% if not forloop.last %}
-          <span class="item-split" aria-hidden="true">/</span>
-          {% endif %}
-          {% endfor %}
-        </nav>
-      </div>
-    </div>
-
-    {# Scrollable content container #}
-    <div class="main-panel-center">
-      <div class="cur-view-content">
-        <div class="sdoc-scroll-container" id="wiki-scroll-container">
-          <div class="wiki-editor-container">
-
-            {# Server-rendered page title #}
-            <div class="wiki-page-title-wrapper">
-              <h1 class="wiki-sdoc-title" id="wiki-page-title">{{ wiki_title }}</h1>
-            </div>
-
-            {# Server-rendered page body converted from the source sdoc file #}
-            <div class="sdoc-editor-container">
-              <div class="sdoc-article-container">
-                <article class="article sdoc-editor__article readonly" id="wiki-content">
-                  {{ wiki_html|safe }}
-                </article>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </main>
-
-</div>
-
 {# Mobile overlay backdrop for the side panel #}
 <div class="wiki-mobile-overlay" id="wiki-mobile-overlay" aria-hidden="true"></div>
 
+<script type="text/javascript">
+window.app = {
+  config: {
+    mediaUrl: '{{ MEDIA_URL }}',
+    logoPath: '{{ logo_path }}',
+    logoWidth: '{{ logo_width }}',
+    logoHeight: '{{ logo_height }}',
+    faviconPath: '{{ favicon_path }}',
+    loginBGPath: '{{ login_bg_path }}',
+    siteTitle: '{{ site_title }}',
+    siteName: '{{ site_name|escapejs }}',
+    siteRoot: '{{ SITE_ROOT }}',
+    loginUrl: '{{ LOGIN_URL }}',
+    isPro: '{{ is_pro }}',
+    isDBSqlite3: {% if is_db_sqlite3 %} true {% else %} false {% endif %},
+    lang: '{{ LANGUAGE_CODE }}',
+    fileServerRoot: '{{ FILE_SERVER_ROOT }}',
+    enableRepoAutoDel: {% if enable_repo_auto_del %} true {% else %} false {% endif %},
+    useGoFileserver: {% if USE_GO_FILESERVER %} true {% else %} false {% endif %},
+    serviceURL: '{{ service_url }}',
+    seafileVersion: '{{ seafile_version }}',
+    avatarURL: '{{ avatar_url }}',
+    cloudMode: {% if cloud_mode %} true {% else %} false {% endif %},
+    isOrgContext: {% if org is not None %} true {% else %} false {% endif %},
+    enableNotificationServer: {% if enable_notification_server %} true {% else %} false {% endif %},
+    notificationServerUrl: '{{ notification_server_url }}'
+  },
+  pageOptions: {
+    csrfToken: '{{ csrf_token }}',
+    name: '{{ request.user.username|email2nickname|escapejs }}',
+    contactEmail: '{{ request.user.username|email2contact_email|escapejs }}',
+    username: '{{ request.user.username|escapejs }}',
+    guideEnabled: {% if guide_enabled %} true {% else %} false {% endif %},
+    trashReposExpireDays: {% if trash_repos_expire_days >= 0 %} {{ trash_repos_expire_days }} {% else %} null {% endif %},
+    canAddRepo: {% if user.permissions.can_add_repo %} true {% else %} false {% endif %},
+    canShareRepo: {% if user.permissions.can_share_repo %} true {% else %} false {% endif %},
+    canAddGroup: {% if user.permissions.can_add_group %} true {% else %} false {% endif %},
+    groupImportMembersExtraMsg: '{{ group_import_members_extra_msg }}',
+    canGenerateShareLink: {% if user.permissions.can_generate_share_link %} true {% else %} false {% endif %},
+    canGenerateUploadLink: {% if user.permissions.can_generate_upload_link %} true {% else %} false {% endif %},
+    canSendShareLinkEmail: {% if user.permissions.can_send_share_link_mail %} true {% else %} false {% endif %},
+    canViewOrg: '{{ user.permissions.can_view_org }}',
+    fileAuditEnabled: {% if file_audit_enabled %} true {% else %} false {% endif %},
+    enableFileComment: {% if enableFileComment %} true {% else %} false {% endif %},
+    folderPermEnabled: {% if folder_perm_enabled %} true {% else %} false {% endif %},
+    enableResetEncryptedRepoPassword: '{{ enable_reset_encrypted_repo_password }}',
+    isEmailConfigured: '{{ is_email_configured }}',
+    enableUploadFolder: '{{ enable_upload_folder }}',
+    enableResumableFileUpload: '{{ enable_resumable_fileupload }}',
+    resumableUploadFileBlockSize: '{{ resumable_upload_file_block_size }}',
+    storages: (function () {
+      var storages = [];
+      {% for storage in storages %}
+      storages.push({
+        'id': '{{ storage.storage_id|escapejs }}',
+        'name': '{{ storage.storage_name|escapejs }}'
+      });
+      {% endfor %}
+      return storages;
+    })(),
+    libraryTemplates: (function () {
+      var libraryTemplates = [];
+      {% for template in library_templates %}
+      libraryTemplates.push('{{ template }}');
+      {% endfor %}
+      return libraryTemplates;
+    })(),
+    enableRepoSnapshotLabel: {% if enable_repo_snapshot_label %} true {% else %} false {% endif %},
+    shareLinkForceUsePassword: {% if share_link_force_use_password %} true {% else %} false {% endif %},
+    shareLinkPasswordMinLength: {{ share_link_password_min_length }},
+    shareLinkPasswordStrengthLevel: {{ share_link_password_strength_level }},
+    sideNavFooterCustomHtml: '{{ side_nav_footer_custom_html|safe|escapejs }}',
+    helpLink: '{{ help_link }}',
+    aboutDialogCustomHtml: '{{ about_dialog_custom_html|safe|escapejs }}',
+    maxFileName: '{{ max_file_name }}',
+    canCreateWiki: {% if user.permissions.can_create_wiki %} true {% else %} false {% endif %},
+    canPublishWiki: {% if user.permissions.can_publish_wiki %} true {% else %} false {% endif %},
+    enableEncryptedLibrary: {% if enable_encrypted_library %} true {% else %} false {% endif %},
+    enableRepoHistorySetting: {% if enable_repo_history_setting %} true {% else %} false {% endif %},
+    enableUserCleanTrash: {% if enable_user_clean_trash %} true {% else %} false {% endif %},
+    isSystemStaff: {% if request.user.is_staff %} true {% else %} false {% endif %},
+    thumbnailSizeForOriginal: {{ thumbnail_size_for_original }},
+    thumbnailSizeForGrid: {{ thumbnail_size_for_grid }},
+    thumbnailDefaultSize: {{ thumbnail_default_size }},
+    repoPasswordMinLength: {{ repo_password_min_length }},
+    canAddPublicRepo: {% if can_add_public_repo %} true {% else %} false {% endif %},
+    enableOCMViaWebdav: {% if enable_ocm_via_webdav %} true {% else %} false {% endif %},
+    enableOCM: {% if enable_ocm %} true {% else %} false {% endif %},
+    ocmRemoteServers: (function () {
+      var servers = [];
+      {% for server in ocm_remote_servers %}
+      servers.push({
+        'label': '{{ server.server_name|escapejs }}',
+        'value': '{{ server.server_url|escapejs }}'
+      });
+      {% endfor %}
+      return servers;
+    })(),
+    canInvitePeople: {% if enable_guest_invitation and user.permissions.can_invite_guest %} true {% else %} false {% endif %},
+    customNavItems: {% if custom_nav_items %} JSON.parse('{{ custom_nav_items|escapejs }}') {% else %} [] {% endif %},
+    enableShowContactEmailWhenSearchUser: {% if enable_show_contact_email_when_search_user %} true {% else %} false {% endif %},
+    enableShowLoginIDWhenSearchUser: {% if enable_show_login_id_when_search_user %} true {% else %} false {% endif %},
+    {% if max_upload_file_size > 0 %}maxUploadFileSize: {{ max_upload_file_size }},{% endif %}
+    {% if max_number_of_files_for_fileupload > 0 %}maxNumberOfFilesForFileupload: {{ max_number_of_files_for_fileupload }},{% endif %}
+    {% if request.user.is_authenticated and request.cur_note %}
+    curNoteMsg: '{{ request.cur_note.message|urlize|escapejs }}',
+    curNoteID: '{{ request.cur_note.id }}',
+    {% endif %}
+    enableTC: {% if enable_terms_and_conditions %} true {% else %} false {% endif %},
+    enableSSOToThirdpartWebsite: {% if enable_sso_to_thirdpart_website %} true {% else %} false {% endif %},
+    enableVideoThumbnail: {% if enable_video_thumbnail %} true {% else %} false {% endif %},
+    enablePDFThumbnail: {% if enable_pdf_thumbnail %} true {% else %} false {% endif %},
+    showLogoutIcon: {% if show_logout_icon %} true {% else %} false {% endif %},
+    additionalShareDialogNote: {% if additional_share_dialog_note %} {{ additional_share_dialog_note|safe }} {% else %} null {% endif %},
+    additionalAboutDialogLinks: {% if additional_about_dialog_links %} {{ additional_about_dialog_links|safe }} {% else %} null {% endif %},
+    enableOnlyoffice: {% if enable_onlyoffice %} true {% else %} false {% endif %},
+    onlyofficeEditFileExtension: {% if onlyoffice_edit_file_extension %} {{ onlyoffice_edit_file_extension|safe }} {% else %} [] {% endif %},
+    onlyofficeSupportEditDocxf: {% if onlyoffice_support_edit_docxf %} true {% else %} false {% endif %},
+    onlyofficeConverterExtensions: {% if onlyoffice_converter_extensions %} {{ onlyoffice_converter_extensions|safe }} {% else %} null {% endif %},
+    enableOfficeWebApp: {% if enable_office_web_app %} true {% else %} false {% endif %},
+    officeWebAppEditFileExtension: {% if office_web_app_edit_file_extension %} {{ office_web_app_edit_file_extension|safe }} {% else %} [] {% endif %},
+    enableSeadoc: {% if enable_seadoc %} true {% else %} false {% endif %},
+    enableWhiteboard: {% if enable_whiteboard %} true {% else %} false {% endif %},
+    isOrgContext: {% if org is not None %} true {% else %} false {% endif %},
+    enableMetadataManagement: {% if enable_metadata_management %} true {% else %} false {% endif %},
+    enableSeafileAI: {% if enable_seafile_ai %} true {% else %} false {% endif %},
+    enableFaceRecognition: {% if enable_face_recognition %} true {% else %} false {% endif %},
+    isMultiTenancy: {% if multi_tenancy %} true {% else %} false {% endif %},
+    isSeafilePlus: {% if is_seafile_plus %} true {% else %} false {% endif %},
+    enableFileTags: {% if enable_file_tags %} true {% else %} false {% endif %},
+    enableShowAbout: {% if enable_show_about %} true {% else %} false {% endif %},
+    enableMultipleOfficeSuite: {% if user.permissions.can_choose_office_suite %} true {% else %} false {% endif %},
+    officeSuiteEditFileExtension: {% if office_suite_edit_file_extension %} {{ office_suite_edit_file_extension|safe }} {% else %} null {% endif %},
+    showWechatSupportGroup: {% if show_wechat_support_group %} true {% else %} false {% endif %},
+    baiduMapKey: '{{ baidu_map_key }}',
+    googleMapKey: '{{ google_map_key }}',
+    googleMapId: '{{ google_map_id }}',
+    enableThumbnailServer: {% if enable_thumbnal_server %} true {% else %} false {% endif %},
+    enableStorageClasses: {% if enable_storage_classes %} true {% else %} false {% endif %}
+  }
+};
+
+window.wiki = {
+  config: {
+    wikiId: "{{ wiki.id }}",
+    repoName: "{{ wiki.name|escapejs }}",
+    initial_path: "{{ file_path|escapejs }}",
+    isWiki2: true,
+    seadocServerUrl: "{{ seadoc_server_url }}",
+    permission: "{{ permission }}",
+    publishUrl: "{{ publish_url }}"
+  }
+};
+</script>
+<script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js?v={{ seafile_version }}"></script>
 <script>
+function getElement(id) {
+  return document.getElementById(id);
+}
+
 (function () {
   'use strict';
-
-  function getElement(id) {
-    return document.getElementById(id);
-  }
 
   function setChildrenExpanded(childrenEl, expanded) {
     if (!childrenEl) return;
@@ -231,8 +369,14 @@
     if (e.key === 'Escape') closeSidePanel();
   });
 
+})();
+
+(function () {
+  'use strict';
+
   // Persist the desktop sidebar width locally so repeated visits feel stable.
-  var resizeHandle = getElement('wiki-resize-handle');
+  var sidePanel = document.getElementById('wiki-side-panel');
+  var resizeHandle = document.getElementById('wiki-resize-handle');
   var SIDE_MIN = 160, SIDE_MAX = 520, RESIZE_KEY = 'sf_wiki_side_panel_width';
 
   function applySideWidth(w) {
@@ -252,45 +396,274 @@
     applySideWidth(260);
   }
 
-  if (resizeHandle) {
-    var resizing = false;
+  if (!resizeHandle) return;
 
-    resizeHandle.addEventListener('mousedown', function (e) {
-      if (window.innerWidth < 768) return;
+  var resizing = false;
+
+  resizeHandle.addEventListener('mousedown', function (e) {
+    if (window.innerWidth < 768) return;
+    e.preventDefault();
+    resizing = true;
+    resizeHandle.classList.add('dragging');
+    document.body.style.cssText += ';cursor:col-resize;user-select:none';
+  });
+
+  document.addEventListener('mousemove', function (e) {
+    if (resizing) applySideWidth(e.clientX);
+  });
+
+  document.addEventListener('mouseup', function () {
+    if (!resizing) return;
+    resizing = false;
+    resizeHandle.classList.remove('dragging');
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+    try {
+      localStorage.setItem(
+        RESIZE_KEY,
+        parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--wiki-side-width'))
+      );
+    } catch (e) {}
+  });
+})();
+
+// Handle side navbar navigation without a full page reload.
+(function () {
+  function dispatchWikiNavigate(pageId) {
+    if (!pageId) return;
+
+    window.dispatchEvent(new CustomEvent('wiki:navigate', {
+      detail: {
+        pageid: pageId
+      }
+    }));
+  }
+
+  function getPageIdFromPath(pathname) {
+    if (!pathname) return '';
+
+    var match = pathname.match(/\/wiki\/publish\/[-0-9a-zA-Z]+\/([-0-9a-zA-Z]{4})\/$/);
+    return match ? match[1] : '';
+  }
+
+  function buildPageUrl(pageId) {
+    if (!pageId) return window.location.pathname + window.location.search + window.location.hash;
+
+    var pathname = window.location.pathname;
+    if (/\/[-0-9a-zA-Z]{4}\/$/.test(pathname)) {
+      pathname = pathname.replace(/\/[-0-9a-zA-Z]{4}\/$/, '/' + pageId + '/');
+    } else if (/\/wiki\/publish\/[-0-9a-zA-Z]+\/$/.test(pathname)) {
+      pathname += pageId + '/';
+    }
+
+    return pathname + window.location.search + window.location.hash;
+  }
+
+  function getNavPageTitle(pageId) {
+    if (!pageId) return '';
+
+    var navLink = document.querySelector('#wiki-nav-tree .wiki-page-item-main[data-page-id="' + pageId + '"]');
+    if (!navLink) return '';
+
+    var titleEl = navLink.querySelector('.wiki-page-title');
+    return titleEl ? titleEl.textContent.trim() : '';
+  }
+
+  function updateWikiPageTitle(pageId) {
+    var pageTitle = getElement('wiki-page-title');
+    var title = getNavPageTitle(pageId);
+    if (!pageTitle || !title) return;
+
+    pageTitle.textContent = title;
+  }
+
+  function getCurrentNavPageId() {
+    var currentLink = document.querySelector('#wiki-nav-tree .wiki-page-item-main[aria-current="true"]');
+    return currentLink ? currentLink.getAttribute('data-page-id') : '';
+  }
+
+  function getNavLinkByPageId(pageId) {
+    if (!pageId) return null;
+
+    return document.querySelector('#wiki-nav-tree .wiki-page-item-main[data-page-id="' + pageId + '"]');
+  }
+
+  function getDirectNavLink(wrapper) {
+    if (!wrapper) return null;
+
+    for (var i = 0; i < wrapper.children.length; i++) {
+      var child = wrapper.children[i];
+      if (child.classList && child.classList.contains('wiki-page-item')) {
+        return child.querySelector('.wiki-page-item-main');
+      }
+    }
+
+    return null;
+  }
+
+  function getNavPathLinks(pageId) {
+    var navLink = getNavLinkByPageId(pageId);
+    if (!navLink) return [];
+
+    var pathLinks = [];
+    var wrapper = navLink.closest('.wiki-page-item-wrapper');
+
+    while (wrapper) {
+      var pathLink = getDirectNavLink(wrapper);
+      if (pathLink) {
+        pathLinks.unshift(pathLink);
+      }
+
+      var parentList = wrapper.parentElement;
+      wrapper = parentList ? parentList.closest('.wiki-page-item-wrapper') : null;
+    }
+
+    return pathLinks;
+  }
+
+  function createBreadcrumbLink(navLink, isCurrent) {
+    var pageId = navLink.getAttribute('data-page-id');
+    var title = navLink.getAttribute('title') || getNavPageTitle(pageId);
+    var breadcrumbLink = document.createElement('a');
+    breadcrumbLink.className = 'wiki2-top-nav-item';
+    breadcrumbLink.href = buildPageUrl(pageId);
+    breadcrumbLink.title = title;
+    breadcrumbLink.setAttribute('data-page-id', pageId);
+    if (isCurrent) {
+      breadcrumbLink.setAttribute('aria-current', 'page');
+    }
+
+    var navIcon = document.createElement('span');
+    navIcon.className = 'nav-icon';
+    var sourceIcon = navLink.querySelector('.nav-item-icon');
+    if (sourceIcon) {
+      navIcon.innerHTML = sourceIcon.innerHTML;
+    }
+
+    var navLabel = document.createElement('span');
+    navLabel.className = 'nav-label';
+    navLabel.textContent = title;
+
+    breadcrumbLink.appendChild(navIcon);
+    breadcrumbLink.appendChild(navLabel);
+
+    return breadcrumbLink;
+  }
+
+  function updateWikiBreadcrumb(pageId) {
+    var breadcrumb = getElement('wiki-breadcrumb');
+    if (!breadcrumb) return;
+
+    var pathLinks = getNavPathLinks(pageId);
+    breadcrumb.innerHTML = '';
+
+    pathLinks.forEach(function (navLink, index) {
+      breadcrumb.appendChild(createBreadcrumbLink(navLink, index === pathLinks.length - 1));
+
+      if (index < pathLinks.length - 1) {
+        var split = document.createElement('span');
+        split.className = 'item-split';
+        split.setAttribute('aria-hidden', 'true');
+        split.textContent = '/';
+        breadcrumb.appendChild(split);
+      }
+    });
+  }
+
+  function updateActiveNav(pageId) {
+    if (!pageId) return;
+
+    var currentLink = document.querySelector('#wiki-nav-tree .wiki-page-item-main[aria-current="true"]');
+    if (currentLink) {
+      currentLink.setAttribute('aria-current', 'false');
+      var currentItem = currentLink.closest('.wiki-page-item');
+      if (currentItem) {
+        currentItem.classList.remove('selected-page');
+      }
+    }
+
+    var nextLink = document.querySelector('#wiki-nav-tree .wiki-page-item-main[data-page-id="' + pageId + '"]');
+    if (!nextLink) return;
+
+    nextLink.setAttribute('aria-current', 'true');
+    var nextItem = nextLink.closest('.wiki-page-item');
+    if (nextItem) {
+      nextItem.classList.add('selected-page');
+    }
+  }
+
+  var navTree = getElement('wiki-nav-tree');
+  if (navTree) {
+    navTree.addEventListener('click', function (e) {
+      var navLink = e.target.closest('.wiki-page-item-main');
+      if (!navLink || !navTree.contains(navLink)) return;
+
       e.preventDefault();
-      resizing = true;
-      resizeHandle.classList.add('dragging');
-      document.body.style.cssText += ';cursor:col-resize;user-select:none';
-    });
 
-    document.addEventListener('mousemove', function (e) {
-      if (resizing) applySideWidth(e.clientX);
-    });
+      var pageId = navLink.getAttribute('data-page-id');
+      if (!pageId) return;
 
-    document.addEventListener('mouseup', function () {
-      if (!resizing) return;
-      resizing = false;
-      resizeHandle.classList.remove('dragging');
-      document.body.style.cursor = '';
-      document.body.style.userSelect = '';
-      try {
-        localStorage.setItem(
-          RESIZE_KEY,
-          parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--wiki-side-width'))
-        );
-      } catch (e) {}
+      var targetUrl = buildPageUrl(pageId);
+      if (targetUrl !== window.location.pathname + window.location.search + window.location.hash) {
+        window.history.pushState({ pageid: pageId }, '', targetUrl);
+      }
+
+      updateActiveNav(pageId);
+      updateWikiPageTitle(pageId);
+      updateWikiBreadcrumb(pageId);
+      dispatchWikiNavigate(pageId);
     });
   }
 
-  // Keep browser back/forward navigation simple for now: SSR content is fully
-  // page-based, so a full reload is the safest way to stay in sync.
-  function reloadCurrentPage() {
-    window.location.reload();
+  var breadcrumb = getElement('wiki-breadcrumb');
+  if (breadcrumb) {
+    breadcrumb.addEventListener('click', function (e) {
+      var breadcrumbLink = e.target.closest('.wiki2-top-nav-item');
+      if (!breadcrumbLink || !breadcrumb.contains(breadcrumbLink)) return;
+
+      e.preventDefault();
+
+      var pageId = breadcrumbLink.getAttribute('data-page-id');
+      if (!pageId) return;
+
+      var targetUrl = buildPageUrl(pageId);
+      if (targetUrl !== window.location.pathname + window.location.search + window.location.hash) {
+        window.history.pushState({ pageid: pageId }, '', targetUrl);
+      }
+
+      updateActiveNav(pageId);
+      updateWikiPageTitle(pageId);
+      updateWikiBreadcrumb(pageId);
+      dispatchWikiNavigate(pageId);
+    });
   }
 
-  window.addEventListener('popstate', reloadCurrentPage);
+  var hasHandledInitialPopstate = false;
 
+  window.addEventListener('popstate', function (e) {
+    if (!hasHandledInitialPopstate) {
+      hasHandledInitialPopstate = true;
+
+      // Some browsers may emit an initial popstate on page load or refresh.
+      // The page content is already rendered from the current URL, so skip the
+      // first popstate-driven navigation entirely.
+      return;
+    }
+
+    var pageId = e.state && e.state.pageid;
+    if (!pageId) {
+      pageId = getPageIdFromPath(window.location.pathname) || getCurrentNavPageId();
+    }
+
+    updateActiveNav(pageId);
+    updateWikiPageTitle(pageId);
+    updateWikiBreadcrumb(pageId);
+    dispatchWikiNavigate(pageId);
+  });
+
+  updateWikiBreadcrumb(getPageIdFromPath(window.location.pathname) || getCurrentNavPageId());
 })();
 </script>
+{% render_bundle 'wikiViewer' 'js' %}
 </body>
 </html>

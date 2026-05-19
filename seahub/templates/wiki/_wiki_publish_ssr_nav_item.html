@@ -13,20 +13,22 @@
 
     <a class="wiki-page-item-main"
        href="{{ item.url }}"
-       {% if item.is_current %}aria-current="page"{% else %}aria-current="false"{% endif %}
+       data-page-id="{{ item.id }}"
+       {% if item.is_current %}aria-current="true"{% else %}aria-current="false"{% endif %}
        title="{{ item.name }}">
       <div class="wiki-page-content">
         <span class="nav-item-icon">
           {% if item.icon %}
           <span style="font-size: 14px;">{{ item.icon }}</span>
           {% elif item.has_children %}
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 7.5A1.5 1.5 0 0 1 4.5 6H10l1.5 2H19.5A1.5 1.5 0 0 1 21 9.5v7A1.5 1.5 0 0 1 19.5 18h-15A1.5 1.5 0 0 1 3 16.5z"></path>
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="currentColor">
+            <path d="M20.415 23.5H10.415V20.5H20.415V23.5Z"/>
+            <path d="M22.415 18.5H10.415V15.5H22.415V18.5Z"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M28.915 11.0557V25C28.915 28.0376 26.4526 30.5 23.415 30.5H8.58496C5.54739 30.5 3.08496 28.0376 3.08496 25V1.5H19.5859L28.915 11.0557ZM6.08496 25C6.08496 26.3807 7.20425 27.5 8.58496 27.5H23.415C24.7958 27.5 25.915 26.3807 25.915 25V13.167H17.4541V4.5H6.08496V25ZM20.4541 10.167H23.8545L20.4541 6.68359V10.167Z"/>
           </svg>
           {% else %}
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-            <polyline points="14 2 14 8 20 8"></polyline>
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="currentColor">
+            <path d="M25.5 13.167H17.0381V4.5H6.5V25C6.5 26.3807 7.61929 27.5 9 27.5H23C24.3807 27.5 25.5 26.3807 25.5 25V13.167ZM20.0381 10.167H23.4395L20.0381 6.68262V10.167ZM28.5 25C28.5 28.0376 26.0376 30.5 23 30.5H9C5.96243 30.5 3.5 28.0376 3.5 25V1.5H19.1699L28.5 11.0557V25Z"/>
           </svg>
           {% endif %}
         </span>

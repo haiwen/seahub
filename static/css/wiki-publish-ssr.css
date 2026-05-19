@@ -246,9 +246,7 @@ html, body {
 .nav-item-icon svg {
   width: 16px;
   height: 16px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.5;
+  color: #666;
 }
 
 .wiki-nav-children {
@@ -333,14 +331,13 @@ html, body {
   margin-right: 4px;
   flex-shrink: 0;
   color: #666;
+  display: inline-flex;
+  align-items: center;
 }
 
 .wiki2-top-nav-item .nav-icon svg {
-  width: 14px;
-  height: 14px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.5;
+  width: 16px;
+  height: 16px;
 }
 
 .item-split {
@@ -399,21 +396,79 @@ html, body {
   word-break: break-word;
 }
 
-.sdoc-editor-container {
+#wiki-sdoc-previewer {
+  flex: 1;
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+}
+
+.wiki-editor-container .sdoc-editor-container {
   flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 0;
+  min-width: 0;
   width: 100%;
 }
 
-.sdoc-article-container {
+.wiki-editor-container .sdoc-editor-container .sdoc-content-wrapper {
+  height: auto;
+  background-color: #fff;
+}
+
+.wiki-editor-container .sdoc-editor-container .sdoc-editor-content {
+  display: flex;
+  flex-direction: column;
+  position: static;
+  min-width: 0;
+  width: 100%;
+}
+
+.sdoc-editor-container .sdoc-editor-content .sdoc-article-container {
   padding-top: 0;
   padding-bottom: 0;
   width: 100%;
 }
 
-.article.sdoc-editor__article {
+.sdoc-editor-container .sdoc-editor-content .sdoc-article-container .article {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  min-height: 800px;
+  width: 100%;
+  padding: 0 142px 60px;
+  box-shadow: none;
+  border: none;
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+
+.sdoc-editor-container .sdoc-editor-content .sdoc-article-container .article > div {
+  caret-color: blue;
+}
+
+.sdoc-editor-container .sdoc-editor-content .sdoc-article-container .article .sdoc-drag-cover::before {
+  content: ' ';
+  width: 59px;
+  display: inline-block;
+  position: absolute;
+  left: -60px;
+}
+
+.sdoc-editor-container .sdoc-editor-content .sdoc-article-container .article .sdoc-draging {
+  border-bottom: 2px solid rgba(35, 131, 226);
+}
+
+.sdoc-editor-container .sdoc-editor-content .sdoc-article-container .article #sdoc-editor {
+  width: 100%;
+  position: relative;
+  outline: none;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+/* .article.sdoc-editor__article {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -426,7 +481,7 @@ html, body {
   background-color: var(--bs-body-bg, #fff);
   color: var(--bs-body-color, #212529);
   box-sizing: border-box;
-}
+} */
 
 @media (max-width: 767px) {
   .article.sdoc-editor__article {
@@ -509,6 +564,17 @@ html, body {
 
   .wiki-mobile-close {
     display: flex !important;
+  }
+
+  .sdoc-editor-container .sdoc-editor-content .sdoc-article-container {
+    min-width: 100% !important;
+    padding: 0;
+    width: 100% !important;
+  }
+
+  .sdoc-editor-container .sdoc-editor-content .article {
+    padding: 1rem !important;
+    /* width: 100vw !important; */
   }
 }
 
