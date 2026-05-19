@@ -2451,6 +2451,27 @@ class Wiki2FileViewRecords(APIView):
 
 
 class Wiki2LinkedRepoDirView(APIView):
+    '''
+    Authentication notes:
+    
+    1. Authentication: Any of SdocJWTTokenAuthentication (JWT-based for SDoc),
+       TokenAuthentication (API token), or SessionAuthentication (web session)
+       can authenticate the user. The request must provide valid credentials
+       via at least one of these methods. 
+
+       Note that: If use JWT-based authentication,the request must also provide a
+       file_uuid of a page in a wiki in the url query parameters
+    
+    2. Wiki permission: check_wiki_permission() verifies the user has read
+        access to the target wiki. This is the primary authorization gate.
+    
+    3. Wiki settings: The wiki must have enable_link_repos turned on, and the
+       requested linked_repo_id must be in the wiki's linked repos list.
+    
+    4. Repo permission: check_folder_permission() verifies the user has read
+        access to the linked repo itself, independent of wiki access.
+    
+    '''
     authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
