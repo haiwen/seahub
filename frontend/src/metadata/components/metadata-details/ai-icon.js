@@ -138,7 +138,7 @@ const AIIcon = () => {
       <DropdownToggle
         id="ai-icon"
         className="border-0 p-0 bg-transparent detail-control mr-2"
-        ref={menuToggleRef}
+        innerRef={menuToggleRef}
         data-toggle="dropdown"
         aria-expanded={isMenuShow}
         title='AI'

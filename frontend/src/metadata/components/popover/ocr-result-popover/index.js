@@ -58,7 +58,12 @@ const OCRResultPopover = ({ repoID, target, record, onToggle, saveToDescription 
   }, [onToggle]);
 
   const updateStyle = useCallback(() => {
-    const { bottom, top, left } = getTarget(target).getBoundingClientRect();
+    const targetElement = getTarget(target);
+    if (!targetElement || typeof targetElement.getBoundingClientRect !== 'function') {
+      return;
+    }
+
+    const { bottom, top, left } = targetElement.getBoundingClientRect();
     const innerHeight = window.innerHeight;
     const innerWidth = window.innerWidth;
     const gap = 5; // gap between target and popover
