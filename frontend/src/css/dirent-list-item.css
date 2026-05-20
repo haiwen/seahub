@@ -108,12 +108,6 @@
   margin-right: 0;
 }
 
-.dirent-property.dirent-property-name {
-  min-width: 120px;
-  font-weight: normal;
-  padding-left: 0;
-}
-
 .dirent-item-name-content {
   display: flex;
   align-items: center;
