@@ -134,7 +134,13 @@ class SelectedDirentsToolbar extends React.Component {
     while (opList.length > 0 && opList[0] === 'Divider') {
       opList.shift();
     }
-    return opList;
+    return opList.map(item => {
+      if (item === 'Divider') return item;
+      return {
+        ...item,
+        onClick: () => this.onMenuItemClick(item.key)
+      };
+    });
   };
 
   onMenuItemClick = (operation) => {
@@ -385,10 +391,7 @@ class SelectedDirentsToolbar extends React.Component {
           <CustomDropdown
             target="selected-item-dropdown-menu"
             items={this.getDirentMenuList(this.props.selectedDirentList[0])}
-            trigger={<Icon symbol="more-level" />}
             triggerClassName="cur-view-path-btn"
-            tooltip={gettext('More operations')}
-            onItemClick={(selectedItem, event) => this.onMenuItemClick(selectedItem.key, event)}
           />
         }
       </div>

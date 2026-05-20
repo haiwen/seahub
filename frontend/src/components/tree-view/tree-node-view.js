@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext, permission } from '../../utils/constants';
+import { permission } from '../../utils/constants';
 import TextTranslation from '../../utils/text-translation';
 import { Utils } from '../../utils/utils';
 import OpIcon from '../../components/op-icon';
@@ -157,10 +157,6 @@ class TreeNodeView extends React.Component {
     this.props.unfreezeItem();
   };
 
-  onMenuItemClick = (operation, event, node) => {
-    this.props.onMenuItemClick(operation, node);
-  };
-
   onItemMouseDown = (event) => {
     event.stopPropagation();
     if (event.button === 2) {
@@ -238,6 +234,16 @@ class TreeNodeView extends React.Component {
     }
 
     return menuList;
+  };
+
+  getMenuList = () => {
+    return this.calculateMenuList(this.props.node).map(item => {
+      if (item === 'Divider') return item;
+      return {
+        ...item,
+        onClick: () => this.props.onMenuItemClick(item.key, this.props.node)
+      };
+    });
   };
 
   renderChildren = () => {
@@ -335,12 +341,9 @@ class TreeNodeView extends React.Component {
             <div className="right-icon">
               <CustomDropdown
                 target={`tree-node-dropdown-btn-${idx}`}
-                items={this.calculateMenuList(this.props.node)}
-                trigger={<Icon symbol="more-level" />}
+                items={this.getMenuList()}
                 freezeItem={this.props.freezeItem}
                 unfreezeItem={this.unfreezeItem}
-                tooltip={gettext('More operations')}
-                onItemClick={(selectedItem, event) => this.onMenuItemClick(selectedItem.key, event, this.props.node)}
               />
             </div>
           )}

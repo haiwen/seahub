@@ -117,3 +117,9 @@
 .dropdown-item.is-danger .dropdown-item-label {
   color: var(--bs-danger);
 }
+
+@media (max-width: 768px) {
+  .dropdown-menu {
+    z-index: 1050;
+  }
+}

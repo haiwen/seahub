@@ -6,7 +6,6 @@ import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Selector from '../../components/single-selector';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
-import Icon from '../../components/icon';
 import CustomDropdown from '../../components/dropdown';
 
 const propTypes = {
@@ -176,7 +175,6 @@ class UserItem extends React.Component {
             {(this.state.showMenu || this.state.isDropdownFrozen) && isOperationMenuShow && (
               <CustomDropdown
                 items={this.getMenuItems()}
-                trigger={<Icon symbol="more-level" />}
                 triggerClassName="op-icon"
                 freezeItem={this.handleDropdownOpen}
                 unfreezeItem={this.handleDropdownClose}
@@ -185,13 +183,13 @@ class UserItem extends React.Component {
           </td>
         </tr>
         {isConfirmInactiveDialogOpen &&
-        <CommonOperationConfirmationDialog
-          title={gettext('Set user inactive')}
-          message={confirmSetUserInactiveMsg}
-          executeOperation={this.setUserInactive}
-          confirmBtnText={gettext('Set')}
-          toggleDialog={this.toggleConfirmInactiveDialog}
-        />
+          <CommonOperationConfirmationDialog
+            title={gettext('Set user inactive')}
+            message={confirmSetUserInactiveMsg}
+            executeOperation={this.setUserInactive}
+            confirmBtnText={gettext('Set')}
+            toggleDialog={this.toggleConfirmInactiveDialog}
+          />
         }
       </>
     );

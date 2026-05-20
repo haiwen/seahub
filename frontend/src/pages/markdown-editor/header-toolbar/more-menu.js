@@ -72,7 +72,6 @@ class MoreMenu extends React.PureComponent {
         triggerClassName="sf-md-header-more-tool"
         menuClassName="drop-list"
         menuPortal={false}
-        onItemClick={(selectedItem) => selectedItem.onClick?.()}
       />
     );
   }

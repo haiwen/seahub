@@ -30,9 +30,9 @@ const CommentBodyHeader = ({ commentList = [], commentType, setCommentType }) =>
   }
 
   const items = [
-    { key: 'All comments', label: gettext('All comments') },
-    { key: 'Resolved comments', label: gettext('Resolved comments') },
-    { key: 'Unresolved comments', label: gettext('Unresolved comments') },
+    { key: 'All comments', label: gettext('All comments'), onClick: () => setCommentType(null, 'All comments') },
+    { key: 'Resolved comments', label: gettext('Resolved comments'), onClick: () => setCommentType(null, 'Resolved comments') },
+    { key: 'Unresolved comments', label: gettext('Unresolved comments'), onClick: () => setCommentType(null, 'Unresolved comments') },
   ];
 
   return (
@@ -50,7 +50,6 @@ const CommentBodyHeader = ({ commentList = [], commentType, setCommentType }) =>
             triggerClassName="w-auto d-flex align-items-center justify-content-center"
             menuClassName="sdoc-dropdown-menu sdoc-comment-filter-dropdown"
             menuPortal={false}
-            onItemClick={(item) => setCommentType(null, item.key)}
           />
         </div>
         <div className="comment-count-tip">{commentTip}</div>

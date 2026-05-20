@@ -4,7 +4,6 @@ import dayjs from 'dayjs';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, filePath, historyRepoID, isVirtualRepo } from '../../utils/constants';
 import URLDecorator from '../../utils/url-decorator';
-import Icon from '../../components/icon';
 import CustomDropdown from '../../components/dropdown';
 
 dayjs.locale(window.app.config.lang);
@@ -119,7 +118,6 @@ class MoreMenu extends React.PureComponent {
       <CustomDropdown
         items={this.getMenuItems()}
         className={`mx-1 old-history-more-operation ${className}`}
-        trigger={<Icon symbol="more-level" />}
         triggerClassName="op-icon"
         menuClassName="drop-list"
       />

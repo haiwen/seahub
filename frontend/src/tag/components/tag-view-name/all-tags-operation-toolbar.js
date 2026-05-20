@@ -84,7 +84,6 @@ const AllTagsOperationToolbar = ({ repoID }) => {
           triggerClassName="path-dropdown-item all-tags-operation-toggle"
           menuClassName="position-fixed"
           menuPortal={false}
-          onItemClick={(selectedItem) => selectedItem.onClick?.()}
         />
       </div>
       {isShowEditTagDialog && (

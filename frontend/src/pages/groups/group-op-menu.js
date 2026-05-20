@@ -212,7 +212,6 @@ class GroupOperationMenu extends React.Component {
         {group && (
           <CustomDropdown
             items={groupActions}
-            onItemClick={(selectedItem) => selectedItem.onClick?.()}
             trigger={(
               <>
                 {this.newLibraryEnabled && <Icon symbol="new" className="new-icon" />}

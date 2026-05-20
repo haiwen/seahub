@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { gettext, filePath } from '../../utils/constants';
 import URLDecorator from '../../utils/url-decorator';
-import Icon from '../icon';
 import CustomDropdown from '../dropdown';
 
 import '../../css/history-record-item.css';
@@ -104,7 +103,6 @@ class HistoryListItem extends React.Component {
         <div className="history-operation">
           <CustomDropdown
             items={this.getMenuItems()}
-            trigger={<Icon symbol="more-level" />}
             triggerClassName={(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}
             freezeItem={this.handleDropdownOpen}
             unfreezeItem={this.handleDropdownClose}

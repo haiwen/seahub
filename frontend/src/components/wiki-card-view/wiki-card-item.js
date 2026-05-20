@@ -15,7 +15,6 @@ import toaster from '../toast';
 import ConvertWikiDialog from '../dialog/convert-wiki-dialog';
 import PublishedWikiExtrance from '../published-wiki-entrance';
 import Icon from '../icon';
-import Tooltip from '../tooltip';
 import CustomDropdown from '../dropdown';
 
 dayjs.extend(relativeTime);
@@ -277,17 +276,10 @@ class WikiCardItem extends Component {
                 target={`wiki-card-more-op-${idx}`}
                 items={dropdownItems}
                 className="ml-auto"
-                trigger={(
-                  <>
-                    <Icon symbol="more-level" className="w-4 h-4" />
-                    <Tooltip target={`wiki-card-more-op-${idx}`}>{gettext('More operations')}</Tooltip>
-                  </>
-                )}
                 triggerClassName="op-icon op-icon-bg-light"
                 menuClassName="dtable-dropdown-menu"
                 onToggle={this.toggleDropDownMenu}
                 onMenuHide={() => this.setState({ isItemMenuShow: false })}
-                onItemClick={(selectedItem) => selectedItem.onClick?.()}
               />
             )}
           </div>

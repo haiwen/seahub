@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { SeafileCommentEditor, commentProcessor } from '@seafile/comment-editor';
 import { gettext } from '../../../utils/constants';
 import CommentDeletePopover from './comment-delete-popover';
-import Icon from '../../icon';
 import CustomDropdown from '../../dropdown';
 
 const { username } = window.app.pageOptions;
@@ -127,7 +126,6 @@ class ReplyItem extends React.Component {
               target={replyOpToolsId}
               className="seafile-comment-dropdown"
               items={this.getMenuItems()}
-              trigger={<Icon symbol="more-level" />}
               triggerClassName="seafile-comment-dropdown-btn sf-dropdown-toggle"
             />
           }

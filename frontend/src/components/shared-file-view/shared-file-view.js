@@ -9,7 +9,6 @@ import SaveSharedFileDialog from '../dialog/save-shared-file-dialog';
 import AddAbuseReportDialog from '../../components/dialog/add-abuse-report-dialog';
 import toaster from '../toast';
 import Switch from '../switch';
-import Icon from '../icon';
 import CustomDropdown from '../dropdown';
 
 import '../../css/header.css';
@@ -165,7 +164,6 @@ class SharedFileView extends React.Component {
         <div className="flex-shrink-0 ml-4">
           <CustomDropdown
             items={this.getMenuItems()}
-            trigger={<Icon symbol="more-level" />}
             triggerClassName="op-icon m-0"
           />
         </div>

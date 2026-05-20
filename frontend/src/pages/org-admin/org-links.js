@@ -8,7 +8,6 @@ import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import MainPanelTopbar from './main-panel-topbar';
 import ViewLinkDialog from '../../components/dialog/view-link-dialog';
-import Icon from '../../components/icon';
 import CustomDropdown from '../../components/dropdown';
 
 dayjs.extend(relativeTime);
@@ -91,7 +90,7 @@ class OrgLinks extends React.Component {
     const linkList = this.state.linkList;
     return (
       <Fragment>
-        <MainPanelTopbar/>
+        <MainPanelTopbar />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
@@ -134,7 +133,7 @@ class OrgLinks extends React.Component {
           </div>
         </div>
         {this.state.isShowLinkDialog &&
-          <ViewLinkDialog currentLinkHref={this.state.currentLinkHref} toggle={this.toggleLinkDialog}/>
+          <ViewLinkDialog currentLinkHref={this.state.currentLinkHref} toggle={this.toggleLinkDialog} />
         }
       </Fragment>
     );
@@ -204,7 +203,6 @@ class RepoItem extends React.Component {
           {(this.state.showMenu || this.state.isDropdownFrozen) && (
             <CustomDropdown
               items={this.getMenuItems()}
-              trigger={<Icon symbol="more-level" />}
               triggerClassName="op-icon"
               freezeItem={this.handleDropdownOpen}
               unfreezeItem={this.handleDropdownClose}

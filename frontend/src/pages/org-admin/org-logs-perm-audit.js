@@ -6,7 +6,6 @@ import { siteRoot, gettext, lang } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import OrgLogsFilePermEvent from '../../models/org-logs-perm-audit';
-import Icon from '../../components/icon';
 import CustomDropdown from '../../components/dropdown';
 import '../../css/org-logs.css';
 
@@ -162,7 +161,6 @@ class PermAuditItem extends React.Component {
             label: <>{gettext('Only Show')} <span className="font-weight-bold">{permEvent.from_user_name}</span></>,
             onClick: this.props.filterUser.bind(this, permEvent.from_user_email),
           }]}
-          trigger={<Icon symbol="more-level" />}
           triggerClassName="op-icon sf-dropdown-toggle"
         />
       </span>

@@ -5,7 +5,6 @@ import { gettext } from '../../../../utils/constants';
 import { getWikPageLink } from '../../utils';
 import { INSERT_POSITION } from '../constants';
 import Icon from '../../../../components/icon';
-import Tooltip from '@/components/tooltip';
 import CustomDropdown from '../../../../components/dropdown';
 
 const { serviceURL: serviceUrl } = window.app.config;
@@ -180,12 +179,6 @@ export default class PageDropdownMenu extends Component {
         target="wiki-nav-item-more-operations"
         items={menuItems}
         className="page-operation-dropdown"
-        trigger={(
-          <>
-            <Icon symbol="more-level" />
-            <Tooltip target="wiki-nav-item-more-operations">{gettext('More operations')}</Tooltip>
-          </>
-        )}
         triggerClassName="op-icon"
         menuClassName="page-operation-dropdown-menu dtable-dropdown-menu large position-fixed"
         modifier={[
@@ -194,7 +187,6 @@ export default class PageDropdownMenu extends Component {
         ]}
         freezeItem={this.props.freezeItem}
         unfreezeItem={this.props.unfreezeItem}
-        onItemClick={(selectedItem) => selectedItem.onClick?.()}
       />
     );
   }

@@ -175,7 +175,6 @@ class MyLibraries extends Component {
                 <span className="library-list-title">{gettext('My Libraries')}</span>
                 <CustomDropdown
                   items={libraryActions}
-                  onItemClick={(selectedItem) => selectedItem.onClick?.()}
                   trigger={(
                     <>
                       <Icon symbol="new" className="new-icon" />

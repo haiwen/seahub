@@ -6,7 +6,6 @@ import EventBus from '../common/event-bus';
 import OpElement from '../../components/op-element';
 import OpIcon from '../../components/op-icon';
 import Icon from '../icon';
-import Tooltip from '../tooltip';
 import CustomDropdown from '../dropdown';
 
 const AllTagsToolbar = () => {
@@ -24,24 +23,6 @@ const AllTagsToolbar = () => {
     eventBus && eventBus.dispatch(EVENT_BUS_TYPE.DELETE_TAGS, selectedTagIds);
   }, [selectedTagIds, eventBus]);
 
-  const menuItems = useMemo(() => {
-    if (!canModify) {
-      return [];
-    }
-
-    if (selectedTagIds.length > 1) {
-      return [{
-        key: TextTranslation.MERGE_TAGS.key,
-        label: TextTranslation.MERGE_TAGS.value,
-      }];
-    }
-
-    return [{
-      key: TextTranslation.NEW_CHILD_TAG.key,
-      label: TextTranslation.NEW_CHILD_TAG.value,
-    }];
-  }, [canModify, selectedTagIds]);
-
   const onMenuItemClick = useCallback((operation, e) => {
     switch (operation) {
       case TextTranslation.MERGE_TAGS.key: {
@@ -54,6 +35,26 @@ const AllTagsToolbar = () => {
       }
     }
   }, [eventBus, selectedTagIds]);
+
+  const menuItems = useMemo(() => {
+    if (!canModify) {
+      return [];
+    }
+
+    if (selectedTagIds.length > 1) {
+      return [{
+        key: TextTranslation.MERGE_TAGS.key,
+        label: TextTranslation.MERGE_TAGS.value,
+        onClick: (e) => onMenuItemClick(TextTranslation.MERGE_TAGS.key, e),
+      }];
+    }
+
+    return [{
+      key: TextTranslation.NEW_CHILD_TAG.key,
+      label: TextTranslation.NEW_CHILD_TAG.value,
+      onClick: (e) => onMenuItemClick(TextTranslation.NEW_CHILD_TAG.key, e),
+    }];
+  }, [canModify, onMenuItemClick, selectedTagIds.length]);
 
   useEffect(() => {
     const unsubscribeSelectTags = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.SELECT_TAGS, (ids) => {
@@ -92,14 +93,7 @@ const AllTagsToolbar = () => {
         <CustomDropdown
           target="all-tags-more-operations-btn"
           items={menuItems}
-          trigger={(
-            <>
-              <Icon symbol="more-level" />
-              <Tooltip target="all-tags-more-operations-btn">{gettext('More operations')}</Tooltip>
-            </>
-          )}
           triggerClassName="cur-view-path-btn"
-          onItemClick={(selectedItem, event) => onMenuItemClick(selectedItem.key, event)}
         />
       )}
     </div>

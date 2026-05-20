@@ -46,26 +46,10 @@ const GalleryFilesToolbar = () => {
       unsubscribeSelectedFileIds && unsubscribeSelectedFileIds();
       unsubscribeMetadata && unsubscribeMetadata();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const records = useMemo(() => selectedRecordIds.map(id => RowUtils.getRecordById(id, metadataRef.current)).filter(Boolean) || [], [selectedRecordIds]);
-
-  const toolbarMenuOptions = useMemo(() => {
-    if (!records.length) return [];
-    const metadataStatus = {
-      enableFaceRecognition,
-      enableGenerateDescription: getColumnByKey(metadataRef.current.columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION) !== null,
-      enableTags
-    };
-    return buildGalleryToolbarMenuOptions(
-      records,
-      readOnly,
-      metadataStatus,
-      null,
-      faceRecognitionPermission
-    );
-  }, [records, readOnly, enableFaceRecognition, enableTags, faceRecognitionPermission]);
 
   const onMenuItemClick = useCallback((operation) => {
     switch (operation) {
@@ -116,6 +100,30 @@ const GalleryFilesToolbar = () => {
         break;
     }
   }, [repoID, records, eventBus, readOnly]);
+
+  const toolbarMenuOptions = useMemo(() => {
+    if (!records.length) return [];
+    const metadataStatus = {
+      enableFaceRecognition,
+      enableGenerateDescription: getColumnByKey(metadataRef.current.columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION) !== null,
+      enableTags
+    };
+    let options = buildGalleryToolbarMenuOptions(
+      records,
+      readOnly,
+      metadataStatus,
+      null,
+      faceRecognitionPermission
+    );
+
+    return options.map(item => {
+      if (item === 'Divider') return item;
+      return {
+        ...item,
+        onClick: () => onMenuItemClick(item.key)
+      };
+    });
+  }, [records, enableFaceRecognition, enableTags, readOnly, faceRecognitionPermission, onMenuItemClick]);
 
   // Individual button handlers
   const onMoveClick = useCallback(() => {
@@ -168,10 +176,7 @@ const GalleryFilesToolbar = () => {
           target="gallery-files-toolbar-menu-toggle"
           forwardedRef={menuRef}
           items={toolbarMenuOptions}
-          trigger={<Icon symbol="more-level" />}
           triggerClassName="cur-view-path-btn"
-          tooltip={gettext('More operations')}
-          onItemClick={(selectedItem) => onMenuItemClick(selectedItem.key)}
         />
       )}
     </div>

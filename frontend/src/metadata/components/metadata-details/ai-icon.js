@@ -25,39 +25,6 @@ const AIIcon = () => {
   const { canModifyRecord, columns, record, onChange, onLocalRecordChange, updateFileTags, updateDescription } = useMetadataDetails();
   const { generateDescription, extractFileDetails, onOCR, generateFileTags } = useMetadataAIOperations();
 
-  const getItems = useMemo(() => {
-    if (!canModifyRecord || !record || checkIsDir(record)) return [];
-    const descriptionColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION);
-    const fileName = getFileNameFromRecord(record);
-    const isImage = Utils.imageCheck(fileName);
-    const isVideo = Utils.videoCheck(fileName);
-    const isPdf = Utils.pdfCheck(fileName);
-    const isDescribableDoc = Utils.isDescriptionSupportedFile(fileName);
-    let list = [];
-
-    if (descriptionColumn && isDescribableDoc) {
-      list.push({
-        key: OPERATION.GENERATE_DESCRIPTION,
-        label: gettext('Generate description'),
-        opData: { type: OPERATION.GENERATE_DESCRIPTION, record }
-      });
-    }
-
-    if (isImage || isPdf) {
-      list.push({ key: OPERATION.OCR, label: gettext('Extract text'), opData: { type: OPERATION.OCR, record } });
-    }
-
-    if (isImage || isVideo) {
-      list.push({ key: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), opData: { type: OPERATION.FILE_DETAIL, record } });
-    }
-
-    if (enableTags && isDescribableDoc && !isVideo) {
-      list.push({ key: OPERATION.FILE_TAGS, label: gettext('Generate file tags'), opData: { type: OPERATION.FILE_TAGS, record } });
-    }
-
-    return list;
-  }, [enableTags, canModifyRecord, columns, record]);
-
   const handleOperation = useCallback((item) => {
     const { opData } = item;
     if (!opData) return;
@@ -121,6 +88,39 @@ const AIIcon = () => {
     }
   }, [columns, generateDescription, onOCR, generateFileTags, extractFileDetails, onChange, onLocalRecordChange, updateFileTags, updateDescription]);
 
+  const getItems = useMemo(() => {
+    if (!canModifyRecord || !record || checkIsDir(record)) return [];
+    const descriptionColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION);
+    const fileName = getFileNameFromRecord(record);
+    const isImage = Utils.imageCheck(fileName);
+    const isVideo = Utils.videoCheck(fileName);
+    const isPdf = Utils.pdfCheck(fileName);
+    const isDescribableDoc = Utils.isDescriptionSupportedFile(fileName);
+    let list = [];
+
+    if (descriptionColumn && isDescribableDoc) {
+      list.push({
+        key: OPERATION.GENERATE_DESCRIPTION,
+        label: gettext('Generate description'),
+        opData: { type: OPERATION.GENERATE_DESCRIPTION, record }
+      });
+    }
+
+    if (isImage || isPdf) {
+      list.push({ key: OPERATION.OCR, label: gettext('Extract text'), opData: { type: OPERATION.OCR, record } });
+    }
+
+    if (isImage || isVideo) {
+      list.push({ key: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), opData: { type: OPERATION.FILE_DETAIL, record } });
+    }
+
+    if (enableTags && isDescribableDoc && !isVideo) {
+      list.push({ key: OPERATION.FILE_TAGS, label: gettext('Generate file tags'), opData: { type: OPERATION.FILE_TAGS, record } });
+    }
+
+    return list.map(item => ({ ...item, onClick: () => handleOperation(item) }));
+  }, [canModifyRecord, record, columns, enableTags, handleOperation]);
+
   if (!enableMetadata || !canModifyRecord || !record) return null;
 
   return (
@@ -136,7 +136,6 @@ const AIIcon = () => {
       triggerClassName="border-0 p-0 bg-transparent detail-control mr-2"
       menuClassName="sf-metadata-ai-dropdown-menu large"
       forwardedRef={forwardedRef}
-      onItemClick={handleOperation}
       toggleProps={{ 'aria-label': gettext('AI') }}
     />
   );

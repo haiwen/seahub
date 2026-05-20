@@ -41,7 +41,9 @@ class LibraryMoreOperations extends React.Component {
     };
   }
 
-  onMenuItemClick = (item) => {
+  onMenuItemClick = (e, item) => {
+    e && e.preventDefault();
+    e && e.stopPropagation();
     switch (item) {
       case 'Rename':
         this.onRenameToggle();

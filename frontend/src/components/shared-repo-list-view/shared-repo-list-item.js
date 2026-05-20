@@ -26,7 +26,6 @@ import Icon from '../icon';
 import RepoWebhookDialog from '../dialog/repo-webhook-dialog';
 import RepoArchiveDialog from '../dialog/repo-archive-dialog';
 import ArchiveIcon from '../archive-icon';
-import Tooltip from '../tooltip';
 import CustomDropdown from '../dropdown';
 import CustomDropdownItem from '../dropdown/item';
 
@@ -371,6 +370,7 @@ class SharedRepoListItem extends React.Component {
           children: advancedOperations.map((advancedItem) => ({
             key: advancedItem,
             label: this.translateMenuItem(advancedItem),
+            onClick: () => this.onMenuItemClick(advancedItem),
           })),
         };
       }
@@ -378,6 +378,7 @@ class SharedRepoListItem extends React.Component {
       return {
         key: item,
         label: this.translateMenuItem(item),
+        onClick: () => this.onMenuItemClick(item),
       };
     });
   };
@@ -519,16 +520,9 @@ class SharedRepoListItem extends React.Component {
           <CustomDropdown
             target={target}
             items={menuItems}
-            trigger={(
-              <>
-                <Icon symbol="more-level" className="w-4 h-4" />
-                <Tooltip target={target}>{gettext('More operations')}</Tooltip>
-              </>
-            )}
             triggerClassName="op-icon"
             freezeItem={this.props.onFreezedItem}
             unfreezeItem={this.handleMenuClose}
-            onItemClick={(selectedItem) => this.onMenuItemClick(selectedItem.key)}
           />
         </div>
       );

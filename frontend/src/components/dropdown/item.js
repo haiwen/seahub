@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { DropdownItem } from 'reactstrap';
@@ -23,6 +23,13 @@ export const CustomDropdownItem = ({
   const showLeftSlot = checked || showCheckPlaceholder;
   const showRightSlot = Boolean(rightSlot) || showShortcutPlaceholder;
 
+  const onItemClick = useCallback((event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (item.disabled) return;
+    onClick?.(event, item);
+  }, [item, onClick]);
+
   return (
     <DropdownItem
       tag={tag}
@@ -31,7 +38,7 @@ export const CustomDropdownItem = ({
         'is-checked': checked,
         'is-disabled': item.disabled,
       })}
-      onClick={item.disabled ? undefined : onClick}
+      onClick={onItemClick}
       onKeyDown={onKeyDown}
       onMouseMove={onMouseMove}
       disabled={item.disabled}

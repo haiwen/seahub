@@ -4,7 +4,6 @@ import RoleSelector from '../../../components/single-selector';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import { gettext, siteRoot } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
-import Icon from '../../../components/icon';
 import CustomDropdown from '../../../components/dropdown';
 
 const propTypes = {
@@ -112,7 +111,6 @@ class DepartmentsV2MembersItem extends React.Component {
             {(highlighted || isDropdownFrozen) &&
               <CustomDropdown
                 items={this.getMenuItems()}
-                trigger={<Icon symbol="more-level" />}
                 triggerClassName="op-icon"
                 freezeItem={this.handleDropdownOpen}
                 unfreezeItem={this.handleDropdownClose}

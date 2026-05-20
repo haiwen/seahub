@@ -139,7 +139,6 @@ const ImageZoomer = ({ setImageScale, setDefaultPageFitScale }) => {
         toggleProps={{ 'aria-label': gettext('Scale menu') }}
         menuClassName="position-fixed"
         menuPortal={false}
-        onItemClick={(selectedItem) => selectedItem.onClick?.()}
       />
       <IconButton
         id="zoom-in-image"

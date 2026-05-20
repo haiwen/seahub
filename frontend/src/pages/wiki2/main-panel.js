@@ -21,7 +21,6 @@ import Icon from '../../components/icon';
 import WikiCollaboratorsOperation from './wiki-collaborators-operation';
 import { seafileAPI } from '../../utils/seafile-api';
 import isHotkey from 'is-hotkey';
-import Tooltip from '@/components/tooltip';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -251,6 +250,7 @@ class MainPanel extends Component {
             />
           ),
           keepOpen: true,
+          onClick: this.toggleFreezeStatus,
         });
       }
       items.push({
@@ -308,12 +308,6 @@ class MainPanel extends Component {
               target="wiki-more-operations"
               items={menuItems}
               className="wiki2-file-history-button"
-              trigger={(
-                <>
-                  <Icon symbol="more-level" />
-                  <Tooltip target="wiki-more-operations">{gettext('More operations')}</Tooltip>
-                </>
-              )}
               triggerClassName="wiki2-file-history-button"
               menuClassName="dtable-dropdown-menu large"
             />

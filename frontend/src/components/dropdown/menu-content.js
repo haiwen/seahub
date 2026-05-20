@@ -19,7 +19,7 @@ const MenuSubmenu = ({
   depth,
   activePath,
   setActivePath,
-  onItemSelect,
+  onClick,
   variant,
   menuClassName,
   parentMenuRef,
@@ -165,7 +165,7 @@ const MenuSubmenu = ({
                 depth={depth + 1}
                 activePath={activePath}
                 setActivePath={setActivePath}
-                onItemSelect={onItemSelect}
+                onClick={onClick}
                 variant={variant}
                 menuClassName={menuClassName}
                 parentMenuRef={menuRef}
@@ -179,11 +179,11 @@ const MenuSubmenu = ({
               key={subItem.key || index}
               item={subItem}
               rightSlot={subItem.right_slot}
-              onClick={(event) => onItemSelect?.(subItem, event)}
+              onClick={onClick}
               onKeyDown={(event) => {
                 if (event.key === 'Enter' || event.key === ' ') {
                   event.preventDefault();
-                  onItemSelect?.(subItem, event);
+                  onClick?.(subItem, event);
                 }
               }}
               showCheckPlaceholder={menuSlotConfig.showCheckPlaceholder}
@@ -242,7 +242,7 @@ export const CustomDropdownMenuContent = ({
               depth={0}
               activePath={activePath}
               setActivePath={setActivePath}
-              onItemSelect={onItemClick}
+              onClick={onItemClick}
               variant={variant}
               menuClassName={menuClassName}
               menuSlotConfig={menuSlotConfig}
@@ -255,7 +255,7 @@ export const CustomDropdownMenuContent = ({
             key={menuItem.key || index}
             item={menuItem}
             rightSlot={menuItem.right_slot}
-            onClick={(event) => onItemClick?.(menuItem, event)}
+            onClick={onItemClick}
             onMouseMove={() => activePath.length > 0 && setActivePath([])}
             onKeyDown={(event) => {
               if (event.key === 'Enter' || event.key === ' ') {

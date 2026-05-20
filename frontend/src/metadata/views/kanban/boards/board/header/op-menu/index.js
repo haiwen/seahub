@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../../../../../../utils/constants';
-import Icon from '../../../../../../../components/icon';
 import CustomDropdown from '../../../../../../../components/dropdown';
 
 const OpMenu = ({ idx, onDelete, onFreezed, onUnFreezed }) => {
@@ -27,8 +26,6 @@ const OpMenu = ({ idx, onDelete, onFreezed, onUnFreezed }) => {
     <CustomDropdown
       target={toggleId}
       items={items}
-      trigger={<Icon symbol="more-level" />}
-      tooltip={gettext('More operations')}
       triggerClassName="sf-dropdown-toggle kanban-header-op-btn kanban-more-operations-toggle"
       freezeItem={handleFreeze}
       unfreezeItem={handleUnfreeze}

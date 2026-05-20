@@ -25,6 +25,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  border-radius: 3px;
 }
 
 .history-list-item .history-operation .dropdown:hover {

@@ -114,7 +114,7 @@ class HistoryVersion extends React.Component {
         {path[2] > 0 && (<div className="daily-history-detail-no-more"></div>)}
         <div className="history-info">
           {this.state.isRenameShow ?
-            <Rename name={name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/>
+            <Rename name={name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} />
             : <div className="name">{name}</div>
           }
           <div className="time">{dayjs(ctime).format('YYYY-MM-DD HH:mm')}</div>
@@ -164,8 +164,7 @@ class HistoryVersion extends React.Component {
                 ...(path[0] !== 0 && path[1] !== 0 && path[2] !== 0 ? [{ key: 'copy', label: gettext('Copy'), onClick: this.onItemCopy }] : []),
                 { key: 'rename', label: gettext('Rename'), onClick: this.toggleRename },
               ]}
-              trigger={<></>}
-              triggerClassName={`sf3-font sf3-font-more ${(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}`}
+              triggerClassName={(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}
             />
           }
         </div>

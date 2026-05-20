@@ -12,7 +12,6 @@ import TreeSection from '../tree-section';
 import imageAPI from '../../utils/image-api';
 import { seafileAPI } from '../../utils/seafile-api';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
-import Icon from '../icon';
 import CustomDropdown from '../dropdown';
 
 const propTypes = {
@@ -93,14 +92,14 @@ class DirFiles extends React.Component {
     const list = [];
     if (userPerm == 'rw') {
       list.push(
-        TextTranslation.NEW_FOLDER,
-        TextTranslation.NEW_FILE
+        { ...TextTranslation.NEW_FOLDER, onClick: () => this.onMoreOperationClick(TextTranslation.NEW_FOLDER.key) },
+        { ...TextTranslation.NEW_FILE, onClick: () => this.onMoreOperationClick(TextTranslation.NEW_FILE.key) }
       );
     }
-    list.push({ ...TextTranslation.DISPLAY_FILES, tick: this.state.isDisplayFiles });
+    list.push({ ...TextTranslation.DISPLAY_FILES, checked: this.state.isDisplayFiles, onClick: () => this.onMoreOperationClick(TextTranslation.DISPLAY_FILES.key) });
     list.push('Divider');
-    list.push({ ...TextTranslation.ASCENDING_BY_NAME, tick: sortKey === TextTranslation.ASCENDING_BY_NAME.key });
-    list.push({ ...TextTranslation.DESCENDING_BY_NAME, tick: sortKey === TextTranslation.DESCENDING_BY_NAME.key });
+    list.push({ ...TextTranslation.ASCENDING_BY_NAME, checked: sortKey === TextTranslation.ASCENDING_BY_NAME.key, onClick: () => this.onMoreOperationClick(TextTranslation.ASCENDING_BY_NAME.key) });
+    list.push({ ...TextTranslation.DESCENDING_BY_NAME, checked: sortKey === TextTranslation.DESCENDING_BY_NAME.key, onClick: () => this.onMoreOperationClick(TextTranslation.DESCENDING_BY_NAME.key) });
     return list;
   };
 
@@ -336,10 +335,8 @@ class DirFiles extends React.Component {
       <div className="tree-section-header-operation tree-section-more-operation" key='tree-section-more-operation'>
         <CustomDropdown
           {...props}
+          variant='control'
           items={this.getMenuList()}
-          trigger={<Icon symbol="more-level" />}
-          tooltip={gettext('More operations')}
-          onItemClick={(selectedItem) => this.onMoreOperationClick(selectedItem.key)}
         />
       </div>
     );

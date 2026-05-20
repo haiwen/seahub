@@ -211,12 +211,12 @@ class Item extends Component {
             <td>
               <div className="d-flex align-items-center">
                 {!item.is_expired &&
-                <OpIcon
-                  className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
-                  symbol="link"
-                  title={gettext('View')}
-                  op={this.viewLink}
-                />
+                  <OpIcon
+                    className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
+                    symbol="link"
+                    title={gettext('View')}
+                    op={this.viewLink}
+                  />
                 }
                 <OpIcon
                   className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
@@ -248,10 +248,10 @@ class Item extends Component {
           </tr>
         }
         {isLinkDialogOpen &&
-        <ShareAdminLink
-          link={item.link}
-          toggleDialog={this.toggleLinkDialog}
-        />
+          <ShareAdminLink
+            link={item.link}
+            toggleDialog={this.toggleLinkDialog}
+          />
         }
       </Fragment>
     );
@@ -424,7 +424,6 @@ class ShareAdminUploadLinks extends Component {
                         {gettext('Upload Links')}
                         <CustomDropdown
                           items={uploadLinkActions}
-                          onItemClick={(selectedItem) => selectedItem.onClick?.()}
                           trigger={<Icon symbol="down" className="down-icon" />}
                           triggerClassName="ml-1 sf-dropdown-toggle"
                           menuPortal={false}
@@ -448,13 +447,13 @@ class ShareAdminUploadLinks extends Component {
           </div>
         </div>
         {this.state.isCleanInvalidUploadLinksDialogOpen &&
-        <CommonOperationConfirmationDialog
-          title={gettext('Clean invalid upload links')}
-          message={gettext('Are you sure you want to clean invalid upload links?')}
-          executeOperation={this.cleanInvalidUploadLinks}
-          confirmBtnText={gettext('Clean')}
-          toggleDialog={this.toggleCleanInvalidUploadLinksDialog}
-        />
+          <CommonOperationConfirmationDialog
+            title={gettext('Clean invalid upload links')}
+            message={gettext('Are you sure you want to clean invalid upload links?')}
+            executeOperation={this.cleanInvalidUploadLinks}
+            confirmBtnText={gettext('Clean')}
+            toggleDialog={this.toggleCleanInvalidUploadLinksDialog}
+          />
         }
         {this.state.isDeleteLinksDialogOpen && (
           <CommonOperationConfirmationDialog

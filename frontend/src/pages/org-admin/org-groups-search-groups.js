@@ -6,7 +6,6 @@ import { orgAdminAPI } from '../../utils/org-admin-api';
 import { gettext, orgID, siteRoot } from '../../utils/constants';
 import toaster from '../../components/toast';
 import OrgGroupInfo from '../../models/org-group';
-import Icon from '../../components/icon';
 import CustomDropdown from '../../components/dropdown';
 
 class GroupItem extends React.Component {
@@ -98,7 +97,6 @@ class GroupItem extends React.Component {
           {(this.state.showMenu || this.state.isDropdownFrozen) && isOperationMenuShow && (
             <CustomDropdown
               items={this.getMenuItems()}
-              trigger={<Icon symbol="more-level" />}
               triggerClassName="op-icon"
               freezeItem={this.handleDropdownOpen}
               unfreezeItem={this.handleDropdownClose}
@@ -190,7 +188,7 @@ class OrgGroupsSearchGroups extends Component {
     let params = (new URL(document.location)).searchParams;
     this.setState({
       query: params.get('query') || '',
-    }, () => {this.getItems();});
+    }, () => { this.getItems(); });
   }
 
   getItems = () => {

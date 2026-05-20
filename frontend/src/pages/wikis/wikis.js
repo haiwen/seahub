@@ -463,7 +463,6 @@ class Wikis extends Component {
                       { key: 'add-wiki', label: gettext('Add Wiki'), onClick: () => this.toggleAddWikiDialog() },
                       { key: 'import-confluence', label: gettext('Import Confluence'), onClick: () => this.toggleImportConfluenceDialog() }
                     ]}
-                    onItemClick={(selectedItem) => selectedItem.onClick?.()}
                     trigger={(
                       <>
                         <Icon symbol="new" className="new-icon" />

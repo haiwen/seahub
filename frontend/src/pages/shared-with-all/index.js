@@ -93,7 +93,7 @@ class SharedWithAll extends React.Component {
     let isExist = false;
     let repoIndex = 0;
     let repoList = this.state.repoList;
-    for (let i = 0; i < repoList.length; i ++) {
+    for (let i = 0; i < repoList.length; i++) {
       if (repo.repo_id === repoList[i].repo_id) {
         isExist = true;
         repoIndex = i;
@@ -104,7 +104,7 @@ class SharedWithAll extends React.Component {
       this.state.repoList.splice(repoIndex, 1);
     }
 
-    let newRepoList = this.state.repoList.map(item => {return item;});
+    let newRepoList = this.state.repoList.map(item => { return item; });
     newRepoList.unshift(repo);
     this.setState({ repoList: newRepoList });
   };
@@ -259,24 +259,23 @@ class SharedWithAll extends React.Component {
                 <span className="d-flex align-items-center"><Icon symbol="share-with-all" className="role-icon" /></span>
                 <span className="library-list-title">{gettext('Shared with all')}</span>
                 {canAddPublicRepo &&
-                <CustomDropdown
-                  items={addLibraryItems}
-                  onItemClick={(selectedItem) => selectedItem.onClick?.()}
-                  trigger={(
-                    <>
-                      <Icon symbol="new" className="new-icon" />
-                      <Icon symbol="down" className="down-icon" />
-                    </>
-                  )}
-                  triggerClassName="ml-2 sf-dropdown-combined-toggle"
-                  menuPortal={false}
-                />
+                  <CustomDropdown
+                    items={addLibraryItems}
+                    trigger={(
+                      <>
+                        <Icon symbol="new" className="new-icon" />
+                        <Icon symbol="down" className="down-icon" />
+                      </>
+                    )}
+                    triggerClassName="ml-2 sf-dropdown-combined-toggle"
+                    menuPortal={false}
+                  />
                 }
               </div>
               {Utils.isDesktop() && (
                 <div className="d-flex align-items-center">
                   <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />
-                  <ReposSortMenu className="ml-2" sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption}/>
+                  <ReposSortMenu className="ml-2" sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
                 </div>
               )}
               {this.renderSortIconInMobile()}
@@ -287,12 +286,12 @@ class SharedWithAll extends React.Component {
           </div>
         </div>
         {this.state.isSortOptionsDialogOpen &&
-        <SortOptionsDialog
-          toggleDialog={this.toggleSortOptionsDialog}
-          sortBy={this.state.sortBy}
-          sortOrder={this.state.sortOrder}
-          sortItems={this.sortItems}
-        />
+          <SortOptionsDialog
+            toggleDialog={this.toggleSortOptionsDialog}
+            sortBy={this.state.sortBy}
+            sortOrder={this.state.sortOrder}
+            sortItems={this.sortItems}
+          />
         }
         {this.state.isCreateRepoDialogOpen && (
           <ModalPortal>

@@ -147,7 +147,6 @@ class DepartmentsV2TreeNode extends Component {
                 toggleDelete: this.props.toggleDelete,
                 toggleMoveDepartment: this.props.toggleMoveDepartment,
               })}
-              trigger={<Icon symbol="more-level" />}
               triggerClassName="right-icon"
               freezeItem={this.handleDropdownOpen}
               unfreezeItem={this.handleDropdownClose}

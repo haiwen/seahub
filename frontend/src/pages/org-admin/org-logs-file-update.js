@@ -8,7 +8,6 @@ import toaster from '../../components/toast';
 import OrgLogsFileUpdateEvent from '../../models/org-logs-file-update';
 import ModalPortal from '../../components/modal-portal';
 import FileUpdateDetailDialog from '../../components/dialog/org-logs-file-update-detail';
-import Icon from '../../components/icon';
 import CustomDropdown from '../../components/dropdown';
 import '../../css/org-logs.css';
 
@@ -210,7 +209,6 @@ class FileUpdateItem extends React.Component {
             label: <>{gettext('Only Show')} <span className="font-weight-bold">{fileEvent.user_name}</span></>,
             onClick: this.props.filterUser.bind(this, fileEvent.user_email),
           }]}
-          trigger={<Icon symbol="more-level" />}
           triggerClassName="op-icon sf-dropdown-toggle"
         />
       </span>
@@ -225,7 +223,7 @@ class FileUpdateItem extends React.Component {
     return (
       <span>
         <span>{repoName}</span>
-        { fileEvent.repo_name &&
+        {fileEvent.repo_name &&
           <CustomDropdown
             className={this.state.highlight ? '' : 'vh'}
             items={[{
@@ -233,7 +231,6 @@ class FileUpdateItem extends React.Component {
               label: <>{gettext('Only Show')} <span className="font-weight-bold">{fileEvent.repo_name}</span></>,
               onClick: this.props.filterRepo.bind(this, fileEvent.repo_name),
             }]}
-            trigger={<Icon symbol="more-level" />}
             triggerClassName="op-icon sf-dropdown-toggle"
           />
         }

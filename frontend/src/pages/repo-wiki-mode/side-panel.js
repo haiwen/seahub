@@ -156,7 +156,6 @@ class SidePanel extends Component {
                     { key: 'new-folder', label: gettext('New Folder'), onClick: () => this.onAddFolderToggle('root') },
                     { key: 'new-file', label: gettext('New File'), onClick: () => this.onAddFileToggle('root') },
                   ]}
-                  trigger={<Icon symbol="more-level" />}
                 />
               )}
             </div>

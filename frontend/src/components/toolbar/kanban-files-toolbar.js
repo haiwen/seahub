@@ -79,10 +79,6 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
     eventBus && eventBus.dispatch(EVENT_BUS_TYPE.DOWNLOAD_RECORDS, selectedRecordIds);
   }, [eventBus, selectedRecordIds]);
 
-  const getMenuList = useCallback(() => {
-    return toolbarMenuOptions;
-  }, [toolbarMenuOptions]);
-
   const onMenuItemClick = useCallback((operation) => {
     switch (operation) {
       case TextTranslation.MOVE.key:
@@ -152,6 +148,16 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
     }
   }, [eventBus, records, selectedRecordIds, readOnly, repoID]);
 
+  const getMenuList = useCallback(() => {
+    return toolbarMenuOptions.map(item => {
+      if (item === 'Divider') return item;
+      return {
+        ...item,
+        onClick: () => onMenuItemClick(item.key)
+      };
+    });
+  }, [toolbarMenuOptions, onMenuItemClick]);
+
   useEffect(() => {
     const unsubscribeSelectedFileIds = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.SELECT_RECORDS, (ids, metadataObj) => {
       metadataRef.current = metadataObj || [];
@@ -162,7 +168,7 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
     return () => {
       unsubscribeSelectedFileIds && unsubscribeSelectedFileIds();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const length = selectedRecordIds.length;
@@ -205,10 +211,7 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
           target="kanban-files-toolbar-menu"
           forwardedRef={menuRef}
           items={getMenuList()}
-          trigger={<Icon symbol="more-level" />}
           triggerClassName="cur-view-path-btn"
-          tooltip={gettext('More operations')}
-          onItemClick={(selectedItem) => onMenuItemClick(selectedItem.key)}
         />
       )}
     </div>

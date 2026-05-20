@@ -93,7 +93,6 @@ class ViewFileToolbar extends React.Component {
             triggerClassName="path-item"
             menuClassName="position-fixed"
             menuPortal={false}
-            onItemClick={(selectedItem) => selectedItem.onClick?.()}
           />
         }
         {this.state.isShareDialogShow && (

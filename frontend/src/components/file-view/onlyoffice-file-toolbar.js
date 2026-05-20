@@ -70,10 +70,8 @@ class OnlyofficeFileToolbar extends React.Component {
           <CustomDropdown
             target="onlyoffice-file-toolbar-more"
             items={desktopMenuItems}
-            trigger={<Icon symbol="more-level" />}
             triggerClassName="file-toolbar-btn"
             menuPortal={false}
-            onItemClick={(selectedItem) => selectedItem.onClick?.()}
           />
           <IconButton
             id="fold-header"
@@ -87,10 +85,8 @@ class OnlyofficeFileToolbar extends React.Component {
           target="onlyoffice-file-toolbar-mobile-more"
           items={mobileMenuItems}
           className="d-block d-md-none flex-shrink-0 ml-4"
-          trigger={<Icon symbol="more-level" />}
           triggerClassName="mx-1"
           menuPortal={false}
-          onItemClick={(selectedItem) => selectedItem.onClick?.()}
         />
       </Fragment>
     );

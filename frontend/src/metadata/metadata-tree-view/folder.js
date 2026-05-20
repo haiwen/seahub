@@ -9,13 +9,12 @@ import { useMetadata } from '../hooks';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
-import { gettext } from '../../utils/constants';
+import { baiduMapKey, gettext, googleMapKey } from '../../utils/constants';
 import { validateName } from '../utils/validate';
-import { METADATA_VIEWS_DRAG_DATA_KEY, METADATA_VIEWS_KEY, TREE_NODE_LEFT_INDENT, VIEW_TYPE, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW } from '../constants';
+import { METADATA_VIEWS_DRAG_DATA_KEY, METADATA_VIEWS_KEY, TREE_NODE_LEFT_INDENT, VIEW_TYPE, VIEW_TYPE_ICON, VIEW_TYPE_LABEL, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW } from '../constants';
 import Icon from '../../components/icon';
-import Tooltip from '@/components/tooltip';
 import CustomDropdown from '../../components/dropdown';
-import { getNewViewMenuItem, ADD_VIEW_KEY } from '../../components/dir-view-mode/dir-views/views-more-operations';
+import { ADD_VIEW_KEY, ADD_VIEW_OPTIONS } from '../../components/dir-view-mode/dir-views/views-more-operations';
 
 const ViewsFolder = ({
   idx, leftIndent, folder, currentPath, userPerm, canDeleteView, getFoldersNames, getMoveableFolders, generateNewViewDefaultName,
@@ -43,56 +42,6 @@ const ViewsFolder = ({
     if (Utils.isIEBrowser() || !canUpdate) return false;
     return true;
   }, [canUpdate]);
-
-  const isValid = useCallback((event) => {
-    return event.dataTransfer.types.includes(METADATA_VIEWS_DRAG_DATA_KEY);
-  }, []);
-
-  const folderMoreOperationMenus = useMemo(() => {
-    let menus = [];
-    if (canUpdate) {
-      menus.push(
-        getNewViewMenuItem(),
-        TextTranslation.RENAME,
-        TextTranslation.DELETE,
-      );
-    }
-    return menus;
-  }, [canUpdate]);
-
-  const onMouseEnter = useCallback(() => {
-    if (freeze) return;
-    setHighlight(true);
-  }, [freeze]);
-
-  const onMouseOver = useCallback(() => {
-    if (freeze) return;
-    setHighlight(true);
-  }, [freeze]);
-
-  const onMouseLeave = useCallback(() => {
-    if (freeze) return;
-    setHighlight(false);
-  }, [freeze]);
-
-  const freezeItem = useCallback(() => {
-    setFreeze(true);
-    setHighlight(true);
-  }, []);
-
-  const unfreezeItem = useCallback(() => {
-    setFreeze(false);
-    setHighlight(false);
-  }, []);
-
-  const clickFolder = useCallback(() => {
-    if (expanded) {
-      collapseFolder(folderId);
-    } else {
-      expandFolder(folderId);
-    }
-    setExpanded(!expanded);
-  }, [expanded, folderId, collapseFolder, expandFolder]);
 
   const prepareAddView = useCallback((viewType) => {
     setNewView({ key: viewType, type: viewType, default_name: generateNewViewDefaultName() });
@@ -137,6 +86,84 @@ const ViewsFolder = ({
       }
     }
   }, [prepareAddView, folderId, deleteFolder]);
+
+  const getNewViewSubMenu = useCallback(() => {
+    const options = [...ADD_VIEW_OPTIONS];
+    const hasMapOption = options.some((option) => option.type === VIEW_TYPE.MAP);
+
+    if (!hasMapOption && (baiduMapKey || googleMapKey)) {
+      options.push({ key: ADD_VIEW_KEY.ADD_MAP, type: VIEW_TYPE.MAP });
+    }
+
+    return options.map(({ key, type }) => ({
+      key,
+      label: VIEW_TYPE_LABEL[type],
+      icon_dom: <Icon symbol={VIEW_TYPE_ICON[type] || VIEW_TYPE.TABLE} className="metadata-view-icon" />,
+      onClick: () => clickMenu(key),
+    }));
+  }, [clickMenu]);
+
+  const getNewViewMenuItem = useCallback(() => ({
+    ...TextTranslation.ADD_VIEW,
+    subOpListHeader: gettext('New view'),
+    children: getNewViewSubMenu(),
+  }), [getNewViewSubMenu]);
+
+  const isValid = useCallback((event) => {
+    return event.dataTransfer.types.includes(METADATA_VIEWS_DRAG_DATA_KEY);
+  }, []);
+
+  const folderMoreOperationMenus = useMemo(() => {
+    let menus = [];
+    if (canUpdate) {
+      menus.push(
+        getNewViewMenuItem(),
+        TextTranslation.RENAME,
+        TextTranslation.DELETE,
+      );
+    }
+    return menus.map(item => {
+      if (item === 'Divider') return item;
+      return {
+        ...item,
+        onClick: () => clickMenu(item.key)
+      };
+    });
+  }, [canUpdate, clickMenu, getNewViewMenuItem]);
+
+  const onMouseEnter = useCallback(() => {
+    if (freeze) return;
+    setHighlight(true);
+  }, [freeze]);
+
+  const onMouseOver = useCallback(() => {
+    if (freeze) return;
+    setHighlight(true);
+  }, [freeze]);
+
+  const onMouseLeave = useCallback(() => {
+    if (freeze) return;
+    setHighlight(false);
+  }, [freeze]);
+
+  const freezeItem = useCallback(() => {
+    setFreeze(true);
+    setHighlight(true);
+  }, []);
+
+  const unfreezeItem = useCallback(() => {
+    setFreeze(false);
+    setHighlight(false);
+  }, []);
+
+  const clickFolder = useCallback(() => {
+    if (expanded) {
+      collapseFolder(folderId);
+    } else {
+      expandFolder(folderId);
+    }
+    setExpanded(!expanded);
+  }, [expanded, folderId, collapseFolder, expandFolder]);
 
   const onDragStart = useCallback((event) => {
     event.stopPropagation();
@@ -319,15 +346,8 @@ const ViewsFolder = ({
               target={`view-folder-dropdown-btn${idx}`}
               items={folderMoreOperationMenus}
               menuClassName="metadata-views-dropdown-menu"
-              trigger={(
-                <>
-                  <Icon symbol="more-level" />
-                  <Tooltip target={`view-folder-dropdown-btn${idx}`}>{gettext('More operations')}</Tooltip>
-                </>
-              )}
               freezeItem={freezeItem}
               unfreezeItem={unfreezeItem}
-              onItemClick={(selectedItem, event) => clickMenu(selectedItem.key, event)}
             />
           )}
         </div>

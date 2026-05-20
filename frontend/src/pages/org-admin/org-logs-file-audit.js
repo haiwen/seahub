@@ -6,7 +6,6 @@ import { siteRoot, gettext, lang } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import OrgLogsFileAuditEvent from '../../models/org-logs-file-audit';
-import Icon from '../../components/icon';
 import CustomDropdown from '../../components/dropdown';
 import '../../css/org-logs.css';
 
@@ -184,7 +183,6 @@ class FileAuditItem extends React.Component {
             label: <>{gettext('Only Show')} <span className="font-weight-bold">{fileEvent.user_name}</span></>,
             onClick: this.props.filterUser.bind(this, fileEvent.user_email),
           }]}
-          trigger={<Icon symbol="more-level" />}
           triggerClassName="op-icon sf-dropdown-toggle"
         />
       </span>
@@ -213,7 +211,7 @@ class FileAuditItem extends React.Component {
     return (
       <span>
         <span>{repoName}</span>
-        { fileEvent.repo_name &&
+        {fileEvent.repo_name &&
           <CustomDropdown
             className={this.state.highlight ? '' : 'vh'}
             items={[{
@@ -221,7 +219,6 @@ class FileAuditItem extends React.Component {
               label: <>{gettext('Only Show')} <span className="font-weight-bold">{fileEvent.repo_name}</span></>,
               onClick: this.props.filterRepo.bind(this, fileEvent.repo_name),
             }]}
-            trigger={<Icon symbol="more-level" />}
             triggerClassName="op-icon sf-dropdown-toggle"
           />
         }

@@ -28,7 +28,6 @@ export const CustomDropdown = ({
   menuClassName,
   className,
   items,
-  onItemClick,
   menuPortal = true,
   freezeItem,
   unfreezeItem,
@@ -71,26 +70,19 @@ export const CustomDropdown = ({
 
   const closeMenu = () => handleToggle(false);
 
-  const onMenuItemSelect = (selectedItem, event) => {
-    if (selectedItem.disabled) {
+  const onMenuItemClick = (e, item) => {
+    if (item.disabled) {
       return;
     }
 
-    selectedItem.onClick?.(event, selectedItem);
-    onItemClick?.(selectedItem, event);
+    item.onClick?.(e, item);
 
-    if (!selectedItem.keepOpen) {
+    if (!item.keepOpen) {
       closeMenu();
     }
   };
 
   const onToggleKeyDown = (event) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      toggle(event);
-      return;
-    }
-
     if (event.key === 'ArrowDown') {
       event.preventDefault();
       if (!isOpen) {
@@ -145,7 +137,7 @@ export const CustomDropdown = ({
         items={items}
         variant={variant}
         menuClassName={menuClassName}
-        onItemClick={onMenuItemSelect}
+        onItemClick={onMenuItemClick}
       />
     </DropdownMenu>
   );
@@ -172,7 +164,6 @@ export const CustomDropdown = ({
         aria-label={gettext('More operations')}
         aria-expanded={isOpen}
         data-toggle="dropdown"
-        onClick={toggle}
         onKeyDown={onToggleKeyDown}
         {...toggleProps}
       >
@@ -194,7 +185,6 @@ CustomDropdown.propTypes = {
   triggerClassName: PropTypes.string,
   menuClassName: PropTypes.string,
   items: PropTypes.array,
-  onItemClick: PropTypes.func,
   variant: PropTypes.oneOf(['action', 'control']),
   placement: PropTypes.string,
   modifier: PropTypes.array,

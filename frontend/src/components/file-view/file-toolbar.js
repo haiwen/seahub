@@ -253,7 +253,6 @@ class FileToolbar extends React.Component {
             )}
             triggerClassName="file-toolbar-btn"
             menuPortal={false}
-            onItemClick={(selectedItem) => selectedItem.onClick?.()}
           />
         </div>
         <CustomDropdown
@@ -284,7 +283,6 @@ class FileToolbar extends React.Component {
             </ButtonGroup>
           }
           menuPortal={false}
-          onItemClick={(selectedItem) => selectedItem.onClick?.()}
         />
       </Fragment>
     );

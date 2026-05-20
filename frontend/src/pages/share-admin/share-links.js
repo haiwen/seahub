@@ -325,12 +325,12 @@ class Item extends Component {
             <td>
               <div className="d-flex align-items-center">
                 {!item.is_expired &&
-                <OpIcon
-                  className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
-                  symbol="link"
-                  title={gettext('View')}
-                  op={this.viewLink}
-                />
+                  <OpIcon
+                    className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
+                    symbol="link"
+                    title={gettext('View')}
+                    op={this.viewLink}
+                  />
                 }
                 <OpIcon
                   className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
@@ -359,30 +359,30 @@ class Item extends Component {
               <td>
                 <MobileItemMenu>
                   {(isPro && !item.is_expired) &&
-                  <DropdownItem className="mobile-menu-item" onClick={this.togglePermSelectDialog}>{gettext('Permission')}</DropdownItem>
+                    <DropdownItem className="mobile-menu-item" onClick={this.togglePermSelectDialog}>{gettext('Permission')}</DropdownItem>
                   }
                   {!item.is_expired &&
-                  <DropdownItem className="mobile-menu-item" onClick={this.viewLink}>{gettext('View')}</DropdownItem>
+                    <DropdownItem className="mobile-menu-item" onClick={this.viewLink}>{gettext('View')}</DropdownItem>
                   }
                   <DropdownItem className="mobile-menu-item" onClick={this.removeLink}>{gettext('Remove')}</DropdownItem>
                 </MobileItemMenu>
               </td>
             </tr>
             {isPermSelectDialogOpen &&
-            <ShareLinkPermissionSelect
-              currentPerm={currentPermission}
-              permissions={permissionOptions}
-              changePerm={this.changePerm}
-              toggleDialog={this.togglePermSelectDialog}
-            />
+              <ShareLinkPermissionSelect
+                currentPerm={currentPermission}
+                permissions={permissionOptions}
+                changePerm={this.changePerm}
+                toggleDialog={this.togglePermSelectDialog}
+              />
             }
           </Fragment>
         }
         {isLinkDialogOpen &&
-        <ShareAdminLink
-          link={item.link}
-          toggleDialog={this.toggleLinkDialog}
-        />
+          <ShareAdminLink
+            link={item.link}
+            toggleDialog={this.toggleLinkDialog}
+          />
         }
       </Fragment>
     );
@@ -592,7 +592,6 @@ class ShareAdminShareLinks extends Component {
                         {gettext('Share Links')}
                         <CustomDropdown
                           items={[{ key: 'clean-invalid-share-links', label: gettext('Clean invalid share links'), onClick: this.toggleCleanInvalidShareLinksDialog }]}
-                          onItemClick={(selectedItem) => selectedItem.onClick?.()}
                           trigger={<Icon symbol="down" className="down-icon" />}
                           triggerClassName="ml-1 sf-dropdown-toggle"
                           menuPortal={false}

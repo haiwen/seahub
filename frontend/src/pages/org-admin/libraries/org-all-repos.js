@@ -13,7 +13,6 @@ import { navigate } from '@gatsbyjs/reach-router';
 import OrgAdminRepo from '../../../models/org-admin-repo';
 import MainPanelTopbar from '../main-panel-topbar';
 import ReposNav from './org-repo-nav';
-import Icon from '../../../components/icon';
 import CustomDropdown from '../../../components/dropdown';
 
 
@@ -226,7 +225,6 @@ class RepoItem extends React.Component {
             {isOperationMenuShow && (
               <CustomDropdown
                 items={this.getMenuItems()}
-                trigger={<Icon symbol="more-level" />}
                 triggerClassName="op-icon"
                 freezeItem={this.handleDropdownOpen}
                 unfreezeItem={this.handleDropdownClose}

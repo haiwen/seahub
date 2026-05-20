@@ -46,7 +46,7 @@ const FaceRecognitionFilesToolbar = ({ repoID }) => {
     return () => {
       unsubscribeSelectedFileIds && unsubscribeSelectedFileIds();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const unSelect = useCallback(() => {
@@ -80,22 +80,6 @@ const FaceRecognitionFilesToolbar = ({ repoID }) => {
       }
     });
   }, [eventBus, selectedRecords]);
-
-  const toolbarMenuOptions = useMemo(() => {
-    if (!selectedRecords.length) return [];
-    const metadataStatus = {
-      enableFaceRecognition: true,
-      enableGenerateDescription: getColumnByKey(metadataRef.current.columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION) !== null,
-      enableTags
-    };
-    return buildGalleryToolbarMenuOptions(
-      selectedRecords,
-      readOnly,
-      metadataStatus,
-      isSomeone,
-      faceRecognitionPermission
-    );
-  }, [selectedRecords, enableTags, readOnly, faceRecognitionPermission, isSomeone]);
 
   const onMenuItemClick = useCallback((option) => {
     switch (option) {
@@ -156,6 +140,32 @@ const FaceRecognitionFilesToolbar = ({ repoID }) => {
     }
   }, [repoID, eventBus, readOnly, selectedRecords, selectedRecordIds]);
 
+  const toolbarMenuOptions = useMemo(() => {
+    if (!selectedRecords.length) return [];
+
+    const metadataStatus = {
+      enableFaceRecognition: true,
+      enableGenerateDescription: getColumnByKey(metadataRef.current.columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION) !== null,
+      enableTags
+    };
+
+    let options = buildGalleryToolbarMenuOptions(
+      selectedRecords,
+      readOnly,
+      metadataStatus,
+      isSomeone,
+      faceRecognitionPermission
+    );
+
+    return options.map(item => {
+      if (item === 'Divider') return item;
+      return {
+        ...item,
+        onClick: () => onMenuItemClick(item.key)
+      };
+    });
+  }, [selectedRecords, enableTags, readOnly, isSomeone, faceRecognitionPermission, onMenuItemClick]);
+
   const length = selectedRecordIds.length;
   return (
     <div className="selected-dirents-toolbar">
@@ -177,10 +187,7 @@ const FaceRecognitionFilesToolbar = ({ repoID }) => {
         target="face-recognition-files-toolbar-menu-toggle"
         forwardedRef={menuRef}
         items={toolbarMenuOptions}
-        trigger={<Icon symbol="more-level" />}
         triggerClassName="cur-view-path-btn"
-        tooltip={gettext('More operations')}
-        onItemClick={(selectedItem) => onMenuItemClick(selectedItem.key)}
       />
     </div>
   );

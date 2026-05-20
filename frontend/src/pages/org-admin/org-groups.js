@@ -169,7 +169,7 @@ class OrgGroups extends Component {
     let groups = this.state.orgGroups;
     return (
       <Fragment>
-        <MainPanelTopbar search={this.getSearch()}/>
+        <MainPanelTopbar search={this.getSearch()} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
@@ -317,7 +317,6 @@ class GroupItem extends React.Component {
           {(this.state.showMenu || this.state.isDropdownFrozen) && isOperationMenuShow && (
             <CustomDropdown
               items={this.getMenuItems()}
-              trigger={<Icon symbol="more-level" />}
               triggerClassName="op-icon"
               freezeItem={this.handleDropdownOpen}
               unfreezeItem={this.handleDropdownClose}

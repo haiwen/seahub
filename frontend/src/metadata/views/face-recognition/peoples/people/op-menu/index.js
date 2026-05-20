@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../../../../../utils/constants';
-import Icon from '../../../../../../components/icon';
 import CustomDropdown from '../../../../../../components/dropdown';
 
 const OpMenu = ({ onRename, onFreezed, onUnFreezed }) => {
@@ -25,8 +24,6 @@ const OpMenu = ({ onRename, onFreezed, onUnFreezed }) => {
     <CustomDropdown
       target="people-more-operations-toggle"
       items={items}
-      trigger={<Icon symbol="more-level" />}
-      tooltip={gettext('More operations')}
       triggerClassName="sf-dropdown-toggle op-icon face-recognition-more-operations-toggle"
       freezeItem={handleFreeze}
       unfreezeItem={handleUnfreeze}

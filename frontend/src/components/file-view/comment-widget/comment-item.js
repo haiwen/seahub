@@ -4,7 +4,6 @@ import dayjs from 'dayjs';
 import { SeafileCommentEditor, commentProcessor } from '@seafile/comment-editor';
 import { gettext } from '../../../utils/constants';
 import CommentDeletePopover from './comment-delete-popover';
-import Icon from '../../icon';
 import CustomDropdown from '../../dropdown';
 
 const commentItemPropTypes = {
@@ -144,7 +143,6 @@ class CommentItem extends React.Component {
               target={commentOpToolsId}
               className="seafile-comment-dropdown"
               items={this.getMenuItems()}
-              trigger={<Icon symbol="more-level" />}
               triggerClassName="seafile-comment-dropdown-btn sf-dropdown-toggle"
             />
           }

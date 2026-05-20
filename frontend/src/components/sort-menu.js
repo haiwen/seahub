@@ -22,24 +22,25 @@ const DEFAULT_SORT_OPTIONS = [
   { value: 'time-desc', text: gettext('Descending by time') }
 ];
 
-const buildSortMenuItems = ({ sortOptions, sortBy, sortOrder }) => {
-  return sortOptions.map((item) => ({
-    key: item.value,
-    label: item.text,
-    checked: item.value === `${sortBy}-${sortOrder}`,
-    sortOption: item,
-  }));
-};
-
 class SortMenu extends React.Component {
   constructor(props) {
     super(props);
     this.sortOptions = this.props.sortOptions || DEFAULT_SORT_OPTIONS;
   }
 
+  buildSortMenuItems = ({ sortOptions, sortBy, sortOrder }) => {
+    return sortOptions.map((item) => ({
+      key: item.value,
+      label: item.text,
+      checked: item.value === `${sortBy}-${sortOrder}`,
+      sortOption: item,
+      onClick: () => this.props.onSelectSortOption(item)
+    }));
+  };
+
   render() {
     const { sortBy, sortOrder, className } = this.props;
-    const sortOptions = buildSortMenuItems({ sortOptions: this.sortOptions, sortBy, sortOrder });
+    const sortOptions = this.buildSortMenuItems({ sortOptions: this.sortOptions, sortBy, sortOrder });
 
     return (
       <CustomDropdown
@@ -56,7 +57,6 @@ class SortMenu extends React.Component {
         triggerClassName="cur-view-path-btn px-1"
         toggleProps={{ 'aria-label': gettext('Switch sort mode') }}
         menuPortal={false}
-        onItemClick={(selectedItem) => this.props.onSelectSortOption(selectedItem.sortOption)}
       />
     );
   }

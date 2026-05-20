@@ -17,7 +17,7 @@ export const ADD_VIEW_KEY = {
   ADD_STATISTICS: 'ADD_STATISTICS',
 };
 
-const ADD_VIEW_OPTIONS = [
+export const ADD_VIEW_OPTIONS = [
   { key: ADD_VIEW_KEY.ADD_TABLE, type: VIEW_TYPE.TABLE },
   { key: ADD_VIEW_KEY.ADD_GALLERY, type: VIEW_TYPE.GALLERY },
   { key: ADD_VIEW_KEY.ADD_KANBAN, type: VIEW_TYPE.KANBAN },
@@ -25,35 +25,14 @@ const ADD_VIEW_OPTIONS = [
   { key: ADD_VIEW_KEY.ADD_STATISTICS, type: VIEW_TYPE.STATISTICS },
 ];
 
-export const getNewViewSubMenu = () => {
-  const options = [...ADD_VIEW_OPTIONS];
-  const hasMapOption = options.some((option) => option.type === VIEW_TYPE.MAP);
-
-  if (!hasMapOption && (baiduMapKey || googleMapKey)) {
-    options.push({ key: ADD_VIEW_KEY.ADD_MAP, type: VIEW_TYPE.MAP });
-  }
-
-  return options.map(({ key, type }) => ({
-    key,
-    label: VIEW_TYPE_LABEL[type],
-    icon_dom: <Icon symbol={VIEW_TYPE_ICON[type] || VIEW_TYPE.TABLE} className="metadata-view-icon" />,
-  }));
-};
-
-export const getNewViewMenuItem = () => ({
-  ...TextTranslation.ADD_VIEW,
-  subOpListHeader: gettext('New view'),
-  children: getNewViewSubMenu(),
-});
-
 const ViewsMoreOperations = ({ menuProps }) => {
   const eventBus = EventBus.getInstance();
 
-  const addView = (viewType) => {
+  const addView = useCallback((viewType) => {
     eventBus.dispatch(EVENT_BUS_TYPE.ADD_VIEW, { viewType });
-  };
+  }, [eventBus]);
 
-  const clickMenu = (option) => {
+  const clickMenu = useCallback((option) => {
     switch (option) {
       case ADD_VIEW_KEY.ADD_FOLDER: {
         eventBus.dispatch(EVENT_BUS_TYPE.ADD_FOLDER);
@@ -87,19 +66,36 @@ const ViewsMoreOperations = ({ menuProps }) => {
         return;
       }
     }
-  };
+  }, [addView, eventBus]);
+
+  const getNewViewSubMenu = useCallback(() => {
+    const options = ADD_VIEW_OPTIONS.map(({ key, type }) => ({ key, type }));
+    const hasMapOption = options.some((option) => option.type === VIEW_TYPE.MAP);
+
+    if (!hasMapOption && (baiduMapKey || googleMapKey)) {
+      options.push({ key: ADD_VIEW_KEY.ADD_MAP, type: VIEW_TYPE.MAP });
+    }
+
+    return options.map(({ key, type }) => ({
+      key,
+      label: VIEW_TYPE_LABEL[type],
+      icon_dom: <Icon symbol={VIEW_TYPE_ICON[type] || VIEW_TYPE.TABLE} className="metadata-view-icon" />,
+      onClick: () => clickMenu(key),
+    }));
+  }, [clickMenu]);
 
   const getMoreOperationsMenus = useCallback(() => {
     return [
       {
         key: ADD_VIEW_KEY.ADD_FOLDER,
         label: TextTranslation.ADD_FOLDER.value,
-        icon_dom: <Icon symbol="folder" className="metadata-view-icon" />
+        icon_dom: <Icon symbol="folder" className="metadata-view-icon" />,
+        onClick: () => clickMenu(ADD_VIEW_KEY.ADD_FOLDER),
       },
       'Divider',
       ...getNewViewSubMenu(),
     ];
-  }, []);
+  }, [clickMenu, getNewViewSubMenu]);
 
   const target = 'new-view-btn';
   return (

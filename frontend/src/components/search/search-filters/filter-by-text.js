@@ -22,18 +22,19 @@ const FilterByText = ({ searchFilenameOnly, onChange }) => {
 
   const label = options.find((option) => option.key === value).label;
 
-  const items = useMemo(() => {
-    return options.map((option) => ({
-      ...option,
-      checked: option.key === value,
-    }));
-  }, [options, value]);
-
   const onItemClick = useCallback((item) => {
     setValue(item.key);
     const isSearchFilenameOnly = item.key === SEARCH_FILTERS_KEY.SEARCH_FILENAME_ONLY;
     onChange(SEARCH_FILTERS_KEY.SEARCH_FILENAME_ONLY, isSearchFilenameOnly);
   }, [onChange]);
+
+  const items = useMemo(() => {
+    return options.map((option) => ({
+      ...option,
+      checked: option.key === value,
+      onClick: () => onItemClick(option),
+    }));
+  }, [options, value, onItemClick]);
 
   return (
     <div className="search-filter filter-by-text-container">
@@ -48,7 +49,6 @@ const FilterByText = ({ searchFilenameOnly, onChange }) => {
         )}
         triggerClassName="search-filter-toggle"
         menuClassName="search-filter-menu filter-by-text-menu"
-        onItemClick={onItemClick}
       />
     </div>
   );

@@ -247,7 +247,6 @@ class DirPath extends React.Component {
           triggerClassName="trash-path-item"
           menuClassName="position-fixed"
           menuPortal={false}
-          onItemClick={(selectedItem) => selectedItem.onClick?.()}
         />
         {this.state.isCleanTrashDialogOpen && (
           <CleanTrash

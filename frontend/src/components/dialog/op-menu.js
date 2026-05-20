@@ -14,7 +14,7 @@ const propTypes = {
 class OpMenu extends React.Component {
   render() {
     const { operations, translateOperations } = this.props;
-    const menuItems = operations.map((item) => ({ key: item, label: translateOperations(item) }));
+    const menuItems = operations.map((item) => ({ key: item, label: translateOperations(item), onClick: () => this.props.onMenuItemClick(item) }));
     return (
       <CustomDropdown
         items={menuItems}
@@ -24,7 +24,6 @@ class OpMenu extends React.Component {
         menuPortal={false}
         freezeItem={this.props.onFreezedItem}
         unfreezeItem={this.props.onUnfreezedItem}
-        onItemClick={(selectedItem) => this.props.onMenuItemClick(selectedItem.key)}
       />
     );
   }

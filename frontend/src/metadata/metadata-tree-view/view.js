@@ -13,7 +13,6 @@ import {
   VIEW_TYPE, VIEW_TYPE_LABEL, VIEW_TYPE_ICON, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW
 } from '../constants';
 import { validateName } from '../utils/validate';
-import Tooltip from '@/components/tooltip';
 import CustomDropdown from '../../components/dropdown';
 
 const MOVE_TO_FOLDER_PREFIX = 'move_to_folder_';
@@ -55,71 +54,6 @@ const ViewItem = ({
     return true;
   }, [canUpdate]);
 
-  const operations = useMemo(() => {
-    if (!canUpdate) return [];
-    if (viewId === FACE_RECOGNITION_VIEW_ID) {
-      return [];
-    }
-    let value = [
-      { key: 'rename', value: gettext('Rename') },
-      { key: 'duplicate', value: gettext('Duplicate') }
-    ];
-
-    const moveableFolders = getMoveableFolders(folderId);
-    if (moveableFolders.length > 0) {
-      value.push({
-        key: 'move',
-        value: gettext('Move'),
-        subOpList: moveableFolders.map((folder) => ({ key: `${MOVE_TO_FOLDER_PREFIX}${folder._id}`, value: folder.name, icon_dom: <Icon symbol="folder" /> })),
-      });
-    }
-    const convertableViews = Object.values(VIEW_TYPE).filter(type =>
-      type !== viewType &&
-      type !== VIEW_TYPE.FACE_RECOGNITION &&
-      !(type === VIEW_TYPE.MAP && !baiduMapKey && !googleMapKey)
-    );
-    value.push({
-      key: 'turn',
-      value: gettext('Change view type'),
-      subOpList: convertableViews.map((type) => {
-        return {
-          key: `${TURN_VIEW_INTO_PREFIX}${type}`,
-          value: VIEW_TYPE_LABEL[type],
-          icon_dom: <Icon symbol={VIEW_TYPE_ICON[type]} className="metadata-view-icon" />,
-        };
-      })
-    });
-    if (canDelete) {
-      value.push({ key: 'delete', value: gettext('Delete') });
-    }
-    return value;
-  }, [folderId, viewId, viewType, canUpdate, canDelete, getMoveableFolders]);
-
-  const onMouseEnter = useCallback(() => {
-    if (freeze) return;
-    setHighlight(true);
-  }, [freeze]);
-
-  const onMouseOver = useCallback(() => {
-    if (freeze) return;
-    setHighlight(true);
-  }, [freeze]);
-
-  const onMouseLeave = useCallback(() => {
-    if (freeze) return;
-    setHighlight(false);
-  }, [freeze]);
-
-  const freezeItem = useCallback(() => {
-    setFreeze(true);
-    setHighlight(true);
-  }, []);
-
-  const unfreezeItem = useCallback(() => {
-    setFreeze(false);
-    setHighlight(false);
-  }, []);
-
   const operationClick = useCallback((operationKey) => {
     if (operationKey.startsWith(MOVE_TO_FOLDER_PREFIX)) {
       const targetFolderId = operationKey.split(MOVE_TO_FOLDER_PREFIX)[1];
@@ -158,6 +92,77 @@ const ViewItem = ({
       return;
     }
   }, [folderId, viewId, isSelected, onDelete, onCopy, moveView, modifyViewType]);
+
+  const operations = useMemo(() => {
+    if (!canUpdate) return [];
+    if (viewId === FACE_RECOGNITION_VIEW_ID) {
+      return [];
+    }
+    let value = [
+      { key: 'rename', value: gettext('Rename') },
+      { key: 'duplicate', value: gettext('Duplicate') }
+    ];
+
+    const moveableFolders = getMoveableFolders(folderId);
+    if (moveableFolders.length > 0) {
+      value.push({
+        key: 'move',
+        value: gettext('Move'),
+        subOpList: moveableFolders.map((folder) => ({ key: `${MOVE_TO_FOLDER_PREFIX}${folder._id}`, value: folder.name, icon_dom: <Icon symbol="folder" /> })),
+      });
+    }
+    const convertableViews = Object.values(VIEW_TYPE).filter(type =>
+      type !== viewType &&
+      type !== VIEW_TYPE.FACE_RECOGNITION &&
+      !(type === VIEW_TYPE.MAP && !baiduMapKey && !googleMapKey)
+    );
+    value.push({
+      key: 'turn',
+      value: gettext('Change view type'),
+      subOpList: convertableViews.map((type) => {
+        return {
+          key: `${TURN_VIEW_INTO_PREFIX}${type}`,
+          value: VIEW_TYPE_LABEL[type],
+          icon_dom: <Icon symbol={VIEW_TYPE_ICON[type]} className="metadata-view-icon" />,
+        };
+      })
+    });
+    if (canDelete) {
+      value.push({ key: 'delete', value: gettext('Delete') });
+    }
+    return value.map(item => {
+      if (item === 'Divider') return item;
+      return {
+        ...item,
+        onClick: () => operationClick(item.key)
+      };
+    });
+  }, [canUpdate, viewId, getMoveableFolders, folderId, canDelete, viewType, operationClick]);
+
+  const onMouseEnter = useCallback(() => {
+    if (freeze) return;
+    setHighlight(true);
+  }, [freeze]);
+
+  const onMouseOver = useCallback(() => {
+    if (freeze) return;
+    setHighlight(true);
+  }, [freeze]);
+
+  const onMouseLeave = useCallback(() => {
+    if (freeze) return;
+    setHighlight(false);
+  }, [freeze]);
+
+  const freezeItem = useCallback(() => {
+    setFreeze(true);
+    setHighlight(true);
+  }, []);
+
+  const unfreezeItem = useCallback(() => {
+    setFreeze(false);
+    setHighlight(false);
+  }, []);
 
   const renameView = useCallback((name, failCallback) => {
     onUpdate(viewId, { name }, () => {
@@ -278,15 +283,8 @@ const ViewItem = ({
                 target={`metadata-view-dropdown-item-${viewId}`}
                 items={operations}
                 menuClassName="metadata-views-dropdown-menu"
-                trigger={(
-                  <>
-                    <Icon symbol="more-level" />
-                    <Tooltip target={`metadata-view-dropdown-item-${viewId}`}>{gettext('More operations')}</Tooltip>
-                  </>
-                )}
                 freezeItem={freezeItem}
                 unfreezeItem={unfreezeItem}
-                onItemClick={(selectedItem, event) => operationClick(selectedItem.key, event)}
               />
             )}
           </div>

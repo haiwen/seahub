@@ -135,12 +135,12 @@ class Item extends React.Component {
           </tr>
         }
         {isRevokeDialogOpen &&
-        <InvitationRevokeDialog
-          accepter={item.accepter}
-          token={item.token}
-          revokeInvitation={this.revokeItem}
-          toggleDialog={this.toggleRevokeDialog}
-        />
+          <InvitationRevokeDialog
+            accepter={item.accepter}
+            token={item.token}
+            revokeInvitation={this.revokeItem}
+            toggleDialog={this.toggleRevokeDialog}
+          />
         }
       </>
     );
@@ -280,7 +280,6 @@ class InvitationsView extends React.Component {
                 <h3 className="sf-heading">{gettext('Invite Guest')}</h3>
                 <CustomDropdown
                   items={invitationActions}
-                  onItemClick={(selectedItem) => selectedItem.onClick?.()}
                   trigger={(
                     <>
                       <Icon symbol="new" className="new-icon" />
@@ -301,10 +300,10 @@ class InvitationsView extends React.Component {
           </div>
         </div>
         {this.state.isInvitePeopleDialogOpen &&
-        <InvitePeopleDialog
-          onInvitePeople={this.onInvitePeople}
-          toggleDialog={this.toggleInvitePeopleDialog}
-        />
+          <InvitePeopleDialog
+            onInvitePeople={this.onInvitePeople}
+            toggleDialog={this.toggleInvitePeopleDialog}
+          />
         }
       </>
     );

@@ -46,7 +46,7 @@ const Tooltip = ({
     placement,
     className: `sf-tooltip ${className ? className : ''}`,
     innerClassName: hasShortcut ? 'sf-tooltip-shortcut-inner' : '',
-    delay: { show: 0, hide: 0 },
+    fade: false,
     hideArrow: true,
     autohide: true,
     modifiers: [

@@ -10,7 +10,6 @@ import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 import Icon from '../../../components/icon';
 import OpIcon from '../../../components/op-icon';
-import Tooltip from '@/components/tooltip';
 import CustomDropdown from '../../../components/dropdown';
 
 import '../css/wiki-nav.css';
@@ -194,17 +193,10 @@ class WikiNav extends Component {
                 target="wiki-nav-more-operations"
                 items={pageOperationItems}
                 className="page-operation-dropdown"
-                trigger={(
-                  <>
-                    <Icon symbol="more-level" />
-                    <Tooltip target="wiki-nav-more-operations">{gettext('More operations')}</Tooltip>
-                  </>
-                )}
                 triggerClassName={classNames('op-icon', { 'invisible': !isHeaderHovered && !isDropdownOpen })}
                 menuClassName="page-operation-dropdown-menu dtable-dropdown-menu large position-fixed"
                 freezeItem={this.handleDropdownOpen}
                 unfreezeItem={this.handleDropdownClose}
-                onItemClick={(selectedItem) => selectedItem.onClick?.()}
               />
               <OpIcon
                 id="new-wiki-page-btn"

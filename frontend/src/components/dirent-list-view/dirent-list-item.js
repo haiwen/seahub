@@ -551,6 +551,18 @@ class DirentListItem extends React.Component {
     }
   };
 
+  getItemMenuList = (dirent, isContextmenu = true) => {
+    let options = this.props.getDirentItemMenuList(dirent, isContextmenu);
+    options = options.map(item => {
+      if (item === 'Divider') return item;
+      return {
+        ...item,
+        onClick: (e) => this.onMenuItemClick(item.key, e)
+      };
+    });
+    return options;
+  };
+
   render() {
     let dirent = this.props.dirent;
     const { columns, hiddenColumnKeys } = this.props;
@@ -744,13 +756,10 @@ class DirentListItem extends React.Component {
               {this.state.isOperationShow && (
                 <CustomDropdown
                   target={`item-dropdown-${dirent.id}`}
-                  items={this.props.getDirentItemMenuList(dirent, true)}
-                  trigger={<Icon symbol="more-level" />}
+                  items={this.getItemMenuList(dirent, true)}
                   triggerClassName="op-icon mr-0"
                   freezeItem={this.props.freezeItem}
                   unfreezeItem={this.unfreezeItem}
-                  tooltip={gettext('More operations')}
-                  onItemClick={(selectedItem, event) => this.onMenuItemClick(selectedItem.key, event)}
                 />
               )}
             </div>

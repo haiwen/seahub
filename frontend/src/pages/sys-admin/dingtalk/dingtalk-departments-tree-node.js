@@ -117,7 +117,6 @@ class DingtalkDepartmentsTreeNode extends Component {
                   label: '导入部门',
                   onClick: () => this.importDepartmentDialogToggle(department),
                 }]}
-                trigger={<Icon symbol="more-level" />}
                 triggerClassName="cursor-pointer right-icon"
                 menuClassName="drop-list"
                 freezeItem={this.handleDropdownOpen}

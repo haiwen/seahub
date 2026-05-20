@@ -25,22 +25,6 @@ class LibraryOperationMenu extends React.Component {
     super(props);
   }
 
-  onMenuItemClick = (operation) => {
-    this.props.onMenuItemClick(operation);
-  };
-
-  onDropdownToggleClick = (event) => {
-    const { isLibView } = this.props;
-    if (isLibView) {
-      return;
-    }
-
-    const dataset = event?.target ? event.target.dataset : null;
-    if (dataset && dataset.toggle === 'Rename') {
-      return;
-    }
-  };
-
   generatorOperations = () => {
     let repo = this.props.repo;
     let showResetPasswordMenuItem = isPro && repo.encrypted && enableResetEncryptedRepoPassword && isEmailConfigured;
@@ -115,6 +99,7 @@ class LibraryOperationMenu extends React.Component {
           children: advancedOperations.map((advancedItem) => ({
             key: advancedItem,
             label: this.translateOperations(advancedItem),
+            onClick: (e) => this.props.onMenuItemClick(e, advancedItem),
           })),
         };
       }
@@ -122,6 +107,7 @@ class LibraryOperationMenu extends React.Component {
       return {
         key: item,
         label: this.translateOperations(item),
+        onClick: (e) => this.props.onMenuItemClick(e, item),
       };
     });
   };
@@ -211,8 +197,6 @@ class LibraryOperationMenu extends React.Component {
           menuProps={{ container: menuContainer || (isLibView ? 'body' : '') }}
           freezeItem={this.props.onFreezedItem}
           unfreezeItem={this.props.onUnfreezedItem}
-          onToggle={this.onDropdownToggleClick}
-          onItemClick={(selectedItem) => this.onMenuItemClick(selectedItem.key)}
         />
       );
     }
@@ -230,7 +214,7 @@ class LibraryOperationMenu extends React.Component {
             <CustomDropdownItem
               key={index}
               item={{ key: item, label: this.translateOperations(item), className: 'mobile-menu-item' }}
-              onClick={() => this.onMenuItemClick(item)}
+              onClick={(e) => this.props.onMenuItemClick(e, item)}
               tag="div"
             />
           );

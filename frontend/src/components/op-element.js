@@ -5,7 +5,6 @@ import { Utils } from '../utils/utils';
 const propTypes = {
   className: PropTypes.string.isRequired,
   op: PropTypes.func,
-  title: PropTypes.string.isRequired,
   children: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
 };
 
@@ -18,7 +17,6 @@ class OpElement extends React.Component {
         tabIndex="0"
         role="button"
         className={className}
-        title={title}
         aria-label={title}
         onClick={op}
         onKeyDown={Utils.onKeyDown}
