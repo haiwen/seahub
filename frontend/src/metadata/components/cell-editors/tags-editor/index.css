@@ -1,15 +1,6 @@
 .sf-metadata-tags-editor {
-  background: var(--bs-popover-bg);
-  border: 1px solid var(--bs-secondary-color);
-  border-radius: 4px;
-  box-shadow: 0 2px 10px 0 #dedede;
   left: 0;
   min-height: 160px;
-  min-width: 200px;
-  opacity: 1;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
 }
 
 [data-bs-theme=dark] .sf-metadata-tags-editor {

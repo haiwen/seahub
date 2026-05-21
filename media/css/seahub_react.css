@@ -639,8 +639,9 @@ textarea::placeholder {
 }
 
 .account-popup {
+  width: 240px;
   right: 0;
-  top: 43px;
+  top: -1px;
   font-size: 13px;
 }
 
@@ -1044,17 +1045,12 @@ textarea::placeholder {
 /**** sf-popover ****/
 /* e.g. top notice popup, group members popup */
 .sf-popover-container {
-  position: relative;
-}
-
-.sf-popover {
-  width: 240px;
-  background: var(--bs-popover-bg);
-  border: 1px solid var(--bs-border-color);
-  border-radius: 3px;
-  box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.1);
   position: absolute;
-  z-index: 20;
+  background: var(--bs-popover-bg);
+  border: 1px solid var(--bs-popover-border-color);
+  border-radius: var(--bs-popover-border-radius);
+  box-shadow: var(--bs-popover-box-shadow);
+  overflow: hidden;
 }
 
 .sf-popover-hd {

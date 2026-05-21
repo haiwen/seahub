@@ -23,18 +23,8 @@
   margin-right: 10px;
 }
 
-.sf-metadata-tags-property-editor-popover .popover {
-  max-width: unset;
-}
-
-.sf-metadata-tags-property-editor-popover .sf-metadata-tags-editor {
-  position: unset;
-  min-width: 200px;
-  padding: 0;
-  overflow: hidden;
-  opacity: 1;
-  background: var(--bs-popover-bg);
-  border: none;
-  border-radius: none;
-  box-shadow: none;
+.sf-metadata-property-editor-popover .sf-metadata-tags-editor.tags-tree-container {
+  right: 0;
+  top: -1px;
+  left: auto;
 }

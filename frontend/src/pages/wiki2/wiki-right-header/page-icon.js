@@ -40,7 +40,7 @@ const PageIcon = ({ currentPageConfig, onUpdatePageConfig }) => {
           placement="bottom"
           hideArrow={true}
           popperClassName='wiki-page-icon-popover'
-          innerClassName='wiki-page-icon-panel wiki-page-panel'
+          innerClassName='wiki-page-icon-panel wiki-page-panel sf-popover-container'
           trigger="legacy"
         >
           <div className='wiki-page-icon-panel__header popover-header'>

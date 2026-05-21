@@ -44,6 +44,10 @@
   max-width: max-content;
 }
 
+.wiki-page-icon-popover .sf-popover-container {
+  transform: translateX(-50%);
+}
+
 .wiki-page-icon-panel__body {
   padding: 0;
   background: var(--bs-body-bg);

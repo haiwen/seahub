@@ -109,7 +109,7 @@ const TagsEditor = ({ record, value, field, updateFileTags }) => {
         placement={placement}
         hideArrow={true}
         fade={false}
-        className="sf-metadata-property-editor-popover sf-metadata-tags-property-editor-popover"
+        className="sf-metadata-property-editor-popover"
         boundariesElement="viewport"
       >
         <Editor

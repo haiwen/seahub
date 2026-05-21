@@ -107,13 +107,13 @@ class LogRepoSelector extends Component {
           <Icon symbol="down" className="ml-2 toggle-icon" />
         </span>
         {isOpen && (
-          <div className="position-absolute activity-modifier-selector-container rounded" ref={ref => this.repoSelector = ref}>
+          <div className="activity-modifier-selector-container sf-popover-container" ref={ref => this.repoSelector = ref}>
             <ul className="activity-selected-modifiers px-3 py-1 list-unstyled">
               {selectedItems.map((item, index) => (
                 <li key={index} className="activity-selected-modifier">
                   <i className="fas fa-folder"></i>
                   <span className="activity-user-name ml-2">{item.name}</span>
-                  <span className="unselect-activity-user ml-2" onClick={(e) => {this.toggleSelectItem(e, item);}}>
+                  <span className="unselect-activity-user ml-2" onClick={(e) => { this.toggleSelectItem(e, item); }}>
                     <Icon symbol="close" />
                   </span>
                 </li>
@@ -140,7 +140,7 @@ class LogRepoSelector extends Component {
                   return (
                     <li key={index}
                       className="activity-user-item h-6 p-1 rounded d-flex justify-content-between align-items-center"
-                      onClick={(e) => {this.toggleSelectItem(e, item);}}
+                      onClick={(e) => { this.toggleSelectItem(e, item); }}
                     >
                       <div>
                         <i className="fas fa-folder"></i>

@@ -40,7 +40,7 @@ const FilterBySuffix = ({ suffixes, onChange }) => {
 
   return (
     <div className="search-filter filter-by-suffix-container">
-      <Dropdown isOpen={isOpen} toggle={toggle}>
+      <Dropdown isOpen={isOpen} toggle={toggle} direction="down">
         <DropdownToggle
           tag="div"
           className={classNames('search-filter-toggle', {
@@ -57,7 +57,15 @@ const FilterBySuffix = ({ suffixes, onChange }) => {
           <Icon symbol="down" className="w-3 h-3 ml-1" />
         </DropdownToggle>
         <ModalPortal>
-          <DropdownMenu className="search-filter-menu filter-by-suffix-menu p-4">
+          <DropdownMenu
+            className="search-filter-menu filter-by-suffix-menu p-4"
+            modifiers={[{
+              name: 'offset',
+              options: {
+                offset: [0, 8]
+              }
+            }]}
+          >
             <input
               ref={inputRef}
               type="text"
@@ -84,7 +92,7 @@ const FilterBySuffix = ({ suffixes, onChange }) => {
           </DropdownMenu>
         </ModalPortal>
       </Dropdown>
-    </div>
+    </div >
   );
 };
 

@@ -19,7 +19,7 @@ class CollaboratorsPopover extends React.PureComponent {
       <UncontrolledPopover
         target="collaborators"
         placement="bottom-end"
-        popperClassName='collaborators-popover'
+        popperClassName="collaborators-popover sf-popover-container"
         trigger="legacy"
         hideArrow={true}
         fade={false}

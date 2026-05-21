@@ -404,7 +404,7 @@ const TagsEditor = forwardRef(({
   }, [nodes, tagsData, value, highlightNodeIndex, searchValue, recentlyUsedTags, keyNodeFoldedMap, searchedKeyNodeFoldedMap, showRecentlyUsed, renderRecentlyUsed, toggleExpandTreeNode, handleSelectTags, onTreeMenuMouseEnter, onTreeMenuMouseLeave]);
 
   return (
-    <div className="sf-metadata-tags-editor tags-tree-container" style={{ ...style, ...customStyle }}>
+    <div className="sf-metadata-tags-editor tags-tree-container sf-popover-container" style={{ ...style, ...customStyle }}>
       <DeleteTag value={value} tags={tagsData} onDelete={handleSelectTags} />
       <div className="sf-metadata-search-tags-container">
         <SearchInput

@@ -22,7 +22,7 @@ export const CustomDropdown = ({
   forwardedRef,
   variant = 'action',
   placement = 'down',
-  modifier,
+  modifiers,
   trigger,
   triggerClassName,
   menuClassName,
@@ -114,7 +114,7 @@ export const CustomDropdown = ({
     <DropdownMenu
       ref={menuRef}
       className={menuClassName}
-      modifiers={modifier || [{
+      modifiers={modifiers || [{
         name: 'preventOverflow',
         options: { boundary: document.body }
       }, {
@@ -178,7 +178,7 @@ CustomDropdown.propTypes = {
   items: PropTypes.array,
   variant: PropTypes.oneOf(['action', 'control']),
   placement: PropTypes.string,
-  modifier: PropTypes.array,
+  modifiers: PropTypes.array,
   menuPortal: PropTypes.bool,
   freezeItem: PropTypes.func,
   unfreezeItem: PropTypes.func,

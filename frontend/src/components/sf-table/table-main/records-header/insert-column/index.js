@@ -117,7 +117,7 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
           <ColumnTypeDropdownMenu
             modifiers={[{
               name: 'offset',
-              options: { offset: [0, 4] },
+              options: { offset: [0, 8] },
             }]}
             onSelect={handleSelect}
           />

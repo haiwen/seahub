@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Popover } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { siteRoot, isPro, gettext, appAvatarURL, enableSSOToThirdpartWebsite, enableSeafileAI } from '../../utils/constants';
@@ -32,45 +33,32 @@ class Account extends Component {
       enableSubscription: false,
     };
     this.isFirstMounted = true;
+    this.popoverRef = null;
+    this.triggerRef = null;
   }
 
-  componentDidUpdate(prevProps) {
-    this.handleProps();
+  componentDidMount() {
+    document.addEventListener('mousedown', this.handleClickOutside, true);
   }
 
-  handleProps = () => {
-    if (this.state.showInfo) {
-      this.addEvents();
-    } else {
-      this.removeEvents();
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside, true);
+  }
+
+  handleClickOutside = (e) => {
+    // Check if click is inside a popover (using .popover class that reactstrap adds)
+    const clickInsideAnyPopover = e.target.closest('.popover');
+    const clickOnTrigger = this.triggerRef && this.triggerRef.contains(e.target);
+    if (!clickInsideAnyPopover && !clickOnTrigger && this.state.showInfo) {
+      this.setState({ showInfo: false });
     }
   };
 
-  addEvents = () => {
-    ['click', 'touchstart', 'keyup'].forEach(event =>
-      document.addEventListener(event, this.handleDocumentClick, true)
-    );
+  onPopoverMouseDown = (e) => {
+    e.stopPropagation();
   };
 
-  removeEvents = () => {
-    ['click', 'touchstart', 'keyup'].forEach(event =>
-      document.removeEventListener(event, this.handleDocumentClick, true)
-    );
-  };
-
-  handleDocumentClick = (e) => {
-    if (e && (e.which === 3 || (e.type === 'keyup' && e.which !== Utils.keyCodes.tab))) return;
-    if (this.accountDOM && this.accountDOM.contains(e.target) && this.accountDOM !== e.target && (e.type !== 'keyup' || e.which === Utils.keyCodes.tab)) {
-      return;
-    }
-
-    this.setState({
-      showInfo: !this.state.showInfo,
-    });
-  };
-
-  onClickAccount = (e) => {
-    e.preventDefault();
+  fetchAccountInfo = () => {
     if (this.isFirstMounted) {
       seafileAPI.getAccountInfo().then(resp => {
         this.setState({
@@ -82,7 +70,6 @@ class Account extends Component {
           isStaff: resp.data.is_staff,
           isInstAdmin: resp.data.is_inst_admin,
           isOrgStaff: resp.data.is_org_staff === 1 ? true : false,
-          showInfo: !this.state.showInfo,
           enableSubscription: resp.data.enable_subscription,
           aiCredit: resp.data.ai_credit,
           aiCost: resp.data.ai_cost,
@@ -93,9 +80,20 @@ class Account extends Component {
         toaster.danger(errMessage);
       });
       this.isFirstMounted = false;
-    } else {
-      this.setState({ showInfo: !this.state.showInfo });
     }
+  };
+
+  onClickAccount = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    this.setState({ showInfo: !this.state.showInfo });
+    if (!this.state.showInfo) {
+      this.fetchAccountInfo();
+    }
+  };
+
+  togglePopover = () => {
+    this.setState({ showInfo: !this.state.showInfo });
   };
 
   renderMenu = () => {
@@ -149,15 +147,30 @@ class Account extends Component {
 
   render() {
     return (
-      <div id="account" ref={ref => this.accountDOM = ref} className="ml-3">
-        <a id="my-info" href="#" onClick={this.onClickAccount} className="account-toggle no-deco d-none d-md-block" aria-label={gettext('View profile and more')}>
+      <div id="account" className="ml-3">
+        <a id="my-info" href="#" onClick={this.onClickAccount} className="account-toggle no-deco d-none d-md-block" aria-label={gettext('View profile and more')} ref={el => this.triggerRef = el}>
           {this.renderAvatar()}
         </a>
         <span className="account-toggle mobile-icon d-md-none" role="button" tabIndex="0" aria-label={gettext('View profile and more')} onClick={this.onClickAccount}>
           <Icon symbol="more-vertical" />
         </span>
-        <div id="user-info-popup" className={`account-popup sf-popover ${this.state.showInfo ? '' : 'hide'}`}>
-          <div className="sf-popover-con">
+        <Popover
+          isOpen={this.state.showInfo}
+          toggle={this.togglePopover}
+          target="my-info"
+          placement="bottom"
+          hideArrow={true}
+          fade={false}
+          modifiers={[
+            {
+              name: 'offset',
+              options: {
+                offset: [16, 8],
+              }
+            }
+          ]}
+        >
+          <div className="sf-popover-container account-popup" ref={el => this.popoverRef = el} onMouseDown={this.onPopoverMouseDown}>
             <div className="item o-hidden">
               {this.renderAvatar()}
               <div className="txt">{this.state.userName}</div>
@@ -187,8 +200,8 @@ class Account extends Component {
             {enableSSOToThirdpartWebsite && <a href={siteRoot + 'sso-to-thirdpart/'} className="item">{gettext('Customer Portal')}</a>}
             <a href={siteRoot + 'accounts/logout/'} className="item">{gettext('Log out')}</a>
           </div>
-        </div>
-      </div>
+        </Popover >
+      </div >
     );
   }
 }

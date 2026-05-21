@@ -87,7 +87,7 @@ const FilterByCreator = ({ creatorList, onChange }) => {
     };
 
     getUsers();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue]);
 
   return (
@@ -108,7 +108,15 @@ const FilterByCreator = ({ creatorList, onChange }) => {
           <Icon symbol="down" className="w-3 h-3 ml-1" />
         </DropdownToggle>
         <ModalPortal>
-          <DropdownMenu className="search-filter-menu filter-by-creator-menu">
+          <DropdownMenu
+            className="search-filter-menu filter-by-creator-menu"
+            modifiers={[{
+              name: 'offset',
+              options: {
+                offset: [0, 8]
+              }
+            }]}
+          >
             <div className="selected-user-item-container">
               {selectedOptions.map((option) => (
                 <UserItem

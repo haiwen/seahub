@@ -1,6 +1,8 @@
-.sf-metadata-hide-columns-popover .popover {
+.sf-metadata-hide-columns-container {
   width: 300px;
-  font-size: 13px;
+  right: 0;
+  top: -1px;
+  padding: .5rem 0;
 }
 
 .sf-metadata-hide-columns-popover .empty-hide-columns-container {
@@ -12,14 +14,6 @@
   padding: 0.25rem 10px;
   font-size: 14px;
   color: var(--bs-body-secondary-color);
-}
-
-.sf-metadata-hide-columns-popover .sf-metadata-hide-columns-container {
-  padding: .5rem 0;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .sf-metadata-hide-columns-popover .sf-metadata-hide-columns-search-container {

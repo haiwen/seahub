@@ -9,6 +9,7 @@
 }
 
 .sf-metadata-column-popover .sf-metadata-column-popover-inner {
+  right: 0;
   max-height: calc(100vh - 170px);
   min-width: 350px;
 }

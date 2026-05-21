@@ -11,6 +11,7 @@ import { getValidFilters, getFilterByColumn } from '../../../utils/filter';
 import { getEventClassName } from '../../../../utils/dom';
 
 import './index.css';
+import classNames from 'classnames';
 
 /**
  * filter = {
@@ -138,8 +139,8 @@ class FilterPopover extends Component {
         boundariesElement={document.body}
       >
         {({ update: scheduleUpdate }) => (
-          <div ref={ref => this.dtablePopoverRef = ref} onClick={this.onPopoverInsideClick} className={filtersClassName}>
-            <BasicFilters readOnly={readOnly} filters={basicFilters} onChange={this.onBasicFilterChange} viewType={viewType}/>
+          <div ref={ref => this.dtablePopoverRef = ref} onClick={this.onPopoverInsideClick} className={classNames('sf-popover-container', filtersClassName)}>
+            <BasicFilters readOnly={readOnly} filters={basicFilters} onChange={this.onBasicFilterChange} viewType={viewType} />
             <FormGroup className="filter-group-advanced filter-group mb-0">
               <Label className="filter-group-name">{gettext('Advanced')}</Label>
               <div className="filter-group-container">
@@ -162,7 +163,7 @@ class FilterPopover extends Component {
               <div className="sf-metadata-filter-popover-add-btns">
                 <CommonAddTool
                   className={`popover-add-tool ${canAddFilter ? '' : 'disabled'}`}
-                  callBack={canAddFilter ? () => this.addFilter(scheduleUpdate) : () => {}}
+                  callBack={canAddFilter ? () => this.addFilter(scheduleUpdate) : () => { }}
                   footerName={gettext('Add filter')}
                   addIconClassName="popover-add-icon"
                 />

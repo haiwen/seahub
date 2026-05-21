@@ -56,7 +56,7 @@ const TagsFilter = ({ value: oldValue, onChange: onChangeAPI }) => {
     return (
       <div className="ml-2">
         <div ref={invalidFilterTip}>
-          <IconBtn symbol="exclamation-triangle" iconStyle={{ fill: '#cd201f' }}/>
+          <IconBtn symbol="exclamation-triangle" iconStyle={{ fill: '#cd201f' }} />
         </div>
         <UncontrolledTooltip
           target={invalidFilterTip}

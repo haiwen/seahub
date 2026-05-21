@@ -200,13 +200,13 @@ class SortPopover extends Component {
         {!readOnly &&
           <div
             className="delete-sort"
-            onClick={(viewType === VIEW_TYPE.GALLERY && index === 0) ? () => {} : (event) => this.deleteSort(event, index)}
+            onClick={(viewType === VIEW_TYPE.GALLERY && index === 0) ? () => { } : (event) => this.deleteSort(event, index)}
             tabIndex="0"
             role="button"
             onKeyDown={Utils.onKeyDown}
             aria-label={gettext('Delete')}
           >
-            {!(viewType === VIEW_TYPE.GALLERY && index === 0) && <Icon className="sf-metadata-icon" symbol="close"/>}
+            {!(viewType === VIEW_TYPE.GALLERY && index === 0) && <Icon className="sf-metadata-icon" symbol="close" />}
           </div>
         }
         <div className="condition">
@@ -252,7 +252,7 @@ class SortPopover extends Component {
         className="sf-metadata-sort-popover"
         boundariesElement={document.body}
       >
-        <div ref={ref => this.sortPopoverRef = ref} onClick={this.onPopoverInsideClick}>
+        <div ref={ref => this.sortPopoverRef = ref} className="sf-popover-container" onClick={this.onPopoverInsideClick}>
           <div className={`sorts-list ${isEmpty ? 'empty-sorts-container' : ''}`} >
             {isEmpty ?
               <div className="empty-sorts-list">{gettext('No sorts')}</div> :

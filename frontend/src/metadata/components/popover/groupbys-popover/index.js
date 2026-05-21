@@ -112,7 +112,7 @@ const GroupbysPopover = ({ groupbys: propsGroupBys, readOnly, hidePopover, onCha
       className="sf-metadata-groupbys-popover"
       boundariesElement={document.body}
     >
-      <div ref={popoverRef} onClick={onPopoverInsideClick} className="sf-metadata-groupbys">
+      <div ref={popoverRef} onClick={onPopoverInsideClick} className="sf-popover-container">
         <Groupbys readOnly={readOnly} groupbys={groupbys} columns={columns} onDelete={deleteGroup} onUpdate={updateGroup} onMove={moveGroupbys} />
         {!readOnly && (groupbys.length < MAX_GROUP_LEVEL) && (
           <CommonAddTool

@@ -95,7 +95,7 @@ class MainPanel extends Component {
               </div>
               <div className="common-toolbar">
                 {isPro && (
-                  <Search isPublic={true} repoID={repoID} onSearchedClick={onSearchedClick} placeholder={gettext('Search files')}/>
+                  <Search isPublic={true} repoID={repoID} onSearchedClick={onSearchedClick} placeholder={gettext('Search files')} />
                 )}
               </div>
             </Fragment>
@@ -116,7 +116,7 @@ class MainPanel extends Component {
               </div>
               <div className="common-toolbar">
                 {isPro && (
-                  <Search isPublic={true} repoID={repoID} onSearchedClick={onSearchedClick} placeholder={gettext('Search files')}/>
+                  <Search isPublic={true} repoID={repoID} onSearchedClick={onSearchedClick} placeholder={gettext('Search files')} />
                 )}
                 <Notification />
                 <Account />
@@ -136,7 +136,7 @@ class MainPanel extends Component {
                 isTOCShow={false}
                 markdownContent={this.props.content}
                 isFileLoading={this.props.isDataLoading}
-                lastModified = {this.props.lastModified}
+                lastModified={this.props.lastModified}
                 latestContributor={this.props.latestContributor}
                 onLinkClick={this.props.onLinkClick}
               />
@@ -148,7 +148,7 @@ class MainPanel extends Component {
                 repoID={repoID}
                 markdownContent={this.props.content}
                 isFileLoading={this.props.isDataLoading}
-                lastModified = {this.props.lastModified}
+                lastModified={this.props.lastModified}
                 latestContributor={this.props.latestContributor}
                 onLinkClick={this.props.onLinkClick}
               />

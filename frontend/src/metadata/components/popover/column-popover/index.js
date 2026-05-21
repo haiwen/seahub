@@ -84,7 +84,7 @@ const ColumnPopover = ({ target, column, onSelect, onCancel, onSubmit }) => {
       fade={false}
       className="sf-metadata-column-popover"
     >
-      <div className="sf-metadata-column-popover-inner" ref={popoverInnerRef} style={{ width: popoverInnerWidth }}>
+      <div className="sf-metadata-column-popover-inner sf-popover-container" ref={popoverInnerRef} style={{ width: popoverInnerWidth }}>
         <div>
           <ColumnName ref={nameRef} readOnly={column?.unique} value={column?.unique ? column.name : ''} />
           <ColumnType ref={typeRef} column={column} onChange={onColumnChange} />

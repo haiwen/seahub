@@ -58,7 +58,7 @@ class UserSubscription extends React.Component {
           </div>
           <div className="main-panel d-flex flex-column">
             <h2 className="heading">{'付费管理'}</h2>
-            <Subscription isOrgContext={false} handleContentScroll={this.handleContentScroll}/>
+            <Subscription isOrgContext={false} handleContentScroll={this.handleContentScroll} />
           </div>
         </div>
       </div>

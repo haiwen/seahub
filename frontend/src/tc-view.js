@@ -23,7 +23,7 @@ class TCView extends React.Component {
           <Logo />
           <Account />
         </div>
-        { termsText ?
+        {termsText ?
           <div className="o-auto">
             <div className="py-4 px-4 my-6 mx-auto content">
               <h2 dangerouslySetInnerHTML={{ __html: Utils.HTMLescape(termsName) }}></h2>

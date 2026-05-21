@@ -138,14 +138,14 @@ class LogUserSelector extends Component {
           <Icon symbol="down" className="ml-2 toggle-icon" />
         </span>
         {isOpen && (
-          <div className="position-absolute activity-modifier-selector-container rounded" ref={ref => this.userSelector = ref}>
+          <div className="activity-modifier-selector-container sf-popover-container" ref={ref => this.userSelector = ref}>
             <ul className="activity-selected-modifiers px-3 py-1 list-unstyled">
               {selectedItems.map((item, index) => {
                 return (
                   <li key={index} className="activity-selected-modifier">
                     <img src={item.avatar_url} className="avatar w-5 h-5" alt="" />
                     <span className="activity-user-name ml-2">{item.name}</span>
-                    <span className="unselect-activity-user ml-2" onClick={(e) => {this.toggleSelectItem(e, item);}}>
+                    <span className="unselect-activity-user ml-2" onClick={(e) => { this.toggleSelectItem(e, item); }}>
                       <Icon symbol="close" />
                     </span>
                   </li>
@@ -176,7 +176,7 @@ class LogUserSelector extends Component {
                   return (
                     <li key={index}
                       className="activity-user-item h-6 p-1 rounded d-flex justify-content-between align-items-center"
-                      onClick={(e) => {this.toggleSelectItem(e, item);}}
+                      onClick={(e) => { this.toggleSelectItem(e, item); }}
                     >
                       <div>
                         <img src={item.avatar_url} className="avatar w-5 h-5" alt="" />

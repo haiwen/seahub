@@ -1,3 +1,9 @@
+.sf-metadata-groupbys-popover .sf-popover-container {
+  width: 400px;
+  right: 0;
+  top: -1px;
+}
+
 .sf-metadata-groupbys-popover .popover {
   max-width: none;
   min-width: 510px;

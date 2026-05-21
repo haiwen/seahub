@@ -197,7 +197,7 @@ const SingleSelectEditor = forwardRef(({
     return () => {
       document.removeEventListener('keydown', onHotKey, true);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onHotKey]);
 
   useEffect(() => {
@@ -251,7 +251,7 @@ const SingleSelectEditor = forwardRef(({
   }, [displayOptions, searchValue, value, highlightIndex, onMenuMouseEnter, onMenuMouseLeave, onMouseDown]);
 
   return (
-    <div className="sf-metadata-single-select-editor" style={style} ref={editorRef}>
+    <div className="sf-metadata-single-select-editor sf-popover-container" style={style} ref={editorRef}>
       <div className="sf-metadata-search-single-select-options">
         <SearchInput
           placeholder={gettext('Search option')}

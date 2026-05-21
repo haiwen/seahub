@@ -1,26 +1,10 @@
-.notification-wrapper .popover {
-  max-width: 300px;
-}
-
 .notification-container {
-  position: absolute;
-  background: var(--bs-popover-bg);
   width: 400px;
-  right: -16px;
-  top: -1px;
-  border-radius: 3px;
-  box-shadow: 0 0 5px #ccc;
+  right: 0;
 }
 
 [data-bs-theme=dark] .notification-container {
-  border: 1px solid var(--bs-border-color);
   box-shadow: none;
-}
-
-@media (min-width: 768px) {
-  .notification-container {
-    right: -10px;
-  }
 }
 
 .notification-container .notification-header {

@@ -185,7 +185,15 @@ const FilterByDate = ({ date, onChange }) => {
           <Icon symbol="down" className="w-3 h-3 ml-1" />
         </DropdownToggle>
         <ModalPortal>
-          <DropdownMenu className="search-filter-menu filter-by-date-menu">
+          <DropdownMenu
+            className="search-filter-menu filter-by-date-menu"
+            modifiers={[{
+              name: 'offset',
+              options: {
+                offset: [0, 8]
+              }
+            }]}
+          >
             <div className="filter-by-date-menu-toolbar">
               <Dropdown isOpen={isTypeOpen} toggle={toggleType}>
                 <DropdownToggle

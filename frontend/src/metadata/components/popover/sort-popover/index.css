@@ -1,3 +1,8 @@
+.sf-metadata-sort-popover .sf-popover-container {
+  position: relative;
+  overflow: visible;
+}
+
 .sf-metadata-sort-popover .popover {
   max-width: none;
   min-width: 400px;

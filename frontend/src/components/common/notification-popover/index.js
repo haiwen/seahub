@@ -4,9 +4,9 @@ import { Popover } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import SeahubModalCloseIcon from '../seahub-modal-close';
 import { NAV_ITEM_MARGIN } from '../../../constants';
+import { Utils } from '../../../utils/utils';
 
 import './index.css';
-import { Utils } from '../../../utils/utils';
 
 class NotificationPopover extends React.Component {
 
@@ -60,8 +60,16 @@ class NotificationPopover extends React.Component {
         fade={false}
         hideArrow={true}
         placement="bottom"
+        modifiers={[
+          {
+            name: 'offset',
+            options: {
+              offset: [16, 8],
+            }
+          }
+        ]}
       >
-        <div className="notification-container" ref={ref => this.notificationContainerRef = ref}>
+        <div className="sf-popover-container notification-container" ref={ref => this.notificationContainerRef = ref}>
           <div className="notification-header modal">
             {headerText}
             <SeahubModalCloseIcon toggle={this.props.onNotificationListToggle} />
@@ -113,18 +121,18 @@ class NotificationPopover extends React.Component {
               </button>
             </div>
             {currentTab === 'general' &&
-            <div className="notification-list-container" onScroll={this.onHandleScroll} ref={ref => this.notificationListRef = ref}>
-              <div ref={ref => this.notificationsWrapperRef = ref}>
-                {this.props.children}
+              <div className="notification-list-container" onScroll={this.onHandleScroll} ref={ref => this.notificationListRef = ref}>
+                <div ref={ref => this.notificationsWrapperRef = ref}>
+                  {this.props.children}
+                </div>
               </div>
-            </div>
             }
             {currentTab === 'discussion' &&
-            <div className="notification-list-container" onScroll={this.onHandleScroll} ref={ref => this.notificationListRef = ref}>
-              <div ref={ref => this.notificationsWrapperRef = ref}>
-                {this.props.children}
+              <div className="notification-list-container" onScroll={this.onHandleScroll} ref={ref => this.notificationListRef = ref}>
+                <div ref={ref => this.notificationsWrapperRef = ref}>
+                  {this.props.children}
+                </div>
               </div>
-            </div>
             }
             <button
               className="notification-footer border-0 bg-transparent d-block w-100"

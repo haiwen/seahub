@@ -49,6 +49,12 @@ const FilterByText = ({ searchFilenameOnly, onChange }) => {
         )}
         triggerClassName="search-filter-toggle"
         menuClassName="search-filter-menu filter-by-text-menu"
+        modifiers={[{
+          name: 'offset',
+          options: {
+            offset: [0, 8]
+          }
+        }]}
       />
     </div>
   );

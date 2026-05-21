@@ -90,7 +90,7 @@ class UserSelector extends Component {
           <Icon symbol="down" className="w-3 h-3 ml-2 toggle-icon" />
         </OpElement>
         {isPopoverOpen && (
-          <div className="position-absolute activity-modifier-selector-container rounded" ref={ref => this.userSelector = ref}>
+          <div className="activity-modifier-selector-container sf-popover-container" ref={ref => this.userSelector = ref}>
             <ul className="activity-selected-modifiers px-3 py-1 list-unstyled">
               {selectedUsers.map((item, index) => {
                 return (
@@ -101,7 +101,7 @@ class UserSelector extends Component {
                       symbol="close"
                       className="unselect-activity-user ml-2"
                       title={gettext('Unselect')}
-                      op={(e) => {this.toggleSelectItem(e, item);}}
+                      op={(e) => { this.toggleSelectItem(e, item); }}
                     />
                   </li>
                 );
@@ -121,7 +121,7 @@ class UserSelector extends Component {
                   <li
                     key={index}
                     className="activity-user-item h-6 p-1 rounded d-flex justify-content-between align-items-center"
-                    onClick={(e) => {this.toggleSelectItem(e, item);}}
+                    onClick={(e) => { this.toggleSelectItem(e, item); }}
                     tabIndex="0"
                     onKeyDown={Utils.onKeyDown}
                     aria-label={gettext('Select')}
