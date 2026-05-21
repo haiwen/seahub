@@ -40,8 +40,22 @@ class ViewModes extends React.Component {
     const { currentViewMode, isSupportTable = false } = this.props;
     const shortcutMain = Utils.isMac() ? '⇧ ⌘' : 'Ctrl + Shift +';
     let options = [
-      { key: LIST_MODE, label: gettext('List view'), icon_dom: <Icon symbol="list-view" />, shortcut: `${shortcutMain} 1`, checked: currentViewMode === LIST_MODE, onClick: () => this.props.switchViewMode(LIST_MODE) },
-      { key: GRID_MODE, label: gettext('Grid view'), icon_dom: <Icon symbol="grid-view" />, shortcut: `${shortcutMain} 2`, checked: currentViewMode === GRID_MODE, onClick: () => this.props.switchViewMode(GRID_MODE) },
+      {
+        key: LIST_MODE,
+        label: gettext('List view'),
+        icon_dom: <Icon symbol="list-view" />,
+        shortcut: `${shortcutMain} 1`,
+        checked: currentViewMode === LIST_MODE,
+        onClick: () => this.props.switchViewMode(LIST_MODE),
+      },
+      {
+        key: GRID_MODE,
+        label: gettext('Grid view'),
+        icon_dom: <Icon symbol="grid-view" />,
+        shortcut: `${shortcutMain} 2`,
+        checked: currentViewMode === GRID_MODE,
+        onClick: () => this.props.switchViewMode(GRID_MODE),
+      },
     ];
     if (isSupportTable) {
       options.push({ key: TABLE_MODE, label: gettext('Table view'), icon_dom: <Icon symbol="table" />, shortcut: `${shortcutMain} 3`, checked: currentViewMode === TABLE_MODE, onClick: () => this.props.switchViewMode(TABLE_MODE) });
