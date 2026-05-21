@@ -172,7 +172,7 @@ class UserNotificationsDialog extends React.Component {
 
   getMenuItems = () => {
     return [
-      { key: 'mark-all-read', label: gettext('Mark all read'), onClick: this.markAllRead },
+      { key: 'mark-all-read', label: gettext('Mark all as read'), onClick: this.markAllRead },
       { key: 'clear', label: gettext('Clear'), onClick: this.clearAll },
     ];
   };
