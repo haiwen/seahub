@@ -190,6 +190,7 @@ class DirColumnView extends React.Component {
               sortTreeNode={this.props.sortTreeNode}
               onUploadFile={this.props.onUploadFile}
               onUploadFolder={this.props.onUploadFolder}
+              loadDirentList={this.props.loadDirentList}
             />
             <ResizeBar
               resizeBarRef={this.resizeBarRef}

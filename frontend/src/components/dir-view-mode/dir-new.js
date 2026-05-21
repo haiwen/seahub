@@ -10,14 +10,13 @@ import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import Icon from '../icon';
 
 const propTypes = {
-  path: PropTypes.string.isRequired,
+  path: PropTypes.string,
   repoID: PropTypes.string.isRequired,
-  repoName: PropTypes.string.isRequired,
   repoEncrypted: PropTypes.bool.isRequired,
   userPerm: PropTypes.string.isRequired,
   onUploadFile: PropTypes.func.isRequired,
   onUploadFolder: PropTypes.func.isRequired,
-  direntList: PropTypes.array.isRequired,
+  direntList: PropTypes.array,
   eventBus: PropTypes.object,
   loadDirentList: PropTypes.func
 };
@@ -27,7 +26,6 @@ class DirNew extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      fileType: '.md',
       operationMenuStyle: '',
       isDesktopMenuOpen: false,
       isSubMenuShown: false,
@@ -46,13 +44,11 @@ class DirNew extends React.Component {
   };
 
   onUploadFile = (e) => {
-    const uploadToRoot = true;
-    this.props.onUploadFile(e, uploadToRoot);
+    this.props.onUploadFile(e);
   };
 
   onUploadFolder = (e) => {
-    const uploadToRoot = true;
-    this.props.onUploadFolder(e, uploadToRoot);
+    this.props.onUploadFolder(e);
   };
 
   onCreateFolder = () => {

@@ -53,8 +53,7 @@ class DirColumnNav extends React.Component {
           <>
             <DirNew
               repoID={repoID}
-              path={'/'}
-              repoName={currentRepoInfo.name}
+              path={currentPath}
               repoEncrypted={currentRepoInfo.encrypted}
               userPerm={userPerm}
               onUploadFile={this.props.onUploadFile}

@@ -3161,6 +3161,7 @@ class LibContentView extends React.Component {
                           rowHeight={rowHeight}
                           onUploadFile={this.onUploadFile}
                           onUploadFolder={this.onUploadFolder}
+                          loadDirentList={this.loadDirentList}
                         />
                         :
                         <div className="message err-tip">{gettext('Folder does not exist.')}</div>
