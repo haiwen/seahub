@@ -27,9 +27,20 @@ class GroupsTest(BaseTestCase):
     def test_can_get(self):
         self.login_as(self.admin)
         url = reverse('api-v2.1-admin-groups')
-        resp = self.client.get(url)
 
+        # create tmp group
+        group_name = randstring(10)
+        data = {
+            'group_name': group_name,
+            'group_owner': self.user.email
+        }
+        resp = self.client.post(url, data)
+        self.assertEqual(201, resp.status_code)
+
+        # get group
+        resp = self.client.get(url)
         json_resp = json.loads(resp.content)
+
         assert len(json_resp['groups']) > 0
 
     def test_can_search_by_name(self):
