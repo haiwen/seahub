@@ -507,7 +507,6 @@ class FileUploader extends React.Component {
   };
 
   onClick = (e) => {
-    e.nativeEvent.stopImmediatePropagation();
     e.stopPropagation();
   };
 

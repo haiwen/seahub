@@ -59,27 +59,17 @@ export const CustomDropdown = ({
     }
   };
 
-  const toggle = (event) => {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    onToggle?.(event);
+  const toggle = () => {
     handleToggle(!isOpen);
+    onToggle?.(!isOpen);
   };
 
-  const closeMenu = () => handleToggle(false);
-
-  const onMenuItemClick = (e, item) => {
+  const onItemClick = (e, item) => {
     if (item.disabled) {
       return;
     }
 
     item.onClick?.(e, item);
-
-    if (!item.keepOpen) {
-      closeMenu();
-    }
   };
 
   const onToggleKeyDown = (event) => {
@@ -100,7 +90,7 @@ export const CustomDropdown = ({
 
     if (event.key === 'Escape') {
       event.preventDefault();
-      closeMenu();
+      handleToggle(false);
       dropdownRef.current?.focus();
       return;
     }
@@ -137,7 +127,7 @@ export const CustomDropdown = ({
         items={items}
         variant={variant}
         menuClassName={menuClassName}
-        onItemClick={onMenuItemClick}
+        onItemClick={onItemClick}
       />
     </DropdownMenu>
   );

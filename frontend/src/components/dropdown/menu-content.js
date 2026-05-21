@@ -122,8 +122,6 @@ const MenuSubmenu = ({
           item={item}
           rightSlot={<Icon symbol="down" className="rotate-270 dropdown-submenu-arrow mr-2" />}
           onKeyDown={onTriggerKeyDown}
-          tabIndex={-1}
-          tag="div"
         />
       </DropdownToggle>
       <DropdownMenu
@@ -183,13 +181,11 @@ const MenuSubmenu = ({
               onKeyDown={(event) => {
                 if (event.key === 'Enter' || event.key === ' ') {
                   event.preventDefault();
-                  onClick?.(subItem, event);
+                  onClick?.(event, subItem);
                 }
               }}
               showCheckPlaceholder={menuSlotConfig.showCheckPlaceholder}
               showShortcutPlaceholder={menuSlotConfig.showShortcutPlaceholder}
-              tabIndex={-1}
-              tag="div"
             />
           );
         })}
@@ -260,13 +256,11 @@ export const CustomDropdownMenuContent = ({
             onKeyDown={(event) => {
               if (event.key === 'Enter' || event.key === ' ') {
                 event.preventDefault();
-                onItemClick?.(menuItem, event);
+                onItemClick?.(event, menuItem);
               }
             }}
             showCheckPlaceholder={menuSlotConfig.showCheckPlaceholder}
             showShortcutPlaceholder={menuSlotConfig.showShortcutPlaceholder}
-            tabIndex={-1}
-            tag="div"
           />
         );
       })}

@@ -136,7 +136,7 @@ class DirOperationToolbar extends React.Component {
           });
         } else {
           opList.push({
-            key: 'upload',
+            key: 'upload-files',
             label: gettext('Upload'),
             icon_dom: <Icon symbol="upload-files" className="dropdown-item-icon" />,
             onClick: this.onUploadFile
@@ -200,25 +200,22 @@ class DirOperationToolbar extends React.Component {
       }
 
       content = (
-        <>
-          <CustomDropdown
-            items={opList}
-            trigger={(
-              <>
-                <Icon symbol="new" />
-                <Icon symbol="down" className="path-item-dropdown-toggle" />
-              </>
-            )}
-            triggerClassName="path-dropdown-item"
-            menuClassName="position-fixed"
-            menuPortal={false}
-          />
-        </>
+        <CustomDropdown
+          items={opList}
+          trigger={(
+            <>
+              <Icon symbol="new" />
+              <Icon symbol="down" className="path-item-dropdown-toggle" />
+            </>
+          )}
+          triggerClassName="path-dropdown-item"
+          menuClassName="position-fixed"
+        />
       );
     } else {
       const mobileItems = [];
       if (canUpload) {
-        mobileItems.push({ key: 'upload', label: gettext('Upload'), onClick: this.onUploadFile });
+        mobileItems.push({ key: 'upload-files', label: gettext('Upload'), onClick: this.onUploadFile });
       }
       if (canCreate) {
         mobileItems.push(

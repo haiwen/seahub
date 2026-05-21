@@ -606,12 +606,12 @@ class SharedDirView extends React.Component {
   };
 
   onUploadFile = (e) => {
-    e.nativeEvent.stopImmediatePropagation();
+    e.stopPropagation();
     this.uploader.onFileUpload();
   };
 
   onUploadFolder = (e) => {
-    e.nativeEvent.stopImmediatePropagation();
+    e.stopPropagation();
     this.uploader.onFolderUpload();
   };
 

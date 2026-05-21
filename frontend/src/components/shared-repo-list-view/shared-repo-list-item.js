@@ -461,7 +461,6 @@ class SharedRepoListItem extends React.Component {
               key={index}
               item={{ key: item, label: this.translateMenuItem(item), className: 'mobile-menu-item' }}
               onClick={() => this.onMenuItemClick(item)}
-              tag="div"
             />
           );
         })}

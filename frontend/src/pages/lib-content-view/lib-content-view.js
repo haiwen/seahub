@@ -1327,7 +1327,7 @@ class LibContentView extends React.Component {
   };
 
   onAddFolder = (dirPath, options = {}) => {
-    const { successCallback = () => {} } = options;
+    const { successCallback = () => { } } = options;
     let repoID = this.props.repoID;
     seafileAPI.createDir(repoID, dirPath).then(() => {
       let name = Utils.getFileName(dirPath);
@@ -3042,31 +3042,31 @@ class LibContentView extends React.Component {
                         )}
                       </div>
                       {isDesktop &&
-                      <div className="cur-view-path-right py-1">
-                        <DirTool
-                          repoID={this.props.repoID}
-                          currentRepoInfo={this.state.currentRepoInfo}
-                          repoName={this.state.currentRepoInfo.repo_name}
-                          userPerm={userPerm}
-                          currentPath={path}
-                          currentMode={this.state.currentMode}
-                          switchViewMode={this.switchViewMode}
-                          isCustomPermission={isCustomPermission}
-                          sortBy={this.state.sortBy}
-                          sortOrder={this.state.sortOrder}
-                          sortItems={this.sortItems}
-                          viewId={this.state.viewId}
-                          viewType={this.props.viewType}
-                          onToggleDetail={this.toggleDirentDetail}
-                          onCloseDetail={this.closeDirentDetail}
-                          eventBus={this.props.eventBus}
-                          enableMetadata={this.state.enableMetadata}
-                          columns={this.state.currentMode === TABLE_MODE ? this.state.tableViewColumns : this.state.columns}
-                          hiddenColumnKeys={this.state.currentMode === TABLE_MODE ? this.state.hiddenTableViewColumnKeys : this.state.hiddenColumnKeys}
-                          rowHeight={rowHeight}
-                          modifyColumnOrder={this.onTableViewColumnOrder}
-                        />
-                      </div>
+                        <div className="cur-view-path-right py-1">
+                          <DirTool
+                            repoID={this.props.repoID}
+                            currentRepoInfo={this.state.currentRepoInfo}
+                            repoName={this.state.currentRepoInfo.repo_name}
+                            userPerm={userPerm}
+                            currentPath={path}
+                            currentMode={this.state.currentMode}
+                            switchViewMode={this.switchViewMode}
+                            isCustomPermission={isCustomPermission}
+                            sortBy={this.state.sortBy}
+                            sortOrder={this.state.sortOrder}
+                            sortItems={this.sortItems}
+                            viewId={this.state.viewId}
+                            viewType={this.props.viewType}
+                            onToggleDetail={this.toggleDirentDetail}
+                            onCloseDetail={this.closeDirentDetail}
+                            eventBus={this.props.eventBus}
+                            enableMetadata={this.state.enableMetadata}
+                            columns={this.state.currentMode === TABLE_MODE ? this.state.tableViewColumns : this.state.columns}
+                            hiddenColumnKeys={this.state.currentMode === TABLE_MODE ? this.state.hiddenTableViewColumnKeys : this.state.hiddenColumnKeys}
+                            rowHeight={rowHeight}
+                            modifyColumnOrder={this.onTableViewColumnOrder}
+                          />
+                        </div>
                       }
                     </div>
                     <div className='cur-view-content lib-content-container'>

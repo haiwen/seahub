@@ -24,9 +24,6 @@ export const CustomDropdownItem = ({
   const showRightSlot = Boolean(rightSlot) || showShortcutPlaceholder;
 
   const onItemClick = useCallback((event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    if (item.disabled) return;
     onClick?.(event, item);
   }, [item, onClick]);
 
@@ -42,8 +39,7 @@ export const CustomDropdownItem = ({
       onKeyDown={onKeyDown}
       onMouseMove={onMouseMove}
       disabled={item.disabled}
-      toggle={false}
-      role="menuitem"
+      toggle={!item.keepOpen}
       tabIndex={tabIndex}
       aria-disabled={item.disabled ? 'true' : undefined}
     >

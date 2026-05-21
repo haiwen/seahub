@@ -215,7 +215,6 @@ class LibraryOperationMenu extends React.Component {
               key={index}
               item={{ key: item, label: this.translateOperations(item), className: 'mobile-menu-item' }}
               onClick={(e) => this.props.onMenuItemClick(e, item)}
-              tag="div"
             />
           );
         })}
