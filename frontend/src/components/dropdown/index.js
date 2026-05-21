@@ -59,7 +59,8 @@ export const CustomDropdown = ({
     }
   };
 
-  const toggle = () => {
+  const toggle = (e) => {
+    e.stopPropagation();
     handleToggle(!isOpen);
     onToggle?.(!isOpen);
   };
