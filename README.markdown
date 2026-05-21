@@ -13,7 +13,7 @@ Preparation
 Getting it
 ==========
 
-You can grab souce code from GitHub.
+You can grab source code from GitHub.
 
     $ git clone git://github.com/haiwen/seahub.git
 
