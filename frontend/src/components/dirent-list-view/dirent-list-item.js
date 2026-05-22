@@ -555,6 +555,19 @@ class DirentListItem extends React.Component {
     let options = this.props.getDirentItemMenuList(dirent, isContextmenu);
     options = options.map(item => {
       if (item === 'Divider') return item;
+      if (item.subOpList) {
+        return {
+          ...item,
+          onClick: (e) => this.onMenuItemClick(item.key, e),
+          subOpList: item.subOpList.map((subItem) => {
+            if (subItem === 'Divider') return subItem;
+            return {
+              ...subItem,
+              onClick: (e) => this.onMenuItemClick(subItem.key, e)
+            };
+          })
+        };
+      }
       return {
         ...item,
         onClick: (e) => this.onMenuItemClick(item.key, e)

@@ -151,6 +151,19 @@ const CardFilesToolbar = ({ repoID, updateCurrentDirent }) => {
   const getMenuList = useCallback(() => {
     return toolbarMenuOptions.map(item => {
       if (item === 'Divider') return item;
+      if (item.subOpList) {
+        return {
+          ...item,
+          onClick: () => onMenuItemClick(item.key),
+          subOpList: item.subOpList.map((subItem) => {
+            if (subItem === 'Divider') return subItem;
+            return {
+              ...subItem,
+              onClick: () => onMenuItemClick(subItem.key)
+            };
+          })
+        };
+      }
       return {
         ...item,
         onClick: () => onMenuItemClick(item.key)

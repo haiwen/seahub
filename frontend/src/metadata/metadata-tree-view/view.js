@@ -132,6 +132,19 @@ const ViewItem = ({
     }
     return value.map(item => {
       if (item === 'Divider') return item;
+      if (item.subOpList) {
+        return {
+          ...item,
+          onClick: () => operationClick(item.key),
+          subOpList: item.subOpList.map((subItem) => {
+            if (subItem === 'Divider') return subItem;
+            return {
+              ...subItem,
+              onClick: () => operationClick(subItem.key)
+            };
+          })
+        };
+      }
       return {
         ...item,
         onClick: () => operationClick(item.key)

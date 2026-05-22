@@ -76,12 +76,15 @@ const ViewsMoreOperations = ({ menuProps }) => {
       options.push({ key: ADD_VIEW_KEY.ADD_MAP, type: VIEW_TYPE.MAP });
     }
 
-    return options.map(({ key, type }) => ({
-      key,
-      label: VIEW_TYPE_LABEL[type],
-      icon_dom: <Icon symbol={VIEW_TYPE_ICON[type] || VIEW_TYPE.TABLE} className="metadata-view-icon" />,
-      onClick: () => clickMenu(key),
-    }));
+    return options.map(({ key, type }) => {
+      if (key === 'Divider') return key;
+      return {
+        key,
+        label: VIEW_TYPE_LABEL[type],
+        icon_dom: <Icon symbol={VIEW_TYPE_ICON[type] || VIEW_TYPE.TABLE} className="metadata-view-icon" />,
+        onClick: () => clickMenu(key),
+      };
+    });
   }, [clickMenu]);
 
   const getMoreOperationsMenus = useCallback(() => {

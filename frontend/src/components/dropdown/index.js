@@ -71,6 +71,9 @@ export const CustomDropdown = ({
     }
 
     item.onClick?.(e, item);
+    if (!item.keepOpen) {
+      handleToggle(false);
+    }
   };
 
   const onToggleKeyDown = (event) => {
