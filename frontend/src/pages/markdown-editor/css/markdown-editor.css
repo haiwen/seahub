@@ -39,7 +39,7 @@ html, body, #root {
     only select file info text
   */
   user-select: text;
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .topbar-file-info .file-title {
