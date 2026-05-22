@@ -2088,11 +2088,16 @@ a.sf-popover-item {
 .login-panel .submit {
   margin: 20px 0 15px;
   background-image: none;
-  height: 42px;
 }
 
 .login-panel .submit:focus {
   border-color: #f19645;
+}
+
+.login-panel #sso,
+.login-panel #multi_adfs_sso,
+.login-panel .submit {
+  height: 40px;
 }
 
 .login-panel-bottom-container {
