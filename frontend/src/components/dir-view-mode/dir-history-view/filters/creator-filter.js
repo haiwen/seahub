@@ -83,7 +83,7 @@ const HistoryCreatorFilter = ({ mode = HISTORY_MODE, value: selectedOptions = []
     };
 
     getUsers();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue]);
 
   const copyRight = mode === HISTORY_MODE ? gettext('Creator') : gettext('Deleted by');
@@ -105,7 +105,13 @@ const HistoryCreatorFilter = ({ mode = HISTORY_MODE, value: selectedOptions = []
           <span className="filter-label" title={copyRight}>{copyRight}</span>
           <Icon symbol="down" className="w-3 h-3 ml-1" />
         </DropdownToggle>
-        <DropdownMenu className="search-filter-menu filter-by-creator-menu">
+        <DropdownMenu
+          className="search-filter-menu filter-by-creator-menu"
+          modifiers={[{
+            name: 'offset',
+            options: { offset: [0, 8] }
+          }]}
+        >
           <div className="selected-user-item-container">
             {selectedOptions.map((option) => (
               <UserItem

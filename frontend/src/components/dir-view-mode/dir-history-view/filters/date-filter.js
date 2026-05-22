@@ -209,6 +209,10 @@ const HistoryDateFilter = ({ mode = HISTORY_MODE, value: propsValue = { value: '
               e.stopPropagation();
             }
           }}
+          modifiers={[{
+            name: 'offset',
+            options: { offset: [0, 8] }
+          }]}
         >
           <div className="filter-by-date-menu-toolbar">
             <span className="filter-by-date-toolbar-label">{copyRight}</span>

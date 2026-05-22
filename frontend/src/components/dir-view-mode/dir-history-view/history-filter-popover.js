@@ -51,7 +51,7 @@ const HistoryFilterPopover = ({ mode, target, filters, onClose, onChange }) => {
 
   return (
     <UncontrolledPopover
-      placement="bottom-start"
+      placement="bottom"
       isOpen={true}
       target={target}
       fade={false}
@@ -59,7 +59,7 @@ const HistoryFilterPopover = ({ mode, target, filters, onClose, onChange }) => {
       className="sf-history-filter-popover"
       boundariesElement={document.body}
     >
-      <div ref={popoverRef} onClick={handlePopoverInsideClick} className={classNames('sf-history-filter', { 'sf-trash-filter': mode === TRASH_MODE })}>
+      <div ref={popoverRef} onClick={handlePopoverInsideClick} className={classNames('sf-history-filter sf-popover-container', { 'sf-trash-filter': mode === TRASH_MODE })}>
         <HistoryBasicFilters
           mode={mode}
           filters={filters}
@@ -82,4 +82,3 @@ HistoryFilterPopover.propTypes = {
 };
 
 export default HistoryFilterPopover;
-

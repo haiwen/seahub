@@ -92,7 +92,7 @@ const FilterBySuffix = ({ suffixes, onChange }) => {
           </DropdownMenu>
         </ModalPortal>
       </Dropdown>
-    </div >
+    </div>
   );
 };
 

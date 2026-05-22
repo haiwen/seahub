@@ -56,7 +56,13 @@ const FilterBySuffix = ({ suffixes, onChange }) => {
           <span className="filter-label" title={gettext('File suffix')}>{gettext('File suffix')}</span>
           <Icon symbol="down" className="w-3 h-3 ml-1" />
         </DropdownToggle>
-        <DropdownMenu className="search-filter-menu filter-by-suffix-menu p-4">
+        <DropdownMenu
+          className="search-filter-menu filter-by-suffix-menu p-4"
+          modifiers={[{
+            name: 'offset',
+            options: { offset: [0, 8] }
+          }]}
+        >
           <input
             ref={inputRef}
             type="text"

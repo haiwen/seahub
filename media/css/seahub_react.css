@@ -641,8 +641,9 @@ textarea::placeholder {
 .account-popup {
   width: 240px;
   right: 0;
-  top: -1px;
+  top: 40px;
   font-size: 13px;
+  z-index: 10;
 }
 
 .account-popup .sf-popover-con {

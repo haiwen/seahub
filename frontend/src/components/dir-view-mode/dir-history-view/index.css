@@ -164,11 +164,10 @@
   max-width: none;
 }
 
-.sf-history-filters {
-  width: 280px;
-}
-
 .sf-history-filter,
 .sf-trash-filter {
   width: 400px;
+  right: -12px;
+  top: -1px;
+  overflow: visible;
 }
