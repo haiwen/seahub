@@ -1,4 +1,5 @@
 .seafile-comment {
+  width: 100%;
   height: 100%;
   background: var(--bs-body-bg);
   display: flex;

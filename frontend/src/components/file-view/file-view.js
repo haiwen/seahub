@@ -193,10 +193,6 @@ class FileView extends React.Component {
     });
   };
 
-  setCommentPanelRef = (ref) => {
-    this.commentPanelRef = ref;
-  };
-
   panelWrapperStyle = () => {
     let style = {
       width: this.state.width,
@@ -247,7 +243,7 @@ class FileView extends React.Component {
     };
     const className = this.getHeaderClassName();
     return (
-      <I18nextProvider i18n={ i18n }>
+      <I18nextProvider i18n={i18n}>
         <Suspense fallback={<Loading />}>
           <div className={`h-100 d-flex flex-column ${className}`}>
             <div className={`file-view-header d-flex justify-content-between align-items-center d-print-none ${isOnlyofficeFile ? (isHeaderShown ? 'onlyoffice-file-view-header-shown' : 'onlyoffice-file-view-header-hidden') : ''}`}>
@@ -310,12 +306,14 @@ class FileView extends React.Component {
               }
               {this.props.content}
               {this.state.isCommentPanelOpen &&
-                <I18nCommentPanel
-                  ref={this.setCommentPanelRef}
-                  toggleCommentPanel={this.toggleCommentPanel}
-                  participants={this.props.participants}
-                  onParticipantsChange={this.props.onParticipantsChange}
-                />
+                <div className='d-flex position-relative' style={this.panelWrapperStyle()}>
+                  <ResizeWidth minWidth={MIN_PANEL_WIDTH} maxWidth={MAX_PANEL_WIDTH} resizeWidth={this.resizeWidth} resizeWidthEnd={this.resizeWidthEnd} />
+                  <I18nCommentPanel
+                    toggleCommentPanel={this.toggleCommentPanel}
+                    participants={this.props.participants}
+                    onParticipantsChange={this.props.onParticipantsChange}
+                  />
+                </div>
               }
               {isDetailsPanelOpen && (
                 <MetadataStatusProvider repoID={repoID} repoInfo={repoInfo}>
