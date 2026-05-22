@@ -180,19 +180,19 @@ class ManageMembersDialog extends React.Component {
         <ModalBody className="pb-0">
           <p className="mb-2">{gettext('Add group member')}</p>
           <div className='add-members'>
-            <div className="position-relative">
+            <div className="position-relative w-100">
               <UserSelect
                 placeholder={gettext('Search users')}
                 onSelectChange={this.onSelectChange}
                 selectedUsers={this.state.selectedUsers}
                 isMulti={true}
-                className="add-members-select"
+                className="add-members-select m-100"
               />
               <SelectUsersIcon onClick={this.props.toggleDepartmentDetailDialog} />
             </div>
             {this.state.selectedUsers.length > 0 ?
-              <Button color="primary" onClick={this.addGroupMember}>{gettext('Submit')}</Button> :
-              <Button color="primary" disabled>{gettext('Submit')}</Button>
+              <Button color="primary" onClick={this.addGroupMember} className="ml-3 flex-shrink-0">{gettext('Submit')}</Button> :
+              <Button color="primary" disabled className="ml-3 flex-shrink-0">{gettext('Submit')}</Button>
             }
           </div>
           {errMessage.length > 0 &&

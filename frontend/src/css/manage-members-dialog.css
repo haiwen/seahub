@@ -21,14 +21,6 @@
   position: relative;
 }
 
-.add-members .add-members-select {
-  width: 385px;
-}
-
-.add-members .btn {
-  width: 75px;
-}
-
 .group-error {
   margin-top: 10px;
 }
