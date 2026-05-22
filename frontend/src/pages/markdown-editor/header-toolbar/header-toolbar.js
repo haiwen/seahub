@@ -118,6 +118,7 @@ class HeaderToolbar extends React.Component {
         return (<CommentPanel {...props} />);
       },
       props: {
+        width: 300,
         toggleCommentPanel: this.onCommentPanelToggle,
         participants: this.props.participants,
         onParticipantsChange: this.props.onParticipantsChange,
@@ -279,7 +280,7 @@ class HeaderToolbar extends React.Component {
         <div className="sf-md-viewer-topbar">
           <div className="sf-md-viewer-topbar-first d-flex justify-content-between">
             <FileInfo toggleStar={this.props.toggleStar} editorApi={this.props.editorApi}
-              fileInfo={this.props.fileInfo}/>
+              fileInfo={this.props.fileInfo} />
             <div className="topbar-btn-container">
               <ButtonGroup>
                 {saving ?
@@ -308,7 +309,7 @@ class HeaderToolbar extends React.Component {
           </div>
           <div className="sf-md-viewer-topbar-first-narrow d-flex justify-content-between">
             <FileInfo toggleStar={this.props.toggleStar} editorApi={this.props.editorApi}
-              fileInfo={this.props.fileInfo}/>
+              fileInfo={this.props.fileInfo} />
             <div className="topbar-btn-container">
               <ButtonGroup>
                 {saving ?
