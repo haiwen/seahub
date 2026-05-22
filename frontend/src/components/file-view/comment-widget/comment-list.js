@@ -98,9 +98,24 @@ class CommentList extends React.Component {
 
   getCommentFilterItems = () => {
     return [
-      { key: 'all-comments', label: gettext('All comments'), checked: this.state.commentType === 'All comments', onClick: (e) => this.setCommentType(e, 'All comments') },
-      { key: 'resolved-comments', label: gettext('Resolved comments'), checked: this.state.commentType === 'Resolved comments', onClick: (e) => this.setCommentType(e, 'Resolved comments') },
-      { key: 'unresolved-comments', label: gettext('Unresolved comments'), checked: this.state.commentType === 'Unresolved comments', onClick: (e) => this.setCommentType(e, 'Unresolved comments') },
+      {
+        key: 'all-comments',
+        label: gettext('All comments'),
+        checked: this.state.commentType === 'All comments',
+        onClick: (e) => this.setCommentType(e, 'All comments')
+      },
+      {
+        key: 'resolved-comments',
+        label: gettext('Resolved comments'),
+        checked: this.state.commentType === 'Resolved comments',
+        onClick: (e) => this.setCommentType(e, 'Resolved comments')
+      },
+      {
+        key: 'unresolved-comments',
+        label: gettext('Unresolved comments'),
+        checked: this.state.commentType === 'Unresolved comments',
+        onClick: (e) => this.setCommentType(e, 'Unresolved comments')
+      },
     ];
   };
 
