@@ -74,9 +74,10 @@
   color: #666;
 }
 
+.tree-section .tree-section-header-operation .dropdown .more-dropdown-toggle .seafile-multicolor-icon,
 .tree-section .tree-section-header-operation .seafile-multicolor-icon-more-level {
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
 }
 
 .tree-section .tree-section-header-operation .seafile-multicolor-icon-down {

@@ -36,7 +36,7 @@ body {
 .tree-node-inner {
   position: relative;
   height: 28px;
-  padding: 2px;
+  padding: 2px 0px;
   cursor: pointer;
   line-height: 1.625;
 }

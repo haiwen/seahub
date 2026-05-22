@@ -42,8 +42,8 @@
 }
 
 .dir-others .dir-others-item .seafile-multicolor-icon {
-  width: 1rem;
-  height: 1rem;
+  width: 14px;
+  height: 14px;
   color: var(--bs-icon-color);
 }
 
