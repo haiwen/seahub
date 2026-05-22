@@ -71,13 +71,7 @@ const MenuSelectStyle = {
     paddingRight: '8px',
   }),
   option: (provided, state) => {
-    const { isDisabled, isActive, isVisited } = state;
-    let bgColor;
-    if (isActive || isVisited) {
-      bgColor = 'rgba(0, 0, 0, 0.06)';
-    } else {
-      bgColor = 'var(--bs-popover-bg)';
-    }
+    const { isDisabled, isFocused } = state;
     return ({
       ...provided,
       color: 'var(--bs-body-color)',
@@ -85,7 +79,7 @@ const MenuSelectStyle = {
       minHeight: '32px',
       padding: '6px 12px 6px 8px',
       cursor: isDisabled ? 'default' : 'pointer',
-      backgroundColor: `${bgColor} !important`,
+      backgroundColor: isFocused ? 'rgba(0, 0, 0, 0.06)' : 'var(--bs-popover-bg)',
     });
   },
   control: controlCallback,
