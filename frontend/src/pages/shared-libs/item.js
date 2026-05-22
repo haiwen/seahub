@@ -206,9 +206,9 @@ class Item extends Component {
               onFocus={this.handleMouseOver}
               onContextMenu={this.handleContextMenu}
             >
-              <div className="d-flex align-items-center">
+              <div className="d-flex align-items-center library-info">
                 <img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="40" className="mr-3" />
-                <div className="d-flex flex-column justify-content-center">
+                <div className="d-flex flex-column justify-content-center library-name-container">
                   <Link to={shareRepoUrl} className="text-truncate library-name" title={data.repo_name}>{data.repo_name}</Link>
                   <span className="library-size">{data.size}</span>
                 </div>

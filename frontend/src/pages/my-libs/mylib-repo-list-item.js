@@ -382,9 +382,9 @@ class MylibRepoListItem extends React.Component {
         onFocus={this.onMouseEnter}
         onContextMenu={this.handleContextMenu}
       >
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center library-info">
           <img src={iconUrl} title={iconTitle} alt={iconTitle} width="40" className="mr-3" />
-          <div className="d-flex flex-column justify-content-center">
+          <div className="d-flex flex-column justify-content-center library-name-container">
             {this.state.isRenaming && (
               <Rename
                 name={repo.repo_name}

@@ -53,13 +53,14 @@
 
 .repo-grid-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
   margin-bottom: 24px;
 }
 
 .repo-grid-container .library-grid-item {
   width: 100%;
+  min-width: 0;
 }
 
 .library-grid-item .library-name {
@@ -67,6 +68,23 @@
   font-size: 14px;
   height: 22px;
   line-height: 22px;
+  max-width: 100%;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.library-grid-item .library-name-container {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.library-grid-item .library-info {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .library-grid-item .library-size {
