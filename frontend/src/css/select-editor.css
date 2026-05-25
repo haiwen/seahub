@@ -42,7 +42,6 @@
   padding-top: 8px;
 }
 
-.permission-editor__option.permission-editor__option--is-selected,
 .permission-editor__option:hover {
   background-color: var(--bs-bg-color) !important;
 }
