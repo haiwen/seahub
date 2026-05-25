@@ -1202,7 +1202,7 @@ table td {
   background-color: var(--bs-tr-active-bg) !important;
 }
 
-/* table-item reanme-component */
+/* table-item rename-component */
 .rename-container input {
   box-sizing: content-box;
   padding: 2px 3px;
@@ -1830,4 +1830,17 @@ a.table-sort-op:hover {
 
 [data-bs-theme=dark] .sf2-icon-plus {
   color: var(--bs-icon-color);
+}
+
+/* Override Chrome default autofill background style */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+input:-internal-autofill-previewed,
+input:-internal-autofill-selected {
+  -webkit-box-shadow: inset 0 0 0 1000px var(--bs-body-bg) !important;
+  box-shadow: inset 0 0 0 1000px var(--bs-body-bg) !important;
+  -webkit-text-fill-color: var(--bs-body-color) !important;
+  transition: background-color 5000s ease-in-out 0s !important;
 }

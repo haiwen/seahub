@@ -2937,3 +2937,17 @@ a.sf-popover-item {
 .page-form-panel .form-foot {
   margin-top: 2.5rem;
 }
+
+/* Override Chrome default autofill background style */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+input:-internal-autofill-previewed,
+input:-internal-autofill-selected {
+  -webkit-box-shadow: inset 0 0 0 1000px var(--bs-body-bg) !important;
+  box-shadow: inset 0 0 0 1000px var(--bs-body-bg) !important;
+  -webkit-text-fill-color: var(--bs-body-color) !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+
