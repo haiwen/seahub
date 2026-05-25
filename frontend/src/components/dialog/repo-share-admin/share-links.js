@@ -312,15 +312,15 @@ class RepoShareAdminShareLinks extends Component {
     const isAllLinksSelected = items.length == selectedLinks.length;
     return (
       <div className="h-100 d-flex flex-column">
-        <div className="d-flex justify-content-between align-items-center pb-2 mt-1 pr-1 border-bottom">
+        <div className="d-flex justify-content-between align-items-center pb-2 pr-1 border-bottom">
           <h6 className="font-weight-normal m-0">{gettext('Share Links')}</h6>
           <div className="d-flex">
-            {selectedLinks.length > 0 && (
+            {selectedLinks.length > 0 ? (
               <>
                 <button className="btn btn-sm btn-secondary mr-2 px-3" onClick={this.cancelSelectAllLinks}>{gettext('Cancel')}</button>
                 <button className="btn btn-sm btn-secondary mr-2 px-3" onClick={this.toggleDeleteShareLinksDialog}>{gettext('Delete')}</button>
               </>
-            )}
+            ) : <div className="my-4"></div>}
           </div>
         </div>
         <div className='flex-fill'>
