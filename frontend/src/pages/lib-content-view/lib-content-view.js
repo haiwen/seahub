@@ -2127,7 +2127,7 @@ class LibContentView extends React.Component {
     this.updateUsedRepoTags();
   };
 
-  onFileUploadSuccessForMain = (direntObject) => {
+  onFileUploadSuccess = (direntObject) => {
     let dirent = null;
     const isExist = this.state.direntList.some(item => item.name === direntObject.name && item.type === direntObject.type);
     if (isExist) {
@@ -2150,18 +2150,10 @@ class LibContentView extends React.Component {
         direntList: direntObject.type === 'dir' ? [dirent, ...prevState.direntList] : [...prevState.direntList, dirent]
       }));
     }
-  };
-
-  onFileUploadSuccess = (uploadToRoot, direntObject) => {
-    if (!uploadToRoot ||
-      (uploadToRoot && this.state.path == '/')
-    ) {
-      this.onFileUploadSuccessForMain(direntObject);
-    }
 
     // Ensure tree reflects new dirents even if repo-update refreshed list earlier.
     if (this.state.isTreePanelShown) {
-      const parentPath = uploadToRoot ? '/' : this.state.path;
+      const parentPath = this.state.path;
       const nodePath = Utils.joinPath(parentPath, direntObject.name);
       if (direntObject.type === 'dir') {
         const tree = this.state.treeData.clone();
@@ -2751,21 +2743,13 @@ class LibContentView extends React.Component {
     });
   };
 
-  onUploadFile = (e, uploadToRoot) => {
+  onUploadFile = (e) => {
     e.nativeEvent.stopImmediatePropagation();
-    if (uploadToRoot) {
-      this.rootUploader.onFileUpload();
-      return;
-    }
     this.uploader.onFileUpload();
   };
 
-  onUploadFolder = (e, uploadToRoot) => {
+  onUploadFolder = (e) => {
     e.nativeEvent.stopImmediatePropagation();
-    if (uploadToRoot) {
-      this.rootUploader.onFolderUpload();
-      return;
-    }
     this.uploader.onFolderUpload();
   };
 
@@ -3189,24 +3173,10 @@ class LibContentView extends React.Component {
                       path={this.state.path}
                       repoID={this.props.repoID}
                       direntList={this.state.direntList}
-                      onFileUploadSuccess={this.onFileUploadSuccess.bind(this, false)}
+                      onFileUploadSuccess={this.onFileUploadSuccess}
                       isCustomPermission={isCustomPermission}
                     />
                   )}
-                  {canUpload &&
-                    this.state.pathExist &&
-                    !this.state.isViewFile &&
-                    <FileUploader
-                      ref={uploader => (this.rootUploader = uploader)}
-                      dragAndDrop={false}
-                      path="/"
-                      repoID={this.props.repoID}
-                      direntList={this.state.direntList}
-                      onFileUploadSuccess={this.onFileUploadSuccess.bind(this, true)}
-                      isCustomPermission={isCustomPermission}
-                    />
-                  }
-
                 </div>
                 {isCopyMoveProgressDialogShow && (
                   <CopyMoveDirentProgressDialog
