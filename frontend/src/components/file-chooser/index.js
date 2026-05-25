@@ -10,7 +10,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { MODE_TYPE_MAP } from '../../constants';
-import Icon from '../icon';
+import IconBtn from '../icon-btn';
 
 import '../../css/file-chooser.css';
 
@@ -449,11 +449,22 @@ class FileChooser extends React.Component {
       <>
         {(isPro && mode !== 'recently_used') && (
           <div className="file-chooser-search-input py-4">
-            <Input className="search-input" placeholder={gettext('Search')} type='text' value={searchInfo} onChange={this.onSearchInfoChanged}></Input>
+            <Input
+              className="search-input"
+              placeholder={gettext('Search')}
+              type='text'
+              value={searchInfo}
+              onChange={this.onSearchInfoChanged}
+              name="file-chooser-search-input"
+            />
             {searchInfo.length !== 0 && (
-              <span className="search-control attr-action-icon" onClick={this.onCloseSearching}>
-                <Icon symbol="close" />
-              </span>
+              <IconBtn
+                symbol="close"
+                size={24}
+                title={gettext('Close')}
+                className=" search-control attr-action-icon op-icon op-icon-bg-light ml-1"
+                onClick={this.onCloseSearching}
+              />
             )}
           </div>
         )}
