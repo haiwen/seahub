@@ -469,7 +469,7 @@ class FileChooser extends React.Component {
           </div>
         )}
         {isSearching ? (
-          <div className="file-chooser-search-container">
+          <div className="file-chooser-search-container p-0">
             {this.renderSearchedView()}
           </div>
         ) : (
