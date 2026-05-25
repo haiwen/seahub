@@ -61,6 +61,7 @@ class DirColumnNav extends React.Component {
               direntList={this.props.direntList}
               eventBus={this.props.eventBus}
               loadDirentList={this.props.loadDirentList}
+              currentMode={this.props.currentMode}
             />
             <div className='flex-fill o-auto'>
               <DirFiles

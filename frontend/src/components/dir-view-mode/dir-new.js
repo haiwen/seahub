@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Button } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { enableSeadoc, enableWhiteboard, gettext, onlyofficeSupportEditDocxf } from '../../utils/constants';
@@ -8,8 +8,15 @@ import toaster from '../toast';
 import TipDialog from '../dialog/tip-dialog';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import Icon from '../icon';
+import {
+  METADATA_MODE,
+  TAGS_MODE,
+  HISTORY_MODE,
+  TRASH_MODE
+} from '../../components/dir-view-mode/constants';
 
 const propTypes = {
+  currentMode: PropTypes.string,
   path: PropTypes.string,
   repoID: PropTypes.string.isRequired,
   repoEncrypted: PropTypes.bool.isRequired,
@@ -111,11 +118,23 @@ class DirNew extends React.Component {
   };
 
   render() {
-    const { userPerm } = this.props;
+    const { userPerm, currentMode } = this.props;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
     const isBtnShown = (userPerm === 'rw' || userPerm === 'admin' || userPerm === 'cloud-edit' || isCustomPermission);
     if (!isBtnShown) {
       return null;
+    }
+
+    if ([METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH_MODE].includes(currentMode)) {
+      return (
+        <Button
+          className="dir-new-btn mt-3 mx-5 flex-fill d-flex align-items-center justify-content-center"
+          disabled={true}
+        >
+          <Icon symbol="new" className="mr-2" />
+          {gettext('New')}
+        </Button>
+      );
     }
 
     let canUpload = true;
