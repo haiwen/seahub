@@ -588,7 +588,7 @@ class ShareAdminShareLinks extends Component {
                 : (
                   <ul className="nav">
                     <li className="nav-item">
-                      <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link active">
+                      <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link active px-0 py-2">
                         {gettext('Share Links')}
                       </Link>
                       <CustomDropdown
@@ -598,7 +598,9 @@ class ShareAdminShareLinks extends Component {
                       />
                     </li>
                     {canGenerateUploadLink && (
-                      <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link">{gettext('Upload Links')}</Link></li>
+                      <li className="nav-item">
+                        <Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link">{gettext('Upload Links')}</Link>
+                      </li>
                     )}
                   </ul>
                 )
