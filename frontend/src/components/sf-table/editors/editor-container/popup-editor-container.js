@@ -34,8 +34,15 @@ class PopupEditorContainer extends React.Component {
     }
 
     if (column.type === CellType.TAGS) {
+      const vw = window.innerWidth || 0;
+      let left = editorLeft;
+
+      if (left + TAGS_EDITOR_WIDTH > vw) {
+        left = vw - TAGS_EDITOR_WIDTH - 8;
+      }
+
       additionalStyles = {
-        left: editorLeft - (TAGS_EDITOR_WIDTH - column.width),
+        left,
       };
     }
 
@@ -252,7 +259,7 @@ class PopupEditorContainer extends React.Component {
       const newTranslated = originalUpdates[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED];
 
       hasChanged = checkCellValueChanged(currentLocation, newLocation) ||
-                  (currentTranslated !== newTranslated);
+        (currentTranslated !== newTranslated);
     } else {
       hasChanged = checkCellValueChanged(originalOldCellValue, originalUpdates[columnKey]);
     }
