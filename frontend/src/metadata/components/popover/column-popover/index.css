@@ -12,6 +12,7 @@
   right: 0;
   max-height: calc(100vh - 170px);
   min-width: 350px;
+  overflow: visible;
 }
 
 .sf-metadata-column-popover .sf-metadata-column-popover-inner>div:first-child {
@@ -63,13 +64,9 @@
   text-overflow: ellipsis;
 }
 
-.sf-metadata-column-popover .sf-metadata-column-type .seafile-multicolor-icon {
-  fill: var(--bs-icon-secondary-color);
-  cursor: default;
-}
-
 .sf-metadata-column-popover .sf-metadata-column-type .seafile-multicolor-icon-rate {
   font-size: 14px;
+  fill: var(--bs-icon-secondary-color);
 }
 
 .sf-metadata-column-popover .sf-metadata-column-type .seafile-multicolor-icon-drop-down {
