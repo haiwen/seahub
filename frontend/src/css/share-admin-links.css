@@ -6,10 +6,31 @@
      top: 0;
    }
  }
- 
+
 .cur-view-path .selected-items-toolbar {
    height: 24px;
    position: relative;
    animation: displaySelectedToolbar .3s ease-in-out 1;
    display: flex;
+}
+
+.share-upload-nav .nav-item {
+  position: relative;
+  padding-right: 32px;
+  cursor: default;
+}
+
+.share-upload-nav .nav-item .nav-link {
+  margin: 0;
+  cursor: pointer;
+}
+
+.share-upload-nav .nav-item .dropdown {
+  position: absolute;
+  right: 4px;
+  font-size: 12px;
+}
+
+.share-upload-nav .nav-item .more-dropdown-toggle {
+  margin-left: 4px;
 }

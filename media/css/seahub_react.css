@@ -756,10 +756,6 @@ textarea::placeholder {
   border-bottom: 0.125rem solid transparent;
 }
 
-.cur-view-path .nav .nav-item .nav-link {
-  padding: 11px 0;
-}
-
 .nav .nav-item .nav-link.active {
   color: #ED7109;
   text-decoration: none;

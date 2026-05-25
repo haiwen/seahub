@@ -464,6 +464,7 @@ img[src=""], img:not([src]) {
 }
 
 .nav-indicator-container .nav-item {
+  height: 40px;
   min-width: fit-content;
 }
 
@@ -475,7 +476,7 @@ img[src=""], img:not([src]) {
 .nav-indicator-container::before {
   content: '';
   position: absolute;
-  bottom: 1px;
+  bottom: 0;
   height: 2px;
   width: var(--indicator-width);
   background: #ED7109;

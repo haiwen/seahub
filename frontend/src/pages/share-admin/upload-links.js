@@ -422,13 +422,12 @@ class ShareAdminUploadLinks extends Component {
                     <li className="nav-item">
                       <Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link active">
                         {gettext('Upload Links')}
-                        <CustomDropdown
-                          items={uploadLinkActions}
-                          trigger={<Icon symbol="down" className="down-icon" />}
-                          triggerClassName="ml-1 sf-dropdown-toggle"
-                          menuPortal={false}
-                        />
                       </Link>
+                      <CustomDropdown
+                        items={uploadLinkActions}
+                        trigger={<Icon symbol="down" className="down-icon" />}
+                        menuPortal={false}
+                      />
                     </li>
                   </ul>
                 )

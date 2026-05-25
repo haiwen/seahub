@@ -590,13 +590,12 @@ class ShareAdminShareLinks extends Component {
                     <li className="nav-item">
                       <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link active">
                         {gettext('Share Links')}
-                        <CustomDropdown
-                          items={[{ key: 'clean-invalid-share-links', label: gettext('Clean invalid share links'), onClick: this.toggleCleanInvalidShareLinksDialog }]}
-                          trigger={<Icon symbol="down" className="down-icon" />}
-                          triggerClassName="ml-1 sf-dropdown-toggle"
-                          menuPortal={false}
-                        />
                       </Link>
+                      <CustomDropdown
+                        items={[{ key: 'clean-invalid-share-links', label: gettext('Clean invalid share links'), onClick: this.toggleCleanInvalidShareLinksDialog }]}
+                        trigger={<Icon symbol="down" className="down-icon" />}
+                        menuPortal={false}
+                      />
                     </li>
                     {canGenerateUploadLink && (
                       <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link">{gettext('Upload Links')}</Link></li>
