@@ -1,7 +1,8 @@
 .sf-metadata-groupbys-popover .sf-popover-container {
-  width: 400px;
+  width: 100%;
   right: 0;
   top: -1px;
+  overflow: visible;
 }
 
 .sf-metadata-groupbys-popover .popover {
