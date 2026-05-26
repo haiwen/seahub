@@ -64,13 +64,14 @@
   text-overflow: ellipsis;
 }
 
-.sf-metadata-column-popover .sf-metadata-column-type .seafile-multicolor-icon-rate {
+.sf-metadata-column-popover .sf-metadata-column-type .seafile-multicolor-icon {
   font-size: 14px;
-  fill: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-secondary-color);
 }
 
-.sf-metadata-column-popover .sf-metadata-column-type .seafile-multicolor-icon-drop-down {
+.sf-metadata-column-popover .sf-metadata-column-type .seafile-multicolor-icon-down {
   font-size: 12px;
+  color: var(--bs-icon-color);
 }
 
 .sf-metadata-column-popover .sf-metadata-column-popover-footer {
