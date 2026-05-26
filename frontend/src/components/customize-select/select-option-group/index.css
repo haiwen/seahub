@@ -78,7 +78,7 @@
 
 .seafile-select-option.seafile-select-option-active {
   cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.04);
+  background-color: var(--bs-dropdown-link-hover-bg);
 }
 
 .seafile-select-option .seafile-multicolor-icon-tick {

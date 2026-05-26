@@ -40,6 +40,8 @@
 }
 
 .sf-metadata-filters-list .filter-item .filter-term {
+  width: 100%;
+  min-width: 160px;
   max-width: 300px;
 }
 

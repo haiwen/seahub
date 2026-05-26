@@ -109,7 +109,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .seafile-customize-select .selected-option-delete .seafile-multicolor-icon {

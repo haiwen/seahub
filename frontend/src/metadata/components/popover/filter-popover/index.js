@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import isHotkey from 'is-hotkey';
 import { FormGroup, Label, UncontrolledPopover } from 'reactstrap';
@@ -11,7 +12,6 @@ import { getValidFilters, getFilterByColumn } from '../../../utils/filter';
 import { getEventClassName } from '../../../../utils/dom';
 
 import './index.css';
-import classNames from 'classnames';
 
 /**
  * filter = {
