@@ -298,7 +298,7 @@ const TagsEditor = forwardRef(({
     return () => {
       document.removeEventListener('keydown', onHotKey, true);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onHotKey]);
 
   useEffect(() => {
@@ -319,7 +319,7 @@ const TagsEditor = forwardRef(({
       }, {});
       setKeyNodeFoldedMap(updatedKeyNodeFoldedMap);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -414,6 +414,7 @@ const TagsEditor = forwardRef(({
           autoFocus={true}
           className="sf-metadata-search-tags"
           isClearable={true}
+          style={{ width: '100%' }}
           components={{
             ClearIndicator: ({ clearValue }) => (
               <span className="d-flex search-control attr-action-icon" aria-label={gettext('Clear')} onClick={clearValue}>

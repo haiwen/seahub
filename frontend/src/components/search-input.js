@@ -4,6 +4,8 @@ import classnames from 'classnames';
 import { Utils } from '../utils/utils';
 import Icon from './icon';
 
+import '../css/search-input.css';
+
 const propTypes = {
   placeholder: PropTypes.string,
   autoFocus: PropTypes.bool,
@@ -110,8 +112,6 @@ class SearchInput extends Component {
   render() {
     const { placeholder, autoFocus, className, onKeyDown, disabled = false, style = {}, isClearable } = this.props;
     const { searchValue } = this.state;
-    const inputWidth = (isClearable && searchValue) ? 'calc(100% - 40px)' : '100%';
-    style.width = inputWidth;
 
     return (
       <Fragment>
@@ -119,7 +119,10 @@ class SearchInput extends Component {
           type="text"
           name="search-input"
           value={searchValue}
-          className={classnames('form-control', className)}
+          className={classnames('form-control', className, {
+            'clearable': isClearable,
+            'hasValue': searchValue
+          })}
           onChange={this.onChange}
           autoFocus={autoFocus}
           placeholder={placeholder}
