@@ -73,6 +73,9 @@ export const createContextMenuOptions = ({
   };
 
   const getOptions = () => {
+    // handle no tags table
+    if (!recordGetterByIndex) return [];
+    
     let options = [];
 
     // handle selected multiple cells
