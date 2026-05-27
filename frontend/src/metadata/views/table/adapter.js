@@ -14,6 +14,7 @@ import { DropdownItem, Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap
 import Icon from '@/components/icon';
 import { POPUP_EDITOR_COLUMN_TYPES } from '@/metadata/constants/column/type';
 import { EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS } from '@/metadata/constants/column/private';
+import { DROPDOWN_SUBMENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 
 export const adaptMetadataColumnsToSfTable = (repoID, metadataColumns) => {
   if (!Array.isArray(metadataColumns)) {
@@ -283,12 +284,7 @@ export const createMetadataContextMenuOptions = ({
         <DropdownMenu
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
-          modifiers={[{
-            name: 'offset',
-            options: {
-              offset: [-8, 12],
-            },
-          }]}
+          modifiers={[DROPDOWN_SUBMENU_OFFSET_DEFAULT]}
         >
           {option.subOpList.map((subItem, subIndex) => {
             if (subItem === 'Divider') {

@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import ModalPortal from '../../../components/modal-portal';
 import ContextMenuItem from './context-menu-item';
 import Icon from '../../../components/icon';
-import { DEFAULT_SUBMENU_OFFSET_DISTANCE, DEFAULT_SUBMENU_OFFSET_SKIDDING } from '@/components/dropdown/utils';
 
 import './index.css';
 
@@ -167,16 +166,7 @@ const ContextMenu = ({
                   <span className="dropdown-item-main-slot">{option.value}</span>
                   <span className="dropdown-item-right-slot mr-2"><Icon symbol="down" className="rotate-270" /></span>
                 </DropdownToggle>
-                <DropdownMenu
-                  modifiers={[
-                    {
-                      name: 'offset',
-                      options: {
-                        offset: [DEFAULT_SUBMENU_OFFSET_SKIDDING, DEFAULT_SUBMENU_OFFSET_DISTANCE],
-                      },
-                    },
-                  ]}
-                >
+                <DropdownMenu>
                   {option.subOpList.map((subItem, subIndex) => {
                     if (subItem === 'Divider') {
                       return <DropdownItem key={subIndex} divider />;

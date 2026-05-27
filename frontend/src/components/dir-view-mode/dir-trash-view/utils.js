@@ -67,7 +67,7 @@ export function createHistoryColumns({ repoID }) {
       editable: false,
       resizable: true,
       is_private: true,
-      formatter: <NumberFormatter formats={{ format: 'byte' }}/>,
+      formatter: <NumberFormatter formats={{ format: 'byte' }} />,
     },
   ];
 

@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { Utils } from '../../../../utils/utils';
 import { gettext } from '../../../../utils/constants';
 import Icon from '../../../icon';
+import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 
 import './index.css';
 
@@ -58,10 +59,7 @@ const FilterBySuffix = ({ suffixes, onChange }) => {
         </DropdownToggle>
         <DropdownMenu
           className="search-filter-menu filter-by-suffix-menu p-4"
-          modifiers={[{
-            name: 'offset',
-            options: { offset: [0, 8] }
-          }]}
+          modifiers={[DROPDOWN_MENU_OFFSET_DEFAULT]}
         >
           <input
             ref={inputRef}

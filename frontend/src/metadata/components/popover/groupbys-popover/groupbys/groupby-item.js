@@ -68,12 +68,12 @@ const GroupbyItem = ({ showDragBtn, index, readOnly, groupby, columns, onDelete,
       return {
         value: { column },
         label: (
-          <div>
+          <>
             <span className="sf-metadata-filter-header-icon">
               <Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[type]} />
             </span>
             <span className="select-option-name">{name}</span>
-          </div>
+          </>
         )
       };
     });
@@ -175,7 +175,7 @@ const GroupbyItem = ({ showDragBtn, index, readOnly, groupby, columns, onDelete,
           title={gettext('Delete')}
           op={deleteGroupby}
         >
-          <Icon className="sf-metadata-icon" symbol="close"/>
+          <Icon className="sf-metadata-icon" symbol="close" />
         </OpElement>
       )}
       <div className="condition">

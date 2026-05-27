@@ -9,6 +9,7 @@ import ModalPortal from '../../../../modal-portal';
 import { SEARCH_FILTERS_KEY, SEARCH_FILTER_BY_DATE_OPTION_KEY } from '../../../../../constants';
 import classNames from 'classnames';
 import Icon from '../../../../icon';
+import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 
 const DATE_INPUT_WIDTH = 118;
 
@@ -127,7 +128,7 @@ const FilterByDate = ({ date, onChange }) => {
           <Icon symbol="down" className="ml-1" />
         </DropdownToggle>
         <ModalPortal>
-          <DropdownMenu className="search-filter-menu filter-by-date-menu">
+          <DropdownMenu className="search-filter-menu filter-by-date-menu" modifiers={[DROPDOWN_MENU_OFFSET_DEFAULT]}>
             {options.map((option, i) => {
               const isSelected = option.key === value;
               if (option === 'Divider') return <div key={i} className="seafile-divider dropdown-divider"></div>;

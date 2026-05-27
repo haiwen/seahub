@@ -8,11 +8,10 @@ import Icon from '../icon';
 import Tooltip from '../tooltip';
 import { CustomDropdownMenuContent } from './menu-content';
 import {
-  DEFAULT_MENU_OFFSET_DISTANCE,
-  DEFAULT_MENU_OFFSET_SKIDDING,
   focusMenuItem,
   MENU_ITEM_SELECTORS,
   getDirectionByPlacement,
+  DROPDOWN_MENU_OFFSET_DEFAULT,
 } from './utils';
 
 import './index.css';
@@ -120,10 +119,7 @@ export const CustomDropdown = ({
       modifiers={modifiers || [{
         name: 'preventOverflow',
         options: { boundary: document.body }
-      }, {
-        name: 'offset',
-        options: { offset: [DEFAULT_MENU_OFFSET_SKIDDING, DEFAULT_MENU_OFFSET_DISTANCE] },
-      }]}
+      }, DROPDOWN_MENU_OFFSET_DEFAULT]}
       onKeyDown={onMenuKeyDown}
       role="menu"
     >

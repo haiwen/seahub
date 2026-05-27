@@ -22,6 +22,7 @@ import { getColumnByKey, getColumnOriginName } from '@/components/sf-table/utils
 import { getColumnOptionNameById, getColumnOptionNamesByIds } from '@/metadata/utils/cell';
 import tagsAPI from '@/tag/api';
 import { GridUtilsAdapter } from '@/components/sf-table/utils/grid-utils-adapter';
+import { DROPDOWN_SUBMENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 
 import './index.css';
 
@@ -444,14 +445,7 @@ const DirTableView = ({
               <span className="mr-auto">{option.value}</span>
               <Icon symbol="down" className="rotate-270" />
             </DropdownToggle>
-            <DropdownMenu
-              modifiers={[{
-                name: 'offset',
-                options: {
-                  offset: [-8, 12],
-                },
-              }]}
-            >
+            <DropdownMenu modifiers={[DROPDOWN_SUBMENU_OFFSET_DEFAULT]}>
               {option.subOpList.map((subOp, subIndex) => {
                 if (subOp == 'Divider') {
                   return <DropdownItem key={subIndex} divider />;

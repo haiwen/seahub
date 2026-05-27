@@ -11,6 +11,7 @@ import ModalPortal from '../../modal-portal';
 import toaster from '../../toast';
 import { SEARCH_FILTERS_KEY } from '../../../constants';
 import Icon from '../../icon';
+import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 
 import './filter-by-creator.css';
 
@@ -108,15 +109,7 @@ const FilterByCreator = ({ creatorList, onChange }) => {
           <Icon symbol="down" className="w-3 h-3 ml-1" />
         </DropdownToggle>
         <ModalPortal>
-          <DropdownMenu
-            className="search-filter-menu filter-by-creator-menu"
-            modifiers={[{
-              name: 'offset',
-              options: {
-                offset: [0, 8]
-              }
-            }]}
-          >
+          <DropdownMenu className="search-filter-menu filter-by-creator-menu" modifiers={[DROPDOWN_MENU_OFFSET_DEFAULT]}>
             <div className="selected-user-item-container">
               {selectedOptions.map((option) => (
                 <UserItem

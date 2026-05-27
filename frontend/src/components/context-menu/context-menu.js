@@ -6,6 +6,7 @@ import { hideMenu } from './actions';
 import { callIfExists } from './helpers';
 import { Utils } from '../../utils/utils';
 import Icon from '../icon';
+import { DROPDOWN_SUBMENU_OFFSET_DEFAULT } from '../dropdown/utils';
 
 const propTypes = {
   id: PropTypes.string.isRequired,
@@ -236,14 +237,7 @@ class ContextMenu extends React.Component {
                   <span className="mr-auto">{menuItem.value}</span>
                   <Icon symbol="down" className="rotate-270" />
                 </DropdownToggle>
-                <DropdownMenu
-                  modifiers={[{
-                    name: 'offset',
-                    options: {
-                      offset: [-8, 12],
-                    }
-                  }]}
-                >
+                <DropdownMenu modifiers={[DROPDOWN_SUBMENU_OFFSET_DEFAULT]}>
                   {menuItem.subOpList.map((item, index) => {
                     if (item == 'Divider') {
                       return <DropdownItem key={index} divider />;

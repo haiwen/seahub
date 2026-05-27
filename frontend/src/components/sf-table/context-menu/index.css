@@ -7,3 +7,7 @@
 .sf-table-context-menu .dropdown-item {
   padding: 0 12px;
 }
+
+.sf-table-context-menu .dropdown-item .seafile-multicolor-icon-down {
+  font-size: 12px;
+}

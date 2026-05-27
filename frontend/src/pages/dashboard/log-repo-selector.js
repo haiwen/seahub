@@ -142,10 +142,10 @@ class LogRepoSelector extends Component {
                       className="activity-user-item h-6 p-1 rounded d-flex justify-content-between align-items-center"
                       onClick={(e) => { this.toggleSelectItem(e, item); }}
                     >
-                      <div>
+                      <span className="avatar-name-wrapper">
                         <i className="fas fa-folder"></i>
                         <span className="activity-user-name ml-2">{item.name}</span>
-                      </div>
+                      </span>
                       {isSelected && <Icon symbol="check-thin" className="text-gray font-weight-bold" />}
                     </li>
                   );

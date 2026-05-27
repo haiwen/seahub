@@ -10,6 +10,7 @@ import Picker from '../../date-and-time-picker';
 import ModalPortal from '../../modal-portal';
 import { SEARCH_FILTERS_KEY, SEARCH_FILTER_BY_DATE_OPTION_KEY, SEARCH_FILTER_BY_DATE_TYPE_KEY } from '../../../constants';
 import Icon from '../../icon';
+import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 
 const DATE_INPUT_WIDTH = 118;
 
@@ -185,15 +186,7 @@ const FilterByDate = ({ date, onChange }) => {
           <Icon symbol="down" className="w-3 h-3 ml-1" />
         </DropdownToggle>
         <ModalPortal>
-          <DropdownMenu
-            className="search-filter-menu filter-by-date-menu"
-            modifiers={[{
-              name: 'offset',
-              options: {
-                offset: [0, 8]
-              }
-            }]}
-          >
+          <DropdownMenu className="search-filter-menu filter-by-date-menu" modifiers={[DROPDOWN_MENU_OFFSET_DEFAULT]}>
             <div className="filter-by-date-menu-toolbar">
               <Dropdown isOpen={isTypeOpen} toggle={toggleType}>
                 <DropdownToggle
@@ -207,7 +200,7 @@ const FilterByDate = ({ date, onChange }) => {
                   <span className="filter-label">{typeLabel}</span>
                   <Icon symbol="down" className="ml-1" />
                 </DropdownToggle>
-                <DropdownMenu>
+                <DropdownMenu modifiers={[DROPDOWN_MENU_OFFSET_DEFAULT]}>
                   {typeOptions.map((option) => {
                     const isSelected = option.key === type;
                     return (

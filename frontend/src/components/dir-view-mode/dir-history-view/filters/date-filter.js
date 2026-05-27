@@ -9,6 +9,7 @@ import OpIcon from '../../../op-icon';
 import Picker from '../../../date-and-time-picker';
 import Icon from '../../../icon';
 import { HISTORY_MODE } from '../../constants';
+import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 
 const DATE_INPUT_WIDTH = 118;
 
@@ -209,10 +210,7 @@ const HistoryDateFilter = ({ mode = HISTORY_MODE, value: propsValue = { value: '
               e.stopPropagation();
             }
           }}
-          modifiers={[{
-            name: 'offset',
-            options: { offset: [0, 8] }
-          }]}
+          modifiers={[DROPDOWN_MENU_OFFSET_DEFAULT]}
         >
           <div className="filter-by-date-menu-toolbar">
             <span className="filter-by-date-toolbar-label">{copyRight}</span>

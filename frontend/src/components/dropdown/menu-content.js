@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import Icon from '../icon';
@@ -9,9 +9,8 @@ import {
   getSubmenuDirection,
   isDividerNode,
   normalizeDropdownItems,
-  DEFAULT_SUBMENU_OFFSET_SKIDDING,
-  DEFAULT_SUBMENU_OFFSET_DISTANCE,
   MENU_ITEM_SELECTORS,
+  DROPDOWN_SUBMENU_OFFSET_DEFAULT,
 } from './utils';
 
 const MenuSubmenu = ({
@@ -27,17 +26,12 @@ const MenuSubmenu = ({
 }) => {
   const triggerRef = useRef(null);
   const menuRef = useRef(null);
-  const closeTimerRef = useRef(null);
   const isOpen = activePath[depth] === item.key;
   const direction = getSubmenuDirection(parentMenuRef?.current);
   const submenuPath = activePath.slice(0, depth).concat(item.key);
   const submenuItems = item.children || [];
 
   const openSubmenu = () => {
-    if (closeTimerRef.current) {
-      window.clearTimeout(closeTimerRef.current);
-      closeTimerRef.current = null;
-    }
     setActivePath((prev) => {
       if (prev[depth] === item.key) {
         return prev.length === depth + 1 ? prev : submenuPath;
@@ -47,26 +41,11 @@ const MenuSubmenu = ({
   };
 
   const closeSubmenu = () => {
-    if (closeTimerRef.current) {
-      window.clearTimeout(closeTimerRef.current);
-    }
-
-    closeTimerRef.current = window.setTimeout(() => {
-      setActivePath((prev) => {
-        if (prev[depth] !== item.key) return prev;
-        return prev.slice(0, depth);
-      });
-      closeTimerRef.current = null;
-    }, 300);
+    setActivePath((prev) => {
+      if (prev[depth] !== item.key) return prev;
+      return prev.slice(0, depth);
+    });
   };
-
-  useEffect(() => {
-    return () => {
-      if (closeTimerRef.current) {
-        window.clearTimeout(closeTimerRef.current);
-      }
-    };
-  }, []);
 
   const onTriggerKeyDown = (event) => {
     if (event.key === 'ArrowRight') {
@@ -127,20 +106,12 @@ const MenuSubmenu = ({
       <DropdownMenu
         ref={menuRef}
         className={menuClassName}
-        modifiers={[
-          {
-            name: 'offset',
-            options: {
-              offset: [DEFAULT_SUBMENU_OFFSET_SKIDDING, DEFAULT_SUBMENU_OFFSET_DISTANCE],
-            },
+        modifiers={[DROPDOWN_SUBMENU_OFFSET_DEFAULT, {
+          name: 'preventOverflow',
+          options: {
+            boundary: document.body,
           },
-          {
-            name: 'preventOverflow',
-            options: {
-              boundary: document.body,
-            },
-          },
-        ]}
+        }]}
         flip={true}
         onMouseEnter={openSubmenu}
         onMouseLeave={closeSubmenu}
