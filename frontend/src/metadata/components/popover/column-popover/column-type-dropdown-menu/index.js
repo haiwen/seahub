@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Icon from '../../../../../components/icon';
 import { gettext } from '../../../../../utils/constants';
 import { COLUMNS } from './constants';
+import { DROPDOWN_SUBMENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 
 import './index.css';
 
@@ -50,7 +51,7 @@ const ColumnTypeDropdownMenu = ({ modifiers, onSelect }) => {
   }, [onSelect]);
 
   return (
-    <DropdownMenu role="menu" className="sf-metadata-column-type-dropdown-menu" modifiers={modifiers}>
+    <DropdownMenu role="menu" flip={true} className="sf-metadata-column-type-dropdown-menu" modifiers={[DROPDOWN_SUBMENU_OFFSET_DEFAULT]}>
       <div className="search-column-container mb-2">
         <Input
           onChange={onSearchColumn}
@@ -93,12 +94,7 @@ const ColumnTypeDropdownMenu = ({ modifiers, onSelect }) => {
                   <span className="mr-auto">{gettext('Custom properties')}</span>
                   <Icon symbol="down" className="rotate-270" />
                 </DropdownToggle>
-                <DropdownMenu
-                  modifiers={[{
-                    name: 'offset',
-                    options: { offset: [-8, 12] },
-                  }]}
-                >
+                <DropdownMenu flip={true} modifiers={[DROPDOWN_SUBMENU_OFFSET_DEFAULT]}>
                   {basicsColumns.map((item, index) => (
                     <DropdownItem
                       key={index}

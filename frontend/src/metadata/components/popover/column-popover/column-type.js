@@ -41,7 +41,7 @@ const ColumnType = forwardRef(({ column, onChange }, ref) => {
         <Label>{gettext('Type')}</Label>
         <Dropdown
           isOpen={isPredefinedPropertiesOpen}
-          direction="start"
+          direction="end"
           toggle={togglePredefinedProperties}
           className={classnames('sf-metadata-column-type', { 'sf-metadata-column-type-focus': isPredefinedPropertiesOpen })}
         >
@@ -56,12 +56,6 @@ const ColumnType = forwardRef(({ column, onChange }, ref) => {
           <ModalPortal>
             <ColumnTypeDropdownMenu
               column={column}
-              modifiers={[{
-                name: 'offset',
-                options: {
-                  offset: [0, 17],
-                }
-              }]}
               onSelect={onChange}
             />
           </ModalPortal>

@@ -13,6 +13,10 @@
   flex-shrink: 0;
 }
 
+.sf-metadata-column-type-dropdown-menu {
+  z-index: 1071;
+}
+
 .sf-metadata-column-type-dropdown-menu .column-type-item.dropdown-item .seafile-multicolor-icon {
   color: var(--bs-icon-secondary-color);
 }
