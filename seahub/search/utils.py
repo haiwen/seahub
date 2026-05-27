@@ -339,6 +339,7 @@ def get_invisible_repos_info_by_username(username, org_id):
 def is_invisible_path(repo_id_to_invisible_paths, repo_id, path):
     invisible_path_set = repo_id_to_invisible_paths.get(repo_id, set())
     for invisible_path in invisible_path_set:
-        if path.startswith(invisible_path):
+        ip = invisible_path.rstrip('/')
+        if path == ip or path.startswith(ip + '/'):
             return True
     return False
