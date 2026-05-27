@@ -6,7 +6,7 @@ import random
 from urllib.parse import urljoin
 from datetime import datetime
 
-from seahub.settings import SECRET_KEY, SEAFEVENTS_SERVER_URL
+from seahub.settings import SECRET_KEY, SEAHUB_IO_LOCAL_SERVER_URL
 from seahub.views import check_folder_permission
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
@@ -94,7 +94,7 @@ def add_init_metadata_task(params):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
-    url = urljoin(SEAFEVENTS_SERVER_URL, '/add-init-metadata-task')
+    url = urljoin(SEAHUB_IO_LOCAL_SERVER_URL, '/add-init-metadata-task')
     resp = requests.get(url, params=params, headers=headers)
     return json.loads(resp.content)['task_id']
 
@@ -103,7 +103,7 @@ def add_init_face_recognition_task(params):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
-    url = urljoin(SEAFEVENTS_SERVER_URL, '/add-init-face-recognition-task')
+    url = urljoin(SEAHUB_IO_LOCAL_SERVER_URL, '/add-init-face-recognition-task')
     resp = requests.get(url, params=params, headers=headers)
     return json.loads(resp.content)['task_id']
 
@@ -112,7 +112,7 @@ def extract_file_details(params):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
-    url = urljoin(SEAFEVENTS_SERVER_URL, '/extract-file-details')
+    url = urljoin(SEAHUB_IO_LOCAL_SERVER_URL, '/extract-file-details')
     resp = requests.post(url, json=params, headers=headers, timeout=30)
     return json.loads(resp.content)['details']
 
@@ -121,7 +121,7 @@ def recognize_faces(params):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
-    url = urljoin(SEAFEVENTS_SERVER_URL, '/recognize-faces')
+    url = urljoin(SEAHUB_IO_LOCAL_SERVER_URL, '/recognize-faces')
     resp = requests.post(url, json=params, headers=headers, timeout=30)
     return resp
 
@@ -130,7 +130,7 @@ def update_people_cover_photo(params):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
-    url = urljoin(SEAFEVENTS_SERVER_URL, '/update-people-cover-photo')
+    url = urljoin(SEAHUB_IO_LOCAL_SERVER_URL, '/update-people-cover-photo')
     resp = requests.post(url, json=params, headers=headers, timeout=30)
     return json.loads(resp.content)
 

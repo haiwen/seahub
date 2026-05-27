@@ -12,6 +12,7 @@ thirdpart/gunicorn*
 thirdpart/*.pth
 thirdpart/site.*
 restart.sh
+seahub_io.sh
 settings.py.mysql
 settings.py.sqlite
 secret_key.py
