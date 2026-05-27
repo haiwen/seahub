@@ -217,12 +217,14 @@ class Item extends Component {
                 {(isPro && data.is_admin) &&
                 <OpIcon
                   className={shareIconClassName}
+                  symbol="share"
                   title={gettext('Share')}
                   op={this.share}
                 />
                 }
                 <OpIcon
                   className={leaveShareIconClassName}
+                  symbol="close"
                   title={gettext('Leave Share')}
                   op={this.leaveShare}
                 />
