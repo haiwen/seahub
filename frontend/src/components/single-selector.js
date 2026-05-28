@@ -27,28 +27,19 @@ class Selector extends Component {
   }
 
   componentDidMount() {
-    document.addEventListener('click', this.handleOutsideClick);
+    document.addEventListener('mousedown', this.handleOutsideClick);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleOutsideClick);
+    document.removeEventListener('mousedown', this.handleOutsideClick);
   }
 
   handleOutsideClick = (e) => {
-    const { isPopoverOpen } = this.state;
-    if (isPopoverOpen && !this.selector.contains(e.target)) {
-      this.togglePopover();
-    }
+    this.setState({ isPopoverOpen: false });
   };
 
   togglePopover = () => {
-    this.setState({
-      isPopoverOpen: !this.state.isPopoverOpen
-    }, () => {
-      if (this.props.toggleItemFreezed) {
-        this.props.toggleItemFreezed(this.state.isPopoverOpen);
-      }
-    });
+    this.setState({ isPopoverOpen: !this.state.isPopoverOpen });
   };
 
   onToggleClick = (e) => {
@@ -83,7 +74,7 @@ class Selector extends Component {
           {customSelectorToggle ? customSelectorToggle : (
             <span className="cur-option">
               {currentSelectedOption ? currentSelectedOption.text : ''}
-              {isDropdownToggleShown && <Icon symbol="down" className="toggle-icon ml-1" />}
+              {(isDropdownToggleShown || isPopoverOpen) && <Icon symbol="down" className="toggle-icon ml-1" />}
             </span>
           )}
         </div>
@@ -97,7 +88,7 @@ class Selector extends Component {
                     tabIndex="0"
                     role="menuitem"
                     className="option-item h-6 py-1 px-3 d-flex justify-content-between align-items-center"
-                    onClick={(e) => {this.selectItem(e, item);}}
+                    onClick={(e) => { this.selectItem(e, item); }}
                     onKeyDown={Utils.onKeyDown}
                   >
                     <span className="option-item-text flex-shrink-0 mr-3">{item.text}</span>
