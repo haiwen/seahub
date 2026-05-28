@@ -1,5 +1,5 @@
 .search-filter-menu.filter-by-creator-menu .dropdown-item:hover {
-  background-color: #F5F5F5;
+  background-color: var(--bs-body-secondary-bg);
 }
 
 .search-filter-menu.filter-by-creator-menu .dropdown-item:hover .dropdown-item-tick .seafile-multicolor-icon {
@@ -21,6 +21,11 @@
   border-bottom: 1px solid #dde2ea;
   margin-top: -8px;
   padding: 5px 10px 3px;
+}
+
+[data-bs-theme="dark"] .search-filter-menu.filter-by-creator-menu .selected-user-item-container {
+  background-color: var(--bs-bg-secondary-color);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
 }
 
 .search-filter-menu.filter-by-creator-menu .selected-user-item-container .user-item .user-remove {
