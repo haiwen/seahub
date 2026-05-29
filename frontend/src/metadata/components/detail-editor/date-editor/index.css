@@ -4,6 +4,18 @@
   padding: 6.5px 6px;
 }
 
+.dirent-detail-item-value.editable .date-picker-container {
+  position: absolute;
+  width: 100%;
+  height: 34px;
+}
+
 .dirent-detail-item-value.editable .ant-calendar-picker-input {
-  display: none;
+  width: 100%;
+  height: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  margin: 0;
 }
