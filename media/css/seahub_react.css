@@ -614,10 +614,6 @@ textarea::placeholder {
 }
 
 @media (max-width:767px) {
-  #account {
-    margin: 5px 0 0 10px;
-  }
-
   .account-toggle {
     font-size: 22px;
     line-height: 1;
