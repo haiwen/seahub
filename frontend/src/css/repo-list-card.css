@@ -165,6 +165,17 @@
   .repo-list-item {
     flex-wrap: wrap;
     padding: 12px;
+    height: auto;
+  }
+  
+  .repo-list-item > div {
+    width: 100%;
+  }
+  
+  .repo-list-item > div:last-child {
+    margin-left: 32px;
+    margin-right: 8px;
+    width: calc(100% - 32px);
   }
 
   .repo-list-item .repo-item-icon {
