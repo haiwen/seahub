@@ -304,7 +304,7 @@ def sdoc_export_to_md(path, doc_uuid, download_url,
 
 
 def sdoc_export_to_html(path, username, doc_uuid, download_url,
-                        src_type, dst_type):
+                        src_type, dst_type, publish_url):
 
     headers = convert_file_gen_headers()
     params = {
@@ -314,6 +314,7 @@ def sdoc_export_to_html(path, username, doc_uuid, download_url,
         'download_url': download_url,
         'src_type': src_type,
         'dst_type': dst_type,
+        'publish_url': publish_url
     }
     url = FILE_CONVERTER_SERVER_URL.rstrip('/') + '/api/v1/sdoc-export-to-html/'
     resp = requests.post(url, json=params, headers=headers, timeout=30)

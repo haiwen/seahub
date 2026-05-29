@@ -328,7 +328,8 @@ def wiki_publish_view(request, publish_url, page_id=None):
         doc_uuid = get_seadoc_file_uuid(repo, file_path)
         download_url = gen_file_get_url(download_token, filename)
         html_resp = sdoc_export_to_html(file_path, '', doc_uuid,
-                                        download_url, src_type, dst_type)
+                                        download_url, src_type, dst_type,
+                                        publish_url)
         if not html_resp.ok:
             raise ValueError('converter returned non-success status {}'.format(html_resp.status_code))
 
