@@ -587,8 +587,8 @@ class ShareAdminShareLinks extends Component {
                 )
                 : (
                   <ul className="nav">
-                    <li className="nav-item">
-                      <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link active px-0 py-2">
+                    <li className="nav-item active">
+                      <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link px-0 py-2">
                         {gettext('Share Links')}
                       </Link>
                       <CustomDropdown

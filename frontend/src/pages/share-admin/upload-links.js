@@ -421,8 +421,8 @@ class ShareAdminUploadLinks extends Component {
                         <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link">{gettext('Share Links')}</Link>
                       </li>
                     )}
-                    <li className="nav-item">
-                      <Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link active px-0 py-2">
+                    <li className="nav-item active">
+                      <Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link px-0 py-2">
                         {gettext('Upload Links')}
                       </Link>
                       <CustomDropdown

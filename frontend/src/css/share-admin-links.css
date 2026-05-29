@@ -16,8 +16,18 @@
 
 .share-upload-nav .nav-item {
   position: relative;
-  padding-right: 32px;
+  margin-right: 24px;
   cursor: default;
+}
+
+.share-upload-nav .nav-item.active::before {
+  width: 100%;
+  height: 2px;
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-color: #ed7109;
 }
 
 .share-upload-nav .nav-item .nav-link {
@@ -26,11 +36,10 @@
 }
 
 .share-upload-nav .nav-item .dropdown {
-  position: absolute;
-  right: 4px;
+  margin-left: 4px;
   font-size: 12px;
 }
 
 .share-upload-nav .nav-item .more-dropdown-toggle {
-  margin-left: 4px;
+  width: fit-content;
 }
