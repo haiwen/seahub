@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-21 15:42+0800\n"
+"POT-Creation-Date: 2026-05-30 09:48+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Ukrainian (http://app.transifex.com/haiwen/seahub/language/uk/)\n"
@@ -27,6 +27,7 @@ msgstr ""
 
 #: frontend/src/components/back-icon.js:13
 #: frontend/src/components/back-icon.js:17
+#: frontend/src/components/file-view/comment-widget/reply-list.js:90
 #: frontend/src/file-history-old.js:208 frontend/src/file-history-old.js:211
 #: frontend/src/file-history.js:59 frontend/src/file-history.js:62
 #: frontend/src/repo-folder-trash.js:206 frontend/src/repo-folder-trash.js:209
@@ -294,13 +295,13 @@ msgstr "Позначити сповіщення як прочитане"
 msgid "View notification"
 msgstr "Переглянути сповіщення"
 
-#: frontend/src/components/common/notification-popover/index.js:88
+#: frontend/src/components/common/notification-popover/index.js:96
 #: frontend/src/user-notifications.js:216
 #| msgid "Generate Link"
 msgid "General"
 msgstr "Загальні"
 
-#: frontend/src/components/common/notification-popover/index.js:102
+#: frontend/src/components/common/notification-popover/index.js:110
 #: frontend/src/user-notifications.js:228
 #| msgid "Permission"
 msgid "Discussion"
@@ -346,6 +347,9 @@ msgstr "Переглянути всі сповіщення"
 #: frontend/src/components/dir-view-mode/dir-history-view/history-view-toolbar.js:101
 #: frontend/src/components/dir-view-mode/dir-trash-view/trash-view-toolbar.js:109
 #: frontend/src/components/dirent-detail/detail/header/index.js:32
+#: frontend/src/components/file-chooser/index.js:464
+#: frontend/src/components/file-view/comment-widget/comment-list.js:154
+#: frontend/src/components/file-view/comment-widget/reply-list.js:94
 #: frontend/src/components/logo.js:67 frontend/src/components/logo.js:68
 #: frontend/src/components/pdf-viewer.js:345
 #: frontend/src/components/pdf-viewer.js:427
@@ -897,7 +901,7 @@ msgstr "Додати Wiki"
 #: frontend/src/pages/wiki2/wiki-trash-dialog.js:144
 #: frontend/src/pages/wiki2/wiki-trash-dialog.js:151
 #: frontend/src/repo-folder-trash.js:254 frontend/src/repo-snapshot.js:202
-#: frontend/src/shared-dir-view.js:1082
+#: frontend/src/shared-dir-view.js:1086
 #: frontend/src/tag/components/dialog/edit-tag-dialog/index.js:100
 #: frontend/src/tag/views/tag-files/list/index.js:145
 #: frontend/src/utils/table-headers.js:85
@@ -1023,8 +1027,8 @@ msgstr "Очищення завершено успішно."
 #: frontend/src/components/dialog/wiki-clean-trash.js:64
 #: frontend/src/pages/org-admin/devices/devices-errors.js:196
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:384
-#: frontend/src/pages/share-admin/share-links.js:626
-#: frontend/src/pages/share-admin/upload-links.js:454
+#: frontend/src/pages/share-admin/share-links.js:627
+#: frontend/src/pages/share-admin/upload-links.js:455
 #: frontend/src/pages/sys-admin/devices/index.js:45
 #: frontend/src/pages/sys-admin/libraries-and-links.js:187
 #: frontend/src/pages/wiki2/wiki-trash-dialog.js:100
@@ -1127,12 +1131,12 @@ msgstr "Дійсно хочете видалити %s ?"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:71
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:70
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/user-item.js:18
-#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:218
+#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:220
 #: frontend/src/components/file-view/comment-widget/comment-item.js:81
 #: frontend/src/components/file-view/comment-widget/reply-item.js:77
 #: frontend/src/components/group-members.js:170
 #: frontend/src/components/library-op-menu.js:128
-#: frontend/src/components/search/search-filters/filter-by-date.js:218
+#: frontend/src/components/search/search-filters/filter-by-date.js:219
 #: frontend/src/components/search/search-filters/user-item.js:20
 #: frontend/src/components/search/search-result-item.js:81
 #: frontend/src/components/share-link-panel/link-authenticated-emails.js:60
@@ -1148,16 +1152,16 @@ msgstr "Дійсно хочете видалити %s ?"
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:505
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:506
 #: frontend/src/components/toolbar/all-tags-toolbar.js:88
-#: frontend/src/components/toolbar/card-files-toolbar.js:206
-#: frontend/src/components/toolbar/card-files-toolbar.js:208
+#: frontend/src/components/toolbar/card-files-toolbar.js:219
+#: frontend/src/components/toolbar/card-files-toolbar.js:221
 #: frontend/src/components/toolbar/face-recognition-files-toolbar.js:185
 #: frontend/src/components/toolbar/gallery-files-toolbar.js:172
-#: frontend/src/components/toolbar/kanban-files-toolbar.js:204
-#: frontend/src/components/toolbar/kanban-files-toolbar.js:205
+#: frontend/src/components/toolbar/kanban-files-toolbar.js:217
+#: frontend/src/components/toolbar/kanban-files-toolbar.js:218
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:355
-#: frontend/src/components/toolbar/table-files-toolbar.js:218
-#: frontend/src/components/toolbar/table-files-toolbar.js:219
-#: frontend/src/components/toolbar/tag-files-toolbar.js:137
+#: frontend/src/components/toolbar/table-files-toolbar.js:231
+#: frontend/src/components/toolbar/table-files-toolbar.js:232
+#: frontend/src/components/toolbar/tag-files-toolbar.js:150
 #: frontend/src/components/user-settings/delete-account.js:38
 #: frontend/src/components/user-settings/web-api-auth-token.js:93
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:252
@@ -1192,10 +1196,10 @@ msgstr "Дійсно хочете видалити %s ?"
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:225
 #: frontend/src/pages/share-admin/share-links.js:581
 #: frontend/src/pages/share-admin/share-links.js:582
-#: frontend/src/pages/share-admin/share-links.js:635
+#: frontend/src/pages/share-admin/share-links.js:636
 #: frontend/src/pages/share-admin/upload-links.js:410
 #: frontend/src/pages/share-admin/upload-links.js:411
-#: frontend/src/pages/share-admin/upload-links.js:463
+#: frontend/src/pages/share-admin/upload-links.js:464
 #: frontend/src/pages/sys-admin/departments/departments-node-dropdown-menu.js:9
 #: frontend/src/pages/sys-admin/departments/member-item.js:65
 #: frontend/src/pages/sys-admin/departments/member-item.js:130
@@ -1361,7 +1365,7 @@ msgstr "Скопіювати вибрані елементи до:"
 #: frontend/src/components/dir-view-mode/dir-history-view/history-view-toolbar.js:96
 #: frontend/src/components/dir-view-mode/dir-trash-view/trash-view-toolbar.js:90
 #: frontend/src/components/dir-view-mode/dir-trash-view/trash-view-toolbar.js:104
-#: frontend/src/components/file-chooser/index.js:452
+#: frontend/src/components/file-chooser/index.js:454
 #: frontend/src/components/file-chooser/searcher/index.js:118
 #: frontend/src/components/search/wiki2-global-search.js:292
 #: frontend/src/components/search/wiki2-global-search.js:334
@@ -1396,7 +1400,7 @@ msgstr "Копіювати {num} елементів"
 #: frontend/src/metadata/components/popover/kanban-add-category-popover/index.js:32
 #: frontend/src/metadata/components/popover/options-popover/option/name/index.js:38
 #: frontend/src/metadata/utils/validate/view.js:9
-#: frontend/src/tag/utils/validate/tag.js:9 frontend/src/utils/utils.js:2044
+#: frontend/src/tag/utils/validate/tag.js:9 frontend/src/utils/utils.js:2045
 msgid "Name is required"
 msgstr "Потрібене старе ім'я"
 
@@ -1531,7 +1535,7 @@ msgstr "Права доступу"
 #: frontend/src/components/dialog/share-repo-dialog.js:44
 #: frontend/src/components/select-editor/repo-api-token-permission-editor.js:22
 #: frontend/src/components/select-editor/repo-api-token-permission-editor.js:57
-#: frontend/src/utils/utils.js:926
+#: frontend/src/utils/utils.js:927
 msgid "Read-Write"
 msgstr "Читання+Запис"
 
@@ -1539,7 +1543,7 @@ msgstr "Читання+Запис"
 #: frontend/src/components/dialog/create-repo-dialog.js:235
 #: frontend/src/components/dialog/share-repo-dialog.js:45
 #: frontend/src/components/select-editor/repo-api-token-permission-editor.js:57
-#: frontend/src/utils/utils.js:929
+#: frontend/src/utils/utils.js:930
 msgid "Read-Only"
 msgstr "Тільки для читання"
 
@@ -1617,18 +1621,18 @@ msgstr "Завантажити"
 #: frontend/src/components/qr-code-popover.js:119
 #: frontend/src/components/shared-file-view/shared-file-view-tip.js:27
 #: frontend/src/components/shared-file-view/shared-file-view.js:75
-#: frontend/src/components/toolbar/card-files-toolbar.js:196
-#: frontend/src/components/toolbar/card-files-toolbar.js:198
+#: frontend/src/components/toolbar/card-files-toolbar.js:209
+#: frontend/src/components/toolbar/card-files-toolbar.js:211
 #: frontend/src/components/toolbar/face-recognition-files-toolbar.js:184
 #: frontend/src/components/toolbar/gallery-files-toolbar.js:171
-#: frontend/src/components/toolbar/kanban-files-toolbar.js:195
-#: frontend/src/components/toolbar/kanban-files-toolbar.js:196
+#: frontend/src/components/toolbar/kanban-files-toolbar.js:208
+#: frontend/src/components/toolbar/kanban-files-toolbar.js:209
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:345
-#: frontend/src/components/toolbar/table-files-toolbar.js:208
-#: frontend/src/components/toolbar/table-files-toolbar.js:209
-#: frontend/src/components/toolbar/tag-files-toolbar.js:144
+#: frontend/src/components/toolbar/table-files-toolbar.js:221
+#: frontend/src/components/toolbar/table-files-toolbar.js:222
+#: frontend/src/components/toolbar/tag-files-toolbar.js:157
 #: frontend/src/pages/file-history-old/history-item.js:106
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:204
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:205
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:57
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:280
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:20
@@ -1638,10 +1642,10 @@ msgstr "Завантажити"
 #: frontend/src/pages/sys-admin/repos/dir-content.js:83
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:19
 #: frontend/src/pages/sys-admin/users/user-links.js:199
-#: frontend/src/repo-snapshot.js:345 frontend/src/shared-dir-view.js:871
-#: frontend/src/shared-dir-view.js:1218 frontend/src/shared-dir-view.js:1235
-#: frontend/src/shared-dir-view.js:1274 frontend/src/shared-dir-view.js:1297
-#: frontend/src/shared-dir-view.js:1375 frontend/src/shared-dir-view.js:1394
+#: frontend/src/repo-snapshot.js:345 frontend/src/shared-dir-view.js:875
+#: frontend/src/shared-dir-view.js:1222 frontend/src/shared-dir-view.js:1239
+#: frontend/src/shared-dir-view.js:1278 frontend/src/shared-dir-view.js:1301
+#: frontend/src/shared-dir-view.js:1379 frontend/src/shared-dir-view.js:1398
 #: frontend/src/utils/text-translation.js:48
 msgid "Download"
 msgstr "Завантажити"
@@ -1672,14 +1676,14 @@ msgstr "Зміна включає редагування файлу, перем�
 #: frontend/src/components/qr-code-popover.js:127
 #: frontend/src/components/share-link-panel/link-item.js:164
 #: frontend/src/components/shared-link.js:23
-#: frontend/src/components/toolbar/card-files-toolbar.js:188
+#: frontend/src/components/toolbar/card-files-toolbar.js:201
 #: frontend/src/components/toolbar/face-recognition-files-toolbar.js:181
 #: frontend/src/components/toolbar/gallery-files-toolbar.js:168
-#: frontend/src/components/toolbar/kanban-files-toolbar.js:188
+#: frontend/src/components/toolbar/kanban-files-toolbar.js:201
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:385
-#: frontend/src/components/toolbar/table-files-toolbar.js:197
-#: frontend/src/components/toolbar/table-files-toolbar.js:198
-#: frontend/src/components/toolbar/tag-files-toolbar.js:128
+#: frontend/src/components/toolbar/table-files-toolbar.js:210
+#: frontend/src/components/toolbar/table-files-toolbar.js:211
+#: frontend/src/components/toolbar/tag-files-toolbar.js:141
 #: frontend/src/pages/org-admin/org-saml-config.js:117
 #: frontend/src/pages/org-admin/org-saml-config.js:129
 #: frontend/src/pages/org-admin/org-saml-config.js:141
@@ -1947,8 +1951,8 @@ msgid "Device Name"
 msgstr "Назва приладу"
 
 #: frontend/src/components/dialog/file-access-log.js:106
-#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:32
-#: frontend/src/components/search/search-filters/filter-by-date.js:39
+#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:33
+#: frontend/src/components/search/search-filters/filter-by-date.js:40
 #: frontend/src/metadata/components/popover/column-popover/column-type-dropdown-menu/constants.js:108
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:102
 #: frontend/src/pages/org-admin/org-logs-file-transfer.js:76
@@ -2660,7 +2664,7 @@ msgstr "Файли з тегами"
 #: frontend/src/pages/wiki2/wiki-trash-dialog.js:145
 #: frontend/src/pages/wiki2/wiki-trash-dialog.js:153
 #: frontend/src/repo-folder-trash.js:257 frontend/src/repo-snapshot.js:203
-#: frontend/src/shared-dir-view.js:1084
+#: frontend/src/shared-dir-view.js:1088
 #: frontend/src/tag/views/tag-files/list/index.js:159
 #: frontend/src/utils/table-headers.js:100
 msgid "Size"
@@ -2680,7 +2684,7 @@ msgstr "Розмір"
 #: frontend/src/pages/starred/starred.js:47
 #: frontend/src/pages/sys-admin/repos/dir-content.js:126
 #: frontend/src/pages/sys-admin/users/user-repos.js:55
-#: frontend/src/shared-dir-view.js:1085
+#: frontend/src/shared-dir-view.js:1089
 msgid "Last Update"
 msgstr "Останнє оновлення"
 
@@ -2845,17 +2849,17 @@ msgstr "Виберіть дату"
 
 #: frontend/src/components/dialog/org-admin-logs-export-excel-dialog.js:153
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:154
-#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:152
-#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:244
-#: frontend/src/components/search/search-filters/filter-by-date.js:245
+#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:153
+#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:246
+#: frontend/src/components/search/search-filters/filter-by-date.js:246
 msgid "Start date"
 msgstr "Дата початку"
 
 #: frontend/src/components/dialog/org-admin-logs-export-excel-dialog.js:162
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:163
-#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:162
-#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:254
-#: frontend/src/components/search/search-filters/filter-by-date.js:255
+#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:163
+#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:256
+#: frontend/src/components/search/search-filters/filter-by-date.js:256
 msgid "End date"
 msgstr "Дата закінчення"
 
@@ -3008,7 +3012,7 @@ msgstr "API токен скопійовано в буфер обміну."
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:137
 #: frontend/src/components/dialog/trash-dialog/index.js:170
-#: frontend/src/repo-folder-trash.js:133 frontend/src/utils/utils.js:1526
+#: frontend/src/repo-folder-trash.js:133 frontend/src/utils/utils.js:1527
 msgid "Permission denied"
 msgstr "Доступ заборонено"
 
@@ -3042,7 +3046,7 @@ msgstr "Доступ заборонено"
 #: frontend/src/pages/upload-link/file-uploader.js:465
 #: frontend/src/pages/wiki2/wiki-trash-dialog.js:250
 #: frontend/src/pages/wikis/wikis.js:365 frontend/src/repo-folder-trash.js:138
-#: frontend/src/repo-folder-trash.js:348 frontend/src/utils/utils.js:1533
+#: frontend/src/repo-folder-trash.js:348 frontend/src/utils/utils.js:1534
 msgid "Error"
 msgstr "Помилка"
 
@@ -3055,7 +3059,7 @@ msgstr "Помилка"
 #: frontend/src/repo-folder-trash.js:144 frontend/src/repo-folder-trash.js:350
 #: frontend/src/shared-file-view-document.js:74
 #: frontend/src/shared-file-view-spreadsheet.js:71
-#: frontend/src/utils/utils.js:1539 frontend/src/view-file-document.js:76
+#: frontend/src/utils/utils.js:1540 frontend/src/view-file-document.js:76
 #: frontend/src/view-file-spreadsheet.js:71
 msgid "Please check the network."
 msgstr "Будь ласка, перевірте мережеве з’єднання."
@@ -3163,7 +3167,7 @@ msgstr ""
 #: frontend/src/components/dialog/repo-share-admin-dialog.js:76
 #: frontend/src/components/dialog/repo-share-admin/share-links.js:316
 #: frontend/src/pages/share-admin/share-links.js:592
-#: frontend/src/pages/share-admin/upload-links.js:420
+#: frontend/src/pages/share-admin/upload-links.js:421
 #: frontend/src/pages/sys-admin/links/links-nav.js:20
 msgid "Share Links"
 msgstr "Посилання для спільного доступу"
@@ -3171,7 +3175,7 @@ msgstr "Посилання для спільного доступу"
 #: frontend/src/components/dialog/repo-share-admin-dialog.js:83
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:305
 #: frontend/src/pages/share-admin/share-links.js:602
-#: frontend/src/pages/share-admin/upload-links.js:424
+#: frontend/src/pages/share-admin/upload-links.js:426
 #: frontend/src/pages/sys-admin/links/links-nav.js:21
 msgid "Upload Links"
 msgstr "З правом запису"
@@ -3219,9 +3223,9 @@ msgid "Select items"
 msgstr "Вибрати елементи"
 
 #: frontend/src/components/dialog/repo-share-admin/share-links.js:264
-#: frontend/src/components/dir-view-mode/dir-history-view/filters/creator-filter.js:89
+#: frontend/src/components/dir-view-mode/dir-history-view/filters/creator-filter.js:90
 #: frontend/src/components/dirent-detail/lib-details.js:20
-#: frontend/src/components/search/search-filters/filter-by-creator.js:107
+#: frontend/src/components/search/search-filters/filter-by-creator.js:108
 #: frontend/src/metadata/utils/column/index.js:174
 #: frontend/src/pages/org-admin/org-group-info.js:81
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:144
@@ -3269,24 +3273,24 @@ msgstr "Відвідування"
 
 #: frontend/src/components/dialog/repo-share-admin/share-links.js:362
 #: frontend/src/components/share-link-panel/link-list.js:141
-#: frontend/src/pages/share-admin/share-links.js:632
+#: frontend/src/pages/share-admin/share-links.js:633
 msgid "Delete share links"
 msgstr "Видалити посилання для спільного доступу"
 
 #: frontend/src/components/dialog/repo-share-admin/share-links.js:363
 #: frontend/src/components/share-link-panel/link-list.js:142
-#: frontend/src/pages/share-admin/share-links.js:633
+#: frontend/src/pages/share-admin/share-links.js:634
 msgid "Are you sure you want to delete the selected share link(s) ?"
 msgstr "Ви впевнені, що хочете видалити вибрані посилання?"
 
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:352
-#: frontend/src/pages/share-admin/upload-links.js:460
+#: frontend/src/pages/share-admin/upload-links.js:461
 #| msgid "No upload links"
 msgid "Delete upload links"
 msgstr "Видалити посилання для завантаження"
 
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:353
-#: frontend/src/pages/share-admin/upload-links.js:461
+#: frontend/src/pages/share-admin/upload-links.js:462
 #| msgid "Are you sure you want to delete the selected share link(s) ?"
 msgid "Are you sure you want to delete the selected upload link(s) ?"
 msgstr "Ви впевнені, що хочете видалити вибрані посилання для завантаження?"
@@ -3492,12 +3496,12 @@ msgstr "Надати доступ іншому серверу"
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:365
 #: frontend/src/components/toolbar/view-file-toolbar.js:66
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:243
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:182
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:183
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:54
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:351
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:412
 #: frontend/src/pages/shared-libs/item.js:184
-#: frontend/src/pages/shared-libs/item.js:220
+#: frontend/src/pages/shared-libs/item.js:221
 #: frontend/src/pages/sys-admin/repos/repos.js:238
 #: frontend/src/utils/text-translation.js:44
 msgid "Share"
@@ -4017,7 +4021,7 @@ msgstr "Файлів немає"
 #: frontend/src/components/dialog/trash-dialog/index.js:274
 #: frontend/src/components/shared-file-view/shared-file-view.js:160
 #: frontend/src/repo-folder-trash.js:214 frontend/src/repo-snapshot.js:170
-#: frontend/src/shared-dir-view.js:886
+#: frontend/src/shared-dir-view.js:890
 msgid "Current path: "
 msgstr "Поточний шлях: "
 
@@ -4052,10 +4056,10 @@ msgid "Original path"
 msgstr "Оригінальний шлях"
 
 #: frontend/src/components/dialog/trash-dialog/table/index.js:14
-#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:25
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:26
-#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:32
-#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:184
+#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:27
+#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:33
+#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:185
 #: frontend/src/components/dir-view-mode/dir-trash-view/utils.js:49
 #: frontend/src/components/dir-view-mode/dir-trash-view/utils.js:50
 #: frontend/src/pages/wiki2/wiki-trash-dialog.js:146
@@ -4065,73 +4069,73 @@ msgstr "Оригінальний шлях"
 msgid "Deleted time"
 msgstr "Час видалення"
 
-#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-creator.js:107
-#: frontend/src/components/dir-view-mode/dir-history-view/filters/creator-filter.js:89
+#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-creator.js:108
+#: frontend/src/components/dir-view-mode/dir-history-view/filters/creator-filter.js:90
 #| msgid "Deleted"
 msgid "Deleted by"
 msgstr "Видалив"
 
-#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-creator.js:126
-#: frontend/src/components/dir-view-mode/dir-history-view/filters/creator-filter.js:123
-#: frontend/src/components/search/search-filters/filter-by-creator.js:126
+#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-creator.js:127
+#: frontend/src/components/dir-view-mode/dir-history-view/filters/creator-filter.js:124
+#: frontend/src/components/search/search-filters/filter-by-creator.js:127
 #| msgid "Search users"
 msgid "Search user"
 msgstr "Шукати користувача"
 
-#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:33
-#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:39
-#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:55
-#: frontend/src/components/search/search-filters/filter-by-date.js:59
+#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:34
+#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:40
+#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:56
+#: frontend/src/components/search/search-filters/filter-by-date.js:60
 #: frontend/src/metadata/constants/filter/filter-modifier.js:28
 msgid "Today"
 msgstr "Сьогодні"
 
-#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:36
-#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:41
-#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:58
-#: frontend/src/components/search/search-filters/filter-by-date.js:62
+#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:37
+#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:42
+#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:59
+#: frontend/src/components/search/search-filters/filter-by-date.js:63
 #| msgid "Last Update"
 msgid "Last 7 days"
 msgstr "Останні 7 днів"
 
-#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:39
-#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:43
-#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:61
-#: frontend/src/components/search/search-filters/filter-by-date.js:65
+#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:40
+#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:44
+#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:62
+#: frontend/src/components/search/search-filters/filter-by-date.js:66
 #| msgid "Last Update"
 msgid "Last 30 days"
 msgstr "Останні 30 днів"
 
-#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:44
-#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:45
-#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:66
-#: frontend/src/components/search/search-filters/filter-by-date.js:70
+#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:45
+#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:46
+#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:67
+#: frontend/src/components/search/search-filters/filter-by-date.js:71
 #| msgid "Custom properties"
 msgid "Custom time"
 msgstr "Власний період"
 
-#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-suffix.js:59
-#: frontend/src/components/dir-view-mode/dir-trash-view/file-suffix-filter/index.js:56
-#: frontend/src/components/search/search-filters/filter-by-suffix.js:56
+#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-suffix.js:60
+#: frontend/src/components/dir-view-mode/dir-trash-view/file-suffix-filter/index.js:57
+#: frontend/src/components/search/search-filters/filter-by-suffix.js:57
 #: frontend/src/metadata/utils/column/index.js:215
 #| msgid "File status"
 msgid "File suffix"
 msgstr "Суфікс файлу"
 
-#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-suffix.js:68
-#: frontend/src/components/dir-view-mode/dir-trash-view/file-suffix-filter/index.js:64
-#: frontend/src/components/search/search-filters/filter-by-suffix.js:65
+#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-suffix.js:69
+#: frontend/src/components/dir-view-mode/dir-trash-view/file-suffix-filter/index.js:68
+#: frontend/src/components/search/search-filters/filter-by-suffix.js:66
 msgid "Separate multiple suffixes by \",\"(like sdoc, pdf)"
 msgstr "Розділяйте суфікси комами \",\" (наприклад: sdoc, pdf)"
 
-#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-suffix.js:80
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-suffix.js:81
-#: frontend/src/components/dir-view-mode/dir-trash-view/file-suffix-filter/index.js:78
-#: frontend/src/components/dir-view-mode/dir-trash-view/file-suffix-filter/index.js:79
+#: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-suffix.js:82
+#: frontend/src/components/dir-view-mode/dir-trash-view/file-suffix-filter/index.js:82
+#: frontend/src/components/dir-view-mode/dir-trash-view/file-suffix-filter/index.js:83
 #: frontend/src/components/manage-members-dialog.js:219
-#: frontend/src/components/search/search-filters/filter-by-suffix.js:78
-#: frontend/src/components/search/search-filters/filter-by-suffix.js:81
-#: frontend/src/metadata/components/cell-editors/tags-editor/index.js:419
+#: frontend/src/components/search/search-filters/filter-by-suffix.js:79
+#: frontend/src/components/search/search-filters/filter-by-suffix.js:82
+#: frontend/src/metadata/components/cell-editors/tags-editor/index.js:420
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:411
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:420
 #: frontend/src/user-notifications.js:176
@@ -4304,10 +4308,10 @@ msgstr "Версія"
 msgid "Labels"
 msgstr "Мітки"
 
-#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:184
-#: frontend/src/components/search/search-filters/filter-by-date.js:30
-#: frontend/src/components/search/search-filters/filter-by-date.js:34
-#: frontend/src/components/search/search-filters/filter-by-date.js:47
+#: frontend/src/components/dir-view-mode/dir-history-view/filters/date-filter.js:185
+#: frontend/src/components/search/search-filters/filter-by-date.js:31
+#: frontend/src/components/search/search-filters/filter-by-date.js:35
+#: frontend/src/components/search/search-filters/filter-by-date.js:48
 #| msgid "Created time"
 msgid "Create time"
 msgstr "Час створення"
@@ -4455,8 +4459,8 @@ msgstr "Редагувати властивості метаданих"
 #: frontend/src/components/dirent-detail/dirent-details/dir-details.js:15
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:65
 #: frontend/src/components/dirent-detail/lib-details.js:21
-#: frontend/src/components/search/search-filters/filter-by-date.js:32
-#: frontend/src/components/search/search-filters/filter-by-date.js:50
+#: frontend/src/components/search/search-filters/filter-by-date.js:33
+#: frontend/src/components/search/search-filters/filter-by-date.js:51
 #: frontend/src/metadata/utils/column/index.js:171
 msgid "Last modified time"
 msgstr "Час останньої зміни"
@@ -4475,7 +4479,7 @@ msgid "Fold"
 msgstr "Згорнути"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/collapse/index.js:26
-#: frontend/src/components/file-view/file-view.js:307
+#: frontend/src/components/file-view/file-view.js:303
 #: frontend/src/components/main-side-nav.js:302
 #: frontend/src/components/main-side-nav.js:374
 #: frontend/src/components/sf-table/table-main/records/record/cell/index.js:189
@@ -4587,62 +4591,62 @@ msgstr "Завантаження метаданих..."
 msgid "Unknown people"
 msgstr "Невідомі люди"
 
-#: frontend/src/components/dirent-grid-view/dirent-grid-item.js:532
+#: frontend/src/components/dirent-grid-view/dirent-grid-item.js:536
 #: frontend/src/metadata/views/card/card-items/card-item/index.js:309
 #: frontend/src/metadata/views/gallery/image.js:189
 msgid "Unmute"
 msgstr ""
 
-#: frontend/src/components/dirent-grid-view/dirent-grid-item.js:532
+#: frontend/src/components/dirent-grid-view/dirent-grid-item.js:536
 #: frontend/src/metadata/views/card/card-items/card-item/index.js:309
 #: frontend/src/metadata/views/gallery/image.js:189
 msgid "Mute"
 msgstr ""
 
-#: frontend/src/components/dirent-grid-view/dirent-grid-item.js:556
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:580
+#: frontend/src/components/dirent-grid-view/dirent-grid-item.js:560
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:597
 #: frontend/src/metadata/components/cell-formatter/file-name-formatter/index.js:27
 #: frontend/src/pages/wiki2/top-nav/index.js:37
 msgid "freezed"
 msgstr "заморожено"
 
-#: frontend/src/components/dirent-grid-view/dirent-grid-item.js:556
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:580
+#: frontend/src/components/dirent-grid-view/dirent-grid-item.js:560
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:597
 #: frontend/src/components/file-view/file-info.js:29
 #: frontend/src/metadata/components/cell-formatter/file-name-formatter/index.js:27
 #: frontend/src/pages/markdown-editor/header-toolbar/file-info.js:17
 msgid "locked"
 msgstr "заблоковано"
 
-#: frontend/src/components/dirent-grid-view/dirent-grid-item.js:557
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:574
+#: frontend/src/components/dirent-grid-view/dirent-grid-item.js:561
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:591
 #: frontend/src/metadata/components/cell-formatter/file-name-formatter/index.js:28
 msgid "Frozen by {name}"
 msgstr "Заморожено користувачем {name}"
 
-#: frontend/src/components/dirent-grid-view/dirent-grid-item.js:557
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:574
+#: frontend/src/components/dirent-grid-view/dirent-grid-item.js:561
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:591
 #: frontend/src/metadata/components/cell-formatter/file-name-formatter/index.js:28
 msgid "locked by {name}"
 msgstr "заблоковано користувачем {name}"
 
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:694
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:695
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:711
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:712
 #: frontend/src/pages/share-admin/share-links.js:297
 #: frontend/src/pages/share-admin/upload-links.js:199
 #| msgid "Unselect"
 msgid "Unselect this item"
 msgstr "Скасувати вибір цього елемента"
 
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:694
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:695
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:711
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:712
 #: frontend/src/pages/share-admin/share-links.js:297
 #: frontend/src/pages/share-admin/upload-links.js:199
 #| msgid "Select File"
 msgid "Select this item"
 msgstr "Вибрати цей елемент"
 
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:711
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:728
 #: frontend/src/components/library-op-menu.js:122
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:293
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:335
@@ -4653,7 +4657,7 @@ msgstr "Вибрати цей елемент"
 msgid "Unstar"
 msgstr "Зняти відмітку"
 
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:711
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:728
 #: frontend/src/components/library-op-menu.js:119
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:293
 #: frontend/src/utils/text-translation.js:176
@@ -4707,14 +4711,14 @@ msgstr "Нічого не знайдено"
 msgid "Libraries"
 msgstr "Бібліотеки"
 
-#: frontend/src/components/file-content-view/image.js:92
-#: frontend/src/shared-file-view-image.js:52
+#: frontend/src/components/file-content-view/image.js:93
+#: frontend/src/shared-file-view-image.js:53
 #| msgid "you can also press ← "
 msgid "You can also press ← "
 msgstr ""
 
-#: frontend/src/components/file-content-view/image.js:97
-#: frontend/src/shared-file-view-image.js:57
+#: frontend/src/components/file-content-view/image.js:98
+#: frontend/src/shared-file-view-image.js:58
 #| msgid "you can also press →"
 msgid "You can also press →"
 msgstr ""
@@ -4785,8 +4789,8 @@ msgstr "Залишилося"
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:97
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:123
 #: frontend/src/pages/excalidraw-editor/editor/tip-message.js:140
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:188
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:246
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:189
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:247
 #: frontend/src/pages/upload-link/upload-list-item.js:97
 #: frontend/src/pages/upload-link/upload-list-item.js:131
 msgid "Saving..."
@@ -4888,32 +4892,6 @@ msgstr "прогрес"
 msgid "state"
 msgstr "стан"
 
-#: frontend/src/components/file-view/comment-widget/comment-body-header.js:11
-#: frontend/src/components/file-view/comment-widget/comment-body-header.js:17
-#: frontend/src/components/file-view/comment-widget/comment-body-header.js:33
-#| msgid "No tags"
-msgid "All comments"
-msgstr "Усі коментарі"
-
-#: frontend/src/components/file-view/comment-widget/comment-body-header.js:13
-#: frontend/src/components/file-view/comment-widget/comment-body-header.js:34
-msgid "Resolved comments"
-msgstr "Рішені коментарі"
-
-#: frontend/src/components/file-view/comment-widget/comment-body-header.js:15
-#: frontend/src/components/file-view/comment-widget/comment-body-header.js:35
-#| msgid "Unfreeze Document"
-msgid "Unresolved comments"
-msgstr "Нерішені коментарі"
-
-#: frontend/src/components/file-view/comment-widget/comment-body-header.js:24
-msgid "Total {comments_count} comment"
-msgstr "Всього {comments_count} коментар"
-
-#: frontend/src/components/file-view/comment-widget/comment-body-header.js:28
-msgid "Total {comments_count} comments"
-msgstr "Всього {comments_count} коментарів"
-
 #: frontend/src/components/file-view/comment-widget/comment-delete-popover.js:60
 #| msgid "Are you sure to delete "
 msgid "Are you sure to delete this comment?"
@@ -4934,16 +4912,30 @@ msgstr "Позначає як вирішені"
 msgid "Resubmit"
 msgstr "Поновити"
 
-#: frontend/src/components/file-view/comment-widget/comment-list.js:105
-#| msgid "Documents"
-msgid "Comments"
-msgstr "Коментарі"
+#: frontend/src/components/file-view/comment-widget/comment-list.js:103
+#: frontend/src/components/file-view/comment-widget/comment-list.js:127
+#| msgid "No tags"
+msgid "All comments"
+msgstr "Усі коментарі"
 
-#: frontend/src/components/file-view/comment-widget/comment-list.js:142
+#: frontend/src/components/file-view/comment-widget/comment-list.js:109
+msgid "Resolved comments"
+msgstr "Рішені коментарі"
+
+#: frontend/src/components/file-view/comment-widget/comment-list.js:115
+#| msgid "Unfreeze Document"
+msgid "Unresolved comments"
+msgstr "Нерішені коментарі"
+
+#: frontend/src/components/file-view/comment-widget/comment-list.js:130
+msgid "All comments ({comments_count})"
+msgstr ""
+
+#: frontend/src/components/file-view/comment-widget/comment-list.js:181
 msgid "No comment yet."
 msgstr "Ще немає коментарів"
 
-#: frontend/src/components/file-view/comment-widget/reply-list.js:93
+#: frontend/src/components/file-view/comment-widget/reply-list.js:91
 #| msgid "File details"
 msgid "Comment details"
 msgstr "Деталі коментаря"
@@ -4968,14 +4960,14 @@ msgstr "Відкрити батьківську папку"
 
 #: frontend/src/components/file-view/file-toolbar.js:103
 #: frontend/src/components/file-view/file-toolbar.js:135
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:167
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:168
 #: frontend/src/utils/text-translation.js:96
 msgid "Lock"
 msgstr "Заблокувати"
 
 #: frontend/src/components/file-view/file-toolbar.js:106
 #: frontend/src/components/file-view/file-toolbar.js:139
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:175
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:176
 #: frontend/src/utils/text-translation.js:100
 msgid "Unlock"
 msgstr "Розблокувати"
@@ -4983,7 +4975,7 @@ msgstr "Розблокувати"
 #: frontend/src/components/file-view/file-toolbar.js:119
 #: frontend/src/components/file-view/file-toolbar.js:230
 #: frontend/src/components/file-view/onlyoffice-file-toolbar.js:57
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:212
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:213
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:51
 #: frontend/src/pages/wiki2/wiki-comment/plugin-item.js:27
 #| msgid "Document"
@@ -5006,11 +4998,11 @@ msgstr "Вивід"
 #: frontend/src/components/file-view/file-toolbar.js:202
 #: frontend/src/components/file-view/file-toolbar.js:272
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/location-controls.js:39
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:193
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:251
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:292
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:321
-#: frontend/src/shared-dir-view.js:251 frontend/src/shared-dir-view.js:879
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:194
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:252
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:293
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:322
+#: frontend/src/shared-dir-view.js:255 frontend/src/shared-dir-view.js:883
 msgid "Save"
 msgstr "Зберегти"
 
@@ -5047,7 +5039,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/user-groups.js:116
 #: frontend/src/pages/sys-admin/users/user-links.js:159
 #: frontend/src/pages/sys-admin/users/users-nav.js:30
-#: frontend/src/utils/utils.js:932
+#: frontend/src/utils/utils.js:933
 msgid "Admin"
 msgstr "Адміністратор"
 
@@ -5161,7 +5153,7 @@ msgstr "Керування спільним доступом"
 
 #: frontend/src/components/library-op-menu.js:158
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:329
-#: frontend/src/metadata/components/popover/filter-popover/index.js:144
+#: frontend/src/metadata/components/popover/filter-popover/index.js:145
 #: frontend/src/utils/text-translation.js:206
 msgid "Advanced"
 msgstr "Додатково"
@@ -5442,7 +5434,7 @@ msgid "File name only"
 msgstr "Тільки назва файлу"
 
 #: frontend/src/components/search/search-tags/index.js:61
-#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:163
+#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:166
 #: frontend/src/tag/views/all-tags/tags-table/editors/tag-name.js:34
 #| msgid "Edit Quota"
 msgid "Edit tag"
@@ -5820,8 +5812,8 @@ msgstr "Примусова точність"
 msgid "Precision"
 msgstr "Точність"
 
-#: frontend/src/components/sf-table/table-main/records-header/insert-column/index.js:110
-#: frontend/src/components/sf-table/table-main/records-header/insert-column/index.js:114
+#: frontend/src/components/sf-table/table-main/records-header/insert-column/index.js:111
+#: frontend/src/components/sf-table/table-main/records-header/insert-column/index.js:115
 #| msgid "Add icon"
 msgid "Add column"
 msgstr "Додати стовпець"
@@ -6040,7 +6032,7 @@ msgstr "Бібліотеку {library_name_placeholder} успішно позн�
 msgid "Starred"
 msgstr "Позначений"
 
-#: frontend/src/components/single-selector.js:79
+#: frontend/src/components/single-selector.js:70
 #| msgid "Clear selected"
 msgid "Toggle selector menu"
 msgstr "Переключити меню вибору"
@@ -6093,46 +6085,46 @@ msgstr "Змінити режим сортування"
 
 #: frontend/src/components/toolbar/all-tags-toolbar.js:75
 #: frontend/src/components/toolbar/all-tags-toolbar.js:78
-#: frontend/src/components/toolbar/card-files-toolbar.js:179
+#: frontend/src/components/toolbar/card-files-toolbar.js:192
 #: frontend/src/components/toolbar/face-recognition-files-toolbar.js:173
 #: frontend/src/components/toolbar/gallery-files-toolbar.js:160
-#: frontend/src/components/toolbar/kanban-files-toolbar.js:179
+#: frontend/src/components/toolbar/kanban-files-toolbar.js:192
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:336
-#: frontend/src/components/toolbar/table-files-toolbar.js:177
-#: frontend/src/components/toolbar/tag-files-toolbar.js:117
-#: frontend/src/components/toolbar/tag-files-toolbar.js:120
+#: frontend/src/components/toolbar/table-files-toolbar.js:190
+#: frontend/src/components/toolbar/tag-files-toolbar.js:130
+#: frontend/src/components/toolbar/tag-files-toolbar.js:133
 #: frontend/src/components/toolbar/trash-toolbar.js:38
 #: frontend/src/components/toolbar/trash-toolbar.js:41
 #: frontend/src/pages/dashboard/user-selector.js:103
 #: frontend/src/pages/share-admin/share-links.js:573
 #: frontend/src/pages/share-admin/upload-links.js:401
-#: frontend/src/shared-dir-view.js:862
+#: frontend/src/shared-dir-view.js:866
 msgid "Unselect"
 msgstr "Скасувати вибір"
 
 #: frontend/src/components/toolbar/all-tags-toolbar.js:81
-#: frontend/src/components/toolbar/card-files-toolbar.js:182
+#: frontend/src/components/toolbar/card-files-toolbar.js:195
 #: frontend/src/components/toolbar/face-recognition-files-toolbar.js:176
 #: frontend/src/components/toolbar/gallery-files-toolbar.js:163
-#: frontend/src/components/toolbar/kanban-files-toolbar.js:182
+#: frontend/src/components/toolbar/kanban-files-toolbar.js:195
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:338
-#: frontend/src/components/toolbar/table-files-toolbar.js:180
-#: frontend/src/components/toolbar/tag-files-toolbar.js:123
+#: frontend/src/components/toolbar/table-files-toolbar.js:193
+#: frontend/src/components/toolbar/tag-files-toolbar.js:136
 #: frontend/src/components/toolbar/trash-toolbar.js:44
 #: frontend/src/pages/share-admin/share-links.js:576
 #: frontend/src/pages/share-admin/upload-links.js:405
-#: frontend/src/shared-dir-view.js:866
+#: frontend/src/shared-dir-view.js:870
 msgid "selected"
 msgstr "вибрано"
 
-#: frontend/src/components/toolbar/card-files-toolbar.js:187
+#: frontend/src/components/toolbar/card-files-toolbar.js:200
 #: frontend/src/components/toolbar/face-recognition-files-toolbar.js:180
 #: frontend/src/components/toolbar/gallery-files-toolbar.js:167
-#: frontend/src/components/toolbar/kanban-files-toolbar.js:187
+#: frontend/src/components/toolbar/kanban-files-toolbar.js:200
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:375
-#: frontend/src/components/toolbar/table-files-toolbar.js:189
-#: frontend/src/components/toolbar/table-files-toolbar.js:190
-#: frontend/src/components/toolbar/tag-files-toolbar.js:127
+#: frontend/src/components/toolbar/table-files-toolbar.js:202
+#: frontend/src/components/toolbar/table-files-toolbar.js:203
+#: frontend/src/components/toolbar/tag-files-toolbar.js:140
 #: frontend/src/metadata/metadata-tree-view/view.js:110
 #: frontend/src/utils/text-translation.js:60
 msgid "Move"
@@ -6150,7 +6142,7 @@ msgstr "Шлях скопійовано в буфер обміну"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:128
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:29
-#: frontend/src/shared-dir-view.js:262
+#: frontend/src/shared-dir-view.js:266
 msgid "Upload Files"
 msgstr "Завантажити файли"
 
@@ -6656,7 +6648,7 @@ msgstr "Усі теги"
 msgid "Search tag"
 msgstr "Пошук тегу"
 
-#: frontend/src/metadata/components/cell-editors/tags-editor/index.js:433
+#: frontend/src/metadata/components/cell-editors/tags-editor/index.js:434
 #| msgid "Add User"
 msgid "Add tag"
 msgstr "Додати тег"
@@ -6978,12 +6970,12 @@ msgstr "Множинний вибір"
 msgid "Rate"
 msgstr "Рейтинг"
 
-#: frontend/src/metadata/components/popover/column-popover/column-type-dropdown-menu/index.js:57
+#: frontend/src/metadata/components/popover/column-popover/column-type-dropdown-menu/index.js:58
 #| msgid "Search property"
 msgid "Search properties"
 msgstr "Пошук властивостей"
 
-#: frontend/src/metadata/components/popover/column-popover/column-type-dropdown-menu/index.js:93
+#: frontend/src/metadata/components/popover/column-popover/column-type-dropdown-menu/index.js:94
 msgid "Custom properties"
 msgstr "Спеціальні властивості"
 
@@ -7009,7 +7001,7 @@ msgid "Name cannot contain dots"
 msgstr "Назва не може містити крапки"
 
 #: frontend/src/metadata/components/popover/column-popover/utils.js:17
-#: frontend/src/utils/utils.js:2054
+#: frontend/src/utils/utils.js:2055
 msgid "Name cannot contain backtick"
 msgstr "Назва не може містити зворотні лапки (`)"
 
@@ -7110,11 +7102,11 @@ msgstr "Основне"
 msgid "File type"
 msgstr "Тип файлу"
 
-#: frontend/src/metadata/components/popover/filter-popover/index.js:150
+#: frontend/src/metadata/components/popover/filter-popover/index.js:151
 msgid "No filters"
 msgstr "Немає фільтрів"
 
-#: frontend/src/metadata/components/popover/filter-popover/index.js:166
+#: frontend/src/metadata/components/popover/filter-popover/index.js:167
 #| msgid "1 filter"
 msgid "Add filter"
 msgstr "Додати фільтр"
@@ -7822,13 +7814,13 @@ msgstr "Назва має бути рядком"
 
 #: frontend/src/metadata/utils/validate/view.js:12
 #: frontend/src/pages/wiki2/wiki-nav/add-new-page-dialog.js:58
-#: frontend/src/tag/utils/validate/tag.js:12 frontend/src/utils/utils.js:2049
+#: frontend/src/tag/utils/validate/tag.js:12 frontend/src/utils/utils.js:2050
 msgid "Name cannot contain slash"
 msgstr "Назва не може містити косу риску"
 
 #: frontend/src/metadata/utils/validate/view.js:15
 #: frontend/src/pages/wiki2/wiki-nav/add-new-page-dialog.js:62
-#: frontend/src/tag/utils/validate/tag.js:15 frontend/src/utils/utils.js:2059
+#: frontend/src/tag/utils/validate/tag.js:15 frontend/src/utils/utils.js:2060
 msgid "Name cannot contain backslash"
 msgstr "Назва не може містити зворотну косу риску"
 
@@ -8271,7 +8263,7 @@ msgid "This is a special group representing a department."
 msgstr "Це спеціальна група, що представляє відділ."
 
 #: frontend/src/pages/institution-admin/user-content/index.js:7
-#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:219
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:220
 #: frontend/src/pages/org-admin/org-info.js:56
 #: frontend/src/pages/org-admin/side-panel.js:39
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:141
@@ -8448,7 +8440,7 @@ msgid "Failed to move files to another library."
 msgstr "Не вдалося перемістити файли в іншу бібліотеку."
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1005
-#: frontend/src/shared-dir-view.js:401
+#: frontend/src/shared-dir-view.js:405
 msgid "Failed to copy files to another library."
 msgstr "Не вдалося скопіювати файли в іншу бібліотеку."
 
@@ -8457,7 +8449,7 @@ msgid "Successfully moved files to another library."
 msgstr "Файли успішно переміщено в іншу бібліотеку."
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1046
-#: frontend/src/shared-dir-view.js:415
+#: frontend/src/shared-dir-view.js:419
 msgid "Successfully copied files to another library."
 msgstr "Файли успішно скопійовано в іншу бібліотеку."
 
@@ -8510,7 +8502,7 @@ msgstr "Успішно скопійовано {name} та ще {n} елемен�
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1815
 #: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:139
-#: frontend/src/utils/utils.js:1635
+#: frontend/src/utils/utils.js:1636
 msgid "Successfully copied %(name)s."
 msgstr "Успішно скопійовано %(name)s."
 
@@ -8536,7 +8528,7 @@ msgstr "Конвертація, зачекайте..."
 #: frontend/src/pages/share-with-ocm/shared-with-ocm.js:178
 #: frontend/src/pages/share-with-ocm/shared-with-ocm.js:216
 #: frontend/src/pages/shared-libs/item.js:192
-#: frontend/src/pages/shared-libs/item.js:226
+#: frontend/src/pages/shared-libs/item.js:228
 msgid "Leave Share"
 msgstr "Залишити спільний доступ"
 
@@ -8743,12 +8735,12 @@ msgstr "Скопіюйте сертифікат IdP і вставте його �
 #: frontend/src/pages/org-admin/libraries/org-all-repos.js:213
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:181
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:257
-#: frontend/src/utils/utils.js:491
+#: frontend/src/utils/utils.js:492
 msgid "Encrypted library"
 msgstr "Зашифрована бібліотека"
 
 #: frontend/src/pages/org-admin/libraries/org-all-repos.js:213
-#: frontend/src/utils/utils.js:497
+#: frontend/src/utils/utils.js:498
 msgid "Read-Write library"
 msgstr "Бібліотека для читання та запису"
 
@@ -9501,13 +9493,13 @@ msgstr "(видалено)"
 msgid "Successfully cleaned invalid share links."
 msgstr "Недійсні посилання спільного доступу очищено."
 
-#: frontend/src/pages/share-admin/share-links.js:594
-#: frontend/src/pages/share-admin/share-links.js:623
+#: frontend/src/pages/share-admin/share-links.js:595
+#: frontend/src/pages/share-admin/share-links.js:624
 #| msgid "Delete share links"
 msgid "Clean invalid share links"
 msgstr "Очистити недійсні спільні посилання"
 
-#: frontend/src/pages/share-admin/share-links.js:624
+#: frontend/src/pages/share-admin/share-links.js:625
 #| msgid "Are you sure you want to delete the selected share link(s) ?"
 msgid "Are you sure you want to clean invalid share links?"
 msgstr "Ви впевнені, що хочете очистити недійсні посилання спільного доступу?"
@@ -9528,12 +9520,12 @@ msgid "Successfully deleted {number_placeholder} upload links"
 msgstr "Успішно видалено {number_placeholder} посилань для завантаження"
 
 #: frontend/src/pages/share-admin/upload-links.js:390
-#: frontend/src/pages/share-admin/upload-links.js:451
+#: frontend/src/pages/share-admin/upload-links.js:452
 #| msgid "No upload links"
 msgid "Clean invalid upload links"
 msgstr "Очистити недійсні посилання завантаження"
 
-#: frontend/src/pages/share-admin/upload-links.js:452
+#: frontend/src/pages/share-admin/upload-links.js:453
 #| msgid "Are you sure you want to clear trash?"
 msgid "Are you sure you want to clean invalid upload links?"
 msgstr "Ви впевнені, що хочете очистити недійсні посилання для завантаження?"
@@ -10523,7 +10515,7 @@ msgid "Upload files to"
 msgstr "Завантажити файли в"
 
 #: frontend/src/pages/upload-link/index.js:55
-#: frontend/src/shared-dir-view.js:261 frontend/src/shared-dir-view.js:268
+#: frontend/src/shared-dir-view.js:265 frontend/src/shared-dir-view.js:272
 msgid "The owner of this library has run out of space."
 msgstr "Власник цієї бібліотеки перевищив допустимий ліміт."
 
@@ -10536,7 +10528,7 @@ msgid "Drag and drop files or folders here."
 msgstr "Перетягніть файли або папки сюди."
 
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:30
-#: frontend/src/shared-dir-view.js:269
+#: frontend/src/shared-dir-view.js:273
 msgid "Upload Folder"
 msgstr "Завантажити папку"
 
@@ -10766,12 +10758,12 @@ msgstr "Інформацію користувача оновлено"
 msgid "Profile Setting"
 msgstr "Налаштування профілю"
 
-#: frontend/src/shared-dir-view.js:244
+#: frontend/src/shared-dir-view.js:248
 #| msgid "IP"
 msgid "ZIP"
 msgstr "ZIP"
 
-#: frontend/src/shared-dir-view.js:830
+#: frontend/src/shared-dir-view.js:834
 #| msgid "Shared by"
 msgid "Shared by: "
 msgstr "Спільний доступ: "
@@ -10898,37 +10890,37 @@ msgstr "Кількість дочірніх тегів"
 msgid "File count"
 msgstr "Кількість файлів"
 
-#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:90
-#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:144
-#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:197
+#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:93
+#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:147
+#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:200
 msgid "Export tags"
 msgstr "Експортувати теги"
 
-#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:98
-#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:177
+#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:101
+#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:180
 #| msgid "Delete page"
 msgid "Delete tag"
 msgstr "Видалити тег"
 
-#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:104
-#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:137
+#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:107
+#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:140
 #| msgid "Delete page"
 msgid "Delete tags"
 msgstr "Видалити теги"
 
-#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:130
+#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:133
 #: frontend/src/utils/text-translation.js:311
 #| msgid "Delete page"
 msgid "Merge tags"
 msgstr "Об'єднати теги"
 
-#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:170
-#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:190
+#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:173
+#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:193
 #| msgid "Set Quota"
 msgid "Set child tags"
 msgstr "Встановити дочірні теги"
 
-#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:185
+#: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:188
 #: frontend/src/tag/views/all-tags/tags-table/index.js:335
 #: frontend/src/utils/text-translation.js:315
 #| msgid "New Tag"
@@ -11132,6 +11124,15 @@ msgstr "Відкрити в новій вкладці"
 msgid "Grid view"
 msgstr "Вигляд сіткою"
 
+#: frontend/src/translate.js:47
+#| msgid "Copy"
+msgid "Copy path"
+msgstr "Копіювати шлях"
+
+#: frontend/src/translate.js:48
+msgid "New"
+msgstr "Новий"
+
 #: frontend/src/user-notifications.js:268
 #: frontend/src/user-notifications.js:273
 #| msgid "Updated file"
@@ -11324,139 +11325,142 @@ msgstr "Додати в групи"
 msgid "Set as cover photo"
 msgstr "Встановити як обкладинку"
 
-#: frontend/src/utils/utils.js:493
+#: frontend/src/utils/utils.js:494
 msgid "Admin access"
 msgstr "Адмін-доступ"
 
-#: frontend/src/utils/utils.js:500
+#: frontend/src/utils/utils.js:501
 msgid "Read-Only library"
 msgstr "Бібліотека тільки для читання"
 
-#: frontend/src/utils/utils.js:503
+#: frontend/src/utils/utils.js:504
 msgid "Online Read-Write library"
 msgstr "Онлайн-бібліотека читання/запис"
 
-#: frontend/src/utils/utils.js:506
+#: frontend/src/utils/utils.js:507
 msgid "Online Read-Only library"
 msgstr "Онлайн-бібліотека тільки для читання"
 
-#: frontend/src/utils/utils.js:517
+#: frontend/src/utils/utils.js:518
 msgid "Read-Write folder"
 msgstr "Папка для читання та запису"
 
-#: frontend/src/utils/utils.js:520
+#: frontend/src/utils/utils.js:521
 msgid "Read-Only folder"
 msgstr "Папка тільки для читання"
 
-#: frontend/src/utils/utils.js:523
+#: frontend/src/utils/utils.js:524
 msgid "Online Read-Write folder"
 msgstr "Онлайн-папка читання/запис"
 
-#: frontend/src/utils/utils.js:526
+#: frontend/src/utils/utils.js:527
 msgid "Online Read-Only folder"
 msgstr "Онлайн-папка тільки для читання"
 
-#: frontend/src/utils/utils.js:935
+#: frontend/src/utils/utils.js:936
 msgid "Online Read-Write"
 msgstr "Онлайн читання/запис"
 
-#: frontend/src/utils/utils.js:938
+#: frontend/src/utils/utils.js:939
 msgid "Online Read-Only"
 msgstr "Онлайн тільки читання"
 
-#: frontend/src/utils/utils.js:941
+#: frontend/src/utils/utils.js:942
 msgid "Invisible"
 msgstr "Невидимий"
 
-#: frontend/src/utils/utils.js:951
+#: frontend/src/utils/utils.js:952
 msgid "User can read, write, upload, download and sync files."
 msgstr "Користувач може читати, писати, завантажувати та синхронізувати файли."
 
-#: frontend/src/utils/utils.js:954
+#: frontend/src/utils/utils.js:955
 msgid "User can read, download and sync files."
 msgstr "Користувач може читати, завантажувати та синхронізувати файли."
 
-#: frontend/src/utils/utils.js:957
+#: frontend/src/utils/utils.js:958
 msgid "Besides Write permission, user can also share the library."
 msgstr "Крім запису, користувач може ділитися бібліотекою."
 
-#: frontend/src/utils/utils.js:960
+#: frontend/src/utils/utils.js:961
 msgid ""
 "User can view and edit file online via browser. Files can't be downloaded."
 msgstr "Можна переглядати та редагувати онлайн. Завантаження заборонено."
 
-#: frontend/src/utils/utils.js:963
+#: frontend/src/utils/utils.js:964
 msgid ""
 "User can only view files online via browser. Files can't be downloaded."
 msgstr "Тільки онлайн-перегляд. Завантаження заборонено."
 
-#: frontend/src/utils/utils.js:966
+#: frontend/src/utils/utils.js:967
 msgid "User can not see this folder."
 msgstr "Користувач не бачить цю папку."
 
-#: frontend/src/utils/utils.js:977
+#: frontend/src/utils/utils.js:978
 msgid "Preview and download"
 msgstr "Попередній перегляд та завантаження"
 
-#: frontend/src/utils/utils.js:987
+#: frontend/src/utils/utils.js:988
 msgid "Preview only"
 msgstr "Тільки попередній перегляд"
 
-#: frontend/src/utils/utils.js:997
+#: frontend/src/utils/utils.js:998
 msgid "Download and upload"
 msgstr "Завантаження та вивантаження"
 
-#: frontend/src/utils/utils.js:1007
+#: frontend/src/utils/utils.js:1008
 msgid "Edit on cloud and download"
 msgstr "Редагування в хмарі та завантаження"
 
-#: frontend/src/utils/utils.js:1017
+#: frontend/src/utils/utils.js:1018
 msgid "Edit on cloud only"
 msgstr "Тільки редагування в хмарі"
 
-#: frontend/src/utils/utils.js:1528
+#: frontend/src/utils/utils.js:1529
 msgid "Too many requests"
 msgstr "Занадто багато запитів"
 
-#: frontend/src/utils/utils.js:1637
+#: frontend/src/utils/utils.js:1638
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr "Успішно скопійовано %(name)s та ще 1 елемент."
 
-#: frontend/src/utils/utils.js:1639
+#: frontend/src/utils/utils.js:1640
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "Успішно скопійовано %(name)s та %(amount)s інших позицій."
 
-#: frontend/src/utils/utils.js:1650
+#: frontend/src/utils/utils.js:1651
 msgid "Successfully moved %(name)s."
 msgstr "Успішно переміщено %(name)s."
 
-#: frontend/src/utils/utils.js:1652
+#: frontend/src/utils/utils.js:1653
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr "Успішно переміщено %(name)s та ще 1 елемент."
 
-#: frontend/src/utils/utils.js:1654
+#: frontend/src/utils/utils.js:1655
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "Успішно переміщено %(name)s та %(amount)s інших позицій."
 
-#: frontend/src/utils/utils.js:1666
+#: frontend/src/utils/utils.js:1667
 msgid "Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr "Не вдалося скопіювати %(name)s та ще %(amount)s елемент(ів)."
 
-#: frontend/src/utils/utils.js:1669
+#: frontend/src/utils/utils.js:1670
 msgid "Failed to copy %(name)s."
 msgstr "Не вдалося скопіювати %(name)s."
 
-#: frontend/src/utils/utils.js:1679
+#: frontend/src/utils/utils.js:1680
 msgid "Failed to move %(name)s and %(amount)s other item(s)."
 msgstr "Не вдалося перемістити %(name)s та ще %(amount)s елемент(ів)."
 
-#: frontend/src/utils/utils.js:1682
+#: frontend/src/utils/utils.js:1683
 msgid "Failed to move %(name)s."
 msgstr "Не вдалося перемістити %(name)s."
 
-#: frontend/src/utils/utils.js:2064
+#: frontend/src/utils/utils.js:2065
 msgid "Name cannot be double dots"
 msgstr "Назва не може бути двома крапками"
+
+#~ msgid "Comments"
+#~ msgstr "Documents"
 
 #~ msgid "Open with client"
 #~ msgstr "Open via Client"
@@ -11484,12 +11488,6 @@ msgstr "Назва не може бути двома крапками"
 
 #~ msgid "New Docxf File"
 #~ msgstr "New SeaDoc File"
-
-#~ msgid "New"
-#~ msgstr "New"
-
-#~ msgid "Copy path"
-#~ msgstr "Copy"
 
 #~ msgid "Add page below"
 #~ msgstr "Add permission"

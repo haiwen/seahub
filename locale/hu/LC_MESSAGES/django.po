@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-21 15:33+0800\n"
+"POT-Creation-Date: 2026-05-30 09:48+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Hungarian (http://app.transifex.com/haiwen/seahub/language/hu/)\n"
@@ -474,7 +474,7 @@ msgstr "A vírusos fájl nem található."
 #: seahub/notifications/models.py:901 seahub/notifications/models.py:926
 #: seahub/notifications/models.py:948 seahub/notifications/models.py:974
 #: seahub/notifications/models.py:991 seahub/notifications/models.py:1008
-#: seahub/notifications/models.py:1037 seahub/seadoc/apis.py:2812
+#: seahub/notifications/models.py:1037 seahub/seadoc/apis.py:2848
 #: seahub/share/views.py:230 seahub/subscription/views.py:90
 #: seahub/utils/__init__.py:174 seahub/views/__init__.py:835
 #: seahub/views/ajax.py:398 seahub/views/ajax.py:402 seahub/wiki/views.py:210
@@ -501,9 +501,9 @@ msgstr "A cél útvonal érvénytelen"
 #: seahub/api2/views.py:2063 seahub/api2/views.py:2125
 #: seahub/api2/views.py:2169 seahub/api2/views.py:2215
 #: seahub/api2/views.py:2264 seahub/api2/views.py:2725
-#: seahub/api2/views.py:2833 seahub/seadoc/apis.py:432
-#: seahub/seadoc/apis.py:559 seahub/seadoc/apis.py:653
-#: seahub/seadoc/apis.py:3170
+#: seahub/api2/views.py:2833 seahub/seadoc/apis.py:433
+#: seahub/seadoc/apis.py:560 seahub/seadoc/apis.py:654
+#: seahub/seadoc/apis.py:3206
 msgid "Out of quota."
 msgstr "Kvóta túllépés."
 
@@ -546,7 +546,7 @@ msgstr ""
 #: seahub/api2/endpoints/file.py:204 seahub/api2/endpoints/upload_links.py:540
 #: seahub/api2/endpoints/via_repo_token.py:853
 #: seahub/api2/endpoints/wiki2.py:605 seahub/api2/endpoints/wikis.py:128
-#: seahub/api2/views.py:2071 seahub/seadoc/apis.py:3177
+#: seahub/api2/views.py:2071 seahub/seadoc/apis.py:3213
 msgid "The number of files in library exceeds the limit"
 msgstr "A kötetben lévő fájlok száma meghaladja a korlátot"
 
@@ -560,7 +560,7 @@ msgstr "A kötetben lévő fájlok száma meghaladja a korlátot"
 #: seahub/api2/endpoints/upload_links.py:322
 #: seahub/api2/endpoints/wiki2.py:1627 seahub/api2/endpoints/wikis.py:108
 #: seahub/api2/endpoints/wikis.py:203 seahub/profile/forms.py:24
-#: seahub/profile/views.py:276 seahub/seadoc/apis.py:2796
+#: seahub/profile/views.py:276 seahub/seadoc/apis.py:2832
 #: seahub/seadoc/views.py:37 seahub/seadoc/views.py:91
 #: seahub/seadoc/views.py:174 seahub/seadoc/views.py:220
 #: seahub/subscription/views.py:27 seahub/subscription/views.py:43
@@ -583,7 +583,7 @@ msgstr "A fájl nincs zárolva."
 msgid "You can not refresh this file's lock."
 msgstr "Nem újíthatja meg a fájl zárolását."
 
-#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2803
+#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2839
 msgid "The participant already exists."
 msgstr "A résztvevő már létezik."
 
@@ -754,7 +754,7 @@ msgid "Expiration time should be earlier than %s."
 msgstr "A lejárati időnek korábbinak kell lennie, mint %s."
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
-#: seahub/seadoc/apis.py:706
+#: seahub/seadoc/apis.py:707
 #: seahub/templates/remote_user/create_unknown_user_false.html:4
 #: seahub/templates/remote_user/error.html:4
 msgid "Error"
