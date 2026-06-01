@@ -23,8 +23,18 @@
 
 .sf-metadata-tags-editor .sf-metadata-search-tags-container .search-control {
   position: absolute;
-  top: 24px;
-  right: 26px;
+  top: 22px;
+  right: 22px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+}
+
+.sf-metadata-tags-editor .sf-metadata-search-tags-container .search-control:hover {
+  background: var(--bs-nav-hover-bg);
 }
 
 .sf-metadata-tags-editor .sf-metadata-tags-editor-container {

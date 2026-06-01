@@ -8,6 +8,17 @@
   display: flex;
 }
 
+.repo-share-admin-container .modal-title .file-toolbar-btn {
+  margin-left: 8px;
+  min-width: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.repo-share-admin-container .modal-title .file-toolbar-btn:hover {
+  background-color: var(--bs-hover-bg) !important;
+}
+
 .repo-share-admin-content-container {
   max-height: 500px;
 }

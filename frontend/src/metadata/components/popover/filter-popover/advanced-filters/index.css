@@ -50,7 +50,7 @@
 }
 
 .sf-metadata-filters-list .filter-conjunction {
-  width: 72px;
+  width: 90px;
 }
 
 .sf-metadata-filters-list .filter-conjunction-readonly {
@@ -58,7 +58,7 @@
 }
 
 .sf-metadata-filters-list .filter-container {
-  width: calc(100% - 72px);
+  width: calc(100% - 90px);
   display: flex;
 }
 
