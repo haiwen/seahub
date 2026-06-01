@@ -57,7 +57,7 @@ const FileNameEditor = React.forwardRef((props, ref) => {
     return null;
   }
 
-  return (<TextEditor ref={textEditorRef} { ...props } readOnly={false} />);
+  return (<TextEditor ref={textEditorRef} {...props} readOnly={false} />);
 });
 
 FileNameEditor.propTypes = {
@@ -67,5 +67,7 @@ FileNameEditor.propTypes = {
   mode: PropTypes.string,
   onCommitCancel: PropTypes.func,
 };
+
+FileNameEditor.displayName = 'FileNameEditor';
 
 export default FileNameEditor;

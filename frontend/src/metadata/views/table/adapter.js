@@ -16,7 +16,7 @@ import { POPUP_EDITOR_COLUMN_TYPES } from '@/metadata/constants/column/type';
 import { EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS } from '@/metadata/constants/column/private';
 import { DROPDOWN_SUBMENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 
-export const adaptMetadataColumnsToSfTable = (repoID, metadataColumns) => {
+export const adaptMetadataColumnsToSfTable = (repoID, repoInfo, metadataColumns) => {
   if (!Array.isArray(metadataColumns)) {
     return metadataColumns;
   }
@@ -33,7 +33,7 @@ export const adaptMetadataColumnsToSfTable = (repoID, metadataColumns) => {
       icon_name: iconName,
       icon_tooltip: iconTooltip,
       formatter: <CellFormatter repoID={repoID} />,
-      editor: <Editor />,
+      editor: <Editor repoInfo={repoInfo} />,
       is_name_column: column.type === CellType.FILE_NAME,
       is_popup_editor: POPUP_EDITOR_COLUMN_TYPES.includes(column.type),
       is_support_preview: [CellType.FILE_NAME].includes(column?.type),
