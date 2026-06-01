@@ -1399,8 +1399,10 @@ ASCII_RE = re.compile(r'[^\x00-\x7f]')
 
 
 def is_valid_password(password):
-
-    return False if ASCII_RE.search(password) else True
+    """Check if password contains only printable characters (any Unicode)."""
+    # Allow any printable or whitespace character, reject control chars only
+    CONTROL_RE = re.compile(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]')
+    return False if CONTROL_RE.search(password) else True
 
 
 def get_logo_path_by_user(username):
