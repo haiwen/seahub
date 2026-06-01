@@ -463,7 +463,7 @@ class Search(APIView):
 
     def get(self, request, format=None):
         if not HAS_FILE_SEARCH and not HAS_FILE_SEASEARCH:
-            error_msg = 'Search not supported.'
+            error_msg = 'Search not supported in Seafile CE or is not enabled.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # argument check
