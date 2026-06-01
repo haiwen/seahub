@@ -261,11 +261,9 @@ const Table = () => {
   }, [gridUtilsAdapter, visibleColumns, permission]);
 
   const sfTableColumns = useMemo(() => {
-    const repoInfo = {
-      permission: store.context.permission,
-    };
+    const repoInfo = store.context.repoInfo;
     return adaptMetadataColumnsToSfTable(repoID, repoInfo, visibleColumns);
-  }, [repoID, store.context.permission, visibleColumns]);
+  }, [repoID, visibleColumns, store.context.repoInfo]);
 
   // SFTable uses 'recordsIds' instead of metadata.view.rows
   const recordsIds = metadata?.view?.rows || [];

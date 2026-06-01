@@ -65,6 +65,7 @@ FileNameEditor.propTypes = {
   column: PropTypes.object,
   record: PropTypes.object,
   mode: PropTypes.string,
+  repoInfo: PropTypes.object,
   onCommitCancel: PropTypes.func,
 };
 
