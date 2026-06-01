@@ -17,6 +17,8 @@ import LeaveGroupDialog from '../../components/dialog/leave-group-dialog';
 import InviteMembersDialog from '../../components/dialog/group-invite-members-dialog';
 import CustomDropdown from '../../components/dropdown';
 import Icon from '../../components/icon';
+import EventBus from '../../components/common/event-bus';
+import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 
 import '../../css/group-view.css';
 
@@ -191,6 +193,13 @@ class GroupOperationMenu extends React.Component {
     return opList;
   };
 
+  onGroupNameChanged = (newName) => {
+    const { group } = this.props;
+    const { id: groupID } = group;
+    const eventBus = EventBus.getInstance();
+    eventBus.dispatch(EVENT_BUS_TYPE.GROUP_RENAMED, { newName, groupID });
+    this.props.onGroupNameChanged(newName);
+  };
 
   render() {
     const {
@@ -239,7 +248,7 @@ class GroupOperationMenu extends React.Component {
           <RenameGroupDialog
             groupID={groupID}
             groupName={group.name}
-            onGroupNameChanged={this.props.onGroupNameChanged}
+            onGroupNameChanged={this.onGroupNameChanged}
             toggleDialog={this.toggleRenameGroupDialog}
           />
         }
