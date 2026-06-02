@@ -54,5 +54,5 @@ urlpatterns = [
     re_path(r'^search-filename/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocSearchFilenameView.as_view(), name='seadoc_search_filename'),
     re_path(r'^export/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocExportView.as_view(), name='seadoc_export'),
     re_path(r'^import/(?P<repo_id>[-0-9a-f]{36})/$', SdocImportView.as_view(), name='seadoc_import'),
-    re_path(r'^search-metadata-records/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocSearchMetadataRecords.as_view(), name='seadoc_search_meatadata_records'),
+    re_path(r'^search-metadata-records/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocSearchMetadataRecords.as_view(), name='seadoc_search_metadata_records'),
 ]

@@ -345,7 +345,7 @@ def add_convert_wiki_task(params):
     return json.loads(resp.content)['task_id']
 
 
-def import_conflunece_to_wiki(params):
+def import_confluence_to_wiki(params):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}

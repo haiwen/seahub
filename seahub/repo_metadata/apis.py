@@ -188,7 +188,7 @@ class MetadataManage(APIView):
         # check dose the repo have opened metadata manage
         record = RepoMetadata.objects.filter(repo_id=repo_id).first()
         if not record or not record.enabled:
-            error_msg = f'The repo {repo_id} has disabledd the metadata manage.'
+            error_msg = f'The repo {repo_id} has disabled the metadata manage.'
             return api_error(status.HTTP_409_CONFLICT, error_msg)
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
@@ -1146,7 +1146,7 @@ class MetadataViews(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
 
-        # The face_recognition view is unique for a repo, cannot be added repeatly.
+        # The face_recognition view is unique for a repo, cannot be added repeatedly.
         if view_type == 'face_recognition':
             view = RepoMetadataViews.objects.get_view(repo_id, FACE_RECOGNITION_VIEW_ID)
             if view:
