@@ -2,6 +2,7 @@
 # encoding: utf-8
 
 import logging
+import datetime
 import json
 from urllib.parse import urlparse
 from constance import config
@@ -257,6 +258,22 @@ def org_register(request):
                 org_operation_signal.send(sender=None, org=new_org, operation='create')
             except Exception as e:
                 logger.error(e)
+
+            try:
+                from seahub.utils import publish_account_registration
+                from seahub.api2.utils import get_client_ip
+                from django.utils import timezone
+                ip = get_client_ip(request)
+                message = {
+                    'register_ip': ip,
+                    'register_time': str(timezone.now().isoformat()),
+                    'account_type': 'org',
+                    'account_id': new_org.org_id,
+                    'account_name': org_name,
+                }
+                publish_account_registration(message)
+            except Exception as e:
+                logger.error('Publish account registration error, %s, %s, %s', new_org.org_id, org_name, e)
 
             if name:
                 Profile.objects.add_or_update(new_user.username, name)

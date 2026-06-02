@@ -599,6 +599,12 @@ if EVENTS_CONFIG_FILE:
         seafevents = None
         EVENTS_ENABLED = False
 
+    try:
+        redis_client = seafevents_api.RedisClient(socket_timeout=30)
+    except Exception as e:
+        logging.exception('Failed to import seafevents RedisClient.')
+        redis_client = None
+
     @contextlib.contextmanager
     def _get_seafevents_session():
         try:
@@ -848,6 +854,12 @@ if EVENTS_CONFIG_FILE:
             res, total_count = seafevents_api.get_delete_records(session, repo_id, show_time, start, limit)
         return res, total_count
 
+    def publish_account_registration(message):
+        try:
+            redis_client.publish('account-registration', json.dumps(message))
+        except Exception as err:
+            logger.error('Publish account-registration msg %s error: %s' % (message, err))
+
 else:
     parsed_events_conf = None
     EVENTS_ENABLED = False
@@ -915,7 +927,8 @@ else:
         pass
     def get_trash_records():
         pass
-
+    def publish_account_registration(message):
+        pass
 
 def calc_file_path_hash(path, bits=12):
     if isinstance(path, str):

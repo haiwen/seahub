@@ -3,6 +3,8 @@ Views which allow users to create and activate accounts.
 
 """
 
+import logging
+import datetime
 
 from django.shortcuts import redirect
 from django.shortcuts import render
@@ -14,6 +16,9 @@ from constance import config
 
 from seahub import settings
 from seahub.utils.auth import get_login_bg_image_path
+
+
+logger = logging.getLogger(__name__)
 
 
 def activate(request, backend,
@@ -194,6 +199,24 @@ def register(request, backend, success_url=None, form_class=None,
         form = form_class(data=request.POST, files=request.FILES)
         if form.is_valid():
             new_user = backend.register(request, **form.cleaned_data)
+
+            try:
+                from seahub.utils import publish_account_registration
+                from seahub.api2.utils import get_client_ip
+                from django.utils import timezone
+                email = form.cleaned_data['email']
+                ip = get_client_ip(request)
+                message = {
+                    'register_ip': ip,
+                    'register_time': str(timezone.now().isoformat()),
+                    'account_type': 'user',
+                    'account_id': new_user.username,
+                    'account_name': email,
+                }
+                publish_account_registration(message)
+            except Exception as e:
+                logger.error('Publish account registration error, %s, %s, %s', new_user.username, email, e)
+
             if success_url is None:
                 to, args, kwargs = backend.post_registration_redirect(request, new_user)
                 return redirect(to, *args, **kwargs)
