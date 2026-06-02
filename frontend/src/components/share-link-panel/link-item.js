@@ -10,6 +10,7 @@ import { Utils } from '../../utils/utils';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 import Icon from '../icon';
 import ClickOutside from '../click-outside';
+import OpIcon from '../op-icon';
 
 const propTypes = {
   idx: PropTypes.number.isRequired,
@@ -120,7 +121,7 @@ class LinkItem extends React.Component {
 
   render() {
     const { isHighlighted, isItemOpVisible, isQRCodePopoverOpen } = this.state;
-    const { item } = this.props;
+    const { item, idx } = this.props;
     const { isSelected = false, permissions, link, expire_date } = item;
     const currentPermission = Utils.getShareLinkPermissionStr(permissions);
     const opsVisible = isItemOpVisible || isQRCodePopoverOpen || isHighlighted;
@@ -161,14 +162,33 @@ class LinkItem extends React.Component {
           <td>{item.description}</td>
           <td>{item.password && <Icon symbol="check-thin" />}</td>
           <td>
-            <a href="#" role="button" onClick={this.onCopyIconClicked} className={`sf3-font sf3-font-copy1 op-icon ${opsVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}></a>
-            <a href="#" role="button" onClick={this.onDeleteIconClicked} className={`sf3-font-delete1 sf3-font op-icon ${opsVisible ? '' : 'invisible'}`} title={gettext('Delete')} aria-label={gettext('Delete')}></a>
-            <a href="#" role="button" id={`qr-code-button-${this.props.idx}`} ref={this.qrCodeBtn} onClick={this.onQRCodeIconClicked} className={`sf3-font sf3-font-qr-code op-icon ${opsVisible ? '' : 'invisible'}`} title={gettext('QR Code')} aria-label={gettext('QR Code')}></a>
+            <OpIcon
+              id={`copy-icon-${idx}`}
+              className={`op-icon ${opsVisible ? '' : 'invisible'}`}
+              symbol="copy"
+              tooltip={gettext('Copy')}
+              op={this.onCopyIconClicked}
+            />
+            <OpIcon
+              id={`delete-icon-${idx}`}
+              className={`op-icon ${opsVisible ? '' : 'invisible'}`}
+              symbol="delete1"
+              tooltip={gettext('Delete')}
+              op={this.onDeleteIconClicked}
+            />
+            <OpIcon
+              id={`qr-code-button-${idx}`}
+              iconRef={this.qrCodeBtn}
+              className={`op-icon ${opsVisible ? '' : 'invisible'}`}
+              symbol="qr-code"
+              tooltip={gettext('QR Code')}
+              op={this.onQRCodeIconClicked}
+            />
             {isQRCodePopoverOpen && (
               <ClickOutside onClickOutside={this.onClickOutside}>
                 <QRCodePopover
                   container={this.qrCodeBtn}
-                  target={`qr-code-button-${this.props.idx}`}
+                  target={`qr-code-button-${idx}`}
                   value={link}
                 />
               </ClickOutside>

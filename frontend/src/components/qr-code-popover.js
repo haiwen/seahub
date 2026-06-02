@@ -133,7 +133,7 @@ const QRCodePopover = ({ container, target, value }) => {
 };
 
 QRCodePopover.propTypes = {
-  target: PropTypes.object,
+  target: PropTypes.string,
   value: PropTypes.string.isRequired,
   container: PropTypes.object
 };
