@@ -1,5 +1,5 @@
 import React from 'react';
-import { getDirentItemMenuList, getBatchMenuList, getPermissions } from '../utils/contextMenuUtils';
+import { getDirentItemMenuList, getBatchMenuList } from '../utils/contextMenuUtils';
 
 export const withDirentContextMenu = (WrappedComponent) => {
   return class extends React.Component {
@@ -11,17 +11,12 @@ export const withDirentContextMenu = (WrappedComponent) => {
       return getBatchMenuList(this.props.currentRepoInfo, selectedDirents, this.getItemMenuList);
     };
 
-    get permissions() {
-      return getPermissions(this.props.currentRepoInfo);
-    }
-
     render() {
       return (
         <WrappedComponent
           {...this.props}
           getItemMenuList={this.getItemMenuList}
           getBatchMenuList={this.getBatchMenuList}
-          permissions={this.permissions}
         />
       );
     }

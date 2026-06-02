@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import * as ContextMenuUtils from '../utils/contextMenuUtils';
 
 export const useDirentContextMenu = ({ repoInfo }) => {
@@ -10,9 +10,5 @@ export const useDirentContextMenu = ({ repoInfo }) => {
     return ContextMenuUtils.getBatchMenuList(repoInfo, selectedDirents, getItemMenuList);
   }, [repoInfo, getItemMenuList]);
 
-  const permissions = useMemo(() => {
-    return ContextMenuUtils.getPermissions(repoInfo);
-  }, [repoInfo]);
-
-  return { getItemMenuList, getBatchMenuList, permissions };
+  return { getItemMenuList, getBatchMenuList };
 };
