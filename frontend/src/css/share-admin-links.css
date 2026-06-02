@@ -30,6 +30,12 @@
   background-color: #ed7109;
 }
 
+.share-upload-nav .nav .nav-item.active .nav-link,
+.share-upload-nav .nav-item.active .more-dropdown-toggle .seafile-multicolor-icon {
+  color: #ED7109;
+  fill: #ED7109;
+}
+
 .share-upload-nav .nav-item .nav-link {
   margin: 0;
   cursor: pointer;

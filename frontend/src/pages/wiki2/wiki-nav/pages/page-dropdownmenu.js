@@ -123,43 +123,43 @@ export default class PageDropdownMenu extends Component {
       {
         key: 'copy-link',
         label: gettext('Copy link'),
-        icon_dom: <Icon symbol="copy" className="mr-2" aria-hidden="true" />,
+        icon_dom: <Icon symbol="copy" className="mr-1" aria-hidden="true" />,
         onClick: this.handleCopyLink,
       },
       {
         key: 'rename',
         label: gettext('Modify name'),
-        icon_dom: <Icon symbol="rename" className="mr-2" aria-hidden="true" />,
+        icon_dom: <Icon symbol="rename" className="mr-1" aria-hidden="true" />,
         onClick: this.onRename,
       },
       {
         key: 'add-page-above',
         label: gettext('Add page above'),
-        icon_dom: <Icon symbol="new" className="mr-2" aria-hidden="true" />,
+        icon_dom: <Icon symbol="new" className="mr-1" aria-hidden="true" />,
         onClick: this.addPageAbove,
       },
       {
         key: 'add-page-below',
         label: gettext('Add page below'),
-        icon_dom: <Icon symbol="new" className="mr-2" aria-hidden="true" />,
+        icon_dom: <Icon symbol="new" className="mr-1" aria-hidden="true" />,
         onClick: this.addPageBelow,
       },
       {
         key: 'duplicate-page',
         label: gettext('Duplicate page'),
-        icon_dom: <Icon symbol="copy" className="mr-2" aria-hidden="true" />,
+        icon_dom: <Icon symbol="copy" className="mr-1" aria-hidden="true" />,
         onClick: this.duplicatePage,
       },
       ...(canDeletePage ? [{
         key: 'delete-page',
         label: gettext('Delete page'),
-        icon_dom: <Icon symbol="delete1" className="mr-2" aria-hidden="true" />,
+        icon_dom: <Icon symbol="delete1" className="mr-1" aria-hidden="true" />,
         onClick: this.onDeletePage,
       }] : []),
       {
         key: 'import-page',
         label: gettext('Import page'),
-        icon_dom: <Icon symbol="import-sdoc" className="mr-2" aria-hidden="true" />,
+        icon_dom: <Icon symbol="import-sdoc" className="mr-1" aria-hidden="true" />,
         children: [
           { key: 'import-docx', label: gettext('Import page from docx'), onClick: () => this.importPage('.docx') },
           { key: 'import-md', label: gettext('Import page from Markdown'), onClick: () => this.importPage('.md') },
@@ -169,7 +169,7 @@ export default class PageDropdownMenu extends Component {
       {
         key: 'open-in-new-tab',
         label: gettext('Open in new tab'),
-        icon_dom: <Icon symbol="open-in-new-tab" className="mr-2" aria-hidden="true" />,
+        icon_dom: <Icon symbol="open-in-new-tab" className="mr-1" aria-hidden="true" />,
         onClick: this.handleOpenInNewTab,
       },
     ];
