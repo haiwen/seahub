@@ -194,7 +194,7 @@ class WikiNav extends Component {
                 items={pageOperationItems}
                 className="page-operation-dropdown"
                 triggerClassName={classNames('op-icon', { 'invisible': !isHeaderHovered && !isDropdownOpen })}
-                menuClassName="page-operation-dropdown-menu dtable-dropdown-menu large position-fixed"
+                menuClassName="page-operation-dropdown-menu large position-fixed"
                 freezeItem={this.handleDropdownOpen}
                 unfreezeItem={this.handleDropdownClose}
               />

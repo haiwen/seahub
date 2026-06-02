@@ -309,7 +309,7 @@ class MainPanel extends Component {
               items={menuItems}
               className="wiki2-file-history-button"
               triggerClassName="wiki2-file-history-button"
-              menuClassName="dtable-dropdown-menu large"
+              menuClassName="large"
             />
           </div>
         </div>

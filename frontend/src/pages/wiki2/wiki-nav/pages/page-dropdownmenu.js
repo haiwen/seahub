@@ -180,7 +180,7 @@ export default class PageDropdownMenu extends Component {
         items={menuItems}
         className="page-operation-dropdown"
         triggerClassName="op-icon"
-        menuClassName="page-operation-dropdown-menu dtable-dropdown-menu large position-fixed"
+        menuClassName="page-operation-dropdown-menu large position-fixed"
         modifier={[
           { name: 'preventOverflow', options: { boundary: 'window', padding: 8 } },
           { name: 'flip', enabled: true, options: { fallbackPlacements: ['top'] } },
