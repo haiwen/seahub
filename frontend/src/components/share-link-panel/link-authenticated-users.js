@@ -9,7 +9,7 @@ import toaster from '../toast';
 import BackIcon from '../../components/back-icon';
 import EmptyTip from '../empty-tip';
 import Loading from '../loading';
-import Icon from '../icon';
+import OpIcon from '../op-icon';
 
 class UserItem extends React.Component {
 
@@ -41,7 +41,7 @@ class UserItem extends React.Component {
   };
 
   render() {
-    const { item } = this.props;
+    const { item, index } = this.props;
     const { isHighlighted } = this.state;
     return (
       <tr
@@ -58,17 +58,13 @@ class UserItem extends React.Component {
           </div>
         </td>
         <td>
-          <span
-            tabIndex="0"
-            role="button"
-            className={`op-icon ${this.state.isOperationShow ? '' : 'hide'}`}
-            onClick={this.deleteItem}
-            onKeyDown={Utils.onKeyDown}
-            title={gettext('Delete')}
-            aria-label={gettext('Delete')}
-          >
-            <Icon symbol="close" />
-          </span>
+          <OpIcon
+            id={`delete-${index}`}
+            symbol="close"
+            className={this.state.isOperationShow ? 'op-icon' : 'op-icon hide'}
+            op={this.deleteItem}
+            tooltip={gettext('Delete')}
+          />
         </td>
       </tr>
     );
@@ -76,6 +72,7 @@ class UserItem extends React.Component {
 }
 
 UserItem.propTypes = {
+  index: PropTypes.number.isRequired,
   repoID: PropTypes.string.isRequired,
   item: PropTypes.object.isRequired,
   deleteItem: PropTypes.func.isRequired,
@@ -220,6 +217,7 @@ class LinkAuthenticatedUsers extends React.Component {
                       return (
                         <UserItem
                           key={index}
+                          index={index}
                           item={item}
                           repoID={this.props.repoID}
                           deleteItem={this.deleteItem}
