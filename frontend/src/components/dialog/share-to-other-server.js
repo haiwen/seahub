@@ -48,7 +48,7 @@ class ShareItem extends React.Component {
   };
 
   render() {
-    let item = this.props.item;
+    const { item, index } = this.props;
     const { isOperationShow, isOpFrozen, isHighlighted } = this.state;
     return (
       <tr
@@ -64,10 +64,11 @@ class ShareItem extends React.Component {
         <td>{Utils.sharePerms(item.permission)}</td>
         <td>
           <OpIcon
+            id={`delete-${index}`}
             symbol="close"
             className={`op-icon ${isOperationShow && !isOpFrozen ? '' : 'd-none'}`}
             op={this.deleteShareItem}
-            title={gettext('Delete')}
+            tooltip={gettext('Delete')}
           />
         </td>
       </tr>
@@ -76,6 +77,7 @@ class ShareItem extends React.Component {
 }
 
 ShareItem.propTypes = {
+  index: PropTypes.number.isRequired,
   item: PropTypes.object.isRequired,
   deleteShareItem: PropTypes.func.isRequired,
 };
@@ -99,6 +101,7 @@ class ShareList extends React.Component {
               return (
                 <ShareItem
                   key={index}
+                  index={index}
                   item={item}
                   deleteShareItem={this.props.deleteShareItem}
                 />
