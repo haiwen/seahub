@@ -5,6 +5,7 @@ import { gettext } from '../../../utils/constants';
 import OpIcon from '../../op-icon';
 
 const propTypes = {
+  index: PropTypes.number.isRequired,
   permission: PropTypes.object.isRequired,
   onEditCustomPermission: PropTypes.func.isRequired,
   onDeleteCustomPermission: PropTypes.func.isRequired,
@@ -52,8 +53,8 @@ class CustomPermissionItem extends React.Component {
   };
 
   render() {
-    const { isHighlighted } = this.state;
-    const { permission } = this.props;
+    const { isHighlighted, isShowOperations } = this.state;
+    const { index, permission } = this.props;
     const { name, description } = permission;
     return (
       <tr
@@ -69,18 +70,20 @@ class CustomPermissionItem extends React.Component {
         <td width='22%' className="text-truncate" title={name}>{name}</td>
         <td width='56%' className="text-truncate">{description}</td>
         <td width='22%'>
-          {this.state.isShowOperations && (
+          {isShowOperations && (
             <Fragment>
               <OpIcon
+                id={`edit-icon-${index}`}
                 symbol="rename"
                 className="op-icon"
-                title={gettext('Edit')}
+                tooltip={gettext('Edit')}
                 op={this.onEditCustomPermission}
               />
               <OpIcon
+                id={`delete-icon-${index}`}
                 symbol="delete1"
                 className="op-icon"
-                title={gettext('Delete')}
+                tooltip={gettext('Delete')}
                 op={this.onDeleteCustomPermission}
               />
             </Fragment>

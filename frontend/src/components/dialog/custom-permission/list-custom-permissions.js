@@ -36,10 +36,11 @@ class ListCustomPermissions extends React.Component {
           <div className="permissions-list-body">
             <table>
               <tbody>
-                {permissions.map(permission => {
+                {permissions.map((permission, index) => {
                   return (
                     <CustomPermissionItem
-                      key={permission.id}
+                      key={index}
+                      index={index}
                       permission={permission}
                       onEditCustomPermission={this.props.onEditCustomPermission}
                       onDeleteCustomPermission={this.props.onDeleteCustomPermission}
