@@ -679,5 +679,6 @@
   "Divider": "Разделитель",
   "Export_as_markdown": "Экспортировать как Markdown",
   "Export_as_docx": "Экспортировать в формате docx",
-  "Close": "Закрыть"
+  "Close": "Закрыть",
+  "File": "Файл"
 }

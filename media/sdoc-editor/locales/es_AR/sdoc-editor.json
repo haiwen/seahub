@@ -679,5 +679,6 @@
   "Divider": "Divider",
   "Export_as_markdown": "Exportar como Markdown",
   "Export_as_docx": "Exportar como docx",
-  "Close": "Cerrar"
+  "Close": "Cerrar",
+  "File": "Archivo"
 }

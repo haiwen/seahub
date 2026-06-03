@@ -679,5 +679,6 @@
   "Divider": "Divider",
   "Export_as_markdown": "Exportovat jako Markdown",
   "Export_as_docx": "Exportovat jako docx",
-  "Close": "Zavřít"
+  "Close": "Zavřít",
+  "File": "Soubor"
 }

@@ -679,5 +679,6 @@
   "Divider": "分隔线",
   "Export_as_markdown": "导出为 Markdown",
   "Export_as_docx": "导出为 docx",
-  "Close": "关闭"
+  "Close": "关闭",
+  "File": "文件"
 }

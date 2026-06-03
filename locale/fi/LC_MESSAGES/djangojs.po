@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-30 09:48+0800\n"
+"POT-Creation-Date: 2026-06-03 10:43+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Finnish (http://app.transifex.com/haiwen/seahub/language/fi/)\n"
@@ -1153,8 +1153,8 @@ msgstr "Haluatko varmasti poistaa tilin?"
 #: frontend/src/components/share-link-panel/link-item.js:183
 #: frontend/src/components/share-link-panel/link-list.js:70
 #: frontend/src/components/share-link-panel/link-list.js:144
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:505
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:506
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:514
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:515
 #: frontend/src/components/toolbar/all-tags-toolbar.js:88
 #: frontend/src/components/toolbar/card-files-toolbar.js:219
 #: frontend/src/components/toolbar/card-files-toolbar.js:221
@@ -1169,8 +1169,8 @@ msgstr "Haluatko varmasti poistaa tilin?"
 #: frontend/src/components/user-settings/delete-account.js:38
 #: frontend/src/components/user-settings/web-api-auth-token.js:93
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:252
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:310
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:322
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:309
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:321
 #: frontend/src/metadata/components/cell-editors/tags-editor/delete-tags/index.js:28
 #: frontend/src/metadata/components/dialog/delete-confirm-dialog/index.js:18
 #: frontend/src/metadata/components/popover/filter-popover/basic-filters/tags-filter.js:118
@@ -1446,7 +1446,7 @@ msgstr "Uusi Hakemisto"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-group-dialog.js:64
 #: frontend/src/components/main-side-nav.js:158
 #: frontend/src/components/main-side-nav.js:165
-#: frontend/src/pages/libraries/index.js:564
+#: frontend/src/pages/libraries/index.js:551
 #: frontend/src/pages/sys-admin/groups/groups.js:148
 msgid "New Group"
 msgstr "Uusi ryhmä"
@@ -1481,7 +1481,7 @@ msgstr "Salasanat eivät täsmää"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-repo-dialog.js:65
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog.js:58
 #: frontend/src/pages/groups/group-op-menu.js:167
-#: frontend/src/pages/libraries/index.js:479
+#: frontend/src/pages/libraries/index.js:469
 #: frontend/src/pages/my-libs/my-libs.js:165
 #: frontend/src/pages/shared-with-all/index.js:235
 #: frontend/src/pages/sys-admin/libraries-and-links.js:179
@@ -1617,8 +1617,8 @@ msgstr "Lisää"
 #: frontend/src/components/dialog/image-dialog/index.js:109
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:182
 #: frontend/src/components/dialog/zip-download-dialog.js:126
-#: frontend/src/components/file-view/file-toolbar.js:117
-#: frontend/src/components/file-view/file-toolbar.js:216
+#: frontend/src/components/file-view/file-toolbar.js:133
+#: frontend/src/components/file-view/file-toolbar.js:232
 #: frontend/src/components/file-view/file-view-tip.js:25
 #: frontend/src/components/history-list-view/history-list-item.js:75
 #: frontend/src/components/history-trash-file-view/download.js:10
@@ -1714,7 +1714,7 @@ msgstr "Luo jakamislinkki"
 #: frontend/src/components/edit-icon.js:8
 #: frontend/src/components/file-view/comment-widget/comment-item.js:82
 #: frontend/src/components/file-view/comment-widget/reply-item.js:78
-#: frontend/src/components/file-view/file-toolbar.js:182
+#: frontend/src/components/file-view/file-toolbar.js:198
 #: frontend/src/components/select-editor/repo-api-token-permission-editor.js:64
 #: frontend/src/components/select-editor/select-editor.js:173
 #: frontend/src/components/share-link-panel/link-details.js:239
@@ -2181,7 +2181,7 @@ msgid "Metadata"
 msgstr ""
 
 #: frontend/src/components/dialog/image-dialog/index.js:107
-#: frontend/src/components/file-view/file-toolbar.js:157
+#: frontend/src/components/file-view/file-toolbar.js:173
 msgid "Rotate"
 msgstr "Kierrä"
 
@@ -2411,8 +2411,8 @@ msgstr "Haluatko varmasti poistua tästä ryhmästä?"
 
 #: frontend/src/components/dialog/leave-group-dialog.js:31
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:258
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:316
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:328
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:315
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:327
 msgid "Leave"
 msgstr "Poistu"
 
@@ -2707,8 +2707,8 @@ msgid "Move {placeholder} to"
 msgstr "Siirrä {placeholder} kohteeseen"
 
 #: frontend/src/components/dialog/my-deleted-repos-dialog/index.js:39
-#: frontend/src/pages/libraries/index.js:481
-#: frontend/src/pages/libraries/index.js:482
+#: frontend/src/pages/libraries/index.js:471
+#: frontend/src/pages/libraries/index.js:472
 #: frontend/src/pages/my-libs/my-libs-deleted.js:55
 #: frontend/src/pages/my-libs/my-libs.js:166
 msgid "Deleted Libraries"
@@ -2949,7 +2949,7 @@ msgstr "URL:n mukautetun osan tulee olla 5–30 merkkiä pitkä ja sisältää v
 
 #: frontend/src/components/dialog/publish-wiki-dialog.js:133
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:249
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:302
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:301
 #| msgid "Publish"
 msgid "Unpublish"
 msgstr "Peruuta julkaisu"
@@ -3024,8 +3024,8 @@ msgstr "Lupa evätty"
 #: frontend/src/components/dialog/trash-dialog/index.js:175
 #: frontend/src/components/dialog/trash-dialog/table/file-records/file-record.js:50
 #: frontend/src/components/dialog/zip-download-dialog.js:79
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:187
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:252
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:196
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:261
 #: frontend/src/metadata/store/server-operator.js:491
 #: frontend/src/metadata/store/server-operator.js:509
 #: frontend/src/pages/lib-content-view/lib-content-view.js:404
@@ -3043,7 +3043,7 @@ msgstr "Lupa evätty"
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:261
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:282
 #: frontend/src/pages/org-admin/devices/devices-errors.js:55
-#: frontend/src/pages/shared-libs/item.js:82
+#: frontend/src/pages/shared-libs/item.js:94
 #: frontend/src/pages/shared-with-all/index.js:81
 #: frontend/src/pages/sys-admin/abuse-reports.js:45
 #: frontend/src/pages/sys-admin/devices/devices-errors.js:53
@@ -3102,13 +3102,13 @@ msgstr ""
 
 #: frontend/src/components/dialog/repo-archive-dialog.js:134
 #: frontend/src/components/library-op-menu.js:164
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:335
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:344
 msgid "Archive"
 msgstr ""
 
 #: frontend/src/components/dialog/repo-archive-dialog.js:134
 #: frontend/src/components/library-op-menu.js:164
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:335
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:344
 msgid "Unarchive"
 msgstr ""
 
@@ -3491,11 +3491,11 @@ msgstr "Jaa toiselle palvelimelle"
 #: frontend/src/components/dialog/share-dialog.js:329
 #: frontend/src/components/dialog/share-wiki-dialog.js:161
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-dialog.js:85
-#: frontend/src/components/file-view/file-toolbar.js:114
-#: frontend/src/components/file-view/file-toolbar.js:239
+#: frontend/src/components/file-view/file-toolbar.js:130
+#: frontend/src/components/file-view/file-toolbar.js:255
 #: frontend/src/components/library-op-menu.js:125
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:305
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:487
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:314
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:496
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:180
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:365
 #: frontend/src/components/toolbar/view-file-toolbar.js:66
@@ -3504,8 +3504,7 @@ msgstr "Jaa toiselle palvelimelle"
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:54
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:351
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:412
-#: frontend/src/pages/shared-libs/item.js:184
-#: frontend/src/pages/shared-libs/item.js:221
+#: frontend/src/pages/shared-libs/item.js:177
 #: frontend/src/pages/sys-admin/repos/repos.js:238
 #: frontend/src/utils/text-translation.js:44
 msgid "Share"
@@ -3634,7 +3633,7 @@ msgstr "Haluatko varmasti poistaa"
 
 #: frontend/src/components/dialog/sysadmin-dialog/rename-department-v2-dialog.js:68
 #: frontend/src/components/library-op-menu.js:131
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:290
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:299
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:237
 #: frontend/src/metadata/metadata-tree-view/view.js:102
 #: frontend/src/metadata/views/face-recognition/peoples/people/op-menu/index.js:20
@@ -4337,8 +4336,8 @@ msgstr "Suodata"
 
 #: frontend/src/components/dir-view-mode/dir-history-view/index.js:216
 #: frontend/src/components/dirent-detail/multi-selection-details/index.js:196
-#: frontend/src/components/file-view/file-toolbar.js:120
-#: frontend/src/components/file-view/file-toolbar.js:223
+#: frontend/src/components/file-view/file-toolbar.js:136
+#: frontend/src/components/file-view/file-toolbar.js:239
 #: frontend/src/pages/org-admin/org-logs-file-update.js:249
 #: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:137
 #: frontend/src/repo-history.js:293 frontend/src/utils/text-translation.js:72
@@ -4364,7 +4363,7 @@ msgstr "Kirjasto nimetty uudelleen onnistuneesti."
 
 #: frontend/src/components/dir-view-mode/dir-others/library-more-operations/department-library-more-operations.js:135
 #: frontend/src/components/dir-view-mode/dir-others/library-more-operations/my-library-more-operations.js:151
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:183
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:192
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:257
 #: frontend/src/pages/org-admin/libraries/org-all-repos.js:202
 #: frontend/src/pages/sys-admin/repos/repos.js:152
@@ -4391,12 +4390,12 @@ msgid "Successfully unwatched the library."
 msgstr "Kirjaston seuranta poistettu onnistuneesti."
 
 #: frontend/src/components/dir-view-mode/dir-others/watch-unwatch-file-changes.js:50
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:320
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:329
 msgid "Unwatch File Changes"
 msgstr "Lopeta tiedostomuutosten seuraaminen"
 
 #: frontend/src/components/dir-view-mode/dir-others/watch-unwatch-file-changes.js:50
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:317
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:326
 msgid "Watch File Changes"
 msgstr "Seuraa tiedostomuutoksia"
 
@@ -4652,9 +4651,11 @@ msgstr "Valitse tämä kohde"
 
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:728
 #: frontend/src/components/library-op-menu.js:122
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:293
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:302
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:542
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:335
-#: frontend/src/pages/shared-libs/item.js:174
+#: frontend/src/pages/shared-libs/item.js:161
+#: frontend/src/pages/shared-libs/item.js:240
 #: frontend/src/pages/starred/starred.js:157
 #: frontend/src/pages/starred/starred.js:203
 #: frontend/src/utils/text-translation.js:180
@@ -4663,7 +4664,9 @@ msgstr "Poista merkintä"
 
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:728
 #: frontend/src/components/library-op-menu.js:119
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:293
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:302
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:547
+#: frontend/src/pages/shared-libs/item.js:166
 #: frontend/src/utils/text-translation.js:176
 msgid "Star"
 msgstr "Merkitse suosikki"
@@ -4702,7 +4705,7 @@ msgstr "Ei tuloksia, jotka vastaavat hakua"
 #: frontend/src/components/share-admin-sub-nav.js:16
 #: frontend/src/pages/dashboard/log-repo-selector.js:103
 #: frontend/src/pages/dashboard/log-repo-selector.js:106
-#: frontend/src/pages/libraries/index.js:462
+#: frontend/src/pages/libraries/index.js:454
 #: frontend/src/pages/org-admin/departments/department.js:131
 #: frontend/src/pages/org-admin/side-panel.js:63
 #: frontend/src/pages/share-admin/libraries.js:333
@@ -4788,8 +4791,8 @@ msgstr "Jäljellä"
 
 #: frontend/src/components/file-uploader/upload-list-item.js:97
 #: frontend/src/components/file-uploader/upload-list-item.js:123
-#: frontend/src/components/file-view/file-toolbar.js:196
-#: frontend/src/components/file-view/file-toolbar.js:266
+#: frontend/src/components/file-view/file-toolbar.js:212
+#: frontend/src/components/file-view/file-toolbar.js:282
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:97
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:123
 #: frontend/src/pages/excalidraw-editor/editor/tip-message.js:140
@@ -4954,30 +4957,30 @@ msgstr "suosikki"
 msgid "unstarred"
 msgstr "ei suosikki"
 
-#: frontend/src/components/file-view/file-toolbar.js:90
-#: frontend/src/components/file-view/file-toolbar.js:109
+#: frontend/src/components/file-view/file-toolbar.js:104
+#: frontend/src/components/file-view/file-toolbar.js:125
 #: frontend/src/components/file-view/onlyoffice-file-toolbar.js:27
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:60
 #: frontend/src/utils/text-translation.js:245
 msgid "Open parent folder"
 msgstr "Avaa isäntäkansio"
 
-#: frontend/src/components/file-view/file-toolbar.js:103
-#: frontend/src/components/file-view/file-toolbar.js:135
+#: frontend/src/components/file-view/file-toolbar.js:119
+#: frontend/src/components/file-view/file-toolbar.js:151
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:168
 #: frontend/src/utils/text-translation.js:96
 msgid "Lock"
 msgstr "Lukitse"
 
-#: frontend/src/components/file-view/file-toolbar.js:106
-#: frontend/src/components/file-view/file-toolbar.js:139
+#: frontend/src/components/file-view/file-toolbar.js:122
+#: frontend/src/components/file-view/file-toolbar.js:155
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:176
 #: frontend/src/utils/text-translation.js:100
 msgid "Unlock"
 msgstr "Poista lukitus"
 
-#: frontend/src/components/file-view/file-toolbar.js:119
-#: frontend/src/components/file-view/file-toolbar.js:230
+#: frontend/src/components/file-view/file-toolbar.js:135
+#: frontend/src/components/file-view/file-toolbar.js:246
 #: frontend/src/components/file-view/onlyoffice-file-toolbar.js:57
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:213
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:51
@@ -4986,21 +4989,21 @@ msgstr "Poista lukitus"
 msgid "Comment"
 msgstr "Kommentti"
 
-#: frontend/src/components/file-view/file-toolbar.js:122
+#: frontend/src/components/file-view/file-toolbar.js:138
 #: frontend/src/components/shared-file-view/shared-file-view.js:93
 msgid "Line wrapping"
 msgstr "Tekstin rivittyminen"
 
-#: frontend/src/components/file-view/file-toolbar.js:167
+#: frontend/src/components/file-view/file-toolbar.js:183
 msgid "Find"
 msgstr "Etsi"
 
-#: frontend/src/components/file-view/file-toolbar.js:175
+#: frontend/src/components/file-view/file-toolbar.js:191
 msgid "Print"
 msgstr "Tulosta"
 
-#: frontend/src/components/file-view/file-toolbar.js:202
-#: frontend/src/components/file-view/file-toolbar.js:272
+#: frontend/src/components/file-view/file-toolbar.js:218
+#: frontend/src/components/file-view/file-toolbar.js:288
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/location-controls.js:39
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:194
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:252
@@ -5062,7 +5065,7 @@ msgid "Member"
 msgstr "Jäsen"
 
 #: frontend/src/components/group-members.js:96
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:248
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:257
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1300
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:278
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:160
@@ -5085,8 +5088,8 @@ msgstr "Minun Kirjastot"
 
 #: frontend/src/components/libraries-sub-nav.js:79
 #: frontend/src/components/wiki-card-view/wiki-card-view.js:104
-#: frontend/src/pages/shared-libs/index.js:122
-#: frontend/src/pages/shared-libs/index.js:133
+#: frontend/src/pages/shared-libs/index.js:113
+#: frontend/src/pages/shared-libs/index.js:123
 msgid "Shared with me"
 msgstr "Jaettu minulle"
 
@@ -5111,7 +5114,7 @@ msgid "Shared from other servers"
 msgstr "Jaettu muilta palvelimilta"
 
 #: frontend/src/components/library-op-menu.js:134
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:296
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:305
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:246
 #: frontend/src/pages/groups/group-op-menu.js:179
 #: frontend/src/pages/org-admin/libraries/org-all-repos.js:175
@@ -5123,13 +5126,13 @@ msgid "Transfer"
 msgstr "Siirrä"
 
 #: frontend/src/components/library-op-menu.js:137
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:311
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:320
 #: frontend/src/utils/text-translation.js:198
 msgid "Change Password"
 msgstr "Vaihda salasana"
 
 #: frontend/src/components/library-op-menu.js:140
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:314
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:323
 #: frontend/src/components/user-settings/webdav-password.js:104
 #: frontend/src/pages/sys-admin/orgs/org-admins.js:205
 #: frontend/src/pages/sys-admin/orgs/org-admins.js:284
@@ -5141,7 +5144,7 @@ msgid "Reset Password"
 msgstr "Nollaa salasana"
 
 #: frontend/src/components/library-op-menu.js:143
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:299
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:308
 #: frontend/src/utils/text-translation.js:190
 msgid "Folder Permission"
 msgstr "Hakemiston oikeudet"
@@ -5150,13 +5153,13 @@ msgstr "Hakemiston oikeudet"
 #: frontend/src/components/main-side-nav-folded.js:332
 #: frontend/src/components/main-side-nav.js:370
 #: frontend/src/components/main-side-nav.js:371
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:308
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:317
 #: frontend/src/utils/text-translation.js:194
 msgid "Share Admin"
 msgstr "Jakojen hallinta"
 
 #: frontend/src/components/library-op-menu.js:158
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:329
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:338
 #: frontend/src/metadata/components/popover/filter-popover/index.js:145
 #: frontend/src/utils/text-translation.js:206
 msgid "Advanced"
@@ -5991,20 +5994,20 @@ msgstr "Jakanut:"
 msgid "Expired"
 msgstr "Vanhentunut"
 
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:189
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:198
 #: frontend/src/pages/my-libs/my-libs-deleted.js:152
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:263
 #: frontend/src/pages/wikis/wikis.js:367
 msgid "Failed. Please check the network."
 msgstr "Epäonnistui. Ole hyvä ja tarkista verkkoyhteys."
 
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:254
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:263
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:284
 msgid "Failed to delete {name}."
 msgstr "{name} poisto epäonnistui."
 
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:302
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:496
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:311
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:505
 #: frontend/src/pages/share-admin/folders.js:239
 #: frontend/src/pages/share-admin/folders.js:259
 #: frontend/src/pages/share-admin/libraries.js:246
@@ -6015,23 +6018,23 @@ msgstr "{name} poisto epäonnistui."
 msgid "Unshare"
 msgstr "Poista jako"
 
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:332
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:341
 msgid "SeaTable integration"
 msgstr "SeaTable-integraatio"
 
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:551
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:590
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:155
-#: frontend/src/pages/shared-libs/item.js:98
+#: frontend/src/pages/shared-libs/item.js:110
 msgid "Successfully unstarred {library_name_placeholder}."
 msgstr "{library_name_placeholder} suosikki poistettu onnistuneesti."
 
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:561
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:600
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:165
-#: frontend/src/pages/shared-libs/item.js:108
+#: frontend/src/pages/shared-libs/item.js:120
 msgid "Successfully starred {library_name_placeholder}."
 msgstr "{library_name_placeholder} lisätty suosikkeihin onnistuneesti."
 
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:602
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:641
 #| msgid "starred"
 msgid "Starred"
 msgstr "Suosikit"
@@ -6465,36 +6468,36 @@ msgstr "Muunna uudeksi wikiksi"
 msgid "Visit the wiki"
 msgstr "Siirry wikissä"
 
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:300
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:299
 #| msgid "Publish Wiki"
 msgid "Unpublish Wiki"
 msgstr "Peruuta wikin julkaisu"
 
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:301
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:300
 #| msgid "Are you sure you want to unlink this device?"
 msgid "Are you sure you want to unpublish Wiki"
 msgstr "Haluatko varmasti peruuttaa wikin julkaisun"
 
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:308
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:320
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:307
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:319
 #| msgid "Delete File"
 msgid "Delete Wiki"
 msgstr "Poista Wiki"
 
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:309
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:321
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:308
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:320
 #| msgid "Are you sure you want to delete"
 msgid "Are you sure you want to delete Wiki"
 msgstr "Haluatko varmasti poistaa wikin"
 
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:314
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:326
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:313
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:325
 #| msgid "Leave Share"
 msgid "Leave Share Wiki"
 msgstr "Poistu jaetusta wikistä"
 
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:315
-#: frontend/src/components/wiki-card-view/wiki-card-item.js:327
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:314
+#: frontend/src/components/wiki-card-view/wiki-card-item.js:326
 #| msgid "Are you sure you want to delete %s ?"
 msgid "Are you sure you want to leave share Wiki"
 msgstr "Haluatko varmasti poistua jaetusta wikistä"
@@ -6749,7 +6752,6 @@ msgid "sorts"
 msgstr "Järjestykset"
 
 #: frontend/src/metadata/components/data-process-setter/sort-setter.js:22
-#: frontend/src/pages/shared-libs/index.js:123
 msgid "Sort"
 msgstr "Järjestä"
 
@@ -8210,7 +8212,7 @@ msgstr "Palautus onnistui."
 #: frontend/src/pages/groups/group-view.js:135
 #: frontend/src/pages/groups/group-view.js:140
 #: frontend/src/pages/institution-admin/user-content/user-repos.js:29
-#: frontend/src/pages/libraries/index.js:492
+#: frontend/src/pages/libraries/index.js:479
 #: frontend/src/pages/my-libs/my-libs.js:39
 #: frontend/src/pages/org-admin/departments/department.js:210
 #: frontend/src/pages/sys-admin/departments/department.js:221
@@ -8531,8 +8533,7 @@ msgstr "Muunnetaan, odota..."
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:281
 #: frontend/src/pages/share-with-ocm/shared-with-ocm.js:178
 #: frontend/src/pages/share-with-ocm/shared-with-ocm.js:216
-#: frontend/src/pages/shared-libs/item.js:192
-#: frontend/src/pages/shared-libs/item.js:228
+#: frontend/src/pages/shared-libs/item.js:185
 msgid "Leave Share"
 msgstr "Poistu jaosta"
 
@@ -8617,7 +8618,7 @@ msgstr "Virheellinen (ole hyvä ja ota yhteyttä järjestelmän ylläpitäjään
 #: frontend/src/pages/share-admin/folders.js:146
 #: frontend/src/pages/share-admin/libraries.js:171
 #: frontend/src/pages/share-with-ocm/shared-with-ocm.js:311
-#: frontend/src/pages/shared-libs/item.js:78
+#: frontend/src/pages/shared-libs/item.js:90
 #: frontend/src/pages/shared-with-all/index.js:77
 msgid "Successfully unshared {name}"
 msgstr "{name} jakamisen peruutus onnistui"
@@ -9547,12 +9548,12 @@ msgstr "Sinun kanssasi ei ole jaettu kirjastoja"
 msgid "No libraries have been shared with you from other servers."
 msgstr "Muilta palvelimilta ei ole jaettu kirjastoja sinulle."
 
-#: frontend/src/pages/shared-libs/content.js:57
+#: frontend/src/pages/shared-libs/content.js:65
 #| msgid "Shared Libraries"
 msgid "No shared libraries"
 msgstr "Ei jaettuja kirjastoja"
 
-#: frontend/src/pages/shared-libs/item.js:83
+#: frontend/src/pages/shared-libs/item.js:95
 #: frontend/src/pages/shared-with-all/index.js:82
 msgid "Failed to unshare {name}"
 msgstr "Kohteen {name} jakamisen peruutus epäonnistui"
@@ -11137,6 +11138,16 @@ msgstr "Kopioi polku"
 msgid "New"
 msgstr "Uusi"
 
+#: frontend/src/translate.js:49
+#| msgid "Open via Client"
+msgid "Open with OnlyOffice"
+msgstr ""
+
+#: frontend/src/translate.js:50
+#| msgid "Open via Client"
+msgid "Open with client"
+msgstr ""
+
 #: frontend/src/user-notifications.js:268
 #: frontend/src/user-notifications.js:273
 #| msgid "Updated file"
@@ -11465,9 +11476,6 @@ msgstr "Nimi ei voi olla kaksi pistettä (..)"
 
 #~ msgid "Comments"
 #~ msgstr "Documents"
-
-#~ msgid "Open with client"
-#~ msgstr "Open via Client"
 
 #~ msgid "This property is not editable"
 #~ msgstr "This property is not editable"

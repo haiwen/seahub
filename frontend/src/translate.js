@@ -46,3 +46,5 @@ gettext('Open in new tab');
 gettext('Grid view');
 gettext('Copy path');
 gettext('New');
+gettext('Open with OnlyOffice');
+gettext('Open with client');
