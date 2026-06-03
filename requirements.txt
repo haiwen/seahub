@@ -7,11 +7,11 @@ django_simple_captcha==0.6.*
 djangosaml2==1.11.*
 djangorestframework==3.16.*
 python-dateutil==2.9.*
-pyjwt==2.11.*
+pyjwt==2.13.*
 pycryptodome==3.23.*
 python-cas==1.7.*
 pysaml2==7.5.*
-requests==2.32.*
+requests==2.34.*
 requests_oauthlib==2.0.*
 future==1.0.*
 gunicorn==25.0.*
@@ -29,4 +29,4 @@ pypinyin==0.55.*
 dnspython==2.8.*
 pillow-heif==1.2.*
 redis==7.1.*
-cairosvg==2.8.*
+cairosvg==2.9.*
