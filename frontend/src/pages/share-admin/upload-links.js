@@ -93,7 +93,7 @@ class Content extends Component {
         ]}
       >
         {items.map((item, index) => {
-          return (<Item key={index} isDesktop={isDesktop} item={item} onRemoveLink={this.props.onRemoveLink} toggleSelectLink={this.props.toggleSelectLink} />);
+          return (<Item key={index} index={index} isDesktop={isDesktop} item={item} onRemoveLink={this.props.onRemoveLink} toggleSelectLink={this.props.toggleSelectLink} />);
         })}
       </FixedWidthTable>
     );
@@ -104,6 +104,7 @@ Content.propTypes = contentPropTypes;
 
 const itemPropTypes = {
   isDesktop: PropTypes.bool.isRequired,
+  index: PropTypes.number.isRequired,
   item: PropTypes.object.isRequired,
   onRemoveLink: PropTypes.func.isRequired,
   toggleSelectLink: PropTypes.func.isRequired
@@ -168,7 +169,7 @@ class Item extends Component {
   };
 
   render() {
-    const { item } = this.props;
+    const { item, index } = this.props;
     const { isSelected = false } = item;
     const { highlight, isOpIconShown, isLinkDialogOpen } = this.state;
 
@@ -212,16 +213,18 @@ class Item extends Component {
               <div className="d-flex align-items-center">
                 {!item.is_expired &&
                   <OpIcon
+                    id={`view-${index}`}
                     className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
                     symbol="link"
-                    title={gettext('View')}
+                    tooltip={gettext('View')}
                     op={this.viewLink}
                   />
                 }
                 <OpIcon
+                  id={`delete-${index}`}
                   className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
                   symbol="delete1"
-                  title={gettext('Remove')}
+                  tooltip={gettext('Remove')}
                   op={this.removeLink}
                 />
               </div>
