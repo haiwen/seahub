@@ -68,7 +68,7 @@ class Content extends Component {
         ]}
       >
         {items.map((item, index) => {
-          return (<Item key={index} isDesktop={isDesktop} item={item} />);
+          return (<Item key={index} index={index} isDesktop={isDesktop} item={item} />);
         })}
       </FixedWidthTable>
     );
@@ -185,7 +185,7 @@ class Item extends Component {
       return null;
     }
 
-    const item = this.props.item;
+    const { item, index } = this.props;
     let { share_permission, isOpIconShown, isPermSelectDialogOpen, isHighlighted } = this.state;
 
     let is_readonly = false;
@@ -234,9 +234,10 @@ class Item extends Component {
           </td>
           <td>
             <OpIcon
+              id={`unshare-${index}`}
               className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
               symbol="close"
-              title={gettext('Unshare')}
+              tooltip={gettext('Unshare')}
               op={this.unshare}
             />
           </td>
@@ -276,6 +277,7 @@ class Item extends Component {
 }
 
 Item.propTypes = {
+  index: PropTypes.number.isRequired,
   item: PropTypes.object.isRequired,
   isDesktop: PropTypes.bool.isRequired,
 };
