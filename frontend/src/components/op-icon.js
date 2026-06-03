@@ -5,7 +5,7 @@ import Icon from './icon';
 import Tooltip from './tooltip';
 
 const propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.string,
   className: PropTypes.string,
   style: PropTypes.object,
   op: PropTypes.func,
