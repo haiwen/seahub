@@ -6,6 +6,7 @@
 .sf-metadata-sort-popover .popover {
   max-width: none;
   min-width: 400px;
+  border: none;
 }
 
 .sf-metadata-sort-popover .sorts-list {
