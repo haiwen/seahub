@@ -255,7 +255,7 @@ class SharedWithAll extends React.Component {
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              <div className="library-list-header">
+              <div className="d-flex align-items-center">
                 <span className="d-flex align-items-center"><Icon symbol="share-with-all" className="role-icon" /></span>
                 <span className="library-list-title">{gettext('Shared with all')}</span>
                 {canAddPublicRepo &&
