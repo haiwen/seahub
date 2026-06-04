@@ -1,21 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../utils/constants';
-import Icon from './icon';
-import Tooltip from './tooltip';
+import OpIcon from './op-icon';
 
 function BackIcon({ onClick }) {
   return (
-    <span
+    <OpIcon
       id="back-icon"
-      role="button"
       className="op-icon op-icon-bg-light mr-1 rotate-180"
-      aria-label={gettext('Back')}
-      onClick={onClick}
-    >
-      <Icon symbol="arrow" />
-      <Tooltip target="back-icon">{gettext('Back')}</Tooltip>
-    </span>
+      symbol="arrow"
+      tooltip={gettext('Back')}
+      op={onClick}
+    />
   );
 }
 

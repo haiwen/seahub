@@ -184,8 +184,8 @@ class LinkAuthenticatedUsers extends React.Component {
     return (
       <div className="h-100 d-flex flex-column">
         <div className="d-flex align-items-center pb-2 border-bottom">
+          <BackIcon onClick={this.goBack} />
           <h6 className="font-weight-normal m-0">
-            <BackIcon onClick={this.goBack} />
             {gettext('Authenticated users')}
           </h6>
         </div>
