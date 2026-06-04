@@ -338,7 +338,7 @@ class MylibRepoListItem extends React.Component {
             </>
           )}
           {!this.state.isRenaming && !repo.repo_name &&
-            (gettext('Broken (please contact your administrator to fix this library)'))
+            <span className="text-truncate">(gettext('Broken (please contact your administrator to fix this library)'))</span>
           }
         </div>
         <div className="repo-item-actions">
