@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { HorizontalScrollbar } from '../../scrollbar';
 import RecordsHeader from '../records-header';
 import Body from './body';
 import TreeBody from './tree-body';
@@ -823,7 +822,7 @@ class Records extends Component {
     return this.resultContainerRef.getBoundingClientRect();
   };
 
-  getRecordsSummaries = () => {};
+  getRecordsSummaries = () => { };
 
   checkIsSelectAll = () => {
     const {
@@ -982,7 +981,7 @@ class Records extends Component {
       recordsCount, showSequenceColumn, sequenceColumnWidth, isGroupView, groupOffsetLeft,
     } = this.props;
     const { recordMetrics, columnMetrics, selectedRange, colOverScanStartIdx, colOverScanEndIdx } = this.state;
-    const { columns, totalWidth, lastFrozenColumnKey } = columnMetrics;
+    const { columns, lastFrozenColumnKey } = columnMetrics;
     const containerWidth = this.getContainerWidth();
     const hasSelectedRecord = this.checkHasSelectedRecord();
     const isSelectedAll = this.checkIsSelectAll();
@@ -1030,14 +1029,6 @@ class Records extends Component {
           </div>
         </div>
         {this.createRecordsDragLayer()}
-        {this.isWindows && this.isWebkit && (
-          <HorizontalScrollbar
-            ref={this.setHorizontalScrollbarRef}
-            innerWidth={totalWidth + CANVAS_RIGHT_INTERVAL}
-            onScrollbarScroll={this.onHorizontalScrollbarScroll}
-            onScrollbarMouseUp={this.onHorizontalScrollbarMouseUp}
-          />
-        )}
         {this.props.showGridFooter &&
           <RecordsFooter
             ref={ref => this.recordsFooterRef = ref}
