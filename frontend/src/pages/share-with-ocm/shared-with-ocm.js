@@ -160,14 +160,15 @@ class Item extends Component {
       return currentViewMode == LIST_MODE
         ? (
           <div
-            className={`repo-list-item ${isHighlighted ? 'highlight' : ''}`}
+            className={`repo-list-item ${isHighlighted ? 'hover' : ''}`}
             onMouseOver={this.handleMouseOver}
             onMouseOut={this.handleMouseOut}
             onFocus={this.handleMouseOver}
           >
-            <div className="repo-item-icon"></div>
+            <div className="repo-item-icon">
+              <img src={item.icon_url} title={item.icon_title} alt={item.icon_title} width="20" height="20" />
+            </div>
             <div className="repo-item-name">
-              <img src={item.icon_url} title={item.icon_title} alt={item.icon_title} width="24" className="mr-2" />
               <Link to={shareRepoUrl}>{item.repo_name}</Link>
             </div>
             <div className="repo-item-actions">
