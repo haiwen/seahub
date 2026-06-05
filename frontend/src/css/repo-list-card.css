@@ -88,7 +88,7 @@
   border-bottom: 1px solid rgba(255, 255, 255, .15);
 }
 
-.repo-list-item:hover {
+.repo-list-item.hover {
   background: var(--bs-tr-hover-bg);
 }
 
