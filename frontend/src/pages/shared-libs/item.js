@@ -172,6 +172,7 @@ class Item extends Component {
       <div className="flex-shrink-0 d-flex align-items-center">
         {(isPro && data.is_admin) &&
           <OpIcon
+            id={`share-${this.props.idx}`}
             className={shareIconClassName}
             symbol="share"
             title={gettext('Share')}
@@ -212,7 +213,7 @@ class Item extends Component {
     }
 
     const { isStarred } = this.state;
-    const { data, currentViewMode = LIST_MODE } = this.props;
+    const { data, idx, currentViewMode = LIST_MODE } = this.props;
     data.icon_url = Utils.getLibIconUrl(data);
     data.icon_title = Utils.getLibIconTitle(data);
 
@@ -235,9 +236,10 @@ class Item extends Component {
                 <Link to={shareRepoUrl}>{data.repo_name}</Link>
                 {isStarred && (
                   <OpIcon
+                    id={`star-icon-${idx}`}
                     className="star-icon ml-1"
                     symbol="starred"
-                    title={gettext('Unstar')}
+                    tooltip={gettext('Unstar')}
                     op={this.onToggleStarRepo}
                   />
                 )}
@@ -258,7 +260,18 @@ class Item extends Component {
               <div className="d-flex align-items-center library-info">
                 <img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="40" className="mr-3" />
                 <div className="d-flex flex-column justify-content-center library-name-container">
-                  <Link to={shareRepoUrl} className="text-truncate library-name" title={data.repo_name}>{data.repo_name}</Link>
+                  <div className='d-flex align-items-center'>
+                    <Link to={shareRepoUrl} className="text-truncate library-name" title={data.repo_name}>{data.repo_name}</Link>
+                    {isStarred && (
+                      <OpIcon
+                        id={`star-icon-${idx}`}
+                        className="star-icon ml-2 flex-shrink-0"
+                        symbol="starred"
+                        tooltip={gettext('Unstar')}
+                        op={this.onToggleStarRepo}
+                      />
+                    )}
+                  </div>
                   <span className="library-size">{data.size}</span>
                 </div>
               </div>
