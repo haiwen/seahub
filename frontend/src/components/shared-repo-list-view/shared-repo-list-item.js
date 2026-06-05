@@ -635,10 +635,10 @@ class SharedRepoListItem extends React.Component {
           <ArchiveIcon currentRepoInfo={repo} />
           {isStarred && (
             <OpIcon
-              id={`starred-icon-${idx}`}
+              id={`star-icon-${idx}`}
               className="star-icon"
               symbol="starred"
-              tooltip={gettext('Starred')}
+              tooltip={gettext('Unstar')}
               op={this.onToggleStarRepo}
             />
           )}
@@ -669,10 +669,21 @@ class SharedRepoListItem extends React.Component {
           <div className="d-flex flex-column justify-content-center library-name-container">
             {this.state.isRenaming ?
               <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
-              <Fragment>
-                <Link to={libPath} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
+              <>
+                <div className='d-flex align-items-center'>
+                  <Link to={libPath} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
+                  {isStarred && (
+                    <OpIcon
+                      id={`star-icon-${idx}`}
+                      className="star-icon ml-2 flex-shrink-0"
+                      symbol="starred"
+                      tooltip={gettext('Unstar')}
+                      op={this.onToggleStarRepo}
+                    />
+                  )}
+                </div>
                 <span className="library-size">{repo.size}</span>
-              </Fragment>
+              </>
             }
           </div>
         </div>

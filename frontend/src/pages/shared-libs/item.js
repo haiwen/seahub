@@ -237,7 +237,7 @@ class Item extends Component {
                 {isStarred && (
                   <OpIcon
                     id={`star-icon-${idx}`}
-                    className="star-icon ml-1"
+                    className="star-icon"
                     symbol="starred"
                     tooltip={gettext('Unstar')}
                     op={this.onToggleStarRepo}
