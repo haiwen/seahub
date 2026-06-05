@@ -1125,6 +1125,9 @@ SERVER_GOOGLE_MAP_KEY = '' # Used in backend server for address / position conve
 GOOGLE_MAP_ID = 'google_map_id'
 
 
+# risk control
+ENABLE_RISK_CONTROL = False
+
 #####################
 # External settings #
 #####################
