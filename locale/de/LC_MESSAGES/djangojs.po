@@ -27,7 +27,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 10:43+0800\n"
+"POT-Creation-Date: 2026-06-05 13:44+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>, 2015-2022,2024-2025\n"
 "Language-Team: German (http://app.transifex.com/haiwen/seahub/language/de/)\n"
@@ -11162,6 +11162,11 @@ msgstr ""
 msgid "Open with client"
 msgstr ""
 
+#: frontend/src/translate.js:51
+#| msgid "Add permission"
+msgid "Add page below"
+msgstr "Seite unterhalb einfügen"
+
 #: frontend/src/user-notifications.js:268
 #: frontend/src/user-notifications.js:273
 #| msgid "Updated file"
@@ -11514,9 +11519,6 @@ msgstr "Der Name darf keinen Doppelpunkt ( : ) enthalten."
 
 #~ msgid "New Docxf File"
 #~ msgstr "New SeaDoc File"
-
-#~ msgid "Add page below"
-#~ msgstr "Add permission"
 
 #~ msgid "Import page from docx"
 #~ msgstr "Import tags"

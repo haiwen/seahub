@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 10:43+0800\n"
+"POT-Creation-Date: 2026-06-05 13:44+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: malnaim <malnaim@safedecision.com.sa>, 2023-2025\n"
 "Language-Team: Arabic (http://app.transifex.com/haiwen/seahub/language/ar/)\n"
@@ -11146,6 +11146,11 @@ msgstr ""
 msgid "Open with client"
 msgstr ""
 
+#: frontend/src/translate.js:51
+#| msgid "Add permission"
+msgid "Add page below"
+msgstr "أضف صفحة أدناه"
+
 #: frontend/src/user-notifications.js:268
 #: frontend/src/user-notifications.js:273
 #| msgid "Updated file"
@@ -11498,9 +11503,6 @@ msgstr "لا يمكن أن يكون الاسم عبارة عن نقطتين فق
 
 #~ msgid "New Docxf File"
 #~ msgstr "New SeaDoc File"
-
-#~ msgid "Add page below"
-#~ msgstr "Add permission"
 
 #~ msgid "Import page from docx"
 #~ msgstr "Import tags"

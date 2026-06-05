@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 10:43+0800\n"
+"POT-Creation-Date: 2026-06-05 13:44+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: English (http://app.transifex.com/haiwen/seahub/language/"
@@ -11823,6 +11823,12 @@ msgstr "Open via Client"
 msgid "Open with client"
 msgstr "Open via Client"
 
+#: frontend/src/translate.js:51
+#, fuzzy
+#| msgid "Add permission"
+msgid "Add page below"
+msgstr "Add permission"
+
 #: frontend/src/user-notifications.js:268
 #: frontend/src/user-notifications.js:273
 #, fuzzy
@@ -12195,11 +12201,6 @@ msgstr "Name cannot be double dots"
 #~| msgid "New SeaDoc File"
 #~ msgid "New Docxf File"
 #~ msgstr "New SeaDoc File"
-
-#, fuzzy
-#~| msgid "Add permission"
-#~ msgid "Add page below"
-#~ msgstr "Add permission"
 
 #, fuzzy
 #~| msgid "Import tags"

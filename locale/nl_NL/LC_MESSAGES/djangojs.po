@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 10:43+0800\n"
+"POT-Creation-Date: 2026-06-05 13:44+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Dutch (Netherlands) (http://app.transifex.com/haiwen/seahub/language/nl_NL/)\n"
@@ -11149,6 +11149,11 @@ msgstr ""
 msgid "Open with client"
 msgstr ""
 
+#: frontend/src/translate.js:51
+#| msgid "Add permission"
+msgid "Add page below"
+msgstr "Pagina hieronder toevoegen"
+
 #: frontend/src/user-notifications.js:268
 #: frontend/src/user-notifications.js:273
 #| msgid "Updated file"
@@ -11501,9 +11506,6 @@ msgstr "Naam mag niet twee puntjes bevatten"
 
 #~ msgid "New Docxf File"
 #~ msgstr "New SeaDoc File"
-
-#~ msgid "Add page below"
-#~ msgstr "Add permission"
 
 #~ msgid "Import page from docx"
 #~ msgstr "Import tags"
