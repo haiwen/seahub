@@ -333,6 +333,7 @@ class MylibRepoListItem extends React.Component {
                   className="star-icon"
                   symbol="starred"
                   tooltip={gettext('Unstar')}
+                  op={this.onToggleStarRepo}
                 />
               )}
             </>
@@ -394,7 +395,18 @@ class MylibRepoListItem extends React.Component {
             )}
             {!this.state.isRenaming && repo.repo_name && (
               <>
-                <Link to={repoURL} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
+                <div className='d-flex align-items-center'>
+                  <Link to={repoURL} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
+                  {isStarred && (
+                    <OpIcon
+                      id={`star-icon-${idx}`}
+                      className="star-icon ml-2 flex-shrink-0"
+                      symbol="starred"
+                      tooltip={gettext('Unstar')}
+                      op={this.onToggleStarRepo}
+                    />
+                  )}
+                </div>
                 <span className="library-size">{repo.size}</span>
               </>
             )}
@@ -404,7 +416,7 @@ class MylibRepoListItem extends React.Component {
           </div>
         </div>
         {(repo.repo_name && this.state.isOpIconShow) && (
-          <div className="flex-shrink-0 d-flex align-items-center">
+          <div className="flex-shrink-0 d-flex align-items-center ml-4">
             <OpIcon
               id={`share-icon-${idx}`}
               className="op-icon"
