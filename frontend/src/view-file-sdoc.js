@@ -64,7 +64,7 @@ root.render(
     <Suspense fallback={<Loading />}>
       <MetadataStatusProvider repoID={repoID} repoInfo={repoInfo}>
         <MetadataMiddlewareProvider repoID={repoID} repoInfo={repoInfo}>
-          {filePerm === 'rw' ? <SdocEditor /> : <SimpleViewer />}
+          {filePerm === 'rw' ? <SdocEditor /> : <SimpleViewer mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}/>}
         </MetadataMiddlewareProvider>
       </MetadataStatusProvider>
     </Suspense>
