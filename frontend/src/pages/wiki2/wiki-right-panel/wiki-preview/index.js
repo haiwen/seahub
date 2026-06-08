@@ -8,6 +8,7 @@ import RightHeader from '../../wiki-right-header';
 import Icon from '../../../../components/icon';
 
 import './index.css';
+import { mediaUrl } from '../../../../utils/constants';
 
 const FilePreviewWrapper = ({ docContent, previewDocUuid, setEditor, togglePreview, isReloadingPreview, previewDocInfo }) => {
   const [isShowZoomOut, setIsShowZoomOut] = useState(false);
@@ -81,6 +82,7 @@ const FilePreviewWrapper = ({ docContent, previewDocUuid, setEditor, togglePrevi
                       showComment={false}
                       isShowRightPanel={false}
                       setEditor={setEditor}
+                      mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
                     />
                   </div>
                 </div>
@@ -109,6 +111,7 @@ const FilePreviewWrapper = ({ docContent, previewDocUuid, setEditor, togglePrevi
                     showComment={false}
                     isShowRightPanel={false}
                     setEditor={setEditor}
+                    mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
                   />
                 </div>
               </div>
