@@ -224,14 +224,13 @@ class DateEditor extends Component {
           {
             ({ value }) => {
               return (
-                <span tabIndex="0">
+                <span tabIndex="0" className="d-block w-100 h-100">
                   <input
                     ref={ref => this.inputRef = ref}
                     placeholder={this.format ? this.format : gettext('Please select')}
                     tabIndex="-1"
                     readOnly
                     className="ant-calendar-picker-input ant-input form-control"
-                    style={{ visibility: 'hidden' }}
                     value={value ? value.format(this.format) : ''}
                     onMouseDown={this.handleMouseDown}
                   />

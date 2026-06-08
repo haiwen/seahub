@@ -71,7 +71,7 @@ const MenuSelectStyle = {
     paddingRight: '8px',
   }),
   option: (provided, state) => {
-    const { isDisabled, isFocused } = state;
+    const { isDisabled } = state;
     return ({
       ...provided,
       color: 'var(--bs-body-color)',
@@ -79,7 +79,7 @@ const MenuSelectStyle = {
       minHeight: '32px',
       padding: '6px 12px 6px 8px',
       cursor: isDisabled ? 'default' : 'pointer',
-      backgroundColor: isFocused ? 'rgba(0, 0, 0, 0.06)' : 'var(--bs-popover-bg)',
+      backgroundColor: 'var(--bs-popover-bg)',
     });
   },
   control: controlCallback,

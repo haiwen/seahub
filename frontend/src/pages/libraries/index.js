@@ -11,7 +11,6 @@ import ModalPortal from '../../components/modal-portal';
 import Loading from '../../components/loading';
 import ViewModes from '../../components/view-modes';
 import ReposSortMenu from '../../components/sort-menu';
-import SortOptionsDialog from '../../components/dialog/sort-options';
 import GuideForNewDialog from '../../components/dialog/guide-for-new-dialog';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import DeletedReposDialog from '../../components/dialog/my-deleted-repos-dialog';
@@ -39,7 +38,6 @@ class Libraries extends Component {
       errorMsg: '',
       isLoading: true,
       repoList: [],
-      isSortOptionsDialogOpen: false,
       isGuideForNewDialogOpen: window.app.pageOptions.guideEnabled,
       groupList: [],
       sharedRepoList: [],
@@ -117,12 +115,6 @@ class Libraries extends Component {
       return item;
     });
     return { allRepoList, myRepoList, sharedRepoList, publicRepoList, groupList };
-  };
-
-  toggleSortOptionsDialog = () => {
-    this.setState({
-      isSortOptionsDialogOpen: !this.state.isSortOptionsDialogOpen
-    });
   };
 
   onCreateRepo = (repo) => {
@@ -460,12 +452,10 @@ class Libraries extends Component {
           <div className="cur-view-container">
             <div className="cur-view-path">
               <h3 className="sf-heading m-0">{gettext('Libraries')}</h3>
-              {isDesktop &&
               <div className="d-flex align-items-center">
-                <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />
+                {isDesktop && <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />}
                 <ReposSortMenu className="ml-2" sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
               </div>
-              }
             </div>
             <div className="cur-view-content repos-container" id="files-content-container">
               {isLoading ? <Loading /> : (
@@ -481,9 +471,6 @@ class Libraries extends Component {
                         <Button onClick={this.toggleDeletedReposDialog} title={gettext('Deleted Libraries')} size="sm">
                           {gettext('Deleted Libraries')}
                         </Button>
-                        {(!Utils.isDesktop() && this.state.repoList.length > 0) &&
-                          <span className="action-icon" onClick={this.toggleSortOptionsDialog}><Icon symbol="sort-mobile" /></span>
-                        }
                       </div>
 
                       {this.state.errorMsg
@@ -579,14 +566,6 @@ class Libraries extends Component {
           {!isLoading && !this.state.errorMsg && this.state.isGuideForNewDialogOpen &&
             <GuideForNewDialog
               toggleDialog={this.toggleGuideForNewDialog}
-            />
-          }
-          {this.state.isSortOptionsDialogOpen &&
-            <SortOptionsDialog
-              toggleDialog={this.toggleSortOptionsDialog}
-              sortBy={this.state.sortBy}
-              sortOrder={this.state.sortOrder}
-              sortItems={this.sortRepoList}
             />
           }
           {this.state.isCreateRepoDialogOpen && (

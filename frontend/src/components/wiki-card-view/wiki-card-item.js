@@ -277,7 +277,6 @@ class WikiCardItem extends Component {
                 items={dropdownItems}
                 className="ml-auto"
                 triggerClassName="op-icon op-icon-bg-light"
-                menuClassName="dtable-dropdown-menu"
                 onToggle={this.toggleDropDownMenu}
                 onMenuHide={() => this.setState({ isItemMenuShow: false })}
               />

@@ -15,6 +15,7 @@ import Tooltip from '@/components/tooltip';
 import ModalPortal from '@/components/modal-portal';
 
 import './index.css';
+import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 
 const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: insertColumnAPI }) => {
   const [isColumnMenuOpen, setColumnMenuOpen] = useState(false);
@@ -115,10 +116,7 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
         </DropdownToggle>
         <ModalPortal>
           <ColumnTypeDropdownMenu
-            modifiers={[{
-              name: 'offset',
-              options: { offset: [0, 8] },
-            }]}
+            modifiers={[DROPDOWN_MENU_OFFSET_DEFAULT]}
             onSelect={handleSelect}
           />
         </ModalPortal>

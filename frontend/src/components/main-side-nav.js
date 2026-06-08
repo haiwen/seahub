@@ -48,6 +48,25 @@ class MainSideNav extends React.Component {
     this.isWorkWeixin = isWorkWeixin(window.navigator.userAgent.toLowerCase());
   }
 
+  componentDidMount() {
+    const eventBus = EventBus.getInstance();
+    this.unsubscribeGroupRenamed = eventBus.subscribe(EVENT_BUS_TYPE.GROUP_RENAMED, this.onGroupRenamed);
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeGroupRenamed();
+  }
+
+  onGroupRenamed = ({ newName, groupID }) => {
+    const { groupItems } = this.state;
+    if (groupItems.length == 0) {
+      return;
+    }
+    const targetGroup = groupItems.find(item => item.id == groupID);
+    targetGroup.name = newName;
+    this.setState({ groupItems });
+  };
+
   toggleWechatDialog = () => {
     this.setState({ isShowWechatDialog: !this.state.isShowWechatDialog });
   };

@@ -26,6 +26,14 @@ class Content extends Component {
     });
   };
 
+  onFreezedItem = () => {
+    this.setState({ isItemFreezed: true });
+  };
+
+  onUnfreezedItem = () => {
+    this.setState({ isItemFreezed: false });
+  };
+
   onContextMenu = (event, repo) => {
     event.preventDefault();
     const id = 'shared-libs-item-menu';
@@ -78,6 +86,8 @@ class Content extends Component {
               isDesktop={isDesktop}
               isItemFreezed={this.state.isItemFreezed}
               freezeItem={this.freezeItem}
+              onFreezedItem={this.onFreezedItem}
+              onUnfreezedItem={this.onUnfreezedItem}
               currentViewMode={currentViewMode}
               onContextMenu={this.onContextMenu}
             />;

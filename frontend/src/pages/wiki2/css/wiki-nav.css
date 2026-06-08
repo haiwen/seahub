@@ -118,11 +118,6 @@
   cursor: pointer;
 }
 
-.wiki-nav .wiki-page-content .dtable-font {
-  margin-right: 6px;
-  font-size: 14px;
-}
-
 .wiki-nav .wiki-page-content .wiki-page-title {
   height: 32px;
   line-height: 32px;
@@ -265,11 +260,6 @@
   align-items: center;
   flex: 1;
   overflow: hidden;
-}
-
-.wiki-drag-ghost-wrapper .wiki-page-content .dtable-font {
-  margin-right: 6px;
-  font-size: 14px;
 }
 
 .wiki-drag-ghost-wrapper .wiki-page-content .wiki-page-title {

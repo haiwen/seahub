@@ -6,6 +6,7 @@ import WikiTopNav from '../../top-nav';
 import { getCurrentPageConfig } from '../../utils';
 import RightHeader from '../../wiki-right-header';
 import Icon from '../../../../components/icon';
+import { mediaUrl } from '../../../../utils/constants';
 
 import './index.css';
 
@@ -81,6 +82,7 @@ const FilePreviewWrapper = ({ docContent, previewDocUuid, setEditor, togglePrevi
                       showComment={false}
                       isShowRightPanel={false}
                       setEditor={setEditor}
+                      mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
                     />
                   </div>
                 </div>
@@ -109,6 +111,7 @@ const FilePreviewWrapper = ({ docContent, previewDocUuid, setEditor, togglePrevi
                     showComment={false}
                     isShowRightPanel={false}
                     setEditor={setEditor}
+                    mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
                   />
                 </div>
               </div>

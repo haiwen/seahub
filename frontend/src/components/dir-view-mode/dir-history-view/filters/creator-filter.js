@@ -9,9 +9,10 @@ import UserItem from '../../../search/search-filters/user-item';
 import { seafileAPI } from '../../../../utils/seafile-api';
 import toaster from '../../../toast';
 import Icon from '../../../icon';
+import { HISTORY_MODE } from '../../constants';
+import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 
 import '../../../search/search-filters/filter-by-creator.css';
-import { HISTORY_MODE } from '../../constants';
 
 const HistoryCreatorFilter = ({ mode = HISTORY_MODE, value: selectedOptions = [], onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -105,13 +106,7 @@ const HistoryCreatorFilter = ({ mode = HISTORY_MODE, value: selectedOptions = []
           <span className="filter-label" title={copyRight}>{copyRight}</span>
           <Icon symbol="down" className="w-3 h-3 ml-1" />
         </DropdownToggle>
-        <DropdownMenu
-          className="search-filter-menu filter-by-creator-menu"
-          modifiers={[{
-            name: 'offset',
-            options: { offset: [0, 8] }
-          }]}
-        >
+        <DropdownMenu className="search-filter-menu filter-by-creator-menu" modifiers={[DROPDOWN_MENU_OFFSET_DEFAULT]} >
           <div className="selected-user-item-container">
             {selectedOptions.map((option) => (
               <UserItem

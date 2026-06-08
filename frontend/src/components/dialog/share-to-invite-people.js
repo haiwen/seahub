@@ -48,8 +48,8 @@ class UserItem extends React.Component {
   };
 
   render() {
-    const { isHighlighted } = this.state;
-    const { item } = this.props;
+    const { isHighlighted, isOperationShow } = this.state;
+    const { item, index, permissions } = this.props;
     let currentPermission = item.is_admin ? 'admin' : item.permission;
     return (
       <tr
@@ -65,9 +65,9 @@ class UserItem extends React.Component {
         <td>
           <SharePermissionEditor
             isTextMode={true}
-            isEditIconShow={this.state.isOperationShow}
+            isEditIconShow={isOperationShow}
             currentPermission={currentPermission}
-            permissions={this.props.permissions}
+            permissions={permissions}
             onPermissionChanged={this.onChangeUserPermission}
           />
         </td>
@@ -75,10 +75,11 @@ class UserItem extends React.Component {
         <td className="name">{item.inviter_name}</td>
         <td>
           <OpIcon
+            id={`delete-icon-${index}`}
             symbol="close"
-            className={`op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
+            className={classnames('op-icon', { 'd-none': !isOperationShow })}
             op={this.deleteShareItem}
-            title={gettext('Delete')}
+            tooltip={gettext('Delete')}
           />
         </td>
       </tr>
@@ -87,6 +88,7 @@ class UserItem extends React.Component {
 }
 
 UserItem.propTypes = {
+  index: PropTypes.number.isRequired,
   item: PropTypes.object.isRequired,
   permissions: PropTypes.array.isRequired,
   deleteShareItem: PropTypes.func.isRequired,
@@ -104,6 +106,7 @@ class UserList extends React.Component {
           return (
             <UserItem
               key={index}
+              index={index}
               item={item}
               permissions={this.props.permissions}
               deleteShareItem={this.props.deleteShareItem}

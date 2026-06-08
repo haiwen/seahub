@@ -178,10 +178,10 @@ class LogUserSelector extends Component {
                       className="activity-user-item h-6 p-1 rounded d-flex justify-content-between align-items-center"
                       onClick={(e) => { this.toggleSelectItem(e, item); }}
                     >
-                      <div>
+                      <span className="avatar-name-wrapper">
                         <img src={item.avatar_url} className="avatar w-5 h-5" alt="" />
                         <span className="activity-user-name ml-2">{item.name}</span>
-                      </div>
+                      </span>
                       {isSelected && <Icon symbol="check-thin" className="text-gray font-weight-bold" />}
                     </li>
                   );

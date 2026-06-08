@@ -37,7 +37,7 @@ from seahub.wiki2.utils import get_wiki_config, WIKI_PAGES_DIR, is_group_wiki, \
     check_wiki_admin_permission, check_wiki_permission, get_all_wiki_ids, get_and_gen_page_nav_by_id, \
     get_current_level_page_ids, save_wiki_config, gen_unique_id, gen_new_page_nav_by_id, pop_nav, \
     delete_page, move_nav, revert_nav, get_sub_ids_by_page_id, get_parent_id_stack, add_convert_wiki_task, \
-    import_conflunece_to_wiki, import_wiki_page
+    import_confluence_to_wiki, import_wiki_page
 
 from seahub.utils import is_org_context, get_user_repos, is_pro_version, is_valid_dirent_name, \
     get_no_duplicate_obj_name, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_get_url, get_service_url, normalize_dir_path, normalize_file_path
@@ -1323,7 +1323,7 @@ class WikiPageTrashView(APIView):
                 seafile_api.del_file(repo_id, parent_dir,
                                      json.dumps([dir_name]), username)
 
-                # rm sdoc fileuuid
+                # rm sdoc file_uuid
                 file_uuid = get_seadoc_file_uuid(repo, del_page['path'])
                 file_uuids.append(file_uuid)
             FileComment.objects.filter(uuid__in=file_uuids).delete()
@@ -1855,7 +1855,7 @@ class ImportConfluenceView(APIView):
             msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
 
-        task_id = import_conflunece_to_wiki({
+        task_id = import_confluence_to_wiki({
             'repo_id': repo_id,
             'space_key': space_key,
             'file_path': tmp_zip_file,

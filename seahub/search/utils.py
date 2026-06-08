@@ -22,6 +22,11 @@ from seahub import settings
 import seaserv
 from seaserv import seafile_api, ccnet_api
 
+try:
+    from seahub.settings import EVENTS_CONFIG_FILE
+except ImportError:
+    EVENTS_CONFIG_FILE = None
+
 
 try:
     from seahub.settings import EVENTS_CONFIG_FILE
@@ -172,15 +177,13 @@ def search_files(repos_map, search_path, keyword, obj_desc, start, size, org_id=
         repo = repos_map.get(f['repo_id'], None)
         if not repo:
             continue
-
         if repo.origin_path:
-            if not f['fullpath'].startswith(repo.origin_path):
+            if not is_path_in_virtual_root(f['fullpath'], repo.origin_path):
                 # this operation will reduce the result items, but it will not happen now
                 continue
             else:
                 f['repo_id'] = repo.repo_id
                 f['fullpath'] = f['fullpath'].removeprefix(repo.origin_path)
-
         if not repo.owner:
             if org_id:
                 repo.owner = seafile_api.get_org_repo_owner(repo.id)
@@ -343,3 +346,14 @@ def is_invisible_path(repo_id_to_invisible_paths, repo_id, path):
         if path == ip or path.startswith(ip + '/'):
             return True
     return False
+
+def is_path_in_virtual_root(fullpath, origin_path):
+    if not origin_path:
+        return True
+
+    fullpath = fullpath.rstrip('/') or '/'
+    origin_path = origin_path.rstrip('/') or '/'
+    if origin_path == '/':
+        return True
+
+    return fullpath == origin_path or fullpath.startswith(origin_path + '/')

@@ -2131,6 +2131,15 @@ def view_media_file_via_share_link(request):
         err_msg = 'Share link has expired'
         return render_error(request, err_msg)
 
+    if not check_share_link_user_access(file_share, request.user.username):
+        err_msg = _('Permission denied')
+        return render_error(request, err_msg)
+
+    password_check_passed, err_msg = check_share_link_common(request, file_share)
+
+    if not password_check_passed:
+        return render_error(request, err_msg or _('Permission denied'))
+
     shared_file_name = os.path.basename(file_share.path)
     file_type, file_ext = get_file_type_and_ext(shared_file_name)
 

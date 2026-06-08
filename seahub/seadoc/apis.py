@@ -29,6 +29,7 @@ from django.core.files.uploadhandler import TemporaryFileUploadHandler
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import condition
 
+from seahub.search.utils import is_path_in_virtual_root
 from seaserv import seafile_api, check_quota, get_org_id_by_repo_id
 from seahub.repo_metadata.metadata_server_api import list_metadata_view_records
 
@@ -55,6 +56,7 @@ from seahub.utils import get_file_type_and_ext, normalize_file_path, \
 from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.utils.repo import parse_repo_perm, get_related_users_by_repo
+from seahub.share.utils import is_repo_admin
 from seahub.seadoc.models import SeadocHistoryName, SeadocRevision, SeadocCommentReply, SeadocNotification
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname, \
@@ -1247,7 +1249,8 @@ class SeadocCommentView(APIView):
         """Delete a comment
         """
         auth = request.headers.get('authorization', '').split()
-        if not is_valid_seadoc_access_token(auth, file_uuid):
+        is_valid, payload = is_valid_seadoc_access_token(auth, file_uuid, return_payload=True)
+        if not is_valid:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1259,6 +1262,13 @@ class SeadocCommentView(APIView):
         if str(file_comment.uuid.uuid) != file_uuid:
             return api_error(status.HTTP_404_NOT_FOUND, 'comment not found: %s' % comment_id)
 
+        # permission check
+        username = payload.get('username', '')
+        if username != file_comment.author:
+            uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+            if not uuid_map or not is_repo_admin(username, uuid_map.repo_id):
+                return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         file_comment.delete()
         SeadocCommentReply.objects.filter(comment_id=comment_id).delete()
         return Response({'success': True})
@@ -1267,7 +1277,8 @@ class SeadocCommentView(APIView):
         """Update a comment
         """
         auth = request.headers.get('authorization', '').split()
-        if not is_valid_seadoc_access_token(auth, file_uuid):
+        is_valid, payload = is_valid_seadoc_access_token(auth, file_uuid, return_payload=True)
+        if not is_valid:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1287,6 +1298,17 @@ class SeadocCommentView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         if str(file_comment.uuid.uuid) != file_uuid:
             return api_error(status.HTTP_404_NOT_FOUND, 'comment not found: %s' % comment_id)
+
+        # permission check
+        username = payload.get('username', '')
+        # editing comment content requires being the author
+        if (detail is not None or comment is not None) and username != file_comment.author:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        # setting resolved allowed for author or repo admin
+        if resolved is not None and username != file_comment.author:
+            uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+            if not uuid_map or not is_repo_admin(username, uuid_map.repo_id):
+                return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         if resolved is not None:
             # do not refresh updated_at
@@ -1461,7 +1483,8 @@ class SeadocCommentReplyView(APIView):
         """Delete a comment reply
         """
         auth = request.headers.get('authorization', '').split()
-        if not is_valid_seadoc_access_token(auth, file_uuid):
+        is_valid, payload = is_valid_seadoc_access_token(auth, file_uuid, return_payload=True)
+        if not is_valid:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1475,6 +1498,14 @@ class SeadocCommentReplyView(APIView):
             id=reply_id, doc_uuid=file_uuid, comment_id=comment_id).first()
         if not reply:
             return api_error(status.HTTP_404_NOT_FOUND, 'reply not found.')
+
+        # permission check
+        username = payload.get('username', '')
+        if username != reply.author:
+            uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+            if not uuid_map or not is_repo_admin(username, uuid_map.repo_id):
+                return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         reply.delete()
         return Response({'success': True})
 
@@ -1482,7 +1513,8 @@ class SeadocCommentReplyView(APIView):
         """Update a comment reply
         """
         auth = request.headers.get('authorization', '').split()
-        if not is_valid_seadoc_access_token(auth, file_uuid):
+        is_valid, payload = is_valid_seadoc_access_token(auth, file_uuid, return_payload=True)
+        if not is_valid:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1501,6 +1533,11 @@ class SeadocCommentReplyView(APIView):
             id=reply_id, doc_uuid=file_uuid, comment_id=comment_id).first()
         if not reply:
             return api_error(status.HTTP_404_NOT_FOUND, 'reply not found.')
+
+        # permission check
+        username = payload.get('username', '')
+        if username != reply.author:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # save
         reply.reply = str(reply_content)
@@ -2997,7 +3034,12 @@ class SeadocSearchFilenameView(APIView):
             error_msg = 'seadoc uuid %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         repo_id = uuid_map.repo_id
+        
         repo = seafile_api.get_repo(repo_id)
+        # permission check
+        if not check_folder_permission(request, repo_id, '/'):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         search_filename_only = True
         if HAS_FILE_SEARCH:
@@ -3061,7 +3103,7 @@ class SeadocSearchFilenameView(APIView):
                 f.pop('_id', None)
 
                 if origin_path:
-                    if not f['fullpath'].startswith(origin_path):
+                    if not is_path_in_virtual_root(f['fullpath'], origin_path):
                         # this operation will reduce the result items, but it will not happen now
                         continue
                     else:

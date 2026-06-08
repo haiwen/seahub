@@ -5,7 +5,7 @@ import Icon from './icon';
 import Tooltip from './tooltip';
 
 const propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.string,
   className: PropTypes.string,
   style: PropTypes.object,
   op: PropTypes.func,
@@ -14,6 +14,7 @@ const propTypes = {
   tooltip: PropTypes.string,
   placement: PropTypes.string,
   modifiers: PropTypes.array,
+  iconRef: PropTypes.object,
 };
 
 class OpIcon extends React.Component {
@@ -22,16 +23,18 @@ class OpIcon extends React.Component {
   }
 
   render() {
-    const { id, className, style, op, title, symbol, tooltip, placement, modifiers, ...others } = this.props;
+    const { id, className, style, op, title, symbol, tooltip, placement, modifiers, iconRef, ...others } = this.props;
     const iconWrapper = (
       <span
         {...others}
         id={id}
+        ref={iconRef}
         className={className}
         style={style}
-        role="button"
-        aria-label={title}
         onClick={op}
+        tabIndex="0"
+        role="button"
+        aria-label={title || tooltip}
         onKeyDown={Utils.onKeyDown}
       >
         <Icon symbol={symbol} />

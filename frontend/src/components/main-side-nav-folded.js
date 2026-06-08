@@ -17,6 +17,8 @@ import { isWorkWeixin } from './wechat/weixin-utils';
 import WechatDialog from './wechat/wechat-dialog';
 import Icon from '../components/icon';
 import Tooltip from './tooltip';
+import EventBus from './common/event-bus';
+import { EVENT_BUS_TYPE } from './common/event-bus-type';
 
 import '../css/main-side-nav-folded.css';
 
@@ -45,6 +47,9 @@ class MainSideNavFolded extends React.Component {
   componentDidMount() {
     document.addEventListener('click', this.handleOutsideClick);
     this.unsubscribeHeaderEvent = this.props.eventBus.subscribe('top-header-mouse-enter', this.closeAllSubNav);
+
+    const eventBus = EventBus.getInstance();
+    this.unsubscribeGroupRenamed = eventBus.subscribe(EVENT_BUS_TYPE.GROUP_RENAMED, this.onGroupRenamed);
     seafileAPI.listGroups().then(res => {
       this.setState({
         groupItems: res.data.map(item => new Group(item)).sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1),
@@ -64,15 +69,25 @@ class MainSideNavFolded extends React.Component {
   componentWillUnmount() {
     document.removeEventListener('click', this.handleOutsideClick);
     this.unsubscribeHeaderEvent();
+    this.unsubscribeGroupRenamed();
     if (this.tipTimeout) {
       clearTimeout(this.tipTimeout);
     }
   }
 
+  onGroupRenamed = ({ newName, groupID }) => {
+    const { groupItems } = this.state;
+    if (groupItems.length == 0) {
+      return;
+    }
+    const targetGroup = groupItems.find(item => item.id == groupID);
+    targetGroup.name = newName;
+    this.setState({ groupItems });
+  };
+
   toggleWechatDialog = () => {
     this.setState({ isShowWechatDialog: !this.state.isShowWechatDialog });
   };
-
 
   handleOutsideClick = (e) => {
     const { isLibrariesSubNavShown, isShareAdminSubNavShown } = this.state;

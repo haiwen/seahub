@@ -49,8 +49,8 @@ class GroupItem extends React.Component {
   };
 
   render() {
+    const { index, item } = this.props;
     const { isHighlighted } = this.state;
-    let item = this.props.item;
     let currentPermission = Utils.getSharedPermission(item);
     if (isMobile) {
       return (
@@ -102,10 +102,11 @@ class GroupItem extends React.Component {
         </td>
         <td>
           <OpIcon
+            id={`delete-icon-${index}`}
             symbol="close"
             className={`op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
             op={this.deleteShareItem}
-            title={gettext('Delete')}
+            tooltip={gettext('Delete')}
           />
         </td>
       </tr>
@@ -114,8 +115,9 @@ class GroupItem extends React.Component {
 }
 
 GroupItem.propTypes = {
-  repoID: PropTypes.string.isRequired,
+  index: PropTypes.number.isRequired,
   item: PropTypes.object.isRequired,
+  repoID: PropTypes.string.isRequired,
   permissions: PropTypes.array.isRequired,
   deleteShareItem: PropTypes.func.isRequired,
   onChangeUserPermission: PropTypes.func.isRequired,
@@ -131,6 +133,7 @@ class GroupList extends React.Component {
           return (
             <GroupItem
               key={index}
+              index={index}
               item={item}
               repoID={this.props.repoID}
               permissions={this.props.permissions}

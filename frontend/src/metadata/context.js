@@ -30,6 +30,7 @@ class Context {
 
     // init API
     const { repoInfo } = this.settings;
+    this.repoInfo = repoInfo;
     this.metadataAPI = metadataAPI;
     this.tagsAPI = tagsAPI;
 

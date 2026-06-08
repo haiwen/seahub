@@ -6,6 +6,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework import status
+from seahub.search.utils import is_path_in_virtual_root
 from seaserv import seafile_api
 
 from seahub.api2.authentication import TokenAuthentication
@@ -120,7 +121,7 @@ class PublishedRepoSearchView(APIView):
                 f.pop('_id', None)
 
                 if origin_path:
-                    if not f['fullpath'].startswith(origin_path):
+                    if not is_path_in_virtual_root(f['fullpath'], origin_path):
                         # this operation will reduce the result items, but it will not happen now
                         continue
                     else:

@@ -1,8 +1,22 @@
 export const DEFAULT_MENU_WIDTH = 200;
 export const DEFAULT_MENU_OFFSET_SKIDDING = 0;
 export const DEFAULT_MENU_OFFSET_DISTANCE = 4;
-export const DEFAULT_SUBMENU_OFFSET_SKIDDING = -10;
-export const DEFAULT_SUBMENU_OFFSET_DISTANCE = 12;
+export const DEFAULT_SUBMENU_OFFSET_SKIDDING = -8;
+export const DEFAULT_SUBMENU_OFFSET_DISTANCE = 0;
+
+export const DROPDOWN_MENU_OFFSET_DEFAULT = {
+  name: 'offset',
+  options: {
+    offset: [DEFAULT_MENU_OFFSET_SKIDDING, DEFAULT_MENU_OFFSET_DISTANCE]
+  }
+};
+
+export const DROPDOWN_SUBMENU_OFFSET_DEFAULT = {
+  name: 'offset',
+  options: {
+    offset: [DEFAULT_SUBMENU_OFFSET_SKIDDING, DEFAULT_SUBMENU_OFFSET_DISTANCE]
+  }
+};
 
 export const isDividerNode = (item) => item === 'Divider' || item?.type === 'divider';
 

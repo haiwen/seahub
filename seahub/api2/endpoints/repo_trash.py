@@ -16,7 +16,7 @@ from seahub.base.models import FileTrash
 
 from seahub.signals import clean_up_repo_trash
 from seahub.utils import is_org_context
-from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr, utc_datetime_to_isoformat_timestr
 from seahub.utils.repo import get_repo_owner, is_repo_admin
 from seahub.views import check_folder_permission
 from seahub.organizations.models import OrgAdminSettings, DISABLE_ORG_USER_CLEAN_TRASH
@@ -327,7 +327,7 @@ class RepoTrash2(APIView):
         item_info = {
             'parent_dir': '/' if trash_item.path == '/' else trash_item.path,
             'obj_name': trash_item.obj_name,
-            'deleted_time': timestamp_to_isoformat_timestr(int(trash_item.delete_time.timestamp())),
+            'deleted_time': utc_datetime_to_isoformat_timestr(trash_item.delete_time),
             'commit_id': trash_item.commit_id,
         }
 

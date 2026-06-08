@@ -23,6 +23,7 @@ import TransferDialog from '../dialog/transfer-dialog';
 import OpIcon from '../../components/op-icon';
 import { formatWithTimezone } from '../../utils/time';
 import Icon from '../icon';
+import Tooltip from '../../components/tooltip';
 import RepoWebhookDialog from '../dialog/repo-webhook-dialog';
 import RepoArchiveDialog from '../dialog/repo-archive-dialog';
 import ArchiveIcon from '../archive-icon';
@@ -96,6 +97,14 @@ class SharedRepoListItem extends React.Component {
         isOperationShow: false,
       });
     }
+  };
+
+  onUnfreezedItem = () => {
+    this.setState({
+      highlight: false,
+      isOperationShow: false,
+    });
+    this.props.onUnfreezedItem();
   };
 
   getRepoComputeParams = () => {
@@ -526,6 +535,19 @@ class SharedRepoListItem extends React.Component {
         </div>
       );
     } else {
+      const { isStarred } = this.state;
+      const starItem = isStarred
+        ? {
+          key: 'Unstar',
+          label: gettext('Unstar'),
+          onClick: this.onToggleStarRepo
+        }
+        : {
+          key: 'Star',
+          label: gettext('Star'),
+          onClick: this.onToggleStarRepo
+        };
+      const menuItems = [starItem];
       return (
         <div className="d-flex align-items-center lh-1">
           {operations.map(item => {
@@ -538,6 +560,23 @@ class SharedRepoListItem extends React.Component {
                 return null;
             }
           })}
+          <CustomDropdown
+            items={menuItems}
+            target="more-operations-btn"
+            placement="down"
+            trigger={
+              <>
+                <Icon symbol="more-level" />
+                <Tooltip target="more-operations-btn">
+                  {gettext('More operations')}
+                </Tooltip>
+              </>
+            }
+            triggerClassName="op-icon"
+            menuProps={{ container: 'body' }}
+            freezeItem={this.props.onFreezedItem}
+            unfreezeItem={this.onUnfreezedItem}
+          />
         </div>
       );
     }
@@ -596,10 +635,11 @@ class SharedRepoListItem extends React.Component {
           <ArchiveIcon currentRepoInfo={repo} />
           {isStarred && (
             <OpIcon
-              id={`starred-icon-${idx}`}
+              id={`star-icon-${idx}`}
               className="star-icon"
               symbol="starred"
-              tooltip={gettext('Starred')}
+              tooltip={gettext('Unstar')}
+              op={this.onToggleStarRepo}
             />
           )}
         </div>
@@ -629,10 +669,21 @@ class SharedRepoListItem extends React.Component {
           <div className="d-flex flex-column justify-content-center library-name-container">
             {this.state.isRenaming ?
               <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
-              <Fragment>
-                <Link to={libPath} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
+              <>
+                <div className='d-flex align-items-center'>
+                  <Link to={libPath} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
+                  {isStarred && (
+                    <OpIcon
+                      id={`star-icon-${idx}`}
+                      className="star-icon ml-2 flex-shrink-0"
+                      symbol="starred"
+                      tooltip={gettext('Unstar')}
+                      op={this.onToggleStarRepo}
+                    />
+                  )}
+                </div>
                 <span className="library-size">{repo.size}</span>
-              </Fragment>
+              </>
             }
           </div>
         </div>

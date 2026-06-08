@@ -8,6 +8,7 @@
 .sf-metadata-groupbys-popover .popover {
   max-width: none;
   min-width: 510px;
+  border: none;
 }
 
 .sf-metadata-groupbys-popover .groupbys-list {
@@ -95,6 +96,10 @@
 
 .sf-metadata-groupbys-popover .groupby-item .groupby-column {
   width: 150px;
+}
+
+.sf-metadata-groupbys-popover .groupby-item .groupby-column .seafile-select-option {
+  justify-content: flex-start;
 }
 
 .sf-metadata-groupbys-popover .groupby-item .groupby-count-type,

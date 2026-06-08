@@ -46,6 +46,12 @@
   border-radius: 10px;
   background: #eaeaea;
   color: #212529;
+  height: 20px;
+}
+
+.activity-selected-modifier .avatar {
+  width: 16px;
+  height: 16px;
 }
 
 .unselect-activity-user .seafile-multicolor-icon {

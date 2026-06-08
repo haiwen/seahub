@@ -44,3 +44,8 @@ gettext('A file named {upload_file_link} is uploaded to {uploaded_link}.');
 gettext('A file named {upload_file_link} is uploaded.');
 gettext('Open in new tab');
 gettext('Grid view');
+gettext('Copy path');
+gettext('New');
+gettext('Open with OnlyOffice');
+gettext('Open with client');
+gettext('Add page below');

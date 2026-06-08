@@ -49,6 +49,7 @@
   width: 14px;
   position: relative;
   left: 2px;
+  bottom: 1px;
 }
 
 .sf-metadata-delete-select-tags .sf-metadata-delete-select-remove .seafile-multicolor-icon-x-01 {

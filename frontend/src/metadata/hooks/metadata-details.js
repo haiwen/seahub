@@ -31,8 +31,8 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
   const [record, setRecord] = useState(null);
   const [originColumns, setOriginColumns] = useState([]);
 
-  const canModifyRecord = useMemo(() => repoInfo.permission !== 'admin' && repoInfo.permission !== 'rw' ? false : true, [repoInfo]);
-  const canModifyDetails = useMemo(() => repoInfo.is_admin, [repoInfo]);
+  const canModifyRecord = useMemo(() => repoInfo?.permission !== 'admin' && repoInfo?.permission !== 'rw' ? false : true, [repoInfo]);
+  const canModifyDetails = useMemo(() => repoInfo?.is_admin, [repoInfo]);
 
   const allColumnsRef = useRef([]);
   const direntRef = useRef(null);
@@ -230,7 +230,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
       }).catch(error => {
         setRecord(null);
         if (error.response && error.response.status === 404 && onErrMessage) {
-          const err = `${direntType === 'file' ? 'File' : 'Folder' } does not exist`;
+          const err = `${direntType === 'file' ? 'File' : 'Folder'} does not exist`;
           onErrMessage(err);
           setLoading(false);
           return;
@@ -240,7 +240,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
         setLoading(false);
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enableMetadata, repoID, path, direntType, dirent, direntDetail]);
 
   useEffect(() => {

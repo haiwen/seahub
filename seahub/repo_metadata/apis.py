@@ -188,7 +188,7 @@ class MetadataManage(APIView):
         # check dose the repo have opened metadata manage
         record = RepoMetadata.objects.filter(repo_id=repo_id).first()
         if not record or not record.enabled:
-            error_msg = f'The repo {repo_id} has disabledd the metadata manage.'
+            error_msg = f'The repo {repo_id} has disabled the metadata manage.'
             return api_error(status.HTTP_409_CONFLICT, error_msg)
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
@@ -1146,7 +1146,7 @@ class MetadataViews(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
 
-        # The face_recognition view is unique for a repo, cannot be added repeatly.
+        # The face_recognition view is unique for a repo, cannot be added repeatedly.
         if view_type == 'face_recognition':
             view = RepoMetadataViews.objects.get_view(repo_id, FACE_RECOGNITION_VIEW_ID)
             if view:
@@ -2960,20 +2960,11 @@ class PeopleCoverPhoto(APIView):
 
         row = query_result[0]
         obj_id = row.get(METADATA_TABLE.columns.obj_id.name)
-        parent_dir = row.get(METADATA_TABLE.columns.parent_dir.name)
-        file_name = row.get(METADATA_TABLE.columns.file_name.name)
-        path = os.path.join(parent_dir, file_name)
-
-        token = seafile_api.get_fileserver_access_token(repo_id, obj_id, 'download', request.user.username, use_onetime=True)
-        if not token:
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
+        
         params = {
             'repo_id': repo_id,
-            'path': path,
-            'download_token': token,
             'people_id': people_id,
+            'obj_id': obj_id,
         }
 
         try:

@@ -70,13 +70,25 @@ class FileToolbar extends React.Component {
   getDesktopMenuItems = () => {
     const items = [];
     if (fileExt === 'csv' && enableOnlyoffice) {
-      items.push({ key: 'open-with-onlyoffice', label: gettext('Open with OnlyOffice'), onClick: this.handleOpenWithOnlyOffice });
+      items.push({
+        key: 'open-with-onlyoffice',
+        label: gettext('Open with OnlyOffice'),
+        onClick: this.handleOpenWithOnlyOffice,
+      });
     }
     if (filePerm === 'rw') {
-      items.push({ key: 'open-with-client', label: gettext('Open with client'), onClick: this.handleOpenWithClient });
+      items.push({
+        key: 'open-with-client',
+        label: gettext('Open with client'),
+        onClick: this.handleOpenWithClient,
+      });
     }
     if (filePerm === 'rw') {
-      items.push({ key: 'history', label: gettext('History'), onClick: this.handleOpenHistory });
+      items.push({
+        key: 'history',
+        label: gettext('History'),
+        onClick: this.handleOpenHistory,
+      });
     }
     if (fileType === 'Text') {
       items.push({
@@ -87,7 +99,11 @@ class FileToolbar extends React.Component {
       });
     }
     items.push('Divider');
-    items.push({ key: 'open-parent-folder', label: gettext('Open parent folder'), onClick: this.handleOpenParentFolder });
+    items.push({
+      key: 'open-parent-folder',
+      label: gettext('Open parent folder'),
+      onClick: this.handleOpenParentFolder,
+    });
 
     return items;
   };

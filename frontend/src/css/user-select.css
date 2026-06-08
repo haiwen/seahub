@@ -91,7 +91,7 @@
   max-width: max-content;
   background: var(--bs-popover-bg);
   border: 1px solid var(--bs-border-secondary-color);
-  border-radius: 8px;
+  border-radius: 4px;
   box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.1);
 }
 

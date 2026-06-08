@@ -42,7 +42,7 @@ const Text = ({ record, column, onCommit }) => {
 
   useEffect(() => {
     const value = getCellValueByColumn(record, column);
-    value && setValue(value);
+    setValue(value || '');
   }, [record, column]);
 
   const readOnly = !column.editable;

@@ -379,12 +379,15 @@
   }
 
   .search-icon-container {
-    display: flex;
+    height: 100%;
     width: 2rem;
+    margin-right: 0.5rem;
+    display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
     position: relative;
+    border-radius: 4px;
+    border: 1px solid var(--bs-border-color);
   }
 
   .search-icon-container .input-icon-addon {

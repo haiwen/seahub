@@ -31,6 +31,7 @@ from django.template.defaultfilters import filesizeformat
 from django.utils import timezone
 from django.utils.translation import gettext as _
 from seahub.auth.utils import get_virtual_id_by_email
+from seahub.search.utils import is_path_in_virtual_root
 from .throttling import ScopedRateThrottle, AnonRateThrottle, UserRateThrottle
 from .authentication import TokenAuthentication
 from .serializers import AuthTokenSerializer
@@ -728,14 +729,13 @@ class Search(APIView):
                 repo_name = repo[2]
                 f['repo_name'] = repo_name
                 f.pop('_id', None)
-
                 origin_repo_id = f['repo_id']
                 origin_full_path = f['fullpath']
                 if is_invisible_path(repo_id_to_invisible_paths, origin_repo_id, origin_full_path):
                     continue
 
                 if origin_path:
-                    if not f['fullpath'].startswith(origin_path):
+                    if not is_path_in_virtual_root(f['fullpath'], origin_path):
                         # this operation will reduce the result items, but it will not happen now
                         continue
                     else:
@@ -3587,6 +3587,16 @@ class FileRevision(APIView):
         path = request.GET.get('p', None)
         if path is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
+        
+
+        permission = check_folder_permission(request, repo_id, path)
+        if permission not in get_available_repo_perms():
+            permission = normalize_custom_permission_name(permission)
+            if not permission:
+                return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        if parse_repo_perm(permission).can_download is False:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         repo = seafile_api.get_repo(repo_id)
         if not repo:

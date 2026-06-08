@@ -91,11 +91,11 @@ class UserSelector extends Component {
         </OpElement>
         {isPopoverOpen && (
           <div className="activity-modifier-selector-container sf-popover-container" ref={ref => this.userSelector = ref}>
-            <ul className="activity-selected-modifiers px-3 py-1 list-unstyled">
+            <ul className="activity-selected-modifiers px-3 py-2 list-unstyled">
               {selectedUsers.map((item, index) => {
                 return (
                   <li key={index} className="activity-selected-modifier">
-                    <img src={item.avatar_url} className="avatar w-5 h-5" alt={item.name} />
+                    <img src={item.avatar_url} className="avatar" alt={item.name} />
                     <span className="activity-user-name ml-2">{item.name}</span>
                     <OpIcon
                       symbol="close"

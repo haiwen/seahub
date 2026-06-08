@@ -8,6 +8,7 @@ import { SEARCH_FILTERS_KEY } from '../../../../../constants';
 import IconBtn from '../../../../icon-btn';
 import Icon from '../../../../icon';
 import { Utils } from '../../../../../utils/utils';
+import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 
 
 const FilterBySuffix = ({ suffixes, onChange }) => {
@@ -60,7 +61,7 @@ const FilterBySuffix = ({ suffixes, onChange }) => {
           <Icon symbol="down" className="ml-1" />
         </DropdownToggle>
         <ModalPortal>
-          <DropdownMenu className="search-filter-menu filter-by-suffix-menu p-4">
+          <DropdownMenu className="search-filter-menu filter-by-suffix-menu p-4" modifiers={[DROPDOWN_MENU_OFFSET_DEFAULT]}>
             <input
               ref={inputRef}
               type="text"

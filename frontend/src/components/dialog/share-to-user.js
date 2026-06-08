@@ -59,7 +59,7 @@ class UserItem extends React.Component {
   };
 
   render() {
-    let item = this.props.item;
+    const { index, item } = this.props;
     let currentPermission = Utils.getSharedPermission(item);
     const { isUserDetailsPopoverOpen, isHighlighted } = this.state;
     if (isMobile) {
@@ -173,7 +173,8 @@ class UserItem extends React.Component {
             symbol="close"
             className={`op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
             op={this.deleteShareItem}
-            title={gettext('Delete')}
+            id={`delete-icon-${index}`}
+            tooltip={gettext('Delete')}
           />
         </td>
       </tr>
@@ -182,6 +183,7 @@ class UserItem extends React.Component {
 }
 
 UserItem.propTypes = {
+  index: PropTypes.number.isRequired,
   repoID: PropTypes.string.isRequired,
   item: PropTypes.object.isRequired,
   permissions: PropTypes.array.isRequired,
@@ -199,8 +201,9 @@ class UserList extends React.Component {
           return (
             <UserItem
               key={index}
-              item={item}
+              index={index}
               repoID={this.props.repoID}
+              item={item}
               permissions={this.props.permissions}
               deleteShareItem={this.props.deleteShareItem}
               onChangeUserPermission={this.props.onChangeUserPermission}

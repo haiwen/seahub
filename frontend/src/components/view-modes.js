@@ -25,12 +25,19 @@ class ViewModes extends React.Component {
   }
 
   onKeyDown = (e) => {
-    if ((e.ctrlKey || e.metaKey) && e.shiftKey) {
+    const isSwitchViewModeHotkey = Utils.isMac()
+      ? e.metaKey && e.altKey && !e.ctrlKey && !e.shiftKey
+      : e.ctrlKey && e.shiftKey && !e.metaKey && !e.altKey;
+
+    if (isSwitchViewModeHotkey) {
       if (e.keyCode === 49) {
+        e.preventDefault();
         this.props.switchViewMode(LIST_MODE);
       } else if (e.keyCode === 50) {
+        e.preventDefault();
         this.props.switchViewMode(GRID_MODE);
       } else if (e.keyCode === 51) {
+        e.preventDefault();
         this.props.switchViewMode(TABLE_MODE);
       }
     }
@@ -38,7 +45,7 @@ class ViewModes extends React.Component {
 
   render() {
     const { currentViewMode, isSupportTable = false } = this.props;
-    const shortcutMain = Utils.isMac() ? '⇧ ⌘' : 'Ctrl + Shift +';
+    const shortcutMain = Utils.isMac() ? '⌥ ⌘' : 'Ctrl + Shift +';
     let options = [
       {
         key: LIST_MODE,

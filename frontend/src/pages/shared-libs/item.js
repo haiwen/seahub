@@ -11,7 +11,11 @@ import ModalPortal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import OpIcon from '../../components/op-icon';
+import Icon from '../../components/icon';
+import Tooltip from '../../components/tooltip';
+import CustomDropdown from '../../components/dropdown';
 import { formatWithTimezone } from '../../utils/time';
+
 
 dayjs.extend(relativeTime);
 
@@ -53,6 +57,14 @@ class Item extends Component {
         showOpIcon: false
       });
     }
+  };
+
+  onUnfreezedItem = () => {
+    this.setState({
+      highlight: false,
+      isOpIconShow: false,
+    });
+    this.props.onUnfreezedItem();
   };
 
   share = () => {
@@ -136,21 +148,76 @@ class Item extends Component {
     }
   };
 
+  itemOperations = () => {
+    const { isStarred } = this.state;
+    const { data } = this.props;
+
+    const iconVisibility = this.state.showOpIcon ? '' : ' invisible';
+    const shareIconClassName = 'op-icon repo-share-btn' + iconVisibility;
+    const leaveShareIconClassName = 'op-icon' + iconVisibility;
+    const starItem = isStarred
+      ? {
+        key: 'Unstar',
+        label: gettext('Unstar'),
+        onClick: this.onToggleStarRepo
+      }
+      : {
+        key: 'Star',
+        label: gettext('Star'),
+        onClick: this.onToggleStarRepo
+      };
+    const menuItems = [starItem];
+
+    return (
+      <div className="flex-shrink-0 d-flex align-items-center">
+        {(isPro && data.is_admin) &&
+          <OpIcon
+            id={`share-${this.props.idx}`}
+            className={shareIconClassName}
+            symbol="share"
+            title={gettext('Share')}
+            op={this.share}
+          />
+        }
+        <OpIcon
+          id={`leave-share-btn-${this.props.idx}`}
+          className={leaveShareIconClassName}
+          symbol="close"
+          tooltip={gettext('Leave Share')}
+          op={this.leaveShare}
+        />
+        <CustomDropdown
+          items={menuItems}
+          target="more-operations-btn"
+          placement="down"
+          trigger={
+            <>
+              <Icon symbol="more-level" />
+              <Tooltip target="more-operations-btn">
+                {gettext('More operations')}
+              </Tooltip>
+            </>
+          }
+          triggerClassName={`op-icon ${iconVisibility}`}
+          menuProps={{ container: 'body' }}
+          freezeItem={this.props.onFreezedItem}
+          unfreezeItem={this.onUnfreezedItem}
+        />
+      </div>
+    );
+  };
+
   render() {
     if (this.state.unshared) {
       return null;
     }
 
     const { isStarred } = this.state;
-    const { data, currentViewMode = LIST_MODE } = this.props;
+    const { data, idx, currentViewMode = LIST_MODE } = this.props;
     data.icon_url = Utils.getLibIconUrl(data);
     data.icon_title = Utils.getLibIconTitle(data);
 
-    let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
-    let shareIconClassName = 'op-icon repo-share-btn' + iconVisibility;
-    let leaveShareIconClassName = 'op-icon' + iconVisibility;
     let shareRepoUrl = this.repoURL = `${siteRoot}library/${data.repo_id}/${Utils.encodePath(data.repo_name)}/`;
-
     if (this.props.isDesktop) {
       return (
         <Fragment>
@@ -169,31 +236,15 @@ class Item extends Component {
                 <Link to={shareRepoUrl}>{data.repo_name}</Link>
                 {isStarred && (
                   <OpIcon
-                    className="star-icon ml-1"
+                    id={`star-icon-${idx}`}
+                    className="star-icon"
                     symbol="starred"
-                    title={gettext('Unstar')}
+                    tooltip={gettext('Unstar')}
+                    op={this.onToggleStarRepo}
                   />
                 )}
               </div>
-              <div className="repo-item-actions">
-                <div className="d-flex align-items-center">
-                  {(isPro && data.is_admin) &&
-                  <OpIcon
-                    className={shareIconClassName}
-                    symbol="share"
-                    title={gettext('Share')}
-                    op={this.share}
-                  />
-                  }
-                  <OpIcon
-                    id={`leave-share-btn-${this.props.idx}`}
-                    className={leaveShareIconClassName}
-                    symbol="close"
-                    tooltip={gettext('Leave Share')}
-                    op={this.leaveShare}
-                  />
-                </div>
-              </div>
+              <div className="repo-item-actions">{this.itemOperations()}</div>
               <div className="repo-item-size">{data.size}</div>
               <div className="repo-item-time" title={formatWithTimezone(data.last_modified)}>{dayjs(data.last_modified).fromNow()}</div>
               <div className="repo-item-owner" title={data.owner_contact_email}>{data.owner_name}</div>
@@ -209,24 +260,22 @@ class Item extends Component {
               <div className="d-flex align-items-center library-info">
                 <img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="40" className="mr-3" />
                 <div className="d-flex flex-column justify-content-center library-name-container">
-                  <Link to={shareRepoUrl} className="text-truncate library-name" title={data.repo_name}>{data.repo_name}</Link>
+                  <div className='d-flex align-items-center'>
+                    <Link to={shareRepoUrl} className="text-truncate library-name" title={data.repo_name}>{data.repo_name}</Link>
+                    {isStarred && (
+                      <OpIcon
+                        id={`star-icon-${idx}`}
+                        className="star-icon ml-2 flex-shrink-0"
+                        symbol="starred"
+                        tooltip={gettext('Unstar')}
+                        op={this.onToggleStarRepo}
+                      />
+                    )}
+                  </div>
                   <span className="library-size">{data.size}</span>
                 </div>
               </div>
-              <div className="flex-shrink-0 d-flex align-items-center">
-                {(isPro && data.is_admin) &&
-                <OpIcon
-                  className={shareIconClassName}
-                  title={gettext('Share')}
-                  op={this.share}
-                />
-                }
-                <OpIcon
-                  className={leaveShareIconClassName}
-                  title={gettext('Leave Share')}
-                  op={this.leaveShare}
-                />
-              </div>
+              {this.itemOperations()}
             </div>
           )}
           {this.state.isShowSharedDialog && (
@@ -295,6 +344,8 @@ Item.propTypes = {
   data: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   freezeItem: PropTypes.func.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
   onContextMenu: PropTypes.func.isRequired,
 };
 

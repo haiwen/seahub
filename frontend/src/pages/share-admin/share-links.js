@@ -114,6 +114,7 @@ class Content extends Component {
           {items.map((item, index) => {
             return (<Item
               key={index}
+              index={index}
               isDesktop={isDesktop}
               item={item}
               onRemoveLink={this.props.onRemoveLink}
@@ -132,6 +133,7 @@ class Content extends Component {
 Content.propTypes = contentPropTypes;
 
 const itemPropTypes = {
+  index: PropTypes.number.isRequired,
   item: PropTypes.object.isRequired,
   isDesktop: PropTypes.bool.isRequired,
   onRemoveLink: PropTypes.func.isRequired,
@@ -251,7 +253,7 @@ class Item extends Component {
   };
 
   render() {
-    const { item } = this.props;
+    const { item, index } = this.props;
     const { isSelected = false } = item;
     const { highlight, currentPermission, permissionOptions, isOpIconShown, isPermSelectDialogOpen, isLinkDialogOpen } = this.state;
     this.permOptions = permissionOptions.map(item => {
@@ -326,16 +328,18 @@ class Item extends Component {
               <div className="d-flex align-items-center">
                 {!item.is_expired &&
                   <OpIcon
+                    id={`view-${index}`}
                     className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
                     symbol="link"
-                    title={gettext('View')}
+                    tooltip={gettext('View')}
                     op={this.viewLink}
                   />
                 }
                 <OpIcon
+                  id={`delete-${index}`}
                   className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
                   symbol="delete1"
-                  title={gettext('Remove')}
+                  tooltip={gettext('Remove')}
                   op={this.removeLink}
                 />
               </div>
@@ -587,8 +591,8 @@ class ShareAdminShareLinks extends Component {
                 )
                 : (
                   <ul className="nav">
-                    <li className="nav-item">
-                      <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link active px-0 py-2">
+                    <li className="nav-item active">
+                      <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link px-0 py-2">
                         {gettext('Share Links')}
                       </Link>
                       <CustomDropdown

@@ -8,6 +8,7 @@ import { SEARCH_FILTERS_KEY } from '../../../constants';
 import Icon from '../../icon';
 import { Utils } from '../../../utils/utils';
 import Tooltip from '@/components/tooltip';
+import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 
 const FilterBySuffix = ({ suffixes, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -57,15 +58,7 @@ const FilterBySuffix = ({ suffixes, onChange }) => {
           <Icon symbol="down" className="w-3 h-3 ml-1" />
         </DropdownToggle>
         <ModalPortal>
-          <DropdownMenu
-            className="search-filter-menu filter-by-suffix-menu p-4"
-            modifiers={[{
-              name: 'offset',
-              options: {
-                offset: [0, 8]
-              }
-            }]}
-          >
+          <DropdownMenu className="search-filter-menu filter-by-suffix-menu p-4" modifiers={[DROPDOWN_MENU_OFFSET_DEFAULT]}>
             <input
               ref={inputRef}
               type="text"

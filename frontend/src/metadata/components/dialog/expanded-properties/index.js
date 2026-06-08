@@ -56,7 +56,7 @@ const ExpandedPropertiesDialog = ({ recordId, columns, toggle, metadata, modifyR
     const oldRowData = isPrivateKey ? { [columnKey]: originalOldCellValue } : { [columnName]: originalOldCellValue };
     const originalOldRowData = { [columnKey]: originalOldCellValue };
     const originalUpdates = { [columnKey]: value };
-    modifyRecord(rowId, updates, oldRowData, originalUpdates, originalOldRowData);
+    modifyRecord({ rowId, updates, oldRowData, originalUpdates, originalOldRowData });
   }, [recordId, record, modifyRecord]);
 
   const closeBtn = (

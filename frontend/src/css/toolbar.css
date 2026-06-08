@@ -83,6 +83,10 @@
   margin: 0;
   font-size: 16px;
   color: var(--bs-icon-color);
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 4px;
 }
 /* end common-toolbar */
 

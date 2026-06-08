@@ -45,11 +45,11 @@ export const CustomDropdownItem = ({
     >
       {showLeftSlot && (
         <span className="dropdown-item-left-slot" aria-hidden="true">
-          {checked && <Icon symbol="check-thin" />}
+          {checked && <Icon symbol="check" />}
         </span>
       )}
       <span className="dropdown-item-main-slot">
-        {icon && <span className="dropdown-item-icon mr-2">{icon}</span>}
+        {icon && <span className={`dropdown-item-icon ${showLeftSlot ? 'mr-2' : 'mr-3'}`}>{icon}</span>}
         <span className="dropdown-item-label" title={label}>{label}</span>
       </span>
       {showRightSlot && (

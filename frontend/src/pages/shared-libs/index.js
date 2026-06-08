@@ -12,7 +12,6 @@ import SortOptionsDialog from '../../components/dialog/sort-options';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import Content from './content';
 import Icon from '../../components/icon';
-import OpIcon from '@/components/op-icon';
 
 class SharedLibraries extends Component {
   constructor(props) {
@@ -85,14 +84,6 @@ class SharedLibraries extends Component {
     );
   };
 
-  renderSortIconInMobile = () => {
-    return (
-      <>
-        {(!Utils.isDesktop() && this.state.items.length > 0) && <span className="action-icon" onClick={this.toggleSortOptionsDialog}><Icon symbol="sort-mobile" /></span>}
-      </>
-    );
-  };
-
   switchViewMode = (newMode) => {
     this.setState({
       currentViewMode: newMode
@@ -120,7 +111,6 @@ class SharedLibraries extends Component {
             <div className="library-list-header">
               <span className="d-flex align-items-center"><Icon symbol="share-with-me" className="role-icon" /></span>
               <span className="library-list-title">{gettext('Shared with me')}</span>
-              {(!Utils.isDesktop() && this.state.items.length > 0) && <OpIcon className="op-icon" symbol="sort-mobile" op={this.toggleSortOptionsDialog} title={gettext('Sort')} />}
             </div>
             {this.renderContent(currentViewMode)}
           </>
@@ -138,7 +128,9 @@ class SharedLibraries extends Component {
                     <ReposSortMenu className="ml-2" sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption}/>
                   </div>
                 )}
-                {this.renderSortIconInMobile()}
+                {(!Utils.isDesktop() && this.state.items.length > 0) &&
+                  <span className="action-icon" onClick={this.toggleSortOptionsDialog}><Icon symbol="sort" /></span>
+                }
               </div>
               <div className={classnames('cur-view-content', 'repos-container', { 'pt-3': currentViewMode != LIST_MODE })}>
                 {this.renderContent(currentViewMode)}
