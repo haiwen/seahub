@@ -435,6 +435,7 @@ class MylibRepoListItem extends React.Component {
               isPC={true}
               menuContainer="body"
               repo={this.props.repo}
+              isStarred={this.state.isStarred}
               onMenuItemClick={this.onMenuItemClick}
               onFreezedItem={this.props.onFreezedItem}
               onUnfreezedItem={this.onUnfreezedItem}
