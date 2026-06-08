@@ -114,7 +114,7 @@ class NoticeItem extends React.Component {
       // 2. handle xss(cross-site scripting)
       notice = notice.replace('{share_from}', shareFrom);
       notice = notice.replace('{repo_link}', `{tagA}${repo_name}{/tagA}`);
-      notice = notice.replace('{permission}', permission);
+      notice = notice.replace('{permission}', Utils.sharePerms(permission));
       notice = Utils.HTMLescape(notice);
       // 3. add jump link
       notice = notice.replace('{tagA}', `<a href='${Utils.encodePath(repoUrl)}'>`);
