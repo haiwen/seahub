@@ -49,6 +49,8 @@ create_tables=true
 EOF
 
 export CCNET_CONF_DIR=/tmp/conf SEAFILE_CONF_DIR=/tmp/conf
+export SEAFILE_CENTRAL_CONF_DIR=/tmp/conf
+export SEAFILE_DATA_DIR=/tmp/seafile-data
 
 echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >~/.npmrc
 
