@@ -6,9 +6,9 @@ import WikiTopNav from '../../top-nav';
 import { getCurrentPageConfig } from '../../utils';
 import RightHeader from '../../wiki-right-header';
 import Icon from '../../../../components/icon';
+import { mediaUrl } from '../../../../utils/constants';
 
 import './index.css';
-import { mediaUrl } from '../../../../utils/constants';
 
 const FilePreviewWrapper = ({ docContent, previewDocUuid, setEditor, togglePreview, isReloadingPreview, previewDocInfo }) => {
   const [isShowZoomOut, setIsShowZoomOut] = useState(false);
