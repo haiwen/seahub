@@ -223,6 +223,7 @@ class HeaderToolbar extends React.Component {
                 />
               </ButtonGroup>
               <MoreMenu
+                target="markdown-rich-more-button"
                 readOnly={this.props.readOnly}
                 openDialogs={this.props.openDialogs}
                 editorMode={this.props.editorMode}
@@ -258,6 +259,7 @@ class HeaderToolbar extends React.Component {
                 }
               </ButtonGroup>
               <MoreMenu
+                target="markdown-rich-more-button-narrow"
                 readOnly={this.props.readOnly}
                 openDialogs={this.props.openDialogs}
                 editorMode={this.props.editorMode}
@@ -298,6 +300,7 @@ class HeaderToolbar extends React.Component {
                 }
               </ButtonGroup>
               <MoreMenu
+                target="markdown-plain-more-button"
                 readOnly={this.props.readOnly}
                 openDialogs={this.props.openDialogs}
                 editorMode={this.props.editorMode}
@@ -327,6 +330,7 @@ class HeaderToolbar extends React.Component {
                 }
               </ButtonGroup>
               <MoreMenu
+                target="markdown-plain-more-button-narrow"
                 readOnly={this.props.readOnly}
                 openDialogs={this.props.openDialogs}
                 editorMode={this.props.editorMode}

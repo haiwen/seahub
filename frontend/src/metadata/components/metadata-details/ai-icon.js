@@ -121,18 +121,22 @@ const AIIcon = () => {
     return list.map(item => ({ ...item, onClick: () => handleOperation(item) }));
   }, [canModifyRecord, record, columns, enableTags, handleOperation]);
 
+  const renderCustomTrigger = useCallback((isOpen) => {
+    return (
+      <>
+        <Icon symbol="ai" className="detail-control-icon" />
+        {!isOpen && <Tooltip target="ai-icon">{gettext('AI')}</Tooltip>}
+      </>
+    );
+  }, []);
+
   if (!enableMetadata || !canModifyRecord || !record) return null;
 
   return (
     <CustomDropdown
       target="ai-icon"
       items={getItems}
-      trigger={(
-        <>
-          <Icon symbol="ai" className="detail-control-icon" />
-          <Tooltip target="ai-icon">{gettext('AI')}</Tooltip>
-        </>
-      )}
+      trigger={renderCustomTrigger}
       triggerClassName="border-0 p-0 bg-transparent detail-control mr-2"
       menuClassName="sf-metadata-ai-dropdown-menu large"
       forwardedRef={forwardedRef}

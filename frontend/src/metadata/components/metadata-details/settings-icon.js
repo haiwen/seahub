@@ -26,7 +26,7 @@ const SettingsIcon = () => {
     <>
       <Button className="border-0 p-0 bg-transparent detail-control mr-2" id={target} onClick={onSetterToggle}>
         <Icon symbol="set-up" className="detail-control-icon" />
-        <Tooltip target={target}>{gettext('Settings')}</Tooltip>
+        {!isShowSetter && <Tooltip target={target}>{gettext('Settings')}</Tooltip>}
       </Button>
       {isShowSetter && (
         <HideColumnPopover

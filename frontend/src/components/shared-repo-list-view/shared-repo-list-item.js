@@ -477,6 +477,19 @@ class SharedRepoListItem extends React.Component {
     );
   };
 
+  renderCustomTrigger = (isOpen) => {
+    return (
+      <>
+        <Icon symbol="more-level" />
+        {!isOpen && (
+          <Tooltip target="more-operations-btn">
+            {gettext('More operations')}
+          </Tooltip>
+        )}
+      </>
+    );
+  };
+
   generatorPCMenu = () => {
     const { idx } = this.props;
     let operations = [];
@@ -564,14 +577,7 @@ class SharedRepoListItem extends React.Component {
             items={menuItems}
             target="more-operations-btn"
             placement="down"
-            trigger={
-              <>
-                <Icon symbol="more-level" />
-                <Tooltip target="more-operations-btn">
-                  {gettext('More operations')}
-                </Tooltip>
-              </>
-            }
+            trigger={this.renderCustomTrigger}
             triggerClassName="op-icon"
             menuProps={{ container: 'body' }}
             freezeItem={this.props.onFreezedItem}

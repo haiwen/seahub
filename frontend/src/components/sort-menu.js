@@ -38,6 +38,15 @@ class SortMenu extends React.Component {
     }));
   };
 
+  renderCustomTrigger = (isOpen) => {
+    return (
+      <>
+        <Icon symbol="sort" />
+        {!isOpen && <Tooltip target="sort-icon">{gettext('Switch sort mode')}</Tooltip>}
+      </>
+    );
+  };
+
   render() {
     const { sortBy, sortOrder, className } = this.props;
     const sortOptions = this.buildSortMenuItems({ sortOptions: this.sortOptions, sortBy, sortOrder });
@@ -48,12 +57,7 @@ class SortMenu extends React.Component {
         items={sortOptions}
         variant="action"
         className={className || ''}
-        trigger={(
-          <>
-            <Icon symbol="sort" />
-            <Tooltip target="sort-icon">{gettext('Switch sort mode')}</Tooltip>
-          </>
-        )}
+        trigger={this.renderCustomTrigger}
         triggerClassName="cur-view-path-btn px-1"
         toggleProps={{ 'aria-label': gettext('Switch sort mode') }}
         menuPortal={false}

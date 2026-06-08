@@ -71,6 +71,7 @@ const HistoryFilterSetter = ({ mode = HISTORY_MODE, filters = DEFAULT_FILTER, on
         op={onToggle}
         onKeyDown={onKeyDown}
         tooltip={message}
+        disableTooltip={isShowPopover}
         aria-label={message}
         tabIndex={0}
         id="history-filter-popover-target"

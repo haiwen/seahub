@@ -28,9 +28,18 @@ class SetRowHeight extends React.Component {
     modifyRowHeight(value);
   };
 
+  renderCustomTrigger = (isOpen) => {
+    const currentOption = ROW_HEIGHT_OPTIONS.find(item => item.value === this.props.rowHeight) || ROW_HEIGHT_OPTIONS[0];
+    return (
+      <>
+        <Icon symbol={`row-height-${currentOption.icon}`} />
+        {!isOpen && <Tooltip target="set-row-height-toggle">{gettext('Set row height')}</Tooltip>}
+      </>
+    );
+  };
+
   render() {
     const { rowHeight = ROW_HEIGHT, iconClass } = this.props;
-    const currentOption = ROW_HEIGHT_OPTIONS.find(item => item.value === rowHeight) || ROW_HEIGHT_OPTIONS[0];
     const menuItems = [{
       type: 'header',
       key: 'set-row-height-title',
@@ -51,12 +60,7 @@ class SetRowHeight extends React.Component {
         target="set-row-height-toggle"
         items={menuItems}
         variant="control"
-        trigger={(
-          <>
-            <Icon symbol={`row-height-${currentOption.icon}`} />
-            <Tooltip target="set-row-height-toggle">{gettext('Set row height')}</Tooltip>
-          </>
-        )}
+        trigger={this.renderCustomTrigger}
         triggerClassName={iconClass}
         toggleProps={{ 'aria-label': gettext('Set row height') }}
         menuClassName="set-row-height-dropdown-menu"

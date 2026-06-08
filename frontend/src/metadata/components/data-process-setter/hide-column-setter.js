@@ -42,7 +42,7 @@ const HideColumnSetter = ({ readOnly, columns, wrapperClass, hiddenColumns, modi
   const className = classnames(wrapperClass, { 'active': validHiddenColumns.length > 0 });
   return (
     <>
-      <OpIcon id="hide-column-setter-icon" symbol="hide" tooltip={message} className={className} op={onSetterToggle} onKeyDown={onKeyDown} />
+      <OpIcon id="hide-column-setter-icon" symbol="hide" tooltip={message} className={className} disableTooltip={isShowSetter} op={onSetterToggle} onKeyDown={onKeyDown} />
       {isShowSetter && (
         <HideColumnPopover
           readOnly={readOnly}

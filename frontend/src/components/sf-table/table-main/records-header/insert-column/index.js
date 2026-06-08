@@ -13,9 +13,9 @@ import toaster from '@/components/toast';
 import { getColumnDisplayName } from '@/metadata/utils/column';
 import Tooltip from '@/components/tooltip';
 import ModalPortal from '@/components/modal-portal';
+import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 
 import './index.css';
-import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 
 const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: insertColumnAPI }) => {
   const [isColumnMenuOpen, setColumnMenuOpen] = useState(false);
@@ -112,7 +112,7 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
           role="button"
         >
           <Icon symbol="add-table" />
-          <Tooltip target={id}>{gettext('Add column')}</Tooltip>
+          {(!isColumnMenuOpen && !isColumnPopoverShow) && <Tooltip target={id}>{gettext('Add column')}</Tooltip>}
         </DropdownToggle>
         <ModalPortal>
           <ColumnTypeDropdownMenu

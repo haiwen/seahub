@@ -19,6 +19,7 @@ const MoreMenuPropTypes = {
   showFileHistory: PropTypes.bool,
   toggleHistory: PropTypes.func,
   onCommentPanelToggle: PropTypes.func,
+  target: PropTypes.string,
 };
 
 class MoreMenu extends React.PureComponent {
@@ -31,9 +32,20 @@ class MoreMenu extends React.PureComponent {
     location.href = '?dl=1';
   };
 
+  renderCustomTrigger = (isOpen) => {
+    const target = this.props.target || 'moreButton';
+    return (
+      <>
+        <Icon symbol="more-level" />
+        {!isOpen && <Tooltip target={target}>{gettext('More operations')}</Tooltip>}
+      </>
+    );
+  };
+
   render() {
     const editorMode = this.props.editorMode;
     const isSmall = this.props.isSmallScreen;
+    const target = this.props.target || 'moreButton';
     const menuItems = [];
     if (!this.props.readOnly && editorMode === 'rich') {
       menuItems.push({ key: 'switch-plain', label: gettext('Switch to plain text editor'), onClick: this.props.onEdit.bind(this, 'plain') });
@@ -61,14 +73,9 @@ class MoreMenu extends React.PureComponent {
 
     return (
       <CustomDropdown
-        target="moreButton"
+        target={target}
         items={menuItems}
-        trigger={(
-          <>
-            <Icon symbol="more-level" />
-            <Tooltip target="moreButton" placement='bottom'>{gettext('More')}</Tooltip>
-          </>
-        )}
+        trigger={this.renderCustomTrigger}
         triggerClassName="sf-md-header-more-tool"
         menuClassName="drop-list"
         menuPortal={false}

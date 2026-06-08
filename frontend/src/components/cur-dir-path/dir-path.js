@@ -224,6 +224,15 @@ class DirPath extends React.Component {
     eventBus.dispatch(EVENT_BUS_TYPE.REFRESH_TRASH);
   };
 
+  renderCustomTrigger = (isOpen) => {
+    return (
+      <>
+        <Icon symbol="down" className="path-item-dropdown-toggle" />
+        {!isOpen && <Tooltip target="trash-more-operations">{gettext('More operations')}</Tooltip>}
+      </>
+    );
+  };
+
   renderCleanTrash = () => {
     const { currentRepoInfo } = this.props;
     const { owner_email, is_admin } = currentRepoInfo;
@@ -238,12 +247,7 @@ class DirPath extends React.Component {
           target="trash-more-operations"
           className="trash-path-dropdown"
           items={[{ key: 'clean-trash', label: gettext('Clean trash'), onClick: this.toggleCleanTrashDialog }]}
-          trigger={(
-            <>
-              <Icon symbol="down" className="path-item-dropdown-toggle" />
-              <Tooltip target="trash-more-operations">{gettext('More operations')}</Tooltip>
-            </>
-          )}
+          trigger={this.renderCustomTrigger}
           triggerClassName="trash-path-item"
           menuClassName="position-fixed"
           menuPortal={false}

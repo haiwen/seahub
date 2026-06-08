@@ -43,6 +43,17 @@ class ViewModes extends React.Component {
     }
   };
 
+  renderCustomTrigger = (isOpen) => {
+    const { currentViewMode } = this.props;
+    const symbol = currentViewMode === LIST_MODE ? 'list-view' : currentViewMode === GRID_MODE ? 'grid-view' : currentViewMode === TABLE_MODE ? 'table' : 'list-view';
+    return (
+      <>
+        <Icon symbol={symbol} />
+        {!isOpen && <Tooltip target="switch-view-mode-icon">{gettext('Switch view mode')}</Tooltip>}
+      </>
+    );
+  };
+
   render() {
     const { currentViewMode, isSupportTable = false } = this.props;
     const shortcutMain = Utils.isMac() ? '⌥ ⌘' : 'Ctrl + Shift +';
@@ -67,19 +78,13 @@ class ViewModes extends React.Component {
     if (isSupportTable) {
       options.push({ key: TABLE_MODE, label: gettext('Table view'), icon_dom: <Icon symbol="table" />, shortcut: `${shortcutMain} 3`, checked: currentViewMode === TABLE_MODE, onClick: () => this.props.switchViewMode(TABLE_MODE) });
     }
-    const symbol = currentViewMode === LIST_MODE ? 'list-view' : currentViewMode === GRID_MODE ? 'grid-view' : currentViewMode === TABLE_MODE ? 'table' : 'list-view';
 
     return (
       <CustomDropdown
         target="switch-view-mode-icon"
         items={options}
         variant="control"
-        trigger={(
-          <>
-            <Icon symbol={symbol} />
-            <Tooltip target="switch-view-mode-icon">{gettext('Switch view mode')}</Tooltip>
-          </>
-        )}
+        trigger={this.renderCustomTrigger}
         triggerClassName="cur-view-path-btn px-1"
         toggleProps={{ 'aria-label': gettext('Switch view mode') }}
         menuPortal={false}

@@ -1,5 +1,6 @@
 import React from 'react';
-import { UncontrolledPopover, PopoverBody, PopoverHeader } from 'reactstrap';
+import PropTypes from 'prop-types';
+import { Popover, PopoverBody, PopoverHeader } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 
 import './collaborators-popover.css';
@@ -7,16 +8,13 @@ import './collaborators-popover.css';
 const t = gettext;
 
 class CollaboratorsPopover extends React.PureComponent {
-
-  constructor(props) {
-    super(props);
-  }
-
   render() {
-    const { collaborators } = this.props;
+    const { collaborators, isOpen, toggle } = this.props;
 
     return (
-      <UncontrolledPopover
+      <Popover
+        isOpen={isOpen}
+        toggle={toggle}
         target="collaborators"
         placement="bottom-end"
         popperClassName="collaborators-popover sf-popover-container"
@@ -40,9 +38,15 @@ class CollaboratorsPopover extends React.PureComponent {
             })}
           </div>
         </PopoverBody>
-      </UncontrolledPopover>
+      </Popover>
     );
   }
 }
+
+CollaboratorsPopover.propTypes = {
+  collaborators: PropTypes.array.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  toggle: PropTypes.func.isRequired,
+};
 
 export default CollaboratorsPopover;

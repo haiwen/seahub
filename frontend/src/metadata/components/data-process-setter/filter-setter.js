@@ -63,7 +63,7 @@ const FilterSetter = ({
   const className = classnames(wrapperClass, { 'active': filtersCount > 0 });
   return (
     <>
-      <OpIcon id={target} symbol="filter" className={className} tooltip={message} aria-label={message} op={onSetterToggle} onKeyDown={onKeyDown} />
+      <OpIcon id={target} symbol="filter" className={className} tooltip={message} aria-label={message} disableTooltip={isShowSetter} op={onSetterToggle} onKeyDown={onKeyDown} />
       {isShowSetter &&
         <FilterPopover
           placement="bottom-end"

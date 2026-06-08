@@ -100,6 +100,15 @@ const ViewsMoreOperations = ({ menuProps }) => {
     ];
   }, [clickMenu, getNewViewSubMenu]);
 
+  const renderCustomTrigger = useCallback((isOpen) => {
+    return (
+      <>
+        <Icon symbol="new" />
+        {!isOpen && <Tooltip target={target}>{gettext('New view')}</Tooltip>}
+      </>
+    );
+  }, []);
+
   const target = 'new-view-btn';
   return (
     <div className="tree-section-header-operation tree-section-more-operation">
@@ -109,12 +118,7 @@ const ViewsMoreOperations = ({ menuProps }) => {
         items={getMoreOperationsMenus()}
         menuClassName="metadata-views-dropdown-menu"
         onItemClick={(selectedItem) => clickMenu(selectedItem.key)}
-        trigger={(
-          <>
-            <Icon symbol="new" />
-            <Tooltip target={target}>{gettext('New view')}</Tooltip>
-          </>
-        )}
+        trigger={renderCustomTrigger}
       />
     </div>
   );

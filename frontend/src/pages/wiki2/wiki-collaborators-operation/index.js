@@ -25,7 +25,8 @@ class CollaboratorsOperation extends React.PureComponent {
     super(props);
     this.currentUser = userInfo;
     this.state = {
-      shownCollaborators: []
+      shownCollaborators: [],
+      isCollaboratorsPopoverOpen: false,
     };
   }
 
@@ -106,17 +107,27 @@ class CollaboratorsOperation extends React.PureComponent {
     this.setState({ shownCollaborators: newCollaborators });
   };
 
+  toggleCollaboratorsPopover = () => {
+    this.setState((prevState) => ({
+      isCollaboratorsPopoverOpen: !prevState.isCollaboratorsPopoverOpen,
+    }));
+  };
+
   render() {
-    const { shownCollaborators } = this.state;
+    const { shownCollaborators, isCollaboratorsPopoverOpen } = this.state;
 
     return (
       <>
         <span className='wiki-collaborators-btn-container' id="collaborators">
           <Icon symbol='sdoc-user' />
-          <Tooltip target="collaborators">{gettext('Collaborators')}</Tooltip>
+          {!isCollaboratorsPopoverOpen && <Tooltip target="collaborators">{gettext('Collaborators')}</Tooltip>}
           {shownCollaborators.length}
         </span>
-        <CollaboratorsPopover collaborators={shownCollaborators} />
+        <CollaboratorsPopover
+          collaborators={shownCollaborators}
+          isOpen={isCollaboratorsPopoverOpen}
+          toggle={this.toggleCollaboratorsPopover}
+        />
       </>
     );
   }

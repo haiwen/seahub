@@ -170,6 +170,20 @@ class LibraryOperationMenu extends React.Component {
     return translateResult;
   };
 
+  renderCustomTrigger = (isOpen) => {
+    const { isLibView } = this.props;
+    return (
+      <>
+        <Icon symbol="more-level" />
+        {!isOpen && (
+          <Tooltip target={isLibView ? 'library-more-operations-btn' : 'more-operations-btn'}>
+            {isLibView ? gettext('More') : gettext('More operations')}
+          </Tooltip>
+        )}
+      </>
+    );
+  };
+
   render() {
     let operations = this.generatorOperations();
     const advancedOperations = this.getAdvancedOperations();
@@ -185,14 +199,7 @@ class LibraryOperationMenu extends React.Component {
           className={isLibView ? 'd-block' : ''}
           target={isLibView ? 'library-more-operations-btn' : 'more-operations-btn'}
           placement={isLibView ? 'end' : 'down'}
-          trigger={isLibView ? children : (
-            <>
-              <Icon symbol="more-level" />
-              <Tooltip target={isLibView ? 'library-more-operations-btn' : 'more-operations-btn'}>
-                {isLibView ? gettext('More') : gettext('More operations')}
-              </Tooltip>
-            </>
-          )}
+          trigger={isLibView ? children : this.renderCustomTrigger}
           triggerClassName={isLibView ? 'dir-others-item' : 'op-icon'}
           menuProps={{ container: menuContainer || (isLibView ? 'body' : '') }}
           freezeItem={this.props.onFreezedItem}

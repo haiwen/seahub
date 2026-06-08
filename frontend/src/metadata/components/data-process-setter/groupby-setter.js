@@ -51,7 +51,7 @@ const GroupbySetter = ({
   const className = classnames(wrapperClass, { 'active': groupbys.length > 0 });
   return (
     <>
-      <OpIcon id={target} symbol="groupby" className={className} tooltip={message} aria-label={message} op={onSetterToggle} onKeyDown={onKeyDown} />
+      <OpIcon id={target} symbol="groupby" className={className} tooltip={message} aria-label={message} disableTooltip={isShowSetter} op={onSetterToggle} onKeyDown={onKeyDown} />
       {isShowSetter && (
         <GroupbysPopover
           readOnly={readOnly}

@@ -177,7 +177,7 @@ class Notification extends React.Component {
     const { totalUnseenCount, currentTab, generalNoticeList, discussionNoticeList, generalNoticeListUnseen, discussionNoticeListUnseen } = this.state;
     return (
       <div id="notifications">
-        <OpIcon id="notification-icon-btn" symbol="notification" tooltip={gettext('Notifications')} className="notification-icon-btn" op={this.onClick} />
+        <OpIcon id="notification-icon-btn" symbol="notification" tooltip={gettext('Notifications')} className="notification-icon-btn" disableTooltip={this.state.showNotice} op={this.onClick} />
         <span className={`num ${totalUnseenCount ? '' : 'hide'}`}>{totalUnseenCount < 1000 ? totalUnseenCount : '999+'}</span>
         {this.state.showNotice &&
           <NotificationPopover
@@ -196,7 +196,7 @@ class Notification extends React.Component {
               <ul className="notice-list list-unstyled" id="notice-popover">
                 {generalNoticeList.map(item => {
                   return (
-                    <NoticeItem key={item.id} noticeItem={item} onNoticeItemClick={this.onNoticeItemClick}/>
+                    <NoticeItem key={item.id} noticeItem={item} onNoticeItemClick={this.onNoticeItemClick} />
                   );
                 })}
               </ul>
@@ -205,7 +205,7 @@ class Notification extends React.Component {
               <ul className="notice-list list-unstyled" id="notice-popover">
                 {discussionNoticeList.map(item => {
                   return (
-                    <NoticeItem key={item.id} noticeItem={item} onNoticeItemClick={this.onNoticeItemClick}/>
+                    <NoticeItem key={item.id} noticeItem={item} onNoticeItemClick={this.onNoticeItemClick} />
                   );
                 })}
               </ul>

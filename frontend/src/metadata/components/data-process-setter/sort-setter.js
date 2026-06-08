@@ -48,7 +48,7 @@ const SortSetter = ({ target = 'sf-metadata-sort-popover', type, sorts: propsSor
 
   return (
     <>
-      <OpIcon id={target} symbol="sort" className={classnames(wrapperClass, { 'active': sorts.length > 0 })} tooltip={sortMessage} aria-label={sortMessage} op={onSetterToggle} onKeyDown={Utils.onKeyDown} />
+      <OpIcon id={target} symbol="sort" className={classnames(wrapperClass, { 'active': sorts.length > 0 })} tooltip={sortMessage} aria-label={sortMessage} disableTooltip={isShowSetter} op={onSetterToggle} onKeyDown={Utils.onKeyDown} />
       {isShowSetter && (
         <SortPopover
           readOnly={readOnly}

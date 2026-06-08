@@ -15,6 +15,7 @@ const propTypes = {
   placement: PropTypes.string,
   modifiers: PropTypes.array,
   iconRef: PropTypes.object,
+  disableTooltip: PropTypes.bool,
 };
 
 class OpIcon extends React.Component {
@@ -23,7 +24,7 @@ class OpIcon extends React.Component {
   }
 
   render() {
-    const { id, className, style, op, title, symbol, tooltip, placement, modifiers, iconRef, ...others } = this.props;
+    const { id, className, style, op, title, symbol, tooltip, placement, modifiers, iconRef, disableTooltip = false, ...others } = this.props;
     const iconWrapper = (
       <span
         {...others}
@@ -45,13 +46,15 @@ class OpIcon extends React.Component {
       return (
         <>
           {iconWrapper}
-          <Tooltip
-            target={id}
-            placement={placement}
-            modifiers={modifiers}
-          >
-            {tooltip}
-          </Tooltip>
+          {!disableTooltip && (
+            <Tooltip
+              target={id}
+              placement={placement}
+              modifiers={modifiers}
+            >
+              {tooltip}
+            </Tooltip>
+          )}
         </>
       );
     }

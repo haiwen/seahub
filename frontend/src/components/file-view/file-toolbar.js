@@ -140,6 +140,19 @@ class FileToolbar extends React.Component {
     return items;
   };
 
+  renderCustomTrigger = (isOpen) => {
+    return (
+      <>
+        <Icon symbol="more-level" />
+        {!isOpen && (
+          <Tooltip target="more-operations" placement='bottom'>
+            {gettext('More operations')}
+          </Tooltip>
+        )}
+      </>
+    );
+  };
+
   render() {
     const { isLocked, lockedByMe, isCommentUpdated, isShareEnabled } = this.props;
     let showLockUnlockBtn = false;
@@ -259,14 +272,7 @@ class FileToolbar extends React.Component {
           <CustomDropdown
             target="more-operations"
             items={this.getDesktopMenuItems()}
-            trigger={(
-              <>
-                <Icon symbol="more-level" />
-                <Tooltip target="more-operations" placement='bottom'>
-                  {gettext('More operations')}
-                </Tooltip>
-              </>
-            )}
+            trigger={this.renderCustomTrigger}
             triggerClassName="file-toolbar-btn"
             menuPortal={false}
           />

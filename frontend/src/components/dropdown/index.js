@@ -157,10 +157,10 @@ export const CustomDropdown = ({
         onKeyDown={onToggleKeyDown}
         {...toggleProps}
       >
-        {trigger || (
+        {typeof trigger === 'function' ? trigger(isOpen) : trigger || (
           <>
             <Icon symbol="more-level" />
-            <Tooltip target={menuId}>{gettext('More operations')}</Tooltip>
+            {!isOpen && <Tooltip target={menuId}>{gettext('More operations')}</Tooltip>}
           </>
         )}
       </DropdownToggle>
@@ -171,7 +171,7 @@ export const CustomDropdown = ({
 
 CustomDropdown.propTypes = {
   target: PropTypes.string,
-  trigger: PropTypes.node,
+  trigger: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   triggerClassName: PropTypes.string,
   menuClassName: PropTypes.string,
   items: PropTypes.array,
