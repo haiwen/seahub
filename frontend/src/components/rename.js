@@ -101,7 +101,7 @@ class Rename extends React.Component {
 
   render() {
     return (
-      <div className="rename-container">
+      <div className="rename-container d-flex">
         <input
           ref={this.inputRef}
           value={this.state.name}
