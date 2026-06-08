@@ -2433,6 +2433,8 @@ def get_repo_file(request, repo_id, file_id, file_name, op,
         redirect_url = gen_file_get_url(token, file_name)
         response = HttpResponse(json.dumps(redirect_url), status=200,
                                 content_type=json_content_type)
+
+        response["oid"] = file_id
         return response
 
     if op == 'downloadblks':
