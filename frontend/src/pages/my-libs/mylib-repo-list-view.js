@@ -53,9 +53,11 @@ class MylibRepoListView extends React.Component {
     });
   };
 
-  onMenuItemClick = (operation, currentObject) => {
+  onMenuItemClick = (operation, currentObject, event) => {
     const index = this.getRepoIndex(currentObject);
-    this.repoItems[index].onMenuItemClick(operation);
+    if (this.repoItems[index]) {
+      this.repoItems[index].onMenuItemClick(event, operation);
+    }
 
     hideMenu();
   };

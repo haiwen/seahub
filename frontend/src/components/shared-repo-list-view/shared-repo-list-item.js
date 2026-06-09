@@ -122,6 +122,9 @@ class SharedRepoListItem extends React.Component {
         this.keepFrozenOnClose = true;
         this.onItemRenameToggle();
         break;
+      case 'Delete':
+        this.onItemDeleteToggle();
+        break;
       case 'Star':
         this.onToggleStarRepo();
         break;
@@ -312,6 +315,9 @@ class SharedRepoListItem extends React.Component {
         break;
       case 'Share':
         translateResult = gettext('Share');
+        break;
+      case 'Delete':
+        translateResult = gettext('Delete');
         break;
       case 'Share Admin':
         translateResult = gettext('Share Admin');
