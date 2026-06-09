@@ -782,13 +782,14 @@ class Records extends Component {
     const { isGroupView, recordGetterByIndex, showRecordAsTree, updateSelectedRecordIds } = this.props;
     const { recordMetrics, treeMetrics } = this.state;
     const { rowIdx: recordIndex, idx, groupRecordIndex } = cell;
+    const isOutSelectedRange = this.isOutSelectedRange({ recordIndex, idx });
 
     if (showRecordAsTree) {
       const node = this.props.getTreeNodeByIndex(recordIndex);
       const nodeKey = getTreeNodeKey(node);
       if (!nodeKey) return;
 
-      if (!TreeMetrics.checkIsTreeNodeSelected(nodeKey, treeMetrics)) {
+      if (isOutSelectedRange && !TreeMetrics.checkIsTreeNodeSelected(nodeKey, treeMetrics)) {
         this.setState({ treeMetrics: this.createTreeMetrics() });
       }
     } else {
@@ -796,7 +797,7 @@ class Records extends Component {
       if (!record) return;
 
       const recordId = record._id;
-      if (!RecordMetrics.isRecordSelected(recordId, recordMetrics)) {
+      if (isOutSelectedRange && !RecordMetrics.isRecordSelected(recordId, recordMetrics)) {
         let updatedRecordMetrics = this.createRowMetrics();
         if (updateSelectedRecordIds) {
           updateSelectedRecordIds([recordId]);
@@ -807,7 +808,7 @@ class Records extends Component {
     }
 
     // select cell when click out of selectRange
-    if (this.isOutSelectedRange({ recordIndex, idx })) {
+    if (isOutSelectedRange) {
       this.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_CELL, cell, false);
     }
   };

@@ -71,6 +71,7 @@ export const createMetadataContextMenuOptions = ({
   onOCR,
   generateFileTags,
   hideMenu,
+  onClearSelected,
 }) => {
   const metadataStatus = {
     enableFaceRecognition,
@@ -198,7 +199,7 @@ export const createMetadataContextMenuOptions = ({
         }
         break;
       case TextTranslation.CLEAR_SELECTED.key:
-        eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
+        onClearSelected?.();
         break;
       case TextTranslation.COPY_SELECTED.key:
         // Handled by SFTable's copy mechanism
@@ -291,7 +292,7 @@ export const createMetadataContextMenuOptions = ({
               return <DropdownItem key={`sub-divider-${subIndex}`} divider />;
             }
             return (
-              <DropdownItem key={subItem.key} onClick={(e) => { e.stopPropagation(); handleOptionClick(subItem, e); }}>
+              <DropdownItem key={subItem.key} toggle={false} onClick={(e) => { e.stopPropagation(); handleOptionClick(subItem, e); }}>
                 {subItem.value}
               </DropdownItem>
             );
@@ -311,7 +312,7 @@ export const createMetadataContextMenuOptions = ({
         return <SubMenuDropdown key={option.key} option={option} />;
       }
       return (
-        <DropdownItem key={option.key} onClick={(e) => { e.stopPropagation(); handleOptionClick(option, e); }}>
+        <DropdownItem key={option.key} toggle={false} onClick={(e) => { e.stopPropagation(); handleOptionClick(option, e); }}>
           {option.value}
         </DropdownItem>
       );
