@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Button } from 'reactstrap';
+import { Button } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { enableSeadoc, enableWhiteboard, gettext, onlyofficeSupportEditDocxf } from '../../utils/constants';
@@ -14,6 +14,7 @@ import {
   HISTORY_MODE,
   TRASH_MODE
 } from '../../components/dir-view-mode/constants';
+import CustomDropdown from '../dropdown';
 
 const propTypes = {
   currentMode: PropTypes.string,
@@ -125,15 +126,19 @@ class DirNew extends React.Component {
       return null;
     }
 
+    const newBtnClassName = 'dir-new-btn mt-3 mx-5 flex-fill d-flex align-items-center justify-content-center btn btn-secondary';
+
     if ([METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH_MODE].includes(currentMode)) {
       return (
-        <Button
-          className="dir-new-btn mt-3 mx-5 flex-fill d-flex align-items-center justify-content-center"
-          disabled={true}
-        >
-          <Icon symbol="new" className="mr-2" />
-          {gettext('New')}
-        </Button>
+        <div className='d-flex'>
+          <Button
+            className={newBtnClassName}
+            disabled={true}
+          >
+            <Icon symbol="new" className="mr-2" />
+            {gettext('New')}
+          </Button>
+        </div>
       );
     }
 
@@ -153,29 +158,32 @@ class DirNew extends React.Component {
       if (canCreate) {
         let newSubOpList = [];
         if (enableSeadoc && !repoEncrypted) {
-          newSubOpList.push({ 'text': gettext('New SeaDoc File'), 'onClick': () => this.onCreateFile('.sdoc') });
-          newSubOpList.push({ 'text': gettext('New Excalidraw File'), 'onClick': () => this.onCreateFile('.exdraw') });
+          newSubOpList.push({ key: 'new-seadoc-file', label: gettext('New SeaDoc File'), onClick: () => this.onCreateFile('.sdoc') });
+          newSubOpList.push({ key: 'new-excalidraw-file', label: gettext('New Excalidraw File'), onClick: () => this.onCreateFile('.exdraw') });
         }
         newSubOpList.push(
-          { 'text': gettext('New Markdown File'), 'onClick': () => this.onCreateFile('.md') },
-          { 'text': gettext('New Excel File'), 'onClick': () => this.onCreateFile('.xlsx') },
-          { 'text': gettext('New PowerPoint File'), 'onClick': () => this.onCreateFile('.pptx') },
-          { 'text': gettext('New Word File'), 'onClick': () => this.onCreateFile('.docx') },
+          { key: 'new-markdown-file', label: gettext('New Markdown File'), onClick: () => this.onCreateFile('.md') },
+          { key: 'new-excel-file', label: gettext('New Excel File'), onClick: () => this.onCreateFile('.xlsx') },
+          { key: 'new-powerpoint-file', label: gettext('New PowerPoint File'), onClick: () => this.onCreateFile('.pptx') },
+          { key: 'new-word-file', label: gettext('New Word File'), onClick: () => this.onCreateFile('.docx') },
         );
         if (onlyofficeSupportEditDocxf) {
-          newSubOpList.push({ 'text': gettext('New Docxf File'), 'onClick': () => this.onCreateFile('.docxf') });
+          newSubOpList.push({ key: 'new-docxf-file', label: gettext('New Docxf File'), onClick: () => this.onCreateFile('.docxf') });
         }
         if (enableWhiteboard) {
-          newSubOpList.push({ 'text': gettext('New Whiteboard File'), 'onClick': () => this.onCreateFile('.draw') });
+          newSubOpList.push({ key: 'new-whiteboard-file', label: gettext('New Whiteboard File'), onClick: () => this.onCreateFile('.draw') });
         }
+
         opList.push({
-          'icon': 'new-folder',
-          'text': gettext('New Folder'),
-          'onClick': this.onCreateFolder
+          key: 'new-folder',
+          label: gettext('New Folder'),
+          icon_dom: <Icon symbol="new-folder" className="dropdown-item-icon" />,
+          onClick: this.onCreateFolder
         },
         {
-          'icon': 'new-file',
-          'text': gettext('New File'),
+          key: 'new-file',
+          label: gettext('New File'),
+          icon_dom: <Icon symbol="new-file" className="dropdown-item-icon" />,
           'subOpList': newSubOpList
         });
       }
@@ -183,119 +191,76 @@ class DirNew extends React.Component {
       if (canUpload) {
         if (Utils.isSupportUploadFolder()) {
           opList.push('Divider', {
-            'icon': 'upload-files',
-            'text': gettext('Upload Files'),
-            'onClick': this.onUploadFile
+            key: 'upload-files',
+            label: gettext('Upload Files'),
+            icon_dom: <Icon symbol="upload-files" className="dropdown-item-icon" />,
+            onClick: this.onUploadFile
           }, {
-            'icon': 'upload-folder',
-            'text': gettext('Upload Folder'),
-            'onClick': this.onUploadFolder
+            key: 'upload-folder',
+            label: gettext('Upload Folder'),
+            icon_dom: <Icon symbol="upload-folder" className="dropdown-item-icon" />,
+            onClick: this.onUploadFolder
           });
         } else {
           opList.push('Divider', {
-            'icon': 'upload-files',
-            'text': gettext('Upload'),
-            'onClick': this.onUploadFile
+            key: 'upload-files',
+            label: gettext('Upload'),
+            icon_dom: <Icon symbol="upload-files" className="dropdown-item-icon" />,
+            onClick: this.onUploadFile
           });
         }
       }
 
       if (enableSeadoc && !repoEncrypted) {
         opList.push('Divider', {
-          'icon': 'import-sdoc',
-          'text': gettext('Import sdoc'),
-          'onClick': this.onUploadSdoc
+          key: 'import-sdoc',
+          label: gettext('Import sdoc'),
+          icon_dom: <Icon symbol="import-sdoc" className="dropdown-item-icon" />,
+          onClick: this.onUploadSdoc
         });
       }
 
       content = (
-        <Fragment>
-          <Dropdown isOpen={this.state.isDesktopMenuOpen} toggle={this.toggleDesktopOpMenu} className='d-flex'>
-            <DropdownToggle
-              className="dir-new-btn mt-3 mx-5 flex-fill d-flex align-items-center justify-content-center"
-              onClick={this.toggleDesktopOpMenu}
-              data-toggle="dropdown"
-              aria-label={gettext('New')}
-              aria-expanded={this.state.isDesktopMenuOpen}
-            >
+        <CustomDropdown
+          className='d-flex'
+          items={opList}
+          toggleProps={{ 'tag': 'button', 'type': 'button', 'role': '' }}
+          trigger={(
+            <>
               <Icon symbol="new" className="mr-2" />
               {gettext('New')}
-            </DropdownToggle>
-            <DropdownMenu onMouseMove={this.onDropDownMouseMove} className='position-fixed'>
-              {opList.map((item, index) => {
-                if (item == 'Divider') {
-                  return <DropdownItem key={index} divider />;
-                } else if (item.subOpList) {
-                  return (
-                    <Dropdown
-                      key={index}
-                      role="menuitem"
-                      tabIndex="0"
-                      direction="right"
-                      className="w-100"
-                      isOpen={this.state.isSubMenuShown && this.state.currentItem == item.text}
-                      toggle={this.toggleSubMenu}
-                      onMouseMove={(e) => {e.stopPropagation();}}
-                    >
-                      <DropdownToggle
-                        tag='span'
-                        role="button"
-                        tabIndex="0"
-                        className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center"
-                        onClick={this.toggleSubMenu}
-                        aria-label={item.text}
-                        data-toggle="dropdown"
-                        onMouseEnter={this.toggleSubMenuShown.bind(this, item)}
-                      >
-                        <Icon symbol={item.icon} className="mr-2 dropdown-item-icon" />
-                        <span className="mr-auto">{item.text}</span>
-                        <Icon symbol="arrow-right-b" style={{ fontSize: '12px' }}/>
-                      </DropdownToggle>
-                      <DropdownMenu flip={false} modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}>
-                        {item.subOpList.map((item, index) => {
-                          if (item == 'Divider') {
-                            return <DropdownItem key={index} divider />;
-                          } else {
-                            return (<DropdownItem key={index} onClick={item.onClick}>{item.text}</DropdownItem>);
-                          }
-                        })}
-                      </DropdownMenu>
-                    </Dropdown>
-                  );
-                } else {
-                  return (
-                    <DropdownItem key={index} className="d-flex align-items-center" onClick={item.onClick}>
-                      <Icon symbol={item.icon} className="mr-2 dropdown-item-icon" />
-                      {item.text}
-                    </DropdownItem>
-                  );
-                }
-              })}
-            </DropdownMenu>
-          </Dropdown>
-        </Fragment>
+            </>
+          )}
+          triggerClassName={newBtnClassName}
+          menuClassName="position-fixed"
+        />
       );
     } else {
+      const opListForMobile = [];
+      if (canCreate) {
+        opListForMobile.push(
+          { key: 'new-folder', label: gettext('New Folder'), onClick: this.onCreateFolder },
+          { key: 'new-file', label: gettext('New File'), onClick: () => this.onCreateFile('') }
+        );
+      }
+      if (canUpload) {
+        opListForMobile.push({ key: 'upload-files', label: gettext('Upload'), onClick: this.onUploadFile });
+      }
+
       content = (
-        <Dropdown isOpen={this.state.isMobileOpMenuOpen} toggle={this.toggleMobileOpMenu} className='d-flex'>
-          <DropdownToggle
-            className="dir-new-btn mt-3 mx-5 flex-fill d-flex align-items-center justify-content-center"
-          >
-            <Icon symbol="new" className="mr-2" />
-            {gettext('New')}
-          </DropdownToggle>
-          <DropdownMenu className='position-fixed'>
-            {canCreate && (
-              <Fragment>
-                <DropdownItem onClick={this.onCreateFolder}>{gettext('New Folder')}</DropdownItem>
-                <DropdownItem onClick={() => this.onCreateFile('')}>{gettext('New File')}</DropdownItem>
-              </Fragment>
-            )}
-            {canUpload && (
-              <DropdownItem onClick={this.onUploadFile}>{gettext('Upload')}</DropdownItem>
-            )}
-          </DropdownMenu>
-        </Dropdown>
+        <CustomDropdown
+          className='d-flex'
+          items={opListForMobile}
+          toggleProps={{ 'tag': 'button', 'type': 'button', 'role': '' }}
+          trigger={(
+            <>
+              <Icon symbol="new" className="mr-2" />
+              {gettext('New')}
+            </>
+          )}
+          triggerClassName={newBtnClassName}
+          menuClassName="position-fixed"
+        />
       );
     }
 
