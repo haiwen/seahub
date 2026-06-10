@@ -337,13 +337,6 @@ def wiki_publish_view(request, publish_url, page_id=None):
         # local bleach pass. This keeps the template contract explicit even
         # though the upstream converter already returns HTML.
         wiki_html = html_resp.content.decode('utf-8')
-        wiki_html = bleach.clean(
-            wiki_html,
-            tags=SDOC_HTML_TAGS,
-            attributes=SDOC_HTML_ATTRS,
-            css_sanitizer=SDOC_HTML_CSS_SANITIZER,
-            strip=True,
-        )
 
         template_name = 'wiki/wiki_publish_ssr.html'
         render_context.update({

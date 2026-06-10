@@ -23,9 +23,11 @@
   <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=20260105">
   <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}seafile-editor/seafile-editor-font.css">
   <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-font.css">
+  <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-print.css">
   <link rel="stylesheet" type="text/css" href="{% static 'css/wiki-publish-ssr.css' %}">
   {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}">{% endif %}
   {% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}">{% endif %}
+  {% render_bundle 'wikiViewer' 'css' %}
 </head>
 <body data-bs-theme="{% if request.session.dark_mode %}dark{% else %}light{% endif %}">
 <div id="wiki-ssr-root">

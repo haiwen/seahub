@@ -4,7 +4,7 @@ html, body {
   height: 100%;
   overflow: hidden;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-               "Helvetica Neue", Arial, sans-serif;
+    "Helvetica Neue", Arial, sans-serif;
   font-size: 14px;
   color: var(--bs-body-color, #212529);
   background-color: var(--bs-body-bg, #fff);
@@ -235,11 +235,11 @@ html, body {
   flex-shrink: 0;
 }
 
-.wiki-page-content > .nav-item-icon:first-child {
+.wiki-page-content>.nav-item-icon:first-child {
   margin-left: 22px;
 }
 
-.wiki-page-item > .wiki-nav-item-icon + .wiki-page-item-main .nav-item-icon {
+.wiki-page-item>.wiki-nav-item-icon+.wiki-page-item-main .nav-item-icon {
   margin-left: 0;
 }
 
@@ -444,7 +444,7 @@ html, body {
   color: var(--bs-body-color);
 }
 
-.sdoc-editor-container .sdoc-editor-content .sdoc-article-container .article > div {
+.sdoc-editor-container .sdoc-editor-content .sdoc-article-container .article>div {
   caret-color: blue;
 }
 
@@ -462,10 +462,6 @@ html, body {
 
 .sdoc-editor-container .sdoc-editor-content .sdoc-article-container .article #sdoc-editor {
   width: 100%;
-  position: relative;
-  outline: none;
-  white-space: pre-wrap;
-  overflow-wrap: break-word;
 }
 
 /* .article.sdoc-editor__article {
@@ -501,7 +497,7 @@ html, body {
 
 #wiki-resize-handle:hover,
 #wiki-resize-handle.dragging {
-  background: rgba(0,0,0,0.12);
+  background: rgba(0, 0, 0, 0.12);
 }
 
 .wiki-mobile-btn {
@@ -551,7 +547,7 @@ html, body {
     height: 100%;
     z-index: 1031;
     transform: translateX(-100%);
-    box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
   }
 
   .wiki2-side-panel.mobile-open {
@@ -594,7 +590,7 @@ html, body {
   background-color: #f0f0ee;
 }
 
-.article.sdoc-editor__article h1,
+/* .article.sdoc-editor__article h1,
 .article.sdoc-editor__article h2,
 .article.sdoc-editor__article h3,
 .article.sdoc-editor__article h4,
@@ -707,14 +703,28 @@ html, body {
     border-left-color: #555;
     color: #aaa;
   }
-}
+} */
 
 .wiki-nav-children .wiki-page-item {
   padding-left: 0;
 }
 
-.indent-1 { padding-left: 12px; }
-.indent-2 { padding-left: 24px; }
-.indent-3 { padding-left: 36px; }
-.indent-4 { padding-left: 48px; }
-.indent-5 { padding-left: 60px; }
+.indent-1 {
+  padding-left: 12px;
+}
+
+.indent-2 {
+  padding-left: 24px;
+}
+
+.indent-3 {
+  padding-left: 36px;
+}
+
+.indent-4 {
+  padding-left: 48px;
+}
+
+.indent-5 {
+  padding-left: 60px;
+}
