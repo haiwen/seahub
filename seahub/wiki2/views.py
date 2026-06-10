@@ -5,8 +5,6 @@ import logging
 import posixpath
 from datetime import datetime
 
-import bleach
-from bleach.css_sanitizer import CSSSanitizer
 from constance import config
 from seaserv import seafile_api
 
@@ -15,7 +13,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from seahub.wiki2.models import Wiki2 as Wiki
-from seahub.wiki2.models import Wiki2Publish, WikiFileViews, Wiki2Settings
+from seahub.wiki2.models import Wiki2Publish, Wiki2Settings
 from seahub.utils import get_file_type_and_ext, render_permission_error
 from seahub.utils.file_types import SEADOC
 from seahub.auth.decorators import login_required
@@ -29,35 +27,6 @@ from seahub.api2.endpoints.utils import sdoc_export_to_html
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
-
-SDOC_HTML_TAGS = {
-    'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-    'b', 'i', 'strong', 'em', 'tt', 'u', 's',
-    'p', 'pre', 'br',
-    'span', 'div', 'blockquote', 'code', 'hr',
-    'ul', 'ol', 'li', 'dd', 'dt',
-    'img', 'a', 'sub', 'sup',
-    'table', 'colgroup', 'col', 'thead', 'tbody', 'tr', 'th', 'td',
-    'input',
-}
-
-SDOC_HTML_ATTRS = {
-    '*': ['id', 'class', 'width', 'height', 'style'],
-    'img': ['src', 'alt', 'title'],
-    'a': ['href', 'alt', 'title'],
-    'input': ['type', 'disabled', 'checked'],
-    'span': ['data-username'],
-}
-
-SDOC_HTML_CSS_SANITIZER = CSSSanitizer(allowed_css_properties=[
-    'width',
-    'height',
-    'background-color',
-    'text-align',
-    'font-size',
-    'font-family',
-    'color',
-])
 
 
 @login_required
@@ -222,13 +191,7 @@ def wiki_publish_view(request, publish_url, page_id=None):
     if not wiki_publish.enable_server_render:
         return render(request, template_name, render_context)
 
-    # ------------------------------------------------------------------
-    # SEO: server-side rendering of sdoc → HTML
-    # When enable_server_render is True, convert the .sdoc file to HTML
-    # in Python before responding, so search-engine crawlers can index
-    # the page content without executing JavaScript.
-    # ------------------------------------------------------------------
-
+    # server-side rendering of sdoc → HTML
     try:
         wiki_config = get_wiki_config(wiki.repo_id, '')
         pages = wiki_config.get('pages', [])
@@ -333,11 +296,7 @@ def wiki_publish_view(request, publish_url, page_id=None):
         if not html_resp.ok:
             raise ValueError('converter returned non-success status {}'.format(html_resp.status_code))
 
-        # Public wiki content is rendered as safe HTML only after a second,
-        # local bleach pass. This keeps the template contract explicit even
-        # though the upstream converter already returns HTML.
         wiki_html = html_resp.content.decode('utf-8')
-
         template_name = 'wiki/wiki_publish_ssr.html'
         render_context.update({
             "wiki_repo_name": wiki.name,
