@@ -84,16 +84,15 @@ class SeahubSelect extends React.Component {
       isMulti = false, menuPosition, isClearable = true, noOptionsMessage = (() => { return null; }),
       classNamePrefix, innerRef, isDisabled = false, form, className = '' } = this.props;
 
-    if (isClearable) {
-      if (value && value.label !== '--' && options[0].label !== '--') {
-        options.unshift({ value: null, label: '--' });
-      }
-      if (value && value.label === '--' && options[0].label === '--') {
-        options.shift();
-      }
-    }
-    const optionsWithCheck = options.map(option => {
-      const isSelected = value && value.value === option.value;
+    const isClearOption = (option) => option && option.value === null && option.label === '--';
+    const hasSelectedOption = !isMulti && value && value.value !== null && value.label !== '--';
+    const normalizedOptions = options.filter(option => !isClearOption(option));
+    const selectOptions = isClearable && hasSelectedOption
+      ? [{ value: null, label: '--' }, ...normalizedOptions]
+      : normalizedOptions;
+
+    const optionsWithCheck = selectOptions.map(option => {
+      const isSelected = hasSelectedOption && value.value === option.value;
       return {
         ...option,
         label: (
