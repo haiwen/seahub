@@ -97,14 +97,16 @@
 
 .user-select-popover .popover .user-item {
   background: transparent;
-  max-width: calc(100% - 16px);
   margin: 0;
+  overflow: hidden;
 }
 
 .user-select-popover .user-item .user-name-container {
-  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .selected-user-item-container .user-item .user-name-container {
-  max-width: 250px;
+  overflow: hidden;
 }

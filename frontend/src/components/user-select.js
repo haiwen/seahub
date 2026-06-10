@@ -280,7 +280,7 @@ class UserSelect extends React.Component {
                         onKeyDown={Utils.onKeyDown}
                       >
                         <UserItem user={user} enableDeleteUser={false} />
-                        {selectedUsers.find(u => u.email === user.email) && <Icon symbol="check-thin" />}
+                        {selectedUsers.find(u => u.email === user.email) && <span><Icon symbol="check" /></span>}
                       </div>
                     );
                   })
