@@ -5,17 +5,24 @@ import '../../css/repo-list-card.css';
 
 const propTypes = {
   children: PropTypes.node.isRequired,
+  customColumns: PropTypes.bool // only for 'shared with ocm' at present
 };
 
-const RepoListCard = ({ children }) => {
+const RepoListCard = ({ children, customColumns = false }) => {
   return (
     <div className="repo-list-card">
       <div className="repo-list-card-header">
         <span className="repo-list-col-name">{gettext('Name')}</span>
         <span className="repo-list-col-icon"></span>
         <span className="repo-list-col-actions"></span>
-        <span className="repo-list-col-size">{gettext('Size')}</span>
-        <span className="repo-list-col-time">{gettext('Last modified')}</span>
+        {customColumns
+          ? (<span className="repo-list-col-server">{gettext('At server')}</span>)
+          : (
+            <>
+              <span className="repo-list-col-size">{gettext('Size')}</span>
+              <span className="repo-list-col-time">{gettext('Last modified')}</span>
+            </>
+          )}
         <span className="repo-list-col-owner">{gettext('Owner')}</span>
       </div>
       <div className="repo-list-card-body">

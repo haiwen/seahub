@@ -76,7 +76,7 @@ class Content extends Component {
         return currentViewMode == LIST_MODE
           ? (
             <>
-              <RepoListCard>
+              <RepoListCard customColumns={!inAllLibs}>
                 {this.renderItems()}
               </RepoListCard>
             </>
@@ -206,7 +206,6 @@ class Item extends Component {
               <img src={item.icon_url} title={item.icon_title} alt={item.icon_title} width="40" className="mr-3" />
               <div className="d-flex flex-column justify-content-center">
                 <Link to={shareRepoUrl} className="library-name text-truncate" title={item.repo_name}>{item.repo_name}</Link>
-                <span className="library-size">{item.size}</span>
               </div>
             </div>
             <div className="flex-shrink-0">

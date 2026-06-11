@@ -60,6 +60,12 @@
   cursor: default;
 }
 
+.repo-list-card-header .repo-list-col-server {
+  width: 31%;
+  flex-shrink: 0;
+  cursor: default;
+}
+
 .repo-list-card-header .repo-list-col-owner {
   width: 17%;
   flex-shrink: 0;
@@ -138,6 +144,12 @@
 
 .repo-list-item .repo-item-time {
   width: 17%;
+  flex-shrink: 0;
+  cursor: default;
+}
+
+.repo-list-item .repo-item-server {
+  width: 31%;
   flex-shrink: 0;
   cursor: default;
 }
