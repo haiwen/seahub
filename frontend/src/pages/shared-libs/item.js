@@ -169,7 +169,7 @@ class Item extends Component {
     const menuItems = [starItem];
 
     return (
-      <div className="flex-shrink-0 d-flex align-items-center">
+      <div className="d-flex align-items-center">
         {(isPro && data.is_admin) &&
           <OpIcon
             id={`share-${this.props.idx}`}
@@ -275,7 +275,9 @@ class Item extends Component {
                   <span className="library-size">{data.size}</span>
                 </div>
               </div>
-              {this.itemOperations()}
+              <div className='flex-shrink-0 ml-4'>
+                {this.itemOperations()}
+              </div>
             </div>
           )}
           {this.state.isShowSharedDialog && (

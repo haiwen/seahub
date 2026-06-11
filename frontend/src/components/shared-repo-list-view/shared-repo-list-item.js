@@ -693,7 +693,7 @@ class SharedRepoListItem extends React.Component {
             }
           </div>
         </div>
-        <div className="flex-shrink-0">
+        <div className="flex-shrink-0 ml-4">
           {this.state.isOperationShow && this.generatorPCMenu()}
         </div>
       </div>
