@@ -20,11 +20,13 @@ const Card = () => {
   const columns = useMemo(() => metadata.view.columns, [metadata.view.columns]);
 
   const modifyRecord = useCallback((rowId, updates, oldRowData, originalUpdates, originalOldRowData, { success_callback } = {}) => {
-    modifyRecordAPI(rowId, updates, oldRowData, originalUpdates, originalOldRowData, false, { success_callback: () => {
-      success_callback && success_callback();
-      const eventBus = window.sfMetadataContext.eventBus;
-      eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED, { recordId: rowId }, updates);
-    } });
+    modifyRecordAPI(rowId, updates, oldRowData, originalUpdates, originalOldRowData, false, {
+      success_callback: () => {
+        success_callback && success_callback();
+        const eventBus = window.sfMetadataContext.eventBus;
+        eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED, { recordId: rowId }, updates);
+      }
+    });
   }, [modifyRecordAPI]);
 
   const closeSettings = useCallback(() => {
@@ -42,7 +44,7 @@ const Card = () => {
   }, [isShowSettings]);
 
   return (
-    <div className="sf-metadata-container">
+    <div className="sf-metadata-container sf-metadata-card-container">
       <div className="sf-metadata-view-card">
         <CardItems
           modifyRecord={modifyRecord}
