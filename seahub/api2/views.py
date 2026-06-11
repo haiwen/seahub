@@ -3563,7 +3563,8 @@ class FileRevert(APIView):
             error_msg = 'file %s not found.' % path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if check_folder_permission(request, repo_id, '/') != 'rw':
+        parent_dir = os.path.dirname(path)
+        if check_folder_permission(request, repo_id, parent_dir) != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -4093,7 +4094,7 @@ class DirRevert(APIView):
             error_msg = 'folder %s not found.' % path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if check_folder_permission(request, repo_id, '/') != 'rw':
+        if check_folder_permission(request, repo_id, path) != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
