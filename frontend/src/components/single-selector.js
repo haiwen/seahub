@@ -89,6 +89,7 @@ class Selector extends Component {
                     role="menuitem"
                     className="option-item h-6 py-1 px-3 d-flex justify-content-between align-items-center"
                     onClick={(e) => { this.selectItem(e, item); }}
+                    onMouseDown={(e) => { e.stopPropagation(); }}
                     onKeyDown={Utils.onKeyDown}
                   >
                     <span className="option-item-text flex-shrink-0 mr-3">{item.text}</span>
