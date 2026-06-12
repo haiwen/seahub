@@ -77,8 +77,9 @@ const HeaderDropdownMenu = forwardRef(({
   }, [column, modifyColumnData]);
 
   const onDelete = useCallback(() => {
+    const { key, name, type, data = null } = column;
     EventBus.getInstance().dispatch(EVENT_BUS_TYPE.SELECT_NONE);
-    deleteColumn(column.key, column);
+    deleteColumn(column.key, { key, name, type, data });
   }, [column, deleteColumn]);
 
   const openRenamePopover = useCallback((e) => {
