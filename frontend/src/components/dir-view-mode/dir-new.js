@@ -157,10 +157,14 @@ class DirNew extends React.Component {
 
       if (canCreate) {
         let newSubOpList = [];
+        newSubOpList.push({ key: 'new-file', label: gettext('New Text File'), onClick: () => this.onCreateFile('') });
+        newSubOpList.push('Divider');
+
         if (enableSeadoc && !repoEncrypted) {
           newSubOpList.push({ key: 'new-seadoc-file', label: gettext('New SeaDoc File'), onClick: () => this.onCreateFile('.sdoc') });
           newSubOpList.push({ key: 'new-excalidraw-file', label: gettext('New Excalidraw File'), onClick: () => this.onCreateFile('.exdraw') });
         }
+
         newSubOpList.push(
           { key: 'new-markdown-file', label: gettext('New Markdown File'), onClick: () => this.onCreateFile('.md') },
           { key: 'new-excel-file', label: gettext('New Excel File'), onClick: () => this.onCreateFile('.xlsx') },
@@ -170,6 +174,7 @@ class DirNew extends React.Component {
         if (onlyofficeSupportEditDocxf) {
           newSubOpList.push({ key: 'new-docxf-file', label: gettext('New Docxf File'), onClick: () => this.onCreateFile('.docxf') });
         }
+
         if (enableWhiteboard) {
           newSubOpList.push({ key: 'new-whiteboard-file', label: gettext('New Whiteboard File'), onClick: () => this.onCreateFile('.draw') });
         }
@@ -189,8 +194,11 @@ class DirNew extends React.Component {
       }
 
       if (canUpload) {
+        if (opList.length > 0) {
+          opList.push('Divider');
+        }
         if (Utils.isSupportUploadFolder()) {
-          opList.push('Divider', {
+          opList.push({
             key: 'upload-files',
             label: gettext('Upload Files'),
             icon_dom: <Icon symbol="upload-files" className="dropdown-item-icon" />,
@@ -202,7 +210,7 @@ class DirNew extends React.Component {
             onClick: this.onUploadFolder
           });
         } else {
-          opList.push('Divider', {
+          opList.push({
             key: 'upload-files',
             label: gettext('Upload'),
             icon_dom: <Icon symbol="upload-files" className="dropdown-item-icon" />,
@@ -212,7 +220,10 @@ class DirNew extends React.Component {
       }
 
       if (enableSeadoc && !repoEncrypted) {
-        opList.push('Divider', {
+        if (opList.length > 0) {
+          opList.push('Divider');
+        }
+        opList.push({
           key: 'import-sdoc',
           label: gettext('Import sdoc'),
           icon_dom: <Icon symbol="import-sdoc" className="dropdown-item-icon" />,

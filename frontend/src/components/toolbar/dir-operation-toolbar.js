@@ -120,8 +120,49 @@ class DirOperationToolbar extends React.Component {
     let content = null;
     if (Utils.isDesktop()) {
       const { showShareBtn, repoEncrypted } = this.props;
+      let newSubOpList = [];
+      if (canCreate) {
+        newSubOpList = [
+          { key: 'new-file', label: gettext('New Text File'), onClick: () => this.onCreateFile('') },
+          'Divider',
+        ];
+        if (enableSeadoc && !repoEncrypted) {
+          newSubOpList.push({ key: 'new-seadoc-file', label: gettext('New SeaDoc File'), onClick: () => this.onCreateFile('.sdoc') });
+          newSubOpList.push({ key: 'new-excalidraw-file', label: gettext('New Excalidraw File'), onClick: () => this.onCreateFile('.exdraw') });
+        }
+        newSubOpList.push(
+          { key: 'new-markdown-file', label: gettext('New Markdown File'), onClick: () => this.onCreateFile('.md') },
+          { key: 'new-excel-file', label: gettext('New Excel File'), onClick: () => this.onCreateFile('.xlsx') },
+          { key: 'new-powerpoint-file', label: gettext('New PowerPoint File'), onClick: () => this.onCreateFile('.pptx') },
+          { key: 'new-word-file', label: gettext('New Word File'), onClick: () => this.onCreateFile('.docx') },
+        );
+        if (onlyofficeSupportEditDocxf) {
+          newSubOpList.push({ key: 'new-docxf-file', label: gettext('New Docxf File'), onClick: () => this.onCreateFile('.docxf') });
+        }
+        if (enableWhiteboard) {
+          newSubOpList.push({ key: 'new-whiteboard-file', label: gettext('New Whiteboard File'), onClick: () => this.onCreateFile('.draw') });
+        }
+      }
       let opList = [];
+      if (canCreate) {
+        opList.push({
+          key: 'new-folder',
+          label: gettext('New Folder'),
+          icon_dom: <Icon symbol="new-folder" className="dropdown-item-icon" />,
+          onClick: this.onCreateFolder
+        });
+
+        opList.push({
+          key: 'new-file',
+          label: gettext('New File'),
+          icon_dom: <Icon symbol="new-file" className="dropdown-item-icon" />,
+          'subOpList': newSubOpList
+        });
+      }
       if (canUpload) {
+        if (opList.length > 0) {
+          opList.push('Divider');
+        }
         if (Utils.isSupportUploadFolder()) {
           opList.push({
             key: 'upload-files',
@@ -144,37 +185,10 @@ class DirOperationToolbar extends React.Component {
         }
       }
 
-      if (canCreate) {
-        let newSubOpList = [
-          { key: 'new-folder', label: gettext('New Folder'), onClick: this.onCreateFolder },
-          { key: 'new-file', label: gettext('New File'), onClick: () => this.onCreateFile('') },
-          'Divider',
-        ];
-        if (enableSeadoc && !repoEncrypted) {
-          newSubOpList.push({ key: 'new-seadoc-file', label: gettext('New SeaDoc File'), onClick: () => this.onCreateFile('.sdoc') });
-          newSubOpList.push({ key: 'new-excalidraw-file', label: gettext('New Excalidraw File'), onClick: () => this.onCreateFile('.exdraw') });
-        }
-        newSubOpList.push(
-          { key: 'new-markdown-file', label: gettext('New Markdown File'), onClick: () => this.onCreateFile('.md') },
-          { key: 'new-excel-file', label: gettext('New Excel File'), onClick: () => this.onCreateFile('.xlsx') },
-          { key: 'new-powerpoint-file', label: gettext('New PowerPoint File'), onClick: () => this.onCreateFile('.pptx') },
-          { key: 'new-word-file', label: gettext('New Word File'), onClick: () => this.onCreateFile('.docx') },
-        );
-        if (onlyofficeSupportEditDocxf) {
-          newSubOpList.push({ key: 'new-docxf-file', label: gettext('New Docxf File'), onClick: () => this.onCreateFile('.docxf') });
-        }
-        if (enableWhiteboard) {
-          newSubOpList.push({ key: 'new-whiteboard-file', label: gettext('New Whiteboard File'), onClick: () => this.onCreateFile('.draw') });
-        }
-        opList.push({
-          key: 'new',
-          label: gettext('New'),
-          icon_dom: <Icon symbol="new" className="dropdown-item-icon" />,
-          children: newSubOpList
-        });
-      }
-
       if (showShareBtn) {
+        if (opList.length > 0) {
+          opList.push('Divider');
+        }
         opList.push({
           key: 'share',
           label: gettext('Share'),
@@ -191,7 +205,10 @@ class DirOperationToolbar extends React.Component {
       });
 
       if (enableSeadoc && !repoEncrypted) {
-        opList.push('Divider', {
+        if (opList.length > 0) {
+          opList.push('Divider');
+        }
+        opList.push({
           key: 'import-sdoc',
           label: gettext('Import sdoc'),
           icon_dom: <Icon symbol="import-sdoc" className="dropdown-item-icon" />,
