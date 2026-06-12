@@ -8,9 +8,9 @@ import { useCollaborators } from '../../../metadata';
 import EmbeddedFileDetails from '../../../components/dirent-detail/embedded-file-details';
 import { gettext, mediaUrl } from '../../../utils/constants';
 import { useMetadataStatus } from '../../../hooks';
+import Tooltip from '../../../components/tooltip';
 
 import './index.css';
-import Tooltip from '../../../components/tooltip';
 
 const SdocEditor = () => {
   const [isStarred, setStarted] = useState(window.app.pageOptions.isStarred);
