@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
-import { gettext, enableEncryptedLibrary, enableResetEncryptedRepoPassword, repoPasswordMinLength, storages, libraryTemplates } from '../../utils/constants';
+import { gettext, enableEncryptedLibrary, enableResetEncryptedRepoPassword, isEmailConfigured, repoPasswordMinLength, storages, libraryTemplates } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { SeahubSelect } from '../common/select';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
@@ -246,7 +246,7 @@ class CreateRepoDialog extends React.Component {
                 </FormGroup>
                 {!this.state.disabled &&
                   <FormGroup>
-                    {!enableResetEncryptedRepoPassword && (
+                    {!(enableResetEncryptedRepoPassword && isEmailConfigured) && (
                       <Alert color="warning">
                         {gettext('For security reasons, the password for the encrypted library is not stored on the server. If you forget it, you will not be able to recover the password.')}
                       </Alert>
