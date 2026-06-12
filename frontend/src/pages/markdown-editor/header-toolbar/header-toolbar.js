@@ -12,9 +12,9 @@ import CommentPanel from '../../../components/file-view/comment-panel';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import Dirent from '../../../../src/models/dirent';
+import Tooltip from '../../../components/tooltip';
 
 import '../css/header-toolbar.css';
-import Tooltip from '../../../components/tooltip';
 
 const { canDownloadFile, repoID, filePath, isRepoAdmin } = window.app.pageOptions;
 
