@@ -1127,6 +1127,7 @@ GOOGLE_MAP_ID = 'google_map_id'
 
 # risk control
 ENABLE_RISK_CONTROL = False
+RISK_CONTROL_SERVER_URL = ''
 
 #####################
 # External settings #

@@ -2,9 +2,11 @@
 Views which allow users to create and activate accounts.
 
 """
-
+import jwt
+import time
 import logging
 import datetime
+import requests
 
 from django.shortcuts import redirect
 from django.shortcuts import render
@@ -202,7 +204,6 @@ def register(request, backend, success_url=None, form_class=None,
 
             if settings.ENABLE_RISK_CONTROL:
                 try:
-                    from seahub.utils import publish_account_registration
                     from seahub.api2.utils import get_client_ip
                     from django.utils import timezone
                     email = form.cleaned_data['email']
@@ -214,9 +215,14 @@ def register(request, backend, success_url=None, form_class=None,
                         'account_id': new_user.username,
                         'account_name': email,
                     }
-                    publish_account_registration(message)
+                    payload = {'exp': int(time.time()) + 300, }
+                    token = jwt.encode(payload, settings.JWT_PRIVATE_KEY, algorithm='HS256')
+                    headers = {"Authorization": "Token %s" % token}
+                    url = settings.RISK_CONTROL_SERVER_URL.rstrip('/') + '/api/seafile/account-risk-control/'
+                    resp = requests.post(
+                        url, json=message, headers=headers, timeout=10)
                 except Exception as e:
-                    logger.error('Publish account registration error, %s, %s, %s', new_user.username, email, e)
+                    logger.error('Risk control account registration error, %s, %s, %s', new_user.username, email, e)
 
             if success_url is None:
                 to, args, kwargs = backend.post_registration_redirect(request, new_user)
