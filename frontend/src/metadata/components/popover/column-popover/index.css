@@ -19,6 +19,15 @@
   padding: 1rem 1rem 0;
 }
 
+.sf-metadata-column-popover .sf-metadata-column-name-input[readonly] {
+  cursor: default;
+}
+
+.sf-metadata-column-popover .sf-metadata-column-settings-item:not(.is-invalid) .sf-metadata-column-name-input[readonly]:focus {
+  border-color: var(--bs-border-secondary-color);
+  box-shadow: none;
+}
+
 .sf-metadata-column-popover .sf-metadata-column-type {
   width: 100%;
   background: var(--bs-popover-bg);
