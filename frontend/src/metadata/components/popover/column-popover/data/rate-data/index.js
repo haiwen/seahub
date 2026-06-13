@@ -8,6 +8,7 @@ import Icon from '../../../../../../components/icon';
 import IconBtn from '../../../../../../components/icon-btn';
 import { gettext } from '../../../../../../utils/constants';
 import { RATE_MAX_NUMBER, RATE_COLORS, RATE_TYPES, DEFAULT_RATE_DATA } from '../../../../../constants';
+import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 
 import './index.css';
 
@@ -16,6 +17,7 @@ const RateData = ({ value, onChange, updatePopoverState }) => {
   const { max, color, type } = initValue;
   const [isShowStylePopover, setIsShowStylePopover] = useState(false);
   const selectedBtnRef = useRef(null);
+  const maxSelectRef = useRef(null);
 
   const maxOptions = useMemo(() => {
     return RATE_MAX_NUMBER.map(max => ({
@@ -28,7 +30,8 @@ const RateData = ({ value, onChange, updatePopoverState }) => {
     return maxOptions.find(item => item.value === max) || maxOptions.find(item => item.value === 5);
   }, [maxOptions, max]);
 
-  const openStylePopover = useCallback((event) => {
+  const openStylePopover = useCallback(() => {
+    maxSelectRef.current?.closeSelect();
     setIsShowStylePopover(!isShowStylePopover);
     updatePopoverState(!isShowStylePopover);
   }, [updatePopoverState, isShowStylePopover]);
@@ -45,8 +48,9 @@ const RateData = ({ value, onChange, updatePopoverState }) => {
   }, [value, onChange, closeStylePopover]);
 
   const onMaxChange = useCallback((option) => {
+    closeStylePopover();
     onChange({ ...value, max: option });
-  }, [value, onChange]);
+  }, [value, onChange, closeStylePopover]);
 
   return (
     <div className="sf-metadata-column-data-settings sf-metadata-rate-column-data-settings">
@@ -70,7 +74,7 @@ const RateData = ({ value, onChange, updatePopoverState }) => {
               popoverClassName="sf-metadata-rate-column-data-style-setting-popover"
               hidePopover={closeStylePopover}
               hidePopoverWithEsc={closeStylePopover}
-              modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}
+              modifiers={[DROPDOWN_MENU_OFFSET_DEFAULT, { name: 'preventOverflow', options: { boundary: document.body } }]}
             >
               <div className="rate-column-style-list">
                 {RATE_COLORS.map(color => {
@@ -90,9 +94,10 @@ const RateData = ({ value, onChange, updatePopoverState }) => {
             </CustomizePopover>
           )}
         </FormGroup>
-        <FormGroup className="rate-column-data-setting-item rate-column-data-max-setting">
+        <FormGroup className="rate-column-data-setting-item rate-column-data-max-setting" onMouseDown={closeStylePopover}>
           <Label>{gettext('Max')}</Label>
           <CustomizeSelect
+            ref={maxSelectRef}
             value={selectedMaxOption}
             options={maxOptions}
             onSelectOption={onMaxChange}

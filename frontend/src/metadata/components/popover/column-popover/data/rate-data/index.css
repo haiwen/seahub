@@ -10,9 +10,10 @@
   width: calc((100% - 16px) / 2);
 }
 
-.sf-metadata-rate-column-data-style-setting-popover .popover-inner {
-  border-radius: var(--bs-popover-border-radius);
-  box-shadow: var(--bs-popover-box-shadow);
+.sf-metadata-rate-column-data-style-setting-popover .popover {
+  border: 1px solid var(--bs-border-secondary-color);
+  border-radius: 4px;
+  box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.1);
 }
 
 .sf-metadata-rate-column-data-settings .rate-column-data-style-setting-wrapper .selected-option .seafile-multicolor-icon,
