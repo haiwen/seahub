@@ -11,8 +11,6 @@ import ModalPortal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import OpIcon from '../../components/op-icon';
-import Icon from '../../components/icon';
-import Tooltip from '../../components/tooltip';
 import CustomDropdown from '../../components/dropdown';
 import { formatWithTimezone } from '../../utils/time';
 
@@ -62,7 +60,7 @@ class Item extends Component {
   onUnfreezedItem = () => {
     this.setState({
       highlight: false,
-      isOpIconShow: false,
+      showOpIcon: false,
     });
     this.props.onUnfreezedItem();
   };
@@ -155,6 +153,7 @@ class Item extends Component {
     const iconVisibility = this.state.showOpIcon ? '' : ' invisible';
     const shareIconClassName = 'op-icon repo-share-btn' + iconVisibility;
     const leaveShareIconClassName = 'op-icon' + iconVisibility;
+    const moreOperationsBtnId = `shared-lib-more-operations-btn-${data.repo_id}`;
     const starItem = isStarred
       ? {
         key: 'Unstar',
@@ -188,16 +187,8 @@ class Item extends Component {
         />
         <CustomDropdown
           items={menuItems}
-          target="more-operations-btn"
+          target={moreOperationsBtnId}
           placement="down"
-          trigger={
-            <>
-              <Icon symbol="more-level" />
-              <Tooltip target="more-operations-btn">
-                {gettext('More operations')}
-              </Tooltip>
-            </>
-          }
           triggerClassName={`op-icon ${iconVisibility}`}
           menuProps={{ container: 'body' }}
           freezeItem={this.props.onFreezedItem}
