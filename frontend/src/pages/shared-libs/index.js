@@ -129,7 +129,7 @@ class SharedLibraries extends Component {
                   </div>
                 )}
                 {(!Utils.isDesktop() && this.state.items.length > 0) &&
-                  <span className="action-icon" onClick={this.toggleSortOptionsDialog}><Icon symbol="sort" /></span>
+                  <span className="cur-view-path-btn px-1" onClick={this.toggleSortOptionsDialog}><Icon symbol="sort" /></span>
                 }
               </div>
               <div className={classnames('cur-view-content', 'repos-container', { 'pt-3': currentViewMode != LIST_MODE })}>

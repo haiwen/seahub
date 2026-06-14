@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { DropdownItem } from 'reactstrap';
 import { Link, navigate } from '@gatsbyjs/reach-router';
 import { gettext, siteRoot, isPro } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -14,6 +15,7 @@ import OpIcon from '../../components/op-icon';
 import Icon from '../../components/icon';
 import Tooltip from '../../components/tooltip';
 import CustomDropdown from '../../components/dropdown';
+import MobileItemMenu from '../../components/mobile-item-menu';
 import { formatWithTimezone } from '../../utils/time';
 
 
@@ -301,22 +303,27 @@ class Item extends Component {
     } else {
       return (
         <Fragment>
-          <div
-            className={`repo-list-item ${this.state.highlight ? 'highlight' : ''}`}
-            onMouseOver={this.handleMouseOver}
-            onMouseOut={this.handleMouseOut}
-            onClick={this.visitRepo}
-          >
-            <div className="d-flex align-items-center text-truncate">
-              <img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" className="mr-2" />
+          <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+            <td onClick={this.visitRepo}><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
+            <td onClick={this.visitRepo}>
               <Link to={shareRepoUrl}>{data.repo_name}</Link>
-            </div>
-            <div className="d-flex align-items-center text-truncate mt-1">
+              <br />
               <span className="item-meta-info" title={data.owner_contact_email}>{data.owner_name}</span>
               <span className="item-meta-info">{data.size}</span>
               <span className="item-meta-info" title={formatWithTimezone(data.last_modified)}>{dayjs(data.last_modified).fromNow()}</span>
-            </div>
-          </div>
+            </td>
+            <td>
+              <MobileItemMenu isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+                <DropdownItem className="mobile-menu-item" onClick={this.onToggleStarRepo}>
+                  {this.state.isStarred ? gettext('Unstar') : gettext('Star')}
+                </DropdownItem>
+                {(isPro && data.is_admin) &&
+                  <DropdownItem className="mobile-menu-item" onClick={this.share}>{gettext('Share')}</DropdownItem>
+                }
+                <DropdownItem className="mobile-menu-item" onClick={this.leaveShare}>{gettext('Leave Share')}</DropdownItem>
+              </MobileItemMenu>
+            </td>
+          </tr>
           {this.state.isShowSharedDialog && (
             <ModalPortal>
               <ShareDialog

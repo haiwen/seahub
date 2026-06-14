@@ -4,6 +4,7 @@ import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
+import LibsMobileThead from '../../components/libs-mobile-thead';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import ContextMenu from '../../components/context-menu/context-menu';
 import { hideMenu, handleContextClick } from '../../components/context-menu/actions';
@@ -115,11 +116,12 @@ class Content extends Component {
       } else {
         // mobile
         content = (
-          <>
-            <RepoListCard>
+          <table className="table-thead-hidden">
+            {<LibsMobileThead inAllLibs={inAllLibs} />}
+            <tbody>
               {itemsContent}
-            </RepoListCard>
-          </>
+            </tbody>
+          </table>
         );
       }
 
