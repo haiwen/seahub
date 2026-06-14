@@ -314,6 +314,11 @@ select {
   margin-bottom: 24px;
 }
 
+.repos-container td:first-child {
+  text-align: left !important;
+  padding-left: 20px;
+}
+
 .table-drop-active::before {
   border: 1px solid rgba(69, 170, 242);
   content: '';

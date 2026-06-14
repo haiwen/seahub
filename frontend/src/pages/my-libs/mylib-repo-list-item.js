@@ -453,14 +453,9 @@ class MylibRepoListItem extends React.Component {
     let repoURL = this.repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
 
     return (
-      <div
-        className={`repo-list-item ${this.state.highlight ? 'hover' : ''}`}
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
-        onClick={this.visitRepo}
-      >
-        <div className="d-flex align-items-center text-truncate">
-          <img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" className="mr-2" />
+      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        <td onClick={this.visitRepo}><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
+        <td onClick={this.visitRepo}>
           {this.state.isRenaming && (
             <Rename
               name={repo.repo_name}
@@ -477,12 +472,21 @@ class MylibRepoListItem extends React.Component {
           {!this.state.isRenaming && !repo.repo_name &&
             <div>(gettext('Broken (please contact your administrator to fix this library)'))</div>
           }
-        </div>
-        <div className="d-flex align-items-center text-truncate mt-1">
           <span className="item-meta-info">{repo.size}</span>
           <span className="item-meta-info" title={formatWithTimezone(repo.last_modified)}>{dayjs(repo.last_modified).fromNow()}</span>
-        </div>
-      </div>
+        </td>
+        <td>
+          {repo.repo_name && (
+            <LibraryOpMenu
+              repo={this.props.repo}
+              isStarred={this.state.isStarred}
+              onMenuItemClick={this.onMenuItemClick}
+              onFreezedItem={this.props.onFreezedItem}
+              onUnfreezedItem={this.onUnfreezedItem}
+            />
+          )}
+        </td>
+      </tr>
     );
   };
 

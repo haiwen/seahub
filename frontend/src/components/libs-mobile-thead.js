@@ -9,8 +9,7 @@ const propTypes = {
 class LibsMobileThead extends React.Component {
 
   render() {
-    const { inAllLibs = false } = this.props;
-    const widthList = inAllLibs ? ['14%', '78%', '8%'] : ['12%', '80%', '8%'];
+    const widthList = ['14%', '78%', '8%'];
     return (
       <thead>
         <tr>

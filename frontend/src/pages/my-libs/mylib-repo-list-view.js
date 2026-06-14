@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
 import MylibRepoListItem from './mylib-repo-list-item';
+import LibsMobileThead from '../../components/libs-mobile-thead';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import ContextMenu from '../../components/context-menu/context-menu';
 import { Utils } from '../../utils/utils';
@@ -118,16 +119,18 @@ class MylibRepoListView extends React.Component {
   };
 
   renderMobileUI = () => {
+    const { inAllLibs } = this.props;
     return (
-      <>
-        <RepoListCard>
+      <table className="table-thead-hidden">
+        <LibsMobileThead inAllLibs={inAllLibs} />
+        <tbody>
           {this.renderRepoListView()}
-        </RepoListCard>
-      </>
+        </tbody>
+      </table>
     );
   };
 
-  render = () => {
+  render() {
     return (
       <Fragment>
         <MediaQuery query="(min-width: 768px)">
@@ -138,7 +141,7 @@ class MylibRepoListView extends React.Component {
         </MediaQuery>
       </Fragment>
     );
-  };
+  }
 }
 
 MylibRepoListView.propTypes = propTypes;

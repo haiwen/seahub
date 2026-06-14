@@ -193,7 +193,7 @@ class MyLibraries extends Component {
               ) : (
                 <>
                   {repoList.length > 0 &&
-                    <span className="action-icon" onClick={this.toggleSortOptionsDialog}>
+                    <span className="cur-view-path-btn px-1" onClick={this.toggleSortOptionsDialog}>
                       <Icon symbol="sort" aria-hidden="true" />
                     </span>
                   }

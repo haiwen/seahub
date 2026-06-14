@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { DropdownItem } from 'reactstrap';
 import { gettext, isPro, folderPermEnabled, enableRepoSnapshotLabel, enableResetEncryptedRepoPassword, isEmailConfigured, enableMultipleOfficeSuite, enableStorageClasses } from '../utils/constants';
+import { Utils } from '../utils/utils';
 import MobileItemMenu from '../components/mobile-item-menu';
 import Icon from './icon';
 import Tooltip from './tooltip';
 import CustomDropdown from './dropdown';
-import CustomDropdownItem from './dropdown/item';
 
 const propTypes = {
   isPC: PropTypes.bool,
@@ -23,7 +24,41 @@ class LibraryOperationMenu extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      isItemMenuShow: false,
+    };
   }
+
+  onMenuItemClick = (e) => {
+    const operation = Utils.getEventData(e, 'toggle');
+    this.props.onMenuItemClick(e, operation);
+  };
+
+  toggleOperationMenu = (e) => {
+    const { isLibView } = this.props;
+    if (isLibView) {
+      this.setState({ isItemMenuShow: !this.state.isItemMenuShow });
+      return;
+    }
+
+    let dataset = e.target ? e.target.dataset : null;
+    if (dataset && dataset.toggle && dataset.toggle === 'Rename') {
+      this.setState({ isItemMenuShow: !this.state.isItemMenuShow });
+      return;
+    }
+
+    this.setState(
+      { isItemMenuShow: !this.state.isItemMenuShow },
+      () => {
+        if (this.state.isItemMenuShow) {
+          this.props.onFreezedItem();
+        } else {
+          this.props.onUnfreezedItem();
+        }
+      }
+    );
+  };
+
 
   generatorOperations = () => {
     let repo = this.props.repo;
@@ -217,13 +252,7 @@ class LibraryOperationMenu extends React.Component {
     return (
       <MobileItemMenu isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
         {operations.filter(item => item != 'Divider').map((item, index) => {
-          return (
-            <CustomDropdownItem
-              key={index}
-              item={{ key: item, label: this.translateOperations(item), className: 'mobile-menu-item' }}
-              onClick={(e) => this.props.onMenuItemClick(e, item)}
-            />
-          );
+          return (<DropdownItem key={index} className="mobile-menu-item" data-toggle={item} onClick={this.onMenuItemClick}>{this.translateOperations(item)}</DropdownItem>);
         })}
       </MobileItemMenu>
     );
