@@ -29,6 +29,10 @@
   cursor: default;
 }
 
+#files-content-container .table-thead-hidden { /* for mobile */
+  margin-bottom: 3rem;
+}
+
 .library-grid-item {
   height: 72px;
   display: flex;

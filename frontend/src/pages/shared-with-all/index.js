@@ -166,7 +166,7 @@ class SharedWithAll extends React.Component {
   renderSortIconInMobile = () => {
     return (
       <>
-        {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="action-icon" onClick={this.toggleSortOptionsDialog}><Icon symbol="sort-mobile" /></span>}
+        {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="cur-view-path-btn px-1" onClick={this.toggleSortOptionsDialog}><Icon symbol="sort" /></span>}
       </>
     );
   };
@@ -243,7 +243,6 @@ class SharedWithAll extends React.Component {
               <span className="d-flex align-items-center"><Icon symbol="share-with-all" className="role-icon" /></span>
               {gettext('Shared with all')}
             </div>
-            {this.renderSortIconInMobile()}
           </div>
           {this.renderContent(currentViewMode)}
         </>

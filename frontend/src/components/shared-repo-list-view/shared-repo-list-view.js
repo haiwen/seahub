@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import LibsMobileThead from '../libs-mobile-thead';
 import SharedRepoListItem from './shared-repo-list-item';
 import toaster from '../toast';
 import Loading from '../loading';
@@ -144,14 +145,18 @@ class SharedRepoListView extends React.Component {
   };
 
   renderMobileUI = () => {
+    const { inAllLibs = false } = this.props;
     return (
-      <RepoListCard>
-        {this.renderRepoListView()}
-      </RepoListCard>
+      <table className="table-thead-hidden">
+        <LibsMobileThead inAllLibs={inAllLibs} />
+        <tbody>
+          {this.renderRepoListView()}
+        </tbody>
+      </table>
     );
   };
 
-  render = () => {
+  render() {
     const table = Utils.isDesktop() ? this.renderPCUI() : this.renderMobileUI();
     if (this.props.hasNextPage) {
       return (
@@ -163,7 +168,7 @@ class SharedRepoListView extends React.Component {
     } else {
       return table;
     }
-  };
+  }
 }
 
 SharedRepoListView.propTypes = propTypes;

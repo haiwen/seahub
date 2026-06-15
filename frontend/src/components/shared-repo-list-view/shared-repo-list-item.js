@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Link, navigate } from '@gatsbyjs/reach-router';
+import { DropdownItem } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, isPro, username, folderPermEnabled, isSystemStaff, enableResetEncryptedRepoPassword, isEmailConfigured, enableStorageClasses } from '../../utils/constants';
 import ModalPortal from '../../components/modal-portal';
@@ -28,7 +29,6 @@ import RepoWebhookDialog from '../dialog/repo-webhook-dialog';
 import RepoArchiveDialog from '../dialog/repo-archive-dialog';
 import ArchiveIcon from '../archive-icon';
 import CustomDropdown from '../dropdown';
-import CustomDropdownItem from '../dropdown/item';
 
 dayjs.extend(relativeTime);
 
@@ -466,11 +466,7 @@ class SharedRepoListItem extends React.Component {
       <MobileItemMenu isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
         {operations.map((item, index) => {
           return (
-            <CustomDropdownItem
-              key={index}
-              item={{ key: item, label: this.translateMenuItem(item), className: 'mobile-menu-item' }}
-              onClick={() => this.onMenuItemClick(item)}
-            />
+            <DropdownItem key={index} data-toggle={item} onClick={() => { this.onMenuItemClick(item); }} className="mobile-menu-item">{this.translateMenuItem(item)}</DropdownItem>
           );
         })}
       </MobileItemMenu>
@@ -711,29 +707,25 @@ class SharedRepoListItem extends React.Component {
     let { repo } = this.props;
     this.repoURL = libPath;
     return (
-      <div
-        className={`repo-list-item ${this.state.highlight ? 'hover' : ''}`}
-        onMouseEnter={this.onMouseEnter}
-        onMouseOver={this.onMouseOver}
-        onMouseLeave={this.onMouseLeave}
-        onClick={this.visitRepo}
-      >
-        <div className="d-flex align-items-center text-truncate">
-          <img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" className="mr-2" />
-          {this.state.isRenaming ?
-            <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
-            <>
-              <Link to={libPath}>{repo.repo_name}</Link>
-              {repo.archive_status === 'archived' && <Icon className="ml-1" symbol="archive"></Icon>}
-            </>
-          }
-        </div>
-        <div className="d-flex align-items-center text-truncate mt-1">
-          <span className="item-meta-info" title={repo.owner_contact_email}>{repo.owner_name}</span>
-          <span className="item-meta-info">{repo.size}</span>
-          <span className="item-meta-info" title={formatWithTimezone(repo.last_modified)}>{dayjs(repo.last_modified).fromNow()}</span>
-        </div>
-      </div>
+      <Fragment>
+        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
+          <td onClick={this.visitRepo}><img src={iconUrl} title={iconTitle} width="24" alt={iconTitle}/></td>
+          <td onClick={this.visitRepo}>
+            {this.state.isRenaming ?
+              <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
+              <>
+                <Link to={libPath}>{repo.repo_name}</Link>
+                {repo.archive_status === 'archived' && <Icon className="ml-1" symbol="archive"></Icon>}
+                <br />
+              </>
+            }
+            <span className="item-meta-info" title={repo.owner_contact_email}>{repo.owner_name}</span>
+            <span className="item-meta-info">{repo.size}</span>
+            <span className="item-meta-info" title={formatWithTimezone(repo.last_modified)}>{dayjs(repo.last_modified).fromNow()}</span>
+          </td>
+          <td>{this.generatorMobileMenu()}</td>
+        </tr>
+      </Fragment>
     );
   };
 
