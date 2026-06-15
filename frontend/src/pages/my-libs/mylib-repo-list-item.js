@@ -339,7 +339,7 @@ class MylibRepoListItem extends React.Component {
             </>
           )}
           {!this.state.isRenaming && !repo.repo_name &&
-            <span className="text-truncate">(gettext('Broken (please contact your administrator to fix this library)'))</span>
+            <span className="text-truncate">{gettext('Broken (please contact your administrator to fix this library)')}</span>
           }
         </div>
         <div className="repo-item-actions">
@@ -411,7 +411,7 @@ class MylibRepoListItem extends React.Component {
               </>
             )}
             {!this.state.isRenaming && !repo.repo_name &&
-              (<span>{gettext('Broken (please contact your administrator to fix this library)')}</span>)
+              (<span className="text-truncate">{gettext('Broken (please contact your administrator to fix this library)')}</span>)
             }
           </div>
         </div>
@@ -475,7 +475,7 @@ class MylibRepoListItem extends React.Component {
             </div>
           )}
           {!this.state.isRenaming && !repo.repo_name &&
-            <div>(gettext('Broken (please contact your administrator to fix this library)'))</div>
+            <div className="text-truncate">{gettext('Broken (please contact your administrator to fix this library)')}</div>
           }
         </div>
         <div className="d-flex align-items-center text-truncate mt-1">
