@@ -5,12 +5,15 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import Cookies from 'js-cookie';
 import classnames from 'classnames';
 import { Link, navigate } from '@gatsbyjs/reach-router';
+import { DropdownItem } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
+import LibsMobileThead from '../../components/libs-mobile-thead';
+import MobileItemMenu from '../../components/mobile-item-menu';
 import ViewModes from '../../components/view-modes';
 import ReposSortMenu from '../../components/sort-menu';
 import SortOptionsDialog from '../../components/dialog/sort-options';
@@ -89,14 +92,14 @@ class Content extends Component {
 
       } else { // mobile
         return (
-          <>
-            <RepoListCard>
+          <table className="table-thead-hidden">
+            <LibsMobileThead inAllLibs={inAllLibs} />
+            <tbody>
               {this.renderItems()}
-            </RepoListCard>
-          </>
+            </tbody>
+          </table>
         );
       }
-
     }
   }
 }
@@ -221,28 +224,31 @@ class Item extends Component {
           </div>
         );
 
-    } else {
-      // mobile
+    } else { // mobile
       return (
-        <div
-          className={`repo-list-item ${isHighlighted ? 'highlight' : ''}`}
+        <tr
+          className={isHighlighted ? 'tr-highlight' : ''}
           onMouseOver={this.handleMouseOver}
           onMouseOut={this.handleMouseOut}
-          onClick={this.visitRepo}
         >
-          <div className="d-flex align-items-center text-truncate">
-            <img src={item.icon_url} title={item.icon_title} alt={item.icon_title} width="24" className="mr-2" />
+          <td onClick={this.visitRepo}>
+            <img src={item.icon_url} title={item.icon_title} alt={item.icon_title} width="24" />
+          </td>
+          <td onClick={this.visitRepo}>
             {item.repo_name && (
               <div>
                 <Link to={shareRepoUrl}>{item.repo_name}</Link>
               </div>
             )}
-          </div>
-          <div className="d-flex align-items-center text-truncate mt-1">
             <span className="item-meta-info">{item.from_user}</span>
             <span className="item-meta-info">{item.from_server_url}</span>
-          </div>
-        </div>
+          </td>
+          <td>
+            <MobileItemMenu isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
+              <DropdownItem className="mobile-menu-item" onClick={this.leaveShare}>{gettext('Leave Share')}</DropdownItem>
+            </MobileItemMenu>
+          </td>
+        </tr>
       );
 
     }
@@ -321,10 +327,10 @@ class SharedWithOCM extends Component {
       <>
         {(!Utils.isDesktop() && this.state.items.length > 0) &&
           <span
-            className="action-icon"
+            className="cur-view-path-btn px-1"
             onClick={this.toggleSortOptionsDialog}
           >
-            <Icon symbol="sort-mobile" />
+            <Icon symbol="sort" />
           </span>
         }
       </>
