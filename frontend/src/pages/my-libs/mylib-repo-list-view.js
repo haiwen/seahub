@@ -16,6 +16,9 @@ const propTypes = {
   inAllLibs: PropTypes.bool,
   currentViewMode: PropTypes.string,
   updateRepoStatus: PropTypes.func,
+  isItemFreezed: PropTypes.bool,
+  onFreezedItem: PropTypes.func,
+  onUnfreezedItem: PropTypes.func,
 };
 
 class MylibRepoListView extends React.Component {
@@ -28,12 +31,27 @@ class MylibRepoListView extends React.Component {
     this.repoItems = [];
   }
 
+  setItemFreezed = (isItemFreezed) => {
+    if (this.props.onFreezedItem && this.props.onUnfreezedItem) {
+      isItemFreezed ? this.props.onFreezedItem() : this.props.onUnfreezedItem();
+      return;
+    }
+    this.setState({ isItemFreezed });
+  };
+
   onFreezedItem = () => {
-    this.setState({ isItemFreezed: true });
+    this.setItemFreezed(true);
   };
 
   onUnfreezedItem = () => {
-    this.setState({ isItemFreezed: false });
+    this.setItemFreezed(false);
+  };
+
+  getIsItemFreezed = () => {
+    if (typeof this.props.isItemFreezed === 'boolean') {
+      return this.props.isItemFreezed;
+    }
+    return this.state.isItemFreezed;
   };
 
   onContextMenu = (event, repo) => {
@@ -70,7 +88,7 @@ class MylibRepoListView extends React.Component {
               idx={index}
               key={item.repo_id}
               repo={item}
-              isItemFreezed={this.state.isItemFreezed}
+              isItemFreezed={this.getIsItemFreezed()}
               onFreezedItem={this.onFreezedItem}
               onUnfreezedItem={this.onUnfreezedItem}
               onRenameRepo={this.props.onRenameRepo}

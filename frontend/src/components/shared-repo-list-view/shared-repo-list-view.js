@@ -22,6 +22,9 @@ const propTypes = {
   hasNextPage: PropTypes.bool,
   inAllLibs: PropTypes.bool,
   onTransferRepo: PropTypes.func,
+  isItemFreezed: PropTypes.bool,
+  onFreezedItem: PropTypes.func,
+  onUnfreezedItem: PropTypes.func,
 };
 
 class SharedRepoListView extends React.Component {
@@ -34,12 +37,27 @@ class SharedRepoListView extends React.Component {
     this.repoItems = [];
   }
 
+  setItemFreezed = (isItemFreezed) => {
+    if (this.props.onFreezedItem && this.props.onUnfreezedItem) {
+      isItemFreezed ? this.props.onFreezedItem() : this.props.onUnfreezedItem();
+      return;
+    }
+    this.setState({ isItemFreezed });
+  };
+
   onFreezedItem = () => {
-    this.setState({ isItemFreezed: true });
+    this.setItemFreezed(true);
   };
 
   onUnfreezedItem = () => {
-    this.setState({ isItemFreezed: false });
+    this.setItemFreezed(false);
+  };
+
+  getIsItemFreezed = () => {
+    if (typeof this.props.isItemFreezed === 'boolean') {
+      return this.props.isItemFreezed;
+    }
+    return this.state.isItemFreezed;
   };
 
   onItemRename = (repo, newName) => {
@@ -95,7 +113,7 @@ class SharedRepoListView extends React.Component {
               repo={repo}
               libraryType={this.props.libraryType}
               currentGroup={this.props.currentGroup}
-              isItemFreezed={this.state.isItemFreezed}
+              isItemFreezed={this.getIsItemFreezed()}
               onFreezedItem={this.onFreezedItem}
               onUnfreezedItem={this.onUnfreezedItem}
               onTransferRepo={this.props.onTransferRepo}

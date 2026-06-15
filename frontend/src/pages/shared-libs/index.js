@@ -80,6 +80,9 @@ class SharedLibraries extends Component {
         sortItems={this.sortItems}
         inAllLibs={inAllLibs}
         currentViewMode={currentViewMode}
+        isItemFreezed={this.props.isItemFreezed}
+        onFreezedItem={this.props.onFreezedItem}
+        onUnfreezedItem={this.props.onUnfreezedItem}
       />
     );
   };
@@ -155,6 +158,9 @@ SharedLibraries.propTypes = {
   currentViewMode: PropTypes.string,
   inAllLibs: PropTypes.bool,
   repoList: PropTypes.array,
+  isItemFreezed: PropTypes.bool,
+  onFreezedItem: PropTypes.func,
+  onUnfreezedItem: PropTypes.func,
 };
 
 export default SharedLibraries;

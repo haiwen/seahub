@@ -21,17 +21,15 @@ class Content extends Component {
   }
 
   freezeItem = (freezed) => {
-    this.setState({
-      isItemFreezed: freezed
-    });
+    this.setItemFreezed(freezed);
   };
 
   onFreezedItem = () => {
-    this.setState({ isItemFreezed: true });
+    this.setItemFreezed(true);
   };
 
   onUnfreezedItem = () => {
-    this.setState({ isItemFreezed: false });
+    this.setItemFreezed(false);
   };
 
   onContextMenu = (event, repo) => {
@@ -39,6 +37,14 @@ class Content extends Component {
     const id = 'shared-libs-item-menu';
     const menuList = Utils.getSharedLibsOperationList(repo);
     handleContextClick(event, id, menuList, repo);
+  };
+
+  setItemFreezed = (isItemFreezed) => {
+    if (this.props.onFreezedItem && this.props.onUnfreezedItem) {
+      isItemFreezed ? this.props.onFreezedItem() : this.props.onUnfreezedItem();
+      return;
+    }
+    this.setState({ isItemFreezed });
   };
 
   setLibItemRef = (index) => item => {
@@ -84,7 +90,7 @@ class Content extends Component {
               key={index}
               data={item}
               isDesktop={isDesktop}
-              isItemFreezed={this.state.isItemFreezed}
+              isItemFreezed={typeof this.props.isItemFreezed === 'boolean' ? this.props.isItemFreezed : this.state.isItemFreezed}
               freezeItem={this.freezeItem}
               onFreezedItem={this.onFreezedItem}
               onUnfreezedItem={this.onUnfreezedItem}
@@ -141,6 +147,9 @@ Content.propTypes = {
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   sortItems: PropTypes.func.isRequired,
+  isItemFreezed: PropTypes.bool,
+  onFreezedItem: PropTypes.func,
+  onUnfreezedItem: PropTypes.func,
 };
 
 export default Content;

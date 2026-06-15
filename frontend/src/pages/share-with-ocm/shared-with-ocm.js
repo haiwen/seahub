@@ -21,7 +21,8 @@ import RepoListCard from '../../components/repo-list-card/repo-list-card';
 
 const propTypes = {
   currentViewMode: PropTypes.string,
-  inAllLibs: PropTypes.bool
+  inAllLibs: PropTypes.bool,
+  isItemFreezed: PropTypes.bool,
 };
 
 dayjs.extend(relativeTime);
@@ -42,6 +43,7 @@ class Content extends Component {
               inAllLibs={inAllLibs}
               isDesktop={isDesktop}
               leaveShare={this.props.leaveShare}
+              isItemFreezed={this.props.isItemFreezed}
             />
           );
         })}
@@ -106,6 +108,7 @@ Content.propTypes = {
   errorMsg: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
   leaveShare: PropTypes.func.isRequired,
+  isItemFreezed: PropTypes.bool,
 };
 
 class Item extends Component {
@@ -120,6 +123,7 @@ class Item extends Component {
   }
 
   handleMouseOver = () => {
+    if (this.props.isItemFreezed) return;
     this.setState({
       isHighlighted: true,
       isOpIconShown: true
@@ -127,6 +131,7 @@ class Item extends Component {
   };
 
   handleMouseOut = () => {
+    if (this.props.isItemFreezed) return;
     this.setState({
       isHighlighted: false,
       isOpIconShown: false
@@ -251,6 +256,7 @@ class Item extends Component {
 Item.propTypes = {
   item: PropTypes.object.isRequired,
   leaveShare: PropTypes.func.isRequired,
+  isItemFreezed: PropTypes.bool,
 };
 
 class SharedWithOCM extends Component {
@@ -374,6 +380,7 @@ class SharedWithOCM extends Component {
         sortOrder={this.state.sortOrder}
         sortItems={this.sortItems}
         leaveShare={this.leaveShare}
+        isItemFreezed={this.props.isItemFreezed}
       />
     );
   };

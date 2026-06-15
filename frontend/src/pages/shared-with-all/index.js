@@ -24,6 +24,9 @@ const propTypes = {
   currentViewMode: PropTypes.string,
   inAllLibs: PropTypes.bool,
   repoList: PropTypes.array,
+  isItemFreezed: PropTypes.bool,
+  onFreezedItem: PropTypes.func,
+  onUnfreezedItem: PropTypes.func,
 };
 
 class SharedWithAll extends React.Component {
@@ -157,6 +160,9 @@ class SharedWithAll extends React.Component {
                   onItemDelete={this.onItemDelete}
                   currentViewMode={currentViewMode}
                   inAllLibs={inAllLibs}
+                  isItemFreezed={this.props.isItemFreezed}
+                  onFreezedItem={this.props.onFreezedItem}
+                  onUnfreezedItem={this.props.onUnfreezedItem}
                 />
               )}
       </>

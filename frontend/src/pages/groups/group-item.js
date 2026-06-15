@@ -21,7 +21,10 @@ const propTypes = {
   onGroupNameChanged: PropTypes.func.isRequired,
   onGroupTransferred: PropTypes.func.isRequired,
   onGroupDeleted: PropTypes.func.isRequired,
-  onLeavingGroup: PropTypes.func.isRequired
+  onLeavingGroup: PropTypes.func.isRequired,
+  isItemFreezed: PropTypes.bool,
+  onFreezedItem: PropTypes.func,
+  onUnfreezedItem: PropTypes.func,
 };
 
 
@@ -106,6 +109,9 @@ class GroupItem extends React.Component {
             onTransferRepo={this.props.onTransferRepo}
             currentViewMode={currentViewMode}
             updateRepoStatus={this.props.updateRepoStatus}
+            isItemFreezed={this.props.isItemFreezed}
+            onFreezedItem={this.props.onFreezedItem}
+            onUnfreezedItem={this.props.onUnfreezedItem}
           />
         )}
       </>

@@ -48,6 +48,7 @@ class Libraries extends Component {
       currentViewMode: localStorage.getItem('sf_repo_list_view_mode') || LIST_MODE,
       sortBy: localStorage.getItem('sf_repos_sort_by') || 'name', // 'name' or 'time'
       sortOrder: localStorage.getItem('sf_repos_sort_order') || 'asc', // 'asc' or 'desc'
+      isItemFreezed: false,
     };
 
     this.groupsReposManager = new GroupsReposManager();
@@ -163,6 +164,14 @@ class Libraries extends Component {
     e.preventDefault();
     const sortOrder = this.state.sortOrder == 'asc' ? 'desc' : 'asc';
     this.sortReposByOption(sortBy, sortOrder);
+  };
+
+  onFreezedItem = () => {
+    this.setState({ isItemFreezed: true });
+  };
+
+  onUnfreezedItem = () => {
+    this.setState({ isItemFreezed: false });
   };
 
   sortRepoList = (sortBy, sortOrder) => {
@@ -490,6 +499,9 @@ class Libraries extends Component {
                               inAllLibs={true}
                               currentViewMode={currentViewMode}
                               updateRepoStatus={this.updateRepoStatus}
+                              isItemFreezed={this.state.isItemFreezed}
+                              onFreezedItem={this.onFreezedItem}
+                              onUnfreezedItem={this.onUnfreezedItem}
                             />
                           )
                       }
@@ -500,6 +512,9 @@ class Libraries extends Component {
                     repoList={this.state.sharedRepoList}
                     inAllLibs={true}
                     currentViewMode={currentViewMode}
+                    isItemFreezed={this.state.isItemFreezed}
+                    onFreezedItem={this.onFreezedItem}
+                    onUnfreezedItem={this.onUnfreezedItem}
                   />
 
                   {canViewOrg && (
@@ -507,6 +522,9 @@ class Libraries extends Component {
                       repoList={this.state.publicRepoList}
                       inAllLibs={true}
                       currentViewMode={currentViewMode}
+                      isItemFreezed={this.state.isItemFreezed}
+                      onFreezedItem={this.onFreezedItem}
+                      onUnfreezedItem={this.onUnfreezedItem}
                     />
                   )}
 
@@ -516,6 +534,7 @@ class Libraries extends Component {
                       currentViewMode={currentViewMode}
                       sortBy={this.state.sortBy}
                       sortOrder={this.state.sortOrder}
+                      isItemFreezed={this.state.isItemFreezed}
                     />
                   }
 
@@ -536,6 +555,9 @@ class Libraries extends Component {
                         onTransferRepo={this.onGroupTransferRepo}
                         currentViewMode={currentViewMode}
                         updateRepoStatus={this.updateRepoStatus}
+                        isItemFreezed={this.state.isItemFreezed}
+                        onFreezedItem={this.onFreezedItem}
+                        onUnfreezedItem={this.onUnfreezedItem}
                       />
                     );
                   })}
