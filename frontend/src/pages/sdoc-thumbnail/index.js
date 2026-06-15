@@ -57,4 +57,3 @@ root.render(
     </Suspense>
   </I18nextProvider>
 );
-

@@ -3,34 +3,45 @@
 {% load seahub_tags %}
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE|default:'en' }}">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ wiki_title }} - {{ wiki_repo_name }}</title>
-  <meta name="keywords" content="{% trans 'File, Collaboration, Team, Organization' %}">
-  {% if site_description != '' %}<meta name="description" content="{{ site_description }}">{% endif %}
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="{{ site_name }}">
-  <meta property="og:url" content="{{ service_url }}{{ request.path }}">
-  <meta property="og:title" content="{{ wiki_title }} - {{ wiki_repo_name }}">
-  <meta property="og:description" content="{{ wiki_title }}">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <meta name="color-scheme" content="dark light">
-  <link rel="icon" href="{{ MEDIA_URL }}{{ favicon_path }}" type="image/x-icon" id="favicon">
-  <link rel="apple-touch-icon" href="{{ MEDIA_URL }}{{ apple_touch_icon_path }}">
-  <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/sf_font3/iconfont.css">
-  <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css?t=20260224">
-  <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=20260105">
-  <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}seafile-editor/seafile-editor-font.css">
-  <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-font.css">
-  <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-print.css">
-  <link rel="stylesheet" type="text/css" href="{% static 'css/wiki-publish-ssr.css' %}">
-  {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}">{% endif %}
-  {% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}">{% endif %}
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ wiki_title }} - {{ wiki_repo_name }}</title>
+        <meta name="keywords" content="{% trans 'File, Collaboration, Team, Organization' %}">
+        {% if site_description != '' %}
+        <meta name="description" content="{{ site_description }}">
+        {% endif %}
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="{{ site_name }}">
+        <meta property="og:url" content="{{ service_url }}{{ request.path }}">
+        <meta property="og:title" content="{{ wiki_title }} - {{ wiki_repo_name }}">
+        <meta property="og:description" content="{{ wiki_title }}">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="color-scheme" content="dark light">
+        <link
+            rel="icon"
+            href="{{ MEDIA_URL }}{{ favicon_path }}"
+            type="image/x-icon"
+            id="favicon"
+        >
+        <link rel="apple-touch-icon" href="{{ MEDIA_URL }}{{ apple_touch_icon_path }}">
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/sf_font3/iconfont.css">
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css?t=20260224">
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=20260105">
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}seafile-editor/seafile-editor-font.css">
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-font.css">
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-print.css">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/wiki-publish-ssr.css' %}">
+        {% if branding_css != '' %}
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}">
+        {% endif %}
+  {% if enable_branding_css %}
+        <link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}">
+        {% endif %}
   {% render_bundle 'wikiViewer' 'css' %}
-</head>
-<body data-bs-theme="{% if request.session.dark_mode %}dark{% else %}light{% endif %}">
-<div id="wiki-ssr-root">
+    </head>
+    <body data-bs-theme="{% if request.session.dark_mode %}dark{% else %}light{% endif %}">
+        <div id="wiki-ssr-root">
             {# Left navigation panel #}
             <aside class="wiki2-side-panel" id="wiki-side-panel" aria-label="{% trans 'Wiki navigation' %}">
                 <div class="wiki2-side-panel-top">
@@ -67,21 +78,52 @@
                 </div>
             </aside>
             {# Desktop resize handle for the left navigation panel #}
-            <div id="wiki-resize-handle" role="separator" aria-orientation="vertical" aria-label="{% trans 'Resize navigation panel' %}"></div>
+            <div
+                id="wiki-resize-handle"
+                role="separator"
+                aria-orientation="vertical"
+                aria-label="{% trans 'Resize navigation panel' %}"
+            ></div>
             {# Main reading area #}
             <main class="wiki2-main-panel" id="wiki-main-panel">
                 {# Top bar with breadcrumb and mobile menu trigger #}
-                   <div class="wiki2-main-panel-north" id="wiki-top-bar">
-                      <div class="wiki2-main-panel-north-content">
-                        <button class="wiki-mobile-btn" id="menu-toggle-btn"
-                                aria-label="{% trans 'Open navigation' %}" title="{% trans 'Navigation' %}">
-                          {# Mobile menu icon #}
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="3" y1="6" x2="21" y2="6"></line>
-                            <line x1="3" y1="12" x2="21" y2="12"></line>
-                            <line x1="3" y1="18" x2="21" y2="18"></line>
-                          </svg>
+                <div class="wiki2-main-panel-north" id="wiki-top-bar">
+                    <div class="wiki2-main-panel-north-content">
+                        <button
+                            class="wiki-mobile-btn"
+                            id="menu-toggle-btn"
+                            aria-label="{% trans 'Open navigation' %}"
+                            title="{% trans 'Navigation' %}"
+                        >
+                            {# Mobile menu icon #}
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <line
+                                    x1="3"
+                                    y1="6"
+                                    x2="21"
+                                    y2="6"
+                                ></line>
+                                <line
+                                    x1="3"
+                                    y1="12"
+                                    x2="21"
+                                    y2="12"
+                                ></line>
+                                <line
+                                    x1="3"
+                                    y1="18"
+                                    x2="21"
+                                    y2="18"
+                                ></line>
+                            </svg>
                         </button>
                         <nav class="wiki2-top-nav" id="wiki-breadcrumb" aria-label="{% trans 'Breadcrumb' %}"></nav>
                     </div>
@@ -98,17 +140,17 @@
                                 {# Server-rendered page body converted from the source sdoc file #}
                                 <div id="wiki-sdoc-previewer">
                                     <div class="sdoc-editor-container">
-                                      <div class="sdoc-content-wrapper">
-                                        <div class="sdoc-editor-content">
-                                          <div class="sdoc-article-container">
-                                              <article class="article sdoc-editor__article readonly" id="wiki-content">
-                                                <div id="sdoc-editor">
-                                                  {{ wiki_html|safe }}
+                                        <div class="sdoc-content-wrapper">
+                                            <div class="sdoc-editor-content">
+                                                <div class="sdoc-article-container">
+                                                    <article class="article sdoc-editor__article readonly" id="wiki-content">
+                                                        <div id="sdoc-editor">
+                                                            {{ wiki_html|safe }}
+                                                        </div>
+                                                    </article>
                                                 </div>
-                                              </article>
-                                          </div>
+                                            </div>
                                         </div>
-                                      </div>
                                     </div>
                                 </div>
                             </div>
@@ -117,10 +159,9 @@
                 </div>
             </main>
         </div>
-{# Mobile overlay backdrop for the side panel #}
-<div class="wiki-mobile-overlay" id="wiki-mobile-overlay" aria-hidden="true"></div>
-
-<script type="text/javascript">
+        {# Mobile overlay backdrop for the side panel #}
+        <div class="wiki-mobile-overlay" id="wiki-mobile-overlay" aria-hidden="true"></div>
+        <script type="text/javascript">
 window.app = {
   config: {
     mediaUrl: '{{ MEDIA_URL }}',
@@ -273,9 +314,9 @@ window.wiki = {
     publishUrl: "{{ publish_url }}"
   }
 };
-</script>
-<script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js?v={{ seafile_version }}"></script>
-<script>
+        </script>
+        <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js?v={{ seafile_version }}"></script>
+        <script>
 function getElement(id) {
   return document.getElementById(id);
 }
@@ -369,6 +410,64 @@ function getElement(id) {
   overlay && overlay.addEventListener('click', closeSidePanel);
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') closeSidePanel();
+  });
+
+  var headerPrefixes = document.querySelectorAll('.sdoc-toggle-header-prefix');
+
+  function toggleHeaderContentWrap(prefix) {
+    if (!prefix) return;
+
+    var headerParent = prefix.parentElement;
+    if (!headerParent) return;
+
+    var contentWrap = headerParent.nextElementSibling;
+    if (!contentWrap || !contentWrap.classList.contains('sdoc-toggle-header-content-wrap')) return;
+
+    var dropdownIcon = prefix.querySelector('.sdoc-big-drop-down');
+
+    var isHidden = window.getComputedStyle(contentWrap).display === 'none';
+    contentWrap.style.display = isHidden ? '' : 'none';
+    if (dropdownIcon) {
+      dropdownIcon.style.transform = isHidden ? '' : 'rotate(-90deg)';
+    }
+  }
+
+  headerPrefixes.forEach(function (prefix) {
+    prefix.addEventListener('click', function () {
+      toggleHeaderContentWrap(prefix);
+    });
+  });
+
+  var liControls = document.querySelectorAll('.sdoc-li-prefix');
+
+  function toggleListContainer(control) {
+    if (!control) return;
+
+    var headerParent = control.parentElement;
+    if (!headerParent) return;
+
+    var liContent = headerParent.nextElementSibling;
+    if (!liContent || !liContent.classList.contains('sdoc-li-content')) return;
+
+    var listContainer = liContent.querySelector('.list-container');
+    if (!listContainer) return;
+
+    var isHidden = window.getComputedStyle(listContainer).display === 'none';
+
+    if (isHidden) {
+      listContainer.style.removeProperty('display');
+      control.style.transform = '';
+      return;
+    }
+
+    listContainer.style.setProperty('display', 'none', 'important');
+    control.style.transform = 'rotate(-90deg)';
+  }
+
+  liControls.forEach(function (control) {
+    control.addEventListener('click', function () {
+      toggleListContainer(control);
+    });
   });
 
 })();
@@ -665,7 +764,7 @@ function getElement(id) {
 
   updateWikiBreadcrumb(getPageIdFromPath(window.location.pathname) || getCurrentNavPageId());
 })();
-</script>
-{% render_bundle 'wikiViewer' 'js' %}
-</body>
+        </script>
+        {% render_bundle 'wikiViewer' 'js' %}
+    </body>
 </html>
