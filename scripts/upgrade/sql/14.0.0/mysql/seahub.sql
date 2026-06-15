@@ -56,8 +56,8 @@ KEY `repo_id_key` (`repo_id`)
 
 
 ALTER TABLE `organizations_orgsettings` ADD COLUMN `monthly_traffic_limit` bigint(20) NOT NULL;
-ALTER TABLE `share_uploadlinkshare` ADD COLUMN `description` LONGTEXT NOT NULL DEFAULT '';
-ALTER TABLE `share_fileshare` ADD COLUMN `description` LONGTEXT NOT NULL DEFAULT '';
+ALTER TABLE `share_uploadlinkshare` ADD COLUMN `description` LONGTEXT;
+ALTER TABLE `share_fileshare` ADD COLUMN `description` LONGTEXT;
 ALTER TABLE notifications_usernotification ADD INDEX idx_usernotification_user_seen (to_user, seen);
 
 ALTER TABLE `Activity` ADD INDEX `idx_activity_repo_timestamp` (`repo_id`, `timestamp`);
