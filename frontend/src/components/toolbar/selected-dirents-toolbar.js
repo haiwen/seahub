@@ -136,6 +136,19 @@ class SelectedDirentsToolbar extends React.Component {
     }
     return opList.map(item => {
       if (item === 'Divider') return item;
+      if (item.subOpList) {
+        return {
+          ...item,
+          onClick: () => this.onMenuItemClick(item.key),
+          subOpList: item.subOpList.map((subItem) => {
+            if (subItem === 'Divider') return subItem;
+            return {
+              ...subItem,
+              onClick: () => this.onMenuItemClick(subItem.key)
+            };
+          })
+        };
+      }
       return {
         ...item,
         onClick: () => this.onMenuItemClick(item.key)
