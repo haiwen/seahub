@@ -239,7 +239,9 @@ export const buildTableMenuOptions = (records, readOnly, metadataStatus, isMulti
 
   const aiOptions = buildAISubmenuOptions(records, readOnly, metadataStatus, isMultiple);
   if (aiOptions.length > 0) {
-    menuOptions.push('Divider');
+    if (menuOptions.length > 0) {
+      menuOptions.push('Divider');
+    }
     menuOptions.push({
       key: 'AI',
       value: gettext('AI'),
@@ -278,7 +280,9 @@ export const buildTableToolbarMenuOptions = (records, readOnly, metadataStatus, 
 
   const aiOptions = buildAISubmenuOptions(records, readOnly, metadataStatus, isMultiple);
   if (aiOptions.length > 0) {
-    menuOptions.push('Divider');
+    if (menuOptions.length > 0) {
+      menuOptions.push('Divider');
+    }
     menuOptions.push({
       key: 'AI',
       value: gettext('AI'),
