@@ -324,6 +324,23 @@ function getElement(id) {
 (function () {
   'use strict';
 
+  function openEmbedLinkInNewTab(event) {
+    var target = event.target;
+    if (!target || !target.closest) return;
+
+    var container = target.closest('.sdoc-embed-link-container');
+    if (!container) return;
+
+    var iframe = container.querySelector('iframe');
+    var src = iframe && iframe.getAttribute('src');
+    if (!src) return;
+
+    event.preventDefault();
+    window.open(src, '_blank', 'noopener');
+  }
+
+  document.addEventListener('dblclick', openEmbedLinkInNewTab);
+
   function setChildrenExpanded(childrenEl, expanded) {
     if (!childrenEl) return;
 
