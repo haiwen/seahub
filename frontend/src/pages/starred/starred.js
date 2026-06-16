@@ -62,6 +62,7 @@ class Content extends Component {
               return (
                 <Item
                   key={index}
+                  index={index}
                   data={item}
                   isDesktop={isDesktop}
                   updateItems={this.props.updateItems}
@@ -164,7 +165,7 @@ class Item extends Component {
 
   renderDesktop = () => {
     const { isHighlighted } = this.state;
-    const data = this.props.data;
+    const { data, index } = this.props;
     const linkUrl = data.dirent_view_url;
     const desktopItem = (
       <tr
@@ -198,9 +199,10 @@ class Item extends Component {
         <td dangerouslySetInnerHTML={{ __html: data.mtime_relative }}></td>
         <td>
           <OpIcon
+            id={`unstar-${index}`}
             className={`op-icon ${this.state.showOpIcon ? '' : 'invisible'}`}
             symbol="close"
-            title={gettext('Unstar')}
+            tooltip={gettext('Unstar')}
             op={this.unstar}
           />
         </td>
@@ -234,7 +236,7 @@ class Item extends Component {
 
 Item.propTypes = {
   data: PropTypes.object,
-  items: PropTypes.array,
+  index: PropTypes.number,
   isDesktop: PropTypes.bool.isRequired,
   updateItems: PropTypes.func
 };
