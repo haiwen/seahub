@@ -52,7 +52,13 @@ class UploadProgressDialog extends React.Component {
           <CustomDropdown
             items={this.getMenuItems()}
             trigger={gettext('Upload')}
-            toggleProps={{ color: 'primary', caret: true }}
+            toggleProps={{
+              tag: 'button',
+              type: 'button',
+              role: '',
+              className: 'btn btn-primary',
+              caret: true
+            }}
           />
           <Button color="primary" outline={true} className="ml-4"
             onClick={this.props.onCancelAllUploading}
