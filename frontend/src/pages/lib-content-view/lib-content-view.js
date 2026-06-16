@@ -826,32 +826,27 @@ class LibContentView extends React.Component {
   };
 
   enrichDirentListWithMetadata = (direntList, metadata) => {
-    const files = direntList.filter(item => item.type === 'file');
-    if (files.length === 0) {
+    if (!metadata?.rows) {
       return direntList.map(item => new Dirent(item));
     }
 
-    const cachedDirentMap = new Map(this.state.direntList.map(dirent => [dirent.name, dirent]));
+    const getDirentMetadataKey = (name, isDir) => `${isDir ? 'dir' : 'file'}:${name}`;
+    const cachedDirentMap = new Map(this.state.direntList.map(dirent => [getDirentMetadataKey(dirent.name, dirent.type !== 'file'), dirent]));
     const metadataMap = new Map();
 
-    if (metadata?.rows) {
-      const { rows } = metadata;
-      rows.forEach(record => {
-        const filename = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-        if (filename) {
-          metadataMap.set(filename, record);
-        }
-      });
-    }
+    const { rows } = metadata;
+    rows.forEach(record => {
+      const filename = record[PRIVATE_COLUMN_KEY.FILE_NAME];
+      if (filename) {
+        metadataMap.set(getDirentMetadataKey(filename, record[PRIVATE_COLUMN_KEY.IS_DIR]), record);
+      }
+    });
 
     return direntList.map(item => {
-      if (item.type !== 'file') {
-        return new Dirent(item);
-      }
-
       const enrichedItem = { ...item };
+      const isDir = item.type !== 'file';
 
-      const metadataInfo = metadataMap.get(item.name);
+      const metadataInfo = metadataMap.get(getDirentMetadataKey(item.name, isDir));
       if (metadataInfo) {
         Object.keys(metadataInfo).forEach(key => {
           if (!enrichedItem.metadata) {
@@ -861,7 +856,7 @@ class LibContentView extends React.Component {
           return;
         });
       } else {
-        const cachedDirent = cachedDirentMap.get(item.name);
+        const cachedDirent = cachedDirentMap.get(getDirentMetadataKey(item.name, isDir));
         // Fallback to cached dirent metadata
         if (cachedDirent?.metadata) {
           const { _name, ...restMetadata } = cachedDirent.metadata;

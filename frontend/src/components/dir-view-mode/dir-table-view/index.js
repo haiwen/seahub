@@ -168,10 +168,10 @@ const DirTableView = ({
 
   const handleDirentMetadata = useCallback((id, direntName, update) => {
     const dirent = direntList.find(d => d.name === direntName);
-    const parentDir = dirent.parent_dir || path;
+    const parentDir = dirent?.parent_dir || path;
     const key = Object.keys(update)[0];
     if (key !== PRIVATE_COLUMN_KEY.TAGS) {
-      metadataAPI.modifyRecord(repoID, { recordId: id }, update);
+      metadataAPI.modifyRecord(repoID, { parentDir, fileName: direntName }, update);
     }
     updateDirentMetadata(direntName, update);
     updateDirentDetail(parentDir, direntName, update);

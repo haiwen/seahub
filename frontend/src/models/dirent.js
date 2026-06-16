@@ -63,9 +63,9 @@ class Dirent {
         this.revision_id = json.revision_id || null;
       }
 
-      if (json.metadata) {
-        this.metadata = json.metadata;
-      }
+    }
+    if (json.metadata) {
+      this.metadata = json.metadata;
     }
   }
 
