@@ -670,7 +670,7 @@ class SharedRepoListItem extends React.Component {
       </div>
     ) : (
       <div
-        className="library-grid-item"
+        className={`library-grid-item ${this.state.highlight ? 'hover' : ''}`}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         onFocus={this.onMouseEnter}

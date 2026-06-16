@@ -43,11 +43,11 @@
   border: 1px solid var(--bs-border-color);
 }
 
-.library-grid-item:hover {
+.library-grid-item.hover {
   background-color: rgba(0, 0, 0, .04);
 }
 
-[data-bs-theme='dark'] .library-grid-item:hover {
+[data-bs-theme='dark'] .library-grid-item.hover {
   background-color: rgba(255, 255, 255, .1);
 }
 

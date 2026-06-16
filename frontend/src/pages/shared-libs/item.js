@@ -242,7 +242,7 @@ class Item extends Component {
             </div>
           ) : (
             <div
-              className="library-grid-item"
+              className={`library-grid-item ${this.state.highlight ? 'hover' : ''}`}
               onMouseOver={this.handleMouseOver}
               onMouseOut={this.handleMouseOut}
               onFocus={this.handleMouseOver}
