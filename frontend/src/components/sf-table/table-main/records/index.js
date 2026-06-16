@@ -58,9 +58,6 @@ class Records extends Component {
   }
 
   componentDidMount() {
-    document.addEventListener('copy', this.onCopyCells);
-    document.addEventListener('paste', this.onPasteCells);
-    document.addEventListener('cut', this.onCutCells);
     if (window.isMobile) {
       window.addEventListener('touchstart', this.onTouchStart);
       window.addEventListener('touchend', this.onTouchEnd);
@@ -93,9 +90,6 @@ class Records extends Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('copy', this.onCopyCells);
-    document.removeEventListener('paste', this.onPasteCells);
-    document.removeEventListener('cut', this.onCutCells);
     if (window.isMobile) {
       window.removeEventListener('touchstart', this.onTouchStart);
       window.removeEventListener('touchend', this.onTouchEnd);
@@ -352,21 +346,38 @@ class Records extends Component {
   };
 
   onCopyCells = (e) => {
-    if (this.props.supportCopy) {
+    if (this.props.supportCopy && this.shouldHandleClipboardEvent(e)) {
       this.eventBus.dispatch(EVENT_BUS_TYPE.COPY_CELLS, e);
     }
   };
 
   onPasteCells = (e) => {
-    if (this.props.supportPaste) {
+    if (this.props.supportPaste && this.shouldHandleClipboardEvent(e)) {
       this.eventBus.dispatch(EVENT_BUS_TYPE.PASTE_CELLS, e);
     }
   };
 
   onCutCells = (e) => {
-    if (this.props.supportCut) {
+    if (this.props.supportCut && this.shouldHandleClipboardEvent(e)) {
       this.eventBus.dispatch(EVENT_BUS_TYPE.CUT_CELLS, e);
     }
+  };
+
+  shouldHandleClipboardEvent = (e) => {
+    const { resultContainerRef } = this;
+    if (!resultContainerRef) return false;
+
+    const eventTarget = e.target;
+    if (eventTarget && resultContainerRef.contains(eventTarget)) {
+      return true;
+    }
+
+    const activeElement = document.activeElement;
+    if (activeElement && resultContainerRef.contains(activeElement)) {
+      return true;
+    }
+
+    return activeElement && activeElement.getAttribute('data-test') === 'active-editor';
   };
 
   onTouchStart = (e) => {
@@ -995,6 +1006,9 @@ class Records extends Component {
           ref={this.setResultContainerRef}
           onScroll={this.onContentScroll}
           onClick={this.onClickContainer}
+          onCopy={this.onCopyCells}
+          onPaste={this.onPasteCells}
+          onCut={this.onCutCells}
         >
           <div className="sf-table-result-content" style={{ width: containerWidth }}>
             <RecordsHeader
