@@ -298,6 +298,37 @@ class MylibRepoListItem extends React.Component {
     this.props.onContextMenu(event, this.props.repo);
   };
 
+  renderOperation = () => {
+    const { idx } = this.props;
+    return (
+      <>
+        <OpIcon
+          id={`share-icon-${idx}`}
+          className="op-icon"
+          symbol="share"
+          tooltip={gettext('Share')}
+          op={this.onShareToggle}
+        />
+        <OpIcon
+          id={`delete-icon-${idx}`}
+          className="op-icon"
+          symbol="delete1"
+          tooltip={gettext('Delete')}
+          op={this.onDeleteToggle}
+        />
+        <LibraryOpMenu
+          isPC={true}
+          menuContainer="body"
+          repo={this.props.repo}
+          isStarred={this.state.isStarred}
+          onMenuItemClick={this.onMenuItemClick}
+          onFreezedItem={this.props.onFreezedItem}
+          onUnfreezedItem={this.onUnfreezedItem}
+        />
+      </>
+    );
+  };
+
   renderPCUI = () => {
     const { isStarred } = this.state;
     const { idx, repo, currentViewMode = LIST_MODE, inAllLibs } = this.props;
@@ -345,29 +376,7 @@ class MylibRepoListItem extends React.Component {
         <div className="repo-item-actions">
           {(repo.repo_name && this.state.isOpIconShow) && (
             <div className="d-flex align-items-center lh-1">
-              <OpIcon
-                id={`share-icon-${idx}`}
-                className="op-icon"
-                symbol="share"
-                tooltip={gettext('Share')}
-                op={this.onShareToggle}
-              />
-              <OpIcon
-                id={`delete-icon-${idx}`}
-                className="op-icon"
-                symbol="delete1"
-                tooltip={gettext('Delete')}
-                op={this.onDeleteToggle}
-              />
-              <LibraryOpMenu
-                isPC={true}
-                menuContainer="body"
-                repo={this.props.repo}
-                isStarred={this.state.isStarred}
-                onMenuItemClick={this.onMenuItemClick}
-                onFreezedItem={this.props.onFreezedItem}
-                onUnfreezedItem={this.onUnfreezedItem}
-              />
+              {this.renderOperation()}
             </div>
           )}
         </div>
@@ -417,29 +426,7 @@ class MylibRepoListItem extends React.Component {
         </div>
         {(repo.repo_name && this.state.isOpIconShow) && (
           <div className="flex-shrink-0 d-flex align-items-center ml-4">
-            <OpIcon
-              id={`share-icon-${idx}`}
-              className="op-icon"
-              symbol="share"
-              tooltip={gettext('Share')}
-              op={this.onShareToggle}
-            />
-            <OpIcon
-              id={`delete-icon-${idx}`}
-              className="op-icon"
-              symbol="delete1"
-              title={gettext('Delete')}
-              op={this.onDeleteToggle}
-            />
-            <LibraryOpMenu
-              isPC={true}
-              menuContainer="body"
-              repo={this.props.repo}
-              isStarred={this.state.isStarred}
-              onMenuItemClick={this.onMenuItemClick}
-              onFreezedItem={this.props.onFreezedItem}
-              onUnfreezedItem={this.onUnfreezedItem}
-            />
+            {this.renderOperation()}
           </div>
         )}
       </div>
