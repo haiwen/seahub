@@ -227,6 +227,12 @@ class CopyDirent extends React.Component {
         selectedRepo: new RepoInfo(firstResult),
         selectedPath: firstResult.path
       });
+    } else {
+      this.setState({
+        selectedRepo: null,
+        selectedPath: '',
+        selectedSearchedItem: { repoID: '', filePath: '' },
+      });
     }
     this.setState({ searchResults: results });
   };

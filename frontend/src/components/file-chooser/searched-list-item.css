@@ -4,8 +4,9 @@
   cursor: pointer;
 }
 
-.searched-list-item:hover {
-  background-color: rgba(0, 0, 0, 0.04);
+.searched-list-item:hover,
+.searched-list-item.tr-active {
+  background-color: rgba(0, 0, 0, 0.04) !important;
 }
 
 .searched-list-item td {

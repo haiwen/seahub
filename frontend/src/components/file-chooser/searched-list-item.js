@@ -29,6 +29,7 @@ class SearchedListItem extends React.Component {
     return (
       <tr
         className={classnames('searched-list-item', {
+          'tr-active': currentItem && item.repo_id === currentItem.repo_id && item.path === currentItem.path,
           'searched-dir': item.is_dir,
         })}
         onClick={this.onClick}
