@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader } from 'reactstrap';
-import Searcher from '../file-chooser/searcher';
 import SelectDirentBody from './select-dirent-body';
 import { MODE_TYPE_MAP } from '../../constants';
 import { Utils } from '../../utils/utils';
@@ -359,17 +358,9 @@ class CopyDirent extends React.Component {
           onUpdateMode={this.updateMode}
           isSupportSearch={isPro}
           onOpenSearch={this.onOpenSearchBar}
-          renderSearchBar={() => (
-            <Searcher
-              className="file-chooser-searcher-inline"
-              closeOnClickOutside={false}
-              keepOpenOnClear={true}
-              onUpdateMode={this.updateMode}
-              onUpdateSearchStatus={this.onUpdateSearchStatus}
-              onUpdateSearchResults={this.onUpdateSearchResults}
-              onClose={this.onCloseSearchBar}
-            />
-          )}
+          onUpdateSearchStatus={this.onUpdateSearchStatus}
+          onUpdateSearchResults={this.onUpdateSearchResults}
+          onCloseSearch={this.onCloseSearchBar}
           searchStatus={searchStatus}
           searchResults={searchResults}
           selectedSearchedItem={this.state.selectedSearchedItem}

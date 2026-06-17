@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import SelectDirentBody from './select-dirent-body';
 import { gettext, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import Searcher from '../file-chooser/searcher';
 import { RepoInfo } from '../../models';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../toast';
@@ -360,17 +359,9 @@ class MoveDirentDialog extends React.Component {
           onUpdateMode={this.updateMode}
           isSupportSearch={isPro}
           onOpenSearch={this.onOpenSearchBar}
-          renderSearchBar={() => (
-            <Searcher
-              className="file-chooser-searcher-inline"
-              closeOnClickOutside={false}
-              keepOpenOnClear={true}
-              onUpdateMode={this.updateMode}
-              onUpdateSearchStatus={this.onUpdateSearchStatus}
-              onUpdateSearchResults={this.onUpdateSearchResults}
-              onClose={this.onCloseSearchBar}
-            />
-          )}
+          onUpdateSearchStatus={this.onUpdateSearchStatus}
+          onUpdateSearchResults={this.onUpdateSearchResults}
+          onCloseSearch={this.onCloseSearchBar}
           searchStatus={searchStatus}
           searchResults={searchResults}
           selectedSearchedItem={this.state.selectedSearchedItem}

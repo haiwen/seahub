@@ -127,8 +127,8 @@
 }
 
 .file-chooser-search-empty-img {
-  width: 6rem;
-  height: 6rem;
+  width: 88px;
+  height: 88px;
   object-fit: contain;
   margin-bottom: 1rem;
   user-select: none;
@@ -136,7 +136,8 @@
 }
 
 .file-chooser-search-empty-text {
-  font-size: 1rem;
+  font-size: .875rem;
+  color: #666;
 }
 
 .file-chooser-search-input {

@@ -47,6 +47,10 @@
   width: 100%;
 }
 
+.file-chooser-searcher.file-chooser-searcher-inline .search-input-container .search-input:focus {
+  box-shadow: none;
+}
+
 .file-chooser-search-results-popover .popover {
   min-width: 400px;
   padding: 1rem;
