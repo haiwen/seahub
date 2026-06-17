@@ -787,6 +787,44 @@ function getElement(id) {
     return true;
   }
 
+  var activeBlockTarget = null;
+  var activeBlockTargetBackground = '';
+
+  function clearActiveBlockTarget() {
+    if (!activeBlockTarget) return;
+
+    activeBlockTarget.style.backgroundColor = activeBlockTargetBackground;
+    activeBlockTarget = null;
+    activeBlockTargetBackground = '';
+  }
+
+  function getBlockTargetById(blockId, sourceEl) {
+    if (!blockId) return null;
+
+    var blockNodes = document.querySelectorAll('[data-id]');
+    var fallbackTarget = null;
+    for (var i = 0; i < blockNodes.length; i++) {
+      var node = blockNodes[i];
+      if (node.getAttribute('data-id') !== blockId || node === sourceEl) continue;
+      if (!fallbackTarget) fallbackTarget = node;
+      if (!node.classList.contains('sdoc-link-block')) {
+        return node;
+      }
+    }
+
+    return fallbackTarget;
+  }
+
+  function activateBlockTarget(target) {
+    if (!target) return;
+
+    clearActiveBlockTarget();
+    activeBlockTarget = target;
+    activeBlockTargetBackground = target.style.backgroundColor;
+    activeBlockTarget.style.backgroundColor = 'rgba(169, 201, 237, 0.3)';
+    activeBlockTarget.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+
   function handleWikiContentLinkClick(e) {
     var wikiLink = e.currentTarget;
     if (!wikiLink) return;
@@ -811,12 +849,34 @@ function getElement(id) {
     }
   }
 
+  function handleWikiBlockLinkClick(e) {
+    var blockLink = e.currentTarget;
+    if (!blockLink) return;
+
+    var blockId = blockLink.getAttribute('data-link-block-id');
+    if (!blockId) return;
+
+    var blockTarget = getBlockTargetById(blockId, blockLink);
+    if (!blockTarget) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    activateBlockTarget(blockTarget)
+  }
+
   function bindWikiContentLinks() {
     var wikiLinks = document.querySelectorAll('.sdoc-wiki-link, .sdoc-link-page');
     wikiLinks.forEach(function (wikiLink) {
       if (wikiLink.__wikiPublishBound) return;
       wikiLink.addEventListener('click', handleWikiContentLinkClick);
       wikiLink.__wikiPublishBound = true;
+    });
+
+    var blockLinks = document.querySelectorAll('.sdoc-link-block');
+    blockLinks.forEach(function (blockLink) {
+      if (blockLink.__wikiPublishBound) return;
+      blockLink.addEventListener('click', handleWikiBlockLinkClick);
+      blockLink.__wikiPublishBound = true;
     });
   }
 
@@ -852,7 +912,16 @@ function getElement(id) {
 
   bindWikiContentLinks();
 
+  document.addEventListener('click', function (e) {
+    if (!activeBlockTarget) return;
+    if (e.target.closest('.sdoc-link-block')) return;
+    if (activeBlockTarget.contains(e.target)) return;
+
+    clearActiveBlockTarget();
+  });
+
   window.addEventListener('wiki:navigate', function () {
+    clearActiveBlockTarget();
     requestAnimationFrame(bindWikiContentLinks);
   });
 
