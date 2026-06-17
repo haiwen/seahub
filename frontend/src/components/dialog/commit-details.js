@@ -4,6 +4,7 @@ import { Modal, ModalBody } from 'reactstrap';
 import dayjs from 'dayjs';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { systemAdminAPI } from '../../utils/system-admin-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 import Icon from '../icon';
@@ -15,6 +16,7 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   commitID: PropTypes.string.isRequired,
   commitTime: PropTypes.string.isRequired,
+  isSysAdminView: PropTypes.bool,
   toggleDialog: PropTypes.func.isRequired
 };
 
@@ -28,8 +30,12 @@ class CommitDetails extends React.Component {
   }
 
   componentDidMount() {
-    const { repoID, commitID } = this.props;
-    seafileAPI.getCommitDetails(repoID, commitID).then((res) => {
+    const { repoID, commitID, isSysAdminView } = this.props;
+    const request = isSysAdminView ?
+      systemAdminAPI.sysAdminGetCommitDetails(repoID, commitID) :
+      seafileAPI.getCommitDetails(repoID, commitID);
+
+    request.then((res) => {
       this.setState({
         isLoading: false,
         errorMsg: '',

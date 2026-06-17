@@ -28,12 +28,13 @@ from seahub.base.templatetags.seahub_tags import tsstr_sec, email2nickname, \
     email2contact_email
 from seahub.auth import authenticate
 from seahub.auth.decorators import login_required, login_required_ajax
-from seahub.constants import GUEST_USER, DEFAULT_USER, HASH_URLS
+from seahub.constants import GUEST_USER, DEFAULT_USER, HASH_URLS, PERMISSION_READ
 from seahub.institutions.models import Institution
 from seahub.role_permissions.utils import get_available_roles, \
         get_available_admin_roles
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
-    is_pro_version, send_html_email, get_site_name, is_org_context
+    is_pro_version, send_html_email, get_site_name, is_org_context, gen_file_get_url, \
+    render_error
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.ldap import get_ldap_info
@@ -66,6 +67,7 @@ except ImportError:
     ENABLE_FILE_SCAN = False
 from seahub.work_weixin.settings import ENABLE_WORK_WEIXIN
 from seahub.dingtalk.settings import ENABLE_DINGTALK
+from seahub.views.repo import get_commit
 
 
 logger = logging.getLogger(__name__)
@@ -118,6 +120,114 @@ def can_view_sys_admin_repo(repo):
         return True
     else:
         return False
+
+def get_sys_admin_repo_view_perm(request, repo):
+    if not request.user.is_staff:
+        return None
+
+    if not request.user.admin_permissions.can_manage_library():
+        return None
+
+    if not can_view_sys_admin_repo(repo):
+        return None
+
+    return PERMISSION_READ
+
+
+def sys_admin_repo_check(request, repo_id):
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    user_perm = get_sys_admin_repo_view_perm(request, repo)
+    if not user_perm:
+        return repo, None
+
+    return repo, user_perm
+
+
+@login_required
+@sys_staff_required
+def sys_admin_repo_history(request, repo_id):
+    repo, user_perm = sys_admin_repo_check(request, repo_id)
+    if not user_perm:
+        return render_error(request, _('Permission denied.'))
+
+    return render(request, 'repo_history_react.html', {
+        'repo': repo,
+        'user_perm': user_perm,
+        'show_label': settings.ENABLE_REPO_SNAPSHOT_LABEL,
+        'is_sys_admin_view': True,
+    })
+
+
+@login_required
+@sys_staff_required
+def sys_admin_repo_snapshot(request, repo_id):
+    repo, user_perm = sys_admin_repo_check(request, repo_id)
+    if not user_perm:
+        return render_error(request, _('Permission denied.'))
+
+    commit_id = request.GET.get('commit_id')
+    if not commit_id:
+        return HttpResponseRedirect(reverse('sys_admin_repo_history', args=[repo_id]))
+
+    current_commit = get_commit(repo.id, repo.version, commit_id)
+    if not current_commit:
+        current_commit = get_commit(repo.id, repo.version, repo.head_cmmt_id)
+
+    return render(request, 'repo_snapshot_react.html', {
+        'repo': repo,
+        'can_restore_repo': False,
+        'current_commit': current_commit,
+        'is_sys_admin_view': True,
+    })
+
+
+@login_required
+@sys_staff_required
+def sys_admin_view_snapshot_file(request, repo_id):
+    repo, user_perm = sys_admin_repo_check(request, repo_id)
+    if not user_perm:
+        return render_error(request, _('Permission denied.'))
+
+    ret_dict = {}
+    from seahub.views.file import view_history_file_common
+    view_history_file_common(request, repo_id, ret_dict)
+    if not request.user_perm:
+        return render_error(request, _('Permission denied.'))
+
+    if ret_dict['err']:
+        return render(request, 'history_file_view_react.html', ret_dict)
+
+    if 'wopi_dict' in ret_dict:
+        return render(request, 'view_file_wopi.html', ret_dict['wopi_dict'])
+
+    if 'onlyoffice_dict' in ret_dict:
+        return render(request, 'view_file_onlyoffice.html', ret_dict['onlyoffice_dict'])
+
+    ret_dict['is_sys_admin_view'] = True
+    ret_dict['zipped'] = [(repo.name, reverse('sys_admin_repo_history', args=[repo_id]))]
+    return render(request, 'history_file_view_react.html', ret_dict)
+
+
+@login_required
+@sys_staff_required
+def sys_admin_download_snapshot_file(request, repo_id, obj_id):
+    repo, user_perm = sys_admin_repo_check(request, repo_id)
+    if not user_perm:
+        return render_error(request, _('Permission denied.'))
+
+    path = request.GET.get('p', '')
+    file_name = request.GET.get('file_name', '')
+    token = seafile_api.get_fileserver_access_token(repo_id, obj_id, 'download', request.user.username)
+    if not token:
+        next_page = request.headers.get('referer', settings.SITE_ROOT)
+        return HttpResponseRedirect(next_page)
+
+    from seahub.views.file import send_file_access_msg
+    send_file_access_msg(request, repo, path, 'web')
+    return HttpResponseRedirect(gen_file_get_url(token, file_name))
 
 def populate_user_info(user):
     """Populate contact email and name to user.

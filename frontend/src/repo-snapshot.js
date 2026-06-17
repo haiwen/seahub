@@ -6,6 +6,7 @@ import { navigate } from '@gatsbyjs/reach-router';
 import { Utils } from './utils/utils';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
+import { systemAdminAPI } from './utils/system-admin-api';
 import Loading from './components/loading';
 import ModalPortal from './components/modal-portal';
 import toaster from './components/toast';
@@ -21,7 +22,8 @@ import './css/repo-snapshot.css';
 const {
   repoID, repoName, canRestoreRepo,
   commitID, commitTime, commitDesc, commitRelativeTime,
-  showAuthor, authorAvatarURL, authorName, authorNickName
+  showAuthor, authorAvatarURL, authorName, authorNickName,
+  isSysAdminView
 } = window.app.pageOptions;
 
 class RepoSnapshot extends React.Component {
@@ -70,7 +72,11 @@ class RepoSnapshot extends React.Component {
       isLoading: true
     });
 
-    seafileAPI.listCommitDir(repoID, commitID, folderPath).then((res) => {
+    const request = isSysAdminView ?
+      systemAdminAPI.sysAdminListCommitDir(repoID, commitID, folderPath) :
+      seafileAPI.listCommitDir(repoID, commitID, folderPath);
+
+    request.then((res) => {
       this.setState({
         isLoading: false,
         folderItems: res.data.dirent_list
@@ -331,7 +337,7 @@ class FolderItem extends React.Component {
         onFocus={this.handleMouseOver}
       >
         <td className="text-center"><img src={Utils.getFileIconUrl(item.name)} alt={gettext('File')} width="24" /></td>
-        <td><a href={`${siteRoot}repo/${repoID}/snapshot/files/?obj_id=${item.obj_id}&commit_id=${commitID}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} target="_blank" rel="noreferrer">{item.name}</a></td>
+        <td><a href={`${siteRoot}${isSysAdminView ? `sys/libraries/${repoID}/history/snapshot/files/` : `repo/${repoID}/snapshot/files/`}?obj_id=${item.obj_id}&commit_id=${commitID}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} target="_blank" rel="noreferrer">{item.name}</a></td>
         <td>{Utils.bytesToSize(item.size)}</td>
         <td>
           <div className="d-flex align-items-center">
@@ -342,7 +348,7 @@ class FolderItem extends React.Component {
               title={gettext('Restore')}
               aria-label={gettext('Restore')}
             />
-            <a href={`${siteRoot}repo/${repoID}/${item.obj_id}/download/?file_name=${encodeURIComponent(item.name)}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} className={`op-icon ${isIconShown ? '' : 'invisible'}`} title={gettext('Download')} role="button" aria-label={gettext('Download')}>
+            <a href={`${siteRoot}${isSysAdminView ? `sys/libraries/${repoID}/history/snapshot/download/${item.obj_id}/` : `repo/${repoID}/${item.obj_id}/download/`}?file_name=${encodeURIComponent(item.name)}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} className={`op-icon ${isIconShown ? '' : 'invisible'}`} title={gettext('Download')} role="button" aria-label={gettext('Download')}>
               <Icon symbol="download" />
             </a>
           </div>

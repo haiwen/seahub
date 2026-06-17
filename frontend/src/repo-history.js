@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import { Utils } from './utils/utils';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
+import { systemAdminAPI } from './utils/system-admin-api';
 import Loading from './components/loading';
 import Paginator from './components/paginator';
 import ModalPortal from './components/modal-portal';
@@ -23,7 +24,8 @@ const {
   repoID,
   repoName,
   userPerm,
-  showLabel
+  showLabel,
+  isSysAdminView
 } = window.app.pageOptions;
 
 class RepoHistory extends React.Component {
@@ -54,7 +56,11 @@ class RepoHistory extends React.Component {
   }
 
   getItems = (page) => {
-    seafileAPI.getRepoHistory(repoID, page, this.state.perPage).then((res) => {
+    const request = isSysAdminView ?
+      systemAdminAPI.sysAdminGetRepoHistory(repoID, page, this.state.perPage) :
+      seafileAPI.getRepoHistory(repoID, page, this.state.perPage);
+
+    request.then((res) => {
       this.setState({
         isLoading: false,
         currentPage: page,
@@ -311,7 +317,11 @@ class Item extends React.Component {
           </td>
           }
           <td>
-            {userPerm == 'rw' && (
+            {isSysAdminView ? (
+              item.isFirstCommit ?
+                <span className={isIconShown ? '' : 'invisible'}>{gettext('Current Version')}</span> :
+                <a href={`${siteRoot}sys/libraries/${repoID}/history/snapshot/?commit_id=${item.commit_id}`} className={isIconShown ? '' : 'invisible'}>{gettext('View Snapshot')}</a>
+            ) : userPerm == 'rw' && (
               item.isFirstCommit ?
                 <span className={isIconShown ? '' : 'invisible'}>{gettext('Current Version')}</span> :
                 <a href={`${siteRoot}repo/${repoID}/snapshot/?commit_id=${item.commit_id}`} className={isIconShown ? '' : 'invisible'}>{gettext('View Snapshot')}</a>
@@ -324,6 +334,7 @@ class Item extends React.Component {
               repoID={repoID}
               commitID={item.commit_id}
               commitTime={item.time}
+              isSysAdminView={isSysAdminView}
               toggleDialog={this.toggleCommitDetailsDialog}
             />
           </ModalPortal>

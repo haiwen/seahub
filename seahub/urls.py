@@ -191,7 +191,8 @@ from seahub.api2.endpoints.admin.logo import AdminLogo
 from seahub.api2.endpoints.admin.favicon import AdminFavicon
 from seahub.api2.endpoints.admin.license import AdminLicense
 from seahub.api2.endpoints.admin.invitations import AdminInvitations, AdminInvitation
-from seahub.api2.endpoints.admin.library_history import AdminLibraryHistoryLimit
+from seahub.api2.endpoints.admin.library_history import AdminLibraryHistoryLimit, \
+    AdminLibraryHistory, AdminLibraryHistoryChanges, AdminLibraryCommitDir
 from seahub.api2.endpoints.admin.login_bg_image import AdminLoginBgImage
 from seahub.api2.endpoints.admin.admin_role import AdminAdminRole
 from seahub.api2.endpoints.admin.address_book.groups import AdminAddressBookGroups, \
@@ -732,6 +733,9 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/search-library/$', AdminSearchLibrary.as_view(), name='api-v2.1-admin-search-library'),
     re_path(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/$', AdminLibrary.as_view(), name='api-v2.1-admin-library'),
     re_path(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/history-limit/$', AdminLibraryHistoryLimit.as_view(), name="api-v2.1-admin-library-history-limit"),
+    re_path(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/history/$', AdminLibraryHistory.as_view(), name='api-v2.1-admin-library-history'),
+    re_path(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/history/changes/$', AdminLibraryHistoryChanges.as_view(), name='api-v2.1-admin-library-history-changes'),
+    re_path(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/commits/(?P<commit_id>[0-9a-f]{40})/dir/$', AdminLibraryCommitDir.as_view(), name='api-v2.1-admin-library-commit-dir'),
     re_path(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/dirents/$', AdminLibraryDirents.as_view(), name='api-v2.1-admin-library-dirents'),
     re_path(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/dirent/$', AdminLibraryDirent.as_view(), name='api-v2.1-admin-library-dirent'),
 
@@ -932,6 +936,10 @@ urlpatterns = [
     path('sys/system-library/', sysadmin_react_fake_view, name="sys_system_library"),
     path('sys/trash-libraries/', sysadmin_react_fake_view, name="sys_trash_libraries"),
     re_path(r'^sys/libraries/(?P<repo_id>[-0-9a-f]{36})/$', sysadmin_react_fake_view, name="sys_libraries_template"),
+    re_path(r'^sys/libraries/(?P<repo_id>[-0-9a-f]{36})/history/$', sys_admin_repo_history, name='sys_admin_repo_history'),
+    re_path(r'^sys/libraries/(?P<repo_id>[-0-9a-f]{36})/history/snapshot/$', sys_admin_repo_snapshot, name='sys_admin_repo_snapshot'),
+    re_path(r'^sys/libraries/(?P<repo_id>[-0-9a-f]{36})/history/snapshot/files/$', sys_admin_view_snapshot_file, name='sys_admin_view_snapshot_file'),
+    re_path(r'^sys/libraries/(?P<repo_id>[-0-9a-f]{36})/history/snapshot/download/(?P<obj_id>[0-9a-f]{40})/$', sys_admin_download_snapshot_file, name='sys_admin_download_snapshot_file'),
     re_path(r'^sys/libraries/(?P<repo_id>[-0-9a-f]{36})/(?P<repo_name>[^/]+)/(?P<path>.*)$', sysadmin_react_fake_view, name="sys_libraries_template_dirent"),
     path('sys/groups/', sysadmin_react_fake_view, name="sys_groups"),
     path('sys/search-groups/', sysadmin_react_fake_view, name="sys_search_groups"),

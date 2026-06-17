@@ -364,13 +364,13 @@ def repo_history(request, repo_id):
     """
     List library modification histories.
     """
-    user_perm = check_folder_permission(request, repo_id, '/')
-    if not user_perm:
-        return render_permission_error(request, _('Unable to view library modification'))
-
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
+
+    user_perm = check_folder_permission(request, repo_id, '/')
+    if not user_perm:
+        return render_permission_error(request, _('Unable to view library modification'))
 
     username = request.user.username
     try:
