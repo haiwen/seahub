@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, ModalHeader } from 'reactstrap';
 import PropTypes from 'prop-types';
 import SelectDirentBody from './select-dirent-body';
-import { gettext, isPro } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { RepoInfo } from '../../models';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -40,7 +40,6 @@ class MoveDirentDialog extends React.Component {
       errMessage: '',
       initToShowChildren: false,
     };
-    this.lastMode = MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY;
   }
 
   componentDidMount() {
@@ -201,10 +200,6 @@ class MoveDirentDialog extends React.Component {
   updateMode = (mode) => {
     if (mode === this.state.mode) return;
 
-    if (mode !== MODE_TYPE_MAP.SEARCH_RESULTS) {
-      this.lastMode = mode;
-    }
-
     const isShowChildren = mode === MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY || mode === MODE_TYPE_MAP.SEARCH_RESULTS;
     this.setState({
       mode,
@@ -268,18 +263,6 @@ class MoveDirentDialog extends React.Component {
     });
   };
 
-  onCloseSearchBar = () => {
-    const mode = this.lastMode;
-    this.setState({
-      mode,
-      searchStatus: '',
-      searchResults: [],
-      selectedSearchedRepo: null,
-      selectedPath: this.props.path,
-      initToShowChildren: mode === MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY,
-    });
-  };
-
   onSearchedItemClick = (item) => {
     item['type'] = item.is_dir ? 'dir' : 'file';
     let repo = new RepoInfo(item);
@@ -293,7 +276,6 @@ class MoveDirentDialog extends React.Component {
       const repoInfo = new RepoInfo(res.data);
       const path = item.path.substring(0, item.path.length - 1);
       const mode = item.repo_id === this.props.repoID ? MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY : MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES;
-      this.lastMode = mode;
       this.setState({
         mode,
         selectedRepo: repoInfo,
@@ -306,10 +288,6 @@ class MoveDirentDialog extends React.Component {
       const errMessage = Utils.getErrorMsg(err);
       toaster.danger(errMessage);
     });
-  };
-
-  selectSearchedItem = (item) => {
-    this.setState({ selectedSearchedItem: item });
   };
 
   renderTitle = () => {
@@ -357,22 +335,18 @@ class MoveDirentDialog extends React.Component {
           setErrMessage={this.setErrMessage}
           handleSubmit={this.handleSubmit}
           onUpdateMode={this.updateMode}
-          isSupportSearch={isPro}
           onOpenSearch={this.onOpenSearchBar}
           onUpdateSearchStatus={this.onUpdateSearchStatus}
           onUpdateSearchResults={this.onUpdateSearchResults}
-          onCloseSearch={this.onCloseSearchBar}
           searchStatus={searchStatus}
           searchResults={searchResults}
           selectedSearchedItem={this.state.selectedSearchedItem}
-          onSelectedSearchedItem={this.selectSearchedItem}
           onSearchedItemClick={this.onSearchedItemClick}
           onSearchedItemDoubleClick={this.onSearchedItemDoubleClick}
           selectedSearchedRepo={selectedSearchedRepo}
           onSelectSearchedRepo={this.selectSearchedRepo}
           onAddFolder={this.props.onAddFolder}
           initToShowChildren={this.state.initToShowChildren}
-          fetchRepoInfo={this.fetchRepoInfo}
         />
       </Modal>
     );

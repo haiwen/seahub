@@ -1,10 +1,9 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { SEARCH_CONTAINER } from '../../../constants/zIndexes';
-import { MODE_TYPE_MAP } from '../../../constants';
 import Icon from '../../icon';
 import Tooltip from '@/components/tooltip';
 
@@ -15,27 +14,11 @@ export const SearchStatus = {
   RESULTS: 'results',
 };
 
-const Searcher = ({ className = '', closeOnClickOutside = true, keepOpenOnClear = false, onUpdateMode, onUpdateSearchStatus, onUpdateSearchResults, onClose }) => {
+const Searcher = ({ className = '', onUpdateSearchStatus, onUpdateSearchResults }) => {
   const [inputValue, setInputValue] = useState('');
-
-  const inputRef = useRef(null);
 
   const searchTimer = useRef(null);
   const source = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (closeOnClickOutside && inputRef.current && !inputRef.current.contains(event.target) && inputValue === '') {
-        onClose();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [closeOnClickOutside, inputValue, onClose]);
 
   const getSearchResult = useCallback((queryData) => {
     if (source.current) {
@@ -105,11 +88,7 @@ const Searcher = ({ className = '', closeOnClickOutside = true, keepOpenOnClear 
 
   const handleKeyDown = useCallback((e) => {
     e.stopPropagation();
-
-    if (e.key === 'Enter' && inputValue.trim().length > 0) {
-      onUpdateMode(MODE_TYPE_MAP.SEARCH_RESULTS);
-    }
-  }, [inputValue, onUpdateMode]);
+  }, []);
 
   const onCloseSearching = useCallback(() => {
     if (searchTimer.current) {
@@ -122,17 +101,13 @@ const Searcher = ({ className = '', closeOnClickOutside = true, keepOpenOnClear 
     setInputValue('');
     onUpdateSearchStatus('');
     onUpdateSearchResults([]);
-    if (!keepOpenOnClear) {
-      onClose();
-    }
-  }, [keepOpenOnClear, onClose, onUpdateSearchResults, onUpdateSearchStatus]);
+  }, [onUpdateSearchResults, onUpdateSearchStatus]);
 
   return (
     <div className={`search-container file-chooser-searcher ${className}`} style={{ zIndex: SEARCH_CONTAINER }}>
       <div className='search-input-container'>
         <span className="search-icon-left input-icon-addon"><Icon symbol="search" /></span>
         <Input
-          innerRef={inputRef}
           className='search-input'
           placeholder={gettext('Search')}
           type='text'
@@ -154,12 +129,8 @@ const Searcher = ({ className = '', closeOnClickOutside = true, keepOpenOnClear 
 
 Searcher.propTypes = {
   className: PropTypes.string,
-  closeOnClickOutside: PropTypes.bool,
-  keepOpenOnClear: PropTypes.bool,
-  onUpdateMode: PropTypes.func,
   onUpdateSearchStatus: PropTypes.func,
   onUpdateSearchResults: PropTypes.func,
-  onClose: PropTypes.func,
 };
 
 export default Searcher;
