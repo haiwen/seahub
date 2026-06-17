@@ -8,23 +8,31 @@
   background-color: var(--bs-nav-hover-bg);
 }
 
-.searched-list-item.searched-dir td {
+.searched-list-item td {
   padding: 0;
   height: 40px;
   border-bottom: none;
 }
 
-.searched-list-item .searched-item-indent {
-  width: 8px;
-  min-width: 8px;
-  border-radius: 3px 0 0 3px;
+.searched-list-item .searched-item-cell {
+  border-radius: 3px;
+}
+
+.searched-list-item .searched-item-content {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+}
+
+.searched-list-item .searched-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
 }
 
 .searched-list-item .searched-item-link {
-  padding-right: 8px;
-  border-radius: 0 3px 3px 0;
-}
-
-.searched-list-item.searched-dir .searched-item-link {
-  padding-right: 8px;
+  flex: 1;
+  min-width: 0;
 }

@@ -38,16 +38,19 @@ class SearchedListItem extends React.Component {
         aria-selected={!!(currentItem && item.repo_id === currentItem.repo_id && item.path === currentItem.path)}
         onKeyDown={Utils.onKeyDown}
       >
-        <td className="searched-item-indent"></td>
-        <td className="text-center searched-item-icon">
-          {item.is_dir ?
-            <span className="tree-node-icon"><Icon symbol="folder" /></span>
-            :
-            <img className="item-img" src={Utils.getFileIconUrl(item.name)} alt="" width="24"/>
-          }
-        </td>
-        <td className='searched-item-link'>
-          <span className="item-link">{repo_name}{path === '/' ? '' : path}</span>
+        <td className="searched-item-cell" colSpan={3}>
+          <div className="searched-item-content">
+            <span className="searched-item-icon">
+              {item.is_dir ?
+                <span className="tree-node-icon"><Icon symbol="folder" /></span>
+                :
+                <img className="item-img" src={Utils.getFileIconUrl(item.name)} alt="" width="24"/>
+              }
+            </span>
+            <span className="searched-item-link">
+              <span className="item-link">{repo_name}{path === '/' ? '' : path}</span>
+            </span>
+          </div>
         </td>
       </tr>
     );
