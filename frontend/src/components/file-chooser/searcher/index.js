@@ -15,7 +15,7 @@ export const SearchStatus = {
   RESULTS: 'results',
 };
 
-const Searcher = ({ onUpdateMode, onUpdateSearchStatus, onUpdateSearchResults, onClose }) => {
+const Searcher = ({ className = '', closeOnClickOutside = true, keepOpenOnClear = false, onUpdateMode, onUpdateSearchStatus, onUpdateSearchResults, onClose }) => {
   const [inputValue, setInputValue] = useState('');
 
   const inputRef = useRef(null);
@@ -25,7 +25,7 @@ const Searcher = ({ onUpdateMode, onUpdateSearchStatus, onUpdateSearchResults, o
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (inputRef.current && !inputRef.current.contains(event.target) && inputValue === '') {
+      if (closeOnClickOutside && inputRef.current && !inputRef.current.contains(event.target) && inputValue === '') {
         onClose();
       }
     };
@@ -35,7 +35,7 @@ const Searcher = ({ onUpdateMode, onUpdateSearchStatus, onUpdateSearchResults, o
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [inputValue, onClose]);
+  }, [closeOnClickOutside, inputValue, onClose]);
 
   const getSearchResult = useCallback((queryData) => {
     if (source.current) {
@@ -57,6 +57,14 @@ const Searcher = ({ onUpdateMode, onUpdateSearchStatus, onUpdateSearchResults, o
     setInputValue(newValue);
 
     if (newValue.trim().length === 0) {
+      if (searchTimer.current) {
+        clearTimeout(searchTimer.current);
+      }
+      if (source.current) {
+        source.current.cancel('prev request is cancelled');
+        source.current = null;
+      }
+      onUpdateSearchStatus('');
       onUpdateSearchResults([]);
       return;
     }
@@ -104,12 +112,23 @@ const Searcher = ({ onUpdateMode, onUpdateSearchStatus, onUpdateSearchResults, o
   }, [inputValue, onUpdateMode]);
 
   const onCloseSearching = useCallback(() => {
+    if (searchTimer.current) {
+      clearTimeout(searchTimer.current);
+    }
+    if (source.current) {
+      source.current.cancel('prev request is cancelled');
+      source.current = null;
+    }
     setInputValue('');
-    onClose();
-  }, [onClose]);
+    onUpdateSearchStatus('');
+    onUpdateSearchResults([]);
+    if (!keepOpenOnClear) {
+      onClose();
+    }
+  }, [keepOpenOnClear, onClose, onUpdateSearchResults, onUpdateSearchStatus]);
 
   return (
-    <div className='search-container file-chooser-searcher' style={{ zIndex: SEARCH_CONTAINER }}>
+    <div className={`search-container file-chooser-searcher ${className}`} style={{ zIndex: SEARCH_CONTAINER }}>
       <div className='search-input-container'>
         <span className="search-icon-left input-icon-addon"><Icon symbol="search" /></span>
         <Input
@@ -134,6 +153,9 @@ const Searcher = ({ onUpdateMode, onUpdateSearchStatus, onUpdateSearchResults, o
 };
 
 Searcher.propTypes = {
+  className: PropTypes.string,
+  closeOnClickOutside: PropTypes.bool,
+  keepOpenOnClear: PropTypes.bool,
   onUpdateMode: PropTypes.func,
   onUpdateSearchStatus: PropTypes.func,
   onUpdateSearchResults: PropTypes.func,

@@ -11,7 +11,13 @@
 }
 
 .file-chooser-searcher .search-icon-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
   min-width: 2rem;
+  pointer-events: none;
+  color: var(--bs-icon-secondary-color);
 }
 
 .file-chooser-searcher .search-input-container .search-input {
@@ -25,6 +31,23 @@
   position: absolute;
   top: 2px;
   right: 2px;
+}
+
+.file-chooser-searcher.file-chooser-searcher-inline.search-container {
+  position: static;
+  display: block;
+  width: 100%;
+  padding: 16px 16px 0;
+}
+
+.file-chooser-searcher.file-chooser-searcher-inline .search-input-container .search-input {
+  height: 2.375rem;
+  width: 100%;
+}
+
+.file-chooser-searcher.file-chooser-searcher-inline .search-input-container .search-control {
+  top: 7px;
+  right: 5px;
 }
 
 .file-chooser-search-results-popover .popover {

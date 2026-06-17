@@ -574,6 +574,20 @@
   padding: 1rem 1rem 0 1rem;
 }
 
+.custom-modal .file-list-col .copy-move-dirent-search-body {
+  min-height: 24rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.custom-modal .file-list-col .copy-move-dirent-search-body .file-chooser-scroll-wrapper {
+  flex: 1;
+}
+
+.custom-modal .file-list-col .copy-move-dirent-search-body .file-chooser-container {
+  height: 100%;
+}
+
 .custom-modal .modal-footer {
   position: relative;
   justify-content: flex-end;

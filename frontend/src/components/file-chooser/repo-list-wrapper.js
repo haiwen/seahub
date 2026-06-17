@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import RepoListView from './repo-list-view';
 import RecentlyUsedListView from './recently-used-list-view';
 import FavoritesListView from './favorites-list-view';
-import { gettext } from '../../utils/constants';
+import { gettext, mediaUrl } from '../../utils/constants';
 import SearchedListView from './searched-list-view';
 import { SearchStatus } from './searcher';
 import { MODE_TYPE_MAP } from '../../constants';
@@ -29,7 +29,16 @@ const RepoListWrapper = (props) => {
         return (
           <>
             {searchResults.length === 0 ? (
-              <div className='search-results-none text-center'>{gettext('No results matching')}</div>
+              <div className="file-chooser-search-empty text-center">
+                <img
+                  src={`${mediaUrl}img/no-results.png`}
+                  alt=""
+                  className="file-chooser-search-empty-img"
+                />
+                <div className="file-chooser-search-empty-text">
+                  {gettext('No results matching')}
+                </div>
+              </div>
             ) : (
               <SearchedListView
                 searchResults={searchResults}
@@ -40,7 +49,18 @@ const RepoListWrapper = (props) => {
           </>
         );
       default:
-        return null;
+        return (
+          <div className="file-chooser-search-empty text-center">
+            <img
+              src={`${mediaUrl}img/start-searching.png`}
+              alt=""
+              className="file-chooser-search-empty-img"
+            />
+            <div className="file-chooser-search-empty-text">
+              {gettext('Enter characters to start searching')}
+            </div>
+          </div>
+        );
     }
   };
 
@@ -171,7 +191,7 @@ const RepoListWrapper = (props) => {
           </div>
         )}
         {mode === MODE_TYPE_MAP.SEARCH_RESULTS && (
-          <div className="list-view">
+          <div className="list-view file-chooser-search-list-view">
             {renderSearchResults()}
           </div>
         )}

@@ -38,7 +38,6 @@ class MoveDirentDialog extends React.Component {
       selectedSearchedItem: { repoID: '', filePath: '' },
       searchStatus: '',
       searchResults: [],
-      showSearchBar: false,
       errMessage: '',
       initToShowChildren: false,
     };
@@ -217,7 +216,6 @@ class MoveDirentDialog extends React.Component {
       this.setState({
         selectedSearchedRepo: null,
         searchResults: [],
-        showSearchBar: false,
       });
     }
 
@@ -225,7 +223,6 @@ class MoveDirentDialog extends React.Component {
       this.setState({
         selectedSearchedRepo: null,
         searchResults: [],
-        showSearchBar: false,
       });
     }
 
@@ -256,7 +253,14 @@ class MoveDirentDialog extends React.Component {
   };
 
   onOpenSearchBar = () => {
-    this.setState({ showSearchBar: true });
+    this.setState({
+      mode: MODE_TYPE_MAP.SEARCH_RESULTS,
+      searchStatus: '',
+      searchResults: [],
+      selectedPath: '',
+      initToShowChildren: true,
+      selectedSearchedItem: { repoID: '', filePath: '' },
+    });
   };
 
   onCloseSearchBar = () => {
@@ -266,7 +270,6 @@ class MoveDirentDialog extends React.Component {
       searchStatus: '',
       searchResults: [],
       selectedSearchedRepo: null,
-      showSearchBar: false,
       selectedPath: this.props.path,
       initToShowChildren: mode === MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY,
     });
@@ -292,7 +295,6 @@ class MoveDirentDialog extends React.Component {
         selectedSearchedRepo: repoInfo,
         selectedPath: path,
         selectedSearchedItem: { repoID: item.repo_id, filePath: path },
-        showSearchBar: mode === MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES,
         initToShowChildren: true,
       });
     }).catch(err => {
@@ -315,7 +317,7 @@ class MoveDirentDialog extends React.Component {
 
   render() {
     const { dirent, selectedDirentList, isMultipleOperation, path } = this.props;
-    const { mode, currentRepo, selectedRepo, selectedPath, showSearchBar, searchStatus, searchResults, selectedSearchedRepo } = this.state;
+    const { mode, currentRepo, selectedRepo, selectedPath, searchStatus, searchResults, selectedSearchedRepo } = this.state;
     const movedDirent = dirent || selectedDirentList[0];
     const { permission } = movedDirent;
     const { isCustomPermission } = Utils.getUserPermission(permission);
@@ -331,26 +333,10 @@ class MoveDirentDialog extends React.Component {
                   <Tooltip target="close-btn">{gettext('Close')}</Tooltip>
                 </span>
               </button>
-              {(isPro && !showSearchBar) &&
-                <button type="button" className="close seahub-modal-btn" data-dismiss="modal" aria-label={gettext('Search')} onClick={this.onOpenSearchBar}>
-                  <span id="search-btn" className="seahub-modal-btn-inner">
-                    <Icon symbol="search" />
-                    <Tooltip target="search-btn">{gettext('Search')}</Tooltip>
-                  </span>
-                </button>
-              }
             </div>
           }
         >
           {isMultipleOperation ? this.renderTitle() : <div dangerouslySetInnerHTML={{ __html: this.renderTitle() }} className="d-flex"></div>}
-          {(isPro && showSearchBar) &&
-            <Searcher
-              onUpdateMode={this.updateMode}
-              onUpdateSearchStatus={this.onUpdateSearchStatus}
-              onUpdateSearchResults={this.onUpdateSearchResults}
-              onClose={this.onCloseSearchBar}
-            />
-          }
         </ModalHeader>
         <SelectDirentBody
           mode={mode}
@@ -366,6 +352,19 @@ class MoveDirentDialog extends React.Component {
           setErrMessage={this.setErrMessage}
           handleSubmit={this.handleSubmit}
           onUpdateMode={this.updateMode}
+          isSupportSearch={isPro}
+          onOpenSearch={this.onOpenSearchBar}
+          renderSearchBar={() => (
+            <Searcher
+              className="file-chooser-searcher-inline"
+              closeOnClickOutside={false}
+              keepOpenOnClear={true}
+              onUpdateMode={this.updateMode}
+              onUpdateSearchStatus={this.onUpdateSearchStatus}
+              onUpdateSearchResults={this.onUpdateSearchResults}
+              onClose={this.onCloseSearchBar}
+            />
+          )}
           searchStatus={searchStatus}
           searchResults={searchResults}
           selectedSearchedItem={this.state.selectedSearchedItem}

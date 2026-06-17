@@ -104,6 +104,33 @@
   background-color: var(--bs-nav-hover-bg);
 }
 
+.file-chooser-search-list-view {
+  height: 100%;
+}
+
+.file-chooser-search-empty {
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--bs-body-secondary-color);
+}
+
+.file-chooser-search-empty-img {
+  width: 6rem;
+  height: 6rem;
+  object-fit: contain;
+  margin-bottom: 1rem;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.file-chooser-search-empty-text {
+  font-size: 1rem;
+}
+
 .file-chooser-search-input {
   position: relative;
 }

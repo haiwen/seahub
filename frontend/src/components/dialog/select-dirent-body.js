@@ -118,6 +118,13 @@ class SelectDirentBody extends React.Component {
   };
 
   selectMode = (mode) => {
+    if (mode === MODE_TYPE_MAP.SEARCH_RESULTS && this.props.onOpenSearch) {
+      if (this.props.mode !== MODE_TYPE_MAP.SEARCH_RESULTS) {
+        this.props.onOpenSearch();
+      }
+      return;
+    }
+
     this.props.onUpdateMode(mode);
     switch (mode) {
       case MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY:
@@ -174,9 +181,22 @@ class SelectDirentBody extends React.Component {
             currentMode={mode}
             onUpdateMode={this.selectMode}
           />
+          {this.props.isSupportSearch && (
+            <LibraryOption
+              mode={MODE_TYPE_MAP.SEARCH_RESULTS}
+              label={gettext('Search')}
+              currentMode={mode}
+              onUpdateMode={this.selectMode}
+            />
+          )}
         </Col>
         <Col xs="12" md="9" className='file-list-col'>
-          <ModalBody>
+          <ModalBody className={mode === MODE_TYPE_MAP.SEARCH_RESULTS ? 'copy-move-dirent-search-body' : ''}>
+            {(mode === MODE_TYPE_MAP.SEARCH_RESULTS && this.props.renderSearchBar) && (
+              <div className="copy-move-dirent-search-input">
+                {this.props.renderSearchBar()}
+              </div>
+            )}
             <RepoListWrapper
               key={repoListWrapperKey}
               mode={mode}
@@ -245,6 +265,9 @@ SelectDirentBody.propTypes = {
   setErrMessage: PropTypes.func,
   mode: PropTypes.string,
   onUpdateMode: PropTypes.func,
+  isSupportSearch: PropTypes.bool,
+  onOpenSearch: PropTypes.func,
+  renderSearchBar: PropTypes.func,
   searchStatus: PropTypes.string,
   searchResults: PropTypes.array,
   onSearchedItemClick: PropTypes.func,

@@ -15,9 +15,16 @@
 }
 
 .searched-list-item .searched-item-indent {
+  width: 8px;
+  min-width: 8px;
   border-radius: 3px 0 0 3px;
 }
 
 .searched-list-item .searched-item-link {
+  padding-right: 8px;
   border-radius: 0 3px 3px 0;
+}
+
+.searched-list-item.searched-dir .searched-item-link {
+  padding-right: 8px;
 }
