@@ -29,7 +29,6 @@ class SearchedListItem extends React.Component {
     return (
       <tr
         className={classnames('searched-list-item', {
-          'tr-active': currentItem && item.repo_id === currentItem.repo_id && item.path === currentItem.path,
           'searched-dir': item.is_dir,
         })}
         onClick={this.onClick}
@@ -44,7 +43,7 @@ class SearchedListItem extends React.Component {
               {item.is_dir ?
                 <span className="tree-node-icon"><Icon symbol="folder" /></span>
                 :
-                <img className="item-img" src={Utils.getFileIconUrl(item.name)} alt="" width="24"/>
+                <img className="item-img" src={Utils.getFileIconUrl(item.name)} alt="" width="24" />
               }
             </span>
             <span className="searched-item-link">

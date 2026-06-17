@@ -24,7 +24,11 @@ const RepoListWrapper = (props) => {
   const renderSearchResults = () => {
     switch (searchStatus) {
       case SearchStatus.LOADING:
-        return <Loading />;
+        return (
+          <div className="file-chooser-search-loading">
+            <Loading />
+          </div>
+        );
       case SearchStatus.RESULTS:
         return (
           <>

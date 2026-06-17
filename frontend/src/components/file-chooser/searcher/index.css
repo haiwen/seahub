@@ -28,9 +28,11 @@
 }
 
 .file-chooser-searcher .search-input-container .search-control {
+  width: 20px;
+  height: 20px;
   position: absolute;
-  top: 2px;
-  right: 2px;
+  top: 9px;
+  right: 9px;
 }
 
 .file-chooser-searcher.file-chooser-searcher-inline.search-container {
@@ -43,11 +45,6 @@
 .file-chooser-searcher.file-chooser-searcher-inline .search-input-container .search-input {
   height: 2.375rem;
   width: 100%;
-}
-
-.file-chooser-searcher.file-chooser-searcher-inline .search-input-container .search-control {
-  top: 7px;
-  right: 5px;
 }
 
 .file-chooser-search-results-popover .popover {

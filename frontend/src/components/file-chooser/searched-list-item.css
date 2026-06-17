@@ -1,25 +1,25 @@
 .searched-list-item {
-  height: 40px;
-  border-radius: 3px;
+  height: 32px;
+  border-radius: 4px;
   cursor: pointer;
 }
 
 .searched-list-item:hover {
-  background-color: var(--bs-nav-hover-bg);
+  background-color: rgba(0, 0, 0, 0.04);
 }
 
 .searched-list-item td {
   padding: 0;
-  height: 40px;
+  height: 32px;
   border-bottom: none;
 }
 
 .searched-list-item .searched-item-cell {
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 .searched-list-item .searched-item-content {
-  height: 40px;
+  height: 32px;
   display: flex;
   align-items: center;
   padding: 0 8px;
@@ -35,4 +35,13 @@
 .searched-list-item .searched-item-link {
   flex: 1;
   min-width: 0;
+  overflow: hidden;
+}
+
+.searched-list-item .searched-item-link .item-link {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

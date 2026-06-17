@@ -75,12 +75,12 @@
 }
 
 .file-chooser-search-container .searched-list-item {
-  height: 2.5rem;
+  height: 32px;
   cursor: pointer;
 }
 
 .file-chooser-search-container .searched-list-item.tr-active {
-  background-color: var(--bs-nav-active-bg) !important;
+  background-color: rgba(0, 0, 0, 0.04) !important;
 }
 
 .file-chooser-search-container .searched-item-icon {
@@ -106,6 +106,14 @@
 
 .file-chooser-search-list-view {
   height: 100%;
+}
+
+.file-chooser-search-loading {
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .file-chooser-search-empty {
