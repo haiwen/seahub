@@ -455,22 +455,25 @@ const PageItem = ({
             ) : (
               <NavItemIcon symbol="file" disable={true} />
             ))}
-            {(!isMouseEntered && childNumber > 0) && (customIcon ? (
-              <CustomIcon icon={customIcon} />
-            ) : (
-              <NavItemIcon symbol="files" disable={true} />
-            ))}
-            {(isMouseEntered && childNumber > 0) && (
+            {childNumber > 0 && (
               <div
                 tabIndex="0"
                 role="button"
-                className="nav-item-icon"
-                onClick={() => toggleExpand(page.id)}
+                className="wiki-nav-item-icon"
+                onClick={(e) => {
+                  toggleExpand(page.id);
+                  e.stopPropagation();
+                }}
                 onKeyDown={Utils.onKeyDown}
               >
                 <Icon symbol="down" className={getFoldState(page.id) ? 'rotate-270' : ''} aria-hidden="true" />
               </div>
             )}
+            {childNumber > 0 && (customIcon ? (
+              <CustomIcon icon={customIcon} />
+            ) : (
+              <NavItemIcon symbol="files" disable={true} />
+            ))}
             <span className="wiki-page-title text-truncate">{page.name}</span>
           </div>
         </div>
