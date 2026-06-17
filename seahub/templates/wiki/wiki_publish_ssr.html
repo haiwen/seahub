@@ -560,7 +560,7 @@ function getElement(id) {
   function getPageIdFromPath(pathname) {
     if (!pathname) return '';
 
-    var match = pathname.match(/\/wiki\/publish\/[-0-9a-zA-Z]+\/([-0-9a-zA-Z]{4})\/$/);
+    var match = pathname.match(/\/wiki\/publish\/[-0-9a-zA-Z]+\/([-0-9a-zA-Z]{4})\/?$/);
     return match ? match[1] : '';
   }
 
@@ -569,16 +569,18 @@ function getElement(id) {
 
     try {
       var parsedUrl = new URL(url, window.location.origin);
-      var match = parsedUrl.pathname.match(/^\/wiki\/publish\/([-0-9a-zA-Z]+)(?:\/([-0-9a-zA-Z]{4}))?\/$/);
+      var match = parsedUrl.pathname.match(/^\/wiki\/publish\/([-0-9a-zA-Z]+)(?:\/([-0-9a-zA-Z]{4}))?\/?$/);
       if (!match) return null;
+
+      var normalizedPathname = parsedUrl.pathname.replace(/\/?$/, '/');
 
       return {
         publishUrl: match[1],
         pageId: match[2] || '',
-        pathname: parsedUrl.pathname,
+        pathname: normalizedPathname,
         search: parsedUrl.search,
         hash: parsedUrl.hash,
-        fullPath: parsedUrl.pathname + parsedUrl.search + parsedUrl.hash
+        fullPath: normalizedPathname + parsedUrl.search + parsedUrl.hash
       };
     } catch (e) {
       return null;
