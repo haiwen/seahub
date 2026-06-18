@@ -28,7 +28,6 @@ class Item extends Component {
       showOpIcon: false,
       unshared: false,
       isShowSharedDialog: false,
-      isStarred: this.props.data.starred,
       isOpMenuOpen: false
     };
   }
@@ -103,10 +102,14 @@ class Item extends Component {
   };
 
   onToggleStarRepo = () => {
-    const repoName = this.props.data.repo_name;
-    if (this.state.isStarred) {
-      seafileAPI.unstarItem(this.props.data.repo_id, '/').then(() => {
-        this.setState({ isStarred: !this.state.isStarred });
+    const { data } = this.props;
+    const repoName = data.repo_name;
+    const onSuccess = () => {
+      this.props.onToggleStarRepo(data);
+    };
+    if (data.starred) {
+      seafileAPI.unstarItem(data.repo_id, '/').then(() => {
+        onSuccess();
         const msg = gettext('Successfully unstarred {library_name_placeholder}.')
           .replace('{library_name_placeholder}', repoName);
         toaster.success(msg);
@@ -115,8 +118,8 @@ class Item extends Component {
         toaster.danger(errMessage);
       });
     } else {
-      seafileAPI.starItem(this.props.data.repo_id, '/').then(() => {
-        this.setState({ isStarred: !this.state.isStarred });
+      seafileAPI.starItem(data.repo_id, '/').then(() => {
+        onSuccess();
         const msg = gettext('Successfully starred {library_name_placeholder}.')
           .replace('{library_name_placeholder}', repoName);
         toaster.success(msg);
@@ -149,14 +152,13 @@ class Item extends Component {
   };
 
   itemOperations = () => {
-    const { isStarred } = this.state;
     const { data } = this.props;
 
     const iconVisibility = this.state.showOpIcon ? '' : ' invisible';
     const shareIconClassName = 'op-icon repo-share-btn' + iconVisibility;
     const leaveShareIconClassName = 'op-icon' + iconVisibility;
     const moreOperationsBtnId = `shared-lib-more-operations-btn-${data.repo_id}`;
-    const starItem = isStarred
+    const starItem = data.starred
       ? {
         key: 'Unstar',
         label: gettext('Unstar'),
@@ -205,7 +207,6 @@ class Item extends Component {
       return null;
     }
 
-    const { isStarred } = this.state;
     const { data, idx, currentViewMode = LIST_MODE } = this.props;
     data.icon_url = Utils.getLibIconUrl(data);
     data.icon_title = Utils.getLibIconTitle(data);
@@ -227,7 +228,7 @@ class Item extends Component {
               </div>
               <div className="repo-item-name">
                 <Link to={shareRepoUrl}>{data.repo_name}</Link>
-                {isStarred && (
+                {data.starred && (
                   <OpIcon
                     id={`star-icon-${idx}`}
                     className="star-icon"
@@ -255,7 +256,7 @@ class Item extends Component {
                 <div className="d-flex flex-column justify-content-center library-name-container">
                   <div className='d-flex align-items-center'>
                     <Link to={shareRepoUrl} className="text-truncate library-name" title={data.repo_name}>{data.repo_name}</Link>
-                    {isStarred && (
+                    {data.starred && (
                       <OpIcon
                         id={`star-icon-${idx}`}
                         className="star-icon ml-2 flex-shrink-0"
@@ -306,7 +307,7 @@ class Item extends Component {
             <td>
               <MobileItemMenu isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
                 <DropdownItem className="mobile-menu-item" onClick={this.onToggleStarRepo}>
-                  {this.state.isStarred ? gettext('Unstar') : gettext('Star')}
+                  {data.starred ? gettext('Unstar') : gettext('Star')}
                 </DropdownItem>
                 {(isPro && data.is_admin) &&
                   <DropdownItem className="mobile-menu-item" onClick={this.share}>{gettext('Share')}</DropdownItem>
@@ -346,6 +347,7 @@ Item.propTypes = {
   freezeItem: PropTypes.func.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
+  onToggleStarRepo: PropTypes.func.isRequired,
   onContextMenu: PropTypes.func.isRequired,
 };
 

@@ -67,6 +67,16 @@ class SharedLibraries extends Component {
     });
   };
 
+  onToggleStarRepo = (repo) => {
+    const items = this.state.items.map(item => {
+      if (item.repo_id === repo.repo_id) {
+        item.starred = !item.starred;
+      }
+      return item;
+    });
+    this.setState({ items });
+  };
+
   renderContent = (currentViewMode) => {
     const { inAllLibs = false, repoList } = this.props;
     const { items } = this.state;
@@ -83,6 +93,7 @@ class SharedLibraries extends Component {
         isItemFreezed={this.props.isItemFreezed}
         onFreezedItem={this.props.onFreezedItem}
         onUnfreezedItem={this.props.onUnfreezedItem}
+        onToggleStarRepo={inAllLibs ? this.props.onToggleStarRepo : this.onToggleStarRepo}
       />
     );
   };
@@ -161,6 +172,7 @@ SharedLibraries.propTypes = {
   isItemFreezed: PropTypes.bool,
   onFreezedItem: PropTypes.func,
   onUnfreezedItem: PropTypes.func,
+  onToggleStarRepo: PropTypes.func,
 };
 
 export default SharedLibraries;

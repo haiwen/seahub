@@ -95,6 +95,7 @@ class Content extends Component {
               freezeItem={this.freezeItem}
               onFreezedItem={this.onFreezedItem}
               onUnfreezedItem={this.onUnfreezedItem}
+              onToggleStarRepo={this.props.onToggleStarRepo}
               currentViewMode={currentViewMode}
               onContextMenu={this.onContextMenu}
             />;
@@ -152,6 +153,7 @@ Content.propTypes = {
   isItemFreezed: PropTypes.bool,
   onFreezedItem: PropTypes.func,
   onUnfreezedItem: PropTypes.func,
+  onToggleStarRepo: PropTypes.func.isRequired,
 };
 
 export default Content;
