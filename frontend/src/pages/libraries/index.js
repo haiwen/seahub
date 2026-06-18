@@ -238,6 +238,16 @@ class Libraries extends Component {
     this.setState({ repoList });
   };
 
+  onToggleStarRepo = (repo) => {
+    const repoList = this.state.repoList.map(item => {
+      if (item.repo_id === repo.repo_id) {
+        item.starred = !item.starred;
+      }
+      return item;
+    });
+    this.setState({ repoList });
+  };
+
   deleteRepo = (repoId, repoList) => {
     if (!Array.isArray(repoList) || repoList.length === 0) {
       return repoList;
@@ -494,6 +504,7 @@ class Libraries extends Component {
                               onRenameRepo={this.onRenameRepo}
                               onDeleteRepo={this.onDeleteRepo}
                               onTransferRepo={this.onTransferRepo}
+                              onToggleStarRepo={this.onToggleStarRepo}
                               onRepoClick={this.onRepoClick}
                               sortRepoList={this.sortRepoList}
                               inAllLibs={true}

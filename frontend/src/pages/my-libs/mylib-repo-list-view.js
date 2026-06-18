@@ -14,6 +14,7 @@ const propTypes = {
   onRenameRepo: PropTypes.func.isRequired,
   onDeleteRepo: PropTypes.func.isRequired,
   onTransferRepo: PropTypes.func.isRequired,
+  onToggleStarRepo: PropTypes.func.isRequired,
   inAllLibs: PropTypes.bool,
   currentViewMode: PropTypes.string,
   updateRepoStatus: PropTypes.func,
@@ -97,6 +98,7 @@ class MylibRepoListView extends React.Component {
               onRenameRepo={this.props.onRenameRepo}
               onDeleteRepo={this.props.onDeleteRepo}
               onTransferRepo={this.props.onTransferRepo}
+              onToggleStarRepo={this.props.onToggleStarRepo}
               currentViewMode={this.props.currentViewMode}
               onContextMenu={this.onContextMenu}
               inAllLibs={this.props.inAllLibs}

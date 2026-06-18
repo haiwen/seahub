@@ -114,6 +114,16 @@ class MyLibraries extends Component {
     this.setState({ repoList: repoList });
   };
 
+  onToggleStarRepo = (repo) => {
+    let repoList = this.state.repoList.map(item => {
+      if (item.repo_id === repo.repo_id) {
+        item.starred = !item.starred;
+      }
+      return item;
+    });
+    this.setState({ repoList: repoList });
+  };
+
   onDeleteRepo = (repo) => {
     let repoList = this.state.repoList.filter(item => {
       return item.repo_id !== repo.repo_id;
@@ -215,6 +225,7 @@ class MyLibraries extends Component {
                         onRenameRepo={this.onRenameRepo}
                         onDeleteRepo={this.onDeleteRepo}
                         onTransferRepo={this.onTransferRepo}
+                        onToggleStarRepo={this.onToggleStarRepo}
                         sortRepoList={this.sortRepoList}
                         currentViewMode={currentViewMode}
                         updateRepoStatus={this.updateRepoStatus}

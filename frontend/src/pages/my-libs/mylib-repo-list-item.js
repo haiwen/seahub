@@ -41,6 +41,7 @@ const propTypes = {
   onRenameRepo: PropTypes.func.isRequired,
   onDeleteRepo: PropTypes.func.isRequired,
   onTransferRepo: PropTypes.func.isRequired,
+  onToggleStarRepo: PropTypes.func.isRequired,
   onContextMenu: PropTypes.func.isRequired,
 };
 
@@ -52,7 +53,6 @@ class MylibRepoListItem extends React.Component {
     super(props);
     this.state = {
       isOpIconShow: false,
-      isStarred: this.props.repo.starred,
       isRenaming: false,
       isShareDialogShow: false,
       isDeleteDialogShow: false,
@@ -148,10 +148,14 @@ class MylibRepoListItem extends React.Component {
   };
 
   onToggleStarRepo = () => {
-    const repoName = this.props.repo.repo_name;
-    if (this.state.isStarred) {
-      seafileAPI.unstarItem(this.props.repo.repo_id, '/').then(() => {
-        this.setState({ isStarred: !this.state.isStarred });
+    const { repo } = this.props;
+    const repoName = repo.repo_name;
+    const onSuccess = () => {
+      this.props.onToggleStarRepo(repo);
+    };
+    if (repo.starred) {
+      seafileAPI.unstarItem(repo.repo_id, '/').then(() => {
+        onSuccess();
         const msg = gettext('Successfully unstarred {library_name_placeholder}.')
           .replace('{library_name_placeholder}', repoName);
         toaster.success(msg);
@@ -160,8 +164,8 @@ class MylibRepoListItem extends React.Component {
         toaster.danger(errMessage);
       });
     } else {
-      seafileAPI.starItem(this.props.repo.repo_id, '/').then(() => {
-        this.setState({ isStarred: !this.state.isStarred });
+      seafileAPI.starItem(repo.repo_id, '/').then(() => {
+        onSuccess();
         const msg = gettext('Successfully starred {library_name_placeholder}.')
           .replace('{library_name_placeholder}', repoName);
         toaster.success(msg);
@@ -320,7 +324,7 @@ class MylibRepoListItem extends React.Component {
           isPC={true}
           menuContainer="body"
           repo={this.props.repo}
-          isStarred={this.state.isStarred}
+          isStarred={this.props.repo.starred}
           onMenuItemClick={this.onMenuItemClick}
           onFreezedItem={this.props.onFreezedItem}
           onUnfreezedItem={this.onUnfreezedItem}
@@ -330,7 +334,6 @@ class MylibRepoListItem extends React.Component {
   };
 
   renderPCUI = () => {
-    const { isStarred } = this.state;
     const { idx, repo, currentViewMode = LIST_MODE, inAllLibs } = this.props;
     let iconUrl = Utils.getLibIconUrl(repo);
     let iconTitle = Utils.getLibIconTitle(repo);
@@ -358,7 +361,7 @@ class MylibRepoListItem extends React.Component {
             <>
               <Link to={repoURL}>{repo.repo_name}</Link>
               <ArchiveIcon currentRepoInfo={repo} />
-              {isStarred && (
+              {repo.starred && (
                 <OpIcon
                   id={`star-icon-${idx}`}
                   className="star-icon"
@@ -406,7 +409,7 @@ class MylibRepoListItem extends React.Component {
               <>
                 <div className='d-flex align-items-center'>
                   <Link to={repoURL} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
-                  {isStarred && (
+                  {repo.starred && (
                     <OpIcon
                       id={`star-icon-${idx}`}
                       className="star-icon ml-2 flex-shrink-0"
@@ -466,7 +469,7 @@ class MylibRepoListItem extends React.Component {
           {repo.repo_name && (
             <LibraryOpMenu
               repo={this.props.repo}
-              isStarred={this.state.isStarred}
+              isStarred={repo.starred}
               onMenuItemClick={this.onMenuItemClick}
               onFreezedItem={this.props.onFreezedItem}
               onUnfreezedItem={this.onUnfreezedItem}
