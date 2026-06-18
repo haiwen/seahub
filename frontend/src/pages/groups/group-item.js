@@ -14,6 +14,7 @@ const propTypes = {
   currentViewMode: PropTypes.string,
   group: PropTypes.object.isRequired,
   renameRelatedGroupsRepos: PropTypes.func,
+  toggleStarRelatedGroupsRepos: PropTypes.func,
   deleteRelatedGroupsRepos: PropTypes.func,
   addRepoToGroup: PropTypes.func,
   unshareRepoToGroup: PropTypes.func,
@@ -53,6 +54,10 @@ class GroupItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
+  };
+
+  onToggleStarRepo = (repo) => {
+    this.props.toggleStarRelatedGroupsRepos(repo.repo_id);
   };
 
   addNewRepo = (newRepo) => {
@@ -106,6 +111,7 @@ class GroupItem extends React.Component {
             onItemUnshare={this.onItemUnshare}
             onItemDelete={this.onItemDelete}
             onItemRename={this.onItemRename}
+            onToggleStarRepo={this.onToggleStarRepo}
             onTransferRepo={this.props.onTransferRepo}
             currentViewMode={currentViewMode}
             updateRepoStatus={this.props.updateRepoStatus}

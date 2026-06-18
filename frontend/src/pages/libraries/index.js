@@ -245,6 +245,7 @@ class Libraries extends Component {
       }
       return item;
     });
+    this.toggleStarRelatedGroupsRepos(repo.repo_id);
     this.setState({ repoList });
   };
 
@@ -256,6 +257,16 @@ class Libraries extends Component {
       return item;
     });
     this.setState({ sharedRepoList });
+  };
+
+  onTogglePublicStarRepo = (repo) => {
+    const publicRepoList = this.state.publicRepoList.map(item => {
+      if (item.repo_id === repo.repo_id) {
+        item.starred = !item.starred;
+      }
+      return item;
+    });
+    this.setState({ publicRepoList });
   };
 
   deleteRepo = (repoId, repoList) => {
@@ -364,6 +375,29 @@ class Libraries extends Component {
         return group;
       }
       const updatedRepos = this.renameRepo(repoId, newName, repos);
+      return { ...group, repos: updatedRepos };
+    });
+    this.setState({ groupList: updatedGroups });
+  };
+
+  toggleStarRelatedGroupsRepos = (repoId) => {
+    const relatedGroups = this.groupsReposManager.getRepoInGroupsIdsById(repoId);
+    if (relatedGroups.length === 0) {
+      return;
+    }
+
+    const { groupList } = this.state;
+    const updatedGroups = groupList.map((group) => {
+      const { repos } = group;
+      if (!relatedGroups.includes(group.id)) {
+        return group;
+      }
+      const updatedRepos = repos.map((repo) => {
+        if (repo.repo_id === repoId) {
+          repo.starred = !repo.starred;
+        }
+        return repo;
+      });
       return { ...group, repos: updatedRepos };
     });
     this.setState({ groupList: updatedGroups });
@@ -547,6 +581,7 @@ class Libraries extends Component {
                       isItemFreezed={this.state.isItemFreezed}
                       onFreezedItem={this.onFreezedItem}
                       onUnfreezedItem={this.onUnfreezedItem}
+                      onToggleStarRepo={this.onTogglePublicStarRepo}
                     />
                   )}
 
@@ -567,6 +602,7 @@ class Libraries extends Component {
                         inAllLibs={true}
                         group={group}
                         renameRelatedGroupsRepos={this.renameRelatedGroupsRepos}
+                        toggleStarRelatedGroupsRepos={this.toggleStarRelatedGroupsRepos}
                         deleteRelatedGroupsRepos={this.deleteRelatedGroupsRepos}
                         addRepoToGroup={this.addRepoToGroup}
                         onGroupNameChanged={this.onGroupNameChanged}

@@ -27,6 +27,7 @@ const propTypes = {
   isItemFreezed: PropTypes.bool,
   onFreezedItem: PropTypes.func,
   onUnfreezedItem: PropTypes.func,
+  onToggleStarRepo: PropTypes.func,
 };
 
 class SharedWithAll extends React.Component {
@@ -122,6 +123,16 @@ class SharedWithAll extends React.Component {
     });
   };
 
+  onToggleStarRepo = (repo) => {
+    const repoList = this.state.repoList.map(item => {
+      if (item.repo_id === repo.repo_id) {
+        item.starred = !item.starred;
+      }
+      return item;
+    });
+    this.setState({ repoList });
+  };
+
   toggleSortOptionsDialog = () => {
     this.setState({
       isSortOptionsDialogOpen: !this.state.isSortOptionsDialogOpen
@@ -152,12 +163,13 @@ class SharedWithAll extends React.Component {
                 <SharedRepoListView
                   key='public-shared-view'
                   libraryType={this.state.libraryType}
-                  repoList={this.state.repoList}
+                  repoList={repoList}
                   sortBy={this.state.sortBy}
                   sortOrder={this.state.sortOrder}
                   sortItems={this.sortItems}
                   onItemUnshare={this.onItemUnshare}
                   onItemDelete={this.onItemDelete}
+                  onToggleStarRepo={inAllLibs ? this.props.onToggleStarRepo : this.onToggleStarRepo}
                   currentViewMode={currentViewMode}
                   inAllLibs={inAllLibs}
                   isItemFreezed={this.props.isItemFreezed}

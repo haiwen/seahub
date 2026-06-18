@@ -46,6 +46,7 @@ const propTypes = {
   onItemDelete: PropTypes.func,
   onContextMenu: PropTypes.func.isRequired,
   onTransferRepo: PropTypes.func,
+  onToggleStarRepo: PropTypes.func.isRequired,
   updateRepoStatus: PropTypes.func,
 };
 
@@ -58,7 +59,6 @@ class SharedRepoListItem extends React.Component {
       isOperationShow: false,
       isShowSharedDialog: false,
       isRenaming: false,
-      isStarred: this.props.repo.starred,
       isFolderPermissionDialogOpen: false,
       isDeleteDialogShow: false,
       isAPITokenDialogShow: false,
@@ -302,7 +302,7 @@ class SharedRepoListItem extends React.Component {
         translateResult = gettext('Rename');
         break;
       case 'Star':
-        translateResult = this.state.isStarred ? gettext('Unstar') : gettext('Star');
+        translateResult = this.props.repo.starred ? gettext('Unstar') : gettext('Star');
         break;
       case 'Transfer':
         translateResult = gettext('Transfer');
@@ -550,8 +550,8 @@ class SharedRepoListItem extends React.Component {
         </div>
       );
     } else {
-      const { isStarred } = this.state;
-      const starItem = isStarred
+      const { repo } = this.props;
+      const starItem = repo.starred
         ? {
           key: 'Unstar',
           label: gettext('Unstar'),
@@ -591,10 +591,14 @@ class SharedRepoListItem extends React.Component {
   };
 
   onToggleStarRepo = () => {
-    const { repo_name: repoName } = this.props.repo;
-    if (this.state.isStarred) {
-      seafileAPI.unstarItem(this.props.repo.repo_id, '/').then(() => {
-        this.setState({ isStarred: !this.state.isStarred });
+    const { repo } = this.props;
+    const { repo_name: repoName } = repo;
+    const onSuccess = () => {
+      this.props.onToggleStarRepo(repo);
+    };
+    if (repo.starred) {
+      seafileAPI.unstarItem(repo.repo_id, '/').then(() => {
+        onSuccess();
         const msg = gettext('Successfully unstarred {library_name_placeholder}.')
           .replace('{library_name_placeholder}', repoName);
         toaster.success(msg);
@@ -603,8 +607,8 @@ class SharedRepoListItem extends React.Component {
         toaster.danger(errMessage);
       });
     } else {
-      seafileAPI.starItem(this.props.repo.repo_id, '/').then(() => {
-        this.setState({ isStarred: !this.state.isStarred });
+      seafileAPI.starItem(repo.repo_id, '/').then(() => {
+        onSuccess();
         const msg = gettext('Successfully starred {library_name_placeholder}.')
           .replace('{library_name_placeholder}', repoName);
         toaster.success(msg);
@@ -620,7 +624,6 @@ class SharedRepoListItem extends React.Component {
   };
 
   renderPCUI = () => {
-    const { isStarred } = this.state;
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
     const { idx, repo, currentViewMode } = this.props;
     return currentViewMode == LIST_MODE ? (
@@ -641,7 +644,7 @@ class SharedRepoListItem extends React.Component {
             <Link to={libPath}>{repo.repo_name}</Link>
           }
           <ArchiveIcon currentRepoInfo={repo} />
-          {isStarred && (
+          {repo.starred && (
             <OpIcon
               id={`star-icon-${idx}`}
               className="star-icon"
@@ -680,7 +683,7 @@ class SharedRepoListItem extends React.Component {
               <>
                 <div className='d-flex align-items-center'>
                   <Link to={libPath} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
-                  {isStarred && (
+                  {repo.starred && (
                     <OpIcon
                       id={`star-icon-${idx}`}
                       className="star-icon ml-2 flex-shrink-0"

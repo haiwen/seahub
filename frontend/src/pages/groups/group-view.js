@@ -204,6 +204,16 @@ class GroupView extends React.Component {
     this.setState({ repoList: repoList });
   };
 
+  onToggleStarRepo = (repo) => {
+    const repoList = this.state.repoList.map(item => {
+      if (item.repo_id === repo.repo_id) {
+        item.starred = !item.starred;
+      }
+      return item;
+    });
+    this.setState({ repoList });
+  };
+
   sortItems = (sortBy, sortOrder) => {
     Cookies.set('seafile-repo-dir-sort-by', sortBy);
     Cookies.set('seafile-repo-dir-sort-order', sortOrder);
@@ -377,6 +387,7 @@ class GroupView extends React.Component {
                         onItemDelete={this.onItemDelete}
                         onItemRename={this.onItemRename}
                         onTransferRepo={this.onItemTransfer}
+                        onToggleStarRepo={this.onToggleStarRepo}
                         currentViewMode={currentViewMode}
                         updateRepoStatus={this.updateRepoStatus}
                       />

@@ -23,6 +23,7 @@ const propTypes = {
   hasNextPage: PropTypes.bool,
   inAllLibs: PropTypes.bool,
   onTransferRepo: PropTypes.func,
+  onToggleStarRepo: PropTypes.func.isRequired,
   isItemFreezed: PropTypes.bool,
   onFreezedItem: PropTypes.func,
   onUnfreezedItem: PropTypes.func,
@@ -118,6 +119,7 @@ class SharedRepoListView extends React.Component {
               onFreezedItem={this.onFreezedItem}
               onUnfreezedItem={this.onUnfreezedItem}
               onTransferRepo={this.props.onTransferRepo}
+              onToggleStarRepo={this.props.onToggleStarRepo}
               onItemUnshare={this.props.onItemUnshare}
               onItemDelete={this.props.onItemDelete}
               onItemRename={this.props.onItemRename}
