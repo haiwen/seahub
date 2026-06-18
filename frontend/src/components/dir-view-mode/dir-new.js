@@ -127,12 +127,14 @@ class DirNew extends React.Component {
     }
 
     const newBtnClassName = 'dir-new-btn mt-3 mx-5 flex-fill d-flex align-items-center justify-content-center btn btn-secondary';
+    const newBtnStyle = { color: 'var(--bs-btn-color)', backgroundColor: 'var(--bs-btn-gb)', border: '1px solid var(--bs-border-color)' };
 
     if ([METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH_MODE].includes(currentMode)) {
       return (
         <div className='d-flex'>
           <Button
             className={newBtnClassName}
+            style={newBtnStyle}
             disabled={true}
           >
             <Icon symbol="new" className="mr-2" />
@@ -235,7 +237,7 @@ class DirNew extends React.Component {
         <CustomDropdown
           className='d-flex'
           items={opList}
-          toggleProps={{ 'tag': 'button', 'type': 'button', 'role': '' }}
+          toggleProps={{ 'tag': 'button', 'type': 'button', 'role': '', style: newBtnStyle }}
           trigger={(
             <>
               <Icon symbol="new" className="mr-2" />
@@ -262,7 +264,7 @@ class DirNew extends React.Component {
         <CustomDropdown
           className='d-flex'
           items={opListForMobile}
-          toggleProps={{ 'tag': 'button', 'type': 'button', 'role': '' }}
+          toggleProps={{ 'tag': 'button', 'type': 'button', 'role': '', style: newBtnStyle }}
           trigger={(
             <>
               <Icon symbol="new" className="mr-2" />
