@@ -173,6 +173,6 @@
     "web-vitals": "2.1.4",
     "webpack": "^5.105.0",
     "webpack-bundle-tracker": "1.7.0",
-    "webpack-dev-server": "5.2.4"
+    "webpack-dev-server": "5.2.5"
   }
 }
