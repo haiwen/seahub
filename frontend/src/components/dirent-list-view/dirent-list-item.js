@@ -780,6 +780,7 @@ class DirentListItem extends React.Component {
                   target={`item-dropdown-${dirent.id}`}
                   items={this.getItemMenuList(dirent, true)}
                   triggerClassName="op-icon mr-0"
+                  adaptivePlacement={true}
                   freezeItem={this.props.freezeItem}
                   unfreezeItem={this.unfreezeItem}
                 />

@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap';
@@ -16,11 +16,80 @@ import {
 
 import './index.css';
 
+const ADAPTIVE_MENU_MARGIN = 8;
+
+const clamp = (value, min, max) => {
+  if (max < min) return min;
+  return Math.min(Math.max(value, min), max);
+};
+
+const getAdaptivePosition = (toggleElement, menuElement) => {
+  if (!toggleElement || !menuElement || typeof window === 'undefined') {
+    return null;
+  }
+
+  const toggleRect = toggleElement.getBoundingClientRect();
+  const menuRect = menuElement.getBoundingClientRect();
+  const menuWidth = menuRect.width;
+  const menuHeight = menuRect.height;
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+  const margin = ADAPTIVE_MENU_MARGIN;
+  const gap = DROPDOWN_MENU_OFFSET_DEFAULT.options.offset[1];
+
+  const spaceBelow = viewportHeight - toggleRect.bottom - margin;
+  const spaceAbove = toggleRect.top - margin;
+  const spaceRight = viewportWidth - toggleRect.right - margin;
+  const spaceLeft = toggleRect.left - margin;
+
+  if (spaceBelow >= menuHeight) {
+    return { placement: 'down', offset: [0, gap] };
+  }
+
+  if (spaceAbove >= menuHeight) {
+    return { placement: 'top', offset: [0, gap] };
+  }
+
+  const minTop = margin;
+  const maxTop = viewportHeight - menuHeight - margin;
+  const sideTop = clamp(toggleRect.top, minTop, maxTop);
+  const sideSkidding = sideTop - toggleRect.top;
+
+  if (spaceRight >= menuWidth) {
+    return { placement: 'end', offset: [sideSkidding, gap] };
+  }
+
+  if (spaceLeft >= menuWidth) {
+    return { placement: 'start', offset: [sideSkidding, gap] };
+  }
+
+  if (Math.max(spaceRight, spaceLeft) > 0) {
+    return {
+      placement: spaceRight >= spaceLeft ? 'end' : 'start',
+      offset: [sideSkidding, gap],
+    };
+  }
+
+  const useDown = spaceBelow >= spaceAbove;
+  const fallbackTop = clamp(
+    useDown ? toggleRect.bottom + gap : toggleRect.top - menuHeight - gap,
+    minTop,
+    maxTop,
+  );
+
+  if (useDown) {
+    return { placement: 'down', offset: [0, fallbackTop - toggleRect.bottom] };
+  }
+
+  return { placement: 'top', offset: [0, toggleRect.top - menuHeight - fallbackTop] };
+};
+
 export const CustomDropdown = ({
   target,
   forwardedRef,
   variant = 'action',
   placement = 'down',
+  adaptivePlacement = false,
   modifiers,
   trigger,
   triggerClassName,
@@ -36,10 +105,80 @@ export const CustomDropdown = ({
   onToggle,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [adaptivePosition, setAdaptivePosition] = useState(null);
   const dropdownRef = useRef(null);
   const menuRef = useRef(null);
+  const menuContainerRef = useRef(null);
   const generatedId = useId().replace(/:/g, '');
   const menuId = target || `dropdown-${generatedId}`;
+  const effectivePlacement = adaptivePlacement ? (adaptivePosition?.placement || placement) : placement;
+
+  const getMenuElement = useCallback(() => {
+    if (menuRef.current instanceof HTMLElement && menuRef.current.isConnected) {
+      return menuRef.current;
+    }
+
+    const menuElement = menuContainerRef.current?.querySelector('.dropdown-menu');
+    if (menuElement) {
+      menuRef.current = menuElement;
+      return menuElement;
+    }
+
+    return null;
+  }, []);
+
+  const updateAdaptivePosition = useCallback(() => {
+    if (!adaptivePlacement || !isOpen) return;
+
+    const nextPosition = getAdaptivePosition(dropdownRef.current, getMenuElement());
+    if (!nextPosition) return;
+
+    setAdaptivePosition((previousPosition) => {
+      if (
+        previousPosition?.placement === nextPosition.placement &&
+        previousPosition?.offset[0] === nextPosition.offset[0] &&
+        previousPosition?.offset[1] === nextPosition.offset[1]
+      ) {
+        return previousPosition;
+      }
+      return nextPosition;
+    });
+  }, [adaptivePlacement, getMenuElement, isOpen]);
+
+  useLayoutEffect(() => {
+    if (!adaptivePlacement || !isOpen) return undefined;
+
+    const frame = window.requestAnimationFrame(updateAdaptivePosition);
+    return () => window.cancelAnimationFrame(frame);
+  }, [adaptivePlacement, isOpen, items, updateAdaptivePosition]);
+
+  useEffect(() => {
+    if (!adaptivePlacement || !isOpen) return undefined;
+
+    window.addEventListener('resize', updateAdaptivePosition);
+    return () => window.removeEventListener('resize', updateAdaptivePosition);
+  }, [adaptivePlacement, isOpen, updateAdaptivePosition]);
+
+  const dropdownMenuModifiers = useMemo(() => {
+    if (!adaptivePlacement) {
+      return modifiers || [{
+        name: 'preventOverflow',
+        options: { boundary: document.body }
+      }, DROPDOWN_MENU_OFFSET_DEFAULT];
+    }
+
+    const adaptiveOffset = adaptivePosition?.offset || DROPDOWN_MENU_OFFSET_DEFAULT.options.offset;
+    return [
+      {
+        name: 'preventOverflow',
+        options: { boundary: document.body },
+      },
+      {
+        name: 'offset',
+        options: { offset: adaptiveOffset },
+      },
+    ];
+  }, [adaptivePlacement, adaptivePosition, modifiers]);
 
   useEffect(() => {
     if (forwardedRef) {
@@ -53,6 +192,8 @@ export const CustomDropdown = ({
     if (nextOpen) {
       freezeItem?.();
     } else {
+      setAdaptivePosition(null);
+      menuRef.current = null;
       unfreezeItem?.();
       onMenuHide?.();
     }
@@ -81,14 +222,15 @@ export const CustomDropdown = ({
       if (!isOpen) {
         handleToggle(true);
       } else {
-        focusMenuItem(menuRef.current, MENU_ITEM_SELECTORS);
+        focusMenuItem(getMenuElement(), MENU_ITEM_SELECTORS);
       }
     }
   };
 
   const onMenuKeyDown = (event) => {
     const selectors = MENU_ITEM_SELECTORS;
-    const interactiveItems = menuRef.current ? Array.from(menuRef.current.querySelectorAll(selectors)) : [];
+    const menuElement = getMenuElement();
+    const interactiveItems = menuElement ? Array.from(menuElement.querySelectorAll(selectors)) : [];
     const currentIndex = interactiveItems.findIndex((node) => node === document.activeElement);
 
     if (event.key === 'Escape') {
@@ -114,12 +256,9 @@ export const CustomDropdown = ({
 
   const menuContent = (
     <DropdownMenu
-      ref={menuRef}
       className={menuClassName}
-      modifiers={modifiers || [{
-        name: 'preventOverflow',
-        options: { boundary: document.body }
-      }, DROPDOWN_MENU_OFFSET_DEFAULT]}
+      modifiers={dropdownMenuModifiers}
+      flip={!adaptivePlacement}
       onKeyDown={onMenuKeyDown}
       role="menu"
     >
@@ -131,6 +270,9 @@ export const CustomDropdown = ({
       />
     </DropdownMenu>
   );
+  const renderedMenuContent = adaptivePlacement ? (
+    <div ref={menuContainerRef}>{menuContent}</div>
+  ) : menuContent;
 
   if (!items?.length) {
     return null;
@@ -141,7 +283,7 @@ export const CustomDropdown = ({
       {...dropdownProps}
       isOpen={isOpen}
       toggle={toggle}
-      direction={getDirectionByPlacement(placement)}
+      direction={getDirectionByPlacement(effectivePlacement)}
       className={className}
     >
       <DropdownToggle
@@ -164,7 +306,7 @@ export const CustomDropdown = ({
           </>
         )}
       </DropdownToggle>
-      {menuPortal ? <ModalPortal>{menuContent}</ModalPortal> : menuContent}
+      {menuPortal ? <ModalPortal>{renderedMenuContent}</ModalPortal> : renderedMenuContent}
     </Dropdown>
   );
 };
@@ -177,6 +319,7 @@ CustomDropdown.propTypes = {
   items: PropTypes.array,
   variant: PropTypes.oneOf(['action', 'control']),
   placement: PropTypes.string,
+  adaptivePlacement: PropTypes.bool,
   modifiers: PropTypes.array,
   menuPortal: PropTypes.bool,
   freezeItem: PropTypes.func,
