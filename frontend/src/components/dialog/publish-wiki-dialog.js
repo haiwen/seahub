@@ -5,6 +5,7 @@ import { gettext, serviceURL } from '../../utils/constants';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import { Button, Modal, ModalBody, ModalFooter, Alert, InputGroup, InputGroupText } from 'reactstrap';
 import toaster from '../toast';
+import Switch from '../switch';
 import wikiAPI from '../../utils/wiki-api';
 
 import '../../css/publish-wiki-dialog.css';
@@ -49,10 +50,10 @@ class PublishWikiDialog extends React.Component {
     });
   };
 
-  handleServerRenderToggle = (e) => {
+  handleServerRenderToggle = (event) => {
     this.setState({
       isSubmitBtnActive: !!this.state.url.trim(),
-      enableServerRender: e.target.checked
+      enableServerRender: event.target.checked
     });
   };
 
@@ -154,17 +155,12 @@ class PublishWikiDialog extends React.Component {
                 {gettext('Pre-render published wiki pages on the server so search engines can index their content more reliably.')}
               </p>
             </div>
-            <div className="form-check form-switch ms-3 mb-0">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                role="switch"
-                id="enableServerRenderSwitch"
-                checked={enableServerRender}
-                onChange={this.handleServerRenderToggle}
-                style={{ cursor: 'pointer' }}
-              />
-            </div>
+            <Switch
+              className="ms-3 mb-0"
+              checked={enableServerRender}
+              onChange={this.handleServerRenderToggle}
+              size="small"
+            />
           </div>
 
         </ModalBody>

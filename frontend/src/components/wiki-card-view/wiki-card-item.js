@@ -134,6 +134,7 @@ class WikiCardItem extends Component {
       this.setState({
         customUrlString: publish_url,
         enableServerRender: !!enable_server_render,
+        isShowPublishDialog: false,
       });
       toaster.success(gettext('Wiki published'));
     }).catch((error) => {
