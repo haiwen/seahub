@@ -224,10 +224,14 @@ class MoveDirentDialog extends React.Component {
   };
 
   onUpdateSearchStatus = (status) => {
+    if (this.state.mode !== MODE_TYPE_MAP.SEARCH_RESULTS) return;
+
     this.setState({ searchStatus: status });
   };
 
   onUpdateSearchResults = (results) => {
+    if (this.state.mode !== MODE_TYPE_MAP.SEARCH_RESULTS) return;
+
     if (results.length > 0) {
       const firstResult = results[0];
       this.setState({

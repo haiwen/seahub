@@ -9,6 +9,11 @@
   background-color: rgba(0, 0, 0, 0.04) !important;
 }
 
+[data-bs-theme="dark"] .searched-list-item:hover,
+[data-bs-theme="dark"] .searched-list-item.tr-active {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
 .searched-list-item td {
   padding: 0;
   height: 32px;

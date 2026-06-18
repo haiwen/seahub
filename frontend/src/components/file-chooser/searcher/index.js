@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
@@ -20,39 +20,54 @@ const Searcher = ({ className = '', onUpdateSearchStatus, onUpdateSearchResults 
   const searchTimer = useRef(null);
   const source = useRef(null);
 
+  const clearSearchRequest = useCallback(() => {
+    if (searchTimer.current) {
+      clearTimeout(searchTimer.current);
+      searchTimer.current = null;
+    }
+    if (source.current) {
+      source.current.cancel('prev request is cancelled');
+      source.current = null;
+    }
+  }, []);
+
   const getSearchResult = useCallback((queryData) => {
     if (source.current) {
       source.current.cancel('prev request is cancelled');
     }
 
-    source.current = seafileAPI.getSource();
-    seafileAPI.searchFiles(queryData, source.current.token).then(res => {
+    const requestSource = seafileAPI.getSource();
+    source.current = requestSource;
+    seafileAPI.searchFiles(queryData, requestSource.token).then(res => {
+      if (source.current !== requestSource) return;
       onUpdateSearchStatus(SearchStatus.RESULTS);
       onUpdateSearchResults(res.data.total ? formatResultItems(res.data.results) : []);
       source.current = null;
     }).catch(err => {
-      source.current = null;
+      if (source.current === requestSource) {
+        source.current = null;
+      }
     });
   }, [onUpdateSearchStatus, onUpdateSearchResults]);
+
+  useEffect(() => {
+    return clearSearchRequest;
+  }, [clearSearchRequest]);
 
   const handleSearchInputChange = useCallback((e) => {
     const newValue = e.target.value;
     setInputValue(newValue);
 
     if (newValue.trim().length === 0) {
-      if (searchTimer.current) {
-        clearTimeout(searchTimer.current);
-      }
-      if (source.current) {
-        source.current.cancel('prev request is cancelled');
-        source.current = null;
-      }
+      clearSearchRequest();
       onUpdateSearchStatus('');
       onUpdateSearchResults([]);
       return;
     }
 
     onUpdateSearchStatus(SearchStatus.LOADING);
+    clearSearchRequest();
+    onUpdateSearchResults([]);
 
     const queryData = {
       q: newValue.trim(),
@@ -61,14 +76,10 @@ const Searcher = ({ className = '', onUpdateSearchStatus, onUpdateSearchResults 
       obj_type: 'dir',
     };
 
-    if (searchTimer) {
-      clearTimeout(searchTimer.current);
-    }
-
     searchTimer.current = setTimeout(() => {
       getSearchResult(queryData);
     }, 500);
-  }, [onUpdateSearchStatus, onUpdateSearchResults, getSearchResult]);
+  }, [onUpdateSearchStatus, onUpdateSearchResults, getSearchResult, clearSearchRequest]);
 
   const formatResultItems = (data) => {
     let items = [];
@@ -91,17 +102,11 @@ const Searcher = ({ className = '', onUpdateSearchStatus, onUpdateSearchResults 
   }, []);
 
   const onCloseSearching = useCallback(() => {
-    if (searchTimer.current) {
-      clearTimeout(searchTimer.current);
-    }
-    if (source.current) {
-      source.current.cancel('prev request is cancelled');
-      source.current = null;
-    }
+    clearSearchRequest();
     setInputValue('');
     onUpdateSearchStatus('');
     onUpdateSearchResults([]);
-  }, [onUpdateSearchResults, onUpdateSearchStatus]);
+  }, [onUpdateSearchResults, onUpdateSearchStatus, clearSearchRequest]);
 
   return (
     <div className={`search-container file-chooser-searcher ${className}`} style={{ zIndex: SEARCH_CONTAINER }}>
