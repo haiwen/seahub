@@ -262,9 +262,13 @@ class OrgAdminAPI {
     return this.req.delete(url);
   }
 
-  orgAdminResetOrgUserPassword(orgID, email) {
+  orgAdminResetOrgUserPassword(orgID, email, turnstileToken = '') {
     const url = this.server + '/api/v2.1/org/' + orgID + '/admin/users/' + encodeURIComponent(email) + '/set-password/';
-    return this.req.put(url);
+    const data = {};
+    if (turnstileToken !== '') {
+      data.cf_turnstile_response = turnstileToken;
+    }
+    return this.req.put(url, data);
   }
 
   orgAdminChangeOrgUserStatus(orgID, email, isActive) {

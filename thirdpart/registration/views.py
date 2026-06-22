@@ -201,11 +201,11 @@ def register(request, backend, success_url=None, form_class=None,
     if request.method == 'POST':
         form = form_class(data=request.POST, files=request.FILES)
 
-        turnstile_enabled = getattr(settings, 'ENABLE_TURNSTILE', False)
+        enable_turnstile = getattr(settings, 'ENABLE_TURNSTILE', False)
         turnstile_valid = True
-        if turnstile_enabled:
-            token = request.POST.get('cf-turnstile-response', '')
-            if not token:
+        if enable_turnstile:
+            turnstile_token = request.POST.get('cf-turnstile-response', '')
+            if not turnstile_token:
                 turnstile_valid = False
             else:
                 secret = getattr(settings, 'TURNSTILE_SECRET_KEY', '')
@@ -216,8 +216,8 @@ def register(request, backend, success_url=None, form_class=None,
                     remoteip = None
 
                 try:
-                    url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
-                    data = {'secret': secret, 'response': token}
+                    url = getattr(settings, 'TURNSTILE_SITEVERIFY_URL', '')
+                    data = {'secret': secret, 'response': turnstile_token}
                     if remoteip:
                         data['remoteip'] = remoteip
                     response = requests.post(url, data=data, timeout=10)
@@ -282,9 +282,9 @@ def register(request, backend, success_url=None, form_class=None,
     context['login_bg_image_path'] = login_bg_image_path
     context['strong_pwd_required'] = config.USER_STRONG_PASSWORD_REQUIRED
 
-    turnstile_enabled = getattr(settings, 'ENABLE_TURNSTILE', False)
-    context['turnstile_enabled'] = turnstile_enabled
-    if turnstile_enabled:
+    enable_turnstile = getattr(settings, 'ENABLE_TURNSTILE', False)
+    context['enable_turnstile'] = enable_turnstile
+    if enable_turnstile:
         context['turnstile_site_key'] = getattr(settings, 'TURNSTILE_SITE_KEY', '')
 
     return render(request, template_name, context)

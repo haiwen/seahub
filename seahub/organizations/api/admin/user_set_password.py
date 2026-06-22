@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
 
 from django.utils.translation import gettext as _
+from django.conf import settings
 
 from seaserv import ccnet_api
 
@@ -36,6 +37,34 @@ class OrgAdminUserSetPassword(APIView):
     def put(self, request, org_id, email):
         """ Reset an organization user's password.
         """
+        enable_turnstile = getattr(settings, 'ENABLE_TURNSTILE', False)
+        if enable_turnstile:
+            turnstile_token = request.data.get('cf_turnstile_response')
+            if not turnstile_token:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Cloudflare Turnstile check failed. Please refresh and try again.')
+
+            secret = getattr(settings, 'TURNSTILE_SECRET_KEY', '')
+            try:
+                from seahub.api2.utils import get_client_ip
+                remoteip = get_client_ip(request)
+            except Exception:
+                remoteip = None
+
+            try:
+                import requests
+                url = getattr(settings, 'TURNSTILE_SITEVERIFY_URL', '')
+                data = {'secret': secret, 'response': turnstile_token}
+                if remoteip:
+                    data['remoteip'] = remoteip
+                response = requests.post(url, data=data, timeout=10)
+                result = response.json()
+                if not result.get('success'):
+                    logger.error(f"Turnstile verification failed: {result}")
+                    return api_error(status.HTTP_400_BAD_REQUEST, 'Cloudflare Turnstile check failed. Please refresh and try again.')
+            except Exception as e:
+                logger.error(f"Turnstile verification error: {e}")
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Cloudflare Turnstile check failed. Please refresh and try again.')
+
         # resource check
         org_id = int(org_id)
         if not ccnet_api.get_org_by_id(org_id):

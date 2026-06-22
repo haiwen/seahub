@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import { gettext, siteRoot, orgID, username } from '../../utils/constants';
 import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
@@ -27,8 +29,18 @@ class UserItem extends React.Component {
     this.state = {
       highlight: false,
       showMenu: false,
-      isDropdownFrozen: false
+      isDropdownFrozen: false,
+      isResetPasswordDialogOpen: false,
+      turnstileToken: '',
+      turnstileWidgetId: null
     };
+    this.turnstileRef = React.createRef();
+  }
+
+  componentWillUnmount() {
+    if (this.state.turnstileWidgetId !== null && window.turnstile) {
+      window.turnstile.remove(this.state.turnstileWidgetId);
+    }
   }
 
   onMouseEnter = () => {
@@ -55,14 +67,59 @@ class UserItem extends React.Component {
     this.props.toggleDelete(email, username);
   };
 
+  renderTurnstileWidget = () => {
+    if (window.org && window.org.pageOptions && window.org.pageOptions.enableTurnstile && this.turnstileRef.current) {
+      const renderTurnstile = () => {
+        if (window.turnstile) {
+          try {
+            const widgetId = window.turnstile.render(this.turnstileRef.current, {
+              sitekey: window.org.pageOptions.turnstileSiteKey,
+              callback: (token) => {
+                this.setState({ turnstileToken: token });
+              }
+            });
+            this.setState({ turnstileWidgetId: widgetId });
+          } catch (e) {
+            //
+          }
+        }
+      };
+
+      if (window.turnstile) {
+        renderTurnstile();
+      } else if (window.turnstileLoadPromise) {
+        window.turnstileLoadPromise.then(() => {
+          renderTurnstile();
+        });
+      }
+    }
+  };
+
   toggleResetPW = () => {
+    this.setState({ isResetPasswordDialogOpen: !this.state.isResetPasswordDialogOpen, turnstileToken: '', turnstileWidgetId: null }, () => {
+      if (!this.state.isResetPasswordDialogOpen && this.state.turnstileWidgetId !== null && window.turnstile) {
+        window.turnstile.remove(this.state.turnstileWidgetId);
+      }
+    });
+  };
+
+  executeResetPW = () => {
+    if (window.org && window.org.pageOptions && window.org.pageOptions.enableTurnstile && !this.state.turnstileToken) {
+      toaster.danger(gettext('Please complete the Turnstile challenge'));
+      return;
+    }
     const { email } = this.props.user;
     toaster.success(gettext('Resetting user\'s password, please wait for a moment.'));
-    orgAdminAPI.orgAdminResetOrgUserPassword(orgID, email).then(res => {
+    orgAdminAPI.orgAdminResetOrgUserPassword(orgID, email, this.state.turnstileToken).then(res => {
       toaster.success(res.data.reset_tip);
+      this.toggleResetPW();
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
+      if (window.turnstile && this.state.turnstileWidgetId !== null) {
+        window.turnstile.reset(this.state.turnstileWidgetId);
+        this.setState({ turnstileToken: '' });
+      }
     });
   };
 
@@ -190,6 +247,21 @@ class UserItem extends React.Component {
             confirmBtnText={gettext('Set')}
             toggleDialog={this.toggleConfirmInactiveDialog}
           />
+        }
+        {this.state.isResetPasswordDialogOpen &&
+          <Modal isOpen={true} toggle={this.toggleResetPW} onOpened={this.renderTurnstileWidget}>
+            <SeahubModalHeader toggle={this.toggleResetPW}>{gettext('Reset Password')}</SeahubModalHeader>
+            <ModalBody>
+              <p>{gettext('Are you sure you want to reset the password of {user_placeholder}?').replace('{user_placeholder}', user.name)}</p>
+              {window.org && window.org.pageOptions && window.org.pageOptions.enableTurnstile && (
+                <div ref={this.turnstileRef} className="mt-2"></div>
+              )}
+            </ModalBody>
+            <ModalFooter>
+              <Button color="secondary" onClick={this.toggleResetPW}>{gettext('Cancel')}</Button>
+              <Button color="primary" onClick={this.executeResetPW}>{gettext('Confirm')}</Button>
+            </ModalFooter>
+          </Modal>
         }
       </>
     );

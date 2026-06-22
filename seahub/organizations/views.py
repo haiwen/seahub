@@ -235,11 +235,11 @@ def org_register(request):
             post_data['url_prefix'] = url_prefix
             form = OrgRegistrationForm(post_data)
 
-        turnstile_enabled = getattr(settings, 'ENABLE_TURNSTILE', False)
+        enable_turnstile = getattr(settings, 'ENABLE_TURNSTILE', False)
         turnstile_valid = True
-        if turnstile_enabled:
-            token = request.POST.get('cf-turnstile-response', '')
-            if not token:
+        if enable_turnstile:
+            turnstile_token = request.POST.get('cf-turnstile-response', '')
+            if not turnstile_token:
                 turnstile_valid = False
             else:
                 secret = getattr(settings, 'TURNSTILE_SECRET_KEY', '')
@@ -250,8 +250,8 @@ def org_register(request):
                     remoteip = None
 
                 try:
-                    url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
-                    data = {'secret': secret, 'response': token}
+                    url = getattr(settings, 'TURNSTILE_SITEVERIFY_URL', '')
+                    data = {'secret': secret, 'response': turnstile_token}
                     if remoteip:
                         data['remoteip'] = remoteip
                     response = requests.post(url, data=data, timeout=10)
@@ -332,7 +332,7 @@ def org_register(request):
     service_url_scheme = up.scheme
     service_url_remaining = up.netloc + up.path
 
-    turnstile_enabled = getattr(settings, 'ENABLE_TURNSTILE', False)
+    enable_turnstile = getattr(settings, 'ENABLE_TURNSTILE', False)
     context = {
         'form': form,
         'login_bg_image_path': login_bg_image_path,
@@ -340,9 +340,9 @@ def org_register(request):
         'service_url_remaining': service_url_remaining,
         'org_auto_url_prefix': ORG_AUTO_URL_PREFIX,
         'strong_pwd_required': config.USER_STRONG_PASSWORD_REQUIRED,
-        'turnstile_enabled': turnstile_enabled,
+        'enable_turnstile': enable_turnstile,
     }
-    if turnstile_enabled:
+    if enable_turnstile:
         context['turnstile_site_key'] = getattr(settings, 'TURNSTILE_SITE_KEY', '')
 
     return render(request, 'organizations/org_register.html', context)
@@ -371,7 +371,9 @@ def react_fake_view(request, **kwargs):
         'enable_subscription': subscription_check(),
         'enable_external_billing_service': ENABLE_EXTERNAL_BILLING_SERVICE,
         'sys_enable_user_clean_trash': config.ENABLE_USER_CLEAN_TRASH,
-        'sys_enable_encrypted_library': config.ENABLE_ENCRYPTED_LIBRARY
+        'sys_enable_encrypted_library': config.ENABLE_ENCRYPTED_LIBRARY,
+        'enable_turnstile': settings.ENABLE_TURNSTILE,
+        'turnstile_site_key': settings.TURNSTILE_SITE_KEY,
         })
 
 

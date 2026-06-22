@@ -56,7 +56,7 @@
 
       {{ form.non_field_errors }}
 
-      {% if turnstile_enabled %}
+      {% if enable_turnstile %}
       <div class="cf-turnstile mt-2" data-sitekey="{{ turnstile_site_key }}"></div>
       {% endif %}
 
@@ -73,7 +73,7 @@
 {% endblock %}
 
 {% block extra_script %}{{block.super}}
-{% if turnstile_enabled %}
+{% if enable_turnstile %}
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 {% endif %}
 <script type="text/javascript" src="{{MEDIA_URL}}bootstrap/bootstrap.popover.min.js"></script>
