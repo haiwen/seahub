@@ -98,7 +98,7 @@ const ChatInput = forwardRef(({
               value={value}
               onChange={(event) => setValue(event.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder={gettext('What problem you want to solve?')}
+              placeholder={gettext('Ask questions based on your documents')}
               rows={1}
               disabled={disabled}
             />

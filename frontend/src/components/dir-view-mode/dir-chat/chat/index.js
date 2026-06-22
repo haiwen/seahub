@@ -504,7 +504,6 @@ const Chat = ({ repoID, settings }) => {
               <Icon symbol="chat-decoration" className="sea-ai-ask-chats-tip-icon" />
               <div className="sea-ai-ask-chats-tip-title">{gettext('How can I help you?')}</div>
               <div className="sea-ai-ask-chats-tip-description">
-                {gettext('You can say "Help solve the following issue: <issue description>" to let AI solve the issue by searching knowledge bases.')}
               </div>
             </div>
           )}
