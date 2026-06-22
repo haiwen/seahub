@@ -123,7 +123,7 @@ class PublishWikiDialog extends React.Component {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <SeahubModalHeader toggle={this.toggle}>{gettext('Publish Wiki')}</SeahubModalHeader>
-        <ModalBody>
+        <ModalBody className='publish-wiki-dialog-container'>
 
           <p>{gettext('Customize URL')}</p>
           <InputGroup className="publish-wiki-custom-url-inputs">
@@ -140,7 +140,7 @@ class PublishWikiDialog extends React.Component {
               <Button color="primary" onClick={this.copyLink} className="border-0">{gettext('Copy')}</Button>
             </InputGroupText>
           </InputGroup>
-          <p className='sf-tip-default mt-2'>
+          <p className='sf-tip-default mt-2' style={{ lineHeight: '20px' }}>
             {gettext('The custom part of the URL must be between 5 and 30 characters long and may only contain letters (a-z), numbers, and hyphens.')}
           </p>
           {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
@@ -151,7 +151,7 @@ class PublishWikiDialog extends React.Component {
           >
             <div style={{ flex: 1 }}>
               <p className="mb-0 fw-semibold">{gettext('SEO: Pre-render published pages')}</p>
-              <p className="mb-0 sf-tip-default" style={{ fontSize: '0.85em' }}>
+              <p className="mb-0 sf-tip-default" style={{ lineHeight: '20px' }}>
                 {gettext('Pre-render published wiki pages on the server so search engines can index their content more reliably.')}
               </p>
             </div>
@@ -159,7 +159,6 @@ class PublishWikiDialog extends React.Component {
               className="ms-3 mb-0"
               checked={enableServerRender}
               onChange={this.handleServerRenderToggle}
-              size="small"
             />
           </div>
 

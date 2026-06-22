@@ -267,11 +267,11 @@ select {
   margin-bottom: 12px;
 }
 
-.repos-container .library-list-header > a {
+.repos-container .library-list-header>a {
   color: var(--bs-body-color);
 }
 
-.repos-container .library-list-header > a:hover {
+.repos-container .library-list-header>a:hover {
   text-decoration: underline;
 }
 

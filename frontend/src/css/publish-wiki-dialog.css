@@ -23,3 +23,23 @@
   border-radius: 0 4px 4px 0;
   height: 38px;
 }
+
+
+.publish-wiki-dialog-container .seahub-switch {
+  margin-left: 16px;
+}
+
+.publish-wiki-dialog-container .custom-switch-indicator {
+  border-radius: 8px;
+  height: 16px;
+  width: 28px;
+}
+
+.publish-wiki-dialog-container .custom-switch .custom-switch-indicator:before {
+  height: 12px;
+  width: 12px;
+}
+
+.publish-wiki-dialog-container .custom-switch .custom-switch-input:checked~.custom-switch-indicator:before {
+  left: 12px;
+}
