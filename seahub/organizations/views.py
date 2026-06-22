@@ -235,7 +235,38 @@ def org_register(request):
             post_data['url_prefix'] = url_prefix
             form = OrgRegistrationForm(post_data)
 
-        if form.is_valid():
+        turnstile_enabled = getattr(settings, 'ENABLE_TURNSTILE', False)
+        turnstile_valid = True
+        if turnstile_enabled:
+            token = request.POST.get('cf-turnstile-response', '')
+            if not token:
+                turnstile_valid = False
+            else:
+                secret = getattr(settings, 'TURNSTILE_SECRET_KEY', '')
+                try:
+                    from seahub.api2.utils import get_client_ip
+                    remoteip = get_client_ip(request)
+                except Exception:
+                    remoteip = None
+
+                try:
+                    url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
+                    data = {'secret': secret, 'response': token}
+                    if remoteip:
+                        data['remoteip'] = remoteip
+                    response = requests.post(url, data=data, timeout=10)
+                    result = response.json()
+                    if not result.get('success'):
+                        turnstile_valid = False
+                        logger.error(f"Turnstile verification failed: {result}")
+                except Exception as e:
+                    turnstile_valid = False
+                    logger.error(f"Turnstile verification error: {e}")
+
+        if not turnstile_valid:
+            form.add_error(None, _("Cloudflare Turnstile check failed. Please refresh and try again."))
+
+        if form.is_valid() and turnstile_valid:
             name = form.cleaned_data['name']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password1']
@@ -300,14 +331,21 @@ def org_register(request):
     up = urlparse(service_url)
     service_url_scheme = up.scheme
     service_url_remaining = up.netloc + up.path
-    return render(request, 'organizations/org_register.html', {
+
+    turnstile_enabled = getattr(settings, 'ENABLE_TURNSTILE', False)
+    context = {
         'form': form,
         'login_bg_image_path': login_bg_image_path,
         'service_url_scheme': service_url_scheme,
         'service_url_remaining': service_url_remaining,
         'org_auto_url_prefix': ORG_AUTO_URL_PREFIX,
-        'strong_pwd_required': config.USER_STRONG_PASSWORD_REQUIRED
-    })
+        'strong_pwd_required': config.USER_STRONG_PASSWORD_REQUIRED,
+        'turnstile_enabled': turnstile_enabled,
+    }
+    if turnstile_enabled:
+        context['turnstile_site_key'] = getattr(settings, 'TURNSTILE_SITE_KEY', '')
+
+    return render(request, 'organizations/org_register.html', context)
 
 
 @login_required

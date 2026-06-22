@@ -54,6 +54,10 @@
       {{ form.note }}             {{ form.note.errors }}
       {% endif %}
 
+      {% if turnstile_enabled %}
+      <div class="cf-turnstile mt-2" data-sitekey="{{ turnstile_site_key }}"></div>
+      {% endif %}
+
       <p class="error hide"></p>
       <button type="submit" class="submit btn btn-primary btn-block">{% trans "Sign Up" %}</button>
     </form>
@@ -67,6 +71,9 @@
 {% endblock %}
 
 {% block extra_script %}{{ block.super }}
+{% if turnstile_enabled %}
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+{% endif %}
 <script type="text/javascript" src="{{MEDIA_URL}}bootstrap/bootstrap.popover.min.js"></script>
 <script type="text/javascript" src="{{MEDIA_URL}}bootstrap/bootstrap.min.js"></script>
 <script type="text/javascript">

@@ -11,6 +11,7 @@ import requests
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.http import Http404
+from django.utils.translation import gettext as _
 
 from registration.backends import get_backend
 
@@ -199,7 +200,39 @@ def register(request, backend, success_url=None, form_class=None,
 
     if request.method == 'POST':
         form = form_class(data=request.POST, files=request.FILES)
-        if form.is_valid():
+
+        turnstile_enabled = getattr(settings, 'ENABLE_TURNSTILE', False)
+        turnstile_valid = True
+        if turnstile_enabled:
+            token = request.POST.get('cf-turnstile-response', '')
+            if not token:
+                turnstile_valid = False
+            else:
+                secret = getattr(settings, 'TURNSTILE_SECRET_KEY', '')
+                try:
+                    from seahub.api2.utils import get_client_ip
+                    remoteip = get_client_ip(request)
+                except Exception:
+                    remoteip = None
+
+                try:
+                    url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
+                    data = {'secret': secret, 'response': token}
+                    if remoteip:
+                        data['remoteip'] = remoteip
+                    response = requests.post(url, data=data, timeout=10)
+                    result = response.json()
+                    if not result.get('success'):
+                        turnstile_valid = False
+                        logger.error(f"Turnstile verification failed: {result}")
+                except Exception as e:
+                    turnstile_valid = False
+                    logger.error(f"Turnstile verification error: {e}")
+
+        if not turnstile_valid:
+            form.add_error(None, _("Cloudflare Turnstile check failed. Please refresh and try again."))
+
+        if form.is_valid() and turnstile_valid:
             new_user = backend.register(request, **form.cleaned_data)
 
             if settings.ENABLE_RISK_CONTROL:
@@ -248,4 +281,10 @@ def register(request, backend, success_url=None, form_class=None,
     login_bg_image_path = get_login_bg_image_path()
     context['login_bg_image_path'] = login_bg_image_path
     context['strong_pwd_required'] = config.USER_STRONG_PASSWORD_REQUIRED
+
+    turnstile_enabled = getattr(settings, 'ENABLE_TURNSTILE', False)
+    context['turnstile_enabled'] = turnstile_enabled
+    if turnstile_enabled:
+        context['turnstile_site_key'] = getattr(settings, 'TURNSTILE_SITE_KEY', '')
+
     return render(request, template_name, context)
