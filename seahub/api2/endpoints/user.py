@@ -231,33 +231,10 @@ class ResetPasswordView(APIView):
         if not is_password_strength_valid(new_password):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Password strength should be strong or very strong')
 
+        from seahub.utils.turnstile import check_turnstile
         enable_turnstile = getattr(settings, 'ENABLE_TURNSTILE', False)
-        if enable_turnstile:
-            turnstile_token = request.data.get('cf_turnstile_response')
-            if not turnstile_token:
-                return api_error(status.HTTP_400_BAD_REQUEST, 'Cloudflare Turnstile check failed. Please refresh and try again.')
-
-            secret = getattr(settings, 'TURNSTILE_SECRET_KEY', '')
-            try:
-                from seahub.api2.utils import get_client_ip
-                remoteip = get_client_ip(request)
-            except Exception:
-                remoteip = None
-
-            try:
-                import requests
-                url = getattr(settings, 'TURNSTILE_SITEVERIFY_URL', '')
-                data = {'secret': secret, 'response': turnstile_token}
-                if remoteip:
-                    data['remoteip'] = remoteip
-                response = requests.post(url, data=data, timeout=10)
-                result = response.json()
-                if not result.get('success'):
-                    logger.error(f"Turnstile verification failed: {result}")
-                    return api_error(status.HTTP_400_BAD_REQUEST, 'Cloudflare Turnstile check failed. Please refresh and try again.')
-            except Exception as e:
-                logger.error(f"Turnstile verification error: {e}")
-                return api_error(status.HTTP_400_BAD_REQUEST, 'Cloudflare Turnstile check failed. Please refresh and try again.')
+        if enable_turnstile and not check_turnstile(request):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Cloudflare Turnstile check failed. Please refresh and try again.')
 
         user = request.user
         if user.enc_password != UNUSABLE_PASSWORD and not old_password:

@@ -96,9 +96,10 @@ class UserItem extends React.Component {
   };
 
   toggleResetPW = () => {
+    const oldWidgetId = this.state.turnstileWidgetId;
     this.setState({ isResetPasswordDialogOpen: !this.state.isResetPasswordDialogOpen, turnstileToken: '', turnstileWidgetId: null }, () => {
-      if (!this.state.isResetPasswordDialogOpen && this.state.turnstileWidgetId !== null && window.turnstile) {
-        window.turnstile.remove(this.state.turnstileWidgetId);
+      if (!this.state.isResetPasswordDialogOpen && oldWidgetId !== null && window.turnstile) {
+        window.turnstile.remove(oldWidgetId);
       }
     });
   };
@@ -259,7 +260,7 @@ class UserItem extends React.Component {
             </ModalBody>
             <ModalFooter>
               <Button color="secondary" onClick={this.toggleResetPW}>{gettext('Cancel')}</Button>
-              <Button color="primary" onClick={this.executeResetPW}>{gettext('Confirm')}</Button>
+              <Button color="primary" onClick={this.executeResetPW}>{gettext('Submit')}</Button>
             </ModalFooter>
           </Modal>
         }

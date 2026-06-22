@@ -201,38 +201,12 @@ def register(request, backend, success_url=None, form_class=None,
     if request.method == 'POST':
         form = form_class(data=request.POST, files=request.FILES)
 
+        from seahub.utils.turnstile import check_turnstile
         enable_turnstile = getattr(settings, 'ENABLE_TURNSTILE', False)
-        turnstile_valid = True
-        if enable_turnstile:
-            turnstile_token = request.POST.get('cf-turnstile-response', '')
-            if not turnstile_token:
-                turnstile_valid = False
-            else:
-                secret = getattr(settings, 'TURNSTILE_SECRET_KEY', '')
-                try:
-                    from seahub.api2.utils import get_client_ip
-                    remoteip = get_client_ip(request)
-                except Exception:
-                    remoteip = None
-
-                try:
-                    url = getattr(settings, 'TURNSTILE_SITEVERIFY_URL', '')
-                    data = {'secret': secret, 'response': turnstile_token}
-                    if remoteip:
-                        data['remoteip'] = remoteip
-                    response = requests.post(url, data=data, timeout=10)
-                    result = response.json()
-                    if not result.get('success'):
-                        turnstile_valid = False
-                        logger.error(f"Turnstile verification failed: {result}")
-                except Exception as e:
-                    turnstile_valid = False
-                    logger.error(f"Turnstile verification error: {e}")
-
-        if not turnstile_valid:
+        if enable_turnstile and not check_turnstile(request):
             form.add_error(None, _("Cloudflare Turnstile check failed. Please refresh and try again."))
 
-        if form.is_valid() and turnstile_valid:
+        if form.is_valid():
             new_user = backend.register(request, **form.cleaned_data)
 
             if settings.ENABLE_RISK_CONTROL:

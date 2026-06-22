@@ -235,38 +235,12 @@ def org_register(request):
             post_data['url_prefix'] = url_prefix
             form = OrgRegistrationForm(post_data)
 
+        from seahub.utils.turnstile import check_turnstile
         enable_turnstile = getattr(settings, 'ENABLE_TURNSTILE', False)
-        turnstile_valid = True
-        if enable_turnstile:
-            turnstile_token = request.POST.get('cf-turnstile-response', '')
-            if not turnstile_token:
-                turnstile_valid = False
-            else:
-                secret = getattr(settings, 'TURNSTILE_SECRET_KEY', '')
-                try:
-                    from seahub.api2.utils import get_client_ip
-                    remoteip = get_client_ip(request)
-                except Exception:
-                    remoteip = None
-
-                try:
-                    url = getattr(settings, 'TURNSTILE_SITEVERIFY_URL', '')
-                    data = {'secret': secret, 'response': turnstile_token}
-                    if remoteip:
-                        data['remoteip'] = remoteip
-                    response = requests.post(url, data=data, timeout=10)
-                    result = response.json()
-                    if not result.get('success'):
-                        turnstile_valid = False
-                        logger.error(f"Turnstile verification failed: {result}")
-                except Exception as e:
-                    turnstile_valid = False
-                    logger.error(f"Turnstile verification error: {e}")
-
-        if not turnstile_valid:
+        if enable_turnstile and not check_turnstile(request):
             form.add_error(None, _("Cloudflare Turnstile check failed. Please refresh and try again."))
 
-        if form.is_valid() and turnstile_valid:
+        if form.is_valid():
             name = form.cleaned_data['name']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password1']
