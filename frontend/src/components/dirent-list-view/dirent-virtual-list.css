@@ -63,13 +63,15 @@
   align-items: center;
   height: 60px;
   width: 100%;
+  min-width: 0;
   border-bottom: 1px solid var(--bs-border-secondary-color);
+  box-sizing: border-box;
   cursor: pointer;
   padding: 0 8px;
 }
 
 .dirent-mobile-thumb {
-  flex-shrink: 0;
+  flex: 0 0 40px;
   width: 40px;
   display: flex;
   align-items: center;
@@ -89,10 +91,20 @@
 .dirent-mobile-name {
   font-weight: normal;
   color: var(--bs-body-color);
+  min-width: 0;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   margin-bottom: 2px;
+}
+
+.dirent-mobile-name a {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .dirent-mobile-meta {
@@ -101,7 +113,7 @@
 }
 
 .dirent-mobile-ops {
-  flex-shrink: 0;
+  flex: 0 0 40px;
   width: 40px;
   display: flex;
   align-items: center;
@@ -140,6 +152,23 @@
 }
 
 @media (max-width: 768px) {
+  .dirent-virtual-list-view,
+  .dirent-virtual-scroll-container,
+  .dirent-virtual-list-body,
+  .dirent-virtual-list-body .virtual-scroll-list {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .dirent-virtual-scroll-container {
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+
+  .dirent-virtual-list-body .virtual-scroll-list {
+    overflow-x: hidden;
+  }
+
   .dirent-virtual-item {
     height: 60px;
   }
