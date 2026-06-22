@@ -13,7 +13,6 @@ import { ChatMessage } from '../models';
 import { ASK_PAGE_SLUG_ID, CHAT_MESSAGE_TYPE } from '../constants';
 import ChatInput from '../chat-input';
 import ChatHistory from '../chat-history';
-import { Thinking } from '../components';
 import { useAskPage, useDocuments, useSessions } from '../hooks';
 import ChatHeader from '../chat-header';
 
@@ -250,8 +249,8 @@ const Chat = ({ repoID, settings }) => {
     });
 
     const unsubscribeAIStreamReply = eventBus.subscribe(EVENT_BUS_TYPE.AI_STREAM_REPLY, (replySessionId, { res, error }, callback) => {
-      modifyLocalSession(replySessionId, { is_replying: false });
       if (replySessionId !== pageSlugId) {
+        modifyLocalSession(replySessionId, { is_replying: false });
         callback && callback(replySessionId, true);
         return;
       }
@@ -259,13 +258,44 @@ const Chat = ({ repoID, settings }) => {
       setReply(false);
       const newChatHistories = chatHistories.slice(0);
 
+      const buildStatusMessage = (text) => new ChatMessage({
+        id: 'typing',
+        message: {
+          [CHAT_MESSAGE_TYPE.TEXT]: text,
+          [CHAT_MESSAGE_TYPE.SOURCES]: [],
+          [CHAT_MESSAGE_TYPE.THOUGHT_PROCESS]: 'disabled',
+        },
+        type: CHAT_MESSAGE_TYPE.GROUP,
+      });
+
+      const updateStatusMessage = (currentChatHistories, text) => {
+        const nextChatHistories = currentChatHistories.slice(0);
+        const lastMessage = nextChatHistories[nextChatHistories.length - 1];
+        if (lastMessage && lastMessage._id === 'typing') {
+          nextChatHistories[nextChatHistories.length - 1] = buildStatusMessage(text);
+        } else {
+          nextChatHistories.push(buildStatusMessage(text));
+        }
+        return nextChatHistories;
+      };
+
+      const removeStatusMessage = (currentChatHistories) => {
+        const nextChatHistories = currentChatHistories.slice(0);
+        if (nextChatHistories[nextChatHistories.length - 1]?._id === 'typing') {
+          nextChatHistories.pop();
+        }
+        return nextChatHistories;
+      };
+
       const onError = (currentChatHistories, streamError) => {
         const errorMessage = streamError ? Utils.getErrorMsg(streamError) : gettext('Error');
-        const nextChatHistories = currentChatHistories.slice(0);
+        const nextChatHistories = removeStatusMessage(currentChatHistories);
         nextChatHistories.push(new ChatMessage({
           message: { [CHAT_MESSAGE_TYPE.TEXT]: errorMessage },
           type: CHAT_MESSAGE_TYPE.ERROR,
         }));
+        setReply(false);
+        modifyLocalSession(replySessionId, { is_replying: false });
         updateChatHistories(nextChatHistories, false);
         modifyLocalSession(replySessionId, { running_task: false });
         callback && callback(replySessionId);
@@ -309,64 +339,33 @@ const Chat = ({ repoID, settings }) => {
         updateChatHistories(nextChatHistories, false);
       };
 
-      let fullText = '';
       let nextChatHistories = newChatHistories.slice(0);
 
-      let chatMessage = new ChatMessage({
-        id: 'typing',
-        message: {
-          [CHAT_MESSAGE_TYPE.AI_REPLY]: '',
-          [CHAT_MESSAGE_TYPE.SOURCES]: [],
-          [CHAT_MESSAGE_TYPE.THOUGHT_PROCESS]: 'disabled',
-        },
-        type: CHAT_MESSAGE_TYPE.GROUP,
-      });
-      const lastMessage = nextChatHistories[nextChatHistories.length - 1];
-      if (lastMessage && lastMessage._id === 'typing') {
-        chatMessage = lastMessage;
-        fullText = lastMessage.message[CHAT_MESSAGE_TYPE.AI_REPLY] || '';
-      } else {
-        nextChatHistories.push(chatMessage);
-      }
-
-      const onMessage = ({ status, answer, results }, { done = false } = {}) => {
-        if (answer) {
-          fullText += answer || '';
-          nextChatHistories = nextChatHistories.slice(0);
-          const lastChatMessage = {
-            ...nextChatHistories[nextChatHistories.length - 1],
-            message: {
-              [CHAT_MESSAGE_TYPE.TEXT]: '',
-              [CHAT_MESSAGE_TYPE.AI_REPLY]: fullText,
-              [CHAT_MESSAGE_TYPE.SOURCES]: [],
-              [CHAT_MESSAGE_TYPE.THOUGHT_PROCESS]: 'disabled',
-            },
-          };
-          nextChatHistories[nextChatHistories.length - 1] = lastChatMessage;
+      const onMessage = ({ status, search_found: searchFound, results }, { done = false } = {}) => {
+        if (status?.type) {
+          const statusText = status.detail ? `${status.type} (${status.detail})` : status.type;
+          nextChatHistories = updateStatusMessage(nextChatHistories, statusText);
           updateChatHistories(nextChatHistories, false);
-        }
-
-        if (status && status.type) {
-          nextChatHistories = nextChatHistories.slice(0);
-          const lastChatMessage = {
-            ...nextChatHistories[nextChatHistories.length - 1],
-            message: {
-              [CHAT_MESSAGE_TYPE.TEXT]: status.type + (status.detail ? ` (${status.detail})` : ''),
-              [CHAT_MESSAGE_TYPE.SOURCES]: [],
-              [CHAT_MESSAGE_TYPE.THOUGHT_PROCESS]: 'disabled',
-            },
-          };
-          nextChatHistories[nextChatHistories.length - 1] = lastChatMessage;
+        } else if (typeof searchFound === 'number') {
+          const searchText = searchFound === 1
+            ? gettext('Found 1 reference')
+            : gettext('Found %1$d references').replace('%1$d', searchFound);
+          nextChatHistories = updateStatusMessage(nextChatHistories, searchText);
           updateChatHistories(nextChatHistories, false);
         }
 
         if (results) {
-          nextChatHistories = nextChatHistories.slice(0, -1);
+          setReply(false);
+          modifyLocalSession(replySessionId, { is_replying: false });
+          nextChatHistories = removeStatusMessage(nextChatHistories);
           updateStreamReply(nextChatHistories, results);
         }
 
         if (done) {
+          setReply(false);
+          modifyLocalSession(replySessionId, { is_replying: false });
           modifyLocalSession(replySessionId, { running_task: false });
+          nextChatHistories = removeStatusMessage(nextChatHistories);
           callback && callback(replySessionId);
         }
       };
@@ -433,7 +432,7 @@ const Chat = ({ repoID, settings }) => {
               const messages = processLines(lines);
               return { done: false, messages };
             } catch (streamError) {
-              onError(nextChatHistories.slice(0, -1), streamError);
+              onError(nextChatHistories, streamError);
               throw streamError;
             }
           },
@@ -516,7 +515,6 @@ const Chat = ({ repoID, settings }) => {
               repoID={repoID}
             />
           ))}
-          {!loading && isReply && <Thinking />}
           {loading && <CenteredLoading className="flex-1" />}
         </div>
       </div>
