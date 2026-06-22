@@ -4,7 +4,7 @@ import { Link } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import { DropdownItem } from 'reactstrap';
 import classnames from 'classnames';
-import { gettext, siteRoot, canGenerateShareLink } from '../../utils/constants';
+import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { repoShareAdminAPI } from '../../utils/repo-share-admin-api';
 import { Utils } from '../../utils/utils';
@@ -16,10 +16,7 @@ import ShareAdminLink from '../../components/dialog/share-admin-link';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 import FixedWidthTable from '../../components/common/fixed-width-table';
 import MobileItemMenu from '../../components/mobile-item-menu';
-import OpElement from '../../components/op-element';
 import OpIcon from '../../components/op-icon';
-import Icon from '../../components/icon';
-import CustomDropdown from '../../components/dropdown';
 
 import '../../css/share-admin-links.css';
 
@@ -263,6 +260,14 @@ class Item extends Component {
 
 Item.propTypes = itemPropTypes;
 
+const propTypes = {
+  updateHeaderConfig: PropTypes.func
+};
+
+const defaultProps = {
+  updateHeaderConfig: () => {}
+};
+
 class ShareAdminUploadLinks extends Component {
 
   constructor(props) {
@@ -277,8 +282,35 @@ class ShareAdminUploadLinks extends Component {
   }
 
   componentDidMount() {
+    this.updateHeaderConfig();
     this.listUserUploadLinks();
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.items !== this.state.items) {
+      this.updateHeaderConfig();
+    }
+  }
+
+  updateHeaderConfig = () => {
+    const { items } = this.state;
+    const selectedLinksLen = items.filter(item => item.isSelected).length;
+
+    this.props.updateHeaderConfig({
+      activeItem: 'share-admin-upload-links',
+      selectedItemsCount: selectedLinksLen,
+      onUnselect: this.cancelSelectAllLinks,
+      onDelete: this.toggleDeleteLinksDialog,
+      deleteId: 'share-admin-upload-links-delete',
+      dropdownItems: [
+        {
+          key: 'clean-invalid-upload-links',
+          label: gettext('Clean invalid upload links'),
+          onClick: this.toggleCleanInvalidUploadLinksDialog
+        }
+      ]
+    });
+  };
 
   listUserUploadLinks() {
     seafileAPI.listUserUploadLinks().then((res) => {
@@ -388,67 +420,17 @@ class ShareAdminUploadLinks extends Component {
   };
 
   render() {
-    const { items } = this.state;
-    const selectedLinksLen = items.filter(item => item.isSelected).length;
-    const uploadLinkActions = [{ key: 'clean-invalid-upload-links', label: gettext('Clean invalid upload links'), onClick: this.toggleCleanInvalidUploadLinksDialog }];
     return (
       <Fragment>
-        <div className="main-panel-center">
-          <div className="cur-view-container">
-            <div className={classnames('cur-view-path share-upload-nav', { 'o-hidden': selectedLinksLen > 0 })}>
-              {selectedLinksLen > 0
-                ? (
-                  <div className="selected-items-toolbar">
-                    <OpElement
-                      className="cur-view-path-btn px-1"
-                      title={gettext('Unselect')}
-                      op={this.cancelSelectAllLinks}
-                    >
-                      <span className="d-flex align-items-center justify-content-center mr-2"><Icon symbol="close" /></span>
-                      <span>{`${selectedLinksLen} ${gettext('selected')}`}</span>
-                    </OpElement>
-                    <OpIcon
-                      className="cur-view-path-btn ml-4"
-                      symbol="delete1"
-                      title={gettext('Delete')}
-                      tooltip={gettext('Delete')}
-                      op={this.toggleDeleteLinksDialog}
-                      id="share-admin-upload-links-delete"
-                    />
-                  </div>
-                )
-                : (
-                  <ul className="nav">
-                    {canGenerateShareLink && (
-                      <li className="nav-item">
-                        <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link">{gettext('Share Links')}</Link>
-                      </li>
-                    )}
-                    <li className="nav-item active">
-                      <Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link px-0 py-2">
-                        {gettext('Upload Links')}
-                      </Link>
-                      <CustomDropdown
-                        items={uploadLinkActions}
-                        trigger={<Icon symbol="down" className="down-icon" />}
-                        menuPortal={false}
-                      />
-                    </li>
-                  </ul>
-                )
-              }
-            </div>
-            <div className="cur-view-content">
-              <Content
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                items={this.state.items}
-                onRemoveLink={this.onRemoveLink}
-                toggleSelectAllLinks={this.toggleSelectAllLinks}
-                toggleSelectLink={this.toggleSelectLink}
-              />
-            </div>
-          </div>
+        <div className="cur-view-content">
+          <Content
+            loading={this.state.loading}
+            errorMsg={this.state.errorMsg}
+            items={this.state.items}
+            onRemoveLink={this.onRemoveLink}
+            toggleSelectAllLinks={this.toggleSelectAllLinks}
+            toggleSelectLink={this.toggleSelectLink}
+          />
         </div>
         {this.state.isCleanInvalidUploadLinksDialogOpen &&
           <CommonOperationConfirmationDialog
@@ -472,5 +454,8 @@ class ShareAdminUploadLinks extends Component {
     );
   }
 }
+
+ShareAdminUploadLinks.propTypes = propTypes;
+ShareAdminUploadLinks.defaultProps = defaultProps;
 
 export default ShareAdminUploadLinks;

@@ -7,7 +7,7 @@ import classnames from 'classnames';
 import { shareLinkAPI } from '../../utils/share-link-api';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import { isPro, gettext, siteRoot, canGenerateUploadLink } from '../../utils/constants';
+import { isPro, gettext, siteRoot } from '../../utils/constants';
 import ShareLink from '../../models/share-link';
 import Loading from '../../components/loading';
 import toaster from '../../components/toast';
@@ -18,10 +18,7 @@ import CommonOperationConfirmationDialog from '../../components/dialog/common-op
 import Selector from '../../components/single-selector';
 import FixedWidthTable from '../../components/common/fixed-width-table';
 import MobileItemMenu from '../../components/mobile-item-menu';
-import OpElement from '../../components/op-element';
 import OpIcon from '../../components/op-icon';
-import Icon from '../../components/icon';
-import CustomDropdown from '../../components/dropdown';
 
 import '../../css/share-admin-links.css';
 
@@ -397,6 +394,14 @@ Item.propTypes = itemPropTypes;
 
 const PER_PAGE = 25;
 
+const propTypes = {
+  updateHeaderConfig: PropTypes.func
+};
+
+const defaultProps = {
+  updateHeaderConfig: () => {}
+};
+
 class ShareAdminShareLinks extends Component {
 
   constructor(props) {
@@ -414,8 +419,35 @@ class ShareAdminShareLinks extends Component {
   }
 
   componentDidMount() {
+    this.updateHeaderConfig();
     this.listUserShareLinks();
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.items !== this.state.items) {
+      this.updateHeaderConfig();
+    }
+  }
+
+  updateHeaderConfig = () => {
+    const { items } = this.state;
+    const selectedLinksLen = items.filter(item => item.isSelected).length;
+
+    this.props.updateHeaderConfig({
+      activeItem: 'share-admin-share-links',
+      selectedItemsCount: selectedLinksLen,
+      onUnselect: this.cancelSelectAllLinks,
+      onDelete: this.toggleDeleteShareLinksDialog,
+      deleteId: 'share-admin-share-links-delete',
+      dropdownItems: [
+        {
+          key: 'clean-invalid-share-links',
+          label: gettext('Clean invalid share links'),
+          onClick: this.toggleCleanInvalidShareLinksDialog
+        }
+      ]
+    });
+  };
 
   listUserShareLinks() {
     const { page } = this.state;
@@ -561,67 +593,18 @@ class ShareAdminShareLinks extends Component {
   };
 
   render() {
-    const { items } = this.state;
-    const selectedLinksLen = items.filter(item => item.isSelected).length;
     return (
       <Fragment>
-        <div className="main-panel-center">
-          <div className="cur-view-container">
-            <div className={classnames('cur-view-path share-upload-nav', { 'o-hidden': selectedLinksLen > 0 })}>
-              {selectedLinksLen > 0
-                ? (
-                  <div className="selected-items-toolbar">
-                    <OpElement
-                      className="cur-view-path-btn px-1"
-                      op={this.cancelSelectAllLinks}
-                      title={gettext('Unselect')}
-                    >
-                      <span className="d-flex align-items-center justify-content-center mr-2"><Icon symbol="close" /></span>
-                      <span>{`${selectedLinksLen} ${gettext('selected')}`}</span>
-                    </OpElement>
-                    <OpIcon
-                      className="cur-view-path-btn ml-4"
-                      symbol="delete1"
-                      title={gettext('Delete')}
-                      tooltip={gettext('Delete')}
-                      op={this.toggleDeleteShareLinksDialog}
-                      id="share-admin-share-links-delete"
-                    />
-                  </div>
-                )
-                : (
-                  <ul className="nav">
-                    <li className="nav-item active">
-                      <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link px-0 py-2">
-                        {gettext('Share Links')}
-                      </Link>
-                      <CustomDropdown
-                        items={[{ key: 'clean-invalid-share-links', label: gettext('Clean invalid share links'), onClick: this.toggleCleanInvalidShareLinksDialog }]}
-                        trigger={<Icon symbol="down" className="down-icon" />}
-                        menuPortal={false}
-                      />
-                    </li>
-                    {canGenerateUploadLink && (
-                      <li className="nav-item">
-                        <Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link">{gettext('Upload Links')}</Link>
-                      </li>
-                    )}
-                  </ul>
-                )
-              }
-            </div>
-            <div className="cur-view-content" onScroll={this.handleScroll}>
-              <Content
-                loading={this.state.loading}
-                isLoadingMore={this.state.isLoadingMore}
-                errorMsg={this.state.errorMsg}
-                items={this.state.items}
-                onRemoveLink={this.onRemoveLink}
-                toggleSelectAllLinks={this.toggleSelectAllLinks}
-                toggleSelectLink={this.toggleSelectLink}
-              />
-            </div>
-          </div>
+        <div className="cur-view-content" onScroll={this.handleScroll}>
+          <Content
+            loading={this.state.loading}
+            isLoadingMore={this.state.isLoadingMore}
+            errorMsg={this.state.errorMsg}
+            items={this.state.items}
+            onRemoveLink={this.onRemoveLink}
+            toggleSelectAllLinks={this.toggleSelectAllLinks}
+            toggleSelectLink={this.toggleSelectLink}
+          />
         </div>
         {this.state.isCleanInvalidShareLinksDialogOpen &&
           <CommonOperationConfirmationDialog
@@ -645,5 +628,8 @@ class ShareAdminShareLinks extends Component {
     );
   }
 }
+
+ShareAdminShareLinks.propTypes = propTypes;
+ShareAdminShareLinks.defaultProps = defaultProps;
 
 export default ShareAdminShareLinks;

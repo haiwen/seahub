@@ -22,8 +22,7 @@ import Starred from './pages/starred/starred';
 import LinkedDevices from './pages/linked-devices/linked-devices';
 import ShareAdminLibraries from './pages/share-admin/libraries';
 import ShareAdminFolders from './pages/share-admin/folders';
-import ShareAdminShareLinks from './pages/share-admin/share-links';
-import ShareAdminUploadLinks from './pages/share-admin/upload-links';
+import ShareAdminLinks from './pages/share-admin/links';
 import SharedLibraries from './pages/shared-libs';
 import ShareWithOCM from './pages/share-with-ocm/shared-with-ocm';
 import OCMViaWebdav from './pages/ocm-via-webdav/ocm-via-webdav';
@@ -334,8 +333,7 @@ class App extends Component {
               <Libraries path={siteRoot + 'libraries'} />
               <MyLibraries path={siteRoot + 'my-libs'} />
               <MyLibDeleted path={siteRoot + 'my-libs/deleted/'} />
-              <ShareAdminShareLinks path={siteRoot + 'share-admin-share-links'} />
-              <ShareAdminUploadLinks path={siteRoot + 'share-admin-upload-links'} />
+              <ShareAdminLinks path={siteRoot + ':shareAdminPage'} />
               <SharedWithAll path={siteRoot + 'org/'} />
               <Wikis
                 path={siteRoot + 'published'}
