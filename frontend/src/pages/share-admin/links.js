@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Link } from '@gatsbyjs/reach-router';
 import { gettext, siteRoot, canGenerateShareLink, canGenerateUploadLink } from '../../utils/constants';
-import { NAV_ITEM_MARGIN } from '../../constants';
 import OpElement from '../../components/op-element';
 import OpIcon from '../../components/op-icon';
 import Icon from '../../components/icon';
@@ -33,6 +32,7 @@ class ShareAdminLinksNav extends Component {
   constructor(props) {
     super(props);
     this.itemRefs = [];
+    this.navRef = null;
   }
 
   componentDidMount() {
@@ -57,13 +57,16 @@ class ShareAdminLinksNav extends Component {
     ].filter(item => item.visible);
 
     const activeIndex = Math.max(navItems.findIndex(item => item.name === activeItem), 0);
-    const itemWidths = this.itemRefs.map(ref => ref?.offsetWidth);
-    const indicatorWidth = itemWidths[activeIndex] || 0;
-    const indicatorOffset = itemWidths.slice(0, activeIndex).reduce((a, b) => a + (b || 0), 0) + (2 * activeIndex + 1) * NAV_ITEM_MARGIN;
+    const activeLink = this.itemRefs[activeIndex];
+    const navRect = this.navRef?.getBoundingClientRect();
+    const activeLinkRect = activeLink?.getBoundingClientRect();
+    const indicatorWidth = activeLink?.offsetWidth || 0;
+    const indicatorOffset = navRect && activeLinkRect ? activeLinkRect.left - navRect.left : 0;
 
     return (
       <ul
         className="nav nav-indicator-container position-relative"
+        ref={el => this.navRef = el}
         style={{
           '--indicator-width': `${indicatorWidth}px`,
           '--indicator-offset': `${indicatorOffset}px`
@@ -83,13 +86,15 @@ class ShareAdminLinksNav extends Component {
               >
                 {item.text}
               </Link>
-              {isActive && (
-                <CustomDropdown
-                  items={dropdownItems}
-                  trigger={<Icon symbol="down" className="down-icon" />}
-                  menuPortal={false}
-                />
-              )}
+              <span className="share-admin-links-nav-dropdown" aria-hidden={!isActive}>
+                {isActive && (
+                  <CustomDropdown
+                    items={dropdownItems}
+                    trigger={<Icon symbol="down" className="down-icon" />}
+                    menuPortal={false}
+                  />
+                )}
+              </span>
             </li>
           );
         })}

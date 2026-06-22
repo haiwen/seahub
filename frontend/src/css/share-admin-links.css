@@ -45,9 +45,20 @@
   margin-right: 0;
 }
 
+.share-upload-nav .nav-item .share-admin-links-nav-dropdown {
+  width: 16px;
+  margin-left: 4px;
+  display: inline-flex;
+  align-items: center;
+}
+
 .share-upload-nav .nav-item .dropdown {
   margin-left: 4px;
   font-size: 12px;
+}
+
+.share-upload-nav .nav-item .share-admin-links-nav-dropdown .dropdown {
+  margin-left: 0;
 }
 
 .share-upload-nav .nav-item .more-dropdown-toggle {
