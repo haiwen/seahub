@@ -12,7 +12,6 @@ const Documents = () => {
     documents,
     currentDocument,
     closeDocuments,
-    closeDocument,
     setCurrentDocument,
   } = useDocuments();
 

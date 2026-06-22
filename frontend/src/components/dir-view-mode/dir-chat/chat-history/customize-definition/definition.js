@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { gettext } from '../../../../../utils/constants';
-import Icon from '../../../../icon';
 
 import './index.css';
 

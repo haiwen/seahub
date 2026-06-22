@@ -13,7 +13,6 @@ export const SessionsProvider = ({ repoID, api, children }) => {
   const [isLoading, setLoading] = useState(true);
   const [sessions, setSessions] = useState([]);
   const [isShowSessions, setIsShowSessions] = useState(false);
-  const storageKeyRef = useRef(`seafile-${repoID}-chat-sessions-display`);
   const sendMessageRequestController = useRef({});
 
   const { pageSlugId, togglePageSlugId } = useAskPage();
@@ -192,18 +191,8 @@ export const SessionsProvider = ({ repoID, api, children }) => {
   }, []);
 
   useEffect(() => {
-    const storedValue = localStorage.getItem(storageKeyRef.current);
-    if (storedValue === 'true' || storedValue === 'false') {
-      setIsShowSessions(storedValue === 'true');
-    } else {
-      setIsShowSessions(true);
-    }
     loadSessions();
   }, [loadSessions]);
-
-  useEffect(() => {
-    localStorage.setItem(storageKeyRef.current, String(isShowSessions));
-  }, [isShowSessions]);
 
   useEffect(() => {
     const unsubscribeSendChatMessage = eventBus.subscribe(EVENT_BUS_TYPE.ASK_QUESTION, solveProblem);
