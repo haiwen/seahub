@@ -79,7 +79,7 @@ class Item extends React.Component {
       isRevokeDialogOpen
     } = this.state;
 
-    const item = this.props.invitation;
+    const { invitation: item, index } = this.props;
 
     return (
       <>
@@ -102,15 +102,17 @@ class Item extends React.Component {
               {isOpIconShown && (
                 item.accept_time ?
                   <OpIcon
+                    id={`revoke-${index}`}
                     symbol="cancel-invitation"
                     className="op-icon"
-                    title={gettext('Revoke Access')}
+                    tooltip={gettext('Revoke Access')}
                     op={this.toggleRevokeDialog}
                   /> :
                   <OpIcon
+                    id={`delete-${index}`}
                     className="op-icon"
                     symbol="close"
-                    title={gettext('Delete')}
+                    tooltip={gettext('Delete')}
                     op={this.deleteItem}
                   />
               )}
@@ -148,6 +150,7 @@ class Item extends React.Component {
 }
 
 const ItemPropTypes = {
+  index: PropTypes.number.isRequired,
   invitation: PropTypes.object.isRequired,
   isDesktop: PropTypes.bool.isRequired,
   deleteItem: PropTypes.func.isRequired
@@ -212,6 +215,7 @@ class Content extends React.Component {
             return (
               <Item
                 key={index}
+                index={index}
                 isDesktop={isDesktop}
                 invitation={invitation}
                 deleteItem={this.props.deleteItem}
