@@ -595,7 +595,7 @@ class DirentListItem extends React.Component {
     let lockedInfo = dirent.is_freezed ? gettext('Frozen by {name}') : gettext('locked by {name}');
     lockedInfo = lockedInfo.replace('{name}', dirent.lock_owner_name);
 
-    const { canDrag } = this.state;
+    const { canDrag, isOperationShow } = this.state;
     const isSdocFile = Utils.isSdocFile(dirent.name);
     const lockedImageUrl = `${mediaUrl}img/file-${dirent.is_freezed ? 'freezed-32.svg' : 'locked-32.png'}`;
     const lockedMessage = dirent.is_freezed ? gettext('freezed') : gettext('locked');
@@ -689,6 +689,7 @@ class DirentListItem extends React.Component {
           'dirent-virtual-item',
           { 'tr-drop-effect': this.state.isDropTipShow },
           { 'tr-active': isSelected },
+          { 'hover': isOperationShow },
         )}
         style={gridStyle || undefined}
         draggable={canDrag}
