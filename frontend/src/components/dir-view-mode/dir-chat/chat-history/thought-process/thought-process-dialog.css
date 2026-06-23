@@ -1,0 +1,30 @@
+.sea-ai-thought-process-dialog {
+  margin: 28px auto;
+  height: calc(100% - 56px);
+  width: 80%;
+  max-width: 80%;
+}
+
+.sea-ai-thought-process-dialog .modal-content {
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+}
+
+.sea-ai-thought-process-dialog .modal-body {
+  overflow-y: auto;
+}
+
+.sea-ai-thought-process-body {
+  width: 100%;
+}
+
+.sea-ai-thought-process-content {
+  width: 100%;
+}
+
+.sea-ai-thought-process-pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
