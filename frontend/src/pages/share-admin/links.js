@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { Link } from '@gatsbyjs/reach-router';
+import { Link, navigate } from '@gatsbyjs/reach-router';
 import { gettext, siteRoot, canGenerateShareLink, canGenerateUploadLink } from '../../utils/constants';
 import OpElement from '../../components/op-element';
 import OpIcon from '../../components/op-icon';
@@ -27,16 +27,21 @@ const navPropTypes = {
   dropdownItems: PropTypes.array
 };
 
+const navDefaultProps = {
+  dropdownItems: []
+};
+
 class ShareAdminLinksNav extends Component {
 
   constructor(props) {
     super(props);
     this.itemRefs = [];
     this.navRef = null;
+    this.state = { ready: false };
   }
 
   componentDidMount() {
-    this.forceUpdate();
+    this.setState({ ready: true });
   }
 
   render() {
@@ -55,6 +60,10 @@ class ShareAdminLinksNav extends Component {
         visible: activeItem === UPLOAD_LINKS || canGenerateUploadLink
       }
     ].filter(item => item.visible);
+
+    if (navItems.length <= 1) {
+      return null;
+    }
 
     const activeIndex = Math.max(navItems.findIndex(item => item.name === activeItem), 0);
     const activeLink = this.itemRefs[activeIndex];
@@ -104,6 +113,7 @@ class ShareAdminLinksNav extends Component {
 }
 
 ShareAdminLinksNav.propTypes = navPropTypes;
+ShareAdminLinksNav.defaultProps = navDefaultProps;
 
 const propTypes = {
   shareAdminPage: PropTypes.string
@@ -132,8 +142,14 @@ class ShareAdminLinks extends Component {
     if (shareAdminPage === SHARE_LINKS || shareAdminPage === UPLOAD_LINKS) {
       return shareAdminPage;
     }
-    return '';
+    return null;
   };
+
+  componentDidMount() {
+    if (!this.getActiveItem()) {
+      navigate(`${siteRoot}share-admin-share-links/`, { replace: true });
+    }
+  }
 
   renderHeader = (activeItem) => {
     const { headerConfig } = this.state;

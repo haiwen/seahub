@@ -287,7 +287,9 @@ class ShareAdminUploadLinks extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.items !== this.state.items) {
+    const prevSelected = prevState.items.filter(item => item.isSelected).length;
+    const curSelected = this.state.items.filter(item => item.isSelected).length;
+    if (prevSelected !== curSelected || prevState.items.length !== this.state.items.length) {
       this.updateHeaderConfig();
     }
   }
