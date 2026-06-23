@@ -6,7 +6,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { Link, navigate } from '@gatsbyjs/reach-router';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, siteRoot, storages } from '../../utils/constants';
+import { gettext, siteRoot } from '../../utils/constants';
 import ModalPortal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 import toaster from '../../components/toast';
@@ -34,7 +34,6 @@ const propTypes = {
   idx: PropTypes.number,
   currentViewMode: PropTypes.string,
   repo: PropTypes.object.isRequired,
-  inAllLibs: PropTypes.bool,
   isItemFreezed: PropTypes.bool.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
@@ -334,7 +333,7 @@ class MylibRepoListItem extends React.Component {
   };
 
   renderPCUI = () => {
-    const { idx, repo, currentViewMode = LIST_MODE, inAllLibs } = this.props;
+    const { idx, repo, currentViewMode = LIST_MODE } = this.props;
     let iconUrl = Utils.getLibIconUrl(repo);
     let iconTitle = Utils.getLibIconTitle(repo);
     let repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
@@ -384,7 +383,6 @@ class MylibRepoListItem extends React.Component {
           )}
         </div>
         <div className="repo-item-size">{repo.size}</div>
-        {(storages.length > 0 && !inAllLibs) && <div className="repo-item-size">{repo.storage_name}</div>}
         <div className="repo-item-time" title={formatWithTimezone(repo.last_modified)}>{dayjs(repo.last_modified).fromNow()}</div>
       </div>
     ) : (

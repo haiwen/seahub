@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
-import { gettext, enableEncryptedLibrary, enableResetEncryptedRepoPassword, isEmailConfigured, repoPasswordMinLength, storages, libraryTemplates } from '../../utils/constants';
+import { gettext, enableEncryptedLibrary, enableResetEncryptedRepoPassword, isEmailConfigured, repoPasswordMinLength, libraryTemplates } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { SeahubSelect } from '../common/select';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
@@ -11,7 +11,6 @@ const propTypes = {
   onCreateRepo: PropTypes.func.isRequired,
   onCreateToggle: PropTypes.func.isRequired,
 };
-
 class CreateRepoDialog extends React.Component {
   constructor(props) {
     super(props);
@@ -23,17 +22,12 @@ class CreateRepoDialog extends React.Component {
       password2: '',
       errMessage: '',
       permission: 'rw',
-      storage_id: storages.length ? storages[0].id : '',
       library_template: libraryTemplates.length ? libraryTemplates[0] : '',
       isSubmitBtnActive: false,
     };
     this.templateOptions = [];
-    this.storageOptions = [];
     if (Array.isArray(libraryTemplates) && libraryTemplates.length) {
       this.templateOptions = libraryTemplates.map((item) => { return { value: item, label: item }; });
-    }
-    if (Array.isArray(storages) && storages.length) {
-      this.storageOptions = storages.map((item) => { return { value: item.id, label: item.name }; });
     }
   }
 
@@ -122,10 +116,6 @@ class CreateRepoDialog extends React.Component {
     this.setState({ permission: permission });
   };
 
-  handleStorageInputChange = (selectedItem) => {
-    this.setState({ storage_id: selectedItem.value });
-  };
-
   handlelibraryTemplatesInputChange = (selectedItem) => {
     this.setState({ library_template: selectedItem.value });
   };
@@ -166,11 +156,6 @@ class CreateRepoDialog extends React.Component {
       };
     }
 
-    const storage_id = this.state.storage_id;
-    if (storage_id) {
-      repo.storage_id = storage_id;
-    }
-
     const library_template = this.state.library_template;
     if (library_template) {
       repo.library_template = library_template;
@@ -205,18 +190,6 @@ class CreateRepoDialog extends React.Component {
                   options={this.templateOptions}
                   onChange={this.handlelibraryTemplatesInputChange}
                   value={this.templateOptions.find(opt => opt.value === this.state.library_template) || null}
-                />
-              </FormGroup>
-            )}
-
-            {storages.length > 0 && (
-              <FormGroup>
-                <Label>{gettext('Storage Backend')}</Label>
-                <SeahubSelect
-                  defaultValue={this.storageOptions[0]}
-                  options={this.storageOptions}
-                  onChange={this.handleStorageInputChange}
-                  value={this.storageOptions.find(opt => opt.value === this.state.storage_id) || null}
                 />
               </FormGroup>
             )}

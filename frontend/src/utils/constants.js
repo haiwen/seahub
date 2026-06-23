@@ -60,7 +60,6 @@ export const isEmailConfigured = window.app.pageOptions.isEmailConfigured === 'T
 export const enableUploadFolder = window.app.pageOptions.enableUploadFolder === 'True';
 export const enableResumableFileUpload = window.app.pageOptions.enableResumableFileUpload === 'True';
 export const resumableUploadFileBlockSize = window.app.pageOptions.resumableUploadFileBlockSize;
-export const storages = window.app.pageOptions.storages; // storage backends
 export const enableStorageClasses = window.app.pageOptions.enableStorageClasses;
 export const libraryTemplates = window.app.pageOptions.libraryTemplates; // library templates
 export const enableRepoSnapshotLabel = window.app.pageOptions.enableRepoSnapshotLabel;
