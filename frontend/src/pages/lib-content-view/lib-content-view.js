@@ -501,7 +501,7 @@ class LibContentView extends React.Component {
       isViewFile: false,
     });
 
-    if (currentMode === LIST_MODE) {
+    if ([LIST_MODE, GRID_MODE, TABLE_MODE].includes(currentMode)) {
       this.setState({
         isDirentListLoading: true,
         direntList: [],
