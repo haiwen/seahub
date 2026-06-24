@@ -47,10 +47,10 @@ class LibraryDirentsTest(BaseTestCase):
         resp = self.client.get(self.url)
         self.assertEqual(403, resp.status_code)
 
-    @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
-    def test_can_get(self, mock_can_view_sys_admin_repo):
+    @patch('seahub.api2.endpoints.admin.library_dirents.sysadmin_can_view_repo')
+    def test_can_get(self, mock_sysadmin_can_view_repo):
 
-        mock_can_view_sys_admin_repo.return_value = True
+        mock_sysadmin_can_view_repo.return_value = True
 
         self.login_as(self.admin)
         resp = self.client.get(self.url)
@@ -61,38 +61,38 @@ class LibraryDirentsTest(BaseTestCase):
         assert json_resp['repo_name'] == self.repo_name
         assert len(json_resp['dirent_list']) == self.init_num
 
-    @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
-    def test_can_not_get_with_invalid_user_permission(self, mock_can_view_sys_admin_repo):
+    @patch('seahub.api2.endpoints.admin.library_dirents.sysadmin_can_view_repo')
+    def test_can_not_get_with_invalid_user_permission(self, mock_sysadmin_can_view_repo):
 
-        mock_can_view_sys_admin_repo.return_value = True
+        mock_sysadmin_can_view_repo.return_value = True
 
         self.login_as(self.user)
         resp = self.client.get(self.url)
         self.assertEqual(403, resp.status_code)
 
-    @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
-    def test_can_not_get_with_invalid_parent_dir(self, mock_can_view_sys_admin_repo):
+    @patch('seahub.api2.endpoints.admin.library_dirents.sysadmin_can_view_repo')
+    def test_can_not_get_with_invalid_parent_dir(self, mock_sysadmin_can_view_repo):
 
-        mock_can_view_sys_admin_repo.return_value = True
+        mock_sysadmin_can_view_repo.return_value = True
 
         self.login_as(self.admin)
         parent_dir = randstring(6)
         resp = self.client.get(self.url + '?parent_dir=%s' % parent_dir)
         self.assertEqual(404, resp.status_code)
 
-    @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
-    def test_can_not_get_with_feather_disable(self, mock_can_view_sys_admin_repo):
+    @patch('seahub.api2.endpoints.admin.library_dirents.sysadmin_can_view_repo')
+    def test_can_not_get_with_feather_disable(self, mock_sysadmin_can_view_repo):
 
-        mock_can_view_sys_admin_repo.return_value = False
+        mock_sysadmin_can_view_repo.return_value = False
 
         self.login_as(self.admin)
         resp = self.client.get(self.url)
         self.assertEqual(403, resp.status_code)
 
-    @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
-    def test_can_create_file_folder(self, mock_can_view_sys_admin_repo):
+    @patch('seahub.api2.endpoints.admin.library_dirents.sysadmin_can_view_repo')
+    def test_can_create_file_folder(self, mock_sysadmin_can_view_repo):
 
-        mock_can_view_sys_admin_repo.return_value = True
+        mock_sysadmin_can_view_repo.return_value = True
 
         self.login_as(self.admin)
 
@@ -128,10 +128,10 @@ class LibraryDirentsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert len(json_resp['dirent_list']) == self.init_num + 2
 
-    @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
-    def test_can_not_create_with_invalid_user_permission(self, mock_can_view_sys_admin_repo):
+    @patch('seahub.api2.endpoints.admin.library_dirents.sysadmin_can_view_repo')
+    def test_can_not_create_with_invalid_user_permission(self, mock_sysadmin_can_view_repo):
 
-        mock_can_view_sys_admin_repo.return_value = True
+        mock_sysadmin_can_view_repo.return_value = True
 
         self.login_as(self.user)
         resp = self.client.post(self.url)
@@ -146,10 +146,10 @@ class LibraryDirentsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert len(json_resp['dirent_list']) == self.init_num
 
-    @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
-    def test_can_not_create_with_invalid_parent_dir(self, mock_can_view_sys_admin_repo):
+    @patch('seahub.api2.endpoints.admin.library_dirents.sysadmin_can_view_repo')
+    def test_can_not_create_with_invalid_parent_dir(self, mock_sysadmin_can_view_repo):
 
-        mock_can_view_sys_admin_repo.return_value = True
+        mock_sysadmin_can_view_repo.return_value = True
 
         self.login_as(self.admin)
         parent_dir = randstring(6)
@@ -162,10 +162,10 @@ class LibraryDirentsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert len(json_resp['dirent_list']) == self.init_num
 
-    @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
-    def test_can_not_create_with_invalid_obj_name(self, mock_can_view_sys_admin_repo):
+    @patch('seahub.api2.endpoints.admin.library_dirents.sysadmin_can_view_repo')
+    def test_can_not_create_with_invalid_obj_name(self, mock_sysadmin_can_view_repo):
 
-        mock_can_view_sys_admin_repo.return_value = True
+        mock_sysadmin_can_view_repo.return_value = True
 
         self.login_as(self.admin)
         resp = self.client.post(self.url, {'obj_name': 'invalid/name'})
@@ -177,10 +177,10 @@ class LibraryDirentsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert len(json_resp['dirent_list']) == self.init_num
 
-    @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
-    def test_can_not_create_with_feather_disable(self, mock_can_view_sys_admin_repo):
+    @patch('seahub.api2.endpoints.admin.library_dirents.sysadmin_can_view_repo')
+    def test_can_not_create_with_feather_disable(self, mock_sysadmin_can_view_repo):
 
-        mock_can_view_sys_admin_repo.return_value = False
+        mock_sysadmin_can_view_repo.return_value = False
 
         self.login_as(self.admin)
         parent_dir = randstring(6)
@@ -188,7 +188,7 @@ class LibraryDirentsTest(BaseTestCase):
         resp = self.client.post(self.url + '?parent_dir=%s' % parent_dir, {'obj_name': dir_name})
         self.assertEqual(403, resp.status_code)
 
-        mock_can_view_sys_admin_repo.return_value = True
+        mock_sysadmin_can_view_repo.return_value = True
 
         # length of dirent list will still be init_num
         # no file/folder was created
@@ -247,10 +247,10 @@ class LibraryDirentTest(BaseTestCase):
         resp = self.client.delete(self.url)
         self.assertEqual(403, resp.status_code)
 
-    @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
-    def test_can_get(self, mock_can_view_sys_admin_repo):
+    @patch('seahub.api2.endpoints.admin.library_dirents.sysadmin_can_view_repo')
+    def test_can_get(self, mock_sysadmin_can_view_repo):
 
-        mock_can_view_sys_admin_repo.return_value = True
+        mock_sysadmin_can_view_repo.return_value = True
 
         self.login_as(self.admin)
 
@@ -270,19 +270,19 @@ class LibraryDirentTest(BaseTestCase):
         assert json_resp['is_file'] == False
         assert json_resp['obj_name'] == self.folder_name
 
-    @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
-    def test_can_not_get_with_invalid_user_permission(self, mock_can_view_sys_admin_repo):
+    @patch('seahub.api2.endpoints.admin.library_dirents.sysadmin_can_view_repo')
+    def test_can_not_get_with_invalid_user_permission(self, mock_sysadmin_can_view_repo):
 
-        mock_can_view_sys_admin_repo.return_value = True
+        mock_sysadmin_can_view_repo.return_value = True
 
         self.login_as(self.user)
         resp = self.client.get(self.url)
         self.assertEqual(403, resp.status_code)
 
-    @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
-    def test_can_not_get_with_invalid_path(self, mock_can_view_sys_admin_repo):
+    @patch('seahub.api2.endpoints.admin.library_dirents.sysadmin_can_view_repo')
+    def test_can_not_get_with_invalid_path(self, mock_sysadmin_can_view_repo):
 
-        mock_can_view_sys_admin_repo.return_value = True
+        mock_sysadmin_can_view_repo.return_value = True
 
         self.login_as(self.admin)
 
@@ -295,19 +295,19 @@ class LibraryDirentTest(BaseTestCase):
         resp = self.client.get(self.url + '?path=%s' % (invalid_path))
         self.assertEqual(404, resp.status_code)
 
-    @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
-    def test_can_not_get_with_feather_disable(self, mock_can_view_sys_admin_repo):
+    @patch('seahub.api2.endpoints.admin.library_dirents.sysadmin_can_view_repo')
+    def test_can_not_get_with_feather_disable(self, mock_sysadmin_can_view_repo):
 
-        mock_can_view_sys_admin_repo.return_value = False
+        mock_sysadmin_can_view_repo.return_value = False
 
         self.login_as(self.admin)
         resp = self.client.get(self.url)
         self.assertEqual(403, resp.status_code)
 
-    @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
-    def test_can_delete_file_folder(self, mock_can_view_sys_admin_repo):
+    @patch('seahub.api2.endpoints.admin.library_dirents.sysadmin_can_view_repo')
+    def test_can_delete_file_folder(self, mock_sysadmin_can_view_repo):
 
-        mock_can_view_sys_admin_repo.return_value = True
+        mock_sysadmin_can_view_repo.return_value = True
 
         self.login_as(self.admin)
 
@@ -333,19 +333,19 @@ class LibraryDirentTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert len(json_resp['dirent_list']) == self.init_num - 2
 
-    @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
-    def test_can_not_delete_with_invalid_user_permission(self, mock_can_view_sys_admin_repo):
+    @patch('seahub.api2.endpoints.admin.library_dirents.sysadmin_can_view_repo')
+    def test_can_not_delete_with_invalid_user_permission(self, mock_sysadmin_can_view_repo):
 
-        mock_can_view_sys_admin_repo.return_value = True
+        mock_sysadmin_can_view_repo.return_value = True
 
         self.login_as(self.user)
         resp = self.client.delete(self.url)
         self.assertEqual(403, resp.status_code)
 
-    @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
-    def test_can_not_delete_with_invalid_path(self, mock_can_view_sys_admin_repo):
+    @patch('seahub.api2.endpoints.admin.library_dirents.sysadmin_can_view_repo')
+    def test_can_not_delete_with_invalid_path(self, mock_sysadmin_can_view_repo):
 
-        mock_can_view_sys_admin_repo.return_value = True
+        mock_sysadmin_can_view_repo.return_value = True
 
         self.login_as(self.admin)
 
@@ -353,19 +353,19 @@ class LibraryDirentTest(BaseTestCase):
         resp = self.client.delete(self.url)
         self.assertEqual(400, resp.status_code)
 
-    @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
-    def test_can_not_delete_with_feather_disable(self, mock_can_view_sys_admin_repo):
+    @patch('seahub.api2.endpoints.admin.library_dirents.sysadmin_can_view_repo')
+    def test_can_not_delete_with_feather_disable(self, mock_sysadmin_can_view_repo):
 
-        mock_can_view_sys_admin_repo.return_value = False
+        mock_sysadmin_can_view_repo.return_value = False
 
         self.login_as(self.admin)
         resp = self.client.delete(self.url)
         self.assertEqual(403, resp.status_code)
 
-    @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
-    def test_can_copy_file_folder_without_dst(self, mock_can_view_sys_admin_repo):
+    @patch('seahub.api2.endpoints.admin.library_dirents.sysadmin_can_view_repo')
+    def test_can_copy_file_folder_without_dst(self, mock_sysadmin_can_view_repo):
 
-        mock_can_view_sys_admin_repo.return_value = True
+        mock_sysadmin_can_view_repo.return_value = True
 
         self.login_as(self.admin)
 
@@ -401,10 +401,10 @@ class LibraryDirentTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert len(json_resp['dirent_list']) == self.init_num + 2
 
-    @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
-    def test_can_copy_file_folder_with_dst(self, mock_can_view_sys_admin_repo):
+    @patch('seahub.api2.endpoints.admin.library_dirents.sysadmin_can_view_repo')
+    def test_can_copy_file_folder_with_dst(self, mock_sysadmin_can_view_repo):
 
-        mock_can_view_sys_admin_repo.return_value = True
+        mock_sysadmin_can_view_repo.return_value = True
 
         dst_repo_id = seafile_api.create_repo(name='test-repo',
                 desc='', username=self.user_name, passwd=None)
@@ -446,30 +446,30 @@ class LibraryDirentTest(BaseTestCase):
 
         self.remove_repo(dst_repo_id)
 
-    @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
-    def test_can_not_copy_with_invalid_user_permission(self, mock_can_view_sys_admin_repo):
+    @patch('seahub.api2.endpoints.admin.library_dirents.sysadmin_can_view_repo')
+    def test_can_not_copy_with_invalid_user_permission(self, mock_sysadmin_can_view_repo):
 
-        mock_can_view_sys_admin_repo.return_value = True
+        mock_sysadmin_can_view_repo.return_value = True
 
         self.login_as(self.user)
         resp = self.client.put(self.url + '?path=%s' % (self.file_path),
                 json.dumps({}), 'application/json')
         self.assertEqual(403, resp.status_code)
 
-    @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
-    def test_can_not_copy_with_invalid_path(self, mock_can_view_sys_admin_repo):
+    @patch('seahub.api2.endpoints.admin.library_dirents.sysadmin_can_view_repo')
+    def test_can_not_copy_with_invalid_path(self, mock_sysadmin_can_view_repo):
 
-        mock_can_view_sys_admin_repo.return_value = True
+        mock_sysadmin_can_view_repo.return_value = True
 
         self.login_as(self.admin)
         # invalid `path` parameter
         resp = self.client.put(self.url, json.dumps({}), 'application/json')
         self.assertEqual(400, resp.status_code)
 
-    @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
-    def test_can_not_copy_with_feather_disable(self, mock_can_view_sys_admin_repo):
+    @patch('seahub.api2.endpoints.admin.library_dirents.sysadmin_can_view_repo')
+    def test_can_not_copy_with_feather_disable(self, mock_sysadmin_can_view_repo):
 
-        mock_can_view_sys_admin_repo.return_value = False
+        mock_sysadmin_can_view_repo.return_value = False
 
         self.login_as(self.admin)
         resp = self.client.put(self.url, json.dumps({}), 'application/json')
