@@ -882,6 +882,104 @@ function getElement(id) {
     });
   }
 
+  function getSdocHeaderLevel(element) {
+    if (!element || !element.classList) return null;
+
+    for (var level = 1; level <= 6; level++) {
+      if (element.classList.contains('sdoc-header-' + level)) {
+        return level;
+      }
+    }
+
+    return null;
+  }
+
+  function getHeaderElementByPrefix(prefix) {
+    if (!prefix) return null;
+
+    var headerRow = prefix.parentElement;
+    if (!headerRow) return null;
+
+    var headerElement = headerRow.parentElement;
+    return getSdocHeaderLevel(headerElement) ? headerElement : null;
+  }
+
+  function setHeaderCollapsedState(headerElement, collapsed) {
+    if (!headerElement) return;
+
+    var prefix = headerElement.querySelector(':scope > .sdoc-header-row > .sdoc-header-collapse-prefix');
+    if (!prefix) return;
+
+    var icon = prefix.querySelector('.sdocfont');
+    headerElement.setAttribute('data-sdoc-collapsed', collapsed ? 'true' : 'false');
+    prefix.classList.toggle('sdoc-header-collapse-prefix-collapsed', collapsed);
+
+    if (icon) {
+      icon.classList.toggle('sdoc-big-caret-up', collapsed);
+      icon.classList.toggle('sdoc-big-drop-down', !collapsed);
+    }
+  }
+
+  function syncCollapsedSections() {
+    var editor = getElement('sdoc-editor');
+    if (!editor) return;
+
+    var blocks = Array.prototype.slice.call(editor.children || []);
+    var activeCollapsedHeaders = [];
+
+    blocks.forEach(function (block) {
+      var headerLevel = getSdocHeaderLevel(block);
+      if (headerLevel !== null) {
+        while (activeCollapsedHeaders.length > 0 && headerLevel <= activeCollapsedHeaders[activeCollapsedHeaders.length - 1]) {
+          activeCollapsedHeaders.pop();
+        }
+      }
+
+      var shouldHide = activeCollapsedHeaders.length > 0;
+      block.classList.toggle('sdoc-section-collapsed', shouldHide);
+
+      if (headerLevel !== null && block.getAttribute('data-sdoc-collapsed') === 'true') {
+        activeCollapsedHeaders.push(headerLevel);
+      }
+    });
+  }
+
+  function initializeHeaderCollapseState() {
+    var editor = getElement('sdoc-editor');
+    if (!editor) return;
+
+    var prefixes = editor.querySelectorAll('.sdoc-header-collapse-prefix');
+    prefixes.forEach(function (prefix) {
+      if (prefix.__wikiPublishCollapseInitialized) return;
+
+      var headerElement = getHeaderElementByPrefix(prefix);
+      if (!headerElement) return;
+
+      setHeaderCollapsedState(headerElement, prefix.classList.contains('sdoc-header-collapse-prefix-collapsed'));
+      prefix.__wikiPublishCollapseInitialized = true;
+    });
+
+    syncCollapsedSections();
+  }
+
+  document.addEventListener('click', function (e) {
+    var prefix = e.target.closest('.sdoc-header-collapse-prefix');
+    if (!prefix) return;
+
+    var editor = getElement('sdoc-editor');
+    if (!editor || !editor.contains(prefix)) return;
+
+    var headerElement = getHeaderElementByPrefix(prefix);
+    if (!headerElement) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    var collapsed = headerElement.getAttribute('data-sdoc-collapsed') === 'true';
+    setHeaderCollapsedState(headerElement, !collapsed);
+    syncCollapsedSections();
+  });
+
   var navTree = getElement('wiki-nav-tree');
   if (navTree) {
     navTree.addEventListener('click', function (e) {
@@ -913,6 +1011,7 @@ function getElement(id) {
   }
 
   bindWikiContentLinks();
+  initializeHeaderCollapseState();
 
   document.addEventListener('click', function (e) {
     if (!activeBlockTarget) return;
@@ -924,7 +1023,10 @@ function getElement(id) {
 
   window.addEventListener('wiki:navigate', function () {
     clearActiveBlockTarget();
-    requestAnimationFrame(bindWikiContentLinks);
+    requestAnimationFrame(function () {
+      bindWikiContentLinks();
+      initializeHeaderCollapseState();
+    });
   });
 
   var hasHandledInitialPopstate = false;

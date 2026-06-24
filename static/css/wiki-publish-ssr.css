@@ -722,6 +722,89 @@ html, body {
   padding-left: 0;
 }
 
+#wiki-sdoc-previewer .sdoc-embed-link-container {
+  height: 300px;
+  max-height: 550px;
+}
+
+#wiki-sdoc-previewer .sdoc-image-content>span {
+  border-width: medium;
+  border-style: none;
+  border-color: currentcolor;
+  border-image: initial;
+}
+
+#wiki-sdoc-previewer .sdoc-table-wrapper .table-cell {
+  border-color: #ccc;
+}
+
+.sdoc-header-row {
+  position: relative;
+  padding-left: 20px;
+  margin-left: -20px;
+}
+
+.sdoc-header-collapse-prefix {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  transform: translateY(-50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sdoc-header-1:hover .sdoc-header-collapse-prefix,
+.sdoc-header-2:hover .sdoc-header-collapse-prefix,
+.sdoc-header-3:hover .sdoc-header-collapse-prefix,
+.sdoc-header-4:hover .sdoc-header-collapse-prefix,
+.sdoc-header-5:hover .sdoc-header-collapse-prefix,
+.sdoc-header-6:hover .sdoc-header-collapse-prefix,
+.sdoc-header-collapse-prefix:hover,
+.sdoc-header-row:focus-within .sdoc-header-collapse-prefix {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sdoc-header-collapse-prefix:hover {
+  background-color: rgba(0, 0, 0, .04);
+  border-radius: 2px;
+}
+
+.sdoc-header-collapse-prefix-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sdoc-header-collapse-prefix .sdocfont {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  scale: calc(0.5);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+}
+
+.sdoc-header-collapse-prefix-collapsed {
+  transform: translateY(-50%) rotate(90deg);
+}
+
+.sdoc-header-content {
+  min-width: 0;
+}
+
+.sdoc-section-collapsed {
+  display: none !important;
+}
+
+
 .indent-1 {
   padding-left: 12px;
 }
