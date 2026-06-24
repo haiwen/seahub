@@ -7,6 +7,7 @@ import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle
 import { systemAdminAPI } from '../../utils/system-admin-api';
 import Loading from '../../components/loading';
 import Icon from '../../components/icon';
+import CommonToolbar from '../../components/toolbar/common-toolbar';
 
 import '../../css/repo-snapshot.css';
 
@@ -103,6 +104,7 @@ class RepoSnapshot extends React.Component {
             <a href={siteRoot}>
               <img src={mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
             </a>
+            <CommonToolbar isShowSearch={false} isShowNotice={false} />
           </div>
           <div className="flex-auto container-fluid pt-4 pb-6 o-auto">
             <div className="row">

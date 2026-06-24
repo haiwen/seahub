@@ -9,6 +9,7 @@ import Loading from '../../components/loading';
 import Paginator from '../../components/paginator';
 import { formatWithTimezone } from '../../utils/time';
 import Icon from '../../components/icon';
+import CommonToolbar from '../../components/toolbar/common-toolbar';
 
 import '../../css/repo-history.css';
 
@@ -84,6 +85,7 @@ class RepoHistory extends React.Component {
             <a href={siteRoot}>
               <img src={mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
             </a>
+            <CommonToolbar isShowSearch={false} isShowNotice={false} />
           </div>
           <div className="flex-auto container-fluid pt-4 pb-6 o-auto">
             <div className="row">
