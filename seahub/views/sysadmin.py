@@ -1,12 +1,13 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # encoding: utf-8
 
-from types import FunctionType
-import logging
+import os
 import json
-import datetime
 import time
+import logging
+import datetime
 from constance import config
+from types import FunctionType
 
 from django.conf import settings as dj_settings
 from django.urls import reverse
@@ -33,7 +34,8 @@ from seahub.institutions.models import Institution
 from seahub.role_permissions.utils import get_available_roles, \
         get_available_admin_roles
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
-    is_pro_version, send_html_email, get_site_name, is_org_context
+    is_pro_version, send_html_email, get_site_name, is_org_context, gen_file_get_url, \
+    render_error
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.ldap import get_ldap_info
@@ -42,6 +44,7 @@ from seahub.utils.ms_excel import write_xls
 from seahub.utils.repo import get_related_users_by_repo, get_repo_owner
 from seahub.utils.auth import get_login_bg_image_path
 from seahub.views import get_system_default_repo_id
+from seahub.views.file import send_file_access_msg
 from seahub.forms import SetUserQuotaForm, AddUserForm
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile, DetailedProfile
@@ -66,9 +69,11 @@ except ImportError:
     ENABLE_FILE_SCAN = False
 from seahub.work_weixin.settings import ENABLE_WORK_WEIXIN
 from seahub.dingtalk.settings import ENABLE_DINGTALK
+from seahub.views.repo import get_commit
 
 
 logger = logging.getLogger(__name__)
+
 
 @login_required
 @sys_staff_required
@@ -106,24 +111,95 @@ def sysadmin_react_fake_view(request, **kwargs):
         'enable_share_link_report_abuse': ENABLE_SHARE_LINK_REPORT_ABUSE,
     })
 
-def can_view_sys_admin_repo(repo):
-    default_repo_id = get_system_default_repo_id()
-    is_default_repo = True if repo.id == default_repo_id else False
 
-    if is_default_repo:
+def sysadmin_can_view_repo(request, repo):
+
+    default_repo_id = get_system_default_repo_id()
+    if repo.id == default_repo_id:
         return True
-    elif repo.encrypted:
-        return False
-    elif is_pro_version() and ENABLE_SYS_ADMIN_VIEW_REPO:
+
+    if request.user.admin_permissions.can_manage_library() and \
+            not repo.encrypted and \
+            is_pro_version() and \
+            ENABLE_SYS_ADMIN_VIEW_REPO:
         return True
-    else:
-        return False
+
+    return False
+
+
+@login_required
+@sys_staff_required
+def sysadmin_repo_history(request, repo_id):
+
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        return render_error(request, _(f'Library {repo_id} not found.'))
+
+    if not sysadmin_can_view_repo(request, repo):
+        return render_error(request, _('Permission denied.'))
+
+    return render(request, 'sysadmin/repo_history_react.html', {
+        'repo': repo,
+    })
+
+
+@login_required
+@sys_staff_required
+def sysadmin_repo_snapshot(request, repo_id):
+
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        return render_error(request, _(f'Library {repo_id} not found.'))
+
+    if not sysadmin_can_view_repo(request, repo):
+        return render_error(request, _('Permission denied.'))
+
+    commit_id = request.GET.get('commit_id')
+    if not commit_id:
+        return render_error(request, _('Commit id missing.'))
+
+    current_commit = get_commit(repo.id, repo.version, commit_id)
+    if not current_commit:
+        current_commit = get_commit(repo.id, repo.version, repo.head_cmmt_id)
+
+    return render(request, 'sysadmin/repo_snapshot_react.html', {
+        'repo': repo,
+        'current_commit': current_commit,
+    })
+
+
+@login_required
+@sys_staff_required
+def sysadmin_snapshot_download_file(request, repo_id):
+
+    obj_id = request.GET.get('obj_id', '')
+    if not obj_id:
+        render_error(request, _('Object id missing.'))
+
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        return render_error(request, _(f'Library {repo_id} not found.'))
+
+    if not sysadmin_can_view_repo(request, repo):
+        return render_error(request, _('Permission denied.'))
+
+    token = seafile_api.get_fileserver_access_token(repo_id, obj_id, 'download', request.user.username)
+    if not token:
+        return render_error(request, _('Internal Server Error'))
+
+    file_path = request.GET.get('file_path', '')
+    file_name = os.path.basename(file_path)
+    send_file_access_msg(request, repo, file_path, 'web')
+
+    return HttpResponseRedirect(gen_file_get_url(token, file_name))
+
 
 def populate_user_info(user):
     """Populate contact email and name to user.
     """
     user.contact_email = email2contact_email(user.email)
     user.name = email2nickname(user.email)
+
 
 def _populate_user_quota_usage(user):
     """Populate space/share quota to user.
@@ -146,6 +222,7 @@ def _populate_user_quota_usage(user):
         user.space_usage = -1
         user.space_quota = -1
 
+
 @login_required
 @sys_staff_required
 def sys_useradmin_export_excel(request):
@@ -155,7 +232,7 @@ def sys_useradmin_export_excel(request):
     next_page = request.headers.get('referer', None)
     if not next_page:
         next_page = SITE_ROOT
-        
+
     if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
         next_page = SITE_ROOT
 
@@ -642,7 +719,7 @@ def sys_group_admin_export_excel(request):
     next_page = request.headers.get('referer', None)
     if not next_page:
         next_page = SITE_ROOT
-        
+
     if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
         next_page = SITE_ROOT
 
@@ -704,7 +781,7 @@ def sys_repo_delete(request, repo_id):
     next_page = request.headers.get('referer', None)
     if not next_page:
         next_page = HASH_URLS['SYS_REPO_ADMIN']
-        
+
     if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
         next_page = HASH_URLS['SYS_REPO_ADMIN']
 
@@ -776,7 +853,7 @@ def batch_add_user_example(request):
     next_page = request.headers.get('referer', None)
     if not next_page:
         next_page = SITE_ROOT
-        
+
     if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
         next_page = SITE_ROOT
 

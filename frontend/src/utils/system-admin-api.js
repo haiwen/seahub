@@ -254,6 +254,20 @@ class SystemAdminAPI {
     return this.req.put(url, form);
   }
 
+  sysAdminGetRepoHistory(repoID, page, perPage) {
+    const url = this.server + '/api/v2.1/admin/libraries/' + repoID + '/history/';
+    const params = {
+      page: page || 1,
+      per_page: perPage || 100,
+    };
+    return this.req.get(url, { params });
+  }
+
+  sysAdminListCommitDir(repoID, commitID, path) {
+    const url = this.server + '/api/v2.1/admin/libraries/' + repoID + '/commits/' + commitID + '/dir/';
+    return this.req.get(url, { params: { path } });
+  }
+
   sysAdminListRepoSharedItems(repoID, shareType) {
     const url = this.server + '/api/v2.1/admin/shares/';
     const params = {

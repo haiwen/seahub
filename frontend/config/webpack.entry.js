@@ -40,12 +40,14 @@ const entryFiles = {
   repoHistory: '/repo-history.js',
   repoSnapshot: '/repo-snapshot.js',
   repoFolderTrash: '/repo-folder-trash.js',
-  orgAdmin: '/pages/org-admin',
-  sysAdmin: '/pages/sys-admin',
   uploadLink: '/pages/upload-link',
   subscription: '/subscription.js',
   institutionAdmin: '/pages/institution-admin/index.js',
-  wikiViewer: '/pages/wiki-viewer/index.js'
+  wikiViewer: '/pages/wiki-viewer/index.js',
+  orgAdmin: '/pages/org-admin',
+  sysAdmin: '/pages/sys-admin',
+  sysadminRepoHistory: '/pages/sys-admin/repo-history.js',
+  sysadminRepoSnapshot: '/pages/sys-admin/repo-snapshot.js',
 };
 
 const getEntries = (isEnvDevelopment) => {

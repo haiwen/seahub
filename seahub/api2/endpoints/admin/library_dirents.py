@@ -18,7 +18,7 @@ from pysearpc import SearpcError
 
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.repo import get_repo_owner
-from seahub.views.sysadmin import can_view_sys_admin_repo
+from seahub.views.sysadmin import sysadmin_can_view_repo
 from seahub.views.file import send_file_access_msg
 from seahub.utils import gen_file_get_url, \
     check_filename_with_rename, is_valid_dirent_name, \
@@ -41,7 +41,7 @@ def common_check(func):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if not can_view_sys_admin_repo(repo):
+        if not sysadmin_can_view_repo(request, repo):
             error_msg = 'Feature disabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
