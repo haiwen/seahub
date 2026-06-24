@@ -127,6 +127,8 @@ class Search extends Component {
   }
 
   componentWillUnmount() {
+    this.debouncedSearch.cancel();
+    this.debouncedRepoSearch.cancel();
     document.removeEventListener('keydown', this.onDocumentKeydown);
     document.removeEventListener('compositionstart', this.onCompositionStart);
     document.removeEventListener('compositionend', this.onCompositionEnd);
@@ -548,6 +550,8 @@ class Search extends Component {
     this.setState({ value: newValue, isCloseShow: newValue.length > 0 });
 
     if (newValue.trim() === '') {
+      this.debouncedSearch.cancel();
+      this.debouncedRepoSearch.cancel();
       this.setState({
         inputValue: '',
         isSearching: false,
@@ -693,6 +697,8 @@ class Search extends Component {
   }
 
   resetToDefault() {
+    this.debouncedSearch.cancel();
+    this.debouncedRepoSearch.cancel();
     this.setState({
       width: '',
       value: '',
@@ -725,6 +731,8 @@ class Search extends Component {
   }
 
   onClearSearch = () => {
+    this.debouncedSearch.cancel();
+    this.debouncedRepoSearch.cancel();
     this.setState({
       value: '',
       inputValue: '',

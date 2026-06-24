@@ -2070,7 +2070,8 @@ export const validateName = (newName) => {
 
 export const debounce = (fn, delay, immediate) => {
   let timer = null;
-  return (...params) => {
+
+  const debounced = function (...params) {
     if (timer) {
       clearTimeout(timer);
     }
@@ -2083,6 +2084,15 @@ export const debounce = (fn, delay, immediate) => {
       }, delay);
     }
   };
+
+  debounced.cancel = () => {
+    if (timer) {
+      clearTimeout(timer);
+      timer = null;
+    }
+  };
+
+  return debounced;
 };
 
 export const throttle = (func, delay) => {
