@@ -68,7 +68,10 @@ import {
   DIR_BASE_COLUMNS,
   DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS,
   getDirTableHiddenColumnKeys,
-  DIR_TABLE_DEFAULT_METADATA_COLUMNS
+  DIR_TABLE_DEFAULT_METADATA_COLUMNS,
+  getDirTableSortByKey,
+  getDirTableSortOrderKey,
+  getDirTableRowHeightKey
 } from '@/constants/dir-column-config';
 
 import { normalizeColumns } from '@/metadata/utils/column';
@@ -125,8 +128,8 @@ class LibContentView extends React.Component {
       isDirentListLoading: true,
       direntList: [],
       isDirentSelected: false,
-      sortBy: Cookies.get('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
-      sortOrder: Cookies.get('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
+      sortBy: props.repoID ? localStorage.getItem(getDirTableSortByKey(props.repoID)) || 'name' : 'name',
+      sortOrder: props.repoID ? localStorage.getItem(getDirTableSortOrderKey(props.repoID)) || 'asc' : 'asc',
       isAllDirentSelected: false,
       dirID: '', // for update dir list
       errorMsg: '',
@@ -150,7 +153,7 @@ class LibContentView extends React.Component {
       enableMetadata: false,
       metadata: null,
       isCrossRepoMove: false,
-      rowHeight: Number(localStorage.getItem(`${this.props.repoID}-dir-table-row-height`)) || ROW_HEIGHT
+      rowHeight: Number(localStorage.getItem(getDirTableRowHeightKey(this.props.repoID))) || ROW_HEIGHT
     };
     this.oldOnpopstate = window.onpopstate;
     window.onpopstate = this.onpopstate;
@@ -2351,8 +2354,7 @@ class LibContentView extends React.Component {
 
   onModifyRowHeight = (rowHeight) => {
     if (!this.props.repoID) return;
-    const key = `${this.props.repoID}-dir-table-row-height`;
-    localStorage.setItem(key, rowHeight);
+    localStorage.setItem(getDirTableRowHeightKey(this.props.repoID), rowHeight);
     this.setState({ rowHeight: rowHeight });
   };
 
@@ -2742,8 +2744,9 @@ class LibContentView extends React.Component {
   };
 
   sortItems = (sortBy, sortOrder) => {
-    Cookies.set('seafile-repo-dir-sort-by', sortBy);
-    Cookies.set('seafile-repo-dir-sort-order', sortOrder);
+    const { repoID } = this.props;
+    localStorage.setItem(getDirTableSortByKey(repoID), sortBy);
+    localStorage.setItem(getDirTableSortOrderKey(repoID), sortOrder);
 
     const sortedDirentList = Utils.sortDirents(this.state.direntList, sortBy, sortOrder);
     this.setState({
