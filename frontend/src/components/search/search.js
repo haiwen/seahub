@@ -36,7 +36,7 @@ const INITIAL_PAGE_SIZE = 20;
 const MAX_ITEMS = 100;
 const LOAD_MORE_THRESHOLD = 100;
 const controlKey = Utils.isMac() ? '⌘' : 'Ctrl';
-const searchType = {
+const searchScope = {
   REPO: 'repo',
   FOLDER: 'folder',
   ALL: 'all',
@@ -82,7 +82,7 @@ class Search extends Component {
       hasMore: false,
       isLoadingMore: false,
       totalCount: 0,
-      searchType: '', // searchType.REPO, searchType.FOLDER, searchType.ALL
+      searchType: '', // searchScope.REPO, searchScope.FOLDER, searchScope.ALL
     };
     this.highlightRef = null;
     this.source = null; // used to cancel request;
@@ -177,7 +177,7 @@ class Search extends Component {
       q: inputValue,
       search_repo: isPublic ? this.queryData?.search_repo : this.props.repoID || 'all',
       search_ftypes: 'all',
-      ...(searchType === searchType.FOLDER && this.props.path && this.props.path !== '/' ? { search_path: this.props.path } : {}),
+      ...(searchType === searchScope.FOLDER && this.props.path && this.props.path !== '/' ? { search_path: this.props.path } : {}),
     });
 
     const remainingItems = MAX_ITEMS - resultItems.length;
@@ -509,25 +509,25 @@ class Search extends Component {
   };
 
   debouncedSearch = debounce((newValue) => {
-    const searchType = this.state.searchType;
+    const activeSearchType = this.state.searchType;
     if (this.isChineseInput === false) {
       this.setState({
         inputValue: newValue,
         isLoading: true,
         highlightIndex: 0,
       }, () => {
-        switch (searchType) {
-          case searchType.FOLDER:
+        switch (activeSearchType) {
+          case searchScope.FOLDER:
             this.searchFolder();
             break;
-          case searchType.REPO:
+          case searchScope.REPO:
             this.searchRepo();
             break;
-          case searchType.ALL:
+          case searchScope.ALL:
             this.searchAllRepos();
             break;
           default:
-            this.searchAllRepos();
+            this.setState({ isLoading: false });
             break;
         }
       });
@@ -885,7 +885,7 @@ class Search extends Component {
       search_repo: this.props.repoID,
       search_ftypes: 'all',
     };
-    this.setState({ searchType: searchType.REPO });
+    this.setState({ searchType: searchScope.REPO });
     this.getSearchResult(this.buildSearchParams(queryData));
   };
 
@@ -897,7 +897,7 @@ class Search extends Component {
       search_ftypes: 'all',
       search_path: this.props.path,
     };
-    this.setState({ searchType: searchType.FOLDER });
+    this.setState({ searchType: searchScope.FOLDER });
     this.getSearchResult(this.buildSearchParams(queryData));
   };
 
@@ -908,7 +908,7 @@ class Search extends Component {
       search_repo: 'all',
       search_ftypes: 'all',
     };
-    this.setState({ searchType: searchType.ALL });
+    this.setState({ searchType: searchScope.ALL });
     this.getSearchResult(this.buildSearchParams(queryData));
   };
 
