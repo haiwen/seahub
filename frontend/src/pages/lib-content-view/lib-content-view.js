@@ -55,6 +55,7 @@ import { PRIVATE_COLUMN_KEY } from '../../metadata/constants/column/private';
 import {
   LIST_MODE,
   TABLE_MODE,
+  GRID_MODE,
   METADATA_MODE,
   TAGS_MODE,
   HISTORY_MODE,
@@ -3002,9 +3003,9 @@ class LibContentView extends React.Component {
                     <div className="cur-view-path lib-cur-view-path">
                       <div className={classnames(
                         'cur-view-path-left', {
-                          'w-100': !isDesktop,
-                          'animation-children': isDirentSelected
-                        })}>
+                        'w-100': !isDesktop,
+                        'animation-children': isDirentSelected
+                      })}>
                         {isDirentSelected ? (
                           [METADATA_MODE, TAGS_MODE, TRASH_MODE, CHAT_MODE].includes(currentMode) ? (
                             <ViewToolbar
