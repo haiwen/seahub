@@ -17,35 +17,35 @@ const Editor = React.forwardRef((props, ref) => {
 
   switch (props.column.type) {
     case CellType.FILE_NAME: {
-      return (<FileNameEditor ref={ref} { ...props } />);
+      return (<FileNameEditor ref={ref} {...props} />);
     }
     case CellType.TEXT: {
-      return (<TextEditor ref={ref} { ...props } />);
+      return (<TextEditor ref={ref} {...props} />);
     }
     case CellType.DATE: {
-      return (<DateEditor ref={ref} { ...props } lang={lang} />);
+      return (<DateEditor ref={ref} {...props} lang={lang} />);
     }
     case CellType.NUMBER: {
       return (<NumberEditor ref={ref} {...props} />);
     }
     case CellType.SINGLE_SELECT: {
-      return (<SingleSelectEditor ref={ref} { ...props} />);
+      return (<SingleSelectEditor ref={ref} {...props} />);
     }
     case CellType.MULTIPLE_SELECT: {
-      return (<MultipleSelectEditor ref={ref} { ...props } />);
+      return (<MultipleSelectEditor ref={ref} {...props} />);
     }
     case CellType.COLLABORATOR: {
-      return (<CollaboratorEditor ref={ref} { ...props } />);
+      return (<CollaboratorEditor ref={ref} {...props} />);
     }
     case CellType.LONG_TEXT: {
-      return (<LongTextEditor ref={ref} { ...props } lang={lang} />);
+      return (<LongTextEditor ref={ref} {...props} lang={lang} />);
     }
     case CellType.TAGS: {
       if (checkIsDir(props.record)) return null;
-      return (<TagsEditor ref={ref} { ...props } />);
+      return (<TagsEditor ref={ref} {...props} />);
     }
     case CellType.GEOLOCATION: {
-      return (<TableGeolocationEditor ref={ref} { ...props } />);
+      return (<TableGeolocationEditor ref={ref} {...props} />);
     }
     case CellType.LINK: {
       return null;

@@ -5,16 +5,17 @@ import utc from 'dayjs/plugin/utc';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import Calendar from '@seafile/seafile-calendar';
 import DatePicker from '@seafile/seafile-calendar/lib/Picker';
-import dayjs from '../../utils/dayjs';
-import { translateCalendar } from '../../../utils/date-format-utils';
-import { gettext } from '../../../utils/constants';
-import { getEventClassName } from '../../../utils/dom';
-import { Utils } from '../../../utils/utils';
+import dayjs from '../../../utils/dayjs';
+import { translateCalendar } from '../../../../utils/date-format-utils';
+import { gettext } from '../../../../utils/constants';
+import { getEventClassName } from '../../../../utils/dom';
+import { Utils } from '../../../../utils/utils';
 
 import 'dayjs/locale/zh-cn';
 import 'dayjs/locale/en-gb';
 
 import '@seafile/seafile-calendar/assets/index.css';
+import './index.css';
 
 dayjs.extend(utc);
 dayjs.extend(localeData);
