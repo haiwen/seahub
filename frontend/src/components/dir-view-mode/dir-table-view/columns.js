@@ -57,8 +57,8 @@ export const createDirentTableColumns = (repoID, repoInfo, columns, onItemClick)
     if (is_private) {
       editable = EDITABLE_PRIVATE_COLUMN_KEYS.includes(key);
     }
-    const editable_via_click_cell = is_private && EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS.includes(key) || false;
-    const is_popup_editor = is_private && POPUP_EDITOR_COLUMN_TYPES.includes(type) || false;
+    const editable_via_click_cell = is_private ? EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS.includes(key) : true;
+    const is_popup_editor = POPUP_EDITOR_COLUMN_TYPES.includes(type);
     const is_support_preview = is_private && SUPPORT_PREVIEW_COLUMN_KEYS.includes(key) || false;
     const icon_tooltip = COLUMNS_ICON_NAME[column.type] || 'Text';
 
