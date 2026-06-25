@@ -57,12 +57,6 @@ class Wiki extends Component {
     this.dragHandlerRef = React.createRef();
   }
 
-  UNSAFE_componentWillMount() {
-    if (!Utils.isDesktop()) {
-      this.setState({ isSidePanelOpen: true });
-    }
-  }
-
   componentDidMount() {
     this.getWikiConfig();
     window.addEventListener('popstate', this.onPopstate);
