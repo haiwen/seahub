@@ -69,8 +69,6 @@ import {
   DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS,
   getDirTableHiddenColumnKeys,
   DIR_TABLE_DEFAULT_METADATA_COLUMNS,
-  getDirTableSortByKey,
-  getDirTableSortOrderKey,
   getDirTableRowHeightKey
 } from '@/constants/dir-column-config';
 
@@ -88,6 +86,9 @@ const propTypes = {
   onTabNavClick: PropTypes.func.isRequired,
   repoID: PropTypes.string,
 };
+
+const DIR_SORT_BY_KEY = 'seafile-repo-dir-sort-by';
+const DIR_SORT_ORDER_KEY = 'seafile-repo-dir-sort-order';
 
 class LibContentView extends React.Component {
 
@@ -128,8 +129,8 @@ class LibContentView extends React.Component {
       isDirentListLoading: true,
       direntList: [],
       isDirentSelected: false,
-      sortBy: props.repoID ? localStorage.getItem(getDirTableSortByKey(props.repoID)) || 'name' : 'name',
-      sortOrder: props.repoID ? localStorage.getItem(getDirTableSortOrderKey(props.repoID)) || 'asc' : 'asc',
+      sortBy: localStorage.getItem(DIR_SORT_BY_KEY) || 'name',
+      sortOrder: localStorage.getItem(DIR_SORT_ORDER_KEY) || 'asc',
       isAllDirentSelected: false,
       dirID: '', // for update dir list
       errorMsg: '',
@@ -2744,9 +2745,8 @@ class LibContentView extends React.Component {
   };
 
   sortItems = (sortBy, sortOrder) => {
-    const { repoID } = this.props;
-    localStorage.setItem(getDirTableSortByKey(repoID), sortBy);
-    localStorage.setItem(getDirTableSortOrderKey(repoID), sortOrder);
+    localStorage.setItem(DIR_SORT_BY_KEY, sortBy);
+    localStorage.setItem(DIR_SORT_ORDER_KEY, sortOrder);
 
     const sortedDirentList = Utils.sortDirents(this.state.direntList, sortBy, sortOrder);
     this.setState({
@@ -2992,9 +2992,9 @@ class LibContentView extends React.Component {
                     <div className="cur-view-path lib-cur-view-path">
                       <div className={classnames(
                         'cur-view-path-left', {
-                          'w-100': !isDesktop,
-                          'animation-children': isDirentSelected
-                        })}
+                        'w-100': !isDesktop,
+                        'animation-children': isDirentSelected
+                      })}
                       >
                         {isDirentSelected ? (
                           [METADATA_MODE, TAGS_MODE, TRASH_MODE, CHAT_MODE].includes(currentMode) ? (

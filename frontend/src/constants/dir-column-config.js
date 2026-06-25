@@ -63,8 +63,5 @@ export const DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS = [
 // Table mode hidden column keys - per repo
 export const getDirTableHiddenColumnKeys = (repoID) => `sf_dir_table_hidden_column_keys_${repoID}`;
 
-// Table sort keys - per repo
-export const getDirTableSortByKey = (repoID) => `sf_dir_table_sort_by_${repoID}`;
-export const getDirTableSortOrderKey = (repoID) => `sf_dir_table_sort_order_${repoID}`;
 export const DIR_TABLE_ROW_HEIGHT_KEY_PREFIX = 'sf_dir_table_row_height_';
 export const getDirTableRowHeightKey = (repoID) => `${DIR_TABLE_ROW_HEIGHT_KEY_PREFIX}${repoID}`;
