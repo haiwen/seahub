@@ -375,7 +375,7 @@ class FileUploader extends React.Component {
         type: 'file',
         mtime: currentTime
       };
-      this.props.onFileUploadSuccess(dirent); // this contance: just one file
+      this.props.onFileUploadSuccess(dirent); // this scene: just one file
 
       let uploadFileList = this.state.uploadFileList.map(item => {
         if (item.uniqueIdentifier === resumableFile.uniqueIdentifier) {

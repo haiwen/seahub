@@ -10,7 +10,7 @@ const propTypes = {
   customURLPart: PropTypes.string.isRequired
 };
 
-class PublishedWikiExtrance extends Component {
+class PublishedWikiEntrance extends Component {
   constructor(props) {
     super(props);
   }
@@ -40,6 +40,6 @@ class PublishedWikiExtrance extends Component {
   }
 }
 
-PublishedWikiExtrance.propTypes = propTypes;
+PublishedWikiEntrance.propTypes = propTypes;
 
-export default PublishedWikiExtrance;
+export default PublishedWikiEntrance;

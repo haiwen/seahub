@@ -12,7 +12,7 @@ const propTypes = {
 
 const UPLOAD_UPLOADING = 'uploading';
 const UPLOAD_ERROR = 'error';
-const UPLOAD_ISSAVING = 'isSaving';
+const UPLOAD_IS_SAVING = 'isSaving';
 const UPLOAD_UPLOADED = 'uploaded';
 
 class UploadListItem extends React.Component {
@@ -32,7 +32,7 @@ class UploadListItem extends React.Component {
       uploadState = UPLOAD_ERROR;
     } else {
       if (resumableFile.remainingTime === 0 && !resumableFile.isSaved) {
-        uploadState = UPLOAD_ISSAVING;
+        uploadState = UPLOAD_IS_SAVING;
       }
 
       if (resumableFile.isSaved) {
@@ -83,7 +83,7 @@ class UploadListItem extends React.Component {
           <span className="file-size">{this.formatFileSize(resumableFile.size)}</span>
         </td>
         <td className="upload-progress">
-          {(this.state.uploadState === UPLOAD_UPLOADING || this.state.uploadState === UPLOAD_ISSAVING) &&
+          {(this.state.uploadState === UPLOAD_UPLOADING || this.state.uploadState === UPLOAD_IS_SAVING) &&
             <Fragment>
               {resumableFile.size >= (100 * 1000 * 1000) &&
                 <Fragment>
@@ -119,7 +119,7 @@ class UploadListItem extends React.Component {
                       {progress > 0 && <p className="progress-text mb-0">{`${gettext('Uploading...')} ${progress}%`}</p>}
                     </>
                   )}
-                  {this.state.uploadState === UPLOAD_ISSAVING && (
+                  {this.state.uploadState === UPLOAD_IS_SAVING && (
                     <p className="progress-text mb-0">{gettext('Saving...')}</p>
                   )}
                 </>

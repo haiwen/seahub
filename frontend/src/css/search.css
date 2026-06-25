@@ -25,6 +25,7 @@
   width: 700px;
   padding: 16px 0;
 }
+
 [data-bs-theme="dark"] .search-container.show {
   background-color: rgba(28, 29, 31, 1);
   border: 1px solid rgba(51, 52, 53, 1);

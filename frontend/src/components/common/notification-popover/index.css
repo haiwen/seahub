@@ -70,7 +70,7 @@
 
 .notification-list-container .notification-item .notification-item-header {
   display: flex;
-  align-items: center
+  align-items: center;
 }
 
 .notification-list-container .notification-item .notification-point {

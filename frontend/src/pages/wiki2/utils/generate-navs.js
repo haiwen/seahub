@@ -12,9 +12,6 @@ class TreeNode {
   }
 
   addChildren(nodeList) {
-    // nodeList.forEach((node) => {
-    //   node.setParent(this);
-    // });
     this.children = nodeList;
   }
 }
@@ -67,7 +64,7 @@ const transSlateToTree = (slateNodes, parentTreeNode) => {
       if (slateNode.children[0] && (slateNode.children[0].type === 'paragraph')) {
         return transParagraph(slateNode.children[0]);
       } else {
-        // list item contain table/code_block/blockqupta
+        // list item contain table/code_block/block_quota
         return new TreeNode({ name: '', href: '' });
       }
     }

@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import isHotkey from 'is-hotkey';
 import { UncontrolledPopover } from 'reactstrap';
 import SearchInput from '../../../components/search-input';
 import { gettext } from '../../../utils/constants';
 import { KeyCodes } from '../../../constants';
 import RepoListItem from './repo-list-item';
 import { getEventClassName } from '../../../utils/dom';
-import isHotkey from 'is-hotkey';
+import Icon from '../../../components/icon';
 
 import './index.css';
-import Icon from '../../../components/icon';
 
 export default function RepoListPopover({ placement, target, repoOptions, linkedRepos, onAddLinkedRepo, onHidePopover }) {
 

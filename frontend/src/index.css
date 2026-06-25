@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
 }
+
 html,
 input,
 textarea {
@@ -45,6 +46,7 @@ input:focus {
   outline: 0;
   border-color: blue;
 }
+
 input[type="checkbox"] {
   width: auto;
 }

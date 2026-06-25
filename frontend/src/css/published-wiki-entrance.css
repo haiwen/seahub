@@ -7,8 +7,9 @@
   border: 1px solid #dbdbdb;
   border-radius: 10px;
 }
+
 [data-bs-theme=dark] .view-published-wiki {
-  border-color: rgba(255, 255, 255, 0.2)
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .view-published-wiki:hover {

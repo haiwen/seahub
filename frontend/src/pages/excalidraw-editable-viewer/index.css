@@ -26,7 +26,7 @@
 
 .exdraw-editable-viewer-wrapper .exdraw-editable-viewer-content {
   flex: 1;
-  display: flex
+  display: flex;
 }
 
 .exdraw-editable-viewer-header .doc-info {

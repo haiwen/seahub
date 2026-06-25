@@ -13,7 +13,7 @@ import TransferDialog from '../dialog/transfer-dialog';
 import wikiAPI from '../../utils/wiki-api';
 import toaster from '../toast';
 import ConvertWikiDialog from '../dialog/convert-wiki-dialog';
-import PublishedWikiExtrance from '../published-wiki-entrance';
+import PublishedWikiEntrance from '../published-wiki-entrance';
 import Icon from '../icon';
 import CustomDropdown from '../dropdown';
 
@@ -275,7 +275,7 @@ class WikiCardItem extends Component {
         >
           <div className="wiki-card-item-top d-flex align-items-center">
             <span className="wiki-icon"><Icon symbol="wiki" className="w-5 h-5" /></span>
-            {this.state.customUrlString && <PublishedWikiExtrance wikiID={wiki.id} customURLPart={this.state.customUrlString} />}
+            {this.state.customUrlString && <PublishedWikiEntrance wikiID={wiki.id} customURLPart={this.state.customUrlString} />}
             {showDropdownMenu && (
               <CustomDropdown
                 target={`wiki-card-more-op-${idx}`}

@@ -12,7 +12,7 @@
 
 .wiki-plugin-operation-btn-container:hover {
   background-color: var(--bs-icon-btn-hover-bg-color);
-  cursor: pointer
+  cursor: pointer;
 }
 
 .wiki-plugin-operation-btn-container svg {

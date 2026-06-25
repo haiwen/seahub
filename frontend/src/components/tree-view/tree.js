@@ -140,8 +140,8 @@ class Tree {
     return this.root.serializeToJson();
   }
 
-  deserializefromJson(json) {
-    let root = TreeNode.deserializefromJson(json);
+  deserializeFromJson(json) {
+    let root = TreeNode.deserializeFromJson(json);
     let tree = new Tree();
     tree.setRoot(root);
     return tree;

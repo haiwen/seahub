@@ -53,7 +53,7 @@ body {
 
 .exdraw-view-header #unfold-onlyoffice-file-view-header {
   right: 152px;
-  z-index: 6
+  z-index: 6;
 }
 
 .sf-only-office.doc-view-header #unfold-onlyoffice-file-view-header,
@@ -76,7 +76,7 @@ body {
 
 .exdraw-view-header #unfold-onlyoffice-file-view-header {
   right: 152px;
-  z-index: 6
+  z-index: 6;
 }
 
 .sf-only-office.doc-view-header #unfold-onlyoffice-file-view-header,

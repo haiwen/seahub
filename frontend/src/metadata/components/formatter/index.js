@@ -16,10 +16,10 @@ import FileNameFormatter from '../cell-formatter/file-name';
 import FileTagsFormatter from '../cell-formatter/file-tags';
 import Empty from './empty';
 import { CellType } from '../../constants';
-
-import './index.css';
 import RateEditor from '../cell-editors/rate-editor';
 import CheckboxEditor from '../cell-editors/checkbox-editor';
+
+import './index.css';
 
 const Formatter = React.memo(({ column, value, isSample, queryUserAPI, emptyTip, ...params }) => {
   const { type } = column || {};

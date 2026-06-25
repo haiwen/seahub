@@ -130,7 +130,7 @@ class TreeNode {
     return treeNode;
   }
 
-  static deserializefromJson(json) {
+  static deserializeFromJson(json) {
     let { path, object, isLoaded, isPreload, isExpanded, parentNode, children = [] } = json;
     object = object.clone();
 
@@ -141,7 +141,7 @@ class TreeNode {
       isPreload,
       isExpanded,
       parentNode,
-      children: children.map(item => TreeNode.deserializefromJson(item))
+      children: children.map(item => TreeNode.deserializeFromJson(item))
     });
     return treeNode;
   }

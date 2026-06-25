@@ -59,11 +59,11 @@ class Wiki extends Component {
     this.loadWikiData(initialPath);
 
     this.links = document.querySelectorAll('#wiki-file-content a');
-    this.links.forEach(link => link.addEventListener('click', this.onConentLinkClick));
+    this.links.forEach(link => link.addEventListener('click', this.onContentLinkClick));
   }
 
   componentWillUnmount() {
-    this.links.forEach(link => link.removeEventListener('click', this.onConentLinkClick));
+    this.links.forEach(link => link.removeEventListener('click', this.onContentLinkClick));
   }
 
   loadSidePanel = (initialPath) => {
@@ -253,7 +253,7 @@ class Wiki extends Component {
     }
   };
 
-  onConentLinkClick = (event) => {
+  onContentLinkClick = (event) => {
     event.preventDefault();
     event.stopPropagation();
     let link = '';
