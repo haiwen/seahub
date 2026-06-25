@@ -84,7 +84,8 @@ const Formatter = React.memo(({ column, value, isSample, queryUserAPI, emptyTip,
       );
     }
     case CellType.CHECKBOX: {
-      if (column.editable) {
+      const readOnly = params.readOnly || false;
+      if (column.editable && !readOnly) {
         return (
           <CheckboxEditor value={value} className={className} field={column} {...params}>
             <Empty fieldType={type} placeholder={emptyTip} />
@@ -119,7 +120,8 @@ const Formatter = React.memo(({ column, value, isSample, queryUserAPI, emptyTip,
       );
     }
     case CellType.RATE: {
-      if (column.editable) {
+      const readOnly = params.readOnly || false;
+      if (column.editable && !readOnly) {
         return (
           <RateEditor value={value} field={column} className={className} {...params}>
             <Empty fieldType={type} placeholder={emptyTip} />

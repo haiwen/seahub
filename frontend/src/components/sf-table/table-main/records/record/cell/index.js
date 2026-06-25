@@ -177,7 +177,7 @@ const Cell = React.memo(({
   };
 
   const renderCellContent = useCallback(() => {
-    const columnFormatter = isValidElement(column.formatter) && cloneElement(column.formatter, { isCellSelected, height, cellRef, value: cellValue, column, record, treeNodeIndex, onChange: modifyRecord });
+    const columnFormatter = isValidElement(column.formatter) && cloneElement(column.formatter, { isCellSelected, height, cellRef, value: cellValue, column, record, treeNodeIndex, onChange: modifyRecord, readOnly: !cellEditable });
     if (showRecordAsTree && isNameColumn) {
       return (
         <div className="sf-table-cell-tree-node">
@@ -197,7 +197,7 @@ const Cell = React.memo(({
       );
     }
     return columnFormatter;
-  }, [isNameColumn, column, isCellSelected, height, cellValue, record, showRecordAsTree, treeNodeIndex, treeNodeDepth, hasChildNodes, isFoldedTreeNode, modifyRecord, toggleExpandTreeNode]);
+  }, [isNameColumn, column, isCellSelected, height, cellValue, record, showRecordAsTree, treeNodeIndex, treeNodeDepth, hasChildNodes, isFoldedTreeNode, modifyRecord, toggleExpandTreeNode, cellEditable]);
 
   return (
     <div key={`${record._id}-${column.key}`} {...containerProps} ref={cellRef}>
