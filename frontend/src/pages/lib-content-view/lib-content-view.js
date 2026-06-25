@@ -33,21 +33,10 @@ import LibDecryptDialog from '../../components/dialog/lib-decrypt-dialog';
 import FileUploader from '../../components/file-uploader/file-uploader';
 import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dirent-progress-dialog';
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
-
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
-import {
-  PRIVATE_FILE_TYPE,
-  DIRENT_DETAIL_SHOW_KEY,
-  TREE_PANEL_STATE_KEY,
-  RECENTLY_USED_LIST_KEY
-} from '../../constants';
-
+import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY, RECENTLY_USED_LIST_KEY } from '../../constants';
 import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, ROW_HEIGHT } from '../../metadata/constants';
-import {
-  MetadataStatusProvider,
-  FileOperationsProvider,
-  MetadataMiddlewareProvider
-} from '../../hooks';
+import { MetadataStatusProvider, FileOperationsProvider, MetadataMiddlewareProvider } from '../../hooks';
 import { MetadataProvider } from '../../metadata/hooks';
 import metadataAPI from '../../metadata/api';
 import { PRIVATE_COLUMN_KEY } from '../../metadata/constants/column/private';
@@ -83,10 +72,7 @@ import {
 } from '@/constants/dir-column-config';
 
 import { normalizeColumns } from '@/metadata/utils/column';
-import {
-  getDirTableColumnOrder,
-  setDirTableColumnOrder
-} from '@/components/dir-view-mode/dir-table-view/columns';
+import { getDirTableColumnOrder, setDirTableColumnOrder } from '@/components/dir-view-mode/dir-table-view/columns';
 
 import '../../css/lib-content-view.css';
 
@@ -3003,9 +2989,10 @@ class LibContentView extends React.Component {
                     <div className="cur-view-path lib-cur-view-path">
                       <div className={classnames(
                         'cur-view-path-left', {
-                        'w-100': !isDesktop,
-                        'animation-children': isDirentSelected
-                      })}>
+                          'w-100': !isDesktop,
+                          'animation-children': isDirentSelected
+                        })}
+                      >
                         {isDirentSelected ? (
                           [METADATA_MODE, TAGS_MODE, TRASH_MODE, CHAT_MODE].includes(currentMode) ? (
                             <ViewToolbar
