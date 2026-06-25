@@ -107,6 +107,7 @@ const ListView = ({ repoID, openImagePreview, renameTagFile, onTagFileContextMen
   const headers = [
     {
       isFixed: true,
+      name: 'select-input',
       width: 31,
       className: 'pl10 pr-2 cursor-pointer',
       children: (
@@ -135,10 +136,12 @@ const ListView = ({ repoID, openImagePreview, renameTagFile, onTagFileContextMen
       )
     }, {
       isFixed: true,
+      name: 'file-icon',
       width: 41,
       className: 'pl-2 pr-2',
     }, {
       isFixed: false,
+      name: 'file-name',
       width: 0.5,
       children: (
         <a className="d-inline-flex align-items-center table-sort-op" href="#" onClick={onSortName}>
@@ -147,9 +150,11 @@ const ListView = ({ repoID, openImagePreview, renameTagFile, onTagFileContextMen
       ),
     }, {
       isFixed: false,
+      name: 'file-tags',
       width: 0.24,
     }, {
       isFixed: false,
+      name: 'file-size',
       width: 0.11,
       children: (
         <a className="d-inline-flex align-items-center table-sort-op" href="#" onClick={onSortSize}>
@@ -158,6 +163,7 @@ const ListView = ({ repoID, openImagePreview, renameTagFile, onTagFileContextMen
       ),
     }, {
       isFixed: false,
+      name: 'file-last-update',
       width: 0.15,
       children: (
         <a className="d-inline-flex align-items-center table-sort-op" href="#" onClick={onSortTime}>
