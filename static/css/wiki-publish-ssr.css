@@ -380,10 +380,47 @@ html, body {
   padding: 0 1rem;
 }
 
+.cur-view-content .wiki-page-cover {
+  position: relative;
+  height: 30vh;
+  width: 100%;
+}
+
+.wiki-page-cover__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 @media (min-width: 768px) {
   .wiki-page-title-wrapper {
     padding: 0 142px;
   }
+}
+
+.wiki-page-icon-wrapper {
+  margin-top: 12px;
+  margin-bottom: 8px;
+  line-height: 78px;
+}
+
+.wiki-page-icon-wrapper.no-page-cover {
+  margin-top: -48px;
+}
+
+.wiki-page-icon-container {
+  position: relative;
+  width: 78px;
+  height: 78px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wiki-page-icon-container>span {
+  font-size: 66px;
+  font-family: EmojiMart, "Segoe UI Emoji", "Segoe UI Symbol", "Segoe UI", "Apple Color Emoji", "Twemoji Mozilla", "Noto Color Emoji", "Android Emoji";
 }
 
 .wiki-sdoc-title {
@@ -391,7 +428,7 @@ html, body {
   font-size: 26pt;
   font-weight: bold;
   padding-top: 0.5rem;
-  margin-bottom: 0.4em;
+  margin-bottom: 1.6em;
   color: var(--bs-body-color, #212529);
   word-break: break-word;
 }
@@ -740,8 +777,15 @@ html, body {
 
 .sdoc-header-row {
   position: relative;
-  padding-left: 20px;
-  margin-left: -20px;
+}
+
+.sdoc-header-row::before {
+  content: '';
+  position: absolute;
+  right: 100%;
+  top: 0;
+  width: 24px;
+  height: 100%;
 }
 
 .sdoc-header-collapse-prefix {
@@ -749,10 +793,11 @@ html, body {
   align-items: center;
   justify-content: center;
   position: absolute;
-  left: 0;
+  right: 100%;
   top: 50%;
   width: 16px;
   height: 16px;
+  margin-right: 4px;
   cursor: pointer;
   transform: translateY(-50%);
   opacity: 0;
@@ -765,6 +810,12 @@ html, body {
 .sdoc-header-4:hover .sdoc-header-collapse-prefix,
 .sdoc-header-5:hover .sdoc-header-collapse-prefix,
 .sdoc-header-6:hover .sdoc-header-collapse-prefix,
+.sdoc-header-1[data-sdoc-collapsed="true"] .sdoc-header-collapse-prefix,
+.sdoc-header-2[data-sdoc-collapsed="true"] .sdoc-header-collapse-prefix,
+.sdoc-header-3[data-sdoc-collapsed="true"] .sdoc-header-collapse-prefix,
+.sdoc-header-4[data-sdoc-collapsed="true"] .sdoc-header-collapse-prefix,
+.sdoc-header-5[data-sdoc-collapsed="true"] .sdoc-header-collapse-prefix,
+.sdoc-header-6[data-sdoc-collapsed="true"] .sdoc-header-collapse-prefix,
 .sdoc-header-collapse-prefix:hover,
 .sdoc-header-row:focus-within .sdoc-header-collapse-prefix {
   opacity: 1;

@@ -8,6 +8,7 @@ from datetime import datetime
 from constance import config
 from seaserv import seafile_api
 
+from django.conf import settings
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -27,6 +28,34 @@ from seahub.api2.endpoints.utils import sdoc_export_to_html
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+WIKI_COVER_LIST = {
+    'wiki-cover-1.jpg',
+    'wiki-cover-2.jpg',
+    'wiki-cover-3.jpg',
+    'wiki-cover-4.jpg',
+    'wiki-cover-5.jpg',
+    'wiki-cover-6.jpg',
+    'wiki-cover-7.jpg',
+    'wiki-cover-8.jpg',
+    'wiki-cover-9.jpg',
+}
+
+
+def get_wiki_cover_url(page):
+    cover_img_url = page.get('cover_img_url', '')
+    if not cover_img_url:
+        return ''
+
+    if cover_img_url in WIKI_COVER_LIST:
+        return '{}img/wiki/cover/{}'.format(settings.MEDIA_URL, cover_img_url)
+
+    doc_uuid = page.get('docUuid', '')
+    if not doc_uuid:
+        return ''
+
+    cover_name = cover_img_url[1:] if cover_img_url.startswith('/') else cover_img_url
+    return '/api/v2.1/seadoc/download-image/{}/{}'.format(doc_uuid, cover_name)
 
 
 @login_required
@@ -209,6 +238,15 @@ def wiki_publish_view(request, publish_url, page_id=None):
         file_path = page_info.get('path', '')
         wiki_title = page_info.get('name', '')
         page_map = {page['id']: page for page in pages}
+        current_page = page_map.get(page_id, {})
+        wiki_pages = {}
+        for page in pages:
+            wiki_pages[page['id']] = {
+                'name': page.get('name', ''),
+                'icon': page.get('icon', ''),
+                'cover_img_url': page.get('cover_img_url', ''),
+                'docUuid': page.get('docUuid', ''),
+            }
 
         def find_navigation_path(items, target_id):
             for nav_item in items:
@@ -302,6 +340,9 @@ def wiki_publish_view(request, publish_url, page_id=None):
             "wiki_html": wiki_html,
             "wiki_navigation": wiki_navigation,
             "wiki_breadcrumb": wiki_breadcrumb,
+            "current_page": current_page,
+            "current_page_cover_url": get_wiki_cover_url(current_page),
+            "wiki_pages_json": json.dumps(wiki_pages),
         })
         return render(request, template_name, render_context)
     except Exception as e:

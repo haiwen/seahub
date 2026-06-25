@@ -133,8 +133,20 @@
                     <div class="cur-view-content">
                         <div class="sdoc-scroll-container" id="wiki-scroll-container">
                             <div class="wiki-editor-container">
+                                {% if current_page_cover_url %}
+                                <div class="wiki-page-cover" id="wiki-page-cover">
+                                    <img class="wiki-page-cover__img" src="{{ current_page_cover_url }}" alt="{% trans 'Cover' %}">
+                                </div>
+                                {% endif %}
                                 {# Server-rendered page title #}
                                 <div class="wiki-page-title-wrapper">
+                                    {% if current_page.icon %}
+                                    <div class="wiki-page-icon-wrapper{% if current_page.cover_img_url %} no-page-cover{% endif %}" id="wiki-page-icon-wrapper">
+                                        <div class="wiki-page-icon-container" aria-hidden="true">
+                                            <span id="wiki-page-icon">{{ current_page.icon }}</span>
+                                        </div>
+                                    </div>
+                                    {% endif %}
                                     <h1 class="wiki-sdoc-title" id="wiki-page-title">{{ wiki_title }}</h1>
                                 </div>
                                 {# Server-rendered page body converted from the source sdoc file #}
@@ -311,7 +323,8 @@ window.wiki = {
     isWiki2: true,
     seadocServerUrl: "{{ seadoc_server_url }}",
     permission: "{{ permission }}",
-    publishUrl: "{{ publish_url }}"
+    publishUrl: "{{ publish_url }}",
+    pageMeta: JSON.parse('{{ wiki_pages_json|escapejs }}')
   }
 };
         </script>
@@ -610,6 +623,129 @@ function getElement(id) {
     return titleEl ? titleEl.textContent.trim() : '';
   }
 
+  function getPageMeta(pageId) {
+    var wikiConfig = window.wiki && window.wiki.config;
+    var pageMeta = wikiConfig && wikiConfig.pageMeta;
+    if (!pageMeta || !pageId) return null;
+
+    return pageMeta[pageId] || null;
+  }
+
+  function getDefaultFaviconUrl() {
+    var appConfig = window.app && window.app.config;
+    if (!appConfig) return '';
+
+    return appConfig.serviceURL + appConfig.mediaUrl + appConfig.faviconPath;
+  }
+
+  function getEmojiFaviconUrl(icon) {
+    if (!icon) return getDefaultFaviconUrl();
+    return 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>' + encodeURIComponent(icon) + '</text></svg>';
+  }
+
+  function getPageCoverUrl(pageMeta) {
+    if (!pageMeta || !pageMeta.cover_img_url) return '';
+
+    var appConfig = window.app && window.app.config;
+    if (!appConfig) return '';
+
+    var coverFile = pageMeta.cover_img_url;
+    var predefinedCoverPattern = /^wiki-cover-[1-9]\.jpg$/;
+    if (predefinedCoverPattern.test(coverFile)) {
+      return appConfig.serviceURL + appConfig.mediaUrl + 'img/wiki/cover/' + coverFile;
+    }
+
+    if (!pageMeta.docUuid) return '';
+    var normalizedCoverFile = coverFile.charAt(0) === '/' ? coverFile.slice(1) : coverFile;
+    return appConfig.serviceURL + '/api/v2.1/seadoc/download-image/' + pageMeta.docUuid + '/' + normalizedCoverFile;
+  }
+
+  function ensurePageCoverElement() {
+    var editorContainer = document.querySelector('.wiki-editor-container');
+    if (!editorContainer) return null;
+
+    var coverEl = getElement('wiki-page-cover');
+    if (coverEl) return coverEl;
+
+    coverEl = document.createElement('div');
+    coverEl.className = 'wiki-page-cover';
+    coverEl.id = 'wiki-page-cover';
+
+    var img = document.createElement('img');
+    img.className = 'wiki-page-cover__img';
+    img.alt = "{% trans 'Cover' %}";
+    coverEl.appendChild(img);
+
+    editorContainer.insertBefore(coverEl, editorContainer.firstChild);
+    return coverEl;
+  }
+
+  function updateWikiPageCover(pageId) {
+    var pageMeta = getPageMeta(pageId);
+    var coverUrl = getPageCoverUrl(pageMeta);
+    var coverEl = getElement('wiki-page-cover');
+
+    if (!coverUrl) {
+      if (coverEl && coverEl.parentNode) {
+        coverEl.parentNode.removeChild(coverEl);
+      }
+      return;
+    }
+
+    coverEl = ensurePageCoverElement();
+    if (!coverEl) return;
+
+    var coverImg = coverEl.querySelector('.wiki-page-cover__img');
+    if (!coverImg) return;
+
+    coverImg.src = coverUrl;
+  }
+
+  function updateWikiPageIcon(pageId) {
+    var pageMeta = getPageMeta(pageId) || {};
+    var iconWrapper = getElement('wiki-page-icon-wrapper');
+    var pageTitleWrapper = document.querySelector('.wiki-page-title-wrapper');
+    if (!pageTitleWrapper) return;
+
+    if (!pageMeta.icon) {
+      if (iconWrapper && iconWrapper.parentNode) {
+        iconWrapper.parentNode.removeChild(iconWrapper);
+      }
+      return;
+    }
+
+    if (!iconWrapper) {
+      iconWrapper = document.createElement('div');
+      iconWrapper.className = 'wiki-page-icon-wrapper';
+      iconWrapper.id = 'wiki-page-icon-wrapper';
+
+      var iconContainer = document.createElement('div');
+      iconContainer.className = 'wiki-page-icon-container';
+      iconContainer.setAttribute('aria-hidden', 'true');
+
+      var iconSpan = document.createElement('span');
+      iconSpan.id = 'wiki-page-icon';
+      iconContainer.appendChild(iconSpan);
+      iconWrapper.appendChild(iconContainer);
+      pageTitleWrapper.insertBefore(iconWrapper, pageTitleWrapper.firstChild);
+    }
+
+    iconWrapper.classList.toggle('no-page-cover', Boolean(pageMeta.cover_img_url));
+
+    var iconEl = getElement('wiki-page-icon');
+    if (iconEl) {
+      iconEl.textContent = pageMeta.icon;
+    }
+  }
+
+  function updateWikiPageFavicon(pageId) {
+    var favicon = getElement('favicon');
+    if (!favicon) return;
+
+    var pageMeta = getPageMeta(pageId) || {};
+    favicon.href = pageMeta.icon ? getEmojiFaviconUrl(pageMeta.icon) : getDefaultFaviconUrl();
+  }
+
   function updateWikiPageTitle(pageId) {
     var pageTitle = getElement('wiki-page-title');
     var title = getNavPageTitle(pageId);
@@ -784,6 +920,9 @@ function getElement(id) {
 
     syncActiveNavState(pageId);
     updateWikiPageTitle(pageId);
+    updateWikiPageIcon(pageId);
+    updateWikiPageCover(pageId);
+    updateWikiPageFavicon(pageId);
     updateWikiBreadcrumb(pageId);
     dispatchWikiNavigate(pageId);
     return true;
@@ -1049,7 +1188,11 @@ function getElement(id) {
     navigateToWikiPage(pageId, buildPageUrl(pageId), { skipHistory: true });
   });
 
-  updateWikiBreadcrumb(getPageIdFromPath(window.location.pathname) || getCurrentNavPageId());
+  var initialPageId = getPageIdFromPath(window.location.pathname) || getCurrentNavPageId();
+  updateWikiPageIcon(initialPageId);
+  updateWikiPageCover(initialPageId);
+  updateWikiPageFavicon(initialPageId);
+  updateWikiBreadcrumb(initialPageId);
 })();
         </script>
         {% render_bundle 'wikiViewer' 'js' %}
