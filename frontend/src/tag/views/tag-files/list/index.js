@@ -147,10 +147,7 @@ const ListView = ({ repoID, openImagePreview, renameTagFile, onTagFileContextMen
       ),
     }, {
       isFixed: false,
-      width: 0.06,
-    }, {
-      isFixed: false,
-      width: 0.18,
+      width: 0.24,
     }, {
       isFixed: false,
       width: 0.11,

@@ -1,6 +1,7 @@
 .sf-metadata-tags-main .tag-list-title .sf-metadata-ui-tags-container {
   width: fit-content;
   max-width: 100%;
+  overflow-x: hidden;
 }
 
 .tag-list-title .sf-metadata-ui-tags-container .sf-metadata-ui-tag {

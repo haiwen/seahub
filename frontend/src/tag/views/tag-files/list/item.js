@@ -159,7 +159,6 @@ const TagFile = ({ repoID, file, tagsData, isRenaming, onRenameCancel, onRenameC
       <td className="tag-list-title">
         <FileTagsFormatter value={tags} tagsData={tagsData} className="sf-metadata-tags-formatter" />
       </td>
-      <td className="operation"></td>
       <td className="file-size">{size || ''}</td>
       <td className="last-update" title={mtimeTip}>{mtimeRelative}</td>
     </tr>
