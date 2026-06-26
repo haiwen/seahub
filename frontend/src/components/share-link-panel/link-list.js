@@ -57,18 +57,18 @@ class LinkList extends React.Component {
     return (
       <div className="h-100 d-flex flex-column">
         <div className="d-flex justify-content-between align-items-center pb-2 mt-1 pr-1 border-bottom">
-          <h6 className="font-weight-normal m-0">{gettext('Share Link')}</h6>
-          <div className="d-flex">
+          <h6 className="font-weight-normal m-0 flex-shrink-0">{gettext('Share Link')}</h6>
+          <div className="d-flex flex-wrap justify-content-end">
             {selectedLinks.length == 0 ? (
               <>
-                <button className="btn btn-sm btn-outline-primary mr-2" onClick={this.props.setMode.bind(this, 'singleLinkCreation')}>{gettext('Generate Link')}</button>
-                <button className="btn btn-sm btn-outline-primary" onClick={this.props.setMode.bind(this, 'linksCreation')}>{gettext('Generate links in batch')}</button>
+                <button className="btn btn-sm btn-outline-primary my-1 my-sm-0" onClick={this.props.setMode.bind(this, 'singleLinkCreation')}>{gettext('Generate Link')}</button>
+                <button className="btn btn-sm btn-outline-primary ml-2 my-1 my-sm-0" onClick={this.props.setMode.bind(this, 'linksCreation')}>{gettext('Generate links in batch')}</button>
               </>
             ) : (
               <>
-                <button className="btn btn-sm btn-secondary mr-2" onClick={this.cancelSelectAllLinks}>{gettext('Cancel')}</button>
-                <button className="btn btn-sm btn-secondary mr-2" onClick={this.toggleDeleteShareLinksDialog}>{gettext('Delete')}</button>
-                <button className="btn btn-sm btn-secondary" onClick={this.exportSelectedLinks}>{gettext('Export')}</button>
+                <button className="btn btn-sm btn-secondary" onClick={this.cancelSelectAllLinks}>{gettext('Cancel')}</button>
+                <button className="btn btn-sm btn-secondary ml-2" onClick={this.toggleDeleteShareLinksDialog}>{gettext('Delete')}</button>
+                <button className="btn btn-sm btn-secondary ml-2" onClick={this.exportSelectedLinks}>{gettext('Export')}</button>
               </>
             )}
           </div>
@@ -78,7 +78,7 @@ class LinkList extends React.Component {
             <EmptyTip text={gettext('No items')} className="h-100 m-0" />
           ) : (
             <>
-              <table className="table-place-header">
+              <table className="table-place-header w-xs-250">
                 <thead>
                   <tr>
                     <th width="3%" className="text-center">
@@ -102,7 +102,7 @@ class LinkList extends React.Component {
                 </thead>
               </table>
               <div className='table-real-container' onScroll={handleScroll}>
-                <table className="table-real-content table-thead-hidden">
+                <table className="table-real-content table-thead-hidden w-xs-250">
                   <thead>
                     <tr>
                       <th width="3%" className="text-center"></th>
