@@ -54,8 +54,6 @@ const Cell = ({
     return value;
   }, [frozen, groupOffsetLeft, column, height, propsStyle]);
 
-  const canModifyColumnInfo = useMemo(() => canModifyColumnData && canModifyColumnData(column), [canModifyColumnData, column]);
-
   const getWidthFromMouseEvent = useCallback((e) => {
     let right = e.pageX || (e.touches && e.touches[0] && e.touches[0].pageX) || (e.changedTouches && e.changedTouches[e.changedTouches.length - 1].pageX);
     if (e.pageX === 0) {
@@ -189,24 +187,22 @@ const Cell = ({
         <div className="sf-table-column-content sf-table-header-cell-left d-flex align-items-center text-truncate">
           {cellContent}
         </div>
-        {canModifyColumnInfo && (
-          <HeaderDropdownMenu
-            ref={dropdownRef}
-            column={column}
-            view={props.view}
-            renameColumn={props.renameColumn}
-            deleteColumn={props.deleteColumn}
-            modifyColumnData={props.modifyColumnData}
-            canModifyView={canModifyView}
-            canModifyColumnData={canModifyColumnData}
-            canDeleteColumn={canDeleteColumn}
-            canRenameColumn={canRenameColumn}
-          />
-        )}
+        <HeaderDropdownMenu
+          ref={dropdownRef}
+          column={column}
+          view={props.view}
+          renameColumn={props.renameColumn}
+          deleteColumn={props.deleteColumn}
+          modifyColumnData={props.modifyColumnData}
+          canModifyView={canModifyView}
+          canModifyColumnData={canModifyColumnData}
+          canDeleteColumn={canDeleteColumn}
+          canRenameColumn={canRenameColumn}
+        />
         <ResizeColumnHandle onDrag={onDraggingColumnWidth} onDragEnd={handleDragEndColumnWidth} />
       </div>
     );
-  }, [isLastFrozenCell, isNameColumn, style, key, onContextMenu, cellContent, canModifyColumnInfo, column, props.view, props.renameColumn, props.deleteColumn, props.modifyColumnData, canModifyView, canModifyColumnData, canDeleteColumn, canRenameColumn, onDraggingColumnWidth, handleDragEndColumnWidth, handleHeaderCellClick, frozen]);
+  }, [isLastFrozenCell, isNameColumn, style, key, onContextMenu, cellContent, column, props.view, props.renameColumn, props.deleteColumn, props.modifyColumnData, canModifyView, canModifyColumnData, canDeleteColumn, canRenameColumn, onDraggingColumnWidth, handleDragEndColumnWidth, handleHeaderCellClick, frozen]);
 
   if (!moveable || isNameColumn) {
     return (

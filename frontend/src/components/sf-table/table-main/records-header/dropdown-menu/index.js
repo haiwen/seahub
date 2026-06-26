@@ -235,6 +235,20 @@ const HeaderDropdownMenu = forwardRef(({
     return items;
   }, [column, canModifyColumnData, canDeleteColumn, canRenameColumn, canModifyView, getDateFormatItems, openOptionPopover, openNumberFormatPopover, openRenamePopover, onDelete, modifySort]);
 
+  const hasEnabledMenuItem = useMemo(() => {
+    return menuItems.some(item => {
+      if (item === 'Divider') return false;
+      if (Array.isArray(item.children) && item.children.length > 0) {
+        return item.children.some(child => !child.disabled);
+      }
+      return !item.disabled;
+    });
+  }, [menuItems]);
+
+  if (!hasEnabledMenuItem) {
+    return null;
+  }
+
   return (
     <>
       <CustomDropdown
