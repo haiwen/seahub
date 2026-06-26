@@ -328,7 +328,7 @@ class Item extends Component {
                     id={`view-${index}`}
                     className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
                     symbol="link"
-                    tooltip={gettext('View')}
+                    tooltip={gettext('View link')}
                     op={this.viewLink}
                   />
                 }
@@ -336,7 +336,7 @@ class Item extends Component {
                   id={`delete-${index}`}
                   className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
                   symbol="delete1"
-                  tooltip={gettext('Remove')}
+                  tooltip={gettext('Delete')}
                   op={this.removeLink}
                 />
               </div>
@@ -363,9 +363,9 @@ class Item extends Component {
                     <DropdownItem className="mobile-menu-item" onClick={this.togglePermSelectDialog}>{gettext('Permission')}</DropdownItem>
                   }
                   {!item.is_expired &&
-                    <DropdownItem className="mobile-menu-item" onClick={this.viewLink}>{gettext('View')}</DropdownItem>
+                    <DropdownItem className="mobile-menu-item" onClick={this.viewLink}>{gettext('View link')}</DropdownItem>
                   }
-                  <DropdownItem className="mobile-menu-item" onClick={this.removeLink}>{gettext('Remove')}</DropdownItem>
+                  <DropdownItem className="mobile-menu-item" onClick={this.removeLink}>{gettext('Delete')}</DropdownItem>
                 </MobileItemMenu>
               </td>
             </tr>
