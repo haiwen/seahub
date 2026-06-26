@@ -247,7 +247,6 @@ class LibraryOperationMenu extends React.Component {
     operations.pop(); // removed the last item 'Advanced'
     operations.unshift('Delete');
     operations.unshift('Share');
-    this.props.isStarred ? operations.unshift('Unstar') : operations.unshift('Star');
 
     return (
       <MobileItemMenu isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
