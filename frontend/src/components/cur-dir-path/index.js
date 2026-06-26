@@ -85,15 +85,18 @@ class CurDirPath extends React.Component {
           onItemMove={this.props.onItemMove}
           loadDirentList={this.props.loadDirentList}
         />
-        {!this.props.isDesktop && this.props.direntList.length > 0 &&
-        <span className="action-icon d-flex align-items-center" onClick={this.toggleSortOptionsDialog}><Icon symbol="sort-mobile" aria-hidden="true" /></span>}
+        {!this.props.isDesktop && this.props.direntList.length > 0 && (
+          <span className="action-icon d-flex align-items-center" onClick={this.toggleSortOptionsDialog}>
+            <Icon symbol="sort" aria-hidden="true" />
+          </span>
+        )}
         {this.state.isSortOptionsDialogOpen &&
-        <SortOptionsDialog
-          toggleDialog={this.toggleSortOptionsDialog}
-          sortBy={this.props.sortBy}
-          sortOrder={this.props.sortOrder}
-          sortItems={this.props.sortItems}
-        />
+          <SortOptionsDialog
+            toggleDialog={this.toggleSortOptionsDialog}
+            sortBy={this.props.sortBy}
+            sortOrder={this.props.sortOrder}
+            sortItems={this.props.sortItems}
+          />
         }
       </div>
     );

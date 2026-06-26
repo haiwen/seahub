@@ -543,7 +543,7 @@ textarea::placeholder {
 .action-icon,
 .attr-action-icon {
   margin-left: 0.5rem;
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-style: normal;
   line-height: 1;
   cursor: pointer;

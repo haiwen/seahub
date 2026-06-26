@@ -691,4 +691,11 @@
   .custom-modal .repo-list-item.active::before {
     display: none;
   }
+
+  .dir-view-path .path-item-dropdown-toggle {
+    width: 12px;
+    height: 12px;
+    transform: translateY(1px);
+    margin-left: 2px;
+  }
 }
