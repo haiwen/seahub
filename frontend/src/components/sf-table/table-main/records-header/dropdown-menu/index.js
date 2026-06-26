@@ -227,7 +227,7 @@ const HeaderDropdownMenu = forwardRef(({
     items.push({
       key: 'delete',
       label: gettext('Delete property'),
-      icon_dom: <Icon className="sf-metadata-icon" symbol="delete" />,
+      icon_dom: <Icon className="sf-metadata-icon" symbol="delete1" />,
       disabled: !canDeleteColumnFn,
       onClick: onDelete,
     });
