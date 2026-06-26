@@ -37,12 +37,42 @@ class ShareAdminLinksNav extends Component {
     super(props);
     this.itemRefs = [];
     this.navRef = null;
-    this.state = { ready: false };
+    this.state = { indicatorStyle: {} };
   }
 
   componentDidMount() {
-    this.setState({ ready: true });
+    this.updateIndicator();
   }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.activeItem !== this.props.activeItem) {
+      this.updateIndicator();
+    }
+  }
+
+  updateIndicator = () => {
+    const { activeItem } = this.props;
+    const navItems = [
+      { name: SHARE_LINKS, path: 'share-admin-share-links/', text: gettext('Share Links'), visible: activeItem === SHARE_LINKS || canGenerateShareLink },
+      { name: UPLOAD_LINKS, path: 'share-admin-upload-links/', text: gettext('Upload Links'), visible: activeItem === UPLOAD_LINKS || canGenerateUploadLink }
+    ].filter(item => item.visible);
+
+    if (navItems.length <= 1) return;
+
+    const activeIndex = Math.max(navItems.findIndex(item => item.name === activeItem), 0);
+    const activeLink = this.itemRefs[activeIndex];
+    const navRect = this.navRef?.getBoundingClientRect();
+    const activeLinkRect = activeLink?.getBoundingClientRect();
+    const indicatorWidth = (activeLink?.offsetWidth || 0) + 16;
+    const indicatorOffset = navRect && activeLinkRect ? activeLinkRect.left - navRect.left : 0;
+
+    this.setState({
+      indicatorStyle: {
+        '--indicator-width': `${indicatorWidth}px`,
+        '--indicator-offset': `${indicatorOffset}px`
+      }
+    });
+  };
 
   render() {
     const { activeItem, dropdownItems } = this.props;
@@ -65,21 +95,11 @@ class ShareAdminLinksNav extends Component {
       return null;
     }
 
-    const activeIndex = Math.max(navItems.findIndex(item => item.name === activeItem), 0);
-    const activeLink = this.itemRefs[activeIndex];
-    const navRect = this.navRef?.getBoundingClientRect();
-    const activeLinkRect = activeLink?.getBoundingClientRect();
-    const indicatorWidth = activeLink?.offsetWidth || 0;
-    const indicatorOffset = navRect && activeLinkRect ? activeLinkRect.left - navRect.left : 0;
-
     return (
       <ul
         className="nav nav-indicator-container position-relative"
         ref={el => this.navRef = el}
-        style={{
-          '--indicator-width': `${indicatorWidth}px`,
-          '--indicator-offset': `${indicatorOffset}px`
-        }}
+        style={this.state.indicatorStyle}
       >
         {navItems.map((item, index) => {
           const isActive = item.name === activeItem;
