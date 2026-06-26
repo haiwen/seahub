@@ -79,10 +79,6 @@
   cursor: pointer;
 }
 
-.file-chooser-search-container .searched-list-item.tr-active {
-  background-color: rgba(0, 0, 0, 0.04) !important;
-}
-
 .file-chooser-search-container .searched-item-icon {
   border-radius: 3px 0 0 3px;
 }

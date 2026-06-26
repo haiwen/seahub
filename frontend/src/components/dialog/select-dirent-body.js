@@ -199,6 +199,9 @@ class SelectDirentBody extends React.Component {
                   className="file-chooser-searcher-inline"
                   onUpdateSearchStatus={this.props.onUpdateSearchStatus}
                   onUpdateSearchResults={this.props.onUpdateSearchResults}
+                  searchResults={searchResults}
+                  onInputArrowKeyDown={this.props.onSearchInputArrowKeyDown}
+                  onInputEnterKeyDown={this.props.onSearchInputEnterKeyDown}
                 />
               </div>
             )}
@@ -218,6 +221,10 @@ class SelectDirentBody extends React.Component {
               onSearchedItemClick={this.props.onSearchedItemClick}
               onSearchedItemDoubleClick={this.props.onSearchedItemDoubleClick}
               selectedSearchedRepo={selectedSearchedRepo}
+              currentSearchedItem={selectedSearchedItem}
+              currentSearchedIndex={this.props.currentSearchedIndex}
+              enableSearchedListDocumentKeyboardNavigation={false}
+              isKeyboardSelectionActive={this.props.isKeyboardSelectionActive}
               newFolderName={this.newFolderName}
               initToShowChildren={this.props.initToShowChildren}
             />
@@ -275,6 +282,8 @@ SelectDirentBody.propTypes = {
   onUpdateSearchResults: PropTypes.func,
   searchStatus: PropTypes.string,
   searchResults: PropTypes.array,
+  onSearchInputArrowKeyDown: PropTypes.func,
+  onSearchInputEnterKeyDown: PropTypes.func,
   onSearchedItemClick: PropTypes.func,
   onSearchedItemDoubleClick: PropTypes.func,
   selectedSearchedRepo: PropTypes.object,
@@ -282,6 +291,8 @@ SelectDirentBody.propTypes = {
   onAddFolder: PropTypes.func,
   initToShowChildren: PropTypes.bool,
   selectedSearchedItem: PropTypes.object,
+  currentSearchedIndex: PropTypes.number,
+  isKeyboardSelectionActive: PropTypes.bool,
 };
 
 export default SelectDirentBody;

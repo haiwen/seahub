@@ -14,7 +14,8 @@ const RepoListWrapper = (props) => {
   const {
     mode, isShowFile = true, fileSuffixes = [], currentPath, isCurrentRepoShow, currentRepoInfo, selectedRepo,
     selectedPath, isOtherRepoShow, selectedItemInfo, repoList,
-    searchStatus, searchResults, onSearchedItemClick, onSearchedItemDoubleClick, selectedSearchedRepo, newFolderName, initToShowChildren
+    searchStatus, searchResults, onSearchedItemClick, onSearchedItemDoubleClick, selectedSearchedRepo, newFolderName, initToShowChildren,
+    currentSearchedItem, currentSearchedIndex, enableSearchedListDocumentKeyboardNavigation, isKeyboardSelectionActive
   } = props;
 
   const onScroll = (event) => {
@@ -48,6 +49,10 @@ const RepoListWrapper = (props) => {
                 searchResults={searchResults}
                 onItemClick={onSearchedItemClick}
                 onSearchedItemDoubleClick={onSearchedItemDoubleClick}
+                selectedItemInfo={currentSearchedItem}
+                currentIndex={currentSearchedIndex}
+                enableDocumentKeyboardNavigation={enableSearchedListDocumentKeyboardNavigation}
+                isKeyboardSelectionActive={isKeyboardSelectionActive}
               />
             )}
           </>
@@ -227,6 +232,10 @@ RepoListWrapper.propTypes = {
   selectedSearchedRepo: PropTypes.object,
   newFolderName: PropTypes.string,
   initToShowChildren: PropTypes.bool,
+  currentSearchedItem: PropTypes.object,
+  currentSearchedIndex: PropTypes.number,
+  enableSearchedListDocumentKeyboardNavigation: PropTypes.bool,
+  isKeyboardSelectionActive: PropTypes.bool,
 };
 
 export default RepoListWrapper;

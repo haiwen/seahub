@@ -7,7 +7,8 @@ import Icon from '../icon';
 import './searched-list-item.css';
 
 const propTypes = {
-  currentItem: PropTypes.object,
+  isSelected: PropTypes.bool,
+  isKeyboardSelected: PropTypes.bool,
   onItemClick: PropTypes.func.isRequired,
   onSearchedItemDoubleClick: PropTypes.func.isRequired,
   item: PropTypes.object,
@@ -24,18 +25,18 @@ class SearchedListItem extends React.Component {
   };
 
   render() {
-    let { item, currentItem } = this.props;
+    let { item, isSelected, isKeyboardSelected } = this.props;
     let { path, repo_name } = item;
     return (
       <tr
         className={classnames('searched-list-item', {
-          'tr-active': currentItem && item.repo_id === currentItem.repo_id && item.path === currentItem.path,
           'searched-dir': item.is_dir,
+          'searched-list-item-keyboard-selected': isKeyboardSelected,
         })}
         onClick={this.onClick}
         onDoubleClick={this.searchItemDoubleClick}
         tabIndex={0}
-        aria-selected={!!(currentItem && item.repo_id === currentItem.repo_id && item.path === currentItem.path)}
+        aria-selected={isSelected}
         onKeyDown={Utils.onKeyDown}
       >
         <td className="searched-item-cell" colSpan={3}>
@@ -49,6 +50,9 @@ class SearchedListItem extends React.Component {
             </span>
             <span className="searched-item-link">
               <span className="item-link">{repo_name}{path === '/' ? '' : path}</span>
+            </span>
+            <span className={classnames('searched-item-check', { invisible: !isSelected })}>
+              <Icon symbol="check" />
             </span>
           </div>
         </td>

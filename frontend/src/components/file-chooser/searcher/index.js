@@ -14,7 +14,14 @@ export const SearchStatus = {
   RESULTS: 'results',
 };
 
-const Searcher = ({ className = '', onUpdateSearchStatus, onUpdateSearchResults }) => {
+const Searcher = ({
+  className = '',
+  onUpdateSearchStatus,
+  onUpdateSearchResults,
+  searchResults = [],
+  onInputArrowKeyDown,
+  onInputEnterKeyDown,
+}) => {
   const [inputValue, setInputValue] = useState('');
 
   const searchTimer = useRef(null);
@@ -98,8 +105,26 @@ const Searcher = ({ className = '', onUpdateSearchStatus, onUpdateSearchResults 
   };
 
   const handleKeyDown = useCallback((e) => {
+    if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && searchResults.length > 0) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (onInputArrowKeyDown) {
+        onInputArrowKeyDown(e.key);
+      }
+      return;
+    }
+
+    if (e.key === 'Enter' && searchResults.length > 0) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (onInputEnterKeyDown) {
+        onInputEnterKeyDown();
+      }
+      return;
+    }
+
     e.stopPropagation();
-  }, []);
+  }, [onInputArrowKeyDown, onInputEnterKeyDown, searchResults.length]);
 
   const onCloseSearching = useCallback(() => {
     clearSearchRequest();
@@ -136,6 +161,9 @@ Searcher.propTypes = {
   className: PropTypes.string,
   onUpdateSearchStatus: PropTypes.func,
   onUpdateSearchResults: PropTypes.func,
+  searchResults: PropTypes.array,
+  onInputArrowKeyDown: PropTypes.func,
+  onInputEnterKeyDown: PropTypes.func,
 };
 
 export default Searcher;

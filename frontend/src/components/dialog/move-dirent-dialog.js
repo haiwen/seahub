@@ -35,6 +35,8 @@ class MoveDirentDialog extends React.Component {
       selectedPath: '',
       selectedSearchedRepo: null,
       selectedSearchedItem: { repoID: '', filePath: '' },
+      currentSearchedIndex: -1,
+      isKeyboardSelectionActive: false,
       searchStatus: '',
       searchResults: [],
       errMessage: '',
@@ -220,7 +222,11 @@ class MoveDirentDialog extends React.Component {
       });
     }
 
-    this.setState({ selectedSearchedItem: { repoID: '', filePath: '' } });
+    this.setState({
+      selectedSearchedItem: { repoID: '', filePath: '' },
+      currentSearchedIndex: -1,
+      isKeyboardSelectionActive: false,
+    });
   };
 
   onUpdateSearchStatus = (status) => {
@@ -232,20 +238,26 @@ class MoveDirentDialog extends React.Component {
   onUpdateSearchResults = (results) => {
     if (this.state.mode !== MODE_TYPE_MAP.SEARCH_RESULTS) return;
 
-    if (results.length > 0) {
-      const firstResult = results[0];
-      this.setState({
-        selectedRepo: new RepoInfo(firstResult),
-        selectedPath: firstResult.path
-      });
-    } else {
-      this.setState({
-        selectedRepo: null,
-        selectedPath: '',
-        selectedSearchedItem: { repoID: '', filePath: '' },
-      });
-    }
-    this.setState({ searchResults: results });
+    this.setState({
+      searchResults: results,
+      selectedRepo: null,
+      selectedPath: '',
+      selectedSearchedItem: { repoID: '', filePath: '' },
+      currentSearchedIndex: -1,
+      isKeyboardSelectionActive: false,
+    });
+  };
+
+  selectSearchedItem = (item, index, options = {}) => {
+    const { isKeyboardSelectionActive = false } = options;
+    this.setState({
+      selectedRepo: new RepoInfo(item),
+      selectedPath: item.path,
+      selectedSearchedItem: { repoID: item.repo_id, filePath: item.path },
+      currentSearchedIndex: index,
+      isKeyboardSelectionActive,
+      errMessage: '',
+    });
   };
 
   onDirentItemClick = (repo, selectedPath) => {
@@ -264,17 +276,39 @@ class MoveDirentDialog extends React.Component {
       selectedPath: '',
       initToShowChildren: true,
       selectedSearchedItem: { repoID: '', filePath: '' },
+      currentSearchedIndex: -1,
+      isKeyboardSelectionActive: false,
     });
   };
 
-  onSearchedItemClick = (item) => {
-    item['type'] = item.is_dir ? 'dir' : 'file';
-    let repo = new RepoInfo(item);
-    this.onDirentItemClick(repo, item.path, item);
+  onSearchedItemClick = (item, index) => {
+    const resultIndex = typeof index === 'number'
+      ? index
+      : this.state.searchResults.findIndex(result => result.repo_id === item.repo_id && result.path === item.path);
+    this.selectSearchedItem(item, resultIndex, { isKeyboardSelectionActive: false });
+  };
+
+  onSearchInputArrowKeyDown = (key) => {
+    const { searchResults, currentSearchedIndex } = this.state;
+    if (searchResults.length === 0) return;
+
+    const nextIndex = key === 'ArrowDown'
+      ? (currentSearchedIndex < 0 ? 0 : (currentSearchedIndex + 1) % searchResults.length)
+      : (currentSearchedIndex < 0 ? searchResults.length - 1 : (currentSearchedIndex - 1 + searchResults.length) % searchResults.length);
+
+    this.selectSearchedItem(searchResults[nextIndex], nextIndex, { isKeyboardSelectionActive: true });
+  };
+
+  onSearchInputEnterKeyDown = () => {
+    const { currentSearchedIndex, searchResults } = this.state;
+    if (currentSearchedIndex < 0 || !searchResults[currentSearchedIndex]) return;
+
+    this.onSearchedItemDoubleClick(searchResults[currentSearchedIndex]);
   };
 
   onSearchedItemDoubleClick = (item) => {
-    if (item.type !== 'dir') return;
+    const itemType = item.type || (item.is_dir ? 'dir' : 'file');
+    if (itemType !== 'dir') return;
 
     seafileAPI.getRepoInfo(item.repo_id).then(res => {
       const repoInfo = new RepoInfo(res.data);
@@ -286,6 +320,7 @@ class MoveDirentDialog extends React.Component {
         selectedSearchedRepo: repoInfo,
         selectedPath: path,
         selectedSearchedItem: { repoID: item.repo_id, filePath: path },
+        currentSearchedIndex: -1,
         initToShowChildren: true,
       });
     }).catch(err => {
@@ -344,7 +379,11 @@ class MoveDirentDialog extends React.Component {
           onUpdateSearchResults={this.onUpdateSearchResults}
           searchStatus={searchStatus}
           searchResults={searchResults}
+          onSearchInputArrowKeyDown={this.onSearchInputArrowKeyDown}
+          onSearchInputEnterKeyDown={this.onSearchInputEnterKeyDown}
           selectedSearchedItem={this.state.selectedSearchedItem}
+          currentSearchedIndex={this.state.currentSearchedIndex}
+          isKeyboardSelectionActive={this.state.isKeyboardSelectionActive}
           onSearchedItemClick={this.onSearchedItemClick}
           onSearchedItemDoubleClick={this.onSearchedItemDoubleClick}
           selectedSearchedRepo={selectedSearchedRepo}
