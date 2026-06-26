@@ -202,6 +202,7 @@ class SelectDirentBody extends React.Component {
                   searchResults={searchResults}
                   onInputArrowKeyDown={this.props.onSearchInputArrowKeyDown}
                   onInputEnterKeyDown={this.props.onSearchInputEnterKeyDown}
+                  inputRef={this.props.searchInputRef}
                 />
               </div>
             )}
@@ -284,6 +285,10 @@ SelectDirentBody.propTypes = {
   searchResults: PropTypes.array,
   onSearchInputArrowKeyDown: PropTypes.func,
   onSearchInputEnterKeyDown: PropTypes.func,
+  searchInputRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.any }),
+  ]),
   onSearchedItemClick: PropTypes.func,
   onSearchedItemDoubleClick: PropTypes.func,
   selectedSearchedRepo: PropTypes.object,

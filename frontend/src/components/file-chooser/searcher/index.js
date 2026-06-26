@@ -21,6 +21,7 @@ const Searcher = ({
   searchResults = [],
   onInputArrowKeyDown,
   onInputEnterKeyDown,
+  inputRef,
 }) => {
   const [inputValue, setInputValue] = useState('');
 
@@ -144,6 +145,7 @@ const Searcher = ({
           value={inputValue}
           onChange={handleSearchInputChange}
           onKeyDown={handleKeyDown}
+          innerRef={inputRef}
           autoFocus
         />
         {inputValue.length !== 0 && (
@@ -164,6 +166,10 @@ Searcher.propTypes = {
   searchResults: PropTypes.array,
   onInputArrowKeyDown: PropTypes.func,
   onInputEnterKeyDown: PropTypes.func,
+  inputRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.any }),
+  ]),
 };
 
 export default Searcher;

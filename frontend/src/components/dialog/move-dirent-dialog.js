@@ -27,6 +27,7 @@ class MoveDirentDialog extends React.Component {
 
   constructor(props) {
     super(props);
+    this.searchInputRef = React.createRef();
     this.state = {
       mode: MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY,
       currentRepo: { repo_id: this.props.repoID },
@@ -286,6 +287,9 @@ class MoveDirentDialog extends React.Component {
       ? index
       : this.state.searchResults.findIndex(result => result.repo_id === item.repo_id && result.path === item.path);
     this.selectSearchedItem(item, resultIndex, { isKeyboardSelectionActive: false });
+    if (this.searchInputRef.current) {
+      this.searchInputRef.current.focus();
+    }
   };
 
   onSearchInputArrowKeyDown = (key) => {
@@ -300,10 +304,15 @@ class MoveDirentDialog extends React.Component {
   };
 
   onSearchInputEnterKeyDown = () => {
+    if (this.state.selectedPath) {
+      this.handleSubmit();
+      return;
+    }
+
     const { currentSearchedIndex, searchResults } = this.state;
     if (currentSearchedIndex < 0 || !searchResults[currentSearchedIndex]) return;
 
-    this.onSearchedItemDoubleClick(searchResults[currentSearchedIndex]);
+    this.selectSearchedItem(searchResults[currentSearchedIndex], currentSearchedIndex, { isKeyboardSelectionActive: true });
   };
 
   onSearchedItemDoubleClick = (item) => {
@@ -381,6 +390,7 @@ class MoveDirentDialog extends React.Component {
           searchResults={searchResults}
           onSearchInputArrowKeyDown={this.onSearchInputArrowKeyDown}
           onSearchInputEnterKeyDown={this.onSearchInputEnterKeyDown}
+          searchInputRef={this.searchInputRef}
           selectedSearchedItem={this.state.selectedSearchedItem}
           currentSearchedIndex={this.state.currentSearchedIndex}
           isKeyboardSelectionActive={this.state.isKeyboardSelectionActive}
