@@ -18,10 +18,6 @@ const Searcher = ({
   className = '',
   onUpdateSearchStatus,
   onUpdateSearchResults,
-  searchResults = [],
-  onInputArrowKeyDown,
-  onInputEnterKeyDown,
-  inputRef,
 }) => {
   const [inputValue, setInputValue] = useState('');
 
@@ -118,29 +114,8 @@ const Searcher = ({
     const isImeComposing = isComposingRef.current || e.nativeEvent?.isComposing || e.keyCode === 229;
     if (isImeComposing) {
       e.stopPropagation();
-      return;
     }
-
-    if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && searchResults.length > 0) {
-      e.preventDefault();
-      e.stopPropagation();
-      if (onInputArrowKeyDown) {
-        onInputArrowKeyDown(e.key);
-      }
-      return;
-    }
-
-    if (e.key === 'Enter' && searchResults.length > 0) {
-      e.preventDefault();
-      e.stopPropagation();
-      if (onInputEnterKeyDown) {
-        onInputEnterKeyDown();
-      }
-      return;
-    }
-
-    e.stopPropagation();
-  }, [onInputArrowKeyDown, onInputEnterKeyDown, searchResults.length]);
+  }, []);
 
   const onCloseSearching = useCallback(() => {
     clearSearchRequest();
@@ -162,7 +137,6 @@ const Searcher = ({
           onKeyDown={handleKeyDown}
           onCompositionStart={handleCompositionStart}
           onCompositionEnd={handleCompositionEnd}
-          innerRef={inputRef}
           autoFocus
         />
         {inputValue.length !== 0 && (
@@ -180,13 +154,6 @@ Searcher.propTypes = {
   className: PropTypes.string,
   onUpdateSearchStatus: PropTypes.func,
   onUpdateSearchResults: PropTypes.func,
-  searchResults: PropTypes.array,
-  onInputArrowKeyDown: PropTypes.func,
-  onInputEnterKeyDown: PropTypes.func,
-  inputRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.any }),
-  ]),
 };
 
 export default Searcher;

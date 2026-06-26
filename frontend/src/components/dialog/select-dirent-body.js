@@ -146,6 +146,26 @@ class SelectDirentBody extends React.Component {
     this.props.setSelectedPath('');
   };
 
+  handleSearchPanelKeyDown = (event) => {
+    const { mode, searchResults } = this.props;
+    if (mode !== MODE_TYPE_MAP.SEARCH_RESULTS || !isPro || searchResults.length === 0) return;
+
+    if (event.nativeEvent?.isComposing || event.keyCode === 229) return;
+
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      event.stopPropagation();
+      this.props.onSearchInputArrowKeyDown?.(event.key);
+      return;
+    }
+
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      event.stopPropagation();
+      this.props.onSearchInputEnterKeyDown?.();
+    }
+  };
+
   render() {
     const { mode, repoList, currentRepo, selectedRepo, currentPath, selectedPath, isSupportOtherLibraries = true, errMessage, searchStatus, searchResults, selectedSearchedRepo, selectedSearchedItem } = this.props;
     let repoListWrapperKey = 'repo-list-wrapper';
@@ -192,17 +212,16 @@ class SelectDirentBody extends React.Component {
           )}
         </Col>
         <Col xs="12" md="9" className='file-list-col'>
-          <ModalBody className={mode === MODE_TYPE_MAP.SEARCH_RESULTS ? 'copy-move-dirent-search-body' : ''}>
+          <ModalBody
+            className={mode === MODE_TYPE_MAP.SEARCH_RESULTS ? 'copy-move-dirent-search-body' : ''}
+            onKeyDown={this.handleSearchPanelKeyDown}
+          >
             {(mode === MODE_TYPE_MAP.SEARCH_RESULTS && isPro) && (
               <div className="copy-move-dirent-search-input">
                 <Searcher
                   className="file-chooser-searcher-inline"
                   onUpdateSearchStatus={this.props.onUpdateSearchStatus}
                   onUpdateSearchResults={this.props.onUpdateSearchResults}
-                  searchResults={searchResults}
-                  onInputArrowKeyDown={this.props.onSearchInputArrowKeyDown}
-                  onInputEnterKeyDown={this.props.onSearchInputEnterKeyDown}
-                  inputRef={this.props.searchInputRef}
                 />
               </div>
             )}
@@ -285,10 +304,6 @@ SelectDirentBody.propTypes = {
   searchResults: PropTypes.array,
   onSearchInputArrowKeyDown: PropTypes.func,
   onSearchInputEnterKeyDown: PropTypes.func,
-  searchInputRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.any }),
-  ]),
   onSearchedItemClick: PropTypes.func,
   onSearchedItemDoubleClick: PropTypes.func,
   selectedSearchedRepo: PropTypes.object,

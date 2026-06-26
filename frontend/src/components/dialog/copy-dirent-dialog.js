@@ -28,7 +28,6 @@ class CopyDirent extends React.Component {
 
   constructor(props) {
     super(props);
-    this.searchInputRef = React.createRef();
     this.state = {
       mode: MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY,
       currentRepo: { repo_id: this.props.repoID },
@@ -266,9 +265,6 @@ class CopyDirent extends React.Component {
       ? index
       : this.state.searchResults.findIndex(result => result.repo_id === item.repo_id && result.path === item.path);
     this.selectSearchedItem(item, resultIndex, { isKeyboardSelectionActive: false });
-    if (this.searchInputRef.current) {
-      this.searchInputRef.current.focus();
-    }
   };
 
   onSearchInputArrowKeyDown = (key) => {
@@ -389,7 +385,6 @@ class CopyDirent extends React.Component {
           searchResults={searchResults}
           onSearchInputArrowKeyDown={this.onSearchInputArrowKeyDown}
           onSearchInputEnterKeyDown={this.onSearchInputEnterKeyDown}
-          searchInputRef={this.searchInputRef}
           selectedSearchedItem={this.state.selectedSearchedItem}
           currentSearchedIndex={this.state.currentSearchedIndex}
           isKeyboardSelectionActive={this.state.isKeyboardSelectionActive}
