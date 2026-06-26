@@ -27,6 +27,7 @@ const Searcher = ({
 
   const searchTimer = useRef(null);
   const source = useRef(null);
+  const isComposingRef = useRef(false);
 
   const clearSearchRequest = useCallback(() => {
     if (searchTimer.current) {
@@ -105,7 +106,21 @@ const Searcher = ({
     return items;
   };
 
+  const handleCompositionStart = useCallback(() => {
+    isComposingRef.current = true;
+  }, []);
+
+  const handleCompositionEnd = useCallback(() => {
+    isComposingRef.current = false;
+  }, []);
+
   const handleKeyDown = useCallback((e) => {
+    const isImeComposing = isComposingRef.current || e.nativeEvent?.isComposing || e.keyCode === 229;
+    if (isImeComposing) {
+      e.stopPropagation();
+      return;
+    }
+
     if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && searchResults.length > 0) {
       e.preventDefault();
       e.stopPropagation();
@@ -145,6 +160,8 @@ const Searcher = ({
           value={inputValue}
           onChange={handleSearchInputChange}
           onKeyDown={handleKeyDown}
+          onCompositionStart={handleCompositionStart}
+          onCompositionEnd={handleCompositionEnd}
           innerRef={inputRef}
           autoFocus
         />
