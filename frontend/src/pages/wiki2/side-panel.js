@@ -250,17 +250,17 @@ class SidePanel extends PureComponent {
     wikiAPI.createWiki2Page(wikiId, pageName, currentPageId, insert_position).then(res => {
       this.isAddingPage = false;
       const { page_id, obj_name, doc_uuid, parent_dir, page_name } = res.data.file_info;
-      this.addPageInside({
-        parentPageId: currentPageId,
-        page_id: page_id,
-        name: page_name,
-        icon: '',
-        path: parent_dir === '/' ? `/${obj_name}` : `${parent_dir}/${obj_name}`,
-        docUuid: doc_uuid,
-        successCallback: () => {},
-        errorCallback: () => {},
-        jumpToNewPage,
-      });
+
+      const name = page_name;
+      const icon = '';
+      const path = parent_dir === '/' ? `/${obj_name}` : `${parent_dir}/${obj_name}`;
+      const docUuid = doc_uuid;
+      const parentPageId = currentPageId;
+      const successCallback = () => {};
+      const errorCallback = () => {};
+      const newPage = new Page({ id: page_id, name, icon, path, docUuid });
+      this.addPage(newPage, parentPageId, successCallback, errorCallback, jumpToNewPage);
+
       const wikiRepoId = res.data.file_info.repo_id;
       const eventBus = EventBus.getInstance();
       eventBus.dispatch(EXTERNAL_EVENT.WIKI_PAGE_ID_CREATED, { pageId: page_id, pageName: page_name, wikiRepoId: wikiRepoId });
