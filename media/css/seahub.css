@@ -2047,6 +2047,15 @@ a.sf-popover-item {
   font-size: 14px;
 }
 
+.login-panel .cf-turnstile {
+  transform: scale(0.9);
+  transform-origin: top left;
+  width: 270px;
+  /* 300px * 0.9 */
+  height: 58.5px;
+  /* 65px * 0.9 */
+}
+
 #log-in-panel .input {
   width: 286px;
   height: 40px;
@@ -2796,6 +2805,7 @@ a.sf-popover-item {
 .tfa-panel {
   margin: 1rem auto;
 }
+
 @media (min-width: 504px) {
   .tfa-panel {
     width: 480px;
@@ -2950,4 +2960,3 @@ input:-internal-autofill-selected {
   -webkit-text-fill-color: var(--bs-body-color) !important;
   transition: background-color 5000s ease-in-out 0s !important;
 }
-
