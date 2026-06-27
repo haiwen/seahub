@@ -54,6 +54,7 @@
       {{ form.note }}             {{ form.note.errors }}
       {% endif %}
 
+      {{ form.non_field_errors }}
       {% if enable_turnstile %}
       <div class="cf-turnstile mt-2" data-sitekey="{{ turnstile_site_key }}"></div>
       {% endif %}

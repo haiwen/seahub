@@ -370,6 +370,12 @@ def password_reset(request, is_admin_site=False,
     login_bg_image_path = get_login_bg_image_path()
     if request.method == "POST":
         form = password_reset_form(request.POST)
+
+        from seahub.utils.turnstile import check_turnstile
+        enable_turnstile = getattr(settings, 'ENABLE_TURNSTILE', False)
+        if enable_turnstile and not check_turnstile(request):
+            form.add_error(None, _("Cloudflare Turnstile check failed. Please refresh and try again."))
+
         if form.is_valid():
             opts = {}
             opts['use_https'] = request.is_secure()
@@ -384,18 +390,32 @@ def password_reset(request, is_admin_site=False,
             except Exception as e:
                 logger.error(str(e))
                 messages.error(request, _('Failed to send email, please contact administrator.'))
-                return render(request, template_name, {
-                        'form': form,
-                        'login_bg_image_path': login_bg_image_path,
-                        })
+
+                context = {
+                    'form': form,
+                    'login_bg_image_path': login_bg_image_path,
+                }
+                enable_turnstile = getattr(settings, 'ENABLE_TURNSTILE', False)
+                context['enable_turnstile'] = enable_turnstile
+                if enable_turnstile:
+                    context['turnstile_site_key'] = getattr(settings, 'TURNSTILE_SITE_KEY', '')
+
+                return render(request, template_name, context)
             else:
                 return HttpResponseRedirect(post_reset_redirect)
     else:
         form = password_reset_form()
-    return render(request, template_name, {
+
+    context = {
         'form': form,
         'login_bg_image_path': login_bg_image_path,
-    })
+    }
+    enable_turnstile = getattr(settings, 'ENABLE_TURNSTILE', False)
+    context['enable_turnstile'] = enable_turnstile
+    if enable_turnstile:
+        context['turnstile_site_key'] = getattr(settings, 'TURNSTILE_SITE_KEY', '')
+
+    return render(request, template_name, context)
 
 def password_reset_done(request, template_name='registration/password_reset_done.html'):
     login_bg_image_path = get_login_bg_image_path()
