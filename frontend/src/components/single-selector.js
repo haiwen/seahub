@@ -93,7 +93,7 @@ class Selector extends Component {
                     onKeyDown={Utils.onKeyDown}
                   >
                     <span className="option-item-text flex-shrink-0 mr-3">{item.text}</span>
-                    <Icon symbol="check-thin" className={item.isSelected ? '' : 'invisible'} />
+                    <Icon symbol="check" className={item.isSelected ? '' : 'invisible'} />
                   </li>
                 );
               })}
