@@ -231,11 +231,6 @@ class ResetPasswordView(APIView):
         if not is_password_strength_valid(new_password):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Password strength should be strong or very strong')
 
-        from seahub.utils.turnstile import check_turnstile
-        enable_turnstile = getattr(settings, 'ENABLE_TURNSTILE', False)
-        if enable_turnstile and not check_turnstile(request):
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Cloudflare Turnstile check failed. Please refresh and try again.')
-
         user = request.user
         if user.enc_password != UNUSABLE_PASSWORD and not old_password:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Old password invalid')

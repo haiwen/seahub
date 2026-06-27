@@ -8,7 +8,6 @@ from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
 
 from django.utils.translation import gettext as _
-from django.conf import settings
 
 from seaserv import ccnet_api
 
@@ -37,11 +36,6 @@ class OrgAdminUserSetPassword(APIView):
     def put(self, request, org_id, email):
         """ Reset an organization user's password.
         """
-        from seahub.utils.turnstile import check_turnstile
-        enable_turnstile = getattr(settings, 'ENABLE_TURNSTILE', False)
-        if enable_turnstile and not check_turnstile(request):
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Cloudflare Turnstile check failed. Please refresh and try again.')
-
         # resource check
         org_id = int(org_id)
         if not ccnet_api.get_org_by_id(org_id):

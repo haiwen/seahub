@@ -6,21 +6,9 @@
 {% endblock %}
 
 {% block extra_script %}
-{% if enable_turnstile %}
-<script>
-  window.turnstileLoadPromise = new Promise(function(resolve) {
-    window.onloadTurnstileCallback = function () {
-      resolve();
-    };
-  });
-</script>
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onloadTurnstileCallback" defer></script>
-{% endif %}
    <script type="text/javascript">
      window.org = {
        pageOptions: {
-         enableTurnstile: {% if enable_turnstile %} true {% else %} false {% endif %},
-         turnstileSiteKey: "{{ turnstile_site_key|escapejs }}",
          orgID: '{{ org.org_id }}',
          orgName: '{{ org.org_name|escapejs }}',
          groupID: '{{ group_id }}',

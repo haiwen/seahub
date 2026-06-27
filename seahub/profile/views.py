@@ -188,8 +188,6 @@ def edit_profile(request):
             'org_saml_connected': org_saml_connected,
             'org_id': request.user.org and request.user.org.org_id or None,
             'strong_pwd_required': bool(config.USER_STRONG_PASSWORD_REQUIRED),
-            'enable_turnstile': settings.ENABLE_TURNSTILE,
-            'turnstile_site_key': settings.TURNSTILE_SITE_KEY,
     }
 
     if show_two_factor_auth:

@@ -34,15 +34,12 @@ class UserAPI {
     return this;
   }
 
-  resetPassword(oldPassword, newPassword, turnstileToken = '') {
+  resetPassword(oldPassword, newPassword) {
     let url = this.server + '/api/v2.1/user/reset-password/';
     let data = {
       old_password: oldPassword,
-      new_password: newPassword,
+      new_password: newPassword
     };
-    if (turnstileToken !== '') {
-      data.cf_turnstile_response = turnstileToken;
-    }
     return this.req.post(url, data);
   }
 
