@@ -48,11 +48,23 @@
 .user-select-container .user-search-container .form-control:focus {
   outline: none;
   box-shadow: none;
+  background-color: transparent;
 }
 
 .user-select-container .user-search-container .input-icon-addon {
+  width: 20px;
+  min-width: 20px;
+  height: 20px;
+  top: 6px;
+  right: 13px;
+  font-size: .875rem;
   cursor: pointer;
   pointer-events: auto;
+}
+
+.user-select-container .user-search-container .input-icon-addon:hover {
+  background-color: var(--bs-icon-btn-hover-bg-color);
+  border-radius: 3px;
 }
 
 .user-select-container .user-list-container {

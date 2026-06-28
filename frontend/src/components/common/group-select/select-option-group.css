@@ -36,16 +36,23 @@
 .option-group .option-group-search .form-control:focus {
   outline: none;
   box-shadow: none;
+  background-color: transparent;
 }
 
 .option-group .option-group-search .input-icon-addon {
+  width: 20px;
+  min-width: 20px;
+  height: 20px;
+  top: 6px;
+  right: 13px;
+  font-size: .875rem;
   cursor: pointer;
   pointer-events: auto;
 }
 
-.option-group .option-group-search .input-icon-addon svg {
-  color: #999;
-  cursor: pointer;
+.option-group .option-group-search .input-icon-addon:hover {
+  background-color: var(--bs-icon-btn-hover-bg-color);
+  border-radius: 3px;
 }
 
 .option-group .none-search-result {
