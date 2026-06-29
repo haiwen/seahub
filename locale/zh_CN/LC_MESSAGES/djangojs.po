@@ -28,7 +28,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-29 13:37+0800\n"
+"POT-Creation-Date: 2026-06-29 18:29+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2023-2026\n"
 "Language-Team: Chinese (China) (http://app.transifex.com/haiwen/seahub/language/zh_CN/)\n"
@@ -4480,8 +4480,8 @@ msgid "Observation"
 msgstr "观察"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-input/index.js:101
-msgid "Ask questions based on your documents"
-msgstr "根据你的文件提问"
+msgid "Ask anything about your files"
+msgstr "关于你的文件，想问点什么？"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat/index.js:350
 msgid "Found 1 reference"
@@ -4491,12 +4491,6 @@ msgstr "找到 1 个引用"
 #, javascript-format
 msgid "Found %1$d references"
 msgstr "找到 %1$d 个引用"
-
-#: frontend/src/components/dir-view-mode/dir-chat/chat/index.js:505
-msgid ""
-"You can say \"Help solve the following issue: <issue description>\" to let "
-"AI solve the issue by searching knowledge bases."
-msgstr "你可以说“帮助解决以下问题：<issue description>”让 AI 通过搜索知识库来解决这个问题。"
 
 #: frontend/src/components/dir-view-mode/dir-chat/components/attachments/index.js:35
 #| msgid "Created library"
@@ -11444,6 +11438,10 @@ msgstr "使用客户端打开"
 #| msgid "Add permission"
 msgid "Add page below"
 msgstr "在下方增加页面"
+
+#: frontend/src/translate.js:52
+msgid "How can I help you?"
+msgstr "我能帮你什么？"
 
 #: frontend/src/user-notifications.js:268
 #: frontend/src/user-notifications.js:273

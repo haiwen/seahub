@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-29 13:37+0800\n"
+"POT-Creation-Date: 2026-06-29 18:29+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2025-2026\n"
 "Language-Team: Chinese (Taiwan) (http://app.transifex.com/haiwen/seahub/language/zh_TW/)\n"
@@ -4464,7 +4464,7 @@ msgid "Observation"
 msgstr ""
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-input/index.js:101
-msgid "Ask questions based on your documents"
+msgid "Ask anything about your files"
 msgstr ""
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat/index.js:350
@@ -4474,12 +4474,6 @@ msgstr ""
 #: frontend/src/components/dir-view-mode/dir-chat/chat/index.js:351
 #, javascript-format
 msgid "Found %1$d references"
-msgstr ""
-
-#: frontend/src/components/dir-view-mode/dir-chat/chat/index.js:505
-msgid ""
-"You can say \"Help solve the following issue: <issue description>\" to let "
-"AI solve the issue by searching knowledge bases."
 msgstr ""
 
 #: frontend/src/components/dir-view-mode/dir-chat/components/attachments/index.js:35
@@ -11428,6 +11422,10 @@ msgstr ""
 #| msgid "Add permission"
 msgid "Add page below"
 msgstr "新增下層頁面"
+
+#: frontend/src/translate.js:52
+msgid "How can I help you?"
+msgstr ""
 
 #: frontend/src/user-notifications.js:268
 #: frontend/src/user-notifications.js:273
