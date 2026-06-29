@@ -147,7 +147,14 @@ class Account extends Component {
     return (<img src={appAvatarURL} width="36" height="36" className="avatar" alt={gettext('Avatar')} />);
   };
 
+  renderDivider = () => {
+    return (<div className="account-popup-divider" aria-hidden="true"></div>);
+  };
+
   render() {
+    const menuItem = this.renderMenu();
+    const isSubscriptionShown = this.state.enableSubscription && !isOrgContext;
+
     return (
       <div id="account" ref={ref => this.accountDOM = ref} className="ml-3">
         <a id="my-info" href="#" onClick={this.onClickAccount} className="account-toggle no-deco d-none d-md-block" aria-label={gettext('View profile and more')}>
@@ -162,6 +169,7 @@ class Account extends Component {
               {this.renderAvatar()}
               <div className="txt">{this.state.userName}</div>
             </div>
+            {this.renderDivider()}
             <div className="item">
               <div className="space-traffic">
                 <p>{gettext('Used:')}{' '}{this.state.quotaUsage} / {this.state.quotaTotal}</p>
@@ -180,11 +188,15 @@ class Account extends Component {
                 </div>
               }
             </div>
-
+            {this.renderDivider()}
             <a href={siteRoot + 'profile/'} className="item">{gettext('Settings')}</a>
-            {(this.state.enableSubscription && !isOrgContext) && <a href={siteRoot + 'subscription/'} className="item">{'付费管理'}</a>}
-            {this.renderMenu()}
+            {isSubscriptionShown && this.renderDivider()}
+            {isSubscriptionShown && <a href={siteRoot + 'subscription/'} className="item">{'付费管理'}</a>}
+            {menuItem && this.renderDivider()}
+            {menuItem}
+            {enableSSOToThirdpartWebsite && this.renderDivider()}
             {enableSSOToThirdpartWebsite && <a href={siteRoot + 'sso-to-thirdpart/'} className="item">{gettext('Customer Portal')}</a>}
+            {this.renderDivider()}
             <a href={siteRoot + 'accounts/logout/'} className="item">{gettext('Log out')}</a>
           </div>
         </div>

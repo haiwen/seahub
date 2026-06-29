@@ -649,11 +649,12 @@ textarea::placeholder {
 .account-popup .item {
   display: block;
   padding: 8px 18px;
-  border-bottom: 1px solid var(--bs-border-secondary-color);
 }
 
-.account-popup .item:last-child {
-  border-bottom: none;
+.account-popup-divider {
+  height: 1px;
+  background-color: var(--bs-border-secondary-color);
+  pointer-events: none;
 }
 
 .account-popup a.item {
