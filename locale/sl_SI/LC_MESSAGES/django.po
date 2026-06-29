@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-30 09:48+0800\n"
+"POT-Creation-Date: 2026-06-29 13:37+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Slovenian (Slovenia) (http://app.transifex.com/haiwen/seahub/language/sl_SI/)\n"
@@ -90,13 +90,17 @@ msgstr "Prekinitev povezave s SAML ni uspela, uporabnik ima prisilno prijavo pre
 msgid "Failed to unbind SAML, please set a contact email first."
 msgstr "Prekinitev povezave s SAML ni uspela, prosimo, najprej nastavite kontaktno e-pošto."
 
+#: seahub/ai/apis.py:613
+msgid "New chat"
+msgstr ""
+
 #: seahub/api2/endpoints/admin/account.py:204
-#: seahub/api2/endpoints/user.py:101 seahub/api2/views.py:381
+#: seahub/api2/endpoints/user.py:101 seahub/api2/views.py:382
 msgid "Name is too long (maximum is 64 characters)"
 msgstr "Ime je predolgo (največ 64 znakov)."
 
 #: seahub/api2/endpoints/admin/account.py:208
-#: seahub/api2/endpoints/user.py:105 seahub/api2/views.py:385
+#: seahub/api2/endpoints/user.py:105 seahub/api2/views.py:386
 #: seahub/forms.py:44 seahub/profile/forms.py:27
 msgid "Name should not include '/'."
 msgstr "Ime ne sme vsebovati znaka '/'."
@@ -133,7 +137,7 @@ msgstr "Vrednost mora biti celo število, večje ali enako 0."
 #: seahub/api2/endpoints/admin/groups.py:135
 #: seahub/api2/endpoints/admin/groups.py:275
 #: seahub/api2/endpoints/groups.py:237 seahub/api2/endpoints/groups.py:310
-#: seahub/api2/views.py:4651 seahub/group/forms.py:36
+#: seahub/api2/views.py:4660 seahub/group/forms.py:36
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
 "brackets or underscore."
@@ -156,8 +160,8 @@ msgstr "V tem oddelku so pododdelki."
 
 #: seahub/api2/endpoints/admin/default_library.py:32
 #: seahub/api2/endpoints/admin/default_library.py:33
-#: seahub/views/__init__.py:558 seahub/views/__init__.py:559
-#: seahub/views/__init__.py:563 seahub/views/__init__.py:564
+#: seahub/views/__init__.py:560 seahub/views/__init__.py:561
+#: seahub/views/__init__.py:565 seahub/views/__init__.py:566
 msgid "My Library"
 msgstr "Moja knjižnica"
 
@@ -458,8 +462,8 @@ msgstr "Datoteka z virusom ni bila najdena."
 #: seahub/api2/endpoints/subscription.py:92
 #: seahub/api2/endpoints/subscription.py:129
 #: seahub/api2/endpoints/upload_links.py:335
-#: seahub/api2/endpoints/wiki2.py:467 seahub/api2/endpoints/wiki2.py:495
-#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4157
+#: seahub/api2/endpoints/wiki2.py:481 seahub/api2/endpoints/wiki2.py:509
+#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4166
 #: seahub/notifications/models.py:618 seahub/notifications/models.py:659
 #: seahub/notifications/models.py:701 seahub/notifications/models.py:752
 #: seahub/notifications/models.py:808 seahub/notifications/models.py:835
@@ -467,9 +471,9 @@ msgstr "Datoteka z virusom ni bila najdena."
 #: seahub/notifications/models.py:901 seahub/notifications/models.py:926
 #: seahub/notifications/models.py:948 seahub/notifications/models.py:974
 #: seahub/notifications/models.py:991 seahub/notifications/models.py:1008
-#: seahub/notifications/models.py:1037 seahub/seadoc/apis.py:2848
+#: seahub/notifications/models.py:1037 seahub/seadoc/apis.py:2849
 #: seahub/share/views.py:230 seahub/subscription/views.py:90
-#: seahub/utils/__init__.py:174 seahub/views/__init__.py:835
+#: seahub/utils/__init__.py:174 seahub/views/__init__.py:837
 #: seahub/views/ajax.py:398 seahub/views/ajax.py:402 seahub/wiki/views.py:210
 #: seahub/wiki/views.py:217 seahub/wiki/views.py:226
 msgid "Internal Server Error"
@@ -490,13 +494,13 @@ msgstr "Neveljavna končna pot"
 #: seahub/api2/endpoints/copy_move_task.py:148
 #: seahub/api2/endpoints/move_folder_merge.py:176
 #: seahub/api2/endpoints/repos_batch.py:497
-#: seahub/api2/endpoints/wiki2.py:1941 seahub/api2/views.py:2023
+#: seahub/api2/endpoints/wiki2.py:1978 seahub/api2/views.py:2023
 #: seahub/api2/views.py:2063 seahub/api2/views.py:2125
 #: seahub/api2/views.py:2169 seahub/api2/views.py:2215
 #: seahub/api2/views.py:2264 seahub/api2/views.py:2725
-#: seahub/api2/views.py:2833 seahub/seadoc/apis.py:433
-#: seahub/seadoc/apis.py:560 seahub/seadoc/apis.py:654
-#: seahub/seadoc/apis.py:3206
+#: seahub/api2/views.py:2833 seahub/seadoc/apis.py:434
+#: seahub/seadoc/apis.py:561 seahub/seadoc/apis.py:655
+#: seahub/seadoc/apis.py:3212
 msgid "Out of quota."
 msgstr "Kvota je presežena."
 
@@ -511,7 +515,7 @@ msgstr "Mape %(src)s ni mogoče premakniti v njeno podmapo %(des)s"
 #: seahub/api2/endpoints/file.py:746 seahub/api2/endpoints/file.py:859
 #: seahub/api2/endpoints/via_repo_token.py:1013
 #: seahub/api2/endpoints/via_repo_token.py:1153
-#: seahub/api2/endpoints/wiki2.py:808
+#: seahub/api2/endpoints/wiki2.py:822
 msgid "File is locked"
 msgstr "Datoteka je zaklenjena"
 
@@ -538,8 +542,8 @@ msgstr ""
 
 #: seahub/api2/endpoints/file.py:204 seahub/api2/endpoints/upload_links.py:540
 #: seahub/api2/endpoints/via_repo_token.py:853
-#: seahub/api2/endpoints/wiki2.py:605 seahub/api2/endpoints/wikis.py:128
-#: seahub/api2/views.py:2071 seahub/seadoc/apis.py:3213
+#: seahub/api2/endpoints/wiki2.py:619 seahub/api2/endpoints/wikis.py:128
+#: seahub/api2/views.py:2071 seahub/seadoc/apis.py:3219
 msgid "The number of files in library exceeds the limit"
 msgstr "Število datotek v knjižnici presega omejitev"
 
@@ -551,14 +555,14 @@ msgstr "Število datotek v knjižnici presega omejitev"
 #: seahub/api2/endpoints/subscription.py:72
 #: seahub/api2/endpoints/subscription.py:112
 #: seahub/api2/endpoints/upload_links.py:322
-#: seahub/api2/endpoints/wiki2.py:1627 seahub/api2/endpoints/wikis.py:108
+#: seahub/api2/endpoints/wiki2.py:1664 seahub/api2/endpoints/wikis.py:108
 #: seahub/api2/endpoints/wikis.py:203 seahub/profile/forms.py:24
-#: seahub/profile/views.py:276 seahub/seadoc/apis.py:2832
+#: seahub/profile/views.py:276 seahub/seadoc/apis.py:2833
 #: seahub/seadoc/views.py:37 seahub/seadoc/views.py:91
 #: seahub/seadoc/views.py:174 seahub/seadoc/views.py:220
 #: seahub/subscription/views.py:27 seahub/subscription/views.py:43
 #: seahub/thumbnail/views.py:54 seahub/thumbnail/views.py:124
-#: seahub/views/__init__.py:638 seahub/views/ajax.py:83
+#: seahub/views/__init__.py:640 seahub/views/ajax.py:83
 #: seahub/views/ajax.py:113 seahub/views/ajax.py:119 seahub/views/sso.py:259
 msgid "Permission denied."
 msgstr "Dostop zavrnjen."
@@ -576,7 +580,7 @@ msgstr "Datoteka ni zaklenjena."
 msgid "You can not refresh this file's lock."
 msgstr "Osvežitev zaklepa te datoteke ni mogoča."
 
-#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2839
+#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2840
 msgid "The participant already exists."
 msgstr "Udeleženec že obstaja."
 
@@ -587,16 +591,16 @@ msgstr "Udeleženec že obstaja."
 msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
 msgstr "Oznaka lahko vsebuje le črke, številke, pike, vezaje ali podčrtaje."
 
-#: seahub/api2/endpoints/group_members.py:109
-#: seahub/api2/endpoints/group_members.py:357
-#: seahub/api2/endpoints/group_members.py:516
+#: seahub/api2/endpoints/group_members.py:110
+#: seahub/api2/endpoints/group_members.py:358
+#: seahub/api2/endpoints/group_members.py:517
 #, python-format
 msgid "User %s is already a group member."
 msgstr "Uporabnik %s je že član skupine."
 
-#: seahub/api2/endpoints/group_members.py:115
-#: seahub/api2/endpoints/group_members.py:366
-#: seahub/api2/endpoints/group_members.py:525 seahub/api2/views.py:1925
+#: seahub/api2/endpoints/group_members.py:116
+#: seahub/api2/endpoints/group_members.py:367
+#: seahub/api2/endpoints/group_members.py:526 seahub/api2/views.py:1925
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
 #: seahub/organizations/api/admin/users.py:339
@@ -604,24 +608,24 @@ msgstr "Uporabnik %s je že član skupine."
 msgid "User %s not found in organization."
 msgstr "Uporabnik %s ni bil najden v organizaciji."
 
-#: seahub/api2/endpoints/group_members.py:118
-#: seahub/api2/endpoints/group_members.py:374
-#: seahub/api2/endpoints/group_members.py:533
+#: seahub/api2/endpoints/group_members.py:119
+#: seahub/api2/endpoints/group_members.py:375
+#: seahub/api2/endpoints/group_members.py:534
 #, python-format
 msgid "User %s is an organization user."
 msgstr "Uporabnik %s je uporabnik organizacije."
 
-#: seahub/api2/endpoints/group_members.py:437 seahub/group/error_msg.py:17
+#: seahub/api2/endpoints/group_members.py:438 seahub/group/error_msg.py:17
 #: seahub/group/error_msg.py:23 seahub/views/file.py:569
 msgid "Group does not exist"
 msgstr "Skupina ne obstaja"
 
-#: seahub/api2/endpoints/group_members.py:576
+#: seahub/api2/endpoints/group_members.py:577
 #| msgid "Email or Username"
 msgid "Email or LoginID"
 msgstr "E-pošta ali prijavni ID"
 
-#: seahub/api2/endpoints/group_members.py:587 seahub/views/sysadmin.py:167
+#: seahub/api2/endpoints/group_members.py:588 seahub/views/sysadmin.py:167
 #: seahub/views/sysadmin.py:275 seahub/views/sysadmin.py:653
 #: seahub/views/sysadmin.py:665 seahub/views/sysadmin.py:813
 msgid "Failed to export Excel"
@@ -711,7 +715,7 @@ msgstr "Geslo lahko vsebuje le številke, velike in male črke ter druge simbole
 #: seahub/api2/endpoints/share_links.py:394
 #: seahub/api2/endpoints/share_links.py:739
 #: seahub/api2/endpoints/upload_links.py:208
-#: seahub/api2/endpoints/upload_links.py:397 seahub/api2/views.py:3718
+#: seahub/api2/endpoints/upload_links.py:397 seahub/api2/views.py:3726
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr "Dnevi do poteka morajo biti večji ali enaki %s"
@@ -721,7 +725,7 @@ msgstr "Dnevi do poteka morajo biti večji ali enaki %s"
 #: seahub/api2/endpoints/share_links.py:400
 #: seahub/api2/endpoints/share_links.py:745
 #: seahub/api2/endpoints/upload_links.py:214
-#: seahub/api2/endpoints/upload_links.py:403 seahub/api2/views.py:3724
+#: seahub/api2/endpoints/upload_links.py:403 seahub/api2/views.py:3732
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr "Dnevi do poteka morajo biti manjši ali enaki %s"
@@ -747,7 +751,7 @@ msgid "Expiration time should be earlier than %s."
 msgstr "Čas poteka mora biti zgodnejši od %s."
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
-#: seahub/seadoc/apis.py:707
+#: seahub/seadoc/apis.py:708
 #: seahub/templates/remote_user/create_unknown_user_false.html:4
 #: seahub/templates/remote_user/error.html:4
 msgid "Error"
@@ -774,11 +778,11 @@ msgstr "Gesla te knjižnice ni mogoče ponastaviti."
 msgid "New password of library %s"
 msgstr "Novo geslo knjižnice %s"
 
-#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4154
+#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4163
 msgid "Wrong password"
 msgstr "Napačno geslo"
 
-#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4160
+#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4169
 msgid "Decrypt library error"
 msgstr "Napaka pri dešifriranju knjižnice"
 
@@ -919,20 +923,20 @@ msgstr "Že imate prikazne slike %(nb_avatars)d, največ dovoljenih prikaznih sl
 msgid "Length of WebDAV password should be less than 30."
 msgstr "Dolžina gesla za WebDAV mora biti krajša od 30 znakov."
 
-#: seahub/api2/endpoints/wiki2.py:223 seahub/api2/endpoints/wiki2.py:1642
+#: seahub/api2/endpoints/wiki2.py:237 seahub/api2/endpoints/wiki2.py:1679
 #: seahub/api2/endpoints/wikis.py:212
 msgid "Name can only contain letters, numbers, blank, hyphen or underscore."
 msgstr "Ime lahko vsebuje le črke, številke, presledke, vezaje ali podčrtaje."
 
-#: seahub/api2/endpoints/wiki2.py:1404
+#: seahub/api2/endpoints/wiki2.py:1421
 msgid "URL is invalid"
 msgstr "URL je neveljaven"
 
-#: seahub/api2/endpoints/wiki2.py:1408
+#: seahub/api2/endpoints/wiki2.py:1425
 msgid "The custom part of URL should have 5-30 characters."
 msgstr "Meri del URL-ja mora imeti od 5 do 30 znakov."
 
-#: seahub/api2/endpoints/wiki2.py:1430
+#: seahub/api2/endpoints/wiki2.py:1452
 msgid "This custom domain is already in use and cannot be used for your wiki"
 msgstr "Ta domena po meri je že v uporabi in je ni mogoče uporabiti za vaš wiki"
 
@@ -1056,15 +1060,19 @@ msgstr "Ta račun je bil zamrznjen zaradi prevelikega števila neuspelih poskuso
 msgid "Logged out"
 msgstr "Odjavljen"
 
-#: seahub/auth/views.py:386
+#: seahub/auth/views.py:377 seahub/organizations/views.py:241
+msgid "Cloudflare Turnstile check failed. Please refresh and try again."
+msgstr ""
+
+#: seahub/auth/views.py:392
 msgid "Failed to send email, please contact administrator."
 msgstr "Email sporočia ni bilo mogoče poslati, prosimo kontaktirajte administratorja"
 
-#: seahub/auth/views.py:454
+#: seahub/auth/views.py:474
 msgid "Unable to change password."
 msgstr "Gesla ni mogoče spremeniti."
 
-#: seahub/auth/views.py:537
+#: seahub/auth/views.py:557
 #, python-brace-format
 msgid "Team {domain} does not have permission to use ADFS/SAML SSO."
 msgstr "Ekipa {domain} nima dovoljenja za uporabo SSO prek ADFS/SAML."
@@ -1599,10 +1607,11 @@ msgid "The %(site_name)s team"
 msgstr "%(site_name)s"
 
 #: seahub/group/views.py:110 seahub/share/views.py:137
-#: seahub/views/__init__.py:463 seahub/views/ajax.py:378
+#: seahub/views/__init__.py:465 seahub/views/ajax.py:378
 #: seahub/views/ajax.py:424 seahub/views/file.py:1336
 #: seahub/views/file.py:1364 seahub/views/file.py:1648
-#: seahub/views/file.py:1688 seahub/views/repo.py:115 seahub/views/repo.py:172
+#: seahub/views/file.py:1688 seahub/views/file.py:2135
+#: seahub/views/file.py:2141 seahub/views/repo.py:115 seahub/views/repo.py:172
 #: seahub/views/repo.py:230 seahub/views/repo.py:258 seahub/views/repo.py:287
 #: seahub/views/repo.py:384
 msgid "Permission denied"
@@ -1718,43 +1727,43 @@ msgstr "Potrdite geslo"
 
 #: seahub/invitations/templates/invitations/token_view.html:30
 #: seahub/options/templates/options/set_user_options.html:14
-#: seahub/organizations/templates/organizations/org_register.html:59
+#: seahub/organizations/templates/organizations/org_register.html:64
 #: seahub/share/templates/share/share_link_email_audit.html:54
 #: seahub/templates/decrypt_repo_form.html:13
 #: seahub/templates/registration/password_change_form.html:38
 #: seahub/templates/registration/password_reset_confirm.html:31
-#: seahub/templates/registration/password_reset_form.html:55
+#: seahub/templates/registration/password_reset_form.html:63
 #: seahub/templates/registration/password_set_form.html:35
 #: seahub/templates/share_access_validation.html:29
 msgid "Submit"
 msgstr "Potrdi"
 
 #: seahub/invitations/templates/invitations/token_view.html:52
-#: seahub/organizations/templates/organizations/org_register.html:91
+#: seahub/organizations/templates/organizations/org_register.html:99
 #: seahub/templates/registration/login.html:210
 #: seahub/templates/registration/password_change_form.html:65
 #: seahub/templates/registration/password_reset_confirm.html:61
 #: seahub/templates/registration/password_set_form.html:58
-#: seahub/templates/registration/registration_form.html:93
+#: seahub/templates/registration/registration_form.html:101
 #: seahub/templates/sysadmin/sudo_mode.html:85
 msgid "Password cannot be blank"
 msgstr "Geslo ne more biti prazno"
 
 #: seahub/invitations/templates/invitations/token_view.html:57
-#: seahub/organizations/templates/organizations/org_register.html:95
+#: seahub/organizations/templates/organizations/org_register.html:103
 #: seahub/templates/registration/password_change_form.html:69
 #: seahub/templates/registration/password_reset_confirm.html:65
 #: seahub/templates/registration/password_set_form.html:62
-#: seahub/templates/registration/registration_form.html:97
+#: seahub/templates/registration/registration_form.html:105
 msgid "Please enter the password again"
 msgstr "Prosimo ponovno vnesite geslo"
 
 #: seahub/invitations/templates/invitations/token_view.html:61
-#: seahub/organizations/templates/organizations/org_register.html:99
+#: seahub/organizations/templates/organizations/org_register.html:107
 #: seahub/templates/registration/password_change_form.html:73
 #: seahub/templates/registration/password_reset_confirm.html:69
 #: seahub/templates/registration/password_set_form.html:66
-#: seahub/templates/registration/registration_form.html:101
+#: seahub/templates/registration/registration_form.html:109
 msgid "Passwords don't match"
 msgstr "Gesli se ne ujemata"
 
@@ -2300,8 +2309,8 @@ msgstr "Ime administratorja"
 msgid "Admin Email"
 msgstr "E-pošta administratorja"
 
-#: seahub/organizations/templates/organizations/org_register.html:87
-#: seahub/templates/registration/registration_form.html:89
+#: seahub/organizations/templates/organizations/org_register.html:95
+#: seahub/templates/registration/registration_form.html:97
 msgid "Email cannot be blank"
 msgstr "Email ne more biti prazen"
 
@@ -2321,12 +2330,12 @@ msgstr "Naslednja"
 msgid "Per page: "
 msgstr "Na stran:"
 
-#: seahub/organizations/views.py:325 seahub/organizations/views.py:355
+#: seahub/organizations/views.py:364 seahub/organizations/views.py:394
 #: seahub/thumbnail/views.py:112
 msgid "Invalid token."
 msgstr "Neveljaven žeton."
 
-#: seahub/organizations/views.py:358
+#: seahub/organizations/views.py:397
 #| msgid "Expiration"
 msgid "Expired token."
 msgstr "Pretečen žeton."
@@ -2392,9 +2401,9 @@ msgstr "Funkcija metapodatkov ni podprta za knjižnice, ki vsebujejo več kot %s
 
 #: seahub/seadoc/views.py:32 seahub/seadoc/views.py:86
 #: seahub/seadoc/views.py:164 seahub/seadoc/views.py:210
-#: seahub/seadoc/views.py:247 seahub/views/__init__.py:454
-#: seahub/views/__init__.py:497 seahub/views/__init__.py:633
-#: seahub/views/__init__.py:799 seahub/views/ajax.py:373
+#: seahub/seadoc/views.py:247 seahub/views/__init__.py:456
+#: seahub/views/__init__.py:499 seahub/views/__init__.py:635
+#: seahub/views/__init__.py:801 seahub/views/ajax.py:373
 msgid "Library does not exist"
 msgstr "Knjižnica ne obstaja"
 
@@ -2553,10 +2562,12 @@ msgid "Sorry, but the requested page could not be found."
 msgstr "Oprostite, vendar zahtevana stran ne obstaja."
 
 #: seahub/templates/base.html:8 seahub/templates/base_for_react.html:9
+#: seahub/templates/wiki/wiki_publish_ssr.html:10
 msgid "File, Collaboration, Team, Organization"
 msgstr "Datoteka, Sodelovanje, Ekipa, Organizacija"
 
 #: seahub/templates/base.html:35
+#: seahub/templates/wiki/wiki_publish_ssr.html:53
 msgid "Close"
 msgstr "Zapri"
 
@@ -2664,7 +2675,7 @@ msgid ""
 msgstr "Za aktiviranje računa, kliknite sledečo povezavo v roku %(expiration_days)s dni:"
 
 #: seahub/templates/registration/activation_email.html:18
-#: seahub/templates/registration/registration_form.html:58
+#: seahub/templates/registration/registration_form.html:63
 msgid "Sign Up"
 msgstr "Prijava"
 
@@ -2774,7 +2785,7 @@ msgstr "Uspešno ponastavljeno geslo."
 #: seahub/templates/registration/password_reset_done.html:4
 #: seahub/templates/registration/password_reset_done.html:44
 #: seahub/templates/registration/password_reset_form.html:4
-#: seahub/templates/registration/password_reset_form.html:50
+#: seahub/templates/registration/password_reset_form.html:54
 msgid "Password Reset"
 msgstr "Ponastavi geslo"
 
@@ -2807,11 +2818,11 @@ msgstr "Za ponastavitev gesla za vaš uporabniški račun %(account)s na %(site_
 msgid "If you did not request it, just skip it."
 msgstr "Če tega niste vi zahtevali preprosto ignorirajte to sporočilo."
 
-#: seahub/templates/registration/password_reset_form.html:52
+#: seahub/templates/registration/password_reset_form.html:56
 msgid "We will send you an email to set new password"
 msgstr "Poslali vam bomo email sporočilo za nastavitev novega gesla"
 
-#: seahub/templates/registration/password_reset_form.html:53
+#: seahub/templates/registration/password_reset_form.html:57
 msgid "Your email used in login"
 msgstr "Vaša e-pošta, uporabljena pri prijavi"
 
@@ -3097,12 +3108,53 @@ msgstr "po spremembi"
 msgid "Your quota is almost full on %(site_name)s."
 msgstr "Vaša kvota na %(site_name)s je skoraj polna."
 
+#: seahub/templates/wiki/_wiki_publish_ssr_nav_item.html:5
+msgid "Toggle navigation section"
+msgstr ""
+
 #: seahub/templates/wiki/wiki.html:24
 msgid "Last modified by"
 msgstr "Zadnjič spremenil"
 
+#: seahub/templates/wiki/wiki_publish_ssr.html:46
+#| msgid "Wiki not found."
+msgid "Wiki navigation"
+msgstr ""
+
+#: seahub/templates/wiki/wiki_publish_ssr.html:52
+msgid "Close navigation"
+msgstr ""
+
+#: seahub/templates/wiki/wiki_publish_ssr.html:63
+#: seahub/templates/wiki/wiki_publish_ssr.html:69
+msgid "Pages"
+msgstr "Strani"
+
+#: seahub/templates/wiki/wiki_publish_ssr.html:85
+msgid "Resize navigation panel"
+msgstr ""
+
+#: seahub/templates/wiki/wiki_publish_ssr.html:95
+#| msgid "Operation"
+msgid "Open navigation"
+msgstr ""
+
+#: seahub/templates/wiki/wiki_publish_ssr.html:96
+#| msgid "Expiration"
+msgid "Navigation"
+msgstr ""
+
+#: seahub/templates/wiki/wiki_publish_ssr.html:128
+msgid "Breadcrumb"
+msgstr ""
+
+#: seahub/templates/wiki/wiki_publish_ssr.html:138
+#: seahub/templates/wiki/wiki_publish_ssr.html:676
+msgid "Cover"
+msgstr "Naslovnica"
+
 #: seahub/thumbnail/views.py:49 seahub/thumbnail/views.py:130
-#: seahub/views/__init__.py:495
+#: seahub/views/__init__.py:497
 msgid "Invalid arguments."
 msgstr "Neveljaven argument."
 
@@ -3250,36 +3302,36 @@ msgstr "Onemogoči"
 msgid "permission error"
 msgstr "napaka dovoljenj"
 
-#: seahub/views/__init__.py:314
+#: seahub/views/__init__.py:316
 msgid "Unable to view recycle page"
 msgstr "Strani s košem ni mogoče prikazati"
 
-#: seahub/views/__init__.py:369
+#: seahub/views/__init__.py:371
 msgid "Unable to view library modification"
 msgstr "Pregled sprememb knjižnice ni mogoč. "
 
-#: seahub/views/__init__.py:488
+#: seahub/views/__init__.py:490
 msgid "Please specify history ID"
 msgstr "Prosimo vnesite ID zgodovine"
 
-#: seahub/views/__init__.py:492
+#: seahub/views/__init__.py:494
 msgid "Successfully restored the library."
 msgstr "Uspešno obnovljena knjižnica."
 
-#: seahub/views/__init__.py:499
+#: seahub/views/__init__.py:501
 msgid "History you specified does not exist"
 msgstr "Zgodovina ki ste jo določili ne obstaja"
 
-#: seahub/views/__init__.py:501
+#: seahub/views/__init__.py:503
 msgid "Unknown error"
 msgstr "Neznana napaka"
 
-#: seahub/views/__init__.py:806 seahub/views/repo.py:291
+#: seahub/views/__init__.py:808 seahub/views/repo.py:291
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" ne obstaja."
 
-#: seahub/views/__init__.py:838
+#: seahub/views/__init__.py:840
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr " \"%s\" ni mogoče prenesti."
@@ -3302,8 +3354,8 @@ msgstr "Napačna povezava za nalaganje"
 
 #: seahub/views/ajax.py:335 seahub/views/file.py:563 seahub/views/file.py:595
 #: seahub/views/file.py:1356 seahub/views/file.py:1682
-#: seahub/views/file.py:2276 seahub/views/file.py:2281
-#: seahub/views/file.py:2288
+#: seahub/views/file.py:2285 seahub/views/file.py:2290
+#: seahub/views/file.py:2297
 msgid "File does not exist"
 msgstr "Datoteka ne obstaja"
 
@@ -3345,7 +3397,7 @@ msgstr "Knjižnica je kriptirana, datoteke ni mogoče odpreti na spletu."
 #: seahub/views/file.py:631 seahub/views/file.py:1207
 #: seahub/views/file.py:1233 seahub/views/file.py:1263
 #: seahub/views/file.py:1412 seahub/views/file.py:1724
-#: seahub/views/file.py:2240
+#: seahub/views/file.py:2249
 msgid "Unable to view file"
 msgstr "Datoteke si ni možno ogledati"
 
@@ -3382,12 +3434,12 @@ msgstr "Deli povezavo za %s."
 msgid "Unable to download file"
 msgstr "Prenos datoteke ni mogoč"
 
-#: seahub/views/file.py:2262
+#: seahub/views/file.py:2271
 #| msgid "Wiki not found."
 msgid "revision not found"
 msgstr "različica ni bila najdena"
 
-#: seahub/views/file.py:2269
+#: seahub/views/file.py:2278
 msgid "The original file does not exist"
 msgstr "Izvorna datoteka ne obstaja."
 

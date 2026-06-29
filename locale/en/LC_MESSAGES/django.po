@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-15 15:27+0800\n"
+"POT-Creation-Date: 2026-06-29 13:37+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: English (http://app.transifex.com/haiwen/seahub/language/"
@@ -94,6 +94,10 @@ msgstr "Failed to bind SAML, please login first."
 msgid "Failed to unbind SAML, please set a contact email first."
 msgstr "Failed to unbind SAML, please set a contact email first."
 
+#: seahub/ai/apis.py:613
+msgid "New chat"
+msgstr ""
+
 #: seahub/api2/endpoints/admin/account.py:204 seahub/api2/endpoints/user.py:101
 #: seahub/api2/views.py:382
 msgid "Name is too long (maximum is 64 characters)"
@@ -161,8 +165,8 @@ msgstr "There are sub-departments in this department."
 
 #: seahub/api2/endpoints/admin/default_library.py:32
 #: seahub/api2/endpoints/admin/default_library.py:33
-#: seahub/views/__init__.py:558 seahub/views/__init__.py:559
-#: seahub/views/__init__.py:563 seahub/views/__init__.py:564
+#: seahub/views/__init__.py:560 seahub/views/__init__.py:561
+#: seahub/views/__init__.py:565 seahub/views/__init__.py:566
 msgid "My Library"
 msgstr "My Library"
 
@@ -472,8 +476,8 @@ msgstr "Virus file is not found."
 #: seahub/api2/endpoints/subscription.py:52
 #: seahub/api2/endpoints/subscription.py:92
 #: seahub/api2/endpoints/subscription.py:129
-#: seahub/api2/endpoints/upload_links.py:335 seahub/api2/endpoints/wiki2.py:467
-#: seahub/api2/endpoints/wiki2.py:495 seahub/api2/endpoints/wiki_pages.py:135
+#: seahub/api2/endpoints/upload_links.py:335 seahub/api2/endpoints/wiki2.py:481
+#: seahub/api2/endpoints/wiki2.py:509 seahub/api2/endpoints/wiki_pages.py:135
 #: seahub/api2/views.py:4166 seahub/notifications/models.py:618
 #: seahub/notifications/models.py:659 seahub/notifications/models.py:701
 #: seahub/notifications/models.py:752 seahub/notifications/models.py:808
@@ -484,7 +488,7 @@ msgstr "Virus file is not found."
 #: seahub/notifications/models.py:1008 seahub/notifications/models.py:1037
 #: seahub/seadoc/apis.py:2849 seahub/share/views.py:230
 #: seahub/subscription/views.py:90 seahub/utils/__init__.py:174
-#: seahub/views/__init__.py:835 seahub/views/ajax.py:398
+#: seahub/views/__init__.py:837 seahub/views/ajax.py:398
 #: seahub/views/ajax.py:402 seahub/wiki/views.py:210 seahub/wiki/views.py:217
 #: seahub/wiki/views.py:226
 msgid "Internal Server Error"
@@ -504,7 +508,7 @@ msgstr "Invalid destination path"
 
 #: seahub/api2/endpoints/copy_move_task.py:148
 #: seahub/api2/endpoints/move_folder_merge.py:176
-#: seahub/api2/endpoints/repos_batch.py:497 seahub/api2/endpoints/wiki2.py:1941
+#: seahub/api2/endpoints/repos_batch.py:497 seahub/api2/endpoints/wiki2.py:1978
 #: seahub/api2/views.py:2023 seahub/api2/views.py:2063
 #: seahub/api2/views.py:2125 seahub/api2/views.py:2169
 #: seahub/api2/views.py:2215 seahub/api2/views.py:2264
@@ -525,7 +529,7 @@ msgstr "Can not move folder %(src)s to its subfolder %(des)s"
 #: seahub/api2/endpoints/file.py:746 seahub/api2/endpoints/file.py:859
 #: seahub/api2/endpoints/via_repo_token.py:1013
 #: seahub/api2/endpoints/via_repo_token.py:1153
-#: seahub/api2/endpoints/wiki2.py:808
+#: seahub/api2/endpoints/wiki2.py:822
 msgid "File is locked"
 msgstr "File is locked"
 
@@ -553,7 +557,7 @@ msgstr "Library can not be transferred to owner."
 
 #: seahub/api2/endpoints/file.py:204 seahub/api2/endpoints/upload_links.py:540
 #: seahub/api2/endpoints/via_repo_token.py:853
-#: seahub/api2/endpoints/wiki2.py:605 seahub/api2/endpoints/wikis.py:128
+#: seahub/api2/endpoints/wiki2.py:619 seahub/api2/endpoints/wikis.py:128
 #: seahub/api2/views.py:2071 seahub/seadoc/apis.py:3219
 msgid "The number of files in library exceeds the limit"
 msgstr "The number of files in library exceeds the limit"
@@ -566,14 +570,14 @@ msgstr "The number of files in library exceeds the limit"
 #: seahub/api2/endpoints/subscription.py:72
 #: seahub/api2/endpoints/subscription.py:112
 #: seahub/api2/endpoints/upload_links.py:322
-#: seahub/api2/endpoints/wiki2.py:1627 seahub/api2/endpoints/wikis.py:108
+#: seahub/api2/endpoints/wiki2.py:1664 seahub/api2/endpoints/wikis.py:108
 #: seahub/api2/endpoints/wikis.py:203 seahub/profile/forms.py:24
 #: seahub/profile/views.py:276 seahub/seadoc/apis.py:2833
 #: seahub/seadoc/views.py:37 seahub/seadoc/views.py:91
 #: seahub/seadoc/views.py:174 seahub/seadoc/views.py:220
 #: seahub/subscription/views.py:27 seahub/subscription/views.py:43
 #: seahub/thumbnail/views.py:54 seahub/thumbnail/views.py:124
-#: seahub/views/__init__.py:638 seahub/views/ajax.py:83
+#: seahub/views/__init__.py:640 seahub/views/ajax.py:83
 #: seahub/views/ajax.py:113 seahub/views/ajax.py:119 seahub/views/sso.py:259
 msgid "Permission denied."
 msgstr "Permission denied."
@@ -602,16 +606,16 @@ msgstr "The participant already exists."
 msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
 msgstr "Tag can only contain letters, numbers, dot, hyphen or underscore."
 
-#: seahub/api2/endpoints/group_members.py:109
-#: seahub/api2/endpoints/group_members.py:357
-#: seahub/api2/endpoints/group_members.py:516
+#: seahub/api2/endpoints/group_members.py:110
+#: seahub/api2/endpoints/group_members.py:358
+#: seahub/api2/endpoints/group_members.py:517
 #, python-format
 msgid "User %s is already a group member."
 msgstr "User %s is already a group member."
 
-#: seahub/api2/endpoints/group_members.py:115
-#: seahub/api2/endpoints/group_members.py:366
-#: seahub/api2/endpoints/group_members.py:525 seahub/api2/views.py:1925
+#: seahub/api2/endpoints/group_members.py:116
+#: seahub/api2/endpoints/group_members.py:367
+#: seahub/api2/endpoints/group_members.py:526 seahub/api2/views.py:1925
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
 #: seahub/organizations/api/admin/users.py:339
@@ -619,25 +623,25 @@ msgstr "User %s is already a group member."
 msgid "User %s not found in organization."
 msgstr "User %s not found in organization."
 
-#: seahub/api2/endpoints/group_members.py:118
-#: seahub/api2/endpoints/group_members.py:374
-#: seahub/api2/endpoints/group_members.py:533
+#: seahub/api2/endpoints/group_members.py:119
+#: seahub/api2/endpoints/group_members.py:375
+#: seahub/api2/endpoints/group_members.py:534
 #, python-format
 msgid "User %s is an organization user."
 msgstr "User %s is an organization user."
 
-#: seahub/api2/endpoints/group_members.py:437 seahub/group/error_msg.py:17
+#: seahub/api2/endpoints/group_members.py:438 seahub/group/error_msg.py:17
 #: seahub/group/error_msg.py:23 seahub/views/file.py:569
 msgid "Group does not exist"
 msgstr "Group does not exist"
 
-#: seahub/api2/endpoints/group_members.py:576
+#: seahub/api2/endpoints/group_members.py:577
 #, fuzzy
 #| msgid "Email or Username"
 msgid "Email or LoginID"
 msgstr "Email or Username"
 
-#: seahub/api2/endpoints/group_members.py:587 seahub/views/sysadmin.py:167
+#: seahub/api2/endpoints/group_members.py:588 seahub/views/sysadmin.py:167
 #: seahub/views/sysadmin.py:275 seahub/views/sysadmin.py:653
 #: seahub/views/sysadmin.py:665 seahub/views/sysadmin.py:813
 msgid "Failed to export Excel"
@@ -946,20 +950,20 @@ msgstr ""
 msgid "Length of WebDAV password should be less than 30."
 msgstr "Length of WebDav password should be less than 30."
 
-#: seahub/api2/endpoints/wiki2.py:223 seahub/api2/endpoints/wiki2.py:1642
+#: seahub/api2/endpoints/wiki2.py:237 seahub/api2/endpoints/wiki2.py:1679
 #: seahub/api2/endpoints/wikis.py:212
 msgid "Name can only contain letters, numbers, blank, hyphen or underscore."
 msgstr "Name can only contain letters, numbers, blank, hyphen or underscore."
 
-#: seahub/api2/endpoints/wiki2.py:1404
+#: seahub/api2/endpoints/wiki2.py:1421
 msgid "URL is invalid"
 msgstr "URL is invalid"
 
-#: seahub/api2/endpoints/wiki2.py:1408
+#: seahub/api2/endpoints/wiki2.py:1425
 msgid "The custom part of URL should have 5-30 characters."
 msgstr "The custom part of URL should have 5-30 characters."
 
-#: seahub/api2/endpoints/wiki2.py:1430
+#: seahub/api2/endpoints/wiki2.py:1452
 msgid "This custom domain is already in use and cannot be used for your wiki"
 msgstr "This custom domain is already in use and cannot be used for your wiki"
 
@@ -1090,15 +1094,19 @@ msgstr "This account has been frozen due to too many failed login attempts."
 msgid "Logged out"
 msgstr "Logged out"
 
-#: seahub/auth/views.py:386
+#: seahub/auth/views.py:377 seahub/organizations/views.py:241
+msgid "Cloudflare Turnstile check failed. Please refresh and try again."
+msgstr ""
+
+#: seahub/auth/views.py:392
 msgid "Failed to send email, please contact administrator."
 msgstr "Failed to send email, please contact administrator."
 
-#: seahub/auth/views.py:454
+#: seahub/auth/views.py:474
 msgid "Unable to change password."
 msgstr "Unable to change password."
 
-#: seahub/auth/views.py:537
+#: seahub/auth/views.py:557
 #, python-brace-format
 msgid "Team {domain} does not have permission to use ADFS/SAML SSO."
 msgstr ""
@@ -1627,7 +1635,7 @@ msgid "The %(site_name)s team"
 msgstr "The %(site_name)s team"
 
 #: seahub/group/views.py:110 seahub/share/views.py:137
-#: seahub/views/__init__.py:463 seahub/views/ajax.py:378
+#: seahub/views/__init__.py:465 seahub/views/ajax.py:378
 #: seahub/views/ajax.py:424 seahub/views/file.py:1336 seahub/views/file.py:1364
 #: seahub/views/file.py:1648 seahub/views/file.py:1688
 #: seahub/views/file.py:2135 seahub/views/file.py:2141 seahub/views/repo.py:115
@@ -1749,43 +1757,43 @@ msgstr "Confirm Password"
 
 #: seahub/invitations/templates/invitations/token_view.html:30
 #: seahub/options/templates/options/set_user_options.html:14
-#: seahub/organizations/templates/organizations/org_register.html:59
+#: seahub/organizations/templates/organizations/org_register.html:64
 #: seahub/share/templates/share/share_link_email_audit.html:54
 #: seahub/templates/decrypt_repo_form.html:13
 #: seahub/templates/registration/password_change_form.html:38
 #: seahub/templates/registration/password_reset_confirm.html:31
-#: seahub/templates/registration/password_reset_form.html:55
+#: seahub/templates/registration/password_reset_form.html:63
 #: seahub/templates/registration/password_set_form.html:35
 #: seahub/templates/share_access_validation.html:29
 msgid "Submit"
 msgstr "Submit"
 
 #: seahub/invitations/templates/invitations/token_view.html:52
-#: seahub/organizations/templates/organizations/org_register.html:91
+#: seahub/organizations/templates/organizations/org_register.html:99
 #: seahub/templates/registration/login.html:210
 #: seahub/templates/registration/password_change_form.html:65
 #: seahub/templates/registration/password_reset_confirm.html:61
 #: seahub/templates/registration/password_set_form.html:58
-#: seahub/templates/registration/registration_form.html:93
+#: seahub/templates/registration/registration_form.html:101
 #: seahub/templates/sysadmin/sudo_mode.html:85
 msgid "Password cannot be blank"
 msgstr "Password cannot be blank"
 
 #: seahub/invitations/templates/invitations/token_view.html:57
-#: seahub/organizations/templates/organizations/org_register.html:95
+#: seahub/organizations/templates/organizations/org_register.html:103
 #: seahub/templates/registration/password_change_form.html:69
 #: seahub/templates/registration/password_reset_confirm.html:65
 #: seahub/templates/registration/password_set_form.html:62
-#: seahub/templates/registration/registration_form.html:97
+#: seahub/templates/registration/registration_form.html:105
 msgid "Please enter the password again"
 msgstr "Please enter the password again"
 
 #: seahub/invitations/templates/invitations/token_view.html:61
-#: seahub/organizations/templates/organizations/org_register.html:99
+#: seahub/organizations/templates/organizations/org_register.html:107
 #: seahub/templates/registration/password_change_form.html:73
 #: seahub/templates/registration/password_reset_confirm.html:69
 #: seahub/templates/registration/password_set_form.html:66
-#: seahub/templates/registration/registration_form.html:101
+#: seahub/templates/registration/registration_form.html:109
 msgid "Passwords don't match"
 msgstr "Passwords don't match"
 
@@ -2394,8 +2402,8 @@ msgstr "Admin Name"
 msgid "Admin Email"
 msgstr "Admin Email"
 
-#: seahub/organizations/templates/organizations/org_register.html:87
-#: seahub/templates/registration/registration_form.html:89
+#: seahub/organizations/templates/organizations/org_register.html:95
+#: seahub/templates/registration/registration_form.html:97
 msgid "Email cannot be blank"
 msgstr "Email cannot be blank"
 
@@ -2415,12 +2423,12 @@ msgstr "Next"
 msgid "Per page: "
 msgstr "Per page: "
 
-#: seahub/organizations/views.py:325 seahub/organizations/views.py:355
+#: seahub/organizations/views.py:364 seahub/organizations/views.py:394
 #: seahub/thumbnail/views.py:112
 msgid "Invalid token."
 msgstr "Invalid token."
 
-#: seahub/organizations/views.py:358
+#: seahub/organizations/views.py:397
 #, fuzzy
 #| msgid "Expiration"
 msgid "Expired token."
@@ -2486,9 +2494,9 @@ msgstr ""
 
 #: seahub/seadoc/views.py:32 seahub/seadoc/views.py:86
 #: seahub/seadoc/views.py:164 seahub/seadoc/views.py:210
-#: seahub/seadoc/views.py:247 seahub/views/__init__.py:454
-#: seahub/views/__init__.py:497 seahub/views/__init__.py:633
-#: seahub/views/__init__.py:799 seahub/views/ajax.py:373
+#: seahub/seadoc/views.py:247 seahub/views/__init__.py:456
+#: seahub/views/__init__.py:499 seahub/views/__init__.py:635
+#: seahub/views/__init__.py:801 seahub/views/ajax.py:373
 msgid "Library does not exist"
 msgstr "Library does not exist"
 
@@ -2653,10 +2661,11 @@ msgid "Sorry, but the requested page could not be found."
 msgstr "Sorry, but the requested page could not be found."
 
 #: seahub/templates/base.html:8 seahub/templates/base_for_react.html:9
+#: seahub/templates/wiki/wiki_publish_ssr.html:10
 msgid "File, Collaboration, Team, Organization"
 msgstr "File, Collaboration, Team, Organization"
 
-#: seahub/templates/base.html:35
+#: seahub/templates/base.html:35 seahub/templates/wiki/wiki_publish_ssr.html:53
 msgid "Close"
 msgstr "Close"
 
@@ -2777,7 +2786,7 @@ msgstr ""
 "%(expiration_days)s days: "
 
 #: seahub/templates/registration/activation_email.html:18
-#: seahub/templates/registration/registration_form.html:58
+#: seahub/templates/registration/registration_form.html:63
 msgid "Sign Up"
 msgstr "Sign Up"
 
@@ -2887,7 +2896,7 @@ msgstr "Successfully reset password."
 #: seahub/templates/registration/password_reset_done.html:4
 #: seahub/templates/registration/password_reset_done.html:44
 #: seahub/templates/registration/password_reset_form.html:4
-#: seahub/templates/registration/password_reset_form.html:50
+#: seahub/templates/registration/password_reset_form.html:54
 msgid "Password Reset"
 msgstr "Password Reset"
 
@@ -2921,11 +2930,11 @@ msgstr ""
 msgid "If you did not request it, just skip it."
 msgstr "If you did not request it, just skip it."
 
-#: seahub/templates/registration/password_reset_form.html:52
+#: seahub/templates/registration/password_reset_form.html:56
 msgid "We will send you an email to set new password"
 msgstr "We will send you an email to set new password"
 
-#: seahub/templates/registration/password_reset_form.html:53
+#: seahub/templates/registration/password_reset_form.html:57
 msgid "Your email used in login"
 msgstr "Your email used in login"
 
@@ -3237,12 +3246,56 @@ msgstr "after modification"
 msgid "Your quota is almost full on %(site_name)s."
 msgstr "Your quota is almost full on %(site_name)s."
 
+#: seahub/templates/wiki/_wiki_publish_ssr_nav_item.html:5
+msgid "Toggle navigation section"
+msgstr ""
+
 #: seahub/templates/wiki/wiki.html:24
 msgid "Last modified by"
 msgstr "Last modified by"
 
+#: seahub/templates/wiki/wiki_publish_ssr.html:46
+#, fuzzy
+#| msgid "Wiki not found."
+msgid "Wiki navigation"
+msgstr "Wiki not found."
+
+#: seahub/templates/wiki/wiki_publish_ssr.html:52
+msgid "Close navigation"
+msgstr ""
+
+#: seahub/templates/wiki/wiki_publish_ssr.html:63
+#: seahub/templates/wiki/wiki_publish_ssr.html:69
+msgid "Pages"
+msgstr ""
+
+#: seahub/templates/wiki/wiki_publish_ssr.html:85
+msgid "Resize navigation panel"
+msgstr ""
+
+#: seahub/templates/wiki/wiki_publish_ssr.html:95
+#, fuzzy
+#| msgid "Operation"
+msgid "Open navigation"
+msgstr "Operation"
+
+#: seahub/templates/wiki/wiki_publish_ssr.html:96
+#, fuzzy
+#| msgid "Expiration"
+msgid "Navigation"
+msgstr "Expiration"
+
+#: seahub/templates/wiki/wiki_publish_ssr.html:128
+msgid "Breadcrumb"
+msgstr ""
+
+#: seahub/templates/wiki/wiki_publish_ssr.html:138
+#: seahub/templates/wiki/wiki_publish_ssr.html:676
+msgid "Cover"
+msgstr ""
+
 #: seahub/thumbnail/views.py:49 seahub/thumbnail/views.py:130
-#: seahub/views/__init__.py:495
+#: seahub/views/__init__.py:497
 msgid "Invalid arguments."
 msgstr "Invalid arguments."
 
@@ -3411,36 +3464,36 @@ msgstr "Disable"
 msgid "permission error"
 msgstr "permission error"
 
-#: seahub/views/__init__.py:314
+#: seahub/views/__init__.py:316
 msgid "Unable to view recycle page"
 msgstr "Unable to view recycle page"
 
-#: seahub/views/__init__.py:369
+#: seahub/views/__init__.py:371
 msgid "Unable to view library modification"
 msgstr "Unable to view library modification"
 
-#: seahub/views/__init__.py:488
+#: seahub/views/__init__.py:490
 msgid "Please specify history ID"
 msgstr "Please specify history ID"
 
-#: seahub/views/__init__.py:492
+#: seahub/views/__init__.py:494
 msgid "Successfully restored the library."
 msgstr "Successfully restored the library."
 
-#: seahub/views/__init__.py:499
+#: seahub/views/__init__.py:501
 msgid "History you specified does not exist"
 msgstr "History you specified does not exist"
 
-#: seahub/views/__init__.py:501
+#: seahub/views/__init__.py:503
 msgid "Unknown error"
 msgstr "Unknown error"
 
-#: seahub/views/__init__.py:806 seahub/views/repo.py:291
+#: seahub/views/__init__.py:808 seahub/views/repo.py:291
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" does not exist."
 
-#: seahub/views/__init__.py:838
+#: seahub/views/__init__.py:840
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "Unable to download \"%s\""
