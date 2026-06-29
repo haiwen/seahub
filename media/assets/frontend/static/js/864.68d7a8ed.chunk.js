@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkseahub_frontend=self.webpackChunkseahub_frontend||[]).push([[864],{90864:function(e,n,t){t.r(n),t.d(n,{EventModelingModule:function(){return u.U},createEventModelingServices:function(){return u.g}});var u=t(75275);t(35745)}}]);
