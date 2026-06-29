@@ -69,8 +69,8 @@ const RecordsHeader = ({
   }, [isGroupView, columnMetrics, height]);
 
   const moveable = useMemo(() => {
-    return !!modifyColumnOrderAPI;
-  }, [modifyColumnOrderAPI]);
+    return !!modifyColumnOrderAPI && (!props.canModifyView || props.canModifyView());
+  }, [modifyColumnOrderAPI, props]);
 
   const resizable = useMemo(() => {
     return !!modifyColumnWidthAPI;
