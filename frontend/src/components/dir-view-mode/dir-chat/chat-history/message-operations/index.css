@@ -1,0 +1,36 @@
+.seaqa-ai-answer-operations {
+  margin-top: 12px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  height: 24px;
+}
+
+.seaqa-ai-reply.text:not(.ends-with-link) + .seaqa-ai-answer-operations {
+  margin-top: 9px;
+}
+
+.seaqa-ai-ask-chat .seaqa-icon-btn {
+  display: none;
+}
+
+.seaqa-ai-ask-chat:last-child .seaqa-icon-btn,
+.seaqa-ai-ask-chat:hover .seaqa-icon-btn {
+  display: flex;
+}
+
+.seaqa-ai-answer-operations #message-operations-copy-button {
+  cursor: pointer;
+  font-size: 14px;
+  height: 24px;
+  min-width: 24px;
+  width: fit-content;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+}
+
+.seaqa-ai-answer-operations #message-operations-copy-button:hover {
+  background-color: var(--bs-icon-btn-hover-bg-color);
+}

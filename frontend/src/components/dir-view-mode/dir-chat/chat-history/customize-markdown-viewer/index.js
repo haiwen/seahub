@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { ELementTypes, MarkdownViewer } from '@seafile/seafile-editor';
@@ -116,7 +116,7 @@ const buildDocumentUrl = (source, repoID) => {
   return `${siteRoot}lib/${repoId}/file${Utils.encodePath(path)}`;
 };
 
-const CustomizeMarkdownViewer = ({ chatId, message, repoID }) => {
+const CustomizeMarkdownViewer = forwardRef(({ chatId, message, repoID }, ref) => {
   // const { openDocument } = useDocuments();
   const containerRef = useRef(null);
   const retryCountRef = useRef(0);
@@ -129,6 +129,10 @@ const CustomizeMarkdownViewer = ({ chatId, message, repoID }) => {
       sources: nextSources,
     };
   }, [chatId, message, repoID]);
+
+  useImperativeHandle(ref, () => ({
+    getAIReply: () => value,
+  }), [value]);
 
   useEffect(() => {
     retryCountRef.current = 0;
@@ -210,7 +214,7 @@ const CustomizeMarkdownViewer = ({ chatId, message, repoID }) => {
       />
     </div>
   );
-};
+});
 
 CustomizeMarkdownViewer.propTypes = {
   chatId: PropTypes.string,
