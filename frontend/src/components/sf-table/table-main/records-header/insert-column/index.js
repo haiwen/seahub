@@ -29,9 +29,9 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
   const style = useMemo(() => {
     return {
       height: height,
-      width: 44,
-      minWidth: 44,
-      maxWidth: 44,
+      width: 40,
+      minWidth: 40,
+      maxWidth: 40,
       left: lastColumn.left + lastColumn.width + groupOffsetLeft,
       position: 'absolute',
     };

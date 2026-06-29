@@ -133,15 +133,19 @@
 .sf-table-result-content .static-sf-table-result-content {
   width: 100%;
   position: relative;
-  background: var(--bs-header-secondary-bg);
-  border-bottom: 1px solid var(--bs-border-secondary-color);
+  background: var(--bs-th-secondary-bg);
+  border-bottom: 1px solid var(--bs-border-quartus-color);
   z-index: 3;
+}
+
+.sf-table-result-content .static-sf-table-result-content.grid-header {
+  background-color: var(--bs-th-secondary-bg);
+  border-bottom: 1px solid var(--bs-border-quartus-color);
 }
 
 .sf-table-result-content .static-sf-table-result-content .sf-table-row {
   position: relative;
-  width: fit-content;
-  background-color: var(--bs-th-bg);
+  background-color: var(--bs-th-secondary-bg);
 }
 
 .record-HeaderCell__draggable {

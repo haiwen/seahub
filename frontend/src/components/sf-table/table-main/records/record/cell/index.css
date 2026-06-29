@@ -4,7 +4,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  border-right: 1px solid var(--bs-border-secondary-color);
+  border-right: 1px solid var(--bs-border-quartus-color);
   padding: 4px 8px;
   display: flex;
   justify-content: flex-start;
@@ -33,7 +33,7 @@
 }
 
 .sf-table-cell.actions-cell {
-  padding: 4px 8px;
+  padding: 4px 4px 4px 8px;
 }
 
 .sf-table-cell .select-cell-checkbox-container,

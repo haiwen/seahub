@@ -149,7 +149,7 @@ class Record extends React.Component {
     const { searchResult } = this.props;
     if (searchResult) {
       const { currentSelectIndex } = searchResult;
-      if (typeof(currentSelectIndex) !== 'number') return false;
+      if (typeof (currentSelectIndex) !== 'number') return false;
       const currentSelectCell = searchResult.matchedCells[currentSelectIndex];
       if (!currentSelectCell) return false;
       const isCurrentRow = this.props.showRecordAsTree ? currentSelectCell.nodeKey === treeNodeKey : currentSelectCell.row === rowId;

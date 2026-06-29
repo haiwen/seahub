@@ -46,6 +46,10 @@
   width: 40px;
 }
 
+.sf-metadata-wrapper .sf-table-result-content .frozen-columns .sf-table-cell {
+  justify-content: space-between;
+}
+
 .sf-metadata-container {
   height: 100%;
 }
