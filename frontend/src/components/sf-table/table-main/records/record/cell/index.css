@@ -11,6 +11,10 @@
   align-items: flex-start;
 }
 
+.sf-table-cell.default-row-height-cell {
+  align-items: center;
+}
+
 .sf-table-cell:not(.table-cell-uneditable):hover {
   cursor: pointer;
 }
@@ -67,10 +71,11 @@
 }
 
 /* cell formatter */
-.sf-table-cell .sf-metadata-ui.cell-formatter-container {
+.sf-table-cell .cell-formatter-container {
+  height: 22px;
   display: flex;
   align-items: center;
-  line-height: 20px;
+  line-height: 22px;
 }
 
 .sf-table-cell .collaborator-avatar {
@@ -134,6 +139,10 @@
 .sf-table-cell .mobile-select-all-container .seafile-multicolor-icon-partially-selected {
   font-size: 14px;
   line-height: 1;
+}
+
+.sf-table-cell.sf-table-number-cell {
+  justify-content: flex-end;
 }
 
 @media screen and (max-width: 991.8px) {

@@ -2,9 +2,20 @@
   line-height: 1.5;
   display: flex;
   align-items: center;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.sf-table-cell .sf-metadata-ui.cell-formatter-container.multiple-select-formatter.multi-line-multiple-select-formatter {
+  height: 100%;
+  align-self: stretch;
+  align-items: flex-start;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  row-gap: 4px;
 }
 
 .sf-metadata-ui.multiple-select-formatter .sf-metadata-ui-select-option {
-  margin-right: 10px !important;
+  margin-right: 4px !important;
   flex-shrink: 0;
 }

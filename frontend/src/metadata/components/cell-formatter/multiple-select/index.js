@@ -2,12 +2,16 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import SelectOption from '../select-option';
+import { ROW_HEIGHT } from '@/metadata/constants';
 import { gettext } from '../../../../utils/constants';
 import { DELETED_OPTION_BACKGROUND_COLOR, DELETED_OPTION_TIPS } from '../../../constants';
 
 import './index.css';
 
-const MultipleSelectFormatter = ({ value, options, fontSize, className, children: emptyFormatter }) => {
+const MultipleSelectFormatter = ({ value, options, fontSize, className, children: emptyFormatter, height }) => {
+  const isDefaultRowHeight = useMemo(() => {
+    return height === ROW_HEIGHT || height === ROW_HEIGHT - 1;
+  }, [height]);
   const displayOptions = useMemo(() => {
     if (!Array.isArray(value) || value.length === 0) return [];
     const selectedOptions = options.filter((option) => value.includes(option.id) || value.includes(option.name));
@@ -22,7 +26,9 @@ const MultipleSelectFormatter = ({ value, options, fontSize, className, children
 
   if (displayOptions.length === 0) return emptyFormatter || null;
   return (
-    <div className={classnames('sf-metadata-ui cell-formatter-container multiple-select-formatter', className)}>
+    <div className={classnames('sf-metadata-ui cell-formatter-container multiple-select-formatter', className, {
+      'multi-line-multiple-select-formatter': !isDefaultRowHeight,
+    })}>
       {displayOptions.map(option => {
         return (<SelectOption key={option.id} option={option} fontSize={fontSize} />);
       })}
@@ -34,6 +40,7 @@ MultipleSelectFormatter.propTypes = {
   value: PropTypes.array,
   options: PropTypes.array,
   fontSize: PropTypes.number,
+  height: PropTypes.number,
   className: PropTypes.string,
   children: PropTypes.any,
 };

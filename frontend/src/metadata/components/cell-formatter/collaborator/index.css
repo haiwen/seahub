@@ -1,7 +1,7 @@
 .sf-metadata-ui.collaborator-item {
   display: inline-flex;
   align-items: center;
-  margin-right: 10px;
+  margin-right: 4px;
   padding: 0 8px 0 2px;
   height: 20px;
   font-size: 13px;
@@ -10,6 +10,17 @@
   color: #212529;
   width: fit-content;
   max-width: 200px;
+}
+
+.sf-table-cell .sf-metadata-ui.cell-formatter-container.collaborators-formatter.multi-line-collaborators-formatter {
+  height: 100%;
+  align-self: stretch;
+  display: flex;
+  align-items: flex-start;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  overflow: hidden;
+  row-gap: 4px;
 }
 
 .sf-metadata-ui.collaborator-item .collaborator-avatar,

@@ -7,6 +7,7 @@ import { getCellValueByColumn } from '../../../../utils/cell';
 import { cellCompare, checkCellValueChanged } from '../../../../utils/selection';
 import { checkIsColumnEditable, checkIsNameColumn } from '../../../../utils/column';
 import { NODE_CONTENT_LEFT_INDENT, NODE_ICON_LEFT_INDENT } from '../../../../constants/tree';
+import { ROW_HEIGHT } from '@/metadata/constants';
 import { gettext } from '@/utils/constants';
 
 import './index.css';
@@ -45,14 +46,16 @@ const Cell = React.memo(({
 
   const className = useMemo(() => {
     const { type } = column;
+    const isDefaultRowHeight = height === ROW_HEIGHT || height === ROW_HEIGHT - 1;
     return classnames('sf-table-cell', `sf-table-${type}-cell`, highlightClassName, {
       'table-cell-uneditable': !cellEditable,
       'last-cell': isLastCell,
       'table-last--frozen': isLastFrozenCell,
       'cell-selected': isCellSelected,
+      'default-row-height-cell': isDefaultRowHeight,
       'name-cell': isNameColumn,
     });
-  }, [cellEditable, column, highlightClassName, isLastCell, isLastFrozenCell, isCellSelected, isNameColumn]);
+  }, [cellEditable, column, highlightClassName, height, isLastCell, isLastFrozenCell, isCellSelected, isNameColumn]);
 
   const style = useMemo(() => {
     const { left, width } = column;

@@ -3,14 +3,18 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { getRowById } from '../../../../components/sf-table/utils/table';
 import { getTagColor, getTagName } from '../../../../tag/utils/cell';
+import { ROW_HEIGHT } from '@/metadata/constants';
 import { TagsContext } from '@/tag/hooks';
 
 import './index.css';
 
-const FileTagsFormatter = ({ value: oldValue, className, children: emptyFormatter, showName = false, tagsData: tagsDataProp }) => {
+const FileTagsFormatter = ({ value: oldValue, className, children: emptyFormatter, showName = false, tagsData: tagsDataProp, height }) => {
   // Use context directly to safely check if provider exists
   const context = useContext(TagsContext);
   const tagsData = tagsDataProp || context?.tagsData;
+  const isDefaultRowHeight = useMemo(() => {
+    return height === ROW_HEIGHT || height === ROW_HEIGHT - 1;
+  }, [height]);
 
   const value = useMemo(() => {
     if (!Array.isArray(oldValue) || oldValue.length === 0) return [];
@@ -19,7 +23,9 @@ const FileTagsFormatter = ({ value: oldValue, className, children: emptyFormatte
 
   if (value.length === 0) return emptyFormatter || null;
   return (
-    <div className={classnames('sf-metadata-ui cell-formatter-container tags-formatter', className)}>
+    <div className={classnames('sf-metadata-ui cell-formatter-container tags-formatter', className, {
+      'multi-line-tags-formatter': !isDefaultRowHeight,
+    })}>
       <div className="sf-metadata-ui-tags-container">
         {value.map((id) => {
           const tag = getRowById(tagsData, id);
@@ -43,6 +49,7 @@ const FileTagsFormatter = ({ value: oldValue, className, children: emptyFormatte
 FileTagsFormatter.propTypes = {
   value: PropTypes.array,
   tagsData: PropTypes.object,
+  height: PropTypes.number,
   className: PropTypes.string,
   showName: PropTypes.bool,
 };

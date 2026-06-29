@@ -27,7 +27,7 @@ const Formatter = React.memo(({ column, value, isSample, queryUserAPI, emptyTip,
   switch (type) {
     case CellType.TEXT: {
       return (
-        <TextFormatter value={value} className={className}>
+        <TextFormatter value={value} className={className} {...params}>
           <Empty fieldType={type} placeholder={emptyTip} />
         </TextFormatter>
       );
@@ -71,7 +71,7 @@ const Formatter = React.memo(({ column, value, isSample, queryUserAPI, emptyTip,
     }
     case CellType.MULTIPLE_SELECT: {
       return (
-        <MultipleSelectFormatter value={value} options={column.data?.options || []} className={className}>
+        <MultipleSelectFormatter value={value} options={column.data?.options || []} className={className} {...params}>
           <Empty fieldType={type} placeholder={emptyTip} />
         </MultipleSelectFormatter>
       );
@@ -114,7 +114,7 @@ const Formatter = React.memo(({ column, value, isSample, queryUserAPI, emptyTip,
     }
     case CellType.NUMBER: {
       return (
-        <NumberFormatter value={value} formats={column?.data} className={className}>
+        <NumberFormatter value={value} formats={column?.data} className={className} {...params}>
           <Empty fieldType={type} placeholder={emptyTip} />
         </NumberFormatter>
       );
@@ -136,14 +136,14 @@ const Formatter = React.memo(({ column, value, isSample, queryUserAPI, emptyTip,
     }
     case CellType.TAGS: {
       return (
-        <FileTagsFormatter value={value} className={className} showName={true} tagsData={params.tagsData}>
+        <FileTagsFormatter value={value} className={className} showName={true} tagsData={params.tagsData} {...params}>
           <Empty fieldType={type} placeholder={emptyTip} />
         </FileTagsFormatter>
       );
     }
     default: {
       return (
-        <TextFormatter value={value} className={className}>
+        <TextFormatter value={value} className={className} {...params}>
           <Empty fieldType={type} placeholder={emptyTip} />
         </TextFormatter>
       );

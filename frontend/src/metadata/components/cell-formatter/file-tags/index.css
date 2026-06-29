@@ -26,10 +26,28 @@
 .sf-metadata-ui.tags-formatter .sf-metadata-ui-tags-container {
   display: flex;
   align-items: center;
+  flex-wrap: nowrap;
   width: max-content;
   min-height: 1rem;
   position: relative;
   cursor: pointer;
+  overflow: hidden;
+}
+
+.sf-table-cell .sf-metadata-ui.cell-formatter-container.tags-formatter.multi-line-tags-formatter {
+  height: 100%;
+  align-self: stretch;
+  align-items: flex-start;
+  overflow: hidden;
+}
+
+.sf-table-cell .sf-metadata-ui.cell-formatter-container.tags-formatter.multi-line-tags-formatter .sf-metadata-ui-tags-container {
+  width: 100%;
+  align-items: flex-start;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  overflow: hidden;
+  row-gap: 4px;
 }
 
 .sf-metadata-ui.tags-formatter .sf-metadata-ui-tags-container .sf-metadata-ui-tag {
@@ -41,7 +59,7 @@
   font-size: 13px;
   border: 1px solid #dbdbdb;
   border-radius: 10px;
-  margin-right: 6px;
+  margin-right: 4px;
   padding: 0 6px 0 2px;
 }
 

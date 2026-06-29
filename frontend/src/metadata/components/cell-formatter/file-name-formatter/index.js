@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Utils } from '../../../../utils/utils';
+import { ROW_HEIGHT } from '@/metadata/constants';
 import { gettext, mediaUrl } from '@/utils/constants';
 
 import './index.css';
@@ -19,6 +20,10 @@ const FileNameFormatter = ({
 }) => {
   const [icon, setIcon] = useState(iconUrl);
   const [iconContainerStyle, setIconContainerStyle] = useState({});
+  const [fileNameStyle, setFileNameStyle] = useState({});
+  const isDefaultRowHeight = useMemo(() => {
+    return height === ROW_HEIGHT || height === ROW_HEIGHT - 1;
+  }, [height]);
 
   const { lockedImageUrl, lockedMessage, lockedInfo } = useMemo(() => {
     if (!record) return { lockedImageUrl: null, lockedMessage: null, lockedInfo: null };
@@ -47,14 +52,31 @@ const FileNameFormatter = ({
       const paddingBottom = parseFloat(cellComputedStyle.paddingBottom) || 0;
       const size = height - borderTop - borderBottom - paddingTop - paddingBottom;
       setIconContainerStyle({ width: size, height: size });
+
+      if (isDefaultRowHeight) {
+        setFileNameStyle({});
+        return;
+      }
+
+      const cellLineHeight = parseFloat(cellComputedStyle.lineHeight) || 20;
+      const availableHeight = Math.max(size, 0);
+      const maxVisibleLines = Math.max(Math.floor(availableHeight / cellLineHeight), 1);
+      setFileNameStyle({
+        display: '-webkit-box',
+        WebkitBoxOrient: 'vertical',
+        WebkitLineClamp: maxVisibleLines,
+        lineClamp: String(maxVisibleLines),
+      });
     }
-  }, [cellRef, height]);
+  }, [cellRef, height, isDefaultRowHeight]);
 
   if (!value) return children || null;
 
   return (
     <div
-      className={classnames('sf-metadata-ui cell-formatter-container file-name-formatter', className)}
+      className={classnames('sf-metadata-ui cell-formatter-container file-name-formatter', className, {
+        'multi-line-file-name-formatter': !isDefaultRowHeight,
+      })}
       title={value}
     >
       {icon &&
@@ -67,6 +89,7 @@ const FileNameFormatter = ({
         tabIndex="0"
         role="button"
         className="sf-metadata-file-name"
+        style={fileNameStyle}
         onClick={onClick}
         onKeyDown={Utils.onKeyDown}
       >

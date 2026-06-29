@@ -1,18 +1,19 @@
-/* cell formatter */
-.sf-metadata-record-cell .sf-metadata-ui.cell-formatter-container {
-  height: 100%;
+.sf-table-cell .sf-metadata-text-formatter {
   width: 100%;
-  line-height: 32px;
-}
-
-.sf-metadata-record-cell .sf-metadata-text-formatter {
+  min-width: 0;
+  display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.sf-metadata-record-cell .sf-metadata-creator-formatter,
-.sf-metadata-record-cell .sf-metadata-last-modifier-formatter {
-  display: flex;
-  align-items: center;
+.sf-table-cell .sf-metadata-ui.cell-formatter-container.text-formatter.multi-line-text-formatter {
+  height: 100%;
+  line-height: 22px;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: unset;
+  align-self: stretch;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
