@@ -246,7 +246,6 @@ class CreateRepoDialog extends React.Component {
                 </FormGroup>
                 {!this.state.disabled &&
                   <FormGroup>
-                    {/* todo translate */}
                     <Label for="passwd1">{gettext('Password')}</Label><span className="tip">{' '}{gettext('(at least {placeholder} characters)').replace('{placeholder}', repoPasswordMinLength)}</span>
                     <Input
                       id="passwd1"
@@ -254,6 +253,7 @@ class CreateRepoDialog extends React.Component {
                       disabled={this.state.disabled}
                       value={this.state.password1}
                       onChange={this.handlePassword1Change}
+                      onKeyDown={this.handleKeyDown}
                       autoComplete="new-password"
                     />
                   </FormGroup>
@@ -267,6 +267,7 @@ class CreateRepoDialog extends React.Component {
                       disabled={this.state.disabled}
                       value={this.state.password2}
                       onChange={this.handlePassword2Change}
+                      onKeyDown={this.handleKeyDown}
                       autoComplete="new-password"
                     />
                   </FormGroup>
