@@ -19,13 +19,14 @@ const TagItem = ({
   onMouseLeave,
   depth = 0,
   hasChildren = false,
+  hasExpandableNodes = false,
   isFolded = false,
   onToggleExpand
 }) => {
   const tagId = getTagId(tag);
   const tagName = getTagName(tag);
   const tagColor = getTagColor(tag);
-  const paddingLeft = node ? NODE_CONTENT_LEFT_INDENT + NODE_ICON_LEFT_INDENT * depth : 8;
+  const paddingLeft = node && hasExpandableNodes ? NODE_CONTENT_LEFT_INDENT + NODE_ICON_LEFT_INDENT * depth : 8;
 
   return (
     <div className="sf-metadata-tags-editor-tag-item">
@@ -55,12 +56,12 @@ const TagItem = ({
             <Icon symbol="down" className={classNames({ 'rotate-270': isFolded })} />
           </span>
         )}
-        <div className="sf-metadata-tag-color-and-name">
+        <div className="sf-metadata-tag-pill">
           <div className="sf-metadata-tag-color" style={{ backgroundColor: tagColor }} />
           <div className="sf-metadata-tag-name">{tagName}</div>
         </div>
         <div className="sf-metadata-tags-editor-tag-check-icon mr-1">
-          {isSelected && <Icon symbol="check-thin" />}
+          {isSelected && <Icon symbol="check" />}
         </div>
       </div>
     </div>
@@ -77,6 +78,7 @@ TagItem.propTypes = {
   onMouseLeave: PropTypes.func,
   depth: PropTypes.number,
   hasChildren: PropTypes.bool,
+  hasExpandableNodes: PropTypes.bool,
   isFolded: PropTypes.bool,
   onToggleExpand: PropTypes.func,
 };

@@ -61,6 +61,10 @@ const MultipleSelectEditor = forwardRef(({
     setSearchValue(newSearchValue);
   }, [searchValue]);
 
+  const clearSearch = useCallback(() => {
+    setSearchValue('');
+  }, []);
+
   const onSelectOption = useCallback((optionId) => {
     const newValue = value.slice(0);
     let optionIdx = value.indexOf(optionId);
@@ -237,7 +241,7 @@ const MultipleSelectEditor = forwardRef(({
               </span>
             </div>
             <div className="single-select-check-icon">
-              {isSelected && <Icon symbol="check-thin" />}
+              {isSelected && <Icon symbol="check" />}
             </div>
           </div>
         </div>
@@ -254,8 +258,10 @@ const MultipleSelectEditor = forwardRef(({
           placeholder={gettext('Search option')}
           onKeyDown={onKeyDown}
           onChange={onChangeSearch}
+          clearValue={clearSearch}
           autoFocus={true}
           className="sf-metadata-search-options"
+          isClearable={true}
         />
       </div>
       <div className="sf-metadata-single-select-editor-container" ref={editorContainerRef}>
@@ -264,7 +270,12 @@ const MultipleSelectEditor = forwardRef(({
       {isShowCreateBtn && (
         <CommonAddTool
           callBack={createOption}
-          footerName={`${gettext('Add option')} ${searchValue}`}
+          footerName={(
+            <>
+              <span className="label">{gettext('Add option')} </span>
+              <span className="add-option-value">{searchValue}</span>
+            </>
+          )}
           className="add-search-result"
         />
       )}

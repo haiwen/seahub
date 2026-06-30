@@ -7,6 +7,11 @@
   font-size: 12px;
 }
 
+.sf-table-header-cell .sf-table-header-dropdown-toggle:hover {
+  border-radius: 4px;
+  background-color: var(--bs-icon-btn-hover-bg-color);
+}
+
 .sf-table-header-cell .seafile-multicolor-icon-down {
   color: var(--bs-icon-secondary-color);
 }

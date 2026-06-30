@@ -2,7 +2,8 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Utils } from '../utils/utils';
-import Icon from './icon';
+import OpIcon from './op-icon';
+import { gettext } from '@/utils/constants';
 
 import '../css/search-input.css';
 
@@ -103,9 +104,10 @@ class SearchInput extends Component {
       return <ClearIndicator clearValue={this.clearSearch} />;
     }
     return (
-      <span className={classnames('search-text-clear input-icon-addon', clearClassName)} onClick={this.clearSearch}>
-        <Icon symbol="close" />
-      </span>
+      // <span className={classnames('search-text-clear input-icon-addon', clearClassName)} onClick={this.clearSearch}>
+      //   <Icon symbol="close" />
+      // </span>
+      <OpIcon id="search-text-clear" className={classnames('search-text-clear op-icon', clearClassName)} op={this.clearSearch} symbol="md-close" tooltip={gettext('Clear')} />
     );
   };
 

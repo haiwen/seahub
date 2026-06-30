@@ -1,11 +1,11 @@
 .sf-metadata-tags-editor .sf-metadata-tags-editor-tag-container {
   position: relative;
   align-items: center;
-  border-radius: 2px;
+  border-radius: 4px;
   color: var(--bs-body-color);
   display: flex;
   font-size: 13px;
-  height: 30px;
+  height: 32px;
   width: 100%;
 }
 
@@ -24,23 +24,32 @@
   height: 12px;
 }
 
-.sf-metadata-tag-color-and-name {
-  height: 100%;
+.sf-metadata-tag-pill {
   display: flex;
   align-items: center;
-  flex: 1;
+  flex: 0 1 auto;
+  height: 22px;
+  max-width: calc(100% - 24px);
+  padding: 0 6px 0 2px;
+  border: 1px solid #dbdbdb;
+  border-radius: 10px;
+  background: var(--bs-body-bg);
+  margin-right: auto;
 }
 
-.sf-metadata-tag-color-and-name .sf-metadata-tag-color {
-  height: 12px;
-  width: 12px;
+.sf-metadata-tag-pill .sf-metadata-tag-color {
+  position: relative;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
   border-radius: 50%;
   flex-shrink: 0;
+  border: 2px solid #fff;
 }
 
-.sf-metadata-tag-color-and-name .sf-metadata-tag-name {
+.sf-metadata-tag-pill .sf-metadata-tag-name {
   flex: 1;
-  margin-left: 8px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

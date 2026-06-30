@@ -53,12 +53,14 @@ class InteractionMasks extends React.Component {
       draggedRange: null,
       isEditorEnabled: false,
       openEditorMode: '',
+      hideSelectionMask: false,
     };
     this.eventBus = EventBus.getInstance();
     this.pasteSource = PASTE_SOURCE.COPY;
     this.cutPosition = null;
     this.viewId = '';
     this.selectionMask = null;
+    this.invalidActionFlashTimeout = null;
   }
 
   componentDidMount() {
@@ -74,6 +76,7 @@ class InteractionMasks extends React.Component {
     this.unsubscribeCopy = this.eventBus.subscribe(EVENT_BUS_TYPE.COPY_CELLS, this.onCopy);
     this.unsubscribePaste = this.eventBus.subscribe(EVENT_BUS_TYPE.PASTE_CELLS, this.onPaste);
     this.unsubscribeCut = this.eventBus.subscribe(EVENT_BUS_TYPE.CUT_CELLS, this.onCut);
+    document.addEventListener('sf-table-invalid-action-flash', this.handleInvalidActionFlash);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -87,6 +90,10 @@ class InteractionMasks extends React.Component {
   }
 
   componentWillUnmount() {
+    if (this.invalidActionFlashTimeout) {
+      clearTimeout(this.invalidActionFlashTimeout);
+    }
+    document.removeEventListener('sf-table-invalid-action-flash', this.handleInvalidActionFlash);
     this.unsubscribeSelectColumn();
     this.unsubscribeSelectCell();
     this.unsubscribeSelectStart();
@@ -1069,6 +1076,20 @@ class InteractionMasks extends React.Component {
     e.stopPropagation();
   };
 
+  handleInvalidActionFlash = (event) => {
+    const duration = event.detail?.duration || 200;
+    if (this.invalidActionFlashTimeout) {
+      clearTimeout(this.invalidActionFlashTimeout);
+    }
+
+    this.setState({ hideSelectionMask: true });
+
+    this.invalidActionFlashTimeout = setTimeout(() => {
+      this.setState({ hideSelectionMask: false });
+      this.invalidActionFlashTimeout = null;
+    }, duration);
+  };
+
   setSelectionMaskRef = (ref) => {
     this.selectionMask = ref;
   };
@@ -1143,7 +1164,7 @@ class InteractionMasks extends React.Component {
 
   renderSingleCellSelectView = () => {
     const { columns } = this.props;
-    const { isEditorEnabled, selectedPosition } = this.state;
+    const { isEditorEnabled, selectedPosition, hideSelectionMask } = this.state;
     const isDragEnabled = this.checkIsSelectedCellEditable();
     const column = getSelectedColumn({ selectedPosition, columns });
     const { type } = column || {};
@@ -1156,6 +1177,7 @@ class InteractionMasks extends React.Component {
       innerRef: this.setSelectionMaskRef,
       selectedPosition,
       getSelectedDimensions: this.getSelectedDimensions,
+      className: hideSelectionMask ? 'selection-mask-hidden' : '',
     };
 
     const showDragHandle = (isDragEnabled && this.props.supportDragFill && type !== CellType.FILE_NAME);
@@ -1187,6 +1209,7 @@ class InteractionMasks extends React.Component {
         innerRef={this.setSelectionMaskRef}
         selectedPosition={selectedRange.startCell}
         getSelectedDimensions={this.getSelectedDimensions}
+        className={this.state.hideSelectionMask ? 'selection-mask-hidden' : ''}
       />
     ];
   };

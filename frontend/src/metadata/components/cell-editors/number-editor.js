@@ -25,7 +25,7 @@ const NumberEditor = forwardRef(({
     const data = column?.data || {};
     const value = getNumberDisplayString(validValue, data) || '';
     setValue(value);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onChange = useCallback((event) => {
@@ -81,7 +81,7 @@ const NumberEditor = forwardRef(({
     <input
       ref={inputRef}
       type="text"
-      className="form-control"
+      className="sf-table-cell-number-editor form-control"
       value={value}
       onBlur={onBlur}
       onPaste={onPaste}

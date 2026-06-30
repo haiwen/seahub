@@ -64,8 +64,8 @@ const SingleSelectEditor = forwardRef(({
   }, [canEditData, displayOptions, searchValue]);
 
   const style = useMemo(() => {
-    return { width: column.width, top: height - 2 };
-  }, [column, height]);
+    return { top: height };
+  }, [height]);
 
   const blur = useCallback(() => {
     onCommit && onCommit(value);
@@ -75,6 +75,10 @@ const SingleSelectEditor = forwardRef(({
     if (searchValue === newSearchValue) return;
     setSearchValue(newSearchValue);
   }, [searchValue]);
+
+  const clearSearch = useCallback(() => {
+    setSearchValue('');
+  }, []);
 
   const onSelectOption = useCallback((optionId) => {
     if (optionId === value) return;
@@ -241,13 +245,12 @@ const SingleSelectEditor = forwardRef(({
               </span>
             </div>
             <div className="single-select-check-icon">
-              {isSelected && <Icon symbol="check-thin" />}
+              {isSelected && <Icon symbol="check" />}
             </div>
           </div>
         </div>
       );
     });
-
   }, [displayOptions, searchValue, value, highlightIndex, onMenuMouseEnter, onMenuMouseLeave, onMouseDown]);
 
   return (
@@ -257,8 +260,10 @@ const SingleSelectEditor = forwardRef(({
           placeholder={gettext('Search option')}
           onKeyDown={onKeyDown}
           onChange={onChangeSearch}
+          clearValue={clearSearch}
           autoFocus={true}
           className="sf-metadata-search-options"
+          isClearable={true}
         />
       </div>
       <div className="sf-metadata-single-select-editor-container" ref={editorContainerRef}>
@@ -267,7 +272,12 @@ const SingleSelectEditor = forwardRef(({
       {isShowCreateBtn && (
         <CommonAddTool
           callBack={createOption}
-          footerName={`${gettext('Add option')} ${searchValue}`}
+          footerName={(
+            <>
+              <span className="label">{gettext('Add option')} </span>
+              <span className="add-option-value">{searchValue}</span>
+            </>
+          )}
           className="add-search-result"
         />
       )}

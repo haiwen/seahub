@@ -49,6 +49,9 @@ const TagsEditor = forwardRef(({
 
   const displayTags = useMemo(() => getTagsByName(tags, searchValue), [searchValue, tags]);
   const recentlyUsedTags = useMemo(() => recentlyUsed, [recentlyUsed]);
+  const hasExpandableNodes = useMemo(() => {
+    return nodes.some(node => checkTreeNodeHasChildNodes(node));
+  }, [nodes]);
 
   const isShowCreateBtn = useMemo(() => {
     if (!canAddTag) return false;
@@ -338,13 +341,10 @@ const TagsEditor = forwardRef(({
           const tagId = getTagId(tag);
           const tagName = getTagName(tag);
           const tagColor = getTagColor(tag);
-          const isSelected = value.includes(tagId);
           return (
             <div
               key={tagId}
-              className={classnames('sf-metadata-ui-tag', {
-                'sf-metadata-ui-tag-selected': isSelected,
-              })}
+              className="sf-metadata-ui-tag"
               title={tagName}
               onClick={() => handleSelectTags(tagId)}
               tabIndex={0}
@@ -358,7 +358,7 @@ const TagsEditor = forwardRef(({
         })}
       </div>
     );
-  }, [recentlyUsedTags, value, handleSelectTags]);
+  }, [recentlyUsedTags, handleSelectTags]);
 
   const renderOptions = useCallback(() => {
     if (nodes.length === 0) {
@@ -394,6 +394,7 @@ const TagsEditor = forwardRef(({
               onMouseLeave={onTreeMenuMouseLeave}
               depth={getTreeNodeDepth(node)}
               hasChildren={checkTreeNodeHasChildNodes(node)}
+              hasExpandableNodes={hasExpandableNodes}
               isFolded={!searchValue ? keyNodeFoldedMap[nodeKey] : searchedKeyNodeFoldedMap[nodeKey]}
               onToggleExpand={(e) => toggleExpandTreeNode(e, nodeKey)}
             />
@@ -401,7 +402,7 @@ const TagsEditor = forwardRef(({
         })}
       </>
     );
-  }, [nodes, tagsData, value, highlightNodeIndex, searchValue, recentlyUsedTags, keyNodeFoldedMap, searchedKeyNodeFoldedMap, showRecentlyUsed, renderRecentlyUsed, toggleExpandTreeNode, handleSelectTags, onTreeMenuMouseEnter, onTreeMenuMouseLeave]);
+  }, [nodes, tagsData, value, highlightNodeIndex, searchValue, recentlyUsedTags, keyNodeFoldedMap, searchedKeyNodeFoldedMap, showRecentlyUsed, renderRecentlyUsed, toggleExpandTreeNode, handleSelectTags, onTreeMenuMouseEnter, onTreeMenuMouseLeave, hasExpandableNodes]);
 
   return (
     <div className="sf-metadata-tags-editor tags-tree-container sf-popover-container" style={{ ...style, ...customStyle }}>
@@ -431,7 +432,12 @@ const TagsEditor = forwardRef(({
       {isShowCreateBtn && (
         <CommonAddTool
           callBack={createTag}
-          footerName={`${gettext('Add tag')} ${searchValue}`}
+          footerName={(
+            <>
+              <span className="label">{gettext('Add tag')} </span>
+              <span className="add-tag-value">{searchValue}</span>
+            </>
+          )}
           className="add-search-result"
         />
       )}

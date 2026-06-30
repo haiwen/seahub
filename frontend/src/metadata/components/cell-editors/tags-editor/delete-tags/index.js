@@ -22,10 +22,10 @@ const DeleteTag = ({ value, tags, onDelete }) => {
             <div className="sf-metadata-delete-select-tag-name">{tagName}</div>
             <OpIcon
               id={`remove-tag-icon-${idx}`}
-              symbol="close"
+              symbol="md-close"
               className="sf-metadata-delete-select-remove"
               tooltip={gettext('Remove')}
-              aria-label={gettext('Delete')}
+              aria-label={gettext('Remove')}
               op={(event) => onDelete(tagId, event)}
               onKeyDown={Utils.onKeyDown}
             />

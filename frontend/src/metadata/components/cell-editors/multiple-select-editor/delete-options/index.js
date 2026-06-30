@@ -26,14 +26,6 @@ const DeleteOption = ({ value, options, onDelete }) => {
         if (!option) return null;
         const { id, name } = option;
         const style = {
-          display: 'inline-flex',
-          padding: '0px 10px',
-          height: '20px',
-          lineHeight: '20px',
-          textAlign: 'center',
-          borderRadius: '10px',
-          maxWidth: '250px',
-          fontSize: 13,
           backgroundColor: option.color,
           color: option.textColor || null,
           fill: option.textColor || '#666',
@@ -41,7 +33,7 @@ const DeleteOption = ({ value, options, onDelete }) => {
         return (
           <div key={id} className="sf-metadata-delete-select-option" style={style}>
             <span className="sf-metadata-delete-select-option-name text-truncate" title={name} aria-label={name}>{name}</span>
-            <IconBtn className="sf-metadata-delete-select-remove" onClick={(event) => onDelete(id, event)} symbol="close" />
+            <IconBtn className="sf-metadata-delete-select-remove" onClick={(event) => onDelete(id, event)} symbol="md-close" />
           </div>
         );
       })}

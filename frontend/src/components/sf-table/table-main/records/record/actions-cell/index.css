@@ -1,12 +1,10 @@
 .sf-table-row .seafile-multicolor-icon-expand {
   opacity: 0;
-  width: 20px;
-  height: 20px;
   text-align: center;
   line-height: 20px;
   flex-shrink: 0;
   cursor: pointer;
-  color: #467fcf;
+  color: var(--bs-icon-color);
 }
 
 .sf-table-row:hover .seafile-multicolor-icon-expand {
@@ -36,14 +34,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 50%;
+  border-radius: 4px;
+  font-size: .75rem;
+  background-color: var(--bs-body-bg);
 }
 
 .sf-table-row:hover .sf-table-cell.actions-cell .row-expand .seafile-multicolor-icon-expand {
-  width: 16px;
-  height: 16px;
   display: block;
-  transform: scale(.8);
 }
 
 .sf-table-row .sf-table-cell.actions-cell .row-expand-icon .seafile-multicolor-icon-expand {
@@ -51,7 +48,7 @@
 }
 
 .sf-table-row .sf-table-cell.actions-cell .row-expand:hover {
-  background-color: #c2f5e9;
+  background-color: var(--bs-icon-btn-hover-bg-color);
 }
 
 .sf-table-row .sf-table-column-content.actions-checkbox {

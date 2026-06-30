@@ -3,7 +3,7 @@
   border-bottom: 1px solid var(--bs-border-color);
   border-radius: 3px 3px 0 0;
   min-height: 28px;
-  padding: 8px 16px;
+  padding: 12px 12px 8px;
   line-height: 1;
   max-height: 150px;
   overflow-y: auto;
@@ -14,21 +14,18 @@
   display: inline-flex;
   align-items: center;
   height: 20px;
-  margin-right: 10px;
-  padding: 0 8px 0 2px;
+  margin: 0 4px 4px 0;
+  padding: 0 8px 0 4px;
   font-size: 13px;
   border-radius: 10px;
   border: 1px solid #dbdbdb;
   background: #fff;
-  margin-top: 2px;
-  margin-bottom: 2px;
 }
 
 .sf-metadata-delete-select-tags .sf-metadata-delete-select-tag .sf-metadata-delete-select-tag-color {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  margin-left: 1px;
 }
 
 .sf-metadata-delete-select-tags .sf-metadata-delete-select-tag .sf-metadata-delete-select-tag-name {
@@ -36,7 +33,7 @@
   height: 20px;
   line-height: 20px;
   color: #212529;
-  margin-left: 8px;
+  margin-left: 4px;
   max-width: 200px;
   flex: 1 1;
   overflow: hidden;
@@ -45,14 +42,10 @@
 }
 
 .sf-metadata-delete-select-tags .sf-metadata-delete-select-tag .sf-metadata-delete-select-remove {
-  height: 14px;
-  width: 14px;
+  height: 10px;
+  width: 10px;
+  display: flex;
   position: relative;
-  left: 2px;
-  bottom: 1px;
-}
-
-.sf-metadata-delete-select-tags .sf-metadata-delete-select-remove .seafile-multicolor-icon-x-01 {
-  fill: #666;
-  font-size: 12px;
+  font-size: 10px;
+  margin-left: 4px;
 }

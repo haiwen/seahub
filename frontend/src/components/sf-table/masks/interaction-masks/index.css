@@ -1,10 +1,13 @@
 .interaction-mask .rdg-selected {
-  border: 2px solid #66afe9;
+  border: 2px solid #3e84f7;
+}
+
+.interaction-mask .rdg-selected.selection-mask-hidden {
+  opacity: 0;
 }
 
 .interaction-mask .rdg-selected-range {
-  border: 1px solid #66afe9;
-  background-color: rgba(102, 175, 233, 0.18823529411764706);
+  background-color: rgba(62, 132, 247, 0.1);
 }
 
 .rdg-selected .drag-handle,
@@ -14,7 +17,7 @@
   position: absolute;
   bottom: -5px;
   right: -4px;
-  background: #66afe9;
+  background: #3e84f7;
   width: 8px;
   height: 8px;
   border: 1px solid #fff;
@@ -34,7 +37,7 @@
   background: white;
   width: 16px;
   height: 16px;
-  border: 1px solid #66afe9;
+  border: 1px solid #3e84f7;
   z-index: 2;
 }
 
@@ -44,7 +47,6 @@
 
 .react-grid-cell-dragged-over-up,
 .react-grid-cell-dragged-over-down {
-  border: 1px dashed black;
-  background: rgba(0, 0, 255, 0.2) !important;
+  border: 1px dashed #3e84f7;
+  background: rgba(62, 132, 247, 0.1) !important;
 }
-

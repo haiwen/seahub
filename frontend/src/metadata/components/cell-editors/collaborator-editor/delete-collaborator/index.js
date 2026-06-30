@@ -21,7 +21,7 @@ const DeleteCollaborator = ({ value, onDelete }) => {
               <img className="collaborator-avatar m-0" alt={name} src={avatar_url} />
             </span>
             <span className="collaborator-name text-truncate" title={name} aria-label={name}>{name}</span>
-            <OpIcon id={`delete-collaborator-icon-${idx}`} className="collaborator-remove" symbol="close" tooltip={gettext('Remove')} op={(e) => onDelete(email, e)} />
+            <OpIcon id={`delete-collaborator-icon-${idx}`} className="collaborator-remove" symbol="md-close" tooltip={gettext('Remove')} op={(e) => onDelete(email, e)} />
           </div>
         );
       })}

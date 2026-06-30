@@ -1,9 +1,9 @@
 .sf-metadata-delete-collaborator {
-  background-color: var(--bs-body-secondary-bg);
+  background-color: var(--bs-th-secondary-bg);
   border-bottom: 1px solid var(--bs-border-secondary-color);
   border-radius: 3px 3px 0 0;
   min-height: 35px;
-  padding: 5px 10px;
+  padding: 8px;
   line-height: 1;
 }
 
@@ -42,19 +42,13 @@
   white-space: nowrap;
 }
 
-.collaborator .collaborator-remove .seafile-multicolor-icon-x-01 {
-  fill: #666;
-  font-size: 12px;
-}
-
 .sf-metadata-delete-collaborator .collaborator {
   margin-top: 2px;
   margin-bottom: 2px;
 }
 
 .sf-metadata-delete-collaborator .collaborator .collaborator-remove {
-  height: 14px;
-  width: 14px;
+  font-size: 10px;
   position: relative;
-  left: 2px;
+  margin-left: 4px;
 }

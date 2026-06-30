@@ -2,7 +2,7 @@
   width: 520px;
   height: fit-content;
   max-height: 450px;
-  border-radius: 3px;
+  border-radius: 8px;
   position: fixed;
   display: flex;
   flex-direction: column;
@@ -10,9 +10,9 @@
   top: 0;
   overflow: hidden;
   bottom: 20px;
-  border: 1px solid rgba(0, 40, 100, 0.12);
-  background: var(--bs-body-bg); 
-  box-shadow: 0 0 5px #ccc;
+  border: 1px solid var(--bs-border-quartus-color);
+  background: var(--bs-body-bg);
+  box-shadow: 0 6px 14px 0 rgba(0, 0, 0, 0.1);
   background-clip: padding-box;
   z-index: 100;
   box-sizing: border-box;
@@ -29,7 +29,7 @@
 }
 
 .sf-metadata-long-text-preview .sf-metadata-longtext-container .article {
-  padding: 10px 16px;
+  padding: 0;
   border: unset;
 }
 
@@ -43,4 +43,6 @@
   height: 100%;
   width: 100%;
   overflow-x: hidden;
+  padding: 24px;
+  margin-bottom: 24px;
 }

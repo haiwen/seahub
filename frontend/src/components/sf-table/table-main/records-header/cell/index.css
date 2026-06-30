@@ -2,6 +2,18 @@
   color: var(--bs-icon-secondary-color);
 }
 
+.static-sf-table-result-content.grid-header .sf-table-row:hover .sf-table-cell.column {
+  background-color: var(--bs-th-secondary-bg);
+}
+
+.static-sf-table-result-content.grid-header .sf-table-row:hover .frozen-columns .sf-table-cell.column {
+  background-color: var(--bs-th-bg);
+}
+
+.static-sf-table-result-content.grid-header .sf-table-header-cell:hover .sf-table-cell.column {
+  background: var(--bs-th-hover-bg);
+}
+
 .sf-table-header-cell .seafile-multicolor-icon-drop-down {
   color: var(--bs-icon-secondary-color);
   font-size: 12px;

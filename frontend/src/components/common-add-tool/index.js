@@ -10,13 +10,15 @@ function CommonAddTool({ callBack, footerName, className, addIconClassName, hide
     <div
       className={`add-item-btn ${className ? className : ''}`}
       style={style}
-      onClick={(e) => {callBack(e);}}
+      onClick={(e) => { callBack(e); }}
       tabIndex="0"
       role="button"
       onKeyDown={Utils.onKeyDown}
     >
-      {!hideIcon && <Icon symbol="add-table" className={addIconClassName} />}
-      <span className="description text-truncate">{footerName}</span>
+      <div className="add-item-btn-content">
+        {!hideIcon && <Icon symbol="add-table" className={addIconClassName} />}
+        <span className="description text-truncate">{footerName}</span>
+      </div>
     </div>
   );
 }
@@ -24,7 +26,7 @@ function CommonAddTool({ callBack, footerName, className, addIconClassName, hide
 CommonAddTool.propTypes = {
   className: PropTypes.string,
   addIconClassName: PropTypes.string,
-  footerName: PropTypes.string.isRequired,
+  footerName: PropTypes.node.isRequired,
   callBack: PropTypes.func.isRequired,
 };
 

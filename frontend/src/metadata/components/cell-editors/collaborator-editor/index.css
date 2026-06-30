@@ -7,28 +7,44 @@
   opacity: 1;
   position: absolute;
   left: 0;
-}
-
-[data-bs-theme=dark] .sf-metadata-collaborator-editor {
-  background-color: var(--bs-popover-bg);
-  border-color: var(--bs-border-secondary-color);
-  box-shadow: none;
+  border-color: var(--bs-border-quartus-color);
 }
 
 .sf-metadata-collaborator-editor .sf-metadata-collaborator-editor-container {
   max-height: 200px;
   min-height: 100px;
-  padding: 10px 0;
+  padding: 8px;
   overflow: auto;
 }
 
 .sf-metadata-collaborator-editor .sf-metadata-search-collaborator-options {
-  padding: 10px 10px 0 10px;
+  position: relative;
+  padding: 8px 8px 0 8px;
 }
 
 .sf-metadata-collaborator-editor .sf-metadata-search-collaborator-options input {
-  max-height: 30px;
-  font-size: 14px;
+  width: 100% !important;
+  max-height: 28px;
+  font-size: 13px;
+  padding: 4px 8px;
+}
+
+.sf-metadata-collaborator-editor .sf-metadata-search-collaborator-options input:focus {
+  border: 1px solid #3e84f7;
+  box-shadow: none;
+}
+
+.sf-metadata-collaborator-editor .sf-metadata-search-collaborator-options .search-text-clear {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 12px;
+  right: 8px;
+  font-size: .75rem;
 }
 
 .sf-metadata-collaborator-editor .collaborator-item {
@@ -53,7 +69,7 @@
   border-radius: 2px;
   font-size: 13px;
   color: var(--bs-body-color);
-  padding-left: 12px;
+  padding-left: 8px;
 }
 
 .sf-metadata-collaborator-editor .collaborator-container-highlight {
@@ -80,7 +96,7 @@
   height: 20px;
   line-height: 20px;
   color: var(--bs-body-color);
-  margin-left: 5px;
+  margin-left: 4px;
   max-width: 200px;
 }
 
@@ -89,21 +105,19 @@
 }
 
 .sf-metadata-collaborator-editor .collaborator-check-icon {
-  width: 20px;
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  margin-right: 10px;
-}
-
-.sf-metadata-collaborator-editor .collaborator-check-icon .seafile-multicolor-icon-check-icon {
-  font-size: 12px;
-  fill: #666;
+  margin-right: 8px;
+  font-size: 13px;
 }
 
 .sf-metadata-collaborator-editor .none-search-result {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40px 0;
   font-size: 14px;
   opacity: 0.5;
-  display: inline-block;
-  padding: 0 10px;
 }

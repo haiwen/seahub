@@ -64,6 +64,10 @@ const CollaboratorEditor = forwardRef(({
     setSearchValue(newSearchValue);
   }, [searchValue]);
 
+  const clearSearch = useCallback(() => {
+    setSearchValue('');
+  }, []);
+
   const onSelectCollaborator = useCallback((email) => {
     const newValue = value.slice(0);
     const collaboratorIndex = newValue.indexOf(email);
@@ -233,7 +237,7 @@ const CollaboratorEditor = forwardRef(({
               </span>
             </div>
             <div className="collaborator-check-icon">
-              {isSelected && <Icon symbol="check-thin" />}
+              {isSelected && <Icon symbol="check" />}
             </div>
           </div>
         </div>
@@ -248,7 +252,7 @@ const CollaboratorEditor = forwardRef(({
     <div className="sf-metadata-collaborator-editor sf-popover-container" style={{ top: -38, left: isBeyondScreen ? 'unset' : 0, right: isBeyondScreen ? 0 : 'unset' }} ref={editorRef}>
       <DeleteCollaborator value={value} onDelete={onDeleteCollaborator} />
       <div className="sf-metadata-search-collaborator-options">
-        <SearchInput placeholder={gettext('Search collaborators')} onKeyDown={onKeyDown} onChange={onChangeSearch} autoFocus={true} className="sf-metadata-search-collaborators" />
+        <SearchInput placeholder={gettext('Search collaborators')} onKeyDown={onKeyDown} onChange={onChangeSearch} clearValue={clearSearch} autoFocus={true} className="sf-metadata-search-collaborators" isClearable={true} />
       </div>
       <div className="sf-metadata-collaborator-editor-container" ref={editorContainerRef}>
         {renderCollaborators()}
