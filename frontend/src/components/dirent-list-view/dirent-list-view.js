@@ -664,6 +664,8 @@ class DirentListView extends React.Component {
 
     const hasSelectedItems = selectedDirentList.length > 0;
     const isPartiallySelected = hasSelectedItems && !isAllItemSelected;
+    const shouldUnselectAll = isAllItemSelected || isPartiallySelected;
+    const selectAllTooltip = shouldUnselectAll ? gettext('Unselect all items') : gettext('Select all items');
     const sortIcon = <span className={`sf3-font sf3-font-down ${sortOrder == 'asc' ? 'rotate-180 d-inline-block' : ''}`}></span>;
     return [
       { isFixed: true,
@@ -676,8 +678,8 @@ class DirentListView extends React.Component {
             onKeyDown={Utils.onKeyDown}
             role="button"
             tabIndex={0}
-            aria-label={isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')}
-            title={isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')}
+            aria-label={selectAllTooltip}
+            title={selectAllTooltip}
           >
             {isPartiallySelected ? (
               <Icon symbol="partially-selected" />
