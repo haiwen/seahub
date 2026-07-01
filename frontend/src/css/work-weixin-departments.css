@@ -38,14 +38,22 @@
 }
 
 .department-children {
-  padding-left: 1rem;
   position: relative;
 }
 
 .tree-node-inner {
   position: relative;
   display: flex;
+  padding: 2px;
   padding-right: 0.5rem;
+}
+
+.tree-view .left-icon {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
 }
 
 .tree-view .tree-node-icon {
@@ -95,7 +103,7 @@
 }
 
 .tree-view .tree-node-text {
-  width: calc(100% - 2.5rem);
+  width: 100%;
   font-size: 14px;
   white-space: nowrap;
   overflow: hidden;

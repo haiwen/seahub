@@ -5,8 +5,11 @@ import { gettext, isPro } from '../../../utils/constants';
 import Icon from '../../../components/icon';
 import CustomDropdown from '../../../components/dropdown';
 
+const LEFT_INDENT = 20;
+
 const WorkWeixinDepartmentsTreeNodePropTypes = {
   index: PropTypes.number,
+  leftIndent: PropTypes.number,
   department: PropTypes.object.isRequired,
   isChildrenShow: PropTypes.bool.isRequired,
   onChangeDepartment: PropTypes.func.isRequired,
@@ -68,6 +71,7 @@ class WorkWeixinDepartmentsTreeNode extends Component {
         return (
           <WorkWeixinDepartmentsTreeNode
             key={department.id}
+            leftIndent={this.props.leftIndent + LEFT_INDENT}
             department={department}
             isChildrenShow={this.state.isChildrenShow}
             onChangeDepartment={this.props.onChangeDepartment}
@@ -88,7 +92,8 @@ class WorkWeixinDepartmentsTreeNode extends Component {
   };
 
   render() {
-    const { isChildrenShow, department, checkedDepartmentId } = this.props;
+    const { isChildrenShow, department, checkedDepartmentId, leftIndent } = this.props;
+    const { active } = this.state;
     return (
       <Fragment>
         {isChildrenShow &&
@@ -102,15 +107,19 @@ class WorkWeixinDepartmentsTreeNode extends Component {
             onMouseEnter={this.onMouseEnter}
             onMouseLeave={this.onMouseLeave}
           >
-            <span className="tree-node-icon" onClick={(e) => this.toggleChildren(e)}>
-              <Icon
-                symbol="down"
-                aria-hidden="true"
-                className={classNames({ 'rotate-270': !this.state.isChildrenShow })}
-              />
-            </span>
-            <span className="tree-node-text">{department.name}</span>
-            {isPro &&
+            <div className="tree-node-text" style={{ paddingLeft: leftIndent + 5 }}>
+              {department.name}
+            </div>
+            <div className="left-icon" style={{ left: leftIndent - 20 }}>
+              <span className="tree-node-icon" onClick={(e) => this.toggleChildren(e)}>
+                <Icon
+                  symbol="down"
+                  aria-hidden="true"
+                  className={classNames({ 'rotate-270': !this.state.isChildrenShow })}
+                />
+              </span>
+            </div>
+            {isPro && active &&
               <CustomDropdown
                 items={[{
                   key: `${department.id}`,
@@ -136,5 +145,9 @@ class WorkWeixinDepartmentsTreeNode extends Component {
 }
 
 WorkWeixinDepartmentsTreeNode.propTypes = WorkWeixinDepartmentsTreeNodePropTypes;
+
+WorkWeixinDepartmentsTreeNode.defaultProps = {
+  leftIndent: LEFT_INDENT,
+};
 
 export default WorkWeixinDepartmentsTreeNode;
