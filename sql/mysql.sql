@@ -1574,6 +1574,7 @@ CREATE TABLE `wiki_wiki2_publish` (
   `username` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `visit_count` int(11) NOT NULL DEFAULT 0,
+  `enable_server_render` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `repo_id` (`repo_id`),
   UNIQUE KEY `publish_url` (`publish_url`)
@@ -1977,4 +1978,42 @@ CREATE TABLE `org_quota_usage` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_org_quota_usage_org_id` (`org_id`),
   KEY `idx_org_quota_usage_timestamp` (`timestamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `chat_sessions` (
+  `id` bigint(11) NOT NULL AUTO_INCREMENT,
+  `repo_id` varchar(36) NOT NULL,
+  `session_uuid` varchar(36) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `session_name` varchar(255) NOT NULL,
+  `is_shared` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_session_uuid` (`session_uuid`),
+  KEY `idx_repo_id_is_shared` (`repo_id`,`is_shared`),
+  KEY `idx_chat_sessions_updated_at` (`updated_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `chat_messages` (
+  `id` bigint(11) NOT NULL AUTO_INCREMENT,
+  `session_uuid` varchar(36) NOT NULL,
+  `message_id` varchar(4) DEFAULT NULL,
+  `role` varchar(20) NOT NULL,
+  `content` longtext DEFAULT NULL,
+  `attachments` longtext DEFAULT NULL,
+  `sources` longtext DEFAULT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_session_uuid_message_id_role` (`session_uuid`, `message_id`, `role`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `chat_message_thought_process` (
+  `id` bigint(11) NOT NULL AUTO_INCREMENT,
+  `session_uuid` varchar(36) DEFAULT NULL,
+  `message_id` varchar(4) DEFAULT NULL,
+  `thought_process` longtext DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_session_uuid_message_id` (`session_uuid`,`message_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
