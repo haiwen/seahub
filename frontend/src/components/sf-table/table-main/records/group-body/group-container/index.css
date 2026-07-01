@@ -119,6 +119,7 @@
   position: absolute;
   display: flex;
   align-items: center;
+  padding: 8px 16px;
   border-top-left-radius: 5px;
   background-color: inherit;
   overflow: hidden;
@@ -173,19 +174,26 @@
 
 /* group expand */
 .canvas-groups-rows .group-toggle-btn {
-  margin: 0 8px;
-  width: 18px !important;
-  height: 18px !important;
+  margin-right: 8px;
+  width: 24px !important;
+  min-width: 24px;
+  height: 24px !important;
   cursor: pointer;
+  border-radius: 4px;
 }
 
-.canvas-groups-rows .group-toggle-btn .seafile-multicolor-icon-drop-down {
-  font-size: 12px;
-  fill: var(--bs-icon-color);
+.canvas-groups-rows .group-toggle-btn:hover {
+  background-color: var(--bs-icon-btn-hover-bg-color);
+}
+
+.canvas-groups-rows .group-toggle-btn .seafile-multicolor-icon-down {
+  width: 16px;
+  height: 16px;
+  color: var(--bs-icon-color);
   transition: all .3s;
 }
 
-.canvas-groups-rows .group-toggle-btn.hide .seafile-multicolor-icon-drop-down {
+.canvas-groups-rows .group-toggle-btn.hide .seafile-multicolor-icon-down {
   transform: rotate(-90deg);
 }
 

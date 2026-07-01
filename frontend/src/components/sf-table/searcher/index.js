@@ -58,14 +58,14 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
             <span
               className='toolbar-search-btn'
               role="button"
-              onClick={focusPreviousMatchedCell ? focusPreviousMatchedCell : () => {}}
+              onClick={focusPreviousMatchedCell ? focusPreviousMatchedCell : () => { }}
             >
               <Icon symbol="down" className="rotate-180" />
             </span>
             <span
               role="button"
               className='toolbar-search-btn'
-              onClick={focusNextMatchedCell ? focusNextMatchedCell : () => {}}
+              onClick={focusNextMatchedCell ? focusNextMatchedCell : () => { }}
             >
               <Icon symbol="down" />
             </span>
@@ -95,8 +95,8 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
         />
       )}
       {isSearchActive && (
-        <div className='sf-table-searcher-input-wrapper'>
-          <span className="input-icon-addon"><Icon symbol="search" /></span>
+        <div className="sf-table-searcher-input-wrapper">
+          <Icon symbol="search" />
           <SFTableSearcherInput
             recordsCount={recordsCount}
             columnsCount={columnsCount}
@@ -108,7 +108,7 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
           <OpIcon
             id="search-close-btn"
             className="btn-close-searcher-wrapper input-icon-addon"
-            symbol="close"
+            symbol="md-close"
             tooltip={gettext('Close')}
             op={handleResetSearch}
           />

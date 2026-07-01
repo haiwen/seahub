@@ -57,7 +57,7 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
         };
 
         let left = (cellWidth - editorWidth) / 2;
-        let top = cellHeight + 5;
+        let top = cellHeight;
 
         const rightEdge = parentRect.left + left + editorWidth;
         if (rightEdge > viewportWidth) {

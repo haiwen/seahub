@@ -32,7 +32,7 @@ class GroupHeaderLeft extends Component {
       >
         <IconBtn
           className={classnames('group-toggle-btn', { 'hide': !isExpanded })}
-          symbol="drop-down"
+          symbol="down"
           onClick={this.props.onExpandGroupToggle}
         />
         <GroupTitle

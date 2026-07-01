@@ -90,7 +90,7 @@ class Record extends React.Component {
   getFrozenCells = () => {
     const {
       columns, sequenceColumnWidth, lastFrozenColumnKey, groupRecordIndex, index: recordIndex, record,
-      cellMetaData, isGroupView, height, columnColor, treeNodeKey,
+      cellMetaData, height, columnColor, treeNodeKey,
     } = this.props;
     const frozenColumns = getFrozenColumns(columns);
     if (frozenColumns.length === 0) return null;
@@ -114,7 +114,7 @@ class Record extends React.Component {
           isCellSelected={isCellSelected}
           isLastCell={isLastCell}
           isLastFrozenCell={isLastFrozenCell}
-          height={isGroupView ? height : height - 1}
+          height={height - 1}
           column={column}
           sequenceColumnWidth={sequenceColumnWidth}
           cellMetaData={cellMetaData}
@@ -161,7 +161,7 @@ class Record extends React.Component {
   getColumnCells = () => {
     const {
       columns, sequenceColumnWidth, colOverScanStartIdx, colOverScanEndIdx, groupRecordIndex, index: recordIndex,
-      record, cellMetaData, isGroupView, height, columnColor, treeNodeKey,
+      record, cellMetaData, height, columnColor, treeNodeKey,
     } = this.props;
     const recordId = record._id;
     const rendererColumns = columns.slice(colOverScanStartIdx, colOverScanEndIdx);
@@ -182,7 +182,7 @@ class Record extends React.Component {
           recordIndex={recordIndex}
           isCellSelected={isCellSelected}
           isLastCell={isLastCell}
-          height={isGroupView ? height : height - 1}
+          height={height - 1}
           column={column}
           sequenceColumnWidth={sequenceColumnWidth}
           needBindEvents={needBindEvents}
@@ -320,10 +320,9 @@ class Record extends React.Component {
 
   render() {
     const {
-      isSelected, isGroupView, showSequenceColumn, index, isLastRecord, lastFrozenColumnKey, height, record
+      isSelected, showSequenceColumn, index, isLastRecord, lastFrozenColumnKey, height, record
     } = this.props;
     const isLocked = record._locked ? true : false;
-    const cellHeight = isGroupView ? height : height - 1;
 
     const frozenCells = this.getFrozenCells();
     const columnCells = this.getColumnCells();
@@ -361,7 +360,7 @@ class Record extends React.Component {
               treeNodeIndex={this.props.treeNodeIndex}
               onSelectRecord={this.onSelectRecord}
               isLastFrozenCell={!lastFrozenColumnKey}
-              height={cellHeight}
+              height={height - 1}
               recordDraggable={this.props.recordDraggable}
               handleDragStart={this.handleDragStart}
               canModifyRow={canModifyRow}
