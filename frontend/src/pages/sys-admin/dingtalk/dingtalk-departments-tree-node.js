@@ -136,7 +136,7 @@ class DingtalkDepartmentsTreeNode extends Component {
         }
         {this.state.isChildrenShow &&
           <div className="department-children">
-            {department.children ? this.renderTreeNodes(department.children) : <span className="ml-2 tip">{'(' + gettext('No sub-departments') + ')'}</span>}
+            {department.children ? this.renderTreeNodes(department.children) : <span className="ml-2 tip" style={{ paddingLeft: leftIndent + 5 }}>{'(' + gettext('No sub-departments') + ')'}</span>}
           </div>
         }
       </Fragment>
