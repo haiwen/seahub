@@ -1716,7 +1716,8 @@ class LibContentView extends React.Component {
 
   onAllDirentSelected = () => {
     this.setState(prevState => {
-      const isAllDirentSelected = !prevState.isAllDirentSelected;
+      const shouldUnselectAll = prevState.isAllDirentSelected || prevState.selectedDirentList.length > 0;
+      const isAllDirentSelected = !shouldUnselectAll;
       const direntList = prevState.direntList.map(item => {
         item.isSelected = isAllDirentSelected;
         return item;
