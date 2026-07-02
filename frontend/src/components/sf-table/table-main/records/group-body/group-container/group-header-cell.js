@@ -25,11 +25,11 @@ class GroupHeaderCell extends React.PureComponent {
   };
 
   getStyle = () => {
-    let { offsetLeft, column, isExpanded } = this.props;
+    let { offsetLeft, column } = this.props;
     const style = {
       position: 'absolute',
       width: column.width,
-      height: GROUP_HEADER_HEIGHT - (isExpanded ? 1 : 2), // header height - border-top(1px) - !isExpanded && border-bottom(1px)
+      height: GROUP_HEADER_HEIGHT - 2, // header height - border-top(1px) - !isExpanded && border-bottom(1px)
       left: offsetLeft
     };
     if (checkIsColumnFrozen(column)) {

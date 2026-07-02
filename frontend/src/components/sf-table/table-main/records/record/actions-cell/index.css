@@ -20,12 +20,13 @@
 .sf-table-cell.actions-cell .action-cell-content {
   height: 24px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 }
 
 .sf-table-row:hover .sf-table-cell.actions-cell .action-cell-content {
   width: 100%;
+  height: 100%;
 }
 
 .sf-table-row:hover .sf-table-cell.actions-cell .row-expand {

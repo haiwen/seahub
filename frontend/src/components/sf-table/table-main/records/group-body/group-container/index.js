@@ -55,7 +55,7 @@ class GroupContainer extends Component {
   cancelFixFrozenDOMs = (scrollLeft) => {
     if (this.backDrop) {
       this.backDrop.style.position = 'absolute';
-      this.backDrop.style.marginLeft = scrollLeft - GROUP_VIEW_OFFSET + 'px';
+      this.backDrop.style.marginLeft = `${scrollLeft - GROUP_VIEW_OFFSET}px`;
       this.backDrop.style.marginTop = '0px';
     }
 
@@ -103,7 +103,7 @@ class GroupContainer extends Component {
     };
     let backDropStyle = {
       height: backdropHeight,
-      width: leftPaneWidth + (scrollLeft ? GROUP_VIEW_OFFSET : 0),
+      width: leftPaneWidth + GROUP_VIEW_OFFSET,
       zIndex: Z_INDEX_GROUP_BACKDROP,
     };
 

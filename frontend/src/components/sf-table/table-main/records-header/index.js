@@ -105,10 +105,10 @@ const RecordsHeader = ({
   const draggingColumnIndex = draggingColumnKey ? columnMetrics.columns.findIndex(c => c.key === draggingColumnKey) : -1;
 
   return (
-    <div className="static-sf-table-result-content grid-header" style={{ height: height + 1 }}>
+    <div className="static-sf-table-result-content grid-header" style={{ height: height }}>
       <div className="sf-table-row" style={rowStyle}>
         {/* frozen */}
-        <div className="frozen-columns d-flex" style={wrapperStyle} ref={ref => onRef(ref)}>
+        <div className="frozen-columns frozen-columns-header d-flex" style={wrapperStyle} ref={ref => onRef(ref)}>
           {showSequenceColumn &&
             <ActionsCell
               isMobile={isMobile}

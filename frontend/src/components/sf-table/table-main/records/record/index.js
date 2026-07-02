@@ -114,7 +114,7 @@ class Record extends React.Component {
           isCellSelected={isCellSelected}
           isLastCell={isLastCell}
           isLastFrozenCell={isLastFrozenCell}
-          height={height - 1}
+          height={height}
           column={column}
           sequenceColumnWidth={sequenceColumnWidth}
           cellMetaData={cellMetaData}
@@ -182,7 +182,7 @@ class Record extends React.Component {
           recordIndex={recordIndex}
           isCellSelected={isCellSelected}
           isLastCell={isLastCell}
-          height={height - 1}
+          height={height}
           column={column}
           sequenceColumnWidth={sequenceColumnWidth}
           needBindEvents={needBindEvents}
@@ -218,7 +218,7 @@ class Record extends React.Component {
     const { isGroupView, lastFrozenColumnKey, height } = this.props;
     let style = {
       zIndex: Z_INDEX_SEQUENCE_COLUMN,
-      height: height - 1,
+      height: height,
     };
     if (isGroupView) {
       style.height = height;
@@ -320,9 +320,10 @@ class Record extends React.Component {
 
   render() {
     const {
-      isSelected, showSequenceColumn, index, isLastRecord, lastFrozenColumnKey, height, record
+      isSelected, showSequenceColumn, index, isLastRecord, lastFrozenColumnKey, height, record, groupLevel, maxGroupLevel
     } = this.props;
     const isLocked = record._locked ? true : false;
+    const isNestedGroupRow = this.props.isGroupView && typeof groupLevel === 'number' && typeof maxGroupLevel === 'number' && groupLevel < maxGroupLevel;
 
     const frozenCells = this.getFrozenCells();
     const columnCells = this.getColumnCells();
@@ -333,6 +334,7 @@ class Record extends React.Component {
         ref={rowRef => this.rowRef = rowRef}
         className={classnames('sf-table-row', {
           'sf-table-last-row': isLastRecord,
+          'nested-group-last-row': isLastRecord && isNestedGroupRow,
           'row-selected': isSelected,
           'row-locked': isLocked,
           'can-drop-tip': this.state.canDropTip,
@@ -360,7 +362,7 @@ class Record extends React.Component {
               treeNodeIndex={this.props.treeNodeIndex}
               onSelectRecord={this.onSelectRecord}
               isLastFrozenCell={!lastFrozenColumnKey}
-              height={height - 1}
+              height={height}
               recordDraggable={this.props.recordDraggable}
               handleDragStart={this.handleDragStart}
               canModifyRow={canModifyRow}
@@ -396,6 +398,8 @@ Record.propTypes = {
   top: PropTypes.number,
   left: PropTypes.number,
   height: PropTypes.number,
+  groupLevel: PropTypes.number,
+  maxGroupLevel: PropTypes.number,
   recordDraggable: PropTypes.bool,
   selectNoneCells: PropTypes.func,
   onSelectRecord: PropTypes.func,

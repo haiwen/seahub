@@ -150,18 +150,11 @@
   width: 100%;
   position: relative;
   background: var(--bs-th-secondary-bg);
-  border-bottom: 1px solid var(--bs-border-quartus-color);
   z-index: 3;
 }
 
-.sf-table-result-content .static-sf-table-result-content.grid-header {
-  background-color: var(--bs-th-secondary-bg);
-  border-bottom: 1px solid var(--bs-border-quartus-color);
-}
-
-.sf-table-result-content .static-sf-table-result-content .sf-table-row {
-  position: relative;
-  background-color: var(--bs-th-secondary-bg);
+.sf-table-result-content .static-sf-table-result-content.grid-header .sf-table-row {
+  background-color: var(--bs-th-bg);
 }
 
 .record-HeaderCell__draggable {
@@ -186,11 +179,13 @@
 
 .sf-table-row {
   width: 100%;
-  border-bottom: 1px solid var(--bs-border-secondary-color);
   display: inline-flex;
   margin-top: 0;
   margin-bottom: 0;
-  transition: all 0.3s;
+}
+
+.sf-table-row .sf-table-cell {
+  border-bottom: 1px solid var(--bs-border-quartus-color);
 }
 
 .static-sf-table-result-content.grid-header .sf-table-row {
@@ -205,10 +200,14 @@
   background: var(--bs-body-bg);
 }
 
+.sf-table-result-content .sf-table-canvas .sf-table-row:hover .sf-table-cell,
+.sf-table-result-content .sf-table-canvas .sf-table-row:hover .frozen-columns .sf-table-cell {
+  background-color: var(--bs-tr-hover-bg);
+}
+
 .sf-table-result-content .frozen-columns .sf-table-cell {
   position: relative;
   overflow: hidden;
-  justify-content: center;
 }
 
 .sf-table-column-content {
@@ -221,7 +220,9 @@
 
 .sf-table-column-content.row-index {
   width: 40px;
-  text-align: center;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   line-height: var(--bs-body-line-height);
 }
 
@@ -394,4 +395,28 @@
 .sf-table-canvas-ctx-wrapper {
   min-height: 150px;
   flex: 1;
+}
+
+.sf-metadata-single-select-editor .add-item-btn,
+.sf-metadata-tags-editor .add-item-btn {
+  height: fit-content;
+  padding: 8px;
+}
+
+.sf-metadata-single-select-editor .add-item-btn .add-item-btn-content,
+.sf-metadata-tags-editor .add-item-btn .add-item-btn-content {
+  width: 100%;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 4px;
+  font-size: .875rem;
+  cursor: pointer;
+}
+
+.sf-metadata-single-select-editor .add-item-btn .add-item-btn-content:hover,
+.sf-metadata-tags-editor .add-item-btn .add-item-btn-content:hover {
+  cursor: pointer;
+  background: var(--bs-icon-btn-hover-bg-color);
 }

@@ -2,7 +2,7 @@
   background-color: var(--bs-body-secondary-bg);
   border-bottom: 1px solid var(--bs-border-quartus-color);
   min-height: 35px;
-  padding: 8px;
+  padding: 8px 8px 4px;
   line-height: 1;
 }
 

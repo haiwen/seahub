@@ -15,7 +15,7 @@ import { LOCAL_KEY_TREE_NODE_FOLDED } from '../../constants/tree';
 import { TreeMetrics } from '../../utils/tree-metrics';
 import { checkHasSearchResult } from '../../utils/search';
 
-const ROW_HEIGHT = 33;
+const ROW_HEIGHT = 32;
 const RENDER_MORE_NUMBER = 10;
 const CONTENT_HEIGHT = window.innerHeight - 174;
 const { max, min, ceil, round } = Math;

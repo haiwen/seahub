@@ -1,4 +1,4 @@
-import React, { cloneElement, isValidElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { cloneElement, isValidElement, useCallback, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Utils } from '../../../../../../utils/utils';
@@ -35,9 +35,6 @@ const Cell = React.memo(({
   toggleExpandTreeNode,
 }) => {
   const cellRef = useRef(null);
-  const invalidActionFlashTimeoutRef = useRef(null);
-  const invalidActionFlashFrameRef = useRef(null);
-  const [showInvalidActionFlash, setShowInvalidActionFlash] = useState(false);
 
   const cellEditable = useMemo(() => {
     return checkIsColumnEditable(column) && canModifyRow && canModifyRow(record);
@@ -47,52 +44,18 @@ const Cell = React.memo(({
     return checkIsNameColumn(column);
   }, [column]);
 
-  useEffect(() => {
-    return () => {
-      if (invalidActionFlashTimeoutRef.current) {
-        clearTimeout(invalidActionFlashTimeoutRef.current);
-      }
-      if (invalidActionFlashFrameRef.current) {
-        cancelAnimationFrame(invalidActionFlashFrameRef.current);
-      }
-    };
-  }, []);
-
-  const triggerInvalidActionFlash = useCallback(() => {
-    if (invalidActionFlashTimeoutRef.current) {
-      clearTimeout(invalidActionFlashTimeoutRef.current);
-    }
-    if (invalidActionFlashFrameRef.current) {
-      cancelAnimationFrame(invalidActionFlashFrameRef.current);
-    }
-
-    setShowInvalidActionFlash(false);
-    document.dispatchEvent(new CustomEvent('sf-table-invalid-action-flash', {
-      detail: { duration: 200 },
-    }));
-    invalidActionFlashFrameRef.current = requestAnimationFrame(() => {
-      setShowInvalidActionFlash(true);
-      invalidActionFlashTimeoutRef.current = setTimeout(() => {
-        setShowInvalidActionFlash(false);
-        invalidActionFlashTimeoutRef.current = null;
-      }, 200);
-      invalidActionFlashFrameRef.current = null;
-    });
-  }, []);
-
   const className = useMemo(() => {
     const { type } = column;
     const isDefaultRowHeight = height === ROW_HEIGHT || height === ROW_HEIGHT - 1;
     return classnames('sf-table-cell', `sf-table-${type}-cell`, highlightClassName, {
       'table-cell-uneditable': !cellEditable,
-      'invalid-action-flash': showInvalidActionFlash,
       'last-cell': isLastCell,
       'table-last--frozen': isLastFrozenCell,
       'cell-selected': isCellSelected,
       'default-row-height-cell': isDefaultRowHeight,
       'name-cell': isNameColumn,
     });
-  }, [cellEditable, column, highlightClassName, height, isLastCell, isLastFrozenCell, isCellSelected, isNameColumn, showInvalidActionFlash]);
+  }, [cellEditable, column, highlightClassName, height, isLastCell, isLastFrozenCell, isCellSelected, isNameColumn]);
 
   const style = useMemo(() => {
     const { left, width } = column;
@@ -111,24 +74,18 @@ const Cell = React.memo(({
 
   const onCellClick = useCallback((event) => {
     const cell = { idx: column.idx, groupRecordIndex, rowIdx: recordIndex };
-    if (!cellEditable) {
-      triggerInvalidActionFlash();
-    }
 
     // select cell
     if (Utils.isFunction(cellMetaData.onCellClick)) {
       cellMetaData.onCellClick(cell, event);
     }
-  }, [cellEditable, column, groupRecordIndex, recordIndex, cellMetaData, triggerInvalidActionFlash]);
+  }, [column, groupRecordIndex, recordIndex, cellMetaData]);
 
   const onCellDoubleClick = useCallback((event) => {
     if (!Utils.isFunction(cellMetaData.onCellDoubleClick)) return;
     const cell = { idx: column.idx, groupRecordIndex, rowIdx: recordIndex };
-    if (!cellEditable) {
-      triggerInvalidActionFlash();
-    }
     cellMetaData.onCellDoubleClick(cell, event);
-  }, [cellEditable, column, groupRecordIndex, recordIndex, cellMetaData, triggerInvalidActionFlash]);
+  }, [column, groupRecordIndex, recordIndex, cellMetaData]);
 
   const onCellMouseDown = useCallback((event) => {
     if (event.button === 2) return;

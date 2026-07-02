@@ -1764,6 +1764,8 @@ a.table-sort-op:hover {
 .form-control:focus {
   background-color: var(--bs-body-bg);
   color: var(--bs-body-color);
+  border: 1px solid #3e84f7;
+  box-shadow: none;
 }
 
 .form-control:disabled {

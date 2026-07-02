@@ -8,7 +8,7 @@
   height: 100%;
 }
 
-.dir-history-view .actions-checkbox,
+.dir-history-view .action-cell-content,
 .dir-history-view .select-all-checkbox {
   display: none !important;
   cursor: default !important;
@@ -16,7 +16,9 @@
 
 .dir-history-view .row-index,
 .dir-history-view .sf-table-row:hover .row-index {
-  display: block !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .dir-history-view .actions-cell {

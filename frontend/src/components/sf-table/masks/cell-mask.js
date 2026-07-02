@@ -15,7 +15,7 @@ class CellMask extends React.PureComponent {
     const { width, height, top, left, zIndex } = this.props;
     // mask border needs to cover cell border, height and width are increased 1, left and top are decreased 1
     return {
-      height: height - 1,
+      height: height,
       width: width,
       zIndex,
       position: 'absolute',

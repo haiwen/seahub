@@ -1,27 +1,18 @@
 .add-item-btn {
+  height: 40px;
   position: relative;
   display: flex;
   align-items: center;
   border-top: 1px solid var(--bs-border-quartus-color);
-  padding: 8px;
+  padding: 0 1rem;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
 }
 
 .add-item-btn .add-item-btn-content {
   width: 100%;
-  height: 30px;
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  padding: 0 12px;
-  border-radius: 4px;
-  font-size: .875rem;
-  cursor: pointer;
-}
-
-.add-item-btn .add-item-btn-content:hover {
-  cursor: pointer;
-  background: var(--bs-icon-btn-hover-bg-color);
 }
 
 .add-item-btn .add-item-btn-content .seafile-multicolor-icon-add-table {

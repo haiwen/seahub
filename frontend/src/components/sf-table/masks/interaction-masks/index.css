@@ -2,10 +2,6 @@
   border: 2px solid #3e84f7;
 }
 
-.interaction-mask .rdg-selected.selection-mask-hidden {
-  opacity: 0;
-}
-
 .interaction-mask .rdg-selected-range {
   background-color: rgba(62, 132, 247, 0.1);
 }

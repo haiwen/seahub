@@ -74,7 +74,7 @@ export const getGroupsRows = (
       });
       groupContainer.first_row_id = first_row_id;
       groupContainer.count = groupCount;
-      groupContainer.height = (isExpanded ? subgroupsHeight : 0) + GROUP_HEADER_HEIGHT;
+      groupContainer.height = (isExpanded ? subgroupsHeight : 0) + GROUP_HEADER_HEIGHT + GROUP_VIEW_OFFSET;
       groupRows.push(groupContainer);
       groupRows.push(...flattenSubgroups);
     } else if (Array.isArray(row_ids) && row_ids.length > 0) {
@@ -146,6 +146,9 @@ export const setupGroupsRows = (groupRows, maxLevel) => {
       const { groupPath: nextGroupPath, level: nextGroupLevel } = nextFlattenGroup;
       if (nextGroupPath[nextGroupPath.length - 1] > 0) {
         top += GROUP_VIEW_OFFSET;
+      }
+      if (nextGroupLevel < pervVisibleGroupLevel) {
+        top += (pervVisibleGroupLevel - nextGroupLevel) * GROUP_VIEW_OFFSET;
       }
       if (nextGroupLevel > pervVisibleGroupLevel) {
         top += (nextGroupLevel - pervVisibleGroupLevel) * GROUP_VIEW_OFFSET;

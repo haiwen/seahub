@@ -8,9 +8,9 @@ export const CELL_NAVIGATION_MODE = {
 
 export const SEQUENCE_COLUMN_WIDTH = 80;
 
-export const ROW_HEIGHT = 33;
+export const ROW_HEIGHT = 32;
 
-export const GRID_HEADER_DEFAULT_HEIGHT = 33;
+export const GRID_HEADER_DEFAULT_HEIGHT = 32;
 
 export const GRID_HEADER_DOUBLE_HEIGHT = 56;
 
@@ -68,7 +68,7 @@ export const GROUP_ROW_TYPE = {
   BTN_INSERT_ROW: 'btn_insert_row',
 };
 
-export const INSERT_ROW_HEIGHT = 33;
+export const INSERT_ROW_HEIGHT = 32;
 
 export const CHANGE_HEADER_WIDTH = 'CHANGE_HEADER_WIDTH';
 

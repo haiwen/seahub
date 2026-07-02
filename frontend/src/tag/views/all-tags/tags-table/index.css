@@ -8,33 +8,18 @@
 }
 
 .sf-table-tag-name-formatter {
-  position: relative;
   display: flex;
   align-items: center;
 }
 
-.sf-table-tag-name-formatter .sf-table-tag-color {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  display: inline-block;
-  height: 12px;
-  width: 12px;
-  border-radius: 50%;
-  transform: translateY(-50%);
-}
-
-.sf-table-tag-name-formatter .sf-table-tag-name-wrapper {
-  flex: 1;
-  padding-left: 20px;
-
+.sf-table-tag-name-formatter .sf-metadata-ui.tags-formatter .sf-metadata-ui-tags-container {
+  cursor: default;
 }
 
 .sf-metadata-all-tags-wrapper .sf-table-row .name-cell.cell-selected {
   cursor: default;
 }
 
-.sf-table-cell.cell-selected .sf-table-tag-name-formatter .sf-table-tag-name:hover {
-  text-decoration: underline;
+.sf-table-cell.cell-selected .sf-table-tag-name-formatter .sf-metadata-ui.tags-formatter .sf-metadata-ui-tags-container {
   cursor: pointer;
 }

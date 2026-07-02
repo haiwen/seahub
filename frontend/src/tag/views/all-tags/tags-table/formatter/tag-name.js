@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import FileTagsFormatter from '../../../../../metadata/components/cell-formatter/file-tags';
 import { useTags } from '../../../../hooks';
-import { PRIVATE_COLUMN_KEY } from '../../../../constants';
 import { getRecordIdFromRecord } from '../../../../../metadata/utils/cell';
 import { getTreeNodeKey } from '../../../../../components/sf-table/utils/tree';
 import { isNumber } from '../../../../../utils/number';
@@ -17,25 +17,23 @@ const TagNameFormatter = ({ record, isCellSelected, setDisplayTag, treeNodeIndex
     return isNumber(treeNodeIndex) ? tree[treeNodeIndex] : null;
   }, [tree, treeNodeIndex]);
 
-  const tagColor = useMemo(() => {
-    return record[PRIVATE_COLUMN_KEY.TAG_COLOR];
+  const tagId = useMemo(() => {
+    return getRecordIdFromRecord(record);
   }, [record]);
 
-  const tagName = useMemo(() => {
-    return record[PRIVATE_COLUMN_KEY.TAG_NAME];
-  }, [record]);
+  const tagValue = useMemo(() => {
+    return tagId ? [{ row_id: tagId }] : [];
+  }, [tagId]);
 
   const onClickName = useCallback(() => {
     if (!isCellSelected) return;
-    const tagId = getRecordIdFromRecord(record);
     const nodeKey = getTreeNodeKey(currentNode);
     setDisplayTag && setDisplayTag(tagId, nodeKey);
-  }, [isCellSelected, record, currentNode, setDisplayTag]);
+  }, [isCellSelected, tagId, currentNode, setDisplayTag]);
 
   return (
-    <div className="sf-table-tag-name-formatter sf-table-cell-formatter sf-metadata-ui cell-formatter-container">
-      <span className="sf-table-tag-color" style={{ backgroundColor: tagColor }}></span>
-      <span className="sf-table-tag-name-wrapper"><span className="sf-table-tag-name" title={tagName} onClick={onClickName}>{tagName}</span></span>
+    <div className="sf-table-tag-name-formatter sf-table-cell-formatter sf-metadata-ui cell-formatter-container" onClick={onClickName}>
+      <FileTagsFormatter tagsData={tagsData} value={tagValue} showName={true} />
     </div>
   );
 };

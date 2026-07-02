@@ -9,11 +9,11 @@ export const HEADER_HEIGHT_TYPE = {
 
 export const SEQUENCE_COLUMN_WIDTH = 80;
 
-export const GRID_HEADER_DEFAULT_HEIGHT = 33;
+export const GRID_HEADER_DEFAULT_HEIGHT = 32;
 
 export const GRID_HEADER_DOUBLE_HEIGHT = 56;
 
-export const INSERT_ROW_HEIGHT = 33;
+export const INSERT_ROW_HEIGHT = 32;
 
 export const MIN_COLUMN_WIDTH = 50;
 

@@ -148,7 +148,7 @@ export const getSelectedDimensions = ({
     let top;
     if (isGroupView) {
       left += groupOffsetLeft;
-      top = getRecordTopFromRecordsBody(groupRecordIndex) + 1;
+      top = getRecordTopFromRecordsBody(groupRecordIndex);
     } else {
       top = getRecordTopFromRecordsBody(rowIdx);
     }
