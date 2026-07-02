@@ -863,4 +863,21 @@ class OrgAdminInviteUser(APIView):
             user_info['last_login'] = ''
             result['success'].append(user_info)
 
+            if settings.ENABLE_RISK_CONTROL:
+                try:
+                    from seahub.utils import risk_control_statistics
+                    message = {
+                        'api_type': 'org_admin_invite_user',
+                        'admin_username': request.user.username,
+                        'admin_name': email2nickname(request.user.username),
+                        'org_id': int(org_id),
+                        'org_name': org.org_name,
+                        'email': email2contact_email(email),
+                        'username': new_user.username,
+                        'name': email2nickname(email),
+                    }
+                    risk_control_statistics(message)
+                except Exception as e:
+                    logger.error('Publish risk-control-statistics msg %s error: %s', message, e)
+
         return Response(result)

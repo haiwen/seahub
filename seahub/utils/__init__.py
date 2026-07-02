@@ -599,6 +599,12 @@ if EVENTS_CONFIG_FILE:
         seafevents = None
         EVENTS_ENABLED = False
 
+    try:
+        redis_client = seafevents_api.RedisClient(socket_timeout=30)
+    except Exception as e:
+        logging.exception('Failed to import seafevents RedisClient.')
+        redis_client = None
+
     @contextlib.contextmanager
     def _get_seafevents_session():
         try:
@@ -848,6 +854,12 @@ if EVENTS_CONFIG_FILE:
             res, total_count = seafevents_api.get_delete_records(session, repo_id, show_time, start, limit)
         return res, total_count
 
+    def risk_control_statistics(message):
+        try:
+            redis_client.publish('risk-control-statistics', json.dumps(message))
+        except Exception as err:
+            logger.error('Publish risk-control-statistics msg %s error: %s' % (message, err))
+
 else:
     parsed_events_conf = None
     EVENTS_ENABLED = False
@@ -914,6 +926,8 @@ else:
     def get_user_activities_by_timestamp():
         pass
     def get_trash_records():
+        pass
+    def risk_control_statistics(message):
         pass
 
 
