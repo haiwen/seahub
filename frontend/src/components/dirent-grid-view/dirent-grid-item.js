@@ -449,10 +449,9 @@ class DirentGridItem extends React.Component {
 
     if (dirent.encoded_thumbnail_src !== '') {
       this.setState((prevState) => ({
-        dirent: {
-          ...prevState.dirent,
+        dirent: Object.assign(prevState.dirent.clone(), {
           encoded_thumbnail_src: ''
-        }
+        })
       }));
     }
   };

@@ -1653,6 +1653,7 @@ class LibContentView extends React.Component {
             <a className="action-link p-0 ml-1" href="#" onClick={this.restoreDeletedDirents.bind(this, res.data.commit_id, [path])}>{gettext('Undo')}</a>
           </>
         );
+        toaster.closeAll();
         toaster.success(successTipWithUndo, { duration: 5 });
       }).catch((error) => {
         let errMessage = Utils.getErrorMsg(error);
