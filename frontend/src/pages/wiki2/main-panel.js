@@ -83,7 +83,7 @@ class MainPanel extends Component {
       isOpenSocket: window.seafile?.docUuid && true,
       publishUrl,
       wikiId,
-      navConfig,
+      navConfig: config, // Reference assignment
       repos: repos,
       wikiSettings,
       isLocked: currentPageConfig?.locked,
