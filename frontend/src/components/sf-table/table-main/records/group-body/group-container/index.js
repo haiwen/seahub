@@ -79,7 +79,7 @@ class GroupContainer extends Component {
   render() {
     const {
       group, columns, width, isExpanded, sequenceColumnWidth, folding, summaryConfigs, height, backdropHeight, top,
-      groupOffsetLeft, lastFrozenColumnKey, maxLevel, scrollLeft,
+      groupOffsetLeft, lastFrozenColumnKey, maxLevel,
     } = this.props;
     const { left, level } = group;
     const firstLevelGroup = level === 1;
