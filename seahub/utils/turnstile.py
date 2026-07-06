@@ -20,7 +20,7 @@ def check_turnstile(request):
 
     secret = getattr(settings, 'TURNSTILE_SECRET_KEY', '')
     if not secret:
-        logger.error('Cloudflare Turnstile check failed: TURNSTILE_SECRET_KEY is not configured')
+        logger.warning('Cloudflare Turnstile check failed: TURNSTILE_SECRET_KEY is not configured')
         return False
 
     try:
@@ -38,9 +38,9 @@ def check_turnstile(request):
         response = requests.post(url, data=data, timeout=10)
         result = response.json()
         if not result.get('success'):
-            logger.error(f"Turnstile verification failed: {result}")
+            logger.warning(f"Turnstile verification failed: {result}")
             return False
         return True
     except Exception as e:
-        logger.error(f"Turnstile verification error: {e}")
+        logger.warning(f"Turnstile verification error: {e}")
         return False
