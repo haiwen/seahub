@@ -1,7 +1,6 @@
 .sea-ai-chat-attachments-container {
   width: 100%;
   overflow-x: auto !important;
-  margin-bottom: 16px;
   scrollbar-width: none;
 }
 

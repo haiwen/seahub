@@ -17,7 +17,7 @@ const Attachments = ({ attachments = [], className = '', onRemove }) => {
     <div className={classNames('sea-ai-chat-message-attachments', className)}>
       {validAttachments.map((attachment, index) => (
         <div
-          className="sea-ai-chat-message-attachments-item"
+          className={classNames('sea-ai-chat-message-attachments-item', { 'sea-ai-chat-message-attachments-item-can-remove': onRemove })}
           key={attachment.key || `${attachment.repo_id}-${attachment.path}-${index}`}
         >
           {onRemove && (

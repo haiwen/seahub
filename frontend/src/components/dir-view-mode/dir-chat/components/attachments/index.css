@@ -3,7 +3,7 @@
   display: flex;
   flex-wrap: nowrap !important;
   justify-content: flex-start !important;
-  margin-bottom: 0 !important;
+  margin-bottom: 12px;
   overflow: hidden;
   width: -webkit-fit-content;
   width: fit-content;
@@ -12,7 +12,7 @@
 
 .sea-ai-chat-message-attachments-item {
   background-color: #f7f7f5;
-  border: 1px solid var(--bs-border-tertiary-color);
+  border: 1px solid #eaeaea;
   border-radius: 8px;
   cursor: pointer;
   display: inline-flex;
@@ -27,13 +27,17 @@
   position: relative;
 }
 
+.sea-ai-chat-message-attachments-item:hover {
+  background-image: linear-gradient(#0000000a, #0000000a);
+}
+
 .sea-ai-chat-message-attachments-item-name {
   font-weight: 500;
   line-height: 24px;
   width: 100%;
 }
 
-.sea-ai-chat-message-attachments-item:hover .sea-ai-chat-message-attachments-item-name {
+.sea-ai-chat-message-attachments-item-can-remove:hover .sea-ai-chat-message-attachments-item-name {
   width: calc(100% - 16px);
 }
 
@@ -48,7 +52,7 @@
   width: 16px;
 }
 
-.sea-ai-chat-message-attachments-item:hover .sea-ai-chat-message-attachments-item-remove {
+.sea-ai-chat-message-attachments-item-can-remove:hover .sea-ai-chat-message-attachments-item-remove {
   display: flex;
   z-index: 2;
   border: none;
@@ -56,8 +60,8 @@
   align-items: center;
 }
 
-.sea-ai-chat-message-attachments-item:hover .sea-ai-chat-message-attachments-item-remove svg,
-.sea-ai-chat-message-attachments-item:hover .sea-ai-chat-message-attachments-item-remove:hover svg {
+.sea-ai-chat-message-attachments-item-can-remove:hover .sea-ai-chat-message-attachments-item-remove svg,
+.sea-ai-chat-message-attachments-item-can-remove:hover .sea-ai-chat-message-attachments-item-remove:hover svg {
   color: #fff !important;
   min-height: 8px;
   min-width: 8px;
