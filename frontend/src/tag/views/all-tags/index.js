@@ -5,6 +5,7 @@ import TagsTable from './tags-table';
 import View from '../view';
 import { TagViewProvider, useTags } from '../../hooks';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../../../metadata/constants';
+import { siteRoot } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import { PRIVATE_FILE_TYPE } from '../../../constants';
 import { getRowById } from '../../../components/sf-table/utils/table';
@@ -13,7 +14,7 @@ import { ALL_TAGS_ID } from '../../constants';
 
 import './index.css';
 
-const AllTags = ({ updateCurrentPath, toggleShowDirentToolbar, ...params }) => {
+const AllTags = ({ repoID, repoInfo, updateCurrentPath, toggleShowDirentToolbar, ...params }) => {
   const [displayTag, setDisplayTag] = useState('');
   const [isLoadingMore, setLoadingMore] = useState(false);
 
@@ -48,8 +49,12 @@ const AllTags = ({ updateCurrentPath, toggleShowDirentToolbar, ...params }) => {
     }
     displayNodeKey.current = nodeKey || '';
     updateCurrentPath(path);
+    if (tagID) {
+      const url = `${siteRoot}library/${repoID}/${encodeURIComponent(repoInfo.repo_name)}/?tag=${encodeURIComponent(tagID)}`;
+      window.history.pushState({ url: url, path: '' }, '', url);
+    }
     setDisplayTag(tagID);
-  }, [tagsData, displayTag, updateCurrentPath]);
+  }, [tagsData, displayTag, updateCurrentPath, repoID, repoInfo]);
 
   const loadMore = useCallback(async () => {
     if (isLoadingMore || !tagsData.hasMore) return;
@@ -82,6 +87,8 @@ const AllTags = ({ updateCurrentPath, toggleShowDirentToolbar, ...params }) => {
       <div className="sf-metadata-all-tags-tag-files">
         <TagViewProvider
           { ...params }
+          repoID={repoID}
+          repoInfo={repoInfo}
           toggleShowDirentToolbar={toggleShowDirentToolbar}
           tagID={displayTag}
           nodeKey={displayNodeKey.current}

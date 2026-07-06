@@ -11,6 +11,8 @@ import { getRowById } from '../../components/sf-table/utils/table';
 import { gettext } from '../../utils/constants';
 import { PRIVATE_COLUMN_KEY, ALL_TAGS_ID } from '../constants';
 import { getColumnOriginName } from '../../metadata/utils/column';
+import { TAG_FILES_DEFAULT_SORT, TAG_FILES_SORT } from '../constants/sort';
+import { TAG_FILES_VIEW_MODE, TAG_FILES_VIEW_MODE_DEFAULT } from '../constants/mode';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 export const TagsContext = React.createContext(null);
@@ -21,6 +23,8 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, tagsChangedC
   const [isReloading, setReloading] = useState(false);
   const [tagsData, setTagsData] = useState(null);
   const [displayNodeKey, setDisplayNodeKey] = useState('');
+  const [tagFilesSort, setTagFilesSort] = useState(TAG_FILES_DEFAULT_SORT);
+  const [tagFilesViewMode, setTagFilesViewMode] = useState(TAG_FILES_VIEW_MODE_DEFAULT);
 
   const storeRef = useRef(null);
   const contextRef = useRef(null);
@@ -59,6 +63,11 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, tagsChangedC
       contextRef.current = new Context();
       contextRef.current.init({ ...params, repoID });
       window.sfTagsDataContext = contextRef.current;
+      const localStorage = contextRef.current.localStorage;
+      const storedTagFilesSort = localStorage && localStorage.getItem(TAG_FILES_SORT);
+      const storedTagFilesViewMode = localStorage && localStorage.getItem(TAG_FILES_VIEW_MODE);
+      setTagFilesSort(storedTagFilesSort ? JSON.parse(storedTagFilesSort) : TAG_FILES_DEFAULT_SORT);
+      setTagFilesViewMode(storedTagFilesViewMode || TAG_FILES_VIEW_MODE_DEFAULT);
       storeRef.current = new Store({ context: contextRef.current, repoId: repoID });
       window.sfTagsDataStore = storeRef.current;
       storeRef.current.initStartIndex();
@@ -244,6 +253,18 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, tagsChangedC
     storeRef.current.modifyTagsSort(sort);
   }, [storeRef]);
 
+  const modifyTagFilesSort = useCallback((sort) => {
+    setTagFilesSort(sort);
+    const localStorage = contextRef.current?.localStorage;
+    localStorage && localStorage.setItem(TAG_FILES_SORT, JSON.stringify(sort));
+  }, []);
+
+  const switchTagFilesViewMode = useCallback((mode) => {
+    setTagFilesViewMode(mode);
+    const localStorage = contextRef.current?.localStorage;
+    localStorage && localStorage.setItem(TAG_FILES_VIEW_MODE, mode);
+  }, []);
+
   useEffect(() => {
     if (isLoading || !handleSelectTag) return;
     const { search } = window.location;
@@ -296,6 +317,10 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, tagsChangedC
       modifyColumnWidth,
       modifyLocalFileTags,
       modifyTagsSort,
+      tagFilesSort,
+      tagFilesViewMode,
+      modifyTagFilesSort,
+      switchTagFilesViewMode,
       reloadTags,
     }}>
       {children}
