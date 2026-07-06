@@ -172,6 +172,11 @@
   border-right: 1px solid var(--bs-border-quartus-color);
 }
 
+.canvas-groups-rows .group-level-2 .group-header-right .group-header-cell:last-child,
+.canvas-groups-rows .group-level-3 .group-header-right .group-header-cell:last-child {
+  border-right: none;
+}
+
 .canvas-groups-rows.all-columns-frozen .group-level-2 .table-last--frozen,
 .canvas-groups-rows.all-columns-frozen .group-level-3 .table-last--frozen {
   border-right: none !important;

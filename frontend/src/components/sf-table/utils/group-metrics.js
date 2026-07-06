@@ -74,7 +74,7 @@ export const getGroupsRows = (
       });
       groupContainer.first_row_id = first_row_id;
       groupContainer.count = groupCount;
-      groupContainer.height = (isExpanded ? subgroupsHeight : 0) + GROUP_HEADER_HEIGHT + GROUP_VIEW_OFFSET;
+      groupContainer.height = (isExpanded ? subgroupsHeight + GROUP_VIEW_OFFSET : 0) + GROUP_HEADER_HEIGHT;
       groupRows.push(groupContainer);
       groupRows.push(...flattenSubgroups);
     } else if (Array.isArray(row_ids) && row_ids.length > 0) {

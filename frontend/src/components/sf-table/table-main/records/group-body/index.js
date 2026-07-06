@@ -777,12 +777,13 @@ class GroupBody extends Component {
     const columnsLen = columns.length;
     const lastColumn = columns[columnsLen - 1];
     let groupRowsHeight = groupMetrics.groupRowsHeight;
+    const getGroupWidth = (level) => totalColumnsWidth + (level - 1) * GROUP_VIEW_OFFSET;
     visibleGroupRows.forEach(groupRow => {
       let {
         type, level, key, left, top, isExpanded, height, groupPathString, groupRecordIndex,
       } = groupRow;
       if (type === GROUP_ROW_TYPE.GROUP_CONTAINER) {
-        const groupWidth = totalColumnsWidth + (level - 1) * 2 * GROUP_VIEW_OFFSET;
+        const groupWidth = getGroupWidth(level);
         const folding = this.expandingGroupPathString === groupPathString && !isExpanded;
         const backdropHeight = height + GROUP_VIEW_OFFSET;
         rendererGroups.push(
@@ -810,6 +811,7 @@ class GroupBody extends Component {
         );
       } else if (type === GROUP_ROW_TYPE.ROW) {
         const { rowId, rowIdx, isLastRow } = groupRow;
+        const groupWidth = getGroupWidth(level);
         const record = rowId && this.props.recordGetterById(rowId);
         const isSelected = RecordMetrics.isRecordSelected(rowId, recordMetrics);
         const hasSelectedCell = this.props.hasSelectedCell({ groupRecordIndex }, selectedPosition);
@@ -833,6 +835,7 @@ class GroupBody extends Component {
             lastFrozenColumnKey={lastFrozenColumnKey}
             record={record}
             columns={columns}
+            totalWidth={groupWidth - sequenceColumnWidth}
             colOverScanStartIdx={colOverScanStartIdx}
             colOverScanEndIdx={colOverScanEndIdx}
             left={left}

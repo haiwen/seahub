@@ -34,6 +34,7 @@ class Record extends React.Component {
       nextProps.columns !== this.props.columns ||
       nextProps.showSequenceColumn !== this.props.showSequenceColumn ||
       nextProps.sequenceColumnWidth !== this.props.sequenceColumnWidth ||
+      nextProps.totalWidth !== this.props.totalWidth ||
       nextProps.colOverScanStartIdx !== this.props.colOverScanStartIdx ||
       nextProps.colOverScanEndIdx !== this.props.colOverScanEndIdx ||
       nextProps.record !== this.props.record ||
@@ -392,6 +393,7 @@ Record.propTypes = {
   columns: PropTypes.array.isRequired,
   showSequenceColumn: PropTypes.bool,
   sequenceColumnWidth: PropTypes.number,
+  totalWidth: PropTypes.number,
   colOverScanStartIdx: PropTypes.number,
   colOverScanEndIdx: PropTypes.number,
   scrollLeft: PropTypes.number,
