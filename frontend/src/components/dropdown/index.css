@@ -99,7 +99,7 @@
 }
 
 .dropdown-item-shortcut {
-  color: #666;
+  color: var(--bs-body-secondary-color);
   font-size: .875rem;
   white-space: nowrap;
 }
