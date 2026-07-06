@@ -353,11 +353,12 @@ html, body {
   overflow: hidden;
 }
 
-.cur-view-content {
+#wiki-ssr-root .cur-view-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  padding: 0 !important;
 }
 
 .sdoc-scroll-container {

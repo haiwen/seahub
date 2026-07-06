@@ -9,6 +9,14 @@ import { Utils } from '../../utils/utils';
 import { SdocWikiEditor } from '@seafile/seafile-sdoc-editor';
 import i18n from '../../_i18n/i18n-sdoc-editor';
 
+const centeredContainerStyle = {
+  flex: 1,
+  width: '100%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+};
+
 function DocViewer({ pageId }) {
   const [state, setState] = useState({
     isLoading: true,
@@ -55,9 +63,15 @@ function DocViewer({ pageId }) {
           sdocServer: seadocServerUrl,
           accessToken: seadoc_access_token,
         });
+        const { mediaUrl, serviceURL, siteRoot, lang } = window.app.config;
 
         window.seafile = {
-          ...(window.seafile || {}),
+          lang,
+          serviceUrl: serviceURL,
+          siteRoot,
+          mediaUrl,
+          assetsUrl: '/api/v2.1/seadoc/download-image/' + docUuid,
+          wikiId,
           docUuid,
         };
 
@@ -94,11 +108,11 @@ function DocViewer({ pageId }) {
   }, [pageId]);
 
   if (state.isLoading) {
-    return <div className="wiki-viewer-loading"><Loading /></div>;
+    return <div className="wiki-viewer-loading" style={centeredContainerStyle}><Loading /></div>;
   }
 
   if (state.errorMessage) {
-    return <div className="wiki-viewer-error">{state.errorMessage}</div>;
+    return <div className="wiki-viewer-error" style={centeredContainerStyle}>{state.errorMessage}</div>;
   }
 
   if (!state.docContent) {
