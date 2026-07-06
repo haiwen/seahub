@@ -259,6 +259,11 @@ class Libraries extends Component {
     this.setState({ sharedRepoList });
   };
 
+  onLeaveShareSharedRepo = (repo) => {
+    const sharedRepoList = this.state.sharedRepoList.filter(item => item.repo_id !== repo.repo_id);
+    this.setState({ sharedRepoList });
+  };
+
   onTogglePublicStarRepo = (repo) => {
     const publicRepoList = this.state.publicRepoList.map(item => {
       if (item.repo_id === repo.repo_id) {
@@ -571,6 +576,7 @@ class Libraries extends Component {
                     onFreezedItem={this.onFreezedItem}
                     onUnfreezedItem={this.onUnfreezedItem}
                     onToggleStarRepo={this.onToggleSharedStarRepo}
+                    onLeaveShare={this.onLeaveShareSharedRepo}
                   />
 
                   {canViewOrg && (

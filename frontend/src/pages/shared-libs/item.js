@@ -26,7 +26,6 @@ class Item extends Component {
     this.state = {
       highlight: false,
       showOpIcon: false,
-      unshared: false,
       isShowSharedDialog: false,
       isOpMenuOpen: false
     };
@@ -85,7 +84,7 @@ class Item extends Component {
     }
 
     request.then((res) => {
-      this.setState({ unshared: true });
+      this.props.onLeaveShare(data);
       let message = gettext('Successfully unshared {name}').replace('{name}', data.repo_name);
       toaster.success(message);
     }).catch(error => {
@@ -203,10 +202,6 @@ class Item extends Component {
   };
 
   render() {
-    if (this.state.unshared) {
-      return null;
-    }
-
     const { data, idx, currentViewMode = LIST_MODE } = this.props;
     data.icon_url = Utils.getLibIconUrl(data);
     data.icon_title = Utils.getLibIconTitle(data);
@@ -349,6 +344,7 @@ Item.propTypes = {
   onUnfreezedItem: PropTypes.func.isRequired,
   onToggleStarRepo: PropTypes.func.isRequired,
   onContextMenu: PropTypes.func.isRequired,
+  onLeaveShare: PropTypes.func,
 };
 
 export default Item;
