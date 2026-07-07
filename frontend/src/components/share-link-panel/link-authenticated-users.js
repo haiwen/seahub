@@ -173,8 +173,8 @@ class LinkAuthenticatedUsers extends React.Component {
     const thead = (
       <thead>
         <tr>
-          <th width="82%"></th>
-          <th width="18%"></th>
+          <th width="75%"></th>
+          <th width="25%"></th>
         </tr>
       </thead>
     );
@@ -186,7 +186,7 @@ class LinkAuthenticatedUsers extends React.Component {
             {gettext('Authenticated users')}
           </h6>
         </div>
-        <table className="table-thead-hidden w-xs-200">
+        <table className="table-thead-hidden">
           {thead}
           <tbody>
             <tr>
@@ -210,7 +210,7 @@ class LinkAuthenticatedUsers extends React.Component {
             : authUsers.length === 0
               ? <EmptyTip text={gettext('No items')} className="h-100 m-0" />
               : (
-                <table className="table-thead-hidden w-xs-200">
+                <table className="table-thead-hidden">
                   {thead}
                   <tbody>
                     {authUsers.map((item, index) => {
