@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import deepCopy from 'deep-copy';
 import classNames from 'classnames';
 import { EventBus, EXTERNAL_EVENT } from '@seafile/seafile-sdoc-editor';
-import { wikiId, wikiPermission, gettext } from '../../utils/constants';
+import { wikiId, wikiPermission, gettext, isPro } from '../../utils/constants';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import WikiNav from './wiki-nav/index';
@@ -310,12 +310,13 @@ class SidePanel extends PureComponent {
             <PublishedWikiExtrance wikiID={wikiId} customURLPart={this.state.customUrl} />
           }
         </div>
+        {isPro &&
         <Wiki2Search
           wikiId={wikiId}
           config={config}
           getCurrentPageId={this.props.getCurrentPageId}
           setCurrentPage={this.props.setCurrentPage}
-        />
+        />}
         <div className="wiki2-side-nav">
           {isLoading ? <Loading/> : this.renderWikiNav()}
         </div>
