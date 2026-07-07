@@ -175,8 +175,8 @@ class LinkAuthenticatedEmails extends React.Component {
     const thead = (
       <thead>
         <tr>
-          <th width="82%"></th>
-          <th width="18%"></th>
+          <th width="75%"></th>
+          <th width="25%"></th>
         </tr>
       </thead>
     );
@@ -188,7 +188,7 @@ class LinkAuthenticatedEmails extends React.Component {
             {gettext('Authenticated emails')}
           </h6>
         </div>
-        <table className="table-thead-hidden w-xs-200">
+        <table className="table-thead-hidden">
           {thead}
           <tbody>
             <tr>
@@ -209,7 +209,7 @@ class LinkAuthenticatedEmails extends React.Component {
             : authEmails.length == 0
               ? <EmptyTip text={gettext('No items')} className="h-100 m-0" />
               : (
-                <table className="table-thead-hidden w-xs-200">
+                <table className="table-thead-hidden">
                   {thead}
                   <tbody>
                     {authEmails.map((item, index) => {
