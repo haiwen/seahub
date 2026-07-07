@@ -12,8 +12,8 @@ const RepoListCard = ({ children, customColumns = false }) => {
   return (
     <div className="repo-list-card">
       <div className="repo-list-card-header">
-        <span className="repo-list-col-name">{gettext('Name')}</span>
         <span className="repo-list-col-icon"></span>
+        <span className="repo-list-col-name">{gettext('Name')}</span>
         <span className="repo-list-col-actions"></span>
         {customColumns
           ? (<span className="repo-list-col-server">{gettext('At server')}</span>)
