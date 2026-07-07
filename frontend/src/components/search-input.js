@@ -104,7 +104,13 @@ class SearchInput extends Component {
       return <ClearIndicator clearValue={this.clearSearch} />;
     }
     return (
-      <OpIcon id="search-text-clear" className={classnames('search-text-clear op-icon', clearClassName)} op={this.clearSearch} symbol="md-close" tooltip={gettext('Clear')} />
+      <OpIcon
+        id="search-text-clear"
+        className={classnames('search-text-clear op-icon input-icon-addon mr-0', clearClassName)}
+        op={this.clearSearch}
+        symbol="md-close"
+        tooltip={gettext('Clear')}
+      />
     );
   };
 
