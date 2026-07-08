@@ -27,6 +27,7 @@ class Location extends React.Component {
     position: PropTypes.object,
     record: PropTypes.object,
     onChange: PropTypes.func,
+    readonly: PropTypes.bool,
   };
 
   constructor(props) {
@@ -180,6 +181,7 @@ class Location extends React.Component {
   };
 
   openEditor = () => {
+    if (this.props.readonly) return;
     this.setState({ isEditorShown: true });
   };
 
@@ -223,6 +225,7 @@ class Location extends React.Component {
   };
 
   render() {
+    const { readonly = false } = this.props;
     const { isLoading, latLng, address, isEditorShown, isFullScreen } = this.state;
     const isValid = isValidPosition(latLng?.lng, latLng?.lat);
     return (
@@ -234,15 +237,15 @@ class Location extends React.Component {
             type: CellType.GEOLOCATION,
             name: getColumnDisplayName(PRIVATE_COLUMN_KEY.LOCATION)
           }}
-          readonly={false}
+          readonly={readonly}
         >
           {isValid ? (
             <div
               ref={ref => this.editorRef = ref}
-              className="sf-metadata-ui cell-formatter-container geolocation-formatter sf-metadata-geolocation-formatter w-100 cursor-pointer"
+              className='sf-metadata-ui cell-formatter-container geolocation-formatter sf-metadata-geolocation-formatter w-100'
               onClick={this.openEditor}
               tabIndex={0}
-              role="button"
+              role={readonly ? 'div' : 'button'}
               aria-label={gettext('Edit')}
               onKeyDown={Utils.onKeyDown}
             >
@@ -255,11 +258,11 @@ class Location extends React.Component {
           ) : (
             <div
               ref={ref => this.editorRef = ref}
-              className="sf-metadata-property-detail-editor sf-metadata-record-cell-empty cursor-pointer"
+              className='sf-metadata-property-detail-editor sf-metadata-record-cell-empty'
               placeholder={gettext('Empty')}
               onClick={this.openEditor}
               tabIndex={0}
-              role="button"
+              role={readonly ? 'div' : 'button'}
               aria-label={gettext('Edit')}
               onKeyDown={Utils.onKeyDown}
             >

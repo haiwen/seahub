@@ -33,15 +33,14 @@ const MetadataDetails = ({ repoID, readOnly, tagsData }) => {
         if (isDir && FOLDER_NOT_DISPLAY_COLUMN_KEYS.includes(field.key)) return null;
         const value = getCellValueByColumn(record, field);
 
-        if (field.key === PRIVATE_COLUMN_KEY.LOCATION && Utils.imageCheck(fileName)) {
-          return <Location key={field.key} position={value} record={record} onChange={onChange} />;
-        }
-
         let canEdit = canModifyRecord && field.editable && !readOnly;
         if (!isImageOrVideo && IMAGE_PRIVATE_COLUMN_KEYS.includes(field.key)) {
           canEdit = false;
         } else if (field.key === PRIVATE_COLUMN_KEY.TAGS && isDir) {
           canEdit = false;
+        }
+        if (field.key === PRIVATE_COLUMN_KEY.LOCATION && Utils.imageCheck(fileName)) {
+          return <Location key={field.key} position={value} record={record} onChange={onChange} readonly={!canEdit} />;
         }
         return (
           <DetailItem key={field.key} field={field} readonly={!canEdit}>
