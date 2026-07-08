@@ -142,6 +142,13 @@ html, body {
   color: inherit;
 }
 
+.wiki-page-item:hover .wiki-page-item-main,
+.wiki-page-item:hover .wiki-page-title,
+.wiki-page-item:hover .nav-item-icon,
+.wiki-page-item:hover .nav-item-icon svg {
+  color: inherit;
+}
+
 .wiki-page-item.selected-page {
   background-color: var(--bs-wiki-nav-active-bg, #e8e8e5);
   font-weight: 500;
@@ -259,7 +266,7 @@ html, body {
 }
 
 .wiki2-top-nav-item {
-  max-width: 200px;
+  max-width: 260px;
 }
 
 .wiki2-main-panel {
@@ -359,6 +366,7 @@ html, body {
   flex-direction: column;
   overflow: hidden;
   padding: 0 !important;
+  min-width: 500px;
 }
 
 .sdoc-scroll-container {
@@ -570,6 +578,10 @@ html, body {
 }
 
 @media (max-width: 767px) {
+  #wiki-ssr-root .cur-view-content {
+    min-width: 0;
+  }
+
   :root {
     --wiki-side-width: 280px;
   }
@@ -770,6 +782,21 @@ html, body {
   border-style: none;
   border-color: currentcolor;
   border-image: initial;
+}
+
+#wiki-sdoc-previewer .sdoc-image-wrapper,
+#wiki-sdoc-previewer .sdoc-image-inner,
+#wiki-sdoc-previewer .sdoc-image-content,
+#wiki-sdoc-previewer .sdoc-image-content> :first-child,
+#wiki-sdoc-previewer .sdoc-image-content>span {
+  max-width: 100%;
+}
+
+#wiki-sdoc-previewer .sdoc-image-wrapper img,
+#wiki-sdoc-previewer .sdoc-image-inner img,
+#wiki-sdoc-previewer .sdoc-image-content img {
+  max-width: 100%;
+  height: auto;
 }
 
 #wiki-sdoc-previewer .sdoc-table-wrapper .table-cell {
