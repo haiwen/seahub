@@ -601,8 +601,8 @@ if EVENTS_CONFIG_FILE:
 
     try:
         redis_client = seafevents_api.RedisClient(socket_timeout=30)
-    except Exception as e:
-        logging.exception('Failed to import seafevents RedisClient.')
+    except Exception:
+        logging.exception('Failed to initialize seafevents RedisClient.')
         redis_client = None
 
     @contextlib.contextmanager
@@ -855,11 +855,12 @@ if EVENTS_CONFIG_FILE:
         return res, total_count
 
     def risk_control_statistics(message):
+        if not redis_client:
+            return
         try:
             redis_client.publish('risk-control-statistics', json.dumps(message))
-        except Exception as err:
-            logger.error('Publish risk-control-statistics msg %s error: %s' % (message, err))
-
+        except Exception:
+            logger.exception('Failed to publish risk-control-statistics message.')
 else:
     parsed_events_conf = None
     EVENTS_ENABLED = False

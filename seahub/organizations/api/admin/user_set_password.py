@@ -39,9 +39,9 @@ class OrgAdminUserSetPassword(APIView):
         """
         # resource check
         org_id = int(org_id)
-        org =  ccnet_api.get_org_by_id(org_id)
+        org = ccnet_api.get_org_by_id(org_id)
         if not org:
-            error_msg = f'Organization {org_id} not found.' % org_id
+            error_msg = f'Organization {org_id} not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
