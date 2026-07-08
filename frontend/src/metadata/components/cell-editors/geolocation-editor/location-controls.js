@@ -18,8 +18,13 @@ const LocationControls = ({
         <span className="ml-2">{gettext('Address')}</span>
       </div>
       <div className="header-actions">
-        <span className="h-5 d-flex align-items-center" title={gettext('Full screen')} aria-label={gettext('Full screen')} onClick={onFullScreen}>
-          <Icon symbol="fullscreen" className="cur-view-path-btn" />
+        <span
+          className="cur-view-path-btn"
+          aria-label={gettext('Full screen')}
+          title={gettext('Full screen')}
+          onClick={onFullScreen}
+        >
+          <Icon symbol="fullscreen"/>
         </span>
         {position && (
           <span
