@@ -91,18 +91,18 @@ class OrgAdminUserSetPassword(APIView):
                 % {'passwd': new_password, 'user': user_nickname}
 
         if settings.ENABLE_RISK_CONTROL:
+            from seahub.utils import risk_control_statistics
+            message = {
+                'api_type': 'org_admin_reset_user_password',
+                'admin_username': request.user.username,
+                'admin_name': email2nickname(request.user.username),
+                'org_id': int(org_id),
+                'org_name': org.org_name,
+                'email':  profile.contact_email if profile and profile.contact_email else '',
+                'username': user.username,
+                'name': email2nickname(email),
+            }
             try:
-                from seahub.utils import risk_control_statistics
-                message = {
-                    'api_type': 'org_admin_reset_user_password',
-                    'admin_username': request.user.username,
-                    'admin_name': email2nickname(request.user.username),
-                    'org_id': int(org_id),
-                    'org_name': org.org_name,
-                    'email':  profile.contact_email if profile and profile.contact_email else '',
-                    'username': user.username,
-                    'name': email2nickname(email),
-                }
                 risk_control_statistics(message)
             except Exception as e:
                 logger.error('Publish risk-control-statistics msg %s error: %s', message, e)
