@@ -371,22 +371,20 @@ class ShareAdminUploadLinks extends Component {
   toggleSelectAllLinks = (isSelected) => {
     const { items: links } = this.state;
     this.setState({
-      items: links.map(item => {
-        item.isSelected = isSelected;
-        return item;
-      })
+      items: links.map(item => ({
+        ...item,
+        isSelected
+      }))
     });
   };
 
   toggleSelectLink = (link, isSelected) => {
     const { items: links } = this.state;
     this.setState({
-      items: links.map(item => {
-        if (item.token == link.token) {
-          item.isSelected = isSelected;
-        }
-        return item;
-      })
+      items: links.map(item => item.token == link.token ? {
+        ...item,
+        isSelected
+      } : item)
     });
   };
 
