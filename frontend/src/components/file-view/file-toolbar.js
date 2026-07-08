@@ -98,13 +98,14 @@ class FileToolbar extends React.Component {
         keepOpen: true,
       });
     }
-    items.push('Divider');
+    if (items.length > 0) {
+      items.push('Divider');
+    }
     items.push({
       key: 'open-parent-folder',
       label: gettext('Open parent folder'),
       onClick: this.handleOpenParentFolder,
     });
-
     return items;
   };
 
