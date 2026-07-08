@@ -5,7 +5,8 @@ import CenteredLoading from '../../centered-loading';
 import Chat from './chat';
 import Sessions from './sessions';
 import Documents from './documents';
-import { AskPageProvider, SessionsProvider, DocumentsProvider, AIChatToolsProvider, useAskPage, useSessions } from './hooks';
+import { AskPageProvider, SessionsProvider, DocumentsProvider, AIChatToolsProvider, useAIChatTools, useAskPage, useSessions } from './hooks';
+import { consumePendingAttachments } from './hooks/ai-chat-tools';
 import { ASK_PAGE_SLUG_ID } from './constants';
 import { chatAPI } from '../../../utils/chat-api';
 import EventBus from '../../common/event-bus';
@@ -15,6 +16,62 @@ import './index.css';
 
 const DEFAULT_SETTINGS = {
   developer_mode: false,
+};
+
+const ChatEvents = () => {
+  const { updateAttachments } = useAIChatTools();
+
+  useEffect(() => {
+    const eventBus = EventBus.getInstance();
+    if (!eventBus) return;
+
+    const unsubscribeAttachFiles = eventBus.subscribe(EVENT_BUS_TYPE.CHAT_ATTACH_FILES, ({ attachments = [], reset = false } = {}) => {
+      if (!Array.isArray(attachments) || attachments.length === 0) {
+        return;
+      }
+
+      updateAttachments((currentAttachments) => {
+        const nextAttachments = reset ? [] : currentAttachments.slice();
+        const attachmentKeys = new Set(nextAttachments.map((item) => item.key));
+
+        attachments.forEach((attachment) => {
+          if (!attachmentKeys.has(attachment.key)) {
+            nextAttachments.push(attachment);
+            attachmentKeys.add(attachment.key);
+          }
+        });
+
+        return nextAttachments;
+      });
+    });
+
+    return () => {
+      unsubscribeAttachFiles && unsubscribeAttachFiles();
+    };
+  }, [updateAttachments]);
+
+  useEffect(() => {
+    const attachments = consumePendingAttachments();
+    if (!Array.isArray(attachments) || attachments.length === 0) {
+      return;
+    }
+
+    updateAttachments((currentAttachments) => {
+      const nextAttachments = currentAttachments.slice();
+      const attachmentKeys = new Set(nextAttachments.map((item) => item.key));
+
+      attachments.forEach((attachment) => {
+        if (!attachmentKeys.has(attachment.key)) {
+          nextAttachments.push(attachment);
+          attachmentKeys.add(attachment.key);
+        }
+      });
+
+      return nextAttachments;
+    });
+  }, [updateAttachments]);
+
+  return null;
 };
 
 const Main = ({ repoID, settings }) => {
@@ -48,6 +105,7 @@ const Main = ({ repoID, settings }) => {
       ) : (
         <>
           <div className="d-flex o-hidden flex-1">
+            <ChatEvents />
             <Chat repoID={repoID} settings={settings} />
             <Documents />
           </div>

@@ -2,6 +2,32 @@ import React, { useContext, useState, useCallback } from 'react';
 
 const AIChatToolsContext = React.createContext(null);
 
+let pendingAttachments = [];
+
+const mergeAttachments = (baseAttachments = [], nextAttachments = []) => {
+  const mergedAttachments = baseAttachments.slice();
+  const attachmentKeys = new Set(mergedAttachments.map((item) => item.key));
+
+  nextAttachments.forEach((attachment) => {
+    if (attachment && !attachmentKeys.has(attachment.key)) {
+      mergedAttachments.push(attachment);
+      attachmentKeys.add(attachment.key);
+    }
+  });
+
+  return mergedAttachments;
+};
+
+export const setPendingAttachments = (attachments = [], reset = false) => {
+  pendingAttachments = reset ? mergeAttachments([], attachments) : mergeAttachments(pendingAttachments, attachments);
+};
+
+export const consumePendingAttachments = () => {
+  const nextAttachments = pendingAttachments;
+  pendingAttachments = [];
+  return nextAttachments;
+};
+
 export const AIChatToolsProvider = ({ children }) => {
   const [attachments, updateAttachments] = useState([]);
 

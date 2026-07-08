@@ -1,15 +1,38 @@
 import TextTranslation from '@/utils/text-translation';
 import { lockFile, unlockFile, freezeDocument, exportDocx, exportMarkdown, exportSdoc, openHistory, openViaClient, openByDefault, openWithOnlyOffice, toggleStar } from '@/utils/dirent-operations';
+import EventBus, { eventBus as globalEventBus } from '@/components/common/event-bus';
 import { EVENT_BUS_TYPE } from '@/components/common/event-bus-type';
 import { Dirent } from '@/models';
 import { Utils } from '@/utils/utils';
 import { seafileAPI } from '@/utils/seafile-api';
+import { AttachmentObject } from '../dir-chat/models';
+import { setPendingAttachments } from '../dir-chat/hooks/ai-chat-tools';
 
 // Base handlers that all dirent views can use
 export const menuHandlers = {
   [TextTranslation.DOWNLOAD.key]: ({ eventBus, path, dirents }) => {
     const direntList = dirents instanceof Dirent ? [dirents.toJson()] : dirents;
     eventBus.dispatch(EVENT_BUS_TYPE.DOWNLOAD_FILE, path, direntList);
+  },
+
+  [TextTranslation.CHAT_WITH_AI.key]: ({ path, repoID, dirent, dirents, isBatch }) => {
+    const targetDirents = Array.isArray(dirents) ? dirents : [dirent || dirents].filter(Boolean);
+    const attachments = targetDirents
+      .filter((item) => item?.type === 'file')
+      .map((item) => new AttachmentObject({
+        repo_id: repoID,
+        path: Utils.joinPath(path, item.name),
+        name: item.name,
+      }));
+
+    setPendingAttachments(attachments, !isBatch);
+    globalEventBus.dispatch(EVENT_BUS_TYPE.SWITCH_TO_CHAT_VIEW);
+    if (attachments.length > 0) {
+      EventBus.getInstance().dispatch(EVENT_BUS_TYPE.CHAT_ATTACH_FILES, {
+        attachments,
+        reset: !isBatch,
+      });
+    }
   },
 
   [TextTranslation.DELETE.key]: ({ dirent, isBatch, onItemDelete, onBatchDelete }) => {

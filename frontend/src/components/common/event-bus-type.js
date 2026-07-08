@@ -50,6 +50,7 @@ export const EVENT_BUS_TYPE = {
   HISTORY_COMMITS_UPDATED: 'history_commits_updated',
   SWITCH_TO_HISTORY_VIEW: 'switch_to_history_view',
   SWITCH_TO_CHAT_VIEW: 'switch_to_chat_view',
+  CHAT_ATTACH_FILES: 'chat_attach_files',
   CHAT_NEW_SESSION: 'chat_new_session',
   CHAT_TOGGLE_SESSIONS: 'chat_toggle_sessions',
   ASK_QUESTION: 'ask_question',

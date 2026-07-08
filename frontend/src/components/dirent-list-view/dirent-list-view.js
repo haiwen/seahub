@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal, thumbnailDefaultSize, fileServerRoot, enableWhiteboard } from '../../utils/constants';
 import { updateImageThumbnail, Utils } from '../../utils/utils';
-import TextTranslation from '../../utils/text-translation';
 import toaster from '../toast';
 import ModalPortal from '../modal-portal';
 import ImageDialog from '../dialog/image-dialog';
@@ -420,16 +419,7 @@ class DirentListView extends React.Component {
         }
       } else {
         let id = 'dirents-menu';
-        let menuList = [];
-        if (isCustomPermission) {
-          const { modify: canModify, copy: canCopy, download: canDownload, delete: canDelete } = customPermission.permission;
-          canDownload && menuList.push(TextTranslation.DOWNLOAD);
-          canDelete && menuList.push(TextTranslation.DELETE);
-          canModify && menuList.push(TextTranslation.MOVE);
-          canCopy && menuList.push(TextTranslation.COPY);
-        } else {
-          menuList = [TextTranslation.DOWNLOAD, TextTranslation.DELETE, TextTranslation.MOVE, TextTranslation.COPY];
-        }
+        let menuList = this.props.getBatchMenuList(this.props.selectedDirentList);
 
         this.handleContextClick(event, id, menuList);
       }

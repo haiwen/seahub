@@ -9,7 +9,6 @@ import ImageDialog from '../dialog/image-dialog';
 import DirentGridItem from '../../components/dirent-grid-view/dirent-grid-item';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
-import TextTranslation from '../../utils/text-translation';
 import toaster from '../toast';
 import imageAPI from '../../utils/image-api';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
@@ -706,13 +705,8 @@ class DirentGridView extends React.Component {
         }, 0);
       }
     } else {
-      let menuList = [];
       if (!hasCustomPermission('modify') && !hasCustomPermission('copy') && !hasCustomPermission('download') && !hasCustomPermission('delete')) return;
-      [TextTranslation.DOWNLOAD, TextTranslation.DELETE, TextTranslation.MOVE, TextTranslation.COPY].forEach(action => {
-        if (hasCustomPermission(action.key.toLowerCase())) {
-          menuList.push(action);
-        }
-      });
+      let menuList = this.props.getBatchMenuList(selectedDirentList);
       this.handleContextClick(event, DIRENTS_MENU_ID, menuList);
     }
   };

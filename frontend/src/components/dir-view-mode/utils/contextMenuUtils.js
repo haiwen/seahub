@@ -1,10 +1,37 @@
 import TextTranslation from '@/utils/text-translation';
-import { username } from '@/utils/constants';
+import { username, enableAIChat, enableSeafileAI } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
+
+const canUseAIChat = (repoInfo) => {
+  return Boolean(enableSeafileAI && enableAIChat && repoInfo && !repoInfo.is_virtual);
+};
+
+const canChatWithDirents = (repoInfo, dirents) => {
+  return canUseAIChat(repoInfo) && Array.isArray(dirents) && dirents.length > 0 && dirents.every((dirent) => dirent?.type === 'file');
+};
+
+const addChatWithAIOption = (menuList, repoInfo, dirents) => {
+  if (!canChatWithDirents(repoInfo, dirents)) {
+    return menuList;
+  }
+
+  const nextMenuList = menuList.slice();
+  const chatOption = TextTranslation.CHAT_WITH_AI;
+  if (nextMenuList.some((item) => item?.key === chatOption.key)) {
+    return nextMenuList;
+  }
+
+  const copyIndex = nextMenuList.findIndex((item) => item?.key === TextTranslation.COPY.key);
+  const downloadIndex = nextMenuList.findIndex((item) => item?.key === TextTranslation.DOWNLOAD.key);
+  const insertIndex = copyIndex > -1 ? copyIndex + 1 : (downloadIndex > -1 ? downloadIndex + 1 : nextMenuList.length);
+  nextMenuList.splice(insertIndex, 0, chatOption);
+  return nextMenuList;
+};
 
 export const getDirentItemMenuList = (repoInfo, dirent, isContextmenu = true) => {
   const isRepoOwner = repoInfo.owner_email === username;
-  return Utils.getDirentOperationList(isRepoOwner, repoInfo, dirent, isContextmenu);
+  const menuList = Utils.getDirentOperationList(isRepoOwner, repoInfo, dirent, isContextmenu);
+  return addChatWithAIOption(menuList, repoInfo, [dirent]);
 };
 
 export const getBatchMenuList = (repoInfo, selectedDirents, getItemMenuList) => {
@@ -29,7 +56,7 @@ export const getBatchMenuList = (repoInfo, selectedDirents, getItemMenuList) => 
       TextTranslation.COPY,
     ];
   }
-  return batchOptions;
+  return addChatWithAIOption(batchOptions, repoInfo, selectedDirents);
 };
 
 export const getPermissions = (repoInfo) => {

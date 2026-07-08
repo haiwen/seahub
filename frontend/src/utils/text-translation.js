@@ -47,6 +47,10 @@ const TextTranslation = {
     key: 'Download',
     value: gettext('Download')
   },
+  CHAT_WITH_AI: {
+    key: 'Chat with AI',
+    value: gettext('Chat with AI')
+  },
   DELETE: {
     key: 'Delete',
     value: gettext('Delete')
