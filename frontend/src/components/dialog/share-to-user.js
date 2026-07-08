@@ -191,38 +191,6 @@ UserItem.propTypes = {
   onChangeUserPermission: PropTypes.func.isRequired,
 };
 
-class UserList extends React.Component {
-
-  render() {
-    let items = this.props.items;
-    return (
-      <tbody>
-        {items.map((item, index) => {
-          return (
-            <UserItem
-              key={index}
-              index={index}
-              repoID={this.props.repoID}
-              item={item}
-              permissions={this.props.permissions}
-              deleteShareItem={this.props.deleteShareItem}
-              onChangeUserPermission={this.props.onChangeUserPermission}
-            />
-          );
-        })}
-      </tbody>
-    );
-  }
-}
-
-UserList.propTypes = {
-  repoID: PropTypes.string.isRequired,
-  items: PropTypes.array.isRequired,
-  permissions: PropTypes.array.isRequired,
-  deleteShareItem: PropTypes.func.isRequired,
-  onChangeUserPermission: PropTypes.func.isRequired,
-};
-
 const propTypes = {
   isGroupOwnedRepo: PropTypes.bool,
   itemPath: PropTypes.string.isRequired,
@@ -527,40 +495,41 @@ class ShareToUser extends React.Component {
     }
     return (
       <div className="share-link-container h-100 d-flex flex-column">
-        <table>
-          {thead}
-          <tbody>
-            <tr>
-              <td>
-                <div className='add-members'>
-                  <UserSelect
-                    isMulti={true}
-                    className="share-to-user-select"
-                    placeholder={gettext('Search users...')}
-                    onSelectChange={this.handleSelectChange}
-                    selectedUsers={this.state.selectedUsers}
+        <div className="overflow-auto">
+          <table className="w-xs-200">
+            {thead}
+            <tbody>
+              <tr>
+                <td>
+                  <div className='add-members'>
+                    <UserSelect
+                      isMulti={true}
+                      className="share-to-user-select"
+                      placeholder={gettext('Search users...')}
+                      onSelectChange={this.handleSelectChange}
+                      selectedUsers={this.state.selectedUsers}
+                    />
+                    <SelectUsersIcon onClick={this.toggleDepartmentDetailDialog} />
+                  </div>
+                </td>
+                <td>
+                  <SharePermissionEditor
+                    repoID={this.props.repoID}
+                    isTextMode={false}
+                    isEditIconShow={false}
+                    currentPermission={this.state.permission}
+                    permissions={this.permissions}
+                    onPermissionChanged={this.setPermission}
+                    enableAddCustomPermission={enableAddCustomPermission}
+                    isWiki={this.state.isWiki}
+                    onAddCustomPermissionToggle={this.props.onAddCustomPermissionToggle}
                   />
-                  <SelectUsersIcon onClick={this.toggleDepartmentDetailDialog} />
-                </div>
-              </td>
-              <td>
-                <SharePermissionEditor
-                  repoID={this.props.repoID}
-                  isTextMode={false}
-                  isEditIconShow={false}
-                  currentPermission={this.state.permission}
-                  permissions={this.permissions}
-                  onPermissionChanged={this.setPermission}
-                  enableAddCustomPermission={enableAddCustomPermission}
-                  isWiki={this.state.isWiki}
-                  onAddCustomPermissionToggle={this.props.onAddCustomPermissionToggle}
-                />
-              </td>
-              <td>
-                <Button color="primary" onClick={this.shareToUser} size={isMobile ? 'sm' : 'md'}>{gettext('Submit')}</Button>
-              </td>
-            </tr>
-            {this.state.errorMsg.length > 0 &&
+                </td>
+                <td>
+                  <Button color="primary" onClick={this.shareToUser}>{gettext('Submit')}</Button>
+                </td>
+              </tr>
+              {this.state.errorMsg.length > 0 &&
               this.state.errorMsg.map((item, index) => {
                 let errMessage = '';
                 if (item.email) {
@@ -574,9 +543,10 @@ class ShareToUser extends React.Component {
                   </tr>
                 );
               })
-            }
-          </tbody>
-        </table>
+              }
+            </tbody>
+          </table>
+        </div>
         <div className="share-list-container flex-fill">
           {this.state.isLoading ? (
             <Loading />
@@ -585,15 +555,23 @@ class ShareToUser extends React.Component {
               {sharedItems.length === 0 ? (
                 <EmptyTip text={gettext('No items')} className="h-100 m-0" />
               ) : (
-                <table className="table-thead-hidden">
+                <table className="table-thead-hidden w-xs-200">
                   {thead}
-                  <UserList
-                    repoID={this.props.repoID}
-                    items={sharedItems}
-                    permissions={this.permissions}
-                    deleteShareItem={this.deleteShareItem}
-                    onChangeUserPermission={this.onChangeUserPermission}
-                  />
+                  <tbody>
+                    {sharedItems.map((item, index) => {
+                      return (
+                        <UserItem
+                          key={index}
+                          index={index}
+                          repoID={this.props.repoID}
+                          item={item}
+                          permissions={this.permissions}
+                          deleteShareItem={this.deleteShareItem}
+                          onChangeUserPermission={this.onChangeUserPermission}
+                        />
+                      );
+                    })}
+                  </tbody>
                 </table>
               )}
             </>
