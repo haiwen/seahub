@@ -469,6 +469,7 @@ html, body {
   position: static;
   min-width: 0;
   width: 100%;
+  min-width: 500px !important;
 }
 
 .sdoc-editor-container .sdoc-editor-content .sdoc-article-container {
