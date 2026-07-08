@@ -20,21 +20,32 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, dele
         const mtime = getFileMTimeFromRecord(row);
         const fileName = getFileNameFromRecord(row);
         const parentDir = getParentDirFromRecord(row);
-        const path = Utils.encodePath(Utils.joinPath(parentDir, fileName));
+        const rawPath = Utils.joinPath(parentDir, fileName);
+        const path = Utils.encodePath(rawPath);
         const fileExt = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
         const isGIF = fileExt === 'gif';
-        const useThumbnail = repoInfo?.encrypted;
-        const basePath = `${siteRoot}${useThumbnail && !isGIF ? 'thumbnail' : 'repo'}/${repoID}`;
-        const src = `${basePath}/${useThumbnail && !isGIF ? thumbnailSizeForOriginal : 'raw'}${path}`;
+        const isTIFF = fileExt === 'tiff' || fileExt === 'tif';
+
+        let thumbnail = '';
+        if (repoInfo?.encrypted || isGIF) {
+          thumbnail = `${siteRoot}repo/${repoID}/raw${path}`;
+        } else {
+          thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}?mtime=${mtime}`;
+        }
+
+        const src = isTIFF
+          ? `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}?mtime=${mtime}`
+          : `${siteRoot}repo/${repoID}/raw${path}`;
+
         return {
           id,
           name: fileName,
           url: `${siteRoot}lib/${repoID}/file${path}`,
-          thumbnail: `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}?mtime=${mtime}`,
-          src: src,
+          thumbnail,
+          src,
           parentDir,
           downloadURL: `${fileServerRoot}repos/${repoID}/files${path}/?op=download`,
-          rawPath: Utils.joinPath(parentDir, fileName),
+          rawPath,
         };
       });
     setImageItems(newImageItems);
