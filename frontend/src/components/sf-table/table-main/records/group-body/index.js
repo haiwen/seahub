@@ -861,7 +861,7 @@ class GroupBody extends Component {
 
     const allColumnsFrozen = lastFrozenColumnKey === lastColumn.key;
     const groupRowsClassName = classnames(
-      'canvas-groups-rows', 'animation',
+      'sf-canvas-groups-rows', 'animation',
       {
         'single-column': checkIsNameColumn(lastColumn),
         'disabled-add-record': true,

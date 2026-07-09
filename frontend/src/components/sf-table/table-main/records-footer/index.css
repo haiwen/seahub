@@ -43,7 +43,7 @@
 }
 
 .sf-table-footer .summary-item,
-.canvas-groups-rows .summary-item {
+.sf-canvas-groups-rows .summary-item {
   display: flex;
   justify-content: flex-end;
   text-align: right;
@@ -52,7 +52,7 @@
 }
 
 .sf-table-footer .summary-item .summary-value,
-.canvas-groups-rows .summary-item .summary-value {
+.sf-canvas-groups-rows .summary-item .summary-value {
   display: flex;
   justify-content: flex-end;
   max-width: calc(100% - 18px);
@@ -60,13 +60,13 @@
 }
 
 .sf-table-footer .summary-value .summary-value-title,
-.canvas-groups-rows .summary-value .summary-value-title {
+.sf-canvas-groups-rows .summary-value .summary-value-title {
   color: #666666;
   flex: none;
 }
 
 .sf-table-footer .summary-value .summary-value-text,
-.canvas-groups-rows .summary-value .summary-value-text {
+.sf-canvas-groups-rows .summary-value .summary-value-text {
   max-width: 100%;
   padding-left: 3px;
   flex: none;
