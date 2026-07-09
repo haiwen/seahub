@@ -67,9 +67,9 @@ class CustomPermissionItem extends React.Component {
         tabIndex="0"
         onFocus={this.onMouseEnter}
       >
-        <td width='22%' className="text-truncate" title={name}>{name}</td>
-        <td width='56%' className="text-truncate">{description}</td>
-        <td width='22%'>
+        <td className="text-truncate" title={name}>{name}</td>
+        <td className="text-truncate">{description}</td>
+        <td>
           {isShowOperations && (
             <Fragment>
               <OpIcon

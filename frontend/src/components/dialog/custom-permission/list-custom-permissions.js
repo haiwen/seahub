@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CustomPermissionItem from './custom-permission-item';
 import { gettext } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
 
 const propTypes = {
   permissions: PropTypes.array.isRequired,
@@ -14,6 +15,18 @@ class ListCustomPermissions extends React.Component {
 
   render() {
     const { permissions } = this.props;
+    const isDesktop = Utils.isDesktop();
+    const columnWidths = isDesktop ? ['22%', '56%', '22%'] : ['36%', '44%', '20%'];
+
+    const thead = (
+      <thead>
+        <tr>
+          <th width={columnWidths[0]}>{gettext('Permission name')}</th>
+          <th width={columnWidths[1]}>{gettext('Description')}</th>
+          <th width={columnWidths[2]}></th>
+        </tr>
+      </thead>
+    );
 
     return (
       <div className="custom-permission">
@@ -25,16 +38,11 @@ class ListCustomPermissions extends React.Component {
         </div>
         <div className="permission-main mt-4">
           <table className="permissions-list-header">
-            <thead>
-              <tr>
-                <th width='22%'>{gettext('Permission name')}</th>
-                <th width='56%'>{gettext('Description')}</th>
-                <th width='22%'></th>
-              </tr>
-            </thead>
+            {thead}
           </table>
-          <div className="permissions-list-body">
+          <div className="permissions-list-body table-thead-hidden">
             <table>
+              {thead}
               <tbody>
                 {permissions.map((permission, index) => {
                   return (

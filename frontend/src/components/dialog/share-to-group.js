@@ -371,26 +371,17 @@ class ShareToGroup extends React.Component {
 
   render() {
     const enableAddCustomPermission = isPro && !isSeafilePlus;
-    let thead = (
+    const isDesktop = Utils.isDesktop();
+    const columnWidths = isDesktop ? ['47%', '35%', '18%'] : ['40%', '35%', '25%'];
+    const thead = (
       <thead>
         <tr>
-          <th width="47%">{gettext('Group')}</th>
-          <th width="35%">{gettext('Permission')}</th>
-          <th width="18%"></th>
+          <th width={columnWidths[0]}>{gettext('Group')}</th>
+          <th width={columnWidths[1]}>{gettext('Permission')}</th>
+          <th width={columnWidths[2]}></th>
         </tr>
       </thead>
     );
-    if (isMobile) {
-      thead = (
-        <thead>
-          <tr>
-            <th width="40%">{gettext('Group')}</th>
-            <th width="35%">{gettext('Permission')}</th>
-            <th width="25%"></th>
-          </tr>
-        </thead>
-      );
-    }
     return (
       <div className='h-100 d-flex flex-column'>
         <table>
