@@ -1147,7 +1147,13 @@ class InteractionMasks extends React.Component {
     const isDragEnabled = this.checkIsSelectedCellEditable();
     const column = getSelectedColumn({ selectedPosition, columns });
     const { type } = column || {};
-    if (isEditorEnabled && type !== CellType.RATE && type !== CellType.CHECKBOX && type === CellType.FILE_NAME) {
+    const shouldHideSelectionMaskWhenEditing = isEditorEnabled && [
+      CellType.FILE_NAME,
+      CellType.TEXT,
+      CellType.NUMBER,
+    ].includes(type);
+
+    if (shouldHideSelectionMaskWhenEditing) {
       return null;
     }
     if (!this.isGridSelected()) return null;
@@ -1197,7 +1203,7 @@ class InteractionMasks extends React.Component {
     const isSelectedSingleCell = selectedRangeIsSingleCell(selectedRange);
     return (
       <div
-        className='interaction-mask'
+        className="interaction-mask"
         ref={this.setContainerRef}
         onKeyDown={this.onKeyDown}
         onFocus={this.onFocus}

@@ -24,19 +24,19 @@ const FileName = ({ repoID, record, className: propsClassName, value, hideIcon =
     if (hideIcon) return {};
     if (isDir) {
       const icon = Utils.getFolderIconUrl();
-      return { iconUrl: icon, defaultIconUrl: icon };
+      return { iconUrl: icon, defaultIconUrl: icon, iconType: 'file-img' };
     }
     const defaultIconUrl = Utils.getFileIconUrl(value);
     if (Utils.imageCheck(value)) {
       const fileExt = Utils.getFileExtension(value, true);
       if (fileExt === 'avif' && !enableThumbnailServer) {
-        return { iconUrl: defaultIconUrl, defaultIconUrl };
+        return { iconUrl: defaultIconUrl, defaultIconUrl, iconType: 'file-img' };
       }
       const path = Utils.encodePath(Utils.joinPath(parentDir, value));
       const thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}${path}?mtime=${getFileMTimeFromRecord(record)}`;
-      return { iconUrl: thumbnail, defaultIconUrl };
+      return { iconUrl: thumbnail, defaultIconUrl, iconType: 'thumbnail' };
     }
-    return { iconUrl: defaultIconUrl, defaultIconUrl };
+    return { iconUrl: defaultIconUrl, defaultIconUrl, iconType: 'file-img' };
   }, [isDir, hideIcon, value, parentDir, record, repoID]);
 
   const handleFilenameClick = useCallback((event) => {

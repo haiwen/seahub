@@ -19,10 +19,10 @@ const FileName = ({ repoID, column, record, className: propsClassName, value, hi
     if (hideIcon) return {};
     if (isDir) {
       const icon = Utils.getFolderIconUrl();
-      return { iconUrl: icon, defaultIconUrl: icon };
+      return { iconUrl: icon, defaultIconUrl: icon, iconType: 'file-img' };
     }
     const defaultIconUrl = Utils.getFileIconUrl(value);
-    return { iconUrl: defaultIconUrl, defaultIconUrl };
+    return { iconUrl: defaultIconUrl, defaultIconUrl, iconType: 'file-img' };
   }, [hideIcon, isDir, value]);
 
   const onFileNameClick = useCallback(() => {

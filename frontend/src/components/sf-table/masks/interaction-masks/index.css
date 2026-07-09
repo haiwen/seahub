@@ -1,13 +1,13 @@
-.interaction-mask .rdg-selected {
+.sf-table-wrapper .interaction-mask .rdg-selected {
   border: 2px solid #3e84f7;
 }
 
-.interaction-mask .rdg-selected-range {
+.sf-table-wrapper .interaction-mask .rdg-selected-range {
   background-color: rgba(62, 132, 247, 0.1);
 }
 
-.rdg-selected .drag-handle,
-.rdg-selected-range .drag-handle,
+.sf-table-wrapper .interaction-mask .rdg-selected .drag-handle,
+.sf-table-wrapper .interaction-mask .rdg-selected-range .drag-handle,
 .checkbox-editor-container .drag-handle {
   pointer-events: auto;
   position: absolute;

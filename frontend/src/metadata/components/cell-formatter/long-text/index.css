@@ -1,11 +1,12 @@
-.sf-metadata-ui.long-text-formatter {
+.sf-table-cell .cell-formatter-container.long-text-formatter {
   width: 100%;
   max-width: 100%;
-  display: -webkit-box;
+  display: block;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
   line-clamp: 4;
   overflow: hidden;
+  text-overflow: ellipsis;
   line-height: 1.5;
 }
 

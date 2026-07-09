@@ -12,10 +12,6 @@
   background-color: var(--bs-icon-btn-hover-bg-color);
 }
 
-.sf-table-header-cell .seafile-multicolor-icon-down {
-  color: var(--bs-icon-secondary-color);
-}
-
 .sf-table-column-dropdown-menu .dropdown-item .seafile-multicolor-icon {
   font-size: .875rem;
   color: var(--bs-icon-color);

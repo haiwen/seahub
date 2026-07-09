@@ -72,6 +72,7 @@
 
 /* cell formatter */
 .sf-table-cell .cell-formatter-container {
+  width: 100%;
   height: 22px;
   display: flex;
   align-items: center;
@@ -143,6 +144,17 @@
 
 .sf-table-cell.sf-table-number-cell {
   justify-content: flex-end;
+}
+
+.sf-table-cell .cell-formatter-container.geolocation-formatter,
+.sf-table-cell .cell-formatter-container.long-text-formatter {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sf-table-cell .cell-formatter-container.tags-formatter {
+  width: 100%;
 }
 
 @media screen and (max-width: 991.8px) {

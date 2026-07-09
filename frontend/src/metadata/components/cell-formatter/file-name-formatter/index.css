@@ -22,13 +22,18 @@
   flex-shrink: 0;
 }
 
-.sf-metadata-ui.file-name-formatter .sf-metadata-file-icon-container .sf-metadata-file-icon {
+.sf-metadata-ui.file-name-formatter .sf-metadata-file-icon-container .thumbnail {
+  background-color: var(--bs-body-color);
+  border-radius: 2px;
+}
+
+.sf-table-row .sf-metadata-ui.file-name-formatter .sf-metadata-file-icon-container .sf-metadata-file-icon {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.sf-metadata-ui.file-name-formatter .sf-metadata-file-name {
+.sf-table-row .sf-metadata-ui.file-name-formatter .sf-metadata-file-name {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

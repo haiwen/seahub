@@ -14,11 +14,13 @@ const FileNameFormatter = ({
   children,
   iconUrl,
   defaultIconUrl,
+  iconType,
   height,
   cellRef,
   onClickName = () => {}
 }) => {
   const [icon, setIcon] = useState(iconUrl);
+  const [currentIconType, setCurrentIconType] = useState(iconType);
   const [iconContainerStyle, setIconContainerStyle] = useState({});
   const [fileNameStyle, setFileNameStyle] = useState({});
   const isDefaultRowHeight = useMemo(() => {
@@ -36,12 +38,20 @@ const FileNameFormatter = ({
   }, [record]);
 
   const onLoadError = useCallback(() => {
-    defaultIconUrl && setIcon(defaultIconUrl);
+    if (defaultIconUrl) {
+      setIcon(defaultIconUrl);
+      setCurrentIconType('file-img');
+    }
   }, [defaultIconUrl]);
 
   const onClick = useCallback((e) => {
     onClickName(e, record);
   }, [onClickName, record]);
+
+  useEffect(() => {
+    setIcon(iconUrl);
+    setCurrentIconType(iconType);
+  }, [iconUrl, iconType]);
 
   useEffect(() => {
     if (cellRef?.current) {
@@ -80,8 +90,22 @@ const FileNameFormatter = ({
       title={value}
     >
       {icon &&
-        <div className="sf-metadata-file-icon-container" style={iconContainerStyle}>
-          <img className="sf-metadata-file-icon" src={icon} onError={onLoadError} alt='' />
+        <div
+          className={classnames('sf-metadata-file-icon-container', {
+            'sf-metadata-file-thumbnail-icon-container': currentIconType === 'thumbnail',
+            'sf-metadata-file-img-icon-container': currentIconType === 'file-img',
+          })}
+          style={iconContainerStyle}
+        >
+          <img
+            className={classnames('sf-metadata-file-icon', {
+              thumbnail: currentIconType === 'thumbnail',
+              'file-img-icon': currentIconType === 'file-img',
+            })}
+            src={icon}
+            onError={onLoadError}
+            alt=''
+          />
           {record?._is_locked && <img className="locked" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo} />}
         </div>
       }
@@ -103,6 +127,7 @@ FileNameFormatter.propTypes = {
   value: PropTypes.string.isRequired,
   iconUrl: PropTypes.string,
   defaultIconUrl: PropTypes.string,
+  iconType: PropTypes.oneOf(['thumbnail', 'file-img']),
   className: PropTypes.string,
   children: PropTypes.any,
   onClickName: PropTypes.func,
