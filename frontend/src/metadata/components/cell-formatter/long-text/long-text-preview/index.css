@@ -31,6 +31,8 @@
 .sf-metadata-long-text-preview .sf-metadata-longtext-container .article {
   padding: 0;
   border: unset;
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg);
 }
 
 .sf-metadata-long-text-preview .longtext-container-scroll {

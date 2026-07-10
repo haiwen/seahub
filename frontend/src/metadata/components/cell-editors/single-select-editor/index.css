@@ -30,6 +30,7 @@
 .sf-metadata-single-select-editor .sf-metadata-search-single-select-options input:focus {
   border: 1px solid #3e84f7;
   box-shadow: none;
+  background-color: transparent;
 }
 
 .sf-metadata-single-select-editor .sf-metadata-search-single-select-options .search-text-clear {

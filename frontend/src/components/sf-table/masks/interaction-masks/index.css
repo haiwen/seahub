@@ -1,14 +1,14 @@
-.sf-table-wrapper .interaction-mask .rdg-selected {
+.sf-table-wrapper .sf-interaction-mask .rdg-selected {
   border: 2px solid #3e84f7;
 }
 
-.sf-table-wrapper .interaction-mask .rdg-selected-range {
+.sf-table-wrapper .sf-interaction-mask .rdg-selected-range {
   background-color: rgba(62, 132, 247, 0.1);
 }
 
-.sf-table-wrapper .interaction-mask .rdg-selected .drag-handle,
-.sf-table-wrapper .interaction-mask .rdg-selected-range .drag-handle,
-.checkbox-editor-container .drag-handle {
+.sf-table-wrapper .sf-interaction-mask .rdg-selected .drag-handle,
+.sf-table-wrapper .sf-interaction-mask .rdg-selected-range .drag-handle,
+.sf-table-wrapper .sf-interaction-mask .checkbox-editor-container .drag-handle {
   pointer-events: auto;
   position: absolute;
   bottom: -5px;
@@ -25,9 +25,9 @@
   cursor: grab;
 }
 
-.rdg-selected .drag-handle:hover,
-.rdg-selected-range .drag-handle:hover,
-.checkbox-editor-container .drag-handle:hover {
+.sf-table-wrapper .sf-interaction-mask .rdg-selected .drag-handle:hover,
+.sf-table-wrapper .sf-interaction-mask .rdg-selected-range .drag-handle:hover,
+.sf-table-wrapper .sf-interaction-mask .checkbox-editor-container .drag-handle:hover {
   bottom: -8px;
   right: -7px;
   background: white;
@@ -37,12 +37,12 @@
   z-index: 2;
 }
 
-.react-grid-cell-dragged-over-down {
+.sf-table-wrapper .sf-interaction-mask .react-grid-cell-dragged-over-down {
   border-top-width: 0;
 }
 
-.react-grid-cell-dragged-over-up,
-.react-grid-cell-dragged-over-down {
+.sf-table-wrapper .sf-interaction-mask .react-grid-cell-dragged-over-up,
+.sf-table-wrapper .sf-interaction-mask .react-grid-cell-dragged-over-down {
   border: 1px dashed #3e84f7;
   background: rgba(62, 132, 247, 0.1) !important;
 }

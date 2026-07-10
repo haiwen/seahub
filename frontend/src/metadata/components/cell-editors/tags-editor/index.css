@@ -25,6 +25,7 @@
 .sf-metadata-tags-editor .sf-metadata-search-tags-container .sf-metadata-search-tags:focus {
   border: 1px solid #3e84f7;
   box-shadow: none;
+  background-color: transparent;
 }
 
 .sf-metadata-tags-editor .sf-metadata-search-tags-container .search-control {

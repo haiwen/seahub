@@ -11,6 +11,8 @@ import { KeyCodes } from '../../../../constants';
 import { gettext } from '../../../../utils/constants';
 import Icon from '../../../../components/icon';
 
+const SELECT_EDITOR_MIN_WIDTH = 300;
+
 const MultipleSelectEditor = forwardRef(({
   height,
   saveImmediately,
@@ -48,9 +50,19 @@ const MultipleSelectEditor = forwardRef(({
     return displayOptions.findIndex(option => option.name === searchValue) === -1 ? true : false;
   }, [canEditData, displayOptions, searchValue]);
 
+  const isBeyondScreen = useMemo(() => {
+    const editorWidth = Math.max(column?.width || 0, SELECT_EDITOR_MIN_WIDTH);
+    return editorPosition.left + editorWidth > window.innerWidth;
+  }, [column, editorPosition]);
+
   const style = useMemo(() => {
-    return { width: column.width };
-  }, [column]);
+    return {
+      width: column.width,
+      top: '-1px',
+      left: isBeyondScreen ? 'unset' : '-1px',
+      right: isBeyondScreen ? 0 : 'unset',
+    };
+  }, [column, isBeyondScreen]);
 
   const blur = useCallback(() => {
     onCommit && onCommit(value);

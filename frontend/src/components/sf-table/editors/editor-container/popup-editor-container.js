@@ -18,6 +18,8 @@ const NOT_SUPPORT_EDITOR_COLUMN_TYPES = [
 ];
 
 const TAGS_EDITOR_WIDTH = 400;
+const SELECT_EDITOR_MIN_WIDTH = 300;
+const EDITOR_VIEWPORT_MARGIN = 8;
 
 class PopupEditorContainer extends React.Component {
 
@@ -28,10 +30,19 @@ class PopupEditorContainer extends React.Component {
     const { width, height, left, top, column, editorPosition } = this.props;
     const editorLeft = editorPosition?.left ?? left;
     const editorTop = editorPosition?.top ?? top;
+    const editorClientLeft = editorPosition?.clientLeft ?? editorLeft;
 
     let additionalStyles = {};
     if (column.type === CellType.SINGLE_SELECT || column.type === CellType.MULTIPLE_SELECT) {
-      additionalStyles = { width, height };
+      const editorWidth = Math.max(width || 0, SELECT_EDITOR_MIN_WIDTH);
+      let left = editorLeft;
+      const overflowRight = editorClientLeft + editorWidth - window.innerWidth + EDITOR_VIEWPORT_MARGIN;
+
+      if (overflowRight > 0) {
+        left = editorLeft - overflowRight;
+      }
+
+      additionalStyles = { left, width: editorWidth, height };
     }
 
     if (column.type === CellType.TAGS) {
@@ -91,9 +102,9 @@ class PopupEditorContainer extends React.Component {
     const spaceAbove = top;
 
     if (spaceBelow >= 400 || spaceBelow >= spaceAbove) {
-      return { top: 0, bottom: 'auto' };
+      return { top: '-1px', bottom: 'auto', left: '-1px' };
     }
-    return { top: 'auto', bottom: '5px' };
+    return { top: 'auto', bottom: '5px', left: '-1px' };
   };
 
   createEditor = () => {

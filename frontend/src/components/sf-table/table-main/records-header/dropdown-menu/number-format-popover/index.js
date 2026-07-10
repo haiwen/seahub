@@ -309,8 +309,7 @@ const NumberFormatPopover = ({ target, column, onToggle, onSubmit }) => {
                 value={customSymbol}
                 onChange={onCustomSymbolChange}
                 placeholder={gettext('Enter custom currency symbol')}
-                className={`sf-metadata-number-format-input${validationError ? ' error' : ''
-                  }`}
+                className={`sf-metadata-number-format-input${validationError ? ' error' : ''}`}
               />
               {validationError && (
                 <div className='sf-metadata-validation-error'>

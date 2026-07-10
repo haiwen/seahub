@@ -49,3 +49,7 @@
   font-size: 10px;
   margin-left: 4px;
 }
+
+.sf-metadata-delete-select-tags .sf-metadata-delete-select-tag .sf-metadata-delete-select-remove .seafile-multicolor-icon {
+  color: #999;
+}

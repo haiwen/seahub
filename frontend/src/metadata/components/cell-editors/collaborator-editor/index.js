@@ -249,7 +249,7 @@ const CollaboratorEditor = forwardRef(({
   const isBeyondScreen = editorPosition.left + 300 > window.innerWidth;
 
   return (
-    <div className="sf-metadata-collaborator-editor sf-popover-container" style={{ top: -38, left: isBeyondScreen ? 'unset' : 0, right: isBeyondScreen ? 0 : 'unset' }} ref={editorRef}>
+    <div className="sf-metadata-collaborator-editor sf-popover-container" style={{ top: '-1px', left: isBeyondScreen ? 'unset' : '-1px', right: isBeyondScreen ? 0 : 'unset' }} ref={editorRef}>
       <DeleteCollaborator value={value} onDelete={onDeleteCollaborator} />
       <div className="sf-metadata-search-collaborator-options">
         <SearchInput placeholder={gettext('Search collaborators')} onKeyDown={onKeyDown} onChange={onChangeSearch} clearValue={clearSearch} autoFocus={true} className="sf-metadata-search-collaborators" isClearable={true} />

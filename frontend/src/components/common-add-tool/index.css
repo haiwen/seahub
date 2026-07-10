@@ -9,6 +9,10 @@
   border-bottom-right-radius: 8px;
 }
 
+.add-item-btn:hover {
+  background: none !important;
+}
+
 .add-item-btn .add-item-btn-content {
   width: 100%;
   display: flex;

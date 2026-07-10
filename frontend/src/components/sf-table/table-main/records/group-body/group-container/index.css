@@ -306,18 +306,6 @@
   border-bottom: none;
 }
 
-.sf-table-canvas .sf-canvas-groups-rows .frozen-columns::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 1px;
-  background: var(--bs-border-quartus-color);
-  pointer-events: none;
-  z-index: 1;
-}
-
 .sf-canvas-groups-rows.frozen .table-result-table-cell.actions-cell {
   z-index: 2 !important;
 }

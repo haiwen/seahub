@@ -32,6 +32,7 @@
 .sf-metadata-collaborator-editor .sf-metadata-search-collaborator-options input:focus {
   border: 1px solid #3e84f7;
   box-shadow: none;
+  background-color: transparent;
 }
 
 .sf-metadata-collaborator-editor .sf-metadata-search-collaborator-options .search-text-clear {

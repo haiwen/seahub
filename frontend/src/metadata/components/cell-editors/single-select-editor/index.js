@@ -12,6 +12,8 @@ import Icon from '../../../../components/icon';
 
 import './index.css';
 
+const SELECT_EDITOR_MIN_WIDTH = 300;
+
 const SingleSelectEditor = forwardRef(({
   height,
   column,
@@ -63,9 +65,18 @@ const SingleSelectEditor = forwardRef(({
     return displayOptions.findIndex(option => option.name === searchValue) === -1 ? true : false;
   }, [canEditData, displayOptions, searchValue]);
 
+  const isBeyondScreen = useMemo(() => {
+    const editorWidth = Math.max(column?.width || 0, SELECT_EDITOR_MIN_WIDTH);
+    return editorPosition.left + editorWidth > window.innerWidth;
+  }, [column, editorPosition]);
+
   const style = useMemo(() => {
-    return { top: height };
-  }, [height]);
+    return {
+      top: height - 1,
+      left: isBeyondScreen ? 'unset' : '-1px',
+      right: isBeyondScreen ? 0 : 'unset',
+    };
+  }, [height, isBeyondScreen]);
 
   const blur = useCallback(() => {
     onCommit && onCommit(value);
