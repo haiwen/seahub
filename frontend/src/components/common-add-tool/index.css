@@ -21,16 +21,20 @@
 
 .add-item-btn .add-item-btn-content .seafile-multicolor-icon-add-table {
   margin-right: 8px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   transform: none;
   color: #666;
 }
 
-[data-bs-theme=dark] .add-item-btn .seafile-multicolor-icon-add-table {
+[data-bs-theme=dark] .add-item-btn .add-item-btn-content .seafile-multicolor-icon-add-table {
   color: rgba(255, 255, 255, .5);
 }
 
-.add-item-btn .description {
+.add-item-btn .add-item-btn-content .label {
+  font-weight: 400;
+}
+
+.add-item-btn .add-item-btn-content .description {
   flex: 1;
 }

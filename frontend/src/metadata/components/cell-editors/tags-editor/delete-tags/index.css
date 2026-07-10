@@ -1,6 +1,6 @@
-.sf-metadata-delete-select-tags {
+.sf-metadata-tags-editor .sf-metadata-delete-select-tags {
   background-color: var(--bs-body-secondary-bg);
-  border-bottom: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
   border-radius: 3px 3px 0 0;
   min-height: 28px;
   padding: 12px 12px 8px;
@@ -10,30 +10,31 @@
   scrollbar-color: #C1C1C1 rgba(0, 0, 0, 0);
 }
 
-.sf-metadata-delete-select-tags .sf-metadata-delete-select-tag {
+.sf-metadata-tags-editor .sf-metadata-delete-select-tags .sf-metadata-delete-select-tag {
   display: inline-flex;
   align-items: center;
-  height: 20px;
+  height: 22px;
   margin: 0 4px 4px 0;
-  padding: 0 8px 0 4px;
+  padding: 0 6px 0 2px;
   font-size: 13px;
-  border-radius: 10px;
+  border-radius: 11px;
   border: 1px solid #dbdbdb;
-  background: #fff;
+  background: var(--bs-body-bg);
 }
 
-.sf-metadata-delete-select-tags .sf-metadata-delete-select-tag .sf-metadata-delete-select-tag-color {
-  width: 12px;
-  height: 12px;
+.sf-metadata-tags-editor .sf-metadata-delete-select-tags .sf-metadata-delete-select-tag .sf-metadata-delete-select-tag-color {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
   border-radius: 50%;
+  border: 2px solid #fff;
+  flex-shrink: 0;
 }
 
-.sf-metadata-delete-select-tags .sf-metadata-delete-select-tag .sf-metadata-delete-select-tag-name {
+.sf-metadata-tags-editor .sf-metadata-delete-select-tags .sf-metadata-delete-select-tag .sf-metadata-delete-select-tag-name {
   display: inline-block;
-  height: 20px;
-  line-height: 20px;
-  color: #212529;
-  margin-left: 4px;
+  line-height: 22px;
+  color: var(--bs-body-color);
   max-width: 200px;
   flex: 1 1;
   overflow: hidden;
@@ -41,7 +42,7 @@
   white-space: nowrap;
 }
 
-.sf-metadata-delete-select-tags .sf-metadata-delete-select-tag .sf-metadata-delete-select-remove {
+.sf-metadata-tags-editor .sf-metadata-delete-select-tags .sf-metadata-delete-select-tag .sf-metadata-delete-select-remove {
   height: 10px;
   width: 10px;
   display: flex;
@@ -50,6 +51,6 @@
   margin-left: 4px;
 }
 
-.sf-metadata-delete-select-tags .sf-metadata-delete-select-tag .sf-metadata-delete-select-remove .seafile-multicolor-icon {
+.sf-metadata-tags-editor .sf-metadata-delete-select-tags .sf-metadata-delete-select-tag .sf-metadata-delete-select-remove .seafile-multicolor-icon {
   color: #999;
 }

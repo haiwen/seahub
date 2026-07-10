@@ -210,7 +210,7 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
         hidePopover={onPopoverToggle}
         hidePopoverWithEsc={onPopoverToggle}
       >
-        <div className="sf-metadata-edit-column-options-container">
+        <div className="sf-metadata-edit-column-options-container sf-popover-container">
           <div className="sf-metadata-edit-column-options-search-container">
             <SearchInput
               className="sf-metadata-option-search-control"
@@ -233,7 +233,7 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
               addIconClassName="sf-metadata-add-option-icon"
             />
           )}
-          <OptionFooter column={column} onToggle={onToggle} onImportOptions={onImportOptions}/>
+          <OptionFooter column={column} onToggle={onToggle} onImportOptions={onImportOptions} />
         </div>
       </CustomizePopover>
       {deletingOptionId && (

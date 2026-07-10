@@ -22,7 +22,7 @@
   flex-shrink: 0;
 }
 
-.sf-metadata-ui.file-name-formatter .sf-metadata-file-icon-container .thumbnail {
+[data-bs-theme=dark] .sf-metadata-ui.file-name-formatter .sf-metadata-file-icon-container .thumbnail {
   background-color: var(--bs-body-color);
   border-radius: 2px;
 }

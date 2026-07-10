@@ -1,4 +1,4 @@
-.sf-metadata-delete-collaborator {
+.sf-metadata-collaborator-editor .sf-metadata-delete-collaborator {
   background-color: var(--bs-th-secondary-bg);
   border-bottom: 1px solid var(--bs-border-secondary-color);
   border-radius: 3px 3px 0 0;
@@ -7,31 +7,31 @@
   line-height: 1;
 }
 
-.sf-metadata-delete-collaborator .collaborator {
+.sf-metadata-collaborator-editor .sf-metadata-delete-collaborator .collaborator {
   background: #eaeaea;
   border-radius: 10px;
   display: inline-flex;
   align-items: center;
   font-size: 13px;
   height: 20px;
-  margin-right: 10px;
+  margin: 0 4px 4px 0;
   padding: 0 8px 0 2px;
 }
 
-.collaborator .collaborator-avatar-container {
+.sf-metadata-collaborator-editor .sf-metadata-delete-collaborator .collaborator .collaborator-avatar-container {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
-.collaborator .collaborator-avatar {
+.sf-metadata-collaborator-editor .sf-metadata-delete-collaborator .collaborator .collaborator-avatar {
   height: 16px;
   width: 16px;
   border-radius: 50%;
   vertical-align: middle;
 }
 
-.collaborator .collaborator-name {
+.sf-metadata-collaborator-editor .sf-metadata-delete-collaborator .collaborator .collaborator-name {
   color: #212529;
   margin-left: 5px;
   max-width: 200px;
@@ -42,12 +42,7 @@
   white-space: nowrap;
 }
 
-.sf-metadata-delete-collaborator .collaborator {
-  margin-top: 2px;
-  margin-bottom: 2px;
-}
-
-.sf-metadata-delete-collaborator .collaborator .collaborator-remove {
+.sf-metadata-collaborator-editor .sf-metadata-delete-collaborator .collaborator .collaborator-remove {
   font-size: 10px;
   position: relative;
   margin-left: 4px;

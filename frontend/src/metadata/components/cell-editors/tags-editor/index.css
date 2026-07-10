@@ -12,7 +12,7 @@
   padding: 10px 10px 0;
 }
 
-.sf-metadata-tags-editor.tags-tree-container .sf-metadata-search-tags-container {
+.sf-metadata-tags-editor.sf-metadata-tags-tree-container .sf-metadata-search-tags-container {
   padding: 8px 12px 0;
 }
 
@@ -20,6 +20,7 @@
   font-size: 13px;
   max-height: 28px;
   padding: 4px 8px;
+  border-radius: 4px;
 }
 
 .sf-metadata-tags-editor .sf-metadata-search-tags-container .sf-metadata-search-tags:focus {
@@ -37,7 +38,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 3px;
+  border-radius: 4px;
   font-size: .75rem;
 }
 
@@ -53,22 +54,22 @@
   scrollbar-color: #C1C1C1 rgba(0, 0, 0, 0);
 }
 
-.sf-metadata-tags-editor.tags-tree-container .sf-metadata-tags-editor-container {
+.sf-metadata-tags-editor.sf-metadata-tags-tree-container .sf-metadata-tags-editor-container {
   max-height: 280px;
-  padding: 8px 0;
+  padding: 8px 0 12px;
 }
 
-.sf-metadata-tags-editor.tags-tree-container .sf-metadata-tags-editor-container .sf-metadata-tags-editor-tag-item {
+.sf-metadata-tags-editor.sf-metadata-tags-tree-container .sf-metadata-tags-editor-container .sf-metadata-tags-editor-tag-item {
   padding: 0 12px;
 }
 
-.sf-metadata-tags-editor .sf-metadata-tags-editor-container .none-search-result {
+.sf-metadata-tags-editor .sf-metadata-tags-editor-container .search-result-empty {
   width: 100%;
   display: flex;
   justify-content: center;
   font-size: 14px;
-  opacity: 0.5;
   margin: 40px 0;
+  color: var(--bs-body-secondary-color);
 }
 
 .sf-metadata-tags-editor .sf-metadata-tags-editor-container .sf-metadata-tags-editor-title {
@@ -79,29 +80,30 @@
   color: #666;
   line-height: 20px;
   font-size: 13px;
+  margin-bottom: 8px;
 }
 
-.sf-metadata-tags-editor .sf-metadata-tags-editor-tag-container-highlight {
-  background: var(--bs-nav-hover-bg);
+.sf-metadata-tags-editor .sf-metadata-tags-editor-container .sf-metadata-tags-editor-tag-container-highlight {
+  background: var(--bs-dropdown-link-hover-bg);
   cursor: pointer;
 }
 
-.sf-metadata-tags-editor .sf-metadata-tags-editor-tag-check-icon {
-  width: 20px;
+.sf-metadata-tags-editor .sf-metadata-tags-editor-container .sf-metadata-tags-editor-tag-check-icon {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: .875rem;
 }
 
-.sf-metadata-tags-editor .sf-metadata-tags-editor-divider {
-  border-top: 1px solid var(--bs-border-color);
+.sf-metadata-tags-editor .sf-metadata-tags-editor-container .sf-metadata-tags-editor-divider {
+  border-top: 1px solid var(--bs-border-secondary-color);
   height: 0;
   margin: 12px 0 8px;
   opacity: 1;
   overflow: hidden;
 }
 
-.sf-metadata-tags-editor-container .sf-metadata-ui-tags-container {
+.sf-metadata-tags-editor .sf-metadata-tags-editor-container .sf-metadata-ui-tags-container {
   width: 100%;
   height: auto;
   display: flex;
@@ -112,7 +114,7 @@
   cursor: pointer;
 }
 
-.sf-metadata-tags-editor-container .sf-metadata-ui-tags-container .sf-metadata-ui-tag {
+.sf-metadata-tags-editor .sf-metadata-tags-editor-container .sf-metadata-ui-tags-container .sf-metadata-ui-tag {
   height: 22px;
   display: flex;
   justify-content: flex-start;
@@ -120,12 +122,16 @@
   background: var(--bs-body-bg);
   font-size: 13px;
   border: 1px solid #dbdbdb;
-  border-radius: 10px;
+  border-radius: 11px;
   margin: 0 4px 4px 0;
   padding: 0 6px 0 2px;
 }
 
-.sf-metadata-tags-editor-container .sf-metadata-ui-tags-container .sf-metadata-ui-tag-color {
+.sf-metadata-tags-editor .sf-metadata-tags-editor-container .sf-metadata-ui-tags-container .sf-metadata-ui-tag.sf-metadata-ui-tag-selected {
+  border-color: rgb(255, 152, 0);
+}
+
+.sf-metadata-tags-editor .sf-metadata-tags-editor-container .sf-metadata-ui-tags-container .sf-metadata-ui-tag-color {
   position: relative;
   display: inline-block;
   width: 16px;
@@ -136,7 +142,7 @@
   border: 2px solid #fff;
 }
 
-.sf-metadata-tags-editor .add-search-result .add-tag-value {
+.sf-metadata-tags-editor .sf-metadata-tags-editor-container .add-search-result .add-tag-value {
   font-weight: 500;
   margin-left: 4px;
 }

@@ -22,14 +22,15 @@
   padding: 8px 8px 0 8px;
 }
 
-.sf-metadata-collaborator-editor .sf-metadata-search-collaborator-options input {
+.sf-metadata-collaborator-editor .sf-metadata-search-collaborator-options search-input {
   width: 100% !important;
   max-height: 28px;
   font-size: 13px;
   padding: 4px 8px;
+  border-radius: 4px;
 }
 
-.sf-metadata-collaborator-editor .sf-metadata-search-collaborator-options input:focus {
+.sf-metadata-collaborator-editor .sf-metadata-search-collaborator-options search-input:focus {
   border: 1px solid #3e84f7;
   box-shadow: none;
   background-color: transparent;
@@ -44,7 +45,7 @@
   align-items: center;
   position: absolute;
   top: 12px;
-  right: 8px;
+  right: 12px;
   font-size: .75rem;
 }
 
@@ -67,14 +68,14 @@
   align-items: center;
   width: 100%;
   height: 30px;
-  border-radius: 2px;
+  border-radius: 4px;
   font-size: 13px;
   color: var(--bs-body-color);
   padding-left: 8px;
 }
 
 .sf-metadata-collaborator-editor .collaborator-container-highlight {
-  background: var(--bs-body-secondary-bg);
+  background: var(--bs-dropdown-link-hover-bg);
   cursor: pointer;
 }
 

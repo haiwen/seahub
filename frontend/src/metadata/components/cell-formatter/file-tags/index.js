@@ -36,7 +36,7 @@ const FileTagsFormatter = ({ value: oldValue, className, children: emptyFormatte
           );
           return (
             <div key={id} className="sf-metadata-ui-tag" title={tagName}>
-              <span className="sf-metadata-ui-tag-color mr-1" style={{ backgroundColor: tagColor }}></span>
+              <span className="sf-metadata-ui-tag-color" style={{ backgroundColor: tagColor }}></span>
               <span className="sf-metadata-ui-tag-text">{tagName}</span>
             </div>
           );

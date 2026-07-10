@@ -134,7 +134,7 @@
   position: absolute;
   display: flex;
   align-items: center;
-  padding: 8px 40px 8px 16px;
+  padding: 8px 16px;
   border-top-left-radius: 8px;
   background-color: inherit;
   overflow: hidden;
@@ -218,15 +218,23 @@
 }
 
 .sf-canvas-groups-rows .group-title .group-column-name {
+  width: 100%;
   font-size: 12px;
   color: var(--bs-body-secondary-color);
-  font-weight: 500;
+  line-height: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .sf-canvas-groups-rows .group-title .group-cell-value {
-  display: flex;
+  width: 100%;
+  display: block;
   font-weight: 500;
-  width: min-content;
+  line-height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .sf-canvas-groups-rows .sf-metadata-ui.cell-formatter-container {
@@ -235,17 +243,11 @@
 
 /* group rows count */
 .sf-canvas-groups-rows .group-rows-count {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.group-rows-count-content {
-  display: inline-flex;
-  align-items: center;
-  margin: 0 16px;
   height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sf-canvas-groups-rows .group-rows-count .count-title {

@@ -1,4 +1,5 @@
 import React, { forwardRef, useMemo, useCallback, useState, useRef, useEffect, useImperativeHandle } from 'react';
+import classnames from 'classnames';
 import CommonAddTool from '../../../../components/common-add-tool';
 import SearchInput from '../../../../components/search-input';
 import { Utils } from '../../../../utils/utils';
@@ -340,10 +341,13 @@ const TagsEditor = forwardRef(({
           const tagId = getTagId(tag);
           const tagName = getTagName(tag);
           const tagColor = getTagColor(tag);
+          const isSelected = value.includes(tagId);
           return (
             <div
               key={tagId}
-              className="sf-metadata-ui-tag"
+              className={classnames('sf-metadata-ui-tag', {
+                'sf-metadata-ui-tag-selected': isSelected,
+              })}
               title={tagName}
               onClick={() => handleSelectTags(tagId)}
               tabIndex={0}
@@ -357,12 +361,12 @@ const TagsEditor = forwardRef(({
         })}
       </div>
     );
-  }, [recentlyUsedTags, handleSelectTags]);
+  }, [recentlyUsedTags, value, handleSelectTags]);
 
   const renderOptions = useCallback(() => {
     if (nodes.length === 0) {
       const noOptionsTip = searchValue ? gettext('No tags available') : gettext('No tag');
-      return (<span className="none-search-result px-4">{noOptionsTip}</span>);
+      return (<span className="search-result-empty">{noOptionsTip}</span>);
     }
     const isRecentlyUsedVisible = showRecentlyUsed && recentlyUsedTags.length > 0 && !searchValue;
     return (
@@ -404,7 +408,7 @@ const TagsEditor = forwardRef(({
   }, [nodes, tagsData, value, highlightNodeIndex, searchValue, recentlyUsedTags, keyNodeFoldedMap, searchedKeyNodeFoldedMap, showRecentlyUsed, renderRecentlyUsed, toggleExpandTreeNode, handleSelectTags, onTreeMenuMouseEnter, onTreeMenuMouseLeave, hasExpandableNodes]);
 
   return (
-    <div className="sf-metadata-tags-editor tags-tree-container sf-popover-container" style={{ ...style, ...customStyle }}>
+    <div className="sf-metadata-tags-editor sf-metadata-tags-tree-container sf-popover-container" style={{ ...style, ...customStyle }}>
       <DeleteTag value={value} tags={tagsData} onDelete={handleSelectTags} />
       <div className="sf-metadata-search-tags-container">
         <SearchInput

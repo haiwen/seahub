@@ -25,6 +25,7 @@
   max-height: 28px;
   font-size: 13px;
   padding: 4px 8px;
+  border-radius: 4px;
 }
 
 .sf-metadata-single-select-editor .sf-metadata-search-single-select-options input:focus {
@@ -110,16 +111,11 @@
   max-width: 100%;
 }
 
-.sf-metadata-single-select-editor .single-select-check-icon {
-  width: 20px;
+.sf-metadata-single-select-editor .sf-metadata-single-select-item .single-select-check-icon {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.sf-metadata-single-select-editor .single-select-check-icon .seafile-multicolor-icon-check-icon {
-  font-size: 12px;
-  fill: #666;
+  font-size: .875rem;
 }
 
 .sf-metadata-single-select-editor .none-search-result {

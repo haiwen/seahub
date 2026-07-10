@@ -51,16 +51,20 @@
 }
 
 .sf-metadata-ui.tags-formatter .sf-metadata-ui-tags-container .sf-metadata-ui-tag {
-  height: 20px;
+  height: 22px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   background: var(--bs-body-bg);
   font-size: 13px;
   border: 1px solid #dbdbdb;
-  border-radius: 10px;
+  border-radius: 11px;
   margin-right: 4px;
   padding: 0 6px 0 2px;
+}
+
+.sf-metadata-ui.tags-formatter .sf-metadata-ui-tags-container .sf-metadata-ui-tag .sf-metadata-ui-tag-text {
+  line-height: 20px;
 }
 
 .sf-metadata-ui.tags-formatter .sf-metadata-ui-tags-container .sf-metadata-ui-tag-color {
@@ -72,4 +76,8 @@
   border-radius: 50%;
   flex-shrink: 0;
   border: 2px solid #fff;
+}
+
+.sf-metadata-ui.tags-formatter .sf-metadata-ui-tags-container .sf-metadata-ui-tag .sf-metadata-ui-tag-color {
+  margin-right: 4px;
 }

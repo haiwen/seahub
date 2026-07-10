@@ -340,7 +340,8 @@
 
 /* table cell editor */
 .table-cell-editor .number-editor,
-.table-cell-editor .duration-editor {
+.table-cell-editor .duration-editor,
+.sf-table-cell .number-formatter {
   text-align: right;
 }
 
@@ -407,7 +408,7 @@
 .sf-metadata-single-select-editor .add-item-btn .add-item-btn-content,
 .sf-metadata-tags-editor .add-item-btn .add-item-btn-content {
   width: 100%;
-  height: 30px;
+  height: 32px;
   display: inline-flex;
   align-items: center;
   padding: 0 12px;
