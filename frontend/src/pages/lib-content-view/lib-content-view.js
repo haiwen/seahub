@@ -11,6 +11,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import {
+  enableAIChat,
   enableSeafileAI,
   enableThumbnailServer,
   gettext,
@@ -198,7 +199,7 @@ class LibContentView extends React.Component {
   };
 
   canUseAIChat = (repoInfo = this.state.currentRepoInfo) => {
-    return Boolean(enableSeafileAI && repoInfo && !repoInfo.is_virtual);
+    return Boolean(enableSeafileAI && enableAIChat && repoInfo && !repoInfo.is_virtual);
   };
 
   componentDidMount() {
