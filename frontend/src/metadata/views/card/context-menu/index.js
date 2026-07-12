@@ -13,6 +13,11 @@ import { buildCardMenuOptions } from '../../../utils/menu-builder';
 import { useMetadataStatus } from '../../../../hooks/metadata-status';
 import { getColumnByKey } from '../../../utils/column';
 import TextTranslation from '../../../../utils/text-translation';
+import EventBus, { eventBus as globalEventBus } from '../../../../components/common/event-bus';
+import { EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '../../../../components/common/event-bus-type';
+import { setPendingAttachments } from '../../../../components/dir-view-mode/dir-chat/hooks/ai-chat-tools';
+import { AttachmentObject } from '../../../../components/dir-view-mode/dir-chat/models';
+import { Utils } from '../../../../utils/utils';
 
 const CardContextMenu = ({ selectedCard, onDelete, onRename }) => {
   const [isRenameDialogShow, setIsRenameDialogShow] = useState(false);
@@ -92,6 +97,23 @@ const CardContextMenu = ({ selectedCard, onDelete, onRename }) => {
         break;
       case TextTranslation.DOWNLOAD.key: {
         handleDownload();
+        break;
+      }
+      case TextTranslation.CHAT_WITH_AI.key: {
+        const attachments = record ? [new AttachmentObject({
+          repo_id: repoID,
+          path: Utils.joinPath(parentDir, oldName),
+          name: oldName,
+        })] : [];
+
+        setPendingAttachments(attachments, true);
+        globalEventBus.dispatch(DIR_EVENT_BUS_TYPE.SWITCH_TO_CHAT_VIEW);
+        if (attachments.length > 0) {
+          EventBus.getInstance().dispatch(DIR_EVENT_BUS_TYPE.CHAT_ATTACH_FILES, {
+            attachments,
+            reset: true,
+          });
+        }
         break;
       }
       case TextTranslation.DELETE.key: {

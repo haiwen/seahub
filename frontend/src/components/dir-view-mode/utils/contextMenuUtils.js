@@ -69,10 +69,10 @@ export const addChatWithAIOption = (menuList, repoInfo, dirents) => {
   const freezeIndex = findFreezeInsertIndex(nextMenuList);
   if (freezeIndex > -1) {
     nextMenuList.splice(freezeIndex, 0, chatOption);
-    return nextMenuList;
+    return trimTrailingDividers(nextMenuList);
   }
 
-  return addStandaloneChatWithAIGroup(nextMenuList, chatOption);
+  return trimTrailingDividers(addStandaloneChatWithAIGroup(nextMenuList, chatOption));
 };
 
 export const buildSelectedDirentsChatMenuList = (menuList, repoInfo, dirents) => {

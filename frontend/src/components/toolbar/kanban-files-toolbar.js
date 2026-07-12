@@ -14,6 +14,10 @@ import { useMetadataStatus } from '../../hooks';
 import { getColumnByKey } from '../sf-table/utils/column';
 import Icon from '../icon';
 import CustomDropdown from '../dropdown';
+import EventBus, { eventBus as globalEventBus } from '../common/event-bus';
+import { EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '../common/event-bus-type';
+import { setPendingAttachments } from '../dir-view-mode/dir-chat/hooks/ai-chat-tools';
+import { AttachmentObject } from '../dir-view-mode/dir-chat/models';
 
 const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
@@ -95,6 +99,29 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
         eventBus && eventBus.dispatch(EVENT_BUS_TYPE.DOWNLOAD_RECORDS, selectedRecordIds);
         break;
       }
+      case TextTranslation.CHAT_WITH_AI.key: {
+        const attachments = records
+          .filter((record) => !checkIsDir(record))
+          .map((record) => {
+            const fileName = getFileNameFromRecord(record);
+            const parentDir = getParentDirFromRecord(record);
+            return new AttachmentObject({
+              repo_id: repoID,
+              path: Utils.joinPath(parentDir, fileName),
+              name: fileName,
+            });
+          });
+
+        setPendingAttachments(attachments, !isMultiple);
+        globalEventBus.dispatch(DIR_EVENT_BUS_TYPE.SWITCH_TO_CHAT_VIEW);
+        if (attachments.length > 0) {
+          EventBus.getInstance().dispatch(DIR_EVENT_BUS_TYPE.CHAT_ATTACH_FILES, {
+            attachments,
+            reset: !isMultiple,
+          });
+        }
+        break;
+      }
       case TextTranslation.EXTRACT_FILE_DETAIL.key:
       case TextTranslation.EXTRACT_FILE_DETAILS.key: {
         const imageOrVideoRecords = records.filter(record => {
@@ -146,7 +173,7 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
       default:
         break;
     }
-  }, [eventBus, records, selectedRecordIds, readOnly, repoID]);
+  }, [eventBus, records, selectedRecordIds, readOnly, repoID, isMultiple]);
 
   const getMenuList = useCallback(() => {
     return toolbarMenuOptions.map(item => {

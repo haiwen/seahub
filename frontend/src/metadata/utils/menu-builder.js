@@ -1,4 +1,4 @@
-import { enableSeafileAI, gettext } from '../../utils/constants';
+import { enableAIChat, enableSeafileAI, gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { checkIsDir } from './row';
 import { getFileNameFromRecord } from './cell';
@@ -150,6 +150,22 @@ export const buildAISubmenuOptions = (records, readOnly, metadataStatus, isMulti
   addAIOptionIfEnabled(TextTranslation.GENERATE_DESCRIPTION.key, TextTranslation.GENERATE_DESCRIPTION);
   addAIOptionIfEnabled(TextTranslation.GENERATE_TAGS.key, TextTranslation.GENERATE_TAGS);
   addAIOptionIfEnabled(TextTranslation.EXTRACT_TEXT.key, TextTranslation.EXTRACT_TEXT);
+
+  const repoInfo = window.sfMetadataContext?.getSetting('repoInfo');
+  const canChatWithAI = Boolean(
+    enableSeafileAI &&
+    enableAIChat &&
+    repoInfo &&
+    !repoInfo.is_virtual &&
+    records.every((record) => !checkIsDir(record))
+  );
+
+  if (canChatWithAI) {
+    aiOptions.unshift({
+      key: TextTranslation.CHAT_WITH_AI.key,
+      value: TextTranslation.CHAT_WITH_AI.value,
+    });
+  }
 
   return aiOptions;
 };

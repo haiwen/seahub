@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { enableAIChat, enableSeafileAI, gettext } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../metadata/constants';
 import TextTranslation from '../../utils/text-translation';
 import RowUtils from '../sf-table/utils/row';
@@ -13,48 +13,11 @@ import { buildTableToolbarMenuOptions } from '../../metadata/utils/menu-builder'
 import { useMetadataStatus } from '../../hooks';
 import { getColumnByKey } from '../sf-table/utils/column';
 import Icon from '../icon';
-import EventBus from '../common/event-bus';
+import EventBus, { eventBus as globalEventBus } from '../common/event-bus';
 import { EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '../common/event-bus-type';
 import CustomDropdown from '../dropdown';
 import { setPendingAttachments } from '../dir-view-mode/dir-chat/hooks/ai-chat-tools';
 import { AttachmentObject } from '../dir-view-mode/dir-chat/models';
-
-const canChatWithRecords = (records) => {
-  const repoInfo = window.sfMetadataContext?.getSetting('repoInfo');
-  if (!enableSeafileAI || !enableAIChat || !repoInfo || repoInfo.is_virtual) {
-    return false;
-  }
-
-  return Array.isArray(records) && records.length > 0 && records.every((record) => !checkIsDir(record));
-};
-
-const insertChatWithAIIntoMenu = (menuOptions, chatOption, canShowChat) => {
-  if (!canShowChat || !chatOption || !Array.isArray(menuOptions)) {
-    return menuOptions;
-  }
-
-  const nextMenuOptions = menuOptions.slice();
-  if (nextMenuOptions.some((item) => item?.key === chatOption.key)) {
-    return nextMenuOptions;
-  }
-
-  const aiIndex = nextMenuOptions.findIndex((item) => item?.key === 'AI');
-  if (aiIndex > -1) {
-    nextMenuOptions.splice(aiIndex, 0, chatOption);
-    return nextMenuOptions;
-  }
-
-  while (nextMenuOptions.length > 0 && nextMenuOptions[nextMenuOptions.length - 1] === 'Divider') {
-    nextMenuOptions.pop();
-  }
-
-  if (nextMenuOptions.length > 0) {
-    nextMenuOptions.push('Divider');
-  }
-
-  nextMenuOptions.push(chatOption);
-  return nextMenuOptions;
-};
 
 const TableFilesToolbar = ({ repoID }) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
@@ -151,7 +114,7 @@ const TableFilesToolbar = ({ repoID }) => {
           });
 
         setPendingAttachments(attachments, !isMultiple);
-        EventBus.getInstance().dispatch(DIR_EVENT_BUS_TYPE.SWITCH_TO_CHAT_VIEW);
+        globalEventBus.dispatch(DIR_EVENT_BUS_TYPE.SWITCH_TO_CHAT_VIEW);
         if (attachments.length > 0) {
           EventBus.getInstance().dispatch(DIR_EVENT_BUS_TYPE.CHAT_ATTACH_FILES, {
             attachments,
@@ -210,8 +173,7 @@ const TableFilesToolbar = ({ repoID }) => {
   }, [eventBus, records, selectedRecordIds, readOnly, repoID, isMultiple]);
 
   const getMenuList = useCallback(() => {
-    const menuOptions = insertChatWithAIIntoMenu(toolbarMenuOptions, TextTranslation.CHAT_WITH_AI, canChatWithRecords(records));
-    return menuOptions.map(item => {
+    return toolbarMenuOptions.map(item => {
       if (item === 'Divider') return item;
       if (item.subOpList) {
         return {
@@ -231,7 +193,7 @@ const TableFilesToolbar = ({ repoID }) => {
         onClick: () => onMenuItemClick(item.key)
       };
     });
-  }, [toolbarMenuOptions, onMenuItemClick, records]);
+  }, [toolbarMenuOptions, onMenuItemClick]);
 
   useEffect(() => {
     const unsubscribeSelectedFileIds = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.SELECT_RECORDS, (ids, metadataObj) => {

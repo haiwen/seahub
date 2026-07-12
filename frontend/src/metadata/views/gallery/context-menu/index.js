@@ -11,6 +11,12 @@ import { getRowsByIds } from '../../../../components/sf-table/utils/table';
 import { openInNewTab, openParentFolder } from '../../../utils/file';
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { getColumnByKey } from '../../../utils/column';
+import EventBus, { eventBus as globalEventBus } from '../../../../components/common/event-bus';
+import { EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '../../../../components/common/event-bus-type';
+import { setPendingAttachments } from '../../../../components/dir-view-mode/dir-chat/hooks/ai-chat-tools';
+import { AttachmentObject } from '../../../../components/dir-view-mode/dir-chat/models';
+import { Utils } from '../../../../utils/utils';
+import { getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/cell';
 
 const GalleryContextMenu = ({
   metadata,
@@ -106,6 +112,27 @@ const GalleryContextMenu = ({
       case TextTranslation.COPY.key:
         handleCopy();
         break;
+      case TextTranslation.CHAT_WITH_AI.key: {
+        const attachments = records.map((record) => {
+          const fileName = getFileNameFromRecord(record);
+          const parentDir = getParentDirFromRecord(record);
+          return new AttachmentObject({
+            repo_id: repoID,
+            path: Utils.joinPath(parentDir, fileName),
+            name: fileName,
+          });
+        });
+
+        setPendingAttachments(attachments, records.length === 1);
+        globalEventBus.dispatch(DIR_EVENT_BUS_TYPE.SWITCH_TO_CHAT_VIEW);
+        if (attachments.length > 0) {
+          EventBus.getInstance().dispatch(DIR_EVENT_BUS_TYPE.CHAT_ATTACH_FILES, {
+            attachments,
+            reset: records.length === 1,
+          });
+        }
+        break;
+      }
       case TextTranslation.REMOVE_FROM_GROUP.key:
         onRemoveImage(selectedImages);
         break;

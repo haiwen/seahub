@@ -13,6 +13,11 @@ import { getColumnByKey } from '../../metadata/utils/column';
 import Icon from '../icon';
 import OpIcon from '../op-icon';
 import CustomDropdown from '../dropdown';
+import EventBus, { eventBus as globalEventBus } from '../common/event-bus';
+import { EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '../common/event-bus-type';
+import { setPendingAttachments } from '../dir-view-mode/dir-chat/hooks/ai-chat-tools';
+import { AttachmentObject } from '../dir-view-mode/dir-chat/models';
+import { getParentDirFromRecord } from '../../metadata/utils/cell';
 
 const GalleryFilesToolbar = () => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
@@ -60,6 +65,29 @@ const GalleryFilesToolbar = () => {
       }
       case TextTranslation.OPEN_PARENT_FOLDER.key: {
         openParentFolder(records[0]);
+        break;
+      }
+      case TextTranslation.CHAT_WITH_AI.key: {
+        const attachments = records
+          .filter((record) => !checkIsDir(record))
+          .map((record) => {
+            const fileName = getFileNameFromRecord(record);
+            const parentDir = getParentDirFromRecord(record);
+            return new AttachmentObject({
+              repo_id: repoID,
+              path: Utils.joinPath(parentDir, fileName),
+              name: fileName,
+            });
+          });
+
+        setPendingAttachments(attachments, records.length === 1);
+        globalEventBus.dispatch(DIR_EVENT_BUS_TYPE.SWITCH_TO_CHAT_VIEW);
+        if (attachments.length > 0) {
+          EventBus.getInstance().dispatch(DIR_EVENT_BUS_TYPE.CHAT_ATTACH_FILES, {
+            attachments,
+            reset: records.length === 1,
+          });
+        }
         break;
       }
       case TextTranslation.EXTRACT_FILE_DETAIL.key:

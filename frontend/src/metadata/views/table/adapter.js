@@ -7,7 +7,7 @@ import { getColumnDisplayName } from '../../utils/column';
 import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME } from '../../constants/column/icon';
 import { buildTableMenuOptions } from '@/metadata/utils/menu-builder';
 import { checkIsDir } from '@/metadata/utils/row';
-import { getParentDirFromRecord, getRecordIdFromRecord } from '@/metadata/utils/cell';
+import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '@/metadata/utils/cell';
 import TextTranslation from '@/utils/text-translation';
 import { openInNewTab, openParentFolder } from '@/metadata/utils/file';
 import { DropdownItem, Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
@@ -15,6 +15,11 @@ import Icon from '@/components/icon';
 import { POPUP_EDITOR_COLUMN_TYPES } from '@/metadata/constants/column/type';
 import { EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS } from '@/metadata/constants/column/private';
 import { DROPDOWN_SUBMENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
+import EventBus, { eventBus as globalEventBus } from '@/components/common/event-bus';
+import { EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '@/components/common/event-bus-type';
+import { setPendingAttachments } from '@/components/dir-view-mode/dir-chat/hooks/ai-chat-tools';
+import { AttachmentObject } from '@/components/dir-view-mode/dir-chat/models';
+import { Utils } from '@/utils/utils';
 
 export const adaptMetadataColumnsToSfTable = (repoID, repoInfo, metadataColumns) => {
   if (!Array.isArray(metadataColumns)) {
@@ -182,6 +187,29 @@ export const createMetadataContextMenuOptions = ({
           }
         }
         break;
+      case TextTranslation.CHAT_WITH_AI.key: {
+        const attachments = records
+          .filter((record) => !checkIsDir(record))
+          .map((record) => {
+            const fileName = getFileNameFromRecord(record);
+            const parentDir = getParentDirFromRecord(record);
+            return new AttachmentObject({
+              repo_id: repoID,
+              path: Utils.joinPath(parentDir, fileName),
+              name: fileName,
+            });
+          });
+
+        setPendingAttachments(attachments, !isMultiple);
+        globalEventBus.dispatch(DIR_EVENT_BUS_TYPE.SWITCH_TO_CHAT_VIEW);
+        if (attachments.length > 0) {
+          EventBus.getInstance().dispatch(DIR_EVENT_BUS_TYPE.CHAT_ATTACH_FILES, {
+            attachments,
+            reset: !isMultiple,
+          });
+        }
+        break;
+      }
       case TextTranslation.DELETE.key:
       case TextTranslation.DELETE_FILE.key:
       case TextTranslation.DELETE_FOLDER.key:
