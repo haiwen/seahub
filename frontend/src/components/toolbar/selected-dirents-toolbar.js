@@ -14,6 +14,9 @@ import EventBus from '../common/event-bus';
 import { EVENT_BUS_TYPE as TABLE_EVENT_BUS_TYPE } from '@/metadata/constants';
 import Tooltip from '../tooltip';
 import CustomDropdown from '../dropdown';
+import TextTranslation from '../../utils/text-translation';
+import { addChatWithAIOption } from '../dir-view-mode/utils/contextMenuUtils';
+import { menuHandlers } from '../dir-view-mode/utils/menuHandlers';
 
 import '../../css/selected-dirents-toolbar.css';
 
@@ -126,6 +129,7 @@ class SelectedDirentsToolbar extends React.Component {
     const currentRepoInfo = this.props.currentRepoInfo;
     const isContextmenu = true;
     let opList = Utils.getDirentOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
+    opList = addChatWithAIOption(opList, currentRepoInfo, [dirent]);
     const list = ['Move', 'Copy', 'Delete', 'Download', 'Share'];
     opList = opList.filter((item) => {
       return list.indexOf(item.key) == -1;
@@ -224,6 +228,16 @@ class SelectedDirentsToolbar extends React.Component {
       }
       case 'Export sdoc': {
         this.exportSdoc(dirent);
+        break;
+      }
+      case TextTranslation.CHAT_WITH_AI.key: {
+        menuHandlers[TextTranslation.CHAT_WITH_AI.key]({
+          path: this.props.path,
+          repoID: this.props.repoID,
+          dirent,
+          dirents,
+          isBatch: dirents.length > 1,
+        });
         break;
       }
       default:

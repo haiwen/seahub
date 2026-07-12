@@ -404,15 +404,59 @@ const DirTableView = ({
     if (selectedDirents.length > 1) {
       const batchOptions = getBatchMenuList(selectedDirents);
 
-      return batchOptions.map((option, index) => (
-        <button
-          key={option.key}
-          className="seafile-contextmenu-item dropdown-item dir-table-menu-item"
-          onClick={(e) => onOptionClick(e, option, null, selectedDirents)}
-        >
-          {option.value}
-        </button>
-      ));
+      return batchOptions.map((option, index) => {
+        if (option === 'Divider') {
+          return <div key={index} className="seafile-divider dropdown-divider"></div>;
+        }
+
+        if (option.subOpList) {
+          return (
+            <Dropdown
+              key={index}
+              direction="right"
+              className="w-100"
+              isOpen={isSubMenuShown && option.key === hoveredOptionKey}
+              toggle={toggleSubMenu}
+              onMouseMove={(e) => { e.stopPropagation(); }}
+            >
+              <DropdownToggle
+                tag="span"
+                className="dropdown-item"
+                onMouseEnter={(e) => toggleSubMenu(e, option.key)}
+              >
+                <span className="mr-auto">{option.value}</span>
+                <Icon symbol="down" className="rotate-270" />
+              </DropdownToggle>
+              <DropdownMenu modifiers={[DROPDOWN_SUBMENU_OFFSET_DEFAULT]}>
+                {option.subOpList.map((subOption, subIndex) => {
+                  if (subOption === 'Divider') {
+                    return <DropdownItem key={subIndex} divider />;
+                  }
+
+                  return (
+                    <DropdownItem
+                      key={subOption.key}
+                      onClick={(e) => onOptionClick(e, subOption, null, selectedDirents)}
+                    >
+                      {subOption.value}
+                    </DropdownItem>
+                  );
+                })}
+              </DropdownMenu>
+            </Dropdown>
+          );
+        }
+
+        return (
+          <button
+            key={option.key}
+            className="seafile-contextmenu-item dropdown-item dir-table-menu-item"
+            onClick={(e) => onOptionClick(e, option, null, selectedDirents)}
+          >
+            {option.value}
+          </button>
+        );
+      });
     }
 
     // Single dirent menu

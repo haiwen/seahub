@@ -2,6 +2,8 @@ import TextTranslation from '@/utils/text-translation';
 import { username, enableAIChat, enableSeafileAI } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 
+const isDivider = (item) => item === 'Divider';
+
 const canUseAIChat = (repoInfo) => {
   return Boolean(enableSeafileAI && enableAIChat && repoInfo && !repoInfo.is_virtual);
 };
@@ -10,7 +12,50 @@ const canChatWithDirents = (repoInfo, dirents) => {
   return canUseAIChat(repoInfo) && Array.isArray(dirents) && dirents.length > 0 && dirents.every((dirent) => dirent?.type === 'file');
 };
 
-const addChatWithAIOption = (menuList, repoInfo, dirents) => {
+const trimTrailingDividers = (menuList) => {
+  const nextMenuList = menuList.slice();
+  while (nextMenuList.length > 0 && isDivider(nextMenuList[nextMenuList.length - 1])) {
+    nextMenuList.pop();
+  }
+  return nextMenuList;
+};
+
+const findFreezeInsertIndex = (menuList) => {
+  return menuList.findIndex((item) => item?.key === TextTranslation.FREEZE_DOCUMENT.key || item?.key === TextTranslation.UNFREEZE_DOCUMENT.key);
+};
+
+const findOpenMethodInsertIndex = (menuList) => {
+  return menuList.findIndex((item) => {
+    const key = item?.key;
+    return key === TextTranslation.OPEN_WITH.key ||
+      key === TextTranslation.OPEN_WITH_DEFAULT.key ||
+      key === TextTranslation.OPEN_VIA_CLIENT.key ||
+      key === TextTranslation.OPEN_WITH_ONLYOFFICE.key;
+  });
+};
+
+const addStandaloneChatWithAIGroup = (menuList, chatOption) => {
+  const nextMenuList = trimTrailingDividers(menuList);
+  const openMethodIndex = findOpenMethodInsertIndex(nextMenuList);
+
+  if (openMethodIndex > -1) {
+    const insertItems = [];
+    if (openMethodIndex > 0 && !isDivider(nextMenuList[openMethodIndex - 1])) {
+      insertItems.push('Divider');
+    }
+    insertItems.push(chatOption, 'Divider');
+    nextMenuList.splice(openMethodIndex, 0, ...insertItems);
+    return nextMenuList;
+  }
+
+  if (nextMenuList.length > 0 && !isDivider(nextMenuList[nextMenuList.length - 1])) {
+    nextMenuList.push('Divider');
+  }
+  nextMenuList.push(chatOption, 'Divider');
+  return nextMenuList;
+};
+
+export const addChatWithAIOption = (menuList, repoInfo, dirents) => {
   if (!canChatWithDirents(repoInfo, dirents)) {
     return menuList;
   }
@@ -21,12 +66,21 @@ const addChatWithAIOption = (menuList, repoInfo, dirents) => {
     return nextMenuList;
   }
 
-  const copyIndex = nextMenuList.findIndex((item) => item?.key === TextTranslation.COPY.key);
-  const downloadIndex = nextMenuList.findIndex((item) => item?.key === TextTranslation.DOWNLOAD.key);
-  const insertIndex = copyIndex > -1 ? copyIndex + 1 : (downloadIndex > -1 ? downloadIndex + 1 : nextMenuList.length);
-  nextMenuList.splice(insertIndex, 0, chatOption);
-  return nextMenuList;
+  const freezeIndex = findFreezeInsertIndex(nextMenuList);
+  if (freezeIndex > -1) {
+    nextMenuList.splice(freezeIndex, 0, chatOption);
+    return nextMenuList;
+  }
+
+  return addStandaloneChatWithAIGroup(nextMenuList, chatOption);
 };
+
+export const buildSelectedDirentsChatMenuList = (menuList, repoInfo, dirents) => {
+  const nextMenuList = addChatWithAIOption(menuList, repoInfo, dirents);
+  return trimTrailingDividers(nextMenuList);
+};
+
+export const canShowChatWithAI = canChatWithDirents;
 
 export const getDirentItemMenuList = (repoInfo, dirent, isContextmenu = true) => {
   const isRepoOwner = repoInfo.owner_email === username;
