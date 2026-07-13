@@ -313,7 +313,7 @@ class LibContentView extends React.Component {
       currentMode = TRASH_MODE;
     } else if (isHistory) {
       currentMode = HISTORY_MODE;
-    } else if (isChat && enableSeafileAI) {
+    } else if (isChat && enableSeafileAI && enableAIChat) {
       currentMode = CHAT_MODE;
     } else if (tagId) {
       currentMode = TAGS_MODE;
