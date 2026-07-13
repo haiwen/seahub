@@ -141,7 +141,7 @@ const KanbanContextMenu = ({ selectedCard, onDelete, onRename }) => {
         break;
       }
     }
-  }, [record, updateFaceRecognition, repoID, openRenameDialog, handleDownload, onDelete, selectedCard, updateRecordDetails, updateRecordDescription, generateFileTags, onOCR]);
+  }, [record, updateFaceRecognition, repoID, openRenameDialog, handleDownload, parentDir, oldName, onDelete, selectedCard, updateRecordDetails, updateRecordDescription, generateFileTags, onOCR]);
 
   useEffect(() => {
     const unsubscribeToggleKanbanRenameDialog = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_KANBAN_RENAME_DIALOG, openRenameDialog);

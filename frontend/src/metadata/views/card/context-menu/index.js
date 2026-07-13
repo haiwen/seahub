@@ -144,7 +144,7 @@ const CardContextMenu = ({ selectedCard, onDelete, onRename }) => {
         break;
       }
     }
-  }, [record, updateFaceRecognition, repoID, openRenameDialog, handleDownload, onDelete, selectedCard, updateRecordDetails, updateRecordDescription, generateFileTags, onOCR]);
+  }, [record, repoID, openRenameDialog, handleDownload, parentDir, oldName, onDelete, selectedCard, updateFaceRecognition, updateRecordDetails, updateRecordDescription, generateFileTags, onOCR]);
 
   useEffect(() => {
     const unsubscribe = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_CARD_RENAME_DIALOG, openRenameDialog);
