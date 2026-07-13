@@ -15,22 +15,23 @@
   bottom: 1px;
   width: 35rem;
   height: 20rem;
-  border: 1px solid #ddd;
-  border-radius: 3px;
-  box-shadow: 0 0 6px #ddd;
-  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-popover-border-color);
+  border-radius: 8px;
+  box-shadow: var(--bs-popover-box-shadow);
+  background: var(--bs-popover-bg);
   z-index: 1050;
+  overflow: hidden;
 }
 
 .uploader-list-header {
-  background-color: var(--bs-header-tertiary-bg);
+  background-color: var(--bs-th-bg);
   padding: 0.625rem;
   font-size: 1rem;
   color: var(--bs-body-color);
   display: flex;
   justify-content: space-between;
   min-height: 2.25rem;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--bs-popover-border-color);
 }
 
 .uploader-list-header .progress {
@@ -55,7 +56,6 @@
 
 .uploader-list-content {
   padding: 0 1rem 1.25rem;
-  background: var(--bs-body-bg);
   overflow: auto;
 }
 
