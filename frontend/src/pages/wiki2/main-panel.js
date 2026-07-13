@@ -22,6 +22,10 @@ import WikiCollaboratorsOperation from './wiki-collaborators-operation';
 import { seafileAPI } from '../../utils/seafile-api';
 import isHotkey from 'is-hotkey';
 
+const HASH_SCROLL_DELAY = 100;
+const HASH_SCROLL_RETRY_DELAY = 150;
+const HASH_SCROLL_MAX_RETRIES = 5;
+
 const propTypes = {
   path: PropTypes.string.isRequired,
   pathExist: PropTypes.bool.isRequired,
@@ -60,6 +64,7 @@ class MainPanel extends Component {
       previewDocInfo: {}
     };
     this.scrollRef = React.createRef();
+    this.hashScrollTimer = null;
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -100,6 +105,7 @@ class MainPanel extends Component {
     this.unsubscribeWikiFilePreview = eventBus.subscribe(EXTERNAL_EVENT.TRANSFER_PREVIEW_FILE_ID, this.toggleWikiFilePreview);
     this.unsubscribeGenerateExdrawReadOnlyLink = eventBus.subscribe(EXTERNAL_EVENT.GENERATE_EXDRAW_READ_ONLY_LINK, this.generateExdrawReadOnlyLink);
     document.addEventListener('keydown', this.handleGlobalKeyDown, true);
+    this.scrollToHashAnchor();
   }
 
   componentWillUnmount() {
@@ -107,6 +113,10 @@ class MainPanel extends Component {
     this.unsubscribeWikiFilePreview();
     this.unsubscribeGenerateExdrawReadOnlyLink();
     document.removeEventListener('keydown', this.handleGlobalKeyDown, true);
+    if (this.hashScrollTimer) {
+      clearTimeout(this.hashScrollTimer);
+      this.hashScrollTimer = null;
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -115,6 +125,14 @@ class MainPanel extends Component {
         isShowRightPanel: false,
         isPreviewFile: false
       });
+    }
+
+    if (
+      prevProps.editorContent !== this.props.editorContent ||
+      prevProps.currentPageId !== this.props.currentPageId ||
+      prevState.docUuid !== this.state.docUuid
+    ) {
+      this.scrollToHashAnchor();
     }
   }
 
@@ -187,6 +205,66 @@ class MainPanel extends Component {
 
   togglePreview = () => {
     this.setState({ isPreviewFile: false });
+  };
+
+  getHashScrollTarget = () => {
+    const rawHash = window.location.hash || '';
+    if (!rawHash.startsWith('#')) {
+      return '';
+    }
+
+    try {
+      return decodeURIComponent(rawHash.slice(1));
+    } catch (error) {
+      return rawHash.slice(1);
+    }
+  };
+
+  escapeSelectorValue = (value) => {
+    if (window.CSS?.escape) {
+      return window.CSS.escape(value);
+    }
+    return value.replace(/["\\]/g, '\\$&');
+  };
+
+  scrollToHashAnchor = () => {
+    if (this.hashScrollTimer) {
+      clearTimeout(this.hashScrollTimer);
+      this.hashScrollTimer = null;
+    }
+
+    const hash = this.getHashScrollTarget();
+    if (!hash || !this.scrollRef.current || !this.props.editorContent?.elements) {
+      return;
+    }
+
+    let retryCount = 0;
+
+    const tryScroll = () => {
+      const scrollContainer = this.scrollRef.current;
+      if (!scrollContainer) {
+        return;
+      }
+
+      const escapedHash = this.escapeSelectorValue(hash);
+      const target = scrollContainer.querySelector(`[data-id="${escapedHash}"]`) || scrollContainer.querySelector(`[id="${escapedHash}"]`);
+
+      if (target) {
+        scrollContainer.scrollTop = target.offsetTop - 10;
+        this.hashScrollTimer = null;
+        return;
+      }
+
+      if (retryCount >= HASH_SCROLL_MAX_RETRIES) {
+        this.hashScrollTimer = null;
+        return;
+      }
+
+      retryCount += 1;
+      this.hashScrollTimer = setTimeout(tryScroll, HASH_SCROLL_RETRY_DELAY);
+    };
+
+    this.hashScrollTimer = setTimeout(tryScroll, HASH_SCROLL_DELAY);
   };
 
   updateUnseenNotificationsCount = (count) => {

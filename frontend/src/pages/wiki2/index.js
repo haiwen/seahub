@@ -125,13 +125,15 @@ class Wiki extends Component {
         wikiRepoId,
       }, () => {
         let pageId = this.getFirstPageId(config);
+        let openedByUrl = false;
         // opened by url
         const urlPageId = location.pathname.split('/').filter(item => !!item).pop();
         if (urlPageId && urlPageId.length === 4 && PageUtils.getPageById(config.pages, urlPageId)) {
           pageId = urlPageId;
+          openedByUrl = true;
         }
         if (pageId) {
-          this.setCurrentPage(pageId);
+          this.setCurrentPage(pageId, undefined, openedByUrl);
         }
       });
     }).catch((error) => {

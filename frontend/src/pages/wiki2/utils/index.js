@@ -49,17 +49,23 @@ const getCurrentPageConfig = (pages, pageId) => {
 
 const getWikPageLink = (serviceURL, url, pageId) => {
   let pathname = url.replace(serviceURL, '');
+  let hash = '';
 
   // For demo test when serviceURL is http://127.0.0.1:80
   if (!url.startsWith(serviceURL)) {
     const newUrl = new URL(url);
     pathname = newUrl.pathname;
+    hash = newUrl.hash;
+  } else {
+    const currentUrl = new URL(url);
+    pathname = currentUrl.pathname;
+    hash = currentUrl.hash;
   }
   let pathArr = pathname.split('/');
   // pathname is like `/wikis/${wikiId}/{pageId}/`
   pathArr[3] = pageId;
   pathname = pathArr.join('/');
-  return `${serviceURL}${pathname}`;
+  return `${serviceURL}${pathname}${hash}`;
 };
 
 const throttle = (fn, delay) => {
