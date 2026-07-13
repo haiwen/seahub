@@ -374,7 +374,7 @@ msgstr "Закрыть"
 #: frontend/src/components/cur-dir-path/dir-path.js:86
 #: frontend/src/components/dir-view-mode/dir-others/index.js:71
 msgid "Chat"
-msgstr ""
+msgstr "Чат"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:95
 #: frontend/src/components/main-side-nav-folded.js:147
@@ -2957,13 +2957,13 @@ msgstr "Пользовательская часть URL должна иметь 
 #: frontend/src/components/dialog/publish-wiki-dialog.js:153
 #| msgid "Wiki published"
 msgid "SEO: Pre-render published pages"
-msgstr ""
+msgstr "SEO: предварительный рендеринг опубликованных страниц"
 
 #: frontend/src/components/dialog/publish-wiki-dialog.js:155
 msgid ""
 "Pre-render published wiki pages on the server so search engines can index "
 "their content more reliably."
-msgstr ""
+msgstr "Предварительная обработка опубликованных вики-страниц на сервере, чтобы поисковые системы могли более надежно индексировать их контент."
 
 #: frontend/src/components/dialog/publish-wiki-dialog.js:167
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:254
@@ -4325,23 +4325,23 @@ msgstr "Упаковка..."
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/customize-definition/definition.js:63
 #| msgid "Update"
 msgid "Updated"
-msgstr ""
+msgstr "Обновлено"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/message-operations/index.js:14
 #| msgid "This file has been updated."
 msgid "The content has been copied"
-msgstr ""
+msgstr "Содержание было скопировано"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/index.js:31
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:240
 msgid "Thought process"
-msgstr ""
+msgstr "Мыслительный процесс"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/process-details/index.js:59
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/process-details/index.js:73
 #| msgid "File details"
 msgid "Toggle details"
-msgstr ""
+msgstr "Переключить детали"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/process-details/index.js:113
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:125
@@ -4366,25 +4366,25 @@ msgstr "Пусто"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:63
 msgid "Time usage"
-msgstr ""
+msgstr "Использование времени"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:67
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:84
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:184
 #| msgid "Actions"
 msgid "Action steps"
-msgstr ""
+msgstr "Шаги действий"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:71
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:87
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:192
 #| msgid "General information"
 msgid "Answer generation"
-msgstr ""
+msgstr "Генерация ответов"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:82
 msgid "Token usages"
-msgstr ""
+msgstr "Использование токенов"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:93
 #: frontend/src/metadata/constants/view/index.js:40
@@ -4397,34 +4397,34 @@ msgstr "Статистика"
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/tool-details-content.js:37
 #| msgid "Departments"
 msgid "Arguments"
-msgstr ""
+msgstr "Аргументы"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:110
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:130
 #| msgid "Extract file detail"
 msgid "Execution detail"
-msgstr ""
+msgstr "Детали выполнения"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:114
 msgid "Tool call"
-msgstr ""
+msgstr "Вызов инструмента"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:135
 msgid "Step"
-msgstr ""
+msgstr "Шаг"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:146
 #| msgid "Custom properties"
 msgid "System prompts"
-msgstr ""
+msgstr "Системные подсказки"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:148
 msgid "Prompt"
-msgstr ""
+msgstr "Подсказка"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:156
 msgid "Raw"
-msgstr ""
+msgstr "Необработанный"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:157
 #: frontend/src/components/send-link.js:137
@@ -4436,16 +4436,16 @@ msgstr "Сообщение"
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:160
 #| msgid "No tags"
 msgid "Attachments"
-msgstr ""
+msgstr "Вложения"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:167
 #| msgid "User info updated"
 msgid "User input"
-msgstr ""
+msgstr "Пользовательский ввод"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:175
 msgid "Task step"
-msgstr ""
+msgstr "Шаг задачи"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:196
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:274
@@ -4460,25 +4460,25 @@ msgstr "Результат"
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/tool-details-content.js:38
 #| msgid "Operation"
 msgid "Observation"
-msgstr ""
+msgstr "Наблюдение"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-input/index.js:101
 msgid "Ask anything about your files"
-msgstr ""
+msgstr "Спросите что-нибудь о ваших файлах"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat/index.js:350
 msgid "Found 1 reference"
-msgstr ""
+msgstr "Найдено 1 упоминание"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat/index.js:351
 #, javascript-format
 msgid "Found %1$d references"
-msgstr ""
+msgstr "Найдено %1$d упоминаний"
 
 #: frontend/src/components/dir-view-mode/dir-chat/components/attachments/index.js:35
 #| msgid "Created library"
 msgid "Seafile library"
-msgstr ""
+msgstr "Библиотека Seafile"
 
 #: frontend/src/components/dir-view-mode/dir-chat/components/thinking/index.js:12
 #| msgid "Saving..."
@@ -4506,27 +4506,27 @@ msgstr "ИИ"
 #: frontend/src/components/toolbar/chat-toolbar.js:31
 #| msgid "History"
 msgid "Histories"
-msgstr ""
+msgstr "Истории"
 
 #: frontend/src/components/dir-view-mode/dir-chat/sessions/index.js:27
 #| msgid "No changes"
 msgid "No chats"
-msgstr ""
+msgstr "Нет чатов"
 
 #: frontend/src/components/dir-view-mode/dir-chat/sessions/session/index.js:52
 #| msgid "Team name"
 msgid "Chat name"
-msgstr ""
+msgstr "Имя чата"
 
 #: frontend/src/components/dir-view-mode/dir-chat/sessions/session/index.js:65
 #| msgid "Deleted option"
 msgid "Delete chat"
-msgstr ""
+msgstr "Удалить чат"
 
 #: frontend/src/components/dir-view-mode/dir-chat/sessions/session/index.js:66
 #| msgid "Are you sure you want to delete this page?"
 msgid "Are you sure you want to delete this chat?"
-msgstr ""
+msgstr "Вы уверены, что хотите удалить этот чат?"
 
 #: frontend/src/components/dir-view-mode/dir-history-view/columns.js:53
 #: frontend/src/components/dir-view-mode/dir-history-view/columns.js:54
@@ -6451,7 +6451,7 @@ msgstr "Переместить"
 #: frontend/src/components/toolbar/chat-toolbar.js:24
 #| msgid "New Tag"
 msgid "New chat"
-msgstr ""
+msgstr "Новый чат"
 
 #: frontend/src/components/toolbar/common-toolbar.js:104
 #| msgid "Search files"
@@ -9769,7 +9769,7 @@ msgstr "(удалено)"
 #: frontend/src/pages/share-admin/upload-links.js:243
 #| msgid "View Link"
 msgid "View link"
-msgstr ""
+msgstr "Посмотреть ссылку"
 
 #: frontend/src/pages/share-admin/share-links.js:447
 #: frontend/src/pages/share-admin/share-links.js:613
@@ -11424,7 +11424,7 @@ msgstr "Добавить страницу ниже"
 
 #: frontend/src/translate.js:52
 msgid "How can I help you?"
-msgstr ""
+msgstr "Чем я могу вам помочь?"
 
 #: frontend/src/user-notifications.js:268
 #: frontend/src/user-notifications.js:273

@@ -6452,7 +6452,7 @@ msgstr "移動"
 #: frontend/src/components/toolbar/chat-toolbar.js:24
 #| msgid "New Tag"
 msgid "New chat"
-msgstr ""
+msgstr "新しい会話"
 
 #: frontend/src/components/toolbar/common-toolbar.js:104
 #| msgid "Search files"

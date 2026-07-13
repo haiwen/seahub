@@ -100,7 +100,7 @@ msgstr "取消綁定 SAML 失敗，請先設置聯繫郵件。"
 
 #: seahub/ai/apis.py:613
 msgid "New chat"
-msgstr ""
+msgstr "新對話"
 
 #: seahub/api2/endpoints/admin/account.py:204
 #: seahub/api2/endpoints/user.py:101 seahub/api2/views.py:382
@@ -546,7 +546,7 @@ msgstr "找不到使用者%s "
 #: seahub/api2/endpoints/dir_shared_items.py:412
 #| msgid "Library can not be transferred to owner."
 msgid "Library can not be shared to owner"
-msgstr ""
+msgstr "資料庫不能分享給擁有者"
 
 #: seahub/api2/endpoints/file.py:204 seahub/api2/endpoints/upload_links.py:540
 #: seahub/api2/endpoints/via_repo_token.py:853
@@ -676,7 +676,7 @@ msgstr "用戶 %s 已存在。"
 msgid ""
 "An (inactive) regular account already exists for this mail address, can not "
 "proceed to create guest account"
-msgstr ""
+msgstr "此電子郵件地址已存在一個（停用的）一般帳號，無法繼續建立訪客帳號"
 
 #: seahub/api2/endpoints/invitations.py:165
 #: seahub/api2/endpoints/repo_share_invitations.py:224
@@ -841,7 +841,7 @@ msgstr "有人在 %s 上共享了一個資料夾給你"
 #, python-format
 #| msgid "Password has been reset on %s"
 msgid "Password for the shared %s on %s"
-msgstr ""
+msgstr "%s 上分享項目的密碼"
 
 #: seahub/api2/endpoints/send_upload_link_email.py:73
 #, python-format
@@ -856,7 +856,7 @@ msgstr "電子郵件無效。"
 #, python-format
 #| msgid "Bad upload link token."
 msgid "Password for the upload link on %s"
-msgstr ""
+msgstr "%s 上上傳連結的密碼"
 
 #: seahub/api2/endpoints/share_link_auth.py:147
 #, python-format
@@ -1070,7 +1070,7 @@ msgstr "退出"
 
 #: seahub/auth/views.py:377 seahub/organizations/views.py:241
 msgid "Cloudflare Turnstile check failed. Please refresh and try again."
-msgstr ""
+msgstr "Cloudflare Turnstile 驗證失敗。請重新整理後再試一次。"
 
 #: seahub/auth/views.py:392
 msgid "Failed to send email, please contact administrator."
@@ -1764,7 +1764,7 @@ msgstr "兩次輸入的密碼不一致"
 msgid ""
 "An (inactive) regular account already exists for this mail address, can not "
 "proceed to accept the invitation."
-msgstr ""
+msgstr "此電子郵件地址已存在一個（停用的）一般帳號，無法繼續接受邀請。"
 
 #: seahub/notifications/management/commands/notify_admins_on_virus.py:68
 #: seahub/notifications/management/commands/notify_admins_on_virus.py:83
@@ -1893,48 +1893,48 @@ msgstr "用戶 <a href='%(user_profile)s'>%(username)s</a> 請求加入到群組
 #| msgid ""
 #| "a href='%(file_url)s'>%(file_name)s</a> has a new comment from user or)s"
 msgid "Library <a href='%(lib_url)s'>%(repo_name)s</a> has been archived."
-msgstr ""
+msgstr "資料庫 <a href='%(lib_url)s'>%(repo_name)s</a> 已封存。"
 
 #: seahub/notifications/models.py:845
 #, python-format
 #| msgid "r account %(username)s on %(site_name)s has been activated."
 msgid "Library %(repo_name)s has been archived."
-msgstr ""
+msgstr "資料庫 %(repo_name)s 已封存。"
 
 #: seahub/notifications/models.py:862
 #, python-format
 #| msgid ""
 #| "a href='%(file_url)s'>%(file_name)s</a> has a new comment from user or)s"
 msgid "Library <a href='%(lib_url)s'>%(repo_name)s</a> has been unarchived."
-msgstr ""
+msgstr "資料庫 <a href='%(lib_url)s'>%(repo_name)s</a> 已取消封存。"
 
 #: seahub/notifications/models.py:867
 #, python-format
 #| msgid "r account %(username)s on %(site_name)s has been activated."
 msgid "Library %(repo_name)s has been unarchived."
-msgstr ""
+msgstr "資料庫 %(repo_name)s 已取消封存。"
 
 #: seahub/notifications/models.py:884
 #, python-format
 msgid "Library <a href='%(lib_url)s'>%(repo_name)s</a> archive failed."
-msgstr ""
+msgstr "資料庫 <a href='%(lib_url)s'>%(repo_name)s</a> 封存失敗。"
 
 #: seahub/notifications/models.py:889
 #, python-format
 #| msgid "Library name is required"
 msgid "Library %(repo_name)s archive failed."
-msgstr ""
+msgstr "資料庫 %(repo_name)s 封存失敗。"
 
 #: seahub/notifications/models.py:906
 #, python-format
 msgid "Library <a href='%(lib_url)s'>%(repo_name)s</a> unarchive failed."
-msgstr ""
+msgstr "資料庫 <a href='%(lib_url)s'>%(repo_name)s</a> 取消封存失敗。"
 
 #: seahub/notifications/models.py:911
 #, python-format
 #| msgid "Library name is required"
 msgid "Library %(repo_name)s unarchive failed."
-msgstr ""
+msgstr "資料庫 %(repo_name)s 取消封存失敗。"
 
 #: seahub/notifications/models.py:936
 #, python-format
@@ -2899,7 +2899,7 @@ msgid ""
 "For security reasons, the link and the password are sent in two separate "
 "emails. This email contains the link. Please check the other email for the "
 "password."
-msgstr ""
+msgstr "基於安全考量，連結與密碼會分別以兩封電子郵件寄送。本郵件包含連結。請檢查另一封電子郵件以取得密碼。"
 
 #: seahub/templates/shared_link_email.html:22
 #: seahub/templates/shared_link_password_email.html:19
@@ -2919,7 +2919,7 @@ msgstr "密碼："
 msgid ""
 "%(escaped_nickname)s shared a %(file_shared_type)s <span style=\"font-"
 "weight:bold;\">%(escaped_file_shared_name)s</span> to you on %(site_name)s."
-msgstr ""
+msgstr "%(escaped_nickname)s 在 %(site_name)s 上分享了一個 %(file_shared_type)s <span style=\"font-weight:bold;\">%(escaped_file_shared_name)s</span> 給您。"
 
 #: seahub/templates/shared_link_password_email.html:16
 #: seahub/templates/shared_upload_link_password_email.html:19
@@ -2927,7 +2927,7 @@ msgid ""
 "For security reasons, the link and the password are sent in two separate "
 "emails. This email contains the password. Please check the other email for "
 "the link."
-msgstr ""
+msgstr "基於安全考量，連結與密碼會分別以兩封電子郵件寄送。本郵件包含密碼。請檢查另一封電子郵件以取得連結。"
 
 #: seahub/templates/shared_upload_link_email.html:12
 #: seahub/templates/shared_upload_link_password_email.html:12
@@ -2939,7 +2939,7 @@ msgstr ""
 msgid ""
 "%(escaped_nickname)s shared an upload link for folder <span style=\"font-"
 "weight:bold;\">%(escaped_folder_name)s</span> to you on %(site_name)s."
-msgstr ""
+msgstr "%(escaped_nickname)s 在 %(site_name)s 上分享了資料夾 <span style=\"font-weight:bold;\">%(escaped_folder_name)s</span> 的上傳連結給您。"
 
 #: seahub/templates/shared_upload_link_email.html:14
 #: seahub/templates/shared_upload_link_password_email.html:14
@@ -3097,7 +3097,7 @@ msgstr "你的配額快滿了 %(site_name)s。"
 
 #: seahub/templates/wiki/_wiki_publish_ssr_nav_item.html:5
 msgid "Toggle navigation section"
-msgstr ""
+msgstr "切換導覽區段"
 
 #: seahub/templates/wiki/wiki.html:24
 msgid "Last modified by"
@@ -3106,11 +3106,11 @@ msgstr "最後修改者"
 #: seahub/templates/wiki/wiki_publish_ssr.html:46
 #| msgid "Wiki not found."
 msgid "Wiki navigation"
-msgstr ""
+msgstr "Wiki 導覽"
 
 #: seahub/templates/wiki/wiki_publish_ssr.html:52
 msgid "Close navigation"
-msgstr ""
+msgstr "關閉導覽"
 
 #: seahub/templates/wiki/wiki_publish_ssr.html:63
 #: seahub/templates/wiki/wiki_publish_ssr.html:69
@@ -3119,21 +3119,21 @@ msgstr "頁面"
 
 #: seahub/templates/wiki/wiki_publish_ssr.html:85
 msgid "Resize navigation panel"
-msgstr ""
+msgstr "調整導覽面板大小"
 
 #: seahub/templates/wiki/wiki_publish_ssr.html:95
 #| msgid "Operation"
 msgid "Open navigation"
-msgstr ""
+msgstr "開啟導覽"
 
 #: seahub/templates/wiki/wiki_publish_ssr.html:96
 #| msgid "Expiration"
 msgid "Navigation"
-msgstr ""
+msgstr "導覽"
 
 #: seahub/templates/wiki/wiki_publish_ssr.html:128
 msgid "Breadcrumb"
-msgstr ""
+msgstr "麵包屑"
 
 #: seahub/templates/wiki/wiki_publish_ssr.html:138
 #: seahub/templates/wiki/wiki_publish_ssr.html:676
@@ -3255,11 +3255,11 @@ msgid ""
 "    smartphone to scan the QR code below. For example, use Google\n"
 "    Authenticator. Then, enter the token generated by the app.\n"
 "    "
-msgstr ""
+msgstr "若要開始使用權杖產生器，請使用您的\n    智慧型手機掃描下方的 QR code。例如可使用 Google\n    Authenticator。然後輸入應用程式產生的權杖。\n    "
 
 #: seahub/two_factor/templates/two_factor/core/setup.html:118
 msgid "Alternatively you may copy the Secret Key to your password manager"
-msgstr ""
+msgstr "或者，您也可以將密鑰複製到您的密碼管理器"
 
 #: seahub/two_factor/templates/two_factor/core/setup.html:239
 #: seahub/two_factor/templates/two_factor/core/setup.html:242
@@ -3504,7 +3504,7 @@ msgstr "成功新增用戶 %s。一封通知郵件已發送。"
 msgid ""
 "Successfully added user %s. An error occurs when sending email notification,"
 " please check your email configuration."
-msgstr ""
+msgstr "已成功新增使用者 %s。傳送電子郵件通知時發生錯誤，請檢查您的電子郵件設定。"
 
 #: seahub/views/sysadmin.py:615 seahub/views/sysadmin.py:628
 #, python-format

@@ -4342,7 +4342,7 @@ msgstr "正在打包"
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/customize-definition/definition.js:63
 #| msgid "Update"
 msgid "Updated"
-msgstr "已上传"
+msgstr "更新于"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/message-operations/index.js:14
 #| msgid "This file has been updated."

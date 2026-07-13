@@ -106,7 +106,7 @@ msgstr "Не удалось отменить привязку SAML. Сначал
 
 #: seahub/ai/apis.py:613
 msgid "New chat"
-msgstr ""
+msgstr "Новый чат"
 
 #: seahub/api2/endpoints/admin/account.py:204
 #: seahub/api2/endpoints/user.py:101 seahub/api2/views.py:382
@@ -1076,7 +1076,7 @@ msgstr "Выйти"
 
 #: seahub/auth/views.py:377 seahub/organizations/views.py:241
 msgid "Cloudflare Turnstile check failed. Please refresh and try again."
-msgstr ""
+msgstr "Не удалось выполнить проверку турникета Cloudflare. Обновите и повторите попытку."
 
 #: seahub/auth/views.py:392
 msgid "Failed to send email, please contact administrator."
@@ -3124,7 +3124,7 @@ msgstr "Ваша квота почти заполнена на %(site_name)s."
 
 #: seahub/templates/wiki/_wiki_publish_ssr_nav_item.html:5
 msgid "Toggle navigation section"
-msgstr ""
+msgstr "Переключить раздел навигации"
 
 #: seahub/templates/wiki/wiki.html:24
 msgid "Last modified by"
@@ -3133,11 +3133,11 @@ msgstr "Последнее изменение:"
 #: seahub/templates/wiki/wiki_publish_ssr.html:46
 #| msgid "Wiki not found."
 msgid "Wiki navigation"
-msgstr ""
+msgstr "Вики-навигация"
 
 #: seahub/templates/wiki/wiki_publish_ssr.html:52
 msgid "Close navigation"
-msgstr ""
+msgstr "Закрыть навигацию"
 
 #: seahub/templates/wiki/wiki_publish_ssr.html:63
 #: seahub/templates/wiki/wiki_publish_ssr.html:69
@@ -3146,21 +3146,21 @@ msgstr "Страницы"
 
 #: seahub/templates/wiki/wiki_publish_ssr.html:85
 msgid "Resize navigation panel"
-msgstr ""
+msgstr "Изменение размера панели навигации"
 
 #: seahub/templates/wiki/wiki_publish_ssr.html:95
 #| msgid "Operation"
 msgid "Open navigation"
-msgstr ""
+msgstr "Открыть навигацию"
 
 #: seahub/templates/wiki/wiki_publish_ssr.html:96
 #| msgid "Expiration"
 msgid "Navigation"
-msgstr ""
+msgstr "Навигация"
 
 #: seahub/templates/wiki/wiki_publish_ssr.html:128
 msgid "Breadcrumb"
-msgstr ""
+msgstr "Навигационная цепочка"
 
 #: seahub/templates/wiki/wiki_publish_ssr.html:138
 #: seahub/templates/wiki/wiki_publish_ssr.html:676

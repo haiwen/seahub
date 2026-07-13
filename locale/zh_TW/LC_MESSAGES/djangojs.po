@@ -26,7 +26,7 @@ msgstr ""
 #| msgid ""
 #| "ibrary has been set to read-only by admin and cannot be updated."
 msgid "This library has been archived, cannot be updated."
-msgstr ""
+msgstr "此資料庫已封存，無法更新。"
 
 #: frontend/src/components/back-icon.js:12
 #: frontend/src/components/file-view/comment-widget/reply-list.js:90
@@ -127,7 +127,7 @@ msgstr "返回"
 
 #: frontend/src/components/common/notice-item.js:52
 msgid "File {file_link} has a new comment from user {author}."
-msgstr ""
+msgstr "檔案 {file_link} 有來自使用者 {author} 的新評論。"
 
 #: frontend/src/components/common/notice-item.js:87
 msgid "{share_from} has shared a library named {repo_link} to you."
@@ -201,7 +201,7 @@ msgstr "用戶 {user} 已在庫 {libraryName} 中恢復文件 {fileName}。"
 #| " renamed file {oldFileName} {fileName} in library {libraryName}."
 msgid ""
 "{user} renamed file {oldFileName} to {fileName} in library {libraryName}."
-msgstr ""
+msgstr "{user} 已在資料庫 {libraryName} 中將檔案 {oldFileName} 重新命名為 {fileName}。"
 
 #: frontend/src/components/common/notice-item.js:286
 msgid "{user} moved file {fileName} in library {libraryName}."
@@ -247,7 +247,7 @@ msgstr "用戶 {user} 已在庫 {libraryName} 中恢復文件夾 {folderName}。
 msgid ""
 "{user} renamed folder {oldFolderName} to {folderName} in library "
 "{libraryName}."
-msgstr ""
+msgstr "{user} 已在資料庫 {libraryName} 中將資料夾 {oldFolderName} 重新命名為 {folderName}。"
 
 #: frontend/src/components/common/notice-item.js:315
 msgid "{user} moved folder {folderName} in library {libraryName}."
@@ -375,7 +375,7 @@ msgstr "關閉"
 #: frontend/src/components/cur-dir-path/dir-path.js:86
 #: frontend/src/components/dir-view-mode/dir-others/index.js:71
 msgid "Chat"
-msgstr ""
+msgstr "對話"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:95
 #: frontend/src/components/main-side-nav-folded.js:147
@@ -412,7 +412,7 @@ msgstr "標籤"
 #: frontend/src/components/cur-dir-path/dir-path.js:262
 #| msgid "Cleaned trash"
 msgid "Clean trash"
-msgstr ""
+msgstr "清空回收筒"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:285
 #: frontend/src/components/cur-dir-path/dir-path.js:305
@@ -442,7 +442,7 @@ msgstr "歷史"
 msgid ""
 "Tip: a snapshot will be generated after modification, which records the "
 "library state after the modification"
-msgstr ""
+msgstr "提示：修改後會產生一個快照，記錄修改後的資料庫狀態"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:425
 #| msgid "Delete page"
@@ -1554,7 +1554,7 @@ msgid ""
 "For security reasons, the password for the encrypted library is not stored "
 "on the server. If you forget it, you will not be able to recover the "
 "password."
-msgstr ""
+msgstr "基於安全考量，加密資料庫的密碼不會儲存在伺服器上。若您忘記密碼，將無法找回。"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:228
 #: frontend/src/components/dialog/generate-upload-link.js:312
@@ -2094,7 +2094,7 @@ msgstr "增加自動過期"
 #: frontend/src/components/share-link-panel/link-creation.js:452
 #| msgid "Description"
 msgid "Add description"
-msgstr ""
+msgstr "新增描述"
 
 #: frontend/src/components/dialog/generate-upload-link.js:471
 #: frontend/src/components/dialog/group-invite-members-dialog.js:101
@@ -2184,7 +2184,7 @@ msgstr "縮小 (Ctrl - 鼠標滾輪)"
 
 #: frontend/src/components/dialog/image-dialog/index.js:104
 msgid "Metadata"
-msgstr ""
+msgstr "中繼資料"
 
 #: frontend/src/components/dialog/image-dialog/index.js:107
 #: frontend/src/components/file-view/file-toolbar.js:186
@@ -2194,12 +2194,12 @@ msgstr "旋轉"
 #: frontend/src/components/dialog/image-dialog/index.js:110
 #| msgid "Loading"
 msgid "Open metadata"
-msgstr ""
+msgstr "開啟中繼資料"
 
 #: frontend/src/components/dialog/image-dialog/index.js:111
 #| msgid "Choose date"
 msgid "Close metadata"
-msgstr ""
+msgstr "關閉中繼資料"
 
 #: frontend/src/components/dialog/image-dialog/index.js:118
 msgid "View original image"
@@ -2611,17 +2611,17 @@ msgstr "搜索用戶"
 #: frontend/src/components/dialog/list-created-files-dialog.js:33
 #| msgid "Delete Folder"
 msgid "Deleted Folders"
-msgstr ""
+msgstr "已刪除的資料夾"
 
 #: frontend/src/components/dialog/list-created-files-dialog.js:33
 #| msgid "Deleted files"
 msgid "Deleted Files"
-msgstr ""
+msgstr "已刪除的檔案"
 
 #: frontend/src/components/dialog/list-created-files-dialog.js:35
 #| msgid "Created folder"
 msgid "Created Folders"
-msgstr ""
+msgstr "已建立的資料夾"
 
 #: frontend/src/components/dialog/list-created-files-dialog.js:35
 msgid "Created Files"
@@ -2958,13 +2958,13 @@ msgstr "URL 自定義部分必須介於 5 到 30 個字符之間，且只能包�
 #: frontend/src/components/dialog/publish-wiki-dialog.js:153
 #| msgid "Wiki published"
 msgid "SEO: Pre-render published pages"
-msgstr ""
+msgstr "SEO：預先渲染已發佈頁面"
 
 #: frontend/src/components/dialog/publish-wiki-dialog.js:155
 msgid ""
 "Pre-render published wiki pages on the server so search engines can index "
 "their content more reliably."
-msgstr ""
+msgstr "在伺服器上預先渲染已發佈的 Wiki 頁面，讓搜尋引擎更可靠地索引其內容。"
 
 #: frontend/src/components/dialog/publish-wiki-dialog.js:167
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:254
@@ -3103,57 +3103,57 @@ msgstr "API 令牌"
 #: frontend/src/components/dialog/repo-archive-dialog.js:110
 msgid ""
 "The library is being archived. You will be notified once it is completed."
-msgstr ""
+msgstr "資料庫正在封存中。完成後您會收到通知。"
 
 #: frontend/src/components/dialog/repo-archive-dialog.js:73
 #: frontend/src/components/dialog/repo-archive-dialog.js:111
 msgid ""
 "The library is being unarchived. You will be notified once it is completed."
-msgstr ""
+msgstr "資料庫正在取消封存中。完成後您會收到通知。"
 
 #: frontend/src/components/dialog/repo-archive-dialog.js:133
 #| msgid "Read-Write library"
 msgid "Archive library"
-msgstr ""
+msgstr "封存資料庫"
 
 #: frontend/src/components/dialog/repo-archive-dialog.js:133
 #| msgid "Restore Library"
 msgid "Unarchive library"
-msgstr ""
+msgstr "取消封存資料庫"
 
 #: frontend/src/components/dialog/repo-archive-dialog.js:134
 #: frontend/src/components/library-op-menu.js:199
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:350
 msgid "Archive"
-msgstr ""
+msgstr "封存"
 
 #: frontend/src/components/dialog/repo-archive-dialog.js:134
 #: frontend/src/components/library-op-menu.js:199
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:350
 msgid "Unarchive"
-msgstr ""
+msgstr "取消封存"
 
 #: frontend/src/components/dialog/repo-archive-dialog.js:138
 #| msgid "Are you sure you want to remove {placeholder} ?"
 msgid "Are you sure you want to archive {placeholder} ?"
-msgstr ""
+msgstr "您確定要封存 {placeholder} 嗎？"
 
 #: frontend/src/components/dialog/repo-archive-dialog.js:140
 #| msgid "Are you sure you want to remove {placeholder} ?"
 msgid "Are you sure you want to unarchive {placeholder} ?"
-msgstr ""
+msgstr "您確定要取消封存 {placeholder} 嗎？"
 
 #: frontend/src/components/dialog/repo-archive-dialog.js:146
 msgid ""
 "Archived libraries will be moved to archive storage. Users will not be able "
 "to access the library during the archive process."
-msgstr ""
+msgstr "已封存的資料庫會移至封存儲存區。在封存過程中，使用者將無法存取該資料庫。"
 
 #: frontend/src/components/dialog/repo-archive-dialog.js:148
 msgid ""
 "The library will be moved back to primary storage. Users will not be able to"
 " access the library during the unarchive process."
-msgstr ""
+msgstr "資料庫將移回主要儲存區。在取消封存過程中，使用者將無法存取該資料庫。"
 
 #: frontend/src/components/dialog/repo-history.js:24
 #: frontend/src/repo-history.js:97
@@ -3187,7 +3187,7 @@ msgstr "共享管理員"
 
 #: frontend/src/components/dialog/repo-share-admin-dialog.js:66
 msgid "Manage all shares and share links in this library"
-msgstr ""
+msgstr "管理此資料庫中的所有分享與分享連結"
 
 #: frontend/src/components/dialog/repo-share-admin-dialog.js:76
 #: frontend/src/components/dialog/repo-share-admin/share-links.js:316
@@ -3323,56 +3323,56 @@ msgstr "確認要刪除選中的上傳連結嗎？"
 #: frontend/src/components/dialog/repo-webhook-dialog/delete-webhook-dialog.js:9
 #| msgid "Delete Member"
 msgid "Delete webhook"
-msgstr ""
+msgstr "刪除 Webhook"
 
 #: frontend/src/components/dialog/repo-webhook-dialog/delete-webhook-dialog.js:11
 #| msgid "Are you sure you want to delete this page?"
 msgid "Are you sure you want to delete this webhook?"
-msgstr ""
+msgstr "您確定要刪除這個 Webhook 嗎？"
 
 #: frontend/src/components/dialog/repo-webhook-dialog/edit-webhook-dialog.js:26
 #| msgid "URL is required"
 msgid "Url is required"
-msgstr ""
+msgstr "需要 URL"
 
 #: frontend/src/components/dialog/repo-webhook-dialog/edit-webhook-dialog.js:38
 #| msgid "Updated file"
 msgid "Update webhook"
-msgstr ""
+msgstr "更新 Webhook"
 
 #: frontend/src/components/dialog/repo-webhook-dialog/edit-webhook-dialog.js:38
 #: frontend/src/components/dialog/repo-webhook-dialog/index.js:172
 msgid "Add webhook"
-msgstr ""
+msgstr "新增 Webhook"
 
 #: frontend/src/components/dialog/repo-webhook-dialog/edit-webhook-dialog.js:47
 #: frontend/src/components/dialog/repo-webhook-dialog/index.js:143
 #: frontend/src/components/dialog/repo-webhook-dialog/index.js:146
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: frontend/src/components/dialog/repo-webhook-dialog/edit-webhook-dialog.js:49
 msgid "URL should start with http(s)."
-msgstr ""
+msgstr "URL 應以 http(s) 開頭。"
 
 #: frontend/src/components/dialog/repo-webhook-dialog/edit-webhook-dialog.js:52
 msgid "Secret"
-msgstr ""
+msgstr "密鑰"
 
 #: frontend/src/components/dialog/repo-webhook-dialog/edit-webhook-dialog.js:55
 msgid ""
 "When you set a secret, you will receive the X-Seafile-Signature header in "
 "the webhook POST request, which is the SHA256 encryption result of the "
 "secret and request.body."
-msgstr ""
+msgstr "當您設定密鑰後，您會在 webhook 的 POST 請求中收到 X-Seafile-Signature 標頭，其為密鑰與 request.body 的 SHA256 加密結果。"
 
 #: frontend/src/components/dialog/repo-webhook-dialog/index.js:134
 msgid "Webhooks"
-msgstr ""
+msgstr "Webhooks"
 
 #: frontend/src/components/dialog/repo-webhook-dialog/index.js:139
 msgid "No webhook"
-msgstr ""
+msgstr "沒有 webhook"
 
 #: frontend/src/components/dialog/reset-encrypted-repo-password-dialog.js:43
 msgid ""
@@ -3693,14 +3693,14 @@ msgstr "重命名"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-monthly-traffic-limit-dialog.js:70
 #| msgid "An integer that is greater than or equal to 0."
 msgid "An integer that is greater than 0."
-msgstr ""
+msgstr "大於 0 的整數。"
 
 #: frontend/src/components/dialog/sysadmin-dialog/set-quota.js:72
 #: frontend/src/components/dialog/sysadmin-dialog/set-upload-download-rate-limit.js:73
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-monthly-traffic-limit-dialog.js:72
 #| msgid "Unselect"
 msgid "Unset"
-msgstr ""
+msgstr "取消設定"
 
 #: frontend/src/components/dialog/sysadmin-dialog/set-upload-download-rate-limit.js:56
 msgid "Set Upload Rate Limit"
@@ -3915,7 +3915,7 @@ msgstr "設置最大成員數量"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-monthly-traffic-limit-dialog.js:55
 #| msgid "Traffic"
 msgid "Set Traffic"
-msgstr ""
+msgstr "設定流量"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-name-dialog.js:51
 #: frontend/src/pages/sys-admin/users/user-info.js:68
@@ -4326,23 +4326,23 @@ msgstr "正在封包"
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/customize-definition/definition.js:63
 #| msgid "Update"
 msgid "Updated"
-msgstr ""
+msgstr "已更新"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/message-operations/index.js:14
 #| msgid "This file has been updated."
 msgid "The content has been copied"
-msgstr ""
+msgstr "內容已複製"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/index.js:31
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:240
 msgid "Thought process"
-msgstr ""
+msgstr "思考過程"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/process-details/index.js:59
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/process-details/index.js:73
 #| msgid "File details"
 msgid "Toggle details"
-msgstr ""
+msgstr "切換詳細資訊"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/process-details/index.js:113
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:125
@@ -4367,25 +4367,25 @@ msgstr "暫無"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:63
 msgid "Time usage"
-msgstr ""
+msgstr "耗時"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:67
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:84
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:184
 #| msgid "Actions"
 msgid "Action steps"
-msgstr ""
+msgstr "動作步驟"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:71
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:87
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:192
 #| msgid "General information"
 msgid "Answer generation"
-msgstr ""
+msgstr "答案生成"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:82
 msgid "Token usages"
-msgstr ""
+msgstr "權杖使用量"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:93
 #: frontend/src/metadata/constants/view/index.js:40
@@ -4398,34 +4398,34 @@ msgstr "統計"
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/tool-details-content.js:37
 #| msgid "Departments"
 msgid "Arguments"
-msgstr ""
+msgstr "參數"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:110
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:130
 #| msgid "Extract file detail"
 msgid "Execution detail"
-msgstr ""
+msgstr "執行詳細資訊"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:114
 msgid "Tool call"
-msgstr ""
+msgstr "工具呼叫"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:135
 msgid "Step"
-msgstr ""
+msgstr "步驟"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:146
 #| msgid "Custom properties"
 msgid "System prompts"
-msgstr ""
+msgstr "系統提示"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:148
 msgid "Prompt"
-msgstr ""
+msgstr "提示詞"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:156
 msgid "Raw"
-msgstr ""
+msgstr "原始內容"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:157
 #: frontend/src/components/send-link.js:137
@@ -4437,16 +4437,16 @@ msgstr "訊息"
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:160
 #| msgid "No tags"
 msgid "Attachments"
-msgstr ""
+msgstr "附件"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:167
 #| msgid "User info updated"
 msgid "User input"
-msgstr ""
+msgstr "使用者輸入"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:175
 msgid "Task step"
-msgstr ""
+msgstr "任務步驟"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:196
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:274
@@ -4461,25 +4461,25 @@ msgstr "搜尋結果"
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/tool-details-content.js:38
 #| msgid "Operation"
 msgid "Observation"
-msgstr ""
+msgstr "觀察"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-input/index.js:101
 msgid "Ask anything about your files"
-msgstr ""
+msgstr "詢問任何關於您檔案的問題"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat/index.js:350
 msgid "Found 1 reference"
-msgstr ""
+msgstr "找到 1 個參考資料"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat/index.js:351
 #, javascript-format
 msgid "Found %1$d references"
-msgstr ""
+msgstr "找到 %1$d 個參考資料"
 
 #: frontend/src/components/dir-view-mode/dir-chat/components/attachments/index.js:35
 #| msgid "Created library"
 msgid "Seafile library"
-msgstr ""
+msgstr "Seafile 資料庫"
 
 #: frontend/src/components/dir-view-mode/dir-chat/components/thinking/index.js:12
 #| msgid "Saving..."
@@ -4507,27 +4507,27 @@ msgstr "AI"
 #: frontend/src/components/toolbar/chat-toolbar.js:31
 #| msgid "History"
 msgid "Histories"
-msgstr ""
+msgstr "歷史記錄"
 
 #: frontend/src/components/dir-view-mode/dir-chat/sessions/index.js:27
 #| msgid "No changes"
 msgid "No chats"
-msgstr ""
+msgstr "沒有對話"
 
 #: frontend/src/components/dir-view-mode/dir-chat/sessions/session/index.js:52
 #| msgid "Team name"
 msgid "Chat name"
-msgstr ""
+msgstr "對話名稱"
 
 #: frontend/src/components/dir-view-mode/dir-chat/sessions/session/index.js:65
 #| msgid "Deleted option"
 msgid "Delete chat"
-msgstr ""
+msgstr "刪除對話"
 
 #: frontend/src/components/dir-view-mode/dir-chat/sessions/session/index.js:66
 #| msgid "Are you sure you want to delete this page?"
 msgid "Are you sure you want to delete this chat?"
-msgstr ""
+msgstr "您確定要刪除這個對話嗎？"
 
 #: frontend/src/components/dir-view-mode/dir-history-view/columns.js:53
 #: frontend/src/components/dir-view-mode/dir-history-view/columns.js:54
@@ -4608,7 +4608,7 @@ msgstr "新建"
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:126
 #| msgid "New File"
 msgid "New Text File"
-msgstr ""
+msgstr "新文字檔"
 
 #: frontend/src/components/dir-view-mode/dir-new.js:164
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:130
@@ -4728,22 +4728,22 @@ msgstr "新增標籤"
 #: frontend/src/components/dir-view-mode/dir-trash-view/index.js:85
 #| msgid "Restored file"
 msgid "Restored {n} items"
-msgstr ""
+msgstr "已還原 {n} 個項目"
 
 #: frontend/src/components/dir-view-mode/dir-trash-view/index.js:379
 #| msgid "Restored folder"
 msgid "Restore folder"
-msgstr ""
+msgstr "還原資料夾"
 
 #: frontend/src/components/dir-view-mode/dir-trash-view/index.js:379
 #| msgid "Restored file"
 msgid "Restore file"
-msgstr ""
+msgstr "還原檔案"
 
 #: frontend/src/components/dir-view-mode/dir-trash-view/no-permission-view.js:7
 #| msgid "You do not have permission"
 msgid "You do not have permission to access Trash."
-msgstr ""
+msgstr "您沒有權限存取回收筒。"
 
 #: frontend/src/components/dir-view-mode/dir-trash-view/utils.js:23
 #: frontend/src/components/dir-view-mode/dir-trash-view/utils.js:24
@@ -4763,7 +4763,7 @@ msgstr "擴充功能提示"
 
 #: frontend/src/components/dir-view-mode/extension-prompts/index.js:19
 msgid "Megaphone Icon"
-msgstr ""
+msgstr "擴音器圖示"
 
 #: frontend/src/components/dir-view-mode/extension-prompts/index.js:23
 msgid ""
@@ -4902,13 +4902,13 @@ msgstr "未知人物"
 #: frontend/src/metadata/views/card/card-items/card-item/index.js:309
 #: frontend/src/metadata/views/gallery/image.js:189
 msgid "Unmute"
-msgstr ""
+msgstr "取消靜音"
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:543
 #: frontend/src/metadata/views/card/card-items/card-item/index.js:309
 #: frontend/src/metadata/views/gallery/image.js:189
 msgid "Mute"
-msgstr ""
+msgstr "靜音"
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:567
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:601
@@ -5036,13 +5036,13 @@ msgstr "資料庫"
 #: frontend/src/shared-file-view-image.js:53
 #| msgid "you can also press ← "
 msgid "You can also press ← "
-msgstr ""
+msgstr "您也可以按 ← "
 
 #: frontend/src/components/file-content-view/image.js:98
 #: frontend/src/shared-file-view-image.js:58
 #| msgid "you can also press →"
 msgid "You can also press →"
-msgstr ""
+msgstr "您也可以按 →"
 
 #: frontend/src/components/file-uploader/file-uploader.js:148
 #: frontend/src/components/file-uploader/file-uploader.js:269
@@ -5250,7 +5250,7 @@ msgstr "未解決的評論"
 
 #: frontend/src/components/file-view/comment-widget/comment-list.js:130
 msgid "All comments ({comments_count})"
-msgstr ""
+msgstr "所有評論 ({comments_count})"
 
 #: frontend/src/components/file-view/comment-widget/comment-list.js:181
 msgid "No comment yet."
@@ -5697,17 +5697,17 @@ msgstr "查看已發布頁面"
 
 #: frontend/src/components/qr-code-popover.js:32
 msgid "QR code downloaded successfully"
-msgstr ""
+msgstr "QR code 下載成功"
 
 #: frontend/src/components/qr-code-popover.js:62
 #| msgid "URL is copied to the clipboard"
 msgid "QR code copied to clipboard"
-msgstr ""
+msgstr "QR code 已複製到剪貼簿"
 
 #: frontend/src/components/qr-code-popover.js:64
 #| msgid "Failed to modify filter"
 msgid "Failed to copy QR code"
-msgstr ""
+msgstr "複製 QR code 失敗"
 
 #: frontend/src/components/repo-info-bar-migrate.js:19
 msgid ""
@@ -5735,7 +5735,7 @@ msgstr "在伺服器"
 #: frontend/src/utils/table-headers.js:115
 #| msgid "Last modifier"
 msgid "Last modified"
-msgstr ""
+msgstr "最後修改"
 
 #: frontend/src/components/sdoc-wiki-page-viewer/index.js:133
 #: frontend/src/components/seafile-markdown-viewer/index.js:147
@@ -5801,18 +5801,18 @@ msgstr "最近訪問的搜尋結果"
 #: frontend/src/components/toolbar/common-toolbar.js:89
 #| msgid "Tag not found"
 msgid "Page not found"
-msgstr ""
+msgstr "找不到頁面"
 
 #: frontend/src/components/search/wiki2-global-search.js:234
 #: frontend/src/components/search/wiki2-search.js:232
 #| msgid "Wikis"
 msgid "Wiki pages"
-msgstr ""
+msgstr "Wiki 頁面"
 
 #: frontend/src/components/search/wiki2-global-search.js:272
 #| msgid "Search files"
 msgid "Search wikis"
-msgstr ""
+msgstr "搜尋 Wiki"
 
 #: frontend/src/components/search/wiki2-search-result.js:41
 #: frontend/src/metadata/metadata-tree-view/index.js:58
@@ -5889,7 +5889,7 @@ msgstr "發送到："
 #: frontend/src/components/send-link.js:126
 #| msgid "Add password protection"
 msgid "Send password separately"
-msgstr ""
+msgstr "分開傳送密碼"
 
 #: frontend/src/components/send-link.js:156
 msgid "Sending..."
@@ -5917,25 +5917,25 @@ msgstr "到期時間"
 
 #: frontend/src/components/set-row-height.js:11
 msgid "Double"
-msgstr ""
+msgstr "雙倍"
 
 #: frontend/src/components/set-row-height.js:12
 msgid "Triple"
-msgstr ""
+msgstr "三倍"
 
 #: frontend/src/components/set-row-height.js:13
 msgid "Quadruple"
-msgstr ""
+msgstr "四倍"
 
 #: frontend/src/components/set-row-height.js:36
 #: frontend/src/components/set-row-height.js:65
 msgid "Set row height"
-msgstr ""
+msgstr "設定列高"
 
 #: frontend/src/components/set-row-height.js:46
 #| msgid "Select all"
 msgid "Select row height"
-msgstr ""
+msgstr "選擇列高"
 
 #: frontend/src/components/sf-table/masks/interaction-masks/index.js:730
 #| msgid "xxx cells selected"
@@ -5991,7 +5991,7 @@ msgstr "選擇 1 條記錄"
 #: frontend/src/components/sf-table/table-main/records-footer/index.js:145
 #| msgid "show more"
 msgid "Load more"
-msgstr ""
+msgstr "載入更多"
 
 #: frontend/src/components/sf-table/table-main/records-footer/index.js:145
 msgid "Load all"
@@ -6216,19 +6216,19 @@ msgstr "分享連結數量"
 #: frontend/src/components/share-link-panel/link-creation.js:341
 #| msgid "Set password"
 msgid "Hide password"
-msgstr ""
+msgstr "隱藏密碼"
 
 #: frontend/src/components/share-link-panel/link-creation.js:339
 #: frontend/src/components/share-link-panel/link-creation.js:341
 #| msgid "New password"
 msgid "Show password"
-msgstr ""
+msgstr "顯示密碼"
 
 #: frontend/src/components/share-link-panel/link-creation.js:343
 #: frontend/src/components/share-link-panel/link-creation.js:345
 #| msgid "Set password"
 msgid "Generate password"
-msgstr ""
+msgstr "產生密碼"
 
 #: frontend/src/components/share-link-panel/link-creation.js:389
 #| msgid "Edit permission"
@@ -6248,12 +6248,12 @@ msgstr "分享連結已複製到剪貼板。"
 #: frontend/src/components/share-link-panel/link-details.js:58
 #| msgid "Share link is copied to the clipboard."
 msgid "Raw file link is copied to the clipboard."
-msgstr ""
+msgstr "原始檔案連結已複製到剪貼簿。"
 
 #: frontend/src/components/share-link-panel/link-details.js:183
 #| msgid "New file name"
 msgid "Raw file link"
-msgstr ""
+msgstr "原始檔案連結"
 
 #: frontend/src/components/share-link-panel/link-details.js:269
 #: frontend/src/components/share-link-panel/link-list.js:96
@@ -6452,12 +6452,12 @@ msgstr "移動"
 #: frontend/src/components/toolbar/chat-toolbar.js:24
 #| msgid "New Tag"
 msgid "New chat"
-msgstr ""
+msgstr "新對話"
 
 #: frontend/src/components/toolbar/common-toolbar.js:104
 #| msgid "Search files"
 msgid "Search wiki pages"
-msgstr ""
+msgstr "搜尋 Wiki 頁面"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:59
 #| msgid "Link has been copied to clipboard"
@@ -6760,7 +6760,7 @@ msgstr "清單檢視"
 #: frontend/src/components/view-modes.js:79
 #| msgid "Table"
 msgid "Table view"
-msgstr ""
+msgstr "表格檢視"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:139
 msgid "Wiki published"
@@ -6838,7 +6838,7 @@ msgstr "已保存圖片"
 msgid ""
 "The number of metadata records exceeds the limit of {mdFileCountLimit} "
 "files."
-msgstr ""
+msgstr "中繼資料記錄數量超過 {mdFileCountLimit} 個檔案的限制。"
 
 #: frontend/src/metadata/components/cell-editors/collaborator-editor/index.js:215
 msgid "No collaborators available"
@@ -7983,7 +7983,7 @@ msgstr "修改屬性順序失敗"
 #: frontend/src/metadata/store/server-operator.js:200
 #| msgid "Failed to modify sort"
 msgid "Failed to modify row height"
-msgstr ""
+msgstr "修改列高失敗"
 
 #: frontend/src/metadata/store/server-operator.js:209
 msgid "Failed to modify filter"
@@ -8151,7 +8151,7 @@ msgstr "項目"
 #: frontend/src/metadata/views/face-recognition/person-photos/index.js:155
 #| msgid "Convert to sdoc"
 msgid "Cover photo has been set"
-msgstr ""
+msgstr "封面照片已設定"
 
 #: frontend/src/metadata/views/kanban/add-board/index.js:43
 #: frontend/src/metadata/views/kanban/add-board/index.js:46
@@ -8282,7 +8282,7 @@ msgstr "已從回收站中移除超過 {n} 天的項目"
 #: frontend/src/pages/dashboard/activity-item.js:107
 #| msgid "{file} and {n} other files"
 msgid "{folder} and {n} other folders"
-msgstr ""
+msgstr "{folder} 和另外 {n} 個資料夾"
 
 #: frontend/src/pages/dashboard/activity-item.js:109
 msgid "{file} and {n} other files"
@@ -8291,7 +8291,7 @@ msgstr "包含 {n} 個其他檔案"
 #: frontend/src/pages/dashboard/activity-item.js:115
 #| msgid "Created {n} files"
 msgid "Created {n} folders"
-msgstr ""
+msgstr "已建立 {n} 個資料夾"
 
 #: frontend/src/pages/dashboard/activity-item.js:117
 msgid "Created {n} files"
@@ -8310,27 +8310,27 @@ msgstr "已建立的檔案"
 #: frontend/src/pages/dashboard/activity-item.js:139
 #| msgid "Files"
 msgid "files"
-msgstr ""
+msgstr "檔案"
 
 #: frontend/src/pages/dashboard/activity-item.js:139
 #| msgid "Folder"
 msgid "folders"
-msgstr ""
+msgstr "資料夾"
 
 #: frontend/src/pages/dashboard/activity-item.js:145
 #| msgid "Deleted Time"
 msgid "Deleted {n} {type}"
-msgstr ""
+msgstr "已刪除 {n} 個{type}"
 
 #: frontend/src/pages/dashboard/activity-item.js:149
 #| msgid "{file} and {n} other files"
 msgid "{name} and {n} other files"
-msgstr ""
+msgstr "{name} 和另外 {n} 個檔案"
 
 #: frontend/src/pages/dashboard/activity-item.js:151
 #| msgid "{file} and {n} other files"
 msgid "{name} and {n} other folders"
-msgstr ""
+msgstr "{name} 和另外 {n} 個資料夾"
 
 #: frontend/src/pages/dashboard/activity-item.js:164
 #: frontend/src/pages/dashboard/activity-item.js:169
@@ -9770,7 +9770,7 @@ msgstr "（已刪除）"
 #: frontend/src/pages/share-admin/upload-links.js:243
 #| msgid "View Link"
 msgid "View link"
-msgstr ""
+msgstr "檢視連結"
 
 #: frontend/src/pages/share-admin/share-links.js:447
 #: frontend/src/pages/share-admin/share-links.js:613
@@ -9956,7 +9956,7 @@ msgstr "將使用者 {user} 從群組 {group} 中移除"
 #: frontend/src/pages/sys-admin/dingtalk/dingtalk-departments-tree-node.js:130
 #: frontend/src/pages/sys-admin/work-weixin/work-weixin-departments-tree-node.js:130
 msgid "No sub-departments"
-msgstr ""
+msgstr "沒有子部門"
 
 #: frontend/src/pages/sys-admin/file-scan-records.js:31
 msgid "Path"
@@ -10285,7 +10285,7 @@ msgstr "群組數量"
 #: frontend/src/pages/sys-admin/orgs/org-info.js:96
 #| msgid "Monthly User Traffic"
 msgid "Monthly Traffic Limit"
-msgstr ""
+msgstr "每月流量限制"
 
 #: frontend/src/pages/sys-admin/orgs/org-info.js:104
 #| msgid "ISO"
@@ -10295,17 +10295,17 @@ msgstr "SSO 整合"
 #: frontend/src/pages/sys-admin/orgs/org-info.js:240
 #| msgid "Successfully set it."
 msgid "Successfully set monthly traffic limit."
-msgstr ""
+msgstr "已成功設定每月流量限制。"
 
 #: frontend/src/pages/sys-admin/orgs/org-info.js:254
 #| msgid "Successfully set it."
 msgid "Successfully set name."
-msgstr ""
+msgstr "已成功設定名稱。"
 
 #: frontend/src/pages/sys-admin/orgs/org-info.js:268
 #| msgid "Set max number of members"
 msgid "Successfully set max number of members."
-msgstr ""
+msgstr "已成功設定成員上限。"
 
 #: frontend/src/pages/sys-admin/orgs/org-info.js:278
 #| msgid "Successfully saved"
@@ -10922,17 +10922,17 @@ msgstr "新增頁面"
 #: frontend/src/pages/wiki2/wiki-repo-popover/index.js:94
 #| msgid "Search Libraries"
 msgid "Search libraries"
-msgstr ""
+msgstr "搜尋資料庫"
 
 #: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:102
 #| msgid "Please choose an image file."
 msgid "Please select an image file."
-msgstr ""
+msgstr "請選擇圖片檔案。"
 
 #: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:130
 #| msgid "Failed to upload {file_name}."
 msgid "Failed to upload image."
-msgstr ""
+msgstr "上傳圖片失敗。"
 
 #: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:223
 #: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:279
@@ -10941,7 +10941,7 @@ msgstr "封面"
 
 #: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:306
 msgid "Images wider than 1500 pixels work best."
-msgstr ""
+msgstr "寬度超過 1500 像素的圖片效果最佳。"
 
 #: frontend/src/pages/wiki2/wiki-right-header/page-icon.js:47
 msgid "Emojis"
@@ -10959,23 +10959,23 @@ msgstr "新增封面"
 #: frontend/src/pages/wiki2/wiki-settings/linked-repo-panel.js:117
 #| msgid "No deleted libraries"
 msgid "Connected libraries"
-msgstr ""
+msgstr "已連結的資料庫"
 
 #: frontend/src/pages/wiki2/wiki-settings/linked-repo-panel.js:102
 msgid ""
 "After connecting libraries, you can list files from them in the Wiki pages."
-msgstr ""
+msgstr "連結資料庫後，您可以在 Wiki 頁面中列出其中的檔案。"
 
 #: frontend/src/pages/wiki2/wiki-settings/linked-repo-panel.js:103
 msgid ""
 "Note, the library must turn on extended properties feature to be connected "
 "to a Wiki."
-msgstr ""
+msgstr "注意，資料庫必須開啟延伸屬性功能才能連結到 Wiki。"
 
 #: frontend/src/pages/wiki2/wiki-settings/linked-repo-panel.js:119
 #| msgid "Library"
 msgid "Add library"
-msgstr ""
+msgstr "新增資料庫"
 
 #: frontend/src/pages/wiki2/wiki-trash-dialog.js:91
 msgid "{placeholder} Wiki Trash"
@@ -10994,7 +10994,7 @@ msgstr "匯入 Confluence 失敗。"
 #: frontend/src/pages/wikis/wikis.js:361
 #| msgid "Successfully transferred the library."
 msgid "Successfully transferred the wiki."
-msgstr ""
+msgstr "Wiki 已成功轉移。"
 
 #: frontend/src/pages/wikis/wikis.js:464
 #| msgid "Import sdoc"
@@ -11411,12 +11411,12 @@ msgstr "網格檢視"
 #: frontend/src/translate.js:49
 #| msgid "Open via Client"
 msgid "Open with OnlyOffice"
-msgstr ""
+msgstr "使用 OnlyOffice 開啟"
 
 #: frontend/src/translate.js:50
 #| msgid "Open via Client"
 msgid "Open with client"
-msgstr ""
+msgstr "使用用戶端開啟"
 
 #: frontend/src/translate.js:51
 #| msgid "Add permission"
@@ -11425,7 +11425,7 @@ msgstr "新增下層頁面"
 
 #: frontend/src/translate.js:52
 msgid "How can I help you?"
-msgstr ""
+msgstr "我能如何幫您？"
 
 #: frontend/src/user-notifications.js:268
 #: frontend/src/user-notifications.js:273
@@ -11436,12 +11436,12 @@ msgstr "更新時間"
 #: frontend/src/utils/dirent-operations.js:84
 #| msgid "Successfully unstarred {library_name_placeholder}."
 msgid "Successfully unstarred {name_placeholder}"
-msgstr ""
+msgstr "已成功取消加星標 {name_placeholder}"
 
 #: frontend/src/utils/dirent-operations.js:86
 #| msgid "Successfully starred {library_name_placeholder}."
 msgid "Successfully starred {name_placeholder}"
-msgstr ""
+msgstr "已成功加星標 {name_placeholder}"
 
 #: frontend/src/utils/table-headers.js:15
 #| msgid "Select all"
@@ -11456,17 +11456,17 @@ msgstr "選擇所有項目"
 #: frontend/src/utils/text-translation.js:80
 #| msgid "Open file"
 msgid "Open with"
-msgstr ""
+msgstr "開啟方式"
 
 #: frontend/src/utils/text-translation.js:88
 #| msgid "Desktop"
 msgid "Desktop client"
-msgstr ""
+msgstr "桌面用戶端"
 
 #: frontend/src/utils/text-translation.js:92
 #| msgid "Only files"
 msgid "OnlyOffice"
-msgstr ""
+msgstr "OnlyOffice"
 
 #: frontend/src/utils/text-translation.js:104
 msgid "Freeze Document"
