@@ -1795,6 +1795,7 @@ a.table-sort-op:hover {
 
 [data-bs-theme=dark] .dropdown-menu {
   --bs-dropdown-divider-bg: rgba(51, 52, 53, 1);
+  --bs-dropdown-link-hover-bg: rgba(255, 255, 255, .08);
   color: rgba(255, 255, 255, .9);
   background-color: rgba(28, 29, 31, 1);
   border: 1px solid rgba(51, 52, 53, 1);
