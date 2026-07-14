@@ -13,7 +13,7 @@
 }
 
 .sf-metadata-tags-editor.sf-metadata-tags-tree-container .sf-metadata-search-tags-container {
-  padding: 8px 12px 0;
+  padding: 8px 8px 0;
 }
 
 .sf-metadata-tags-editor .sf-metadata-search-tags-container .sf-metadata-search-tags {
@@ -56,7 +56,7 @@
 
 .sf-metadata-tags-editor.sf-metadata-tags-tree-container .sf-metadata-tags-editor-container {
   max-height: 280px;
-  padding: 8px 0 12px;
+  padding: 8px 0 8px;
 }
 
 .sf-metadata-tags-editor.sf-metadata-tags-tree-container .sf-metadata-tags-editor-container .sf-metadata-tags-editor-tag-item {

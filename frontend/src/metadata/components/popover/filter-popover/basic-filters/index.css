@@ -1,20 +1,19 @@
+.filter-group-basic.filter-group {
+  margin-bottom: 40px;
+}
+
 .sf-metadata-basic-filters-select.seafile-customize-select {
   width: fit-content;
   max-width: 100%;
+  height: 24px;
   background-image: none;
   border: none;
-  padding: 0 6px;
-  margin-left: -6px;
-  height: 28px;
+  padding: 0;
+  margin-right: 12px;
 }
 
-.sf-metadata-basic-filters-select.seafile-customize-select:hover,
-.sf-metadata-basic-filters-select.seafile-customize-select.highlighted:hover {
-  background: var(--bs-hover-bg);
-}
-
-.sf-metadata-basic-filters-select.seafile-customize-select .selected-option {
-  background-color: transparent;
+.sf-metadata-basic-filters-select.seafile-customize-select > .selected-option:hover {
+  background: var(--bs-icon-btn-hover-bg-color);
 }
 
 .sf-metadata-basic-filters-select.seafile-customize-select.focus {
@@ -22,8 +21,22 @@
   box-shadow: none;
 }
 
-.sf-metadata-basic-filters-select.highlighted .selected-option .selected-option-show {
+.sf-metadata-basic-filters-select.seafile-customize-select .selected-option {
+  width: 100%;
+  height: 100%;
+  padding: 0 4px;
+  background-color: transparent;
+  border-radius: 4px;
+}
+
+.sf-metadata-basic-filters-select.seafile-customize-select .selected-option:hover {
+  background: var(--bs-icon-btn-hover-bg-color);
+}
+
+.sf-metadata-basic-filters-select.highlighted .selected-option .selected-option-show,
+.sf-metadata-basic-filters-select.highlighted .selected-option .seafile-multicolor-icon-down {
   color: #ed7109 !important;
+  font-weight: 500;
 }
 
 .sf-metadata-basic-filters-select.seafile-customize-select .selected-option .selected-option-show {
@@ -56,11 +69,8 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  height: 20px;
-  width: 20px;
   text-align: center;
   flex-shrink: 0;
-  margin-left: 10px;
 }
 
 .seafile-select-option.seafile-select-option-active .seafile-multicolor-icon-check-mark {
@@ -70,25 +80,6 @@
 .filter-group-basic .sf-metadata-filters-list {
   min-height: unset;
   display: flex;
-}
-
-.sf-metadata-table-view-basic-filter-file-type-select .seafile-select-option {
-  padding: 0.25rem 1rem;
-}
-
-.sf-metadata-table-view-basic-filter-file-type-select .select-basic-filter-option .select-basic-filter-option-checkbox {
-  display: inline-flex;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.sf-metadata-table-view-basic-filter-file-type-select .select-basic-filter-option .select-basic-filter-option-checkbox,
-.sf-metadata-table-view-basic-filter-file-type-select .select-basic-filter-option .select-basic-filter-option-checkbox input {
-  cursor: inherit;
-}
-
-.sf-metadata-table-view-basic-filter-file-type-select .select-basic-filter-option .select-basic-filter-option-checkbox .form-check-input {
-  margin-top: 0px;
 }
 
 .sf-metadata-basic-filters-select .select-basic-filter-display-name:hover {

@@ -108,7 +108,7 @@ class SearchInput extends Component {
     return (
       <OpIcon
         id="search-text-clear"
-        className={classnames('search-control search-text-clear op-icon op-icon-bg-light m-0', clearClassName)}
+        className={classnames('search-text-clear', clearClassName)}
         op={this.clearSearch}
         symbol="md-close"
         tooltip={gettext('Clear')}

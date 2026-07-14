@@ -19,6 +19,8 @@
 
 .sf-metadata-collaborator-editor .sf-metadata-search-collaborator-options {
   position: relative;
+  display: flex;
+  align-items: center;
   padding: 8px 8px 0 8px;
 }
 
@@ -34,19 +36,6 @@
   border: 1px solid #3e84f7;
   box-shadow: none;
   background-color: transparent;
-}
-
-.sf-metadata-collaborator-editor .sf-metadata-search-collaborator-options .search-text-clear {
-  width: 20px;
-  height: 20px;
-  min-width: 20px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  font-size: .75rem;
 }
 
 .sf-metadata-collaborator-editor .collaborator-item {
@@ -91,6 +80,7 @@
   width: 16px;
   height: 16px;
   line-height: 16px;
+  border-radius: 50%;
 }
 
 .sf-metadata-collaborator-editor .collaborator-name {

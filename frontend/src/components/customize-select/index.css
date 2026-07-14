@@ -47,6 +47,7 @@
   align-items: center;
   justify-content: space-between;
   background: inherit;
+  color: var(--bs-body-color);
 }
 
 .seafile-customize-select .selected-option .selected-option-show-container {
@@ -109,7 +110,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: var(--bs-body-color);
 }
 
 .seafile-customize-select .selected-option-delete .seafile-multicolor-icon {

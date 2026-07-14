@@ -1,6 +1,7 @@
-import React, { Fragment, useMemo } from 'react';
+import React, { Fragment, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import CustomizeSelect from '../../../../../../../components/customize-select';
+import DeleteCollaborator from '../../../../../cell-editors/collaborator-editor/delete-collaborator';
 import { gettext } from '../../../../../../../utils/constants';
 import { FILTER_PREDICATE_TYPE } from '../../../../../../constants';
 import Icon from '../../../../../../../components/icon';
@@ -37,7 +38,6 @@ const CollaboratorFilter = ({ readOnly, filterIndex, filterTerm, collaborators, 
                   </span>
                   <span
                     className="collaborator-name text-truncate"
-                    style={{ maxWidth: '200px' }}
                     title={collaborator.name}
                     aria-label={collaborator.name}
                   >{collaborator.name}
@@ -45,7 +45,7 @@ const CollaboratorFilter = ({ readOnly, filterIndex, filterTerm, collaborators, 
                 </div>
               </div>
               <div className='collaborator-check-icon'>
-                {isSelected && <Icon symbol="check-thin" />}
+                {isSelected && <Icon symbol="check" />}
               </div>
             </div>
           </Fragment>
@@ -54,25 +54,31 @@ const CollaboratorFilter = ({ readOnly, filterIndex, filterTerm, collaborators, 
     });
   }, [filterIndex, collaborators, filterTerm]);
 
-  const selectValue = useMemo(() => {
-    return Array.isArray(filterTerm) && filterTerm.length > 0 && filterTerm.map((item) => {
-      let collaborator = collaborators.find(c => c.email === item);
-      if (!collaborator) return null;
-      return (
-        <div key={item} className="collaborator">
-          <span className="collaborator-avatar-container">
-            <img className="collaborator-avatar" alt={collaborator.name} src={collaborator.avatar_url} />
-          </span>
-          <span
-            className="collaborator-name text-truncate"
-            title={collaborator.name}
-            aria-label={collaborator.name}
-          >{collaborator.name}
-          </span>
-        </div>
-      );
-    });
+  const selectedCollaborators = useMemo(() => {
+    if (!Array.isArray(filterTerm)) return [];
+    return filterTerm.filter(email => collaborators.some(collaborator => collaborator.email === email));
   }, [filterTerm, collaborators]);
+
+  const onDeleteCollaborator = useCallback((email, event) => {
+    event && event.stopPropagation();
+    event && event.nativeEvent && event.nativeEvent.stopImmediatePropagation();
+    const collaborator = collaborators.find(item => item.email === email);
+    if (!collaborator) return;
+    onSelectCollaborator({ filterIndex, columnOption: collaborator });
+  }, [collaborators, filterIndex, onSelectCollaborator]);
+
+  const selectValue = useMemo(() => {
+    if (selectedCollaborators.length === 0) return null;
+    return (
+      <DeleteCollaborator
+        value={selectedCollaborators}
+        collaborators={collaborators}
+        onDelete={onDeleteCollaborator}
+        removable={!readOnly}
+        showRemoveTooltip={false}
+      />
+    );
+  }, [selectedCollaborators, collaborators, onDeleteCollaborator, readOnly]);
 
   return (
     <CustomizeSelect
@@ -84,8 +90,8 @@ const CollaboratorFilter = ({ readOnly, filterIndex, filterTerm, collaborators, 
       readOnly={readOnly}
       supportMultipleSelect={isSupportMultipleSelect}
       searchable={true}
-      searchPlaceholder={gettext('Search collaborator')}
-      isShowSelected={false}
+      searchPlaceholder={gettext('Search collaborators')}
+      isShowSelected={selectedCollaborators.length > 0}
       noOptionsPlaceholder={gettext('No collaborators')}
     />
   );

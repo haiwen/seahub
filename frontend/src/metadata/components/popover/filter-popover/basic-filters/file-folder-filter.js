@@ -21,7 +21,7 @@ const FileOrFolderFilter = ({ readOnly, value = 'all', onChange: onChangeAPI }) 
           <div className="select-basic-filter-option">
             <div className="select-basic-filter-option-name" title={name} aria-label={name}>{name}</div>
             <div className="select-basic-filter-option-check-icon">
-              {value === o.value && (<Icon symbol="check-thin" />)}
+              {value === o.value && (<Icon symbol="check" />)}
             </div>
           </div>
         )
@@ -42,7 +42,7 @@ const FileOrFolderFilter = ({ readOnly, value = 'all', onChange: onChangeAPI }) 
   return (
     <CustomizeSelect
       readOnly={readOnly}
-      className="sf-metadata-basic-filters-select mr-4"
+      className="sf-metadata-basic-filters-select"
       value={displayValue}
       options={options}
       onSelectOption={onChange}
