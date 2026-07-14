@@ -124,12 +124,14 @@ class Content extends Component {
       } else {
         // mobile
         content = (
-          <table className="table-thead-hidden">
-            {<LibsMobileThead inAllLibs={inAllLibs} />}
-            <tbody>
-              {itemsContent}
-            </tbody>
-          </table>
+          <div className="library-list-mobile-container">
+            <table className="table-thead-hidden">
+              {<LibsMobileThead />}
+              <tbody>
+                {itemsContent}
+              </tbody>
+            </table>
+          </div>
         );
       }
 

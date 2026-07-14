@@ -152,7 +152,7 @@ class MylibRepoListItem extends React.Component {
     this.onToggleStarRepo();
   };
 
-  onToggleStarRepo = (e) => {
+  onToggleStarRepo = () => {
     const { repo } = this.props;
     const repoName = repo.repo_name;
     const onSuccess = () => {

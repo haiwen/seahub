@@ -9,7 +9,7 @@ import { Utils } from '../../utils/utils';
 import ViewModes from '../../components/view-modes';
 import ReposSortMenu from '../../components/sort-menu';
 import SortOptionsDialog from '../../components/dialog/sort-options';
-import { LIST_MODE } from '../../components/dir-view-mode/constants';
+import { LIST_MODE, GRID_MODE } from '../../components/dir-view-mode/constants';
 import Content from './content';
 import Icon from '../../components/icon';
 
@@ -123,6 +123,7 @@ class SharedLibraries extends Component {
     const { inAllLibs = false, currentViewMode: propCurrentViewMode } = this.props;
     const { sortBy, sortOrder, currentViewMode: stateCurrentViewMode } = this.state;
     const currentViewMode = inAllLibs ? propCurrentViewMode : stateCurrentViewMode;
+    const isDesktop = Utils.isDesktop();
 
     return (
       <Fragment>
@@ -142,17 +143,17 @@ class SharedLibraries extends Component {
                   <span className="d-flex align-items-center"><Icon symbol="share-with-me" className="role-icon" /></span>
                   <span className="library-list-title">{gettext('Shared with me')}</span>
                 </div>
-                {Utils.isDesktop() && (
+                {isDesktop && (
                   <div className="d-flex align-items-center">
                     <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />
                     <ReposSortMenu className="ml-2" sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption}/>
                   </div>
                 )}
-                {(!Utils.isDesktop() && this.state.items.length > 0) &&
+                {(!isDesktop && this.state.items.length > 0) &&
                   <span className="cur-view-path-btn px-1" onClick={this.toggleSortOptionsDialog}><Icon symbol="sort" /></span>
                 }
               </div>
-              <div className={classnames('cur-view-content', 'repos-container', { 'pt-3': currentViewMode != LIST_MODE })}>
+              <div className={classnames('cur-view-content', 'repos-container', { 'pt-3': isDesktop && currentViewMode == GRID_MODE })}>
                 {this.renderContent(currentViewMode)}
               </div>
             </div>

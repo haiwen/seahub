@@ -100,6 +100,12 @@ class Item extends Component {
     this.setState({ isShowSharedDialog: false });
   };
 
+  // only for clicking the star icon in mobile
+  onClickStarInMobile = (e) => {
+    e.stopPropagation();
+    this.onToggleStarRepo();
+  };
+
   onToggleStarRepo = () => {
     const { data } = this.props;
     const repoName = data.repo_name;
@@ -291,10 +297,20 @@ class Item extends Component {
       return (
         <Fragment>
           <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-            <td onClick={this.visitRepo}><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
+            <td onClick={this.visitRepo}><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="20" /></td>
             <td onClick={this.visitRepo}>
-              <Link to={shareRepoUrl}>{data.repo_name}</Link>
-              <br />
+              <div className='d-flex align-items-center'>
+                <Link to={shareRepoUrl} className="text-truncate library-name" title={data.repo_name}>{data.repo_name}</Link>
+                {data.starred && (
+                  <OpIcon
+                    id={`star-icon-${idx}`}
+                    className="star-icon ml-2 flex-shrink-0"
+                    symbol="starred"
+                    tooltip={gettext('Unstar')}
+                    op={this.onClickStarInMobile}
+                  />
+                )}
+              </div>
               <span className="item-meta-info" title={data.owner_contact_email}>{data.owner_name}</span>
               <span className="item-meta-info">{data.size}</span>
               <span className="item-meta-info" title={formatWithTimezone(data.last_modified)}>{dayjs(data.last_modified).fromNow()}</span>
