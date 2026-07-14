@@ -590,6 +590,12 @@ class SharedRepoListItem extends React.Component {
     }
   };
 
+  // only for clicking the star icon in mobile
+  onClickStarInMobile = (e) => {
+    e.stopPropagation();
+    this.onToggleStarRepo();
+  };
+
   onToggleStarRepo = () => {
     const { repo } = this.props;
     const { repo_name: repoName } = repo;
@@ -713,7 +719,7 @@ class SharedRepoListItem extends React.Component {
 
   renderMobileUI = () => {
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
-    let { repo } = this.props;
+    let { repo, idx } = this.props;
     this.repoURL = libPath;
     return (
       <Fragment>
@@ -722,11 +728,19 @@ class SharedRepoListItem extends React.Component {
           <td onClick={this.visitRepo}>
             {this.state.isRenaming ?
               <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
-              <>
-                <Link to={libPath}>{repo.repo_name}</Link>
+              <div className='d-flex align-items-center'>
+                <Link to={libPath} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
                 {repo.archive_status === 'archived' && <Icon className="ml-1" symbol="archive"></Icon>}
-                <br />
-              </>
+                {repo.starred && (
+                  <OpIcon
+                    id={`star-icon-${idx}`}
+                    className="star-icon ml-2 flex-shrink-0"
+                    symbol="starred"
+                    tooltip={gettext('Unstar')}
+                    op={this.onClickStarInMobile}
+                  />
+                )}
+              </div>
             }
             <span className="item-meta-info" title={repo.owner_contact_email}>{repo.owner_name}</span>
             <span className="item-meta-info">{repo.size}</span>

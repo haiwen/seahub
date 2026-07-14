@@ -165,14 +165,15 @@ class SharedRepoListView extends React.Component {
   };
 
   renderMobileUI = () => {
-    const { inAllLibs = false } = this.props;
     return (
-      <table className="table-thead-hidden">
-        <LibsMobileThead inAllLibs={inAllLibs} />
-        <tbody>
-          {this.renderRepoListView()}
-        </tbody>
-      </table>
+      <div className="library-list-mobile-container">
+        <table className="table-thead-hidden">
+          <LibsMobileThead />
+          <tbody>
+            {this.renderRepoListView()}
+          </tbody>
+        </table>
+      </div>
     );
   };
 
