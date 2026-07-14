@@ -560,6 +560,11 @@ function getElement(id) {
 
 // Handle side navbar navigation without a full page reload.
 (function () {
+  var HASH_SCROLL_DELAY = 100;
+  var HASH_SCROLL_RETRY_DELAY = 150;
+  var HASH_SCROLL_MAX_RETRIES = 5;
+  var hashScrollTimer = null;
+
   function dispatchWikiNavigate(pageId) {
     if (!pageId) return;
 
@@ -939,6 +944,25 @@ function getElement(id) {
     activeBlockTargetBackground = '';
   }
 
+  function getHashScrollTarget() {
+    var rawHash = window.location.hash || '';
+    if (!rawHash || rawHash.charAt(0) !== '#') return '';
+
+    try {
+      return decodeURIComponent(rawHash.slice(1));
+    } catch (e) {
+      return rawHash.slice(1);
+    }
+  }
+
+  function escapeSelectorValue(value) {
+    if (window.CSS && window.CSS.escape) {
+      return window.CSS.escape(value);
+    }
+
+    return value.replace(/["\\]/g, '\\$&');
+  }
+
   function getBlockTargetById(blockId, sourceEl) {
     if (!blockId) return null;
 
@@ -964,6 +988,49 @@ function getElement(id) {
     activeBlockTargetBackground = target.style.backgroundColor;
     activeBlockTarget.style.backgroundColor = 'rgba(169, 201, 237, 0.3)';
     activeBlockTarget.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+
+  function scrollToHashTarget() {
+    if (hashScrollTimer) {
+      clearTimeout(hashScrollTimer);
+      hashScrollTimer = null;
+    }
+
+    var hash = getHashScrollTarget();
+    if (!hash) return;
+
+    var retryCount = 0;
+
+    function tryScroll() {
+      var scrollContainer = getElement('wiki-scroll-container');
+      var editor = getElement('sdoc-editor');
+      if (!scrollContainer || !editor) return;
+
+      var escapedHash = escapeSelectorValue(hash);
+      var target = getBlockTargetById(hash) ||
+        editor.querySelector('[data-id="' + escapedHash + '"]') ||
+        editor.querySelector('[id="' + escapedHash + '"]');
+
+      if (target) {
+        if (target.getAttribute && target.getAttribute('data-id') === hash) {
+          activateBlockTarget(target);
+        } else {
+          target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        }
+        hashScrollTimer = null;
+        return;
+      }
+
+      if (retryCount >= HASH_SCROLL_MAX_RETRIES) {
+        hashScrollTimer = null;
+        return;
+      }
+
+      retryCount += 1;
+      hashScrollTimer = setTimeout(tryScroll, HASH_SCROLL_RETRY_DELAY);
+    }
+
+    hashScrollTimer = setTimeout(tryScroll, HASH_SCROLL_DELAY);
   }
 
   function handleWikiContentLinkClick(e) {
@@ -1165,7 +1232,12 @@ function getElement(id) {
     requestAnimationFrame(function () {
       bindWikiContentLinks();
       initializeHeaderCollapseState();
+      scrollToHashTarget();
     });
+  });
+
+  window.addEventListener('hashchange', function () {
+    scrollToHashTarget();
   });
 
   var hasHandledInitialPopstate = false;
@@ -1193,6 +1265,7 @@ function getElement(id) {
   updateWikiPageCover(initialPageId);
   updateWikiPageFavicon(initialPageId);
   updateWikiBreadcrumb(initialPageId);
+  scrollToHashTarget();
 })();
         </script>
         {% render_bundle 'wikiViewer' 'js' %}
