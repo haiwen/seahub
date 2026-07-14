@@ -16,6 +16,7 @@ const ChatInput = forwardRef(({
   readOnly,
   repoID,
   sendMessage,
+  isEmpty,
 }, ref) => {
   const [containerFocus, setContainerFocus] = useState(true);
   const [selectedModel, setSelectedModel] = useState(null);
@@ -98,7 +99,7 @@ const ChatInput = forwardRef(({
               value={value}
               onChange={(event) => setValue(event.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder={gettext('Ask anything about your files')}
+              placeholder={isEmpty ? gettext('Ask anything about your files') : ''}
               rows={1}
               disabled={disabled}
             />
@@ -139,6 +140,7 @@ ChatInput.propTypes = {
   readOnly: PropTypes.bool,
   repoID: PropTypes.string,
   sendMessage: PropTypes.func.isRequired,
+  isEmpty: PropTypes.bool,
 };
 
 export default ChatInput;

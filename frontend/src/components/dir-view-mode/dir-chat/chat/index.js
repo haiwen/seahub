@@ -523,6 +523,7 @@ const Chat = ({ repoID, settings }) => {
           readOnly={Boolean(session?.running_task)}
           repoID={repoID}
           sendMessage={sendMessage}
+          isEmpty={isEmpty}
         />
       </div>
     </div>
