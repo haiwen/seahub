@@ -6,11 +6,6 @@
   min-width: 215px;
 }
 
-#files-content-container td:first-child {
-  text-align: left !important;
-  padding-left: 20px;
-}
-
 #files-content-container .libraries-empty-tip-in-list-mode {
   color: #666;
   text-align: center;
@@ -29,8 +24,55 @@
   cursor: default;
 }
 
-#files-content-container .table-thead-hidden { /* for mobile */
-  margin-bottom: 3rem;
+/* for mobile */
+.library-list-mobile-container {
+  border: 1px solid var(--bs-border-quartus-color);
+  border-radius: 8px;
+}
+
+#files-content-container .library-list-mobile-container {
+  margin-bottom: 1.5rem;
+}
+
+.library-list-mobile-container td {
+  border-bottom: 1px solid var(--bs-border-quartus-color);
+}
+
+.library-list-mobile-container table th:first-child,
+.library-list-mobile-container table td:first-child {
+  width: 48px;
+}
+
+.library-list-mobile-container table td:first-child {
+  padding: .5rem 12px .5rem 16px;
+}
+
+.library-list-mobile-container table th:nth-child(2),
+.library-list-mobile-container table td:nth-child(2) {
+  width: calc(100% - 92px);
+}
+
+.library-list-mobile-container table td:nth-child(2) {
+  padding: .5rem 0;
+}
+
+.library-list-mobile-container table th:last-child,
+.library-list-mobile-container table td:last-child {
+  width: 44px;
+}
+
+.library-list-mobile-container table td:last-child {
+  text-align: right;
+  padding: .5rem 16px;
+}
+
+.library-list-mobile-container tr:last-child td {
+  border-bottom: none;
+}
+
+.library-list-mobile-container .star-icon {
+  width: 21px;
+  height: 21px;
 }
 
 .library-grid-item {

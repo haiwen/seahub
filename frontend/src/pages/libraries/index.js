@@ -556,7 +556,6 @@ class Libraries extends Component {
                               onToggleStarRepo={this.onToggleStarRepo}
                               onRepoClick={this.onRepoClick}
                               sortRepoList={this.sortRepoList}
-                              inAllLibs={true}
                               currentViewMode={currentViewMode}
                               updateRepoStatus={this.updateRepoStatus}
                               isItemFreezed={this.state.isItemFreezed}

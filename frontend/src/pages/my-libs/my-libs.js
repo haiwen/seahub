@@ -14,7 +14,7 @@ import ReposSortMenu from '../../components/sort-menu';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import DeletedReposDialog from '../../components/dialog/my-deleted-repos-dialog';
-import { LIST_MODE } from '../../components/dir-view-mode/constants';
+import { LIST_MODE, GRID_MODE } from '../../components/dir-view-mode/constants';
 import MylibRepoListView from './mylib-repo-list-view';
 import Icon from '../../components/icon';
 import CustomDropdown from '../../components/dropdown';
@@ -210,7 +210,7 @@ class MyLibraries extends Component {
                 </>
               )}
             </div>
-            <div className={classnames('cur-view-content', 'repos-container', { 'pt-3': currentViewMode != LIST_MODE })}>
+            <div className={classnames('cur-view-content', 'repos-container', { 'pt-3': isDesktop && currentViewMode == GRID_MODE })}>
               {isLoading
                 ? <Loading />
                 : errorMsg

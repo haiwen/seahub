@@ -146,7 +146,13 @@ class MylibRepoListItem extends React.Component {
     }
   };
 
-  onToggleStarRepo = () => {
+  // only for clicking the star icon in mobile
+  onClickStarInMobile = (e) => {
+    e.stopPropagation();
+    this.onToggleStarRepo();
+  };
+
+  onToggleStarRepo = (e) => {
     const { repo } = this.props;
     const repoName = repo.repo_name;
     const onSuccess = () => {
@@ -435,14 +441,14 @@ class MylibRepoListItem extends React.Component {
   };
 
   renderMobileUI = () => {
-    let repo = this.props.repo;
+    const { idx, repo } = this.props;
     let iconUrl = Utils.getLibIconUrl(repo);
     let iconTitle = Utils.getLibIconTitle(repo);
     let repoURL = this.repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
 
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td onClick={this.visitRepo}><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
+        <td onClick={this.visitRepo}><img src={iconUrl} title={iconTitle} alt={iconTitle} width="20" /></td>
         <td onClick={this.visitRepo}>
           {this.state.isRenaming && (
             <Rename
@@ -452,9 +458,18 @@ class MylibRepoListItem extends React.Component {
             />
           )}
           {!this.state.isRenaming && repo.repo_name && (
-            <div>
-              <Link to={repoURL}>{repo.repo_name}</Link>
+            <div className='d-flex align-items-center'>
+              <Link to={repoURL} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
               {repo.archive_status === 'archived' && <Icon className="ml-1" symbol="archive"></Icon>}
+              {repo.starred && (
+                <OpIcon
+                  id={`star-icon-${idx}`}
+                  className="star-icon ml-2 flex-shrink-0"
+                  symbol="starred"
+                  tooltip={gettext('Unstar')}
+                  op={this.onClickStarInMobile}
+                />
+              )}
             </div>
           )}
           {!this.state.isRenaming && !repo.repo_name &&

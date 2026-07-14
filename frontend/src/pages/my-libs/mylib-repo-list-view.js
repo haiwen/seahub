@@ -15,7 +15,6 @@ const propTypes = {
   onDeleteRepo: PropTypes.func.isRequired,
   onTransferRepo: PropTypes.func.isRequired,
   onToggleStarRepo: PropTypes.func.isRequired,
-  inAllLibs: PropTypes.bool,
   currentViewMode: PropTypes.string,
   updateRepoStatus: PropTypes.func,
   isItemFreezed: PropTypes.bool,
@@ -101,7 +100,6 @@ class MylibRepoListView extends React.Component {
               onToggleStarRepo={this.props.onToggleStarRepo}
               currentViewMode={this.props.currentViewMode}
               onContextMenu={this.onContextMenu}
-              inAllLibs={this.props.inAllLibs}
               updateRepoStatus={this.props.updateRepoStatus}
             />
           );
@@ -141,14 +139,15 @@ class MylibRepoListView extends React.Component {
   };
 
   renderMobileUI = () => {
-    const { inAllLibs } = this.props;
     return (
-      <table className="table-thead-hidden">
-        <LibsMobileThead inAllLibs={inAllLibs} />
-        <tbody>
-          {this.renderRepoListView()}
-        </tbody>
-      </table>
+      <div className="library-list-mobile-container">
+        <table className="table-thead-hidden">
+          <LibsMobileThead />
+          <tbody>
+            {this.renderRepoListView()}
+          </tbody>
+        </table>
+      </div>
     );
   };
 
