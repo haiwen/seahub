@@ -1,12 +1,9 @@
 .sea-ai-chat-customize-link-reference {
   height: 20px;
   width: 20px;
-  display: inline-block;
   text-align: center;
   border-radius: 50%;
-  border: 1px solid #afb3ba;
   font-size: 12px;
   color: #666;
-  background-color: #e5e5e5;
-  cursor: pointer;
+  background-color: var(--bs-border-quartus-color);
 }

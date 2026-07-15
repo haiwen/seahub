@@ -7,7 +7,7 @@ const CustomizeLinkReference = ({ element, onClick, attributes }) => {
   return (
     <span
       onClick={onClick}
-      className="sea-ai-chat-customize-link-reference"
+      className="sea-ai-chat-customize-link-reference cursor-pointer d-inline-block"
       data-id={element.id}
       {...attributes}
       title={element.label}
