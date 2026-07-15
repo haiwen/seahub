@@ -5,7 +5,6 @@ html, body {
   overflow: hidden;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
-  font-size: 14px;
   color: var(--bs-body-color, #212529);
   background-color: var(--bs-body-bg, #fff);
 }
@@ -42,9 +41,7 @@ html, body {
   border-bottom: 1px solid transparent;
 }
 
-.wiki2-side-panel-top h1 {
-  font-size: 1rem;
-  font-weight: 500;
+.wiki2-side-panel-top .wiki-repo-name {
   margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -533,7 +530,7 @@ html, body {
 }
 
 #wiki-resize-handle {
-  width: 5px;
+  width: 1px;
   cursor: col-resize;
   background: transparent;
   flex-shrink: 0;
