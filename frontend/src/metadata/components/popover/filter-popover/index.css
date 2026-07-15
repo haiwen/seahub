@@ -13,10 +13,19 @@
   flex-direction: column;
   min-width: 400px;
   overflow: visible;
+  padding: 8px 0;
 }
 
-.sf-metadata-filter-popover .filter-group-name {
-  margin-bottom: 10px;
+.sf-metadata-filter-popover .filter-group-title {
+  width: calc(100% - 32px);
+  height: 40px;
+  line-height: 40px;
+  margin: 0 16px;
+  border-bottom: 1px solid var(--bs-border-secondary-color);
+}
+
+.sf-metadata-filter-popover .filter-group-container {
+  padding: 16px 12px 0;
 }
 
 .sf-metadata-filter-popover .filter-group-advanced {
@@ -25,13 +34,8 @@
   flex-direction: column;
 }
 
-.sf-metadata-filter-popover .filter-group-advanced .filter-group-name {
-  padding: 0 16px;
-}
-
 .sf-metadata-filter-popover .filter-group-advanced .filter-group-container {
   flex: 1;
-  padding: 0 16px 16px;
 }
 
 .sf-metadata-filter-popover .sf-metadata-filter-popover-add-btns {
@@ -40,16 +44,16 @@
   background: inherit;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
-  height: 40px;
-  padding: 0 1rem;
+  padding: 8px 8px 0;
+  border-top: 1px solid var(--bs-border-secondary-color);
 }
 
 .sf-metadata-filter-popover .add-item-btn.popover-add-tool {
-  height: 28px;
-  padding: 0 6px;
+  height: 32px;
+  padding: 0 8px;
   width: fit-content;
   max-width: 100%;
   border-radius: 3px;
+  font-size: .875rem;
   font-weight: 400;
-  margin-left: -6px;
 }

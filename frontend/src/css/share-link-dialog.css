@@ -89,6 +89,10 @@
   height: 44px;
 }
 
+.share-dialog-content .share-dialog-main .form-control {
+  height: 38px;
+}
+
 .share-list-container {
   max-height: 20rem;
   min-height: 15rem;

@@ -37,8 +37,8 @@ const BasicFilters = ({ readOnly, filters = [], onChange, viewType }) => {
   }, [filters, onChange]);
 
   return (
-    <FormGroup className="filter-group-basic filter-group p-4">
-      <Label className="filter-group-name">{gettext('Basic')}</Label>
+    <FormGroup noMargin className="filter-group-basic filter-group">
+      <Label className="filter-group-title">{gettext('Basic')}</Label>
       <div className="filter-group-container">
         <div className="sf-metadata-filters-list">
           {filters.map((filter) => {

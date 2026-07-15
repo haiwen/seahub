@@ -10,7 +10,7 @@
 }
 
 .add-item-btn:hover {
-  background: none !important;
+  background: none;
 }
 
 .add-item-btn .add-item-btn-content {
@@ -19,16 +19,15 @@
   align-items: center;
 }
 
-.add-item-btn .add-item-btn-content .seafile-multicolor-icon-add-table {
+.add-item-btn .add-item-btn-content .seafile-multicolor-icon-plus {
   margin-right: 8px;
   font-size: 14px;
   font-weight: 600;
   transform: none;
-  color: #666;
 }
 
-[data-bs-theme=dark] .add-item-btn .add-item-btn-content .seafile-multicolor-icon-add-table {
-  color: rgba(255, 255, 255, .5);
+[data-bs-theme=dark] .add-item-btn .add-item-btn-content .seafile-multicolor-icon-plus {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .add-item-btn .add-item-btn-content .label {

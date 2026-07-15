@@ -141,8 +141,8 @@ class FilterPopover extends Component {
         {({ update: scheduleUpdate }) => (
           <div ref={ref => this.dtablePopoverRef = ref} onClick={this.onPopoverInsideClick} className={classNames('sf-popover-container', filtersClassName)}>
             <BasicFilters readOnly={readOnly} filters={basicFilters} onChange={this.onBasicFilterChange} viewType={viewType} />
-            <FormGroup className="filter-group-advanced filter-group mb-0">
-              <Label className="filter-group-name">{gettext('Advanced')}</Label>
+            <FormGroup noMargin className="filter-group-advanced filter-group">
+              <Label className="filter-group-title">{gettext('Advanced')}</Label>
               <div className="filter-group-container">
                 <AdvancedFilters
                   filterConjunction={filterConjunction}

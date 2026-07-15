@@ -16,7 +16,7 @@ function CommonAddTool({ callBack, footerName, className, addIconClassName, hide
       onKeyDown={Utils.onKeyDown}
     >
       <div className="add-item-btn-content">
-        {!hideIcon && <Icon symbol="add-table" className={addIconClassName} />}
+        {!hideIcon && <Icon symbol="plus" className={addIconClassName} />}
         <span className="description text-truncate">{footerName}</span>
       </div>
     </div>

@@ -6,8 +6,12 @@ import { gettext } from '@/utils/constants';
 
 import './index.css';
 
-const DeleteCollaborator = ({ value, onDelete }) => {
-  const { getCollaborator } = useCollaborators();
+const DeleteCollaborator = ({ value, onDelete, collaborators = [], removable = true, showRemoveTooltip = true }) => {
+  const { getCollaborator: getCollaboratorFromContext } = useCollaborators();
+
+  const getCollaborator = (email) => {
+    return collaborators.find(collaborator => collaborator.email === email) || getCollaboratorFromContext(email);
+  };
 
   return (
     <div className="sf-metadata-delete-collaborator">
@@ -21,7 +25,15 @@ const DeleteCollaborator = ({ value, onDelete }) => {
               <img className="collaborator-avatar m-0" alt={name} src={avatar_url} />
             </span>
             <span className="collaborator-name text-truncate" title={name} aria-label={name}>{name}</span>
-            <OpIcon id={`delete-collaborator-icon-${idx}`} className="collaborator-remove" symbol="md-close" tooltip={gettext('Remove')} op={(e) => onDelete(email, e)} />
+            {removable && (
+              <OpIcon
+                id={showRemoveTooltip ? `delete-collaborator-icon-${idx}` : undefined}
+                className="collaborator-remove"
+                symbol="md-close"
+                tooltip={showRemoveTooltip ? gettext('Remove') : undefined}
+                op={(e) => onDelete && onDelete(email, e)}
+              />
+            )}
           </div>
         );
       })}
@@ -31,7 +43,10 @@ const DeleteCollaborator = ({ value, onDelete }) => {
 
 DeleteCollaborator.propTypes = {
   value: PropTypes.array.isRequired,
-  onDelete: PropTypes.func.isRequired
+  onDelete: PropTypes.func,
+  collaborators: PropTypes.array,
+  removable: PropTypes.bool,
+  showRemoveTooltip: PropTypes.bool,
 };
 
 export default DeleteCollaborator;

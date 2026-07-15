@@ -1,10 +1,61 @@
-.sf-metadata-selector-collaborator.seafile-customize-select .seafile-select-option {
-  line-height: 20px;
-  padding: 5px 10px 5px 10px !important;
+.sf-metadata-selector-collaborator.seafile-customize-select .selected-option-show {
+  width: calc(100% - 20px);
+  text-overflow: clip;
 }
 
-.sf-metadata-selector-collaborator.seafile-customize-select .selected-option-show {
-  text-overflow: clip;
+.sf-metadata-selector-collaborator.seafile-customize-select > .selected-option .sf-metadata-delete-collaborator {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.sf-metadata-selector-collaborator.seafile-customize-select > .selected-option .sf-metadata-delete-collaborator .collaborator {
+  max-width: 100%;
+  flex-shrink: 0;
+  margin-bottom: 0;
+}
+
+.sf-metadata-selector-collaborator.seafile-customize-select .seafile-option-group {
+  max-height: 360px;
+  overflow: hidden;
+}
+
+.sf-metadata-selector-collaborator.seafile-customize-select .seafile-option-group .editor-list-delete {
+  max-height: 84px;
+  padding: 8px;
+  margin-bottom: 0 !important;
+  overflow-y: auto;
+  background-color: var(--bs-th-secondary-bg);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
+}
+
+.sf-metadata-selector-collaborator.seafile-customize-select .seafile-option-group .editor-list-delete .sf-metadata-delete-collaborator {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.sf-metadata-selector-collaborator.seafile-customize-select .seafile-option-group .seafile-option-group-search {
+  display: flex;
+  align-items: center;
+  padding: 8px 8px 0;
+  border-bottom: 0;
+}
+
+.sf-metadata-selector-collaborator.seafile-customize-select .seafile-option-group .seafile-option-group-search .form-control {
+  height: 28px;
+  padding: 8px;
+  cursor: text;
+  background-color: transparent;
+  border: 1px solid var(--bs-border-secondary-color);
+  border-radius: 4px;
+}
+
+.sf-metadata-selector-collaborator.seafile-customize-select .seafile-option-group .seafile-option-group-search .form-control:focus {
+  border-color: #3e84f7;
+}
+
+.sf-metadata-selector-collaborator.seafile-customize-select .seafile-option-group .seafile-option-group-content {
+  max-height: 220px;
 }
 
 .sf-metadata-selector-collaborator.seafile-customize-select .seafile-select-option .collaborator .collaborator-avatar {

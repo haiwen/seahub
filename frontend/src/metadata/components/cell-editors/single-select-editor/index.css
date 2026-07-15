@@ -17,6 +17,8 @@
 
 .sf-metadata-single-select-editor .sf-metadata-search-single-select-options {
   position: relative;
+  display: flex;
+  align-items: center;
   padding: 8px 8px 0 8px;
 }
 
@@ -32,19 +34,6 @@
   border: 1px solid #3e84f7;
   box-shadow: none;
   background-color: transparent;
-}
-
-.sf-metadata-single-select-editor .sf-metadata-search-single-select-options .search-text-clear {
-  width: 20px;
-  height: 20px;
-  min-width: 20px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: 12px;
-  right: 8px;
-  font-size: .75rem;
 }
 
 .sf-metadata-single-select-editor .single-select-item {

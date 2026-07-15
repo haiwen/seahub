@@ -40,6 +40,7 @@ const propTypes = {
 };
 
 const EMPTY_PREDICATE = [FILTER_PREDICATE_TYPE.EMPTY, FILTER_PREDICATE_TYPE.NOT_EMPTY];
+const CLEAR_SELECTED_OPTIONS = 'clear-selected-options';
 
 class FilterItem extends React.Component {
 
@@ -178,6 +179,12 @@ class FilterItem extends React.Component {
 
   onSelectMultiple = (value) => {
     const { index, filter } = this.props;
+    if (value.action === CLEAR_SELECTED_OPTIONS) {
+      const newFilter = { ...filter, filter_term: [] };
+      this.resetState(newFilter);
+      this.props.updateFilter(index, newFilter);
+      return;
+    }
     const { columnOption: option } = value;
 
     let newFilter = getUpdatedFilterBySelectMultiple(filter, option);
@@ -341,6 +348,12 @@ class FilterItem extends React.Component {
     const dataOptions = options.map(option => {
       return FilterItemUtils.generateMultipleSelectOption(option, filterTerm);
     });
+    if (Array.isArray(filterTerm) && filterTerm.length > 0) {
+      dataOptions.unshift({
+        value: { action: CLEAR_SELECTED_OPTIONS },
+        label: <span className="select-option-name">--</span>
+      });
+    }
     return (
       <CustomizeSelect
         className="sf-metadata-selector-multiple-select"

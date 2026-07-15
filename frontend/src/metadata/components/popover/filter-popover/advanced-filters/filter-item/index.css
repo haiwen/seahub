@@ -29,7 +29,7 @@
 
 .sf-metadata-selector-single-select .seafile-select-option:hover,
 .sf-metadata-selector-multiple-select .seafile-select-option:hover {
-  background-color: #f7f7f7;
+  background-color: var(--bs-dropdown-link-hover-bg);
   color: var(--bs-body-color);
 }
 
@@ -40,6 +40,9 @@
 
 .sf-metadata-selector-single-select .select-option-name,
 .sf-metadata-selector-multiple-select .select-option-name {
-  margin-top: 5px;
   justify-content: space-between;
+}
+
+.filter-item .filter-container .filter-predicate {
+  min-width: 120px;
 }
