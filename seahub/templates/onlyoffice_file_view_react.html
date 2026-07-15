@@ -149,7 +149,16 @@
   };
 
   window.onload = function () {
+    var isSafari = /^((?!chrome|android).)*safari/i.test(window.navigator.userAgent);
+    if (!isSafari) {
       docEditor = new DocsAPI.DocEditor("placeholder", config);
+      return;
+    }
+
+    window.onlyofficeConfig = config;
+    if (window.initOnlyofficeEditor) {
+      window.initOnlyofficeEditor();
+    }
   };
 
 </script>
