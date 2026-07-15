@@ -764,10 +764,23 @@ function getElement(id) {
     return currentLink ? currentLink.getAttribute('data-page-id') : '';
   }
 
+  function getFirstNavPageId() {
+    var firstLink = document.querySelector('#wiki-nav-tree .wiki-page-item-main[data-page-id]');
+    return firstLink ? firstLink.getAttribute('data-page-id') : '';
+  }
+
   function getNavLinkByPageId(pageId) {
     if (!pageId) return null;
 
     return document.querySelector('#wiki-nav-tree .wiki-page-item-main[data-page-id="' + pageId + '"]');
+  }
+
+  function resolvePageId(pageId) {
+    if (pageId && getNavLinkByPageId(pageId)) {
+      return pageId;
+    }
+
+    return getCurrentNavPageId() || getFirstNavPageId();
   }
 
   function getDirectNavLink(wrapper) {
@@ -913,14 +926,20 @@ function getElement(id) {
   }
 
   function navigateToWikiPage(pageId, targetUrl, options) {
-    if (!pageId || !getNavLinkByPageId(pageId)) return false;
+    var requestedPageId = pageId;
+    pageId = resolvePageId(pageId);
+    if (!pageId) return false;
 
     options = options || {};
 
-    var nextUrl = targetUrl || buildPageUrl(pageId);
+    var nextUrl = requestedPageId === pageId && targetUrl ? targetUrl : buildPageUrl(pageId);
     var currentUrl = window.location.pathname + window.location.search + window.location.hash;
-    if (!options.skipHistory && nextUrl !== currentUrl) {
-      window.history.pushState({ pageid: pageId }, '', nextUrl);
+    if (nextUrl !== currentUrl) {
+      if (options.replaceHistory) {
+        window.history.replaceState({ pageid: pageId }, '', nextUrl);
+      } else if (!options.skipHistory) {
+        window.history.pushState({ pageid: pageId }, '', nextUrl);
+      }
     }
 
     syncActiveNavState(pageId);
@@ -1260,11 +1279,8 @@ function getElement(id) {
     navigateToWikiPage(pageId, buildPageUrl(pageId), { skipHistory: true });
   });
 
-  var initialPageId = getPageIdFromPath(window.location.pathname) || getCurrentNavPageId();
-  updateWikiPageIcon(initialPageId);
-  updateWikiPageCover(initialPageId);
-  updateWikiPageFavicon(initialPageId);
-  updateWikiBreadcrumb(initialPageId);
+  var initialPageId = getPageIdFromPath(window.location.pathname) || getCurrentNavPageId() || getFirstNavPageId();
+  navigateToWikiPage(initialPageId, buildPageUrl(initialPageId), { skipHistory: true, replaceHistory: true });
   scrollToHashTarget();
 })();
         </script>
