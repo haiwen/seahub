@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /published/
+Allow: /wiki/publish/
 Allow: /media/
 Disallow: /
