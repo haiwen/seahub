@@ -1,8 +1,9 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Utils } from '../utils/utils';
 import OpIcon from './op-icon';
+import Icon from './icon';
 import { gettext } from '@/utils/constants';
 
 import '../css/search-input.css';
@@ -21,6 +22,7 @@ const propTypes = {
   clearClassName: PropTypes.string,
   components: PropTypes.object,
   value: PropTypes.string,
+  isShowSearchIcon: PropTypes.bool,
 };
 
 class SearchInput extends Component {
@@ -106,7 +108,7 @@ class SearchInput extends Component {
     return (
       <OpIcon
         id="search-text-clear"
-        className={classnames('search-text-clear op-icon input-icon-addon mr-0', clearClassName)}
+        className={classnames('search-control search-text-clear op-icon op-icon-bg-light m-0', clearClassName)}
         op={this.clearSearch}
         symbol="md-close"
         tooltip={gettext('Clear')}
@@ -115,11 +117,14 @@ class SearchInput extends Component {
   };
 
   render() {
-    const { placeholder, autoFocus, className, onKeyDown, disabled = false, style = {}, isClearable } = this.props;
+    const { placeholder, autoFocus, className, onKeyDown, disabled = false, style = {}, isClearable, isShowSearchIcon = true } = this.props;
     const { searchValue } = this.state;
 
     return (
-      <Fragment>
+      <div className={classnames('search-input-wrapper', { 'has-search-icon': isShowSearchIcon })}>
+        {isShowSearchIcon && (
+          <span className="search-icon-left input-icon-addon"><Icon symbol="search" /></span>
+        )}
         <input
           type="text"
           name="search-input"
@@ -139,7 +144,7 @@ class SearchInput extends Component {
           ref={ref => this.inputRef = ref}
         />
         {this.renderClear()}
-      </Fragment>
+      </div>
     );
   }
 }

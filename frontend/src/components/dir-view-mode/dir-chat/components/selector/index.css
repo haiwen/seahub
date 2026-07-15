@@ -1,3 +1,49 @@
+/* Other popover height is auto, only chat selector height is fixed 276px. */
+.sea-ai-chat-selector-display-editor .popover {
+  border-radius: 8px;
+  box-shadow: 0 6px 14px 0 rgba(0, 0, 0, .1);
+  min-width: 12rem;
+  height: 276px;
+}
+
+.sea-ai-chat-selector-display-editor .popover .popover-inner > div,
+.sea-ai-chat-selector-display-editor .popover .popover-inner {
+  height: 100%;
+}
+
+.sea-ai-chat-selector-display-editor .option-editor-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sea-ai-chat-selector-display-editor .option-editor-search-wrapper {
+  flex: 0 0 auto;
+}
+
+.sea-ai-chat-selector-display-editor .option-editor-content {
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+}
+
+.sea-ai-chat-selector-display-editor .option-editor-content.empty {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.sea-ai-chat-selector-display-editor .option-editor-content.empty > .option-editor-start-searching-tip {
+  min-height: 0;
+  width: 100%;
+}
+
+.sea-ai-chat-selector-display-editor .option-editor-start-searching-tip,
+.sea-ai-chat-selector-display-editor .option-editor-no-results-tip {
+  height: 100%;
+  min-height: 0;
+}
+
 .sea-ai-chat-selector-display-editor .popover.bs-popover-auto[data-popper-placement^=top],
 .sea-ai-chat-selector-display-editor .popover.bs-popover-top {
   margin-bottom: 0;

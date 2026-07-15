@@ -44,12 +44,20 @@ const OptionEditorContainer = forwardRef(({
 }, ref) => {
   const [value, setValue] = useState(propsValue || (isMultiple ? [] : ''));
   const [searchValue, setSearchValue] = useState('');
+  const [isSearchCleared, setIsSearchCleared] = useState(false);
   const [displayOptions, setDisplayOptions] = useState(options);
 
   const onSearchValueChange = useCallback((newSearchValue) => {
     if (searchValue === newSearchValue) return;
+    setIsSearchCleared(false);
     setSearchValue(newSearchValue);
   }, [searchValue]);
+
+  const clearSearch = useCallback(() => {
+    setIsSearchCleared(true);
+    setSearchValue('');
+    setDisplayOptions([]);
+  }, []);
 
   const toggleOption = useCallback((optionValue) => {
     if (isMultiple) {
@@ -90,8 +98,11 @@ const OptionEditorContainer = forwardRef(({
   }, []);
 
   useEffect(() => {
+    if (isSearchCleared) {
+      return;
+    }
     setDisplayOptions(searchOptions(options, searchValue));
-  }, [searchValue, options]);
+  }, [searchValue, options, isSearchCleared]);
 
   useImperativeHandle(ref, () => ({
     getValue: () => {
@@ -129,13 +140,15 @@ const OptionEditorContainer = forwardRef(({
       {isSearchEnabled && (
         <div className="option-editor-search-wrapper">
           <SearchInput
-            isShowSearchIcon={false}
+            isShowSearchIcon={true}
+            isClearable={true}
             autoFocus={true}
             value={searchValue}
             size={SEARCH_HEIGHT}
             placeholder={placeholder}
             onKeyDown={onKeyDown}
             onChange={onSearchValueChange}
+            clearValue={clearSearch}
           />
         </div>
       )}

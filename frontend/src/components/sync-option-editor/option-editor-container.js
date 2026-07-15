@@ -27,6 +27,7 @@ const OptionEditorContainer = forwardRef(({
   const [searchValue, setSearchValue] = useState('');
   const [options, setOptions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSearchCleared, setIsSearchCleared] = useState(false);
 
   const abortControllerRef = useRef(null);
   const timer = useRef(null);
@@ -34,8 +35,22 @@ const OptionEditorContainer = forwardRef(({
 
   const onSearchValueChange = useCallback((newSearchValue) => {
     if (searchValue === newSearchValue) return;
+    setIsSearchCleared(false);
     setSearchValue(newSearchValue);
   }, [searchValue]);
+
+  const clearSearch = useCallback(() => {
+    setIsSearchCleared(true);
+    setSearchValue('');
+    setOptions([]);
+    setIsLoading(false);
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    timer.current && clearTimeout(timer.current);
+    timer.current = null;
+  }, []);
 
   const toggleOption = useCallback((optionValue) => {
     if (isMultiple) {
@@ -67,6 +82,9 @@ const OptionEditorContainer = forwardRef(({
   }, []);
 
   useEffect(() => {
+    if (isSearchCleared) {
+      return;
+    }
     if (lastSearchValue.current === searchValue) return;
     lastSearchValue.current = searchValue;
 
@@ -98,7 +116,7 @@ const OptionEditorContainer = forwardRef(({
         abortControllerRef.current = null;
       });
     }, 300);
-  }, [searchValue, onSearch]);
+  }, [searchValue, onSearch, isSearchCleared]);
 
   useEffect(() => {
     return () => {
@@ -122,13 +140,14 @@ const OptionEditorContainer = forwardRef(({
     <div className={classnames('option-editor-container search-enabled', className)}>
       <div className="option-editor-search-wrapper">
         <SearchInput
+          isClearable={true}
           autoFocus={true}
           value={searchValue}
           size={36}
           placeholder={placeholder}
           onKeyDown={onKeyDown}
           onChange={onSearchValueChange}
-          onClear={() => onSearchValueChange('')}
+          clearValue={clearSearch}
         />
       </div>
       <Options

@@ -1,3 +1,48 @@
 .form-control.clearable.hasValue {
   width: calc(100% - 40px);
 }
+
+.search-input-wrapper {
+  position: relative;
+}
+
+.search-input-wrapper .search-icon-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  min-width: 2rem;
+  pointer-events: none;
+  color: var(--bs-icon-secondary-color);
+  padding-left: 12px;
+  padding-right: 8px;
+}
+
+.search-input-wrapper .search-icon-left .seafile-multicolor-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.search-input-wrapper.has-search-icon .form-control {
+  padding-left: 2rem;
+}
+
+.search-input-wrapper.has-search-icon .form-control.clearable.hasValue {
+  width: 100%
+}
+
+.search-input-wrapper .search-control {
+  position: absolute;
+  top: 8px;
+  right: 9px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-input-wrapper .search-control .seafile-multicolor-icon {
+  width: 12px;
+  height: 12px;
+}
