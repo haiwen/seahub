@@ -50,6 +50,7 @@ const SyncSelector = ({ icon, className, value, title, onChange, children, onSea
           onChange={handleChange}
           onToggle={onToggle}
           onSearch={onSearch}
+          isShowSearchIcon={true}
         />
       )}
     </>

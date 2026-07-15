@@ -117,7 +117,7 @@ class SearchInput extends Component {
   };
 
   render() {
-    const { placeholder, autoFocus, className, onKeyDown, disabled = false, style = {}, isClearable, isShowSearchIcon = true } = this.props;
+    const { placeholder, autoFocus, className, onKeyDown, disabled = false, style = {}, isClearable, isShowSearchIcon = false } = this.props;
     const { searchValue } = this.state;
 
     return (

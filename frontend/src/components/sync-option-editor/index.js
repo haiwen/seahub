@@ -19,6 +19,7 @@ const SyncOptionsEditor = ({
   onChange,
   onToggle,
   onSearch,
+  isShowSearchIcon,
 }) => {
   const optionEditorContainerRef = useRef(null);
 
@@ -50,6 +51,7 @@ const SyncOptionsEditor = ({
         onChange={onChange}
         onToggle={onToggle}
         onSearch={onSearch}
+        isShowSearchIcon={isShowSearchIcon}
       />
     </CustomizePopover>
   );

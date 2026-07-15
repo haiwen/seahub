@@ -22,6 +22,7 @@ const OptionEditorContainer = forwardRef(({
   onToggle,
   onPressTab,
   onSearch,
+  isShowSearchIcon,
 }, ref) => {
   const [value, setValue] = useState(propsValue || (isMultiple ? [] : ''));
   const [searchValue, setSearchValue] = useState('');
@@ -148,6 +149,7 @@ const OptionEditorContainer = forwardRef(({
           onKeyDown={onKeyDown}
           onChange={onSearchValueChange}
           clearValue={clearSearch}
+          isShowSearchIcon={isShowSearchIcon}
         />
       </div>
       <Options

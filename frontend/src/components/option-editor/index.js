@@ -25,6 +25,7 @@ const OptionsEditor = ({
   onChange,
   onToggle,
   onCreate,
+  isShowSearchIcon,
 }) => {
   const optionEditorContainerRef = useRef(null);
 
@@ -62,6 +63,7 @@ const OptionsEditor = ({
         onChange={onChange}
         onToggle={onToggle}
         onCreate={onCreate}
+        isShowSearchIcon={isShowSearchIcon}
       />
     </CustomizePopover>
   );

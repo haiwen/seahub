@@ -57,6 +57,7 @@ const Selector = ({
           placement={placement}
           onChange={handleChange}
           onToggle={() => setIsShowMenu(false)}
+          isShowSearchIcon={true}
         />
       )}
     </>

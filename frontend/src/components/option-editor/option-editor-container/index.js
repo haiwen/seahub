@@ -40,6 +40,7 @@ const OptionEditorContainer = forwardRef(({
   onToggle,
   onCreate,
   onPressTab,
+  isShowSearchIcon = false,
   addToolText = gettext('Add tag'),
 }, ref) => {
   const [value, setValue] = useState(propsValue || (isMultiple ? [] : ''));
@@ -140,7 +141,7 @@ const OptionEditorContainer = forwardRef(({
       {isSearchEnabled && (
         <div className="option-editor-search-wrapper">
           <SearchInput
-            isShowSearchIcon={true}
+            isShowSearchIcon={isShowSearchIcon}
             isClearable={true}
             autoFocus={true}
             value={searchValue}
