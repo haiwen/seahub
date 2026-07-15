@@ -67,9 +67,10 @@ class Content extends Component {
 
   render() {
     const { loading, errorMsg, items, inAllLibs, currentViewMode } = this.props;
+    const isDesktop = Utils.isDesktop();
 
     const emptyTip = inAllLibs ?
-      <span className={`libraries-empty-tip-in-${currentViewMode}-mode`}>{gettext('No shared libraries')}</span> :
+      <span className={`libraries-empty-tip-in-${isDesktop ? currentViewMode : LIST_MODE}-mode`}>{gettext('No shared libraries')}</span> :
       <EmptyTip
         title={gettext('No shared libraries')}
         text={gettext('No libraries have been shared directly with you. A shared library can be shared with full or restricted permission. If you need access to a library owned by another user, ask the user to share the library with you.')}

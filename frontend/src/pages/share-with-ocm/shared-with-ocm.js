@@ -56,6 +56,7 @@ class Content extends Component {
 
   render() {
     const { loading, errorMsg, items, currentViewMode, inAllLibs } = this.props;
+    const isDesktop = Utils.isDesktop();
 
     if (loading) {
       return <Loading />;
@@ -65,7 +66,7 @@ class Content extends Component {
       if (items.length == 0) {
         const emptyTipTitle = gettext('No libraries have been shared with you');
         const emptyTip = inAllLibs
-          ? <span className={`libraries-empty-tip-in-${currentViewMode}-mode`}>{emptyTipTitle}</span>
+          ? <span className={`libraries-empty-tip-in-${isDesktop ? currentViewMode : LIST_MODE}-mode`}>{emptyTipTitle}</span>
           : (
             <EmptyTip
               title={emptyTipTitle}
@@ -76,7 +77,6 @@ class Content extends Component {
         return emptyTip;
       }
 
-      const isDesktop = Utils.isDesktop();
       if (isDesktop) {
         return currentViewMode == LIST_MODE
           ? (

@@ -83,7 +83,8 @@ class GroupItem extends React.Component {
 
   render() {
     const { inAllLibs = false, group, currentViewMode = LIST_MODE } = this.props;
-    const emptyTip = <p className={`libraries-empty-tip-in-${currentViewMode}-mode`}>{gettext('No libraries')}</p>;
+    const isDesktop = Utils.isDesktop();
+    const emptyTip = <p className={`libraries-empty-tip-in-${isDesktop ? currentViewMode : LIST_MODE}-mode`}>{gettext('No libraries')}</p>;
 
     return (
       <>

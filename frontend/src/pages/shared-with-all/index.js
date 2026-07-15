@@ -142,8 +142,9 @@ class SharedWithAll extends React.Component {
   renderContent = (currentViewMode) => {
     const { inAllLibs = false } = this.props;
     const { isLoading, errMessage, repoList } = this.state;
+    const isDesktop = Utils.isDesktop();
     const emptyTip = inAllLibs
-      ? <p className={`libraries-empty-tip-in-${currentViewMode}-mode`}>{gettext('No public libraries')}</p>
+      ? <p className={`libraries-empty-tip-in-${isDesktop ? currentViewMode : LIST_MODE}-mode`}>{gettext('No public libraries')}</p>
       : (
         <EmptyTip
           title={gettext('No public libraries')}
