@@ -14,7 +14,7 @@ import SortOptionsDialog from '../../components/dialog/sort-options';
 import ModalPortal from '../../components/modal-portal';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import ShareRepoDialog from '../../components/dialog/share-repo-dialog';
-import { LIST_MODE } from '../../components/dir-view-mode/constants';
+import { LIST_MODE, GRID_MODE } from '../../components/dir-view-mode/constants';
 import ViewModes from '../../components/view-modes';
 import ReposSortMenu from '../../components/sort-menu';
 import Icon from '../../components/icon';
@@ -248,6 +248,7 @@ class SharedWithAll extends React.Component {
     const { inAllLibs = false, currentViewMode: propCurrentViewMode } = this.props;
     const { sortBy, sortOrder, currentViewMode: stateCurrentViewMode } = this.state;
     const currentViewMode = inAllLibs ? propCurrentViewMode : stateCurrentViewMode;
+    const isDesktop = Utils.isDesktop();
     const addLibraryItems = [
       { key: 'share-existing-libraries', label: gettext('Share existing libraries'), onClick: this.onSelectRepoToggle },
       { key: 'new-library', label: gettext('New Library'), onClick: this.onCreateRepoToggle }
@@ -297,7 +298,7 @@ class SharedWithAll extends React.Component {
               )}
               {this.renderSortIconInMobile()}
             </div>
-            <div className={classnames('cur-view-content', 'repos-container', { 'pt-3': currentViewMode != LIST_MODE })}>
+            <div className={classnames('cur-view-content', 'repos-container', { 'pt-3': isDesktop && currentViewMode == GRID_MODE })}>
               {this.renderContent(currentViewMode)}
             </div>
           </div>

@@ -14,7 +14,7 @@ import SharedRepoListView from '../../components/shared-repo-list-view/shared-re
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import ViewModes from '../../components/view-modes';
 import ReposSortMenu from '../../components/sort-menu';
-import { LIST_MODE } from '../../components/dir-view-mode/constants';
+import { LIST_MODE, GRID_MODE } from '../../components/dir-view-mode/constants';
 import GroupOperationMenu from './group-op-menu';
 import Icon from '../../components/icon';
 
@@ -295,6 +295,7 @@ class GroupView extends React.Component {
       currentGroup, isDepartmentGroup,
       currentViewMode, sortBy, sortOrder
     } = this.state;
+    const isDesktop = Utils.isDesktop();
 
     let useRate = 0;
     if (isDepartmentGroup && currentGroup.group_quota) {
@@ -361,7 +362,7 @@ class GroupView extends React.Component {
               )}
             </div>
             <div
-              className={classnames('cur-view-content', 'd-block', 'repos-container', { 'pt-3': currentViewMode != LIST_MODE })}
+              className={classnames('cur-view-content', 'd-block', 'repos-container', { 'pt-3': isDesktop && currentViewMode == GRID_MODE })}
               onScroll={this.handleScroll}
             >
               {isLoading
