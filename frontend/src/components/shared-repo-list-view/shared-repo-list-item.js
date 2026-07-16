@@ -458,10 +458,12 @@ class SharedRepoListItem extends React.Component {
       }
     } else {
       operations = this.generatorOperations().filter(item => item != 'Divider');
-      if (this.isDepartmentOwnerGroupMember) {
-        operations.unshift('Unshare');
-        operations.unshift('Share');
-      }
+    }
+    if (this.isDepartmentOwnerGroupMember) {
+      operations.unshift('Delete');
+      operations.unshift('Share');
+    } else {
+      operations.push('Star');
     }
 
     if (!operations.length) {
