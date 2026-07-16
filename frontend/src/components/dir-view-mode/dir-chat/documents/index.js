@@ -4,6 +4,7 @@ import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap
 import { MarkdownViewer } from '@seafile/seafile-editor';
 import CenteredLoading from '../../../centered-loading';
 import Icon from '../../../icon';
+import OpIcon from '../../../op-icon';
 import { mediaUrl, gettext } from '../../../../utils/constants';
 import { Selector } from '../components';
 import { useDocuments } from '../hooks';
@@ -71,6 +72,10 @@ const Documents = () => {
     downloadContent(currentDocument?.content || '', currentDocument?.name);
   }, [currentDocument]);
 
+  const toggleFull = useCallback(() => {
+    setIsFull((currentValue) => !currentValue);
+  }, []);
+
   const handleOpenFile = useCallback(() => {
     if (!currentDocument?.fileUrl) {
       return;
@@ -122,34 +127,38 @@ const Documents = () => {
             {isMarkdownArtifact && currentDocument?.fileUrl && (
               <Dropdown isOpen={isMoreMenuShow} toggle={toggleMoreMenu} className="d-flex">
                 <DropdownToggle
-                  tag="button"
-                  type="button"
-                  className="btn btn-icon p-0 border-0 bg-transparent seafile-ai-chat-documents-more-btn"
-                  title={gettext('More operations')}
-                  aria-label={gettext('More operations')}
-                >
-                  <Icon symbol="more" />
-                </DropdownToggle>
+                  tag={OpIcon}
+                  id="seafile-ai-chat-documents-more-btn"
+                  className="op-icon seafile-ai-chat-documents-more-btn"
+                  symbol="more"
+                  tooltip={gettext('More operations')}
+                />
                 <DropdownMenu end className="seafile-ai-chat-documents-dropdown-menu">
                   <DropdownItem onClick={handleOpenFile}>{gettext('Open file')}</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             )}
-            <button type="button" className="btn btn-icon p-0 border-0 bg-transparent seafile-ai-chat-documents-icon-btn" onClick={handleDownload} title={gettext('Download')} aria-label={gettext('Download')}>
-              <Icon symbol="download" />
-            </button>
-            <button
-              type="button"
-              className="btn btn-icon p-0 border-0 bg-transparent seafile-ai-chat-documents-icon-btn"
-              onClick={() => setIsFull(!isFull)}
-              title={isFull ? gettext('Collapse') : gettext('Expand')}
-              aria-label={isFull ? gettext('Collapse') : gettext('Expand')}
-            >
-              <Icon symbol={isMarkdownArtifact ? (isFull ? 'collapse' : 'view-issue') : (isFull ? 'minus-sign' : 'fullscreen')} />
-            </button>
-            <button type="button" className="btn btn-icon p-0 seafile-ai-chat-documents-icon-btn" onClick={closeDocuments} title={gettext('Close')}>
-              <Icon symbol="close" />
-            </button>
+            <OpIcon
+              id="seafile-ai-chat-documents-download-btn"
+              className="op-icon seafile-ai-chat-documents-icon-btn"
+              symbol="download"
+              tooltip={gettext('Download')}
+              op={handleDownload}
+            />
+            <OpIcon
+              id="seafile-ai-chat-documents-expand-btn"
+              className="op-icon seafile-ai-chat-documents-icon-btn"
+              symbol={isMarkdownArtifact ? (isFull ? 'collapse' : 'view-issue') : (isFull ? 'minus-sign' : 'fullscreen')}
+              tooltip={isFull ? gettext('Collapse') : gettext('Expand')}
+              op={toggleFull}
+            />
+            <OpIcon
+              id="seafile-ai-chat-documents-close-btn"
+              className="op-icon seafile-ai-chat-documents-icon-btn"
+              symbol="close"
+              tooltip={gettext('Close')}
+              op={closeDocuments}
+            />
           </div>
         </div>
         <div className="seafile-ai-chat-documents-body">
