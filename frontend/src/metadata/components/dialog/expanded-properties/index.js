@@ -80,7 +80,7 @@ const ExpandedPropertiesDialog = ({ recordId, columns, toggle, metadata, modifyR
                   <span className="d-flex text-align-center">
                     <Icon symbol={COLUMNS_ICON_CONFIG[type]} className="column-type-icon" />
                   </span>
-                  <span className="text-center">{name}</span>
+                  <span className="text-center text-truncate" title={name}>{name}</span>
                 </div>
                 <div className="col-9 content-wrapper">
                   {Component && <Component record={record} column={column} columns={columns} containerRef={containerRef} onCommit={onCommit} modifyColumnData={modifyColumnData} updateFileTags={updateFileTags} />}
