@@ -53,3 +53,12 @@
 .sea-ai-chat-selector-display-editor .popover.bs-popover-auto[data-popper-placement^=bottom-start] {
   top: -4px !important;
 }
+
+.sea-ai-chat-selector-display-editor .option-editor-search-wrapper .search-input-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.sea-ai-chat-selector-display-editor .option-editor-search-wrapper .search-input-wrapper .search-text-clear {
+  right: 4px;
+}
