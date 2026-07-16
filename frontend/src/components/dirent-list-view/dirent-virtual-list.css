@@ -61,22 +61,20 @@
 .dirent-mobile-item {
   display: flex;
   align-items: center;
-  height: 60px;
+  height: 59px;
   width: 100%;
   min-width: 0;
   border-bottom: 1px solid var(--bs-border-secondary-color);
   box-sizing: border-box;
   cursor: pointer;
-  padding: 0 8px;
 }
 
 .dirent-mobile-thumb {
-  flex: 0 0 40px;
-  width: 40px;
+  flex: 0 0 24px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  margin-right: 8px;
+  justify-content: center;
+  margin-right: 12px;
 }
 
 .dirent-mobile-content {
@@ -90,21 +88,7 @@
 
 .dirent-mobile-name {
   font-weight: normal;
-  color: var(--bs-body-color);
-  min-width: 0;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   margin-bottom: 2px;
-}
-
-.dirent-mobile-name a {
-  display: block;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .dirent-mobile-meta {

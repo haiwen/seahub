@@ -647,10 +647,19 @@ class DirentListItem extends React.Component {
               />
             }
             {!this.state.isRenaming && (
-              <div className="dirent-mobile-name">
-                {(!dirent.isDir() && !this.canPreview) ?
-                  <a className="sf-link" onClick={this.onItemClick}>{dirent.name}</a> :
-                  <a href={this.getDirentHref()} onClick={this.onItemClick}>{dirent.name}</a>
+              <div className="dirent-mobile-name d-flex align-items-center">
+                {(!dirent.isDir() && !this.canPreview)
+                  ? <a className="sf-link text-truncate" onClick={this.onItemClick}>{dirent.name}</a>
+                  : <a className="text-truncate" href={this.getDirentHref()} onClick={this.onItemClick}>{dirent.name}</a>
+                }
+                {dirent.starred &&
+                <OpIcon
+                  id={`star-icon-${dirent.id}`}
+                  className="star-icon ml-2 flex-shrink-0"
+                  symbol={'starred'}
+                  tooltip={gettext('Unstar')}
+                  op={this.onItemStarred}
+                />
                 }
               </div>
             )}
