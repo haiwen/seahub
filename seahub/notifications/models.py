@@ -132,6 +132,7 @@ MSG_TYPE_REPO_SHARE_PERM_DELETE = 'repo_share_perm_delete'
 MSG_TYPE_REPO_SHARE_TO_GROUP = 'repo_share_to_group'
 MSG_TYPE_USER_MESSAGE = 'user_message'
 MSG_TYPE_FILE_COMMENT = 'file_comment'
+MSG_TYPE_FILE_MENTION = 'file_mention'
 MSG_TYPE_DRAFT_COMMENT = 'draft_comment'
 MSG_TYPE_DRAFT_REVIEWER = 'draft_reviewer'
 MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted'
@@ -194,6 +195,13 @@ def file_comment_msg_to_json(repo_id, file_path, author, comment):
                        'file_path': file_path,
                        'author': author,
                        'comment': comment})
+
+
+def file_mention_msg_to_json(repo_id, file_path, from_user, file_name):
+    return json.dumps({'repo_id': repo_id,
+                       'file_path': file_path,
+                       'from_user': from_user,
+                       'file_name': file_name})
 
 def draft_comment_msg_to_json(draft_id, author, comment):
     return json.dumps({'draft_id': draft_id,
@@ -384,6 +392,9 @@ class UserNotificationManager(models.Manager):
         """
         return self._add_user_notification(to_user, MSG_TYPE_FILE_COMMENT, detail)
 
+    def add_file_mention_msg(self, to_user, detail):
+        return self._add_user_notification(to_user, MSG_TYPE_FILE_MENTION, detail)
+
     def add_draft_comment_msg(self, to_user, detail):
         """Notify ``to_user`` that review creator
         """
@@ -509,6 +520,9 @@ class UserNotification(models.Model):
     def is_file_comment_msg(self):
         return self.msg_type == MSG_TYPE_FILE_COMMENT
 
+    def is_file_mention_msg(self):
+        return self.msg_type == MSG_TYPE_FILE_MENTION
+
     def is_draft_comment_msg(self):
         return self.msg_type == MSG_TYPE_DRAFT_COMMENT
 
@@ -580,6 +594,8 @@ class UserNotification(models.Model):
             return self.format_group_join_request()
         elif self.is_file_comment_msg():
             return self.format_file_comment_msg()
+        elif self.is_file_mention_msg():
+            return self.format_file_mention_msg()
         elif self.is_draft_comment_msg():
             return self.format_draft_comment_msg()
         elif self.is_draft_reviewer_msg():
@@ -963,6 +979,30 @@ class UserNotification(models.Model):
             'file_url': reverse('view_lib_file', args=[repo_id, file_path]),
             'file_name': escape(file_name),
             'author': escape(email2nickname(author)),
+        }
+        return msg
+
+    def format_file_mention_msg(self):
+        try:
+            d = json.loads(self.detail)
+        except Exception as e:
+            logger.error(e)
+            return _("Internal Server Error")
+
+        repo_id = d['repo_id']
+        file_path = d['file_path']
+        from_user = d['from_user']
+        file_name = d['file_name']
+
+        repo = seafile_api.get_repo(repo_id)
+        if repo is None or not seafile_api.get_file_id_by_path(repo.id, file_path):
+            self.delete()
+            return None
+
+        msg = _("%(from_user)s mentioned you in <a href='%(file_url)s'>%(file_name)s</a>") % {
+            'from_user': escape(email2nickname(from_user)),
+            'file_url': reverse('view_lib_file', args=[repo_id, file_path]),
+            'file_name': escape(file_name),
         }
         return msg
 

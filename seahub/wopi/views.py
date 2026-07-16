@@ -29,12 +29,11 @@ from seahub.utils import gen_inner_file_get_url, gen_inner_file_upload_url, \
         is_pro_version, is_valid_dirent_name, check_filename_with_rename
 from seahub.utils.file_op import ONLINE_OFFICE_LOCK_OWNER, \
         if_locked_by_online_office, check_file_lock
-from seahub.utils.repo import parse_repo_perm
-from seahub.views import check_folder_permission
 from seahub.settings import SITE_ROOT
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN
 
 from seahub.wopi.utils import get_file_info_by_token, get_wopi_file_url
+from seahub.wopi.mention_utils import send_wopi_mention_notifications
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -257,10 +256,6 @@ def build_put_relative_response(request_user, repo_id, file_path,
         'Name': file_name,
         'Url': file_url,
     }
-
-
-def can_use_put_relative(parent_perm):
-    return bool(parent_perm) and parse_repo_perm(parent_perm).can_upload
 
 
 def access_token_check(func):
@@ -563,6 +558,14 @@ class WOPIFilesView(APIView):
                     if x_wopi_override == 'REFRESH_LOCK':
                         refresh_file_lock(request)
                     else:
+                        token = request.GET.get('access_token', None)
+                        info_dict = get_file_info_by_token(token)
+                        send_wopi_mention_notifications(
+                            info_dict['repo_id'],
+                            info_dict['file_path'],
+                            os.path.basename(info_dict['file_path']),
+                            info_dict['request_user'],
+                        )
                         unlock_file(request)
 
                     return HttpResponse()
@@ -664,6 +667,7 @@ class WOPIFilesContentsView(APIView):
                 logger.error('parameter target_file: {}'.format(data['target_file']))
                 logger.error('response: {}'.format(resp.__dict__))
                 return HttpResponse(json.dumps({}), status=500, content_type=json_content_type)
+
         except Exception as e:
             logger.error(e)
             return HttpResponse(json.dumps({}), status=500,

@@ -2073,6 +2073,23 @@ class SeafileAPI {
     return this.req.get(url);
   }
 
+  listWopiMentionUsers(repoID, filePath, query) {
+    const path = encodeURIComponent(filePath);
+    let url = this.server + '/api2/wopi/repos/' + repoID + '/mentions/?path=' + path;
+    if (query) {
+      url += '&q=' + encodeURIComponent(query);
+    }
+    return this.req.get(url);
+  }
+
+  addWopiMentionUser(repoID, filePath, username) {
+    let url = this.server + '/api2/wopi/repos/' + repoID + '/mentions/';
+    return this.req.post(url, {
+      path: filePath,
+      username,
+    });
+  }
+
   addFileParticipants(repoID, filePath, emails) {
     let url = this.server + '/api/v2.1/repos/' + repoID + '/file/participants/';
     let params = {

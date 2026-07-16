@@ -4,6 +4,7 @@ import { Button, Input, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import FileView from './components/file-view/file-view';
 import FileViewTip from './components/file-view/file-view-tip';
 import { gettext, siteRoot } from './utils/constants';
+import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
 import SeahubModalHeader from './components/common/seahub-modal-header';
 import toaster from './components/toast';
@@ -37,6 +38,7 @@ class FileContent extends React.Component {
     this.state = {
       isSaveAsDialogOpen: false,
       nextFileName: fileName,
+      relatedUsers: null,
     };
   }
 
@@ -139,6 +141,25 @@ class FileContent extends React.Component {
       if (!nextFileName || nextFileName === fileName) return;
 
       this.navigateToSavedAsFile(nextFileName);
+      return;
+    }
+
+    if (message.MessageId === 'UI_Mention') {
+      const { type, text, username: mentionedUsername } = message.Values || {};
+
+      if (type === 'autocomplete') {
+        seafileAPI.listWopiMentionUsers(repoID, window.app.pageOptions.filePath, text || '').then((res) => {
+          this.postMessageToOfficeFrame({
+            MessageId: 'Action_Mention',
+            Values: { list: res.data.list || [] },
+          });
+        }).catch(() => {});
+      }
+
+      if (type === 'selected' && mentionedUsername) {
+        seafileAPI.addWopiMentionUser(repoID, window.app.pageOptions.filePath, mentionedUsername).catch(() => {});
+      }
+
       return;
     }
 
