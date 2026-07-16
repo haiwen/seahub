@@ -775,14 +775,6 @@ function getElement(id) {
     return document.querySelector('#wiki-nav-tree .wiki-page-item-main[data-page-id="' + pageId + '"]');
   }
 
-  function resolvePageId(pageId) {
-    if (pageId && getNavLinkByPageId(pageId)) {
-      return pageId;
-    }
-
-    return getCurrentNavPageId() || getFirstNavPageId();
-  }
-
   function getDirectNavLink(wrapper) {
     if (!wrapper) return null;
 
@@ -926,13 +918,11 @@ function getElement(id) {
   }
 
   function navigateToWikiPage(pageId, targetUrl, options) {
-    var requestedPageId = pageId;
-    pageId = resolvePageId(pageId);
-    if (!pageId) return false;
+    if (!pageId || !getNavLinkByPageId(pageId)) return false;
 
     options = options || {};
 
-    var nextUrl = requestedPageId === pageId && targetUrl ? targetUrl : buildPageUrl(pageId);
+    var nextUrl = targetUrl || buildPageUrl(pageId);
     var currentUrl = window.location.pathname + window.location.search + window.location.hash;
     if (nextUrl !== currentUrl) {
       if (options.replaceHistory) {
@@ -1070,6 +1060,7 @@ function getElement(id) {
 
     if (targetInfo.publishUrl !== currentInfo.publishUrl) return;
     if (!targetInfo.pageId || targetInfo.pageId === currentInfo.pageId) return;
+    if (!getNavLinkByPageId(targetInfo.pageId)) return;
 
     if (navigateToWikiPage(targetInfo.pageId, targetInfo.fullPath)) {
       e.preventDefault();
@@ -1276,11 +1267,23 @@ function getElement(id) {
       pageId = getPageIdFromPath(window.location.pathname) || getCurrentNavPageId();
     }
 
-    navigateToWikiPage(pageId, buildPageUrl(pageId), { skipHistory: true });
+    if (!navigateToWikiPage(pageId, buildPageUrl(pageId), { skipHistory: true })) {
+      // The browser URL already points at the target history entry.
+      // Reload so the server can render pages outside the navigation tree.
+      window.location.reload();
+    }
   });
 
-  var initialPageId = getPageIdFromPath(window.location.pathname) || getCurrentNavPageId() || getFirstNavPageId();
-  navigateToWikiPage(initialPageId, buildPageUrl(initialPageId), { skipHistory: true, replaceHistory: true });
+  var pathPageId = getPageIdFromPath(window.location.pathname);
+  var initialPageId = pathPageId || getCurrentNavPageId() || getFirstNavPageId();
+  if (pathPageId) {
+    updateWikiPageIcon(initialPageId);
+    updateWikiPageCover(initialPageId);
+    updateWikiPageFavicon(initialPageId);
+    updateWikiBreadcrumb(initialPageId);
+  } else {
+    navigateToWikiPage(initialPageId, buildPageUrl(initialPageId), { skipHistory: true, replaceHistory: true });
+  }
   scrollToHashTarget();
 })();
         </script>

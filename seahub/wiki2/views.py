@@ -270,7 +270,6 @@ def wiki_publish_view(request, publish_url, page_id=None):
 
         current_path = find_navigation_path(navigation, page_id)
         current_path_ids = {item.get('id') for item in current_path}
-        current_navigation_id = first_navigation_id or page_id
 
         def normalize_navigation_item(item, depth=0):
             page = page_map.get(item.get('id'))
@@ -294,7 +293,7 @@ def wiki_publish_view(request, publish_url, page_id=None):
                 'url': f"/wiki/publish/{publish_url}/{item['id']}/",
                 'depth': depth,
                 'has_children': has_children,
-                'is_current': item['id'] == current_navigation_id,
+                'is_current': item['id'] == page_id,
                 'is_expanded': item['id'] in current_path_ids and item['id'] != page_id,
             }
 
