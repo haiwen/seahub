@@ -90,7 +90,7 @@
   border-bottom: none;
 }
 
-[data-bs-theme='dark'] .repo-list-item {
+[data-bs-theme='dark'] .repo-list-item:not(:last-child) {
   border-bottom: 1px solid rgba(255, 255, 255, .15);
 }
 
@@ -179,11 +179,11 @@
     padding: 12px;
     height: auto;
   }
-  
+
   .repo-list-item > div {
     width: 100%;
   }
-  
+
   .repo-list-item > div:last-child {
     margin-left: 32px;
     margin-right: 8px;
