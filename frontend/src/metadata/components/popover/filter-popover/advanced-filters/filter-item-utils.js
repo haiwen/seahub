@@ -70,7 +70,7 @@ class FilterItemUtils {
             {option.name}
           </div>
           <div className="multiple-check-icon">
-            {filterTerm.indexOf(option.id) > -1 && <Icon symbol="check-thin" />}
+            {filterTerm.indexOf(option.id) > -1 && <Icon symbol="check" />}
           </div>
         </div>
       )

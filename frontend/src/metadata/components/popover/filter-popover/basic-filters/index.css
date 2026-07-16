@@ -80,6 +80,7 @@
 .filter-group-basic .sf-metadata-filters-list {
   min-height: unset;
   display: flex;
+  margin-top: 12px;
 }
 
 .sf-metadata-basic-filters-select .select-basic-filter-display-name:hover {

@@ -13,7 +13,7 @@
   margin: 0;
   max-width: 150px;
   overflow: hidden;
-  padding: 0 10px;
+  padding: 0 8px;
   text-align: left;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -23,8 +23,8 @@
 
 .sf-metadata-selector-single-select .seafile-select-option,
 .sf-metadata-selector-multiple-select .seafile-select-option {
-  height: 30px;
-  padding: 0 10px;
+  height: 32px;
+  padding: 0 8px;
 }
 
 .sf-metadata-selector-single-select .seafile-select-option:hover,
@@ -35,14 +35,12 @@
 
 .sf-metadata-selector-multiple-select.seafile-customize-select .selected-option-show,
 .sf-metadata-selector-single-select.seafile-customize-select .selected-option-show {
+  display: flex;
+  align-items: center;
   text-overflow: clip;
 }
 
 .sf-metadata-selector-single-select .select-option-name,
 .sf-metadata-selector-multiple-select .select-option-name {
   justify-content: space-between;
-}
-
-.filter-item .filter-container .filter-predicate {
-  min-width: 120px;
 }

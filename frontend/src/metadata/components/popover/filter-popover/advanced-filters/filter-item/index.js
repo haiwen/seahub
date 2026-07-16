@@ -326,7 +326,7 @@ class FilterItem extends React.Component {
     if (Array.isArray(options) && Array.isArray(filterTerm)) {
       filterTerm.forEach((item) => {
         let inOption = options.find(option => option.id === item);
-        let optionStyle = { margin: '0 10px 0 0' };
+        let optionStyle = { margin: '0 4px 0 0' };
         let optionName = null;
         if (inOption) {
           optionName = inOption.name;
@@ -456,9 +456,11 @@ class FilterItem extends React.Component {
             { background: selectedOption.color, color: selectedOption.textColor || null } :
             { background: DELETED_OPTION_BACKGROUND_COLOR };
           const selectedOptionName = selectedOption ? selectedOption.name : gettext('deleted option');
-          selectedOptionDom = { label: (
-            <span className={className} style={style} title={selectedOptionName} aria-label={selectedOptionName}>{selectedOptionName}</span>
-          ) };
+          selectedOptionDom = {
+            label: (
+              <span className={className} style={style} title={selectedOptionName} aria-label={selectedOptionName}>{selectedOptionName}</span>
+            )
+          };
         }
 
         let dataOptions = options.map(option => {
@@ -559,7 +561,7 @@ class FilterItem extends React.Component {
     return (
       <div className="ml-2">
         <div ref={this.invalidFilterTip}>
-          <IconBtn symbol="exclamation-triangle" iconStyle={{ fill: '#cd201f' }}/>
+          <IconBtn symbol="exclamation-triangle" iconStyle={{ fill: '#cd201f' }} />
         </div>
         <UncontrolledTooltip
           target={this.invalidFilterTip}

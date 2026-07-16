@@ -82,6 +82,10 @@
   margin: 2px 0;
 }
 
+.rc-calendar .rc-calendar-inputs .rc-calendar-input-wrap input {
+  height: 32px;
+}
+
 [data-bs-theme="dark"] .rc-calendar-disabled-cell .rc-calendar-date {
   color: rgba(255, 255, 255, .2) !important;
 }

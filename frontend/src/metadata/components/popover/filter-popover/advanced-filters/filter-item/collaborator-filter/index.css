@@ -41,6 +41,16 @@
   border-bottom: 0;
 }
 
+.sf-metadata-selector-collaborator.seafile-customize-select .seafile-option-group .seafile-option-group-search .search-input-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.sf-metadata-selector-collaborator.seafile-customize-select .seafile-option-group .seafile-option-group-search .search-input-wrapper .search-text-clear {
+  right: 4px;
+}
+
 .sf-metadata-selector-collaborator.seafile-customize-select .seafile-option-group .seafile-option-group-search .form-control {
   height: 28px;
   padding: 8px;

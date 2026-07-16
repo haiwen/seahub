@@ -1,9 +1,9 @@
 .sf-metadata-tags-editor .sf-metadata-delete-select-tags {
-  background-color: var(--bs-body-secondary-bg);
+  background-color: var(--bs-th-bg);
   border-bottom: 1px solid var(--bs-border-secondary-color);
   border-radius: 3px 3px 0 0;
   min-height: 28px;
-  padding: 8px;
+  padding: 8px 8px 4px;
   line-height: 1;
   max-height: 150px;
   overflow-y: auto;
@@ -15,7 +15,7 @@
   align-items: center;
   height: 22px;
   margin: 0 4px 4px 0;
-  padding: 0 6px 0 2px;
+  padding: 0 8px 0 4px;
   font-size: 13px;
   border-radius: 11px;
   border: 1px solid #dbdbdb;
