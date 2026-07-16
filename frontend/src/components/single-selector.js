@@ -80,14 +80,14 @@ class Selector extends Component {
         </div>
         {isPopoverOpen && (
           <div className={`options-container position-absolute rounded shadow mt-1 ${menuCustomClass}`} ref={ref => this.selector = ref}>
-            <ul className="option-list list-unstyled py-3 o-auto" role="menu">
+            <ul className="option-list list-unstyled o-auto" role="menu">
               {options.map((item, index) => {
                 return (
                   <li
                     key={index}
                     tabIndex="0"
                     role="menuitem"
-                    className="option-item h-6 py-1 px-3 d-flex justify-content-between align-items-center"
+                    className="option-item d-flex justify-content-between align-items-center"
                     onClick={(e) => { this.selectItem(e, item); }}
                     onMouseDown={(e) => { e.stopPropagation(); }}
                     onKeyDown={Utils.onKeyDown}

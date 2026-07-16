@@ -8,22 +8,28 @@
 
 .sf-single-selector .options-container {
   min-width: 165px;
-  background: var(--bs-body-bg);
+  background: var(--bs-popover-bg);
   border: 1px solid var(--bs-border-secondary-color);
+  border-radius: var(--bs-popover-border-radius);
+  box-shadow: var(--bs-popover-box-shadow);
   z-index: 2;
 }
 
 .sf-single-selector .option-list {
   min-height: 4rem;
   max-height: 200px;
+  padding: 8px;
 }
 
 .sf-single-selector .option-item {
+  height: 32px;
+  padding: 0 8px;
   cursor: pointer;
 }
 
 .sf-single-selector .option-item:hover {
-  background: var(--bs-body-secondary-bg);
+  background: var(--bs-dropdown-link-hover-bg);
+  border-radius: 4px;
 }
 
 .sf-single-selector .option-item-text {

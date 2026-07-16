@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Modal, ModalBody, Button, Input } from 'reactstrap';
@@ -11,6 +11,8 @@ import copy from 'copy-to-clipboard';
 import Loading from '../loading';
 import OpIcon from '../op-icon';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
+
+import '../../css/repo-api-token-dialog.css';
 
 const apiTokenItemPropTypes = {
   item: PropTypes.object.isRequired,
@@ -83,12 +85,12 @@ class APITokenItem extends React.Component {
           <div className="d-flex align-items-center">
             <span>{item.api_token}</span>
             {this.state.isOperationShow &&
-            <OpIcon
-              symbol="copy"
-              className="op-icon ml-1"
-              op={this.onCopyAPIToken}
-              title={gettext('Copy')}
-            />
+              <OpIcon
+                symbol="copy"
+                className="op-icon ml-1"
+                op={this.onCopyAPIToken}
+                title={gettext('Copy')}
+              />
             }
           </div>
         </td>
@@ -248,54 +250,55 @@ class RepoAPITokenDialog extends React.Component {
       </thead>
     );
     return (
-      <Fragment>
+      <>
         {this.state.errorMsg &&
           <p className="error text-center">{this.state.errorMsg}</p>
         }
-        {!this.state.errorMsg &&
-        <Fragment>
-          <table className="w-xs-250">
-            {thead}
-            <tbody>
-              <tr>
-                <td>
-                  <Input
-                    type="text"
-                    id="appName"
-                    value={this.state.appName}
-                    onChange={this.onInputChange}
-                    onKeyDown={this.onKeyDown}
-                  />
-                </td>
-                <td>
-                  <RepoAPITokenPermissionEditor
-                    isTextMode={false}
-                    isEditIconShow={false}
-                    currentPermission={this.state.permission}
-                    onPermissionChanged={this.setPermission}
-                  />
-                </td>
-                <td><span className="text-secondary">--</span></td>
-                <td>
-                  <Button color="primary" onClick={this.addAPIToken} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div style={{ minHeight: '10rem', maxHeight: '18rem' }}>
-            {this.state.apiTokenList.length !== 0 &&
-            <table className="table-thead-hidden w-xs-250">
+        {!this.state.errorMsg && (
+          <>
+            <table className="w-xs-250">
               {thead}
               <tbody>
-                {renderAPITokenList}
+                <tr>
+                  <td>
+                    <Input
+                      type="text"
+                      id="appName"
+                      className="api-token-app-name-input"
+                      value={this.state.appName}
+                      onChange={this.onInputChange}
+                      onKeyDown={this.onKeyDown}
+                    />
+                  </td>
+                  <td>
+                    <RepoAPITokenPermissionEditor
+                      isTextMode={false}
+                      isEditIconShow={false}
+                      currentPermission={this.state.permission}
+                      onPermissionChanged={this.setPermission}
+                    />
+                  </td>
+                  <td><span className="text-secondary">--</span></td>
+                  <td>
+                    <Button color="primary" onClick={this.addAPIToken} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
+                  </td>
+                </tr>
               </tbody>
             </table>
-            }
-          </div>
-          {this.state.loading && <Loading/>}
-        </Fragment>
-        }
-      </Fragment>
+            <div style={{ minHeight: '10rem', maxHeight: '18rem' }}>
+              {this.state.apiTokenList.length !== 0 &&
+                <table className="table-thead-hidden w-xs-250">
+                  {thead}
+                  <tbody>
+                    {renderAPITokenList}
+                  </tbody>
+                </table>
+              }
+            </div>
+            {this.state.loading && <Loading />}
+          </>
+        )}
+      </>
     );
   };
 
