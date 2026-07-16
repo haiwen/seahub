@@ -1274,16 +1274,11 @@ function getElement(id) {
     }
   });
 
-  var pathPageId = getPageIdFromPath(window.location.pathname);
-  var initialPageId = pathPageId || getCurrentNavPageId() || getFirstNavPageId();
-  if (pathPageId) {
-    updateWikiPageIcon(initialPageId);
-    updateWikiPageCover(initialPageId);
-    updateWikiPageFavicon(initialPageId);
-    updateWikiBreadcrumb(initialPageId);
-  } else {
-    navigateToWikiPage(initialPageId, buildPageUrl(initialPageId), { skipHistory: true, replaceHistory: true });
-  }
+  var initialPageId = getPageIdFromPath(window.location.pathname) || getCurrentNavPageId() || getFirstNavPageId();
+  updateWikiPageIcon(initialPageId);
+  updateWikiPageCover(initialPageId);
+  updateWikiPageFavicon(initialPageId);
+  updateWikiBreadcrumb(initialPageId);
   scrollToHashTarget();
 })();
         </script>
