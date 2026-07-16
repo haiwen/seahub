@@ -605,8 +605,12 @@ function getElement(id) {
     }
   }
 
-  function buildPageUrl(pageId) {
-    if (!pageId) return window.location.pathname + window.location.search + window.location.hash;
+  function buildPageUrl(pageId, options) {
+    options = options || {};
+
+    if (!pageId) {
+      return window.location.pathname + window.location.search + (options.includeHash === false ? '' : window.location.hash);
+    }
 
     var pathname = window.location.pathname;
     if (/\/[-0-9a-zA-Z]{4}\/$/.test(pathname)) {
@@ -615,7 +619,7 @@ function getElement(id) {
       pathname += pageId + '/';
     }
 
-    return pathname + window.location.search + window.location.hash;
+    return pathname + window.location.search + (options.includeHash === false ? '' : window.location.hash);
   }
 
   function getNavPageTitle(pageId) {
@@ -1207,7 +1211,10 @@ function getElement(id) {
       var pageId = navLink.getAttribute('data-page-id');
       if (!pageId) return;
 
-      navigateToWikiPage(pageId, buildPageUrl(pageId));
+      var targetUrl = buildPageUrl(pageId, { includeHash: false });
+      if (targetUrl === window.location.pathname + window.location.search) return;
+
+      navigateToWikiPage(pageId, targetUrl);
     });
   }
 
