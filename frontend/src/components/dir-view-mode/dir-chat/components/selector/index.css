@@ -21,6 +21,11 @@
   flex: 0 0 auto;
 }
 
+.sea-ai-chat-selector-display-editor .option-editor-search-wrapper .search-input-wrapper {
+  display: flex;
+  align-items: center;
+}
+
 .sea-ai-chat-selector-display-editor .option-editor-content {
   flex: 1;
   min-height: 0;
