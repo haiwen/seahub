@@ -8,15 +8,16 @@ import logging
 import urllib.request
 import urllib.error
 import urllib.parse
+import posixpath
 import requests
 import hashlib
-import posixpath
 import datetime
 
 from rest_framework.views import APIView
 
 from django.http import HttpResponse
 from django.core.cache import cache
+from django.utils.encoding import force_str
 
 from pysearpc import SearpcError
 from seaserv import seafile_api
@@ -25,12 +26,15 @@ from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.accounts import User, ANONYMOUS_EMAIL
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils import gen_inner_file_get_url, gen_inner_file_upload_url, \
-        is_pro_version
+        is_pro_version, is_valid_dirent_name, check_filename_with_rename
 from seahub.utils.file_op import ONLINE_OFFICE_LOCK_OWNER, \
-        if_locked_by_online_office
+        if_locked_by_online_office, check_file_lock
+from seahub.utils.repo import parse_repo_perm
+from seahub.views import check_folder_permission
 from seahub.settings import SITE_ROOT
+from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN
 
-from seahub.wopi.utils import get_file_info_by_token
+from seahub.wopi.utils import get_file_info_by_token, get_wopi_file_url
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -122,6 +126,143 @@ def get_current_lock_id(request):
     return cache.get(key, '')
 
 
+def get_request_body(request):
+    if hasattr(request, 'body'):
+        return request.body
+    return request.read()
+
+
+def decode_wopi_relative_target(value):
+    if value is None:
+        return None
+
+    value = force_str(value)
+
+    try:
+        decoded = value.encode('ascii').decode('utf-7')
+        if decoded:
+            return decoded
+    except Exception:
+        pass
+
+    # Collabora may pass header values already decoded by the HTTP stack.
+    return value
+
+
+def encode_wopi_relative_target(value):
+    value = force_str(value)
+
+    try:
+        return value.encode('utf-7').decode('ascii')
+    except Exception:
+        return value
+
+
+def get_relative_target_file_name(request, current_file_name):
+    suggested_target = request.headers.get('x-wopi-suggestedtarget', None)
+    relative_target = request.headers.get('x-wopi-relativetarget', None)
+
+    if suggested_target and relative_target:
+        return None, HttpResponse(json.dumps({}), status=400,
+                                  content_type=json_content_type)
+
+    if not suggested_target and not relative_target:
+        return None, HttpResponse(json.dumps({}), status=400,
+                                  content_type=json_content_type)
+
+    if suggested_target:
+        suggested_target = decode_wopi_relative_target(suggested_target)
+        if suggested_target.startswith('.'):
+            base_name, _ = os.path.splitext(current_file_name)
+            target_file_name = base_name + suggested_target
+        else:
+            target_file_name = suggested_target
+
+        if not is_valid_dirent_name(target_file_name):
+            target_file_name = current_file_name
+
+        return target_file_name, None
+
+    relative_target = decode_wopi_relative_target(relative_target)
+    if not is_valid_dirent_name(relative_target):
+        return None, HttpResponse(json.dumps({}), status=400,
+                                  content_type=json_content_type)
+
+    if len(relative_target) > MAX_UPLOAD_FILE_NAME_LEN:
+        return None, HttpResponse(json.dumps({}), status=400,
+                                  content_type=json_content_type)
+
+    return relative_target, None
+
+
+def upload_relative_file(repo_id, parent_dir, file_name, file_obj, request_user):
+    fake_obj_id = {'parent_dir': parent_dir}
+    upload_token = seafile_api.get_fileserver_access_token(repo_id,
+                                                           json.dumps(fake_obj_id),
+                                                           'upload-link',
+                                                           request_user)
+    if not upload_token:
+        logger.error('No fileserver access token when uploading relative file.')
+        return False
+
+    upload_url = gen_inner_file_upload_url('upload-api', upload_token)
+    files = {'file': (file_name, file_obj)}
+    data = {'parent_dir': parent_dir}
+    resp = requests.post(upload_url, files=files, data=data)
+    if resp.status_code != 200:
+        logger.error('upload_url: {}'.format(upload_url))
+        logger.error('parameter file_name: {}'.format(file_name))
+        logger.error('parameter parent_dir: {}'.format(parent_dir))
+        logger.error('response: {}'.format(resp.__dict__))
+        return False
+
+    return True
+
+
+def update_relative_file(repo_id, file_path, file_name, file_obj, request_user):
+    fake_obj_id = {'online_office_update': True}
+    update_token = seafile_api.get_fileserver_access_token(repo_id,
+                                                           json.dumps(fake_obj_id),
+                                                           'update',
+                                                           request_user)
+    if not update_token:
+        logger.error('No fileserver access token when updating relative file.')
+        return False
+
+    update_url = gen_inner_file_upload_url('update-api', update_token)
+    files = {'file': (file_name, file_obj)}
+    data = {'target_file': file_path}
+    resp = requests.post(update_url, files=files, data=data)
+    if resp.status_code != 200:
+        logger.error('update_url: {}'.format(update_url))
+        logger.error('parameter file_name: {}'.format(file_name))
+        logger.error('parameter target_file: {}'.format(file_path))
+        logger.error('response: {}'.format(resp.__dict__))
+        return False
+
+    return True
+
+
+def build_put_relative_response(request_user, repo_id, file_path,
+                                can_edit, can_download,
+                                can_write_relative):
+    file_name = os.path.basename(file_path)
+    file_url, _, _ = get_wopi_file_url(request_user, repo_id, file_path,
+                                       can_edit=can_edit,
+                                       can_download=can_download,
+                                       can_write_relative=can_write_relative,
+                                       )
+
+    return {
+        'Name': file_name,
+        'Url': file_url,
+    }
+
+
+def can_use_put_relative(parent_perm):
+    return bool(parent_perm) and parse_repo_perm(parent_perm).can_upload
+
+
 def access_token_check(func):
 
     def _decorated(view, request, file_id, *args, **kwargs):
@@ -193,6 +334,7 @@ class WOPIFilesView(APIView):
         obj_id = info_dict['obj_id']
         can_edit = info_dict['can_edit']
         can_download = info_dict['can_download']
+        can_write_relative = info_dict.get('can_write_relative', False)
 
         repo = seafile_api.get_repo(repo_id)
 
@@ -265,9 +407,7 @@ class WOPIFilesView(APIView):
         avatar_url, _, _ = api_avatar_url(request_user)
         result['UserExtraInfo'] = {'avatar': avatar_url, 'mail': request_user}
 
-        # new file creation feature is not implemented on wopi host(seahub)
-        # hide save as button on view/edit file page
-        result['UserCanNotWriteRelative'] = True
+        result['UserCanNotWriteRelative'] = not can_write_relative
 
         return HttpResponse(json.dumps(result), status=200,
                             content_type=json_content_type)
@@ -343,6 +483,72 @@ class WOPIFilesView(APIView):
                 # containing the value of the current lock on the file.
                 response['X-WOPI-Lock'] = current_lock_id
                 return response
+
+        elif x_wopi_override == 'PUT_RELATIVE':
+            token = request.GET.get('access_token', None)
+            info_dict = get_file_info_by_token(token)
+            request_user = info_dict['request_user']
+            repo_id = info_dict['repo_id']
+            file_path = info_dict['file_path']
+            can_download = info_dict['can_download']
+            can_write_relative = info_dict.get('can_write_relative', False)
+
+            parent_dir = os.path.dirname(file_path)
+            if not can_write_relative:
+                return HttpResponse(json.dumps({}), status=501,
+                                    content_type=json_content_type)
+
+            current_file_name = os.path.basename(file_path)
+            target_file_name, error_response = get_relative_target_file_name(request, current_file_name)
+            if error_response:
+                return error_response
+
+            overwrite_relative_target = request.headers.get('x-wopi-overwriterelativetarget', 'false')
+            overwrite_relative_target = force_str(overwrite_relative_target).lower() == 'true'
+            target_file_path = posixpath.join(parent_dir, target_file_name)
+            target_file_id = seafile_api.get_file_id_by_path(repo_id, target_file_path)
+
+            is_specific_target = request.headers.get('x-wopi-relativetarget', None) is not None
+            if is_specific_target and target_file_id and not overwrite_relative_target:
+                response = HttpResponse(json.dumps({}), status=409,
+                                        content_type=json_content_type)
+                valid_file_name = check_filename_with_rename(repo_id, parent_dir, target_file_name)
+                if valid_file_name != target_file_name:
+                    response['X-WOPI-ValidRelativeTarget'] = encode_wopi_relative_target(valid_file_name)
+                return response
+
+            if not is_specific_target:
+                target_file_name = check_filename_with_rename(repo_id, parent_dir, target_file_name)
+                target_file_path = posixpath.join(parent_dir, target_file_name)
+                target_file_id = seafile_api.get_file_id_by_path(repo_id, target_file_path)
+
+            if target_file_id and overwrite_relative_target:
+                is_locked, locked_by_me = check_file_lock(repo_id, target_file_path, request_user)
+                if is_locked and not locked_by_me:
+                    response = HttpResponse(json.dumps({}), status=409,
+                                            content_type=json_content_type)
+                    lock_info = seafile_api.get_lock_info(repo_id, target_file_path)
+                    response['X-WOPI-Lock'] = getattr(lock_info, 'lock_token', '') if lock_info else ''
+                    return response
+
+            file_obj = get_request_body(request)
+            if target_file_id and overwrite_relative_target:
+                success = update_relative_file(repo_id, target_file_path, target_file_name,
+                                               file_obj, request_user)
+            else:
+                success = upload_relative_file(repo_id, parent_dir, target_file_name,
+                                               file_obj, request_user)
+
+            if not success:
+                return HttpResponse(json.dumps({}), status=500,
+                                    content_type=json_content_type)
+
+            result = build_put_relative_response(request_user, repo_id, target_file_path,
+                                                 can_edit=True,
+                                                 can_download=can_download,
+                                                 can_write_relative=can_write_relative)
+            return HttpResponse(json.dumps(result), status=200,
+                                content_type=json_content_type)
 
         elif x_wopi_override in ('REFRESH_LOCK', 'UNLOCK'):
             if file_is_locked(request):
@@ -432,7 +638,7 @@ class WOPIFilesContentsView(APIView):
         file_path = info_dict['file_path']
 
         try:
-            file_obj = request.read()
+            file_obj = get_request_body(request)
 
             # get file update url
             fake_obj_id = {'online_office_update': True}
