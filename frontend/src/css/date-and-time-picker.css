@@ -4,7 +4,7 @@
 }
 
 .rc-calendar-table tbody tr {
-  height: auto;
+  height: 1.75rem!important;
 }
 
 /* overwrite some styles */
