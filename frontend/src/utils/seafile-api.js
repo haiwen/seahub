@@ -2062,9 +2062,24 @@ class SeafileAPI {
     return this.req.get(url, { params: params });
   }
 
-  listRepoRelatedUsers(repoID) {
+  listRepoRelatedUsers(repoID, name = '') {
     let url = this.server + '/api/v2.1/repos/' + repoID + '/related-users/';
-    return this.req.get(url);
+    return this.req.get(url, {
+      params: {
+        name: name,
+      }
+    });
+  }
+
+  sendWopiMentionNotifications(repoID, filePath, accessToken, mentionedUsers, sequence) {
+    const url = this.server + '/api2/wopi/mentions/';
+    return this.req.post(url, {
+      repo_id: repoID,
+      file_path: filePath,
+      access_token: accessToken,
+      mentioned_users: mentionedUsers,
+      sequence: sequence,
+    });
   }
 
   listFileParticipants(repoID, filePath) {

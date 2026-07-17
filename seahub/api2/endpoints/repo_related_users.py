@@ -32,6 +32,8 @@ class RepoRelatedUsersView(APIView):
 
         Not support public repo
         """
+        name = request.GET.get('name', '').strip().lower()
+
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -56,6 +58,15 @@ class RepoRelatedUsersView(APIView):
             user_obj_list = db_api.get_active_users_by_user_list(related_user_list)
             for username in user_obj_list:
                 user_info = get_user_common_info(username)
+                if name:
+                    candidate_values = [
+                        user_info.get('email', '').lower(),
+                        user_info.get('name', '').lower(),
+                        user_info.get('contact_email', '').lower(),
+                    ]
+                    if not any(name in value for value in candidate_values if value):
+                        continue
+
                 user_list.append(user_info)
         except Exception as e:
             logger.error(e)

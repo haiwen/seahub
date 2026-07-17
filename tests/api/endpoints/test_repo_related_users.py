@@ -37,17 +37,36 @@ class RepoRelatedUsersViewTest(BaseTestCase):
         self.remove_repo()
         self.remove_user(self.tmp_user.username)
 
-    # def test_can_get(self):
-    #     resp = self.client.get(self.url)
-    #     self.assertEqual(200, resp.status_code)
+    def test_can_get(self):
+        resp = self.client.get(self.url)
+        self.assertEqual(200, resp.status_code)
 
-    #     json_resp = json.loads(resp.content)
-    #     user_list = json_resp.get('user_list')
+        json_resp = json.loads(resp.content)
+        user_list = json_resp.get('user_list')
 
-    #     assert user_list
-    #     assert len(user_list) == 3
+        assert user_list
+        assert len(user_list) == 3
 
-    #     usernames = [user_info.get('email') for user_info in user_list]
-    #     assert self.user.username in usernames
-    #     assert self.tmp_user.username in usernames
-    #     assert self.admin.username in usernames
+        usernames = [user_info.get('email') for user_info in user_list]
+        assert self.user.username in usernames
+        assert self.tmp_user.username in usernames
+        assert self.admin.username in usernames
+
+    def test_can_filter_by_name(self):
+        resp = self.client.get(self.url, {'name': self.admin.username})
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        user_list = json_resp.get('user_list')
+
+        assert len(user_list) == 1
+        assert user_list[0].get('email') == self.admin.username
+
+    def test_can_filter_by_contact_email(self):
+        resp = self.client.get(self.url, {'name': self.admin.username.split('@')[0]})
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        user_list = json_resp.get('user_list')
+
+        assert any(user_info.get('email') == self.admin.username for user_info in user_list)
