@@ -122,6 +122,7 @@ class Libraries extends Component {
     this.toggleCreateRepoDialog();
     seafileAPI.createMineRepo(repo).then((res) => {
       const newRepo = new Repo({
+        type: 'mine',
         repo_id: res.data.repo_id,
         repo_name: res.data.repo_name,
         size: res.data.repo_size,
@@ -148,8 +149,9 @@ class Libraries extends Component {
     this.setState({ sortBy, sortOrder }, () => {
       localStorage.setItem('sf_repos_sort_by', sortBy);
       localStorage.setItem('sf_repos_sort_order', sortOrder);
-      const { allRepoList: repoList, groupList: groups } = this.state;
-      const { allRepoList, myRepoList, sharedRepoList, publicRepoList, groupList } = this.sortRepos(repoList, groups);
+      const { repoList: myLibs, sharedRepoList: sharedLibs, publicRepoList: publicLibs, groupList: groups } = this.state;
+      const allRepos = [].concat(myLibs, sharedLibs, publicLibs);
+      const { allRepoList, myRepoList, sharedRepoList, publicRepoList, groupList } = this.sortRepos(allRepos, groups);
       this.setState({
         allRepoList,
         groupList,
