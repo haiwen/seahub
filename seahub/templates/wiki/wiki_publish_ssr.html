@@ -1261,6 +1261,10 @@ function getElement(id) {
     if (searchClose) {
       searchClose.addEventListener('click', closeSearchModal);
     }
+    searchModal.addEventListener('mousedown', function (e) {
+      if (e.target !== searchModal) return;
+      closeSearchModal();
+    });
     searchBackdrop.addEventListener('click', closeSearchModal);
     searchClear.addEventListener('click', function () {
       searchInput.value = '';
