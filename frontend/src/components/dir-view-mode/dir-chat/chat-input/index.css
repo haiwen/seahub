@@ -4,11 +4,11 @@
   flex-direction: column;
   align-items: center;
   border-radius: 16px;
-  box-shadow: 0px 0px 0px 1px #E2E2E2;
+  box-shadow: 0 0 0 1px var(--bs-border-color);
 }
 
 .sea-ai-ask-chat-input-wrapper.disabled {
-  box-shadow: 0px 0px 0px 1px #BDBDBD !important;
+  box-shadow: 0 0 0 1px var(--sea-ai-chat-input-disabled-border-color) !important;
 }
 
 .sea-ai-ask-chat-input-container {
@@ -20,12 +20,12 @@
   align-items: center;
   justify-content: space-between;
   border-radius: 16px;
-  background-color: #FFF;
-  box-shadow: 0px 0px 0px 1px #EAEAEA;
+  background-color: var(--bs-body-bg);
+  box-shadow: 0 0 0 1px var(--bs-border-color);
 }
 
 .sea-ai-ask-chat-input-wrapper.disabled .sea-ai-ask-chat-input-container {
-  box-shadow: 0px 0px 0px 1px #BDBDBD;
+  box-shadow: 0 0 0 1px var(--sea-ai-chat-input-disabled-border-color);
 }
 
 .sea-ai-ask-chat-input-content {
@@ -46,10 +46,12 @@
   cursor: text;
   resize: none;
   line-height: 22px;
+  color: var(--bs-body-color);
+  background-color: transparent;
 }
 
 .sea-ai-ask-chat-input-content .message-input::placeholder {
-  color: #868E96;
+  color: var(--sea-ai-chat-placeholder-color);
   font-size: 14px;
   line-height: 22px;
 }
@@ -110,12 +112,12 @@
 }
 
 .sea-ai-ask-chat-operations-container .attach-files-btn:hover {
-  background-color: #F7F7F5;
+  background-color: var(--bs-icon-btn-hover-bg-color);
 }
 
 .sea-ai-ask-chat-operations-container .icon-send-wrapper {
-  background-color: #EFEFEF;
-  border: 1px solid #EAEAEA;
+  background-color: var(--sea-ai-chat-send-disabled-bg);
+  border: 1px solid var(--sea-ai-chat-send-disabled-bg);
   border-radius: 16px;
 }
 
@@ -135,11 +137,11 @@
 }
 
 .sea-ai-ask-chat-operations-container .icon-send-wrapper.disabled .sea-ai-icon-svg {
-  color: #fff;
+  color: var(--bs-icon-secondary-color);
 }
 
 .sea-ai-ask-chat-operations-container .attach-files-btn .sea-ai-icon-svg {
-  color: #666;
+  color: var(--bs-icon-color);
 }
 
 .sea-ai-ask-chat-operations-container .sea-ai-icon-svg {
@@ -200,6 +202,11 @@
   flex-shrink: 0;
 }
 
+[data-bs-theme="dark"] .sea-ai-model-selector .sea-ai-model-logo-openai img,
+[data-bs-theme="dark"] .sea-ai-model-selector-editor .option-editor-option-icon[src$="openai.png"] {
+  filter: invert(1);
+}
+
 .sea-ai-model-selector .sea-ai-model-name {
   display: flex;
   height: 100%;
@@ -246,14 +253,20 @@
   height: 420px;
   overflow: hidden;
   border-radius: 12px;
-  background-color: #fff;
+  background-color: var(--bs-popover-bg);
   box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12);
-  border: 1px solid #EAEAEA;
+  border: 1px solid var(--bs-border-secondary-color);
   z-index: 30;
 }
 
 .attach-files-popover .file-chooser-search-input {
   padding: 12px 16px !important;
+}
+
+.attach-files-popover .file-chooser-search-input .search-input {
+  color: var(--bs-body-color);
+  background-color: transparent;
+  border-color: var(--bs-border-color);
 }
 
 .attach-files-popover .file-chooser-scroll-wrapper {

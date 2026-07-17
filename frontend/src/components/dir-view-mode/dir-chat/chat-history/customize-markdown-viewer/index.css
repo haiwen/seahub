@@ -19,6 +19,17 @@
   max-width: 100%;
   border: none !important;
   box-shadow: none !important;
+  color: inherit !important;
+  background-color: inherit !important;
+}
+
+.sea-ai-message-reply .article h1,
+.sea-ai-message-reply .article h2,
+.sea-ai-message-reply .article h3,
+.sea-ai-message-reply .article h4,
+.sea-ai-message-reply .article h5,
+.sea-ai-message-reply .article h6 {
+  color: inherit !important;
 }
 
 .sea-ai-message-reply.rich-text .article :last-child {

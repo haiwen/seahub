@@ -19,6 +19,10 @@
   border-radius: 3px;
 }
 
+[data-bs-theme="dark"] .sea-ai-thought-process .sea-ai-thought-process-content-value {
+  background-color: var(--bs-body-secondary-bg);
+}
+
 .sea-ai-thought-process .sea-ai-thought-process-content-value .article {
   background-color: inherit;
 }
@@ -30,7 +34,7 @@
 
 .sea-ai-thought-process-order.primary-order-container {
   justify-content: space-between;
-  background-color: #f7f7f5;
+  background-color: var(--sea-ai-chat-card-bg);
   border-radius: 8px;
   border: 1px solid var(--bs-border-secondary-color);
   padding: 0px 16px;
@@ -271,10 +275,21 @@
   margin: 0;
   max-width: 100%;
   border: none;
+  color: inherit;
+  background-color: transparent;
+}
+
+.sea-ai-thought-process-content-item .sf-slate-viewer-scroll-container .article h1,
+.sea-ai-thought-process-content-item .sf-slate-viewer-scroll-container .article h2,
+.sea-ai-thought-process-content-item .sf-slate-viewer-scroll-container .article h3,
+.sea-ai-thought-process-content-item .sf-slate-viewer-scroll-container .article h4,
+.sea-ai-thought-process-content-item .sf-slate-viewer-scroll-container .article h5,
+.sea-ai-thought-process-content-item .sf-slate-viewer-scroll-container .article h6 {
+  color: inherit;
 }
 
 .sea-ai-thought-process .sea-ai-thought-process-content-statistics .sea-ai-thought-process-content-title {
-  color: #666;
+  color: var(--bs-body-secondary-color);
 }
 
 .sea-ai-thought-process .sea-ai-thought-process-content-statistics .sea-ai-thought-process-content-value {

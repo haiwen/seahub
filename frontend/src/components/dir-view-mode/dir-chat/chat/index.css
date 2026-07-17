@@ -91,12 +91,12 @@
   word-wrap: break-word;
   height: auto;
   font-size: 14px;
-  color: #212529;
-  background-color: #fff;
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg);
 }
 
 .user-input-chat .sea-ai-ask-message-content {
-  background-color: #FFF7F0;
+  background-color: var(--sea-ai-chat-user-message-bg);
   border-radius: 0 8px 8px 8px;
   border: unset;
   padding: 12px 16px;

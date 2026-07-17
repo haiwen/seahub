@@ -22,13 +22,13 @@
 
 .sea-ai-chat-attachments-scroll-before {
   left: 15px;
-  background: linear-gradient(90deg, #fff, #F7F7F5);
+  background: linear-gradient(90deg, var(--bs-body-bg), var(--sea-ai-chat-card-bg));
   padding-right: 6px;
 }
 
 .sea-ai-chat-attachments-scroll-after {
   right: 15px;
-  background: linear-gradient(270deg, #fff, #F7F7F5);
+  background: linear-gradient(270deg, var(--bs-body-bg), var(--sea-ai-chat-card-bg));
   padding-left: 6px;
 }
 
@@ -46,7 +46,7 @@
 
 .sea-ai-chat-attachments-scroll-before .sea-ai-icon-btn,
 .sea-ai-chat-attachments-scroll-after .sea-ai-icon-btn {
-  border: 1px solid #eee;
+  border: 1px solid var(--bs-border-secondary-color);
   border-radius: 8px;
   cursor: pointer;
 }

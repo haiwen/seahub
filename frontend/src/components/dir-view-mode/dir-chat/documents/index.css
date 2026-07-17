@@ -16,8 +16,14 @@
   flex-direction: column;
 }
 
+.seafile-ai-chat-documents-wrapper,
+.seafile-ai-chat-documents-wrapper .seafile-ai-chat-documents {
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg);
+}
+
 .seafile-ai-chat-documents-wrapper:not(.full-content) .seafile-ai-chat-documents {
-  border-left: 1px solid #eee;
+  border-left: 1px solid var(--bs-border-secondary-color);
 }
 
 /* header */
@@ -27,7 +33,7 @@
   margin-left: 16px;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--bs-border-secondary-color);
   justify-content: space-between;
   gap: 24px;
 }
@@ -63,7 +69,7 @@
 .sea-ai-customize-select.sea-ai-chat-selector-display.seafile-ai-chat-documents-selector .seafile-ai-chat-documents-divider {
   height: 12px;
   width: 1px;
-  background-color: #eaeaea;
+  background-color: var(--bs-border-quartus-color);
 }
 
 .sea-ai-customize-select.sea-ai-chat-selector-display.seafile-ai-chat-documents-selector .seafile-ai-chat-document-name {
@@ -90,7 +96,7 @@
 }
 
 .seafile-ai-chat-documents-wrapper.markdown-artifact .seafile-ai-chat-documents .seafile-ai-chat-documents-header .seafile-ai-chat-documents-count {
-  color: #666;
+  color: var(--bs-body-secondary-color);
   flex-shrink: 0;
 }
 
@@ -144,11 +150,15 @@
   justify-content: space-between;
   height: 57px;
   padding: 0 12px 0 16px;
-  border-bottom: 1px solid #d1d9e0;
+  border-bottom: 1px solid var(--bs-border-secondary-color);
   background-color: #f6f8fa;
   gap: 4px;
   overflow: hidden;
   flex-shrink: 0;
+}
+
+[data-bs-theme="dark"] .seafile-ai-chat-documents .seafile-ai-chat-document-info {
+  background-color: var(--bs-body-secondary-bg);
 }
 
 .seafile-ai-chat-documents .seafile-ai-chat-document-info .seafile-ai-chat-document-info-content {
@@ -160,7 +170,7 @@
 }
 
 .seafile-ai-chat-documents .seafile-ai-chat-document-info .seafile-ai-chat-document-info-size {
-  color: #59636e;
+  color: var(--bs-body-secondary-color);
   font-size: 12px;
 }
 
@@ -233,4 +243,9 @@
 .seafile-ai-chat-documents-wrapper.markdown-artifact .seafile-ai-chat-document-md .sf-slate-viewer-scroll-container .article h5,
 .seafile-ai-chat-documents-wrapper.markdown-artifact .seafile-ai-chat-document-md .sf-slate-viewer-scroll-container .article h6 {
   border-bottom: none !important;
+}
+
+.seafile-ai-chat-documents-wrapper.markdown-artifact .seafile-ai-chat-document-md .sf-slate-viewer-scroll-container .article table th,
+.seafile-ai-chat-documents-wrapper.markdown-artifact .seafile-ai-chat-document-md .sf-slate-viewer-scroll-container .article table td {
+  color: inherit;
 }

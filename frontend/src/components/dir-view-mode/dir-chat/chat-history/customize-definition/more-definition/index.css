@@ -12,10 +12,10 @@
 }
 
 .sea-ai-chat-customize-definitions-popover .popover {
-  background-color: #fff;
-  border: 1px solid #0028641f;
+  background-color: var(--bs-popover-bg);
+  border: 1px solid var(--bs-border-color);
   border-radius: 4px !important;
-  box-shadow: 0 0 5px #ccc;
+  box-shadow: var(--bs-popover-box-shadow);
   left: 0;
   min-height: 160px;
   position: absolute;
@@ -62,7 +62,7 @@
 }
 
 .sea-ai-chat-customize-definitions-popover .sea-ai-chat-customize-definitions-title .sea-ai-chat-customize-definitions-index-btn:hover {
-  background-color: rgba(0, 0, 0, 0.04);
+  background-color: var(--bs-icon-btn-hover-bg-color);
 }
 
 .sea-ai-chat-customize-definitions-popover .sea-ai-chat-customize-definitions-title .sea-ai-chat-customize-definitions-index-btn .seafile-multicolor-icon {

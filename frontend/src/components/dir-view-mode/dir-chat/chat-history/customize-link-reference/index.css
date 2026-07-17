@@ -4,6 +4,6 @@
   text-align: center;
   border-radius: 50%;
   font-size: 12px;
-  color: #666;
+  color: var(--bs-body-secondary-color);
   background-color: var(--bs-border-quartus-color);
 }

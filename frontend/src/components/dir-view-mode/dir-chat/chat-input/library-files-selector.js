@@ -56,9 +56,7 @@ const LibraryFilesSelector = ({ repoID, value: attachments = [], onChange: props
           icon: 'file',
         };
       });
-    }).catch((error) => {
-      // Suppress abort/cancel errors
-      if (error && error.name === 'AbortError') return [];
+    }).catch(() => {
       return [];
     });
   }, [repoID]);

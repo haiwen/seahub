@@ -31,6 +31,10 @@
   right: 4px;
 }
 
+.sea-ai-chat-selector-display-editor .option-editor-search-wrapper .search-input-wrapper .search-text-clear:hover {
+  background-color: transparent;
+}
+
 .sea-ai-chat-selector-display-editor .option-editor-content {
   flex: 1;
   min-height: 0;
@@ -46,6 +50,17 @@
 .sea-ai-chat-selector-display-editor .option-editor-content.empty > .option-editor-start-searching-tip {
   min-height: 0;
   width: 100%;
+}
+
+.sea-ai-chat-selector-display-editor .option-editor-option:hover,
+.sea-ai-chat-selector-display-editor .option-editor-option.active {
+  background-color: var(--bs-icon-btn-hover-bg-color);
+}
+
+.sea-ai-chat-selector-display-editor .option-editor-search-wrapper .form-control {
+  color: var(--bs-body-color);
+  background-color: transparent;
+  border-color: var(--bs-border-color);
 }
 
 .sea-ai-chat-selector-display-editor .option-editor-start-searching-tip,

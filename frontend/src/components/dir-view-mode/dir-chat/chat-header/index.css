@@ -2,7 +2,7 @@
   flex: 0 1 auto;
   font-weight: 500;
   font-size: 14px;
-  color: #212529;
+  color: var(--bs-body-color);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -11,7 +11,7 @@
 .sea-ai-ask-chats-header .chat-header-divider {
   height: 12px;
   width: 1px;
-  background-color: #eaeaea;
+  background-color: var(--bs-border-quartus-color);
   margin: 0 12px;
 }
 

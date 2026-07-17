@@ -5,7 +5,7 @@
   padding: 0 0.75rem;
   height: 36px;
   border-radius: 8px;
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .sea-ai-customize-select.sea-ai-chat-selector-display:not(.border) {
@@ -13,15 +13,15 @@
 }
 
 .sea-ai-customize-select.sea-ai-chat-selector-display.bg-color {
-  background-color: #F7F7F5;
+  background-color: var(--sea-ai-chat-card-bg);
 }
 
 .sea-ai-customize-select.sea-ai-chat-selector-display:hover {
-  background-color: rgba(0, 0, 0, 0.04);
+  background-color: var(--bs-icon-btn-hover-bg-color);
 }
 
 .sea-ai-customize-select.sea-ai-chat-selector-display:not(.border):hover {
-  background-color: #EDEDEB;
+  background-color: var(--bs-hover-bg);
 }
 
 .sea-ai-customize-select.sea-ai-chat-selector-display.highlight {

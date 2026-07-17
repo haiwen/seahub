@@ -4,8 +4,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: -4px 4px 4px 0 rgba(0, 0, 0, 0.02);
-  background-color: #FFF;
+  box-shadow: -1px 0 0 var(--bs-border-secondary-color);
+  background-color: var(--bs-body-bg);
 }
 
 .sea-ai-ask-sessions-wrapper .sea-ai-ask-sessions-header {

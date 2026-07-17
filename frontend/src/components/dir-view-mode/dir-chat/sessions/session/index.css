@@ -11,7 +11,7 @@
 .sea-ai-ask-sessions-wrapper .sea-ai-ask-session-item.active,
 .sea-ai-ask-sessions-wrapper .sea-ai-ask-session-item:hover,
 .sea-ai-ask-sessions-wrapper .sea-ai-ask-session-item .sea-ai-ask-session-more-op-btn:hover {
-  background-color: rgba(0, 0, 0, 0.04);
+  background-color: var(--bs-icon-btn-hover-bg-color);
 }
 
 .sea-ai-ask-sessions-wrapper .sea-ai-ask-session-item .sea-ai-ask-session-content {

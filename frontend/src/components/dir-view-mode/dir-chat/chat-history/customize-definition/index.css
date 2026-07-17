@@ -8,7 +8,7 @@
   margin-bottom: 12px !important;
   gap: 8px;
   padding: 16px 16px 8px 16px;
-  background: #f7f7f5;
+  background: var(--sea-ai-chat-card-bg);
   border-radius: 8px;
   cursor: pointer;
 }
@@ -20,7 +20,7 @@
 }
 
 .sea-ai-chat-customize-definition:hover {
-  background-color: #f0f0f0;
+  background-color: var(--bs-hover-bg);
 }
 
 .sea-ai-chat-customize-definition .sea-ai-chat-customize-definition-order {

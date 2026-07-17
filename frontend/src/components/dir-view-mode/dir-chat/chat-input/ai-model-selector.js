@@ -42,6 +42,7 @@ const AIModelSelector = ({ isSimple, selectedModel, updateModel }) => {
         label: model.label,
         simple_label: model.label,
         img: LLM_MODEL_ICON[type],
+        type,
       };
     });
   }, []);
@@ -71,7 +72,7 @@ const AIModelSelector = ({ isSimple, selectedModel, updateModel }) => {
       displayBgColor={true}
       placement="top-start"
     >
-      <div className="sea-ai-model-logo">
+      <div className={`sea-ai-model-logo sea-ai-model-logo-${option.type}`}>
         <img src={option.img} alt="" />
       </div>
       <div className="sea-ai-model-name text-truncate">{isSimple ? option?.simple_label : option?.label}</div>

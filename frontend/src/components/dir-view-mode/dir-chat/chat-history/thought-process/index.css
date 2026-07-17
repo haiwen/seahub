@@ -10,7 +10,7 @@
   justify-content: center;
   height: 24px;
   overflow: hidden;
-  color: #666;
+  color: var(--bs-body-secondary-color);
 }
 
 .sea-ai-thought-process-btn,
@@ -21,7 +21,7 @@
 
 .sea-ai-thought-process-btn:hover {
   cursor: pointer;
-  color: var(--bas-dark);
+  color: var(--bs-body-color);
 }
 
 .sea-ai-thought-process-btn:disabled {
@@ -35,7 +35,7 @@
 
 .sea-ai-thought-process-btn:hover .sea-ai-icon-svg-open-in-new-tab {
   cursor: pointer;
-  color: var(--bas-dark);
+  color: var(--bs-body-color);
 }
 
 .sea-ai-thought-process-value {
@@ -43,5 +43,5 @@
   word-break: break-word;
   font-size: 12px;
   line-height: 18px;
-  color: #495057;
+  color: var(--bs-body-secondary-color);
 }
