@@ -1,0 +1,97 @@
+{% load i18n %}
+{% if placement == 'trigger' %}
+<button
+    type="button"
+    class="wiki2-search wiki2-search-btn"
+    id="wiki-search-trigger"
+    aria-haspopup="dialog"
+    aria-controls="wiki-search-modal"
+    aria-label="{% trans 'Search' %}"
+>
+    <span class="wiki2-search-btn__icon" aria-hidden="true">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+        >
+            <circle cx="11" cy="11" r="7"></circle>
+            <line
+                x1="21"
+                y1="21"
+                x2="16.65"
+                y2="16.65"
+            ></line>
+        </svg>
+    </span>
+    <span>{% trans "Search" %}</span>
+</button>
+{% elif placement == 'modal' %}
+<div class="wiki2-search-modal-backdrop hidden" id="wiki-search-modal-backdrop" aria-hidden="true"></div>
+<div
+    class="wiki2-search-modal hidden"
+    id="wiki-search-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-label="{% trans 'Search' %}"
+    data-type-to-start="{% trans 'Type characters to start search' %}"
+    data-searching="{% trans 'Searching...' %}"
+    data-no-result="{% trans 'No result' %}"
+    data-untitled="{% trans 'Untitled' %}"
+    data-current-page="{% trans 'Current page' %}"
+    data-search-failed="{% trans 'Search failed' %}"
+>
+    <div class="wiki2-search-modal__dialog" role="document">
+        <div class="wiki2-search-modal__body">
+            <div class="wiki2-search-input">
+                <span class="wiki2-search-input__icon" aria-hidden="true">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <line
+                            x1="21"
+                            y1="21"
+                            x2="16.65"
+                            y2="16.65"
+                        ></line>
+                    </svg>
+                </span>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="wiki-search-input"
+                    placeholder="{% trans 'Search' %}"
+                    autocomplete="off"
+                >
+                <button
+                    type="button"
+                    class="wiki2-search-input__clear hidden"
+                    id="wiki-search-clear"
+                    aria-label="{% trans 'Close' %}"
+                >
+                    &times;
+                </button>
+            </div>
+            <div class="wiki2-search-divider seafile-search-divider"></div>
+            <div class="wiki2-search-result-container" id="wiki-search-result-container">
+                <p class="wiki2-search-status" id="wiki-search-status">{% trans "Type characters to start search" %}</p>
+                <div class="wiki2-search-result hidden" id="wiki-search-result-panel">
+                    <h6 class="wiki2-search-result-header">{% trans "Wiki pages" %}</h6>
+                    <ul
+                        class="wiki2-search-result-list"
+                        id="wiki-search-result-list"
+                        role="listbox"
+                        aria-label="{% trans 'Wiki pages' %}"
+                    ></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

@@ -55,6 +55,9 @@
                         &times;
                     </button>
                 </div>
+                {% if is_pro %}
+                {% include "wiki/_wiki_publish_ssr_search.html" with placement="trigger" %}
+                {% endif %}
                 <div class="wiki2-side-nav">
                     <div class="wiki2-pages-container">
                         <div class="wiki-nav">
@@ -173,6 +176,9 @@
         </div>
         {# Mobile overlay backdrop for the side panel #}
         <div class="wiki-mobile-overlay" id="wiki-mobile-overlay" aria-hidden="true"></div>
+        {% if is_pro %}
+        {% include "wiki/_wiki_publish_ssr_search.html" with placement="modal" %}
+        {% endif %}
         <script type="text/javascript">
 window.app = {
   config: {
@@ -640,6 +646,23 @@ function getElement(id) {
     return pageMeta[pageId] || null;
   }
 
+  function getPageIdByDocUuid(docUuid) {
+    if (!docUuid) return '';
+
+    var wikiConfig = window.wiki && window.wiki.config;
+    var pageMeta = wikiConfig && wikiConfig.pageMeta;
+    if (!pageMeta) return '';
+
+    for (var pageId in pageMeta) {
+      if (!Object.prototype.hasOwnProperty.call(pageMeta, pageId)) continue;
+      if (pageMeta[pageId] && pageMeta[pageId].docUuid === docUuid) {
+        return pageId;
+      }
+    }
+
+    return '';
+  }
+
   function getDefaultFaviconUrl() {
     var appConfig = window.app && window.app.config;
     if (!appConfig) return '';
@@ -946,6 +969,363 @@ function getElement(id) {
     return true;
   }
 
+  function initWikiSearch() {
+    var searchTrigger = getElement('wiki-search-trigger');
+    var searchModal = getElement('wiki-search-modal');
+    var searchBackdrop = getElement('wiki-search-modal-backdrop');
+    var searchClose = getElement('wiki-search-close');
+    var searchInput = getElement('wiki-search-input');
+    var searchClear = getElement('wiki-search-clear');
+    var searchStatus = getElement('wiki-search-status');
+    var searchResultPanel = getElement('wiki-search-result-panel');
+    var searchResultList = getElement('wiki-search-result-list');
+    var searchResultContainer = getElement('wiki-search-result-container');
+
+    if (!searchTrigger || !searchModal || !searchBackdrop || !searchInput || !searchClear || !searchStatus || !searchResultPanel || !searchResultList || !searchResultContainer) {
+      return;
+    }
+
+    var searchState = {
+      isOpen: false,
+      isLoading: false,
+      results: [],
+      highlightIndex: -1,
+      debounceTimer: null,
+      abortController: null
+    };
+
+    var searchText = {
+      typeToStart: searchModal.getAttribute('data-type-to-start') || '',
+      searching: searchModal.getAttribute('data-searching') || '',
+      noResult: searchModal.getAttribute('data-no-result') || '',
+      untitled: searchModal.getAttribute('data-untitled') || '',
+      currentPage: searchModal.getAttribute('data-current-page') || '',
+      searchFailed: searchModal.getAttribute('data-search-failed') || ''
+    };
+
+    function getSearchApiUrl() {
+      var appConfig = window.app && window.app.config;
+      var siteRoot = appConfig && appConfig.siteRoot ? appConfig.siteRoot.replace(/\/$/, '') : '';
+      return siteRoot + '/api/v2.1/wiki2/search/';
+    }
+
+    function getCSRFToken() {
+      var pageOptions = window.app && window.app.pageOptions;
+      if (pageOptions && pageOptions.csrfToken) return pageOptions.csrfToken;
+
+      var match = document.cookie.match(/(?:^|;\s*)sfcsrftoken=([^;]+)/);
+      return match ? decodeURIComponent(match[1]) : '';
+    }
+
+    function createDefaultResultIcon() {
+      var icon = document.createElement('span');
+      icon.className = 'wiki2-search-result-icon wiki2-search-result-item__icon';
+      icon.setAttribute('aria-hidden', 'true');
+      icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor"><path d="M25.5 13.167H17.0381V4.5H6.5V25C6.5 26.3807 7.61929 27.5 9 27.5H23C24.3807 27.5 25.5 26.3807 25.5 25V13.167ZM20.0381 10.167H23.4395L20.0381 6.68262V10.167ZM28.5 25C28.5 28.0376 26.0376 30.5 23 30.5H9C5.96243 30.5 3.5 28.0376 3.5 25V1.5H19.1699L28.5 11.0557V25Z"/></svg>';
+      return icon;
+    }
+
+    function createResultIcon(item) {
+      var icon = document.createElement('span');
+      icon.className = 'wiki2-search-result-icon wiki2-search-result-item__icon';
+      icon.setAttribute('aria-hidden', 'true');
+      if (item.icon) {
+        icon.textContent = item.icon;
+      } else {
+        icon.innerHTML = createDefaultResultIcon().innerHTML;
+      }
+      return icon;
+    }
+
+    function setSearchStatus(message) {
+      searchStatus.textContent = message;
+      searchStatus.classList.remove('hidden');
+    }
+
+    function normalizeSearchResults(results) {
+      var normalizedResults = [];
+      results.forEach(function (result) {
+        var pageId = getPageIdByDocUuid(result.doc_uuid);
+        if (!pageId) return;
+
+        var pageMeta = getPageMeta(pageId) || {};
+        normalizedResults.push({
+          key: result._id || result.doc_uuid || pageId,
+          pageId: pageId,
+          icon: pageMeta.icon || '',
+          name: pageMeta.name || '',
+          title: result.title || '',
+          content: result.content || ''
+        });
+      });
+      return normalizedResults;
+    }
+
+    function scrollHighlightedResultIntoView() {
+      var highlightedItem = searchResultList.querySelector('.wiki2-search-result-item.is-highlighted');
+      if (!highlightedItem) return;
+
+      var containerRect = searchResultContainer.getBoundingClientRect();
+      var itemRect = highlightedItem.getBoundingClientRect();
+      if (itemRect.top < containerRect.top) {
+        highlightedItem.scrollIntoView({ block: 'nearest' });
+      } else if (itemRect.bottom > containerRect.bottom) {
+        highlightedItem.scrollIntoView({ block: 'nearest' });
+      }
+    }
+
+    function renderSearchResults() {
+      searchResultList.innerHTML = '';
+
+      if (!searchState.results.length) {
+        searchResultPanel.classList.add('hidden');
+        if (!searchState.isLoading && searchInput.value.trim()) {
+          setSearchStatus(searchText.noResult);
+        }
+        return;
+      }
+
+      searchStatus.classList.add('hidden');
+      searchResultPanel.classList.remove('hidden');
+
+      searchState.results.forEach(function (item, index) {
+        var resultItem = document.createElement('li');
+        resultItem.className = 'wiki2-search-result-item';
+        if (index === searchState.highlightIndex) {
+          resultItem.classList.add('is-highlighted', 'wiki2-search-result-item-highlight');
+        }
+        resultItem.setAttribute('role', 'option');
+        resultItem.setAttribute('aria-selected', index === searchState.highlightIndex ? 'true' : 'false');
+        resultItem.setAttribute('tabindex', '-1');
+        resultItem.setAttribute('data-page-id', item.pageId);
+
+        resultItem.appendChild(createResultIcon(item));
+
+        var content = document.createElement('div');
+        content.className = 'wiki2-search-result-content wiki2-search-result-item__content';
+
+        var title = document.createElement('div');
+        title.className = 'wiki2-search-result-title wiki2-search-result-item__title';
+
+        var titleText = document.createElement('div');
+        if (item.title) {
+          titleText.innerHTML = item.title;
+        } else {
+          titleText.textContent = item.name || searchText.untitled;
+        }
+        title.appendChild(titleText);
+
+        if (item.pageId === getCurrentNavPageId()) {
+          var currentTag = document.createElement('span');
+          currentTag.className = 'wiki2-search-result-current wiki2-search-result-item__current';
+          currentTag.textContent = searchText.currentPage;
+          title.appendChild(currentTag);
+        }
+
+        content.appendChild(title);
+
+        if (item.content) {
+          var summary = document.createElement('div');
+          summary.className = 'wiki2-search-result-summary wiki2-search-result-item__summary';
+          summary.innerHTML = item.content;
+          content.appendChild(summary);
+        }
+
+        resultItem.appendChild(content);
+        resultItem.addEventListener('mouseenter', function () {
+          searchState.highlightIndex = index;
+          renderSearchResults();
+        });
+        resultItem.addEventListener('click', function () {
+          selectSearchResult(index);
+        });
+
+        searchResultList.appendChild(resultItem);
+      });
+
+      scrollHighlightedResultIntoView();
+    }
+
+    function resetSearchResults() {
+      searchState.results = [];
+      searchState.highlightIndex = -1;
+      searchState.isLoading = false;
+      searchResultList.innerHTML = '';
+      searchResultPanel.classList.add('hidden');
+      setSearchStatus(searchText.typeToStart);
+    }
+
+    function closeSearchModal() {
+      searchState.isOpen = false;
+      searchModal.classList.add('hidden');
+      searchBackdrop.classList.add('hidden');
+      searchModal.setAttribute('aria-hidden', 'true');
+      searchBackdrop.setAttribute('aria-hidden', 'true');
+      if (searchState.abortController) {
+        searchState.abortController.abort();
+        searchState.abortController = null;
+      }
+      if (searchState.debounceTimer) {
+        clearTimeout(searchState.debounceTimer);
+        searchState.debounceTimer = null;
+      }
+      searchInput.value = '';
+      searchClear.classList.add('hidden');
+      resetSearchResults();
+      searchTrigger.focus();
+    }
+
+    function openSearchModal() {
+      searchState.isOpen = true;
+      searchModal.classList.remove('hidden');
+      searchBackdrop.classList.remove('hidden');
+      searchModal.setAttribute('aria-hidden', 'false');
+      searchBackdrop.setAttribute('aria-hidden', 'false');
+      setTimeout(function () {
+        searchInput.focus();
+      }, 0);
+    }
+
+    function selectSearchResult(index) {
+      var item = searchState.results[index];
+      if (!item) return;
+
+      if (item.pageId !== getCurrentNavPageId()) {
+        navigateToWikiPage(item.pageId, buildPageUrl(item.pageId, { includeHash: false }));
+      }
+      closeSearchModal();
+    }
+
+    function searchWiki(query) {
+      if (searchState.abortController) {
+        searchState.abortController.abort();
+      }
+
+      searchState.abortController = new AbortController();
+      searchState.isLoading = true;
+      searchState.results = [];
+      searchState.highlightIndex = -1;
+      searchResultList.innerHTML = '';
+      searchResultPanel.classList.add('hidden');
+      setSearchStatus(searchText.searching);
+
+      var headers = {
+        'Content-Type': 'application/json'
+      };
+      var csrfToken = getCSRFToken();
+      if (csrfToken) {
+        headers['X-CSRFToken'] = csrfToken;
+      }
+
+      fetch(getSearchApiUrl(), {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: headers,
+        body: JSON.stringify({
+          query: query,
+          search_wiki: window.wiki.config.wikiId
+        }),
+        signal: searchState.abortController.signal
+      }).then(function (response) {
+        if (!response.ok) {
+          throw new Error('Request failed');
+        }
+        return response.json();
+      }).then(function (data) {
+        searchState.isLoading = false;
+        searchState.abortController = null;
+        searchState.results = normalizeSearchResults(data.results || []);
+        searchState.highlightIndex = searchState.results.length ? 0 : -1;
+        renderSearchResults();
+      }).catch(function (error) {
+        if (error && error.name === 'AbortError') return;
+        searchState.isLoading = false;
+        searchState.abortController = null;
+        searchState.results = [];
+        searchState.highlightIndex = -1;
+        searchResultPanel.classList.add('hidden');
+        setSearchStatus(searchText.searchFailed);
+      });
+    }
+
+    searchTrigger.addEventListener('click', openSearchModal);
+    if (searchClose) {
+      searchClose.addEventListener('click', closeSearchModal);
+    }
+    searchBackdrop.addEventListener('click', closeSearchModal);
+    searchClear.addEventListener('click', function () {
+      searchInput.value = '';
+      searchClear.classList.add('hidden');
+      resetSearchResults();
+      searchInput.focus();
+    });
+
+    searchInput.addEventListener('input', function () {
+      var query = searchInput.value.trim();
+      searchClear.classList.toggle('hidden', !query);
+
+      if (searchState.debounceTimer) {
+        clearTimeout(searchState.debounceTimer);
+        searchState.debounceTimer = null;
+      }
+
+      if (!query) {
+        if (searchState.abortController) {
+          searchState.abortController.abort();
+          searchState.abortController = null;
+        }
+        resetSearchResults();
+        return;
+      }
+
+      searchState.debounceTimer = setTimeout(function () {
+        searchWiki(query);
+      }, 300);
+    });
+
+    searchInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeSearchModal();
+        return;
+      }
+
+      if (e.key === 'ArrowDown' && searchState.results.length) {
+        e.preventDefault();
+        searchState.highlightIndex = Math.min(searchState.highlightIndex + 1, searchState.results.length - 1);
+        renderSearchResults();
+        return;
+      }
+
+      if (e.key === 'ArrowUp' && searchState.results.length) {
+        e.preventDefault();
+        searchState.highlightIndex = Math.max(searchState.highlightIndex - 1, 0);
+        renderSearchResults();
+        return;
+      }
+
+      if (e.key === 'Enter' && searchState.highlightIndex >= 0) {
+        e.preventDefault();
+        selectSearchResult(searchState.highlightIndex);
+      }
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if ((e.metaKey || e.ctrlKey) && !e.shiftKey && !e.altKey && String(e.key).toLowerCase() === 'k') {
+        e.preventDefault();
+        if (!searchState.isOpen) {
+          openSearchModal();
+        }
+        return;
+      }
+
+      if (e.key === 'Escape' && searchState.isOpen && document.activeElement !== searchInput) {
+        e.preventDefault();
+        closeSearchModal();
+      }
+    });
+  }
+
   var activeBlockTarget = null;
   var activeBlockTargetBackground = '';
 
@@ -1234,6 +1614,7 @@ function getElement(id) {
   }
 
   bindWikiContentLinks();
+  initWikiSearch();
   initializeHeaderCollapseState();
 
   document.addEventListener('click', function (e) {
