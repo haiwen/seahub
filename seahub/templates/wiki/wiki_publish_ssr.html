@@ -974,6 +974,13 @@ function getElement(id) {
     return true;
   }
 
+  window.addEventListener('wiki:request-navigate', function (event) {
+    var pageId = event && event.detail && event.detail.pageid;
+    if (!pageId || pageId === getCurrentNavPageId()) return;
+
+    navigateToWikiPage(pageId, buildPageUrl(pageId));
+  });
+
   function initWikiSearch() {
     var searchTrigger = getElement('wiki-search-trigger');
     var searchModal = getElement('wiki-search-modal');

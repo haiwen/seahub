@@ -6,7 +6,7 @@ import wikiAPI from '../../utils/wiki-api';
 import SDocServerApi from '../../utils/sdoc-server-api';
 import { mediaUrl, seadocServerUrl, wikiId } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import { SdocWikiEditor } from '@seafile/seafile-sdoc-editor';
+import { EventBus, SdocWikiEditor } from '@seafile/seafile-sdoc-editor';
 import i18n from '../../_i18n/i18n-sdoc-editor';
 
 const centeredContainerStyle = {
@@ -16,6 +16,7 @@ const centeredContainerStyle = {
   alignItems: 'center',
   justifyContent: 'center',
 };
+const WIKI_NAVIGATE_REQUEST_EVENT = 'wiki:request-navigate';
 
 function DocViewer({ pageId }) {
   const [state, setState] = useState({
@@ -28,6 +29,30 @@ function DocViewer({ pageId }) {
   });
 
   const scrollRef = useRef(document.getElementById('wiki-scroll-container'));
+  const currentPageIdRef = useRef(pageId);
+
+  useEffect(() => {
+    currentPageIdRef.current = pageId;
+  }, [pageId]);
+
+  useEffect(() => {
+    const eventBus = EventBus.getInstance();
+    const unsubscribe = eventBus.subscribe('open_wiki_page_id_link', ({ page_id }) => {
+      if (!page_id || page_id === currentPageIdRef.current) {
+        return;
+      }
+
+      window.dispatchEvent(new CustomEvent(WIKI_NAVIGATE_REQUEST_EVENT, {
+        detail: {
+          pageid: page_id,
+        }
+      }));
+    });
+
+    return () => {
+      unsubscribe && unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     let isCancelled = false;
@@ -64,6 +89,7 @@ function DocViewer({ pageId }) {
           accessToken: seadoc_access_token,
         });
         const { mediaUrl, serviceURL, siteRoot, lang } = window.app.config;
+        const { publishUrl } = window.wiki.config;
 
         window.seafile = {
           lang,
@@ -73,6 +99,7 @@ function DocViewer({ pageId }) {
           assetsUrl: '/api/v2.1/seadoc/download-image/' + docUuid,
           wikiId,
           docUuid,
+          publishUrl,
         };
 
         const docRes = await sdocServerApi.getDocContent();
