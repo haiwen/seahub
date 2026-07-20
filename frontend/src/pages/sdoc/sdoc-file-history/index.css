@@ -128,7 +128,7 @@
 }
 
 .sdoc-file-history .sdoc-file-history-content .sdoc-article-container {
-  width: 100%;
+  width: 100% !important;
   padding-top: 0;
   padding-bottom: 0;
   margin-left: 0 !important;
