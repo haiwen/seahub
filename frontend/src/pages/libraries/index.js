@@ -126,7 +126,7 @@ class Libraries extends Component {
         repo_id: res.data.repo_id,
         repo_name: res.data.repo_name,
         size: res.data.repo_size,
-        mtime: res.data.mtime,
+        last_modified: res.data.last_modified,
         owner_email: res.data.email,
         encrypted: res.data.encrypted,
         permission: res.data.permission,
