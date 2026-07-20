@@ -349,10 +349,31 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
   const createHistoryContextMenuOptions = useCallback((tableProps) => {
     if (!canSelected) return;
 
-    const { selectedPosition, recordIds, recordGetterByIndex, isGroupView, hideMenu } = tableProps;
+    const { selectedPosition, recordIds, recordGetterByIndex, recordMetrics, isGroupView, hideMenu } = tableProps;
+
+    const selectedTrashIds = recordMetrics ? Object.keys(recordMetrics.idSelectedRecordMap || {}).filter(id => recordMetrics.idSelectedRecordMap[id]) : [];
+
+    if (selectedTrashIds.length > 1) {
+      return [
+        <button
+          key="trash-restore-items"
+          className="dropdown-item"
+          onClick={(e) => {
+            e.stopPropagation();
+            hideMenu && hideMenu(false);
+            restoreTrashes();
+          }}
+        >
+          {gettext('Restore items')}
+        </button>
+      ];
+    }
 
     let trashItem = null;
-    if (selectedPosition) {
+    if (selectedTrashIds.length === 1) {
+      const selectedTrashId = selectedTrashIds[0];
+      trashItem = tableData.id_row_map?.[selectedTrashId] || null;
+    } else if (selectedPosition) {
       const recordIndex = selectedPosition.rowIdx !== undefined ? selectedPosition.rowIdx : selectedPosition.recordIndex;
       const groupRecordIndex = selectedPosition.groupRecordIndex;
 
@@ -376,10 +397,10 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
           restoreTrash(trashItem);
         }}
       >
-        {trashItem.is_dir ? gettext('Restore folder') : gettext('Restore file')}
+        {trashItem.is_dir ? gettext('Restore items') : gettext('Restore item')}
       </button>
     ];
-  }, [canSelected, restoreTrash]);
+  }, [canSelected, restoreTrash, restoreTrashes, tableData.id_row_map]);
 
   if (isFirstLoading) return <Loading />;
 
