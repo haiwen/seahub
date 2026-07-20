@@ -6,7 +6,7 @@ import FileNameFormatter from '../../../../metadata/components/cell-formatter/fi
 import EventBus from '../../../common/event-bus';
 import { EVENT_BUS_TYPE } from '../../../common/event-bus-type';
 
-const FileName = ({ repoID, column, record, className: propsClassName, value, hideIcon = false, ...params }) => {
+const FileName = ({ repoID, column, record, className: propsClassName, value, hideIcon = false, isCellSelected, ...params }) => {
   const isDir = useMemo(() => record.is_dir, [record]);
 
   const className = useMemo(() => {
@@ -25,10 +25,15 @@ const FileName = ({ repoID, column, record, className: propsClassName, value, hi
     return { iconUrl: defaultIconUrl, defaultIconUrl, iconType: 'file-img' };
   }, [hideIcon, isDir, value]);
 
-  const onFileNameClick = useCallback(() => {
+  const onFileNameClick = useCallback((event) => {
+    event.preventDefault();
+    event.nativeEvent.stopImmediatePropagation();
+
+    if (!isCellSelected) return;
+
     const eventBus = EventBus.getInstance();
     eventBus.dispatch(EVENT_BUS_TYPE.ON_TRASH_ITEM_CLICK, record);
-  }, [record]);
+  }, [isCellSelected, record]);
 
   return (<FileNameFormatter { ...params } className={className} value={value} onClickName={onFileNameClick} { ...iconUrl } />);
 
@@ -37,6 +42,7 @@ const FileName = ({ repoID, column, record, className: propsClassName, value, hi
 FileName.propTypes = {
   value: PropTypes.string,
   hideIcon: PropTypes.bool,
+  isCellSelected: PropTypes.bool,
   record: PropTypes.object,
   className: PropTypes.string,
   onFileNameClick: PropTypes.func,

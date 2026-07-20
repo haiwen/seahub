@@ -1,20 +1,16 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot } from '../../../../utils/constants';
 
-const DescriptionFormatter = ({ value, record, repoID }) => {
-
-  const handleViewSnapshot = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    window.open(`${siteRoot}repo/${repoID}/snapshot/?commit_id=${record.commit_id}`, '_blank');
-  }, [record, repoID]);
+const DescriptionFormatter = ({ value, record, isCellSelected, onOpenCommitDetails }) => {
 
   const handleDescriptionClick = useCallback((e) => {
-    if (e.button === 0) {
-      handleViewSnapshot(e);
-    }
-  }, [handleViewSnapshot]);
+    e.preventDefault();
+    e.nativeEvent.stopImmediatePropagation();
+
+    if (!isCellSelected || e.button !== 0 || !record) return;
+
+    onOpenCommitDetails?.(record);
+  }, [isCellSelected, onOpenCommitDetails, record]);
 
   if (!record) return null;
 
@@ -37,8 +33,8 @@ const DescriptionFormatter = ({ value, record, repoID }) => {
 DescriptionFormatter.propTypes = {
   value: PropTypes.string,
   record: PropTypes.object,
-  repoID: PropTypes.string,
+  isCellSelected: PropTypes.bool,
+  onOpenCommitDetails: PropTypes.func,
 };
 
 export default DescriptionFormatter;
-

@@ -250,9 +250,9 @@ const DirHistoryView = ({ repoID, userPerm }) => {
 
   const columns = useMemo(() => {
     let cols = createHistoryColumns({
-      repoID,
       userPerm,
       showTags,
+      onOpenCommitDetails: handleShowCommitDetails,
     });
 
     let left = 0;
@@ -264,7 +264,7 @@ const DirHistoryView = ({ repoID, userPerm }) => {
     });
 
     return cols;
-  }, [repoID, userPerm, columnWidths]);
+  }, [userPerm, columnWidths, handleShowCommitDetails]);
 
   const getTagsColumnIndex = useCallback(() => {
     return columns.findIndex(col => col.key === COLUMN_KEY_TAGS);

@@ -11,16 +11,16 @@ import TagsFormatter from './formatters/tags-formatter';
  * Follows the pattern used in TagsTable (/tag/views/all-tags/tags-table/)
  *
  * @param {Object} options - Configuration options
- * @param {string} options.repoID - Repository ID
  * @param {string} options.userPerm - User permission ('rw' or 'r')
  * @param {boolean} options.showTags - Whether to show tags column
+ * @param {Function} options.onOpenCommitDetails - Open commit details dialog
  * @returns {Array} Array of column definitions for SFTable
  */
 export function createHistoryColumns(options = {}) {
   const {
-    repoID,
     userPerm = 'r',
     showTags = false,
+    onOpenCommitDetails,
   } = options;
 
   let baseColumns = [
@@ -35,7 +35,7 @@ export function createHistoryColumns(options = {}) {
       editable: false,
       resizable: true,
       is_name_column: true,
-      formatter: <DescriptionFormatter repoID={repoID} />,
+      formatter: <DescriptionFormatter onOpenCommitDetails={onOpenCommitDetails} />,
     },
     {
       key: 'time',
@@ -88,4 +88,3 @@ export function createHistoryColumns(options = {}) {
 
   return baseColumns;
 }
-
