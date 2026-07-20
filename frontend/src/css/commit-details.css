@@ -1,9 +1,90 @@
-.repo-commit-time {
-  font-size: .875rem;
+.commit-details-dialog .modal-content {
+  border-radius: 8px;
 }
 
-.repo-commit-time .seafile-multicolor-icon-time {
-  width: 1rem;
-  height: 1rem;
-  color: #999;
+.commit-details-dialog .modal-header,
+.commit-details-dialog .modal-body {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.commit-details-dialog .modal-header {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.commit-details-dialog .modal-body {
+  padding-top: 12px;
+  padding-bottom: 16px;
+}
+
+.repo-commit-time-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.repo-commit-time {
+  font-size: .875rem;
+  line-height: 22px;
+}
+
+.repo-commit-view-snapshot-btn {
+  height: 26px;
+  padding: 0 12px;
+  background: transparent;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 4px;
+  color: var(--bs-body-color);
+  line-height: 24px;
+}
+
+.repo-commit-view-snapshot-btn:hover {
+  background-color: rgba(0, 0, 0, .04);
+}
+
+[data-bs-theme=dark] .repo-commit-view-snapshot-btn.hover {
+  background-color: rgba(255, 255, 255, .1);
+}
+
+.repo-commit-details-description {
+  margin-top: 12px;
+  line-height: 20px;
+}
+
+.repo-commit-details-section {
+  margin-top: 12px;
+}
+
+.repo-commit-details-title {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.repo-commit-details-list {
+  margin-top: 8px;
+}
+
+.repo-commit-details-item {
+  padding: 6px 12px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  line-height: 20px;
+}
+
+[data-bs-theme=dark] .repo-commit-details-item {
+  background-color: rgba(255, 255, 255, .08);
+}
+
+.repo-commit-details-item + .repo-commit-details-item {
+  margin-top: 4px;
+}
+
+.repo-commit-details-item a {
+  color: #ed7109;
+}
+
+.repo-commit-details-item a:hover,
+.repo-commit-details-item a:focus {
+  color: #ed7109;
 }
