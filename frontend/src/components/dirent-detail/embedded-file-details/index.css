@@ -118,3 +118,7 @@ so this special style can only be overridden in seahub */
   margin-left: 4px;
   flex-shrink: 0;
 }
+
+.cur-view-detail .sf-metadata-collaborator-property-detail-editor .collaborator {
+  width: fit-content !important;
+}
