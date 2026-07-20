@@ -18,7 +18,7 @@
 }
 
 .sf-table-cell.actions-cell .action-cell-content {
-  height: 24px;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;

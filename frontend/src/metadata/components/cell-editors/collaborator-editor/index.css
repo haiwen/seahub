@@ -24,7 +24,7 @@
   padding: 8px 8px 0 8px;
 }
 
-.sf-metadata-collaborator-editor .sf-metadata-search-collaborator-options search-input {
+.sf-metadata-collaborator-editor .sf-metadata-search-collaborator-options .form-control {
   width: 100% !important;
   max-height: 28px;
   font-size: 13px;
@@ -32,7 +32,7 @@
   border-radius: 4px;
 }
 
-.sf-metadata-collaborator-editor .sf-metadata-search-collaborator-options search-input:focus {
+.sf-metadata-collaborator-editor .sf-metadata-search-collaborator-options .form-control:focus {
   border: 1px solid #3e84f7;
   box-shadow: none;
   background-color: transparent;
