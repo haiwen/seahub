@@ -1093,7 +1093,7 @@ def view_history_file_common(request, repo_id, ret_dict):
 
     path = request.GET.get('p', '/')
     path = normalize_file_path(path)
-    
+
     ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo)
 
     commit_id = request.GET.get('commit_id', '')
@@ -1114,7 +1114,7 @@ def view_history_file_common(request, repo_id, ret_dict):
         current_commit = get_commit(origin_repo.id, origin_repo.version, commit_id)
     else:
         current_commit = get_commit(repo_id, repo.version, commit_id)
-    
+
     if not current_commit:
         raise Http404
 
@@ -1444,10 +1444,11 @@ def view_shared_file(request, fileshare):
         if not can_edit:
             ret_dict['seadoc_access_token'] = gen_seadoc_access_token(file_uuid, filename, username, permission=seadoc_perm)
         else:
-            name = username
-            username = str(time.time())
+            if not request.user.is_authenticated:
+                username = 'anon_%d' % int(time.time() * 1000)
             ret_dict['seadoc_access_token'] = gen_share_seadoc_access_token(file_uuid, filename, username, name, permission=seadoc_perm)
 
+        ret_dict['name'] = name
         ret_dict['share_link_username'] = username
 
         send_file_access_msg(request, repo, path, 'web')
@@ -1618,6 +1619,7 @@ def view_shared_file(request, fileshare):
         data['seadoc_access_token'] = ret_dict['seadoc_access_token']
         data['can_edit_file'] = ret_dict['can_edit_file']
         data['file_perm'] = ret_dict['file_perm']
+        data['name'] = ret_dict['name']
         data['share_link_username'] = ret_dict['share_link_username']
 
     if filetype == EXCALIDRAW:

@@ -8,7 +8,7 @@ import { Utils } from './utils/utils';
 import { mediaUrl } from './utils/constants';
 
 const { serviceURL, siteRoot, avatarURL } = window.app.config;
-const { shareLinkUsername: username } = window.shared.pageOptions;
+const { shareLinkUsername: username, name = 'Anonymous' } = window.shared.pageOptions;
 
 const {
   repoID, filePerm,
@@ -31,7 +31,7 @@ window.seafile = {
   serviceUrl: serviceURL,
   accessToken: seadocAccessToken,
   sdocServer: seadocServerUrl,
-  name: 'Anonymous',
+  name,
   username,
   avatarURL,
   siteRoot,
