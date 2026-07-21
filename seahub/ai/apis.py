@@ -25,8 +25,9 @@ from seahub.views import check_folder_permission
 from seahub.utils.repo import parse_repo_perm
 from seahub.ai.utils import image_caption, translate, writing_assistant, verify_ai_config, generate_summary, \
     generate_file_tags, ocr, is_ai_usage_over_limit, gen_chat_task_id, gen_message_id, \
-    get_ai_reply, process_stream_ai_reply, strip_content_details_from_attachments, user_passes_ai_chat_folder_permissions, \
-    verify_chat_ai_config, AI_REPLY_TIMEOUT
+    get_ai_reply, process_stream_ai_reply, resolve_repo_ai_usage_context, strip_content_details_from_attachments, \
+    verify_chat_ai_config, AI_REPLY_TIMEOUT, AI_SCENARIO_CHAT, AI_SCENARIO_FILE_TAGS, AI_SCENARIO_IMAGE_CAPTION, \
+    AI_SCENARIO_OCR, AI_SCENARIO_SUMMARY, AI_SCENARIO_TRANSLATE, AI_SCENARIO_WRITING_ASSISTANT, user_passes_ai_chat_folder_permissions
 from seahub.tags.models import FileUUIDMap
 from seahub.views.file import get_file_view_path_and_perm, get_file_content
 
@@ -86,13 +87,11 @@ class ImageCaption(APIView):
         params = {
             'path': path,
             'lang': lang,
-            'org_id': org_id,
-            'repo_id': repo_id,
             'obj_id': file_id,
-            'username': username,
             'capture_time': None,
             'address': None
         }
+        params.update(resolve_repo_ai_usage_context(username, repo_id, org_id, AI_SCENARIO_IMAGE_CAPTION))
         metadata_server_api = MetadataServerAPI(repo_id, user=request.user.username)
 
         from seafevents.repo_metadata.constants import METADATA_TABLE
@@ -175,11 +174,9 @@ class GenerateSummary(APIView):
 
         params = {
             'path': path,
-            'org_id': org_id,
-            'username': username,
-            'repo_id': repo_id,
             'obj_id': file_id,
         }
+        params.update(resolve_repo_ai_usage_context(username, repo_id, org_id, AI_SCENARIO_SUMMARY))
 
         try:
             resp = generate_summary(params)
@@ -237,11 +234,9 @@ class GenerateFileTags(APIView):
     
         params = {
             'path': path,
-            'org_id': org_id,
-            'username': username,
-            'repo_id': repo_id,
             'obj_id': file_id,
         }
+        params.update(resolve_repo_ai_usage_context(username, repo_id, org_id, AI_SCENARIO_FILE_TAGS))
 
         file_type, _ = get_file_type_and_ext(os.path.basename(path))
         if file_type == IMAGE:
@@ -327,11 +322,9 @@ class OCR(APIView):
         
         params = {
             'file_name': os.path.basename(path),
-            'org_id': org_id,
-            'username': username,
-            'repo_id': repo_id,
             'obj_id': file_id,
         }
+        params.update(resolve_repo_ai_usage_context(username, repo_id, org_id, AI_SCENARIO_OCR))
 
         try:
             resp = ocr(params)
@@ -369,9 +362,8 @@ class Translate(APIView):
         params = {
             'text': text,
             'lang': lang,
-            'org_id': org_id,
-            'username': username
         }
+        params.update(resolve_repo_ai_usage_context(username, None, org_id, AI_SCENARIO_TRANSLATE))
 
         try:
             resp = translate(params)
@@ -410,9 +402,8 @@ class WritingAssistant(APIView):
             'text': text,
             'writing_type': writing_type,
             'custom_prompt': custom_prompt,
-            'org_id': org_id,
-            'username': username
         }
+        params.update(resolve_repo_ai_usage_context(username, None, org_id, AI_SCENARIO_WRITING_ASSISTANT))
 
         try:
             resp = writing_assistant(params)
@@ -745,11 +736,11 @@ class ChatView(APIView):
             'session_uuid': session_uuid,
             'query': query,
             'attachments': attachments,
-            'username': request.user.username,
-            'org_id': org_id,
             'llm_model': request.data.get('model'),
             'repo_prompt': get_repo_prompt(repo_id),
+            'scenario': AI_SCENARIO_CHAT,
         }
+        params.update(resolve_repo_ai_usage_context(request.user.username, repo_id, org_id, AI_SCENARIO_CHAT))
 
         task_info = {
             'user_input': {

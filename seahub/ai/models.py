@@ -34,6 +34,25 @@ class StatsAIByOwner(models.Model):
         unique_together = (('username', 'month', 'model'),)
 
 
+class AIUsageStatistics(models.Model):
+    date = models.DateField(null=True, db_index=True)
+    repo_id = models.CharField(max_length=36, null=True, blank=True)
+    username = models.CharField(max_length=255, null=False, db_index=True)
+    repo_owner = models.CharField(max_length=255, null=True, blank=True)
+    group_id = models.IntegerField(null=True, blank=True)
+    org_id = models.BigIntegerField(null=True, blank=True)
+    model = models.CharField(max_length=100, null=False)
+    scenario = models.CharField(max_length=64, null=False, default='unknown')
+    input_tokens = models.IntegerField(null=True, blank=True)
+    output_tokens = models.IntegerField(null=True, blank=True)
+    cost = models.FloatField()
+    created_at = models.DateTimeField(null=True, blank=True)
+    updated_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = 'ai_usage_statistics'
+
+
 class ChatSessionsManager(models.Manager):
     def create_session(self, repo_id, session_name, username):
         session_uuid = str(uuid.uuid4())
