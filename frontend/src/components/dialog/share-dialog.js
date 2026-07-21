@@ -310,10 +310,12 @@ class ShareDialog extends React.Component {
   renderExternalShareMessage = () => {
     if (additionalShareDialogNote && (typeof additionalShareDialogNote) === 'object') {
       return (
-        <div className="external-share-message mt-2">
-          <h6>{additionalShareDialogNote.title}</h6>
-          <p style={{ fontSize: '14px', color: '#666' }} className="text-wrap m-0">{additionalShareDialogNote.content}</p>
-        </div>
+        <span
+          className="share-dialog-header-note"
+          title={`${additionalShareDialogNote.title}: ${additionalShareDialogNote.content}`}
+        >
+          {additionalShareDialogNote.title}: {additionalShareDialogNote.content}
+        </span>
       );
     }
     return null;
@@ -325,9 +327,11 @@ class ShareDialog extends React.Component {
       <div>
         <Modal isOpen={true} style={LARGE_DIALOG_STYLE} className="share-dialog" toggle={this.props.toggleDialog}>
           <SeahubModalHeader toggle={this.props.toggleDialog} tag="div">
-            <h5 className="text-truncate m-0">
-              {gettext('Share')} <span className="op-target" title={itemName}>{itemName}</span>
-            </h5>
+            <div className="share-dialog-header d-flex align-items-center w-100">
+              <h5 className="share-dialog-header-main text-truncate m-0">
+                {gettext('Share')} <span className="op-target" title={itemName}>{itemName}</span>
+              </h5>
+            </div>
             {this.renderExternalShareMessage()}
           </SeahubModalHeader>
           <ModalBody className="share-dialog-content" role="tablist">

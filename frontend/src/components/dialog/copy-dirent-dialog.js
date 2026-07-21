@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader } from 'reactstrap';
+import { Modal } from 'reactstrap';
 import SelectDirentBody from './select-dirent-body';
 import { MODE_TYPE_MAP } from '../../constants';
 import { Utils } from '../../utils/utils';
@@ -8,8 +8,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import { RepoInfo } from '../../models';
 import toaster from '../toast';
-import Icon from '../icon';
-import Tooltip from '../tooltip';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -350,20 +349,9 @@ class CopyDirent extends React.Component {
 
     return (
       <Modal className="custom-modal" isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}
-          close={
-            <div className="header-buttons">
-              <button type="button" className="close seahub-modal-btn" data-dismiss="modal" aria-label={gettext('Close')} title={gettext('Close')} onClick={this.toggle}>
-                <span id="close-btn" className="seahub-modal-btn-inner">
-                  <Icon symbol="close" />
-                  <Tooltip target="close-btn">{gettext('Close')}</Tooltip>
-                </span>
-              </button>
-            </div>
-          }
-        >
+        <SeahubModalHeader toggle={this.toggle}>
           {isMultipleOperation ? this.renderTitle() : <div dangerouslySetInnerHTML={{ __html: this.renderTitle() }} className="d-flex"></div>}
-        </ModalHeader>
+        </SeahubModalHeader>
         <SelectDirentBody
           mode={mode}
           currentRepo={currentRepo}

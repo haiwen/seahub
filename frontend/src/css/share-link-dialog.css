@@ -5,6 +5,33 @@
   flex-direction: column;
 }
 
+.share-dialog .modal-content {
+  border: 1px solid var(--bs-border-secondary-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.share-dialog .modal-header .modal-title {
+  min-width: 0;
+}
+
+.share-dialog .share-dialog-header {
+  min-width: 0;
+}
+
+.share-dialog .share-dialog-header-main,
+.share-dialog .share-dialog-header-note {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.share-dialog .share-dialog-header-note {
+  color: var(--bs-body-secondary-color);
+  font-size: 14px;
+}
+
 .share-dialog-content .share-dialog-side {
   flex-basis: 18%;
   padding: 1rem;

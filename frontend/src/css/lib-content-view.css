@@ -467,33 +467,20 @@
   max-width: 740px;
 }
 
+.custom-modal .modal-content {
+  min-height: 534px;
+  border: 1px solid var(--bs-border-secondary-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
 .custom-modal .row {
   flex: 1;
   margin: 0;
 }
 
-.custom-modal .modal-header {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  border-bottom: 1px solid var(--bs-border-secondary-color);
-  position: relative;
-  font-size: 1rem;
-}
-
 .custom-modal .modal-header .modal-title {
   max-width: calc(100% - 260px);
-}
-
-.custom-modal .modal-header .header-buttons .seahub-modal-btn {
-  padding: 14px 12px;
-}
-
-.custom-modal .modal-content {
-  min-height: 534px;
-  border: 0;
 }
 
 .custom-modal .modal-body {
@@ -598,6 +585,8 @@
 .custom-modal .modal-footer {
   position: relative;
   justify-content: flex-end;
+  border-top: 1px solid var(--bs-border-secondary-color);
+  padding: 16px;
 }
 
 .custom-modal .move-dirent-dialog-footer {
