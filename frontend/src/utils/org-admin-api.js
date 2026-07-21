@@ -162,6 +162,45 @@ class OrgAdminAPI {
     return this.req.get(url, { params: params });
   }
 
+  orgAdminGetAIStatistics(orgID, date, month, groupBy, page, perPage) {
+    const url = this.server + '/api/v2.1/org/' + orgID + '/admin/statistics/ai/';
+    let params = {
+      group_by: groupBy,
+      page: page,
+      per_page: perPage
+    };
+    if (date) {
+      params.date = date;
+    }
+    if (month) {
+      params.month = month;
+    }
+    return this.req.get(url, { params: params });
+  }
+
+  orgAdminGetAIStatisticsDetail(orgID, groupBy, startDate, endDate, condition, scenarios) {
+    const url = this.server + '/api/v2.1/org/' + orgID + '/admin/statistics/ai/detail/';
+    let params = {
+      group_by: groupBy,
+      start_date: startDate,
+      end_date: endDate,
+      condition: JSON.stringify(condition)
+    };
+    if (scenarios) {
+      params.scenarios = scenarios;
+    }
+    return this.req.get(url, { params: params });
+  }
+
+  orgAdminGetAIStatisticsOverview(orgID, groupBy) {
+    const url = this.server + '/api/v2.1/org/' + orgID + '/admin/statistics/ai/overview/';
+    let params = {};
+    if (groupBy) {
+      params.group_by = groupBy;
+    }
+    return this.req.get(url, { params: params });
+  }
+
   orgAdminListDevices(orgID, platform, page, per_page) {
     const url = this.server + '/api/v2.1/org/' + orgID + '/admin/devices/';
     let params = {
