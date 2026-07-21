@@ -45,7 +45,7 @@ class CommitDetails extends React.Component {
 
   viewSnapshot = () => {
     const { repoID, commitID } = this.props;
-    window.open(`${siteRoot}repo/${repoID}/snapshot/?commit_id=${commitID}`, '_blank');
+    window.open(`${siteRoot}repo/${repoID}/snapshot/?commit_id=${commitID}`, '_blank', 'noopener,noreferrer');
   };
 
   render() {

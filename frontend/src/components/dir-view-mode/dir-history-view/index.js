@@ -236,10 +236,10 @@ const DirHistoryView = ({ repoID, userPerm }) => {
         onClick={(e) => {
           e.stopPropagation();
           hideMenu && hideMenu(false);
-          window.open(`${siteRoot}repo/${repoID}/snapshot/?commit_id=${commit.commit_id}`, '_blank');
+          window.open(`${siteRoot}repo/${repoID}/snapshot/?commit_id=${commit.commit_id}`, '_blank', 'noopener,noreferrer');
         }}
       >
-        {gettext('View Snapshot')}
+        {gettext('View snapshot')}
       </button>
     ];
   }, [repoID, handleShowCommitDetails, firstCommitId]);
