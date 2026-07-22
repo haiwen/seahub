@@ -10,8 +10,8 @@ import { ASK_PAGE_SLUG_ID, SESSION_TAB_TYPE } from '../constants';
 
 const SessionsContext = React.createContext(null);
 
-export const SessionsProvider = ({ repoID, api, children }) => {
-  const [isLoading, setLoading] = useState(true);
+export const SessionsProvider = ({ repoID, api, children, enableSessions = true }) => {
+  const [isLoading, setLoading] = useState(enableSessions);
   const [sessions, setSessions] = useState([]);
   const [teamSessions, setTeamSessions] = useState([]);
   const [isTeamSessionsLoading, setIsTeamSessionsLoading] = useState(false);
@@ -28,6 +28,11 @@ export const SessionsProvider = ({ repoID, api, children }) => {
   }, []);
 
   const loadSessions = useCallback(() => {
+    if (!enableSessions) {
+      setSessions([]);
+      setLoading(false);
+      return Promise.resolve();
+    }
     setLoading(true);
     return api.listChatSessions(repoID).then((res) => {
       setSessions(normalizeSessions(res.data.sessions));
@@ -37,7 +42,7 @@ export const SessionsProvider = ({ repoID, api, children }) => {
     }).finally(() => {
       setLoading(false);
     });
-  }, [api, normalizeSessions, repoID]);
+  }, [api, enableSessions, normalizeSessions, repoID]);
 
   const updateSessionCollection = useCallback((setter, sessionId, updater) => {
     setter((currentSessions) => {
@@ -105,6 +110,11 @@ export const SessionsProvider = ({ repoID, api, children }) => {
   }, [api, pageSlugId, togglePageSlugId, updateSessionState]);
 
   const loadTeamSessions = useCallback(() => {
+    if (!enableSessions) {
+      setTeamSessions([]);
+      setIsTeamSessionsLoading(false);
+      return Promise.resolve();
+    }
     setIsTeamSessionsLoading(true);
     return api.listTeamSharedSessions(repoID).then((res) => {
       setTeamSessions(normalizeSessions(res.data.sessions));
@@ -114,7 +124,7 @@ export const SessionsProvider = ({ repoID, api, children }) => {
     }).finally(() => {
       setIsTeamSessionsLoading(false);
     });
-  }, [api, normalizeSessions, repoID]);
+  }, [api, enableSessions, normalizeSessions, repoID]);
 
   const shareSession = useCallback((sessionId) => {
     return api.shareChatSession(sessionId, true).then((res) => {
@@ -247,8 +257,16 @@ export const SessionsProvider = ({ repoID, api, children }) => {
   }, [sessions, teamSessions]);
 
   useEffect(() => {
+    if (!enableSessions) {
+      setLoading(false);
+      setSessions([]);
+      setTeamSessions([]);
+      setIsShowSessions(false);
+      return;
+    }
+
     loadSessions();
-  }, [loadSessions]);
+  }, [enableSessions, loadSessions]);
 
   useEffect(() => {
     const unsubscribeSendChatMessage = eventBus.subscribe(EVENT_BUS_TYPE.ASK_QUESTION, solveProblem);

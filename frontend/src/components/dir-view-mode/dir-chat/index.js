@@ -18,6 +18,20 @@ const DEFAULT_SETTINGS = {
   developer_mode: false,
 };
 
+const mergeAttachments = (currentAttachments, attachments, reset = false) => {
+  const nextAttachments = reset ? [] : currentAttachments.slice();
+  const attachmentKeys = new Set(nextAttachments.map((item) => item.key));
+
+  attachments.forEach((attachment) => {
+    if (!attachmentKeys.has(attachment.key)) {
+      nextAttachments.push(attachment);
+      attachmentKeys.add(attachment.key);
+    }
+  });
+
+  return nextAttachments;
+};
+
 const ChatEvents = () => {
   const { updateAttachments } = useAIChatTools();
 
@@ -31,17 +45,7 @@ const ChatEvents = () => {
       }
 
       updateAttachments((currentAttachments) => {
-        const nextAttachments = reset ? [] : currentAttachments.slice();
-        const attachmentKeys = new Set(nextAttachments.map((item) => item.key));
-
-        attachments.forEach((attachment) => {
-          if (!attachmentKeys.has(attachment.key)) {
-            nextAttachments.push(attachment);
-            attachmentKeys.add(attachment.key);
-          }
-        });
-
-        return nextAttachments;
+        return mergeAttachments(currentAttachments, attachments, reset);
       });
     });
 
@@ -57,17 +61,7 @@ const ChatEvents = () => {
     }
 
     updateAttachments((currentAttachments) => {
-      const nextAttachments = currentAttachments.slice();
-      const attachmentKeys = new Set(nextAttachments.map((item) => item.key));
-
-      attachments.forEach((attachment) => {
-        if (!attachmentKeys.has(attachment.key)) {
-          nextAttachments.push(attachment);
-          attachmentKeys.add(attachment.key);
-        }
-      });
-
-      return nextAttachments;
+      return mergeAttachments(currentAttachments, attachments);
     });
   }, [updateAttachments]);
 
@@ -83,6 +77,7 @@ const Main = ({ repoID, settings, showDocuments = true, compact = false, enableS
     openShowSessions,
     closeShowSessions
   } = useSessions();
+  const showSessionsView = enableSessions && isShowSessions;
 
   useEffect(() => {
     const eventBus = EventBus.getInstance();
@@ -124,13 +119,13 @@ const Main = ({ repoID, settings, showDocuments = true, compact = false, enableS
   useEffect(() => {
     if (typeof onEmbeddedViewChange === 'function' && compact) {
       onEmbeddedViewChange({
-        isShowSessions: enableSessions ? isShowSessions : false,
-        view: enableSessions && isShowSessions ? 'sessions' : 'chat',
+        isShowSessions: showSessionsView,
+        view: showSessionsView ? 'sessions' : 'chat',
       });
     }
-  }, [compact, enableSessions, isShowSessions, onEmbeddedViewChange]);
+  }, [compact, onEmbeddedViewChange, showSessionsView]);
 
-  const isLoading = isAskPageLoading || isSessionsLoading;
+  const isLoading = isAskPageLoading || (enableSessions && isSessionsLoading);
 
   return (
     <div className="ask-main-container">
@@ -140,7 +135,7 @@ const Main = ({ repoID, settings, showDocuments = true, compact = false, enableS
         <>
           <div className="d-flex o-hidden flex-1">
             <ChatEvents />
-            {compact && enableSessions && isShowSessions ? (
+            {compact && showSessionsView ? (
               <Sessions
                 sessionId={pageSlugId}
                 embedded={true}
@@ -158,7 +153,7 @@ const Main = ({ repoID, settings, showDocuments = true, compact = false, enableS
               </>
             )}
           </div>
-          {!compact && enableSessions && isShowSessions && <Sessions sessionId={pageSlugId} />}
+          {!compact && showSessionsView && <Sessions sessionId={pageSlugId} />}
         </>
       )}
     </div>
@@ -200,7 +195,7 @@ const DirChat = ({ repoID, repoName, settings, embedded = false, initialAttachme
 
   return (
     <AskPageProvider resetURL={effectiveResetURL} getInitialPageSlugId={effectiveGetInitialPageSlugId}>
-      <SessionsProvider repoID={repoID} api={chatAPI}>
+      <SessionsProvider repoID={repoID} api={chatAPI} enableSessions={enableSessions}>
         <DocumentsProvider>
           <AIChatToolsProvider initialAttachments={normalizedInitialAttachments}>
             <Main

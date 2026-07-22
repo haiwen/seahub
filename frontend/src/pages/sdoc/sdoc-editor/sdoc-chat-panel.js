@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect, useMemo, useState } from 'react';
+import React, { useCallback, useLayoutEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import DirChat from '../../../components/dir-view-mode/dir-chat';
 import ChatToolbar from '../../../components/toolbar/chat-toolbar';
@@ -7,14 +7,11 @@ import OpIcon from '../../../components/op-icon';
 import { AttachmentObject } from '../../../components/dir-view-mode/dir-chat/models';
 import { ASK_PAGE_SLUG_ID } from '../../../components/dir-view-mode/dir-chat/constants';
 import { gettext } from '../../../utils/constants';
-import EventBus from '../../../components/common/event-bus';
-import { EVENT_BUS_TYPE } from '../../../components/common/event-bus-type';
 
 import './sdoc-chat-panel.css';
 
 const SdocChatPanel = ({ onClose, width }) => {
   const { repoID, docPath, docName } = window.seafile;
-  const [isShowSessions, setIsShowSessions] = useState(false);
 
   const initialAttachments = useMemo(() => {
     return [new AttachmentObject({
@@ -25,11 +22,6 @@ const SdocChatPanel = ({ onClose, width }) => {
   }, [docName, docPath, repoID]);
 
   const getInitialPageSlugId = useCallback(() => ASK_PAGE_SLUG_ID.NEW, []);
-
-  const onBackToChat = useCallback(() => {
-    const eventBus = EventBus.getInstance();
-    eventBus && eventBus.dispatch(EVENT_BUS_TYPE.CHAT_TOGGLE_SESSIONS);
-  }, []);
 
   useLayoutEffect(() => {
     const panel = document.getElementById('sdoc-content-right-panel');
@@ -64,23 +56,12 @@ const SdocChatPanel = ({ onClose, width }) => {
     >
       <div className="sdoc-chat-panel-header">
         <div className="sdoc-chat-panel-header-left">
-          {isShowSessions ? (
-            <OpIcon
-              id="sdoc-chat-panel-back-btn"
-              className="sdoc-chat-panel-header-op"
-              symbol="arrow-left"
-              tooltip={gettext('Back')}
-              op={onBackToChat}
-            />
-          ) : null}
-          <span className="sdoc-chat-panel-title">{isShowSessions ? gettext('Histories') : gettext('Chat with AI')}</span>
+          <span className="sdoc-chat-panel-title">{gettext('Chat with AI')}</span>
         </div>
         <div className="sdoc-chat-panel-header-right">
-          {!isShowSessions && (
-            <div className="sdoc-chat-panel-toolbar">
-              <ChatToolbar className="sdoc-chat-panel-toolbar-actions" isCompact={true} showHistory={false} />
-            </div>
-          )}
+          <div className="sdoc-chat-panel-toolbar">
+            <ChatToolbar className="sdoc-chat-panel-toolbar-actions" isCompact={true} showHistory={false} />
+          </div>
           <OpIcon
             id="sdoc-chat-panel-close-btn"
             className="sdoc-chat-panel-header-op"
@@ -101,7 +82,6 @@ const SdocChatPanel = ({ onClose, width }) => {
             enableSessions={false}
             defaultShowSessions={false}
             getInitialPageSlugId={getInitialPageSlugId}
-            onEmbeddedViewChange={({ isShowSessions }) => setIsShowSessions(isShowSessions)}
           />
         </div>
       </div>
