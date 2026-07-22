@@ -111,9 +111,11 @@
   font-size: .875rem;
   font-weight: 500;
   color: var(--bs-body-color);
+  margin-bottom: 8px;
 }
 
 .sea-ai-ask-sessions-wrapper .sea-ai-ask-sessions-empty .empty-tip-text {
+  margin-top: 0;
   font-size: .75rem;
   color: var(--bs-body-secondary-color);
 }
