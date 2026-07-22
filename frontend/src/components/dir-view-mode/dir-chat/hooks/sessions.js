@@ -131,7 +131,7 @@ export const SessionsProvider = ({ repoID, api, children, enableSessions = true 
       const updatedSession = new ChatSession(res.data.session);
       updateSessionState(sessionId, () => updatedSession);
       setTeamSessions((currentSessions) => [updatedSession, ...currentSessions.filter((item) => item._id !== sessionId)]);
-      toaster.success(gettext('Chat shared within library'));
+      toaster.success(gettext('Chat shared'));
       return updatedSession;
     }).catch((error) => {
       toaster.danger(Utils.getErrorMsg(error));
@@ -143,7 +143,7 @@ export const SessionsProvider = ({ repoID, api, children, enableSessions = true 
       const updatedSession = new ChatSession(res.data.session);
       updateSessionCollection(setSessions, sessionId, () => updatedSession);
       updateSessionCollection(setTeamSessions, sessionId, () => null);
-      toaster.success(gettext('Chat unshared from library'));
+      toaster.success(gettext('Chat unshared'));
       return updatedSession;
     }).catch((error) => {
       toaster.danger(Utils.getErrorMsg(error));

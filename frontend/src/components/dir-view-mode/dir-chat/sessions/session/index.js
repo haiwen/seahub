@@ -30,7 +30,7 @@ const Session = ({ session, isSelected, isTeamTab = false, embedded = false, onS
     onSelect && onSelect(session);
   }, [onSelect, session, togglePageSlugId]);
 
-  const icon = session.is_shared ? 'group' : 'new-chat';
+  const icon = session.is_shared ? 'chat-team' : 'new-chat';
 
   if (isTeamTab) {
     return (
@@ -63,9 +63,9 @@ const Session = ({ session, isSelected, isTeamTab = false, embedded = false, onS
           <DropdownMenu end>
             <DropdownItem onClick={() => setIsShowRenameDialog(true)}>{gettext('Rename')}</DropdownItem>
             {session.is_shared ? (
-              <DropdownItem onClick={() => unshareSession(session._id)}>{gettext('Unshare within library')}</DropdownItem>
+              <DropdownItem onClick={() => unshareSession(session._id)}>{gettext('Unshare')}</DropdownItem>
             ) : (
-              <DropdownItem onClick={() => shareSession(session._id)}>{gettext('Share within library')}</DropdownItem>
+              <DropdownItem onClick={() => shareSession(session._id)}>{gettext('Share')}</DropdownItem>
             )}
             <DropdownItem onClick={() => setIsShowDeleteDialog(true)}>{gettext('Delete')}</DropdownItem>
           </DropdownMenu>
