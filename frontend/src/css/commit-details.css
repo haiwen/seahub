@@ -29,6 +29,12 @@
   line-height: 22px;
 }
 
+.repo-commit-time-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+}
+
 .repo-commit-view-snapshot-btn {
   height: 26px;
   padding: 0 12px;
@@ -60,6 +66,7 @@
 .repo-commit-details-title {
   font-size: 14px;
   line-height: 20px;
+  font-weight: 500;
 }
 
 .repo-commit-details-list {

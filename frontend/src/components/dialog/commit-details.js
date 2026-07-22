@@ -6,6 +6,7 @@ import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
+import Icon from '../icon';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 import '../../css/commit-details.css';
@@ -55,7 +56,10 @@ class CommitDetails extends React.Component {
         <SeahubModalHeader toggle={toggleDialog}>{gettext('Modification Details')}</SeahubModalHeader>
         <ModalBody>
           <div className="repo-commit-time-row">
-            <p className="repo-commit-time mb-0">{dayjs(commitTime).format('YYYY-MM-DD HH:mm:ss')}</p>
+            <p className="repo-commit-time mb-0 d-flex align-items-center">
+              <Icon symbol="time" className="repo-commit-time-icon" />
+              {dayjs(commitTime).format('YYYY-MM-DD HH:mm:ss')}
+            </p>
             <button type="button" className="repo-commit-view-snapshot-btn" onClick={this.viewSnapshot}>
               {gettext('View snapshot')}
             </button>
