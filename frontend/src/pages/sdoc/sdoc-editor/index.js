@@ -9,6 +9,7 @@ import EmbeddedFileDetails from '../../../components/dirent-detail/embedded-file
 import { gettext, mediaUrl } from '../../../utils/constants';
 import { useMetadataStatus } from '../../../hooks';
 import Tooltip from '../../../components/tooltip';
+import SdocChatPanel, { SdocChatPluginIcon } from './sdoc-chat-panel';
 
 import './index.css';
 
@@ -22,6 +23,20 @@ const SdocEditor = () => {
   const plugins = useMemo(() => {
     const { repoID, docPath, docPerm, isRepoAdmin } = window.seafile;
     return [
+      {
+        name: 'sdoc-chat',
+        icon: <SdocChatPluginIcon />,
+        resizable_width: true,
+        display_type: 'right-panel',
+        component: ({ onClose, width }) => {
+          return (
+            <SdocChatPanel
+              onClose={onClose}
+              width={width - 1}
+            />
+          );
+        },
+      },
       {
         name: 'sdoc-info',
         icon: 'sdoc-info',

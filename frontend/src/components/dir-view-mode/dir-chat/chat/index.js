@@ -18,7 +18,7 @@ import ChatHeader from '../chat-header';
 
 import './index.css';
 
-const Chat = ({ repoID, settings }) => {
+const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = false }) => {
   const [isReply, setReply] = useState(false);
   const [loading, setLoading] = useState(true);
   const [chatHistories, setChatHistories] = useState([]);
@@ -62,11 +62,14 @@ const Chat = ({ repoID, settings }) => {
   }, [session?.running_task, isSharedByOther]);
 
   const isSmall = useMemo(() => {
+    if (forceSmallPage) {
+      return true;
+    }
     if (isShowDocuments && Array.isArray(documents) && documents.length > 0) {
       return true;
     }
     return isShowSessions;
-  }, [documents, isShowDocuments, isShowSessions]);
+  }, [documents, forceSmallPage, isShowDocuments, isShowSessions]);
 
   const jumpToBottom = useCallback((delay = 1) => {
     if (timer.current) {
@@ -527,7 +530,7 @@ const Chat = ({ repoID, settings }) => {
 
   return (
     <div className={classNames('sea-ai-ask-wrapper', { empty: isEmpty && isNewChat, 'small-page': isSmall, 'has-header': !isNewChat })}>
-      {!isNewChat && (
+      {!isNewChat && !hideSessionHeader && (
         <div className="sea-ai-ask-chats-header">
           <ChatHeader session={session} isEmpty={isEmpty} customHeaderTitle={session?.problem || session?.name} />
         </div>
@@ -584,6 +587,8 @@ const Chat = ({ repoID, settings }) => {
 Chat.propTypes = {
   repoID: PropTypes.string.isRequired,
   settings: PropTypes.object,
+  forceSmallPage: PropTypes.bool,
+  hideSessionHeader: PropTypes.bool,
 };
 
 export default Chat;

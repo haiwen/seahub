@@ -41,3 +41,9 @@
   cursor: pointer;
   color: #212529;
 }
+
+.sdoc-content-right-panel .sdoc-chat-panel .detail-header .detail-control .seafile-multicolor-icon,
+.sdoc-content-right-panel .sdoc-chat-panel .detail-header .detail-control .seafile-multicolor-icon-ai,
+.sdoc-content-right-panel .sdoc-chat-panel .detail-header .detail-control .seafile-multicolor-icon-history {
+  fill: #666;
+}

@@ -28,8 +28,10 @@ export const consumePendingAttachments = () => {
   return nextAttachments;
 };
 
-export const AIChatToolsProvider = ({ children }) => {
-  const [attachments, updateAttachments] = useState([]);
+export const AIChatToolsProvider = ({ children, initialAttachments = [] }) => {
+  const [attachments, updateAttachments] = useState(() => {
+    return Array.isArray(initialAttachments) ? initialAttachments.filter(Boolean) : [];
+  });
 
   const removeAttachment = useCallback((attachment, index) => {
     updateAttachments((currentAttachments) => {

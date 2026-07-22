@@ -1,0 +1,108 @@
+.sdoc-content-right-panel-wrapper.sdoc-chat-panel-wrapper {
+  transition: none;
+}
+
+.sdoc-chat-panel-header {
+  height: 48px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--bs-border-secondary-color);
+}
+
+.sdoc-chat-panel-header-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.sdoc-chat-panel-header-left,
+.sdoc-chat-panel-header-right,
+.sdoc-chat-panel-toolbar,
+.sdoc-chat-panel-toolbar-actions {
+  display: flex;
+  align-items: center;
+}
+
+.sdoc-chat-panel-header-left,
+.sdoc-chat-panel-header-right {
+  gap: 8px;
+}
+
+.sdoc-chat-panel-header-right {
+  flex-shrink: 0;
+}
+
+.sdoc-chat-panel-header-op,
+.sdoc-chat-panel-toolbar-actions .cur-view-path-btn {
+  cursor: pointer;
+  font-size: 14px;
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+}
+
+.sdoc-chat-panel-header-op:hover,
+.sdoc-chat-panel-toolbar-actions .cur-view-path-btn:hover {
+  background-color: var(--bs-icon-btn-hover-bg-color);
+}
+
+.sdoc-chat-panel-header-op .seafile-multicolor-icon,
+.sdoc-chat-panel-toolbar-actions .cur-view-path-btn .seafile-multicolor-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--bs-icon-color);
+}
+
+.sdoc-chat-panel-title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 22px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sdoc-chat-panel-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.sdoc-chat-panel-content {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.sdoc-chat-panel-content .ask-main-container {
+  padding-right: 0;
+}
+
+.sdoc-chat-panel-content .sea-ai-ask-wrapper.small-page .sea-ai-ask-chats {
+  width: calc(100% - 32px);
+  padding-top: 20px;
+}
+
+.sdoc-chat-panel-content .sea-ai-ask-wrapper.small-page .sea-ai-ask-chats-footer {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.sdoc-chat-panel-content .sea-ai-ask-wrapper.small-page .sea-ai-ask-chats-body {
+  mask-image: none;
+}
+
+.sdoc-chat-panel-toolbar-actions {
+  gap: 8px;
+}
+
+.sdoc-chat-panel-toolbar-actions .cur-view-path-btn {
+  padding: 0;
+  margin-right: 0 !important;
+}

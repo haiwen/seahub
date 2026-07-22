@@ -74,9 +74,15 @@ const ChatEvents = () => {
   return null;
 };
 
-const Main = ({ repoID, settings }) => {
+const Main = ({ repoID, settings, showDocuments = true, compact = false, enableSessions = true, defaultShowSessions, onEmbeddedViewChange }) => {
   const { isLoading: isAskPageLoading, pageSlugId, togglePageSlugId } = useAskPage();
-  const { isLoading: isSessionsLoading, isShowSessions, toggleIsShowSessions } = useSessions();
+  const {
+    isLoading: isSessionsLoading,
+    isShowSessions,
+    toggleIsShowSessions,
+    openShowSessions,
+    closeShowSessions
+  } = useSessions();
 
   useEffect(() => {
     const eventBus = EventBus.getInstance();
@@ -86,15 +92,43 @@ const Main = ({ repoID, settings }) => {
       togglePageSlugId(ASK_PAGE_SLUG_ID.NEW);
     });
 
-    const unsubscribeToggleSessions = eventBus.subscribe(EVENT_BUS_TYPE.CHAT_TOGGLE_SESSIONS, () => {
+    const unsubscribeToggleSessions = enableSessions ? eventBus.subscribe(EVENT_BUS_TYPE.CHAT_TOGGLE_SESSIONS, () => {
       toggleIsShowSessions();
-    });
+    }) : null;
 
     return () => {
       unsubscribeNewSession && unsubscribeNewSession();
       unsubscribeToggleSessions && unsubscribeToggleSessions();
     };
-  }, [togglePageSlugId, toggleIsShowSessions]);
+  }, [enableSessions, togglePageSlugId, toggleIsShowSessions]);
+
+  useEffect(() => {
+    if (!enableSessions) {
+      closeShowSessions();
+    }
+  }, [closeShowSessions, enableSessions]);
+
+  useEffect(() => {
+    if (!enableSessions || !compact || typeof defaultShowSessions !== 'boolean') {
+      return;
+    }
+
+    if (defaultShowSessions) {
+      openShowSessions();
+      return;
+    }
+
+    closeShowSessions();
+  }, [closeShowSessions, compact, defaultShowSessions, enableSessions, openShowSessions]);
+
+  useEffect(() => {
+    if (typeof onEmbeddedViewChange === 'function' && compact) {
+      onEmbeddedViewChange({
+        isShowSessions: enableSessions ? isShowSessions : false,
+        view: enableSessions && isShowSessions ? 'sessions' : 'chat',
+      });
+    }
+  }, [compact, enableSessions, isShowSessions, onEmbeddedViewChange]);
 
   const isLoading = isAskPageLoading || isSessionsLoading;
 
@@ -106,10 +140,25 @@ const Main = ({ repoID, settings }) => {
         <>
           <div className="d-flex o-hidden flex-1">
             <ChatEvents />
-            <Chat repoID={repoID} settings={settings} />
-            <Documents />
+            {compact && enableSessions && isShowSessions ? (
+              <Sessions
+                sessionId={pageSlugId}
+                embedded={true}
+                onSelect={closeShowSessions}
+              />
+            ) : (
+              <>
+                <Chat
+                  repoID={repoID}
+                  settings={settings}
+                  forceSmallPage={compact}
+                  hideSessionHeader={compact}
+                />
+                {showDocuments && <Documents />}
+              </>
+            )}
           </div>
-          {isShowSessions && <Sessions sessionId={pageSlugId} />}
+          {!compact && enableSessions && isShowSessions && <Sessions sessionId={pageSlugId} />}
         </>
       )}
     </div>
@@ -119,16 +168,21 @@ const Main = ({ repoID, settings }) => {
 Main.propTypes = {
   repoID: PropTypes.string.isRequired,
   settings: PropTypes.object,
+  showDocuments: PropTypes.bool,
+  compact: PropTypes.bool,
+  enableSessions: PropTypes.bool,
+  defaultShowSessions: PropTypes.bool,
+  onEmbeddedViewChange: PropTypes.func,
 };
 
-const DirChat = ({ repoID, repoName, settings }) => {
-  const resetURL = useCallback((pageSlugId) => {
+const DirChat = ({ repoID, repoName, settings, embedded = false, initialAttachments = [], hideDocuments = false, enableSessions = true, defaultShowSessions, resetURL, getInitialPageSlugId, onEmbeddedViewChange }) => {
+  const defaultResetURL = useCallback((pageSlugId) => {
     const baseUrl = `${siteRoot}library/${repoID}/${encodeURIComponent(repoName)}/?chat=true&path=/`;
     const url = pageSlugId === ASK_PAGE_SLUG_ID.NEW ? baseUrl : `${baseUrl}&chatSessionId=${pageSlugId}`;
     window.history.replaceState({}, '', url);
   }, [repoID, repoName]);
 
-  const getInitialPageSlugId = useCallback(() => {
+  const defaultGetInitialPageSlugId = useCallback(() => {
     const { search } = window.location;
     const match = search.match(/[?&]chatSessionId=([^&]+)/);
     if (!match) {
@@ -138,13 +192,26 @@ const DirChat = ({ repoID, repoName, settings }) => {
   }, []);
 
   const mergedSettings = useMemo(() => Object.assign({}, DEFAULT_SETTINGS, settings || {}), [settings]);
+  const normalizedInitialAttachments = useMemo(() => {
+    return Array.isArray(initialAttachments) ? initialAttachments.filter(Boolean) : [];
+  }, [initialAttachments]);
+  const effectiveResetURL = embedded ? resetURL : (resetURL || defaultResetURL);
+  const effectiveGetInitialPageSlugId = embedded ? getInitialPageSlugId : (getInitialPageSlugId || defaultGetInitialPageSlugId);
 
   return (
-    <AskPageProvider resetURL={resetURL} getInitialPageSlugId={getInitialPageSlugId}>
+    <AskPageProvider resetURL={effectiveResetURL} getInitialPageSlugId={effectiveGetInitialPageSlugId}>
       <SessionsProvider repoID={repoID} api={chatAPI}>
         <DocumentsProvider>
-          <AIChatToolsProvider>
-            <Main repoID={repoID} settings={mergedSettings} />
+          <AIChatToolsProvider initialAttachments={normalizedInitialAttachments}>
+            <Main
+              repoID={repoID}
+              settings={mergedSettings}
+              showDocuments={!hideDocuments}
+              compact={embedded}
+              enableSessions={enableSessions}
+              defaultShowSessions={defaultShowSessions}
+              onEmbeddedViewChange={onEmbeddedViewChange}
+            />
           </AIChatToolsProvider>
         </DocumentsProvider>
       </SessionsProvider>
@@ -154,8 +221,16 @@ const DirChat = ({ repoID, repoName, settings }) => {
 
 DirChat.propTypes = {
   repoID: PropTypes.string.isRequired,
-  repoName: PropTypes.string.isRequired,
+  repoName: PropTypes.string,
   settings: PropTypes.object,
+  embedded: PropTypes.bool,
+  initialAttachments: PropTypes.array,
+  hideDocuments: PropTypes.bool,
+  enableSessions: PropTypes.bool,
+  defaultShowSessions: PropTypes.bool,
+  resetURL: PropTypes.func,
+  getInitialPageSlugId: PropTypes.func,
+  onEmbeddedViewChange: PropTypes.func,
 };
 
 export default DirChat;
