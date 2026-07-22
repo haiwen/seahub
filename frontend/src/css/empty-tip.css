@@ -9,7 +9,7 @@
 
 .empty-tip .no-items-img-tip {
   display: inline-block;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
   -webkit-user-drag: none;
 }
 
@@ -17,7 +17,7 @@
   font-size: 18px;
   font-weight: 500;
   color: var(--bs-body-color);
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .empty-tip .empty-tip-text {

@@ -15,6 +15,7 @@ export const SessionsProvider = ({ repoID, api, children, enableSessions = true 
   const [sessions, setSessions] = useState([]);
   const [teamSessions, setTeamSessions] = useState([]);
   const [isTeamSessionsLoading, setIsTeamSessionsLoading] = useState(false);
+  const [hasLoadedTeamSessions, setHasLoadedTeamSessions] = useState(false);
   const [activeTab, setActiveTab] = useState(SESSION_TAB_TYPE.MINE);
   const [isShowSessions, setIsShowSessions] = useState(false);
   const sendMessageRequestController = useRef({});
@@ -118,9 +119,11 @@ export const SessionsProvider = ({ repoID, api, children, enableSessions = true 
     setIsTeamSessionsLoading(true);
     return api.listTeamSharedSessions(repoID).then((res) => {
       setTeamSessions(normalizeSessions(res.data.sessions));
+      setHasLoadedTeamSessions(true);
     }).catch((error) => {
       toaster.danger(Utils.getErrorMsg(error));
       setTeamSessions([]);
+      setHasLoadedTeamSessions(true);
     }).finally(() => {
       setIsTeamSessionsLoading(false);
     });
@@ -295,6 +298,7 @@ export const SessionsProvider = ({ repoID, api, children, enableSessions = true 
     sessions,
     teamSessions,
     isTeamSessionsLoading,
+    hasLoadedTeamSessions,
     activeTab,
     setActiveTab,
     isShowSessions,
@@ -322,6 +326,7 @@ export const SessionsProvider = ({ repoID, api, children, enableSessions = true 
     getSession,
     isLoading,
     isShowSessions,
+    hasLoadedTeamSessions,
     isTeamSessionsLoading,
     loadSessions,
     loadTeamSessions,

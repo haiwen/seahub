@@ -16,6 +16,7 @@ const Sessions = ({ sessionId, embedded = false, onSelect }) => {
     sessions,
     teamSessions,
     isTeamSessionsLoading,
+    hasLoadedTeamSessions,
     activeTab,
     setActiveTab,
     closeShowSessions,
@@ -28,6 +29,7 @@ const Sessions = ({ sessionId, embedded = false, onSelect }) => {
 
   const isTeamTab = activeTab === SESSION_TAB_TYPE.TEAM;
   const displaySessions = embedded ? sessions : (isTeamTab ? teamSessions : sessions);
+  const shouldShowLoading = isTeamTab && !hasLoadedTeamSessions ? true : isTeamSessionsLoading;
   const emptyTipProps = isTeamTab
     ? {
       title: gettext('No shared chats'),
@@ -106,13 +108,13 @@ const Sessions = ({ sessionId, embedded = false, onSelect }) => {
         </div>
       )}
       <div className={classNames('sea-ai-ask-sessions-body', { embedded })}>
-        {isTeamSessionsLoading && (
+        {shouldShowLoading && (
           <CenteredLoading />
         )}
-        {!isTeamSessionsLoading && displaySessions.length === 0 && (
+        {!shouldShowLoading && displaySessions.length === 0 && (
           <EmptyTip className="sea-ai-ask-sessions-empty" {...emptyTipProps} />
         )}
-        {!isTeamSessionsLoading && displaySessions.map((session) => (
+        {!shouldShowLoading && displaySessions.map((session) => (
           <Session
             key={session._id}
             session={session}

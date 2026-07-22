@@ -114,7 +114,6 @@
 }
 
 .sea-ai-ask-sessions-wrapper .sea-ai-ask-sessions-empty .empty-tip-text {
-  margin-top: 8px;
   font-size: .75rem;
   color: var(--bs-body-secondary-color);
 }
