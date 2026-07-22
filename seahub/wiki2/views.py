@@ -11,6 +11,7 @@ from seaserv import seafile_api
 from django.conf import settings
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
+from django.utils.http import http_date
 from django.urls import reverse
 
 from seahub.wiki2.models import Wiki2 as Wiki
@@ -196,7 +197,6 @@ def wiki_publish_view(request, publish_url, page_id=None):
         except Exception as e:
             logger.warning(e)
 
-    last_modified = datetime.fromtimestamp(last_modified)
     # update visit_count
     try:
         current_count = wiki_publish.visit_count
@@ -211,21 +211,25 @@ def wiki_publish_view(request, publish_url, page_id=None):
         "file_path": file_path,
         "repo_name": repo.name if repo else '',
         "modifier": latest_contributor,
-        "modify_time": last_modified,
+        "modify_time": datetime.fromtimestamp(last_modified),
         "seadoc_server_url": SEADOC_SERVER_URL,
         "permission": 'public',
         "publish_url": publish_url,
     }
 
     if not wiki_publish.enable_server_render:
-        return render(request, template_name, render_context)
+        response = render(request, template_name, render_context)
+        response['Last-Modified'] = http_date(last_modified)
+        return response
 
     # server-side rendering of sdoc → HTML
     try:
         wiki_config = get_wiki_config(wiki.repo_id, '')
         pages = wiki_config.get('pages', [])
         if not pages:
-            return render(request, template_name, render_context)
+            response = render(request, template_name, render_context)
+            response['Last-Modified'] = http_date(last_modified)
+            return response
 
         navigation = wiki_config.get('navigation', [])
         first_navigation_id = navigation[0].get('id') if navigation else None
@@ -359,10 +363,14 @@ def wiki_publish_view(request, publish_url, page_id=None):
             "current_page_cover_url": get_wiki_cover_url(current_page),
             "wiki_pages_json": json.dumps(wiki_pages),
         })
-        return render(request, template_name, render_context)
+        response = render(request, template_name, render_context)
+        response['Last-Modified'] = http_date(last_modified)
+        return response
     except Exception as e:
         logger.warning('SSR fallback for published wiki %s: %s', wiki_id, e)
-        return render(request, template_name, render_context)
+        response = render(request, template_name, render_context)
+        response['Last-Modified'] = http_date(last_modified)
+        return response
 
 
 def wiki_history_view(request, wiki_id):
