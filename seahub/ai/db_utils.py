@@ -2,6 +2,7 @@ from django.db.models import Sum, Value
 from django.db.models.functions import Coalesce
 
 from seahub.ai.models import AIUsageStatistics
+from seahub.ai.utils import convert_cost_to_credit
 
 
 def query_ai_statistics_overview(group_by, date_range, org_id=None):
@@ -41,7 +42,7 @@ def query_ai_statistics_overview(group_by, date_range, org_id=None):
     return AIUsageStatistics.objects.filter(**query_kwargs).values(
         *group_fields
     ).annotate(
-        total_credit_used=Coalesce(Sum('cost'), Value(0.0))
+        total_credit_used=convert_cost_to_credit(Coalesce(Sum('cost'), Value(0.0)))
     ).order_by(
         '-total_credit_used'
     )
@@ -74,7 +75,7 @@ def query_ai_statistics_detail(group_by, date_range, condition, scenarios=None):
     ).annotate(
         total_input_tokens=Coalesce(Sum('input_tokens'), Value(0)),
         total_output_tokens=Coalesce(Sum('output_tokens'), Value(0)),
-        total_credit_used=Coalesce(Sum('cost'), Value(0.0)),
+        total_credit_used=convert_cost_to_credit(Coalesce(Sum('cost'), Value(0.0))),
     ).order_by(
         'date' if group_by == 'date' else '-total_credit_used'
     )

@@ -113,23 +113,21 @@ def writing_assistant(params):
 
 # utils
 def get_ai_credit_by_user(user, org_id):
-    if not org_id or org_id <= 0:
-        return -1
-
     user_role = get_user_role(user)
     role = DEFAULT_USER if (user_role == '' or user_role == DEFAULT_USER) else user_role
     ai_credit_per_user = get_enabled_role_permissions_by_role(role)['monthly_ai_credit_per_user']
     if ai_credit_per_user < 0:
         return -1
-
-    if ORG_MEMBER_QUOTA_ENABLED:
-        org_members_quota = OrgMemberQuota.objects.get_quota(org_id)
-        ai_credit = org_members_quota * ai_credit_per_user
+    if org_id and org_id != -1:
+        if ORG_MEMBER_QUOTA_ENABLED:
+            org_members_quota = OrgMemberQuota.objects.get_quota(org_id)
+            ai_credit = org_members_quota * ai_credit_per_user
+        else:
+            ccnet_db = CcnetDB()
+            user_count = ccnet_db.get_org_user_count(org_id)
+            ai_credit = user_count * ai_credit_per_user
     else:
-        ccnet_db = CcnetDB()
-        user_count = ccnet_db.get_org_user_count(org_id)
-        ai_credit = user_count * ai_credit_per_user
-
+        ai_credit = ai_credit_per_user
     return ai_credit
 
 
@@ -151,17 +149,22 @@ def get_ai_cost_by_user(user, org_id):
     return cost
 
 
-def is_ai_usage_over_limit(user, org_id):
-    if not org_id or org_id <= 0:
-        return False
+def convert_cost_to_credit(cost):
+    return 100 * cost
 
+
+def get_ai_credit_used_by_user(user, org_id):
+    return convert_cost_to_credit(get_ai_cost_by_user(user, org_id))
+
+
+def is_ai_usage_over_limit(user, org_id):
     ai_credit = get_ai_credit_by_user(user, org_id)
-    cost = get_ai_cost_by_user(user, org_id)
+    used_credit = get_ai_credit_used_by_user(user, org_id)
 
     if ai_credit < 0:
         return False
 
-    return ai_credit <= round(cost, 2)
+    return used_credit >= ai_credit
 
 
 def _get_repo_owner(repo_id, org_id=None):
