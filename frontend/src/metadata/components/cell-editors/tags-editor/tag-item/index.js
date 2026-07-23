@@ -6,8 +6,8 @@ import { NODE_CONTENT_LEFT_INDENT, NODE_ICON_LEFT_INDENT } from '../../../../../
 import { gettext } from '@/utils/constants';
 import Icon from '../../../../../components/icon';
 import { Utils } from '../../../../../utils/utils';
-import '../../../tag-ui/index.css';
 
+import '../../../tag-ui/index.css';
 import './index.css';
 
 const TagItem = ({
