@@ -56,7 +56,7 @@ const Session = ({ session, isSelected, isTeamTab = false, embedded = false, onS
         <div className="sea-ai-ask-session-content">
           <div className="sea-ai-ask-session-name text-truncate" title={displayName}>{displayName}</div>
         </div>
-        <Dropdown isOpen={isOpen} toggle={toggleDropdown} className="sea-ai-ask-session-more-op-btn">
+        <Dropdown isOpen={isOpen} toggle={toggleDropdown}>
           <DropdownToggle color="link" className="sea-ai-ask-session-more-op-btn p-0 border-0 text-secondary">
             <Icon symbol="more-level" />
           </DropdownToggle>
