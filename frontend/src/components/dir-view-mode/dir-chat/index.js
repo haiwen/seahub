@@ -173,13 +173,13 @@ Main.propTypes = {
 const DirChat = ({ repoID, repoName, settings, embedded = false, initialAttachments = [], hideDocuments = false, enableSessions = true, defaultShowSessions, resetURL, getInitialPageSlugId, onEmbeddedViewChange }) => {
   const defaultResetURL = useCallback((pageSlugId) => {
     const baseUrl = `${siteRoot}library/${repoID}/${encodeURIComponent(repoName)}/?chat=true&path=/`;
-    const url = pageSlugId === ASK_PAGE_SLUG_ID.NEW ? baseUrl : `${baseUrl}&chatSessionId=${pageSlugId}`;
+    const url = pageSlugId === ASK_PAGE_SLUG_ID.NEW ? baseUrl : `${baseUrl}&chat_session_id=${pageSlugId}`;
     window.history.replaceState({}, '', url);
   }, [repoID, repoName]);
 
   const defaultGetInitialPageSlugId = useCallback(() => {
     const { search } = window.location;
-    const match = search.match(/[?&]chatSessionId=([^&]+)/);
+    const match = search.match(/[?&]chat_session_id=([^&]+)/);
     if (!match) {
       return ASK_PAGE_SLUG_ID.NEW;
     }
