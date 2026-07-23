@@ -4,6 +4,7 @@ import { Button, Modal, ModalFooter, ModalBody } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import DOMPurify from 'dompurify';
 
 const propTypes = {
   groupName: PropTypes.string.isRequired,
@@ -34,7 +35,7 @@ class ChangeGroupDialog extends React.Component {
           {gettext('Change group to department')}
         </SeahubModalHeader>
         <ModalBody>
-          <p dangerouslySetInnerHTML={{ __html: msg }}></p>
+          <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(msg) }}></p>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.props.toggleDialog}>{gettext('Cancel')}</Button>
