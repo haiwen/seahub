@@ -80,7 +80,6 @@ const SdocChatPanel = ({ onClose, width }) => {
             initialAttachments={initialAttachments}
             hideDocuments={true}
             enableSessions={false}
-            defaultShowSessions={false}
             getInitialPageSlugId={getInitialPageSlugId}
           />
         </div>
