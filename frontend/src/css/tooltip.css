@@ -10,11 +10,11 @@
 .sf-tooltip .tooltip .tooltip-inner {
   width: fit-content;
   max-width: 242px;
-  font-size: 14px;
+  font-size: .75rem;
   text-align: start;
   background-color: var(--bs-body-color);
   color: var(--bs-body-bg);
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 4px 8px;
   line-height: 20px;
   font-weight: normal;
