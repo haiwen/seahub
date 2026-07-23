@@ -43,7 +43,8 @@ class UserSelector extends Component {
 
   togglePopover = () => {
     this.setState({
-      isPopoverOpen: !this.state.isPopoverOpen
+      isPopoverOpen: !this.state.isPopoverOpen,
+      query: '',
     }, () => {
       if (!this.state.isPopoverOpen) {
         const { availableUsers } = this.props;
@@ -75,7 +76,7 @@ class UserSelector extends Component {
     const selectedUsers = availableUsers.filter(item => item.isSelected);
     const filteredAvailableUsers = query.trim() ? availableUsers.filter(item => item.contact_email.indexOf(query.trim()) != -1 || item.name.indexOf(query.trim()) != -1 || item.login_id.indexOf(query.trim()) != -1) : availableUsers;
     return (
-      <div className="mt-4 position-relative">
+      <div className="position-relative">
         <OpElement
           className="cur-activity-modifiers d-inline-flex align-items-center p-2 rounded"
           title={gettext('Toggle user selector')}
@@ -115,6 +116,7 @@ class UserSelector extends Component {
                 onChange={this.onQueryChange}
               />
             </div>
+            {filteredAvailableUsers.length > 0 &&
             <ul className="activity-user-list list-unstyled p-3 o-auto">
               {filteredAvailableUsers.map((item, index) => {
                 return (
@@ -134,7 +136,8 @@ class UserSelector extends Component {
                   </li>
                 );
               })}
-            </ul>
+            </ul>}
+            {filteredAvailableUsers.length === 0 && <div className="py-4 text-center">{gettext('No users')}</div>}
           </div>
         )}
       </div>
