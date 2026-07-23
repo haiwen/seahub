@@ -6,6 +6,7 @@ import { NODE_CONTENT_LEFT_INDENT, NODE_ICON_LEFT_INDENT } from '../../../../../
 import { gettext } from '@/utils/constants';
 import Icon from '../../../../../components/icon';
 import { Utils } from '../../../../../utils/utils';
+import '../../../tag-ui/index.css';
 
 import './index.css';
 
@@ -56,9 +57,9 @@ const TagItem = ({
             <Icon symbol="down" className={classNames({ 'rotate-270': isFolded })} />
           </span>
         )}
-        <div className="sf-metadata-tag-pill">
-          <div className="sf-metadata-tag-color" style={{ backgroundColor: tagColor }} />
-          <div className="sf-metadata-tag-name">{tagName}</div>
+        <div className="sf-metadata-ui-tag">
+          <div className="sf-metadata-ui-tag-color" style={{ backgroundColor: tagColor }} />
+          <div className="sf-metadata-ui-tag-text">{tagName}</div>
         </div>
         <div className="sf-metadata-tags-editor-tag-check-icon">
           {isSelected && <Icon symbol="check" />}

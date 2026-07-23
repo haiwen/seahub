@@ -88,5 +88,5 @@
 .dirent-detail-item-value:not(.editable) .sf-metadata-tags-formatter .sf-metadata-ui-tags-container .sf-metadata-ui-tag {
   top: 0;
   cursor: default;
-  margin-bottom: 5px;
+  margin: 0 4px 4px 0;
 }

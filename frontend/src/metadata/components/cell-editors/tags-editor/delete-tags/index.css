@@ -11,35 +11,10 @@
 }
 
 .sf-metadata-tags-editor .sf-metadata-delete-select-tags .sf-metadata-delete-select-tag {
-  display: inline-flex;
-  align-items: center;
-  height: 22px;
   margin: 0 4px 4px 0;
-  padding: 0 8px 0 4px;
-  font-size: 13px;
-  border-radius: 11px;
-  border: 1px solid #dbdbdb;
-  background: var(--bs-body-bg);
-}
-
-.sf-metadata-tags-editor .sf-metadata-delete-select-tags .sf-metadata-delete-select-tag .sf-metadata-delete-select-tag-color {
-  width: 16px;
-  height: 16px;
-  margin-right: 4px;
-  border-radius: 50%;
-  border: 2px solid #fff;
-  flex-shrink: 0;
 }
 
 .sf-metadata-tags-editor .sf-metadata-delete-select-tags .sf-metadata-delete-select-tag .sf-metadata-delete-select-tag-name {
-  display: inline-block;
-  line-height: 22px;
-  color: var(--bs-body-color);
-  max-width: 200px;
-  flex: 1 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .sf-metadata-tags-editor .sf-metadata-delete-select-tags .sf-metadata-delete-select-tag .sf-metadata-delete-select-remove {

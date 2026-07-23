@@ -6,6 +6,7 @@ import { getTagColor, getTagName } from '../../../../../tag/utils/cell';
 import { Utils } from '../../../../../utils/utils';
 import { gettext } from '../../../../../utils/constants';
 
+import '../../../tag-ui/index.css';
 import './index.css';
 
 const DeleteTag = ({ value, tags, onDelete }) => {
@@ -17,9 +18,9 @@ const DeleteTag = ({ value, tags, onDelete }) => {
         const tagName = getTagName(tag);
         const tagColor = getTagColor(tag);
         return (
-          <div className="sf-metadata-delete-select-tag" key={tagId}>
-            <div className="sf-metadata-delete-select-tag-color" style={{ backgroundColor: tagColor }}></div>
-            <div className="sf-metadata-delete-select-tag-name">{tagName}</div>
+          <div className="sf-metadata-ui-tag sf-metadata-ui-tag-removable sf-metadata-delete-select-tag" key={tagId}>
+            <div className="sf-metadata-ui-tag-color sf-metadata-delete-select-tag-color" style={{ backgroundColor: tagColor }}></div>
+            <div className="sf-metadata-ui-tag-text sf-metadata-delete-select-tag-name">{tagName}</div>
             <OpIcon
               id={`remove-tag-icon-${idx}`}
               symbol="md-close"

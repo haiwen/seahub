@@ -14,6 +14,7 @@ import { checkIsTreeNodeShown, checkTreeNodeHasChildNodes, getNodesWithAncestors
 import TagItem from './tag-item';
 import DeleteTag from './delete-tags';
 import Icon from '../../../../components/icon';
+import '../../tag-ui/index.css';
 
 import './index.css';
 

@@ -115,31 +115,11 @@
 }
 
 .sf-metadata-tags-editor .sf-metadata-tags-editor-container .sf-metadata-ui-tags-container .sf-metadata-ui-tag {
-  height: 22px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  background: var(--bs-body-bg);
-  font-size: 13px;
-  border: 1px solid #dbdbdb;
-  border-radius: 11px;
   margin: 0 4px 4px 0;
-  padding: 0 6px 0 2px;
 }
 
 .sf-metadata-tags-editor .sf-metadata-tags-editor-container .sf-metadata-ui-tags-container .sf-metadata-ui-tag.sf-metadata-ui-tag-selected {
   border-color: rgb(255, 152, 0);
-}
-
-.sf-metadata-tags-editor .sf-metadata-tags-editor-container .sf-metadata-ui-tags-container .sf-metadata-ui-tag-color {
-  position: relative;
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  margin-right: 4px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  border: 2px solid #fff;
 }
 
 .sf-metadata-tags-editor .sf-metadata-tags-editor-container .add-search-result .add-tag-value {

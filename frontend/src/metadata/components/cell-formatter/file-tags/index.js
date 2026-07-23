@@ -6,9 +6,10 @@ import { getTagColor, getTagName } from '../../../../tag/utils/cell';
 import { ROW_HEIGHT } from '@/metadata/constants';
 import { TagsContext } from '@/tag/hooks';
 
+import '../../tag-ui/index.css';
 import './index.css';
 
-const FileTagsFormatter = ({ value: oldValue, className, children: emptyFormatter, showName = false, tagsData: tagsDataProp, height }) => {
+const FileTagsFormatter = ({ value: oldValue, className, children: emptyFormatter, showName = false, tagsData: tagsDataProp, height = ROW_HEIGHT }) => {
   // Use context directly to safely check if provider exists
   const context = useContext(TagsContext);
   const tagsData = tagsDataProp || context?.tagsData;

@@ -109,3 +109,7 @@
 .dirent-detail-item .dirent-detail-item-value .sf-metadata-ui.collaborator-item {
   max-width: 100%;
 }
+
+.dirent-detail-item .dirent-detail-item-value .sf-metadata-ui-tags-container {
+  height: 100%;
+}
