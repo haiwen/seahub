@@ -61,13 +61,21 @@ const Session = ({ session, isSelected, isTeamTab = false, embedded = false, onS
             <Icon symbol="more-level" />
           </DropdownToggle>
           <DropdownMenu end>
-            <DropdownItem onClick={() => setIsShowRenameDialog(true)}>{gettext('Rename')}</DropdownItem>
+            <DropdownItem onClick={() => setIsShowRenameDialog(true)}>
+              <span className="dropdown-item-main-slot">{gettext('Rename')}</span>
+            </DropdownItem>
             {session.is_shared ? (
-              <DropdownItem onClick={() => unshareSession(session._id)}>{gettext('Unshare')}</DropdownItem>
+              <DropdownItem onClick={() => unshareSession(session._id)}>
+                <span className="dropdown-item-main-slot">{gettext('Unshare')}</span>
+              </DropdownItem>
             ) : (
-              <DropdownItem onClick={() => shareSession(session._id)}>{gettext('Share')}</DropdownItem>
+              <DropdownItem onClick={() => shareSession(session._id)}>
+                <span className="dropdown-item-main-slot">{gettext('Share')}</span>
+              </DropdownItem>
             )}
-            <DropdownItem onClick={() => setIsShowDeleteDialog(true)}>{gettext('Delete')}</DropdownItem>
+            <DropdownItem onClick={() => setIsShowDeleteDialog(true)}>
+              <span className="dropdown-item-main-slot">{gettext('Delete')}</span>
+            </DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </div>
