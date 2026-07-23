@@ -928,6 +928,7 @@ urlpatterns = [
     path('sys/statistics/storage/', sysadmin_react_fake_view, name="sys_statistics_storage"),
     path('sys/statistics/user/', sysadmin_react_fake_view, name="sys_statistics_user"),
     path('sys/statistics/traffic/', sysadmin_react_fake_view, name="sys_statistics_traffic"),
+    path('sys/statistics/ai/', sysadmin_react_fake_view, name="sys_statistics_ai"),
     path('sys/statistics/reports/', sysadmin_react_fake_view, name="sys_statistics_reports"),
     path('sys/statistics/metrics/', sysadmin_react_fake_view, name="sys_statistics_metrics"),
     path('sys/devices/desktop/', sysadmin_react_fake_view, name="sys_desktop_devices"),
