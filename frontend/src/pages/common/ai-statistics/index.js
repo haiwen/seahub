@@ -16,6 +16,7 @@ const propTypes = {
   defaultGroupBy: PropTypes.string.isRequired,
   detailOptionsMap: PropTypes.object.isRequired,
   enableOverview: PropTypes.bool,
+  groupLabel: PropTypes.string,
   listFetcher: PropTypes.func.isRequired,
   detailFetcher: PropTypes.func.isRequired,
   overviewFetcher: PropTypes.func,
@@ -78,6 +79,7 @@ const AIStatisticsPage = ({
   defaultGroupBy,
   detailOptionsMap,
   enableOverview = false,
+  groupLabel,
   listFetcher,
   detailFetcher,
   overviewFetcher,
@@ -173,7 +175,7 @@ const AIStatisticsPage = ({
     }
     if (groupBy === 'group') {
       const nextColumns = [
-        { key: 'group_display', name: gettext('Group') },
+        { key: 'group_display', name: groupLabel },
         { key: 'creator_display', name: gettext('Creator') },
       ];
       if (showOrgColumn) {
@@ -192,7 +194,7 @@ const AIStatisticsPage = ({
       ];
     }
     return [];
-  }, [groupBy, showOrgColumn]);
+  }, [groupBy, groupLabel, showOrgColumn]);
 
   const openDetails = (item) => {
     setDetailConfig({

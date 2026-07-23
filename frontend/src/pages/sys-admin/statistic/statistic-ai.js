@@ -6,7 +6,7 @@ import AIStatisticsPage from '../../common/ai-statistics';
 const tabs = [
   { value: 'repo', label: gettext('Library') },
   { value: 'user', label: gettext('User') },
-  { value: 'group', label: gettext('Group') },
+  { value: 'group', label: gettext('Department') },
   { value: 'org', label: gettext('Team') },
 ];
 
@@ -47,6 +47,7 @@ const StatisticAI = () => {
           defaultGroupBy="repo"
           detailOptionsMap={detailOptionsMap}
           detailFetcher={detailFetcher}
+          groupLabel={gettext('Department')}
           listFetcher={listFetcher}
           showOrgColumn={true}
           tabs={tabs}

@@ -9,7 +9,7 @@ const tabs = [
   { value: 'overview', label: gettext('Overview') },
   { value: 'repo', label: gettext('Library') },
   { value: 'user', label: gettext('User') },
-  { value: 'group', label: gettext('Group') },
+  { value: 'group', label: gettext('Department') },
 ];
 
 const detailOptionsMap = {
@@ -51,6 +51,7 @@ const OrgStatisticAI = () => {
             defaultGroupBy="overview"
             detailOptionsMap={detailOptionsMap}
             enableOverview={true}
+            groupLabel={gettext('Department')}
             listFetcher={listFetcher}
             detailFetcher={detailFetcher}
             overviewFetcher={overviewFetcher}
