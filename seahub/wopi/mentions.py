@@ -1,6 +1,5 @@
 import json
 import logging
-import posixpath
 import hashlib
 import time
 
@@ -99,7 +98,7 @@ def flush_cached_wopi_mentions(access_token, request_user, repo_id, file_path, o
     try:
         state = get_cached_wopi_mentions_state(access_token)
         mentioned_users = state['mentioned_users']
-        sent_count, failed_users = flush_wopi_mention_notifications(
+        failed_users = flush_wopi_mention_notifications(
             repo_id, file_path, request_user, mentioned_users, org_id=org_id
         )
 
@@ -108,7 +107,7 @@ def flush_cached_wopi_mentions(access_token, request_user, repo_id, file_path, o
             'updated_at': int(time.time()),
         })
         cache.set(cache_key, state, WOPI_MENTION_CACHE_EXPIRATION)
-        return sent_count, failed_users
+        return failed_users
     finally:
         release_wopi_mentions_lock(lock_key)
 
@@ -126,10 +125,9 @@ def add_wopi_mention_notification(repo_id, file_path, from_user, to_user):
 def flush_wopi_mention_notifications(repo_id, file_path, from_user, mentioned_users, org_id=None):
     mentioned_users = {username for username in mentioned_users if username and username != from_user}
     if not mentioned_users:
-        return 0, set()
+        return set()
 
     related_users = set(get_active_related_users_by_repo(repo_id, org_id))
-    sent_count = 0
     failed_users = set()
     for to_user in mentioned_users:
         if to_user not in related_users:
@@ -137,10 +135,9 @@ def flush_wopi_mention_notifications(repo_id, file_path, from_user, mentioned_us
 
         try:
             add_wopi_mention_notification(repo_id, file_path, from_user, to_user)
-            sent_count += 1
         except Exception as e:
             logger.error('Failed to create WOPI mention notification for %s in %s%s: %s',
                          to_user, repo_id, file_path, e)
             failed_users.add(to_user)
 
-    return sent_count, failed_users
+    return failed_users
