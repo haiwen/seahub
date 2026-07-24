@@ -1,13 +1,13 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
 import { Button, Input, Modal, ModalBody, ModalFooter } from 'reactstrap';
+import { createRoot } from 'react-dom/client';
 import FileView from '@/components/file-view/file-view';
 import FileViewTip from '@/components/file-view/file-view-tip';
+import SeahubModalHeader from './components/common/seahub-modal-header';
+import toaster from './components/toast';
 import { gettext, siteRoot } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
-import SeahubModalHeader from './components/common/seahub-modal-header';
-import toaster from './components/toast';
 
 const {
   err,
@@ -247,7 +247,7 @@ class FileContent extends React.Component {
         </form>
         {this.state.isSaveAsDialogOpen && (
           <Modal isOpen={true} toggle={this.toggleSaveAsDialog} autoFocus={false}>
-            <SeahubModalHeader toggle={this.toggleSaveAsDialog}>{gettext('Save As')}</SeahubModalHeader>
+            <SeahubModalHeader toggle={this.toggleSaveAsDialog}>{gettext('Save as')}</SeahubModalHeader>
             <ModalBody>
               <Input
                 value={this.state.nextFileName}
