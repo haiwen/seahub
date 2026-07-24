@@ -75,7 +75,7 @@ def safe_flush_cached_wopi_mentions(access_token, request_user, repo_id, file_pa
         return flush_cached_wopi_mentions(access_token, request_user, repo_id, file_path, org_id=org_id)
     except Exception as e:
         logger.error('Failed to flush cached WOPI mentions for %s%s: %s', repo_id, file_path, e)
-        return 0, set()
+        return set()
 
 
 def lock_file(request):
@@ -585,6 +585,7 @@ class WOPIFilesView(APIView):
                     if x_wopi_override == 'REFRESH_LOCK':
                         refresh_file_lock(request)
                     else:
+                        # Flush mentions on session close when user close page without clicking save button
                         safe_flush_cached_wopi_mentions(
                             token,
                             info_dict['request_user'],
