@@ -247,7 +247,7 @@ class FileContent extends React.Component {
         </form>
         {this.state.isSaveAsDialogOpen && (
           <Modal isOpen={true} toggle={this.toggleSaveAsDialog} autoFocus={false}>
-            <SeahubModalHeader toggle={this.toggleSaveAsDialog}>{gettext('Save As')}</SeahubModalHeader>
+            <SeahubModalHeader toggle={this.toggleSaveAsDialog}>{gettext('Save as')}</SeahubModalHeader>
             <ModalBody>
               <Input
                 value={this.state.nextFileName}
