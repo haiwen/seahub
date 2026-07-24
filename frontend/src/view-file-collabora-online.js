@@ -4,6 +4,7 @@ import { Button, Input, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import FileView from './components/file-view/file-view';
 import FileViewTip from './components/file-view/file-view-tip';
 import { gettext, siteRoot } from './utils/constants';
+import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
 import SeahubModalHeader from './components/common/seahub-modal-header';
 import toaster from './components/toast';
@@ -50,6 +51,7 @@ class FileContent extends React.Component {
       isSaveAsDialogOpen: false,
       nextFileName: fileName,
     };
+    this.mentionedUsers = new Set();
   }
 
   componentWillUnmount() {
@@ -120,6 +122,58 @@ class FileContent extends React.Component {
     }
   };
 
+  cacheMentionNotifications = (mentionedUsers) => {
+    const nextMentionedUsers = Array.from(new Set(mentionedUsers)).sort();
+    if (!nextMentionedUsers.length) {
+      return Promise.resolve();
+    }
+
+    return seafileAPI.sendWopiMentionNotifications(
+      repoID,
+      window.app.pageOptions.filePath,
+      accessToken,
+      nextMentionedUsers,
+    )
+      .then(() => {})
+      .catch((error) => {
+        const errorMessage = error?.response?.data?.error_msg || error?.message || gettext('Failed to cache mention notifications.');
+        toaster.danger(errorMessage);
+      });
+  };
+
+  handleMentionAutocomplete = (args = {}) => {
+    const searchText = typeof args.text === 'string' ? args.text : '';
+    seafileAPI.listRepoRelatedUsers(repoID, searchText).then((response) => {
+      const userList = response?.data?.user_list || [];
+      const mentionList = userList
+        .filter((user) => user.email !== window.app.pageOptions.username)
+        .map((user) => ({
+          username: user.email,
+          label: user.name,
+          profile: user.avatar_url || '',
+        }));
+      this.postMessageToOfficeFrame({
+        MessageId: 'Action_Mention',
+        Values: {
+          list: mentionList,
+        },
+      });
+    }).catch((error) => {
+      const errorMessage = error?.response?.data?.error_msg || error?.message || gettext('Failed to load mention users.');
+      toaster.danger(errorMessage);
+    });
+  };
+
+  handleMentionSelected = (args = {}) => {
+    const mentionedUser = args.username;
+    if (!mentionedUser || mentionedUser === window.app.pageOptions.username) {
+      return;
+    }
+
+    this.mentionedUsers.add(mentionedUser);
+    this.cacheMentionNotifications(Array.from(this.mentionedUsers));
+  };
+
   onMessage = (event) => {
     if (!actionOrigin || event.origin !== actionOrigin) return;
 
@@ -133,6 +187,16 @@ class FileContent extends React.Component {
     }
 
     if (!message || !message.MessageId) return;
+
+    if (message.MessageId === 'UI_Mention') {
+      const mentionArgs = message.Values || message.args || {};
+      if (mentionArgs.type === 'autocomplete') {
+        this.handleMentionAutocomplete(mentionArgs);
+      } else if (mentionArgs.type === 'selected') {
+        this.handleMentionSelected(mentionArgs);
+      }
+      return;
+    }
 
     if (message.MessageId === 'UI_SaveAs') {
       this.setState({
@@ -154,6 +218,10 @@ class FileContent extends React.Component {
         siteRoot,
       });
       this.navigateToSavedAsFile(redirectUrl);
+      return;
+    }
+
+    if (message.MessageId === 'UI_Close') {
       return;
     }
 
