@@ -54,6 +54,10 @@ class DirentDetails extends React.Component {
       const fullPath = Utils.joinPath(nextProps.path, nextProps.dirent.name);
       this.updateDetail(nextProps.repoID, nextProps.dirent, fullPath);
     }
+
+    if (!ObjectUtils.isSameObject(dirent, nextProps.dirent, ['name', 'status'])) {
+      this.setState({ direntDetail: '' });
+    }
   }
 
   componentWillUnmount() {

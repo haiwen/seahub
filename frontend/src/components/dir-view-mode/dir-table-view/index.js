@@ -533,6 +533,10 @@ const DirTableView = ({
     onSelectedDirentListUpdate(list);
   }, [getDirentsByRowIds, onSelectedDirentListUpdate]);
 
+  const onClickTableBlankSpace = useCallback(() => {
+    updateDetailDirent(null);
+  }, [updateDetailDirent]);
+
   const onRecordSelected = useCallback((event, rowId) => {
     const dirent = getDirentByRowId(rowId);
     onItemSelected(dirent, event);
@@ -685,6 +689,7 @@ const DirTableView = ({
         showRecordAsTree={false}
         createContextMenuOptions={createContextMenuOptions}
         onCellClick={onCellClick}
+        onClickTableBlankSpace={onClickTableBlankSpace}
         onRecordSelected={onRecordSelected}
         renderCustomDraggedRows={renderCustomDraggedRows}
         moveRecords={permission.canModify() ? moveDirents : undefined}

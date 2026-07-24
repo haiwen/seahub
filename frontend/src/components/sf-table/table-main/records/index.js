@@ -327,6 +327,7 @@ class Records extends Component {
     if (classNames.includes('sf-table-result-content')) {
       this.eventBus.dispatch(EVENT_BUS_TYPE.CLOSE_EDITOR);
       this.props.updateSelectedRecordIds && this.props.updateSelectedRecordIds([]);
+      this.props.onClickTableBlankSpace && this.props.onClickTableBlankSpace();
     }
   };
 
@@ -427,6 +428,7 @@ class Records extends Component {
 
     // clear selected records
     this.onDeselectAllRecords();
+    this.props.onClickTableBlankSpace && this.props.onClickTableBlankSpace();
   };
 
   selectCell = (cellPosition) => {

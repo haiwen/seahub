@@ -2988,7 +2988,10 @@ class LibContentView extends React.Component {
       detailPath = Utils.getDirName(this.state.path);
     }
 
-    const renderedDetailDirent = activeDetailDirent || currentNode?.object || null;
+    const fallbackFolderDetailDirent = !activeDetailDirent && this.state.path !== '/'
+      ? (currentNode?.object || new Dirent({ name: Utils.getFileName(this.state.path), type: 'dir' }))
+      : null;
+    const renderedDetailDirent = activeDetailDirent || fallbackFolderDetailDirent || null;
     return (
       <FileOperationsProvider
         repoID={repoID}
