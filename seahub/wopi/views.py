@@ -10,8 +10,8 @@ import urllib.error
 import urllib.parse
 import posixpath
 import requests
-import hashlib
 import datetime
+import hashlib
 
 from rest_framework.views import APIView
 
@@ -20,7 +20,7 @@ from django.core.cache import cache
 from django.utils.encoding import force_str
 
 from pysearpc import SearpcError
-from seaserv import seafile_api
+from seaserv import seafile_api, get_org_id_by_repo_id
 
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.accounts import User, ANONYMOUS_EMAIL
@@ -34,6 +34,7 @@ from seahub.views import check_folder_permission
 from seahub.settings import SITE_ROOT
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN
 
+from seahub.wopi.mentions import flush_cached_wopi_mentions
 from seahub.wopi.utils import get_file_info_by_token, get_wopi_file_url
 
 logger = logging.getLogger(__name__)
@@ -63,6 +64,18 @@ def generate_file_lock_key_value(request):
     x_wopi_lock = request.headers.get('x-wopi-lock', None)
 
     return lock_cache_key, x_wopi_lock
+
+
+def get_access_token(request):
+    return request.GET.get('access_token', None)
+
+
+def safe_flush_cached_wopi_mentions(access_token, request_user, repo_id, file_path, org_id=None):
+    try:
+        return flush_cached_wopi_mentions(access_token, request_user, repo_id, file_path, org_id=org_id)
+    except Exception as e:
+        logger.error('Failed to flush cached WOPI mentions for %s%s: %s', repo_id, file_path, e)
+        return 0, set()
 
 
 def lock_file(request):
@@ -485,7 +498,7 @@ class WOPIFilesView(APIView):
                 return response
 
         elif x_wopi_override == 'PUT_RELATIVE':
-            token = request.GET.get('access_token', None)
+            token = get_access_token(request)
             info_dict = get_file_info_by_token(token)
             request_user = info_dict['request_user']
             repo_id = info_dict['repo_id']
@@ -547,10 +560,19 @@ class WOPIFilesView(APIView):
                                                  can_edit=True,
                                                  can_download=can_download,
                                                  can_write_relative=can_write_relative)
+            safe_flush_cached_wopi_mentions(
+                token,
+                request_user,
+                repo_id,
+                target_file_path,
+                org_id=get_org_id_by_repo_id(repo_id)
+            )
             return HttpResponse(json.dumps(result), status=200,
                                 content_type=json_content_type)
 
         elif x_wopi_override in ('REFRESH_LOCK', 'UNLOCK'):
+            token = get_access_token(request)
+            info_dict = get_file_info_by_token(token)
             if file_is_locked(request):
                 # If the file is currently locked
                 # and the X-WOPI-Lock value does NOT match the lock currently on the file
@@ -563,6 +585,13 @@ class WOPIFilesView(APIView):
                     if x_wopi_override == 'REFRESH_LOCK':
                         refresh_file_lock(request)
                     else:
+                        safe_flush_cached_wopi_mentions(
+                            token,
+                            info_dict['request_user'],
+                            info_dict['repo_id'],
+                            info_dict['file_path'],
+                            org_id=get_org_id_by_repo_id(info_dict['repo_id'])
+                        )
                         unlock_file(request)
 
                     return HttpResponse()
@@ -631,8 +660,8 @@ class WOPIFilesContentsView(APIView):
     @access_token_check
     def post(self, request, file_id, format=None):
 
-        token = request.GET.get('access_token', None)
-        info_dict = get_file_info_by_token(token)
+        wopi_access_token = get_access_token(request)
+        info_dict = get_file_info_by_token(wopi_access_token)
         request_user = info_dict['request_user']
         repo_id = info_dict['repo_id']
         file_path = info_dict['file_path']
@@ -642,16 +671,16 @@ class WOPIFilesContentsView(APIView):
 
             # get file update url
             fake_obj_id = {'online_office_update': True}
-            token = seafile_api.get_fileserver_access_token(repo_id,
-                                                            json.dumps(fake_obj_id),
-                                                            'update',
-                                                            request_user)
+            update_token = seafile_api.get_fileserver_access_token(repo_id,
+                                                                   json.dumps(fake_obj_id),
+                                                                   'update',
+                                                                   request_user)
 
-            if not token:
+            if not update_token:
                 return HttpResponse(json.dumps({}), status=500,
                                     content_type=json_content_type)
 
-            update_url = gen_inner_file_upload_url('update-api', token)
+            update_url = gen_inner_file_upload_url('update-api', update_token)
 
             # update file
             files = {'file': (os.path.basename(file_path), file_obj)}
@@ -664,6 +693,14 @@ class WOPIFilesContentsView(APIView):
                 logger.error('parameter target_file: {}'.format(data['target_file']))
                 logger.error('response: {}'.format(resp.__dict__))
                 return HttpResponse(json.dumps({}), status=500, content_type=json_content_type)
+
+            safe_flush_cached_wopi_mentions(
+                wopi_access_token,
+                request_user,
+                repo_id,
+                file_path,
+                org_id=get_org_id_by_repo_id(repo_id)
+            )
         except Exception as e:
             logger.error(e)
             return HttpResponse(json.dumps({}), status=500,

@@ -144,6 +144,7 @@ MSG_TYPE_REPO_ARCHIVED = 'repo_archived'
 MSG_TYPE_REPO_UNARCHIVED = 'repo_unarchived'
 MSG_TYPE_REPO_ARCHIVE_FAILED = 'repo_archive_failed'
 MSG_TYPE_REPO_UNARCHIVE_FAILED = 'repo_unarchive_failed'
+MSG_TYPE_WOPI_MENTION = 'wopi_mention'
 
 
 def file_uploaded_msg_to_json(file_name, repo_id, uploaded_to):
@@ -411,6 +412,10 @@ class UserNotificationManager(models.Manager):
         """
         return self._add_user_notification(to_user, MSG_TYPE_SAML_SSO_FAILED, detail)
 
+    def add_wopi_mention_msg(self, to_user, detail):
+        """Notify ``to_user`` that someone mentioned them in a WOPI document."""
+        return self._add_user_notification(to_user, MSG_TYPE_WOPI_MENTION, detail)
+
 
 class UserNotification(models.Model):
     to_user = LowerCaseCharField(db_index=True, max_length=255)
@@ -545,6 +550,9 @@ class UserNotification(models.Model):
     def is_repo_unarchive_failed_msg(self):
         return self.msg_type == MSG_TYPE_REPO_UNARCHIVE_FAILED
 
+    def is_wopi_mention_msg(self):
+        return self.msg_type == MSG_TYPE_WOPI_MENTION
+
     def user_message_detail_to_dict(self):
         """Parse user message detail, returns dict contains ``message`` and
         ``msg_from``.
@@ -602,6 +610,8 @@ class UserNotification(models.Model):
             return self.format_repo_archive_failed_msg()
         elif self.is_repo_unarchive_failed_msg():
             return self.format_repo_unarchive_failed_msg()
+        elif self.is_wopi_mention_msg():
+            return self.format_wopi_mention_msg()
         else:
             return ''
 
@@ -963,6 +973,30 @@ class UserNotification(models.Model):
             'file_url': reverse('view_lib_file', args=[repo_id, file_path]),
             'file_name': escape(file_name),
             'author': escape(email2nickname(author)),
+        }
+        return msg
+
+    def format_wopi_mention_msg(self):
+        try:
+            d = json.loads(self.detail)
+        except Exception as e:
+            logger.error(e)
+            return _("Internal Server Error")
+
+        repo_id = d['repo_id']
+        file_path = d['file_path']
+        from_user = d['from_user']
+
+        repo = seafile_api.get_repo(repo_id)
+        if repo is None or not seafile_api.get_file_id_by_path(repo.id, file_path):
+            self.delete()
+            return None
+
+        file_name = os.path.basename(file_path)
+        msg = _("%(from_user)s mentioned you in <a href='%(file_url)s'>%(file_name)s</a>") % {
+            'from_user': escape(email2nickname(from_user)),
+            'file_url': reverse('view_lib_file', args=[repo_id, file_path]),
+            'file_name': escape(file_name),
         }
         return msg
 

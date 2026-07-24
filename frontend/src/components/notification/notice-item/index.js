@@ -32,6 +32,7 @@ const MSG_TYPE_REPO_ARCHIVED = 'repo_archived';
 const MSG_TYPE_REPO_UNARCHIVED = 'repo_unarchived';
 const MSG_TYPE_REPO_ARCHIVE_FAILED = 'repo_archive_failed';
 const MSG_TYPE_REPO_UNARCHIVE_FAILED = 'repo_unarchive_failed';
+const MSG_TYPE_WOPI_MENTION = 'wopi_mention';
 
 dayjs.extend(relativeTime);
 
@@ -58,6 +59,20 @@ class NoticeItem extends React.Component {
       notice = notice.replace('{tagA}', `<a href=${Utils.encodePath(fileUrl)}>`);
       notice = notice.replace('{/tagA}', '</a>');
       return { avatar_url, notice };
+    }
+
+    if (noticeType === MSG_TYPE_WOPI_MENTION) {
+      let avatar_url = detail.from_user_avatar_url;
+      let author = detail.from_user_name;
+      let fileName = detail.file_name;
+      let fileUrl = siteRoot + 'lib/' + repo_id + '/' + 'file' + detail.file_path;
+      let notice = gettext('{author} mentioned you in {file_link}.');
+      notice = notice.replace('{author}', author);
+      notice = notice.replace('{file_link}', `{tagA}${fileName}{/tagA}`);
+      notice = Utils.HTMLescape(notice);
+      notice = notice.replace('{tagA}', `<a href=${Utils.encodePath(fileUrl)}>`);
+      notice = notice.replace('{/tagA}', '</a>');
+      return { avatar_url, notice, username: author };
     }
 
     if (noticeType === MSG_TYPE_ADD_USER_TO_GROUP) {
