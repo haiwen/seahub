@@ -18,17 +18,6 @@ from seahub.wopi.mentions import cache_wopi_mentions
 logger = logging.getLogger(__name__)
 
 
-def get_write_permission(request, repo_id, file_path):
-    permission = check_folder_permission(request, repo_id, file_path)
-    if not permission:
-        return None
-
-    if not parse_repo_perm(permission).can_edit_on_web:
-        return None
-
-    return permission
-
-
 def get_valid_wopi_info(access_token, request_user, repo_id=None, file_path=None):
     info_dict = get_file_info_by_token(access_token)
     if not info_dict:
@@ -58,21 +47,24 @@ class WOPIMentionsView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid.')
         if not file_path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'file_path invalid.')
+        if not mentioned_users:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'mentioned_users invalid.')
+
+        permission = check_folder_permission(request, repo_id, file_path)
+        if not permission or not parse_repo_perm(permission).can_edit_on_web:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         if not access_token:
             return api_error(status.HTTP_400_BAD_REQUEST, 'access_token invalid.')
 
-        if not get_valid_wopi_info(access_token, request.user.username, repo_id=repo_id, file_path=file_path):
+        username = request.user.username
+        if not get_valid_wopi_info(access_token, username, repo_id=repo_id, file_path=file_path):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-
-        if not get_write_permission(request, repo_id, file_path):
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-        if not isinstance(mentioned_users, list):
-            return api_error(status.HTTP_400_BAD_REQUEST, 'mentioned_users invalid.')
 
         try:
-            state = cache_wopi_mentions(
+            cache_wopi_mentions(
                 access_token,
-                request.user.username,
+                username,
                 repo_id,
                 file_path,
                 mentioned_users,
@@ -82,7 +74,4 @@ class WOPIMentionsView(APIView):
             logger.error(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
-        return Response({
-            'success': True,
-            'cached_count': len(state['mentioned_users']),
-        })
+        return Response({'success': True})
