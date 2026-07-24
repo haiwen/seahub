@@ -338,6 +338,9 @@ class Records extends Component {
       });
     }
     this.onDeselectAllRecords();
+    if (this.props.onCellClick) {
+      this.props.onCellClick(cell);
+    }
   };
 
   onCellRangeSelectionUpdated = (selectedRange) => {

@@ -80,6 +80,7 @@ const propTypes = {
   fullDirentList: PropTypes.array,
   eventBus: PropTypes.object,
   updateCurrentDirent: PropTypes.func.isRequired,
+  updateDetailDirent: PropTypes.func.isRequired,
   updateCurrentPath: PropTypes.func,
   toggleShowDirentToolbar: PropTypes.func,
   updateTreeNode: PropTypes.func,
@@ -358,6 +359,7 @@ class DirColumnView extends React.Component {
               updateDirentMetadata={this.props.updateDirentMetadata}
               onItemConvert={this.props.onItemConvert}
               showDirentDetail={this.props.showDirentDetail}
+              updateDetailDirent={this.props.updateDetailDirent}
               onItemsMove={this.props.onItemsMove}
               onItemMove={this.props.onItemMove}
               isDirentDetailShow={this.props.isDirentDetailShow}

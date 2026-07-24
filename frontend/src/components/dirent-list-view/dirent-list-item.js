@@ -231,6 +231,21 @@ class DirentListItem extends React.Component {
     this.props.onItemSelected(this.props.dirent, event);
   };
 
+  onRowClick = (event) => {
+    if (this.state.isRenaming) {
+      return;
+    }
+
+    const interactiveSelector = 'a, button, input, textarea, select, [role="button"], .op-icon, .dropdown, .dropdown-toggle';
+    if (event.target.closest(interactiveSelector)) {
+      return;
+    }
+
+    event.stopPropagation();
+    event.preventDefault();
+    this.props.onDirentClick(this.props.dirent, event);
+  };
+
   onItemStarred = (e) => {
     e.stopPropagation();
     const { dirent, repoID, path, updateDirent } = this.props;
@@ -713,6 +728,7 @@ class DirentListItem extends React.Component {
         onDragLeave={this.onItemDragLeave}
         onDrop={this.onItemDragDrop}
         onMouseDown={this.onItemMouseDown}
+        onClick={this.onRowClick}
         onContextMenu={this.onItemContextMenu}
       >
         {/* Checkbox */}

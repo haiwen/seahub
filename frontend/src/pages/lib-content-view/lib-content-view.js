@@ -147,6 +147,7 @@ class LibContentView extends React.Component {
       viewId: '0000',
       tagId: '',
       currentDirent: null,
+      detailDirent: null,
       columns: DIR_BASE_COLUMNS,
       tableViewColumns: DIR_BASE_COLUMNS,
       tableViewColumnOrder: this.props.repoID ? getDirTableColumnOrder(this.props.repoID) : null,
@@ -172,10 +173,21 @@ class LibContentView extends React.Component {
     this.setState({ currentDirent: dirent });
   };
 
+  updateDetailDirent = (dirent = null) => {
+    this.setState({ detailDirent: dirent });
+  };
+
   updateCurrentNotExistDirent = (deletedDirent) => {
-    let { currentDirent } = this.state;
+    const { currentDirent, detailDirent } = this.state;
+    const nextState = {};
     if (currentDirent && deletedDirent.name === currentDirent.name) {
-      this.setState({ currentDirent: null });
+      nextState.currentDirent = null;
+    }
+    if (detailDirent && deletedDirent.name === detailDirent.name) {
+      nextState.detailDirent = null;
+    }
+    if (Object.keys(nextState).length > 0) {
+      this.setState(nextState);
     }
   };
 
@@ -284,6 +296,7 @@ class LibContentView extends React.Component {
           path: this.state.path,
           isSessionExpired: false,
           currentDirent: null,
+          detailDirent: null,
           columns,
           tableViewColumns,
           metadata,
@@ -627,6 +640,8 @@ class LibContentView extends React.Component {
         isDirentListLoading: true,
         isViewFile: false,
         selectedDirentList: [],
+        currentDirent: null,
+        detailDirent: null,
       });
     }
 
@@ -924,6 +939,7 @@ class LibContentView extends React.Component {
         metadata,
         isSessionExpired: false,
         currentDirent: null,
+        detailDirent: null,
       }, () => {
         if (this.state.currentRepoInfo.is_admin) {
           if (this.foldersSharedOut) {
@@ -1295,7 +1311,7 @@ class LibContentView extends React.Component {
     let direntPaths = this.getSelectedDirentPaths();
     let dirNames = this.getSelectedDirentNames();
 
-    this.setState({ currentDirent: null });
+    this.setState({ currentDirent: null, detailDirent: null });
     seafileAPI.deleteMultipleDirents(repoID, this.state.path, dirNames).then(res => {
       this.deleteItemsAjaxCallback(direntPaths, dirNames);
 
@@ -1915,7 +1931,8 @@ class LibContentView extends React.Component {
 
   onDirentClick = (clickedDirent, event) => {
     this.setState({
-      currentDirent: clickedDirent && clickedDirent.isActive ? null : clickedDirent
+      currentDirent: clickedDirent && clickedDirent.isActive ? null : clickedDirent,
+      detailDirent: null,
     });
     const { direntList, selectedDirentList, lastSelectedIndex } = this.state;
     if (clickedDirent) {
@@ -2016,6 +2033,7 @@ class LibContentView extends React.Component {
       lastSelectedIndex: lastSelectedIndex,
       isAllDirentSelected: newSelectedDirentList.length === this.state.direntList.length,
       currentDirent,
+      detailDirent: null,
     });
   };
 
@@ -2044,7 +2062,8 @@ class LibContentView extends React.Component {
 
   onDirentSelected = (dirent, event) => {
     this.setState({
-      currentDirent: dirent && dirent.isActive ? null : dirent
+      currentDirent: dirent && dirent.isActive ? null : dirent,
+      detailDirent: null,
     });
 
     const { direntList, lastSelectedIndex, selectedDirentList } = this.state;
@@ -2094,6 +2113,7 @@ class LibContentView extends React.Component {
           direntList: nextDirentList,
           selectedDirentList: nextSelectedDirentList,
           lastSelectedIndex: nextSelectedIndex,
+          detailDirent: null,
         });
       } else {
         this.setState({
@@ -2101,6 +2121,7 @@ class LibContentView extends React.Component {
           direntList: nextDirentList,
           selectedDirentList: nextSelectedDirentList,
           lastSelectedIndex: nextSelectedIndex,
+          detailDirent: null,
         });
       }
     } else {
@@ -2110,6 +2131,7 @@ class LibContentView extends React.Component {
         direntList: nextDirentList,
         selectedDirentList: [],
         lastSelectedIndex: nextSelectedIndex,
+        detailDirent: null,
       });
     }
   };
@@ -2282,7 +2304,7 @@ class LibContentView extends React.Component {
       return item.name !== name;
     });
     this.recalculateSelectedDirents([name], direntList);
-    this.setState({ direntList: direntList, currentDirent: null });
+    this.setState({ direntList: direntList, currentDirent: null, detailDirent: null });
   };
 
   // only one scene: The moved items are inside current path
@@ -2297,6 +2319,7 @@ class LibContentView extends React.Component {
       isDirentSelected: false,
       isAllDirentSelected: false,
       currentDirent: null,
+      detailDirent: null,
     });
   };
 
@@ -2346,6 +2369,16 @@ class LibContentView extends React.Component {
           ...prevState.currentDirent,
           metadata: {
             ...prevState.currentDirent.metadata,
+            ...updateData
+          }
+        });
+      }
+
+      if (prevState.detailDirent && prevState.detailDirent.name === direntName) {
+        newState.detailDirent = new Dirent({
+          ...prevState.detailDirent,
+          metadata: {
+            ...prevState.detailDirent.metadata,
             ...updateData
           }
         });
@@ -2699,6 +2732,7 @@ class LibContentView extends React.Component {
       }),
       currentMode: nextMode,
       currentDirent: null,
+      detailDirent: null,
     });
   };
 
@@ -2713,6 +2747,7 @@ class LibContentView extends React.Component {
       selectedDirentList: selectedDirentList,
       isDirentSelected: selectedDirentList.length > 0,
       isAllDirentSelected: newDirentList.length ? selectedDirentList.length === newDirentList.length : false,
+      detailDirent: selectedDirentList.length > 0 ? null : this.state.detailDirent,
     });
   };
 
@@ -2942,12 +2977,18 @@ class LibContentView extends React.Component {
       currentDirent = currentDirent.toJson();
     }
 
+    let detailDirent = this.state.detailDirent;
+    if (detailDirent instanceof Dirent) {
+      detailDirent = detailDirent.toJson();
+    }
+
     let detailPath = this.state.path;
-    if (!currentDirent && currentMode !== METADATA_MODE && currentMode !== TAGS_MODE && this.state.selectedDirentList.length === 0) {
+    const activeDetailDirent = this.state.selectedDirentList.length > 0 ? currentDirent : (detailDirent || currentDirent);
+    if (!activeDetailDirent && currentMode !== METADATA_MODE && currentMode !== TAGS_MODE && this.state.selectedDirentList.length === 0) {
       detailPath = Utils.getDirName(this.state.path);
     }
 
-    const detailDirent = currentDirent || currentNode?.object || null;
+    const renderedDetailDirent = activeDetailDirent || currentNode?.object || null;
     return (
       <FileOperationsProvider
         repoID={repoID}
@@ -3160,6 +3201,7 @@ class LibContentView extends React.Component {
                           showDirentDetail={this.showDirentDetail}
                           eventBus={this.props.eventBus}
                           updateCurrentDirent={this.updateCurrentDirent}
+                          updateDetailDirent={this.updateDetailDirent}
                           updateCurrentPath={this.updatePath}
                           toggleShowDirentToolbar={this.toggleShowDirentToolbar}
                           updateTreeNode={this.updateTreeNode}
@@ -3180,7 +3222,7 @@ class LibContentView extends React.Component {
                           path={detailPath}
                           repoID={this.props.repoID}
                           currentRepoInfo={{ ...this.state.currentRepoInfo }}
-                          dirent={detailDirent}
+                          dirent={renderedDetailDirent}
                           selectedDirents={this.state.selectedDirentList}
                           repoTags={this.state.repoTags}
                           fileTags={this.state.isViewFile ? this.state.fileTags : []}
