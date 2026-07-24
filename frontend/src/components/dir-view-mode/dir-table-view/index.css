@@ -25,6 +25,7 @@
 
 .table-cell-editor .sf-table-cell-text-editor {
   height: 100%;
+  background-color: var(--bs-body-bg);
 }
 
 .table-cell-editor .sf-table-cell-text-editor.form-control:focus,
