@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import { UncontrolledTooltip } from 'reactstrap';
+import { Tooltip as ReactstrapTooltip } from 'reactstrap';
+import { getTooltipOpenState } from './tooltip-utils';
 
 import '../css/tooltip.css';
 
@@ -20,7 +21,12 @@ const Tooltip = ({
   shortcut
 }) => {
 
+  const [isOpen, setIsOpen] = useState(false);
   const hasShortcut = Boolean(shortcut);
+
+  const toggle = useCallback((event) => {
+    setIsOpen((open) => getTooltipOpenState(open, event));
+  }, []);
 
   const renderContent = () => {
     if (hasShortcut) {
@@ -49,6 +55,7 @@ const Tooltip = ({
     fade: false,
     hideArrow: true,
     autohide: true,
+    trigger: 'hover focus click',
     modifiers: [
       {
         name: 'offset',
@@ -66,9 +73,9 @@ const Tooltip = ({
   };
 
   return (
-    <UncontrolledTooltip {...tooltipProps}>
+    <ReactstrapTooltip {...tooltipProps} isOpen={isOpen} toggle={toggle}>
       {renderContent()}
-    </UncontrolledTooltip>
+    </ReactstrapTooltip>
   );
 };
 
