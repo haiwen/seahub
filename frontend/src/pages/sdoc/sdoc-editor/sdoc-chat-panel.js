@@ -7,6 +7,7 @@ import OpIcon from '../../../components/op-icon';
 import { AttachmentObject } from '../../../components/dir-view-mode/dir-chat/models';
 import { ASK_PAGE_SLUG_ID } from '../../../components/dir-view-mode/dir-chat/constants';
 import { gettext } from '../../../utils/constants';
+import { getDocSessionIds, getLatestDocSessionId, removeDocSession, removeDocSessions, touchDocSession } from './sdoc-chat-session-storage';
 
 import './sdoc-chat-panel.css';
 
@@ -21,7 +22,25 @@ const SdocChatPanel = ({ onClose, width }) => {
     })];
   }, [docName, docPath, repoID]);
 
-  const getInitialPageSlugId = useCallback(() => ASK_PAGE_SLUG_ID.NEW, []);
+  const getInitialPageSlugId = useCallback(() => {
+    return getLatestDocSessionId(repoID, docPath) || ASK_PAGE_SLUG_ID.NEW;
+  }, [docPath, repoID]);
+
+  const getSessionIdsFilter = useCallback(() => {
+    return getDocSessionIds(repoID, docPath);
+  }, [docPath, repoID]);
+
+  const onSessionTouch = useCallback((sessionId) => {
+    touchDocSession(repoID, docPath, sessionId);
+  }, [docPath, repoID]);
+
+  const onSessionDelete = useCallback((sessionId) => {
+    removeDocSession(repoID, docPath, sessionId);
+  }, [docPath, repoID]);
+
+  const onSessionIdsMissing = useCallback((sessionIds) => {
+    removeDocSessions(repoID, docPath, sessionIds);
+  }, [docPath, repoID]);
 
   useLayoutEffect(() => {
     const panel = document.getElementById('sdoc-content-right-panel');
@@ -60,7 +79,7 @@ const SdocChatPanel = ({ onClose, width }) => {
         </div>
         <div className="sdoc-chat-panel-header-right">
           <div className="sdoc-chat-panel-toolbar">
-            <ChatToolbar className="sdoc-chat-panel-toolbar-actions" isCompact={true} showHistory={false} />
+            <ChatToolbar className="sdoc-chat-panel-toolbar-actions" isCompact={true} showHistory={true} />
           </div>
           <OpIcon
             id="sdoc-chat-panel-close-btn"
@@ -79,8 +98,13 @@ const SdocChatPanel = ({ onClose, width }) => {
             embedded={true}
             initialAttachments={initialAttachments}
             hideDocuments={true}
-            enableSessions={false}
+            enableSessions={true}
             getInitialPageSlugId={getInitialPageSlugId}
+            getSessionIdsFilter={getSessionIdsFilter}
+            onSessionTouch={onSessionTouch}
+            onSessionDelete={onSessionDelete}
+            onSessionIdsMissing={onSessionIdsMissing}
+            fallbackToNewWhenSessionMissing={true}
           />
         </div>
       </div>

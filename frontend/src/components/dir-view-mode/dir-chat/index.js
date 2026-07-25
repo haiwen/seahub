@@ -85,6 +85,9 @@ const Main = ({ repoID, settings, showDocuments = true, compact = false, enableS
 
     const unsubscribeNewSession = eventBus.subscribe(EVENT_BUS_TYPE.CHAT_NEW_SESSION, () => {
       togglePageSlugId(ASK_PAGE_SLUG_ID.NEW);
+      if (compact) {
+        closeShowSessions();
+      }
     });
 
     const unsubscribeToggleSessions = enableSessions ? eventBus.subscribe(EVENT_BUS_TYPE.CHAT_TOGGLE_SESSIONS, () => {
@@ -95,7 +98,7 @@ const Main = ({ repoID, settings, showDocuments = true, compact = false, enableS
       unsubscribeNewSession && unsubscribeNewSession();
       unsubscribeToggleSessions && unsubscribeToggleSessions();
     };
-  }, [enableSessions, togglePageSlugId, toggleIsShowSessions]);
+  }, [closeShowSessions, compact, enableSessions, togglePageSlugId, toggleIsShowSessions]);
 
   useEffect(() => {
     if (!enableSessions) {
@@ -170,7 +173,24 @@ Main.propTypes = {
   onEmbeddedViewChange: PropTypes.func,
 };
 
-const DirChat = ({ repoID, repoName, settings, embedded = false, initialAttachments = [], hideDocuments = false, enableSessions = true, defaultShowSessions, resetURL, getInitialPageSlugId, onEmbeddedViewChange }) => {
+const DirChat = ({
+  repoID,
+  repoName,
+  settings,
+  embedded = false,
+  initialAttachments = [],
+  hideDocuments = false,
+  enableSessions = true,
+  defaultShowSessions,
+  resetURL,
+  getInitialPageSlugId,
+  onEmbeddedViewChange,
+  getSessionIdsFilter,
+  onSessionTouch,
+  onSessionDelete,
+  onSessionIdsMissing,
+  fallbackToNewWhenSessionMissing = false,
+}) => {
   const defaultResetURL = useCallback((pageSlugId) => {
     const baseUrl = `${siteRoot}library/${repoID}/${encodeURIComponent(repoName)}/?chat=true&path=/`;
     const url = pageSlugId === ASK_PAGE_SLUG_ID.NEW ? baseUrl : `${baseUrl}&chat_session_id=${pageSlugId}`;
@@ -195,7 +215,16 @@ const DirChat = ({ repoID, repoName, settings, embedded = false, initialAttachme
 
   return (
     <AskPageProvider resetURL={effectiveResetURL} getInitialPageSlugId={effectiveGetInitialPageSlugId}>
-      <SessionsProvider repoID={repoID} api={chatAPI} enableSessions={enableSessions}>
+      <SessionsProvider
+        repoID={repoID}
+        api={chatAPI}
+        enableSessions={enableSessions}
+        getSessionIdsFilter={getSessionIdsFilter}
+        onSessionTouch={onSessionTouch}
+        onSessionDelete={onSessionDelete}
+        onSessionIdsMissing={onSessionIdsMissing}
+        fallbackToNewWhenSessionMissing={fallbackToNewWhenSessionMissing}
+      >
         <DocumentsProvider>
           <AIChatToolsProvider initialAttachments={normalizedInitialAttachments}>
             <Main
@@ -226,6 +255,11 @@ DirChat.propTypes = {
   resetURL: PropTypes.func,
   getInitialPageSlugId: PropTypes.func,
   onEmbeddedViewChange: PropTypes.func,
+  getSessionIdsFilter: PropTypes.func,
+  onSessionTouch: PropTypes.func,
+  onSessionDelete: PropTypes.func,
+  onSessionIdsMissing: PropTypes.func,
+  fallbackToNewWhenSessionMissing: PropTypes.bool,
 };
 
 export default DirChat;
