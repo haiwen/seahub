@@ -22,6 +22,7 @@ export const SessionsProvider = ({
   fallbackToNewWhenSessionMissing = false,
 }) => {
   const [isLoading, setLoading] = useState(enableSessions);
+  const [isSessionsLoadSuccessful, setIsSessionsLoadSuccessful] = useState(false);
   const [sessions, setSessions] = useState([]);
   const [teamSessions, setTeamSessions] = useState([]);
   const [isTeamSessionsLoading, setIsTeamSessionsLoading] = useState(false);
@@ -69,9 +70,11 @@ export const SessionsProvider = ({
     if (!enableSessions) {
       setSessions([]);
       setLoading(false);
+      setIsSessionsLoadSuccessful(false);
       return Promise.resolve();
     }
     setLoading(true);
+    setIsSessionsLoadSuccessful(false);
     return api.listChatSessions(repoID).then((res) => {
       const normalizedSessions = normalizeSessions(res.data.sessions);
       const sessionIds = getFilteredSessionIds();
@@ -86,9 +89,11 @@ export const SessionsProvider = ({
       }
 
       setSessions(nextSessions);
+      setIsSessionsLoadSuccessful(true);
     }).catch((error) => {
       toaster.danger(Utils.getErrorMsg(error));
       setSessions([]);
+      setIsSessionsLoadSuccessful(false);
     }).finally(() => {
       setLoading(false);
     });
@@ -334,6 +339,7 @@ export const SessionsProvider = ({
   useEffect(() => {
     if (!enableSessions) {
       setLoading(false);
+      setIsSessionsLoadSuccessful(false);
       setSessions([]);
       setTeamSessions([]);
       setIsShowSessions(false);
@@ -344,11 +350,7 @@ export const SessionsProvider = ({
   }, [enableSessions, loadSessions]);
 
   useEffect(() => {
-    touchSession(pageSlugId);
-  }, [pageSlugId, touchSession]);
-
-  useEffect(() => {
-    if (!enableSessions || !fallbackToNewWhenSessionMissing || isLoading || pageSlugId === ASK_PAGE_SLUG_ID.NEW) {
+    if (!enableSessions || !fallbackToNewWhenSessionMissing || isLoading || !isSessionsLoadSuccessful || pageSlugId === ASK_PAGE_SLUG_ID.NEW) {
       return;
     }
 
@@ -361,7 +363,7 @@ export const SessionsProvider = ({
       onSessionDelete(pageSlugId);
     }
     togglePageSlugId(ASK_PAGE_SLUG_ID.NEW);
-  }, [enableSessions, fallbackToNewWhenSessionMissing, isLoading, onSessionDelete, pageSlugId, sessions, togglePageSlugId]);
+  }, [enableSessions, fallbackToNewWhenSessionMissing, isLoading, isSessionsLoadSuccessful, onSessionDelete, pageSlugId, sessions, togglePageSlugId]);
 
   useEffect(() => {
     const unsubscribeSendChatMessage = eventBus.subscribe(EVENT_BUS_TYPE.ASK_QUESTION, solveProblem);
