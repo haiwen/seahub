@@ -38,6 +38,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
     getSession,
     getChatMessage,
     startChatFromConversation,
+    touchSession,
   } = useSessions();
   const { isShowDocuments, documents } = useDocuments();
   const { pageSlugId, togglePageSlugId } = useAskPage();
@@ -110,6 +111,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
     });
 
     if (pageSlugId !== ASK_PAGE_SLUG_ID.NEW) {
+      touchSession(pageSlugId);
       eventBus.dispatch(EVENT_BUS_TYPE.ASK_QUESTION, {
         sessionId: pageSlugId,
         message: validMessage,
@@ -133,7 +135,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
         });
       }, 3);
     });
-  }, [chatHistories, createSession, pageSlugId, togglePageSlugId, updateChatHistories]);
+  }, [chatHistories, createSession, pageSlugId, togglePageSlugId, touchSession, updateChatHistories]);
 
   const handleStartChatFromConversation = useCallback(() => {
     if (!session?._id || !startChatFromConversation || isStartingChatFromConversation) {
