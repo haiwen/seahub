@@ -1,6 +1,7 @@
 .sea-ai-chat-customize-link-reference {
-  height: 20px;
-  width: 20px;
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
   text-align: center;
   border-radius: 50%;
   font-size: 12px;
