@@ -25,6 +25,20 @@
   justify-content: space-between;
 }
 
+.sea-ai-ask-sessions-wrapper .sea-ai-ask-sessions-close-btn {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.sea-ai-ask-sessions-wrapper .sea-ai-ask-sessions-close-btn:hover {
+  background-color: var(--bs-icon-btn-hover-bg-color);
+}
+
 .sea-ai-ask-sessions-wrapper .sea-ai-ask-sessions-tabs {
   position: relative;
   width: calc(100% - 16px);

@@ -1,11 +1,12 @@
 .sea-ai-chat-attachments-container {
   width: 100%;
   overflow-x: auto !important;
+  margin-bottom: 12px;
   scrollbar-width: none;
 }
 
 .sea-ai-chat-attachments {
-  width: fit-content;
+  width: max-content;
   display: flex;
   align-items: center;
   flex-wrap: nowrap !important;
@@ -22,21 +23,21 @@
 
 .sea-ai-chat-attachments-scroll-before {
   left: 15px;
-  background: linear-gradient(90deg, var(--bs-body-bg), var(--sea-ai-chat-card-bg));
+  background: linear-gradient(270deg, rgba(9, 9, 9, 0), var(--bs-body-bg) 45%);
   padding-right: 6px;
 }
 
 .sea-ai-chat-attachments-scroll-after {
   right: 15px;
-  background: linear-gradient(270deg, var(--bs-body-bg), var(--sea-ai-chat-card-bg));
+  background: linear-gradient(90deg, transparent 0%, var(--bs-body-bg) 45%);
   padding-left: 6px;
 }
 
 .sea-ai-chat-attachments-scroll-before,
 .sea-ai-chat-attachments-scroll-after {
   z-index: 5;
-  width: 30px;
-  height: 36px;
+  width: 56px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -49,4 +50,21 @@
   border: 1px solid var(--bs-border-secondary-color);
   border-radius: 8px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  min-width: 0;
+  padding: 0;
+  line-height: 1;
+  color: var(--bs-icon-color);
+  background-color: transparent;
+}
+
+.sea-ai-chat-attachments-scroll-before .sea-ai-icon-btn svg,
+.sea-ai-chat-attachments-scroll-after .sea-ai-icon-btn svg {
+  width: 12px;
+  height: 12px;
 }

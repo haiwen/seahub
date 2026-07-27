@@ -69,6 +69,38 @@
   min-height: 0;
 }
 
+.sea-ai-chat-file-selector-editor .option-editor-empty-tip-img {
+  display: none;
+}
+
+.sea-ai-chat-file-selector-editor .option-editor-start-searching-tip::before,
+.sea-ai-chat-file-selector-editor .option-editor-no-results-tip::before {
+  content: "";
+  width: 48px;
+  height: 48px;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+[data-bs-theme="light"] .sea-ai-chat-file-selector-editor .option-editor-no-results-tip::before {
+  background-image: url(../../../../../../../media/img/no-results.png);
+}
+
+[data-bs-theme="dark"] .sea-ai-chat-file-selector-editor .option-editor-no-results-tip::before {
+  background-image: url(../../../../../../../media/img/no-results-dark.png);
+}
+
+[data-bs-theme="light"] .sea-ai-chat-file-selector-editor .option-editor-start-searching-tip::before {
+  background-image: url(../../../../../../../media/img/start-searching.png);
+}
+
+[data-bs-theme="dark"] .sea-ai-chat-file-selector-editor .option-editor-start-searching-tip::before {
+  background-image: url(../../../../../../../media/img/start-searching-dark.png);
+}
+
 .sea-ai-chat-selector-display-editor .popover.bs-popover-auto[data-popper-placement^=top],
 .sea-ai-chat-selector-display-editor .popover.bs-popover-top {
   margin-bottom: 0;

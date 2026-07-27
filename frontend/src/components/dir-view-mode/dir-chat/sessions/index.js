@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { gettext } from '../../../../utils/constants';
 import CenteredLoading from '../../../centered-loading';
 import Icon from '../../../icon';
+import Tooltip from '../../../tooltip';
 import { useSessions } from '../hooks';
 import EmptyTip from '../../../empty-tip';
 import Session from './session';
@@ -86,9 +87,18 @@ const Sessions = ({ sessionId, embedded = false, onSelect }) => {
       {!embedded && (
         <div className="sea-ai-ask-sessions-header">
           <div>{gettext('Histories')}</div>
-          <button type="button" className="btn btn-icon p-0 border-0 bg-transparent" onClick={closeShowSessions} title={gettext('Close')}>
+          <button
+            id="sea-ai-ask-sessions-close-btn"
+            type="button"
+            className="btn btn-icon p-0 border-0 sea-ai-ask-sessions-close-btn"
+            onClick={closeShowSessions}
+            aria-label={gettext('Close')}
+          >
             <Icon symbol="close" />
           </button>
+          <Tooltip target="sea-ai-ask-sessions-close-btn" placement="bottom">
+            {gettext('Close')}
+          </Tooltip>
         </div>
       )}
       {!embedded && (

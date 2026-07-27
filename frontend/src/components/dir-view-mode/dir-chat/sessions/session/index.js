@@ -1,9 +1,10 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Button, Dropdown, DropdownMenu, DropdownItem, DropdownToggle, Input, Modal, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Dropdown, DropdownMenu, DropdownToggle, Input, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../../../../utils/constants';
 import Icon from '../../../../icon';
+import CustomDropdownItem from '../../../../dropdown/item';
 import CommonOperationConfirmationDialog from '../../../../dialog/common-operation-confirmation-dialog';
 import { useAskPage, useSessions } from '../../hooks';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
@@ -61,21 +62,37 @@ const Session = ({ session, isSelected, isTeamTab = false, embedded = false, onS
             <Icon symbol="more-level" />
           </DropdownToggle>
           <DropdownMenu end>
-            <DropdownItem onClick={() => setIsShowRenameDialog(true)}>
-              <span className="dropdown-item-main-slot">{gettext('Rename')}</span>
-            </DropdownItem>
+            <CustomDropdownItem
+              item={{
+                label: gettext('Rename'),
+                icon: <Icon symbol="rename" />,
+              }}
+              onClick={() => setIsShowRenameDialog(true)}
+            />
             {session.is_shared ? (
-              <DropdownItem onClick={() => unshareSession(session._id)}>
-                <span className="dropdown-item-main-slot">{gettext('Unshare')}</span>
-              </DropdownItem>
+              <CustomDropdownItem
+                item={{
+                  label: gettext('Unshare'),
+                  icon: <Icon symbol="unshare" />,
+                }}
+                onClick={() => unshareSession(session._id)}
+              />
             ) : (
-              <DropdownItem onClick={() => shareSession(session._id)}>
-                <span className="dropdown-item-main-slot">{gettext('Share')}</span>
-              </DropdownItem>
+              <CustomDropdownItem
+                item={{
+                  label: gettext('Share'),
+                  icon: <Icon symbol="share" />,
+                }}
+                onClick={() => shareSession(session._id)}
+              />
             )}
-            <DropdownItem onClick={() => setIsShowDeleteDialog(true)}>
-              <span className="dropdown-item-main-slot">{gettext('Delete')}</span>
-            </DropdownItem>
+            <CustomDropdownItem
+              item={{
+                label: gettext('Delete'),
+                icon: <Icon symbol="delete1" />,
+              }}
+              onClick={() => setIsShowDeleteDialog(true)}
+            />
           </DropdownMenu>
         </Dropdown>
       </div>

@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { gettext } from '../../../../utils/constants';
 import ClickOutside from '../../../click-outside';
 import Icon from '../../../icon';
+import Tooltip from '../../../tooltip';
 import { useAIChatTools } from '../hooks';
 import AIModelSelector from './ai-model-selector';
 import AttachmentsFormatter from './attachments';
@@ -118,15 +119,20 @@ const ChatInput = forwardRef(({
               <div className="sea-ai-model-selector">
                 <AIModelSelector selectedModel={selectedModel} updateModel={setSelectedModel} />
               </div>
-              <button
-                type="button"
-                className={classNames('btn p-0 border-0 d-flex align-items-center justify-content-center sea-ai-ask-icon-btn icon-send-wrapper no-hover-bg', { 'disabled': isSendDisabled })}
-                onClick={handleSend}
-                disabled={isSendDisabled}
-                title={gettext('Send')}
-              >
-                <Icon symbol="btn-send" className="sea-ai-icon-svg" />
-              </button>
+              <span id="sea-ai-chat-send-tooltip" className="d-inline-flex">
+                <button
+                  type="button"
+                  className={classNames('btn p-0 border-0 d-flex align-items-center justify-content-center sea-ai-ask-icon-btn icon-send-wrapper no-hover-bg', { 'disabled': isSendDisabled })}
+                  onClick={handleSend}
+                  disabled={isSendDisabled}
+                  aria-label={gettext('Send')}
+                >
+                  <Icon symbol="btn-send" className="sea-ai-icon-svg" />
+                </button>
+              </span>
+              <Tooltip target="sea-ai-chat-send-tooltip" placement="top">
+                {gettext('Send')}
+              </Tooltip>
             </div>
           </div>
         </div>

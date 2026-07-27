@@ -8,8 +8,14 @@
   cursor: pointer;
 }
 
-.sea-ai-ask-sessions-wrapper .sea-ai-ask-session-item.active,
-.sea-ai-ask-sessions-wrapper .sea-ai-ask-session-item:hover,
+.sea-ai-ask-sessions-wrapper .sea-ai-ask-session-item.active {
+  background-color: var(--bs-nav-active-bg);
+}
+
+.sea-ai-ask-sessions-wrapper .sea-ai-ask-session-item:hover {
+  background-color: var(--bs-nav-hover-bg);
+}
+
 .sea-ai-ask-sessions-wrapper .sea-ai-ask-session-item .sea-ai-ask-session-more-op-btn:hover {
   background-color: var(--bs-icon-btn-hover-bg-color);
 }

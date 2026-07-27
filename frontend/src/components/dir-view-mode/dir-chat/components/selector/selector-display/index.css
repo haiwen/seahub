@@ -16,12 +16,26 @@
   background-color: var(--sea-ai-chat-card-bg);
 }
 
+.sea-ai-customize-select.sea-ai-chat-selector-display.sea-ai-model-selector {
+  cursor: pointer;
+}
+
 .sea-ai-customize-select.sea-ai-chat-selector-display:hover {
   background-color: var(--bs-icon-btn-hover-bg-color);
 }
 
 .sea-ai-customize-select.sea-ai-chat-selector-display:not(.border):hover {
   background-color: var(--bs-hover-bg);
+}
+
+.sea-ai-customize-select.sea-ai-chat-selector-display.sea-ai-model-selector:hover {
+  background:
+    linear-gradient(
+      0deg,
+      var(--bs-icon-btn-hover-bg-color) 0%,
+      var(--bs-icon-btn-hover-bg-color) 100%
+    ),
+    var(--sea-ai-chat-card-bg);
 }
 
 .sea-ai-customize-select.sea-ai-chat-selector-display.highlight {
