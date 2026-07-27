@@ -2988,7 +2988,9 @@ class LibContentView extends React.Component {
       detailPath = Utils.getDirName(this.state.path);
     }
 
-    const fallbackFolderDetailDirent = !activeDetailDirent && this.state.path !== '/'
+    const isMetadataDetailPath = this.state.path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/') ||
+      this.state.path.startsWith('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/');
+    const fallbackFolderDetailDirent = !isMetadataDetailPath && !activeDetailDirent && this.state.path !== '/'
       ? (currentNode?.object || new Dirent({ name: Utils.getFileName(this.state.path), type: 'dir' }))
       : null;
     const renderedDetailDirent = activeDetailDirent || fallbackFolderDetailDirent || null;
