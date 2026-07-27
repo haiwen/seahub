@@ -1547,6 +1547,14 @@ CREATE TABLE `repo_metadata`  (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `repo_metadata_status` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `repo_id` VARCHAR(36) NOT NULL,
+  `ai_summary_running` TINYINT(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_repo_id` (`repo_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 CREATE TABLE `repo_metadata_view` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `repo_id` varchar(36) NOT NULL,
