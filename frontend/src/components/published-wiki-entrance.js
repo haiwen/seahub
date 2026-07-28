@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { UncontrolledTooltip } from 'reactstrap';
+import Tooltip from './tooltip';
 import { serviceURL, gettext } from '../utils/constants';
 
 import '../css/published-wiki-entrance.css';
@@ -25,16 +25,13 @@ class PublishedWikiEntrance extends Component {
           href={`${serviceURL}/wiki/publish/${customURLPart}`}
           target="_blank"
           rel="noreferrer"
-          onClick={(e) => {e.stopPropagation();}}
+          onClick={(e) => { e.stopPropagation(); }}
         >
           {gettext('Published')}
         </a>
-        <UncontrolledTooltip
-          target={`wiki-${wikiID}`}
-          placement="bottom"
-        >
+        <Tooltip target={`wiki-${wikiID}`}>
           {gettext('View published page')}
-        </UncontrolledTooltip>
+        </Tooltip>
       </>
     );
   }

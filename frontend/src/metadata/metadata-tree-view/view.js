@@ -293,7 +293,6 @@ const ViewItem = ({
           <div className="right-icon" id={`metadata-view-dropdown-item-${viewId}`} >
             {highlight && (
               <CustomDropdown
-                target={`metadata-view-dropdown-item-${viewId}`}
                 items={operations}
                 menuClassName="metadata-views-dropdown-menu"
                 freezeItem={freezeItem}

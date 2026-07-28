@@ -30,14 +30,12 @@
 }
 
 .repo-commit-time-icon {
-  width: 16px;
-  height: 16px;
   margin-right: 8px;
 }
 
 .repo-commit-view-snapshot-btn {
   height: 26px;
-  padding: 0 12px;
+  padding: 0 8px;
   background: transparent;
   border: 1px solid var(--bs-border-color);
   border-radius: 4px;
