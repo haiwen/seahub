@@ -66,12 +66,11 @@ html, body {
 .wiki2-search,
 .wiki2-search-btn {
   margin: 10px 8px 0;
-  min-height: 32px;
-  display: inline-flex;
+  height: 32px;
+  display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 8px;
-  padding: 0 10px;
+  padding: 0;
   border: none;
   border-radius: 3px;
   background: transparent;
@@ -79,6 +78,7 @@ html, body {
   font-size: .875rem;
   text-align: left;
   flex-shrink: 0;
+  cursor: pointer;
 }
 
 .wiki2-search:hover,
@@ -88,18 +88,19 @@ html, body {
 
 .wiki2-search .wiki2-search-btn__icon,
 .wiki2-search-btn__icon {
-  width: 16px;
-  height: 16px;
+  width: 24px;
+  height: 24px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  margin: 0 8px;
   color: #666;
 }
 
 .wiki2-search .wiki2-search-btn__icon svg,
 .wiki2-search-btn__icon svg {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
 }
 
 .wiki2-pages-container {
@@ -364,7 +365,7 @@ html, body {
 .wiki2-search-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(0, 0, 0, 0.5);
   z-index: 1200;
 }
 
@@ -374,7 +375,7 @@ html, body {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 10vh 16px 16px;
+  padding: 1.75rem 16px 16px;
   z-index: 1201;
 }
 
@@ -386,8 +387,8 @@ html, body {
 }
 
 .wiki2-search-modal__dialog {
-  width: min(720px, 100%);
-  max-height: min(70vh, 640px);
+  width: 100%;
+  max-width: 500px;
   display: flex;
   flex-direction: column;
   background: var(--bs-body-bg, #fff);
@@ -427,8 +428,8 @@ html, body {
 }
 
 .wiki2-search-input .form-control {
-  height: 44px;
-  padding-left: 36px;
+  height: 38px;
+  padding-left: 40px;
   padding-right: 36px;
   font-size: .875rem;
   width: 100%;
@@ -462,9 +463,9 @@ html, body {
 
 .wiki2-search-result-container {
   min-height: 48px;
-  max-height: calc(70vh - 120px);
+  max-height: calc(100vh - 200px);
   overflow-y: auto;
-  padding: 0 16px 16px;
+  padding: 0 16px;
 }
 
 .wiki2-search-status {
@@ -576,11 +577,7 @@ html, body {
 
 @media (max-width: 767px) {
   .wiki2-search-modal {
-    padding-top: 5vh;
-  }
-
-  .wiki2-search-modal__dialog {
-    max-height: 80vh;
+    padding: .5rem;
   }
 
   .wiki2-search-modal .wiki2-search-input {
@@ -590,6 +587,12 @@ html, body {
   .wiki2-search-result {
     padding-top: 16px;
     padding-right: 16px;
+  }
+}
+
+@media (min-width: 992px) {
+  .wiki2-search-modal__dialog {
+    max-width: 800px;
   }
 }
 
