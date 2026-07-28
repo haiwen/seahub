@@ -57,7 +57,9 @@
 .search-icon-left {
   display: flex;
   align-items: center;
-  justify-content: center;
+  min-width: 16px !important;
+  padding-left: 12px;
+  padding-right: 8px;
 }
 
 .search-icon-left .seafile-multicolor-icon {
@@ -85,7 +87,7 @@
 
 .search-icon-right:hover {
   background-color: var(--bs-icon-btn-hover-bg-color);
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 .search-icon-right.sf3-font-set-up {
