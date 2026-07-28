@@ -72,6 +72,16 @@
   padding: 8px;
 }
 
+.sea-ai-ask-session-dropdown-menu .dropdown-item-icon {
+  margin-right: 12px !important;
+}
+
+.sea-ai-ask-session-dropdown-menu .dropdown-item-icon .seafile-multicolor-icon {
+  width: 14px;
+  height: 14px;
+  color: #666;
+}
+
 .sea-ai-ask-sessions-wrapper .sea-ai-ask-session-item.embedded {
   min-height: 32px;
   margin-bottom: 4px;
