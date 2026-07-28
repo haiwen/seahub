@@ -63,10 +63,8 @@ const LibraryFilesSelector = ({ repoID, value: attachments = [], onChange: props
 
   const onChange = useCallback((selectedKeys) => {
     const currentKeys = attachments.map((att) => att.key);
-
     const addedKeys = selectedKeys.filter((key) => !currentKeys.includes(key));
     const removedKeys = currentKeys.filter((key) => !selectedKeys.includes(key));
-
     let updatedAttachments = [...attachments];
 
     if (removedKeys.length > 0) {

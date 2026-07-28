@@ -20,6 +20,7 @@ const SyncSelector = ({ icon, className, value, title, onChange, children, onSea
 
   const handleChange = useCallback((newValue) => {
     onChange && onChange(newValue);
+    setIsShowSelector(false);
   }, [onChange]);
 
   const onToggle = useCallback(() => {
