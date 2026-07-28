@@ -158,6 +158,10 @@ export const Utils = {
     return file_ext === 'pdf';
   },
 
+  epubCheck: function (filename) {
+    return Utils.getFileExtension(filename, true).toLowerCase() === 'epub';
+  },
+
   getShareLinkPermissionList: function (itemType, permission, path, canEdit) {
     // itemType: library, dir, file
     // permission: rw, r, admin, cloud-edit, preview, custom-*
