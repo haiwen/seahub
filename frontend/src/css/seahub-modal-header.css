@@ -19,14 +19,15 @@
   gap: 8px;
   min-width: 0;
   width: 100%;
+  font-weight: 500;
 }
 
 .modal .seahub-modal-btn.close {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   padding: 0;
   opacity: 1;
   margin: 0 0 0 12px;
@@ -46,8 +47,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   border-radius: 4px;
 }
 

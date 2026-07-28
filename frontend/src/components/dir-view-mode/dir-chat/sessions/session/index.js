@@ -61,7 +61,7 @@ const Session = ({ session, isSelected, isTeamTab = false, embedded = false, onS
           <DropdownToggle color="link" className="sea-ai-ask-session-more-op-btn p-0 border-0 text-secondary">
             <Icon symbol="more-level" />
           </DropdownToggle>
-          <DropdownMenu end>
+          <DropdownMenu end className="sea-ai-ask-session-dropdown-menu">
             <CustomDropdownItem
               item={{
                 label: gettext('Rename'),

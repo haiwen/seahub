@@ -26,13 +26,18 @@
 }
 
 .sea-ai-ask-sessions-wrapper .sea-ai-ask-sessions-close-btn {
-  width: 32px;
-  min-width: 32px;
-  height: 32px;
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 4px;
+}
+
+.sea-ai-ask-sessions-wrapper .sea-ai-ask-sessions-close-btn .seafile-multicolor-icon {
+  width: 16px;
+  height: 16px;
 }
 
 .sea-ai-ask-sessions-wrapper .sea-ai-ask-sessions-close-btn:hover {
