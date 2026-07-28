@@ -195,7 +195,7 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
         <span>{gettext('Search')}</span>
       </Button>
       {isModalOpen &&
-        <Modal className="wiki2-search-modal" isOpen={isModalOpen} toggle={resetToDefault} autoFocus={false} size='lg'>
+        <Modal className="wiki2-search-modal" isOpen={isModalOpen} toggle={resetToDefault} autoFocus={false} returnFocusAfterClose={false} size='lg'>
           <ModalBody>
             <div className="wiki2-search-input">
               <span className="d-flex align-items-center search-icon-left input-icon-addon">

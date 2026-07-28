@@ -1010,6 +1010,8 @@ function getElement(id) {
       typeToStart: searchModal.getAttribute('data-type-to-start') || '',
       searching: searchModal.getAttribute('data-searching') || '',
       noResult: searchModal.getAttribute('data-no-result') || '',
+      typeToStartImage: searchModal.getAttribute('data-type-to-start-image') || '',
+      noResultImage: searchModal.getAttribute('data-no-result-image') || '',
       untitled: searchModal.getAttribute('data-untitled') || '',
       currentPage: searchModal.getAttribute('data-current-page') || '',
       searchFailed: searchModal.getAttribute('data-search-failed') || ''
@@ -1049,8 +1051,29 @@ function getElement(id) {
       return icon;
     }
 
-    function setSearchStatus(message) {
-      searchStatus.textContent = message;
+    function setSearchStatus(message, imageUrl) {
+      searchStatus.textContent = '';
+      searchStatus.classList.toggle('wiki2-search-status--empty', Boolean(imageUrl));
+      if (imageUrl) {
+        var emptyState = document.createElement('div');
+        emptyState.className = 'search-result-none';
+
+        var image = document.createElement('img');
+        image.className = 'none-image';
+        image.src = imageUrl;
+        image.alt = '';
+        image.width = 48;
+        image.height = 48;
+        emptyState.appendChild(image);
+
+        var tip = document.createElement('span');
+        tip.className = 'none-tip';
+        tip.textContent = message;
+        emptyState.appendChild(tip);
+        searchStatus.appendChild(emptyState);
+      } else {
+        searchStatus.textContent = message;
+      }
       searchStatus.classList.remove('hidden');
     }
 
@@ -1089,10 +1112,16 @@ function getElement(id) {
     function renderSearchResults() {
       searchResultList.innerHTML = '';
 
+      if (!searchInput.value.trim()) {
+        searchResultPanel.classList.add('hidden');
+        setSearchStatus(searchText.typeToStart, searchText.typeToStartImage);
+        return;
+      }
+
       if (!searchState.results.length) {
         searchResultPanel.classList.add('hidden');
         if (!searchState.isLoading && searchInput.value.trim()) {
-          setSearchStatus(searchText.noResult);
+          setSearchStatus(searchText.noResult, searchText.noResultImage);
         }
         return;
       }
@@ -1163,12 +1192,10 @@ function getElement(id) {
       searchState.isLoading = false;
       searchResultList.innerHTML = '';
       searchResultPanel.classList.add('hidden');
-      setSearchStatus(searchText.typeToStart);
+      setSearchStatus(searchText.typeToStart, searchText.typeToStartImage);
     }
 
-    function closeSearchModal(options) {
-      options = options || {};
-
+    function closeSearchModal() {
       searchState.isOpen = false;
       searchModal.classList.add('hidden');
       searchBackdrop.classList.add('hidden');
@@ -1185,8 +1212,8 @@ function getElement(id) {
       searchInput.value = '';
       searchClear.classList.add('hidden');
       resetSearchResults();
-      if (options.restoreFocus !== false) {
-        searchTrigger.focus();
+      if (searchModal.contains(document.activeElement)) {
+        document.activeElement.blur();
       }
     }
 
@@ -1204,12 +1231,10 @@ function getElement(id) {
     function selectSearchResult(index) {
       var item = searchState.results[index];
       if (!item) return;
+      if (item.pageId === getCurrentNavPageId()) return;
 
-      closeSearchModal({ restoreFocus: false });
-
-      if (item.pageId !== getCurrentNavPageId()) {
-        navigateToWikiPage(item.pageId, buildPageUrl(item.pageId, { includeHash: false }));
-      }
+      closeSearchModal();
+      navigateToWikiPage(item.pageId, buildPageUrl(item.pageId, { includeHash: false }));
     }
 
     function searchWiki(query) {
@@ -1279,6 +1304,12 @@ function getElement(id) {
       resetSearchResults();
       searchInput.focus();
     });
+    searchClear.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        searchClear.click();
+      }
+    });
 
     searchResultList.addEventListener('mousedown', function (e) {
       var resultItem = e.target.closest('.wiki2-search-result-item');
@@ -1313,6 +1344,8 @@ function getElement(id) {
         return;
       }
 
+      searchStatus.classList.add('hidden');
+
       searchState.debounceTimer = setTimeout(function () {
         searchWiki(query);
       }, 300);
@@ -1341,6 +1374,7 @@ function getElement(id) {
 
       if (e.key === 'Enter' && searchState.highlightIndex >= 0) {
         e.preventDefault();
+        e.stopPropagation();
         selectSearchResult(searchState.highlightIndex);
       }
     });
