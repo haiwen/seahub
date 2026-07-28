@@ -41,12 +41,6 @@
   width: 100%;
 }
 
-.seafile-search-divider {
-  height: 1px;
-  background-color: var(--bs-border-color);
-  margin: 16px 0;
-}
-
 .wiki2-search-modal .modal-body {
   padding: 16px 0;
 }
