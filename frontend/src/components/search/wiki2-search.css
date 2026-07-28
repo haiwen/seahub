@@ -58,7 +58,7 @@
 @media (max-width: 767px) {
   .wiki2-search-input .search-input {
     height: 38px;
-    width: 100%;
+    width: 100% !important;
     box-shadow: none;
   }
 }
