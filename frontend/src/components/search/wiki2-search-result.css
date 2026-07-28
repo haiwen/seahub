@@ -81,7 +81,7 @@
 
 .wiki2-search-result-item.wiki2-search-result-item-highlight {
   cursor: pointer;
-  background-color: var(--bs-bg-secondary-color);
+  background-color: var(--bs-hover-secondary-bg);
 }
 
 @media (max-width: 767px) {

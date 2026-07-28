@@ -1,4 +1,9 @@
 .searched-item-details .detail-header {
   border: none;
-  padding: 8px;
+  padding: 12px 16px 12px 12px;
+}
+
+.searched-item-details .detail-body {
+  border: none;
+  padding: 0px 16px 0px 12px;
 }

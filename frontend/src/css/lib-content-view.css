@@ -609,8 +609,8 @@
 }
 
 .custom-modal .modal-footer .footer-left-btn:not(.disabled):hover {
-  background-color: var(--bs-bg-secondary-color);
-  border-radius: 3px;
+  background-color: var(--bs-icon-btn-hover-bg-color);
+  border-radius: 4px;
 }
 
 .cur-view-container .cur-view-path {

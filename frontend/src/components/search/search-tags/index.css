@@ -9,12 +9,12 @@
 
 .search-tags-container .tags-title {
   width: 100%;
-  height: 20px;
+  height: 22px;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   padding: 0 16px;
-  margin: 10px 0 4px;
+  margin: 12px 0 8px;
   font-size: 0.875rem;
   color: #666;
 }
@@ -40,7 +40,7 @@
 }
 
 .search-tags-container .tags-content .tag-item:hover {
-  background-color: var(--bs-bg-secondary-color);
+  background-color: var(--bs-hover-secondary-bg);
   cursor: pointer;
 }
 
