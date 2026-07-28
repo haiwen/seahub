@@ -89,6 +89,7 @@
     position: relative;
     margin: 16px 16px 0;
   }
+
   .wiki2-search-modal .wiki2-search-input:not(:focus) {
     box-shadow: none;
   }

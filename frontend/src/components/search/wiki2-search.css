@@ -35,7 +35,7 @@
 }
 
 .wiki2-search-input .form-control {
-  padding-left: 2.5rem;
+  padding-left: 36px;
   height: 38px;
   font-size: 0.875rem;
   width: 100%;
@@ -53,4 +53,12 @@
 
 .wiki2-search-modal .seafile-divider {
   margin: 16px 0;
+}
+
+@media (max-width: 767px) {
+  .wiki2-search-input .search-input {
+    height: 38px;
+    width: 100% !important;
+    box-shadow: none;
+  }
 }
