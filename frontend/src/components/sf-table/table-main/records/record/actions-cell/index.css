@@ -50,7 +50,7 @@
 }
 
 .sf-table-row .sf-table-cell.actions-cell .row-expand:hover {
-  background-color: var(--bs-popover-bg);
+  background-color: var(--bs-icon-btn-hover-bg-color);
 }
 
 .sf-table-row .sf-table-column-content.actions-checkbox {
