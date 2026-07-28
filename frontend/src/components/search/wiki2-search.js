@@ -210,12 +210,14 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
                 onKeyDown={onKeyDown}
                 autoFocus={true}
               />
-              <IconBtn
-                symbol="close"
-                className="search-icon-right input-icon-addon mr-2"
-                onClick={onClearSearch}
-                aria-label={gettext('Close')}
-              />
+              {value !== '' && (
+                <IconBtn
+                  symbol="close"
+                  className="search-icon-right input-icon-addon mr-2"
+                  onClick={onClearSearch}
+                  aria-label={gettext('Close')}
+                />
+              )}
             </div>
 
             <div className="seafile-search-divider"></div>
@@ -226,7 +228,7 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
                 <p className='sf-tip-default d-flex justify-content-center'>{gettext('Type characters to start search')}</p>}
               {(value !== '' && isResultGotten && results.length === 0) &&
                 <p className='sf-tip-default d-flex justify-content-center'>{gettext('No result')}</p>}
-              {results.length > 0 && (
+              {value !== '' && results.length > 0 && (
                 <div className="wiki2-search-result mb-3">
                   <h6 className="wiki2-search-result-header d-flex align-items-center mb-2">
                     <span>{gettext('Wiki pages')}</span>

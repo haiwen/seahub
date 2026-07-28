@@ -538,10 +538,13 @@
   border-radius: 4px;
 }
 
-.search-types .search-types-highlight,
+.search-types .search-types-highlight {
+  background-color: var(--bs-active-secondary-bg);
+}
+
 .search-types>div:focus,
 .search-types>div:hover {
-  background-color: var(--bs-active-secondary-bg);
+  background-color: var(--bs-hover-secondary-bg);
 }
 
 .search-types .search-types-text {
