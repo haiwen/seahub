@@ -3,16 +3,21 @@ import time
 import requests
 import json
 import random
+import posixpath
+import stat
 from urllib.parse import urljoin
 from datetime import datetime
 
 from seahub.settings import SECRET_KEY, SEAFEVENTS_SERVER_URL
 from seahub.views import check_folder_permission
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
+from seahub.constants import PERMISSION_INVISIBLE
 
 from seaserv import seafile_api
 
 FACES_SAVE_PATH = '_Internal/Faces'
+
+AI_SUMMARY_METADATA_QUERY_BATCH_SIZE = 500
 
 # fake metadata for metadata views of repo without metadata enabled, to avoid frontend error. 
 # The metadata is not real and only used for display.
@@ -231,6 +236,136 @@ def remove_ai_summary(metadata_server_api):
             METADATA_TABLE.columns.ai_summary_mtime.key,
         ]:
             metadata_server_api.delete_column(METADATA_TABLE.id, column['key'], True)
+
+
+def _list_files_for_ai_summary(repo_id, username, path):
+    files = []
+    pending_paths = [path]
+
+    while pending_paths:
+        current_path = pending_paths.pop()
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, current_path)
+        if not dir_id:
+            if current_path == path:
+                return None
+            continue
+
+        dirents = seafile_api.list_dir_with_perm(repo_id, current_path, dir_id, username, -1, -1)
+        for dirent in dirents:
+            if dirent.permission == PERMISSION_INVISIBLE:
+                continue
+
+            if current_path == '/' and dirent.obj_name in ('_Internal', 'images'):
+                continue
+
+            entry_path = posixpath.join(current_path, dirent.obj_name)
+            if stat.S_ISDIR(dirent.mode):
+                pending_paths.append(entry_path)
+                continue
+
+            files.append({
+                'file_id': dirent.obj_id,
+                'file_name': dirent.obj_name,
+                'path': entry_path,
+            })
+
+    return files
+
+
+def _get_ai_summary_metadata_by_obj_ids(repo_id, username, obj_ids, metadata_table):
+    if not obj_ids:
+        return {}
+
+    from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
+
+    metadata_server_api = MetadataServerAPI(repo_id, username)
+    rows = []
+    for start in range(0, len(obj_ids), AI_SUMMARY_METADATA_QUERY_BATCH_SIZE):
+        obj_id_batch = obj_ids[start:start + AI_SUMMARY_METADATA_QUERY_BATCH_SIZE]
+        sql = (
+            f'SELECT `{metadata_table.columns.obj_id.name}`, '
+            f'`{metadata_table.columns.ai_summary.name}`, '
+            f'`{metadata_table.columns.ai_summary_mtime.name}` '
+            f'FROM `{metadata_table.name}` '
+            f'WHERE `{metadata_table.columns.obj_id.name}` IN ({", ".join(["?"] * len(obj_id_batch))});'
+        )
+        rows.extend(metadata_server_api.query_rows(sql, obj_id_batch).get('results', []))
+
+    return {
+        row.get(metadata_table.columns.obj_id.name): row
+        for row in rows
+        if row.get(metadata_table.columns.obj_id.name)
+    }
+
+
+def _is_ai_summary_mtime_valid(ai_summary_mtime):
+    if not isinstance(ai_summary_mtime, str) or not ai_summary_mtime:
+        return False
+    try:
+        datetime.fromisoformat(ai_summary_mtime.replace('Z', '+00:00'))
+        return True
+    except (TypeError, ValueError):
+        return False
+
+
+def list_file_summaries(repo_id, username, path):
+    from seahub.repo_metadata.models import RepoMetadata
+
+    files = _list_files_for_ai_summary(repo_id, username, path)
+    if files is None:
+        return None
+
+    metadata_by_obj_id = {}
+    metadata_table = None
+    metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+    if metadata and metadata.enabled and metadata.summary_enabled:
+        from seafevents.repo_metadata.constants import METADATA_TABLE
+
+        metadata_table = METADATA_TABLE
+        metadata_by_obj_id = _get_ai_summary_metadata_by_obj_ids(
+            repo_id, username, [file_info['file_id'] for file_info in files], metadata_table)
+
+    results = []
+    uncomparable_files = []
+    stats = {
+        'requested_path': path,
+        'returned_file_count': len(files),
+        'valid_summary_count': 0,
+        'summary_missing_count': 0,
+        'summary_empty_count': 0,
+        'summary_mtime_invalid_count': 0,
+    }
+    for file_info in files:
+        metadata = metadata_by_obj_id.get(file_info['file_id'])
+        if not metadata:
+            stats['summary_missing_count'] += 1
+            uncomparable_files.append({**file_info, 'reason': 'ai_summary_missing'})
+            continue
+
+        ai_summary = metadata.get(metadata_table.columns.ai_summary.name)
+        if not isinstance(ai_summary, str) or not ai_summary.strip():
+            stats['summary_empty_count'] += 1
+            uncomparable_files.append({**file_info, 'reason': 'ai_summary_empty'})
+            continue
+
+        ai_summary_mtime = metadata.get(metadata_table.columns.ai_summary_mtime.name)
+        if not _is_ai_summary_mtime_valid(ai_summary_mtime):
+            stats['summary_mtime_invalid_count'] += 1
+            uncomparable_files.append({**file_info, 'reason': 'ai_summary_mtime_invalid'})
+            continue
+
+        results.append({
+            **file_info,
+            'ai_summary': ai_summary.strip(),
+            'ai_summary_mtime': ai_summary_mtime,
+        })
+        stats['valid_summary_count'] += 1
+
+    return {
+        'files': results,
+        'uncomparable_files': uncomparable_files,
+        'traversal_stats': stats,
+    }
 
 
 def init_faces(metadata_server_api):

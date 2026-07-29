@@ -1,6 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
 import os
+import posixpath
 import re
 import tempfile
 from io import BytesIO
@@ -23,11 +24,12 @@ from seahub.share.models import UploadLinkShare, FileShare, check_share_link_acc
 from seaserv import seafile_api
 
 from seahub.tags.models import FileUUIDMap
-from seahub.repo_metadata.utils import FACES_SAVE_PATH
+from seahub.repo_metadata.utils import FACES_SAVE_PATH, list_file_summaries
 from seahub.utils.repo import parse_repo_perm
 from seahub.views.file import send_file_access_msg, FILE_TYPE_FOR_NEW_FILE_LINK
 from seahub.utils import normalize_file_path, get_file_type_and_ext
 from seahub.views import check_folder_permission
+from seahub.constants import PERMISSION_INVISIBLE
 
 
 logger = logging.getLogger(__name__)
@@ -370,6 +372,47 @@ class SeafileSaveFaceView(APIView):
                 os.remove(tmp_file_path)
 
         return Response({'success': True})
+
+
+class InternalListFileSummaries(APIView):
+    authentication_classes = ()
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request, repo_id):
+        auth = request.headers.get('authorization', '').split()
+        if not is_valid_internal_jwt(auth):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        username = request.data.get('username')
+        path = request.data.get('path')
+        if not username or not isinstance(username, str):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'username invalid')
+        if not path or not isinstance(path, str) or not path.startswith('/'):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid')
+
+        path = posixpath.normpath(path)
+        if path == '.':
+            path = '/'
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)
+
+        permission = seafile_api.check_permission_by_path(repo_id, path, username)
+        if not permission or permission == PERMISSION_INVISIBLE:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        try:
+            result = list_file_summaries(repo_id, username, path)
+        except Exception as error:
+            logger.error('Failed to get file summaries repo=%s path=%s: %s', repo_id, path, error)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        if result is None:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Directory not found.')
+
+        return Response(result)
+
 
 class CheckShareLinkThumbnailAccess(APIView):
     authentication_classes = (SessionCRSFCheckFreeAuthentication,)
