@@ -235,7 +235,7 @@ function Wiki2GlobalSearch({ placeholder, onSearchedClick }) {
           </div>
         )}
         {value !== '' && results.length > 0 && (
-          <div className="wiki2-search-result mb-3">
+          <div className="wiki2-search-result">
             <h6 className="wiki2-search-result-header d-flex align-items-center">
               <span>{gettext('Wiki pages')}</span>
             </h6>
