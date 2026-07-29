@@ -12,9 +12,9 @@ def query_ai_statistics_overview(group_by, date_range, org_id=None):
         'date__lte': date_end,
     }
 
-    if group_by == 'username':
-        query_kwargs['username__isnull'] = False
-        group_fields = ['username']
+    if group_by == 'repo_owner':
+        query_kwargs['repo_owner__isnull'] = False
+        group_fields = ['repo_owner']
         if not org_id:
             group_fields.append('org_id')
     elif group_by == 'repo_id':
@@ -55,8 +55,6 @@ def query_ai_statistics_detail(group_by, date_range, condition, scenarios=None):
         'date__lte': date_end,
     }
 
-    if 'username' in condition:
-        query_kwargs['username'] = condition['username']
     if 'repo_id' in condition:
         query_kwargs['repo_id'] = condition['repo_id']
     if 'repo_owner' in condition:

@@ -67,13 +67,14 @@ class ImageCaption(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if is_ai_usage_over_limit(request.user, org_id):
-            return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
-
         permission = check_folder_permission(request, repo_id, os.path.dirname(path))
         if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        usage_context = resolve_repo_ai_usage_context(username, repo_id, org_id, AI_SCENARIO_IMAGE_CAPTION)
+        if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
+            return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         try:
             file_id = seafile_api.get_file_id_by_path(repo_id, path)
@@ -91,7 +92,7 @@ class ImageCaption(APIView):
             'capture_time': None,
             'address': None
         }
-        params.update(resolve_repo_ai_usage_context(username, repo_id, org_id, AI_SCENARIO_IMAGE_CAPTION))
+        params.update(usage_context)
         metadata_server_api = MetadataServerAPI(repo_id, user=request.user.username)
 
         from seafevents.repo_metadata.constants import METADATA_TABLE
@@ -158,7 +159,8 @@ class GenerateSummary(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if is_ai_usage_over_limit(request.user, org_id):
+        usage_context = resolve_repo_ai_usage_context(username, repo_id, org_id, AI_SCENARIO_SUMMARY)
+        if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         try:
@@ -176,7 +178,7 @@ class GenerateSummary(APIView):
             'path': path,
             'obj_id': file_id,
         }
-        params.update(resolve_repo_ai_usage_context(username, repo_id, org_id, AI_SCENARIO_SUMMARY))
+        params.update(usage_context)
 
         try:
             resp = generate_summary(params)
@@ -219,7 +221,8 @@ class GenerateFileTags(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if is_ai_usage_over_limit(request.user, org_id):
+        usage_context = resolve_repo_ai_usage_context(username, repo_id, org_id, AI_SCENARIO_FILE_TAGS)
+        if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         try:
@@ -236,7 +239,7 @@ class GenerateFileTags(APIView):
             'path': path,
             'obj_id': file_id,
         }
-        params.update(resolve_repo_ai_usage_context(username, repo_id, org_id, AI_SCENARIO_FILE_TAGS))
+        params.update(usage_context)
 
         file_type, _ = get_file_type_and_ext(os.path.basename(path))
         if file_type == IMAGE:
@@ -302,7 +305,8 @@ class OCR(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if is_ai_usage_over_limit(request.user, org_id):
+        usage_context = resolve_repo_ai_usage_context(username, repo_id, org_id, AI_SCENARIO_OCR)
+        if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         try:
@@ -324,7 +328,7 @@ class OCR(APIView):
             'file_name': os.path.basename(path),
             'obj_id': file_id,
         }
-        params.update(resolve_repo_ai_usage_context(username, repo_id, org_id, AI_SCENARIO_OCR))
+        params.update(usage_context)
 
         try:
             resp = ocr(params)
@@ -346,24 +350,34 @@ class Translate(APIView):
         if not verify_ai_config():
             return api_error(status.HTTP_400_BAD_REQUEST, 'AI server not configured')
 
+        repo_id = request.data.get('repo_id')
         text = request.data.get('text')
         lang = request.data.get('lang')
         org_id = request.user.org.org_id if request.user.org else None
         username = request.user.username
 
+        if not repo_id:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
         if not text:
             return api_error(status.HTTP_400_BAD_REQUEST, 'text invalid')
         if not lang:
             return api_error(status.HTTP_400_BAD_REQUEST, 'lang invalid')
-        
-        if is_ai_usage_over_limit(request.user, org_id):
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
+        if not check_folder_permission(request, repo_id, '/'):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        usage_context = resolve_repo_ai_usage_context(username, repo_id, org_id, AI_SCENARIO_TRANSLATE)
+        if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         params = {
             'text': text,
             'lang': lang,
         }
-        params.update(resolve_repo_ai_usage_context(username, None, org_id, AI_SCENARIO_TRANSLATE))
+        params.update(usage_context)
 
         try:
             resp = translate(params)
@@ -384,18 +398,28 @@ class WritingAssistant(APIView):
         if not verify_ai_config():
             return api_error(status.HTTP_400_BAD_REQUEST, 'AI server not configured')
 
+        repo_id = request.data.get('repo_id')
         text = request.data.get('text')
         writing_type = request.data.get('writing_type')
         custom_prompt = request.data.get('custom_prompt')
         org_id =  request.user.org.org_id if request.user.org else None
         username = request.user.username
 
+        if not repo_id:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
         if not text:
             return api_error(status.HTTP_400_BAD_REQUEST, 'text invalid')
         if not custom_prompt and not writing_type:
             return api_error(status.HTTP_400_BAD_REQUEST, 'writing_type invalid')
 
-        if is_ai_usage_over_limit(request.user, org_id):
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
+        if not check_folder_permission(request, repo_id, '/'):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        usage_context = resolve_repo_ai_usage_context(username, repo_id, org_id, AI_SCENARIO_WRITING_ASSISTANT)
+        if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         params = {
@@ -403,7 +427,7 @@ class WritingAssistant(APIView):
             'writing_type': writing_type,
             'custom_prompt': custom_prompt,
         }
-        params.update(resolve_repo_ai_usage_context(username, None, org_id, AI_SCENARIO_WRITING_ASSISTANT))
+        params.update(usage_context)
 
         try:
             resp = writing_assistant(params)
@@ -702,7 +726,8 @@ class ChatView(APIView):
         can_upload = parse_repo_perm(repo_permission).can_upload if repo_permission else False
 
         org_id = request.user.org.org_id if getattr(request.user, 'org', None) else None
-        if is_ai_usage_over_limit(request.user, org_id):
+        usage_context = resolve_repo_ai_usage_context(request.user.username, repo_id, org_id, AI_SCENARIO_CHAT)
+        if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         session_uuid = request.data.get('session_uuid')
@@ -740,7 +765,7 @@ class ChatView(APIView):
             'repo_prompt': get_repo_prompt(repo_id),
             'scenario': AI_SCENARIO_CHAT,
         }
-        params.update(resolve_repo_ai_usage_context(request.user.username, repo_id, org_id, AI_SCENARIO_CHAT))
+        params.update(usage_context)
 
         task_info = {
             'user_input': {

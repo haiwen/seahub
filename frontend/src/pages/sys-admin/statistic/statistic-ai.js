@@ -5,7 +5,6 @@ import AIStatisticsPage from '../../common/ai-statistics';
 
 const tabs = [
   { value: 'repo', label: gettext('Library') },
-  { value: 'user', label: gettext('User') },
   { value: 'group', label: gettext('Department') },
   { value: 'org', label: gettext('Team') },
 ];
@@ -13,20 +12,13 @@ const tabs = [
 const detailOptionsMap = {
   repo: [
     { value: 'date', label: gettext('Date') },
-    { value: 'user', label: gettext('User') },
-  ],
-  user: [
-    { value: 'date', label: gettext('Date') },
-    { value: 'repo', label: gettext('Library') },
   ],
   group: [
     { value: 'date', label: gettext('Date') },
-    { value: 'user', label: gettext('User') },
     { value: 'repo', label: gettext('Library') },
   ],
   org: [
     { value: 'date', label: gettext('Date') },
-    { value: 'user', label: gettext('User') },
     { value: 'repo', label: gettext('Library') },
   ],
 };

@@ -24,13 +24,6 @@ const formatCount = (value) => Number(value || 0).toLocaleString();
 
 const getFirstDayOfCurrentMonth = () => dayjs().startOf('month').format('YYYY-MM-DD');
 
-const renderUserText = (name, username) => {
-  if (name && username && name !== username) {
-    return `${name} (${username})`;
-  }
-  return name || username || '';
-};
-
 const AIStatisticsDetailDialog = ({ condition, detailOptions, loadDetails, onToggle, title }) => {
   const [groupBy, setGroupBy] = useState(detailOptions[0]?.value || 'date');
   const [startDate, setStartDate] = useState(getFirstDayOfCurrentMonth());
@@ -75,14 +68,6 @@ const AIStatisticsDetailDialog = ({ condition, detailOptions, loadDetails, onTog
         { key: 'total_credit_used', name: gettext('Credit used') },
       ];
     }
-    if (groupBy === 'user') {
-      return [
-        { key: 'username', name: gettext('User') },
-        { key: 'total_input_tokens', name: gettext('Input tokens') },
-        { key: 'total_output_tokens', name: gettext('Output tokens') },
-        { key: 'total_credit_used', name: gettext('Credit used') },
-      ];
-    }
     return [
       { key: 'repo_name', name: gettext('Library') },
       { key: 'repo_id', name: gettext('Library ID') },
@@ -93,9 +78,6 @@ const AIStatisticsDetailDialog = ({ condition, detailOptions, loadDetails, onTog
   }, [groupBy]);
 
   const renderCell = (item, key) => {
-    if (key === 'username') {
-      return renderUserText(item.nickname, item.username);
-    }
     if (key === 'total_credit_used') {
       return formatCredit(item.total_credit_used);
     }

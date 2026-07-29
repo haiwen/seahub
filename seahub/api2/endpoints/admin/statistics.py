@@ -646,9 +646,9 @@ class AdminAIStatisticsView(APIView):
             except Exception:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'month invalid')
 
-        group_by = request.GET.get('group_by', 'user')
-        if group_by not in ('user', 'repo', 'group', 'org'):
-            return api_error(status.HTTP_400_BAD_REQUEST, 'group_by invalid. Must be "user", "repo", "group" or "org"')
+        group_by = request.GET.get('group_by', 'owner')
+        if group_by not in ('owner', 'repo', 'group', 'org'):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'group_by invalid. Must be "owner", "repo", "group" or "org"')
 
         try:
             page = int(request.GET.get('page', 1))
@@ -658,9 +658,9 @@ class AdminAIStatisticsView(APIView):
         start, end = (page - 1) * per_page, page * per_page
 
         try:
-            if group_by == 'user':
-                records = query_ai_statistics_overview('username', date_range)
-                return self._stats_by_user(records, start, end)
+            if group_by == 'owner':
+                records = query_ai_statistics_overview('repo_owner', date_range)
+                return self._stats_by_owner(records, start, end)
             if group_by == 'repo':
                 records = query_ai_statistics_overview('repo_id', date_range)
                 return self._stats_by_repo(records, start, end)
@@ -673,24 +673,24 @@ class AdminAIStatisticsView(APIView):
             logger.exception(error)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal server error')
 
-    def _stats_by_user(self, records, start, end):
+    def _stats_by_owner(self, records, start, end):
         total_count = records.count()
         stats = list(records[start:end])
         if not stats:
             return Response({'results': [], 'count': 0})
 
-        usernames = [item['username'] for item in stats]
+        repo_owners = [item['repo_owner'] for item in stats]
         org_ids = [item['org_id'] for item in stats if item.get('org_id') is not None]
-        nickname_map = _get_user_nickname_map(usernames)
+        nickname_map = _get_user_nickname_map(repo_owners)
         org_name_map = _get_org_name_map(org_ids)
 
         results = []
         for item in stats:
-            username = item['username']
+            repo_owner = item['repo_owner']
             org_id = item.get('org_id')
             results.append({
-                'username': username,
-                'nickname': nickname_map.get(username, email2nickname(username)),
+                'repo_owner': repo_owner,
+                'nickname': nickname_map.get(repo_owner, email2nickname(repo_owner)),
                 'org_id': org_id,
                 'org_name': org_name_map.get(org_id, ''),
                 'total_credit_used': item['total_credit_used'],
@@ -811,10 +811,10 @@ class AdminAIStatisticsDetailView(APIView):
         group_by = request.GET.get('group_by')
         if group_by == 'repo':
             group_by = 'repo_id'
-        elif group_by == 'user':
-            group_by = 'username'
+        elif group_by == 'owner':
+            group_by = 'repo_owner'
         elif group_by != 'date':
-            return api_error(status.HTTP_400_BAD_REQUEST, 'group_by invalid. Must be sub-group_by of "repo" or "user" or "date"')
+            return api_error(status.HTTP_400_BAD_REQUEST, 'group_by invalid. Must be sub-group_by of "repo", "owner" or "date"')
 
         start_date = request.GET.get('start_date')
         end_date = request.GET.get('end_date')
@@ -830,16 +830,16 @@ class AdminAIStatisticsDetailView(APIView):
         if group_by == 'date':
             return Response({'results': list(query_set)})
 
-        if group_by == 'username':
+        if group_by == 'repo_owner':
             query_set = list(query_set[:30])
-            usernames = [item['username'] for item in query_set]
-            nickname_map = _get_user_nickname_map(usernames)
+            repo_owners = [item['repo_owner'] for item in query_set]
+            nickname_map = _get_user_nickname_map(repo_owners)
             results = []
             for item in query_set:
-                username = item['username']
+                repo_owner = item['repo_owner']
                 results.append({
-                    'username': username,
-                    'nickname': nickname_map.get(username, email2nickname(username)),
+                    'repo_owner': repo_owner,
+                    'nickname': nickname_map.get(repo_owner, email2nickname(repo_owner)),
                     'total_credit_used': item['total_credit_used'],
                     'total_input_tokens': item['total_input_tokens'],
                     'total_output_tokens': item['total_output_tokens'],

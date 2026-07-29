@@ -45,10 +45,6 @@ const buildCondition = (groupBy, item) => {
     condition.repo_id = item.repo_id;
     return condition;
   }
-  if (groupBy === 'user') {
-    condition.username = item.username;
-    return condition;
-  }
   if (groupBy === 'group') {
     condition.group_id = item.group_id;
     return condition;
@@ -68,11 +64,11 @@ const getDefaultPerPage = () => {
   return getSearchParamNumber('per_page', 25);
 };
 
-const renderUserText = (name, username) => {
-  if (name && username && name !== username) {
-    return `${name} (${username})`;
+const renderOwnerText = (name, repoOwner) => {
+  if (name && repoOwner && name !== repoOwner) {
+    return `${name} (${repoOwner})`;
   }
-  return name || username || '';
+  return name || repoOwner || '';
 };
 
 const AIStatisticsPage = ({
@@ -162,17 +158,6 @@ const AIStatisticsPage = ({
       nextColumns.push({ key: 'actions', name: gettext('Details') });
       return nextColumns;
     }
-    if (groupBy === 'user') {
-      const nextColumns = [
-        { key: 'username_display', name: gettext('User') },
-      ];
-      if (showOrgColumn) {
-        nextColumns.push({ key: 'org_display', name: gettext('Team') });
-      }
-      nextColumns.push({ key: 'total_credit_used', name: gettext('Credit used') });
-      nextColumns.push({ key: 'actions', name: gettext('Details') });
-      return nextColumns;
-    }
     if (groupBy === 'group') {
       const nextColumns = [
         { key: 'group_display', name: groupLabel },
@@ -209,19 +194,16 @@ const AIStatisticsPage = ({
       if (item.group_name) {
         return item.group_name;
       }
-      return renderUserText(item.nickname, item.repo_owner);
+      return renderOwnerText(item.nickname, item.repo_owner);
     }
     if (key === 'org_display') {
       return item.org_name || (item.org_id ? `${gettext('Team')} #${item.org_id}` : '');
-    }
-    if (key === 'username_display') {
-      return renderUserText(item.nickname, item.username);
     }
     if (key === 'group_display') {
       return item.group_name || item.group_id || '';
     }
     if (key === 'creator_display') {
-      return renderUserText(item.creator_name, item.creator);
+      return renderOwnerText(item.creator_name, item.creator);
     }
     if (key === 'total_credit_used') {
       return formatCredit(item.total_credit_used);
