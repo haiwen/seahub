@@ -35,9 +35,7 @@
     role="dialog"
     aria-modal="true"
     aria-label="{% trans 'Search' %}"
-    data-type-to-start="{% trans 'Type characters to start search' %}"
     data-searching="{% trans 'Searching...' %}"
-    data-no-result="{% trans 'No result' %}"
     data-untitled="{% trans 'Untitled' %}"
     data-current-page="{% trans 'Current page' %}"
     data-search-failed="{% trans 'Search failed' %}"
@@ -69,18 +67,48 @@
                     placeholder="{% trans 'Search' %}"
                     autocomplete="off"
                 >
-                <button
-                    type="button"
+                <div
                     class="wiki2-search-input__clear hidden"
                     id="wiki-search-clear"
+                    role="button"
+                    tabindex="0"
                     aria-label="{% trans 'Close' %}"
                 >
-                    &times;
-                </button>
+                    <svg
+                        viewBox="0 0 1024 1024"
+                        width="200"
+                        height="200"
+                        aria-hidden="true"
+                        focusable="false"
+                    >
+                        <path d="M489.6 444.8l294.4-294.4 67.2 67.2-294.4 294.4 294.4 294.4-67.2 67.2-294.4-294.4-272 272-67.2-67.2 272-272-272-272 67.2-67.2z" fill="currentColor"></path>
+                    </svg>
+                </div>
             </div>
-            <div class="wiki2-search-divider seafile-search-divider"></div>
             <div class="wiki2-search-result-container" id="wiki-search-result-container">
-                <p class="wiki2-search-status" id="wiki-search-status">{% trans "Type characters to start search" %}</p>
+                <div class="wiki2-search-status wiki2-search-status--empty" id="wiki-search-status">
+                    <div class="search-result-none" id="wiki-search-status-default">
+                        <img
+                            class="none-image"
+                            src="{{ MEDIA_URL }}img/start-searching.png"
+                            alt=""
+                            width="48"
+                            height="48"
+                        >
+                        <span class="none-tip">{% trans "Type characters to start search" %}</span>
+                    </div>
+                    <div class="search-result-none" id="wiki-search-status-no-result" hidden>
+                        <img
+                            class="none-image"
+                            src="{{ MEDIA_URL }}img/no-results.png"
+                            alt=""
+                            width="48"
+                            height="48"
+                        >
+                        <span class="none-tip">{% trans "No result" %}</span>
+                    </div>
+                    <span id="wiki-search-status-message" hidden></span>
+                </div>
                 <div class="wiki2-search-result hidden" id="wiki-search-result-panel">
                     <h6 class="wiki2-search-result-header">{% trans "Wiki pages" %}</h6>
                     <ul

@@ -6,7 +6,7 @@ import classnames from 'classnames';
 import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
 import searchAPI from '../../utils/search-api';
-import { gettext } from '../../utils/constants';
+import { gettext, mediaUrl } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import SearchResultLibrary from './search-result-library';
 import { debounce, Utils } from '../../utils/utils';
@@ -762,21 +762,22 @@ class Search extends Component {
     const filteredItems = this.filterByCreator(resultItems);
     if (isLoading) {
       return <Loading />;
-    }
-    else if (this.state.inputValue.trim().length === 0) {
-      return <div className="search-result-none">{gettext('Type characters to start search')}</div>;
-    }
-    else if (!isResultGotten) {
-      return this.renderSearchTypes(this.state.inputValue.trim());
-    }
-    else if (filteredItems.length > 0) {
-      return this.renderResults(filteredItems);
-    }
-    else {
+    } else if (this.state.inputValue.trim().length === 0) {
       return (
         <div className="search-result-none">
-          <h4 className="search-results-title text-start">{gettext('Files')}</h4>
-          {gettext('No results matching')}
+          <img className='none-image' src={`${mediaUrl}img/start-searching.png`} alt="" width="48" height="48" />
+          <span className='none-tip'>{gettext('Type characters to start search')}</span>
+        </div>
+      );
+    } else if (!isResultGotten) {
+      return this.renderSearchTypes(this.state.inputValue.trim());
+    } else if (filteredItems.length > 0) {
+      return this.renderResults(filteredItems);
+    } else {
+      return (
+        <div className="search-result-none">
+          <img className='none-image' src={`${mediaUrl}img/no-results.png`} alt="" width="48" height="48" />
+          <span className='none-tip'>{gettext('No results matching')}</span>
         </div>
       );
     }
@@ -1116,7 +1117,7 @@ class Search extends Component {
           <div className="search">
             <div className={`search-mask ${isMaskShow ? 'show' : 'hide'}`} onClick={this.onCloseHandler} style={isMaskShow ? { zIndex: SEARCH_MASK } : {}}></div>
             <div className={`search-container ${isMaskShow ? 'show' : ''}`} style={isMaskShow ? { zIndex: SEARCH_CONTAINER } : {}}>
-              <div className={`input-icon ${isMaskShow ? 'mb-1' : ''}`}>
+              <div className="input-icon">
                 <span className="search-icon-left input-icon-addon">
                   <Icon symbol="search" />
                 </span>

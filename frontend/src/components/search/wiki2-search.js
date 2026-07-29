@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, ModalBody, Input, Button } from 'reactstrap';
 import isHotkey from 'is-hotkey';
 import searchAPI from '../../utils/search-api';
-import { gettext } from '../../utils/constants';
+import { gettext, mediaUrl } from '../../utils/constants';
 import { debounce, Utils } from '../../utils/utils';
 import toaster from '../toast';
 import Loading from '../loading';
@@ -66,6 +66,8 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
       if (isEnter(e)) {
         const highlightResult = results[highlightIndex];
         if (highlightResult && highlightResult.page.id !== getCurrentPageId()) {
+          e.preventDefault();
+          e.stopPropagation();
           setCurrentPage(highlightResult.page.id);
           resetToDefault();
         }
@@ -193,7 +195,7 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
         <span>{gettext('Search')}</span>
       </Button>
       {isModalOpen &&
-        <Modal className="wiki2-search-modal" isOpen={isModalOpen} toggle={resetToDefault} autoFocus={false} size='lg'>
+        <Modal className="wiki2-search-modal" isOpen={isModalOpen} toggle={resetToDefault} autoFocus={false} returnFocusAfterClose={false} size='lg'>
           <ModalBody>
             <div className="wiki2-search-input">
               <span className="d-flex align-items-center search-icon-left input-icon-addon">
@@ -210,25 +212,32 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
                 onKeyDown={onKeyDown}
                 autoFocus={true}
               />
-              <IconBtn
-                symbol="close"
-                className="search-icon-right input-icon-addon mr-2"
-                onClick={onClearSearch}
-                aria-label={gettext('Close')}
-              />
+              {value !== '' && (
+                <IconBtn
+                  symbol="close"
+                  className="search-icon-right input-icon-addon mr-2"
+                  onClick={onClearSearch}
+                  aria-label={gettext('Close')}
+                />
+              )}
             </div>
-
-            <div className="seafile-search-divider"></div>
-
             <div className="wiki2-search-result-container" style={{ maxHeight: (window.innerHeight - 200) }} ref={searchResultListContainerRef}>
               {isLoading && <Loading />}
-              {(value === '' && !isResultGotten) &&
-                <p className='sf-tip-default d-flex justify-content-center'>{gettext('Type characters to start search')}</p>}
-              {(value !== '' && isResultGotten && results.length === 0) &&
-                <p className='sf-tip-default d-flex justify-content-center'>{gettext('No result')}</p>}
-              {results.length > 0 && (
+              {(value === '' && !isResultGotten) && (
+                <div className="search-result-none">
+                  <img className='none-image' src={`${mediaUrl}img/start-searching.png`} alt="" width="48" height="48" />
+                  <span className='none-tip'>{gettext('Type characters to start search')}</span>
+                </div>
+              )}
+              {(value !== '' && isResultGotten && results.length === 0) && (
+                <div className="search-result-none">
+                  <img className='none-image' src={`${mediaUrl}img/no-results.png`} alt="" width="48" height="48" />
+                  <span className='none-tip'>{gettext('No results matching')}</span>
+                </div>
+              )}
+              {value !== '' && results.length > 0 && (
                 <div className="wiki2-search-result mb-3">
-                  <h6 className="wiki2-search-result-header d-flex align-items-center mb-2">
+                  <h6 className="wiki2-search-result-header d-flex align-items-center">
                     <span>{gettext('Wiki pages')}</span>
                   </h6>
                   <ul>

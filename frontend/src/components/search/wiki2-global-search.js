@@ -5,7 +5,7 @@ import MediaQuery from 'react-responsive';
 import classNames from 'classnames';
 import { SEARCH_CONTAINER, SEARCH_MASK } from '@/constants/zIndexes';
 import wikiAPI from '../../utils/wiki-api';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext, mediaUrl, siteRoot } from '../../utils/constants';
 import { debounce, Utils } from '../../utils/utils';
 import toaster from '../toast';
 import Loading from '../loading';
@@ -167,7 +167,7 @@ function Wiki2GlobalSearch({ placeholder, onSearchedClick }) {
       if (isEnter(e)) {
         const highlightResult = results[highlightIndex];
         if (highlightResult) {
-          onItemClick(highlightResult);
+          onItemClick(e, highlightResult);
         }
       } else if (isUp(e)) {
         onUp(e, highlightIndex);
@@ -223,14 +223,20 @@ function Wiki2GlobalSearch({ placeholder, onSearchedClick }) {
       <>
         {isLoading && <Loading />}
         {(value === '' && !isResultGotten) && (
-          <div className="search-result-none">{gettext('Type characters to start search')}</div>
+          <div className="search-result-none">
+            <img className='none-image' src={`${mediaUrl}img/start-searching.png`} alt="" width="48" height="48" />
+            <span className='none-tip'>{gettext('Type characters to start search')}</span>
+          </div>
         )}
         {(value !== '' && isResultGotten && results.length === 0) && (
-          <div className="search-result-none">{gettext('No result')}</div>
+          <div className="search-result-none">
+            <img className='none-image' src={`${mediaUrl}img/no-results.png`} alt="" width="48" height="48" />
+            <span className='none-tip'>{gettext('No results matching')}</span>
+          </div>
         )}
-        {results.length > 0 && (
+        {value !== '' && results.length > 0 && (
           <div className="wiki2-search-result mb-3">
-            <h6 className="wiki2-search-result-header d-flex align-items-center my-2">
+            <h6 className="wiki2-search-result-header d-flex align-items-center">
               <span>{gettext('Wiki pages')}</span>
             </h6>
             <ul>
@@ -297,12 +303,14 @@ function Wiki2GlobalSearch({ placeholder, onSearchedClick }) {
                   onFocus={onFocus}
                   autoFocus={true}
                 />
-                <IconBtn
-                  symbol="close"
-                  className="search-icon-right input-icon-addon mr-2"
-                  onClick={onClearSearch}
-                  aria-label={gettext('Close')}
-                />
+                {value !== '' && (
+                  <IconBtn
+                    symbol="close"
+                    className="search-icon-right input-icon-addon mr-2"
+                    onClick={onClearSearch}
+                    aria-label={gettext('Close')}
+                  />
+                )}
               </div>
 
               <div className="seafile-divider"></div>
