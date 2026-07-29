@@ -19,7 +19,6 @@
   font-size: 16px;
   color: var(--bs-icon-color);
   border-radius: 4px;
-  border: 1px solid var(--bs-border-color);
 }
 
 .notification-icon-btn:hover {
