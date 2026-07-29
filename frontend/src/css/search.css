@@ -163,7 +163,7 @@
 }
 
 .search-result-container .search-result-list {
-  margin: 4px 0;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
@@ -183,7 +183,7 @@
   padding: 10px 36px 10px 8px;
   font-size: 0.8125rem;
   cursor: pointer;
-  margin-right: 1rem;
+  margin-right: 12px;
   border-radius: 4px;
   position: relative;
 }
