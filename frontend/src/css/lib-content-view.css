@@ -59,6 +59,12 @@
   justify-content: center;
 }
 
+.dir-content-nav .dir-new-btn:hover {
+  background-color: var(--bs-btn-hover-bg);
+  border-color: var(--bs-btn-hover-border-color);
+  color: var(--bs-btn-hover-color);
+}
+
 .dir-content-main {
   position: relative;
   flex: 1 0 74.5%;

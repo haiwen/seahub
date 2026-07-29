@@ -157,9 +157,9 @@ class Account extends Component {
 
     return (
       <div id="account" ref={ref => this.accountDOM = ref} className="ml-3">
-        <a id="my-info" href="#" onClick={this.onClickAccount} className="account-toggle no-deco d-none d-md-block" aria-label={gettext('View profile and more')}>
+        <button id="my-info" type="button" onClick={this.onClickAccount} className="account-toggle no-deco border-0 bg-transparent p-0 d-none d-md-block" aria-label={gettext('View profile and more')}>
           {this.renderAvatar()}
-        </a>
+        </button>
         <span className="account-toggle mobile-icon d-md-none" role="button" tabIndex="0" aria-label={gettext('View profile and more')} onClick={this.onClickAccount}>
           <Icon symbol="more-vertical" />
         </span>
