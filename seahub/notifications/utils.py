@@ -349,6 +349,35 @@ def update_notice_detail(request, notices):
             except Exception as e:
                 logger.error(e)
 
+        elif notice.is_wopi_mention_msg():
+            try:
+                d = json.loads(notice.detail)
+
+                repo_id = d['repo_id']
+                file_path = d['file_path']
+
+                if repo_id in repo_dict:
+                    repo = repo_dict[repo_id]
+                else:
+                    repo = seafile_api.get_repo(repo_id)
+                    repo_dict[repo_id] = repo
+
+                if repo is None or not seafile_api.get_file_id_by_path(repo.id, file_path):
+                    notice.detail = None
+                else:
+                    from_user_email = d.pop('from_user')
+                    file_name = os.path.basename(file_path)
+                    url, is_default, date_uploaded = api_avatar_url(from_user_email)
+                    d['from_user_avatar_url'] = url
+                    d['from_user_name'] = email2nickname(from_user_email)
+                    d['from_user_email'] = from_user_email
+                    d['from_user_contact_email'] = email2contact_email(from_user_email)
+                    d['file_name'] = file_name
+                    d['repo_name'] = repo.name
+                    notice.detail = d
+            except Exception as e:
+                logger.error(e)
+
         elif notice.is_repo_monitor_msg():
             try:
                 d = json.loads(notice.detail)
