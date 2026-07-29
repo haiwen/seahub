@@ -1360,6 +1360,7 @@ function getElement(id) {
 
       if (e.key === 'ArrowDown' && searchState.results.length) {
         e.preventDefault();
+        e.stopPropagation();
         searchState.highlightIndex = Math.min(searchState.highlightIndex + 1, searchState.results.length - 1);
         renderSearchResults();
         return;
@@ -1367,6 +1368,7 @@ function getElement(id) {
 
       if (e.key === 'ArrowUp' && searchState.results.length) {
         e.preventDefault();
+        e.stopPropagation();
         searchState.highlightIndex = Math.max(searchState.highlightIndex - 1, 0);
         renderSearchResults();
         return;
