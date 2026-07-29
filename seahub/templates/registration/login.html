@@ -139,6 +139,7 @@ html, body, #wrapper { height:100%; }
 {% endblock %}
 
 {% block extra_script %}
+{% include "registration/custom.html" %}
 <script type="text/javascript">
 $('.login-panel-outer-container').prepend($($('#logo').html()).attr({'height': 40}).addClass('login-panel-logo'));
 $('.login-panel-bottom-container').append($('#lang').removeClass('fright').addClass('px-2'));
