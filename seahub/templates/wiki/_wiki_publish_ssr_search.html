@@ -35,11 +35,7 @@
     role="dialog"
     aria-modal="true"
     aria-label="{% trans 'Search' %}"
-    data-type-to-start="{% trans 'Type characters to start search' %}"
     data-searching="{% trans 'Searching...' %}"
-    data-no-result="{% trans 'No result' %}"
-    data-type-to-start-image="{{ MEDIA_URL }}img/start-searching.png"
-    data-no-result-image="{{ MEDIA_URL }}img/no-results.png"
     data-untitled="{% trans 'Untitled' %}"
     data-current-page="{% trans 'Current page' %}"
     data-search-failed="{% trans 'Search failed' %}"
@@ -91,7 +87,7 @@
             </div>
             <div class="wiki2-search-result-container" id="wiki-search-result-container">
                 <div class="wiki2-search-status wiki2-search-status--empty" id="wiki-search-status">
-                    <div class="search-result-none">
+                    <div class="search-result-none" id="wiki-search-status-default">
                         <img
                             class="none-image"
                             src="{{ MEDIA_URL }}img/start-searching.png"
@@ -101,6 +97,17 @@
                         >
                         <span class="none-tip">{% trans "Type characters to start search" %}</span>
                     </div>
+                    <div class="search-result-none" id="wiki-search-status-no-result" hidden>
+                        <img
+                            class="none-image"
+                            src="{{ MEDIA_URL }}img/no-results.png"
+                            alt=""
+                            width="48"
+                            height="48"
+                        >
+                        <span class="none-tip">{% trans "No result" %}</span>
+                    </div>
+                    <span id="wiki-search-status-message" hidden></span>
                 </div>
                 <div class="wiki2-search-result hidden" id="wiki-search-result-panel">
                     <h6 class="wiki2-search-result-header">{% trans "Wiki pages" %}</h6>
