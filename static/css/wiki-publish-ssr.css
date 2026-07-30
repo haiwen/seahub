@@ -447,6 +447,28 @@ html, body {
   background: var(--bs-hover-secondary-bg, #f0f0ee);
 }
 
+.wiki2-search-clear-tooltip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1202;
+  max-width: 242px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background-color: var(--bs-body-color);
+  color: var(--bs-body-bg);
+  font-size: .75rem;
+  font-weight: normal;
+  line-height: 20px;
+  white-space: nowrap;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.wiki2-search-clear-tooltip.is-visible {
+  visibility: visible;
+}
+
 .wiki2-search-result-container {
   min-height: 48px;
   max-height: calc(100vh - 200px);
