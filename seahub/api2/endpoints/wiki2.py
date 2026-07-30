@@ -71,7 +71,7 @@ WIKI_PAGE_EXPORT_TYPES = ['sdoc', 'markdown']
 logger = logging.getLogger(__name__)
 
 
-def _merge_wiki_in_groups(group_wikis, publish_wikis_dict, link_prefix):
+def _merge_wiki_in_groups(group_wikis, publish_wikis_dict, server_render_wikis_dict, link_prefix):
 
     group_ids = [gw.group_id for gw in group_wikis]
     group_id_wikis_map = {key: [] for key in group_ids}
@@ -85,6 +85,7 @@ def _merge_wiki_in_groups(group_wikis, publish_wikis_dict, link_prefix):
         else:
             owner_nickname = email2nickname(owner)
         is_published = True if publish_wikis_dict.get(gw.id) else False
+        enable_server_render = True if is_published and server_render_wikis_dict.get(gw.id) else False
         public_url_suffix = publish_wikis_dict.get(gw.id) if is_published else ""
         link = link_prefix + public_url_suffix if public_url_suffix else ""
         repo_info = {
@@ -93,7 +94,8 @@ def _merge_wiki_in_groups(group_wikis, publish_wikis_dict, link_prefix):
                 "owner_nickname": owner_nickname,
                 "public_url_suffix": public_url_suffix,
                 "public_url": link,
-                "is_published": is_published
+                "is_published": is_published,
+                "enable_server_render": enable_server_render
         }
         wiki_info.update(repo_info)
         group_id = gw.group_id
@@ -204,7 +206,8 @@ class Wikis2View(APIView):
             r.owner = r.user
 
         group_wiki_list = []
-        group_id_wikis_map = _merge_wiki_in_groups(group_wikis, publish_wikis_dict, link_prefix)
+        group_id_wikis_map = _merge_wiki_in_groups(
+            group_wikis, publish_wikis_dict, server_render_wikis_dict, link_prefix)
         for group_obj in user_wiki_groups:
             group_wiki = {
                 'group_name': group_obj.group_name,
