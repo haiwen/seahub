@@ -151,7 +151,7 @@ class CommentList extends React.Component {
                 </>
               )}
             />
-            <OpIcon id="comment-close" className="op-icon" symbol="md-close" tooltip={gettext('Close')} op={toggleCommentList} />
+            <OpIcon id="comment-close" className="op-icon" symbol="close" tooltip={gettext('Close')} op={toggleCommentList} />
           </div>
         </div>
 

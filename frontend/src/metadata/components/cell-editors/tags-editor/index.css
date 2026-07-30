@@ -66,10 +66,18 @@
 .sf-metadata-tags-editor .sf-metadata-tags-editor-container .search-result-empty {
   width: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   font-size: 14px;
-  margin: 40px 0;
+  padding: 22px 0 30px;
   color: var(--bs-body-secondary-color);
+}
+
+.sf-metadata-tags-editor .sf-metadata-tags-editor-container .search-result-empty-img {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
 }
 
 .sf-metadata-tags-editor .sf-metadata-tags-editor-container .sf-metadata-tags-editor-title {

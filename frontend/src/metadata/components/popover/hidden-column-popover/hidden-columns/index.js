@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import HideColumn from './hide-column';
-import { gettext } from '../../../../../utils/constants';
+import { gettext, mediaUrl } from '../../../../../utils/constants';
 
 const HiddenColumns = ({ readOnly, columns, hiddenColumns, onChange, modifyColumnOrder }) => {
   const [draggingColumnKey, setDraggingCellKey] = useState(null);
@@ -27,7 +27,12 @@ const HiddenColumns = ({ readOnly, columns, hiddenColumns, onChange, modifyColum
 
   return (
     <div className={classnames('hide-columns-list', { 'empty-hide-columns-container': isEmpty })}>
-      {isEmpty && <div className="empty-hide-columns-list">{gettext('No properties available to be hidden')}</div>}
+      {isEmpty && (
+        <>
+          <img src={`${mediaUrl}img/no-results.png`} alt="" className="empty-hide-columns-img" />
+          <span className="empty-hide-columns-list">{gettext('No properties available to be hidden')}</span>
+        </>
+      )}
       {!isEmpty && columns.map((column, columnIndex) => {
         return (
           <HideColumn

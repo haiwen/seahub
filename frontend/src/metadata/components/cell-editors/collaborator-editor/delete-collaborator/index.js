@@ -29,7 +29,7 @@ const DeleteCollaborator = ({ value, onDelete, collaborators = [], removable = t
               <OpIcon
                 id={showRemoveTooltip ? `delete-collaborator-icon-${idx}` : undefined}
                 className="collaborator-remove"
-                symbol="md-close"
+                symbol="close"
                 tooltip={showRemoveTooltip ? gettext('Remove') : undefined}
                 op={(e) => onDelete && onDelete(email, e)}
               />

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
-import { gettext } from '../../utils/constants';
+import { gettext, mediaUrl } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import OpIcon from '../../components/op-icon';
 import OpElement from '../../components/op-element';
@@ -137,7 +137,12 @@ class UserSelector extends Component {
                 );
               })}
             </ul>}
-            {filteredAvailableUsers.length === 0 && <div className="py-4 text-center">{gettext('No users')}</div>}
+            {filteredAvailableUsers.length === 0 && (
+            <div className="select-empty-container">
+              <img src={`${mediaUrl}img/no-results.png`} alt="" className="select-empty-img" />
+              {gettext('No users')}
+            </div>
+            )}
           </div>
         )}
       </div>

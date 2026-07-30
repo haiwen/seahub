@@ -311,11 +311,22 @@
 }
 
 .sf-metadata-filters-list .seafile-option-group {
-  width: 300px;
   min-width: 0;
   max-width: 300px;
   max-height: 360px;
   overflow: auto;
+}
+
+.sf-metadata-filters-list .seafile-option-group .none-search-result {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  padding: 0 8px;
+}
+
+.sf-metadata-filters-list .seafile-option-group .none-search-result-img {
+  display: none;
 }
 
 .sf-metadata-filters-list .filter-conjunction .seafile-option-group {

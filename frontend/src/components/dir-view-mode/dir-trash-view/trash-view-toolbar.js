@@ -93,7 +93,7 @@ const TrashViewToolbar = () => {
           )}
           {isSearchActive && (
             <div className="sf-table-searcher-input-wrapper">
-              <span className="input-icon-addon"><Icon symbol="search" /></span>
+              <Icon symbol="search" />
               <input
                 ref={searchInputRef}
                 className='sf-table-searcher-input form-control'

@@ -110,7 +110,7 @@ class SearchInput extends Component {
         id="search-text-clear"
         className={classnames('search-text-clear', clearClassName)}
         op={this.clearSearch}
-        symbol="md-close"
+        symbol="close"
         tooltip={gettext('Clear')}
       />
     );

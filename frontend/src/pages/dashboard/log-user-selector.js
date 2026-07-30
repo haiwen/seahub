@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
-import { gettext } from '../../utils/constants';
+import { gettext, mediaUrl } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Icon from '../../components/icon';
@@ -164,7 +164,8 @@ class LogUserSelector extends Component {
               {isLoading ? (
                 <li className="text-center">{gettext('Loading...')}</li>
               ) : displayItems.length === 0 ? (
-                <li className="text-center">
+                <li className="text-center-select-empty">
+                  <img src={`${mediaUrl}img/no-results.png`} alt="" className="select-empty-img" />
                   {query ? gettext('User not found') : gettext('Enter characters to start searching')}
                 </li>
               ) : (

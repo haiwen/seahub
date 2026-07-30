@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
 import { MenuSelectStyle } from './seahub-select-style';
+import { gettext, mediaUrl } from '../../../utils/constants';
 import Icon from '../../icon';
 import SelectDropdownIndicator from '../../select-dropdown-indicator';
 import './seahub-select.css';
@@ -43,6 +44,19 @@ MenuList.propTypes = {
   children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };
 
+const NoOptionsMessage = props => {
+  return (
+    <div className="seahub-select-no-options-message">
+      <img src={`${mediaUrl}img/no-results.png`} alt="" className="seahub-select-no-options-img" />
+      {props.children ? <span className="seahub-select-no-options-text">{props.children}</span> : null}
+    </div>
+  );
+};
+
+NoOptionsMessage.propTypes = {
+  children: PropTypes.node,
+};
+
 const Option = props => {
   return (
     <div style={props.data.style}>
@@ -81,7 +95,7 @@ class SeahubSelect extends React.Component {
 
   render() {
     const { options = [], onChange, value = {}, isSearchable = false, placeholder = '',
-      isMulti = false, menuPosition, isClearable = true, noOptionsMessage = (() => { return null; }),
+      isMulti = false, menuPosition, isClearable = true, noOptionsMessage = (() => { return gettext('No results'); }),
       classNamePrefix, innerRef, isDisabled = false, form, className = '' } = this.props;
 
     const isClearOption = (option) => option && option.value === null && option.label === '--';
@@ -115,7 +129,7 @@ class SeahubSelect extends React.Component {
         className={className}
         classNamePrefix={classNamePrefix}
         styles={MenuSelectStyle}
-        components={{ Option, DropdownIndicator, MenuList, ClearIndicator, ValueContainer }}
+        components={{ Option, DropdownIndicator, MenuList, ClearIndicator, ValueContainer, NoOptionsMessage }}
         placeholder={placeholder}
         isSearchable={isSearchable}
         isClearable={false}
