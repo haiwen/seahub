@@ -57,11 +57,6 @@
   transform: translateY(-50%);
 }
 
-.wiki2-search-input .wiki2-search-input-clear .seafile-multicolor-icon {
-  width: 12px;
-  height: 12px;
-}
-
 .wiki2-search-input .wiki2-search-input-clear:hover {
   background-color: var(--bs-hover-secondary-bg);
 }
