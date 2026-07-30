@@ -8,21 +8,14 @@
     aria-controls="wiki-search-modal"
     aria-label="{% trans 'Search' %}"
 >
-    <span class="wiki2-search-btn__icon" aria-hidden="true">
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-        >
-            <circle cx="11" cy="11" r="7"></circle>
-            <line
-                x1="21"
-                y1="21"
-                x2="16.65"
-                y2="16.65"
-            ></line>
+    <span class="w-6 h-6 d-flex align-items-center justify-content-center" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+            <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M14.2197 0.719727C21.6756 0.719727 27.7197 6.76388 27.7197 14.2197C27.7197 17.4073 26.6141 20.336 24.7666 22.6455L31.2803 29.1582L29.1592 31.2803L22.6455 24.7666C20.336 26.6141 17.4073 27.7197 14.2197 27.7197C6.76388 27.7197 0.719727 21.6756 0.719727 14.2197C0.719727 6.76388 6.76388 0.719727 14.2197 0.719727ZM14.2197 3.71973C8.42074 3.71973 3.71973 8.42074 3.71973 14.2197C3.71973 20.0187 8.42074 24.7197 14.2197 24.7197C20.0187 24.7197 24.7197 20.0187 24.7197 14.2197C24.7197 8.42074 20.0187 3.71973 14.2197 3.71973Z"
+                fill="currentColor"
+            ></path>
         </svg>
     </span>
     <span>{% trans "Search" %}</span>
@@ -43,21 +36,14 @@
     <div class="wiki2-search-modal__dialog" role="document">
         <div class="wiki2-search-modal__body">
             <div class="wiki2-search-input">
-                <span class="wiki2-search-input__icon" aria-hidden="true">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                    >
-                        <circle cx="11" cy="11" r="7"></circle>
-                        <line
-                            x1="21"
-                            y1="21"
-                            x2="16.65"
-                            y2="16.65"
-                        ></line>
+                <span class="d-flex search-icon-left input-icon-addon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M14.2197 0.719727C21.6756 0.719727 27.7197 6.76388 27.7197 14.2197C27.7197 17.4073 26.6141 20.336 24.7666 22.6455L31.2803 29.1582L29.1592 31.2803L22.6455 24.7666C20.336 26.6141 17.4073 27.7197 14.2197 27.7197C6.76388 27.7197 0.719727 21.6756 0.719727 14.2197C0.719727 6.76388 6.76388 0.719727 14.2197 0.719727ZM14.2197 3.71973C8.42074 3.71973 3.71973 8.42074 3.71973 14.2197C3.71973 20.0187 8.42074 24.7197 14.2197 24.7197C20.0187 24.7197 24.7197 20.0187 24.7197 14.2197C24.7197 8.42074 20.0187 3.71973 14.2197 3.71973Z"
+                            fill="currentColor"
+                        ></path>
                     </svg>
                 </span>
                 <input
@@ -72,7 +58,7 @@
                     id="wiki-search-clear"
                     role="button"
                     tabindex="0"
-                    aria-label="{% trans 'Close' %}"
+                    aria-label="{% trans 'Clear search' %}"
                 >
                     <svg
                         viewBox="0 0 1024 1024"
@@ -121,5 +107,6 @@
             </div>
         </div>
     </div>
+    <span class="wiki2-search-clear-tooltip" id="wiki-search-clear-tooltip" role="tooltip">{% trans "Clear search" %}</span>
 </div>
 {% endif %}

@@ -988,6 +988,7 @@ function getElement(id) {
     var searchClose = getElement('wiki-search-close');
     var searchInput = getElement('wiki-search-input');
     var searchClear = getElement('wiki-search-clear');
+    var searchClearTooltip = getElement('wiki-search-clear-tooltip');
     var searchStatus = getElement('wiki-search-status');
     var searchStatusDefault = getElement('wiki-search-status-default');
     var searchStatusNoResult = getElement('wiki-search-status-no-result');
@@ -996,7 +997,7 @@ function getElement(id) {
     var searchResultList = getElement('wiki-search-result-list');
     var searchResultContainer = getElement('wiki-search-result-container');
 
-    if (!searchTrigger || !searchModal || !searchBackdrop || !searchInput || !searchClear || !searchStatus || !searchStatusDefault || !searchStatusNoResult || !searchStatusMessage || !searchResultPanel || !searchResultList || !searchResultContainer) {
+    if (!searchTrigger || !searchModal || !searchBackdrop || !searchInput || !searchClear || !searchClearTooltip || !searchStatus || !searchStatusDefault || !searchStatusNoResult || !searchStatusMessage || !searchResultPanel || !searchResultList || !searchResultContainer) {
       return;
     }
 
@@ -1015,6 +1016,22 @@ function getElement(id) {
       currentPage: searchModal.getAttribute('data-current-page') || '',
       searchFailed: searchModal.getAttribute('data-search-failed') || ''
     };
+
+    function positionSearchClearTooltip() {
+      var clearRect = searchClear.getBoundingClientRect();
+      searchClearTooltip.style.left = (clearRect.left + clearRect.width / 2) + 'px';
+      searchClearTooltip.style.top = (clearRect.bottom + 2.5) + 'px';
+      searchClearTooltip.style.transform = 'translateX(-50%)';
+    }
+
+    function showSearchClearTooltip() {
+      positionSearchClearTooltip();
+      searchClearTooltip.classList.add('is-visible');
+    }
+
+    function hideSearchClearTooltip() {
+      searchClearTooltip.classList.remove('is-visible');
+    }
 
     function getSearchApiUrl() {
       var appConfig = window.app && window.app.config;
@@ -1193,6 +1210,7 @@ function getElement(id) {
       }
       searchInput.value = '';
       searchClear.classList.add('hidden');
+      hideSearchClearTooltip();
       resetSearchResults();
       if (searchModal.contains(document.activeElement)) {
         document.activeElement.blur();
@@ -1283,6 +1301,7 @@ function getElement(id) {
     searchClear.addEventListener('click', function () {
       searchInput.value = '';
       searchClear.classList.add('hidden');
+      hideSearchClearTooltip();
       resetSearchResults();
       searchInput.focus();
     });
@@ -1290,6 +1309,15 @@ function getElement(id) {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         searchClear.click();
+      }
+    });
+    searchClear.addEventListener('mouseenter', showSearchClearTooltip);
+    searchClear.addEventListener('mouseleave', hideSearchClearTooltip);
+    searchClear.addEventListener('focus', showSearchClearTooltip);
+    searchClear.addEventListener('blur', hideSearchClearTooltip);
+    window.addEventListener('resize', function () {
+      if (searchClearTooltip.classList.contains('is-visible')) {
+        positionSearchClearTooltip();
       }
     });
 

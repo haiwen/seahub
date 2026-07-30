@@ -86,21 +86,10 @@ html, body {
   background-color: var(--bs-wiki-nav-hover-bg, #f0f0ee);
 }
 
-.wiki2-search .wiki2-search-btn__icon,
-.wiki2-search-btn__icon {
-  width: 24px;
-  height: 24px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 8px;
-  color: #666;
-}
-
-.wiki2-search .wiki2-search-btn__icon svg,
-.wiki2-search-btn__icon svg {
+#wiki-search-trigger svg {
   width: 16px;
   height: 16px;
+  color: #868e96;
 }
 
 .wiki2-pages-container {
@@ -407,23 +396,21 @@ html, body {
   margin: 0 16px;
 }
 
-.wiki2-search-input__icon {
+.wiki2-search-input .search-icon-left.input-icon-addon {
   position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
-  color: #666;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  color: #868e96;
+  min-width: 36px;
+  justify-content: left;
   pointer-events: none;
 }
 
-.wiki2-search-input__icon svg {
+.wiki2-search-input .search-icon-left svg {
   width: 16px;
   height: 16px;
+  margin-left: 12px;
 }
 
 .wiki2-search-input .form-control {
@@ -432,6 +419,7 @@ html, body {
   padding-right: 36px;
   font-size: .875rem;
   width: 100%;
+  border-radius: 4px;
 }
 
 .wiki2-search-input__clear {
@@ -457,6 +445,28 @@ html, body {
 
 .wiki2-search-input__clear:hover {
   background: var(--bs-hover-secondary-bg, #f0f0ee);
+}
+
+.wiki2-search-clear-tooltip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1202;
+  max-width: 242px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background-color: var(--bs-body-color);
+  color: var(--bs-body-bg);
+  font-size: .75rem;
+  font-weight: normal;
+  line-height: 20px;
+  white-space: nowrap;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.wiki2-search-clear-tooltip.is-visible {
+  visibility: visible;
 }
 
 .wiki2-search-result-container {
