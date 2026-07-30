@@ -105,13 +105,8 @@
   font-size: .875rem;
 }
 
-.sf-metadata-single-select-editor .none-search-result {
-  width: 100%;
-  display: inline-flex;
-  justify-content: center;
+.sf-metadata-single-select-editor .search-empty-tip-text-only {
   margin: 40px 0;
-  font-size: 14px;
-  color: var(--bs-body-secondary-color);
 }
 
 .sf-metadata-single-select-editor .add-search-result {

@@ -48,7 +48,7 @@
 }
 
 .search-input-wrapper.has-search-icon .form-control {
-  padding-left: 2rem;
+  padding-left: 36px;
 }
 
 .search-input-wrapper.has-search-icon .form-control.clearable.hasValue {

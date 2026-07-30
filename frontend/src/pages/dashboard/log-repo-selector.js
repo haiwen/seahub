@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
-import { gettext, mediaUrl } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
+import SearchEmptyTip from '../../components/common/search-empty-tip';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Icon from '../../components/icon';
@@ -127,14 +128,11 @@ class LogRepoSelector extends Component {
                 onChange={this.onQueryChange}
               />
             </div>
-            <ul className="activity-user-list list-unstyled p-3 o-auto">
+            <ul className={`activity-user-list list-unstyled o-auto ${!isLoading && displayItems.length > 0 ? 'p-3' : ''}`}>
               {isLoading ? (
-                <li className="text-center">{gettext('Loading...')}</li>
+                <li className="activity-user-loading">{gettext('Loading...')}</li>
               ) : displayItems.length === 0 ? (
-                <li className="text-center-select-empty">
-                  <img src={`${mediaUrl}img/no-results.png`} alt="" className="select-empty-img" />
-                  {query ? gettext('Library not found') : gettext('Enter characters to start searching')}
-                </li>
+                <li><SearchEmptyTip text={query ? gettext('Library not found') : gettext('Enter characters to start searching')} /></li>
               ) : (
                 displayItems.map((item, index) => {
                   const isSelected = selectedItems.some(selected => selected.id === item.id);

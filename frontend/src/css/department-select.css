@@ -81,19 +81,6 @@
   color: #212529;
 }
 
-.no-search-result {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 28px 12px 36px;
-  color: #6c757d;
-  font-size: 14px;
-  text-align: center;
-}
-
-.no-search-result .select-empty-img {
-  width: 48px;
-  height: 48px;
-  margin-bottom: 8px;
-  flex-shrink: 0;
+.department-list-container .search-empty-tip {
+  margin: -4px 0;
 }

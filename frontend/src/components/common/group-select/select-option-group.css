@@ -58,21 +58,8 @@
   border-radius: 3px;
 }
 
-.option-group .none-search-result {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 16px 10px 24px;
-  color: var(--bs-body-secondary-color);
-  font-size: 14px;
-  text-align: center;
-}
-
-.option-group .none-search-result-img {
-  width: 48px;
-  height: 48px;
-  margin-bottom: 8px;
-  flex-shrink: 0;
+.option-group .option-group-content .search-empty-tip {
+  padding: 24px 10px 32px;
 }
 
 .option-group .option-group-content {

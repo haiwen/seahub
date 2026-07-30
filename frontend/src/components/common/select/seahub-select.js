@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
 import { MenuSelectStyle } from './seahub-select-style';
-import { gettext, mediaUrl } from '../../../utils/constants';
+import { gettext } from '../../../utils/constants';
 import Icon from '../../icon';
 import SelectDropdownIndicator from '../../select-dropdown-indicator';
+import SearchEmptyTip from '../search-empty-tip';
 import './seahub-select.css';
 
 const DropdownIndicator = props => {
@@ -36,7 +37,7 @@ ClearIndicator.propTypes = {
 
 const MenuList = (props) => (
   <div onClick={e => e.nativeEvent.stopImmediatePropagation()} onMouseDown={e => e.nativeEvent.stopImmediatePropagation()} >
-    <components.MenuList {...props}>{props.children}</components.MenuList>
+    <components.MenuList {...props} className="seahub-select-menu-list">{props.children}</components.MenuList>
   </div>
 );
 
@@ -45,12 +46,7 @@ MenuList.propTypes = {
 };
 
 const NoOptionsMessage = props => {
-  return (
-    <div className="seahub-select-no-options-message">
-      <img src={`${mediaUrl}img/no-results.png`} alt="" className="seahub-select-no-options-img" />
-      {props.children ? <span className="seahub-select-no-options-text">{props.children}</span> : null}
-    </div>
-  );
+  return <SearchEmptyTip text={props.children} />;
 };
 
 NoOptionsMessage.propTypes = {

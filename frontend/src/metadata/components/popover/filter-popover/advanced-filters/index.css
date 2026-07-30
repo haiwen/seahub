@@ -317,15 +317,7 @@
   overflow: auto;
 }
 
-.sf-metadata-filters-list .seafile-option-group .none-search-result {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 32px;
-  padding: 0 8px;
-}
-
-.sf-metadata-filters-list .seafile-option-group .none-search-result-img {
+.sf-metadata-filters-list .seafile-option-group .search-empty-tip-img {
   display: none;
 }
 

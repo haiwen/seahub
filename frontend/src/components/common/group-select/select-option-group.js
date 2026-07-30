@@ -5,7 +5,8 @@ import SearchInput from '../../search-input';
 import Option from './option';
 import KeyCodes from '../../../constants/keyCodes';
 import Icon from '../../icon';
-import { gettext, mediaUrl } from '../../../utils/constants';
+import { gettext } from '../../../utils/constants';
+import SearchEmptyTip from '../../common/search-empty-tip';
 
 import './select-option-group.css';
 
@@ -138,10 +139,7 @@ class SelectOptionGroup extends Component {
     this.filterOptions = this.props.getFilterOptions(searchVal);
     if (this.filterOptions.length === 0) {
       return (
-        <div className="none-search-result">
-          <img src={`${mediaUrl}img/no-results.png`} alt="" className="none-search-result-img" />
-          <span>{noOptionsPlaceholder || gettext('No results')}</span>
-        </div>
+        <SearchEmptyTip text={noOptionsPlaceholder || gettext('No results')} />
       );
     }
     return this.filterOptions.map((option, index) => {

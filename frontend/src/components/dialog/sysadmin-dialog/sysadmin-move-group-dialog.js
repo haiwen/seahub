@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalBody, ModalFooter, Popover } from 'reactstrap';
 import toaster from '../../../components/toast';
-import { gettext, orgID, mediaUrl } from '../../../utils/constants';
+import { gettext, orgID } from '../../../utils/constants';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import SearchInput from '../../search-input';
 import ClickOutside from '../../click-outside';
+import SearchEmptyTip from '../../../components/common/search-empty-tip';
 import classnames from 'classnames';
 
 import '../../../css/department-select.css';
@@ -192,10 +193,7 @@ export default class MoveDepartmentDialog extends React.Component {
                           );
                         })
                       ) : (
-                        <div className="no-search-result">
-                          <img src={`${mediaUrl}img/no-results.png`} alt="" className="select-empty-img" />
-                          {searchValue ? gettext('Department not found') : gettext('Enter characters to start searching')}
-                        </div>
+                        <SearchEmptyTip text={searchValue ? gettext('Department not found') : gettext('Enter characters to start searching')} />
                       )}
                     </div>
                   </div>

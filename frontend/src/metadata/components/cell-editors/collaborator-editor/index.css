@@ -102,12 +102,6 @@
   font-size: 13px;
 }
 
-.sf-metadata-collaborator-editor .none-search-result {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.sf-metadata-collaborator-editor .search-empty-tip-text-only {
   margin: 40px 0;
-  font-size: 14px;
-  color: var(--bs-body-secondary-color);
 }

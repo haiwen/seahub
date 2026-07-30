@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import HideColumn from './hide-column';
-import { gettext, mediaUrl } from '../../../../../utils/constants';
+import { gettext } from '../../../../../utils/constants';
+import SearchEmptyTip from '../../../../../components/common/search-empty-tip';
 
 const HiddenColumns = ({ readOnly, columns, hiddenColumns, onChange, modifyColumnOrder }) => {
   const [draggingColumnKey, setDraggingCellKey] = useState(null);
@@ -26,13 +26,8 @@ const HiddenColumns = ({ readOnly, columns, hiddenColumns, onChange, modifyColum
   const draggingColumnIndex = draggingColumnKey ? columns.findIndex(c => c.key === draggingColumnKey) : -1;
 
   return (
-    <div className={classnames('hide-columns-list', { 'empty-hide-columns-container': isEmpty })}>
-      {isEmpty && (
-        <>
-          <img src={`${mediaUrl}img/no-results.png`} alt="" className="empty-hide-columns-img" />
-          <span className="empty-hide-columns-list">{gettext('No properties available to be hidden')}</span>
-        </>
-      )}
+    <div className="hide-columns-list">
+      {isEmpty && <SearchEmptyTip text={gettext('No properties available to be hidden')} />}
       {!isEmpty && columns.map((column, columnIndex) => {
         return (
           <HideColumn

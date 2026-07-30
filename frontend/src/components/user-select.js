@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Popover } from 'reactstrap';
 import { seafileAPI } from '../utils/seafile-api';
-import { gettext, mediaUrl } from '../utils/constants';
+import { gettext } from '../utils/constants';
+import SearchEmptyTip from './common/search-empty-tip';
 import { Utils } from '../utils/utils';
 import toaster from './toast';
 import KeyCodes from '../constants/keyCodes';
@@ -286,11 +287,7 @@ class UserSelect extends React.Component {
                   })
                 )}
                 {searchedUsers.length === 0 &&
-                  <div className="no-search-result">
-                    <img src={`${mediaUrl}img/no-results.png`} alt="" className="no-search-result-img" />
-                    {searchValue ? gettext('User not found') : gettext('Enter characters to start searching')}
-                  </div>
-                }
+                  <SearchEmptyTip text={searchValue ? gettext('User not found') : gettext('Enter characters to start searching')} />}
               </div>
             </div>
           </Popover>

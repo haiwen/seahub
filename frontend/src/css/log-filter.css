@@ -68,6 +68,13 @@
   max-height: 200px;
 }
 
+.activity-user-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 4rem;
+}
+
 .activity-user-item {
   cursor: pointer;
 }
@@ -94,31 +101,4 @@
 .activity-user-item .seafile-multicolor-icon-check-thin {
   flex-shrink: 0;
   margin-left: 8px;
-}
-
-.text-center-select-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 16px 10px 24px;
-  color: var(--bs-body-secondary-color);
-  font-size: 14px;
-  text-align: center;
-}
-
-.select-empty-img {
-  width: 48px;
-  height: 48px;
-  margin-bottom: 8px;
-  flex-shrink: 0;
-}
-
-.select-empty-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 32px 10px 40px;
-  color: var(--bs-body-secondary-color);
-  font-size: 14px;
-  text-align: center;
 }

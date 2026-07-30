@@ -2,6 +2,7 @@ import React, { forwardRef, useMemo, useImperativeHandle, useCallback, useState,
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import SearchInput from '../../../../components/search-input';
+import SearchEmptyTip from '../../../../components/common/search-empty-tip';
 import DeleteCollaborator from './delete-collaborator';
 import { Utils } from '../../../../utils/utils';
 import { KeyCodes } from '../../../../constants';
@@ -217,7 +218,7 @@ const CollaboratorEditor = forwardRef(({
   const renderCollaborators = useCallback(() => {
     if (displayCollaborators.length === 0) {
       const noOptionsTip = searchValue ? gettext('No collaborators available') : gettext('No collaborators');
-      return (<span className="none-search-result">{noOptionsTip}</span>);
+      return <SearchEmptyTip text={noOptionsTip} showImage={false} />;
     }
 
     return displayCollaborators.map((collaborator, i) => {
