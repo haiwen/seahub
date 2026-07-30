@@ -396,21 +396,9 @@ html, body {
   margin: 0 16px;
 }
 
-.wiki2-search-input .search-icon-left.input-icon-addon {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  color: #868e96;
-  min-width: 36px;
-  justify-content: left;
-  pointer-events: none;
-}
-
 .wiki2-search-input .search-icon-left svg {
   width: 16px;
   height: 16px;
-  margin-left: 12px;
 }
 
 .wiki2-search-input .form-control {
