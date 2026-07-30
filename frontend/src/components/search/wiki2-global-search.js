@@ -12,6 +12,7 @@ import Loading from '../loading';
 import IconBtn from '../icon-btn';
 import Icon from '../icon';
 import Wiki2SearchResult from './wiki2-search-result';
+import Tooltip from '../tooltip';
 
 import './wiki2-search.css';
 
@@ -304,12 +305,16 @@ function Wiki2GlobalSearch({ placeholder, onSearchedClick }) {
                   autoFocus={true}
                 />
                 {value !== '' && (
-                  <IconBtn
-                    symbol="close"
-                    className="search-icon-right input-icon-addon mr-2"
-                    onClick={onClearSearch}
-                    aria-label={gettext('Close')}
-                  />
+                  <>
+                    <IconBtn
+                      id="wiki2-global-search-clear-btn"
+                      symbol="close"
+                      className="search-icon-right input-icon-addon mr-2"
+                      onClick={onClearSearch}
+                      aria-label={gettext('Clear search')}
+                    />
+                    <Tooltip target="wiki2-global-search-clear-btn">{gettext('Clear search')}</Tooltip>
+                  </>
                 )}
               </div>
 

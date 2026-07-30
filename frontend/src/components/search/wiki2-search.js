@@ -10,6 +10,7 @@ import Loading from '../loading';
 import Wiki2SearchResult from './wiki2-search-result';
 import IconBtn from '../icon-btn';
 import Icon from '../icon';
+import Tooltip from '../tooltip';
 
 import './wiki2-search.css';
 
@@ -213,12 +214,16 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
                 autoFocus={true}
               />
               {value !== '' && (
-                <IconBtn
-                  symbol="close"
-                  className="search-icon-right input-icon-addon mr-2"
-                  onClick={onClearSearch}
-                  aria-label={gettext('Close')}
-                />
+                <>
+                  <IconBtn
+                    id="wiki2-search-clear-btn"
+                    symbol="close"
+                    className="search-icon-right input-icon-addon mr-2"
+                    onClick={onClearSearch}
+                    aria-label={gettext('Clear search')}
+                  />
+                  <Tooltip target="wiki2-search-clear-btn">{gettext('Clear search')}</Tooltip>
+                </>
               )}
             </div>
             <div className="wiki2-search-result-container" style={{ maxHeight: (window.innerHeight - 200) }} ref={searchResultListContainerRef}>
