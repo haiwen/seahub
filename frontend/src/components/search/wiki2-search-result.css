@@ -46,16 +46,15 @@
   border-radius: 4px;
 }
 
-.wiki2-search-modal .wiki2-search-result-item {
-  min-height: 40px;
-  align-items: center;
-}
-
 .wiki2-search-result-item .wiki2-search-result-icon {
   height: 20px;
   display: flex;
   align-items: center;
   margin-right: 4px;
+}
+
+.wiki2-search-result-item .wiki2-search-result-icon .nav-item-icon {
+  margin-left: 0;
 }
 
 .wiki2-search-result-item .wiki2-search-result-content {
