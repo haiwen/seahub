@@ -7,7 +7,6 @@ from django.db import models, transaction
 class AIUsageStatistics(models.Model):
     date = models.DateField(null=True, db_index=True)
     repo_id = models.CharField(max_length=36, null=True, blank=True)
-    username = models.CharField(max_length=255, null=False, db_index=True)
     repo_owner = models.CharField(max_length=255, null=True, blank=True)
     group_id = models.IntegerField(null=True, blank=True)
     org_id = models.BigIntegerField(null=True, blank=True)
