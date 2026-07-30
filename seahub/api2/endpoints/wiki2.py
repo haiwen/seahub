@@ -71,7 +71,7 @@ WIKI_PAGE_EXPORT_TYPES = ['sdoc', 'markdown']
 logger = logging.getLogger(__name__)
 
 
-def _merge_wiki_in_groups(group_wikis, publish_wikis_dict, server_render_wikis_dict, link_prefix):
+def _merge_wiki_in_groups(group_wikis, publish_wikis_dict, link_prefix):
 
     group_ids = [gw.group_id for gw in group_wikis]
     group_id_wikis_map = {key: [] for key in group_ids}
@@ -85,7 +85,6 @@ def _merge_wiki_in_groups(group_wikis, publish_wikis_dict, server_render_wikis_d
         else:
             owner_nickname = email2nickname(owner)
         is_published = True if publish_wikis_dict.get(gw.id) else False
-        enable_server_render = True if is_published and server_render_wikis_dict.get(gw.id) else False
         public_url_suffix = publish_wikis_dict.get(gw.id) if is_published else ""
         link = link_prefix + public_url_suffix if public_url_suffix else ""
         repo_info = {
@@ -94,8 +93,7 @@ def _merge_wiki_in_groups(group_wikis, publish_wikis_dict, server_render_wikis_d
                 "owner_nickname": owner_nickname,
                 "public_url_suffix": public_url_suffix,
                 "public_url": link,
-                "is_published": is_published,
-                "enable_server_render": enable_server_render
+                "is_published": is_published
         }
         wiki_info.update(repo_info)
         group_id = gw.group_id
@@ -191,34 +189,29 @@ class Wikis2View(APIView):
             wiki_list.append(wiki_info)
 
         group_id_in_wikis = list(set([r.group_id for r in group_wikis]))
-        user_group_ids = [group.id for group in user_groups]
         try:
             group_ids_admins_map = {}
-            if user_group_ids:
+            if group_id_in_wikis:
                 ccnet_db = CcnetDB()
-                group_ids_admins_map = ccnet_db.get_group_ids_admins_map(user_group_ids)
+                group_ids_admins_map = ccnet_db.get_group_ids_admins_map(group_id_in_wikis)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        user_wiki_groups = [ug for ug in user_groups if ug.id in group_id_in_wikis]
         for r in group_wikis:
             r.owner = r.user
 
         group_wiki_list = []
-        group_id_wikis_map = _merge_wiki_in_groups(
-            group_wikis, publish_wikis_dict, server_render_wikis_dict, link_prefix)
-        for group_obj in user_groups:
-            group_wikis_info = group_id_wikis_map.get(group_obj.id, [])
-            group_admins = group_ids_admins_map.get(group_obj.id) or []
-            if not group_wikis_info and username not in group_admins:
-                continue
+        group_id_wikis_map = _merge_wiki_in_groups(group_wikis, publish_wikis_dict, link_prefix)
+        for group_obj in user_wiki_groups:
             group_wiki = {
                 'group_name': group_obj.group_name,
                 'group_id': group_obj.id,
-                'group_admins': group_admins,
+                'group_admins': group_ids_admins_map.get(group_obj.id) or [],
                 "owner": group_obj.creator_name,
-                'wiki_info': group_wikis_info
+                'wiki_info': group_id_wikis_map[group_obj.id]
             }
             group_wiki_list.append(group_wiki)
         wiki_list = sorted(wiki_list, key=lambda x: x.get('updated_at'), reverse=True)
