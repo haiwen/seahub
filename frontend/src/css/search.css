@@ -4,7 +4,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .search-container {
@@ -150,9 +150,38 @@
   align-items: center;
 }
 
-.search-result-container .search-result-none .none-image {
+.search-result-none.search-result-start-searching-tip .none-image,
+.search-result-none.search-result-no-results-tip .none-image {
+  display: none;
+}
+
+.search-result-none.search-result-start-searching-tip::before,
+.search-result-none.search-result-no-results-tip::before {
+  content: "";
+  width: 48px;
+  height: 48px;
   margin-top: 64px;
   margin-bottom: 8px;
+  flex-shrink: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+[data-bs-theme="light"] .search-result-none.search-result-start-searching-tip::before {
+  background-image: url(../../../media/img/start-searching.png);
+}
+
+[data-bs-theme="dark"] .search-result-none.search-result-start-searching-tip::before {
+  background-image: url(../../../media/img/start-searching-dark.png);
+}
+
+[data-bs-theme="light"] .search-result-none.search-result-no-results-tip::before {
+  background-image: url(../../../media/img/no-results.png);
+}
+
+[data-bs-theme="dark"] .search-result-none.search-result-no-results-tip::before {
+  background-image: url(../../../media/img/no-results-dark.png);
 }
 
 .search-result-container .search-result-none .none-tip {
@@ -188,12 +217,12 @@
   position: relative;
 }
 
-.search-result-container .search-result-item:hover {
-  background-color: var(--bs-hover-secondary-bg);
-}
-
 .search-result-container .search-result-item.search-result-item-highlight {
   background-color: var(--bs-active-secondary-bg);
+}
+
+.search-result-container .search-result-item:hover {
+  background-color: var(--bs-hover-secondary-bg);
 }
 
 .search-result-container .search-result-container-side-panel {
@@ -241,8 +270,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  top: auto;
+  top: 0;
   right: 0;
+  bottom: 0;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .search-result-item .search-icon-right:hover {

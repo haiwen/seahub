@@ -36,9 +36,34 @@
 
 .wiki2-search-input .form-control {
   padding-left: 36px;
+  padding-right: 36px;
   height: 38px;
   font-size: 0.875rem;
   width: 100%;
+}
+
+.wiki2-search-input .wiki2-search-input-clear {
+  top: 50%;
+  right: 9px;
+  bottom: auto;
+  left: auto;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  color: var(--bs-icon-color);
+  background-color: transparent;
+  border-radius: 4px;
+  transform: translateY(-50%);
+}
+
+.wiki2-search-input .wiki2-search-input-clear .seafile-multicolor-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.wiki2-search-input .wiki2-search-input-clear:hover {
+  background-color: var(--bs-hover-secondary-bg);
 }
 
 .wiki2-search-modal .modal-body {
