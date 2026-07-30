@@ -29,7 +29,7 @@ class CommonOperationConfirmationDialog extends Component {
       <Modal isOpen={true} toggle={this.toggle}>
         <SeahubModalHeader toggle={this.toggle}>{title}</SeahubModalHeader>
         <ModalBody>
-          <p dangerouslySetInnerHTML={{ __html: message }}></p>
+          <p>{message}</p>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
