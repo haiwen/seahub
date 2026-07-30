@@ -764,7 +764,7 @@ class Search extends Component {
       return <Loading />;
     } else if (this.state.inputValue.trim().length === 0) {
       return (
-        <div className="search-result-none">
+        <div className="search-result-none search-result-start-searching-tip">
           <img className='none-image' src={`${mediaUrl}img/start-searching.png`} alt="" width="48" height="48" />
           <span className='none-tip'>{gettext('Type characters to start search')}</span>
         </div>
@@ -775,7 +775,7 @@ class Search extends Component {
       return this.renderResults(filteredItems);
     } else {
       return (
-        <div className="search-result-none">
+        <div className="search-result-none search-result-no-results-tip">
           <img className='none-image' src={`${mediaUrl}img/no-results.png`} alt="" width="48" height="48" />
           <span className='none-tip'>{gettext('No results matching')}</span>
         </div>

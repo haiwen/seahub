@@ -55,15 +55,17 @@
   width: fit-content;
   min-width: 240px;
   max-width: 400px;
-  min-height: auto;
+  height: auto;
 }
 
 .seafile-ai-chat-documents-selector-editor .option-editor-container {
-  min-height: auto;
+  height: auto;
 }
 
 .seafile-ai-chat-documents-selector-editor .option-editor-container .option-editor-content {
-  min-height: auto;
+  flex: 0 1 auto;
+  min-height: 0;
+  max-height: 200px;
 }
 
 .sea-ai-customize-select.sea-ai-chat-selector-display.seafile-ai-chat-documents-selector .seafile-ai-chat-documents-divider {

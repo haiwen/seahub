@@ -218,7 +218,7 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
                   <IconBtn
                     id="wiki2-search-clear-btn"
                     symbol="close"
-                    className="search-icon-right input-icon-addon mr-2"
+                    className="search-icon-right wiki2-search-input-clear"
                     onClick={onClearSearch}
                     aria-label={gettext('Clear search')}
                   />
@@ -229,13 +229,13 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
             <div className="wiki2-search-result-container" style={{ maxHeight: (window.innerHeight - 200) }} ref={searchResultListContainerRef}>
               {isLoading && <Loading />}
               {(value === '' && !isResultGotten) && (
-                <div className="search-result-none">
+                <div className="search-result-none search-result-start-searching-tip">
                   <img className='none-image' src={`${mediaUrl}img/start-searching.png`} alt="" width="48" height="48" />
                   <span className='none-tip'>{gettext('Type characters to start search')}</span>
                 </div>
               )}
               {(value !== '' && isResultGotten && results.length === 0) && (
-                <div className="search-result-none">
+                <div className="search-result-none search-result-no-results-tip">
                   <img className='none-image' src={`${mediaUrl}img/no-results.png`} alt="" width="48" height="48" />
                   <span className='none-tip'>{gettext('No results matching')}</span>
                 </div>
@@ -245,7 +245,7 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
                   <h6 className="wiki2-search-result-header d-flex align-items-center">
                     <span>{gettext('Wiki pages')}</span>
                   </h6>
-                  <ul>
+                  <ul className="wiki2-search-result-list">
                     {results.map((result, index) => {
                       return (
                         <Wiki2SearchResult

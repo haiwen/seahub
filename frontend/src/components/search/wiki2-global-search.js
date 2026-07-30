@@ -224,13 +224,13 @@ function Wiki2GlobalSearch({ placeholder, onSearchedClick }) {
       <>
         {isLoading && <Loading />}
         {(value === '' && !isResultGotten) && (
-          <div className="search-result-none">
+          <div className="search-result-none search-result-start-searching-tip">
             <img className='none-image' src={`${mediaUrl}img/start-searching.png`} alt="" width="48" height="48" />
             <span className='none-tip'>{gettext('Type characters to start search')}</span>
           </div>
         )}
         {(value !== '' && isResultGotten && results.length === 0) && (
-          <div className="search-result-none">
+          <div className="search-result-none search-result-no-results-tip">
             <img className='none-image' src={`${mediaUrl}img/no-results.png`} alt="" width="48" height="48" />
             <span className='none-tip'>{gettext('No results matching')}</span>
           </div>
@@ -240,7 +240,7 @@ function Wiki2GlobalSearch({ placeholder, onSearchedClick }) {
             <h6 className="wiki2-search-result-header d-flex align-items-center">
               <span>{gettext('Wiki pages')}</span>
             </h6>
-            <ul>
+            <ul className="wiki2-search-result-list">
               {results.map((result, index) => {
                 const flatIndex = getFlatIndex(result);
                 const key = result._id || result.doc_uuid || `${result.wiki_id}-${result.page_id || ''}-${flatIndex}`;
@@ -309,7 +309,7 @@ function Wiki2GlobalSearch({ placeholder, onSearchedClick }) {
                     <IconBtn
                       id="wiki2-global-search-clear-btn"
                       symbol="close"
-                      className="search-icon-right input-icon-addon mr-2"
+                      className="search-icon-right wiki2-search-input-clear"
                       onClick={onClearSearch}
                       aria-label={gettext('Clear search')}
                     />

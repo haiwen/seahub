@@ -230,7 +230,7 @@
 
 .sea-ai-model-selector-editor .popover,
 .sea-ai-model-selector-editor .option-editor-container {
-  min-height: fit-content;
+  height: auto;
 }
 
 .sea-ai-model-selector-editor .popover {
@@ -239,7 +239,9 @@
 }
 
 .sea-ai-model-selector-editor .option-editor-container .option-editor-content {
-  min-height: fit-content;
+  flex: 0 1 auto;
+  min-height: 0;
+  max-height: 200px;
 }
 
 .attach-files-trigger-container {
