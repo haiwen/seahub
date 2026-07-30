@@ -82,6 +82,15 @@ class RepoMetadata(models.Model):
         db_table = 'repo_metadata'
 
 
+class RepoMetadataStatus(models.Model):
+
+    repo_id = models.CharField(max_length=36, unique=True, db_index=True)
+    ai_summary_running = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = 'repo_metadata_status'
+
+
 class RepoFolder(object):
 
     def __init__(self, name, children=[], folders_views_ids=None):
