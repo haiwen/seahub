@@ -50,5 +50,5 @@
 }
 
 :is(.sf-metadata-collaborator-editor, .sf-metadata-selector-collaborator) .sf-metadata-delete-collaborator .collaborator .collaborator-remove .seafile-multicolor-icon-close {
-  color: #999;
+  color: #666;
 }

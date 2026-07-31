@@ -588,6 +588,11 @@
   height: 100%;
 }
 
+.custom-modal .file-list-col .footer-left-btn,
+.custom-modal .file-list-col .footer-right-btns {
+  margin: 0;
+}
+
 .custom-modal .modal-footer {
   position: relative;
   justify-content: flex-end;

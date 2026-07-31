@@ -42,19 +42,13 @@
 .user-item .user-remove {
   display: inline-flex;
   align-items: center;
-  width: 14px;
-  margin: 0 -2px 0 2px;
+  margin-left: 4px;
 }
 
-.user-item .user-remove .seafile-multicolor-icon {
-  width: 12px;
-  height: 12px;
-  color: #909090;
-  cursor: pointer;
-}
-
-.user-item .user-remove .seafile-multicolor-icon:hover {
-  color: #666666;
+.user-item .seafile-multicolor-icon-close {
+  width: 10px;
+  height: 10px;
+  color: #666;
   cursor: pointer;
 }
 

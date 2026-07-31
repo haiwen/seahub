@@ -51,19 +51,27 @@
 }
 
 .seafile-customize-select .selected-option .selected-option-show-container {
-  background: #f7f7f5;
+  background: #eaeaea;
   border-radius: 4px;
   padding: 0px 6px;
   margin-right: 4px;
   height: 24px;
   display: flex;
   align-items: center;
+  color: #212529;
 }
 
-.seafile-customize-select .selected-option .selected-option-show-container .seafile-multicolor-icon-x-01 {
+.seafile-customize-select .selected-option .selected-option-show-container .option-remove {
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 4px;
+}
+
+.seafile-customize-select .selected-option .selected-option-show-container .seafile-multicolor-icon-close {
   width: 12px;
   height: 12px;
-  color: var(--bs-icon-color);
+  color: #666;
 }
 
 .seafile-customize-select .selected-option .custom-select-dropdown-icon {
@@ -110,10 +118,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.seafile-customize-select .selected-option-delete .seafile-multicolor-icon {
-  color: var(--bs-icon-color);
 }
 
 .seafile-customize-select .select-placeholder {
