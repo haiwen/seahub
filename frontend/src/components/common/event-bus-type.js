@@ -68,6 +68,9 @@ export const EVENT_BUS_TYPE = {
   DIRENT_METADATA_CHANGED: 'dirent_metadata_changed',
   COLUMN_DATA_MODIFIED: 'column_data_modified',
 
+  // library settings
+  SWITCH_TO_SETTINGS_VIEW: 'switch_to_settings_view',
+
   // trash
   SWITCH_TO_TRASH_VIEW: 'switch_to_trash_view',
   SELECT_TRASH: 'select_trash',

@@ -1,0 +1,55 @@
+.library-setting-item {
+  margin-bottom: 2rem;
+}
+
+.library-setting-item-heading {
+  font-size: 1rem;
+  font-weight: normal;
+  padding-bottom: .25rem;
+  border-bottom: 1px solid var(--bs-border-secondary-color);
+  margin-bottom: .75rem;
+}
+
+.library-setting-item-2nd-heading {
+  font-size: .875rem;
+  font-weight: normal;
+  margin: 0;
+}
+
+.library-setting-item .form-check {
+  padding-left: 1.375rem;
+  margin-bottom: 0;
+}
+
+.library-setting-item .form-label {
+  font-size: .875rem;
+}
+
+.library-setting-item .setting-tip {
+  font-size: .75rem;
+  color: var(--bs-body-secondary-color);
+  margin: .25rem 0 0;
+}
+
+.library-setting-item .help-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.library-setting-item .help-icon:hover {
+  background: var(--bs-icon-btn-hover-bg-color);
+}
+
+.library-setting-item .metadata-status-hide-properties-button {
+  padding: 3px 12px;
+  height: 2rem;
+  background: var(--bs-bg-color);
+}
+
+.library-setting-item .metadata-status-hide-properties-button:hover {
+  background: #ebebeb;
+}

@@ -11,10 +11,11 @@ import { DRAG_HANDLER_HEIGHT, MAX_SIDE_PANEL_RATE, MIN_SIDE_PANEL_RATE } from '.
 import { SeafileMetadata } from '../../metadata';
 import { TagsView } from '../../tag';
 import { mediaUrl } from '../../utils/constants';
-import { CHAT_MODE, GRID_MODE, LIST_MODE, METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH_MODE, TABLE_MODE } from './constants';
+import { CHAT_MODE, GRID_MODE, LIST_MODE, METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH_MODE, TABLE_MODE, SETTINGS_MODE } from './constants';
 import DirTrashView from './dir-trash-view';
 import NoPermissionView from './dir-trash-view/no-permission-view';
 import DirChat from './dir-chat';
+import DirSettingsView from './dir-settings-view';
 
 const propTypes = {
   isSidePanelFolded: PropTypes.bool,
@@ -368,6 +369,13 @@ class DirColumnView extends React.Component {
           )}
           {currentMode === HISTORY_MODE && (
             <DirHistoryView
+              repoID={this.props.repoID}
+              userPerm={this.props.userPerm}
+              currentRepoInfo={this.props.currentRepoInfo}
+            />
+          )}
+          {currentMode === SETTINGS_MODE && (
+            <DirSettingsView
               repoID={this.props.repoID}
               userPerm={this.props.userPerm}
               currentRepoInfo={this.props.currentRepoInfo}

@@ -49,6 +49,7 @@ import {
   METADATA_MODE,
   TAGS_MODE,
   HISTORY_MODE,
+  SETTINGS_MODE,
   TRASH_MODE,
   CHAT_MODE
 } from '../../components/dir-view-mode/constants';
@@ -221,6 +222,7 @@ class LibContentView extends React.Component {
     this.unsubscribeOpenTreePanel = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_TREE_PANEL, this.openTreePanel);
     this.unsubscribeSwitchToHistoryView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_HISTORY_VIEW, this.switchToHistoryView);
     this.unsubscribeSwitchToChatView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_CHAT_VIEW, this.switchToChatView);
+    this.unsubscribeSwitchToSettingsView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_SETTINGS_VIEW, this.switchToSettingsView);
     this.unsubscribeSwitchToTrashView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_TRASH_VIEW, this.switchToTrashView);
     this.unsubscribeUpdateTrashPath = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_TRASH_PATH, this.updateTrashPath);
 
@@ -320,9 +322,11 @@ class LibContentView extends React.Component {
   calculatePara = async (props) => {
     const { repoID } = props;
 
-    const { path, viewId, tagId, isHistory, isTrash, isChat } = this.getInfoFromLocation(repoID);
+    const { path, viewId, tagId, isHistory, isSettings, isTrash, isChat } = this.getInfoFromLocation(repoID);
     let currentMode;
-    if (isTrash) {
+    if (isSettings) {
+      currentMode = SETTINGS_MODE;
+    } else if (isTrash) {
       currentMode = TRASH_MODE;
     } else if (isHistory) {
       currentMode = HISTORY_MODE;
@@ -387,6 +391,9 @@ class LibContentView extends React.Component {
 
     const tagId = urlParams.get('tag');
     if (tagId) return { path: `/${PRIVATE_FILE_TYPE.TAGS_PROPERTIES}/${tagId}`, tagId };
+
+    const isSettings = urlParams.get('settings');
+    if (isSettings) return { path: '/', isSettings: true };
 
     const isHistory = urlParams.get('history');
     if (isHistory) return { path: '/', isHistory: true };
@@ -480,13 +487,15 @@ class LibContentView extends React.Component {
 
   onpopstate = (event) => {
     const { repoID } = this.props;
-    const { path: urlPath, viewId, tagId, isTrash, isChat } = this.getInfoFromLocation(repoID);
+    const { path: urlPath, viewId, tagId, isSettings, isTrash, isChat } = this.getInfoFromLocation(repoID);
 
     let currentMode;
     let resolvedPath = urlPath;
     let resolvedTagId = tagId;
 
-    if (isTrash) {
+    if (isSettings) {
+      currentMode = SETTINGS_MODE;
+    } else if (isTrash) {
       currentMode = TRASH_MODE;
     } else if (isChat && this.canUseAIChat()) {
       currentMode = CHAT_MODE;
@@ -726,10 +735,12 @@ class LibContentView extends React.Component {
 
   hideMetadataView = (isSetRoot = false) => {
     const { repoID } = this.props;
-    const { path, isHistory, isTrash, isChat } = this.getInfoFromLocation(repoID);
+    const { path, isHistory, isSettings, isTrash, isChat } = this.getInfoFromLocation(repoID);
     let mode = Cookies.get('seafile_view_mode') || LIST_MODE;
     if (isHistory) {
       mode = HISTORY_MODE;
+    } else if (isSettings) {
+      mode = SETTINGS_MODE;
     } else if (isTrash) {
       mode = TRASH_MODE;
     } else if (isChat && this.canUseAIChat()) {
@@ -1408,6 +1419,19 @@ class LibContentView extends React.Component {
 
     this.setState({
       currentMode: CHAT_MODE,
+      path: '/',
+      isDirentDetailShow: false,
+      isDirentSelected: false,
+    });
+  };
+
+  switchToSettingsView = () => {
+    const repoInfo = this.state.currentRepoInfo;
+    const url = siteRoot + 'library/' + repoInfo.repo_id + '/' + encodeURIComponent(repoInfo.repo_name) + '/?settings=true';
+    window.history.pushState({}, '', url);
+
+    this.setState({
+      currentMode: SETTINGS_MODE,
       path: '/',
       isDirentDetailShow: false,
       isDirentSelected: false,
@@ -3238,7 +3262,7 @@ class LibContentView extends React.Component {
                       )}
                     </div>
                   </div>
-                  {canUpload && this.state.pathExist && !this.state.isViewFile && ![METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH_MODE, CHAT_MODE].includes(this.state.currentMode) && (
+                  {canUpload && this.state.pathExist && !this.state.isViewFile && ![METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH_MODE, SETTINGS_MODE, CHAT_MODE].includes(this.state.currentMode) && (
                     <FileUploader
                       ref={uploader => this.uploader = uploader}
                       dragAndDrop={true}

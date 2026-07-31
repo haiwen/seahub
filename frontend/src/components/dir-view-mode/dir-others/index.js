@@ -43,6 +43,9 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, currentMode, updateRepoI
     };
   });
 
+  const handleSettingsClick = () => {
+    eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_TO_SETTINGS_VIEW);
+  };
 
   const handleTrashClick = () => {
     eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_TO_TRASH_VIEW);
@@ -80,11 +83,19 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, currentMode, updateRepoI
           updateRepoInfo={updateRepoInfo}
         />
       )}
-      {showSettings && (
+      {/*showSettings && (
         <Item
           text={gettext('Settings')}
           iconSymbol="set-up"
           op={toggleSettingsDialog}
+        />
+      )*/}
+      {showSettings && (
+        <Item
+          text={gettext('Settings')}
+          iconSymbol="set-up"
+          op={handleSettingsClick}
+          isActive={currentMode === 'settings'}
         />
       )}
       {userPerm == 'rw' && (
