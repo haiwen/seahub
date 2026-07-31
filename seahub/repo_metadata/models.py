@@ -75,20 +75,12 @@ class RepoMetadata(models.Model):
     details_settings = models.TextField()
     ocr_enabled = models.BooleanField(db_index=True)
     global_hidden_columns = models.TextField()
+    status = models.CharField(max_length=32, default='', blank=True)
 
     objects = RepoMetadataManager()
 
     class Meta:
         db_table = 'repo_metadata'
-
-
-class RepoMetadataStatus(models.Model):
-
-    repo_id = models.CharField(max_length=36, unique=True, db_index=True)
-    ai_summary_running = models.BooleanField(default=False)
-
-    class Meta:
-        db_table = 'repo_metadata_status'
 
 
 class RepoFolder(object):

@@ -133,12 +133,7 @@ MODIFY COLUMN provider varchar(32)
 MODIFY COLUMN uid varchar(255)
   CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL;
 
-CREATE TABLE `repo_metadata_status` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `repo_id` VARCHAR(36) NOT NULL,
-  `ai_summary_running` TINYINT(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `idx_repo_id` (`repo_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+ALTER TABLE `repo_metadata`
+  ADD COLUMN `status` VARCHAR(32) NOT NULL DEFAULT '' AFTER `global_hidden_columns`;
 
 
