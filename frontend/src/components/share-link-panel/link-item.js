@@ -160,7 +160,7 @@ class LinkItem extends React.Component {
             {expire_date ? dayjs(expire_date).format('YYYY-MM-DD HH:mm') : '--'}
           </td>
           <td>{item.description}</td>
-          <td>{item.password && <Icon symbol="check-thin" />}</td>
+          <td>{item.password && <Icon symbol="check" />}</td>
           <td>
             <OpIcon
               id={`copy-icon-${idx}`}

@@ -133,7 +133,7 @@ class UserSelector extends Component {
                         <img src={item.avatar_url} className="avatar w-5 h-5" alt="" />
                         <span className="activity-user-name ml-2">{item.name}</span>
                       </div>
-                      {item.isSelected && <Icon symbol="check-thin" className="text-gray font-weight-bold" />}
+                      {item.isSelected && <Icon symbol="check" className="text-gray font-weight-bold" />}
                     </li>
                   );
                 })}
