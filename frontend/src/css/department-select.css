@@ -81,8 +81,6 @@
   color: #212529;
 }
 
-.no-search-result {
-  padding: 8px 12px;
-  color: #6c757d;
-  text-align: center;
+.department-list-container .search-empty-tip {
+  margin: -4px 0;
 }

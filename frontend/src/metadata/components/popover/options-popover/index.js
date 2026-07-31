@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import CustomizePopover from '../../../../components/customize-popover';
 import CommonAddTool from '../../../../components/common-add-tool';
 import SearchInput from '../../../../components/search-input';
+import SearchEmptyTip from '../../../../components/common/search-empty-tip';
 import toaster from '../../../../components/toast';
 import ConfirmDeletePopover from './confirm-delete-popover';
 import OptionsContainer from './options-container';
@@ -171,8 +172,8 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
 
   const renderEmptyTip = useCallback(() => {
     if (displayOptions.length > 0) return null;
-    if (searchValue) return (<div className="none-search-result mt-2">{gettext('No options available')}</div>);
-    return (<div className="none-search-result mt-2">{gettext('No options')}</div>);
+    if (searchValue) return <SearchEmptyTip text={gettext('No options available')} showImage={false} />;
+    return <SearchEmptyTip text={gettext('No options')} showImage={false} />;
   }, [searchValue, displayOptions]);
 
   const renderOptions = useCallback(() => {

@@ -91,7 +91,7 @@ class ReplyList extends React.Component {
             <span className="title">{gettext('Comment details')}</span>
           </div>
           <div className="comments-panel-header-right">
-            <OpIcon id="comment-close" className="op-icon" symbol="md-close" tooltip={gettext('Close')} op={this.props.toggleCommentList} />
+            <OpIcon id="comment-close" className="op-icon" symbol="close" tooltip={gettext('Close')} op={this.props.toggleCommentList} />
           </div>
         </div>
 

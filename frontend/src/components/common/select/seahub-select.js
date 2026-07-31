@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
 import { MenuSelectStyle } from './seahub-select-style';
+import { gettext } from '../../../utils/constants';
 import Icon from '../../icon';
 import SelectDropdownIndicator from '../../select-dropdown-indicator';
+import SearchEmptyTip from '../search-empty-tip';
 import './seahub-select.css';
 
 const DropdownIndicator = props => {
@@ -35,12 +37,20 @@ ClearIndicator.propTypes = {
 
 const MenuList = (props) => (
   <div onClick={e => e.nativeEvent.stopImmediatePropagation()} onMouseDown={e => e.nativeEvent.stopImmediatePropagation()} >
-    <components.MenuList {...props}>{props.children}</components.MenuList>
+    <components.MenuList {...props} className="seahub-select-menu-list">{props.children}</components.MenuList>
   </div>
 );
 
 MenuList.propTypes = {
   children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+};
+
+const NoOptionsMessage = props => {
+  return <SearchEmptyTip text={props.children} />;
+};
+
+NoOptionsMessage.propTypes = {
+  children: PropTypes.node,
 };
 
 const Option = props => {
@@ -81,7 +91,7 @@ class SeahubSelect extends React.Component {
 
   render() {
     const { options = [], onChange, value = {}, isSearchable = false, placeholder = '',
-      isMulti = false, menuPosition, isClearable = true, noOptionsMessage = (() => { return null; }),
+      isMulti = false, menuPosition, isClearable = true, noOptionsMessage = (() => { return gettext('No results'); }),
       classNamePrefix, innerRef, isDisabled = false, form, className = '' } = this.props;
 
     const isClearOption = (option) => option && option.value === null && option.label === '--';
@@ -115,7 +125,7 @@ class SeahubSelect extends React.Component {
         className={className}
         classNamePrefix={classNamePrefix}
         styles={MenuSelectStyle}
-        components={{ Option, DropdownIndicator, MenuList, ClearIndicator, ValueContainer }}
+        components={{ Option, DropdownIndicator, MenuList, ClearIndicator, ValueContainer, NoOptionsMessage }}
         placeholder={placeholder}
         isSearchable={isSearchable}
         isClearable={false}

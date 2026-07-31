@@ -68,6 +68,13 @@
   max-height: 200px;
 }
 
+.activity-user-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 4rem;
+}
+
 .activity-user-item {
   cursor: pointer;
 }

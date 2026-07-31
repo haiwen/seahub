@@ -23,6 +23,7 @@
 
 .seafile-option-group .seafile-option-group-search .form-control {
   border: none;
+  border-radius: 4px;
   padding: .375rem 1rem;
   cursor: pointer;
 }
@@ -41,13 +42,6 @@
 .seafile-option-group .seafile-option-group-search .input-icon-addon svg {
   color: #999;
   cursor: pointer;
-}
-
-.seafile-option-group .none-search-result {
-  height: 100px;
-  width: 100%;
-  padding: 10px;
-  color: var(--bs-body-secondary-color);
 }
 
 .seafile-option-group .seafile-option-group-content {

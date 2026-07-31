@@ -5,6 +5,7 @@ import SearchInput from '../../../../components/search-input';
 import { Utils } from '../../../../utils/utils';
 import { KeyCodes } from '../../../../constants';
 import { gettext } from '../../../../utils/constants';
+import SearchEmptyTip from '../../../../components/common/search-empty-tip';
 import { useTags } from '../../../../tag/hooks';
 import { getTagId, getTagName, getTagsByName, getTagByName, getTagColor } from '../../../../tag/utils/cell';
 import { getRowById } from '../../../../components/sf-table/utils/table';
@@ -367,7 +368,7 @@ const TagsEditor = forwardRef(({
   const renderOptions = useCallback(() => {
     if (nodes.length === 0) {
       const noOptionsTip = searchValue ? gettext('No tags available') : gettext('No tag');
-      return (<span className="search-result-empty">{noOptionsTip}</span>);
+      return <SearchEmptyTip text={noOptionsTip} />;
     }
     const isRecentlyUsedVisible = showRecentlyUsed && recentlyUsedTags.length > 0 && !searchValue;
     return (

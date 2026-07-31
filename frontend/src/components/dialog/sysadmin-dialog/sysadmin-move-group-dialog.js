@@ -9,6 +9,7 @@ import { Utils } from '../../../utils/utils';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import SearchInput from '../../search-input';
 import ClickOutside from '../../click-outside';
+import SearchEmptyTip from '../../../components/common/search-empty-tip';
 import classnames from 'classnames';
 
 import '../../../css/department-select.css';
@@ -192,9 +193,7 @@ export default class MoveDepartmentDialog extends React.Component {
                           );
                         })
                       ) : (
-                        <div className="no-search-result">
-                          {searchValue ? gettext('Department not found') : gettext('Enter characters to start searching')}
-                        </div>
+                        <SearchEmptyTip text={searchValue ? gettext('Department not found') : gettext('Enter characters to start searching')} />
                       )}
                     </div>
                   </div>

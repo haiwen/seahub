@@ -1,7 +1,6 @@
 .sf-metadata-single-select-editor {
   min-width: 300px;
   padding: 0;
-  min-height: 160px;
   overflow: hidden;
   opacity: 1;
   position: absolute;
@@ -10,7 +9,6 @@
 
 .sf-metadata-single-select-editor .sf-metadata-single-select-editor-container {
   max-height: 200px;
-  min-height: 100px;
   padding: 8px;
   overflow: auto;
 }
@@ -107,13 +105,8 @@
   font-size: .875rem;
 }
 
-.sf-metadata-single-select-editor .none-search-result {
-  width: 100%;
-  display: inline-flex;
-  justify-content: center;
+.sf-metadata-single-select-editor .search-empty-tip-text-only {
   margin: 40px 0;
-  font-size: 14px;
-  opacity: 0.5;
 }
 
 .sf-metadata-single-select-editor .add-search-result {
