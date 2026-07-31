@@ -62,6 +62,37 @@
   border-bottom: 1px solid var(--bs-border-secondary-color);
 }
 
+.transfer-dialog-content .transfer-dialog-main .transfer-repo-department-select {
+  min-height: 38px;
+  padding: 6px 12px;
+  border-color: var(--bs-border-color);
+  border-radius: 4px;
+}
+
+.transfer-dialog-content .transfer-dialog-main .transfer-repo-department-select.focus {
+  border-color: #3e84f7 !important;
+}
+
+.transfer-dialog-content .transfer-dialog-main .transfer-repo-department-select .select-placeholder {
+  color: var(--bs-body-secondary-color);
+}
+
+.transfer-dialog-content .transfer-dialog-main .transfer-repo-department-select .seafile-option-group {
+  max-width: none;
+  border-radius: 4px;
+}
+
+.transfer-dialog-content .transfer-dialog-main .transfer-repo-department-select .seafile-option-group-content {
+  padding: 8px;
+}
+
+.transfer-dialog-content .transfer-dialog-main .transfer-repo-department-select .seafile-select-option {
+  min-width: 0;
+  min-height: 30px;
+  padding: 0 10px;
+  border-radius: 4px;
+}
+
 .transfer-dialog-content .transfer-dialog-main .transfer-repo-reshare-switch .custom-switch {
   padding-left: 0;
 }

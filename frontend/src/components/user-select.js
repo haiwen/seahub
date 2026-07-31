@@ -233,6 +233,7 @@ class UserSelect extends React.Component {
               return (
                 <UserItem
                   key={index}
+                  idx={index}
                   user={user}
                   enableDeleteUser={true}
                   onDeleteUser={this.onDeleteSelectedCollaborator}
