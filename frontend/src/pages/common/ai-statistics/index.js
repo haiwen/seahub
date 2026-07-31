@@ -66,7 +66,7 @@ const getDefaultPerPage = () => {
 
 const renderOwnerText = (name, repoOwner) => {
   if (name && repoOwner && name !== repoOwner) {
-    return `${name} (${repoOwner})`;
+    return `${name}`;
   }
   return name || repoOwner || '';
 };
