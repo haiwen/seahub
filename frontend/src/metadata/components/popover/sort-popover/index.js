@@ -176,6 +176,7 @@ class SortPopover extends Component {
     const { name, type } = column;
     const { readOnly = false, type: viewType } = this.props;
     const selectedColumn = {
+      value: { column },
       label: (
         <Fragment>
           <span className="sf-metadata-filter-header-icon"><Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[type]} /></span>
