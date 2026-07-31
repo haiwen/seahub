@@ -270,7 +270,7 @@ class RepoListItem extends React.Component {
           </div>
           {repoActive &&
             <div className="item-right-icon">
-              <Icon symbol="check-thin" />
+              <Icon symbol="check" />
             </div>
           }
         </div>
