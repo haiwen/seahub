@@ -1,12 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import { enableRepoAutoDel, enableFaceRecognitionFeature, enableSeafileAI } from '../../../utils/constants';
+import { enableRepoAutoDel, enableFaceRecognitionFeature, enableSeafileAI, enableAIChat } from '../../../utils/constants';
 import { useMetadataStatus } from '../../../hooks';
 import Loading from '../../../components/loading';
 import LibHistorySettingPanel from './lib-history-setting-panel';
 import LibAutoDelSettingPanel from './lib-old-files-auto-del-setting-panel';
 import {
   MetadataStatusManagementDialog as LibExtendedPropertiesSettingPanel,
+  MetadataAISummaryStatusDialog as LibAISummarySettingPanel,
   MetadataFaceRecognitionDialog as LibFaceRecognitionSettingPanel,
   MetadataTagsStatusDialog as LibMetadataTagsStatusSettingPanel,
   useMetadata
@@ -19,13 +20,18 @@ const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
 };
 
-const LibSettingsDialog = ({ repoID, currentRepoInfo, showMigrateTip, onMigrateSuccess }) => {
+const LibSettings = ({ repoID, currentRepoInfo, showMigrateTip, onMigrateSuccess }) => {
   const [isMigrating, setIsMigrating] = useState(false);
 
   const { encrypted, is_admin } = currentRepoInfo;
   const { enableMetadataManagement } = window.app.pageOptions;
   const { updateEnableFaceRecognition } = useMetadata();
-  const { enableMetadata, updateEnableMetadata, enableTags, tagsLang, updateEnableTags, enableFaceRecognition, globalHiddenColumns, modifyGlobalHiddenColumns } = useMetadataStatus();
+  const {
+    enableMetadata, updateEnableMetadata,
+    enableTags, tagsLang, updateEnableTags,
+    enableAISummary, updateEnableAISummary,
+    enableFaceRecognition, globalHiddenColumns, modifyGlobalHiddenColumns
+  } = useMetadataStatus();
   const enableHistorySetting = is_admin; // repo owner, admin of the department which the repo belongs to, and ...
   const enableAutoDelSetting = is_admin && enableRepoAutoDel;
   const enableExtendedPropertiesSetting = !encrypted && is_admin && enableMetadataManagement;
@@ -80,6 +86,14 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, showMigrateTip, onMigrateS
           submit={updateEnableMetadata}
         />
       )}
+      {(enableExtendedPropertiesSetting && enableSeafileAI && enableAIChat) && (
+        <LibAISummarySettingPanel
+          repoID={repoID}
+          value={enableAISummary}
+          submit={updateEnableAISummary}
+          enableMetadata={enableMetadata}
+        />
+      )}
       {enableExtendedPropertiesSetting && enableFaceRecognitionFeature && (
         <LibFaceRecognitionSettingPanel
           repoID={repoID}
@@ -106,6 +120,6 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, showMigrateTip, onMigrateS
   );
 };
 
-LibSettingsDialog.propTypes = propTypes;
+LibSettings.propTypes = propTypes;
 
-export default LibSettingsDialog;
+export default LibSettings;
