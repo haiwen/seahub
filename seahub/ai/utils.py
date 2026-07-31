@@ -210,13 +210,7 @@ def _get_group_id_by_repo_owner(repo_owner):
     except Exception:
         return None
 
-
-def _get_group_creator(group_id):
-    group = ccnet_api.get_group(group_id)
-    return getattr(group, 'creator_name', None) if group else None
-
-
-def resolve_repo_ai_usage_context(username, repo_id=None, org_id=None, scenario=AI_SCENARIO_UNKNOWN):
+def resolve_repo_ai_usage_context(repo_id=None, org_id=None, scenario=AI_SCENARIO_UNKNOWN):
     usage_org_id = org_id
     repo_owner = None
     group_id = None
@@ -230,14 +224,11 @@ def resolve_repo_ai_usage_context(username, repo_id=None, org_id=None, scenario=
 
         repo_owner = _get_repo_owner(repo_id, usage_org_id)
         group_id = _get_group_id_by_repo_owner(repo_owner)
-        if group_id:
-            repo_owner = _get_group_creator(group_id) or repo_owner
-
+        
     if not isinstance(usage_org_id, int) or usage_org_id <= 0:
         usage_org_id = None
 
     return {
-        'username': username,
         'repo_id': repo_id,
         'repo_owner': repo_owner,
         'group_id': group_id,

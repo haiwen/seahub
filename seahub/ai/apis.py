@@ -72,7 +72,7 @@ class ImageCaption(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        usage_context = resolve_repo_ai_usage_context(username, repo_id, org_id, AI_SCENARIO_IMAGE_CAPTION)
+        usage_context = resolve_repo_ai_usage_context(repo_id, org_id, AI_SCENARIO_IMAGE_CAPTION)
         if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
@@ -93,7 +93,7 @@ class ImageCaption(APIView):
             'address': None
         }
         params.update(usage_context)
-        metadata_server_api = MetadataServerAPI(repo_id, user=request.user.username)
+        metadata_server_api = MetadataServerAPI(repo_id, user=username)
 
         from seafevents.repo_metadata.constants import METADATA_TABLE
 
@@ -142,7 +142,6 @@ class GenerateSummary(APIView):
         repo_id = request.data.get('repo_id')
         path = request.data.get('path')
         org_id = request.user.org.org_id if request.user.org else None
-        username = request.user.username
 
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
@@ -159,7 +158,7 @@ class GenerateSummary(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        usage_context = resolve_repo_ai_usage_context(username, repo_id, org_id, AI_SCENARIO_SUMMARY)
+        usage_context = resolve_repo_ai_usage_context(repo_id, org_id, AI_SCENARIO_SUMMARY)
         if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
@@ -204,7 +203,6 @@ class GenerateFileTags(APIView):
         repo_id = request.data.get('repo_id')
         path = request.data.get('path')
         org_id = request.user.org.org_id if request.user.org else None
-        username = request.user.username
 
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
@@ -221,7 +219,7 @@ class GenerateFileTags(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        usage_context = resolve_repo_ai_usage_context(username, repo_id, org_id, AI_SCENARIO_FILE_TAGS)
+        usage_context = resolve_repo_ai_usage_context(repo_id, org_id, AI_SCENARIO_FILE_TAGS)
         if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
@@ -285,7 +283,6 @@ class OCR(APIView):
         repo_id = request.data.get('repo_id')
         path = request.data.get('path')
         org_id = request.user.org.org_id if request.user.org else None
-        username = request.user.username
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
         if not path:
@@ -305,7 +302,7 @@ class OCR(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        usage_context = resolve_repo_ai_usage_context(username, repo_id, org_id, AI_SCENARIO_OCR)
+        usage_context = resolve_repo_ai_usage_context(repo_id, org_id, AI_SCENARIO_OCR)
         if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
@@ -354,7 +351,6 @@ class Translate(APIView):
         text = request.data.get('text')
         lang = request.data.get('lang')
         org_id = request.user.org.org_id if request.user.org else None
-        username = request.user.username
 
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
@@ -369,7 +365,7 @@ class Translate(APIView):
         if not check_folder_permission(request, repo_id, '/'):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        usage_context = resolve_repo_ai_usage_context(username, repo_id, org_id, AI_SCENARIO_TRANSLATE)
+        usage_context = resolve_repo_ai_usage_context(repo_id, org_id, AI_SCENARIO_TRANSLATE)
         if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
@@ -403,7 +399,6 @@ class WritingAssistant(APIView):
         writing_type = request.data.get('writing_type')
         custom_prompt = request.data.get('custom_prompt')
         org_id =  request.user.org.org_id if request.user.org else None
-        username = request.user.username
 
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
@@ -418,7 +413,7 @@ class WritingAssistant(APIView):
         if not check_folder_permission(request, repo_id, '/'):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        usage_context = resolve_repo_ai_usage_context(username, repo_id, org_id, AI_SCENARIO_WRITING_ASSISTANT)
+        usage_context = resolve_repo_ai_usage_context(repo_id, org_id, AI_SCENARIO_WRITING_ASSISTANT)
         if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
@@ -726,7 +721,7 @@ class ChatView(APIView):
         can_upload = parse_repo_perm(repo_permission).can_upload if repo_permission else False
 
         org_id = request.user.org.org_id if getattr(request.user, 'org', None) else None
-        usage_context = resolve_repo_ai_usage_context(request.user.username, repo_id, org_id, AI_SCENARIO_CHAT)
+        usage_context = resolve_repo_ai_usage_context(repo_id, org_id, AI_SCENARIO_CHAT)
         if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
