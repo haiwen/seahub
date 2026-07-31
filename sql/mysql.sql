@@ -1541,7 +1541,7 @@ CREATE TABLE `repo_metadata`  (
   `details_settings` longtext DEFAULT NULL,
   `ocr_enabled` tinyint(1) DEFAULT NULL,
   `global_hidden_columns` longtext DEFAULT NULL,
-  `status` VARCHAR(32) NOT NULL DEFAULT '',
+  `ai_processing_status` VARCHAR(32) NOT NULL DEFAULT '',
   UNIQUE KEY `key_repo_metadata_repo_id`(`repo_id`),
   KEY `key_repo_metadata_enabled`(`enabled`),
   KEY `key_last_face_cluster_time_face_recognition_enabled` (`face_recognition_enabled`,`last_face_cluster_time`),
