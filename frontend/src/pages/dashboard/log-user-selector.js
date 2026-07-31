@@ -181,7 +181,7 @@ class LogUserSelector extends Component {
                         <img src={item.avatar_url} className="avatar w-5 h-5" alt="" />
                         <span className="activity-user-name ml-2">{item.name}</span>
                       </span>
-                      {isSelected && <Icon symbol="check-thin" className="text-gray font-weight-bold" />}
+                      {isSelected && <Icon symbol="check" className="text-gray font-weight-bold" />}
                     </li>
                   );
                 })
