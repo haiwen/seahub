@@ -14,7 +14,7 @@ from django.utils.translation import gettext as _
 from seahub.api2.utils import api_error, to_python_boolean
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
-from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews, RepoMetadataStatus
+from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.utils import is_org_context
 from seahub.views import check_folder_permission
 from seahub.repo_metadata.utils import add_init_metadata_task, recognize_faces, gen_unique_id, init_metadata, \
@@ -2049,9 +2049,6 @@ class MetadataAISummaryStatusManage(APIView):
             remove_ai_summary(metadata_server_api)
             metadata.summary_enabled = False
             metadata.save()
-
-            # Clean up the lock to prevent stale lock from blocking future tasks
-            RepoMetadataStatus.objects.filter(repo_id=repo_id).delete()
         except Exception as e:
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
