@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { gettext } from '@/utils/constants';
 import ModalPortal from '../modal-portal';
 import SelectOptionGroup from './select-option-group';
 import { getEventClassName } from '../../utils/dom';
 import { Utils } from '../../utils/utils';
 import Icon from '../icon';
+import OpIcon from '../op-icon';
 
 import './index.css';
-import OpIcon from '../op-icon';
-import { gettext } from '@/utils/constants';
 
 class CustomizeSelect extends Component {
 
