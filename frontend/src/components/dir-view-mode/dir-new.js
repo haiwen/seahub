@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { Utils } from '../../utils/utils';
@@ -130,7 +130,7 @@ class DirNew extends React.Component {
 
     if ([METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH_MODE].includes(currentMode)) {
       return (
-        <div className='d-flex'>
+        <div className="dir-new-container d-flex">
           <Button
             className={newBtnClassName}
             disabled={true}
@@ -231,21 +231,23 @@ class DirNew extends React.Component {
         });
       }
 
-      content = (
-        <CustomDropdown
-          className='d-flex'
-          items={opList}
-          toggleProps={{ 'tag': 'button', 'type': 'button', 'role': '' }}
-          trigger={(
-            <>
-              <Icon symbol="new" className="mr-2" />
-              {gettext('New')}
-            </>
-          )}
-          triggerClassName={newBtnClassName}
-          menuClassName="position-fixed"
-        />
-      );
+      if (opList.length > 0) {
+        content = (
+          <CustomDropdown
+            className="d-flex w-100"
+            items={opList}
+            toggleProps={{ 'tag': 'button', 'type': 'button', 'role': '' }}
+            trigger={(
+              <>
+                <Icon symbol="new" className="mr-2" />
+                {gettext('New')}
+              </>
+            )}
+            triggerClassName={newBtnClassName}
+            menuClassName="position-fixed"
+          />
+        );
+      }
     } else {
       const opListForMobile = [];
       if (canCreate) {
@@ -258,31 +260,35 @@ class DirNew extends React.Component {
         opListForMobile.push({ key: 'upload-files', label: gettext('Upload'), onClick: this.onUploadFile });
       }
 
-      content = (
-        <CustomDropdown
-          className='d-flex'
-          items={opListForMobile}
-          toggleProps={{ 'tag': 'button', 'type': 'button', 'role': '' }}
-          trigger={(
-            <>
-              <Icon symbol="new" className="mr-2" />
-              {gettext('New')}
-            </>
-          )}
-          triggerClassName={newBtnClassName}
-          menuClassName="position-fixed"
-        />
-      );
+      if (opListForMobile.length > 0) {
+        content = (
+          <CustomDropdown
+            className="d-flex w-100"
+            items={opListForMobile}
+            toggleProps={{ 'tag': 'button', 'type': 'button', 'role': '' }}
+            trigger={(
+              <>
+                <Icon symbol="new" className="mr-2" />
+                {gettext('New')}
+              </>
+            )}
+            triggerClassName={newBtnClassName}
+            menuClassName="position-fixed"
+          />
+        );
+      }
+    }
+
+    if (!content) {
+      return null;
     }
 
     return (
-      <Fragment>
-        {isBtnShown && content}
+      <div className="dir-new-container">
+        {content}
         {this.state.isImportingSdoc && <TipDialog/>}
-        <div>
-          <input className="d-none" type="file" onChange={this.uploadSdoc} ref={this.fileInputRef} accept=".sdoczip"/>
-        </div>
-      </Fragment>
+        <input className="d-none" type="file" onChange={this.uploadSdoc} ref={this.fileInputRef} accept=".sdoczip"/>
+      </div>
     );
   }
 }
