@@ -89,10 +89,9 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
     });
   }, []);
 
-  const onSubmit = useCallback((nextValue, nextHiddenColumns) => {
-    if (!isHiddenColumnsVisible && (oldHiddenColumns !== nextHiddenColumns)) {
-      modifyHiddenColumns(nextHiddenColumns);
-      setHiddenColumns(nextHiddenColumns);
+  const onSubmit = useCallback((nextValue) => {
+    if (oldHiddenColumns !== hiddenColumns) {
+      modifyHiddenColumns(hiddenColumns);
     }
 
     // Only invoke metadataAPI when value changed
@@ -112,7 +111,7 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
         setSubmitting(false);
       });
     }
-  }, [repoID, oldValue, isHiddenColumnsVisible, oldHiddenColumns, modifyHiddenColumns, submit]);
+  }, [repoID, oldValue, isHiddenColumnsVisible, oldHiddenColumns, modifyHiddenColumns, submit, hiddenColumns]);
 
   const turnOffConfirmToggle = useCallback(() => {
     setShowTurnOffConfirmDialog(!showTurnOffConfirmDialog);
@@ -136,13 +135,18 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
     const nextValue = !value;
     const canSubmit = (!submitting && oldValue !== nextValue) || (!isHiddenColumnsVisible && (oldHiddenColumns !== hiddenColumns));
     if (canSubmit) {
-      onSubmit(nextValue, hiddenColumns);
+      onSubmit(nextValue);
     }
   }, [value, onSubmit, submitting, oldValue, isHiddenColumnsVisible, oldHiddenColumns, hiddenColumns]);
 
   const hidePopover = useCallback(() => {
     setHiddenColumnsVisible(false);
-  }, []);
+
+    const canSubmit = (!submitting && oldValue !== value) || (oldHiddenColumns !== hiddenColumns);
+    if (canSubmit) {
+      onSubmit(value);
+    }
+  }, [onSubmit, submitting, oldValue, value, oldHiddenColumns, hiddenColumns]);
 
   const showPopover = useCallback(() => {
     setHiddenColumnsVisible(true);
@@ -154,12 +158,8 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
   }, [oldValue, isHiddenColumnsVisible, hidePopover, showPopover]);
 
   const onHiddenColumnsChange = useCallback((columns) => {
-    const nextHiddenColumns = columns;
-    const canSubmit = (!submitting && oldValue !== value) || (!isHiddenColumnsVisible && (oldHiddenColumns !== nextHiddenColumns));
-    if (canSubmit) {
-      onSubmit(value, nextHiddenColumns);
-    }
-  }, [onSubmit, submitting, oldValue, value, isHiddenColumnsVisible, oldHiddenColumns]);
+    setHiddenColumns(columns);
+  }, []);
 
   const count = hiddenColumns.length;
   let text = gettext('Hide properties');

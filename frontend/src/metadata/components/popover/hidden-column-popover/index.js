@@ -46,7 +46,7 @@ const HideColumnPopover = ({ hidePopover, onChange, readOnly, target, placement,
       document.removeEventListener('keydown', onHotKey);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [hide, onHotKey]);
 
   const onPopoverInsideClick = useCallback((event) => {
     event.stopPropagation();
