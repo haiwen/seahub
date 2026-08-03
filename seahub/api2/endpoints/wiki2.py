@@ -257,6 +257,9 @@ class Wikis2View(APIView):
         if not wiki_name:
             return api_error(status.HTTP_400_BAD_REQUEST, 'wiki name is required.')
 
+        wiki_color = request.data.get("color", "")
+        wiki_icon = request.data.get("icon", "")
+
         if not is_valid_dirent_name(wiki_name):
             msg = _('Name can only contain letters, numbers, blank, hyphen or underscore.')
             return api_error(status.HTTP_400_BAD_REQUEST, msg)
@@ -327,9 +330,18 @@ class Wikis2View(APIView):
             msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
 
+        if wiki_color:
+            Wiki2Settings.objects.update_or_create(wiki_id=repo_id, defaults={"color": wiki_color})
+        if wiki_icon:
+            Wiki2Settings.objects.update_or_create(wiki_id=repo_id, defaults={"icon": wiki_icon})
+
         repo = seafile_api.get_repo(repo_id)
         wiki = Wiki(repo, wiki_owner)
         wiki_info = wiki.to_dict()
+        wiki_settings = Wiki2Settings.objects.get(wiki_id=repo_id)
+        color = wiki_settings.color if wiki_settings else ''
+        icon = wiki_settings.icon if wiki_settings else ''
+        wiki_info.update({'color': color, 'icon': icon})
         if not is_group_owner:
             wiki_info['owner_nickname'] = email2nickname(wiki.owner)
         else:
