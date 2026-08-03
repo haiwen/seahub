@@ -370,7 +370,7 @@ class Wiki2View(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if wiki_name and wiki_name == wiki.name:
-            return Response({"success": True})
+            wiki_name = ''
 
         repo_id = wiki.repo_id
         repo = seafile_api.get_repo(repo_id)
