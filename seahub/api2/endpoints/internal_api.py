@@ -24,7 +24,9 @@ from seahub.share.models import UploadLinkShare, FileShare, check_share_link_acc
 from seaserv import seafile_api
 
 from seahub.tags.models import FileUUIDMap
-from seahub.repo_metadata.utils import FACES_SAVE_PATH, list_file_summaries
+from seahub.repo_metadata.models import RepoMetadata
+from seahub.repo_metadata.metadata_server_api import list_metadata_records
+from seahub.repo_metadata.utils import FACES_SAVE_PATH
 from seahub.utils.repo import parse_repo_perm
 from seahub.views.file import send_file_access_msg, FILE_TYPE_FOR_NEW_FILE_LINK
 from seahub.utils import normalize_file_path, get_file_type_and_ext
@@ -374,7 +376,7 @@ class SeafileSaveFaceView(APIView):
         return Response({'success': True})
 
 
-class InternalListFileSummaries(APIView):
+class InternalListMetadataRecords(APIView):
     authentication_classes = ()
     throttle_classes = (UserRateThrottle,)
 
@@ -402,16 +404,51 @@ class InternalListFileSummaries(APIView):
         if not permission or permission == PERMISSION_INVISIBLE:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        try:
-            result = list_file_summaries(repo_id, username, path)
-        except Exception as error:
-            logger.error('Failed to get file summaries repo=%s path=%s: %s', repo_id, path, error)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-
-        if result is None:
+        if not seafile_api.get_dir_id_by_path(repo_id, path):
             return api_error(status.HTTP_404_NOT_FOUND, 'Directory not found.')
 
-        return Response(result)
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Metadata is disabled.')
+
+        try:
+            records = []
+            start = 0
+            while True:
+                response = list_metadata_records(
+                    repo_id, username, start=start, limit=1000)
+                results = response.get('results', [])
+                records.extend(results)
+                if len(results) < 1000:
+                    break
+                start += 1000
+
+            visible_records = []
+            for record in records:
+                if record.get('_is_dir') in (True, 'True', 'true'):
+                    continue
+
+                record_path = posixpath.join(
+                    record.get('_parent_dir', ''), record.get('_name', ''))
+
+                if path != '/' and not record_path.startswith(path + '/'):
+                    continue
+
+                if record_path.startswith('/_Internal/') or record_path.startswith('/images/'):
+                    continue
+
+                permission = seafile_api.check_permission_by_path(
+                    repo_id, record_path, username)
+                if not permission or permission == PERMISSION_INVISIBLE:
+                    continue
+
+                visible_records.append(record)
+            records = visible_records
+        except Exception as error:
+            logger.error('Failed to list metadata records repo=%s path=%s: %s', repo_id, path, error)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response({'records': records})
 
 
 class CheckShareLinkThumbnailAccess(APIView):
