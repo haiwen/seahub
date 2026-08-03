@@ -89,18 +89,16 @@ class Wikis extends Component {
     this.setState({ isShowAddWikiMenu: !this.state.isShowAddWikiMenu });
   };
 
-  toggleAddWikiDialog = (currentDeptID, isMyWiki) => {
+  toggleAddWikiDialog = (currentDeptID) => {
     if (this.state.isShowAddDialog) {
       this.setState({
         isShowAddDialog: false,
         currentDeptID: '',
-        isMyWiki: false
       });
     } else {
       this.setState({
         isShowAddDialog: true,
         currentDeptID,
-        isMyWiki: isMyWiki || false
       });
     }
   };
@@ -174,47 +172,48 @@ class Wikis extends Component {
     });
   };
 
-  addWiki = (wikiName, currentDeptID) => {
-    wikiAPI.addWiki2(wikiName, currentDeptID).then((res) => {
-      let wikis = this.state.wikis.slice(0);
-      let groupWikis = this.state.groupWikis;
-      let new_wiki = res.data;
-      new_wiki['version'] = 'v2';
-      new_wiki['admins'] = new_wiki.group_admins;
-      if (currentDeptID) {
-        if (groupWikis.find(group => group.group_id === currentDeptID)) {
-          groupWikis.filter(group => {
-            if (group.group_id === currentDeptID) {
-              group.wiki_info.push(new_wiki);
-            }
-            return group;
-          });
-        } else {
-          groupWikis.push({
-            group_id: currentDeptID,
-            wiki_info: [new_wiki],
-            group_admins: new_wiki.group_admins,
-            group_name: new_wiki.group_name,
-            owner: new_wiki.owner,
-            owner_nickname: new_wiki.owner_nickname,
-          });
+  addWiki = (details) => {
+    const currentDeptID = details.owner;
+    return wikiAPI.addWiki2(details).then((res) => {
+      const newWiki = {
+        ...res.data,
+        version: 'v2',
+        admins: res.data.group_admins,
+      };
+      this.setState((prevState) => {
+        if (!currentDeptID) {
+          return {
+            wikis: [newWiki, ...prevState.wikis],
+          };
         }
-        this.setState({
+
+        const isCurrentGroup = group => String(group.group_id) === String(currentDeptID);
+        const groupExists = prevState.groupWikis.some(isCurrentGroup);
+        const groupWikis = groupExists ?
+          prevState.groupWikis.map(group => {
+            if (!isCurrentGroup(group)) {
+              return group;
+            }
+            return {
+              ...group,
+              wiki_info: [...group.wiki_info, newWiki],
+            };
+          }) :
+          [...prevState.groupWikis, {
+            group_id: currentDeptID,
+            wiki_info: [newWiki],
+            group_admins: newWiki.group_admins,
+            group_name: newWiki.group_name,
+            owner: newWiki.owner,
+            owner_nickname: newWiki.owner_nickname,
+          }];
+
+        return {
           currentDeptID: '',
           groupWikis,
-        });
-      } else {
-        wikis.unshift(new_wiki);
-        this.setState({
-          wikis,
-        });
-      }
-
-    }).catch((error) => {
-      if (error.response) {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      }
+        };
+      });
+      return newWiki;
     });
   };
 
@@ -322,31 +321,48 @@ class Wikis extends Component {
   };
 
   renameWiki = (wiki, newName) => {
-    if (wiki.version === 'v1') {
-      wikiAPI.renameWiki(wiki.id, newName).then(() => {
-        let wikis = this.state.wikis.map(item => {
+    return wikiAPI.renameWiki(wiki.id, newName).then(() => {
+      this.setState((prevState) => ({
+        wikis: prevState.wikis.map(item => {
           if (item.id === wiki.id && item.version === 'v1') {
-            item.name = newName;
+            return { ...item, name: newName };
           }
           return item;
-        });
-        this.setState({ wikis: wikis });
-      }).catch((error) => {
-        if (error.response) {
-          let errorMsg = error.response.data.error_msg;
-          toaster.danger(errorMsg);
-        }
+        }),
+      }));
+    }).catch((error) => {
+      if (error.response) {
+        toaster.danger(error.response.data.error_msg);
+      }
+    });
+  };
+
+  updateWiki = (wiki, details) => {
+    return wikiAPI.updateWiki2(wiki.id, details).then(() => {
+      const updatedWiki = {
+        ...wiki,
+        name: details.name,
+        icon: details.icon,
+        color: details.color,
+        version: wiki.version,
+      };
+      this.setState((prevState) => {
+        const updateItem = item => {
+          if (item.id === wiki.id && item.version === wiki.version) {
+            return { ...item, ...updatedWiki };
+          }
+          return item;
+        };
+        return {
+          wikis: prevState.wikis.map(updateItem),
+          groupWikis: prevState.groupWikis.map(group => ({
+            ...group,
+            wiki_info: group.wiki_info.map(updateItem),
+          })),
+        };
       });
-    } else {
-      wikiAPI.renameWiki2(wiki.id, newName).then(() => {
-        this.getWikis();
-      }).catch((error) => {
-        if (error.response) {
-          let errorMsg = error.response.data.error_msg;
-          toaster.danger(errorMsg);
-        }
-      });
-    }
+      return updatedWiki;
+    });
   };
 
   transferWiki = (wiki, owner, reshare) => {
@@ -439,7 +455,6 @@ class Wikis extends Component {
               toggleCancel={this.toggleAddWikiDialog}
               addWiki={this.addWiki}
               currentDeptID={this.state.currentDeptID}
-              isMyWiki={this.state.isMyWiki}
             />
           </ModalPortal>
         }
@@ -483,6 +498,7 @@ class Wikis extends Component {
                   leaveSharedWiki={this.leaveSharedWiki}
                   unshareGroupWiki={this.unshareGroupWiki}
                   renameWiki={this.renameWiki}
+                  updateWiki={this.updateWiki}
                   transferWiki={this.transferWiki}
                   convertWiki={this.convertWiki}
                   toggleAddWikiDialog={this.toggleAddWikiDialog}
@@ -498,7 +514,7 @@ class Wikis extends Component {
                   text={
                     <>
                       <p className="m-0">{gettext('You can click the "Add Wiki" button below to add a new Wiki.')}</p>
-                      <button className="btn btn-primary mt-6" onClick={this.toggleAddWikiDialog}><Icon symbol="new" className="mr-2" />{gettext('Add Wiki')}</button>
+                      <button className="btn btn-primary mt-6" onClick={() => this.toggleAddWikiDialog()}><Icon symbol="new" className="mr-2" />{gettext('Add Wiki')}</button>
                     </>
                   }
                 />

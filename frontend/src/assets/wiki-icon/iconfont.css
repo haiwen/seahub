@@ -1,0 +1,1224 @@
+@font-face {
+  font-family: "wiki-iconfont";
+  src: url('./iconfont.woff2?t=1785486777808') format('woff2'),
+       url('./iconfont.woff?t=1785486777808') format('woff');
+}
+
+.wiki-iconfont {
+  display: inline-block;
+  font-family: "wiki-iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.wiki-asterisk-fill:before {
+  content: "\e783";
+}
+
+.wiki-article-ny-times-fill:before {
+  content: "\e660";
+}
+
+.wiki-armchair-fill:before {
+  content: "\e784";
+}
+
+.wiki-archive-fill:before {
+  content: "\e785";
+}
+
+.wiki-angle-fill:before {
+  content: "\e786";
+}
+
+.wiki-alarm-fill:before {
+  content: "\e65f";
+}
+
+.wiki-aperture-fill:before {
+  content: "\e787";
+}
+
+.wiki-alien-fill:before {
+  content: "\e788";
+}
+
+.wiki-ambulance-fill:before {
+  content: "\e789";
+}
+
+.wiki-address-book-fill:before {
+  content: "\e78a";
+}
+
+.wiki-airplay-fill:before {
+  content: "\e78b";
+}
+
+.wiki-airplane-tilt-fill:before {
+  content: "\e78c";
+}
+
+.wiki-boat-fill:before {
+  content: "\e772";
+}
+
+.wiki-bone-fill:before {
+  content: "\e773";
+}
+
+.wiki-bluetooth-fill:before {
+  content: "\e774";
+}
+
+.wiki-binoculars-fill:before {
+  content: "\e664";
+}
+
+.wiki-basketball-fill:before {
+  content: "\e663";
+}
+
+.wiki-binary-fill:before {
+  content: "\e775";
+}
+
+.wiki-beer-stein-fill:before {
+  content: "\e776";
+}
+
+.wiki-bell-simple-fill:before {
+  content: "\e777";
+}
+
+.wiki-bank-fill:before {
+  content: "\e662";
+}
+
+.wiki-battery-charging-fill:before {
+  content: "\e778";
+}
+
+.wiki-bezier-curve-fill:before {
+  content: "\e779";
+}
+
+.wiki-beanie-fill:before {
+  content: "\e77a";
+}
+
+.wiki-basket-fill:before {
+  content: "\e77b";
+}
+
+.wiki-barcode-fill:before {
+  content: "\e77c";
+}
+
+.wiki-barbell-fill:before {
+  content: "\e77d";
+}
+
+.wiki-barricade-fill:before {
+  content: "\e77e";
+}
+
+.wiki-bag-fill:before {
+  content: "\e77f";
+}
+
+.wiki-balloon-fill:before {
+  content: "\e780";
+}
+
+.wiki-atom-fill:before {
+  content: "\e661";
+}
+
+.wiki-asclepius-fill:before {
+  content: "\e781";
+}
+
+.wiki-baby-fill:before {
+  content: "\e782";
+}
+
+.wiki-blueprint-fill:before {
+  content: "\e76e";
+}
+
+.wiki-bird-fill:before {
+  content: "\e76f";
+}
+
+.wiki-book-bookmark-fill:before {
+  content: "\e770";
+}
+
+.wiki-bomb-fill:before {
+  content: "\e771";
+}
+
+.wiki-bulldozer-fill:before {
+  content: "\e75f";
+}
+
+.wiki-bus-fill:before {
+  content: "\e760";
+}
+
+.wiki-cactus-fill:before {
+  content: "\e761";
+}
+
+.wiki-butterfly-fill:before {
+  content: "\e762";
+}
+
+.wiki-bowl-steam-fill:before {
+  content: "\e763";
+}
+
+.wiki-boot-fill:before {
+  content: "\e764";
+}
+
+.wiki-book-open-text-fill:before {
+  content: "\e765";
+}
+
+.wiki-book-ledger-fill:before {
+  content: "\e766";
+}
+
+.wiki-bread-fill:before {
+  content: "\e767";
+}
+
+.wiki-books-fill:before {
+  content: "\e768";
+}
+
+.wiki-brain-fill:before {
+  content: "\e769";
+}
+
+.wiki-bridge-fill:before {
+  content: "\e76a";
+}
+
+.wiki-bounding-box-fill:before {
+  content: "\e76b";
+}
+
+.wiki-box-arrow-up-fill:before {
+  content: "\e76c";
+}
+
+.wiki-book-fill:before {
+  content: "\e665";
+}
+
+.wiki-biohazard-fill:before {
+  content: "\e76d";
+}
+
+.wiki-building-office-fill:before {
+  content: "\e668";
+}
+
+.wiki-cell-tower-fill:before {
+  content: "\e74e";
+}
+
+.wiki-chart-bar-fill:before {
+  content: "\e74f";
+}
+
+.wiki-chart-bar-horizontal-fill:before {
+  content: "\e750";
+}
+
+.wiki-certificate-fill:before {
+  content: "\e751";
+}
+
+.wiki-carrot-fill:before {
+  content: "\e752";
+}
+
+.wiki-cardholder-fill:before {
+  content: "\e753";
+}
+
+.wiki-boules-fill:before {
+  content: "\e666";
+}
+
+.wiki-broom-fill:before {
+  content: "\e669";
+}
+
+.wiki-cable-car-fill:before {
+  content: "\e754";
+}
+
+.wiki-box-arrow-down-fill:before {
+  content: "\e667";
+}
+
+.wiki-calendar-dots-fill:before {
+  content: "\e755";
+}
+
+.wiki-book-open-user-fill:before {
+  content: "\e756";
+}
+
+.wiki-broadcast-fill:before {
+  content: "\e757";
+}
+
+.wiki-call-bell-fill:before {
+  content: "\e758";
+}
+
+.wiki-bug-fill:before {
+  content: "\e759";
+}
+
+.wiki-bookmarks-fill:before {
+  content: "\e75a";
+}
+
+.wiki-cake-fill:before {
+  content: "\e75b";
+}
+
+.wiki-calculator-fill:before {
+  content: "\e75c";
+}
+
+.wiki-camera-fill:before {
+  content: "\e75d";
+}
+
+.wiki-browsers-fill:before {
+  content: "\e75e";
+}
+
+.wiki-cooking-pot-fill:before {
+  content: "\e73a";
+}
+
+.wiki-desktop-tower-fill:before {
+  content: "\e73b";
+}
+
+.wiki-cheers-fill:before {
+  content: "\e73c";
+}
+
+.wiki-credit-card-fill:before {
+  content: "\e73d";
+}
+
+.wiki-chair-fill:before {
+  content: "\e73e";
+}
+
+.wiki-coins-fill:before {
+  content: "\e73f";
+}
+
+.wiki-crown-simple-fill:before {
+  content: "\e740";
+}
+
+.wiki-currency-gbp-fill:before {
+  content: "\e741";
+}
+
+.wiki-footprints-fill:before {
+  content: "\e742";
+}
+
+.wiki-crop-fill:before {
+  content: "\e743";
+}
+
+.wiki-face-mask-fill:before {
+  content: "\e744";
+}
+
+.wiki-fan-fill:before {
+  content: "\e745";
+}
+
+.wiki-chart-pie-slice-fill:before {
+  content: "\e746";
+}
+
+.wiki-chart-line-fill:before {
+  content: "\e747";
+}
+
+.wiki-car-fill:before {
+  content: "\e66a";
+}
+
+.wiki-chart-donut-fill:before {
+  content: "\e748";
+}
+
+.wiki-chart-scatter-fill:before {
+  content: "\e749";
+}
+
+.wiki-calendar-check-fill:before {
+  content: "\e74a";
+}
+
+.wiki-chalkboard-simple-fill:before {
+  content: "\e74b";
+}
+
+.wiki-charging-station-fill:before {
+  content: "\e74c";
+}
+
+.wiki-cassette-tape-fill:before {
+  content: "\e74d";
+}
+
+.wiki-check-square-fill:before {
+  content: "\e724";
+}
+
+.wiki-dog-fill:before {
+  content: "\e725";
+}
+
+.wiki-crosshair-simple-fill:before {
+  content: "\e726";
+}
+
+.wiki-code-fill:before {
+  content: "\e727";
+}
+
+.wiki-desktop-fill:before {
+  content: "\e728";
+}
+
+.wiki-chart-trend-fill:before {
+  content: "\e729";
+}
+
+.wiki-hard-hat-fill:before {
+  content: "\e72a";
+}
+
+.wiki-fork-knife-fill:before {
+  content: "\e72b";
+}
+
+.wiki-cloud-fill:before {
+  content: "\e72c";
+}
+
+.wiki-currency-krw-fill:before {
+  content: "\e72d";
+}
+
+.wiki-cow-fill:before {
+  content: "\e72e";
+}
+
+.wiki-copyright-fill:before {
+  content: "\e72f";
+}
+
+.wiki-clock-fill:before {
+  content: "\e730";
+}
+
+.wiki-cookie-fill:before {
+  content: "\e731";
+}
+
+.wiki-envelope-fill:before {
+  content: "\e732";
+}
+
+.wiki-floppy-disk-back-fill:before {
+  content: "\e733";
+}
+
+.wiki-chat-text-fill:before {
+  content: "\e734";
+}
+
+.wiki-coffee-fill:before {
+  content: "\e735";
+}
+
+.wiki-disc-fill:before {
+  content: "\e736";
+}
+
+.wiki-garage-fill:before {
+  content: "\e737";
+}
+
+.wiki-crane-tower-fill:before {
+  content: "\e738";
+}
+
+.wiki-file-fill:before {
+  content: "\e739";
+}
+
+.wiki-grid-menu:before {
+  content: "\e70f";
+}
+
+.wiki-currency-btc-fill:before {
+  content: "\e710";
+}
+
+.wiki-fingerprint-fill:before {
+  content: "\e711";
+}
+
+.wiki-cooperation-fill:before {
+  content: "\e712";
+}
+
+.wiki-file-archive-fill:before {
+  content: "\e713";
+}
+
+.wiki-high-heel-fill:before {
+  content: "\e714";
+}
+
+.wiki-fire-fill:before {
+  content: "\e715";
+}
+
+.wiki-dna-fill:before {
+  content: "\e716";
+}
+
+.wiki-first-aid-kit-fill:before {
+  content: "\e717";
+}
+
+.wiki-fallout-shelter-fill:before {
+  content: "\e718";
+}
+
+.wiki-confetti-fill:before {
+  content: "\e719";
+}
+
+.wiki-drop-fill:before {
+  content: "\e71a";
+}
+
+.wiki-cherries-fill:before {
+  content: "\e71b";
+}
+
+.wiki-currency-dollar-fill:before {
+  content: "\e71c";
+}
+
+.wiki-cat-fill:before {
+  content: "\e66b";
+}
+
+.wiki-factory-fill:before {
+  content: "\e71d";
+}
+
+.wiki-eyedropper-sample-fill:before {
+  content: "\e71e";
+}
+
+.wiki-currency-jpy-fill:before {
+  content: "\e71f";
+}
+
+.wiki-gift-fill:before {
+  content: "\e720";
+}
+
+.wiki-closed-captioning-fill:before {
+  content: "\e721";
+}
+
+.wiki-chart-polar-fill:before {
+  content: "\e722";
+}
+
+.wiki-ghost-fill:before {
+  content: "\e723";
+}
+
+.wiki-hourglass-fill:before {
+  content: "\e6fb";
+}
+
+.wiki-film-fill:before {
+  content: "\e6fc";
+}
+
+.wiki-eraser-fill:before {
+  content: "\e6fd";
+}
+
+.wiki-currency-cny-fill:before {
+  content: "\e6fe";
+}
+
+.wiki-contactless-payment-fill:before {
+  content: "\e6ff";
+}
+
+.wiki-ear-fill:before {
+  content: "\e700";
+}
+
+.wiki-devices-fill:before {
+  content: "\e701";
+}
+
+.wiki-folder-fill:before {
+  content: "\e66d";
+}
+
+.wiki-farm-fill:before {
+  content: "\e702";
+}
+
+.wiki-circuitry-fill:before {
+  content: "\e703";
+}
+
+.wiki-compass-fill:before {
+  content: "\e704";
+}
+
+.wiki-device-fill:before {
+  content: "\e66c";
+}
+
+.wiki-function-fill:before {
+  content: "\e705";
+}
+
+.wiki-clipboard-text-fill:before {
+  content: "\e706";
+}
+
+.wiki-device-mobile-fill:before {
+  content: "\e707";
+}
+
+.wiki-cube-fill:before {
+  content: "\e708";
+}
+
+.wiki-database-fill:before {
+  content: "\e709";
+}
+
+.wiki-checkerboard-fill:before {
+  content: "\e70a";
+}
+
+.wiki-hospital-fill:before {
+  content: "\e70b";
+}
+
+.wiki-cube-focus-fill:before {
+  content: "\e70c";
+}
+
+.wiki-hamburger-fill:before {
+  content: "\e70d";
+}
+
+.wiki-high-definition-fill:before {
+  content: "\e70e";
+}
+
+.wiki-ice-cream-fill:before {
+  content: "\e6e8";
+}
+
+.wiki-keyhole-fill:before {
+  content: "\e6e9";
+}
+
+.wiki-guitar-fill:before {
+  content: "\e670";
+}
+
+.wiki-list-bullets-fill:before {
+  content: "\e6ea";
+}
+
+.wiki-meteor-fill:before {
+  content: "\e6eb";
+}
+
+.wiki-microphone-fill:before {
+  content: "\e6ec";
+}
+
+.wiki-identification-card-fill:before {
+  content: "\e6ed";
+}
+
+.wiki-laptop-fill:before {
+  content: "\e6ee";
+}
+
+.wiki-memory-fill:before {
+  content: "\e6ef";
+}
+
+.wiki-microscope-fill:before {
+  content: "\e6f0";
+}
+
+.wiki-infinity-fill:before {
+  content: "\e6f1";
+}
+
+.wiki-log-fill:before {
+  content: "\e6f2";
+}
+
+.wiki-lightning-fill:before {
+  content: "\e6f3";
+}
+
+.wiki-cpu-fill:before {
+  content: "\e66e";
+}
+
+.wiki-gif-fill:before {
+  content: "\e66f";
+}
+
+.wiki-link-fill:before {
+  content: "\e6f4";
+}
+
+.wiki-graphics-card-fill:before {
+  content: "\e6f5";
+}
+
+.wiki-image-fill:before {
+  content: "\e6f6";
+}
+
+.wiki-medal-fill:before {
+  content: "\e6f7";
+}
+
+.wiki-key-fill:before {
+  content: "\e6f8";
+}
+
+.wiki-identification-badge-fill:before {
+  content: "\e6f9";
+}
+
+.wiki-currency-eur-fill:before {
+  content: "\e6fa";
+}
+
+.wiki-snowflake-fill:before {
+  content: "\e6d4";
+}
+
+.wiki-shapes-fill:before {
+  content: "\e6d5";
+}
+
+.wiki-speaker-high-fill:before {
+  content: "\e6d6";
+}
+
+.wiki-stack-fill:before {
+  content: "\e6d7";
+}
+
+.wiki-subway-fill:before {
+  content: "\e6d8";
+}
+
+.wiki-magnifying-glass-fill:before {
+  content: "\e671";
+}
+
+.wiki-mountains-fill:before {
+  content: "\e672";
+}
+
+.wiki-map-pin-line-fill:before {
+  content: "\e6d9";
+}
+
+.wiki-lock-simple-fill:before {
+  content: "\e6da";
+}
+
+.wiki-music-notes-fill:before {
+  content: "\e6db";
+}
+
+.wiki-lightbulb-fill:before {
+  content: "\e6dc";
+}
+
+.wiki-magic-wand-fill:before {
+  content: "\e6dd";
+}
+
+.wiki-notebook-fill:before {
+  content: "\e6de";
+}
+
+.wiki-nuclear-plant-fill:before {
+  content: "\e6df";
+}
+
+.wiki-newspaper-fill:before {
+  content: "\e6e0";
+}
+
+.wiki-list-checks-fill:before {
+  content: "\e6e1";
+}
+
+.wiki-lighthouse-fill:before {
+  content: "\e6e2";
+}
+
+.wiki-megaphone-simple-fill:before {
+  content: "\e6e3";
+}
+
+.wiki-magnet-fill:before {
+  content: "\e6e4";
+}
+
+.wiki-math-operations-fill:before {
+  content: "\e6e5";
+}
+
+.wiki-megaphone-fill:before {
+  content: "\e6e6";
+}
+
+.wiki-mailbox-fill:before {
+  content: "\e6e7";
+}
+
+.wiki-translate-fill:before {
+  content: "\e6bc";
+}
+
+.wiki-percent-fill:before {
+  content: "\e6bd";
+}
+
+.wiki-support-fill:before {
+  content: "\e6be";
+}
+
+.wiki-password-fill:before {
+  content: "\e6bf";
+}
+
+.wiki-pencil-ruler-fill:before {
+  content: "\e6c0";
+}
+
+.wiki-pi-fill:before {
+  content: "\e6c1";
+}
+
+.wiki-pill-fill:before {
+  content: "\e6c2";
+}
+
+.wiki-exam-fill:before {
+  content: "\e6c3";
+}
+
+.wiki-screwdriver-fill:before {
+  content: "\e6c4";
+}
+
+.wiki-robot-fill:before {
+  content: "\e6c5";
+}
+
+.wiki-scribble-fill:before {
+  content: "\e6c6";
+}
+
+.wiki-shield-check-fill:before {
+  content: "\e6c7";
+}
+
+.wiki-sun-fill:before {
+  content: "\e6c8";
+}
+
+.wiki-solar-panel-fill:before {
+  content: "\e6c9";
+}
+
+.wiki-smiley-fill:before {
+  content: "\e6ca";
+}
+
+.wiki-piggy-bank-fill:before {
+  content: "\e6cb";
+}
+
+.wiki-paperclip-fill:before {
+  content: "\e6cc";
+}
+
+.wiki-palette-fill:before {
+  content: "\e6cd";
+}
+
+.wiki-tag-fill:before {
+  content: "\e6ce";
+}
+
+.wiki-person-fill:before {
+  content: "\e6cf";
+}
+
+.wiki-standard-definition-fill:before {
+  content: "\e6d0";
+}
+
+.wiki-shopping-cart-fill:before {
+  content: "\e6d1";
+}
+
+.wiki-radioactive-fill:before {
+  content: "\e6d2";
+}
+
+.wiki-pipe-fill:before {
+  content: "\e6d3";
+}
+
+.wiki-film-reel-fill:before {
+  content: "\e6a5";
+}
+
+.wiki-vault-fill:before {
+  content: "\e6a6";
+}
+
+.wiki-sparkle-fill:before {
+  content: "\e6a7";
+}
+
+.wiki-table-fill:before {
+  content: "\e6a8";
+}
+
+.wiki-yarn-fill:before {
+  content: "\e6a9";
+}
+
+.wiki-rss-fill:before {
+  content: "\e6aa";
+}
+
+.wiki-pinwheel-fill:before {
+  content: "\e6ab";
+}
+
+.wiki-virus-fill:before {
+  content: "\e6ac";
+}
+
+.wiki-traffic-sign-fill:before {
+  content: "\e6ad";
+}
+
+.wiki-wallet-fill:before {
+  content: "\e6ae";
+}
+
+.wiki-phone-call-fill:before {
+  content: "\e6af";
+}
+
+.wiki-globe-hemisphere-east-fill:before {
+  content: "\e6b0";
+}
+
+.wiki-signature-fill:before {
+  content: "\e6b1";
+}
+
+.wiki-grains-fill:before {
+  content: "\e6b2";
+}
+
+.wiki-flashlight-fill:before {
+  content: "\e6b3";
+}
+
+.wiki-team-chat-fill:before {
+  content: "\e6b4";
+}
+
+.wiki-vinyl-record-fill:before {
+  content: "\e6b5";
+}
+
+.wiki-storefront-fill:before {
+  content: "\e6b6";
+}
+
+.wiki-trademark-fill:before {
+  content: "\e6b7";
+}
+
+.wiki-traffic-signal-fill:before {
+  content: "\e6b8";
+}
+
+.wiki-webcam-fill:before {
+  content: "\e6b9";
+}
+
+.wiki-road-horizon-fill:before {
+  content: "\e6ba";
+}
+
+.wiki-tent-fill:before {
+  content: "\e6bb";
+}
+
+.wiki-prescription-fill:before {
+  content: "\e693";
+}
+
+.wiki-printer-fill:before {
+  content: "\e694";
+}
+
+.wiki-pen-nib-fill:before {
+  content: "\e695";
+}
+
+.wiki-security-camera-fill:before {
+  content: "\e696";
+}
+
+.wiki-hurricane-fill:before {
+  content: "\e697";
+}
+
+.wiki-spiral-fill:before {
+  content: "\e698";
+}
+
+.wiki-rocket-launch-fill:before {
+  content: "\e699";
+}
+
+.wiki-paper-plane-tilt-fill:before {
+  content: "\e69a";
+}
+
+.wiki-house-line-fill:before {
+  content: "\e69b";
+}
+
+.wiki-plug-charging-fill:before {
+  content: "\e69c";
+}
+
+.wiki-planet-fill:before {
+  content: "\e69d";
+}
+
+.wiki-receipt-fill:before {
+  content: "\e69e";
+}
+
+.wiki-potted-plant-fill:before {
+  content: "\e69f";
+}
+
+.wiki-head-circuit-fill:before {
+  content: "\e6a0";
+}
+
+.wiki-video-fill:before {
+  content: "\e677";
+}
+
+.wiki-paint-bucket-fill:before {
+  content: "\e6a1";
+}
+
+.wiki-tree-evergreen-fill:before {
+  content: "\e675";
+}
+
+.wiki-flag-fill:before {
+  content: "\e6a2";
+}
+
+.wiki-waveform-fill:before {
+  content: "\e676";
+}
+
+.wiki-qr-code-fill:before {
+  content: "\e674";
+}
+
+.wiki-tornado-fill:before {
+  content: "\e6a3";
+}
+
+.wiki-kanban-fill:before {
+  content: "\e673";
+}
+
+.wiki-trademark-registered-fill:before {
+  content: "\e6a4";
+}
+
+.wiki-game-controller-fill:before {
+  content: "\e683";
+}
+
+.wiki-thermometer-fill:before {
+  content: "\e684";
+}
+
+.wiki-flask-fill:before {
+  content: "\e685";
+}
+
+.wiki-swatches-fill:before {
+  content: "\e686";
+}
+
+.wiki-graduation-cap-fill:before {
+  content: "\e687";
+}
+
+.wiki-house-money-fill:before {
+  content: "\e678";
+}
+
+.wiki-trophy-fill:before {
+  content: "\e688";
+}
+
+.wiki-phone-chat-fill:before {
+  content: "\e679";
+}
+
+.wiki-tooth-fill:before {
+  content: "\e689";
+}
+
+.wiki-umbrella-simple-fill:before {
+  content: "\e68a";
+}
+
+.wiki-hash-fill:before {
+  content: "\e68b";
+}
+
+.wiki-toolbox-fill:before {
+  content: "\e68c";
+}
+
+.wiki-suitcase-rolling-fill:before {
+  content: "\e68d";
+}
+
+.wiki-presentation-chart-fill:before {
+  content: "\e68e";
+}
+
+.wiki-shield-warning-fill:before {
+  content: "\e68f";
+}
+
+.wiki-skull-fill:before {
+  content: "\e690";
+}
+
+.wiki-engine-fill:before {
+  content: "\e691";
+}
+
+.wiki-headset-fill:before {
+  content: "\e692";
+}
+
+.wiki-warehouse-fill:before {
+  content: "\e680";
+}
+
+.wiki-store-fill:before {
+  content: "\e67a";
+}
+
+.wiki-users-three-fill:before {
+  content: "\e67c";
+}
+
+.wiki-user-list-fill:before {
+  content: "\e67b";
+}
+
+.wiki-folder-user-fill:before {
+  content: "\e681";
+}
+
+.wiki-user-fill:before {
+  content: "\e682";
+}
+
+.wiki-traffic-cone-fill:before {
+  content: "\e67e";
+}
+
+.wiki-virtual-reality-fill:before {
+  content: "\e67d";
+}
+
+.wiki-users-fill:before {
+  content: "\e67f";
+}

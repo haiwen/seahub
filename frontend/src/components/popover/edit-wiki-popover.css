@@ -1,0 +1,207 @@
+.edit-wiki-popover .popover {
+  width: 500px;
+  max-width: calc(100vw - 32px);
+  border: 1px solid #eee;
+  border-radius: 8px;
+  box-shadow: 0 6px 14px 0 rgba(0, 0, 0, 0.1);
+}
+
+.edit-wiki-popover .popover-inner {
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.edit-wiki-popover .popover-inner>div {
+  display: flex;
+  flex-direction: column;
+  max-height: min(60vh, calc(100vh - 32px));
+}
+
+.edit-wiki-popover .edit-wiki-popover-body {
+  flex: 1 1 auto;
+  padding: 16px;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.edit-wiki-popover .edit-wiki-field {
+  margin-bottom: 16px;
+}
+
+.edit-wiki-popover .edit-wiki-field>label,
+.edit-wiki-popover .edit-wiki-icons-header>label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--bs-body-color);
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.edit-wiki-popover .wiki-color-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.edit-wiki-popover .wiki-color-option {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+}
+
+.edit-wiki-popover .wiki-color-option:focus-visible,
+.edit-wiki-popover .wiki-icon-option:focus-visible,
+.edit-wiki-popover .wiki-icons-toggle:focus-visible {
+  outline: 2px solid #2B8FF7;
+  outline-offset: 2px;
+}
+
+.edit-wiki-popover .wiki-color-option .seafile-multicolor-icon {
+  width: 14px;
+  height: 14px;
+  color: #fff;
+}
+
+.edit-wiki-popover .edit-wiki-icons-field {
+  margin-bottom: 0;
+}
+
+.edit-wiki-popover .edit-wiki-icons-header {
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.edit-wiki-popover .edit-wiki-icons-header>label {
+  margin-bottom: 0;
+}
+
+.edit-wiki-popover .wiki-icons-toggle {
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 4px 0 8px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #212529;
+  font-size: 12px;
+  line-height: 12px;
+}
+
+.edit-wiki-popover .wiki-icons-toggle:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.edit-wiki-popover .wiki-icons-toggle .seafile-multicolor-icon {
+  width: 12px;
+  height: 12px;
+  color: #666;
+  transition: transform 0.2s ease;
+}
+
+.edit-wiki-popover .wiki-icons-toggle .seafile-multicolor-icon.expanded {
+  transform: rotate(90deg);
+}
+
+.edit-wiki-popover .wiki-icon-options {
+  display: grid;
+  grid-template-columns: repeat(13, 32px);
+  justify-content: space-between;
+  row-gap: 4px;
+}
+
+.edit-wiki-popover .wiki-icon-option {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #999;
+}
+
+.edit-wiki-popover .wiki-icon-option:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.edit-wiki-popover .wiki-icon-option .wiki-iconfont {
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+  line-height: 24px;
+  color: inherit;
+}
+
+.edit-wiki-popover .edit-wiki-popover-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 56px;
+  padding: 12px 16px;
+  border-top: 1px solid #eee;
+  gap: 8px;
+}
+
+.edit-wiki-popover .wiki-icon-selector-body {
+  display: flex;
+  min-height: 288px;
+  padding: 0 0 16px;
+  overflow: hidden;
+}
+
+.edit-wiki-popover .modal-footer {
+  flex-shrink: 0;
+  min-height: 56px;
+  padding: 12px 16px;
+  border-top: 1px solid #eee;
+  gap: 8px;
+}
+
+.edit-wiki-popover .edit-wiki-popover-footer .btn,
+.edit-wiki-popover .modal-footer .btn {
+  height: 32px;
+  margin: 0;
+  padding: 4px 12px;
+}
+
+[data-bs-theme=dark] .edit-wiki-popover .popover {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme=dark] .edit-wiki-popover .edit-wiki-popover-footer {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme=dark] .edit-wiki-popover .modal-footer {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme=dark] .edit-wiki-popover .wiki-icons-toggle {
+  color: var(--bs-body-color);
+}
+
+[data-bs-theme=dark] .edit-wiki-popover .wiki-icons-toggle:hover,
+[data-bs-theme=dark] .edit-wiki-popover .wiki-icon-option:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 531px) {
+  .edit-wiki-popover .wiki-icon-options {
+    grid-template-columns: repeat(auto-fill, 32px);
+    justify-content: start;
+    gap: 4px;
+  }
+}
