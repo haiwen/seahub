@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { DEFAULT_WIKI_COLOR, resolveWikiIcon } from './constants';
 
-import '../../assets/wiki-icon/iconfont.css';
 import './wiki-icon.css';
 
 const getColorWithOpacity = (color, opacity) => {
@@ -20,9 +19,9 @@ const WikiIconGlyph = ({ icon, className }) => {
   return (
     <i
       className={classNames(
-        'wiki-iconfont',
+        'haiwen-iconfont',
         'wiki-icon-glyph',
-        `wiki-${resolvedIcon}`,
+        `haiwen-${resolvedIcon}`,
         className
       )}
       aria-hidden="true"

@@ -6,7 +6,7 @@
   font-size: 14px;
 }
 
-.wiki-card-group + .wiki-card-group {
+.wiki-card-group+.wiki-card-group {
   margin-top: 24px;
 }
 
@@ -106,7 +106,7 @@
   border-radius: 8px;
 }
 
-.wiki-card-item .wiki-card-item-top .wiki-icon .wiki-iconfont {
+.wiki-card-item .wiki-card-item-top .wiki-icon .haiwen-iconfont {
   width: 16px;
   height: 16px;
   font-size: 16px;
