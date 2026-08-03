@@ -75,6 +75,7 @@ class RepoMetadata(models.Model):
     details_settings = models.TextField()
     ocr_enabled = models.BooleanField(db_index=True)
     global_hidden_columns = models.TextField()
+    ai_processing_status = models.CharField(max_length=32, default='', blank=True)
 
     objects = RepoMetadataManager()
 
