@@ -421,12 +421,13 @@ def password_reset_confirm(request, uidb36=None, token=None, template_name='regi
         user = None
 
     context_instance = {}
-    if token_generator.check_token(user, token):
+    if token_generator.check_token(user, token) and can_user_update_password(user):
         context_instance['validlink'] = True
         if request.method == 'POST':
             form = set_password_form(user, request.POST)
             if form.is_valid():
                 form.save()
+                UserOptions.objects.unset_force_passwd_change(user.username)
                 return HttpResponseRedirect(post_reset_redirect)
         else:
             form = set_password_form(None)

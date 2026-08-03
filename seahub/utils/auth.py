@@ -97,6 +97,9 @@ def is_force_user_sso(user_obj):
 
 
 def can_user_update_password(user_obj):
+    if getattr(user_obj, 'source', None) in ('LDAP', 'LDAPImport'):
+        return False
+
     if is_force_user_sso(user_obj):
         return False
     
