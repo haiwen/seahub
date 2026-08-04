@@ -10,7 +10,7 @@ from django.shortcuts import render
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponseRedirect
 
-from urllib.parse import quote
+from urllib.parse import parse_qsl, quote, urlencode, urlsplit, urlunsplit
 from django.utils.http import base36_to_int, url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _
 from django.views.decorators.cache import never_cache
@@ -274,6 +274,8 @@ def logout(request, next_page=None,
         except Exception as e:
             logger.warning(e)
 
+    oauth_id_token = request.session.get('oauth_id_token', '')
+
     from seahub.auth import logout
     logout(request)
 
@@ -297,6 +299,21 @@ def logout(request, next_page=None,
     via_oauth = request.COOKIES.get('via_oauth', '')
     oauth_logout_url = getattr(settings, 'OAUTH_LOGOUT_URL', '')
     if (getattr(settings, 'ENABLE_OAUTH', False) or getattr(settings, 'ENABLE_CUSTOM_OAUTH', False)) and via_oauth and oauth_logout_url:
+        if oauth_id_token and getattr(settings, 'ENABLE_OAUTH', False):
+            scheme, netloc, path, query, fragment = urlsplit(oauth_logout_url)
+            oidc_logout_params = {'id_token_hint', 'post_logout_redirect_uri'}
+            query_params = [
+                (key, value)
+                for key, value in parse_qsl(query, keep_blank_values=True)
+                if key not in oidc_logout_params
+            ]
+            query_params.extend([
+                ('id_token_hint', oauth_id_token),
+                ('post_logout_redirect_uri', get_service_url()),
+            ])
+            oauth_logout_url = urlunsplit((
+                scheme, netloc, path, urlencode(query_params), fragment
+            ))
         response = HttpResponseRedirect(oauth_logout_url)
         response.delete_cookie('via_oauth')
         response.delete_cookie('seahub_auth')
