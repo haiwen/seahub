@@ -109,6 +109,13 @@ def writing_assistant(params):
     return resp
 
 
+def generate_icon(params):
+    headers = gen_headers()
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/generate-icon/')
+    resp = requests.post(url, json=params, headers=headers, timeout=30)
+    return resp
+
+
 # utils
 def get_ai_credit_by_user(user, org_id):
     if org_id and org_id > 0:
