@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { resolveWikiColor, resolveWikiIcon } from './wiki-card-utils';
+import { resolveWikiColor, resolveWikiIcon } from '../constants-utils';
 
-import './wiki-icon.css';
+import './index.css';
 
 const getColorWithOpacity = (color, opacity) => {
   const red = parseInt(color.slice(1, 3), 16);

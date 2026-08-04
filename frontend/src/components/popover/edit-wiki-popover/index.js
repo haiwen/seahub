@@ -2,22 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Alert, Button, Input, Label, Popover } from 'reactstrap';
-import Icon from '../icon';
-import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import Icon from '../../icon';
+import { gettext } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
 import {
   DEFAULT_WIKI_COLOR,
   WIKI_ICON_COLORS,
-} from '../wiki-card-view/constants';
+} from '../../wiki-card-view/constants';
 import {
   getDisplayedWikiIcons,
   isHomepageWikiIcon,
   resolveWikiIcon,
-} from '../wiki-card-view/wiki-card-utils';
-import { WikiIconGlyph } from '../wiki-card-view/wiki-icon';
-import WikiIconSelector from '../wiki-card-view/wiki-icon-selector';
+} from '../../wiki-card-view/constants-utils';
+import { WikiIconGlyph } from '../../wiki-card-view/wiki-icon';
+import WikiIconSelector from '../../wiki-card-view/wiki-icon-selector';
 
-import './edit-wiki-popover.css';
+import './index.css';
 
 const POPOVER_VIEWPORT_HEIGHT_RATIO = 0.6;
 const POPOVER_VIEWPORT_MARGIN = 16;

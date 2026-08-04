@@ -2,15 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Alert, Button, ModalBody, ModalFooter } from 'reactstrap';
-import SeahubModalHeader from '../common/seahub-modal-header';
-import Icon from '../icon';
-import SearchInput from '../search-input';
-import { gettext } from '../../utils/constants';
-import { WIKI_ICON_CATEGORIES } from './constants';
-import { filterWikiIcons } from './wiki-card-utils';
-import { WikiIconGlyph } from './wiki-icon';
+import SeahubModalHeader from '../../common/seahub-modal-header';
+import Icon from '../../icon';
+import SearchInput from '../../search-input';
+import { gettext } from '../../../utils/constants';
+import { WIKI_ICON_CATEGORIES } from '../constants';
+import { filterWikiIcons } from '../constants-utils';
+import { WikiIconGlyph } from '../wiki-icon';
 
-import './wiki-icon-selector.css';
+import './index.css';
 
 const propTypes = {
   selectedColor: PropTypes.string.isRequired,

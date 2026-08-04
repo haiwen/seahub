@@ -2,23 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Alert, Button, Modal, ModalBody, ModalFooter, Input, Label } from 'reactstrap';
-import SeahubModalHeader from '../common/seahub-modal-header';
-import { gettext, isPro } from '../../utils/constants';
-import wikiAPI from '../../utils/wiki-api';
-import { Utils } from '../../utils/utils';
-import toaster from '../toast';
-import { SeahubSelect } from '../common/select';
-import Icon from '../icon';
+import SeahubModalHeader from '../../common/seahub-modal-header';
+import { gettext, isPro } from '../../../utils/constants';
+import wikiAPI from '../../../utils/wiki-api';
+import { Utils } from '../../../utils/utils';
+import toaster from '../../toast';
+import { SeahubSelect } from '../../common/select';
+import Icon from '../../icon';
 import {
   DEFAULT_WIKI_COLOR,
   DEFAULT_WIKI_ICON,
   WIKI_ICON_COLORS,
-} from '../wiki-card-view/constants';
-import { getDisplayedWikiIcons, isHomepageWikiIcon } from '../wiki-card-view/wiki-card-utils';
-import { WikiIconGlyph } from '../wiki-card-view/wiki-icon';
-import WikiIconSelector from '../wiki-card-view/wiki-icon-selector';
+} from '../../wiki-card-view/constants';
+import { getDisplayedWikiIcons, isHomepageWikiIcon } from '../../wiki-card-view/constants-utils';
+import { WikiIconGlyph } from '../../wiki-card-view/wiki-icon';
+import WikiIconSelector from '../../wiki-card-view/wiki-icon-selector';
 
-import './add-wiki-dialog.css';
+import './index.css';
 
 const propTypes = {
   toggleCancel: PropTypes.func.isRequired,
