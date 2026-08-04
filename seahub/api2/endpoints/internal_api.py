@@ -1,7 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
 import os
-import posixpath
 import re
 import tempfile
 from io import BytesIO
@@ -24,14 +23,11 @@ from seahub.share.models import UploadLinkShare, FileShare, check_share_link_acc
 from seaserv import seafile_api
 
 from seahub.tags.models import FileUUIDMap
-from seahub.repo_metadata.models import RepoMetadata
-from seahub.repo_metadata.metadata_server_api import list_metadata_records
 from seahub.repo_metadata.utils import FACES_SAVE_PATH
 from seahub.utils.repo import parse_repo_perm
 from seahub.views.file import send_file_access_msg, FILE_TYPE_FOR_NEW_FILE_LINK
 from seahub.utils import normalize_file_path, get_file_type_and_ext
 from seahub.views import check_folder_permission
-from seahub.constants import PERMISSION_INVISIBLE
 
 
 logger = logging.getLogger(__name__)
@@ -374,82 +370,6 @@ class SeafileSaveFaceView(APIView):
                 os.remove(tmp_file_path)
 
         return Response({'success': True})
-
-
-class InternalListMetadataRecords(APIView):
-    authentication_classes = ()
-    throttle_classes = (UserRateThrottle,)
-
-    def post(self, request, repo_id):
-        auth = request.headers.get('authorization', '').split()
-        if not is_valid_internal_jwt(auth):
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-
-        username = request.data.get('username')
-        path = request.data.get('path')
-        if not username or not isinstance(username, str):
-            return api_error(status.HTTP_400_BAD_REQUEST, 'username invalid')
-        if not path or not isinstance(path, str) or not path.startswith('/'):
-            return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid')
-
-        path = posixpath.normpath(path)
-        if path == '.':
-            path = '/'
-
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)
-
-        permission = seafile_api.check_permission_by_path(repo_id, path, username)
-        if not permission or permission == PERMISSION_INVISIBLE:
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-
-        if not seafile_api.get_dir_id_by_path(repo_id, path):
-            return api_error(status.HTTP_404_NOT_FOUND, 'Directory not found.')
-
-        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not metadata or not metadata.enabled:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Metadata is disabled.')
-
-        try:
-            records = []
-            start = 0
-            while True:
-                response = list_metadata_records(
-                    repo_id, username, start=start, limit=1000)
-                results = response.get('results', [])
-                records.extend(results)
-                if len(results) < 1000:
-                    break
-                start += 1000
-
-            visible_records = []
-            for record in records:
-                if record.get('_is_dir') in (True, 'True', 'true'):
-                    continue
-
-                record_path = posixpath.join(
-                    record.get('_parent_dir', ''), record.get('_name', ''))
-
-                if path != '/' and not record_path.startswith(path + '/'):
-                    continue
-
-                if record_path.startswith('/_Internal/') or record_path.startswith('/images/'):
-                    continue
-
-                permission = seafile_api.check_permission_by_path(
-                    repo_id, record_path, username)
-                if not permission or permission == PERMISSION_INVISIBLE:
-                    continue
-
-                visible_records.append(record)
-            records = visible_records
-        except Exception as error:
-            logger.error('Failed to list metadata records repo=%s path=%s: %s', repo_id, path, error)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-
-        return Response({'records': records})
-
 
 class CheckShareLinkThumbnailAccess(APIView):
     authentication_classes = (SessionCRSFCheckFreeAuthentication,)
