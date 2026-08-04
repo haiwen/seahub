@@ -1,15 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { DEFAULT_WIKI_COLOR, resolveWikiIcon } from './constants';
+import { resolveWikiColor, resolveWikiIcon } from './wiki-card-utils';
 
 import './wiki-icon.css';
 
 const getColorWithOpacity = (color, opacity) => {
-  const normalizedColor = /^#[0-9a-f]{6}$/i.test(color) ? color : DEFAULT_WIKI_COLOR;
-  const red = parseInt(normalizedColor.slice(1, 3), 16);
-  const green = parseInt(normalizedColor.slice(3, 5), 16);
-  const blue = parseInt(normalizedColor.slice(5, 7), 16);
+  const red = parseInt(color.slice(1, 3), 16);
+  const green = parseInt(color.slice(3, 5), 16);
+  const blue = parseInt(color.slice(5, 7), 16);
   return `rgba(${red}, ${green}, ${blue}, ${opacity})`;
 };
 
@@ -31,7 +30,7 @@ const WikiIconGlyph = ({ icon, className }) => {
 
 const WikiIcon = ({ icon, color, className }) => {
   const resolvedIcon = resolveWikiIcon(icon);
-  const resolvedColor = /^#[0-9a-f]{6}$/i.test(color) ? color : DEFAULT_WIKI_COLOR;
+  const resolvedColor = resolveWikiColor(color);
 
   return (
     <span

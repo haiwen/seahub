@@ -29,11 +29,11 @@
   border: 0;
   border-radius: 4px;
   background: transparent;
-  color: #666;
+  color: var(--bs-icon-color);
 }
 
 .wiki-icon-selector-back:hover {
-  background: rgba(0, 0, 0, 0.04);
+  background: var(--bs-icon-btn-hover-bg-color);
 }
 
 .wiki-icon-selector-back .seafile-multicolor-icon {
@@ -64,7 +64,7 @@
   height: 38px;
   padding-left: 36px;
   padding-right: 40px;
-  color: #212529;
+  color: var(--bs-body-color);
   font-size: 14px;
 }
 
@@ -94,7 +94,7 @@
 
 .wiki-icon-selector-category h3 {
   margin: 0 0 8px;
-  color: #212529;
+  color: var(--bs-body-color);
   font-size: 14px;
   font-weight: 400;
   line-height: 26px;
@@ -116,11 +116,11 @@
   border: 0;
   border-radius: 4px;
   background: transparent;
-  color: #999;
+  color: var(--bs-icon-secondary-color);
 }
 
 .wiki-icon-selector-option:hover {
-  background: rgba(0, 0, 0, 0.04);
+  background: var(--bs-icon-btn-hover-bg-color);
 }
 
 .wiki-icon-selector-option:focus-visible,
@@ -149,18 +149,7 @@
 
 .wiki-icon-selector-dialog .modal-footer {
   flex-shrink: 0;
-  border-top: 1px solid #eee;
-}
-
-[data-bs-theme=dark] .wiki-icon-selector-back,
-[data-bs-theme=dark] .wiki-icon-selector-category h3,
-[data-bs-theme=dark] .wiki-icon-selector-body .wiki-icon-selector-search {
-  color: var(--bs-body-color);
-}
-
-[data-bs-theme=dark] .wiki-icon-selector-back:hover,
-[data-bs-theme=dark] .wiki-icon-selector-option:hover {
-  background: rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--bs-border-secondary-color);
 }
 
 @media (max-width: 531px) {

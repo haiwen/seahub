@@ -32,7 +32,7 @@
 .add-wiki-dialog .add-wiki-icons-header>label {
   display: block;
   margin-bottom: 8px;
-  color: #212529;
+  color: var(--bs-body-color);
   font-size: 14px;
   line-height: 22px;
 }
@@ -82,19 +82,19 @@
   border: 0;
   border-radius: 4px;
   background: transparent;
-  color: #212529;
+  color: var(--bs-body-color);
   font-size: 12px;
   line-height: 12px;
 }
 
 .add-wiki-dialog .wiki-icons-toggle:hover {
-  background: rgba(0, 0, 0, 0.04);
+  background: var(--bs-icon-btn-hover-bg-color);
 }
 
 .add-wiki-dialog .wiki-icons-toggle .seafile-multicolor-icon {
   width: 12px;
   height: 12px;
-  color: #666;
+  color: var(--bs-icon-color);
   transition: transform 0.2s ease;
 }
 
@@ -119,11 +119,11 @@
   border: 0;
   border-radius: 4px;
   background: transparent;
-  color: #999;
+  color: var(--bs-icon-secondary-color);
 }
 
 .add-wiki-dialog .wiki-icon-option:hover {
-  background: rgba(0, 0, 0, 0.04);
+  background: var(--bs-icon-btn-hover-bg-color);
 }
 
 .add-wiki-dialog .wiki-icon-option .haiwen-iconfont {
@@ -143,18 +143,7 @@
 
 .add-wiki-dialog .modal-footer {
   flex-shrink: 0;
-  border-top: 1px solid #eee;
-}
-
-[data-bs-theme=dark] .add-wiki-dialog .add-wiki-field>label,
-[data-bs-theme=dark] .add-wiki-dialog .add-wiki-icons-header>label,
-[data-bs-theme=dark] .add-wiki-dialog .wiki-icons-toggle {
-  color: var(--bs-body-color);
-}
-
-[data-bs-theme=dark] .add-wiki-dialog .wiki-icons-toggle:hover,
-[data-bs-theme=dark] .add-wiki-dialog .wiki-icon-option:hover {
-  background: rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--bs-border-secondary-color);
 }
 
 @media (max-width: 531px) {

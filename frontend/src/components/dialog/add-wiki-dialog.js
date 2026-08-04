@@ -12,10 +12,9 @@ import Icon from '../icon';
 import {
   DEFAULT_WIKI_COLOR,
   DEFAULT_WIKI_ICON,
-  getDisplayedWikiIcons,
-  isHomepageWikiIcon,
   WIKI_ICON_COLORS,
 } from '../wiki-card-view/constants';
+import { getDisplayedWikiIcons, isHomepageWikiIcon } from '../wiki-card-view/wiki-card-utils';
 import { WikiIconGlyph } from '../wiki-card-view/wiki-icon';
 import WikiIconSelector from '../wiki-card-view/wiki-icon-selector';
 
@@ -27,18 +26,11 @@ const propTypes = {
   currentDeptID: PropTypes.number,
 };
 
-const getMyWikiOption = () => ({
-  id: '',
-  value: 'My wiki',
-  email: '',
-  label: gettext('My Wikis'),
-});
-
 class AddWikiDialog extends React.Component {
 
   constructor(props) {
     super(props);
-    const myWikiOption = getMyWikiOption();
+    const myWikiOption = this.getMyWikiOption();
     this.state = {
       name: '',
       selectedOption: props.currentDeptID ? null : myWikiOption,
@@ -50,6 +42,15 @@ class AddWikiDialog extends React.Component {
       draftSelectedIcon: null,
       isSubmitting: false,
       errorMessage: '',
+    };
+  }
+
+  getMyWikiOption() {
+    return {
+      id: '',
+      value: 'My wiki',
+      email: '',
+      label: gettext('My Wikis'),
     };
   }
 
@@ -65,7 +66,7 @@ class AddWikiDialog extends React.Component {
         email: department.email,
         label: department.name,
       }));
-      const myWikiOption = getMyWikiOption();
+      const myWikiOption = this.getMyWikiOption();
       options.unshift(myWikiOption);
       const selectedOption = this.props.currentDeptID ?
         options.find(option => String(option.id) === String(this.props.currentDeptID)) :

@@ -1,9 +1,9 @@
 .edit-wiki-popover .popover {
   width: 500px;
   max-width: calc(100vw - 32px);
-  border: 1px solid #eee;
+  border: 1px solid var(--bs-popover-border-color);
   border-radius: 8px;
-  box-shadow: 0 6px 14px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: var(--bs-popover-box-shadow);
 }
 
 .edit-wiki-popover .popover-inner {
@@ -93,19 +93,19 @@
   border: 0;
   border-radius: 4px;
   background: transparent;
-  color: #212529;
+  color: var(--bs-body-color);
   font-size: 12px;
   line-height: 12px;
 }
 
 .edit-wiki-popover .wiki-icons-toggle:hover {
-  background: rgba(0, 0, 0, 0.04);
+  background: var(--bs-icon-btn-hover-bg-color);
 }
 
 .edit-wiki-popover .wiki-icons-toggle .seafile-multicolor-icon {
   width: 12px;
   height: 12px;
-  color: #666;
+  color: var(--bs-icon-color);
   transition: transform 0.2s ease;
 }
 
@@ -130,11 +130,11 @@
   border: 0;
   border-radius: 4px;
   background: transparent;
-  color: #999;
+  color: var(--bs-icon-secondary-color);
 }
 
 .edit-wiki-popover .wiki-icon-option:hover {
-  background: rgba(0, 0, 0, 0.04);
+  background: var(--bs-icon-btn-hover-bg-color);
 }
 
 .edit-wiki-popover .wiki-icon-option .haiwen-iconfont {
@@ -151,7 +151,7 @@
   justify-content: flex-end;
   min-height: 56px;
   padding: 12px 16px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--bs-border-secondary-color);
   gap: 8px;
 }
 
@@ -166,7 +166,7 @@
   flex-shrink: 0;
   min-height: 56px;
   padding: 12px 16px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--bs-border-secondary-color);
   gap: 8px;
 }
 
@@ -175,27 +175,6 @@
   height: 32px;
   margin: 0;
   padding: 4px 12px;
-}
-
-[data-bs-theme=dark] .edit-wiki-popover .popover {
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
-[data-bs-theme=dark] .edit-wiki-popover .edit-wiki-popover-footer {
-  border-top-color: rgba(255, 255, 255, 0.1);
-}
-
-[data-bs-theme=dark] .edit-wiki-popover .modal-footer {
-  border-top-color: rgba(255, 255, 255, 0.1);
-}
-
-[data-bs-theme=dark] .edit-wiki-popover .wiki-icons-toggle {
-  color: var(--bs-body-color);
-}
-
-[data-bs-theme=dark] .edit-wiki-popover .wiki-icons-toggle:hover,
-[data-bs-theme=dark] .edit-wiki-popover .wiki-icon-option:hover {
-  background: rgba(255, 255, 255, 0.08);
 }
 
 @media (max-width: 531px) {

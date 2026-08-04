@@ -7,11 +7,13 @@ import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import {
   DEFAULT_WIKI_COLOR,
+  WIKI_ICON_COLORS,
+} from '../wiki-card-view/constants';
+import {
   getDisplayedWikiIcons,
   isHomepageWikiIcon,
   resolveWikiIcon,
-  WIKI_ICON_COLORS,
-} from '../wiki-card-view/constants';
+} from '../wiki-card-view/wiki-card-utils';
 import { WikiIconGlyph } from '../wiki-card-view/wiki-icon';
 import WikiIconSelector from '../wiki-card-view/wiki-icon-selector';
 

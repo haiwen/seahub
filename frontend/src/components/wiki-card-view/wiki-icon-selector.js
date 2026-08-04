@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Alert, Button, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import { Alert, Button, ModalBody, ModalFooter } from 'reactstrap';
+import SeahubModalHeader from '../common/seahub-modal-header';
 import Icon from '../icon';
 import SearchInput from '../search-input';
 import { gettext } from '../../utils/constants';
-import { filterWikiIcons, WIKI_ICON_CATEGORIES } from './constants';
+import { WIKI_ICON_CATEGORIES } from './constants';
+import { filterWikiIcons } from './wiki-card-utils';
 import { WikiIconGlyph } from './wiki-icon';
 
-import '../../css/seahub-modal-header.css';
 import './wiki-icon-selector.css';
 
 const propTypes = {
@@ -116,19 +117,17 @@ class WikiIconSelector extends React.Component {
     return (
       <>
         {showHeader &&
-          <ModalHeader className="seahub-modal-header wiki-icon-selector-header">
-            <div className="seahub-modal-title-content">
-              <button
-                type="button"
-                className="wiki-icon-selector-back"
-                onClick={onPrevious}
-                aria-label={gettext('Previous')}
-              >
-                <Icon symbol="arrow-left" />
-              </button>
-              <span>{gettext('Select Icon')}</span>
-            </div>
-          </ModalHeader>
+          <SeahubModalHeader className="wiki-icon-selector-header" isShowClose={false}>
+            <button
+              type="button"
+              className="wiki-icon-selector-back"
+              onClick={onPrevious}
+              aria-label={gettext('Previous')}
+            >
+              <Icon symbol="arrow-left" />
+            </button>
+            <span>{gettext('Select Icon')}</span>
+          </SeahubModalHeader>
         }
         <ModalBody className="wiki-icon-selector-body">
           <div className="wiki-icon-selector-scroll">

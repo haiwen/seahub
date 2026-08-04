@@ -6,7 +6,7 @@
   padding: 0 8px;
   border: 1px solid rgba(0, 40, 100, 0.12);
   border-radius: 20px;
-  color: #666;
+  color: var(--bs-body-secondary-color);
   font-size: 12px;
   line-height: 20px;
   background: transparent;
@@ -14,18 +14,10 @@
 
 [data-bs-theme=dark] .view-published-wiki {
   border-color: rgba(255, 255, 255, 0.2);
-  color: var(--bs-body-secondary-color);
 }
 
 .view-published-wiki:hover {
-  border-color: rgba(0, 40, 100, 0.12);
-  background: rgba(0, 0, 0, 0.04);
+  background: var(--bs-icon-btn-hover-bg-color);
   text-decoration: none;
-  color: #666;
-}
-
-[data-bs-theme=dark] .view-published-wiki:hover {
-  border-color: rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.08);
   color: var(--bs-body-secondary-color);
 }
