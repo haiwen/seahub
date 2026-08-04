@@ -58,7 +58,7 @@ from seahub.utils import render_error, is_org_context, \
     get_site_scheme_and_netloc, get_file_history_suffix
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_types import (IMAGE, PDF, SVG, AUDIO,
-                                     MARKDOWN, TEXT, VIDEO, SEADOC, TLDRAW, EXCALIDRAW, EXCALIDRAW)
+                                     MARKDOWN, TEXT, VIDEO, SEADOC, TLDRAW, EXCALIDRAW, EPUB)
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.star import is_file_starred
 from seahub.utils.file_op import check_file_lock, \
@@ -392,7 +392,9 @@ def can_preview_file(file_name, file_size, repo):
 
     # Seafile defines 10 kinds of filetype:
     # TEXT, MARKDOWN, IMAGE, VIDEO, AUDIO, PDF, SVG
-    if filetype in (TEXT, MARKDOWN, IMAGE, PDF) or fileext in get_conf_text_ext():
+    if filetype in (TEXT, MARKDOWN, IMAGE, PDF, EPUB) or fileext in get_conf_text_ext():
+        if filetype == EPUB and repo.encrypted:
+            return False, _('The library is encrypted, can not open file online.')
         if file_size > FILE_PREVIEW_MAX_SIZE:
             error_msg = _('File size surpasses %s, can not be opened online.') % \
                 filesizeformat(FILE_PREVIEW_MAX_SIZE)
@@ -766,7 +768,7 @@ def view_lib_file(request, repo_id, path):
     if filetype in FILE_TYPE_FOR_NEW_FILE_LINK:
         raw_path = gen_file_get_url_new(repo_id, path)
 
-    if filetype in (IMAGE, VIDEO, AUDIO, PDF, SVG, 'Unknown'):
+    if filetype in (IMAGE, VIDEO, AUDIO, PDF, SVG, EPUB, 'Unknown'):
         template = 'common_file_view_react.html'
 
     open_with_onlyoffice = request.GET.get('open_with_onlyoffice', 'false')
@@ -1025,6 +1027,10 @@ def view_lib_file(request, repo_id, path):
             can_rotate = False
         return_dict['can_rotate'] = can_rotate
 
+        send_file_access_msg(request, repo, path, 'web')
+        return render(request, template, return_dict)
+
+    elif filetype == EPUB:
         send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)
 

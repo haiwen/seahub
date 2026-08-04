@@ -7,6 +7,7 @@ import SVG from './components/file-content-view/svg';
 import PDF from './components/file-content-view/pdf';
 import Video from './components/file-content-view/video';
 import Audio from './components/file-content-view/audio';
+import EPUB from './components/file-content-view/epub';
 import { Utils } from './utils/utils';
 import { gettext } from './utils/constants';
 import ImageAPI from './utils/image-api';
@@ -127,6 +128,9 @@ class InnerFileView extends React.Component {
         break;
       case 'Audio':
         content = <Audio />;
+        break;
+      case 'EPUB':
+        content = <EPUB tip={<FileViewTip />} />;
         break;
       default:
         break;
