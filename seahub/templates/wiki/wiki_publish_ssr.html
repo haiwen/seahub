@@ -1532,6 +1532,49 @@ function getElement(id) {
     }
   }
 
+  function getSdocImagePageLinkInfo(href) {
+    if (!href) return null;
+
+    try {
+      var url = new URL(href, window.location.origin);
+      var pathParts = url.pathname.split('/').filter(Boolean);
+      var wikisIndex = pathParts.lastIndexOf('wikis');
+      if (wikisIndex < 0 || pathParts.length < wikisIndex + 3) return null;
+
+      return {
+        url: url,
+        wikiId: decodeURIComponent(pathParts[wikisIndex + 1]),
+        pageId: decodeURIComponent(pathParts[pathParts.length - 1])
+      };
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function handleSdocImagePageLinkClick(e) {
+    var imagePageLink = e.target.closest('.sdoc-image-page-link');
+    if (!imagePageLink) return;
+
+    e.preventDefault();
+
+    var href = imagePageLink.getAttribute('href');
+    if (!href) return;
+
+    var targetInfo = getSdocImagePageLinkInfo(href);
+    var currentWikiId = window.wiki && window.wiki.config && window.wiki.config.wikiId;
+    if (
+      targetInfo &&
+      targetInfo.url.origin === window.location.origin &&
+      targetInfo.wikiId === currentWikiId &&
+      getNavLinkByPageId(targetInfo.pageId)
+    ) {
+      navigateToWikiPage(targetInfo.pageId, buildPageUrl(targetInfo.pageId));
+      return;
+    }
+
+    window.open(href, '_blank', 'noopener');
+  }
+
   function handleWikiBlockLinkClick(e) {
     var blockLink = e.currentTarget;
     if (!blockLink) return;
@@ -1660,6 +1703,8 @@ function getElement(id) {
     setHeaderCollapsedState(headerElement, !collapsed);
     syncCollapsedSections();
   });
+
+  document.addEventListener('click', handleSdocImagePageLinkClick);
 
   var navTree = getElement('wiki-nav-tree');
   if (navTree) {

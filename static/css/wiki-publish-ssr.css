@@ -794,6 +794,10 @@ html, body {
   left: -60px;
 }
 
+.sdoc-editor-container .sdoc-editor-content .sdoc-article-container .article .sdoc-drag-cover:focus-visible {
+  outline: none;
+}
+
 .sdoc-editor-container .sdoc-editor-content .sdoc-article-container .article .sdoc-draging {
   border-bottom: 2px solid rgba(35, 131, 226);
 }
