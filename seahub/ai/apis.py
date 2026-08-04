@@ -25,7 +25,8 @@ from seahub.views import check_folder_permission
 from seahub.utils.repo import parse_repo_perm
 from seahub.ai.utils import image_caption, translate, writing_assistant, verify_ai_config, generate_summary, \
     generate_file_tags, ocr, is_ai_usage_over_limit, gen_chat_task_id, gen_message_id, \
-    get_ai_reply, process_stream_ai_reply, strip_content_details_from_attachments, verify_chat_ai_config, AI_REPLY_TIMEOUT
+    get_ai_reply, process_stream_ai_reply, strip_content_details_from_attachments, user_passes_ai_chat_folder_permissions, \
+    verify_chat_ai_config, AI_REPLY_TIMEOUT
 from seahub.tags.models import FileUUIDMap
 from seahub.views.file import get_file_view_path_and_perm, get_file_content
 
@@ -446,6 +447,8 @@ class ChatSessionsView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
         if not check_folder_permission(request, repo_id, '/'): 
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        if not user_passes_ai_chat_folder_permissions(request, repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         session_type = request.GET.get('type', 'mine')
         if session_type == 'shared':
@@ -468,6 +471,8 @@ class ChatSessionsView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, 'Virtual library is not supported.')
         if not check_folder_permission(request, repo_id, '/'):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        if not user_passes_ai_chat_folder_permissions(request, repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         session = ChatSessions.objects.create_session(repo_id, session_name, request.user.username)
         return Response({'session': session.to_dict()}, status=status.HTTP_201_CREATED)
@@ -483,6 +488,8 @@ class ChatSessionView(APIView):
         if not session:
             return api_error(status.HTTP_404_NOT_FOUND, 'Session not found.')
         if not check_folder_permission(request, session.repo_id, '/'):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        if not user_passes_ai_chat_folder_permissions(request, session.repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if session.username != request.user.username:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied. Only the session owner can modify this session.')
@@ -505,6 +512,8 @@ class ChatSessionView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 'Session not found.')
         if not check_folder_permission(request, session.repo_id, '/'):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        if not user_passes_ai_chat_folder_permissions(request, session.repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if session.username != request.user.username:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied. Only the session owner can delete this session.')
 
@@ -524,6 +533,8 @@ class ChatSessionCopyView(APIView):
         if not session:
             return api_error(status.HTTP_404_NOT_FOUND, 'Session not found.')
         if not check_folder_permission(request, session.repo_id, '/'):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        if not user_passes_ai_chat_folder_permissions(request, session.repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if session.username != request.user.username and not session.is_shared:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
@@ -551,6 +562,8 @@ class ChatMessagesView(APIView):
         if not session:
             return api_error(status.HTTP_404_NOT_FOUND, 'Session not found.')
         if not check_folder_permission(request, session.repo_id, '/'):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        if not user_passes_ai_chat_folder_permissions(request, session.repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if not check_session_access(session, request.user.username):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
@@ -595,6 +608,8 @@ class ChatMarkdownArtifactView(APIView):
         file_path = os.path.join(uuid_map.parent_path, uuid_map.filename)
         if not check_folder_permission(request, repo_id, '/'):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        if not user_passes_ai_chat_folder_permissions(request, repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -638,6 +653,8 @@ class ChatView(APIView):
         if not session:
             return api_error(status.HTTP_404_NOT_FOUND, 'Session not found.')
         if not check_folder_permission(request, session.repo_id, '/'):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        if not user_passes_ai_chat_folder_permissions(request, session.repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if not check_session_access(session, request.user.username):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
@@ -686,6 +703,8 @@ class ChatView(APIView):
         if repo.is_virtual:
             return api_error(status.HTTP_403_FORBIDDEN, 'Virtual library is not supported.')
         if not check_folder_permission(request, repo_id, '/'):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        if not user_passes_ai_chat_folder_permissions(request, repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         repo_permission = check_folder_permission(request, repo_id, '/')
