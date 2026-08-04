@@ -111,7 +111,7 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
         setSubmitting(false);
       });
     }
-  }, [repoID, oldValue, isHiddenColumnsVisible, oldHiddenColumns, modifyHiddenColumns, submit, hiddenColumns]);
+  }, [repoID, oldValue, oldHiddenColumns, modifyHiddenColumns, submit, hiddenColumns]);
 
   const turnOffConfirmToggle = useCallback(() => {
     setShowTurnOffConfirmDialog(!showTurnOffConfirmDialog);
