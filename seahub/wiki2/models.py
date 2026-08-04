@@ -114,6 +114,8 @@ class Wiki2Settings(models.Model):
     wiki_id = models.CharField(max_length=36, db_index=True)
     enable_link_repos = models.BooleanField(default=True)
     linked_repos = models.TextField(default='[]')
+    color = models.CharField(max_length=255, default='')
+    icon = models.CharField(max_length=255, default='')
 
     class Meta:
         db_table = 'wiki_settings'
