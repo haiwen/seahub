@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, username, isPro, siteRoot, enableAIChat, enableSeafileAI } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
@@ -31,17 +31,6 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, currentMode, updateRepoI
     const serviceUrl = window.app.config.serviceURL;
     window.location.href = serviceUrl + '/library/' + repoID + '/' + repoName + '/?tag=__all_tags';
   }, [repoID, repoName]);
-
-  useEffect(() => {
-    const unsubscribeUnselectFiles = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_LIBRARY_SETTINGS_TAGS, () => {
-      setSettingsDialogOpen(true);
-      setActiveTab(TAB.TAGS_SETTING);
-      setShowMigrateTip(true);
-    });
-    return () => {
-      unsubscribeUnselectFiles();
-    };
-  });
 
   const handleSettingsClick = () => {
     eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_TO_SETTINGS_VIEW);

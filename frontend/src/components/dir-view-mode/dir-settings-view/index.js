@@ -1,8 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { enableRepoAutoDel, enableFaceRecognitionFeature, enableSeafileAI, enableAIChat } from '../../../utils/constants';
 import { useMetadataStatus } from '../../../hooks';
-import Loading from '../../../components/loading';
 import LibHistorySettingPanel from './lib-history-setting-panel';
 import LibAutoDelSettingPanel from './lib-old-files-auto-del-setting-panel';
 import {
@@ -18,11 +17,10 @@ import './index.css';
 const propTypes = {
   repoID: PropTypes.string.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
+  isMigrationTipShown: PropTypes.bool
 };
 
-const LibSettings = ({ repoID, currentRepoInfo, showMigrateTip, onMigrateSuccess }) => {
-  const [isMigrating, setIsMigrating] = useState(false);
-
+const LibSettings = ({ repoID, currentRepoInfo, isMigrationTipShown }) => {
   const { encrypted, is_admin } = currentRepoInfo;
   const { enableMetadataManagement } = window.app.pageOptions;
   const { updateEnableFaceRecognition } = useMetadata();
@@ -36,37 +34,8 @@ const LibSettings = ({ repoID, currentRepoInfo, showMigrateTip, onMigrateSuccess
   const enableAutoDelSetting = is_admin && enableRepoAutoDel;
   const enableExtendedPropertiesSetting = !encrypted && is_admin && enableMetadataManagement;
 
-  const handleMigrateStart = useCallback(() => {
-    setIsMigrating(true);
-  }, []);
-
-  const handleMigrateEnd = useCallback(() => {
-    setIsMigrating(false);
-    onMigrateSuccess && onMigrateSuccess();
-  }, [onMigrateSuccess]);
-
-  const handleMigrateError = useCallback(() => {
-    setIsMigrating(false);
-  }, []);
-
   return (
     <div className='p-4'>
-      {isMigrating && (
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(255, 255, 255, 0.8)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          zIndex: 1050
-        }}>
-          <Loading />
-        </div>
-      )}
       {enableHistorySetting && (
         <LibHistorySettingPanel
           repoID={repoID}
@@ -110,10 +79,7 @@ const LibSettings = ({ repoID, currentRepoInfo, showMigrateTip, onMigrateSuccess
           enableAI={enableSeafileAI}
           submit={updateEnableTags}
           enableMetadata={enableMetadata}
-          showMigrateTip={showMigrateTip}
-          onMigrateSuccess={handleMigrateEnd}
-          onMigrateError={handleMigrateError}
-          onMigrateStart={handleMigrateStart}
+          isMigrationTipShown={isMigrationTipShown}
         />
       )}
     </div>

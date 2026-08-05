@@ -1,12 +1,15 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
+import classnames from 'classnames';
 import tagsAPI from '../../../../tag/api';
+import { ALL_TAGS_ID } from '../../../../tag/constants';
 import { gettext } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
 import Switch from '../../../../components/switch';
 import OpIcon from '../../../../components/op-icon';
 import toaster from '../../../../components/toast';
+import Loading from '../../../../components/loading';
 import { SeahubSelect } from '../../../../components/common/select';
 import TurnOffConfirmDialog from '../turn-off-confirm-dialog';
 
@@ -20,11 +23,20 @@ const langOptions = [
   }
 ];
 
-const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, submit, enableMetadata, enableAI, showMigrateTip, onMigrateSuccess, onMigrateStart, onMigrateError }) => {
+const MetadataTagsStatusDialog = ({
+  value: oldValue,
+  lang: oldLang,
+  repoID,
+  submit,
+  enableMetadata,
+  enableAI,
+  isMigrationTipShown
+}) => {
   const [value, setValue] = useState(oldValue);
   const [lang, setLang] = useState(oldLang);
   const [submitting, setSubmitting] = useState(false);
   const [showTurnOffConfirmDialog, setShowTurnOffConfirmDialog] = useState(false);
+  const [isMigrating, setIsMigrating] = useState(false);
 
   const onSubmit = useCallback((nextValue, nextLang) => {
     if (!nextValue) {
@@ -45,16 +57,20 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, subm
   }, [repoID, submit]);
 
   const migrateTag = useCallback(() => {
-    onMigrateStart && onMigrateStart();
+    setIsMigrating(true);
     tagsAPI.migrateTags(repoID).then(res => {
+      setIsMigrating(false);
       toaster.success(gettext('Tags migrated successfully'));
-      onMigrateSuccess && onMigrateSuccess();
+      const searchParams = new URLSearchParams(location.search);
+      searchParams.delete('settings');
+      searchParams.append('tag', ALL_TAGS_ID);
+      location.search = `?${searchParams.toString()}`;
     }).catch(error => {
+      setIsMigrating(false);
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
-      onMigrateError && onMigrateError();
     });
-  }, [repoID, onMigrateSuccess, onMigrateStart, onMigrateError]);
+  }, [repoID]);
 
   const turnOffConfirmToggle = useCallback(() => {
     setShowTurnOffConfirmDialog(!showTurnOffConfirmDialog);
@@ -76,19 +92,19 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, subm
 
   const onValueChange = useCallback(() => {
     const nextValue = !value;
-    const submitDisabled = (oldValue === nextValue && oldLang === lang) || submitting || !enableMetadata;
+    const submitDisabled = (oldValue === nextValue && oldLang === lang) || submitting || isMigrating || !enableMetadata;
     if (!submitDisabled) {
       onSubmit(nextValue, lang);
     }
-  }, [value, onSubmit, oldValue, oldLang, lang, submitting, enableMetadata]);
+  }, [value, onSubmit, oldValue, oldLang, lang, submitting, enableMetadata, isMigrating]);
 
   const onSelectChange = useCallback((option) => {
     const nextLang = option.value;
-    const submitDisabled = (oldValue === value && oldLang === nextLang) || submitting || !enableMetadata;
+    const submitDisabled = (oldValue === value && oldLang === nextLang) || submitting || isMigrating || !enableMetadata;
     if (!submitDisabled) {
       onSubmit(value, nextLang);
     }
-  }, [onSubmit, oldValue, value, oldLang, submitting, enableMetadata]);
+  }, [onSubmit, oldValue, value, oldLang, submitting, enableMetadata, isMigrating]);
 
   return (
     <div className='library-setting-item'>
@@ -97,7 +113,7 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, subm
         <div className='d-flex align-items-center'>
           <Switch
             checked={value}
-            disabled={submitting || !enableMetadata}
+            disabled={submitting || isMigrating || !enableMetadata}
             size="large"
             textPosition="right"
             onChange={onValueChange}
@@ -128,16 +144,17 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, subm
           />
         </div>
         }
-        {showMigrateTip &&
+        {isMigrationTipShown &&
         <div className="mt-5">
           <p className='m-0'>{gettext('This library contains tags of old version. Do you like to migrate the tags to new version?')}</p>
           <Button
             color="primary"
             outline={true}
-            className='mt-2'
-            onClick={migrateTag}
+            className='mt-2 migrate-tags-btn'
+            onClick={isMigrating ? () => {} : migrateTag}
           >
-            {gettext('Migrate old version tags')}
+            <Loading className={classnames('tags-migrating-icon', { 'visible': isMigrating })} />
+            <span className={classnames('migrate-tags-btn-text', { 'visible': !isMigrating })}>{gettext('Migrate old version tags')}</span>
           </Button>
         </div>
         }
@@ -161,10 +178,7 @@ MetadataTagsStatusDialog.propTypes = {
   submit: PropTypes.func.isRequired,
   enableAI: PropTypes.bool.isRequired,
   enableMetadata: PropTypes.bool.isRequired,
-  showMigrateTip: PropTypes.bool,
-  onMigrateSuccess: PropTypes.func,
-  onMigrateError: PropTypes.func,
-  onMigrateStart: PropTypes.func,
+  isMigrationTipShown: PropTypes.bool
 };
 
 export default MetadataTagsStatusDialog;

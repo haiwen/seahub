@@ -9,7 +9,8 @@ const RepoInfoBarMigrate = () => {
 
   const { enableMetadataManagement } = useMetadataStatus();
   const openMigrate = () => {
-    eventBus.dispatch(EVENT_BUS_TYPE.OPEN_TREE_PANEL, () => eventBus.dispatch(EVENT_BUS_TYPE.OPEN_LIBRARY_SETTINGS_TAGS));
+    const isMigrationTipShown = true;
+    eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_TO_SETTINGS_VIEW, isMigrationTipShown);
   };
 
   return (

@@ -219,7 +219,6 @@ class LibContentView extends React.Component {
     this.unsubscribeEvent = this.props.eventBus.subscribe(EVENT_BUS_TYPE.SEARCH_LIBRARY_CONTENT, this.onSearchedClick);
     this.unsubscribeSelectSearchedTag = this.props.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_TAG, this.onTreeNodeClick);
 
-    this.unsubscribeOpenTreePanel = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_TREE_PANEL, this.openTreePanel);
     this.unsubscribeSwitchToHistoryView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_HISTORY_VIEW, this.switchToHistoryView);
     this.unsubscribeSwitchToChatView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_CHAT_VIEW, this.switchToChatView);
     this.unsubscribeSwitchToSettingsView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_SETTINGS_VIEW, this.switchToSettingsView);
@@ -442,7 +441,6 @@ class LibContentView extends React.Component {
     window.removeEventListener('popstate', this.onpopstate);
     window.onpopstate = this.oldOnpopstate;
     this.unsubscribeEvent();
-    this.unsubscribeOpenTreePanel();
     this.unsubscribeEventBus && this.unsubscribeEventBus();
     this.unsubscribeSelectSearchedTag && this.unsubscribeSelectSearchedTag();
     this.unsubscribeSwitchToHistoryView && this.unsubscribeSwitchToHistoryView();
@@ -1425,13 +1423,14 @@ class LibContentView extends React.Component {
     });
   };
 
-  switchToSettingsView = () => {
+  switchToSettingsView = (isMigrationTipShown) => {
     const repoInfo = this.state.currentRepoInfo;
     const url = siteRoot + 'library/' + repoInfo.repo_id + '/' + encodeURIComponent(repoInfo.repo_name) + '/?settings=true';
     window.history.pushState({}, '', url);
 
     this.setState({
       currentMode: SETTINGS_MODE,
+      isMigrationTipShown,
       path: '/',
       isDirentDetailShow: false,
       isDirentSelected: false,
@@ -2880,17 +2879,6 @@ class LibContentView extends React.Component {
     e.preventDefault();
   };
 
-  openTreePanel = (callback) => {
-    if (this.state.isTreePanelShown) {
-      callback();
-    } else {
-      this.toggleTreePanel();
-      setTimeout(() => {
-        callback();
-      }, 100);
-    }
-  };
-
   toggleTreePanel = () => {
     this.setState({
       isTreePanelShown: !this.state.isTreePanelShown
@@ -3172,6 +3160,7 @@ class LibContentView extends React.Component {
                           isTreePanelShown={this.state.isTreePanelShown}
                           isDirentDetailShow={this.state.isDirentDetailShow}
                           currentMode={this.state.currentMode}
+                          isMigrationTipShown={this.state.isMigrationTipShown}
                           path={this.state.path}
                           repoID={this.props.repoID}
                           currentRepoInfo={this.state.currentRepoInfo}

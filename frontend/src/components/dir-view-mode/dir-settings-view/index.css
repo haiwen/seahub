@@ -53,3 +53,22 @@
 .library-setting-item .metadata-status-hide-properties-button:hover {
   background: #ebebeb;
 }
+
+.library-setting-item .migrate-tags-btn {
+  display: grid;
+  place-items: center;
+}
+
+.library-setting-item .migrate-tags-btn .tags-migrating-icon,
+.library-setting-item .migrate-tags-btn .migrate-tags-btn-text {
+  grid-area: 1 / 1;
+  visibility: hidden;
+}
+
+.library-setting-item .tags-migrating-icon {
+  width: 16px;
+  height: 16px;
+  border-color: #f3d5b9;
+  border-left-color: #e3934e;
+  margin: 0;
+}

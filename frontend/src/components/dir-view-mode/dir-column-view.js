@@ -20,6 +20,7 @@ import DirSettingsView from './dir-settings-view';
 const propTypes = {
   isSidePanelFolded: PropTypes.bool,
   isTreePanelShown: PropTypes.bool.isRequired,
+  isMigrationTipShown: PropTypes.bool,
   isDirentDetailShow: PropTypes.bool,
   currentMode: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
@@ -379,6 +380,7 @@ class DirColumnView extends React.Component {
               repoID={this.props.repoID}
               userPerm={this.props.userPerm}
               currentRepoInfo={this.props.currentRepoInfo}
+              isMigrationTipShown={this.props.isMigrationTipShown}
             />
           )}
         </div>
