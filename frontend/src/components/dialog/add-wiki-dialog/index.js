@@ -257,7 +257,7 @@ class AddWikiDialog extends React.Component {
                 <div className="add-wiki-icons-header">
                   <Label>{gettext('Icons')}</Label>
                   <button type="button" className="wiki-icons-toggle" onClick={this.openIconSelector}>
-                    {gettext('View All')}
+                    {gettext('View all')}
                     <Icon symbol="arrow-right" />
                   </button>
                 </div>

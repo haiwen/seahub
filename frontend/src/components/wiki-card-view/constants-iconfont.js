@@ -34,7 +34,7 @@ const WIKI_ICON_MANIFEST = {
   categories: [
     {
       id: 'common',
-      name: 'Common Icons',
+      name: 'Common icons',
       icons: [
         'alarm-fill',
         'book-bookmark-fill',
@@ -69,7 +69,7 @@ const WIKI_ICON_MANIFEST = {
     },
     {
       id: 'system-devices',
-      name: 'System & Devices Icons',
+      name: 'System & devices icons',
       icons: [
         'address-book-fill',
         'airplay-fill',
@@ -185,7 +185,7 @@ const WIKI_ICON_MANIFEST = {
     },
     {
       id: 'transport-location',
-      name: 'Transport & Location Icons',
+      name: 'Transport & location icons',
       icons: [
         'airplane-tilt-fill',
         'boat-fill',
@@ -208,7 +208,7 @@ const WIKI_ICON_MANIFEST = {
     },
     {
       id: 'entertainment-games',
-      name: 'Entertainment & Games Icons',
+      name: 'Entertainment & games icons',
       icons: [
         'alien-fill',
         'bomb-fill',
@@ -228,7 +228,7 @@ const WIKI_ICON_MANIFEST = {
     },
     {
       id: 'medical-health',
-      name: 'Medical & Health Icons',
+      name: 'Medical & health icons',
       icons: [
         'ambulance-fill',
         'asclepius-fill',
@@ -242,7 +242,7 @@ const WIKI_ICON_MANIFEST = {
     },
     {
       id: 'design-geometry',
-      name: 'Design & Geometry Icons',
+      name: 'Design & geometry icons',
       icons: [
         'angle-fill',
         'aperture-fill',
@@ -258,7 +258,7 @@ const WIKI_ICON_MANIFEST = {
     },
     {
       id: 'objects-daily-life',
-      name: 'Objects & Daily Life Icons',
+      name: 'Objects & daily life icons',
       icons: [
         'armchair-fill',
         'article-ny-times-fill',
@@ -305,7 +305,7 @@ const WIKI_ICON_MANIFEST = {
     },
     {
       id: 'nature-science',
-      name: 'Nature & Science Icons',
+      name: 'Nature & science icons',
       icons: [
         'atom-fill',
         'binary-fill',
@@ -362,7 +362,7 @@ const WIKI_ICON_MANIFEST = {
     },
     {
       id: 'business-finance',
-      name: 'Business & Finance Icons',
+      name: 'Business & finance icons',
       icons: [
         'bag-fill',
         'bank-fill',
