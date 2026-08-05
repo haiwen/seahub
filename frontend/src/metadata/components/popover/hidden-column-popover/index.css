@@ -101,6 +101,7 @@
 .sf-metadata-hide-columns-popover .hide-column-item .seafile-multicolor-icon {
   font-size: 12px;
   margin-right: 10px;
+  flex-shrink: 0;
   color: var(--bs-icon-secondary-color);
   fill: var(--bs-icon-secondary-color);
 }
