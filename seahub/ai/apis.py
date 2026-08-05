@@ -461,7 +461,7 @@ class AIGenerateIcon(APIView):
         if not verify_ai_config():
             return api_error(status.HTTP_400_BAD_REQUEST, 'AI server not configured')
 
-        wiki_name = request.data.get('wiki_name')
+        wiki_name = request.data.get('name')
         org_id = request.user.org.org_id if request.user.org else None
         username = request.user.username
 
