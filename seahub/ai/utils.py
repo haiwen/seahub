@@ -26,7 +26,7 @@ from seahub.share.utils import is_repo_admin
 from seahub.utils import HAS_FILE_SEASEARCH, gen_inner_file_upload_url, get_service_url, is_org_context, is_pro_version, mkstemp
 from seahub.utils.user_permissions import get_user_role
 from seahub.utils.ccnet_db import CcnetDB
-from seahub.organizations.models import OrgMemberQuota
+from seahub.organizations.models import OrgMemberQuota, OrgSettings
 from seahub.ai.models import AIUsageStatistics, ChatMessageThoughtProcess, ChatMessages, ChatSessions
 try:
     from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
@@ -114,7 +114,15 @@ def writing_assistant(params):
 
 # utils
 def get_ai_credit_by_user(user, org_id):
-    user_role = get_user_role(user)
+    if org_id and org_id > 0:
+        org = ccnet_api.get_org_by_id(org_id)
+        if not org:
+            logger.warning('Cannot find an organization related to org_id %s.' % org_id)
+            user_role = DEFAULT_USER
+        else:
+            user_role = OrgSettings.objects.get_role_by_org(org)
+    else:
+        user_role = get_user_role(user)
     role = DEFAULT_USER if (user_role == '' or user_role == DEFAULT_USER) else user_role
     ai_credit_per_user = get_enabled_role_permissions_by_role(role)['monthly_ai_credit_per_user']
     if ai_credit_per_user < 0:
@@ -132,10 +140,18 @@ def get_ai_credit_by_user(user, org_id):
     return ai_credit
 
 
-def get_ai_credit_by_repo_owner(repo_owner):
+def get_ai_credit_by_repo_owner(repo_owner, org_id=None):
     try:
-        owner = User.objects.get(email=repo_owner)
-        owner_role = get_user_role(owner)
+        if org_id and org_id > 0:
+            org = ccnet_api.get_org_by_id(org_id)
+            if not org:
+                logger.warning('Cannot find an organization related to org_id %s.' % org_id)
+                owner_role = DEFAULT_USER
+            else:
+                owner_role = OrgSettings.objects.get_role_by_org(org)
+        else:   
+            owner = User.objects.get(email=repo_owner)
+            owner_role = get_user_role(owner)
     except User.DoesNotExist:
         owner_role = DEFAULT_USER
     return get_enabled_role_permissions_by_role(owner_role)['monthly_ai_credit_per_user']
@@ -181,7 +197,7 @@ def is_ai_usage_over_limit(user, repo_owner, org_id):
         if not repo_owner:
             logger.warning('repo_owner is empty when checking AI credit')
             return True
-        ai_credit = get_ai_credit_by_repo_owner(repo_owner)
+        ai_credit = get_ai_credit_by_repo_owner(repo_owner, org_id)
         cost = get_ai_cost_by_repo_owner(repo_owner)
     used_credit = convert_cost_to_credit(cost)
 

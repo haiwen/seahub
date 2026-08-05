@@ -659,6 +659,7 @@ class OrgAdminAIStatisticsOverviewView(APIView):
     @staticmethod
     def _get_scenario_percentages(date_range, org_id):
         records = list(query_ai_statistics_overview('scenario', date_range, org_id))
+
         if not records:
             return {'results': [], 'count': 0}
 
@@ -667,10 +668,10 @@ class OrgAdminAIStatisticsOverviewView(APIView):
         for item in records:
             percentage = 0
             if total_credit_used:
-                percentage = round(item['total_credit_used'] / total_credit_used, 3)
+                percentage = round(float(item['total_credit_used'] / total_credit_used), 3)
             results.append({
                 'scenario': item.get('scenario') or '',
-                'total_credit_used': round(item['total_credit_used'], 0),
+                'total_credit_used': round(item['total_credit_used'], 3),
                 'percentage': percentage,
             })
 
@@ -707,7 +708,7 @@ class OrgAdminAIStatisticsOverviewView(APIView):
             date_range = self._get_month_range(month_start)
             results.append({
                 'month': month_start.strftime('%Y-%m'),
-                'total_credit_used': round(self._get_total_credit_used(date_range, org_id), 0),
+                'total_credit_used': round(self._get_total_credit_used(date_range, org_id), 3),
             })
         return {'results': results, 'count': len(results)}
 
@@ -723,7 +724,7 @@ class OrgAdminAIStatisticsOverviewView(APIView):
         while current_date <= today:
             results.append({
                 'date': current_date.isoformat(),
-                'total_credit_used': round(date_to_credit.get(current_date, 0), 0),
+                'total_credit_used': round(date_to_credit.get(current_date, 0), 3),
             })
             current_date += datetime.timedelta(days=1)
         return {'results': results, 'count': len(results)}
@@ -763,8 +764,8 @@ class OrgAdminAIStatisticsOverviewView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal server error')
 
         return Response({
-            'current_month_credit': round(current_month_credit, 0),
-            'last_month_credit': round(last_month_credit, 0),
-            'last_month_same_day_credit': round(last_month_same_day_credit, 0),
-            'month_on_month_change': round(month_on_month_change, 0),
+            'current_month_credit': round(current_month_credit, 3),
+            'last_month_credit': round(last_month_credit, 3),
+            'last_month_same_day_credit': round(last_month_same_day_credit, 3),
+            'month_on_month_change': round(month_on_month_change, 3),
         })
