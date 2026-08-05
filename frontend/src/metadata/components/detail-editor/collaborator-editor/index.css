@@ -15,6 +15,8 @@
 }
 
 .sf-metadata-collaborator-property-detail-editor .sf-metadata-delete-collaborator .collaborator .collaborator-name {
+  /* The background color of the collaborator container is light gray, so in both light and dark modes,
+  the color of the collaborator name remains black, ensuring a high contrast between the name and the background color. */
   color: #212529;
   margin-left: 4px;
 }
