@@ -26,15 +26,15 @@ const propTypes = {
 
 const getCategoryName = (categoryId) => {
   const categoryNames = {
-    common: gettext('Common Icons'),
-    'system-devices': gettext('System & Devices Icons'),
-    'transport-location': gettext('Transport & Location Icons'),
-    'entertainment-games': gettext('Entertainment & Games Icons'),
-    'medical-health': gettext('Medical & Health Icons'),
-    'design-geometry': gettext('Design & Geometry Icons'),
-    'objects-daily-life': gettext('Objects & Daily Life Icons'),
-    'nature-science': gettext('Nature & Science Icons'),
-    'business-finance': gettext('Business & Finance Icons'),
+    common: gettext('Common icons'),
+    'system-devices': gettext('System & devices icons'),
+    'transport-location': gettext('Transport & location icons'),
+    'entertainment-games': gettext('Entertainment & games icons'),
+    'medical-health': gettext('Medical & health icons'),
+    'design-geometry': gettext('Design & geometry icons'),
+    'objects-daily-life': gettext('Objects & daily life icons'),
+    'nature-science': gettext('Nature & science icons'),
+    'business-finance': gettext('Business & finance icons'),
   };
   return categoryNames[categoryId];
 };
@@ -126,7 +126,7 @@ class WikiIconSelector extends React.Component {
             >
               <Icon symbol="arrow-left" />
             </button>
-            <span>{gettext('Select Icon')}</span>
+            <span>{gettext('Select icon')}</span>
           </SeahubModalHeader>
         }
         <ModalBody className="wiki-icon-selector-body">
