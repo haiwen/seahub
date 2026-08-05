@@ -14,6 +14,11 @@
   margin: 5px 10px 5px 0;
 }
 
+.sf-metadata-collaborator-property-detail-editor .sf-metadata-delete-collaborator .collaborator .collaborator-name {
+  color: #212529;
+  margin-left: 4px;
+}
+
 .cur-view-detail-large .sf-metadata-collaborator-property-detail-editor .sf-metadata-delete-collaborator .collaborator {
   width: fit-content;
 }
