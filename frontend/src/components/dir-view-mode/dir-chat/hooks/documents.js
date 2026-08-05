@@ -6,9 +6,12 @@ import { useSessions } from './sessions';
 
 const DocumentsContext = React.createContext(null);
 
-const getDocumentKey = (document) => {
+export const getDocumentKey = (document) => {
   if (!document) {
     return '';
+  }
+  if (document.kind === 'markdown_artifact' && document.fileUuid) {
+    return `markdown_artifact:${document.fileUuid}`;
   }
   return document.document_key || document.url || `${document.repo_id || ''}:${document.path || document.name || ''}`;
 };
