@@ -14,6 +14,7 @@ from django.db import connection
 from django.db.models import Q
 from django.core.cache import cache
 from django.utils.translation import gettext as _
+from django.utils import translation
 from django.utils.timezone import make_naive, is_aware
 import ldap
 from ldap import sasl
@@ -1435,14 +1436,20 @@ class AdminUser(APIView):
         if is_active is not None:
             update_status_tip = _('Edit succeeded')
             if user_obj.is_active and IS_EMAIL_CONFIGURED:
+                cur_language = translation.get_language()
                 try:
+                    user_language = Profile.objects.get_user_language(user_obj.email)
+                    translation.activate(user_language)
                     send_html_email(_(u'Your account on %s is activated') % get_site_name(),
                                     'sysadmin/user_activation_email.html',
                                     {'username': email2contact_email(user_obj.email)},
                                     None,
                                     [email2contact_email(user_obj.email)])
+
+                    translation.activate(cur_language)
                     update_status_tip = _('Edit succeeded, an email has been sent.')
                 except Exception as e:
+                    translation.activate(cur_language)
                     logger.error(e)
                     update_status_tip = _('Edit succeeded, but failed to send email, please check your email configuration.')
 
