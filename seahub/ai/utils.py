@@ -28,10 +28,7 @@ from seahub.utils.user_permissions import get_user_role
 from seahub.utils.ccnet_db import CcnetDB
 from seahub.organizations.models import OrgMemberQuota, OrgSettings
 from seahub.ai.models import AIUsageStatistics, ChatMessageThoughtProcess, ChatMessages, ChatSessions
-try:
-    from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
-except ImportError:
-    ORG_MEMBER_QUOTA_ENABLED = False
+
 
 logger = logging.getLogger(__name__)
 
