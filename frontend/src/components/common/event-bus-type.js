@@ -67,6 +67,9 @@ export const EVENT_BUS_TYPE = {
   // library settings
   SWITCH_TO_SETTINGS_VIEW: 'switch_to_settings_view',
 
+  // tags
+  SWITCH_TO_TAGS_VIEW: 'switch_to_tags_view',
+
   // trash
   SWITCH_TO_TRASH_VIEW: 'switch_to_trash_view',
   SELECT_TRASH: 'select_trash',

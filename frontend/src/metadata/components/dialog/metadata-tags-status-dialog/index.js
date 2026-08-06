@@ -12,6 +12,8 @@ import toaster from '../../../../components/toast';
 import Loading from '../../../../components/loading';
 import { SeahubSelect } from '../../../../components/common/select';
 import TurnOffConfirmDialog from '../turn-off-confirm-dialog';
+import { eventBus } from '../../../../components/common/event-bus';
+import { EVENT_BUS_TYPE } from '../../../../components/common/event-bus-type';
 
 const langOptions = [
   {
@@ -61,10 +63,7 @@ const MetadataTagsStatusDialog = ({
     tagsAPI.migrateTags(repoID).then(res => {
       setIsMigrating(false);
       toaster.success(gettext('Tags migrated successfully'));
-      const searchParams = new URLSearchParams(location.search);
-      searchParams.delete('settings');
-      searchParams.append('tag', ALL_TAGS_ID);
-      location.search = `?${searchParams.toString()}`;
+      eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_TO_TAGS_VIEW, ALL_TAGS_ID);
     }).catch(error => {
       setIsMigrating(false);
       const errorMsg = Utils.getErrorMsg(error);

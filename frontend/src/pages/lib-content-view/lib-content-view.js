@@ -222,6 +222,7 @@ class LibContentView extends React.Component {
     this.unsubscribeSwitchToHistoryView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_HISTORY_VIEW, this.switchToHistoryView);
     this.unsubscribeSwitchToChatView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_CHAT_VIEW, this.switchToChatView);
     this.unsubscribeSwitchToSettingsView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_SETTINGS_VIEW, this.switchToSettingsView);
+    this.unsubscribeSwitchToTagsView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_TAGS_VIEW, this.switchToTagsView);
     this.unsubscribeSwitchToTrashView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_TRASH_VIEW, this.switchToTrashView);
     this.unsubscribeUpdateTrashPath = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_TRASH_PATH, this.updateTrashPath);
 
@@ -445,6 +446,8 @@ class LibContentView extends React.Component {
     this.unsubscribeSelectSearchedTag && this.unsubscribeSelectSearchedTag();
     this.unsubscribeSwitchToHistoryView && this.unsubscribeSwitchToHistoryView();
     this.unsubscribeSwitchToChatView && this.unsubscribeSwitchToChatView();
+    this.unsubscribeSwitchToSettingsView && this.unsubscribeSwitchToSettingsView();
+    this.unsubscribeSwitchToTagsView && this.unsubscribeSwitchToTagsView();
     this.unsubscribeColumnVisibilityChanged && this.unsubscribeColumnVisibilityChanged();
     this.unsubscribeTableViewColumnVisibilityChanged && this.unsubscribeTableViewColumnVisibilityChanged();
     this.unsubscribeDirentStatusChanged && this.unsubscribeDirentStatusChanged();
@@ -1435,6 +1438,15 @@ class LibContentView extends React.Component {
       isDirentDetailShow: false,
       isDirentSelected: false,
     });
+  };
+
+  switchToTagsView = (tagId) => {
+    const filePath = `/${PRIVATE_FILE_TYPE.TAGS_PROPERTIES}/${tagId}`;
+    this.setState({
+      isDirentDetailShow: false,
+      isDirentSelected: false,
+    });
+    this.showTagsView(filePath, tagId);
   };
 
   switchToTrashView = () => {
