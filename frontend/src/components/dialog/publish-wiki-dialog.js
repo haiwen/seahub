@@ -21,11 +21,17 @@ class PublishWikiDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
+      <Modal
+        isOpen={true}
+        centered={true}
+        className="publish-wiki-dialog"
+        toggle={this.toggle}
+      >
         <SeahubModalHeader toggle={this.toggle}>{gettext('Publish Wiki')}</SeahubModalHeader>
         <PublishWikiContent
           wiki={this.props.wiki}
           onPublish={this.props.onPublish}
+          toggleCancel={this.toggle}
           handleCustomUrl={this.props.handleCustomUrl}
           customUrlString={this.props.customUrlString}
           enableServerRender={this.props.enableServerRender}

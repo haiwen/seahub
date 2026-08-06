@@ -12,12 +12,20 @@ import '../css/publish-wiki-dialog.css';
 const propTypes = {
   wiki: PropTypes.object,
   onPublish: PropTypes.func.isRequired,
-  handleCustomUrl: PropTypes.func.isRequired,
+  toggleCancel: PropTypes.func,
+  handleCustomUrl: PropTypes.func,
   customUrlString: PropTypes.string,
   enableServerRender: PropTypes.bool,
+  displayType: PropTypes.oneOf(['dialog', 'popover']),
+  onUnpublish: PropTypes.func,
 };
 
-const DEFAULT_URL = serviceURL + '/wiki/publish/';
+const defaultProps = {
+  customUrlString: '',
+  displayType: 'dialog',
+};
+
+export const DEFAULT_URL = serviceURL + '/wiki/publish/';
 
 class PublishWikiContent extends React.Component {
 
@@ -26,7 +34,7 @@ class PublishWikiContent extends React.Component {
     this.state = {
       url: this.props.customUrlString,
       errMessage: '',
-      isSubmitBtnActive: false,
+      isSubmitBtnActive: !!(this.props.customUrlString || '').trim(),
       enableServerRender: !!this.props.enableServerRender || false,
     };
     this.newInput = React.createRef();
@@ -75,6 +83,9 @@ class PublishWikiContent extends React.Component {
     wikiAPI.deletePublishWikiLink(wiki_id).then((res) => {
       this.setState({ url: '', enableServerRender: false });
       this.props.handleCustomUrl('');
+      if (this.props.toggleCancel) {
+        this.props.toggleCancel();
+      }
       toaster.success(gettext('Wiki custom URL deleted'));
     }).catch((error) => {
       if (error.response) {
@@ -111,61 +122,105 @@ class PublishWikiContent extends React.Component {
     this.newInput.current.focus();
   };
 
-  render() {
-    const { enableServerRender } = this.state;
-
+  renderContent = () => {
     return (
       <>
-        <ModalBody className='publish-wiki-dialog-container'>
+        <p>{gettext('Customize URL')}</p>
+        <InputGroup className="publish-wiki-custom-url-inputs">
+          <span className="input-pretext" ref={this.preTextRef} onClick={this.onClickPreText}>{DEFAULT_URL}</span>
+          <input
+            className="publish-wiki-custom-url-input form-control"
+            type="text"
+            value={this.state.url}
+            onChange={this.handleChange}
+            onKeyDown={this.handleKeyDown}
+            ref={this.newInput}
+          />
+          <InputGroupText>
+            <Button color="primary" onClick={this.copyLink} className="border-0">{gettext('Copy')}</Button>
+          </InputGroupText>
+        </InputGroup>
+        <p className="sf-tip-default mt-2" style={{ lineHeight: '20px' }}>
+          {gettext('The custom part of the URL must be between 5 and 30 characters long and may only contain letters (a-z), numbers, and hyphens.')}
+        </p>
+        {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
 
-          <p>{gettext('Customize URL')}</p>
-          <InputGroup className="publish-wiki-custom-url-inputs">
-            <span className="input-pretext" ref={this.preTextRef} onClick={this.onClickPreText}>{DEFAULT_URL}</span>
-            <input
-              className="publish-wiki-custom-url-input form-control"
-              type="text"
-              value={this.state.url}
-              onChange={this.handleChange}
-              onKeyDown={this.handleKeyDown}
-              ref={this.newInput}
-            />
-            <InputGroupText>
-              <Button color="primary" onClick={this.copyLink} className="border-0">{gettext('Copy')}</Button>
-            </InputGroupText>
-          </InputGroup>
-          <p className='sf-tip-default mt-2' style={{ lineHeight: '20px' }}>
-            {gettext('The custom part of the URL must be between 5 and 30 characters long and may only contain letters (a-z), numbers, and hyphens.')}
-          </p>
-          {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
-
-          <div
-            className="d-flex align-items-center justify-content-between mt-3 pt-3"
-            style={{ borderTop: '1px solid var(--border-color, #dee2e6)' }}
-          >
-            <div style={{ flex: 1 }}>
-              <p className="mb-0 fw-semibold">{gettext('SEO: Pre-render published pages')}</p>
-              <p className="mb-0 sf-tip-default" style={{ lineHeight: '20px' }}>
-                {gettext('Pre-render published wiki pages on the server so search engines can index their content more reliably.')}
-              </p>
-            </div>
-            <Switch
-              checked={enableServerRender}
-              onChange={this.handleServerRenderToggle}
-            />
+        <div
+          className="d-flex align-items-center justify-content-between mt-3 pt-3"
+          style={{ borderTop: '1px solid var(--bs-border-color, #dee2e6)' }}
+        >
+          <div style={{ flex: 1 }}>
+            <p className="mb-0 fw-semibold">{gettext('SEO: Pre-render published pages')}</p>
+            <p className="mb-0 sf-tip-default" style={{ lineHeight: '20px' }}>
+              {gettext('Pre-render published wiki pages on the server so search engines can index their content more reliably.')}
+            </p>
           </div>
+          <Switch
+            checked={this.state.enableServerRender}
+            onChange={this.handleServerRenderToggle}
+          />
+        </div>
+      </>
+    );
+  };
 
+  renderDialog = () => {
+    const isPublished = this.props.customUrlString !== '';
+    return (
+      <>
+        <ModalBody className="publish-wiki-dialog-container">
+          {this.renderContent()}
         </ModalBody>
-        <ModalFooter>
-          {this.props.customUrlString !== '' &&
+        <ModalFooter className={isPublished ? 'publish-wiki-dialog-footer-published' : ''}>
+          {!isPublished &&
+            <Button color="secondary" onClick={this.props.toggleCancel}>{gettext('Cancel')}</Button>
+          }
+          {isPublished &&
             <Button color="secondary" onClick={this.deleteCustomUrl}>{gettext('Unpublish')}</Button>
           }
-          <Button color="primary" onClick={this.handleSubmit} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
+          <Button color="primary" onClick={this.handleSubmit} disabled={!this.state.isSubmitBtnActive}>
+            {isPublished ? gettext('Republish') : gettext('Submit')}
+          </Button>
         </ModalFooter>
       </>
     );
+  };
+
+  renderPopover = () => {
+    const isPublished = this.props.customUrlString !== '';
+    return (
+      <>
+        <div className="publish-wiki-dialog-container publish-wiki-popover-body">
+          {this.renderContent()}
+        </div>
+        <div className="publish-wiki-popover-footer">
+          {isPublished ?
+            <div className="publish-wiki-popover-actions">
+              <Button color="secondary" onClick={this.props.onUnpublish}>{gettext('Unpublish')}</Button>
+              <Button color="primary" onClick={this.handleSubmit} disabled={!this.state.isSubmitBtnActive}>
+                {gettext('Republish')}
+              </Button>
+            </div> :
+            <Button
+              color="primary"
+              className="w-100"
+              onClick={this.handleSubmit}
+              disabled={!this.state.isSubmitBtnActive}
+            >
+              {gettext('Publish')}
+            </Button>
+          }
+        </div>
+      </>
+    );
+  };
+
+  render() {
+    return this.props.displayType === 'popover' ? this.renderPopover() : this.renderDialog();
   }
 }
 
 PublishWikiContent.propTypes = propTypes;
+PublishWikiContent.defaultProps = defaultProps;
 
 export default PublishWikiContent;

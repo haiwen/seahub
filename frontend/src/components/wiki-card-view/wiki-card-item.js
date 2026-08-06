@@ -96,9 +96,10 @@ class WikiCardItem extends Component {
   };
 
   handleCustomUrl = (url) => {
-    this.setState({
+    this.setState((prevState) => ({
       customUrlString: url,
-    });
+      enableServerRender: url ? prevState.enableServerRender : false,
+    }));
   };
 
   onDeleteCancel = () => {
