@@ -351,17 +351,23 @@ class Translate(APIView):
         if not verify_ai_config():
             return api_error(status.HTTP_400_BAD_REQUEST, 'AI server not configured')
 
-        repo_id = request.data.get('repo_id')
+        file_uuid = request.data.get('file_uuid')
         text = request.data.get('text')
         lang = request.data.get('lang')
         org_id = request.user.org.org_id if request.user.org else None
 
-        if not repo_id:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
+        if not file_uuid:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'file_uuid invalid')
         if not text:
             return api_error(status.HTTP_400_BAD_REQUEST, 'text invalid')
         if not lang:
             return api_error(status.HTTP_400_BAD_REQUEST, 'lang invalid')
+
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map or uuid_map.is_dir:
+            return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
+
+        repo_id = uuid_map.repo_id
 
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -399,19 +405,24 @@ class WritingAssistant(APIView):
         if not verify_ai_config():
             return api_error(status.HTTP_400_BAD_REQUEST, 'AI server not configured')
 
-        repo_id = request.data.get('repo_id')
+        file_uuid = request.data.get('file_uuid')
         text = request.data.get('text')
         writing_type = request.data.get('writing_type')
         custom_prompt = request.data.get('custom_prompt')
         org_id =  request.user.org.org_id if request.user.org else None
 
-        if not repo_id:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
+        if not file_uuid:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'file_uuid invalid')
         if not text:
             return api_error(status.HTTP_400_BAD_REQUEST, 'text invalid')
         if not custom_prompt and not writing_type:
             return api_error(status.HTTP_400_BAD_REQUEST, 'writing_type invalid')
 
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map or uuid_map.is_dir:
+            return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
+        
+        repo_id = uuid_map.repo_id
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')

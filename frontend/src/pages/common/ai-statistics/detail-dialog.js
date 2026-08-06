@@ -104,7 +104,7 @@ const AIStatisticsDetailDialog = ({ condition, detailOptions, loadDetails, onTog
               <option key={option.value} value={option.value}>{option.label}</option>
             ))}
           </Input>
-          <span className="mr-2">{gettext('Start')}</span>
+          <span className="mr-2">{gettext('From')}</span>
           <Input
             type="date"
             className="mr-4"
@@ -112,7 +112,7 @@ const AIStatisticsDetailDialog = ({ condition, detailOptions, loadDetails, onTog
             value={startDate}
             onChange={(event) => setStartDate(event.target.value)}
           />
-          <span className="mr-2">{gettext('End')}</span>
+          <span className="mr-2">{gettext('To')}</span>
           <Input
             type="date"
             className="mr-4"
