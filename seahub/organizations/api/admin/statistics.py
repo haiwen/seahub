@@ -592,6 +592,7 @@ class OrgAdminAIStatisticsDetailView(APIView):
         if not condition:
             return api_error(status.HTTP_400_BAD_REQUEST, 'condition must cannot be empty')
 
+        condition['org_id'] = org_id
         start_date = request.GET.get('start_date')
         end_date = request.GET.get('end_date')
         if not start_date or not end_date:
