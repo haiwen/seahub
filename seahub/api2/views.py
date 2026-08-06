@@ -133,11 +133,6 @@ except ImportError:
     ORG_MEMBER_QUOTA_DEFAULT = None
 
 try:
-    from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
-except ImportError:
-    ORG_MEMBER_QUOTA_ENABLED = False
-
-try:
     from seahub.settings import OFFICE_WEB_APP_FILE_EXTENSION
 except ImportError:
     OFFICE_WEB_APP_FILE_EXTENSION = ()
@@ -5185,9 +5180,8 @@ class OrganizationView(APIView):
             org_id = org.org_id
 
             # set member limit
-            if ORG_MEMBER_QUOTA_ENABLED:
-                from seahub.organizations.models import OrgMemberQuota
-                OrgMemberQuota.objects.set_quota(org_id, member_limit)
+            from seahub.organizations.models import OrgMemberQuota
+            OrgMemberQuota.objects.set_quota(org_id, member_limit)
 
             # set quota
             quota = quota_mb * get_file_size_unit('MB')

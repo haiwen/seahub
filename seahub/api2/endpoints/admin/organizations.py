@@ -36,13 +36,7 @@ from seahub.organizations.models import OrgSAMLConfig, OrgAdminSettings
 from seahub.utils.ccnet_db import CcnetDB
 from seahub.utils.db_api import SeafileDB
 
-try:
-    from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
-except ImportError:
-    ORG_MEMBER_QUOTA_ENABLED = False
-
-if ORG_MEMBER_QUOTA_ENABLED:
-    from seahub.organizations.models import OrgMemberQuota
+from seahub.organizations.models import OrgMemberQuota
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -88,8 +82,7 @@ def get_org_info(org):
     current_date = datetime.now()
     org_info['monthly_traffic_usage'] = get_org_traffic_by_month(org_id, current_date)
 
-    if ORG_MEMBER_QUOTA_ENABLED:
-        org_info['max_user_number'] = OrgMemberQuota.objects.get_quota(org_id)
+    org_info['max_user_number'] = OrgMemberQuota.objects.get_quota(org_id)
 
     return org_info
 
@@ -242,8 +235,7 @@ class AdminOrganizations(APIView):
                 org_info['quota'] = seafile_api.get_org_quota(org_id)
                 org_info['quota_usage'] = seafile_api.get_org_quota_usage(org_id)
 
-                if ORG_MEMBER_QUOTA_ENABLED:
-                    org_info['max_user_number'] = OrgMemberQuota.objects.get_quota(org_id)
+                org_info['max_user_number'] = OrgMemberQuota.objects.get_quota(org_id)
 
                 if org_id in orgs_last_activity_dict:
                     org_info['last_activity_time'] = datetime_to_isoformat_timestr(orgs_last_activity_dict[org_id])
@@ -343,9 +335,8 @@ class AdminOrganizations(APIView):
                 logger.error(e)
                 return api_error(status.HTTP_400_BAD_REQUEST, "Quota is not valid")
 
-        if ORG_MEMBER_QUOTA_ENABLED:
-            member_limit = request.data.get('member_limit', ORG_MEMBER_QUOTA_DEFAULT)
-            OrgMemberQuota.objects.set_quota(org_id, member_limit)
+        member_limit = request.data.get('member_limit', ORG_MEMBER_QUOTA_DEFAULT)
+        OrgMemberQuota.objects.set_quota(org_id, member_limit)
 
         org = ccnet_api.get_org_by_id(org_id)
         try:
@@ -433,7 +424,7 @@ class AdminOrganization(APIView):
 
         # update org max user number
         max_user_number = request.data.get('max_user_number', None)
-        if max_user_number and ORG_MEMBER_QUOTA_ENABLED:
+        if max_user_number:
 
             try:
                 max_user_number = int(max_user_number)

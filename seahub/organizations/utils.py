@@ -6,7 +6,6 @@ from seaserv import ccnet_api
 
 from seahub.invitations.models import Invitation
 from seahub.organizations.models import OrgSettings, OrgMemberQuota
-from seahub.organizations.settings import ORG_MEMBER_QUOTA_ENABLED
 from seahub.utils import gen_token, get_service_url
 from seahub.utils.file_size import get_quota_from_string
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
@@ -74,9 +73,6 @@ def get_org_traffic_limit(org):
     traffic_limit = OrgSettings.objects.get_monthly_traffic_limit_by_org(org)
     if traffic_limit > 0:
         return traffic_limit
-
-    if not ORG_MEMBER_QUOTA_ENABLED:
-        return 0
 
     traffic_limit = 0
     org_role = OrgSettings.objects.get_role_by_org(org)
