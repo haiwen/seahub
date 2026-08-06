@@ -133,3 +133,7 @@ MODIFY COLUMN provider varchar(32)
 MODIFY COLUMN uid varchar(255)
   CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL;
 
+ALTER TABLE `repo_metadata`
+  ADD COLUMN `ai_processing_status` VARCHAR(32) NOT NULL DEFAULT '';
+
+

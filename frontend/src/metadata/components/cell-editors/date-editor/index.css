@@ -86,6 +86,10 @@
   height: 32px;
 }
 
+.rc-calendar .rc-calendar-inputs .rc-calendar-date-input-col .rc-calendar-input-wrap input {
+  padding: 0 12px;
+}
+
 [data-bs-theme="dark"] .rc-calendar-disabled-cell .rc-calendar-date {
   color: rgba(255, 255, 255, .2) !important;
 }

@@ -49,7 +49,7 @@ class FilterItemUtils {
             {option.name}
           </div>
           <div className="single-check-icon">
-            {selectedOption?.id === option.id && <Icon symbol="check-thin" />}
+            {selectedOption?.id === option.id && <Icon symbol="check" />}
           </div>
         </div>
       )

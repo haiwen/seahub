@@ -61,3 +61,13 @@
 .sf-metadata-filter-popover .seafile-option-group {
   min-width: 200px;
 }
+
+.sf-metadata-filter-popover .seafile-option-group .search-empty-tip-img {
+  display: none;
+}
+
+.sf-metadata-filter-popover .seafile-option-group .search-empty-tip {
+  height: 32px;
+  justify-content: center;
+  padding: 0 8px;
+}

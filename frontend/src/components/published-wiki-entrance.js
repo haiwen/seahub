@@ -21,7 +21,7 @@ class PublishedWikiEntrance extends Component {
       <>
         <a
           id={`wiki-${wikiID}`}
-          className="view-published-wiki ml-2"
+          className="view-published-wiki"
           href={`${serviceURL}/wiki/publish/${customURLPart}`}
           target="_blank"
           rel="noreferrer"

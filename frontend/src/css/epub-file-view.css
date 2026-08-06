@@ -1,0 +1,12 @@
+.epub-file-view {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.epub-file-view img {
+  max-width: calc(100% - 2rem);
+  max-height: 100%;
+  object-fit: contain;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 20%);
+}

@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { gettext, enableShowContactEmailWhenSearchUser, enableShowLoginIDWhenSearchUser } from '../../utils/constants';
-import Icon from '../icon';
+import OpIcon from '../op-icon';
 
 import './index.css';
 
 const propTypes = {
+  idx: PropTypes.number,
   user: PropTypes.shape({
     name: PropTypes.string.isRequired,
     avatar_url: PropTypes.string.isRequired,
@@ -28,7 +29,7 @@ class UserItem extends React.Component {
   };
 
   render() {
-    const { className, user, enableDeleteUser = true } = this.props;
+    const { idx, className, user, enableDeleteUser = true } = this.props;
     const { name, avatar_url, contact_email, login_id } = user;
     return (
       <div className={classnames('user-item', className)} title={name}>
@@ -41,9 +42,13 @@ class UserItem extends React.Component {
           {(enableShowLoginIDWhenSearchUser && !enableDeleteUser) && <span className="user-option-email">({login_id})</span>}
         </div>
         {enableDeleteUser && (
-          <span className="user-remove ml-2" onClick={this.onDeleteUser} title={gettext('Remove')}>
-            <Icon symbol="close" />
-          </span>
+          <OpIcon
+            id={`remove-btn-${idx}`}
+            className="user-remove"
+            symbol="close"
+            tooltip={gettext('Remove')}
+            op={this.onDeleteUser}
+          />
         )}
       </div>
     );

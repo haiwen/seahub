@@ -148,12 +148,14 @@ class WikiAPI {
     });
   }
 
-  addWiki2(wikiName, owner) {
+  addWiki2(details) {
     const url = this.server + '/api/v2.1/wikis2/';
     let form = new FormData();
-    form.append('name', wikiName);
-    if (owner) {
-      form.append('owner', owner);
+    form.append('name', details.name);
+    form.append('icon', details.icon);
+    form.append('color', details.color);
+    if (details.owner) {
+      form.append('owner', details.owner);
     }
     return this._sendPostRequest(url, form);
   }
@@ -249,10 +251,12 @@ class WikiAPI {
     return this.req.put(url, params);
   }
 
-  renameWiki2(wikiId, wikiName) {
+  updateWiki2(wikiId, details) {
     const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/';
     let params = {
-      wiki_name: wikiName
+      wiki_name: details.name,
+      icon: details.icon,
+      color: details.color
     };
     return this.req.put(url, params);
   }

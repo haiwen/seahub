@@ -33,6 +33,8 @@
 }
 
 .file-chooser-item .item-info .item-right-icon {
+  position:absolute;
+  right: 0;
   margin-right: 8px;
 }
 

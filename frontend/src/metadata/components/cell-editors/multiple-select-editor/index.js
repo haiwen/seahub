@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import CommonAddTool from '../../../../components/common-add-tool';
 import SearchInput from '../../../../components/search-input';
+import SearchEmptyTip from '../../../../components/common/search-empty-tip';
 import DeleteOption from './delete-options';
 import { Utils } from '../../../../utils/utils';
 import { getColumnOptionIdsByNames } from '../../../utils/cell';
@@ -229,7 +230,7 @@ const MultipleSelectEditor = forwardRef(({
   const renderOptions = useCallback(() => {
     if (displayOptions.length === 0) {
       const noOptionsTip = searchValue ? gettext('No options available') : gettext('No option');
-      return (<span className="none-search-result">{noOptionsTip}</span>);
+      return <SearchEmptyTip text={noOptionsTip} showImage={false} />;
     }
 
     return displayOptions.map((option, i) => {

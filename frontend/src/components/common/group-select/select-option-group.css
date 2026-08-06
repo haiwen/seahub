@@ -31,6 +31,7 @@
 .option-group .option-group-search .form-control {
   height: 31px;
   border: none;
+  border-radius: 4px;
   padding: .375rem 1rem;
   cursor: pointer;
 }
@@ -57,11 +58,8 @@
   border-radius: 3px;
 }
 
-.option-group .none-search-result {
-  height: 100px;
-  width: 100%;
-  padding: 10px;
-  color: var(--bs-body-secondary-color);
+.option-group .option-group-content .search-empty-tip {
+  padding: 24px 10px 32px;
 }
 
 .option-group .option-group-content {

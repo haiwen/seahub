@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Icon from '../../../../../components/icon';
+import SearchEmptyTip from '../../../../../components/common/search-empty-tip';
 import { gettext } from '../../../../../utils/constants';
 import { COLUMNS } from './constants';
 import { DROPDOWN_SUBMENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
@@ -62,9 +63,11 @@ const ColumnTypeDropdownMenu = ({ modifiers, onSelect }) => {
           name="sf-metadata-column-type-search-input"
         />
       </div>
-      {displayColumns.length > 0 && predefinedColumns.length > 0 && (
+      {displayColumns.length === 0 ? (
+        <SearchEmptyTip text={gettext('No properties available')} showImage={false} />
+      ) : (
         <>
-          {predefinedColumns.map(item => (
+          {predefinedColumns.length > 0 && predefinedColumns.map(item => (
             <DropdownItem
               key={item.key}
               className="column-type-item text-truncate"
@@ -77,7 +80,7 @@ const ColumnTypeDropdownMenu = ({ modifiers, onSelect }) => {
           ))}
           {basicsColumns.length > 0 && (
             <>
-              <DropdownItem className="w-100" divider />
+              {predefinedColumns.length > 0 && <DropdownItem className="w-100" divider />}
               <Dropdown
                 className="w-100"
                 direction="end"

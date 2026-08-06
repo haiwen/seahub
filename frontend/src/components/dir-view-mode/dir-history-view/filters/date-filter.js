@@ -236,7 +236,7 @@ const HistoryDateFilter = ({ mode = HISTORY_MODE, value: propsValue = { value: '
                 toggle={false}
               >
                 {option.label}
-                {isSelected && <Icon symbol="check-thin" className="dropdown-item-tick" />}
+                {isSelected && <Icon symbol="check" className="dropdown-item-tick" />}
               </DropdownItem>
             );
           })}

@@ -173,7 +173,7 @@ class DirentListItem extends React.Component {
       this.thumbnailCenter = videoThumbnailCenter;
       return true;
     }
-    if (Utils.imageCheck(dirent.name) || (enablePDFThumbnail && Utils.pdfCheck(dirent.name))) {
+    if (Utils.imageCheck(dirent.name) || Utils.epubCheck(dirent.name) || (enablePDFThumbnail && Utils.pdfCheck(dirent.name))) {
       this.thumbnailCenter = imageThumbnailCenter;
       return true;
     }

@@ -5,6 +5,8 @@ import WikiCardItemAdd from './wiki-card-item-add';
 import { isMobile } from '../../utils/utils';
 import { SIDE_PANEL_FOLDED_WIDTH } from '../../constants';
 import Icon from '../icon';
+import OpIcon from '../op-icon';
+import { gettext } from '../../utils/constants';
 
 const propTypes = {
   wikis: PropTypes.array.isRequired,
@@ -16,6 +18,7 @@ const propTypes = {
   isDepartment: PropTypes.bool.isRequired,
   isShowAvatar: PropTypes.bool.isRequired,
   renameWiki: PropTypes.func.isRequired,
+  updateWiki: PropTypes.func.isRequired,
   convertWiki: PropTypes.func,
   toggleAddWikiDialog: PropTypes.func,
   sidePanelRate: PropTypes.number,
@@ -76,20 +79,28 @@ class WikiCardGroup extends Component {
     }
 
     return (
-      <div className='wiki-card-group mb-4'>
+      <div className="wiki-card-group">
         <h4 className="sf-heading">
           <span className="nav-icon d-flex align-items-center"><Icon symbol={iconSymbol} /></span>
           {title}
+          {toggleAddWikiDialog &&
+            <OpIcon
+              id={`add-wiki-in-${isMyWikis ? 'my-wikis' : group.group_id}`}
+              className="wiki-card-group-add"
+              symbol="new"
+              op={toggleAddWikiDialog}
+              tooltip={gettext('Add Wiki')}
+            />
+          }
         </h4>
         {(wikis.length === 0 && noItemsTip) &&
           <div className="wiki-card-group-no-tip my-4">{noItemsTip}</div>
         }
         <div className='wiki-card-group-items' style={{ gridTemplateColumns: isMobile ? '48% 48%' : grids }} ref={this.groupItemsRef}>
-          {wikis.map((wiki, index) => {
+          {wikis.map(wiki => {
             return (isGroup ?
               <WikiCardItem
-                idx={index}
-                key={index + wiki.id + wiki.name}
+                key={`${wiki.version}-${wiki.id}`}
                 group={group}
                 wiki={wiki}
                 deleteWiki={this.props.deleteWiki}
@@ -98,12 +109,12 @@ class WikiCardGroup extends Component {
                 isDepartment={isDepartment}
                 isShowAvatar={this.props.isShowAvatar}
                 renameWiki={this.props.renameWiki}
+                updateWiki={this.props.updateWiki}
                 convertWiki={this.props.convertWiki}
               />
               :
               <WikiCardItem
-                idx={index}
-                key={index + wiki.id + wiki.name}
+                key={`${wiki.version}-${wiki.id}`}
                 wiki={wiki}
                 deleteWiki={this.props.deleteWiki}
                 unshareGroupWiki={this.props.unshareGroupWiki}
@@ -111,6 +122,7 @@ class WikiCardGroup extends Component {
                 isDepartment={isDepartment}
                 isShowAvatar={this.props.isShowAvatar}
                 renameWiki={this.props.renameWiki}
+                updateWiki={this.props.updateWiki}
                 convertWiki={this.props.convertWiki}
               />
             );

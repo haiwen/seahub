@@ -43,14 +43,14 @@ class DingtalkDepartmentMembersList extends Component {
           <td>{member.name}</td>
           <td>{member.mobile}</td>
           <td>{member.contact_email}</td>
-          <td>{member.email && <Icon symbol="check-thin" />}</td>
+          <td>{member.email && <Icon symbol="check" />}</td>
         </tr>
       );
     });
 
     return (
       <div className="dir-content-main">
-        {isMembersListLoading && <Loading/>}
+        {isMembersListLoading && <Loading />}
         {!isMembersListLoading && this.props.membersList.length > 0 &&
           <Table hover>
             <thead>
@@ -73,7 +73,7 @@ class DingtalkDepartmentMembersList extends Component {
         }
         {!isMembersListLoading && this.props.membersList.length === 0 &&
           <div className="message empty-tip text-center">
-            <img src={`${siteRoot}media/img/member-list-empty-2x.png`} alt=""/>
+            <img src={`${siteRoot}media/img/member-list-empty-2x.png`} alt="" />
             <h4>{'成员列表为空'}</h4>
           </div>
         }

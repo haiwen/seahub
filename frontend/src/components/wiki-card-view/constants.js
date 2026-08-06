@@ -1,0 +1,30 @@
+import { WIKI_ICON_MANIFEST } from './constants-iconfont';
+
+const DEFAULT_WIKI_ICON = WIKI_ICON_MANIFEST.defaultIcon;
+const DEFAULT_WIKI_COLOR = '#FF8000';
+
+const WIKI_ICON_COLORS = [
+  '#FF8000',
+  '#FFAA00',
+  '#F84B5C',
+  '#F500A0',
+  '#8B3DFF',
+  '#B735D7',
+  '#34C759',
+  '#2BC49A',
+  '#12AEE2',
+  '#06B6B7',
+  '#2B8FF7',
+  '#5A534D',
+];
+
+const WIKI_ICON_CATEGORIES = WIKI_ICON_MANIFEST.categories;
+const WIKI_HOMEPAGE_ICONS = WIKI_ICON_MANIFEST.homepageIcons;
+
+export {
+  DEFAULT_WIKI_COLOR,
+  DEFAULT_WIKI_ICON,
+  WIKI_HOMEPAGE_ICONS,
+  WIKI_ICON_CATEGORIES,
+  WIKI_ICON_COLORS,
+};

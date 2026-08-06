@@ -18,11 +18,9 @@
   color: var(--bs-body-color);
 }
 
-.sf-metadata-edit-column-options-container .none-search-result {
-  height: 100px;
-  opacity: .5;
-  padding: 10px;
-  width: 100%;
+.sf-metadata-edit-column-options-container .search-empty-tip-text-only {
+  margin-top: 8px;
+  padding: 32px 10px 40px;
 }
 
 .sf-metadata-edit-column-options-container .sf-metadata-select-options-list {

@@ -122,6 +122,7 @@ PREVIEW_FILEEXT = {
     SPREADSHEET: ('xls', 'xlsx', 'ods', 'fods'),
     SVG: ('svg',),
     PDF: ('pdf', 'ai'),
+    EPUB: ('epub',),
     MARKDOWN: ('markdown', 'md'),
     VIDEO: ('mp4', 'ogv', 'webm', 'mov', 'm4v'),
     AUDIO: ('mp3', 'oga', 'ogg', 'wav', 'flac', 'opus'),

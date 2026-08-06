@@ -142,7 +142,7 @@ const HistoryCreatorFilter = ({ mode = HISTORY_MODE, value: selectedOptions = []
               toggle={false}
             >
               {isOpen && <UserItem user={option} />}
-              {selectedOptions.map(item => item.email).includes(option.email) && <span className="dropdown-item-tick"><Icon symbol="check-thin" /></span>}
+              {selectedOptions.map(item => item.email).includes(option.email) && <span className="dropdown-item-tick"><Icon symbol="check" /></span>}
             </DropdownItem>
           ))}
         </DropdownMenu>
