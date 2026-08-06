@@ -89,10 +89,11 @@ class ImageCaption(APIView):
             'path': path,
             'lang': lang,
             'obj_id': file_id,
+            'repo_id': repo_id,
+            'scenario': AI_SCENARIO_IMAGE_CAPTION,
             'capture_time': None,
             'address': None
         }
-        params.update(usage_context)
         metadata_server_api = MetadataServerAPI(repo_id, user=username)
 
         from seafevents.repo_metadata.constants import METADATA_TABLE
@@ -176,8 +177,9 @@ class GenerateSummary(APIView):
         params = {
             'path': path,
             'obj_id': file_id,
+            'repo_id': repo_id,
+            'scenario': AI_SCENARIO_SUMMARY,
         }
-        params.update(usage_context)
 
         try:
             resp = generate_summary(params)
@@ -236,8 +238,9 @@ class GenerateFileTags(APIView):
         params = {
             'path': path,
             'obj_id': file_id,
+            'repo_id': repo_id,
+            'scenario': AI_SCENARIO_FILE_TAGS,
         }
-        params.update(usage_context)
 
         file_type, _ = get_file_type_and_ext(os.path.basename(path))
         if file_type == IMAGE:
@@ -324,8 +327,9 @@ class OCR(APIView):
         params = {
             'file_name': os.path.basename(path),
             'obj_id': file_id,
+            'repo_id': repo_id,
+            'scenario': AI_SCENARIO_OCR,
         }
-        params.update(usage_context)
 
         try:
             resp = ocr(params)
@@ -372,8 +376,9 @@ class Translate(APIView):
         params = {
             'text': text,
             'lang': lang,
+            'repo_id': repo_id,
+            'scenario': AI_SCENARIO_TRANSLATE,
         }
-        params.update(usage_context)
 
         try:
             resp = translate(params)
@@ -421,8 +426,9 @@ class WritingAssistant(APIView):
             'text': text,
             'writing_type': writing_type,
             'custom_prompt': custom_prompt,
+            'repo_id': repo_id,
+            'scenario': AI_SCENARIO_WRITING_ASSISTANT,
         }
-        params.update(usage_context)
 
         try:
             resp = writing_assistant(params)
@@ -760,7 +766,6 @@ class ChatView(APIView):
             'repo_prompt': get_repo_prompt(repo_id),
             'scenario': AI_SCENARIO_CHAT,
         }
-        params.update(usage_context)
 
         task_info = {
             'user_input': {
