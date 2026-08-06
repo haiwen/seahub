@@ -4,12 +4,8 @@ from unittest.mock import patch
 from django.test import RequestFactory, SimpleTestCase
 
 from seahub.ai.apis import ChatSessionView
-from seahub.ai.utils import (
-    PERMISSION_PREVIEW,
-    PERMISSION_PREVIEW_EDIT,
-    PERMISSION_INVISIBLE,
-    user_passes_ai_chat_folder_permissions,
-)
+from seahub.ai.utils import user_passes_ai_chat_folder_permissions
+from seahub.constants import PERMISSION_INVISIBLE
 
 
 class AIChatFolderPermissionTest(SimpleTestCase):
@@ -35,14 +31,12 @@ class AIChatFolderPermissionTest(SimpleTestCase):
     @patch('seahub.ai.utils.is_pro_version', return_value=True)
     def test_forbidden_user_folder_permissions_block_ai_chat(
             self, mock_is_pro_version, mock_is_repo_admin, mock_list_user_perms):
-        for permission in (PERMISSION_INVISIBLE, PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT):
-            with self.subTest(permission=permission):
-                mock_list_user_perms.return_value = [SimpleNamespace(
-                    user=self.request.user.username,
-                    permission=permission,
-                )]
+        mock_list_user_perms.return_value = [SimpleNamespace(
+            user=self.request.user.username,
+            permission=PERMISSION_INVISIBLE,
+        )]
 
-                assert user_passes_ai_chat_folder_permissions(self.request, self.repo_id) is False
+        assert user_passes_ai_chat_folder_permissions(self.request, self.repo_id) is False
 
     @patch('seahub.ai.utils.ccnet_api.get_groups', create=True)
     @patch('seahub.ai.utils.is_org_context', return_value=False)
@@ -50,10 +44,10 @@ class AIChatFolderPermissionTest(SimpleTestCase):
     @patch('seahub.ai.utils.seafile_api.list_folder_user_perm_by_repo', return_value=[], create=True)
     @patch('seahub.ai.utils.is_repo_admin', return_value=False)
     @patch('seahub.ai.utils.is_pro_version', return_value=True)
-    def test_group_preview_folder_permission_blocks_ai_chat(
+    def test_group_invisible_folder_permission_blocks_ai_chat(
             self, mock_is_pro_version, mock_is_repo_admin, mock_list_user_perms,
             mock_list_group_perms, mock_is_org_context, mock_get_groups):
-        mock_list_group_perms.return_value = [SimpleNamespace(group_id=1, permission=PERMISSION_PREVIEW)]
+        mock_list_group_perms.return_value = [SimpleNamespace(group_id=1, permission=PERMISSION_INVISIBLE)]
         mock_get_groups.return_value = [SimpleNamespace(id=1)]
 
         assert user_passes_ai_chat_folder_permissions(self.request, self.repo_id) is False
@@ -65,11 +59,11 @@ class AIChatFolderPermissionTest(SimpleTestCase):
     @patch('seahub.ai.utils.seafile_api.list_folder_user_perm_by_repo', return_value=[], create=True)
     @patch('seahub.ai.utils.is_repo_admin', return_value=False)
     @patch('seahub.ai.utils.is_pro_version', return_value=True)
-    def test_org_group_preview_folder_permission_blocks_ai_chat(
+    def test_org_group_invisible_folder_permission_blocks_ai_chat(
             self, mock_is_pro_version, mock_is_repo_admin, mock_list_user_perms,
             mock_list_group_perms, mock_is_org_context, mock_get_org_groups):
         self.request.user.org = SimpleNamespace(org_id=1)
-        mock_list_group_perms.return_value = [SimpleNamespace(group_id=2, permission=PERMISSION_PREVIEW)]
+        mock_list_group_perms.return_value = [SimpleNamespace(group_id=2, permission=PERMISSION_INVISIBLE)]
         mock_get_org_groups.return_value = [SimpleNamespace(id=2)]
 
         assert user_passes_ai_chat_folder_permissions(self.request, self.repo_id) is False

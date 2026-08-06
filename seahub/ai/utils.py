@@ -20,7 +20,7 @@ from seaserv import seafile_api, ccnet_api
 from seahub.settings import SEAFILE_AI_SECRET_KEY, SEAFILE_AI_SERVER_URL
 from seahub.tags.models import FileUUIDMap
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
-from seahub.constants import DEFAULT_USER, PERMISSION_INVISIBLE, PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT
+from seahub.constants import DEFAULT_USER, PERMISSION_INVISIBLE
 from seahub.share.utils import is_repo_admin
 from seahub.utils import HAS_FILE_SEASEARCH, gen_inner_file_upload_url, get_service_url, is_org_context, is_pro_version, mkstemp
 from seahub.utils.user_permissions import get_user_role
@@ -45,13 +45,6 @@ MARKDOWN_LINK_TAG_RE = re.compile(
 MARKDOWN_READONLY_TIPS_RE = re.compile(
     r'\s*<markdown-readonly-tips>[\s\S]*?</markdown-readonly-tips>\s*'
 )
-
-AI_CHAT_FORBIDDEN_FOLDER_PERMISSIONS = [
-    PERMISSION_INVISIBLE,
-    PERMISSION_PREVIEW,
-    PERMISSION_PREVIEW_EDIT,
-]
-
 
 # API
 def gen_headers():
@@ -178,7 +171,7 @@ def user_passes_ai_chat_folder_permissions(request, repo_id):
     # 2. check folder permissions of the repo of users
     user_folder_perms = seafile_api.list_folder_user_perm_by_repo(repo_id)
     for ufp in user_folder_perms:
-        if ufp.user == username and ufp.permission in AI_CHAT_FORBIDDEN_FOLDER_PERMISSIONS:
+        if ufp.user == username and ufp.permission == PERMISSION_INVISIBLE:
             return False
     # 3. check folder permissions of the repo of groups
     # 3.1 list folder perms of a groups
@@ -194,7 +187,7 @@ def user_passes_ai_chat_folder_permissions(request, repo_id):
         user_group_ids = [g.id for g in user_groups]
         # 3.3 check folder permissions
         for gfp in group_folder_perms:
-            if gfp.group_id in user_group_ids and gfp.permission in AI_CHAT_FORBIDDEN_FOLDER_PERMISSIONS:
+            if gfp.group_id in user_group_ids and gfp.permission == PERMISSION_INVISIBLE:
                 return False
 
     return True
