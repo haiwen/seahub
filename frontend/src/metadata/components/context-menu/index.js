@@ -163,7 +163,7 @@ const ContextMenu = ({
                   className="dropdown-item"
                   onMouseEnter={() => handleSubMenuMouseEnter(option)}
                 >
-                  <span className="dropdown-item-main-slot">{option.value}</span>
+                  <span className="dropdown-item-text">{option.value}</span>
                   <span className="dropdown-item-right-slot mr-2"><Icon symbol="down" className="rotate-270" /></span>
                 </DropdownToggle>
                 <DropdownMenu>

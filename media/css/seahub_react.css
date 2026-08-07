@@ -1282,26 +1282,9 @@ a.table-sort-op:hover {
   vertical-align: middle;
 }
 
-.dropdown-item {
-  height: 32px;
-  display: flex;
-  align-items: center;
-  line-height: 1.5;
-  cursor: pointer;
-  color: var(--bs-body-color);
-  font-size: .875rem;
-  border-radius: 4px;
-  padding: 0;
-}
-
 .dropdown-item .sf3-font,
 .dropdown-item .sf2-icon-tick {
-  color: #666;
-}
-
-.dropdown-item:hover {
-  background-color: var(--bs-dropdown-link-hover-bg);
-  color: var(--bs-body-color);
+  color: var(--bs-icon-color);
 }
 
 .dropdown-item:active {

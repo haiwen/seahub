@@ -231,7 +231,7 @@ class ContextMenu extends React.Component {
               >
                 <DropdownToggle
                   tag='span'
-                  className="dropdown-item dropdown-item-main-slot"
+                  className="dropdown-item dropdown-item-text"
                   onMouseEnter={this.toggleSubMenuShown.bind(this, menuItem)}
                 >
                   <span className="mr-auto">{menuItem.value}</span>
@@ -243,7 +243,7 @@ class ContextMenu extends React.Component {
                       return <DropdownItem key={index} divider />;
                     } else {
                       return (
-                        <DropdownItem key={index} data-operation={item.key} className="dropdown-item-main-slot" onClick={this.onMenuItemClick} onContextMenu={this.onContextMenu}>{item.value}</DropdownItem>
+                        <DropdownItem key={index} data-operation={item.key} className="dropdown-item-text" onClick={this.onMenuItemClick} onContextMenu={this.onContextMenu}>{item.value}</DropdownItem>
                       );
                     }
                   })}
@@ -254,7 +254,7 @@ class ContextMenu extends React.Component {
             return (
               <button
                 key={index}
-                className="dropdown-item-main-slot dropdown-item"
+                className="dropdown-item-text dropdown-item"
                 data-operation={menuItem.key}
                 onClick={this.onMenuItemClick}
                 onContextMenu={this.onContextMenu}
