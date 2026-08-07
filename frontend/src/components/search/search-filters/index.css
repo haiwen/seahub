@@ -117,7 +117,7 @@
 }
 
 .search-filter-menu .input-container.focus {
-  border-color: #3e84f7;
+  border-color: var(--bs-form-select-focus-border-color);
   box-shadow: none;
   outline: 0;
 }

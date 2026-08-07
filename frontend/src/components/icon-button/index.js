@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Button } from 'reactstrap';
-import Icon from './icon';
-import Tooltip from './tooltip';
+import Icon from '../icon';
+import Tooltip from '../tooltip';
+
+import './index.css';
 
 const propTypes = {
   id: PropTypes.string.isRequired,
@@ -26,7 +28,7 @@ class IconButton extends React.Component {
     const button = (href ? (
       <a
         id={id}
-        className={classNames('file-toolbar-btn', { 'disabled': disabled })}
+        className={classNames('icon-btn file-toolbar-btn', { 'disabled': disabled })}
         aria-label={text}
         href={href}
       >
@@ -35,8 +37,8 @@ class IconButton extends React.Component {
     ) : (
       <Button
         id={id}
-        className={classNames('border-0 p-0 bg-transparent file-toolbar-btn', { 'disabled': disabled })}
-        onClick={disabled ? () => {} : onClick}
+        className={classNames('icon-btn file-toolbar-btn', { 'disabled': disabled })}
+        onClick={disabled ? () => { } : onClick}
         aria-label={text}
         data-active={!disabled}
       >

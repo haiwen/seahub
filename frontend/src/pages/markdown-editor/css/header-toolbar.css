@@ -26,30 +26,21 @@
   z-index: 103;
 }
 
-.sf-md-viewer-topbar .btn {
-  color: #666;
-  border: none !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 28px;
-  width: 28px;
-  min-width: 0;
-  padding-left: 7px;
-  padding-top: 0;
-  border-radius: 3px !important;
-  margin-right: 10px;
-}
-
-.sf-md-viewer-topbar .btn:hover {
-  background-color: var(--bs-hover-bg) !important;
-  color: #666;
-}
-
 .sf-md-viewer-topbar .btn .seafile-multicolor-icon {
   color: #666;
   height: 16px;
   width: 16px;
+}
+
+.sf-md-viewer-topbar .comment-tip {
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  border-radius: 50%;
+  width: 6px;
+  height: 6px;
+  z-index: 100;
+  background: red;
 }
 
 .collab-users-dropdown.dropdown {
@@ -60,43 +51,9 @@
   color: #ED7109;
 }
 
-.sf-md-viewer-topbar .btn:focus,
-.sf-md-viewer-topbar .btn:active {
-  box-shadow: none !important;
-  background-color: #EFEFEF;
-}
-
-.sf-md-viewer-topbar .btn:hover {
-  background-color: #EFEFEF;
-}
-
-.btn-secondary:focus,
-.btn-secondary:active,
-.btn-secondary:not(:disabled):not(.disabled):active {
-  background-color: #EFEFEF;
-}
-
 .btn-active[data-active=false]#saveButton:hover {
   background-color: #fff;
   cursor: default;
-}
-
-.sf-md-viewer-topbar .sf-md-header-more-tool {
-  width: 28px;
-  height: 28px;
-  border-radius: 3px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-}
-
-.sf-md-viewer-topbar .sf-md-header-more-tool svg {
-  color: #666;
-}
-
-.sf-md-viewer-topbar .sf-md-header-more-tool:hover {
-  background-color: #EFEFEF;
 }
 
 .sf-md-viewer-topbar .sf-operator-folder-divider {

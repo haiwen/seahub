@@ -29,6 +29,7 @@
   color: var(--bs-body-color);
 }
 
+.user-select-trigger .user-item .user-name,
 .selected-user-item-container .user-item .user-name {
   color: #212529;
 }

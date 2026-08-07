@@ -8,7 +8,6 @@
 .sf-metadata-edit-column-options-container {
   min-width: 400px;
   height: auto;
-  background: var(--bs-body-bg);
 }
 
 .sf-metadata-edit-column-options-container .sf-metadata-edit-column-options-search-container {
