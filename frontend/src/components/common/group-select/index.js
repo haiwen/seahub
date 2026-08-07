@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { Popover } from 'reactstrap';
 import ModalPortal from '../../modal-portal';
+import ClickOutside from '../../click-outside';
 import SelectOptionGroup from './select-option-group.js';
 import Icon from '../../icon.js';
 import { Utils } from '../../../utils/utils';
@@ -18,24 +20,8 @@ class GroupSelect extends Component {
     };
   }
 
-  onSelectToggle = (event) => {
-    event.preventDefault();
-    if (this.state.isShowSelectOptions) event.stopPropagation();
-    let eventClassName = event.target.className;
-    if (typeof eventClassName === 'string' && (eventClassName.includes('seafile-multicolor-icon-x-') || eventClassName === 'option-group-search')) return;
-    if (event.target.value === '') return;
-    this.setState({
-      isShowSelectOptions: !this.state.isShowSelectOptions
-    });
-  };
-
-  onClickOutside = (event) => {
-    if (this.props.isShowSelected && event.target.className.includes('icon-fork-number')) {
-      return;
-    }
-    if (!this.selector.contains(event.target)) {
-      this.closeSelect();
-    }
+  toggle = () => {
+    this.setState({ isShowSelectOptions: !this.state.isShowSelectOptions });
   };
 
   closeSelect = () => {
@@ -44,18 +30,9 @@ class GroupSelect extends Component {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.selectedOptions.length !== this.props.selectedOptions.length) {
-      // when selectedOptions change and dom rendered, calculate top
-      setTimeout(() => {
-        this.forceUpdate();
-      }, 1);
+      setTimeout(() => { this.forceUpdate(); }, 1);
     }
   }
-
-  getSelectedOptionTop = () => {
-    if (!this.selector) return 38;
-    const { height } = this.selector.getBoundingClientRect();
-    return height;
-  };
 
   getFilterOptions = (searchValue) => {
     const { options } = this.props;
@@ -66,69 +43,80 @@ class GroupSelect extends Component {
 
   render() {
     let { className, selectedOptions, options, placeholder, searchPlaceholder, noOptionsPlaceholder, isInModal } = this.props;
+    const { isShowSelectOptions } = this.state;
     return (
-      <div
-        ref={(node) => this.selector = node}
-        className={classnames('group-select custom-select',
-          { 'focus': this.state.isShowSelectOptions },
-          className
-        )}
-        onClick={this.onSelectToggle}
-        tabIndex={0}
-        role="combobox"
-        aria-expanded={this.state.isShowSelectOptions}
-        aria-haspopup="listbox"
-        aria-label={placeholder}
-        aria-controls="group-select-listbox"
-        onKeyDown={Utils.onKeyDown}
-      >
-        <div className="selected-option">
-          {selectedOptions.length > 0 ?
-            <span className="selected-option-show">
-              {selectedOptions.map(item =>
-                <span key={item.id} className="selected-option-item">
-                  <span className='selected-option-item-name'>{item.name}</span>
-                  <span className="d-flex align-items-center" onClick={() => {this.props.onDeleteOption(item);}}><Icon symbol="close" /></span>
+      <ClickOutside onClickOutside={this.closeSelect}>
+        <div className="d-inline-flex">
+          <div
+            id="group-select"
+            ref={(node) => this.selector = node}
+            className={classnames('group-select sf-select',
+              { 'focus': isShowSelectOptions },
+              className
+            )}
+            tabIndex={0}
+            role="combobox"
+            aria-expanded={isShowSelectOptions}
+            aria-haspopup="listbox"
+            aria-label={placeholder}
+            aria-controls="group-select-listbox"
+            onKeyDown={Utils.onKeyDown}
+            onClick={this.toggle}
+          >
+            <div className="selected-option">
+              {selectedOptions.length > 0 ?
+                <span className="selected-option-show">
+                  {selectedOptions.map(item =>
+                    <span key={item.id} className="selected-option-item">
+                      <span className='selected-option-item-name'>{item.name}</span>
+                      <span className="d-flex align-items-center" onClick={() => { this.props.onDeleteOption(item); }}><Icon symbol="close" /></span>
+                    </span>
+                  )}
                 </span>
-              )}
-            </span>
-            :
-            <span className="select-placeholder">{placeholder}</span>
-          }
-          <SelectDropdownIndicator />
+                :
+                <span className="select-placeholder">{placeholder}</span>
+              }
+              <SelectDropdownIndicator />
+            </div>
+          </div>
+          {!isInModal && (
+            <Popover
+              isOpen={isShowSelectOptions}
+              target="group-select"
+              placement="bottom-start"
+              hideArrow={true}
+              fade={false}
+            >
+              <SelectOptionGroup
+                selectedOptions={selectedOptions}
+                options={options}
+                onSelectOption={this.props.onSelectOption}
+                searchPlaceholder={searchPlaceholder}
+                noOptionsPlaceholder={noOptionsPlaceholder}
+                closeSelect={this.closeSelect}
+                getFilterOptions={this.getFilterOptions}
+              />
+            </Popover>
+          )}
+          {isShowSelectOptions && isInModal && (
+            <ModalPortal>
+              <SelectOptionGroup
+                className={className}
+                selectedOptions={selectedOptions}
+                position={this.selector && this.selector.getBoundingClientRect()}
+                isInModal={isInModal}
+                top={this.selector ? this.selector.getBoundingClientRect().height : 38}
+                options={options}
+                onSelectOption={this.props.onSelectOption}
+                searchPlaceholder={searchPlaceholder}
+                noOptionsPlaceholder={noOptionsPlaceholder}
+                closeSelect={this.closeSelect}
+                getFilterOptions={this.getFilterOptions}
+              />
+            </ModalPortal>
+          )}
         </div>
-        {this.state.isShowSelectOptions && !isInModal && (
-          <SelectOptionGroup
-            selectedOptions={selectedOptions}
-            top={this.getSelectedOptionTop()}
-            options={options}
-            onSelectOption={this.props.onSelectOption}
-            searchPlaceholder={searchPlaceholder}
-            noOptionsPlaceholder={noOptionsPlaceholder}
-            onClickOutside={this.onClickOutside}
-            closeSelect={this.closeSelect}
-            getFilterOptions={this.getFilterOptions}
-          />
-        )}
-        {this.state.isShowSelectOptions && isInModal && (
-          <ModalPortal>
-            <SelectOptionGroup
-              className={className}
-              selectedOptions={selectedOptions}
-              position={this.selector.getBoundingClientRect()}
-              isInModal={isInModal}
-              top={this.getSelectedOptionTop()}
-              options={options}
-              onSelectOption={this.props.onSelectOption}
-              searchPlaceholder={searchPlaceholder}
-              noOptionsPlaceholder={noOptionsPlaceholder}
-              onClickOutside={this.onClickOutside}
-              closeSelect={this.closeSelect}
-              getFilterOptions={this.getFilterOptions}
-            />
-          </ModalPortal>
-        )}
-      </div>
+      </ClickOutside>
     );
   }
 }
@@ -143,7 +131,7 @@ GroupSelect.propTypes = {
   searchable: PropTypes.bool,
   searchPlaceholder: PropTypes.string,
   noOptionsPlaceholder: PropTypes.string,
-  isInModal: PropTypes.bool, // if select component in a modal (option group need ModalPortal to show)
+  isInModal: PropTypes.bool,
 };
 
 export default GroupSelect;
