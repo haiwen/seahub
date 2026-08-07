@@ -50,3 +50,6 @@ gettext('Open with OnlyOffice');
 gettext('Open with client');
 gettext('Add page below');
 gettext('How can I help you?');
+gettext('Extended properties are being built.');
+gettext('Delete property');
+gettext('Sort ascending');
