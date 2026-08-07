@@ -5,7 +5,7 @@
   height: 38px;
   line-height: 38px;
   z-index: 1;
-  color: #666;
+  color: var(--bs-body-secondary-color);
 }
 
 .publish-wiki-custom-url-inputs .publish-wiki-custom-url-input {
@@ -22,6 +22,95 @@
 .publish-wiki-custom-url-inputs .input-group-text .btn {
   border-radius: 0 4px 4px 0;
   height: 38px;
+}
+
+.publish-wiki-dialog.modal-dialog {
+  width: calc(100% - 32px);
+  max-width: 500px;
+}
+
+.publish-wiki-dialog .modal-content {
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.publish-wiki-dialog .modal-footer.publish-wiki-dialog-footer-published {
+  gap: 8px;
+}
+
+.publish-wiki-dialog .modal-footer.publish-wiki-dialog-footer-published .btn {
+  flex: 1;
+  min-width: 0;
+  height: 38px;
+  margin: 0;
+}
+
+.publish-wiki-popover .popover {
+  width: 500px;
+  max-width: calc(100vw - 32px);
+  font-size: 14px;
+  border: 1px solid var(--bs-popover-border-color);
+  border-radius: 8px;
+  box-shadow: var(--bs-popover-box-shadow);
+}
+
+.publish-wiki-popover-header {
+  padding: 16px 16px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: transparent;
+  font-weight: 500;
+}
+
+.publish-wiki-view {
+  height: 26px;
+  padding: 0 4px 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--bs-body-secondary-color);
+  font-weight: 400;
+  border-radius: 4px;
+}
+
+.publish-wiki-view:hover {
+  color: var(--bs-body-secondary-color);
+  background-color: var(--bs-hover-bg);
+  text-decoration: none;
+}
+
+.publish-wiki-view-icon {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  color: currentColor;
+}
+
+.publish-wiki-view-icon path {
+  fill: currentColor;
+}
+
+.publish-wiki-popover-body {
+  padding: 16px;
+}
+
+.publish-wiki-popover-footer {
+  padding: 16px;
+  border-top: 1px solid var(--bs-popover-border-color);
+}
+
+.publish-wiki-popover-footer .btn {
+  height: 38px;
+}
+
+.publish-wiki-popover-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.publish-wiki-popover-actions .btn {
+  flex: 1;
 }
 
 

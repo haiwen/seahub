@@ -30,6 +30,31 @@
   height: 44px;
 }
 
+.wiki2-side-panel .wiki2-publish {
+  height: 32px;
+  margin: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  font-size: .875rem;
+}
+
+.wiki2-side-panel .wiki2-publish:hover {
+  background-color: var(--bs-wiki-nav-hover-bg) !important;
+  border-radius: 3px;
+}
+
+.wiki2-side-panel .wiki2-publish .seafile-multicolor-icon-open-in-new-tab {
+  width: 16px;
+  height: 16px;
+  color: var(--bs-icon-color);
+}
+
+.wiki2-side-panel .wiki2-publish .seafile-multicolor-icon-open-in-new-tab path {
+  fill: currentColor;
+}
+
 .wiki2-side-panel .wiki-new-page-tooltip {
   z-index: 1001;
 }
