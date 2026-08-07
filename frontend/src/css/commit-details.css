@@ -43,13 +43,9 @@
   line-height: 24px;
 }
 
-.repo-commit-view-snapshot-btn:hover {
-  background-color: rgba(0, 0, 0, .04);
-}
-
-[data-bs-theme=dark] .repo-commit-view-snapshot-btn:hover,
-[data-bs-theme=dark] .repo-commit-view-snapshot-btn:focus {
-  background-color: rgba(255, 255, 255, .1);
+.repo-commit-view-snapshot-btn:hover,
+.repo-commit-view-snapshot-btn:focus {
+  background-color: var(--bs-icon-btn-hover-bg-color);
 }
 
 .repo-commit-details-description {
@@ -73,13 +69,9 @@
 
 .repo-commit-details-item {
   padding: 6px 12px;
-  background-color: #f9f9f9;
+  background-color: var(--bs-bg-card);
   border-radius: 4px;
   line-height: 20px;
-}
-
-[data-bs-theme=dark] .repo-commit-details-item {
-  background-color: rgba(255, 255, 255, .08);
 }
 
 .repo-commit-details-item + .repo-commit-details-item {

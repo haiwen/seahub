@@ -2,6 +2,7 @@
   margin-left: -4px;
   margin-top: 4px;
   max-width: 600px;
+  overflow: hidden;
 }
 
 .sf-metadata-edit-column-options-container {

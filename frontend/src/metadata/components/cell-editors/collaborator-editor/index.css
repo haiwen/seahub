@@ -1,5 +1,6 @@
 .sf-metadata-collaborator-editor {
   width: 300px;
+  max-width: none;
   height: fit-content;
   padding: 0;
   overflow: hidden;

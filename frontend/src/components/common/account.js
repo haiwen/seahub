@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Popover } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { siteRoot, isPro, gettext, appAvatarURL, enableSSOToThirdpartWebsite, enableSeafileAI } from '../../utils/constants';
@@ -34,39 +35,8 @@ class Account extends Component {
     this.isFirstMounted = true;
   }
 
-  componentDidUpdate(prevProps) {
-    this.handleProps();
-  }
-
-  handleProps = () => {
-    if (this.state.showInfo) {
-      this.addEvents();
-    } else {
-      this.removeEvents();
-    }
-  };
-
-  addEvents = () => {
-    ['click', 'touchstart', 'keyup'].forEach(event =>
-      document.addEventListener(event, this.handleDocumentClick, true)
-    );
-  };
-
-  removeEvents = () => {
-    ['click', 'touchstart', 'keyup'].forEach(event =>
-      document.removeEventListener(event, this.handleDocumentClick, true)
-    );
-  };
-
-  handleDocumentClick = (e) => {
-    if (e && (e.which === 3 || (e.type === 'keyup' && e.which !== Utils.keyCodes.tab))) return;
-    if (this.accountDOM && this.accountDOM.contains(e.target) && this.accountDOM !== e.target && (e.type !== 'keyup' || e.which === Utils.keyCodes.tab)) {
-      return;
-    }
-
-    this.setState({
-      showInfo: !this.state.showInfo,
-    });
+  toggle = () => {
+    this.setState({ showInfo: !this.state.showInfo });
   };
 
   onClickAccount = (e) => {
@@ -74,6 +44,7 @@ class Account extends Component {
     if (this.isFirstMounted) {
       seafileAPI.getAccountInfo().then(resp => {
         this.setState({
+          showInfo: true,
           userName: resp.data.name,
           contactEmail: resp.data.email,
           usageRate: resp.data.space_usage,
@@ -82,7 +53,6 @@ class Account extends Component {
           isStaff: resp.data.is_staff,
           isInstAdmin: resp.data.is_inst_admin,
           isOrgStaff: resp.data.is_org_staff === 1 ? true : false,
-          showInfo: !this.state.showInfo,
           enableSubscription: resp.data.enable_subscription,
           aiCredit: resp.data.ai_credit,
           aiCreditUsed: resp.data.ai_credit_used,
@@ -93,8 +63,6 @@ class Account extends Component {
         toaster.danger(errMessage);
       });
       this.isFirstMounted = false;
-    } else {
-      this.setState({ showInfo: !this.state.showInfo });
     }
   };
 
@@ -105,38 +73,19 @@ class Account extends Component {
 
     if (isAdminPanel) {
       if (isStaff) {
-        data = {
-          url: siteRoot,
-          text: gettext('Exit System Admin')
-        };
+        data = { url: siteRoot, text: gettext('Exit System Admin') };
       } else if (isOrgStaff) {
-        data = {
-          url: siteRoot,
-          text: gettext('Exit Organization Admin')
-        };
+        data = { url: siteRoot, text: gettext('Exit Organization Admin') };
       } else if (isInstAdmin) {
-        data = {
-          url: siteRoot,
-          text: gettext('Exit Institution Admin')
-        };
+        data = { url: siteRoot, text: gettext('Exit Institution Admin') };
       }
-
     } else {
       if (isStaff) {
-        data = {
-          url: `${siteRoot}sys/info/`,
-          text: gettext('System Admin')
-        };
+        data = { url: `${siteRoot}sys/info/`, text: gettext('System Admin') };
       } else if (isOrgStaff) {
-        data = {
-          url: `${siteRoot}org/info/`,
-          text: gettext('Organization Admin')
-        };
+        data = { url: `${siteRoot}org/info/`, text: gettext('Organization Admin') };
       } else if (isPro && isInstAdmin) {
-        data = {
-          url: `${siteRoot}inst/useradmin/`,
-          text: gettext('Institution Admin')
-        };
+        data = { url: `${siteRoot}inst/useradmin/`, text: gettext('Institution Admin') };
       }
     }
 
@@ -163,43 +112,50 @@ class Account extends Component {
         <span className="account-toggle mobile-icon d-md-none" role="button" tabIndex="0" aria-label={gettext('View profile and more')} onClick={this.onClickAccount}>
           <Icon symbol="more-vertical" />
         </span>
-        <div id="user-info-popup" className={`account-popup sf-popover-container ${this.state.showInfo ? '' : 'hide'}`}>
-          <div className="sf-popover-con">
-            <div className="item o-hidden">
-              {this.renderAvatar()}
-              <div className="txt">{this.state.userName}</div>
+        <Popover
+          isOpen={this.state.showInfo}
+          toggle={this.toggle}
+          target="account"
+          placement="bottom-end"
+          hideArrow={true}
+          fade={false}
+          trigger="legacy"
+          popperClassName="account-popup"
+        >
+          <div className="item o-hidden">
+            {this.renderAvatar()}
+            <div className="txt">{this.state.userName}</div>
+          </div>
+          {this.renderDivider()}
+          <div className="item">
+            <div className="space-traffic">
+              <p>{gettext('Used:')}{' '}{this.state.quotaUsage} / {this.state.quotaTotal}</p>
+              <div id="quota-bar">
+                <span id="quota-usage" className="usage" style={{ width: this.state.usageRate }}>
+                </span>
+              </div>
             </div>
-            {this.renderDivider()}
-            <div className="item">
+            {enableSeafileAI &&
               <div className="space-traffic">
-                <p>{gettext('Used:')}{' '}{this.state.quotaUsage} / {this.state.quotaTotal}</p>
+                <p>{gettext('AI credit used:')}{' '}{this.state.aiCreditUsed} / {this.state.aiCredit > 0 ? this.state.aiCredit : '--'}</p>
                 <div id="quota-bar">
-                  <span id="quota-usage" className="usage" style={{ width: this.state.usageRate }}>
+                  <span id="quota-usage" className="usage" style={{ width: this.state.aiUsageRate }}>
                   </span>
                 </div>
               </div>
-              {enableSeafileAI &&
-                <div className="space-traffic">
-                  <p>{gettext('AI credit used:')}{' '}{this.state.aiCreditUsed} / {this.state.aiCredit > 0 ? this.state.aiCredit : '--'}</p>
-                  <div id="quota-bar">
-                    <span id="quota-usage" className="usage" style={{ width: this.state.aiUsageRate }}>
-                    </span>
-                  </div>
-                </div>
-              }
-            </div>
-            {this.renderDivider()}
-            <a href={siteRoot + 'profile/'} className="item">{gettext('Settings')}</a>
-            {isSubscriptionShown && this.renderDivider()}
-            {isSubscriptionShown && <a href={siteRoot + 'subscription/'} className="item">{'付费管理'}</a>}
-            {menuItem && this.renderDivider()}
-            {menuItem}
-            {enableSSOToThirdpartWebsite && this.renderDivider()}
-            {enableSSOToThirdpartWebsite && <a href={siteRoot + 'sso-to-thirdpart/'} className="item">{gettext('Customer Portal')}</a>}
-            {this.renderDivider()}
-            <a href={siteRoot + 'accounts/logout/'} className="item">{gettext('Log out')}</a>
+            }
           </div>
-        </div>
+          {this.renderDivider()}
+          <a href={siteRoot + 'profile/'} className="item">{gettext('Settings')}</a>
+          {isSubscriptionShown && this.renderDivider()}
+          {isSubscriptionShown && <a href={siteRoot + 'subscription/'} className="item">{'付费管理'}</a>}
+          {menuItem && this.renderDivider()}
+          {menuItem}
+          {enableSSOToThirdpartWebsite && this.renderDivider()}
+          {enableSSOToThirdpartWebsite && <a href={siteRoot + 'sso-to-thirdpart/'} className="item">{gettext('Customer Portal')}</a>}
+          {this.renderDivider()}
+          <a href={siteRoot + 'accounts/logout/'} className="item">{gettext('Log out')}</a>
+        </Popover>
       </div>
     );
   }

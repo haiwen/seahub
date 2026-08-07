@@ -54,22 +54,22 @@ class NotificationPopover extends React.Component {
 
     return (
       <Popover
-        className="notification-wrapper"
+        popperClassName="notification-popover"
         target="notification-icon-btn"
         isOpen={true}
         fade={false}
         hideArrow={true}
-        placement="bottom"
+        placement="bottom-end"
         modifiers={[
           {
             name: 'offset',
             options: {
-              offset: [16, 8],
+              offset: [0, 8],
             }
           }
         ]}
       >
-        <div className="sf-popover-container notification-container" ref={ref => this.notificationContainerRef = ref}>
+        <div ref={ref => this.notificationContainerRef = ref}>
           <div className="notification-header modal">
             {headerText}
             <SeahubModalCloseIcon toggle={this.props.onNotificationListToggle} />

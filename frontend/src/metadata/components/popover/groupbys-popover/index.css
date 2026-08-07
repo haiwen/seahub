@@ -1,14 +1,6 @@
-.sf-metadata-groupbys-popover .sf-popover-container {
-  width: 100%;
-  right: 0;
-  top: -1px;
-  overflow: visible;
-}
-
 .sf-metadata-groupbys-popover .popover {
   max-width: none;
   min-width: 510px;
-  border: none;
 }
 
 .sf-metadata-groupbys-popover .groupbys-list {

@@ -5,19 +5,11 @@
 }
 
 .searched-list-item:hover {
-  background-color: rgba(0, 0, 0, 0.04) !important;
+  background-color: var(--bs-bg-color) !important;
 }
 
 .searched-list-item.searched-list-item-keyboard-selected {
-  background-color: rgba(0, 0, 0, 0.04) !important;
-}
-
-[data-bs-theme="dark"] .searched-list-item:hover {
-  background-color: rgba(255, 255, 255, 0.08) !important;
-}
-
-[data-bs-theme="dark"] .searched-list-item.searched-list-item-keyboard-selected {
-  background-color: rgba(255, 255, 255, 0.08) !important;
+  background-color: var(--bs-bg-color) !important;
 }
 
 .searched-list-item td {

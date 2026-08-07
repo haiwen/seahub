@@ -82,19 +82,11 @@
   align-items: center;
   padding: 0 20px;
   border-radius: 8px;
-  border: 1px solid #eaeaea;
-}
-
-[data-bs-theme='dark'] .library-grid-item {
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid var(--bs-border-quartus-color);
 }
 
 .library-grid-item.hover {
-  background-color: rgba(0, 0, 0, .04);
-}
-
-[data-bs-theme='dark'] .library-grid-item.hover {
-  background-color: rgba(255, 255, 255, .1);
+  background-color: var(--bs-icon-btn-hover-bg-color);
 }
 
 .repo-grid-container {
