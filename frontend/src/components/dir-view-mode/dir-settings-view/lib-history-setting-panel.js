@@ -16,11 +16,11 @@ class LibHistorySetting extends React.Component {
     super(props);
     this.state = {
       keepDays: -1,
-      expireDays: 30,
-      disabled: true,
+      days: 30,
+      daysInputDisabled: true,
       allHistory: true,
       noHistory: false,
-      autoHistory: false,
+      limitedHistory: false,
       errorInfo: ''
     };
   }
@@ -32,37 +32,63 @@ class LibHistorySetting extends React.Component {
         keepDays,
         allHistory: keepDays < 0,
         noHistory: keepDays === 0,
-        autoHistory: keepDays > 0,
-        disabled: keepDays <= 0,
-        expireDays: keepDays > 0 ? keepDays : 30,
+        limitedHistory: keepDays > 0,
+        daysInputDisabled: keepDays <= 0,
+        days: keepDays > 0 ? keepDays : 30,
       });
-
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
   }
 
-  submit = () => {
-    let days = this.state.keepDays;
-    if (this.state.autoHistory) {
-      days = this.state.expireDays;
-    }
-    let repoID = this.props.repoID;
-    // If it's allHistory, days is always -1, no validation is needed;
-    // If it's noHistory, days is always 0, no validation is needed;
-    // If it's autoHistory, days needs to be validated to be greater than 0."
-    if (this.state.autoHistory && Number(days) <= 0) {
-      this.setState({
-        errorInfo: gettext('Please enter a non-negative integer'),
-      });
-      return;
+  submit = (nextType) => {
+    let days;
+    if (nextType === 'allHistory') {
+      days = -1;
+    } else if (nextType === 'noHistory') {
+      days = 0;
+    } else if (nextType === 'limitedHistory' || this.state.limitedHistory) {
+      days = this.state.days;
+      // If it's limitedHistory, days needs to be validated to be greater than 0.
+      if (Number(days) <= 0) {
+        this.setState({
+          errorInfo: gettext('Please enter a non-negative integer'),
+        });
+        return;
+      }
     }
 
+    const { repoID } = this.props;
     seafileAPI.setRepoHistoryLimit(repoID, parseInt(days)).then(res => {
-      this.setState({ keepDays: res.data.keep_days });
       const message = gettext('Successfully set library history.');
       toaster.success(message);
+      const { keep_days } = res.data;
+      if (nextType === 'allHistory') {
+        this.setState({
+          keepDays: -1,
+          daysInputDisabled: true,
+          allHistory: true,
+          noHistory: false,
+          limitedHistory: false,
+        });
+      } else if (nextType === 'noHistory') {
+        this.setState({
+          keepDays: 0,
+          daysInputDisabled: true,
+          allHistory: false,
+          noHistory: true,
+          limitedHistory: false,
+        });
+      } else {
+        this.setState({
+          keepDays: keep_days,
+          daysInputDisabled: false,
+          allHistory: false,
+          noHistory: false,
+          limitedHistory: true,
+        });
+      }
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -80,34 +106,12 @@ class LibHistorySetting extends React.Component {
     let num = e.target.value;
     this.setState({
       keepDays: num,
-      expireDays: num,
+      days: num,
     });
   };
 
-  setLimitDays = (type) => {
-    if (type === 'allHistory') {
-      this.setState({
-        keepDays: -1,
-        disabled: true
-      });
-    } else if (type === 'noHistory') {
-      this.setState({
-        keepDays: 0,
-        disabled: true
-      });
-    } else {
-      this.setState({
-        disabled: false
-      });
-    }
-
-    this.setState({
-      allHistory: type === 'allHistory',
-      noHistory: type === 'noHistory',
-      autoHistory: type === 'autoHistory',
-    });
-
-    this.submit();
+  onHistorySelectionChanged = (type) => {
+    this.submit(type);
   };
 
   render() {
@@ -119,23 +123,23 @@ class LibHistorySetting extends React.Component {
           <p className="tip">{gettext('Setting library history is disabled by Admin.')}</p>
           }
           <FormGroup check>
-            <Input type="radio" name="radio1" checked={this.state.allHistory} disabled={!enableRepoHistorySetting} onChange={() => {this.setLimitDays('allHistory');}}/>{' '}
+            <Input type="radio" name="keep-history" checked={this.state.allHistory} disabled={!enableRepoHistorySetting} onChange={() => {this.onHistorySelectionChanged('allHistory');}}/>{' '}
             <Label>{gettext('Keep full history')}</Label>
           </FormGroup>
           <FormGroup check>
-            <Input type="radio" name="radio1" checked={this.state.noHistory} disabled={!enableRepoHistorySetting} onChange={() => {this.setLimitDays('noHistory');}}/>{' '}
+            <Input type="radio" name="keep-history" checked={this.state.noHistory} disabled={!enableRepoHistorySetting} onChange={() => {this.onHistorySelectionChanged('noHistory');}}/>{' '}
             <Label>{gettext('Don\'t keep history')}</Label>
           </FormGroup>
           <FormGroup check>
-            <Input type="radio" name="radio1" checked={this.state.autoHistory} disabled={!enableRepoHistorySetting} onChange={() => {this.setLimitDays('autoHistory');}}/>{' '}
+            <Input type="radio" name="keep-history" checked={this.state.limitedHistory} disabled={!enableRepoHistorySetting} onChange={() => {this.onHistorySelectionChanged('limitedHistory');}}/>{' '}
             <Label className='d-inline-flex'>
               {gettext('Only keep a period of history:')}
               <Input
                 type="text"
                 className="expire-input"
-                value={this.state.expireDays}
+                value={this.state.days}
                 onChange={this.onChange}
-                disabled={this.state.disabled}
+                disabled={this.state.daysInputDisabled}
                 onKeyDown={this.handleKeyDown}
               />
               <span>{gettext('days')}</span>
