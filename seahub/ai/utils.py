@@ -15,9 +15,10 @@ from django.utils.translation import gettext as _
 from django.utils import timezone
 from django.db.models.functions import Coalesce
 from django.db.models import Sum, Value
-from seaserv import seafile_api, ccnet_api
+from seaserv import ccnet_api, get_org_id_by_repo_id, seafile_api
 
 from seahub.settings import SEAFILE_AI_SECRET_KEY, SEAFILE_AI_SERVER_URL
+from seahub.base.accounts import User
 from seahub.tags.models import FileUUIDMap
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
 from seahub.constants import DEFAULT_USER, PERMISSION_INVISIBLE
@@ -25,12 +26,9 @@ from seahub.share.utils import is_repo_admin
 from seahub.utils import HAS_FILE_SEASEARCH, gen_inner_file_upload_url, get_service_url, is_org_context, is_pro_version, mkstemp
 from seahub.utils.user_permissions import get_user_role
 from seahub.utils.ccnet_db import CcnetDB
-from seahub.organizations.models import OrgMemberQuota
-from seahub.ai.models import ChatMessageThoughtProcess, ChatMessages, ChatSessions, StatsAIByOwner, StatsAIByTeam
-try:
-    from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
-except ImportError:
-    ORG_MEMBER_QUOTA_ENABLED = False
+from seahub.organizations.models import OrgMemberQuota, OrgSettings
+from seahub.ai.models import AIUsageStatistics, ChatMessageThoughtProcess, ChatMessages, ChatSessions
+
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +43,16 @@ MARKDOWN_LINK_TAG_RE = re.compile(
 MARKDOWN_READONLY_TIPS_RE = re.compile(
     r'\s*<markdown-readonly-tips>[\s\S]*?</markdown-readonly-tips>\s*'
 )
+
+AI_SCENARIO_IMAGE_CAPTION = 'image-caption'
+AI_SCENARIO_SUMMARY = 'summary'
+AI_SCENARIO_FILE_TAGS = 'file-tags'
+AI_SCENARIO_OCR = 'ocr'
+AI_SCENARIO_TRANSLATE = 'translate'
+AI_SCENARIO_WRITING_ASSISTANT = 'writing-assistant'
+AI_SCENARIO_CHAT = 'chat'
+AI_SCENARIO_UNKNOWN = 'unknown'
+
 
 # API
 def gen_headers():
@@ -103,41 +111,139 @@ def writing_assistant(params):
 
 # utils
 def get_ai_credit_by_user(user, org_id):
-    user_role = get_user_role(user)
+    if org_id and org_id > 0:
+        org = ccnet_api.get_org_by_id(org_id)
+        if not org:
+            logger.warning('Cannot find an organization related to org_id %s.' % org_id)
+            user_role = DEFAULT_USER
+        else:
+            user_role = OrgSettings.objects.get_role_by_org(org)
+    else:
+        user_role = get_user_role(user)
     role = DEFAULT_USER if (user_role == '' or user_role == DEFAULT_USER) else user_role
     ai_credit_per_user = get_enabled_role_permissions_by_role(role)['monthly_ai_credit_per_user']
     if ai_credit_per_user < 0:
         return -1
-    if org_id and org_id != -1:
-        if ORG_MEMBER_QUOTA_ENABLED:
-            org_members_quota = OrgMemberQuota.objects.get_quota(org_id)
-            ai_credit = org_members_quota * ai_credit_per_user
-        else:
-            ccnet_db = CcnetDB()
-            user_count = ccnet_db.get_org_user_count(org_id)
-            ai_credit = user_count * ai_credit_per_user
+    
+    if org_id and org_id > 0:
+        org_members_quota = OrgMemberQuota.objects.get_quota(org_id)
+        ai_credit = org_members_quota * ai_credit_per_user
     else:
         ai_credit = ai_credit_per_user
     return ai_credit
 
 
-def get_ai_cost_by_user(user, org_id):
-    month = timezone.now().replace(day=1)
+def get_ai_credit_by_repo_owner(repo_owner, org_id=None):
+    try:
+        if org_id and org_id > 0:
+            org = ccnet_api.get_org_by_id(org_id)
+            if not org:
+                logger.warning('Cannot find an organization related to org_id %s.' % org_id)
+                owner_role = DEFAULT_USER
+            else:
+                owner_role = OrgSettings.objects.get_role_by_org(org)
+        else:   
+            owner = User.objects.get(email=repo_owner)
+            owner_role = get_user_role(owner)
+    except User.DoesNotExist:
+        owner_role = DEFAULT_USER
+    return get_enabled_role_permissions_by_role(owner_role)['monthly_ai_credit_per_user']
+
+
+def _get_ai_cost(**filters):
+    today = timezone.now().date()
+    month_start = today.replace(day=1)
+    filters.update({
+        'date__gte': month_start,
+        'date__lte': today,
+    })
+    return AIUsageStatistics.objects.filter(**filters).aggregate(
+        total_cost=Coalesce(Sum('cost'), Value(0.0))
+    )['total_cost']
+
+
+def get_ai_cost_by_org(org_id):
+    return _get_ai_cost(org_id=org_id)
+
+
+def get_ai_cost_by_repo_owner(repo_owner):
+    return _get_ai_cost(repo_owner=repo_owner)
+
+
+def convert_cost_to_credit(cost):
+    return 100 * cost
+
+
+def get_ai_credit_used_by_user(user, org_id):
     if org_id and org_id > 0:
-        cost = StatsAIByTeam.objects.filter(org_id=org_id, month=month).aggregate(total_cost=Coalesce(Sum('cost'), Value(0.0)))['total_cost']
+        cost = get_ai_cost_by_org(org_id)
     else:
-        cost = StatsAIByOwner.objects.filter(username=user.username, month=month).aggregate(total_cost=Coalesce(Sum('cost'), Value(0.0)))['total_cost']
-    return cost
+        cost = get_ai_cost_by_repo_owner(user.username)
+    return convert_cost_to_credit(cost)
 
 
-def is_ai_usage_over_limit(user, org_id):
-    ai_credit = get_ai_credit_by_user(user, org_id)
-    cost = get_ai_cost_by_user(user, org_id)
+def is_ai_usage_over_limit(user, repo_owner, org_id):
+    if org_id and org_id > 0:
+        ai_credit = get_ai_credit_by_user(user, org_id)
+        cost = get_ai_cost_by_org(org_id)
+    else:
+        if not repo_owner:
+            logger.warning('repo_owner is empty when checking AI credit')
+            return True
+        ai_credit = get_ai_credit_by_repo_owner(repo_owner, org_id)
+        cost = get_ai_cost_by_repo_owner(repo_owner)
+    used_credit = convert_cost_to_credit(cost)
 
     if ai_credit < 0:
         return False
 
-    return ai_credit <= round(cost, 2)
+    return used_credit >= ai_credit
+
+
+def _get_repo_owner(repo_id, org_id=None):
+    repo_owner = seafile_api.get_repo_owner(repo_id)
+    if repo_owner:
+        return repo_owner
+    if org_id and org_id > 0:
+        repo_owner = seafile_api.get_org_repo_owner(repo_id)
+        if repo_owner:
+            return repo_owner
+    return None
+
+
+def _get_group_id_by_repo_owner(repo_owner):
+    if not isinstance(repo_owner, str) or '@seafile_group' not in repo_owner:
+        return None
+    try:
+        return int(repo_owner.split('@', 1)[0])
+    except Exception:
+        return None
+
+def resolve_repo_ai_usage_context(repo_id=None, org_id=None, scenario=AI_SCENARIO_UNKNOWN):
+    usage_org_id = org_id
+    repo_owner = None
+    group_id = None
+
+    if repo_id:
+        repo_org_id = get_org_id_by_repo_id(repo_id)
+        if isinstance(repo_org_id, int) and repo_org_id > 0:
+            usage_org_id = repo_org_id
+        else:
+            usage_org_id = None
+
+        repo_owner = _get_repo_owner(repo_id, usage_org_id)
+        group_id = _get_group_id_by_repo_owner(repo_owner)
+        
+    if not isinstance(usage_org_id, int) or usage_org_id <= 0:
+        usage_org_id = None
+
+    return {
+        'repo_id': repo_id,
+        'repo_owner': repo_owner,
+        'group_id': group_id,
+        'org_id': usage_org_id,
+        'scenario': scenario or AI_SCENARIO_UNKNOWN,
+    }
 
 def gen_chat_task_id(session_uuid):
     return f'chat_{session_uuid.replace("-", "")}'

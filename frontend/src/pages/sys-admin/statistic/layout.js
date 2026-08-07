@@ -6,6 +6,7 @@ import StatisticFile from './statistic-file';
 import StatisticStorage from './statistic-storage';
 import StatisticUsers from './statistic-users';
 import StatisticTraffic from './statistic-traffic';
+import StatisticAI from './statistic-ai';
 import StatisticMetrics from './statistic-metrics';
 import StatisticReports from './statistic-reports';
 
@@ -22,6 +23,7 @@ const StatisticLayout = ({ children, ...commonProps }) => {
         <StatisticStorage path="storage" />
         <StatisticUsers path="user" />
         <StatisticTraffic path="traffic" />
+        <StatisticAI path="ai" />
         <StatisticReports path="reports" />
         <StatisticMetrics path="metrics" />
       </Router>

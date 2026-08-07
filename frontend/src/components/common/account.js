@@ -24,7 +24,7 @@ class Account extends Component {
       quotaUsage: '',
       quotaTotal: '',
       aiCredit: '',
-      aiCost: '',
+      aiCreditUsed: '',
       aiUsageRate: '',
       isStaff: false,
       isOrgStaff: false,
@@ -85,7 +85,7 @@ class Account extends Component {
           showInfo: !this.state.showInfo,
           enableSubscription: resp.data.enable_subscription,
           aiCredit: resp.data.ai_credit,
-          aiCost: resp.data.ai_cost,
+          aiCreditUsed: resp.data.ai_credit_used,
           aiUsageRate: resp.data.ai_usage_rate
         });
       }).catch(error => {
@@ -180,7 +180,7 @@ class Account extends Component {
               </div>
               {enableSeafileAI &&
                 <div className="space-traffic">
-                  <p>{gettext('AI credit used:')}{' '}{this.state.aiCost} / {this.state.aiCredit > 0 ? this.state.aiCredit : '--'}</p>
+                  <p>{gettext('AI credit used:')}{' '}{this.state.aiCreditUsed} / {this.state.aiCredit > 0 ? this.state.aiCredit : '--'}</p>
                   <div id="quota-bar">
                     <span id="quota-usage" className="usage" style={{ width: this.state.aiUsageRate }}>
                     </span>

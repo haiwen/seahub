@@ -1,5 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import calendar
 import datetime
+import json
 import logging
 from zoneinfo import ZoneInfo
 from rest_framework.authentication import SessionAuthentication
@@ -11,8 +13,10 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.http import HttpResponse
 
-from seaserv import ccnet_api
+from seaserv import ccnet_api, seafile_api
 
+from seahub.ai.db_utils import query_ai_statistics_detail, query_ai_statistics_overview
+from seahub.profile.models import Profile
 from seahub.utils import get_file_ops_stats_by_day, IS_DB_SQLITE3, \
         get_total_storage_stats_by_day, get_user_activity_stats_by_day, \
         is_pro_version, EVENTS_ENABLED, get_system_traffic_by_day, \
@@ -30,6 +34,35 @@ from seahub.api2.utils import api_error
 from seahub.api2.endpoints.utils import get_seafevents_metrics
 
 logger = logging.getLogger(__name__)
+
+
+def _get_user_nickname_map(usernames):
+    if not usernames:
+        return {}
+    profiles = Profile.objects.filter(user__in=usernames)
+    return {profile.user: profile.nickname for profile in profiles}
+
+
+def _get_org_name_map(org_ids):
+    org_name_map = {}
+    for org_id in set(org_ids):
+        org = ccnet_api.get_org_by_id(int(org_id))
+        if not org:
+            continue
+        org_name_map[org_id] = org.org_name
+    return org_name_map
+
+
+def _get_group_info_map(group_ids):
+    group_name_map = {}
+    group_creator_map = {}
+    for group_id in set(group_ids):
+        group = ccnet_api.get_group(int(group_id))
+        if not group:
+            continue
+        group_name_map[group_id] = getattr(group, 'group_name', '')
+        group_creator_map[group_id] = getattr(group, 'creator_name', '')
+    return group_name_map, group_creator_map
 
 
 def check_parameter(func):
@@ -583,3 +616,247 @@ class SystemMetricsView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({ 'metrics': metrics_data })
+
+
+class AdminAIStatisticsView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsAdminUser,)
+
+    def get(self, request):
+        if not request.user.admin_permissions.can_view_statistic():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        date = request.GET.get('date')
+        month = request.GET.get('month')
+        if not date and not month:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'date or month required')
+        if date:
+            try:
+                date_obj = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+                date_range = [date_obj.isoformat(), date_obj.isoformat()]
+            except Exception:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'date invalid')
+        else:
+            try:
+                month_start = datetime.datetime.strptime(month, '%Y%m').date()
+                _, last_day_num = calendar.monthrange(month_start.year, month_start.month)
+                month_end = datetime.date(month_start.year, month_start.month, last_day_num)
+                date_range = [month_start.isoformat(), month_end.isoformat()]
+            except Exception:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'month invalid')
+
+        group_by = request.GET.get('group_by', 'owner')
+        if group_by not in ('owner', 'repo', 'group', 'org'):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'group_by invalid. Must be "owner", "repo", "group" or "org"')
+
+        try:
+            page = int(request.GET.get('page', 1))
+            per_page = int(request.GET.get('per_page', 25))
+        except Exception:
+            page, per_page = 1, 25
+        start, end = (page - 1) * per_page, page * per_page
+
+        try:
+            if group_by == 'owner':
+                records = query_ai_statistics_overview('repo_owner', date_range)
+                return self._stats_by_owner(records, start, end)
+            if group_by == 'repo':
+                records = query_ai_statistics_overview('repo_id', date_range)
+                return self._stats_by_repo(records, start, end)
+            if group_by == 'group':
+                records = query_ai_statistics_overview('group_id', date_range)
+                return self._stats_by_group(records, start, end)
+            records = query_ai_statistics_overview('org_id', date_range)
+            return self._stats_by_org(records, start, end)
+        except Exception as error:
+            logger.exception(error)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal server error')
+
+    def _stats_by_owner(self, records, start, end):
+        total_count = records.count()
+        stats = list(records[start:end])
+        if not stats:
+            return Response({'results': [], 'count': 0})
+
+        repo_owners = [item['repo_owner'] for item in stats]
+        org_ids = [item['org_id'] for item in stats if item.get('org_id') is not None]
+        nickname_map = _get_user_nickname_map(repo_owners)
+        org_name_map = _get_org_name_map(org_ids)
+
+        results = []
+        for item in stats:
+            repo_owner = item['repo_owner']
+            org_id = item.get('org_id')
+            results.append({
+                'repo_owner': repo_owner,
+                'nickname': nickname_map.get(repo_owner, email2nickname(repo_owner)),
+                'org_id': org_id,
+                'org_name': org_name_map.get(org_id, ''),
+                'total_credit_used': item['total_credit_used'],
+            })
+        return Response({'results': results, 'count': total_count})
+
+    def _stats_by_repo(self, records, start, end):
+        total_count = records.count()
+        stats = list(records[start:end])
+        if not stats:
+            return Response({'results': [], 'count': 0})
+
+        repo_owner_names = [item['repo_owner'] for item in stats if item.get('repo_owner') and not item.get('group_id')]
+        org_ids = [item['org_id'] for item in stats if item.get('org_id') is not None]
+        group_ids = [item['group_id'] for item in stats if item.get('group_id') is not None]
+        repo_owner_nickname_map = _get_user_nickname_map(repo_owner_names)
+        org_name_map = _get_org_name_map(org_ids)
+        group_name_map, _ = _get_group_info_map(group_ids)
+
+        results = []
+        for item in stats:
+            repo = seafile_api.get_repo(item['repo_id'])
+            result = {
+                'repo_id': item['repo_id'],
+                'repo_name': repo.name if repo else None,
+                'org_id': item.get('org_id'),
+                'org_name': org_name_map.get(item.get('org_id'), ''),
+                'total_credit_used': item['total_credit_used'],
+            }
+            if item.get('group_id') is not None:
+                result['repo_owner'] = item.get('repo_owner') or f"{item['group_id']}@seafile_group"
+                result['group_id'] = item['group_id']
+                result['group_name'] = group_name_map.get(item['group_id'], item['group_id'])
+            elif item.get('repo_owner'):
+                result['repo_owner'] = item['repo_owner']
+                result['nickname'] = repo_owner_nickname_map.get(item['repo_owner'], email2nickname(item['repo_owner']))
+            results.append(result)
+        return Response({'results': results, 'count': total_count})
+
+    def _stats_by_group(self, records, start, end):
+        total_count = records.count()
+        stats = list(records[start:end])
+        if not stats:
+            return Response({'results': [], 'count': 0})
+
+        group_ids = [item['group_id'] for item in stats]
+        org_ids = [item['org_id'] for item in stats if item.get('org_id') is not None]
+        group_id_to_name_map, group_id_to_creator_map = _get_group_info_map(group_ids)
+        nickname_map = _get_user_nickname_map(set(group_id_to_creator_map.values()))
+        org_name_map = _get_org_name_map(org_ids)
+
+        results = []
+        for item in stats:
+            creator = group_id_to_creator_map.get(item['group_id'], '')
+            org_id = item.get('org_id')
+            results.append({
+                'group_id': item['group_id'],
+                'group_name': group_id_to_name_map.get(item['group_id'], ''),
+                'creator': creator,
+                'creator_name': nickname_map.get(creator, email2nickname(creator)),
+                'org_id': org_id,
+                'org_name': org_name_map.get(org_id, ''),
+                'total_credit_used': item['total_credit_used'],
+            })
+        return Response({'results': results, 'count': total_count})
+
+    def _stats_by_org(self, records, start, end):
+        total_count = records.count()
+        stats = list(records[start:end])
+        if not stats:
+            return Response({'results': [], 'count': 0})
+
+        org_ids = [item['org_id'] for item in stats]
+        org_dict = {}
+        creators = []
+        for org_id in set(org_ids):
+            org = ccnet_api.get_org_by_id(int(org_id))
+            if not org:
+                continue
+            org_dict[org_id] = org
+            creators.append(org.creator)
+        nickname_map = _get_user_nickname_map(set(creators))
+
+        results = []
+        for item in stats:
+            org = org_dict.get(item['org_id'])
+            creator = org.creator if org else ''
+            results.append({
+                'org_id': item['org_id'],
+                'org_name': org.org_name if org else '',
+                'creator': creator,
+                'creator_name': nickname_map.get(creator, email2nickname(creator)),
+                'total_credit_used': item['total_credit_used'],
+            })
+        return Response({'results': results, 'count': total_count})
+
+
+class AdminAIStatisticsDetailView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsAdminUser,)
+
+    def get(self, request):
+        if not request.user.admin_permissions.can_view_statistic():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        condition = request.GET.get('condition')
+        if isinstance(condition, str):
+            try:
+                condition = json.loads(condition)
+            except Exception:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'condition invalid. Must be an object')
+        if not isinstance(condition, dict):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'condition invalid. Must be an object')
+        if not condition:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'condition must cannot be empty')
+
+        group_by = request.GET.get('group_by')
+        if group_by == 'repo':
+            group_by = 'repo_id'
+        elif group_by == 'owner':
+            group_by = 'repo_owner'
+        elif group_by != 'date':
+            return api_error(status.HTTP_400_BAD_REQUEST, 'group_by invalid. Must be sub-group_by of "repo", "owner" or "date"')
+
+        start_date = request.GET.get('start_date')
+        end_date = request.GET.get('end_date')
+        if not start_date or not end_date:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'range of date must be provided')
+
+        start_date = datetime.datetime.strptime(start_date.split('T')[0], '%Y-%m-%d').date()
+        end_date = datetime.datetime.strptime(end_date.split('T')[0], '%Y-%m-%d').date()
+        scenarios_str = request.GET.get('scenarios')
+        scenarios = [item.strip() for item in scenarios_str.split(',') if item.strip()] if scenarios_str else []
+
+        query_set = query_ai_statistics_detail(group_by, [start_date, end_date], condition, scenarios=scenarios or None)
+        if group_by == 'date':
+            return Response({'results': list(query_set)})
+
+        if group_by == 'repo_owner':
+            query_set = list(query_set[:30])
+            repo_owners = [item['repo_owner'] for item in query_set]
+            nickname_map = _get_user_nickname_map(repo_owners)
+            results = []
+            for item in query_set:
+                repo_owner = item['repo_owner']
+                results.append({
+                    'repo_owner': repo_owner,
+                    'nickname': nickname_map.get(repo_owner, email2nickname(repo_owner)),
+                    'total_credit_used': item['total_credit_used'],
+                    'total_input_tokens': item['total_input_tokens'],
+                    'total_output_tokens': item['total_output_tokens'],
+                })
+            results.reverse()
+            return Response({'results': results})
+
+        query_set = list(query_set[:30])
+        results = []
+        for item in query_set:
+            repo = seafile_api.get_repo(item['repo_id'])
+            results.append({
+                'repo_id': item['repo_id'],
+                'repo_name': repo.name if repo else '<Unknown library>',
+                'total_credit_used': item['total_credit_used'],
+                'total_input_tokens': item['total_input_tokens'],
+                'total_output_tokens': item['total_output_tokens'],
+            })
+        results.reverse()
+        return Response({'results': results})

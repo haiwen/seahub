@@ -20,7 +20,9 @@ class OrgInfo extends Component {
       storage_usage: 0,
       member_quota: 0,
       member_usage: 0,
-      active_members: 0
+      active_members: 0,
+      ai_credit_used: 0,
+      ai_credit: 0,
     };
   }
 
@@ -29,12 +31,12 @@ class OrgInfo extends Component {
       const {
         org_id, org_name, traffic_this_month, traffic_limit,
         member_quota, member_usage, active_members,
-        storage_quota, storage_usage, ai_cost, ai_credit
+        storage_quota, storage_usage, ai_credit_used, ai_credit
       } = res.data;
       this.setState({
         org_id, org_name, traffic_this_month, traffic_limit,
         member_quota, member_usage, active_members,
-        storage_quota, storage_usage, ai_cost, ai_credit
+        storage_quota, storage_usage, ai_credit_used, ai_credit
       });
     });
   }
@@ -43,10 +45,11 @@ class OrgInfo extends Component {
     const {
       org_id, org_name, traffic_this_month, traffic_limit,
       member_quota, member_usage, active_members,
-      storage_quota, storage_usage, ai_cost, ai_credit
+      storage_quota, storage_usage, ai_credit_used, ai_credit
     } = this.state;
     let download_traffic = traffic_this_month.link_file_download + traffic_this_month.sync_file_download + traffic_this_month.web_file_download;
     download_traffic = download_traffic ? download_traffic : 0;
+    const aiUsageRate = ai_credit > 0 ? ai_credit_used / ai_credit * 100 : 0;
     return (
       <Fragment>
         <MainPanelTopbar />
@@ -142,12 +145,12 @@ class OrgInfo extends Component {
                     <h4 className="info-content-item-heading">{gettext('AI credit used this month')}</h4>
 
                     <>
-                      <p className="info-content-space-text">{`${ai_credit > 0 ? (ai_cost / ai_credit * 100).toFixed(2) : '0'}%`}</p>
+                      <p className="info-content-space-text">{`${aiUsageRate.toFixed(2)}%`}</p>
                       <div className="progress-container">
                         <div className="progress">
-                          <div className="progress-bar" role="progressbar" style={{ width: `${ai_cost / ai_credit * 100}%` }} aria-valuenow={download_traffic / traffic_limit * 100} aria-valuemin="0" aria-valuemax="100"></div>
+                          <div className="progress-bar" role="progressbar" style={{ width: `${aiUsageRate}%` }} aria-valuenow={aiUsageRate} aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
-                        <p className="progress-text m-0">{`${ai_cost} / ${ai_credit > 0 ? ai_credit : '--'}`}</p>
+                        <p className="progress-text m-0">{`${ai_credit_used} / ${ai_credit > 0 ? ai_credit : '--'}`}</p>
                       </div>
                     </>
                   </div>

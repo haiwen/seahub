@@ -10,6 +10,7 @@ import OrgStatisticFile from './statistic/statistic-file';
 import OrgStatisticStorage from './statistic/statistic-storage';
 import OrgStatisticTraffic from './statistic/statistic-traffic';
 import OrgStatisticUsers from './statistic/statistic-users';
+import OrgStatisticAI from './statistic/statistic-ai';
 import OrgStatisticReport from './statistic/statistic-reports';
 import OrgDesktopDevices from './devices/desktop-devices';
 import OrgMobileDevices from './devices/mobile-devices';
@@ -103,6 +104,7 @@ class Org extends React.Component {
             <OrgStatisticStorage path={siteRoot + 'org/statistics-admin/total-storage/'} />
             <OrgStatisticUsers path={siteRoot + 'org/statistics-admin/active-users/'} />
             <OrgStatisticTraffic path={siteRoot + 'org/statistics-admin/traffic/'} />
+            <OrgStatisticAI path={siteRoot + 'org/statistics-admin/ai/'} />
             <OrgStatisticReport path={siteRoot + 'org/statistics-admin/reports/'} />
             <OrgDesktopDevices path={siteRoot + 'org/deviceadmin/desktop-devices/'} />
             <OrgMobileDevices path={siteRoot + 'org/deviceadmin/mobile-devices/'} />

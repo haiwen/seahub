@@ -150,7 +150,7 @@ from seahub.api2.endpoints.admin.web_settings import AdminWebSettings
 from seahub.api2.endpoints.admin.statistics import (
     FileOperationsView, TotalStorageView, ActiveUsersView, SystemTrafficView, \
     SystemUserTrafficExcelView, SystemUserStorageExcelView, SystemUserTrafficView, \
-    SystemOrgTrafficView, SystemMetricsView
+    SystemOrgTrafficView, SystemMetricsView, AdminAIStatisticsView, AdminAIStatisticsDetailView
 )
 from seahub.api2.endpoints.admin.devices import AdminDevices
 from seahub.api2.endpoints.admin.device_errors import AdminDeviceErrors
@@ -700,6 +700,8 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/statistics/system-user-traffic/excel/$', SystemUserTrafficExcelView.as_view(), name='api-v2.1-admin-statistics-system-user-traffic-excel'),
     re_path(r'^api/v2.1/admin/statistics/system-user-storage/excel/$', SystemUserStorageExcelView.as_view(), name='api-v2.1-admin-statistics-system-user-storage-excel'),
     re_path(r'^api/v2.1/admin/statistics/system-metrics/$', SystemMetricsView.as_view(), name='api-v2.1-admin-statistics-system-metrics'),
+    re_path(r'^api/v2.1/admin/statistics/ai/$', AdminAIStatisticsView.as_view(), name='api-v2.1-admin-statistics-ai'),
+    re_path(r'^api/v2.1/admin/statistics/ai/detail/$', AdminAIStatisticsDetailView.as_view(), name='api-v2.1-admin-statistics-ai-detail'),
     ## admin::users
     re_path(r'^api/v2.1/admin/users/$', AdminUsers.as_view(), name='api-v2.1-admin-users'),
     re_path(r'^api/v2.1/admin/ldap-users/$', AdminLDAPUsers.as_view(), name='api-v2.1-admin-ldap-users'),
@@ -926,6 +928,7 @@ urlpatterns = [
     path('sys/statistics/storage/', sysadmin_react_fake_view, name="sys_statistics_storage"),
     path('sys/statistics/user/', sysadmin_react_fake_view, name="sys_statistics_user"),
     path('sys/statistics/traffic/', sysadmin_react_fake_view, name="sys_statistics_traffic"),
+    path('sys/statistics/ai/', sysadmin_react_fake_view, name="sys_statistics_ai"),
     path('sys/statistics/reports/', sysadmin_react_fake_view, name="sys_statistics_reports"),
     path('sys/statistics/metrics/', sysadmin_react_fake_view, name="sys_statistics_metrics"),
     path('sys/devices/desktop/', sysadmin_react_fake_view, name="sys_desktop_devices"),

@@ -103,7 +103,7 @@ class SysAdmin extends React.Component {
       },
       {
         tab: 'statistic',
-        urlPartList: ['statistics/file', 'statistics/storage', 'statistics/user', 'statistics/traffic', 'statistics/reports', 'statistics/metrics']
+        urlPartList: ['statistics/file', 'statistics/storage', 'statistics/user', 'statistics/traffic', 'statistics/ai', 'statistics/reports', 'statistics/metrics']
       },
       {
         tab: 'users',

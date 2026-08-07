@@ -1122,6 +1122,36 @@ def validate_llm_models(models):
 
     return validated_models
 
+
+def get_llm_price(models):
+    if not models or not isinstance(models, list):
+        return {}
+
+    prices = {}
+    for model in models:
+        if not isinstance(model, dict) or model.get('disable', False):
+            continue
+
+        model_name = model.get('model')
+        if not model_name:
+            continue
+
+        price = model.get('price')
+        if isinstance(price, (float, int)):
+            prices[model_name] = {
+                'input_tokens': price,
+                'output_tokens': 0,
+            }
+            continue
+
+        if isinstance(price, dict) and 'input_tokens' in price:
+            prices[model_name] = {
+                'input_tokens': price.get('input_tokens', 0),
+                'output_tokens': price.get('output_tokens', 0),
+            }
+
+    return prices
+
 d = os.path.dirname
 EVENTS_CONFIG_FILE = os.environ.get(
     'EVENTS_CONFIG_FILE',
@@ -1245,6 +1275,7 @@ JWT_PRIVATE_KEY = os.environ.get('JWT_PRIVATE_KEY', '') or JWT_PRIVATE_KEY
 # config in yaml & env
 ai_yaml_file_path = os.path.join(central_conf_dir, os.environ.get('SEAFILE_AI_CONFIG_NAME', 'seafile_ai_config.yaml'))
 ai_configs = ConfigParser(ai_yaml_file_path, 'seahub')
+AI_PRICES = get_llm_price(ai_configs.get('LLM_MODELS', []) + [ai_configs.get('EMBEDDING_MODEL', {})])
 
 LLM_MODELS = [
     {
