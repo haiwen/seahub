@@ -21,11 +21,7 @@
 }
 
 .notification-icon-btn:hover {
-  background-color: rgba(0, 0, 0, .04);
-}
-
-[data-bs-theme="dark"] #notifications .notification-icon-btn:hover {
-  background-color: rgba(255, 255, 255, .1);
+  background-color: var(--bs-icon-btn-hover-bg-color);
 }
 
 @media (max-width: 390px) {
@@ -81,7 +77,7 @@
 
 #notice-popover .time {
   margin: 0;
-  color: #666;
+  color: var(--bs-body-secondary-color);
   text-align: right;
   font-size: 0.8125rem;
   line-height: 1.5rem;
@@ -92,7 +88,7 @@
   display: block;
   padding: 7px 0;
   text-align: center;
-  color: #666;
+  color: var(--bs-body-secondary-color);
 }
 
 #notice-popover .sf-popover-close {
@@ -102,7 +98,7 @@
 }
 
 #notice-popover .sf-popover-hd {
-  border-bottom: 1px solid #dfdfe1;
+  border-bottom: 1px solid var(--bs-border-secondary-color);
   margin: 0 10px;
 }
 

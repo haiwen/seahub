@@ -352,11 +352,7 @@
 
 .dir-view-path .icon-path-split {
   height: 16px;
-  border-left: 1.5px solid #eaeaea;
-}
-
-[data-bs-theme='dark'] .dir-view-path .icon-path-split {
-  border-left: 1.5px solid rgba(255, 255, 255, .15);
+  border-left: 1.5px solid var(--bs-border-quartus-color);
 }
 
 .dir-view-path .path-label {

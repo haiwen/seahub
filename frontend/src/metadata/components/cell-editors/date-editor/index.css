@@ -12,6 +12,25 @@
   color: var(--bs-body-color);
 }
 
+.rc-calendar-header-nav-wrap>a,
+.rc-calendar-column-header-inner,
+.rc-calendar-month-panel-prev-year-btn,
+.rc-calendar-month-panel-next-year-btn,
+.rc-calendar-year-panel-prev-decade-btn,
+.rc-calendar-year-panel-next-decade-btn {
+  color: var(--bs-body-secondary-color);
+}
+
+.rc-calendar-header-nav-wrap>a:hover,
+.rc-calendar-month-panel-prev-year-btn:hover,
+.rc-calendar-month-panel-next-year-btn:hover,
+.rc-calendar-year-panel-prev-decade-btn:hover,
+.rc-calendar-year-panel-next-decade-btn:hover,
+.rc-calendar-decade-panel-prev-century-btn:hover,
+.rc-calendar-decade-panel-next-century-btn:hover {
+  background-color: var(--bs-icon-btn-hover-bg-color);
+}
+
 .rc-calendar .rc-calendar-date-input input,
 .rc-calendar .rc-calendar-time-input input {
   border: 1px solid #3e84f7;
@@ -23,46 +42,28 @@
 .rc-calendar-year-panel,
 .rc-calendar-decade-panel {
   background-color: var(--bs-popover-bg);
+  border: 1px solid var(--bs-calendar-border-color);
 }
 
-[data-bs-theme="dark"] .rc-calendar-header-nav-wrap>a,
-[data-bs-theme="dark"] .rc-calendar-column-header-inner,
-[data-bs-theme="dark"] .rc-calendar-month-panel-prev-year-btn,
-[data-bs-theme="dark"] .rc-calendar-month-panel-next-year-btn,
-[data-bs-theme="dark"] .rc-calendar-year-panel-prev-decade-btn,
-[data-bs-theme="dark"] .rc-calendar-year-panel-next-decade-btn{
-  color: rgba(255, 255, 255, .5);
+.rc-calendar-last-month-cell .rc-calendar-date,
+.rc-calendar-next-month-btn-day .rc-calendar-date,
+.rc-calendar-decade-panel-last-century-cell .rc-calendar-decade-panel-decade,
+.rc-calendar-decade-panel-next-century-cell .rc-calendar-decade-panel-decade,
+.rc-calendar-disabled-cell .rc-calendar-date {
+  color: var(--bs-calendar-out-range-color);
 }
 
-[data-bs-theme="dark"] .rc-calendar-header-nav-wrap>a:hover,
-[data-bs-theme="dark"] .rc-calendar-month-panel-prev-year-btn:hover,
-[data-bs-theme="dark"] .rc-calendar-month-panel-next-year-btn:hover,
-[data-bs-theme="dark"] .rc-calendar-year-panel-prev-decade-btn:hover,
-[data-bs-theme="dark"] .rc-calendar-year-panel-next-decade-btn:hover,
-[data-bs-theme="dark"] .rc-calendar-decade-panel-prev-century-btn:hover,
-[data-bs-theme="dark"] .rc-calendar-decade-panel-next-century-btn:hover {
-  background-color: rgba(255, 255, 255, .1);
+.rc-calendar-disabled-cell .rc-calendar-date {
+  background-color: var(--bs-calendar-disabled-bg) !important;
 }
 
-[data-bs-theme="dark"] .rc-calendar-last-month-cell .rc-calendar-date,
-[data-bs-theme="dark"] .rc-calendar-next-month-btn-day .rc-calendar-date,
-[data-bs-theme="dark"] .rc-calendar-decade-panel-last-century-cell .rc-calendar-decade-panel-decade,
-[data-bs-theme="dark"] .rc-calendar-decade-panel-next-century-cell .rc-calendar-decade-panel-decade,
-[data-bs-theme="dark"] .rc-calendar-disabled-cell .rc-calendar-date {
-  color: rgba(255, 255, 255, .2);
-}
-
-[data-bs-theme="dark"] .rc-calendar-disabled-cell .rc-calendar-date {
-  background-color: rgba(255, 255, 255, .08) !important;
-}
-
-[data-bs-theme="dark"] .rc-calendar-cell:not(.rc-calendar-selected-date) .rc-calendar-date:hover,
-[data-bs-theme="dark"] .rc-calendar-right-panel-item-text:not(.rc-calendar-right-panel-item-selected):hover,
-[data-bs-theme="dark"] .rc-calendar-month-panel-cell:not(.rc-calendar-month-panel-selected-cell) .rc-calendar-month-panel-month:hover,
-[data-bs-theme="dark"] .rc-calendar-year-panel-cell:not(.rc-calendar-year-panel-selected-cell) .rc-calendar-year-panel-year:hover,
-[data-bs-theme="dark"] .rc-calendar-decade-panel-cell:not(.rc-calendar-decade-panel-selected-cell) .rc-calendar-decade-panel-decade:hover {
+.rc-calendar-cell:not(.rc-calendar-selected-date) .rc-calendar-date:hover,
+.rc-calendar-right-panel-item-text:not(.rc-calendar-right-panel-item-selected):hover,
+.rc-calendar-month-panel-cell:not(.rc-calendar-month-panel-selected-cell) .rc-calendar-month-panel-month:hover,
+.rc-calendar-year-panel-cell:not(.rc-calendar-year-panel-selected-cell) .rc-calendar-year-panel-year:hover,
+.rc-calendar-decade-panel-cell:not(.rc-calendar-decade-panel-selected-cell) .rc-calendar-decade-panel-decade:hover {
   color: var(--bs-body-color);
-  background-color: rgba(255, 255, 255, .1);
+  background-color: var(--bs-icon-btn-hover-bg-color);
 }
 
 .rc-calendar-clear-btn {
@@ -77,11 +78,6 @@
   background-color: var(--bs-icon-btn-hover-bg-color);
 }
 
-.rc-calendar-disabled-cell .rc-calendar-date {
-  color: #bbb;
-  margin: 2px 0;
-}
-
 .rc-calendar .rc-calendar-inputs .rc-calendar-input-wrap input {
   height: 32px;
 }
@@ -90,41 +86,32 @@
   padding: 0 12px;
 }
 
-[data-bs-theme="dark"] .rc-calendar-disabled-cell .rc-calendar-date {
-  color: rgba(255, 255, 255, .2) !important;
-}
-
 .rc-calendar-disabled-cell-first-of-row.rc-calendar-disabled-cell .rc-calendar-date {
   margin-left: 2px;
 }
 
-/* border color */
-[data-bs-theme="dark"] .rc-calendar {
-  border: 1px solid var(--bs-popover-border-color);
+.rc-calendar-time-input-col,
+.rc-calendar-right-panel {
+  border-left: 1px solid var(--bs-calendar-time-section-border);
 }
 
-[data-bs-theme="dark"] .rc-calendar-time-input-col,
-[data-bs-theme="dark"] .rc-calendar-right-panel {
-  border-left: 1px solid rgba(255, 255, 255, .1);
-}
-
-[data-bs-theme="dark"] .rc-calendar-input,
-[data-bs-theme="dark"] .rc-calendar-date-input,
-[data-bs-theme="dark"] .rc-calendar-time-input {
+.rc-calendar-input,
+.rc-calendar-date-input,
+.rc-calendar-time-input {
   background-color: transparent;
 }
 
-[data-bs-theme="dark"] .rc-calendar-date-input input:not(:focus),
-[data-bs-theme="dark"] .rc-calendar-time-input input:not(:focus) {
-  border: 1px solid rgba(255, 255, 255, .1);
+.rc-calendar-date-input input:not(:focus),
+.rc-calendar-time-input input:not(:focus) {
+  border: 1px solid var(--bs-calendar-border-color);
 }
 
-[data-bs-theme="dark"] .rc-calendar-footer {
-  border-top: 1px solid rgba(255, 255, 255, .1);
+.rc-calendar-footer {
+  border-top: 1px solid var(--bs-calendar-time-section-border);
 }
 
-[data-bs-theme="dark"] .rc-calendar-month-panel-header,
-[data-bs-theme="dark"] .rc-calendar-year-panel-header,
-[data-bs-theme="dark"] .rc-calendar-decade-panel-header {
-  border-bottom: 1px solid rgba(255, 255, 255, .1);
+.rc-calendar-month-panel-header,
+.rc-calendar-year-panel-header,
+.rc-calendar-decade-panel-header {
+  border-bottom: 1px solid var(--bs-calendar-time-section-border);
 }

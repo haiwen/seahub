@@ -44,7 +44,7 @@
   max-width: max-content;
 }
 
-.wiki-page-icon-popover .sf-popover-container {
+.wiki-page-icon-popover {
   transform: translateX(-50%);
 }
 

@@ -377,8 +377,8 @@
   cursor: default;
 }
 
-[data-bs-theme=dark] .sf-metadata-setting-selector__control {
-  background-color: field !important;
+.sf-metadata-setting-selector__control {
+  background-color: var(--bs-body-bg) !important;
 }
 
 .seafile-select-option:not(.seafile-select-option-active):hover .sf-metadata-filter-header-icon .sf2-icon-tick {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Input } from 'reactstrap';
+import { Input, Popover } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import SearchEmptyTip from '../../components/common/search-empty-tip';
 import { Utils } from '../../utils/utils';
@@ -29,28 +29,8 @@ class LogUserSelector extends Component {
       searchResults: [],
       isLoading: false
     };
-    this.dropdownRef = React.createRef();
     this.finalValue = '';
   }
-
-  componentDidMount() {
-    document.addEventListener('click', this.handleClickOutside);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.handleClickOutside);
-  }
-
-  handleClickOutside = (e) => {
-    if (this.props.isOpen && !this.userSelector.contains(e.target)) {
-      this.props.onToggle();
-    }
-  };
-
-  onToggleClick = (e) => {
-    e.stopPropagation();
-    this.props.onToggle();
-  };
 
   onQueryChange = (e) => {
     const value = e.target.value;
@@ -118,78 +98,87 @@ class LogUserSelector extends Component {
 
   render() {
     const { query, isLoading, searchResults } = this.state;
-    const { selectedItems, isOpen } = this.props;
+    const { selectedItems, isOpen, onToggle } = this.props;
     const displayItems = query.trim() ? searchResults : this.props.items;
 
     return (
-      <div className="position-relative d-inline-block ml-2" ref={this.dropdownRef}>
-        <span
-          className="cur-activity-modifiers p-2 rounded"
-          onClick={this.onToggleClick}
-          aria-label={gettext('Toggle user selector')}
-          role="button"
-          title={gettext('Toggle user selector')}
-        >
-          {selectedItems.length > 0 ? (
-            <>
-              <span>{(this.props.componentName + ':')}</span>
-              <span className="d-inline-block ml-1">{selectedItems.map(item => item.name).join(', ')}</span>
-            </>
-          ) : this.props.componentName}
-          <Icon symbol="down" className="ml-2 toggle-icon" />
+      <>
+        <span id="log-user-selector-trigger">
+          <span
+            className="cur-activity-modifiers p-2 rounded"
+            onClick={onToggle}
+            aria-label={gettext('Toggle user selector')}
+            role="button"
+            title={gettext('Toggle user selector')}
+          >
+            {selectedItems.length > 0 ? (
+              <>
+                <span>{(this.props.componentName + ':')}</span>
+                <span className="d-inline-block ml-1">{selectedItems.map(item => item.name).join(', ')}</span>
+              </>
+            ) : this.props.componentName}
+            <Icon symbol="down" className="ml-2 toggle-icon" />
+          </span>
         </span>
-        {isOpen && (
-          <div className="activity-modifier-selector-container sf-popover-container" ref={ref => this.userSelector = ref}>
-            <ul className="activity-selected-modifiers px-3 py-1 list-unstyled">
-              {selectedItems.map((item, index) => {
+        <Popover
+          isOpen={isOpen}
+          toggle={onToggle}
+          target="log-user-selector-trigger"
+          placement="bottom-start"
+          hideArrow={true}
+          fade={false}
+          trigger="legacy"
+          popperClassName="activity-user-selector-popover"
+        >
+          <ul className="activity-selected-modifiers px-3 py-1 list-unstyled">
+            {selectedItems.map((item, index) => {
+              return (
+                <li key={index} className="activity-selected-modifier">
+                  <img src={item.avatar_url} className="avatar w-5 h-5" alt="" />
+                  <span className="activity-user-name ml-2">{item.name}</span>
+                  <span className="unselect-activity-user ml-2" onClick={(e) => { this.toggleSelectItem(e, item); }}>
+                    <Icon symbol="close" />
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+          <div className="px-3 pt-3">
+            <Input
+              type="text"
+              placeholder={gettext('Find users')}
+              value={query}
+              onChange={this.onQueryChange}
+            />
+          </div>
+          <ul className={`activity-user-list list-unstyled o-auto ${!isLoading && displayItems.length > 0 ? 'p-3' : ''}`}>
+            {isLoading ? (
+              <li className="activity-user-loading">{gettext('Loading...')}</li>
+            ) : displayItems.length === 0 ? (
+              <li><SearchEmptyTip text={query ? gettext('User not found') : gettext('Enter characters to start searching')} /></li>
+            ) : (
+              displayItems.map((item, index) => {
+                const isSelected = selectedItems.some(selected =>
+                  (item.email && selected.email === item.email) ||
+                  (item.id && selected.id === item.id)
+                );
                 return (
-                  <li key={index} className="activity-selected-modifier">
-                    <img src={item.avatar_url} className="avatar w-5 h-5" alt="" />
-                    <span className="activity-user-name ml-2">{item.name}</span>
-                    <span className="unselect-activity-user ml-2" onClick={(e) => { this.toggleSelectItem(e, item); }}>
-                      <Icon symbol="close" />
+                  <li key={index}
+                    className="activity-user-item h-6 p-1 rounded d-flex justify-content-between align-items-center"
+                    onClick={(e) => { this.toggleSelectItem(e, item); }}
+                  >
+                    <span className="avatar-name-wrapper">
+                      <img src={item.avatar_url} className="avatar w-5 h-5" alt="" />
+                      <span className="activity-user-name ml-2">{item.name}</span>
                     </span>
+                    {isSelected && <Icon symbol="check" className="text-gray font-weight-bold" />}
                   </li>
                 );
-              })}
-            </ul>
-            <div className="px-3 pt-3">
-              <Input
-                type="text"
-                placeholder={gettext('Find users')}
-                value={query}
-                onChange={this.onQueryChange}
-              />
-            </div>
-            <ul className={`activity-user-list list-unstyled o-auto ${!isLoading && displayItems.length > 0 ? 'p-3' : ''}`}>
-              {isLoading ? (
-                <li className="activity-user-loading">{gettext('Loading...')}</li>
-              ) : displayItems.length === 0 ? (
-                <li><SearchEmptyTip text={query ? gettext('User not found') : gettext('Enter characters to start searching')} /></li>
-              ) : (
-                displayItems.map((item, index) => {
-                  const isSelected = selectedItems.some(selected =>
-                    (item.email && selected.email === item.email) ||
-                    (item.id && selected.id === item.id)
-                  );
-                  return (
-                    <li key={index}
-                      className="activity-user-item h-6 p-1 rounded d-flex justify-content-between align-items-center"
-                      onClick={(e) => { this.toggleSelectItem(e, item); }}
-                    >
-                      <span className="avatar-name-wrapper">
-                        <img src={item.avatar_url} className="avatar w-5 h-5" alt="" />
-                        <span className="activity-user-name ml-2">{item.name}</span>
-                      </span>
-                      {isSelected && <Icon symbol="check" className="text-gray font-weight-bold" />}
-                    </li>
-                  );
-                })
-              )}
-            </ul>
-          </div>
-        )}
-      </div>
+              })
+            )}
+          </ul>
+        </Popover>
+      </>
     );
   }
 }

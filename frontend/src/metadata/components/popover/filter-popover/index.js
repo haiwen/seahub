@@ -139,7 +139,7 @@ class FilterPopover extends Component {
         boundariesElement={document.body}
       >
         {({ update: scheduleUpdate }) => (
-          <div ref={ref => this.dtablePopoverRef = ref} onClick={this.onPopoverInsideClick} className={classNames('sf-popover-container', filtersClassName)}>
+          <div ref={ref => this.dtablePopoverRef = ref} onClick={this.onPopoverInsideClick} className={filtersClassName}>
             <BasicFilters readOnly={readOnly} filters={basicFilters} onChange={this.onBasicFilterChange} viewType={viewType} />
             <FormGroup noMargin className="filter-group-advanced filter-group">
               <Label className="filter-group-title">{gettext('Advanced')}</Label>

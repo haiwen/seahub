@@ -1889,24 +1889,13 @@ a.sf-popover-item {
 }
 
 .account-popup {
-  right: 0;
-  top: 52px;
   font-size: 13px;
-}
-
-.account-popup .outer-caret {
-  top: -10px;
-  right: 16px;
-}
-
-.account-popup .sf-popover-con {
-  padding: 0;
 }
 
 .account-popup .item {
   display: block;
   padding: 8px 18px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--bs-border-secondary-color);
 }
 
 .account-popup a.item {
@@ -1915,7 +1904,7 @@ a.sf-popover-item {
 }
 
 .account-popup a.item:hover {
-  background: #fafafa;
+  background: var(--bs-hover-bg);
   text-decoration: none;
 }
 
@@ -2001,16 +1990,12 @@ a.sf-popover-item {
 }
 
 .login-panel {
-  background: #f5f6f7;
+  background: var(--bs-bg-surface-dimmed);
   border-radius: 3px;
   padding: 20px 60px;
   width: 390px;
   margin: 0 auto;
   box-shadow: 0 0 8px #a7a6a9;
-}
-
-[data-bs-theme=dark] .login-panel {
-  background-color: rgba(0, 0, 0, 0.75);
 }
 
 #log-in-panel {

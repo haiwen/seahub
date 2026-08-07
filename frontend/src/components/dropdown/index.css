@@ -35,8 +35,6 @@
   max-width: 240px;
   max-height: 600px;
   overflow: visible;
-  padding: 8px;
-  border-radius: 8px;
 }
 
 .dropdown-menu .dropdown-header {
