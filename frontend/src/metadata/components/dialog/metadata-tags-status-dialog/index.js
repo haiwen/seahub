@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import classnames from 'classnames';
@@ -104,6 +104,12 @@ const MetadataTagsStatusDialog = ({
       onSubmit(value, nextLang);
     }
   }, [onSubmit, oldValue, value, oldLang, submitting, enableMetadata, isMigrating]);
+
+  useEffect(() => {
+    if (value && !enableMetadata) {
+      setValue(false);
+    }
+  }, [value, enableMetadata]);
 
   return (
     <div className='library-setting-item'>

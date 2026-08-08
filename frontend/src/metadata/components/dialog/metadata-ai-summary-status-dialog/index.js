@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Switch from '../../../../components/switch';
 import toaster from '../../../../components/toast';
@@ -60,6 +60,12 @@ const MetadataAISummaryStatusDialog = ({ value: oldValue, repoID, submit, enable
       onSubmit(nextValue);
     }
   }, [value, onSubmit, oldValue, submitting, enableMetadata]);
+
+  useEffect(() => {
+    if (value && !enableMetadata) {
+      setValue(false);
+    }
+  }, [value, enableMetadata]);
 
   return (
     <div className='library-setting-item'>
