@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext, username, isPro, siteRoot } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import TreeSection from '../../tree-section';
-import LibSettingsDialog from '../../dialog/lib-settings';
 import { eventBus } from '../../common/event-bus';
 import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
-import { TAB } from '../../../constants/repo-setting-tabs';
 import LibraryMoreOperations from './library-more-operations';
 import WatchUnwatchFileChanges from './watch-unwatch-file-changes';
 import Item from './item';
@@ -15,33 +13,11 @@ import './index.css';
 
 const DirOthers = ({ userPerm, repoID, currentRepoInfo, currentMode, updateRepoInfo }) => {
   const { owner_email, is_admin, repo_name: repoName, permission } = currentRepoInfo;
-
   const showSettings = is_admin; // repo owner, department admin, shared with 'Admin' permission
-  let [isSettingsDialogOpen, setSettingsDialogOpen] = useState(false);
-  let [activeTab, setActiveTab] = useState(TAB.HISTORY_SETTING);
-  let [showMigrateTip, setShowMigrateTip] = useState(false);
 
-  const toggleSettingsDialog = () => {
-    setSettingsDialogOpen(!isSettingsDialogOpen);
+  const handleSettingsClick = () => {
+    eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_TO_SETTINGS_VIEW);
   };
-
-  const handleMigrateSuccess = useCallback(() => {
-    setShowMigrateTip(false);
-    const serviceUrl = window.app.config.serviceURL;
-    window.location.href = serviceUrl + '/library/' + repoID + '/' + repoName + '/?tag=__all_tags';
-  }, [repoID, repoName]);
-
-  useEffect(() => {
-    const unsubscribeUnselectFiles = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_LIBRARY_SETTINGS_TAGS, () => {
-      setSettingsDialogOpen(true);
-      setActiveTab(TAB.TAGS_SETTING);
-      setShowMigrateTip(true);
-    });
-    return () => {
-      unsubscribeUnselectFiles();
-    };
-  });
-
 
   const handleTrashClick = () => {
     eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_TO_TRASH_VIEW);
@@ -71,7 +47,8 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, currentMode, updateRepoI
         <Item
           text={gettext('Settings')}
           iconSymbol="set-up"
-          op={toggleSettingsDialog}
+          op={handleSettingsClick}
+          isActive={currentMode === 'settings'}
         />
       )}
       {userPerm == 'rw' && (
@@ -94,16 +71,6 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, currentMode, updateRepoI
         <LibraryMoreOperations
           repo={currentRepoInfo}
           updateRepoInfo={updateRepoInfo}
-        />
-      )}
-      {isSettingsDialogOpen && (
-        <LibSettingsDialog
-          repoID={repoID}
-          currentRepoInfo={currentRepoInfo}
-          toggleDialog={toggleSettingsDialog}
-          tab={activeTab}
-          showMigrateTip={showMigrateTip}
-          onMigrateSuccess={handleMigrateSuccess}
         />
       )}
     </TreeSection>

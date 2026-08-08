@@ -1,13 +1,13 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import TreeSection from '../../tree-section';
 import ExtensionPrompts from '../extension-prompts';
-import LibSettingsDialog from '../../dialog/lib-settings';
 import ViewsMoreOperations from './views-more-operations';
 import { MetadataTreeView, useMetadata } from '../../../metadata';
 import { useMetadataStatus } from '../../../hooks';
 import { gettext } from '../../../utils/constants';
-import { TAB } from '../../../constants/repo-setting-tabs';
+import { eventBus } from '../../common/event-bus';
+import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
 
 import './index.css';
 
@@ -21,13 +21,8 @@ const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
   const { isLoading } = useMetadata();
   const { enableMetadata, showView } = useMetadataStatus();
 
-  let [isSettingsDialogOpen, setSettingsDialogOpen] = useState(false);
-  const toggleSettingsDialog = () => {
-    setSettingsDialogOpen(!isSettingsDialogOpen);
-  };
-
   const onExtendedProperties = useCallback(() => {
-    setSettingsDialogOpen(true);
+    eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_TO_SETTINGS_VIEW);
   }, []);
 
   if (!enableMetadataManagement || (!enableMetadata && !currentRepoInfo.is_admin)) {
@@ -67,14 +62,6 @@ const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
           <MetadataTreeView userPerm={userPerm} currentPath={currentPath} />
         ) : null}
       </TreeSection>
-      {isSettingsDialogOpen && (
-        <LibSettingsDialog
-          repoID={repoID}
-          currentRepoInfo={currentRepoInfo}
-          tab={TAB.EXTENDED_PROPERTIES_SETTING}
-          toggleDialog={toggleSettingsDialog}
-        />
-      )}
     </>
   );
 };

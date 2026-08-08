@@ -8,7 +8,7 @@ import HistoryViewToolbar from '../dir-view-mode/dir-history-view/history-view-t
 import ChatToolbar from '../toolbar/chat-toolbar';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { ALL_TAGS_ID } from '../../tag/constants';
-import { HISTORY_MODE, LIST_MODE, TRASH_MODE, TABLE_MODE, CHAT_MODE } from '../dir-view-mode/constants';
+import { HISTORY_MODE, LIST_MODE, SETTINGS_MODE, TRASH_MODE, TABLE_MODE, CHAT_MODE } from '../dir-view-mode/constants';
 import TagsTableSearcher from '../../tag/views/all-tags/tags-table/tags-table-searcher';
 import AllTagsSortSetter from '../../tag/views/all-tags/tags-table/all-tags-sort-setter';
 import TagFilesViewToolbar from '../../tag/components/tag-files-view-toolbar';
@@ -115,6 +115,14 @@ class DirTool extends React.Component {
       return (
         <div className="dir-tool">
           <ChatToolbar />
+        </div>
+      );
+    }
+
+    const isSettingsView = currentMode === SETTINGS_MODE;
+    if (isSettingsView) {
+      return (
+        <div className="dir-tool">
         </div>
       );
     }
