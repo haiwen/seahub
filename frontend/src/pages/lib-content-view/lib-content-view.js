@@ -348,7 +348,7 @@ class LibContentView extends React.Component {
       if (currentMode === CHAT_MODE && !canUseAIChat) {
         currentMode = Cookies.get('seafile_view_mode') || LIST_MODE;
       }
-      const isDirentDetailShow = !isHistory && !isTrash && currentMode !== CHAT_MODE && storedDirentDetailShowState === 'true';
+      const isDirentDetailShow = !isSettings && !isHistory && !isTrash && currentMode !== CHAT_MODE && storedDirentDetailShowState === 'true';
       const isGroupOwnedRepo = repoInfo.owner_email.includes('@seafile_group');
       document.title = repoInfo.repo_name;
 
