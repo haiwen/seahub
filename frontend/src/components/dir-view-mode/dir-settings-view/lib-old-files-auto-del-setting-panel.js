@@ -34,27 +34,37 @@ class LibOldFilesAutoDelSetting extends React.Component {
     });
   }
 
-  submit = () => {
-    let daysNeedTobeSet;
-    if (this.state.isAutoDel) {
-      daysNeedTobeSet = this.state.autoDelDays;
-      let reg = /^-?\d+$/;
-      let isvalid_days = reg.test(daysNeedTobeSet);
-      if (!isvalid_days || daysNeedTobeSet <= 0) {
+  submit = (nextType) => {
+    let days;
+    if (nextType === 'noAutoDel') {
+      days = 0;
+    } else if (nextType === 'autoDel' || this.state.isAutoDel) {
+      days = this.state.autoDelDays;
+      const reg = /^-?\d+$/;
+      const isValidDays = reg.test(days);
+      if (!isValidDays || Number(days) <= 0) {
         this.setState({
           errorInfo: gettext('Please enter a positive integer'),
         });
         return;
       }
-    } else {
-      daysNeedTobeSet = 0; // if no auto del, give 0 to server
     }
 
-
-    let repoID = this.props.repoID;
-
-    seafileAPI.setRepoOldFilesAutoDelDays(repoID, daysNeedTobeSet).then(res => {
+    const { repoID } = this.props;
+    seafileAPI.setRepoOldFilesAutoDelDays(repoID, parseInt(days)).then(res => {
       toaster.success(gettext('Successfully set it.'));
+      if (nextType === 'noAutoDel') {
+        this.setState({
+          isAutoDel: false,
+          errorInfo: '',
+        });
+      } else {
+        this.setState({
+          autoDelDays: parseInt(days),
+          isAutoDel: true,
+          errorInfo: '',
+        });
+      }
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -62,30 +72,22 @@ class LibOldFilesAutoDelSetting extends React.Component {
   };
 
   handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    const { isAutoDel } = this.state;
+    if (isAutoDel && e.key === 'Enter') {
       this.submit();
       e.preventDefault();
     }
   };
 
-  onChange = (e) => {
-    let days = e.target.value;
+  onDaysInputChange = (e) => {
+    const days = e.target.value;
     this.setState({
       autoDelDays: days,
     });
   };
 
-  updateRadioCheck = (type) => {
-    if (type === 'noAutoDel') {
-      this.setState({
-        isAutoDel: false,
-      });
-    } else if (type === 'autoDel') {
-      this.setState({
-        isAutoDel: true,
-      });
-    }
-    this.submit();
+  onAutoDelSelectionChange = (nextType) => {
+    this.submit(nextType);
   };
 
   render() {
@@ -94,19 +96,19 @@ class LibOldFilesAutoDelSetting extends React.Component {
         <h3 className='library-setting-item-heading'>{gettext('Auto deletion')}</h3>
         <Form>
           <FormGroup check>
-            <Input type="radio" name="radio1" checked={!this.state.isAutoDel} onChange={() => {this.updateRadioCheck('noAutoDel');}}/>{' '}
+            <Input type="radio" name="auto-delete" checked={!this.state.isAutoDel} onChange={() => {this.onAutoDelSelectionChange('noAutoDel');}}/>{' '}
             <Label>{gettext('Do not automatically delete files')}</Label>
           </FormGroup>
           <FormGroup check>
-            <Input type="radio" name="radio1" checked={this.state.isAutoDel} onChange={() => {this.updateRadioCheck('autoDel');}}/>{' '}
+            <Input type="radio" name="auto-delete" checked={this.state.isAutoDel} onChange={() => {this.onAutoDelSelectionChange('autoDel');}}/>{' '}
             <Label className='d-flex'>
               {gettext('Automatically delete files that are not modified within certain days:')}
               <Input
                 type="text"
                 className="expire-input"
                 value={this.state.autoDelDays}
-                disabled={!this.state.isAutoDel}
-                onChange={this.onChange}
+                disabled={!this.state.isAutoDel && this.state.autoDelDays > 0}
+                onChange={this.onDaysInputChange}
                 onKeyDown={this.handleKeyDown}
               />
               <span>{gettext('days')}</span>
