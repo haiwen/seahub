@@ -73,6 +73,12 @@
   margin-bottom: 0;
 }
 
+.add-wiki-dialog .wiki-icons-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .add-wiki-dialog .wiki-icons-toggle {
   height: 26px;
   display: inline-flex;
@@ -85,6 +91,17 @@
   color: var(--bs-body-color);
   font-size: 12px;
   line-height: 12px;
+}
+
+.add-wiki-dialog .wiki-icons-auto-match {
+  padding-right: 8px;
+}
+
+.add-wiki-dialog .wiki-icons-divider {
+  width: 1px;
+  height: 12px;
+  flex: 0 0 1px;
+  background-color: var(--bs-border-secondary-color);
 }
 
 .add-wiki-dialog .wiki-icons-toggle:hover {
@@ -134,10 +151,160 @@
   color: inherit;
 }
 
+.add-wiki-dialog .wiki-ai-suggested-icons {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6.5px;
+}
+
+.add-wiki-dialog .wiki-ai-suggested-icon {
+  position: relative;
+  height: 96px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 8px 12px 8px;
+  border: 1px solid var(--bs-border-secondary-color);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--bs-body-secondary-color);
+}
+
+.add-wiki-dialog .wiki-ai-suggested-icon:hover {
+  background: var(--bs-icon-btn-hover-bg-color);
+}
+
+.add-wiki-dialog .wiki-ai-suggested-icon.selected {
+  border-color: var(--bs-primary);
+}
+
+.add-wiki-dialog .wiki-ai-suggested-icon-box {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: var(--bs-icon-btn-hover-bg-color);
+  color: var(--bs-icon-color);
+}
+
+.add-wiki-dialog .wiki-ai-suggested-icon-box .haiwen-iconfont {
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+  line-height: 24px;
+  color: inherit;
+}
+
+.add-wiki-dialog .wiki-ai-suggested-icon-name {
+  max-width: 100%;
+  margin-top: 4px;
+  overflow: hidden;
+  color: var(--bs-body-secondary-color);
+  font-size: 12px;
+  line-height: 20px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.add-wiki-dialog .wiki-ai-suggested-icon-check {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 12px;
+  height: 12px;
+  color: var(--bs-primary);
+}
+
+.add-wiki-dialog .wiki-ai-suggested-icons-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 16px;
+  color: var(--bs-body-secondary-color);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.add-wiki-dialog .wiki-ai-suggested-icons-footer .wiki-ai-custom-icon {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.add-wiki-dialog .wiki-ai-icons-placeholder {
+  height: 134px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--bs-border-secondary-color);
+  border-radius: 8px;
+  color: var(--bs-body-secondary-color);
+  text-align: center;
+}
+
+.add-wiki-dialog .wiki-ai-icons-placeholder-icon {
+  display: block;
+  width: 16px;
+  height: 16px;
+  margin-bottom: 8px;
+  color: inherit;
+}
+
+.add-wiki-dialog .wiki-ai-icons-placeholder-text {
+  color: var(--bs-body-secondary-color);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.add-wiki-dialog .wiki-ai-icons-thinking {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--bs-body-secondary-color);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.add-wiki-dialog .wiki-ai-thinking-spinner {
+  width: 16px;
+  height: 16px;
+  margin-bottom: 8px;
+  border: 1px solid var(--bs-border-secondary-color);
+  border-top-color: var(--bs-icon-secondary-color);
+  border-radius: 50%;
+  animation: wiki-ai-thinking-spin 0.9s linear infinite;
+}
+
+@keyframes wiki-ai-thinking-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.add-wiki-dialog .wiki-ai-custom-icon {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--bs-orange);
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+.add-wiki-dialog .wiki-ai-custom-icon:hover {
+  text-decoration: underline;
+}
+
 .add-wiki-dialog .wiki-color-option:focus-visible,
 .add-wiki-dialog .wiki-icon-option:focus-visible,
-.add-wiki-dialog .wiki-icons-toggle:focus-visible {
-  outline: 2px solid #2B8FF7;
+.add-wiki-dialog .wiki-ai-suggested-icon:focus-visible,
+.add-wiki-dialog .wiki-icons-toggle:focus-visible,
+.add-wiki-dialog .wiki-ai-custom-icon:focus-visible {
+  outline: 2px solid var(--bs-primary);
   outline-offset: 2px;
 }
 

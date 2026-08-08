@@ -125,7 +125,7 @@
 
 .wiki-icon-selector-option:focus-visible,
 .wiki-icon-selector-back:focus-visible {
-  outline: 2px solid #2b8ff7;
+  outline: 2px solid var(--bs-primary);
   outline-offset: 2px;
 }
 
