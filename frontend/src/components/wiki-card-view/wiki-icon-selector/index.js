@@ -5,9 +5,10 @@ import { Alert, Button, ModalBody, ModalFooter } from 'reactstrap';
 import SeahubModalHeader from '../../common/seahub-modal-header';
 import Icon from '../../icon';
 import SearchInput from '../../search-input';
+import Tooltip from '../../tooltip';
 import { gettext } from '../../../utils/constants';
 import { WIKI_ICON_CATEGORIES } from '../constants';
-import { filterWikiIcons } from '../constants-utils';
+import { filterWikiIconOptions } from '../constants-utils';
 import { WikiIconGlyph } from '../wiki-icon';
 
 import './index.css';
@@ -56,24 +57,36 @@ class WikiIconSelector extends React.Component {
     this.setState({ searchValue: '' });
   };
 
-  renderIcon = (icon) => {
+  handleSubmitKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  };
+
+  renderIcon = ({ icon, label }) => {
     const { selectedColor, selectedIcon } = this.props;
     const isSelected = icon === selectedIcon;
+    const tooltipTarget = `wiki-icon-selector-option-${icon}`;
     return (
-      <button
-        key={icon}
-        type="button"
-        className={classNames('wiki-icon-selector-option', { selected: isSelected })}
-        style={isSelected ? {
-          backgroundColor: `${selectedColor}1A`,
-          color: selectedColor,
-        } : null}
-        onClick={() => this.props.onIconSelect(icon)}
-        aria-label={`${gettext('Select icon')} ${icon}`}
-        aria-pressed={isSelected}
-      >
-        <WikiIconGlyph icon={icon} />
-      </button>
+      <React.Fragment key={icon}>
+        <button
+          id={tooltipTarget}
+          type="button"
+          className={classNames('wiki-icon-selector-option', { selected: isSelected })}
+          style={isSelected ? {
+            backgroundColor: `${selectedColor}1A`,
+            color: selectedColor,
+          } : null}
+          onClick={() => this.props.onIconSelect(icon)}
+          aria-label={`${gettext('Select icon')} ${label}`}
+          aria-pressed={isSelected}
+        >
+          <WikiIconGlyph icon={icon} />
+        </button>
+        <Tooltip target={tooltipTarget} placement="top" delay={{ show: 500, hide: 0 }}>
+          {label}
+        </Tooltip>
+      </React.Fragment>
     );
   };
 
@@ -91,14 +104,14 @@ class WikiIconSelector extends React.Component {
   };
 
   renderSearchResults = () => {
-    const icons = filterWikiIcons(this.state.searchValue);
-    if (!icons.length) {
+    const iconOptions = filterWikiIconOptions(this.state.searchValue);
+    if (!iconOptions.length) {
       return <div className="wiki-icon-selector-empty">{gettext('No icons found')}</div>;
     }
 
     return (
       <div className="wiki-icon-selector-grid wiki-icon-selector-search-results">
-        {icons.map(this.renderIcon)}
+        {iconOptions.map(this.renderIcon)}
       </div>
     );
   };
@@ -152,7 +165,7 @@ class WikiIconSelector extends React.Component {
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={onPrevious}>{gettext('Previous')}</Button>
-          <Button color="primary" onClick={onSubmit} disabled={isSubmitDisabled || isSubmitting}>
+          <Button color="primary" onClick={onSubmit} onKeyDown={this.handleSubmitKeyDown} disabled={isSubmitDisabled || isSubmitting}>
             {gettext('Submit')}
           </Button>
         </ModalFooter>

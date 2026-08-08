@@ -51,6 +51,11 @@ class WikiAPI {
     return this.req.get(url, { params: params });
   }
 
+  generateWikiIcons(name) {
+    const url = this.server + '/api/v2.1/ai/generate-icon/';
+    return this.req.post(url, { name });
+  }
+
   listWikiDir(wikiId, dirPath, withParents) {
     const path = encodeURIComponent(dirPath);
     let url = this.server + '/api/v2.1/wikis/' + wikiId + '/dir/?p=' + path;
