@@ -16,6 +16,7 @@ import {
   AI_SUGGESTED_ICON_PAGE_SIZE,
   getDisplayedWikiIconOptions,
   getSuggestedIconPage,
+  getWikiAiCustomMessageParts,
   isHomepageWikiIcon,
   normalizeSuggestedIcons,
   resolveWikiIcon,
@@ -301,6 +302,19 @@ class EditWikiPopover extends React.Component {
       truncatedSuggestedIconNames: {},
       errorMessage: '',
     }));
+  };
+
+  renderAiCustomMessage = (message) => {
+    const [before, after] = getWikiAiCustomMessageParts(message);
+    return (
+      <span>
+        {before}
+        <button type="button" className="wiki-ai-custom-icon" onClick={this.openCustomIconPage}>
+          {gettext('Custom')}
+        </button>
+        {after}
+      </span>
+    );
   };
 
   openAiIconPage = () => {
@@ -677,33 +691,18 @@ class EditWikiPopover extends React.Component {
                                   })}
                                 </div>
                                 <div className="wiki-ai-suggested-icons-footer">
-                                  <span>{gettext('Icons auto-matched by name')}{'\u00a0\u00a0'}</span>
-                                  <button type="button" className="wiki-ai-custom-icon" onClick={this.openCustomIconPage}>
-                                    {gettext('Custom')}
-                                  </button>
+                                  {this.renderAiCustomMessage(gettext('Icons auto-matched by name {custom}'))}
                                 </div>
                               </> : showNoSuggestedIcons ?
                                 <div className="wiki-ai-icons-placeholder">
                                   <div className="wiki-ai-icons-placeholder-text">
-                                    <div>{gettext('No suggested icons found. Add')}</div>
-                                    <div>
-                                      {gettext('icons with')}{'\u00a0'}
-                                      <button type="button" className="wiki-ai-custom-icon" onClick={this.openCustomIconPage}>
-                                        {gettext('Custom')}
-                                      </button>
-                                    </div>
+                                    {this.renderAiCustomMessage(gettext('No suggested icons found. Add icons with {custom}'))}
                                   </div>
                                 </div> :
                                 <div className="wiki-ai-icons-placeholder">
                                   <Icon symbol="ask-ai" className="wiki-ai-icons-placeholder-icon" />
                                   <div className="wiki-ai-icons-placeholder-text">
-                                    <div>{gettext('Input name, AI matches icons')}</div>
-                                    <div>
-                                      {gettext('automatically')}{'\u00a0\u00a0'}
-                                      <button type="button" className="wiki-ai-custom-icon" onClick={this.openCustomIconPage}>
-                                        {gettext('Custom')}
-                                      </button>
-                                    </div>
+                                    {this.renderAiCustomMessage(gettext('Input name, AI matches icons automatically {custom}'))}
                                   </div>
                                 </div>
                           }

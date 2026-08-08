@@ -297,6 +297,8 @@
 }
 
 .edit-wiki-popover .wiki-ai-custom-icon {
+  display: inline-block;
+  margin-inline: 8px;
   padding: 0;
   border: 0;
   background: transparent;

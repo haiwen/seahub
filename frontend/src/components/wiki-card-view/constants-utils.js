@@ -56,6 +56,11 @@ const normalizeSuggestedIcons = (icons) => {
   }, []);
 };
 
+const getWikiAiCustomMessageParts = (message) => {
+  const [before = '', after = ''] = message.split('{custom}');
+  return [before.replace(/\s+$/, ''), after.replace(/^\s+/, '')];
+};
+
 const getSuggestedIconPage = (icons, pageIndex) => {
   const startIndex = pageIndex * AI_SUGGESTED_ICON_PAGE_SIZE;
   return icons.slice(startIndex, startIndex + AI_SUGGESTED_ICON_PAGE_SIZE);
@@ -78,6 +83,7 @@ export {
   filterWikiIconOptions,
   getDisplayedWikiIconOptions,
   getSuggestedIconPage,
+  getWikiAiCustomMessageParts,
   isWikiIcon,
   isHomepageWikiIcon,
   normalizeSuggestedIcons,
