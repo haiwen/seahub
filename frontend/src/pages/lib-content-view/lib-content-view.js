@@ -3172,7 +3172,7 @@ class LibContentView extends React.Component {
                           isTreePanelShown={this.state.isTreePanelShown}
                           isDirentDetailShow={this.state.isDirentDetailShow}
                           currentMode={this.state.currentMode}
-                          isMigrationTipShown={this.state.isMigrationTipShown}
+                          isMigrationTipShown={this.state.isMigrationTipShown || isRepoInfoBarShow}
                           path={this.state.path}
                           repoID={this.props.repoID}
                           currentRepoInfo={this.state.currentRepoInfo}
