@@ -3104,6 +3104,7 @@ class LibContentView extends React.Component {
                           )
                         ) : (
                           <CurDirPath
+                            currentMode={this.state.currentMode}
                             currentRepoInfo={this.state.currentRepoInfo}
                             repoID={this.props.repoID}
                             repoName={this.state.currentRepoInfo.repo_name}
