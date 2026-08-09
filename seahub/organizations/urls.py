@@ -12,6 +12,7 @@ urlpatterns = [
     path('statistics-admin/total-storage/', react_fake_view, name='org_statistics_admin_total_storage'),
     path('statistics-admin/active-users/', react_fake_view, name='org_statistics_admin_active_users'),
     path('statistics-admin/traffic/', react_fake_view, name='org_statistics_admin_traffic'),
+    path('statistics-admin/ai/', react_fake_view, name='org_statistics_admin_ai'),
 
     path('deviceadmin/desktop-devices/', react_fake_view, name='org_device_admin'),
     path('deviceadmin/mobile-devices/', react_fake_view, name='org_device_admin_mobile_devices'),

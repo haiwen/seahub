@@ -2,3 +2,7 @@
 .seahub-select-value-container .seafile-multicolor-icon-check {
   display: none;
 }
+
+.seahub-select-menu-list .search-empty-tip {
+  margin: -8px 0;
+}

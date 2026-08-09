@@ -100,7 +100,7 @@ class HeaderToolbar extends React.Component {
           headerComponent: {
             closeIcon: (
               <>
-                <Icon symbol="md-close" className="detail-control-icon" />
+                <Icon symbol="close" className="detail-control-icon" />
                 <Tooltip target="details-close-icon">{gettext('Close')}</Tooltip>
               </>
             )

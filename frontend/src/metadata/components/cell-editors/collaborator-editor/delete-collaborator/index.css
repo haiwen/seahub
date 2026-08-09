@@ -49,6 +49,6 @@
   margin-left: 4px;
 }
 
-:is(.sf-metadata-collaborator-editor, .sf-metadata-selector-collaborator) .sf-metadata-delete-collaborator .collaborator .collaborator-remove .seafile-multicolor-icon-md-close {
-  color: #999;
+:is(.sf-metadata-collaborator-editor, .sf-metadata-selector-collaborator) .sf-metadata-delete-collaborator .collaborator .collaborator-remove .seafile-multicolor-icon-close {
+  color: #666;
 }

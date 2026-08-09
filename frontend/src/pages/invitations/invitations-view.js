@@ -97,7 +97,7 @@ class Item extends React.Component {
             <td>{item.accepter}</td>
             <td>{dayjs(item.invite_time).format('YYYY-MM-DD')}</td>
             <td>{dayjs(item.expire_time).format('YYYY-MM-DD')}</td>
-            <td>{item.accept_time && <span className="invite-accept-icon"><Icon symbol="check-thin" /></span>}</td>
+            <td>{item.accept_time && <span className="invite-accept-icon"><Icon symbol="check" /></span>}</td>
             <td>
               {isOpIconShown && (
                 item.accept_time ?

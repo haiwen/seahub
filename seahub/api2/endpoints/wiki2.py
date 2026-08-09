@@ -71,7 +71,7 @@ WIKI_PAGE_EXPORT_TYPES = ['sdoc', 'markdown']
 logger = logging.getLogger(__name__)
 
 
-def _merge_wiki_in_groups(group_wikis, publish_wikis_dict, server_render_wikis_dict, link_prefix):
+def _merge_wiki_in_groups(group_wikis, publish_wikis_dict, server_render_wikis_dict, link_prefix, wiki_settings_dict):
 
     group_ids = [gw.group_id for gw in group_wikis]
     group_id_wikis_map = {key: [] for key in group_ids}
@@ -88,6 +88,9 @@ def _merge_wiki_in_groups(group_wikis, publish_wikis_dict, server_render_wikis_d
         enable_server_render = True if is_published and server_render_wikis_dict.get(gw.id) else False
         public_url_suffix = publish_wikis_dict.get(gw.id) if is_published else ""
         link = link_prefix + public_url_suffix if public_url_suffix else ""
+        wiki_settings = wiki_settings_dict.get(gw.id)
+        color = wiki_settings.color if wiki_settings else ''
+        icon = wiki_settings.icon if wiki_settings else ''
         repo_info = {
                 "type": "group",
                 "permission": gw.permission,
@@ -95,7 +98,9 @@ def _merge_wiki_in_groups(group_wikis, publish_wikis_dict, server_render_wikis_d
                 "public_url_suffix": public_url_suffix,
                 "public_url": link,
                 "is_published": is_published,
-                "enable_server_render": enable_server_render
+                "enable_server_render": enable_server_render,
+                "color": color, 
+                "icon": icon
         }
         wiki_info.update(repo_info)
         group_id = gw.group_id
@@ -133,11 +138,16 @@ class Wikis2View(APIView):
 
         publish_wikis_dict = {}
         server_render_wikis_dict = {}
+        wiki_settings_dict = {}
 
         published_wikis = Wiki2Publish.objects.filter(repo_id__in=wiki_ids)
         for w in published_wikis:
             publish_wikis_dict[w.repo_id] = w.publish_url
             server_render_wikis_dict[w.repo_id] = w.enable_server_render
+
+        wiki_settings = Wiki2Settings.objects.filter(wiki_id__in=wiki_ids)
+        for ws in wiki_settings:
+            wiki_settings_dict[ws.wiki_id] = ws
 
         wiki_list = []
         for r in owned_wikis:
@@ -152,6 +162,9 @@ class Wikis2View(APIView):
             enable_server_render = True if is_published and server_render_wikis_dict.get(r.id) else False
 
             public_url_suffix = publish_wikis_dict.get(r.id) if is_published else ""
+            wiki_setting = wiki_settings_dict.get(r.id)
+            color = wiki_setting.color if wiki_setting else ''
+            icon = wiki_setting.icon if wiki_setting else ''
             link = link_prefix + public_url_suffix if public_url_suffix else ""
             repo_info = {
                     "type": "mine",
@@ -160,7 +173,10 @@ class Wikis2View(APIView):
                     "public_url_suffix": public_url_suffix,
                     "public_url": link,
                     "is_published": is_published,
-                    "enable_server_render": enable_server_render
+                    "enable_server_render": enable_server_render,
+                    'color': color,
+                    'icon': icon
+                    
                 }
 
             wiki_info.update(repo_info)
@@ -178,6 +194,9 @@ class Wikis2View(APIView):
             wiki_info = wiki.to_dict()
             is_published = True if publish_wikis_dict.get(r.id) else False
             public_url_suffix = publish_wikis_dict.get(r.id) if is_published else ""
+            wiki_setting = wiki_settings_dict.get(r.id)
+            color = wiki_setting.color if wiki_setting else ''
+            icon = wiki_setting.icon if wiki_setting else ''
             link = link_prefix + public_url_suffix if public_url_suffix else ""
             repo_info = {
                     "type": "shared",
@@ -185,7 +204,9 @@ class Wikis2View(APIView):
                     "owner_nickname": owner_nickname,
                     "public_url_suffix": public_url_suffix,
                     "public_url": link,
-                    "is_published": is_published
+                    "is_published": is_published,
+                    "color": color,
+                    "icon": icon,
                 }
             wiki_info.update(repo_info)
             wiki_list.append(wiki_info)
@@ -207,7 +228,7 @@ class Wikis2View(APIView):
 
         group_wiki_list = []
         group_id_wikis_map = _merge_wiki_in_groups(
-            group_wikis, publish_wikis_dict, server_render_wikis_dict, link_prefix)
+            group_wikis, publish_wikis_dict, server_render_wikis_dict, link_prefix, wiki_settings_dict)
         for group_obj in user_wiki_groups:
             group_wiki = {
                 'group_name': group_obj.group_name,
@@ -235,6 +256,9 @@ class Wikis2View(APIView):
         wiki_name = request.data.get("name", None)
         if not wiki_name:
             return api_error(status.HTTP_400_BAD_REQUEST, 'wiki name is required.')
+
+        wiki_color = request.data.get("color", "")
+        wiki_icon = request.data.get("icon", "")
 
         if not is_valid_dirent_name(wiki_name):
             msg = _('Name can only contain letters, numbers, blank, hyphen or underscore.')
@@ -306,9 +330,18 @@ class Wikis2View(APIView):
             msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
 
+        if wiki_color:
+            Wiki2Settings.objects.update_or_create(wiki_id=repo_id, defaults={"color": wiki_color})
+        if wiki_icon:
+            Wiki2Settings.objects.update_or_create(wiki_id=repo_id, defaults={"icon": wiki_icon})
+
         repo = seafile_api.get_repo(repo_id)
         wiki = Wiki(repo, wiki_owner)
         wiki_info = wiki.to_dict()
+        wiki_settings = Wiki2Settings.objects.get(wiki_id=repo_id)
+        color = wiki_settings.color if wiki_settings else ''
+        icon = wiki_settings.icon if wiki_settings else ''
+        wiki_info.update({'color': color, 'icon': icon})
         if not is_group_owner:
             wiki_info['owner_nickname'] = email2nickname(wiki.owner)
         else:
@@ -334,10 +367,11 @@ class Wiki2View(APIView):
 
     def put(self, request, wiki_id):
         wiki_name = request.data.get('wiki_name')
-        if not wiki_name:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'wiki name is required.')
+        wiki_icon = request.data.get('icon')
+        wiki_color = request.data.get('color')
+        
 
-        if not is_valid_dirent_name(wiki_name):
+        if wiki_name and (not is_valid_dirent_name(wiki_name)):
             return api_error(status.HTTP_400_BAD_REQUEST, 'name invalid.')
 
         username = request.user.username
@@ -347,8 +381,8 @@ class Wiki2View(APIView):
             error_msg = 'Wiki not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if wiki_name == wiki.name:
-            return Response({"success": True})
+        if wiki_name and wiki_name == wiki.name:
+            wiki_name = ''
 
         repo_id = wiki.repo_id
         repo = seafile_api.get_repo(repo_id)
@@ -376,7 +410,12 @@ class Wiki2View(APIView):
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            seafile_api.edit_repo(repo_id, wiki_name, '', username)
+            if wiki_name:
+                seafile_api.edit_repo(repo_id, wiki_name, '', username)
+            if wiki_icon:
+                Wiki2Settings.objects.update_or_create(wiki_id=wiki_id, defaults={"icon": wiki_icon})
+            if wiki_color:
+                Wiki2Settings.objects.update_or_create(wiki_id=wiki_id, defaults={"color": wiki_color})
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

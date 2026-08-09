@@ -40,8 +40,9 @@
 }
 
 .user-select-container .user-search-container .form-control {
-  height: 31px;
+  height: 32px;
   border: none;
+  border-radius: 4px;
   padding: .375rem 1rem;
   cursor: pointer;
 }
@@ -91,12 +92,8 @@
   cursor: pointer;
 }
 
-.no-search-result {
-  color: var(--bs-body-secondary-color);
-  font-size: 14px;
-  padding: 10px;
-  overflow: auto;
-  text-align: center;
+.user-select-container .user-list-container .search-empty-tip {
+  margin: -8px 0;
 }
 
 .user-select-popover .popover {

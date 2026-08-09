@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { enableAIChat, enableSeafileAI, gettext } from '../../../utils/constants';
 import Loading from '../../loading';
+import OpIcon from '../../op-icon';
+import { eventBus } from '../../common/event-bus';
+import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
 import DirNew from '../dir-new';
 import DirFiles from '../dir-files';
 import DirViews from '../dir-views';
@@ -41,28 +45,45 @@ class DirColumnNav extends React.Component {
     e.stopPropagation();
   };
 
+  handleChatClick = () => {
+    eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_TO_CHAT_VIEW);
+  };
+
   render() {
     const {
       isTreeDataLoading, userPerm, treeData, repoID, currentPath, currentRepoInfo, navRate = 0.25
     } = this.props;
     const flex = navRate ? '0 0 ' + navRate * 100 + '%' : '0 0 25%';
     const select = this.props.inResizing ? 'none' : '';
+    const canUseAIChat = enableSeafileAI && enableAIChat && !currentRepoInfo.is_virtual;
     return (
       <div className="dir-content-nav" role="navigation" style={{ flex: (flex), userSelect: select }} onScroll={this.stopTreeScrollPropagation}>
         {isTreeDataLoading ? <Loading /> : (
           <>
-            <DirNew
-              repoID={repoID}
-              path={currentPath}
-              repoEncrypted={currentRepoInfo.encrypted}
-              userPerm={userPerm}
-              onUploadFile={this.props.onUploadFile}
-              onUploadFolder={this.props.onUploadFolder}
-              direntList={this.props.direntList}
-              eventBus={this.props.eventBus}
-              loadDirentList={this.props.loadDirentList}
-              currentMode={this.props.currentMode}
-            />
+            <div className="dir-content-nav-top-actions">
+              <DirNew
+                repoID={repoID}
+                path={currentPath}
+                repoEncrypted={currentRepoInfo.encrypted}
+                userPerm={userPerm}
+                onUploadFile={this.props.onUploadFile}
+                onUploadFolder={this.props.onUploadFolder}
+                direntList={this.props.direntList}
+                eventBus={this.props.eventBus}
+                loadDirentList={this.props.loadDirentList}
+                currentMode={this.props.currentMode}
+              />
+              {canUseAIChat && (
+                <OpIcon
+                  id="dir-chat-with-ai-btn"
+                  className="dir-chat-with-ai-btn"
+                  symbol="new-chat"
+                  tooltip={gettext('Chat with AI')}
+                  placement="bottom"
+                  op={this.handleChatClick}
+                />
+              )}
+            </div>
             <div className='flex-fill o-auto'>
               <DirFiles
                 repoID={repoID}

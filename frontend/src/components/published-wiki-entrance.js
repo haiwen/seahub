@@ -7,7 +7,8 @@ import '../css/published-wiki-entrance.css';
 
 const propTypes = {
   wikiID: PropTypes.string.isRequired,
-  customURLPart: PropTypes.string.isRequired
+  customURLPart: PropTypes.string.isRequired,
+  placement: PropTypes.oneOf(['top', 'bottom', 'left', 'right']),
 };
 
 class PublishedWikiEntrance extends Component {
@@ -16,12 +17,12 @@ class PublishedWikiEntrance extends Component {
   }
 
   render() {
-    const { wikiID, customURLPart } = this.props;
+    const { wikiID, customURLPart, placement } = this.props;
     return (
       <>
         <a
           id={`wiki-${wikiID}`}
-          className="view-published-wiki ml-2"
+          className="view-published-wiki"
           href={`${serviceURL}/wiki/publish/${customURLPart}`}
           target="_blank"
           rel="noreferrer"
@@ -29,7 +30,7 @@ class PublishedWikiEntrance extends Component {
         >
           {gettext('Published')}
         </a>
-        <Tooltip target={`wiki-${wikiID}`}>
+        <Tooltip target={`wiki-${wikiID}`} placement={placement}>
           {gettext('View published page')}
         </Tooltip>
       </>

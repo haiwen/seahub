@@ -89,18 +89,16 @@ class Wikis extends Component {
     this.setState({ isShowAddWikiMenu: !this.state.isShowAddWikiMenu });
   };
 
-  toggleAddWikiDialog = (currentDeptID, isMyWiki) => {
+  toggleAddWikiDialog = (currentDeptID) => {
     if (this.state.isShowAddDialog) {
       this.setState({
         isShowAddDialog: false,
         currentDeptID: '',
-        isMyWiki: false
       });
     } else {
       this.setState({
         isShowAddDialog: true,
         currentDeptID,
-        isMyWiki: isMyWiki || false
       });
     }
   };
@@ -174,17 +172,18 @@ class Wikis extends Component {
     });
   };
 
-  addWiki = (wikiName, currentDeptID) => {
-    wikiAPI.addWiki2(wikiName, currentDeptID).then((res) => {
+  addWiki = (details) => {
+    const currentDeptID = details.owner;
+    return wikiAPI.addWiki2(details).then((res) => {
       let wikis = this.state.wikis.slice(0);
       let groupWikis = this.state.groupWikis;
       let new_wiki = res.data;
       new_wiki['version'] = 'v2';
       new_wiki['admins'] = new_wiki.group_admins;
       if (currentDeptID) {
-        if (groupWikis.find(group => group.group_id === currentDeptID)) {
+        if (groupWikis.find(group => String(group.group_id) === String(currentDeptID))) {
           groupWikis.filter(group => {
-            if (group.group_id === currentDeptID) {
+            if (String(group.group_id) === String(currentDeptID)) {
               group.wiki_info.push(new_wiki);
             }
             return group;
@@ -210,11 +209,7 @@ class Wikis extends Component {
         });
       }
 
-    }).catch((error) => {
-      if (error.response) {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      }
+      return new_wiki;
     });
   };
 
@@ -337,16 +332,35 @@ class Wikis extends Component {
           toaster.danger(errorMsg);
         }
       });
-    } else {
-      wikiAPI.renameWiki2(wiki.id, newName).then(() => {
-        this.getWikis();
-      }).catch((error) => {
-        if (error.response) {
-          let errorMsg = error.response.data.error_msg;
-          toaster.danger(errorMsg);
-        }
-      });
     }
+  };
+
+  updateWiki = (wiki, details) => {
+    return wikiAPI.updateWiki2(wiki.id, details).then(() => {
+      const updatedWiki = {
+        ...wiki,
+        name: details.name,
+        icon: details.icon,
+        color: details.color,
+        version: wiki.version,
+      };
+      this.setState((prevState) => {
+        const updateItem = item => {
+          if (item.id === wiki.id && item.version === wiki.version) {
+            return { ...item, ...updatedWiki };
+          }
+          return item;
+        };
+        return {
+          wikis: prevState.wikis.map(updateItem),
+          groupWikis: prevState.groupWikis.map(group => ({
+            ...group,
+            wiki_info: group.wiki_info.map(updateItem),
+          })),
+        };
+      });
+      return updatedWiki;
+    });
   };
 
   transferWiki = (wiki, owner, reshare) => {
@@ -439,7 +453,6 @@ class Wikis extends Component {
               toggleCancel={this.toggleAddWikiDialog}
               addWiki={this.addWiki}
               currentDeptID={this.state.currentDeptID}
-              isMyWiki={this.state.isMyWiki}
             />
           </ModalPortal>
         }
@@ -483,6 +496,7 @@ class Wikis extends Component {
                   leaveSharedWiki={this.leaveSharedWiki}
                   unshareGroupWiki={this.unshareGroupWiki}
                   renameWiki={this.renameWiki}
+                  updateWiki={this.updateWiki}
                   transferWiki={this.transferWiki}
                   convertWiki={this.convertWiki}
                   toggleAddWikiDialog={this.toggleAddWikiDialog}

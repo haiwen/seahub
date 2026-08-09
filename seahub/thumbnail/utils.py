@@ -7,7 +7,10 @@ import tempfile
 import urllib.request, urllib.error, urllib.parse
 import logging
 import subprocess
+import struct
+import zipfile
 from io import BytesIO
+from xml.etree import ElementTree
 
 try: # Py2 and Py3 compatibility
     from urllib.request import urlretrieve
@@ -20,7 +23,7 @@ from seaserv import get_file_id_by_path, get_repo, get_file_size, \
     seafile_api
 
 from seahub.utils import gen_inner_file_get_url, get_file_type_and_ext, normalize_file_path
-from seahub.utils.file_types import VIDEO, PDF, SVG, SEADOC
+from seahub.utils.file_types import VIDEO, PDF, SVG, SEADOC, EPUB
 from seahub.settings import THUMBNAIL_IMAGE_SIZE_LIMIT, \
     THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT,\
     ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_VIDEO_FRAME_TIME, SERVICE_URL
@@ -39,6 +42,124 @@ LARGE_WIDTH_HEIGHT_THRESHOLD = 2000
 LARGE_AREA_THRESHOLD = 3000000
 # PDF size threshold for detailed page size checking (bytes)
 LARGE_PDF_SIZE_THRESHOLD = 50 * 1024 * 1024  # 50MB
+EPUB_METADATA_SIZE_LIMIT = 1024 * 1024
+EPUB_COVER_SIZE_LIMIT = 20 * 1024 * 1024
+EPUB_ARCHIVE_SIZE_LIMIT = 50 * 1024 * 1024
+EPUB_MAX_ENTRIES = 10000
+
+
+def _check_epub_entry_count(epub_file):
+    epub_file.seek(0, os.SEEK_END)
+    file_size = epub_file.tell()
+    footer_start = max(0, file_size - 65557)
+    epub_file.seek(footer_start)
+    footer = epub_file.read()
+    eocd_offset = footer.rfind(b'PK\x05\x06')
+    if eocd_offset < 0 or len(footer) - eocd_offset < 22:
+        raise ValueError('Invalid EPUB central directory')
+    entry_count = struct.unpack_from('<H', footer, eocd_offset + 10)[0]
+    if entry_count == 0xffff:
+        raise ValueError('ZIP64 EPUB archives are unsupported')
+    if entry_count > EPUB_MAX_ENTRIES:
+        raise ValueError('EPUB has too many entries')
+
+    central_directory_size, central_directory_offset = struct.unpack_from(
+        '<II', footer, eocd_offset + 12)
+    absolute_eocd_offset = footer_start + eocd_offset
+    if central_directory_offset + central_directory_size != absolute_eocd_offset:
+        raise ValueError('Invalid EPUB central directory')
+
+    epub_file.seek(central_directory_offset)
+    directory = epub_file.read(central_directory_size)
+    offset = 0
+    actual_entry_count = 0
+    while offset < len(directory):
+        if directory[offset:offset + 4] != b'PK\x01\x02' or offset + 46 > len(directory):
+            raise ValueError('Invalid EPUB central directory')
+        name_size, extra_size, comment_size = struct.unpack_from(
+            '<HHH', directory, offset + 28)
+        offset += 46 + name_size + extra_size + comment_size
+        actual_entry_count += 1
+        if actual_entry_count > EPUB_MAX_ENTRIES:
+            raise ValueError('EPUB has too many entries')
+    if offset != len(directory) or actual_entry_count != entry_count:
+        raise ValueError('Invalid EPUB central directory')
+    epub_file.seek(0)
+
+
+def _read_epub_member(archive, path, size_limit):
+    try:
+        member = archive.getinfo(path)
+    except KeyError as e:
+        raise ValueError('EPUB member not found') from e
+    if member.file_size > size_limit:
+        raise ValueError('EPUB member is too large')
+    with archive.open(member) as source:
+        data = source.read(size_limit + 1)
+    if len(data) > size_limit:
+        raise ValueError('EPUB member is too large')
+    return data
+
+
+def _copy_epub(response, destination):
+    copied = 0
+    while True:
+        chunk = response.read(64 * 1024)
+        if not chunk:
+            return
+        copied += len(chunk)
+        if copied > EPUB_ARCHIVE_SIZE_LIMIT:
+            raise ValueError('EPUB archive is too large')
+        destination.write(chunk)
+
+
+def get_epub_cover(epub_file):
+    """Return the cover image from an EPUB 2 or EPUB 3 archive."""
+    _check_epub_entry_count(epub_file)
+    with zipfile.ZipFile(epub_file) as archive:
+        if len(archive.infolist()) > EPUB_MAX_ENTRIES:
+            raise ValueError('EPUB has too many entries')
+        container_data = _read_epub_member(
+            archive, 'META-INF/container.xml', EPUB_METADATA_SIZE_LIMIT)
+        container = ElementTree.fromstring(container_data)
+        rootfile = next((element for element in container.iter()
+                         if element.tag.rsplit('}', 1)[-1] == 'rootfile'), None)
+        package_path = rootfile.get('full-path') if rootfile is not None else None
+        if not package_path:
+            raise ValueError('EPUB package document not found')
+
+        package_path = posixpath.normpath(package_path)
+        if package_path.startswith('../') or package_path.startswith('/'):
+            raise ValueError('Invalid EPUB package path')
+        package = ElementTree.fromstring(_read_epub_member(
+            archive, package_path, EPUB_METADATA_SIZE_LIMIT))
+
+        cover_id = None
+        manifest_items = []
+        for element in package.iter():
+            tag = element.tag.rsplit('}', 1)[-1]
+            if tag == 'meta' and element.get('name') == 'cover':
+                cover_id = element.get('content')
+            elif tag == 'item':
+                manifest_items.append(element)
+
+        cover_item = next((item for item in manifest_items
+                           if 'cover-image' in item.get('properties', '').split()), None)
+        if cover_item is None and cover_id:
+            cover_item = next((item for item in manifest_items
+                               if item.get('id') == cover_id), None)
+        if cover_item is None or not cover_item.get('href'):
+            raise ValueError('EPUB cover not found')
+
+        package_dir = posixpath.dirname(package_path)
+        cover_href = urllib.parse.urlsplit(cover_item.get('href')).path
+        cover_path = posixpath.normpath(posixpath.join(
+            package_dir, urllib.parse.unquote(cover_href)))
+        if cover_path.startswith('../') or cover_path.startswith('/'):
+            raise ValueError('Invalid EPUB cover path')
+
+        return BytesIO(_read_epub_member(
+            archive, cover_path, EPUB_COVER_SIZE_LIMIT))
 
 def generate_thumbnail_key(repo_id, path):
     """Generate thumbnail key using MD5(repo_id + path)."""
@@ -145,6 +266,11 @@ def generate_thumbnail(request, repo_id, size, path):
         return create_pdf_thumbnails(repo, file_id, path, size,
                                      thumbnail_file, file_size)
 
+    if filetype == EPUB:
+        if file_size > EPUB_ARCHIVE_SIZE_LIMIT:
+            return (False, 400)
+        return create_epub_thumbnail(repo, file_id, path, size, thumbnail_file)
+
 
     # image thumbnails
     if file_size > THUMBNAIL_IMAGE_SIZE_LIMIT * 1024**2:
@@ -173,6 +299,25 @@ def generate_thumbnail(request, repo_id, size, path):
         return _create_thumbnail_common(f, thumbnail_file, size)
     except Exception as e:
         logger.warning(e)
+        return (False, 400)
+
+
+def create_epub_thumbnail(repo, file_id, path, size, thumbnail_file):
+    token = seafile_api.get_fileserver_access_token(
+        repo.id, file_id, 'view', '', use_onetime=True)
+    if not token:
+        return (False, 500)
+
+    try:
+        inner_path = gen_inner_file_get_url(token, os.path.basename(path))
+        with urllib.request.urlopen(inner_path) as response:
+            with tempfile.SpooledTemporaryFile(max_size=2 * 1024 * 1024) as epub_file:
+                _copy_epub(response, epub_file)
+                epub_file.seek(0)
+                cover = get_epub_cover(epub_file)
+                return _create_thumbnail_common(cover, thumbnail_file, size)
+    except Exception as e:
+        logger.warning('Failed to create EPUB cover thumbnail for %s: %s', path, e)
         return (False, 400)
 
 def create_psd_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):

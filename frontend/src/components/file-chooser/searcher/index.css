@@ -33,6 +33,7 @@
   position: absolute;
   top: 9px;
   right: 9px;
+  font-size: .875rem;
 }
 
 .file-chooser-searcher.file-chooser-searcher-inline.search-container {

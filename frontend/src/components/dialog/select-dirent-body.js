@@ -250,7 +250,7 @@ class SelectDirentBody extends React.Component {
             />
             {errMessage && <Alert color="danger" className="alert-message">{errMessage}</Alert>}
           </ModalBody>
-          <ModalFooter className='move-dirent-dialog-footer'>
+          <ModalFooter className="move-dirent-dialog-footer">
             <Button
               className="footer-left-btn"
               color="secondary"
@@ -265,8 +265,8 @@ class SelectDirentBody extends React.Component {
               <span>{gettext('New folder')}</span>
             </Button>
             <div className='footer-right-btns'>
-              <Button color="secondary m-1" onClick={this.onCancel}>{gettext('Cancel')}</Button>
-              <Button color="primary m-1" onClick={this.handleSubmit} disabled={!this.props.selectedPath}>{gettext('Submit')}</Button>
+              <Button color="secondary" onClick={this.onCancel}>{gettext('Cancel')}</Button>
+              <Button color="primary ml-2" onClick={this.handleSubmit} disabled={!this.props.selectedPath}>{gettext('Submit')}</Button>
             </div>
           </ModalFooter>
         </Col>

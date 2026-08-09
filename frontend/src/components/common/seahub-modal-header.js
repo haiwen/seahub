@@ -6,7 +6,7 @@ import Tooltip from '../tooltip';
 
 import '../../css/seahub-modal-header.css';
 
-const SeahubModalHeader = ({ children, className = '', ...props }) => {
+const SeahubModalHeader = ({ children, className = '', isShowClose = true, ...props }) => {
   const customCloseBtn = (
     <button type="button" className="close seahub-modal-btn" data-dismiss="modal" aria-label={gettext('Close')} onClick={props.toggle}>
       <span id="seahub-modal-close-btn" className="seahub-modal-btn-inner">
@@ -16,7 +16,12 @@ const SeahubModalHeader = ({ children, className = '', ...props }) => {
     </button>
   );
   return (
-    <ModalHeader {...props} className={`seahub-modal-header ${className}`.trim()} close={customCloseBtn}>
+    <ModalHeader
+      {...props}
+      toggle={isShowClose ? props.toggle : undefined}
+      className={`seahub-modal-header ${className}`.trim()}
+      close={isShowClose ? customCloseBtn : null}
+    >
       <div className="seahub-modal-title-content">
         {children}
       </div>

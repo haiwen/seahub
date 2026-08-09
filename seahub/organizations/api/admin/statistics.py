@@ -1,5 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import calendar
 import datetime
+import json
 import logging
 from zoneinfo import ZoneInfo
 
@@ -11,8 +13,10 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.http import HttpResponse
 
-from seaserv import ccnet_api
+from seaserv import ccnet_api, seafile_api
 
+from seahub.ai.db_utils import query_ai_statistics_detail, query_ai_statistics_overview
+from seahub.profile.models import Profile
 from seahub.utils import get_org_file_ops_stats_by_day, \
         get_org_total_storage_stats_by_day, get_org_user_activity_stats_by_day, \
         get_org_traffic_by_day, is_pro_version, EVENTS_ENABLED, \
@@ -30,6 +34,25 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 
 logger = logging.getLogger(__name__)
+
+
+def get_user_nickname_map(usernames):
+    if not usernames:
+        return {}
+    profiles = Profile.objects.filter(user__in=usernames)
+    return {profile.user: profile.nickname for profile in profiles}
+
+
+def get_group_info_map(group_ids):
+    group_name_map = {}
+    group_creator_map = {}
+    for group_id in set(group_ids):
+        group = ccnet_api.get_group(int(group_id))
+        if not group:
+            continue
+        group_name_map[group_id] = getattr(group, 'group_name', '')
+        group_creator_map[group_id] = getattr(group, 'creator_name', '')
+    return group_name_map, group_creator_map
 
 
 def get_time_offset():
@@ -412,3 +435,338 @@ class OrgUserStorageExcelView(APIView):
         wb.save(response)
 
         return response
+
+
+class OrgAdminAIStatisticsView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsProVersion, IsOrgAdminUser)
+
+    def get(self, request, org_id):
+        org_id = int(org_id)
+        if not request.user.org or request.user.org.org_id != org_id:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        date = request.GET.get('date')
+        month = request.GET.get('month')
+        if not date and not month:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'date or month required')
+        if date:
+            try:
+                date_obj = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+                date_range = [date_obj.isoformat(), date_obj.isoformat()]
+            except Exception:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'date invalid')
+        else:
+            try:
+                month_start = datetime.datetime.strptime(month, '%Y%m').date()
+                _, last_day_num = calendar.monthrange(month_start.year, month_start.month)
+                month_end = datetime.date(month_start.year, month_start.month, last_day_num)
+                date_range = [month_start.isoformat(), month_end.isoformat()]
+            except Exception:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'month invalid')
+
+        group_by = request.GET.get('group_by', 'owner')
+        if group_by not in ('owner', 'repo', 'group'):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'group_by invalid. Must be "owner" or "repo" or "group"')
+
+        try:
+            page = int(request.GET.get('page', 1))
+            per_page = int(request.GET.get('per_page', 25))
+        except Exception:
+            page, per_page = 1, 25
+        start, end = (page - 1) * per_page, page * per_page
+
+        try:
+            if group_by == 'repo':
+                records = query_ai_statistics_overview('repo_id', date_range, org_id)
+                return self._stats_by_repo(records, start, end)
+            if group_by == 'owner':
+                records = query_ai_statistics_overview('repo_owner', date_range, org_id)
+                return self._stats_by_owner(records, start, end)
+            records = query_ai_statistics_overview('group_id', date_range, org_id)
+            return self._stats_by_group(records, start, end)
+        except Exception as error:
+            logger.exception(error)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal server error')
+
+    def _stats_by_repo(self, records, start, end):
+        total_count = records.count()
+        stats = list(records[start:end])
+        if not stats:
+            return Response({'results': [], 'count': 0})
+
+        repo_owner_names = [item['repo_owner'] for item in stats if item.get('repo_owner') and not item.get('group_id')]
+        repo_owner_nickname_map = get_user_nickname_map(repo_owner_names)
+        group_ids = [item['group_id'] for item in stats if item.get('group_id') is not None]
+        group_name_map, _ = get_group_info_map(group_ids)
+
+        results = []
+        for item in stats:
+            repo = seafile_api.get_repo(item['repo_id'])
+            result = {
+                'repo_id': item['repo_id'],
+                'repo_name': repo.name if repo else None,
+                'total_credit_used': item['total_credit_used'],
+            }
+            if item.get('group_id') is not None:
+                result['repo_owner'] = item.get('repo_owner') or f"{item['group_id']}@seafile_group"
+                result['group_id'] = item['group_id']
+                result['group_name'] = group_name_map.get(item['group_id'], item['group_id'])
+            elif item.get('repo_owner'):
+                result['repo_owner'] = item['repo_owner']
+                result['nickname'] = repo_owner_nickname_map.get(item['repo_owner'], email2nickname(item['repo_owner']))
+            results.append(result)
+
+        return Response({'results': results, 'count': total_count})
+
+    def _stats_by_owner(self, records, start, end):
+        total_count = records.count()
+        stats = list(records[start:end])
+        if not stats:
+            return Response({'results': [], 'count': 0})
+
+        repo_owners = [item['repo_owner'] for item in stats]
+        nickname_map = get_user_nickname_map(repo_owners)
+        results = []
+        for item in stats:
+            repo_owner = item['repo_owner']
+            results.append({
+                'repo_owner': repo_owner,
+                'nickname': nickname_map.get(repo_owner, email2nickname(repo_owner)),
+                'total_credit_used': item['total_credit_used'],
+            })
+
+        return Response({'results': results, 'count': total_count})
+
+    def _stats_by_group(self, records, start, end):
+        total_count = records.count()
+        stats = list(records[start:end])
+        if not stats:
+            return Response({'results': [], 'count': 0})
+
+        group_ids = [item['group_id'] for item in stats]
+        group_id_to_name_map, group_id_to_creator_map = get_group_info_map(group_ids)
+        nickname_map = get_user_nickname_map(set(group_id_to_creator_map.values()))
+
+        results = []
+        for item in stats:
+            creator = group_id_to_creator_map.get(item['group_id'], '')
+            results.append({
+                'group_id': item['group_id'],
+                'group_name': group_id_to_name_map.get(item['group_id'], ''),
+                'creator': creator,
+                'creator_name': nickname_map.get(creator, email2nickname(creator)),
+                'total_credit_used': item['total_credit_used'],
+            })
+
+        return Response({'results': results, 'count': total_count})
+
+
+class OrgAdminAIStatisticsDetailView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsProVersion, IsOrgAdminUser)
+
+    def get(self, request, org_id):
+        org_id = int(org_id)
+        if not request.user.org or request.user.org.org_id != org_id:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        group_by = request.GET.get('group_by')
+        if group_by == 'repo':
+            group_by = 'repo_id'
+        elif group_by == 'owner':
+            group_by = 'repo_owner'
+        elif group_by != 'date':
+            return api_error(status.HTTP_400_BAD_REQUEST, 'group_by invalid. Must be sub-group_by of "repo", "owner" or "date"')
+
+        condition = request.GET.get('condition')
+        if isinstance(condition, str):
+            try:
+                condition = json.loads(condition)
+            except Exception:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'condition invalid. Must be an object')
+        if not isinstance(condition, dict):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'condition invalid. Must be an object')
+        if not condition:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'condition must cannot be empty')
+
+        condition['org_id'] = org_id
+        start_date = request.GET.get('start_date')
+        end_date = request.GET.get('end_date')
+        if not start_date or not end_date:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'range of date must be provided')
+
+        start_date = datetime.datetime.strptime(start_date.split('T')[0], '%Y-%m-%d').date()
+        end_date = datetime.datetime.strptime(end_date.split('T')[0], '%Y-%m-%d').date()
+        scenarios_str = request.GET.get('scenarios')
+        scenarios = [item.strip() for item in scenarios_str.split(',') if item.strip()] if scenarios_str else []
+
+        query_set = query_ai_statistics_detail(group_by, [start_date, end_date], condition, scenarios=scenarios or None)
+        if group_by == 'date':
+            return Response({'results': list(query_set)})
+
+        if group_by == 'repo_owner':
+            query_set = list(query_set[:30])
+            repo_owners = [item['repo_owner'] for item in query_set]
+            nickname_map = get_user_nickname_map(repo_owners)
+            results = []
+            for item in query_set:
+                repo_owner = item['repo_owner']
+                results.append({
+                    'repo_owner': repo_owner,
+                    'nickname': nickname_map.get(repo_owner, email2nickname(repo_owner)),
+                    'total_credit_used': item['total_credit_used'],
+                    'total_input_tokens': item['total_input_tokens'],
+                    'total_output_tokens': item['total_output_tokens'],
+                })
+            results.reverse()
+            return Response({'results': results})
+
+        query_set = list(query_set[:30])
+        results = []
+        for item in query_set:
+            repo = seafile_api.get_repo(item['repo_id'])
+            results.append({
+                'repo_id': item['repo_id'],
+                'repo_name': repo.name if repo else '<Unknown library>',
+                'total_credit_used': item['total_credit_used'],
+                'total_input_tokens': item['total_input_tokens'],
+                'total_output_tokens': item['total_output_tokens'],
+            })
+        results.reverse()
+        return Response({'results': results})
+
+
+class OrgAdminAIStatisticsOverviewView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsProVersion, IsOrgAdminUser)
+
+    @staticmethod
+    def _get_month_range(date_obj):
+        _, last_day_num = calendar.monthrange(date_obj.year, date_obj.month)
+        start_date = datetime.date(date_obj.year, date_obj.month, 1)
+        end_date = datetime.date(date_obj.year, date_obj.month, last_day_num)
+        return [start_date.isoformat(), end_date.isoformat()]
+
+    @staticmethod
+    def _get_total_credit_used(date_range, org_id):
+        records = query_ai_statistics_overview('org_id', date_range, org_id)
+        record = records.first()
+        return record['total_credit_used'] if record else 0
+
+    @staticmethod
+    def _get_scenario_percentages(date_range, org_id):
+        records = list(query_ai_statistics_overview('scenario', date_range, org_id))
+
+        if not records:
+            return {'results': [], 'count': 0}
+
+        total_credit_used = sum(item['total_credit_used'] for item in records)
+        results = []
+        for item in records:
+            percentage = 0
+            if total_credit_used:
+                percentage = round(float(item['total_credit_used'] / total_credit_used), 3)
+            results.append({
+                'scenario': item.get('scenario') or '',
+                'total_credit_used': round(item['total_credit_used'], 3),
+                'percentage': percentage,
+            })
+
+        return {'results': results, 'count': len(results)}
+
+    @staticmethod
+    def _get_month_start(date_obj):
+        return datetime.date(date_obj.year, date_obj.month, 1)
+
+    @staticmethod
+    def _add_months(date_obj, months):
+        month_index = date_obj.month - 1 + months
+        year = date_obj.year + month_index // 12
+        month = month_index % 12 + 1
+        return datetime.date(year, month, 1)
+
+    @staticmethod
+    def _get_last_month_same_day_range(today):
+        if today.month == 1:
+            last_month_date = datetime.date(today.year - 1, 12, 1)
+        else:
+            last_month_date = datetime.date(today.year, today.month - 1, 1)
+
+        _, last_day_num = calendar.monthrange(last_month_date.year, last_month_date.month)
+        same_day = min(today.day, last_day_num)
+        end_date = datetime.date(last_month_date.year, last_month_date.month, same_day)
+        return [last_month_date.isoformat(), end_date.isoformat()]
+
+    def _get_monthly_credits(self, org_id, months_count=6):
+        current_month_start = self._get_month_start(datetime.date.today())
+        results = []
+        for offset in range(months_count - 1, -1, -1):
+            month_start = self._add_months(current_month_start, -offset)
+            date_range = self._get_month_range(month_start)
+            results.append({
+                'month': month_start.strftime('%Y-%m'),
+                'total_credit_used': round(self._get_total_credit_used(date_range, org_id), 3),
+            })
+        return {'results': results, 'count': len(results)}
+
+    @staticmethod
+    def _get_daily_credits_current_month(org_id):
+        today = datetime.date.today()
+        month_start = datetime.date(today.year, today.month, 1)
+        query_set = query_ai_statistics_detail('date', [month_start, today], {'org_id': org_id})
+        date_to_credit = {item['date']: item['total_credit_used'] for item in query_set}
+
+        results = []
+        current_date = month_start
+        while current_date <= today:
+            results.append({
+                'date': current_date.isoformat(),
+                'total_credit_used': round(date_to_credit.get(current_date, 0), 3),
+            })
+            current_date += datetime.timedelta(days=1)
+        return {'results': results, 'count': len(results)}
+
+    def get(self, request, org_id):
+        org_id = int(org_id)
+        if not request.user.org or request.user.org.org_id != org_id:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        today = datetime.date.today()
+        current_month_range = self._get_month_range(today)
+        group_by = request.GET.get('group_by')
+        if group_by and group_by not in ('scenario', 'month', 'date'):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'group_by invalid. Must be "scenario" or "month" or "date"')
+
+        try:
+            if group_by == 'scenario':
+                return Response(self._get_scenario_percentages(current_month_range, org_id))
+            if group_by == 'month':
+                return Response(self._get_monthly_credits(org_id))
+            if group_by == 'date':
+                return Response(self._get_daily_credits_current_month(org_id))
+
+            if today.month == 1:
+                last_month_date = datetime.date(today.year - 1, 12, 1)
+            else:
+                last_month_date = datetime.date(today.year, today.month - 1, 1)
+            last_month_range = self._get_month_range(last_month_date)
+            last_month_same_day_range = self._get_last_month_same_day_range(today)
+
+            current_month_credit = self._get_total_credit_used(current_month_range, org_id)
+            last_month_credit = self._get_total_credit_used(last_month_range, org_id)
+            last_month_same_day_credit = self._get_total_credit_used(last_month_same_day_range, org_id)
+            month_on_month_change = current_month_credit - last_month_credit
+        except Exception as error:
+            logger.exception(error)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal server error')
+
+        return Response({
+            'current_month_credit': round(current_month_credit, 3),
+            'last_month_credit': round(last_month_credit, 3),
+            'last_month_same_day_credit': round(last_month_same_day_credit, 3),
+            'month_on_month_change': round(month_on_month_change, 3),
+        })

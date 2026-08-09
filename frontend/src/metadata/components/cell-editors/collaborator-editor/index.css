@@ -1,7 +1,6 @@
 .sf-metadata-collaborator-editor {
   width: 300px;
   height: fit-content;
-  min-height: 160px;
   padding: 0;
   overflow: hidden;
   opacity: 1;
@@ -12,7 +11,6 @@
 
 .sf-metadata-collaborator-editor .sf-metadata-collaborator-editor-container {
   max-height: 200px;
-  min-height: 100px;
   padding: 8px;
   overflow: auto;
 }
@@ -104,12 +102,6 @@
   font-size: 13px;
 }
 
-.sf-metadata-collaborator-editor .none-search-result {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.sf-metadata-collaborator-editor .search-empty-tip-text-only {
   margin: 40px 0;
-  font-size: 14px;
-  opacity: 0.5;
 }

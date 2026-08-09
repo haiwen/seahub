@@ -17,6 +17,7 @@ class Nav extends React.Component {
       { name: 'storageStatistic', urlPart: 'statistics/storage', text: gettext('Storage') },
       { name: 'userStatistic', urlPart: 'statistics/user', text: gettext('Users') },
       { name: 'trafficStatistic', urlPart: 'statistics/traffic', text: gettext('Traffic') },
+      { name: 'aiStatistic', urlPart: 'statistics/ai', text: gettext('AI Usage') },
       { name: 'reportsStatistic', urlPart: 'statistics/reports', text: gettext('Reports') },
       { name: 'metricsStatistic', urlPart: 'statistics/metrics', text: gettext('Metrics') },
     ];

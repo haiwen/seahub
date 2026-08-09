@@ -526,7 +526,7 @@ textarea::placeholder {
   margin-right: 0.25rem;
 }
 
-.op-icon:focus,
+.op-icon:focus-visible,
 .op-icon:hover {
   color: var(--bs-icon-color);
   /* to overwrite the styles for `a:hover` */

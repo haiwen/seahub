@@ -2,10 +2,13 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import deepCopy from 'deep-copy';
 import classNames from 'classnames';
+import { Button } from 'reactstrap';
 import { EventBus, EXTERNAL_EVENT } from '@seafile/seafile-sdoc-editor';
-import { wikiId, wikiPermission, gettext, isPro } from '../../utils/constants';
+import { wikiId, wikiPermission, gettext, isPro, canPublishWiki } from '../../utils/constants';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
+import Icon from '../../components/icon';
+import Tooltip from '../../components/tooltip';
 import WikiNav from './wiki-nav/index';
 import PageUtils from './wiki-nav/page-utils';
 import Page from './models/page';
@@ -17,14 +20,15 @@ import WikiTrashDialog from './wiki-trash-dialog';
 import { DEFAULT_PAGE_NAME } from './constant';
 import Wiki2Search from '../../components/search/wiki2-search';
 import CommonUndoTool from '../../components/common/common-undo-tool';
-import PublishedWikiExtrance from '../../components/published-wiki-entrance';
+import PublishedWikiEntrance from '../../components/published-wiki-entrance';
 import { userAPI } from '../../utils/user-api';
 import ImportWikiPageDialog from '../../components/dialog/import-wiki-page-dialog';
 import WikiSettingsDialog from './wiki-settings';
+import PublishWikiPopover from './publish-wiki-popover';
 
 import './side-panel.css';
 
-const { repoName, publishUrl } = window.wiki.config;
+const { repoName, publishUrl, isAdmin } = window.wiki.config;
 
 const propTypes = {
   isSidePanelOpen: PropTypes.bool.isRequired,
@@ -45,6 +49,9 @@ class SidePanel extends PureComponent {
     this.state = {
       isShowTrashDialog: false,
       customUrl: publishUrl,
+      enableServerRender: false,
+      canManagePublish: false,
+      isShowPublishPopover: false,
       isShowSettingDialog: false,
     };
   }
@@ -52,6 +59,15 @@ class SidePanel extends PureComponent {
   componentDidMount() {
     const eventBus = EventBus.getInstance();
     this.unsubscribeLibraryToggle = eventBus.subscribe(EXTERNAL_EVENT.ADD_WIKI_LIBRARY_TOGGLE, this.toggleSettingDialog);
+    if (isAdmin && canPublishWiki) {
+      wikiAPI.getPublishWikiLink(wikiId).then((res) => {
+        const { enable_server_render } = res.data;
+        this.setState({
+          canManagePublish: true,
+          enableServerRender: !!enable_server_render,
+        });
+      }).catch(() => {});
+    }
   }
 
   componentWillUnmount() {
@@ -219,6 +235,51 @@ class SidePanel extends PureComponent {
     this.setState({ isShowImportPageDialog: !this.state.isShowImportPageDialog });
   };
 
+  togglePublishPopover = () => {
+    this.setState((prevState) => ({
+      isShowPublishPopover: !prevState.isShowPublishPopover,
+    }));
+  };
+
+  hidePublishPopover = (event) => {
+    const target = event && event.target;
+    if (target && typeof target.closest === 'function' && target.closest('#wiki2-publish')) {
+      return;
+    }
+    this.setState({ isShowPublishPopover: false });
+  };
+
+  publishWiki = (url, enableServerRender = false) => {
+    const urlIndex = url.indexOf('/publish/');
+    const publishUrl = url.substring(urlIndex + '/publish/'.length);
+    wikiAPI.publishWiki(wikiId, publishUrl, enableServerRender).then((res) => {
+      const { publish_url, enable_server_render } = res.data;
+      this.setState({
+        customUrl: publish_url,
+        enableServerRender: !!enable_server_render,
+        isShowPublishPopover: false,
+      });
+      toaster.success(gettext('Wiki published'));
+    }).catch((error) => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    });
+  };
+
+  unpublishWiki = () => {
+    wikiAPI.deletePublishWikiLink(wikiId).then(() => {
+      this.setState({
+        customUrl: '',
+        enableServerRender: false,
+        isShowPublishPopover: false,
+      });
+      toaster.success(gettext('Wiki custom URL deleted'));
+    }).catch((error) => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    });
+  };
+
   // default page name
   handleAddNewPage = (jumpToNewPage = true, pageName = gettext(DEFAULT_PAGE_NAME)) => {
     if (this.isAddingPage === true) return;
@@ -302,12 +363,17 @@ class SidePanel extends PureComponent {
 
   render() {
     const { isLoading, config, style } = this.props;
+    const { canManagePublish } = this.state;
     return (
       <div className={classNames('wiki2-side-panel', { 'left-zero': this.props.isSidePanelOpen })} style={style}>
         <div className="wiki2-side-panel-top">
           <h1 className="h4 text-truncate ml-0 mb-0" title={repoName}>{repoName}</h1>
           {(wikiPermission === 'rw' && this.state.customUrl) &&
-            <PublishedWikiExtrance wikiID={wikiId} customURLPart={this.state.customUrl} />
+            <PublishedWikiEntrance
+              wikiID={wikiId}
+              customURLPart={this.state.customUrl}
+              placement="right"
+            />
           }
         </div>
         {isPro &&
@@ -317,6 +383,37 @@ class SidePanel extends PureComponent {
           getCurrentPageId={this.props.getCurrentPageId}
           setCurrentPage={this.props.setCurrentPage}
         />}
+        {canManagePublish &&
+          <>
+            <Button
+              id="wiki2-publish"
+              className="wiki2-publish border-0 p-0 font-weight-normal"
+              onClick={this.togglePublishPopover}
+              aria-haspopup="dialog"
+              aria-expanded={this.state.isShowPublishPopover}
+            >
+              <span className="w-6 h-6 d-flex align-items-center justify-content-center">
+                <Icon symbol="open-in-new-tab" />
+              </span>
+              <span>{gettext('Publish')}</span>
+            </Button>
+            {!this.state.isShowPublishPopover &&
+              <Tooltip target="wiki2-publish" placement="right">
+                {gettext('Manage Published Pages')}
+              </Tooltip>
+            }
+            {this.state.isShowPublishPopover &&
+              <PublishWikiPopover
+                target="wiki2-publish"
+                hidePopover={this.hidePublishPopover}
+                onPublish={this.publishWiki}
+                onUnpublish={this.unpublishWiki}
+                customUrlString={this.state.customUrl}
+                enableServerRender={this.state.enableServerRender}
+              />
+            }
+          </>
+        }
         <div className="wiki2-side-nav">
           {isLoading ? <Loading/> : this.renderWikiNav()}
         </div>

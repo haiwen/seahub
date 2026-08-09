@@ -64,7 +64,7 @@ def get_group_info(request, group_id, avatar_size=GROUP_AVATAR_DEFAULT_SIZE):
     if group.parent_group_id != 0:
         group_info['group_quota'] = seafile_api.get_group_quota(group_id)
 
-    group_info['group_quota_usage'] = ''
+    group_info['group_quota_usage'] = 0
     if is_pro_version():
         if is_org_context(request):
             org_id = request.user.org.org_id

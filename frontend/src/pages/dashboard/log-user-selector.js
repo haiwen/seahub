@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
 import { gettext } from '../../utils/constants';
+import SearchEmptyTip from '../../components/common/search-empty-tip';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Icon from '../../components/icon';
@@ -160,13 +161,11 @@ class LogUserSelector extends Component {
                 onChange={this.onQueryChange}
               />
             </div>
-            <ul className="activity-user-list list-unstyled p-3 o-auto">
+            <ul className={`activity-user-list list-unstyled o-auto ${!isLoading && displayItems.length > 0 ? 'p-3' : ''}`}>
               {isLoading ? (
-                <li className="text-center">{gettext('Loading...')}</li>
+                <li className="activity-user-loading">{gettext('Loading...')}</li>
               ) : displayItems.length === 0 ? (
-                <li className="text-center">
-                  {query ? gettext('User not found') : gettext('Enter characters to start searching')}
-                </li>
+                <li><SearchEmptyTip text={query ? gettext('User not found') : gettext('Enter characters to start searching')} /></li>
               ) : (
                 displayItems.map((item, index) => {
                   const isSelected = selectedItems.some(selected =>
@@ -182,7 +181,7 @@ class LogUserSelector extends Component {
                         <img src={item.avatar_url} className="avatar w-5 h-5" alt="" />
                         <span className="activity-user-name ml-2">{item.name}</span>
                       </span>
-                      {isSelected && <Icon symbol="check-thin" className="text-gray font-weight-bold" />}
+                      {isSelected && <Icon symbol="check" className="text-gray font-weight-bold" />}
                     </li>
                   );
                 })

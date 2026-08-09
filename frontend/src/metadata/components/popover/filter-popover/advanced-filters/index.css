@@ -311,11 +311,14 @@
 }
 
 .sf-metadata-filters-list .seafile-option-group {
-  width: 300px;
   min-width: 0;
   max-width: 300px;
   max-height: 360px;
   overflow: auto;
+}
+
+.sf-metadata-filters-list .seafile-option-group .search-empty-tip-img {
+  display: none;
 }
 
 .sf-metadata-filters-list .filter-conjunction .seafile-option-group {

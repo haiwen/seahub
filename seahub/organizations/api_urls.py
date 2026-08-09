@@ -30,7 +30,8 @@ from .api.admin.delete_org import OrgAdminDeleteOrg
 
 from .api.admin.statistics import OrgFileOperationsView, OrgTotalStorageView, \
         OrgActiveUsersView, OrgSystemTrafficView, OrgUserTrafficView, \
-        OrgUserTrafficExcelView, OrgUserStorageExcelView
+        OrgUserTrafficExcelView, OrgUserStorageExcelView, OrgAdminAIStatisticsView, \
+        OrgAdminAIStatisticsDetailView, OrgAdminAIStatisticsOverviewView
 from .api.admin.saml_config import OrgSAMLConfigView, OrgVerifyDomain
 
 from .org_logs_export import OrgLogsExport, org_log_export_excel
@@ -58,6 +59,15 @@ urlpatterns = [
     path('<int:org_id>/admin/statistics/user-storage/excel/',
         OrgUserStorageExcelView.as_view(),
         name='api-v2.1-org-admin-statistics-user-storage-excel'),
+    path('<int:org_id>/admin/statistics/ai/',
+        OrgAdminAIStatisticsView.as_view(),
+        name='api-v2.1-org-admin-statistics-ai'),
+    path('<int:org_id>/admin/statistics/ai/detail/',
+        OrgAdminAIStatisticsDetailView.as_view(),
+        name='api-v2.1-org-admin-statistics-ai-detail'),
+    path('<int:org_id>/admin/statistics/ai/overview/',
+        OrgAdminAIStatisticsOverviewView.as_view(),
+        name='api-v2.1-org-admin-statistics-ai-overview'),
 
     path('<int:org_id>/admin/saml-config/',
         OrgSAMLConfigView.as_view(),

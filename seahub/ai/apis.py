@@ -25,7 +25,9 @@ from seahub.views import check_folder_permission
 from seahub.utils.repo import parse_repo_perm
 from seahub.ai.utils import image_caption, translate, writing_assistant, verify_ai_config, generate_summary, \
     generate_file_tags, ocr, is_ai_usage_over_limit, gen_chat_task_id, gen_message_id, \
-    get_ai_reply, process_stream_ai_reply, strip_content_details_from_attachments, verify_chat_ai_config, AI_REPLY_TIMEOUT
+    get_ai_reply, process_stream_ai_reply, resolve_repo_ai_usage_context, strip_content_details_from_attachments, \
+    verify_chat_ai_config, AI_REPLY_TIMEOUT, AI_SCENARIO_CHAT, AI_SCENARIO_FILE_TAGS, AI_SCENARIO_IMAGE_CAPTION, \
+    AI_SCENARIO_OCR, AI_SCENARIO_SUMMARY, AI_SCENARIO_TRANSLATE, AI_SCENARIO_WRITING_ASSISTANT, user_passes_ai_chat_folder_permissions
 from seahub.tags.models import FileUUIDMap
 from seahub.views.file import get_file_view_path_and_perm, get_file_content
 
@@ -65,13 +67,14 @@ class ImageCaption(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if is_ai_usage_over_limit(request.user, org_id):
-            return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
-
         permission = check_folder_permission(request, repo_id, os.path.dirname(path))
         if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        usage_context = resolve_repo_ai_usage_context(repo_id, org_id, AI_SCENARIO_IMAGE_CAPTION)
+        if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
+            return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         try:
             file_id = seafile_api.get_file_id_by_path(repo_id, path)
@@ -85,14 +88,13 @@ class ImageCaption(APIView):
         params = {
             'path': path,
             'lang': lang,
-            'org_id': org_id,
-            'repo_id': repo_id,
             'obj_id': file_id,
-            'username': username,
+            'repo_id': repo_id,
+            'scenario': AI_SCENARIO_IMAGE_CAPTION,
             'capture_time': None,
             'address': None
         }
-        metadata_server_api = MetadataServerAPI(repo_id, user=request.user.username)
+        metadata_server_api = MetadataServerAPI(repo_id, user=username)
 
         from seafevents.repo_metadata.constants import METADATA_TABLE
 
@@ -141,7 +143,6 @@ class GenerateSummary(APIView):
         repo_id = request.data.get('repo_id')
         path = request.data.get('path')
         org_id = request.user.org.org_id if request.user.org else None
-        username = request.user.username
 
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
@@ -158,7 +159,8 @@ class GenerateSummary(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if is_ai_usage_over_limit(request.user, org_id):
+        usage_context = resolve_repo_ai_usage_context(repo_id, org_id, AI_SCENARIO_SUMMARY)
+        if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         try:
@@ -174,10 +176,9 @@ class GenerateSummary(APIView):
 
         params = {
             'path': path,
-            'org_id': org_id,
-            'username': username,
-            'repo_id': repo_id,
             'obj_id': file_id,
+            'repo_id': repo_id,
+            'scenario': AI_SCENARIO_SUMMARY,
         }
 
         try:
@@ -204,7 +205,6 @@ class GenerateFileTags(APIView):
         repo_id = request.data.get('repo_id')
         path = request.data.get('path')
         org_id = request.user.org.org_id if request.user.org else None
-        username = request.user.username
 
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
@@ -221,7 +221,8 @@ class GenerateFileTags(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if is_ai_usage_over_limit(request.user, org_id):
+        usage_context = resolve_repo_ai_usage_context(repo_id, org_id, AI_SCENARIO_FILE_TAGS)
+        if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         try:
@@ -236,10 +237,9 @@ class GenerateFileTags(APIView):
     
         params = {
             'path': path,
-            'org_id': org_id,
-            'username': username,
-            'repo_id': repo_id,
             'obj_id': file_id,
+            'repo_id': repo_id,
+            'scenario': AI_SCENARIO_FILE_TAGS,
         }
 
         file_type, _ = get_file_type_and_ext(os.path.basename(path))
@@ -286,7 +286,6 @@ class OCR(APIView):
         repo_id = request.data.get('repo_id')
         path = request.data.get('path')
         org_id = request.user.org.org_id if request.user.org else None
-        username = request.user.username
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
         if not path:
@@ -306,7 +305,8 @@ class OCR(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if is_ai_usage_over_limit(request.user, org_id):
+        usage_context = resolve_repo_ai_usage_context(repo_id, org_id, AI_SCENARIO_OCR)
+        if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         try:
@@ -326,10 +326,9 @@ class OCR(APIView):
         
         params = {
             'file_name': os.path.basename(path),
-            'org_id': org_id,
-            'username': username,
-            'repo_id': repo_id,
             'obj_id': file_id,
+            'repo_id': repo_id,
+            'scenario': AI_SCENARIO_OCR,
         }
 
         try:
@@ -352,24 +351,39 @@ class Translate(APIView):
         if not verify_ai_config():
             return api_error(status.HTTP_400_BAD_REQUEST, 'AI server not configured')
 
+        file_uuid = request.data.get('file_uuid')
         text = request.data.get('text')
         lang = request.data.get('lang')
         org_id = request.user.org.org_id if request.user.org else None
-        username = request.user.username
 
+        if not file_uuid:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'file_uuid invalid')
         if not text:
             return api_error(status.HTTP_400_BAD_REQUEST, 'text invalid')
         if not lang:
             return api_error(status.HTTP_400_BAD_REQUEST, 'lang invalid')
-        
-        if is_ai_usage_over_limit(request.user, org_id):
+
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map or uuid_map.is_dir:
+            return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
+
+        repo_id = uuid_map.repo_id
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
+        if not check_folder_permission(request, repo_id, '/'):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        usage_context = resolve_repo_ai_usage_context(repo_id, org_id, AI_SCENARIO_TRANSLATE)
+        if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         params = {
             'text': text,
             'lang': lang,
-            'org_id': org_id,
-            'username': username
+            'repo_id': repo_id,
+            'scenario': AI_SCENARIO_TRANSLATE,
         }
 
         try:
@@ -391,26 +405,40 @@ class WritingAssistant(APIView):
         if not verify_ai_config():
             return api_error(status.HTTP_400_BAD_REQUEST, 'AI server not configured')
 
+        file_uuid = request.data.get('file_uuid')
         text = request.data.get('text')
         writing_type = request.data.get('writing_type')
         custom_prompt = request.data.get('custom_prompt')
         org_id =  request.user.org.org_id if request.user.org else None
-        username = request.user.username
 
+        if not file_uuid:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'file_uuid invalid')
         if not text:
             return api_error(status.HTTP_400_BAD_REQUEST, 'text invalid')
         if not custom_prompt and not writing_type:
             return api_error(status.HTTP_400_BAD_REQUEST, 'writing_type invalid')
 
-        if is_ai_usage_over_limit(request.user, org_id):
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map or uuid_map.is_dir:
+            return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
+        
+        repo_id = uuid_map.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
+        if not check_folder_permission(request, repo_id, '/'):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        usage_context = resolve_repo_ai_usage_context(repo_id, org_id, AI_SCENARIO_WRITING_ASSISTANT)
+        if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         params = {
             'text': text,
             'writing_type': writing_type,
             'custom_prompt': custom_prompt,
-            'org_id': org_id,
-            'username': username
+            'repo_id': repo_id,
+            'scenario': AI_SCENARIO_WRITING_ASSISTANT,
         }
 
         try:
@@ -446,6 +474,8 @@ class ChatSessionsView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
         if not check_folder_permission(request, repo_id, '/'): 
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        if not user_passes_ai_chat_folder_permissions(request, repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         session_type = request.GET.get('type', 'mine')
         if session_type == 'shared':
@@ -468,6 +498,8 @@ class ChatSessionsView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, 'Virtual library is not supported.')
         if not check_folder_permission(request, repo_id, '/'):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        if not user_passes_ai_chat_folder_permissions(request, repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         session = ChatSessions.objects.create_session(repo_id, session_name, request.user.username)
         return Response({'session': session.to_dict()}, status=status.HTTP_201_CREATED)
@@ -483,6 +515,8 @@ class ChatSessionView(APIView):
         if not session:
             return api_error(status.HTTP_404_NOT_FOUND, 'Session not found.')
         if not check_folder_permission(request, session.repo_id, '/'):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        if not user_passes_ai_chat_folder_permissions(request, session.repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if session.username != request.user.username:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied. Only the session owner can modify this session.')
@@ -505,6 +539,8 @@ class ChatSessionView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 'Session not found.')
         if not check_folder_permission(request, session.repo_id, '/'):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        if not user_passes_ai_chat_folder_permissions(request, session.repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if session.username != request.user.username:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied. Only the session owner can delete this session.')
 
@@ -524,6 +560,8 @@ class ChatSessionCopyView(APIView):
         if not session:
             return api_error(status.HTTP_404_NOT_FOUND, 'Session not found.')
         if not check_folder_permission(request, session.repo_id, '/'):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        if not user_passes_ai_chat_folder_permissions(request, session.repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if session.username != request.user.username and not session.is_shared:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
@@ -551,6 +589,8 @@ class ChatMessagesView(APIView):
         if not session:
             return api_error(status.HTTP_404_NOT_FOUND, 'Session not found.')
         if not check_folder_permission(request, session.repo_id, '/'):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        if not user_passes_ai_chat_folder_permissions(request, session.repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if not check_session_access(session, request.user.username):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
@@ -595,6 +635,8 @@ class ChatMarkdownArtifactView(APIView):
         file_path = os.path.join(uuid_map.parent_path, uuid_map.filename)
         if not check_folder_permission(request, repo_id, '/'):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        if not user_passes_ai_chat_folder_permissions(request, repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -638,6 +680,8 @@ class ChatView(APIView):
         if not session:
             return api_error(status.HTTP_404_NOT_FOUND, 'Session not found.')
         if not check_folder_permission(request, session.repo_id, '/'):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        if not user_passes_ai_chat_folder_permissions(request, session.repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if not check_session_access(session, request.user.username):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
@@ -687,12 +731,15 @@ class ChatView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, 'Virtual library is not supported.')
         if not check_folder_permission(request, repo_id, '/'):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        if not user_passes_ai_chat_folder_permissions(request, repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         repo_permission = check_folder_permission(request, repo_id, '/')
         can_upload = parse_repo_perm(repo_permission).can_upload if repo_permission else False
 
         org_id = request.user.org.org_id if getattr(request.user, 'org', None) else None
-        if is_ai_usage_over_limit(request.user, org_id):
+        usage_context = resolve_repo_ai_usage_context(repo_id, org_id, AI_SCENARIO_CHAT)
+        if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         session_uuid = request.data.get('session_uuid')
@@ -726,10 +773,9 @@ class ChatView(APIView):
             'session_uuid': session_uuid,
             'query': query,
             'attachments': attachments,
-            'username': request.user.username,
-            'org_id': org_id,
             'llm_model': request.data.get('model'),
             'repo_prompt': get_repo_prompt(repo_id),
+            'scenario': AI_SCENARIO_CHAT,
         }
 
         task_info = {

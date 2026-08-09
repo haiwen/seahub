@@ -63,13 +63,8 @@
   padding: 0 12px;
 }
 
-.sf-metadata-tags-editor .sf-metadata-tags-editor-container .search-result-empty {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  font-size: 14px;
-  margin: 40px 0;
-  color: var(--bs-body-secondary-color);
+.sf-metadata-tags-editor .sf-metadata-tags-editor-container .search-empty-tip {
+  margin: -10px 0;
 }
 
 .sf-metadata-tags-editor .sf-metadata-tags-editor-container .sf-metadata-tags-editor-title {

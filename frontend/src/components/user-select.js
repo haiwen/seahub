@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import { Popover } from 'reactstrap';
 import { seafileAPI } from '../utils/seafile-api';
 import { gettext } from '../utils/constants';
+import SearchEmptyTip from './common/search-empty-tip';
 import { Utils } from '../utils/utils';
 import toaster from './toast';
 import KeyCodes from '../constants/keyCodes';
@@ -232,6 +233,7 @@ class UserSelect extends React.Component {
               return (
                 <UserItem
                   key={index}
+                  idx={index}
                   user={user}
                   enableDeleteUser={true}
                   onDeleteUser={this.onDeleteSelectedCollaborator}
@@ -286,10 +288,7 @@ class UserSelect extends React.Component {
                   })
                 )}
                 {searchedUsers.length === 0 &&
-                  <div className="no-search-result">
-                    {searchValue ? gettext('User not found') : gettext('Enter characters to start searching')}
-                  </div>
-                }
+                  <SearchEmptyTip text={searchValue ? gettext('User not found') : gettext('Enter characters to start searching')} />}
               </div>
             </div>
           </Popover>

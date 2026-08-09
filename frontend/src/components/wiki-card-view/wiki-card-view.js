@@ -12,6 +12,7 @@ const propTypes = {
   data: PropTypes.object.isRequired,
   deleteWiki: PropTypes.func.isRequired,
   renameWiki: PropTypes.func.isRequired,
+  updateWiki: PropTypes.func.isRequired,
   transferWiki: PropTypes.func.isRequired,
   leaveSharedWiki: PropTypes.func.isRequired,
   unshareGroupWiki: PropTypes.func.isRequired,
@@ -81,6 +82,7 @@ class WikiCardView extends Component {
         key='my-Wikis'
         deleteWiki={this.props.deleteWiki}
         renameWiki={this.props.renameWiki}
+        updateWiki={this.props.updateWiki}
         transferWiki={this.props.transferWiki}
         unshareGroupWiki={this.props.unshareGroupWiki}
         sidePanelRate={sidePanelRate}
@@ -90,7 +92,7 @@ class WikiCardView extends Component {
         isDepartment={false}
         isShowAvatar={false}
         isMyWikis={true}
-        toggleAddWikiDialog={canCreateWiki ? toggleAddWikiDialog.bind(this, null, true) : null}
+        toggleAddWikiDialog={canCreateWiki ? toggleAddWikiDialog.bind(this, null) : null}
       />
     );
     wikiCardGroups.push(
@@ -98,6 +100,7 @@ class WikiCardView extends Component {
         key='shared-Wikis'
         deleteWiki={this.props.leaveSharedWiki}
         renameWiki={this.props.renameWiki}
+        updateWiki={this.props.updateWiki}
         transferWiki={this.props.transferWiki}
         unshareGroupWiki={this.props.unshareGroupWiki}
         wikis={sharedWikis}
@@ -120,6 +123,7 @@ class WikiCardView extends Component {
             deleteWiki={this.props.deleteWiki}
             unshareGroupWiki={this.props.unshareGroupWiki}
             renameWiki={this.props.renameWiki}
+            updateWiki={this.props.updateWiki}
             transferWiki={this.props.transferWiki}
             sidePanelRate={sidePanelRate}
             isSidePanelFolded={isSidePanelFolded}
@@ -128,7 +132,7 @@ class WikiCardView extends Component {
             title={groupWiki.group_name}
             isDepartment={true}
             isShowAvatar={false}
-            toggleAddWikiDialog={(canCreateWiki && this.state.departmentMap[groupWiki.group_id]) ? toggleAddWikiDialog.bind(this, groupWiki.group_id, false) : null}
+            toggleAddWikiDialog={(canCreateWiki && this.state.departmentMap[groupWiki.group_id]) ? toggleAddWikiDialog.bind(this, groupWiki.group_id) : null}
           />
         );
       }
@@ -139,6 +143,7 @@ class WikiCardView extends Component {
           key='old-Wikis'
           deleteWiki={this.props.deleteWiki}
           renameWiki={this.props.renameWiki}
+          updateWiki={this.props.updateWiki}
           transferWiki={this.props.transferWiki}
           unshareGroupWiki={this.props.unshareGroupWiki}
           convertWiki={this.props.convertWiki}
