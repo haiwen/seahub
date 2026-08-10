@@ -52,6 +52,7 @@ AI_SCENARIO_TRANSLATE = 'translate'
 AI_SCENARIO_WRITING_ASSISTANT = 'writing-assistant'
 AI_SCENARIO_CHAT = 'chat'
 AI_SCENARIO_UNKNOWN = 'unknown'
+AI_SCENARIO_SEARCH_ICONS = 'search-icons'
 
 
 # API
@@ -105,6 +106,13 @@ def translate(params):
 def writing_assistant(params):
     headers = gen_headers()
     url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/writing-assistant/')
+    resp = requests.post(url, json=params, headers=headers, timeout=30)
+    return resp
+
+
+def search_icons(params):
+    headers = gen_headers()
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/search-icons/')
     resp = requests.post(url, json=params, headers=headers, timeout=30)
     return resp
 

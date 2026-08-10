@@ -23,8 +23,8 @@ from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthenti
 from seahub.utils import get_file_type_and_ext, IMAGE
 from seahub.views import check_folder_permission
 from seahub.utils.repo import parse_repo_perm
-from seahub.ai.utils import image_caption, translate, writing_assistant, verify_ai_config, generate_summary, \
-    generate_file_tags, ocr, is_ai_usage_over_limit, gen_chat_task_id, gen_message_id, \
+from seahub.ai.utils import AI_SCENARIO_SEARCH_ICONS, image_caption, translate, writing_assistant, verify_ai_config, generate_summary, \
+    generate_file_tags, ocr, search_icons, is_ai_usage_over_limit, gen_chat_task_id, gen_message_id, \
     get_ai_reply, process_stream_ai_reply, resolve_repo_ai_usage_context, strip_content_details_from_attachments, \
     verify_chat_ai_config, AI_REPLY_TIMEOUT, AI_SCENARIO_CHAT, AI_SCENARIO_FILE_TAGS, AI_SCENARIO_IMAGE_CAPTION, \
     AI_SCENARIO_OCR, AI_SCENARIO_SUMMARY, AI_SCENARIO_TRANSLATE, AI_SCENARIO_WRITING_ASSISTANT, user_passes_ai_chat_folder_permissions
@@ -443,6 +443,45 @@ class WritingAssistant(APIView):
 
         try:
             resp = writing_assistant(params)
+            resp_json = resp.json()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response(resp_json, resp.status_code)
+
+
+class AISearchIcons(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request):
+        if not verify_ai_config():
+            return api_error(status.HTTP_400_BAD_REQUEST, 'AI server not configured')
+
+        query = request.data.get('query')
+        count = request.data.get('count', 15)
+        org_id = request.user.org.org_id if request.user.org else None
+        username = request.user.username
+
+        if not query:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'query invalid')
+
+        if is_ai_usage_over_limit(username, username, org_id):
+            return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
+
+        params = {
+            'query': query,
+            'count': count,
+            'org_id': org_id,
+            'username': username,
+            'scenario': AI_SCENARIO_SEARCH_ICONS,
+        }
+
+        try:
+            resp = search_icons(params)
             resp_json = resp.json()
         except Exception as e:
             logger.error(e)
