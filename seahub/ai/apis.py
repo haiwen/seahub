@@ -23,7 +23,7 @@ from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthenti
 from seahub.utils import get_file_type_and_ext, IMAGE
 from seahub.views import check_folder_permission
 from seahub.utils.repo import parse_repo_perm
-from seahub.ai.utils import image_caption, translate, writing_assistant, verify_ai_config, generate_summary, \
+from seahub.ai.utils import AI_SCENARIO_SEARCH_ICONS, image_caption, translate, writing_assistant, verify_ai_config, generate_summary, \
     generate_file_tags, ocr, search_icons, is_ai_usage_over_limit, gen_chat_task_id, gen_message_id, \
     get_ai_reply, process_stream_ai_reply, resolve_repo_ai_usage_context, strip_content_details_from_attachments, \
     verify_chat_ai_config, AI_REPLY_TIMEOUT, AI_SCENARIO_CHAT, AI_SCENARIO_FILE_TAGS, AI_SCENARIO_IMAGE_CAPTION, \
@@ -469,7 +469,7 @@ class AISearchIcons(APIView):
         if not query:
             return api_error(status.HTTP_400_BAD_REQUEST, 'query invalid')
 
-        if is_ai_usage_over_limit(request.user, org_id):
+        if is_ai_usage_over_limit(username, username, org_id):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         params = {
@@ -477,6 +477,7 @@ class AISearchIcons(APIView):
             'count': count,
             'org_id': org_id,
             'username': username,
+            'scenario': AI_SCENARIO_SEARCH_ICONS,
         }
 
         try:

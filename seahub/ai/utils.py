@@ -52,6 +52,7 @@ AI_SCENARIO_TRANSLATE = 'translate'
 AI_SCENARIO_WRITING_ASSISTANT = 'writing-assistant'
 AI_SCENARIO_CHAT = 'chat'
 AI_SCENARIO_UNKNOWN = 'unknown'
+AI_SCENARIO_SEARCH_ICONS = 'search-icons'
 
 
 # API
