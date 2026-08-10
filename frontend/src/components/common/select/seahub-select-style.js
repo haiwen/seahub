@@ -12,7 +12,7 @@ const DEFAULT_CONTROL_STYLE = {
 const FOCUS_CONTROL_STYLE = {
   fontSize: '14px',
   padding: '0 4px',
-    border: '1px solid var(--bs-form-select-focus-border-color)',
+  border: '1px solid var(--bs-form-select-focus-border-color)',
   boxShadow: 'none',
   backgroundColor: 'var(--bs-popover-bg)',
   borderRadius: '4px',

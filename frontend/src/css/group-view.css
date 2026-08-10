@@ -4,5 +4,5 @@
 }
 
 .group-member:hover {
-  background: #f5f5f5;
+  background: var(--bs-hover-secondary-bg);
 }
