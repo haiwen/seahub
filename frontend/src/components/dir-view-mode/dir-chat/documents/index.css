@@ -153,14 +153,10 @@
   height: 57px;
   padding: 0 12px 0 16px;
   border-bottom: 1px solid var(--bs-border-secondary-color);
-  background-color: #f6f8fa;
+  background-color: var(--bs-body-secondary-bg);
   gap: 4px;
   overflow: hidden;
   flex-shrink: 0;
-}
-
-[data-bs-theme="dark"] .seafile-ai-chat-documents .seafile-ai-chat-document-info {
-  background-color: var(--bs-body-secondary-bg);
 }
 
 .seafile-ai-chat-documents .seafile-ai-chat-document-info .seafile-ai-chat-document-info-content {

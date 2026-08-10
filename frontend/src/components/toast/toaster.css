@@ -56,14 +56,9 @@
   justify-content: space-between;
   box-sizing: border-box;
   border-radius: 3px;
-  box-shadow: rgba(67, 90, 111, 0.3) 0px 0px 1px, rgba(67, 90, 111, 0.47) 0px 8px 10px -4px;
+  box-shadow: var(--bs-box-shadow-none, rgba(67, 90, 111, 0.3) 0px 0px 1px, rgba(67, 90, 111, 0.47) 0px 8px 10px -4px);
   padding: 10px 16px;
-  background: var(--bs-body-bg);
-}
-
-[data-bs-theme=dark] .seahub-toast-alert-container {
-  box-shadow: none;
-  background-color: #292929;
+  background: var(--bs-popover-bg);
 }
 
 .seahub-toast-alert-container.success {
@@ -125,11 +120,7 @@
   margin: 0;
   font-weight: 600;
   font-size: 14px;
-  color: #435a6f;
-}
-
-[data-bs-theme=dark] .seahub-toast-alert-container .toast-text-title {
-  color: rgba(255, 255, 255, .9);
+  color: var(--bs-body-color);
 }
 
 .seahub-toast-alert-container .toast-text-child {
@@ -147,12 +138,8 @@
   line-height: 22px;
   font-weight: 700;
   font-size: 20px;
-  color: #000;
+  color: var(--bs-icon-color);
   opacity: 0.5;
-}
-
-[data-bs-theme=dark] .seahub-toast-alert-container .toast-close {
-  color: rgba(255, 255, 255, .7);
 }
 
 .seahub-toast-alert-container .toast-close:hover {

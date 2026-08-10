@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
-import IconButton from '../../components/icon-button';
+import IconButton from '../icon-button';
 import Icon from '../../components/icon';
 import { gettext } from '../../utils/constants';
 import CustomDropdown from '../../components/dropdown';

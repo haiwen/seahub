@@ -211,7 +211,7 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
         hidePopover={onPopoverToggle}
         hidePopoverWithEsc={onPopoverToggle}
       >
-        <div className="sf-metadata-edit-column-options-container sf-popover-container">
+        <div className="sf-metadata-edit-column-options-container">
           <div className="sf-metadata-edit-column-options-search-container">
             <SearchInput
               className="sf-metadata-option-search-control"

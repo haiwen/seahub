@@ -9,8 +9,7 @@
 /* edit color popover */
 .sf-metadata-edit-option-color-popover .popover {
   max-width: 425px;
-  padding-top: 5px;
-  padding-left: 5px;
+  padding: 16px;
 }
 
 .sf-metadata-edit-option-color-popover .sf-metadata-edit-option-color-item-input {
@@ -24,8 +23,8 @@
 }
 
 .sf-metadata-edit-option-color-popover .sf-metadata-edit-option-color-item-container {
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;

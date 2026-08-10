@@ -245,8 +245,8 @@
   z-index: 4;
 }
 
-[data-bs-theme="dark"] .grid-item .grid-file-img-link .thumbnail {
-  background-color: white;
+.grid-item .grid-file-img-link .thumbnail {
+  background-color: var(--bs-thumbnail-bg-color, transparent);
   padding: 2px;
   border-radius: 2px;
 }

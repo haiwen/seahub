@@ -112,17 +112,17 @@
 }
 
 .tree-view .dropdown .right-icon {
-  width: 20px;
-  height: 20px;
-  border-radius: 3px;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #666;
-  margin-top: 2px;
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--bs-icon-color);
+    margin-top: 2px;
 }
 
 .tree-view .dropdown .right-icon:hover {
-  background-color: #dbdbdb;
+    background-color: var(--bs-hover-tertiary-bg);
 }
