@@ -62,3 +62,8 @@
   height: 1px;
   width: 100%;
 }
+
+.sf-md-viewer-topbar .dropdown .more-dropdown-toggle {
+  width: 28px;
+  height: 28px;
+}

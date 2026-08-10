@@ -193,6 +193,7 @@ class SelectOptionGroup extends Component {
             onChange={this.onChangeSearch}
             ref={this.searchInputRef}
             isClearable={true}
+            clearValue={() => this.onChangeSearch('')}
           />
         </div>
         <div className="option-group-content" ref={(ref) => this.optionGroupContentRef = ref}>
