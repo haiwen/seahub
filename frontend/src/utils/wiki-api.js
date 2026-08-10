@@ -3,6 +3,8 @@ import axios from 'axios';
 import FormData from 'form-data';
 import { siteRoot } from './constants';
 
+const DEFAULT_WIKI_ICON_SEARCH_COUNT = 15;
+
 class WikiAPI {
 
   init({ server, username, password, token }) {
@@ -49,6 +51,11 @@ class WikiAPI {
     const url = this.server + '/api/v2.1/departments/';
     const params = { can_admin: true };
     return this.req.get(url, { params: params });
+  }
+
+  generateWikiIcons(query, count = DEFAULT_WIKI_ICON_SEARCH_COUNT) {
+    const url = this.server + '/api/v2.1/ai/search-icons/';
+    return this.req.post(url, { query, count });
   }
 
   listWikiDir(wikiId, dirPath, withParents) {

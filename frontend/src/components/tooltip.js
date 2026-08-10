@@ -11,6 +11,13 @@ const propTypes = {
   className: PropTypes.string,
   children: PropTypes.node,
   shortcut: PropTypes.arrayOf(PropTypes.string),
+  delay: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.shape({
+      show: PropTypes.number,
+      hide: PropTypes.number,
+    }),
+  ]),
 };
 
 const Tooltip = ({
@@ -18,7 +25,8 @@ const Tooltip = ({
   placement = 'bottom',
   className,
   children,
-  shortcut
+  shortcut,
+  delay,
 }) => {
 
   const [isOpen, setIsOpen] = useState(false);
@@ -56,6 +64,7 @@ const Tooltip = ({
     hideArrow: true,
     autohide: true,
     trigger: 'hover focus click',
+    delay,
     modifiers: [
       {
         name: 'offset',
