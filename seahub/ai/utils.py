@@ -109,9 +109,9 @@ def writing_assistant(params):
     return resp
 
 
-def generate_icon(params):
+def search_icons(params):
     headers = gen_headers()
-    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/generate-icon/')
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/search-icons/')
     resp = requests.post(url, json=params, headers=headers, timeout=30)
     return resp
 
