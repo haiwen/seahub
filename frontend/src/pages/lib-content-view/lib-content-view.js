@@ -49,6 +49,7 @@ import {
   METADATA_MODE,
   TAGS_MODE,
   HISTORY_MODE,
+  SETTINGS_MODE,
   TRASH_MODE,
   CHAT_MODE
 } from '../../components/dir-view-mode/constants';
@@ -218,9 +219,10 @@ class LibContentView extends React.Component {
     this.unsubscribeEvent = this.props.eventBus.subscribe(EVENT_BUS_TYPE.SEARCH_LIBRARY_CONTENT, this.onSearchedClick);
     this.unsubscribeSelectSearchedTag = this.props.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_TAG, this.onTreeNodeClick);
 
-    this.unsubscribeOpenTreePanel = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_TREE_PANEL, this.openTreePanel);
     this.unsubscribeSwitchToHistoryView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_HISTORY_VIEW, this.switchToHistoryView);
     this.unsubscribeSwitchToChatView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_CHAT_VIEW, this.switchToChatView);
+    this.unsubscribeSwitchToSettingsView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_SETTINGS_VIEW, this.switchToSettingsView);
+    this.unsubscribeSwitchToTagsView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_TAGS_VIEW, this.switchToTagsView);
     this.unsubscribeSwitchToTrashView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_TRASH_VIEW, this.switchToTrashView);
     this.unsubscribeUpdateTrashPath = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_TRASH_PATH, this.updateTrashPath);
 
@@ -320,9 +322,11 @@ class LibContentView extends React.Component {
   calculatePara = async (props) => {
     const { repoID } = props;
 
-    const { path, viewId, tagId, isHistory, isTrash, isChat } = this.getInfoFromLocation(repoID);
+    const { path, viewId, tagId, isHistory, isSettings, isTrash, isChat } = this.getInfoFromLocation(repoID);
     let currentMode;
-    if (isTrash) {
+    if (isSettings) {
+      currentMode = SETTINGS_MODE;
+    } else if (isTrash) {
       currentMode = TRASH_MODE;
     } else if (isHistory) {
       currentMode = HISTORY_MODE;
@@ -344,7 +348,7 @@ class LibContentView extends React.Component {
       if (currentMode === CHAT_MODE && !canUseAIChat) {
         currentMode = Cookies.get('seafile_view_mode') || LIST_MODE;
       }
-      const isDirentDetailShow = !isHistory && !isTrash && currentMode !== CHAT_MODE && storedDirentDetailShowState === 'true';
+      const isDirentDetailShow = !isSettings && !isHistory && !isTrash && currentMode !== CHAT_MODE && storedDirentDetailShowState === 'true';
       const isGroupOwnedRepo = repoInfo.owner_email.includes('@seafile_group');
       document.title = repoInfo.repo_name;
 
@@ -387,6 +391,9 @@ class LibContentView extends React.Component {
 
     const tagId = urlParams.get('tag');
     if (tagId) return { path: `/${PRIVATE_FILE_TYPE.TAGS_PROPERTIES}/${tagId}`, tagId };
+
+    const isSettings = urlParams.get('settings');
+    if (isSettings) return { path: '/', isSettings: true };
 
     const isHistory = urlParams.get('history');
     if (isHistory) return { path: '/', isHistory: true };
@@ -435,11 +442,12 @@ class LibContentView extends React.Component {
     window.removeEventListener('popstate', this.onpopstate);
     window.onpopstate = this.oldOnpopstate;
     this.unsubscribeEvent();
-    this.unsubscribeOpenTreePanel();
     this.unsubscribeEventBus && this.unsubscribeEventBus();
     this.unsubscribeSelectSearchedTag && this.unsubscribeSelectSearchedTag();
     this.unsubscribeSwitchToHistoryView && this.unsubscribeSwitchToHistoryView();
     this.unsubscribeSwitchToChatView && this.unsubscribeSwitchToChatView();
+    this.unsubscribeSwitchToSettingsView && this.unsubscribeSwitchToSettingsView();
+    this.unsubscribeSwitchToTagsView && this.unsubscribeSwitchToTagsView();
     this.unsubscribeColumnVisibilityChanged && this.unsubscribeColumnVisibilityChanged();
     this.unsubscribeTableViewColumnVisibilityChanged && this.unsubscribeTableViewColumnVisibilityChanged();
     this.unsubscribeDirentStatusChanged && this.unsubscribeDirentStatusChanged();
@@ -480,13 +488,15 @@ class LibContentView extends React.Component {
 
   onpopstate = (event) => {
     const { repoID } = this.props;
-    const { path: urlPath, viewId, tagId, isTrash, isChat } = this.getInfoFromLocation(repoID);
+    const { path: urlPath, viewId, tagId, isSettings, isTrash, isChat } = this.getInfoFromLocation(repoID);
 
     let currentMode;
     let resolvedPath = urlPath;
     let resolvedTagId = tagId;
 
-    if (isTrash) {
+    if (isSettings) {
+      currentMode = SETTINGS_MODE;
+    } else if (isTrash) {
       currentMode = TRASH_MODE;
     } else if (isChat && this.canUseAIChat()) {
       currentMode = CHAT_MODE;
@@ -726,10 +736,12 @@ class LibContentView extends React.Component {
 
   hideMetadataView = (isSetRoot = false) => {
     const { repoID } = this.props;
-    const { path, isHistory, isTrash, isChat } = this.getInfoFromLocation(repoID);
+    const { path, isHistory, isSettings, isTrash, isChat } = this.getInfoFromLocation(repoID);
     let mode = Cookies.get('seafile_view_mode') || LIST_MODE;
     if (isHistory) {
       mode = HISTORY_MODE;
+    } else if (isSettings) {
+      mode = SETTINGS_MODE;
     } else if (isTrash) {
       mode = TRASH_MODE;
     } else if (isChat && this.canUseAIChat()) {
@@ -1412,6 +1424,29 @@ class LibContentView extends React.Component {
       isDirentDetailShow: false,
       isDirentSelected: false,
     });
+  };
+
+  switchToSettingsView = (isMigrationTipShown) => {
+    const repoInfo = this.state.currentRepoInfo;
+    const url = siteRoot + 'library/' + repoInfo.repo_id + '/' + encodeURIComponent(repoInfo.repo_name) + '/?settings=true';
+    window.history.pushState({}, '', url);
+
+    this.setState({
+      currentMode: SETTINGS_MODE,
+      isMigrationTipShown,
+      path: '/',
+      isDirentDetailShow: false,
+      isDirentSelected: false,
+    });
+  };
+
+  switchToTagsView = (tagId) => {
+    const filePath = `/${PRIVATE_FILE_TYPE.TAGS_PROPERTIES}/${tagId}`;
+    this.setState({
+      isDirentDetailShow: false,
+      isDirentSelected: false,
+    });
+    this.showTagsView(filePath, tagId);
   };
 
   switchToTrashView = () => {
@@ -2856,17 +2891,6 @@ class LibContentView extends React.Component {
     e.preventDefault();
   };
 
-  openTreePanel = (callback) => {
-    if (this.state.isTreePanelShown) {
-      callback();
-    } else {
-      this.toggleTreePanel();
-      setTimeout(() => {
-        callback();
-      }, 100);
-    }
-  };
-
   toggleTreePanel = () => {
     this.setState({
       isTreePanelShown: !this.state.isTreePanelShown
@@ -3080,6 +3104,7 @@ class LibContentView extends React.Component {
                           )
                         ) : (
                           <CurDirPath
+                            currentMode={this.state.currentMode}
                             currentRepoInfo={this.state.currentRepoInfo}
                             repoID={this.props.repoID}
                             repoName={this.state.currentRepoInfo.repo_name}
@@ -3148,6 +3173,7 @@ class LibContentView extends React.Component {
                           isTreePanelShown={this.state.isTreePanelShown}
                           isDirentDetailShow={this.state.isDirentDetailShow}
                           currentMode={this.state.currentMode}
+                          isMigrationTipShown={this.state.isMigrationTipShown || isRepoInfoBarShow}
                           path={this.state.path}
                           repoID={this.props.repoID}
                           currentRepoInfo={this.state.currentRepoInfo}
@@ -3238,7 +3264,7 @@ class LibContentView extends React.Component {
                       )}
                     </div>
                   </div>
-                  {canUpload && this.state.pathExist && !this.state.isViewFile && ![METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH_MODE, CHAT_MODE].includes(this.state.currentMode) && (
+                  {canUpload && this.state.pathExist && !this.state.isViewFile && ![METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH_MODE, SETTINGS_MODE, CHAT_MODE].includes(this.state.currentMode) && (
                     <FileUploader
                       ref={uploader => this.uploader = uploader}
                       dragAndDrop={true}

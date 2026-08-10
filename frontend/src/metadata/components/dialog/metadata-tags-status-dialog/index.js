@@ -1,13 +1,19 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { ModalBody, ModalFooter, Button, FormGroup, Label } from 'reactstrap';
-import Switch from '../../../../components/switch';
-import { gettext } from '../../../../utils/constants';
+import { Button } from 'reactstrap';
+import classnames from 'classnames';
 import tagsAPI from '../../../../tag/api';
-import toaster from '../../../../components/toast';
+import { ALL_TAGS_ID } from '../../../../tag/constants';
+import { gettext } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
-import TurnOffConfirmDialog from '../turn-off-confirm-dialog';
+import Switch from '../../../../components/switch';
+import OpIcon from '../../../../components/op-icon';
+import toaster from '../../../../components/toast';
+import Loading from '../../../../components/loading';
 import { SeahubSelect } from '../../../../components/common/select';
+import TurnOffConfirmDialog from '../turn-off-confirm-dialog';
+import { eventBus } from '../../../../components/common/event-bus';
+import { EVENT_BUS_TYPE } from '../../../../components/common/event-bus-type';
 
 const langOptions = [
   {
@@ -19,42 +25,51 @@ const langOptions = [
   }
 ];
 
-const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, toggleDialog: toggle, submit, enableMetadata, enableAI, showMigrateTip, onMigrateSuccess, onMigrateStart, onMigrateError }) => {
+const MetadataTagsStatusDialog = ({
+  value: oldValue,
+  lang: oldLang,
+  repoID,
+  submit,
+  enableMetadata,
+  enableAI,
+  isMigrationTipShown
+}) => {
   const [value, setValue] = useState(oldValue);
   const [lang, setLang] = useState(oldLang);
   const [submitting, setSubmitting] = useState(false);
   const [showTurnOffConfirmDialog, setShowTurnOffConfirmDialog] = useState(false);
-  const onToggle = useCallback(() => {
-    toggle();
-  }, [toggle]);
+  const [isMigrating, setIsMigrating] = useState(false);
 
-  const onSubmit = useCallback(() => {
-    if (!value) {
+  const onSubmit = useCallback((nextValue, nextLang) => {
+    if (!nextValue) {
       setShowTurnOffConfirmDialog(true);
       return;
     }
     setSubmitting(true);
-    tagsAPI.openTags(repoID, lang).then(res => {
-      submit(true, lang);
-      toggle();
+    tagsAPI.openTags(repoID, nextLang).then(res => {
+      setSubmitting(false);
+      submit(true, nextLang);
+      setValue(nextValue);
+      setLang(nextLang);
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
       setSubmitting(false);
     });
-  }, [lang, repoID, submit, toggle, value]);
+  }, [repoID, submit]);
 
   const migrateTag = useCallback(() => {
-    onMigrateStart && onMigrateStart();
+    setIsMigrating(true);
     tagsAPI.migrateTags(repoID).then(res => {
+      setIsMigrating(false);
       toaster.success(gettext('Tags migrated successfully'));
-      onMigrateSuccess && onMigrateSuccess();
+      eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_TO_TAGS_VIEW, ALL_TAGS_ID);
     }).catch(error => {
+      setIsMigrating(false);
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
-      onMigrateError && onMigrateError();
     });
-  }, [repoID, onMigrateSuccess, onMigrateStart, onMigrateError]);
+  }, [repoID]);
 
   const turnOffConfirmToggle = useCallback(() => {
     setShowTurnOffConfirmDialog(!showTurnOffConfirmDialog);
@@ -64,94 +79,111 @@ const MetadataTagsStatusDialog = ({ value: oldValue, lang: oldLang, repoID, togg
     setShowTurnOffConfirmDialog(false);
     setSubmitting(true);
     tagsAPI.closeTags(repoID).then(res => {
+      setSubmitting(false);
       submit(false);
-      toggle();
+      setValue(false);
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
       setSubmitting(false);
     });
-  }, [repoID, submit, toggle]);
+  }, [repoID, submit]);
 
   const onValueChange = useCallback(() => {
     const nextValue = !value;
-    setValue(nextValue);
-  }, [value]);
+    const submitDisabled = (oldValue === nextValue && oldLang === lang) || submitting || isMigrating || !enableMetadata;
+    if (!submitDisabled) {
+      onSubmit(nextValue, lang);
+    }
+  }, [value, onSubmit, oldValue, oldLang, lang, submitting, enableMetadata, isMigrating]);
 
   const onSelectChange = useCallback((option) => {
-    const newValue = option.value;
-    if (newValue === lang) return;
-    setLang(newValue);
-  }, [lang]);
+    const nextLang = option.value;
+    const submitDisabled = (oldValue === value && oldLang === nextLang) || submitting || isMigrating || !enableMetadata;
+    if (!submitDisabled) {
+      onSubmit(value, nextLang);
+    }
+  }, [onSubmit, oldValue, value, oldLang, submitting, enableMetadata, isMigrating]);
+
+  useEffect(() => {
+    if (value && !enableMetadata) {
+      setValue(false);
+    }
+  }, [value, enableMetadata]);
 
   return (
-    <>
-      {!showTurnOffConfirmDialog && (
-        <>
-          <ModalBody className="metadata-face-recognition-dialog">
-            {!enableMetadata && <p className="open-metadata-tip">{gettext('Please turn on extended properties setting first')}</p>}
-            <Switch
-              checked={value}
-              disabled={submitting || !enableMetadata}
-              size="large"
-              textPosition="right"
-              className="change-face-recognition-status-management w-100"
-              onChange={onValueChange}
-              placeholder={gettext('Tags')}
-            />
-            <p className="tip">
-              {gettext('Enable tags to add tags to files and search files by tags.')}
-            </p>
-            {value && enableAI &&
-              <FormGroup className="mt-6">
-                <Label>{gettext('Language for tags generated by AI')}</Label>
-                <SeahubSelect
-                  className='tags-language-selector w-75'
-                  value={langOptions.find(o => o.value === lang) || langOptions[1]}
-                  options={langOptions}
-                  onChange={onSelectChange}
-                  isClearable={false}
-                />
-              </FormGroup>
-            }
-            {showMigrateTip &&
-              <FormGroup className="mt-6">
-                <p>{gettext('This library contains tags of old version. Do you like to migrate the tags to new version?')}</p>
-                <Button
-                  color="primary"
-                  onClick={migrateTag}
-                >
-                  {gettext('Migrate old version tags')}
-                </Button>
-              </FormGroup>
-            }
-          </ModalBody>
-          <ModalFooter>
-            <Button color="secondary" onClick={onToggle}>{gettext('Cancel')}</Button>
-            <Button color="primary" disabled={(oldValue === value && oldLang === lang.value) || submitting || !enableMetadata} onClick={onSubmit}>{gettext('Submit')}</Button>
-          </ModalFooter>
-        </>
-      )}
+    <div className='library-setting-item'>
+      <h3 className='library-setting-item-heading'>{gettext('Tags')}</h3>
+      <>
+        <div className='d-flex align-items-center'>
+          <Switch
+            checked={value}
+            disabled={submitting || isMigrating || !enableMetadata}
+            size="large"
+            textPosition="right"
+            onChange={onValueChange}
+            placeholder={gettext('Tags')}
+          />
+          {!enableMetadata &&
+          <OpIcon
+            id="tags-help-icon"
+            className="ml-1 position-relative help-icon"
+            symbol="question-circle-stroked"
+            tooltip={gettext('Please turn on extended properties setting first')}
+            placement='right'
+          />
+          }
+        </div>
+        <p className="setting-tip">
+          {gettext('Enable tags to add tags to files and search files by tags.')}
+        </p>
+        {value && enableAI &&
+        <div className="mt-4">
+          <h4 className='library-setting-item-2nd-heading'>{gettext('Language for tags generated by AI')}</h4>
+          <SeahubSelect
+            className='tags-language-selector w-50 mt-2'
+            value={langOptions.find(o => o.value === lang) || langOptions[1]}
+            options={langOptions}
+            onChange={onSelectChange}
+            isClearable={false}
+          />
+        </div>
+        }
+        {isMigrationTipShown &&
+        <div className="mt-5">
+          <p className='m-0'>{gettext('This library contains tags of old version. Do you like to migrate the tags to new version?')}</p>
+          <Button
+            color="primary"
+            outline={true}
+            className='mt-2 migrate-tags-btn'
+            onClick={isMigrating ? () => {} : migrateTag}
+          >
+            <Loading className={classnames('tags-migrating-icon', { 'visible': isMigrating })} />
+            <span className={classnames('migrate-tags-btn-text', { 'visible': !isMigrating })}>{gettext('Migrate old version tags')}</span>
+          </Button>
+        </div>
+        }
+      </>
       {showTurnOffConfirmDialog && (
-        <TurnOffConfirmDialog title={gettext('Turn off tags')} toggle={turnOffConfirmToggle} submit={turnOffConfirmSubmit}>
+        <TurnOffConfirmDialog
+          title={gettext('Turn off tags')}
+          toggle={turnOffConfirmToggle}
+          submit={turnOffConfirmSubmit}
+        >
           <p>{gettext('Do you really want to turn off tags? Existing tags will all be deleted.')}</p>
         </TurnOffConfirmDialog>
       )}
-    </>
+    </div>
   );
 };
 
 MetadataTagsStatusDialog.propTypes = {
   value: PropTypes.bool.isRequired,
   repoID: PropTypes.string.isRequired,
-  toggleDialog: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
   enableAI: PropTypes.bool.isRequired,
   enableMetadata: PropTypes.bool.isRequired,
-  showMigrateTip: PropTypes.bool,
-  onMigrateSuccess: PropTypes.func,
-  onMigrateError: PropTypes.func,
-  onMigrateStart: PropTypes.func,
+  isMigrationTipShown: PropTypes.bool
 };
 
 export default MetadataTagsStatusDialog;

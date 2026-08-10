@@ -4,6 +4,10 @@ import SortOptionsDialog from '../../components/dialog/sort-options';
 import DirPath from './dir-path';
 import withDynamicPathWidth from './withDynamicPathWidth';
 import Icon from '../icon';
+import {
+  SETTINGS_MODE,
+  TRASH_MODE
+} from '../../components/dir-view-mode/constants';
 
 // Wrap DirPath with dynamic width HOC (without extra wrapper)
 const DirPathWithDynamicWidth = withDynamicPathWidth(DirPath);
@@ -11,6 +15,7 @@ const DirPathWithDynamicWidth = withDynamicPathWidth(DirPath);
 DirPathWithDynamicWidth.displayName = 'DirPathWithDynamicWidth';
 
 const propTypes = {
+  currentMode: PropTypes.string.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
   repoID: PropTypes.string.isRequired,
   repoName: PropTypes.string.isRequired,
@@ -56,6 +61,7 @@ class CurDirPath extends React.Component {
   };
 
   render() {
+    const { currentMode } = this.props;
     return (
       <div className="cur-dir-path d-flex justify-content-between align-items-center">
         <DirPathWithDynamicWidth
@@ -85,7 +91,9 @@ class CurDirPath extends React.Component {
           onItemMove={this.props.onItemMove}
           loadDirentList={this.props.loadDirentList}
         />
-        {!this.props.isDesktop && this.props.direntList.length > 0 && (
+        {!this.props.isDesktop &&
+          this.props.direntList.length > 0 &&
+          ![SETTINGS_MODE, TRASH_MODE].includes(currentMode) && (
           <span className="action-icon d-flex align-items-center" onClick={this.toggleSortOptionsDialog}>
             <Icon symbol="sort" aria-hidden="true" />
           </span>

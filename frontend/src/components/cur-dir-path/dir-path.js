@@ -79,11 +79,24 @@ class DirPath extends React.Component {
     return location.href.indexOf('?chat=true') > -1;
   };
 
+  isSettingsMode = () => {
+    return location.href.indexOf('?settings=true') > -1;
+  };
+
   turnChatPathToLink = () => {
     return (
       <>
         <span className="path-split">/</span>
         <span className="path-item path-item-read-only">{gettext('Chat')}</span>
+      </>
+    );
+  };
+
+  turnSettingsPathToLink = () => {
+    return (
+      <>
+        <span className="path-split">/</span>
+        <span className="path-item path-item-read-only">{gettext('Settings')}</span>
       </>
     );
   };
@@ -366,6 +379,10 @@ class DirPath extends React.Component {
       return this.turnChatPathToLink();
     }
 
+    if (this.isSettingsMode()) {
+      return this.turnSettingsPathToLink();
+    }
+
     let nodePath = '';
     let pathElem = pathList.map((item, index) => {
       if (item === '') return null;
@@ -419,6 +436,7 @@ class DirPath extends React.Component {
   render() {
     const { currentPath, repoName, isTreePanelShown, currentRepoInfo } = this.props;
     const pathElem = this.turnPathToLink(currentPath);
+    const isSettingsMode = this.isSettingsMode();
     const isTrashMode = this.isTrashMode();
     const isHistoryMode = this.isHistoryMode();
     const isChatMode = this.isChatMode();
@@ -454,7 +472,7 @@ class DirPath extends React.Component {
             <span className="path-split">/</span>
           </>
         )}
-        {(!isHistoryMode && !isTrashMode && !isChatMode && (currentPath === '/' || currentPath === '')) ?
+        {(!isHistoryMode && !isTrashMode && !isChatMode && !isSettingsMode && (currentPath === '/' || currentPath === '')) ?
           <DirOperationToolbar
             path={this.props.currentPath}
             repoID={this.props.repoID}

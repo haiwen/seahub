@@ -1,7 +1,7 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Button } from 'reactstrap';
 import Switch from '../../../../components/switch';
 import toaster from '../../../../components/toast';
 import TurnOffConfirmDialog from '../turn-off-confirm-dialog';
@@ -73,14 +73,12 @@ const GLOBAL_CONFIGURABLE_COLUMNS = [
   }
 ];
 
-const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns: oldHiddenColumns, toggleDialog: toggle, submit, modifyHiddenColumns }) => {
+const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns: oldHiddenColumns, submit, modifyHiddenColumns }) => {
   const [value, setValue] = useState(oldValue);
   const [submitting, setSubmitting] = useState(false);
   const [showTurnOffConfirmDialog, setShowTurnOffConfirmDialog] = useState(false);
   const [isHiddenColumnsVisible, setHiddenColumnsVisible] = useState(false);
   const [hiddenColumns, setHiddenColumns] = useState(oldHiddenColumns || []);
-
-  const hideColumnBtnRef = useRef(null);
 
   const columns = useMemo(() => {
     return GLOBAL_CONFIGURABLE_COLUMNS.map(column => {
@@ -91,33 +89,29 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
     });
   }, []);
 
-  const onToggle = useCallback(() => {
-    if (submitting) return;
-    toggle && toggle();
-  }, [submitting, toggle]);
-
-  const onSubmit = useCallback(() => {
-    if (!isHiddenColumnsVisible && (oldHiddenColumns !== hiddenColumns)) {
+  const onSubmit = useCallback((nextValue) => {
+    if (oldHiddenColumns !== hiddenColumns) {
       modifyHiddenColumns(hiddenColumns);
     }
 
     // Only invoke metadataAPI when value changed
-    if (oldValue !== value) {
-      if (!value) {
+    if (oldValue !== nextValue) {
+      if (!nextValue) {
         setShowTurnOffConfirmDialog(true);
         return;
       }
       setSubmitting(true);
       metadataAPI.createMetadata(repoID).then(res => {
+        setSubmitting(false);
         submit(true);
+        setValue(nextValue);
       }).catch(error => {
         const errorMsg = Utils.getErrorMsg(error);
         toaster.danger(errorMsg);
         setSubmitting(false);
       });
     }
-    toggle();
-  }, [repoID, oldValue, value, isHiddenColumnsVisible, oldHiddenColumns, hiddenColumns, modifyHiddenColumns, submit, toggle]);
+  }, [repoID, oldValue, oldHiddenColumns, modifyHiddenColumns, submit, hiddenColumns]);
 
   const turnOffConfirmToggle = useCallback(() => {
     setShowTurnOffConfirmDialog(!showTurnOffConfirmDialog);
@@ -127,23 +121,32 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
     setShowTurnOffConfirmDialog(false);
     setSubmitting(true);
     metadataAPI.deleteMetadata(repoID).then(res => {
+      setSubmitting(false);
       submit(false);
-      toggle();
+      setValue(false);
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
       setSubmitting(false);
     });
-  }, [repoID, submit, toggle]);
+  }, [repoID, submit]);
 
   const onValueChange = useCallback(() => {
     const nextValue = !value;
-    setValue(nextValue);
-  }, [value]);
+    const canSubmit = (!submitting && oldValue !== nextValue) || (!isHiddenColumnsVisible && (oldHiddenColumns !== hiddenColumns));
+    if (canSubmit) {
+      onSubmit(nextValue);
+    }
+  }, [value, onSubmit, submitting, oldValue, isHiddenColumnsVisible, oldHiddenColumns, hiddenColumns]);
 
   const hidePopover = useCallback(() => {
     setHiddenColumnsVisible(false);
-  }, []);
+
+    const canSubmit = (!submitting && oldValue !== value) || (oldHiddenColumns !== hiddenColumns);
+    if (canSubmit) {
+      onSubmit(value);
+    }
+  }, [onSubmit, submitting, oldValue, value, oldHiddenColumns, hiddenColumns]);
 
   const showPopover = useCallback(() => {
     setHiddenColumnsVisible(true);
@@ -165,71 +168,61 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
   } else if (count > 1) {
     text = `${count} ${gettext('Hidden properties')}`;
   }
-  const canSubmit = (!submitting && oldValue !== value) || (!isHiddenColumnsVisible && (oldHiddenColumns !== hiddenColumns));
   return (
-    <>
-      {!showTurnOffConfirmDialog && (
-        <>
-          <ModalBody className="metadata-status-management-dialog">
-            <Switch
-              checked={value}
-              disabled={submitting}
-              size="large"
-              textPosition="right"
-              className={classnames('change-metadata-status-management w-100', { 'disabled': submitting })}
-              onChange={onValueChange}
-              placeholder={gettext('Enable extended properties')}
-            />
-            <p className="tip m-0">
-              {gettext('After enable extended properties for files, you can add different properties to files, like collaborators, file expiring time, file description. You can also create different views for files based extended properties.')}
+    <div className='library-setting-item'>
+      <h3 className='library-setting-item-heading'>{gettext('Extended properties')}</h3>
+      <>
+        <Switch
+          checked={value}
+          disabled={submitting}
+          size="large"
+          textPosition="right"
+          className={classnames('change-metadata-status-management w-100', { 'disabled': submitting })}
+          onChange={onValueChange}
+          placeholder={gettext('Enable extended properties')}
+        />
+        <p className="setting-tip">
+          {gettext('After enable extended properties for files, you can add different properties to files, like collaborators, file expiring time, file description. You can also create different views for files based extended properties.')}
+        </p>
+        {value && (
+          <div className="metadata-status-hide-columns-container mt-5">
+            <h4 className="library-setting-item-2nd-heading">{gettext('Global hidden properties')}</h4>
+            <p className="setting-tip">
+              {gettext('Global hidden properties will not be displayed in all views.')}
             </p>
-            {value && (
-              <div className="metadata-status-hide-columns-container mt-4">
-                <span className="text-truncate">{gettext('Global hidden properties')}</span>
-                <p className="tip">
-                  {gettext('Global hidden properties will not be displayed in all views.')}
-                </p>
-                <Button
-                  ref={hideColumnBtnRef}
-                  id="metadata-status-hide-properties-button"
-                  className={classnames('border-0 font-weight-normal metadata-status-hide-properties-button', { 'disabled': !oldValue })}
-                  onClick={onClickHideColumns}
-                >
-                  <Icon symbol="hide" size={24} />
-                  <span className="ml-1">{text}</span>
-                </Button>
-                {isHiddenColumnsVisible && (
-                  <HideColumnPopover
-                    placement="bottom-start"
-                    target="metadata-status-hide-properties-button"
-                    hiddenColumns={hiddenColumns}
-                    columns={columns}
-                    hidePopover={hidePopover}
-                    onChange={onHiddenColumnsChange}
-                  />
-                )}
-              </div>
+            <Button
+              id="metadata-status-hide-properties-button"
+              className={classnames('mt-1 border-0 font-weight-normal metadata-status-hide-properties-button', { 'disabled': !oldValue })}
+              onClick={onClickHideColumns}
+            >
+              <Icon symbol="hide" size={24} />
+              <span className="ml-2">{text}</span>
+            </Button>
+            {isHiddenColumnsVisible && (
+              <HideColumnPopover
+                placement="bottom-end"
+                target="metadata-status-hide-properties-button"
+                hiddenColumns={hiddenColumns}
+                columns={columns}
+                hidePopover={hidePopover}
+                onChange={onHiddenColumnsChange}
+              />
             )}
-          </ModalBody>
-          <ModalFooter>
-            <Button color="secondary" onClick={onToggle}>{gettext('Cancel')}</Button>
-            <Button color="primary" disabled={!canSubmit} onClick={onSubmit}>{gettext('Submit')}</Button>
-          </ModalFooter>
-        </>
-      )}
+          </div>
+        )}
+      </>
       {showTurnOffConfirmDialog && (
         <TurnOffConfirmDialog title={gettext('Turn off extended properties')} toggle={turnOffConfirmToggle} submit={turnOffConfirmSubmit}>
           <p>{gettext('Do you really want to turn off extended properties? Existing properties will all be deleted.')}</p>
         </TurnOffConfirmDialog>
       )}
-    </>
+    </div>
   );
 };
 
 MetadataStatusManagementDialog.propTypes = {
   value: PropTypes.bool,
   repoID: PropTypes.string.isRequired,
-  toggleDialog: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
 };
 
