@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Popover } from 'reactstrap';
 import ModalPortal from '../../modal-portal';
-import ClickOutside from '../../click-outside';
 import SelectOptionGroup from './select-option-group.js';
 import Icon from '../../icon.js';
 import { Utils } from '../../../utils/utils';
@@ -45,8 +44,7 @@ class GroupSelect extends Component {
     let { className, selectedOptions, options, placeholder, searchPlaceholder, noOptionsPlaceholder, isInModal } = this.props;
     const { isShowSelectOptions } = this.state;
     return (
-      <ClickOutside onClickOutside={this.closeSelect}>
-        <div className="d-inline-flex">
+      <>
           <div
             id="group-select"
             ref={(node) => this.selector = node}
@@ -69,7 +67,7 @@ class GroupSelect extends Component {
                   {selectedOptions.map(item =>
                     <span key={item.id} className="selected-option-item">
                       <span className='selected-option-item-name'>{item.name}</span>
-                      <span className="d-flex align-items-center" onClick={() => { this.props.onDeleteOption(item); }}><Icon symbol="close" /></span>
+                      <span className="d-flex align-items-center" onClick={(e) => { e.stopPropagation(); this.props.onDeleteOption(item); }}><Icon symbol="close" /></span>
                     </span>
                   )}
                 </span>
@@ -87,18 +85,23 @@ class GroupSelect extends Component {
               hideArrow={true}
               fade={false}
             >
-              <SelectOptionGroup
-                selectedOptions={selectedOptions}
-                options={options}
-                onSelectOption={this.props.onSelectOption}
-                searchPlaceholder={searchPlaceholder}
-                noOptionsPlaceholder={noOptionsPlaceholder}
-                closeSelect={this.closeSelect}
-                getFilterOptions={this.getFilterOptions}
-              />
-            </Popover>
-          )}
-          {isShowSelectOptions && isInModal && (
+            <SelectOptionGroup
+              selectedOptions={selectedOptions}
+              options={options}
+              onSelectOption={this.props.onSelectOption}
+              searchPlaceholder={searchPlaceholder}
+              noOptionsPlaceholder={noOptionsPlaceholder}
+              onClickOutside={(e) => {
+                const optionGroup = document.querySelector('.option-group');
+                if (optionGroup && optionGroup.contains(e.target)) return;
+                this.closeSelect();
+              }}
+              closeSelect={this.closeSelect}
+              getFilterOptions={this.getFilterOptions}
+            />
+          </Popover>
+        )}
+        {isShowSelectOptions && isInModal && (
             <ModalPortal>
               <SelectOptionGroup
                 className={className}
@@ -110,13 +113,17 @@ class GroupSelect extends Component {
                 onSelectOption={this.props.onSelectOption}
                 searchPlaceholder={searchPlaceholder}
                 noOptionsPlaceholder={noOptionsPlaceholder}
+                onClickOutside={(e) => {
+                  const optionGroup = document.querySelector('.option-group');
+                  if (optionGroup && optionGroup.contains(e.target)) return;
+                  this.closeSelect();
+                }}
                 closeSelect={this.closeSelect}
                 getFilterOptions={this.getFilterOptions}
               />
             </ModalPortal>
           )}
-        </div>
-      </ClickOutside>
+        </>
     );
   }
 }

@@ -76,7 +76,7 @@ class MoreMenu extends React.PureComponent {
         target={target}
         items={menuItems}
         trigger={this.renderCustomTrigger}
-        triggerClassName="icon-btn"
+        triggerClassName="op-icon"
         menuClassName="drop-list"
         menuPortal={false}
       />
