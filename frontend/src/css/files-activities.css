@@ -31,12 +31,6 @@
   z-index: 2;
 }
 
-.activity-user-selector-popover {
-  --bs-popover-max-width: 320px;
-  --bs-popover-body-padding-y: 0;
-  --bs-popover-body-padding-x: 0;
-}
-
 .activity-selected-modifiers {
   min-height: 2rem;
   background: var(--bs-body-secondary-bg);

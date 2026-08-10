@@ -1,9 +1,13 @@
 .repo-list-card {
   flex-shrink: 0;
-  border: 1px solid var(--bs-border-quartus-color);
+  border: 1px solid #eaeaea;
   border-radius: 8px;
   margin-bottom: 24px;
   overflow: hidden;
+}
+
+[data-bs-theme='dark'] .repo-list-card {
+  border: 1px solid rgba(255, 255, 255, .15);
 }
 
 .repo-list-card-header {
@@ -11,12 +15,16 @@
   display: flex;
   padding: 8px 16px;
   background: var(--bs-th-bg);
-  border-bottom: 1px solid var(--bs-border-quartus-color);
+  border-bottom: 1px solid #eaeaea;
   border-radius: 8px 8px 0 0;
   color: #666;
   font-size: 14px;
   box-sizing: border-box;
   cursor: default;
+}
+
+[data-bs-theme='dark'] .repo-list-card-header {
+  border-bottom: 1px solid rgba(255, 255, 255, .15);
 }
 
 .repo-list-card-header > span {
@@ -72,7 +80,7 @@
   height: 40px;
   display: flex;
   padding: 0 16px;
-  border-bottom: 1px solid var(--bs-border-quartus-color);
+  border-bottom: 1px solid #eaeaea;
   align-items: center;
   box-sizing: border-box;
   transition: none;
@@ -80,6 +88,10 @@
 
 .repo-list-item:last-child {
   border-bottom: none;
+}
+
+[data-bs-theme='dark'] .repo-list-item:not(:last-child) {
+  border-bottom: 1px solid rgba(255, 255, 255, .15);
 }
 
 .repo-list-item.hover {

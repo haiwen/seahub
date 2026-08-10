@@ -25,8 +25,12 @@
 .dirent-detail-item .dirent-detail-item-name .seafile-multicolor-icon {
   margin-right: 6px;
   font-size: 14px;
-  color: var(--bs-icon-secondary-color);
+  color: #999;
   flex-shrink: 0;
+}
+
+[data-bs-theme=dark] .dirent-detail-item .dirent-detail-item-name .seafile-multicolor-icon {
+  color: rgba(255, 255, 255, .5);
 }
 
 .dirent-detail-item .dirent-detail-item-name .seafile-multicolor-icon-tag {

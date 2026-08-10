@@ -170,7 +170,7 @@ body {
 }
 
 .dropdown-item:hover .freeze-document-switch .custom-switch-description {
-    color: var(--bs-body-color);
+  color: #fff;
   transition: none;
 }
 

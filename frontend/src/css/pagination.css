@@ -11,9 +11,9 @@
   font-size: 12px;
 }
 
-.paginator .btn:disabled {
-  background-color: var(--bs-disabled-bg);
-  border-color: var(--bs-border-color);
+[data-bs-theme=dark] .paginator .btn:disabled {
+  background-color: rgba(255, 255, 255, .02);
+  border-color: rgba(255, 255, 255, .1);
 }
 
 .paginator .paginator-dropdown .btn:active,

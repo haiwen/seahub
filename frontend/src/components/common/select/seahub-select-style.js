@@ -12,7 +12,7 @@ const DEFAULT_CONTROL_STYLE = {
 const FOCUS_CONTROL_STYLE = {
   fontSize: '14px',
   padding: '0 4px',
-    border: '1px solid var(--bs-form-select-focus-border-color)',
+  border: '1px solid #3e84f7',
   boxShadow: 'none',
   backgroundColor: 'var(--bs-popover-bg)',
   borderRadius: '4px',
@@ -26,7 +26,7 @@ const controlCallback = (provided, state) => {
       ...provided,
       ...DEFAULT_CONTROL_STYLE,
       cursor: 'default',
-      backgroundColor: 'var(--bs-disabled-bg)',
+      backgroundColor: '#f5f5f5',
       opacity: 0.65,
     };
   }
@@ -104,7 +104,7 @@ const MenuSelectStyle = {
   },
   multiValueRemove: (styles) => ({
     ...styles,
-    color: 'var(--bs-icon-secondary-color)',
+    color: '#909090',
     ':hover': {
       backgroundColor: 'transparent',
       color: 'var(--bs-icon-color)',
@@ -118,7 +118,7 @@ const MenuSelectStyle = {
     const { isDisabled } = state;
     return {
       ...provided,
-      color: 'var(--bs-placeholder-color)',
+      color: '#868e96',
       opacity: isDisabled ? 0.65 : 1,
     };
   },

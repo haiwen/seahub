@@ -35,10 +35,14 @@
 .old-history-main .get-more-btn {
   width: 100%;
   padding: .5em 0;
-  background: var(--bs-bg-muted);
+  background: #efefef;
   border: 0;
   color: var(--bs-icon-color);
   border-radius: 2px;
+}
+
+[data-bs-theme=dark] .old-history-main .get-more-btn {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .old-history-main .get-more-btn:hover {
@@ -54,9 +58,13 @@
 
 .old-history-main h2 {
   font-size: 1.5em;
-  color: var(--bs-body-color);
+  color: #222;
   font-weight: bold;
   line-height: 1.5;
+}
+
+[data-bs-theme=dark] .old-history-main h2 {
+  color: var(--bs-body-secondary-color);
 }
 
 .old-history-main .file-name {

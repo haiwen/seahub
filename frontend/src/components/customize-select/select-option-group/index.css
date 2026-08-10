@@ -1,14 +1,18 @@
-.sf-option-group {
+.seafile-option-group {
   position: absolute;
   left: 0;
   min-height: 60px;
   max-height: 300px;
   min-width: 100%;
   max-width: 15rem;
+  box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.1);
+  background: var(--bs-popover-bg);
+  border: 1px solid var(--bs-border-secondary-color);
+  border-radius: 8px;
   z-index: 10001;
 }
 
-.sf-option-group .sf-option-group-search {
+.seafile-option-group .seafile-option-group-search {
   width: 100%;
   padding: 6px 10px;
   min-width: 170px;
@@ -17,7 +21,7 @@
   border-bottom: 1px solid var(--bs-border-secondary-color);
 }
 
-.sf-option-group .sf-option-group-search .form-control {
+.seafile-option-group .seafile-option-group-search .form-control {
   height: 32px;
   border: none;
   border-radius: 4px;
@@ -25,29 +29,29 @@
   cursor: pointer;
 }
 
-.sf-option-group .sf-option-group-search .form-control:focus {
+.seafile-option-group .seafile-option-group-search .form-control:focus {
   outline: none;
   box-shadow: none;
   background-color: transparent;
 }
 
-.sf-option-group .sf-option-group-search .input-icon-addon {
+.seafile-option-group .seafile-option-group-search .input-icon-addon {
   z-index: 1;
   pointer-events: auto;
 }
 
-.sf-option-group .sf-option-group-search .input-icon-addon svg {
-  color: var(--bs-icon-secondary-color);
+.seafile-option-group .seafile-option-group-search .input-icon-addon svg {
+  color: #999;
   cursor: pointer;
 }
 
-.sf-option-group .sf-option-group-content {
+.seafile-option-group .seafile-option-group-content {
   max-height: 252px;
   overflow-y: auto;
   padding: 8px;
 }
 
-.sf-select-option {
+.seafile-select-option {
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -59,60 +63,62 @@
   clear: both;
   font-weight: 400;
   text-align: inherit;
+  background-color: transparent;
   border: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  border-radius: 4px;
 }
 
-.sf-select-option.sf-select-option-active {
+.seafile-select-option.seafile-select-option-active {
   cursor: pointer;
   background-color: var(--bs-dropdown-link-hover-bg);
 }
 
-.sf-select-option .seafile-multicolor-icon-tick {
+.seafile-select-option .seafile-multicolor-icon-tick {
   right: 10px;
   position: absolute;
   color: inherit;
 }
 
-.sf-select-option:not(.sf-select-option-active):hover .header-icon .seafile-multicolor-icon {
-    fill: var(--bs-icon-secondary-color);
+.seafile-select-option:not(.seafile-select-option-active):hover .header-icon .seafile-multicolor-icon {
+  fill: #aaa;
 }
 
-.sf-select-option:not(.sf-select-option-active):hover .header-icon .sf2-icon-tick {
-    fill: var(--bs-icon-secondary-color);
+.seafile-select-option:not(.seafile-select-option-active):hover .header-icon .sf2-icon-tick {
+  color: #aaa;
 }
 
-.sf-select-option .select-option-name .single-select-option {
+.seafile-select-option .select-option-name .single-select-option {
   margin: 0 0 0 12px;
 }
 
-.sf-select-option .select-option-name .multiple-select-option {
+.seafile-select-option .select-option-name .multiple-select-option {
   margin: 0;
 }
 
-.sf-option-group-selector-single-select .select-option-name,
-.sf-option-group-selector-multiple-select .multiple-option-name {
+.seafile-option-group-selector-single-select .select-option-name,
+.seafile-option-group-selector-multiple-select .multiple-option-name {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.sf-option-group-selector-multiple-select .multiple-check-icon {
+.seafile-option-group-selector-multiple-select .multiple-check-icon {
   display: inline-flex;
   width: 20px;
   text-align: center;
 }
 
-.sf-option-group-selector-multiple-select .multiple-check-icon .seafile-multicolor-icon-check-mark {
+.seafile-option-group-selector-multiple-select .multiple-check-icon .seafile-multicolor-icon-check-mark {
   font-size: 12px;
-  color: var(--bs-icon-secondary-color);
+  color: #798d99;
 }
 
-.sf-option-group-selector-single-select .sf-select-option:hover,
-.sf-option-group-selector-single-select .sf-select-option.sf-select-option-active,
-.sf-option-group-selector-multiple-select .sf-select-option:hover,
-.sf-option-group-selector-multiple-select .sf-select-option.sf-select-option-active {
-  background-color: var(--bs-dropdown-link-hover-bg);
+.seafile-option-group-selector-single-select .seafile-select-option:hover,
+.seafile-option-group-selector-single-select .seafile-select-option.seafile-select-option-active,
+.seafile-option-group-selector-multiple-select .seafile-select-option:hover,
+.seafile-option-group-selector-multiple-select .seafile-select-option.seafile-select-option-active {
+  background-color: #f5f5f5;
 }

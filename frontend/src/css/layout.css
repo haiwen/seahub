@@ -10,6 +10,10 @@
   scrollbar-color: #C1C1C1 rgba(0, 0, 0, 0);
 }
 
+[data-bs-theme="dark"] :root {
+  color-scheme: dark;
+}
+
 input[type="checkbox"],
 input[type="radio"],
 select {
@@ -17,7 +21,11 @@ select {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bs-body-bg);
+  background: var(--bs-body-bg, #ffffff);
+}
+
+[data-bs-theme="dark"] ::-webkit-scrollbar-track {
+  background: var(--bs-dark, #212529);
 }
 
 /* for left right layout */
@@ -33,10 +41,14 @@ select {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: var(--bs-body-bg);
+  background: #fafafa;
   transition: flex 0.3s ease-in-out;
   -webkit-transition: flex 0.3s ease-in-out;
   -moz-transition: flex 0.3s ease-in-out;
+}
+
+[data-bs-theme="dark"] .side-panel {
+  background-color: var(--bs-body-bg);
 }
 
 .user-panel .side-panel-north {
@@ -290,7 +302,11 @@ select {
 }
 
 .repos-container .library-list-header .btn.btn-secondary:hover {
-  background-color: var(--bs-icon-btn-hover-bg-color);
+  background-color: rgba(0, 0, 0, .04);
+}
+
+[data-bs-theme="dark"] .repos-container .library-list-header .btn.btn-secondary:hover {
+  background-color: rgba(255, 255, 255, .1);
 }
 
 .cur-view-container .repos-container .libraries-empty-tip-in-list-mode {

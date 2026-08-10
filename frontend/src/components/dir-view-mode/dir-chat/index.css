@@ -1,3 +1,26 @@
+:root,
+[data-bs-theme="light"] {
+  --sea-ai-chat-card-bg: #f7f7f5;
+  --sea-ai-chat-user-message-bg: rgba(var(--bs-primary-rgb), 0.1);
+  --sea-ai-chat-send-disabled-bg: #dbdbdb;
+  --sea-ai-chat-placeholder-color: #868e96;
+  --sea-ai-chat-attachment-close-bg: rgba(0, 0, 0, 0.5);
+  --sea-ai-chat-code-block-bg: #f5f7fa;
+  --sea-ai-chat-reference-divider-color: var(--bs-border-tertiary-color);
+  --sea-ai-chat-reference-order-bg: var(--bs-th-fifth-bg);
+}
+
+[data-bs-theme="dark"] {
+  --sea-ai-chat-card-bg: var(--bs-body-secondary-bg);
+  --sea-ai-chat-user-message-bg: rgba(var(--bs-primary-rgb), 0.15);
+  --sea-ai-chat-send-disabled-bg: rgba(255, 255, 255, 0.2);
+  --sea-ai-chat-placeholder-color: var(--bs-placeholder-color);
+  --sea-ai-chat-attachment-close-bg: rgba(255, 255, 255, 0.5);
+  --sea-ai-chat-code-block-bg: #1c1d1f;
+  --sea-ai-chat-reference-divider-color: #2e2e2e;
+  --sea-ai-chat-reference-order-bg: #2e2e2e;
+}
+
 .ask-main-container {
   display: flex;
   height: 100%;

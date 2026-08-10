@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Input, Popover } from 'reactstrap';
+import { Input } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import SearchEmptyTip from '../../components/common/search-empty-tip';
 import { Utils } from '../../utils/utils';
 import OpIcon from '../../components/op-icon';
+import OpElement from '../../components/op-element';
 import Icon from '../../components/icon';
-import OpElement from '@/components/op-element';
 
 import '../../css/files-activities.css';
 
@@ -27,20 +27,36 @@ class UserSelector extends Component {
     };
   }
 
-  togglePopover = () => {
+  componentDidMount() {
+    document.addEventListener('click', this.handleOutsideClick);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleOutsideClick);
+  }
+
+  handleOutsideClick = (e) => {
     const { isPopoverOpen } = this.state;
-    if (isPopoverOpen) {
-      const { availableUsers } = this.props;
-      const selectedUsers = availableUsers.filter(item => item.isSelected);
-      this.props.setTargetUsers(selectedUsers);
+    if (isPopoverOpen && !this.userSelector.contains(e.target)) {
+      this.togglePopover();
     }
+  };
+
+  togglePopover = () => {
     this.setState({
-      isPopoverOpen: !isPopoverOpen,
+      isPopoverOpen: !this.state.isPopoverOpen,
       query: '',
+    }, () => {
+      if (!this.state.isPopoverOpen) {
+        const { availableUsers } = this.props;
+        const selectedUsers = availableUsers.filter(item => item.isSelected);
+        this.props.setTargetUsers(selectedUsers);
+      }
     });
   };
 
-  onToggleClick = () => {
+  onToggleClick = (e) => {
+    e.stopPropagation();
     this.togglePopover();
   };
 
@@ -61,90 +77,73 @@ class UserSelector extends Component {
     const selectedUsers = availableUsers.filter(item => item.isSelected);
     const filteredAvailableUsers = query.trim() ? availableUsers.filter(item => item.contact_email.indexOf(query.trim()) != -1 || item.name.indexOf(query.trim()) != -1 || item.login_id.indexOf(query.trim()) != -1) : availableUsers;
     return (
-      <>
-        <span id="activity-user-selector-trigger">
-          <OpElement
-            className="cur-activity-modifiers d-inline-flex align-items-center p-2 rounded"
-            title={gettext('Toggle user selector')}
-            op={this.onToggleClick}
-          >
-            {currentSelectedUsers.length > 0 ? (
-              <>
-                <span>{gettext('Modified by:')}</span>
-                <span className="d-inline-block ml-1">{currentSelectedUsers.map(item => item.name).join(', ')}</span>
-              </>
-            ) : gettext('Modified by')}
-            <Icon symbol="down" className="w-3 h-3 ml-2 toggle-icon" />
-          </OpElement>
-        </span>
-        <Popover
-          isOpen={isPopoverOpen}
-          toggle={this.togglePopover}
-          target="activity-user-selector-trigger"
-          placement="bottom-start"
-          hideArrow={true}
-          fade={false}
-          trigger="legacy"
-          popperClassName="activity-user-selector-popover"
-          modifiers={[
-            {
-              name: 'offset',
-              options: {
-                offset: [0, 8],
-              }
-            }
-          ]}
+      <div className="position-relative">
+        <OpElement
+          className="cur-activity-modifiers d-inline-flex align-items-center p-2 rounded"
+          title={gettext('Toggle user selector')}
+          op={this.onToggleClick}
         >
-          <ul className="activity-selected-modifiers px-3 py-2 list-unstyled">
-            {selectedUsers.map((item, index) => {
-              return (
-                <li key={index} className="activity-selected-modifier">
-                  <img src={item.avatar_url} className="avatar" alt={item.name} />
-                  <span className="activity-user-name ml-2">{item.name}</span>
-                  <OpIcon
-                    symbol="close"
-                    className="unselect-activity-user ml-2"
-                    title={gettext('Unselect')}
-                    op={(e) => { this.toggleSelectItem(e, item); }}
-                  />
-                </li>
-              );
-            })}
-          </ul>
-          <div className="px-3 pt-3">
-            <Input
-              type="text"
-              placeholder={gettext('Find modifiers')}
-              value={query}
-              onChange={this.onQueryChange}
-            />
-          </div>
-          {filteredAvailableUsers.length > 0 &&
-            <ul className="activity-user-list list-unstyled p-3 o-auto">
-              {filteredAvailableUsers.map((item, index) => {
+          {currentSelectedUsers.length > 0 ? (
+            <>
+              <span>{gettext('Modified by:')}</span>
+              <span className="d-inline-block ml-1">{currentSelectedUsers.map(item => item.name).join(', ')}</span>
+            </>
+          ) : gettext('Modified by')}
+          <Icon symbol="down" className="w-3 h-3 ml-2 toggle-icon" />
+        </OpElement>
+        {isPopoverOpen && (
+          <div className="activity-modifier-selector-container sf-popover-container" ref={ref => this.userSelector = ref}>
+            <ul className="activity-selected-modifiers px-3 py-2 list-unstyled">
+              {selectedUsers.map((item, index) => {
                 return (
-                  <li
-                    key={index}
-                    className="activity-user-item h-6 p-1 rounded d-flex justify-content-between align-items-center"
-                    onClick={(e) => { this.toggleSelectItem(e, item); }}
-                    tabIndex="0"
-                    onKeyDown={Utils.onKeyDown}
-                    aria-label={gettext('Select')}
-                  >
-                    <div>
-                      <img src={item.avatar_url} className="avatar w-5 h-5" alt="" />
-                      <span className="activity-user-name ml-2">{item.name}</span>
-                    </div>
-                    {item.isSelected && <Icon symbol="check" className="text-gray font-weight-bold" />}
+                  <li key={index} className="activity-selected-modifier">
+                    <img src={item.avatar_url} className="avatar" alt={item.name} />
+                    <span className="activity-user-name ml-2">{item.name}</span>
+                    <OpIcon
+                      symbol="close"
+                      className="unselect-activity-user ml-2"
+                      title={gettext('Unselect')}
+                      op={(e) => { this.toggleSelectItem(e, item); }}
+                    />
                   </li>
                 );
               })}
-            </ul>}
-          {filteredAvailableUsers.length === 0 && (
-            <SearchEmptyTip text={gettext('No users')} />
-          )}
-        </Popover>
-      </>
+            </ul>
+            <div className="px-3 pt-3">
+              <Input
+                type="text"
+                placeholder={gettext('Find modifiers')}
+                value={query}
+                onChange={this.onQueryChange}
+              />
+            </div>
+            {filteredAvailableUsers.length > 0 &&
+              <ul className="activity-user-list list-unstyled p-3 o-auto">
+                {filteredAvailableUsers.map((item, index) => {
+                  return (
+                    <li
+                      key={index}
+                      className="activity-user-item h-6 p-1 rounded d-flex justify-content-between align-items-center"
+                      onClick={(e) => { this.toggleSelectItem(e, item); }}
+                      tabIndex="0"
+                      onKeyDown={Utils.onKeyDown}
+                      aria-label={gettext('Select')}
+                    >
+                      <div>
+                        <img src={item.avatar_url} className="avatar w-5 h-5" alt="" />
+                        <span className="activity-user-name ml-2">{item.name}</span>
+                      </div>
+                      {item.isSelected && <Icon symbol="check" className="text-gray font-weight-bold" />}
+                    </li>
+                  );
+                })}
+              </ul>}
+            {filteredAvailableUsers.length === 0 && (
+              <SearchEmptyTip text={gettext('No users')} />
+            )}
+          </div>
+        )}
+      </div>
     );
   }
 }

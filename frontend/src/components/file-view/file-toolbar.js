@@ -94,7 +94,7 @@ class FileToolbar extends React.Component {
       items.push({
         key: 'line-wrapping',
         label: gettext('Line wrapping'),
-        right_slot: <Switch className="txt-line-wrap-menu" checked={this.props.lineWrapping} onChange={this.toggleLineWrapping} />,
+        right_slot: <Switch className="txt-line-wrap-menu mr-3" checked={this.props.lineWrapping} onChange={this.toggleLineWrapping} />,
         keepOpen: true,
       });
     }
@@ -223,7 +223,7 @@ class FileToolbar extends React.Component {
           )}
           {(canEditFile && fileType != 'SDoc' && !err) &&
             (this.props.isSaving ?
-              <Button type='button' aria-label={gettext('Saving...')} className={'file-toolbar-btn icon-btn'}>
+              <Button type='button' aria-label={gettext('Saving...')} className={'file-toolbar-btn border-0 p-0 bg-transparent'}>
                 <Icon symbol="spinner" />
               </Button>
               :
@@ -235,7 +235,7 @@ class FileToolbar extends React.Component {
                   onClick={this.props.onSave}
                 />
                 :
-                <Button type='button' disabled={true} className='icon-btn file-toolbar-btn disabled'>
+                <Button type='button' disabled={true} className='file-toolbar-btn disabled border-0 p-0 bg-transparent'>
                   <Icon symbol="save" />
                 </Button>
               ))}

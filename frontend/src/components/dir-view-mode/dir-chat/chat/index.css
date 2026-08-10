@@ -96,7 +96,7 @@
 }
 
 .user-input-chat .sea-ai-ask-message-content {
-  background-color: var(--bs-primary-subtle-bg);
+  background-color: var(--sea-ai-chat-user-message-bg);
   border-radius: 0 8px 8px 8px;
   border: unset;
   padding: 12px 16px;

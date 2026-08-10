@@ -1,6 +1,10 @@
 .sf-metadata-column-popover .sf-metadata-column-data-settings {
-  background-color: var(--bs-body-secondary-bg);
+  background-color: #f5f5f5;
   margin: 0 -1rem -1rem;
+}
+
+[data-bs-theme=dark] .sf-metadata-column-popover .sf-metadata-column-data-settings {
+  background-color: var(--bs-popover-bg);
 }
 
 .sf-metadata-column-popover .sf-metadata-column-data-settings .selected-option {

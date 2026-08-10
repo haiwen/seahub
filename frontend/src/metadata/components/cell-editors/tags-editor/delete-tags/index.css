@@ -1,6 +1,7 @@
 .sf-metadata-tags-editor .sf-metadata-delete-select-tags {
   background-color: var(--bs-th-bg);
   border-bottom: 1px solid var(--bs-border-secondary-color);
+  border-radius: 3px 3px 0 0;
   min-height: 28px;
   padding: 8px 8px 4px;
   line-height: 1;
@@ -11,6 +12,9 @@
 
 .sf-metadata-tags-editor .sf-metadata-delete-select-tags .sf-metadata-delete-select-tag {
   margin: 0 4px 4px 0;
+}
+
+.sf-metadata-tags-editor .sf-metadata-delete-select-tags .sf-metadata-delete-select-tag .sf-metadata-delete-select-tag-name {
 }
 
 .sf-metadata-tags-editor .sf-metadata-delete-select-tags .sf-metadata-delete-select-tag .sf-metadata-delete-select-remove {

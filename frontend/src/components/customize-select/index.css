@@ -1,25 +1,45 @@
-.sf-select {
+.seafile-customize-select {
+  position: relative;
+  display: flex;
+  padding: 0 16px;
+  border-radius: 4px;
   align-items: center;
   justify-content: space-between;
+  max-width: 900px;
+  user-select: none;
   text-align: left;
   line-height: 1.5;
+  background-image: none;
+  font-size: 14px;
+  color: var(--bs-body-color);
+  border: 1px solid rgba(0, 40, 100, 0.12);
 }
 
-.sf-select.disabled:focus,
-.sf-select.focus.disabled,
-.sf-select.disabled:hover {
-  border-color: var(--bs-form-select-border-color);
+.seafile-customize-select:focus,
+.seafile-customize-select.focus {
+  border-color: #3E84F7 !important;
+}
+
+.seafile-customize-select.disabled:focus,
+.seafile-customize-select.focus.disabled,
+.seafile-customize-select.disabled:hover {
+  border-color: rgba(0, 40, 100, 0.12) !important;
   box-shadow: unset;
   cursor: default;
 }
 
-.sf-select .seafile-multicolor-icon-down {
+.seafile-customize-select:hover {
+  cursor: pointer;
+  border-color: var(--bs-border-color);
+}
+
+.seafile-customize-select .seafile-multicolor-icon-down {
   width: 12px;
   height: 12px;
   color: var(--bs-icon-color);
 }
 
-.sf-select .selected-option {
+.seafile-customize-select .selected-option {
   display: flex;
   flex: 1;
   overflow: hidden;
@@ -30,31 +50,31 @@
   color: var(--bs-body-color);
 }
 
-.sf-select .selected-option .selected-option-show-container {
-  background: var(--bs-body-secondary-bg);
+.seafile-customize-select .selected-option .selected-option-show-container {
+  background: #eaeaea;
   border-radius: 4px;
   padding: 0px 6px;
   margin-right: 4px;
   height: 24px;
   display: flex;
   align-items: center;
-  color: var(--bs-body-color);
+  color: #212529;
 }
 
-.sf-select .selected-option .selected-option-show-container .option-remove {
+.seafile-customize-select .selected-option .selected-option-show-container .option-remove {
   height: 100%;
   display: inline-flex;
   align-items: center;
   margin-left: 4px;
 }
 
-.sf-select .selected-option .selected-option-show-container .seafile-multicolor-icon-close {
+.seafile-customize-select .selected-option .selected-option-show-container .seafile-multicolor-icon-close {
   width: 12px;
   height: 12px;
-  color: var(--bs-icon-secondary-color);
+  color: #666;
 }
 
-.sf-select .selected-option .custom-select-dropdown-icon {
+.seafile-customize-select .selected-option .custom-select-dropdown-icon {
   height: 12px;
   width: 12px;
   color: var(--bs-icon-color);
@@ -64,47 +84,47 @@
   margin-left: 0.5rem;
 }
 
-.sf-select.selector-collaborator .sf-option-group .sf-option-group-content,
-.sf-select.selector-group .sf-option-group .sf-option-group-content {
+.seafile-customize-select.selector-collaborator .seafile-option-group .seafile-option-group-content,
+.seafile-customize-select.selector-group .seafile-option-group .seafile-option-group-content {
   padding: 10px;
 }
 
-.sf-select.selector-collaborator .sf-option-group .sf-option-group-content {
+.seafile-customize-select.selector-collaborator .seafile-option-group .seafile-option-group-content {
   padding: 10px 0;
 }
 
-.sf-select.selector-collaborator .option {
+.seafile-customize-select.selector-collaborator .option {
   padding: 5px 0 5px 10px !important;
   line-height: 20px;
 }
 
-.sf-select.selector-group .option {
+.seafile-customize-select.selector-group .option {
   height: 30px;
   display: flex;
   align-items: center;
 }
 
-.sf-select.selector-group .select-group-option {
+.seafile-customize-select.selector-group .select-group-option {
   justify-content: space-between;
 }
 
-.sf-select.selector-group .selected-option .selected-group {
+.seafile-customize-select.selector-group .selected-option .selected-group {
   padding: 0 2px;
-  background: var(--bs-body-secondary-bg);
+  background: #eceff4;
   border-radius: 3px;
 }
 
-.sf-select .selected-option-show {
+.seafile-customize-select .selected-option-show {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.sf-select .select-placeholder {
+.seafile-customize-select .select-placeholder {
   line-height: 1;
   font-size: 14px;
   white-space: nowrap;
-  color: var(--bs-placeholder-color);
+  color: #868E96;
   width: calc(100% - 12px);
   margin-right: 8px;
 }

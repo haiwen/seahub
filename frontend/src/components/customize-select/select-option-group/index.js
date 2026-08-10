@@ -186,9 +186,9 @@ class SelectOptionGroup extends Component {
     return (
       <ClickOutside onClickOutside={this.props.onClickOutside}>
         <div
-          className={classnames('sf-option-group', className ? 'sf-option-group-' + className : '', {
+          className={classnames('seafile-option-group', className ? 'seafile-option-group-' + className : '', {
             'pt-0': isShowSelected,
-            'create-new-sf-option-group': addOptionAble,
+            'create-new-seafile-option-group': addOptionAble,
           })}
           ref={(ref) => this.optionGroupRef = ref}
           style={style}
@@ -198,7 +198,7 @@ class SelectOptionGroup extends Component {
             <div className="editor-list-delete mb-2" onClick={(e) => e.stopPropagation()}>{value.label || ''}</div>
           }
           {searchable && (
-            <div className="sf-option-group-search">
+            <div className="seafile-option-group-search">
               <SearchInput
                 className="option-search-control"
                 placeholder={searchPlaceholder}
@@ -209,7 +209,7 @@ class SelectOptionGroup extends Component {
               />
             </div>
           )}
-          <div className="sf-option-group-content" ref={(ref) => this.optionGroupContentRef = ref}>
+          <div className="seafile-option-group-content" ref={(ref) => this.optionGroupContentRef = ref}>
             {this.renderOptGroup(searchVal)}
           </div>
           {addOptionAble && AddOption}
