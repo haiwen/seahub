@@ -24,7 +24,10 @@
   font-size: 14px;
   font-weight: 600;
   transform: none;
-  color: var(--bs-icon-secondary-color);
+}
+
+[data-bs-theme=dark] .add-item-btn .add-item-btn-content .seafile-multicolor-icon-plus {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .add-item-btn .add-item-btn-content .label {

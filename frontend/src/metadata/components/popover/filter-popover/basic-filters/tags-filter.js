@@ -74,7 +74,7 @@ const TagsFilter = ({ value: oldValue, onChange: onChangeAPI }) => {
     return (
       <div
         ref={ref}
-        className={classNames('sf-metadata-basic-filters-select sf-metadata-basic-filter-tags-select sf-select custom-select  mr-4', {
+        className={classNames('sf-metadata-basic-filters-select sf-metadata-basic-filter-tags-select seafile-customize-select custom-select  mr-4', {
           'focus': isOptionsVisible,
           'highlighted': value.length > 0
         })}

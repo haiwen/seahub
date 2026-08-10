@@ -34,7 +34,7 @@
 }
 
 .permission-editor__menu .permission-editor__option--is-disabled {
-  color: var(--bs-disabled-color);
+  color: #9c9c9c;
   border-top: 1px solid var(--bs-border-color);
   margin-top: 8px;
   border-radius: 0px;

@@ -4,12 +4,16 @@
   align-items: center;
   margin-left: auto;
   padding: 0 8px;
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid rgba(0, 40, 100, 0.12);
   border-radius: 20px;
   color: var(--bs-body-secondary-color);
   font-size: 12px;
   line-height: 20px;
   background: transparent;
+}
+
+[data-bs-theme=dark] .view-published-wiki {
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .view-published-wiki:hover {

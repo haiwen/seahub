@@ -1,6 +1,10 @@
 .side-panel .side-nav-folded {
   overflow: visible;
-  background: var(--bs-header-bg);
+  background: #fafafa;
+}
+
+[data-bs-theme="dark"] .side-panel .side-nav-folded {
+  background-color: rgba(19, 19, 19, 1);
 }
 
 .side-panel .side-nav-folded .side-nav-con {

@@ -1,6 +1,12 @@
+.sf-metadata-sort-popover .sf-popover-container {
+  position: relative;
+  overflow: visible;
+}
+
 .sf-metadata-sort-popover .popover {
   max-width: none;
   min-width: 400px;
+  border: none;
 }
 
 .sf-metadata-sort-popover .sorts-list {
@@ -65,8 +71,4 @@
 
 .sorts-list .delete-sort .seafile-multicolor-icon-fork-number:hover {
   fill: var(--bs-icon-color);
-}
-
-.sorts-list .sf-select {
-  height: 100%;
 }

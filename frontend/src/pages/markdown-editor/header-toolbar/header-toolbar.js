@@ -166,66 +166,68 @@ class HeaderToolbar extends React.Component {
               isStarred={this.props.fileInfo.isStarred}
             />
             <div className="topbar-btn-container">
-              {(canLockUnlockFile && !isLocked) && (
+              <ButtonGroup>
+                {(canLockUnlockFile && !isLocked) && (
+                  <IconButton
+                    id="lock-unlock-file"
+                    icon='lock'
+                    text={gettext('Lock')}
+                    onClick={this.props.toggleLockFile}
+                  />
+                )}
+                {(canLockUnlockFile && lockedByMe) && (
+                  <IconButton
+                    id="lock-unlock-file"
+                    icon='unlock'
+                    text={gettext('Unlock')}
+                    onClick={this.props.toggleLockFile}
+                  />
+                )}
+                {canGenerateShareLink && (
+                  <IconButton
+                    id='shareBtn'
+                    text={gettext('Share')}
+                    icon='share'
+                    onClick={this.props.toggleShareLinkDialog}
+                  />
+                )}
+                {saving ?
+                  <button type={'button'} aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
+                    <Icon symbol="spinner" />
+                  </button>
+                  :
+                  <IconButton
+                    text={gettext('Save')}
+                    id={'saveButton'}
+                    icon='save'
+                    disabled={!contentChanged}
+                    onClick={this.props.onSaveEditorContent}
+                  />
+                }
+                {canDownloadFile && (
+                  <IconButton
+                    id="download-file"
+                    icon="download"
+                    text={gettext('Download')}
+                    onClick={this.downloadFile}
+                  />
+                )}
+                <span className="position-relative">
+                  <IconButton
+                    id="file-comment"
+                    icon="comment"
+                    text={gettext('Comment')}
+                    onClick={this.onCommentPanelToggle}
+                  />
+                  {isCommentUpdated && <span className='comment-tip'></span>}
+                </span>
                 <IconButton
-                  id="lock-unlock-file"
-                  icon='lock'
-                  text={gettext('Lock')}
-                  onClick={this.props.toggleLockFile}
+                  id="file-info"
+                  text={gettext('Info')}
+                  icon='info'
+                  onClick={this.onArticleInfoToggle}
                 />
-              )}
-              {(canLockUnlockFile && lockedByMe) && (
-                <IconButton
-                  id="lock-unlock-file"
-                  icon='unlock'
-                  text={gettext('Unlock')}
-                  onClick={this.props.toggleLockFile}
-                />
-              )}
-              {canGenerateShareLink && (
-                <IconButton
-                  id='shareBtn'
-                  text={gettext('Share')}
-                  icon='share'
-                  onClick={this.props.toggleShareLinkDialog}
-                />
-              )}
-              {saving ?
-                <button type={'button'} aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
-                  <Icon symbol="spinner" />
-                </button>
-                :
-                <IconButton
-                  text={gettext('Save')}
-                  id={'saveButton'}
-                  icon='save'
-                  disabled={!contentChanged}
-                  onClick={this.props.onSaveEditorContent}
-                />
-              }
-              {canDownloadFile && (
-                <IconButton
-                  id="download-file"
-                  icon="download"
-                  text={gettext('Download')}
-                  onClick={this.downloadFile}
-                />
-              )}
-              <span className="position-relative">
-                <IconButton
-                  id="file-comment"
-                  icon="comment"
-                  text={gettext('Comment')}
-                  onClick={this.onCommentPanelToggle}
-                />
-                {isCommentUpdated && <span className='comment-tip'></span>}
-              </span>
-              <IconButton
-                id="file-info"
-                text={gettext('Info')}
-                icon='info'
-                onClick={this.onArticleInfoToggle}
-              />
+              </ButtonGroup>
               <MoreMenu
                 target="markdown-rich-more-button"
                 readOnly={this.props.readOnly}
@@ -291,19 +293,21 @@ class HeaderToolbar extends React.Component {
               fileInfo={this.props.fileInfo}
             />
             <div className="topbar-btn-container">
-              {saving ?
-                <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
-                  <Icon symbol="spinner" />
-                </button>
-                :
-                <IconButton
-                  id={'saveButton'}
-                  text={gettext('Save')}
-                  icon='save'
-                  onClick={this.props.onSaveEditorContent}
-                  disabled={!contentChanged}
-                />
-              }
+              <ButtonGroup>
+                {saving ?
+                  <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
+                    <Icon symbol="spinner" />
+                  </button>
+                  :
+                  <IconButton
+                    id={'saveButton'}
+                    text={gettext('Save')}
+                    icon='save'
+                    onClick={this.props.onSaveEditorContent}
+                    disabled={!contentChanged}
+                  />
+                }
+              </ButtonGroup>
               <MoreMenu
                 target="markdown-plain-more-button"
                 readOnly={this.props.readOnly}

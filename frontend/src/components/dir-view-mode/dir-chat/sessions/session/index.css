@@ -77,9 +77,9 @@
 }
 
 .sea-ai-ask-session-dropdown-menu .dropdown-item-icon .seafile-multicolor-icon {
-    width: 14px;
-    height: 14px;
-    color: var(--bs-icon-color);
+  width: 14px;
+  height: 14px;
+  color: #666;
 }
 
 .sea-ai-ask-sessions-wrapper .sea-ai-ask-session-item.embedded {

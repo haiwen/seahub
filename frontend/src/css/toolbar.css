@@ -69,7 +69,11 @@
 }
 
 .common-toolbar .sf-icon-color-mode:hover {
-  background-color: var(--bs-icon-btn-hover-bg-color);
+  background-color: rgba(0, 0, 0, .04);
+}
+
+[data-bs-theme="dark"] .common-toolbar .sf-icon-color-mode:hover {
+  background-color: rgba(255, 255, 255, .1);
 }
 
 .common-toolbar .account-toggle.mobile-icon {

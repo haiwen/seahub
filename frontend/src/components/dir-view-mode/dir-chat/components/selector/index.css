@@ -1,5 +1,7 @@
 /* Other popover height is auto, only chat selector height is fixed 276px. */
 .sea-ai-chat-selector-display-editor .popover {
+  border-radius: 8px;
+  box-shadow: 0 6px 14px 0 rgba(0, 0, 0, .1);
   min-width: 12rem;
   height: 276px;
 }

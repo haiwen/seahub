@@ -264,7 +264,7 @@ const MultipleSelectEditor = forwardRef(({
   }, [displayOptions, searchValue, value, highlightIndex, onMenuMouseEnter, onMenuMouseLeave, onSelectOption]);
 
   return (
-    <div className="sf-metadata-single-select-editor sf-metadata-multiple-select-editor popover" style={style} ref={editorRef}>
+    <div className="sf-metadata-single-select-editor sf-metadata-multiple-select-editor sf-popover-container" style={style} ref={editorRef}>
       <DeleteOption value={value} options={options} onDelete={onDeleteOption} />
       <div className="sf-metadata-search-single-select-options">
         <SearchInput

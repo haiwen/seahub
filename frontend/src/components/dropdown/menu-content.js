@@ -99,7 +99,7 @@ const MenuSubmenu = ({
       >
         <CustomDropdownItem
           item={item}
-          rightSlot={<Icon symbol="down" className="rotate-270 dropdown-submenu-arrow" />}
+          rightSlot={<Icon symbol="down" className="rotate-270 dropdown-submenu-arrow mr-2" />}
           onKeyDown={onTriggerKeyDown}
         />
       </DropdownToggle>

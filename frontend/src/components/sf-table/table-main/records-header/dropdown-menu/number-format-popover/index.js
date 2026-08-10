@@ -290,7 +290,7 @@ const NumberFormatPopover = ({ target, column, onToggle, onSubmit }) => {
       canHide={true}
       header={gettext('Number format settings')}
     >
-      <div className="sf-metadata-number-format-popover-content sf-metadata-column-data-settings">
+      <div className="sf-popover-container sf-metadata-number-format-popover-content sf-metadata-column-data-settings">
         <FormGroup>
           <Label>{gettext('Format')}</Label>
           <CustomizeSelect

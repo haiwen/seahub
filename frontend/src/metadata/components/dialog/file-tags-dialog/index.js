@@ -60,7 +60,7 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
       toaster.danger(errorMessage);
       setLoading(false);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tagsData]);
 
   const onClickTag = useCallback((tagName) => {
@@ -145,7 +145,7 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
       className="sf-file-tags"
       backdropClassName="sf-file-tags-backdrop"
     >
-      <div onClick={(e) => e.stopPropagation()}>
+      <div onClick={(e) => e.stopPropagation()} className="modal-content">
         <ModalHeader>{fileName + ' ' + gettext('tags')}</ModalHeader>
         <ModalBody>
           {isLoading ?

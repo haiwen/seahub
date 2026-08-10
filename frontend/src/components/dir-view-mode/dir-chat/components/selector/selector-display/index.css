@@ -13,7 +13,7 @@
 }
 
 .sea-ai-customize-select.sea-ai-chat-selector-display.bg-color {
-  background-color: var(--bs-body-secondary-bg);
+  background-color: var(--sea-ai-chat-card-bg);
 }
 
 .sea-ai-customize-select.sea-ai-chat-selector-display.sea-ai-model-selector {
@@ -35,7 +35,7 @@
       var(--bs-icon-btn-hover-bg-color) 0%,
       var(--bs-icon-btn-hover-bg-color) 100%
     ),
-    var(--bs-body-secondary-bg);
+    var(--sea-ai-chat-card-bg);
 }
 
 .sea-ai-customize-select.sea-ai-chat-selector-display.highlight {

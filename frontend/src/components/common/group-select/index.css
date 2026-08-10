@@ -1,17 +1,31 @@
-.group-select.sf-select {
-  flex: 1;
-  display: flex;
-  padding: 6px 28px 6px 8px;
-  align-items: center;
-  justify-content: space-between;
-  height: auto;
-  min-height: 38px;
+.group-select {
+  position: relative;
 }
 
-.group-select.sf-select.disabled:focus,
-.group-select.sf-select.focus.disabled,
-.group-select.sf-select.disabled:hover {
-  border-color: var(--bs-form-select-border-color);
+.group-select.custom-select {
+  display: flex;
+  padding: 6px 28px 6px 8px;
+  border-radius: 4px;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 900px;
+  user-select: none;
+  text-align: left;
+  border-color: 1px solid rgba(0, 40, 100, 0.12);
+  height: auto;
+  min-height: 38px;
+  cursor: pointer;
+}
+
+.group-select.custom-select:focus,
+.group-select.custom-select.focus {
+  border: 1px solid #3e84f7;
+}
+
+.group-select.custom-select.disabled:focus,
+.group-select.custom-select.focus.disabled,
+.group-select.custom-select.disabled:hover {
+  border-color: rgba(0, 40, 100, 0.12) !important;
   box-shadow: unset;
   cursor: default;
 }
@@ -23,14 +37,18 @@
   flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
-  background: inherit;
+  background: var(--bs-popover-bg);
 }
 
-.group-select.selector-collaborator .sf-option-group .sf-option-group-content {
+.group-select.selector-collaborator .option-group .option-group-content {
   padding: 10px;
 }
 
-.group-select.selector-collaborator .sf-select-option {
+.group-select.custom-select.selector-collaborator .option-group .option-group-content {
+  padding: 10px 0;
+}
+
+.group-select.custom-select.selector-collaborator .option {
   padding: 5px 0 5px 10px !important;
   line-height: 20px;
 }
@@ -48,7 +66,7 @@
 }
 
 .group-select .selected-option-show .selected-option-item {
-  background-color: var(--bs-body-secondary-bg);
+  background-color: #F7F7F5;
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -58,7 +76,7 @@
 
 .group-select .selected-option-show .selected-option-item .selected-option-item-name {
   font-size: 14px;
-  color: var(--bs-body-color);
+  color: #212519;
   margin-right: 8px;
 }
 

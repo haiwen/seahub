@@ -3,7 +3,7 @@
   display: flex;
   justify-content: flex-end;
   padding: 1rem;
-  border-top: 1px solid var(--bs-dropdown-divider-bg);
+  border-top: 1px solid #dedede;
 }
 
 .option-editor-footer .option-editor-tips {

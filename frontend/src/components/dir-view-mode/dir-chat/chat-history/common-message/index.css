@@ -32,48 +32,47 @@
 }
 
 .sea-ai-ask-message-content .sf-code-block-container {
-  background: var(--bs-bg-code);
+  background: var(--sea-ai-chat-code-block-bg);
 }
 
 .sea-ai-ask-message-content .sf-code-block-container pre {
-  background: var(--bs-bg-code);
+  background: var(--sea-ai-chat-code-block-bg);
 }
 
-.sea-ai-ask-message-content .sf-code-block-container pre {
-  background: var(--bs-bg-code);
+[data-bs-theme="dark"] .sea-ai-ask-message-content .sf-code-block-container pre {
   color: var(--bs-body-color);
   text-shadow: none;
 }
 
-.sea-ai-ask-message-content .sf-code-block-container .sf-lang-selector {
+[data-bs-theme="dark"] .sea-ai-ask-message-content .sf-code-block-container .sf-lang-selector {
   color: var(--bs-body-color);
   background: var(--bs-body-secondary-bg);
 }
 
-.sea-ai-ask-message-content .article blockquote {
+[data-bs-theme="dark"] .sea-ai-ask-message-content .article blockquote {
   color: var(--bs-body-secondary-color);
   border-left-color: var(--bs-border-secondary-color);
 }
 
-.sea-ai-ask-message-content .article h2 {
+[data-bs-theme="dark"] .sea-ai-ask-message-content .article h2 {
   border-bottom-color: var(--bs-border-tertiary-color);
 }
 
-.sea-ai-ask-message-content .sdoc-divider-element {
+[data-bs-theme="dark"] .sea-ai-ask-message-content .sdoc-divider-element {
   border-top-color: var(--bs-border-tertiary-color);
 }
 
-.sea-ai-ask-message-content .article table {
+[data-bs-theme="dark"] .sea-ai-ask-message-content .article table {
   border-left-color: var(--bs-border-secondary-color);
   border-top-color: var(--bs-border-secondary-color);
 }
 
-.sea-ai-ask-message-content .article table td,
-.sea-ai-ask-message-content .article table th {
+[data-bs-theme="dark"] .sea-ai-ask-message-content .article table td,
+[data-bs-theme="dark"] .sea-ai-ask-message-content .article table th {
   border-color: var(--bs-border-tertiary-color);
 }
 
-.sea-ai-ask-message-content .article tr:nth-child(odd) {
+[data-bs-theme="dark"] .sea-ai-ask-message-content .article tr:nth-child(odd) {
   background-color: var(--bs-bg-secondary-color);
 }
 

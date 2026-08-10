@@ -98,6 +98,10 @@
   padding: 0.25rem 12px;
 }
 
+.search-filter-menu.filter-by-text-menu .dropdown-item {
+  padding: 0;
+}
+
 .search-filter-menu .dropdown-item .dropdown-item-tick {
   font-size: 1rem;
   left: auto;
@@ -117,7 +121,7 @@
 }
 
 .search-filter-menu .input-container.focus {
-  border-color: var(--bs-form-select-focus-border-color);
+  border-color: #3e84f7;
   box-shadow: none;
   outline: 0;
 }

@@ -1,24 +1,16 @@
 .sf-metadata-card-item {
   min-width: 0;
   height: fit-content;
-  background: var(--bs-bg-card);
+  background: #f9f9f9;
   border: 1px solid var(--bs-border-secondary-color);
   border-radius: 6px;
-  box-shadow: var(--bs-box-shadow-none, 0 2px 6px rgba(0, 0, 0, .08));
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .08);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   user-select: none;
   transition: box-shadow .15s ease, border-color .15s ease, background-color .15s ease;
   cursor: pointer;
-}
-
-.sf-metadata-card-item.selected {
-  border-color: #ff9800;
-}
-
-.sf-metadata-card-item:hover {
-  box-shadow: var(--bs-box-shadow-none, 0 0 6px #0000002e);
 }
 
 .sf-metadata-card-item.selected {
@@ -68,7 +60,11 @@
 }
 
 .sf-metadata-card-item-image-scroll-wrapper.show-scrollbar {
-  scrollbar-color: var(--bs-icon-secondary-color, rgba(0, 0, 0, 0.2)) transparent;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+[data-bs-theme="dark"] .sf-metadata-card-item-image-scroll-wrapper.show-scrollbar {
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 
 .sf-metadata-card-item-image-scroll-wrapper::-webkit-scrollbar {
@@ -85,11 +81,19 @@
 }
 
 .sf-metadata-card-item-image-scroll-wrapper.show-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--bs-icon-secondary-color, rgba(0, 0, 0, 0.2));
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .sf-metadata-card-item-image-scroll-wrapper.show-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: var(--bs-icon-color);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+[data-bs-theme="dark"] .sf-metadata-card-item-image-scroll-wrapper.show-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+[data-bs-theme="dark"] .sf-metadata-card-item-image-scroll-wrapper.show-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .sf-metadata-card-item-image-scroll-wrapper .sf-metadata-card-item-doc-thumbnail {
@@ -214,6 +218,20 @@
   overflow: hidden;
   line-height: 1.5;
   white-space: normal;
+}
+
+[data-bs-theme="dark"] .sf-metadata-card-item {
+  background-color: rgba(19, 19, 19, 1);
+  border-color: var(--bs-border-secondary-color);
+}
+
+[data-bs-theme="dark"] .sf-metadata-card-item.selected {
+  border-color: #ff9800;
+}
+
+[data-bs-theme="dark"] .sf-metadata-card-item:hover {
+  box-shadow: none;
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .sf-metadata-card-item .grid-video-preview video {

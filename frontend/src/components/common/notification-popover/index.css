@@ -1,8 +1,13 @@
-.notification-popover {
+.notification-container {
   width: 400px;
+  right: 0;
 }
 
-.notification-popover .notification-header {
+[data-bs-theme=dark] .notification-container {
+  box-shadow: none;
+}
+
+.notification-container .notification-header {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,16 +19,16 @@
   overflow: hidden;
 }
 
-.notification-popover .notification-header .seahub-modal-btn {
+.notification-container .notification-header .seahub-modal-btn {
   position: absolute;
   right: 14px;
 }
 
-.notification-popover .notification-body {
+.notification-container .notification-body {
   padding: 0;
 }
 
-.notification-popover .notification-body .show-weixin-qrcode {
+.notification-container .notification-body .show-weixin-qrcode {
   cursor: pointer;
   border-bottom: 1px solid var(--bs-border-color);
   height: 40px;
@@ -33,42 +38,42 @@
   padding-left: 10px;
 }
 
-.notification-popover .show-weixin-qrcode .weixin-icon {
+.show-weixin-qrcode .weixin-icon {
   color: var(--bs-icon-color);
   font-size: 20px;
   margin-left: 20px;
 }
 
-.notification-popover .mark-all-read {
+.notification-container .mark-all-read {
   color: var(--bs-body-secondary-color);
 }
 
-.notification-popover .notification-list-container {
+.notification-body .notification-list-container {
   max-height: 260px;
   overflow: auto;
 }
 
-.notification-popover .notification-list-container .notification-item {
+.notification-list-container .notification-item {
   padding: 14px 16px 14px 10px;
   border-bottom: 1px solid var(--bs-border-secondary-color);
   position: relative;
   cursor: pointer;
 }
 
-.notification-popover .notification-list-container .notification-item:last-child {
+.notification-list-container .notification-item:last-child {
   border-bottom: none;
 }
 
-.notification-popover .notification-list-container .notification-item:hover {
+.notification-list-container .notification-item:hover {
   background: var(--bs-nav-hover-bg);
 }
 
-.notification-popover .notification-list-container .notification-item .notification-item-header {
+.notification-list-container .notification-item .notification-item-header {
   display: flex;
   align-items: center;
 }
 
-.notification-popover .notification-list-container .notification-item .notification-point {
+.notification-list-container .notification-item .notification-point {
   display: inline-block;
   width: 8px;
   height: 8px;
@@ -78,7 +83,7 @@
   position: absolute;
 }
 
-.notification-popover .notification-list-container .notification-item .notification-header-info {
+.notification-list-container .notification-item .notification-header-info {
   display: flex;
   justify-content: space-between;
   flex: 1;
@@ -151,18 +156,18 @@
   border-top: none !important;
 }
 
-.notification-popover .notification-body .mark-notifications {
+.notification-container .notification-body .mark-notifications {
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid var(--bs-border-secondary-color);
   padding: 0 16px;
 }
 
-.notification-popover .notification-body .mark-notifications .mark-all-read:hover {
+.notification-container .notification-body .mark-notifications .mark-all-read:hover {
   text-decoration: underline;
 }
 
-.notification-popover .notification-body .nav .nav-item .nav-link {
+.notification-container .notification-body .nav .nav-item .nav-link {
   height: 46px;
   margin-right: 15px;
   margin-left: 15px;
@@ -170,16 +175,17 @@
   color: var(--bs-body-color);
 }
 
-.notification-popover .notification-body .nav .nav-item .nav-link.active {
+.notification-container .notification-body .nav .nav-item .nav-link.active {
   color: #ED7109;
 }
 
-.notification-popover .nav-indicator-container::before {
+.notification-container .nav-indicator-container::before {
   bottom: 0px;
 }
 
 @media (max-width: 768px) {
-  .notification-popover {
+  .notification-container {
+    right: -60px;
     width: 360px;
   }
 }
