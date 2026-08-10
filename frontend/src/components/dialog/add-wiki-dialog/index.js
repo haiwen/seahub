@@ -20,6 +20,7 @@ import {
   getDisplayedWikiIconOptions,
   getSuggestedIconPage,
   getWikiAiCustomMessageParts,
+  getWikiAiErrorMessage,
   isHomepageWikiIcon,
   normalizeSuggestedIcons,
 } from '../../wiki-card-view/constants-utils';
@@ -192,6 +193,10 @@ class AddWikiDialog extends React.Component {
     const request = wikiAPI.generateWikiIcons(wikiName)
       .then((res) => {
         if (requestId !== this.suggestedIconRequestId) return;
+        if (this.state.name.trim() !== wikiName) {
+          this.setState({ isThinking: false });
+          return;
+        }
         const suggestedIconResults = normalizeSuggestedIcons(res.data.icons);
         const suggestedIcons = getSuggestedIconPage(suggestedIconResults, 0);
         this.setState((state) => ({
@@ -206,8 +211,12 @@ class AddWikiDialog extends React.Component {
       })
       .catch((error) => {
         if (requestId !== this.suggestedIconRequestId) return;
+        if (this.state.name.trim() !== wikiName) {
+          this.setState({ isThinking: false });
+          return;
+        }
         const errorMsg = error.response && error.response.data && error.response.data.error_msg;
-        toaster.danger(errorMsg || gettext('Error'));
+        toaster.danger(getWikiAiErrorMessage(errorMsg));
         this.setState({
           isThinking: false,
           suggestedIcons: [],
@@ -236,10 +245,10 @@ class AddWikiDialog extends React.Component {
   inputNewName = (e) => {
     const name = e.target.value;
     this.clearNameBlurTimer();
-    this.invalidateSuggestedIconRequest();
+    const isRequestPending = Boolean(this.suggestedIconRequest);
     this.setState({
       name,
-      isThinking: false,
+      isThinking: isRequestPending && Boolean(name.trim()),
       suggestedIcons: [],
       suggestedIconResults: [],
       suggestedIconName: '',

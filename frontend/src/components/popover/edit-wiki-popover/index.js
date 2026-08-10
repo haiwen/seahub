@@ -17,6 +17,7 @@ import {
   getDisplayedWikiIconOptions,
   getSuggestedIconPage,
   getWikiAiCustomMessageParts,
+  getWikiAiErrorMessage,
   isHomepageWikiIcon,
   normalizeSuggestedIcons,
   resolveWikiIcon,
@@ -171,11 +172,11 @@ class EditWikiPopover extends React.Component {
   handleNameChange = (event) => {
     const name = event.target.value;
     this.clearNameBlurTimer();
-    this.invalidateSuggestedIconRequest();
+    const isRequestPending = Boolean(this.suggestedIconRequest);
     this.setState({
       name,
       errorMessage: '',
-      isThinking: false,
+      isThinking: isRequestPending && Boolean(name.trim()),
       suggestedIcons: [],
       suggestedIconResults: [],
       suggestedIconName: '',
@@ -231,6 +232,10 @@ class EditWikiPopover extends React.Component {
     const request = wikiAPI.generateWikiIcons(wikiName)
       .then((res) => {
         if (requestId !== this.suggestedIconRequestId) return;
+        if (this.state.name.trim() !== wikiName) {
+          this.setState({ isThinking: false });
+          return;
+        }
         const suggestedIconResults = normalizeSuggestedIcons(res.data.icons);
         const suggestedIcons = getSuggestedIconPage(suggestedIconResults, 0);
         this.setState((state) => ({
@@ -245,8 +250,12 @@ class EditWikiPopover extends React.Component {
       })
       .catch((error) => {
         if (requestId !== this.suggestedIconRequestId) return;
+        if (this.state.name.trim() !== wikiName) {
+          this.setState({ isThinking: false });
+          return;
+        }
         const errorMsg = error.response && error.response.data && error.response.data.error_msg;
-        toaster.danger(errorMsg || gettext('Error'));
+        toaster.danger(getWikiAiErrorMessage(errorMsg));
         this.setState({
           isThinking: false,
           suggestedIcons: [],

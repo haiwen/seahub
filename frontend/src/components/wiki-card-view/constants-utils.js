@@ -4,6 +4,7 @@ import {
   WIKI_HOMEPAGE_ICONS,
   WIKI_ICON_CATEGORIES,
 } from './constants';
+import { gettext } from '../../utils/constants';
 
 const WIKI_ICON_OPTIONS = WIKI_ICON_CATEGORIES.flatMap(category => category.icons);
 const WIKI_ICON_OPTIONS_BY_ID = new Map(WIKI_ICON_OPTIONS.map(option => [option.icon, option]));
@@ -61,6 +62,19 @@ const getWikiAiCustomMessageParts = (message) => {
   return [before.replace(/\s+$/, ''), after.replace(/^\s+/, '')];
 };
 
+const getWikiAiErrorMessage = (errorMsg) => {
+  switch (errorMsg) {
+    case 'AI server not configured':
+      return gettext('AI server not configured');
+    case 'Credit not enough':
+      return gettext('Credit not enough');
+    case 'Internal Server Error':
+      return gettext('Internal Server Error');
+    default:
+      return gettext('Error');
+  }
+};
+
 const getSuggestedIconPage = (icons, pageIndex) => {
   const startIndex = pageIndex * AI_SUGGESTED_ICON_PAGE_SIZE;
   return icons.slice(startIndex, startIndex + AI_SUGGESTED_ICON_PAGE_SIZE);
@@ -84,6 +98,7 @@ export {
   getDisplayedWikiIconOptions,
   getSuggestedIconPage,
   getWikiAiCustomMessageParts,
+  getWikiAiErrorMessage,
   isWikiIcon,
   isHomepageWikiIcon,
   normalizeSuggestedIcons,
