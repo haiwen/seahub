@@ -73,7 +73,7 @@
 /* wiki-card-item-top */
 .wiki-card-item .wiki-card-item-top {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .wiki-card-item .wiki-card-item-top .wiki-icon {
@@ -87,10 +87,10 @@
 }
 
 .wiki-card-item .wiki-card-item-top .wiki-icon .haiwen-iconfont {
-  width: 16px;
-  height: 16px;
-  font-size: 16px;
-  line-height: 16px;
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  line-height: 20px;
   color: inherit;
 }
 
