@@ -8,7 +8,8 @@
 
 /* edit color popover */
 .sf-metadata-edit-option-color-popover .popover {
-  max-width: 425px;
+  max-width: none;
+  width: fit-content;
   padding: 16px;
 }
 
@@ -18,8 +19,11 @@
   opacity: 0;
 }
 
-.sf-metadata-edit-option-color-popover .col-auto {
-  padding-left: 3px;
+.sf-metadata-edit-option-color-popover .sf-metadata-edit-option-color-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 376px;
 }
 
 .sf-metadata-edit-option-color-popover .sf-metadata-edit-option-color-item-container {

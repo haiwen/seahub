@@ -58,23 +58,21 @@ const Color = ({ option, isViewing, isPredefined, onChange }) => {
           hidePopover={closePopover}
           hidePopoverWithEsc={closePopover}
         >
-          <div className="row gutters-xs" onClick={(e) => e && e.stopPropagation()}>
+          <div className="sf-metadata-edit-option-color-grid" onClick={(e) => e && e.stopPropagation()}>
             {SELECT_OPTION_COLORS.map((colorItem, index) => {
               const { COLOR: optionColor, BORDER_COLOR: borderColor, TEXT_COLOR: textColor } = colorItem;
               const isSelected = (index === 0 && !option) || option?.color === optionColor;
               return (
-                <div key={colorItem.COLOR} className="col-auto">
-                  <label className="color-select">
-                    <input name="color" type="radio" value={optionColor} className="sf-metadata-edit-option-color-item-input" defaultChecked={isSelected} onClick={onClick} />
-                    <IconBtn
-                      className={classnames('sf-metadata-edit-option-color-item-container', { 'selected': isSelected })}
-                      id={target}
-                      style={{ backgroundColor: optionColor || null, borderColor: borderColor }}
-                      symbol="check"
-                      iconStyle={{ fill: textColor || '#666' }}
-                    />
-                  </label>
-                </div>
+                <label key={colorItem.COLOR} className="color-select">
+                  <input name="color" type="radio" value={optionColor} className="sf-metadata-edit-option-color-item-input" defaultChecked={isSelected} onClick={onClick} />
+                  <IconBtn
+                    className={classnames('sf-metadata-edit-option-color-item-container', { 'selected': isSelected })}
+                    id={target}
+                    style={{ backgroundColor: optionColor || null, borderColor: borderColor }}
+                    symbol="check"
+                    iconStyle={{ fill: textColor || '#666' }}
+                  />
+                </label>
               );
             })}
           </div>

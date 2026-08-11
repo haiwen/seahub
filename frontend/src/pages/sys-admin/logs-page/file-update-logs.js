@@ -298,7 +298,7 @@ class FileUpdateLogs extends Component {
       <div className="main-panel-center flex-row">
         <div className="cur-view-container">
           <div className="cur-view-content">
-            <div className="d-flex align-items-center mb-2">
+            <div className="d-flex align-items-center mb-2 gap-4">
               <LogUserSelector
                 componentName={gettext('Users')}
                 items={availableUsers}
@@ -308,7 +308,6 @@ class FileUpdateLogs extends Component {
                 onToggle={() => this.handleSelectorToggle('user')}
                 searchUsersFunc={this.searchUsers}
               />
-              <div className="mx-3"></div>
               <LogRepoSelector
                 items={availableRepos}
                 selectedItems={selectedRepos}
