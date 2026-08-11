@@ -62,9 +62,9 @@ class UserSelector extends Component {
     const filteredAvailableUsers = query.trim() ? availableUsers.filter(item => item.contact_email.indexOf(query.trim()) != -1 || item.name.indexOf(query.trim()) != -1 || item.login_id.indexOf(query.trim()) != -1) : availableUsers;
     return (
       <>
-        <span id="activity-user-selector-trigger">
+        <span id="activity-user-selector-trigger" className="d-flex">
           <OpElement
-            className="cur-activity-modifiers d-inline-flex align-items-center p-2 rounded"
+            className="cur-activity-modifiers d-inline-flex align-items-center rounded"
             title={gettext('Toggle user selector')}
             op={this.onToggleClick}
           >

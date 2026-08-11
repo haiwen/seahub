@@ -256,7 +256,7 @@ class ActivityItem extends Component {
       <Fragment>
         {isShowDate &&
           <tr>
-            <td colSpan={isDesktop ? 5 : 3} className="border-top-0">{dayjs(item.time).format('YYYY-MM-DD')}</td>
+            <td colSpan={isDesktop ? 5 : 3} className="border-top-0 p-0">{dayjs(item.time).format('YYYY-MM-DD')}</td>
           </tr>
         }
         {isDesktop ? (
@@ -270,7 +270,7 @@ class ActivityItem extends Component {
             <td>{op}</td>
             <td>
               {details}
-              {moreDetails && <br /> }
+              {moreDetails && <br />}
               {moreDetails && smallLibLink}
             </td>
             <td className="relative-time">
@@ -291,7 +291,7 @@ class ActivityItem extends Component {
               <span className="text-secondary mobile-activity-time">
                 <time datetime={item.time} is="relative-time" title={formatWithTimezone(item.time)}>{dayjs(item.time).fromNow()}</time>
               </span>
-              {moreDetails && <br /> }
+              {moreDetails && <br />}
               {moreDetails && libLink}
             </td>
           </tr>

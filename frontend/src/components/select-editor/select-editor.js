@@ -44,10 +44,21 @@ class SelectEditor extends React.Component {
       options: []
     };
     this.options = [];
+    this.selectRef = React.createRef();
   }
 
   componentDidMount() {
     this.setOptions();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevState.isEditing && this.state.isEditing) {
+      setTimeout(() => {
+        if (this.selectRef.current) {
+          this.selectRef.current.focus();
+        }
+      }, 0);
+    }
   }
 
   setOptions = () => {
@@ -121,8 +132,42 @@ class SelectEditor extends React.Component {
   };
 
   onMenuClose = () => {
+    document.body.classList.remove('keyboard-nav-active');
+    document.removeEventListener('keydown', this.handleKeyDown, true);
     this.setState({ isEditing: false });
     this.props.toggleItemFreezed && this.props.toggleItemFreezed(false);
+  };
+
+  handleKeyDown = (e) => {
+    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+      document.body.classList.add('keyboard-nav-active');
+      if (this.selectRef.current) {
+        this.selectRef.current.focusOption(e.key === 'ArrowDown' ? 'down' : 'up');
+      }
+    } else if (e.key === 'Enter') {
+      const focusedOption = this.selectRef.current?.state?.focusedOption;
+      if (focusedOption && focusedOption.isDisabled && this.props.enableAddCustomPermission) {
+        this.props.onAddCustomPermissionToggle && this.props.onAddCustomPermissionToggle();
+      }
+    }
+  };
+
+  onMenuOpen = () => {
+    // Use setTimeout to clear focusedOption after getDerivedStateFromProps runs
+    setTimeout(() => {
+      if (this.selectRef.current) {
+        this.selectRef.current.setState({ focusedOption: null });
+      }
+    }, 0);
+    // Use capture phase to ensure the listener fires
+    document.addEventListener('keydown', this.handleKeyDown, true);
+  };
+
+  // Prevent react-select's internal handler from double-processing arrow keys
+  handleSelectKeyDown = (e) => {
+    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+      e.preventDefault();
+    }
   };
 
   render() {
@@ -146,6 +191,7 @@ class SelectEditor extends React.Component {
       <div className="permission-editor" onClick={this.onSelectHandler}>
         {(!isTextMode || this.state.isEditing) &&
           <Select
+            ref={this.selectRef}
             options={optionsWithCheck}
             className="permission-editor-select"
             classNamePrefix="permission-editor"
@@ -158,6 +204,8 @@ class SelectEditor extends React.Component {
             styles={MenuSelectStyle}
             components={{ DropdownIndicator }}
             onMenuClose={this.onMenuClose}
+            onMenuOpen={this.onMenuOpen}
+            onKeyDown={this.handleSelectKeyDown}
             autoFocus={autoFocus}
             isSearchable={isSearchable}
             menuShouldScrollIntoView
