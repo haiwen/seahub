@@ -2768,6 +2768,7 @@ class LibContentView extends React.Component {
       currentMode: nextMode,
       currentDirent: null,
       detailDirent: null,
+      currentNode: null,
     });
   };
 
