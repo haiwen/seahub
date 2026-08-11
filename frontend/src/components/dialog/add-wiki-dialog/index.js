@@ -387,15 +387,11 @@ class AddWikiDialog extends React.Component {
   };
 
   closeIconSelector = () => {
-    this.setState((state) => {
-      const selectedIcon = state.draftSelectedIcon || state.selectedIcon;
-      return {
-        selectedIcon,
-        pinnedIcon: isHomepageWikiIcon(selectedIcon) ? state.pinnedIcon : selectedIcon,
-        isIconSelectorOpen: false,
-        draftSelectedIcon: null,
-        errorMessage: '',
-      };
+    this.setState({
+      isCustomIconPage: true,
+      isIconSelectorOpen: false,
+      draftSelectedIcon: null,
+      errorMessage: '',
     });
   };
 
@@ -404,11 +400,16 @@ class AddWikiDialog extends React.Component {
   };
 
   handleIconSelectorSubmit = () => {
-    const { draftSelectedIcon } = this.state;
-    if (!draftSelectedIcon) return;
-
-    this.setState({ selectedIcon: draftSelectedIcon }, () => {
-      this.submitWiki(draftSelectedIcon);
+    this.setState((state) => {
+      if (!state.draftSelectedIcon) return null;
+      return {
+        selectedIcon: state.draftSelectedIcon,
+        pinnedIcon: isHomepageWikiIcon(state.draftSelectedIcon) ? state.pinnedIcon : state.draftSelectedIcon,
+        isCustomIconPage: true,
+        isIconSelectorOpen: false,
+        draftSelectedIcon: null,
+        errorMessage: '',
+      };
     });
   };
 
@@ -452,7 +453,7 @@ class AddWikiDialog extends React.Component {
             onIconSelect={this.handleFullIconSelect}
             onPrevious={this.closeIconSelector}
             onSubmit={this.handleIconSelectorSubmit}
-            isSubmitDisabled={!draftSelectedIcon || !name.trim()}
+            isSubmitDisabled={!draftSelectedIcon}
             isSubmitting={isSubmitting}
             errorMessage={errorMessage}
           /> :

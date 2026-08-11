@@ -28,6 +28,10 @@
   margin-bottom: 16px;
 }
 
+.edit-wiki-popover .edit-wiki-field .form-control {
+  border-radius: 4px;
+}
+
 .edit-wiki-popover .edit-wiki-field>label,
 .edit-wiki-popover .edit-wiki-icons-header>label {
   display: block;
@@ -333,6 +337,7 @@
 
 .edit-wiki-popover .wiki-icon-selector-body {
   display: flex;
+  flex-direction: column;
   min-height: 288px;
   padding: 0 0 16px;
   overflow: hidden;

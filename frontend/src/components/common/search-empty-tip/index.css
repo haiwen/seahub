@@ -16,6 +16,18 @@
   flex-shrink: 0;
 }
 
+.search-empty-tip-img-dark {
+  display: none;
+}
+
+[data-bs-theme="dark"] .search-empty-tip-img-light {
+  display: none;
+}
+
+[data-bs-theme="dark"] .search-empty-tip-img-dark {
+  display: block;
+}
+
 .search-empty-tip-text {
   line-height: 22px;
 }

@@ -16,7 +16,7 @@
 .modal .seahub-modal-header .seahub-modal-title-content {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   min-width: 0;
   width: 100%;
   font-weight: 500;

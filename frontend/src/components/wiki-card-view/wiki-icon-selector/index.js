@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Alert, Button, ModalBody, ModalFooter } from 'reactstrap';
 import SeahubModalHeader from '../../common/seahub-modal-header';
+import SearchEmptyTip from '../../common/search-empty-tip';
 import Icon from '../../icon';
 import SearchInput from '../../search-input';
 import Tooltip from '../../tooltip';
@@ -106,7 +107,11 @@ class WikiIconSelector extends React.Component {
   renderSearchResults = () => {
     const iconOptions = filterWikiIconOptions(this.state.searchValue);
     if (!iconOptions.length) {
-      return <div className="wiki-icon-selector-empty">{gettext('No icons found')}</div>;
+      return (
+        <div className="wiki-icon-selector-empty">
+          <SearchEmptyTip text={gettext('No icons found')} />
+        </div>
+      );
     }
 
     return (
@@ -143,7 +148,7 @@ class WikiIconSelector extends React.Component {
           </SeahubModalHeader>
         }
         <ModalBody className="wiki-icon-selector-body">
-          <div className="wiki-icon-selector-scroll">
+          <div className="wiki-icon-selector-search-container">
             <SearchInput
               className="wiki-icon-selector-search"
               value={searchValue}
@@ -155,6 +160,8 @@ class WikiIconSelector extends React.Component {
               autoFocus={true}
               wait={0}
             />
+          </div>
+          <div className="wiki-icon-selector-scroll">
             {searchValue ? this.renderSearchResults() : this.renderCategorizedIcons()}
             {errorMessage &&
               <Alert color="danger" className="wiki-icon-selector-error mb-0">
