@@ -266,7 +266,7 @@ const SingleSelectEditor = forwardRef(({
   }, [displayOptions, searchValue, value, highlightIndex, onMenuMouseEnter, onMenuMouseLeave, onMouseDown]);
 
   return (
-    <div className="sf-metadata-single-select-editor sf-popover-container" style={style} ref={editorRef}>
+    <div className="sf-metadata-single-select-editor popover" style={style} ref={editorRef}>
       <div className="sf-metadata-search-single-select-options">
         <SearchInput
           placeholder={gettext('Search option')}

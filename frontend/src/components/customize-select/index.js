@@ -28,7 +28,7 @@ class CustomizeSelect extends Component {
     */
     if (this.state.isShowSelectOptions) event.stopPropagation();
     const eventClassName = getEventClassName(event);
-    if (this.props.readOnly || eventClassName.indexOf('option-search-control') > -1 || eventClassName === 'seafile-option-group-search') return;
+    if (this.props.readOnly || eventClassName.indexOf('option-search-control') > -1 || eventClassName === 'sf-option-group-search') return;
     // Prevent closing by pressing the space bar in the search input
     if (event.target.value === '') return;
     this.setState({
@@ -99,7 +99,7 @@ class CustomizeSelect extends Component {
         tabIndex="0"
         role="button"
         ref={(node) => this.selector = node}
-        className={classnames('seafile-customize-select custom-select',
+        className={classnames('sf-select',
           { 'focus': this.state.isShowSelectOptions },
           { 'disabled': readOnly },
           className

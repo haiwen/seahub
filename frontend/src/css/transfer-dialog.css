@@ -70,23 +70,23 @@
 }
 
 .transfer-dialog-content .transfer-dialog-main .transfer-repo-department-select.focus {
-  border-color: #3e84f7 !important;
+  border-color: var(--bs-form-select-focus-border-color) !important;
 }
 
 .transfer-dialog-content .transfer-dialog-main .transfer-repo-department-select .select-placeholder {
   color: var(--bs-body-secondary-color);
 }
 
-.transfer-dialog-content .transfer-dialog-main .transfer-repo-department-select .seafile-option-group {
+.transfer-dialog-content .transfer-dialog-main .transfer-repo-department-select .sf-option-group {
   max-width: none;
   border-radius: 4px;
 }
 
-.transfer-dialog-content .transfer-dialog-main .transfer-repo-department-select .seafile-option-group-content {
+.transfer-dialog-content .transfer-dialog-main .transfer-repo-department-select .sf-option-group-content {
   padding: 8px;
 }
 
-.transfer-dialog-content .transfer-dialog-main .transfer-repo-department-select .seafile-select-option {
+.transfer-dialog-content .transfer-dialog-main .transfer-repo-department-select .sf-select-option {
   min-width: 0;
   min-height: 30px;
   padding: 0 10px;

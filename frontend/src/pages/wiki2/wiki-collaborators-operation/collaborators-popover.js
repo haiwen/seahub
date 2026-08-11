@@ -17,7 +17,7 @@ class CollaboratorsPopover extends React.PureComponent {
         toggle={toggle}
         target="collaborators"
         placement="bottom-end"
-        popperClassName="collaborators-popover sf-popover-container"
+        popperClassName="collaborators-popover"
         trigger="legacy"
         hideArrow={true}
         fade={false}

@@ -1,10 +1,9 @@
 .sf-metadata-tags-editor {
+  position: absolute;
   left: 0;
+  max-width: none;
   min-height: 160px;
-}
-
-[data-bs-theme=dark] .sf-metadata-tags-editor {
-  box-shadow: none;
+  overflow: hidden;
 }
 
 .sf-metadata-tags-editor .sf-metadata-search-tags-container {
@@ -72,7 +71,7 @@
   display: flex;
   align-items: center;
   padding: 0 12px;
-  color: #666;
+  color: var(--bs-body-secondary-color);
   line-height: 20px;
   font-size: 13px;
   margin-bottom: 8px;

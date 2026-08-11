@@ -44,17 +44,17 @@ export const CustomDropdownItem = ({
       aria-disabled={item.disabled ? 'true' : undefined}
     >
       {showLeftSlot && (
-        <span className="dropdown-item-left-slot" aria-hidden="true">
+        <span className="dropdown-item-check" aria-hidden="true">
           {checked && <Icon symbol="check" />}
         </span>
       )}
-      <span className="dropdown-item-main-slot">
+      <span className="dropdown-item-text">
         {icon && <span className={`dropdown-item-icon ${showLeftSlot ? 'mr-2' : 'mr-3'}`}>{icon}</span>}
         <span className="dropdown-item-label" title={label}>{label}</span>
       </span>
       {showRightSlot && (
         <span className="dropdown-item-right-slot" aria-hidden="true">
-          {rightSlot || (showShortcutPlaceholder ? <span className="dropdown-item-shortcut mr-3">{shortcut}</span> : null)}
+          {rightSlot || (showShortcutPlaceholder ? <span className="dropdown-item-shortcut">{shortcut}</span> : null)}
         </span>
       )}
     </DropdownItem>

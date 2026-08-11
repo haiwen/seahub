@@ -1,0 +1,14 @@
+.icon-btn {
+  height: 28px;
+  width: 28px;
+  min-width: 0;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  color: #666;
+  border: none;
+  border-radius: 3px;
+  padding: 0;
+  background: transparent;
+  margin-right: 10px;
+}

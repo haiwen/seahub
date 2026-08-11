@@ -2,7 +2,7 @@
   margin-bottom: 40px;
 }
 
-.sf-metadata-basic-filters-select.seafile-customize-select {
+.sf-metadata-basic-filters-select.sf-select {
   width: fit-content;
   max-width: 100%;
   height: 24px;
@@ -12,16 +12,16 @@
   margin-right: 12px;
 }
 
-.sf-metadata-basic-filters-select.seafile-customize-select > .selected-option:hover {
+.sf-metadata-basic-filters-select.sf-select > .selected-option:hover {
   background: var(--bs-icon-btn-hover-bg-color);
 }
 
-.sf-metadata-basic-filters-select.seafile-customize-select.focus {
+.sf-metadata-basic-filters-select.sf-select.focus {
   border-color: unset;
   box-shadow: none;
 }
 
-.sf-metadata-basic-filters-select.seafile-customize-select .selected-option {
+.sf-metadata-basic-filters-select.sf-select .selected-option {
   width: 100%;
   height: 100%;
   padding: 0 4px;
@@ -29,7 +29,7 @@
   border-radius: 4px;
 }
 
-.sf-metadata-basic-filters-select.seafile-customize-select .selected-option:hover {
+.sf-metadata-basic-filters-select.sf-select .selected-option:hover {
   background: var(--bs-icon-btn-hover-bg-color);
 }
 
@@ -39,7 +39,7 @@
   font-weight: 500;
 }
 
-.sf-metadata-basic-filters-select.seafile-customize-select .selected-option .selected-option-show {
+.sf-metadata-basic-filters-select.sf-select .selected-option .selected-option-show {
   width: 100%;
 }
 
@@ -73,11 +73,12 @@
   flex-shrink: 0;
 }
 
-.seafile-select-option.seafile-select-option-active .seafile-multicolor-icon-check-mark {
+.sf-select-option.sf-select-option-active .seafile-multicolor-icon-check-mark {
   fill: #fff;
 }
 
 .filter-group-basic .sf-metadata-filters-list {
+  height: 24px;
   min-height: unset;
   display: flex;
   margin-top: 12px;

@@ -253,7 +253,7 @@ class SortPopover extends Component {
         className="sf-metadata-sort-popover"
         boundariesElement={document.body}
       >
-        <div ref={ref => this.sortPopoverRef = ref} className="sf-popover-container" onClick={this.onPopoverInsideClick}>
+        <div ref={ref => this.sortPopoverRef = ref} onClick={this.onPopoverInsideClick}>
           <div className={`sorts-list ${isEmpty ? 'empty-sorts-container' : ''}`} >
             {isEmpty ?
               <div className="empty-sorts-list">{gettext('No sorts')}</div> :

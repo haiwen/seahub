@@ -97,20 +97,6 @@ body {
   right: 200px;
 }
 
-
-.file-view-header .file-toolbar-btn {
-  position: relative;
-  min-width: 0;
-  width: 28px;
-  height: 28px;
-  border-radius: 3px;
-  margin-left: 10px;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .file-view-header .file-toolbar-btn .sdocfont {
   font-size: .875rem;
   font-weight: 400;

@@ -1,5 +1,6 @@
 .sf-metadata-collaborator-editor {
   width: 300px;
+  max-width: none;
   height: fit-content;
   padding: 0;
   overflow: hidden;
@@ -91,7 +92,7 @@
 }
 
 .sf-metadata-collaborator-editor .sf-metadata-delete-collaborator .collaborator-name {
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .sf-metadata-collaborator-editor .collaborator-check-icon {

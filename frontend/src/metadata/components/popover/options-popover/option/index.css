@@ -10,7 +10,7 @@
 }
 
 .sf-metadata-edit-option-container:hover {
-  background-color: #f5f5f5;
+  background-color: var(--bs-hover-bg);
   cursor: pointer;
 }
 
@@ -75,7 +75,7 @@
 
 .sf-metadata-edit-option-container.sf-metadata-edit-deleting-option,
 .sf-metadata-edit-option-container.sf-metadata-edit-option-viewing {
-  background-color: #f5f5f5;
+  background-color: var(--bs-hover-bg);
 }
 
 .sf-metadata-edit-option-container.sf-metadata-edit-option-disabled,
