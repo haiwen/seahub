@@ -468,7 +468,8 @@ def password_change(request, template_name='registration/password_change_form.ht
     if post_change_redirect is None:
         post_change_redirect = reverse('auth_password_change_done')
         
-    can_change_password = can_user_update_password(request.user)
+    force_passwd_change = request.session.get('force_passwd_change', False)
+    can_change_password = force_passwd_change or can_user_update_password(request.user)
 
     if not can_change_password:
         return render_error(request, _('Unable to change password.'))
@@ -490,7 +491,7 @@ def password_change(request, template_name='registration/password_change_form.ht
         if form.is_valid():
             form.save()
 
-            if request.session.get('force_passwd_change', False):
+            if force_passwd_change:
                 del request.session['force_passwd_change']
                 UserOptions.objects.unset_force_passwd_change(
                     request.user.username)
@@ -503,7 +504,7 @@ def password_change(request, template_name='registration/password_change_form.ht
     return render(request, template_name, {
         'form': form,
         'strong_pwd_required': config.USER_STRONG_PASSWORD_REQUIRED,
-        'force_passwd_change': request.session.get('force_passwd_change', False),
+        'force_passwd_change': force_passwd_change,
     })
 
 def password_change_done(request, template_name='registration/password_change_done.html'):

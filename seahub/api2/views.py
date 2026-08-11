@@ -90,6 +90,7 @@ from seahub.utils.star import star_file, unstar_file, get_dir_starred_files
 from seahub.utils.file_tags import get_files_tags_in_dir
 from seahub.utils.file_types import MARKDOWN
 from seahub.utils.file_size import get_file_size_unit
+from seahub.utils.admin_password import require_password_change
 from seahub.utils.file_op import check_file_lock
 from seahub.utils.timeutils import utc_to_local, \
         datetime_to_isoformat_timestr, datetime_to_timestamp, \
@@ -5179,6 +5180,7 @@ class OrganizationView(APIView):
 
         try:
             new_user = User.objects.create_user(username, password, is_staff=False, is_active=True)
+            require_password_change(new_user)
             create_org(org_name, prefix, new_user.username)
 
             org = ccnet_threaded_rpc.get_org_by_url_prefix(prefix)

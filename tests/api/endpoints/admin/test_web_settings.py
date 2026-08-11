@@ -28,7 +28,8 @@ class AdminWebSettingsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 25
+        assert len(json_resp) == 24
+        assert 'FORCE_PASSWORD_CHANGE' not in json_resp
 
     @override_settings(ENABLE_SETTINGS_VIA_WEB=False)
     def test_get_with_enable_settings(self):
@@ -52,7 +53,6 @@ class AdminWebSettingsTest(BaseTestCase):
             "ENABLE_TERMS_AND_CONDITIONS": False,
             "SITE_TITLE": "Private Seafile",
             "USER_STRONG_PASSWORD_REQUIRED": 0,
-            "FORCE_PASSWORD_CHANGE": True,
             "ENABLE_SHARE_TO_ALL_GROUPS": False,
             "ENABLE_USER_CLEAN_TRASH": True,
             "FREEZE_USER_ON_LOGIN_FAILED": False,

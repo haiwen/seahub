@@ -2,7 +2,6 @@
 import os
 import logging
 from types import FunctionType
-from constance import config
 
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
@@ -30,6 +29,7 @@ from seahub.api2.models import TokenV2
 from seahub.organizations.models import OrgSettings
 from seahub.organizations.views import gen_org_url_prefix
 from seahub.utils.auth import can_user_update_password
+from seahub.utils.admin_password import require_password_change
 from seahub.utils.ccnet_db import get_ccnet_db_name
 import seahub.settings as settings
 from seahub.settings import SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, INIT_PASSWD, \
@@ -357,6 +357,8 @@ def update_user_info(request, user, password, is_active, is_staff, role,
 
     # update user
     user.save()
+    if password:
+        require_password_change(user)
 
     # update additional user info
     if is_pro_version() and role:
@@ -881,6 +883,7 @@ class AdminUsers(APIView):
         # create user
         try:
             user_obj = User.objects.create_user(email, password, is_staff, is_active)
+            require_password_change(user_obj)
             create_user_info(request, email=user_obj.username, role=role,
                              nickname=name, contact_email=email,
                              quota_total_mb=quota_total_mb,
@@ -912,9 +915,6 @@ class AdminUsers(APIView):
         }
         admin_operation.send(sender=None, admin_name=request.user.username,
                              operation=USER_ADD, detail=admin_op_detail)
-
-        if config.FORCE_PASSWORD_CHANGE:
-            UserOptions.objects.set_force_passwd_change(user_obj.email)
 
         return Response(user_info)
 
@@ -1544,8 +1544,7 @@ class AdminUserResetPassword(APIView):
         user.set_password(new_password)
         user.save()
 
-        if config.FORCE_PASSWORD_CHANGE:
-            UserOptions.objects.set_force_passwd_change(user.username)
+        require_password_change(user)
 
         if IS_EMAIL_CONFIGURED:
             if SEND_EMAIL_ON_RESETTING_USER_PASSWD:

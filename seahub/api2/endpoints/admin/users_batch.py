@@ -3,7 +3,6 @@
 import logging
 from io import BytesIO
 from openpyxl import load_workbook
-from constance import config
 
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
@@ -35,7 +34,7 @@ from seahub.constants import DEFAULT_ADMIN
 from seahub.role_permissions.models import AdminRole
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.base.models import UserLastLogin
-from seahub.options.models import UserOptions
+from seahub.utils.admin_password import require_password_change
 from seahub.role_permissions.utils import get_available_roles
 from seahub.utils.user_permissions import get_user_role
 from seahub.auth.utils import get_virtual_id_by_email
@@ -345,8 +344,7 @@ class AdminImportUsers(APIView):
                 pass
 
             user = User.objects.create_user(email, password, is_staff=False, is_active=True)
-            if config.FORCE_PASSWORD_CHANGE:
-                UserOptions.objects.set_force_passwd_change(user.email)
+            require_password_change(user)
 
             # update the user's optional info
             # update nikename

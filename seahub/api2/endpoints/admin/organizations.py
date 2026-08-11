@@ -22,6 +22,7 @@ from seahub.organizations.utils import generate_org_reactivate_link, \
 from seahub.utils import is_valid_email, IS_EMAIL_CONFIGURED, send_html_email, \
         get_org_traffic_by_month
 from seahub.utils.file_size import get_file_size_unit
+from seahub.utils.admin_password import require_password_change
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
@@ -321,6 +322,7 @@ class AdminOrganizations(APIView):
         try:
             new_user = User.objects.create_user(owner_email, owner_password,
                                                 is_staff=False, is_active=True)
+            require_password_change(new_user)
         except User.DoesNotExist as e:
             logger.error(e)
             error_msg = 'Failed to add user %s.' % owner_email

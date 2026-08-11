@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+from mock import patch
 
 from seaserv import ccnet_api, seafile_api
 from tests.common.utils import randstring
@@ -9,6 +10,7 @@ from seahub.test_utils import BaseTestCase
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.profile.models import DetailedProfile
+from seahub.options.models import UserOptions
 from seahub.share.models import FileShare, UploadLinkShare
 from seahub.utils.file_size import get_file_size_unit
 
@@ -75,6 +77,7 @@ class AdminUsersTest(BaseTestCase):
         assert json_resp['contact_email'] == self.tmp_email
 
         ccnet_email = ccnet_api.get_emailuser(json_resp['email'])
+        assert UserOptions.objects.passwd_change_required(ccnet_email.email)
 
         self.remove_user(ccnet_email.email)
 
@@ -247,6 +250,7 @@ class AdminUserTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
 
         assert ccnet_api.validate_emailuser(self.tmp_email, password) == 0
+        assert UserOptions.objects.passwd_change_required(self.tmp_email)
 
     def test_update_name(self):
 
@@ -452,4 +456,34 @@ class AdminAdminUsersTest(BaseTestCase):
 
         for admin_user in json_resp['admin_user_list']:
             assert admin_user['is_staff'] == True
+
+class AdminUserResetPasswordTest(BaseTestCase):
+
+    def setUp(self):
+        self.login_as(self.admin)
+        self.url = reverse(
+            'api-v2.1-admin-user-reset-password', args=[self.user.username]
+        )
+
+    @patch('seahub.api2.endpoints.admin.users.IS_EMAIL_CONFIGURED', False)
+    def test_reset_to_temporary_password_requires_password_change(self):
+        resp = self.client.put(self.url)
+
+        self.assertEqual(200, resp.status_code)
+        assert UserOptions.objects.passwd_change_required(self.user.username)
+
+    @patch('seahub.api2.endpoints.admin.users.send_html_email')
+    @patch('seahub.api2.endpoints.admin.users.IS_EMAIL_CONFIGURED', True)
+    def test_reset_link_does_not_require_password_change(
+            self, _mock_send_html_email):
+        from seahub.profile.models import Profile
+
+        Profile.objects.add_or_update(
+            self.user.username, contact_email='contact@example.com'
+        )
+
+        resp = self.client.put(self.url)
+
+        self.assertEqual(200, resp.status_code)
+        assert not UserOptions.objects.passwd_change_required(self.user.username)
 

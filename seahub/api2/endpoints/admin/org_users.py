@@ -10,7 +10,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-from constance import config
 from seaserv import ccnet_api, seafile_api
 
 from seahub.settings import INIT_PASSWD, SEND_EMAIL_ON_RESETTING_USER_PASSWD
@@ -24,7 +23,7 @@ from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.profile.models import Profile
-from seahub.options.models import UserOptions
+from seahub.utils.admin_password import require_password_change
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
@@ -213,6 +212,7 @@ class AdminOrgUsers(APIView):
         try:
             user = User.objects.create_user(email, password, is_staff=False,
                     is_active=is_active)
+            require_password_change(user)
         except User.DoesNotExist as e:
             logger.error(e)
             error_msg = 'Fail to add user %s.' % email
@@ -230,9 +230,6 @@ class AdminOrgUsers(APIView):
         name = request.POST.get('name', None)
         if name:
             Profile.objects.add_or_update(user.email, name)
-
-        if config.FORCE_PASSWORD_CHANGE:
-            UserOptions.objects.set_force_passwd_change(user.email)
 
         user_info = get_org_user_info(org_id, user)
         user_info['active'] = is_active

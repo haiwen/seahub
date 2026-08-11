@@ -30,6 +30,7 @@ from seahub.utils.error_msg import file_type_error_msg
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, \
         datetime_to_isoformat_timestr
 from seahub.utils.licenseparse import user_number_over_limit
+from seahub.utils.admin_password import require_password_change
 from seahub.views.sysadmin import send_user_add_mail
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
@@ -273,6 +274,7 @@ class OrgAdminUsers(APIView):
         try:
             user = User.objects.create_user(email, password, is_staff=False,
                                             is_active=True)
+            require_password_change(user)
         except User.DoesNotExist as e:
             logger.error(e)
             error_msg = 'Fail to add user %s.' % email
@@ -725,6 +727,7 @@ class OrgAdminImportUsers(APIView):
                 pass
 
             user = User.objects.create_user(email, password, is_staff=False, is_active=True)
+            require_password_change(user)
             set_org_user(org_id, user.email)
 
             if IS_EMAIL_CONFIGURED:

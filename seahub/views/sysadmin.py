@@ -46,7 +46,7 @@ from seahub.utils.auth import get_login_bg_image_path
 from seahub.views import get_system_default_repo_id
 from seahub.views.file import send_file_access_msg
 from seahub.forms import SetUserQuotaForm, AddUserForm
-from seahub.options.models import UserOptions
+from seahub.utils.admin_password import require_password_change
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.signals import repo_deleted
 from seahub.admin_log.signals import admin_operation
@@ -585,8 +585,7 @@ def user_reset(request, email):
         user.set_password(new_password)
         user.save()
 
-        if config.FORCE_PASSWORD_CHANGE:
-            UserOptions.objects.set_force_passwd_change(user.username)
+        require_password_change(user)
 
         if IS_EMAIL_CONFIGURED:
             if SEND_EMAIL_ON_RESETTING_USER_PASSWD:
@@ -657,6 +656,7 @@ def user_add(request):
         try:
             user = User.objects.create_user(email, password, is_staff=False,
                                             is_active=True)
+            require_password_change(user)
         except User.DoesNotExist as e:
             logger.error(e)
             err_msg = _('Fail to add user %s.') % email
@@ -671,8 +671,6 @@ def user_add(request):
 
         if user:
             User.objects.update_role(user.email, role)
-            if config.FORCE_PASSWORD_CHANGE:
-                UserOptions.objects.set_force_passwd_change(user.email)
             if name:
                 Profile.objects.add_or_update(user.email, name, '')
             if department:

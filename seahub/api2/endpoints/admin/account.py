@@ -25,6 +25,7 @@ from seahub.profile.models import Profile, DetailedProfile
 from seahub.institutions.models import Institution
 from seahub.share.models import UploadLinkShare, FileShare
 from seahub.utils import is_valid_username, is_org_context
+from seahub.utils.admin_password import require_password_change
 from seahub.utils.file_size import get_file_size_unit
 from seahub.group.utils import is_group_member
 
@@ -318,6 +319,8 @@ class Account(APIView):
             if result_code == -1:
                 return api_error(status.HTTP_520_OPERATION_FAILED,
                                  'Failed to update user.')
+            if password is not None:
+                require_password_change(user)
 
             email = user.email
             try:
@@ -349,6 +352,8 @@ class Account(APIView):
                 logger.error(e)
                 return api_error(status.HTTP_520_OPERATION_FAILED,
                                  'Failed to add user.')
+
+            require_password_change(user)
 
             email = user.email
             try:

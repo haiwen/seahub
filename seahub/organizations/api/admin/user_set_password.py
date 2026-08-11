@@ -18,6 +18,7 @@ from seahub.api2.utils import api_error
 from seahub.base.accounts import User
 from seahub.profile.models import Profile
 from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email
+from seahub.utils.admin_password import require_password_change
 from seahub.base.templatetags.seahub_tags import email2nickname
 
 import seahub.settings as settings
@@ -86,6 +87,7 @@ class OrgAdminUserSetPassword(APIView):
 
             user.set_password(new_password)
             user.save()
+            require_password_change(user)
 
             reset_tip = _('Successfully reset password to %(passwd)s for user %(user)s.') \
                 % {'passwd': new_password, 'user': user_nickname}

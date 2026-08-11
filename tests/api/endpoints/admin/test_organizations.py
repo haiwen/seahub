@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.test import override_settings
 
 from seahub.test_utils import BaseTestCase
+from seahub.options.models import UserOptions
 from tests.common.utils import randstring
 
 from seaserv import seafserv_threaded_rpc
@@ -117,6 +118,7 @@ class AdminOrganizationsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert org_name == json_resp['org_name']
         assert owner_email == json_resp['creator_email']
+        assert UserOptions.objects.passwd_change_required(owner_email)
 
 
 @pytest.mark.skipif(TRAVIS, reason="pro only")

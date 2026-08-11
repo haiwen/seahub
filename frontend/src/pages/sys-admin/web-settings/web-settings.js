@@ -228,13 +228,6 @@ class WebSettings extends Component {
                     />
                     <CheckboxItem
                       saveSetting={this.saveSetting}
-                      displayName={gettext('Force password change')}
-                      keyText='FORCE_PASSWORD_CHANGE'
-                      value={config_dict['FORCE_PASSWORD_CHANGE']}
-                      helpTip={gettext('Force user to change password when account is newly added or reset by admin')}
-                    />
-                    <CheckboxItem
-                      saveSetting={this.saveSetting}
                       displayName={gettext('Enable two factor authentication')}
                       keyText='ENABLE_TWO_FACTOR_AUTH'
                       value={config_dict['ENABLE_TWO_FACTOR_AUTH']}

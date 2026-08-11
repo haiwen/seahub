@@ -4,6 +4,7 @@ from mock import patch
 from seaserv import ccnet_api
 from django.urls import reverse
 from seahub.test_utils import BaseTestCase
+from seahub.options.models import UserOptions
 from tests.common.utils import randstring
 
 from seaserv import seafserv_threaded_rpc
@@ -95,6 +96,7 @@ class OrgUsersTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
 
         assert json_resp['email'] == email
+        assert UserOptions.objects.passwd_change_required(email)
 
     def test_can_not_create_if_not_admin(self):
 

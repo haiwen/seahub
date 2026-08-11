@@ -30,6 +30,7 @@ from seahub.group.views import remove_group_common
 from seahub.profile.models import Profile
 from seahub.utils import get_service_url, render_error
 from seahub.utils.auth import get_login_bg_image_path
+from seahub.utils.admin_password import require_password_change
 
 from seahub.organizations.models import OrgSettings
 from seahub.organizations.signals import org_operation_signal
@@ -155,6 +156,7 @@ def org_add(request):
         try:
             new_user = User.objects.create_user(email, password,
                                                 is_staff=False, is_active=True)
+            require_password_change(new_user)
         except User.DoesNotExist as e:
             logger.error(e)
             err_msg = 'Fail to create organization owner %s.' % email
