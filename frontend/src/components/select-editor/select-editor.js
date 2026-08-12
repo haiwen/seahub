@@ -45,15 +45,23 @@ class SelectEditor extends React.Component {
     };
     this.options = [];
     this.selectRef = React.createRef();
+    this.focusTimer = null;
+    this.clearFocusTimer = null;
   }
 
   componentDidMount() {
     this.setOptions();
   }
 
+  componentWillUnmount() {
+    this.cleanupKeyboardListener();
+    clearTimeout(this.focusTimer);
+    clearTimeout(this.clearFocusTimer);
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (!prevState.isEditing && this.state.isEditing) {
-      setTimeout(() => {
+      this.focusTimer = setTimeout(() => {
         if (this.selectRef.current) {
           this.selectRef.current.focus();
         }
@@ -131,9 +139,14 @@ class SelectEditor extends React.Component {
     e.nativeEvent.stopImmediatePropagation();
   };
 
-  onMenuClose = () => {
+  cleanupKeyboardListener = () => {
     document.body.classList.remove('keyboard-nav-active');
     document.removeEventListener('keydown', this.handleKeyDown, true);
+  };
+
+  onMenuClose = () => {
+    this.cleanupKeyboardListener();
+    clearTimeout(this.clearFocusTimer);
     this.setState({ isEditing: false });
     this.props.toggleItemFreezed && this.props.toggleItemFreezed(false);
   };
@@ -153,13 +166,11 @@ class SelectEditor extends React.Component {
   };
 
   onMenuOpen = () => {
-    // Use setTimeout to clear focusedOption after getDerivedStateFromProps runs
-    setTimeout(() => {
+    this.clearFocusTimer = setTimeout(() => {
       if (this.selectRef.current) {
         this.selectRef.current.setState({ focusedOption: null });
       }
     }, 0);
-    // Use capture phase to ensure the listener fires
     document.addEventListener('keydown', this.handleKeyDown, true);
   };
 
