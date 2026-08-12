@@ -447,6 +447,7 @@ def password_reset_confirm(request, uidb36=None, token=None, template_name='regi
             form = set_password_form(user, request.POST)
             if form.is_valid():
                 form.save()
+                UserOptions.objects.unset_force_passwd_change(user.username)
                 return HttpResponseRedirect(post_reset_redirect)
         else:
             form = set_password_form(None)
