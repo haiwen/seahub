@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 import Icon from '../../../../icon';
-import { gettext } from '../../../../../utils/constants';
+import { gettext, siteRoot } from '../../../../../utils/constants';
 
 import './index.css';
 
@@ -16,6 +16,7 @@ const CustomizeLink = ({
   children,
   mdFiles = [],
   openDocument,
+  repoID,
 }) => {
   const file = useMemo(() => {
     if (!Array.isArray(mdFiles) || mdFiles.length === 0) {
@@ -40,6 +41,20 @@ const CustomizeLink = ({
     }
     handleOpenDocument(event);
   }, [handleOpenDocument]);
+
+  const isLibraryFile = repoID && element.url.startsWith(`${siteRoot}lib/${repoID}/file/`);
+
+  if (isLibraryFile) {
+    return (
+      <span
+        data-url={element.url}
+        className="sf-virtual-link"
+        {...attributes}
+      >
+        <a href={element.url} target="_blank" rel="noopener noreferrer">{children}</a>
+      </span>
+    );
+  }
 
   if (!element.url.startsWith(FILE_URL_PREFIX) || !file) {
     return (
