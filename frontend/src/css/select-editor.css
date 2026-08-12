@@ -42,10 +42,6 @@
   padding-top: 8px;
 }
 
-.permission-editor__option:hover {
-  background-color: var(--bs-bg-color) !important;
-}
-
 .permission-editor__menu .permission-editor__option--is-disabled:hover {
   background-color: var(--bs-popover-bg) !important;
 }
@@ -79,4 +75,9 @@
 
 .permission-editor-value-container .seafile-multicolor-icon-check {
   display: none;
+}
+
+.permission-editor__option--is-focused .permission-editor-btn-add-custom-permission {
+  background-color: var(--bs-dropdown-link-hover-bg);
+  border-radius: 4px;
 }

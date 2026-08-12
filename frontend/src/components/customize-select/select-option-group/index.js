@@ -59,8 +59,10 @@ class SelectOptionGroup extends Component {
   onHotKey = (event) => {
     const keyCode = event.keyCode;
     if (keyCode === KeyCodes.UpArrow) {
+      event.preventDefault();
       this.onPressUp();
     } else if (keyCode === KeyCodes.DownArrow) {
+      event.preventDefault();
       this.onPressDown();
     } else if (keyCode === KeyCodes.Enter) {
       let option = this.filterOptions && this.filterOptions[this.state.activeIndex];

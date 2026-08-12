@@ -170,6 +170,18 @@
   font-size: 13px;
 }
 
+.search-filter-menu:focus-visible {
+  outline: none;
+}
+
+.filter-by-date-menu-wrapper:focus-visible {
+  outline: none;
+}
+
+.search-filter-toggle:focus-visible {
+  outline: none;
+}
+
 .filter-by-date-menu .filter-by-date-menu-toolbar {
   display: flex;
   align-items: center;

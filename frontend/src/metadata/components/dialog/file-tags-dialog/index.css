@@ -8,11 +8,6 @@
   margin-right: 100px;
 }
 
-.sf-file-tags .modal-content {
-  border: 1px solid #efefef;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-}
-
 .sf-file-tags .modal-header {
   height: 48px;
 }

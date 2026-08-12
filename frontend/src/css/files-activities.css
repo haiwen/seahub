@@ -14,7 +14,9 @@
 }
 
 .cur-activity-modifiers {
-  margin-left: -0.5rem;
+  height: 24px;
+  padding: 0 4px;
+  margin-left: -4px;
 }
 
 .cur-activity-modifiers:hover {

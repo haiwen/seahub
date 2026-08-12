@@ -14,6 +14,10 @@
   cursor: pointer;
 }
 
+.sf-metadata-edit-option-container .sf-metadata-edit-option-drag-container {
+  display: flex;
+}
+
 .sf-metadata-edit-option-container .sf-metadata-edit-option-drag-container:hover {
   cursor: grab;
 }
@@ -25,7 +29,6 @@
 .sf-metadata-edit-option-container .sf-metadata-edit-option-content {
   display: flex;
   align-items: center;
-  border-radius: .25rem;
   flex: 1 1;
   margin-left: 10px;
   overflow: hidden;
