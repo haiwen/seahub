@@ -245,6 +245,7 @@ class Search extends Component {
   };
 
   onDocumentKeydown = (e) => {
+    if (e.target.closest('.search-filter-menu, .search-filter')) return;
     if (isHotkey('mod+k')(e)) {
       e.preventDefault();
       this.onFocusHandler();
@@ -283,6 +284,7 @@ class Search extends Component {
 
     // 01 init search, display and highlight recent search results
     if (this.state.showRecent) {
+      const visitedItems = JSON.parse(localStorage.getItem(this.storeKey)) || [];
       if (highlightIndex > 0) {
         this.setState({ highlightIndex: highlightIndex - 1 }, () => {
           if (this.highlightRef) {
@@ -292,6 +294,8 @@ class Search extends Component {
             }
           }
         });
+      } else {
+        this.setState({ highlightIndex: visitedItems.length - 1 });
       }
       return;
     }
@@ -333,6 +337,8 @@ class Search extends Component {
           }
         }
       });
+    } else {
+      this.setState({ highlightIndex: resultItems.length - 1 });
     }
   };
 
@@ -355,6 +361,8 @@ class Search extends Component {
             }
           }
         });
+      } else {
+        this.setState({ highlightIndex: 0 });
       }
       return;
     }
@@ -400,6 +408,8 @@ class Search extends Component {
           }
         }
       });
+    } else {
+      this.setState({ highlightIndex: 0 });
     }
   };
 

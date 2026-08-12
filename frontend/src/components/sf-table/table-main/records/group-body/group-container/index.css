@@ -248,6 +248,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: auto;
 }
 
 .sf-canvas-groups-rows .group-rows-count .count-title {
