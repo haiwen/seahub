@@ -298,7 +298,7 @@ class SeadocDownloadLink(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         #
-        download_link = get_seadoc_download_link(uuid_map)
+        download_link = get_seadoc_download_link(uuid_map, is_inner=True)
         if not download_link:
             error_msg = 'seadoc file %s not found.' % uuid_map.filename
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
