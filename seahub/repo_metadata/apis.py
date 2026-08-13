@@ -202,7 +202,7 @@ class MetadataManage(APIView):
             if record.summary_enabled:
                 record.summary_enabled = False
                 record.ai_summary_indexed_at = None
-                record.ai_indexing_status = ''
+                record.ai_processing_status = ''
                 record.save()
                 delete_summary_vector_index({'repo_id': repo_id})
             metadata_server_api.delete_base()
@@ -2024,7 +2024,7 @@ class MetadataAISummaryStatusManage(APIView):
             init_ai_summary(metadata_server_api)
             metadata.summary_enabled = True
             metadata.ai_summary_indexed_at = None
-            metadata.ai_indexing_status = 'pending'
+            metadata.ai_processing_status = ''
             metadata.save()
             add_init_ai_summary_task({
                 'repo_id': repo_id,
@@ -2055,7 +2055,7 @@ class MetadataAISummaryStatusManage(APIView):
         try:
             metadata.summary_enabled = False
             metadata.ai_summary_indexed_at = None
-            metadata.ai_indexing_status = ''
+            metadata.ai_processing_status = ''
             metadata.save()
             delete_summary_vector_index({'repo_id': repo_id})
             remove_ai_summary(metadata_server_api)
