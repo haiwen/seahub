@@ -12,7 +12,7 @@ import '../../css/files-activities.css';
 
 dayjs.locale(window.app.config.lang);
 
-const GAP = 16;
+const GAP = 32;
 
 class FilesActivities extends Component {
 
@@ -238,7 +238,7 @@ class FilesActivities extends Component {
         <div className="cur-view-container" id="activities">
           <div className="cur-view-path">
             <ul
-              className="nav nav-indicator-container position-relative gap-4"
+              className="nav nav-indicator-container position-relative gap-6"
               style={{
                 '--indicator-width': `${indicatorWidth}px`,
                 '--indicator-offset': `${indicatorOffset}px`

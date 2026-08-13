@@ -469,7 +469,6 @@ img[src=""], img:not([src]) {
   height: 2px;
   width: var(--indicator-width);
   background: #ED7109;
-  border-radius: 2px;
   transition: transform 0.3s ease;
   transform: translateX(var(--indicator-offset));
 }
