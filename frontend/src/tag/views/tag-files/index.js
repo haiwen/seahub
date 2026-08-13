@@ -4,15 +4,16 @@ import { gettext } from '../../../utils/constants';
 import EmptyTip from '../../../components/empty-tip';
 import toaster from '../../../components/toast';
 import ContextMenu from '../../../components/context-menu/context-menu';
+import { LIST_MODE } from '../../../components/dir-view-mode/constants';
+import { hideMenu, showMenu } from '../../../components/context-menu/actions';
+import { getDirentItemMenuList, getBatchMenuList } from '../../../components/dir-view-mode/utils/contextMenuUtils';
+import { EVENT_BUS_TYPE } from '../../../metadata/constants';
+import { getRecordIdFromRecord } from '../../../metadata/utils/cell';
 import ImagePreviewer from '../../../metadata/components/cell-formatter/image-previewer';
 import TextTranslation from '../../../utils/text-translation';
-import { getRecordIdFromRecord } from '../../../metadata/utils/cell';
 import { Utils } from '../../../utils/utils';
-import { getFileById, getFileName, getFileParentDir, getTagFileOperationList } from '../../utils/file';
-import { EVENT_BUS_TYPE } from '../../../metadata/constants';
-import { hideMenu, showMenu } from '../../../components/context-menu/actions';
+import { getFileById, getFileName, getFileParentDir } from '../../utils/file';
 import URLDecorator from '../../../utils/url-decorator';
-import { LIST_MODE } from '../../../components/dir-view-mode/constants';
 import ListView from './list';
 import GridView from './grid';
 
@@ -32,7 +33,6 @@ const TagFiles = () => {
 
   const canDelete = useMemo(() => window.sfTagsDataContext && window.sfTagsDataContext.canModifyTag(), []);
 
-  // selectedFile
   const selectedFile = useMemo(() => {
     if (!selectedFileIds || selectedFileIds.length === 0) return null;
     return getFileById(tagFiles, selectedFileIds[0]);
@@ -46,6 +46,12 @@ const TagFiles = () => {
   const selectedFilePath = useMemo(() => {
     return selectedFileParentDir && selectedFileName ? Utils.joinPath(selectedFileParentDir, selectedFileName) : '';
   }, [selectedFileParentDir, selectedFileName]);
+
+  const toFileMenuItem = useCallback((file) => ({
+    name: getFileName(file),
+    type: 'file',
+    permission: window.sfTagsDataContext && window.sfTagsDataContext.permission,
+  }), []);
 
   const openImagePreview = useCallback((record) => {
     currentImageRef.current = record;
@@ -81,13 +87,13 @@ const TagFiles = () => {
     convertFile(selectedFilePath, dstType);
   }, [selectedFilePath, convertFile]);
 
-  const exportDocx = useCallback((dirent) => {
+  const exportDocx = useCallback(() => {
     const serviceUrl = window.app.config.serviceURL;
     const exportToDocxUrl = serviceUrl + '/repo/sdoc_export_to_docx/' + repoID + '/?file_path=' + selectedFilePath;
     window.location.href = exportToDocxUrl;
   }, [repoID, selectedFilePath]);
 
-  const exportSdoc = useCallback((dirent) => {
+  const exportSdoc = useCallback(() => {
     const serviceUrl = window.app.config.serviceURL;
     const exportToSdocUrl = serviceUrl + '/lib/' + repoID + '/file/' + selectedFilePath + '?dl=1';
     window.location.href = exportToSdocUrl;
@@ -99,16 +105,6 @@ const TagFiles = () => {
       height: window.innerHeight,
     };
   }, []);
-
-  const getMenuList = useCallback((file) => {
-    const { DOWNLOAD, DELETE } = TextTranslation;
-    if (selectedFileIds.length > 1) {
-      return [DOWNLOAD, DELETE];
-    }
-    const canModify = window.sfTagsDataContext && window.sfTagsDataContext.canModify();
-    const fileName = file ? getFileName(file) : selectedFileName;
-    return getTagFileOperationList(fileName, repoInfo, canModify);
-  }, [selectedFileIds, selectedFileName, repoInfo]);
 
   const onMenuItemClick = useCallback((option) => {
     if (!option) return;
@@ -174,37 +170,35 @@ const TagFiles = () => {
     if (selectedFileIds.length <= 1) {
       const fileId = getRecordIdFromRecord(file);
       updateSelectedFileIds([fileId]);
-      menuList = getMenuList(file);
+      menuList = getDirentItemMenuList(repoInfo, toFileMenuItem(file), true);
     } else {
-      menuList = getMenuList();
+      const selectedFiles = selectedFileIds.map((id) => toFileMenuItem(getFileById(tagFiles, id)));
+      menuList = getBatchMenuList(repoInfo, selectedFiles, getDirentItemMenuList);
     }
-    const id = TAG_FILE_CONTEXT_MENU_ID;
-    let x = event.clientX || (event.touches && event.touches[0].pageX);
-    let y = event.clientY || (event.touches && event.touches[0].pageY);
-
-    hideMenu();
-
-    let showMenuConfig = {
-      id: id,
-      position: { x, y },
-      target: event.target,
-      currentObject: file,
-      menuList: menuList,
-    };
 
     if (menuList.length === 0) {
       return;
     }
 
-    showMenu(showMenuConfig);
-  }, [selectedFileIds, updateSelectedFileIds, getMenuList]);
+    const x = event.clientX || (event.touches && event.touches[0].pageX);
+    const y = event.clientY || (event.touches && event.touches[0].pageY);
+
+    hideMenu();
+    showMenu({
+      id: TAG_FILE_CONTEXT_MENU_ID,
+      position: { x, y },
+      target: event.target,
+      currentObject: file,
+      menuList,
+    });
+  }, [selectedFileIds, updateSelectedFileIds, repoInfo, tagFiles, toFileMenuItem]);
 
   useEffect(() => {
     if (!window.sfTagsDataContext) return;
     const unsubscribeUnselectFiles = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.UNSELECT_TAG_FILES, () => updateSelectedFileIds([]));
     const unsubscribeDeleteTagFiles = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.DELETE_TAG_FILES, deleteTagFiles);
-    const unsubScribeMoveTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.MOVE_TAG_FILE, moveTagFile);
-    const unsubScribeCopyTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.COPY_TAG_FILE, copyTagFile);
+    const unsubscribeMoveTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.MOVE_TAG_FILE, moveTagFile);
+    const unsubscribeCopyTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.COPY_TAG_FILE, copyTagFile);
     const unsubscribeShareTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.SHARE_TAG_FILE, shareTagFile);
     const unsubscribeRenameTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.RENAME_TAG_FILE_IN_DIALOG, renameTagFileInDialog);
     const unsubscribeDownloadTagFiles = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.DOWNLOAD_TAG_FILES, downloadTagFiles);
@@ -218,8 +212,8 @@ const TagFiles = () => {
     return () => {
       unsubscribeUnselectFiles();
       unsubscribeDeleteTagFiles();
-      unsubScribeMoveTagFile();
-      unsubScribeCopyTagFile();
+      unsubscribeMoveTagFile();
+      unsubscribeCopyTagFile();
       unsubscribeShareTagFile();
       unsubscribeRenameTagFile();
       unsubscribeDownloadTagFiles();
