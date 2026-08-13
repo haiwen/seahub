@@ -223,6 +223,15 @@ class ChatMessages(models.Model):
         if not isinstance(attachments, list):
             attachments = []
 
+        extensions = []
+        if self.role == 'assistant':
+            try:
+                review_task = ReviewTask.objects.filter(assistant_message_id=self.id).first()
+            except Exception:
+                review_task = None
+            if review_task:
+                extensions.append({'type': 'sdoc_review', 'review_task_id': str(review_task.id)})
+
         return {
             'id': self.id,
             'session_uuid': self.session_uuid,
@@ -231,6 +240,112 @@ class ChatMessages(models.Model):
             'content': self.content,
             'attachments': attachments,
             'sources': sources,
+            'extensions': extensions,
             'created_at': self.created_at,
             'updated_at': self.updated_at,
         }
+
+
+class ReviewTask(models.Model):
+    STATUS_GENERATING = 'generating'
+    STATUS_REVIEW_READY = 'review_ready'
+    STATUS_APPLYING = 'applying'
+    STATUS_APPLIED = 'applied'
+    STATUS_PERSISTED = 'persisted'
+    STATUS_SAVE_PENDING = 'save_pending'
+    STATUS_REJECTED = 'rejected'
+    STATUS_STALE = 'stale'
+    STATUS_FAILED = 'failed'
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    chat_session_id = models.CharField(max_length=36, db_index=True)
+    assistant_message = models.OneToOneField(
+        ChatMessages, null=True, blank=True, on_delete=models.SET_NULL,
+        related_name='review_task', db_column='assistant_message_id')
+    repo_id = models.CharField(max_length=36, db_index=True)
+    path = models.TextField()
+    file_uuid = models.CharField(max_length=36, db_index=True)
+    requester = models.CharField(max_length=255)
+    approved_by = models.CharField(max_length=255, null=True, blank=True)
+    status = models.CharField(max_length=32, default=STATUS_GENERATING, db_index=True)
+    error_code = models.CharField(max_length=64, null=True, blank=True)
+    prompt = models.TextField()
+    base_sdoc_version = models.BigIntegerField()
+    applied_sdoc_version = models.BigIntegerField(null=True, blank=True)
+    target_block_id = models.CharField(max_length=255, null=True, blank=True)
+    target_text_node_id = models.CharField(max_length=255, null=True, blank=True)
+    target_block_type = models.CharField(max_length=64, null=True, blank=True)
+    before_leaf_text = models.TextField(null=True, blank=True)
+    before_range_text = models.TextField(null=True, blank=True)
+    start_offset = models.IntegerField(null=True, blank=True)
+    end_offset = models.IntegerField(null=True, blank=True)
+    after_text = models.TextField(null=True, blank=True)
+    rationale = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'ai_review_task'
+
+    def to_dict(self):
+        return {
+            'id': str(self.id),
+            'chat_session_id': self.chat_session_id,
+            'assistant_message_id': self.assistant_message_id,
+            'status': self.status,
+            'error_code': self.error_code,
+            'base_sdoc_version': self.base_sdoc_version,
+            'applied_sdoc_version': self.applied_sdoc_version,
+            'target_block_id': self.target_block_id,
+            'target_text_node_id': self.target_text_node_id,
+            'target_block_type': self.target_block_type,
+            'before_leaf_text': self.before_leaf_text,
+            'before_range_text': self.before_range_text,
+            'start_offset': self.start_offset,
+            'end_offset': self.end_offset,
+            'after_text': self.after_text,
+            'rationale': self.rationale,
+            'approved_by': self.approved_by,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at,
+        }
+
+
+def ensure_review_tables():
+    from django.db import connection
+
+    with connection.cursor() as cursor:
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS `ai_review_task` (
+              `id` char(36) NOT NULL,
+              `chat_session_id` varchar(36) NOT NULL,
+              `assistant_message_id` bigint(20) NULL,
+              `repo_id` varchar(36) NOT NULL,
+              `path` longtext NOT NULL,
+              `file_uuid` varchar(36) NOT NULL,
+              `requester` varchar(255) NOT NULL,
+              `approved_by` varchar(255) NULL,
+              `status` varchar(32) NOT NULL,
+              `error_code` varchar(64) NULL,
+              `prompt` longtext NOT NULL,
+              `base_sdoc_version` bigint(20) NOT NULL,
+              `applied_sdoc_version` bigint(20) NULL,
+              `target_block_id` varchar(255) NULL,
+              `target_text_node_id` varchar(255) NULL,
+              `target_block_type` varchar(64) NULL,
+              `before_leaf_text` longtext NULL,
+              `before_range_text` longtext NULL,
+              `start_offset` int(11) NULL,
+              `end_offset` int(11) NULL,
+              `after_text` longtext NULL,
+              `rationale` longtext NULL,
+              `created_at` datetime(6) NOT NULL,
+              `updated_at` datetime(6) NOT NULL,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `ai_review_task_assistant_message_id` (`assistant_message_id`),
+              KEY `ai_review_task_chat_session_id` (`chat_session_id`),
+              KEY `ai_review_task_repo_id` (`repo_id`),
+              KEY `ai_review_task_file_uuid` (`file_uuid`),
+              KEY `ai_review_task_status` (`status`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+        ''')

@@ -18,14 +18,17 @@ def parse_response(response):
 
 class SdocServerAPI(object):
 
-    def __init__(self, doc_uuid, filename, username):
+    def __init__(self, doc_uuid, filename, username, access_token=None):
         self.doc_uuid = doc_uuid
         self.filename = filename
         self.username = username
         self.headers = None
         self.sdoc_server_url = SEADOC_SERVER_URL.rstrip('/')
         self.timeout = 30
-        self._init()
+        if access_token:
+            self.headers = {'Authorization': 'Token ' + access_token}
+        else:
+            self._init()
 
     def _init(self):
         sdoc_server_access_token = gen_seadoc_access_token(
@@ -46,6 +49,17 @@ class SdocServerAPI(object):
     def get_doc(self):
         url = self.sdoc_server_url + '/api/v1/docs/' + self.doc_uuid + '/?from=seahub'
         response = requests.get(url, headers=self.headers)
+        return parse_response(response)
+
+    def get_review_snapshot(self):
+        url = self.sdoc_server_url + '/api/v1/docs/' + self.doc_uuid + '/review-snapshot/?from=seahub'
+        response = requests.get(url, headers=self.headers, timeout=self.timeout)
+        return parse_response(response)
+
+    def apply_change_set(self, access_token, data):
+        url = self.sdoc_server_url + '/api/v1/docs/' + self.doc_uuid + '/apply-change-set/?from=seahub'
+        headers = {'Authorization': 'Token ' + access_token}
+        response = requests.post(url, json=data, headers=headers, timeout=self.timeout)
         return parse_response(response)
 
     def save_doc(self):

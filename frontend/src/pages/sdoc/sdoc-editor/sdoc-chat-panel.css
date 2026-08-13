@@ -46,6 +46,220 @@
   border-radius: 3px;
 }
 
+.sdoc-review-card {
+  box-sizing: border-box;
+  max-width: 100%;
+  margin: 12px 0;
+  padding: 12px;
+  border: 1px solid #c7d2fe;
+  border-radius: 8px;
+  background: #f8faff;
+}
+
+.sdoc-review-card-header,
+.sdoc-review-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.sdoc-review-card-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sdoc-review-card-header {
+  font-weight: 600;
+}
+
+.sdoc-review-card-status {
+  color: #52606d;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
+.sdoc-review-card-locate {
+  margin: 6px 0;
+  font-size: 12px;
+}
+
+.sdoc-review-card-diff {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.sdoc-review-card-before {
+  color: #a23c3c;
+  text-decoration: line-through;
+}
+
+.sdoc-review-card-after {
+  color: #227447;
+}
+
+.sdoc-review-card-rationale {
+  margin-top: 8px;
+  color: #52606d;
+  font-size: 12px;
+}
+
+.sdoc-review-card-actions {
+  margin-top: 12px;
+}
+
+.sdoc-review-card-summary {
+  width: 100%;
+  min-width: 0;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--bs-body-color);
+  text-align: left;
+  cursor: pointer;
+  background: var(--bs-body-bg);
+}
+
+.sdoc-review-card-summary:hover {
+  border-color: #a5b4fc;
+  background: #fafbff;
+}
+
+.sdoc-review-card-summary-icon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  color: #227447;
+  font-size: 13px;
+  font-weight: 700;
+  border: 1px solid #8fc7a6;
+  border-radius: 50%;
+}
+
+.sdoc-review-card-summary-content {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.sdoc-review-card-summary-title {
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sdoc-review-card-summary-text {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  color: #52606d;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sdoc-review-card-summary-action,
+.sdoc-review-card-collapse {
+  flex-shrink: 0;
+  color: #52606d;
+  font-size: 12px;
+}
+
+.sdoc-review-card-collapse {
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  background: transparent;
+}
+
+.sdoc-review-card-collapse:hover {
+  color: var(--bs-primary);
+}
+
+.sdoc-review-progress {
+  width: fit-content;
+  min-width: 196px;
+  max-width: 100%;
+  margin: 8px 0 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--bs-border-secondary-color);
+  border-radius: 8px;
+  background: var(--bs-body-bg);
+}
+
+.sdoc-review-progress-spinner {
+  display: block;
+  width: 9px;
+  height: 9px;
+  border: 2px solid #c7d2fe;
+  border-top-color: #4f46e5;
+  border-radius: 50%;
+  animation: sdoc-review-spin .8s linear infinite;
+}
+
+.sdoc-review-progress-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sdoc-review-progress-step {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #8490a0;
+  font-size: 12px;
+}
+
+.sdoc-review-progress-step-mark {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 13px;
+  height: 13px;
+  border: 1px solid #b8c0cc;
+  border-radius: 50%;
+  font-size: 9px;
+}
+
+.sdoc-review-progress-step.is-active {
+  color: var(--bs-body-color);
+  font-weight: 600;
+}
+
+.sdoc-review-progress-step.is-active .sdoc-review-progress-step-mark {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px #eef2ff;
+}
+
+.sdoc-review-progress-step.is-complete {
+  color: #52606d;
+}
+
+.sdoc-review-progress-step.is-complete .sdoc-review-progress-step-mark {
+  color: #227447;
+  border-color: #8fc7a6;
+}
+
+@keyframes sdoc-review-spin {
+  to { transform: rotate(360deg); }
+}
+
+.sdoc-review-target {
+  outline: 2px solid #818cf8 !important;
+  outline-offset: 3px;
+  background: #eef2ff !important;
+}
+
 .sdoc-chat-panel-header-op:hover,
 .sdoc-chat-panel-toolbar-actions .cur-view-path-btn:hover {
   background-color: var(--bs-icon-btn-hover-bg-color);
@@ -75,6 +289,7 @@
 }
 
 .sdoc-chat-panel-content {
+  width: 100%;
   display: flex;
   flex: 1;
   min-height: 0;

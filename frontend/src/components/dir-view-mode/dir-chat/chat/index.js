@@ -18,8 +18,9 @@ import ChatHeader from '../chat-header';
 
 import './index.css';
 
-const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = false }) => {
+const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = false, messageRenderers, onReviewSubmit }) => {
   const [isReply, setReply] = useState(false);
+  const [isReviewSubmitting, setReviewSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [chatHistories, setChatHistories] = useState([]);
   const [fetchedSession, setFetchedSession] = useState(null);
@@ -110,6 +111,57 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
       messageInputRef.current?.clearInput();
     });
 
+    if (onReviewSubmit) {
+      const progressId = `review-progress-${Date.now()}`;
+      const buildProgressMessage = (phase) => new ChatMessage({
+        id: progressId,
+        message: {},
+        type: CHAT_MESSAGE_TYPE.TIP,
+        extensions: [{ type: 'sdoc_review_progress', phase }],
+      });
+      let reviewChatHistories = [...newChatHistories, buildProgressMessage('reading_document')];
+      setReviewSubmitting(true);
+      updateChatHistories(reviewChatHistories);
+
+      const updateProgress = (phase) => {
+        reviewChatHistories = reviewChatHistories.map((chat) => {
+          return chat._id === progressId ? buildProgressMessage(phase) : chat;
+        });
+        updateChatHistories(reviewChatHistories);
+      };
+
+      onReviewSubmit({
+        sessionId: pageSlugId,
+        message: validMessage,
+        attachments,
+        model,
+        createSession,
+        onProgress: updateProgress,
+      }).then((result) => {
+        if (result && result.sessionId && result.sessionId !== pageSlugId) {
+          currentSessionId.current = result.sessionId;
+          togglePageSlugId(result.sessionId);
+        }
+        if (result && result.messages) {
+          const nextChatHistories = reviewChatHistories.filter((chat) => chat._id !== progressId);
+          nextChatHistories[nextChatHistories.length - 1] = result.messages[0] || nextChatHistories[nextChatHistories.length - 1];
+          nextChatHistories.push(...result.messages.slice(1));
+          updateChatHistories(nextChatHistories);
+        }
+      }).catch((error) => {
+        const nextChatHistories = reviewChatHistories.filter((chat) => chat._id !== progressId);
+        nextChatHistories.push(new ChatMessage({
+          message: { [CHAT_MESSAGE_TYPE.TEXT]: gettext('Unable to create a review suggestion.') },
+          type: CHAT_MESSAGE_TYPE.ERROR,
+        }));
+        updateChatHistories(nextChatHistories);
+        toaster.danger(Utils.getErrorMsg(error));
+      }).finally(() => {
+        setReviewSubmitting(false);
+      });
+      return;
+    }
+
     if (pageSlugId !== ASK_PAGE_SLUG_ID.NEW) {
       touchSession(pageSlugId);
       eventBus.dispatch(EVENT_BUS_TYPE.ASK_QUESTION, {
@@ -135,7 +187,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
         });
       }, 3);
     });
-  }, [chatHistories, createSession, pageSlugId, togglePageSlugId, touchSession, updateChatHistories]);
+  }, [chatHistories, createSession, onReviewSubmit, pageSlugId, togglePageSlugId, touchSession, updateChatHistories]);
 
   const handleStartChatFromConversation = useCallback(() => {
     if (!session?._id || !startChatFromConversation || isStartingChatFromConversation) {
@@ -203,6 +255,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
           id: item.id,
           message: newChatData,
           type: CHAT_MESSAGE_TYPE.GROUP,
+          extensions: item.extensions || [],
         });
       }) : [];
 
@@ -528,7 +581,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
 
   const isEmpty = chatHistories.length === 0 && !loading;
   const isNewChat = pageSlugId === ASK_PAGE_SLUG_ID.NEW;
-  const effectiveIsReply = loading || isReply;
+  const effectiveIsReply = loading || isReply || isReviewSubmitting;
 
   return (
     <div className={classNames('sea-ai-ask-wrapper', { empty: isEmpty && isNewChat, 'small-page': isSmall, 'has-header': !isNewChat })}>
@@ -553,6 +606,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
               chat={chat}
               settings={settings}
               repoID={repoID}
+              messageRenderers={messageRenderers}
             />
           ))}
           {loading && <CenteredLoading className="flex-1" />}
@@ -591,6 +645,8 @@ Chat.propTypes = {
   settings: PropTypes.object,
   forceSmallPage: PropTypes.bool,
   hideSessionHeader: PropTypes.bool,
+  messageRenderers: PropTypes.object,
+  onReviewSubmit: PropTypes.func,
 };
 
 export default Chat;

@@ -117,6 +117,16 @@ def search_icons(params):
     return resp
 
 
+def generate_sdoc_review(params):
+    headers = gen_headers()
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/sdoc-review/')
+    resp = requests.post(url, json=params, headers=headers, timeout=AI_REPLY_TIMEOUT)
+    if not resp.ok:
+        raise RuntimeError('SDoc review request failed: %s' % resp.text)
+    result = resp.json()
+    return result.get('review')
+
+
 # utils
 def get_ai_credit_by_user(user, org_id):
     if org_id and org_id > 0:

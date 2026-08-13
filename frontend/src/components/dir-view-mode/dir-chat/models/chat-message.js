@@ -6,6 +6,7 @@ class ChatMessage {
     this.message = object.message || {};
     this.isUserSpeak = object.isUserSpeak || false;
     this.type = object.type || '';
+    this.extensions = object.extensions || [];
   }
 }
 

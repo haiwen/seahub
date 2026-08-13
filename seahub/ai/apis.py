@@ -2,12 +2,16 @@ import time
 import logging
 import os.path
 import json
+import jwt
 from django.core.cache import cache
 from django.http import StreamingHttpResponse
 from django.utils.translation import gettext as _
+from django.utils import timezone
+from django.db import transaction
+from django.conf import settings
 from pysearpc import SearpcError
 
-from seahub.ai.models import ChatMessageThoughtProcess, ChatMessages, ChatSessions
+from seahub.ai.models import ChatMessageThoughtProcess, ChatMessages, ChatSessions, ReviewTask, ensure_review_tables
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
 from seahub.repo_metadata.models import RepoMetadata
 from seaserv import seafile_api
@@ -21,15 +25,19 @@ from seahub.api2.utils import api_error, get_file_size
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthentication
 from seahub.utils import get_file_type_and_ext, IMAGE
+from seahub.utils.file_types import SEADOC
 from seahub.views import check_folder_permission
 from seahub.utils.repo import parse_repo_perm
 from seahub.ai.utils import AI_SCENARIO_SEARCH_ICONS, image_caption, translate, writing_assistant, verify_ai_config, generate_summary, \
     generate_file_tags, ocr, search_icons, is_ai_usage_over_limit, gen_chat_task_id, gen_message_id, \
     get_ai_reply, process_stream_ai_reply, resolve_repo_ai_usage_context, strip_content_details_from_attachments, \
     verify_chat_ai_config, AI_REPLY_TIMEOUT, AI_SCENARIO_CHAT, AI_SCENARIO_FILE_TAGS, AI_SCENARIO_IMAGE_CAPTION, \
-    AI_SCENARIO_OCR, AI_SCENARIO_SUMMARY, AI_SCENARIO_TRANSLATE, AI_SCENARIO_WRITING_ASSISTANT, user_passes_ai_chat_folder_permissions
+    AI_SCENARIO_OCR, AI_SCENARIO_SUMMARY, AI_SCENARIO_TRANSLATE, AI_SCENARIO_WRITING_ASSISTANT, user_passes_ai_chat_folder_permissions, \
+    generate_sdoc_review
 from seahub.tags.models import FileUUIDMap
 from seahub.views.file import get_file_view_path_and_perm, get_file_content
+from seahub.seadoc.sdoc_server_api import SdocServerAPI
+from seahub.seadoc.utils import gen_seadoc_access_token
 
 logger = logging.getLogger(__name__)
 
@@ -497,6 +505,393 @@ def get_repo_prompt(repo_id):
 
 def check_session_access(session, username):
     return session.username == username or session.is_shared
+
+
+def get_sdoc_review_task(task_id):
+    try:
+        return ReviewTask.objects.get(id=task_id)
+    except ReviewTask.DoesNotExist:
+        return None
+
+
+def get_sdoc_review_target(request, repo_id, path):
+    logger.info('sdoc_review_target: repo=%s path=%s', repo_id, path)
+    if not repo_id or not path:
+        logger.warning('sdoc_review_target: missing repo_id or path')
+        return None, api_error(status.HTTP_400_BAD_REQUEST, 'repo_id and path are required.')
+
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        logger.warning('sdoc_review_target: repo not found repo=%s', repo_id)
+        return None, api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
+
+    parent_path = os.path.dirname(path) or '/'
+    if not check_folder_permission(request, repo_id, parent_path):
+        logger.warning('sdoc_review_target: permission denied repo=%s path=%s', repo_id, parent_path)
+        return None, api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+    basename = os.path.basename(path)
+    file_type, file_ext = get_file_type_and_ext(basename)
+    logger.info('sdoc_review_target: basename=%s file_type=%s file_ext=%s', basename, file_type, file_ext)
+    if file_type != SEADOC:
+        logger.warning('sdoc_review_target: not an sdoc file_type=%s', file_type)
+        return None, api_error(status.HTTP_404_NOT_FOUND, 'SDoc not found.')
+
+    try:
+        uuid_map = FileUUIDMap.objects.get_or_create_fileuuidmap_by_path(repo_id, path, False, pending=True)
+        logger.info('sdoc_review_target: uuid_map=%s', uuid_map.uuid if uuid_map else 'None')
+        return uuid_map, None
+    except Exception as e:
+        logger.exception('sdoc_review_target: failed to get_or_create uuid_map: %s', e)
+        return None, api_error(status.HTTP_404_NOT_FOUND, 'SDoc not found.')
+
+
+def generate_sdoc_service_token(file_uuid, filename, username, purpose, **claims):
+    payload = {
+        'file_uuid': str(file_uuid),
+        'filename': filename,
+        'username': username,
+        'permission': 'rw',
+        'purpose': purpose,
+        'exp': int(time.time()) + 60,
+    }
+    payload.update(claims)
+    return jwt.encode(payload, settings.SEADOC_PRIVATE_KEY, algorithm='HS256')
+
+
+def verify_sdoc_save_result_token(request, task_id, file_uuid, applied_sdoc_version, outcome, saved_version=None):
+    auth = request.headers.get('Authorization', '').split()
+    if len(auth) != 2 or auth[0].lower() != 'token':
+        return False
+    try:
+        payload = jwt.decode(auth[1], settings.SEADOC_PRIVATE_KEY, algorithms=['HS256'])
+    except Exception:
+        return False
+
+    if payload.get('purpose') != 'sdoc_agent_save_result':
+        return False
+    if str(payload.get('task_id')) != str(task_id):
+        return False
+    if str(payload.get('file_uuid')) != str(file_uuid):
+        return False
+    if payload.get('applied_sdoc_version') != applied_sdoc_version:
+        return False
+    if payload.get('outcome') != outcome:
+        return False
+    if outcome == 'persisted' and payload.get('saved_version') != saved_version:
+        return False
+    return True
+
+
+def iter_sdoc_text_leaves(elements, block_type=None, block_id=None):
+    for element in elements or []:
+        if not isinstance(element, dict):
+            continue
+        element_type = element.get('type') or block_type
+        current_block_id = element.get('id') or block_id
+        children = element.get('children')
+        if 'text' in element:
+            yield element, block_type, block_id
+            continue
+        if isinstance(children, list):
+            yield from iter_sdoc_text_leaves(children, element_type, current_block_id)
+
+
+def validate_sdoc_review_candidate(candidate, elements):
+    if not isinstance(candidate, dict):
+        raise ValueError('Invalid review suggestion.')
+    required_fields = (
+        'operation_kind', 'target_block_id', 'target_text_node_id', 'target_block_type',
+        'start_offset', 'end_offset', 'before_leaf_text', 'before_range_text', 'after_text', 'rationale')
+    if any(field not in candidate for field in required_fields):
+        raise ValueError('The review suggestion is incomplete.')
+    if candidate['operation_kind'] != 'replace_text':
+        raise ValueError('Only text replacement is supported.')
+    if candidate['target_block_type'] not in ('title', 'subtitle', 'header1', 'header2', 'header3', 'header4', 'header5', 'header6', 'paragraph'):
+        raise ValueError('This document element is not supported.')
+    if not isinstance(candidate['start_offset'], int) or not isinstance(candidate['end_offset'], int):
+        raise ValueError('Invalid text range.')
+    if not isinstance(candidate['after_text'], str) or len(candidate['after_text']) > 2000:
+        raise ValueError('The replacement text is too long.')
+
+    for leaf, block_type, block_id in iter_sdoc_text_leaves(elements):
+        if leaf.get('id') != candidate['target_text_node_id']:
+            continue
+        if block_id != candidate['target_block_id'] or block_type != candidate['target_block_type']:
+            raise ValueError('The review target does not match the document.')
+        leaf_text = leaf.get('text', '')
+        start_offset = candidate['start_offset']
+        end_offset = candidate['end_offset']
+        if start_offset < 0 or end_offset < start_offset or end_offset > len(leaf_text):
+            raise ValueError('The text range is invalid.')
+        if candidate['before_leaf_text'] != leaf_text:
+            raise ValueError('The review target text has changed.')
+        if candidate['before_range_text'] != leaf_text[start_offset:end_offset]:
+            raise ValueError('The review target range does not match.')
+        return
+    raise ValueError('The review target was not found.')
+
+
+class ReviewTasksView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request):
+        ensure_review_tables()
+        repo_id = request.data.get('repo_id')
+        path = request.data.get('path')
+        prompt = request.data.get('prompt', '').strip()
+        session_uuid = request.data.get('session_uuid')
+        if not prompt:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'prompt is required.')
+
+        uuid_map, error = get_sdoc_review_target(request, repo_id, path)
+        if error:
+            return error
+
+        session = ChatSessions.objects.get_session_by_uuid(session_uuid) if session_uuid else None
+        if not session or session.repo_id != repo_id or session.username != request.user.username:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Session not found.')
+
+        try:
+            service_token = generate_sdoc_service_token(
+                uuid_map.uuid, uuid_map.filename, request.user.username, 'sdoc_agent_snapshot')
+            sdoc_api = SdocServerAPI(str(uuid_map.uuid), uuid_map.filename, request.user.username, access_token=service_token)
+            snapshot = sdoc_api.get_review_snapshot()
+        except Exception as error:
+            logger.exception('Failed to load SDoc review snapshot: %s', error)
+            return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, 'SDoc is unavailable.')
+
+        elements = snapshot.get('elements')
+        base_version = snapshot.get('version')
+        if not isinstance(elements, list) or not isinstance(base_version, int):
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Invalid SDoc snapshot.')
+
+        try:
+            message_id = gen_message_id(session_uuid)
+        except Exception as error:
+            logger.exception('Failed to allocate chat message id: %s', error)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal server error.')
+
+        with transaction.atomic():
+            user_message = ChatMessages.objects.create_message(session_uuid, message_id, 'user', prompt, attachments=[])
+            task = ReviewTask.objects.create(
+                chat_session_id=session_uuid,
+                repo_id=repo_id,
+                path=path,
+                file_uuid=str(uuid_map.uuid),
+                requester=request.user.username,
+                prompt=prompt,
+                base_sdoc_version=base_version,
+            )
+
+        try:
+            candidate = generate_sdoc_review({
+                'prompt': prompt,
+                'elements': elements,
+                'username': request.user.username,
+                'org_id': request.user.org.org_id if getattr(request.user, 'org', None) else None,
+            })
+            validate_sdoc_review_candidate(candidate, elements)
+        except ValueError as error:
+            task.status = ReviewTask.STATUS_FAILED
+            task.error_code = 'invalid_candidate'
+            task.save(update_fields=['status', 'error_code', 'updated_at'])
+            assistant_message = ChatMessages.objects.create_message(session_uuid, message_id, 'assistant', str(error), attachments=[])
+            return Response({
+                'task': task.to_dict(),
+                'messages': [user_message.to_dict(), assistant_message.to_dict()],
+            }, status=status.HTTP_201_CREATED)
+        except Exception as error:
+            logger.exception('Failed to generate SDoc review: %s', error)
+            task.status = ReviewTask.STATUS_FAILED
+            task.error_code = 'generation_failed'
+            task.save(update_fields=['status', 'error_code', 'updated_at'])
+            assistant_message = ChatMessages.objects.create_message(session_uuid, message_id, 'assistant', _('Unable to generate a review suggestion.'), attachments=[])
+            return Response({
+                'task': task.to_dict(),
+                'messages': [user_message.to_dict(), assistant_message.to_dict()],
+            }, status=status.HTTP_201_CREATED)
+
+        with transaction.atomic():
+            assistant_message = ChatMessages.objects.create_message(
+                session_uuid,
+                message_id,
+                'assistant',
+                _('I created a review suggestion.'),
+            )
+            task.assistant_message = assistant_message
+            task.status = ReviewTask.STATUS_REVIEW_READY
+            task.target_block_id = candidate['target_block_id']
+            task.target_text_node_id = candidate['target_text_node_id']
+            task.target_block_type = candidate['target_block_type']
+            task.before_leaf_text = candidate['before_leaf_text']
+            task.before_range_text = candidate['before_range_text']
+            task.start_offset = candidate['start_offset']
+            task.end_offset = candidate['end_offset']
+            task.after_text = candidate['after_text']
+            task.rationale = candidate['rationale']
+            task.save()
+            ChatSessions.objects.filter(session_uuid=session_uuid).update(updated_at=timezone.now())
+
+        return Response({
+            'task': task.to_dict(),
+            'messages': [user_message.to_dict(), assistant_message.to_dict()],
+        }, status=status.HTTP_201_CREATED)
+
+
+class ReviewTaskView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, task_id):
+        ensure_review_tables()
+        task = get_sdoc_review_task(task_id)
+        if not task:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Review task not found.')
+        _, error = get_sdoc_review_target(request, task.repo_id, task.path)
+        if error:
+            return error
+        return Response({'task': task.to_dict()})
+
+
+class ReviewTaskApproveView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, task_id):
+        ensure_review_tables()
+        task = get_sdoc_review_task(task_id)
+        if not task:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Review task not found.')
+        uuid_map, error = get_sdoc_review_target(request, task.repo_id, task.path)
+        if error:
+            return error
+        permission = check_folder_permission(request, task.repo_id, os.path.dirname(task.path) or '/')
+        if not permission or not parse_repo_perm(permission).can_edit_on_web:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        claimed = ReviewTask.objects.filter(
+            id=task.id, status=ReviewTask.STATUS_REVIEW_READY).update(
+            status=ReviewTask.STATUS_APPLYING,
+            approved_by=request.user.username,
+            updated_at=timezone.now())
+        if not claimed:
+            task.refresh_from_db()
+            return Response({'task': task.to_dict()})
+
+        task.refresh_from_db()
+        token = generate_sdoc_service_token(
+            uuid_map.uuid, uuid_map.filename, request.user.username,
+            'sdoc_agent_apply', task_id=str(task.id), approved_by=task.approved_by)
+        try:
+            sdoc_api = SdocServerAPI(str(uuid_map.uuid), uuid_map.filename, request.user.username)
+            result = sdoc_api.apply_change_set(token, {
+                'task_id': str(task.id),
+                'expected_version': task.base_sdoc_version,
+                'approved_by': task.approved_by,
+                'target_block_id': task.target_block_id,
+                'target_text_node_id': task.target_text_node_id,
+                'target_block_type': task.target_block_type,
+                'before_leaf_text': task.before_leaf_text,
+                'before_range_text': task.before_range_text,
+                'start_offset': task.start_offset,
+                'end_offset': task.end_offset,
+                'after_text': task.after_text,
+            })
+        except Exception as error:
+            logger.exception('Failed to apply SDoc review: %s', error)
+            task.status = ReviewTask.STATUS_FAILED
+            task.error_code = 'apply_failed'
+            task.save(update_fields=['status', 'error_code', 'updated_at'])
+            return Response({'task': task.to_dict()})
+
+        if result.get('status') == 'stale':
+            task.status = ReviewTask.STATUS_STALE
+            task.save(update_fields=['status', 'updated_at'])
+            return Response({'task': task.to_dict()})
+        if result.get('status') != 'applied':
+            task.status = ReviewTask.STATUS_FAILED
+            task.error_code = result.get('error_code', 'apply_failed')
+            task.save(update_fields=['status', 'error_code', 'updated_at'])
+            return Response({'task': task.to_dict()})
+
+        applied_version = result.get('applied_version')
+        updated = ReviewTask.objects.filter(
+            id=task.id, status=ReviewTask.STATUS_APPLYING).update(
+            status=ReviewTask.STATUS_APPLIED,
+            applied_sdoc_version=applied_version,
+            updated_at=timezone.now())
+        task.refresh_from_db()
+        return Response({'task': task.to_dict()})
+
+
+class ReviewTaskRejectView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, task_id):
+        ensure_review_tables()
+        task = get_sdoc_review_task(task_id)
+        if not task:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Review task not found.')
+        _, error = get_sdoc_review_target(request, task.repo_id, task.path)
+        if error:
+            return error
+        ReviewTask.objects.filter(id=task.id, status=ReviewTask.STATUS_REVIEW_READY).update(
+            status=ReviewTask.STATUS_REJECTED, updated_at=timezone.now())
+        task.refresh_from_db()
+        return Response({'task': task.to_dict()})
+
+
+class ReviewSaveResultView(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+
+    def post(self, request):
+        ensure_review_tables()
+        task_id = request.data.get('task_id')
+        file_uuid = request.data.get('file_uuid')
+        applied_version = request.data.get('applied_sdoc_version')
+        outcome = request.data.get('outcome')
+        saved_version = request.data.get('saved_version')
+        if not task_id or not file_uuid or not isinstance(applied_version, int) or outcome not in ('persisted', 'save_pending', 'file_unavailable'):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid save result.')
+        if outcome == 'persisted' and not isinstance(saved_version, int):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'saved_version is required.')
+
+        task = get_sdoc_review_task(task_id)
+        if not task or str(task.file_uuid) != str(file_uuid):
+            return api_error(status.HTTP_404_NOT_FOUND, 'Review task not found.')
+        if not verify_sdoc_save_result_token(request, task_id, file_uuid, applied_version, outcome, saved_version):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        if task.status == ReviewTask.STATUS_PERSISTED:
+            if outcome == 'persisted' and task.applied_sdoc_version == applied_version:
+                return Response({'task': task.to_dict()})
+            return api_error(status.HTTP_409_CONFLICT, 'Save result conflicts with current task state.')
+
+        if task.status not in (ReviewTask.STATUS_APPLYING, ReviewTask.STATUS_APPLIED, ReviewTask.STATUS_SAVE_PENDING):
+            return api_error(status.HTTP_409_CONFLICT, 'Review task cannot accept a save result.')
+        if task.status != ReviewTask.STATUS_APPLYING and task.applied_sdoc_version != applied_version:
+            return api_error(status.HTTP_409_CONFLICT, 'Applied version does not match.')
+
+        if outcome == 'persisted':
+            if applied_version > saved_version:
+                return api_error(status.HTTP_409_CONFLICT, 'Saved version is behind the applied version.')
+            task.status = ReviewTask.STATUS_PERSISTED
+            task.applied_sdoc_version = applied_version
+            task.error_code = None
+        elif outcome == 'save_pending':
+            task.status = ReviewTask.STATUS_SAVE_PENDING
+            task.applied_sdoc_version = applied_version
+        else:
+            task.status = ReviewTask.STATUS_FAILED
+            task.applied_sdoc_version = applied_version
+            task.error_code = 'file_unavailable'
+        task.save(update_fields=['status', 'applied_sdoc_version', 'error_code', 'updated_at'])
+        return Response({'task': task.to_dict()})
 
 
 class ChatSessionsView(APIView):
