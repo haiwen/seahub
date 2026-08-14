@@ -118,13 +118,6 @@ class SocketClient {
       return acc;
     }, []);
 
-    for (const syncableElement of syncableElements) {
-      this.broadcastedElementVersions.set(
-        syncableElement.id,
-        syncableElement.version,
-      );
-    }
-
     this.queueFileUpload();
 
     const payload = {
@@ -133,6 +126,14 @@ class SocketClient {
     };
     const params = this.getParams(payload);
     this.socket.emit('elements-updated', params, (result) => {
+      if (result && result.success) {
+        for (const syncableElement of syncableElements) {
+          this.broadcastedElementVersions.set(
+            syncableElement.id,
+            syncableElement.version,
+          );
+        }
+      }
       callback && callback(result);
     });
   };
