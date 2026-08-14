@@ -155,6 +155,18 @@ class SocketManager {
 
     const isExceedExecuteTime = (lastOpBeginTime - firstOpBeginTime) / 1000 > 30 ? true : false;
     if (isExceedExecuteTime || this.pendingOperationList.length > 200) {
+      if (this.pendingOperationList.length > 200) {
+        const latestOperation = this.pendingOperationList[this.pendingOperationList.length - 1];
+        // The first begin time belongs to the in-flight operation when present.
+        const firstPendingBeginTimeIndex = this._sendingOperation ? 1 : 0;
+        const firstPendingBeginTime =
+          this.pendingOperationBeginTimeList[firstPendingBeginTimeIndex] || lastOpBeginTime;
+
+        this.pendingOperationList = [latestOperation];
+        this.pendingOperationBeginTimeList = this._sendingOperation
+          ? [firstOpBeginTime, firstPendingBeginTime]
+          : [firstPendingBeginTime];
+      }
       this.dispatchConnectState('pending_operations_exceed_limit');
     }
 
