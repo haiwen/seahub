@@ -45,13 +45,12 @@ class SocketClient {
   };
 
   onConnected = () => {
-    if (this.isReconnect) {
-      this.isReconnect = false;
-    }
+    clientDebug('connected.');
   };
 
   onDisconnected = (data) => {
     clientDebug('disconnect message: %s', data);
+    this.isReconnect = true;
     const socketManager = SocketManager.getInstance();
 
     // Requeue the in-flight operation for every disconnect reason before reconnecting.
@@ -145,7 +144,21 @@ class SocketClient {
 
   onInitRoom = () => {
     serverDebug('join-room message');
-    this.socket.emit('join-room', this.getParams());
+    this.socket.emit('join-room', this.getParams(), (result) => {
+      if (!this.isReconnect) {
+        return;
+      }
+
+      if (!result || !result.success) {
+        serverDebug('join room failed after reconnect, %O', result);
+        return;
+      }
+
+      this.isReconnect = false;
+      const socketManager = SocketManager.getInstance();
+      socketManager.dispatchConnectState('reconnect-ready');
+      socketManager.dispatchConnectState('reconnect');
+    });
   };
 
   onRoomUserChanged = (users) => {
@@ -175,8 +188,6 @@ class SocketClient {
   onReconnect = () => {
     clientDebug('reconnect.');
     this.isReconnect = true;
-    const socketManager = SocketManager.getInstance();
-    socketManager.dispatchConnectState('reconnect');
   };
 
   onReconnectAttempt = (attemptNumber) => {
