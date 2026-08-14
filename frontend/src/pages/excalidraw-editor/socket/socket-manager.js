@@ -325,7 +325,7 @@ class SocketManager {
   };
 
   dispatchConnectState = (type, message) => {
-    if (type === 'reconnect') {
+    if (type === 'reconnect-ready') {
       this.resumePendingOperations();
     }
 
