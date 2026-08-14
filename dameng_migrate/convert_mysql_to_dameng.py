@@ -59,6 +59,11 @@ JSON_COLUMNS = {
     "SDOC_NOTIFICATION": {"DETAIL"},
 }
 
+# disql rejects oversized SQL statements. Avatar data is Base64 text and can be
+# safely appended to a CLOB in small literals instead of one large INSERT.
+AVATAR_UPLOADED_TABLE = "AVATAR_UPLOADED"
+DEFAULT_LOB_CHUNK_SIZE = 8000
+
 
 def split_statements(sql: str) -> list[str]:
     """Split SQL on semicolons outside quoted strings and identifiers."""
@@ -157,10 +162,65 @@ def convert_special_values(statement: str, table: str, columns: list[str]) -> st
     return statement[:values_index.end()] + " (" + ",".join(fields) + ")"
 
 
-def convert_insert(statement: str) -> str:
+def convert_avatar_uploaded_insert(statement: str, chunk_size: int) -> str:
+    """Convert one avatar row into a short INSERT followed by CLOB updates."""
     match = INSERT_PREFIX.match(statement)
     if not match:
         raise ValueError("not an INSERT statement")
+
+    values_match = re.search(r"\bVALUES\b", statement, re.IGNORECASE)
+    if not values_match:
+        raise ValueError("AVATAR_UPLOADED INSERT has no VALUES clause")
+
+    values = statement[values_match.end():].strip()
+    if not (values.startswith("(") and values.endswith(")")):
+        raise ValueError(
+            "AVATAR_UPLOADED must use single-row INSERT statements; "
+            "export with --skip-extended-insert"
+        )
+
+    columns = [
+        column.replace("``", "`").upper()
+        for column in BACKTICK_IDENTIFIER.findall(match.group("before_values"))
+    ]
+    fields = split_values(values[1:-1])
+    if len(fields) != len(columns):
+        raise ValueError("AVATAR_UPLOADED INSERT column count does not match VALUES count")
+
+    field_by_column = dict(zip(columns, fields))
+    required_columns = {"FILENAME", "FILENAME_MD5", "DATA", "SIZE", "MTIME"}
+    if set(field_by_column) != required_columns:
+        raise ValueError("AVATAR_UPLOADED INSERT has unexpected columns")
+
+    data = field_by_column["DATA"].strip()
+    if not (data.startswith("'") and data.endswith("'")):
+        raise ValueError("AVATAR_UPLOADED DATA must be a quoted Base64 string")
+    data = data[1:-1]
+
+    result = [
+        'INSERT INTO "AVATAR_UPLOADED" '
+        '("FILENAME", "FILENAME_MD5", "DATA", "SIZE", "MTIME") VALUES '
+        f'({field_by_column["FILENAME"]}, {field_by_column["FILENAME_MD5"]}, '
+        f"TO_CLOB(''), {field_by_column['SIZE']}, {field_by_column['MTIME']});\n"
+    ]
+    filename_md5 = field_by_column["FILENAME_MD5"]
+    for start in range(0, len(data), chunk_size):
+        chunk = data[start:start + chunk_size]
+        result.append(
+            'UPDATE "AVATAR_UPLOADED" SET "DATA" = "DATA" || '
+            f"TO_CLOB('{chunk}') WHERE \"FILENAME_MD5\" = {filename_md5};\n"
+        )
+    return "".join(result)
+
+
+def convert_insert(statement: str, lob_chunk_size: int) -> str:
+    match = INSERT_PREFIX.match(statement)
+    if not match:
+        raise ValueError("not an INSERT statement")
+
+    source_table = match.group("table")[1:-1].replace("``", "`").upper()
+    if source_table == AVATAR_UPLOADED_TABLE:
+        return convert_avatar_uploaded_insert(statement, lob_chunk_size)
 
     # before_values contains only whitespace and an optional explicit column list.
     # Convert identifiers here only; do not alter quoted values after VALUES.
@@ -191,7 +251,7 @@ def is_ignorable(statement: str) -> bool:
     return bool(MYSQL_EXECUTABLE_COMMENT.match(statement) or MYSQL_LOCK_OR_SET.match(statement))
 
 
-def convert_file(source: Path, target: Path) -> tuple[int, int]:
+def convert_file(source: Path, target: Path, lob_chunk_size: int) -> tuple[int, int]:
     sql = source.read_text(encoding="utf-8-sig")
     converted: list[str] = [
         "-- Converted from MySQL data-only dump for Dameng MySQL compatibility mode.\n",
@@ -215,7 +275,7 @@ def convert_file(source: Path, target: Path) -> tuple[int, int]:
                 "mysqldump --no-create-info --complete-insert "
                 "--skip-extended-insert first."
             )
-        converted.append(convert_insert(statement))
+        converted.append(convert_insert(statement, lob_chunk_size))
         inserts += 1
 
     target.write_text("".join(converted), encoding="utf-8", newline="\n")
@@ -228,15 +288,23 @@ def main() -> int:
     )
     parser.add_argument("source", type=Path, help="MySQL single-table data-only .sql file")
     parser.add_argument("target", type=Path, help="output Dameng .sql file")
+    parser.add_argument(
+        "--lob-chunk-size",
+        type=int,
+        default=DEFAULT_LOB_CHUNK_SIZE,
+        help=f"characters appended per AVATAR_UPLOADED CLOB statement (default: {DEFAULT_LOB_CHUNK_SIZE})",
+    )
     args = parser.parse_args()
 
     if not args.source.is_file():
         parser.error(f"source file not found: {args.source}")
     if args.source.resolve() == args.target.resolve():
         parser.error("source and target must be different files")
+    if args.lob_chunk_size <= 0:
+        parser.error("--lob-chunk-size must be greater than zero")
 
     try:
-        inserts, skipped = convert_file(args.source, args.target)
+        inserts, skipped = convert_file(args.source, args.target, args.lob_chunk_size)
     except (OSError, UnicodeDecodeError, ValueError) as error:
         print(f"Conversion failed: {error}", file=sys.stderr)
         return 1
