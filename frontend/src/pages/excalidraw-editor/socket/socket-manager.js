@@ -219,7 +219,7 @@ class SocketManager {
       return;
     }
     // Operations are execute failure
-    const { error_type } = result;
+    const error_type = result && result.error_type;
     if (error_type === 'load_document_content_error' || error_type === 'token_expired') {
       // load_document_content_error: After a short-term reconnection, the content of the document fails to load
       this.dispatchConnectState(error_type);
@@ -235,6 +235,13 @@ class SocketManager {
       stateDebug(`State Changed: ${this.state} -> ${STATE.CONFLICT}`);
       this.state = STATE.CONFLICT;
       this.resolveConflicting(result);
+    } else {
+      // Keep failed operations retryable without leaving the manager in SENDING state.
+      this.pendingOperationList.unshift(operation.slice());
+      this._sendingOperation = null;
+      stateDebug(`State Changed: ${this.state} -> ${STATE.IDLE}`);
+      this.state = STATE.IDLE;
+      this.dispatchConnectState(error_type || 'execute_client_operations_error', result);
     }
   };
 
