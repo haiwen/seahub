@@ -24,7 +24,7 @@ CREATE TABLE `abuse_reports_abusereport` (
   PRIMARY KEY (`id`),
   KEY `abuse_reports_abusereport_abuse_type_703d5335` (`abuse_type`),
   KEY `abuse_reports_abusereport_handled_94b8304c` (`handled`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `abuse_reports_abusereport` DISABLE KEYS */;
@@ -40,7 +40,7 @@ CREATE TABLE `admin_log_adminlog` (
   PRIMARY KEY (`id`),
   KEY `admin_log_adminlog_email_7213c993` (`email`),
   KEY `admin_log_adminlog_operation_4bad7bd1` (`operation`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `admin_log_adminlog` DISABLE KEYS */;
@@ -53,7 +53,7 @@ CREATE TABLE `api2_token` (
   `created` datetime NOT NULL,
   PRIMARY KEY (`key`),
   UNIQUE KEY `user` (`user`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `api2_token` DISABLE KEYS */;
@@ -74,7 +74,7 @@ CREATE TABLE `api2_tokenv2` (
   `wiped_at` datetime DEFAULT NULL,
   PRIMARY KEY (`key`),
   UNIQUE KEY `api2_tokenv2_user_platform_device_id_37005c24_uniq` (`user`,`platform`,`device_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 ALTER TABLE `api2_tokenv2` CHANGE COLUMN `device_name` `device_name` varchar(40) CHARACTER SET 'utf8mb4' COLLATE utf8mb4_unicode_ci NOT NULL;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -88,7 +88,7 @@ CREATE TABLE `auth_group` (
   `name` varchar(80) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `auth_group` DISABLE KEYS */;
@@ -104,7 +104,7 @@ CREATE TABLE `auth_group_permissions` (
   KEY `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` (`permission_id`),
   CONSTRAINT `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
   CONSTRAINT `auth_group_permissions_group_id_b120cbf9_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `auth_group_permissions` DISABLE KEYS */;
@@ -119,7 +119,7 @@ CREATE TABLE `auth_permission` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `auth_permission_content_type_id_codename_01ab375a_uniq` (`content_type_id`,`codename`),
   CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=239 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=239 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
@@ -141,7 +141,7 @@ CREATE TABLE `auth_user` (
   `date_joined` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
@@ -157,7 +157,7 @@ CREATE TABLE `auth_user_groups` (
   KEY `auth_user_groups_group_id_97559544_fk_auth_group_id` (`group_id`),
   CONSTRAINT `auth_user_groups_group_id_97559544_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
   CONSTRAINT `auth_user_groups_user_id_6a12ed8b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `auth_user_groups` DISABLE KEYS */;
@@ -173,7 +173,7 @@ CREATE TABLE `auth_user_user_permissions` (
   KEY `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` (`permission_id`),
   CONSTRAINT `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
   CONSTRAINT `auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `auth_user_user_permissions` DISABLE KEYS */;
@@ -187,7 +187,7 @@ CREATE TABLE `avatar_avatar` (
   `avatar` varchar(1024) NOT NULL,
   `date_uploaded` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `avatar_avatar` DISABLE KEYS */;
@@ -200,7 +200,7 @@ CREATE TABLE `avatar_groupavatar` (
   `avatar` varchar(1024) NOT NULL,
   `date_uploaded` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `avatar_groupavatar` DISABLE KEYS */;
@@ -213,7 +213,7 @@ CREATE TABLE `base_clientlogintoken` (
   `timestamp` datetime NOT NULL,
   PRIMARY KEY (`token`),
   KEY `base_clientlogintoken_username_4ad5d42c` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `base_clientlogintoken` DISABLE KEYS */;
@@ -225,7 +225,7 @@ CREATE TABLE `base_commandslastcheck` (
   `command_type` varchar(100) NOT NULL,
   `last_check` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `base_commandslastcheck` DISABLE KEYS */;
@@ -241,7 +241,7 @@ CREATE TABLE `base_devicetoken` (
   `pversion` varchar(16) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `base_devicetoken_token_user_38535636_uniq` (`token`,`user`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `base_devicetoken` DISABLE KEYS */;
@@ -262,7 +262,7 @@ CREATE TABLE `base_filecomment` (
   KEY `base_filecomment_author_8a4d7e91` (`author`),
   KEY `base_filecomment_resolved_e0717eca` (`resolved`),
   CONSTRAINT `base_filecomment_uuid_id_4f9a2ca2_fk_tags_fileuuidmap_uuid` FOREIGN KEY (`uuid_id`) REFERENCES `tags_fileuuidmap` (`uuid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `base_filecomment` DISABLE KEYS */;
@@ -275,7 +275,7 @@ CREATE TABLE `base_reposecretkey` (
   `secret_key` varchar(44) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `repo_id` (`repo_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `base_reposecretkey` DISABLE KEYS */;
@@ -288,7 +288,7 @@ CREATE TABLE `base_userlastlogin` (
   `last_login` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `base_userlastlogin_username_270de06f` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `base_userlastlogin` DISABLE KEYS */;
@@ -305,7 +305,7 @@ CREATE TABLE `base_userstarredfiles` (
   PRIMARY KEY (`id`),
   KEY `base_userstarredfiles_email_29e69053` (`email`),
   KEY `base_userstarredfiles_repo_id_f5ecc00a` (`repo_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `base_userstarredfiles` DISABLE KEYS */;
@@ -320,7 +320,7 @@ CREATE TABLE `captcha_captchastore` (
   `expiration` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `hashkey` (`hashkey`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `captcha_captchastore` DISABLE KEYS */;
@@ -333,7 +333,7 @@ CREATE TABLE `constance_config` (
   `value` longtext DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `constance_key` (`constance_key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `constance_config` DISABLE KEYS */;
@@ -348,7 +348,7 @@ CREATE TABLE `contacts_contact` (
   `note` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `contacts_contact_user_email_149035d4` (`user_email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `contacts_contact` DISABLE KEYS */;
@@ -365,7 +365,7 @@ CREATE TABLE `django_cas_ng_proxygrantingticket` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `django_cas_ng_proxygrant_session_key_user_id_4cd2ea19_uniq` (`session_key`,`user`),
   KEY `django_cas_ng_proxyg_user_id_f833edd2_fk_auth_user` (`user`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `django_cas_ng_proxygrantingticket` DISABLE KEYS */;
@@ -377,7 +377,7 @@ CREATE TABLE `django_cas_ng_sessionticket` (
   `session_key` varchar(255) NOT NULL,
   `ticket` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `django_cas_ng_sessionticket` DISABLE KEYS */;
@@ -390,7 +390,7 @@ CREATE TABLE `django_content_type` (
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
@@ -404,7 +404,7 @@ CREATE TABLE `django_migrations` (
   `name` varchar(255) NOT NULL,
   `applied` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
@@ -418,7 +418,7 @@ CREATE TABLE `django_session` (
   `expire_date` datetime NOT NULL,
   PRIMARY KEY (`session_key`),
   KEY `django_session_expire_date_a5c62663` (`expire_date`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
@@ -442,7 +442,7 @@ CREATE TABLE `drafts_draft` (
   KEY `drafts_draft_updated_at_0a144b05` (`updated_at`),
   KEY `drafts_draft_username_73e6738b` (`username`),
   KEY `drafts_draft_origin_repo_id_8978ca2c` (`origin_repo_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `drafts_draft` DISABLE KEYS */;
@@ -457,7 +457,7 @@ CREATE TABLE `drafts_draftreviewer` (
   KEY `drafts_draftreviewer_reviewer_e4c777ac` (`reviewer`),
   KEY `drafts_draftreviewer_draft_id_4ea59775_fk_drafts_draft_id` (`draft_id`),
   CONSTRAINT `drafts_draftreviewer_draft_id_4ea59775_fk_drafts_draft_id` FOREIGN KEY (`draft_id`) REFERENCES `drafts_draft` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `drafts_draftreviewer` DISABLE KEYS */;
@@ -471,7 +471,7 @@ CREATE TABLE `file_participants_fileparticipant` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `file_participants_fileparticipant_uuid_id_username_c747dd36_uniq` (`uuid_id`,`username`),
   CONSTRAINT `file_participants_fi_uuid_id_861b7339_fk_tags_file` FOREIGN KEY (`uuid_id`) REFERENCES `tags_fileuuidmap` (`uuid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `file_participants_fileparticipant` DISABLE KEYS */;
@@ -487,7 +487,7 @@ CREATE TABLE `file_tags_filetags` (
   KEY `file_tags_filetags_repo_tag_id_c39660cb_fk_repo_tags_repotags_id` (`repo_tag_id`),
   CONSTRAINT `file_tags_filetags_file_uuid_id_e30f0ec8_fk_tags_file` FOREIGN KEY (`file_uuid_id`) REFERENCES `tags_fileuuidmap` (`uuid`),
   CONSTRAINT `file_tags_filetags_repo_tag_id_c39660cb_fk_repo_tags_repotags_id` FOREIGN KEY (`repo_tag_id`) REFERENCES `repo_tags_repotags` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `file_tags_filetags` DISABLE KEYS */;
@@ -499,7 +499,7 @@ CREATE TABLE `institutions_institution` (
   `name` varchar(200) NOT NULL,
   `create_time` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `institutions_institution` DISABLE KEYS */;
@@ -514,7 +514,7 @@ CREATE TABLE `institutions_institutionadmin` (
   KEY `institutions_institu_institution_id_1e9bb58b_fk_instituti` (`institution_id`),
   KEY `institutions_institutionadmin_user_c71d766d` (`user`),
   CONSTRAINT `institutions_institu_institution_id_1e9bb58b_fk_instituti` FOREIGN KEY (`institution_id`) REFERENCES `institutions_institution` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `institutions_institutionadmin` DISABLE KEYS */;
@@ -528,7 +528,7 @@ CREATE TABLE `institutions_institutionquota` (
   PRIMARY KEY (`id`),
   KEY `institutions_institu_institution_id_d23201d9_fk_instituti` (`institution_id`),
   CONSTRAINT `institutions_institu_institution_id_d23201d9_fk_instituti` FOREIGN KEY (`institution_id`) REFERENCES `institutions_institution` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `institutions_institutionquota` DISABLE KEYS */;
@@ -547,7 +547,7 @@ CREATE TABLE `invitations_invitation` (
   PRIMARY KEY (`id`),
   KEY `invitations_invitation_inviter_b0a7b855` (`inviter`),
   KEY `invitations_invitation_token_25a92a38` (`token`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `invitations_invitation` DISABLE KEYS */;
@@ -560,7 +560,7 @@ CREATE TABLE `notifications_notification` (
   `primary` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `notifications_notification_primary_4f95ec21` (`primary`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `notifications_notification` DISABLE KEYS */;
@@ -578,7 +578,7 @@ CREATE TABLE `notifications_usernotification` (
   KEY `notifications_usernotification_msg_type_985afd02` (`msg_type`),
   KEY `notifications_usernotification_timestamp_125067e8` (`timestamp`),
   KEY `idx_usernotification_user_seen` (`to_user`, `seen`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `notifications_usernotification` DISABLE KEYS */;
@@ -593,7 +593,7 @@ CREATE TABLE `options_useroptions` (
   PRIMARY KEY (`id`),
   KEY `options_useroptions_email_77d5726a` (`email`),
   KEY `options_useroptions_option_key_7bf7ae4b` (`option_key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `options_useroptions` DISABLE KEYS */;
@@ -606,7 +606,7 @@ CREATE TABLE `organizations_orgmemberquota` (
   `quota` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `organizations_orgmemberquota_org_id_93dde51d` (`org_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `organizations_orgmemberquota` DISABLE KEYS */;
@@ -621,7 +621,7 @@ CREATE TABLE `organizations_orgsettings` (
   `monthly_traffic_limit` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `organizations_orgsettings_org_id_630f6843_uniq` (`org_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `organizations_orgsettings` DISABLE KEYS */;
@@ -635,7 +635,7 @@ CREATE TABLE `post_office_attachment` (
   `mimetype` varchar(255) NOT NULL,
   `headers` longtext DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `post_office_attachment` DISABLE KEYS */;
@@ -651,7 +651,7 @@ CREATE TABLE `post_office_attachment_emails` (
   KEY `post_office_attachme_email_id_96875fd9_fk_post_offi` (`email_id`),
   CONSTRAINT `post_office_attachme_attachment_id_6136fd9a_fk_post_offi` FOREIGN KEY (`attachment_id`) REFERENCES `post_office_attachment` (`id`),
   CONSTRAINT `post_office_attachme_email_id_96875fd9_fk_post_offi` FOREIGN KEY (`email_id`) REFERENCES `post_office_email` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `post_office_attachment_emails` DISABLE KEYS */;
@@ -683,7 +683,7 @@ CREATE TABLE `post_office_email` (
   KEY `post_office_email_scheduled_time_3869ebec` (`scheduled_time`),
   KEY `post_office_email_template_id_417da7da_fk_post_offi` (`template_id`),
   CONSTRAINT `post_office_email_template_id_417da7da_fk_post_offi` FOREIGN KEY (`template_id`) REFERENCES `post_office_emailtemplate` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `post_office_email` DISABLE KEYS */;
@@ -705,7 +705,7 @@ CREATE TABLE `post_office_emailtemplate` (
   UNIQUE KEY `post_office_emailtemplat_name_language_default_te_4023e3e4_uniq` (`name`,`language`,`default_template_id`),
   KEY `post_office_emailtem_default_template_id_2ac2f889_fk_post_offi` (`default_template_id`),
   CONSTRAINT `post_office_emailtem_default_template_id_2ac2f889_fk_post_offi` FOREIGN KEY (`default_template_id`) REFERENCES `post_office_emailtemplate` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `post_office_emailtemplate` DISABLE KEYS */;
@@ -722,7 +722,7 @@ CREATE TABLE `post_office_log` (
   PRIMARY KEY (`id`),
   KEY `post_office_log_email_id_d42c8808_fk_post_office_email_id` (`email_id`),
   CONSTRAINT `post_office_log_email_id_d42c8808_fk_post_office_email_id` FOREIGN KEY (`email_id`) REFERENCES `post_office_email` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `post_office_log` DISABLE KEYS */;
@@ -736,7 +736,7 @@ CREATE TABLE `profile_detailedprofile` (
   `telephone` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `profile_detailedprofile_user_612c11ba` (`user`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `profile_detailedprofile` DISABLE KEYS */;
@@ -760,7 +760,7 @@ CREATE TABLE `profile_profile` (
   UNIQUE KEY `profile_profile_contact_email_0975e4bf_uniq` (`contact_email`),
   KEY `profile_profile_institution_c0286bd1` (`institution`),
   KEY `profile_profile_list_in_address_book_b1009a78` (`list_in_address_book`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `profile_profile` DISABLE KEYS */;
@@ -772,7 +772,7 @@ CREATE TABLE `registration_registrationprofile` (
   `emailuser_id` int(11) NOT NULL,
   `activation_key` varchar(40) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `registration_registrationprofile` DISABLE KEYS */;
@@ -788,7 +788,7 @@ CREATE TABLE `related_files_relatedfiles` (
   KEY `related_files_relate_r_uuid_id_031751df_fk_tags_file` (`r_uuid_id`),
   CONSTRAINT `related_files_relate_r_uuid_id_031751df_fk_tags_file` FOREIGN KEY (`r_uuid_id`) REFERENCES `tags_fileuuidmap` (`uuid`),
   CONSTRAINT `related_files_relate_o_uuid_id_aaa8e613_fk_tags_file` FOREIGN KEY (`o_uuid_id`) REFERENCES `tags_fileuuidmap` (`uuid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `related_files_relatedfiles` DISABLE KEYS */;
@@ -808,7 +808,7 @@ CREATE TABLE `repo_api_tokens` (
   UNIQUE KEY `token` (`token`),
   KEY `repo_api_tokens_repo_id_47a50fef` (`repo_id`),
   KEY `repo_api_tokens_app_name_7c395c31` (`app_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `repo_api_tokens` DISABLE KEYS */;
@@ -825,7 +825,7 @@ CREATE TABLE `repo_share_invitation` (
   KEY `repo_share_invitatio_invitation_id_b71effd2_fk_invitatio` (`invitation_id`),
   KEY `repo_share_invitation_repo_id_7bcf84fa` (`repo_id`),
   CONSTRAINT `repo_share_invitatio_invitation_id_b71effd2_fk_invitatio` FOREIGN KEY (`invitation_id`) REFERENCES `invitations_invitation` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `repo_share_invitation` DISABLE KEYS */;
@@ -841,7 +841,7 @@ CREATE TABLE `repo_tags_repotags` (
   KEY `repo_tags_repotags_repo_id_1163a48f` (`repo_id`),
   KEY `repo_tags_repotags_name_3f4c9027` (`name`),
   KEY `repo_tags_repotags_color_1292b6c1` (`color`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `repo_tags_repotags` DISABLE KEYS */;
@@ -861,7 +861,7 @@ CREATE TABLE `revision_tag_revisiontags` (
   KEY `revision_tag_revisiontags_username_3007d29e` (`username`),
   KEY `revision_tag_revisio_tag_id_ee4e9b00_fk_revision_` (`tag_id`),
   CONSTRAINT `revision_tag_revisio_tag_id_ee4e9b00_fk_revision_` FOREIGN KEY (`tag_id`) REFERENCES `revision_tag_tags` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `revision_tag_revisiontags` DISABLE KEYS */;
@@ -873,7 +873,7 @@ CREATE TABLE `revision_tag_tags` (
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `revision_tag_tags` DISABLE KEYS */;
@@ -886,7 +886,7 @@ CREATE TABLE `role_permissions_adminrole` (
   `role` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `role_permissions_adminrole` DISABLE KEYS */;
@@ -901,7 +901,7 @@ CREATE TABLE `share_anonymousshare` (
   `token` varchar(25) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `token` (`token`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `share_anonymousshare` DISABLE KEYS */;
@@ -916,7 +916,7 @@ CREATE TABLE `share_extragroupssharepermission` (
   PRIMARY KEY (`id`),
   KEY `share_extragroupssharepermission_repo_id_38dbaea1` (`repo_id`),
   KEY `share_extragroupssharepermission_group_id_6ca34bb2` (`group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `share_extragroupssharepermission` DISABLE KEYS */;
@@ -931,7 +931,7 @@ CREATE TABLE `share_extrasharepermission` (
   PRIMARY KEY (`id`),
   KEY `share_extrasharepermission_repo_id_23cc10fc` (`repo_id`),
   KEY `share_extrasharepermission_share_to_823c16cb` (`share_to`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `share_extrasharepermission` DISABLE KEYS */;
@@ -942,7 +942,7 @@ CREATE TABLE `share_fileshare` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(255) NOT NULL,
   `repo_id` varchar(36) NOT NULL,
-  `path` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `path` longtext NOT NULL,
   `token` varchar(100) NOT NULL,
   `ctime` datetime NOT NULL,
   `view_cnt` int(11) NOT NULL,
@@ -959,7 +959,7 @@ CREATE TABLE `share_fileshare` (
   KEY `share_fileshare_repo_id_9b5ae27a` (`repo_id`),
   KEY `idx_ctime` (`ctime`),
   KEY `idx_view_cnt` (`view_cnt`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `share_fileshare` DISABLE KEYS */;
@@ -974,7 +974,7 @@ CREATE TABLE `share_orgfileshare` (
   UNIQUE KEY `file_share_id` (`file_share_id`),
   KEY `share_orgfileshare_org_id_8d17998c` (`org_id`),
   CONSTRAINT `share_orgfileshare_file_share_id_7890388b_fk_share_fileshare_id` FOREIGN KEY (`file_share_id`) REFERENCES `share_fileshare` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `share_orgfileshare` DISABLE KEYS */;
@@ -995,7 +995,7 @@ CREATE TABLE `share_privatefiledirshare` (
   KEY `share_privatefiledirshare_from_user_d568d535` (`from_user`),
   KEY `share_privatefiledirshare_to_user_2a92a044` (`to_user`),
   KEY `share_privatefiledirshare_repo_id_97c5cb6f` (`repo_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `share_privatefiledirshare` DISABLE KEYS */;
@@ -1018,7 +1018,7 @@ CREATE TABLE `share_uploadlinkshare` (
   KEY `share_uploadlinkshare_username_3203c243` (`username`),
   KEY `share_uploadlinkshare_repo_id_c519f857` (`repo_id`),
   KEY `share_uploadlinkshare_expire_date` (`expire_date`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `share_uploadlinkshare` DISABLE KEYS */;
@@ -1028,13 +1028,13 @@ CREATE TABLE `share_uploadlinkshare` (
 CREATE TABLE `social_auth_usersocialauth` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(255) NOT NULL,
-  `provider` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `uid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `provider` varchar(32) NOT NULL,
+  `uid` varchar(255) NOT NULL,
   `extra_data` longtext DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `social_auth_usersocialauth_provider_uid_e6b5e668_uniq` (`provider`,`uid`),
   KEY `social_auth_usersocialauth_username_3f06b5cf` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `social_auth_usersocialauth` DISABLE KEYS */;
@@ -1050,7 +1050,7 @@ CREATE TABLE `sysadmin_extra_userloginlog` (
   PRIMARY KEY (`id`),
   KEY `sysadmin_extra_userloginlog_username_5748b9e3` (`username`),
   KEY `sysadmin_extra_userloginlog_login_date_c171d790` (`login_date`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `sysadmin_extra_userloginlog` DISABLE KEYS */;
@@ -1067,7 +1067,7 @@ CREATE TABLE `tags_filetag` (
   KEY `tags_filetag_uuid_id_2aa2266c_fk_tags_fileuuidmap_uuid` (`uuid_id`),
   CONSTRAINT `tags_filetag_uuid_id_2aa2266c_fk_tags_fileuuidmap_uuid` FOREIGN KEY (`uuid_id`) REFERENCES `tags_fileuuidmap` (`uuid`),
   CONSTRAINT `tags_filetag_tag_id_0f264fc9_fk_tags_tags_id` FOREIGN KEY (`tag_id`) REFERENCES `tags_tags` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `tags_filetag` DISABLE KEYS */;
@@ -1084,7 +1084,7 @@ CREATE TABLE `tags_fileuuidmap` (
   PRIMARY KEY (`uuid`),
   KEY `tags_fileuuidmap_repo_id_ac67aa33` (`repo_id`),
   KEY `tags_fileuuidmap_repo_id_parent_path_md5_c8bb0860` (`repo_id_parent_path_md5`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `tags_fileuuidmap` DISABLE KEYS */;
@@ -1096,7 +1096,7 @@ CREATE TABLE `tags_tags` (
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `tags_tags` DISABLE KEYS */;
@@ -1114,7 +1114,7 @@ CREATE TABLE `termsandconditions_termsandconditions` (
   `date_created` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `termsandconditions_termsandconditions_slug_489d1e9d` (`slug`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `termsandconditions_termsandconditions` DISABLE KEYS */;
@@ -1131,7 +1131,7 @@ CREATE TABLE `termsandconditions_usertermsandconditions` (
   UNIQUE KEY `termsandconditions_usert_username_terms_id_a7dabb70_uniq` (`username`,`terms_id`),
   KEY `termsandconditions_u_terms_id_eacdbcc7_fk_termsandc` (`terms_id`),
   CONSTRAINT `termsandconditions_u_terms_id_eacdbcc7_fk_termsandc` FOREIGN KEY (`terms_id`) REFERENCES `termsandconditions_termsandconditions` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `termsandconditions_usertermsandconditions` DISABLE KEYS */;
@@ -1143,7 +1143,7 @@ CREATE TABLE `trusted_ip_trustedip` (
   `ip` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `trusted_ip_trustedip_ip_e898970c` (`ip`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `trusted_ip_trustedip` DISABLE KEYS */;
@@ -1160,7 +1160,7 @@ CREATE TABLE `two_factor_phonedevice` (
   `method` varchar(4) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user` (`user`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `two_factor_phonedevice` DISABLE KEYS */;
@@ -1174,7 +1174,7 @@ CREATE TABLE `two_factor_staticdevice` (
   `confirmed` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user` (`user`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `two_factor_staticdevice` DISABLE KEYS */;
@@ -1189,7 +1189,7 @@ CREATE TABLE `two_factor_statictoken` (
   KEY `two_factor_statictok_device_id_93095b45_fk_two_facto` (`device_id`),
   KEY `two_factor_statictoken_token_2ade1084` (`token`),
   CONSTRAINT `two_factor_statictok_device_id_93095b45_fk_two_facto` FOREIGN KEY (`device_id`) REFERENCES `two_factor_staticdevice` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `two_factor_statictoken` DISABLE KEYS */;
@@ -1210,7 +1210,7 @@ CREATE TABLE `two_factor_totpdevice` (
   `last_t` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user` (`user`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `two_factor_totpdevice` DISABLE KEYS */;
@@ -1230,7 +1230,7 @@ CREATE TABLE `wiki_wiki` (
   UNIQUE KEY `wiki_wiki_username_repo_id_4c8925af_uniq` (`username`,`repo_id`),
   KEY `wiki_wiki_created_at_54930e39` (`created_at`),
   KEY `wiki_wiki_repo_id_2ee93c37` (`repo_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `wiki_wiki` DISABLE KEYS */;
@@ -1262,7 +1262,7 @@ CREATE TABLE `ocm_share` (
   KEY `ocm_share_to_user_4e255523` (`to_user`),
   KEY `ocm_share_to_server_url_43f0e89b` (`to_server_url`),
   KEY `ocm_share_repo_id_51937581` (`repo_id`)
-) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `ocm_share_received` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1283,7 +1283,7 @@ CREATE TABLE `ocm_share_received` (
   KEY `ocm_share_received_from_server_url_10527b80` (`from_server_url`),
   KEY `ocm_share_received_repo_id_9e77a1b9` (`repo_id`),
   KEY `ocm_share_received_provider_id_60c873e0` (`provider_id`)
-) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `repo_auto_delete` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1291,7 +1291,7 @@ CREATE TABLE `repo_auto_delete` (
     `days` int(11) NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `repo_id` (`repo_id`)
-) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `external_department` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1301,7 +1301,7 @@ CREATE TABLE `external_department` (
     PRIMARY KEY (`id`),
     UNIQUE KEY `group_id` (`group_id`),
     UNIQUE KEY `external_department_provider_outer_id_8dns6vkw_uniq` (`provider`,`outer_id`)
-) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `custom_share_permission` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1311,7 +1311,7 @@ CREATE TABLE `custom_share_permission` (
   `permission` longtext NOT NULL,
   PRIMARY KEY (`id`),
   KEY `custom_share_permission_repo_id_578fe49f` (`repo_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `ocm_via_webdav_received_shares` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1338,7 +1338,7 @@ CREATE TABLE `ocm_via_webdav_received_shares` (
   KEY `ocm_via_webdav_share_received_share_type_7615aaab` (`share_type`),
   KEY `ocm_via_webdav_share_received_share_with_5a23eb17` (`share_with`),
   KEY `ocm_via_webdav_share_received_shared_by_1786d580` (`shared_by`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `onlyoffice_onlyofficedockey` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1351,7 +1351,7 @@ CREATE TABLE `onlyoffice_onlyofficedockey` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `repo_id_file_path_md5` (`repo_id_file_path_md5`),
   KEY `onlyoffice_onlyofficedockey_doc_key_edba1352` (`doc_key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `org_saml_config` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1365,7 +1365,7 @@ CREATE TABLE `org_saml_config` (
   UNIQUE KEY `org_id` (`org_id`),
   UNIQUE KEY `domain` (`domain`),
   KEY `org_saml_config_domain_verified_398065b9` (`domain_verified`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `base_usermonitoredrepos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1375,7 +1375,7 @@ CREATE TABLE `base_usermonitoredrepos` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `base_usermonitoredrepos_email_repo_id_b4ab00e4_uniq` (`email`,`repo_id`),
   KEY `base_usermonitoredrepos_repo_id_00e624c3` (`repo_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `organizations_orgadminsettings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1384,7 +1384,7 @@ CREATE TABLE `organizations_orgadminsettings` (
   `value` longtext NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `organizations_orgadminsettings_org_id_key_a01cc7de_uniq` (`org_id`,`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `history_name` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1451,7 +1451,7 @@ CREATE TABLE `deleted_files_count` (
   PRIMARY KEY (`id`),
   KEY `ix_deleted_files_count_repo_id` (`repo_id`),
   KEY `ix_deleted_files_count_deleted_time` (`deleted_time`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `sdoc_notification` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1740,7 +1740,7 @@ CREATE TABLE `ContentScanRecord` (
   `timestamp` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `ix_ContentScanRecord_repo_id` (`repo_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `ContentScanResult` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1750,7 +1750,7 @@ CREATE TABLE `ContentScanResult` (
   `detail` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `ix_ContentScanResult_repo_id` (`repo_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `Activity` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -1765,7 +1765,7 @@ CREATE TABLE `Activity` (
   PRIMARY KEY (`id`),
   KEY `ix_Activity_timestamp` (`timestamp`),
   KEY `idx_activity_repo_timestamp` (`repo_id`, `timestamp`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `UserActivity` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -1776,7 +1776,7 @@ CREATE TABLE `UserActivity` (
   KEY `activity_id` (`activity_id`),
   KEY `ix_UserActivity_timestamp` (`timestamp`),
   KEY `idx_username_timestamp` (`username`,`timestamp`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `FileHistory` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -1795,7 +1795,7 @@ CREATE TABLE `FileHistory` (
   KEY `ix_FileHistory_file_uuid` (`file_uuid`),
   KEY `ix_FileHistory_repo_id_path_md5` (`repo_id_path_md5`),
   KEY `ix_FileHistory_timestamp` (`timestamp`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `FileAudit` (
   `eid` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -1812,7 +1812,7 @@ CREATE TABLE `FileAudit` (
   KEY `idx_file_audit_repo_org_eid` (`repo_id`,`org_id`,`eid`),
   KEY `idx_file_audit_orgid_eid` (`org_id`,`eid`),
   KEY `ix_FileAudit_timestamp` (`timestamp`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `FileUpdate` (
   `eid` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -1827,7 +1827,7 @@ CREATE TABLE `FileUpdate` (
   KEY `idx_file_update_orgid_eid` (`org_id`,`eid`),
   KEY `ix_FileUpdate_timestamp` (`timestamp`),
   KEY `idx_file_update_repo_org_eid` (`repo_id`,`org_id`,`eid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `PermAudit` (
   `eid` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -1844,7 +1844,7 @@ CREATE TABLE `PermAudit` (
   KEY `idx_perm_audit_orgid_eid` (`org_id`,`eid`),
   KEY `ix_perm_audit_timestamp` (`timestamp`),
   KEY `idx_perm_audit_user_orgid_eid` (`from_user`,`org_id`,`eid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `TotalStorageStat` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1853,7 +1853,7 @@ CREATE TABLE `TotalStorageStat` (
   `org_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_storage_time_org` (`timestamp`,`org_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `FileOpsStat` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1863,7 +1863,7 @@ CREATE TABLE `FileOpsStat` (
   `org_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_file_ops_org_time` (`org_id`,`timestamp`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `UserActivityStat` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1875,7 +1875,7 @@ CREATE TABLE `UserActivityStat` (
   UNIQUE KEY `name_time_md5` (`name_time_md5`),
   KEY `idx_activity_time_org` (`timestamp`,`org_id`),
   KEY `ix_UserActivityStat_timestamp` (`timestamp`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `UserTraffic` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1887,7 +1887,7 @@ CREATE TABLE `UserTraffic` (
   PRIMARY KEY (`id`),
   KEY `ix_UserTraffic_org_id` (`org_id`),
   KEY `idx_traffic_time_user` (`timestamp`,`user`,`org_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `MonthlyUserTraffic` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1902,7 +1902,7 @@ CREATE TABLE `MonthlyUserTraffic` (
   `link_file_download` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_monthlyusertraffic_time_org_user` (`timestamp`,`user`,`org_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `SysTraffic` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1913,7 +1913,7 @@ CREATE TABLE `SysTraffic` (
   PRIMARY KEY (`id`),
   KEY `idx_systraffic_time_org` (`timestamp`,`org_id`),
   KEY `ix_SysTraffic_org_id` (`org_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `MonthlySysTraffic` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1927,13 +1927,13 @@ CREATE TABLE `MonthlySysTraffic` (
   `link_file_download` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_monthlysystraffic_time_org` (`timestamp`,`org_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `VirusScanRecord` (
   `repo_id` varchar(36) NOT NULL,
   `scan_commit_id` varchar(40) NOT NULL,
   PRIMARY KEY (`repo_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `VirusFile` (
   `vid` int(11) NOT NULL AUTO_INCREMENT,
@@ -1946,7 +1946,7 @@ CREATE TABLE `VirusFile` (
   KEY `ix_VirusFile_repo_id` (`repo_id`),
   KEY `ix_VirusFile_has_ignored` (`has_ignored`),
   KEY `ix_VirusFile_has_deleted` (`has_deleted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `GroupIdLDAPUuidPair` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1955,7 +1955,7 @@ CREATE TABLE `GroupIdLDAPUuidPair` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `group_id` (`group_id`),
   UNIQUE KEY `group_uuid` (`group_uuid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `user_quota_usage` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
