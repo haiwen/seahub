@@ -26,6 +26,7 @@ class SocketManager {
     this.excalidrawAPI = excalidrawAPI;
     this.state = STATE.IDLE;
     this._activeSendRequestId = null;
+    this._retryCount = 0;
 
     this.pendingOperationList = [];
     this.pendingOperationBeginTimeList = [];
@@ -168,7 +169,15 @@ class SocketManager {
   };
 
   resumePendingOperations = () => {
-    if (this.state === STATE.NEED_RELOAD) return;
+    if (
+      this.state === STATE.NEED_RELOAD ||
+      this.state === STATE.SENDING ||
+      this.state === STATE.CONFLICT ||
+      this._sendingOperation ||
+      this._activeSendRequestId
+    ) {
+      return;
+    }
 
     this.state = STATE.IDLE;
     if (this.pendingOperationList.length > 0) {
@@ -213,6 +222,7 @@ class SocketManager {
       this.setLastBroadcastedOrReceivedSceneVersion(operation);
 
       // send next operations
+      this._retryCount = 0;
       this.pendingOperationBeginTimeList.shift(); // remove current operation's begin time
       this._sendingOperation = null;
       this.sendNextOperations();
@@ -237,11 +247,16 @@ class SocketManager {
       this.resolveConflicting(result);
     } else {
       // Keep failed operations retryable without leaving the manager in SENDING state.
+      const shouldRetry = this._retryCount === 0;
+      this._retryCount += 1;
       this.pendingOperationList.unshift(operation.slice());
       this._sendingOperation = null;
       stateDebug(`State Changed: ${this.state} -> ${STATE.IDLE}`);
       this.state = STATE.IDLE;
       this.dispatchConnectState(error_type || 'execute_client_operations_error', result);
+      if (shouldRetry) {
+        this.sendOperations();
+      }
     }
   };
 
@@ -250,7 +265,8 @@ class SocketManager {
 
     this.updateLocalDataByRemoteData(elements, version);
 
-    this.pendingOperationBeginTimeList.shift();
+    // Keep the current operation's begin time while it is requeued for retry.
+    // It is removed only after the operation is acknowledged successfully.
     this._sendingOperation = null;
     this.state = STATE.SENDING;
     this.sendNextOperations();
