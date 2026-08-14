@@ -303,7 +303,7 @@ class SocketManager {
     if (type === 'disconnect') {
       // current state is sending
       if (this._sendingOperation) {
-        this.pendingOperationList.unshift(this._sendingOperations.slice());
+        this.pendingOperationList.unshift(this._sendingOperation.slice());
         this._sendingOperation = null;
       }
       stateDebug(`State Changed: ${this.state} -> ${STATE.DISCONNECT}`);
