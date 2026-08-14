@@ -51,15 +51,16 @@ class SocketClient {
   };
 
   onDisconnected = (data) => {
+    clientDebug('disconnect message: %s', data);
+    const socketManager = SocketManager.getInstance();
+
+    // Requeue the in-flight operation for every disconnect reason before reconnecting.
+    socketManager.dispatchConnectState('disconnect', data);
+
     if (data === 'ping timeout') {
       clientDebug('Disconnected due to ping timeout, trying to reconnect...');
       this.socket.connect();
-      return;
     }
-
-    clientDebug('disconnect message: %s', data);
-    const socketManager = SocketManager.getInstance();
-    socketManager.dispatchConnectState('disconnect');
   };
 
   onConnectError = () => {

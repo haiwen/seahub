@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { stateDebug } from '../utils/debug';
 import SocketClient from './socket-client';
 import { CaptureUpdateAction, getSceneVersion, reconcileElements, restoreElements } from '@excalidraw/excalidraw';
@@ -24,6 +25,7 @@ class SocketManager {
     this.document = document;
     this.excalidrawAPI = excalidrawAPI;
     this.state = STATE.IDLE;
+    this._activeSendRequestId = null;
 
     this.pendingOperationList = [];
     this.pendingOperationBeginTimeList = [];
@@ -165,6 +167,15 @@ class SocketManager {
     this.sendNextOperations();
   };
 
+  resumePendingOperations = () => {
+    if (this.state === STATE.NEED_RELOAD) return;
+
+    this.state = STATE.IDLE;
+    if (this.pendingOperationList.length > 0) {
+      this.sendOperations();
+    }
+  };
+
   sendNextOperations = () => {
     if (this.state !== STATE.SENDING) return;
     if (this.pendingOperationList.length === 0) {
@@ -176,19 +187,30 @@ class SocketManager {
     this.dispatchConnectState('is-saving');
     const version = this.document.version;
     const elements = this.pendingOperationList.shift();
+    const requestId = uuidv4();
+    this._activeSendRequestId = requestId;
     this._sendingOperation = elements;
 
-    this.socketClient.broadcastSceneElements(elements, version, this.sendOperationsCallback);
+    this.socketClient.broadcastSceneElements(
+      elements,
+      version,
+      (result) => this.sendOperationsCallback(result, requestId, elements),
+    );
   };
 
-  sendOperationsCallback = (result) => {
+  sendOperationsCallback = (result, requestId, operation) => {
+    if (requestId !== this._activeSendRequestId) {
+      return;
+    }
+    this._activeSendRequestId = null;
+
     if (result && result.success) {
       const { version: serverVersion } = result;
       this.setVersion(serverVersion);
       const lastSavedAt = new Date().getTime();
       this.dispatchConnectState('saved', lastSavedAt);
 
-      this.setLastBroadcastedOrReceivedSceneVersion(this._sendingOperation);
+      this.setLastBroadcastedOrReceivedSceneVersion(operation);
 
       // send next operations
       this.pendingOperationBeginTimeList.shift(); // remove current operation's begin time
@@ -208,7 +230,7 @@ class SocketManager {
       this._sendingOperation = null;
     } else if (error_type === 'version_behind_server') {
       // Put the failed operation into the pending list and re-execute it
-      this.pendingOperationList.unshift(this._sendingOperation);
+      this.pendingOperationList.unshift(operation);
 
       stateDebug(`State Changed: ${this.state} -> ${STATE.CONFLICT}`);
       this.state = STATE.CONFLICT;
@@ -297,10 +319,12 @@ class SocketManager {
 
   dispatchConnectState = (type, message) => {
     if (type === 'reconnect') {
-      this.state = STATE.IDLE;
+      this.resumePendingOperations();
     }
 
     if (type === 'disconnect') {
+      // Invalidate the callback of the disconnected socket.
+      this._activeSendRequestId = null;
       // current state is sending
       if (this._sendingOperation) {
         this.pendingOperationList.unshift(this._sendingOperation.slice());
