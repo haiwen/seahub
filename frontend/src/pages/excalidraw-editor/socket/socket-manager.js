@@ -151,7 +151,7 @@ class SocketManager {
     const firstOpBeginTime = this.pendingOperationBeginTimeList[0];
 
     const isExceedExecuteTime = (lastOpBeginTime - firstOpBeginTime) / 1000 > 30 ? true : false;
-    if (isExceedExecuteTime || this.pendingOperationList.length > 500) {
+    if (isExceedExecuteTime || this.pendingOperationList.length > 200) {
       this.dispatchConnectState('pending_operations_exceed_limit');
     }
 
@@ -298,15 +298,12 @@ class SocketManager {
   dispatchConnectState = (type, message) => {
     if (type === 'reconnect') {
       this.state = STATE.IDLE;
-      if (this.pendingOperationList.length > 0) {
-        this.sendOperations();
-      }
     }
 
     if (type === 'disconnect') {
       // current state is sending
       if (this._sendingOperation) {
-        this.pendingOperationList.unshift(this._sendingOperation);
+        this.pendingOperationList.unshift(this._sendingOperation.slice());
         this._sendingOperation = null;
       }
       stateDebug(`State Changed: ${this.state} -> ${STATE.DISCONNECT}`);
@@ -317,10 +314,8 @@ class SocketManager {
   };
 
   static destroy = () => {
-    if (this.instance?.socketClient) {
-      this.instance.socketClient.close();
-    }
     this.instance = null;
+    this.socketClient.close();
   };
 
 }
