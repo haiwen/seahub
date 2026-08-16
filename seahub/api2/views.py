@@ -1816,31 +1816,26 @@ class DownloadRepo(APIView):
             error_msg = f'Library {repo_id} not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        perm = check_folder_permission(request, repo_id, '/')
-        if not perm:
+        if 'seadrive' in request.META.get('HTTP_USER_AGENT', '').lower():
+            client = 'seadrive'
+        else:
+            client = 'seafile'
+
+        username = request.user.username
+        perm = seafile_api.check_permission(repo_id, username)
+
+        if client == 'seafile' and not perm:
             error_msg = 'You do not have permission to access this library.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        username = request.user.username
-
-        resp = seafile_api.is_repo_syncable(repo_id, username, perm)
-
         # example: {'forbidden_path': '/folder in lian lib', 'is_syncable': False}
         # forbidden_path field will be returned ONLY when is_syncable is False
+        resp = seafile_api.is_repo_syncable(repo_id, username, perm, client=client)
         resp_json = json.loads(resp)
         is_syncable = resp_json['is_syncable']
-        forbidden_path = resp_json.get('forbidden_path', '')
-
-        if 'seadrive' in request.META.get('HTTP_USER_AGENT', '').lower():
-            # This is to help the desktop client to show error to the user.
-            # The actual permission check will be done at the file download time.
-            if not is_syncable and forbidden_path == '/':
-                error_msg = 'unsyncable share permission'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        else:
-            if not is_syncable:
-                error_msg = 'unsyncable share permission'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if not is_syncable:
+            error_msg = 'unsyncable share permission'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         return repo_download_info(request, repo_id)
 
