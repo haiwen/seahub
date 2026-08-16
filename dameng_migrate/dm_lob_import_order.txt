@@ -1,0 +1,2 @@
+# Tables imported through dmPython to avoid disql SQL-text length limits.
+AVATAR_UPLOADED
