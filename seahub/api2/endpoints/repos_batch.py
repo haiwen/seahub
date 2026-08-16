@@ -39,7 +39,8 @@ from seahub.utils.repo import get_repo_owner, get_available_repo_perms, \
 
 from seahub.views import check_folder_permission
 from seahub.settings import MAX_PATH
-from seahub.utils.file_types import SEADOC
+from seahub.utils.file_types import EXCALIDRAW, SEADOC
+from seahub.exdraw.utils import copy_exdraw_images, move_exdraw_images
 from seahub.seadoc.utils import copy_sdoc_images, move_sdoc_images
 
 logger = logging.getLogger(__name__)
@@ -1203,6 +1204,20 @@ class ReposAsyncBatchCopyItemView(APIView):
         except Exception as e:
             logger.error(e)
 
+        # exdraw image
+        try:
+            for src_dirent, dst_dirent in dirents_map.items():
+                filetype, fileext = get_file_type_and_ext(src_dirent)
+                if filetype != EXCALIDRAW:
+                    continue
+                src_path = posixpath.join(src_parent_dir, src_dirent)
+                dst_path = posixpath.join(dst_parent_dir, dst_dirent)
+                copy_exdraw_images(
+                    src_repo_id, src_path, dst_repo_id, dst_path,
+                    username, is_async=True)
+        except Exception as e:
+            logger.error(e)
+
         return Response(result)
 
 
@@ -1349,6 +1364,20 @@ class ReposAsyncBatchMoveItemView(APIView):
         except Exception as e:
             logger.error(e)
 
+        # exdraw image
+        try:
+            for src_dirent, dst_dirent in dirents_map.items():
+                filetype, fileext = get_file_type_and_ext(src_dirent)
+                if filetype != EXCALIDRAW:
+                    continue
+                src_path = posixpath.join(src_parent_dir, src_dirent)
+                dst_path = posixpath.join(dst_parent_dir, dst_dirent)
+                move_exdraw_images(
+                    src_repo_id, src_path, dst_repo_id, dst_path,
+                    username, is_async=True)
+        except Exception as e:
+            logger.error(e)
+
         return Response(result)
 
 
@@ -1466,6 +1495,20 @@ class ReposSyncBatchCopyItemView(APIView):
                 dst_path = posixpath.join(dst_parent_dir, dst_dirent)
                 copy_sdoc_images(
                     src_repo_id, src_path, dst_repo_id, dst_path, username, is_async=False)
+        except Exception as e:
+            logger.error(e)
+
+        # exdraw image
+        try:
+            for src_dirent, dst_dirent in dirents_map.items():
+                filetype, fileext = get_file_type_and_ext(src_dirent)
+                if filetype != EXCALIDRAW:
+                    continue
+                src_path = posixpath.join(src_parent_dir, src_dirent)
+                dst_path = posixpath.join(dst_parent_dir, dst_dirent)
+                copy_exdraw_images(
+                    src_repo_id, src_path, dst_repo_id, dst_path,
+                    username, is_async=False)
         except Exception as e:
             logger.error(e)
 
@@ -1843,4 +1886,3 @@ class BatchMoveItemsUpdatePath(APIView):
                 logger.error('Failed to update starred files path: %s', e)
 
         return Response({'success': True, 'updated_count': updated_count})
-
