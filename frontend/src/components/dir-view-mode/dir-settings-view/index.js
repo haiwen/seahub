@@ -48,6 +48,7 @@ const LibSettings = ({ repoID, currentRepoInfo, isMigrationTipShown }) => {
   const enableAutoDelSetting = is_admin && enableRepoAutoDel;
   const enableExtendedPropertiesSetting = !encrypted && is_admin && enableMetadataManagement;
   const settingsURL = `${siteRoot}library/${repoID}/${encodeURIComponent(repoName)}/?settings=true`;
+  const visibleActiveTab = enableExtendedPropertiesSetting ? activeTab : TAB.GENERAL;
 
   useEffect(() => {
     return globalHistory.listen(({ location }) => {
@@ -62,7 +63,7 @@ const LibSettings = ({ repoID, currentRepoInfo, isMigrationTipShown }) => {
   }, [isMigrationTipShown]);
 
   useLayoutEffect(() => {
-    const activeIndex = activeTab === TAB.GENERAL ? 0 : 1;
+    const activeIndex = visibleActiveTab === TAB.GENERAL ? 0 : 1;
     const itemWidths = tabRefs.current.map(ref => ref?.offsetWidth || 0);
     const indicatorWidth = itemWidths[activeIndex];
     if (!indicatorWidth) return;
@@ -73,7 +74,7 @@ const LibSettings = ({ repoID, currentRepoInfo, isMigrationTipShown }) => {
       '--indicator-width': `${indicatorWidth}px`,
       '--indicator-offset': `${indicatorOffset}px`,
     });
-  }, [activeTab]);
+  }, [visibleActiveTab]);
 
   const onTabKeyDown = (event) => {
     if (event.key === ' ') {
@@ -106,29 +107,31 @@ const LibSettings = ({ repoID, currentRepoInfo, isMigrationTipShown }) => {
           <li className="nav-item" role="presentation" ref={el => tabRefs.current[0] = el}>
             <Link
               to={settingsURL}
-              className={`m-0 nav-link${activeTab === TAB.GENERAL ? ' active' : ''}`}
+              className={`m-0 nav-link${visibleActiveTab === TAB.GENERAL ? ' active' : ''}`}
               id="library-settings-general-tab"
               role="tab"
-              aria-selected={activeTab === TAB.GENERAL}
+              aria-selected={visibleActiveTab === TAB.GENERAL}
               aria-controls="library-settings-general-panel"
               onKeyDown={onTabKeyDown}
             >
               {gettext('General')}
             </Link>
           </li>
-          <li className="nav-item" role="presentation" ref={el => tabRefs.current[1] = el}>
-            <Link
-              to={`${settingsURL}&tab=${TAB.METADATA_AI}`}
-              className={`m-0 nav-link${activeTab === TAB.METADATA_AI ? ' active' : ''}`}
-              id="library-settings-metadata-ai-tab"
-              role="tab"
-              aria-selected={activeTab === TAB.METADATA_AI}
-              aria-controls="library-settings-metadata-ai-panel"
-              onKeyDown={onTabKeyDown}
-            >
-              {gettext('Metadata & AI')}
-            </Link>
-          </li>
+          {enableExtendedPropertiesSetting && (
+            <li className="nav-item" role="presentation" ref={el => tabRefs.current[1] = el}>
+              <Link
+                to={`${settingsURL}&tab=${TAB.METADATA_AI}`}
+                className={`m-0 nav-link${visibleActiveTab === TAB.METADATA_AI ? ' active' : ''}`}
+                id="library-settings-metadata-ai-tab"
+                role="tab"
+                aria-selected={visibleActiveTab === TAB.METADATA_AI}
+                aria-controls="library-settings-metadata-ai-panel"
+                onKeyDown={onTabKeyDown}
+              >
+                {gettext('Metadata & AI')}
+              </Link>
+            </li>
+          )}
         </ul>
       </div>
       <div
@@ -136,7 +139,7 @@ const LibSettings = ({ repoID, currentRepoInfo, isMigrationTipShown }) => {
         id="library-settings-general-panel"
         role="tabpanel"
         aria-labelledby="library-settings-general-tab"
-        hidden={activeTab !== TAB.GENERAL}
+        hidden={visibleActiveTab !== TAB.GENERAL}
       >
         {enableHistorySetting && (
           <LibHistorySettingPanel
@@ -154,7 +157,7 @@ const LibSettings = ({ repoID, currentRepoInfo, isMigrationTipShown }) => {
         id="library-settings-metadata-ai-panel"
         role="tabpanel"
         aria-labelledby="library-settings-metadata-ai-tab"
-        hidden={activeTab !== TAB.METADATA_AI}
+        hidden={visibleActiveTab !== TAB.METADATA_AI}
       >
         {enableExtendedPropertiesSetting && (
           <LibExtendedPropertiesSettingPanel
