@@ -354,12 +354,15 @@ class SocketManager {
 
   dispatchConnectState = (type, message) => {
     if (type === 'reconnect-ready') {
+      // A new connection gets a fresh operation retry budget.
+      this._retryCount = 0;
       this.resumePendingOperations();
     }
 
     if (type === 'disconnect') {
-      // Invalidate the callback of the disconnected socket.
+      // Invalidate the callback of the disconnected socket and its retry budget.
       this._activeSendRequestId = null;
+      this._retryCount = 0;
       // current state is sending
       if (this._sendingOperation) {
         this.pendingOperationList.unshift(this._sendingOperation.slice());
@@ -373,8 +376,10 @@ class SocketManager {
   };
 
   static destroy = () => {
+    if (this.instance?.socketClient) {
+      this.instance.socketClient.close();
+    }
     this.instance = null;
-    this.socketClient.close();
   };
 
 }
