@@ -7,10 +7,16 @@ import SocketManager from './socket-manager';
 import { getFilename } from '../utils/element-utils';
 import { FILE_UPLOAD_TIMEOUT } from '../constants';
 
+const JOIN_ROOM_ACK_TIMEOUT = 5000;
+const MAX_JOIN_ROOM_RETRIES = 3;
+const JOIN_ROOM_RETRY_DELAY = 1000;
+
 class SocketClient {
   constructor(config) {
     this.config = config;
     this.isReconnect = false;
+    this.joinRoomRetryCount = 0;
+    this.joinRoomRetryTimer = null;
     this.broadcastedElementVersions = new Map();
     this.socket = io(`${config.exdrawServer}/exdraw`, {
       reconnection: true,
@@ -51,6 +57,8 @@ class SocketClient {
   onDisconnected = (data) => {
     clientDebug('disconnect message: %s', data);
     this.isReconnect = true;
+    this.joinRoomRetryCount = 0;
+    this.clearJoinRoomRetryTimer();
     const socketManager = SocketManager.getInstance();
 
     // Requeue the in-flight operation for every disconnect reason before reconnecting.
@@ -143,23 +151,67 @@ class SocketClient {
     this.socket.emit('mouse-location-updated', params);
   };
 
-  onInitRoom = () => {
-    serverDebug('join-room message');
-    this.socket.emit('join-room', this.getParams(), (result) => {
+  clearJoinRoomRetryTimer = () => {
+    if (this.joinRoomRetryTimer) {
+      clearTimeout(this.joinRoomRetryTimer);
+      this.joinRoomRetryTimer = null;
+    }
+  };
+
+  scheduleJoinRoomRetry = (error) => {
+    if (!this.isReconnect || !this.socket.connected) {
+      return;
+    }
+
+    if (this.joinRoomRetryCount < MAX_JOIN_ROOM_RETRIES) {
+      this.joinRoomRetryCount += 1;
+      const retryDelay = Math.min(
+        JOIN_ROOM_RETRY_DELAY * (2 ** (this.joinRoomRetryCount - 1)),
+        5000,
+      );
+      serverDebug(
+        'join room failed after reconnect, retrying (%s/%s) in %sms: %O',
+        this.joinRoomRetryCount,
+        MAX_JOIN_ROOM_RETRIES,
+        retryDelay,
+        error,
+      );
+      this.clearJoinRoomRetryTimer();
+      this.joinRoomRetryTimer = setTimeout(() => {
+        this.joinRoomRetryTimer = null;
+        this.joinRoom();
+      }, retryDelay);
+      return;
+    }
+
+    serverDebug('join room retries exhausted after reconnect: %O', error);
+    const socketManager = SocketManager.getInstance();
+    socketManager.dispatchConnectState('join_room_error', error);
+  };
+
+  joinRoom = () => {
+    this.socket.timeout(JOIN_ROOM_ACK_TIMEOUT).emit('join-room', this.getParams(), (timeoutError, result) => {
       if (!this.isReconnect) {
         return;
       }
 
-      if (!result || !result.success) {
-        serverDebug('join room failed after reconnect, %O', result);
+      if (timeoutError || !result || !result.success) {
+        this.scheduleJoinRoomRetry(timeoutError || result || { error_type: 'join_room_timeout' });
         return;
       }
 
+      this.clearJoinRoomRetryTimer();
+      this.joinRoomRetryCount = 0;
       this.isReconnect = false;
       const socketManager = SocketManager.getInstance();
       socketManager.dispatchConnectState('reconnect-ready');
       socketManager.dispatchConnectState('reconnect');
     });
+  };
+
+  onInitRoom = () => {
+    serverDebug('join-room message');
+    this.joinRoom();
   };
 
   onRoomUserChanged = (users) => {
@@ -189,6 +241,8 @@ class SocketClient {
   onReconnect = () => {
     clientDebug('reconnect.');
     this.isReconnect = true;
+    this.joinRoomRetryCount = 0;
+    this.clearJoinRoomRetryTimer();
   };
 
   onReconnectAttempt = (attemptNumber) => {

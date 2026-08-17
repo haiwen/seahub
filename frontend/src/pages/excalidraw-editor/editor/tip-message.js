@@ -24,6 +24,7 @@ class TipMessage extends React.Component {
     this.unsubscribeDisconnectEvent = eventBus.subscribe('disconnect', this.onDisconnect);
     this.unsubscribeReconnectErrorEvent = eventBus.subscribe('reconnect_error', this.onReconnectError);
     this.unsubscribeReconnectEvent = eventBus.subscribe('reconnect', this.onReconnect);
+    this.unsubscribeJoinRoomError = eventBus.subscribe('join_room_error', this.onJoinRoomError);
 
     // server return error
     this.unsubscribeOpExecError = eventBus.subscribe('execute_client_operations_error', this.onOperationExecuteError);
@@ -42,6 +43,7 @@ class TipMessage extends React.Component {
     this.unsubscribeDisconnectEvent();
     this.unsubscribeReconnectErrorEvent();
     this.unsubscribeReconnectEvent();
+    this.unsubscribeJoinRoomError();
 
     this.unsubscribeOpExecError();
     this.unsubscribeSyncServerOpError();
@@ -106,6 +108,13 @@ class TipMessage extends React.Component {
     const message = gettext(copyright);
     toaster.closeAll();
     toaster.success(message); // close after serval seconds
+  };
+
+  onJoinRoomError = () => {
+    const copyright = 'Failed to rejoin the document room. Changes remain pending. Please refresh the page and try again.';
+    const message = gettext(copyright);
+    toaster.closeAll();
+    toaster.danger(message, { hasCloseButton: false, duration: null });
   };
 
   onDocumentSaving = () => {
