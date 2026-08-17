@@ -12,7 +12,7 @@ for source_file in "$SOURCE_DIR"/*.sql; do
 
   table_name="$(basename "$source_file" .sql)"
   if [ "$(printf '%s' "$table_name" | tr '[:lower:]' '[:upper:]')" = "AVATAR_UPLOADED" ]; then
-    echo "跳过：$source_file 由 import_avatar_uploaded.py 直接导入达梦"
+    echo "跳过：$source_file 由 dmpython_import.py 直接导入达梦"
     continue
   fi
   target_table="$(printf '%s' "$table_name" | tr '[:lower:]' '[:upper:]')"
