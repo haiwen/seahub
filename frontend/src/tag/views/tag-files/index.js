@@ -25,7 +25,7 @@ const TagFiles = () => {
   const {
     tagFiles, repoID, repoInfo, selectedFileIds, updateSelectedFileIds, viewMode,
     moveTagFile, copyTagFile, deleteTagFiles, downloadTagFiles, convertFile, shareTagFile, openTagFileAccessLog,
-    renameTagFileInDialog, renameTagFile,
+    renameTagFileInDialog, renameTagFile, chatWithAIAboutTagFiles
   } = useTagView();
   const [isImagePreviewerVisible, setImagePreviewerVisible] = useState(false);
 
@@ -131,6 +131,9 @@ const TagFiles = () => {
           renameTagFileInDialog(selectedFileIds[0]);
         }
         break;
+      case TextTranslation.CHAT_WITH_AI.key:
+        chatWithAIAboutTagFiles();
+        break;
       case TextTranslation.CONVERT_TO_SDOC.key:
         onConvertFile('sdoc');
         break;
@@ -163,7 +166,11 @@ const TagFiles = () => {
         break;
     }
     hideMenu();
-  }, [moveTagFile, copyTagFile, handleDeleteTagFiles, shareTagFile, downloadTagFiles, viewMode, onConvertFile, onHistory, openTagFileAccessLog, openViaClient, selectedFileIds, renameTagFileInDialog, exportDocx, exportSdoc]);
+  }, [
+    moveTagFile, copyTagFile, handleDeleteTagFiles, shareTagFile, downloadTagFiles,
+    viewMode, onConvertFile, onHistory, openTagFileAccessLog, openViaClient,
+    selectedFileIds, renameTagFileInDialog, chatWithAIAboutTagFiles, exportDocx, exportSdoc,
+  ]);
 
   const onTagFileContextMenu = useCallback((event, file) => {
     let menuList = [];
@@ -201,6 +208,7 @@ const TagFiles = () => {
     const unsubscribeCopyTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.COPY_TAG_FILE, copyTagFile);
     const unsubscribeShareTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.SHARE_TAG_FILE, shareTagFile);
     const unsubscribeRenameTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.RENAME_TAG_FILE_IN_DIALOG, renameTagFileInDialog);
+    const unsubscribeChatWithAI = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.CHAT_WITH_AI_ABOUT_TAG_FILES, chatWithAIAboutTagFiles);
     const unsubscribeDownloadTagFiles = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.DOWNLOAD_TAG_FILES, downloadTagFiles);
     const unsubscribeFileHistory = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.FILE_HISTORY, onHistory);
     const unsubscribeFileAccessLog = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.FILE_ACCESS_LOG, openTagFileAccessLog);
@@ -216,6 +224,7 @@ const TagFiles = () => {
       unsubscribeCopyTagFile();
       unsubscribeShareTagFile();
       unsubscribeRenameTagFile();
+      unsubscribeChatWithAI();
       unsubscribeDownloadTagFiles();
       unsubscribeFileHistory();
       unsubscribeFileAccessLog();

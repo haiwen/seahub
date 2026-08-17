@@ -119,6 +119,7 @@ export const EVENT_BUS_TYPE = {
   COPY_TAG_FILE: 'copy_tag_file',
   RENAME_TAG_FILE_IN_SITU: 'rename_tag_file_in_situ',
   RENAME_TAG_FILE_IN_DIALOG: 'rename_tag_file_in_dialog',
+  CHAT_WITH_AI_ABOUT_TAG_FILES: 'chat_with_ai_about_tag_files',
   SHARE_TAG_FILE: 'share_tag_file',
   DOWNLOAD_TAG_FILES: 'download_tag_files',
   DELETE_TAG_FILES: 'delete_tag_files',

@@ -16,13 +16,17 @@ import { PRIVATE_COLUMN_KEY } from '../constants';
 import { gettext } from '../../utils/constants';
 import { getSortBy, getSortOrder } from '../utils/sort';
 import { useFileOperations } from '../../hooks/file-operations';
+import { menuHandlers } from '../../components/dir-view-mode/utils/menuHandlers';
+import TextTranslation from '../../utils/text-translation';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const TagViewContext = React.createContext(null);
 
 export const TagViewProvider = ({
-  repoID, tagID, nodeKey, children, moveFileCallback, copyFileCallback, deleteFilesCallback, renameFileCallback, convertFileCallback,
-  toggleShowDirentToolbar, ...params
+  repoID, tagID, nodeKey, children,
+  moveFileCallback, copyFileCallback, deleteFilesCallback, renameFileCallback, convertFileCallback,
+  toggleShowDirentToolbar,
+  ...params
 }) => {
   const [isLoading, setLoading] = useState(true);
   const [tagFiles, setTagFiles] = useState(null);
@@ -214,6 +218,23 @@ export const TagViewProvider = ({
     handleRename(dirent, [], renameTagFile);
   }, [selectedFileIds, tagFiles, handleRename, renameTagFile]);
 
+  const chatWithAIAboutTagFiles = useCallback(() => {
+    if (!selectedFileIds || selectedFileIds.length === 0) return null;
+    const files = selectedFileIds.map(id => {
+      const file = getFileById(tagFiles, id);
+      const name = file[TAG_FILE_KEY.NAME];
+      const parent_dir = file[TAG_FILE_KEY.PARENT_DIR];
+      return { name, parent_dir, type: 'file' };
+    });
+    menuHandlers[TextTranslation.CHAT_WITH_AI.key]({
+      repoID: repoID,
+      path: files[0].parent_dir,
+      dirent: files[0],
+      dirents: files,
+      isBatch: files.length > 1
+    });
+  }, [selectedFileIds, tagFiles, repoID]);
+
   const shareTagFile = useCallback(() => {
     if (!selectedFileIds || selectedFileIds.length === 0) return null;
     const selectedFile = getFileById(tagFiles, selectedFileIds[0]);
@@ -292,6 +313,7 @@ export const TagViewProvider = ({
       downloadTagFiles,
       renameTagFileInDialog,
       renameTagFile,
+      chatWithAIAboutTagFiles,
       convertFile,
       modifyTagFilesSort,
       sortBy,

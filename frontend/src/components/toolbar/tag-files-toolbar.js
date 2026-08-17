@@ -49,6 +49,9 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
       case TextTranslation.RENAME.key:
         eventBus && eventBus.dispatch(EVENT_BUS_TYPE.RENAME_TAG_FILE_IN_DIALOG);
         break;
+      case TextTranslation.CHAT_WITH_AI.key:
+        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.CHAT_WITH_AI_ABOUT_TAG_FILES);
+        break;
       case TextTranslation.HISTORY.key:
         eventBus && eventBus.dispatch(EVENT_BUS_TYPE.FILE_HISTORY);
         break;
