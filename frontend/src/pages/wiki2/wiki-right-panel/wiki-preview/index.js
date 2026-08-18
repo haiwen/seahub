@@ -1,42 +1,26 @@
 import React, { useRef, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { SdocWikiEditor } from '@seafile/seafile-sdoc-editor';
 import FileLoading from '../file-loading';
 import WikiTopNav from '../../top-nav';
 import { getCurrentPageConfig } from '../../utils';
-import RightHeader from '../../wiki-right-header';
 import Icon from '../../../../components/icon';
-import { mediaUrl } from '../../../../utils/constants';
+
+import PreviewContent from './preview-content';
 
 import './index.css';
 
 const FilePreviewWrapper = ({ docContent, previewDocUuid, setEditor, togglePreview, isReloadingPreview, previewDocInfo }) => {
   const [isShowZoomOut, setIsShowZoomOut] = useState(false);
   const wikiFilePreviewRef = useRef();
+  const zoomOutPreviewRef = useRef();
   const scrollRef = useRef();
+  const zoomOutScrollRef = useRef();
 
   const { config, pageId } = previewDocInfo;
   const isSdocPreview = previewDocInfo.type === 'sdoc_link';
-  const hasPreviewContent = docContent?.elements && !isReloadingPreview && previewDocInfo.type;
+  const hasPreviewContent = Boolean(docContent?.elements && !isReloadingPreview && previewDocInfo.type);
   const wikiTopNavProps = { config, currentPageId: pageId };
   const currentPageConfig = config && pageId && getCurrentPageConfig(config.pages, pageId);
-
-  const previewContent = (
-    <>
-      {!isSdocPreview && <RightHeader currentPageConfig={ currentPageConfig && { ...currentPageConfig, locked: true }} />}
-      <SdocWikiEditor
-        document={docContent}
-        docUuid={previewDocUuid}
-        isWikiReadOnly={true}
-        scrollRef={scrollRef}
-        collaborators={[]}
-        showComment={false}
-        isShowRightPanel={false}
-        setEditor={setEditor}
-        mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
-      />
-    </>
-  );
 
   const openFullscreen = (e) => {
     e.stopPropagation();
@@ -95,7 +79,14 @@ const FilePreviewWrapper = ({ docContent, previewDocUuid, setEditor, togglePrevi
               <div className='wiki-file-preview-container' ref={wikiFilePreviewRef}>
                 <div className='wiki-scroll-container' ref={scrollRef}>
                   <div className='wiki-preview-container'>
-                    {previewContent}
+                    <PreviewContent
+                      docContent={docContent}
+                      previewDocUuid={previewDocUuid}
+                      setEditor={setEditor}
+                      scrollRef={scrollRef}
+                      isSdocPreview={isSdocPreview}
+                      currentPageConfig={currentPageConfig}
+                    />
                   </div>
                 </div>
               </div>
@@ -108,12 +99,19 @@ const FilePreviewWrapper = ({ docContent, previewDocUuid, setEditor, togglePrevi
           <div className='wiki-zoom-out-container' onClick={() => setIsShowZoomOut(false)}>
             <div
               className='file-preview-zoom-out-container'
-              ref={wikiFilePreviewRef}
+              ref={zoomOutPreviewRef}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className='wiki-scroll-container' ref={scrollRef}>
+              <div className='wiki-scroll-container' ref={zoomOutScrollRef}>
                 <div className='wiki-preview-container'>
-                  {previewContent}
+                  <PreviewContent
+                    docContent={docContent}
+                    previewDocUuid={previewDocUuid}
+                    setEditor={setEditor}
+                    scrollRef={zoomOutScrollRef}
+                    isSdocPreview={isSdocPreview}
+                    currentPageConfig={currentPageConfig}
+                  />
                 </div>
               </div>
             </div>
