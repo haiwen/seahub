@@ -159,7 +159,7 @@ class Item extends Component {
           <OpIcon
             id={`delete-link-${idx}`}
             className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
-            symbol="delete1"
+            symbol="delete"
             tooltip={gettext('Remove')}
             op={this.deleteShareLink}
           />

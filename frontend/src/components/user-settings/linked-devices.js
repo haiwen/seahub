@@ -153,7 +153,7 @@ class Item extends Component {
             aria-label={gettext('Unlink')}
             onClick={this.handleClick}
           >
-            <Icon symbol="delete1" />
+            <Icon symbol="delete" />
           </span>
         </td>
       </tr>
@@ -187,10 +187,10 @@ class Item extends Component {
       <React.Fragment>
         {this.props.isDesktop ? this.renderDesktop() : this.renderMobile()}
         {this.state.isConfirmUnlinkDialogOpen &&
-        <ConfirmUnlinkDeviceDialog
-          executeOperation={this.unlinkDevice}
-          toggleDialog={this.toggleDialog}
-        />
+          <ConfirmUnlinkDeviceDialog
+            executeOperation={this.unlinkDevice}
+            toggleDialog={this.toggleDialog}
+          />
         }
       </React.Fragment>
     );

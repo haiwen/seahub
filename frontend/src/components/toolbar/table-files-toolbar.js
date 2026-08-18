@@ -253,7 +253,7 @@ const TableFilesToolbar = ({ repoID }) => {
         <OpIcon
           id="delete-btn"
           className="cur-view-path-btn"
-          symbol="delete1"
+          symbol="delete"
           tooltip={gettext('Delete')}
           aria-label={gettext('Delete')}
           op={deleteRecords}

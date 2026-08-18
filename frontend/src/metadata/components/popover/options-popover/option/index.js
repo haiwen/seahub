@@ -95,7 +95,7 @@ const Option = ({
       </div>
       <div id={`sf-metadata-edit-option-more-operation-${option.id}`} className="sf-metadata-edit-option-more-operations">
         {(isViewing || isDeleting) && (
-          <IconBtn className="op-icon" onClick={onDelete} symbol="delete1" />
+          <IconBtn className="op-icon" onClick={onDelete} symbol="delete" />
         )}
       </div>
     </div>

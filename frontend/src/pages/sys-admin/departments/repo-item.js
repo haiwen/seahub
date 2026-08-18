@@ -46,7 +46,7 @@ class RepoItem extends React.Component {
         <td className="cursor-pointer text-center" onClick={this.props.showDeleteRepoDialog.bind(this, repo)}>
           <OpIcon
             className={`op-icon ${highlight ? '' : 'vh'}`}
-            symbol="delete1"
+            symbol="delete"
             title={gettext('Delete')}
           />
         </td>

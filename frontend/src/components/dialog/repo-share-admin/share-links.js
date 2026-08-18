@@ -119,7 +119,7 @@ class Item extends Component {
             title={gettext('Delete')}
             aria-label={gettext('Delete')}
           >
-            <Icon symbol="delete1" />
+            <Icon symbol="delete" />
           </span>
         </td>
       </tr>

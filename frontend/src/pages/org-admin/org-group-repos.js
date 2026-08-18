@@ -42,7 +42,7 @@ class OrgGroupRepos extends Component {
   render() {
     return (
       <Fragment>
-        <MainPanelTopbar/>
+        <MainPanelTopbar />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <OrgAdminGroupNav groupID={this.props.groupID} currentItem='repos' />
@@ -188,7 +188,7 @@ class Item extends Component {
           <td>
             <OpIcon
               className={`op-icon${isOpIconShown ? '' : ' invisible'}`}
-              symbol="delete1"
+              symbol="delete"
               title={gettext('Delete')}
               op={this.handleDeleteIconClick}
             />

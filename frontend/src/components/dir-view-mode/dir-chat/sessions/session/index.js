@@ -89,7 +89,7 @@ const Session = ({ session, isSelected, isTeamTab = false, embedded = false, onS
             <CustomDropdownItem
               item={{
                 label: gettext('Delete'),
-                icon: <Icon symbol="delete1" />,
+                icon: <Icon symbol="delete" />,
               }}
               onClick={() => setIsShowDeleteDialog(true)}
             />

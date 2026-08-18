@@ -247,7 +247,7 @@ const FilterByDate = ({ date, onChange }) => {
                     id="clear-date-btn"
                     className="op-icon"
                     tooltip={gettext('Delete')}
-                    symbol="delete1"
+                    symbol="delete"
                     op={onClearDate}
                   />
                 )}

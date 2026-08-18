@@ -197,7 +197,7 @@ class ShareAdminLinks extends Component {
               </OpElement>
               <OpIcon
                 className="cur-view-path-btn ml-4"
-                symbol="delete1"
+                symbol="delete"
                 title={gettext('Delete')}
                 tooltip={gettext('Delete')}
                 op={onDelete}

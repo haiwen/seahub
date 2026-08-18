@@ -218,7 +218,7 @@ const HistoryDateFilter = ({ mode = HISTORY_MODE, value: propsValue = { value: '
               id="delete-btn"
               className="op-icon"
               tooltip={gettext('Delete')}
-              symbol="delete1"
+              symbol="delete"
               op={onClearDate}
             />
           </div>

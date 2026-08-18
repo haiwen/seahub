@@ -378,7 +378,7 @@ class SelectedDirentsToolbar extends React.Component {
           <OpIcon
             id="cur-view-path-btn-delete"
             className="cur-view-path-btn"
-            symbol="delete1"
+            symbol="delete"
             tooltip={gettext('Delete')}
             modifiers={modifiers}
             op={this.onItemsDelete}
