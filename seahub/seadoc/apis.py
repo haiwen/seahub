@@ -7,9 +7,11 @@ import stat
 import logging
 import requests
 import posixpath
+from collections.abc import Mapping
 from urllib.parse import unquote, quote
 import time
 import shutil
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta
 
 from zipfile import is_zipfile, ZipFile
@@ -42,7 +44,9 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_link, \
     get_seadoc_download_link, get_seadoc_file_uuid, gen_seadoc_access_token, \
     gen_seadoc_image_parent_path, get_seadoc_asset_upload_link, get_seadoc_asset_download_link, \
-    can_access_seadoc_asset, is_seadoc_revision, ZSDOC, export_sdoc
+    upload_seadoc_asset, can_access_seadoc_asset, is_seadoc_revision, ZSDOC, export_sdoc
+from seahub.seadoc.remote_image import download_remote_image, MAX_REMOTE_IMAGE_COUNT, \
+    RemoteImageError, run_remote_image_transfer
 from seahub.seadoc.settings import SDOC_REVISIONS_DIR, SDOC_IMAGES_DIR
 from seahub.utils.file_types import SEADOC, IMAGE, VIDEO, EXCALIDRAW
 from seahub.utils.file_op import if_locked_by_online_office
@@ -85,6 +89,7 @@ except Exception:
 
 HTTP_443_ABOVE_QUOTA = 443
 HTTP_447_TOO_MANY_FILES_IN_LIBRARY = 447
+REMOTE_IMAGE_UPLOAD_TIMEOUT = (5, 60)
 
 
 class SeadocAccessToken(APIView):
@@ -443,11 +448,12 @@ class SeadocUploadImage(APIView):
         upload_link = get_seadoc_asset_upload_link(repo_id, parent_path, username)
         relative_path = []
         for file in file_list:
-            file_path = posixpath.join(parent_path, file.name)
-            file_path = os.path.normpath(file_path)
-            files = {'file': file}
-            data = {'parent_dir': parent_path, 'filename': file.name, 'target_file': file_path}
-            resp = requests.post(upload_link, files=files, data=data)
+            resp = upload_seadoc_asset(
+                upload_link,
+                parent_path,
+                file.name,
+                file,
+            )
             if not resp.ok:
                 logger.error(resp.text)
                 error_msg = 'Internal Server Error'
@@ -455,6 +461,104 @@ class SeadocUploadImage(APIView):
             image_url = '/' + file.name
             relative_path.append(image_url)
         return Response({'relative_path': relative_path})
+
+
+class SeadocImportRemoteImages(APIView):
+
+    authentication_classes = ()
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request, file_uuid):
+        auth = request.headers.get('authorization', '').split()
+        is_valid, payload = is_valid_seadoc_access_token(
+            auth,
+            file_uuid,
+            return_payload=True,
+        )
+        if not is_valid or payload.get('permission') != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        image_urls = request.data.get('image_urls') if isinstance(request.data, Mapping) else None
+        if not isinstance(image_urls, list) or not image_urls:
+            error_msg = 'Param image_urls is required.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        if (
+            len(image_urls) > MAX_REMOTE_IMAGE_COUNT
+            or any(not isinstance(url, str) for url in image_urls)
+        ):
+            error_msg = 'Param image_urls must contain at most %s URLs.' % MAX_REMOTE_IMAGE_COUNT
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        if check_quota(uuid_map.repo_id) < 0:
+            return api_error(status.HTTP_400_BAD_REQUEST, _('Out of quota.'))
+
+        username = payload.get('username', '')
+        parent_path = gen_seadoc_image_parent_path(
+            file_uuid,
+            uuid_map.repo_id,
+            username,
+        )
+        upload_link = get_seadoc_asset_upload_link(
+            uuid_map.repo_id,
+            parent_path,
+            username,
+        )
+        if not upload_link:
+            return api_error(
+                status.HTTP_500_INTERNAL_SERVER_ERROR,
+                'Internal Server Error',
+            )
+
+        unique_image_urls = list(dict.fromkeys(image_urls))
+
+        def import_image(source_url):
+            try:
+                def transfer():
+                    image = download_remote_image(source_url)
+                    filename = 'image-%s.%s' % (uuid.uuid4(), image['extension'])
+                    response = upload_seadoc_asset(
+                        upload_link,
+                        parent_path,
+                        filename,
+                        image['content'],
+                        image['content_type'],
+                        timeout=REMOTE_IMAGE_UPLOAD_TIMEOUT,
+                    )
+                    if not response.ok:
+                        logger.error(response.text)
+                        raise RemoteImageError(
+                            'storage_failed',
+                            'Failed to store remote image.',
+                        )
+                    return {
+                        'source_url': source_url,
+                        'status': 'success',
+                        'relative_path': '/' + filename,
+                    }
+
+                return run_remote_image_transfer(transfer)
+            except RemoteImageError as error:
+                error_code = error.code
+            except Exception:
+                error_code = 'storage_failed'
+
+            logger.error('Import remote image failed: %s', error_code)
+            return {
+                'source_url': source_url,
+                'status': 'failed',
+                'error_code': error_code,
+            }
+
+        max_workers = min(2, len(unique_image_urls))
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            images = list(executor.map(import_image, unique_image_urls))
+
+        return Response({'images': images})
 
 
 def latest_entry(request, file_uuid, filename):

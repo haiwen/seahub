@@ -171,6 +171,25 @@ def get_seadoc_asset_upload_link(repo_id, parent_path, username):
     return upload_link
 
 
+def upload_seadoc_asset(
+        upload_link, parent_path, filename, file_obj, content_type=None, timeout=None):
+    file_path = posixpath.join(parent_path, filename)
+    file_path = os.path.normpath(file_path)
+    if content_type:
+        files = {'file': (filename, file_obj, content_type)}
+    else:
+        files = {'file': file_obj}
+    data = {
+        'parent_dir': parent_path,
+        'filename': filename,
+        'target_file': file_path,
+    }
+    request_kwargs = {'files': files, 'data': data}
+    if timeout is not None:
+        request_kwargs['timeout'] = timeout
+    return requests.post(upload_link, **request_kwargs)
+
+
 def get_seadoc_asset_download_link(repo_id, parent_path, filename, username):
     file_path = posixpath.join(parent_path, filename)
     obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
