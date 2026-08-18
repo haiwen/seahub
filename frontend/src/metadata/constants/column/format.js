@@ -86,6 +86,7 @@ const SINGLE_CELL_VALUE_COLUMN_TYPE_MAP = {
   [CellType.SINGLE_SELECT]: true,
   [CellType.NUMBER]: true,
   [CellType.RATE]: true,
+  [CellType.GEOLOCATION]: true,
 };
 
 const DATE_DEFAULT_TYPES = {

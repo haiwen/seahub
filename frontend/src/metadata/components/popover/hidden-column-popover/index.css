@@ -2,6 +2,9 @@
   width: 300px;
   right: 0;
   padding: .5rem 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .sf-metadata-hide-columns-popover .sf-metadata-hide-columns-search-container {
@@ -23,6 +26,8 @@
 
 .sf-metadata-hide-columns-popover .hide-columns-list {
   width: 100%;
+  flex: 1;
+  min-height: 0;
   overflow: auto;
   padding: .5rem 0;
 }

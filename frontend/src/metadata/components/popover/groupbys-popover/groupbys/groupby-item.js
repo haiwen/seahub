@@ -99,13 +99,16 @@ const GroupbyItem = ({ showDragBtn, index, readOnly, groupby, columns, onDelete,
     return sortOptions.find(option => option.value.sortType === groupby.sort_type);
   }, [sortOptions, groupby]);
 
-  const DISPLAY_GROUP_DATE_GRANULARITY_TEXT = useMemo(() => {
+  const DISPLAY_GROUP_GRANULARITY_TEXT = useMemo(() => {
     return {
       'By day': gettext('By day'),
       'By week': gettext('By week'),
       'By month': gettext('By month'),
       'By quarter': gettext('By quarter'),
       'By year': gettext('By year'),
+      'By province': gettext('By province'),
+      'By city': gettext('By city'),
+      'By district': gettext('By district'),
     };
   }, []);
 
@@ -115,10 +118,10 @@ const GroupbyItem = ({ showDragBtn, index, readOnly, groupby, columns, onDelete,
     return granularityList.map((granularity) => {
       return {
         value: granularity,
-        label: <span className="select-option-name">{DISPLAY_GROUP_DATE_GRANULARITY_TEXT[displayGranularity[granularity]]}</span>,
+        label: <span className="select-option-name">{DISPLAY_GROUP_GRANULARITY_TEXT[displayGranularity[granularity]]}</span>,
       };
     });
-  }, [columns, groupby, DISPLAY_GROUP_DATE_GRANULARITY_TEXT]);
+  }, [columns, groupby, DISPLAY_GROUP_GRANULARITY_TEXT]);
 
   const selectedCountType = useMemo(() => {
     const { count_type } = groupby;
@@ -126,10 +129,10 @@ const GroupbyItem = ({ showDragBtn, index, readOnly, groupby, columns, onDelete,
     if (countType) {
       return {
         value: count_type || getDefaultCountType(column),
-        label: <span className="select-option-name">{DISPLAY_GROUP_DATE_GRANULARITY_TEXT[countType]}</span>
+        label: <span className="select-option-name">{DISPLAY_GROUP_GRANULARITY_TEXT[countType]}</span>
       };
     }
-  }, [column, groupby, DISPLAY_GROUP_DATE_GRANULARITY_TEXT]);
+  }, [column, groupby, DISPLAY_GROUP_GRANULARITY_TEXT]);
 
   const deleteGroupby = useCallback((event) => {
     event.nativeEvent.stopImmediatePropagation();

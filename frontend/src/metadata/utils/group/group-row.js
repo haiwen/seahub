@@ -1,13 +1,13 @@
 import { DateUtils } from '../date';
 import {
   CellType, DATE_COLUMN_OPTIONS, MULTIPLE_CELL_VALUE_COLUMN_TYPE_MAP, SINGLE_CELL_VALUE_COLUMN_TYPE_MAP, MAX_GROUP_LEVEL,
-  SORT_COLUMN_OPTIONS, SORT_TYPE, TEXT_SORTER_COLUMN_TYPES, NUMBER_SORTER_COLUMN_TYPES,
+  SORT_COLUMN_OPTIONS, SORT_TYPE, TEXT_SORTER_COLUMN_TYPES, NUMBER_SORTER_COLUMN_TYPES, PRIVATE_COLUMN_KEY,
 } from '../../constants';
 import { deleteInvalidGroupby } from './core';
 import { isValidCellValue, getCellValueByColumn, getCollaboratorsNames, getGeolocationByGranularity } from '../cell';
 import { sortDate, sortText, sortNumber, sortCheckbox, sortCollaborator, sortSingleSelect, sortMultipleSelect } from '../sort';
 
-const _getFormattedCellValue = (cellValue, groupby) => {
+const _getFormattedCellValue = (cellValue, groupby, record) => {
   const { column, count_type: countType } = groupby;
   const { type: columnType } = column;
   switch (columnType) {
@@ -38,7 +38,8 @@ const _getFormattedCellValue = (cellValue, groupby) => {
       return Array.isArray(cellValue) ? cellValue : [];
     }
     case CellType.GEOLOCATION: {
-      return getGeolocationByGranularity(cellValue, countType);
+      const locationTranslated = record && record[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED];
+      return getGeolocationByGranularity(locationTranslated || cellValue, countType);
     }
     default: {
       return null;
@@ -168,7 +169,7 @@ const groupRowsWithMultipleGroupbys = (groupbys, rows, collaborators) => {
       const { column, column_key } = currentGroupby;
       const { type: columnType } = column;
       const cellValue = getCellValueByColumn(row, column);
-      const formattedValue = _getFormattedCellValue(cellValue, currentGroupby);
+      const formattedValue = _getFormattedCellValue(cellValue, currentGroupby, row);
       const sCellValue = _getStrCellValue(formattedValue, columnType);
       const group = {
         cell_value: formattedValue,
@@ -237,7 +238,7 @@ const groupTableRows = (groupbys, rows, collaborators = []) => {
   let cellValue2GroupIndexMap = {};
   rows.forEach((r) => {
     const cellValue = getCellValueByColumn(r, column);
-    const formattedValue = _getFormattedCellValue(cellValue, groupby);
+    const formattedValue = _getFormattedCellValue(cellValue, groupby, r);
     const cellValueStr = _getStrCellValue(formattedValue, columnType);
     let groupedRowIndex = _findGroupIndex(cellValueStr, cellValue2GroupIndexMap, groups.length);
     if (groupedRowIndex > -1) {

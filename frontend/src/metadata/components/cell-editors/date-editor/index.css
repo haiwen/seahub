@@ -12,7 +12,6 @@
   color: var(--bs-body-color);
 }
 
-.rc-calendar-header-nav-wrap>a,
 .rc-calendar-column-header-inner,
 .rc-calendar-month-panel-prev-year-btn,
 .rc-calendar-month-panel-next-year-btn,
@@ -42,7 +41,6 @@
 .rc-calendar-year-panel,
 .rc-calendar-decade-panel {
   background-color: var(--bs-popover-bg);
-  border: 1px solid var(--bs-calendar-border-color);
 }
 
 .rc-calendar-last-month-cell .rc-calendar-date,
@@ -104,10 +102,6 @@
 .rc-calendar-date-input input:not(:focus),
 .rc-calendar-time-input input:not(:focus) {
   border: 1px solid var(--bs-calendar-border-color);
-}
-
-.rc-calendar-footer {
-  border-top: 1px solid var(--bs-calendar-time-section-border);
 }
 
 .rc-calendar-month-panel-header,
