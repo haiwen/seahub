@@ -117,6 +117,17 @@ def add_init_ai_summary_task(params):
     return json.loads(resp.content).get('task_id')
 
 
+def delete_summary_vector_index(params):
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {"Authorization": "Token %s" % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/delete-summary-vector-index')
+    resp = requests.post(url, json=params, headers=headers, timeout=30)
+    if resp.status_code < 200 or resp.status_code >= 300:
+        raise ConnectionError(resp.status_code, resp.text)
+    return resp.json()
+
+
 def extract_file_details(params):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')

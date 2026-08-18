@@ -21,7 +21,7 @@ from seahub.repo_metadata.utils import add_init_metadata_task, recognize_faces, 
     get_unmodifiable_columns, can_read_metadata, init_faces, \
     extract_file_details, get_table_by_name, remove_faces_table, FACES_SAVE_PATH, \
     init_tags, init_tag_self_link_columns, remove_tags_table, add_init_face_recognition_task, \
-    add_init_ai_summary_task, get_update_record, update_people_cover_photo, init_ai_summary, remove_ai_summary
+    add_init_ai_summary_task, delete_summary_vector_index, get_update_record, update_people_cover_photo, init_ai_summary, remove_ai_summary
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.repo import is_repo_admin, is_repo_owner
 from seahub.share.utils import check_invisible_folder
@@ -199,6 +199,12 @@ class MetadataManage(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         try:
+            if record.summary_enabled:
+                record.summary_enabled = False
+                record.ai_summary_indexed_at = None
+                record.ai_processing_status = ''
+                record.save()
+                delete_summary_vector_index({'repo_id': repo_id})
             metadata_server_api.delete_base()
         except Exception as err:
             logger.error(err)
@@ -209,7 +215,6 @@ class MetadataManage(APIView):
             record.enabled = False
             record.face_recognition_enabled = False
             record.tags_enabled = False
-            record.summary_enabled = False
             record.details_settings = '{}'
             record.save()
             RepoMetadataViews.objects.filter(repo_id=repo_id).delete()
@@ -2018,6 +2023,8 @@ class MetadataAISummaryStatusManage(APIView):
         try:
             init_ai_summary(metadata_server_api)
             metadata.summary_enabled = True
+            metadata.ai_summary_indexed_at = None
+            metadata.ai_processing_status = ''
             metadata.save()
             add_init_ai_summary_task({
                 'repo_id': repo_id,
@@ -2025,6 +2032,10 @@ class MetadataAISummaryStatusManage(APIView):
             })
         except Exception as e:
             logger.exception(e)
+            metadata.summary_enabled = False
+            metadata.ai_summary_indexed_at = None
+            metadata.ai_processing_status = ''
+            metadata.save()
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         return Response({'success': True})
@@ -2046,8 +2057,11 @@ class MetadataAISummaryStatusManage(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         try:
+            delete_summary_vector_index({'repo_id': repo_id})
             remove_ai_summary(metadata_server_api)
             metadata.summary_enabled = False
+            metadata.ai_summary_indexed_at = None
+            metadata.ai_processing_status = ''
             metadata.save()
         except Exception as e:
             logger.exception(e)

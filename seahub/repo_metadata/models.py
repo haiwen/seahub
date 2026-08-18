@@ -46,6 +46,8 @@ class RepoMetadataManager(models.Manager):
             metadata.tags_enabled = True
             metadata.tags_lang = 'en'
             metadata.summary_enabled = False
+            metadata.ai_summary_indexed_at = None
+            metadata.ai_processing_status = ''
             metadata.from_commit = from_commit
             metadata.to_commit = None
         metadata.save()
@@ -76,6 +78,7 @@ class RepoMetadata(models.Model):
     ocr_enabled = models.BooleanField(db_index=True)
     global_hidden_columns = models.TextField()
     ai_processing_status = models.CharField(max_length=32, default='', blank=True)
+    ai_summary_indexed_at = models.DateTimeField(blank=True, null=True)
 
     objects = RepoMetadataManager()
 

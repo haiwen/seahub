@@ -7,6 +7,7 @@ import os
 import re
 import copy
 import json
+from django.core.exceptions import ImproperlyConfigured
 from .config_parser import ConfigParser
 
 from seaserv import FILE_SERVER_PORT
@@ -1275,7 +1276,15 @@ JWT_PRIVATE_KEY = os.environ.get('JWT_PRIVATE_KEY', '') or JWT_PRIVATE_KEY
 # config in yaml & env
 ai_yaml_file_path = os.path.join(central_conf_dir, os.environ.get('SEAFILE_AI_CONFIG_NAME', 'seafile_ai_config.yaml'))
 ai_configs = ConfigParser(ai_yaml_file_path, 'seahub')
-AI_PRICES = get_llm_price(ai_configs.get('LLM_MODELS', []) + [ai_configs.get('EMBEDDING_MODEL', {})])
+EMBEDDING_MODEL = ai_configs.get('EMBEDDING_MODEL', {})
+EMBEDDING_DIMENSIONS = 1024
+try:
+    dimensions = int(EMBEDDING_MODEL.get('dimensions', EMBEDDING_DIMENSIONS))
+    if dimensions > 0:
+        EMBEDDING_DIMENSIONS = dimensions
+except (TypeError, ValueError):
+    pass
+AI_PRICES = get_llm_price(ai_configs.get('LLM_MODELS', []) + [EMBEDDING_MODEL])
 
 LLM_MODELS = [
     {
