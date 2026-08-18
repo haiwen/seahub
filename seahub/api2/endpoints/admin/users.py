@@ -30,7 +30,7 @@ from seahub.api2.utils import api_error, to_python_boolean, get_user_common_info
 from seahub.api2.models import TokenV2
 from seahub.organizations.models import OrgSettings
 from seahub.organizations.views import gen_org_url_prefix
-from seahub.utils.auth import can_user_update_password
+from seahub.utils.auth import user_local_password_enabled
 from seahub.utils.ccnet_db import get_ccnet_db_name
 import seahub.settings as settings
 from seahub.settings import SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, INIT_PASSWD, \
@@ -70,7 +70,7 @@ from seahub.auth.models import SocialAuthUser
 
 from seahub.options.models import UserOptions
 from seahub.share.models import FileShare, UploadLinkShare, ExtraSharePermission, CustomSharePermissions
-from seahub.utils.ldap import ENABLE_LDAP, LDAP_FILTER, ENABLE_SASL, SASL_MECHANISM, ENABLE_SSO_USER_CHANGE_PASSWORD, \
+from seahub.utils.ldap import ENABLE_LDAP, LDAP_FILTER, ENABLE_SASL, SASL_MECHANISM, \
     LDAP_PROVIDER, LDAP_SERVER_URL, LDAP_BASE_DN, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD, LDAP_LOGIN_ATTR, LDAP_USER_OBJECT_CLASS, \
     ENABLE_MULTI_LDAP, MULTI_LDAP_1_SERVER_URL, MULTI_LDAP_1_BASE_DN, MULTI_LDAP_1_ADMIN_DN, \
     MULTI_LDAP_1_ADMIN_PASSWORD, MULTI_LDAP_1_LOGIN_ATTR, \
@@ -1405,6 +1405,9 @@ class AdminUser(APIView):
             error_msg = 'User %s not found.' % email
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        if password and not user_local_password_enabled(user_obj):
+            return api_error(status.HTTP_400_BAD_REQUEST, _('Unable to reset password.'))
+
         try:
             update_user_info(request,
                              user=user_obj,
@@ -1517,7 +1520,7 @@ class AdminUserResetPassword(APIView):
             error_msg = 'email invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
-        can_reset_password = can_user_update_password(user)
+        can_reset_password = user_local_password_enabled(user)
         if not can_reset_password:
             return api_error(status.HTTP_400_BAD_REQUEST, _('Unable to reset password.'))
 

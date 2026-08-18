@@ -19,6 +19,7 @@ from seahub.base.accounts import User
 from seahub.profile.models import Profile
 from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email
 from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.utils.auth import user_local_password_enabled
 
 import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, SEND_EMAIL_ON_RESETTING_USER_PASSWD
@@ -49,6 +50,9 @@ class OrgAdminUserSetPassword(APIView):
         except User.DoesNotExist:
             error_msg = f'User {email} not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not user_local_password_enabled(user):
+            return api_error(status.HTTP_400_BAD_REQUEST, _('Unable to reset password.'))
 
         user_nickname = email2nickname(email)
         if not org_user_exists(org_id, email):

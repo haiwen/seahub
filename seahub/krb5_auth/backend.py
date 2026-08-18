@@ -5,6 +5,8 @@ from django.contrib.auth.backends import RemoteUserBackend
 import seaserv
 
 from seahub.base.accounts import User
+from seahub.auth.models import SocialAuthUser
+from seahub.utils.auth import KRB5_PROVIDER
 
 
 class RemoteKrbBackend(RemoteUserBackend):
@@ -52,5 +54,10 @@ class RemoteKrbBackend(RemoteUserBackend):
                                                     is_active=True)
             else:
                 pass
+
+        if user:
+            # Persist the Kerberos authentication source for later policy checks.
+            SocialAuthUser.objects.add_if_not_exists(
+                user.username, KRB5_PROVIDER, user.username)
 
         return user

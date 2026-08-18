@@ -2,10 +2,10 @@ import os
 
 
 from seahub.settings import LOGIN_BG_IMAGE_PATH, MEDIA_ROOT, ENABLE_OAUTH, ENABLE_ADFS_LOGIN, \
-    ENABLE_MULTI_ADFS, DISABLE_ADFS_USER_PWD_LOGIN, ENABLE_CHANGE_PASSWORD
+    ENABLE_MULTI_ADFS, DISABLE_SSO_USER_LOCAL_PWD_LOGIN
 from seahub.auth.models import SocialAuthUser
 import seahub.settings as settings
-from seahub.utils import gen_token
+from seahub.utils import gen_token, is_ldap_user
 from datetime import datetime
 from seaserv import ccnet_api
 
@@ -31,6 +31,7 @@ MONTH_SEASON_MAP = {
     12: 'winter'
 }
 
+
 def get_login_bg_image_path():
     """ Return custom background image path if it exists, otherwise return default background image path.
     """
@@ -38,7 +39,7 @@ def get_login_bg_image_path():
     login_bg_image_path = "img/login-background/%s-bg.jpg" % MONTH_SEASON_MAP.get(current_month)
     if not os.path.exists(os.path.join(MEDIA_ROOT, login_bg_image_path)):
         login_bg_image_path = LOGIN_BG_IMAGE_PATH
-    
+
     # get path that background image of login page
     custom_login_bg_image_path = get_custom_login_bg_image_path()
     if os.path.exists(os.path.join(MEDIA_ROOT, custom_login_bg_image_path)):
@@ -56,16 +57,39 @@ def gen_user_virtual_id():
     return gen_token(max_length=32) + VIRTUAL_ID_EMAIL_DOMAIN
 
 
+REMOTE_USER_PROVIDER = 'remote-user'
+KRB5_PROVIDER = 'kerberos'
+
+
+def is_remote_user(user_obj):
+    """Return whether ``user_obj`` is authenticated by an external provider."""
+    if is_ldap_user(user_obj):
+        return True
+
+    username = getattr(user_obj, 'username', '')
+    return bool(username) and SocialAuthUser.objects.filter(username=username).exists()
+
+
+def user_local_password_enabled(user_obj):
+    """Return whether ``user_obj`` may set and use a Seafile local password."""
+    if is_force_user_sso(user_obj):
+        return False
+
+    if not is_remote_user(user_obj):
+        return True
+
+    return not DISABLE_SSO_USER_LOCAL_PWD_LOGIN
+
+
 def is_force_user_sso(user_obj):
-    
+
     from seahub.organizations.models import OrgAdminSettings, FORCE_ADFS_LOGIN
     from seahub.organizations.utils import can_use_sso_in_multi_tenancy
-    
+
     enable_sso = ENABLE_OAUTH or ENABLE_ADFS_LOGIN
     force_sso = False
     is_admin = False
-    user = user_obj
-    username = user.username
+    username = user_obj.username
     org_id = -1
     orgs = ccnet_api.get_orgs_by_user(username)
 
@@ -73,8 +97,7 @@ def is_force_user_sso(user_obj):
     oauth_provider_identifier = getattr(settings, 'OAUTH_PROVIDER_DOMAIN', '')
 
     if orgs:
-        org = orgs[0]
-        org_id = org.org_id
+        org_id = orgs[0].org_id
 
     if org_id > 0 and ENABLE_MULTI_ADFS and can_use_sso_in_multi_tenancy(org_id):
         is_admin = ccnet_api.is_org_staff(org_id, username)
@@ -82,9 +105,9 @@ def is_force_user_sso(user_obj):
         if org_settings:
             force_sso = int(org_settings.value)
     elif enable_sso:
-        force_sso = DISABLE_ADFS_USER_PWD_LOGIN
-        is_admin = user.is_staff
-        
+        force_sso = DISABLE_SSO_USER_LOCAL_PWD_LOGIN
+        is_admin = user_obj.is_staff
+
     if force_sso and (not is_admin):
         sso_user = SocialAuthUser.objects.filter(
             username=username,
@@ -92,22 +115,5 @@ def is_force_user_sso(user_obj):
         )
         if sso_user.exists():
             return True
-        
+
     return False
-
-
-def can_user_update_password(user_obj):
-    if is_force_user_sso(user_obj):
-        return False
-    
-    username = user_obj.username
-    
-    has_bind_social_auth = False
-    if SocialAuthUser.objects.filter(username=username).exists():
-        has_bind_social_auth = True
-
-    if has_bind_social_auth and (not settings.ENABLE_SSO_USER_CHANGE_PASSWORD):
-        return False
-    
-    return ENABLE_CHANGE_PASSWORD
-    

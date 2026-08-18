@@ -15,6 +15,7 @@ from seahub.two_factor.views.login import is_device_remembered
 from seahub.utils.two_factor_auth import has_two_factor_auth, \
         two_factor_auth_enabled, verify_two_factor_token
 from seahub.settings import ENABLE_LDAP, USE_LDAP_SYNC_ONLY
+from seahub.utils.auth import user_local_password_enabled
 from constance import config
 
 logger = logging.getLogger(__name__)
@@ -87,10 +88,16 @@ class AuthTokenSerializer(serializers.Serializer):
             
             # Second check the password correct or not
             user = authenticate(username=login_id, password=password)
+            if user and not user_local_password_enabled(user):
+                user = None
+
             if not user:
                 """try login id/contact email"""
                 # convert login id or contact email to username if any
                 user = authenticate(username=username, password=password)
+                if user and not user_local_password_enabled(user):
+                    user = None
+
                 # After local user authentication process is completed, authenticate LDAP user
                 if user is None and ENABLE_LDAP and not USE_LDAP_SYNC_ONLY:
                     user = authenticate(ldap_user=username, password=password)
