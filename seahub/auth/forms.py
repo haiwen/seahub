@@ -79,9 +79,12 @@ class AuthenticationForm(forms.Form):
             self.user_cache = authenticate(username=converted_login_str, password=password)
 
             if self.user_cache and not user_local_password_enabled(self.user_cache):
-                # LDAP/SSO user local password check passed, but they can NOT use local password
-                # mark user as unauthenticated
-                # then auth user via ldap password
+                if not is_ldap_user(self.user_cache):
+                    self.errors['disable_pwd_login'] = _('Please use Single Sign-On to login.')
+                    raise forms.ValidationError(_('Please use Single Sign-On to login.'))
+
+                # The local password cannot be used by this LDAP user. Continue
+                # with LDAP authentication so the LDAP password can still work.
                 self.user_cache = None
 
             # Step 3) Check LDAP

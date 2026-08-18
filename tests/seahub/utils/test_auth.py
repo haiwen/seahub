@@ -54,7 +54,9 @@ class ForceUserSSOPolicyTest(BaseTestCase):
         SocialAuthUser.objects.add(
             self.user.username, 'oauth.example.com', self.user.username)
 
-        with patch('seahub.utils.auth.settings.OAUTH_PROVIDER_DOMAIN', 'oauth.example.com'):
+        with patch(
+                'seahub.utils.auth.settings.OAUTH_PROVIDER_DOMAIN',
+                'oauth.example.com', create=True):
             self.assertTrue(is_force_user_sso(self.user))
 
     @patch('seahub.utils.auth.DISABLE_SSO_USER_LOCAL_PWD_LOGIN', False)
