@@ -42,6 +42,6 @@
   display: none;
 }
 
-.sf-metadata-edit-option-color-popover .sf-metadata-edit-option-color-item-container:not(.selected) .seafile-multicolor-icon-check-mark {
+.sf-metadata-edit-option-color-popover .sf-metadata-edit-option-color-item-container:not(.selected) .seafile-multicolor-icon-check {
   display: none;
 }

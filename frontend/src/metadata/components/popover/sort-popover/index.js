@@ -15,6 +15,7 @@ import {
 import { execSortsOperation, getDisplaySorts, isSortsEmpty, SORT_OPERATION } from './utils';
 
 import './index.css';
+import DirView from '@/pages/sys-admin/repos/dir-view';
 
 const SORT_TYPES = [
   {
@@ -143,12 +144,12 @@ class SortPopover extends Component {
       return {
         value: { column },
         label: (
-          <div>
+          <span className="sort-column-option">
             <span className="sf-metadata-filter-header-icon">
               <Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[type]} />
             </span>
-            <span className=''>{name}</span>
-          </div>
+            <span className="select-option-name" title={name} aria-label={name}>{name}</span>
+          </span>
         )
       };
     });
@@ -178,16 +179,17 @@ class SortPopover extends Component {
     const selectedColumn = {
       value: { column },
       label: (
-        <Fragment>
+        <>
           <span className="sf-metadata-filter-header-icon"><Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[type]} /></span>
           <span className="select-option-name" title={name} aria-label={name}>{name}</span>
-        </Fragment>
+        </>
       )
     };
 
     const selectedType = sort.sort_type;
     const selectedTypeOption = SORT_TYPES.find(sortType => sortType.value === selectedType);
     const selectedSortType = selectedType && {
+      value: { sortType: selectedType },
       label: <span className="select-option-name">{selectedTypeOption?.name || gettext('Up')}</span>
     };
 

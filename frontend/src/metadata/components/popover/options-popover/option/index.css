@@ -43,13 +43,8 @@
   justify-content: center;
 }
 
-.sf-metadata-edit-option-container .sf-metadata-edit-option-operation-item .seafile-multicolor-icon-delete {
-  fill: #666;
+.sf-metadata-edit-option-container .seafile-multicolor-icon-btn {
   font-size: 14px;
-}
-
-.sf-metadata-edit-option-container .sf-metadata-edit-option-operation-item:hover .seafile-multicolor-icon-delete {
-  fill: #212529;
 }
 
 .sf-metadata-edit-option-container.sf-metadata-edit-option-drop-over-top::before {

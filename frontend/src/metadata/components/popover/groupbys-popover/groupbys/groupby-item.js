@@ -125,6 +125,7 @@ const GroupbyItem = ({ showDragBtn, index, readOnly, groupby, columns, onDelete,
     const countType = getSelectedCountType(column, count_type);
     if (countType) {
       return {
+        value: count_type || getDefaultCountType(column),
         label: <span className="select-option-name">{DISPLAY_GROUP_DATE_GRANULARITY_TEXT[countType]}</span>
       };
     }

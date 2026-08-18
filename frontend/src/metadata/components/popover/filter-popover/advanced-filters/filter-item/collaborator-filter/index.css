@@ -47,10 +47,6 @@
   align-items: center;
 }
 
-.sf-metadata-selector-collaborator.sf-select .sf-option-group .sf-option-group-search .search-input-wrapper .search-text-clear {
-  right: 4px;
-}
-
 .sf-metadata-selector-collaborator.sf-select .sf-option-group .sf-option-group-search .form-control {
   height: 28px;
   padding: 8px;

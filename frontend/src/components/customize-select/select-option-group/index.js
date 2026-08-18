@@ -160,7 +160,7 @@ class SelectOptionGroup extends Component {
           disableHover={this.state.disableHover}
         >
           {opt.label}
-          {isSelected && <Icon symbol="check" />}
+          {isSelected && <Icon symbol="check" className="flex-shrink-0" />}
         </Option>
       );
     });

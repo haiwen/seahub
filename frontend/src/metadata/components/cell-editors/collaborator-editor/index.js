@@ -125,9 +125,9 @@ const CollaboratorEditor = forwardRef(({
   const onUpArrow = useCallback((event) => {
     event.preventDefault();
     event.stopPropagation();
-    if (highlightIndex === 0) {
+    if (highlightIndex <= 0) {
       setHighlightIndex(displayCollaborators.length - 1);
-      editorContainerRef.current.scrollTop = 0;
+      editorContainerRef.current.scrollTop = editorContainerRef.current.scrollHeight;
       return;
     }
     setHighlightIndex(highlightIndex - 1);
@@ -202,8 +202,7 @@ const CollaboratorEditor = forwardRef(({
   }, [onHotKey]);
 
   useEffect(() => {
-    const highlightIndex = displayCollaborators.length === 0 ? -1 : 0;
-    setHighlightIndex(highlightIndex);
+    setHighlightIndex(-1);
   }, [displayCollaborators]);
 
   useImperativeHandle(ref, () => ({
