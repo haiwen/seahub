@@ -2032,6 +2032,10 @@ class MetadataAISummaryStatusManage(APIView):
             })
         except Exception as e:
             logger.exception(e)
+            metadata.summary_enabled = False
+            metadata.ai_summary_indexed_at = None
+            metadata.ai_processing_status = ''
+            metadata.save()
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         return Response({'success': True})
@@ -2053,12 +2057,12 @@ class MetadataAISummaryStatusManage(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         try:
+            delete_summary_vector_index({'repo_id': repo_id})
+            remove_ai_summary(metadata_server_api)
             metadata.summary_enabled = False
             metadata.ai_summary_indexed_at = None
             metadata.ai_processing_status = ''
             metadata.save()
-            delete_summary_vector_index({'repo_id': repo_id})
-            remove_ai_summary(metadata_server_api)
         except Exception as e:
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
