@@ -1490,6 +1490,11 @@ class SeafileAPI {
   }
 
 
+  getSdocAccessTokenByUuid(docUuid) {
+    const url = this.server + '/api/v2.1/seadoc/access-token-by-uuid/' + docUuid + '/';
+    return this.req.get(url);
+  }
+
   listSdocNotifications(page, perPage) {
     const url = this.server + '/api/v2.1/sdoc-notifications/';
     let params = {

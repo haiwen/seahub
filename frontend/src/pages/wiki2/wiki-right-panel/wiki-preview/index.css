@@ -44,6 +44,16 @@
   font-size: 14px;
 }
 
+.wiki-file-preview-drawer .wiki-file-preview-panel-header .wiki-file-preview-panel-header-left .sdoc-preview-title {
+  color: #212529;
+  font-size: 16px;
+  font-weight: 500;
+  max-width: 360px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .wiki-file-preview-drawer .wiki-file-preview-panel-header .wiki-file-preview-panel-header-left .wiki-detail-header-icon-container {
   align-items: center;
   display: flex;

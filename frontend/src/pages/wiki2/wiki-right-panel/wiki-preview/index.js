@@ -16,8 +16,27 @@ const FilePreviewWrapper = ({ docContent, previewDocUuid, setEditor, togglePrevi
   const scrollRef = useRef();
 
   const { config, pageId } = previewDocInfo;
+  const isSdocPreview = previewDocInfo.type === 'sdoc_link';
+  const hasPreviewContent = docContent?.elements && !isReloadingPreview && previewDocInfo.type;
   const wikiTopNavProps = { config, currentPageId: pageId };
   const currentPageConfig = config && pageId && getCurrentPageConfig(config.pages, pageId);
+
+  const previewContent = (
+    <>
+      {!isSdocPreview && <RightHeader currentPageConfig={ currentPageConfig && { ...currentPageConfig, locked: true }} />}
+      <SdocWikiEditor
+        document={docContent}
+        docUuid={previewDocUuid}
+        isWikiReadOnly={true}
+        scrollRef={scrollRef}
+        collaborators={[]}
+        showComment={false}
+        isShowRightPanel={false}
+        setEditor={setEditor}
+        mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
+      />
+    </>
+  );
 
   const openFullscreen = (e) => {
     e.stopPropagation();
@@ -45,7 +64,11 @@ const FilePreviewWrapper = ({ docContent, previewDocUuid, setEditor, togglePrevi
           <div className="wiki-file-preview-panel-header">
             <div className="wiki-file-preview-panel-header-left">
               <div className="wiki-detail-header-icon-container">
-                {previewDocInfo.config && <WikiTopNav {...wikiTopNavProps} />}
+                {isSdocPreview ? (
+                  <span className='sdoc-preview-title' title={previewDocInfo.title}>{previewDocInfo.title}</span>
+                ) : (
+                  previewDocInfo.config && <WikiTopNav {...wikiTopNavProps} />
+                )}
               </div>
             </div>
             <div className="wiki-file-preview-panel-header-right">
@@ -68,22 +91,11 @@ const FilePreviewWrapper = ({ docContent, previewDocUuid, setEditor, togglePrevi
                 <FileLoading />
               </div>
             )}
-            {docContent?.elements && !isReloadingPreview && previewDocInfo.config && (
+            {hasPreviewContent && (
               <div className='wiki-file-preview-container' ref={wikiFilePreviewRef}>
                 <div className='wiki-scroll-container' ref={scrollRef}>
                   <div className='wiki-preview-container'>
-                    <RightHeader currentPageConfig={ currentPageConfig && { ...currentPageConfig, locked: true }} />
-                    <SdocWikiEditor
-                      document={docContent}
-                      docUuid={previewDocUuid}
-                      isWikiReadOnly={true}
-                      scrollRef={scrollRef}
-                      collaborators={[]}
-                      showComment={false}
-                      isShowRightPanel={false}
-                      setEditor={setEditor}
-                      mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
-                    />
+                    {previewContent}
                   </div>
                 </div>
               </div>
@@ -91,7 +103,7 @@ const FilePreviewWrapper = ({ docContent, previewDocUuid, setEditor, togglePrevi
           </div>
         </div>
       </div>
-      {isShowZoomOut && docContent?.elements && previewDocInfo.config && (
+      {isShowZoomOut && hasPreviewContent && (
         ReactDOM.createPortal(
           <div className='wiki-zoom-out-container' onClick={() => setIsShowZoomOut(false)}>
             <div
@@ -101,18 +113,7 @@ const FilePreviewWrapper = ({ docContent, previewDocUuid, setEditor, togglePrevi
             >
               <div className='wiki-scroll-container' ref={scrollRef}>
                 <div className='wiki-preview-container'>
-                  <RightHeader currentPageConfig={ currentPageConfig && { ...currentPageConfig, locked: true }} />
-                  <SdocWikiEditor
-                    document={docContent}
-                    docUuid={previewDocUuid}
-                    isWikiReadOnly={true}
-                    scrollRef={scrollRef}
-                    collaborators={[]}
-                    showComment={false}
-                    isShowRightPanel={false}
-                    setEditor={setEditor}
-                    mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
-                  />
+                  {previewContent}
                 </div>
               </div>
             </div>
