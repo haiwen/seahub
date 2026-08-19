@@ -15,7 +15,6 @@ import {
 import { execSortsOperation, getDisplaySorts, isSortsEmpty, SORT_OPERATION } from './utils';
 
 import './index.css';
-import DirView from '@/pages/sys-admin/repos/dir-view';
 
 const SORT_TYPES = [
   {
