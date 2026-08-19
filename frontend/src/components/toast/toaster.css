@@ -120,7 +120,7 @@
   margin: 0;
   font-weight: 600;
   font-size: 14px;
-  color: var(--bs-body-color);
+  color: #435a6f;
 }
 
 .seahub-toast-alert-container .toast-text-child {
