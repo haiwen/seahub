@@ -10,7 +10,7 @@
 }
 
 .add-item-btn:hover {
-  background: none;
+  background-color: var(--bs-hover-secondary-bg);
 }
 
 .add-item-btn .add-item-btn-content {

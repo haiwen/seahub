@@ -9,11 +9,6 @@
 .popover-add-tool.add-item-btn {
   border-top: none;
   color: var(--bs-body-secondary-color);
-  background-color: inherit;
-}
-
-.popover-add-tool.add-item-btn:hover {
-  background-color: var(--bs-bg-color);
 }
 
 .popover-add-tool.disabled:hover {

@@ -10,7 +10,7 @@
 }
 
 .sf-metadata-edit-option-container:hover {
-  background-color: var(--bs-hover-bg);
+  background-color: var(--bs-hover-secondary-bg);
   cursor: pointer;
 }
 
