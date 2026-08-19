@@ -35,7 +35,7 @@ const CustomizeMarkdownViewer = forwardRef(({ chatId, message, repoID }, ref) =>
     const nextSources = normalizeSources(message?.[CHAT_MESSAGE_TYPE.SOURCES] || [], repoID);
     const nextMdFiles = [];
     return {
-      value: buildAIReply(message?.[CHAT_MESSAGE_TYPE.AI_REPLY] || '', nextSources, chatId, nextMdFiles),
+      value: buildAIReply(message?.[CHAT_MESSAGE_TYPE.AI_REPLY] || '', nextSources, chatId, nextMdFiles, repoID),
       sources: nextSources,
       mdFiles: nextMdFiles,
     };
@@ -95,10 +95,16 @@ const CustomizeMarkdownViewer = forwardRef(({ chatId, message, repoID }, ref) =>
         render: (<CustomizeDefinition sources={sources} onOpen={handleOpenDocument} />),
       },
       [ELementTypes.LINK]: {
-        render: (<CustomizeLink mdFiles={mdFiles} openDocument={openDocument} />),
+        render: (
+          <CustomizeLink
+            mdFiles={mdFiles}
+            openDocument={openDocument}
+            repoID={repoID}
+          />
+        ),
       },
     };
-  }, [handleOpenDocument, mdFiles, openDocument, sources]);
+  }, [handleOpenDocument, mdFiles, openDocument, repoID, sources]);
 
   const beforeRenderCallback = useCallback((nodes) => {
     const valueCount = Array.isArray(nodes) ? nodes.length : 0;

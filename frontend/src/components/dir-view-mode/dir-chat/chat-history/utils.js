@@ -1,3 +1,5 @@
+import URLDecorator from '../../../../utils/url-decorator';
+
 const INTERNAL_REFERENCE_RE = /<reference_(\d+)>/g;
 const GROUPED_REFERENCE_RE = /\(\s*(?:Documents|Document|Reference|Source|Docs|Doc)\s*\d+(?:(?:\s*,\s*|\s+)(?:Documents|Document|Reference|Source|Docs|Doc)\s*\d+)*(?:\s*,)?\s*\)/gi;
 const REFERENCE_GROUP_FORMAT_RE = /([[\(])(Reference|Source|Document|Documents|Docs|Doc)\s*(\d+(?:\s*,\s*(?:\d+|(?:Reference|Source|Document|Documents|Docs|Doc)\s*\d+))*)\s*([\]\)])/gi;
@@ -8,7 +10,10 @@ const REFERENCE_COMMA_RE = /(\[Reference\s+\d+\](?:\s*,\s*\[Reference\s+\d+\])+)
 const MARKDOWN_FILE_RE = /<seafile-ai-markdown(?:\s+file_name=(["'])([^"']*?)\1)?\s*>([\s\S]*?)<\/seafile-ai-markdown>/g;
 const MARKDOWN_FILE_LINK_RE = /<seafile-ai-markdown-link\s+url=(["'])(.*?)\1\s*><\/seafile-ai-markdown-link>/g;
 const MARKDOWN_READONLY_TIPS_RE = /<markdown-readonly-tips>([\s\S]*?)<\/markdown-readonly-tips>/g;
+const LIBRARY_FILE_RE = /<seafile-ai-file>([\s\S]*?)<\/seafile-ai-file>/g;
 const LIB_MARKDOWN_LINK_RE = /\[[^\]]+\.md\]\((?:https?:\/\/[^)]+)?\/lib\/[^)]+\)\s*/g;
+
+const escapeMarkdownLinkText = (value) => value.replace(/([\\\[\]])/g, '\\$1');
 
 export const getSourceTitle = (source, index) => {
   return source?.title || source?.name || source?.path || `Reference ${index}`;
@@ -67,6 +72,34 @@ export const transformMarkdownFilesToLinks = (value = '', mdFiles = [], messageI
   });
 };
 
+export const transformLibraryFilesToLinks = (value = '', repoID = '') => {
+  if (!value || !repoID) {
+    return value;
+  }
+
+  return value.replace(LIBRARY_FILE_RE, (match, filePath) => {
+    const path = filePath.trim();
+    if (!path || path.includes('\n')) {
+      return match;
+    }
+
+    const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+    if (normalizedPath.split('/').includes('..')) {
+      return match;
+    }
+
+    const url = URLDecorator.getUrl({
+      type: 'open_with_default',
+      repoID,
+      filePath: normalizedPath,
+    });
+    if (!url) {
+      return match;
+    }
+    return `[${escapeMarkdownLinkText(path)}](${url})`;
+  });
+};
+
 export const buildReadonlyTips = (value = '') => {
   const tips = [];
   const nextValue = value.replace(MARKDOWN_READONLY_TIPS_RE, (match, content) => {
@@ -91,16 +124,17 @@ const normalizeReferenceGroups = (value = '') => {
   });
 };
 
-export const buildAIReply = (value, sources, chatId, mdFiles = []) => {
+export const buildAIReply = (value, sources, chatId, mdFiles = [], repoID = '') => {
   if (!value) {
     return '';
   }
 
   const { value: valueWithoutTips, tips } = buildReadonlyTips(value);
-  const nextValue = transformMarkdownFilesToLinks(valueWithoutTips, mdFiles, chatId)
+  const valueWithoutMarkdownFileLinks = transformMarkdownFilesToLinks(valueWithoutTips, mdFiles, chatId)
     .replace(MARKDOWN_FILE_LINK_RE, '')
     .replace(LIB_MARKDOWN_LINK_RE, '')
     .trim();
+  const nextValue = transformLibraryFilesToLinks(valueWithoutMarkdownFileLinks, repoID);
   if (chatId === 'typing') {
     const typingValue = nextValue.replace(INTERNAL_REFERENCE_RE, '');
     if (tips.length === 0) {
