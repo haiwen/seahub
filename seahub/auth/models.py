@@ -122,7 +122,7 @@ class SocialAuthUserManager(models.Manager):
             # which can match records with different letter cases or diacritical marks.
             # This ensures the result matches exactly at the character level.
             if social_auth_user and (
-                social_auth_user.provider != provider or social_auth_user.uid != uid
+                social_auth_user.provider != provider or social_auth_user.uid != str(uid)
             ):
                 return None
             return social_auth_user
