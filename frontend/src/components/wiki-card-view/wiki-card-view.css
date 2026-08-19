@@ -66,11 +66,8 @@
 }
 
 .wiki-card-item:hover {
+  background: var(--bs-bg-card-elevated-hover);
   box-shadow: var(--bs-box-shadow-none, 0 4px 16px 0 rgba(0, 0, 0, 0.08));
-}
-
-[data-bs-theme=dark] .wiki-card-item:hover {
-  background-color: var(--bs-bg-color);
 }
 
 /* wiki-card-item-top */
