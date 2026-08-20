@@ -321,7 +321,7 @@ class MylibRepoListItem extends React.Component {
         <OpIcon
           id={`delete-icon-${idx}`}
           className="op-icon"
-          symbol="delete1"
+          symbol="delete"
           tooltip={gettext('Delete')}
           op={this.onDeleteToggle}
         />

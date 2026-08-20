@@ -241,7 +241,7 @@ const CardFilesToolbar = ({ repoID, updateCurrentDirent }) => {
       {!readOnly && (
         <OpIcon
           id="delete-btn"
-          symbol="delete1"
+          symbol="delete"
           className="cur-view-path-btn sf3-font"
           tooltip={gettext('Delete')}
           op={deleteRecords}

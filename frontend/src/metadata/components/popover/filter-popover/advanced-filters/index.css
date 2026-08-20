@@ -108,6 +108,19 @@
   max-width: 160px;
 }
 
+.sf-metadata-filters-list .filter-column .sf-option-group .filter-column-option {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.sf-metadata-filters-list .filter-column .sf-option-group .filter-column-option .select-option-name {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .filter-term .selector-multiple-select .sf-select-option,
 .filter-term .selector-single-select .sf-select-option {
   height: 30px;
@@ -229,13 +242,15 @@
   fill: var(--bs-icon-color);
 }
 
-.sf-metadata-filters-list .multiple-option-name {
+.sf-metadata-filters-list .multiple-option-name,
+.sf-metadata-filters-list .single-option-name {
   width: 100%;
   display: flex;
   align-items: center;
 }
 
 .sf-metadata-filters-list .multiple-check-icon,
+.sf-metadata-filters-list .single-check-icon,
 .sf-metadata-filters-list .collaborator-check-icon {
   display: inline-flex;
   height: 20px;
@@ -245,6 +260,7 @@
 }
 
 .sf-metadata-filters-list .multiple-check-icon .seafile-multicolor-icon-check-mark,
+.sf-metadata-filters-list .single-check-icon .seafile-multicolor-icon-check-mark,
 .sf-metadata-filters-list .collaborator-check-icon .seafile-multicolor-icon-check-mark {
   fill: var(--bs-icon-color);
   font-size: 12px;
@@ -317,10 +333,6 @@
   overflow: auto;
 }
 
-.sf-metadata-filters-list .sf-option-group .search-empty-tip-img {
-  display: none;
-}
-
 .sf-metadata-filters-list .filter-conjunction .sf-option-group {
   width: 200px;
 }
@@ -346,7 +358,7 @@
   display: none;
 }
 
-.filter-group-advanced .sf-metadata-filters-list .sf-select .selected-option-show > div {
+.filter-group-advanced .sf-metadata-filters-list .sf-select .selected-option-show .filter-column-option {
   display: flex;
 }
 
@@ -355,7 +367,7 @@
   margin-right: 4px;
 }
 
-.filter-group-advanced .sf-metadata-filters-list .sf-select .selected-option-show > div .select-option-name {
+.filter-group-advanced .sf-metadata-filters-list .sf-select .selected-option-show .filter-column-option .select-option-name {
   width: calc(100% - 22px);
   display: block;
   overflow: hidden;

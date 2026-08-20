@@ -11,12 +11,12 @@ class FilterItemUtils {
     return {
       value: { column },
       label: (
-        <div>
+        <span className="filter-column-option">
           <span className="sf-metadata-filter-header-icon">
             <Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[type]} />
           </span>
-          <span className="select-option-name">{name}</span>
-        </div>
+          <span className="select-option-name" title={name} aria-label={name}>{name}</span>
+        </span>
       )
     };
   }
@@ -35,7 +35,7 @@ class FilterItemUtils {
     };
   }
 
-  static generateSingleSelectOption(option, selectedOption) {
+  static generateSingleSelectOption(option, filterTerm) {
     return {
       value: { columnOption: option },
       label: (
@@ -49,7 +49,7 @@ class FilterItemUtils {
             {option.name}
           </div>
           <div className="single-check-icon">
-            {selectedOption?.id === option.id && <Icon symbol="check" />}
+            {filterTerm === option.id && <Icon symbol="check" />}
           </div>
         </div>
       )

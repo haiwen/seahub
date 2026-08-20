@@ -153,7 +153,11 @@ const MultipleSelectEditor = forwardRef(({
   const onUpArrow = useCallback((event) => {
     event.preventDefault();
     event.stopPropagation();
-    if (highlightIndex === 0) return;
+    if (highlightIndex <= 0) {
+      setHighlightIndex(displayOptions.length - 1);
+      editorContainerRef.current.scrollTop = editorContainerRef.current.scrollHeight;
+      return;
+    }
     setHighlightIndex(highlightIndex - 1);
     if (highlightIndex > displayOptions.length - maxItemNum) {
       editorContainerRef.current.scrollTop -= itemHeight;
@@ -163,7 +167,11 @@ const MultipleSelectEditor = forwardRef(({
   const onDownArrow = useCallback((event) => {
     event.preventDefault();
     event.stopPropagation();
-    if (highlightIndex === displayOptions.length - 1) return;
+    if (highlightIndex === displayOptions.length - 1) {
+      setHighlightIndex(0);
+      editorContainerRef.current.scrollTop = 0;
+      return;
+    }
     setHighlightIndex(highlightIndex + 1);
     if (highlightIndex >= maxItemNum) {
       editorContainerRef.current.scrollTop += itemHeight;
@@ -214,8 +222,7 @@ const MultipleSelectEditor = forwardRef(({
   }, [onHotKey]);
 
   useEffect(() => {
-    const highlightIndex = displayOptions.length === 0 ? -1 : 0;
-    setHighlightIndex(highlightIndex);
+    setHighlightIndex(-1);
   }, [displayOptions]);
 
   useImperativeHandle(ref, () => ({

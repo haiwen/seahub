@@ -69,7 +69,6 @@
   border-radius: 4px;
   color: var(--bs-body-color);
   border: 1px solid var(--bs-border-color);
-  background-color: var(--bs-btn-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -89,7 +88,6 @@
   align-items: center;
   justify-content: center;
   color: var(--bs-icon-color);
-  background-color: var(--bs-btn-bg);
   border: 1px solid var(--bs-border-color);
   border-radius: 4px;
 }

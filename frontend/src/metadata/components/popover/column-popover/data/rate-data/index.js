@@ -98,6 +98,8 @@ const RateData = ({ value, onChange, updatePopoverState }) => {
           <Label>{gettext('Max')}</Label>
           <CustomizeSelect
             ref={maxSelectRef}
+            className="custom-select"
+            isInModal={true}
             value={selectedMaxOption}
             options={maxOptions}
             onSelectOption={onMaxChange}

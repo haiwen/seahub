@@ -48,3 +48,7 @@
 .sf-metadata-rate-column-data-style-setting-popover .rate-column-data-style-item .seafile-multicolor-icon {
   font-size: 16px;
 }
+
+.sf-metadata-rate-column-data-settings .rate-column-data-setting-item .sf-option-group {
+  min-width: 145px;
+}

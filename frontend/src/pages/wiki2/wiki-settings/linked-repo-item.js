@@ -17,7 +17,7 @@ export default function LinkedRepoItem({ repoItem, onDeleteLinkedRepo }) {
       </td>
       <td className='repo-op'>
         <span className="op-icon" onClick={onDeleteClick}>
-          <Icon symbol="delete1" />
+          <Icon symbol="delete" />
         </span>
       </td>
     </tr>

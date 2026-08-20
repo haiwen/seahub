@@ -195,7 +195,7 @@ const FaceRecognitionFilesToolbar = ({ repoID }) => {
         </>
       )}
       <OpIcon id="download-btn" symbol="download" className="cur-view-path-btn" tooltip={gettext('Download')} aria-label={gettext('Download')} op={handleDownload} />
-      {!readOnly && <OpIcon id="delete-btn" symbol="delete1" className="cur-view-path-btn" tooltip={gettext('Delete')} aria-label={gettext('Delete')} op={deleteRecords} />}
+      {!readOnly && <OpIcon id="delete-btn" symbol="delete" className="cur-view-path-btn" tooltip={gettext('Delete')} aria-label={gettext('Delete')} op={deleteRecords} />}
       <CustomDropdown
         target="face-recognition-files-toolbar-menu-toggle"
         forwardedRef={menuRef}

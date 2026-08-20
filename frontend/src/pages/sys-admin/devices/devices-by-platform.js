@@ -168,7 +168,7 @@ class Item extends Component {
           <td>
             <OpIcon
               className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
-              symbol="delete1"
+              symbol="delete"
               title={gettext('Unlink')}
               op={this.handleUnlink}
             />

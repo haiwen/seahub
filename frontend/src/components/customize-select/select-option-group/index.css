@@ -3,8 +3,8 @@
   left: 0;
   min-height: 60px;
   max-height: 300px;
-  min-width: 100%;
-  max-width: 15rem;
+  min-width: 200px;
+  max-width: 240px;
   z-index: 10001;
 }
 
@@ -53,7 +53,7 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  min-width: 200px;
+  height: 32px;
   line-height: 24px;
   padding: 4px 8px;
   clear: both;

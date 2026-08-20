@@ -81,7 +81,7 @@ class CustomPermissionItem extends React.Component {
               />
               <OpIcon
                 id={`delete-icon-${index}`}
-                symbol="delete1"
+                symbol="delete"
                 className="op-icon"
                 tooltip={gettext('Delete')}
                 op={this.onDeleteCustomPermission}

@@ -137,7 +137,7 @@ class Item extends Component {
         <td>{data.last_login_ip}</td>
         <td>{dayjs(data.last_accessed).fromNow()}</td>
         <td>
-          <a href="#" className={opClasses} title={gettext('Unlink')} role="button" aria-label={gettext('Unlink')} onClick={this.handleClick}><Icon symbol="delete1" /></a>
+          <a href="#" className={opClasses} title={gettext('Unlink')} role="button" aria-label={gettext('Unlink')} onClick={this.handleClick}><Icon symbol="delete" /></a>
         </td>
       </tr>
     );
@@ -170,10 +170,10 @@ class Item extends Component {
       <React.Fragment>
         {this.props.isDesktop ? this.renderDesktopItem() : this.renderMobileItem()}
         {this.state.isConfirmUnlinkDialogOpen &&
-        <ConfirmUnlinkDeviceDialog
-          executeOperation={this.unlinkDevice}
-          toggleDialog={this.toggleDialog}
-        />
+          <ConfirmUnlinkDeviceDialog
+            executeOperation={this.unlinkDevice}
+            toggleDialog={this.toggleDialog}
+          />
         }
       </React.Fragment>
     );

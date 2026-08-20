@@ -104,6 +104,13 @@
   min-width: 0;
 }
 
+.sf-metadata-groupbys-popover .groupby-item .groupby-column .groupby-column-option .select-option-name {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .sf-metadata-groupbys-popover .groupby-item .groupby-count-type,
 .sf-metadata-groupbys-popover .groupby-item .groupby-predicate {
   width: 130px;

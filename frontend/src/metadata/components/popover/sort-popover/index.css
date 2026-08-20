@@ -39,6 +39,19 @@
   width: 150px;
 }
 
+.sort-item .sort-column .sort-column-option {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.sort-item .sort-column .sort-column-option .select-option-name {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .sort-item .sort-predicate {
   width: 130px;
 }
