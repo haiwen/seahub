@@ -336,6 +336,14 @@ class AdminOrganizations(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, "Quota is not valid")
 
         member_limit = request.data.get('member_limit', ORG_MEMBER_QUOTA_DEFAULT)
+        try:
+            member_limit = int(member_limit)
+        except (TypeError, ValueError):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'member_limit invalid.')
+
+        if member_limit <= 0:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'member_limit invalid.')
+
         OrgMemberQuota.objects.set_quota(org_id, member_limit)
 
         org = ccnet_api.get_org_by_id(org_id)
