@@ -70,19 +70,19 @@ const AllTagsOperationToolbar = ({ repoID }) => {
     {
       key: 'new-tag',
       label: gettext('New tag'),
-      icon_dom: <Icon symbol="new" className="mr-1 dropdown-item-icon" />,
+      icon_dom: <Icon symbol="new" className="dropdown-item-icon" />,
       onClick: openAddTag,
     },
     {
       key: 'import-tags',
       label: gettext('Import tags'),
-      icon_dom: <Icon symbol="import-sdoc" className="mr-1 dropdown-item-icon" />,
+      icon_dom: <Icon symbol="import-sdoc" className="dropdown-item-icon" />,
       onClick: handleImportTags,
     },
     {
       key: 'export-tags',
       label: gettext('Export tags'),
-      icon_dom: <Icon symbol="download" className="mr-1 dropdown-item-icon" />,
+      icon_dom: <Icon symbol="download" className="dropdown-item-icon" />,
       onClick: handleExportTags,
     }
   ]), [openAddTag, handleImportTags, handleExportTags]);
