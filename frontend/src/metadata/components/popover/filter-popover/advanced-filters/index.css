@@ -333,10 +333,6 @@
   overflow: auto;
 }
 
-.sf-metadata-filters-list .sf-option-group .search-empty-tip-img {
-  display: none;
-}
-
 .sf-metadata-filters-list .filter-conjunction .sf-option-group {
   width: 200px;
 }
