@@ -153,7 +153,7 @@ export default class PageDropdownMenu extends Component {
       ...(canDeletePage ? [{
         key: 'delete-page',
         label: gettext('Delete page'),
-        icon_dom: <Icon symbol="delete1" aria-hidden="true" />,
+        icon_dom: <Icon symbol="delete" aria-hidden="true" />,
         onClick: this.onDeletePage,
       }] : []),
       {

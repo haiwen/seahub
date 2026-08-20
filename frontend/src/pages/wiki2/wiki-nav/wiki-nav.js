@@ -169,7 +169,7 @@ class WikiNav extends Component {
     const pageOperationItems = [{
       key: 'import-page',
       label: gettext('Import page'),
-      icon_dom: <Icon symbol="import-sdoc" className="mr-2" aria-hidden="true" />,
+      icon_dom: <Icon symbol="import-sdoc" aria-hidden="true" />,
       children: [
         { key: 'import-docx', label: gettext('Import page from docx'), onClick: () => this.handleImportPage('.docx') },
         { key: 'import-md', label: gettext('Import page from Markdown'), onClick: () => this.handleImportPage('.md') },
