@@ -36,7 +36,7 @@ from seahub.organizations.signals import org_operation_signal
 from seahub.organizations.decorators import org_staff_required
 from seahub.organizations.forms import OrgRegistrationForm
 from seahub.organizations.settings import ORG_AUTO_URL_PREFIX, \
-        ORG_MEMBER_QUOTA_ENABLED, ORG_ENABLE_ADMIN_INVITE_USER_VIA_WEIXIN, \
+        ORG_ENABLE_ADMIN_INVITE_USER_VIA_WEIXIN, \
         ORG_ENABLE_ADMIN_CUSTOM_LOGO, ORG_ENABLE_ADMIN_CUSTOM_NAME, \
         ORG_ENABLE_ADMIN_INVITE_USER, ORG_ENABLE_ADMIN_DELETE_ORG
 from seahub.organizations.utils import get_or_create_invitation_link, \
@@ -333,7 +333,6 @@ def react_fake_view(request, **kwargs):
     # Whether use new page
     return render(request, "organizations/org_admin_react.html", {
         'org': org,
-        'org_member_quota_enabled': ORG_MEMBER_QUOTA_ENABLED,
         'org_enable_admin_custom_logo': ORG_ENABLE_ADMIN_CUSTOM_LOGO,
         'org_enable_admin_custom_name': ORG_ENABLE_ADMIN_CUSTOM_NAME,
         'org_enable_admin_invite_user': ORG_ENABLE_ADMIN_INVITE_USER,
@@ -374,13 +373,12 @@ def org_associate(request, token):
         return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
 
     # check org member quota
-    if ORG_MEMBER_QUOTA_ENABLED:
-        from seahub.organizations.models import OrgMemberQuota
-        org_members = len(ccnet_api.get_org_users_by_url_prefix(org.url_prefix,
-                                                                -1, -1))
-        org_members_quota = OrgMemberQuota.objects.get_quota(org_id)
-        if org_members_quota is not None and org_members >= org_members_quota:
-            return render_error(request, 'Above quota')
+    from seahub.organizations.models import OrgMemberQuota
+    org_members = len(ccnet_api.get_org_users_by_url_prefix(org.url_prefix,
+                                                            -1, -1))
+    org_members_quota = OrgMemberQuota.objects.get_quota(org_id)
+    if org_members_quota is not None and org_members >= org_members_quota:
+        return render_error(request, 'Above quota')
 
     set_org_user(org_id, username)
 

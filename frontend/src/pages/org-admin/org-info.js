@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { UncontrolledTooltip } from 'reactstrap';
 import { orgAdminAPI } from '../../utils/org-admin-api';
-import { mediaUrl, gettext, orgMemberQuotaEnabled, enableSeafileAI } from '../../utils/constants';
+import { mediaUrl, gettext, enableSeafileAI } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import MainPanelTopbar from './main-panel-topbar';
 import Icon from '../../components/icon';
@@ -88,12 +88,10 @@ class OrgInfo extends Component {
                     <p className="info-content-user-text">{member_usage}</p>
                   </div>
 
-                  {orgMemberQuotaEnabled &&
                   <div>
                     <h4 className="info-content-item-heading">{gettext('User number limit')}</h4>
                     <p className="info-content-user-text">{member_quota > 0 ? member_quota : '--'}</p>
                   </div>
-                  }
 
                 </div>
 

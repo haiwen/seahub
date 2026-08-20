@@ -16,11 +16,6 @@ from seahub.utils import is_pro_version
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 
-try:
-    from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
-except ImportError:
-    ORG_MEMBER_QUOTA_ENABLED= False
-
 logger = logging.getLogger(__name__)
 
 

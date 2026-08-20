@@ -25,8 +25,7 @@ from seahub.organizations.api.permissions import IsOrgAdmin
 from seahub.organizations.models import OrgAdminSettings, \
         OrgMemberQuota, FORCE_ADFS_LOGIN, DISABLE_ORG_ENCRYPTED_LIBRARY, \
         DISABLE_ORG_USER_CLEAN_TRASH
-from seahub.organizations.settings import ORG_MEMBER_QUOTA_ENABLED, \
-        ORG_ENABLE_ADMIN_CUSTOM_NAME
+from seahub.organizations.settings import ORG_ENABLE_ADMIN_CUSTOM_NAME
 
 from django.conf import settings as dj_settings
 from seahub.ai.utils import get_ai_credit_by_user, get_ai_credit_used_by_user
@@ -58,10 +57,7 @@ def get_org_info(request, org_id):
         user_default_quota = 0
 
     # member quota
-    if ORG_MEMBER_QUOTA_ENABLED:
-        member_quota = OrgMemberQuota.objects.get_quota(org_id)
-    else:
-        member_quota = 0
+    member_quota = OrgMemberQuota.objects.get_quota(org_id)
 
     # member usage
     try:

@@ -36,11 +36,6 @@ from seahub.utils.db_api import SeafileDB
 from seahub.share.models import ExtraSharePermission
 from seahub.organizations.models import OrgMemberQuota
 
-try:
-    from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
-except ImportError:
-    ORG_MEMBER_QUOTA_ENABLED= False
-
 logger = logging.getLogger(__name__)
 
 def get_org_user_info(org_id, user_obj):
@@ -203,11 +198,10 @@ class AdminOrgUsers(APIView):
         # check user number limit by org member quota
         ccnet_db = CcnetDB()
         org_active_members_count = ccnet_db.count_org_active_users(org_id)
-        if ORG_MEMBER_QUOTA_ENABLED:
-            org_members_quota = OrgMemberQuota.objects.get_quota(org_id)
-            if org_members_quota is not None and org_active_members_count >= org_members_quota:
-                error_msg = 'The number of users exceeds the limit.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        org_members_quota = OrgMemberQuota.objects.get_quota(org_id)
+        if org_members_quota is not None and org_active_members_count >= org_members_quota:
+            error_msg = 'The number of users exceeds the limit.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # create user
         try:
@@ -303,7 +297,7 @@ class AdminOrgUser(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             if active == 'true':
-                if not user.is_active and ORG_MEMBER_QUOTA_ENABLED:
+                if not user.is_active:
                     ccnet_db = CcnetDB()
                     org_active_members_count = ccnet_db.count_org_active_users(org_id)
                     org_members_quota = OrgMemberQuota.objects.get_quota(org_id)

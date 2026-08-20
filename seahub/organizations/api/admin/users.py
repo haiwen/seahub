@@ -40,8 +40,7 @@ from pysearpc import SearpcError
 
 import seahub.settings as settings
 from seahub.organizations.models import OrgMemberQuota
-from seahub.organizations.settings import ORG_MEMBER_QUOTA_ENABLED, \
-        ORG_ENABLE_ADMIN_INVITE_USER
+from seahub.organizations.settings import ORG_ENABLE_ADMIN_INVITE_USER
 from seahub.organizations.views import get_org_user_self_usage, \
         get_org_user_quota, is_org_staff, org_user_exists, \
         unset_org_user, set_org_user, set_org_staff, unset_org_staff
@@ -228,11 +227,10 @@ class OrgAdminUsers(APIView):
         # check plan
         ccnet_db = CcnetDB()
         org_active_members_count = ccnet_db.count_org_active_users(org_id)
-        if ORG_MEMBER_QUOTA_ENABLED:
-            org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
-            if org_members_quota is not None and org_active_members_count >= org_members_quota:
-                err_msg = 'The number of users exceeds the limit.'
-                return api_error(status.HTTP_403_FORBIDDEN, err_msg)
+        org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
+        if org_members_quota is not None and org_active_members_count >= org_members_quota:
+            err_msg = 'The number of users exceeds the limit.'
+            return api_error(status.HTTP_403_FORBIDDEN, err_msg)
 
         if user_number_over_limit():
             return api_error(status.HTTP_403_FORBIDDEN, 'The number of users exceeds the limit')
@@ -438,7 +436,7 @@ class OrgAdminUser(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             if is_active == 'true':
-                if not user.is_active and ORG_MEMBER_QUOTA_ENABLED:
+                if not user.is_active:
                     ccnet_db = CcnetDB()
                     org_active_members_count = ccnet_db.count_org_active_users(org_id)
                     org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
@@ -674,12 +672,10 @@ class OrgAdminImportUsers(APIView):
         # check plan
         ccnet_db = CcnetDB()
         org_active_members_count = ccnet_db.count_org_active_users(org_id)
-        if ORG_MEMBER_QUOTA_ENABLED:
-            from seahub.organizations.models import OrgMemberQuota
-            org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
-            if org_members_quota is not None and org_active_members_count+len(records) > org_members_quota:
-                err_msg = 'The number of users exceeds the limit.'
-                return api_error(status.HTTP_403_FORBIDDEN, err_msg)
+        org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
+        if org_members_quota is not None and org_active_members_count+len(records) > org_members_quota:
+            err_msg = 'The number of users exceeds the limit.'
+            return api_error(status.HTTP_403_FORBIDDEN, err_msg)
 
         if user_number_over_limit(new_users=len(records)):
             error_msg = 'The number of users exceeds the limit.'
@@ -810,12 +806,11 @@ class OrgAdminInviteUser(APIView):
         # check plan
         ccnet_db = CcnetDB()
         org_active_members_count = ccnet_db.count_org_active_users(org_id)
-        if ORG_MEMBER_QUOTA_ENABLED:
-            org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
-            if org_members_quota is not None and \
-                    org_active_members_count + len(email_list) > org_members_quota:
-                err_msg = _('The number of users exceeds the limit')
-                return api_error(status.HTTP_403_FORBIDDEN, err_msg)
+        org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
+        if org_members_quota is not None and \
+                org_active_members_count + len(email_list) > org_members_quota:
+            err_msg = _('The number of users exceeds the limit')
+            return api_error(status.HTTP_403_FORBIDDEN, err_msg)
 
         if user_number_over_limit(len(email_list)):
             err_msg = _('The number of users exceeds the limit')

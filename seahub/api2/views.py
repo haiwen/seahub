@@ -112,6 +112,7 @@ from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
     ENABLE_SEAFILE_AI, SEAFILE_AI_SERVER_URL
 from seahub.subscription.utils import subscription_check
 from seahub.organizations.models import OrgAdminSettings, DISABLE_ORG_ENCRYPTED_LIBRARY
+from seahub.organizations.settings import ORG_MEMBER_QUOTA_DEFAULT
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_image_parent_path, get_seadoc_asset_upload_link
 from seahub.views.file import get_office_feature_by_repo
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
@@ -127,16 +128,6 @@ try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
     MULTI_TENANCY = False
-try:
-    from seahub.settings import ORG_MEMBER_QUOTA_DEFAULT
-except ImportError:
-    ORG_MEMBER_QUOTA_DEFAULT = None
-
-try:
-    from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
-except ImportError:
-    ORG_MEMBER_QUOTA_ENABLED = False
-
 try:
     from seahub.settings import OFFICE_WEB_APP_FILE_EXTENSION
 except ImportError:
@@ -5160,6 +5151,14 @@ class OrganizationView(APIView):
             logger.error(e)
             return api_error(status.HTTP_400_BAD_REQUEST, "Quota is not valid")
 
+        try:
+            member_limit = int(member_limit)
+        except (TypeError, ValueError):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Member limit is not valid')
+
+        if member_limit <= 0:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Member limit is not valid')
+
         vid = get_virtual_id_by_email(username)
         try:
             User.objects.get(email = vid)
@@ -5185,9 +5184,8 @@ class OrganizationView(APIView):
             org_id = org.org_id
 
             # set member limit
-            if ORG_MEMBER_QUOTA_ENABLED:
-                from seahub.organizations.models import OrgMemberQuota
-                OrgMemberQuota.objects.set_quota(org_id, member_limit)
+            from seahub.organizations.models import OrgMemberQuota
+            OrgMemberQuota.objects.set_quota(org_id, member_limit)
 
             # set quota
             quota = quota_mb * get_file_size_unit('MB')
