@@ -112,6 +112,7 @@ from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
     ENABLE_SEAFILE_AI, SEAFILE_AI_SERVER_URL
 from seahub.subscription.utils import subscription_check
 from seahub.organizations.models import OrgAdminSettings, DISABLE_ORG_ENCRYPTED_LIBRARY
+from seahub.organizations.settings import ORG_MEMBER_QUOTA_DEFAULT
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_image_parent_path, get_seadoc_asset_upload_link
 from seahub.views.file import get_office_feature_by_repo
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
@@ -127,11 +128,6 @@ try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
     MULTI_TENANCY = False
-try:
-    from seahub.settings import ORG_MEMBER_QUOTA_DEFAULT
-except ImportError:
-    ORG_MEMBER_QUOTA_DEFAULT = None
-
 try:
     from seahub.settings import OFFICE_WEB_APP_FILE_EXTENSION
 except ImportError:
