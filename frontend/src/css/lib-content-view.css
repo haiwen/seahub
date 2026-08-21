@@ -74,10 +74,15 @@
   justify-content: center;
 }
 
+/* Special handling: keep the new button transparent in dark mode. */
+[data-bs-theme="dark"] .dir-content-nav .dir-new-btn {
+  background-color: transparent;
+}
+
 .dir-content-nav .dir-new-btn:hover {
   background-color: var(--bs-btn-hover-bg);
-  border-color: var(--bs-btn-hover-border-color);
   color: var(--bs-btn-hover-color);
+  border-color: var(--bs-btn-hover-border-color);
 }
 
 .dir-content-nav .dir-chat-with-ai-btn {
