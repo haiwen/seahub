@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { stateDebug } from '../utils/debug';
 import SocketClient from './socket-client';
 import { CaptureUpdateAction, getSceneVersion, reconcileElements, restoreElements } from '@excalidraw/excalidraw';
@@ -24,6 +25,8 @@ class SocketManager {
     this.document = document;
     this.excalidrawAPI = excalidrawAPI;
     this.state = STATE.IDLE;
+    this._activeSendRequestId = null;
+    this._retryCount = 0;
 
     this.pendingOperationList = [];
     this.pendingOperationBeginTimeList = [];
@@ -151,7 +154,19 @@ class SocketManager {
     const firstOpBeginTime = this.pendingOperationBeginTimeList[0];
 
     const isExceedExecuteTime = (lastOpBeginTime - firstOpBeginTime) / 1000 > 30 ? true : false;
-    if (isExceedExecuteTime || this.pendingOperationList.length > 500) {
+    if (isExceedExecuteTime || this.pendingOperationList.length > 200) {
+      if (this.pendingOperationList.length > 200) {
+        const latestOperation = this.pendingOperationList[this.pendingOperationList.length - 1];
+        // The first begin time belongs to the in-flight operation when present.
+        const firstPendingBeginTimeIndex = this._sendingOperation ? 1 : 0;
+        const firstPendingBeginTime =
+          this.pendingOperationBeginTimeList[firstPendingBeginTimeIndex] || lastOpBeginTime;
+
+        this.pendingOperationList = [latestOperation];
+        this.pendingOperationBeginTimeList = this._sendingOperation
+          ? [firstOpBeginTime, firstPendingBeginTime]
+          : [firstPendingBeginTime];
+      }
       this.dispatchConnectState('pending_operations_exceed_limit');
     }
 
@@ -165,6 +180,23 @@ class SocketManager {
     this.sendNextOperations();
   };
 
+  resumePendingOperations = () => {
+    if (
+      this.state === STATE.NEED_RELOAD ||
+      this.state === STATE.SENDING ||
+      this.state === STATE.CONFLICT ||
+      this._sendingOperation ||
+      this._activeSendRequestId
+    ) {
+      return;
+    }
+
+    this.state = STATE.IDLE;
+    if (this.pendingOperationList.length > 0) {
+      this.sendOperations();
+    }
+  };
+
   sendNextOperations = () => {
     if (this.state !== STATE.SENDING) return;
     if (this.pendingOperationList.length === 0) {
@@ -176,28 +208,40 @@ class SocketManager {
     this.dispatchConnectState('is-saving');
     const version = this.document.version;
     const elements = this.pendingOperationList.shift();
+    const requestId = uuidv4();
+    this._activeSendRequestId = requestId;
     this._sendingOperation = elements;
 
-    this.socketClient.broadcastSceneElements(elements, version, this.sendOperationsCallback);
+    this.socketClient.broadcastSceneElements(
+      elements,
+      version,
+      (result) => this.sendOperationsCallback(result, requestId, elements),
+    );
   };
 
-  sendOperationsCallback = (result) => {
+  sendOperationsCallback = (result, requestId, operation) => {
+    if (requestId !== this._activeSendRequestId) {
+      return;
+    }
+    this._activeSendRequestId = null;
+
     if (result && result.success) {
       const { version: serverVersion } = result;
       this.setVersion(serverVersion);
       const lastSavedAt = new Date().getTime();
       this.dispatchConnectState('saved', lastSavedAt);
 
-      this.setLastBroadcastedOrReceivedSceneVersion(this._sendingOperation);
+      this.setLastBroadcastedOrReceivedSceneVersion(operation);
 
       // send next operations
+      this._retryCount = 0;
       this.pendingOperationBeginTimeList.shift(); // remove current operation's begin time
       this._sendingOperation = null;
       this.sendNextOperations();
       return;
     }
     // Operations are execute failure
-    const { error_type } = result;
+    const error_type = result && result.error_type;
     if (error_type === 'load_document_content_error' || error_type === 'token_expired') {
       // load_document_content_error: After a short-term reconnection, the content of the document fails to load
       this.dispatchConnectState(error_type);
@@ -208,11 +252,23 @@ class SocketManager {
       this._sendingOperation = null;
     } else if (error_type === 'version_behind_server') {
       // Put the failed operation into the pending list and re-execute it
-      this.pendingOperationList.unshift(this._sendingOperation);
+      this.pendingOperationList.unshift(operation);
 
       stateDebug(`State Changed: ${this.state} -> ${STATE.CONFLICT}`);
       this.state = STATE.CONFLICT;
       this.resolveConflicting(result);
+    } else {
+      // Keep failed operations retryable without leaving the manager in SENDING state.
+      const shouldRetry = this._retryCount === 0;
+      this._retryCount += 1;
+      this.pendingOperationList.unshift(operation.slice());
+      this._sendingOperation = null;
+      stateDebug(`State Changed: ${this.state} -> ${STATE.IDLE}`);
+      this.state = STATE.IDLE;
+      this.dispatchConnectState(error_type || 'execute_client_operations_error', result);
+      if (shouldRetry) {
+        this.sendOperations();
+      }
     }
   };
 
@@ -221,7 +277,8 @@ class SocketManager {
 
     this.updateLocalDataByRemoteData(elements, version);
 
-    this.pendingOperationBeginTimeList.shift();
+    // Keep the current operation's begin time while it is requeued for retry.
+    // It is removed only after the operation is acknowledged successfully.
     this._sendingOperation = null;
     this.state = STATE.SENDING;
     this.sendNextOperations();
@@ -296,17 +353,19 @@ class SocketManager {
   };
 
   dispatchConnectState = (type, message) => {
-    if (type === 'reconnect') {
-      this.state = STATE.IDLE;
-      if (this.pendingOperationList.length > 0) {
-        this.sendOperations();
-      }
+    if (type === 'reconnect-ready') {
+      // A new connection gets a fresh operation retry budget.
+      this._retryCount = 0;
+      this.resumePendingOperations();
     }
 
     if (type === 'disconnect') {
+      // Invalidate the callback of the disconnected socket and its retry budget.
+      this._activeSendRequestId = null;
+      this._retryCount = 0;
       // current state is sending
       if (this._sendingOperation) {
-        this.pendingOperationList.unshift(this._sendingOperation);
+        this.pendingOperationList.unshift(this._sendingOperation.slice());
         this._sendingOperation = null;
       }
       stateDebug(`State Changed: ${this.state} -> ${STATE.DISCONNECT}`);
