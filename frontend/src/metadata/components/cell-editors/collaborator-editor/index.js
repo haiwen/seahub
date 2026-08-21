@@ -21,6 +21,7 @@ const CollaboratorEditor = forwardRef(({
   onCommit,
   onPressTab,
   onClose,
+  isPopover = true,
 }, ref) => {
   const [value, setValue] = useState(oldValue || []);
   const [searchValue, setSearchValue] = useState('');
@@ -249,7 +250,7 @@ const CollaboratorEditor = forwardRef(({
   const isBeyondScreen = editorPosition.left + 300 > window.innerWidth;
 
   return (
-    <div className="sf-metadata-collaborator-editor popover" style={{ top: '-1px', left: isBeyondScreen ? 'unset' : '-1px', right: isBeyondScreen ? 0 : 'unset' }} ref={editorRef}>
+    <div className={classnames('sf-metadata-collaborator-editor', { 'popover': isPopover })} style={{ top: '-1px', left: isBeyondScreen ? 'unset' : '-1px', right: isBeyondScreen ? 0 : 'unset' }} ref={editorRef}>
       <DeleteCollaborator value={value} onDelete={onDeleteCollaborator} />
       <div className="sf-metadata-search-collaborator-options">
         <SearchInput placeholder={gettext('Search collaborators')} onKeyDown={onKeyDown} onChange={onChangeSearch} clearValue={clearSearch} autoFocus={true} className="sf-metadata-search-collaborators" isClearable={true} />
