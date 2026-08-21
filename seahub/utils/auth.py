@@ -71,49 +71,24 @@ def is_remote_user(user_obj):
 
 
 def user_local_password_enabled(user_obj):
-    """Return whether ``user_obj`` may set and use a Seafile local password."""
-    if is_force_user_sso(user_obj):
-        return False
-
-    if not is_remote_user(user_obj):
+    
+    if user_obj.is_staff:
         return True
-
-    return not DISABLE_SSO_USER_LOCAL_PWD_LOGIN
-
-
-def is_force_user_sso(user_obj):
-
-    from seahub.organizations.models import OrgAdminSettings, FORCE_ADFS_LOGIN
-    from seahub.organizations.utils import can_use_sso_in_multi_tenancy
-
-    enable_sso = ENABLE_OAUTH or ENABLE_ADFS_LOGIN
-    force_sso = False
-    is_admin = False
-    username = user_obj.username
-    org_id = -1
-    orgs = ccnet_api.get_orgs_by_user(username)
-
-    saml_provider_identifier = getattr(settings, 'SAML_PROVIDER_IDENTIFIER', 'saml')
-    oauth_provider_identifier = getattr(settings, 'OAUTH_PROVIDER_DOMAIN', '')
-
+    
+    orgs = ccnet_api.get_orgs_by_user(user_obj.username)
     if orgs:
         org_id = orgs[0].org_id
-
-    if org_id > 0 and ENABLE_MULTI_ADFS and can_use_sso_in_multi_tenancy(org_id):
-        is_admin = ccnet_api.is_org_staff(org_id, username)
-        org_settings = OrgAdminSettings.objects.filter(org_id=org_id, key=FORCE_ADFS_LOGIN).first()
-        if org_settings:
-            force_sso = int(org_settings.value)
-    elif enable_sso:
-        force_sso = DISABLE_SSO_USER_LOCAL_PWD_LOGIN
-        is_admin = user_obj.is_staff
-
-    if force_sso and (not is_admin):
-        sso_user = SocialAuthUser.objects.filter(
-            username=username,
-            provider__in=[saml_provider_identifier, oauth_provider_identifier]
-        )
-        if sso_user.exists():
+        if ccnet_api.is_org_staff(org_id, user_obj.username):
             return True
-
-    return False
+        
+        elif ENABLE_MULTI_ADFS and can_use_sso_in_multi_tenancy(org_id):
+            from seahub.organizations.models import OrgAdminSettings, FORCE_ADFS_LOGIN
+            from seahub.organizations.utils import can_use_sso_in_multi_tenancy
+            org_settings = OrgAdminSettings.objects.filter(org_id=org_id, key=FORCE_ADFS_LOGIN).first()
+            if org_settings:
+                return int(org_settings.value)
+    
+    if not is_remote_user(user_obj):
+        return True
+    
+    return not DISABLE_SSO_USER_LOCAL_PWD_LOGIN

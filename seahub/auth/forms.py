@@ -19,7 +19,7 @@ from seahub.auth.utils import get_virtual_id_by_email
 
 from captcha.fields import CaptchaField
 
-from seahub.utils.auth import is_force_user_sso, user_local_password_enabled
+from seahub.utils.auth import user_local_password_enabled
 from seahub.utils.password import get_password_strength_requirements, \
         is_password_strength_valid
 
@@ -122,7 +122,7 @@ class AuthenticationForm(forms.Form):
                     self.errors['inactive'] = _("This account is inactive.")
                     raise forms.ValidationError(_("This account is inactive."))
 
-            if is_force_user_sso(self.user_cache):
+            if not user_local_password_enabled(self.user_cache):
                 self.errors['disable_pwd_login'] = _('Please use Single Sign-On to login.')
                 raise forms.ValidationError(_('Please use Single Sign-On to login.'))
 

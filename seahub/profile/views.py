@@ -12,7 +12,7 @@ from django.utils.translation import gettext as _
 import seaserv
 from seaserv import seafile_api
 
-from seahub.utils.auth import is_force_user_sso, user_local_password_enabled
+from seahub.utils.auth import user_local_password_enabled
 from .forms import DetailedProfileForm
 from .models import Profile, DetailedProfile
 from seahub.auth.models import SocialAuthUser
@@ -147,7 +147,7 @@ def edit_profile(request):
         WEBDAV_SECRET_SETTED = True
 
     show_two_factor_auth = has_two_factor_auth() and not request.session.get('is_sso_user')
-    force_user_sso_login = is_force_user_sso(request.user)
+    force_user_sso_login = not user_local_password_enabled(request.user)
 
     resp_dict = {
             'form': form,
