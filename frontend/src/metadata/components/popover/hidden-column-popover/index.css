@@ -92,14 +92,14 @@
 }
 
 .sf-metadata-hide-columns-popover .hide-column-item .custom-switch .custom-switch-indicator {
-  border-radius: 6px;
-  height: 12px;
-  width: 22px;
+  border-radius: 8px;
+  height: 16px;
+  width: 28px;
 }
 
 .sf-metadata-hide-columns-popover .hide-column-item .custom-switch .custom-switch-indicator:before {
-  height: 8px;
-  width: 8px;
+  height: 12px;
+  width: 12px;
 }
 
 .sf-metadata-hide-columns-popover .hide-column-item .custom-switch .custom-switch-input:checked~.custom-switch-indicator:before {
@@ -110,8 +110,8 @@
   font-size: 14px;
   margin-right: 8px;
   flex-shrink: 0;
-  color: var(--bs-icon-color);
-  fill: var(--bs-icon-color);
+  color: var(--bs-icon-secondary-color);
+  fill: var(--bs-icon-secondary-color);
 }
 
 .sf-metadata-hide-columns-popover .sf-metadata-hide-columns-operations {

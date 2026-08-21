@@ -12,7 +12,7 @@
 }
 
 .user-select-trigger .user-select-placeholder {
-  color: var(--bs-body-secondary-color);
+  color: #868e96;
 }
 
 .user-select-popover .popover {
@@ -26,7 +26,7 @@
 }
 
 .selected-user-item-container .user-select-placeholder {
-  color: var(--bs-body-secondary-color);
+  color: #868e96;
 }
 
 .user-select-container {
@@ -80,6 +80,7 @@
   margin: 8px;
   overflow: auto;
 }
+
 .user-select-container .user-list-container .user-item-container {
   display: flex;
   align-items: center;
