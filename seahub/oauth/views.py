@@ -232,6 +232,11 @@ def oauth_callback(request):
     # by logging the user in.
     request.user = user
     auth.login(request, user)
+    oauth_id_token = token.get('id_token')
+    if oauth_id_token:
+        request.session['oauth_id_token'] = oauth_id_token
+    else:
+        request.session.pop('oauth_id_token', None)
 
     # update user's profile
     name = oauth_user_info.get('name', '')
