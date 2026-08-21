@@ -115,7 +115,6 @@ const HideColumnPopover = ({ hidePopover, onChange, readOnly, target, placement,
             autoFocus={true}
             isClearable={true}
             isShowSearchIcon={true}
-            isClearable={true}
           />
         </div>
         <HiddenColumns readOnly={readOnly} columns={displayColumns} hiddenColumns={hiddenColumns} onChange={hideColumn} modifyColumnOrder={modifyColumnOrder} />
