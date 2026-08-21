@@ -58,5 +58,5 @@
 }
 
 .sf-metadata-filter-popover .sf-option-group {
-  min-width: 200px;
+  max-width: 480px;
 }

@@ -55,6 +55,10 @@
   z-index: 1;
 }
 
+.sf-metadata-groupbys-popover .groupbys-list .search-text-clear {
+  right: 6px;
+}
+
 .sf-metadata-groupbys-popover .groupby-item .delete-groupby {
   height: 20px;
   margin-right: 14px;
@@ -151,4 +155,8 @@
 .sf-metadata-groupbys-popover .groupbys-tools .groupbys-tool-item:hover {
   cursor: pointer;
   color: var(--bs-body-secondary-color);
+}
+
+.sf-metadata-groupbys-popover .sf-option-group {
+  max-width: 480px;
 }

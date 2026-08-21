@@ -326,17 +326,9 @@
   margin-right: 14px;
 }
 
-.sf-metadata-filters-list .sf-option-group {
-  min-width: 0;
-  max-width: 300px;
-  max-height: 360px;
-  overflow: auto;
-}
-
 .sf-metadata-filters-list .filter-conjunction .sf-option-group {
   width: 200px;
 }
-
 
 .sf-metadata-filters-list .filter-conjunction .sf-option-group .sf-select-option {
   min-width: 0;
@@ -374,6 +366,10 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   margin-right: 4px;
+}
+
+.filter-group-advanced .sf-metadata-filters-list .search-text-clear {
+  right: 6px;
 }
 
 .sf-metadata-filter-header-icon,

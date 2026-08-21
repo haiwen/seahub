@@ -18,7 +18,7 @@
 .sf-metadata-tags-editor .sf-metadata-search-tags-container .sf-metadata-search-tags {
   font-size: 13px;
   max-height: 28px;
-  padding: 4px 8px;
+  padding: 4px 32px 4px 8px;
   border-radius: 4px;
 }
 
@@ -31,7 +31,7 @@
 .sf-metadata-tags-editor .sf-metadata-search-tags-container .search-control {
   position: absolute;
   top: 12px;
-  right: 16px;
+  right: 12px;
   width: 20px;
   height: 20px;
   display: flex;

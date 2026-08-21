@@ -19,6 +19,10 @@
   padding: 16px;
 }
 
+.sf-metadata-sort-popover .sf-option-group {
+  max-width: 480px;
+}
+
 .sorts-list .sort-item {
   display: flex;
   align-items: center;
@@ -82,4 +86,8 @@
 
 .sorts-list .sf-select {
   height: 100%;
+}
+
+.sf-metadata-sort-popover .sorts-list .search-text-clear {
+  right: 6px;
 }

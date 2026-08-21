@@ -67,6 +67,10 @@ const HideColumnPopover = ({ hidePopover, onChange, readOnly, target, placement,
     setSearchValue(newSearchValue);
   }, [searchValue]);
 
+  const clearSearch = useCallback(() => {
+    setSearchValue('');
+  }, []);
+
   const update = useCallback((hiddenColumns) => {
     setHiddenColumns(hiddenColumns);
     onChange(hiddenColumns);
@@ -107,8 +111,10 @@ const HideColumnPopover = ({ hidePopover, onChange, readOnly, target, placement,
             placeholder={gettext('Search property')}
             onKeyDown={onKeyDown}
             onChange={onChangeSearch}
+            clearValue={clearSearch}
             autoFocus={true}
             isShowSearchIcon={true}
+            isClearable={true}
           />
         </div>
         <HiddenColumns readOnly={readOnly} columns={displayColumns} hiddenColumns={hiddenColumns} onChange={hideColumn} modifyColumnOrder={modifyColumnOrder} />
