@@ -235,6 +235,13 @@ export const TagViewProvider = ({
     });
   }, [selectedFileIds, tagFiles, repoID]);
 
+  const displayFileDetails = useCallback(() => {
+    if (!selectedFileIds || selectedFileIds.length === 0) return null;
+    menuHandlers[TextTranslation.PROPERTIES.key]({
+      showDirentDetail: params.showDirentDetail
+    });
+  }, [selectedFileIds, params.showDirentDetail]);
+
   const shareTagFile = useCallback(() => {
     if (!selectedFileIds || selectedFileIds.length === 0) return null;
     const selectedFile = getFileById(tagFiles, selectedFileIds[0]);
@@ -314,6 +321,7 @@ export const TagViewProvider = ({
       renameTagFileInDialog,
       renameTagFile,
       chatWithAIAboutTagFiles,
+      displayFileDetails,
       convertFile,
       modifyTagFilesSort,
       sortBy,

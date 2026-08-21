@@ -136,10 +136,18 @@ export const EVENT_BUS_TYPE = {
   MODIFY_TAGS_SORT: 'modify_tags_sort',
 
   // file
+  TOGGLE_STAR_ITEM: 'toggle_star_item',
+  LOCK_FILE: 'lock_file',
+  UNLOCK_FILE: 'unlock_file',
+  FREEZE_DOCUMENT: 'freeze_document',
   FILE_HISTORY: 'file_history',
   FILE_ACCESS_LOG: 'file_access_log',
+  PROPERTIES: 'properties',
+  OPEN_WITH_DEFAULT: 'open_with_default',
+  OPEN_WITH_ONLYOFFICE: 'open_with_onlyoffice',
   OPEN_VIA_CLIENT: 'open_via_client',
   CONVERT_FILE: 'convert_file',
   EXPORT_DOCX: 'export_docx',
   EXPORT_SDOC: 'export_sdoc',
+  EXPORT_MARKDOWN: 'export_markdown',
 };

@@ -52,11 +52,38 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
       case TextTranslation.CHAT_WITH_AI.key:
         eventBus && eventBus.dispatch(EVENT_BUS_TYPE.CHAT_WITH_AI_ABOUT_TAG_FILES);
         break;
+      case TextTranslation.STAR.key:
+        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_STAR_ITEM);
+        break;
+      case TextTranslation.UNSTAR.key:
+        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_STAR_ITEM);
+        break;
+      case TextTranslation.LOCK.key:
+        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.LOCK_FILE);
+        break;
+      case TextTranslation.UNLOCK.key:
+        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.UNLOCK_FILE);
+        break;
+      case TextTranslation.UNFREEZE_DOCUMENT.key:
+        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.UNLOCK_FILE);
+        break;
+      case TextTranslation.FREEZE_DOCUMENT.key:
+        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.FREEZE_DOCUMENT);
+        break;
       case TextTranslation.HISTORY.key:
         eventBus && eventBus.dispatch(EVENT_BUS_TYPE.FILE_HISTORY);
         break;
       case TextTranslation.ACCESS_LOG.key:
         eventBus && eventBus.dispatch(EVENT_BUS_TYPE.FILE_ACCESS_LOG);
+        break;
+      case TextTranslation.PROPERTIES.key:
+        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.PROPERTIES);
+        break;
+      case TextTranslation.OPEN_WITH_DEFAULT.key:
+        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.OPEN_WITH_DEFAULT);
+        break;
+      case TextTranslation.OPEN_WITH_ONLYOFFICE.key:
+        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.OPEN_WITH_ONLYOFFICE);
         break;
       case TextTranslation.OPEN_VIA_CLIENT.key:
         eventBus && eventBus.dispatch(EVENT_BUS_TYPE.OPEN_VIA_CLIENT);
@@ -75,6 +102,9 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
         break;
       case TextTranslation.EXPORT_SDOC.key:
         eventBus && eventBus.dispatch(EVENT_BUS_TYPE.EXPORT_SDOC);
+        break;
+      case TextTranslation.EXPORT_MARKDOWN.key:
+        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.EXPORT_MARKDOWN);
         break;
       default:
         break;
