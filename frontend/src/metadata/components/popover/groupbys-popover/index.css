@@ -152,3 +152,7 @@
   cursor: pointer;
   color: var(--bs-body-secondary-color);
 }
+
+.sf-metadata-groupbys-popover .sf-option-group {
+  max-width: 480px;
+}
