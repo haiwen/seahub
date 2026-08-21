@@ -87,3 +87,7 @@
 .sorts-list .sf-select {
   height: 100%;
 }
+
+.sf-metadata-sort-popover .sorts-list .search-text-clear {
+  right: 6px;
+}

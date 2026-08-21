@@ -24,6 +24,10 @@
   color: var(--bs-body-color);
 }
 
+.sf-metadata-hide-columns-popover .sf-metadata-hide-columns-search-container .search-text-clear {
+  right: 6px;
+}
+
 .sf-metadata-hide-columns-popover .hide-columns-list {
   width: 100%;
   flex: 1;
