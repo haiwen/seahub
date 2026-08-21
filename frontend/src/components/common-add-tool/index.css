@@ -33,4 +33,5 @@
 .add-item-btn .add-item-btn-content .description {
   flex: 1;
   color: var(--bs-body-color);
+  font-size: .875rem;
 }
