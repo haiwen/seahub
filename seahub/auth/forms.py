@@ -122,10 +122,6 @@ class AuthenticationForm(forms.Form):
                     self.errors['inactive'] = _("This account is inactive.")
                     raise forms.ValidationError(_("This account is inactive."))
 
-            if not user_local_password_enabled(self.user_cache):
-                self.errors['disable_pwd_login'] = _('Please use Single Sign-On to login.')
-                raise forms.ValidationError(_('Please use Single Sign-On to login.'))
-
         # TODO: determine whether this should move to its own method.
         if self.request:
             if not self.request.session.test_cookie_worked():
