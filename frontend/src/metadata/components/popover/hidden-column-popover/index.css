@@ -22,6 +22,7 @@
   width: 100%;
   border-radius: 4px;
   color: var(--bs-body-color);
+  padding: 6px 32px 6px 36px;
 }
 
 .sf-metadata-hide-columns-popover .sf-metadata-hide-columns-search-container .search-text-clear {
