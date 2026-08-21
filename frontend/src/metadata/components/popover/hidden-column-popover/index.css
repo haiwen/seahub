@@ -1,7 +1,7 @@
 .sf-metadata-hide-columns-container {
   width: 300px;
   right: 0;
-  padding: .5rem 0;
+  padding: 8px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -9,7 +9,7 @@
 
 .sf-metadata-hide-columns-popover .sf-metadata-hide-columns-search-container {
   width: 100%;
-  padding: 0 10px;
+  padding: 0px 8px;
 }
 
 .sf-metadata-hide-columns-popover .sf-metadata-hide-columns-search-container .search-input-wrapper {
@@ -34,7 +34,7 @@
   flex: 1;
   min-height: 0;
   overflow: auto;
-  padding: .5rem 0;
+  padding: 8px 0 8px;
 }
 
 .sf-metadata-hide-columns-popover .hide-columns-list .hide-column-item {
@@ -42,7 +42,9 @@
   align-items: center;
   position: relative;
   width: 100%;
-  padding: 4px 20px;
+  height: 32px;
+  line-height: 32px;
+  padding: 0 8px;
   clear: both;
   font-weight: 400;
   color: var(--bs-body-color);
@@ -54,6 +56,7 @@
 
 .sf-metadata-hide-columns-popover .hide-columns-list .hide-column-item:hover {
   background: var(--bs-tr-hover-bg);
+  border-radius: 4px;
 }
 
 .sf-metadata-hide-columns-popover .hide-columns-list .hide-column-item:not(.disabled):hover,
@@ -94,14 +97,14 @@
 }
 
 .sf-metadata-hide-columns-popover .hide-column-item .custom-switch .custom-switch-indicator {
-  border-radius: 6px;
-  height: 12px;
-  width: 22px;
+  border-radius: 8px;
+  height: 16px;
+  width: 28px;
 }
 
 .sf-metadata-hide-columns-popover .hide-column-item .custom-switch .custom-switch-indicator:before {
-  height: 8px;
-  width: 8px;
+  height: 12px;
+  width: 12px;
 }
 
 .sf-metadata-hide-columns-popover .hide-column-item .custom-switch .custom-switch-input:checked~.custom-switch-indicator:before {
@@ -109,28 +112,34 @@
 }
 
 .sf-metadata-hide-columns-popover .hide-column-item .seafile-multicolor-icon {
-  font-size: 12px;
-  margin-right: 10px;
+  font-size: 14px;
+  margin-right: 8px;
   flex-shrink: 0;
-  color: var(--bs-icon-color);
-  fill: var(--bs-icon-color);
+  color: var(--bs-icon-secondary-color);
+  fill: var(--bs-icon-secondary-color);
 }
 
 .sf-metadata-hide-columns-popover .sf-metadata-hide-columns-operations {
   display: flex;
   justify-content: space-between;
-  padding: 0 17px;
+  padding: 8px;
   width: 100%;
 }
 
 .sf-metadata-hide-columns-popover .sf-metadata-hide-columns-operations .sf-metadata-hide-columns-operation {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bs-tr-hover-bg);
+  background: var(--bs-bg-color);
   border-radius: 3px;
   color: var(--bs-body-color);
-  height: 28px;
+  height: 32px;
+  font-size: 14px;
+}
+
+.sf-metadata-hide-columns-popover .sf-metadata-hide-columns-operations .sf-metadata-hide-columns-operation:first-child {
+  margin-right: 8px;
 }
 
 .sf-metadata-hide-columns-popover .sf-metadata-hide-columns-operations .sf-metadata-hide-columns-operation:hover {
@@ -141,11 +150,17 @@
 
 .sf-metadata-hide-columns-popover .hide-column-item .drag-hide-column-handle {
   width: 14px;
-  margin-right: 10px;
+  margin-right: 12px;
 }
 
 .sf-metadata-hide-columns-popover .hide-column-item .drag-hide-column-handle .seafile-multicolor-icon {
   margin-right: 0px;
+}
+
+.sf-metadata-hide-columns-popover .hide-column-item .drag-hide-column-handle .seafile-multicolor-icon:hover {
+  background: var(--bs-icon-btn-hover-bg-color);
+  border-radius: 4px;
+  height: 24px;
 }
 
 .sf-metadata-hide-columns-popover .hide-columns-list .hide-column-item.disabled .drag-hide-column-handle {

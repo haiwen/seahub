@@ -38,7 +38,7 @@
   opacity: 1;
   background: var(--bs-popover-bg);
   border: none;
-  border-radius: unset;
+  border-radius: 8px;
   box-shadow: none;
 }
 
