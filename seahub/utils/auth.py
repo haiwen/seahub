@@ -71,6 +71,8 @@ def is_remote_user(user_obj):
 
 
 def user_local_password_enabled(user_obj):
+    if not user_obj:
+        return False
     
     if user_obj.is_staff:
         return True
@@ -85,8 +87,10 @@ def user_local_password_enabled(user_obj):
             from seahub.organizations.models import OrgAdminSettings, FORCE_ADFS_LOGIN
             from seahub.organizations.utils import can_use_sso_in_multi_tenancy
             org_settings = OrgAdminSettings.objects.filter(org_id=org_id, key=FORCE_ADFS_LOGIN).first()
-            if org_settings:
-                return int(org_settings.value)
+            if org_settings and int(org_settings.value) == 1:
+                return False
+            else:
+                return True
     
     if not is_remote_user(user_obj):
         return True
