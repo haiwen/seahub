@@ -44,6 +44,21 @@
   width: 100%;
 }
 
+.sea-ai-chat-message-attachments-item-source {
+  color: var(--bs-body-secondary-color);
+  font-size: 12px;
+}
+
+.sea-ai-chat-message-attachments-item-source .seafile-multicolor-icon {
+  width: 12px;
+  height: 12px;
+  color: var(--bs-body-secondary-color);
+}
+
+.sea-ai-chat-message-attachments-item-source .seafile-multicolor-icon path {
+  fill: currentColor;
+}
+
 .sea-ai-chat-message-attachments-item-can-remove:hover .sea-ai-chat-message-attachments-item-name {
   width: calc(100% - 16px);
 }

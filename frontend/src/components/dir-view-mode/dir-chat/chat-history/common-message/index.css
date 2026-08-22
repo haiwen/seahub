@@ -2,6 +2,12 @@
   cursor: pointer;
 }
 
+.sea-ai-ask-chat.user-input-chat > .sea-ai-chat-message-attachments {
+  max-width: 100%;
+  flex-wrap: wrap !important;
+  justify-content: flex-end !important;
+}
+
 .sea-ai-ask-message-content .sf-slate-viewer-scroll-container {
   padding-top: 0;
   padding-bottom: 0;

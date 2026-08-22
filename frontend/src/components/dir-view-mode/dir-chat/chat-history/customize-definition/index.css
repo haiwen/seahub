@@ -8,7 +8,7 @@
   margin-left: 8px;
   gap: 8px;
   padding: 16px 16px 8px 16px;
-  background: var(--bs-body-secondary-bg);
+  background: var(--bs-bg-file-card-color);
   border-radius: 8px;
   cursor: pointer;
 }

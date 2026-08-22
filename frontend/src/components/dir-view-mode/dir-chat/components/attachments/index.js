@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Icon from '../../../../icon';
+import Tooltip from '../../../../tooltip';
 import { gettext } from '../../../../../utils/constants';
 import URLDecorator from '../../../../../utils/url-decorator';
 
@@ -18,6 +19,7 @@ const Attachments = ({ attachments = [], className = '', isOpenable = false, onR
     <div className={classNames('sea-ai-chat-message-attachments', className)}>
       {validAttachments.map((attachment, index) => {
         const key = attachment.key || `${attachment.repo_id}-${attachment.path}-${index}`;
+        const removeButtonID = `sea-ai-chat-attachment-remove-${index}`;
         const canOpen = Boolean(isOpenable && !onRemove && attachment.repo_id && attachment.path);
         const itemClassName = classNames('sea-ai-chat-message-attachments-item', {
           'sea-ai-chat-message-attachments-item-can-remove': onRemove,
@@ -28,14 +30,21 @@ const Attachments = ({ attachments = [], className = '', isOpenable = false, onR
             {onRemove && (
               <button
                 type="button"
+                id={removeButtonID}
                 className="sea-ai-chat-message-attachments-item-remove"
                 onClick={() => onRemove(attachment, index)}
+                aria-label={gettext('Delete')}
               >
                 <Icon symbol="close" />
               </button>
             )}
+            {onRemove && (
+              <Tooltip target={removeButtonID} placement="top">
+                {gettext('Delete')}
+              </Tooltip>
+            )}
             <span className="sea-ai-chat-message-attachments-item-name text-truncate" title={attachment.name}>{attachment.name}</span>
-            <span className="d-inline-flex justify-content-center align-items-center">
+            <span className="sea-ai-chat-message-attachments-item-source d-inline-flex justify-content-center align-items-center">
               <Icon symbol="ai-file" className="mr-1" />
               {gettext('Seafile library')}
             </span>

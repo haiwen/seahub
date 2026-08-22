@@ -112,6 +112,7 @@ class SearchInput extends Component {
         op={this.clearSearch}
         symbol="close"
         tooltip={gettext('Clear')}
+        placement={clearClassName ? 'top' : undefined}
       />
     );
   };

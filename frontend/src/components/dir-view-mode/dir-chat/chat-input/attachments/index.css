@@ -15,6 +15,10 @@
   overflow: hidden;
 }
 
+.sea-ai-chat-attachments .sea-ai-chat-message-attachments-item {
+  background-color: var(--bs-bg-file-card-color);
+}
+
 .sea-ai-chat-attachments-container::-webkit-scrollbar {
   display: none;
   width: 0;
@@ -22,13 +26,13 @@
 }
 
 .sea-ai-chat-attachments-scroll-before {
-  left: 15px;
+  left: 0;
   background: linear-gradient(270deg, rgba(9, 9, 9, 0), var(--bs-body-bg) 45%);
   padding-right: 6px;
 }
 
 .sea-ai-chat-attachments-scroll-after {
-  right: 15px;
+  right: 0;
   background: linear-gradient(90deg, transparent 0%, var(--bs-body-bg) 45%);
   padding-left: 6px;
 }

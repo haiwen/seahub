@@ -53,7 +53,7 @@ const LibraryFilesSelector = ({ repoID, value: attachments = [], onChange: props
         return {
           value: key,
           label: name,
-          icon: 'file',
+          icon: 'newpage',
         };
       });
     }).catch(() => {
