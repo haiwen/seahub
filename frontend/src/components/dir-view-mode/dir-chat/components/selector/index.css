@@ -38,8 +38,8 @@
   right: 6px;
 }
 
-.sea-ai-chat-selector-display-editor .option-editor-search-wrapper .search-input-wrapper .search-text-clear:hover {
-  background-color: transparent;
+.sea-ai-chat-file-selector-editor .popover {
+  z-index: 1060;
 }
 
 .sea-ai-chat-selector-display-editor .option-editor-content {
@@ -77,6 +77,11 @@
 .sea-ai-chat-file-selector-editor .option-editor-search-wrapper .form-control {
   height: 32px;
   border-radius: 4px;
+}
+
+.sea-ai-chat-file-selector-editor .option-editor-search-wrapper .form-control:focus {
+  border-color: var(--bs-form-select-focus-border-color);
+  box-shadow: var(--bs-form-select-focus-box-shadow);
 }
 
 .sea-ai-chat-file-selector-editor .option-editor-search-wrapper .search-input-wrapper.has-search-icon .form-control {

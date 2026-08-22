@@ -49,6 +49,7 @@
 
 .search-input-wrapper.has-search-icon .form-control {
   padding-left: 36px;
+  padding-right: 30px;
 }
 
 .search-input-wrapper.has-search-icon .form-control.clearable.hasValue {

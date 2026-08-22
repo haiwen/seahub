@@ -219,6 +219,11 @@
   flex-shrink: 0;
 }
 
+.sea-ai-model-selector .seafile-multicolor-icon-arrow-down {
+  width: 12px;
+  height: 12px;
+}
+
 .sea-ai-ask-chat-records-selector {
   width: 36px !important;
   padding: 0 10px !important;

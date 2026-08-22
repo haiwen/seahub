@@ -185,14 +185,14 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
           {gettext('After enable extended properties for files, you can add different properties to files, like collaborators, file expiring time, file description. You can also create different views for files based extended properties.')}
         </p>
         {value && (
-          <div className="metadata-status-hide-columns-container mt-5">
+          <div className="metadata-status-hide-columns-container mt-4">
             <h4 className="library-setting-item-2nd-heading">{gettext('Global hidden properties')}</h4>
             <p className="setting-tip">
               {gettext('Global hidden properties will not be displayed in all views.')}
             </p>
             <Button
               id="metadata-status-hide-properties-button"
-              className={classnames('mt-1 border-0 font-weight-normal metadata-status-hide-properties-button', { 'disabled': !oldValue })}
+              className={classnames('mt-2 border-0 font-weight-normal metadata-status-hide-properties-button', { 'disabled': !oldValue })}
               onClick={onClickHideColumns}
             >
               <Icon symbol="hide" size={24} />
