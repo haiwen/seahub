@@ -195,7 +195,7 @@ class SelectedDirentsToolbar extends React.Component {
         this.openFileAccessLog(dirent);
         break;
       case 'Properties':
-        this.props.showDirentDetail('info');
+        this.props.showDirentDetail();
         break;
       case 'Open with Default':
         this.onOpenByDefault(dirent);

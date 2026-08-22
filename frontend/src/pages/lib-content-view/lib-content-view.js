@@ -192,8 +192,15 @@ class LibContentView extends React.Component {
     }
   };
 
-  showDirentDetail = () => {
-    this.setState({ isDirentDetailShow: true }, () => {
+  showDirentDetail = (params) => {
+    const { dirent } = params;
+    const newState = {
+      isDirentDetailShow: true
+    };
+    if (dirent) {
+      newState.detailDirent = dirent;
+    }
+    this.setState(newState, () => {
       localStorage.setItem(DIRENT_DETAIL_SHOW_KEY, true);
     });
   };

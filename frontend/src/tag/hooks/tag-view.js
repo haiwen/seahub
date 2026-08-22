@@ -237,10 +237,16 @@ export const TagViewProvider = ({
 
   const displayFileDetails = useCallback(() => {
     if (!selectedFileIds || selectedFileIds.length === 0) return null;
-    menuHandlers[TextTranslation.PROPERTIES.key]({
-      showDirentDetail: params.showDirentDetail
-    });
-  }, [selectedFileIds, params.showDirentDetail]);
+    const selectedFile = getFileById(tagFiles, selectedFileIds[0]);
+    const name = selectedFile[TAG_FILE_KEY.NAME];
+    const parentDir = selectedFile[TAG_FILE_KEY.PARENT_DIR];
+    const dirent = {
+      type: 'file',
+      name,
+      path: parentDir
+    };
+    params.showDirentDetail({ dirent });
+  }, [tagFiles, selectedFileIds, params]);
 
   const shareTagFile = useCallback(() => {
     if (!selectedFileIds || selectedFileIds.length === 0) return null;
