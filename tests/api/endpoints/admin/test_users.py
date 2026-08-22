@@ -10,7 +10,9 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.profile.models import DetailedProfile
 from seahub.share.models import FileShare, UploadLinkShare
+from seahub.auth.models import SocialAuthUser
 from seahub.utils.file_size import get_file_size_unit
+from mock import patch
 
 try:
     from seahub.settings import LOCAL_PRO_DEV_ENV
@@ -247,6 +249,17 @@ class AdminUserTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
 
         assert ccnet_api.validate_emailuser(self.tmp_email, password) == 0
+
+    @patch('seahub.utils.auth.DISABLE_SSO_USER_LOCAL_PWD_LOGIN', True)
+    def test_cannot_update_remote_user_password(self):
+        self.login_as(self.admin)
+        SocialAuthUser.objects.add(self.tmp_email, 'saml', self.tmp_email)
+
+        data = {"email": self.tmp_email, "password": randstring(10)}
+        resp = self.client.put(self.url, json.dumps(data), 'application/json')
+
+        self.assertEqual(400, resp.status_code)
+        self.assertIn('Unable to reset password.', resp.json()['error_msg'])
 
     def test_update_name(self):
 

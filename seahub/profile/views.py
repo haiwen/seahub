@@ -12,7 +12,7 @@ from django.utils.translation import gettext as _
 import seaserv
 from seaserv import seafile_api
 
-from seahub.utils.auth import is_force_user_sso, can_user_update_password
+from seahub.utils.auth import user_local_password_enabled
 from .forms import DetailedProfileForm
 from .models import Profile, DetailedProfile
 from seahub.auth.models import SocialAuthUser
@@ -21,8 +21,7 @@ from seahub.base.accounts import User, UNUSABLE_PASSWORD
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.contacts.models import Contact
 from seahub.options.models import UserOptions, CryptoOptionNotSetError, DEFAULT_COLLABORATE_EMAIL_INTERVAL
-from seahub.utils import is_org_context, is_pro_version, is_valid_username, \
-        is_ldap_user, get_webdav_url
+from seahub.utils import is_org_context, is_pro_version, is_valid_username, get_webdav_url
 from seahub.utils.two_factor_auth import has_two_factor_auth
 from seahub.views import get_owned_repo_list
 from seahub.work_weixin.utils import work_weixin_oauth_check
@@ -140,7 +139,7 @@ def edit_profile(request):
             org_saml_connected = SocialAuthUser.objects.filter(
                 username=request.user.username, provider=SAML_PROVIDER_IDENTIFIER).exists()
 
-    can_update_password = can_user_update_password(request.user)
+    can_update_password = user_local_password_enabled(request.user)
 
     WEBDAV_SECRET_SETTED = False
     if settings.ENABLE_WEBDAV_SECRET and \
@@ -148,7 +147,7 @@ def edit_profile(request):
         WEBDAV_SECRET_SETTED = True
 
     show_two_factor_auth = has_two_factor_auth() and not request.session.get('is_sso_user')
-    force_user_sso_login = is_force_user_sso(request.user)
+    force_user_sso_login = not user_local_password_enabled(request.user)
 
     resp_dict = {
             'form': form,
@@ -158,9 +157,8 @@ def edit_profile(request):
             'default_repo': default_repo,
             'owned_repos': owned_repos,
             'is_pro': is_pro_version(),
-            'is_ldap_user': is_ldap_user(request.user),
             'two_factor_auth_enabled': show_two_factor_auth,
-            'ENABLE_CHANGE_PASSWORD': can_update_password,
+            'can_update_password': can_update_password,
             'ENABLE_GET_AUTH_TOKEN_BY_SESSION': settings.ENABLE_GET_AUTH_TOKEN_BY_SESSION,
             'ENABLE_WEBDAV_SECRET': settings.ENABLE_WEBDAV_SECRET,
             'WEBDAV_SECRET_SETTED': WEBDAV_SECRET_SETTED,

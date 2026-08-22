@@ -325,7 +325,7 @@ ENABLE_ADFS_LOGIN = False
 
 ENABLE_MULTI_ADFS = False
 
-DISABLE_ADFS_USER_PWD_LOGIN = False
+DISABLE_SSO_USER_LOCAL_PWD_LOGIN = False
 
 ENABLE_OAUTH = False
 ENABLE_WATERMARK = False
@@ -478,12 +478,6 @@ USER_STRONG_PASSWORD_REQUIRED = False
 
 # Force user to change password when admin add/reset a user.
 FORCE_PASSWORD_CHANGE = True
-
-# Enable a user to change password in 'settings' page.
-ENABLE_CHANGE_PASSWORD = True
-
-# Enable a sso user to change password in 'settings' page.
-ENABLE_SSO_USER_CHANGE_PASSWORD = True
 
 # Enable a user to get auth token in 'settings' page.
 ENABLE_GET_AUTH_TOKEN_BY_SESSION = False

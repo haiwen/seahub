@@ -45,7 +45,7 @@ from seahub.base.accounts import User
 from seahub.auth.models import SocialAuthUser
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.utils import render_error
-from seahub.utils.auth import is_force_user_sso
+from seahub.utils.auth import user_local_password_enabled
 from seahub.utils.licenseparse import user_number_over_limit
 from seahub.adfs_auth.signals import saml_sso_failed
 # Added by khorkin
@@ -750,7 +750,7 @@ def saml2_disconnect(request, org_id=None):
     if request.user.enc_password == '!':
         return HttpResponseBadRequest(_('Failed to unbind SAML, please set a password first.'))
     
-    if is_force_user_sso(request.user):
+    if not user_local_password_enabled(request.user):
         return render_error(request, _('Failed to unbind SAML, the user is forced login by SSO.') )
         
 

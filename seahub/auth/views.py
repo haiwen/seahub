@@ -39,7 +39,7 @@ from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_quota_from_string
 from seahub.utils.two_factor_auth import two_factor_auth_enabled, handle_two_factor_auth
 from seahub.utils.user_permissions import get_user_role
-from seahub.utils.auth import get_login_bg_image_path, can_user_update_password
+from seahub.utils.auth import get_login_bg_image_path, user_local_password_enabled
 from seahub.organizations.models import OrgSAMLConfig
 from seahub.organizations.utils import can_use_sso_in_multi_tenancy
 
@@ -212,7 +212,6 @@ def login(request, template_name='registration/login.html',
         'enable_sso': enable_sso,
         'enable_multi_adfs': getattr(settings, 'ENABLE_MULTI_ADFS', False),
         'login_bg_image_path': login_bg_image_path,
-        'enable_change_password': settings.ENABLE_CHANGE_PASSWORD,
     })
 
 def login_simple_check(request):
@@ -376,11 +375,6 @@ def password_reset(request, is_admin_site=False,
                    token_generator=default_token_generator,
                    post_reset_redirect=None):
 
-    
-    can_reset_password = can_user_update_password(request.user)
-    if not can_reset_password:
-        return render_error(request, _('Unable to reset password.'))
-
     if post_reset_redirect is None:
         post_reset_redirect = reverse('auth_password_reset_done')
 
@@ -458,12 +452,13 @@ def password_reset_confirm(request, uidb36=None, token=None, template_name='regi
         user = None
 
     context_instance = {}
-    if token_generator.check_token(user, token):
+    if token_generator.check_token(user, token) and user_local_password_enabled(user):
         context_instance['validlink'] = True
         if request.method == 'POST':
             form = set_password_form(user, request.POST)
             if form.is_valid():
                 form.save()
+                UserOptions.objects.unset_force_passwd_change(user.username)
                 return HttpResponseRedirect(post_reset_redirect)
         else:
             form = set_password_form(None)
@@ -482,12 +477,12 @@ def password_reset_complete(request, template_name='registration/password_reset_
 @login_required
 def password_change(request, template_name='registration/password_change_form.html',
                     post_change_redirect=None, password_change_form=PasswordChangeForm):
+
     if post_change_redirect is None:
         post_change_redirect = reverse('auth_password_change_done')
-        
-    can_change_password = can_user_update_password(request.user)
 
-    if not can_change_password:
+    force_passwd_change = request.session.get('force_passwd_change', False)
+    if not force_passwd_change and not user_local_password_enabled(request.user):
         return render_error(request, _('Unable to change password.'))
 
     if settings.ENABLE_USER_SET_CONTACT_EMAIL:
@@ -507,7 +502,7 @@ def password_change(request, template_name='registration/password_change_form.ht
         if form.is_valid():
             form.save()
 
-            if request.session.get('force_passwd_change', False):
+            if force_passwd_change:
                 del request.session['force_passwd_change']
                 UserOptions.objects.unset_force_passwd_change(
                     request.user.username)
@@ -520,7 +515,7 @@ def password_change(request, template_name='registration/password_change_form.ht
     return render(request, template_name, {
         'form': form,
         'strong_pwd_required': config.USER_STRONG_PASSWORD_REQUIRED,
-        'force_passwd_change': request.session.get('force_passwd_change', False),
+        'force_passwd_change': force_passwd_change,
     })
 
 def password_change_done(request, template_name='registration/password_change_done.html'):

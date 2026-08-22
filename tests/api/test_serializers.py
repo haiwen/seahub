@@ -2,6 +2,7 @@ from mock import patch
 
 from seahub.test_utils import BaseTestCase
 from seahub.api2.serializers import AuthTokenSerializer
+from seahub.auth.models import SocialAuthUser
 from seahub.profile.models import Profile
 
 
@@ -110,6 +111,17 @@ class AuthTokenSerializerTest(BaseTestCase):
 
         s = AuthTokenSerializer(data=d, context={'request': self.fake_request})
         self.assertSuccess(s)
+
+    @patch('seahub.utils.auth.DISABLE_SSO_USER_LOCAL_PWD_LOGIN', True)
+    def test_remote_user_cannot_log_in_with_local_password(self):
+        SocialAuthUser.objects.add(self.user.username, 'saml', self.user.username)
+
+        s = AuthTokenSerializer(data={
+            'username': self.user.username,
+            'password': self.user_password,
+        }, context={'request': self.fake_request})
+
+        self.assertFailed(s)
 
     def test_login_id(self):
         d = {
