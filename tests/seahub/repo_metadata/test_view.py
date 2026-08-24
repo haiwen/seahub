@@ -840,7 +840,9 @@ class MetadataTagFilesTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
         self.assertEqual(1, len(json_resp['results']))
-        self.assertEqual(self.file_name, json_resp['results'][0]['_name'])
+        file_info = json_resp['results'][0]
+        self.assertEqual(self.file_name, file_info['_name'])
+        self.assertIn('permission', file_info)
     
 
 class MetadataMergeTagsTest(BaseTestCase):
@@ -895,4 +897,3 @@ class MetadataMergeTagsTest(BaseTestCase):
         tag_ids = [tag['_id'] for tag in json_resp['results']]
         self.assertIn(self.target_tag_id, tag_ids)
         self.assertNotIn(self.merge_tag_id, tag_ids)
-
