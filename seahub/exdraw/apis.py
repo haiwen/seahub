@@ -189,7 +189,7 @@ class ExdrawContentView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 'exdraw file %s not found.' % uuid_map.filename)
 
         try:
-            resp = requests.get(download_link)
+            resp = requests.get(download_link, timeout=30)
         except requests.RequestException as e:
             logger.error('get exdraw content failed %s: %s', file_uuid, e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
