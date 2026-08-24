@@ -186,7 +186,7 @@ class ExdrawContentView(APIView):
         # Fetch from the internal fileserver so callers never receive a download URL.
         download_link = get_exdraw_download_link(uuid_map, is_inner=True)
         if not download_link:
-            return api_error(status.HTTP_404_NOT_FOUND, 'seadoc file %s not found.' % uuid_map.filename)
+            return api_error(status.HTTP_404_NOT_FOUND, 'exdraw file %s not found.' % uuid_map.filename)
 
         try:
             resp = requests.get(download_link)
