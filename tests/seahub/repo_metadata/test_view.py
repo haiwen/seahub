@@ -455,68 +455,6 @@ class MetadataFoldersTest(BaseTestCase):
         self.assertTrue(json_resp['success'])
 
 
-class FacesRecordsTest(BaseTestCase):
-    def setUp(self):
-        self.login_as(self.user)
-        self.repo = seafile_api.get_repo(self.create_repo(
-            name='test-repo',
-            desc='',
-            username=self.user.username,
-            passwd=None
-        ))
-        self.repo_id = self.repo.id
-        
-        url = reverse('api-v2.1-metadata', args=[self.repo_id])
-        self.client.put(url)
-        url = reverse('api-v2.1-metadata-face-recognition', args=[self.repo_id])
-        self.client.post(url)
-
-    def test_get_face_records(self):
-        url = reverse('api-v2.1-metadata-face-records', args=[self.repo_id])
-        resp = self.client.get(url)
-        self.assertEqual(200, resp.status_code)
-        json_resp = json.loads(resp.content)
-        self.assertIn('metadata', json_resp)
-        self.assertIn('results', json_resp)
-
-
-class FaceRecognitionManageTest(BaseTestCase):
-    def setUp(self):
-        self.login_as(self.user)
-        self.repo = seafile_api.get_repo(self.create_repo(
-            name='test-repo',
-            desc='',
-            username=self.user.username,
-            passwd=None
-        ))
-        self.repo_id = self.repo.id
-        
-        url = reverse('api-v2.1-metadata', args=[self.repo_id])
-        self.client.put(url)
-
-    def test_enable_face_recognition(self):
-        url = reverse('api-v2.1-metadata-face-recognition', args=[self.repo_id])
-        resp = self.client.post(url)
-        self.assertEqual(200, resp.status_code)
-        json_resp = json.loads(resp.content)
-        self.assertIn('task_id', json_resp)
-        metadata = RepoMetadata.objects.filter(repo_id=self.repo_id).first()
-        face_recognition_status = metadata.face_recognition_enabled
-        self.assertEqual(1, face_recognition_status)
-
-    def test_disable_face_recognition(self):
-        url = reverse('api-v2.1-metadata-face-recognition', args=[self.repo_id])
-        self.client.post(url)
-
-        resp = self.client.delete(url)
-        self.assertEqual(200, resp.status_code)
-        json_resp = json.loads(resp.content)
-        self.assertTrue(json_resp['success'])
-        metadata = RepoMetadata.objects.filter(repo_id=self.repo_id).first()
-        face_recognition_status = metadata.face_recognition_enabled
-        self.assertEqual(0, face_recognition_status)
-
-
 class MetadataTagsStatusManageTest(BaseTestCase):
     def setUp(self):
         self.login_as(self.user)

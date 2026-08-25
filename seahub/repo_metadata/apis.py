@@ -78,8 +78,9 @@ class MetadataManage(APIView):
                 if record.tags_enabled:
                     is_tags_enabled = True
                     tags_lang = record.tags_lang
-                if record.face_recognition_enabled:
-                    face_recognition_enabled = True
+                # Face recognition is no longer available.
+                # if record.face_recognition_enabled:
+                #     face_recognition_enabled = True
                 if record.summary_enabled:
                     summary_enabled = True
                 if not global_hidden_columns:
