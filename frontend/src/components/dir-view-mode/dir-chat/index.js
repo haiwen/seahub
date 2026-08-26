@@ -68,7 +68,7 @@ const ChatEvents = () => {
   return null;
 };
 
-const Main = ({ repoID, settings, showDocuments = true, compact = false, enableSessions = true, defaultShowSessions, onEmbeddedViewChange }) => {
+const Main = ({ repoID, settings, showDocuments = true, compact = false, enableSessions = true, defaultShowSessions, onEmbeddedViewChange, messageRenderers, onReviewSubmit }) => {
   const { isLoading: isAskPageLoading, pageSlugId, togglePageSlugId } = useAskPage();
   const {
     isLoading: isSessionsLoading,
@@ -151,6 +151,8 @@ const Main = ({ repoID, settings, showDocuments = true, compact = false, enableS
                   settings={settings}
                   forceSmallPage={compact}
                   hideSessionHeader={compact}
+                  messageRenderers={messageRenderers}
+                  onReviewSubmit={onReviewSubmit}
                 />
                 {showDocuments && <Documents />}
               </>
@@ -171,6 +173,8 @@ Main.propTypes = {
   enableSessions: PropTypes.bool,
   defaultShowSessions: PropTypes.bool,
   onEmbeddedViewChange: PropTypes.func,
+  messageRenderers: PropTypes.object,
+  onReviewSubmit: PropTypes.func,
 };
 
 const DirChat = ({
@@ -190,6 +194,8 @@ const DirChat = ({
   onSessionDelete,
   onSessionIdsMissing,
   fallbackToNewWhenSessionMissing = false,
+  messageRenderers,
+  onReviewSubmit,
 }) => {
   const defaultResetURL = useCallback((pageSlugId) => {
     const baseUrl = `${siteRoot}library/${repoID}/${encodeURIComponent(repoName)}/?chat=true&path=/`;
@@ -235,6 +241,8 @@ const DirChat = ({
               enableSessions={enableSessions}
               defaultShowSessions={defaultShowSessions}
               onEmbeddedViewChange={onEmbeddedViewChange}
+              messageRenderers={messageRenderers}
+              onReviewSubmit={onReviewSubmit}
             />
           </AIChatToolsProvider>
         </DocumentsProvider>
@@ -260,6 +268,8 @@ DirChat.propTypes = {
   onSessionDelete: PropTypes.func,
   onSessionIdsMissing: PropTypes.func,
   fallbackToNewWhenSessionMissing: PropTypes.bool,
+  messageRenderers: PropTypes.object,
+  onReviewSubmit: PropTypes.func,
 };
 
 export default DirChat;

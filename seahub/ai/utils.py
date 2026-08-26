@@ -33,6 +33,8 @@ from seahub.ai.models import AIUsageStatistics, ChatMessageThoughtProcess, ChatM
 logger = logging.getLogger(__name__)
 
 AI_REPLY_TIMEOUT = 180
+REVIEW_TOTAL_TIMEOUT_SECONDS = 180
+REVIEW_CHUNK_TIMEOUT_SECONDS = 30
 GENERATED_MARKDOWN_DIR = '/AI Generated/'
 MARKDOWN_FILE_RE = re.compile(
     r'<seafile-ai-markdown(?:\s+file_name=(["\'])([^"\']*?)\1)?\s*>([\s\S]*?)</seafile-ai-markdown>'
@@ -115,6 +117,46 @@ def search_icons(params):
     url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/search-icons/')
     resp = requests.post(url, json=params, headers=headers, timeout=30)
     return resp
+
+
+def generate_sdoc_review(params):
+    headers = gen_headers()
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/sdoc-review/')
+    resp = requests.post(url, json=params, headers=headers, timeout=AI_REPLY_TIMEOUT)
+    if not resp.ok:
+        raise RuntimeError('SDoc review request failed: %s' % resp.text)
+    result = resp.json()
+    return result.get('review')
+
+
+def generate_sdoc_review_plan(params, timeout=AI_REPLY_TIMEOUT):
+    headers = gen_headers()
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/sdoc-review-plan/')
+    resp = requests.post(url, json=params, headers=headers, timeout=timeout)
+    if not resp.ok:
+        raise RuntimeError('SDoc review plan request failed: %s' % resp.text)
+    result = resp.json()
+    return result.get('plan')
+
+
+def generate_sdoc_review_chunk(params, timeout=REVIEW_CHUNK_TIMEOUT_SECONDS):
+    headers = gen_headers()
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/sdoc-review-chunk/')
+    resp = requests.post(url, json=params, headers=headers, timeout=timeout)
+    if not resp.ok:
+        raise RuntimeError('SDoc review chunk request failed: %s' % resp.text)
+    result = resp.json()
+    return result.get('items')
+
+
+def generate_sdoc_analyze(params):
+    headers = gen_headers()
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/sdoc-analyze/')
+    resp = requests.post(url, json=params, headers=headers, timeout=AI_REPLY_TIMEOUT)
+    if not resp.ok:
+        raise RuntimeError('SDoc analyze request failed: %s' % resp.text)
+    result = resp.json()
+    return result.get('analysis')
 
 
 # utils

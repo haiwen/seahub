@@ -100,6 +100,23 @@ class ChatAPI {
   getMarkdownArtifact(fileUUID) {
     return this.req.get(this.server + '/api/v2.1/ai/chat/markdown-artifacts/' + fileUUID + '/');
   }
+
+  createSdocReview(params) {
+    return this.req.post(this.server + '/api/v2.1/ai/sdoc-reviews/', params);
+  }
+
+  getSdocReview(taskId, wait) {
+    const query = wait ? '?wait=1' : '';
+    return this.req.get(this.server + '/api/v2.1/ai/sdoc-reviews/' + taskId + '/' + query);
+  }
+
+  approveSdocReview(taskId, selectedItemIds) {
+    return this.req.post(this.server + '/api/v2.1/ai/sdoc-reviews/' + taskId + '/approve/', { selected_item_ids: selectedItemIds });
+  }
+
+  rejectSdocReview(taskId, selectedItemIds) {
+    return this.req.post(this.server + '/api/v2.1/ai/sdoc-reviews/' + taskId + '/reject/', { selected_item_ids: selectedItemIds });
+  }
 }
 
 const chatAPI = new ChatAPI();
