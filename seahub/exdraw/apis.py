@@ -166,6 +166,41 @@ class ExdrawDownloadLink(APIView):
 
         return Response({'download_link': download_link})
 
+class ExdrawContentView(APIView):
+    authentication_classes = ()
+    throttle_classes = (UserRateThrottle,)
+    
+    def get(self, request, file_uuid):
+        auth = request.headers.get('authorization', '').split()
+        if not is_valid_exdraw_access_token(auth, file_uuid):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            return api_error(status.HTTP_404_NOT_FOUND, 'exdraw uuid %s not found.' % file_uuid)
+
+        filetype, fileext = get_file_type_and_ext(uuid_map.filename)
+        if filetype != EXCALIDRAW:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'exdraw file type %s invalid.' % filetype)
+
+        # Fetch from the internal fileserver so callers never receive a download URL.
+        download_link = get_exdraw_download_link(uuid_map, is_inner=True)
+        if not download_link:
+            return api_error(status.HTTP_404_NOT_FOUND, 'exdraw file %s not found.' % uuid_map.filename)
+
+        try:
+            resp = requests.get(download_link, timeout=30)
+        except requests.RequestException as e:
+            logger.error('get exdraw content failed %s: %s', file_uuid, e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        if not resp.ok:
+            logger.error('get exdraw content failed %s: %s', file_uuid, resp.text)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return HttpResponse(resp.content, content_type='application/json')
+    
+
 
 class ExdrawEditorCallBack(APIView):
     authentication_classes = ()
