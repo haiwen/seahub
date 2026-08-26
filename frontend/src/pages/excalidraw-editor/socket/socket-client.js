@@ -28,6 +28,7 @@ class SocketClient {
     this.socket.on('leave-room', this.onLeaveRoom);
 
     this.socket.on('elements-updated', this.onReceiveRemoteElementsUpdate);
+    this.socket.on('elements-preview', this.onReceiveRemoteElementsPreview);
     this.socket.on('mouse-location-updated', this.onReceiveRemoteMouseLocationUpdate);
 
     this.socket.io.on('reconnect', this.onReconnect);
@@ -137,6 +138,11 @@ class SocketClient {
     });
   };
 
+  broadcastPreviewElements = (payload) => {
+    const params = this.getParams(payload);
+    this.socket.volatile.emit('server-volatile-broadcast', params);
+  };
+
   broadcastMouseLocation = (payload) => {
     const params = this.getParams(payload);
     this.socket.emit('mouse-location-updated', params);
@@ -163,6 +169,12 @@ class SocketClient {
     serverDebug('sync elements by another updated, %O', params);
     const socketManager = SocketManager.getInstance();
     socketManager.handleRemoteSceneUpdated(params);
+  };
+
+  onReceiveRemoteElementsPreview = (params) => {
+    serverDebug('receive another preview elements, %O', params);
+    const socketManager = SocketManager.getInstance();
+    socketManager.handleRemotePreviewElements(params);
   };
 
   onReceiveRemoteMouseLocationUpdate = (params) => {

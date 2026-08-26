@@ -17,9 +17,14 @@ const conflictDebug = Debug('excalidraw:sdoc-conflict');
 conflictDebug.enabled = true;
 conflictDebug.log = console.log;
 
+const gestureDebug = Debug('excalidraw:gesture');
+gestureDebug.enabled = true;
+gestureDebug.log = console.log;
+
 export {
   stateDebug,
   clientDebug,
   serverDebug,
   conflictDebug,
+  gestureDebug,
 };

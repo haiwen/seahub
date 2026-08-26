@@ -143,7 +143,20 @@ const SimpleEditor = ({ isSharedView = false }) => {
   const handleChange = useCallback((elements, appState, files) => {
     if (filePermRef.current === 'r') return;
     const socketManager = SocketManager.getInstance();
-    socketManager.syncLocalElementsToOthers(elements);
+    if (socketManager.consumeRemotePreviewChange(elements)) {
+      return;
+    }
+    const gestureUpdate = socketManager.updateGesture(elements, appState);
+    if (gestureUpdate.gesture) {
+      socketManager.broadcastPreviewElements(elements, gestureUpdate.gesture);
+      if (gestureUpdate.ended) {
+        socketManager.commitGesture(elements, gestureUpdate.gesture, 'text-edit-finished');
+      }
+    } else {
+      // Changes outside a pointer gesture (for example delete, paste, or
+      // keyboard shortcuts) remain reliable operations immediately.
+      socketManager.syncLocalElementsToOthers(elements);
+    }
 
     const docUuid = context.getDocUuid();
     if (!LocalData.isSavePaused()) {
@@ -172,6 +185,18 @@ const SimpleEditor = ({ isSharedView = false }) => {
       });
     }
   }, [excalidrawAPI]);
+
+  const handlePointerDown = useCallback((activeTool, pointerDownState) => {
+    if (filePermRef.current === 'r') return;
+    const socketManager = SocketManager.getInstance();
+    socketManager.handlePointerDown(activeTool, pointerDownState);
+  }, []);
+
+  const handlePointerUp = useCallback((activeTool, pointerDownState) => {
+    if (filePermRef.current === 'r') return;
+    const socketManager = SocketManager.getInstance();
+    socketManager.handlePointerUp(activeTool, pointerDownState);
+  }, []);
 
   const handlePointerUpdate = useCallback((payload) => {
     if (filePermRef.current === 'r') return;
@@ -229,6 +254,8 @@ const SimpleEditor = ({ isSharedView = false }) => {
         initialData={initialStatePromiseRef.current.promise}
         excalidrawAPI={(api) => setExcalidrawAPI(api)}
         onChange={handleChange}
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
         onPointerUpdate={handlePointerUpdate}
         UIOptions={UIOptions}
         langCode={langList[window.app.config.lang] || 'en'}
