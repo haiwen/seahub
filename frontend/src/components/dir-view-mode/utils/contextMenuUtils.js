@@ -1,5 +1,5 @@
 import TextTranslation from '@/utils/text-translation';
-import { username, enableAIChat, enableSeafileAI } from '@/utils/constants';
+import { isPro, username, enableAIChat, enableSeafileAI } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 
 const isDivider = (item) => item === 'Divider';
@@ -75,17 +75,32 @@ export const addChatWithAIOption = (menuList, repoInfo, dirents) => {
   return trimTrailingDividers(addStandaloneChatWithAIGroup(nextMenuList, chatOption));
 };
 
-export const buildSelectedDirentsChatMenuList = (menuList, repoInfo, dirents) => {
-  const nextMenuList = addChatWithAIOption(menuList, repoInfo, dirents);
-  return trimTrailingDividers(nextMenuList);
-};
-
 export const canShowChatWithAI = canChatWithDirents;
 
 export const getDirentItemMenuList = (repoInfo, dirent, isContextmenu = true) => {
   const isRepoOwner = repoInfo.owner_email === username;
   const menuList = Utils.getDirentOperationList(isRepoOwner, repoInfo, dirent, isContextmenu);
   return addChatWithAIOption(menuList, repoInfo, [dirent]);
+};
+
+const addLockUnlockMultiOption = (repoInfo, selectedDirents, list) => {
+  if (!isPro || selectedDirents.some(item => item.type != 'file')) {
+    return list;
+  }
+
+  const isRepoOwner = repoInfo.owner_email === username;
+  const canLockFiles = selectedDirents.some(dirent => dirent.permission == 'rw' && !dirent.name.endsWith('.sdoc') && !dirent.is_locked);
+  const canUnlockFiles = selectedDirents.some(dirent => dirent.permission == 'rw' && !dirent.name.endsWith('.sdoc') && dirent.is_locked && (dirent.locked_by_me || dirent.lock_owner == 'OnlineOffice' || isRepoOwner || repoInfo.is_admin));
+  if (canLockFiles || canUnlockFiles) {
+    list.push('Divider');
+  }
+  if (canLockFiles) {
+    list.push(TextTranslation.LOCK);
+  }
+  if (canUnlockFiles) {
+    list.push(TextTranslation.UNLOCK);
+  }
+  return list;
 };
 
 export const getBatchMenuList = (repoInfo, selectedDirents, getItemMenuList) => {
@@ -110,7 +125,17 @@ export const getBatchMenuList = (repoInfo, selectedDirents, getItemMenuList) => 
       TextTranslation.COPY,
     ];
   }
-  return addChatWithAIOption(batchOptions, repoInfo, selectedDirents);
+
+  if (canChatWithDirents(repoInfo, selectedDirents)) {
+    batchOptions.push('Divider', TextTranslation.CHAT_WITH_AI);
+  }
+
+  addLockUnlockMultiOption(repoInfo, selectedDirents, batchOptions);
+
+  if (isDivider(batchOptions[0])) {
+    batchOptions.shift();
+  }
+  return batchOptions;
 };
 
 export const getPermissions = (repoInfo) => {
