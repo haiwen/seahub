@@ -70,6 +70,7 @@ class GroupOperationMenu extends React.Component {
         };
         const repo = new Repo(object);
         this.props.addNewRepo(repo);
+        EventBus.getInstance().dispatch(EVENT_BUS_TYPE.GROUP_LIBRARIES_CHANGED);
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
@@ -79,6 +80,7 @@ class GroupOperationMenu extends React.Component {
       seafileAPI.createGroupRepo(groupId, repo).then(res => {
         const repo = new Repo(res.data);
         this.props.addNewRepo(repo);
+        EventBus.getInstance().dispatch(EVENT_BUS_TYPE.GROUP_LIBRARIES_CHANGED);
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);

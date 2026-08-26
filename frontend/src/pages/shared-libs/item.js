@@ -15,6 +15,8 @@ import OpIcon from '../../components/op-icon';
 import CustomDropdown from '../../components/dropdown';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import { formatWithTimezone } from '../../utils/time';
+import EventBus from '../../components/common/event-bus';
+import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 
 
 dayjs.extend(relativeTime);
@@ -85,6 +87,7 @@ class Item extends Component {
 
     request.then((res) => {
       this.props.onLeaveShare(data);
+      EventBus.getInstance().dispatch(EVENT_BUS_TYPE.SHARED_LIBRARIES_CHANGED);
       let message = gettext('Successfully unshared {name}').replace('{name}', data.repo_name);
       toaster.success(message);
     }).catch(error => {

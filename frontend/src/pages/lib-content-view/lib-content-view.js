@@ -2883,6 +2883,7 @@ class LibContentView extends React.Component {
       'from': this.state.currentRepoInfo.owner_email
     };
     seafileAPI.leaveShareRepo(this.props.repoID, options).then(res => {
+      EventBus.getInstance().dispatch(EVENT_BUS_TYPE.SHARED_LIBRARIES_CHANGED);
       navigate(siteRoot + 'shared-libs/');
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error, true);

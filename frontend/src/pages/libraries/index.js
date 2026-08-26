@@ -24,8 +24,10 @@ import { GroupsReposManager } from './groups-repos-manager';
 import EventBus from '../../components/common/event-bus';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
+import { ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY } from '../../constants';
 import Icon from '../../components/icon';
 import OpIcon from '../../components/op-icon';
+import LibrariesMoreMenu from './libraries-more-menu';
 
 import '../../css/files.css';
 
@@ -48,6 +50,7 @@ class Libraries extends Component {
       currentViewMode: localStorage.getItem('sf_repo_list_view_mode') || LIST_MODE,
       sortBy: localStorage.getItem('sf_repos_sort_by') || 'name', // 'name' or 'time'
       sortOrder: localStorage.getItem('sf_repos_sort_order') || 'asc', // 'asc' or 'desc'
+      onlyShowGroupsWithLibraries: localStorage.getItem(ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY) === 'true',
       isItemFreezed: false,
     };
 
@@ -169,6 +172,16 @@ class Libraries extends Component {
     this.sortReposByOption(sortBy, sortOrder);
   };
 
+  toggleOnlyShowGroupsWithLibraries = () => {
+    this.setState((prevState) => ({
+      onlyShowGroupsWithLibraries: !prevState.onlyShowGroupsWithLibraries,
+    }), () => {
+      const { onlyShowGroupsWithLibraries } = this.state;
+      localStorage.setItem(ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY, onlyShowGroupsWithLibraries);
+      EventBus.getInstance().dispatch(EVENT_BUS_TYPE.ONLY_SHOW_GROUPS_WITH_LIBRARIES_CHANGED, onlyShowGroupsWithLibraries);
+    });
+  };
+
   onFreezedItem = () => {
     this.setState({ isItemFreezed: true });
   };
@@ -274,6 +287,11 @@ class Libraries extends Component {
       }
       return item;
     });
+    this.setState({ publicRepoList });
+  };
+
+  onUnsharePublicRepo = (repo) => {
+    const publicRepoList = this.state.publicRepoList.filter(item => item.repo_id !== repo.repo_id);
     this.setState({ publicRepoList });
   };
 
@@ -514,8 +532,11 @@ class Libraries extends Component {
   };
 
   render() {
-    const { isLoading, currentViewMode, sortBy, sortOrder, groupList } = this.state;
+    const { isLoading, currentViewMode, sortBy, sortOrder, groupList, onlyShowGroupsWithLibraries } = this.state;
     const isDesktop = Utils.isDesktop();
+    const visibleGroupList = onlyShowGroupsWithLibraries ? groupList.filter(group => group.repos.length > 0) : groupList;
+    const showSharedLibraries = !onlyShowGroupsWithLibraries || this.state.sharedRepoList.length > 0;
+    const showPublicLibraries = !onlyShowGroupsWithLibraries || this.state.publicRepoList.length > 0;
 
     return (
       <>
@@ -526,6 +547,11 @@ class Libraries extends Component {
               <div className="d-flex align-items-center">
                 {isDesktop && <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />}
                 <ReposSortMenu className="ml-2" sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
+                <LibrariesMoreMenu
+                  className="ml-2"
+                  onlyShowGroupsWithLibraries={onlyShowGroupsWithLibraries}
+                  onToggleOnlyShowGroupsWithLibraries={this.toggleOnlyShowGroupsWithLibraries}
+                />
               </div>
             </div>
             <div className="cur-view-content repos-container" id="files-content-container">
@@ -570,18 +596,20 @@ class Libraries extends Component {
                     </>
                   )}
 
-                  <SharedLibraries
-                    repoList={this.state.sharedRepoList}
-                    inAllLibs={true}
-                    currentViewMode={currentViewMode}
-                    isItemFreezed={this.state.isItemFreezed}
-                    onFreezedItem={this.onFreezedItem}
-                    onUnfreezedItem={this.onUnfreezedItem}
-                    onToggleStarRepo={this.onToggleSharedStarRepo}
-                    onLeaveShare={this.onLeaveShareSharedRepo}
-                  />
+                  {showSharedLibraries && (
+                    <SharedLibraries
+                      repoList={this.state.sharedRepoList}
+                      inAllLibs={true}
+                      currentViewMode={currentViewMode}
+                      isItemFreezed={this.state.isItemFreezed}
+                      onFreezedItem={this.onFreezedItem}
+                      onUnfreezedItem={this.onUnfreezedItem}
+                      onToggleStarRepo={this.onToggleSharedStarRepo}
+                      onLeaveShare={this.onLeaveShareSharedRepo}
+                    />
+                  )}
 
-                  {canViewOrg && (
+                  {canViewOrg && showPublicLibraries && (
                     <SharedWithAll
                       repoList={this.state.publicRepoList}
                       inAllLibs={true}
@@ -590,6 +618,7 @@ class Libraries extends Component {
                       onFreezedItem={this.onFreezedItem}
                       onUnfreezedItem={this.onUnfreezedItem}
                       onToggleStarRepo={this.onTogglePublicStarRepo}
+                      onUnshareRepo={this.onUnsharePublicRepo}
                     />
                   )}
 
@@ -603,7 +632,7 @@ class Libraries extends Component {
                     />
                   }
 
-                  {groupList.length > 0 && groupList.map((group) => {
+                  {visibleGroupList.length > 0 && visibleGroupList.map((group) => {
                     return (
                       <GroupItem
                         key={group.id}
