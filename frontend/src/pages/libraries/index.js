@@ -60,7 +60,7 @@ class Libraries extends Component {
     const eventBus = EventBus.getInstance();
     this.unsubscribeAddNewGroup = eventBus.subscribe(EVENT_BUS_TYPE.ADD_NEW_GROUP, this.addNewGroup);
     this.unsubscribeAddSharedRepoIntoGroup = eventBus.subscribe(EVENT_BUS_TYPE.ADD_SHARED_REPO_INTO_GROUP, this.addRepoToGroup);
-    this.unsubscribeUnsharedRepoToGroup = eventBus.subscribe(EVENT_BUS_TYPE.UN_SHARE_REPO_TO_GROUP, this.unshareRepoToGroup);
+    this.unsubscribeUnsharedRepoToGroup = eventBus.subscribe(EVENT_BUS_TYPE.UNSHARE_REPO_TO_GROUP, this.unshareRepoToGroup);
   }
 
   componentWillUnmount() {
@@ -81,6 +81,7 @@ class Libraries extends Component {
         return group;
       });
       groups = this.sortGroups(groups);
+      this.groupsReposManager = new GroupsReposManager();
       this.groupsReposManager.init(groups);
       const { allRepoList, myRepoList, sharedRepoList, publicRepoList, groupList } = this.sortRepos(repoList, groups);
       this.setState({
@@ -217,7 +218,7 @@ class Libraries extends Component {
       this.groupsReposManager.remove(repoID, oldGroupID);
       this.groupsReposManager.add(repoID, newGroupID);
     }
-    this.setState({ groupList: updatedGroups });
+    this.setState({ groupList: updatedGroups }, this.initLibraries);
   };
 
   renameRepo = (repoId, newName, repoList) => {
