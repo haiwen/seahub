@@ -1,7 +1,7 @@
 import os
 import json
 import time
-from django.urls import reverse
+from django.urls import NoReverseMatch, reverse
 
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.test_utils import BaseTestCase
@@ -42,6 +42,45 @@ class MetadataManagerTest(BaseTestCase):
 
         metadata = RepoMetadata.objects.get(repo_id=self.repo_id)
         self.assertFalse(metadata.enabled)
+
+    def test_face_recognition_is_not_exposed(self):
+        self.client.put(self.management_url)
+        metadata = RepoMetadata.objects.get(repo_id=self.repo_id)
+        metadata.face_recognition_enabled = True
+        metadata.save(update_fields=['face_recognition_enabled'])
+        metadata_views = RepoMetadataViews.objects.get(repo_id=self.repo_id)
+        view_details = json.loads(metadata_views.details)
+        view_details['views'].append({
+            '_id': '_legacy_face_recognition',
+            'name': 'People',
+            'type': 'face_recognition',
+        })
+        view_details['navigation'].append({
+            '_id': '_legacy_face_recognition',
+            'type': 'view',
+        })
+        metadata_views.details = json.dumps(view_details)
+        metadata_views.save(update_fields=['details'])
+
+        resp = self.client.get(self.management_url)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertFalse(json_resp['face_recognition_enabled'])
+
+        with self.assertRaises(NoReverseMatch):
+            reverse('api-v2.1-metadata-face-recognition', args=[self.repo_id])
+
+        views_url = reverse('api-v2.1-metadata-views', args=[self.repo_id])
+        resp = self.client.get(views_url)
+        json_resp = json.loads(resp.content)
+        self.assertNotIn('_legacy_face_recognition', [view['_id'] for view in json_resp['views']])
+        self.assertNotIn('_legacy_face_recognition', [item['_id'] for item in json_resp['navigation']])
+
+        resp = self.client.post(views_url, {
+            'name': 'People',
+            'type': 'face_recognition',
+        })
+        self.assertEqual(400, resp.status_code)
 
 
 class MetadataDetailSettingsTest(BaseTestCase):
@@ -833,4 +872,3 @@ class MetadataMergeTagsTest(BaseTestCase):
         tag_ids = [tag['_id'] for tag in json_resp['results']]
         self.assertIn(self.target_tag_id, tag_ids)
         self.assertNotIn(self.merge_tag_id, tag_ids)
-

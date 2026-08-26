@@ -82,11 +82,6 @@ class Context {
   getMetadata = (params) => {
     if (!this.metadataAPI) return null;
     const repoID = this.settings['repoID'];
-    const { view_id, start, limit } = params;
-    if (view_id === FACE_RECOGNITION_VIEW_ID) {
-      return this.metadataAPI.getFaceData(repoID, start, limit);
-    }
-
     return this.metadataAPI.getMetadata(repoID, params);
   };
 

@@ -8,7 +8,6 @@ import AllTagsToolbar from './all-tags-toolbar';
 import TagFilesToolbar from './tag-files-toolbar';
 import TableFilesToolbar from './table-files-toolbar';
 import GalleryFilesToolbar from './gallery-files-toolbar';
-import FaceRecognitionFilesToolbar from './face-recognition-files-toolbar';
 import KanbanFilesToolbar from './kanban-files-toolbar';
 import CardFilesToolbar from './card-files-toolbar';
 import TrashToolbar from './trash-toolbar';
@@ -31,10 +30,6 @@ const ViewToolbar = ({ repoID, repoInfo, mode, path, viewId, updateCurrentDirent
     return (
       <GalleryFilesToolbar updateCurrentDirent={updateCurrentDirent} />
     );
-  }
-
-  if (type === VIEW_TYPE.FACE_RECOGNITION) {
-    return <FaceRecognitionFilesToolbar repoID={repoID} />;
   }
 
   if (type === VIEW_TYPE.TABLE) {

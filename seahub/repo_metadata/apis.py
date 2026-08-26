@@ -1119,6 +1119,27 @@ class MetadataViews(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        # Face recognition is no longer available. Hide legacy views without changing stored data.
+        face_view_ids = {
+            view.get('_id') for view in metadata_views.get('views', [])
+            if view.get('type') == 'face_recognition' or view.get('_id') == FACE_RECOGNITION_VIEW_ID
+        }
+        metadata_views['views'] = [
+            view for view in metadata_views.get('views', [])
+            if view.get('_id') not in face_view_ids
+        ]
+        navigation = []
+        for item in metadata_views.get('navigation', []):
+            if item.get('_id') in face_view_ids:
+                continue
+            if item.get('type') == 'folder':
+                item['children'] = [
+                    child for child in item.get('children', [])
+                    if child.get('_id') not in face_view_ids
+                ]
+            navigation.append(item)
+        metadata_views['navigation'] = navigation
+
         return Response(metadata_views)
 
     def post(self, request, repo_id):
@@ -1159,12 +1180,10 @@ class MetadataViews(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
 
-        # The face_recognition view is unique for a repo, cannot be added repeatedly.
+        # Face recognition is no longer available.
         if view_type == 'face_recognition':
-            view = RepoMetadataViews.objects.get_view(repo_id, FACE_RECOGNITION_VIEW_ID)
-            if view:
-                error_msg = 'The face recognition view already exists.'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            error_msg = 'The face recognition view is no longer available.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
             new_view = RepoMetadataViews.objects.add_view(repo_id, view_name, view_type, view_data, folder_id)
