@@ -16,9 +16,10 @@ const PREVIEW_SYNC_TIMEOUT = 50;
 
 class PreviewManager {
 
-  constructor(excalidrawAPI, socketClient) {
+  constructor(excalidrawAPI, socketClient, onCommit) {
     this.excalidrawAPI = excalidrawAPI;
     this.socketClient = socketClient;
+    this.onCommit = onCommit;
     this.activeGesture = null;
     this.remotePreviewSequenceByGesture = new Map();
     this.remotePreviewElementsById = new Map();
@@ -310,6 +311,15 @@ class PreviewManager {
     // Ensure the final Preview is sent before the reliable commit. The
     // throttle may still have a trailing update waiting to be dispatched.
     this.broadcastPreviewElements.flush();
+
+    // Preview updates are deliberately not part of the reliable operation
+    // queue. Once the gesture ends, explicitly enqueue the final scene as a
+    // real operation so the change is persisted even when no further
+    // Excalidraw onChange event is emitted.
+    if (this.onCommit) {
+      this.onCommit(elements);
+    }
+
     if (this.activeGesture === gesture) {
       this.endGesture(reason);
     }
