@@ -512,7 +512,7 @@ class AdminOrganization(APIView):
                                                       defaults={'value': force_adfs_login})
 
         monthly_traffic_limit = request.data.get('monthly_traffic_limit', None)
-        if monthly_traffic_limit:
+        if monthly_traffic_limit is not None:
             try:
                 monthly_traffic_limit = int(monthly_traffic_limit)
             except ValueError:
@@ -525,6 +525,9 @@ class AdminOrganization(APIView):
 
             monthly_traffic_limit = monthly_traffic_limit * get_file_size_unit('MB')
             OrgSettings.objects.add_or_update(org, monthly_traffic_limit=monthly_traffic_limit)
+            # Clear a prior monthly traffic throttle. seafevents will reapply it
+            # during its next check if the updated limit is still exceeded.
+            seafile_api.org_set_download_rate_limit(org_id, -1)
 
         org = ccnet_api.get_org_by_id(org_id)
         org_info = get_org_info(org)
