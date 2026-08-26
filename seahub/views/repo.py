@@ -393,7 +393,7 @@ def view_shared_upload_link(request, uploadlink):
     except Exception as e:
         logger.error(e)
         max_upload_file_size = -1
-    avatar_url, _, _ = api_avatar_url(username)
+    avatar_url = api_avatar_url(username)[0]
     data = {
         'repo': repo,
         'path': path,
