@@ -152,9 +152,11 @@ const SimpleEditor = ({ isSharedView = false }) => {
       if (gestureUpdate.ended) {
         socketManager.commitGesture(elements, gestureUpdate.gesture, gestureUpdate.endReason);
       }
-    } else {
+    } else if (!gestureUpdate.skipSync) {
       // Changes outside a pointer gesture (for example delete, paste, or
-      // keyboard shortcuts) remain reliable operations immediately.
+      // keyboard shortcuts) remain reliable operations immediately. A
+      // PointerUp finalization can consume the current onChange after it has
+      // already committed the PointerUp snapshot.
       socketManager.syncLocalElementsToOthers(elements);
     }
 

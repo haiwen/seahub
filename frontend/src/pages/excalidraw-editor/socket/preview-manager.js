@@ -71,6 +71,8 @@ class PreviewManager {
       previewSequence: 0,
       pointerUpPending: false,
       pointerUpSceneSignature: null,
+      pointerUpElementIds: null,
+      pointerUpElements: null,
     };
 
     this.logGesture('start', this.activeGesture, {
@@ -96,6 +98,8 @@ class PreviewManager {
         previewSequence: 0,
         pointerUpPending: false,
         pointerUpSceneSignature: null,
+        pointerUpElementIds: null,
+        pointerUpElements: null,
       };
       this.logGesture('start', this.activeGesture, { source: 'onChange' });
     }
@@ -158,14 +162,45 @@ class PreviewManager {
     const gesture = this.activeGesture;
     const isTextEditFinished =
       gesture.type === OPERATION_TYPES.EDIT_TEXT && currentType === OPERATION_TYPES.OTHER;
+    const isTextEditContinuation =
+      gesture.pointerUpPending &&
+      gesture.activeTool === 'text' &&
+      currentType === OPERATION_TYPES.EDIT_TEXT;
     // Excalidraw can dispatch onPointerUp before it publishes the last scene
     // change (for example the last freedraw point or the final resize/move).
-    // Wait for the next onChange so the reliable operation uses the scene that
-    // Excalidraw has actually finalized, rather than the scene read in
-    // handlePointerUp.
-    const isPointerUpFinalChange = gesture.pointerUpPending && !(
-      gesture.activeTool === 'text' && currentType === OPERATION_TYPES.EDIT_TEXT
+    // Only treat the next onChange as the final gesture update when the
+    // gesture's own elements changed after PointerUp.
+    const currentGestureSceneSignature = this.getGestureSceneSignature(
+      elements,
+      gesture,
+      gesture.pointerUpElementIds,
     );
+    const hasGestureSceneChanged =
+      currentGestureSceneSignature !== gesture.pointerUpSceneSignature;
+    const isPointerUpFinalChange =
+      gesture.pointerUpPending &&
+      !isTextEditContinuation &&
+      hasGestureSceneChanged;
+    const isPointerUpWithoutFinalChange =
+      gesture.pointerUpPending &&
+      !isTextEditContinuation &&
+      !hasGestureSceneChanged;
+
+    if (isPointerUpWithoutFinalChange) {
+      // The final gesture scene was already published before PointerUp. Commit
+      // that snapshot and consume the current onChange so the same scene is
+      // not enqueued again as a duplicate reliable operation.
+      const pointerUpElements = gesture.pointerUpElements || elements;
+      const isSameSceneAsPointerUp =
+        this.getSceneSignature(elements) === this.getSceneSignature(pointerUpElements);
+      this.commitGesture(
+        pointerUpElements,
+        gesture,
+        'pointer-up-without-final-change',
+      );
+      return { gesture: null, ended: false, skipSync: isSameSceneAsPointerUp };
+    }
+
     const ended = isTextEditFinished || isPointerUpFinalChange;
     const endReason = isTextEditFinished
       ? 'text-edit-finished'
@@ -206,6 +241,17 @@ class PreviewManager {
 
   getSceneSignature = (elements) => {
     return elements.map((element) => `${element.id}:${element.version}:${element.versionNonce}:${element.isDeleted ? 1 : 0}`).join('|');
+  };
+
+  getGestureSceneSignature = (elements, gesture, elementIdsOverride = null) => {
+    const elementIds = new Set(elementIdsOverride || gesture?.elementIds || []);
+    if (elementIds.size === 0) {
+      return this.getSceneSignature(elements);
+    }
+
+    return this.getSceneSignature(
+      elements.filter((element) => elementIds.has(element.id)),
+    );
   };
 
   clearPendingRemotePreviewChange = () => {
@@ -471,7 +517,13 @@ class PreviewManager {
     // before Excalidraw applies the final scene update.
     if (currentType !== OPERATION_TYPES.EDIT_TEXT) {
       this.activeGesture.pointerUpPending = true;
-      this.activeGesture.pointerUpSceneSignature = this.getSceneSignature(elements);
+      this.activeGesture.pointerUpElements = elements.slice();
+      this.activeGesture.pointerUpElementIds = [...this.activeGesture.elementIds];
+      this.activeGesture.pointerUpSceneSignature = this.getGestureSceneSignature(
+        elements,
+        this.activeGesture,
+        this.activeGesture.pointerUpElementIds,
+      );
       this.logGesture('pointer-up-waiting-for-final-change', this.activeGesture, {
         sceneSignature: this.activeGesture.pointerUpSceneSignature,
       });
