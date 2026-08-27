@@ -95,11 +95,15 @@ class SocketManager {
   }
 
   get pendingOperationList() {
-    return this.operationManager.pendingOperationList;
+    return this.operationManager.pendingOperationQueue.map(({ operation }) => operation);
   }
 
   get pendingOperationBeginTimeList() {
-    return this.operationManager.pendingOperationBeginTimeList;
+    return this.operationManager.operationQueue.map(({ beginTime }) => beginTime);
+  }
+
+  get pendingOperationQueue() {
+    return this.operationManager.pendingOperationQueue;
   }
 
   startGesture = (activeTool, pointerDownState) => {

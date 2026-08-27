@@ -32,8 +32,7 @@ class OperationManager {
     this.onStateChange = onStateChange;
 
     this.state = STATE.IDLE;
-    this.pendingOperationList = [];
-    this.pendingOperationBeginTimeList = [];
+    this.pendingOperationQueue = [];
     this.lastBroadcastedOrReceivedSceneVersion = 0;
     this.lastQueuedSceneVersion = 0;
     this._sendingOperation = null;
@@ -43,6 +42,12 @@ class OperationManager {
     }
     this.lastQueuedSceneVersion = this.lastBroadcastedOrReceivedSceneVersion;
     this.retryTimer = null;
+  }
+
+  get operationQueue() {
+    return this._sendingOperation
+      ? [this._sendingOperation, ...this.pendingOperationQueue]
+      : [...this.pendingOperationQueue];
   }
 
   notifyState = (type, message) => {
@@ -81,14 +86,17 @@ class OperationManager {
       return;
     }
     this.lastQueuedSceneVersion = sceneVersion;
-    this.pendingOperationList.push(elementsWithoutRemotePreview);
+    const queueItem = {
+      operation: elementsWithoutRemotePreview,
+      beginTime: new Date().getTime(),
+    };
+    this.pendingOperationQueue.push(queueItem);
 
-    const lastOpBeginTime = new Date().getTime();
-    this.pendingOperationBeginTimeList.push(lastOpBeginTime);
-    const firstOpBeginTime = this.pendingOperationBeginTimeList[0];
+    const firstQueueItem = this.operationQueue[0];
+    const isExceedExecuteTime = firstQueueItem &&
+      (queueItem.beginTime - firstQueueItem.beginTime) / 1000 > 30;
 
-    const isExceedExecuteTime = (lastOpBeginTime - firstOpBeginTime) / 1000 > 30 ? true : false;
-    if (isExceedExecuteTime || this.pendingOperationList.length > 500) {
+    if (isExceedExecuteTime || this.pendingOperationQueue.length > 500) {
       this.notifyState('pending_operations_exceed_limit');
     }
 
@@ -113,7 +121,7 @@ class OperationManager {
 
   sendNextOperations = () => {
     if (this.state !== STATE.SENDING) return;
-    if (this.pendingOperationList.length === 0) {
+    if (this.pendingOperationQueue.length === 0) {
       stateDebug(`State Changed: ${this.state} -> ${STATE.IDLE}`);
       this.state = STATE.IDLE;
       return;
@@ -121,20 +129,20 @@ class OperationManager {
 
     this.notifyState('is-saving');
     const version = this.document.version;
-    const elements = this.pendingOperationList.shift();
-    this._sendingOperation = elements;
+    const queueItem = this.pendingOperationQueue.shift();
+    this._sendingOperation = queueItem;
 
     this.socketClient.broadcastSceneElements(
-      elements,
+      queueItem.operation,
       version,
-      (result) => this.sendOperationsCallback(result, elements),
+      (result) => this.sendOperationsCallback(result, queueItem),
     );
   };
 
-  sendOperationsCallback = (result, operation = this._sendingOperation) => {
+  sendOperationsCallback = (result, queueItem = this._sendingOperation) => {
     // Ignore an ACK/error callback belonging to an operation that has already
     // been requeued (for example, after disconnect or ACK timeout).
-    if (operation !== this._sendingOperation) return;
+    if (!queueItem || queueItem !== this._sendingOperation) return;
 
     if (result && result.success) {
       const { version: serverVersion } = result;
@@ -142,10 +150,9 @@ class OperationManager {
       const lastSavedAt = new Date().getTime();
       this.notifyState('saved', lastSavedAt);
 
-      this.setLastBroadcastedOrReceivedSceneVersion(operation);
+      this.setLastBroadcastedOrReceivedSceneVersion(queueItem.operation);
 
       // send next operations
-      this.pendingOperationBeginTimeList.shift(); // remove current operation's begin time
       this._sendingOperation = null;
       this.sendNextOperations();
       return;
@@ -155,9 +162,7 @@ class OperationManager {
     if (error_type === 'ack_timeout') {
       // The ACK may be lost even if the server has already processed the
       // operation. Requeue it and retry through the normal operation pipeline.
-      // Keep the operation's begin time at the head of the time list because
-      // it is still paired with this operation after the retry.
-      this.pendingOperationList.unshift(operation);
+      this.pendingOperationQueue.unshift(queueItem);
       this._sendingOperation = null;
       stateDebug(`ACK timeout. State Changed: ${this.state} -> ${STATE.IDLE}`);
       this.state = STATE.IDLE;
@@ -166,17 +171,14 @@ class OperationManager {
       // load_document_content_error: After a short-term reconnection, the content of the document fails to load
       this.notifyState(error_type);
 
-      // reset sending control. The operation is not requeued, so remove its
-      // begin time as well to keep the two queues aligned.
+      // Reset sending control. The operation is not requeued because the
+      // document must be reloaded before sending more operations.
       stateDebug(`State Changed: ${this.state} -> ${STATE.NEED_RELOAD}`);
       this.state = STATE.NEED_RELOAD;
-      this.pendingOperationBeginTimeList.shift();
       this._sendingOperation = null;
     } else if (error_type === 'version_behind_server') {
       // Put the failed operation into the pending list and re-execute it.
-      // Its begin time is already the first entry in the time list, so retain
-      // it while moving the operation back to the pending list.
-      this.pendingOperationList.unshift(operation);
+      this.pendingOperationQueue.unshift(queueItem);
 
       stateDebug(`State Changed: ${this.state} -> ${STATE.CONFLICT}`);
       this.state = STATE.CONFLICT;
@@ -189,9 +191,6 @@ class OperationManager {
 
     this.updateLocalDataByRemoteData(elements, version);
 
-    // The conflicted operation was requeued at the front of
-    // pendingOperationList. Do not shift its begin time here; otherwise the
-    // first timestamp would belong to the next operation on the retry.
     this._sendingOperation = null;
     this.state = STATE.SENDING;
     this.sendNextOperations();
@@ -232,7 +231,7 @@ class OperationManager {
   handleConnectState = (type) => {
     if (type === 'reconnect') {
       this.state = STATE.IDLE;
-      if (this.pendingOperationList.length > 0) {
+      if (this.pendingOperationQueue.length > 0) {
         this.sendOperations();
       }
     }
@@ -240,7 +239,7 @@ class OperationManager {
     if (type === 'disconnect') {
       // current state is sending
       if (this._sendingOperation) {
-        this.pendingOperationList.unshift(this._sendingOperation);
+        this.pendingOperationQueue.unshift(this._sendingOperation);
         this._sendingOperation = null;
       }
       stateDebug(`State Changed: ${this.state} -> ${STATE.DISCONNECT}`);
