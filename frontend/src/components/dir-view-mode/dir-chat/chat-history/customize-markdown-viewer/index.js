@@ -25,7 +25,7 @@ const buildDocumentUrl = (source, repoID) => {
   return `${siteRoot}lib/${repoId}/file${Utils.encodePath(path)}`;
 };
 
-const CustomizeMarkdownViewer = forwardRef(({ chatId, message, repoID }, ref) => {
+const CustomizeMarkdownViewer = forwardRef(({ chatId, message, repoID, enableMathJax = true }, ref) => {
   const { openDocument } = useDocuments();
   const containerRef = useRef(null);
   const retryCountRef = useRef(0);
@@ -127,7 +127,7 @@ const CustomizeMarkdownViewer = forwardRef(({ chatId, message, repoID }, ref) =>
         value={value}
         isFetching={false}
         isShowOutline={false}
-        mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
+        mathJaxSource={enableMathJax ? mediaUrl + 'js/mathjax/tex-svg.js' : undefined}
         options={options}
         beforeRenderCallback={beforeRenderCallback}
         onDefinitionClick={() => {}}
@@ -140,6 +140,7 @@ CustomizeMarkdownViewer.propTypes = {
   chatId: PropTypes.string,
   message: PropTypes.object,
   repoID: PropTypes.string,
+  enableMathJax: PropTypes.bool,
 };
 
 export default CustomizeMarkdownViewer;

@@ -190,6 +190,7 @@ const SdocChatPanel = ({ onClose, width }) => {
             fallbackToNewWhenSessionMissing={true}
             messageRenderers={messageRenderers}
             onReviewSubmit={onReviewSubmit}
+            enableMessageMathJax={false}
           />
         </div>
       </div>

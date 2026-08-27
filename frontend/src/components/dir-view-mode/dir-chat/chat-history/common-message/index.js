@@ -8,7 +8,7 @@ import MessageOperations from '../message-operations';
 
 import './index.css';
 
-const CommonMessage = ({ chatId, message, settings, repoID, showOperations }) => {
+const CommonMessage = ({ chatId, message, settings, repoID, showOperations, enableMessageMathJax = true }) => {
   const markdownMessageRef = useRef(null);
 
   const getAIReply = useCallback(() => {
@@ -22,7 +22,13 @@ const CommonMessage = ({ chatId, message, settings, repoID, showOperations }) =>
         <ThoughtProcess value={message[CHAT_MESSAGE_TYPE.THOUGHT_PROCESS]} settings={settings} />
         {message[CHAT_MESSAGE_TYPE.TEXT] && <>{message[CHAT_MESSAGE_TYPE.TEXT]}</>}
         {message[CHAT_MESSAGE_TYPE.AI_REPLY] && (
-          <CustomizeMarkdownViewer ref={markdownMessageRef} chatId={chatId} message={message} repoID={repoID} />
+          <CustomizeMarkdownViewer
+            ref={markdownMessageRef}
+            chatId={chatId}
+            message={message}
+            repoID={repoID}
+            enableMathJax={enableMessageMathJax}
+          />
         )}
         {showOperations && (<MessageOperations getAIReply={getAIReply} />)}
       </div>
@@ -36,6 +42,7 @@ CommonMessage.propTypes = {
   settings: PropTypes.object,
   repoID: PropTypes.string,
   showOperations: PropTypes.bool,
+  enableMessageMathJax: PropTypes.bool,
 };
 
 export default CommonMessage;
