@@ -292,7 +292,7 @@ const SdocReviewCard = ({ reviewTaskId, onMessageContentChange, onTaskRunningCha
   return (
     <div className="sdoc-review-card">
       <div className="sdoc-review-card-header">
-        <span>{gettext('AI review suggestion')}</span>
+        <span>{gettext('AI review')}</span>
         {isDone && (
           <button type="button" className="sdoc-review-card-collapse" onClick={() => setExpanded(false)}>{gettext('Hide')}</button>
         )}
@@ -300,10 +300,10 @@ const SdocReviewCard = ({ reviewTaskId, onMessageContentChange, onTaskRunningCha
 
       {isGenerating && (
         <div className="sdoc-review-card-banner">
-          <div>{gettext('Reviewing · {percent}%').replace('{percent}', progressPercent)}</div>
+          <div>{gettext('Review in progress · {percent}% complete').replace('{percent}', progressPercent)}</div>
           {items.length > 0 && (
             <div className="sdoc-review-card-banner-detail">
-              {gettext('{count} suggestions found').replace('{count}', items.length)}
+              {gettext('{count} suggestions ready to review').replace('{count}', items.length)}
             </div>
           )}
         </div>
@@ -385,7 +385,11 @@ const SdocReviewCard = ({ reviewTaskId, onMessageContentChange, onTaskRunningCha
           return (
             <div key={item.item_id} className={`sdoc-review-card-item ${item.conflicted ? 'sdoc-review-card-item-conflicted' : ''}`}>
               <div className="sdoc-review-card-item-header">
-                <span className="sdoc-review-card-item-title">{gettext('Suggestion {n}').replace('{n}', index + 1)}</span>
+                <span className="sdoc-review-card-item-title">
+                  {gettext('Suggestion {current} of {total}')
+                    .replace('{current}', index + 1)
+                    .replace('{total}', items.length)}
+                </span>
                 {item.state !== 'pending' && (
                   <span className={`sdoc-review-card-item-status sdoc-review-card-item-status-${item.state}`}>{stateLabelFor(item.state)}</span>
                 )}
