@@ -2018,3 +2018,168 @@ CREATE TABLE `chat_message_thought_process` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniq_session_uuid_message_id` (`session_uuid`,`message_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `ai_review_task` (
+  `id` char(36) NOT NULL,
+  `chat_session_id` varchar(36) NOT NULL,
+  `assistant_message_id` bigint(20) DEFAULT NULL,
+  `repo_id` varchar(36) NOT NULL,
+  `path` longtext NOT NULL,
+  `file_uuid` varchar(36) NOT NULL,
+  `requester` varchar(255) NOT NULL,
+  `prompt` longtext NOT NULL,
+  `route` varchar(32) NOT NULL,
+  `org_id` bigint(20) DEFAULT NULL,
+  `message_id` varchar(4) DEFAULT NULL,
+  `generation_status` varchar(32) NOT NULL,
+  `generation_revision` int(11) NOT NULL,
+  `generation_attempt_id` char(36) DEFAULT NULL,
+  `generation_deadline_at` datetime(6) DEFAULT NULL,
+  `error_code` varchar(64) DEFAULT NULL,
+  `total_chunks` int(11) NOT NULL,
+  `completed_chunks` int(11) NOT NULL,
+  `total_review_blocks` int(11) NOT NULL,
+  `completed_review_blocks` int(11) NOT NULL,
+  `generation_truncated` tinyint(1) NOT NULL,
+  `generation_stop_reason` varchar(64) DEFAULT NULL,
+  `generation_finished_at` datetime(6) DEFAULT NULL,
+  `base_sdoc_version` bigint(20) DEFAULT NULL,
+  `current_changeset_revision_id` char(36) DEFAULT NULL,
+  `current_card_revision_id` char(36) DEFAULT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ai_review_task_assistant_message_id` (`assistant_message_id`),
+  KEY `ai_review_task_chat_session_id` (`chat_session_id`),
+  KEY `ai_review_task_repo_id` (`repo_id`),
+  KEY `ai_review_task_file_uuid` (`file_uuid`),
+  KEY `ai_review_task_generation_status` (`generation_status`),
+  KEY `ai_review_task_generation_attempt_id` (`generation_attempt_id`),
+  KEY `ai_review_task_current_changeset_revision_id` (`current_changeset_revision_id`),
+  KEY `ai_review_task_current_card_revision_id` (`current_card_revision_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `ai_review_changeset_revision` (
+  `id` char(36) NOT NULL,
+  `review_task_id` char(36) NOT NULL,
+  `changeset_revision` int(11) NOT NULL,
+  `snapshot_id` varchar(36) NOT NULL,
+  `file_uuid` varchar(36) NOT NULL,
+  `document_incarnation` varchar(36) NOT NULL,
+  `exact_sdoc_version` bigint(20) NOT NULL,
+  `projection_version` varchar(64) NOT NULL,
+  `scope_summary` longtext NOT NULL,
+  `revision_brief` json NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ai_review_changeset_revision_task_rev` (`review_task_id`,`changeset_revision`),
+  KEY `ai_review_changeset_revision_file_uuid` (`file_uuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `ai_review_generation_chunk` (
+  `id` char(36) NOT NULL,
+  `review_task_id` char(36) NOT NULL,
+  `generation_attempt_id` char(36) NOT NULL,
+  `chunk_index` int(11) NOT NULL,
+  `block_count` int(11) NOT NULL,
+  `created_item_count` int(11) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ai_review_generation_chunk_attempt_index` (`review_task_id`,`generation_attempt_id`,`chunk_index`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `ai_review_change_item` (
+  `id` char(36) NOT NULL,
+  `item_id` char(36) NOT NULL,
+  `changeset_revision_id` char(36) NOT NULL,
+  `logical_item_id` char(36) DEFAULT NULL,
+  `kind` varchar(64) NOT NULL,
+  `target` json NOT NULL,
+  `precondition` json NOT NULL,
+  `preview` json NOT NULL,
+  `after_text` longtext NOT NULL,
+  `after_type` varchar(64) DEFAULT NULL,
+  `rationale` longtext NOT NULL,
+  `sort_order` int(11) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ai_review_change_item_rev_item` (`changeset_revision_id`,`item_id`),
+  KEY `ai_review_change_item_item_id` (`item_id`),
+  KEY `ai_review_change_item_logical_item_id` (`logical_item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `ai_review_card_revision` (
+  `id` char(36) NOT NULL,
+  `review_task_id` char(36) NOT NULL,
+  `changeset_revision_id` char(36) NOT NULL,
+  `card_revision` int(11) NOT NULL,
+  `supersedes_decision_id` char(36) DEFAULT NULL,
+  `created_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ai_review_card_revision_task_rev` (`review_task_id`,`card_revision`),
+  KEY `ai_review_card_revision_changeset_revision_id` (`changeset_revision_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `ai_review_card_revision_item` (
+  `id` char(36) NOT NULL,
+  `card_revision_item_id` char(36) NOT NULL,
+  `card_revision_id` char(36) NOT NULL,
+  `change_item_id` char(36) NOT NULL,
+  `reviewable` tinyint(1) NOT NULL,
+  `conflicted` tinyint(1) NOT NULL,
+  `selectable` tinyint(1) NOT NULL,
+  `conflict_summary` longtext DEFAULT NULL,
+  `created_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ai_review_card_rev_item_membership` (`card_revision_id`,`change_item_id`),
+  KEY `ai_review_card_rev_item_card_item_id` (`card_revision_item_id`),
+  KEY `ai_review_card_rev_item_change_item_id` (`change_item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `ai_review_decision` (
+  `id` char(36) NOT NULL,
+  `review_decision_id` char(36) NOT NULL,
+  `card_revision_id` char(36) NOT NULL,
+  `decision_kind` varchar(16) NOT NULL,
+  `selection_digest` varchar(64) NOT NULL,
+  `operator` varchar(255) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ai_review_decision_review_decision_id` (`review_decision_id`),
+  KEY `ai_review_decision_card_revision_id` (`card_revision_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `ai_review_decision_selection` (
+  `id` char(36) NOT NULL,
+  `decision_id` char(36) NOT NULL,
+  `card_revision_item_id` char(36) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ai_review_decision_selection_decision_item` (`decision_id`,`card_revision_item_id`),
+  KEY `ai_review_decision_selection_card_revision_item_id` (`card_revision_item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `ai_review_apply_attempt` (
+  `id` char(36) NOT NULL,
+  `apply_attempt_id` char(36) NOT NULL,
+  `review_decision_id` char(36) NOT NULL,
+  `status` varchar(32) NOT NULL,
+  `persistence_status` varchar(32) NOT NULL,
+  `verification_status` varchar(32) NOT NULL,
+  `approved_by` varchar(255) NOT NULL,
+  `selection_digest` varchar(64) NOT NULL,
+  `apply_payload_digest` varchar(64) NOT NULL,
+  `card_revision_number` int(11) NOT NULL,
+  `changeset_revision_number` int(11) NOT NULL,
+  `snapshot_id` varchar(36) NOT NULL,
+  `document_incarnation` varchar(36) NOT NULL,
+  `applied_sdoc_version` bigint(20) DEFAULT NULL,
+  `operation_log_correlation_id` varchar(36) DEFAULT NULL,
+  `result_query_deadline_at` datetime(6) DEFAULT NULL,
+  `error_code` varchar(64) DEFAULT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ai_review_apply_attempt_apply_attempt_id` (`apply_attempt_id`),
+  UNIQUE KEY `ai_review_apply_attempt_review_decision_id` (`review_decision_id`),
+  KEY `ai_review_apply_attempt_status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

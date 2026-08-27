@@ -41,6 +41,15 @@ VALID_KINDS = {
     'replace_table_cell_text',
 }
 VALID_DECISION_KINDS = {'approved', 'rejected'}
+LIST_TYPES = {'ordered_list', 'unordered_list'}
+EDITABLE_HEADING_TYPES = {
+    'paragraph', 'header1', 'header2', 'header3', 'header4', 'header5', 'header6',
+}
+EDITABLE_TEXT_BLOCK_TYPES = {
+    'title', 'subtitle', 'paragraph',
+    'header1', 'header2', 'header3', 'header4', 'header5', 'header6',
+    'list_item', 'table_cell',
+}
 
 CANONICAL_HASH_SCHEMA = 'sdoc-canonical/v1'
 SELECTION_SCHEMA = 'sdoc-selection/v1'
@@ -259,6 +268,12 @@ def _canonical_selected_item(item):
         after_type = item['after_type']
         if after_type not in VALID_BLOCK_TYPES:
             raise CanonicalizationError('Invalid after_type: %r' % (after_type,))
+        if kind == 'set_list_type':
+            if block_type not in LIST_TYPES or after_type not in LIST_TYPES or block_type == after_type:
+                raise CanonicalizationError('Invalid list type transition.')
+        elif (block_type not in EDITABLE_HEADING_TYPES or
+              after_type not in EDITABLE_HEADING_TYPES or block_type == after_type):
+            raise CanonicalizationError('Invalid block type transition.')
         precondition = item['precondition']
         if not isinstance(precondition, dict) or set(precondition.keys()) != {
                 'canonical_before_hash', 'hash_algorithm', 'hash_schema_version', 'projection_version'}:
@@ -288,6 +303,12 @@ def _canonical_selected_item(item):
     block_type = target['block_type']
     if block_type not in VALID_BLOCK_TYPES:
         raise CanonicalizationError('Invalid target block_type: %r' % (block_type,))
+    if block_type not in EDITABLE_TEXT_BLOCK_TYPES:
+        raise CanonicalizationError('Unsupported text target block_type: %r' % (block_type,))
+    if kind == 'replace_table_cell_text' and block_type != 'table_cell':
+        raise CanonicalizationError('replace_table_cell_text requires a table_cell target.')
+    if kind == 'replace_block_text' and block_type == 'table_cell':
+        raise CanonicalizationError('replace_block_text cannot target a table_cell.')
 
     precondition = item['precondition']
     if not isinstance(precondition, dict) or set(precondition.keys()) != {

@@ -105,9 +105,12 @@ class ChatAPI {
     return this.req.post(this.server + '/api/v2.1/ai/sdoc-reviews/', params);
   }
 
-  getSdocReview(taskId, wait) {
-    const query = wait ? '?wait=1' : '';
-    return this.req.get(this.server + '/api/v2.1/ai/sdoc-reviews/' + taskId + '/' + query);
+  getSdocReview(taskId) {
+    return this.req.get(this.server + '/api/v2.1/ai/sdoc-reviews/' + taskId + '/');
+  }
+
+  cancelSdocReview(taskId) {
+    return this.req.post(this.server + '/api/v2.1/ai/sdoc-reviews/' + taskId + '/cancel/');
   }
 
   approveSdocReview(taskId, selectedItemIds) {

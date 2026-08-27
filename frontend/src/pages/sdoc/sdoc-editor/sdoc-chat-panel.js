@@ -105,6 +105,7 @@ const SdocChatPanel = ({ onClose, width }) => {
             message: { [CHAT_MESSAGE_TYPE.AI_REPLY]: gettext('Reviewing the document…') },
           }),
         ],
+        runningTask: true,
       };
     }
 
@@ -112,7 +113,13 @@ const SdocChatPanel = ({ onClose, width }) => {
   }, [docPath, repoID, mapMessages]);
 
   const messageRenderers = useMemo(() => ({
-    sdoc_review: ({ extension }) => <SdocReviewCard reviewTaskId={extension.review_task_id} />,
+    sdoc_review: ({ extension, onMessageContentChange, onTaskRunningChange }) => (
+      <SdocReviewCard
+        reviewTaskId={extension.review_task_id}
+        onMessageContentChange={onMessageContentChange}
+        onTaskRunningChange={onTaskRunningChange}
+      />
+    ),
     sdoc_review_progress: ({ extension }) => (
       <SdocReviewProgress phase={extension.phase} completed={extension.completed} total={extension.total} />
     ),

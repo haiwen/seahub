@@ -11,7 +11,7 @@ from django.db import transaction
 from django.conf import settings
 from pysearpc import SearpcError
 
-from seahub.ai.models import ChatMessageThoughtProcess, ChatMessages, ChatSessions
+from seahub.ai.models import ApplyAttempt, ChatMessageThoughtProcess, ChatMessages, ChatSessions, ReviewTask
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
 from seahub.repo_metadata.models import RepoMetadata
 from seaserv import seafile_api
@@ -32,14 +32,36 @@ from seahub.ai.utils import AI_SCENARIO_SEARCH_ICONS, image_caption, translate, 
     generate_file_tags, ocr, search_icons, is_ai_usage_over_limit, gen_chat_task_id, gen_message_id, \
     get_ai_reply, process_stream_ai_reply, resolve_repo_ai_usage_context, strip_content_details_from_attachments, \
     verify_chat_ai_config, AI_REPLY_TIMEOUT, AI_SCENARIO_CHAT, AI_SCENARIO_FILE_TAGS, AI_SCENARIO_IMAGE_CAPTION, \
-    AI_SCENARIO_OCR, AI_SCENARIO_SUMMARY, AI_SCENARIO_TRANSLATE, AI_SCENARIO_WRITING_ASSISTANT, user_passes_ai_chat_folder_permissions, \
-    generate_sdoc_review
+    AI_SCENARIO_OCR, AI_SCENARIO_SUMMARY, AI_SCENARIO_TRANSLATE, AI_SCENARIO_WRITING_ASSISTANT, user_passes_ai_chat_folder_permissions
 from seahub.tags.models import FileUUIDMap
 from seahub.views.file import get_file_view_path_and_perm, get_file_content
 from seahub.seadoc.sdoc_server_api import SdocServerAPI
 from seahub.seadoc.utils import gen_seadoc_access_token
 
 logger = logging.getLogger(__name__)
+
+SDOC_REVIEW_ACTIVE_STATUSES = (
+    ReviewTask.GENERATION_QUEUED,
+    ReviewTask.GENERATION_READING,
+    ReviewTask.GENERATION_DRAFTING,
+)
+
+
+def get_running_sdoc_review_task(session_uuid):
+    review_task = ReviewTask.objects.filter(
+        chat_session_id=session_uuid,
+        generation_status__in=SDOC_REVIEW_ACTIVE_STATUSES,
+    ).order_by('-created_at').first()
+    if review_task:
+        return review_task
+    attempt = ApplyAttempt.objects.select_related(
+        'review_decision__card_revision__review_task').filter(
+            review_decision__card_revision__review_task__chat_session_id=session_uuid,
+            status=ApplyAttempt.STATUS_COMMITTING,
+        ).order_by('-created_at').first()
+    if attempt:
+        return attempt.review_decision.card_revision.review_task
+    return None
 
 
 class ImageCaption(APIView):
@@ -672,7 +694,7 @@ class ChatSessionCopyView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         chat_task_id = gen_chat_task_id(session_uuid)
-        if cache.get(chat_task_id) is not None:
+        if cache.get(chat_task_id) is not None or get_running_sdoc_review_task(session_uuid):
             return api_error(status.HTTP_409_CONFLICT, 'There are unfinished tasks in the current session, please try again later.')
 
         try:
@@ -716,13 +738,20 @@ class ChatMessagesView(APIView):
             messages_data.append(data)
 
         chat_task_info = cache.get(gen_chat_task_id(session_uuid))
+        review_task = get_running_sdoc_review_task(session_uuid)
         results = {
             'session': session.to_dict(),
             'messages': messages_data,
-            'running_task': chat_task_info is not None,
+            'running_task': chat_task_info is not None or review_task is not None,
+            'running_task_type': (
+                'chat' if chat_task_info is not None else
+                ('sdoc_review' if review_task is not None else None)
+            ),
         }
         if results['running_task']:
-            results['user_input'] = chat_task_info['user_input']
+            results['user_input'] = (
+                chat_task_info['user_input'] if chat_task_info is not None else
+                {'message': review_task.prompt, 'attachments': []})
         return Response(results)
 
 
@@ -863,7 +892,7 @@ class ChatView(APIView):
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         chat_task_id = gen_chat_task_id(session_uuid)
-        if cache.get(chat_task_id) is not None:
+        if cache.get(chat_task_id) is not None or get_running_sdoc_review_task(session_uuid):
             return api_error(status.HTTP_409_CONFLICT, 'There are unfinished tasks in the current session, please try again later.')
 
         try:

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { chatAPI } from '../../../utils/chat-api';
 import { gettext } from '../../../utils/constants';
@@ -54,19 +54,27 @@ ListTypePreview.propTypes = {
   marker: PropTypes.string.isRequired,
 };
 
-const SdocReviewCard = ({ reviewTaskId }) => {
+const SdocReviewCard = ({ reviewTaskId, onMessageContentChange, onTaskRunningChange }) => {
   const [card, setCard] = useState(null);
   const [task, setTask] = useState(null);
   const [pendingItemIds, setPendingItemIds] = useState({});
   const [bulkPending, setBulkPending] = useState(null);
   const [isExpanded, setExpanded] = useState(true);
   const [expandedItemIds, setExpandedItemIds] = useState(() => new Set());
+  const messageContentCallbackRef = useRef(onMessageContentChange);
 
-  const loadCard = useCallback(async (wait = false) => {
-    const response = await chatAPI.getSdocReview(reviewTaskId, wait);
+  useEffect(() => {
+    messageContentCallbackRef.current = onMessageContentChange;
+  }, [onMessageContentChange]);
+
+  const loadCard = useCallback(async () => {
+    const response = await chatAPI.getSdocReview(reviewTaskId);
     setTask(response.data.task);
     setCard(response.data.card);
-    return response.data.task;
+    if (response.data.task?.assistant_content) {
+      messageContentCallbackRef.current?.(response.data.task.assistant_content);
+    }
+    return response.data;
   }, [reviewTaskId]);
 
   useEffect(() => {
@@ -80,8 +88,11 @@ const SdocReviewCard = ({ reviewTaskId }) => {
 
   const generationStatus = task?.generation_status;
   const isGenerating = ['queued', 'reading', 'drafting'].includes(generationStatus);
+  const isApplying = items.some((item) => item.state === 'approved');
+  const isRunning = isGenerating || isApplying;
   const generationFailed = ['failed', 'cancelled'].includes(generationStatus);
   const truncated = !!task?.generation_truncated;
+  const generationStopReason = task?.generation_stop_reason;
   const batchConflict = card?.batch_conflict;
   const totalChunks = task?.total_chunks || 0;
   const completedChunks = task?.completed_chunks || 0;
@@ -98,32 +109,63 @@ const SdocReviewCard = ({ reviewTaskId }) => {
   }, [completedChunks, completedReviewBlocks, totalChunks, totalReviewBlocks]);
 
   useEffect(() => {
+    if (!task) return;
+    onTaskRunningChange?.(reviewTaskId, isRunning, isGenerating);
+  }, [isGenerating, isRunning, onTaskRunningChange, reviewTaskId, task]);
+
+  useEffect(() => {
     if (!isGenerating) return undefined;
     let cancelled = false;
-    let retryDelay = 0;
-    let lastUpdatedAt = task?.updated_at;
+    let retryDelay = 1000;
+    let lastUpdatedAt = null;
 
     const poll = async () => {
       while (!cancelled) {
+        if (document.hidden) {
+          await new Promise((resolve) => window.setTimeout(resolve, 5000));
+          continue;
+        }
         try {
-          const nextTask = await loadCard(true);
+          const nextData = await loadCard();
+          const nextTask = nextData?.task;
           if (cancelled || !['queued', 'reading', 'drafting'].includes(nextTask?.generation_status)) {
             return;
           }
           const hasProgress = nextTask.updated_at !== lastUpdatedAt;
           lastUpdatedAt = nextTask.updated_at;
-          retryDelay = hasProgress ? 0 : Math.min(retryDelay ? retryDelay * 2 : 500, 4000);
+          retryDelay = hasProgress ? 1000 : Math.min(retryDelay * 2, 5000);
         } catch (error) {
-          retryDelay = Math.min(retryDelay ? retryDelay * 2 : 1000, 8000);
+          retryDelay = Math.min(retryDelay * 2, 8000);
         }
-        if (retryDelay) {
-          await new Promise((resolve) => window.setTimeout(resolve, retryDelay));
+        await new Promise((resolve) => window.setTimeout(resolve, retryDelay));
+      }
+    };
+    poll();
+    return () => { cancelled = true; };
+  }, [isGenerating, loadCard]);
+
+  useEffect(() => {
+    if (!isApplying) return undefined;
+    let cancelled = false;
+    let retryDelay = 1000;
+
+    const poll = async () => {
+      while (!cancelled) {
+        await new Promise((resolve) => window.setTimeout(resolve, retryDelay));
+        if (cancelled) return;
+        try {
+          const nextData = await loadCard();
+          const nextItems = nextData?.card?.items || [];
+          if (!nextItems.some((item) => item.state === 'approved')) return;
+          retryDelay = Math.min(retryDelay * 2, 5000);
+        } catch (error) {
+          retryDelay = Math.min(retryDelay * 2, 8000);
         }
       }
     };
     poll();
     return () => { cancelled = true; };
-  }, [isGenerating, loadCard, task?.updated_at]);
+  }, [isApplying, loadCard]);
 
   useEffect(() => {
     if (isDone) setExpanded(false);
@@ -208,6 +250,7 @@ const SdocReviewCard = ({ reviewTaskId }) => {
   }, [reviewTaskId, pendingIds]);
 
   if (!task) return null;
+  if (generationStatus === 'cancelled') return null;
 
   if (!isExpanded && items.length > COLLAPSED_ITEM_LIMIT && !isGenerating) {
     return (
@@ -257,7 +300,7 @@ const SdocReviewCard = ({ reviewTaskId }) => {
 
       {isGenerating && (
         <div className="sdoc-review-card-banner">
-          <div>{gettext('Reviewing process · {percent}%').replace('{percent}', progressPercent)}</div>
+          <div>{gettext('Reviewing · {percent}%').replace('{percent}', progressPercent)}</div>
           {items.length > 0 && (
             <div className="sdoc-review-card-banner-detail">
               {gettext('{count} suggestions found').replace('{count}', items.length)}
@@ -272,7 +315,11 @@ const SdocReviewCard = ({ reviewTaskId }) => {
       )}
       {!isGenerating && truncated && (
         <div className="sdoc-review-card-banner">
-          <div>{gettext('Review stopped early · {percent}% of document reviewed').replace('{percent}', progressPercent)}</div>
+          <div>
+            {generationStopReason === 'suggestion_limit_reached'
+              ? gettext('Review limit reached · the first 50 suggestions are shown')
+              : gettext('Review stopped early · {percent}% of document reviewed').replace('{percent}', progressPercent)}
+          </div>
           {items.length > 0 && (
             <div className="sdoc-review-card-banner-detail">
               {gettext('{count} suggestions are ready to review').replace('{count}', items.length)}
@@ -409,6 +456,8 @@ const SdocReviewCard = ({ reviewTaskId }) => {
 
 SdocReviewCard.propTypes = {
   reviewTaskId: PropTypes.string.isRequired,
+  onMessageContentChange: PropTypes.func,
+  onTaskRunningChange: PropTypes.func,
 };
 
 export default SdocReviewCard;

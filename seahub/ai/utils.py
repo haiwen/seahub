@@ -17,7 +17,10 @@ from django.db.models.functions import Coalesce
 from django.db.models import Sum, Value
 from seaserv import ccnet_api, get_org_id_by_repo_id, seafile_api
 
-from seahub.settings import SEAFILE_AI_SECRET_KEY, SEAFILE_AI_SERVER_URL
+from seahub.settings import (
+    SECRET_KEY, SEAFEVENTS_SERVER_URL,
+    SEAFILE_AI_SECRET_KEY, SEAFILE_AI_SERVER_URL,
+)
 from seahub.base.accounts import User
 from seahub.tags.models import FileUUIDMap
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
@@ -33,8 +36,6 @@ from seahub.ai.models import AIUsageStatistics, ChatMessageThoughtProcess, ChatM
 logger = logging.getLogger(__name__)
 
 AI_REPLY_TIMEOUT = 180
-REVIEW_TOTAL_TIMEOUT_SECONDS = 180
-REVIEW_CHUNK_TIMEOUT_SECONDS = 30
 GENERATED_MARKDOWN_DIR = '/AI Generated/'
 MARKDOWN_FILE_RE = re.compile(
     r'<seafile-ai-markdown(?:\s+file_name=(["\'])([^"\']*?)\1)?\s*>([\s\S]*?)</seafile-ai-markdown>'
@@ -62,6 +63,36 @@ def gen_headers():
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SEAFILE_AI_SECRET_KEY, algorithm='HS256')
     return {"Authorization": "Token %s" % token}
+
+
+def _enqueue_seafevents_task(path, payload, error_label):
+    if not SEAFEVENTS_SERVER_URL:
+        raise RuntimeError('SeafEvents server is not configured')
+    token_payload = {'exp': int(time.time()) + 300}
+    token = jwt.encode(token_payload, SECRET_KEY, algorithm='HS256')
+    url = urljoin(SEAFEVENTS_SERVER_URL, path)
+    response = requests.post(
+        url,
+        json=payload,
+        headers={'Authorization': 'Token %s' % token},
+        timeout=5,
+    )
+    if not response.ok:
+        raise RuntimeError('Failed to enqueue %s: %s' % (error_label, response.text))
+
+
+def enqueue_sdoc_review_task(task_id):
+    """Publish a persisted review task to the existing SeafEvents queue."""
+    _enqueue_seafevents_task(
+        '/add-sdoc-review-task', {'task_id': str(task_id)}, 'SDoc review task')
+
+
+def enqueue_sdoc_review_apply_attempt(apply_attempt_id):
+    """Publish an indeterminate ApplyAttempt for background reconciliation."""
+    _enqueue_seafevents_task(
+        '/add-sdoc-review-apply-attempt',
+        {'apply_attempt_id': str(apply_attempt_id)},
+        'SDoc review apply attempt')
 
 
 def verify_ai_config():
@@ -117,46 +148,6 @@ def search_icons(params):
     url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/search-icons/')
     resp = requests.post(url, json=params, headers=headers, timeout=30)
     return resp
-
-
-def generate_sdoc_review(params):
-    headers = gen_headers()
-    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/sdoc-review/')
-    resp = requests.post(url, json=params, headers=headers, timeout=AI_REPLY_TIMEOUT)
-    if not resp.ok:
-        raise RuntimeError('SDoc review request failed: %s' % resp.text)
-    result = resp.json()
-    return result.get('review')
-
-
-def generate_sdoc_review_plan(params, timeout=AI_REPLY_TIMEOUT):
-    headers = gen_headers()
-    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/sdoc-review-plan/')
-    resp = requests.post(url, json=params, headers=headers, timeout=timeout)
-    if not resp.ok:
-        raise RuntimeError('SDoc review plan request failed: %s' % resp.text)
-    result = resp.json()
-    return result.get('plan')
-
-
-def generate_sdoc_review_chunk(params, timeout=REVIEW_CHUNK_TIMEOUT_SECONDS):
-    headers = gen_headers()
-    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/sdoc-review-chunk/')
-    resp = requests.post(url, json=params, headers=headers, timeout=timeout)
-    if not resp.ok:
-        raise RuntimeError('SDoc review chunk request failed: %s' % resp.text)
-    result = resp.json()
-    return result.get('items')
-
-
-def generate_sdoc_analyze(params):
-    headers = gen_headers()
-    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/sdoc-analyze/')
-    resp = requests.post(url, json=params, headers=headers, timeout=AI_REPLY_TIMEOUT)
-    if not resp.ok:
-        raise RuntimeError('SDoc analyze request failed: %s' % resp.text)
-    result = resp.json()
-    return result.get('analysis')
 
 
 # utils

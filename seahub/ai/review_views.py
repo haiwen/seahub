@@ -1,11 +1,11 @@
 import json
 import logging
 import os
-import time
 import uuid
 
 import jwt
 from django.conf import settings
+from django.core.cache import cache
 from django.db import transaction
 from django.db.models import F, Max
 from django.utils import timezone
@@ -28,8 +28,7 @@ from seahub.tags.models import FileUUIDMap
 from seahub.ai.models import (
     ChatMessages, ChatSessions, ReviewTask, ReviewChangeSetRevision,
     ReviewChangeItem, ReviewCardRevision, ReviewCardRevisionItem,
-    ReviewDecision, ReviewDecisionSelection, ApplyAttempt,
-    ensure_review_tables,
+    ReviewDecision, ReviewDecisionSelection, ApplyAttempt, ReviewGenerationChunk,
 )
 from seahub.ai.sdoc_intent import route_sdoc_prompt
 from seahub.ai.sdoc_canonical import (
@@ -40,9 +39,11 @@ from seahub.ai.sdoc_canonical import (
     set_list_type_hash as compute_set_list_type_hash,
 )
 from seahub.ai.utils import (
-    generate_sdoc_review, generate_sdoc_analyze, gen_message_id,
-    generate_sdoc_review_plan, generate_sdoc_review_chunk,
-    REVIEW_TOTAL_TIMEOUT_SECONDS,
+    gen_message_id, gen_chat_task_id, enqueue_sdoc_review_task,
+    enqueue_sdoc_review_apply_attempt,
+    AI_SCENARIO_CHAT,
+    verify_chat_ai_config, user_passes_ai_chat_folder_permissions,
+    resolve_repo_ai_usage_context, is_ai_usage_over_limit,
 )
 from seahub.ai.apis import (
     get_sdoc_review_target, generate_sdoc_service_token,
@@ -55,14 +56,24 @@ PHASE1_KIND = 'replace_block_text'
 PROJECTION_VERSION = 'sdoc-agent-context/v1'
 HASH_SCHEMA_VERSION = 'sdoc-canonical/v1'
 MAX_CHANGE_ITEMS = 50
-LONG_POLL_TIMEOUT_SECONDS = 20
-LONG_POLL_INTERVAL_SECONDS = 1
 GENERATION_IN_PROGRESS = ('queued', 'reading', 'drafting')
+REVIEW_WORKER_TOKEN_PURPOSE = 'sdoc_review_worker'
+REVIEW_WORKER_TOKEN_AUDIENCE = 'seahub_sdoc_review'
+REVIEW_WORKER_CLAIM_TIMEOUT_SECONDS = 200
+TEXT_CHANGE_KINDS = frozenset(('replace_block_text', 'replace_table_cell_text'))
+LIST_TYPES = frozenset(('ordered_list', 'unordered_list'))
+EDITABLE_TEXT_BLOCK_TYPES = frozenset((
+    'title', 'subtitle', 'paragraph', 'header1', 'header2', 'header3',
+    'header4', 'header5', 'header6', 'list_item', 'table_cell',
+))
+EDITABLE_HEADING_TYPES = frozenset((
+    'paragraph', 'header1', 'header2', 'header3', 'header4', 'header5', 'header6',
+))
 
 
 def _get_review_task(task_id):
     try:
-        return ReviewTask.objects.get(id=task_id)
+        return ReviewTask.objects.select_related('assistant_message').get(id=task_id)
     except ReviewTask.DoesNotExist:
         return None
 
@@ -130,12 +141,19 @@ def _build_card_dict(task):
         .select_related('change_item').order_by('change_item__sort_order'))
 
     # Derive each item's latest decision state.
-    decisions = list(ReviewDecision.objects.filter(card_revision=card).order_by('created_at'))
     decision_by_item = {}
-    for decision in decisions:
-        for selection in ReviewDecisionSelection.objects.filter(decision=decision).select_related('card_revision_item__change_item'):
-            item_id = str(selection.card_revision_item.change_item.item_id)
-            decision_by_item[item_id] = decision
+    selections = list(
+        ReviewDecisionSelection.objects.filter(decision__card_revision=card)
+        .select_related('decision', 'card_revision_item__change_item')
+        .order_by('decision__created_at'))
+    for selection in selections:
+        item_id = str(selection.card_revision_item.change_item.item_id)
+        decision_by_item[item_id] = selection.decision
+    attempt_by_decision_id = {
+        attempt.review_decision_id: attempt
+        for attempt in ApplyAttempt.objects.filter(
+            review_decision_id__in={decision.id for decision in decision_by_item.values()})
+    }
 
     items = []
     conflict_item_count = 0
@@ -149,7 +167,7 @@ def _build_card_dict(task):
             if decision.decision_kind == ReviewDecision.KIND_REJECTED:
                 state = 'rejected'
             else:
-                attempt = _attempt_for_decision(decision)
+                attempt = attempt_by_decision_id.get(decision.id)
                 if attempt and attempt.status == ApplyAttempt.STATUS_APPLIED:
                     state = 'applied'
                 elif attempt and attempt.status == ApplyAttempt.STATUS_FAILED_PRECOMMIT:
@@ -197,23 +215,24 @@ def _build_card_dict(task):
     }
 
 
-def _attempt_for_decision(decision):
-    try:
-        return ApplyAttempt.objects.get(review_decision=decision)
-    except ApplyAttempt.DoesNotExist:
-        return None
-
-
 def _decided_item_ids(card):
     decided = set()
-    for decision in ReviewDecision.objects.filter(card_revision=card):
-        attempt = _attempt_for_decision(decision)
+    selections = list(
+        ReviewDecisionSelection.objects.filter(decision__card_revision=card)
+        .select_related('decision', 'card_revision_item__change_item'))
+    attempt_by_decision_id = {
+        attempt.review_decision_id: attempt
+        for attempt in ApplyAttempt.objects.filter(
+            review_decision_id__in={selection.decision_id for selection in selections})
+    }
+    for selection in selections:
+        decision = selection.decision
+        attempt = attempt_by_decision_id.get(decision.id)
         if decision.decision_kind == ReviewDecision.KIND_APPROVED and attempt and attempt.status == ApplyAttempt.STATUS_PREFLIGHT_CONFLICTED:
             # The batch was rejected before commit, so its non-conflicting items
             # must remain eligible for a subsequent approval.
             continue
-        for selection in ReviewDecisionSelection.objects.filter(decision=decision).select_related('card_revision_item__change_item'):
-            decided.add(str(selection.card_revision_item.change_item.item_id))
+        decided.add(str(selection.card_revision_item.change_item.item_id))
     return decided
 
 
@@ -242,80 +261,6 @@ def _get_uuid_map(repo_id, path):
     return uuid_map
 
 
-def run_generation(task, session_uuid, message_id):
-    """Run review generation for a queued task, chunk by chunk.
-
-    Uses the progressive plan + chunk protocol: each completed chunk is persisted
-    immediately so partial results survive a total timeout. A total budget of
-    REVIEW_TOTAL_TIMEOUT_SECONDS is enforced; chunks that do not finish within the
-    budget are dropped and the task is published with generation_truncated=True.
-    Raises on setup failure (no plan); the caller marks the task failed.
-    """
-    deadline = timezone.now() + timezone.timedelta(seconds=REVIEW_TOTAL_TIMEOUT_SECONDS)
-    uuid_map = _get_uuid_map(task.repo_id, task.path)
-    document_context = _fetch_document_context(uuid_map, task.requester)
-
-    remaining_seconds = (deadline - timezone.now()).total_seconds()
-    if remaining_seconds <= 0:
-        raise TimeoutError('SDoc review generation timed out before planning')
-
-    plan = generate_sdoc_review_plan({
-        'prompt': task.prompt,
-        'document_context': document_context,
-        'username': task.requester,
-        'org_id': None,
-    }, timeout=min(30, remaining_seconds))
-    chunks = plan.get('chunks') if isinstance(plan, dict) else None
-    brief = plan.get('brief') if isinstance(plan, dict) else None
-    if not isinstance(chunks, list) or not chunks:
-        raise ValueError('no chunks')
-
-    view = ReviewTasksView()
-    total_blocks = sum(
-        len(chunk.get('block_ids') or [])
-        for chunk in chunks if isinstance(chunk, dict))
-    changeset_revision, card_revision = view._begin_review(
-        task, session_uuid, message_id, document_context, brief, len(chunks), total_blocks)
-
-    truncated = False
-    for chunk in chunks:
-        chunk_index = chunk.get('chunk_index')
-        if not isinstance(chunk_index, int):
-            continue
-        block_count = len(chunk.get('block_ids') or [])
-        remaining_seconds = (deadline - timezone.now()).total_seconds()
-        if remaining_seconds <= 0:
-            truncated = True
-            break
-        try:
-            suggestions = generate_sdoc_review_chunk({
-                'prompt': task.prompt,
-                'document_context': document_context,
-                'brief': brief,
-                'chunk_index': chunk_index,
-                'username': task.requester,
-                'org_id': None,
-            }, timeout=min(30, remaining_seconds))
-        except Exception as error:
-            logger.warning('SDoc review chunk %s generation failed: %s', chunk_index, error)
-            truncated = True
-            continue
-        if not isinstance(suggestions, list):
-            truncated = True
-            continue
-        try:
-            view._persist_chunk(
-                task, changeset_revision, card_revision, document_context,
-                chunk_index, block_count, suggestions)
-        except Exception:
-            logger.exception('Failed to persist SDoc review chunk %s', chunk_index)
-            truncated = True
-
-    view._finish_review(
-        task, session_uuid, message_id, document_context.get('exact_sdoc_version'),
-        changeset_revision, card_revision, truncated)
-
-
 def mark_generation_failed(task, attempt_id=None, error_code='generation_failed'):
     """Persist a terminal generation failure and replace the transient chat copy."""
     filters = {
@@ -341,13 +286,49 @@ def mark_generation_failed(task, attempt_id=None, error_code='generation_failed'
     ChatSessions.objects.filter(session_uuid=task.chat_session_id).update(updated_at=timezone.now())
 
 
+def _is_review_worker_request(request):
+    auth = request.headers.get('Authorization', '').split()
+    if len(auth) != 2 or auth[0].lower() != 'token' or not settings.JWT_PRIVATE_KEY:
+        return False
+    try:
+        payload = jwt.decode(auth[1], settings.JWT_PRIVATE_KEY, algorithms=['HS256'])
+    except Exception:
+        return False
+    return (
+        payload.get('is_internal') is True
+        and payload.get('purpose') == REVIEW_WORKER_TOKEN_PURPOSE
+        and payload.get('audience') == REVIEW_WORKER_TOKEN_AUDIENCE
+    )
+
+
+def _review_worker_forbidden(request):
+    if _is_review_worker_request(request):
+        return None
+    return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+
+def _document_context_matches_revision(task, revision, document_context):
+    if not isinstance(document_context, dict):
+        return False
+    return (
+        str(document_context.get('file_uuid')) == str(task.file_uuid)
+        and str(document_context.get('snapshot_id')) == str(revision.snapshot_id)
+        and str(document_context.get('document_incarnation')) == str(revision.document_incarnation)
+        and document_context.get('exact_sdoc_version') == revision.exact_sdoc_version
+    )
+
+
 def _map_suggestions(document_context, file_uuid, document_incarnation, changeset_revision, suggestions, start_order, chunk_index=None):
     """Map model suggestions to ReviewChangeItem objects (no DB write)."""
     items = []
     item_order = start_order
     for suggestion in suggestions:
+        if not isinstance(suggestion, dict):
+            continue
         kind = suggestion.get('kind') or PHASE1_KIND
         rationale = suggestion.get('rationale') or ''
+        if not isinstance(rationale, str):
+            rationale = ''
         item = None
 
         if kind == 'set_list_type':
@@ -358,6 +339,8 @@ def _map_suggestions(document_context, file_uuid, document_incarnation, changese
             if not list_node:
                 continue
             if list_node.get('type') != block_type:
+                continue
+            if block_type not in LIST_TYPES or after_type not in LIST_TYPES or block_type == after_type:
                 continue
             canonical_hash = compute_set_list_type_hash(
                 block_id, block_type, list_node.get('ancestor_path'),
@@ -394,6 +377,8 @@ def _map_suggestions(document_context, file_uuid, document_incarnation, changese
                 continue
             if block.get('type') != block_type:
                 continue
+            if block_type not in EDITABLE_HEADING_TYPES or after_type not in EDITABLE_HEADING_TYPES or block_type == after_type:
+                continue
             canonical_hash = compute_set_block_type_hash(
                 block_id, block_type, block.get('ancestor_path'),
                 block.get('before_leaf_text'), file_uuid, document_incarnation)
@@ -417,7 +402,7 @@ def _map_suggestions(document_context, file_uuid, document_incarnation, changese
                 rationale=rationale,
                 sort_order=item_order,
             )
-        else:
+        elif kind in TEXT_CHANGE_KINDS:
             block_id = suggestion.get('block_id')
             text_node_id = suggestion.get('text_node_id')
             block_type = suggestion.get('block_type')
@@ -427,6 +412,17 @@ def _map_suggestions(document_context, file_uuid, document_incarnation, changese
             if not block or not block.get('supported'):
                 continue
             if block.get('type') != block_type:
+                continue
+            if block_type not in EDITABLE_TEXT_BLOCK_TYPES:
+                continue
+            if kind == 'replace_table_cell_text' and block_type != 'table_cell':
+                continue
+            if kind == 'replace_block_text' and block_type == 'table_cell':
+                continue
+            actual_before_text = block.get('before_leaf_text')
+            if not isinstance(before_leaf_text, str) or before_leaf_text != actual_before_text:
+                continue
+            if not isinstance(after_text, str) or after_text == actual_before_text:
                 continue
             item = ReviewChangeItem(
                 changeset_revision=changeset_revision,
@@ -439,7 +435,7 @@ def _map_suggestions(document_context, file_uuid, document_incarnation, changese
                     'ancestor_path': block.get('ancestor_path'),
                 },
                 precondition={
-                    'before_leaf_text': before_leaf_text,
+                    'before_leaf_text': actual_before_text,
                     'canonical_before_hash': block.get('canonical_before_hash'),
                     'hash_algorithm': 'SHA-256',
                     'hash_schema_version': HASH_SCHEMA_VERSION,
@@ -449,6 +445,8 @@ def _map_suggestions(document_context, file_uuid, document_incarnation, changese
                 rationale=rationale,
                 sort_order=item_order,
             )
+        else:
+            continue
 
         target = item.target
         ident = '%s:%s:%s:%s:%s:%s' % (
@@ -469,7 +467,6 @@ class ReviewTasksView(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def post(self, request):
-        ensure_review_tables()
         repo_id = request.data.get('repo_id')
         path = request.data.get('path')
         prompt = request.data.get('prompt', '').strip()
@@ -507,15 +504,24 @@ class ReviewTasksView(APIView):
                 'messages': [user_message.to_dict(), assistant_message.to_dict()],
             }, status=status.HTTP_201_CREATED)
 
+        if not verify_chat_ai_config():
+            return api_error(status.HTTP_400_BAD_REQUEST, 'AI server not configured')
+        if not user_passes_ai_chat_folder_permissions(request, repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        requested_org_id = request.user.org.org_id if getattr(request.user, 'org', None) else None
+        usage_context = resolve_repo_ai_usage_context(repo_id, requested_org_id, AI_SCENARIO_CHAT)
+        if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
+            return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
+
         session = _get_session(request, session_uuid, repo_id)
         if not session:
             return api_error(status.HTTP_404_NOT_FOUND, 'Session not found.')
 
-        try:
-            document_context = _fetch_document_context(uuid_map, request.user.username)
-        except Exception:
-            logger.exception('Failed to load SDoc document context.')
-            return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, 'SDoc is unavailable.')
+        if cache.get(gen_chat_task_id(session_uuid)) is not None:
+            return api_error(
+                status.HTTP_409_CONFLICT,
+                'There are unfinished tasks in the current session, please try again later.')
 
         try:
             message_id = gen_message_id(session_uuid)
@@ -523,9 +529,20 @@ class ReviewTasksView(APIView):
             logger.exception('Failed to allocate chat message id.')
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal server error.')
 
-        generation_deadline_at = timezone.now() + timezone.timedelta(seconds=60)
-
         with transaction.atomic():
+            ChatSessions.objects.select_for_update().get(pk=session.pk)
+            if ReviewTask.objects.filter(
+                    chat_session_id=session_uuid,
+                    generation_status__in=GENERATION_IN_PROGRESS).exists():
+                return api_error(
+                    status.HTTP_409_CONFLICT,
+                    'There are unfinished tasks in the current session, please try again later.')
+            if ApplyAttempt.objects.filter(
+                    review_decision__card_revision__review_task__chat_session_id=session_uuid,
+                    status=ApplyAttempt.STATUS_COMMITTING).exists():
+                return api_error(
+                    status.HTTP_409_CONFLICT,
+                    'There are unfinished tasks in the current session, please try again later.')
             user_message = ChatMessages.objects.create_message(session_uuid, message_id, 'user', prompt, attachments=[])
             assistant_message = ChatMessages.objects.create_message(
                 session_uuid, message_id, 'assistant', _('Reviewing the document…'), attachments=[])
@@ -537,139 +554,23 @@ class ReviewTasksView(APIView):
                 file_uuid=str(uuid_map.uuid),
                 requester=request.user.username,
                 prompt=prompt,
+                route=route,
+                org_id=usage_context['org_id'],
                 message_id=message_id,
                 generation_status=ReviewTask.GENERATION_QUEUED,
                 generation_revision=1,
-                generation_deadline_at=generation_deadline_at,
             )
-
-        supported_count = sum(1 for b in (document_context.get('blocks') or []) if b.get('supported'))
-        if supported_count > 10:
-            # Long document: enqueue for the background worker and return immediately.
-            return Response({
-                'route': route,
-                'task': task.to_dict(),
-                'messages': [user_message.to_dict()],
-            }, status=status.HTTP_202_ACCEPTED)
-
-        # queued -> reading
-        ReviewTask.objects.filter(id=task.id, generation_status=ReviewTask.GENERATION_QUEUED).update(
-            generation_status=ReviewTask.GENERATION_READING, updated_at=timezone.now())
-
-        analysis_message = None
-        if route == 'answer_then_review':
-            try:
-                analysis = generate_sdoc_analyze({
-                    'prompt': prompt,
-                    'document_context': document_context,
-                    'username': request.user.username,
-                    'org_id': request.user.org.org_id if getattr(request.user, 'org', None) else None,
-                })
-                if analysis:
-                    analysis_message_id = gen_message_id(session_uuid)
-                    analysis_message = ChatMessages.objects.create_message(
-                        session_uuid, analysis_message_id, 'assistant', analysis, attachments=[])
-            except Exception:
-                logger.exception('Failed to generate SDoc analysis; continuing to review.')
-
         try:
-            result = generate_sdoc_review({
-                'prompt': prompt,
-                'document_context': document_context,
-                'username': request.user.username,
-                'org_id': request.user.org.org_id if getattr(request.user, 'org', None) else None,
-            })
-            suggestions = result.get('items') if isinstance(result, dict) else None
-            if not isinstance(suggestions, list) or not suggestions:
-                raise ValueError('no suggestions')
-        except Exception as error:
-            logger.exception('Failed to generate SDoc review: %s', error)
-            ReviewTask.objects.filter(id=task.id).update(
-                generation_status=ReviewTask.GENERATION_FAILED, error_code='generation_failed', updated_at=timezone.now())
-            assistant_message = ChatMessages.objects.create_message(
-                session_uuid, message_id, 'assistant', _('Unable to generate a review suggestion.'), attachments=[])
-            messages = [user_message.to_dict()]
-            if analysis_message:
-                messages.append(analysis_message.to_dict())
-            messages.append(assistant_message.to_dict())
-            return Response({
-                'route': route,
-                'task': _get_review_task(task.id).to_dict(),
-                'messages': messages,
-            }, status=status.HTTP_201_CREATED)
-
-        try:
-            self._persist_review(task, session_uuid, message_id, document_context, suggestions)
-        except Exception as error:
-            logger.exception('Failed to persist SDoc review: %s', error)
-            ReviewTask.objects.filter(id=task.id).update(
-                generation_status=ReviewTask.GENERATION_FAILED, error_code='persist_failed', updated_at=timezone.now())
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Failed to persist review suggestion.')
-
-        task.refresh_from_db()
-        assistant_message = ChatMessages.objects.filter(
-            session_uuid=session_uuid, message_id=message_id, role='assistant').first()
-        messages = [user_message.to_dict()]
-        if analysis_message:
-            messages.append(analysis_message.to_dict())
-        if assistant_message:
-            messages.append(assistant_message.to_dict())
+            enqueue_sdoc_review_task(task.id)
+        except Exception:
+            # The task remains queued. SeafEvents periodically reconciles queued
+            # rows through the internal pending endpoint after a transient outage.
+            logger.exception('Failed to enqueue SDoc review task %s.', task.id)
         return Response({
             'route': route,
             'task': task.to_dict(),
-            'card': _build_card_dict(task),
-            'messages': messages,
-        }, status=status.HTTP_201_CREATED)
-
-    def _persist_review(self, task, session_uuid, message_id, document_context, suggestions):
-        snapshot_id = document_context.get('snapshot_id')
-        document_incarnation = document_context.get('document_incarnation')
-        exact_sdoc_version = document_context.get('exact_sdoc_version')
-        file_uuid = str(task.file_uuid)
-
-        with transaction.atomic():
-            changeset_revision = ReviewChangeSetRevision.objects.create(
-                review_task=task,
-                changeset_revision=1,
-                snapshot_id=snapshot_id,
-                file_uuid=file_uuid,
-                document_incarnation=document_incarnation,
-                exact_sdoc_version=exact_sdoc_version,
-                projection_version=PROJECTION_VERSION,
-                scope_summary=document_context.get('scope_summary') or '',
-            )
-            change_items = _map_suggestions(
-                document_context, file_uuid, document_incarnation,
-                changeset_revision, suggestions[:MAX_CHANGE_ITEMS], 0)
-            if not change_items:
-                raise ValueError('no writable suggestions')
-
-            ReviewChangeItem.objects.bulk_create(change_items)
-            created_items = list(ReviewChangeItem.objects.filter(changeset_revision=changeset_revision).order_by('sort_order'))
-
-            card_revision = ReviewCardRevision.objects.create(
-                review_task=task,
-                changeset_revision=changeset_revision,
-                card_revision=1,
-            )
-            for item in created_items:
-                ReviewCardRevisionItem.objects.create(
-                    card_revision=card_revision,
-                    change_item=item,
-                    reviewable=True,
-                    conflicted=False,
-                    selectable=True,
-                )
-
-            assistant_message = ChatMessages.objects.create_message(
-                session_uuid, message_id, 'assistant', _('I created a review suggestion.'))
-            task.assistant_message = assistant_message
-            task.generation_status = ReviewTask.GENERATION_REVIEW_READY
-            task.base_sdoc_version = exact_sdoc_version
-            task.current_changeset_revision = changeset_revision
-            task.current_card_revision = card_revision
-            task.save()
-            ChatSessions.objects.filter(session_uuid=session_uuid).update(updated_at=timezone.now())
+            'messages': [user_message.to_dict()],
+        }, status=status.HTTP_202_ACCEPTED)
 
     def _begin_review(self, task, session_uuid, message_id, document_context, brief, total_chunks, total_blocks):
         snapshot_id = document_context.get('snapshot_id')
@@ -717,11 +618,27 @@ class ReviewTasksView(APIView):
         document_incarnation = document_context.get('document_incarnation')
 
         with transaction.atomic():
+            receipt, receipt_created = ReviewGenerationChunk.objects.get_or_create(
+                review_task=task,
+                generation_attempt_id=task.generation_attempt_id,
+                chunk_index=chunk_index,
+                defaults={'block_count': block_count},
+            )
+            if not receipt_created:
+                return {
+                    'created_count': receipt.created_item_count,
+                    'limit_reached': False,
+                    'duplicate': True,
+                }
             existing_items = ReviewChangeItem.objects.filter(changeset_revision=changeset_revision)
             existing_count = existing_items.count()
             existing_order = existing_items.aggregate(max_order=Max('sort_order'))['max_order']
             start_order = 0 if existing_order is None else existing_order + 1
             remaining_slots = max(MAX_CHANGE_ITEMS - existing_count, 0)
+            if remaining_slots == 0:
+                receipt.created_item_count = 0
+                receipt.save(update_fields=['created_item_count'])
+                return {'created_count': 0, 'limit_reached': True}
             items = _map_suggestions(
                 document_context, file_uuid, document_incarnation,
                 changeset_revision, suggestions[:remaining_slots], start_order, chunk_index)
@@ -730,7 +647,9 @@ class ReviewTasksView(APIView):
             if items and not new_items:
                 # A retry of a chunk that was already persisted must not make the
                 # visible progress counter advance twice.
-                return 0
+                receipt.created_item_count = 0
+                receipt.save(update_fields=['created_item_count'])
+                return {'created_count': 0, 'limit_reached': False, 'duplicate': True}
             if new_items:
                 ReviewChangeItem.objects.bulk_create(new_items)
                 created = list(ReviewChangeItem.objects.filter(
@@ -748,9 +667,15 @@ class ReviewTasksView(APIView):
                 completed_chunks=F('completed_chunks') + 1,
                 completed_review_blocks=F('completed_review_blocks') + block_count,
                 updated_at=timezone.now())
-        return len(new_items)
+            receipt.created_item_count = len(new_items)
+            receipt.save(update_fields=['created_item_count'])
+        return {
+            'created_count': len(new_items),
+            'limit_reached': len(suggestions) > remaining_slots,
+        }
 
-    def _finish_review(self, task, session_uuid, message_id, exact_sdoc_version, changeset_revision, card_revision, truncated):
+    def _finish_review(self, task, session_uuid, message_id, exact_sdoc_version,
+                       changeset_revision, card_revision, truncated, stop_reason=None):
         has_items = ReviewChangeItem.objects.filter(changeset_revision=changeset_revision).exists()
         with transaction.atomic():
             if not has_items:
@@ -765,7 +690,7 @@ class ReviewTasksView(APIView):
             if not assistant_message:
                 assistant_message = ChatMessages.objects.create_message(
                     session_uuid, message_id, 'assistant', _('I created a review suggestion.'))
-            else:
+            elif task.route != 'answer_then_review':
                 assistant_message.content = _('I created a review suggestion.')
                 assistant_message.save(update_fields=['content'])
             ReviewTask.objects.filter(id=task.id).update(
@@ -773,6 +698,7 @@ class ReviewTasksView(APIView):
                 generation_status=ReviewTask.GENERATION_REVIEW_READY,
                 error_code=None,
                 generation_truncated=truncated,
+                generation_stop_reason=stop_reason,
                 generation_finished_at=timezone.now(),
                 base_sdoc_version=exact_sdoc_version,
                 current_changeset_revision_id=changeset_revision.id,
@@ -781,33 +707,355 @@ class ReviewTasksView(APIView):
         ChatSessions.objects.filter(session_uuid=session_uuid).update(updated_at=timezone.now())
 
 
+class ReviewWorkerPendingView(APIView):
+    """Reconcile durable ReviewTask rows with the SeafEvents Redis queue."""
+    authentication_classes = ()
+    permission_classes = ()
+
+    def post(self, request):
+        error = _review_worker_forbidden(request)
+        if error:
+            return error
+
+        now = timezone.now()
+        stale_tasks = list(ReviewTask.objects.filter(
+            generation_status__in=(ReviewTask.GENERATION_READING, ReviewTask.GENERATION_DRAFTING),
+            generation_deadline_at__lt=now,
+        ))
+        for task in stale_tasks:
+            mark_generation_failed(
+                task,
+                attempt_id=task.generation_attempt_id,
+                error_code='generation_timeout',
+            )
+
+        task_ids = list(
+            ReviewTask.objects.filter(generation_status=ReviewTask.GENERATION_QUEUED)
+            .order_by('created_at').values_list('id', flat=True)[:100]
+        )
+        ApplyAttempt.objects.filter(
+            status=ApplyAttempt.STATUS_COMMITTING,
+            result_query_deadline_at__lt=now,
+        ).update(
+            status=ApplyAttempt.STATUS_OUTCOME_UNKNOWN,
+            error_code='post_commit_indeterminate',
+            updated_at=now,
+        )
+        apply_attempt_ids = list(
+            ApplyAttempt.objects.filter(status=ApplyAttempt.STATUS_COMMITTING)
+            .order_by('created_at').values_list('apply_attempt_id', flat=True)[:100]
+        )
+        return Response({
+            'task_ids': [str(task_id) for task_id in task_ids],
+            'apply_attempt_ids': [str(attempt_id) for attempt_id in apply_attempt_ids],
+        })
+
+
+class ReviewWorkerApplyReconcileView(APIView):
+    """Perform one non-blocking reconciliation query for an ApplyAttempt."""
+
+    authentication_classes = ()
+    permission_classes = ()
+
+    def post(self, request, apply_attempt_id):
+        error = _review_worker_forbidden(request)
+        if error:
+            return error
+
+        attempt = ApplyAttempt.objects.select_related(
+            'review_decision__card_revision__review_task').filter(
+                apply_attempt_id=apply_attempt_id).first()
+        if not attempt:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Apply attempt not found.')
+        if attempt.status != ApplyAttempt.STATUS_COMMITTING:
+            return Response({'terminal': True, 'attempt': attempt.to_dict()})
+        if attempt.result_query_deadline_at and attempt.result_query_deadline_at <= timezone.now():
+            ReviewTaskApproveView()._mark_outcome_unknown(attempt)
+            attempt.refresh_from_db()
+            return Response({'terminal': True, 'attempt': attempt.to_dict()})
+
+        handler = ReviewTaskApproveView()
+        result = handler._query_apply_result(attempt)
+        if isinstance(result, dict) and result.get('status') in (
+                'applied', 'preflight_conflicted', 'failed_precommit', 'outcome_unknown'):
+            handler._map_apply_result(attempt, result)
+            attempt.refresh_from_db()
+            return Response({'terminal': True, 'attempt': attempt.to_dict()})
+        return Response({'terminal': False, 'attempt': attempt.to_dict()})
+
+
+class ReviewWorkerClaimView(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+
+    def post(self, request, task_id):
+        error = _review_worker_forbidden(request)
+        if error:
+            return error
+
+        try:
+            attempt_id = uuid.UUID(str(request.data.get('attempt_id')))
+        except (TypeError, ValueError):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'attempt_id is invalid.')
+
+        claimed = ReviewTask.objects.filter(
+            id=task_id,
+            generation_status=ReviewTask.GENERATION_QUEUED,
+        ).update(
+            generation_status=ReviewTask.GENERATION_READING,
+            generation_attempt_id=attempt_id,
+            generation_revision=F('generation_revision') + 1,
+            generation_deadline_at=(
+                timezone.now() + timezone.timedelta(seconds=REVIEW_WORKER_CLAIM_TIMEOUT_SECONDS)
+            ),
+            updated_at=timezone.now(),
+        )
+        task = ReviewTask.objects.filter(id=task_id).first()
+        if not task:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Review task not found.')
+        if not claimed and not (
+                task.generation_attempt_id == attempt_id
+                and task.generation_status in (ReviewTask.GENERATION_READING, ReviewTask.GENERATION_DRAFTING)):
+            return api_error(status.HTTP_409_CONFLICT, 'Review task is not claimable.')
+
+        try:
+            uuid_map = _get_uuid_map(task.repo_id, task.path)
+            if str(uuid_map.uuid) != str(task.file_uuid):
+                raise RuntimeError('The ReviewTask file identity no longer matches its path.')
+            document_context = _fetch_document_context(uuid_map, task.requester)
+            if str(document_context.get('file_uuid')) != str(task.file_uuid):
+                raise RuntimeError('The SDoc snapshot does not match the ReviewTask file.')
+        except Exception:
+            logger.exception('Failed to fetch SDoc snapshot for review task %s.', task.id)
+            mark_generation_failed(task, attempt_id=attempt_id, error_code='snapshot_unavailable')
+            return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, 'Document snapshot unavailable.')
+
+        return Response({
+            'task': {
+                'id': str(task.id),
+                'prompt': task.prompt,
+                'route': task.route,
+                'username': task.requester,
+                'org_id': task.org_id,
+                'repo_id': task.repo_id,
+            },
+            'document_context': document_context,
+        })
+
+
+class ReviewWorkerEventView(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+
+    def post(self, request, task_id):
+        error = _review_worker_forbidden(request)
+        if error:
+            return error
+
+        try:
+            attempt_id = uuid.UUID(str(request.data.get('attempt_id')))
+        except (TypeError, ValueError):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'attempt_id is invalid.')
+        event_type = request.data.get('event_type')
+        with transaction.atomic():
+            task = ReviewTask.objects.select_for_update().select_related(
+                'current_changeset_revision', 'current_card_revision').filter(id=task_id).first()
+            if not task:
+                return api_error(status.HTTP_404_NOT_FOUND, 'Review task not found.')
+            if task.generation_attempt_id != attempt_id:
+                return api_error(status.HTTP_409_CONFLICT, 'Review attempt is stale.')
+
+            if event_type == 'analysis':
+                return self._analysis(task, request.data)
+            if event_type == 'begin':
+                return self._begin(task, request.data)
+            if event_type == 'chunk':
+                return self._chunk(task, request.data)
+            if event_type == 'finish':
+                return self._finish(task, request.data)
+            if event_type == 'failed':
+                error_code = request.data.get('error_code') or 'generation_failed'
+                if not isinstance(error_code, str) or len(error_code) > 64:
+                    error_code = 'generation_failed'
+                mark_generation_failed(task, attempt_id=attempt_id, error_code=error_code)
+                return Response({'accepted': True})
+            return api_error(status.HTTP_400_BAD_REQUEST, 'event_type is invalid.')
+
+    def _analysis(self, task, data):
+        if task.generation_status not in (ReviewTask.GENERATION_READING, ReviewTask.GENERATION_DRAFTING):
+            return api_error(status.HTTP_409_CONFLICT, 'Review task is not running.')
+        content = data.get('content')
+        if not isinstance(content, str) or not content:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'content is invalid.')
+        ChatMessages.objects.filter(
+            session_uuid=task.chat_session_id,
+            message_id=task.message_id,
+            role='assistant',
+        ).update(content=content, updated_at=timezone.now())
+        ChatSessions.objects.filter(session_uuid=task.chat_session_id).update(updated_at=timezone.now())
+        return Response({'accepted': True})
+
+    def _begin(self, task, data):
+        if task.generation_status == ReviewTask.GENERATION_DRAFTING:
+            if task.current_changeset_revision_id and task.current_card_revision_id:
+                return Response({
+                    'changeset_revision_id': str(task.current_changeset_revision_id),
+                    'card_revision_id': str(task.current_card_revision_id),
+                })
+            return api_error(status.HTTP_409_CONFLICT, 'Review task has an incomplete draft.')
+        if task.generation_status != ReviewTask.GENERATION_READING:
+            return api_error(status.HTTP_409_CONFLICT, 'Review task is not ready to begin.')
+
+        document_context = data.get('document_context')
+        total_chunks = data.get('total_chunks')
+        total_blocks = data.get('total_blocks')
+        if not isinstance(document_context, dict):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'document_context is invalid.')
+        if not isinstance(total_chunks, int) or total_chunks < 1:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'total_chunks is invalid.')
+        if not isinstance(total_blocks, int) or total_blocks < 1:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'total_blocks is invalid.')
+        if str(document_context.get('file_uuid')) != str(task.file_uuid):
+            return api_error(status.HTTP_409_CONFLICT, 'Document snapshot does not match the task.')
+
+        changeset, card = ReviewTasksView()._begin_review(
+            task,
+            task.chat_session_id,
+            task.message_id,
+            document_context,
+            data.get('brief'),
+            total_chunks,
+            total_blocks,
+        )
+        return Response({
+            'changeset_revision_id': str(changeset.id),
+            'card_revision_id': str(card.id),
+        })
+
+    def _chunk(self, task, data):
+        if task.generation_status != ReviewTask.GENERATION_DRAFTING:
+            return api_error(status.HTTP_409_CONFLICT, 'Review task is not drafting.')
+        changeset = task.current_changeset_revision
+        card = task.current_card_revision
+        document_context = data.get('document_context')
+        suggestions = data.get('suggestions')
+        chunk_index = data.get('chunk_index')
+        block_count = data.get('block_count')
+        if not changeset or not card or not _document_context_matches_revision(
+                task, changeset, document_context):
+            return api_error(status.HTTP_409_CONFLICT, 'Document snapshot does not match the review.')
+        if not isinstance(suggestions, list) or not isinstance(chunk_index, int):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Chunk payload is invalid.')
+        if chunk_index < 0 or chunk_index >= task.total_chunks:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'chunk_index is out of range.')
+        if not isinstance(block_count, int) or block_count < 0:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'block_count is invalid.')
+
+        result = ReviewTasksView()._persist_chunk(
+            task, changeset, card, document_context,
+            chunk_index, block_count, suggestions,
+        )
+        return Response(result)
+
+    def _finish(self, task, data):
+        if task.generation_status == ReviewTask.GENERATION_REVIEW_READY:
+            return Response({'accepted': True})
+        if task.generation_status != ReviewTask.GENERATION_DRAFTING:
+            return api_error(status.HTTP_409_CONFLICT, 'Review task is not drafting.')
+        changeset = task.current_changeset_revision
+        card = task.current_card_revision
+        document_context = data.get('document_context')
+        if not changeset or not card or not _document_context_matches_revision(
+                task, changeset, document_context):
+            return api_error(status.HTTP_409_CONFLICT, 'Document snapshot does not match the review.')
+        ReviewTasksView()._finish_review(
+            task,
+            task.chat_session_id,
+            task.message_id,
+            document_context.get('exact_sdoc_version'),
+            changeset,
+            card,
+            bool(data.get('truncated')),
+            data.get('stop_reason'),
+        )
+        return Response({'accepted': True})
+
+
 class ReviewTaskView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, task_id):
-        ensure_review_tables()
         task = _get_review_task(task_id)
         if not task or not _is_requester(request, task):
             return api_error(status.HTTP_404_NOT_FOUND, 'Review task not found.')
-        _, error = get_sdoc_review_target(request, task.repo_id, task.path)
+        _uuid_map, error = get_sdoc_review_target(request, task.repo_id, task.path)
         if error:
             return error
 
-        # Long-poll: hold the request while the task is still generating, so the
-        # client does not need to hammer the endpoint. Return as soon as a chunk
-        # updates the task, not only when generation reaches a terminal state.
-        # The caller opts in via ?wait=1.
-        if request.GET.get('wait') == '1' and task.generation_status in GENERATION_IN_PROGRESS:
-            deadline = timezone.now() + timezone.timedelta(seconds=LONG_POLL_TIMEOUT_SECONDS)
-            initial_updated_at = task.updated_at
-            while task.generation_status in GENERATION_IN_PROGRESS and timezone.now() < deadline:
-                time.sleep(LONG_POLL_INTERVAL_SECONDS)
-                task.refresh_from_db()
-                if task.updated_at != initial_updated_at:
-                    break
-
         return Response({'task': task.to_dict(), 'card': _build_card_dict(task)})
+
+
+class ReviewTaskCancelView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, task_id):
+        task = _get_review_task(task_id)
+        if not task or not _is_requester(request, task):
+            return api_error(status.HTTP_404_NOT_FOUND, 'Review task not found.')
+        _uuid_map, error = get_sdoc_review_target(request, task.repo_id, task.path)
+        if error:
+            return error
+
+        with transaction.atomic():
+            task = ReviewTask.objects.select_for_update().select_related(
+                'assistant_message').filter(id=task_id).first()
+            if task.generation_status == ReviewTask.GENERATION_CANCELLED:
+                return Response({'task': task.to_dict(), 'card': None})
+            if task.generation_status not in GENERATION_IN_PROGRESS:
+                return api_error(status.HTTP_409_CONFLICT, 'Review task is not running.')
+
+            card_ids = list(ReviewCardRevision.objects.filter(
+                review_task=task).values_list('id', flat=True))
+            changeset_ids = list(ReviewChangeSetRevision.objects.filter(
+                review_task=task).values_list('id', flat=True))
+
+            task.current_card_revision = None
+            task.current_changeset_revision = None
+            task.generation_status = ReviewTask.GENERATION_CANCELLED
+            task.generation_attempt_id = None
+            task.generation_stop_reason = 'cancelled_by_user'
+            task.generation_finished_at = timezone.now()
+            task.total_chunks = 0
+            task.completed_chunks = 0
+            task.total_review_blocks = 0
+            task.completed_review_blocks = 0
+            task.save(update_fields=[
+                'current_card_revision', 'current_changeset_revision',
+                'generation_status', 'generation_attempt_id',
+                'generation_stop_reason', 'generation_finished_at',
+                'total_chunks', 'completed_chunks', 'total_review_blocks',
+                'completed_review_blocks', 'updated_at',
+            ])
+
+            if card_ids:
+                ReviewCardRevisionItem.objects.filter(
+                    card_revision_id__in=card_ids).delete()
+                ReviewCardRevision.objects.filter(id__in=card_ids).delete()
+            if changeset_ids:
+                ReviewChangeItem.objects.filter(
+                    changeset_revision_id__in=changeset_ids).delete()
+                ReviewChangeSetRevision.objects.filter(id__in=changeset_ids).delete()
+            ReviewGenerationChunk.objects.filter(review_task=task).delete()
+
+            if task.assistant_message_id:
+                task.assistant_message.content = _('Review stopped.')
+                task.assistant_message.save(update_fields=['content', 'updated_at'])
+            ChatSessions.objects.filter(
+                session_uuid=task.chat_session_id).update(updated_at=timezone.now())
+
+        return Response({'task': task.to_dict(), 'card': None})
 
 
 class ReviewTaskApproveView(APIView):
@@ -815,7 +1063,6 @@ class ReviewTaskApproveView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request, task_id):
-        ensure_review_tables()
         task = _get_review_task(task_id)
         if not task or not _is_requester(request, task):
             return api_error(status.HTTP_404_NOT_FOUND, 'Review task not found.')
@@ -968,53 +1215,38 @@ class ReviewTaskApproveView(APIView):
                 result = {'status': 'in_progress'}
 
         if result.get('status') == 'in_progress':
-            result = self._query_apply_result_with_backoff(uuid_map, request, apply_payload, attempt)
-            if result is None:
-                self._mark_outcome_unknown(attempt)
-            else:
-                self._map_apply_result(attempt, result)
+            deadline = timezone.now() + timezone.timedelta(seconds=60)
+            ApplyAttempt.objects.filter(id=attempt.id).update(
+                result_query_deadline_at=deadline, updated_at=timezone.now())
+            try:
+                enqueue_sdoc_review_apply_attempt(attempt.apply_attempt_id)
+            except Exception:
+                # The SeafEvents recovery sweep also discovers committing rows.
+                logger.exception(
+                    'Failed to enqueue SDoc apply reconciliation %s.',
+                    attempt.apply_attempt_id)
+            attempt.refresh_from_db()
+            return Response(
+                {'task': task.to_dict(), 'card': _build_card_dict(task)},
+                status=status.HTTP_202_ACCEPTED)
         else:
             self._map_apply_result(attempt, result)
         attempt.refresh_from_db()
         return Response({'task': task.to_dict(), 'card': _build_card_dict(task)})
 
-    def _query_apply_result_with_backoff(self, uuid_map, request, apply_payload, attempt):
-        deadline = timezone.now() + timezone.timedelta(seconds=60)
-        ApplyAttempt.objects.filter(id=attempt.id).update(
-            result_query_deadline_at=deadline, updated_at=timezone.now())
-        delays = (1, 3, 10, 30)
-        delay_index = 0
-        while timezone.now() < deadline:
-            result = self._query_apply_result(uuid_map, request, apply_payload, attempt)
-            if result and isinstance(result, dict) and result.get('status') in (
-                    'applied', 'preflight_conflicted', 'failed_precommit', 'outcome_unknown'):
-                return result
-            if delay_index < len(delays):
-                time.sleep(delays[delay_index])
-            else:
-                time.sleep(30)
-            delay_index += 1
-        return None
-
-    def _query_apply_result(self, uuid_map, request, apply_payload, attempt):
+    def _query_apply_result(self, attempt):
         try:
+            card = attempt.review_decision.card_revision
+            task = card.review_task
+            uuid_map = _get_uuid_map(task.repo_id, task.path)
             query_token = generate_sdoc_service_token(
-                uuid_map.uuid, uuid_map.filename, request.user.username, 'sdoc_agent_apply_result',
-                apply_attempt_id=apply_payload['apply_attempt_id'],
-                task_id=apply_payload['task_id'],
-                review_decision_id=apply_payload['review_decision_id'],
-                snapshot_id=apply_payload['snapshot_id'],
-                document_incarnation=apply_payload['document_incarnation'],
-                doc_uuid=apply_payload['doc_uuid'],
-                changeset_revision_id=apply_payload['changeset_revision_id'],
-                changeset_revision=apply_payload['changeset_revision'],
-                card_revision=apply_payload['card_revision'],
-                decision_kind=apply_payload['decision_kind'],
-                selection_digest=apply_payload['selection_digest'],
-                apply_payload_digest=apply_payload['apply_payload_digest'],
-                approved_by=request.user.username)
-            sdoc_api = SdocServerAPI(str(uuid_map.uuid), uuid_map.filename, request.user.username)
-            return sdoc_api.get_apply_result(query_token, apply_payload['apply_attempt_id'])
+                uuid_map.uuid, uuid_map.filename, attempt.approved_by,
+                'sdoc_agent_apply_result',
+                apply_attempt_id=str(attempt.apply_attempt_id))
+            sdoc_api = SdocServerAPI(
+                str(uuid_map.uuid), uuid_map.filename, attempt.approved_by)
+            return sdoc_api.get_apply_result(
+                query_token, str(attempt.apply_attempt_id))
         except Exception:
             logger.exception('Query SDoc apply result failed.')
             return None
@@ -1095,7 +1327,6 @@ class ReviewTaskRejectView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request, task_id):
-        ensure_review_tables()
         task = _get_review_task(task_id)
         if not task or not _is_requester(request, task):
             return api_error(status.HTTP_404_NOT_FOUND, 'Review task not found.')
@@ -1155,7 +1386,6 @@ class ReviewSaveResultView(APIView):
     permission_classes = ()
 
     def post(self, request):
-        ensure_review_tables()
         apply_attempt_id = request.data.get('apply_attempt_id')
         outcome = request.data.get('outcome')
         applied_version = request.data.get('applied_sdoc_version')

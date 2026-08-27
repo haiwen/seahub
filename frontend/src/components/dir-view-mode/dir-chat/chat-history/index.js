@@ -6,7 +6,7 @@ import { CHAT_MESSAGE_TYPE } from '../constants';
 
 import './index.css';
 
-const ChatHistory = ({ chat, settings, repoID, messageRenderers }) => {
+const ChatHistory = ({ chat, settings, repoID, messageRenderers, onMessageContentChange, onExtensionStateChange }) => {
   const { _id, message = {}, isUserSpeak = false, type, extensions = [] } = chat;
   const chatId = useMemo(() => _id || '', [_id]);
   const showOperations = useMemo(() => {
@@ -29,7 +29,15 @@ const ChatHistory = ({ chat, settings, repoID, messageRenderers }) => {
       )}
       {extensions.map((extension, index) => {
         const Renderer = messageRenderers && messageRenderers[extension.type];
-        return Renderer ? <Renderer key={`${extension.type}-${index}`} extension={extension} chatId={chatId} /> : null;
+        return Renderer ? (
+          <Renderer
+            key={`${extension.type}-${index}`}
+            extension={extension}
+            chatId={chatId}
+            onMessageContentChange={(content) => onMessageContentChange?.(chatId, content)}
+            onTaskRunningChange={onExtensionStateChange}
+          />
+        ) : null;
       })}
     </div>
   );
@@ -40,6 +48,8 @@ ChatHistory.propTypes = {
   settings: PropTypes.object,
   repoID: PropTypes.string,
   messageRenderers: PropTypes.object,
+  onMessageContentChange: PropTypes.func,
+  onExtensionStateChange: PropTypes.func,
 };
 
 export default ChatHistory;
