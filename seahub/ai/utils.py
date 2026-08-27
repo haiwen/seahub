@@ -35,6 +35,16 @@ from seahub.ai.models import AIUsageStatistics, ChatMessageThoughtProcess, ChatM
 
 logger = logging.getLogger(__name__)
 
+
+class SdocReviewScopeError(RuntimeError):
+    pass
+
+
+class SdocReviewScopeAmbiguousError(SdocReviewScopeError):
+    def __init__(self, candidates):
+        super().__init__('review scope is ambiguous')
+        self.candidates = candidates
+
 AI_REPLY_TIMEOUT = 180
 GENERATED_MARKDOWN_DIR = '/AI Generated/'
 MARKDOWN_FILE_RE = re.compile(
@@ -93,6 +103,29 @@ def enqueue_sdoc_review_apply_attempt(apply_attempt_id):
         '/add-sdoc-review-apply-attempt',
         {'apply_attempt_id': str(apply_attempt_id)},
         'SDoc review apply attempt')
+
+
+def resolve_sdoc_review_scope(prompt, document_context):
+    """Resolve a deterministic review scope before persisting a ReviewTask."""
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/sdoc-review-scope/')
+    response = requests.post(
+        url,
+        json={'prompt': prompt, 'document_context': document_context},
+        headers=gen_headers(),
+        timeout=10,
+    )
+    try:
+        data = response.json()
+    except ValueError as error:
+        raise SdocReviewScopeError('Invalid review scope response.') from error
+    if response.status_code == 409 and data.get('error_code') == 'scope_ambiguous':
+        raise SdocReviewScopeAmbiguousError(data.get('candidates') or [])
+    if not response.ok:
+        raise SdocReviewScopeError(data.get('error_msg') or 'Unable to resolve review scope.')
+    scope = data.get('scope') if isinstance(data, dict) else None
+    if not isinstance(scope, dict):
+        raise SdocReviewScopeError('Invalid review scope response.')
+    return scope
 
 
 def verify_ai_config():

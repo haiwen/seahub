@@ -6,7 +6,7 @@ import uuid
 import jwt
 from django.conf import settings
 from django.core.cache import cache
-from django.db import transaction
+from django.db import IntegrityError, transaction
 from django.db.models import F, Max
 from django.utils import timezone
 from django.utils.translation import gettext as _
@@ -44,6 +44,8 @@ from seahub.ai.utils import (
     AI_SCENARIO_CHAT,
     verify_chat_ai_config, user_passes_ai_chat_folder_permissions,
     resolve_repo_ai_usage_context, is_ai_usage_over_limit,
+    resolve_sdoc_review_scope, SdocReviewScopeError,
+    SdocReviewScopeAmbiguousError,
 )
 from seahub.ai.apis import (
     get_sdoc_review_target, generate_sdoc_service_token,
@@ -56,6 +58,10 @@ PHASE1_KIND = 'replace_block_text'
 PROJECTION_VERSION = 'sdoc-agent-context/v1'
 HASH_SCHEMA_VERSION = 'sdoc-canonical/v1'
 MAX_CHANGE_ITEMS = 50
+MAX_REVIEW_DECISION_ITEMS = 10
+REVISION_BRIEF_REQUIRED_STRING_FIELDS = (
+    'goal', 'tone', 'length', 'heading_strategy', 'do_not_modify',
+)
 GENERATION_IN_PROGRESS = ('queued', 'reading', 'drafting')
 REVIEW_WORKER_TOKEN_PURPOSE = 'sdoc_review_worker'
 REVIEW_WORKER_TOKEN_AUDIENCE = 'seahub_sdoc_review'
@@ -111,11 +117,115 @@ def _fetch_document_context(uuid_map, username):
     return document_context
 
 
+def _is_valid_revision_brief(brief):
+    if not isinstance(brief, dict):
+        return False
+    if any(not isinstance(brief.get(field), str) or not brief[field].strip()
+           for field in REVISION_BRIEF_REQUIRED_STRING_FIELDS):
+        return False
+    terminology = brief.get('terminology')
+    return isinstance(terminology, list) and all(
+        isinstance(term, str) and term.strip() for term in terminology)
+
+
+def _has_duplicate_item_ids(item_ids):
+    return len({str(item_id) for item_id in item_ids}) != len(item_ids)
+
+
+def _has_too_many_decision_items(item_ids):
+    return len(item_ids) > MAX_REVIEW_DECISION_ITEMS
+
+
+def _review_generation_expired(task, now=None):
+    deadline = task.generation_deadline_at
+    return deadline is not None and deadline <= (now or timezone.now())
+
+
+def _is_safe_review_finish(total_chunks, completed_chunks, truncated, stop_reason):
+    if truncated:
+        return (
+            stop_reason == 'suggestion_limit_reached'
+            and 0 < completed_chunks <= total_chunks
+        )
+    return stop_reason is None and completed_chunks == total_chunks
+
+
+def _filter_document_context_to_scope(document_context, task):
+    allowed_block_ids = set(getattr(task, 'allowed_block_ids', None) or [])
+    allowed_text_targets = {
+        (target.get('block_id'), target.get('text_node_id'))
+        for target in (getattr(task, 'allowed_text_targets', None) or [])
+        if isinstance(target, dict)
+    }
+    if not allowed_block_ids or not allowed_text_targets:
+        raise RuntimeError('Review scope is unavailable.')
+    context = dict(document_context)
+    context['blocks'] = [
+        block for block in document_context.get('blocks') or []
+        if isinstance(block, dict)
+        and block.get('block_id') in allowed_block_ids
+        and (block.get('block_id'), block.get('text_node_id')) in allowed_text_targets
+    ]
+    context['lists'] = [
+        list_node for list_node in document_context.get('lists') or []
+        if isinstance(list_node, dict) and list_node.get('block_id') in allowed_block_ids
+    ]
+    context['outline'] = [
+        header for header in document_context.get('outline') or []
+        if isinstance(header, dict) and header.get('block_id') in allowed_block_ids
+    ]
+    context['scope_summary'] = getattr(task, 'scope_summary', '')
+    return context
+
+
+def _suggestion_is_within_task_scope(suggestion, task):
+    if not isinstance(suggestion, dict):
+        return True
+    kind = suggestion.get('kind') or PHASE1_KIND
+    if kind not in TEXT_CHANGE_KINDS | {'set_block_type', 'set_list_type'}:
+        return True
+    block_id = suggestion.get('block_id')
+    if block_id not in set(getattr(task, 'allowed_block_ids', None) or []):
+        return False
+    if kind in TEXT_CHANGE_KINDS:
+        return (block_id, suggestion.get('text_node_id')) in {
+            (target.get('block_id'), target.get('text_node_id'))
+            for target in (getattr(task, 'allowed_text_targets', None) or [])
+            if isinstance(target, dict)
+        }
+    return True
+
+
 def _lookup_block(document_context, block_id, text_node_id):
     for block in document_context.get('blocks') or []:
         if block.get('block_id') == block_id and block.get('text_node_id') == text_node_id:
             return block
     return None
+
+
+def _review_target_key(kind, target):
+    block_id = target.get('block_id') or ''
+    if kind in TEXT_CHANGE_KINDS:
+        return 'text:%s:%s' % (block_id, target.get('text_node_id') or '')
+    if kind == 'set_block_type':
+        return 'block-type:%s' % block_id
+    if kind == 'set_list_type':
+        return 'list-type:%s' % block_id
+    return None
+
+
+def _filter_unique_review_items(items, existing_logical_ids, existing_target_keys):
+    """Keep the first proposed edit for each immutable review target."""
+    new_target_keys = set()
+    result = []
+    for item in items:
+        if (item.logical_item_id in existing_logical_ids
+                or item.target_key in existing_target_keys
+                or item.target_key in new_target_keys):
+            continue
+        new_target_keys.add(item.target_key)
+        result.append(item)
+    return result
 
 
 def _lookup_block_by_id(document_context, block_id):
@@ -449,11 +559,10 @@ def _map_suggestions(document_context, file_uuid, document_incarnation, changese
             continue
 
         target = item.target
+        item.target_key = _review_target_key(kind, target)
         ident = '%s:%s:%s:%s:%s:%s' % (
             changeset_revision.review_task_id, kind, target.get('block_id'), target.get('text_node_id', ''),
             item.after_type or '', item.after_text or '')
-        if chunk_index is not None:
-            ident = '%s:%s' % (chunk_index, ident)
         item.logical_item_id = uuid.uuid5(uuid.NAMESPACE_DNS, ident)
 
         items.append(item)
@@ -518,6 +627,41 @@ class ReviewTasksView(APIView):
         if not session:
             return api_error(status.HTTP_404_NOT_FOUND, 'Session not found.')
 
+        try:
+            creation_context = _fetch_document_context(uuid_map, request.user.username)
+            scope = resolve_sdoc_review_scope(prompt, creation_context)
+        except SdocReviewScopeAmbiguousError as error:
+            try:
+                message_id = gen_message_id(session_uuid)
+            except Exception:
+                logger.exception('Failed to allocate chat message id.')
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal server error.')
+            candidate_titles = [
+                str(candidate.get('text')) for candidate in error.candidates
+                if isinstance(candidate, dict) and candidate.get('text')
+            ]
+            content = _('I found multiple matching sections: {sections}. Please specify the chapter number or select the target section.').replace(
+                '{sections}', ', '.join(candidate_titles) or _('the matching sections'))
+            with transaction.atomic():
+                user_message = ChatMessages.objects.create_message(session_uuid, message_id, 'user', prompt, attachments=[])
+                assistant_message = ChatMessages.objects.create_message(session_uuid, message_id, 'assistant', content, attachments=[])
+                ChatSessions.objects.filter(session_uuid=session_uuid).update(updated_at=timezone.now())
+            return Response({
+                'route': 'clarify',
+                'messages': [user_message.to_dict(), assistant_message.to_dict()],
+            }, status=status.HTTP_201_CREATED)
+        except SdocReviewScopeError:
+            logger.exception('Failed to resolve SDoc review scope.')
+            return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, 'Review scope unavailable.')
+        except Exception:
+            logger.exception('Failed to read SDoc review scope.')
+            return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, 'Document snapshot unavailable.')
+
+        allowed_block_ids = scope.get('allowed_block_ids') if isinstance(scope, dict) else None
+        allowed_text_targets = scope.get('allowed_text_targets') if isinstance(scope, dict) else None
+        if not isinstance(allowed_block_ids, list) or not isinstance(allowed_text_targets, list):
+            return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, 'Review scope unavailable.')
+
         if cache.get(gen_chat_task_id(session_uuid)) is not None:
             return api_error(
                 status.HTTP_409_CONFLICT,
@@ -557,6 +701,12 @@ class ReviewTasksView(APIView):
                 route=route,
                 org_id=usage_context['org_id'],
                 message_id=message_id,
+                allowed_block_ids=allowed_block_ids,
+                allowed_text_targets=allowed_text_targets,
+                scope_summary=scope.get('scope_summary') or '',
+                scope_snapshot_id=creation_context.get('snapshot_id'),
+                scope_document_incarnation=creation_context.get('document_incarnation'),
+                scope_sdoc_version=creation_context.get('exact_sdoc_version'),
                 generation_status=ReviewTask.GENERATION_QUEUED,
                 generation_revision=1,
             )
@@ -643,7 +793,8 @@ class ReviewTasksView(APIView):
                 document_context, file_uuid, document_incarnation,
                 changeset_revision, suggestions[:remaining_slots], start_order, chunk_index)
             existing_ids = set(existing_items.values_list('logical_item_id', flat=True))
-            new_items = [it for it in items if it.logical_item_id not in existing_ids]
+            existing_target_keys = set(existing_items.values_list('target_key', flat=True))
+            new_items = _filter_unique_review_items(items, existing_ids, existing_target_keys)
             if items and not new_items:
                 # A retry of a chunk that was already persisted must not make the
                 # visible progress counter advance twice.
@@ -825,6 +976,9 @@ class ReviewWorkerClaimView(APIView):
             document_context = _fetch_document_context(uuid_map, task.requester)
             if str(document_context.get('file_uuid')) != str(task.file_uuid):
                 raise RuntimeError('The SDoc snapshot does not match the ReviewTask file.')
+            document_context = _filter_document_context_to_scope(document_context, task)
+            if not document_context.get('blocks') and not document_context.get('lists'):
+                raise RuntimeError('The ReviewTask scope no longer has editable targets.')
         except Exception:
             logger.exception('Failed to fetch SDoc snapshot for review task %s.', task.id)
             mark_generation_failed(task, attempt_id=attempt_id, error_code='snapshot_unavailable')
@@ -864,6 +1018,10 @@ class ReviewWorkerEventView(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, 'Review task not found.')
             if task.generation_attempt_id != attempt_id:
                 return api_error(status.HTTP_409_CONFLICT, 'Review attempt is stale.')
+            if _review_generation_expired(task):
+                mark_generation_failed(
+                    task, attempt_id=attempt_id, error_code='generation_timeout')
+                return api_error(status.HTTP_409_CONFLICT, 'Review task has timed out.')
 
             if event_type == 'analysis':
                 return self._analysis(task, request.data)
@@ -917,6 +1075,15 @@ class ReviewWorkerEventView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'total_blocks is invalid.')
         if str(document_context.get('file_uuid')) != str(task.file_uuid):
             return api_error(status.HTTP_409_CONFLICT, 'Document snapshot does not match the task.')
+        try:
+            scoped_context = _filter_document_context_to_scope(document_context, task)
+        except RuntimeError:
+            return api_error(status.HTTP_409_CONFLICT, 'Review scope is unavailable.')
+        if (len(scoped_context.get('blocks') or []) != len(document_context.get('blocks') or [])
+                or len(scoped_context.get('lists') or []) != len(document_context.get('lists') or [])):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'document_context exceeds the review scope.')
+        if total_chunks > 1 and not _is_valid_revision_brief(data.get('brief')):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'revision brief is invalid.')
 
         changeset, card = ReviewTasksView()._begin_review(
             task,
@@ -950,6 +1117,8 @@ class ReviewWorkerEventView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'chunk_index is out of range.')
         if not isinstance(block_count, int) or block_count < 0:
             return api_error(status.HTTP_400_BAD_REQUEST, 'block_count is invalid.')
+        if any(not _suggestion_is_within_task_scope(suggestion, task) for suggestion in suggestions):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Chunk suggestion exceeds the review scope.')
 
         result = ReviewTasksView()._persist_chunk(
             task, changeset, card, document_context,
@@ -968,6 +1137,12 @@ class ReviewWorkerEventView(APIView):
         if not changeset or not card or not _document_context_matches_revision(
                 task, changeset, document_context):
             return api_error(status.HTTP_409_CONFLICT, 'Document snapshot does not match the review.')
+        truncated = bool(data.get('truncated'))
+        stop_reason = data.get('stop_reason')
+        completed_chunks = ReviewGenerationChunk.objects.filter(review_task=task).count()
+        if not _is_safe_review_finish(
+                task.total_chunks, completed_chunks, truncated, stop_reason):
+            return api_error(status.HTTP_409_CONFLICT, 'Review generation is incomplete.')
         ReviewTasksView()._finish_review(
             task,
             task.chat_session_id,
@@ -975,8 +1150,8 @@ class ReviewWorkerEventView(APIView):
             document_context.get('exact_sdoc_version'),
             changeset,
             card,
-            bool(data.get('truncated')),
-            data.get('stop_reason'),
+            truncated,
+            stop_reason,
         )
         return Response({'accepted': True})
 
@@ -1066,8 +1241,8 @@ class ReviewTaskApproveView(APIView):
         task = _get_review_task(task_id)
         if not task or not _is_requester(request, task):
             return api_error(status.HTTP_404_NOT_FOUND, 'Review task not found.')
-        if task.generation_status in GENERATION_IN_PROGRESS:
-            return api_error(status.HTTP_409_CONFLICT, 'Review generation is still in progress.')
+        if task.generation_status != ReviewTask.GENERATION_REVIEW_READY:
+            return api_error(status.HTTP_409_CONFLICT, 'Review task is not ready for decisions.')
         uuid_map, error = _load_target_and_check(request, task.repo_id, task.path, require_edit=True)
         if error:
             return error
@@ -1078,6 +1253,12 @@ class ReviewTaskApproveView(APIView):
         selected_item_ids = request.data.get('selected_item_ids') or []
         if not isinstance(selected_item_ids, list) or not selected_item_ids:
             return api_error(status.HTTP_400_BAD_REQUEST, 'selected_item_ids must not be empty.')
+        if _has_duplicate_item_ids(selected_item_ids):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'selected_item_ids must be unique.')
+        if _has_too_many_decision_items(selected_item_ids):
+            return api_error(
+                status.HTTP_400_BAD_REQUEST,
+                'A review decision can contain at most %s items.' % MAX_REVIEW_DECISION_ITEMS)
 
         try:
             return self._approve(request, task, card, uuid_map, selected_item_ids)
@@ -1171,28 +1352,61 @@ class ReviewTaskApproveView(APIView):
             apply_payload_digest=apply_payload['apply_payload_digest'],
             approved_by=request.user.username)
 
-        with transaction.atomic():
-            decision = ReviewDecision.objects.create(
-                review_decision_id=decision_id,
-                card_revision=card,
-                decision_kind=ReviewDecision.KIND_APPROVED,
-                selection_digest=selection_digest,
-                operator=request.user.username,
-            )
-            for membership in selected:
-                ReviewDecisionSelection.objects.create(decision=decision, card_revision_item=membership)
-            attempt = ApplyAttempt.objects.create(
-                apply_attempt_id=attempt_id,
-                review_decision=decision,
-                status=ApplyAttempt.STATUS_PENDING,
-                approved_by=request.user.username,
-                selection_digest=selection_digest,
-                apply_payload_digest=apply_payload_digest,
-                card_revision_number=card.card_revision,
-                changeset_revision_number=changeset.changeset_revision,
-                snapshot_id=changeset.snapshot_id,
-                document_incarnation=changeset.document_incarnation,
-            )
+        try:
+            with transaction.atomic():
+                # Serialize all decisions for the selected suggestions.  The
+                # task lock also prevents Cancel from deleting the draft while
+                # a decision is being created.
+                locked_task = ReviewTask.objects.select_for_update().filter(
+                    id=task.id,
+                    generation_status=ReviewTask.GENERATION_REVIEW_READY,
+                    current_card_revision=card,
+                ).first()
+                if not locked_task:
+                    return api_error(status.HTTP_409_CONFLICT, 'Review task is not ready for decisions.')
+                locked_memberships = list(
+                    ReviewCardRevisionItem.objects.select_for_update().filter(
+                        card_revision=card,
+                        change_item__item_id__in=sorted_ids,
+                    ).select_related('change_item').order_by('card_revision_item_id'))
+                locked_by_item_id = {
+                    str(membership.change_item.item_id): membership
+                    for membership in locked_memberships
+                }
+                if len(locked_by_item_id) != len(sorted_ids):
+                    return api_error(status.HTTP_409_CONFLICT, 'Selected item is not available.')
+                selected = [locked_by_item_id[item_id] for item_id in selected_item_ids]
+                if any(not membership.selectable for membership in selected):
+                    return api_error(status.HTTP_409_CONFLICT, 'Selected item is not available.')
+                if ReviewDecisionSelection.objects.select_for_update().filter(
+                        card_revision_item__in=selected).exists():
+                    return api_error(status.HTTP_409_CONFLICT, 'Selected item is already decided.')
+
+                decision = ReviewDecision.objects.create(
+                    review_decision_id=decision_id,
+                    card_revision=card,
+                    decision_kind=ReviewDecision.KIND_APPROVED,
+                    selection_digest=selection_digest,
+                    operator=request.user.username,
+                )
+                for membership in selected:
+                    ReviewDecisionSelection.objects.create(decision=decision, card_revision_item=membership)
+                attempt = ApplyAttempt.objects.create(
+                    apply_attempt_id=attempt_id,
+                    review_decision=decision,
+                    status=ApplyAttempt.STATUS_PENDING,
+                    approved_by=request.user.username,
+                    selection_digest=selection_digest,
+                    apply_payload_digest=apply_payload_digest,
+                    card_revision_number=card.card_revision,
+                    changeset_revision_number=changeset.changeset_revision,
+                    snapshot_id=changeset.snapshot_id,
+                    document_incarnation=changeset.document_incarnation,
+                )
+        except IntegrityError:
+            # The database constraint is the final fence if another process
+            # claims the same item outside this code path.
+            return api_error(status.HTTP_409_CONFLICT, 'Selected item is already decided.')
 
         ApplyAttempt.objects.filter(id=attempt.id, status=ApplyAttempt.STATUS_PENDING).update(
             status=ApplyAttempt.STATUS_COMMITTING, updated_at=timezone.now())
@@ -1330,8 +1544,8 @@ class ReviewTaskRejectView(APIView):
         task = _get_review_task(task_id)
         if not task or not _is_requester(request, task):
             return api_error(status.HTTP_404_NOT_FOUND, 'Review task not found.')
-        if task.generation_status in GENERATION_IN_PROGRESS:
-            return api_error(status.HTTP_409_CONFLICT, 'Review generation is still in progress.')
+        if task.generation_status != ReviewTask.GENERATION_REVIEW_READY:
+            return api_error(status.HTTP_409_CONFLICT, 'Review task is not ready for decisions.')
         _, error = get_sdoc_review_target(request, task.repo_id, task.path)
         if error:
             return error
@@ -1339,44 +1553,64 @@ class ReviewTaskRejectView(APIView):
         if not card:
             return api_error(status.HTTP_409_CONFLICT, 'No review card to reject.')
 
-        memberships = list(ReviewCardRevisionItem.objects.filter(card_revision=card).select_related('change_item'))
-        if not memberships:
-            return api_error(status.HTTP_409_CONFLICT, 'No items to reject.')
-
-        membership_by_item = {str(m.change_item.item_id): m for m in memberships}
-        decided_item_ids = _decided_item_ids(card)
-
         selected_item_ids = request.data.get('selected_item_ids')
         if isinstance(selected_item_ids, list) and selected_item_ids:
-            selected = []
-            for item_id in selected_item_ids:
-                membership = membership_by_item.get(str(item_id))
-                if not membership:
-                    return api_error(status.HTTP_409_CONFLICT, 'Selected item is not available.')
-                if str(item_id) in decided_item_ids:
-                    return api_error(status.HTTP_409_CONFLICT, 'Selected item is already decided.')
-                selected.append(membership)
+            if _has_duplicate_item_ids(selected_item_ids):
+                return api_error(status.HTTP_400_BAD_REQUEST, 'selected_item_ids must be unique.')
+            requested_item_ids = [str(item_id) for item_id in selected_item_ids]
         else:
-            selected = [m for m in memberships if str(m.change_item.item_id) not in decided_item_ids]
+            requested_item_ids = None
 
-        if not selected:
-            return api_error(status.HTTP_409_CONFLICT, 'No pending items to reject.')
+        try:
+            with transaction.atomic():
+                locked_task = ReviewTask.objects.select_for_update().filter(
+                    id=task.id,
+                    generation_status=ReviewTask.GENERATION_REVIEW_READY,
+                    current_card_revision=card,
+                ).first()
+                if not locked_task:
+                    return api_error(status.HTTP_409_CONFLICT, 'Review task is not ready for decisions.')
+                memberships_query = ReviewCardRevisionItem.objects.select_for_update().filter(
+                    card_revision=card).select_related('change_item').order_by('card_revision_item_id')
+                if requested_item_ids is not None:
+                    memberships_query = memberships_query.filter(
+                        change_item__item_id__in=requested_item_ids)
+                memberships = list(memberships_query)
+                if not memberships:
+                    return api_error(status.HTTP_409_CONFLICT, 'No items to reject.')
+                membership_by_item = {str(m.change_item.item_id): m for m in memberships}
+                if requested_item_ids is not None:
+                    if len(membership_by_item) != len(requested_item_ids):
+                        return api_error(status.HTTP_409_CONFLICT, 'Selected item is not available.')
+                    selected = [membership_by_item[item_id] for item_id in requested_item_ids]
+                else:
+                    selected = memberships
+                decided_item_ids = set(
+                    str(item_id) for item_id in ReviewDecisionSelection.objects.select_for_update().filter(
+                        card_revision_item__in=selected).values_list(
+                            'card_revision_item__change_item__item_id', flat=True))
+                if requested_item_ids is not None and decided_item_ids:
+                    return api_error(status.HTTP_409_CONFLICT, 'Selected item is already decided.')
+                selected = [membership for membership in selected
+                            if str(membership.change_item.item_id) not in decided_item_ids]
+                if not selected:
+                    return api_error(status.HTTP_409_CONFLICT, 'No pending items to reject.')
 
-        sorted_ids = sorted(str(m.change_item.item_id) for m in selected)
-        selection_digest = compute_selection_digest(
-            str(task.id), card.card_revision, card.changeset_revision.changeset_revision,
-            'rejected', sorted_ids)
-
-        with transaction.atomic():
-            decision = ReviewDecision.objects.create(
-                review_decision_id=uuid.uuid4(),
-                card_revision=card,
-                decision_kind=ReviewDecision.KIND_REJECTED,
-                selection_digest=selection_digest,
-                operator=request.user.username,
-            )
-            for membership in selected:
-                ReviewDecisionSelection.objects.create(decision=decision, card_revision_item=membership)
+                sorted_ids = sorted(str(m.change_item.item_id) for m in selected)
+                selection_digest = compute_selection_digest(
+                    str(task.id), card.card_revision, card.changeset_revision.changeset_revision,
+                    'rejected', sorted_ids)
+                decision = ReviewDecision.objects.create(
+                    review_decision_id=uuid.uuid4(),
+                    card_revision=card,
+                    decision_kind=ReviewDecision.KIND_REJECTED,
+                    selection_digest=selection_digest,
+                    operator=request.user.username,
+                )
+                for membership in selected:
+                    ReviewDecisionSelection.objects.create(decision=decision, card_revision_item=membership)
+        except IntegrityError:
+            return api_error(status.HTTP_409_CONFLICT, 'Selected item is already decided.')
 
         return Response({'task': task.to_dict(), 'card': _build_card_dict(task)})
 

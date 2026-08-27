@@ -31,6 +31,7 @@ const blockTypeLabelFor = (type) => {
 };
 
 const COLLAPSED_ITEM_LIMIT = 3;
+const REVIEW_DECISION_BATCH_SIZE = 10;
 
 const ListTypePreview = ({ type, items, marker }) => {
   const List = type === 'ordered_list' ? 'ol' : 'ul';
@@ -88,6 +89,7 @@ const SdocReviewCard = ({ reviewTaskId, onMessageContentChange, onTaskRunningCha
 
   const generationStatus = task?.generation_status;
   const isGenerating = ['queued', 'reading', 'drafting'].includes(generationStatus);
+  const isDecisionReady = generationStatus === 'review_ready';
   const isApplying = items.some((item) => item.state === 'approved');
   const isRunning = isGenerating || isApplying;
   const generationFailed = ['failed', 'cancelled'].includes(generationStatus);
@@ -218,10 +220,14 @@ const SdocReviewCard = ({ reviewTaskId, onMessageContentChange, onTaskRunningCha
   const approveAll = useCallback(async () => {
     setBulkPending('approve');
     try {
-      const response = await chatAPI.approveSdocReview(reviewTaskId, pendingIds);
-      setTask(response.data.task);
-      setCard(response.data.card);
-      const resultItems = response.data.card?.items || [];
+      let response;
+      for (let index = 0; index < pendingIds.length; index += REVIEW_DECISION_BATCH_SIZE) {
+        response = await chatAPI.approveSdocReview(
+          reviewTaskId, pendingIds.slice(index, index + REVIEW_DECISION_BATCH_SIZE));
+        setTask(response.data.task);
+        setCard(response.data.card);
+      }
+      const resultItems = response?.data.card?.items || [];
       if (resultItems.length > COLLAPSED_ITEM_LIMIT && resultItems.every((item) => item.state !== 'pending')) {
         setExpanded(false);
       }
@@ -346,10 +352,10 @@ const SdocReviewCard = ({ reviewTaskId, onMessageContentChange, onTaskRunningCha
         <div className="sdoc-review-card-bulk-actions">
           <span className="sdoc-review-card-bulk-count">{gettext('{count} suggestions').replace('{count}', pendingCount)}</span>
           <div className="sdoc-review-card-bulk-actions-buttons">
-            <button type="button" className="btn btn-secondary btn-sm" disabled={!!bulkPending || isGenerating} onClick={rejectAll}>
+            <button type="button" className="btn btn-secondary btn-sm" disabled={!!bulkPending || !isDecisionReady} onClick={rejectAll}>
               {gettext('Reject all')}
             </button>
-            <button type="button" className="btn btn-primary btn-sm" disabled={!!bulkPending || isGenerating} onClick={approveAll}>
+            <button type="button" className="btn btn-primary btn-sm" disabled={!!bulkPending || !isDecisionReady} onClick={approveAll}>
               {gettext('Approve all')}
             </button>
           </div>
@@ -401,7 +407,7 @@ const SdocReviewCard = ({ reviewTaskId, onMessageContentChange, onTaskRunningCha
                       className="sdoc-review-card-item-icon-btn sdoc-review-card-item-icon-btn-reject"
                       aria-label={gettext('Reject')}
                       title={gettext('Reject')}
-                      disabled={!!pendingAction || isGenerating}
+                      disabled={!!pendingAction || !isDecisionReady}
                       onClick={() => reject(item.item_id)}
                     >
                       <svg viewBox="0 0 14 14" aria-hidden="true">
@@ -413,7 +419,7 @@ const SdocReviewCard = ({ reviewTaskId, onMessageContentChange, onTaskRunningCha
                       className="sdoc-review-card-item-icon-btn sdoc-review-card-item-icon-btn-approve"
                       aria-label={gettext('Approve')}
                       title={gettext('Approve')}
-                      disabled={!!pendingAction || isGenerating}
+                      disabled={!!pendingAction || !isDecisionReady}
                       onClick={() => approve(item.item_id)}
                     >
                       <svg viewBox="0 0 14 14" aria-hidden="true">
