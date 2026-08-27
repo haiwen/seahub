@@ -267,6 +267,12 @@ class ReviewTask(models.Model):
     route = models.CharField(max_length=32, default='review')
     org_id = models.BigIntegerField(null=True, blank=True)
     message_id = models.CharField(max_length=4, null=True, blank=True)
+    allowed_block_ids = models.JSONField(default=list)
+    allowed_text_targets = models.JSONField(default=list)
+    scope_summary = models.TextField(default='')
+    scope_snapshot_id = models.CharField(max_length=36, null=True, blank=True)
+    scope_document_incarnation = models.CharField(max_length=36, null=True, blank=True)
+    scope_sdoc_version = models.BigIntegerField(null=True, blank=True)
     generation_status = models.CharField(max_length=32, default=GENERATION_QUEUED, db_index=True)
     generation_revision = models.IntegerField(default=0)
     generation_attempt_id = models.UUIDField(null=True, blank=True, db_index=True)
@@ -311,6 +317,7 @@ class ReviewTask(models.Model):
             'generation_finished_at': self.generation_finished_at,
             'route': self.route,
             'prompt': self.prompt,
+            'scope_summary': self.scope_summary,
             'base_sdoc_version': self.base_sdoc_version,
             'current_changeset_revision_id': self.current_changeset_revision_id,
             'current_card_revision_id': self.current_card_revision_id,
@@ -379,6 +386,7 @@ class ReviewChangeItem(models.Model):
         ReviewChangeSetRevision, on_delete=models.RESTRICT, related_name='items',
         db_column='changeset_revision_id')
     logical_item_id = models.UUIDField(null=True, blank=True, db_index=True)
+    target_key = models.CharField(max_length=160, null=True, blank=True, db_index=True)
     kind = models.CharField(max_length=64)
     target = models.JSONField(default=dict)
     precondition = models.JSONField(default=dict)
@@ -393,7 +401,7 @@ class ReviewChangeItem(models.Model):
 
     class Meta:
         db_table = 'ai_review_change_item'
-        unique_together = (('changeset_revision', 'item_id'),)
+        unique_together = (('changeset_revision', 'item_id'), ('changeset_revision', 'target_key'))
         ordering = ('sort_order',)
 
     def to_dict(self):
@@ -402,6 +410,7 @@ class ReviewChangeItem(models.Model):
             'item_id': str(self.item_id),
             'changeset_revision_id': self.changeset_revision_id,
             'logical_item_id': str(self.logical_item_id) if self.logical_item_id else None,
+            'target_key': self.target_key,
             'kind': self.kind,
             'target': self.target,
             'precondition': self.precondition,
@@ -500,7 +509,10 @@ class ReviewDecisionSelection(models.Model):
 
     class Meta:
         db_table = 'ai_review_decision_selection'
-        unique_together = (('decision', 'card_revision_item'),)
+        # A card item represents one user-decidable suggestion.  It must not
+        # be claimed by both an approve and a reject decision (or by two
+        # concurrent approve requests).
+        unique_together = (('decision', 'card_revision_item'), ('card_revision_item',))
 
 
 class ApplyAttempt(models.Model):
