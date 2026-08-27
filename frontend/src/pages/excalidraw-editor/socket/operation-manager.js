@@ -1,5 +1,6 @@
 import { stateDebug } from '../utils/debug';
 import { CaptureUpdateAction, getSceneVersion, reconcileElements, restoreElements } from '@excalidraw/excalidraw';
+import { v4 as uuidv4 } from 'uuid';
 import { OPERATION_RETRY_DELAY } from '../constants';
 
 const STATE = {
@@ -87,6 +88,7 @@ class OperationManager {
     }
     this.lastQueuedSceneVersion = sceneVersion;
     const queueItem = {
+      uuid: uuidv4(),
       operation: elementsWithoutRemotePreview,
       beginTime: new Date().getTime(),
     };
@@ -102,6 +104,11 @@ class OperationManager {
 
     this.sendOperations();
   };
+
+  createRetryQueueItem = (queueItem) => ({
+    ...queueItem,
+    uuid: uuidv4(),
+  });
 
   scheduleRetry = () => {
     if (this.retryTimer) return;
@@ -139,10 +146,17 @@ class OperationManager {
     );
   };
 
-  sendOperationsCallback = (result, queueItem = this._sendingOperation) => {
-    // Ignore an ACK/error callback belonging to an operation that has already
-    // been requeued (for example, after disconnect or ACK timeout).
-    if (!queueItem || queueItem !== this._sendingOperation) return;
+  sendOperationsCallback = (result, queueItem) => {
+    // A retry keeps the same operation and enqueue time but receives a new
+    // UUID. This prevents a delayed ACK from an earlier send attempt from
+    // being accepted for the current attempt.
+    if (!queueItem || queueItem.uuid !== this._sendingOperation?.uuid) {
+      return;
+    }
+
+    // Release the in-flight slot before changing the queue/state. Any
+    // duplicate or delayed callback for this request must be ignored.
+    this._sendingOperation = null;
 
     if (result && result.success) {
       const { version: serverVersion } = result;
@@ -153,7 +167,6 @@ class OperationManager {
       this.setLastBroadcastedOrReceivedSceneVersion(queueItem.operation);
 
       // send next operations
-      this._sendingOperation = null;
       this.sendNextOperations();
       return;
     }
@@ -162,8 +175,7 @@ class OperationManager {
     if (error_type === 'ack_timeout') {
       // The ACK may be lost even if the server has already processed the
       // operation. Requeue it and retry through the normal operation pipeline.
-      this.pendingOperationQueue.unshift(queueItem);
-      this._sendingOperation = null;
+      this.pendingOperationQueue.unshift(this.createRetryQueueItem(queueItem));
       stateDebug(`ACK timeout. State Changed: ${this.state} -> ${STATE.IDLE}`);
       this.state = STATE.IDLE;
       this.scheduleRetry();
@@ -175,10 +187,10 @@ class OperationManager {
       // document must be reloaded before sending more operations.
       stateDebug(`State Changed: ${this.state} -> ${STATE.NEED_RELOAD}`);
       this.state = STATE.NEED_RELOAD;
-      this._sendingOperation = null;
     } else if (error_type === 'version_behind_server') {
-      // Put the failed operation into the pending list and re-execute it.
-      this.pendingOperationQueue.unshift(queueItem);
+      // Put the failed operation into the pending list and re-execute it with
+      // a new UUID so a previous callback cannot match the retry.
+      this.pendingOperationQueue.unshift(this.createRetryQueueItem(queueItem));
 
       stateDebug(`State Changed: ${this.state} -> ${STATE.CONFLICT}`);
       this.state = STATE.CONFLICT;
@@ -188,7 +200,6 @@ class OperationManager {
       // Drop it and release the in-flight slot; otherwise the manager remains
       // in SENDING forever and blocks all following operations.
       this.notifyState('execute_client_operations_error', error_type);
-      this._sendingOperation = null;
       stateDebug(`Operation failed (${error_type || 'unknown'}). State remains ${this.state}`);
       this.sendNextOperations();
     }
@@ -247,7 +258,7 @@ class OperationManager {
     if (type === 'disconnect') {
       // current state is sending
       if (this._sendingOperation) {
-        this.pendingOperationQueue.unshift(this._sendingOperation);
+        this.pendingOperationQueue.unshift(this.createRetryQueueItem(this._sendingOperation));
         this._sendingOperation = null;
       }
       stateDebug(`State Changed: ${this.state} -> ${STATE.DISCONNECT}`);
