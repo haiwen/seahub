@@ -9,6 +9,7 @@ import uuid
 from django.urls import reverse
 
 from seahub.repo_api_tokens.models import RepoAPITokens
+from seahub.repo_metadata.models import RepoMetadataViews
 from seahub.test_utils import BaseTestCase
 
 
@@ -130,3 +131,58 @@ class ViaUploadLinkTest(BaseTestCase):
         resp = self.client.get(self.url, data=data, **headers)
         self.assertEqual(200, resp.status_code)
         assert resp.content
+
+
+class ViaRepoMetadataViewsTest(BaseTestCase):
+
+    def setUp(self):
+        self.login_as(self.user)
+        self.repo_id = self.create_repo(
+            name='test-repo',
+            desc='',
+            username=self.user.username,
+            passwd=None,
+        )
+        self.client.put(reverse('api-v2.1-metadata', args=[self.repo_id]))
+
+        metadata_views = RepoMetadataViews.objects.get(repo_id=self.repo_id)
+        view_details = json.loads(metadata_views.details)
+        view_details['views'].append({
+            '_id': '_legacy_face_recognition',
+            'name': 'People',
+            'type': 'face_recognition',
+        })
+        view_details['navigation'].append({
+            '_id': '_legacy_face_recognition',
+            'type': 'view',
+        })
+        metadata_views.details = json.dumps(view_details)
+        metadata_views.save(update_fields=['details'])
+
+        self.read_token = RepoAPITokens.objects.create_token(
+            'read-app', self.repo_id, self.user.username, permission='r')
+        self.write_token = RepoAPITokens.objects.create_token(
+            'write-app', self.repo_id, self.user.username, permission='rw')
+        self.url = reverse('via-repo-token-metadata-views')
+        self.logout()
+
+    def tearDown(self):
+        RepoAPITokens.objects.filter(repo_id=self.repo_id).delete()
+        self.remove_repo(self.repo_id)
+
+    def test_get_hides_legacy_face_recognition_view(self):
+        headers = {'HTTP_AUTHORIZATION': 'token ' + self.read_token.token}
+        resp = self.client.get(self.url, **headers)
+        self.assertEqual(200, resp.status_code)
+
+        result = json.loads(resp.content)
+        self.assertNotIn('_legacy_face_recognition', [view['_id'] for view in result['views']])
+        self.assertNotIn('_legacy_face_recognition', [item['_id'] for item in result['navigation']])
+
+    def test_post_rejects_face_recognition_view(self):
+        headers = {'HTTP_AUTHORIZATION': 'token ' + self.write_token.token}
+        resp = self.client.post(self.url, {
+            'name': 'People',
+            'type': 'face_recognition',
+        }, **headers)
+        self.assertEqual(400, resp.status_code)

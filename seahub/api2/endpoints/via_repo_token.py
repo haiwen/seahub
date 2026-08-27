@@ -24,7 +24,7 @@ from seahub.repo_metadata.constants import METADATA_RECORD_UPDATE_LIMIT
 from seahub.repo_metadata.metadata_server_api import list_metadata_view_records, MetadataServerAPI
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.repo_metadata.utils import get_update_record, get_unmodifiable_columns, can_read_metadata, \
-    remove_tags_table, init_tags, get_table_by_name
+    remove_tags_table, init_tags, get_table_by_name, filter_face_recognition_views
 from seahub.seadoc.models import SeadocHistoryName, SeadocCommentReply
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.seadoc.utils import get_seadoc_file_uuid
@@ -1692,6 +1692,8 @@ class ViaRepoMetadataViews(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        metadata_views = filter_face_recognition_views(metadata_views)
+
         return Response(metadata_views)
 
     def post(self, request):
@@ -1731,6 +1733,10 @@ class ViaRepoMetadataViews(APIView):
         if permission != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if view_type == 'face_recognition':
+            error_msg = 'The face recognition view is no longer available.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
             new_view = RepoMetadataViews.objects.add_view(repo_id, view_name, view_type, view_data, folder_id)

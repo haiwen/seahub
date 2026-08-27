@@ -21,7 +21,8 @@ from seahub.repo_metadata.utils import add_init_metadata_task, recognize_faces, 
     get_unmodifiable_columns, can_read_metadata, init_faces, \
     extract_file_details, get_table_by_name, remove_faces_table, FACES_SAVE_PATH, \
     init_tags, init_tag_self_link_columns, remove_tags_table, add_init_face_recognition_task, \
-    add_init_ai_summary_task, delete_summary_vector_index, get_update_record, update_people_cover_photo, init_ai_summary, remove_ai_summary
+    add_init_ai_summary_task, delete_summary_vector_index, get_update_record, update_people_cover_photo, init_ai_summary, \
+    remove_ai_summary, filter_face_recognition_views
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.repo import is_repo_admin, is_repo_owner
 from seahub.share.utils import check_invisible_folder
@@ -1119,26 +1120,7 @@ class MetadataViews(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        # Face recognition is no longer available. Hide legacy views without changing stored data.
-        face_view_ids = {
-            view.get('_id') for view in metadata_views.get('views', [])
-            if view.get('type') == 'face_recognition' or view.get('_id') == FACE_RECOGNITION_VIEW_ID
-        }
-        metadata_views['views'] = [
-            view for view in metadata_views.get('views', [])
-            if view.get('_id') not in face_view_ids
-        ]
-        navigation = []
-        for item in metadata_views.get('navigation', []):
-            if item.get('_id') in face_view_ids:
-                continue
-            if item.get('type') == 'folder':
-                item['children'] = [
-                    child for child in item.get('children', [])
-                    if child.get('_id') not in face_view_ids
-                ]
-            navigation.append(item)
-        metadata_views['navigation'] = navigation
+        metadata_views = filter_face_recognition_views(metadata_views)
 
         return Response(metadata_views)
 
