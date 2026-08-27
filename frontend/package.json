@@ -149,6 +149,7 @@
     "fs-extra": "^10.0.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "30.3.0",
+    "jest-environment-jsdom": "^30.3.0",
     "jest-resolve": "^27.4.2",
     "jest-watch-typeahead": "3.0.1",
     "mini-css-extract-plugin": "^2.4.5",
