@@ -1790,6 +1790,8 @@ class ViaRepoMetadataViews(APIView):
 
         try:
             result = RepoMetadataViews.objects.update_view(repo_id, view_id, view_data)
+            if result is None:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'update view failed')
         except Exception as e:
             logger.exception(e)
             error_msg = 'Internal Server Error'

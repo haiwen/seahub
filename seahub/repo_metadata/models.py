@@ -241,15 +241,20 @@ class RepoMetadataViewsManager(models.Manager):
 
     def update_view(self, repo_id, view_id, view_dict):
         metadata_views = self.filter(repo_id=repo_id).first()
+        view_details = json.loads(metadata_views.details)
+        view = next((view for view in view_details['views'] if view.get('_id') == view_id), None)
+        if not view:
+            return None
+        if (view.get('type') == 'face_recognition' or
+                view.get('_id') == FACE_RECOGNITION_VIEW_ID or
+                view_dict.get('type') == 'face_recognition'):
+            return None
+
         view_dict.pop('_id', '')
         if 'name' in view_dict:
             exist_obj_names = metadata_views.views_names
             view_dict['name'] = get_no_duplicate_obj_name(view_dict['name'], exist_obj_names)
-        view_details = json.loads(metadata_views.details)
-        for v in view_details['views']:
-            if v.get('_id') == view_id:
-                v.update(view_dict)
-                break
+        view.update(view_dict)
         metadata_views.details = json.dumps(view_details)
         metadata_views.save()
         return json.loads(metadata_views.details)

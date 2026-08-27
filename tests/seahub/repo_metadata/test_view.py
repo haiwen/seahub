@@ -314,6 +314,20 @@ class MetadataViewsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         self.assertTrue(json_resp['success'])
 
+    def test_put_rejects_face_recognition_view(self):
+        url = reverse('api-v2.1-metadata-views', args=[self.repo_id])
+        resp = self.client.post(url, {
+            'name': 'test_view',
+            'type': 'table'
+        }, 'application/json')
+        view_id = json.loads(resp.content)['view']['_id']
+
+        resp = self.client.put(url, {
+            'view_id': view_id,
+            'view_data': {'type': 'face_recognition'}
+        }, 'application/json')
+        self.assertEqual(400, resp.status_code)
+
     def test_delete_view(self):
         url = reverse('api-v2.1-metadata-views', args=[self.repo_id])
         resp = self.client.post(url, {
