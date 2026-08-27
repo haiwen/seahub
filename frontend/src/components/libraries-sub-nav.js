@@ -9,6 +9,8 @@ import Icon from './icon';
 const propTypes = {
   currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   tabItemClick: PropTypes.func.isRequired,
+  showSharedLibraries: PropTypes.bool.isRequired,
+  showPublicLibraries: PropTypes.bool.isRequired,
 };
 
 class LibrariesSubNav extends React.Component {
@@ -67,19 +69,21 @@ class LibrariesSubNav extends React.Component {
             </Link>
           </li>
         )}
-        <li className={`nav-item ${this.getActiveClass('shared-libs')}`}>
-          <Link
-            to={siteRoot + 'shared-libs/'}
-            className={`nav-link ${this.getActiveClass('shared-libs')}`}
-            onClick={(e) => this.tabItemClick(e, 'shared-libs')}
-          >
-            <span className="nav-icon">
-              <Icon symbol="share-with-me" />
-            </span>
-            <span className="nav-text ellipsis" title={gettext('Shared with me')}>{gettext('Shared with me')}</span>
-          </Link>
-        </li>
-        {canViewOrg &&
+        {this.props.showSharedLibraries && (
+          <li className={`nav-item ${this.getActiveClass('shared-libs')}`}>
+            <Link
+              to={siteRoot + 'shared-libs/'}
+              className={`nav-link ${this.getActiveClass('shared-libs')}`}
+              onClick={(e) => this.tabItemClick(e, 'shared-libs')}
+            >
+              <span className="nav-icon">
+                <Icon symbol="share-with-me" />
+              </span>
+              <span className="nav-text ellipsis" title={gettext('Shared with me')}>{gettext('Shared with me')}</span>
+            </Link>
+          </li>
+        )}
+        {canViewOrg && this.props.showPublicLibraries &&
         <li className={`nav-item ${this.getActiveClass('org')}`}>
           <Link
             to={siteRoot + 'org/'}

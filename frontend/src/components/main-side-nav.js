@@ -16,7 +16,7 @@ import toaster from './toast';
 import CreateGroupDialog from '../components/dialog/create-group-dialog';
 import AboutDialog from './dialog/about-dialog';
 import LibrariesSubNav from '../components/libraries-sub-nav';
-import { SUB_NAV_ITEM_HEIGHT } from '../constants';
+import { ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY, SUB_NAV_ITEM_HEIGHT } from '../constants';
 import { isWorkWeixin } from './wechat/weixin-utils';
 import WechatDialog from './wechat/wechat-dialog';
 import { EVENT_BUS_TYPE } from './common/event-bus-type';
@@ -40,22 +40,41 @@ class MainSideNav extends React.Component {
       isAboutDialogShow: false,
       sharedExtended: false,
       groupItems: [],
+      onlyShowGroupsWithLibraries: localStorage.getItem(ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY) === 'true',
+      hasSharedLibraries: false,
+      hasPublicLibraries: false,
       isCreateGroupDialogOpen: false,
       isShowWechatDialog: false,
     };
     this.adminHeight = 0;
-    this.filesNavHeight = 0;
     this.isWorkWeixin = isWorkWeixin(window.navigator.userAgent.toLowerCase());
   }
 
   componentDidMount() {
     const eventBus = EventBus.getInstance();
     this.unsubscribeGroupRenamed = eventBus.subscribe(EVENT_BUS_TYPE.GROUP_RENAMED, this.onGroupRenamed);
+    this.unsubscribeOnlyShowGroupsWithLibrariesChanged = eventBus.subscribe(
+      EVENT_BUS_TYPE.ONLY_SHOW_GROUPS_WITH_LIBRARIES_CHANGED,
+      this.onOnlyShowGroupsWithLibrariesChanged
+    );
+    this.unsubscribeAddSharedRepoIntoGroup = eventBus.subscribe(EVENT_BUS_TYPE.ADD_SHARED_REPO_INTO_GROUP, this.loadGroups);
+    this.unsubscribeUnsharedRepoToGroup = eventBus.subscribe(EVENT_BUS_TYPE.UNSHARE_REPO_TO_GROUP, this.loadGroups);
+    this.unsubscribeGroupLibrariesChanged = eventBus.subscribe(EVENT_BUS_TYPE.GROUP_LIBRARIES_CHANGED, this.loadGroups);
+    this.unsubscribeSharedLibrariesChanged = eventBus.subscribe(EVENT_BUS_TYPE.SHARED_LIBRARIES_CHANGED, this.loadLibraryCounts);
   }
 
   componentWillUnmount() {
     this.unsubscribeGroupRenamed();
+    this.unsubscribeOnlyShowGroupsWithLibrariesChanged();
+    this.unsubscribeAddSharedRepoIntoGroup();
+    this.unsubscribeUnsharedRepoToGroup();
+    this.unsubscribeGroupLibrariesChanged();
+    this.unsubscribeSharedLibrariesChanged();
   }
+
+  onOnlyShowGroupsWithLibrariesChanged = (onlyShowGroupsWithLibraries) => {
+    this.setState({ onlyShowGroupsWithLibraries });
+  };
 
   onGroupRenamed = ({ newName, groupID }) => {
     const { groupItems } = this.state;
@@ -81,17 +100,29 @@ class MainSideNav extends React.Component {
   };
 
   loadGroups = () => {
-    seafileAPI.listGroups().then(res => {
+    seafileAPI.listGroups(true).then(res => {
       let groupList = res.data.map(item => {
         let group = new Group(item);
         return group;
       });
 
-      this.filesNavHeight = (groupList.length + (canAddGroup ? 1 : 0) + (canAddRepo ? 1 : 0) + (canViewOrg ? 1 : 0) + (enableOCM ? 1 : 0) + (enableOCMViaWebdav ? 1 : 0) + 1) * SUB_NAV_ITEM_HEIGHT;
       this.setState({
         groupItems: groupList.sort((a, b) => {
           return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
         })
+      });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
+  loadLibraryCounts = () => {
+    seafileAPI.listRepos({ 'type': ['shared', 'public'] }).then(res => {
+      const repoList = res.data.repos;
+      this.setState({
+        hasSharedLibraries: repoList.some(repo => repo.type === 'shared'),
+        hasPublicLibraries: repoList.some(repo => repo.type === 'public'),
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -148,7 +179,6 @@ class MainSideNav extends React.Component {
     const newGroup = new Group(groupData);
     const { groupItems: newList } = this.state;
     newList.push(newGroup);
-    this.filesNavHeight += SUB_NAV_ITEM_HEIGHT;
 
     const eventBus = EventBus.getInstance();
     eventBus.dispatch(EVENT_BUS_TYPE.ADD_NEW_GROUP, { group: newGroup });
@@ -289,6 +319,7 @@ class MainSideNav extends React.Component {
     }, () => {
       if (this.state.filesNavUnfolded) {
         this.loadGroups();
+        this.loadLibraryCounts();
       }
     });
   };
@@ -299,7 +330,11 @@ class MainSideNav extends React.Component {
 
   render() {
     let showActivity = isPro || !isDBSqlite3;
-    const { filesNavUnfolded, groupItems, sharedExtended } = this.state;
+    const { filesNavUnfolded, groupItems, sharedExtended, onlyShowGroupsWithLibraries, hasSharedLibraries, hasPublicLibraries } = this.state;
+    const visibleGroupItems = onlyShowGroupsWithLibraries ? groupItems.filter(group => group.repos.length > 0) : groupItems;
+    const showSharedLibraries = !onlyShowGroupsWithLibraries || hasSharedLibraries;
+    const showPublicLibraries = !onlyShowGroupsWithLibraries || hasPublicLibraries;
+    const filesNavHeight = (visibleGroupItems.length + (canAddGroup ? 1 : 0) + (canAddRepo ? 1 : 0) + (canViewOrg && showPublicLibraries ? 1 : 0) + (enableOCM ? 1 : 0) + (enableOCMViaWebdav ? 1 : 0) + (showSharedLibraries ? 1 : 0)) * SUB_NAV_ITEM_HEIGHT;
     return (
       <Fragment>
         <div className="side-nav">
@@ -325,12 +360,14 @@ class MainSideNav extends React.Component {
                 <ul
                   id="files-sub-nav"
                   className={`nav sub-nav nav-pills flex-column ${filesNavUnfolded ? 'side-panel-slide' : 'side-panel-slide-up'}`}
-                  style={ filesNavUnfolded ? { height: this.filesNavHeight, 'opacity': 1 } : { 'height': 0, 'opacity': 0 }}
+                  style={ filesNavUnfolded ? { height: filesNavHeight, 'opacity': 1 } : { 'height': 0, 'opacity': 0 }}
                 >
                   {filesNavUnfolded && (
                     <>
                       <LibrariesSubNav
-                        groupItems={groupItems}
+                        groupItems={visibleGroupItems}
+                        showSharedLibraries={showSharedLibraries}
+                        showPublicLibraries={showPublicLibraries}
                         tabItemClick={this.tabItemClick}
                         currentTab={this.props.currentTab}
                       />

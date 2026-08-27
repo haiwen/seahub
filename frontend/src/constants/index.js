@@ -55,6 +55,8 @@ export const TREE_PANEL_SECTION_STATE_KEY = 'sf_dir_view_tree_panel_section_stat
 
 export const RECENTLY_USED_LIST_KEY = 'recently_used_list';
 
+export const ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY = 'sf_only_show_groups_with_libraries';
+
 export const SEARCH_FILTERS_KEY = {
   SEARCH_FILENAME_AND_CONTENT: 'search_filename_and_content',
   SEARCH_FILENAME_ONLY: 'search_filename_only',

@@ -2,12 +2,15 @@ export const EVENT_BUS_TYPE = {
   // library
   CURRENT_LIBRARY_CHANGED: 'current_library_changed',
   SEARCH_LIBRARY_CONTENT: 'search_library_content',
+  SHARED_LIBRARIES_CHANGED: 'shared_libraries_changed',
 
   // group
   ADD_NEW_GROUP: 'add_new_group',
   ADD_SHARED_REPO_INTO_GROUP: 'add_shared_repo_into_group',
   UNSHARE_REPO_TO_GROUP: 'unshare_repo_to_group',
+  GROUP_LIBRARIES_CHANGED: 'group_libraries_changed',
   GROUP_RENAMED: 'group_renamed',
+  ONLY_SHOW_GROUPS_WITH_LIBRARIES_CHANGED: 'only_show_groups_with_libraries_changed',
 
   RESTORE_IMAGE: 'restore_image',
   OPEN_MARKDOWN: 'open_markdown',

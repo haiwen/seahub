@@ -4,7 +4,7 @@ import ModalPortal from './modal-portal';
 import { Link } from '@gatsbyjs/reach-router';
 import { gettext, siteRoot, canInvitePeople, canCreateWiki, enableTC, sideNavFooterCustomHtml, showWechatSupportGroup,
   isPro, isDBSqlite3, customNavItems, curNoteMsg, enableShowAbout } from '../utils/constants';
-import { SIDE_PANEL_FOLDED_WIDTH, SUB_NAV_ITEM_HEIGHT } from '../constants';
+import { ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY, SIDE_PANEL_FOLDED_WIDTH, SUB_NAV_ITEM_HEIGHT } from '../constants';
 import LibrariesSubNav from '../components/libraries-sub-nav';
 import ShareAdminSubNav from '../components/share-admin-sub-nav';
 import AboutDialog from './dialog/about-dialog';
@@ -35,6 +35,9 @@ class MainSideNavFolded extends React.Component {
     super(props);
     this.state = {
       groupItems: [],
+      onlyShowGroupsWithLibraries: localStorage.getItem(ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY) === 'true',
+      hasSharedLibraries: false,
+      hasPublicLibraries: false,
       isLibrariesSubNavShown: false,
       isShareAdminSubNavShown: false,
       isAboutDialogShow: false,
@@ -50,14 +53,16 @@ class MainSideNavFolded extends React.Component {
 
     const eventBus = EventBus.getInstance();
     this.unsubscribeGroupRenamed = eventBus.subscribe(EVENT_BUS_TYPE.GROUP_RENAMED, this.onGroupRenamed);
-    seafileAPI.listGroups().then(res => {
-      this.setState({
-        groupItems: res.data.map(item => new Group(item)).sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1),
-      });
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
+    this.unsubscribeOnlyShowGroupsWithLibrariesChanged = eventBus.subscribe(
+      EVENT_BUS_TYPE.ONLY_SHOW_GROUPS_WITH_LIBRARIES_CHANGED,
+      this.onOnlyShowGroupsWithLibrariesChanged
+    );
+    this.unsubscribeAddSharedRepoIntoGroup = eventBus.subscribe(EVENT_BUS_TYPE.ADD_SHARED_REPO_INTO_GROUP, this.loadGroups);
+    this.unsubscribeUnsharedRepoToGroup = eventBus.subscribe(EVENT_BUS_TYPE.UNSHARE_REPO_TO_GROUP, this.loadGroups);
+    this.unsubscribeGroupLibrariesChanged = eventBus.subscribe(EVENT_BUS_TYPE.GROUP_LIBRARIES_CHANGED, this.loadGroups);
+    this.unsubscribeSharedLibrariesChanged = eventBus.subscribe(EVENT_BUS_TYPE.SHARED_LIBRARIES_CHANGED, this.loadLibraryCounts);
+    this.loadGroups();
+    this.loadLibraryCounts();
     // make sure the tip is shown after nav folded animation end
     this.tipTimeout = setTimeout(() => {
       this.setState({
@@ -66,14 +71,47 @@ class MainSideNavFolded extends React.Component {
     }, 500);
   }
 
+  loadGroups = () => {
+    seafileAPI.listGroups(true).then(res => {
+      this.setState({
+        groupItems: res.data.map(item => new Group(item)).sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1),
+      });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
+  loadLibraryCounts = () => {
+    seafileAPI.listRepos({ 'type': ['shared', 'public'] }).then(res => {
+      const repoList = res.data.repos;
+      this.setState({
+        hasSharedLibraries: repoList.some(repo => repo.type === 'shared'),
+        hasPublicLibraries: repoList.some(repo => repo.type === 'public'),
+      });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
   componentWillUnmount() {
     document.removeEventListener('click', this.handleOutsideClick);
     this.unsubscribeHeaderEvent();
     this.unsubscribeGroupRenamed();
+    this.unsubscribeOnlyShowGroupsWithLibrariesChanged();
+    this.unsubscribeAddSharedRepoIntoGroup();
+    this.unsubscribeUnsharedRepoToGroup();
+    this.unsubscribeGroupLibrariesChanged();
+    this.unsubscribeSharedLibrariesChanged();
     if (this.tipTimeout) {
       clearTimeout(this.tipTimeout);
     }
   }
+
+  onOnlyShowGroupsWithLibrariesChanged = (onlyShowGroupsWithLibraries) => {
+    this.setState({ onlyShowGroupsWithLibraries });
+  };
 
   onGroupRenamed = ({ newName, groupID }) => {
     const { groupItems } = this.state;
@@ -192,7 +230,10 @@ class MainSideNavFolded extends React.Component {
 
   render() {
     let showActivity = isPro || !isDBSqlite3;
-    const { groupItems, isLibrariesSubNavShown, isShareAdminSubNavShown } = this.state;
+    const { groupItems, isLibrariesSubNavShown, isShareAdminSubNavShown, onlyShowGroupsWithLibraries, hasSharedLibraries, hasPublicLibraries } = this.state;
+    const visibleGroupItems = onlyShowGroupsWithLibraries ? groupItems.filter(group => group.repos.length > 0) : groupItems;
+    const showSharedLibraries = !onlyShowGroupsWithLibraries || hasSharedLibraries;
+    const showPublicLibraries = !onlyShowGroupsWithLibraries || hasPublicLibraries;
     return (
       <Fragment>
         <div className='side-nav-folded-container h-100 position-relative'>
@@ -212,7 +253,9 @@ class MainSideNavFolded extends React.Component {
                   onMouseLeave={this.closeSubNav}
                 >
                   <LibrariesSubNav
-                    groupItems={groupItems}
+                    groupItems={visibleGroupItems}
+                    showSharedLibraries={showSharedLibraries}
+                    showPublicLibraries={showPublicLibraries}
                     tabItemClick={this.tabItemClick}
                     currentTab={this.props.currentTab}
                   />
