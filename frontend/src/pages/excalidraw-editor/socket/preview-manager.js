@@ -46,7 +46,13 @@ class PreviewManager {
 
   startGesture = (activeTool, pointerDownState) => {
     if (this.activeGesture) {
-      this.logGesture('cancel', this.activeGesture, { reason: 'new-pointer-down' });
+      // A new pointer-down can arrive before the previous gesture's pointer-up
+      // (for example after a fast tool switch). Commit the previous gesture
+      // before replacing its state, otherwise its final change only exists in
+      // the volatile preview channel.
+      const previousGesture = this.activeGesture;
+      const elements = this.excalidrawAPI.getSceneElementsIncludingDeleted();
+      this.commitGesture(elements, previousGesture, 'new-pointer-down');
     }
 
     const sceneElementIds = new Set(

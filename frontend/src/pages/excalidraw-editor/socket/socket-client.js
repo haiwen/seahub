@@ -5,7 +5,7 @@ import { isSyncableElement } from '../data';
 import { clientDebug, serverDebug } from '../utils/debug';
 import SocketManager from './socket-manager';
 import { getFilename } from '../utils/element-utils';
-import { FILE_UPLOAD_TIMEOUT } from '../constants';
+import { FILE_UPLOAD_TIMEOUT, OPERATION_ACK_TIMEOUT } from '../constants';
 
 class SocketClient {
   constructor(config) {
@@ -52,15 +52,14 @@ class SocketClient {
   };
 
   onDisconnected = (data) => {
+    clientDebug('disconnect message: %s', data);
+    const socketManager = SocketManager.getInstance();
+    socketManager.dispatchConnectState('disconnect', data);
+
     if (data === 'ping timeout') {
       clientDebug('Disconnected due to ping timeout, trying to reconnect...');
       this.socket.connect();
-      return;
     }
-
-    clientDebug('disconnect message: %s', data);
-    const socketManager = SocketManager.getInstance();
-    socketManager.dispatchConnectState('disconnect');
   };
 
   onConnectError = () => {
@@ -119,13 +118,6 @@ class SocketClient {
       return acc;
     }, []);
 
-    for (const syncableElement of syncableElements) {
-      this.broadcastedElementVersions.set(
-        syncableElement.id,
-        syncableElement.version,
-      );
-    }
-
     this.queueFileUpload();
 
     const payload = {
@@ -133,7 +125,21 @@ class SocketClient {
       version: version,
     };
     const params = this.getParams(payload);
-    this.socket.emit('elements-updated', params, (result) => {
+    this.socket.timeout(OPERATION_ACK_TIMEOUT).emit('elements-updated', params, (error, result) => {
+      if (error) {
+        clientDebug('elements-updated ACK timeout.');
+        callback && callback({ error_type: 'ack_timeout' });
+        return;
+      }
+
+      if (result && result.success) {
+        for (const syncableElement of syncableElements) {
+          this.broadcastedElementVersions.set(
+            syncableElement.id,
+            syncableElement.version,
+          );
+        }
+      }
       callback && callback(result);
     });
   };

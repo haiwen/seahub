@@ -1,5 +1,6 @@
 import { stateDebug } from '../utils/debug';
 import { CaptureUpdateAction, getSceneVersion, reconcileElements, restoreElements } from '@excalidraw/excalidraw';
+import { OPERATION_RETRY_DELAY } from '../constants';
 
 const STATE = {
   IDLE: 'idle',
@@ -41,6 +42,7 @@ class OperationManager {
       this.setLastBroadcastedOrReceivedSceneVersion(document.elements);
     }
     this.lastQueuedSceneVersion = this.lastBroadcastedOrReceivedSceneVersion;
+    this.retryTimer = null;
   }
 
   notifyState = (type, message) => {
@@ -93,6 +95,15 @@ class OperationManager {
     this.sendOperations();
   };
 
+  scheduleRetry = () => {
+    if (this.retryTimer) return;
+
+    this.retryTimer = setTimeout(() => {
+      this.retryTimer = null;
+      this.sendOperations();
+    }, OPERATION_RETRY_DELAY);
+  };
+
   sendOperations = () => {
     if (this.state !== STATE.IDLE) return;
     stateDebug(`State changed: ${this.state} -> ${STATE.SENDING}`);
@@ -113,17 +124,25 @@ class OperationManager {
     const elements = this.pendingOperationList.shift();
     this._sendingOperation = elements;
 
-    this.socketClient.broadcastSceneElements(elements, version, this.sendOperationsCallback);
+    this.socketClient.broadcastSceneElements(
+      elements,
+      version,
+      (result) => this.sendOperationsCallback(result, elements),
+    );
   };
 
-  sendOperationsCallback = (result) => {
+  sendOperationsCallback = (result, operation = this._sendingOperation) => {
+    // Ignore an ACK/error callback belonging to an operation that has already
+    // been requeued (for example, after disconnect or ACK timeout).
+    if (operation !== this._sendingOperation) return;
+
     if (result && result.success) {
       const { version: serverVersion } = result;
       this.setVersion(serverVersion);
       const lastSavedAt = new Date().getTime();
       this.notifyState('saved', lastSavedAt);
 
-      this.setLastBroadcastedOrReceivedSceneVersion(this._sendingOperation);
+      this.setLastBroadcastedOrReceivedSceneVersion(operation);
 
       // send next operations
       this.pendingOperationBeginTimeList.shift(); // remove current operation's begin time
@@ -132,8 +151,17 @@ class OperationManager {
       return;
     }
     // Operations are execute failure
-    const { error_type } = result;
-    if (error_type === 'load_document_content_error' || error_type === 'token_expired') {
+    const { error_type } = result || {};
+    if (error_type === 'ack_timeout') {
+      // The ACK may be lost even if the server has already processed the
+      // operation. Requeue it and retry through the normal operation pipeline.
+      this.pendingOperationList.unshift(operation);
+      this.pendingOperationBeginTimeList.shift();
+      this._sendingOperation = null;
+      stateDebug(`ACK timeout. State Changed: ${this.state} -> ${STATE.IDLE}`);
+      this.state = STATE.IDLE;
+      this.scheduleRetry();
+    } else if (error_type === 'load_document_content_error' || error_type === 'token_expired') {
       // load_document_content_error: After a short-term reconnection, the content of the document fails to load
       this.notifyState(error_type);
 
@@ -143,7 +171,7 @@ class OperationManager {
       this._sendingOperation = null;
     } else if (error_type === 'version_behind_server') {
       // Put the failed operation into the pending list and re-execute it
-      this.pendingOperationList.unshift(this._sendingOperation);
+      this.pendingOperationList.unshift(operation);
 
       stateDebug(`State Changed: ${this.state} -> ${STATE.CONFLICT}`);
       this.state = STATE.CONFLICT;
