@@ -8,7 +8,7 @@ import ThoughtProcess from '../thought-process';
 
 import './index.css';
 
-const CommonMessage = ({ chatId, message, settings, repoID, showOperations, isStreaming }) => {
+const CommonMessage = ({ chatId, message, settings, repoID, showOperations, isStreaming, enableMessageMathJax = true }) => {
   const markdownMessageRef = useRef(null);
 
   const getAIReply = useCallback(() => {
@@ -22,7 +22,14 @@ const CommonMessage = ({ chatId, message, settings, repoID, showOperations, isSt
         <ThoughtProcess value={message[CHAT_MESSAGE_TYPE.THOUGHT_PROCESS]} settings={settings} />
         {message[CHAT_MESSAGE_TYPE.TEXT] && <>{message[CHAT_MESSAGE_TYPE.TEXT]}</>}
         {message[CHAT_MESSAGE_TYPE.AI_REPLY] && (
-          <CustomizeMarkdownViewer ref={markdownMessageRef} chatId={chatId} message={message} repoID={repoID} isStreaming={isStreaming} />
+          <CustomizeMarkdownViewer
+            ref={markdownMessageRef}
+            chatId={chatId}
+            message={message}
+            repoID={repoID}
+            isStreaming={isStreaming}
+            enableMathJax={enableMessageMathJax}
+          />
         )}
         {showOperations && (<MessageOperations getAIReply={getAIReply} />)}
       </div>
@@ -37,6 +44,7 @@ CommonMessage.propTypes = {
   repoID: PropTypes.string,
   showOperations: PropTypes.bool,
   isStreaming: PropTypes.bool,
+  enableMessageMathJax: PropTypes.bool,
 };
 
 export default CommonMessage;

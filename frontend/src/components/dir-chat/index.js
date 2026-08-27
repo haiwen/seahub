@@ -68,7 +68,7 @@ const ChatEvents = () => {
   return null;
 };
 
-const Main = ({ repoID, settings, showDocuments = true, compact = false, enableSessions = true, defaultShowSessions, onEmbeddedViewChange, messageRenderers, onReviewSubmit }) => {
+const Main = ({ repoID, settings, showDocuments = true, compact = false, enableSessions = true, defaultShowSessions, onEmbeddedViewChange, messageRenderers, onReviewSubmit, enableMessageMathJax = true }) => {
   const { isLoading: isAskPageLoading, pageSlugId, togglePageSlugId } = useAskPage();
   const {
     isLoading: isSessionsLoading,
@@ -153,6 +153,7 @@ const Main = ({ repoID, settings, showDocuments = true, compact = false, enableS
                   hideSessionHeader={compact}
                   messageRenderers={messageRenderers}
                   onReviewSubmit={onReviewSubmit}
+                  enableMessageMathJax={enableMessageMathJax}
                 />
                 {showDocuments && <Documents />}
               </>
@@ -175,6 +176,7 @@ Main.propTypes = {
   onEmbeddedViewChange: PropTypes.func,
   messageRenderers: PropTypes.object,
   onReviewSubmit: PropTypes.func,
+  enableMessageMathJax: PropTypes.bool,
 };
 
 const DirChat = ({
@@ -196,6 +198,7 @@ const DirChat = ({
   fallbackToNewWhenSessionMissing = false,
   messageRenderers,
   onReviewSubmit,
+  enableMessageMathJax = true,
 }) => {
   const defaultResetURL = useCallback((pageSlugId) => {
     const baseUrl = `${siteRoot}library/${repoID}/${encodeURIComponent(repoName)}/?chat=true&path=/`;
@@ -243,6 +246,7 @@ const DirChat = ({
               onEmbeddedViewChange={onEmbeddedViewChange}
               messageRenderers={messageRenderers}
               onReviewSubmit={onReviewSubmit}
+              enableMessageMathJax={enableMessageMathJax}
             />
           </AIChatToolsProvider>
         </DocumentsProvider>
@@ -270,6 +274,7 @@ DirChat.propTypes = {
   fallbackToNewWhenSessionMissing: PropTypes.bool,
   messageRenderers: PropTypes.object,
   onReviewSubmit: PropTypes.func,
+  enableMessageMathJax: PropTypes.bool,
 };
 
 export default DirChat;

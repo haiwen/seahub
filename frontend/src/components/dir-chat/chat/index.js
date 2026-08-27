@@ -21,7 +21,7 @@ import './index.css';
 const STREAM_UPDATE_DELAY = 50;
 const SCROLL_BOTTOM_THRESHOLD = 24;
 
-const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = false, messageRenderers, onReviewSubmit }) => {
+const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = false, messageRenderers, onReviewSubmit, enableMessageMathJax = true }) => {
   const [isReply, setReply] = useState(false);
   const [isReviewSubmitting, setReviewSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -796,6 +796,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
               settings={settings}
               repoID={repoID}
               messageRenderers={messageRenderers}
+              enableMessageMathJax={enableMessageMathJax}
               onMessageContentChange={updateChatMessageContent}
               onExtensionStateChange={updateReviewTaskRunning}
             />
@@ -841,6 +842,7 @@ Chat.propTypes = {
   hideSessionHeader: PropTypes.bool,
   messageRenderers: PropTypes.object,
   onReviewSubmit: PropTypes.func,
+  enableMessageMathJax: PropTypes.bool,
 };
 
 export default Chat;

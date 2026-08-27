@@ -6,7 +6,7 @@ import CommonMessage from './common-message';
 
 import './index.css';
 
-const ChatHistory = ({ chat, settings, repoID, messageRenderers, onMessageContentChange, onExtensionStateChange }) => {
+const ChatHistory = ({ chat, settings, repoID, messageRenderers, onMessageContentChange, onExtensionStateChange, enableMessageMathJax = true }) => {
   const { _id, message = {}, isUserSpeak = false, type, extensions = [] } = chat;
   const chatId = useMemo(() => _id || '', [_id]);
   const isStreaming = chatId === 'streaming-answer';
@@ -26,7 +26,15 @@ const ChatHistory = ({ chat, settings, repoID, messageRenderers, onMessageConten
   return (
     <div className={classNames('sea-ai-ask-chat', { 'user-input-chat': isUserSpeak })}>
       {hasMessageContent && (
-        <CommonMessage chatId={chatId} message={message} settings={settings} repoID={repoID} showOperations={showOperations} isStreaming={isStreaming} />
+        <CommonMessage
+          chatId={chatId}
+          message={message}
+          settings={settings}
+          repoID={repoID}
+          showOperations={showOperations}
+          isStreaming={isStreaming}
+          enableMessageMathJax={enableMessageMathJax}
+        />
       )}
       {extensions.map((extension, index) => {
         const Renderer = messageRenderers && messageRenderers[extension.type];
@@ -51,6 +59,7 @@ ChatHistory.propTypes = {
   messageRenderers: PropTypes.object,
   onMessageContentChange: PropTypes.func,
   onExtensionStateChange: PropTypes.func,
+  enableMessageMathJax: PropTypes.bool,
 };
 
 export default ChatHistory;
