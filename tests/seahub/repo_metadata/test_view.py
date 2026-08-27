@@ -363,6 +363,25 @@ class MetadataViewsDuplicateViewTest(BaseTestCase):
         self.assertNotEqual(json_resp['view']['_id'], self.view_id)
         self.assertTrue(json_resp['view']['name'].startswith('test_view'))
 
+    def test_duplicate_face_recognition_view(self):
+        metadata_views = RepoMetadataViews.objects.get(repo_id=self.repo_id)
+        view_details = json.loads(metadata_views.details)
+        view_details['views'].append({
+            '_id': '_legacy_face_recognition',
+            'name': 'People',
+            'type': 'face_recognition',
+        })
+        view_details['navigation'].append({
+            '_id': '_legacy_face_recognition',
+            'type': 'view',
+        })
+        metadata_views.details = json.dumps(view_details)
+        metadata_views.save(update_fields=['details'])
+
+        url = reverse('api-v2.1-metadata-view-duplicate', args=[self.repo_id])
+        resp = self.client.post(url, {'view_id': '_legacy_face_recognition'}, 'application/json')
+        self.assertEqual(400, resp.status_code)
+
 
 class MetadataViewsMoveViewTest(BaseTestCase):
     def setUp(self):

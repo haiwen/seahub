@@ -186,3 +186,9 @@ class ViaRepoMetadataViewsTest(BaseTestCase):
             'type': 'face_recognition',
         }, **headers)
         self.assertEqual(400, resp.status_code)
+
+    def test_duplicate_face_recognition_view(self):
+        headers = {'HTTP_AUTHORIZATION': 'token ' + self.write_token.token}
+        url = reverse('via-repo-token-metadata-duplicate-views')
+        resp = self.client.post(url, {'view_id': '_legacy_face_recognition'}, **headers)
+        self.assertEqual(400, resp.status_code)

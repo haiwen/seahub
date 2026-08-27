@@ -258,11 +258,13 @@ class RepoMetadataViewsManager(models.Manager):
         metadata_views = self.filter(repo_id=repo_id).first()
         view_details = json.loads(metadata_views.details)
         exist_folders_views_ids = metadata_views.folders_views_ids
-        new_view_id = generate_views_unique_id(4, exist_folders_views_ids)
         duplicate_view = next((copy.deepcopy(view) for view in view_details['views'] if view.get('_id') == view_id), None)
         if not duplicate_view:
             return None
+        if duplicate_view.get('type') == 'face_recognition' or duplicate_view.get('_id') == FACE_RECOGNITION_VIEW_ID:
+            return None
 
+        new_view_id = generate_views_unique_id(4, exist_folders_views_ids)
         duplicate_view['_id'] = new_view_id
         view_name = get_no_duplicate_obj_name(duplicate_view['name'], metadata_views.views_names)
         duplicate_view['name'] = view_name
