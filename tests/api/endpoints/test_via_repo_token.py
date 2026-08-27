@@ -179,6 +179,12 @@ class ViaRepoMetadataViewsTest(BaseTestCase):
         self.assertNotIn('_legacy_face_recognition', [view['_id'] for view in result['views']])
         self.assertNotIn('_legacy_face_recognition', [item['_id'] for item in result['navigation']])
 
+    def test_get_legacy_face_recognition_view_detail(self):
+        headers = {'HTTP_AUTHORIZATION': 'token ' + self.read_token.token}
+        url = reverse('via-repo-token-metadata-views-detail', args=['_legacy_face_recognition'])
+        resp = self.client.get(url, **headers)
+        self.assertEqual(404, resp.status_code)
+
     def test_post_rejects_face_recognition_view(self):
         headers = {'HTTP_AUTHORIZATION': 'token ' + self.write_token.token}
         resp = self.client.post(self.url, {

@@ -237,6 +237,8 @@ class RepoMetadataViewsManager(models.Manager):
         view_details = json.loads(metadata_views.details)
         for v in view_details['views']:
             if v.get('_id') == view_id:
+                if v.get('type') == 'face_recognition' or v.get('_id') == FACE_RECOGNITION_VIEW_ID:
+                    return None
                 return v
 
     def update_view(self, repo_id, view_id, view_dict):

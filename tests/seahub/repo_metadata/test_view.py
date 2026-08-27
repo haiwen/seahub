@@ -297,6 +297,25 @@ class MetadataViewsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         self.assertEqual(json_resp['view']['_id'], view_id)
 
+    def test_get_legacy_face_recognition_view_detail(self):
+        metadata_views = RepoMetadataViews.objects.get(repo_id=self.repo_id)
+        view_details = json.loads(metadata_views.details)
+        view_details['views'].append({
+            '_id': '_legacy_face_recognition',
+            'name': 'People',
+            'type': 'face_recognition',
+        })
+        view_details['navigation'].append({
+            '_id': '_legacy_face_recognition',
+            'type': 'view',
+        })
+        metadata_views.details = json.dumps(view_details)
+        metadata_views.save(update_fields=['details'])
+
+        url = reverse('api-v2.1-metadata-views-detail', args=[self.repo_id, '_legacy_face_recognition'])
+        resp = self.client.get(url)
+        self.assertEqual(404, resp.status_code)
+
     def test_put_view(self):
         url = reverse('api-v2.1-metadata-views', args=[self.repo_id])
         resp = self.client.post(url, {
