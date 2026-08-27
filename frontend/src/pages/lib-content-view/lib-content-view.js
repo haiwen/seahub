@@ -11,8 +11,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import {
-  enableAIChat,
-  enableSeafileAI,
+  chatAndSearchAvailable,
   enableThumbnailServer,
   gettext,
   SF_DIRECTORY_TREE_SORT_BY_KEY,
@@ -155,11 +154,13 @@ class LibContentView extends React.Component {
       hiddenColumnKeys: this.props.repoID ? JSON.parse(localStorage.getItem(getDirHiddenColumnKeys(this.props.repoID))) || LIST_VIEW_HIDDEN_COLUMNS_DEFAULT : LIST_VIEW_HIDDEN_COLUMNS_DEFAULT,
       hiddenTableViewColumnKeys: this.props.repoID ? JSON.parse(localStorage.getItem(getDirTableHiddenColumnKeys(this.props.repoID))) || DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS : DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS,
       enableMetadata: false,
+      enableAISummary: false,
       metadata: null,
       isCrossRepoMove: false,
       rowHeight: Number(localStorage.getItem(getDirTableRowHeightKey(this.props.repoID))) || ROW_HEIGHT
     };
     this.oldOnpopstate = window.onpopstate;
+    window.app.pageOptions.enableAISummary = false;
     window.onpopstate = this.onpopstate;
     this.lastModifyTime = new Date();
     this.isNeedUpdateHistoryState = true; // Load, refresh page, switch mode for the first time, no need to set historyState
@@ -212,7 +213,7 @@ class LibContentView extends React.Component {
   };
 
   canUseAIChat = (repoInfo = this.state.currentRepoInfo) => {
-    return Boolean(enableSeafileAI && enableAIChat && repoInfo && !repoInfo.is_virtual);
+    return Boolean(chatAndSearchAvailable && this.state.enableAISummary && repoInfo && !repoInfo.is_virtual);
   };
 
   componentDidMount() {
@@ -330,7 +331,7 @@ class LibContentView extends React.Component {
       currentMode = TRASH_MODE;
     } else if (isHistory) {
       currentMode = HISTORY_MODE;
-    } else if (isChat && enableSeafileAI && enableAIChat) {
+    } else if (isChat && chatAndSearchAvailable) {
       currentMode = CHAT_MODE;
     } else if (tagId) {
       currentMode = TAGS_MODE;
@@ -2913,13 +2914,23 @@ class LibContentView extends React.Component {
   };
 
   metadataStatusCallback = (status) => {
-    const { enableTags, enableMetadata } = status;
+    const { enableTags, enableMetadata, enableAISummary } = status;
     const { repoID } = this.props;
 
     if (enableMetadata !== this.state.enableMetadata) {
       this.setState({ enableMetadata });
       if (!enableMetadata && repoID) {
         localStorage.removeItem(getDirHiddenColumnKeys(repoID));
+      }
+    }
+    if (enableAISummary !== this.state.enableAISummary) {
+      window.app.pageOptions.enableAISummary = enableAISummary;
+      this.setState({ enableAISummary });
+      if (!enableAISummary && this.state.currentMode === CHAT_MODE) {
+        this.switchViewMode(Cookies.get('seafile_view_mode') || LIST_MODE);
+      }
+      if (enableAISummary && chatAndSearchAvailable && this.getInfoFromLocation(repoID).isChat) {
+        this.setState({ currentMode: CHAT_MODE, path: '/', isDirentDetailShow: false, isDirentSelected: false });
       }
     }
 
@@ -3178,6 +3189,7 @@ class LibContentView extends React.Component {
                           path={this.state.path}
                           repoID={this.props.repoID}
                           currentRepoInfo={this.state.currentRepoInfo}
+                          enableAISummary={this.state.enableAISummary}
                           updateRepoInfo={this.updateRepoInfo}
                           isGroupOwnedRepo={this.state.isGroupOwnedRepo}
                           userPerm={userPerm}

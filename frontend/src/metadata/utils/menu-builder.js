@@ -1,4 +1,4 @@
-import { enableAIChat, enableSeafileAI, gettext } from '../../utils/constants';
+import { chatAndSearchAvailable, enableSeafileAI, gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { checkIsDir } from './row';
 import { getFileNameFromRecord } from './cell';
@@ -153,8 +153,8 @@ export const buildAISubmenuOptions = (records, readOnly, metadataStatus, isMulti
 
   const repoInfo = window.sfMetadataContext?.getSetting('repoInfo');
   const canChatWithAI = Boolean(
-    enableSeafileAI &&
-    enableAIChat &&
+    chatAndSearchAvailable &&
+    window.app.pageOptions.enableAISummary &&
     repoInfo &&
     !repoInfo.is_virtual &&
     records.every((record) => !checkIsDir(record))

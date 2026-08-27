@@ -1,11 +1,11 @@
 import TextTranslation from '@/utils/text-translation';
-import { username, enableAIChat, enableSeafileAI } from '@/utils/constants';
+import { chatAndSearchAvailable, username } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 
 const isDivider = (item) => item === 'Divider';
 
 const canUseAIChat = (repoInfo) => {
-  return Boolean(enableSeafileAI && enableAIChat && repoInfo && !repoInfo.is_virtual);
+  return Boolean(chatAndSearchAvailable && window.app.pageOptions.enableAISummary && repoInfo && !repoInfo.is_virtual);
 };
 
 const canChatWithDirents = (repoInfo, dirents) => {

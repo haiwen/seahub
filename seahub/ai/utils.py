@@ -17,13 +17,13 @@ from django.db.models.functions import Coalesce
 from django.db.models import Sum, Value
 from seaserv import ccnet_api, get_org_id_by_repo_id, seafile_api
 
-from seahub.settings import SEAFILE_AI_SECRET_KEY, SEAFILE_AI_SERVER_URL
+from seahub.settings import ENABLE_AI_CHAT, ENABLE_METADATA_MANAGEMENT, ENABLE_SEAFILE_AI, LLM_MODELS, SEAFILE_AI_SECRET_KEY, SEAFILE_AI_SERVER_URL
 from seahub.base.accounts import User
 from seahub.tags.models import FileUUIDMap
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
 from seahub.constants import DEFAULT_USER, PERMISSION_INVISIBLE
 from seahub.share.utils import is_repo_admin
-from seahub.utils import HAS_FILE_SEASEARCH, gen_inner_file_upload_url, get_service_url, is_org_context, is_pro_version, mkstemp
+from seahub.utils import gen_inner_file_upload_url, get_service_url, is_org_context, is_pro_version, mkstemp
 from seahub.utils.user_permissions import get_user_role
 from seahub.utils.ccnet_db import CcnetDB
 from seahub.organizations.models import OrgMemberQuota, OrgSettings
@@ -271,7 +271,13 @@ def gen_message_id(session_uuid, max_try=5):
 
 
 def verify_chat_ai_config():
-    return bool(SEAFILE_AI_SERVER_URL and SEAFILE_AI_SECRET_KEY and HAS_FILE_SEASEARCH)
+    return bool(
+        ENABLE_METADATA_MANAGEMENT and
+        ENABLE_SEAFILE_AI and
+        ENABLE_AI_CHAT and
+        SEAFILE_AI_SERVER_URL and
+        LLM_MODELS
+    )
 
 
 def user_passes_ai_chat_folder_permissions(request, repo_id):
