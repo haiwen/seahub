@@ -155,8 +155,9 @@ class OperationManager {
     if (error_type === 'ack_timeout') {
       // The ACK may be lost even if the server has already processed the
       // operation. Requeue it and retry through the normal operation pipeline.
+      // Keep the operation's begin time at the head of the time list because
+      // it is still paired with this operation after the retry.
       this.pendingOperationList.unshift(operation);
-      this.pendingOperationBeginTimeList.shift();
       this._sendingOperation = null;
       stateDebug(`ACK timeout. State Changed: ${this.state} -> ${STATE.IDLE}`);
       this.state = STATE.IDLE;
@@ -165,12 +166,16 @@ class OperationManager {
       // load_document_content_error: After a short-term reconnection, the content of the document fails to load
       this.notifyState(error_type);
 
-      // reset sending control
+      // reset sending control. The operation is not requeued, so remove its
+      // begin time as well to keep the two queues aligned.
       stateDebug(`State Changed: ${this.state} -> ${STATE.NEED_RELOAD}`);
       this.state = STATE.NEED_RELOAD;
+      this.pendingOperationBeginTimeList.shift();
       this._sendingOperation = null;
     } else if (error_type === 'version_behind_server') {
-      // Put the failed operation into the pending list and re-execute it
+      // Put the failed operation into the pending list and re-execute it.
+      // Its begin time is already the first entry in the time list, so retain
+      // it while moving the operation back to the pending list.
       this.pendingOperationList.unshift(operation);
 
       stateDebug(`State Changed: ${this.state} -> ${STATE.CONFLICT}`);
@@ -184,7 +189,9 @@ class OperationManager {
 
     this.updateLocalDataByRemoteData(elements, version);
 
-    this.pendingOperationBeginTimeList.shift();
+    // The conflicted operation was requeued at the front of
+    // pendingOperationList. Do not shift its begin time here; otherwise the
+    // first timestamp would belong to the next operation on the retry.
     this._sendingOperation = null;
     this.state = STATE.SENDING;
     this.sendNextOperations();
