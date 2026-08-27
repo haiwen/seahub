@@ -150,7 +150,7 @@ const SimpleEditor = ({ isSharedView = false }) => {
     if (gestureUpdate.gesture) {
       socketManager.broadcastPreviewElements(elements, gestureUpdate.gesture);
       if (gestureUpdate.ended) {
-        socketManager.commitGesture(elements, gestureUpdate.gesture, 'text-edit-finished');
+        socketManager.commitGesture(elements, gestureUpdate.gesture, gestureUpdate.endReason);
       }
     } else {
       // Changes outside a pointer gesture (for example delete, paste, or

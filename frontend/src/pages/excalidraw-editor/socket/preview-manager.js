@@ -13,6 +13,7 @@ import {
 } from '../utils/operation-type';
 
 const PREVIEW_SYNC_TIMEOUT = 50;
+const MAX_PENDING_REMOTE_PREVIEW_CHANGES = 100;
 
 class PreviewManager {
 
@@ -24,7 +25,7 @@ class PreviewManager {
     this.remotePreviewSequenceByGesture = new Map();
     this.remotePreviewElementsById = new Map();
     this.isApplyingRemotePreview = false;
-    this.pendingRemotePreviewChange = null;
+    this.pendingRemotePreviewChanges = [];
   }
 
   logGesture = (phase, gesture, extra = {}) => {
@@ -67,6 +68,8 @@ class PreviewManager {
       startedAt: Date.now(),
       updateCount: 0,
       previewSequence: 0,
+      pointerUpPending: false,
+      pointerUpSceneSignature: null,
     };
 
     this.logGesture('start', this.activeGesture, {
@@ -90,6 +93,8 @@ class PreviewManager {
         startedAt: Date.now(),
         updateCount: 0,
         previewSequence: 0,
+        pointerUpPending: false,
+        pointerUpSceneSignature: null,
       };
       this.logGesture('start', this.activeGesture, { source: 'onChange' });
     }
@@ -150,12 +155,26 @@ class PreviewManager {
     });
 
     const gesture = this.activeGesture;
-    const ended = gesture.type === OPERATION_TYPES.EDIT_TEXT && currentType === OPERATION_TYPES.OTHER;
+    const isTextEditFinished =
+      gesture.type === OPERATION_TYPES.EDIT_TEXT && currentType === OPERATION_TYPES.OTHER;
+    // Excalidraw can dispatch onPointerUp before it publishes the last scene
+    // change (for example the last freedraw point or the final resize/move).
+    // Wait for the next onChange so the reliable operation uses the scene that
+    // Excalidraw has actually finalized, rather than the scene read in
+    // handlePointerUp.
+    const isPointerUpFinalChange = gesture.pointerUpPending && !(
+      gesture.activeTool === 'text' && currentType === OPERATION_TYPES.EDIT_TEXT
+    );
+    const ended = isTextEditFinished || isPointerUpFinalChange;
+    const endReason = isTextEditFinished
+      ? 'text-edit-finished'
+      : 'pointer-up-final-change';
     if (ended) {
-      this.endGesture('text-edit-finished');
+      gesture.pointerUpPending = false;
+      this.endGesture(endReason);
     }
 
-    return { gesture, ended };
+    return { gesture, ended, endReason };
   };
 
   broadcastPreviewElements = throttle((elements, gesture) => {
@@ -189,22 +208,26 @@ class PreviewManager {
   };
 
   clearPendingRemotePreviewChange = () => {
-    this.pendingRemotePreviewChange = null;
+    this.pendingRemotePreviewChanges = [];
   };
 
   consumeRemotePreviewChange = (elements) => {
-    if (this.isApplyingRemotePreview) {
-      this.pendingRemotePreviewChange = null;
+    const sceneSignature = this.getSceneSignature(elements);
+    const pendingIndex = this.pendingRemotePreviewChanges.findIndex(
+      (pendingChange) => pendingChange.sceneSignature === sceneSignature,
+    );
+
+    if (pendingIndex !== -1) {
+      // updateScene() callbacks can be coalesced. If a later preview scene is
+      // observed, all earlier pending scenes have either already been applied
+      // or will not produce a separate callback.
+      this.pendingRemotePreviewChanges.splice(0, pendingIndex + 1);
       return true;
     }
 
-    if (!this.pendingRemotePreviewChange) {
-      return false;
-    }
-
-    const isPreviewChange = this.pendingRemotePreviewChange.sceneSignature === this.getSceneSignature(elements);
-    this.pendingRemotePreviewChange = null;
-    return isPreviewChange;
+    // updateScene() may invoke onChange synchronously. Do not treat that
+    // callback as a local edit, but keep other pending preview scenes intact.
+    return this.isApplyingRemotePreview;
   };
 
   getElementsWithoutRemotePreview = (elements) => {
@@ -275,12 +298,18 @@ class PreviewManager {
     });
 
     const nextSceneElements = Array.from(sceneElementById.values());
-    // updateScene() schedules Excalidraw's onChange. Keep a scene signature so
-    // the later callback can be identified without swallowing a real local
-    // edit that happened in the meantime.
-    this.pendingRemotePreviewChange = {
+    // updateScene() schedules Excalidraw's onChange. Keep each scene
+    // signature so callbacks from multiple remote previews can be matched
+    // without one remote update overwriting another.
+    this.pendingRemotePreviewChanges.push({
       sceneSignature: this.getSceneSignature(nextSceneElements),
-    };
+    });
+    if (this.pendingRemotePreviewChanges.length > MAX_PENDING_REMOTE_PREVIEW_CHANGES) {
+      this.pendingRemotePreviewChanges.splice(
+        0,
+        this.pendingRemotePreviewChanges.length - MAX_PENDING_REMOTE_PREVIEW_CHANGES,
+      );
+    }
     this.isApplyingRemotePreview = true;
     try {
       this.excalidrawAPI.updateScene({
@@ -359,9 +388,15 @@ class PreviewManager {
     });
 
     // Text editing continues after the pointer is released and is committed
-    // by the onChange that observes editingTextElement becoming null.
+    // by the onChange that observes editingTextElement becoming null. For all
+    // other gestures, wait for that onChange because PointerUp may arrive
+    // before Excalidraw applies the final scene update.
     if (currentType !== OPERATION_TYPES.EDIT_TEXT) {
-      return this.commitGesture(elements, this.activeGesture);
+      this.activeGesture.pointerUpPending = true;
+      this.activeGesture.pointerUpSceneSignature = this.getSceneSignature(elements);
+      this.logGesture('pointer-up-waiting-for-final-change', this.activeGesture, {
+        sceneSignature: this.activeGesture.pointerUpSceneSignature,
+      });
     }
     return false;
   };
