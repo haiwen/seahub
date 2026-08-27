@@ -103,7 +103,7 @@ export const createTableHeaders = (
     }] : []),
     ...(isColumnVisible(DIR_COLUMN_KEYS.MTIME) ? [{
       key: DIR_COLUMN_KEYS.MTIME,
-      width: 120,
+      width: 135,
       className: 'dirent-property dirent-property-modified',
       children: React.createElement(
         'span',
