@@ -183,6 +183,14 @@ class OperationManager {
       stateDebug(`State Changed: ${this.state} -> ${STATE.CONFLICT}`);
       this.state = STATE.CONFLICT;
       this.resolveConflicting(result);
+    } else {
+      // An operation execution error is terminal for the current operation.
+      // Drop it and release the in-flight slot; otherwise the manager remains
+      // in SENDING forever and blocks all following operations.
+      this.notifyState('execute_client_operations_error', error_type);
+      this._sendingOperation = null;
+      stateDebug(`Operation failed (${error_type || 'unknown'}). State remains ${this.state}`);
+      this.sendNextOperations();
     }
   };
 

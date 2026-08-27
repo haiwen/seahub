@@ -235,6 +235,7 @@ class SocketManager {
     const collaborators = new Map(this.collaborators);
     if (users && Array.isArray(users)) {
       users.forEach(user => {
+        this.previewManager.markRemotePreviewUserActive(user);
         if (!collaborators.get(user._username)) {
           collaborators.set(user._username, user);
         }
@@ -247,6 +248,12 @@ class SocketManager {
   };
 
   receiveLeaveRoom = (userInfo) => {
+    if (!userInfo) {
+      return;
+    }
+
+    this.previewManager.clearRemotePreviewForUser(userInfo);
+
     const collaborators = new Map(this.collaborators);
     if (collaborators.get(userInfo._username)) {
       collaborators.delete(userInfo._username);

@@ -24,6 +24,7 @@ class PreviewManager {
     this.activeGesture = null;
     this.remotePreviewSequenceByGesture = new Map();
     this.remotePreviewElementsById = new Map();
+    this.leftRemotePreviewUsers = new Set();
     this.isApplyingRemotePreview = false;
     this.pendingRemotePreviewChanges = [];
   }
@@ -256,6 +257,79 @@ class PreviewManager {
     }
   };
 
+  markRemotePreviewUserActive = (user) => {
+    if (!user) {
+      return;
+    }
+
+    this.leftRemotePreviewUsers.delete(this.getPreviewUserKey(user));
+  };
+
+  clearRemotePreviewForUser = (user) => {
+    if (!user) {
+      return;
+    }
+
+    const userKey = this.getPreviewUserKey(user);
+    this.leftRemotePreviewUsers.add(userKey);
+    const localElements = this.excalidrawAPI.getSceneElementsIncludingDeleted();
+    const previewRecordsById = new Map();
+    for (const [elementId, previewRecord] of this.remotePreviewElementsById) {
+      if (previewRecord.userKey === userKey) {
+        previewRecordsById.set(elementId, previewRecord);
+        this.remotePreviewElementsById.delete(elementId);
+      }
+    }
+
+    const didClearPreview = previewRecordsById.size > 0;
+    const nextSceneElements = [];
+    localElements.forEach((element) => {
+      const previewRecord = previewRecordsById.get(element.id);
+      if (!previewRecord) {
+        nextSceneElements.push(element);
+        return;
+      }
+
+      if (previewRecord.baseElement) {
+        nextSceneElements.push(previewRecord.baseElement);
+      }
+    });
+
+    // Keep the sequence cache so a delayed packet from an old gesture is
+    // rejected if the user rejoins before that packet arrives.
+
+    if (!didClearPreview) {
+      return;
+    }
+
+    // Keep the update out of the reliable operation pipeline. The pending
+    // scene signature also prevents Excalidraw's onChange from treating this
+    // cleanup as a local edit.
+    this.pendingRemotePreviewChanges.push({
+      sceneSignature: this.getSceneSignature(nextSceneElements),
+    });
+    if (this.pendingRemotePreviewChanges.length > MAX_PENDING_REMOTE_PREVIEW_CHANGES) {
+      this.pendingRemotePreviewChanges.splice(
+        0,
+        this.pendingRemotePreviewChanges.length - MAX_PENDING_REMOTE_PREVIEW_CHANGES,
+      );
+    }
+
+    this.isApplyingRemotePreview = true;
+    try {
+      this.excalidrawAPI.updateScene({
+        elements: nextSceneElements,
+        captureUpdate: CaptureUpdateAction.NEVER,
+      });
+    } finally {
+      this.isApplyingRemotePreview = false;
+    }
+
+    gestureDebug('clear preview after user left', {
+      user: userKey,
+    });
+  };
+
   handleRemotePreviewElements = (params) => {
     const { gestureId, seq, type, user, elements = [] } = params;
     if (!gestureId || !Number.isFinite(seq) || !Array.isArray(elements)) {
@@ -263,6 +337,10 @@ class PreviewManager {
     }
 
     const userKey = this.getPreviewUserKey(user);
+    if (this.leftRemotePreviewUsers.has(userKey)) {
+      return;
+    }
+
     const previewKey = `${userKey}:${gestureId}`;
     const lastSeq = this.remotePreviewSequenceByGesture.get(previewKey);
     if (lastSeq !== undefined && seq <= lastSeq) {
