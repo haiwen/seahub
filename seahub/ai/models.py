@@ -229,7 +229,7 @@ class ChatMessages(models.Model):
                 review_task = ReviewTask.objects.filter(assistant_message_id=self.id).first()
             except Exception:
                 review_task = None
-            if review_task:
+            if review_task and review_task.generation_status != ReviewTask.GENERATION_CANCELLED:
                 extensions.append({'type': 'sdoc_review', 'review_task_id': str(review_task.id)})
 
         return {
@@ -264,6 +264,8 @@ class ReviewTask(models.Model):
     file_uuid = models.CharField(max_length=36, db_index=True)
     requester = models.CharField(max_length=255)
     prompt = models.TextField()
+    route = models.CharField(max_length=32, default='review')
+    org_id = models.BigIntegerField(null=True, blank=True)
     message_id = models.CharField(max_length=4, null=True, blank=True)
     generation_status = models.CharField(max_length=32, default=GENERATION_QUEUED, db_index=True)
     generation_revision = models.IntegerField(default=0)
@@ -275,6 +277,7 @@ class ReviewTask(models.Model):
     total_review_blocks = models.IntegerField(default=0)
     completed_review_blocks = models.IntegerField(default=0)
     generation_truncated = models.BooleanField(default=False)
+    generation_stop_reason = models.CharField(max_length=64, null=True, blank=True)
     generation_finished_at = models.DateTimeField(null=True, blank=True)
     base_sdoc_version = models.BigIntegerField(null=True, blank=True)
     current_changeset_revision = models.ForeignKey(
@@ -295,6 +298,7 @@ class ReviewTask(models.Model):
             'task_id': str(self.id),
             'chat_session_id': self.chat_session_id,
             'assistant_message_id': self.assistant_message_id,
+            'assistant_content': self.assistant_message.content if self.assistant_message_id else None,
             'generation_status': self.generation_status,
             'generation_attempt_id': str(self.generation_attempt_id) if self.generation_attempt_id else None,
             'error_code': self.error_code,
@@ -303,7 +307,9 @@ class ReviewTask(models.Model):
             'total_review_blocks': self.total_review_blocks,
             'completed_review_blocks': self.completed_review_blocks,
             'generation_truncated': self.generation_truncated,
+            'generation_stop_reason': self.generation_stop_reason,
             'generation_finished_at': self.generation_finished_at,
+            'route': self.route,
             'prompt': self.prompt,
             'base_sdoc_version': self.base_sdoc_version,
             'current_changeset_revision_id': self.current_changeset_revision_id,
@@ -346,6 +352,24 @@ class ReviewChangeSetRevision(models.Model):
             'scope_summary': self.scope_summary,
             'revision_brief': self.revision_brief,
         }
+
+
+class ReviewGenerationChunk(models.Model):
+    """Durable receipt for one progressive generation chunk."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    review_task = models.ForeignKey(
+        ReviewTask, on_delete=models.RESTRICT, related_name='generation_chunks',
+        db_column='review_task_id')
+    generation_attempt_id = models.UUIDField()
+    chunk_index = models.IntegerField()
+    block_count = models.IntegerField(default=0)
+    created_item_count = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'ai_review_generation_chunk'
+        unique_together = (('review_task', 'generation_attempt_id', 'chunk_index'),)
 
 
 class ReviewChangeItem(models.Model):
@@ -534,188 +558,3 @@ class ApplyAttempt(models.Model):
             'created_at': self.created_at,
             'updated_at': self.updated_at,
         }
-
-
-def ensure_review_tables():
-    from django.db import connection
-
-    with connection.cursor() as cursor:
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS `ai_review_task` (
-              `id` char(36) NOT NULL,
-              `chat_session_id` varchar(36) NOT NULL,
-              `assistant_message_id` bigint(20) NULL,
-              `repo_id` varchar(36) NOT NULL,
-              `path` longtext NOT NULL,
-              `file_uuid` varchar(36) NOT NULL,
-               `requester` varchar(255) NOT NULL,
-               `prompt` longtext NOT NULL,
-               `message_id` varchar(4) NULL,
-               `generation_status` varchar(32) NOT NULL,
-               `generation_revision` int(11) NOT NULL,
-               `generation_attempt_id` char(36) NULL,
-               `generation_deadline_at` datetime(6) NULL,
-               `error_code` varchar(64) NULL,
-               `total_chunks` int(11) NOT NULL,
-               `completed_chunks` int(11) NOT NULL,
-               `total_review_blocks` int(11) NOT NULL,
-               `completed_review_blocks` int(11) NOT NULL,
-               `generation_truncated` tinyint(1) NOT NULL,
-               `generation_finished_at` datetime(6) NULL,
-               `base_sdoc_version` bigint(20) NULL,
-              `current_changeset_revision_id` char(36) NULL,
-              `current_card_revision_id` char(36) NULL,
-              `created_at` datetime(6) NOT NULL,
-              `updated_at` datetime(6) NOT NULL,
-              PRIMARY KEY (`id`),
-              UNIQUE KEY `ai_review_task_assistant_message_id` (`assistant_message_id`),
-              KEY `ai_review_task_chat_session_id` (`chat_session_id`),
-              KEY `ai_review_task_repo_id` (`repo_id`),
-              KEY `ai_review_task_file_uuid` (`file_uuid`),
-              KEY `ai_review_task_generation_status` (`generation_status`),
-              KEY `ai_review_task_generation_attempt_id` (`generation_attempt_id`),
-              KEY `ai_review_task_current_changeset_revision_id` (`current_changeset_revision_id`),
-              KEY `ai_review_task_current_card_revision_id` (`current_card_revision_id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-        ''')
-        # Review tables are created lazily in development and older installs may
-        # already have this table from an earlier MVP revision. Keep this small
-        # additive migration here so the progressive-generation fields are not
-        # silently missing after an upgrade.
-        review_task_columns = {
-            'total_chunks': 'int(11) NOT NULL DEFAULT 0',
-            'completed_chunks': 'int(11) NOT NULL DEFAULT 0',
-            'total_review_blocks': 'int(11) NOT NULL DEFAULT 0',
-            'completed_review_blocks': 'int(11) NOT NULL DEFAULT 0',
-            'generation_truncated': 'tinyint(1) NOT NULL DEFAULT 0',
-            'generation_finished_at': 'datetime(6) NULL',
-        }
-        for column, definition in review_task_columns.items():
-            cursor.execute('SHOW COLUMNS FROM `ai_review_task` LIKE %s', [column])
-            if not cursor.fetchone():
-                cursor.execute('ALTER TABLE `ai_review_task` ADD COLUMN `%s` %s' % (column, definition))
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS `ai_review_changeset_revision` (
-              `id` char(36) NOT NULL,
-              `review_task_id` char(36) NOT NULL,
-              `changeset_revision` int(11) NOT NULL,
-              `snapshot_id` varchar(36) NOT NULL,
-              `file_uuid` varchar(36) NOT NULL,
-              `document_incarnation` varchar(36) NOT NULL,
-              `exact_sdoc_version` bigint(20) NOT NULL,
-              `projection_version` varchar(64) NOT NULL,
-              `scope_summary` longtext NOT NULL,
-              `revision_brief` json NOT NULL,
-              `created_at` datetime(6) NOT NULL,
-              PRIMARY KEY (`id`),
-              UNIQUE KEY `ai_review_changeset_revision_task_rev` (`review_task_id`, `changeset_revision`),
-              KEY `ai_review_changeset_revision_file_uuid` (`file_uuid`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-        ''')
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS `ai_review_change_item` (
-              `id` char(36) NOT NULL,
-              `item_id` char(36) NOT NULL,
-              `changeset_revision_id` char(36) NOT NULL,
-              `logical_item_id` char(36) NULL,
-              `kind` varchar(64) NOT NULL,
-              `target` json NOT NULL,
-              `precondition` json NOT NULL,
-              `preview` json NOT NULL,
-              `after_text` longtext NOT NULL,
-              `after_type` varchar(64) NULL,
-              `rationale` longtext NOT NULL,
-              `sort_order` int(11) NOT NULL,
-              `created_at` datetime(6) NOT NULL,
-              PRIMARY KEY (`id`),
-              UNIQUE KEY `ai_review_change_item_rev_item` (`changeset_revision_id`, `item_id`),
-              KEY `ai_review_change_item_item_id` (`item_id`),
-              KEY `ai_review_change_item_logical_item_id` (`logical_item_id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-        ''')
-        # Existing development databases may predate display-only item preview
-        # metadata. Keep this additive migration compatible with old cards.
-        cursor.execute('SHOW COLUMNS FROM `ai_review_change_item` LIKE %s', ['preview'])
-        if not cursor.fetchone():
-            cursor.execute('ALTER TABLE `ai_review_change_item` ADD COLUMN `preview` json NULL AFTER `precondition`')
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS `ai_review_card_revision` (
-              `id` char(36) NOT NULL,
-              `review_task_id` char(36) NOT NULL,
-              `changeset_revision_id` char(36) NOT NULL,
-              `card_revision` int(11) NOT NULL,
-              `supersedes_decision_id` char(36) NULL,
-              `created_at` datetime(6) NOT NULL,
-              PRIMARY KEY (`id`),
-              UNIQUE KEY `ai_review_card_revision_task_rev` (`review_task_id`, `card_revision`),
-              KEY `ai_review_card_revision_changeset_revision_id` (`changeset_revision_id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-        ''')
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS `ai_review_card_revision_item` (
-              `id` char(36) NOT NULL,
-              `card_revision_item_id` char(36) NOT NULL,
-              `card_revision_id` char(36) NOT NULL,
-              `change_item_id` char(36) NOT NULL,
-              `reviewable` tinyint(1) NOT NULL,
-              `conflicted` tinyint(1) NOT NULL,
-              `selectable` tinyint(1) NOT NULL,
-              `conflict_summary` longtext NULL,
-              `created_at` datetime(6) NOT NULL,
-              PRIMARY KEY (`id`),
-              UNIQUE KEY `ai_review_card_rev_item_membership` (`card_revision_id`, `change_item_id`),
-              KEY `ai_review_card_rev_item_card_item_id` (`card_revision_item_id`),
-              KEY `ai_review_card_rev_item_change_item_id` (`change_item_id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-        ''')
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS `ai_review_decision` (
-              `id` char(36) NOT NULL,
-              `review_decision_id` char(36) NOT NULL,
-              `card_revision_id` char(36) NOT NULL,
-              `decision_kind` varchar(16) NOT NULL,
-              `selection_digest` varchar(64) NOT NULL,
-              `operator` varchar(255) NOT NULL,
-              `created_at` datetime(6) NOT NULL,
-              PRIMARY KEY (`id`),
-              UNIQUE KEY `ai_review_decision_review_decision_id` (`review_decision_id`),
-              KEY `ai_review_decision_card_revision_id` (`card_revision_id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-        ''')
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS `ai_review_decision_selection` (
-              `id` char(36) NOT NULL,
-              `decision_id` char(36) NOT NULL,
-              `card_revision_item_id` char(36) NOT NULL,
-              PRIMARY KEY (`id`),
-              UNIQUE KEY `ai_review_decision_selection_decision_item` (`decision_id`, `card_revision_item_id`),
-              KEY `ai_review_decision_selection_card_revision_item_id` (`card_revision_item_id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-        ''')
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS `ai_review_apply_attempt` (
-              `id` char(36) NOT NULL,
-              `apply_attempt_id` char(36) NOT NULL,
-              `review_decision_id` char(36) NOT NULL,
-              `status` varchar(32) NOT NULL,
-              `persistence_status` varchar(32) NOT NULL,
-              `verification_status` varchar(32) NOT NULL,
-              `approved_by` varchar(255) NOT NULL,
-              `selection_digest` varchar(64) NOT NULL,
-              `apply_payload_digest` varchar(64) NOT NULL,
-              `card_revision_number` int(11) NOT NULL,
-              `changeset_revision_number` int(11) NOT NULL,
-              `snapshot_id` varchar(36) NOT NULL,
-              `document_incarnation` varchar(36) NOT NULL,
-              `applied_sdoc_version` bigint(20) NULL,
-              `operation_log_correlation_id` varchar(36) NULL,
-              `result_query_deadline_at` datetime(6) NULL,
-              `error_code` varchar(64) NULL,
-              `created_at` datetime(6) NOT NULL,
-              `updated_at` datetime(6) NOT NULL,
-              PRIMARY KEY (`id`),
-              UNIQUE KEY `ai_review_apply_attempt_apply_attempt_id` (`apply_attempt_id`),
-              UNIQUE KEY `ai_review_apply_attempt_review_decision_id` (`review_decision_id`),
-              KEY `ai_review_apply_attempt_status` (`status`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-        ''')

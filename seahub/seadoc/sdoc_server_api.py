@@ -62,10 +62,10 @@ class SdocServerAPI(object):
         response = requests.post(url, json=data, headers=headers, timeout=self.timeout)
         return parse_response(response)
 
-    def get_apply_result(self, access_token, apply_attempt_id):
+    def get_apply_result(self, access_token, apply_attempt_id, timeout=5):
         url = self.sdoc_server_url + '/api/v1/docs/' + self.doc_uuid + '/agent-applies/' + apply_attempt_id + '/?from=seahub'
         headers = {'Authorization': 'Token ' + access_token}
-        response = requests.get(url, headers=headers, timeout=self.timeout)
+        response = requests.get(url, headers=headers, timeout=timeout)
         return parse_response(response)
 
     def save_doc(self):
