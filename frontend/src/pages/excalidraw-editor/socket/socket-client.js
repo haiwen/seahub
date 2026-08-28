@@ -5,13 +5,24 @@ import { isSyncableElement } from '../data';
 import { clientDebug, serverDebug } from '../utils/debug';
 import SocketManager from './socket-manager';
 import { getFilename } from '../utils/element-utils';
-import { FILE_UPLOAD_TIMEOUT, OPERATION_ACK_TIMEOUT } from '../constants';
+import {
+  FILE_UPLOAD_TIMEOUT,
+  JOIN_ROOM_ACK_TIMEOUT,
+  JOIN_ROOM_MAX_RETRIES,
+  JOIN_ROOM_MAX_RETRY_DELAY,
+  JOIN_ROOM_RETRY_DELAY,
+  OPERATION_ACK_TIMEOUT,
+} from '../constants';
 
 class SocketClient {
   constructor(config) {
     this.config = config;
     this.isReconnect = false;
     this.isJoiningRoom = false;
+    this.isRoomReady = false;
+    this.joinRoomRetryCount = 0;
+    this.joinRoomRetryTimer = null;
+    this.joinRoomAttemptId = 0;
     this.broadcastedElementVersions = new Map();
     this.socket = io(`${config.exdrawServer}/exdraw`, {
       reconnection: true,
@@ -54,6 +65,10 @@ class SocketClient {
 
   onDisconnected = (data) => {
     clientDebug('disconnect message: %s', data);
+    this.clearJoinRoomRetryTimer();
+    this.joinRoomAttemptId += 1;
+    this.isJoiningRoom = false;
+    this.isRoomReady = false;
     const socketManager = SocketManager.getInstance();
     socketManager.dispatchConnectState('disconnect', data);
 
@@ -155,24 +170,97 @@ class SocketClient {
     this.socket.emit('mouse-location-updated', params);
   };
 
+  getJoinRoomRetryDelay = (retryCount) => Math.min(
+    JOIN_ROOM_RETRY_DELAY * (2 ** Math.max(retryCount - 1, 0)),
+    JOIN_ROOM_MAX_RETRY_DELAY,
+  );
+
+  clearJoinRoomRetryTimer = () => {
+    if (this.joinRoomRetryTimer) {
+      clearTimeout(this.joinRoomRetryTimer);
+      this.joinRoomRetryTimer = null;
+    }
+  };
+
+  markRoomReady = (result) => {
+    this.clearJoinRoomRetryTimer();
+    this.isJoiningRoom = false;
+    this.isRoomReady = true;
+    this.joinRoomRetryCount = 0;
+
+    const socketManager = SocketManager.getInstance();
+    socketManager.dispatchConnectState('room-ready', result);
+  };
+
+  failJoinRoom = (errorType, error) => {
+    this.clearJoinRoomRetryTimer();
+    this.isJoiningRoom = false;
+    this.isRoomReady = false;
+
+    const socketManager = SocketManager.getInstance();
+    socketManager.dispatchConnectState('join-room-failed', {
+      error_type: errorType,
+      error,
+      retry_count: this.joinRoomRetryCount,
+    });
+  };
+
+  retryJoinRoom = (errorType, error) => {
+    this.joinRoomRetryCount += 1;
+
+    if (this.joinRoomRetryCount > JOIN_ROOM_MAX_RETRIES) {
+      clientDebug('join-room failed after %s retries.', JOIN_ROOM_MAX_RETRIES);
+      this.failJoinRoom(errorType, error);
+      return;
+    }
+
+    const delay = this.getJoinRoomRetryDelay(this.joinRoomRetryCount);
+    this.clearJoinRoomRetryTimer();
+    this.joinRoomRetryTimer = setTimeout(() => {
+      this.joinRoomRetryTimer = null;
+      this.joinRoom();
+    }, delay);
+  };
+
+  joinRoom = () => {
+    if (!this.isJoiningRoom || !this.socket.connected) {
+      return;
+    }
+
+    const attemptId = ++this.joinRoomAttemptId;
+    this.socket.timeout(JOIN_ROOM_ACK_TIMEOUT).emit(
+      'join-room',
+      this.getParams(),
+      (error, result) => {
+        if (attemptId !== this.joinRoomAttemptId || !this.isJoiningRoom) {
+          return;
+        }
+
+        if (!error && result && result.success) {
+          this.markRoomReady(result);
+          return;
+        }
+
+        const errorType = error ? 'ack_timeout' : (result?.error_type || 'join_room_error');
+        this.retryJoinRoom(errorType, error || result);
+      },
+    );
+  };
+
   onInitRoom = () => {
     serverDebug('join-room message');
-    // The server emits room-user-change after join-room has completed. Keep
-    // operations blocked until that event confirms that this socket is back
-    // in the document room.
+    this.clearJoinRoomRetryTimer();
+    this.joinRoomAttemptId += 1;
+    this.joinRoomRetryCount = 0;
     this.isJoiningRoom = true;
-    this.socket.emit('join-room', this.getParams());
+    this.isRoomReady = false;
+    this.joinRoom();
   };
 
   onRoomUserChanged = (users) => {
     serverDebug('room users changed. all users count: %s', users.length);
     const socketManager = SocketManager.getInstance();
     socketManager.receiveRoomUserChanged(users);
-
-    if (this.isJoiningRoom) {
-      this.isJoiningRoom = false;
-      socketManager.dispatchConnectState('room-ready');
-    }
   };
 
   onLeaveRoom = (userInfo) => {
@@ -219,6 +307,10 @@ class SocketClient {
   };
 
   close = () => {
+    this.clearJoinRoomRetryTimer();
+    this.joinRoomAttemptId += 1;
+    this.isJoiningRoom = false;
+    this.isRoomReady = false;
     this.socket.close();
   };
 

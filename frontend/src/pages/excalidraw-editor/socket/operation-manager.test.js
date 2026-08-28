@@ -141,4 +141,21 @@ describe('OperationManager retry policy', () => {
     expect(socketClient.broadcastSceneElements).toHaveBeenCalledTimes(1);
     expect(manager._sendingOperation.retryCount).toBe(0);
   });
+
+  it('keeps pending operations and blocks sending when joining the room fails', () => {
+    const { manager, socketClient, onStateChange } = createManager();
+    manager.state = 'disconnect';
+    const queueItem = createQueueItem();
+    manager.pendingOperationQueue.push(queueItem);
+
+    manager.handleConnectState('join-room-failed', { error_type: 'ack_timeout' });
+
+    expect(manager.state).toBe('need_reload');
+    expect(manager.pendingOperationQueue).toEqual([queueItem]);
+    expect(socketClient.broadcastSceneElements).not.toHaveBeenCalled();
+    expect(onStateChange).toHaveBeenCalledWith(
+      'join_room_failed',
+      { error_type: 'ack_timeout' },
+    );
+  });
 });

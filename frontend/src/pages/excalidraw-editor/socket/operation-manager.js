@@ -286,7 +286,7 @@ class OperationManager {
     this.updateLocalDataByRemoteData(elements, version);
   };
 
-  handleConnectState = (type) => {
+  handleConnectState = (type, message) => {
     if (type === 'reconnect') {
       // A transport reconnect only means that the Socket.IO connection is
       // back. The client still has to re-join the document room. Wait for
@@ -303,6 +303,14 @@ class OperationManager {
       if (this.pendingOperationQueue.length > 0) {
         this.sendOperations();
       }
+      return;
+    }
+
+    if (type === 'join-room-failed') {
+      this.clearRetryTimer();
+      stateDebug(`State Changed: ${this.state} -> ${STATE.NEED_RELOAD}`);
+      this.state = STATE.NEED_RELOAD;
+      this.notifyState('join_room_failed', message);
       return;
     }
 

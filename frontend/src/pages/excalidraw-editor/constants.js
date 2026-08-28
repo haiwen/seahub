@@ -33,6 +33,10 @@ export const OPERATION_ACK_TIMEOUT = 30000;
 export const OPERATION_RETRY_DELAY = 1000;
 export const OPERATION_MAX_RETRIES = 3;
 export const OPERATION_MAX_RETRY_DELAY = 8000;
+export const JOIN_ROOM_ACK_TIMEOUT = 10000;
+export const JOIN_ROOM_RETRY_DELAY = 1000;
+export const JOIN_ROOM_MAX_RETRIES = 3;
+export const JOIN_ROOM_MAX_RETRY_DELAY = 8000;
 
 export const LIBRARY_SIDEBAR_TAB = 'library';
 export const CANVAS_SEARCH_TAB = 'search';
