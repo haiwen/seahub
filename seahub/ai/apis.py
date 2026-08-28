@@ -695,6 +695,8 @@ class ChatMarkdownArtifactView(APIView):
         file_path = os.path.join(uuid_map.parent_path, uuid_map.filename)
         if not check_folder_permission(request, repo_id, '/'):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        if not is_chat_and_search_enabled(repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Chat & Search is not enabled for this library.')
         if not user_passes_ai_chat_folder_permissions(request, repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
@@ -741,6 +743,8 @@ class ChatView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 'Session not found.')
         if not check_folder_permission(request, session.repo_id, '/'):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        if not is_chat_and_search_enabled(session.repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Chat & Search is not enabled for this library.')
         if not user_passes_ai_chat_folder_permissions(request, session.repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if not check_session_access(session, request.user.username):
