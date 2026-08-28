@@ -100,6 +100,26 @@ describe('OperationManager retry policy', () => {
     expect(manager._sendingOperation.retryCount).toBe(1);
   });
 
+  it('uses the exponential delay for the second retry', () => {
+    const { manager, socketClient } = createManager();
+    const queueItem = createQueueItem(1);
+    manager.state = 'sending';
+    manager._sendingOperation = queueItem;
+
+    manager.sendOperationsCallback({ error_type: 'ack_timeout' }, queueItem);
+
+    expect(manager.state).toBe('idle');
+    expect(manager.pendingOperationQueue[0].retryCount).toBe(2);
+    expect(socketClient.broadcastSceneElements).not.toHaveBeenCalled();
+
+    jest.advanceTimersByTime(OPERATION_RETRY_DELAY * 2 - 1);
+    expect(socketClient.broadcastSceneElements).not.toHaveBeenCalled();
+
+    jest.advanceTimersByTime(1);
+    expect(socketClient.broadcastSceneElements).toHaveBeenCalledTimes(1);
+    expect(manager._sendingOperation.retryCount).toBe(2);
+  });
+
   it('resets retry budgets when the connection is ready again', () => {
     const { manager, socketClient } = createManager();
     manager.state = 'disconnect';

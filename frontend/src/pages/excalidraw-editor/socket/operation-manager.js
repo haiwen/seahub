@@ -154,7 +154,7 @@ class OperationManager {
     this.retryTimer = setTimeout(() => {
       this.retryTimer = null;
       this.sendOperations();
-    }, OPERATION_RETRY_DELAY);
+    }, delay);
   };
 
   sendOperations = () => {
