@@ -14,10 +14,14 @@ import {
   OPERATION_ACK_TIMEOUT,
 } from '../constants';
 
+const RETRYABLE_JOIN_ROOM_ERRORS = new Set([
+  'ack_timeout',
+  'join_room_error',
+]);
+
 class SocketClient {
   constructor(config) {
     this.config = config;
-    this.isReconnect = false;
     this.isJoiningRoom = false;
     this.isRoomReady = false;
     this.joinRoomRetryCount = 0;
@@ -31,7 +35,6 @@ class SocketClient {
         'doc_uuid': config.docUuid,
       }
     });
-    this.socket.on('connect', this.onConnected);
     this.socket.on('disconnect', this.onDisconnected);
     this.socket.on('connect_error', this.onConnectError);
 
@@ -57,20 +60,25 @@ class SocketClient {
     };
   };
 
-  onConnected = () => {
-    if (this.isReconnect) {
-      this.isReconnect = false;
+  resetJoinRoomState = ({ resetRetryCount = true, isRoomReady = false } = {}) => {
+    this.clearJoinRoomRetryTimer();
+    this.joinRoomAttemptId += 1;
+    this.isJoiningRoom = false;
+    this.isRoomReady = isRoomReady;
+    if (resetRetryCount) {
+      this.joinRoomRetryCount = 0;
     }
+  };
+
+  dispatchConnectState = (type, message) => {
+    const socketManager = SocketManager.getInstance();
+    socketManager.dispatchConnectState(type, message);
   };
 
   onDisconnected = (data) => {
     clientDebug('disconnect message: %s', data);
-    this.clearJoinRoomRetryTimer();
-    this.joinRoomAttemptId += 1;
-    this.isJoiningRoom = false;
-    this.isRoomReady = false;
-    const socketManager = SocketManager.getInstance();
-    socketManager.dispatchConnectState('disconnect', data);
+    this.resetJoinRoomState();
+    this.dispatchConnectState('disconnect', data);
 
     if (data === 'ping timeout') {
       clientDebug('Disconnected due to ping timeout, trying to reconnect...');
@@ -80,8 +88,7 @@ class SocketClient {
 
   onConnectError = () => {
     clientDebug('connect_error.');
-    const socketManager = SocketManager.getInstance();
-    socketManager.dispatchConnectState('connect_error');
+    this.dispatchConnectState('connect_error');
   };
 
   queueFileUpload = throttle(async () => {
@@ -176,29 +183,20 @@ class SocketClient {
   );
 
   clearJoinRoomRetryTimer = () => {
-    if (this.joinRoomRetryTimer) {
+    if (this.joinRoomRetryTimer !== null) {
       clearTimeout(this.joinRoomRetryTimer);
       this.joinRoomRetryTimer = null;
     }
   };
 
   markRoomReady = (result) => {
-    this.clearJoinRoomRetryTimer();
-    this.isJoiningRoom = false;
-    this.isRoomReady = true;
-    this.joinRoomRetryCount = 0;
-
-    const socketManager = SocketManager.getInstance();
-    socketManager.dispatchConnectState('room-ready', result);
+    this.resetJoinRoomState({ isRoomReady: true });
+    this.dispatchConnectState('room-ready', result);
   };
 
   failJoinRoom = (errorType, error) => {
-    this.clearJoinRoomRetryTimer();
-    this.isJoiningRoom = false;
-    this.isRoomReady = false;
-
-    const socketManager = SocketManager.getInstance();
-    socketManager.dispatchConnectState('join-room-failed', {
+    this.resetJoinRoomState({ resetRetryCount: false });
+    this.dispatchConnectState('join-room-failed', {
       error_type: errorType,
       error,
       retry_count: this.joinRoomRetryCount,
@@ -206,6 +204,11 @@ class SocketClient {
   };
 
   retryJoinRoom = (errorType, error) => {
+    if (!RETRYABLE_JOIN_ROOM_ERRORS.has(errorType)) {
+      this.failJoinRoom(errorType, error);
+      return;
+    }
+
     this.joinRoomRetryCount += 1;
 
     if (this.joinRoomRetryCount > JOIN_ROOM_MAX_RETRIES) {
@@ -249,11 +252,8 @@ class SocketClient {
 
   onInitRoom = () => {
     serverDebug('join-room message');
-    this.clearJoinRoomRetryTimer();
-    this.joinRoomAttemptId += 1;
-    this.joinRoomRetryCount = 0;
+    this.resetJoinRoomState();
     this.isJoiningRoom = true;
-    this.isRoomReady = false;
     this.joinRoom();
   };
 
@@ -289,7 +289,6 @@ class SocketClient {
 
   onReconnect = () => {
     clientDebug('reconnect.');
-    this.isReconnect = true;
     const socketManager = SocketManager.getInstance();
     socketManager.dispatchConnectState('reconnect');
   };
@@ -307,10 +306,7 @@ class SocketClient {
   };
 
   close = () => {
-    this.clearJoinRoomRetryTimer();
-    this.joinRoomAttemptId += 1;
-    this.isJoiningRoom = false;
-    this.isRoomReady = false;
+    this.resetJoinRoomState();
     this.socket.close();
   };
 

@@ -100,6 +100,22 @@ describe('OperationManager retry policy', () => {
     expect(manager._sendingOperation.retryCount).toBe(1);
   });
 
+  it('does not bypass retry backoff when a new local edit arrives', () => {
+    const { manager, socketClient } = createManager();
+    const queueItem = createQueueItem();
+    manager.state = 'sending';
+    manager._sendingOperation = queueItem;
+
+    manager.sendOperationsCallback({ error_type: 'ack_timeout' }, queueItem);
+    manager.pendingOperationQueue.push(createQueueItem());
+
+    manager.sendOperations();
+    expect(socketClient.broadcastSceneElements).not.toHaveBeenCalled();
+
+    jest.advanceTimersByTime(OPERATION_RETRY_DELAY);
+    expect(socketClient.broadcastSceneElements).toHaveBeenCalledTimes(1);
+  });
+
   it('uses the exponential delay for the second retry', () => {
     const { manager, socketClient } = createManager();
     const queueItem = createQueueItem(1);

@@ -121,6 +121,26 @@ describe('SocketClient join-room handshake', () => {
     expect(socket.emit).toHaveBeenCalledTimes(3);
   });
 
+  it('does not retry non-retryable join-room errors', () => {
+    const { client, socket, socketManager } = createClient();
+
+    client.onInitRoom();
+    socket.invokeJoinRoomAck(null, {
+      success: false,
+      error_type: 'invalid_join_room',
+    });
+
+    expect(socket.emit).toHaveBeenCalledTimes(1);
+    expect(client.isJoiningRoom).toBe(false);
+    expect(socketManager.dispatchConnectState).toHaveBeenCalledWith(
+      'join-room-failed',
+      expect.objectContaining({
+        error_type: 'invalid_join_room',
+        retry_count: 0,
+      }),
+    );
+  });
+
   it('stops retrying and reports failure after the retry budget is exhausted', () => {
     const { client, socket, socketManager } = createClient();
 

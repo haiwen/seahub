@@ -91,7 +91,10 @@ class OperationManager {
   syncLocalElementsToOthers = (elements) => {
     const elementsWithoutRemotePreview = this.getElementsWithoutRemotePreview(elements);
     const sceneVersion = getSceneVersion(elementsWithoutRemotePreview);
-    if (sceneVersion <= this.lastQueuedSceneVersion || !this.isNeedToSync(elementsWithoutRemotePreview)) {
+    if (
+      sceneVersion <= this.lastQueuedSceneVersion ||
+      sceneVersion <= this.lastBroadcastedOrReceivedSceneVersion
+    ) {
       return;
     }
     this.lastQueuedSceneVersion = sceneVersion;
@@ -146,14 +149,14 @@ class OperationManager {
   };
 
   clearRetryTimer = () => {
-    if (this.retryTimer) {
+    if (this.retryTimer !== null) {
       clearTimeout(this.retryTimer);
       this.retryTimer = null;
     }
   };
 
   scheduleRetry = (delay = OPERATION_RETRY_DELAY) => {
-    if (this.retryTimer) return;
+    if (this.retryTimer !== null) return;
 
     this.retryTimer = setTimeout(() => {
       this.retryTimer = null;
@@ -162,7 +165,9 @@ class OperationManager {
   };
 
   sendOperations = () => {
-    if (this.state !== STATE.IDLE) return;
+    // Keep the retry backoff effective even when new local edits arrive while
+    // the failed operation is waiting to be retried.
+    if (this.state !== STATE.IDLE || this.retryTimer !== null) return;
     stateDebug(`State changed: ${this.state} -> ${STATE.SENDING}`);
     this.state = STATE.SENDING;
     this.sendNextOperations();

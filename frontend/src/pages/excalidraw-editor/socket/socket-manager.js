@@ -214,7 +214,7 @@ class SocketManager {
   }, LOAD_IMAGES_TIMEOUT);
 
   dispatchConnectState = (type, message) => {
-    this.operationManager.handleConnectState(type);
+    this.operationManager.handleConnectState(type, message);
     this.eventBus.dispatch(type, message);
   };
 
