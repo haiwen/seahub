@@ -455,6 +455,7 @@ class DirentGridView extends React.Component {
         eventBus: this.props.eventBus,
         path: this.props.path,
         repoID: this.props.repoID,
+        repoInfo: this.props.currentRepoInfo,
         dirents: this.props.selectedDirentList,
         isBatch: true,
         onBatchDelete: this.props.onItemsDelete,

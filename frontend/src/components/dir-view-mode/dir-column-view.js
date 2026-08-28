@@ -343,6 +343,7 @@ class DirColumnView extends React.Component {
               isDirentListLoading={this.props.isDirentListLoading}
               repoID={this.props.repoID}
               repoInfo={this.props.currentRepoInfo}
+              userPerm={this.props.userPerm}
               path={this.props.path}
               sortBy={this.props.sortBy}
               sortOrder={this.props.sortOrder}

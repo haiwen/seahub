@@ -89,8 +89,9 @@ const addLockUnlockMultiOption = (repoInfo, selectedDirents, list) => {
   }
 
   const isRepoOwner = repoInfo.owner_email === username;
+  const isAdmin = repoInfo.is_admin;
   const canLockFiles = selectedDirents.some(dirent => dirent.permission == 'rw' && !dirent.name.endsWith('.sdoc') && !dirent.is_locked);
-  const canUnlockFiles = selectedDirents.some(dirent => dirent.permission == 'rw' && !dirent.name.endsWith('.sdoc') && dirent.is_locked && (dirent.locked_by_me || dirent.lock_owner == 'OnlineOffice' || isRepoOwner || repoInfo.is_admin));
+  const canUnlockFiles = selectedDirents.some(dirent => dirent.permission == 'rw' && !dirent.name.endsWith('.sdoc') && dirent.is_locked && (dirent.locked_by_me || dirent.lock_owner == 'OnlineOffice' || isRepoOwner || isAdmin));
   if (canLockFiles || canUnlockFiles) {
     list.push('Divider');
   }
@@ -103,28 +104,48 @@ const addLockUnlockMultiOption = (repoInfo, selectedDirents, list) => {
   return list;
 };
 
-export const getBatchMenuList = (repoInfo, selectedDirents, getItemMenuList) => {
-  const { isCustomPermission, customPermission } = Utils.getUserPermission(repoInfo.user_perm);
+export const getBatchMenuList = (repoInfo, userPerm, selectedDirents, getItemMenuList) => {
+  const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
+
+  let canModify = false;
+  let canCopy = false;
+  let canDelete = false;
+  let canDownload = false;
+  switch (userPerm) {
+    case 'rw':
+    case 'admin':
+      canModify = true;
+      canCopy = true;
+      canDelete = true;
+      canDownload = true;
+      break;
+    case 'cloud-edit':
+      canModify = true;
+      canCopy = true;
+      canDelete = true;
+      break;
+    case 'r':
+      canCopy = true;
+      canDownload = true;
+      break;
+  }
+  if (isCustomPermission) {
+    const { permission } = customPermission;
+    canModify = permission.modify;
+    canCopy = permission.copy;
+    canDownload = permission.download;
+    canDelete = permission.delete;
+  }
 
   if (selectedDirents.length <= 1) {
     return getItemMenuList(selectedDirents[0]);
   }
 
   let batchOptions = [];
-  if (isCustomPermission) {
-    const { modify: canModify, copy: canCopy, download: canDownload, delete: canDelete } = customPermission.permission;
-    canDownload && batchOptions.push(TextTranslation.DOWNLOAD);
-    canDelete && batchOptions.push(TextTranslation.DELETE);
-    canModify && batchOptions.push(TextTranslation.MOVE);
-    canCopy && batchOptions.push(TextTranslation.COPY);
-  } else {
-    batchOptions = [
-      TextTranslation.DOWNLOAD,
-      TextTranslation.DELETE,
-      TextTranslation.MOVE,
-      TextTranslation.COPY,
-    ];
-  }
+  canDownload && batchOptions.push(TextTranslation.DOWNLOAD);
+  canDelete && batchOptions.push(TextTranslation.DELETE);
+  canModify && batchOptions.push(TextTranslation.MOVE);
+  canCopy && batchOptions.push(TextTranslation.COPY);
 
   if (canChatWithDirents(repoInfo, selectedDirents)) {
     batchOptions.push('Divider', TextTranslation.CHAT_WITH_AI);

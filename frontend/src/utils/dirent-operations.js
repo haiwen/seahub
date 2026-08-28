@@ -98,8 +98,8 @@ export const batchLockUnlockFile = async (repoID, operation, paths, updateState)
           : gettext('Successfully unlocked {name}.').replace('{name}', fileName);
       } else {
         msg = isLock
-          ? gettext('Successfully locked {name} and {n} other items.').replace('{name}', fileName).replace('{n}', successPaths.length - 1)
-          : gettext('Successfully unlocked {name} and {n} other items.').replace('{name}', fileName).replace('{n}', successPaths.length - 1);
+          ? gettext('Successfully locked {name} and {n} other item(s).').replace('{name}', fileName).replace('{n}', successPaths.length - 1)
+          : gettext('Successfully unlocked {name} and {n} other item(s).').replace('{name}', fileName).replace('{n}', successPaths.length - 1);
       }
       toaster.success(msg);
     }
