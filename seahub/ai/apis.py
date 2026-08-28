@@ -728,9 +728,17 @@ class ChatMessagesView(APIView):
         if message_ids:
             thought_process_map = ChatMessageThoughtProcess.objects.get_thought_process_from_session_uuid_and_message_ids(session_uuid, message_ids)
 
+        assistant_message_ids = [message.id for message in messages if message.role == 'assistant']
+        review_task_by_assistant_message_id = {}
+        if assistant_message_ids:
+            review_task_by_assistant_message_id = {
+                task.assistant_message_id: task
+                for task in ReviewTask.objects.filter(assistant_message_id__in=assistant_message_ids)
+            }
+
         messages_data = []
         for message in messages:
-            data = message.to_dict()
+            data = message.to_dict(review_task_by_assistant_message_id)
             if message.role == 'assistant':
                 thought_process = thought_process_map.get(message.message_id, {})
                 if thought_process:

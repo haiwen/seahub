@@ -10,7 +10,7 @@ import jwt
 from django.test import RequestFactory, SimpleTestCase, override_settings
 from django.utils import timezone
 
-from seahub.ai.models import ReviewDecisionSelection, ReviewTask
+from seahub.ai.models import ChatMessages, ReviewDecisionSelection, ReviewTask
 from seahub.ai.review_views import (
     ReviewTaskApproveView, ReviewTaskCancelView, ReviewTaskRejectView,
     ReviewTasksView, _filter_document_context_to_scope,
@@ -218,6 +218,38 @@ class SDocReviewDecisionStateTest(SimpleTestCase):
             ('card_revision_item',),
             ReviewDecisionSelection._meta.unique_together,
         )
+
+    @patch('seahub.ai.review_views.ReviewCardRevisionItem.objects.filter')
+    @patch('seahub.ai.review_views.ReviewDecisionSelection.objects.filter')
+    def test_partial_preflight_conflict_releases_unconflicted_item_selections(
+            self, mock_selection_filter, mock_membership_filter):
+        mock_membership_filter.return_value = []
+        decision = SimpleNamespace(card_revision=SimpleNamespace())
+        attempt = SimpleNamespace(review_decision=decision)
+
+        ReviewTaskApproveView()._record_preflight_conflicts(attempt, [{
+            'item_id': 'conflicted-item', 'conflict_code': 'before_hash_mismatch',
+        }])
+
+        mock_selection_filter.assert_called_once_with(decision=decision)
+        mock_selection_filter.return_value.exclude.assert_called_once_with(
+            card_revision_item__change_item__item_id__in={'conflicted-item'})
+        mock_selection_filter.return_value.exclude.return_value.delete.assert_called_once()
+
+
+class SDocReviewMessageExtensionTest(SimpleTestCase):
+    @patch('seahub.ai.models.ReviewTask.objects.filter')
+    def test_message_serialization_uses_prefetched_review_tasks(self, mock_review_tasks):
+        review_task = SimpleNamespace(
+            id=uuid.uuid4(), generation_status=ReviewTask.GENERATION_REVIEW_READY)
+        message = ChatMessages(id=17, session_uuid='session', message_id='1', role='assistant')
+
+        data = message.to_dict({17: review_task})
+
+        self.assertEqual(data['extensions'], [{
+            'type': 'sdoc_review', 'review_task_id': str(review_task.id),
+        }])
+        mock_review_tasks.assert_not_called()
 
     def test_oracle_review_schema_has_the_orm_scope_and_target_fields(self):
         project_root = Path(__file__).resolve().parents[3]

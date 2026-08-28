@@ -208,7 +208,7 @@ class ChatMessages(models.Model):
         db_table = 'chat_messages'
         unique_together = (('session_uuid', 'message_id', 'role'),)
 
-    def to_dict(self):
+    def to_dict(self, review_task_by_assistant_message_id=None):
         try:
             sources = json.loads(self.sources)
         except Exception:
@@ -225,10 +225,13 @@ class ChatMessages(models.Model):
 
         extensions = []
         if self.role == 'assistant':
-            try:
-                review_task = ReviewTask.objects.filter(assistant_message_id=self.id).first()
-            except Exception:
-                review_task = None
+            if review_task_by_assistant_message_id is None:
+                try:
+                    review_task = ReviewTask.objects.filter(assistant_message_id=self.id).first()
+                except Exception:
+                    review_task = None
+            else:
+                review_task = review_task_by_assistant_message_id.get(self.id)
             if review_task and review_task.generation_status != ReviewTask.GENERATION_CANCELLED:
                 extensions.append({'type': 'sdoc_review', 'review_task_id': str(review_task.id)})
 
