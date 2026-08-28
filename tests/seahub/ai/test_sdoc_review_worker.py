@@ -17,7 +17,8 @@ from seahub.ai.review_views import (
     _is_valid_revision_brief, _is_review_worker_request,
     _suggestion_is_within_task_scope, _review_target_key,
     _filter_unique_review_items, _has_duplicate_item_ids,
-    _has_too_many_decision_items, _review_generation_expired, _is_safe_review_finish,
+    _has_too_many_decision_items, _renew_review_worker_lease,
+    _review_generation_expired, _is_safe_review_finish,
 )
 from seahub.ai.sdoc_intent import route_sdoc_prompt
 from seahub.ai.utils import enqueue_sdoc_review_apply_attempt, enqueue_sdoc_review_task
@@ -299,6 +300,16 @@ class SDocReviewScopeTest(SimpleTestCase):
         task = SimpleNamespace(
             generation_deadline_at=timezone.now() - timezone.timedelta(seconds=1))
         self.assertTrue(_review_generation_expired(task))
+
+    def test_worker_lease_is_renewed_by_activity(self):
+        task = MagicMock()
+        now = timezone.now()
+
+        _renew_review_worker_lease(task, now=now)
+
+        self.assertGreater(task.generation_deadline_at, now)
+        task.save.assert_called_once_with(
+            update_fields=['generation_deadline_at', 'updated_at'])
 
     def test_finish_requires_all_chunks_unless_the_suggestion_limit_stopped_it(self):
         self.assertFalse(_is_safe_review_finish(3, 2, False, None))
