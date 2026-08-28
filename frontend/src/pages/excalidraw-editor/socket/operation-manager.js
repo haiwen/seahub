@@ -110,6 +110,13 @@ class OperationManager {
     uuid: uuidv4(),
   });
 
+  retryOperation = (queueItem, reason) => {
+    this.pendingOperationQueue.unshift(this.createRetryQueueItem(queueItem));
+    stateDebug(`${reason}. State Changed: ${this.state} -> ${STATE.IDLE}`);
+    this.state = STATE.IDLE;
+    this.scheduleRetry();
+  };
+
   scheduleRetry = () => {
     if (this.retryTimer) return;
 
@@ -175,10 +182,7 @@ class OperationManager {
     if (error_type === 'ack_timeout') {
       // The ACK may be lost even if the server has already processed the
       // operation. Requeue it and retry through the normal operation pipeline.
-      this.pendingOperationQueue.unshift(this.createRetryQueueItem(queueItem));
-      stateDebug(`ACK timeout. State Changed: ${this.state} -> ${STATE.IDLE}`);
-      this.state = STATE.IDLE;
-      this.scheduleRetry();
+      this.retryOperation(queueItem, 'ACK timeout');
     } else if (error_type === 'load_document_content_error' || error_type === 'token_expired') {
       // load_document_content_error: After a short-term reconnection, the content of the document fails to load
       this.notifyState(error_type);
@@ -196,12 +200,12 @@ class OperationManager {
       this.state = STATE.CONFLICT;
       this.resolveConflicting(result);
     } else {
-      // An operation execution error is terminal for the current operation.
-      // Drop it and release the in-flight slot; otherwise the manager remains
-      // in SENDING forever and blocks all following operations.
+      // Keep ordinary execution failures in the reliable queue. The operation
+      // has already been removed from the pending queue, so dropping it here
+      // would lose the user's edit. Retry with a new UUID so a delayed ACK
+      // from the failed attempt cannot acknowledge the retry.
       this.notifyState('execute_client_operations_error', error_type);
-      stateDebug(`Operation failed (${error_type || 'unknown'}). State remains ${this.state}`);
-      this.sendNextOperations();
+      this.retryOperation(queueItem, `Operation failed (${error_type || 'unknown'})`);
     }
   };
 
