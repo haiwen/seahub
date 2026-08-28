@@ -1,7 +1,11 @@
 import { stateDebug } from '../utils/debug';
 import { CaptureUpdateAction, getSceneVersion, reconcileElements, restoreElements } from '@excalidraw/excalidraw';
 import { v4 as uuidv4 } from 'uuid';
-import { OPERATION_RETRY_DELAY } from '../constants';
+import {
+  OPERATION_MAX_RETRIES,
+  OPERATION_MAX_RETRY_DELAY,
+  OPERATION_RETRY_DELAY,
+} from '../constants';
 
 const STATE = {
   IDLE: 'idle',
@@ -91,6 +95,7 @@ class OperationManager {
       uuid: uuidv4(),
       operation: elementsWithoutRemotePreview,
       beginTime: new Date().getTime(),
+      retryCount: 0,
     };
     this.pendingOperationQueue.push(queueItem);
 
@@ -105,19 +110,45 @@ class OperationManager {
     this.sendOperations();
   };
 
-  createRetryQueueItem = (queueItem) => ({
+  createRetryQueueItem = (queueItem, retryCount = queueItem.retryCount || 0) => ({
     ...queueItem,
     uuid: uuidv4(),
+    retryCount,
   });
 
+  getRetryDelay = (retryCount) => Math.min(
+    OPERATION_RETRY_DELAY * (2 ** Math.max(retryCount - 1, 0)),
+    OPERATION_MAX_RETRY_DELAY,
+  );
+
   retryOperation = (queueItem, reason) => {
-    this.pendingOperationQueue.unshift(this.createRetryQueueItem(queueItem));
+    const retryCount = (queueItem.retryCount || 0) + 1;
+    if (retryCount > OPERATION_MAX_RETRIES) {
+      // Keep the operation available for a later reload/reconnect instead of
+      // silently dropping the user's edit. Do not retry it while the manager
+      // is in NEED_RELOAD state.
+      this.pendingOperationQueue.unshift(this.createRetryQueueItem(queueItem, retryCount));
+      this.clearRetryTimer();
+      stateDebug(`${reason}. Retry budget exhausted. State Changed: ${this.state} -> ${STATE.NEED_RELOAD}`);
+      this.state = STATE.NEED_RELOAD;
+      this.notifyState('sync_server_operations_error');
+      return;
+    }
+
+    this.pendingOperationQueue.unshift(this.createRetryQueueItem(queueItem, retryCount));
     stateDebug(`${reason}. State Changed: ${this.state} -> ${STATE.IDLE}`);
     this.state = STATE.IDLE;
-    this.scheduleRetry();
+    this.scheduleRetry(this.getRetryDelay(retryCount));
   };
 
-  scheduleRetry = () => {
+  clearRetryTimer = () => {
+    if (this.retryTimer) {
+      clearTimeout(this.retryTimer);
+      this.retryTimer = null;
+    }
+  };
+
+  scheduleRetry = (delay = OPERATION_RETRY_DELAY) => {
     if (this.retryTimer) return;
 
     this.retryTimer = setTimeout(() => {
@@ -253,6 +284,10 @@ class OperationManager {
 
   handleConnectState = (type) => {
     if (type === 'reconnect') {
+      this.clearRetryTimer();
+      this.pendingOperationQueue = this.pendingOperationQueue.map((queueItem) => (
+        this.createRetryQueueItem(queueItem, 0)
+      ));
       this.state = STATE.IDLE;
       if (this.pendingOperationQueue.length > 0) {
         this.sendOperations();
@@ -260,6 +295,7 @@ class OperationManager {
     }
 
     if (type === 'disconnect') {
+      this.clearRetryTimer();
       // current state is sending
       if (this._sendingOperation) {
         this.pendingOperationQueue.unshift(this.createRetryQueueItem(this._sendingOperation));
