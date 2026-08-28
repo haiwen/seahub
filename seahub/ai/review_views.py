@@ -65,7 +65,9 @@ REVISION_BRIEF_REQUIRED_STRING_FIELDS = (
 GENERATION_IN_PROGRESS = ('queued', 'reading', 'drafting')
 REVIEW_WORKER_TOKEN_PURPOSE = 'sdoc_review_worker'
 REVIEW_WORKER_TOKEN_AUDIENCE = 'seahub_sdoc_review'
-REVIEW_WORKER_CLAIM_TIMEOUT_SECONDS = 200
+# This is a renewable worker lease, not a fixed Review duration. A healthy
+# worker renews it before long model calls and whenever it reports progress.
+REVIEW_WORKER_LEASE_SECONDS = 200
 TEXT_CHANGE_KINDS = frozenset(('replace_block_text', 'replace_table_cell_text'))
 LIST_TYPES = frozenset(('ordered_list', 'unordered_list'))
 EDITABLE_TEXT_BLOCK_TYPES = frozenset((
@@ -139,6 +141,14 @@ def _has_too_many_decision_items(item_ids):
 def _review_generation_expired(task, now=None):
     deadline = task.generation_deadline_at
     return deadline is not None and deadline <= (now or timezone.now())
+
+
+def _renew_review_worker_lease(task, now=None):
+    now = now or timezone.now()
+    task.generation_deadline_at = now + timezone.timedelta(
+        seconds=REVIEW_WORKER_LEASE_SECONDS)
+    task.updated_at = now
+    task.save(update_fields=['generation_deadline_at', 'updated_at'])
 
 
 def _is_safe_review_finish(total_chunks, completed_chunks, truncated, stop_reason):
@@ -383,6 +393,7 @@ def mark_generation_failed(task, attempt_id=None, error_code='generation_failed'
         generation_status=ReviewTask.GENERATION_FAILED,
         error_code=error_code,
         generation_finished_at=timezone.now(),
+        generation_deadline_at=None,
         updated_at=timezone.now())
     if not updated:
         return
@@ -957,7 +968,7 @@ class ReviewWorkerClaimView(APIView):
             generation_attempt_id=attempt_id,
             generation_revision=F('generation_revision') + 1,
             generation_deadline_at=(
-                timezone.now() + timezone.timedelta(seconds=REVIEW_WORKER_CLAIM_TIMEOUT_SECONDS)
+                timezone.now() + timezone.timedelta(seconds=REVIEW_WORKER_LEASE_SECONDS)
             ),
             updated_at=timezone.now(),
         )
@@ -1023,6 +1034,11 @@ class ReviewWorkerEventView(APIView):
                     task, attempt_id=attempt_id, error_code='generation_timeout')
                 return api_error(status.HTTP_409_CONFLICT, 'Review task has timed out.')
 
+            if event_type == 'heartbeat':
+                return self._heartbeat(task)
+            if event_type != 'failed':
+                _renew_review_worker_lease(task)
+
             if event_type == 'analysis':
                 return self._analysis(task, request.data)
             if event_type == 'begin':
@@ -1038,6 +1054,12 @@ class ReviewWorkerEventView(APIView):
                 mark_generation_failed(task, attempt_id=attempt_id, error_code=error_code)
                 return Response({'accepted': True})
             return api_error(status.HTTP_400_BAD_REQUEST, 'event_type is invalid.')
+
+    def _heartbeat(self, task):
+        if task.generation_status not in (ReviewTask.GENERATION_READING, ReviewTask.GENERATION_DRAFTING):
+            return api_error(status.HTTP_409_CONFLICT, 'Review task is not running.')
+        _renew_review_worker_lease(task)
+        return Response({'accepted': True})
 
     def _analysis(self, task, data):
         if task.generation_status not in (ReviewTask.GENERATION_READING, ReviewTask.GENERATION_DRAFTING):
@@ -1202,6 +1224,7 @@ class ReviewTaskCancelView(APIView):
             task.generation_attempt_id = None
             task.generation_stop_reason = 'cancelled_by_user'
             task.generation_finished_at = timezone.now()
+            task.generation_deadline_at = None
             task.total_chunks = 0
             task.completed_chunks = 0
             task.total_review_blocks = 0
@@ -1209,7 +1232,7 @@ class ReviewTaskCancelView(APIView):
             task.save(update_fields=[
                 'current_card_revision', 'current_changeset_revision',
                 'generation_status', 'generation_attempt_id',
-                'generation_stop_reason', 'generation_finished_at',
+                'generation_stop_reason', 'generation_finished_at', 'generation_deadline_at',
                 'total_chunks', 'completed_chunks', 'total_review_blocks',
                 'completed_review_blocks', 'updated_at',
             ])
