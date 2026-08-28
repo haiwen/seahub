@@ -14,6 +14,7 @@ from seahub.ai.models import ReviewDecisionSelection, ReviewTask
 from seahub.ai.review_views import (
     ReviewTaskApproveView, ReviewTaskCancelView, ReviewTaskRejectView,
     ReviewTasksView, _filter_document_context_to_scope,
+    _document_context_matches_task_snapshot,
     _is_valid_revision_brief, _is_review_worker_request,
     _suggestion_is_within_task_scope, _review_target_key,
     _filter_unique_review_items, _has_duplicate_item_ids,
@@ -239,11 +240,19 @@ class SDocReviewDecisionStateTest(SimpleTestCase):
 class SDocReviewScopeTest(SimpleTestCase):
     def setUp(self):
         self.task = SimpleNamespace(
+            file_uuid='file-uuid',
+            scope_snapshot_id='snapshot-id',
+            scope_document_incarnation='incarnation-id',
+            scope_sdoc_version=7,
             allowed_block_ids=['section-1', 'block-1', 'list-1'],
             allowed_text_targets=[{'block_id': 'block-1', 'text_node_id': 'text-1'}],
             scope_summary='Section 1',
         )
         self.context = {
+            'file_uuid': 'file-uuid',
+            'snapshot_id': 'snapshot-id',
+            'document_incarnation': 'incarnation-id',
+            'exact_sdoc_version': 7,
             'blocks': [
                 {'block_id': 'block-1', 'text_node_id': 'text-1'},
                 {'block_id': 'block-2', 'text_node_id': 'text-2'},
@@ -269,6 +278,19 @@ class SDocReviewScopeTest(SimpleTestCase):
         self.assertFalse(_suggestion_is_within_task_scope({
             'kind': 'replace_block_text', 'block_id': 'block-2', 'text_node_id': 'text-2',
         }, self.task))
+
+    def test_unknown_suggestion_kind_is_rejected(self):
+        self.assertFalse(_suggestion_is_within_task_scope({
+            'kind': 'delete_block', 'block_id': 'block-1',
+        }, self.task))
+        self.assertFalse(_suggestion_is_within_task_scope({
+            'block_id': 'block-1', 'text_node_id': 'text-1',
+        }, self.task))
+
+    def test_worker_context_must_match_the_creation_snapshot(self):
+        self.assertTrue(_document_context_matches_task_snapshot(self.task, self.context))
+        changed = dict(self.context, exact_sdoc_version=8, snapshot_id='new-snapshot')
+        self.assertFalse(_document_context_matches_task_snapshot(self.task, changed))
 
     def test_long_review_requires_a_complete_brief(self):
         self.assertFalse(_is_valid_revision_brief({}))
