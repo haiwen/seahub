@@ -15,6 +15,7 @@ from seahub.auth.utils import LOGIN_ATTEMPT_PREFIX
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.test_utils import BaseTestCase
+from seahub.utils.ldap import LDAP_PROVIDER
 
 
 class LoginTest(BaseTestCase):
@@ -115,13 +116,12 @@ class LoginTest(BaseTestCase):
 
         self.assertEqual(302, resp.status_code)
 
-    @override_settings(ENABLE_LDAP=True, USE_LDAP_SYNC_ONLY=False)
     @patch('seahub.utils.auth.DISABLE_SSO_USER_LOCAL_PWD_LOGIN', True)
     @patch('seahub.auth.forms.authenticate')
-    def test_org_force_sso_blocks_ldap_password_login(
-            self, mock_authenticate, _mock_is_force_user_sso):
-        self.user.source = 'LDAP'
-        mock_authenticate.side_effect = [self.user, self.user]
+    def test_authentication_form_blocks_remote_local_password_login(
+            self, mock_authenticate):
+        SocialAuthUser.objects.add(self.user.username, 'saml', self.user.username)
+        mock_authenticate.return_value = self.user
 
         form = AuthenticationForm(data={
             'login': self.user.username, 'password': self.user_password,
@@ -129,13 +129,14 @@ class LoginTest(BaseTestCase):
 
         self.assertFalse(form.is_valid())
         self.assertIn('disable_pwd_login', form.errors)
+        self.assertEqual(mock_authenticate.call_count, 1)
 
     @override_settings(ENABLE_LDAP=True, USE_LDAP_SYNC_ONLY=False)
     @patch('seahub.utils.auth.DISABLE_SSO_USER_LOCAL_PWD_LOGIN', True)
     @patch('seahub.auth.forms.authenticate')
     def test_ldap_password_login_remains_available_when_local_password_is_disabled(
             self, mock_authenticate):
-        self.user.source = 'LDAP'
+        SocialAuthUser.objects.add(self.user.username, LDAP_PROVIDER, self.user.username)
         mock_authenticate.side_effect = [self.user, self.user]
 
         form = AuthenticationForm(data={
