@@ -188,12 +188,25 @@ def _filter_document_context_to_scope(document_context, task):
     return context
 
 
+def _document_context_matches_task_snapshot(task, document_context):
+    """Compare a worker context with the immutable identity captured at creation."""
+    if not isinstance(document_context, dict):
+        return False
+    return (
+        str(document_context.get('file_uuid')) == str(task.file_uuid)
+        and str(document_context.get('snapshot_id')) == str(task.scope_snapshot_id)
+        and str(document_context.get('document_incarnation'))
+        == str(task.scope_document_incarnation)
+        and document_context.get('exact_sdoc_version') == task.scope_sdoc_version
+    )
+
+
 def _suggestion_is_within_task_scope(suggestion, task):
     if not isinstance(suggestion, dict):
-        return True
-    kind = suggestion.get('kind') or PHASE1_KIND
+        return False
+    kind = suggestion.get('kind')
     if kind not in TEXT_CHANGE_KINDS | {'set_block_type', 'set_list_type'}:
-        return True
+        return False
     block_id = suggestion.get('block_id')
     if block_id not in set(getattr(task, 'allowed_block_ids', None) or []):
         return False
@@ -985,8 +998,13 @@ class ReviewWorkerClaimView(APIView):
             if str(uuid_map.uuid) != str(task.file_uuid):
                 raise RuntimeError('The ReviewTask file identity no longer matches its path.')
             document_context = _fetch_document_context(uuid_map, task.requester)
-            if str(document_context.get('file_uuid')) != str(task.file_uuid):
-                raise RuntimeError('The SDoc snapshot does not match the ReviewTask file.')
+            if not _document_context_matches_task_snapshot(task, document_context):
+                mark_generation_failed(
+                    task, attempt_id=attempt_id,
+                    error_code='document_changed_before_generation')
+                return api_error(
+                    status.HTTP_409_CONFLICT,
+                    'The document changed before review generation began.')
             document_context = _filter_document_context_to_scope(document_context, task)
             if not document_context.get('blocks') and not document_context.get('lists'):
                 raise RuntimeError('The ReviewTask scope no longer has editable targets.')
@@ -1095,7 +1113,7 @@ class ReviewWorkerEventView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'total_chunks is invalid.')
         if not isinstance(total_blocks, int) or total_blocks < 1:
             return api_error(status.HTTP_400_BAD_REQUEST, 'total_blocks is invalid.')
-        if str(document_context.get('file_uuid')) != str(task.file_uuid):
+        if not _document_context_matches_task_snapshot(task, document_context):
             return api_error(status.HTTP_409_CONFLICT, 'Document snapshot does not match the task.')
         try:
             scoped_context = _filter_document_context_to_scope(document_context, task)
