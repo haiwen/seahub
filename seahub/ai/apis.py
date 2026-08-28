@@ -39,7 +39,7 @@ def is_chat_and_search_enabled(repo_id):
     configured = verify_chat_ai_config()
     enabled = bool(configured and metadata and metadata.enabled and metadata.summary_enabled)
     if not enabled:
-        logger.info('AI Chat & Search is unavailable for library %s: configured=%s', repo_id, configured)
+        logger.info('AI Chat and Search is unavailable for library %s: configured=%s', repo_id, configured)
     return enabled
 
 
@@ -523,7 +523,7 @@ class ChatSessionsView(APIView):
         if not check_folder_permission(request, repo_id, '/'): 
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if not is_chat_and_search_enabled(repo_id):
-            return api_error(status.HTTP_403_FORBIDDEN, 'AI Chat & Search is not enabled for this library.')
+            return api_error(status.HTTP_403_FORBIDDEN, 'AI Chat and Search is not enabled for this library.')
         if not user_passes_ai_chat_folder_permissions(request, repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
@@ -547,7 +547,7 @@ class ChatSessionsView(APIView):
         if repo.is_virtual:
             return api_error(status.HTTP_403_FORBIDDEN, 'Virtual library is not supported.')
         if not is_chat_and_search_enabled(repo_id):
-            return api_error(status.HTTP_403_FORBIDDEN, 'AI Chat & Search is not enabled for this library.')
+            return api_error(status.HTTP_403_FORBIDDEN, 'AI Chat and Search is not enabled for this library.')
         if not check_folder_permission(request, repo_id, '/'):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if not user_passes_ai_chat_folder_permissions(request, repo_id):
@@ -569,7 +569,7 @@ class ChatSessionView(APIView):
         if not check_folder_permission(request, session.repo_id, '/'):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if not is_chat_and_search_enabled(session.repo_id):
-            return api_error(status.HTTP_403_FORBIDDEN, 'AI Chat & Search is not enabled for this library.')
+            return api_error(status.HTTP_403_FORBIDDEN, 'AI Chat and Search is not enabled for this library.')
         if not user_passes_ai_chat_folder_permissions(request, session.repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if session.username != request.user.username:
@@ -594,7 +594,7 @@ class ChatSessionView(APIView):
         if not check_folder_permission(request, session.repo_id, '/'):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if not is_chat_and_search_enabled(session.repo_id):
-            return api_error(status.HTTP_403_FORBIDDEN, 'AI Chat & Search is not enabled for this library.')
+            return api_error(status.HTTP_403_FORBIDDEN, 'AI Chat and Search is not enabled for this library.')
         if not user_passes_ai_chat_folder_permissions(request, session.repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if session.username != request.user.username:
@@ -618,7 +618,7 @@ class ChatSessionCopyView(APIView):
         if not check_folder_permission(request, session.repo_id, '/'):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if not is_chat_and_search_enabled(session.repo_id):
-            return api_error(status.HTTP_403_FORBIDDEN, 'AI Chat & Search is not enabled for this library.')
+            return api_error(status.HTTP_403_FORBIDDEN, 'AI Chat and Search is not enabled for this library.')
         if not user_passes_ai_chat_folder_permissions(request, session.repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if session.username != request.user.username and not session.is_shared:
@@ -649,7 +649,7 @@ class ChatMessagesView(APIView):
         if not check_folder_permission(request, session.repo_id, '/'):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if not is_chat_and_search_enabled(session.repo_id):
-            return api_error(status.HTTP_403_FORBIDDEN, 'AI Chat & Search is not enabled for this library.')
+            return api_error(status.HTTP_403_FORBIDDEN, 'AI Chat and Search is not enabled for this library.')
         if not user_passes_ai_chat_folder_permissions(request, session.repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if not check_session_access(session, request.user.username):
@@ -790,7 +790,7 @@ class ChatView(APIView):
         if repo.is_virtual:
             return api_error(status.HTTP_403_FORBIDDEN, 'Virtual library is not supported.')
         if not is_chat_and_search_enabled(repo_id):
-            return api_error(status.HTTP_403_FORBIDDEN, 'AI Chat & Search is not enabled for this library.')
+            return api_error(status.HTTP_403_FORBIDDEN, 'AI Chat and Search is not enabled for this library.')
         if not check_folder_permission(request, repo_id, '/'):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if not user_passes_ai_chat_folder_permissions(request, repo_id):

@@ -69,7 +69,7 @@ const MetadataAISummaryStatusDialog = ({ value: oldValue, repoID, submit, enable
 
   return (
     <div className='library-setting-item'>
-      <h3 className='library-setting-item-heading'>{gettext('AI Chat & Search')}</h3>
+      <h3 className='library-setting-item-heading'>{gettext('AI Chat and Search')}</h3>
       <>
         <div className='d-flex align-items-center'>
           <Switch
@@ -79,7 +79,7 @@ const MetadataAISummaryStatusDialog = ({ value: oldValue, repoID, submit, enable
             textPosition="right"
             className="change-face-recognition-status-management"
             onChange={onValueChange}
-            placeholder={gettext('AI Chat & Search')}
+            placeholder={gettext('AI Chat and Search')}
           />
           {!enableMetadata &&
             <OpIcon
@@ -96,8 +96,8 @@ const MetadataAISummaryStatusDialog = ({ value: oldValue, repoID, submit, enable
         </p>
       </>
       {showTurnOffConfirmDialog && (
-        <TurnOffConfirmDialog title={gettext('Turn off AI Chat & Search')} toggle={turnOffConfirmToggle} submit={turnOffConfirmSubmit}>
-          <p>{gettext('Do you really want to turn off AI Chat & Search? AI chat and file search will no longer be available, and existing AI summaries will all be deleted.')}</p>
+        <TurnOffConfirmDialog title={gettext('Turn off AI Chat and Search')} toggle={turnOffConfirmToggle} submit={turnOffConfirmSubmit}>
+          <p>{gettext('Do you really want to turn off AI Chat and Search? AI chat and file search will no longer be available, and existing AI summaries will all be deleted.')}</p>
         </TurnOffConfirmDialog>
       )}
     </div>

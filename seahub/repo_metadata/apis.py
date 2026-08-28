@@ -1999,7 +1999,7 @@ class MetadataAISummaryStatusManage(APIView):
 
     def post(self, request, repo_id):
         if not verify_chat_ai_config():
-            return api_error(status.HTTP_400_BAD_REQUEST, 'AI Chat & Search is not configured')
+            return api_error(status.HTTP_400_BAD_REQUEST, 'AI Chat and Search is not configured')
 
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
         if not metadata or not metadata.enabled:
