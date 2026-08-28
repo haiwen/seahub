@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { globalHistory, Link } from '@gatsbyjs/reach-router';
-import { enableRepoAutoDel, enableFaceRecognitionFeature, enableSeafileAI, enableAIChat, gettext, siteRoot } from '../../../utils/constants';
+import { chatAndSearchAvailable, enableRepoAutoDel, enableFaceRecognitionFeature, enableSeafileAI, gettext, siteRoot } from '../../../utils/constants';
 import { useMetadataStatus } from '../../../hooks';
 import LibHistorySettingPanel from './lib-history-setting-panel';
 import LibAutoDelSettingPanel from './lib-old-files-auto-del-setting-panel';
@@ -168,7 +168,7 @@ const LibSettings = ({ repoID, currentRepoInfo, isMigrationTipShown }) => {
             submit={updateEnableMetadata}
           />
         )}
-        {(enableExtendedPropertiesSetting && enableSeafileAI && enableAIChat) && (
+        {(enableExtendedPropertiesSetting && chatAndSearchAvailable) && (
           <LibAISummarySettingPanel
             repoID={repoID}
             value={enableAISummary}

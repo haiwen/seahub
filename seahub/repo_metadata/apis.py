@@ -32,7 +32,7 @@ from seahub.repo_tags.models import RepoTags
 from seahub.settings import MD_FILE_COUNT_LIMIT
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.search.utils import get_invisible_repos_info_by_username, is_invisible_path
-from seahub.ai.utils import verify_ai_config
+from seahub.ai.utils import verify_ai_config, verify_chat_ai_config
 
 logger = logging.getLogger(__name__)
 
@@ -1998,8 +1998,8 @@ class MetadataAISummaryStatusManage(APIView):
         return Response({'enabled': bool(metadata.summary_enabled)})
 
     def post(self, request, repo_id):
-        if not verify_ai_config():
-            return api_error(status.HTTP_400_BAD_REQUEST, 'AI server not configured')
+        if not verify_chat_ai_config():
+            return api_error(status.HTTP_400_BAD_REQUEST, 'AI Chat and Search is not configured')
 
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
         if not metadata or not metadata.enabled:
