@@ -24,6 +24,8 @@ class RemoteUserPasswordPolicyTest(BaseTestCase):
             with patch('seahub.utils.auth.DISABLE_SSO_USER_LOCAL_PWD_LOGIN', True):
                 self.assertTrue(is_remote_user(self.user))
                 self.assertFalse(user_local_password_enabled(self.user))
+            SocialAuthUser.objects.filter(
+                username=self.user.username, provider=provider).delete()
 
     def test_social_auth_users_are_remote_users(self):
         SocialAuthUser.objects.add(self.user.username, 'saml', self.user.username)
