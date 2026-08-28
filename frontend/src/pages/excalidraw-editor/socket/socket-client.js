@@ -11,6 +11,7 @@ class SocketClient {
   constructor(config) {
     this.config = config;
     this.isReconnect = false;
+    this.isJoiningRoom = false;
     this.broadcastedElementVersions = new Map();
     this.socket = io(`${config.exdrawServer}/exdraw`, {
       reconnection: true,
@@ -156,6 +157,10 @@ class SocketClient {
 
   onInitRoom = () => {
     serverDebug('join-room message');
+    // The server emits room-user-change after join-room has completed. Keep
+    // operations blocked until that event confirms that this socket is back
+    // in the document room.
+    this.isJoiningRoom = true;
     this.socket.emit('join-room', this.getParams());
   };
 
@@ -163,6 +168,11 @@ class SocketClient {
     serverDebug('room users changed. all users count: %s', users.length);
     const socketManager = SocketManager.getInstance();
     socketManager.receiveRoomUserChanged(users);
+
+    if (this.isJoiningRoom) {
+      this.isJoiningRoom = false;
+      socketManager.dispatchConnectState('room-ready');
+    }
   };
 
   onLeaveRoom = (userInfo) => {

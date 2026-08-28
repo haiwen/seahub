@@ -8,6 +8,7 @@ import {
 } from '../constants';
 
 const STATE = {
+  WAITING_FOR_ROOM: 'waiting_for_room',
   IDLE: 'idle',
   SENDING: 'sending',
   CONFLICT: 'conflict',
@@ -36,7 +37,10 @@ class OperationManager {
     this.loadImageFiles = loadImageFiles;
     this.onStateChange = onStateChange;
 
-    this.state = STATE.IDLE;
+    // The Socket.IO transport can connect before the client has joined the
+    // Excalidraw room. Queue local edits, but do not send them until the
+    // room-ready event is received.
+    this.state = STATE.WAITING_FOR_ROOM;
     this.pendingOperationQueue = [];
     this.lastBroadcastedOrReceivedSceneVersion = 0;
     this.lastQueuedSceneVersion = 0;
@@ -284,6 +288,13 @@ class OperationManager {
 
   handleConnectState = (type) => {
     if (type === 'reconnect') {
+      // A transport reconnect only means that the Socket.IO connection is
+      // back. The client still has to re-join the document room. Wait for
+      // room-ready before resetting retry budgets or sending operations.
+      return;
+    }
+
+    if (type === 'room-ready') {
       this.clearRetryTimer();
       this.pendingOperationQueue = this.pendingOperationQueue.map((queueItem) => (
         this.createRetryQueueItem(queueItem, 0)
@@ -292,6 +303,7 @@ class OperationManager {
       if (this.pendingOperationQueue.length > 0) {
         this.sendOperations();
       }
+      return;
     }
 
     if (type === 'disconnect') {

@@ -120,12 +120,23 @@ describe('OperationManager retry policy', () => {
     expect(manager._sendingOperation.retryCount).toBe(2);
   });
 
-  it('resets retry budgets when the connection is ready again', () => {
+  it('does not send operations on transport reconnect before the room is ready', () => {
     const { manager, socketClient } = createManager();
     manager.state = 'disconnect';
     manager.pendingOperationQueue.push(createQueueItem(OPERATION_MAX_RETRIES));
 
     manager.handleConnectState('reconnect');
+
+    expect(socketClient.broadcastSceneElements).not.toHaveBeenCalled();
+    expect(manager.state).toBe('disconnect');
+  });
+
+  it('resets retry budgets and sends when the room is ready again', () => {
+    const { manager, socketClient } = createManager();
+    manager.state = 'disconnect';
+    manager.pendingOperationQueue.push(createQueueItem(OPERATION_MAX_RETRIES));
+
+    manager.handleConnectState('room-ready');
 
     expect(socketClient.broadcastSceneElements).toHaveBeenCalledTimes(1);
     expect(manager._sendingOperation.retryCount).toBe(0);
