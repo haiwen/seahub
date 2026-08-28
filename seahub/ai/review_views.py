@@ -1564,6 +1564,14 @@ class ReviewTaskApproveView(APIView):
                 card_revision=attempt.review_decision.card_revision)
             global_summary = _('The document was reloaded after this review was generated. Generate a new review.')
         else:
+            # Preflight failed before SDoc committed anything. Keep selections
+            # for the conflicting items as their terminal conflict record, but
+            # release every other item so it can be approved again.
+            ReviewDecisionSelection.objects.filter(
+                decision=attempt.review_decision,
+            ).exclude(
+                card_revision_item__change_item__item_id__in=conflict_by_item_id.keys(),
+            ).delete()
             memberships = ReviewCardRevisionItem.objects.filter(
                 card_revision=attempt.review_decision.card_revision,
                 change_item__item_id__in=conflict_by_item_id.keys())
