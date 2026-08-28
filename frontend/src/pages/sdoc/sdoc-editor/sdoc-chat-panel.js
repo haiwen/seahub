@@ -4,10 +4,13 @@ import DirChat from '../../../components/dir-view-mode/dir-chat';
 import ChatToolbar from '../../../components/toolbar/chat-toolbar';
 import Icon from '../../../components/icon';
 import OpIcon from '../../../components/op-icon';
-import { AttachmentObject } from '../../../components/dir-view-mode/dir-chat/models';
-import { ASK_PAGE_SLUG_ID } from '../../../components/dir-view-mode/dir-chat/constants';
+import { AttachmentObject, ChatMessage } from '../../../components/dir-view-mode/dir-chat/models';
+import { ASK_PAGE_SLUG_ID, CHAT_MESSAGE_TYPE } from '../../../components/dir-view-mode/dir-chat/constants';
+import { chatAPI } from '../../../utils/chat-api';
 import { gettext } from '../../../utils/constants';
 import { getDocSessionIds, getLatestDocSessionId, removeDocSession, removeDocSessions, touchDocSession } from './sdoc-chat-session-storage';
+import SdocReviewCard from './sdoc-review-card';
+import SdocReviewProgress from './sdoc-review-progress';
 
 import './sdoc-chat-panel.css';
 
@@ -41,6 +44,86 @@ const SdocChatPanel = ({ onClose, width }) => {
   const onSessionIdsMissing = useCallback((sessionIds) => {
     removeDocSessions(repoID, docPath, sessionIds);
   }, [docPath, repoID]);
+
+  const mapMessages = useCallback((rawMessages) => {
+    return (rawMessages || []).map((item) => {
+      if (item.role === 'user') {
+        return new ChatMessage({
+          id: item.id,
+          message: {
+            [CHAT_MESSAGE_TYPE.TEXT]: item.content,
+            [CHAT_MESSAGE_TYPE.ATTACHMENTS]: item.attachments || [],
+          },
+          isUserSpeak: true,
+        });
+      }
+      return new ChatMessage({
+        id: item.id,
+        type: CHAT_MESSAGE_TYPE.GROUP,
+        extensions: item.extensions || [],
+        message: {
+          [CHAT_MESSAGE_TYPE.AI_REPLY]: item.content || '',
+          [CHAT_MESSAGE_TYPE.SOURCES]: item.sources || [],
+        },
+      });
+    });
+  }, []);
+
+  const onReviewSubmit = useCallback(async ({ sessionId, message, createSession, onProgress }) => {
+    let reviewSessionId = sessionId;
+    if (reviewSessionId === ASK_PAGE_SLUG_ID.NEW) {
+      const session = await createSession(message.slice(0, 100));
+      reviewSessionId = session._id;
+    }
+
+    onProgress?.('reading_document');
+    const improvingTimer = window.setTimeout(() => onProgress?.('drafting_suggestion'), 700);
+    const response = await chatAPI.createSdocReview({
+      repo_id: repoID,
+      path: docPath,
+      prompt: message,
+      session_uuid: reviewSessionId,
+    }).finally(() => {
+      window.clearTimeout(improvingTimer);
+    });
+
+    const route = response.data.route;
+    if (route === 'answer') {
+      return { sessionId: reviewSessionId, fallbackToChat: true, message };
+    }
+
+    const task = response.data.task || {};
+    const userMessages = mapMessages(response.data.messages);
+    if (['queued', 'reading', 'drafting'].includes(task.generation_status)) {
+      return {
+        sessionId: reviewSessionId,
+        messages: [
+          ...userMessages,
+          new ChatMessage({
+            type: CHAT_MESSAGE_TYPE.GROUP,
+            extensions: [{ type: 'sdoc_review', review_task_id: task.id }],
+            message: { [CHAT_MESSAGE_TYPE.AI_REPLY]: gettext('Reviewing the document…') },
+          }),
+        ],
+        runningTask: true,
+      };
+    }
+
+    return { sessionId: reviewSessionId, messages: userMessages };
+  }, [docPath, repoID, mapMessages]);
+
+  const messageRenderers = useMemo(() => ({
+    sdoc_review: ({ extension, onMessageContentChange, onTaskRunningChange }) => (
+      <SdocReviewCard
+        reviewTaskId={extension.review_task_id}
+        onMessageContentChange={onMessageContentChange}
+        onTaskRunningChange={onTaskRunningChange}
+      />
+    ),
+    sdoc_review_progress: ({ extension }) => (
+      <SdocReviewProgress phase={extension.phase} completed={extension.completed} total={extension.total} />
+    ),
+  }), []);
 
   useLayoutEffect(() => {
     const panel = document.getElementById('sdoc-content-right-panel');
@@ -105,6 +188,9 @@ const SdocChatPanel = ({ onClose, width }) => {
             onSessionDelete={onSessionDelete}
             onSessionIdsMissing={onSessionIdsMissing}
             fallbackToNewWhenSessionMissing={true}
+            messageRenderers={messageRenderers}
+            onReviewSubmit={onReviewSubmit}
+            enableMessageMathJax={false}
           />
         </div>
       </div>

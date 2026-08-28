@@ -18,18 +18,22 @@ import ChatHeader from '../chat-header';
 
 import './index.css';
 
-const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = false }) => {
+const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = false, messageRenderers, onReviewSubmit, enableMessageMathJax = true }) => {
   const [isReply, setReply] = useState(false);
+  const [isReviewSubmitting, setReviewSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [chatHistories, setChatHistories] = useState([]);
   const [fetchedSession, setFetchedSession] = useState(null);
   const [isStartingChatFromConversation, setIsStartingChatFromConversation] = useState(false);
+  const [activeReviewTaskId, setActiveReviewTaskId] = useState(null);
+  const [isStoppingReview, setStoppingReview] = useState(false);
 
   const timer = useRef(null);
   const chatHistoryContentRef = useRef(null);
   const messageInputRef = useRef(null);
   const currentSessionId = useRef('');
   const newSessionProblem = useRef('');
+  const runningReviewTaskIds = useRef(new Set());
 
   const {
     isShowSessions,
@@ -91,6 +95,72 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
     jumpToBottom(reply ? 10 : 50);
   }, [jumpToBottom]);
 
+  const updateChatMessageContent = useCallback((chatId, content) => {
+    setChatHistories((current) => {
+      const index = current.findIndex((chat) => chat._id === chatId);
+      if (index < 0 || current[index].message?.[CHAT_MESSAGE_TYPE.AI_REPLY] === content) {
+        return current;
+      }
+      const next = current.slice();
+      const chat = current[index];
+      next[index] = new ChatMessage({
+        id: chat._id,
+        message: { ...chat.message, [CHAT_MESSAGE_TYPE.AI_REPLY]: content },
+        isUserSpeak: chat.isUserSpeak,
+        type: chat.type,
+        extensions: chat.extensions,
+      });
+      return next;
+    });
+  }, []);
+
+  const updateReviewTaskRunning = useCallback((reviewTaskId, running, cancellable = false) => {
+    if (!reviewTaskId || pageSlugId === ASK_PAGE_SLUG_ID.NEW) return;
+    if (running) {
+      runningReviewTaskIds.current.add(reviewTaskId);
+      setActiveReviewTaskId(cancellable ? reviewTaskId : null);
+      modifyLocalSession(pageSlugId, { running_task: true });
+      return;
+    }
+    const wasTracked = runningReviewTaskIds.current.delete(reviewTaskId);
+    if (wasTracked) {
+      const remainingTaskIds = Array.from(runningReviewTaskIds.current);
+      setActiveReviewTaskId(remainingTaskIds[remainingTaskIds.length - 1] || null);
+    }
+    if (wasTracked && runningReviewTaskIds.current.size === 0) {
+      modifyLocalSession(pageSlugId, { running_task: false });
+    }
+  }, [modifyLocalSession, pageSlugId]);
+
+  const stopReview = useCallback(async () => {
+    if (!activeReviewTaskId || isStoppingReview) return;
+    setStoppingReview(true);
+    try {
+      const response = await chatAPI.cancelSdocReview(activeReviewTaskId);
+      const stoppedContent = response.data.task?.assistant_content || gettext('Review stopped.');
+      setChatHistories((current) => current.map((chat) => {
+        const isStoppedReview = chat.extensions.some((extension) => (
+          extension.type === 'sdoc_review' && extension.review_task_id === activeReviewTaskId
+        ));
+        if (!isStoppedReview) return chat;
+        return new ChatMessage({
+          id: chat._id,
+          message: { ...chat.message, [CHAT_MESSAGE_TYPE.AI_REPLY]: stoppedContent },
+          isUserSpeak: chat.isUserSpeak,
+          type: chat.type,
+          extensions: chat.extensions.filter((extension) => extension.review_task_id !== activeReviewTaskId),
+        });
+      }));
+      runningReviewTaskIds.current.delete(activeReviewTaskId);
+      setActiveReviewTaskId(null);
+      modifyLocalSession(pageSlugId, { running_task: false });
+    } catch (error) {
+      toaster.danger(Utils.getErrorMsg(error));
+    } finally {
+      setStoppingReview(false);
+    }
+  }, [activeReviewTaskId, isStoppingReview, modifyLocalSession, pageSlugId]);
+
   const sendMessage = useCallback(({ message, attachments, model }) => {
     const validMessage = message.trim();
     if (!validMessage) {
@@ -109,6 +179,74 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
     updateChatHistories(newChatHistories, false, () => {
       messageInputRef.current?.clearInput();
     });
+
+    if (onReviewSubmit) {
+      const progressId = `review-progress-${Date.now()}`;
+      const buildProgressMessage = (phase, completed, total) => new ChatMessage({
+        id: progressId,
+        message: {},
+        type: CHAT_MESSAGE_TYPE.TIP,
+        extensions: [{ type: 'sdoc_review_progress', phase, completed, total }],
+      });
+      let reviewChatHistories = [...newChatHistories, buildProgressMessage('reading_document')];
+      setReviewSubmitting(true);
+      updateChatHistories(reviewChatHistories);
+
+      const updateProgress = (progress) => {
+        const phase = typeof progress === 'string' ? progress : progress.phase;
+        const completed = typeof progress === 'object' ? progress.completed : undefined;
+        const total = typeof progress === 'object' ? progress.total : undefined;
+        reviewChatHistories = reviewChatHistories.map((chat) => {
+          return chat._id === progressId ? buildProgressMessage(phase, completed, total) : chat;
+        });
+        updateChatHistories(reviewChatHistories);
+      };
+
+      onReviewSubmit({
+        sessionId: pageSlugId,
+        message: validMessage,
+        attachments,
+        model,
+        createSession,
+        onProgress: updateProgress,
+      }).then((result) => {
+        if (result && result.sessionId && result.sessionId !== pageSlugId) {
+          currentSessionId.current = result.sessionId;
+          togglePageSlugId(result.sessionId);
+        }
+        if (result && result.runningTask && result.sessionId) {
+          modifyLocalSession(result.sessionId, { running_task: true });
+        }
+        if (result && result.fallbackToChat) {
+          const nextChatHistories = reviewChatHistories.filter((chat) => chat._id !== progressId);
+          updateChatHistories(nextChatHistories);
+          eventBus.dispatch(EVENT_BUS_TYPE.ASK_QUESTION, {
+            sessionId: result.sessionId || pageSlugId,
+            message: result.message || validMessage,
+            attachments,
+            model,
+          });
+          return;
+        }
+        if (result && result.messages) {
+          const nextChatHistories = reviewChatHistories.filter((chat) => chat._id !== progressId);
+          nextChatHistories[nextChatHistories.length - 1] = result.messages[0] || nextChatHistories[nextChatHistories.length - 1];
+          nextChatHistories.push(...result.messages.slice(1));
+          updateChatHistories(nextChatHistories);
+        }
+      }).catch((error) => {
+        const nextChatHistories = reviewChatHistories.filter((chat) => chat._id !== progressId);
+        nextChatHistories.push(new ChatMessage({
+          message: { [CHAT_MESSAGE_TYPE.TEXT]: gettext('Unable to create a review suggestion.') },
+          type: CHAT_MESSAGE_TYPE.ERROR,
+        }));
+        updateChatHistories(nextChatHistories);
+        toaster.danger(Utils.getErrorMsg(error));
+      }).finally(() => {
+        setReviewSubmitting(false);
+      });
+      return;
+    }
 
     if (pageSlugId !== ASK_PAGE_SLUG_ID.NEW) {
       touchSession(pageSlugId);
@@ -135,7 +273,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
         });
       }, 3);
     });
-  }, [chatHistories, createSession, pageSlugId, togglePageSlugId, touchSession, updateChatHistories]);
+  }, [chatHistories, createSession, modifyLocalSession, onReviewSubmit, pageSlugId, togglePageSlugId, touchSession, updateChatHistories]);
 
   const handleStartChatFromConversation = useCallback(() => {
     if (!session?._id || !startChatFromConversation || isStartingChatFromConversation) {
@@ -160,6 +298,8 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
     }
 
     currentSessionId.current = pageSlugId;
+    runningReviewTaskIds.current.clear();
+    setActiveReviewTaskId(null);
     setFetchedSession(null);
     updateChatHistories([]);
     setLoading(true);
@@ -174,6 +314,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
         session: sessionData,
         messages: historyMessages,
         running_task,
+        running_task_type,
         user_input,
       } = res.data;
 
@@ -203,10 +344,13 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
           id: item.id,
           message: newChatData,
           type: CHAT_MESSAGE_TYPE.GROUP,
+          extensions: item.extensions || [],
         });
       }) : [];
 
-      if (running_task) {
+      const hasRunningReview = running_task_type === 'sdoc_review';
+
+      if (running_task && !hasRunningReview) {
         setReply(true);
         const { message = '', attachments = [] } = user_input || {};
         messages.push(new ChatMessage({
@@ -221,7 +365,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
       updateChatHistories(messages);
       setLoading(false);
 
-      if (running_task) {
+      if (running_task && !hasRunningReview) {
         getChatMessage(pageSlugId);
       }
     }).catch((error) => {
@@ -528,7 +672,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
 
   const isEmpty = chatHistories.length === 0 && !loading;
   const isNewChat = pageSlugId === ASK_PAGE_SLUG_ID.NEW;
-  const effectiveIsReply = loading || isReply;
+  const effectiveIsReply = loading || isReply || isReviewSubmitting;
 
   return (
     <div className={classNames('sea-ai-ask-wrapper', { empty: isEmpty && isNewChat, 'small-page': isSmall, 'has-header': !isNewChat })}>
@@ -553,6 +697,10 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
               chat={chat}
               settings={settings}
               repoID={repoID}
+              messageRenderers={messageRenderers}
+              enableMessageMathJax={enableMessageMathJax}
+              onMessageContentChange={updateChatMessageContent}
+              onExtensionStateChange={updateReviewTaskRunning}
             />
           ))}
           {loading && <CenteredLoading className="flex-1" />}
@@ -579,6 +727,9 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
             repoID={repoID}
             sendMessage={sendMessage}
             isEmpty={isEmpty}
+            showStop={Boolean(activeReviewTaskId)}
+            stopping={isStoppingReview}
+            onStop={stopReview}
           />
         )}
       </div>
@@ -591,6 +742,9 @@ Chat.propTypes = {
   settings: PropTypes.object,
   forceSmallPage: PropTypes.bool,
   hideSessionHeader: PropTypes.bool,
+  messageRenderers: PropTypes.object,
+  onReviewSubmit: PropTypes.func,
+  enableMessageMathJax: PropTypes.bool,
 };
 
 export default Chat;

@@ -2,12 +2,16 @@ import time
 import logging
 import os.path
 import json
+import jwt
 from django.core.cache import cache
 from django.http import StreamingHttpResponse
 from django.utils.translation import gettext as _
+from django.utils import timezone
+from django.db import transaction
+from django.conf import settings
 from pysearpc import SearpcError
 
-from seahub.ai.models import ChatMessageThoughtProcess, ChatMessages, ChatSessions
+from seahub.ai.models import ApplyAttempt, ChatMessageThoughtProcess, ChatMessages, ChatSessions, ReviewTask
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
 from seahub.repo_metadata.models import RepoMetadata
 from seaserv import seafile_api
@@ -21,6 +25,7 @@ from seahub.api2.utils import api_error, get_file_size
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthentication
 from seahub.utils import get_file_type_and_ext, IMAGE
+from seahub.utils.file_types import SEADOC
 from seahub.views import check_folder_permission
 from seahub.utils.repo import parse_repo_perm
 from seahub.ai.utils import AI_SCENARIO_SEARCH_ICONS, image_caption, translate, writing_assistant, verify_ai_config, generate_summary, \
@@ -30,8 +35,33 @@ from seahub.ai.utils import AI_SCENARIO_SEARCH_ICONS, image_caption, translate, 
     AI_SCENARIO_OCR, AI_SCENARIO_SUMMARY, AI_SCENARIO_TRANSLATE, AI_SCENARIO_WRITING_ASSISTANT, user_passes_ai_chat_folder_permissions
 from seahub.tags.models import FileUUIDMap
 from seahub.views.file import get_file_view_path_and_perm, get_file_content
+from seahub.seadoc.sdoc_server_api import SdocServerAPI
+from seahub.seadoc.utils import gen_seadoc_access_token
 
 logger = logging.getLogger(__name__)
+
+SDOC_REVIEW_ACTIVE_STATUSES = (
+    ReviewTask.GENERATION_QUEUED,
+    ReviewTask.GENERATION_READING,
+    ReviewTask.GENERATION_DRAFTING,
+)
+
+
+def get_running_sdoc_review_task(session_uuid):
+    review_task = ReviewTask.objects.filter(
+        chat_session_id=session_uuid,
+        generation_status__in=SDOC_REVIEW_ACTIVE_STATUSES,
+    ).order_by('-created_at').first()
+    if review_task:
+        return review_task
+    attempt = ApplyAttempt.objects.select_related(
+        'review_decision__card_revision__review_task').filter(
+            review_decision__card_revision__review_task__chat_session_id=session_uuid,
+            status=ApplyAttempt.STATUS_COMMITTING,
+        ).order_by('-created_at').first()
+    if attempt:
+        return attempt.review_decision.card_revision.review_task
+    return None
 
 
 class ImageCaption(APIView):
@@ -499,6 +529,64 @@ def check_session_access(session, username):
     return session.username == username or session.is_shared
 
 
+def is_indeterminate_sdoc_apply_error(error):
+    """Return whether an apply request might have reached SDoc Server.
+
+    A 4xx response is a definite rejection before an Agent Apply commit. Other
+    transport failures and server-side failures can occur after SDoc Server has
+    started processing, so the persisted task must remain outcome-unknown.
+    """
+    if isinstance(error, ConnectionError):
+        status_code = error.args[0] if error.args else None
+        return not isinstance(status_code, int) or not 400 <= status_code < 500
+    return True
+
+
+def get_sdoc_review_target(request, repo_id, path):
+    logger.info('sdoc_review_target: repo=%s path=%s', repo_id, path)
+    if not repo_id or not path:
+        logger.warning('sdoc_review_target: missing repo_id or path')
+        return None, api_error(status.HTTP_400_BAD_REQUEST, 'repo_id and path are required.')
+
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        logger.warning('sdoc_review_target: repo not found repo=%s', repo_id)
+        return None, api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
+
+    parent_path = os.path.dirname(path) or '/'
+    if not check_folder_permission(request, repo_id, parent_path):
+        logger.warning('sdoc_review_target: permission denied repo=%s path=%s', repo_id, parent_path)
+        return None, api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+    basename = os.path.basename(path)
+    file_type, file_ext = get_file_type_and_ext(basename)
+    logger.info('sdoc_review_target: basename=%s file_type=%s file_ext=%s', basename, file_type, file_ext)
+    if file_type != SEADOC:
+        logger.warning('sdoc_review_target: not an sdoc file_type=%s', file_type)
+        return None, api_error(status.HTTP_404_NOT_FOUND, 'SDoc not found.')
+
+    try:
+        uuid_map = FileUUIDMap.objects.get_or_create_fileuuidmap_by_path(repo_id, path, False, pending=True)
+        logger.info('sdoc_review_target: uuid_map=%s', uuid_map.uuid if uuid_map else 'None')
+        return uuid_map, None
+    except Exception as e:
+        logger.exception('sdoc_review_target: failed to get_or_create uuid_map: %s', e)
+        return None, api_error(status.HTTP_404_NOT_FOUND, 'SDoc not found.')
+
+
+def generate_sdoc_service_token(file_uuid, filename, username, purpose, **claims):
+    payload = {
+        'file_uuid': str(file_uuid),
+        'filename': filename,
+        'username': username,
+        'permission': 'rw',
+        'purpose': purpose,
+        'exp': int(time.time()) + 60,
+    }
+    payload.update(claims)
+    return jwt.encode(payload, settings.SEADOC_PRIVATE_KEY, algorithm='HS256')
+
+
 class ChatSessionsView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
@@ -606,7 +694,7 @@ class ChatSessionCopyView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         chat_task_id = gen_chat_task_id(session_uuid)
-        if cache.get(chat_task_id) is not None:
+        if cache.get(chat_task_id) is not None or get_running_sdoc_review_task(session_uuid):
             return api_error(status.HTTP_409_CONFLICT, 'There are unfinished tasks in the current session, please try again later.')
 
         try:
@@ -640,9 +728,17 @@ class ChatMessagesView(APIView):
         if message_ids:
             thought_process_map = ChatMessageThoughtProcess.objects.get_thought_process_from_session_uuid_and_message_ids(session_uuid, message_ids)
 
+        assistant_message_ids = [message.id for message in messages if message.role == 'assistant']
+        review_task_by_assistant_message_id = {}
+        if assistant_message_ids:
+            review_task_by_assistant_message_id = {
+                task.assistant_message_id: task
+                for task in ReviewTask.objects.filter(assistant_message_id__in=assistant_message_ids)
+            }
+
         messages_data = []
         for message in messages:
-            data = message.to_dict()
+            data = message.to_dict(review_task_by_assistant_message_id)
             if message.role == 'assistant':
                 thought_process = thought_process_map.get(message.message_id, {})
                 if thought_process:
@@ -650,13 +746,20 @@ class ChatMessagesView(APIView):
             messages_data.append(data)
 
         chat_task_info = cache.get(gen_chat_task_id(session_uuid))
+        review_task = get_running_sdoc_review_task(session_uuid)
         results = {
             'session': session.to_dict(),
             'messages': messages_data,
-            'running_task': chat_task_info is not None,
+            'running_task': chat_task_info is not None or review_task is not None,
+            'running_task_type': (
+                'chat' if chat_task_info is not None else
+                ('sdoc_review' if review_task is not None else None)
+            ),
         }
         if results['running_task']:
-            results['user_input'] = chat_task_info['user_input']
+            results['user_input'] = (
+                chat_task_info['user_input'] if chat_task_info is not None else
+                {'message': review_task.prompt, 'attachments': []})
         return Response(results)
 
 
@@ -797,7 +900,7 @@ class ChatView(APIView):
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         chat_task_id = gen_chat_task_id(session_uuid)
-        if cache.get(chat_task_id) is not None:
+        if cache.get(chat_task_id) is not None or get_running_sdoc_review_task(session_uuid):
             return api_error(status.HTTP_409_CONFLICT, 'There are unfinished tasks in the current session, please try again later.')
 
         try:
@@ -815,6 +918,8 @@ class ChatView(APIView):
             'llm_model': request.data.get('model'),
             'repo_prompt': get_repo_prompt(repo_id),
             'scenario': AI_SCENARIO_CHAT,
+            'username': request.user.username,
+            'org_id': org_id,
         }
 
         task_info = {

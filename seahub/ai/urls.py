@@ -2,6 +2,12 @@ from django.urls import re_path
 from .apis import ImageCaption, GenerateSummary, GenerateFileTags, OCR, Translate, WritingAssistant, \
     ChatMessagesView, ChatMarkdownArtifactView, ChatSessionCopyView, ChatSessionView, ChatSessionsView, ChatView, \
     AISearchIcons
+from .review_views import (
+    ReviewTaskView, ReviewTasksView, ReviewTaskApproveView, ReviewTaskRejectView,
+    ReviewTaskCancelView,
+    ReviewSaveResultView, ReviewWorkerPendingView, ReviewWorkerClaimView,
+    ReviewWorkerEventView, ReviewWorkerApplyReconcileView,
+)
 
 urlpatterns = [
     re_path(r'^image-caption/$', ImageCaption.as_view(), name='api-v2.1-image-caption'),
@@ -18,4 +24,15 @@ urlpatterns = [
     re_path(r'^chat/sessions/(?P<session_uuid>[-0-9a-f]+)/copy/$', ChatSessionCopyView.as_view(), name='api-v2.1-ai-chat-session-copy'),
     re_path(r'^chat/sessions/(?P<session_uuid>[-0-9a-f]+)/messages/$', ChatMessagesView.as_view(), name='api-v2.1-ai-chat-messages'),
     re_path(r'^chat/markdown-artifacts/(?P<file_uuid>[-0-9a-f]{36})/$', ChatMarkdownArtifactView.as_view(), name='api-v2.1-ai-chat-markdown-artifact'),
+
+    re_path(r'^sdoc-reviews/$', ReviewTasksView.as_view(), name='api-v2.1-ai-sdoc-reviews'),
+    re_path(r'^sdoc-reviews/(?P<task_id>[-0-9a-f]{36})/$', ReviewTaskView.as_view(), name='api-v2.1-ai-sdoc-review'),
+    re_path(r'^sdoc-reviews/(?P<task_id>[-0-9a-f]{36})/cancel/$', ReviewTaskCancelView.as_view(), name='api-v2.1-ai-sdoc-review-cancel'),
+    re_path(r'^sdoc-reviews/(?P<task_id>[-0-9a-f]{36})/approve/$', ReviewTaskApproveView.as_view(), name='api-v2.1-ai-sdoc-review-approve'),
+    re_path(r'^sdoc-reviews/(?P<task_id>[-0-9a-f]{36})/reject/$', ReviewTaskRejectView.as_view(), name='api-v2.1-ai-sdoc-review-reject'),
+    re_path(r'^internal/sdoc-reviews/pending/$', ReviewWorkerPendingView.as_view(), name='api-v2.1-ai-sdoc-review-worker-pending'),
+    re_path(r'^internal/sdoc-reviews/(?P<task_id>[-0-9a-f]{36})/claim/$', ReviewWorkerClaimView.as_view(), name='api-v2.1-ai-sdoc-review-worker-claim'),
+    re_path(r'^internal/sdoc-reviews/(?P<task_id>[-0-9a-f]{36})/events/$', ReviewWorkerEventView.as_view(), name='api-v2.1-ai-sdoc-review-worker-events'),
+    re_path(r'^internal/sdoc-review-applies/(?P<apply_attempt_id>[-0-9a-f]{36})/reconcile/$', ReviewWorkerApplyReconcileView.as_view(), name='api-v2.1-ai-sdoc-review-apply-reconcile'),
+    re_path(r'^internal/sdoc-review-save-result/$', ReviewSaveResultView.as_view(), name='api-v2.1-ai-sdoc-review-save-result'),
 ]

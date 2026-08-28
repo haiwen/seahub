@@ -18,6 +18,9 @@ const ChatInput = forwardRef(({
   repoID,
   sendMessage,
   isEmpty,
+  showStop,
+  stopping,
+  onStop,
 }, ref) => {
   const [containerFocus, setContainerFocus] = useState(true);
   const [selectedModel, setSelectedModel] = useState(null);
@@ -122,16 +125,21 @@ const ChatInput = forwardRef(({
               <span id="sea-ai-chat-send-tooltip" className="d-inline-flex">
                 <button
                   type="button"
-                  className={classNames('btn p-0 border-0 d-flex align-items-center justify-content-center sea-ai-ask-icon-btn icon-send-wrapper no-hover-bg', { 'disabled': isSendDisabled })}
-                  onClick={handleSend}
-                  disabled={isSendDisabled}
-                  aria-label={gettext('Send')}
+                  className={classNames(
+                    'btn p-0 border-0 d-flex align-items-center justify-content-center sea-ai-ask-icon-btn icon-send-wrapper no-hover-bg',
+                    { 'disabled': showStop ? stopping : isSendDisabled, 'review-stop': showStop }
+                  )}
+                  onClick={showStop ? onStop : handleSend}
+                  disabled={showStop ? stopping : isSendDisabled}
+                  aria-label={showStop ? gettext('Stop') : gettext('Send')}
                 >
-                  <Icon symbol="btn-send" className="sea-ai-icon-svg" />
+                  {showStop
+                    ? <span className="sea-ai-review-stop-indicator" aria-hidden="true" />
+                    : <Icon symbol="btn-send" className="sea-ai-icon-svg" />}
                 </button>
               </span>
               <Tooltip target="sea-ai-chat-send-tooltip" placement="top">
-                {gettext('Send')}
+                {showStop ? gettext('Stop') : gettext('Send')}
               </Tooltip>
             </div>
           </div>
@@ -147,6 +155,9 @@ ChatInput.propTypes = {
   repoID: PropTypes.string,
   sendMessage: PropTypes.func.isRequired,
   isEmpty: PropTypes.bool,
+  showStop: PropTypes.bool,
+  stopping: PropTypes.bool,
+  onStop: PropTypes.func,
 };
 
 export default ChatInput;
