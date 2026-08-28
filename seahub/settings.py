@@ -1271,6 +1271,7 @@ JWT_PRIVATE_KEY = os.environ.get('JWT_PRIVATE_KEY', '') or JWT_PRIVATE_KEY
 ai_yaml_file_path = os.path.join(central_conf_dir, os.environ.get('SEAFILE_AI_CONFIG_NAME', 'seafile_ai_config.yaml'))
 ai_configs = ConfigParser(ai_yaml_file_path, 'seahub')
 EMBEDDING_MODEL = ai_configs.get('EMBEDDING_MODEL', {})
+EMBEDDING_MODEL_CONFIGURED = bool(validate_llm_models([EMBEDDING_MODEL]))
 EMBEDDING_DIMENSIONS = 1024
 try:
     dimensions = int(EMBEDDING_MODEL.get('dimensions', EMBEDDING_DIMENSIONS))
