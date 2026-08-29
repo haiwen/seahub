@@ -15,6 +15,13 @@ import {
 const PREVIEW_SYNC_TIMEOUT = 50;
 const GESTURE_FINALIZE_TIMEOUT = 100;
 const MAX_PENDING_REMOTE_PREVIEW_CHANGES = 100;
+const FINALIZED_GESTURE_GRACE_TIMEOUT = 250;
+
+const GESTURE_STATES = {
+  ACTIVE: 'active',
+  FINALIZING: 'finalizing',
+  FINALIZED: 'finalized',
+};
 
 class PreviewManager {
 
@@ -29,6 +36,8 @@ class PreviewManager {
     this.isApplyingRemotePreview = false;
     this.pendingRemotePreviewChanges = [];
     this.pointerUpFinalizeTimer = null;
+    this.recentlyFinalizedGesture = null;
+    this.recentlyFinalizedGestureTimer = null;
   }
 
   logGesture = (phase, gesture, extra = {}) => {
@@ -48,6 +57,54 @@ class PreviewManager {
     });
   };
 
+  createGesture = (type, activeTool, elementIds, sceneElementIds) => ({
+    gestureId: uuidv4(),
+    type,
+    activeTool: activeTool?.type || OPERATION_TYPES.OTHER,
+    elementIds,
+    sceneElementIds,
+    startedAt: Date.now(),
+    updateCount: 0,
+    previewSequence: 0,
+    state: GESTURE_STATES.ACTIVE,
+    pointerUpPending: false,
+    pointerUpSceneSignature: null,
+    pointerUpElementIds: null,
+    pointerUpElements: null,
+    committed: false,
+  });
+
+  clearRecentlyFinalizedGesture = () => {
+    if (this.recentlyFinalizedGestureTimer !== null) {
+      clearTimeout(this.recentlyFinalizedGestureTimer);
+      this.recentlyFinalizedGestureTimer = null;
+    }
+    this.recentlyFinalizedGesture = null;
+  };
+
+  rememberFinalizedGesture = (gesture, elements) => {
+    this.clearRecentlyFinalizedGesture();
+    this.recentlyFinalizedGesture = {
+      gestureId: gesture.gestureId,
+      sceneSignature: this.getSceneSignature(elements),
+    };
+    this.recentlyFinalizedGestureTimer = setTimeout(() => {
+      this.recentlyFinalizedGestureTimer = null;
+      this.recentlyFinalizedGesture = null;
+    }, FINALIZED_GESTURE_GRACE_TIMEOUT);
+  };
+
+  consumeRecentlyFinalizedGesture = (elements) => {
+    if (!this.recentlyFinalizedGesture) {
+      return false;
+    }
+
+    const isSameScene =
+      this.getSceneSignature(elements) === this.recentlyFinalizedGesture.sceneSignature;
+    this.clearRecentlyFinalizedGesture();
+    return isSameScene;
+  };
+
   startGesture = (activeTool, pointerDownState) => {
     if (this.activeGesture) {
       // A new pointer-down can arrive before the previous gesture's pointer-up
@@ -58,25 +115,17 @@ class PreviewManager {
       const elements = this.excalidrawAPI.getSceneElementsIncludingDeleted();
       this.commitGesture(elements, previousGesture, 'new-pointer-down');
     }
+    this.clearRecentlyFinalizedGesture();
 
     const sceneElementIds = new Set(
       this.excalidrawAPI.getSceneElementsIncludingDeleted().map((element) => element.id),
     );
-    this.activeGesture = {
-      gestureId: uuidv4(),
-      type: getPointerDownSessionType(activeTool, pointerDownState),
-      activeTool: activeTool?.type || OPERATION_TYPES.OTHER,
-      elementIds: getPointerDownElementIds(pointerDownState),
+    this.activeGesture = this.createGesture(
+      getPointerDownSessionType(activeTool, pointerDownState),
+      activeTool,
+      getPointerDownElementIds(pointerDownState),
       sceneElementIds,
-      startedAt: Date.now(),
-      updateCount: 0,
-      previewSequence: 0,
-      pointerUpPending: false,
-      pointerUpSceneSignature: null,
-      pointerUpElementIds: null,
-      pointerUpElements: null,
-      committed: false,
-    };
+    );
 
     this.logGesture('start', this.activeGesture, {
       hitElementType: pointerDownState?.hit?.element?.type || null,
@@ -87,24 +136,22 @@ class PreviewManager {
   updateGesture = (elements, appState) => {
     const currentType = getActiveSessionType(elements, appState);
 
+    // A fallback timer may finalize a gesture before Excalidraw emits the
+    // corresponding onChange. Consume that callback instead of enqueueing a
+    // second reliable operation for the same scene.
+    if (!this.activeGesture && this.consumeRecentlyFinalizedGesture(elements)) {
+      return { gesture: null, ended: false, skipSync: true };
+    }
+
     // Text input can continue after pointerup. Start a logical text session
     // when Excalidraw exposes editingTextElement through onChange.
     if (!this.activeGesture && currentType === OPERATION_TYPES.EDIT_TEXT) {
-      this.activeGesture = {
-        gestureId: uuidv4(),
-        type: currentType,
-        activeTool: appState?.activeTool?.type || OPERATION_TYPES.OTHER,
-        elementIds: getElementIdsFromAppState(appState),
-        sceneElementIds: new Set(elements.map((element) => element.id)),
-        startedAt: Date.now(),
-        updateCount: 0,
-        previewSequence: 0,
-        pointerUpPending: false,
-        pointerUpSceneSignature: null,
-        pointerUpElementIds: null,
-        pointerUpElements: null,
-        committed: false,
-      };
+      this.activeGesture = this.createGesture(
+        currentType,
+        appState?.activeTool,
+        getElementIdsFromAppState(appState),
+        new Set(elements.map((element) => element.id)),
+      );
       this.logGesture('start', this.activeGesture, { source: 'onChange' });
     }
 
@@ -211,7 +258,8 @@ class PreviewManager {
       : 'pointer-up-final-change';
     if (ended) {
       gesture.pointerUpPending = false;
-      this.endGesture(endReason);
+      gesture.state = GESTURE_STATES.FINALIZING;
+      this.clearPointerUpFinalizeTimer();
     }
 
     return { gesture, ended, endReason };
@@ -468,7 +516,12 @@ class PreviewManager {
     this.clearPointerUpFinalizeTimer();
     this.pointerUpFinalizeTimer = setTimeout(() => {
       this.pointerUpFinalizeTimer = null;
-      if (this.activeGesture !== gesture || !gesture.pointerUpPending || gesture.committed) {
+      if (
+        this.activeGesture !== gesture ||
+        gesture.state !== GESTURE_STATES.FINALIZING ||
+        !gesture.pointerUpPending ||
+        gesture.committed
+      ) {
         return;
       }
 
@@ -493,7 +546,7 @@ class PreviewManager {
 
   flushPendingGesture = (reason = 'flush') => {
     const gesture = this.activeGesture;
-    if (!gesture || !gesture.pointerUpPending || gesture.committed) {
+    if (!gesture || gesture.committed) {
       return false;
     }
 
@@ -518,7 +571,10 @@ class PreviewManager {
     }
 
     gesture.committed = true;
+    gesture.state = GESTURE_STATES.FINALIZED;
+    gesture.pointerUpPending = false;
     this.clearPointerUpFinalizeTimer();
+    this.rememberFinalizedGesture(gesture, elements);
 
     // Ensure the final Preview is sent before the reliable commit. The
     // throttle may still have a trailing update waiting to be dispatched.
@@ -569,6 +625,7 @@ class PreviewManager {
     // other gestures, wait for that onChange because PointerUp may arrive
     // before Excalidraw applies the final scene update.
     if (currentType !== OPERATION_TYPES.EDIT_TEXT) {
+      this.activeGesture.state = GESTURE_STATES.FINALIZING;
       this.activeGesture.pointerUpPending = true;
       this.activeGesture.pointerUpElements = elements.slice();
       this.activeGesture.pointerUpElementIds = [...this.activeGesture.elementIds];

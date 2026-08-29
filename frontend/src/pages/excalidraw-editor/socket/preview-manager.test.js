@@ -94,6 +94,21 @@ describe('PreviewManager PointerUp finalization', () => {
     expect(context.manager.activeGesture).toBeNull();
   });
 
+  it('consumes a late onChange after fallback finalization', () => {
+    const context = createManager();
+    startDrag(context);
+
+    jest.advanceTimersByTime(100);
+
+    const result = context.manager.updateGesture(
+      context.excalidrawAPI.getSceneElementsIncludingDeleted(),
+      dragAppState,
+    );
+
+    expect(result).toEqual({ gesture: null, ended: false, skipSync: true });
+    expect(context.onCommit).toHaveBeenCalledTimes(1);
+  });
+
   it('uses the latest scene when it is available before the fallback timer', () => {
     const context = createManager();
     startDrag(context);
@@ -118,6 +133,23 @@ describe('PreviewManager PointerUp finalization', () => {
     jest.advanceTimersByTime(100);
 
     expect(context.onCommit).toHaveBeenCalledWith(finalScene);
+    expect(context.onCommit).toHaveBeenCalledTimes(1);
+    expect(context.manager.activeGesture).toBeNull();
+  });
+
+  it('flushes an active gesture when disconnected before PointerUp', () => {
+    const context = createManager();
+    context.setAppState(dragAppState);
+    context.manager.handlePointerDown(
+      { type: 'selection' },
+      { hit: { element: { id: 'element-1' } } },
+    );
+    context.manager.updateGesture(
+      context.excalidrawAPI.getSceneElementsIncludingDeleted(),
+      dragAppState,
+    );
+
+    expect(context.manager.flushPendingGesture('disconnect')).toBe(true);
     expect(context.onCommit).toHaveBeenCalledTimes(1);
     expect(context.manager.activeGesture).toBeNull();
   });
