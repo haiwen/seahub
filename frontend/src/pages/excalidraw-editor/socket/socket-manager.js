@@ -142,6 +142,10 @@ class SocketManager {
     return this.previewManager.handlePointerUp(activeTool, pointerDownState);
   };
 
+  flushPendingGesture = (reason = 'flush') => {
+    return this.previewManager.flushPendingGesture(reason);
+  };
+
   getVersion = () => {
     return this.operationManager.getVersion();
   };
@@ -215,6 +219,9 @@ class SocketManager {
 
   dispatchConnectState = (type, message) => {
     this.operationManager.handleConnectState(type, message);
+    if (type === 'disconnect' || type === 'join-room-failed') {
+      this.previewManager.flushPendingGesture(type);
+    }
     this.eventBus.dispatch(type, message);
   };
 

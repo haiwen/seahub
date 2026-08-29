@@ -209,6 +209,7 @@ const SimpleEditor = ({ isSharedView = false }) => {
   const beforeUnload = useCallback((event) => {
     LocalData.flushSave();
     const socketManager = SocketManager.getInstance();
+    socketManager.flushPendingGesture('before-unload');
     const fileManager = socketManager.fileManager;
     const elements = excalidrawAPI.getSceneElementsIncludingDeleted();
     const syncableElements = getSyncableElements(elements);

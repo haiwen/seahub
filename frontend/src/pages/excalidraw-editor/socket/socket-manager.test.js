@@ -3,7 +3,9 @@ import SocketManager from './socket-manager';
 jest.mock('@excalidraw/excalidraw', () => ({}));
 jest.mock('lodash.throttle', () => (callback) => callback);
 jest.mock('./socket-client', () => jest.fn());
-jest.mock('./preview-manager', () => jest.fn());
+jest.mock('./preview-manager', () => jest.fn().mockImplementation(() => ({
+  flushPendingGesture: jest.fn(),
+})));
 jest.mock('./operation-manager', () => jest.fn());
 jest.mock('../utils/event-bus', () => ({
   getInstance: jest.fn(),

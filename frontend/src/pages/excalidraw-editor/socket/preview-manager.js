@@ -13,6 +13,7 @@ import {
 } from '../utils/operation-type';
 
 const PREVIEW_SYNC_TIMEOUT = 50;
+const GESTURE_FINALIZE_TIMEOUT = 100;
 const MAX_PENDING_REMOTE_PREVIEW_CHANGES = 100;
 
 class PreviewManager {
@@ -27,6 +28,7 @@ class PreviewManager {
     this.leftRemotePreviewUsers = new Set();
     this.isApplyingRemotePreview = false;
     this.pendingRemotePreviewChanges = [];
+    this.pointerUpFinalizeTimer = null;
   }
 
   logGesture = (phase, gesture, extra = {}) => {
@@ -73,6 +75,7 @@ class PreviewManager {
       pointerUpSceneSignature: null,
       pointerUpElementIds: null,
       pointerUpElements: null,
+      committed: false,
     };
 
     this.logGesture('start', this.activeGesture, {
@@ -100,6 +103,7 @@ class PreviewManager {
         pointerUpSceneSignature: null,
         pointerUpElementIds: null,
         pointerUpElements: null,
+        committed: false,
       };
       this.logGesture('start', this.activeGesture, { source: 'onChange' });
     }
@@ -453,19 +457,68 @@ class PreviewManager {
     });
   };
 
+  clearPointerUpFinalizeTimer = () => {
+    if (this.pointerUpFinalizeTimer !== null) {
+      clearTimeout(this.pointerUpFinalizeTimer);
+      this.pointerUpFinalizeTimer = null;
+    }
+  };
+
+  schedulePointerUpFinalize = (gesture) => {
+    this.clearPointerUpFinalizeTimer();
+    this.pointerUpFinalizeTimer = setTimeout(() => {
+      this.pointerUpFinalizeTimer = null;
+      if (this.activeGesture !== gesture || !gesture.pointerUpPending || gesture.committed) {
+        return;
+      }
+
+      const elements = this.excalidrawAPI.getSceneElementsIncludingDeleted();
+      const currentGestureSceneSignature = this.getGestureSceneSignature(
+        elements,
+        gesture,
+        gesture.pointerUpElementIds,
+      );
+      const hasGestureSceneChanged =
+        currentGestureSceneSignature !== gesture.pointerUpSceneSignature;
+      const finalElements = hasGestureSceneChanged
+        ? elements
+        : (gesture.pointerUpElements || elements);
+      this.commitGesture(
+        finalElements,
+        gesture,
+        hasGestureSceneChanged ? 'pointer-up-timeout-final-change' : 'pointer-up-timeout',
+      );
+    }, GESTURE_FINALIZE_TIMEOUT);
+  };
+
+  flushPendingGesture = (reason = 'flush') => {
+    const gesture = this.activeGesture;
+    if (!gesture || !gesture.pointerUpPending || gesture.committed) {
+      return false;
+    }
+
+    const elements = this.excalidrawAPI.getSceneElementsIncludingDeleted();
+    this.commitGesture(elements, gesture, reason);
+    return true;
+  };
+
   endGesture = (reason = 'pointer-up') => {
     if (!this.activeGesture) {
       return;
     }
 
+    this.clearPointerUpFinalizeTimer();
     this.logGesture('end', this.activeGesture, { reason });
     this.activeGesture = null;
   };
 
   commitGesture = (elements, gesture = this.activeGesture, reason = 'pointer-up') => {
-    if (!gesture) {
+    if (!gesture || gesture.committed) {
       return false;
     }
+
+    gesture.committed = true;
+    this.clearPointerUpFinalizeTimer();
 
     // Ensure the final Preview is sent before the reliable commit. The
     // throttle may still have a trailing update waiting to be dispatched.
@@ -524,6 +577,8 @@ class PreviewManager {
         this.activeGesture,
         this.activeGesture.pointerUpElementIds,
       );
+      this.broadcastPreviewElements.flush();
+      this.schedulePointerUpFinalize(this.activeGesture);
       this.logGesture('pointer-up-waiting-for-final-change', this.activeGesture, {
         sceneSignature: this.activeGesture.pointerUpSceneSignature,
       });
