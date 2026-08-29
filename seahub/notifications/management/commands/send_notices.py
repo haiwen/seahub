@@ -221,6 +221,17 @@ class Command(BaseCommand):
         notice.author = author
         return notice
 
+    def format_wopi_mention_msg(self, notice):
+        d = json.loads(notice.detail)
+        repo_id = d['repo_id']
+        file_path = d['file_path']
+        from_user = d['from_user']
+
+        notice.file_url = reverse('view_lib_file', args=[repo_id, file_path])
+        notice.file_name = os.path.basename(file_path)
+        notice.author = from_user
+        return notice
+
     def format_guest_invitation_accepted_msg(self, notice):
         d = json.loads(notice.detail)
         inv_id = d['invitation_id']
@@ -420,6 +431,9 @@ class Command(BaseCommand):
 
                 elif notice.is_file_comment_msg():
                     notice = self.format_file_comment_msg(notice)
+
+                elif notice.is_wopi_mention_msg():
+                    notice = self.format_wopi_mention_msg(notice)
 
                 elif notice.is_guest_invitation_accepted_msg():
                     notice = self.format_guest_invitation_accepted_msg(notice)
