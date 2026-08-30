@@ -4,7 +4,7 @@ import copy from 'copy-to-clipboard';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import { enableSeadoc, enableWhiteboard, gettext, onlyofficeSupportEditDocxf } from '../../utils/constants';
+import { enableSeadoc, gettext, onlyofficeSupportEditDocxf } from '../../utils/constants';
 import toaster from '../toast';
 import TipDialog from '../dialog/tip-dialog';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
@@ -193,9 +193,6 @@ class DirOperationToolbar extends React.Component {
         );
         if (onlyofficeSupportEditDocxf) {
           newSubOpList.push({ 'text': gettext('New Docxf File'), 'onClick': () => this.onCreateFile('.docxf') });
-        }
-        if (enableWhiteboard) {
-          newSubOpList.push({ 'text': gettext('New Whiteboard File'), 'onClick': () => this.onCreateFile('.draw') });
         }
         opList.push({
           'icon': 'new',

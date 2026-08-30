@@ -105,7 +105,6 @@ FILEEXT_ICON_MAP = {
     'bmp': 'pic.png',
     'ico': 'pic.png',
     'psd': 'psd.png',
-    'draw': 'draw.png',
     'exdraw': 'draw.png',
 
     # zip file
@@ -409,7 +408,7 @@ def email2contact_email(value):
 
 @register.filter(name='email2login_id')
 def email2login_id(value):
-    
+
     if not value:
         return ''
 
@@ -417,7 +416,7 @@ def email2login_id(value):
     login_id = cache.get(key)
     if login_id and login_id.strip():
         return login_id
-    
+
     profile = Profile.objects.get_profile_by_user(value)
     login_id = profile and profile.login_id or ''
     cache.set(key, login_id, LOGIN_ID_CACHE_TIMEOUT)
