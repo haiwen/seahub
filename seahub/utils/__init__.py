@@ -125,7 +125,6 @@ PREVIEW_FILEEXT = {
     AUDIO: ('mp3', 'oga', 'ogg', 'wav', 'flac', 'opus'),
     #'3D': ('stl', 'obj'),
     SEADOC: ('sdoc',),
-    TLDRAW: ('draw',),
     EXCALIDRAW: ('exdraw',),
 }
 
