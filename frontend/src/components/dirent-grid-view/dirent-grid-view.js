@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, username, enableSeadoc, thumbnailDefaultSize, thumbnailSizeForOriginal, gettext, fileServerRoot, enableWhiteboard } from '../../utils/constants';
+import { siteRoot, username, enableSeadoc, thumbnailDefaultSize, thumbnailSizeForOriginal, gettext, fileServerRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -355,9 +355,6 @@ class DirentGridView extends React.Component {
       case 'New Docxf File':
         this.onCreateFile('.docxf');
         break;
-      case 'New Whiteboard File':
-        this.onCreateFile('.draw');
-        break;
       case 'New Excalidraw File':
         this.onCreateFile('.exdraw');
         break;
@@ -700,7 +697,6 @@ class DirentGridView extends React.Component {
       NEW_POWERPOINT_FILE,
       NEW_WORD_FILE,
       NEW_SEADOC_FILE,
-      NEW_TLDRAW_FILE,
       NEW_EXCALIDRAW_FILE
     } = TextTranslation;
 
@@ -720,10 +716,6 @@ class DirentGridView extends React.Component {
       NEW_POWERPOINT_FILE,
       NEW_WORD_FILE
     );
-
-    if (enableWhiteboard) {
-      direntsContainerMenuList.push(NEW_TLDRAW_FILE);
-    }
 
     if (selectedDirentList.length === 0) {
       if (!hasCustomPermission('create')) return;

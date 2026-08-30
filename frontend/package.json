@@ -16,7 +16,6 @@
     "@seafile/seafile-calendar": "0.1.1",
     "@seafile/seafile-editor": "2.0.53",
     "@seafile/seafile-sdoc-editor": "2.0.128",
-    "@seafile/stldraw-editor": "1.0.1",
     "@uiw/codemirror-extensions-langs": "^4.19.4",
     "@uiw/codemirror-themes": "^4.23.5",
     "@uiw/react-codemirror": "^4.19.4",

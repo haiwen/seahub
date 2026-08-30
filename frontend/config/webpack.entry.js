@@ -1,7 +1,6 @@
 const paths = require('./paths');
 
 const entryFiles = {
-  tldrawEditor: '/tldrawEditor.js',
   excalidrawEditor: '/excalidraw-editor.js',
   markdownEditor: '/index.js',
   plainMarkdownEditor: '/pages/plain-markdown-editor/index.js',
