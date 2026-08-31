@@ -49,12 +49,9 @@ class TagsManagerAPI {
     return this.req.get(url);
   };
 
-  openTags = (repoID, lang) => {
+  openTags = (repoID) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/tags-status/';
-    const params = {
-      lang: lang,
-    };
-    return this.req.put(url, params);
+    return this.req.put(url);
   };
 
   closeTags = (repoID) => {

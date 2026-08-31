@@ -16,20 +16,6 @@
   min-height: 160px;
 }
 
-.sf-file-tags .sf-file-new-tag {
-  display: inline-flex;
-  height: 20px;
-  padding: 0 8px;
-  border: 1px solid #dedede;
-  border-radius: 14px;
-  margin-right: 8px;
-  margin-bottom: 8px;
-  line-height: 20px;
-  cursor: pointer;
-  font-size: 13px;
-  align-items: center;
-}
-
 .sf-file-exit-tag {
   display: inline-flex;
   align-items: center;
@@ -65,7 +51,6 @@
   white-space: nowrap;
 }
 
-.sf-file-new-tag.selected,
 .sf-file-exit-tag.selected {
   border-color: #FF9800;
 }

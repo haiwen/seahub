@@ -9,8 +9,6 @@ import { Utils } from '../../../../utils/utils';
 import { getFileNameFromRecord, getParentDirFromRecord, getTagsFromRecord, getRecordIdFromRecord } from '../../../utils/cell';
 import { getTagByName } from '../../../../tag/utils/row';
 import { getTagId } from '../../../../tag/utils/cell';
-import { RECENTLY_USED_TAG_IDS, PRIVATE_COLUMN_KEY as TAGS_PRIVATE_COLUMN_KEY } from '../../../../tag/constants';
-import { SELECT_OPTION_COLORS } from '../../../constants';
 import { useTags } from '../../../../tag/hooks';
 
 import './index.css';
@@ -18,15 +16,23 @@ import './index.css';
 const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
 
   const [isLoading, setLoading] = useState(true);
-  const [newTags, setNewTags] = useState([]);
-  const [exitTags, setExitTags] = useState([]);
+  const [existingTags, setExistingTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
 
   const fileName = useMemo(() => getFileNameFromRecord(record), [record]);
 
-  const { tagsData, addTags, context } = useTags();
+  const { tagsData } = useTags();
 
   useEffect(() => {
+    if (!tagsData) {
+      return;
+    }
+    if (!tagsData.rows?.length) {
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
     let path = '';
     if (window.sfMetadataContext.canModifyRow(record)) {
       const parentDir = getParentDirFromRecord(record);
@@ -38,18 +44,8 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
     }
     window.sfMetadataContext.generateFileTags(path).then(res => {
       const tags = res.data.tags || [];
-      let newTags = [];
-      let exitTags = [];
-      tags.forEach(tag => {
-        const tagObj = getTagByName(tagsData, tag);
-        if (tagObj) {
-          exitTags.push(tagObj);
-        } else {
-          newTags.push(tag);
-        }
-      });
-      setNewTags(newTags);
-      setExitTags(exitTags);
+      const matchedTags = tags.map(tag => getTagByName(tagsData, tag)).filter(Boolean);
+      setExistingTags(matchedTags);
       setLoading(false);
     }).catch(error => {
       let errorMessage = gettext('Failed to generate file tags');
@@ -80,63 +76,28 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
       return;
     }
 
-    let selectedNewTags = [];
     let selectedExitTagIds = [];
     selectedTags.forEach(tagName => {
       const tag = getTagByName(tagsData, tagName);
       if (tag) {
         selectedExitTagIds.push(getTagId(tag));
-      } else {
-        selectedNewTags.push(tagName);
       }
-    });
-
-    selectedNewTags = selectedNewTags.map(tagName => {
-      const defaultOptions = SELECT_OPTION_COLORS.slice(0, 24);
-      const defaultOption = defaultOptions[Math.floor(Math.random() * defaultOptions.length)];
-      return {
-        [TAGS_PRIVATE_COLUMN_KEY.TAG_NAME]: tagName,
-        [TAGS_PRIVATE_COLUMN_KEY.TAG_COLOR]: defaultOption.COLOR,
-      };
     });
     const recordId = getRecordIdFromRecord(record);
     let oldTags = getTagsFromRecord(record);
     let oldTagIds = oldTags ? oldTags.map(item => item.row_id) : [];
 
-    if (selectedNewTags.length > 0) {
-      addTags(selectedNewTags, {
-        success_callback: (operation) => {
-          const tagIds = operation.tags?.map(tag => getTagId(tag)) || [];
-          let newTagIds = [...oldTagIds, ...tagIds];
-          selectedExitTagIds.forEach(id => {
-            if (!newTagIds.includes(id)) {
-              newTagIds.push(id);
-            }
-          });
-          onSubmit([{ record_id: recordId, tags: newTagIds, old_tags: oldTagIds }]);
-          const saved = context.localStorage && context.localStorage.getItem(RECENTLY_USED_TAG_IDS);
-          const ids = saved ? JSON.parse(saved) : [];
-          const newIds = [...tagIds, ...ids].slice(0, 10);
-          context.localStorage && context.localStorage.setItem(RECENTLY_USED_TAG_IDS, JSON.stringify(newIds));
-          onToggle();
-        },
-        fail_callback: (error) => {
-          toaster.danger(Utils.getErrorMsg(error));
-        },
-      });
-    } else {
-      let newTagIds = [...oldTagIds];
-      selectedExitTagIds.forEach(id => {
-        if (!newTagIds.includes(id)) {
-          newTagIds.push(id);
-        }
-      });
-      if (newTagIds.length !== oldTagIds.length) {
-        onSubmit([{ record_id: recordId, tags: newTagIds, old_tags: oldTagIds }]);
+    let newTagIds = [...oldTagIds];
+    selectedExitTagIds.forEach(id => {
+      if (!newTagIds.includes(id)) {
+        newTagIds.push(id);
       }
-      onToggle();
+    });
+    if (newTagIds.length !== oldTagIds.length) {
+      onSubmit([{ record_id: recordId, tags: newTagIds, old_tags: oldTagIds }]);
     }
-  }, [selectedTags, onSubmit, onToggle, record, addTags, tagsData, isLoading, context.localStorage]);
+    onToggle();
+  }, [selectedTags, onSubmit, onToggle, record, tagsData, isLoading]);
 
   return (
     <Modal
@@ -154,9 +115,9 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
             <div>
               <div className="mb-6">
                 <div className='mb-1'>{gettext('Matching tags')}</div>
-                {exitTags.length > 0 && (
+                {existingTags.length > 0 && (
                   <>
-                    {exitTags.map((tag, index) => {
+                    {existingTags.map((tag, index) => {
                       const { _tag_color: tagColor, _tag_name: tagName } = tag;
                       const isSelected = selectedTags.includes(tagName);
                       return (
@@ -172,30 +133,8 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
                     })}
                   </>
                 )}
-                {exitTags.length === 0 && (
-                  <span className='tip'>{gettext('No matching tags')}</span>
-                )}
-              </div>
-              <div className="mb-6">
-                <div className='mb-1'>{gettext('Recommended new tags')}</div>
-                {newTags.length > 0 && (
-                  <>
-                    {newTags.map((tagName, index) => {
-                      const isSelected = selectedTags.includes(tagName);
-                      return (
-                        <div
-                          key={index}
-                          className={classNames('sf-file-new-tag', { 'selected': isSelected })}
-                          onClick={() => onClickTag(tagName)}
-                        >
-                          {tagName}
-                        </div>
-                      );
-                    })}
-                  </>
-                )}
-                {newTags.length === 0 && (
-                  <span className='tip'>{gettext('No recommended new tags')}</span>
+                {existingTags.length === 0 && (
+                  <span className='tip'>{gettext(tagsData?.rows?.length ? 'No matching tags' : 'No tags available')}</span>
                 )}
               </div>
             </div>

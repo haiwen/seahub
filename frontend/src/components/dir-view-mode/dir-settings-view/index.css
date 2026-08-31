@@ -94,11 +94,6 @@
   background: var(--bs-icon-btn-hover-bg-color);
 }
 
-.library-setting-item .tags-language-selector {
-  width: 300px;
-  max-width: 100%;
-}
-
 .library-setting-item .migrate-tags-tip {
   line-height: 1.375rem;
 }
