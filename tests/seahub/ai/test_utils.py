@@ -82,11 +82,13 @@ class AIChatFolderPermissionTest(SimpleTestCase):
 class AIChatAPIPermissionTest(SimpleTestCase):
     databases = {'default'}
 
+    @patch('seahub.ai.apis.is_chat_and_search_enabled', return_value=True)
     @patch('seahub.ai.apis.user_passes_ai_chat_folder_permissions', return_value=False)
     @patch('seahub.ai.apis.check_folder_permission', return_value='rw')
     @patch('seahub.ai.apis.ChatSessions.objects.get_session_by_uuid')
     def test_update_session_rejects_forbidden_folder_permission(
-            self, mock_get_session, mock_check_folder_permission, mock_user_passes_permissions):
+            self, mock_get_session, mock_check_folder_permission, mock_user_passes_permissions,
+            mock_is_chat_and_search_enabled):
         request = SimpleNamespace(
             user=SimpleNamespace(username='user@example.com'),
             data={'session_name': 'Renamed chat'},
@@ -100,4 +102,5 @@ class AIChatAPIPermissionTest(SimpleTestCase):
 
         self.assertEqual(response.status_code, 403)
         mock_check_folder_permission.assert_called_once_with(request, 'repo-id', '/')
+        mock_is_chat_and_search_enabled.assert_called_once_with('repo-id')
         mock_user_passes_permissions.assert_called_once_with(request, 'repo-id')
