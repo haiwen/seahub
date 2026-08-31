@@ -912,6 +912,9 @@ class FileLockBatchView(APIView):
         if not operation:
             return api_error(status.HTTP_400_BAD_REQUEST, 'operation invalid.')
 
+        if not isinstance(operation, str):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'operation invalid.')
+
         operation = operation.lower()
         if operation not in ('lock', 'unlock'):
             error_msg = "operation can only be 'lock' or 'unlock'."
