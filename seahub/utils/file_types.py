@@ -10,7 +10,6 @@ VIDEO = 'Video'
 AUDIO = 'Audio'
 SPREADSHEET = 'SpreadSheet'
 SEADOC = 'SDoc'
-TLDRAW = 'Tldraw'
 EXCALIDRAW = 'Excalidraw'
 
 

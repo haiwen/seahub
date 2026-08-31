@@ -144,10 +144,6 @@ export const menuHandlers = {
     eventBus.dispatch(EVENT_BUS_TYPE.CREATE_FILE, path, direntList, '.docx');
   },
 
-  [TextTranslation.NEW_TLDRAW_FILE.key]: ({ eventBus, path, direntList }) => {
-    eventBus.dispatch(EVENT_BUS_TYPE.CREATE_FILE, path, direntList, '.draw');
-  },
-
   [TextTranslation.NEW_EXCALIDRAW_FILE.key]: ({ eventBus, path, direntList }) => {
     eventBus.dispatch(EVENT_BUS_TYPE.CREATE_FILE, path, direntList, '.exdraw');
   },

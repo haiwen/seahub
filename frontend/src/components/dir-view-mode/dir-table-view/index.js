@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import SFTable from '../../sf-table';
 import { transformDirentsToTableData } from './data-transformer';
 import { createDirentTableColumns, setDirTableColumnWidth } from './columns';
-import { siteRoot, enableSeadoc, enableWhiteboard } from '@/utils/constants';
+import { siteRoot, enableSeadoc } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import Icon from '@/components/icon';
 import TextTranslation from '@/utils/text-translation';
@@ -381,7 +381,6 @@ const DirTableView = ({
     if (idx === -1 && rowIdx === -1 && selectedRecordIds.length === 0) {
       const createMenuOptions = getCreateMenuList({
         enableSeadoc,
-        enableWhiteboard,
         isRepoEncrypted: repoInfo.encrypted
       });
 
