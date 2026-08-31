@@ -583,44 +583,6 @@ table img {
   vertical-align: middle;
 }
 
-/* custom scrollbar */
-::-webkit-scrollbar {
-  height: 9px;
-  width: 9px;
-}
-
-::-webkit-scrollbar-button {
-  display: block;
-  height: 4px;
-}
-
-::-webkit-scrollbar-track-piece {
-  background: #e9e9eb;
-}
-
-::-webkit-scrollbar-track-piece:vertical:start {
-  border-radius: 5px 5px 0 0;
-}
-
-::-webkit-scrollbar-track-piece:vertical:end {
-  border-radius: 0 0 5px 5px;
-}
-
-::-webkit-scrollbar-track-piece:horizontal:start {
-  border-radius: 5px 0 0 5px;
-}
-
-::-webkit-scrollbar-track-piece:horizontal:end {
-  border-radius: 0 5px 5px 0;
-}
-
-::-webkit-scrollbar-thumb:vertical,
-::-webkit-scrollbar-thumb:horizontal {
-  background: #ccc;
-  border-radius: 5px;
-  display: block;
-}
-
 /********** common class ***********/
 .fleft {
   float: left;

@@ -63,33 +63,6 @@
   padding: 16px;
   overflow-y: auto;
   overflow-x: hidden;
-  scrollbar-width: thin;
-  scrollbar-color: transparent transparent;
-}
-
-.sf-metadata-card-item-image-scroll-wrapper.show-scrollbar {
-  scrollbar-color: var(--bs-icon-secondary-color, rgba(0, 0, 0, 0.2)) transparent;
-}
-
-.sf-metadata-card-item-image-scroll-wrapper::-webkit-scrollbar {
-  width: 6px;
-}
-
-.sf-metadata-card-item-image-scroll-wrapper::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.sf-metadata-card-item-image-scroll-wrapper::-webkit-scrollbar-thumb {
-  background: transparent;
-  border-radius: 3px;
-}
-
-.sf-metadata-card-item-image-scroll-wrapper.show-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--bs-icon-secondary-color, rgba(0, 0, 0, 0.2));
-}
-
-.sf-metadata-card-item-image-scroll-wrapper.show-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: var(--bs-icon-color);
 }
 
 .sf-metadata-card-item-image-scroll-wrapper .sf-metadata-card-item-doc-thumbnail {

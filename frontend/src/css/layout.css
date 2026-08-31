@@ -7,17 +7,12 @@
 
 :root {
   color-scheme: light;
-  scrollbar-color: #C1C1C1 rgba(0, 0, 0, 0);
 }
 
 input[type="checkbox"],
 input[type="radio"],
 select {
   color-scheme: inherit;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bs-body-bg);
 }
 
 /* for left right layout */

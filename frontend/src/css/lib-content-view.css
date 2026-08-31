@@ -727,7 +727,6 @@
     border-right: none !important;
     border-bottom: 1px solid var(--bs-border-color);
     overflow-x: scroll;
-    scrollbar-width: none;
   }
 
   .custom-modal .repo-list-item.active::before {
