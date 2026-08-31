@@ -9,6 +9,7 @@ from seahub.organizations.models import OrgAdminSettings, FORCE_ADFS_LOGIN
 from seahub.test_utils import BaseTestCase
 from seahub.utils.auth import KRB5_PROVIDER, REMOTE_USER_PROVIDER, \
     is_remote_user, user_local_password_enabled
+from seahub.utils.ldap import LDAP_PROVIDER, MULTI_LDAP_1_PROVIDER
 
 
 class RemoteUserPasswordPolicyTest(BaseTestCase):
@@ -18,8 +19,8 @@ class RemoteUserPasswordPolicyTest(BaseTestCase):
             self.assertTrue(user_local_password_enabled(self.user))
 
     def test_ldap_users_are_remote_users(self):
-        for source in ('LDAP', 'LDAPImport'):
-            self.user.source = source
+        for provider in (LDAP_PROVIDER, MULTI_LDAP_1_PROVIDER):
+            SocialAuthUser.objects.add(self.user.username, provider, provider + self.user.username)
             with patch('seahub.utils.auth.DISABLE_SSO_USER_LOCAL_PWD_LOGIN', True):
                 self.assertTrue(is_remote_user(self.user))
                 self.assertFalse(user_local_password_enabled(self.user))
@@ -38,4 +39,3 @@ class RemoteUserPasswordPolicyTest(BaseTestCase):
         for provider in (REMOTE_USER_PROVIDER, KRB5_PROVIDER):
             SocialAuthUser.objects.add(self.user.username, provider, provider + self.user.username)
             self.assertTrue(is_remote_user(self.user))
-

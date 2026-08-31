@@ -43,44 +43,46 @@ class MetadataManagerTest(BaseTestCase):
         metadata = RepoMetadata.objects.get(repo_id=self.repo_id)
         self.assertFalse(metadata.enabled)
 
-    def test_face_recognition_is_not_exposed(self):
-        self.client.put(self.management_url)
-        metadata = RepoMetadata.objects.get(repo_id=self.repo_id)
-        metadata.face_recognition_enabled = True
-        metadata.save(update_fields=['face_recognition_enabled'])
-        metadata_views = RepoMetadataViews.objects.get(repo_id=self.repo_id)
-        view_details = json.loads(metadata_views.details)
-        view_details['views'].append({
-            '_id': '_legacy_face_recognition',
-            'name': 'People',
-            'type': 'face_recognition',
-        })
-        view_details['navigation'].append({
-            '_id': '_legacy_face_recognition',
-            'type': 'view',
-        })
-        metadata_views.details = json.dumps(view_details)
-        metadata_views.save(update_fields=['details'])
+    # Face recognition has been removed. Keep the related tests below commented
+    # out until legacy metadata cleanup needs to be tested again.
+    # def test_face_recognition_is_not_exposed(self):
+    #     self.client.put(self.management_url)
+    #     metadata = RepoMetadata.objects.get(repo_id=self.repo_id)
+    #     metadata.face_recognition_enabled = True
+    #     metadata.save(update_fields=['face_recognition_enabled'])
+    #     metadata_views = RepoMetadataViews.objects.get(repo_id=self.repo_id)
+    #     view_details = json.loads(metadata_views.details)
+    #     view_details['views'].append({
+    #         '_id': '_legacy_face_recognition',
+    #         'name': 'People',
+    #         'type': 'face_recognition',
+    #     })
+    #     view_details['navigation'].append({
+    #         '_id': '_legacy_face_recognition',
+    #         'type': 'view',
+    #     })
+    #     metadata_views.details = json.dumps(view_details)
+    #     metadata_views.save(update_fields=['details'])
 
-        resp = self.client.get(self.management_url)
-        self.assertEqual(200, resp.status_code)
-        json_resp = json.loads(resp.content)
-        self.assertFalse(json_resp['face_recognition_enabled'])
+    #     resp = self.client.get(self.management_url)
+    #     self.assertEqual(200, resp.status_code)
+    #     json_resp = json.loads(resp.content)
+    #     self.assertFalse(json_resp['face_recognition_enabled'])
 
-        with self.assertRaises(NoReverseMatch):
-            reverse('api-v2.1-metadata-face-recognition', args=[self.repo_id])
+    #     with self.assertRaises(NoReverseMatch):
+    #         reverse('api-v2.1-metadata-face-recognition', args=[self.repo_id])
 
-        views_url = reverse('api-v2.1-metadata-views', args=[self.repo_id])
-        resp = self.client.get(views_url)
-        json_resp = json.loads(resp.content)
-        self.assertNotIn('_legacy_face_recognition', [view['_id'] for view in json_resp['views']])
-        self.assertNotIn('_legacy_face_recognition', [item['_id'] for item in json_resp['navigation']])
+    #     views_url = reverse('api-v2.1-metadata-views', args=[self.repo_id])
+    #     resp = self.client.get(views_url)
+    #     json_resp = json.loads(resp.content)
+    #     self.assertNotIn('_legacy_face_recognition', [view['_id'] for view in json_resp['views']])
+    #     self.assertNotIn('_legacy_face_recognition', [item['_id'] for item in json_resp['navigation']])
 
-        resp = self.client.post(views_url, {
-            'name': 'People',
-            'type': 'face_recognition',
-        })
-        self.assertEqual(400, resp.status_code)
+    #     resp = self.client.post(views_url, {
+    #         'name': 'People',
+    #         'type': 'face_recognition',
+    #     })
+    #     self.assertEqual(400, resp.status_code)
 
 
 class MetadataDetailSettingsTest(BaseTestCase):
@@ -297,24 +299,24 @@ class MetadataViewsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         self.assertEqual(json_resp['view']['_id'], view_id)
 
-    def test_get_legacy_face_recognition_view_detail(self):
-        metadata_views = RepoMetadataViews.objects.get(repo_id=self.repo_id)
-        view_details = json.loads(metadata_views.details)
-        view_details['views'].append({
-            '_id': '_legacy_face_recognition',
-            'name': 'People',
-            'type': 'face_recognition',
-        })
-        view_details['navigation'].append({
-            '_id': '_legacy_face_recognition',
-            'type': 'view',
-        })
-        metadata_views.details = json.dumps(view_details)
-        metadata_views.save(update_fields=['details'])
+    # def test_get_legacy_face_recognition_view_detail(self):
+    #     metadata_views = RepoMetadataViews.objects.get(repo_id=self.repo_id)
+    #     view_details = json.loads(metadata_views.details)
+    #     view_details['views'].append({
+    #         '_id': '_legacy_face_recognition',
+    #         'name': 'People',
+    #         'type': 'face_recognition',
+    #     })
+    #     view_details['navigation'].append({
+    #         '_id': '_legacy_face_recognition',
+    #         'type': 'view',
+    #     })
+    #     metadata_views.details = json.dumps(view_details)
+    #     metadata_views.save(update_fields=['details'])
 
-        url = reverse('api-v2.1-metadata-views-detail', args=[self.repo_id, '_legacy_face_recognition'])
-        resp = self.client.get(url)
-        self.assertEqual(404, resp.status_code)
+    #     url = reverse('api-v2.1-metadata-views-detail', args=[self.repo_id, '_legacy_face_recognition'])
+    #     resp = self.client.get(url)
+    #     self.assertEqual(404, resp.status_code)
 
     def test_put_view(self):
         url = reverse('api-v2.1-metadata-views', args=[self.repo_id])
@@ -333,19 +335,19 @@ class MetadataViewsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         self.assertTrue(json_resp['success'])
 
-    def test_put_rejects_face_recognition_view(self):
-        url = reverse('api-v2.1-metadata-views', args=[self.repo_id])
-        resp = self.client.post(url, {
-            'name': 'test_view',
-            'type': 'table'
-        }, 'application/json')
-        view_id = json.loads(resp.content)['view']['_id']
+    # def test_put_rejects_face_recognition_view(self):
+    #     url = reverse('api-v2.1-metadata-views', args=[self.repo_id])
+    #     resp = self.client.post(url, {
+    #         'name': 'test_view',
+    #         'type': 'table'
+    #     }, 'application/json')
+    #     view_id = json.loads(resp.content)['view']['_id']
 
-        resp = self.client.put(url, {
-            'view_id': view_id,
-            'view_data': {'type': 'face_recognition'}
-        }, 'application/json')
-        self.assertEqual(400, resp.status_code)
+    #     resp = self.client.put(url, {
+    #         'view_id': view_id,
+    #         'view_data': {'type': 'face_recognition'}
+    #     }, 'application/json')
+    #     self.assertEqual(400, resp.status_code)
 
     def test_delete_view(self):
         url = reverse('api-v2.1-metadata-views', args=[self.repo_id])
@@ -396,24 +398,24 @@ class MetadataViewsDuplicateViewTest(BaseTestCase):
         self.assertNotEqual(json_resp['view']['_id'], self.view_id)
         self.assertTrue(json_resp['view']['name'].startswith('test_view'))
 
-    def test_duplicate_face_recognition_view(self):
-        metadata_views = RepoMetadataViews.objects.get(repo_id=self.repo_id)
-        view_details = json.loads(metadata_views.details)
-        view_details['views'].append({
-            '_id': '_legacy_face_recognition',
-            'name': 'People',
-            'type': 'face_recognition',
-        })
-        view_details['navigation'].append({
-            '_id': '_legacy_face_recognition',
-            'type': 'view',
-        })
-        metadata_views.details = json.dumps(view_details)
-        metadata_views.save(update_fields=['details'])
+    # def test_duplicate_face_recognition_view(self):
+    #     metadata_views = RepoMetadataViews.objects.get(repo_id=self.repo_id)
+    #     view_details = json.loads(metadata_views.details)
+    #     view_details['views'].append({
+    #         '_id': '_legacy_face_recognition',
+    #         'name': 'People',
+    #         'type': 'face_recognition',
+    #     })
+    #     view_details['navigation'].append({
+    #         '_id': '_legacy_face_recognition',
+    #         'type': 'view',
+    #     })
+    #     metadata_views.details = json.dumps(view_details)
+    #     metadata_views.save(update_fields=['details'])
 
-        url = reverse('api-v2.1-metadata-view-duplicate', args=[self.repo_id])
-        resp = self.client.post(url, {'view_id': '_legacy_face_recognition'}, 'application/json')
-        self.assertEqual(400, resp.status_code)
+    #     url = reverse('api-v2.1-metadata-view-duplicate', args=[self.repo_id])
+    #     resp = self.client.post(url, {'view_id': '_legacy_face_recognition'}, 'application/json')
+    #     self.assertEqual(400, resp.status_code)
 
 
 class MetadataViewsMoveViewTest(BaseTestCase):

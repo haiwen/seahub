@@ -80,6 +80,8 @@ class AIChatFolderPermissionTest(SimpleTestCase):
 
 
 class AIChatAPIPermissionTest(SimpleTestCase):
+    databases = {'default'}
+
     @patch('seahub.ai.apis.user_passes_ai_chat_folder_permissions', return_value=False)
     @patch('seahub.ai.apis.check_folder_permission', return_value='rw')
     @patch('seahub.ai.apis.ChatSessions.objects.get_session_by_uuid')
