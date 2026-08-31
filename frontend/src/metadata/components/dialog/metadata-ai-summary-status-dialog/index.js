@@ -92,7 +92,7 @@ const MetadataAISummaryStatusDialog = ({ value: oldValue, repoID, submit, enable
           }
         </div>
         <p className="setting-tip">
-          {gettext('Enable AI summary and AI chat on your files. Your files will be summarized to enable AI to efficiently find your files during chat.')}
+          {gettext('Enable AI chat and AI search on your files. Your files will be summarized to enable AI to efficiently find your files during chat.')}
         </p>
       </>
       {showTurnOffConfirmDialog && (
