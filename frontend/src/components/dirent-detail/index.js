@@ -8,7 +8,6 @@ import ObjectUtils from '../../utils/object';
 import { MetadataContext } from '../../metadata';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { METADATA_MODE, TAGS_MODE } from '../dir-view-mode/constants';
-import { FACE_RECOGNITION_VIEW_ID } from '../../metadata/constants';
 import { useTags } from '../../tag/hooks';
 
 const Detail = React.memo(({
@@ -62,9 +61,8 @@ const Detail = React.memo(({
 
   if (isView && !dirent) {
     const pathParts = path.split('/');
-    const [, , viewId, children] = pathParts;
+    const [, , viewId] = pathParts;
     if (!viewId) return null;
-    if (viewId === FACE_RECOGNITION_VIEW_ID && !children) return null;
     return (<ViewDetails viewId={viewId} onClose={onClose} />);
   }
 
