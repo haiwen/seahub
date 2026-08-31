@@ -24,7 +24,6 @@
   height: fit-content;
   max-height: 180px;
   overflow: auto;
-  scrollbar-color: #C1C1C1 rgba(0, 0, 0, 0);
   padding: 0 16px;
   margin-bottom: 10px;
 }

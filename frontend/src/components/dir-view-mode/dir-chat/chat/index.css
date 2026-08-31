@@ -38,10 +38,6 @@
   align-items: center;
 }
 
-.sea-ai-ask-chats-body::-webkit-scrollbar {
-  display: none;
-}
-
 .sea-ai-ask-chats {
   display: flex;
   flex-direction: column;

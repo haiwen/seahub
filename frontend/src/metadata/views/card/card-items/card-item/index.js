@@ -31,10 +31,8 @@ const CardItem = ({
 }) => {
   const { repoID } = useMetadataView();
   const [isUsingIcon, setIsUsingIcon] = useState(false);
-  const [showScrollbar, setShowScrollbar] = useState(false);
   const imgRef = useRef(null);
   const containerRef = useRef(null);
-  const hoverTimerRef = useRef(null);
 
   const fileNameValue = getCellValueByColumn(record, fileNameColumn);
   const mtimeValue = getCellValueByColumn(record, mtimeColumn);
@@ -93,26 +91,6 @@ const CardItem = ({
     if (!canPreview) return;
     onOpenFile(record);
   }, [record, onOpenFile]);
-
-  const handleImageContainerMouseEnter = useCallback(() => {
-    if (!isDocumentFile) return;
-
-    if (hoverTimerRef.current) {
-      clearTimeout(hoverTimerRef.current);
-    }
-
-    hoverTimerRef.current = setTimeout(() => {
-      setShowScrollbar(true);
-    }, 500);
-  }, [isDocumentFile]);
-
-  const handleImageContainerMouseLeave = useCallback(() => {
-    if (hoverTimerRef.current) {
-      clearTimeout(hoverTimerRef.current);
-      hoverTimerRef.current = null;
-    }
-    setShowScrollbar(false);
-  }, []);
 
   const handleImageContainerScroll = useCallback((event) => {
     event.stopPropagation();
@@ -246,11 +224,7 @@ const CardItem = ({
       >
         {scrollable ? (
           <div
-            className={classnames('sf-metadata-card-item-image-scroll-wrapper', {
-              'show-scrollbar': showScrollbar
-            })}
-            onMouseEnter={handleImageContainerMouseEnter}
-            onMouseLeave={handleImageContainerMouseLeave}
+            className="sf-metadata-card-item-image-scroll-wrapper"
             onScroll={handleImageContainerScroll}
           >
             <img
