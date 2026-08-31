@@ -61,7 +61,6 @@ class MetadataManage(APIView):
 
         is_enabled = False
         is_tags_enabled = False
-        tags_lang = ''
         details_settings = '{}'
         face_recognition_enabled = False
         summary_enabled = False
@@ -78,7 +77,6 @@ class MetadataManage(APIView):
                     details_settings = '{}'
                 if record.tags_enabled:
                     is_tags_enabled = True
-                    tags_lang = record.tags_lang
                 # Face recognition is no longer available.
                 # if record.face_recognition_enabled:
                 #     face_recognition_enabled = True
@@ -104,7 +102,6 @@ class MetadataManage(APIView):
             'tags_enabled': is_tags_enabled,
             'face_recognition_enabled': face_recognition_enabled,
             'summary_enabled': summary_enabled,
-            'tags_lang': tags_lang,
             'details_settings': details_settings,
             'global_hidden_columns': global_hidden_columns,
             'show_view': show_view,
@@ -2164,11 +2161,6 @@ class MetadataTagsStatusManage(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def put(self, request, repo_id):
-        lang = request.data.get('lang')
-        if not lang:
-            error_msg = 'lang invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -2188,7 +2180,6 @@ class MetadataTagsStatusManage(APIView):
 
         try:
             metadata.tags_enabled = True
-            metadata.tags_lang = lang
             metadata.save()
         except Exception as e:
             logger.exception(e)
@@ -2228,7 +2219,6 @@ class MetadataTagsStatusManage(APIView):
 
         try:
             record.tags_enabled = False
-            record.tags_lang = None
             record.save()
         except Exception as e:
             logger.error(e)
@@ -3231,7 +3221,6 @@ class MetadataMigrateTags(APIView):
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         if not tags_enabled:
             metadata.tags_enabled = True
-            metadata.tags_lang = 'en'
             metadata.save()
             init_tags(metadata_server_api)
 

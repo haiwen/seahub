@@ -251,27 +251,19 @@ class GenerateFileTags(APIView):
             'scenario': AI_SCENARIO_FILE_TAGS,
         }
 
+        from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
+        from seafevents.repo_metadata.constants import TAGS_TABLE
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+        sql = f'SELECT `{TAGS_TABLE.columns.name.name}` FROM `{TAGS_TABLE.name}`'
+        query_result = metadata_server_api.query_rows(sql).get('results', [])
+        candidate_tags = [item[TAGS_TABLE.columns.name.name].strip() for item in query_result]
+
         file_type, _ = get_file_type_and_ext(os.path.basename(path))
         if file_type == IMAGE:
-            try:
-                record = RepoMetadata.objects.filter(repo_id=repo_id).first()
-            except Exception as e:
-                logger.error(e)
-                error_msg = 'Internal Server Error'
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
             params['file_type'] = 'image'
-            params['lang'] = record.tags_lang if record and record.tags_enabled else None
         else:
-            from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
-            from seafevents.repo_metadata.constants import TAGS_TABLE
-            metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-
-            sql = f'SELECT `{TAGS_TABLE.columns.name.name}` FROM `{TAGS_TABLE.name}`'
-            query_result = metadata_server_api.query_rows(sql).get('results', [])
-
             params['file_type'] = 'doc'
-            params['candidate_tags'] = [item[TAGS_TABLE.columns.name.name].strip() for item in query_result]
+        params['candidate_tags'] = candidate_tags
 
         try:
             resp = generate_file_tags(params)
