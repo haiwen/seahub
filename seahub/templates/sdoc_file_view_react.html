@@ -11,6 +11,9 @@
 {% block extra_data %}
 isPro: '{{ is_pro }}',
 currentDirId: '{{ current_dir_id }}',
+llmModels: {{ llm_models|default:"[]"|safe }},
+chatAndSearchAvailable: {% if chat_and_search_available %} true {% else %} false {% endif %},
+isVirtualRepo: {% if repo.is_virtual %}true{% else %}false{% endif %},
 docPath: '{{ path|escapejs }}',
 docName: '{{ filename|escapejs }}',
 docUuid: '{{ file_uuid }}',

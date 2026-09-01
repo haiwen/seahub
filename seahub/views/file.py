@@ -777,6 +777,7 @@ def view_lib_file(request, repo_id, path):
         return_dict['assets_url'] = '/api/v2.1/seadoc/download-image/' + file_uuid
         return_dict['seadoc_server_url'] = SEADOC_SERVER_URL
         return_dict['enable_seadoc'] = ENABLE_SEADOC
+        return_dict['llm_models'] = json.dumps(settings.LLM_MODELS)
 
         can_edit_file = True
         locked_by_online_office = if_locked_by_online_office(repo_id, path)
