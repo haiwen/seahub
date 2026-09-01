@@ -45,9 +45,11 @@ class MainSideNav extends React.Component {
       hasPublicLibraries: false,
       isCreateGroupDialogOpen: false,
       isShowWechatDialog: false,
+      isSideNavHovered: false,
     };
     this.adminHeight = 0;
     this.isWorkWeixin = isWorkWeixin(window.navigator.userAgent.toLowerCase());
+    this.sideNavHideTimer = null;
   }
 
   componentDidMount() {
@@ -64,6 +66,7 @@ class MainSideNav extends React.Component {
   }
 
   componentWillUnmount() {
+    clearTimeout(this.sideNavHideTimer);
     this.unsubscribeGroupRenamed();
     this.unsubscribeOnlyShowGroupsWithLibrariesChanged();
     this.unsubscribeAddSharedRepoIntoGroup();
@@ -74,6 +77,18 @@ class MainSideNav extends React.Component {
 
   onOnlyShowGroupsWithLibrariesChanged = (onlyShowGroupsWithLibraries) => {
     this.setState({ onlyShowGroupsWithLibraries });
+  };
+
+  onSideNavMouseEnter = () => {
+    clearTimeout(this.sideNavHideTimer);
+    this.setState({ isSideNavHovered: true });
+  };
+
+  onSideNavMouseLeave = () => {
+    clearTimeout(this.sideNavHideTimer);
+    this.sideNavHideTimer = setTimeout(() => {
+      this.setState({ isSideNavHovered: false });
+    }, 500);
   };
 
   onGroupRenamed = ({ newName, groupID }) => {
@@ -338,7 +353,13 @@ class MainSideNav extends React.Component {
     return (
       <Fragment>
         <div className="side-nav">
-          <div className={'side-nav-con d-flex flex-column'}>
+          {/* Make sure scrollbar is hidden by default in the UI. */}
+          <div
+            className="side-nav-con d-flex flex-column"
+            style={{ overflowY: this.state.isSideNavHovered ? 'auto' : 'hidden' }}
+            onMouseEnter={this.onSideNavMouseEnter}
+            onMouseLeave={this.onSideNavMouseLeave}
+          >
             <h2 className="mb-2 px-2 font-weight-normal heading">{gettext('Workspace')}</h2>
             <ul className="nav nav-pills flex-column nav-container">
               <li id="files" className={`nav-item flex-column ${this.getLibrariesSectionActiveClass()}`}>
