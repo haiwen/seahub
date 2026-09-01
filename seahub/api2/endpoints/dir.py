@@ -15,7 +15,7 @@ from urllib.parse import quote
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error, to_python_boolean
-from seahub.api2.views import get_dir_file_recursively
+from seahub.api2.views import get_dir_file_recursively_with_perm
 
 from seahub.thumbnail.utils import generate_thumbnail_key, get_thumbnail_src
 from seahub.views import check_folder_permission
@@ -282,7 +282,7 @@ class DirView(APIView):
         if recursive == '1':
 
             try:
-                dir_file_info_list = get_dir_file_recursively(username, repo_id,
+                dir_file_info_list = get_dir_file_recursively_with_perm(username, repo_id,
                         parent_dir, [])
             except Exception as e:
                 logger.error(e)
