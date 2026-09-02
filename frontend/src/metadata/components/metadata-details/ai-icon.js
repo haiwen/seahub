@@ -115,7 +115,7 @@ const AIIcon = () => {
     }
 
     if (enableTags && isDescribableDoc && !isVideo) {
-      list.push({ key: OPERATION.FILE_TAGS, label: gettext('Generate file tags'), opData: { type: OPERATION.FILE_TAGS, record } });
+      list.push({ key: OPERATION.FILE_TAGS, label: gettext('Suggest file tags'), opData: { type: OPERATION.FILE_TAGS, record } });
     }
 
     return list.map(item => ({ ...item, onClick: () => handleOperation(item) }));

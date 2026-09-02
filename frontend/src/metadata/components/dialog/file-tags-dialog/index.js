@@ -48,7 +48,7 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
       setExistingTags(matchedTags);
       setLoading(false);
     }).catch(error => {
-      let errorMessage = gettext('Failed to generate file tags');
+      let errorMessage = gettext('Failed to suggest file tags');
       if (error.status === 429) {
         const err_data = error.response.data;
         errorMessage = gettext(err_data.error_msg);

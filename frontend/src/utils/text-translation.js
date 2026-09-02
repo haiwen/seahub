@@ -282,7 +282,7 @@ const TextTranslation = {
   },
   GENERATE_TAGS: {
     key: 'Generate tags',
-    value: gettext('Generate file tags'),
+    value: gettext('Suggest file tags'),
   },
   DETECT_FACES: {
     key: 'Detect faces',
