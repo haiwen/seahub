@@ -1541,10 +1541,13 @@ CREATE TABLE `repo_metadata`  (
   `details_settings` longtext DEFAULT NULL,
   `ocr_enabled` tinyint(1) DEFAULT NULL,
   `global_hidden_columns` longtext DEFAULT NULL,
+  `summary_enabled` TINYINT(1) NOT NULL DEFAULT 0,
+  `ai_summary_indexed_at` datetime DEFAULT NULL,
   `ai_processing_status` VARCHAR(32) NOT NULL DEFAULT '',
   UNIQUE KEY `key_repo_metadata_repo_id`(`repo_id`),
   KEY `key_repo_metadata_enabled`(`enabled`),
   KEY `key_last_face_cluster_time_face_recognition_enabled` (`face_recognition_enabled`,`last_face_cluster_time`),
+  KEY `repo_metadata_summary_enabled_idx` (`summary_enabled`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -1683,6 +1686,8 @@ CREATE TABLE `wiki_settings` (
   `wiki_id` varchar(36) NOT NULL,
   `enable_link_repos` tinyint(1) NOT NULL,
   `linked_repos` longtext,
+  `icon` VARCHAR(255) NULL DEFAULT NULL, 
+  `color` VARCHAR(255) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_wiki_settings_wiki_id` (`wiki_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -1942,6 +1947,7 @@ CREATE TABLE `VirusFile` (
   `file_path` text NOT NULL,
   `has_deleted` tinyint(1) NOT NULL,
   `has_ignored` tinyint(1) NOT NULL,
+  `virus_signature` TEXT DEFAULT NULL,
   PRIMARY KEY (`vid`),
   KEY `ix_VirusFile_repo_id` (`repo_id`),
   KEY `ix_VirusFile_has_ignored` (`has_ignored`),
@@ -2017,4 +2023,23 @@ CREATE TABLE `chat_message_thought_process` (
   `thought_process` longtext DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniq_session_uuid_message_id` (`session_uuid`,`message_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `ai_usage_statistics` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `date` date DEFAULT NULL,
+  `repo_id` varchar(36) DEFAULT NULL,
+  `repo_owner` varchar(255) DEFAULT NULL,
+  `group_id` int(11) DEFAULT NULL,
+  `org_id` bigint(20) DEFAULT NULL,
+  `model` varchar(100) NOT NULL,
+  `scenario` varchar(64) NOT NULL DEFAULT 'unknown',
+  `input_tokens` int(11) DEFAULT NULL,
+  `output_tokens` int(11) DEFAULT NULL,
+  `cost` double NOT NULL,
+  `created_at` datetime(6) DEFAULT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_date_repo` (`date`, `repo_id`),
+  KEY `idx_date_org` (`date`, `org_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
