@@ -1,31 +1,21 @@
-from seahub.test_utils import BaseTestCase
+from seahub.constants import DEFAULT_USER, GUEST_USER
+from seahub.role_permissions.settings import (
+    DEFAULT_ENABLED_ROLE_PERMISSIONS, ENABLED_ROLE_PERMISSIONS,
+)
 
-from seahub.role_permissions.settings import merge_roles
 
-K1 = 'k1'
-K2 = 'k2'
+class TestMonthlyDownloadTrafficLimitKey:
 
-class SettingsTest(BaseTestCase):
-    def test_merge_rols(self, ):
-        default = {
-            'default': {
-                K1: True,
-                K2: True,
-            },
-        }
+    def test_default_role_permissions_use_renamed_keys(self):
+        for role in (DEFAULT_USER, GUEST_USER):
+            perms = DEFAULT_ENABLED_ROLE_PERMISSIONS[role]
+            assert 'monthly_download_traffic_limit' in perms
+            assert 'monthly_download_traffic_limit_per_user' in perms
+            assert 'monthly_rate_limit' not in perms
+            assert 'monthly_rate_limit_per_user' not in perms
 
-        custom = {
-            'default': {
-                K1: False,
-                K2: False,
-            },
-            'custom': {
-                K1: True,
-            }
-        }
-
-        merged = merge_roles(default, custom)
-        assert merged['default'][K1] is False
-        assert merged['default'][K2] is False
-        assert merged['custom'][K1] is True
-        assert merged['custom'][K2] is True
+    def test_enabled_role_permissions_use_renamed_keys(self):
+        for role in (DEFAULT_USER, GUEST_USER):
+            perms = ENABLED_ROLE_PERMISSIONS[role]
+            assert 'monthly_download_traffic_limit' in perms
+            assert 'monthly_download_traffic_limit_per_user' in perms

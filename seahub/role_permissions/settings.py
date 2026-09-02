@@ -48,9 +48,9 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'upload_rate_limit': 0,
         'download_rate_limit': 0,
         # download traffic limit for common user
-        'monthly_rate_limit': '',
+        'monthly_download_traffic_limit': '',
         # download traffic limit for org
-        'monthly_rate_limit_per_user': '',
+        'monthly_download_traffic_limit_per_user': '',
         # upload traffic limit for common user
         'monthly_upload_traffic_limit': '',
         # upload traffic limit for org
@@ -82,9 +82,9 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'upload_rate_limit': 0,
         'download_rate_limit': 0,
         # download traffic limit for common user
-        'monthly_rate_limit': '',
+        'monthly_download_traffic_limit': '',
         # download traffic limit for org
-        'monthly_rate_limit_per_user': '',
+        'monthly_download_traffic_limit_per_user': '',
         # upload traffic limit for common user
         'monthly_upload_traffic_limit': '',
         # upload traffic limit for org
