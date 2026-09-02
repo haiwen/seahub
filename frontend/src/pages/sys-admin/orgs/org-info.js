@@ -93,7 +93,7 @@ class Content extends Component {
               <EditIcon onClick={this.toggleSetQuotaDialog} />
             </dd>
 
-            <dt className="info-item-heading">{gettext('Monthly Traffic Limit')}</dt>
+            <dt className="info-item-heading">{gettext('Monthly Download Traffic Limit')}</dt>
             <dd className="info-item-content">
               {`${Utils.bytesToSize(download_traffic)} / ${monthly_download_traffic_limit > 0 ? Utils.bytesToSize(monthly_download_traffic_limit) : '--'}`}
               <EditIcon onClick={this.toggleSetMonthlyDownloadTrafficLimitDialog} />
