@@ -27,7 +27,6 @@ class RepoCommitDirView(APIView):
 
     def _get_item_info(self, dirent, path):
 
-        # # seahub/seahub/api2/views get_dir_file_recursively
         entry = {}
         if stat.S_ISDIR(dirent.mode):
             entry['type'] = 'dir'

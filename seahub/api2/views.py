@@ -2266,7 +2266,7 @@ class UpdateBlksLinkView(APIView):
         url = gen_file_upload_url(token, 'update-blks-api')
         return Response(url)
 
-def get_dir_file_recursively(username, repo_id, path, all_dirs):
+def get_dir_file_recursively_with_perm(username, repo_id, path, all_dirs):
     is_pro = is_pro_version()
     path_id = seafile_api.get_dir_id_by_path(repo_id, path)
     dirs = seafile_api.list_dir_with_perm(repo_id, path,
@@ -2322,7 +2322,7 @@ def get_dir_file_recursively(username, repo_id, path, all_dirs):
 
         if stat.S_ISDIR(dirent.mode):
             sub_path = posixpath.join(path, dirent.obj_name)
-            get_dir_file_recursively(username, repo_id, sub_path, all_dirs)
+            get_dir_file_recursively_with_perm(username, repo_id, sub_path, all_dirs)
 
     return all_dirs
 
@@ -3885,7 +3885,7 @@ class DirView(APIView):
         if recursive == '1':
             result = []
             username = request.user.username
-            dir_file_list = get_dir_file_recursively(username, repo_id, path, [])
+            dir_file_list = get_dir_file_recursively_with_perm(username, repo_id, path, [])
             if request_type == 'f':
                 for item in dir_file_list:
                     if item['type'] == 'file':

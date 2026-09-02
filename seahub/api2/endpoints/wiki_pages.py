@@ -17,7 +17,6 @@ from django.utils.translation import gettext as _
 
 from seahub.views import check_folder_permission
 from seahub.views.file import send_file_access_msg
-from seahub.api2.views import get_dir_file_recursively
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
