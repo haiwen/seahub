@@ -74,9 +74,6 @@ def get_org_monthly_download_traffic_limit(org):
     if download_traffic_limit > 0:
         return download_traffic_limit
 
-    if not ORG_MEMBER_QUOTA_ENABLED:
-        return 0
-
     download_traffic_limit = 0
     org_role = OrgSettings.objects.get_role_by_org(org)
     role_perm_dict = get_enabled_role_permissions_by_role(org_role)
