@@ -15,7 +15,7 @@ class OrgInfo extends Component {
     this.state = {
       org_name: '',
       traffic_this_month: '',
-      traffic_limit: '',
+      monthly_download_traffic_limit: '',
       storage_quota: 0,
       storage_usage: 0,
       member_quota: 0,
@@ -29,12 +29,12 @@ class OrgInfo extends Component {
   componentDidMount() {
     orgAdminAPI.orgAdminGetOrgInfo().then(res => {
       const {
-        org_id, org_name, traffic_this_month, traffic_limit,
+        org_id, org_name, traffic_this_month, monthly_download_traffic_limit,
         member_quota, member_usage, active_members,
         storage_quota, storage_usage, ai_credit_used, ai_credit
       } = res.data;
       this.setState({
-        org_id, org_name, traffic_this_month, traffic_limit,
+        org_id, org_name, traffic_this_month, monthly_download_traffic_limit,
         member_quota, member_usage, active_members,
         storage_quota, storage_usage, ai_credit_used, ai_credit
       });
@@ -43,7 +43,7 @@ class OrgInfo extends Component {
 
   render() {
     const {
-      org_id, org_name, traffic_this_month, traffic_limit,
+      org_id, org_name, traffic_this_month, monthly_download_traffic_limit,
       member_quota, member_usage, active_members,
       storage_quota, storage_usage, ai_credit_used, ai_credit
     } = this.state;
@@ -124,14 +124,14 @@ class OrgInfo extends Component {
                       {gettext('After exceeding the traffic limit, the file download speed will be restricted.')}
                     </UncontrolledTooltip>
                   </h4>
-                  {traffic_limit > 0 ? (
+                  {monthly_download_traffic_limit > 0 ? (
                     <>
-                      <p className="info-content-space-text">{`${(download_traffic / traffic_limit * 100).toFixed(2)}%`}</p>
+                      <p className="info-content-space-text">{`${(download_traffic / monthly_download_traffic_limit * 100).toFixed(2)}%`}</p>
                       <div className="progress-container">
                         <div className="progress">
-                          <div className="progress-bar" role="progressbar" style={{ width: `${download_traffic / traffic_limit * 100}%` }} aria-valuenow={download_traffic / traffic_limit * 100} aria-valuemin="0" aria-valuemax="100"></div>
+                          <div className="progress-bar" role="progressbar" style={{ width: `${download_traffic / monthly_download_traffic_limit * 100}%` }} aria-valuenow={download_traffic / monthly_download_traffic_limit * 100} aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
-                        <p className="progress-text m-0">{`${Utils.bytesToSize(download_traffic)} / ${Utils.bytesToSize(traffic_limit)}`}</p>
+                        <p className="progress-text m-0">{`${Utils.bytesToSize(download_traffic)} / ${Utils.bytesToSize(monthly_download_traffic_limit)}`}</p>
                       </div>
                     </>
                   ) : (

@@ -76,7 +76,7 @@ class OrgSettingsManager(models.Manager):
         except OrgSettings.DoesNotExist:
             return True
 
-    def get_monthly_traffic_limit_by_org(self, org):
+    def get_monthly_download_traffic_limit_by_org(self, org):
         org_id = org.org_id
         try:
             limit = self.get(org_id=org_id).monthly_traffic_limit
@@ -85,7 +85,7 @@ class OrgSettingsManager(models.Manager):
             return 0
 
     def add_or_update(self, org, role=None, is_active=None,
-                      monthly_traffic_limit=None):
+                      monthly_download_traffic_limit=None):
         org_id = org.org_id
         try:
             settings = self.get(org_id=org_id)
@@ -106,8 +106,8 @@ class OrgSettingsManager(models.Manager):
             except Exception as e:
                 logger.error(e)
 
-        if monthly_traffic_limit is not None:
-            settings.monthly_traffic_limit = monthly_traffic_limit
+        if monthly_download_traffic_limit is not None:
+            settings.monthly_traffic_limit = monthly_download_traffic_limit
 
         settings.save(using=self._db)
         return settings
