@@ -16,6 +16,7 @@ import {
   lockFile,
   unlockFile,
   freezeDocument,
+  unfreezeDocument,
   exportDocx,
   exportMarkdown,
   exportSdoc,
@@ -40,6 +41,7 @@ const TagFiles = () => {
     repoInfo,
     selectedFileIds,
     updateSelectedFileIds,
+    updateTagFile,
     viewMode,
     moveTagFile,
     copyTagFile,
@@ -61,10 +63,18 @@ const TagFiles = () => {
     return window.sfTagsDataContext && window.sfTagsDataContext.canModifyTag();
   }, []);
 
+  const toFileObj = useCallback((file) => {
+    return Object.assign(file, {
+      name: getFileName(file),
+      type: 'file'
+    });
+  }, []);
+
   const selectedFile = useMemo(() => {
     if (!selectedFileIds || selectedFileIds.length === 0) return null;
-    return getFileById(tagFiles, selectedFileIds[0]);
-  }, [selectedFileIds, tagFiles]);
+    const file = getFileById(tagFiles, selectedFileIds[0]);
+    return toFileObj(file);
+  }, [selectedFileIds, tagFiles, toFileObj]);
 
   const selectedFileParentDir = useMemo(() => getFileParentDir(selectedFile), [selectedFile]);
   const selectedFileName = useMemo(() => getFileName(selectedFile), [selectedFile]);
@@ -73,12 +83,6 @@ const TagFiles = () => {
       ? Utils.joinPath(selectedFileParentDir, selectedFileName)
       : '';
   }, [selectedFileParentDir, selectedFileName]);
-
-  const toFileMenuItem = useCallback((file) => ({
-    name: getFileName(file),
-    type: 'file',
-    permission: window.sfTagsDataContext && window.sfTagsDataContext.permission,
-  }), []);
 
   const openImagePreview = useCallback((record) => {
     currentImageRef.current = record;
@@ -96,36 +100,40 @@ const TagFiles = () => {
   }, [deleteTagFiles, updateSelectedFileIds]);
 
   const toggleStarItem = useCallback(() => {
-    toggleStar(repoID, selectedFileParentDir, { name: selectedFileName, starred: selectedFile?.starred });
-  }, [repoID, selectedFileParentDir, selectedFileName, selectedFile]);
+    toggleStar(repoID, selectedFileParentDir, selectedFile, updateTagFile);
+  }, [repoID, selectedFileParentDir, selectedFile, updateTagFile]);
 
   const lockTagFile = useCallback(() => {
-    lockFile(repoID, selectedFileParentDir, { name: selectedFileName });
-  }, [repoID, selectedFileParentDir, selectedFileName]);
+    lockFile(repoID, selectedFileParentDir, selectedFile, updateTagFile);
+  }, [repoID, selectedFileParentDir, selectedFile, updateTagFile]);
 
   const unlockTagFile = useCallback(() => {
-    unlockFile(repoID, selectedFileParentDir, { name: selectedFileName });
-  }, [repoID, selectedFileParentDir, selectedFileName]);
+    unlockFile(repoID, selectedFileParentDir, selectedFile, updateTagFile);
+  }, [repoID, selectedFileParentDir, selectedFile, updateTagFile]);
 
   const freezeTagDocument = useCallback(() => {
-    freezeDocument(repoID, selectedFileParentDir, { name: selectedFileName });
-  }, [repoID, selectedFileParentDir, selectedFileName]);
+    freezeDocument(repoID, selectedFileParentDir, selectedFile, updateTagFile);
+  }, [repoID, selectedFileParentDir, selectedFile, updateTagFile]);
+
+  const unfreezeTagDocument = useCallback(() => {
+    unfreezeDocument(repoID, selectedFileParentDir, selectedFile, updateTagFile);
+  }, [repoID, selectedFileParentDir, selectedFile, updateTagFile]);
 
   const openWithDefault = useCallback(() => {
-    openByDefault(repoID, selectedFileParentDir, { name: selectedFileName });
-  }, [repoID, selectedFileParentDir, selectedFileName]);
+    openByDefault(repoID, selectedFileParentDir, selectedFile);
+  }, [repoID, selectedFileParentDir, selectedFile]);
 
   const openWithOnlyofficeForTagFile = useCallback(() => {
-    openWithOnlyOffice(repoID, selectedFileParentDir, { name: selectedFileName });
-  }, [repoID, selectedFileParentDir, selectedFileName]);
+    openWithOnlyOffice(repoID, selectedFileParentDir, selectedFile);
+  }, [repoID, selectedFileParentDir, selectedFile]);
 
   const openViaClientForTagFile = useCallback(() => {
-    openViaClient(repoID, selectedFileParentDir, { name: selectedFileName });
-  }, [repoID, selectedFileParentDir, selectedFileName]);
+    openViaClient(repoID, selectedFileParentDir, selectedFile);
+  }, [repoID, selectedFileParentDir, selectedFile]);
 
   const onHistory = useCallback(() => {
-    openHistory(repoID, selectedFileParentDir, { name: selectedFileName });
-  }, [repoID, selectedFileParentDir, selectedFileName]);
+    openHistory(repoID, selectedFileParentDir, selectedFile);
+  }, [repoID, selectedFileParentDir, selectedFile]);
 
   const onConvertFile = useCallback((dstType) => {
     toaster.notifyInProgress(gettext('Converting, please wait...'), { id: 'conversion' });
@@ -133,16 +141,16 @@ const TagFiles = () => {
   }, [selectedFilePath, convertFile]);
 
   const exportSdocAsDocx = useCallback(() => {
-    exportDocx(repoID, selectedFileParentDir, { name: selectedFileName });
-  }, [repoID, selectedFileParentDir, selectedFileName]);
+    exportDocx(repoID, selectedFileParentDir, selectedFile);
+  }, [repoID, selectedFileParentDir, selectedFile]);
 
   const exportSdocAsMarkdown = useCallback(() => {
-    exportMarkdown(repoID, selectedFileParentDir, { name: selectedFileName });
-  }, [repoID, selectedFileParentDir, selectedFileName]);
+    exportMarkdown(repoID, selectedFileParentDir, selectedFile);
+  }, [repoID, selectedFileParentDir, selectedFile]);
 
   const exportSdocAsZip = useCallback(() => {
-    exportSdoc(repoID, selectedFileParentDir, { name: selectedFileName });
-  }, [repoID, selectedFileParentDir, selectedFileName]);
+    exportSdoc(repoID, selectedFileParentDir, selectedFile);
+  }, [repoID, selectedFileParentDir, selectedFile]);
 
   const getMenuContainerSize = useCallback(() => ({
     width: window.innerWidth,
@@ -189,11 +197,13 @@ const TagFiles = () => {
         lockTagFile();
         break;
       case TextTranslation.UNLOCK.key:
-      case TextTranslation.UNFREEZE_DOCUMENT.key:
         unlockTagFile();
         break;
       case TextTranslation.FREEZE_DOCUMENT.key:
         freezeTagDocument();
+        break;
+      case TextTranslation.UNFREEZE_DOCUMENT.key:
+        unfreezeTagDocument();
         break;
       case TextTranslation.PROPERTIES.key:
         displayFileDetails();
@@ -249,6 +259,7 @@ const TagFiles = () => {
     lockTagFile,
     unlockTagFile,
     freezeTagDocument,
+    unfreezeTagDocument,
     displayFileDetails,
     onConvertFile,
     exportSdocAsDocx,
@@ -266,9 +277,9 @@ const TagFiles = () => {
     if (selectedFileIds.length <= 1) {
       const fileId = getRecordIdFromRecord(file);
       updateSelectedFileIds([fileId]);
-      menuList = getDirentItemMenuList(repoInfo, toFileMenuItem(file), true);
+      menuList = getDirentItemMenuList(repoInfo, toFileObj(file), true);
     } else {
-      const selectedFiles = selectedFileIds.map((id) => toFileMenuItem(getFileById(tagFiles, id)));
+      const selectedFiles = selectedFileIds.map((id) => toFileObj(getFileById(tagFiles, id)));
       menuList = getBatchMenuList(repoInfo, selectedFiles, getDirentItemMenuList);
     }
 
@@ -285,7 +296,7 @@ const TagFiles = () => {
       currentObject: file,
       menuList,
     });
-  }, [selectedFileIds, updateSelectedFileIds, repoInfo, tagFiles, toFileMenuItem]);
+  }, [selectedFileIds, updateSelectedFileIds, repoInfo, tagFiles, toFileObj]);
 
   useEffect(() => {
     if (!window.sfTagsDataContext) return;

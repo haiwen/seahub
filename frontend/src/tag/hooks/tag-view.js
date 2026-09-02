@@ -279,6 +279,24 @@ export const TagViewProvider = ({
     });
   }, [repoID, convertFileCallback]);
 
+  const updateTagFile = useCallback((file, updates) => {
+    const id = file[TAG_FILE_KEY.ID];
+    const nextTagFiles = {
+      ...tagFiles,
+      rows: tagFiles.rows.map(row => {
+        if (row[TAG_FILE_KEY.ID] === id) {
+          return Object.assign(row, updates);
+        }
+        return row;
+      })
+    };
+    setTagFiles(nextTagFiles);
+
+    setTimeout(() => {
+      window.sfTagsDataContext && window.sfTagsDataContext.eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_TAG_FILES, nextTagFiles);
+    }, 0);
+  }, [tagFiles]);
+
   useEffect(() => {
     setLoading(true);
     const childTagsIds = getChildTagsIds(tagID, nodeKey);
@@ -320,6 +338,7 @@ export const TagViewProvider = ({
       updateCurrentDirent: params.updateCurrentDirent,
       selectedFileIds,
       updateSelectedFileIds,
+      updateTagFile,
       moveTagFile,
       copyTagFile,
       deleteTagFiles,

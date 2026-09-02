@@ -1,5 +1,5 @@
 import TextTranslation from '@/utils/text-translation';
-import { lockFile, unlockFile, freezeDocument, exportDocx, exportMarkdown, exportSdoc, openHistory, openViaClient, openByDefault, openWithOnlyOffice, toggleStar } from '@/utils/dirent-operations';
+import { lockFile, unlockFile, freezeDocument, unfreezeDocument, exportDocx, exportMarkdown, exportSdoc, openHistory, openViaClient, openByDefault, openWithOnlyOffice, toggleStar } from '@/utils/dirent-operations';
 import EventBus, { eventBus as globalEventBus } from '@/components/common/event-bus';
 import { EVENT_BUS_TYPE } from '@/components/common/event-bus-type';
 import { Dirent } from '@/models';
@@ -68,7 +68,7 @@ export const menuHandlers = {
   },
 
   [TextTranslation.UNFREEZE_DOCUMENT.key]: ({ repoID, path, dirent, updateDirent }) => {
-    unlockFile(repoID, path, dirent, updateDirent);
+    unfreezeDocument(repoID, path, dirent, updateDirent);
   },
 
   [TextTranslation.HISTORY.key]: ({ repoID, path, dirent }) => {

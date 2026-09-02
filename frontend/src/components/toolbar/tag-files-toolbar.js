@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { gettext } from '../../utils/constants';
 import { EVENT_BUS_TYPE } from '../../metadata/constants';
 import TextTranslation from '../../utils/text-translation';
@@ -14,7 +14,7 @@ const MULTI_EXCLUDES = ['Download', 'Delete', 'Move', 'Copy'];
 
 const TagFilesToolbar = ({ currentRepoInfo }) => {
   const [selectedFileIds, setSelectedFileIds] = useState([]);
-  const tagFilesRef = useRef([]);
+  const [tagFiles, setTagFiles] = useState([]);
 
   const eventBus = window.sfTagsDataContext && window.sfTagsDataContext.eventBus;
   const selectedFilesLen = selectedFileIds.length;
@@ -112,13 +112,12 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
   }, [eventBus]);
 
   const toFileObj = useCallback((fileId) => {
-    const file = getFileById(tagFilesRef.current, fileId);
-    return {
+    const file = getFileById(tagFiles, fileId);
+    return Object.assign(file, {
       name: getFileName(file),
-      type: 'file', // for 'chat with AI'
-      permission: window.sfTagsDataContext && window.sfTagsDataContext.permission
-    };
-  }, []);
+      type: 'file' // for 'chat with AI'
+    });
+  }, [tagFiles]);
 
   const buildMenuOps = useCallback((allOperations, excludesOperations) => {
     const iconOps = excludesOperations.filter(item => {
@@ -152,14 +151,14 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
     return { iconOps, menuOps: validOperations };
   }, [onMenuItemClick]);
 
-  const getMenuList = useCallback(() => {
+  const getFileOperations = useCallback(() => {
     if (selectedFilesLen !== 1) return {};
     const fileObj = toFileObj(selectedFileIds[0]);
     const allOperations = getDirentItemMenuList(currentRepoInfo, fileObj, true);
     return buildMenuOps(allOperations, SINGLE_EXCLUDES);
   }, [currentRepoInfo, toFileObj, buildMenuOps, selectedFileIds, selectedFilesLen]);
 
-  const getSelectedFilesMenuList = useCallback(() => {
+  const getSelectedFilesOperations = useCallback(() => {
     if (selectedFilesLen <= 1) return {};
     const selectedFiles = selectedFileIds.map(toFileObj);
     const allOperations = getBatchMenuList(currentRepoInfo, selectedFiles, getDirentItemMenuList);
@@ -168,12 +167,17 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
 
   useEffect(() => {
     const unsubscribeSelectedFileIds = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.SELECT_TAG_FILES, (ids, tagFiles) => {
-      tagFilesRef.current = tagFiles || [];
+      setTagFiles(tagFiles);
       setSelectedFileIds(ids);
+    });
+
+    const unsubscribeUpdateTagFiles = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_TAG_FILES, (tagFiles) => {
+      setTagFiles(tagFiles);
     });
 
     return () => {
       unsubscribeSelectedFileIds && unsubscribeSelectedFileIds();
+      unsubscribeUpdateTagFiles && unsubscribeUpdateTagFiles();
     };
   }, [eventBus]);
 
@@ -196,8 +200,8 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
     });
   };
 
-  const { iconOps, menuOps } = getMenuList();
-  const { iconOps: iconOpsForMulti, menuOps: menuOpsForMulti } = getSelectedFilesMenuList();
+  const { iconOps, menuOps } = getFileOperations();
+  const { iconOps: iconOpsForMulti, menuOps: menuOpsForMulti } = getSelectedFilesOperations();
 
   return (
     <div className="selected-dirents-toolbar">
