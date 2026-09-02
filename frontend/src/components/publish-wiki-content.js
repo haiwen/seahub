@@ -86,7 +86,7 @@ class PublishWikiContent extends React.Component {
       if (this.props.toggleCancel) {
         this.props.toggleCancel();
       }
-      toaster.success(gettext('Wiki custom URL deleted'));
+      toaster.success(gettext('Wiki unpublished'));
     }).catch((error) => {
       if (error.response) {
         let errorMsg = error.response.data.error_msg;
