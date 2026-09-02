@@ -18,6 +18,14 @@ script_name=$0
 function usage () {
     echo "usage : "
     echo "$(basename ${script_name}) [-h/--help] [-r/--repair] [-E/--export path_to_export] [repo_id_1 [repo_id_2 ...]]"
+    echo "Additional options:"
+    echo "-f, --force: run fsck without user ownership check"
+    echo "-r, --repair: repair corrupted libraries"
+    echo "-t, --threads: thread number for fsck"
+    echo "-E, --export: export libraries to the specified path"
+    echo "-S, --check-file-size: check whether file size matches the actual file content"
+    echo "-s, --shallow: skip checking file contents and only check object existence"
+    echo "-i, --id-prefix: run fsck for repos with this repo id prefix"
     echo ""
 }
 
