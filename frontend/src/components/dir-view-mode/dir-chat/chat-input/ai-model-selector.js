@@ -1,8 +1,9 @@
 import React, { useMemo, useEffect } from 'react';
-import { mediaUrl } from '../../../../utils/constants';
+import { mediaUrl, username } from '../../../../utils/constants';
 import { Selector } from '../components';
 
 const LLM_MODELS = window.app?.pageOptions?.llmModels || [];
+const AI_MODEL_STORAGE_KEY = username ? `sf_ai_chat_selected_model:${username}` : 'sf_ai_chat_selected_model';
 const LLM_MODEL_ICON = {
   'openai': `${mediaUrl}img/llm-providers/openai.png`,
   'dashscope': `${mediaUrl}img/llm-providers/dashscope.png`,
@@ -49,11 +50,17 @@ const AIModelSelector = ({ isSimple, selectedModel, updateModel }) => {
 
   useEffect(() => {
     if (!selectedModel && LLM_MODELS.length > 0) {
-      const defaultModel = LLM_MODELS.find((model) => model.default === true);
-      const modelToUse = defaultModel ? defaultModel.model : LLM_MODELS[0].model;
-      updateModel(modelToUse);
+      const storedModel = window.localStorage.getItem(AI_MODEL_STORAGE_KEY);
+      const modelToUse = LLM_MODELS.find((model) => model.model === storedModel) ||
+        LLM_MODELS.find((model) => model.default === true) || LLM_MODELS[0];
+      updateModel(modelToUse.model);
     }
   }, [selectedModel, updateModel]);
+
+  const handleModelChange = (model) => {
+    updateModel(model);
+    window.localStorage.setItem(AI_MODEL_STORAGE_KEY, model);
+  };
 
   if (LLM_MODELS.length === 0) return null;
   const option = options.find((model) => model.value === selectedModel) || options.find((model) => model.default === true) || options[0];
@@ -67,7 +74,7 @@ const AIModelSelector = ({ isSimple, selectedModel, updateModel }) => {
       icon="arrow-down"
       iconPlacement="right"
       border={false}
-      onChange={updateModel}
+      onChange={handleModelChange}
       isSearchEnabled={false}
       displayBgColor={true}
       placement="top-start"

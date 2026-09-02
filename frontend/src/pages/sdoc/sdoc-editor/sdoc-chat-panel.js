@@ -1,5 +1,6 @@
 import React, { useCallback, useLayoutEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { Tooltip } from '@seafile/sdoc-editor';
 import DirChat from '../../../components/dir-view-mode/dir-chat';
 import ChatToolbar from '../../../components/toolbar/chat-toolbar';
 import Icon from '../../../components/icon';
@@ -119,8 +120,9 @@ SdocChatPanel.propTypes = {
 
 export const SdocChatPluginIcon = () => {
   return (
-    <span className="d-flex align-items-center" title={gettext('Chat with AI')}>
+    <span id="sdoc-chat-plugin-icon" className="d-flex align-items-center justify-content-center w-100 h-100">
       <Icon symbol="new-chat" style={{ width: 16, height: 16 }} />
+      <Tooltip target="sdoc-chat-plugin-icon">{gettext('Chat with AI')}</Tooltip>
     </span>
   );
 };
