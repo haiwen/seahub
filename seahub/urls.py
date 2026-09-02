@@ -69,7 +69,7 @@ from seahub.api2.endpoints.repos_batch import BatchMoveItemsUpdatePath, ReposBat
         ReposSyncBatchCopyItemView, ReposSyncBatchMoveItemView, \
         ReposBatchDeleteItemView, RepoFoldersItemBatchDelete
 from seahub.api2.endpoints.repos import RepoView, ReposView, RepoShareInfoView, RepoImageRotateView
-from seahub.api2.endpoints.file import FileView, FileLockBatchView
+from seahub.api2.endpoints.file import FileView, FileBatchLockView, FileBatchUnlockView
 from seahub.api2.endpoints.file_access_log import FileAccessLogView
 from seahub.api2.endpoints.file_history import FileHistoryView, NewFileHistoryView
 from seahub.api2.endpoints.dir import DirView, DirDetailView
@@ -462,7 +462,8 @@ urlpatterns = [
     re_path(r'^api/v2.1/repos/$', ReposView.as_view(), name='api-v2.1-repos-view'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/$', RepoView.as_view(), name='api-v2.1-repo-view'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/$', FileView.as_view(), name='api-v2.1-file-view'),
-    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/batch-lock-unlock-file/$', FileLockBatchView.as_view(), name='api-v2.1-file-lock-batch'),
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/batch-lock-file/$', FileBatchLockView.as_view(), name='api-v2.1-file-batch-lock'),
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/batch-unlock-file/$', FileBatchUnlockView.as_view(), name='api-v2.1-file-batch-unlock'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/access-log/$', FileAccessLogView.as_view(), name='api-v2.1-file-access-log-view'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/history/$', FileHistoryView.as_view(), name='api-v2.1-file-history-view'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/new_history/$', NewFileHistoryView.as_view(), name='api-v2.1-new-file-history-view'),
