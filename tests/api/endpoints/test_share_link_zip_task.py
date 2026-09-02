@@ -9,9 +9,9 @@ from seahub.share.models import FileShare
 
 class ShareLinkZipTaskViewTest(BaseTestCase):
 
-    def _add_dir_share_link(self):
+    def _add_dir_share_link(self, permission=FileShare.PERM_VIEW_DL):
         fs = FileShare.objects.create_dir_link(self.user.username,
-                self.repo.id, self.folder, None, None)
+                self.repo.id, self.folder, None, None, permission)
 
         return fs.token
 
@@ -32,3 +32,11 @@ class ShareLinkZipTaskViewTest(BaseTestCase):
 
         json_resp = json.loads(resp.content)
         assert len(json_resp['zip_token']) == 36
+
+    def test_cannot_get_zip_task_from_view_only_share_link(self):
+        share_link_token = self._add_dir_share_link(FileShare.PERM_VIEW_ONLY)
+
+        url = self.url + '?share_link_token=%s&path=/' % share_link_token
+
+        resp = self.client.get(url)
+        self.assertEqual(403, resp.status_code)
