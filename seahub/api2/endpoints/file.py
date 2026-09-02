@@ -911,6 +911,8 @@ class FileBatchLockView(APIView):
         paths = request.data.get('paths')
         if not isinstance(paths, list) or not paths:
             return api_error(status.HTTP_400_BAD_REQUEST, 'paths invalid.')
+        if len(paths) > 100:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'paths limit exceeded (max 100).')
 
         expire = request.data.get('expire', 0)
         try:
@@ -1003,6 +1005,8 @@ class FileBatchUnlockView(APIView):
         paths = request.data.get('paths')
         if not isinstance(paths, list) or not paths:
             return api_error(status.HTTP_400_BAD_REQUEST, 'paths invalid.')
+        if len(paths) > 100:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'paths limit exceeded (max 100).')
 
         repo = seafile_api.get_repo(repo_id)
         if not repo:
