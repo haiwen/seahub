@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { enableAIChat, enableSeafileAI, gettext } from '../../../utils/constants';
+import { chatAndSearchAvailable, gettext } from '../../../utils/constants';
 import Loading from '../../loading';
 import OpIcon from '../../op-icon';
 import { eventBus } from '../../common/event-bus';
@@ -37,6 +37,7 @@ const propTypes = {
   updateTreeNode: PropTypes.func,
   updateRepoInfo: PropTypes.func,
   sortTreeNode: PropTypes.func,
+  enableAISummary: PropTypes.bool,
 };
 
 class DirColumnNav extends React.Component {
@@ -55,7 +56,7 @@ class DirColumnNav extends React.Component {
     } = this.props;
     const flex = navRate ? '0 0 ' + navRate * 100 + '%' : '0 0 25%';
     const select = this.props.inResizing ? 'none' : '';
-    const canUseAIChat = enableSeafileAI && enableAIChat && !currentRepoInfo.is_virtual;
+    const canUseAIChat = chatAndSearchAvailable && this.props.enableAISummary && !currentRepoInfo.is_virtual;
     return (
       <div className="dir-content-nav" role="navigation" style={{ flex: (flex), userSelect: select }} onScroll={this.stopTreeScrollPropagation}>
         {isTreeDataLoading ? <Loading /> : (

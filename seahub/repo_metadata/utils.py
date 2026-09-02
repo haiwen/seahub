@@ -9,10 +9,35 @@ from datetime import datetime
 from seahub.settings import SECRET_KEY, SEAFEVENTS_SERVER_URL
 from seahub.views import check_folder_permission
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
+from seahub.repo_metadata.constants import FACE_RECOGNITION_VIEW_ID
 
 from seaserv import seafile_api
 
 FACES_SAVE_PATH = '_Internal/Faces'
+
+
+def filter_face_recognition_views(metadata_views):
+    # Face recognition is no longer available. Hide legacy views without changing stored data.
+    face_view_ids = {
+        view.get('_id') for view in metadata_views.get('views', [])
+        if view.get('type') == 'face_recognition' or view.get('_id') == FACE_RECOGNITION_VIEW_ID
+    }
+    metadata_views['views'] = [
+        view for view in metadata_views.get('views', [])
+        if view.get('_id') not in face_view_ids
+    ]
+    navigation = []
+    for item in metadata_views.get('navigation', []):
+        if item.get('_id') in face_view_ids:
+            continue
+        if item.get('type') == 'folder':
+            item['children'] = [
+                child for child in item.get('children', [])
+                if child.get('_id') not in face_view_ids
+            ]
+        navigation.append(item)
+    metadata_views['navigation'] = navigation
+    return metadata_views
 
 # fake metadata for metadata views of repo without metadata enabled, to avoid frontend error. 
 # The metadata is not real and only used for display.

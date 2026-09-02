@@ -5,7 +5,7 @@ import toaster from '../components/toast';
 import Loading from '../components/loading';
 import { PRIVATE_FILE_TYPE } from '../constants';
 import { EVENT_BUS_TYPE } from '../metadata/constants';
-import { enableSeafileAI, enableAIChat, gettext } from '../utils/constants';
+import { enableSeafileAI, gettext } from '../utils/constants';
 
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes
@@ -73,7 +73,7 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
         cancelMetadataURL();
       }
       setEnableTags(enableTags);
-      setEnableAISummary(enableSeafileAI && enableAIChat && !!enableAISummary);
+      setEnableAISummary(!!enableAISummary);
       setShowView(showView);
       setTagsLang(tagsLang || 'en');
       setDetailsSettings(JSON.parse(detailsSettings));
@@ -109,9 +109,9 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
   }, [repoID, enableMetadataManagement]);
 
   useEffect(() => {
-    statusCallback && statusCallback({ enableTags, enableMetadata, showView });
+    statusCallback && statusCallback({ enableTags, enableMetadata, enableAISummary, showView });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enableTags, enableMetadata, showView]);
+  }, [enableTags, enableMetadata, enableAISummary, showView]);
 
   const updateEnableMetadata = useCallback((newValue) => {
     if (newValue === enableMetadata) return;

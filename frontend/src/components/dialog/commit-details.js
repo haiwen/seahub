@@ -52,7 +52,7 @@ class CommitDetails extends React.Component {
   render() {
     const { toggleDialog, commitTime } = this.props;
     return (
-      <Modal isOpen={true} toggle={toggleDialog} centered={true} modalClassName="commit-details-dialog">
+      <Modal isOpen={true} toggle={toggleDialog} modalClassName="commit-details-dialog">
         <SeahubModalHeader toggle={toggleDialog}>{gettext('Modification Details')}</SeahubModalHeader>
         <ModalBody>
           <div className="repo-commit-time-row">

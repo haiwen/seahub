@@ -807,7 +807,7 @@ class SeafileAPI {
 
   searchFiles(searchParams, cancelToken) {
     let url = this.server + '/api2/search/';
-    url = url + '?q=' + searchParams.q;
+    url = url + '?q=' + encodeURIComponent(searchParams.q);
     if (searchParams.search_repo) { url = url + '&search_repo=' + searchParams.search_repo; }
     if (searchParams.search_ftypes) { url = url + '&search_ftypes=' + searchParams.search_ftypes; }
     if (searchParams.page) { url = url + '&page=' + searchParams.page; }

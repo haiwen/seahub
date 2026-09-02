@@ -19,6 +19,8 @@ import ViewModes from '../../components/view-modes';
 import ReposSortMenu from '../../components/sort-menu';
 import Icon from '../../components/icon';
 import CustomDropdown from '../../components/dropdown';
+import EventBus from '../../components/common/event-bus';
+import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 
 const propTypes = {
   currentViewMode: PropTypes.string,
@@ -28,6 +30,7 @@ const propTypes = {
   onFreezedItem: PropTypes.func,
   onUnfreezedItem: PropTypes.func,
   onToggleStarRepo: PropTypes.func,
+  onUnshareRepo: PropTypes.func,
 };
 
 class SharedWithAll extends React.Component {
@@ -78,6 +81,10 @@ class SharedWithAll extends React.Component {
         return item.repo_id !== repo.repo_id;
       });
       this.setState({ repoList: repoList });
+      if (this.props.onUnshareRepo) {
+        this.props.onUnshareRepo(repo);
+      }
+      EventBus.getInstance().dispatch(EVENT_BUS_TYPE.SHARED_LIBRARIES_CHANGED);
       let message = gettext('Successfully unshared {name}').replace('{name}', repo.repo_name);
       toaster.success(message);
     }).catch(error => {
@@ -111,6 +118,7 @@ class SharedWithAll extends React.Component {
     let newRepoList = this.state.repoList.map(item => { return item; });
     newRepoList.unshift(repo);
     this.setState({ repoList: newRepoList });
+    EventBus.getInstance().dispatch(EVENT_BUS_TYPE.SHARED_LIBRARIES_CHANGED);
   };
 
   sortItems = (sortBy, sortOrder) => {

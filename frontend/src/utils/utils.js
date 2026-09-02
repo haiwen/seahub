@@ -116,7 +116,6 @@ export const Utils = {
     'webp': 'pic.png',
     'jfif': 'pic.png',
     'avif': 'pic.png',
-    'draw': 'draw.png',
     'exdraw': 'draw.png',
 
     // photoshop file

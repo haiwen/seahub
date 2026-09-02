@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { enableSeadoc, gettext, enableWhiteboard, onlyofficeSupportEditDocxf } from '../../utils/constants';
+import { enableSeadoc, gettext, onlyofficeSupportEditDocxf } from '../../utils/constants';
 import Loading from '../loading';
 import TextTranslation from '../../utils/text-translation';
 import { Utils } from '../../utils/utils';
@@ -45,7 +45,6 @@ class DirentNoneView extends React.Component {
       NEW_POWERPOINT_FILE,
       NEW_WORD_FILE,
       NEW_SEADOC_FILE,
-      NEW_TLDRAW_FILE,
       NEW_EXCALIDRAW_FILE
     } = TextTranslation;
     const direntsContainerMenuList = [
@@ -62,9 +61,6 @@ class DirentNoneView extends React.Component {
       NEW_POWERPOINT_FILE,
       NEW_WORD_FILE,
     );
-    if (enableWhiteboard) {
-      direntsContainerMenuList.push(NEW_TLDRAW_FILE);
-    }
     let id = 'dirent-container-menu';
     if (isCustomPermission) {
       const { create: canCreate } = customPermission.permission;
@@ -121,9 +117,6 @@ class DirentNoneView extends React.Component {
         break;
       case 'New Docxf File':
         this.onCreateFile('.docxf');
-        break;
-      case 'New Whiteboard File':
-        this.onCreateFile('.draw');
         break;
       case 'New SeaDoc File':
         this.onCreateFile('.sdoc');

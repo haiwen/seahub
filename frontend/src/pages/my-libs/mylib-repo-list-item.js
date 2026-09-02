@@ -29,6 +29,8 @@ import OpIcon from '../../components/op-icon';
 import { formatWithTimezone } from '../../utils/time';
 import Icon from '../../components/icon';
 import ArchiveIcon from '../../components/archive-icon';
+import EventBus from '../../components/common/event-bus';
+import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 
 const propTypes = {
   idx: PropTypes.number,
@@ -283,6 +285,7 @@ class MylibRepoListItem extends React.Component {
       });
 
       this.props.onDeleteRepo(repo);
+      EventBus.getInstance().dispatch(EVENT_BUS_TYPE.GROUP_LIBRARIES_CHANGED);
       let name = repo.repo_name;
       var msg = gettext('Successfully deleted {name}.').replace('{name}', name);
       toaster.success(msg);

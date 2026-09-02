@@ -184,6 +184,7 @@ class DirColumnView extends React.Component {
               navRate={navRate}
               inResizing={inResizing}
               currentRepoInfo={this.props.currentRepoInfo}
+              enableAISummary={this.props.enableAISummary}
               updateRepoInfo={this.props.updateRepoInfo}
               onItemMove={this.props.onItemMove}
               onItemsMove={this.props.onItemsMove}

@@ -3,9 +3,8 @@ import metadataAPI from '../api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Folder from '../model/metadata/folder';
-import { gettext } from '../../utils/constants';
 import { PRIVATE_FILE_TYPE } from '../../constants';
-import { FACE_RECOGNITION_VIEW_ID, VIEW_TYPE, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW } from '../constants';
+import { VIEW_TYPE, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW } from '../constants';
 import { useMetadataStatus } from '../../hooks';
 import { getViewName } from '../utils/view';
 
@@ -14,14 +13,14 @@ const CACHED_COLLAPSED_FOLDERS_PREFIX = 'sf-metadata-collapsed-folders';
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const MetadataContext = React.createContext(null);
 
-export const MetadataProvider = ({ repoID, currentPath, selectMetadataView, children }) => {
+export const MetadataProvider = ({ repoID, selectMetadataView, children }) => {
   const [isLoading, setLoading] = useState(true);
   const [navigation, setNavigation] = useState([]);
   const [idViewMap, setIdViewMap] = useState({});
 
   const collapsedFoldersIds = useRef([]);
 
-  const { enableMetadata, enableFaceRecognition, isBeingBuilt, setIsBeingBuilt, updateEnableFaceRecognition: updateEnableFaceRecognitionAPI } = useMetadataStatus();
+  const { enableMetadata, isBeingBuilt, setIsBeingBuilt } = useMetadataStatus();
 
   const getCollapsedFolders = useCallback(() => {
     const strFoldedFolders = window.localStorage.getItem(`${CACHED_COLLAPSED_FOLDERS_PREFIX}-${repoID}`);
@@ -349,36 +348,6 @@ export const MetadataProvider = ({ repoID, currentPath, selectMetadataView, chil
     });
   }, [repoID, navigation]);
 
-  const updateEnableFaceRecognition = useCallback((newValue) => {
-    if (newValue === enableFaceRecognition) return;
-    if (newValue) {
-      toaster.success(gettext('Recognizing portraits. Please refresh the page later.'));
-      addView({ name: '_people', type: VIEW_TYPE.FACE_RECOGNITION });
-    } else {
-      if (idViewMap[FACE_RECOGNITION_VIEW_ID]) {
-        let isSelected = false;
-        if (currentPath.includes('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/')) {
-          const [, , currentViewId] = currentPath.split('/');
-          isSelected = currentViewId === FACE_RECOGNITION_VIEW_ID;
-        }
-        const folders = navigation.filter((nav) => nav.type === VIEWS_TYPE_FOLDER);
-        const targetFolder = folders.find((folder) => {
-          const { children } = folder;
-          if (Array.isArray(children) && children.length > 0) {
-            const view = children.find((viewNav) => viewNav._id === FACE_RECOGNITION_VIEW_ID);
-            if (view) {
-              return true;
-            }
-          }
-          return false;
-        });
-        const folderId = targetFolder ? targetFolder._id : null;
-        deleteView({ folderId, viewId: FACE_RECOGNITION_VIEW_ID, isSelected });
-      }
-    }
-    updateEnableFaceRecognitionAPI(newValue);
-  }, [enableFaceRecognition, currentPath, idViewMap, navigation, addView, deleteView, updateEnableFaceRecognitionAPI]);
-
   const modifyViewType = useCallback((viewId, update) => {
     metadataAPI.modifyView(repoID, viewId, update).then(res => {
       setIdViewMap({
@@ -427,8 +396,6 @@ export const MetadataProvider = ({ repoID, currentPath, selectMetadataView, chil
   return (
     <MetadataContext.Provider value={{
       isLoading,
-      enableFaceRecognition,
-      updateEnableFaceRecognition,
       isBeingBuilt,
       setIsBeingBuilt,
       navigation,

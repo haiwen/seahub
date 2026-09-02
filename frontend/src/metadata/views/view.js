@@ -3,7 +3,6 @@ import Loading from '../../components/loading';
 import CenteredLoading from '../../components/centered-loading';
 import Table from './table';
 import Gallery from './gallery';
-import FaceRecognition from './face-recognition';
 import Kanban from './kanban';
 import Map from './map';
 import Card from './card';
@@ -24,9 +23,6 @@ const View = () => {
       }
       case VIEW_TYPE.TABLE: {
         return <Table />;
-      }
-      case VIEW_TYPE.FACE_RECOGNITION: {
-        return (<FaceRecognition />);
       }
       case VIEW_TYPE.KANBAN: {
         return <Kanban />;

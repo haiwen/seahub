@@ -108,6 +108,11 @@
   padding-top: 20px;
 }
 
+.sdoc-chat-panel-content .sea-ai-ask-wrapper.empty .sea-ai-ask-chats {
+  justify-content: center;
+  padding-top: 0;
+}
+
 .sdoc-chat-panel-content .sea-ai-ask-wrapper.small-page .sea-ai-ask-chats-footer {
   margin-top: auto;
   padding-left: 16px;

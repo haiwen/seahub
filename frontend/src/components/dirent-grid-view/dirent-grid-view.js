@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, username, enableSeadoc, thumbnailDefaultSize, thumbnailSizeForOriginal, gettext, fileServerRoot, enableWhiteboard } from '../../utils/constants';
+import { siteRoot, username, enableSeadoc, thumbnailDefaultSize, thumbnailSizeForOriginal, gettext, fileServerRoot } from '../../utils/constants';
 import { updateImageThumbnail, Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import Loading from '../loading';
@@ -685,7 +685,6 @@ class DirentGridView extends React.Component {
     // Use shared function to get create menu options
     let direntsContainerMenuList = getCreateMenuList({
       enableSeadoc,
-      enableWhiteboard,
       isRepoEncrypted: currentRepoInfo.encrypted
     });
 

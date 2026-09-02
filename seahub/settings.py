@@ -970,12 +970,6 @@ EXCALIDRAW_SERVER_URL = SEADOC_SERVER_URL
 FILE_CONVERTER_SERVER_URL = 'http://127.0.0.1:8888'
 
 
-##########################
-# Settings for tldraw    #
-##########################
-
-ENABLE_WHITEBOARD = False
-
 ######################################
 # Settings for notification server   #
 ######################################
@@ -1082,7 +1076,7 @@ METADATA_FILE_TYPES = {
                'm4v', 'mkv', 'flv', 'vob'),
     '_audio': ('mp3', 'oga', 'ogg', 'wav', 'flac', 'opus', 'aac', 'au', 'm4a', 'aif', 'aiff', 'wma', 'mp1', 'mp2'),
     '_compressed': ('rar', 'zip', '7z', 'tar', 'gz', 'bz2', 'tgz', 'xz', 'lzma'),
-    '_diagram': ('draw', 'exdraw'),
+    '_diagram': ('exdraw',),
 }
 
 ##############################
@@ -1271,6 +1265,7 @@ JWT_PRIVATE_KEY = os.environ.get('JWT_PRIVATE_KEY', '') or JWT_PRIVATE_KEY
 ai_yaml_file_path = os.path.join(central_conf_dir, os.environ.get('SEAFILE_AI_CONFIG_NAME', 'seafile_ai_config.yaml'))
 ai_configs = ConfigParser(ai_yaml_file_path, 'seahub')
 EMBEDDING_MODEL = ai_configs.get('EMBEDDING_MODEL', {})
+EMBEDDING_MODEL_CONFIGURED = bool(validate_llm_models([EMBEDDING_MODEL]))
 EMBEDDING_DIMENSIONS = 1024
 try:
     dimensions = int(EMBEDDING_MODEL.get('dimensions', EMBEDDING_DIMENSIONS))

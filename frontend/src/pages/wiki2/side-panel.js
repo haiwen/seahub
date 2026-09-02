@@ -273,7 +273,7 @@ class SidePanel extends PureComponent {
         enableServerRender: false,
         isShowPublishPopover: false,
       });
-      toaster.success(gettext('Wiki custom URL deleted'));
+      toaster.success(gettext('Wiki unpublished'));
     }).catch((error) => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);

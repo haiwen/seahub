@@ -1,9 +1,9 @@
 from django.urls import re_path
-from .apis import MetadataRecognizeFaces, MetadataRecords, MetadataManage, MetadataColumns, MetadataRecord, \
-    MetadataFolders, MetadataViews, MetadataViewsMoveView, MetadataViewsDetailView, MetadataViewsDuplicateView, FacesRecords, \
-    FaceRecognitionManage, FacesRecord, MetadataExtractFileDetails, PeoplePhotos, MetadataTagsStatusManage, MetadataTags, \
+from .apis import MetadataRecords, MetadataManage, MetadataColumns, MetadataRecord, \
+    MetadataFolders, MetadataViews, MetadataViewsMoveView, MetadataViewsDetailView, MetadataViewsDuplicateView, \
+    MetadataExtractFileDetails, MetadataTagsStatusManage, MetadataTags, \
     MetadataTagsLinks, MetadataFileTags, MetadataTagFiles, MetadataMergeTags, MetadataTagsFiles, MetadataDetailsSettingsView, \
-    PeopleCoverPhoto, MetadataMigrateTags, MetadataExportTags, MetadataImportTags, MetadataGlobalHiddenColumnsView, \
+    MetadataMigrateTags, MetadataExportTags, MetadataImportTags, MetadataGlobalHiddenColumnsView, \
     MetadataBatchRecords, MetadataStatistics, MetadataCheckRecordsLimit, MetadataAISummaryStatusManage
 
 urlpatterns = [
@@ -21,14 +21,14 @@ urlpatterns = [
     re_path(r'^move-views/$', MetadataViewsMoveView.as_view(), name='api-v2.1-metadata-views-move'),
     re_path(r'^duplicate-view/$', MetadataViewsDuplicateView.as_view(), name='api-v2.1-metadata-view-duplicate'),
 
-    # face-recognition
-    re_path(r'^face-record/$', FacesRecord.as_view(), name='api-v2.1-metadata-face-record'),
-    re_path(r'^face-records/$', FacesRecords.as_view(), name='api-v2.1-metadata-face-records'),
-    re_path(r'^people-photos/(?P<people_id>.+)/$', PeoplePhotos.as_view(), name='api-v2.1-metadata-people-photos-get-delete'),
-    re_path(r'^people-photos/$', PeoplePhotos.as_view(), name='api-v2.1-metadata-people-photos-post'),
-    re_path(r'^face-recognition/$', FaceRecognitionManage.as_view(), name='api-v2.1-metadata-face-recognition'),
-    re_path(r'^recognize-faces/$', MetadataRecognizeFaces.as_view(), name='api-v2.1-metadata-recognize-faces'),
-    re_path(r'^people-cover-photo/(?P<people_id>.+)/$', PeopleCoverPhoto.as_view(), name='api-v2.1-metadata-people-cover-photo'),
+    # Face recognition is no longer available.
+    # re_path(r'^face-record/$', FacesRecord.as_view(), name='api-v2.1-metadata-face-record'),
+    # re_path(r'^face-records/$', FacesRecords.as_view(), name='api-v2.1-metadata-face-records'),
+    # re_path(r'^people-photos/(?P<people_id>.+)/$', PeoplePhotos.as_view(), name='api-v2.1-metadata-people-photos-get-delete'),
+    # re_path(r'^people-photos/$', PeoplePhotos.as_view(), name='api-v2.1-metadata-people-photos-post'),
+    # re_path(r'^face-recognition/$', FaceRecognitionManage.as_view(), name='api-v2.1-metadata-face-recognition'),
+    # re_path(r'^recognize-faces/$', MetadataRecognizeFaces.as_view(), name='api-v2.1-metadata-recognize-faces'),
+    # re_path(r'^people-cover-photo/(?P<people_id>.+)/$', PeopleCoverPhoto.as_view(), name='api-v2.1-metadata-people-cover-photo'),
 
     re_path(r'^extract-file-details/$', MetadataExtractFileDetails.as_view(), name='api-v2.1-metadata-extract-file-details'),
 

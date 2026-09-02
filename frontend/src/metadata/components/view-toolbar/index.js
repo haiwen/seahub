@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { EVENT_BUS_TYPE, VIEW_TYPE } from '../../constants';
 import TableViewToolbar from './table-view-toolbar';
 import GalleryViewToolbar from './gallery-view-toolbar';
-import FaceRecognitionViewToolbar from './face-recognition-view-toolbar';
 import KanbanViewToolBar from './kanban-view-toolbar';
 import CardViewToolBar from './card-view-toolbar';
 import MapViewToolBar from './map-view-toolbar';
@@ -95,13 +94,6 @@ const ViewToolBar = ({ viewId, isCustomPermission, onToggleDetail, onCloseDetail
           collaborators={collaborators}
           modifyFilters={modifyFilters}
           modifySorts={modifySorts}
-          onToggleDetail={onToggleDetail}
-        />
-      )}
-      {viewType === VIEW_TYPE.FACE_RECOGNITION && (
-        <FaceRecognitionViewToolbar
-          readOnly={readOnly}
-          isCustomPermission={isCustomPermission}
           onToggleDetail={onToggleDetail}
         />
       )}

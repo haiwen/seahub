@@ -11,6 +11,9 @@
 {% block extra_data %}
 isPro: '{{ is_pro }}',
 currentDirId: '{{ current_dir_id }}',
+llmModels: {{ llm_models|default:"[]"|safe }},
+chatAndSearchAvailable: {% if chat_and_search_available %} true {% else %} false {% endif %},
+isVirtualRepo: {% if repo.is_virtual %}true{% else %}false{% endif %},
 docPath: '{{ path|escapejs }}',
 docName: '{{ filename|escapejs }}',
 docUuid: '{{ file_uuid }}',
@@ -38,7 +41,6 @@ enableSeadoc: {% if enable_seadoc %} true {% else %} false {% endif %},
 {% block render_bundle %}
 <script type="text/javascript" src="{% static "scripts/lib/jquery.min.js" %}"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1536127546642"></script>
-<script src="{{ MEDIA_URL }}js/init-scroll-bar.js" ></script>
 <script type="text/javascript">
     var SEAFILE_GLOBAL = {
         csrfCookieName: '{{ CSRF_COOKIE_NAME }}'

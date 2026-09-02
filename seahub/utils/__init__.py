@@ -130,7 +130,6 @@ PREVIEW_FILEEXT = {
     AUDIO: ('mp3', 'oga', 'ogg', 'wav', 'flac', 'opus'),
     #'3D': ('stl', 'obj'),
     SEADOC: ('sdoc',),
-    TLDRAW: ('draw',),
     EXCALIDRAW: ('exdraw',),
     TEXT: ('admin', 'txt', 'log', 'csv', 'py', 'c', 'cpp', 'h', 'java', 'js', 'css', 'html', 'htm', 'xml', 'json', 'yml', 'yaml', 'sh', 'rb', 'php', 'go', 'rs', 'swift', 'kt", "kts', 'dart', 'ini', 'cfg', 'conf', 'toml'),
 }

@@ -7,7 +7,6 @@
   margin-top: 12px;
   padding: 0 16px 10px;
   overflow: auto hidden;
-  scrollbar-color: #C1C1C1 rgba(0, 0, 0, 0);
   border-bottom: 1px solid var(--bs-border-secondary-color);
 }
 

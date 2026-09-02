@@ -7,6 +7,7 @@ from seaserv import ccnet_api
 from django.urls import reverse
 from django.test import override_settings
 
+from seahub.organizations.models import OrgSettings
 from seahub.test_utils import BaseTestCase
 from tests.common.utils import randstring
 
@@ -161,3 +162,15 @@ class AdminOrganizationTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert json_resp['org_id'] == self.org.org_id
         assert json_resp['role'] == 'custom'
+
+    @patch('seahub.api2.endpoints.admin.organizations.seafile_api.org_set_download_rate_limit')
+    def test_can_clear_monthly_traffic_limit(self, mock_set_download_rate_limit):
+        OrgSettings.objects.add_or_update(self.org, monthly_traffic_limit=1024)
+
+        resp = self.client.put(self.url, 'monthly_traffic_limit=0',
+                               'application/x-www-form-urlencoded')
+
+        self.assertEqual(200, resp.status_code)
+        self.assertEqual(
+            OrgSettings.objects.get_monthly_traffic_limit_by_org(self.org), 0)
+        mock_set_download_rate_limit.assert_called_once_with(self.org.org_id, -1)

@@ -58,7 +58,7 @@ from seahub.utils import render_error, is_org_context, \
     get_site_scheme_and_netloc, get_file_history_suffix
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_types import (IMAGE, PDF, SVG, AUDIO,
-                                     MARKDOWN, TEXT, VIDEO, SEADOC, TLDRAW, EXCALIDRAW, EPUB)
+                                     MARKDOWN, TEXT, VIDEO, SEADOC, EXCALIDRAW, EPUB)
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.star import is_file_starred
 from seahub.utils.file_op import check_file_lock, \
@@ -777,6 +777,7 @@ def view_lib_file(request, repo_id, path):
         return_dict['assets_url'] = '/api/v2.1/seadoc/download-image/' + file_uuid
         return_dict['seadoc_server_url'] = SEADOC_SERVER_URL
         return_dict['enable_seadoc'] = ENABLE_SEADOC
+        return_dict['llm_models'] = json.dumps(settings.LLM_MODELS)
 
         can_edit_file = True
         locked_by_online_office = if_locked_by_online_office(repo_id, path)
@@ -907,33 +908,6 @@ def view_lib_file(request, repo_id, path):
         return render(request, template, return_dict)
 
     elif filetype == MARKDOWN:
-
-        mode = request.GET.get('mode', '')
-        if mode not in ('edit', 'viewer', 'plain'):
-            mode = 'viewer'
-        if mode == 'plain':
-            template = 'plain_' + template
-
-        return_dict['protocol'] = request.is_secure() and 'https' or 'http'
-        return_dict['domain'] = get_current_site(request).domain
-        return_dict['serviceUrl'] = get_service_url().rstrip('/')
-        return_dict['language_code'] = get_language()
-        return_dict['mode'] = mode
-        return_dict['share_link_expire_days_Default'] = SHARE_LINK_EXPIRE_DAYS_DEFAULT
-        return_dict['share_link_expire_days_min'] = SHARE_LINK_EXPIRE_DAYS_MIN
-        return_dict['share_link_expire_days_max'] = SHARE_LINK_EXPIRE_DAYS_MAX
-        return_dict['raw_path'] = raw_path
-
-        can_edit_file = True
-        if parse_repo_perm(permission).can_edit_on_web is False:
-            can_edit_file = False
-        elif is_locked and not locked_by_me:
-            can_edit_file = False
-        return_dict['can_edit_file'] = can_edit_file
-
-        return render(request, template, return_dict)
-
-    elif filetype == TLDRAW:
 
         mode = request.GET.get('mode', '')
         if mode not in ('edit', 'viewer', 'plain'):

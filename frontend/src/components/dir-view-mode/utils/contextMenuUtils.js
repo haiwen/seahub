@@ -1,11 +1,11 @@
 import TextTranslation from '@/utils/text-translation';
-import { isPro, username, enableAIChat, enableSeafileAI } from '@/utils/constants';
+import { isPro, username, chatAndSearchAvailable, enableAIChat, enableSeafileAI } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 
 const isDivider = (item) => item === 'Divider';
 
 const canUseAIChat = (repoInfo) => {
-  return Boolean(enableSeafileAI && enableAIChat && repoInfo && !repoInfo.is_virtual);
+  return Boolean(chatAndSearchAvailable && window.app.pageOptions.enableAISummary && repoInfo && !repoInfo.is_virtual);
 };
 
 const canChatWithDirents = (repoInfo, dirents) => {
@@ -167,11 +167,7 @@ export const getPermissions = (repoInfo) => {
   };
 };
 
-export const getCreateMenuList = ({
-  enableSeadoc = false,
-  enableWhiteboard = false,
-  isRepoEncrypted = false
-}) => {
+export const getCreateMenuList = ({ enableSeadoc = false, isRepoEncrypted = false }) => {
   const {
     NEW_FOLDER, NEW_FILE,
     NEW_MARKDOWN_FILE,
@@ -179,7 +175,6 @@ export const getCreateMenuList = ({
     NEW_POWERPOINT_FILE,
     NEW_WORD_FILE,
     NEW_SEADOC_FILE,
-    NEW_TLDRAW_FILE,
     NEW_EXCALIDRAW_FILE
   } = TextTranslation;
 
@@ -195,10 +190,6 @@ export const getCreateMenuList = ({
     NEW_POWERPOINT_FILE,
     NEW_WORD_FILE,
   );
-
-  if (enableWhiteboard) {
-    createMenuList.push(NEW_TLDRAW_FILE);
-  }
 
   return createMenuList;
 };

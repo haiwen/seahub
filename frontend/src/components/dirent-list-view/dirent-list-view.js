@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal, thumbnailDefaultSize, fileServerRoot, enableWhiteboard } from '../../utils/constants';
+import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal, thumbnailDefaultSize, fileServerRoot } from '../../utils/constants';
 import { updateImageThumbnail, Utils } from '../../utils/utils';
 import toaster from '../toast';
 import ModalPortal from '../modal-portal';
@@ -377,7 +377,6 @@ class DirentListView extends React.Component {
 
     const direntsContainerMenuList = getCreateMenuList({
       enableSeadoc,
-      enableWhiteboard,
       isRepoEncrypted: this.props.currentRepoInfo.encrypted
     });
 
