@@ -176,5 +176,14 @@
     "webpack-dev-server": "^5.2.2",
     "webpack-manifest-plugin": "^4.0.2",
     "workbox-webpack-plugin": "7.4.1"
+  },
+  "overrides": {
+    "lodash-es": "4.18.1",
+    "@excalidraw/excalidraw": {
+      "nanoid": "3.3.18",
+      "@excalidraw/mermaid-to-excalidraw": {
+        "nanoid": "5.1.16"
+      }
+    }
   }
 }
