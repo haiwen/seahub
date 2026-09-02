@@ -77,9 +77,9 @@ def get_org_traffic_limit(org):
     traffic_limit = 0
     org_role = OrgSettings.objects.get_role_by_org(org)
     role_perm_dict = get_enabled_role_permissions_by_role(org_role)
-    monthly_rate_limit_per_user = role_perm_dict.get('monthly_rate_limit_per_user', '')
-    if monthly_rate_limit_per_user:
+    monthly_download_traffic_limit_per_user = role_perm_dict.get('monthly_download_traffic_limit_per_user', '')
+    if monthly_download_traffic_limit_per_user:
         member_quota = OrgMemberQuota.objects.get_quota(org_id)
-        traffic_limit = get_quota_from_string(monthly_rate_limit_per_user) * member_quota
+        traffic_limit = get_quota_from_string(monthly_download_traffic_limit_per_user) * member_quota
 
     return traffic_limit
