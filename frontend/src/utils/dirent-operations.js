@@ -49,6 +49,11 @@ export const unlockFile = async (repoID, path, dirent, updateState) => {
 
 export const batchLockFile = async (repoID, repoInfo, dirents, updateState) => {
   const targetFiles = dirents.filter(dirent => dirent.permission == 'rw' && !dirent.name.endsWith('.sdoc') && !dirent.is_locked);
+  if (targetFiles.length > 100) {
+    toaster.danger(gettext('At most 100 files can be locked in one time.'));
+    return false;
+  }
+
   const paths = targetFiles.map(dirent => Utils.joinPath(dirent.parent_dir, dirent.name));
   const onUpdate = updateState && ((successPaths, updates) => {
     successPaths.forEach((successPath) => {
@@ -65,6 +70,11 @@ export const batchUnlockFile = async (repoID, repoInfo, dirents, updateState) =>
   const isRepoOwner = repoInfo.owner_email === username;
   const isAdmin = repoInfo.is_admin;
   const targetFiles = dirents.filter(dirent => dirent.permission == 'rw' && !dirent.name.endsWith('.sdoc') && dirent.is_locked && (dirent.locked_by_me || dirent.lock_owner == 'OnlineOffice' || isRepoOwner || isAdmin));
+  if (targetFiles.length > 100) {
+    toaster.danger(gettext('At most 100 files can be unlocked in one time.'));
+    return false;
+  }
+
   const paths = targetFiles.map(dirent => Utils.joinPath(dirent.parent_dir, dirent.name));
   const onUpdate = updateState && ((successPaths, updates) => {
     successPaths.forEach((successPath) => {
@@ -79,25 +89,30 @@ export const batchUnlockFile = async (repoID, repoInfo, dirents, updateState) =>
 
 export const batchLockUnlockFile = async (repoID, operation, paths, updateState) => {
   try {
-    const res = await seafileAPI.batchLockUnlockFile(repoID, operation, paths);
+    let res;
+    if (operation == 'lock') {
+      res = await seafileAPI.batchLockFile(repoID, paths);
+    } else {
+      res = await seafileAPI.batchUnlockFile(repoID, paths);
+    }
     const successPaths = res.data.success || [];
     const failed = res.data.failed || [];
 
     if (updateState && successPaths.length > 0) {
-      const isLock = operation === 'lock';
+      const isLocked = operation === 'lock';
       updateState(successPaths, {
-        is_locked: isLock,
-        locked_by_me: isLock,
-        lock_owner_name: isLock ? name : ''
+        is_locked: isLocked,
+        locked_by_me: isLocked,
+        lock_owner_name: isLocked ? name : ''
       });
       const fileName = Utils.getFileName(successPaths[0]);
       let msg;
       if (successPaths.length === 1) {
-        msg = isLock
+        msg = isLocked
           ? gettext('Successfully locked {name}.').replace('{name}', fileName)
           : gettext('Successfully unlocked {name}.').replace('{name}', fileName);
       } else {
-        msg = isLock
+        msg = isLocked
           ? gettext('Successfully locked {name} and {n} other item(s).').replace('{name}', fileName).replace('{n}', successPaths.length - 1)
           : gettext('Successfully unlocked {name} and {n} other item(s).').replace('{name}', fileName).replace('{n}', successPaths.length - 1);
       }

@@ -1041,10 +1041,17 @@ class SeafileAPI {
     return this.req.post(url, form);
   }
 
-  batchLockUnlockFile(repoID, operation, paths) {
-    const url = this.server + '/api/v2.1/repos/' + repoID + '/batch-lock-unlock-file/';
+  batchLockFile(repoID, paths) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/batch-lock-file/';
     const data = {
-      operation: operation,
+      paths: paths
+    };
+    return this.req.put(url, data);
+  }
+
+  batchUnlockFile(repoID, paths) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/batch-unlock-file/';
+    const data = {
       paths: paths
     };
     return this.req.put(url, data);
