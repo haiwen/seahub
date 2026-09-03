@@ -52,3 +52,13 @@ describe('getWikPageLink', () => {
     expect(getWikPageLink(serviceURL, url, pageId)).toBe(expectedUrl);
   });
 });
+
+describe('getWikPageLink with a port', () => {
+  it('preserves the port and service path', () => {
+    const serviceURL = 'http://127.0.0.1:8080/seahub';
+    const url = 'http://127.0.0.1:8080/seahub/wikis/6cbbded99bd272796a2/7Lj3/';
+    const pageId = 'y4Jw';
+    const expectedUrl = 'http://127.0.0.1:8080/seahub/wikis/6cbbded99bd272796a2/y4Jw/';
+    expect(getWikPageLink(serviceURL, url, pageId)).toBe(expectedUrl);
+  });
+});
