@@ -512,7 +512,7 @@ class AdminOrganization(APIView):
                                                       defaults={'value': force_adfs_login})
 
         monthly_download_traffic_limit = request.data.get('monthly_download_traffic_limit', None)
-        if monthly_download_traffic_limit:
+        if monthly_download_traffic_limit is not None:
             try:
                 monthly_download_traffic_limit = int(monthly_download_traffic_limit)
             except ValueError:
