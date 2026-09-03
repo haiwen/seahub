@@ -50,10 +50,10 @@
 
 - `Reviewer rules`: a general request such as `review current branch` or
   `review current code` is sufficient; do not require the user to specify a
-  reviewer type. Before reviewing frontend-related changes, read
-  `review-rules/code-reviewer.md`. When the change includes CSS, SCSS, Less,
-  CSS Modules, pages, or components, also read `review-rules/css-reviewer.md`
-  and apply its additional checks automatically.
+  reviewer type. Before reviewing frontend-related changes, the reviewer must
+  read and apply `review-rules/code-reviewer.md`. When the change includes CSS,
+  SCSS, Less, CSS Modules, pages, or components, the reviewer must also read
+  and apply `review-rules/css-reviewer.md`.
 - `Pull request`: state the affected screen and commands run; attach screenshots
   or recordings for visual changes.
 - `Integration`: identify new translation keys and backend API expectations.
