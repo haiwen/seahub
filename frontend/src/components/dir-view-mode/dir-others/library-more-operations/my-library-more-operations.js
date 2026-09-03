@@ -49,6 +49,10 @@ class LibraryMoreOperations extends React.Component {
     e.preventDefault();
     e.stopPropagation();
     switch (item) {
+      case 'Star':
+      case 'Unstar':
+        this.onToggleStarRepo();
+        break;
       case 'Rename':
         this.onRenameToggle();
         break;
@@ -84,6 +88,33 @@ class LibraryMoreOperations extends React.Component {
         break;
       default:
         break;
+    }
+  };
+
+  onToggleStarRepo = () => {
+    const { repo } = this.props;
+    const { repo_name: repoName } = repo;
+    const onSuccess = () => {
+      this.props.updateRepoInfo({ starred: !repo.starred });
+    };
+    if (repo.starred) {
+      seafileAPI.unstarItem(repo.repo_id, '/').then(() => {
+        onSuccess();
+        const msg = gettext('Successfully unstarred {library_name_placeholder}.').replace('{library_name_placeholder}', repoName);
+        toaster.success(msg);
+      }).catch(error => {
+        const errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    } else {
+      seafileAPI.starItem(repo.repo_id, '/').then(() => {
+        onSuccess();
+        const msg = gettext('Successfully starred {library_name_placeholder}.').replace('{library_name_placeholder}', repoName);
+        toaster.success(msg);
+      }).catch(error => {
+        const errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
     }
   };
 
@@ -175,6 +206,7 @@ class LibraryMoreOperations extends React.Component {
           isPC={true}
           isLibView={true}
           repo={repo}
+          isStarred={repo.starred}
           onMenuItemClick={this.onMenuItemClick}
         >
           <>
