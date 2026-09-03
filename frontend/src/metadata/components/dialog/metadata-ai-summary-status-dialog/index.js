@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { Button } from 'reactstrap';
 import Switch from '../../../../components/switch';
 import toaster from '../../../../components/toast';
 import OpIcon from '../../../../components/op-icon';
@@ -8,13 +9,16 @@ import { Utils } from '../../../../utils/utils';
 import { gettext } from '../../../../utils/constants';
 import { EVENT_BUS_TYPE } from '../../../constants';
 import TurnOffConfirmDialog from '../turn-off-confirm-dialog';
+import StatusDialog from './status-dialog';
 
 import '../metadata-face-recognition-dialog/index.css';
+import './index.css';
 
 const MetadataAISummaryStatusDialog = ({ value: oldValue, repoID, submit, enableMetadata }) => {
   const [value, setValue] = useState(oldValue);
   const [submitting, setSubmitting] = useState(false);
   const [showTurnOffConfirmDialog, setShowTurnOffConfirmDialog] = useState(false);
+  const [showStatusDialog, setShowStatusDialog] = useState(false);
 
   const onSubmit = useCallback((nextValue) => {
     if (!nextValue) {
@@ -52,6 +56,10 @@ const MetadataAISummaryStatusDialog = ({ value: oldValue, repoID, submit, enable
       setSubmitting(false);
     });
   }, [repoID, submit]);
+
+  const statusDialogToggle = useCallback(() => {
+    setShowStatusDialog((isOpen) => !isOpen);
+  }, []);
 
   const onValueChange = useCallback(() => {
     const nextValue = !value;
@@ -94,7 +102,18 @@ const MetadataAISummaryStatusDialog = ({ value: oldValue, repoID, submit, enable
         <p className="setting-tip">
           {gettext('Enable AI chat and AI search on your files. Your files will be summarized to enable AI to efficiently find your files during chat.')}
         </p>
+        {value && (
+          <Button
+            className="mt-2 border-0 font-weight-normal ai-summary-view-status-button"
+            onClick={statusDialogToggle}
+          >
+            {gettext('View status')}
+          </Button>
+        )}
       </>
+      {showStatusDialog && (
+        <StatusDialog repoID={repoID} toggle={statusDialogToggle} />
+      )}
       {showTurnOffConfirmDialog && (
         <TurnOffConfirmDialog title={gettext('Turn off AI Chat and Search')} toggle={turnOffConfirmToggle} submit={turnOffConfirmSubmit}>
           <p>{gettext('Do you really want to turn off AI Chat and Search? AI chat and file search will no longer be available, and existing AI summaries will all be deleted.')}</p>

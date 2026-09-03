@@ -1,0 +1,105 @@
+.library-setting-item .ai-summary-view-status-button {
+  height: 2rem;
+  padding: 3px 12px;
+  background: var(--bs-bg-color);
+}
+
+.library-setting-item .ai-summary-view-status-button.btn.btn-secondary:hover {
+  background: var(--bs-icon-btn-hover-bg-color);
+}
+
+.ai-summary-status-dialog {
+  max-height: calc(100% - 56px);
+  height: auto !important;
+}
+
+.ai-summary-status-dialog .modal-body {
+  display: flex;
+  align-items: center;
+}
+
+.ai-summary-status-container {
+  width: 100%;
+}
+
+.ai-summary-status-container .status-header {
+  margin-bottom: 24px;
+}
+
+.ai-summary-status-container .timeline {
+  position: relative;
+}
+
+.ai-summary-status-container .timeline-item {
+  display: flex;
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.ai-summary-status-container .timeline-item:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 20px;
+  top: 40px;
+  bottom: -32px;
+  width: 1px;
+  background-color: var(--bs-border-tertiary-color);
+}
+
+.ai-summary-status-container .timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+.ai-summary-status-container .timeline-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  background: var(--bs-body-bg);
+  z-index: 1;
+}
+
+.ai-summary-status-container .timeline-icon .seafile-multicolor-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.ai-summary-status-container .timeline-icon .seafile-multicolor-icon-check-circle {
+  color: #009933;
+}
+
+.ai-summary-status-container .timeline-icon .seafile-multicolor-icon-exclamation-circle {
+  color: var(--bs-danger);
+}
+
+.ai-summary-status-container .timeline-icon .seafile-multicolor-icon-time {
+  color: #ffa500;
+  opacity: 0.7;
+}
+
+.ai-summary-status-container .timeline-icon .seafile-multicolor-icon-spinner {
+  color: #007bff;
+  animation: ai-summary-status-spin 1s linear infinite;
+}
+
+.ai-summary-status-container .timeline-content {
+  margin-left: 8px;
+}
+
+.ai-summary-status-container .timeline-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.ai-summary-status-container .timeline-stats {
+  color: var(--bs-body-secondary-color);
+}
+
+@keyframes ai-summary-status-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

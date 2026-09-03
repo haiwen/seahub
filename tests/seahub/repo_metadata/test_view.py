@@ -1,7 +1,10 @@
 import os
 import json
 import time
+from unittest.mock import patch
+
 from django.urls import NoReverseMatch, reverse
+from django.utils import timezone
 
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.test_utils import BaseTestCase
@@ -83,6 +86,51 @@ class MetadataManagerTest(BaseTestCase):
     #         'type': 'face_recognition',
     #     })
     #     self.assertEqual(400, resp.status_code)
+
+
+class MetadataAISummaryStatusTest(BaseTestCase):
+    def setUp(self):
+        self.login_as(self.user)
+        self.repo_id = self.create_repo(
+            name='test-repo',
+            desc='',
+            username=self.user.username,
+            passwd=None,
+        )
+        self.url = reverse('api-v2.1-metadata-summary-status', args=[self.repo_id])
+        self.metadata = RepoMetadata.objects.enable_metadata_and_tags(self.repo_id)
+        self.metadata.summary_enabled = True
+        self.metadata.ai_summary_indexed_at = timezone.now()
+        self.metadata.save(update_fields=['summary_enabled', 'ai_summary_indexed_at'])
+
+    @patch('seahub.repo_metadata.apis.MetadataServerAPI')
+    def test_get_ai_summary_status(self, mock_metadata_server_api):
+        status_cases = {
+            '': ('pending', 'completed'),
+            'in_summary': ('crawling', 'pending'),
+            'indexing': ('completed', 'crawling'),
+            'summary_failed': ('failed', 'pending'),
+            'index_failed': ('completed', 'failed'),
+        }
+
+        for processing_status, expected_statuses in status_cases.items():
+            self.metadata.ai_processing_status = processing_status
+            self.metadata.save(update_fields=['ai_processing_status'])
+            mock_metadata_server_api.return_value.query_rows.side_effect = [
+                {'results': [{'count': 5}]},
+                {'results': [{'count': 4}]},
+                {'results': [{'count': 3}]},
+            ]
+
+            response = self.client.get(self.url)
+            self.assertEqual(200, response.status_code)
+            result = json.loads(response.content)
+            self.assertEqual(5, result['total_files'])
+            self.assertEqual(4, result['summary']['processed_count'])
+            self.assertEqual(3, result['index']['indexed_count'])
+            self.assertEqual(expected_statuses[0], result['summary']['status'])
+            self.assertEqual(expected_statuses[1], result['index']['status'])
+            self.assertTrue(result['latest_index_time'].endswith(('Z', '+00:00')))
 
 
 class MetadataDetailSettingsTest(BaseTestCase):
