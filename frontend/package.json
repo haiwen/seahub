@@ -98,8 +98,7 @@
       "<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}",
       "<rootDir>/src/**/?(*.)(spec|test).{js,jsx,mjs}"
     ],
-    "testEnvironment": "node",
-    "testURL": "http://localhost",
+    "testEnvironment": "jsdom",
     "transform": {
       "^.+\\.(js|jsx|mjs)$": "<rootDir>/node_modules/babel-jest",
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
@@ -119,7 +118,10 @@
       "web.jsx",
       "jsx",
       "node"
-    ]
+    ],
+    "testEnvironmentOptions": {
+      "url": "http://localhost"
+    }
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
@@ -130,7 +132,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "13.5.0",
     "babel-eslint": "10.1.0",
-    "babel-jest": "^27.4.2",
+    "babel-jest": "30.3.0",
     "babel-loader": "^8.2.3",
     "babel-plugin-dynamic-import-node": "2.3.3",
     "babel-plugin-named-asset-import": "^0.3.7",
@@ -150,7 +152,8 @@
     "fs-extra": "^10.0.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "30.3.0",
-    "jest-resolve": "^27.4.2",
+    "jest-environment-jsdom": "30.3.0",
+    "jest-resolve": "30.3.0",
     "jest-watch-typeahead": "3.0.1",
     "mini-css-extract-plugin": "^2.4.5",
     "node-polyfill-webpack-plugin": "4.1.0",
