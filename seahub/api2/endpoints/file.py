@@ -890,3 +890,183 @@ class FileView(APIView):
         result['success'] = True
         result['commit_id'] = repo.head_cmmt_id
         return Response(result)
+
+
+class FileBatchLockView(APIView):
+    """Lock multiple files in one library.
+
+    Files are processed independently so an invalid or inaccessible file does
+    not prevent other requested files from being processed.
+    """
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def put(self, request, repo_id, format=None):
+        if not is_pro_version():
+            error_msg = 'file lock feature only supported in professional edition.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        paths = request.data.get('paths')
+        if not isinstance(paths, list) or not paths:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'paths invalid.')
+        if len(paths) > 100:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'paths limit exceeded (max 100).')
+
+        expire = request.data.get('expire', 0)
+        try:
+            expire = int(expire)
+        except (TypeError, ValueError):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'expire invalid.')
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = request.user.username
+        result = {'success': [], 'failed': []}
+        processed_paths = set()
+        folder_permissions = {}
+
+        for raw_path in paths:
+            if not isinstance(raw_path, str):
+                result['failed'].append({'path': raw_path, 'error_msg': 'path invalid.'})
+                continue
+
+            path = normalize_file_path(raw_path)
+            if not path:
+                result['failed'].append({'path': raw_path, 'error_msg': 'path invalid.'})
+                continue
+
+            if path in processed_paths:
+                continue
+            processed_paths.add(path)
+
+            if not seafile_api.get_file_id_by_path(repo_id, path):
+                result['failed'].append({'path': path, 'error_msg': 'File %s not found.' % path})
+                continue
+
+            parent_dir = os.path.dirname(path)
+            if parent_dir not in folder_permissions:
+                folder_permissions[parent_dir] = check_folder_permission(
+                    request, repo_id, parent_dir)
+            if folder_permissions[parent_dir] != PERMISSION_READ_WRITE:
+                result['failed'].append({'path': path, 'error_msg': 'Permission denied.'})
+                continue
+
+            try:
+                is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+            except Exception as e:
+                logger.error(e)
+                result['failed'].append({'path': path, 'error_msg': 'Internal Server Error'})
+                continue
+
+            locked_by_online_office = if_locked_by_online_office(repo_id, path)
+            try:
+                if expire < 0 and locked_by_online_office:
+                    seafile_api.unlock_file(repo_id, path)
+                    seafile_api.lock_file(repo_id, path, username, expire)
+                elif is_locked:
+                    result['failed'].append({'path': path, 'error_msg': _('File is locked')})
+                    continue
+                elif expire > 0:
+                    seafile_api.lock_file(repo_id, path, username,
+                                          int(time.time()) + expire)
+                else:
+                    seafile_api.lock_file(repo_id, path, username, expire)
+            except SearpcError as e:
+                logger.error(e)
+                result['failed'].append({'path': path, 'error_msg': 'Internal Server Error'})
+                continue
+
+            result['success'].append(path)
+
+        return Response(result)
+
+
+class FileBatchUnlockView(APIView):
+    """Unlock multiple files in one library.
+
+    Files are processed independently so an invalid or inaccessible file does
+    not prevent other requested files from being processed.
+    """
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def put(self, request, repo_id, format=None):
+        if not is_pro_version():
+            error_msg = 'file lock feature only supported in professional edition.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        paths = request.data.get('paths')
+        if not isinstance(paths, list) or not paths:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'paths invalid.')
+        if len(paths) > 100:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'paths limit exceeded (max 100).')
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = request.user.username
+        can_unlock_any_file = is_repo_owner(request, repo_id, username) or \
+            is_repo_admin(username, repo_id)
+        result = {'success': [], 'failed': []}
+        processed_paths = set()
+        folder_permissions = {}
+
+        for raw_path in paths:
+            if not isinstance(raw_path, str):
+                result['failed'].append({'path': raw_path, 'error_msg': 'path invalid.'})
+                continue
+
+            path = normalize_file_path(raw_path)
+            if not path:
+                result['failed'].append({'path': raw_path, 'error_msg': 'path invalid.'})
+                continue
+
+            if path in processed_paths:
+                continue
+            processed_paths.add(path)
+
+            if not seafile_api.get_file_id_by_path(repo_id, path):
+                result['failed'].append({'path': path, 'error_msg': 'File %s not found.' % path})
+                continue
+
+            parent_dir = os.path.dirname(path)
+            if parent_dir not in folder_permissions:
+                folder_permissions[parent_dir] = check_folder_permission(
+                    request, repo_id, parent_dir)
+            if folder_permissions[parent_dir] != PERMISSION_READ_WRITE:
+                result['failed'].append({'path': path, 'error_msg': 'Permission denied.'})
+                continue
+
+            try:
+                is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+            except Exception as e:
+                logger.error(e)
+                result['failed'].append({'path': path, 'error_msg': 'Internal Server Error'})
+                continue
+
+            locked_by_online_office = if_locked_by_online_office(repo_id, path)
+            try:
+                if not is_locked:
+                    result['failed'].append({'path': path, 'error_msg': _('File is not locked.')})
+                    continue
+                if not (locked_by_me or locked_by_online_office or can_unlock_any_file):
+                    result['failed'].append({'path': path, 'error_msg': 'You can not unlock this file.'})
+                    continue
+                seafile_api.unlock_file(repo_id, path)
+            except SearpcError as e:
+                logger.error(e)
+                result['failed'].append({'path': path, 'error_msg': 'Internal Server Error'})
+                continue
+
+            result['success'].append(path)
+
+        return Response(result)
