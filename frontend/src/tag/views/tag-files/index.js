@@ -315,6 +315,7 @@ const TagFiles = () => {
       eventBus.subscribe(EVENT_BUS_TYPE.LOCK_FILE, lockTagFile),
       eventBus.subscribe(EVENT_BUS_TYPE.UNLOCK_FILE, unlockTagFile),
       eventBus.subscribe(EVENT_BUS_TYPE.FREEZE_DOCUMENT, freezeTagDocument),
+      eventBus.subscribe(EVENT_BUS_TYPE.UNFREEZE_DOCUMENT, unfreezeTagDocument),
       eventBus.subscribe(EVENT_BUS_TYPE.FILE_HISTORY, onHistory),
       eventBus.subscribe(EVENT_BUS_TYPE.FILE_ACCESS_LOG, openTagFileAccessLog),
       eventBus.subscribe(EVENT_BUS_TYPE.PROPERTIES, displayFileDetails),

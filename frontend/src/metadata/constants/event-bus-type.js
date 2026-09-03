@@ -141,6 +141,7 @@ export const EVENT_BUS_TYPE = {
   LOCK_FILE: 'lock_file',
   UNLOCK_FILE: 'unlock_file',
   FREEZE_DOCUMENT: 'freeze_document',
+  UNFREEZE_DOCUMENT: 'unfreeze_document',
   FILE_HISTORY: 'file_history',
   FILE_ACCESS_LOG: 'file_access_log',
   PROPERTIES: 'properties',

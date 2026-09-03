@@ -64,11 +64,11 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
       case TextTranslation.UNLOCK.key:
         eventBus && eventBus.dispatch(EVENT_BUS_TYPE.UNLOCK_FILE);
         break;
-      case TextTranslation.UNFREEZE_DOCUMENT.key:
-        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.UNLOCK_FILE);
-        break;
       case TextTranslation.FREEZE_DOCUMENT.key:
         eventBus && eventBus.dispatch(EVENT_BUS_TYPE.FREEZE_DOCUMENT);
+        break;
+      case TextTranslation.UNFREEZE_DOCUMENT.key:
+        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.UNFREEZE_DOCUMENT);
         break;
       case TextTranslation.HISTORY.key:
         eventBus && eventBus.dispatch(EVENT_BUS_TYPE.FILE_HISTORY);
