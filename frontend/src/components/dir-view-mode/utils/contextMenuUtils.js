@@ -1,5 +1,5 @@
 import TextTranslation from '@/utils/text-translation';
-import { chatAndSearchAvailable, username } from '@/utils/constants';
+import { isPro, username, chatAndSearchAvailable, enableAIChat, enableSeafileAI } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 
 const isDivider = (item) => item === 'Divider';
@@ -75,11 +75,6 @@ export const addChatWithAIOption = (menuList, repoInfo, dirents) => {
   return trimTrailingDividers(addStandaloneChatWithAIGroup(nextMenuList, chatOption));
 };
 
-export const buildSelectedDirentsChatMenuList = (menuList, repoInfo, dirents) => {
-  const nextMenuList = addChatWithAIOption(menuList, repoInfo, dirents);
-  return trimTrailingDividers(nextMenuList);
-};
-
 export const canShowChatWithAI = canChatWithDirents;
 
 export const getDirentItemMenuList = (repoInfo, dirent, isContextmenu = true) => {
@@ -88,29 +83,80 @@ export const getDirentItemMenuList = (repoInfo, dirent, isContextmenu = true) =>
   return addChatWithAIOption(menuList, repoInfo, [dirent]);
 };
 
-export const getBatchMenuList = (repoInfo, selectedDirents, getItemMenuList) => {
-  const { isCustomPermission, customPermission } = Utils.getUserPermission(repoInfo.user_perm);
+const addLockUnlockMultiOption = (repoInfo, selectedDirents, list) => {
+  if (!isPro || selectedDirents.some(item => item.type != 'file')) {
+    return list;
+  }
+
+  const isRepoOwner = repoInfo.owner_email === username;
+  const isAdmin = repoInfo.is_admin;
+  const canLockFiles = selectedDirents.some(dirent => dirent.permission == 'rw' && !dirent.name.endsWith('.sdoc') && !dirent.is_locked);
+  const canUnlockFiles = selectedDirents.some(dirent => dirent.permission == 'rw' && !dirent.name.endsWith('.sdoc') && dirent.is_locked && (dirent.locked_by_me || dirent.lock_owner == 'OnlineOffice' || isRepoOwner || isAdmin));
+  if (canLockFiles || canUnlockFiles) {
+    list.push('Divider');
+  }
+  if (canLockFiles) {
+    list.push(TextTranslation.LOCK);
+  }
+  if (canUnlockFiles) {
+    list.push(TextTranslation.UNLOCK);
+  }
+  return list;
+};
+
+export const getBatchMenuList = (repoInfo, userPerm, selectedDirents, getItemMenuList) => {
+  const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
+
+  let canModify = false;
+  let canCopy = false;
+  let canDelete = false;
+  let canDownload = false;
+  switch (userPerm) {
+    case 'rw':
+    case 'admin':
+      canModify = true;
+      canCopy = true;
+      canDelete = true;
+      canDownload = true;
+      break;
+    case 'cloud-edit':
+      canModify = true;
+      canCopy = true;
+      canDelete = true;
+      break;
+    case 'r':
+      canCopy = true;
+      canDownload = true;
+      break;
+  }
+  if (isCustomPermission) {
+    const { permission } = customPermission;
+    canModify = permission.modify;
+    canCopy = permission.copy;
+    canDownload = permission.download;
+    canDelete = permission.delete;
+  }
 
   if (selectedDirents.length <= 1) {
     return getItemMenuList(selectedDirents[0]);
   }
 
   let batchOptions = [];
-  if (isCustomPermission) {
-    const { modify: canModify, copy: canCopy, download: canDownload, delete: canDelete } = customPermission.permission;
-    canDownload && batchOptions.push(TextTranslation.DOWNLOAD);
-    canDelete && batchOptions.push(TextTranslation.DELETE);
-    canModify && batchOptions.push(TextTranslation.MOVE);
-    canCopy && batchOptions.push(TextTranslation.COPY);
-  } else {
-    batchOptions = [
-      TextTranslation.DOWNLOAD,
-      TextTranslation.DELETE,
-      TextTranslation.MOVE,
-      TextTranslation.COPY,
-    ];
+  canDownload && batchOptions.push(TextTranslation.DOWNLOAD);
+  canDelete && batchOptions.push(TextTranslation.DELETE);
+  canModify && batchOptions.push(TextTranslation.MOVE);
+  canCopy && batchOptions.push(TextTranslation.COPY);
+
+  if (canChatWithDirents(repoInfo, selectedDirents)) {
+    batchOptions.push('Divider', TextTranslation.CHAT_WITH_AI);
   }
-  return addChatWithAIOption(batchOptions, repoInfo, selectedDirents);
+
+  addLockUnlockMultiOption(repoInfo, selectedDirents, batchOptions);
+
+  if (isDivider(batchOptions[0])) {
+    batchOptions.shift();
+  }
+  return batchOptions;
 };
 
 export const getPermissions = (repoInfo) => {
