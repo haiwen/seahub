@@ -1,5 +1,5 @@
 import TextTranslation from '@/utils/text-translation';
-import { isPro, username, chatAndSearchAvailable, enableAIChat, enableSeafileAI } from '@/utils/constants';
+import { isPro, username, chatAndSearchAvailable } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 
 const isDivider = (item) => item === 'Divider';
