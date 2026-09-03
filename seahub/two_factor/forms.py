@@ -3,6 +3,7 @@ from binascii import unhexlify
 from time import time
 
 from django import forms
+from django.db import IntegrityError, transaction
 from django.forms import ModelForm, Form
 from django.utils.translation import gettext_lazy as _
 
@@ -51,6 +52,10 @@ class DeviceValidationForm(forms.Form):
         if not self.device.verify_token(token):
             raise forms.ValidationError(self.error_messages['invalid_token'])
         return token
+
+
+class TOTPDeviceAlreadyExists(Exception):
+    """Raised when a completed setup conflicts with an existing TOTP device."""
 
 
 class TOTPDeviceForm(forms.Form):
@@ -102,10 +107,27 @@ class TOTPDeviceForm(forms.Form):
         return token
 
     def save(self):
-        return TOTPDevice.objects.create(user=self.user.username, key=self.key,
-                                         tolerance=self.tolerance, t0=self.t0,
-                                         step=self.step, drift=self.drift,
-                                         digits=self.digits)
+        try:
+            with transaction.atomic():
+                return TOTPDevice.objects.create(
+                    user=self.user.username,
+                    key=self.key,
+                    tolerance=self.tolerance,
+                    t0=self.t0,
+                    step=self.step,
+                    drift=self.drift,
+                    digits=self.digits,
+                )
+        except IntegrityError:
+            try:
+                device = TOTPDevice.objects.get(user=self.user.username)
+            except TOTPDevice.DoesNotExist:
+                raise
+
+            if device.key == self.key:
+                return device
+
+            raise TOTPDeviceAlreadyExists
 
 
 class DisableForm(forms.Form):
