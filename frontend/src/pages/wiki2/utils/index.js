@@ -48,24 +48,28 @@ const getCurrentPageConfig = (pages, pageId) => {
 };
 
 const getWikPageLink = (serviceURL, url, pageId) => {
-  let pathname = url.replace(serviceURL, '');
-  let hash = '';
+  const serviceUrlObject = new URL(serviceURL);
+  const currentUrl = new URL(url, serviceURL);
+  const servicePath = serviceUrlObject.pathname.replace(/\/+$/, '');
+  const currentPath = currentUrl.pathname;
 
-  // For demo test when serviceURL is http://127.0.0.1:80
-  if (!url.startsWith(serviceURL)) {
-    const newUrl = new URL(url);
-    pathname = newUrl.pathname;
-    hash = newUrl.hash;
-  } else {
-    const currentUrl = new URL(url);
-    pathname = currentUrl.pathname;
-    hash = currentUrl.hash;
+  // Remove the service URL path prefix before parsing `/wikis/${wikiId}/${pageId}/`.
+  // Without this step, a deployment under `/seahub` shifts the path indexes and
+  // causes the service path to be duplicated in the returned URL.
+  const pathname = servicePath &&
+    (currentPath === servicePath || currentPath.startsWith(`${servicePath}/`))
+    ? currentPath.slice(servicePath.length)
+    : currentPath;
+  const pathArr = pathname.split('/');
+  const wikiIndex = pathArr.indexOf('wikis');
+
+  if (wikiIndex === -1 || !pathArr[wikiIndex + 1]) {
+    return `${serviceUrlObject.origin}${servicePath}${pathname}${currentUrl.hash}`;
   }
-  let pathArr = pathname.split('/');
-  // pathname is like `/wikis/${wikiId}/{pageId}/`
-  pathArr[3] = pageId;
-  pathname = pathArr.join('/');
-  return `${serviceURL}${pathname}${hash}`;
+
+  // pathname is like `/wikis/${wikiId}/${pageId}/`.
+  pathArr[wikiIndex + 2] = pageId;
+  return `${serviceUrlObject.origin}${servicePath}${pathArr.join('/')}${currentUrl.hash}`;
 };
 
 const throttle = (fn, delay) => {
