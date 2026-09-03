@@ -125,20 +125,20 @@ const HideColumnPopover = ({ hidePopover, onChange, readOnly, target, placement,
               onClick={hideAll}
               role="button"
               tabIndex={0}
-              aria-label={gettext('Unwatch all')}
+              aria-label={gettext('Hide all')}
               onKeyDown={Utils.onKeyDown}
             >
-              {gettext('Unwatch all')}
+              {gettext('Hide all')}
             </div>
             <div
               className="sf-metadata-hide-columns-operation px-2"
               onClick={showAll}
               role="button"
               tabIndex={0}
-              aria-label={gettext('Watch all')}
+              aria-label={gettext('Show all')}
               onKeyDown={Utils.onKeyDown}
             >
-              {gettext('Watch all')}
+              {gettext('Show all')}
             </div>
           </div>
         )}
