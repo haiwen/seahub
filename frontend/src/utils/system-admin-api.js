@@ -638,8 +638,8 @@ class SystemAdminAPI {
     if (orgInfo.quota != undefined) {
       formData.append('quota', orgInfo.quota);
     }
-    if (orgInfo.monthlyTrafficLimit != undefined) {
-      formData.append('monthly_traffic_limit', orgInfo.monthlyTrafficLimit);
+    if (orgInfo.monthlyDownloadTrafficLimit != undefined) {
+      formData.append('monthly_download_traffic_limit', orgInfo.monthlyDownloadTrafficLimit);
     }
     if (orgInfo.role) {
       formData.append('role', orgInfo.role);

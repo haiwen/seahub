@@ -20,7 +20,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.utils import get_org_traffic_by_month
 from seahub.utils.file_size import get_file_size_unit
 
-from seahub.organizations.utils import get_org_traffic_limit
+from seahub.organizations.utils import get_org_monthly_download_traffic_limit
 from seahub.organizations.api.permissions import IsOrgAdmin
 from seahub.organizations.models import OrgAdminSettings, \
         OrgMemberQuota, FORCE_ADFS_LOGIN, DISABLE_ORG_ENCRYPTED_LIBRARY, \
@@ -90,7 +90,7 @@ def get_org_info(request, org_id):
 
     current_date = datetime.now()
     info['traffic_this_month'] = get_org_traffic_by_month(org_id, current_date)
-    info['traffic_limit'] = get_org_traffic_limit(request.user.org)
+    info['monthly_download_traffic_limit'] = get_org_monthly_download_traffic_limit(request.user.org)
 
     if dj_settings.ENABLE_SEAFILE_AI and dj_settings.SEAFILE_AI_SERVER_URL:
         info['ai_credit'] = get_ai_credit_by_user(request.user, org_id)

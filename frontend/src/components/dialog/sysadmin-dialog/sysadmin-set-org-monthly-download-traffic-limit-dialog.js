@@ -6,10 +6,10 @@ import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
-  updateMonthlyTrafficLimit: PropTypes.func.isRequired
+  updateMonthlyDownloadTrafficLimit: PropTypes.func.isRequired
 };
 
-class SysAdminSetOrgMonthlyTrafficLimitDialog extends React.Component {
+class SysAdminSetOrgMonthlyDownloadTrafficLimitDialog extends React.Component {
 
   constructor(props) {
     super(props);
@@ -39,12 +39,12 @@ class SysAdminSetOrgMonthlyTrafficLimitDialog extends React.Component {
   };
 
   handleSubmit = () => {
-    this.props.updateMonthlyTrafficLimit(this.state.traffic.trim());
+    this.props.updateMonthlyDownloadTrafficLimit(this.state.traffic.trim());
     this.toggle();
   };
 
   handleUnset = () => {
-    this.props.updateMonthlyTrafficLimit(0);
+    this.props.updateMonthlyDownloadTrafficLimit(0);
     this.toggle();
   };
 
@@ -82,6 +82,6 @@ class SysAdminSetOrgMonthlyTrafficLimitDialog extends React.Component {
   }
 }
 
-SysAdminSetOrgMonthlyTrafficLimitDialog.propTypes = propTypes;
+SysAdminSetOrgMonthlyDownloadTrafficLimitDialog.propTypes = propTypes;
 
-export default SysAdminSetOrgMonthlyTrafficLimitDialog;
+export default SysAdminSetOrgMonthlyDownloadTrafficLimitDialog;
