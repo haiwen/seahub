@@ -60,69 +60,32 @@ export const TagViewProvider = ({
 
   const moveTagFile = useCallback(() => {
     if (!selectedFileIds || selectedFileIds.length === 0) return null;
+    const selectedFile = getFileById(tagFiles, selectedFileIds[0]);
+    const path = selectedFile[TAG_FILE_KEY.PARENT_DIR];
+    const dirent = { name: selectedFile[TAG_FILE_KEY.NAME] };
+    const callback = (targetRepo, dirent, targetParentPath, sourceParentPath, isByDialog) => {
+      seafileAPI.moveDir(repoID, targetRepo.repo_id, targetParentPath, sourceParentPath, dirent.name).then(res => {
+        moveFileCallback && moveFileCallback(repoID, targetRepo, dirent, targetParentPath, sourceParentPath, res.data.task_id || null, isByDialog);
+        updateSelectedFileIds([]);
+      });
+    };
 
-    if (selectedFileIds.length === 1) {
-      const selectedFile = getFileById(tagFiles, selectedFileIds[0]);
-      const path = selectedFile[TAG_FILE_KEY.PARENT_DIR];
-      const dirent = { name: selectedFile[TAG_FILE_KEY.NAME] };
-      const callback = (targetRepo, dirent, targetParentPath, sourceParentPath, isByDialog) => {
-        seafileAPI.moveDir(repoID, targetRepo.repo_id, targetParentPath, sourceParentPath, dirent.name).then(res => {
-          moveFileCallback && moveFileCallback(repoID, targetRepo, dirent, targetParentPath, sourceParentPath, res.data.task_id || null, isByDialog);
-          updateSelectedFileIds([]);
-        });
-      };
-
-      handleMove(path, dirent, false, callback);
-    } else {
-      const selectedFiles = selectedFileIds.map(id => getFileById(tagFiles, id));
-      const path = selectedFiles[0][TAG_FILE_KEY.PARENT_DIR];
-      const dirents = selectedFiles.map(file => ({ name: file[TAG_FILE_KEY.NAME] }));
-      const dirNames = dirents.map(dirent => dirent.name);
-      const sourceParentPath = path;
-      const callback = (targetRepo, targetParentPath, isByDialog) => {
-        seafileAPI.moveDir(repoID, targetRepo.repo_id, targetParentPath, sourceParentPath, dirNames).then(res => {
-          moveFileCallback && moveFileCallback(repoID, targetRepo, dirents[0], targetParentPath, sourceParentPath, res.data.task_id || null, isByDialog, {
-            isBatchOperation: true,
-            batchFileNames: dirNames
-          });
-          updateSelectedFileIds([]);
-        });
-      };
-
-      handleMove(path, dirents, true, callback);
-    }
+    handleMove(path, dirent, false, callback);
   }, [repoID, selectedFileIds, tagFiles, moveFileCallback, updateSelectedFileIds, handleMove]);
 
   const copyTagFile = useCallback(() => {
     if (!selectedFileIds || selectedFileIds.length === 0) return null;
 
-    if (selectedFileIds.length === 1) {
-      const selectedFile = getFileById(tagFiles, selectedFileIds[0]);
-      const path = selectedFile[TAG_FILE_KEY.PARENT_DIR];
-      const dirent = { name: selectedFile[TAG_FILE_KEY.NAME] };
-      const callback = (targetRepo, dirent, targetParentPath, sourceParentPath, isByDialog) => {
-        seafileAPI.copyDir(repoID, targetRepo.repo_id, targetParentPath, sourceParentPath, dirent.name).then(res => {
-          copyFileCallback && copyFileCallback(repoID, targetRepo, dirent, targetParentPath, sourceParentPath, res.data.task_id || null, isByDialog);
-          updateSelectedFileIds([]);
-        });
-      };
-      handleCopy(path, dirent, false, callback);
-    } else {
-      const selectedFiles = selectedFileIds.map(id => getFileById(tagFiles, id));
-      const path = selectedFiles[0][TAG_FILE_KEY.PARENT_DIR];
-      const dirents = selectedFiles.map(file => ({ name: file[TAG_FILE_KEY.NAME] }));
-      const dirNames = dirents.map(dirent => dirent.name);
-      const callback = (targetRepo, targetParentPath, isByDialog) => {
-        seafileAPI.copyDir(repoID, targetRepo.repo_id, targetParentPath, path, dirNames).then(res => {
-          copyFileCallback && copyFileCallback(repoID, targetRepo, dirents[0], targetParentPath, path, res.data.task_id || null, isByDialog, {
-            isBatchOperation: true,
-            batchFileNames: dirNames
-          });
-          updateSelectedFileIds([]);
-        });
-      };
-      handleCopy(path, dirents, true, callback);
-    }
+    const selectedFile = getFileById(tagFiles, selectedFileIds[0]);
+    const path = selectedFile[TAG_FILE_KEY.PARENT_DIR];
+    const dirent = { name: selectedFile[TAG_FILE_KEY.NAME] };
+    const callback = (targetRepo, dirent, targetParentPath, sourceParentPath, isByDialog) => {
+      seafileAPI.copyDir(repoID, targetRepo.repo_id, targetParentPath, sourceParentPath, dirent.name).then(res => {
+        copyFileCallback && copyFileCallback(repoID, targetRepo, dirent, targetParentPath, sourceParentPath, res.data.task_id || null, isByDialog);
+        updateSelectedFileIds([]);
+      });
+    };
+    handleCopy(path, dirent, false, callback);
   }, [repoID, selectedFileIds, tagFiles, copyFileCallback, updateSelectedFileIds, handleCopy]);
 
   const deleteTagFiles = useCallback((ids) => {

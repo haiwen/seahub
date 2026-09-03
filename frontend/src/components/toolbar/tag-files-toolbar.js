@@ -7,10 +7,10 @@ import OpIcon from '../../components/op-icon';
 import OpElement from '../../components/op-element';
 import Icon from '../icon';
 import CustomDropdown from '../dropdown';
-import { getDirentItemMenuList, getBatchMenuList } from '../dir-view-mode/utils/contextMenuUtils';
+import { getDirentItemMenuList, getTagFilesOperations } from '../dir-view-mode/utils/contextMenuUtils';
 
 const SINGLE_EXCLUDES = ['Download', 'Delete', 'Share', 'Move', 'Copy'];
-const MULTI_EXCLUDES = ['Download', 'Delete', 'Move', 'Copy'];
+const MULTI_EXCLUDES = ['Download', 'Delete'];
 
 const TagFilesToolbar = ({ currentRepoInfo }) => {
   const [selectedFileIds, setSelectedFileIds] = useState([]);
@@ -161,7 +161,7 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
   const getSelectedFilesOperations = useCallback(() => {
     if (selectedFilesLen <= 1) return {};
     const selectedFiles = selectedFileIds.map(toFileObj);
-    const allOperations = getBatchMenuList(currentRepoInfo, selectedFiles, getDirentItemMenuList);
+    const allOperations = getTagFilesOperations(currentRepoInfo, selectedFiles);
     return buildMenuOps(allOperations, MULTI_EXCLUDES);
   }, [currentRepoInfo, toFileObj, buildMenuOps, selectedFileIds, selectedFilesLen]);
 

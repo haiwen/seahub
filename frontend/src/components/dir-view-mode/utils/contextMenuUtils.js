@@ -113,6 +113,34 @@ export const getBatchMenuList = (repoInfo, selectedDirents, getItemMenuList) => 
   return addChatWithAIOption(batchOptions, repoInfo, selectedDirents);
 };
 
+export const getTagFilesOperations = (repoInfo, selectedDirents) => {
+  let batchOptions = [];
+
+  const canDownload = selectedDirents.some(dirent => {
+    const { permission } = dirent;
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
+    return (permission == 'rw' || permission == 'r') || (isCustomPermission && customPermission.permission.download);
+  });
+  const canDelete = selectedDirents.some(dirent => {
+    const { permission } = dirent;
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
+    const perm = (permission == 'rw' || permission == 'cloud-edit') || (isCustomPermission && customPermission.permission.delete);
+    const locked = !dirent.is_locked || (dirent.is_locked && dirent.locked_by_me);
+    return perm && locked;
+  });
+  canDownload && batchOptions.push(TextTranslation.DOWNLOAD);
+  canDelete && batchOptions.push(TextTranslation.DELETE);
+
+  if (canChatWithDirents(repoInfo, selectedDirents)) {
+    batchOptions.push('Divider', TextTranslation.CHAT_WITH_AI);
+  }
+  if (isDivider(batchOptions[0])) {
+    batchOptions.shift();
+  }
+
+  return batchOptions;
+};
+
 export const getPermissions = (repoInfo) => {
   return {
     isRepoOwner: repoInfo.owner_email === username,

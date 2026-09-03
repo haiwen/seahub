@@ -5,7 +5,7 @@ import toaster from '../../../components/toast';
 import ContextMenu from '../../../components/context-menu/context-menu';
 import { LIST_MODE } from '../../../components/dir-view-mode/constants';
 import { hideMenu, showMenu } from '../../../components/context-menu/actions';
-import { getDirentItemMenuList, getBatchMenuList } from '../../../components/dir-view-mode/utils/contextMenuUtils';
+import { getDirentItemMenuList, getTagFilesOperations } from '../../../components/dir-view-mode/utils/contextMenuUtils';
 import { EVENT_BUS_TYPE } from '../../../metadata/constants';
 import { getRecordIdFromRecord } from '../../../metadata/utils/cell';
 import ImagePreviewer from '../../../metadata/components/cell-formatter/image-previewer';
@@ -280,7 +280,7 @@ const TagFiles = () => {
       menuList = getDirentItemMenuList(repoInfo, toFileObj(file), true);
     } else {
       const selectedFiles = selectedFileIds.map((id) => toFileObj(getFileById(tagFiles, id)));
-      menuList = getBatchMenuList(repoInfo, selectedFiles, getDirentItemMenuList);
+      menuList = getTagFilesOperations(repoInfo, selectedFiles);
     }
 
     if (menuList.length === 0) return;
