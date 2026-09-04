@@ -17,7 +17,7 @@ import DepartmentsTreePanel from './departments-tree-panel';
 import Department from './department';
 import MainPanelTopbar from '../main-panel-topbar';
 
-import '../../../css/system-departments.css';
+import './system-departments.css';
 
 class Departments extends React.Component {
 

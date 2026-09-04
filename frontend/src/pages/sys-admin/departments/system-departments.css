@@ -15,7 +15,7 @@
   justify-content: center;
 }
 
-.tree-node {
+.departments-tree-panel .tree-node {
   position: relative;
   display: flex;
   align-items: center;
@@ -42,15 +42,15 @@
   z-index: 0;
 }
 
-.tree-node:hover {
+.departments-tree-panel .tree-node:hover {
   background-color: var(--bs-nav-hover-bg);
 }
 
-.tree-node .seafile-multicolor-icon {
+.departments-tree-panel .tree-node .seafile-multicolor-icon {
   color: var(--bs-icon-color);
 }
 
-.tree-node .departments-v2-tree-icon {
+.departments-tree-panel .tree-node .departments-v2-tree-icon {
   width: 24px;
   display: flex;
   align-items: center;
@@ -58,14 +58,14 @@
   font-size: 12px;
 }
 
-.tree-node .departments-v2-tree-node-text {
+.departments-tree-panel .tree-node .departments-v2-tree-node-text {
   flex: 1;
   padding-right: 4px;
   line-height: 24px;
   font-size: 14px;
 }
 
-.tree-node .right-icon {
+.departments-tree-panel .tree-node .right-icon {
   width: 20px;
   height: 20px;
   border-radius: 3px;
@@ -75,7 +75,7 @@
   align-items: center;
 }
 
-.tree-node .right-icon:hover {
+.departments-tree-panel .tree-node .right-icon:hover {
   background-color: var(--bs-hover-tertiary-bg);
 }
 
