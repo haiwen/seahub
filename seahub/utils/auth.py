@@ -79,13 +79,13 @@ def user_local_password_enabled(user_obj):
     
     orgs = ccnet_api.get_orgs_by_user(user_obj.username)
     if orgs:
+        from seahub.organizations.models import OrgAdminSettings, FORCE_ADFS_LOGIN
+        from seahub.organizations.utils import can_use_sso_in_multi_tenancy
         org_id = orgs[0].org_id
         if ccnet_api.is_org_staff(org_id, user_obj.username):
             return True
         
         elif ENABLE_MULTI_ADFS and can_use_sso_in_multi_tenancy(org_id):
-            from seahub.organizations.models import OrgAdminSettings, FORCE_ADFS_LOGIN
-            from seahub.organizations.utils import can_use_sso_in_multi_tenancy
             org_settings = OrgAdminSettings.objects.filter(org_id=org_id, key=FORCE_ADFS_LOGIN).first()
             if org_settings and int(org_settings.value) == 1:
                 return False
