@@ -7,9 +7,6 @@ import toaster from '../../../../components/toast';
 import { gettext } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
 import { getFileNameFromRecord, getParentDirFromRecord, getTagsFromRecord, getRecordIdFromRecord } from '../../../utils/cell';
-import { getTagByName } from '../../../../tag/utils/row';
-import { getTagId } from '../../../../tag/utils/cell';
-import { useTags } from '../../../../tag/hooks';
 
 import './index.css';
 
@@ -21,17 +18,7 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
 
   const fileName = useMemo(() => getFileNameFromRecord(record), [record]);
 
-  const { tagsData } = useTags();
-
   useEffect(() => {
-    if (!tagsData) {
-      return;
-    }
-    if (!tagsData.rows?.length) {
-      setLoading(false);
-      return;
-    }
-
     setLoading(true);
     let path = '';
     if (window.sfMetadataContext.canModifyRow(record)) {
@@ -43,9 +30,7 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
       return;
     }
     window.sfMetadataContext.generateFileTags(path).then(res => {
-      const tags = res.data.tags || [];
-      const matchedTags = tags.map(tag => getTagByName(tagsData, tag)).filter(Boolean);
-      setExistingTags(matchedTags);
+      setExistingTags(res.data.tags || []);
       setLoading(false);
     }).catch(error => {
       let errorMessage = gettext('Failed to suggest file tags');
@@ -57,15 +42,15 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
       setLoading(false);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tagsData]);
+  }, []);
 
-  const onClickTag = useCallback((tagName) => {
+  const onClickTag = useCallback((tagId) => {
     let newSelectedTags = selectedTags.slice(0);
-    const tagNameIndex = selectedTags.findIndex(i => i === tagName);
-    if (tagNameIndex === -1) {
-      newSelectedTags.push(tagName);
+    const tagIdIndex = selectedTags.findIndex(i => i === tagId);
+    if (tagIdIndex === -1) {
+      newSelectedTags.push(tagId);
     } else {
-      newSelectedTags = newSelectedTags.filter(i => i !== tagName);
+      newSelectedTags = newSelectedTags.filter(i => i !== tagId);
     }
     setSelectedTags(newSelectedTags);
   }, [selectedTags]);
@@ -76,19 +61,12 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
       return;
     }
 
-    let selectedExitTagIds = [];
-    selectedTags.forEach(tagName => {
-      const tag = getTagByName(tagsData, tagName);
-      if (tag) {
-        selectedExitTagIds.push(getTagId(tag));
-      }
-    });
     const recordId = getRecordIdFromRecord(record);
     let oldTags = getTagsFromRecord(record);
     let oldTagIds = oldTags ? oldTags.map(item => item.row_id) : [];
 
     let newTagIds = [...oldTagIds];
-    selectedExitTagIds.forEach(id => {
+    selectedTags.forEach(id => {
       if (!newTagIds.includes(id)) {
         newTagIds.push(id);
       }
@@ -97,7 +75,7 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
       onSubmit([{ record_id: recordId, tags: newTagIds, old_tags: oldTagIds }]);
     }
     onToggle();
-  }, [selectedTags, onSubmit, onToggle, record, tagsData, isLoading]);
+  }, [selectedTags, onSubmit, onToggle, record, isLoading]);
 
   return (
     <Modal
@@ -117,24 +95,22 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
                 <div className='mb-1'>{gettext('Matching tags')}</div>
                 {existingTags.length > 0 && (
                   <>
-                    {existingTags.map((tag, index) => {
-                      const { _tag_color: tagColor, _tag_name: tagName } = tag;
-                      const isSelected = selectedTags.includes(tagName);
+                    {existingTags.map((tag) => {
+                      const isSelected = selectedTags.includes(tag.id);
                       return (
                         <div
-                          key={index}
+                          key={tag.id}
                           className={classNames('sf-file-exit-tag', { 'selected': isSelected })}
-                          onClick={() => onClickTag(tagName)}
+                          onClick={() => onClickTag(tag.id)}
                         >
-                          <div className="sf-file-exit-tag-color" style={{ backgroundColor: tagColor }}></div>
-                          <div className="sf-file-exit-tag-name">{tagName}</div>
+                          <div className="sf-file-exit-tag-name">{tag.name}</div>
                         </div>
                       );
                     })}
                   </>
                 )}
                 {existingTags.length === 0 && (
-                  <span className='tip'>{gettext(tagsData?.rows?.length ? 'No matching tags' : 'No tags available')}</span>
+                  <span className='tip'>{gettext('No matching tags')}</span>
                 )}
               </div>
             </div>
