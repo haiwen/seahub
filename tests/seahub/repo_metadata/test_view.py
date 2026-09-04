@@ -117,9 +117,9 @@ class MetadataAISummaryStatusTest(BaseTestCase):
             self.metadata.ai_processing_status = processing_status
             self.metadata.save(update_fields=['ai_processing_status'])
             mock_metadata_server_api.return_value.query_rows.side_effect = [
-                {'results': [{'count': 5}]},
-                {'results': [{'count': 4}]},
-                {'results': [{'count': 3}]},
+                {'results': [{'_suffix': 'PDF', 'count': 5}, {'_suffix': 'xlsx', 'count': 2}]},
+                {'results': [{'_suffix': 'PDF', 'count': 4}, {'_suffix': 'xlsx', 'count': 2}]},
+                {'results': [{'_suffix': 'PDF', 'count': 3}, {'_suffix': 'xlsx', 'count': 2}]},
             ]
 
             response = self.client.get(self.url)
@@ -133,7 +133,8 @@ class MetadataAISummaryStatusTest(BaseTestCase):
             self.assertTrue(result['latest_index_time'].endswith(('Z', '+00:00')))
 
         first_query = mock_metadata_server_api.return_value.query_rows.call_args_list[0].args[0]
-        self.assertIn('LOWER(`_suffix`)', first_query)
+        self.assertIn('GROUP BY `_suffix`', first_query)
+        self.assertNotIn('LOWER(', first_query)
 
 
 class MetadataDetailSettingsTest(BaseTestCase):

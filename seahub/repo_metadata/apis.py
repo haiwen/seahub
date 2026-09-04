@@ -2009,23 +2009,24 @@ class MetadataAISummaryStatusManage(APIView):
 
         from seafevents.repo_metadata.constants import METADATA_TABLE, SUMMARY_SUPPORTED_FILE_EXTENSIONS
 
-        suffix_placeholders = ', '.join(['?'] * len(SUMMARY_SUPPORTED_FILE_EXTENSIONS))
+        supported_suffixes = set(SUMMARY_SUPPORTED_FILE_EXTENSIONS)
         base_sql = f'''
-            SELECT COUNT(*) AS count
+            SELECT `{METADATA_TABLE.columns.suffix.name}`, COUNT(*) AS count
             FROM `{METADATA_TABLE.name}`
             WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
                 AND `{METADATA_TABLE.columns.file_type.name}` = "_document"
-                AND LOWER(`{METADATA_TABLE.columns.suffix.name}`) IN ({suffix_placeholders})
         '''
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
         def query_count(condition='', condition_params=None):
-            sql = base_sql + condition
-            parameters = list(SUMMARY_SUPPORTED_FILE_EXTENSIONS)
-            parameters.extend(condition_params or [])
-            results = metadata_server_api.query_rows(sql, parameters).get('results', [])
-            return (results[0].get('count') or 0) if results else 0
+            sql = base_sql + condition + f' GROUP BY `{METADATA_TABLE.columns.suffix.name}`'
+            results = metadata_server_api.query_rows(sql, condition_params or []).get('results', [])
+            return sum(
+                row.get('count') or 0
+                for row in results
+                if (row.get(METADATA_TABLE.columns.suffix.name) or '').lower() in supported_suffixes
+            )
 
         try:
             total_files = query_count()
