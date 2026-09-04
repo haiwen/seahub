@@ -25,6 +25,7 @@ class MetadataManagerTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
         self.assertFalse(json_resp['enabled'])
+        self.assertNotIn('tags_lang', json_resp)
     
     def test_put_metadata_manage(self):
         resp = self.client.put(self.management_url)
@@ -564,20 +565,16 @@ class MetadataTagsStatusManageTest(BaseTestCase):
 
     def test_enable_tags(self):
         url = reverse('api-v2.1-metadata-tags-status', args=[self.repo_id])
-        data = {
-            'lang': 'en'
-        }
-        resp = self.client.put(url, data, 'application/json')
+        resp = self.client.put(url)
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
         self.assertTrue(json_resp['success'])
         metadata = RepoMetadata.objects.filter(repo_id=self.repo_id).first()
         self.assertEqual(1, metadata.tags_enabled)
-        self.assertEqual('en', metadata.tags_lang)
 
     def test_disable_tags(self):
         url = reverse('api-v2.1-metadata-tags-status', args=[self.repo_id])
-        self.client.put(url, {'lang': 'en'}, 'application/json')
+        self.client.put(url)
         
         resp = self.client.delete(url)
         self.assertEqual(200, resp.status_code)
@@ -601,7 +598,7 @@ class MetadataTagsTest(BaseTestCase):
         url = reverse('api-v2.1-metadata', args=[self.repo_id])
         self.client.put(url)
         url = reverse('api-v2.1-metadata-tags-status', args=[self.repo_id])
-        self.client.put(url, {'lang': 'en'}, 'application/json')
+        self.client.put(url)
 
     def test_create_and_get_tags(self):
         url = reverse('api-v2.1-metadata-tags', args=[self.repo_id])
@@ -684,7 +681,7 @@ class MetadataTagsLinksTest(BaseTestCase):
         self.client.put(url)
         
         url = reverse('api-v2.1-metadata-tags-status', args=[self.repo_id])
-        self.client.put(url, {'lang': 'en'}, 'application/json')
+        self.client.put(url)
 
         url = reverse('api-v2.1-metadata-tags', args=[self.repo_id])
         data = {
@@ -782,7 +779,7 @@ class MetadataFileTagsTest(BaseTestCase):
         time.sleep(0.2)
 
         url = reverse('api-v2.1-metadata-tags-status', args=[self.repo_id])
-        self.client.put(url, {'lang': 'en'}, 'application/json')
+        self.client.put(url)
 
         url = reverse('api-v2.1-metadata-tags', args=[self.repo_id])
         data = {
@@ -835,7 +832,7 @@ class MetadataTagFilesTest(BaseTestCase):
         self.client.put(url)
         
         url = reverse('api-v2.1-metadata-tags-status', args=[self.repo_id])
-        self.client.put(url, {'lang': 'en'}, 'application/json')
+        self.client.put(url)
 
         url = reverse('api-v2.1-metadata-tags', args=[self.repo_id])
         data = {
@@ -889,7 +886,7 @@ class MetadataMergeTagsTest(BaseTestCase):
         self.client.put(url)
 
         url = reverse('api-v2.1-metadata-tags-status', args=[self.repo_id])
-        self.client.put(url, {'lang': 'en'}, 'application/json')
+        self.client.put(url)
 
         url = reverse('api-v2.1-metadata-tags', args=[self.repo_id])
         data = {

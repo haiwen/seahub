@@ -40,11 +40,10 @@ class RepoMetadataManager(models.Manager):
         enabled = True
         from_commit = '0000000000000000000000000000000000000000'
         if not metadata:
-            metadata = self.model(repo_id=repo_id, enabled=enabled, tags_enabled=enabled, tags_lang='en', summary_enabled=False, from_commit=from_commit)
+            metadata = self.model(repo_id=repo_id, enabled=enabled, tags_enabled=enabled, summary_enabled=False, from_commit=from_commit)
         else:
             metadata.enabled = enabled
             metadata.tags_enabled = True
-            metadata.tags_lang = 'en'
             metadata.summary_enabled = False
             metadata.ai_summary_indexed_at = None
             metadata.ai_processing_status = ''
@@ -72,7 +71,6 @@ class RepoMetadata(models.Model):
     to_commit = models.CharField(max_length=40)
     tags_enabled = models.BooleanField(db_index=True)
     summary_enabled = models.BooleanField(db_index=True)
-    tags_lang = models.CharField(max_length=36)
     last_face_cluster_time = models.DateTimeField(db_index=True, blank=True, null=True)
     details_settings = models.TextField()
     ocr_enabled = models.BooleanField(db_index=True)

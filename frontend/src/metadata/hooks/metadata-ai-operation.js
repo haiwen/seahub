@@ -14,7 +14,6 @@ export const MetadataAIOperationsProvider = ({
   repoID,
   enableMetadata = false,
   enableTags = false,
-  tagsLang,
   repoInfo,
   children
 }) => {
@@ -167,7 +166,6 @@ export const MetadataAIOperationsProvider = ({
     <MetadataAIOperationsContext.Provider value={{
       enableMetadata,
       enableTags,
-      tagsLang,
       canModify,
       onOCR,
       onOCRByImageDialog,

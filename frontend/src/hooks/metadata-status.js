@@ -23,7 +23,6 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
   const [globalHiddenColumns, setGlobalHiddenColumns] = useState([]);
 
   const [enableTags, setEnableTags] = useState(false);
-  const [tagsLang, setTagsLang] = useState('en');
 
   const [enableAISummary, setEnableAISummary] = useState(false);
   const [enableFaceRecognition, setEnableFaceRecognition] = useState(false);
@@ -64,7 +63,6 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
         tags_enabled: enableTags,
         summary_enabled: enableAISummary,
         show_view: showView,
-        tags_lang: tagsLang,
         details_settings: detailsSettings,
         face_recognition_enabled: enableFaceRecognition,
         global_hidden_columns: globalHiddenColumns,
@@ -75,7 +73,6 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
       setEnableTags(enableTags);
       setEnableAISummary(!!enableAISummary);
       setShowView(showView);
-      setTagsLang(tagsLang || 'en');
       setDetailsSettings(JSON.parse(detailsSettings));
       setEnableFaceRecognition(enableSeafileAI && enableFaceRecognition);
       setEnableMetadata(enableMetadata);
@@ -124,19 +121,17 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
     setDetailsSettings({});
     setIsBeingBuilt(newValue);
     setEnableMetadata(newValue);
-    setTagsLang('en');
     setEnableTags(newValue);
     setShowView(newValue);
   }, [enableMetadata, cancelMetadataURL]);
 
-  const updateEnableTags = useCallback((newValue, lang = 'en') => {
-    if (newValue === enableTags && lang === tagsLang) return;
+  const updateEnableTags = useCallback((newValue) => {
+    if (newValue === enableTags) return;
     if (!newValue) {
       cancelMetadataURL();
     }
     setEnableTags(newValue);
-    setTagsLang(lang);
-  }, [enableTags, tagsLang, cancelMetadataURL]);
+  }, [enableTags, cancelMetadataURL]);
 
   const updateEnableAISummary = useCallback((newValue) => {
     if (newValue === enableAISummary) return;
@@ -190,7 +185,6 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
         updateEnableMetadata,
         enableTags,
         showView,
-        tagsLang,
         updateEnableTags,
         enableAISummary,
         updateEnableAISummary,

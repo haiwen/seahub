@@ -2289,11 +2289,7 @@ class ViaRepoMetadataTagsStatusManage(APIView):
 
     def put(self, request):
         repo_id = request.repo_api_token_obj.repo_id
-        lang = request.data.get('lang')
         username = request.repo_api_token_obj.generated_by
-        if not lang:
-            error_msg = 'lang invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
@@ -2315,7 +2311,6 @@ class ViaRepoMetadataTagsStatusManage(APIView):
 
         try:
             metadata.tags_enabled = True
-            metadata.tags_lang = lang
             metadata.save()
         except Exception as e:
             logger.exception(e)
@@ -2358,7 +2353,6 @@ class ViaRepoMetadataTagsStatusManage(APIView):
 
         try:
             record.tags_enabled = False
-            record.tags_lang = None
             record.save()
         except Exception as e:
             logger.error(e)

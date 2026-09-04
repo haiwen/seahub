@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { globalHistory, Link } from '@gatsbyjs/reach-router';
-import { chatAndSearchAvailable, enableRepoAutoDel, enableSeafileAI, gettext, siteRoot } from '../../../utils/constants';
+import { chatAndSearchAvailable, enableRepoAutoDel, gettext, siteRoot } from '../../../utils/constants';
 import { useMetadataStatus } from '../../../hooks';
 import LibHistorySettingPanel from './lib-history-setting-panel';
 import LibAutoDelSettingPanel from './lib-old-files-auto-del-setting-panel';
@@ -37,7 +37,7 @@ const LibSettings = ({ repoID, currentRepoInfo, isMigrationTipShown }) => {
   const { enableMetadataManagement } = window.app.pageOptions;
   const {
     enableMetadata, updateEnableMetadata,
-    enableTags, tagsLang, updateEnableTags,
+    enableTags, updateEnableTags,
     enableAISummary, updateEnableAISummary,
     globalHiddenColumns, modifyGlobalHiddenColumns
   } = useMetadataStatus();
@@ -177,8 +177,6 @@ const LibSettings = ({ repoID, currentRepoInfo, isMigrationTipShown }) => {
           <LibMetadataTagsStatusSettingPanel
             repoID={repoID}
             value={enableTags}
-            lang={tagsLang}
-            enableAI={enableSeafileAI}
             submit={updateEnableTags}
             enableMetadata={enableMetadata}
             isMigrationTipShown={isMigrationTipShown}
