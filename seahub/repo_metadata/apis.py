@@ -2015,7 +2015,7 @@ class MetadataAISummaryStatusManage(APIView):
             FROM `{METADATA_TABLE.name}`
             WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
                 AND `{METADATA_TABLE.columns.file_type.name}` = "_document"
-                AND `{METADATA_TABLE.columns.suffix.name}` IN ({suffix_placeholders})
+                AND LOWER(`{METADATA_TABLE.columns.suffix.name}`) IN ({suffix_placeholders})
         '''
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)

@@ -132,6 +132,9 @@ class MetadataAISummaryStatusTest(BaseTestCase):
             self.assertEqual(expected_statuses[1], result['index']['status'])
             self.assertTrue(result['latest_index_time'].endswith(('Z', '+00:00')))
 
+        first_query = mock_metadata_server_api.return_value.query_rows.call_args_list[0].args[0]
+        self.assertIn('LOWER(`_suffix`)', first_query)
+
 
 class MetadataDetailSettingsTest(BaseTestCase):
     def setUp(self):
