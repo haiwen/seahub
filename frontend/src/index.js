@@ -7,8 +7,6 @@ import MarkdownEditor from './pages/markdown-editor';
 import Loading from './components/loading';
 import { MetadataMiddlewareProvider, MetadataStatusProvider } from './hooks';
 
-import './index.css';
-
 const { repoID, repoEncrypted, filePerm } = window.app.pageOptions;
 
 const root = createRoot(document.getElementById('root'));

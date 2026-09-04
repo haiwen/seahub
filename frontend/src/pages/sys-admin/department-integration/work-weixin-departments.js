@@ -1,15 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
 import deepCopy from 'deep-copy';
-import { systemAdminAPI } from '../../utils/system-admin-api';
-import { siteRoot, isPro } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
-import toaster from '../../components/toast';
-import MainPanelTopbar from './main-panel-topbar';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { siteRoot, isPro } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
+import toaster from '../../../components/toast';
+import MainPanelTopbar from '../main-panel-topbar';
 import { WorkWeixinDepartmentMembersList, WorkWeixinDepartmentsTreePanel } from './work-weixin';
-import ImportWorkWeixinDepartmentDialog from '../../components/dialog/import-work-weixin-department-dialog';
+import ImportWorkWeixinDepartmentDialog from '../../../components/dialog/import-work-weixin-department-dialog';
 
-import '../../css/work-weixin-departments.css';
+import './department-integration-tree.css';
 
 class WorkWeixinDepartments extends Component {
 
@@ -306,7 +306,7 @@ class WorkWeixinDepartments extends Component {
             <div className="cur-view-path">
               <h3 className="sf-heading">{'企业微信集成'}</h3>
             </div>
-            <div className="cur-view-content d-flex flex-row p-0">
+            <div className="cur-view-content department-integration-tree work-weixin-departments d-flex flex-row p-0">
               <WorkWeixinDepartmentsTreePanel
                 departmentsTree={this.state.departmentsTree}
                 isTreeLoading={this.state.isTreeLoading}
