@@ -55,8 +55,8 @@ import GroupMemberAuditLogs from './logs-page/group-member-audit-logs';
 import WebSettings from './web-settings/web-settings';
 import Notifications from './notifications/notifications';
 import FileScanRecords from './file-scan-records';
-import WorkWeixinDepartments from './work-weixin-departments';
-import DingtalkDepartments from './dingtalk-departments';
+import WorkWeixinDepartments from './department-integration/work-weixin-departments';
+import DingtalkDepartments from './department-integration/dingtalk-departments';
 import Invitations from './invitations/invitations';
 import TermsAndConditions from './terms-and-conditions/terms-and-conditions';
 

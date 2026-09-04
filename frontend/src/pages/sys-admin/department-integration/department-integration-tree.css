@@ -1,0 +1,128 @@
+.department-integration-tree {
+  position: relative;
+}
+
+.department-integration-tree .dir-content-main {
+  position: absolute;
+  right: 0;
+  height: 100%;
+  width: 75%;
+  overflow-y: hidden;
+  padding-right: 1rem;
+}
+
+.department-integration-tree .dir-content-main:hover {
+  overflow-y: auto;
+}
+
+.department-integration-tree .dir-content-main table td {
+  line-height: 2rem;
+}
+
+.department-integration-tree .dir-content-nav {
+  position: absolute;
+  overflow: hidden;
+  width: 25%;
+}
+
+.department-integration-tree .dir-content-nav:hover {
+  overflow: auto;
+}
+
+.department-integration-tree .dir-content-resize {
+  position: absolute;
+  left: 25%;
+  height: 100%;
+  width: 1%;
+  border-left: 1px solid var(--bs-border-secondary-color);
+}
+
+.department-integration-tree .department-children {
+  position: relative;
+}
+
+.department-integration-tree .tree-node-inner {
+  position: relative;
+  display: flex;
+  padding: 2px 0;
+  padding-right: 0.5rem;
+}
+
+.department-integration-tree .tree-view .left-icon {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+}
+
+.department-integration-tree .tree-view .tree-node-icon {
+  padding: 0 5px;
+}
+
+.department-integration-tree .tree-node-inner .tree-node-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.department-integration-tree .tree-node-inner .tree-node-icon .seafile-multicolor-icon {
+  color: var(--bs-icon-color);
+}
+
+.department-integration-tree .tree-node-inner .tree-node-icon .seafile-multicolor-icon-down {
+  font-size: 12px;
+}
+
+.department-integration-tree .tree-view .department-children .tip {
+  font-size: 12px;
+}
+
+.department-integration-tree .tree-node-inner-hover {
+  background-color: var(--bs-nav-hover-bg);
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.department-integration-tree .tree-node-hight-light {
+  border-radius: 4px;
+  background-color: var(--bs-nav-active-bg) !important;
+}
+
+.department-integration-tree .tree-node-hight-light::before {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 4px;
+  left: -8px;
+  top: 2px;
+  bottom: 2px;
+  border-radius: 2px;
+  background-color: #ff9800;
+  z-index: 0;
+}
+
+.department-integration-tree .tree-view .tree-node-text {
+  width: 100%;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 24px;
+}
+
+.department-integration-tree .tree-view .dropdown .right-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--bs-icon-color);
+  margin-top: 2px;
+}
+
+.department-integration-tree .tree-view .dropdown .right-icon:hover {
+  background-color: var(--bs-hover-tertiary-bg);
+}
