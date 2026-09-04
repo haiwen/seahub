@@ -1,8 +1,9 @@
 import os
 from django.urls import reverse
 from django.test import TestCase
+from seaserv import seafile_api
 
-from seahub.share.models import FileShare
+from seahub.share.models import FileShare, UploadLinkShare
 from seahub.test_utils import Fixtures
 
 class SharedDirTest(TestCase, Fixtures):
@@ -47,6 +48,27 @@ class SharedDirTest(TestCase, Fixtures):
         )
 
         assert '8082' in resp['location']
+
+class SharedUploadLinkTest(TestCase, Fixtures):
+    def setUp(self):
+        seafile_api.share_repo(
+            self.repo.id, self.user.username, self.admin.username, 'rw')
+        self.upload_link = UploadLinkShare.objects.create_upload_link_share(
+            self.admin.username, self.repo.id, self.folder)
+        seafile_api.remove_share(
+            self.repo.id, self.user.username, self.admin.username)
+
+    def tearDown(self):
+        self.remove_repo()
+
+    def test_returns_permission_denied_when_creator_loses_library_access(self):
+        response = self.client.get(
+            reverse('view_shared_upload_link', args=[self.upload_link.token]))
+
+        self.assertEqual(200, response.status_code)
+        self.assertTemplateUsed(response, 'error.html')
+        self.assertContains(response, 'Permission denied')
+
 
 class EncryptSharedDirTest(TestCase, Fixtures):
     def setUp(self):

@@ -7,7 +7,6 @@ from django.utils.http import int_to_base36
 from collections import OrderedDict
 
 from seaserv import ccnet_api
-from seahub.auth.models import SocialAuthUser
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2contact_email
 from seahub.auth import authenticate
@@ -17,11 +16,10 @@ from seahub.profile.models import Profile
 from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email, \
     is_ldap_user, get_site_name
 from seahub.auth.utils import get_virtual_id_by_email
-from seahub.organizations.models import OrgAdminSettings, FORCE_ADFS_LOGIN
 
 from captcha.fields import CaptchaField
 
-from seahub.utils.auth import is_force_user_sso, can_user_update_password
+from seahub.utils.auth import user_local_password_enabled
 from seahub.utils.password import get_password_strength_requirements, \
         is_password_strength_valid
 
@@ -80,6 +78,15 @@ class AuthenticationForm(forms.Form):
             # or a valid email address for old users created before v11.0
             self.user_cache = authenticate(username=converted_login_str, password=password)
 
+            if self.user_cache and not user_local_password_enabled(self.user_cache):
+                if not is_ldap_user(self.user_cache):
+                    self.errors['disable_pwd_login'] = _('Please use Single Sign-On to login.')
+                    raise forms.ValidationError(_('Please use Single Sign-On to login.'))
+
+                # The local password cannot be used by this LDAP user. Continue
+                # with LDAP authentication so the LDAP password can still work.
+                self.user_cache = None
+
             # Step 3) Check LDAP
             if self.user_cache is None:
                 """then try login id/contact email/primary id"""
@@ -89,6 +96,7 @@ class AuthenticationForm(forms.Form):
                     self.user_cache = authenticate(ldap_user=converted_login_str, password=password)
 
                 if self.user_cache is None:
+
                     err_msg = _("Please enter a correct email/username and password. Note that both fields are case-sensitive.")
 
                     if settings.LOGIN_ERROR_DETAILS:
@@ -113,12 +121,7 @@ class AuthenticationForm(forms.Form):
                 else:
                     self.errors['inactive'] = _("This account is inactive.")
                     raise forms.ValidationError(_("This account is inactive."))
-                
-                
-            if is_force_user_sso(self.user_cache):
-                self.errors['disable_pwd_login'] = _('Please use Single Sign-On to login.')
-                raise forms.ValidationError(_('Please use Single Sign-On to login.'))
-                
+
         # TODO: determine whether this should move to its own method.
         if self.request:
             if not self.request.session.test_cookie_worked():
@@ -159,11 +162,7 @@ class PasswordResetForm(forms.Form):
             self.users_cache = None
             return
 
-        if is_ldap_user(self.users_cache):
-            raise forms.ValidationError(_("Can not reset password, please contact LDAP admin."))
-        
-        can_reset_password = can_user_update_password(self.users_cache)
-        if not can_reset_password:
+        if not user_local_password_enabled(self.users_cache):
             raise forms.ValidationError(_('Unable to reset password.'))
 
         return email

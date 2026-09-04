@@ -49,6 +49,9 @@ export const getSelectedCountType = (column, countType) => {
   if (isDateColumn(column)) {
     return DISPLAY_GROUP_DATE_GRANULARITY[type];
   }
+  if (column.type === CellType.GEOLOCATION) {
+    return DISPLAY_GROUP_GEOLOCATION_GRANULARITY[type];
+  }
   return null;
 };
 

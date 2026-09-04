@@ -17,6 +17,8 @@ from datetime import datetime
 from urllib.parse import urlparse
 
 from constance import config
+from seahub.auth.models import SocialAuthUser
+from seahub.utils.ldap import MULTI_LDAP_1_PROVIDER, LDAP_PROVIDER
 import seaserv
 from seaserv import seafile_api, ccnet_api
 
@@ -128,7 +130,6 @@ PREVIEW_FILEEXT = {
     AUDIO: ('mp3', 'oga', 'ogg', 'wav', 'flac', 'opus'),
     #'3D': ('stl', 'obj'),
     SEADOC: ('sdoc',),
-    TLDRAW: ('draw',),
     EXCALIDRAW: ('exdraw',),
     TEXT: ('admin', 'txt', 'log', 'csv', 'py', 'c', 'cpp', 'h', 'java', 'js', 'css', 'html', 'htm', 'xml', 'json', 'yml', 'yaml', 'sh', 'rb', 'php', 'go', 'rs', 'swift', 'kt", "kts', 'dart', 'ini', 'cfg', 'conf', 'toml'),
 }
@@ -330,7 +331,7 @@ def is_valid_dirent_name(name):
 def is_ldap_user(user):
     """Check whether user is a LDAP user.
     """
-    return user.source == 'LDAP' or user.source == 'LDAPImport'
+    return SocialAuthUser.objects.filter(provider__in=[LDAP_PROVIDER, MULTI_LDAP_1_PROVIDER], username=user.username).exists()
 
 def get_no_duplicate_obj_name(obj_name, exist_obj_names):
 

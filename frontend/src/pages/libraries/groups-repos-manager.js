@@ -34,7 +34,7 @@ export class GroupsReposManager {
     if (!repoInGroupsIds.includes(group_id)) {
       return;
     }
-    repoInGroupsIds = repoInGroupsIds.filter((groupId) => groupId === group_id);
+    repoInGroupsIds = repoInGroupsIds.filter((groupId) => groupId !== group_id);
     if (repoInGroupsIds.length === 0) {
       this.removeRepo(repo_id);
     } else {

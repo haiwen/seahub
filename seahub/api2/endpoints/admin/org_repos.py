@@ -14,11 +14,6 @@ from seahub.api2.utils import api_error
 from seahub.api2.permissions import IsProVersion
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 
-try:
-    from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
-except ImportError:
-    ORG_MEMBER_QUOTA_ENABLED = False
-
 logger = logging.getLogger(__name__)
 
 

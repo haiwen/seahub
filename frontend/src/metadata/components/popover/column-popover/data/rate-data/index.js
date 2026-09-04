@@ -58,7 +58,7 @@ const RateData = ({ value, onChange, updatePopoverState }) => {
         <FormGroup className="rate-column-data-setting-item rate-column-data-style-setting">
           <Label>{gettext('Style')}</Label>
           <div
-            className={classnames('sf-select custom-select rate-column-data-style-setting-wrapper', { 'focus': isShowStylePopover })}
+            className={classnames('sf-select rate-column-data-style-setting-wrapper', { 'focus': isShowStylePopover })}
             id="sf-metadata-rate-column-data-style-setting-wrapper"
             onClick={openStylePopover}
             ref={selectedBtnRef}
@@ -98,6 +98,7 @@ const RateData = ({ value, onChange, updatePopoverState }) => {
           <Label>{gettext('Max')}</Label>
           <CustomizeSelect
             ref={maxSelectRef}
+            isInModal={true}
             value={selectedMaxOption}
             options={maxOptions}
             onSelectOption={onMaxChange}

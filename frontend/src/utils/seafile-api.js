@@ -807,7 +807,7 @@ class SeafileAPI {
 
   searchFiles(searchParams, cancelToken) {
     let url = this.server + '/api2/search/';
-    url = url + '?q=' + searchParams.q;
+    url = url + '?q=' + encodeURIComponent(searchParams.q);
     if (searchParams.search_repo) { url = url + '&search_repo=' + searchParams.search_repo; }
     if (searchParams.search_ftypes) { url = url + '&search_ftypes=' + searchParams.search_ftypes; }
     if (searchParams.page) { url = url + '&page=' + searchParams.page; }
@@ -1039,6 +1039,22 @@ class SeafileAPI {
     const form = new FormData();
     form.append('token', zip_token);
     return this.req.post(url, form);
+  }
+
+  batchLockFile(repoID, paths) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/batch-lock-file/';
+    const data = {
+      paths: paths
+    };
+    return this.req.put(url, data);
+  }
+
+  batchUnlockFile(repoID, paths) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/batch-unlock-file/';
+    const data = {
+      paths: paths
+    };
+    return this.req.put(url, data);
   }
 
   // ---- File Operation
@@ -1489,6 +1505,11 @@ class SeafileAPI {
     return this.req.get(url, { params: params });
   }
 
+
+  getSdocAccessTokenByUuid(docUuid) {
+    const url = this.server + '/api/v2.1/seadoc/access-token-by-uuid/' + docUuid + '/';
+    return this.req.get(url);
+  }
 
   listSdocNotifications(page, perPage) {
     const url = this.server + '/api/v2.1/sdoc-notifications/';

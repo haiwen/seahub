@@ -65,6 +65,7 @@ class MainPanel extends Component {
     };
     this.scrollRef = React.createRef();
     this.hashScrollTimer = null;
+    this.previewRequestId = 0;
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -109,6 +110,7 @@ class MainPanel extends Component {
   }
 
   componentWillUnmount() {
+    this.previewRequestId += 1;
     this.unsubscribeUnseenNotificationsCount();
     this.unsubscribeWikiFilePreview();
     this.unsubscribeGenerateExdrawReadOnlyLink();
@@ -147,36 +149,71 @@ class MainPanel extends Component {
   };
 
   toggleWikiFilePreview = (data) => {
+    const isWikiLink = data?.type === 'wiki_link';
+    const isSdocLink = data?.type === 'sdoc_link';
+
+    if (isWikiLink && (!data.wiki_repo_id || !data.page_id)) return;
+    if (isSdocLink && !data.doc_uuid) return;
+    if (!isWikiLink && !isSdocLink) return;
+
+    const requestId = ++this.previewRequestId;
+    const previewDocInfo = {
+      type: data.type,
+      title: data.title,
+      pageId: isWikiLink ? data.page_id : '',
+      config: isWikiLink ? this.props.config : null,
+    };
+
     this.setState({
       isPreviewFile: true,
       isReloadingPreview: true,
-      previewDocUuid: {},
+      previewDocUuid: '',
+      docContent: {},
+      previewDocInfo,
       isShowRightPanel: false
     });
 
-    // Firstly get access token config and then use it to get wiki content
-    const getWikiPage = wikiAPI.getWiki2Page(data.wiki_repo_id, data.page_id);
-    getWikiPage.then(res => {
-      const { seadoc_access_token, assets_url } = res.data;
-      const docUuid = assets_url.slice(assets_url.lastIndexOf('/') + 1);
-      const config = {
-        docUuid,
-        sdocServer: seadocServerUrl,
-        accessToken: seadoc_access_token,
-      };
-      this.setState({ previewDocUuid: docUuid });
-
-      const sdocServerApi = new SDocServerApi(config);
-      sdocServerApi.getDocContent().then(docRes => {
-        this.setState({
+    const getDocContent = isWikiLink
+      ? wikiAPI.getWiki2Page(data.wiki_repo_id, data.page_id).then(res => {
+        const { seadoc_access_token, assets_url } = res.data;
+        const docUuid = assets_url.slice(assets_url.lastIndexOf('/') + 1);
+        const config = {
+          docUuid,
+          sdocServer: seadocServerUrl,
+          accessToken: seadoc_access_token,
+        };
+        return new SDocServerApi(config).getDocContent().then(docRes => ({
           docContent: docRes.data,
-          isReloadingPreview: false,
-          previewDocInfo: { pageId: data.page_id, config: this.props.config }
-        });
+          docUuid,
+        }));
+      })
+      : seafileAPI.getSdocAccessTokenByUuid(data.doc_uuid).then(res => {
+        const config = {
+          docUuid: data.doc_uuid,
+          sdocServer: seadocServerUrl,
+          accessToken: res.data.access_token,
+        };
+        return new SDocServerApi(config).getDocContent().then(docRes => ({
+          docContent: docRes.data,
+          docUuid: data.doc_uuid,
+        }));
+      });
+
+    getDocContent.then(({ docContent, docUuid }) => {
+      if (requestId !== this.previewRequestId) return;
+      this.setState({
+        previewDocUuid: docUuid,
+        docContent,
+        isReloadingPreview: false,
       });
     }).catch(error => {
+      if (requestId !== this.previewRequestId) return;
       // eslint-disable-next-line no-console
       console.error(error);
+      this.setState({
+        docContent: {},
+        isReloadingPreview: false,
+      });
     });
   };
 
@@ -204,6 +241,7 @@ class MainPanel extends Component {
   }
 
   togglePreview = () => {
+    this.previewRequestId += 1;
     this.setState({ isPreviewFile: false });
   };
 

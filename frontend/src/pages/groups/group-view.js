@@ -17,6 +17,8 @@ import ReposSortMenu from '../../components/sort-menu';
 import { LIST_MODE, GRID_MODE } from '../../components/dir-view-mode/constants';
 import GroupOperationMenu from './group-op-menu';
 import Icon from '../../components/icon';
+import EventBus from '../../components/common/event-bus';
+import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 
 import '../../css/group-view.css';
 
@@ -153,6 +155,7 @@ class GroupView extends React.Component {
     });
     this.setState({ repoList: repoList });
     this.loadGroup(this.props.groupID);
+    EventBus.getInstance().dispatch(EVENT_BUS_TYPE.GROUP_LIBRARIES_CHANGED);
   };
 
   onItemTransfer = (repoId, groupID, owner) => {
@@ -161,6 +164,7 @@ class GroupView extends React.Component {
     });
     this.setState({ repoList: repoList });
     this.loadGroup(this.props.groupID);
+    EventBus.getInstance().dispatch(EVENT_BUS_TYPE.GROUP_LIBRARIES_CHANGED);
   };
 
   onItemUnshare = (repo) => {
@@ -171,6 +175,7 @@ class GroupView extends React.Component {
       });
       this.setState({ repoList: repoList });
       this.loadGroup(group.id);
+      EventBus.getInstance().dispatch(EVENT_BUS_TYPE.GROUP_LIBRARIES_CHANGED);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

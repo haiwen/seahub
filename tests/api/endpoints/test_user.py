@@ -5,6 +5,7 @@ from mock import patch
 
 from django.urls import reverse
 
+from seahub.auth.models import SocialAuthUser
 from seahub.test_utils import BaseTestCase
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
@@ -78,6 +79,19 @@ class AccountTest(BaseTestCase):
         assert json_resp['telephone'] == d_profile.telephone
         assert json_resp['login_id'] == profile.login_id
         assert 'list_in_address_book' in json_resp
+
+    def test_remote_user_cannot_reset_local_password_when_disabled(self):
+        self.login_as(self.user)
+        SocialAuthUser.objects.add(self.user.username, 'saml', self.user.username)
+        url = reverse('api-v2.1-user-reset-password')
+
+        with patch('seahub.utils.auth.DISABLE_SSO_USER_LOCAL_PWD_LOGIN', True):
+            resp = self.client.post(url, json.dumps({
+                'old_password': self.user_password,
+                'new_password': 'Seafile123',
+            }), 'application/json')
+
+        self.assertEqual(403, resp.status_code)
 
     def test_update_user_nickname(self):
 

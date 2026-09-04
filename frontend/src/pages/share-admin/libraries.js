@@ -15,6 +15,8 @@ import FixedWidthTable from '../../components/common/fixed-width-table';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import OpIcon from '../../components/op-icon';
 import Icon from '../../components/icon';
+import EventBus from '../../components/common/event-bus';
+import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 
 class Content extends Component {
 
@@ -168,6 +170,11 @@ class Item extends Component {
       this.setState({
         unshared: true
       });
+      if (share_type == 'group') {
+        EventBus.getInstance().dispatch(EVENT_BUS_TYPE.UNSHARE_REPO_TO_GROUP, { repo_id: item.repo_id, group_id: item.group_id });
+      } else if (share_type == 'public') {
+        EventBus.getInstance().dispatch(EVENT_BUS_TYPE.SHARED_LIBRARIES_CHANGED);
+      }
       let message = gettext('Successfully unshared {name}').replace('{name}', item.repo_name);
       toaster.success(message);
     }).catch(error => {

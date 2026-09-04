@@ -527,7 +527,7 @@ class SharedRepoListItem extends React.Component {
       <OpIcon
         id={`delete-icon-${idx}`}
         className="op-icon"
-        symbol="delete1"
+        symbol="delete"
         tooltip={gettext('Delete')}
         role="button" aria-label={gettext('Delete')}
         op={this.onItemDeleteToggle}
@@ -726,7 +726,7 @@ class SharedRepoListItem extends React.Component {
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
-          <td onClick={this.visitRepo}><img src={iconUrl} title={iconTitle} width="20" alt={iconTitle}/></td>
+          <td onClick={this.visitRepo}><img src={iconUrl} title={iconTitle} width="20" alt={iconTitle} /></td>
           <td onClick={this.visitRepo}>
             {this.state.isRenaming ?
               <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :

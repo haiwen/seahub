@@ -22,8 +22,8 @@ window.app.pageOptions = {
   enableUserSetContactEmail: {% if ENABLE_USER_SET_CONTACT_EMAIL %} true {% else %} false {% endif %},
   enableUserSetName: {% if ENABLE_USER_SET_NAME %} true {% else %} false {% endif %},
 
-  canUpdatePassword: {% if not is_ldap_user and ENABLE_CHANGE_PASSWORD %} true {% else %} false {% endif %},
-  {% if not is_ldap_user and ENABLE_CHANGE_PASSWORD %}
+  canUpdatePassword: {% if can_update_password %} true {% else %} false {% endif %},
+  {% if can_update_password %}
   passwordOperationText: {% if user_unusable_password %}"{% trans "Set Password" %}"{% else %}"{% trans "Update" %}"{% endif %},
   {% endif %}
   userUnusablePassword: {% if user_unusable_password %} true {% else %} false {% endif %},

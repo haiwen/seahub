@@ -44,7 +44,7 @@ class OrgUserOwnedRepos extends Component {
   render() {
     return (
       <Fragment>
-        <MainPanelTopbar/>
+        <MainPanelTopbar />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <OrgAdminUserNav email={this.props.email} currentItem='owned-repos' />
@@ -180,7 +180,7 @@ class Item extends Component {
           <td>
             <OpIcon
               className={`op-icon${isOpIconShown ? '' : ' invisible'}`}
-              symbol="delete1"
+              symbol="delete"
               title={gettext('Delete')}
               op={this.handleDeleteIconClick}
             />

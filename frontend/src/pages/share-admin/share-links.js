@@ -335,7 +335,7 @@ class Item extends Component {
                 <OpIcon
                   id={`delete-${index}`}
                   className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
-                  symbol="delete1"
+                  symbol="delete"
                   tooltip={gettext('Delete')}
                   op={this.removeLink}
                 />
@@ -399,7 +399,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  updateHeaderConfig: () => {}
+  updateHeaderConfig: () => { }
 };
 
 class ShareAdminShareLinks extends Component {

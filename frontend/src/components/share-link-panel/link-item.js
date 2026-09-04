@@ -172,7 +172,7 @@ class LinkItem extends React.Component {
             <OpIcon
               id={`delete-icon-${idx}`}
               className={`op-icon ${opsVisible ? '' : 'invisible'}`}
-              symbol="delete1"
+              symbol="delete"
               tooltip={gettext('Delete')}
               op={this.onDeleteIconClicked}
             />

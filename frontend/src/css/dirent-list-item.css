@@ -108,6 +108,10 @@
   margin-right: 0;
 }
 
+.dirent-property .sf-metadata-ui-tags-container .sf-metadata-ui-tag-color {
+  margin-right: -6px;
+}
+
 .dirent-item-name-content {
   display: flex;
   align-items: center;

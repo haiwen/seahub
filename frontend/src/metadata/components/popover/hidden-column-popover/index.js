@@ -67,6 +67,10 @@ const HideColumnPopover = ({ hidePopover, onChange, readOnly, target, placement,
     setSearchValue(newSearchValue);
   }, [searchValue]);
 
+  const clearSearch = useCallback(() => {
+    setSearchValue('');
+  }, []);
+
   const update = useCallback((hiddenColumns) => {
     setHiddenColumns(hiddenColumns);
     onChange(hiddenColumns);
@@ -101,13 +105,15 @@ const HideColumnPopover = ({ hidePopover, onChange, readOnly, target, placement,
       className="sf-metadata-hide-columns-popover"
       boundariesElement={document.body}
     >
-      <div ref={popoverRef} onClick={onPopoverInsideClick} className="sf-metadata-hide-columns-container" style={{ maxHeight: window.innerHeight - 100 }}>
+      <div ref={popoverRef} onClick={onPopoverInsideClick} className="sf-metadata-hide-columns-container" style={{ maxHeight: window.innerHeight - 150 }}>
         <div className="sf-metadata-hide-columns-search-container">
           <SearchInput
             placeholder={gettext('Search property')}
             onKeyDown={onKeyDown}
             onChange={onChangeSearch}
+            clearValue={clearSearch}
             autoFocus={true}
+            isClearable={true}
             isShowSearchIcon={true}
           />
         </div>

@@ -8,7 +8,8 @@ export const withDirentContextMenu = (WrappedComponent) => {
     };
 
     getBatchMenuList = (selectedDirents) => {
-      return getBatchMenuList(this.props.currentRepoInfo, selectedDirents, this.getItemMenuList);
+      const { currentRepoInfo, userPerm } = this.props;
+      return getBatchMenuList(currentRepoInfo, userPerm, selectedDirents, this.getItemMenuList);
     };
 
     render() {

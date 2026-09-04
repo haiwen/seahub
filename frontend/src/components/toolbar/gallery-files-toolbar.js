@@ -210,7 +210,7 @@ const GalleryFilesToolbar = () => {
         </>
       )}
       <OpIcon id="download-btn" symbol="download" className="cur-view-path-btn" tooltip={gettext('Download')} aria-label={gettext('Download')} op={onDownloadClick} />
-      {!readOnly && <OpIcon id="delete-btn" symbol="delete1" className="cur-view-path-btn" tooltip={gettext('Delete')} aria-label={gettext('Delete')} op={onDeleteClick} />}
+      {!readOnly && <OpIcon id="delete-btn" symbol="delete" className="cur-view-path-btn" tooltip={gettext('Delete')} aria-label={gettext('Delete')} op={onDeleteClick} />}
 
       {toolbarMenuOptions.length > 0 && (
         <CustomDropdown

@@ -72,7 +72,7 @@ class DirentItem extends React.Component {
             {isOpIconShown && fromSystemRepo &&
               <OpIcon
                 className="op-icon"
-                symbol="delete1"
+                symbol="delete"
                 title={gettext('Delete')}
                 op={this.deleteDirent}
               />

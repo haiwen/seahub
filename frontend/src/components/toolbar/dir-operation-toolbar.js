@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import copy from 'copy-to-clipboard';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import { enableSeadoc, enableWhiteboard, gettext, onlyofficeSupportEditDocxf } from '../../utils/constants';
+import { enableSeadoc, gettext, onlyofficeSupportEditDocxf } from '../../utils/constants';
 import toaster from '../toast';
 import TipDialog from '../dialog/tip-dialog';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
@@ -139,10 +139,8 @@ class DirOperationToolbar extends React.Component {
         if (onlyofficeSupportEditDocxf) {
           newSubOpList.push({ key: 'new-docxf-file', label: gettext('New Docxf File'), onClick: () => this.onCreateFile('.docxf') });
         }
-        if (enableWhiteboard) {
-          newSubOpList.push({ key: 'new-whiteboard-file', label: gettext('New Whiteboard File'), onClick: () => this.onCreateFile('.draw') });
-        }
       }
+
       let opList = [];
       if (canCreate) {
         opList.push({

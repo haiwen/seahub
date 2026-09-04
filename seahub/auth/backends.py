@@ -10,6 +10,8 @@ from django.conf import settings
 from seaserv import ccnet_api, seafile_api
 
 from seahub.base.accounts import User, AuthBackend
+from seahub.auth.models import SocialAuthUser
+from seahub.utils.auth import REMOTE_USER_PROVIDER
 from seahub.profile.models import Profile
 from seahub.utils.file_size import get_quota_from_string
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
@@ -162,6 +164,11 @@ class SeafileRemoteUserBackend(AuthBackend):
                 return None
 
         if self.user_can_authenticate(user):
+            # Persist the remote authentication source so policy checks still
+            # work after this request reloads the user.
+            SocialAuthUser.objects.add_if_not_exists(
+                user.username, REMOTE_USER_PROVIDER, user.username)
+
             # update user info after authenticated
             try:
                 self.configure_user(request, user)

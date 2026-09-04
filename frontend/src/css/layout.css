@@ -7,17 +7,12 @@
 
 :root {
   color-scheme: light;
-  scrollbar-color: #C1C1C1 rgba(0, 0, 0, 0);
 }
 
 input[type="checkbox"],
 input[type="radio"],
 select {
   color-scheme: inherit;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bs-body-bg);
 }
 
 /* for left right layout */
@@ -469,7 +464,6 @@ img[src=""], img:not([src]) {
   height: 2px;
   width: var(--indicator-width);
   background: #ED7109;
-  border-radius: 2px;
   transition: transform 0.3s ease;
   transform: translateX(var(--indicator-offset));
 }

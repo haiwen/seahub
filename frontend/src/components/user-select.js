@@ -170,7 +170,12 @@ class UserSelect extends React.Component {
   onEsc = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    this.setState({ isPopoverOpen: false });
+    this.setState({
+      isPopoverOpen: false,
+      searchedUsers: [],
+      searchValue: '',
+      highlightIndex: -1
+    });
   };
 
   onUserClick = (user) => {
@@ -206,10 +211,12 @@ class UserSelect extends React.Component {
   };
 
   onTogglePopover = () => {
-    this.setState({ isPopoverOpen: !this.state.isPopoverOpen });
-    if (!this.state.isPopoverOpen) {
-      this.onValueChanged(this.state.searchValue);
-    }
+    this.setState({
+      isPopoverOpen: !this.state.isPopoverOpen,
+      highlightIndex: -1,
+      searchedUsers: [],
+      searchValue: ''
+    });
   };
 
   render() {
@@ -265,6 +272,7 @@ class UserSelect extends React.Component {
                   onChange={this.onValueChanged}
                   onKeyDown={this.onKeyDown}
                   isClearable={true}
+                  clearValue={() => this.onValueChanged('')}
                 />
               </div>
               <div className="user-list-container" ref={ref => this.container = ref}>

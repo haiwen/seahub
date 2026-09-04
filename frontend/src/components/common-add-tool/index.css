@@ -10,7 +10,7 @@
 }
 
 .add-item-btn:hover {
-  background: none;
+  background-color: var(--bs-hover-secondary-bg);
 }
 
 .add-item-btn .add-item-btn-content {
@@ -24,7 +24,6 @@
   font-size: 14px;
   font-weight: 600;
   transform: none;
-  color: var(--bs-icon-secondary-color);
 }
 
 .add-item-btn .add-item-btn-content .label {
@@ -33,4 +32,6 @@
 
 .add-item-btn .add-item-btn-content .description {
   flex: 1;
+  color: var(--bs-body-color);
+  font-size: .875rem;
 }

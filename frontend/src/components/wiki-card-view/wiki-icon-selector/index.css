@@ -43,27 +43,33 @@
 
 .wiki-icon-selector-dialog .wiki-icon-selector-body {
   display: flex;
+  flex-direction: column;
   min-height: 288px;
   padding: 0 0 16px;
   overflow: hidden;
 }
 
+.wiki-icon-selector-search-container {
+  flex-shrink: 0;
+  padding: 16px 16px 8px;
+}
+
+.wiki-icon-selector-search-container .search-input-wrapper {
+  position: relative;
+}
+
 .wiki-icon-selector-scroll {
   flex: 1;
   min-height: 0;
-  padding: 16px 16px 0;
+  padding: 0 16px;
   overflow-y: auto;
-}
-
-.wiki-icon-selector-body .search-input-wrapper {
-  position: relative;
-  margin-bottom: 16px;
 }
 
 .wiki-icon-selector-body .wiki-icon-selector-search {
   height: 38px;
   padding-left: 36px;
   padding-right: 40px;
+  border-radius: 4px;
   color: var(--bs-body-color);
   font-size: 14px;
 }
@@ -78,10 +84,14 @@
   color: #868e96;
 }
 
-.wiki-icon-selector-body .search-input-wrapper .search-icon-left .seafile-multicolor-icon,
-.wiki-icon-selector-body .search-input-wrapper .search-text-clear .seafile-multicolor-icon {
+.wiki-icon-selector-body .search-input-wrapper .search-icon-left .seafile-multicolor-icon {
   width: 16px;
   height: 16px;
+}
+
+.wiki-icon-selector-body .search-input-wrapper .search-text-clear .seafile-multicolor-icon {
+  width: 14px;
+  height: 14px;
 }
 
 .wiki-icon-selector-body .search-input-wrapper .search-text-clear {
@@ -137,10 +147,8 @@
   color: inherit;
 }
 
-.wiki-icon-selector-empty {
-  color: var(--bs-body-secondary-color);
-  font-size: 14px;
-  line-height: 22px;
+.wiki-icon-selector-empty .search-empty-tip {
+  padding: 64px 10px 80px;
 }
 
 .wiki-icon-selector-error {

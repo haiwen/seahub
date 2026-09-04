@@ -84,7 +84,7 @@ const AllTagsToolbar = () => {
         <OpIcon
           id="delete-btn"
           className="cur-view-path-btn"
-          symbol="delete1"
+          symbol="delete"
           tooltip={gettext('Delete')}
           op={deleteTags}
         />

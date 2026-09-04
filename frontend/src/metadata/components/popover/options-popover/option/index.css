@@ -10,8 +10,12 @@
 }
 
 .sf-metadata-edit-option-container:hover {
-  background-color: var(--bs-hover-bg);
+  background-color: var(--bs-hover-secondary-bg);
   cursor: pointer;
+}
+
+.sf-metadata-edit-option-container .sf-metadata-edit-option-drag-container {
+  display: flex;
 }
 
 .sf-metadata-edit-option-container .sf-metadata-edit-option-drag-container:hover {
@@ -25,7 +29,6 @@
 .sf-metadata-edit-option-container .sf-metadata-edit-option-content {
   display: flex;
   align-items: center;
-  border-radius: .25rem;
   flex: 1 1;
   margin-left: 10px;
   overflow: hidden;
@@ -40,13 +43,8 @@
   justify-content: center;
 }
 
-.sf-metadata-edit-option-container .sf-metadata-edit-option-operation-item .seafile-multicolor-icon-delete {
-  fill: #666;
+.sf-metadata-edit-option-container .seafile-multicolor-icon-btn {
   font-size: 14px;
-}
-
-.sf-metadata-edit-option-container .sf-metadata-edit-option-operation-item:hover .seafile-multicolor-icon-delete {
-  fill: #212529;
 }
 
 .sf-metadata-edit-option-container.sf-metadata-edit-option-drop-over-top::before {

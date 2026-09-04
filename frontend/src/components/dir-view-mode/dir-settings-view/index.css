@@ -1,32 +1,72 @@
 .library-setting-item {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .library-setting-item-heading {
+  display: flex;
+  align-items: center;
+  height: 2.5rem;
   font-size: 1rem;
   font-weight: normal;
-  padding-bottom: .25rem;
+  padding-bottom: 0;
   border-bottom: 1px solid var(--bs-border-secondary-color);
-  margin-bottom: .75rem;
+  margin-bottom: .5rem;
 }
 
 .library-setting-item-2nd-heading {
   font-size: .875rem;
   font-weight: normal;
+  line-height: 1.375rem;
   margin: 0;
 }
 
 .library-setting-item .form-check {
+  min-height: 2rem;
   padding-left: 1.375rem;
   margin-bottom: 0;
 }
 
+.library-setting-item .form-check-input {
+  margin-top: .5625rem;
+}
+
 .library-setting-item .form-label {
+  display: flex;
+  align-items: center;
+  min-height: 2rem;
   font-size: .875rem;
+  font-weight: normal;
+  margin-bottom: 0;
+}
+
+.library-setting-item input.expire-input {
+  padding: .25rem .5rem;
+  margin: 0 .5rem;
+  border-radius: 4px;
+}
+
+.library-setting-item .seahub-switch,
+.library-setting-item .seahub-switch .custom-switch {
+  min-height: 2rem;
+}
+
+.library-setting-item .seahub-switch.large .custom-switch-indicator {
+  width: 1.75rem;
+  height: 1rem;
+}
+
+.library-setting-item .seahub-switch.large .custom-switch-indicator::before {
+  width: .75rem;
+  height: .75rem;
+}
+
+.library-setting-item .seahub-switch.large .custom-switch-input:checked~.custom-switch-indicator::before {
+  left: 14px;
 }
 
 .library-setting-item .setting-tip {
   font-size: .75rem;
+  line-height: 1.25rem;
   color: var(--bs-body-secondary-color);
   margin: .25rem 0 0;
 }
@@ -50,13 +90,24 @@
   background: var(--bs-bg-color);
 }
 
-.library-setting-item .metadata-status-hide-properties-button:hover {
-  background: #ebebeb;
+.library-setting-item .metadata-status-hide-properties-button.btn.btn-secondary:hover {
+  background: var(--bs-icon-btn-hover-bg-color);
+}
+
+.library-setting-item .tags-language-selector {
+  width: 300px;
+  max-width: 100%;
+}
+
+.library-setting-item .migrate-tags-tip {
+  line-height: 1.375rem;
 }
 
 .library-setting-item .migrate-tags-btn {
   display: grid;
   place-items: center;
+  height: 2rem;
+  padding: 3px 12px;
 }
 
 .library-setting-item .migrate-tags-btn .tags-migrating-icon,

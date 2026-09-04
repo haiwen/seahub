@@ -1,5 +1,5 @@
 import TextTranslation from '@/utils/text-translation';
-import { lockFile, unlockFile, freezeDocument, unfreezeDocument, exportDocx, exportMarkdown, exportSdoc, openHistory, openViaClient, openByDefault, openWithOnlyOffice, toggleStar } from '@/utils/dirent-operations';
+import { lockFile, unlockFile, batchLockFile, batchUnlockFile, freezeDocument, unfreezeDocument, exportDocx, exportMarkdown, exportSdoc, openHistory, openViaClient, openByDefault, openWithOnlyOffice, toggleStar } from '@/utils/dirent-operations';
 import EventBus, { eventBus as globalEventBus } from '@/components/common/event-bus';
 import { EVENT_BUS_TYPE } from '@/components/common/event-bus-type';
 import { Dirent } from '@/models';
@@ -55,12 +55,20 @@ export const menuHandlers = {
     onItemRename && onItemRename();
   },
 
-  [TextTranslation.LOCK.key]: ({ repoID, path, dirent, updateDirent }) => {
-    lockFile(repoID, path, dirent, updateDirent);
+  [TextTranslation.LOCK.key]: ({ repoID, path, dirent, updateDirent, dirents, isBatch, repoInfo }) => {
+    if (isBatch) {
+      batchLockFile(repoID, repoInfo, dirents, updateDirent);
+    } else {
+      lockFile(repoID, path, dirent, updateDirent);
+    }
   },
 
-  [TextTranslation.UNLOCK.key]: ({ repoID, path, dirent, updateDirent }) => {
-    unlockFile(repoID, path, dirent, updateDirent);
+  [TextTranslation.UNLOCK.key]: ({ repoID, path, dirent, updateDirent, dirents, isBatch, repoInfo }) => {
+    if (isBatch) {
+      batchUnlockFile(repoID, repoInfo, dirents, updateDirent);
+    } else {
+      unlockFile(repoID, path, dirent, updateDirent);
+    }
   },
 
   [TextTranslation.FREEZE_DOCUMENT.key]: ({ repoID, path, dirent, updateDirent }) => {
@@ -142,10 +150,6 @@ export const menuHandlers = {
 
   [TextTranslation.NEW_WORD_FILE.key]: ({ eventBus, path, direntList }) => {
     eventBus.dispatch(EVENT_BUS_TYPE.CREATE_FILE, path, direntList, '.docx');
-  },
-
-  [TextTranslation.NEW_TLDRAW_FILE.key]: ({ eventBus, path, direntList }) => {
-    eventBus.dispatch(EVENT_BUS_TYPE.CREATE_FILE, path, direntList, '.draw');
   },
 
   [TextTranslation.NEW_EXCALIDRAW_FILE.key]: ({ eventBus, path, direntList }) => {

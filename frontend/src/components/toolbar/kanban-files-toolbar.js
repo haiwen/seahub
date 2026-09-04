@@ -239,7 +239,7 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
       {!readOnly && (
         <OpIcon
           id="delete-btn"
-          symbol="delete1"
+          symbol="delete"
           className="cur-view-path-btn"
           tooltip={gettext('Delete')}
           aria-label={gettext('Delete')}

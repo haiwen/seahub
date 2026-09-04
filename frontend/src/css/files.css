@@ -6,6 +6,10 @@
   min-width: 215px;
 }
 
+.libraries-more-menu {
+  min-width: 270px;
+}
+
 #files-content-container .libraries-empty-tip-in-list-mode {
   color: #666;
   text-align: center;

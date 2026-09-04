@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Attachments } from '../../components';
 import Icon from '../../../../icon';
-import { gettext } from '../../../../../utils/constants';
 
 import './index.css';
 
@@ -44,7 +43,6 @@ const AttachmentsFormatter = ({ value = [], onRemove }) => {
             type="button"
             className="sea-ai-icon-btn"
             onClick={() => scrollAttachments(-1)}
-            title={gettext('Previous')}
           >
             <Icon symbol="arrow-left" />
           </button>
@@ -63,9 +61,8 @@ const AttachmentsFormatter = ({ value = [], onRemove }) => {
             type="button"
             className="sea-ai-icon-btn"
             onClick={() => scrollAttachments(1)}
-            title={gettext('Next')}
           >
-            <Icon symbol="arrow-right" />
+            <Icon symbol="sdoc-next-page" />
           </button>
         </div>
       )}

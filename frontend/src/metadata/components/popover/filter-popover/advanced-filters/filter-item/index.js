@@ -464,7 +464,7 @@ class FilterItem extends React.Component {
         }
 
         let dataOptions = options.map(option => {
-          return FilterItemUtils.generateSingleSelectOption(option);
+          return FilterItemUtils.generateSingleSelectOption(option, filter_term);
         });
 
         return (

@@ -364,16 +364,11 @@ class EditWikiPopover extends React.Component {
   };
 
   closeIconSelector = () => {
-    this.setState((state) => {
-      const selectedIcon = state.draftSelectedIcon || state.selectedIcon;
-      return {
-        selectedIcon,
-        pinnedIcon: isHomepageWikiIcon(selectedIcon) ? state.pinnedIcon : selectedIcon,
-        isCustomIconPage: true,
-        isIconSelectorOpen: false,
-        draftSelectedIcon: null,
-        errorMessage: '',
-      };
+    this.setState({
+      isCustomIconPage: true,
+      isIconSelectorOpen: false,
+      draftSelectedIcon: null,
+      errorMessage: '',
     });
   };
 
@@ -431,11 +426,16 @@ class EditWikiPopover extends React.Component {
   };
 
   handleIconSelectorSubmit = () => {
-    const { draftSelectedIcon } = this.state;
-    if (!draftSelectedIcon) return;
-
-    this.setState({ selectedIcon: draftSelectedIcon }, () => {
-      this.submitUpdate(draftSelectedIcon);
+    this.setState((state) => {
+      if (!state.draftSelectedIcon) return null;
+      return {
+        selectedIcon: state.draftSelectedIcon,
+        pinnedIcon: isHomepageWikiIcon(state.draftSelectedIcon) ? state.pinnedIcon : state.draftSelectedIcon,
+        isCustomIconPage: true,
+        isIconSelectorOpen: false,
+        draftSelectedIcon: null,
+        errorMessage: '',
+      };
     });
   };
 
@@ -549,7 +549,7 @@ class EditWikiPopover extends React.Component {
                   onIconSelect={this.handleFullIconSelect}
                   onPrevious={this.closeIconSelector}
                   onSubmit={this.handleIconSelectorSubmit}
-                  isSubmitDisabled={!draftSelectedIcon || !name.trim() || !this.hasChanges(draftSelectedIcon)}
+                  isSubmitDisabled={!draftSelectedIcon}
                   isSubmitting={isSubmitting}
                   errorMessage={errorMessage}
                 /> :

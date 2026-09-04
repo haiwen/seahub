@@ -24,7 +24,7 @@ const LocationControls = ({
           title={gettext('Full screen')}
           onClick={onFullScreen}
         >
-          <Icon symbol="fullscreen"/>
+          <Icon symbol="fullscreen" />
         </span>
         {position && (
           <span
@@ -33,7 +33,7 @@ const LocationControls = ({
             title={gettext('Delete location')}
             onClick={onClear}
           >
-            <Icon symbol="delete1" />
+            <Icon symbol="delete" />
           </span>
         )}
         <button

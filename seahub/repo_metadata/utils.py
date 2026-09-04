@@ -9,10 +9,35 @@ from datetime import datetime
 from seahub.settings import SECRET_KEY, SEAFEVENTS_SERVER_URL
 from seahub.views import check_folder_permission
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
+from seahub.repo_metadata.constants import FACE_RECOGNITION_VIEW_ID
 
 from seaserv import seafile_api
 
 FACES_SAVE_PATH = '_Internal/Faces'
+
+
+def filter_face_recognition_views(metadata_views):
+    # Face recognition is no longer available. Hide legacy views without changing stored data.
+    face_view_ids = {
+        view.get('_id') for view in metadata_views.get('views', [])
+        if view.get('type') == 'face_recognition' or view.get('_id') == FACE_RECOGNITION_VIEW_ID
+    }
+    metadata_views['views'] = [
+        view for view in metadata_views.get('views', [])
+        if view.get('_id') not in face_view_ids
+    ]
+    navigation = []
+    for item in metadata_views.get('navigation', []):
+        if item.get('_id') in face_view_ids:
+            continue
+        if item.get('type') == 'folder':
+            item['children'] = [
+                child for child in item.get('children', [])
+                if child.get('_id') not in face_view_ids
+            ]
+        navigation.append(item)
+    metadata_views['navigation'] = navigation
+    return metadata_views
 
 # fake metadata for metadata views of repo without metadata enabled, to avoid frontend error. 
 # The metadata is not real and only used for display.
@@ -115,6 +140,17 @@ def add_init_ai_summary_task(params):
     url = urljoin(SEAFEVENTS_SERVER_URL, '/add-init-ai-summary-task')
     resp = requests.get(url, params=params, headers=headers)
     return json.loads(resp.content).get('task_id')
+
+
+def delete_summary_vector_index(params):
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {"Authorization": "Token %s" % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/delete-summary-vector-index')
+    resp = requests.post(url, json=params, headers=headers, timeout=30)
+    if resp.status_code < 200 or resp.status_code >= 300:
+        raise ConnectionError(resp.status_code, resp.text)
+    return resp.json()
 
 
 def extract_file_details(params):

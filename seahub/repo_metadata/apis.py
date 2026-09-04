@@ -21,7 +21,8 @@ from seahub.repo_metadata.utils import add_init_metadata_task, recognize_faces, 
     get_unmodifiable_columns, can_read_metadata, init_faces, \
     extract_file_details, get_table_by_name, remove_faces_table, FACES_SAVE_PATH, \
     init_tags, init_tag_self_link_columns, remove_tags_table, add_init_face_recognition_task, \
-    add_init_ai_summary_task, get_update_record, update_people_cover_photo, init_ai_summary, remove_ai_summary
+    add_init_ai_summary_task, delete_summary_vector_index, get_update_record, update_people_cover_photo, init_ai_summary, \
+    remove_ai_summary, filter_face_recognition_views
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.repo import is_repo_admin, is_repo_owner
 from seahub.share.utils import check_invisible_folder
@@ -32,7 +33,7 @@ from seahub.repo_tags.models import RepoTags
 from seahub.settings import MD_FILE_COUNT_LIMIT
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.search.utils import get_invisible_repos_info_by_username, is_invisible_path
-from seahub.ai.utils import verify_ai_config
+from seahub.ai.utils import verify_ai_config, verify_chat_ai_config
 
 logger = logging.getLogger(__name__)
 
@@ -78,8 +79,9 @@ class MetadataManage(APIView):
                 if record.tags_enabled:
                     is_tags_enabled = True
                     tags_lang = record.tags_lang
-                if record.face_recognition_enabled:
-                    face_recognition_enabled = True
+                # Face recognition is no longer available.
+                # if record.face_recognition_enabled:
+                #     face_recognition_enabled = True
                 if record.summary_enabled:
                     summary_enabled = True
                 if not global_hidden_columns:
@@ -199,6 +201,12 @@ class MetadataManage(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         try:
+            if record.summary_enabled:
+                record.summary_enabled = False
+                record.ai_summary_indexed_at = None
+                record.ai_processing_status = ''
+                record.save()
+                delete_summary_vector_index({'repo_id': repo_id})
             metadata_server_api.delete_base()
         except Exception as err:
             logger.error(err)
@@ -209,7 +217,6 @@ class MetadataManage(APIView):
             record.enabled = False
             record.face_recognition_enabled = False
             record.tags_enabled = False
-            record.summary_enabled = False
             record.details_settings = '{}'
             record.save()
             RepoMetadataViews.objects.filter(repo_id=repo_id).delete()
@@ -1113,6 +1120,8 @@ class MetadataViews(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        metadata_views = filter_face_recognition_views(metadata_views)
+
         return Response(metadata_views)
 
     def post(self, request, repo_id):
@@ -1153,12 +1162,10 @@ class MetadataViews(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
 
-        # The face_recognition view is unique for a repo, cannot be added repeatedly.
+        # Face recognition is no longer available.
         if view_type == 'face_recognition':
-            view = RepoMetadataViews.objects.get_view(repo_id, FACE_RECOGNITION_VIEW_ID)
-            if view:
-                error_msg = 'The face recognition view already exists.'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            error_msg = 'The face recognition view is no longer available.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
             new_view = RepoMetadataViews.objects.add_view(repo_id, view_name, view_type, view_data, folder_id)
@@ -1211,6 +1218,8 @@ class MetadataViews(APIView):
 
         try:
             result = RepoMetadataViews.objects.update_view(repo_id, view_id, view_data)
+            if result is None:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'update view failed')
         except Exception as e:
             logger.exception(e)
             error_msg = 'Internal Server Error'
@@ -1347,6 +1356,10 @@ class MetadataViewsDetailView(APIView):
             logger.exception(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if not view:
+            error_msg = 'Metadata view %s not found.' % view_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         return Response({'view': view})
 
@@ -1993,8 +2006,8 @@ class MetadataAISummaryStatusManage(APIView):
         return Response({'enabled': bool(metadata.summary_enabled)})
 
     def post(self, request, repo_id):
-        if not verify_ai_config():
-            return api_error(status.HTTP_400_BAD_REQUEST, 'AI server not configured')
+        if not verify_chat_ai_config():
+            return api_error(status.HTTP_400_BAD_REQUEST, 'AI Chat and Search is not configured')
 
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
         if not metadata or not metadata.enabled:
@@ -2018,6 +2031,8 @@ class MetadataAISummaryStatusManage(APIView):
         try:
             init_ai_summary(metadata_server_api)
             metadata.summary_enabled = True
+            metadata.ai_summary_indexed_at = None
+            metadata.ai_processing_status = ''
             metadata.save()
             add_init_ai_summary_task({
                 'repo_id': repo_id,
@@ -2025,6 +2040,10 @@ class MetadataAISummaryStatusManage(APIView):
             })
         except Exception as e:
             logger.exception(e)
+            metadata.summary_enabled = False
+            metadata.ai_summary_indexed_at = None
+            metadata.ai_processing_status = ''
+            metadata.save()
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         return Response({'success': True})
@@ -2046,8 +2065,11 @@ class MetadataAISummaryStatusManage(APIView):
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         try:
+            delete_summary_vector_index({'repo_id': repo_id})
             remove_ai_summary(metadata_server_api)
             metadata.summary_enabled = False
+            metadata.ai_summary_indexed_at = None
+            metadata.ai_processing_status = ''
             metadata.save()
         except Exception as e:
             logger.exception(e)

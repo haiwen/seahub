@@ -79,7 +79,10 @@ const MenuSelectStyle = {
       minHeight: '32px',
       padding: '6px 8px',
       cursor: isDisabled ? 'default' : 'pointer',
-      backgroundColor: isFocused ? 'var(--bs-dropdown-link-hover-bg)' : 'var(--bs-popover-bg)',
+      backgroundColor: isFocused && !isDisabled ? 'var(--bs-dropdown-link-hover-bg)' : 'var(--bs-popover-bg)',
+      '&:hover': {
+        backgroundColor: isDisabled ? 'var(--bs-popover-bg)' : 'var(--bs-dropdown-link-hover-bg)',
+      }
     });
   },
   control: controlCallback,

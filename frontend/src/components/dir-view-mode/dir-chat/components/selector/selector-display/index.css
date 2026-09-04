@@ -18,6 +18,7 @@
 
 .sea-ai-customize-select.sea-ai-chat-selector-display.sea-ai-model-selector {
   cursor: pointer;
+  background-color: var(--bs-bg-file-card-color);
 }
 
 .sea-ai-customize-select.sea-ai-chat-selector-display:hover {
@@ -35,7 +36,7 @@
       var(--bs-icon-btn-hover-bg-color) 0%,
       var(--bs-icon-btn-hover-bg-color) 100%
     ),
-    var(--bs-body-secondary-bg);
+    var(--bs-bg-file-card-color);
 }
 
 .sea-ai-customize-select.sea-ai-chat-selector-display.highlight {

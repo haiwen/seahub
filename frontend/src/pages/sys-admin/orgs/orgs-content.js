@@ -78,14 +78,14 @@ class Content extends Component {
             </tbody>
           </table>
           {this.props.currentPage &&
-          <Paginator
-            currentPage={this.props.currentPage}
-            hasNextPage={this.props.hasNextPage}
-            curPerPage={this.props.curPerPage}
-            resetPerPage={this.props.resetPerPage}
-            gotoPreviousPage={this.getPreviousPage}
-            gotoNextPage={this.getNextPage}
-          />
+            <Paginator
+              currentPage={this.props.currentPage}
+              hasNextPage={this.props.hasNextPage}
+              curPerPage={this.props.curPerPage}
+              resetPerPage={this.props.resetPerPage}
+              gotoPreviousPage={this.getPreviousPage}
+              gotoNextPage={this.getNextPage}
+            />
           }
         </Fragment>
       );
@@ -280,7 +280,7 @@ class Item extends Component {
           <td>
             <OpIcon
               className={`op-icon ${highlighted ? '' : 'invisible'}`}
-              symbol="delete1"
+              symbol="delete"
               title={gettext('Delete')}
               op={this.toggleDeleteDialog}
             />

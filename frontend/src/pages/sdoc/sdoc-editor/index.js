@@ -6,7 +6,7 @@ import Dirent from '../../../models/dirent';
 import { Utils } from '../../../utils/utils';
 import { useCollaborators } from '../../../metadata';
 import EmbeddedFileDetails from '../../../components/dirent-detail/embedded-file-details';
-import { gettext, mediaUrl } from '../../../utils/constants';
+import { chatAndSearchAvailable, gettext, mediaUrl } from '../../../utils/constants';
 import { useMetadataStatus } from '../../../hooks';
 import Tooltip from '../../../components/tooltip';
 import SdocChatPanel, { SdocChatPluginIcon } from './sdoc-chat-panel';
@@ -19,7 +19,9 @@ const SdocEditor = () => {
   const [direntList, setDirentList] = useState([]);
   const [currentDirent, setCurrentDirent] = useState(null);
   const { collaborators } = useCollaborators();
-  const { enableMetadata } = useMetadataStatus();
+  const { enableMetadata, enableAISummary } = useMetadataStatus();
+  const isVirtualRepo = window.app.pageOptions.isVirtualRepo;
+  const canUseAIChat = chatAndSearchAvailable && enableAISummary && !isVirtualRepo;
   const plugins = useMemo(() => {
     const { repoID, docPath, docPerm, isRepoAdmin } = window.seafile;
     return [
@@ -65,8 +67,8 @@ const SdocEditor = () => {
           );
         },
       }
-    ];
-  }, [currentDirent]);
+    ].filter((plugin) => canUseAIChat || plugin.name !== 'sdoc-chat');
+  }, [canUseAIChat, currentDirent]);
 
   const dirPath = useMemo(() => {
     const { docPath } = window.seafile;

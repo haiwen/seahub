@@ -248,11 +248,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: auto;
 }
 
 .sf-canvas-groups-rows .group-rows-count .count-title {
   margin-right: 4px;
   color: var(--bs-body-secondary-color);
+  white-space: nowrap;
 }
 
 /* group-header-right */

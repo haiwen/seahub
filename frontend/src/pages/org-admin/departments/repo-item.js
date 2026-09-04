@@ -41,13 +41,13 @@ class RepoItem extends React.Component {
     return (
       <>
         <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-          <td><img src={iconUrl} width="24" alt={gettext('icon')}/></td>
+          <td><img src={iconUrl} width="24" alt={gettext('icon')} /></td>
           <td>{repo.name}</td>
           <td>{Utils.bytesToSize(repo.size)}{' '}</td>
           <td className="cursor-pointer text-center">
             <OpIcon
               className={`op-icon ${highlight ? '' : 'vh'}`}
-              symbol="delete1"
+              symbol="delete"
               title="Delete"
               op={this.toggleDeleteDialog}
             />

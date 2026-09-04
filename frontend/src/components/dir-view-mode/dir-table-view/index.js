@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import SFTable from '../../sf-table';
 import { transformDirentsToTableData } from './data-transformer';
 import { createDirentTableColumns, setDirTableColumnWidth } from './columns';
-import { siteRoot, enableSeadoc, enableWhiteboard } from '@/utils/constants';
+import { siteRoot, enableSeadoc } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import Icon from '@/components/icon';
 import TextTranslation from '@/utils/text-translation';
@@ -43,6 +43,7 @@ const DirTableView = ({
   isDirentListLoading,
   repoID,
   repoInfo,
+  userPerm,
   path,
   sortBy,
   sortOrder,
@@ -78,7 +79,7 @@ const DirTableView = ({
   const { globalHiddenColumns } = useMetadataStatus();
   const { tagsData } = useTags();
 
-  const { getBatchMenuList, getItemMenuList } = useDirentContextMenu({ repoInfo });
+  const { getBatchMenuList, getItemMenuList } = useDirentContextMenu({ repoInfo, userPerm });
 
   const permission = useMemo(() => {
     let canDrop = repoInfo.permission === 'rw';
@@ -349,6 +350,7 @@ const DirTableView = ({
         eventBus,
         path,
         repoID,
+        repoInfo,
         dirent,
         dirents,
         isBatch,
@@ -381,7 +383,6 @@ const DirTableView = ({
     if (idx === -1 && rowIdx === -1 && selectedRecordIds.length === 0) {
       const createMenuOptions = getCreateMenuList({
         enableSeadoc,
-        enableWhiteboard,
         isRepoEncrypted: repoInfo.encrypted
       });
 
@@ -708,6 +709,7 @@ DirTableView.propTypes = {
   isDirentListLoading: PropTypes.bool.isRequired,
   repoID: PropTypes.string.isRequired,
   repoInfo: PropTypes.object.isRequired,
+  userPerm: PropTypes.string,
   path: PropTypes.string.isRequired,
   sortBy: PropTypes.string,
   sortOrder: PropTypes.string,

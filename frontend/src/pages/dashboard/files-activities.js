@@ -12,7 +12,7 @@ import '../../css/files-activities.css';
 
 dayjs.locale(window.app.config.lang);
 
-const NAV_ITEM_MARGIN = 16;
+const GAP = 32;
 
 class FilesActivities extends Component {
 
@@ -232,22 +232,22 @@ class FilesActivities extends Component {
     const activeIndex = onlyMine ? 1 : 0;
     const itemWidths = this.itemRefs.map(ref => ref?.offsetWidth);
     const indicatorWidth = itemWidths[activeIndex];
-    const indicatorOffset = itemWidths.slice(0, activeIndex).reduce((a, b) => a + b, 0) + (2 * activeIndex + 1) * NAV_ITEM_MARGIN;
+    const indicatorOffset = itemWidths.slice(0, activeIndex).reduce((a, b) => a + b, 0) + activeIndex * GAP;
     return (
       <div className="main-panel-center">
         <div className="cur-view-container" id="activities">
           <div className="cur-view-path">
             <ul
-              className="nav nav-indicator-container position-relative"
+              className="nav nav-indicator-container position-relative gap-6"
               style={{
                 '--indicator-width': `${indicatorWidth}px`,
                 '--indicator-offset': `${indicatorOffset}px`
               }}
             >
-              <li className="nav-item mx-4" ref={el => this.itemRefs[0] = el}>
+              <li className="nav-item" ref={el => this.itemRefs[0] = el}>
                 <Link to={`${siteRoot}activities/all/`} className={`nav-link${onlyMine ? '' : ' active'}`}>{gettext('All Activities')}</Link>
               </li>
-              <li className="nav-item mx-4" ref={el => this.itemRefs[1] = el}>
+              <li className="nav-item" ref={el => this.itemRefs[1] = el}>
                 <Link to={`${siteRoot}activities/mine/`} className={`nav-link${onlyMine ? ' active' : ''}`}>{gettext('My Activities')}</Link>
               </li>
             </ul>

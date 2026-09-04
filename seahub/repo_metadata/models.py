@@ -46,6 +46,8 @@ class RepoMetadataManager(models.Manager):
             metadata.tags_enabled = True
             metadata.tags_lang = 'en'
             metadata.summary_enabled = False
+            metadata.ai_summary_indexed_at = None
+            metadata.ai_processing_status = ''
             metadata.from_commit = from_commit
             metadata.to_commit = None
         metadata.save()
@@ -76,6 +78,7 @@ class RepoMetadata(models.Model):
     ocr_enabled = models.BooleanField(db_index=True)
     global_hidden_columns = models.TextField()
     ai_processing_status = models.CharField(max_length=32, default='', blank=True)
+    ai_summary_indexed_at = models.DateTimeField(blank=True, null=True)
 
     objects = RepoMetadataManager()
 
@@ -234,19 +237,26 @@ class RepoMetadataViewsManager(models.Manager):
         view_details = json.loads(metadata_views.details)
         for v in view_details['views']:
             if v.get('_id') == view_id:
+                if v.get('type') == 'face_recognition' or v.get('_id') == FACE_RECOGNITION_VIEW_ID:
+                    return None
                 return v
 
     def update_view(self, repo_id, view_id, view_dict):
         metadata_views = self.filter(repo_id=repo_id).first()
+        view_details = json.loads(metadata_views.details)
+        view = next((view for view in view_details['views'] if view.get('_id') == view_id), None)
+        if not view:
+            return None
+        if (view.get('type') == 'face_recognition' or
+                view.get('_id') == FACE_RECOGNITION_VIEW_ID or
+                view_dict.get('type') == 'face_recognition'):
+            return None
+
         view_dict.pop('_id', '')
         if 'name' in view_dict:
             exist_obj_names = metadata_views.views_names
             view_dict['name'] = get_no_duplicate_obj_name(view_dict['name'], exist_obj_names)
-        view_details = json.loads(metadata_views.details)
-        for v in view_details['views']:
-            if v.get('_id') == view_id:
-                v.update(view_dict)
-                break
+        view.update(view_dict)
         metadata_views.details = json.dumps(view_details)
         metadata_views.save()
         return json.loads(metadata_views.details)
@@ -255,11 +265,13 @@ class RepoMetadataViewsManager(models.Manager):
         metadata_views = self.filter(repo_id=repo_id).first()
         view_details = json.loads(metadata_views.details)
         exist_folders_views_ids = metadata_views.folders_views_ids
-        new_view_id = generate_views_unique_id(4, exist_folders_views_ids)
         duplicate_view = next((copy.deepcopy(view) for view in view_details['views'] if view.get('_id') == view_id), None)
         if not duplicate_view:
             return None
+        if duplicate_view.get('type') == 'face_recognition' or duplicate_view.get('_id') == FACE_RECOGNITION_VIEW_ID:
+            return None
 
+        new_view_id = generate_views_unique_id(4, exist_folders_views_ids)
         duplicate_view['_id'] = new_view_id
         view_name = get_no_duplicate_obj_name(duplicate_view['name'], metadata_views.views_names)
         duplicate_view['name'] = view_name

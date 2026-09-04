@@ -8,6 +8,8 @@ import SharedRepoListView from '../../components/shared-repo-list-view/shared-re
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import GroupOperationMenu from './group-op-menu';
 import Icon from '../../components/icon';
+import EventBus from '../../components/common/event-bus';
+import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 
 const propTypes = {
   inAllLibs: PropTypes.bool,
@@ -36,6 +38,7 @@ class GroupItem extends React.Component {
     const { id: group_id } = group;
     seafileAPI.unshareRepoToGroup(repo.repo_id, group_id).then(() => {
       this.props.unshareRepoToGroup({ repo_id: repo.repo_id, group_id });
+      EventBus.getInstance().dispatch(EVENT_BUS_TYPE.GROUP_LIBRARIES_CHANGED);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -44,6 +47,12 @@ class GroupItem extends React.Component {
 
   onItemDelete = (repo) => {
     this.props.deleteRelatedGroupsRepos(repo.repo_id);
+    EventBus.getInstance().dispatch(EVENT_BUS_TYPE.GROUP_LIBRARIES_CHANGED);
+  };
+
+  onTransferRepo = (repoID, groupID, newOwner) => {
+    this.props.onTransferRepo(repoID, groupID, newOwner);
+    EventBus.getInstance().dispatch(EVENT_BUS_TYPE.GROUP_LIBRARIES_CHANGED);
   };
 
   onItemRename = (repo, newName) => {
@@ -113,7 +122,7 @@ class GroupItem extends React.Component {
             onItemDelete={this.onItemDelete}
             onItemRename={this.onItemRename}
             onToggleStarRepo={this.onToggleStarRepo}
-            onTransferRepo={this.props.onTransferRepo}
+            onTransferRepo={this.onTransferRepo}
             currentViewMode={currentViewMode}
             updateRepoStatus={this.props.updateRepoStatus}
             isItemFreezed={this.props.isItemFreezed}

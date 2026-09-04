@@ -77,6 +77,7 @@ const CollaboratorEditor = ({ field, value, onChange }) => {
           column={field}
           height={2}
           onCommit={onCommit}
+          isPopover={false}
         />
       </Popover>
     );

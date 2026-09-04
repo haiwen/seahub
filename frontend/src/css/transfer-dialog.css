@@ -53,18 +53,28 @@
 }
 
 .transfer-dialog-content .transfer-dialog-main .transfer-repo-label {
-  color: var(--bs-body-secondary-color);
+  font-size: 14px;
+  color: var(--bs-body-color);
 }
 
-.transfer-dialog-content .transfer-dialog-main .user-select {
-  padding: 8px 0;
-  border-top: 1px solid var(--bs-border-secondary-color);
-  border-bottom: 1px solid var(--bs-border-secondary-color);
+.transfer-repo-reshare-switch .custom-switch-indicator {
+  border-radius: 8px;
+  height: 16px;
+  width: 28px;
+}
+
+.transfer-repo-reshare-switch .custom-switch .custom-switch-indicator:before {
+  height: 12px;
+  width: 12px;
+}
+
+.transfer-repo-reshare-switch .custom-switch .custom-switch-input:checked~.custom-switch-indicator:before {
+  left: 12px;
 }
 
 .transfer-dialog-content .transfer-dialog-main .transfer-repo-department-select {
   min-height: 38px;
-  padding: 6px 12px;
+  padding: 6px 40px 6px 16px;
   border-color: var(--bs-border-color);
   border-radius: 4px;
 }
@@ -74,11 +84,23 @@
 }
 
 .transfer-dialog-content .transfer-dialog-main .transfer-repo-department-select .select-placeholder {
-  color: var(--bs-body-secondary-color);
+  color: #868e96;
+}
+
+.transfer-dialog-content .transfer-dialog-main .transfer-repo-department-select .seafile-multicolor-icon-down {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.transfer-dialog-content .transfer-dialog-main .transfer-repo-department-select .seafile-multicolor-icon-close {
+  color: var(--bs-icon-color);
 }
 
 .transfer-dialog-content .transfer-dialog-main .transfer-repo-department-select .sf-option-group {
-  max-width: none;
+  min-width: 100%;
+  max-width: 100%;
   border-radius: 4px;
 }
 
@@ -91,10 +113,6 @@
   min-height: 30px;
   padding: 0 10px;
   border-radius: 4px;
-}
-
-.transfer-dialog-content .transfer-dialog-main .transfer-repo-reshare-switch .custom-switch {
-  padding-left: 0;
 }
 
 .transfer-dialog-side .nav-item .nav-link:hover {

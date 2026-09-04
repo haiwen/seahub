@@ -150,6 +150,7 @@ const OptionEditorContainer = forwardRef(({
           onChange={onSearchValueChange}
           clearValue={clearSearch}
           isShowSearchIcon={isShowSearchIcon}
+          clearClassName="sea-ai-chat-file-selector-clear"
         />
       </div>
       <Options

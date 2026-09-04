@@ -26,6 +26,7 @@ from seahub.institutions.models import Institution
 from seahub.share.models import UploadLinkShare, FileShare
 from seahub.utils import is_valid_username, is_org_context
 from seahub.utils.file_size import get_file_size_unit
+from seahub.utils.auth import user_local_password_enabled
 from seahub.group.utils import is_group_member
 
 
@@ -311,6 +312,8 @@ class Account(APIView):
             # update password
             password = request.data.get("password", None)
             if password is not None:
+                if not user_local_password_enabled(user):
+                    return api_error(status.HTTP_400_BAD_REQUEST, _('Unable to reset password.'))
                 user.set_password(password)
 
             # save user
