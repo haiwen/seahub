@@ -103,6 +103,7 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
                           className={classNames('sf-file-exit-tag', { 'selected': isSelected })}
                           onClick={() => onClickTag(tag.id)}
                         >
+                          <div className="sf-file-exit-tag-color" style={{ backgroundColor: tag.color }}></div>
                           <div className="sf-file-exit-tag-name">{tag.name}</div>
                         </div>
                       );

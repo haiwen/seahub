@@ -220,6 +220,10 @@ class GenerateFileTags(APIView):
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid')
 
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled or not metadata.tags_enabled:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Metadata tags are not enabled')
+
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
