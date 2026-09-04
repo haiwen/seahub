@@ -187,7 +187,7 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
         case 'Download':
           return <OpIcon key="dl-btn" id="dl-btn" symbol="download" className="cur-view-path-btn" tooltip={gettext('Download')} op={downloadTagFiles} />;
         case 'Delete':
-          return <OpIcon key="del-btn" id="del-btn" symbol="delete1" className="cur-view-path-btn" tooltip={gettext('Delete')} op={deleteTagFiles} />;
+          return <OpIcon key="del-btn" id="del-btn" symbol="delete" className="cur-view-path-btn" tooltip={gettext('Delete')} op={deleteTagFiles} />;
         case 'Share':
           return <OpIcon key="share-btn" id="share-btn" symbol="share" className="cur-view-path-btn" tooltip={gettext('Share')} op={shareTagFile} />;
         case 'Move':

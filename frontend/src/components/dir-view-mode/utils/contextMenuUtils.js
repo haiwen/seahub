@@ -162,17 +162,11 @@ export const getBatchMenuList = (repoInfo, userPerm, selectedDirents, getItemMen
 export const getTagFilesOperations = (repoInfo, selectedDirents) => {
   let batchOptions = [];
 
-  const canDownload = selectedDirents.some(dirent => {
-    const { permission } = dirent;
-    const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
-    return (permission == 'rw' || permission == 'r') || (isCustomPermission && customPermission.permission.download);
+  const canDownload = selectedDirents.some(file => {
+    return Utils.canDownloadFile(file);
   });
-  const canDelete = selectedDirents.some(dirent => {
-    const { permission } = dirent;
-    const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
-    const perm = (permission == 'rw' || permission == 'cloud-edit') || (isCustomPermission && customPermission.permission.delete);
-    const locked = !dirent.is_locked || (dirent.is_locked && dirent.locked_by_me);
-    return perm && locked;
+  const canDelete = selectedDirents.some(file => {
+    return Utils.canDeleteFile(file);
   });
   canDownload && batchOptions.push(TextTranslation.DOWNLOAD);
   canDelete && batchOptions.push(TextTranslation.DELETE);

@@ -6,6 +6,7 @@ import ContextMenu from '../../../components/context-menu/context-menu';
 import { LIST_MODE } from '../../../components/dir-view-mode/constants';
 import { hideMenu, showMenu } from '../../../components/context-menu/actions';
 import { getDirentItemMenuList, getTagFilesOperations } from '../../../components/dir-view-mode/utils/contextMenuUtils';
+import { menuHandlers } from '../../../components/dir-view-mode/utils/menuHandlers';
 import { EVENT_BUS_TYPE } from '../../../metadata/constants';
 import { getRecordIdFromRecord } from '../../../metadata/utils/cell';
 import ImagePreviewer from '../../../metadata/components/cell-formatter/image-previewer';
@@ -52,7 +53,6 @@ const TagFiles = () => {
     openTagFileAccessLog,
     renameTagFileInDialog,
     renameTagFile,
-    chatWithAIAboutTagFiles,
     displayFileDetails,
   } = useTagView();
 
@@ -98,6 +98,21 @@ const TagFiles = () => {
     deleteTagFiles(ids);
     updateSelectedFileIds([]);
   }, [deleteTagFiles, updateSelectedFileIds]);
+
+  const chatWithAIAboutTagFiles = useCallback(() => {
+    if (!selectedFileIds || selectedFileIds.length === 0) return null;
+    const files = selectedFileIds.map(id => {
+      const file = getFileById(tagFiles, id);
+      const name = getFileName(file);
+      const parent_dir = getFileParentDir(file);
+      return { name, parent_dir, type: 'file' };
+    });
+    menuHandlers[TextTranslation.CHAT_WITH_AI.key]({
+      repoID: repoID,
+      dirents: files,
+      isBatch: files.length > 1
+    });
+  }, [selectedFileIds, tagFiles, repoID]);
 
   const toggleStarItem = useCallback(() => {
     toggleStar(repoID, selectedFileParentDir, selectedFile, updateTagFile);

@@ -21,7 +21,7 @@ export const menuHandlers = {
       .filter((item) => item?.type === 'file')
       .map((item) => new AttachmentObject({
         repo_id: repoID,
-        path: Utils.joinPath(path, item.name),
+        path: Utils.joinPath(item.parent_dir, item.name),
         name: item.name,
       }));
 

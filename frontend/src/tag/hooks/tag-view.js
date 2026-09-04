@@ -16,8 +16,6 @@ import { PRIVATE_COLUMN_KEY } from '../constants';
 import { gettext } from '../../utils/constants';
 import { getSortBy, getSortOrder } from '../utils/sort';
 import { useFileOperations } from '../../hooks/file-operations';
-import { menuHandlers } from '../../components/dir-view-mode/utils/menuHandlers';
-import TextTranslation from '../../utils/text-translation';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const TagViewContext = React.createContext(null);
@@ -90,7 +88,12 @@ export const TagViewProvider = ({
 
   const deleteTagFiles = useCallback((ids) => {
     const tagIds = ids?.length ? ids : selectedFileIds;
-    const files = tagIds.map(id => getFileById(tagFiles, id));
+    const files = tagIds
+      .filter(id => {
+        const file = getFileById(tagFiles, id);
+        return Utils.canDeleteFile(file);
+      })
+      .map(id => getFileById(tagFiles, id));
     const paths = files.map(f => Utils.joinPath(f[TAG_FILE_KEY.PARENT_DIR], f[TAG_FILE_KEY.NAME]));
     const fileNames = files.map(f => f[TAG_FILE_KEY.NAME]);
     metadataAPI.batchDeleteFiles(repoID, paths).then(() => {
@@ -129,11 +132,17 @@ export const TagViewProvider = ({
 
   const downloadTagFiles = useCallback(() => {
     if (!selectedFileIds.length) return;
-    const direntList = selectedFileIds.map(id => {
-      const file = getFileById(tagFiles, id);
-      const name = file[TAG_FILE_KEY.PARENT_DIR] === '/' ? file[TAG_FILE_KEY.NAME] : `${file[TAG_FILE_KEY.PARENT_DIR]}/${file[TAG_FILE_KEY.NAME]}`;
-      return { name };
-    });
+
+    const direntList = selectedFileIds
+      .filter(id => {
+        const file = getFileById(tagFiles, id);
+        return Utils.canDownloadFile(file);
+      })
+      .map(id => {
+        const file = getFileById(tagFiles, id);
+        const name = file[TAG_FILE_KEY.PARENT_DIR] === '/' ? file[TAG_FILE_KEY.NAME] : `${file[TAG_FILE_KEY.PARENT_DIR]}/${file[TAG_FILE_KEY.NAME]}`;
+        return { name };
+      });
     handleDownload('/', direntList);
   }, [tagFiles, selectedFileIds, handleDownload]);
 
@@ -180,23 +189,6 @@ export const TagViewProvider = ({
     const dirent = { name: oldName, type: 'file' };
     handleRename(dirent, [], renameTagFile);
   }, [selectedFileIds, tagFiles, handleRename, renameTagFile]);
-
-  const chatWithAIAboutTagFiles = useCallback(() => {
-    if (!selectedFileIds || selectedFileIds.length === 0) return null;
-    const files = selectedFileIds.map(id => {
-      const file = getFileById(tagFiles, id);
-      const name = file[TAG_FILE_KEY.NAME];
-      const parent_dir = file[TAG_FILE_KEY.PARENT_DIR];
-      return { name, parent_dir, type: 'file' };
-    });
-    menuHandlers[TextTranslation.CHAT_WITH_AI.key]({
-      repoID: repoID,
-      path: files[0].parent_dir,
-      dirent: files[0],
-      dirents: files,
-      isBatch: files.length > 1
-    });
-  }, [selectedFileIds, tagFiles, repoID]);
 
   const displayFileDetails = useCallback(() => {
     if (!selectedFileIds || selectedFileIds.length === 0) return null;
@@ -308,7 +300,6 @@ export const TagViewProvider = ({
       downloadTagFiles,
       renameTagFileInDialog,
       renameTagFile,
-      chatWithAIAboutTagFiles,
       displayFileDetails,
       convertFile,
       modifyTagFilesSort,
