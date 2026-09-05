@@ -15,7 +15,7 @@ from seahub.api2.utils import api_error, to_python_boolean
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
-from seahub.utils import is_org_context
+from seahub.utils import is_org_context, is_pro_version
 from seahub.views import check_folder_permission
 from seahub.repo_metadata.utils import add_init_metadata_task, recognize_faces, gen_unique_id, init_metadata, \
     get_unmodifiable_columns, can_read_metadata, init_faces, \
@@ -30,12 +30,82 @@ from seaserv import seafile_api
 from seahub.repo_metadata.constants import FACE_RECOGNITION_VIEW_ID, METADATA_RECORD_UPDATE_LIMIT
 from seahub.file_tags.models import FileTags
 from seahub.repo_tags.models import RepoTags
+from seahub.base.models import UserStarredFiles
+from seahub.base.templatetags.seahub_tags import email2contact_email, email2nickname
+from seahub.constants import PERMISSION_READ
 from seahub.settings import MD_FILE_COUNT_LIMIT
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.search.utils import get_invisible_repos_info_by_username, is_invisible_path
 from seahub.ai.utils import verify_ai_config, verify_chat_ai_config
 
 logger = logging.getLogger(__name__)
+
+
+def add_tagged_files_status_info(username, repo_id, query_result, metadata_table):
+    try:
+        starred_items = UserStarredFiles.objects.filter(
+            email=username, repo_id=repo_id, org_id=-1)
+        starred_item_path_set = {item.path.rstrip('/') for item in starred_items}
+    except Exception as e:
+        logger.error(e)
+        starred_item_path_set = set()
+
+    file_infos = query_result.get('results', [])
+    if not file_infos:
+        return
+
+    file_name_key = metadata_table.columns.file_name.name
+    parent_dir_key = metadata_table.columns.parent_dir.name
+    dirents_by_path = {}
+    is_pro = is_pro_version()
+    repo_permission = PERMISSION_READ if seafile_api.get_repo_status(repo_id) == 1 else None
+    parent_dirs = {file_info.get(parent_dir_key, '') for file_info in file_infos}
+    for parent_dir in parent_dirs:
+        try:
+            parent_dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
+            dirents = seafile_api.list_dir_with_perm(
+                repo_id, parent_dir, parent_dir_id, username, -1, -1)
+            dirents_by_path.update({
+                posixpath.join(parent_dir, dirent.obj_name): dirent
+                for dirent in dirents
+            })
+        except Exception as e:
+            logger.error(e)
+
+    for file_info in file_infos:
+        file_path = posixpath.join(
+            file_info.get(parent_dir_key, ''), file_info.get(file_name_key, ''))
+        file_info['starred'] = file_path.rstrip('/') in starred_item_path_set
+
+        dirent = dirents_by_path.get(file_path)
+        file_info['permission'] = (repo_permission or dirent.permission) if dirent else repo_permission
+
+        # Keep lock-related fields consistent with the directory API: pro only.
+        if not is_pro:
+            continue
+
+        if not dirent:
+            file_info.update({
+                'is_freezed': False,
+                'is_locked': False,
+                'lock_owner': '',
+                'lock_owner_contact_email': '',
+                'lock_owner_name': '',
+                'lock_time': 0,
+                'locked_by_me': False,
+            })
+            continue
+
+        lock_owner_email = dirent.lock_owner or ''
+        file_info.update({
+            'is_freezed': dirent.expire is not None and dirent.expire < 0,
+            'is_locked': dirent.is_locked,
+            'lock_owner': lock_owner_email,
+            'lock_owner_contact_email': email2contact_email(lock_owner_email),
+            'lock_owner_name': email2nickname(lock_owner_email),
+            'lock_time': dirent.lock_time,
+            'locked_by_me': username == lock_owner_email,
+        })
 
 
 
@@ -2811,6 +2881,9 @@ class MetadataTagFiles(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        add_tagged_files_status_info(
+            request.user.username, repo_id, tag_files_query, METADATA_TABLE)
+
         return Response(tag_files_query)
 
 
@@ -2874,6 +2947,9 @@ class MetadataTagsFiles(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        add_tagged_files_status_info(
+            request.user.username, repo_id, tags_files_query, METADATA_TABLE)
 
         return Response(tags_files_query)
 
