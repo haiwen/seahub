@@ -2,7 +2,7 @@ import json
 import logging
 import os
 import posixpath
-from datetime import datetime
+from datetime import datetime, timezone
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -2000,7 +2000,78 @@ class MetadataAISummaryStatusManage(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        return Response({'enabled': bool(metadata.summary_enabled)})
+        indexed_at = metadata.ai_summary_indexed_at
+        if indexed_at and indexed_at.tzinfo is None:
+            indexed_at = indexed_at.replace(tzinfo=timezone.utc)
+
+        from seafevents.repo_metadata.constants import METADATA_TABLE, SUMMARY_SUPPORTED_FILE_EXTENSIONS
+
+        supported_suffixes = set(SUMMARY_SUPPORTED_FILE_EXTENSIONS)
+        base_sql = f'''
+            SELECT `{METADATA_TABLE.columns.suffix.name}`, COUNT(*) AS count
+            FROM `{METADATA_TABLE.name}`
+            WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
+                AND `{METADATA_TABLE.columns.file_type.name}` = "_document"
+        '''
+
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+
+        def query_count(condition='', condition_params=None):
+            sql = base_sql + condition + f' GROUP BY `{METADATA_TABLE.columns.suffix.name}`'
+            results = metadata_server_api.query_rows(sql, condition_params or []).get('results', [])
+            return sum(
+                row.get('count') or 0
+                for row in results
+                if (row.get(METADATA_TABLE.columns.suffix.name) or '').lower() in supported_suffixes
+            )
+
+        try:
+            total_files = query_count()
+            processed_count = query_count(
+                f''' AND `{METADATA_TABLE.columns.ai_summary_mtime.name}` IS NOT NULL
+                    AND (`{METADATA_TABLE.columns.file_mtime.name}` IS NULL
+                        OR `{METADATA_TABLE.columns.ai_summary_mtime.name}` >= `{METADATA_TABLE.columns.file_mtime.name}`)'''
+            )
+            indexed_count = 0
+            if indexed_at:
+                indexed_count = query_count(
+                    f''' AND `{METADATA_TABLE.columns.ai_summary.name}` IS NOT NULL
+                        AND `{METADATA_TABLE.columns.ai_summary.name}` != ''
+                        AND `{METADATA_TABLE.columns.ai_summary_mtime.name}` <= ?''',
+                    [indexed_at.isoformat()]
+                )
+        except Exception as e:
+            logger.exception(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        summary_status = 'completed' if total_files == processed_count else 'pending'
+        index_status = 'completed' if metadata.ai_summary_indexed_at else 'pending'
+        if metadata.ai_processing_status == 'in_summary':
+            summary_status = 'crawling'
+            index_status = 'pending'
+        elif metadata.ai_processing_status == 'indexing':
+            summary_status = 'completed'
+            index_status = 'crawling'
+        elif metadata.ai_processing_status == 'summary_failed':
+            summary_status = 'failed'
+            index_status = 'pending'
+        elif metadata.ai_processing_status == 'index_failed':
+            summary_status = 'completed'
+            index_status = 'failed'
+
+        return Response({
+            'enabled': bool(metadata.summary_enabled),
+            'total_files': total_files,
+            'latest_index_time': indexed_at,
+            'summary': {
+                'status': summary_status,
+                'processed_count': processed_count,
+            },
+            'index': {
+                'status': index_status,
+                'indexed_count': indexed_count,
+            },
+        })
 
     def post(self, request, repo_id):
         if not verify_chat_ai_config():
