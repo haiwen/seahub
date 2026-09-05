@@ -1,0 +1,141 @@
+/* Default node styles for components/tree-view. */
+.tree-view {
+  line-height: 1.5;
+  padding: 0;
+}
+
+.tree-view .tree-node-inner {
+  position: relative;
+  height: 28px;
+  padding: 2px 0;
+  cursor: pointer;
+  line-height: 1.625;
+}
+
+.tree-view .tree-node-inner-hover {
+  background-color: var(--bs-nav-hover-bg);
+  border-radius: 0.25rem;
+}
+
+.tree-view .tree-node-inner .tree-node-text {
+  padding-left: 2.8rem;
+  width: calc(100% - 1.5rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 24px;
+}
+
+.tree-view .tree-node-inner .left-icon {
+  height: 24px;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  top: 2px;
+  left: 0;
+  padding-left: 1.5rem;
+}
+
+.tree-view .folder-toggle-icon {
+  position: absolute;
+  left: 0;
+  color: var(--bs-icon-color);
+  width: 1.5rem;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tree-view .folder-toggle-icon .seafile-multicolor-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.tree-view .tree-node-drop {
+  border-radius: 4px;
+  background-color: rgb(200, 220, 240);
+}
+
+.tree-view .tree-node-sort {
+  position: relative;
+}
+
+.tree-view .tree-node-sort::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: rgb(200, 220, 240);
+  border-radius: 2px;
+  z-index: 1;
+}
+
+.tree-view .tree-node-icon {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--bs-icon-color);
+}
+
+.tree-view .tree-node-icon .seafile-multicolor-icon {
+  width: .875rem;
+  height: .875rem;
+}
+
+.tree-view .tree-node-inner .right-icon {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--bs-icon-color);
+  z-index: 2;
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+.tree-view .tree-node-inner .right-icon .dropdown {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tree-view .tree-node-inner .right-icon .more-dropdown-toggle {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tree-view .tree-node-inner .right-icon .more-dropdown-toggle .seafile-multicolor-icon {
+  width: 12px;
+  height: 12px;
+  color: var(--bs-icon-color);
+}
+
+.tree-view .tree-node-hight-light {
+  border-radius: 4px;
+  background-color: var(--bs-nav-active-bg) !important;
+}
+
+.tree-view .tree-node-hight-light::before {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 4px;
+  height: 24px;
+  left: -8px;
+  top: 2px;
+  background-color: #ff9800;
+  border-radius: 2px;
+  z-index: 0;
+}

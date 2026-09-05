@@ -22,7 +22,6 @@ import {
 } from '../../components/resize-bar/constants';
 
 import '../../css/layout.css';
-import '../../css/side-panel.css';
 import '../../css/toolbar.css';
 import '../../css/search.css';
 import './wiki.css';

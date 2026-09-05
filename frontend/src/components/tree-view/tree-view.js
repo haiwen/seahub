@@ -6,6 +6,8 @@ import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
 import { Utils } from '../../utils/utils';
 
+import './tree-view.css';
+
 const propTypes = {
   userPerm: PropTypes.string,
   isNodeMenuShow: PropTypes.bool.isRequired,
