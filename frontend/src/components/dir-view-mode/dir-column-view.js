@@ -248,6 +248,7 @@ class DirColumnView extends React.Component {
               copyFileCallback={this.props.copyFileCallback}
               convertFileCallback={this.props.convertFileCallback}
               toggleShowDirentToolbar={this.props.toggleShowDirentToolbar}
+              showDirentDetail={this.props.showDirentDetail}
             />
           )}
           {currentMode === LIST_MODE && (

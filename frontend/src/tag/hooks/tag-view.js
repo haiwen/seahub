@@ -21,8 +21,10 @@ import { useFileOperations } from '../../hooks/file-operations';
 const TagViewContext = React.createContext(null);
 
 export const TagViewProvider = ({
-  repoID, tagID, nodeKey, children, moveFileCallback, copyFileCallback, deleteFilesCallback, renameFileCallback, convertFileCallback,
-  toggleShowDirentToolbar, ...params
+  repoID, tagID, nodeKey, children,
+  moveFileCallback, copyFileCallback, deleteFilesCallback, renameFileCallback, convertFileCallback,
+  toggleShowDirentToolbar,
+  ...params
 }) => {
   const [isLoading, setLoading] = useState(true);
   const [tagFiles, setTagFiles] = useState(null);
@@ -71,6 +73,7 @@ export const TagViewProvider = ({
 
   const copyTagFile = useCallback(() => {
     if (!selectedFileIds || selectedFileIds.length === 0) return null;
+
     const selectedFile = getFileById(tagFiles, selectedFileIds[0]);
     const path = selectedFile[TAG_FILE_KEY.PARENT_DIR];
     const dirent = { name: selectedFile[TAG_FILE_KEY.NAME] };
@@ -85,7 +88,12 @@ export const TagViewProvider = ({
 
   const deleteTagFiles = useCallback((ids) => {
     const tagIds = ids?.length ? ids : selectedFileIds;
-    const files = tagIds.map(id => getFileById(tagFiles, id));
+    const files = tagIds
+      .filter(id => {
+        const file = getFileById(tagFiles, id);
+        return Utils.canDeleteFile(file);
+      })
+      .map(id => getFileById(tagFiles, id));
     const paths = files.map(f => Utils.joinPath(f[TAG_FILE_KEY.PARENT_DIR], f[TAG_FILE_KEY.NAME]));
     const fileNames = files.map(f => f[TAG_FILE_KEY.NAME]);
     metadataAPI.batchDeleteFiles(repoID, paths).then(() => {
@@ -124,11 +132,17 @@ export const TagViewProvider = ({
 
   const downloadTagFiles = useCallback(() => {
     if (!selectedFileIds.length) return;
-    const direntList = selectedFileIds.map(id => {
-      const file = getFileById(tagFiles, id);
-      const name = file[TAG_FILE_KEY.PARENT_DIR] === '/' ? file[TAG_FILE_KEY.NAME] : `${file[TAG_FILE_KEY.PARENT_DIR]}/${file[TAG_FILE_KEY.NAME]}`;
-      return { name };
-    });
+
+    const direntList = selectedFileIds
+      .filter(id => {
+        const file = getFileById(tagFiles, id);
+        return Utils.canDownloadFile(file);
+      })
+      .map(id => {
+        const file = getFileById(tagFiles, id);
+        const name = file[TAG_FILE_KEY.PARENT_DIR] === '/' ? file[TAG_FILE_KEY.NAME] : `${file[TAG_FILE_KEY.PARENT_DIR]}/${file[TAG_FILE_KEY.NAME]}`;
+        return { name };
+      });
     handleDownload('/', direntList);
   }, [tagFiles, selectedFileIds, handleDownload]);
 
@@ -176,6 +190,19 @@ export const TagViewProvider = ({
     handleRename(dirent, [], renameTagFile);
   }, [selectedFileIds, tagFiles, handleRename, renameTagFile]);
 
+  const displayFileDetails = useCallback(() => {
+    if (!selectedFileIds || selectedFileIds.length === 0) return null;
+    const selectedFile = getFileById(tagFiles, selectedFileIds[0]);
+    const name = selectedFile[TAG_FILE_KEY.NAME];
+    const parentDir = selectedFile[TAG_FILE_KEY.PARENT_DIR];
+    const dirent = {
+      type: 'file',
+      name,
+      path: parentDir
+    };
+    params.showDirentDetail({ dirent });
+  }, [tagFiles, selectedFileIds, params]);
+
   const shareTagFile = useCallback(() => {
     if (!selectedFileIds || selectedFileIds.length === 0) return null;
     const selectedFile = getFileById(tagFiles, selectedFileIds[0]);
@@ -206,6 +233,24 @@ export const TagViewProvider = ({
       convertFileCallback({ path, error });
     });
   }, [repoID, convertFileCallback]);
+
+  const updateTagFile = useCallback((file, updates) => {
+    const id = file[TAG_FILE_KEY.ID];
+    const nextTagFiles = {
+      ...tagFiles,
+      rows: tagFiles.rows.map(row => {
+        if (row[TAG_FILE_KEY.ID] === id) {
+          return Object.assign(row, updates);
+        }
+        return row;
+      })
+    };
+    setTagFiles(nextTagFiles);
+
+    setTimeout(() => {
+      window.sfTagsDataContext && window.sfTagsDataContext.eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_TAG_FILES, nextTagFiles);
+    }, 0);
+  }, [tagFiles]);
 
   useEffect(() => {
     setLoading(true);
@@ -248,12 +293,14 @@ export const TagViewProvider = ({
       updateCurrentDirent: params.updateCurrentDirent,
       selectedFileIds,
       updateSelectedFileIds,
+      updateTagFile,
       moveTagFile,
       copyTagFile,
       deleteTagFiles,
       downloadTagFiles,
       renameTagFileInDialog,
       renameTagFile,
+      displayFileDetails,
       convertFile,
       modifyTagFilesSort,
       sortBy,
