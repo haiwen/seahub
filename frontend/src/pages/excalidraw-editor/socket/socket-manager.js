@@ -1,6 +1,4 @@
-import { stateDebug } from '../utils/debug';
 import SocketClient from './socket-client';
-import { CaptureUpdateAction, getSceneVersion, reconcileElements, restoreElements } from '@excalidraw/excalidraw';
 import { CURSOR_SYNC_TIMEOUT, LOAD_IMAGES_TIMEOUT } from '../constants';
 import throttle from 'lodash.throttle';
 import EventBus from '../utils/event-bus';
@@ -8,14 +6,8 @@ import FileManager from '../data/file-manager';
 import { loadFilesFromServer, saveFilesToServer } from '../data/server-storage';
 import { updateStaleImageStatuses } from '../utils/exdraw-utils';
 import { isInitializedImageElement } from '../utils/element-utils';
-
-const STATE = {
-  IDLE: 'idle',
-  SENDING: 'sending',
-  CONFLICT: 'conflict',
-  DISCONNECT: 'disconnect',
-  NEED_RELOAD: 'need_reload',
-};
+import PreviewManager from './preview-manager';
+import OperationManager from './operation-manager';
 
 class SocketManager {
 
@@ -23,22 +15,13 @@ class SocketManager {
     this.config = config;
     this.document = document;
     this.excalidrawAPI = excalidrawAPI;
-    this.state = STATE.IDLE;
-
-    this.pendingOperationList = [];
-    this.pendingOperationBeginTimeList = [];
     this.collaborators = new Map();
     const { user } = config;
     this.collaborators.set(user._username, user, { isCurrentUser: true });
     this.excalidrawAPI.updateScene({ collaborators: this.collaborators });
 
     this.eventBus = EventBus.getInstance();
-
     this.socketClient = new SocketClient(config);
-    this.lastBroadcastedOrReceivedSceneVersion = 0; // used check is need sync or not
-    if (document && document.elements) {
-      this.setLastBroadcastedOrReceivedSceneVersion(document.elements);
-    }
     this.fileManager = new FileManager({
       getFiles: async (ids) => {
         return loadFilesFromServer(ids);
@@ -62,6 +45,22 @@ class SocketManager {
           }, new Map())
         };
       }
+    });
+
+    this.previewManager = new PreviewManager(
+      excalidrawAPI,
+      this.socketClient,
+      (elements) => this.operationManager.syncLocalElementsToOthers(elements),
+    );
+    this.operationManager = new OperationManager({
+      excalidrawAPI,
+      document,
+      socketClient: this.socketClient,
+      getElementsWithoutRemotePreview: this.previewManager.getElementsWithoutRemotePreview,
+      clearRemotePreviewRecords: this.previewManager.clearRemotePreviewRecords,
+      clearPendingRemotePreviewChange: this.previewManager.clearPendingRemotePreviewChange,
+      loadImageFiles: this.loadImageFiles,
+      onStateChange: this.dispatchConnectState,
     });
   }
 
@@ -87,22 +86,108 @@ class SocketManager {
     return this.instance;
   };
 
+  get activeGesture() {
+    return this.previewManager.activeGesture;
+  }
+
+  get state() {
+    return this.operationManager.state;
+  }
+
+  get pendingOperationList() {
+    return this.operationManager.pendingOperationQueue.map(({ operation }) => operation);
+  }
+
+  get pendingOperationBeginTimeList() {
+    return this.operationManager.operationQueue.map(({ beginTime }) => beginTime);
+  }
+
+  get pendingOperationQueue() {
+    return this.operationManager.pendingOperationQueue;
+  }
+
+  startGesture = (activeTool, pointerDownState) => {
+    this.previewManager.startGesture(activeTool, pointerDownState);
+  };
+
+  updateGesture = (elements, appState) => {
+    return this.previewManager.updateGesture(elements, appState);
+  };
+
+  broadcastPreviewElements = (elements, gesture) => {
+    this.previewManager.broadcastPreviewElements(elements, gesture);
+  };
+
+  consumeRemotePreviewChange = (elements) => {
+    return this.previewManager.consumeRemotePreviewChange(elements);
+  };
+
+  getElementsWithoutRemotePreview = (elements) => {
+    return this.previewManager.getElementsWithoutRemotePreview(elements);
+  };
+
+  handleRemotePreviewElements = (params) => {
+    this.previewManager.handleRemotePreviewElements(params);
+  };
+
+  commitGesture = (elements, gesture, reason) => {
+    return this.previewManager.commitGesture(elements, gesture, reason);
+  };
+
+  handlePointerDown = (activeTool, pointerDownState) => {
+    this.previewManager.handlePointerDown(activeTool, pointerDownState);
+  };
+
+  handlePointerUp = (activeTool, pointerDownState) => {
+    return this.previewManager.handlePointerUp(activeTool, pointerDownState);
+  };
+
+  flushPendingGesture = (reason = 'flush') => {
+    return this.previewManager.flushPendingGesture(reason);
+  };
+
   getVersion = () => {
-    return this.document.version;
+    return this.operationManager.getVersion();
   };
 
   setVersion = (version) => {
-    this.document.version = version;
+    this.operationManager.setVersion(version);
   };
 
   setLastBroadcastedOrReceivedSceneVersion = (elements) => {
-    const version = getSceneVersion(elements);
-    this.lastBroadcastedOrReceivedSceneVersion = version;
+    this.operationManager.setLastBroadcastedOrReceivedSceneVersion(elements);
   };
 
   getLastBroadcastedOrReceivedSceneVersion = () => {
-    return this.lastBroadcastedOrReceivedSceneVersion;
+    return this.operationManager.getLastBroadcastedOrReceivedSceneVersion();
   };
+
+  isNeedToSync = (elements) => {
+    return this.operationManager.isNeedToSync(elements);
+  };
+
+  syncLocalElementsToOthers = (elements) => {
+    this.operationManager.syncLocalElementsToOthers(elements);
+  };
+
+  sendOperations = () => {
+    this.operationManager.sendOperations();
+  };
+
+  updateLocalDataByRemoteData = (remoteElements, remoteVersion) => {
+    this.operationManager.updateLocalDataByRemoteData(remoteElements, remoteVersion);
+  };
+
+  handleRemoteSceneUpdated = (params) => {
+    this.operationManager.handleRemoteSceneUpdated(params);
+  };
+
+  syncMouseLocationToOthers = throttle((payload) => {
+    if (payload.pointersMap.size < 2) {
+      const { pointer, button } = payload;
+      this.socketClient.broadcastMouseLocation({ pointer, button });
+    }
+  }, CURSOR_SYNC_TIMEOUT);
 
   fetchImageFilesFromServer = async (opts) => {
     const elements = opts.elements.filter(element => {
@@ -132,130 +217,12 @@ class SocketManager {
     });
   }, LOAD_IMAGES_TIMEOUT);
 
-  isNeedToSync = (elements) => {
-    const currentVersion = getSceneVersion(elements);
-    if (currentVersion > this.lastBroadcastedOrReceivedSceneVersion) {
-      return true;
+  dispatchConnectState = (type, message) => {
+    this.operationManager.handleConnectState(type, message);
+    if (type === 'disconnect' || type === 'join-room-failed') {
+      this.previewManager.flushPendingGesture(type);
     }
-    return false;
-  };
-
-  syncLocalElementsToOthers = (elements) => {
-    if (!this.isNeedToSync(elements)) {
-      return;
-    }
-    this.pendingOperationList.push(elements);
-
-    const lastOpBeginTime = new Date().getTime();
-    this.pendingOperationBeginTimeList.push(lastOpBeginTime);
-    const firstOpBeginTime = this.pendingOperationBeginTimeList[0];
-
-    const isExceedExecuteTime = (lastOpBeginTime - firstOpBeginTime) / 1000 > 30 ? true : false;
-    if (isExceedExecuteTime || this.pendingOperationList.length > 500) {
-      this.dispatchConnectState('pending_operations_exceed_limit');
-    }
-
-    this.sendOperations();
-  };
-
-  sendOperations = () => {
-    if (this.state !== STATE.IDLE) return;
-    stateDebug(`State changed: ${this.state} -> ${STATE.SENDING}`);
-    this.state = STATE.SENDING;
-    this.sendNextOperations();
-  };
-
-  sendNextOperations = () => {
-    if (this.state !== STATE.SENDING) return;
-    if (this.pendingOperationList.length === 0) {
-      stateDebug(`State Changed: ${this.state} -> ${STATE.IDLE}`);
-      this.state = STATE.IDLE;
-      return;
-    }
-
-    this.dispatchConnectState('is-saving');
-    const version = this.document.version;
-    const elements = this.pendingOperationList.shift();
-    this._sendingOperation = elements;
-
-    this.socketClient.broadcastSceneElements(elements, version, this.sendOperationsCallback);
-  };
-
-  sendOperationsCallback = (result) => {
-    if (result && result.success) {
-      const { version: serverVersion } = result;
-      this.setVersion(serverVersion);
-      const lastSavedAt = new Date().getTime();
-      this.dispatchConnectState('saved', lastSavedAt);
-
-      this.setLastBroadcastedOrReceivedSceneVersion(this._sendingOperation);
-
-      // send next operations
-      this.pendingOperationBeginTimeList.shift(); // remove current operation's begin time
-      this._sendingOperation = null;
-      this.sendNextOperations();
-      return;
-    }
-    // Operations are execute failure
-    const { error_type } = result;
-    if (error_type === 'load_document_content_error' || error_type === 'token_expired') {
-      // load_document_content_error: After a short-term reconnection, the content of the document fails to load
-      this.dispatchConnectState(error_type);
-
-      // reset sending control
-      stateDebug(`State Changed: ${this.state} -> ${STATE.NEED_RELOAD}`);
-      this.state = STATE.NEED_RELOAD;
-      this._sendingOperation = null;
-    } else if (error_type === 'version_behind_server') {
-      // Put the failed operation into the pending list and re-execute it
-      this.pendingOperationList.unshift(this._sendingOperation);
-
-      stateDebug(`State Changed: ${this.state} -> ${STATE.CONFLICT}`);
-      this.state = STATE.CONFLICT;
-      this.resolveConflicting(result);
-    }
-  };
-
-  resolveConflicting = (result) => {
-    const { elements, version } = result;
-
-    this.updateLocalDataByRemoteData(elements, version);
-
-    this.pendingOperationBeginTimeList.shift();
-    this._sendingOperation = null;
-    this.state = STATE.SENDING;
-    this.sendNextOperations();
-  };
-
-
-  syncMouseLocationToOthers = throttle((payload) => {
-    if (payload.pointersMap.size < 2) {
-      const { pointer, button } = payload;
-      this.socketClient.broadcastMouseLocation({ pointer, button });
-    }
-  }, CURSOR_SYNC_TIMEOUT);
-
-  updateLocalDataByRemoteData = (remoteElements, remoteVersion) => {
-    const localElements = this.excalidrawAPI.getSceneElementsIncludingDeleted();
-    const appState = this.excalidrawAPI.getAppState();
-    const restoredRemoteElements = restoreElements(remoteElements, null);
-    const reconciledElements = reconcileElements(localElements, restoredRemoteElements, appState);
-
-    this.setLastBroadcastedOrReceivedSceneVersion(reconciledElements);
-    this.setVersion(remoteVersion);
-
-    this.excalidrawAPI.updateScene({
-      elements: reconciledElements,
-      captureUpdate: CaptureUpdateAction.NEVER,
-    });
-
-    // sync images from another user
-    this.loadImageFiles();
-  };
-
-  handleRemoteSceneUpdated = (params) => {
-    const { elements, version } = params;
-    this.updateLocalDataByRemoteData(elements, version);
+    this.eventBus.dispatch(type, message);
   };
 
   handleRemoteMouseLocationUpdated = (params) => {
@@ -275,6 +242,7 @@ class SocketManager {
     const collaborators = new Map(this.collaborators);
     if (users && Array.isArray(users)) {
       users.forEach(user => {
+        this.previewManager.markRemotePreviewUserActive(user);
         if (!collaborators.get(user._username)) {
           collaborators.set(user._username, user);
         }
@@ -287,33 +255,18 @@ class SocketManager {
   };
 
   receiveLeaveRoom = (userInfo) => {
+    if (!userInfo) {
+      return;
+    }
+
+    this.previewManager.clearRemotePreviewForUser(userInfo);
+
     const collaborators = new Map(this.collaborators);
     if (collaborators.get(userInfo._username)) {
       collaborators.delete(userInfo._username);
       this.collaborators = collaborators;
       this.excalidrawAPI.updateScene({ collaborators });
     }
-  };
-
-  dispatchConnectState = (type, message) => {
-    if (type === 'reconnect') {
-      this.state = STATE.IDLE;
-      if (this.pendingOperationList.length > 0) {
-        this.sendOperations();
-      }
-    }
-
-    if (type === 'disconnect') {
-      // current state is sending
-      if (this._sendingOperation) {
-        this.pendingOperationList.unshift(this._sendingOperation);
-        this._sendingOperation = null;
-      }
-      stateDebug(`State Changed: ${this.state} -> ${STATE.DISCONNECT}`);
-      this.state = STATE.DISCONNECT;
-    }
-
-    this.eventBus.dispatch(type, message);
   };
 
   static destroy = () => {
