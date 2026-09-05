@@ -97,93 +97,6 @@
   color: #ED7109;
 }
 
-/*tree view */
-.tree-view {
-  padding: 0 12px;
-  line-height: 1.5;
-}
-
-.tree-node-inner {
-  position: relative;
-  height: 28px;
-  padding: 2px 0;
-  cursor: pointer;
-  line-height: 1.625;
-}
-
-.tree-node-inner-hover {
-  background-color: rgb(255, 239, 178);
-  border-radius: 0.25rem;
-}
-
-.tree-node-inner .tree-node-text {
-  padding-left: 2.8rem;
-  width: calc(100% - 1rem);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 24px;
-}
-
-.tree-node-inner .left-icon {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 2px;
-  left: 0;
-  padding-left: 1.5rem;
-}
-
-.folder-toggle-icon {
-  position: absolute;
-  left: 0;
-  color: #666666;
-  line-height: 1.625;
-  width: 1.5rem;
-  display: flex;
-  align-content: center;
-  justify-content: center;
-}
-
-.tree-node-icon {
-  display: inline-block;
-  width: 1rem;
-  text-align: center;
-  color: #666666;
-}
-
-.tree-node-inner .right-icon {
-  position: absolute;
-  top: 2px;
-  right: 1rem;
-  bottom: 0;
-  width: 1.5rem;
-  color: #666;
-  z-index: 2;
-  font-size: 0.8125rem;
-  text-align: center;
-}
-
-.tree-node-inner .right-icon i {
-  width: 100%;
-  height: 100%;
-  vertical-align: middle;
-  font-size: 0.8125rem;
-  line-height: 1.625rem !important;
-  color: #666666;
-}
-
-.tree-node-hight-light {
-  color: #fff;
-  border-radius: 4px;
-  background-color: #feac74 !important;
-}
-
-.tree-node-hight-light i {
-  color: #fff;
-}
-
 .parent-path {
   position: relative;
 }
@@ -195,4 +108,65 @@
   margin-top: 0;
   margin-left: 0.25rem;
   font-size: 0.9375rem;
+}
+
+/* Tree View extensions unique to the Wiki side panel. */
+.wiki-side-panel .wiki-pages-container .tree-view {
+  margin-left: 10px;
+  margin-top: 14px;
+  padding: 0 12px 0 0;
+}
+
+.wiki-side-panel .tree-view .tree-node-inner-hover {
+  background-color: rgb(255, 239, 178);
+}
+
+.wiki-side-panel .tree-view .tree-node-inner .tree-node-text {
+  width: calc(100% - 1rem);
+}
+
+.wiki-side-panel .tree-view .tree-node-inner .left-icon {
+  justify-content: center;
+}
+
+.wiki-side-panel .tree-view .folder-toggle-icon {
+  color: #666666;
+  line-height: 1.625;
+  align-content: center;
+}
+
+.wiki-side-panel .tree-view .tree-node-icon {
+  display: inline-block;
+  width: 1rem;
+  color: #666666;
+}
+
+.wiki-side-panel .tree-view .tree-node-inner .right-icon {
+  top: 2px;
+  right: 1rem;
+  bottom: 0;
+  width: 1.5rem;
+  color: #666;
+}
+
+.wiki-side-panel .tree-view .tree-node-inner .right-icon i {
+  width: 100%;
+  height: 100%;
+  vertical-align: middle;
+  font-size: 0.8125rem;
+  line-height: 1.625rem !important;
+  color: #666666;
+}
+
+.wiki-side-panel .tree-view .tree-node-hight-light {
+  color: #fff;
+  background-color: #feac74 !important;
+}
+
+.wiki-side-panel .tree-view .tree-node-hight-light::before {
+  content: none;
+}
+
+.wiki-side-panel .tree-view .tree-node-hight-light i {
+  color: #fff;
 }

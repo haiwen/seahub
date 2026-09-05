@@ -5,6 +5,7 @@ import Logo from '../../components/logo';
 import Loading from '../../components/loading';
 import TreeView from '../../components/tree-view/tree-view';
 import IndexMdViewer from './index-md-viewer';
+import './side-panel.css';
 
 const propTypes = {
   closeSideBar: PropTypes.bool.isRequired,

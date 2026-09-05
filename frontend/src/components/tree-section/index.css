@@ -83,7 +83,9 @@
 .tree-section .tree-section-header-operation .seafile-multicolor-icon-down {
   width: 12px;
   height: 12px;
-}.tree-section .tree-section-header .tree-section-more-operation,
+}
+
+.tree-section .tree-section-header .tree-section-more-operation,
 .tree-section .tree-section-header .tree-section-create-operation {
   display: none;
 }
@@ -91,13 +93,27 @@
 .tree-section .tree-section-header.tree-section-header-hover .tree-section-more-operation,
 .tree-section .tree-section-header:not(.tree-section-header-hover):hover .tree-section-more-operation,
 .tree-section .tree-section-header.tree-section-header-hover .tree-section-create-operation,
-.tree-section .tree-section-header:not(.tree-section-header-hover):hover .tree-section-create-operation  {
+.tree-section .tree-section-header:not(.tree-section-header-hover):hover .tree-section-create-operation {
   display: flex;
 }
 
 .tree-section .tree-section-body .tree-view {
   margin-left: 0px;
   padding: 0px;
+}
+
+.tree-section .tree-section-body .tree-view.tree-view-drop {
+  border: 1px solid rgba(69, 170, 242);
+}
+
+.tree-section .tree-section-body .tree-view.tree-view-drop::before {
+  border-left: 1px solid rgba(69, 170, 242);
+  content: '';
+  margin-left: 8px;
+  height: calc(100% + 24px);
+  display: block;
+  margin-top: -12px;
+  float: left;
 }
 
 .tree-section .tree-section-body .right-icon:hover {

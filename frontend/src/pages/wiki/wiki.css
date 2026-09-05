@@ -40,12 +40,6 @@
   overflow: auto;
 }
 
-.wiki-pages-container .tree-view {
-  margin-left: 10px;
-  margin-top: 14px;
-  padding-left: 0px;
-}
-
 img[src=""] {
   opacity: 0;
 }
