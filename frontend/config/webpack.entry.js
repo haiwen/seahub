@@ -2,7 +2,7 @@ const paths = require('./paths');
 
 const entryFiles = {
   excalidrawEditor: '/excalidraw-editor.js',
-  markdownEditor: '/index.js',
+  markdownEditor: '/markdown-editor.js',
   plainMarkdownEditor: '/pages/plain-markdown-editor/index.js',
   TCAccept: '/tc-accept.js',
   TCView: '/tc-view.js',
