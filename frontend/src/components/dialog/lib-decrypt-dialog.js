@@ -61,7 +61,7 @@ class LibDecryptDialog extends React.Component {
           <Form className="lib-decrypt-form text-center">
             <img className="lock-icon" src={`${mediaUrl}img/lock.png`} alt="" aria-hidden="true" />
             <p className="intro">{gettext('This library is password protected')}</p>
-            <p className="tip">{'* '}{gettext('The password will be kept in the server for only 1 hour.')}</p>
+            <p className="tip">{gettext('The password will be kept in the server for only 1 hour.')}</p>
             {this.state.showError &&
               <p className="error">{gettext('Wrong password')}</p>
             }
