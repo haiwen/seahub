@@ -16,7 +16,12 @@ import toaster from './toast';
 import CreateGroupDialog from '../components/dialog/create-group-dialog';
 import AboutDialog from './dialog/about-dialog';
 import LibrariesSubNav from '../components/libraries-sub-nav';
-import { ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY, SUB_NAV_ITEM_HEIGHT } from '../constants';
+import {
+  ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY,
+  SIDE_NAV_FILES_UNFOLDED_KEY,
+  SIDE_NAV_SHARE_ADMIN_UNFOLDED_KEY,
+  SUB_NAV_ITEM_HEIGHT
+} from '../constants';
 import { isWorkWeixin } from './wechat/weixin-utils';
 import WechatDialog from './wechat/wechat-dialog';
 import { EVENT_BUS_TYPE } from './common/event-bus-type';
@@ -36,9 +41,9 @@ class MainSideNav extends React.Component {
     super(props);
 
     this.state = {
-      filesNavUnfolded: false,
+      filesNavUnfolded: localStorage.getItem(SIDE_NAV_FILES_UNFOLDED_KEY) === 'true',
       isAboutDialogShow: false,
-      sharedExtended: false,
+      sharedExtended: localStorage.getItem(SIDE_NAV_SHARE_ADMIN_UNFOLDED_KEY) === 'true',
       groupItems: [],
       onlyShowGroupsWithLibraries: localStorage.getItem(ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY) === 'true',
       hasSharedLibraries: false,
@@ -63,6 +68,10 @@ class MainSideNav extends React.Component {
     this.unsubscribeUnsharedRepoToGroup = eventBus.subscribe(EVENT_BUS_TYPE.UNSHARE_REPO_TO_GROUP, this.loadGroups);
     this.unsubscribeGroupLibrariesChanged = eventBus.subscribe(EVENT_BUS_TYPE.GROUP_LIBRARIES_CHANGED, this.loadGroups);
     this.unsubscribeSharedLibrariesChanged = eventBus.subscribe(EVENT_BUS_TYPE.SHARED_LIBRARIES_CHANGED, this.loadLibraryCounts);
+    if (this.state.filesNavUnfolded) {
+      this.loadGroups();
+      this.loadLibraryCounts();
+    }
   }
 
   componentWillUnmount() {
@@ -111,6 +120,8 @@ class MainSideNav extends React.Component {
     }
     this.setState({
       sharedExtended: !this.state.sharedExtended,
+    }, () => {
+      localStorage.setItem(SIDE_NAV_SHARE_ADMIN_UNFOLDED_KEY, this.state.sharedExtended);
     });
   };
 
@@ -332,6 +343,7 @@ class MainSideNav extends React.Component {
     this.setState({
       filesNavUnfolded: !this.state.filesNavUnfolded
     }, () => {
+      localStorage.setItem(SIDE_NAV_FILES_UNFOLDED_KEY, this.state.filesNavUnfolded);
       if (this.state.filesNavUnfolded) {
         this.loadGroups();
         this.loadLibraryCounts();
