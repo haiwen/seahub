@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
+import shutil
 import logging
 
 from rest_framework.authentication import SessionAuthentication
@@ -56,7 +57,7 @@ class AdminLicense(APIView):
 
             # copy license to the host in docker
             if os.path.exists(HOST_DIR):
-                os.system('cp %s %s' % (LICENSE_PATH, HOST_DIR))
+                shutil.copy2(LICENSE_PATH, HOST_DIR)
 
             ccnet_api.reload_license()
         except Exception as e:
