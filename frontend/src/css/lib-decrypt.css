@@ -59,18 +59,8 @@
   width: 100%;
   height: 38px;
   margin: 16px 0 0;
-  color: #ffffff;
-  background-color: #ff8000;
-  border-color: #ff8000;
   font-size: 16px;
   font-weight: 400;
-}
-
-.lib-decrypt-form .submit:hover,
-.lib-decrypt-form .submit:focus {
-  color: #ffffff;
-  background-color: #e67300;
-  border-color: #e67300;
 }
 
 @media (max-width: 575.98px) {
