@@ -5,8 +5,6 @@ import { gettext } from '../../../utils/constants';
 
 import './collaborators-popover.css';
 
-const t = gettext;
-
 class CollaboratorsPopover extends React.PureComponent {
   render() {
     const { collaborators, isOpen, toggle } = this.props;
@@ -23,11 +21,11 @@ class CollaboratorsPopover extends React.PureComponent {
         fade={false}
         security='fixed'
       >
-        <PopoverHeader className='popover-header'>{t('Online members')}{' '}({collaborators.length})</PopoverHeader>
+        <PopoverHeader className='popover-header'>{gettext('Online members')}{' '}({collaborators.length})</PopoverHeader>
         <PopoverBody className="popover-container">
           <div className="content-list">
             {collaborators.map((item, index) => {
-              const name = index === 0 ? `${item.name} (${t('Me')})` : item.name;
+              const name = index === 0 ? `${item.name} (${gettext('Me')})` : item.name;
               return (
                 <div key={index} className="collaborator-details">
                   <span className="collaborator-tag" />
