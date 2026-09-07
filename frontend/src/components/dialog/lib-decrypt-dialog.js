@@ -55,18 +55,18 @@ class LibDecryptDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
+      <Modal className="lib-decrypt-dialog" isOpen={true} toggle={this.toggle}>
         <ModalBody>
-          <SeahubModalCloseIcon className="float-end" toggle={this.toggle} />
+          <SeahubModalCloseIcon className="lib-decrypt-close" toggle={this.toggle} />
           <Form className="lib-decrypt-form text-center">
-            <img src={`${mediaUrl}img/lock.png`} alt="" aria-hidden="true" />
+            <img className="lock-icon" src={`${mediaUrl}img/lock.png`} alt="" aria-hidden="true" />
             <p className="intro">{gettext('This library is password protected')}</p>
+            <p className="tip">{'* '}{gettext('The password will be kept in the server for only 1 hour.')}</p>
             {this.state.showError &&
               <p className="error">{gettext('Wrong password')}</p>
             }
             <input type="password" name="password" className="form-control password-input" autoComplete="off" onKeyDown={this.handleKeyDown} placeholder={gettext('Password')} onChange={this.handleChange} />
             <button type="submit" className="btn btn-primary submit" onClick={this.handleSubmit}>{gettext('Submit')}</button>
-            <p className="tip">{'* '}{gettext('The password will be kept in the server for only 1 hour.')}</p>
           </Form>
         </ModalBody>
       </Modal>
