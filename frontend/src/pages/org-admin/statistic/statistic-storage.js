@@ -8,7 +8,7 @@ import Loading from '../../../components/loading';
 import { gettext, orgID } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
-import Chart from '../../../chart';
+import Chart from '../../../components/chart';
 
 const OrgStatisticStorage = () => {
   const [isLoading, setLoading] = useState(true);

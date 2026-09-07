@@ -6,7 +6,7 @@ import { systemAdminAPI } from '../../../utils/system-admin-api';
 import Loading from '../../../components/loading';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
-import Chart from '../../../chart';
+import Chart from '../../../components/chart';
 
 const StatisticUsers = (props) => {
   const [isLoading, setLoading] = useState(true);
