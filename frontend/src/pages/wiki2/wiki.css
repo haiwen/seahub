@@ -170,13 +170,8 @@ body {
 }
 
 .dropdown-item:hover .freeze-document-switch .custom-switch-description {
-    color: var(--bs-body-color);
+  color: var(--bs-body-color);
   transition: none;
-}
-
-.dropdown-item .freeze-document-switch .custom-switch-indicator {
-  position: absolute;
-  right: 12px;
 }
 
 .wiki2-top-nav .locked {
