@@ -9,7 +9,7 @@ import Loading from '../../../components/loading';
 import UsersTraffic from './statistic-traffic-users';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
-import Chart from '../../../chart';
+import Chart from '../../../components/chart';
 
 class OrgStatisticTraffic extends React.Component {
 
