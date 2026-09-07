@@ -53,3 +53,4 @@ gettext('How can I help you?');
 gettext('Extended properties are being built.');
 gettext('Delete property');
 gettext('Sort ascending');
+gettext('Pages');
