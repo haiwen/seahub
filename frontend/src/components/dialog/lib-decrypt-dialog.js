@@ -57,7 +57,7 @@ class LibDecryptDialog extends React.Component {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalBody>
-          <SeahubModalCloseIcon className="position-absolute top-0 end-0 m-0" toggle={this.toggle} />
+          <SeahubModalCloseIcon className="float-end" toggle={this.toggle} />
           <Form className="lib-decrypt-form text-center">
             <img src={`${mediaUrl}img/lock.png`} alt="" aria-hidden="true" />
             <p className="intro">{gettext('This library is password protected')}</p>
