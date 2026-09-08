@@ -16,7 +16,11 @@ import toaster from './toast';
 import CreateGroupDialog from '../components/dialog/create-group-dialog';
 import AboutDialog from './dialog/about-dialog';
 import FilesSubNav from '../components/files-sub-nav';
-import { SUB_NAV_ITEM_HEIGHT } from '../constants';
+import {
+  SIDE_NAV_FILES_UNFOLDED_KEY,
+  SIDE_NAV_SHARE_ADMIN_UNFOLDED_KEY,
+  SUB_NAV_ITEM_HEIGHT
+} from '../constants';
 import { isWorkWeixin } from './wechat/weixin-utils';
 import WechatDialog from './wechat/wechat-dialog';
 import { EVENT_BUS_TYPE } from './common/event-bus-type';
@@ -36,9 +40,9 @@ class MainSideNav extends React.Component {
     super(props);
 
     this.state = {
-      filesNavUnfolded: false,
+      filesNavUnfolded: localStorage.getItem(SIDE_NAV_FILES_UNFOLDED_KEY) === 'true',
       isAboutDialogShow: false,
-      sharedExtended: false,
+      sharedExtended: localStorage.getItem(SIDE_NAV_SHARE_ADMIN_UNFOLDED_KEY) === 'true',
       groupItems: [],
       isCreateGroupDialogOpen: false,
       isShowWechatDialog: false,
@@ -48,6 +52,12 @@ class MainSideNav extends React.Component {
     this.isWorkWeixin = isWorkWeixin(window.navigator.userAgent.toLowerCase());
   }
 
+  componentDidMount() {
+    if (this.state.filesNavUnfolded) {
+      this.loadGroups();
+    }
+  }
+
   toggleWechatDialog = () => {
     this.setState({ isShowWechatDialog: !this.state.isShowWechatDialog });
   };
@@ -55,6 +65,8 @@ class MainSideNav extends React.Component {
   shExtend = () => {
     this.setState({
       sharedExtended: !this.state.sharedExtended,
+    }, () => {
+      localStorage.setItem(SIDE_NAV_SHARE_ADMIN_UNFOLDED_KEY, this.state.sharedExtended);
     });
   };
 
@@ -222,6 +234,7 @@ class MainSideNav extends React.Component {
     this.setState({
       filesNavUnfolded: !this.state.filesNavUnfolded
     }, () => {
+      localStorage.setItem(SIDE_NAV_FILES_UNFOLDED_KEY, this.state.filesNavUnfolded);
       if (this.state.filesNavUnfolded) {
         this.loadGroups();
       }
