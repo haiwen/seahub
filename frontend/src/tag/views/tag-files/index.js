@@ -14,20 +14,15 @@ import { Utils } from '../../../utils/utils';
 import { gettext } from '../../../utils/constants';
 import TextTranslation from '../../../utils/text-translation';
 import {
-  lockFile,
-  unlockFile,
-  freezeDocument,
-  unfreezeDocument,
   exportDocx,
   exportMarkdown,
   exportSdoc,
-  toggleStar,
   openHistory,
   openByDefault,
   openViaClient,
   openWithOnlyOffice,
 } from '../../../utils/dirent-operations';
-import { getFileById, getFileName, getFileParentDir } from '../../utils/file';
+import { getFileById, getFileName, getFileParentDir, getFileObj, filterTagFileOperations } from '../../utils/file';
 import ListView from './list';
 import GridView from './grid';
 
@@ -42,47 +37,31 @@ const TagFiles = () => {
     repoInfo,
     selectedFileIds,
     updateSelectedFileIds,
-    updateTagFile,
     viewMode,
-    moveTagFile,
     copyTagFile,
-    deleteTagFiles,
     downloadTagFiles,
     convertFile,
     shareTagFile,
     openTagFileAccessLog,
-    renameTagFileInDialog,
-    renameTagFile,
     displayFileDetails,
   } = useTagView();
 
   const [isImagePreviewerVisible, setImagePreviewerVisible] = useState(false);
   const currentImageRef = useRef(null);
 
-  const canDelete = useMemo(() => {
-    return window.sfTagsDataContext && window.sfTagsDataContext.canModifyTag();
-  }, []);
-
-  const toFileObj = useCallback((file) => {
-    return Object.assign(file, {
-      name: getFileName(file),
-      type: 'file'
-    });
-  }, []);
-
   const selectedFile = useMemo(() => {
     if (!selectedFileIds || selectedFileIds.length === 0) return null;
     const file = getFileById(tagFiles, selectedFileIds[0]);
-    return toFileObj(file);
-  }, [selectedFileIds, tagFiles, toFileObj]);
+    return getFileObj(file, repoInfo.is_admin);
+  }, [selectedFileIds, tagFiles, repoInfo]);
 
   const selectedFileParentDir = useMemo(() => getFileParentDir(selectedFile), [selectedFile]);
-  const selectedFileName = useMemo(() => getFileName(selectedFile), [selectedFile]);
   const selectedFilePath = useMemo(() => {
-    return selectedFileParentDir && selectedFileName
-      ? Utils.joinPath(selectedFileParentDir, selectedFileName)
+    const name = getFileName(selectedFile);
+    return selectedFileParentDir && name
+      ? Utils.joinPath(selectedFileParentDir, name)
       : '';
-  }, [selectedFileParentDir, selectedFileName]);
+  }, [selectedFileParentDir, selectedFile]);
 
   const openImagePreview = useCallback((record) => {
     currentImageRef.current = record;
@@ -94,45 +73,22 @@ const TagFiles = () => {
     setImagePreviewerVisible(false);
   }, []);
 
-  const handleDeleteTagFiles = useCallback((ids) => {
-    deleteTagFiles(ids);
-    updateSelectedFileIds([]);
-  }, [deleteTagFiles, updateSelectedFileIds]);
-
   const chatWithAIAboutTagFiles = useCallback(() => {
-    if (!selectedFileIds || selectedFileIds.length === 0) return null;
-    const files = selectedFileIds.map(id => {
+    if (!selectedFileIds || selectedFileIds.length === 0) return;
+    const files = selectedFileIds.map((id) => {
       const file = getFileById(tagFiles, id);
-      const name = getFileName(file);
-      const parent_dir = getFileParentDir(file);
-      return { name, parent_dir, type: 'file' };
+      return {
+        name: getFileName(file),
+        parent_dir: getFileParentDir(file),
+        type: 'file',
+      };
     });
     menuHandlers[TextTranslation.CHAT_WITH_AI.key]({
-      repoID: repoID,
+      repoID,
       dirents: files,
-      isBatch: files.length > 1
+      isBatch: files.length > 1,
     });
   }, [selectedFileIds, tagFiles, repoID]);
-
-  const toggleStarItem = useCallback(() => {
-    toggleStar(repoID, selectedFileParentDir, selectedFile, updateTagFile);
-  }, [repoID, selectedFileParentDir, selectedFile, updateTagFile]);
-
-  const lockTagFile = useCallback(() => {
-    lockFile(repoID, selectedFileParentDir, selectedFile, updateTagFile);
-  }, [repoID, selectedFileParentDir, selectedFile, updateTagFile]);
-
-  const unlockTagFile = useCallback(() => {
-    unlockFile(repoID, selectedFileParentDir, selectedFile, updateTagFile);
-  }, [repoID, selectedFileParentDir, selectedFile, updateTagFile]);
-
-  const freezeTagDocument = useCallback(() => {
-    freezeDocument(repoID, selectedFileParentDir, selectedFile, updateTagFile);
-  }, [repoID, selectedFileParentDir, selectedFile, updateTagFile]);
-
-  const unfreezeTagDocument = useCallback(() => {
-    unfreezeDocument(repoID, selectedFileParentDir, selectedFile, updateTagFile);
-  }, [repoID, selectedFileParentDir, selectedFile, updateTagFile]);
 
   const openWithDefault = useCallback(() => {
     openByDefault(repoID, selectedFileParentDir, selectedFile);
@@ -176,14 +132,8 @@ const TagFiles = () => {
     if (!option) return;
 
     switch (option) {
-      case TextTranslation.MOVE.key:
-        moveTagFile();
-        break;
       case TextTranslation.COPY.key:
         copyTagFile();
-        break;
-      case TextTranslation.DELETE.key:
-        handleDeleteTagFiles();
         break;
       case TextTranslation.SHARE.key:
         shareTagFile();
@@ -191,34 +141,8 @@ const TagFiles = () => {
       case TextTranslation.DOWNLOAD.key:
         downloadTagFiles();
         break;
-      case TextTranslation.RENAME.key:
-        if (viewMode === LIST_MODE) {
-          window.sfTagsDataContext && window.sfTagsDataContext.eventBus.dispatch(
-            EVENT_BUS_TYPE.RENAME_TAG_FILE_IN_SITU,
-            selectedFileIds[0]
-          );
-        } else {
-          renameTagFileInDialog(selectedFileIds[0]);
-        }
-        break;
       case TextTranslation.CHAT_WITH_AI.key:
         chatWithAIAboutTagFiles();
-        break;
-      case TextTranslation.STAR.key:
-      case TextTranslation.UNSTAR.key:
-        toggleStarItem();
-        break;
-      case TextTranslation.LOCK.key:
-        lockTagFile();
-        break;
-      case TextTranslation.UNLOCK.key:
-        unlockTagFile();
-        break;
-      case TextTranslation.FREEZE_DOCUMENT.key:
-        freezeTagDocument();
-        break;
-      case TextTranslation.UNFREEZE_DOCUMENT.key:
-        unfreezeTagDocument();
         break;
       case TextTranslation.PROPERTIES.key:
         displayFileDetails();
@@ -261,20 +185,10 @@ const TagFiles = () => {
     }
     hideMenu();
   }, [
-    moveTagFile,
     copyTagFile,
-    handleDeleteTagFiles,
     shareTagFile,
     downloadTagFiles,
-    viewMode,
-    selectedFileIds,
-    renameTagFileInDialog,
     chatWithAIAboutTagFiles,
-    toggleStarItem,
-    lockTagFile,
-    unlockTagFile,
-    freezeTagDocument,
-    unfreezeTagDocument,
     displayFileDetails,
     onConvertFile,
     exportSdocAsDocx,
@@ -288,13 +202,14 @@ const TagFiles = () => {
   ]);
 
   const onTagFileContextMenu = useCallback((event, file) => {
+    const { is_admin: isAdmin } = repoInfo;
     let menuList = [];
+
     if (selectedFileIds.length <= 1) {
-      const fileId = getRecordIdFromRecord(file);
-      updateSelectedFileIds([fileId]);
-      menuList = getDirentItemMenuList(repoInfo, toFileObj(file), true);
+      updateSelectedFileIds([getRecordIdFromRecord(file)]);
+      menuList = filterTagFileOperations(getDirentItemMenuList(repoInfo, getFileObj(file, isAdmin), true));
     } else {
-      const selectedFiles = selectedFileIds.map((id) => toFileObj(getFileById(tagFiles, id)));
+      const selectedFiles = selectedFileIds.map((id) => getFileObj(getFileById(tagFiles, id), isAdmin));
       menuList = getTagFilesOperations(repoInfo, selectedFiles);
     }
 
@@ -311,7 +226,7 @@ const TagFiles = () => {
       currentObject: file,
       menuList,
     });
-  }, [selectedFileIds, updateSelectedFileIds, repoInfo, tagFiles, toFileObj]);
+  }, [selectedFileIds, updateSelectedFileIds, repoInfo, tagFiles]);
 
   useEffect(() => {
     if (!window.sfTagsDataContext) return;
@@ -319,18 +234,10 @@ const TagFiles = () => {
     const eventBus = window.sfTagsDataContext.eventBus;
     const unsubscribers = [
       eventBus.subscribe(EVENT_BUS_TYPE.UNSELECT_TAG_FILES, () => updateSelectedFileIds([])),
-      eventBus.subscribe(EVENT_BUS_TYPE.DELETE_TAG_FILES, deleteTagFiles),
-      eventBus.subscribe(EVENT_BUS_TYPE.MOVE_TAG_FILE, moveTagFile),
       eventBus.subscribe(EVENT_BUS_TYPE.COPY_TAG_FILE, copyTagFile),
       eventBus.subscribe(EVENT_BUS_TYPE.SHARE_TAG_FILE, shareTagFile),
-      eventBus.subscribe(EVENT_BUS_TYPE.RENAME_TAG_FILE_IN_DIALOG, renameTagFileInDialog),
       eventBus.subscribe(EVENT_BUS_TYPE.CHAT_WITH_AI_ABOUT_TAG_FILES, chatWithAIAboutTagFiles),
       eventBus.subscribe(EVENT_BUS_TYPE.DOWNLOAD_TAG_FILES, downloadTagFiles),
-      eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_STAR_ITEM, toggleStarItem),
-      eventBus.subscribe(EVENT_BUS_TYPE.LOCK_FILE, lockTagFile),
-      eventBus.subscribe(EVENT_BUS_TYPE.UNLOCK_FILE, unlockTagFile),
-      eventBus.subscribe(EVENT_BUS_TYPE.FREEZE_DOCUMENT, freezeTagDocument),
-      eventBus.subscribe(EVENT_BUS_TYPE.UNFREEZE_DOCUMENT, unfreezeTagDocument),
       eventBus.subscribe(EVENT_BUS_TYPE.FILE_HISTORY, onHistory),
       eventBus.subscribe(EVENT_BUS_TYPE.FILE_ACCESS_LOG, openTagFileAccessLog),
       eventBus.subscribe(EVENT_BUS_TYPE.PROPERTIES, displayFileDetails),
@@ -346,7 +253,23 @@ const TagFiles = () => {
     return () => {
       unsubscribers.forEach((unsubscribe) => unsubscribe());
     };
-  });
+  }, [
+    updateSelectedFileIds,
+    copyTagFile,
+    shareTagFile,
+    chatWithAIAboutTagFiles,
+    downloadTagFiles,
+    onHistory,
+    openTagFileAccessLog,
+    displayFileDetails,
+    openWithDefault,
+    openWithOnlyofficeForTagFile,
+    openViaClientForTagFile,
+    onConvertFile,
+    exportSdocAsDocx,
+    exportSdocAsMarkdown,
+    exportSdocAsZip,
+  ]);
 
   if (tagFiles.rows.length === 0) {
     return <EmptyTip text={gettext('No files')} />;
@@ -358,7 +281,6 @@ const TagFiles = () => {
         <ListView
           repoID={repoID}
           openImagePreview={openImagePreview}
-          renameTagFile={renameTagFile}
           onTagFileContextMenu={onTagFileContextMenu}
         />
       ) : (
@@ -375,8 +297,8 @@ const TagFiles = () => {
           record={currentImageRef.current}
           table={tagFiles}
           closeImagePopup={closeImagePreviewer}
-          canDelete={canDelete}
-          deleteRecords={handleDeleteTagFiles}
+          canDelete={false}
+          deleteRecords={() => {}}
         />
       )}
       <ContextMenu

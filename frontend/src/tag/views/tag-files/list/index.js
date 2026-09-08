@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import FixedWidthTable from '../../../../components/common/fixed-width-table';
 import { Utils } from '../../../../utils/utils';
 import { gettext } from '../../../../utils/constants';
@@ -7,12 +7,9 @@ import { getRecordIdFromRecord } from '../../../../metadata/utils/cell';
 import { useTags, useTagView } from '../../../hooks';
 import TagFile from './item';
 import { hideMenu } from '../../../../components/context-menu/actions';
-import { EVENT_BUS_TYPE } from '../../../../metadata/constants';
 import Icon from '../../../../components/icon';
 
-const ListView = ({ repoID, openImagePreview, renameTagFile, onTagFileContextMenu }) => {
-  const [renameTargetId, setRenameTargetId] = useState(null);
-
+const ListView = ({ repoID, openImagePreview, onTagFileContextMenu }) => {
   const { tagsData } = useTags();
   const { tagFiles, selectedFileIds, sortBy, sortOrder, updateSelectedFileIds, modifyTagFilesSort } = useTagView();
 
@@ -78,28 +75,10 @@ const ListView = ({ repoID, openImagePreview, renameTagFile, onTagFileContextMen
     updateSelectedFileIds(fileIds);
   }, [updateSelectedFileIds]);
 
-  const onRenameCancel = useCallback(() => {
-    setRenameTargetId(null);
-  }, []);
-
-  const onRenameConfirm = useCallback((newName) => {
-    onRenameCancel();
-    renameTagFile(newName);
-  }, [onRenameCancel, renameTagFile]);
-
   const onContainerClick = useCallback(() => {
     hideMenu();
-    if (!renameTargetId) updateSelectedFileIds([]);
-  }, [renameTargetId, updateSelectedFileIds]);
-
-  useEffect(() => {
-    if (!window.sfTagsDataContext) return;
-    const unsubscribeRenameTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.RENAME_TAG_FILE_IN_SITU, (id) => setRenameTargetId(id));
-
-    return () => {
-      unsubscribeRenameTagFile && unsubscribeRenameTagFile();
-    };
-  }, []);
+    updateSelectedFileIds([]);
+  }, [updateSelectedFileIds]);
 
   const sortIcon = <span className="d-inline-flex align-items-center ml-1"><Icon symbol="down" className={classNames('w-3 h-3', sortOrder == 'asc' ? 'rotate-180 d-inline-flex' : '')} /></span>;
 
@@ -195,9 +174,6 @@ const ListView = ({ repoID, openImagePreview, renameTagFile, onTagFileContextMen
               repoID={repoID}
               file={file}
               tagsData={tagsData}
-              isRenaming={renameTargetId === fileId}
-              onRenameCancel={onRenameCancel}
-              onRenameConfirm={onRenameConfirm}
               selectedFileIds={selectedFileIds}
               onSelectFile={onSelectFile}
               openImagePreview={openImagePreview}

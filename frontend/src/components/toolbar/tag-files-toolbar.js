@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { gettext } from '../../utils/constants';
 import { EVENT_BUS_TYPE } from '../../metadata/constants';
 import TextTranslation from '../../utils/text-translation';
-import { getFileById, getFileName } from '../../tag/utils/file';
+import { getFileById, getFileObj, filterTagFileOperations } from '../../tag/utils/file';
 import OpIcon from '../../components/op-icon';
 import OpElement from '../../components/op-element';
 import Icon from '../icon';
@@ -28,16 +28,8 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
     eventBus && eventBus.dispatch(EVENT_BUS_TYPE.SHARE_TAG_FILE);
   }, [eventBus]);
 
-  const moveTagFile = useCallback(() => {
-    eventBus && eventBus.dispatch(EVENT_BUS_TYPE.MOVE_TAG_FILE);
-  }, [eventBus]);
-
   const copyTagFile = useCallback(() => {
     eventBus && eventBus.dispatch(EVENT_BUS_TYPE.COPY_TAG_FILE);
-  }, [eventBus]);
-
-  const deleteTagFiles = useCallback(() => {
-    eventBus && eventBus.dispatch(EVENT_BUS_TYPE.DELETE_TAG_FILES);
   }, [eventBus]);
 
   const downloadTagFiles = useCallback(() => {
@@ -46,29 +38,8 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
 
   const onMenuItemClick = useCallback((operation) => {
     switch (operation) {
-      case TextTranslation.RENAME.key:
-        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.RENAME_TAG_FILE_IN_DIALOG);
-        break;
       case TextTranslation.CHAT_WITH_AI.key:
         eventBus && eventBus.dispatch(EVENT_BUS_TYPE.CHAT_WITH_AI_ABOUT_TAG_FILES);
-        break;
-      case TextTranslation.STAR.key:
-        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_STAR_ITEM);
-        break;
-      case TextTranslation.UNSTAR.key:
-        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_STAR_ITEM);
-        break;
-      case TextTranslation.LOCK.key:
-        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.LOCK_FILE);
-        break;
-      case TextTranslation.UNLOCK.key:
-        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.UNLOCK_FILE);
-        break;
-      case TextTranslation.FREEZE_DOCUMENT.key:
-        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.FREEZE_DOCUMENT);
-        break;
-      case TextTranslation.UNFREEZE_DOCUMENT.key:
-        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.UNFREEZE_DOCUMENT);
         break;
       case TextTranslation.HISTORY.key:
         eventBus && eventBus.dispatch(EVENT_BUS_TYPE.FILE_HISTORY);
@@ -111,12 +82,9 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
     }
   }, [eventBus]);
 
-  const toFileObj = useCallback((fileId) => {
+  const toFileObj = useCallback((fileId, isAdmin) => {
     const file = getFileById(tagFiles, fileId);
-    return Object.assign(file, {
-      name: getFileName(file),
-      type: 'file' // for 'chat with AI'
-    });
+    return getFileObj(file, isAdmin);
   }, [tagFiles]);
 
   const buildMenuOps = useCallback((allOperations, excludesOperations) => {
@@ -145,22 +113,23 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
           onClick: () => onMenuItemClick(item.key)
         };
       });
-    if (validOperations.length > 0 && validOperations[0] === 'Divider') {
-      validOperations.shift();
-    }
-    return { iconOps, menuOps: validOperations };
+
+    const startIndex = validOperations.findIndex(item => item !== 'Divider');
+    return { iconOps, menuOps: validOperations.slice(startIndex) };
   }, [onMenuItemClick]);
 
   const getFileOperations = useCallback(() => {
     if (selectedFilesLen !== 1) return {};
-    const fileObj = toFileObj(selectedFileIds[0]);
-    const allOperations = getDirentItemMenuList(currentRepoInfo, fileObj, true);
+    const { is_admin } = currentRepoInfo;
+    const fileObj = toFileObj(selectedFileIds[0], is_admin);
+    const allOperations = filterTagFileOperations(getDirentItemMenuList(currentRepoInfo, fileObj, true));
     return buildMenuOps(allOperations, SINGLE_EXCLUDES);
   }, [currentRepoInfo, toFileObj, buildMenuOps, selectedFileIds, selectedFilesLen]);
 
   const getSelectedFilesOperations = useCallback(() => {
     if (selectedFilesLen <= 1) return {};
-    const selectedFiles = selectedFileIds.map(toFileObj);
+    const { is_admin } = currentRepoInfo;
+    const selectedFiles = selectedFileIds.map(id => toFileObj(id, is_admin));
     const allOperations = getTagFilesOperations(currentRepoInfo, selectedFiles);
     return buildMenuOps(allOperations, MULTI_EXCLUDES);
   }, [currentRepoInfo, toFileObj, buildMenuOps, selectedFileIds, selectedFilesLen]);
@@ -186,12 +155,8 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
       switch (item) {
         case 'Download':
           return <OpIcon key="dl-btn" id="dl-btn" symbol="download" className="cur-view-path-btn" tooltip={gettext('Download')} op={downloadTagFiles} />;
-        case 'Delete':
-          return <OpIcon key="del-btn" id="del-btn" symbol="delete" className="cur-view-path-btn" tooltip={gettext('Delete')} op={deleteTagFiles} />;
         case 'Share':
           return <OpIcon key="share-btn" id="share-btn" symbol="share" className="cur-view-path-btn" tooltip={gettext('Share')} op={shareTagFile} />;
-        case 'Move':
-          return <OpIcon key="move-btn" id="move-btn" symbol="move" className="cur-view-path-btn" tooltip={gettext('Move')} op={moveTagFile} />;
         case 'Copy':
           return <OpIcon key="copy-btn" id="copy-btn" symbol="copy" className="cur-view-path-btn" tooltip={gettext('Copy')} op={copyTagFile} />;
         default:

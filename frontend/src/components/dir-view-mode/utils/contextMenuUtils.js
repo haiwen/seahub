@@ -162,14 +162,9 @@ export const getBatchMenuList = (repoInfo, userPerm, selectedDirents, getItemMen
 export const getTagFilesOperations = (repoInfo, selectedDirents) => {
   let batchOptions = [];
 
-  const canDownload = selectedDirents.some(file => {
-    return Utils.canDownloadFile(file);
-  });
-  const canDelete = selectedDirents.some(file => {
-    return Utils.canDeleteFile(file);
-  });
+  const { is_admin } = repoInfo;
+  const canDownload = is_admin;
   canDownload && batchOptions.push(TextTranslation.DOWNLOAD);
-  canDelete && batchOptions.push(TextTranslation.DELETE);
 
   if (canChatWithDirents(repoInfo, selectedDirents)) {
     batchOptions.push('Divider', TextTranslation.CHAT_WITH_AI);

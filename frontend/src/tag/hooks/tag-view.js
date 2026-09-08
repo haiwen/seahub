@@ -1,7 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import toaster from '../../components/toast';
 import { Utils } from '../../utils/utils';
-import { metadataAPI } from '../../metadata';
 import tagsAPI from '../api';
 import { useTags } from './tags';
 import { getTreeNodeById, getTreeNodeByKey } from '../../components/sf-table/utils/tree';
@@ -10,19 +8,14 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { TAG_FILE_KEY } from '../constants/file';
 import { EVENT_BUS_TYPE } from '../../metadata/constants';
 import { getFileById, sortTagFiles } from '../utils/file';
-import { getRowById } from '../../components/sf-table/utils/table';
-import { getTagFilesLinks } from '../utils/cell';
-import { PRIVATE_COLUMN_KEY } from '../constants';
-import { gettext } from '../../utils/constants';
 import { getSortBy, getSortOrder } from '../utils/sort';
 import { useFileOperations } from '../../hooks/file-operations';
 
-// This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const TagViewContext = React.createContext(null);
 
 export const TagViewProvider = ({
   repoID, tagID, nodeKey, children,
-  moveFileCallback, copyFileCallback, deleteFilesCallback, renameFileCallback, convertFileCallback,
+  copyFileCallback, convertFileCallback,
   toggleShowDirentToolbar,
   ...params
 }) => {
@@ -31,8 +24,8 @@ export const TagViewProvider = ({
   const [errorMessage, setErrorMessage] = useState(null);
   const [selectedFileIds, setSelectedFileIds] = useState([]);
 
-  const { tagsData, updateLocalTags, tagFilesSort, tagFilesViewMode, modifyTagFilesSort } = useTags();
-  const { handleDownload, handleMove, handleCopy, handleRename, handleAccessLog, handleShare } = useFileOperations();
+  const { tagsData, tagFilesSort, tagFilesViewMode, modifyTagFilesSort } = useTags();
+  const { handleDownload, handleCopy, handleAccessLog, handleShare } = useFileOperations();
   const sortBy = getSortBy(tagFilesSort);
   const sortOrder = getSortOrder(tagFilesSort);
   const viewMode = tagFilesViewMode;
@@ -54,22 +47,7 @@ export const TagViewProvider = ({
     setTimeout(() => {
       window.sfTagsDataContext && window.sfTagsDataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_TAG_FILES, ids, tagFiles);
     }, 0);
-  }, [setSelectedFileIds, tagFiles, toggleShowDirentToolbar]);
-
-  const moveTagFile = useCallback(() => {
-    if (!selectedFileIds || selectedFileIds.length === 0) return null;
-    const selectedFile = getFileById(tagFiles, selectedFileIds[0]);
-    const path = selectedFile[TAG_FILE_KEY.PARENT_DIR];
-    const dirent = { name: selectedFile[TAG_FILE_KEY.NAME] };
-    const callback = (targetRepo, dirent, targetParentPath, sourceParentPath, isByDialog) => {
-      seafileAPI.moveDir(repoID, targetRepo.repo_id, targetParentPath, sourceParentPath, dirent.name).then(res => {
-        moveFileCallback && moveFileCallback(repoID, targetRepo, dirent, targetParentPath, sourceParentPath, res.data.task_id || null, isByDialog);
-        updateSelectedFileIds([]);
-      });
-    };
-
-    handleMove(path, dirent, false, callback);
-  }, [repoID, selectedFileIds, tagFiles, moveFileCallback, updateSelectedFileIds, handleMove]);
+  }, [tagFiles, toggleShowDirentToolbar]);
 
   const copyTagFile = useCallback(() => {
     if (!selectedFileIds || selectedFileIds.length === 0) return null;
@@ -86,58 +64,10 @@ export const TagViewProvider = ({
     handleCopy(path, dirent, false, callback);
   }, [repoID, selectedFileIds, tagFiles, copyFileCallback, updateSelectedFileIds, handleCopy]);
 
-  const deleteTagFiles = useCallback((ids) => {
-    const tagIds = ids?.length ? ids : selectedFileIds;
-    const files = tagIds
-      .filter(id => {
-        const file = getFileById(tagFiles, id);
-        return Utils.canDeleteFile(file);
-      })
-      .map(id => getFileById(tagFiles, id));
-    const paths = files.map(f => Utils.joinPath(f[TAG_FILE_KEY.PARENT_DIR], f[TAG_FILE_KEY.NAME]));
-    const fileNames = files.map(f => f[TAG_FILE_KEY.NAME]);
-    metadataAPI.batchDeleteFiles(repoID, paths).then(() => {
-      const updatedTags = new Set();
-      files.forEach(file => {
-        file._tags.forEach(tag => updatedTags.add(tag.row_id));
-      });
-
-      let idTagUpdates = {};
-      updatedTags.forEach(tagID => {
-        const row = getRowById(tagsData, tagID);
-        const oldTagFileLinks = getTagFilesLinks(row);
-        if (Array.isArray(oldTagFileLinks) && oldTagFileLinks.length > 0) {
-          const newTagFileLinks = oldTagFileLinks.filter(link => !tagIds.includes(link.row_id));
-          const update = { [PRIVATE_COLUMN_KEY.TAG_FILE_LINKS]: newTagFileLinks };
-          idTagUpdates[tagID] = update;
-        }
-      });
-      updateLocalTags([...updatedTags], idTagUpdates);
-
-      setTagFiles(prevTagFiles => ({
-        ...prevTagFiles,
-        rows: prevTagFiles.rows.filter(row => !tagIds.includes(row[TAG_FILE_KEY.ID])),
-      }));
-
-      deleteFilesCallback && deleteFilesCallback(paths, fileNames);
-      updateSelectedFileIds([]);
-      let msg = fileNames.length > 1
-        ? gettext('Successfully deleted {name} and {n} other items')
-        : gettext('Successfully deleted {name}');
-      msg = msg.replace('{name}', fileNames[0])
-        .replace('{n}', fileNames.length - 1);
-      toaster.success(msg);
-    });
-  }, [repoID, tagsData, tagFiles, selectedFileIds, updateLocalTags, deleteFilesCallback, updateSelectedFileIds]);
-
   const downloadTagFiles = useCallback(() => {
     if (!selectedFileIds.length) return;
 
     const direntList = selectedFileIds
-      .filter(id => {
-        const file = getFileById(tagFiles, id);
-        return Utils.canDownloadFile(file);
-      })
       .map(id => {
         const file = getFileById(tagFiles, id);
         const name = file[TAG_FILE_KEY.PARENT_DIR] === '/' ? file[TAG_FILE_KEY.NAME] : `${file[TAG_FILE_KEY.PARENT_DIR]}/${file[TAG_FILE_KEY.NAME]}`;
@@ -145,50 +75,6 @@ export const TagViewProvider = ({
       });
     handleDownload('/', direntList);
   }, [tagFiles, selectedFileIds, handleDownload]);
-
-  const renameTagFile = useCallback((newName) => {
-    if (!selectedFileIds || selectedFileIds.length === 0) return null;
-    const selectedFile = getFileById(tagFiles, selectedFileIds[0]);
-    const oldName = selectedFile[TAG_FILE_KEY.NAME];
-    const path = selectedFile[TAG_FILE_KEY.PARENT_DIR];
-    const id = selectedFile[TAG_FILE_KEY.ID];
-    const newPath = Utils.joinPath(path, newName);
-    seafileAPI.getFileInfo(repoID, newPath).then(() => {
-      let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
-      errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
-      toaster.danger(errMessage);
-    }).catch(error => {
-      if (error && error.response && error.response.status === 404) {
-        const oldFullPath = Utils.joinPath(path, oldName);
-        seafileAPI.renameFile(repoID, oldFullPath, newName).then(res => {
-          renameFileCallback && renameFileCallback(path, newName);
-          setTagFiles(prevTagFiles => ({
-            ...prevTagFiles,
-            rows: prevTagFiles.rows.map(row => {
-              if (row[TAG_FILE_KEY.ID] === id) {
-                return { ...row, [TAG_FILE_KEY.NAME]: newName };
-              }
-              return row;
-            })
-          }));
-        }).catch(error => {
-          const errMessage = Utils.getErrorMsg(error);
-          toaster.danger(errMessage);
-        });
-      } else {
-        const errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      }
-    });
-  }, [repoID, selectedFileIds, tagFiles, renameFileCallback]);
-
-  const renameTagFileInDialog = useCallback(() => {
-    if (!selectedFileIds || selectedFileIds.length === 0) return null;
-    const selectedFile = getFileById(tagFiles, selectedFileIds[0]);
-    const oldName = selectedFile[TAG_FILE_KEY.NAME];
-    const dirent = { name: oldName, type: 'file' };
-    handleRename(dirent, [], renameTagFile);
-  }, [selectedFileIds, tagFiles, handleRename, renameTagFile]);
 
   const displayFileDetails = useCallback(() => {
     if (!selectedFileIds || selectedFileIds.length === 0) return null;
@@ -240,7 +126,7 @@ export const TagViewProvider = ({
       ...tagFiles,
       rows: tagFiles.rows.map(row => {
         if (row[TAG_FILE_KEY.ID] === id) {
-          return Object.assign(row, updates);
+          return { ...row, ...updates };
         }
         return row;
       })
@@ -294,12 +180,8 @@ export const TagViewProvider = ({
       selectedFileIds,
       updateSelectedFileIds,
       updateTagFile,
-      moveTagFile,
       copyTagFile,
-      deleteTagFiles,
       downloadTagFiles,
-      renameTagFileInDialog,
-      renameTagFile,
       displayFileDetails,
       convertFile,
       modifyTagFilesSort,
