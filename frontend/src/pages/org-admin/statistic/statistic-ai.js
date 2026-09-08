@@ -3,7 +3,7 @@ import MainPanelTopbar from '../main-panel-topbar';
 import StatisticNav from './statistic-nav';
 import { gettext, orgID } from '../../../utils/constants';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
-import AIStatisticsPage from '../../common/ai-statistics';
+import AIStatisticsPage from '../../../components/ai-statistics';
 
 const tabs = [
   { value: 'overview', label: gettext('Overview') },

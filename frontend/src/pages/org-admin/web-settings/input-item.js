@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Input, Button, InputGroup } from 'reactstrap';
 import Icon from '../../../components/icon';
 import { gettext } from '../../../utils/constants';
-import SettingItemBase from '../../common-admin/web-settings/setting-item-base';
+import SettingItemBase from '../../../components/web-settings/setting-item-base';
 
 const propTypes = {
   inputType: PropTypes.string,
