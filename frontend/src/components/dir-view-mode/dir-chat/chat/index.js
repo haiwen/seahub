@@ -18,6 +18,9 @@ import ChatHeader from '../chat-header';
 
 import './index.css';
 
+const STREAM_UPDATE_DELAY = 50;
+const SCROLL_BOTTOM_THRESHOLD = 24;
+
 const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = false }) => {
   const [isReply, setReply] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -83,6 +86,14 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
     timer.current = setTimeout(() => {
       chatHistoryContentRef.current.scrollTop = chatHistoryContentRef.current.scrollHeight;
     }, delay);
+  }, []);
+
+  const isNearBottom = useCallback(() => {
+    const container = chatHistoryContentRef.current;
+    if (!container) {
+      return false;
+    }
+    return container.scrollHeight - container.scrollTop - container.clientHeight <= SCROLL_BOTTOM_THRESHOLD;
   }, []);
 
   const updateChatHistories = useCallback((newChatHistories, reply = false, callback) => {
@@ -299,6 +310,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
 
       setReply(false);
       const newChatHistories = chatHistories.slice(0);
+      const streamingAnswerId = 'streaming-answer';
 
       const buildStatusMessage = (text) => new ChatMessage({
         id: 'typing',
@@ -329,9 +341,18 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
         return nextChatHistories;
       };
 
+      const removeStreamingAnswer = (currentChatHistories) => {
+        const nextChatHistories = currentChatHistories.slice(0);
+        if (nextChatHistories[nextChatHistories.length - 1]?._id === streamingAnswerId) {
+          nextChatHistories.pop();
+        }
+        return nextChatHistories;
+      };
+
       const onError = (currentChatHistories, streamError) => {
         const errorMessage = streamError ? Utils.getErrorMsg(streamError) : gettext('Error');
-        const nextChatHistories = removeStatusMessage(currentChatHistories);
+        let nextChatHistories = removeStatusMessage(currentChatHistories);
+        nextChatHistories = removeStreamingAnswer(nextChatHistories);
         nextChatHistories.push(new ChatMessage({
           message: { [CHAT_MESSAGE_TYPE.TEXT]: errorMessage },
           type: CHAT_MESSAGE_TYPE.ERROR,
@@ -363,7 +384,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
         } = replyData;
         const messageIndex = nextChatHistories.findIndex((chat) => chat._id === aiReplyMessageId);
         if (messageIndex > -1) {
-          return;
+          return nextChatHistories;
         }
         const newChatData = {
           [CHAT_MESSAGE_TYPE.AI_REPLY]: ai_reply,
@@ -379,10 +400,45 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
           type: CHAT_MESSAGE_TYPE.GROUP,
         }));
         updateChatHistories(nextChatHistories, false);
+        return nextChatHistories;
       };
 
       let nextChatHistories = newChatHistories.slice(0);
-      const onMessage = ({ status, search_found: searchFound, results }, { done = false } = {}) => {
+      let streamedAnswer = '';
+      let streamUpdateTimer = null;
+      const renderStreamingAnswer = () => {
+        streamUpdateTimer = null;
+        nextChatHistories = removeStatusMessage(nextChatHistories);
+        const streamingAnswer = new ChatMessage({
+          id: streamingAnswerId,
+          message: {
+            [CHAT_MESSAGE_TYPE.AI_REPLY]: streamedAnswer,
+            [CHAT_MESSAGE_TYPE.SOURCES]: [],
+            [CHAT_MESSAGE_TYPE.THOUGHT_PROCESS]: 'disabled',
+          },
+          type: CHAT_MESSAGE_TYPE.GROUP,
+        });
+        if (nextChatHistories[nextChatHistories.length - 1]?._id === streamingAnswerId) {
+          nextChatHistories[nextChatHistories.length - 1] = streamingAnswer;
+        } else {
+          nextChatHistories.push(streamingAnswer);
+        }
+        updateChatHistories(nextChatHistories, isNearBottom());
+      };
+      const updateStreamingAnswer = (answer) => {
+        streamedAnswer += answer;
+        if (!streamUpdateTimer) {
+          streamUpdateTimer = window.setTimeout(renderStreamingAnswer, STREAM_UPDATE_DELAY);
+        }
+      };
+      const flushStreamingAnswer = () => {
+        if (streamUpdateTimer) {
+          window.clearTimeout(streamUpdateTimer);
+          renderStreamingAnswer();
+        }
+      };
+
+      const onMessage = ({ status, answer, search_found: searchFound, results }, { done = false } = {}) => {
         if (status?.type) {
           const statusText = status.detail ? `${status.type} (${status.detail})` : status.type;
           nextChatHistories = updateStatusMessage(nextChatHistories, statusText);
@@ -395,14 +451,21 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
           updateChatHistories(nextChatHistories, false);
         }
 
+        if (typeof answer === 'string' && answer) {
+          updateStreamingAnswer(answer);
+        }
+
         if (results) {
+          flushStreamingAnswer();
           setReply(false);
           modifyLocalSession(replySessionId, { is_replying: false });
           nextChatHistories = removeStatusMessage(nextChatHistories);
-          updateStreamReply(nextChatHistories, results);
+          nextChatHistories = removeStreamingAnswer(nextChatHistories);
+          nextChatHistories = updateStreamReply(nextChatHistories, results);
         }
 
         if (done) {
+          flushStreamingAnswer();
           setReply(false);
           modifyLocalSession(replySessionId, { is_replying: false });
           modifyLocalSession(replySessionId, { running_task: false });
@@ -473,6 +536,9 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
               const messages = processLines(lines);
               return { done: false, messages };
             } catch (streamError) {
+              if (streamUpdateTimer) {
+                window.clearTimeout(streamUpdateTimer);
+              }
               onError(nextChatHistories, streamError);
               throw streamError;
             }
@@ -516,7 +582,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
       unsubscribeAIReply();
       unsubscribeAIStreamReply();
     };
-  }, [chatHistories, modifyLocalSession, pageSlugId, updateChatHistories]);
+  }, [chatHistories, isNearBottom, modifyLocalSession, pageSlugId, updateChatHistories]);
 
   useEffect(() => {
     return () => {

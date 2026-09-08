@@ -9,12 +9,13 @@ import './index.css';
 const ChatHistory = ({ chat, settings, repoID }) => {
   const { _id, message = {}, isUserSpeak = false, type } = chat;
   const chatId = useMemo(() => _id || '', [_id]);
+  const isStreaming = chatId === 'streaming-answer';
   const showOperations = useMemo(() => {
     if (isUserSpeak) return false;
     if (type === CHAT_MESSAGE_TYPE.TIP) return false;
-    if (chatId === 'typing') return false;
+    if (chatId === 'typing' || isStreaming) return false;
     return true;
-  }, [chatId, isUserSpeak, type]);
+  }, [chatId, isStreaming, isUserSpeak, type]);
 
   if (Object.keys(message).length === 0) {
     return null;
@@ -22,7 +23,7 @@ const ChatHistory = ({ chat, settings, repoID }) => {
 
   return (
     <div className={classNames('sea-ai-ask-chat', { 'user-input-chat': isUserSpeak })}>
-      <CommonMessage chatId={chatId} message={message} settings={settings} repoID={repoID} showOperations={showOperations} />
+      <CommonMessage chatId={chatId} message={message} settings={settings} repoID={repoID} showOperations={showOperations} isStreaming={isStreaming} />
     </div>
   );
 };
