@@ -52,6 +52,12 @@ class MainSideNav extends React.Component {
     this.isWorkWeixin = isWorkWeixin(window.navigator.userAgent.toLowerCase());
   }
 
+  componentDidMount() {
+    if (this.state.filesNavUnfolded) {
+      this.loadGroups();
+    }
+  }
+
   toggleWechatDialog = () => {
     this.setState({ isShowWechatDialog: !this.state.isShowWechatDialog });
   };
