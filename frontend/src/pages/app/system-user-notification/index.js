@@ -26,11 +26,10 @@ class SystemUserNotification extends React.Component {
     if (!userNoteMsgs) {
       return null;
     }
-    const userNoteMsgItem = userNoteMsgs.map((item, index) => {
+    const userNoteMsgItem = userNoteMsgs.map((item) => {
       return (
         <SystemUserNotificationItem
-          key={index}
-          notificationItem={item}
+          key={item.id}
           msg={item.msg_format}
           notificationID={item.id}
         />
