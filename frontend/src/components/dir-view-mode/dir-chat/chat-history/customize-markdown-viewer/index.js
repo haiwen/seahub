@@ -25,7 +25,7 @@ const buildDocumentUrl = (source, repoID) => {
   return `${siteRoot}lib/${repoId}/file${Utils.encodePath(path)}`;
 };
 
-const CustomizeMarkdownViewer = forwardRef(({ chatId, message, repoID }, ref) => {
+const CustomizeMarkdownViewer = forwardRef(({ chatId, message, repoID, isStreaming = false }, ref) => {
   const { openDocument } = useDocuments();
   const containerRef = useRef(null);
   const retryCountRef = useRef(0);
@@ -46,12 +46,15 @@ const CustomizeMarkdownViewer = forwardRef(({ chatId, message, repoID }, ref) =>
   }), [value]);
 
   useEffect(() => {
+    if (isStreaming) {
+      return;
+    }
     retryCountRef.current = 0;
     setViewerKey(0);
-  }, [value]);
+  }, [isStreaming, value]);
 
   useEffect(() => {
-    if (!value) {
+    if (isStreaming || !value) {
       return undefined;
     }
 
@@ -70,7 +73,7 @@ const CustomizeMarkdownViewer = forwardRef(({ chatId, message, repoID }, ref) =>
     return () => {
       window.clearTimeout(timer);
     };
-  }, [value, viewerKey]);
+  }, [isStreaming, value, viewerKey]);
 
   const handleOpenDocument = useCallback((source) => {
     const url = buildDocumentUrl(source, repoID);
@@ -107,6 +110,9 @@ const CustomizeMarkdownViewer = forwardRef(({ chatId, message, repoID }, ref) =>
   }, [handleOpenDocument, mdFiles, openDocument, repoID, sources]);
 
   const beforeRenderCallback = useCallback((nodes) => {
+    if (isStreaming) {
+      return nodes;
+    }
     const valueCount = Array.isArray(nodes) ? nodes.length : 0;
     if (valueCount === 1 && nodes[0]?.type === 'paragraph') {
       setAIMessageType('text');
@@ -114,7 +120,7 @@ const CustomizeMarkdownViewer = forwardRef(({ chatId, message, repoID }, ref) =>
     }
     setAIMessageType('rich-text');
     return nodes;
-  }, []);
+  }, [isStreaming]);
 
   if (!value) {
     return null;
@@ -123,9 +129,10 @@ const CustomizeMarkdownViewer = forwardRef(({ chatId, message, repoID }, ref) =>
   return (
     <div className={classNames('sea-ai-message-reply', aiMessageType)} ref={containerRef}>
       <MarkdownViewer
-        key={viewerKey}
+        key={isStreaming ? 'streaming' : viewerKey}
         value={value}
         isFetching={false}
+        isShowLoading={!isStreaming}
         isShowOutline={false}
         mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
         options={options}
@@ -140,6 +147,7 @@ CustomizeMarkdownViewer.propTypes = {
   chatId: PropTypes.string,
   message: PropTypes.object,
   repoID: PropTypes.string,
+  isStreaming: PropTypes.bool,
 };
 
 export default CustomizeMarkdownViewer;
