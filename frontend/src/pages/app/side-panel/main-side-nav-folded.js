@@ -1,26 +1,26 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import ModalPortal from './modal-portal';
+import ModalPortal from '../../../components/modal-portal';
 import { Link } from '@gatsbyjs/reach-router';
 import { gettext, siteRoot, canInvitePeople, canCreateWiki, enableTC, sideNavFooterCustomHtml, showWechatSupportGroup,
-  isPro, isDBSqlite3, customNavItems, curNoteMsg, enableShowAbout } from '../utils/constants';
-import { ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY, SIDE_PANEL_FOLDED_WIDTH, SUB_NAV_ITEM_HEIGHT } from '../constants';
-import LibrariesSubNav from '../components/libraries-sub-nav';
-import ShareAdminSubNav from '../components/share-admin-sub-nav';
-import AboutDialog from './dialog/about-dialog';
-import { seafileAPI } from '../utils/seafile-api';
-import { Utils } from '../utils/utils';
-import Group from '../models/group';
-import toaster from './toast';
-import { FOLDED_SIDE_NAV_FILES, FOLDED_SIDE_NAV } from '../constants/zIndexes';
-import { isWorkWeixin } from './wechat/weixin-utils';
-import WechatDialog from './wechat/wechat-dialog';
-import Icon from '../components/icon';
-import Tooltip from './tooltip';
-import EventBus from './common/event-bus';
-import { EVENT_BUS_TYPE } from './common/event-bus-type';
+  isPro, isDBSqlite3, customNavItems, curNoteMsg, enableShowAbout } from '../../../utils/constants';
+import { ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY, SIDE_PANEL_FOLDED_WIDTH, SUB_NAV_ITEM_HEIGHT } from '../../../constants';
+import LibrariesSubNav from './libraries-sub-nav';
+import ShareAdminSubNav from './share-admin-sub-nav';
+import AboutDialog from '../../../components/dialog/about-dialog';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { Utils } from '../../../utils/utils';
+import Group from '../../../models/group';
+import toaster from '../../../components/toast';
+import { FOLDED_SIDE_NAV_FILES, FOLDED_SIDE_NAV } from '../../../constants/zIndexes';
+import { isWorkWeixin } from '../../../components/wechat/weixin-utils';
+import WechatDialog from '../../../components/wechat/wechat-dialog';
+import Icon from '../../../components/icon';
+import Tooltip from '../../../components/tooltip';
+import EventBus from '../../../components/common/event-bus';
+import { EVENT_BUS_TYPE } from '../../../components/common/event-bus-type';
 
-import '../css/main-side-nav-folded.css';
+import './main-side-nav-folded.css';
 
 const propTypes = {
   currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,

@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import MediaQuery from 'react-responsive';
-import Logo from './logo';
+import Logo from '../../../components/logo';
 import MainSideNav from './main-side-nav';
 import MainSideNavFolded from './main-side-nav-folded';
-import { SIDE_PANEL_FOLDED_WIDTH } from '../constants';
+import { SIDE_PANEL_FOLDED_WIDTH } from '../../../constants';
 
 const propTypes = {
   isSidePanelClosed: PropTypes.bool,

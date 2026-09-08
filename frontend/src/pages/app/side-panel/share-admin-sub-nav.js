@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import {
   gettext, siteRoot, canAddRepo, canShareRepo, canGenerateShareLink, canGenerateUploadLink
-} from '../utils/constants';
+} from '../../../utils/constants';
 
 const propTypes = {
   currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
