@@ -6,9 +6,9 @@ import { gettext, mediaUrl, logoPath, orgID, orgEnableAdminCustomLogo, orgEnable
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import MainPanelTopbar from '../main-panel-topbar';
-import Section from '../../common-admin/web-settings/section';
-import CheckboxItem from '../../common-admin/web-settings/checkbox-item';
-import FileItem from '../../common-admin/web-settings/file-item';
+import Section from '../../../components/web-settings/section';
+import CheckboxItem from '../../../components/web-settings/checkbox-item';
+import FileItem from '../../../components/web-settings/file-item';
 import InputItem from './input-item';
 import DeleteOrganizationDialog from '../../../components/dialog/org-admin-delete-org-dialog';
 

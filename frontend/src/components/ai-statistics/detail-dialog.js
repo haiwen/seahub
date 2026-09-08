@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { Button, Input, Modal, ModalBody, ModalFooter } from 'reactstrap';
 
-import EmptyTip from '../../../components/empty-tip';
-import Loading from '../../../components/loading';
-import SeahubModalHeader from '../../../components/common/seahub-modal-header';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
-import toaster from '../../../components/toast';
+import EmptyTip from '../empty-tip';
+import Loading from '../loading';
+import SeahubModalHeader from '../common/seahub-modal-header';
+import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 
 const propTypes = {
   condition: PropTypes.object,

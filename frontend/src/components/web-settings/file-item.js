@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
-import { gettext } from '../../../utils/constants';
+import { gettext } from '../../utils/constants';
 import SettingItemBase from './setting-item-base';
 
 const propTypes = {

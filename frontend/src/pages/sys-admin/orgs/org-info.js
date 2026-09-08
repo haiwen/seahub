@@ -13,7 +13,7 @@ import SysAdminSetOrgNameDialog from '../../../components/dialog/sysadmin-dialog
 import SysAdminSetOrgMaxUserNumberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-org-max-user-number-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
 import OrgNav from './org-nav';
-import CheckboxItem from '../../common-admin/web-settings/checkbox-item';
+import CheckboxItem from '../../../components/web-settings/checkbox-item';
 
 class Content extends Component {
 

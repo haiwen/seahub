@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { Button, Input } from 'reactstrap';
 
-import EmptyTip from '../../../components/empty-tip';
-import Loading from '../../../components/loading';
-import Paginator from '../../../components/paginator';
-import { gettext } from '../../../utils/constants';
-import toaster from '../../../components/toast';
-import { Utils } from '../../../utils/utils';
+import EmptyTip from '../empty-tip';
+import Loading from '../loading';
+import Paginator from '../paginator';
+import { gettext } from '../../utils/constants';
+import toaster from '../toast';
+import { Utils } from '../../utils/utils';
 
 import AIStatisticsDetailDialog from './detail-dialog';
 
