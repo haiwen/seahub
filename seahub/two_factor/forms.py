@@ -102,10 +102,17 @@ class TOTPDeviceForm(forms.Form):
         return token
 
     def save(self):
-        return TOTPDevice.objects.create(user=self.user.username, key=self.key,
-                                         tolerance=self.tolerance, t0=self.t0,
-                                         step=self.step, drift=self.drift,
-                                         digits=self.digits)
+        # `two_factor_totpdevice.user` is unique, so creating unconditionally
+        # raises IntegrityError when the user already has a device -- discarding
+        # the secret they have just scanned while their app keeps it. clean_token()
+        # has already validated the submitted token against the new key, so
+        # possession is proven before the old device is replaced.
+        device, _ = TOTPDevice.objects.update_or_create(
+            user=self.user.username,
+            defaults=dict(key=self.key, tolerance=self.tolerance, t0=self.t0,
+                          step=self.step, drift=self.drift,
+                          digits=self.digits))
+        return device
 
 
 class DisableForm(forms.Form):
