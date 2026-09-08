@@ -511,20 +511,11 @@ class Search extends Component {
    * @param {string} savedRepoID - The saved repo ID. If empty string, save in global localStorage.
    */
   keepVisitedItem = (targetItem, savedRepoID) => {
-    let targetIndex;
     const { repo_id: targetRepoID, path: targetPath } = targetItem;
     const storeKey = 'sfVisitedSearchItems' + savedRepoID;
-    const items = JSON.parse(localStorage.getItem(storeKey)) || [];
-    for (let i = 0, len = items.length; i < len; i++) {
-      const { repo_id, path } = items[i];
-      if (repo_id == targetRepoID && path == targetPath) {
-        targetIndex = i;
-        break;
-      }
-    }
-    if (targetIndex != undefined) {
-      items.splice(targetIndex, 1);
-    }
+    const items = (JSON.parse(localStorage.getItem(storeKey)) || []).filter(({ repo_id, path }) => {
+      return repo_id !== targetRepoID || path !== targetPath;
+    });
     items.unshift(targetItem);
     if (items.length > 50) { // keep 50 items at most
       items.pop();
