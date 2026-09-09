@@ -108,7 +108,7 @@
   margin-right: 0;
 }
 
-.dirent-property .sf-metadata-ui-tags-container .sf-metadata-ui-tag-color {
+.dirent-property .sf-metadata-ui-tags-container .sf-metadata-ui-tag-color:not(:last-child) {
   margin-right: -6px;
 }
 
