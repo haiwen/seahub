@@ -86,5 +86,7 @@ export const filterTagFileOperations = (operations) => {
     TextTranslation.STAR,
     TextTranslation.UNSTAR,
   ];
-  return operations.filter(item => !EXCLUDED_SINGLE_FILE_OPS.includes(item));
+  const list = operations.filter(item => !EXCLUDED_SINGLE_FILE_OPS.includes(item));
+  const startIndex = list.findIndex(item => item !== 'Divider');
+  return list.slice(startIndex);
 };
