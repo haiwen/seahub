@@ -7,7 +7,7 @@ import Option from './option';
 import { KeyCodes } from '../../../constants';
 import Icon from '../../icon';
 import { gettext } from '../../../utils/constants';
-import SearchEmptyTip from '../../../components/common/search-empty-tip';
+import SearchEmptyTip from '../../../components/search-empty-tip';
 
 import './index.css';
 

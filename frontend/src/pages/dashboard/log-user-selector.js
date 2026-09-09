@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Input, Popover } from 'reactstrap';
 import { gettext } from '../../utils/constants';
-import SearchEmptyTip from '../../components/common/search-empty-tip';
+import SearchEmptyTip from '../../components/search-empty-tip';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Icon from '../../components/icon';

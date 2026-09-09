@@ -6,7 +6,7 @@ import Option from './option';
 import KeyCodes from '../../../constants/keyCodes';
 import Icon from '../../icon';
 import { gettext } from '../../../utils/constants';
-import SearchEmptyTip from '../../common/search-empty-tip';
+import SearchEmptyTip from '../../search-empty-tip';
 
 import './select-option-group.css';
 

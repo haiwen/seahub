@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { mediaUrl } from '../../../utils/constants';
+import { mediaUrl } from '../../utils/constants';
 import './index.css';
 
 const SearchEmptyTip = ({ text, showImage = true }) => {

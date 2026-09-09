@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { Button } from 'reactstrap';
 import { gettext } from './utils/constants';
 import Logo from './components/logo';
-import Account from './components/common/account';
+import Account from './components/account';
 import TermsPreviewWidget from './components/terms-preview-widget';
 import { Utils } from './utils/utils';
 

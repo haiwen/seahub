@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Alert, Button, ModalBody, ModalFooter } from 'reactstrap';
 import SeahubModalHeader from '../../common/seahub-modal-header';
-import SearchEmptyTip from '../../common/search-empty-tip';
+import SearchEmptyTip from '../../search-empty-tip';
 import Icon from '../../icon';
 import SearchInput from '../../search-input';
 import Tooltip from '../../tooltip';

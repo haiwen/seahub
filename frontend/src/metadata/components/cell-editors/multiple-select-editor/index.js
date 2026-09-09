@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import CommonAddTool from '../../../../components/common-add-tool';
 import SearchInput from '../../../../components/search-input';
-import SearchEmptyTip from '../../../../components/common/search-empty-tip';
+import SearchEmptyTip from '../../../../components/search-empty-tip';
 import DeleteOption from './delete-options';
 import { Utils } from '../../../../utils/utils';
 import { getColumnOptionIdsByNames } from '../../../utils/cell';

@@ -5,7 +5,7 @@ import { DropdownItem } from 'reactstrap';
 import dayjs from 'dayjs';
 import classnames from 'classnames';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import Account from './components/common/account';
+import Account from './components/account';
 import {
   useGoFileserver, fileServerRoot, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle,
   thumbnailSizeForOriginal, thumbnailDefaultSize, thumbnailSizeForGrid, enableThumbnailServer

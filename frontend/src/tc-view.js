@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import Logo from './components/logo';
 import EmptyTip from './components/empty-tip';
-import Account from './components/common/account';
+import Account from './components/account';
 import TermsPreviewWidget from './components/terms-preview-widget';
 import { Utils } from './utils/utils';
 import { gettext } from './utils/constants';

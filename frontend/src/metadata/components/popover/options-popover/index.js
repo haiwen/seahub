@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import CustomizePopover from '../../../../components/customize-popover';
 import CommonAddTool from '../../../../components/common-add-tool';
 import SearchInput from '../../../../components/search-input';
-import SearchEmptyTip from '../../../../components/common/search-empty-tip';
+import SearchEmptyTip from '../../../../components/search-empty-tip';
 import toaster from '../../../../components/toast';
 import ConfirmDeletePopover from './confirm-delete-popover';
 import OptionsContainer from './options-container';

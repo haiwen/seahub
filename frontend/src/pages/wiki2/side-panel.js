@@ -19,7 +19,7 @@ import WikiExternalOperations from './wiki-external-operations';
 import WikiTrashDialog from './wiki-trash-dialog';
 import { DEFAULT_PAGE_NAME } from './constant';
 import Wiki2Search from '../../components/search/wiki2-search';
-import CommonUndoTool from '../../components/common/common-undo-tool';
+import CommonUndoTool from './common-undo-tool';
 import PublishedWikiEntrance from '../../components/published-wiki-entrance';
 import { userAPI } from '../../utils/user-api';
 import ImportWikiPageDialog from '../../components/dialog/import-wiki-page-dialog';

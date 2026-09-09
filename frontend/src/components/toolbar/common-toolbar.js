@@ -6,9 +6,9 @@ import SearchByName from '../search/search-by-name';
 import Wiki2GlobalSearch from '../search/wiki2-global-search';
 import toaster from '../toast';
 import Notification from '../notification';
-import Account from '../common/account';
-import ColorMode from '../common/color-mode';
-import Logout from '../common/logout';
+import Account from '../account';
+import ColorMode from '../color-mode';
+import Logout from '../logout';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import tagsAPI from '../../tag/api';
 
