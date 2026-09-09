@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Utils } from '../../../utils/utils';
+import { Utils } from '../../utils/utils';
 
 class Option extends Component {
 

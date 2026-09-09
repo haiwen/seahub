@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Popover } from 'reactstrap';
-import ModalPortal from '../../modal-portal';
+import ModalPortal from '../modal-portal';
 import SelectOptionGroup from './select-option-group.js';
-import Icon from '../../icon.js';
-import { Utils } from '../../../utils/utils';
-import SelectDropdownIndicator from '../../select-dropdown-indicator';
+import Icon from '../icon.js';
+import { Utils } from '../../utils/utils';
+import SelectDropdownIndicator from '../select-dropdown-indicator';
 
 import './index.css';
 

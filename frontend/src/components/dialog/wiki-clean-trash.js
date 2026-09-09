@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import CreatableSelect from 'react-select/creatable';
-import { MenuSelectStyle } from '../common/select/seahub-select-style';
+import { MenuSelectStyle } from '../select/seahub-select-style';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';

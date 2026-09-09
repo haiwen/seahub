@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import OpIcon from '../op-icon';
-import { SeahubSelect } from '../common/select';
+import { SeahubSelect } from '../select';
 
 const propTypes = {
   isTextMode: PropTypes.bool.isRequired,

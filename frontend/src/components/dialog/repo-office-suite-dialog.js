@@ -6,7 +6,7 @@ import toaster from '../toast';
 import { userAPI } from '../../utils/user-api';
 import { gettext, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import { SeahubSelect } from '../common/select';
+import { SeahubSelect } from '../select';
 import SeahubModalHeader from '../common/seahub-modal-header';
 
 import '../../css/repo-office-suite-dialog.css';

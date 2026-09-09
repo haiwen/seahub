@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Form, FormGroup, Label, Input, Modal, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import { gettext } from '../../utils/constants';
-import { SeahubSelect } from '../common/select';
+import { SeahubSelect } from '../select';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../toast';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';

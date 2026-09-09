@@ -1,6 +1,6 @@
 import React from 'react';
 import { gettext, siteRoot } from '../../utils/constants';
-import { SeahubSelect } from '../common/select';
+import { SeahubSelect } from '../select';
 
 const {
   currentLang, langList

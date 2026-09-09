@@ -9,7 +9,7 @@ import toaster from '../toast';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
 import EventBus from '../common/event-bus';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
-import GroupSelect from '../common/group-select';
+import GroupSelect from '../group-select';
 import EmptyTip from '../../components/empty-tip';
 import Loading from '../../components/loading';
 import OpIcon from '../op-icon';

@@ -5,7 +5,7 @@ import { gettext, isPro } from '../../utils/constants';
 import wikiAPI from '../../utils/wiki-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
-import { SeahubSelect } from '../common/select';
+import { SeahubSelect } from '../select';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {

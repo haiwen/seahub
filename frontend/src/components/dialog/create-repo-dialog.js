@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Modal, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
 import { gettext, enableEncryptedLibrary, enableResetEncryptedRepoPassword, isEmailConfigured, repoPasswordMinLength, libraryTemplates } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import { SeahubSelect } from '../common/select';
+import { SeahubSelect } from '../select';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
