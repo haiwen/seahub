@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { useTags, useTagView } from '../../../hooks';
-import { getRecordIdFromRecord } from '../../../../metadata/utils/cell';
-import TagFile from './item';
 import { hideMenu } from '../../../../components/context-menu/actions';
+import { getRecordIdFromRecord } from '../../../../metadata/utils/cell';
+import { useTags, useTagView } from '../../../hooks';
+import TagFile from './item';
 
 const GridView = ({ repoID, openImagePreview, onTagFileContextMenu }) => {
   const [startPoint, setStartPoint] = useState(null);

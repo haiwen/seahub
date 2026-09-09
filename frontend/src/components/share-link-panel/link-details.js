@@ -1,21 +1,21 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
-import copy from 'copy-to-clipboard';
 import { Button, Input, InputGroup } from 'reactstrap';
-import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, canSendShareLinkEmail } from '../../utils/constants';
+import copy from 'copy-to-clipboard';
+import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
+import BackIcon from '../../components/back-icon';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
+import ShareLink from '../../models/share-link';
+import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, canSendShareLinkEmail } from '../../utils/constants';
 import { shareLinkAPI } from '../../utils/share-link-api';
 import { Utils } from '../../utils/utils';
-import ShareLink from '../../models/share-link';
-import toaster from '../toast';
-import SendLink from '../send-link';
-import SharedLink from '../shared-link';
-import SetLinkExpiration from '../set-link-expiration';
-import ShareLinkScopeEditor from '../select-editor/share-link-scope-editor';
-import SelectEditor from '../select-editor/select-editor';
-import BackIcon from '../../components/back-icon';
 import Icon from '../icon';
+import SelectEditor from '../select-editor/select-editor';
+import ShareLinkScopeEditor from '../select-editor/share-link-scope-editor';
+import SendLink from '../send-link';
+import SetLinkExpiration from '../set-link-expiration';
+import SharedLink from '../shared-link';
+import toaster from '../toast';
 
 const propTypes = {
   sharedLinkInfo: PropTypes.object.isRequired,

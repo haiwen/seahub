@@ -1,12 +1,12 @@
 import React from 'react';
+import { Modal, ModalBody, ModalFooter, Input, Button, Label } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { Utils } from '../../utils/utils';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import { Modal, ModalBody, ModalFooter, Input, Button, Label } from 'reactstrap';
-import toaster from '../toast';
+import { Utils } from '../../utils/utils';
 import Loading from '../loading';
-import SeahubModalHeader from '@/components/seahub-modal-header';
+import toaster from '../toast';
 
 const InvitePeopleDialogPropTypes = {
   onInvitePeople: PropTypes.func.isRequired,

@@ -1,21 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import DirColumnNav from './dir-column-nav';
-import DirListView from './dir-list-view';
-import DirGridView from './dir-grid-view';
-import DirTableView from './dir-table-view';
-import DirHistoryView from './dir-history-view';
 import { SIDE_PANEL_FOLDED_WIDTH } from '../../constants';
-import ResizeBar from '../resize-bar';
-import { DRAG_HANDLER_HEIGHT, MAX_SIDE_PANEL_RATE, MIN_SIDE_PANEL_RATE } from '../resize-bar/constants';
 import { SeafileMetadata } from '../../metadata';
 import { TagsView } from '../../tag';
 import { mediaUrl } from '../../utils/constants';
+import ResizeBar from '../resize-bar';
+import { DRAG_HANDLER_HEIGHT, MAX_SIDE_PANEL_RATE, MIN_SIDE_PANEL_RATE } from '../resize-bar/constants';
 import { CHAT_MODE, GRID_MODE, LIST_MODE, METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH_MODE, TABLE_MODE, SETTINGS_MODE } from './constants';
+import DirChat from './dir-chat';
+import DirColumnNav from './dir-column-nav';
+import DirGridView from './dir-grid-view';
+import DirHistoryView from './dir-history-view';
+import DirListView from './dir-list-view';
+import DirSettingsView from './dir-settings-view';
+import DirTableView from './dir-table-view';
 import DirTrashView from './dir-trash-view';
 import NoPermissionView from './dir-trash-view/no-permission-view';
-import DirChat from './dir-chat';
-import DirSettingsView from './dir-settings-view';
 
 const propTypes = {
   isSidePanelFolded: PropTypes.bool,

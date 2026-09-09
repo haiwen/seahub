@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
-import RepoItem from './repo-item';
+import PropTypes from 'prop-types';
 import { gettext, trashReposExpireDays } from '../../../utils/constants';
 import FixedWidthTable from '../../fixed-width-table';
 import ModalPortal from '../../modal-portal';
 import CommonOperationConfirmationDialog from '../common-operation-confirmation-dialog';
+import RepoItem from './repo-item';
 
 const Repos = ({ repos, filterRestoredRepo, cleanDeletedRepos, enableUserCleanTrash }) => {
   const [isCleanDialogOpen, setIsCleanDialogOpen] = useState(false);

@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../utils/constants';
-import TreeSection from '../../tree-section';
+import OpIcon from '../../../components/op-icon';
 import { useMetadataStatus } from '../../../hooks';
 import { TagsTreeView } from '../../../tag';
-import { useTags } from '../../../tag/hooks';
 import EditTagDialog from '../../../tag/components/dialog/edit-tag-dialog';
-import OpIcon from '../../../components/op-icon';
+import { useTags } from '../../../tag/hooks';
+import { gettext } from '../../../utils/constants';
+import TreeSection from '../../tree-section';
 
 const DirTags = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
   const [isShowEditTagDialog, setIsShowEditTagDialog] = useState(false);

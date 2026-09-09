@@ -1,15 +1,15 @@
 import React from 'react';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import watermark from 'watermark-dom';
-import classNames from 'classnames';
-import Account from '../account';
+import AddAbuseReportDialog from '../../components/dialog/add-abuse-report-dialog';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import Account from '../account';
 import SaveSharedFileDialog from '../dialog/save-shared-file-dialog';
-import AddAbuseReportDialog from '../../components/dialog/add-abuse-report-dialog';
-import toaster from '../toast';
-import Switch from '../switch';
 import CustomDropdown from '../dropdown';
+import Switch from '../switch';
+import toaster from '../toast';
 
 import '../../css/header.css';
 import '../../css/shared-file-view.css';

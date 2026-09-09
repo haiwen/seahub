@@ -1,23 +1,23 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
-import { Utils } from '../../../../utils/utils';
-import { seafileAPI } from '../../../../utils/seafile-api';
-import { userAPI } from '../../../../utils/user-api';
-import { gettext, siteRoot } from '../../../../utils/constants';
+import PropTypes from 'prop-types';
+import ChangeRepoPasswordDialog from '../../../../components/dialog/change-repo-password-dialog';
+import LibSubFolderPermissionDialog from '../../../../components/dialog/lib-sub-folder-permission-dialog';
+import RenameRepoDialog from '../../../../components/dialog/rename-repo';
+import RepoAPITokenDialog from '../../../../components/dialog/repo-api-token-dialog';
+import RepoArchiveDialog from '../../../../components/dialog/repo-archive-dialog';
+import RepoShareAdminDialog from '../../../../components/dialog/repo-share-admin-dialog';
+import ResetEncryptedRepoPasswordDialog from '../../../../components/dialog/reset-encrypted-repo-password-dialog';
+import TransferDialog from '../../../../components/dialog/transfer-dialog';
+import LibraryOpMenu from '../../../../components/library-op-menu';
 import ModalPortal from '../../../../components/modal-portal';
 import toaster from '../../../../components/toast';
-import RenameRepoDialog from '../../../../components/dialog/rename-repo';
-import TransferDialog from '../../../../components/dialog/transfer-dialog';
-import ChangeRepoPasswordDialog from '../../../../components/dialog/change-repo-password-dialog';
-import ResetEncryptedRepoPasswordDialog from '../../../../components/dialog/reset-encrypted-repo-password-dialog';
-import LibSubFolderPermissionDialog from '../../../../components/dialog/lib-sub-folder-permission-dialog';
-import RepoAPITokenDialog from '../../../../components/dialog/repo-api-token-dialog';
-import RepoShareAdminDialog from '../../../../components/dialog/repo-share-admin-dialog';
-import RepoArchiveDialog from '../../../../components/dialog/repo-archive-dialog';
-import LibraryOpMenu from '../../../../components/library-op-menu';
-import Icon from '../../../icon';
+import { gettext, siteRoot } from '../../../../utils/constants';
+import { seafileAPI } from '../../../../utils/seafile-api';
+import { userAPI } from '../../../../utils/user-api';
+import { Utils } from '../../../../utils/utils';
 import RepoWebhookDialog from '../../../dialog/repo-webhook-dialog';
+import Icon from '../../../icon';
 
 const propTypes = {
   repo: PropTypes.object.isRequired,

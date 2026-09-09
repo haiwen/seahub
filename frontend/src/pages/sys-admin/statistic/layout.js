@@ -1,14 +1,14 @@
 import React from 'react';
 import { Router, useLocation } from '@gatsbyjs/reach-router';
-import StatisticNav from './statistic-nav';
 import MainPanelTopbar from '../main-panel-topbar';
-import StatisticFile from './statistic-file';
-import StatisticStorage from './statistic-storage';
-import StatisticUsers from './statistic-users';
-import StatisticTraffic from './statistic-traffic';
 import StatisticAI from './statistic-ai';
+import StatisticFile from './statistic-file';
 import StatisticMetrics from './statistic-metrics';
+import StatisticNav from './statistic-nav';
 import StatisticReports from './statistic-reports';
+import StatisticStorage from './statistic-storage';
+import StatisticTraffic from './statistic-traffic';
+import StatisticUsers from './statistic-users';
 
 const StatisticLayout = ({ children, ...commonProps }) => {
   const location = useLocation();

@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
-import FilePreviewWrapper from './wiki-preview';
 import ResizeWidth from '../../../components/file-view/resize-width';
-import { WIKI_RIGHT_PANEL_WIDTH } from '../constant';
 import LocalStorage from '../../../utils/local-storage-utils';
+import { WIKI_RIGHT_PANEL_WIDTH } from '../constant';
+import FilePreviewWrapper from './wiki-preview';
 
 import './index.css';
 

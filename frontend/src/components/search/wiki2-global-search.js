@@ -1,18 +1,18 @@
 import React, { useCallback, useState, useRef, useEffect, useMemo } from 'react';
-import PropTypes from 'prop-types';
-import isHotkey from 'is-hotkey';
 import MediaQuery from 'react-responsive';
 import classNames from 'classnames';
+import isHotkey from 'is-hotkey';
+import PropTypes from 'prop-types';
 import { SEARCH_CONTAINER, SEARCH_MASK } from '@/constants/zIndexes';
-import wikiAPI from '../../utils/wiki-api';
 import { gettext, mediaUrl, siteRoot } from '../../utils/constants';
 import { debounce, Utils } from '../../utils/utils';
-import toaster from '../toast';
-import Loading from '../loading';
-import IconBtn from '../icon-btn';
+import wikiAPI from '../../utils/wiki-api';
 import Icon from '../icon';
-import Wiki2SearchResult from './wiki2-search-result';
+import IconBtn from '../icon-btn';
+import Loading from '../loading';
+import toaster from '../toast';
 import Tooltip from '../tooltip';
+import Wiki2SearchResult from './wiki2-search-result';
 
 import './wiki2-search.css';
 

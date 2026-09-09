@@ -1,15 +1,15 @@
 import React, { useCallback, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { chatAPI } from '../../../utils/chat-api';
 import { siteRoot } from '../../../utils/constants';
 import CenteredLoading from '../../centered-loading';
+import EventBus, { EVENT_BUS_TYPE } from '../../event-bus';
 import Chat from './chat';
-import Sessions from './sessions';
+import { ASK_PAGE_SLUG_ID } from './constants';
 import Documents from './documents';
 import { AskPageProvider, SessionsProvider, DocumentsProvider, AIChatToolsProvider, useAIChatTools, useAskPage, useSessions } from './hooks';
 import { consumePendingAttachments } from './hooks/ai-chat-tools';
-import { ASK_PAGE_SLUG_ID } from './constants';
-import { chatAPI } from '../../../utils/chat-api';
-import EventBus, { EVENT_BUS_TYPE } from '../../event-bus';
+import Sessions from './sessions';
 
 import './index.css';
 

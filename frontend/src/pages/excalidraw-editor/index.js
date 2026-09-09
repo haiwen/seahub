@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import SimpleEditor from './editor';
 import Loading from '../../components/loading';
 import { Utils } from '../../utils/utils';
-import context from './context';
 import editorApi from './api/editor-api';
+import context from './context';
+import SimpleEditor from './editor';
 
 import './index.css';
 

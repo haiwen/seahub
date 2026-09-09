@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { DropdownItem } from 'reactstrap';
+import PropTypes from 'prop-types';
 
 const ContextMenuItem = ({
   option,

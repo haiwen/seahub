@@ -1,6 +1,6 @@
-import { ValidateFilter } from '../validate';
-import { DateUtils } from '../date';
 import { CellType, FILTER_ERR_MSG, FILTER_TERM_MODIFIER_TYPE } from '../../constants';
+import { DateUtils } from '../date';
+import { ValidateFilter } from '../validate';
 
 const EXACT_DATE_TERM_MODIFIER_TYPES = [
   FILTER_TERM_MODIFIER_TYPE.TODAY,

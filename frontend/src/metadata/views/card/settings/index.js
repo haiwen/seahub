@@ -2,11 +2,11 @@ import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import OpIcon from '../../../../components/op-icon';
 import Switch from '../../../../components/switch';
-import FieldDisplaySettings from '../../../components/data-process-setter/field-display-settings';
+import { useMetadataStatus } from '../../../../hooks';
 import { gettext } from '../../../../utils/constants';
+import FieldDisplaySettings from '../../../components/data-process-setter/field-display-settings';
 import { COLUMNS_ICON_CONFIG, CARD_SETTINGS_KEYS, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { getColumnByKey } from '../../../utils/column';
-import { useMetadataStatus } from '../../../../hooks';
 
 import './index.css';
 

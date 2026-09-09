@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
-import { Utils } from '../../../utils/utils';
-import Icon from '../../../components/icon';
 import Tooltip from '@/components/tooltip';
 import { gettext } from '@/utils/constants';
+import Icon from '../../../components/icon';
+import { Utils } from '../../../utils/utils';
 
 import './plugin-item.css';
 

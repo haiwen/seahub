@@ -1,15 +1,15 @@
 import { CaptureUpdateAction, getSceneVersion, reconcileElements, restoreElements } from '@excalidraw/excalidraw';
 import throttle from 'lodash.throttle';
 import io from 'socket.io-client';
+import EventBus from '../../../components/event-bus';
 import { CURSOR_SYNC_TIMEOUT, INITIAL_SCENE_UPDATE_TIMEOUT, LOAD_IMAGES_TIMEOUT, SYNC_FULL_SCENE_INTERVAL_MS, WS_SUBTYPES } from '../constants';
 import { getSyncableElements } from '../data';
-import { loadFilesFromServer, loadFromServerStorage, saveFilesToServer, saveToServerStorage } from '../data/server-storage';
-import { resolvablePromise, updateStaleImageStatuses } from '../utils/exdraw-utils';
-import { serverDebug } from '../utils/debug';
-import Portal from './portal';
-import EventBus from '../../../components/event-bus';
 import FileManager from '../data/file-manager';
+import { loadFilesFromServer, loadFromServerStorage, saveFilesToServer, saveToServerStorage } from '../data/server-storage';
+import { serverDebug } from '../utils/debug';
 import { isInitializedImageElement } from '../utils/element-utils';
+import { resolvablePromise, updateStaleImageStatuses } from '../utils/exdraw-utils';
+import Portal from './portal';
 
 class Collab {
 

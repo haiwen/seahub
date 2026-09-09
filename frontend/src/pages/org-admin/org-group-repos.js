@@ -1,15 +1,15 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { Link } from '@gatsbyjs/reach-router';
-import { orgAdminAPI } from '../../utils/org-admin-api';
-import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import DeleteRepoDialog from '../../components/dialog/delete-repo-dialog';
 import Loading from '../../components/loading';
-import toaster from '../../components/toast';
 import OpIcon from '../../components/op-icon';
 import OrgAdminGroupNav from '../../components/org-admin-group-nav';
-import DeleteRepoDialog from '../../components/dialog/delete-repo-dialog';
+import toaster from '../../components/toast';
+import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
+import { orgAdminAPI } from '../../utils/org-admin-api';
+import { Utils } from '../../utils/utils';
 import MainPanelTopbar from './main-panel-topbar';
 
 import '../../css/org-admin-user.css';

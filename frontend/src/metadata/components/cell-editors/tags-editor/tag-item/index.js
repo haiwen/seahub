@@ -1,10 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { getTagColor, getTagId, getTagName } from '../../../../../tag/utils/cell';
-import { NODE_CONTENT_LEFT_INDENT, NODE_ICON_LEFT_INDENT } from '../../../../../components/sf-table/constants/tree';
+import PropTypes from 'prop-types';
 import { gettext } from '@/utils/constants';
 import Icon from '../../../../../components/icon';
+import { NODE_CONTENT_LEFT_INDENT, NODE_ICON_LEFT_INDENT } from '../../../../../components/sf-table/constants/tree';
+import { getTagColor, getTagId, getTagName } from '../../../../../tag/utils/cell';
 import { Utils } from '../../../../../utils/utils';
 
 import '../../../tag-ui/index.css';

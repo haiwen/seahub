@@ -1,9 +1,9 @@
 import React from 'react';
 import CenteredLoading from '../../components/centered-loading';
-import View from './view';
-import AllTags from './all-tags';
-import { TagViewProvider, useTags } from '../hooks';
 import { ALL_TAGS_ID } from '../constants';
+import { TagViewProvider, useTags } from '../hooks';
+import AllTags from './all-tags';
+import View from './view';
 
 const Views = ({ ...params }) => {
   const { isLoading, displayNodeKey } = useTags();

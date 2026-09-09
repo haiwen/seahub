@@ -1,4 +1,3 @@
-import { getColumnByKey } from '../../utils/column';
 import {
   VIEW_NOT_DISPLAY_COLUMN_KEYS,
   VIEW_TYPE_DEFAULT_BASIC_FILTER,
@@ -7,6 +6,7 @@ import {
   VIEW_DEFAULT_SETTINGS,
   ROW_HEIGHT
 } from '../../constants';
+import { getColumnByKey } from '../../utils/column';
 
 class View {
 

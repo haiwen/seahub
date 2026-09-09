@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Icon from '../../../components/icon';
 import Logo from '../../../components/logo';
 import CommonToolbar from '../../../components/toolbar/common-toolbar';
-import Icon from '../../../components/icon';
 
 import '../../../css/header.css';
 

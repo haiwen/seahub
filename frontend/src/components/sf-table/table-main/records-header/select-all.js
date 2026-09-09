@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Icon from '../../../icon';
 import { gettext } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
+import Icon from '../../../icon';
 
 class SelectAll extends Component {
 

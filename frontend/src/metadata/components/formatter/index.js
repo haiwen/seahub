@@ -1,23 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TextFormatter from '../cell-formatter/text';
+import { CellType } from '../../constants';
+import CheckboxEditor from '../cell-editors/checkbox-editor';
+import RateEditor from '../cell-editors/rate-editor';
+import CheckboxFormatter from '../cell-formatter/checkbox';
+import CollaboratorsFormatter from '../cell-formatter/collaborators';
 import CreatorFormatter from '../cell-formatter/creator';
 import CTimeFormatter from '../cell-formatter/ctime';
 import DateFormatter from '../cell-formatter/date';
-import SingleSelectFormatter from '../cell-formatter/single-select';
-import CollaboratorsFormatter from '../cell-formatter/collaborators';
-import CheckboxFormatter from '../cell-formatter/checkbox';
-import GeolocationFormatter from '../cell-formatter/geolocation';
-import LongTextFormatter from '../cell-formatter/long-text';
-import NumberFormatter from '../cell-formatter/number';
-import MultipleSelectFormatter from '../cell-formatter/multiple-select';
-import RateFormatter from '../cell-formatter/rate';
 import FileNameFormatter from '../cell-formatter/file-name';
 import FileTagsFormatter from '../cell-formatter/file-tags';
+import GeolocationFormatter from '../cell-formatter/geolocation';
+import LongTextFormatter from '../cell-formatter/long-text';
+import MultipleSelectFormatter from '../cell-formatter/multiple-select';
+import NumberFormatter from '../cell-formatter/number';
+import RateFormatter from '../cell-formatter/rate';
+import SingleSelectFormatter from '../cell-formatter/single-select';
+import TextFormatter from '../cell-formatter/text';
 import Empty from './empty';
-import { CellType } from '../../constants';
-import RateEditor from '../cell-editors/rate-editor';
-import CheckboxEditor from '../cell-editors/checkbox-editor';
 
 import './index.css';
 

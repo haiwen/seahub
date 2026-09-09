@@ -1,9 +1,14 @@
 /* eslint-disable react/prop-types */
 import React, { useContext, useEffect, useRef, useState, useCallback } from 'react';
+import EventBus from '@/components/event-bus';
 import { Dirent } from '@/models';
+import { getSearchRule } from '../../components/sf-table/utils/search';
+import { getRowById } from '../../components/sf-table/utils/table';
 import toaster from '../../components/toast';
-import Context from '../context';
-import Store from '../store';
+import { useFileOperations, useMetadataAIOperations, useMetadataStatus } from '../../hooks';
+import { useTags } from '../../tag/hooks';
+import { gettext } from '../../utils/constants';
+import { Utils, validateName } from '../../utils/utils';
 import {
   CellType,
   EVENT_BUS_TYPE,
@@ -13,18 +18,13 @@ import {
   TABLE_NOT_DISPLAY_COLUMN_KEYS,
   shouldPreserveSearchForOperation
 } from '../constants';
-import { Utils, validateName } from '../../utils/utils';
-import { useMetadata } from './metadata';
-import { useCollaborators } from './collaborators';
-import { getRowById } from '../../components/sf-table/utils/table';
+import Context from '../context';
+import Store from '../store';
 import { getCellValueByColumn, getCollaboratorsName, getFileNameFromRecord, getFileObjIdFromRecord, getNumberDisplayString, getParentDirFromRecord, getRecordIdFromRecord, getUniqueFileName } from '../utils/cell';
-import { gettext } from '../../utils/constants';
-import { checkIsDir } from '../utils/row';
-import { useTags } from '../../tag/hooks';
-import { useFileOperations, useMetadataAIOperations, useMetadataStatus } from '../../hooks';
 import { getColumnByKey } from '../utils/column';
-import { getSearchRule } from '../../components/sf-table/utils/search';
-import EventBus from '@/components/event-bus';
+import { checkIsDir } from '../utils/row';
+import { useCollaborators } from './collaborators';
+import { useMetadata } from './metadata';
 
 const MetadataViewContext = React.createContext(null);
 

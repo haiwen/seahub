@@ -1,3 +1,6 @@
+import { CellType, DATE_FORMAT_MAP, FILTER_CONJUNCTION_TYPE } from '../../constants';
+import { getCellValueByColumn } from '../cell';
+import { DateUtils } from '../date';
 import {
   getFormattedFilters,
   deleteInvalidFilter,
@@ -12,9 +15,6 @@ import {
   numberFilter,
   multipleSelectFilter,
 } from './filter-column';
-import { DateUtils } from '../date';
-import { CellType, DATE_FORMAT_MAP, FILTER_CONJUNCTION_TYPE } from '../../constants';
-import { getCellValueByColumn } from '../cell';
 
 const getFilterResult = (row, filter, { username, userId }) => {
   const { column } = filter;

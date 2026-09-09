@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
-import dayjs from 'dayjs';
 import classNames from 'classnames';
+import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
+import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 import { gettext } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
-import OpIcon from '../../../op-icon';
 import Picker from '../../../date-and-time-picker';
 import Icon from '../../../icon';
+import OpIcon from '../../../op-icon';
 import { HISTORY_MODE } from '../../constants';
-import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 
 const DATE_INPUT_WIDTH = 118;
 

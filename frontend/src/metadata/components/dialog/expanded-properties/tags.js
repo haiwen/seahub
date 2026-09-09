@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { getCellValueByColumn, getRecordIdFromRecord } from '../../../utils/cell';
-import { getRowById } from '../../../../components/sf-table/utils/table';
-import { useTags } from '../../../../tag/hooks';
-import TagsEditor from '../../cell-editors/tags-editor';
-import FileTagsFormatter from '../../cell-formatter/file-tags';
 import ClickOutside from '../../../../components/click-outside';
 import Icon from '../../../../components/icon';
+import { getRowById } from '../../../../components/sf-table/utils/table';
+import { useTags } from '../../../../tag/hooks';
+import { getCellValueByColumn, getRecordIdFromRecord } from '../../../utils/cell';
+import TagsEditor from '../../cell-editors/tags-editor';
+import FileTagsFormatter from '../../cell-formatter/file-tags';
 
 const Tags = ({ record, column, updateFileTags, containerRef }) => {
   const [isEditorShown, setIsEditorShown] = useState(false);

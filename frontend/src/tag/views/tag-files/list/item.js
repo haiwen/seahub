@@ -1,17 +1,17 @@
 import { useCallback, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import PropTypes from 'prop-types';
 import FileTagsFormatter from '../../../../metadata/components/cell-formatter/file-tags';
-import { gettext, siteRoot, thumbnailDefaultSize } from '../../../../utils/constants';
 import {
   getParentDirFromRecord, getRecordIdFromRecord, getFileNameFromRecord, getFileSizedFromRecord,
   getFileMTimeFromRecord, getTagsFromRecord, getFilePathByRecord,
 } from '../../../../metadata/utils/cell';
-import { Utils } from '../../../../utils/utils';
 import { openFile } from '../../../../metadata/utils/file';
+import { gettext, siteRoot, thumbnailDefaultSize } from '../../../../utils/constants';
 import { formatWithTimezone } from '../../../../utils/time';
+import { Utils } from '../../../../utils/utils';
 
 import './index.css';
 

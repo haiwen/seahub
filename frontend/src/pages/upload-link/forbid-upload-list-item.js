@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Utils } from '../../utils/utils';
-import { gettext } from '../../utils/constants';
 import Icon from '../../components/icon';
+import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   file: PropTypes.object,

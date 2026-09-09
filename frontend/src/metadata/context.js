@@ -1,13 +1,13 @@
-import metadataAPI from './api';
+import EventBus from '../components/event-bus';
 import tagsAPI from '../tag/api';
+import { username, lang } from '../utils/constants';
+import { Utils } from '../utils/utils';
+import metadataAPI from './api';
 import {
   PRIVATE_COLUMN_KEYS, EDITABLE_DATA_PRIVATE_COLUMN_KEYS, EDITABLE_PRIVATE_COLUMN_KEYS, DELETABLE_PRIVATE_COLUMN_KEY,
   FACE_RECOGNITION_VIEW_ID,
 } from './constants';
 import LocalStorage from './utils/local-storage';
-import EventBus from '../components/event-bus';
-import { username, lang } from '../utils/constants';
-import { Utils } from '../utils/utils';
 
 class Context {
 

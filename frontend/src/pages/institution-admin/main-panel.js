@@ -1,15 +1,15 @@
 import React from 'react';
-import MainPanelTopbar from '../sys-admin/main-panel-topbar';
-import UserList from './user-list';
 import { Router, navigate } from '@gatsbyjs/reach-router';
+import { gettext, siteRoot } from '../../utils/constants';
+import MainPanelTopbar from '../sys-admin/main-panel-topbar';
+import Search from '../sys-admin/search';
 import UserContent from './user-content';
-import UsersNav from './users-nav';
+import UserGroups from './user-content/user-groups';
 import UserInfo from './user-content/user-info';
 import UserRepos from './user-content/user-repos';
-import UserGroups from './user-content/user-groups';
-import { gettext, siteRoot } from '../../utils/constants';
-import Search from '../sys-admin/search';
+import UserList from './user-list';
 import UserListSearch from './user-list-search';
+import UsersNav from './users-nav';
 
 export default function MainPanel(props) {
 

@@ -1,10 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Alert, Modal, ModalBody, ModalFooter, Button, Form, FormGroup, Label, Input, InputGroup } from 'reactstrap';
+import PropTypes from 'prop-types';
+import SeahubModalHeader from '@/components/seahub-modal-header';
+import SysAdminUserRoleEditor from '../../../components/select-editor/sysadmin-user-role-editor';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
-import SysAdminUserRoleEditor from '../../../components/select-editor/sysadmin-user-role-editor';
-import SeahubModalHeader from '@/components/seahub-modal-header';
 import Icon from '../../icon';
 
 const propTypes = {

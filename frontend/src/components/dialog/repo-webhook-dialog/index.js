@@ -1,17 +1,17 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
+import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
 import { gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
-import Loading from '../../loading';
-import Icon from '../../icon';
 import EmptyTip from '../../empty-tip';
-import WebhookItem from './webhook-item';
+import Icon from '../../icon';
+import Loading from '../../loading';
+import toaster from '../../toast';
 import DeleteWebHookDialog from './delete-webhook-dialog';
 import EditWebHookDialog from './edit-webhook-dialog';
-import toaster from '../../toast';
+import WebhookItem from './webhook-item';
 
 import './index.css';
 

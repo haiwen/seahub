@@ -1,20 +1,20 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
-import { Utils } from '../../../utils/utils';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
-import { gettext } from '../../../utils/constants';
-import toaster from '../../../components/toast';
-import EmptyTip from '../../../components/empty-tip';
-import Loading from '../../../components/loading';
-import Paginator from '../../../components/paginator';
+import PropTypes from 'prop-types';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import SysAdminGroupAddMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-group-add-member-dialog';
+import EmptyTip from '../../../components/empty-tip';
+import Loading from '../../../components/loading';
+import OpIcon from '../../../components/op-icon';
+import Paginator from '../../../components/paginator';
 import RoleSelector from '../../../components/single-selector';
+import toaster from '../../../components/toast';
+import { gettext } from '../../../utils/constants';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { Utils } from '../../../utils/utils';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import GroupNav from './group-nav';
-import OpIcon from '../../../components/op-icon';
 
 class Content extends Component {
 

@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { UTC_FORMAT_DEFAULT, PRIVATE_COLUMN_KEY } from '../../constants';
-import { OPERATION_TYPE } from './constants';
 import Column from '../../model/column';
 import View from '../../model/metadata/view';
-import { getColumnOriginName } from '../../utils/column';
 import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
+import { getColumnOriginName } from '../../utils/column';
+import { OPERATION_TYPE } from './constants';
 
 dayjs.extend(utc);
 

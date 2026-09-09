@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
 import { FormGroup, Label, Input } from 'reactstrap';
+import PropTypes from 'prop-types';
 import CustomizePopover from '@/components/customize-popover';
 import CustomizeSelect from '@/components/customize-select';
 import Switch from '@/components/switch';
-import { gettext } from '@/utils/constants';
 import { DEFAULT_NUMBER_FORMAT } from '@/metadata/constants';
+import { gettext } from '@/utils/constants';
 
 import './index.css';
 

@@ -1,14 +1,14 @@
 import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import LibDetail from './lib-details';
-import DirentDetail from './dirent-details';
-import MultiSelectionDetails from './multi-selection-details';
-import ViewDetails from '../../metadata/components/view-details';
-import ObjectUtils from '../../utils/object';
-import { MetadataContext } from '../../metadata';
 import { PRIVATE_FILE_TYPE } from '../../constants';
-import { METADATA_MODE, TAGS_MODE } from '../dir-view-mode/constants';
+import { MetadataContext } from '../../metadata';
+import ViewDetails from '../../metadata/components/view-details';
 import { useTags } from '../../tag/hooks';
+import ObjectUtils from '../../utils/object';
+import { METADATA_MODE, TAGS_MODE } from '../dir-view-mode/constants';
+import DirentDetail from './dirent-details';
+import LibDetail from './lib-details';
+import MultiSelectionDetails from './multi-selection-details';
 
 const Detail = React.memo(({
   repoID,

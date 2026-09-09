@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, username, canCreateWiki, isPro } from '../../utils/constants';
-import WikiCardGroup from './wiki-card-group';
-import wikiAPI from '../../utils/wiki-api';
 import { Utils } from '../../utils/utils';
+import wikiAPI from '../../utils/wiki-api';
 import toaster from '../toast';
+import WikiCardGroup from './wiki-card-group';
 
 import './wiki-card-view.css';
 

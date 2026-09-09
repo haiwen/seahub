@@ -1,6 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { MarkdownViewer } from '@seafile/seafile-editor';
+import PropTypes from 'prop-types';
 import Loading from '../../components/loading';
 import { mediaUrl } from '../../utils/constants';
 

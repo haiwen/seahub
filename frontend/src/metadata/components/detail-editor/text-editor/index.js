@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import ClickOutside from '../../../../components/click-outside';
-import { gettext } from '../../../../utils/constants';
 import { KeyCodes } from '../../../../constants';
+import { gettext } from '../../../../utils/constants';
+import ObjectUtils from '../../../../utils/object';
 import { isCellValueChanged } from '../../../utils/cell';
 import { getTrimmedString } from '../../../utils/common';
-import ObjectUtils from '../../../../utils/object';
 
 import './index.css';
 

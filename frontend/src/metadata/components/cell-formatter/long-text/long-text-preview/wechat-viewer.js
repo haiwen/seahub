@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { processor } from '@seafile/seafile-editor';
+import PropTypes from 'prop-types';
 
 const WechatViewer = ({ value }) => {
   const [innerHtml, setInnerHtml] = useState('');

@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
 import { UncontrolledPopover } from 'reactstrap';
-import isHotkey from 'is-hotkey';
-import HistoryBasicFilters from './filters/basic-filters';
-import { getEventClassName } from '../../../utils/dom';
 import classNames from 'classnames';
+import isHotkey from 'is-hotkey';
+import PropTypes from 'prop-types';
+import { getEventClassName } from '../../../utils/dom';
 import { TRASH_MODE } from '../constants';
+import HistoryBasicFilters from './filters/basic-filters';
 
 const HistoryFilterPopover = ({ mode, target, filters, onClose, onChange }) => {
   const popoverRef = useRef(null);

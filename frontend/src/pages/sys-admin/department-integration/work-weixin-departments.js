@@ -1,13 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
 import deepCopy from 'deep-copy';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
-import { siteRoot, isPro } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import ImportWorkWeixinDepartmentDialog from '../../../components/dialog/import-work-weixin-department-dialog';
 import toaster from '../../../components/toast';
+import { siteRoot, isPro } from '../../../utils/constants';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { Utils } from '../../../utils/utils';
 import MainPanelTopbar from '../main-panel-topbar';
 import { WorkWeixinDepartmentMembersList, WorkWeixinDepartmentsTreePanel } from './work-weixin';
-import ImportWorkWeixinDepartmentDialog from '../../../components/dialog/import-work-weixin-department-dialog';
 
 import './department-integration-tree.css';
 

@@ -1,13 +1,13 @@
+import React from 'react';
+import PermissionDeniedTip from '../components/permission-denied-tip';
+import toaster from '../components/toast';
+import { PRIVATE_FILE_TYPE } from '../constants';
+import { compareTwoString } from './compare-two-string';
 import { mediaUrl, gettext, serviceURL, siteRoot, isPro, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableSeadoc, enableRepoSnapshotLabel,
   enableResetEncryptedRepoPassword, isEmailConfigured, isSystemStaff,
   enableOnlyoffice, onlyofficeEditFileExtension,
   enableOfficeWebApp, officeWebAppEditFileExtension, enableMultipleOfficeSuite, officeSuiteEditFileExtension } from './constants';
 import TextTranslation from './text-translation';
-import React from 'react';
-import toaster from '../components/toast';
-import PermissionDeniedTip from '../components/permission-denied-tip';
-import { compareTwoString } from './compare-two-string';
-import { PRIVATE_FILE_TYPE } from '../constants';
 
 export const Utils = {
 

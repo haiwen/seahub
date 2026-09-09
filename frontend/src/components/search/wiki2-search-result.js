@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import CustomIcon from '../../pages/wiki2/custom-icon';
 import { gettext } from '../../utils/constants';
-import Icon from '../icon';
 import { Utils } from '../../utils/utils';
+import Icon from '../icon';
 
 import './wiki2-search-result.css';
 

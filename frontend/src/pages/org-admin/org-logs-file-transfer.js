@@ -1,12 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
 import { Link } from '@gatsbyjs/reach-router';
+import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
 import toaster from '../../components/toast';
-import { Utils } from '../../utils/utils';
-import { orgAdminAPI } from '../../utils/org-admin-api';
-import { siteRoot, gettext, lang } from '../../utils/constants';
 import OrgLogsFileTransferEvent from '../../models/org-logs-file-transfer';
+import { siteRoot, gettext, lang } from '../../utils/constants';
+import { orgAdminAPI } from '../../utils/org-admin-api';
+import { Utils } from '../../utils/utils';
 import UserLink from './user-link';
 
 import '../../css/org-logs.css';

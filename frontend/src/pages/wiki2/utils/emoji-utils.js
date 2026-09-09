@@ -1,5 +1,5 @@
-import { init } from 'emoji-mart';
 import data from '@emoji-mart/data';
+import { init } from 'emoji-mart';
 
 // init data for emoji-mart, used in Picker and `getRandomEmoji` method
 init({ data });

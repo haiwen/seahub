@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import className from 'classnames';
-import { navigate } from '@gatsbyjs/reach-router';
 import { Button } from 'reactstrap';
+import { navigate } from '@gatsbyjs/reach-router';
+import className from 'classnames';
+import PropTypes from 'prop-types';
 import { gettext } from '../utils/constants';
-import Icon from './icon';
 import CustomDropdown from './dropdown';
+import Icon from './icon';
 
 import '../css/pagination.css';
 

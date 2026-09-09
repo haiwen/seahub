@@ -1,10 +1,10 @@
-import axios from 'axios';
 import React, { Suspense, useEffect, useState } from 'react';
-import { createRoot } from 'react-dom/client';
 import { I18nextProvider } from 'react-i18next';
 import { SDocViewer } from '@seafile/seafile-sdoc-editor';
-import Loading from '../../components/loading';
+import axios from 'axios';
+import { createRoot } from 'react-dom/client';
 import i18n from '../../_i18n/i18n-sdoc-editor';
+import Loading from '../../components/loading';
 
 import './index.css';
 

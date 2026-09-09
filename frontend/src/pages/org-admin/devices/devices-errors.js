@@ -1,20 +1,20 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
+import { Link } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Link } from '@gatsbyjs/reach-router';
-import { orgAdminAPI } from '../../../utils/org-admin-api';
-import { siteRoot, gettext, orgID } from '../../../utils/constants';
-import toaster from '../../../components/toast';
-import { Utils } from '../../../utils/utils';
+import PropTypes from 'prop-types';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
-import DevicesNav from './devices-nav';
+import Paginator from '../../../components/paginator';
+import toaster from '../../../components/toast';
+import { siteRoot, gettext, orgID } from '../../../utils/constants';
+import { orgAdminAPI } from '../../../utils/org-admin-api';
+import { formatWithTimezone } from '../../../utils/time';
+import { Utils } from '../../../utils/utils';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
-import Paginator from '../../../components/paginator';
-import { formatWithTimezone } from '../../../utils/time';
+import DevicesNav from './devices-nav';
 
 
 dayjs.extend(relativeTime);

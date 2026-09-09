@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { Utils } from '../utils/utils';
-import OpIcon from './op-icon';
-import Icon from './icon';
+import PropTypes from 'prop-types';
 import { gettext } from '@/utils/constants';
+import { Utils } from '../utils/utils';
+import Icon from './icon';
+import OpIcon from './op-icon';
 
 import '../css/search-input.css';
 

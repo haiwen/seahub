@@ -1,15 +1,15 @@
 import React, { useCallback, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import FileNameFormatter from './file-name-formatter';
-import { Utils } from '../../../utils/utils';
-import { siteRoot, thumbnailDefaultSize, enableThumbnailServer } from '../../../utils/constants';
-import { getParentDirFromRecord, getFileMTimeFromRecord } from '../../utils/cell';
-import { checkIsDir } from '../../utils/row';
+import PropTypes from 'prop-types';
 import EventBus from '@/components/event-bus';
-import { openFile } from '@/metadata/utils/file';
 import { EDITOR_TYPE } from '@/components/sf-table/constants/grid';
 import { EVENT_BUS_TYPE } from '@/metadata/constants';
+import { openFile } from '@/metadata/utils/file';
+import { siteRoot, thumbnailDefaultSize, enableThumbnailServer } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
+import { getParentDirFromRecord, getFileMTimeFromRecord } from '../../utils/cell';
+import { checkIsDir } from '../../utils/row';
+import FileNameFormatter from './file-name-formatter';
 
 const FileName = ({ repoID, record, className: propsClassName, value, hideIcon = false, isCellSelected, onItemClick, ...params }) => {
   const parentDir = useMemo(() => getParentDirFromRecord(record), [record]);

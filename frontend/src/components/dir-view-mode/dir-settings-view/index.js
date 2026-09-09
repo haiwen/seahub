@@ -1,15 +1,15 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import { globalHistory, Link } from '@gatsbyjs/reach-router';
-import { chatAndSearchAvailable, enableRepoAutoDel, gettext, siteRoot } from '../../../utils/constants';
+import PropTypes from 'prop-types';
 import { useMetadataStatus } from '../../../hooks';
-import LibHistorySettingPanel from './lib-history-setting-panel';
-import LibAutoDelSettingPanel from './lib-old-files-auto-del-setting-panel';
 import {
   MetadataStatusManagementDialog as LibExtendedPropertiesSettingPanel,
   MetadataAISummaryStatusDialog as LibAISummarySettingPanel,
   MetadataTagsStatusDialog as LibMetadataTagsStatusSettingPanel,
 } from '../../../metadata';
+import { chatAndSearchAvailable, enableRepoAutoDel, gettext, siteRoot } from '../../../utils/constants';
+import LibHistorySettingPanel from './lib-history-setting-panel';
+import LibAutoDelSettingPanel from './lib-old-files-auto-del-setting-panel';
 
 import './index.css';
 

@@ -1,9 +1,9 @@
-import { gettext } from '../../utils/constants';
-import { OPERATION_TYPE } from './operations';
 import { getColumnByKey } from '../../metadata/utils/column';
+import { gettext } from '../../utils/constants';
 import ObjectUtils from '../../utils/object';
-import { PRIVATE_COLUMN_KEY } from '../constants';
 import tagsAPI from '../api';
+import { PRIVATE_COLUMN_KEY } from '../constants';
+import { OPERATION_TYPE } from './operations';
 
 const MAX_LOAD_RECORDS = 100;
 

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
-import { Utils } from '../../../utils/utils';
 import Icon from '../../../components/icon';
+import { Utils } from '../../../utils/utils';
 
 export default function LinkedRepoItem({ repoItem, onDeleteLinkedRepo }) {
   const iconUrl = Utils.getLibIconUrl(repoItem);

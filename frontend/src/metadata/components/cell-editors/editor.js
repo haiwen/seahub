@@ -1,17 +1,17 @@
 import React from 'react';
-import DateEditor from './date-editor';
-import FileNameEditor from './file-name-editor';
-import TextEditor from './text-editor';
-import NumberEditor from './number-editor';
-import SingleSelectEditor from './single-select-editor';
-import MultipleSelectEditor from './multiple-select-editor';
-import CollaboratorEditor from './collaborator-editor';
-import LongTextEditor from './long-text-editor';
-import TagsEditor from './tags-editor';
-import TableGeolocationEditor from './geolocation-editor/table-geolocation-editor';
 import { lang } from '../../../utils/constants';
 import { CellType } from '../../constants';
 import { checkIsDir } from '../../utils/row';
+import CollaboratorEditor from './collaborator-editor';
+import DateEditor from './date-editor';
+import FileNameEditor from './file-name-editor';
+import TableGeolocationEditor from './geolocation-editor/table-geolocation-editor';
+import LongTextEditor from './long-text-editor';
+import MultipleSelectEditor from './multiple-select-editor';
+import NumberEditor from './number-editor';
+import SingleSelectEditor from './single-select-editor';
+import TagsEditor from './tags-editor';
+import TextEditor from './text-editor';
 
 const Editor = React.forwardRef((props, ref) => {
 

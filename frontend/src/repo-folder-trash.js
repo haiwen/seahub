@@ -1,18 +1,18 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
-import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
-import { Utils } from './utils/utils';
-import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
-import { seafileAPI } from './utils/seafile-api';
+import PropTypes from 'prop-types';
+import { createRoot } from 'react-dom/client';
+import CleanTrash from './components/dialog/clean-trash';
+import Icon from './components/icon';
 import Loading from './components/loading';
 import ModalPortal from './components/modal-portal';
 import toaster from './components/toast';
 import CommonToolbar from './components/toolbar/common-toolbar';
-import CleanTrash from './components/dialog/clean-trash';
+import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
+import { seafileAPI } from './utils/seafile-api';
 import { formatWithTimezone } from './utils/time';
-import Icon from './components/icon';
+import { Utils } from './utils/utils';
 
 import './css/toolbar.css';
 import './css/search.css';

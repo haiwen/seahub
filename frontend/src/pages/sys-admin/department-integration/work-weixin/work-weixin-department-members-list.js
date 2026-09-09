@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Table } from 'reactstrap';
-import { siteRoot } from '../../../../utils/constants';
-import Loading from '../../../../components/loading';
+import PropTypes from 'prop-types';
 import Icon from '../../../../components/icon';
+import Loading from '../../../../components/loading';
+import { siteRoot } from '../../../../utils/constants';
 
 const WorkWeixinDepartmentMembersListPropTypes = {
   isMembersListLoading: PropTypes.bool.isRequired,

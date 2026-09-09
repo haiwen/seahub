@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../../utils/constants';
-import FolderRecords from './folder-records';
-import FileRecords from './file-records';
-import FixedWidthTable from '../../../fixed-width-table';
 import LibsMobileThead from '../../../../components/libs-mobile-thead';
+import { gettext } from '../../../../utils/constants';
+import FixedWidthTable from '../../../fixed-width-table';
+import FileRecords from './file-records';
+import FolderRecords from './folder-records';
 
 const Table = ({ repoID, renderFolder, data, isDesktop }) => {
   const headers = useMemo(() => [

@@ -1,7 +1,7 @@
 import React, { useState, forwardRef, useImperativeHandle, useCallback, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { FormGroup, FormFeedback, Input } from 'reactstrap';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import { gettext } from '../../../../utils/constants';
 
 // eslint-disable-next-line react/display-name

@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import axios from 'axios';
 import classnames from 'classnames';
-import { gettext } from '../../../../utils/constants';
-import { debounce, Utils } from '../../../../utils/utils';
-import toaster from '../../../toast';
-import Loading from '../../../loading';
-import IconBtn from '../../../icon-btn';
+import PropTypes from 'prop-types';
 import { SEARCH_FILTERS_SHOW_KEY } from '../../../../constants';
+import { gettext } from '../../../../utils/constants';
 import { repoTrashAPI } from '../../../../utils/repo-trash-api';
-import TrashFilters from './search-filters';
+import { debounce, Utils } from '../../../../utils/utils';
 import Icon from '../../../icon';
+import IconBtn from '../../../icon-btn';
+import Loading from '../../../loading';
+import toaster from '../../../toast';
+import TrashFilters from './search-filters';
 
 import './search-trash.css';
 

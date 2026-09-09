@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../utils/constants';
 import { SEARCH_FILTERS_KEY } from '../../../constants';
-import Icon from '../../icon';
+import { gettext } from '../../../utils/constants';
 import CustomDropdown from '../../dropdown';
+import Icon from '../../icon';
 
 const FilterByText = ({ searchFilenameOnly, onChange }) => {
   const [value, setValue] = useState(searchFilenameOnly ? SEARCH_FILTERS_KEY.SEARCH_FILENAME_ONLY : SEARCH_FILTERS_KEY.SEARCH_FILENAME_AND_CONTENT);

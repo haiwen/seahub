@@ -1,12 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import Select, { components } from 'react-select';
-import { gettext } from '../../utils/constants';
-import { MenuSelectStyle } from '../select';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import OpIcon from '../../components/op-icon';
-import Icon from '../icon';
+import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import Icon from '../icon';
+import { MenuSelectStyle } from '../select';
 import SelectDropdownIndicator from '../select-dropdown-indicator';
 
 import '../../css/select-editor.css';

@@ -1,11 +1,11 @@
-import TextTranslation from '@/utils/text-translation';
-import { lockFile, unlockFile, batchLockFile, batchUnlockFile, freezeDocument, unfreezeDocument, exportDocx, exportMarkdown, exportSdoc, openHistory, openViaClient, openByDefault, openWithOnlyOffice, toggleStar } from '@/utils/dirent-operations';
 import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE } from '@/components/event-bus';
 import { Dirent } from '@/models';
-import { Utils } from '@/utils/utils';
+import { lockFile, unlockFile, batchLockFile, batchUnlockFile, freezeDocument, unfreezeDocument, exportDocx, exportMarkdown, exportSdoc, openHistory, openViaClient, openByDefault, openWithOnlyOffice, toggleStar } from '@/utils/dirent-operations';
 import { seafileAPI } from '@/utils/seafile-api';
-import { AttachmentObject } from '../dir-chat/models';
+import TextTranslation from '@/utils/text-translation';
+import { Utils } from '@/utils/utils';
 import { setPendingAttachments } from '../dir-chat/hooks/ai-chat-tools';
+import { AttachmentObject } from '../dir-chat/models';
 
 // Base handlers that all dirent views can use
 export const menuHandlers = {

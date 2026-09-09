@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Icon from '../../../components/icon';
 import { gettext } from '../../../utils/constants';
 import { notificationAPI } from '../../../utils/notification-api';
-import Icon from '../../../components/icon';
 
 class SystemUserNotificationItem extends React.Component {
   constructor(props) {

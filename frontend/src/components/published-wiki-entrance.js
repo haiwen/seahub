@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Tooltip from './tooltip';
 import { serviceURL, gettext } from '../utils/constants';
+import Tooltip from './tooltip';
 
 import '../css/published-wiki-entrance.css';
 

@@ -1,20 +1,20 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
-import { Utils } from '../../utils/utils';
-import { seafileAPI } from '../../utils/seafile-api';
-import { enableSeadoc, gettext, onlyofficeSupportEditDocxf } from '../../utils/constants';
-import toaster from '../toast';
-import TipDialog from '../dialog/tip-dialog';
-import { EVENT_BUS_TYPE } from '../event-bus';
-import Icon from '../icon';
+import PropTypes from 'prop-types';
 import {
   METADATA_MODE,
   TAGS_MODE,
   HISTORY_MODE,
   TRASH_MODE
 } from '../../components/dir-view-mode/constants';
+import { enableSeadoc, gettext, onlyofficeSupportEditDocxf } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
+import TipDialog from '../dialog/tip-dialog';
 import CustomDropdown from '../dropdown';
+import { EVENT_BUS_TYPE } from '../event-bus';
+import Icon from '../icon';
+import toaster from '../toast';
 
 const propTypes = {
   currentMode: PropTypes.string,

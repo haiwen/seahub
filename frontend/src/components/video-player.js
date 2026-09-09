@@ -1,5 +1,4 @@
 import React from 'react';
-
 import videojs from 'video.js';
 import 'videojs-hotkeys';
 import 'video.js/dist/video-js.css';

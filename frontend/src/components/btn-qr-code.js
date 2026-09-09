@@ -1,8 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
-import QRCodePopover from './qr-code-popover';
+import PropTypes from 'prop-types';
 import ClickOutside from './click-outside';
+import QRCodePopover from './qr-code-popover';
 
 import '../css/btn-qr-code.css';
 

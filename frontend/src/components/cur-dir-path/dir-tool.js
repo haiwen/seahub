@@ -1,23 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TextTranslation from '../../utils/text-translation';
-import ViewModes from '../../components/view-modes';
-import SortMenu from '../../components/sort-menu';
-import MetadataViewToolBar from '../../metadata/components/view-toolbar';
-import HistoryViewToolbar from '../dir-view-mode/dir-history-view/history-view-toolbar';
-import ChatToolbar from '../toolbar/chat-toolbar';
-import { PRIVATE_FILE_TYPE } from '../../constants';
-import { ALL_TAGS_ID } from '../../tag/constants';
-import { HISTORY_MODE, LIST_MODE, SETTINGS_MODE, TRASH_MODE, TABLE_MODE, CHAT_MODE } from '../dir-view-mode/constants';
-import TagsTableSearcher from '../../tag/views/all-tags/tags-table/tags-table-searcher';
-import AllTagsSortSetter from '../../tag/views/all-tags/tags-table/all-tags-sort-setter';
-import TagFilesViewToolbar from '../../tag/components/tag-files-view-toolbar';
-import OpIcon from '../../components/op-icon';
-import { HideColumnSetter } from '../../metadata/components/data-process-setter';
-import SetRowHeight from '../../components/set-row-height';
-import { EVENT_BUS_TYPE } from '../../components/event-bus';
-import TrashViewToolbar from '../dir-view-mode/dir-trash-view/trash-view-toolbar';
 import { PRIVATE_COLUMN_KEY } from '@/metadata/constants';
+import { EVENT_BUS_TYPE } from '../../components/event-bus';
+import OpIcon from '../../components/op-icon';
+import SetRowHeight from '../../components/set-row-height';
+import SortMenu from '../../components/sort-menu';
+import ViewModes from '../../components/view-modes';
+import { PRIVATE_FILE_TYPE } from '../../constants';
+import { HideColumnSetter } from '../../metadata/components/data-process-setter';
+import MetadataViewToolBar from '../../metadata/components/view-toolbar';
+import TagFilesViewToolbar from '../../tag/components/tag-files-view-toolbar';
+import { ALL_TAGS_ID } from '../../tag/constants';
+import AllTagsSortSetter from '../../tag/views/all-tags/tags-table/all-tags-sort-setter';
+import TagsTableSearcher from '../../tag/views/all-tags/tags-table/tags-table-searcher';
+import TextTranslation from '../../utils/text-translation';
+import { HISTORY_MODE, LIST_MODE, SETTINGS_MODE, TRASH_MODE, TABLE_MODE, CHAT_MODE } from '../dir-view-mode/constants';
+import HistoryViewToolbar from '../dir-view-mode/dir-history-view/history-view-toolbar';
+import TrashViewToolbar from '../dir-view-mode/dir-trash-view/trash-view-toolbar';
+import ChatToolbar from '../toolbar/chat-toolbar';
 
 const propTypes = {
   repoID: PropTypes.string,

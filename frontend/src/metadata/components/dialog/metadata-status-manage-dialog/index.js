@@ -1,17 +1,17 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { Button } from 'reactstrap';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import Icon from '../../../../components/icon';
 import Switch from '../../../../components/switch';
 import toaster from '../../../../components/toast';
-import TurnOffConfirmDialog from '../turn-off-confirm-dialog';
-import metadataAPI from '../../../api';
-import { Utils } from '../../../../utils/utils';
 import { gettext } from '../../../../utils/constants';
-import Icon from '../../../../components/icon';
-import { HideColumnPopover } from '../../popover';
+import { Utils } from '../../../../utils/utils';
+import metadataAPI from '../../../api';
 import { CellType, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { getColumnDisplayName } from '../../../utils/column';
+import { HideColumnPopover } from '../../popover';
+import TurnOffConfirmDialog from '../turn-off-confirm-dialog';
 
 import './index.css';
 

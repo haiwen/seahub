@@ -1,9 +1,9 @@
 import React, { forwardRef, useMemo, useImperativeHandle, useCallback, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Utils } from '../../../utils/utils';
-import { getNumberDisplayString, replaceNumberNotAllowInput, formatStringToNumber } from '../../utils/cell';
 import { KeyCodes } from '../../../constants';
+import { Utils } from '../../../utils/utils';
 import { DEFAULT_NUMBER_FORMAT } from '../../constants';
+import { getNumberDisplayString, replaceNumberNotAllowInput, formatStringToNumber } from '../../utils/cell';
 
 const NumberEditor = forwardRef(({
   readOnly,

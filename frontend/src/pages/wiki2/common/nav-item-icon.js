@@ -1,6 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import FileIcon from '../../../assets/icons/wiki-file.svg';
 import FilesIcon from '../../../assets/icons/wiki-files.svg';
 

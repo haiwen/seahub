@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import tagsAPI from '../../tag/api';
 import { isPro, gettext, showLogoutIcon, siteRoot } from '../../utils/constants';
+import Account from '../account';
+import ColorMode from '../color-mode';
+import { EVENT_BUS_TYPE } from '../event-bus';
+import Logout from '../logout';
+import Notification from '../notification';
 import Search from '../search/search';
 import SearchByName from '../search/search-by-name';
 import Wiki2GlobalSearch from '../search/wiki2-global-search';
 import toaster from '../toast';
-import Notification from '../notification';
-import Account from '../account';
-import ColorMode from '../color-mode';
-import Logout from '../logout';
-import { EVENT_BUS_TYPE } from '../event-bus';
-import tagsAPI from '../../tag/api';
 
 const propTypes = {
   repoID: PropTypes.string,

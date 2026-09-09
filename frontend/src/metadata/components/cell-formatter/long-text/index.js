@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { getPreviewContent } from '@seafile/seafile-editor';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import Icon from '../../../../components/icon';
 import ModalPortal from '../../../../components/modal-portal';
 import LongTextPreview from './long-text-preview';

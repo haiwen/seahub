@@ -1,12 +1,12 @@
 import React, { useCallback, useState, useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { Popover } from 'reactstrap';
+import PropTypes from 'prop-types';
+import { KeyCodes } from '../../../../constants';
+import { gettext } from '../../../../utils/constants';
+import { getEventClassName } from '../../../../utils/dom';
+import { useCollaborators } from '../../../hooks';
 import Editor from '../../cell-editors/collaborator-editor';
 import DeleteCollaborator from '../../cell-editors/collaborator-editor/delete-collaborator';
-import { gettext } from '../../../../utils/constants';
-import { useCollaborators } from '../../../hooks';
-import { KeyCodes } from '../../../../constants';
-import { getEventClassName } from '../../../../utils/dom';
 
 import './index.css';
 

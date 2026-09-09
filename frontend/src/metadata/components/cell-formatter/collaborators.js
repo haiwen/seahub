@@ -1,8 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import AsyncCollaborator from './async-collaborator';
+import PropTypes from 'prop-types';
 import { ROW_HEIGHT } from '@/metadata/constants';
+import AsyncCollaborator from './async-collaborator';
 
 const CollaboratorsFormatter = ({ value, className, children: emptyFormatter, ...params }) => {
   if (!Array.isArray(value) || value.length === 0) return emptyFormatter || null;

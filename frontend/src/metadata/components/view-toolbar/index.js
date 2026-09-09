@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { EVENT_BUS_TYPE, VIEW_TYPE } from '../../constants';
-import TableViewToolbar from './table-view-toolbar';
+import CardViewToolBar from './card-view-toolbar';
 import GalleryViewToolbar from './gallery-view-toolbar';
 import KanbanViewToolBar from './kanban-view-toolbar';
-import CardViewToolBar from './card-view-toolbar';
 import MapViewToolBar from './map-view-toolbar';
+import TableViewToolbar from './table-view-toolbar';
 
 import './index.css';
 

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import dayjs from 'dayjs';
-import Loading from '../../../components/loading';
-import Icon from '../../../components/icon';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
-import { gettext } from '../../../utils/constants';
 import Tooltip from '@/components/tooltip';
+import Icon from '../../../components/icon';
+import Loading from '../../../components/loading';
+import { gettext } from '../../../utils/constants';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 
 class ComponentMetricsTable extends Component {
   constructor(props) {

@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import toaster from '../../../components/toast';
-import Main from './main';
-import { useMetadataView } from '../../hooks/metadata-view';
 import { Utils } from '../../../utils/utils';
 import { PER_LOAD_NUMBER } from '../../constants';
+import { useMetadataView } from '../../hooks/metadata-view';
+import Main from './main';
 
 import './index.css';
 

@@ -1,15 +1,15 @@
 import React, { forwardRef, useMemo, useImperativeHandle, useCallback, useState, useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import CommonAddTool from '../../../../components/common-add-tool';
-import SearchInput from '../../../../components/search-input';
+import Icon from '../../../../components/icon';
 import SearchEmptyTip from '../../../../components/search-empty-tip';
+import SearchInput from '../../../../components/search-input';
+import { KeyCodes } from '../../../../constants';
 import { gettext } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
-import { KeyCodes } from '../../../../constants';
 import { getCellValueByColumn } from '../../../utils/cell';
 import { getColumnByKey, getColumnOptions, generateNewOption } from '../../../utils/column';
-import Icon from '../../../../components/icon';
 
 import './index.css';
 

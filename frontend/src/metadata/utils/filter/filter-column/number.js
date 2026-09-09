@@ -1,5 +1,5 @@
-import { isNumberEqual } from '../../number';
 import { FILTER_PREDICATE_TYPE } from '../../../constants';
+import { isNumberEqual } from '../../number';
 
 /**
  * Filter number

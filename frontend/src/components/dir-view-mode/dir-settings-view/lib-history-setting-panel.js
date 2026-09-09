@@ -1,6 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Form, FormGroup, Label, Input, Alert } from 'reactstrap';
+import PropTypes from 'prop-types';
 import { gettext, enableRepoHistorySetting } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';

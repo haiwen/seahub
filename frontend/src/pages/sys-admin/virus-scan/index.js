@@ -1,10 +1,10 @@
 import React from 'react';
+import { Button } from 'reactstrap';
+import { useLocation } from '@gatsbyjs/reach-router';
+import { eventBus, EVENT_BUS_TYPE } from '../../../components/event-bus';
+import { gettext } from '../../../utils/constants';
 import MainPanelTopbar from '../main-panel-topbar';
 import Nav from './nav';
-import { useLocation } from '@gatsbyjs/reach-router';
-import { Button } from 'reactstrap';
-import { gettext } from '../../../utils/constants';
-import { eventBus, EVENT_BUS_TYPE } from '../../../components/event-bus';
 
 const VirusScan = ({ children, ...commonProps }) => {
   const location = useLocation();

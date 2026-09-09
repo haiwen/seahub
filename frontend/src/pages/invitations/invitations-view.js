@@ -1,20 +1,20 @@
 import React from 'react';
 import { DropdownItem } from 'reactstrap';
-import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
 import classnames from 'classnames';
-import { gettext, mediaUrl } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
-import { seafileAPI } from '../../utils/seafile-api';
-import InvitePeopleDialog from '../../components/dialog/invite-people-dialog';
+import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
 import InvitationRevokeDialog from '../../components/dialog/invitation-revoke-dialog';
-import Loading from '../../components/loading';
-import toaster from '../../components/toast';
-import EmptyTip from '../../components/empty-tip';
-import OpIcon from '../../components/op-icon';
-import MobileItemMenu from '../../components/mobile-item-menu';
-import Icon from '../../components/icon';
+import InvitePeopleDialog from '../../components/dialog/invite-people-dialog';
 import CustomDropdown from '../../components/dropdown';
+import EmptyTip from '../../components/empty-tip';
+import Icon from '../../components/icon';
+import Loading from '../../components/loading';
+import MobileItemMenu from '../../components/mobile-item-menu';
+import OpIcon from '../../components/op-icon';
+import toaster from '../../components/toast';
+import { gettext, mediaUrl } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 
 import '../../css/invitations.css';
 

@@ -1,10 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import Cell from './cell';
-import ActionsCell from './actions-cell';
-import { getFrozenColumns } from '../../../utils/column';
+import PropTypes from 'prop-types';
 import { SEQUENCE_COLUMN as Z_INDEX_SEQUENCE_COLUMN, FROZEN_GROUP_CELL as Z_INDEX_FROZEN_GROUP_CELL } from '../../../constants/z-index';
+import { getFrozenColumns } from '../../../utils/column';
+import ActionsCell from './actions-cell';
+import Cell from './cell';
 
 import './index.css';
 

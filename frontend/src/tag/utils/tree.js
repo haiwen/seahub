@@ -1,9 +1,9 @@
-import { checkTreeNodeHasChildNodes, createTreeNode, generateNodeKey, getAllSubTreeNodes, getTreeNodeId, getTreeNodeKey } from '../../components/sf-table/utils/tree';
 import { getRowById, getRowsByIds } from '../../components/sf-table/utils/table';
+import { checkTreeNodeHasChildNodes, createTreeNode, generateNodeKey, getAllSubTreeNodes, getTreeNodeId, getTreeNodeKey } from '../../components/sf-table/utils/tree';
 import { getRecordIdFromRecord } from '../../metadata/utils/cell';
-import { getParentLinks, getChildLinks, getTagName, getTagFilesCount } from './cell';
-import { ALL_TAGS_SORT_KEY } from '../constants/sort';
 import { compareString } from '../../metadata/utils/sort';
+import { ALL_TAGS_SORT_KEY } from '../constants/sort';
+import { getParentLinks, getChildLinks, getTagName, getTagFilesCount } from './cell';
 import { getSortBy, getSortOrder } from './sort';
 
 const KEY_ALL_CHILD_TAGS_IDS = 'all_child_tags_ids';

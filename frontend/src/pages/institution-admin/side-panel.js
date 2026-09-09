@@ -1,9 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
+import PropTypes from 'prop-types';
+import Icon from '../../components/icon';
 import Logo from '../../components/logo';
 import { gettext, siteRoot, institutionName } from '../../utils/constants';
-import Icon from '../../components/icon';
 
 const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,

@@ -1,5 +1,5 @@
-import { EVENT_BUS_TYPE } from './event-bus-type';
 import { OPERATION_TYPE } from '../store/operations/constants';
+import { EVENT_BUS_TYPE } from './event-bus-type';
 
 /**
  * Search persistence operation categories

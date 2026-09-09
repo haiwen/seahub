@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useCallback, useState, useRef, forwardRef, useImperativeHandle } from 'react';
-import ModalPortal from '../../components/modal-portal';
 import CopyDirentDialog from '../../components/dialog/copy-dirent-dialog';
 import { EVENT_BUS_TYPE } from '../../components/event-bus';
+import ModalPortal from '../../components/modal-portal';
 
 // This hook provides content about copy file
 const CopyFileContext = React.createContext(null);

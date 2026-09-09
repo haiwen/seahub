@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import { gettext } from '@/utils/constants';
-import ModalPortal from '../modal-portal';
 import Icon from '../icon';
+import ModalPortal from '../modal-portal';
 import Tooltip from '../tooltip';
 import { CustomDropdownMenuContent } from './menu-content';
 import {

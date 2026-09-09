@@ -1,42 +1,42 @@
 import React from 'react';
+import { DropdownItem } from 'reactstrap';
+import classnames from 'classnames';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import { createRoot } from 'react-dom/client';
-import { DropdownItem } from 'reactstrap';
-import dayjs from 'dayjs';
-import classnames from 'classnames';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import Account from './components/account';
+import CopyMoveDirentProgressDialog from './components/dialog/copy-move-dirent-progress-dialog';
+import ImageDialog from './components/dialog/image-dialog';
+import SaveSharedDirDialog from './components/dialog/save-shared-dir-dialog';
+import ZipDownloadDialog from './components/dialog/zip-download-dialog';
+import { LIST_MODE } from './components/dir-view-mode/constants';
+import CustomDropdown from './components/dropdown';
+import Icon from './components/icon';
+import Loading from './components/loading';
+import MobileItemMenu from './components/mobile-item-menu';
+import ModalPortal from './components/modal-portal';
+import OpElement from './components/op-element';
+import OpIcon from './components/op-icon';
+import RepoInfoBar from './components/repo-info-bar';
+import ResizeBar from './components/resize-bar';
+import {
+  DRAG_HANDLER_HEIGHT, INIT_SIDE_PANEL_RATE, MAX_SIDE_PANEL_RATE, MIN_SIDE_PANEL_RATE
+} from './components/resize-bar/constants';
+import { TreeHelper, TreeNode, TreeView } from './components/shared-dir-tree-view';
+import FileUploader from './components/shared-link-file-uploader/file-uploader';
+import SortMenu from './components/sort-menu';
+import toaster from './components/toast';
+import ViewModes from './components/view-modes';
+import { MetadataAIOperationsProvider } from './hooks';
+import RepoTag from './models/repo-tag';
 import {
   useGoFileserver, fileServerRoot, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle,
   thumbnailSizeForOriginal, thumbnailDefaultSize, thumbnailSizeForGrid, enableThumbnailServer
 } from './utils/constants';
-import { Utils } from './utils/utils';
 import { seafileAPI } from './utils/seafile-api';
-import Loading from './components/loading';
-import toaster from './components/toast';
-import ModalPortal from './components/modal-portal';
-import ZipDownloadDialog from './components/dialog/zip-download-dialog';
-import ImageDialog from './components/dialog/image-dialog';
-import FileUploader from './components/shared-link-file-uploader/file-uploader';
-import SaveSharedDirDialog from './components/dialog/save-shared-dir-dialog';
-import CopyMoveDirentProgressDialog from './components/dialog/copy-move-dirent-progress-dialog';
-import RepoInfoBar from './components/repo-info-bar';
-import RepoTag from './models/repo-tag';
-import { LIST_MODE } from './components/dir-view-mode/constants';
-import { MetadataAIOperationsProvider } from './hooks';
-import ViewModes from './components/view-modes';
-import SortMenu from './components/sort-menu';
-import { TreeHelper, TreeNode, TreeView } from './components/shared-dir-tree-view';
-import ResizeBar from './components/resize-bar';
-import MobileItemMenu from './components/mobile-item-menu';
-import {
-  DRAG_HANDLER_HEIGHT, INIT_SIDE_PANEL_RATE, MAX_SIDE_PANEL_RATE, MIN_SIDE_PANEL_RATE
-} from './components/resize-bar/constants';
 import { formatWithTimezone } from './utils/time';
-import OpIcon from './components/op-icon';
-import OpElement from './components/op-element';
-import Icon from './components/icon';
-import CustomDropdown from './components/dropdown';
+import { Utils } from './utils/utils';
 
 import './css/layout.css';
 import './css/header.css';

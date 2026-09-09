@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
 import { CellType } from '../../constants';
-import { getCellValueByColumn } from './core';
-import { getCellValueDisplayString } from './common';
 import { getColumnOriginName } from '../column';
+import { getCellValueDisplayString } from './common';
+import { getCellValueByColumn } from './core';
 
 const getAutoTimeDisplayString = (autoTime) => {
   if (!autoTime) {

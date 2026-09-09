@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import { Input, PopoverBody } from 'reactstrap';
+import PropTypes from 'prop-types';
 import CustomizePopover from '../../../../components/customize-popover';
 import toaster from '../../../../components/toast';
+import { KeyCodes } from '../../../../constants';
 import { gettext } from '../../../../utils/constants';
 import { useMetadataView } from '../../../hooks/metadata-view';
-import { KeyCodes } from '../../../../constants';
-import { ValidateColumnFormFields } from '../column-popover/utils';
 import { COMMON_FORM_FIELD_TYPE } from '../column-popover/constants';
+import { ValidateColumnFormFields } from '../column-popover/utils';
 
 import './index.css';
 

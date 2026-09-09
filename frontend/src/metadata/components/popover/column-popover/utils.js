@@ -1,6 +1,6 @@
-import { isRegExpression } from '../../../utils/common';
-import { getColumnByKey, getColumnByName } from '../../../utils/column';
 import { CellType } from '../../../constants';
+import { getColumnByKey, getColumnByName } from '../../../utils/column';
+import { isRegExpression } from '../../../utils/common';
 import { COMMON_FORM_FIELD_TYPE, TEXT_FORM_FIELD, NUMBER_FORM_FIELD } from './constants';
 
 const _validateColumnName = ({ columnName, oldColumn, metadata, gettext }) => {

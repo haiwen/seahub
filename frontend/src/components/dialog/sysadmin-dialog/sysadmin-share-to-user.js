@@ -1,15 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { isPro, gettext } from '../../../utils/constants';
 import { Button } from 'reactstrap';
+import PropTypes from 'prop-types';
+import EmptyTip from '../../../components/empty-tip';
+import { isPro, gettext } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
-import EmptyTip from '../../../components/empty-tip';
+import Icon from '../../icon';
 import Loading from '../../loading';
+import SharePermissionEditor from '../../select-editor/share-permission-editor';
 import toaster from '../../toast';
 import UserSelect from '../../user-select';
-import SharePermissionEditor from '../../select-editor/share-permission-editor';
-import Icon from '../../icon';
 
 class UserItem extends React.Component {
 

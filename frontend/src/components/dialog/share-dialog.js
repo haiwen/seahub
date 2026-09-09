@@ -1,20 +1,20 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Modal, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
+import PropTypes from 'prop-types';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import { gettext, username, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, additionalShareDialogNote, enableOCM, isPro, isSeafilePlus, canShareRepo, LARGE_DIALOG_STYLE } from '../../utils/constants';
-import ShareLinkPanel from '../share-link-panel';
-import GenerateUploadLink from './generate-upload-link';
-import ShareToUser from './share-to-user';
-import ShareToGroup from './share-to-group';
-import ShareToInvitePeople from './share-to-invite-people';
-import ShareToOtherServer from './share-to-other-server';
-import InternalLink from './internal-link';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
+import ShareLinkPanel from '../share-link-panel';
 import toaster from '../toast';
-import SeahubModalHeader from '@/components/seahub-modal-header';
 import CustomPermissionManager from './custom-permission/custom-permission-manager';
+import GenerateUploadLink from './generate-upload-link';
+import InternalLink from './internal-link';
+import ShareToGroup from './share-to-group';
+import ShareToInvitePeople from './share-to-invite-people';
+import ShareToOtherServer from './share-to-other-server';
+import ShareToUser from './share-to-user';
 
 import '../../css/share-link-dialog.css';
 

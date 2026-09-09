@@ -1,18 +1,18 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { Utils } from '../../utils/utils';
+import { getRowById } from '../../components/sf-table/utils/table';
 import toaster from '../../components/toast';
-import { useMetadataStatus } from '../../hooks';
 import { PRIVATE_FILE_TYPE } from '../../constants';
-import { getTagColor, getTagId, getTagName, getCellValueByColumn } from '../utils/cell';
+import { useMetadataStatus } from '../../hooks';
+import { PER_LOAD_NUMBER, EVENT_BUS_TYPE } from '../../metadata/constants';
+import { getColumnOriginName } from '../../metadata/utils/column';
+import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import { PRIVATE_COLUMN_KEY, ALL_TAGS_ID } from '../constants';
+import { TAG_FILES_VIEW_MODE, TAG_FILES_VIEW_MODE_DEFAULT } from '../constants/mode';
+import { TAG_FILES_DEFAULT_SORT, TAG_FILES_SORT } from '../constants/sort';
 import Context from '../context';
 import Store from '../store';
-import { PER_LOAD_NUMBER, EVENT_BUS_TYPE } from '../../metadata/constants';
-import { getRowById } from '../../components/sf-table/utils/table';
-import { gettext } from '../../utils/constants';
-import { PRIVATE_COLUMN_KEY, ALL_TAGS_ID } from '../constants';
-import { getColumnOriginName } from '../../metadata/utils/column';
-import { TAG_FILES_DEFAULT_SORT, TAG_FILES_SORT } from '../constants/sort';
-import { TAG_FILES_VIEW_MODE, TAG_FILES_VIEW_MODE_DEFAULT } from '../constants/mode';
+import { getTagColor, getTagId, getTagName, getCellValueByColumn } from '../utils/cell';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 export const TagsContext = React.createContext(null);

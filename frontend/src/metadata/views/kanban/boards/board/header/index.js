@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import CellFormatter from '../../../../../components/cell-formatter';
-import { gettext } from '../../../../../../utils/constants';
-import OpMenu from './op-menu';
-import { CellType } from '../../../../../constants';
+import PropTypes from 'prop-types';
 import OpIcon from '../../../../../../components/op-icon';
+import { gettext } from '../../../../../../utils/constants';
+import CellFormatter from '../../../../../components/cell-formatter';
+import { CellType } from '../../../../../constants';
+import OpMenu from './op-menu';
 
 import './index.css';
 

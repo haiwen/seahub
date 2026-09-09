@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react';
 import classnames from 'classnames';
-import SyncOptionsEditor from '../../../../sync-option-editor';
 import { gettext } from '../../../../../utils/constants';
+import SyncOptionsEditor from '../../../../sync-option-editor';
 import SelectorDisplay from './selector-display';
 
 import './index.css';

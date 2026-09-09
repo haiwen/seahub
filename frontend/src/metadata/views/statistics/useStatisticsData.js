@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
+import { Utils } from '../../../utils/utils';
 import metadataAPI from '../../api';
 
 export const useStatisticsData = (repoID) => {

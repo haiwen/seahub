@@ -1,10 +1,10 @@
 import React, { useCallback, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../../utils/constants';
 import { KeyCodes } from '../../../../constants';
-import { DEFAULT_NUMBER_FORMAT } from '../../../constants';
-import { Utils } from '../../../../utils/utils';
+import { gettext } from '../../../../utils/constants';
 import ObjectUtils from '../../../../utils/object';
+import { Utils } from '../../../../utils/utils';
+import { DEFAULT_NUMBER_FORMAT } from '../../../constants';
 import { isCellValueChanged, getNumberDisplayString, replaceNumberNotAllowInput, formatStringToNumber } from '../../../utils/cell';
 
 import './index.css';

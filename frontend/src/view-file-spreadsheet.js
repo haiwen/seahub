@@ -1,10 +1,10 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { seafileAPI } from './utils/seafile-api';
-import { siteRoot, gettext } from './utils/constants';
 import FileView from './components/file-view/file-view';
 import FileViewTip from './components/file-view/file-view-tip';
 import Loading from './components/loading';
+import { siteRoot, gettext } from './utils/constants';
+import { seafileAPI } from './utils/seafile-api';
 
 import './css/spreadsheet-file-view.css';
 

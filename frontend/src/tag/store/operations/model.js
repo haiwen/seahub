@@ -1,6 +1,6 @@
 import deepCopy from 'deep-copy';
-import { OPERATION_ATTRIBUTES } from './constants';
 import apply from './apply';
+import { OPERATION_ATTRIBUTES } from './constants';
 import invert from './invert';
 
 class Operation {

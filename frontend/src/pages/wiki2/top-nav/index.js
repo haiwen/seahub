@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { gettext, mediaUrl } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
 import NavItemIcon from '../common/nav-item-icon';
 import CustomIcon from '../custom-icon';
-import { gettext, mediaUrl } from '../../../utils/constants';
 import { getPaths } from '../utils/index';
-import { Utils } from '../../../utils/utils';
 
 import './index.css';
 

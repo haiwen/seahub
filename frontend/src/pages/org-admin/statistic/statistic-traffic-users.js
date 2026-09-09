@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react';
 import { Input } from 'reactstrap';
 import dayjs from 'dayjs';
+import Loading from '../../../components/loading';
+import Paginator from '../../../components/paginator';
+import toaster from '../../../components/toast';
+import { gettext, orgID } from '../../../utils/constants';
+import { orgAdminAPI } from '../../../utils/org-admin-api';
+import { Utils } from '../../../utils/utils';
 import TrafficTable from './traffic-table';
 import TrafficTableBody from './traffic-table-body';
-import { orgAdminAPI } from '../../../utils/org-admin-api';
-import Paginator from '../../../components/paginator';
-import Loading from '../../../components/loading';
-import { gettext, orgID } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
-import toaster from '../../../components/toast';
 
 class UsersTraffic extends React.Component {
 

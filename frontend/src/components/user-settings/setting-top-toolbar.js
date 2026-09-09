@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CommonToolbar from '../toolbar/common-toolbar';
 import Icon from '../icon';
+import CommonToolbar from '../toolbar/common-toolbar';
 
 const propTypes = {
   onShowSidePanel: PropTypes.func,

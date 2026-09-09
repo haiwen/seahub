@@ -1,6 +1,6 @@
-import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '@/metadata/constants';
-import CellFormatter from '@/metadata/components/cell-formatter';
 import Editor from '@/metadata/components/cell-editors/editor';
+import CellFormatter from '@/metadata/components/cell-formatter';
+import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '@/metadata/constants';
 import { EDITABLE_PRIVATE_COLUMN_KEYS, EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS } from '@/metadata/constants/column/private';
 import { POPUP_EDITOR_COLUMN_TYPES } from '@/metadata/constants/column/type';
 

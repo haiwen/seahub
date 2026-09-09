@@ -1,17 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import dayjs from 'dayjs';
-import { Utils, isMobile } from '../../utils/utils';
-import { gettext, wikiId } from '../../utils/constants';
-import wikiAPI from '../../utils/wiki-api';
-import ModalPortal from '../../components/modal-portal';
-import toaster from '../../components/toast';
-import Paginator from '../../components/paginator';
+import PropTypes from 'prop-types';
 import WikiCleanTrash from '../../components/dialog/wiki-clean-trash';
-import NavItemIcon from './common/nav-item-icon';
-import { formatWithTimezone } from '../../utils/time';
 import Icon from '../../components/icon';
+import ModalPortal from '../../components/modal-portal';
+import Paginator from '../../components/paginator';
+import toaster from '../../components/toast';
+import { gettext, wikiId } from '../../utils/constants';
+import { formatWithTimezone } from '../../utils/time';
+import { Utils, isMobile } from '../../utils/utils';
+import wikiAPI from '../../utils/wiki-api';
+import NavItemIcon from './common/nav-item-icon';
 
 import '../../css/toolbar.css';
 import '../../css/search.css';

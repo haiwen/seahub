@@ -1,13 +1,13 @@
 import React, { useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
-import toaster from '../../components/toast';
-import Icon from '../../components/icon';
-import InlineNameEditor from './inline-name-editor';
-import { useMetadata } from '../hooks';
-import { validateName } from '../utils/validate';
-import { VIEW_TYPE, VIEW_TYPE_ICON } from '../constants';
 import Tooltip from '@/components/tooltip';
 import { gettext } from '@/utils/constants';
+import Icon from '../../components/icon';
+import toaster from '../../components/toast';
+import { VIEW_TYPE, VIEW_TYPE_ICON } from '../constants';
+import { useMetadata } from '../hooks';
+import { validateName } from '../utils/validate';
+import InlineNameEditor from './inline-name-editor';
 
 const NewView = ({ newView, leftIndent, addView }) => {
   const { type: newViewType } = newView;

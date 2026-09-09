@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalFooter, Button, Form, Alert } from 'reactstrap';
+import PropTypes from 'prop-types';
+import SeahubModalHeader from '@/components/seahub-modal-header';
+import { gettext } from '../../../utils/constants';
+import { userAPI } from '../../../utils/user-api';
+import { Utils, validatePassword } from '../../../utils/utils';
 import toaster from '../../toast';
 import PasswordInput from './password-input';
-import { userAPI } from '../../../utils/user-api';
-import { gettext } from '../../../utils/constants';
-import { Utils, validatePassword } from '../../../utils/utils';
-import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const propTypes = {
   toggle: PropTypes.func,

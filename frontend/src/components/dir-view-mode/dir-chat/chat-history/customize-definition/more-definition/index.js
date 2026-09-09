@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import CustomizePopover from '../../../../../customize-popover';
 import Icon from '../../../../../icon';
 import Definition from '../definition';

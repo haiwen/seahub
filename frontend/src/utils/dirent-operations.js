@@ -1,9 +1,9 @@
-import { seafileAPI } from './seafile-api';
-import { Utils } from './utils';
-import { gettext, name } from './constants';
 import { username } from '@/utils/constants';
-import URLDecorator from './url-decorator';
 import toaster from '../components/toast';
+import { gettext, name } from './constants';
+import { seafileAPI } from './seafile-api';
+import URLDecorator from './url-decorator';
+import { Utils } from './utils';
 
 export const handleError = (error) => {
   toaster.danger(Utils.getErrorMsg(error));

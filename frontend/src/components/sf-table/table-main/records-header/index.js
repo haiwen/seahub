@@ -1,13 +1,13 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import Cell from './cell';
-import ActionsCell from './actions-cell';
-import InsertColumn from './insert-column';
-import { GRID_HEADER as Z_INDEX_GRID_HEADER, SEQUENCE_COLUMN as Z_INDEX_SEQUENCE_COLUMN } from '../../constants/z-index';
-import { HEADER_HEIGHT_TYPE, GRID_HEADER_DEFAULT_HEIGHT, GRID_HEADER_DOUBLE_HEIGHT, MIN_COLUMN_WIDTH } from '../../constants/grid';
 import { isEmptyObject } from '../../../../utils/object';
-import { getFrozenColumns, checkIsColumnFrozen, recalculateColumnMetricsByResizeColumn } from '../../utils/column';
 import { isMobile } from '../../../../utils/utils';
+import { HEADER_HEIGHT_TYPE, GRID_HEADER_DEFAULT_HEIGHT, GRID_HEADER_DOUBLE_HEIGHT, MIN_COLUMN_WIDTH } from '../../constants/grid';
+import { GRID_HEADER as Z_INDEX_GRID_HEADER, SEQUENCE_COLUMN as Z_INDEX_SEQUENCE_COLUMN } from '../../constants/z-index';
+import { getFrozenColumns, checkIsColumnFrozen, recalculateColumnMetricsByResizeColumn } from '../../utils/column';
+import ActionsCell from './actions-cell';
+import Cell from './cell';
+import InsertColumn from './insert-column';
 
 const RecordsHeader = ({
   containerWidth,

@@ -1,6 +1,6 @@
 import React from 'react';
-import View from './view';
 import { MetadataViewProvider } from '../hooks/metadata-view';
+import View from './view';
 
 import './index.css';
 

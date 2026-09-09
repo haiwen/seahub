@@ -1,11 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Button, Modal, ModalBody, ModalFooter, Alert } from 'reactstrap';
+import PropTypes from 'prop-types';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import FileChooser from '../file-chooser';
 import { Utils } from '../../utils/utils';
-import SeahubModalHeader from '@/components/seahub-modal-header';
+import FileChooser from '../file-chooser';
 
 const propTypes = {
   sharedToken: PropTypes.string.isRequired,

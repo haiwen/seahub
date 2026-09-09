@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
+import Loading from '@/components/loading';
+import { MetadataStatusProvider } from '../../../hooks';
+import { MetadataDetailsProvider } from '../../../metadata';
 import { Repo } from '../../../models';
+import { gettext, mediaUrl, siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { Utils } from '../../../utils/utils';
+import { Body, Header } from '../../dirent-detail/detail';
+import LibDetail from '../../dirent-detail/lib-details';
 import toaster from '../../toast';
 import Details from './details';
-import { MetadataDetailsProvider } from '../../../metadata';
-import { MetadataStatusProvider } from '../../../hooks';
-import LibDetail from '../../dirent-detail/lib-details';
-import { Body, Header } from '../../dirent-detail/detail';
-import { gettext, mediaUrl, siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
-import Loading from '@/components/loading';
 
 import './index.css';
 

@@ -1,8 +1,8 @@
-import CellType from './type';
 import {
   COLUMNS_ICON_CONFIG,
   COLUMNS_ICON_NAME,
 } from './icon';
+import CellType from './type';
 
 export {
   COLLABORATOR_COLUMN_TYPES,

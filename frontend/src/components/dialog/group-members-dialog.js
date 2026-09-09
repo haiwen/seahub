@@ -1,12 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Modal, ModalBody } from 'reactstrap';
-import { Utils } from '../../utils/utils';
+import PropTypes from 'prop-types';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import toaster from '../toast';
-import SeahubModalHeader from '@/components/seahub-modal-header';
+import { Utils } from '../../utils/utils';
 import Loading from '../loading';
+import toaster from '../toast';
 
 const propTypes = {
   groupID: PropTypes.number.isRequired,

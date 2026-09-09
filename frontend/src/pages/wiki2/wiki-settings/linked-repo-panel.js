@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ModalBody } from 'reactstrap';
-import wikiAPI from '../../../utils/wiki-api';
 import Loading from '../../../components/loading';
-import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
-import { Utils } from '../../../utils/utils';
-import LinkedRepoItem from './linked-repo-item';
 import Repo from '../../../models/repo';
+import { gettext } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
+import wikiAPI from '../../../utils/wiki-api';
 import { getWikiRepos, getWikiSettings, saveWikiSettingsIntoStorage } from '../utils/wiki-setting';
 import RepoListPopover from '../wiki-repo-popover';
+import LinkedRepoItem from './linked-repo-item';
 
 const { wikiId } = window.wiki.config;
 

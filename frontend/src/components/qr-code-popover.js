@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
+import { Popover, PopoverBody, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { QRCodeSVG } from 'qrcode.react';
-import { Popover, PopoverBody, Button } from 'reactstrap';
-import toaster from './toast';
 import { gettext } from '../utils/constants';
+import toaster from './toast';
 
 const QRCodePopover = ({ container, target, value }) => {
   const qrCodeRef = React.useRef(null);

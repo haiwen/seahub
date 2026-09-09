@@ -1,11 +1,11 @@
 import { CellType, DEFAULT_DATE_FORMAT } from '../../constants';
-import DateUtils from '../date';
-import { getCellValueByColumn } from './core';
 import { getColumnOptions } from '../column';
+import DateUtils from '../date';
 import {
   getDateDisplayString, getNumberDisplayString, getLongtextDisplayString, getOptionName, getCollaboratorsName, getColumnOptionNamesByIds,
   getGeolocationDisplayString, getColumnOptionIdsByNames, getTagsDisplayString,
 } from './column';
+import { getCellValueByColumn } from './core';
 
 export const getCellValueDisplayString = (row, column, { collaborators = [], tagsData } = {}) => {
   if (!row) return '';

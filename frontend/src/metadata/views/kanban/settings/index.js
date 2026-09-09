@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import Icon from '../../../../components/icon';
 import OpIcon from '../../../../components/op-icon';
 import Switch from '../../../../components/switch';
-import Selector from '../../../components/selector';
-import FieldDisplaySettings from '../../../components/data-process-setter/field-display-settings';
+import { useMetadataStatus } from '../../../../hooks';
 import { gettext } from '../../../../utils/constants';
+import FieldDisplaySettings from '../../../components/data-process-setter/field-display-settings';
+import Selector from '../../../components/selector';
 import { CellType, COLUMNS_ICON_CONFIG, KANBAN_SETTINGS_KEYS } from '../../../constants';
 import { getColumnByKey } from '../../../utils/column';
-import { useMetadataStatus } from '../../../../hooks';
 
 import './index.css';
 

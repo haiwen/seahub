@@ -1,8 +1,8 @@
 import React, { useCallback, useRef, useEffect } from 'react';
 import { gettext } from '../../../../utils/constants';
 import { seafileAPI } from '../../../../utils/seafile-api';
-import AttachmentObject from '../models/attachment_object';
 import SyncSelector from '../components/selector/sync-selector';
+import AttachmentObject from '../models/attachment_object';
 
 const CHAT_ATTACHMENT_EXTENSIONS = 'md,sdoc,docx,pdf,pptx';
 

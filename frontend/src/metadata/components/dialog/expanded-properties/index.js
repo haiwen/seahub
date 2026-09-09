@@ -1,23 +1,23 @@
 import React, { useCallback, useMemo, useRef } from 'react';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../../utils/constants';
-import { getCellValueByColumn, getFileNameFromRecord, isCellValueChanged } from '../../../utils/cell';
 import Icon from '../../../../components/icon';
+import { gettext } from '../../../../utils/constants';
 import { CellType, COLUMNS_ICON_CONFIG, PRIVATE_COLUMN_KEYS } from '../../../constants';
-import Text from './text';
-import LongText from './long-text';
-import CTime from './ctime';
-import Number from './number';
-import Date from './date';
-import Creator from './creator';
-import Collaborator from './collaborator';
-import SingleSelect from './single-select';
-import MultipleSelect from './multiple-select';
+import { getCellValueByColumn, getFileNameFromRecord, isCellValueChanged } from '../../../utils/cell';
 import Checkbox from './checkbox';
-import Rate from './rate';
-import Tags from './tags';
+import Collaborator from './collaborator';
+import Creator from './creator';
+import CTime from './ctime';
+import Date from './date';
 import Geolocation from './geolocation';
+import LongText from './long-text';
+import MultipleSelect from './multiple-select';
+import Number from './number';
+import Rate from './rate';
+import SingleSelect from './single-select';
+import Tags from './tags';
+import Text from './text';
 
 import './index.css';
 

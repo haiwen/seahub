@@ -1,19 +1,19 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { baiduMapKey, gettext, googleMapKey } from '../../utils/constants';
+import PropTypes from 'prop-types';
+import CustomDropdown from '../../components/dropdown';
 import Icon from '../../components/icon';
 import toaster from '../../components/toast';
-import InlineNameEditor from './inline-name-editor';
+import { baiduMapKey, gettext, googleMapKey } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import { useMetadata } from '../hooks';
 import {
   FACE_RECOGNITION_VIEW_ID, METADATA_VIEWS_DRAG_DATA_KEY, METADATA_VIEWS_KEY,
   VIEW_DEFAULT_SETTINGS, VIEW_INCOMPATIBLE_PROPERTIES, VIEW_PROPERTY_KEYS,
   VIEW_TYPE, VIEW_TYPE_LABEL, VIEW_TYPE_ICON, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW
 } from '../constants';
+import { useMetadata } from '../hooks';
 import { validateName } from '../utils/validate';
-import CustomDropdown from '../../components/dropdown';
+import InlineNameEditor from './inline-name-editor';
 
 const MOVE_TO_FOLDER_PREFIX = 'move_to_folder_';
 const TURN_VIEW_INTO_PREFIX = 'turn_view_into_';

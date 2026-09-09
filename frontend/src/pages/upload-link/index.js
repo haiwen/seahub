@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Utils } from '../../utils/utils';
-import { seafileAPI } from '../../utils/seafile-api';
-import { gettext } from '../../utils/constants';
-import Logo from '../../components/logo';
 import Account from '../../components/account';
-import FileUploader from './file-uploader';
 import Icon from '../../components/icon';
+import Logo from '../../components/logo';
+import { gettext } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
+import FileUploader from './file-uploader';
 
 import '../../css/upload-link.css';
 

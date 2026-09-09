@@ -1,15 +1,15 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
-import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-import { Utils } from '../../utils/utils';
-import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from '../../utils/constants';
-import { systemAdminAPI } from '../../utils/system-admin-api';
+import PropTypes from 'prop-types';
+import { createRoot } from 'react-dom/client';
+import Icon from '../../components/icon';
 import Loading from '../../components/loading';
 import Paginator from '../../components/paginator';
-import { formatWithTimezone } from '../../utils/time';
-import Icon from '../../components/icon';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
+import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from '../../utils/constants';
+import { systemAdminAPI } from '../../utils/system-admin-api';
+import { formatWithTimezone } from '../../utils/time';
+import { Utils } from '../../utils/utils';
 
 import '../../css/repo-history.css';
 

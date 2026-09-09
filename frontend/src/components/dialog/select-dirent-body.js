@@ -1,15 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Button, ModalFooter, ModalBody, Alert, Row, Col } from 'reactstrap';
+import PropTypes from 'prop-types';
+import { MODE_TYPE_MAP } from '../../constants';
+import { RepoInfo } from '../../models';
+import { gettext, isPro } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
+import CreateFolder from '../dialog/create-folder-dialog';
 import RepoListWrapper from '../file-chooser/repo-list-wrapper';
 import Searcher from '../file-chooser/searcher';
-import { MODE_TYPE_MAP } from '../../constants';
-import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, isPro } from '../../utils/constants';
-import { RepoInfo } from '../../models';
-import CreateFolder from '../dialog/create-folder-dialog';
 import Icon from '../icon';
-import { Utils } from '../../utils/utils';
 
 const LibraryOption = ({ mode, label, currentMode, onUpdateMode }) => {
   return (

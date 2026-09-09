@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import HideColumn from './hide-column';
-import { gettext } from '../../../../../utils/constants';
 import SearchEmptyTip from '../../../../../components/search-empty-tip';
+import { gettext } from '../../../../../utils/constants';
+import HideColumn from './hide-column';
 
 const HiddenColumns = ({ readOnly, columns, hiddenColumns, onChange, modifyColumnOrder }) => {
   const [draggingColumnKey, setDraggingCellKey] = useState(null);

@@ -1,13 +1,13 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
 import { Button } from 'reactstrap';
 import { DiffViewer } from '@seafile/seafile-sdoc-editor';
-import { gettext, mediaUrl } from '../../utils/constants';
-import Loading from '../../components/loading';
+import { createRoot } from 'react-dom/client';
 import GoBack from '../../components/go-back';
-import { Utils } from '../../utils/utils';
-import { seafileAPI } from '../../utils/seafile-api';
+import Loading from '../../components/loading';
 import toaster from '../../components/toast';
+import { gettext, mediaUrl } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 
 import '../../css/layout.css';
 import '../../css/sdoc-revision.css';

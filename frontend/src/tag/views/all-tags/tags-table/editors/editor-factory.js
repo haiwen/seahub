@@ -1,8 +1,8 @@
 import React from 'react';
-import ParentTagsEditor from './parent-tags';
-import ChildTagsEditor from './child-tags';
-import TagNameEditor from './tag-name';
 import { PRIVATE_COLUMN_KEY } from '../../../../constants';
+import ChildTagsEditor from './child-tags';
+import ParentTagsEditor from './parent-tags';
+import TagNameEditor from './tag-name';
 
 export const createColumnEditor = ({ column, otherProps }) => {
   switch (column.key) {

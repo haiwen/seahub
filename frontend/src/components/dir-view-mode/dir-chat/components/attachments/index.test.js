@@ -1,7 +1,7 @@
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import Attachments from './index';
 import URLDecorator from '../../../../../utils/url-decorator';
+import Attachments from './index';
 
 jest.mock('../../../../icon', () => {
   return function MockIcon() {

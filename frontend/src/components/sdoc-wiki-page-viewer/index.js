@@ -1,9 +1,9 @@
 import React, { Suspense } from 'react';
-import PropTypes from 'prop-types';
-import { WikiViewer } from '@seafile/seafile-sdoc-editor';
 import { I18nextProvider } from 'react-i18next';
-import { appAvatarURL, assetsUrl, gettext, mediaUrl, name, repoID, serviceURL, sharedToken, siteRoot, slug, username } from '../../utils/constants';
+import { WikiViewer } from '@seafile/seafile-sdoc-editor';
+import PropTypes from 'prop-types';
 import i18n from '../../_i18n/i18n-sdoc-editor';
+import { appAvatarURL, assetsUrl, gettext, mediaUrl, name, repoID, serviceURL, sharedToken, siteRoot, slug, username } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 

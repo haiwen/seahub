@@ -1,6 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Row, Col, Label } from 'reactstrap';
+import PropTypes from 'prop-types';
 
 const propTypes = {
   displayName: PropTypes.string.isRequired,

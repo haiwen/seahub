@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { Link } from '@gatsbyjs/reach-router';
-import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext, siteRoot, isPro, username } from '../../../utils/constants';
-import Loading from '../../loading';
-import toaster from '../../../components/toast';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import EmptyTip from '../../../components/empty-tip';
 import SharePermissionEditor from '../../../components/select-editor/share-permission-editor';
+import toaster from '../../../components/toast';
+import { gettext, siteRoot, isPro, username } from '../../../utils/constants';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { Utils } from '../../../utils/utils';
+import Loading from '../../loading';
 import OpIcon from '../../op-icon';
 
 const itemPropTypes = {

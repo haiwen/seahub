@@ -1,17 +1,17 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Cookies from 'js-cookie';
+import PropTypes from 'prop-types';
+import SortOptionsDialog from '../../components/dialog/sort-options';
+import { LIST_MODE, GRID_MODE } from '../../components/dir-view-mode/constants';
+import Icon from '../../components/icon';
+import ReposSortMenu from '../../components/sort-menu';
+import ViewModes from '../../components/view-modes';
 import Repo from '../../models/repo';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import ViewModes from '../../components/view-modes';
-import ReposSortMenu from '../../components/sort-menu';
-import SortOptionsDialog from '../../components/dialog/sort-options';
-import { LIST_MODE, GRID_MODE } from '../../components/dir-view-mode/constants';
 import Content from './content';
-import Icon from '../../components/icon';
 
 class SharedLibraries extends Component {
   constructor(props) {

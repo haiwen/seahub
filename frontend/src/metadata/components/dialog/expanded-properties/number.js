@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { formatStringToNumber, getCellValueByColumn, getNumberDisplayString, replaceNumberNotAllowInput } from '../../../utils/cell';
-import { DEFAULT_NUMBER_FORMAT, PRIVATE_COLUMN_KEYS } from '../../../constants';
 import { KeyCodes } from '../../../../constants';
 import { Utils } from '../../../../utils/utils';
+import { DEFAULT_NUMBER_FORMAT, PRIVATE_COLUMN_KEYS } from '../../../constants';
+import { formatStringToNumber, getCellValueByColumn, getNumberDisplayString, replaceNumberNotAllowInput } from '../../../utils/cell';
 
 const Number = ({ record, column, onCommit }) => {
   const [inputValue, setInputValue] = useState('');

@@ -1,8 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
-import Loading from '../loading';
+import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
+import Loading from '../loading';
 
 const propTypes = {
   importDepartmentDialogToggle: PropTypes.func.isRequired,

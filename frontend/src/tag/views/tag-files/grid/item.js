@@ -1,9 +1,9 @@
-import classNames from 'classnames';
 import React, { useCallback, useMemo, useState } from 'react';
+import classNames from 'classnames';
 import { getFileMTimeFromRecord, getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../../../metadata/utils/cell';
-import { Utils } from '../../../../utils/utils';
-import { siteRoot, thumbnailDefaultSize } from '../../../../utils/constants';
 import { openFile } from '../../../../metadata/utils/file';
+import { siteRoot, thumbnailDefaultSize } from '../../../../utils/constants';
+import { Utils } from '../../../../utils/utils';
 
 const TagFile = ({ repoID, file, selectedFileIds, onSelectFile, onMultiSelect, openImagePreview, onContextMenu }) => {
   const [isThumbnailLoadErr, setIsThumbnailLoadErr] = useState(false);

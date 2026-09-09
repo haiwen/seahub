@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import CenteredLoading from '../../../../components/centered-loading';
 import toaster from '../../../../components/toast';
 import { gettext } from '../../../../utils/constants';

@@ -1,10 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { UncontrolledTooltip } from 'reactstrap';
+import PropTypes from 'prop-types';
+import Icon from '../../../../components/icon';
 import toaster from '../../../../components/toast';
 import { gettext } from '../../../../utils/constants';
 import { generateOptionID, getColumnOptions } from '../../../utils/column';
-import Icon from '../../../../components/icon';
 
 import './options-footer.css';
 

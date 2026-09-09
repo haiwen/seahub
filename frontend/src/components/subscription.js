@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import toaster from './toast';
 import { Modal, ModalBody, ModalFooter, InputGroup, InputGroupText, Input, Button } from 'reactstrap';
-import { gettext, serviceURL } from '../utils/constants';
-import { Utils } from '../utils/utils';
-import { subscriptionAPI } from '../utils/subscription-api';
-import Loading from './loading';
+import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
+import { gettext, serviceURL } from '../utils/constants';
+import { subscriptionAPI } from '../utils/subscription-api';
+import { Utils } from '../utils/utils';
+import Loading from './loading';
+import toaster from './toast';
 
 import '../css/layout.css';
 import '../css/subscription.css';

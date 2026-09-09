@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import SeafileCodeMirror from './components/seafile-codemirror';
 import SharedFileView from './components/shared-file-view/shared-file-view';
 import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
-import SeafileCodeMirror from './components/seafile-codemirror';
 import './css/text-file-view.css';
 
 const { err, fileExt, fileContent } = window.shared.pageOptions;

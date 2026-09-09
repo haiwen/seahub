@@ -1,6 +1,6 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import FormData from 'form-data';
+import Cookies from 'js-cookie';
 import { siteRoot } from './constants';
 
 class OrgAdminAPI {

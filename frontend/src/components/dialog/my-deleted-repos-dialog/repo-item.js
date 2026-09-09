@@ -1,13 +1,13 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { seafileAPI } from '../../../utils/seafile-api';
+import PropTypes from 'prop-types';
 import { gettext, lang } from '../../../utils/constants';
-import toaster from '../../toast';
+import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import Icon from '../../icon';
 import ModalPortal from '../../modal-portal';
+import toaster from '../../toast';
 import CommonOperationConfirmationDialog from '../common-operation-confirmation-dialog';
 
 dayjs.locale(lang);

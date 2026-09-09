@@ -1,14 +1,14 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import { gettext } from '../../../../utils/constants';
 import CenteredLoading from '../../../centered-loading';
+import EmptyTip from '../../../empty-tip';
 import Icon from '../../../icon';
 import Tooltip from '../../../tooltip';
-import { useSessions } from '../hooks';
-import EmptyTip from '../../../empty-tip';
-import Session from './session';
 import { SESSION_TAB_TYPE } from '../constants';
+import { useSessions } from '../hooks';
+import Session from './session';
 
 import './index.css';
 

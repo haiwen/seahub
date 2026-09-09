@@ -1,6 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { PopoverHeader } from 'reactstrap';
+import PropTypes from 'prop-types';
 import CustomizePopover from '../../components/customize-popover';
 import Icon from '../../components/icon';
 import PublishWikiContent, { DEFAULT_URL } from '../../components/publish-wiki-content';

@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import OpIcon from '../../components/op-icon';
 import { permission } from '../../utils/constants';
 import TextTranslation from '../../utils/text-translation';
 import { Utils } from '../../utils/utils';
-import OpIcon from '../../components/op-icon';
-import Icon from '../icon';
 import CustomDropdown from '../dropdown';
+import Icon from '../icon';
 
 const LEFT_INDENT = 20;
 

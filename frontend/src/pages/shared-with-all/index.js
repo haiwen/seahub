@@ -1,25 +1,25 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import Cookies from 'js-cookie';
 import classnames from 'classnames';
-import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, canAddPublicRepo } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
-import Repo from '../../models/repo';
-import toaster from '../../components/toast';
-import Loading from '../../components/loading';
-import EmptyTip from '../../components/empty-tip';
-import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
-import SortOptionsDialog from '../../components/dialog/sort-options';
-import ModalPortal from '../../components/modal-portal';
+import Cookies from 'js-cookie';
+import PropTypes from 'prop-types';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import ShareRepoDialog from '../../components/dialog/share-repo-dialog';
+import SortOptionsDialog from '../../components/dialog/sort-options';
 import { LIST_MODE, GRID_MODE } from '../../components/dir-view-mode/constants';
-import ViewModes from '../../components/view-modes';
-import ReposSortMenu from '../../components/sort-menu';
-import Icon from '../../components/icon';
 import CustomDropdown from '../../components/dropdown';
+import EmptyTip from '../../components/empty-tip';
 import EventBus, { EVENT_BUS_TYPE } from '../../components/event-bus';
+import Icon from '../../components/icon';
+import Loading from '../../components/loading';
+import ModalPortal from '../../components/modal-portal';
+import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
+import ReposSortMenu from '../../components/sort-menu';
+import toaster from '../../components/toast';
+import ViewModes from '../../components/view-modes';
+import Repo from '../../models/repo';
+import { gettext, canAddPublicRepo } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   currentViewMode: PropTypes.string,

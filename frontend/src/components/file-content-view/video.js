@@ -1,6 +1,6 @@
 import React from 'react';
-import VideoPlayer from '../video-player';
 import { MimetypesKind } from '../../utils/constants';
+import VideoPlayer from '../video-player';
 import '../../css/video-file-view.css';
 
 const {

@@ -1,21 +1,21 @@
 import React, { Fragment, Component } from 'react';
-import PropTypes from 'prop-types';
-import { Link } from '@gatsbyjs/reach-router';
 import { DropdownItem } from 'reactstrap';
+import { Link } from '@gatsbyjs/reach-router';
 import classnames from 'classnames';
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
-import { gettext, siteRoot, isPro } from '../../utils/constants';
-import Loading from '../../components/loading';
-import EmptyTip from '../../components/empty-tip';
-import toaster from '../../components/toast';
-import SharePermissionEditor from '../../components/select-editor/share-permission-editor';
-import SharedFolderInfo from '../../models/shared-folder-info';
+import PropTypes from 'prop-types';
 import PermSelect from '../../components/dialog/perm-select';
+import EmptyTip from '../../components/empty-tip';
 import FixedWidthTable from '../../components/fixed-width-table';
+import Icon from '../../components/icon';
+import Loading from '../../components/loading';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import OpIcon from '../../components/op-icon';
-import Icon from '../../components/icon';
+import SharePermissionEditor from '../../components/select-editor/share-permission-editor';
+import toaster from '../../components/toast';
+import SharedFolderInfo from '../../models/shared-folder-info';
+import { gettext, siteRoot, isPro } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 
 class Content extends Component {
 

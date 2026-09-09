@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { DropdownItem } from 'reactstrap';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { seafileAPI } from '../../utils/seafile-api';
-import { gettext } from '../../utils/constants';
-import toaster from '../../components/toast';
-import EmptyTip from '../../components/empty-tip';
-import MobileItemMenu from '../../components/mobile-item-menu';
+import PropTypes from 'prop-types';
 import ConfirmUnlinkDeviceDialog from '../../components/dialog/confirm-unlink-device';
-import { Utils } from '../../utils/utils';
+import EmptyTip from '../../components/empty-tip';
 import Icon from '../../components/icon';
+import MobileItemMenu from '../../components/mobile-item-menu';
+import toaster from '../../components/toast';
+import { gettext } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 
 dayjs.extend(relativeTime);
 

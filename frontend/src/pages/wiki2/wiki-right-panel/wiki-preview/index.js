@@ -1,10 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import FileLoading from '../file-loading';
+import Icon from '../../../../components/icon';
 import WikiTopNav from '../../top-nav';
 import { getCurrentPageConfig } from '../../utils';
-import Icon from '../../../../components/icon';
-
+import FileLoading from '../file-loading';
 import PreviewContent from './preview-content';
 
 import './index.css';

@@ -1,16 +1,16 @@
 import React, { useCallback, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import EmptyTip from '../../empty-tip';
-import CenteredLoading from '../../centered-loading';
-import Records from './records';
-import ContextMenu from '../context-menu';
+import PropTypes from 'prop-types';
 import { gettext } from '../../../utils/constants';
-import { GROUP_VIEW_OFFSET } from '../constants/group';
+import CenteredLoading from '../../centered-loading';
+import EmptyTip from '../../empty-tip';
 import { SEQUENCE_COLUMN_WIDTH } from '../constants/grid';
+import { GROUP_VIEW_OFFSET } from '../constants/group';
+import ContextMenu from '../context-menu';
 import { getCellValueByColumn } from '../utils/cell';
 import GridUtils from '../utils/grid';
 import { generateKeyTreeNodeRowIdMap } from '../utils/tree';
+import Records from './records';
 
 const TableMain = ({
   table,

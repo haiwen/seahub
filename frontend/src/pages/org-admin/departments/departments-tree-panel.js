@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Icon from '../../../components/icon';
 import { gettext } from '../../../utils/constants';
 import TreeNode from './tree-node';
-import Icon from '../../../components/icon';
 
 const DepartmentsTreePanelPropTypes = {
   rootNodes: PropTypes.array,

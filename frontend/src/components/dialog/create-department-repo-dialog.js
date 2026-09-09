@@ -1,8 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Button, Modal, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
-import { gettext, maxFileName } from '../../utils/constants';
+import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
+import { gettext, maxFileName } from '../../utils/constants';
 
 const propTypes = {
   onCreateRepo: PropTypes.func.isRequired,

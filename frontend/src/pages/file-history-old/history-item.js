@@ -1,10 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-import { Utils } from '../../utils/utils';
+import PropTypes from 'prop-types';
+import CustomDropdown from '../../components/dropdown';
 import { gettext, siteRoot, filePath, historyRepoID, isVirtualRepo } from '../../utils/constants';
 import URLDecorator from '../../utils/url-decorator';
-import CustomDropdown from '../../components/dropdown';
+import { Utils } from '../../utils/utils';
 
 dayjs.locale(window.app.config.lang);
 

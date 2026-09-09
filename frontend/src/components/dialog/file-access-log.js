@@ -1,14 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
 import { Modal, ModalBody } from 'reactstrap';
-import { Utils } from '../../utils/utils';
+import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import { gettext, siteRoot } from '../../utils/constants';
 import { fileAccessLogAPI } from '../../utils/file-access-log-api';
-import toaster from '../toast';
-import Loading from '../loading';
+import { Utils } from '../../utils/utils';
 import EmptyTip from '../empty-tip';
-import SeahubModalHeader from '@/components/seahub-modal-header';
+import Loading from '../loading';
+import toaster from '../toast';
 
 import '../../css/file-access-log.css';
 

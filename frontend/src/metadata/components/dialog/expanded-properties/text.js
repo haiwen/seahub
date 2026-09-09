@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import { KeyCodes } from '../../../../constants';
+import { siteRoot, thumbnailDefaultSize, enableThumbnailServer } from '../../../../utils/constants';
+import { Utils } from '../../../../utils/utils';
+import { CellType } from '../../../constants';
 import { getCellValueByColumn, getFileMTimeFromRecord, getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/cell';
 import { checkIsDir } from '../../../utils/row';
-import { Utils } from '../../../../utils/utils';
-import { siteRoot, thumbnailDefaultSize, enableThumbnailServer } from '../../../../utils/constants';
-import { CellType } from '../../../constants';
-import { KeyCodes } from '../../../../constants';
 
 const Text = ({ record, column, onCommit }) => {
   const [value, setValue] = useState('');

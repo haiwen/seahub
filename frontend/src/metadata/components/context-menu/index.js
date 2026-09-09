@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { DropdownItem, Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import PropTypes from 'prop-types';
+import Icon from '../../../components/icon';
 import ModalPortal from '../../../components/modal-portal';
 import ContextMenuItem from './context-menu-item';
-import Icon from '../../../components/icon';
 
 import './index.css';
 

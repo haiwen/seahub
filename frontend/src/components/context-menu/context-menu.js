@@ -1,12 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
-import listener from './globalEventListener';
-import { hideMenu } from './actions';
-import { callIfExists } from './helpers';
+import PropTypes from 'prop-types';
 import { Utils } from '../../utils/utils';
-import Icon from '../icon';
 import { DROPDOWN_SUBMENU_OFFSET_DEFAULT } from '../dropdown/utils';
+import Icon from '../icon';
+import { hideMenu } from './actions';
+import listener from './globalEventListener';
+import { callIfExists } from './helpers';
 
 const propTypes = {
   id: PropTypes.string.isRequired,

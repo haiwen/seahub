@@ -1,7 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { Button } from 'reactstrap';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import Icon from '../icon';
 import Tooltip from '../tooltip';
 

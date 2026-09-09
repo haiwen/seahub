@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Utils } from '../../../utils/utils';
-import { siteRoot, gettext } from '../../../utils/constants';
 import OpIcon from '../../../components/op-icon';
+import { siteRoot, gettext } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
 
 const { enableSysAdminViewRepo } = window.sysadmin.pageOptions;
 

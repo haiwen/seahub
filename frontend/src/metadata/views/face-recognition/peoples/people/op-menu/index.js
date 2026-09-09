@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../../../../utils/constants';
 import CustomDropdown from '../../../../../../components/dropdown';
+import { gettext } from '../../../../../../utils/constants';
 
 const OpMenu = ({ onRename, onFreezed, onUnFreezed }) => {
   const handleFreeze = useCallback(() => {

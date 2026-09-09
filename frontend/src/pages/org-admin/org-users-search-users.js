@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Form, FormGroup, Input, Col } from 'reactstrap';
-import { Utils } from '../../utils/utils';
-import { orgAdminAPI } from '../../utils/org-admin-api';
-import { gettext, orgID } from '../../utils/constants';
+import PropTypes from 'prop-types';
 import toaster from '../../components/toast';
-import UserItem from './org-user-item';
 import OrgUserInfo from '../../models/org-user';
+import { gettext, orgID } from '../../utils/constants';
+import { orgAdminAPI } from '../../utils/org-admin-api';
+import { Utils } from '../../utils/utils';
+import UserItem from './org-user-item';
 
 class OrgUsersSearchUsersResult extends React.Component {
 

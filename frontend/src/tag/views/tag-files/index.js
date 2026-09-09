@@ -1,18 +1,15 @@
 import React, { useCallback, useState, useRef, useMemo, useEffect } from 'react';
-import { useTagView } from '../../hooks';
-import EmptyTip from '../../../components/empty-tip';
-import toaster from '../../../components/toast';
+import { hideMenu, showMenu } from '../../../components/context-menu/actions';
 import ContextMenu from '../../../components/context-menu/context-menu';
 import { LIST_MODE } from '../../../components/dir-view-mode/constants';
-import { hideMenu, showMenu } from '../../../components/context-menu/actions';
 import { getDirentItemMenuList, getTagFilesOperations } from '../../../components/dir-view-mode/utils/contextMenuUtils';
 import { menuHandlers } from '../../../components/dir-view-mode/utils/menuHandlers';
+import EmptyTip from '../../../components/empty-tip';
+import toaster from '../../../components/toast';
+import ImagePreviewer from '../../../metadata/components/cell-formatter/image-previewer';
 import { EVENT_BUS_TYPE } from '../../../metadata/constants';
 import { getRecordIdFromRecord } from '../../../metadata/utils/cell';
-import ImagePreviewer from '../../../metadata/components/cell-formatter/image-previewer';
-import { Utils } from '../../../utils/utils';
 import { gettext } from '../../../utils/constants';
-import TextTranslation from '../../../utils/text-translation';
 import {
   exportDocx,
   exportMarkdown,
@@ -22,9 +19,12 @@ import {
   openViaClient,
   openWithOnlyOffice,
 } from '../../../utils/dirent-operations';
+import TextTranslation from '../../../utils/text-translation';
+import { Utils } from '../../../utils/utils';
+import { useTagView } from '../../hooks';
 import { getFileById, getFileName, getFileParentDir, getFileObj, filterTagFileOperations } from '../../utils/file';
-import ListView from './list';
 import GridView from './grid';
+import ListView from './list';
 
 import './index.css';
 

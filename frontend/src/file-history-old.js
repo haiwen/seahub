@@ -1,15 +1,15 @@
 import React, { Fragment } from 'react';
-import { createRoot } from 'react-dom/client';
 import { Button } from 'reactstrap';
-import { Utils } from './utils/utils';
-import { seafileAPI } from './utils/seafile-api';
-import { gettext, PER_PAGE, filePath, fileName, historyRepoID, useNewAPI, canDownload } from './utils/constants';
-import editUtilities from './utils/editor-utilities';
+import { createRoot } from 'react-dom/client';
+import Icon from './components/icon';
 import Loading from './components/loading';
 import Logo from './components/logo';
 import CommonToolbar from './components/toolbar/common-toolbar';
 import HistoryItem from './pages/file-history-old/history-item';
-import Icon from './components/icon';
+import { gettext, PER_PAGE, filePath, fileName, historyRepoID, useNewAPI, canDownload } from './utils/constants';
+import editUtilities from './utils/editor-utilities';
+import { seafileAPI } from './utils/seafile-api';
+import { Utils } from './utils/utils';
 
 import './css/layout.css';
 import './css/toolbar.css';

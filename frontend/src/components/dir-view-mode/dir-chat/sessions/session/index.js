@@ -1,13 +1,13 @@
 import React, { useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { Button, Dropdown, DropdownMenu, DropdownToggle, Input, Modal, ModalBody, ModalFooter } from 'reactstrap';
-import { gettext } from '../../../../../utils/constants';
-import Icon from '../../../../icon';
-import CustomDropdownItem from '../../../../dropdown/item';
-import CommonOperationConfirmationDialog from '../../../../dialog/common-operation-confirmation-dialog';
-import { useAskPage, useSessions } from '../../hooks';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
+import { gettext } from '../../../../../utils/constants';
+import CommonOperationConfirmationDialog from '../../../../dialog/common-operation-confirmation-dialog';
+import CustomDropdownItem from '../../../../dropdown/item';
+import Icon from '../../../../icon';
+import { useAskPage, useSessions } from '../../hooks';
 
 import './index.css';
 

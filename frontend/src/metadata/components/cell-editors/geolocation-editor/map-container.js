@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { createBMapGeolocationControl, createBMapZoomControl } from '../../map-controller';
-import { createZoomControl } from '../../map-controller/zoom';
-import { createGeolocationControl } from '../../map-controller/geolocation';
-import { initMapInfo, loadMapSource } from '../../../../utils/map-utils';
-import { baiduMapKey, googleMapId, googleMapKey } from '../../../../utils/constants';
 import { MAP_TYPE } from '../../../../constants';
-import { isValidPosition } from '../../../utils/validate';
-import { DEFAULT_POSITION } from '../../../constants';
+import { baiduMapKey, googleMapId, googleMapKey } from '../../../../utils/constants';
 import { convertToMapCoords } from '../../../../utils/coord-transform';
+import { initMapInfo, loadMapSource } from '../../../../utils/map-utils';
+import { DEFAULT_POSITION } from '../../../constants';
+import { isValidPosition } from '../../../utils/validate';
+import { createBMapGeolocationControl, createBMapZoomControl } from '../../map-controller';
+import { createGeolocationControl } from '../../map-controller/geolocation';
+import { createZoomControl } from '../../map-controller/zoom';
 
 const MapContainer = ({
   position,

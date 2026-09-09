@@ -1,8 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
-import SeahubModalHeader from '@/components/seahub-modal-header';
 import { Modal } from 'reactstrap';
+import PropTypes from 'prop-types';
+import SeahubModalHeader from '@/components/seahub-modal-header';
+import { gettext } from '../../utils/constants';
 import PublishWikiContent from '../publish-wiki-content';
 
 const propTypes = {

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
-import Icon from '../../components/icon';
 import CustomDropdown from '../../components/dropdown';
+import Icon from '../../components/icon';
+import { gettext } from '../../utils/constants';
 
 const propTypes = {
   userPerm: PropTypes.string.isRequired,

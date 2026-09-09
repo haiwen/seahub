@@ -1,7 +1,7 @@
+import { siteRoot } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import { getFileNameFromRecord, getParentDirFromRecord } from './cell';
 import { checkIsDir } from './row';
-import { Utils } from '../../utils/utils';
-import { siteRoot } from '../../utils/constants';
 
 const FILE_TYPE = {
   FOLDER: 'folder',

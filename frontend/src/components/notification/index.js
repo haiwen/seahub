@@ -1,11 +1,11 @@
 import React from 'react';
-import NotificationPopover from './notification-popover';
-import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
-import NoticeItem from './notice-item';
-import UserNotificationsDialog from './user-notifications';
+import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import OpIcon from '../op-icon';
+import NoticeItem from './notice-item';
+import NotificationPopover from './notification-popover';
+import UserNotificationsDialog from './user-notifications';
 
 import './index.css';
 

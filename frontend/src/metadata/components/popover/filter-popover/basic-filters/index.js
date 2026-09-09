@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { FormGroup, Label } from 'reactstrap';
-import FileOrFolderFilter from './file-folder-filter';
-import TableFileTypeFilter from './table-file-type-filter';
-import GalleryFileTypeFilter from './gallery-file-type-filter';
-import TagsFilter from './tags-filter';
+import PropTypes from 'prop-types';
 import { gettext } from '../../../../../utils/constants';
 import { FILTER_PREDICATE_TYPE, PRIVATE_COLUMN_KEY, VIEW_TYPE } from '../../../../constants';
+import FileOrFolderFilter from './file-folder-filter';
+import GalleryFileTypeFilter from './gallery-file-type-filter';
+import TableFileTypeFilter from './table-file-type-filter';
+import TagsFilter from './tags-filter';
 
 import './index.css';
 

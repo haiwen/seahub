@@ -1,16 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
-import toaster from '../toast';
+import PropTypes from 'prop-types';
+import { MODE_TYPE_MAP } from '../../constants';
+import RepoInfo from '../../models/repo-info';
+import { gettext, isPro } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
+import IconBtn from '../icon-btn';
 import Loading from '../loading';
+import toaster from '../toast';
 import RepoListWrapper from './repo-list-wrapper';
 import SearchedListView from './searched-list-view';
-import RepoInfo from '../../models/repo-info';
-import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, isPro } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
-import { MODE_TYPE_MAP } from '../../constants';
-import IconBtn from '../icon-btn';
 
 import '../../css/file-chooser.css';
 

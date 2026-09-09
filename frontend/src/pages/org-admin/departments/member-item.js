@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import RoleSelector from '../../../components/single-selector';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
+import CustomDropdown from '../../../components/dropdown';
+import RoleSelector from '../../../components/single-selector';
 import { gettext, siteRoot } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
-import CustomDropdown from '../../../components/dropdown';
 
 const propTypes = {
   isItemFreezed: PropTypes.bool,

@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Loading from '../../../loading';
-import { RecordMetrics } from '../../utils/record-metrics';
-import { TreeMetrics } from '../../utils/tree-metrics';
 import { gettext } from '../../../../utils/constants';
+import { addClassName, removeClassName } from '../../../../utils/dom';
+import Loading from '../../../loading';
 import { CANVAS_RIGHT_INTERVAL } from '../../constants/grid';
 import { GRID_FOOTER as Z_INDEX_GRID_FOOTER } from '../../constants/z-index';
-import { addClassName, removeClassName } from '../../../../utils/dom';
+import { RecordMetrics } from '../../utils/record-metrics';
 import { getRecordsFromSelectedRange } from '../../utils/selection';
+import { TreeMetrics } from '../../utils/tree-metrics';
 
 import './index.css';
 

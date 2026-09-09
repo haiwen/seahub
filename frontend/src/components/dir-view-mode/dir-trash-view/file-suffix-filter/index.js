@@ -1,11 +1,11 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Utils } from '../../../../utils/utils';
-import { gettext } from '../../../../utils/constants';
-import Icon from '../../../icon';
+import PropTypes from 'prop-types';
 import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
+import { gettext } from '../../../../utils/constants';
+import { Utils } from '../../../../utils/utils';
+import Icon from '../../../icon';
 
 import './index.css';
 

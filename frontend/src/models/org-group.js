@@ -1,5 +1,5 @@
-import { lang } from '../utils/constants';
 import dayjs from 'dayjs';
+import { lang } from '../utils/constants';
 
 dayjs.locale(lang);
 

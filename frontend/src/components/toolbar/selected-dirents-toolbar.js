@@ -1,19 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
-import OpIcon from '../../components/op-icon';
-import OpElement from '../../components/op-element';
-import { Dirent } from '../../models';
-import EventBus, { EVENT_BUS_TYPE } from '../event-bus';
-import Icon from '../icon';
-import { lockFile, unlockFile, freezeDocument, exportDocx, exportSdoc, toggleStar, openHistory, openByDefault, openViaClient, openWithOnlyOffice, exportMarkdown } from '../../utils/dirent-operations';
 import { EVENT_BUS_TYPE as TABLE_EVENT_BUS_TYPE } from '@/metadata/constants';
-import Tooltip from '../tooltip';
-import CustomDropdown from '../dropdown';
+import OpElement from '../../components/op-element';
+import OpIcon from '../../components/op-icon';
+import { Dirent } from '../../models';
+import { gettext } from '../../utils/constants';
+import { lockFile, unlockFile, freezeDocument, exportDocx, exportSdoc, toggleStar, openHistory, openByDefault, openViaClient, openWithOnlyOffice, exportMarkdown } from '../../utils/dirent-operations';
 import TextTranslation from '../../utils/text-translation';
+import { Utils } from '../../utils/utils';
 import { getDirentItemMenuList, getBatchMenuList } from '../dir-view-mode/utils/contextMenuUtils';
 import { menuHandlers } from '../dir-view-mode/utils/menuHandlers';
+import CustomDropdown from '../dropdown';
+import EventBus, { EVENT_BUS_TYPE } from '../event-bus';
+import Icon from '../icon';
+import Tooltip from '../tooltip';
 
 import '../../css/selected-dirents-toolbar.css';
 

@@ -1,10 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import Icon from '../../../../icon';
-import Tooltip from '../../../../tooltip';
+import PropTypes from 'prop-types';
 import { gettext } from '../../../../../utils/constants';
 import URLDecorator from '../../../../../utils/url-decorator';
+import Icon from '../../../../icon';
+import Tooltip from '../../../../tooltip';
 
 import './index.css';
 

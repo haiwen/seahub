@@ -1,10 +1,10 @@
 import './polyfills';
-import * as Utils from './utils';
-import * as constants from './constants';
-import { addStyleToHead, addCursorStyleToBody, removeStyle } from './styles';
-import dragScroller from './dragscroller';
 import { debounce, isMobile } from '../../../utils/utils';
+import * as constants from './constants';
 import { defaultOptions } from './defaults';
+import dragScroller from './dragscroller';
+import { addStyleToHead, addCursorStyleToBody, removeStyle } from './styles';
+import * as Utils from './utils';
 
 const grabEvents = ['mousedown', 'touchstart'];
 const moveEvents = ['mousemove', 'touchmove'];

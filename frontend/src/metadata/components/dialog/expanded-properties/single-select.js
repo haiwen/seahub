@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import ClickOutside from '../../../../components/click-outside';
+import Icon from '../../../../components/icon';
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
 import { getCellValueByColumn, getColumnOptionNameById } from '../../../utils/cell';
 import SingleSelectEditor from '../../cell-editors/single-select-editor';
 import SelectOption from '../../cell-formatter/select-option';
-import ClickOutside from '../../../../components/click-outside';
-import Icon from '../../../../components/icon';
 
 const SingleSelect = ({ record, column, columns, onCommit, modifyColumnData }) => {
   const [isEditorShow, setIsEditorShow] = useState(false);

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from '../icon';
 import { Utils } from '../../utils/utils';
+import Icon from '../icon';
 
 import './index.css';
 

@@ -1,13 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { I18nextProvider } from 'react-i18next';
 import { LongTextEditorDialog, getPreviewContent } from '@seafile/seafile-editor';
+import PropTypes from 'prop-types';
+import i18n from '../../../../_i18n/i18n-seafile-editor';
 import toaster from '../../../../components/toast';
-import LongtextAPI from './api';
-import { getValidLongTextValue, isLongTextValueExceedLimit } from '../../../utils/column';
 import { lang, serviceURL } from '../../../../utils/constants';
 import { LONG_TEXT_EXCEED_LIMIT_MESSAGE, LONG_TEXT_EXCEED_LIMIT_SUGGEST } from '../../../constants';
-import i18n from '../../../../_i18n/i18n-seafile-editor';
+import { getValidLongTextValue, isLongTextValueExceedLimit } from '../../../utils/column';
+import LongtextAPI from './api';
 
 class LongTextEditor extends React.PureComponent {
 

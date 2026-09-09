@@ -1,20 +1,20 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { CaptureUpdateAction, Excalidraw, MainMenu, newElementWith, reconcileElements, restoreElements, useHandleLibrary } from '@excalidraw/excalidraw';
-import isUrl from 'is-url';
-import { langList } from '../constants';
-import { LibraryIndexedDBAdapter } from './library-adapter';
-import context from '../context';
-import TipMessage from './tip-message';
-import { importFromLocalStorage } from '../data/local-storage';
-import { generateImageElement, resolvablePromise, updateStaleImageStatuses } from '../utils/exdraw-utils';
-import { getFilename, isInitializedImageElement } from '../utils/element-utils';
-import LocalData from '../data/local-data';
-import SocketManager from '../socket/socket-manager';
-import { loadFromServerStorage } from '../data/server-storage';
-import { getSyncableElements } from '../data';
-import { gettext } from '../../../utils/constants';
-import SelectSdocFileDialog from '../extension/select-image-dialog';
 import isHotkey from 'is-hotkey';
+import isUrl from 'is-url';
+import { gettext } from '../../../utils/constants';
+import { langList } from '../constants';
+import context from '../context';
+import { getSyncableElements } from '../data';
+import LocalData from '../data/local-data';
+import { importFromLocalStorage } from '../data/local-storage';
+import { loadFromServerStorage } from '../data/server-storage';
+import SelectSdocFileDialog from '../extension/select-image-dialog';
+import SocketManager from '../socket/socket-manager';
+import { getFilename, isInitializedImageElement } from '../utils/element-utils';
+import { generateImageElement, resolvablePromise, updateStaleImageStatuses } from '../utils/exdraw-utils';
+import { LibraryIndexedDBAdapter } from './library-adapter';
+import TipMessage from './tip-message';
 
 import '@excalidraw/excalidraw/index.css';
 

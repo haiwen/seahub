@@ -1,9 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Modal, ModalBody } from 'reactstrap';
-import TermsPreviewWidget from '../terms-preview-widget';
-import { gettext } from '../../utils/constants';
+import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
+import { gettext } from '../../utils/constants';
+import TermsPreviewWidget from '../terms-preview-widget';
 
 const propTypes = {
   title: PropTypes.string,

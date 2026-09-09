@@ -1,18 +1,18 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import { MetadataContext } from '../../../metadata';
+import AIIcon from '../../../metadata/components/metadata-details/ai-icon';
+import SettingsIcon from '../../../metadata/components/metadata-details/settings-icon';
+import { MetadataDetailsProvider } from '../../../metadata/hooks';
+import { useTags } from '../../../tag/hooks';
+import { enableSeafileAI } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
+import Loading from '../../loading';
 import toaster from '../../toast';
 import { Header, Body } from '../detail';
 import FileDetails from '../dirent-details/file-details';
-import { MetadataContext } from '../../../metadata';
-import { MetadataDetailsProvider } from '../../../metadata/hooks';
-import AIIcon from '../../../metadata/components/metadata-details/ai-icon';
-import SettingsIcon from '../../../metadata/components/metadata-details/settings-icon';
-import Loading from '../../loading';
-import { useTags } from '../../../tag/hooks';
-import { enableSeafileAI } from '../../../utils/constants';
 
 import './index.css';
 

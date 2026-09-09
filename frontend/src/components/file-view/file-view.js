@@ -1,25 +1,25 @@
 import React, { Suspense } from 'react';
+import { I18nextProvider } from 'react-i18next';
 import PropTypes from 'prop-types';
 import watermark from 'watermark-dom';
-import { I18nextProvider } from 'react-i18next';
 import i18n from '../../_i18n/i18n-sdoc-editor';
-import { seafileAPI } from '../../utils/seafile-api';
+import { MetadataMiddlewareProvider, MetadataStatusProvider } from '../../hooks';
 import { gettext, siteName } from '../../utils/constants';
+import LocalStorage from '../../utils/local-storage-utils';
+import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import toaster from '../toast';
+import WebSocketClient from '../../utils/websocket-service';
+import ShareDialog from '../dialog/share-dialog';
+import EmbeddedFileDetails from '../dirent-detail/embedded-file-details';
 import IconButton from '../icon-button';
+import Loading from '../loading';
+import ModalPortal from '../modal-portal';
+import toaster from '../toast';
 import FileInfo from './file-info';
 import FileToolbar from './file-toolbar';
-import OnlyofficeFileToolbar from './onlyoffice-file-toolbar';
-import EmbeddedFileDetails from '../dirent-detail/embedded-file-details';
-import { MetadataMiddlewareProvider, MetadataStatusProvider } from '../../hooks';
-import Loading from '../loading';
-import WebSocketClient from '../../utils/websocket-service';
-import ResizeWidth from './resize-width';
-import LocalStorage from '../../utils/local-storage-utils';
 import I18nCommentPanel from './i18n-comment-panel';
-import ModalPortal from '../modal-portal';
-import ShareDialog from '../dialog/share-dialog';
+import OnlyofficeFileToolbar from './onlyoffice-file-toolbar';
+import ResizeWidth from './resize-width';
 
 import '../../css/file-view.css';
 

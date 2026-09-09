@@ -1,9 +1,9 @@
 import React, { forwardRef, useCallback, useMemo } from 'react';
-import TagsEditor from '../../../../../metadata/components/cell-editors/tags-editor';
-import { useTags } from '../../../../hooks';
 import { getRowById } from '../../../../../components/sf-table/utils/table';
-import { getChildLinks } from '../../../../utils/cell';
+import TagsEditor from '../../../../../metadata/components/cell-editors/tags-editor';
 import { getRecordIdFromRecord } from '../../../../../metadata/utils/cell';
+import { useTags } from '../../../../hooks';
+import { getChildLinks } from '../../../../utils/cell';
 
 const ChildTagsEditor = forwardRef(({ editingRowId, column, addTagLinks, deleteTagLinks, customStyle, ...editorProps }, ref) => {
   const { tagsData, context } = useTags();

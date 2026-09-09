@@ -1,8 +1,8 @@
 import React, { Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
+import FileView from './components/file-view/file-view';
 import Loading from './components/loading';
 import ExcaliEditor from './pages/excalidraw-editor';
-import FileView from './components/file-view/file-view';
 
 const ViewFileExcaliEditor = () => {
   return (

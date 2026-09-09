@@ -1,5 +1,5 @@
-import CellType from './type';
 import { gettext } from '../../../utils/constants';
+import CellType from './type';
 
 // text value limit
 const _TEXT_MAX_LENGTH = 10000;

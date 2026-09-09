@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import Icon from '../../../components/icon';
 import { PRIVATE_FILE_TYPE } from '../../../constants';
-import { ALL_TAGS_ID } from '../../constants';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
-import Icon from '../../../components/icon';
+import { ALL_TAGS_ID } from '../../constants';
 
 import './index.css';
 

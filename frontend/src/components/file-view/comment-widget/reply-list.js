@@ -1,14 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { SeafileCommentEditor } from '@seafile/comment-editor';
 import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
+import OpIcon from '@/components/op-icon';
 import { gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
 import CommentItem from './comment-item';
 import ReplyItem from './reply-item';
-import OpIcon from '@/components/op-icon';
 
 const { username, repoID, filePath } = window.app.pageOptions;
 

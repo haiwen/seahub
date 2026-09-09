@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import CustomDropdown from '../../../components/dropdown';
 import Icon from '../../../components/icon';
 import { getDepartmentMenuItems } from './departments-node-dropdown-menu';
-import CustomDropdown from '../../../components/dropdown';
 
 const departmentsTreeNodePropTypes = {
   node: PropTypes.object,

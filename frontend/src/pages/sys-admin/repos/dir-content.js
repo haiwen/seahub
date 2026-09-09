@@ -1,13 +1,13 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
+import classnames from 'classnames';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import classnames from 'classnames';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import PropTypes from 'prop-types';
 import Loading from '../../../components/loading';
 import OpIcon from '../../../components/op-icon';
+import { gettext } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
 
 dayjs.extend(relativeTime);
 

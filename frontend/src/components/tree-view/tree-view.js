@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TextTranslation from '../../utils/text-translation';
-import TreeNodeView from './tree-node-view';
-import ContextMenu from '../context-menu/context-menu';
-import { hideMenu, showMenu } from '../context-menu/actions';
 import { Utils } from '../../utils/utils';
+import { hideMenu, showMenu } from '../context-menu/actions';
+import ContextMenu from '../context-menu/context-menu';
+import TreeNodeView from './tree-node-view';
 
 import './tree-view.css';
 

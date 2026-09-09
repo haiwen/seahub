@@ -1,12 +1,12 @@
 import React, { useMemo, useCallback, useState, useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { Popover } from 'reactstrap';
-import Editor from '../../cell-editors/single-select-editor';
-import { gettext } from '../../../../utils/constants';
+import PropTypes from 'prop-types';
 import { KeyCodes } from '../../../../constants';
+import { gettext } from '../../../../utils/constants';
+import { getEventClassName } from '../../../../utils/dom';
 import { getOption } from '../../../utils/cell';
 import { getColumnOptions } from '../../../utils/column';
-import { getEventClassName } from '../../../../utils/dom';
+import Editor from '../../cell-editors/single-select-editor';
 
 import './index.css';
 

@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Alert, FormGroup, Input, Label } from 'reactstrap';
+import PropTypes from 'prop-types';
+import Tooltip from '@/components/tooltip';
 import { gettext } from '../../../utils/constants';
-import Loading from '../../loading';
+import { Utils } from '../../../utils/utils';
 import BackIcon from '../../back-icon';
 import Icon from '../../icon';
-import { Utils } from '../../../utils/utils';
-import Tooltip from '@/components/tooltip';
+import Loading from '../../loading';
 
 class CustomPermissionEditor extends React.Component {
   constructor(props) {

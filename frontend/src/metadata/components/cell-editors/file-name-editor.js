@@ -2,9 +2,9 @@ import React, { useImperativeHandle, useRef, useEffect, useCallback } from 'reac
 import PropTypes from 'prop-types';
 import { Utils } from '../../../utils/utils';
 import { EDITOR_TYPE } from '../../constants';
+import { checkIsDir } from '../../utils/row';
 import ImagePreviewer from '../cell-formatter/image-previewer';
 import TextEditor from './text-editor';
-import { checkIsDir } from '../../utils/row';
 
 const FileNameEditor = React.forwardRef((props, ref) => {
   const { repoID, repoInfo, column, record, mode } = props;

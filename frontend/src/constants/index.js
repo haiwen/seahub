@@ -1,5 +1,5 @@
-import * as zIndexes from './zIndexes';
 import KeyCodes from './keyCodes';
+import * as zIndexes from './zIndexes';
 
 export const DIALOG_MAX_HEIGHT = window.innerHeight - 56; // Dialog margin is 3.5rem (56px)
 

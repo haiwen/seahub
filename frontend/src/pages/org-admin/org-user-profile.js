@@ -1,14 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { orgAdminAPI } from '../../utils/org-admin-api';
-import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
-import Loading from '../../components/loading';
-import OrgAdminUserNav from '../../components/org-admin-user-nav';
-import SetOrgUserName from '../../components/dialog/set-org-user-name';
 import SetOrgUserContactEmail from '../../components/dialog/set-org-user-contact-email';
+import SetOrgUserName from '../../components/dialog/set-org-user-name';
 import SetOrgUserQuota from '../../components/dialog/set-org-user-quota';
 import EditIcon from '../../components/edit-icon';
+import Loading from '../../components/loading';
+import OrgAdminUserNav from '../../components/org-admin-user-nav';
+import { gettext } from '../../utils/constants';
+import { orgAdminAPI } from '../../utils/org-admin-api';
+import { Utils } from '../../utils/utils';
 import MainPanelTopbar from './main-panel-topbar';
 
 import '../../css/org-admin-user.css';

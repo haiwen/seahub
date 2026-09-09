@@ -1,11 +1,11 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { seafileAPI } from './utils/seafile-api';
-import { gettext, mediaUrl } from './utils/constants';
-import SharedFileView from './components/shared-file-view/shared-file-view';
-import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
 import Loading from './components/loading';
 import PDFViewer from './components/pdf-viewer';
+import SharedFileView from './components/shared-file-view/shared-file-view';
+import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
+import { gettext, mediaUrl } from './utils/constants';
+import { seafileAPI } from './utils/seafile-api';
 
 import './css/pdf-file-view.css';
 

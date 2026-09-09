@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { systemAdminAPI } from '../../utils/system-admin-api';
 import { gettext } from '../../utils/constants';
+import { systemAdminAPI } from '../../utils/system-admin-api';
 import { Utils } from '../../utils/utils';
 import MainPanelTopbar from './main-panel-topbar';
 

@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Row, Col } from 'reactstrap';
-import { Utils } from '../../../utils/utils';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
-import { gettext, serviceURL } from '../../../utils/constants';
-import toaster from '../../../components/toast';
-import Loading from '../../../components/loading';
-import EditIcon from '../../../components/edit-icon';
+import PropTypes from 'prop-types';
 import SysAdminSetOrgQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
+import SysAdminSetOrgMaxUserNumberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-org-max-user-number-dialog';
 import SysAdminSetOrgMonthlyTrafficLimitDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-org-monthly-traffic-limit-dialog';
 import SysAdminSetOrgNameDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-org-name-dialog';
-import SysAdminSetOrgMaxUserNumberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-org-max-user-number-dialog';
+import EditIcon from '../../../components/edit-icon';
+import Loading from '../../../components/loading';
+import toaster from '../../../components/toast';
+import CheckboxItem from '../../../components/web-settings/checkbox-item';
+import { gettext, serviceURL } from '../../../utils/constants';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { Utils } from '../../../utils/utils';
 import MainPanelTopbar from '../main-panel-topbar';
 import OrgNav from './org-nav';
-import CheckboxItem from '../../../components/web-settings/checkbox-item';
 
 class Content extends Component {
 

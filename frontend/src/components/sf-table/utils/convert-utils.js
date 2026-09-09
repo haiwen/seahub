@@ -2,16 +2,16 @@
  * Cell value type conversion utilities for paste operations
  * Handles conversion between different column types when pasting data
  */
+import { CellType, DEFAULT_DATE_FORMAT } from '@/metadata/constants';
+import { COLUMN_DATA_OPERATION_TYPE } from '@/metadata/store/operations';
 import {
   getDateDisplayString, getNumberDisplayString, formatStringToNumber, getOptionName, getCollaboratorsName, getFloatNumber, getColumnOptionNamesByIds,
   getOption, checkIsPredefinedOption, getColumnOptionNameById,
   getTagsDisplayString,
 } from '@/metadata/utils/cell';
 import { getColumnOptions, generatorCellOption, generatorCellOptions, isLongTextValueExceedLimit, getValidLongTextValue } from '@/metadata/utils/column';
-import { isNumber } from '@/metadata/utils/number';
 import { formatTextToDate } from '@/metadata/utils/date';
-import { CellType, DEFAULT_DATE_FORMAT } from '@/metadata/constants';
-import { COLUMN_DATA_OPERATION_TYPE } from '@/metadata/store/operations';
+import { isNumber } from '@/metadata/utils/number';
 
 const SUPPORT_PASTE_FROM_COLUMN = {
   [CellType.MULTIPLE_SELECT]: [CellType.MULTIPLE_SELECT, CellType.TEXT, CellType.SINGLE_SELECT],

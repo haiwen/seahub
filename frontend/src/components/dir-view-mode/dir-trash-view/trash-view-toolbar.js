@@ -1,11 +1,11 @@
 import React, { useCallback, useState, useRef, useEffect } from 'react';
-import OpIcon from '../../op-icon';
-import { gettext } from '../../../utils/constants';
 import { KeyCodes } from '../../../constants';
+import { gettext } from '../../../utils/constants';
 import EventBus, { EVENT_BUS_TYPE } from '../../event-bus';
 import Icon from '../../icon';
-import HistoryFilterSetter from '../dir-history-view/history-filter-setter';
+import OpIcon from '../../op-icon';
 import { TRASH_MODE } from '../constants';
+import HistoryFilterSetter from '../dir-history-view/history-filter-setter';
 
 const DEFAULT_FILTER = {
   date: {

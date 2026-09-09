@@ -1,6 +1,6 @@
+import axios from 'axios';
 import Cookies from 'js-cookie';
 import { siteRoot } from './constants';
-import axios from 'axios';
 
 class ShareLinkAPI {
   init({ server, username, password, token }) {

@@ -1,6 +1,6 @@
+import { canUseDOM } from '../../utils/dom';
 import { MENU_SHOW, MENU_HIDE } from './actions';
 import { uniqueId, hasOwnProp } from './helpers';
-import { canUseDOM } from '../../utils/dom';
 
 class GlobalEventListener {
 

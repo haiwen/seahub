@@ -1,10 +1,10 @@
-import React from './index';
 import PropTypes from 'prop-types';
 import OpIcon from '@/components/op-icon';
 import { getRowById } from '../../../../../components/sf-table/utils/table';
 import { getTagColor, getTagName } from '../../../../../tag/utils/cell';
-import { Utils } from '../../../../../utils/utils';
 import { gettext } from '../../../../../utils/constants';
+import { Utils } from '../../../../../utils/utils';
+import React from './index';
 
 import '../../../tag-ui/index.css';
 import './index.css';

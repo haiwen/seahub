@@ -1,8 +1,8 @@
+import { CaptureUpdateAction, newElementWith } from '@excalidraw/excalidraw';
 import throttle from 'lodash.throttle';
 import { FILE_UPLOAD_TIMEOUT, WS_SUBTYPES } from '../constants';
 import { isSyncableElement } from '../data';
 import { serverDebug } from '../utils/debug';
-import { CaptureUpdateAction, newElementWith } from '@excalidraw/excalidraw';
 import { getFilename } from '../utils/element-utils';
 
 class Portal {

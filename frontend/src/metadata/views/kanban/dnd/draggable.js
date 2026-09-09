@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import { constants } from '../../../third-party/trello-smooth-dnd';
 
 const { wrapperClass } = constants;

@@ -1,6 +1,6 @@
-import Cookies from 'js-cookie';
 import axios from 'axios';
 import FormData from 'form-data';
+import Cookies from 'js-cookie';
 import { siteRoot } from './constants';
 
 const DEFAULT_WIKI_ICON_SEARCH_COUNT = 15;

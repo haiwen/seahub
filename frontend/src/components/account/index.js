@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Popover } from 'reactstrap';
-import { Utils } from '../../utils/utils';
-import { seafileAPI } from '../../utils/seafile-api';
+import PropTypes from 'prop-types';
 import { siteRoot, isPro, gettext, appAvatarURL, enableSSOToThirdpartWebsite, enableSeafileAI } from '../../utils/constants';
-import toaster from '../toast';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import Icon from '../icon';
+import toaster from '../toast';
 
 const {
   isOrgContext,

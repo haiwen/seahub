@@ -1,5 +1,5 @@
-import * as Utils from './utils';
 import { translationValue, visibilityValue, extraSizeForInsertion } from './constants';
+import * as Utils from './utils';
 
 const horizontalMap = {
   size: 'offsetWidth',

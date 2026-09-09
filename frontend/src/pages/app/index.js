@@ -1,39 +1,39 @@
 import React, { Component } from 'react';
-import { Router, navigate } from '@gatsbyjs/reach-router';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
-import { siteRoot, siteTitle, mediaUrl, faviconPath } from '../../utils/constants';
-import { Utils, isMobile } from '../../utils/utils';
+import { Router, navigate } from '@gatsbyjs/reach-router';
 import EventBus from '../../components/event-bus';
 import ResizeBar from '../../components/resize-bar';
-import Header from './header';
-import SidePanel from './side-panel';
-import SystemNotification from './system-notification';
-import SystemUserNotification from './system-user-notification';
 import {
   DRAG_HANDLER_HEIGHT,
   INIT_SIDE_PANEL_RATE,
   MAX_SIDE_PANEL_RATE,
   MIN_SIDE_PANEL_RATE
 } from '../../components/resize-bar/constants';
+import { siteRoot, siteTitle, mediaUrl, faviconPath } from '../../utils/constants';
+import { Utils, isMobile } from '../../utils/utils';
 import FilesActivities from '../dashboard/files-activities';
-import Starred from '../starred/starred';
-import LinkedDevices from '../linked-devices/linked-devices';
-import ShareAdminLibraries from '../share-admin/libraries';
-import ShareAdminFolders from '../share-admin/folders';
-import ShareAdminLinks from '../share-admin/links';
-import SharedLibraries from '../shared-libs';
-import ShareWithOCM from '../share-with-ocm/shared-with-ocm';
-import OCMViaWebdav from '../ocm-via-webdav/ocm-via-webdav';
-import OCMRepoDir from '../share-with-ocm/remote-dir-view';
-import MyLibraries from '../my-libs/my-libs';
-import MyLibDeleted from '../my-libs/my-libs-deleted';
-import SharedWithAll from '../shared-with-all';
-import LibContentView from '../lib-content-view/lib-content-view';
 import GroupView from '../groups/group-view';
 import InvitationsView from '../invitations/invitations-view';
-import Wikis from '../wikis/wikis';
+import LibContentView from '../lib-content-view/lib-content-view';
 import Libraries from '../libraries';
+import LinkedDevices from '../linked-devices/linked-devices';
+import MyLibraries from '../my-libs/my-libs';
+import MyLibDeleted from '../my-libs/my-libs-deleted';
+import OCMViaWebdav from '../ocm-via-webdav/ocm-via-webdav';
+import ShareAdminFolders from '../share-admin/folders';
+import ShareAdminLibraries from '../share-admin/libraries';
+import ShareAdminLinks from '../share-admin/links';
+import OCMRepoDir from '../share-with-ocm/remote-dir-view';
+import ShareWithOCM from '../share-with-ocm/shared-with-ocm';
+import SharedLibraries from '../shared-libs';
+import SharedWithAll from '../shared-with-all';
+import Starred from '../starred/starred';
+import Wikis from '../wikis/wikis';
+import Header from './header';
+import SidePanel from './side-panel';
+import SystemNotification from './system-notification';
+import SystemUserNotification from './system-user-notification';
 
 import '../../css/layout.css';
 import '../../css/toolbar.css';

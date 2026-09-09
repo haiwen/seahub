@@ -1,10 +1,10 @@
 import React, { Fragment, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import CustomizeSelect from '../../../../../../../components/customize-select';
-import DeleteCollaborator from '../../../../../cell-editors/collaborator-editor/delete-collaborator';
+import Icon from '../../../../../../../components/icon';
 import { gettext } from '../../../../../../../utils/constants';
 import { FILTER_PREDICATE_TYPE } from '../../../../../../constants';
-import Icon from '../../../../../../../components/icon';
+import DeleteCollaborator from '../../../../../cell-editors/collaborator-editor/delete-collaborator';
 
 import './index.css';
 

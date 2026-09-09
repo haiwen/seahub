@@ -1,8 +1,8 @@
 import { compareString } from '../../metadata/utils/sort';
+import TextTranslation from '../../utils/text-translation';
 import { TAG_FILE_KEY } from '../constants/file';
 import { TAG_FILES_SORT_KEY } from '../constants/sort';
 import { getSortBy, getSortOrder } from './sort';
-import TextTranslation from '../../utils/text-translation';
 
 export const getFileById = (tagFiles, fileId) => {
   return fileId ? tagFiles.rows.find(file => file._id === fileId) : '';

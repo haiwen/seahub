@@ -1,17 +1,17 @@
 import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import Formatter from './formatter';
+import PropTypes from 'prop-types';
+import Icon from '../../../../../components/icon';
+import { siteRoot, gettext, fileServerRoot, thumbnailSizeForOriginal, enableThumbnailServer } from '../../../../../utils/constants';
+import { Utils } from '../../../../../utils/utils';
 import { useMetadataView } from '../../../../hooks/metadata-view';
 import {
   getCellValueByColumn,
   isValidCellValue,
   getParentDirFromRecord, getFileMTimeFromRecord
 } from '../../../../utils/cell';
-import { Utils } from '../../../../../utils/utils';
 import { checkIsDir } from '../../../../utils/row';
-import { siteRoot, gettext, fileServerRoot, thumbnailSizeForOriginal, enableThumbnailServer } from '../../../../../utils/constants';
-import Icon from '../../../../../components/icon';
+import Formatter from './formatter';
 
 import './index.css';
 

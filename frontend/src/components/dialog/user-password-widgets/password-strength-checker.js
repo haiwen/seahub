@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { Progress } from 'reactstrap';
+import PropTypes from 'prop-types';
 import { gettext } from '../../../utils/constants';
 import { evaluatePasswordStrength } from '../../../utils/utils';
 

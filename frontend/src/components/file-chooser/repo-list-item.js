@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TreeListView from './tree-list-view';
-import TreeNode from '../../components/tree-view/tree-node';
 import treeHelper from '../../components/tree-view/tree-helper';
+import TreeNode from '../../components/tree-view/tree-node';
+import Dirent from '../../models/dirent';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import Dirent from '../../models/dirent';
-import toaster from '../toast';
 import Icon from '../icon';
+import toaster from '../toast';
+import TreeListView from './tree-list-view';
 
 const propTypes = {
   isCurrentRepo: PropTypes.bool,

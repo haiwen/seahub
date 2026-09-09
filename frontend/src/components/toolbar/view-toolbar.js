@@ -1,17 +1,17 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { TAGS_MODE, TRASH_MODE, CHAT_MODE } from '../dir-view-mode/constants';
-import { ALL_TAGS_ID } from '../../tag/constants';
-import { useMetadata } from '../../metadata/hooks';
 import { VIEW_TYPE } from '../../metadata/constants';
+import { useMetadata } from '../../metadata/hooks';
+import { ALL_TAGS_ID } from '../../tag/constants';
+import { TAGS_MODE, TRASH_MODE, CHAT_MODE } from '../dir-view-mode/constants';
 import AllTagsToolbar from './all-tags-toolbar';
-import TagFilesToolbar from './tag-files-toolbar';
-import TableFilesToolbar from './table-files-toolbar';
+import CardFilesToolbar from './card-files-toolbar';
+import ChatToolbar from './chat-toolbar';
 import GalleryFilesToolbar from './gallery-files-toolbar';
 import KanbanFilesToolbar from './kanban-files-toolbar';
-import CardFilesToolbar from './card-files-toolbar';
+import TableFilesToolbar from './table-files-toolbar';
+import TagFilesToolbar from './tag-files-toolbar';
 import TrashToolbar from './trash-toolbar';
-import ChatToolbar from './chat-toolbar';
 
 const ViewToolbar = ({ repoID, repoInfo, mode, path, viewId, updateCurrentDirent }) => {
   const { idViewMap } = useMetadata();

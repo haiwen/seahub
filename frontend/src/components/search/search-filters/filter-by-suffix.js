@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { gettext } from '../../../utils/constants';
-import ModalPortal from '../../modal-portal';
-import { SEARCH_FILTERS_KEY } from '../../../constants';
-import Icon from '../../icon';
-import { Utils } from '../../../utils/utils';
-import Tooltip from '@/components/tooltip';
+import PropTypes from 'prop-types';
 import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
+import Tooltip from '@/components/tooltip';
+import { SEARCH_FILTERS_KEY } from '../../../constants';
+import { gettext } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
+import Icon from '../../icon';
+import ModalPortal from '../../modal-portal';
 
 const FilterBySuffix = ({ suffixes, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);

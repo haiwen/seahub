@@ -1,14 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import copy from 'copy-to-clipboard';
-import { Utils } from '../../utils/utils';
-import { seafileAPI } from '../../utils/seafile-api';
+import PropTypes from 'prop-types';
 import { enableSeadoc, gettext, onlyofficeSupportEditDocxf } from '../../utils/constants';
-import toaster from '../toast';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import TipDialog from '../dialog/tip-dialog';
+import CustomDropdown from '../dropdown';
 import { EVENT_BUS_TYPE } from '../event-bus';
 import Icon from '../icon';
-import CustomDropdown from '../dropdown';
+import toaster from '../toast';
 
 const propTypes = {
   path: PropTypes.string.isRequired,

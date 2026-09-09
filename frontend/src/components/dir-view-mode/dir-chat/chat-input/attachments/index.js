@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Attachments } from '../../components';
 import Icon from '../../../../icon';
+import { Attachments } from '../../components';
 
 import './index.css';
 

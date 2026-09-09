@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { MarkdownViewer } from '@seafile/seafile-editor';
+import PropTypes from 'prop-types';
 import WechatViewer from './wechat-viewer';
 
 // Windows old Wechat (3.0 or earlier) inner core is chrome 53 and don't support ECMA6, can't use seafile-editor markdownViewer

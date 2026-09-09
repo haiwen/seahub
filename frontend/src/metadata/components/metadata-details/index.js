@@ -1,15 +1,15 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import CellFormatter from '../cell-formatter';
-import DetailEditor from '../detail-editor';
 import DetailItem from '../../../components/dirent-detail/detail-item';
-import { Utils } from '../../../utils/utils';
-import { getCellValueByColumn, getFileNameFromRecord } from '../../utils/cell';
+import { useMetadataStatus } from '../../../hooks';
 import { gettext } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
 import { PRIVATE_COLUMN_KEY, IMAGE_PRIVATE_COLUMN_KEYS } from '../../constants';
 import { useMetadataDetails } from '../../hooks';
-import { useMetadataStatus } from '../../../hooks';
+import { getCellValueByColumn, getFileNameFromRecord } from '../../utils/cell';
 import { checkIsDir } from '../../utils/row';
+import CellFormatter from '../cell-formatter';
+import DetailEditor from '../detail-editor';
 import { FOLDER_NOT_DISPLAY_COLUMN_KEYS } from './constants';
 import Location from './location';
 

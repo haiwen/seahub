@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { chatAndSearchAvailable, gettext } from '../../../utils/constants';
+import { eventBus, EVENT_BUS_TYPE } from '../../event-bus';
 import Loading from '../../loading';
 import OpIcon from '../../op-icon';
-import { eventBus, EVENT_BUS_TYPE } from '../../event-bus';
-import DirNew from '../dir-new';
 import DirFiles from '../dir-files';
-import DirViews from '../dir-views';
-import DirTags from '../dir-tags';
+import DirNew from '../dir-new';
 import DirOthers from '../dir-others';
+import DirTags from '../dir-tags';
+import DirViews from '../dir-views';
 
 import './index.css';
 

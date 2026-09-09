@@ -1,10 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import urlJoin from 'url-join';
 import { gettext, siteRoot, mediaUrl, enableVideoThumbnail, enablePDFThumbnail, fileServerRoot, enableThumbnailServer } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
 import { imageThumbnailCenter, videoThumbnailCenter } from '../../utils/thumbnail-center';
+import { Utils } from '../../utils/utils';
 import Icon from '../icon';
 
 const propTypes = {

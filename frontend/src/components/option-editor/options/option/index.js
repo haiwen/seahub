@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import classnames from 'classnames';
-import Icon from '../../../icon';
 import { isString } from '../../../../utils/type-detection';
+import Icon from '../../../icon';
 
 import './index.css';
 

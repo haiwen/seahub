@@ -1,14 +1,14 @@
 // This file is copied from frontend/src/components/file-uploader/file-uploader.js,
 // and modified according to the requirements of this page.
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import Resumablejs from '@seafile/resumablejs';
 import MD5 from 'MD5';
+import PropTypes from 'prop-types';
+import toaster from '../../components/toast';
 import { gettext, resumableUploadFileBlockSize, maxUploadFileSize, maxNumberOfFilesForFileupload } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import UploadProgressDialog from './upload-progress-dialog';
-import toaster from '../../components/toast';
 
 import '../../css/file-uploader.css';
 

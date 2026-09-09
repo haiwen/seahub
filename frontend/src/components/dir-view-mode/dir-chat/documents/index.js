@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import classnames from 'classnames';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import { MarkdownViewer } from '@seafile/seafile-editor';
+import classnames from 'classnames';
+import { mediaUrl, gettext } from '../../../../utils/constants';
 import CenteredLoading from '../../../centered-loading';
 import Icon from '../../../icon';
 import OpIcon from '../../../op-icon';
-import { mediaUrl, gettext } from '../../../../utils/constants';
 import { Selector } from '../components';
 import { useDocuments } from '../hooks';
 

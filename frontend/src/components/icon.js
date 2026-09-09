@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import '../css/icon.css';
 
 const iconModules = require.context('../assets/icons', false, /\.svg$/);

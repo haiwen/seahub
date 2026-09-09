@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import SearchEmptyTip from '../../../components/search-empty-tip';
+import { KeyCodes } from '../../../constants';
+import { gettext } from '../../../utils/constants';
 import ClickOutside from '../../click-outside';
+import Icon from '../../icon';
 import SearchInput from '../../search-input';
 import Option from './option';
-import { KeyCodes } from '../../../constants';
-import Icon from '../../icon';
-import { gettext } from '../../../utils/constants';
-import SearchEmptyTip from '../../../components/search-empty-tip';
 
 import './index.css';
 

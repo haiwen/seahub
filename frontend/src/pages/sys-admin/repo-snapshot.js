@@ -1,13 +1,13 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { Utils } from '../../utils/utils';
+import PropTypes from 'prop-types';
+import { createRoot } from 'react-dom/client';
+import Icon from '../../components/icon';
+import Loading from '../../components/loading';
+import CommonToolbar from '../../components/toolbar/common-toolbar';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from '../../utils/constants';
 import { systemAdminAPI } from '../../utils/system-admin-api';
-import Loading from '../../components/loading';
-import Icon from '../../components/icon';
-import CommonToolbar from '../../components/toolbar/common-toolbar';
+import { Utils } from '../../utils/utils';
 
 import '../../css/repo-snapshot.css';
 

@@ -1,13 +1,13 @@
 import React, { Component, Fragment } from 'react';
-import { Utils } from '../../../utils/utils';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
-import { gettext, isPro, mediaUrl, logoPath, faviconPath, loginBGPath } from '../../../utils/constants';
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
-import MainPanelTopbar from '../main-panel-topbar';
-import Section from '../../../components/web-settings/section';
 import CheckboxItem from '../../../components/web-settings/checkbox-item';
 import FileItem from '../../../components/web-settings/file-item';
+import Section from '../../../components/web-settings/section';
+import { gettext, isPro, mediaUrl, logoPath, faviconPath, loginBGPath } from '../../../utils/constants';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { Utils } from '../../../utils/utils';
+import MainPanelTopbar from '../main-panel-topbar';
 import InputItem from './input-item';
 
 import '../../../css/system-admin-web-settings.css';

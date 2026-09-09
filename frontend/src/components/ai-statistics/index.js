@@ -1,15 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
 import { Button, Input } from 'reactstrap';
-
+import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
+import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import EmptyTip from '../empty-tip';
 import Loading from '../loading';
 import Paginator from '../paginator';
-import { gettext } from '../../utils/constants';
 import toaster from '../toast';
-import { Utils } from '../../utils/utils';
-
 import AIStatisticsDetailDialog from './detail-dialog';
 
 const propTypes = {

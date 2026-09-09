@@ -1,20 +1,20 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import ViewItem from './view';
-import toaster from '../../components/toast';
-import NewView from './new-view';
-import InlineNameEditor from './inline-name-editor';
-import { useMetadata } from '../hooks';
-import { PRIVATE_FILE_TYPE } from '../../constants';
-import { Utils } from '../../utils/utils';
-import TextTranslation from '../../utils/text-translation';
-import { baiduMapKey, gettext, googleMapKey } from '../../utils/constants';
-import { validateName } from '../utils/validate';
-import { METADATA_VIEWS_DRAG_DATA_KEY, METADATA_VIEWS_KEY, TREE_NODE_LEFT_INDENT, VIEW_TYPE, VIEW_TYPE_ICON, VIEW_TYPE_LABEL, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW } from '../constants';
-import Icon from '../../components/icon';
-import CustomDropdown from '../../components/dropdown';
+import PropTypes from 'prop-types';
 import { ADD_VIEW_KEY, ADD_VIEW_OPTIONS } from '../../components/dir-view-mode/dir-views/views-more-operations';
+import CustomDropdown from '../../components/dropdown';
+import Icon from '../../components/icon';
+import toaster from '../../components/toast';
+import { PRIVATE_FILE_TYPE } from '../../constants';
+import { baiduMapKey, gettext, googleMapKey } from '../../utils/constants';
+import TextTranslation from '../../utils/text-translation';
+import { Utils } from '../../utils/utils';
+import { METADATA_VIEWS_DRAG_DATA_KEY, METADATA_VIEWS_KEY, TREE_NODE_LEFT_INDENT, VIEW_TYPE, VIEW_TYPE_ICON, VIEW_TYPE_LABEL, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW } from '../constants';
+import { useMetadata } from '../hooks';
+import { validateName } from '../utils/validate';
+import InlineNameEditor from './inline-name-editor';
+import NewView from './new-view';
+import ViewItem from './view';
 
 const ViewsFolder = ({
   idx, leftIndent, folder, currentPath, userPerm, canDeleteView, getFoldersNames, getMoveableFolders, generateNewViewDefaultName,

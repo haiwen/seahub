@@ -1,14 +1,14 @@
 import React, { forwardRef, useMemo, useImperativeHandle, useCallback, useState, useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import SearchInput from '../../../../components/search-input';
+import PropTypes from 'prop-types';
+import Icon from '../../../../components/icon';
 import SearchEmptyTip from '../../../../components/search-empty-tip';
-import DeleteCollaborator from './delete-collaborator';
-import { Utils } from '../../../../utils/utils';
+import SearchInput from '../../../../components/search-input';
 import { KeyCodes } from '../../../../constants';
 import { gettext } from '../../../../utils/constants';
+import { Utils } from '../../../../utils/utils';
 import { useCollaborators } from '../../../hooks';
-import Icon from '../../../../components/icon';
+import DeleteCollaborator from './delete-collaborator';
 
 import './index.css';
 

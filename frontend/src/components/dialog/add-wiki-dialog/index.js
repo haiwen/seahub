@@ -1,14 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { Alert, Button, Modal, ModalBody, ModalFooter, Input, Label } from 'reactstrap';
-import SeahubModalHeader from '../../seahub-modal-header';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import { enableSeafileAI, gettext, isPro } from '../../../utils/constants';
-import wikiAPI from '../../../utils/wiki-api';
 import { Utils } from '../../../utils/utils';
-import toaster from '../../toast';
-import { SeahubSelect } from '../../select';
+import wikiAPI from '../../../utils/wiki-api';
 import Icon from '../../icon';
+import SeahubModalHeader from '../../seahub-modal-header';
+import { SeahubSelect } from '../../select';
+import toaster from '../../toast';
 import Tooltip from '../../tooltip';
 import {
   DEFAULT_WIKI_COLOR,

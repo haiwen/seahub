@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import ClickOutside from '../../../../components/click-outside';
-import { getCellValueByColumn } from '../../metadata-details/utils';
-import SelectOption from '../../cell-formatter/select-option';
-import MultipleSelectEditor from '../../cell-editors/multiple-select-editor';
-import { getColumnOptionNamesByIds } from '../../../utils/cell';
 import Icon from '../../../../components/icon';
+import { getColumnOptionNamesByIds } from '../../../utils/cell';
+import MultipleSelectEditor from '../../cell-editors/multiple-select-editor';
+import SelectOption from '../../cell-formatter/select-option';
+import { getCellValueByColumn } from '../../metadata-details/utils';
 
 const MultipleSelect = ({ record, column, onCommit, modifyColumnData }) => {
   const [isEditorShow, setIsEditorShow] = useState(false);

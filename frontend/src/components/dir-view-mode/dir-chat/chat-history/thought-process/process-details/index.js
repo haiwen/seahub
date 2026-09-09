@@ -1,8 +1,8 @@
 import { useState, useCallback } from 'react';
 import { FormGroup, Label } from 'reactstrap';
+import { MarkdownViewer } from '@seafile/seafile-editor';
 import classnames from 'classnames';
 import Icon from '@/components/icon';
-import { MarkdownViewer } from '@seafile/seafile-editor';
 import { gettext } from '../../../../../../utils/constants';
 import { formatDetailsJSONValue, formatDetailsValue, shouldHighlightDetailsAsJSON } from '../tool-details-content';
 

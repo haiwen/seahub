@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import classnames from 'classnames';
-import Tip from '../tip';
-import { isFunction, isNumber } from '../../../utils/type-detection';
 import { isEnter } from '../../../utils/hotkey';
+import { isFunction, isNumber } from '../../../utils/type-detection';
 import CenteredLoading from '../../centered-loading';
+import Tip from '../tip';
 import Option from './option';
 import './index.css';
 

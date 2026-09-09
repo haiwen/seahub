@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { UncontrolledTooltip, DropdownItem } from 'reactstrap';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import Icon from '../../../../icon';
 
 const ColumnDropdownItem = ({

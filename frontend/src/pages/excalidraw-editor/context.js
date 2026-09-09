@@ -1,6 +1,6 @@
+import axios from 'axios';
 import Url from 'url-parse';
 import ExcalidrawServerApi from './api';
-import axios from 'axios';
 
 class Context {
   constructor() {

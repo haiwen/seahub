@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { Utils } from '../../../utils/utils';
-import { gettext, wikiPermission } from '../../../utils/constants';
-import { WIKI_COVER_LIST } from '../constant';
-import PageIcon from './page-icon';
-import { generateARandomEmoji, generateEmojiIcon } from '../utils/emoji-utils';
-import PageTitleEditor from './page-title-editor';
+import PropTypes from 'prop-types';
 import Icon from '../../../components/icon';
+import { gettext, wikiPermission } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
+import { WIKI_COVER_LIST } from '../constant';
+import { generateARandomEmoji, generateEmojiIcon } from '../utils/emoji-utils';
+import PageIcon from './page-icon';
+import PageTitleEditor from './page-title-editor';
 
 import './page-title.css';
 

@@ -1,11 +1,11 @@
 import React, { useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
-import toaster from '../../components/toast';
-import InlineNameEditor from './inline-name-editor';
-import { validateName } from '../utils/validate';
-import { useMetadata } from '../hooks';
-import { VIEWS_TYPE_FOLDER } from '../constants';
 import Icon from '../../components/icon';
+import toaster from '../../components/toast';
+import { VIEWS_TYPE_FOLDER } from '../constants';
+import { useMetadata } from '../hooks';
+import { validateName } from '../utils/validate';
+import InlineNameEditor from './inline-name-editor';
 
 const NewFolder = ({ closeNewFolder }) => {
   const { navigation, addFolder } = useMetadata();

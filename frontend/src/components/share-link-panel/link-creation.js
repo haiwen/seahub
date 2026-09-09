@@ -1,18 +1,18 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
 import { Button, Form, FormGroup, Label, Input, InputGroup, Alert } from 'reactstrap';
+import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
+import BackIcon from '../../components/back-icon';
+import ShareLink from '../../models/share-link';
 import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, shareLinkForceUsePassword, shareLinkPasswordMinLength, shareLinkPasswordStrengthLevel, isEmailConfigured, canUseGlobalAddressBook } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { shareLinkAPI } from '../../utils/share-link-api';
 import { Utils } from '../../utils/utils';
-import ShareLink from '../../models/share-link';
-import toaster from '../toast';
-import SetLinkExpiration from '../set-link-expiration';
-import UserSelect from '../user-select';
-import BackIcon from '../../components/back-icon';
 import Icon from '../icon';
+import SetLinkExpiration from '../set-link-expiration';
+import toaster from '../toast';
 import Tooltip from '../tooltip';
+import UserSelect from '../user-select';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,

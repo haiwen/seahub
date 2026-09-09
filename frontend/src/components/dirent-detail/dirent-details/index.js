@@ -1,19 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import AIIcon from '../../../metadata/components/metadata-details/ai-icon';
+import SettingsIcon from '../../../metadata/components/metadata-details/settings-icon';
+import { EVENT_BUS_TYPE } from '../../../metadata/constants';
+import { MetadataDetailsProvider } from '../../../metadata/hooks';
 import { siteRoot, thumbnailSizeForGrid, enableSeafileAI, fileServerRoot, MimetypesKind } from '../../../utils/constants';
+import ObjectUtils from '../../../utils/object';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
+import { eventBus } from '../../event-bus';
 import toaster from '../../toast';
+import VideoPlayer from '../../video-player';
 import { Detail, Header, Body } from '../detail';
 import DirDetails from './dir-details';
 import FileDetails from './file-details';
-import ObjectUtils from '../../../utils/object';
-import { MetadataDetailsProvider } from '../../../metadata/hooks';
-import AIIcon from '../../../metadata/components/metadata-details/ai-icon';
-import SettingsIcon from '../../../metadata/components/metadata-details/settings-icon';
-import { eventBus } from '../../event-bus';
-import { EVENT_BUS_TYPE } from '../../../metadata/constants';
-import VideoPlayer from '../../video-player';
 
 import './index.css';
 

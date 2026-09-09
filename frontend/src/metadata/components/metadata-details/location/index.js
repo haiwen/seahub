@@ -1,23 +1,23 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { Modal, Popover } from 'reactstrap';
-import { initMapInfo, loadMapSource } from '../../../../utils/map-utils';
-import { MAP_TYPE } from '../../../../constants';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import ClickOutside from '../../../../components/click-outside';
+import DetailItem from '../../../../components/dirent-detail/detail-item';
+import { eventBus } from '../../../../components/event-bus';
 import Loading from '../../../../components/loading';
+import { MAP_TYPE } from '../../../../constants';
 import { gettext, baiduMapKey, googleMapKey, googleMapId } from '../../../../utils/constants';
+import { convertToMapCoords } from '../../../../utils/coord-transform';
+import { initMapInfo, loadMapSource } from '../../../../utils/map-utils';
+import { Utils } from '../../../../utils/utils';
 import { CellType, EVENT_BUS_TYPE, GEOLOCATION_FORMAT, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { getGeolocationDisplayString } from '../../../utils/cell';
-import { isValidPosition } from '../../../utils/validate';
-import DetailItem from '../../../../components/dirent-detail/detail-item';
 import { getColumnDisplayName } from '../../../utils/column';
-import { createBMapZoomControl } from '../../map-controller';
-import { Utils } from '../../../../utils/utils';
-import { eventBus } from '../../../../components/event-bus';
-import { createZoomControl } from '../../map-controller/zoom';
-import ClickOutside from '../../../../components/click-outside';
+import { isValidPosition } from '../../../utils/validate';
 import GeolocationEditor from '../../cell-editors/geolocation-editor';
-import { convertToMapCoords } from '../../../../utils/coord-transform';
+import { createBMapZoomControl } from '../../map-controller';
+import { createZoomControl } from '../../map-controller/zoom';
 
 import './index.css';
 

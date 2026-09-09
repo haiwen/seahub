@@ -1,12 +1,12 @@
 import React, { useCallback, useState, useRef, useEffect } from 'react';
 import classnames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
+import Icon from '../../../../../components/icon';
 import toaster from '../../../../../components/toast';
+import { gettext } from '../../../../../utils/constants';
 import context from '../../../context';
 import { getErrorMsg } from '../../../utils/common-utils';
 import { addDataToTree } from '../helpers';
-import { gettext } from '../../../../../utils/constants';
-import Icon from '../../../../../components/icon';
 
 import './index.css';
 

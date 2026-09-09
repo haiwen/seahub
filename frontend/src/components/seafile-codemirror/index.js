@@ -1,7 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import CodeMirror from '@uiw/react-codemirror';
 import { EditorView } from '@codemirror/view';
+import CodeMirror from '@uiw/react-codemirror';
+import PropTypes from 'prop-types';
 import { getLanguageExtensions } from './languages';
 import { myTheme } from './theme';
 

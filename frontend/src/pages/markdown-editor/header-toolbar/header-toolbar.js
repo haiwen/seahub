@@ -1,18 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { EXTERNAL_EVENTS, EventBus } from '@seafile/seafile-editor';
-import { gettext, canGenerateShareLink, isPro, mediaUrl, canLockUnlockFile } from '../../../utils/constants';
-import ButtonGroup from './button-group';
-import MoreMenu from './more-menu';
-import FileInfo from './file-info';
-import Icon from '../../../components/icon';
-import IconButton from '../../../components/icon-button';
+import PropTypes from 'prop-types';
+import Dirent from '../../../../src/models/dirent';
 import EmbeddedFileDetails from '../../../components/dirent-detail/embedded-file-details';
 import CommentPanel from '../../../components/file-view/comment-panel';
+import Icon from '../../../components/icon';
+import IconButton from '../../../components/icon-button';
+import Tooltip from '../../../components/tooltip';
+import { gettext, canGenerateShareLink, isPro, mediaUrl, canLockUnlockFile } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
-import Dirent from '../../../../src/models/dirent';
-import Tooltip from '../../../components/tooltip';
+import ButtonGroup from './button-group';
+import FileInfo from './file-info';
+import MoreMenu from './more-menu';
 
 import '../css/header-toolbar.css';
 

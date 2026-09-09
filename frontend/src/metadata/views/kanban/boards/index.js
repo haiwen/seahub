@@ -1,11 +1,14 @@
 import React, { useMemo, useCallback, useState, useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { useMetadataView } from '../../../hooks/metadata-view';
-import { useCollaborators } from '../../../hooks';
-import { CellType, KANBAN_SETTINGS_KEYS, UNCATEGORIZED } from '../../../constants';
-import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
+import PropTypes from 'prop-types';
+import EmptyTip from '../../../../components/empty-tip';
+import { getRowById } from '../../../../components/sf-table/utils/table';
 import { gettext } from '../../../../utils/constants';
+import ImagePreviewer from '../../../components/cell-formatter/image-previewer';
+import { CellType, KANBAN_SETTINGS_KEYS, UNCATEGORIZED } from '../../../constants';
+import { useCollaborators } from '../../../hooks';
+import { useMetadataView } from '../../../hooks/metadata-view';
+import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
 import { checkIsPredefinedOption, getCellValueByColumn, isValidCellValue, getRecordIdFromRecord,
   getFileNameFromRecord, getParentDirFromRecord
 } from '../../../utils/cell';
@@ -13,11 +16,8 @@ import { getColumnOptions, getColumnOriginName } from '../../../utils/column';
 import { openFile } from '../../../utils/file';
 import { checkIsDir } from '../../../utils/row';
 import AddBoard from '../add-board';
-import EmptyTip from '../../../../components/empty-tip';
-import Board from './board';
-import ImagePreviewer from '../../../components/cell-formatter/image-previewer';
 import ContextMenu from '../context-menu';
-import { getRowById } from '../../../../components/sf-table/utils/table';
+import Board from './board';
 
 import './index.css';
 

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import SelectAll from './select-all';
+import PropTypes from 'prop-types';
 import { SEQUENCE_COLUMN_WIDTH } from '../../constants/grid';
+import SelectAll from './select-all';
 
 class ActionsCell extends Component {
 

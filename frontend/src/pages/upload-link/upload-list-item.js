@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import Icon from '../../components/icon';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import Icon from '../../components/icon';
 
 const propTypes = {
   resumableFile: PropTypes.object.isRequired,

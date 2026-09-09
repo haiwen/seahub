@@ -1,13 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
 import { DropdownItem } from 'reactstrap';
-import { Utils, isMobile } from '../../../../../utils/utils';
+import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
+import MobileItemMenu from '../../../../../components/mobile-item-menu';
 import { gettext, siteRoot } from '../../../../../utils/constants';
 import { seafileAPI } from '../../../../../utils/seafile-api';
-import toaster from '../../../../toast';
-import MobileItemMenu from '../../../../../components/mobile-item-menu';
 import { formatWithTimezone } from '../../../../../utils/time';
+import { Utils, isMobile } from '../../../../../utils/utils';
+import toaster from '../../../../toast';
 
 class FileRecord extends React.Component {
 

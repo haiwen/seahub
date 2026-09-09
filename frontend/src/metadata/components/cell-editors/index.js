@@ -1,5 +1,5 @@
-import EditorPortal from './editor-portal';
 import EditorContainer from './editor-container';
+import EditorPortal from './editor-portal';
 
 export {
   EditorPortal,

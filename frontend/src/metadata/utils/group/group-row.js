@@ -1,11 +1,11 @@
-import { DateUtils } from '../date';
 import {
   CellType, DATE_COLUMN_OPTIONS, MULTIPLE_CELL_VALUE_COLUMN_TYPE_MAP, SINGLE_CELL_VALUE_COLUMN_TYPE_MAP, MAX_GROUP_LEVEL,
   SORT_COLUMN_OPTIONS, SORT_TYPE, TEXT_SORTER_COLUMN_TYPES, NUMBER_SORTER_COLUMN_TYPES, PRIVATE_COLUMN_KEY,
 } from '../../constants';
-import { deleteInvalidGroupby } from './core';
 import { isValidCellValue, getCellValueByColumn, getCollaboratorsNames, getGeolocationByGranularity } from '../cell';
+import { DateUtils } from '../date';
 import { sortDate, sortText, sortNumber, sortCheckbox, sortCollaborator, sortSingleSelect, sortMultipleSelect } from '../sort';
+import { deleteInvalidGroupby } from './core';
 
 const _getFormattedCellValue = (cellValue, groupby, record) => {
   const { column, count_type: countType } = groupby;

@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { getCellValueByColumn } from '../../../utils/cell';
 import Icon from '../../../../components/icon';
+import { getCellValueByColumn } from '../../../utils/cell';
 
 const CheckBox = ({ record, column, onCommit }) => {
   const value = useMemo(() => getCellValueByColumn(record, column), [record, column]);

@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { GalleryGroupBySetter, FilterSetter, SortSetter } from '../data-process-setter';
-import { PRIVATE_COLUMN_KEY } from '../../constants';
-import { gettext } from '../../../utils/constants';
-import { useMetadataStatus } from '../../../hooks';
 import OpIcon from '../../../components/op-icon';
+import { useMetadataStatus } from '../../../hooks';
+import { gettext } from '../../../utils/constants';
+import { PRIVATE_COLUMN_KEY } from '../../constants';
+import { GalleryGroupBySetter, FilterSetter, SortSetter } from '../data-process-setter';
 
 const GalleryViewToolbar = ({
   readOnly, isCustomPermission, view, collaborators,

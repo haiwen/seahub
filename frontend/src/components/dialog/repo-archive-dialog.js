@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
+import PropTypes from 'prop-types';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { userAPI } from '../../utils/user-api';
-import toaster from '../toast';
-import SeahubModalHeader from '@/components/seahub-modal-header';
+import { Utils } from '../../utils/utils';
 import Loading from '../loading';
+import toaster from '../toast';
 
 const POLLING_INTERVAL = 2000; // 2 seconds
 const MAX_POLLING_COUNT = 150; // Max 5 minutes (150 * 2s)

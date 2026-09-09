@@ -1,10 +1,10 @@
 import React from 'react';
 import { EventBus, SocketManager } from '@seafile/sdoc-editor';
-import CollaboratorsPopover from './collaborators-popover.js';
-import Icon from '../../../components/icon.js';
-import SDocServerApi from '../../../utils/sdoc-server-api.js';
 import Tooltip from '@/components/tooltip.js';
 import { gettext } from '@/utils/constants.js';
+import Icon from '../../../components/icon.js';
+import SDocServerApi from '../../../utils/sdoc-server-api.js';
+import CollaboratorsPopover from './collaborators-popover.js';
 
 import './index.css';
 
