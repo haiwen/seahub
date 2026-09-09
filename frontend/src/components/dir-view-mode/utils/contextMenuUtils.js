@@ -162,6 +162,9 @@ export const getBatchMenuList = (repoInfo, userPerm, selectedDirents, getItemMen
 export const getTagFilesOperations = (repoInfo, selectedDirents) => {
   let batchOptions = [];
 
+  // Files in TAG VIEW can be from different parent folders,
+  // and there is performance problem for python API to get 'permission' for each file,
+  // so, 'permission' is not returned
   const { is_admin } = repoInfo;
   const canDownload = is_admin;
   canDownload && batchOptions.push(TextTranslation.DOWNLOAD);
