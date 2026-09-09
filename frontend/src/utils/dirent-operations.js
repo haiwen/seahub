@@ -21,10 +21,10 @@ export const lockFile = async (repoID, path, dirent, updateState) => {
         lock_owner_name: name
       });
     }
-    return { success: true };
+    const msg = gettext('Successfully locked {name_placeholder}').replace('{name_placeholder}', dirent.name);
+    toaster.success(msg);
   } catch (error) {
     handleError(error);
-    return { success: false, error };
   }
 };
 
@@ -33,17 +33,16 @@ export const unlockFile = async (repoID, path, dirent, updateState) => {
   try {
     await seafileAPI.unlockfile(repoID, filePath);
     if (updateState) {
-      const updates = {
+      updateState(dirent, {
         is_locked: false,
         locked_by_me: false,
         lock_owner_name: ''
-      };
-      updateState(dirent, updates);
+      });
     }
-    return { success: true };
+    const msg = gettext('Successfully unlocked {name_placeholder}').replace('{name_placeholder}', dirent.name);
+    toaster.success(msg);
   } catch (error) {
     handleError(error);
-    return { success: false, error };
   }
 };
 
@@ -219,9 +218,26 @@ export const freezeDocument = async (repoID, path, dirent, updateState) => {
         lock_owner_name: name
       });
     }
-    return { success: true };
+    toaster.success(gettext('Successfully froze {name_placeholder}').replace('{name_placeholder}', dirent.name));
   } catch (error) {
     handleError(error);
-    return { success: false, error };
+  }
+};
+
+export const unfreezeDocument = async (repoID, path, dirent, updateState) => {
+  const filePath = Utils.joinPath(path, dirent.name);
+  try {
+    await seafileAPI.unlockfile(repoID, filePath);
+    if (updateState) {
+      updateState(dirent, {
+        is_freezed: false,
+        is_locked: false,
+        locked_by_me: false,
+        lock_owner_name: ''
+      });
+    }
+    toaster.success(gettext('Successfully unfroze {name_placeholder}').replace('{name_placeholder}', dirent.name));
+  } catch (error) {
+    handleError(error);
   }
 };

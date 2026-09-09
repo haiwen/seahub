@@ -159,6 +159,26 @@ export const getBatchMenuList = (repoInfo, userPerm, selectedDirents, getItemMen
   return batchOptions;
 };
 
+export const getTagFilesOperations = (repoInfo, selectedDirents) => {
+  let batchOptions = [];
+
+  // Files in TAG VIEW can be from different parent folders,
+  // and there is performance problem for python API to get 'permission' for each file,
+  // so, 'permission' is not returned
+  const { is_admin } = repoInfo;
+  const canDownload = is_admin;
+  canDownload && batchOptions.push(TextTranslation.DOWNLOAD);
+
+  if (canChatWithDirents(repoInfo, selectedDirents)) {
+    batchOptions.push('Divider', TextTranslation.CHAT_WITH_AI);
+  }
+  if (isDivider(batchOptions[0])) {
+    batchOptions.shift();
+  }
+
+  return batchOptions;
+};
+
 export const getPermissions = (repoInfo) => {
   return {
     isRepoOwner: repoInfo.owner_email === username,

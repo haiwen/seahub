@@ -610,6 +610,20 @@ export const Utils = {
     return list;
   },
 
+  canDownloadFile: function (dirent) {
+    const { permission } = dirent;
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
+    return (permission == 'rw' || permission == 'r') || (isCustomPermission && customPermission.permission.download);
+  },
+
+  canDeleteFile: function (dirent) {
+    const { permission } = dirent;
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
+    const perm = (permission == 'rw' || permission == 'cloud-edit') || (isCustomPermission && customPermission.permission.delete);
+    const locked = !dirent.is_locked || (dirent.is_locked && dirent.locked_by_me);
+    return perm && locked;
+  },
+
   getFileOperationList: function (isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
     let list = [];
     const {

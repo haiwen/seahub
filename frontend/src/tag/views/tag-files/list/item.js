@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import Rename from '../../../../components/rename';
 import FileTagsFormatter from '../../../../metadata/components/cell-formatter/file-tags';
 import { gettext, siteRoot, thumbnailDefaultSize } from '../../../../utils/constants';
 import {
@@ -12,14 +11,13 @@ import {
 } from '../../../../metadata/utils/cell';
 import { Utils } from '../../../../utils/utils';
 import { openFile } from '../../../../metadata/utils/file';
-import { TAG_FILE_KEY } from '../../../constants/file';
 import { formatWithTimezone } from '../../../../utils/time';
 
 import './index.css';
 
 dayjs.extend(relativeTime);
 
-const TagFile = ({ repoID, file, tagsData, isRenaming, onRenameCancel, onRenameConfirm, selectedFileIds, onSelectFile, openImagePreview, onContextMenu }) => {
+const TagFile = ({ repoID, file, tagsData, selectedFileIds, onSelectFile, openImagePreview, onContextMenu }) => {
   const [highlight, setHighlight] = useState(false);
   const [isIconLoadError, setIconLoadError] = useState(false);
 
@@ -82,15 +80,14 @@ const TagFile = ({ repoID, file, tagsData, isRenaming, onRenameCancel, onRenameC
     event.preventDefault();
     event.stopPropagation();
     const canPreview = window.sfTagsDataContext.canPreview();
-    if (isRenaming || !canPreview) return;
+    if (!canPreview) return;
     openFile(repoID, file, () => {
       openImagePreview(file);
     });
-  }, [repoID, file, openImagePreview, isRenaming]);
+  }, [repoID, file, openImagePreview]);
 
   const handleClick = useCallback((event) => {
     event.stopPropagation();
-    if (isRenaming) return;
     if (event.target.tagName === 'TD' && event.target.closest('td').querySelector('input[type="checkbox"]') === null) {
       onSelectFile([fileId]);
       return;
@@ -99,7 +96,7 @@ const TagFile = ({ repoID, file, tagsData, isRenaming, onRenameCancel, onRenameC
       ? selectedFileIds.filter(id => id !== fileId)
       : [...selectedFileIds, fileId];
     onSelectFile(newSelectedFileIds);
-  }, [fileId, selectedFileIds, isRenaming, onSelectFile]);
+  }, [fileId, selectedFileIds, onSelectFile]);
 
   const handleContextMenu = useCallback((event) => {
     event.preventDefault();
@@ -145,16 +142,7 @@ const TagFile = ({ repoID, file, tagsData, isRenaming, onRenameCancel, onRenameC
         </div>
       </td>
       <td className="name">
-        {isRenaming ? (
-          <Rename
-            hasSuffix={true}
-            name={file[TAG_FILE_KEY.NAME]}
-            onRenameConfirm={onRenameConfirm}
-            onRenameCancel={onRenameCancel}
-          />
-        ) : (
-          <a href={path} onClick={handleClickFileName}>{name}</a>
-        )}
+        <a href={path} onClick={handleClickFileName}>{name}</a>
       </td>
       <td className="tag-list-title">
         <FileTagsFormatter value={tags} tagsData={tagsData} className="sf-metadata-tags-formatter" />
@@ -170,13 +158,10 @@ TagFile.propTypes = {
   repoID: PropTypes.string,
   tagsData: PropTypes.object,
   file: PropTypes.object,
-  isRenaming: PropTypes.bool,
-  onRenameCancel: PropTypes.func,
-  onRenameConfirm: PropTypes.func,
   selectedFileIds: PropTypes.array,
   onSelectFile: PropTypes.func,
   openImagePreview: PropTypes.func,
-  reSelectFiles: PropTypes.func,
+  onContextMenu: PropTypes.func,
 };
 
 export default TagFile;

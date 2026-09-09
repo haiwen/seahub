@@ -115,17 +115,15 @@ export const EVENT_BUS_TYPE = {
   CLEAR_MAP_INSTANCE: 'clear_map_instance',
 
   // tag file
-  MOVE_TAG_FILE: 'move_tag_file',
   COPY_TAG_FILE: 'copy_tag_file',
-  RENAME_TAG_FILE_IN_SITU: 'rename_tag_file_in_situ',
-  RENAME_TAG_FILE_IN_DIALOG: 'rename_tag_file_in_dialog',
+  CHAT_WITH_AI_ABOUT_TAG_FILES: 'chat_with_ai_about_tag_files',
   SHARE_TAG_FILE: 'share_tag_file',
   DOWNLOAD_TAG_FILES: 'download_tag_files',
-  DELETE_TAG_FILES: 'delete_tag_files',
   SELECT_TAG_FILES: 'select_tag_files',
   UNSELECT_TAG_FILES: 'unselect_tag_files',
   MODIFY_TAG_FILES_SORT: 'modify_tag_files_sort',
   SWITCH_TAG_FILES_VIEW_MODE: 'switch_tag_files_view_mode',
+  UPDATE_TAG_FILES: 'update_tag_files',
 
   // tags
   SELECT_TAGS: 'select_tags',
@@ -137,8 +135,12 @@ export const EVENT_BUS_TYPE = {
   // file
   FILE_HISTORY: 'file_history',
   FILE_ACCESS_LOG: 'file_access_log',
+  PROPERTIES: 'properties',
+  OPEN_WITH_DEFAULT: 'open_with_default',
+  OPEN_WITH_ONLYOFFICE: 'open_with_onlyoffice',
   OPEN_VIA_CLIENT: 'open_via_client',
   CONVERT_FILE: 'convert_file',
   EXPORT_DOCX: 'export_docx',
   EXPORT_SDOC: 'export_sdoc',
+  EXPORT_MARKDOWN: 'export_markdown',
 };

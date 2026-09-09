@@ -29,7 +29,6 @@ const Detail = React.memo(({
 
   useEffect(() => {
     if (isView) return;
-    if (isTag) return;
 
     // init context
     const context = new MetadataContext();
@@ -41,9 +40,7 @@ const Detail = React.memo(({
         delete window['sfMetadataContext'];
       }
     };
-  }, [repoID, currentRepoInfo, isView, isTag]);
-
-  if (isTag) return null;
+  }, [repoID, currentRepoInfo, isView]);
 
   // Handle multi-selection case
   if (selectedDirents && selectedDirents.length > 1) {
@@ -75,7 +72,7 @@ const Detail = React.memo(({
   return (
     <DirentDetail
       repoID={repoID}
-      path={isView ? dirent.path : path}
+      path={isView || isTag ? dirent.path : path}
       dirent={selectedDirents[0] || dirent}
       currentRepoInfo={currentRepoInfo}
       repoTags={repoTags}
