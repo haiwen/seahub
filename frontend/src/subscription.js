@@ -2,8 +2,8 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
 import SideNav from './components/user-settings/side-nav';
-import Account from './components/common/account';
-import Notification from './components/common/notification';
+import Account from './components/account';
+import Notification from './components/notification';
 import Subscription from './components/subscription';
 
 import './css/toolbar.css';

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { gettext } from '@/utils/constants';
-import Icon from '../../icon';
+import Icon from '../icon';
 
 import './index.css';
 

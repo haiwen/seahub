@@ -4,7 +4,7 @@ import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import Logo from '../../components/logo';
-import Account from '../../components/common/account';
+import Account from '../../components/account';
 import FileUploader from './file-uploader';
 import Icon from '../../components/icon';
 

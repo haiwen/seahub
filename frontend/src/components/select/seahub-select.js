@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
 import { MenuSelectStyle } from './seahub-select-style';
-import { gettext } from '../../../utils/constants';
-import Icon from '../../icon';
-import SelectDropdownIndicator from '../../select-dropdown-indicator';
+import { gettext } from '../../utils/constants';
+import Icon from '../icon';
+import SelectDropdownIndicator from '../select-dropdown-indicator';
 import SearchEmptyTip from '../search-empty-tip';
 import './seahub-select.css';
 

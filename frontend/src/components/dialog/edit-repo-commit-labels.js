@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { components } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-import { MenuSelectStyle } from '../common/select/seahub-select-style';
+import { MenuSelectStyle } from '../select/seahub-select-style';
 import SelectDropdownIndicator from '../select-dropdown-indicator';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';

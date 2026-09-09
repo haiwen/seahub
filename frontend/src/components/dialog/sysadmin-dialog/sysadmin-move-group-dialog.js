@@ -9,7 +9,7 @@ import { Utils } from '../../../utils/utils';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import SearchInput from '../../search-input';
 import ClickOutside from '../../click-outside';
-import SearchEmptyTip from '../../../components/common/search-empty-tip';
+import SearchEmptyTip from '../../../components/search-empty-tip';
 import classnames from 'classnames';
 
 import '../../../css/department-select.css';

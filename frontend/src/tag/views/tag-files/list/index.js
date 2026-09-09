@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import FixedWidthTable from '../../../../components/common/fixed-width-table';
+import FixedWidthTable from '../../../../components/fixed-width-table';
 import { Utils } from '../../../../utils/utils';
 import { gettext } from '../../../../utils/constants';
 import classNames from 'classnames';

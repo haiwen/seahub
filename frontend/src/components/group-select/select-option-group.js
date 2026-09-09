@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import SearchInput from '../../search-input';
+import SearchInput from '../search-input';
 import Option from './option';
-import KeyCodes from '../../../constants/keyCodes';
-import Icon from '../../icon';
-import { gettext } from '../../../utils/constants';
-import SearchEmptyTip from '../../common/search-empty-tip';
+import KeyCodes from '../../constants/keyCodes';
+import Icon from '../icon';
+import { gettext } from '../../utils/constants';
+import SearchEmptyTip from '../search-empty-tip';
 
 import './select-option-group.css';
 

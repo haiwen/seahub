@@ -16,7 +16,7 @@ import ShareLinkPermissionSelect from '../../components/dialog/share-link-permis
 import ShareAdminLink from '../../components/dialog/share-admin-link';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 import Selector from '../../components/single-selector';
-import FixedWidthTable from '../../components/common/fixed-width-table';
+import FixedWidthTable from '../../components/fixed-width-table';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import OpIcon from '../../components/op-icon';
 

@@ -10,7 +10,7 @@ import { seafileAPI } from '../../../utils/seafile-api';
 import SDocServerApi from '../../../utils/sdoc-server-api';
 import { PER_PAGE, gettext, historyRepoID, mediaUrl } from '../../../utils/constants';
 import Loading from '../../../components/loading';
-import GoBack from '../../../components/common/go-back';
+import GoBack from '../../../components/go-back';
 import SidePanel from './side-panel';
 import { Utils, isMobile } from '../../../utils/utils';
 import toaster from '../../../components/toast';

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Select, { components } from 'react-select';
 import { gettext } from '../../utils/constants';
-import { MenuSelectStyle } from '../common/select';
+import { MenuSelectStyle } from '../select';
 import OpIcon from '../../components/op-icon';
 import Icon from '../icon';
 import { Utils } from '../../utils/utils';

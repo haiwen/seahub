@@ -4,7 +4,7 @@ import { Button } from 'reactstrap';
 import { DiffViewer } from '@seafile/seafile-sdoc-editor';
 import { gettext, mediaUrl } from '../../utils/constants';
 import Loading from '../../components/loading';
-import GoBack from '../../components/common/go-back';
+import GoBack from '../../components/go-back';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../../components/toast';

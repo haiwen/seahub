@@ -2,7 +2,7 @@ import React, { forwardRef, useMemo, useImperativeHandle, useCallback, useState,
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import SearchInput from '../../../../components/search-input';
-import SearchEmptyTip from '../../../../components/common/search-empty-tip';
+import SearchEmptyTip from '../../../../components/search-empty-tip';
 import DeleteCollaborator from './delete-collaborator';
 import { Utils } from '../../../../utils/utils';
 import { KeyCodes } from '../../../../constants';

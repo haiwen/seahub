@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { Popover } from 'reactstrap';
 import { seafileAPI } from '../utils/seafile-api';
 import { gettext } from '../utils/constants';
-import SearchEmptyTip from './common/search-empty-tip';
+import SearchEmptyTip from './search-empty-tip';
 import { Utils } from '../utils/utils';
 import toaster from './toast';
 import KeyCodes from '../constants/keyCodes';

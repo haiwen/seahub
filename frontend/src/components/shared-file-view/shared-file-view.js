@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import watermark from 'watermark-dom';
 import classNames from 'classnames';
-import Account from '../common/account';
+import Account from '../account';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import SaveSharedFileDialog from '../dialog/save-shared-file-dialog';

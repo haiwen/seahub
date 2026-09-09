@@ -7,7 +7,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
 import FileChooser from '../file-chooser';
-import GroupSelect from '../common/group-select';
+import GroupSelect from '../group-select';
 import toaster from '../../components/toast';
 import BackIcon from '../../components/back-icon';
 import EmptyTip from '../../components/empty-tip';

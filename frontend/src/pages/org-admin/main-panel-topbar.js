@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Account from '../../components/common/account';
-import ColorMode from '../../components/common/color-mode';
+import Account from '../../components/account';
+import ColorMode from '../../components/color-mode';
 import Icon from '../../components/icon';
 
 const propTypes = {

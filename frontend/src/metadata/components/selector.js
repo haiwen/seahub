@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { SeahubSelect } from '../../components/common/select';
+import { SeahubSelect } from '../../components/select';
 
 const Selector = ({ options, settingKey, value, defaultValue, onChange }) => {
 

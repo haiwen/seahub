@@ -8,7 +8,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import OpIcon from '../op-icon';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
-import { SeahubSelect } from '../common/select';
+import { SeahubSelect } from '../select';
 import EmptyTip from '../empty-tip';
 import Loading from '../loading';
 

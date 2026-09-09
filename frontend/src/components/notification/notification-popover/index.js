@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Popover } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
-import SeahubModalCloseIcon from '../seahub-modal-close';
+import SeahubModalCloseIcon from '../../common/seahub-modal-close';
 import { NAV_ITEM_MARGIN } from '../../../constants';
 import { Utils } from '../../../utils/utils';
 

@@ -2,17 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classname from 'classnames';
 import { Modal, ModalHeader, ModalBody, TabPane, Nav, NavItem, NavLink, TabContent } from 'reactstrap';
-import { Utils } from './utils/utils';
-import { gettext } from './utils/constants';
-import { seafileAPI } from './utils/seafile-api';
-import Loading from './components/loading';
-import NoticeItem from './components/common/notice-item';
-import OpIcon from './components/op-icon';
-import CustomDropdown from './components/dropdown';
+import { Utils } from '../../../utils/utils';
+import { gettext } from '../../../utils/constants';
+import { seafileAPI } from '../../../utils/seafile-api';
+import Loading from '../../loading';
+import NoticeItem from '../notice-item';
+import OpIcon from '../../op-icon';
+import CustomDropdown from '../../dropdown';
 
-import './css/toolbar.css';
-import './css/search.css';
-import './css/user-notifications.css';
+import './index.css';
 
 const PER_PAGE = 20;
 

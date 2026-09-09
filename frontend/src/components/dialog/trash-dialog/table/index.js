@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { gettext } from '../../../../utils/constants';
 import FolderRecords from './folder-records';
 import FileRecords from './file-records';
-import FixedWidthTable from '../../../common/fixed-width-table';
+import FixedWidthTable from '../../../fixed-width-table';
 import LibsMobileThead from '../../../../components/libs-mobile-thead';
 
 const Table = ({ repoID, renderFolder, data, isDesktop }) => {

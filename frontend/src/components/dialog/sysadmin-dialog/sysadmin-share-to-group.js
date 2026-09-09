@@ -8,7 +8,7 @@ import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
 import EmptyTip from '../../../components/empty-tip';
 import SharePermissionEditor from '../../select-editor/share-permission-editor';
-import GroupSelect from '../../common/group-select';
+import GroupSelect from '../../group-select';
 import Loading from '../../../components/loading';
 import Icon from '../../icon';
 
