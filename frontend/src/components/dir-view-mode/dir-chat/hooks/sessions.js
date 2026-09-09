@@ -2,8 +2,7 @@ import React, { useContext, useEffect, useMemo, useRef, useState, useCallback } 
 import { gettext } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
 import toaster from '../../../../components/toast';
-import { eventBus } from '../../../../components/common/event-bus';
-import { EVENT_BUS_TYPE } from '../../../../components/common/event-bus-type';
+import { eventBus, EVENT_BUS_TYPE } from '../../../../components/event-bus';
 import { ChatSession } from '../models';
 import { useAskPage } from './page-type';
 import { ASK_PAGE_SLUG_ID, SESSION_TAB_TYPE } from '../constants';

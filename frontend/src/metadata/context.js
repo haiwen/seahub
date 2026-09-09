@@ -5,7 +5,7 @@ import {
   FACE_RECOGNITION_VIEW_ID,
 } from './constants';
 import LocalStorage from './utils/local-storage';
-import EventBus from '../components/common/event-bus';
+import EventBus from '../components/event-bus';
 import { username, lang } from '../utils/constants';
 import { Utils } from '../utils/utils';
 

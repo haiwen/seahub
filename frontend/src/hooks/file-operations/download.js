@@ -6,7 +6,7 @@ import URLDecorator from '../../utils/url-decorator';
 import ModalPortal from '../../components/modal-portal';
 import ZipDownloadDialog from '../../components/dialog/zip-download-dialog';
 import toaster from '../../components/toast';
-import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
+import { EVENT_BUS_TYPE } from '../../components/event-bus';
 
 // This hook provides content about download
 const DownloadFileContext = React.createContext(null);

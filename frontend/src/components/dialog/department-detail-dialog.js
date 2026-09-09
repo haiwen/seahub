@@ -7,7 +7,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import EmptyTip from '../empty-tip';
 import Loading from '../loading';
-import { eventBus } from '../common/event-bus';
+import { eventBus } from '../event-bus';
 import Department from '../../models/department';
 import SeahubModalHeader from '../common/seahub-modal-header';
 import DepartmentGroup from './department-detail-widget/department-group';

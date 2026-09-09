@@ -11,8 +11,7 @@ import OpIcon from '../../../../components/op-icon';
 import toaster from '../../../../components/toast';
 import Loading from '../../../../components/loading';
 import TurnOffConfirmDialog from '../turn-off-confirm-dialog';
-import { eventBus } from '../../../../components/common/event-bus';
-import { EVENT_BUS_TYPE } from '../../../../components/common/event-bus-type';
+import { eventBus, EVENT_BUS_TYPE } from '../../../../components/event-bus';
 
 const MetadataTagsStatusDialog = ({
   value: oldValue,

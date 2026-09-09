@@ -11,8 +11,7 @@ import SysAdminSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/s
 import SysAdminSetUploadDownloadRateLimitDialog from '../../../components/dialog/sysadmin-dialog/set-upload-download-rate-limit';
 import SysAdminUpdateUserDialog from '../../../components/dialog/sysadmin-dialog/update-user';
 import Selector from '../../../components/single-selector';
-import { eventBus } from '../../../components/common/event-bus';
-import { EVENT_BUS_TYPE } from '../../../components/common/event-bus-type';
+import { eventBus, EVENT_BUS_TYPE } from '../../../components/event-bus';
 
 const { twoFactorAuthEnabled, availableRoles } = window.sysadmin.pageOptions;
 

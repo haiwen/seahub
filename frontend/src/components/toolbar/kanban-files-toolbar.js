@@ -14,8 +14,7 @@ import { useMetadataStatus } from '../../hooks';
 import { getColumnByKey } from '../sf-table/utils/column';
 import Icon from '../icon';
 import CustomDropdown from '../dropdown';
-import EventBus, { eventBus as globalEventBus } from '../common/event-bus';
-import { EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '../common/event-bus-type';
+import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '../event-bus';
 import { setPendingAttachments } from '../dir-view-mode/dir-chat/hooks/ai-chat-tools';
 import { AttachmentObject } from '../dir-view-mode/dir-chat/models';
 

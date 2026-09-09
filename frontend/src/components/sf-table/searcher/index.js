@@ -7,7 +7,7 @@ import { checkHasSearchResult } from '../utils/search';
 import { EVENT_BUS_TYPE } from '../../../metadata/constants';
 import OpIcon from '../../../components/op-icon';
 import Icon from '../../icon';
-import EventBus from '@/components/common/event-bus';
+import EventBus from '@/components/event-bus';
 
 const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells, closeSearcher, focusNextMatchedCell, focusPreviousMatchedCell, showResultNavigation = true }) => {
   const [isSearchActive, setIsSearchActive] = useState(false);

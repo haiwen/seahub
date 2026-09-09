@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo, forwardRef, useImperativeHandle 
 import classnames from 'classnames';
 import ModalPortal from '@/components/modal-portal';
 import Icon from '@/components/icon';
-import EventBus from '@/components/common/event-bus';
+import EventBus from '@/components/event-bus';
 import { RenamePopover, OptionsPopover } from '@/metadata/components/popover';
 import NumberFormatPopover from './number-format-popover';
 import CustomDropdown from '@/components/dropdown';

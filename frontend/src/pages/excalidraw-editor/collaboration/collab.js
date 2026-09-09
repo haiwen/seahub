@@ -7,7 +7,7 @@ import { loadFilesFromServer, loadFromServerStorage, saveFilesToServer, saveToSe
 import { resolvablePromise, updateStaleImageStatuses } from '../utils/exdraw-utils';
 import { serverDebug } from '../utils/debug';
 import Portal from './portal';
-import EventBus from '../../../components/common/event-bus';
+import EventBus from '../../../components/event-bus';
 import FileManager from '../data/file-manager';
 import { isInitializedImageElement } from '../utils/element-utils';
 

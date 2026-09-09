@@ -11,7 +11,7 @@ import ObjectUtils from '../../../utils/object';
 import { MetadataDetailsProvider } from '../../../metadata/hooks';
 import AIIcon from '../../../metadata/components/metadata-details/ai-icon';
 import SettingsIcon from '../../../metadata/components/metadata-details/settings-icon';
-import { eventBus } from '../../common/event-bus';
+import { eventBus } from '../../event-bus';
 import { EVENT_BUS_TYPE } from '../../../metadata/constants';
 import VideoPlayer from '../../video-player';
 

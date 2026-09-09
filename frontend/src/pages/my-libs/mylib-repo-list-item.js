@@ -29,8 +29,7 @@ import OpIcon from '../../components/op-icon';
 import { formatWithTimezone } from '../../utils/time';
 import Icon from '../../components/icon';
 import ArchiveIcon from '../../components/archive-icon';
-import EventBus from '../../components/common/event-bus';
-import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
+import EventBus, { EVENT_BUS_TYPE } from '../../components/event-bus';
 
 const propTypes = {
   idx: PropTypes.number,

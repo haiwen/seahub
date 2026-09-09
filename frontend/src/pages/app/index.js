@@ -4,7 +4,7 @@ import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { siteRoot, siteTitle, mediaUrl, faviconPath } from '../../utils/constants';
 import { Utils, isMobile } from '../../utils/utils';
-import EventBus from '../../components/common/event-bus';
+import EventBus from '../../components/event-bus';
 import ResizeBar from '../../components/resize-bar';
 import Header from './header';
 import SidePanel from './side-panel';

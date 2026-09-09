@@ -9,7 +9,7 @@ import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
 import Icon from '../../../components/icon';
 import CustomDropdown from '../../../components/dropdown';
-import EventBus from '../../../components/common/event-bus';
+import EventBus from '../../../components/event-bus';
 import { EVENT_BUS_TYPE } from '../../../metadata/constants';
 
 const AllTagsOperationToolbar = ({ repoID }) => {

@@ -15,8 +15,7 @@ import OpIcon from '../../components/op-icon';
 import CustomDropdown from '../../components/dropdown';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import { formatWithTimezone } from '../../utils/time';
-import EventBus from '../../components/common/event-bus';
-import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
+import EventBus, { EVENT_BUS_TYPE } from '../../components/event-bus';
 
 
 dayjs.extend(relativeTime);

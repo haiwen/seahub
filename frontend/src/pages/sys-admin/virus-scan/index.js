@@ -4,8 +4,7 @@ import Nav from './nav';
 import { useLocation } from '@gatsbyjs/reach-router';
 import { Button } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
-import { eventBus } from '../../../components/common/event-bus';
-import { EVENT_BUS_TYPE } from '../../../components/common/event-bus-type';
+import { eventBus, EVENT_BUS_TYPE } from '../../../components/event-bus';
 
 const VirusScan = ({ children, ...commonProps }) => {
   const location = useLocation();

@@ -11,7 +11,7 @@ import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
 import toaster from '../toast';
 import imageAPI from '../../utils/image-api';
-import { EVENT_BUS_TYPE } from '../common/event-bus-type';
+import { EVENT_BUS_TYPE } from '../event-bus';
 import EmptyTip from '../empty-tip';
 import { Dirent } from '../../models';
 import { VirtualGrid } from '../virtual-list';

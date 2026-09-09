@@ -9,7 +9,7 @@ import PageDropdownMenu from './page-dropdownmenu';
 import { gettext, wikiId, wikiPermission } from '../../../../utils/constants';
 import AddNewPageDialog from '../add-new-page-dialog';
 import CustomIcon from '../../custom-icon';
-import { eventBus } from '../../../../components/common/event-bus';
+import { eventBus } from '../../../../components/event-bus';
 import { INSERT_POSITION } from '../constants';
 import toaster from '../../../../components/toast';
 import wikiAPI from '../../../../utils/wiki-api';

@@ -15,7 +15,7 @@ import TagFilesViewToolbar from '../../tag/components/tag-files-view-toolbar';
 import OpIcon from '../../components/op-icon';
 import { HideColumnSetter } from '../../metadata/components/data-process-setter';
 import SetRowHeight from '../../components/set-row-height';
-import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
+import { EVENT_BUS_TYPE } from '../../components/event-bus';
 import TrashViewToolbar from '../dir-view-mode/dir-trash-view/trash-view-toolbar';
 import { PRIVATE_COLUMN_KEY } from '@/metadata/constants';
 

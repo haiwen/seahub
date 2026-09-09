@@ -17,8 +17,7 @@ import LeaveGroupDialog from '../../components/dialog/leave-group-dialog';
 import InviteMembersDialog from '../../components/dialog/group-invite-members-dialog';
 import CustomDropdown from '../../components/dropdown';
 import Icon from '../../components/icon';
-import EventBus from '../../components/common/event-bus';
-import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
+import EventBus, { EVENT_BUS_TYPE } from '../../components/event-bus';
 
 import '../../css/group-view.css';
 

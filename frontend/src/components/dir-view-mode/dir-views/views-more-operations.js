@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import TextTranslation from '../../../utils/text-translation';
 import { baiduMapKey, gettext, googleMapKey } from '@/utils/constants';
-import EventBus from '../../common/event-bus';
+import EventBus from '../../event-bus';
 import { EVENT_BUS_TYPE, VIEW_TYPE, VIEW_TYPE_ICON, VIEW_TYPE_LABEL } from '../../../metadata/constants';
 import Icon from '../../icon';
 import Tooltip from '@/components/tooltip';

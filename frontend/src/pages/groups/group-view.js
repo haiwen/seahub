@@ -17,8 +17,7 @@ import ReposSortMenu from '../../components/sort-menu';
 import { LIST_MODE, GRID_MODE } from '../../components/dir-view-mode/constants';
 import GroupOperationMenu from './group-op-menu';
 import Icon from '../../components/icon';
-import EventBus from '../../components/common/event-bus';
-import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
+import EventBus, { EVENT_BUS_TYPE } from '../../components/event-bus';
 
 import '../../css/group-view.css';
 

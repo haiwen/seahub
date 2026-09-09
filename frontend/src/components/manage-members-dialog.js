@@ -10,7 +10,7 @@ import toaster from './toast';
 import Loading from './loading';
 import GroupMembers from './group-members';
 import SelectUsersIcon from './select-members-to-share-with';
-import { eventBus } from './common/event-bus';
+import { eventBus } from './event-bus';
 import OpIcon from './op-icon';
 import Icon from './icon';
 

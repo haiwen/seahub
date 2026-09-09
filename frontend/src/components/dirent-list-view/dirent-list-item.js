@@ -10,7 +10,7 @@ import { imageThumbnailCenter, videoThumbnailCenter } from '../../utils/thumbnai
 import Rename from '../rename';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import OpIcon from '../../components/op-icon';
-import { EVENT_BUS_TYPE } from '../common/event-bus-type';
+import { EVENT_BUS_TYPE } from '../event-bus';
 import { Dirent } from '../../models';
 import { formatUnixWithTimezone } from '../../utils/time';
 import Icon from '../icon';

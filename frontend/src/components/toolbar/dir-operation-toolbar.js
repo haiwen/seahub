@@ -6,7 +6,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { enableSeadoc, gettext, onlyofficeSupportEditDocxf } from '../../utils/constants';
 import toaster from '../toast';
 import TipDialog from '../dialog/tip-dialog';
-import { EVENT_BUS_TYPE } from '../common/event-bus-type';
+import { EVENT_BUS_TYPE } from '../event-bus';
 import Icon from '../icon';
 import CustomDropdown from '../dropdown';
 

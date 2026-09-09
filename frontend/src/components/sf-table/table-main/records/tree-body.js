@@ -4,7 +4,7 @@ import Loading from '../../../loading';
 import { RightScrollbar } from '../../scrollbar';
 import InteractionMasks from '../../masks/interaction-masks';
 import Record from './record';
-import EventBus from '../../../common/event-bus';
+import EventBus from '../../../event-bus';
 import { EVENT_BUS_TYPE } from '@/metadata/constants';
 import { checkIsTreeNodeShown, checkTreeNodeHasChildNodes, getTreeNodeId, getTreeNodeKey, getValidKeyTreeNodeFoldedMap } from '../../utils/tree';
 import { isShiftKeyDown } from '../../../../utils/keyboard-utils';

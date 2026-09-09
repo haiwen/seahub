@@ -10,8 +10,7 @@ import Loading from '../../../components/loading';
 import { Link } from '@gatsbyjs/reach-router';
 import UserLink from '../user-link';
 import Paginator from '../../../components/paginator';
-import { eventBus } from '../../../components/common/event-bus';
-import { EVENT_BUS_TYPE } from '../../../components/common/event-bus-type';
+import { eventBus, EVENT_BUS_TYPE } from '../../../components/event-bus';
 import { formatWithTimezone } from '../../../utils/time';
 
 dayjs.extend(relativeTime);

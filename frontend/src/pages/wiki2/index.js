@@ -14,7 +14,7 @@ import SidePanel from './side-panel';
 import MainPanel from './main-panel';
 import PageUtils from './wiki-nav/page-utils';
 import LocalStorage from '../../utils/local-storage-utils';
-import { eventBus } from '../../components/common/event-bus';
+import { eventBus } from '../../components/event-bus';
 import { getNamePaths } from './utils';
 import ResizeBar from '../../components/resize-bar';
 import {

@@ -8,7 +8,7 @@ import ImageDialog from '../dialog/image-dialog';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
 import DirentsDraggedPreview from '../draggable/dirents-dragged-preview';
-import { EVENT_BUS_TYPE } from '../common/event-bus-type';
+import { EVENT_BUS_TYPE } from '../event-bus';
 import EmptyTip from '../empty-tip';
 import imageAPI from '../../utils/image-api';
 import { seafileAPI } from '../../utils/seafile-api';
