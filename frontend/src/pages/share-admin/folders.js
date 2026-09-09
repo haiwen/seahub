@@ -12,7 +12,7 @@ import toaster from '../../components/toast';
 import SharePermissionEditor from '../../components/select-editor/share-permission-editor';
 import SharedFolderInfo from '../../models/shared-folder-info';
 import PermSelect from '../../components/dialog/perm-select';
-import FixedWidthTable from '../../components/common/fixed-width-table';
+import FixedWidthTable from '../../components/fixed-width-table';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import OpIcon from '../../components/op-icon';
 import Icon from '../../components/icon';

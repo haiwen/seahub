@@ -14,7 +14,7 @@ import EmptyTip from '../../components/empty-tip';
 import UploadLink from '../../models/upload-link';
 import ShareAdminLink from '../../components/dialog/share-admin-link';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
-import FixedWidthTable from '../../components/common/fixed-width-table';
+import FixedWidthTable from '../../components/fixed-width-table';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import OpIcon from '../../components/op-icon';
 
