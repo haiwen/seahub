@@ -7,7 +7,7 @@ import toaster from '../../../components/toast';
 import Loading from '../../../components/loading';
 import wikiAPI from '../../../utils/wiki-api';
 import { INSERT_POSITION } from './constants';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 import '../css/add-new-page-dialog.css';
 

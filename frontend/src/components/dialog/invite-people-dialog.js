@@ -6,7 +6,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Modal, ModalBody, ModalFooter, Input, Button, Label } from 'reactstrap';
 import toaster from '../toast';
 import Loading from '../loading';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const InvitePeopleDialogPropTypes = {
   onInvitePeople: PropTypes.func.isRequired,

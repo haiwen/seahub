@@ -33,7 +33,7 @@ import LibDecryptDialog from '../../components/dialog/lib-decrypt-dialog';
 import FileUploader from '../../components/file-uploader/file-uploader';
 import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dirent-progress-dialog';
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
-import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
+import EventBus, { EVENT_BUS_TYPE, eventBus } from '../../components/event-bus';
 import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY, RECENTLY_USED_LIST_KEY } from '../../constants';
 import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, ROW_HEIGHT } from '../../metadata/constants';
 import { MetadataStatusProvider, FileOperationsProvider, MetadataMiddlewareProvider } from '../../hooks';
@@ -59,7 +59,6 @@ import Detail from '../../components/dirent-detail';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-toolbar';
 import ViewToolbar from '../../components/toolbar/view-toolbar';
-import EventBus, { eventBus } from '../../components/common/event-bus';
 import WebSocketClient from '../../utils/websocket-service';
 import Column from '@/metadata/model/column';
 

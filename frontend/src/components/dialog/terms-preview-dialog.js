@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, ModalBody } from 'reactstrap';
 import TermsPreviewWidget from '../terms-preview-widget';
 import { gettext } from '../../utils/constants';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const propTypes = {
   title: PropTypes.string,

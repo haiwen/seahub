@@ -5,7 +5,7 @@ import ClickOutside from '../../../click-outside';
 import Editor from './editor';
 import { Utils } from '../../../../utils/utils';
 import { EDITOR_CONTAINER as Z_INDEX_EDITOR_CONTAINER } from '../../constants/z-index';
-import EventBus from '../../../common/event-bus';
+import EventBus from '../../../event-bus';
 import { checkIsColumnEditable, getColumnOriginName } from '../../utils/column';
 import { checkCellValueChanged } from '../../utils/selection';
 import { getCellValueByColumn, getColumnOptionNameById, getColumnOptionNamesByIds } from '../../utils/cell';

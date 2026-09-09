@@ -19,8 +19,7 @@ import ViewModes from '../../components/view-modes';
 import ReposSortMenu from '../../components/sort-menu';
 import Icon from '../../components/icon';
 import CustomDropdown from '../../components/dropdown';
-import EventBus from '../../components/common/event-bus';
-import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
+import EventBus, { EVENT_BUS_TYPE } from '../../components/event-bus';
 
 const propTypes = {
   currentViewMode: PropTypes.string,

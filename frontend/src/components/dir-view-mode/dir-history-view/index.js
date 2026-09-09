@@ -8,8 +8,7 @@ import { transformCommitsToTableData } from './data-transformer';
 import { createHistoryColumns } from './columns';
 import CommitDetails from '../../dialog/commit-details';
 import UpdateRepoCommitLabels from '../../dialog/edit-repo-commit-labels';
-import { eventBus } from '../../common/event-bus';
-import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
+import { eventBus, EVENT_BUS_TYPE } from '../../event-bus';
 
 import './index.css';
 

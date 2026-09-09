@@ -6,7 +6,7 @@ import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { userAPI } from '../../utils/user-api';
 import toaster from '../toast';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import Loading from '../loading';
 
 const POLLING_INTERVAL = 2000; // 2 seconds

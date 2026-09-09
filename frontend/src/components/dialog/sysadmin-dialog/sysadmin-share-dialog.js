@@ -4,7 +4,7 @@ import { Modal, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 're
 import { gettext, LARGE_DIALOG_STYLE } from '../../../utils/constants';
 import SysAdminShareToUser from './sysadmin-share-to-user';
 import SysAdminShareToGroup from './sysadmin-share-to-group';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import '../../../css/share-link-dialog.css';
 
 const propTypes = {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import { gettext } from '../../../utils/constants';
 
 export default function DeleteWebHookDialog({ deleteWebhook, toggleDeleteDialog }) {

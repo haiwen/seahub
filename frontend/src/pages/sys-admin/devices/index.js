@@ -7,8 +7,7 @@ import { gettext } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
-import { EVENT_BUS_TYPE } from '../../../components/common/event-bus-type';
-import { eventBus } from '../../../components/common/event-bus';
+import { EVENT_BUS_TYPE, eventBus } from '../../../components/event-bus';
 
 const Devices = ({ children, ...commonProps }) => {
   const [isCleanBtnShown, setIsCleanBtnShown] = useState(false);

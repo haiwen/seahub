@@ -8,8 +8,7 @@ import SharedRepoListView from '../../components/shared-repo-list-view/shared-re
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import GroupOperationMenu from './group-op-menu';
 import Icon from '../../components/icon';
-import EventBus from '../../components/common/event-bus';
-import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
+import EventBus, { EVENT_BUS_TYPE } from '../../components/event-bus';
 
 const propTypes = {
   inAllLibs: PropTypes.bool,

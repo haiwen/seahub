@@ -7,7 +7,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Repo from '../../models/repo';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const shareRepoListItemProps = {
   repo: PropTypes.object.isRequired,

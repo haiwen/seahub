@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Icon from '../../../../icon';
 import ResizeColumnHandle from '../resize-column-handle';
-import EventBus from '../../../../common/event-bus';
+import EventBus from '../../../../event-bus';
 import { EVENT_BUS_TYPE } from '@/metadata/constants';
 import { checkIsNameColumn } from '../../../utils/column';
 import { MIN_COLUMN_WIDTH } from '../../../constants/grid';

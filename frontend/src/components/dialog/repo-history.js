@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, ModalBody } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import RepoHistoryTable from '../repo-history-view';
 
 import '../../css/repo-history.css';

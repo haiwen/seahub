@@ -14,7 +14,7 @@ import { RecordMetrics } from '../../sf-table/utils/record-metrics';
 import { menuHandlers } from '../utils/menuHandlers';
 import { useDirentContextMenu } from '../hooks/useDirentContextMenu';
 import { getCreateMenuList } from '../utils/contextMenuUtils';
-import EventBus from '@/components/common/event-bus';
+import EventBus from '@/components/event-bus';
 import { getRowById, getRowsByIds } from '@/components/sf-table/utils/table';
 import { useMetadataStatus } from '@/hooks';
 import { metadataAPI } from '@/metadata';

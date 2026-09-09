@@ -4,7 +4,7 @@ import { Button, Modal, Input, ModalBody, ModalFooter, Form, FormGroup, Label, A
 import { gettext, enableEncryptedLibrary, enableResetEncryptedRepoPassword, isEmailConfigured, repoPasswordMinLength, libraryTemplates } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { SeahubSelect } from '../select';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const propTypes = {
   libraryType: PropTypes.string.isRequired,

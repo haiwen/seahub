@@ -8,8 +8,7 @@ import OpMenu from '../../../components/dialog/op-menu';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
-import { eventBus } from '../../../components/common/event-bus';
-import { EVENT_BUS_TYPE } from '../../../components/common/event-bus-type';
+import { eventBus, EVENT_BUS_TYPE } from '../../../components/event-bus';
 
 const virusFileItemPropTypes = {
   resetPerPage: PropTypes.func,

@@ -8,7 +8,7 @@ import { gettext } from '../../utils/constants';
 import { useMetadata } from '../hooks';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { EVENT_BUS_TYPE, TREE_NODE_LEFT_INDENT, VIEWS_TYPE_FOLDER } from '../constants';
-import EventBus from '../../components/common/event-bus';
+import EventBus from '../../components/event-bus';
 
 import './index.css';
 

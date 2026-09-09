@@ -13,8 +13,7 @@ import UserNav from './user-nav';
 import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
-import { eventBus } from '../../../components/common/event-bus';
-import { EVENT_BUS_TYPE } from '../../../components/common/event-bus-type';
+import { eventBus, EVENT_BUS_TYPE } from '../../../components/event-bus';
 
 import './index.css';
 

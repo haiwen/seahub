@@ -17,8 +17,7 @@ import tagsAPI from '../../tag/api';
 import { getColumnByKey, getColumnOptions, getColumnOriginName } from '../utils/column';
 import ObjectUtils from '../../utils/object';
 import { NOT_DISPLAY_COLUMN_KEYS } from '../components/metadata-details/constants';
-import { eventBus } from '../../components/common/event-bus';
-import { EVENT_BUS_TYPE as DIRENT_EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
+import { eventBus, EVENT_BUS_TYPE as DIRENT_EVENT_BUS_TYPE } from '../../components/event-bus';
 
 dayjs.extend(utc);
 

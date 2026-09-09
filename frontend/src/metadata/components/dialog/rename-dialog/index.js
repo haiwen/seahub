@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, Input, ModalBody, ModalFooter, Alert } from 'reactstrap';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import { gettext } from '../../../../utils/constants';
 import { validateName } from '../../../../utils/utils';
 import { isEnter } from '../../../../utils/hotkey';

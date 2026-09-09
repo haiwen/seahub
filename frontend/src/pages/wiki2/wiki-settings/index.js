@@ -1,7 +1,7 @@
 import React, { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import LinkedRepoPanel from './linked-repo-panel';
 import { gettext } from '../../../utils/constants';
 

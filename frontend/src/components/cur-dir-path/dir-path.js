@@ -12,7 +12,7 @@ import { ALL_TAGS_ID } from '../../tag/constants';
 import OpIcon from '../../components/op-icon';
 import Icon from '../icon';
 import { getTrashPath } from '../dir-view-mode/dir-trash-view/utils';
-import EventBus from '../common/event-bus';
+import EventBus from '../event-bus';
 import CleanTrash from '../dialog/clean-trash';
 import ArchiveIcon from '../archive-icon';
 import Tooltip from '../tooltip';

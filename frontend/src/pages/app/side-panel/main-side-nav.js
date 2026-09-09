@@ -24,8 +24,7 @@ import {
 } from '../../../constants';
 import { isWorkWeixin } from '../../../components/wechat/weixin-utils';
 import WechatDialog from '../../../components/wechat/wechat-dialog';
-import { EVENT_BUS_TYPE } from '../../../components/common/event-bus-type';
-import EventBus from '../../../components/common/event-bus';
+import EventBus, { EVENT_BUS_TYPE } from '../../../components/event-bus';
 import OpIcon from '../../../components/op-icon';
 import Icon from '../../../components/icon';
 

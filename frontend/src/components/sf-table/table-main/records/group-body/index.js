@@ -14,7 +14,7 @@ import { checkIsColumnSupportDirectEdit, checkIsColumnFrozen, checkIsNameColumn,
 import { checkIsCellSupportOpenEditor } from '../../../utils/selection';
 import { GROUP_HEADER_HEIGHT, GROUP_ROW_TYPE, GROUP_VIEW_OFFSET } from '../../../constants/group';
 import { EVENT_BUS_TYPE } from '@/metadata/constants';
-import EventBus from '../../../../common/event-bus';
+import EventBus from '../../../../event-bus';
 import { ROW_HEIGHT } from '../../../../../metadata/constants';
 
 const GROUP_OVER_SCAN_ROWS = 10;

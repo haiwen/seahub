@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { gettext } from '../../utils/constants';
 import { EVENT_BUS_TYPE } from '../../metadata/constants';
 import TextTranslation from '../../utils/text-translation';
-import EventBus from '../common/event-bus';
+import EventBus from '../event-bus';
 import OpElement from '../../components/op-element';
 import OpIcon from '../../components/op-icon';
 import Icon from '../icon';

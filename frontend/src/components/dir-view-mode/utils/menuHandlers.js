@@ -1,7 +1,6 @@
 import TextTranslation from '@/utils/text-translation';
 import { lockFile, unlockFile, batchLockFile, batchUnlockFile, freezeDocument, unfreezeDocument, exportDocx, exportMarkdown, exportSdoc, openHistory, openViaClient, openByDefault, openWithOnlyOffice, toggleStar } from '@/utils/dirent-operations';
-import EventBus, { eventBus as globalEventBus } from '@/components/common/event-bus';
-import { EVENT_BUS_TYPE } from '@/components/common/event-bus-type';
+import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE } from '@/components/event-bus';
 import { Dirent } from '@/models';
 import { Utils } from '@/utils/utils';
 import { seafileAPI } from '@/utils/seafile-api';

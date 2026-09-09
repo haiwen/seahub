@@ -7,7 +7,7 @@ import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { Utils } from '../../../utils/utils';
 import UserSelect from '../../user-select';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 export default class AddDepartMemberV2Dialog extends React.Component {
 

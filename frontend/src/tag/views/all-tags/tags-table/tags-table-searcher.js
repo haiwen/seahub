@@ -5,7 +5,7 @@ import { useTags } from '../../../hooks';
 import { getSearchRule } from '../../../../components/sf-table/utils/search';
 import { getTreeNodeId, getTreeNodeKey } from '../../../../components/sf-table/utils/tree';
 import { getRowById } from '../../../../components/sf-table/utils/table';
-import EventBus from '../../../../components/common/event-bus';
+import EventBus from '../../../../components/event-bus';
 import { EVENT_BUS_TYPE } from '../../../../metadata/constants';
 
 const SUPPORT_SEARCH_COLUMNS_KEYS = [PRIVATE_COLUMN_KEY.TAG_NAME];

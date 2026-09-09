@@ -4,7 +4,7 @@ import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 import copy from '../copy-to-clipboard';
 import { gettext } from '../../utils/constants';
 import toaster from '../../components/toast';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const propTypes = {
   link: PropTypes.string.isRequired,

@@ -17,7 +17,7 @@ import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
 import { isMobile } from '../../../../utils/utils';
 import { addClassName, removeClassName, getEventClassName } from '../../../../utils/dom';
 import { isWindowsBrowser, isWebkitBrowser } from '../../utils';
-import EventBus from '../../../common/event-bus';
+import EventBus from '../../../event-bus';
 import { CANVAS_RIGHT_INTERVAL } from '../../constants/grid';
 import { GROUP_ROW_TYPE } from '../../constants/group';
 import { isNumber } from '../../../../utils/number';

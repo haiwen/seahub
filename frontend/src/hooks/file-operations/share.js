@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useCallback, useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import ModalPortal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
-import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
+import { EVENT_BUS_TYPE } from '../../components/event-bus';
 
 // This hook provides content about share
 const ShareFileContext = React.createContext(null);

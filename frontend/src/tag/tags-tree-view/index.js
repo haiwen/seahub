@@ -9,7 +9,7 @@ import { checkTreeNodeHasChildNodes, getTreeChildNodes, getTreeNodeDepth, getTre
 import { getRowById } from '../../components/sf-table/utils/table';
 import { SIDEBAR_INIT_LEFT_INDENT } from '../constants/sidebar-tree';
 import { EVENT_BUS_TYPE } from '../../metadata/constants';
-import { EVENT_BUS_TYPE as COMMON_EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
+import { EVENT_BUS_TYPE as COMMON_EVENT_BUS_TYPE } from '../../components/event-bus';
 
 import './index.css';
 

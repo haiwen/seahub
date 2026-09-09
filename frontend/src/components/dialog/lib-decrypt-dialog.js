@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, ModalBody, Form } from 'reactstrap';
 import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import SeahubModalCloseIcon from '../../components/common/seahub-modal-close';
+import SeahubModalCloseIcon from '../../components/seahub-modal-close';
 
 import '../../css/lib-decrypt.css';
 

@@ -9,8 +9,7 @@ import { AskPageProvider, SessionsProvider, DocumentsProvider, AIChatToolsProvid
 import { consumePendingAttachments } from './hooks/ai-chat-tools';
 import { ASK_PAGE_SLUG_ID } from './constants';
 import { chatAPI } from '../../../utils/chat-api';
-import EventBus from '../../common/event-bus';
-import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
+import EventBus, { EVENT_BUS_TYPE } from '../../event-bus';
 
 import './index.css';
 

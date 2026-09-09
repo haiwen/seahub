@@ -11,7 +11,7 @@ import TextTranslation from '../../utils/text-translation';
 import TreeSection from '../tree-section';
 import imageAPI from '../../utils/image-api';
 import { seafileAPI } from '../../utils/seafile-api';
-import { EVENT_BUS_TYPE } from '../common/event-bus-type';
+import { EVENT_BUS_TYPE } from '../event-bus';
 import CustomDropdown from '../dropdown';
 
 const propTypes = {

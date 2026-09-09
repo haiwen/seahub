@@ -13,7 +13,7 @@ import DetailItem from '../../../../components/dirent-detail/detail-item';
 import { getColumnDisplayName } from '../../../utils/column';
 import { createBMapZoomControl } from '../../map-controller';
 import { Utils } from '../../../../utils/utils';
-import { eventBus } from '../../../../components/common/event-bus';
+import { eventBus } from '../../../../components/event-bus';
 import { createZoomControl } from '../../map-controller/zoom';
 import ClickOutside from '../../../../components/click-outside';
 import GeolocationEditor from '../../cell-editors/geolocation-editor';

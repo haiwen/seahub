@@ -6,7 +6,7 @@ import { Utils } from '../../../utils/utils';
 import { siteRoot, thumbnailDefaultSize, enableThumbnailServer } from '../../../utils/constants';
 import { getParentDirFromRecord, getFileMTimeFromRecord } from '../../utils/cell';
 import { checkIsDir } from '../../utils/row';
-import EventBus from '@/components/common/event-bus';
+import EventBus from '@/components/event-bus';
 import { openFile } from '@/metadata/utils/file';
 import { EDITOR_TYPE } from '@/components/sf-table/constants/grid';
 import { EVENT_BUS_TYPE } from '@/metadata/constants';

@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody } from 'reactstrap';
 import { gettext, mediaUrl, siteName, canAddRepo } from '../../utils/constants';
-import Icon from '../icon';
-import '../../css/seahub-modal-header.css';
+import SeahubModalCloseIcon from '../seahub-modal-close';
 
 const propTypes = {
   toggleDialog: PropTypes.func.isRequired
@@ -19,11 +18,7 @@ class GuideForNewDialog extends React.Component {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalBody>
-          <button type="button" className="close seahub-modal-btn p-0" aria-label={gettext('Close')} title={gettext('Close')} onClick={this.toggle}>
-            <span className="seahub-modal-btn-inner">
-              <Icon symbol="close" className="w-4 h-4" />
-            </span>
-          </button>
+          <SeahubModalCloseIcon toggle={this.toggle} className="p-0 float-end" />
           <div className="p-2 text-center">
             <img src={`${mediaUrl}img/welcome.png`} width="408" alt="" />
             <h3 id="dialogTitle" className="mt-6 mb-4">{gettext('Welcome to {site_name_placeholder}').replace('{site_name_placeholder}', siteName)}</h3>

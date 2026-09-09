@@ -13,8 +13,7 @@ import { buildTableToolbarMenuOptions } from '../../metadata/utils/menu-builder'
 import { useMetadataStatus } from '../../hooks';
 import { getColumnByKey } from '../sf-table/utils/column';
 import Icon from '../icon';
-import EventBus, { eventBus as globalEventBus } from '../common/event-bus';
-import { EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '../common/event-bus-type';
+import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '../event-bus';
 import CustomDropdown from '../dropdown';
 import { setPendingAttachments } from '../dir-view-mode/dir-chat/hooks/ai-chat-tools';
 import { AttachmentObject } from '../dir-view-mode/dir-chat/models';

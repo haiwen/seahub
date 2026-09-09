@@ -2,8 +2,7 @@ import React, { useCallback, useState, useRef, useEffect } from 'react';
 import OpIcon from '../../op-icon';
 import { gettext } from '../../../utils/constants';
 import { KeyCodes } from '../../../constants';
-import { eventBus } from '../../common/event-bus';
-import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
+import { eventBus, EVENT_BUS_TYPE } from '../../event-bus';
 import Icon from '../../icon';
 import HistoryFilterSetter from './history-filter-setter';
 

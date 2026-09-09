@@ -15,8 +15,7 @@ import FixedWidthTable from '../../components/fixed-width-table';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import OpIcon from '../../components/op-icon';
 import Icon from '../../components/icon';
-import EventBus from '../../components/common/event-bus';
-import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
+import EventBus, { EVENT_BUS_TYPE } from '../../components/event-bus';
 
 class Content extends Component {
 

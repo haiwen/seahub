@@ -6,7 +6,7 @@ import TextTranslation from '../../utils/text-translation';
 import { Utils } from '../../utils/utils';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
-import { EVENT_BUS_TYPE } from '../common/event-bus-type';
+import { EVENT_BUS_TYPE } from '../event-bus';
 
 import '../../css/tip-for-new-file.css';
 

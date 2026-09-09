@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, Input, ModalBody, ModalFooter, Label, Form, FormGroup } from 'reactstrap';
 import { gettext } from '../../utils/constants';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,

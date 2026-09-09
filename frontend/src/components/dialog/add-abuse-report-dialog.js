@@ -5,7 +5,7 @@ import { gettext } from '../../utils/constants';
 import { SeahubSelect } from '../select';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../toast';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const propTypes = {
   sharedToken: PropTypes.string.isRequired,

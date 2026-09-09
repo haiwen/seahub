@@ -17,8 +17,7 @@ import { isWorkWeixin } from '../../../components/wechat/weixin-utils';
 import WechatDialog from '../../../components/wechat/wechat-dialog';
 import Icon from '../../../components/icon';
 import Tooltip from '../../../components/tooltip';
-import EventBus from '../../../components/common/event-bus';
-import { EVENT_BUS_TYPE } from '../../../components/common/event-bus-type';
+import EventBus, { EVENT_BUS_TYPE } from '../../../components/event-bus';
 
 import './main-side-nav-folded.css';
 

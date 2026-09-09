@@ -4,7 +4,7 @@ import { gettext } from '../../utils/constants';
 import Icon from '../icon';
 import Tooltip from '../tooltip';
 
-import '../../css/seahub-modal-header.css';
+import './seahub-modal-header.css';
 
 const SeahubModalHeader = ({ children, className = '', isShowClose = true, ...props }) => {
   const customCloseBtn = (

@@ -5,7 +5,7 @@ import { gettext, LARGE_DIALOG_STYLE } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import LibSubFolderSetUserPermissionDialog from './lib-sub-folder-set-user-permission-dialog';
 import LibSubFolderSetGroupPermissionDialog from './lib-sub-folder-set-group-permission-dialog';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 import '../../css/share-link-dialog.css';
 import '../../css/lib-sub-folder-permission-dialog.css';

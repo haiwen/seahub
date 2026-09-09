@@ -4,7 +4,7 @@ import { Button, Modal, ModalBody, ModalFooter, Input, Alert, FormGroup, Label }
 import { gettext } from '../../../utils/constants';
 import TermsPreviewWidget from '../../terms-preview-widget';
 import TermsEditorDialog from '../terms-editor-dialog';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 import '../../../css/terms-conditions-editor.css';
 

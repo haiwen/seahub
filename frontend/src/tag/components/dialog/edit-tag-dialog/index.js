@@ -4,7 +4,7 @@ import { Modal, ModalBody, ModalFooter, FormGroup, Input, Button, Alert, Label }
 import classnames from 'classnames';
 import IconBtn from '../../../../components/icon-btn';
 import toaster from '../../../../components/toast';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import { gettext } from '../../../../utils/constants';
 import { getTagColor, getTagId, getTagName } from '../../../utils/cell';
 import { isValidTagName } from '../../../utils/validate/tag';

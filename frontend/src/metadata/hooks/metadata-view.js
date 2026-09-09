@@ -24,7 +24,7 @@ import { useTags } from '../../tag/hooks';
 import { useFileOperations, useMetadataAIOperations, useMetadataStatus } from '../../hooks';
 import { getColumnByKey } from '../utils/column';
 import { getSearchRule } from '../../components/sf-table/utils/search';
-import EventBus from '@/components/common/event-bus';
+import EventBus from '@/components/event-bus';
 
 const MetadataViewContext = React.createContext(null);
 

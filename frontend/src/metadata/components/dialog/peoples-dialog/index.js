@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalFooter, Button, FormGroup, Label } from 'reactstrap';
 import CustomizeSelect from '../../../../components/customize-select';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import People from './people';
 import { gettext } from '../../../../utils/constants';
 import { useMetadataView } from '../../../hooks/metadata-view';

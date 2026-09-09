@@ -8,7 +8,7 @@ import RepoShareAdminShareLinks from './repo-share-admin/share-links';
 import RepoShareAdminUploadLinks from './repo-share-admin/upload-links';
 import RepoShareAdminUserShares from './repo-share-admin/user-shares';
 import RepoShareAdminGroupShares from './repo-share-admin/group-shares';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 import '../../css/repo-share-admin.css';
 

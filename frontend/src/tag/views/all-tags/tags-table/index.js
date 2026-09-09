@@ -9,7 +9,7 @@ import { createContextMenuOptions } from './context-menu-options';
 import { gettext } from '../../../../utils/constants';
 import { PRIVATE_COLUMN_KEY, VISIBLE_COLUMNS_KEYS } from '../../../constants';
 import { useTags } from '../../../hooks';
-import EventBus from '../../../../components/common/event-bus';
+import EventBus from '../../../../components/event-bus';
 import { EVENT_BUS_TYPE } from '../../../../metadata/constants';
 import { LOCAL_KEY_TREE_NODE_FOLDED } from '../../../../components/sf-table/constants/tree';
 import { isNumber } from '../../../../utils/number';

@@ -9,8 +9,7 @@ import Loading from '../../loading';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import SharePermissionEditor from '../../../components/select-editor/share-permission-editor';
-import EventBus from '../../common/event-bus';
-import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
+import EventBus, { EVENT_BUS_TYPE } from '../../event-bus';
 import OpIcon from '../../op-icon';
 
 const itemPropTypes = {

@@ -9,7 +9,7 @@ import Notification from '../notification';
 import Account from '../account';
 import ColorMode from '../color-mode';
 import Logout from '../logout';
-import { EVENT_BUS_TYPE } from '../common/event-bus-type';
+import { EVENT_BUS_TYPE } from '../event-bus';
 import tagsAPI from '../../tag/api';
 
 const propTypes = {
