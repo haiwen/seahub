@@ -6,7 +6,7 @@ import wikiAPI from '../../utils/wiki-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import { SeahubSelect } from '../select';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const propTypes = {
   toggleCancel: PropTypes.func.isRequired,

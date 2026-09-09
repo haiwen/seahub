@@ -3,7 +3,7 @@ import { gettext } from '../../utils/constants';
 import Icon from '../icon';
 import Tooltip from '../tooltip';
 
-import '../../css/seahub-modal-header.css';
+import '../seahub-modal-header/seahub-modal-header.css';
 
 const SeahubModalCloseIcon = (props) => {
   return (

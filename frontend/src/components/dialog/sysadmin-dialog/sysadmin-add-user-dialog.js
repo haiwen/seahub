@@ -4,7 +4,7 @@ import { Alert, Modal, ModalBody, ModalFooter, Button, Form, FormGroup, Label, I
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import SysAdminUserRoleEditor from '../../../components/select-editor/sysadmin-user-role-editor';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import Icon from '../../icon';
 
 const propTypes = {

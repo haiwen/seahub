@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Alert, Button, Modal, ModalBody, ModalFooter, Input, Label } from 'reactstrap';
-import SeahubModalHeader from '../../common/seahub-modal-header';
+import SeahubModalHeader from '../../seahub-modal-header';
 import { enableSeafileAI, gettext, isPro } from '../../../utils/constants';
 import wikiAPI from '../../../utils/wiki-api';
 import { Utils } from '../../../utils/utils';

@@ -5,7 +5,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { Button, Modal, ModalBody, ModalFooter, Table } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 import '../../css/list-created-files-dialog.css';
 

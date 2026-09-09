@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Modal, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import UserSelect from '../../user-select';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const propTypes = {
   createGroup: PropTypes.func.isRequired,

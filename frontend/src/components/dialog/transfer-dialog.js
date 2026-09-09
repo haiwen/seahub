@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalBody, ModalFooter,
   Nav, NavItem, NavLink, TabContent, TabPane, Label } from 'reactstrap';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import { seafileAPI } from '../../utils/seafile-api';
 import { systemAdminAPI } from '../../utils/system-admin-api';
 import { orgAdminAPI } from '../../utils/org-admin-api';

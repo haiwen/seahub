@@ -4,7 +4,7 @@ import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Modal, ModalBody, ModalFooter, Label, Input, Button } from 'reactstrap';
 import { Utils } from '../../utils/utils';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 class CreateGroupDialog extends React.Component {
 

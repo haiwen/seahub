@@ -8,7 +8,7 @@ import { userAPI } from '../../utils/user-api';
 import toaster from '../../components/toast';
 import { Utils } from '../../utils/utils';
 import SeahubIODialog from '../dialog/seahub-io-dialog';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 
 class OrgLogsExportExcelDialog extends React.Component {

@@ -13,7 +13,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 import toaster from '../toast';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import CustomPermissionManager from './custom-permission/custom-permission-manager';
 
 import '../../css/share-link-dialog.css';

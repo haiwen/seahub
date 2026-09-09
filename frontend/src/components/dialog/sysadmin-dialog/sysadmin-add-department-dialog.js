@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Modal, ModalBody, ModalFooter, Input, Form, FormGroup, Label } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const propTypes = {
   groupID: PropTypes.string,

@@ -6,7 +6,7 @@ import { gettext, orgID } from '../../../utils/constants';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import SearchInput from '../../search-input';
 import ClickOutside from '../../click-outside';
 import SearchEmptyTip from '../../../components/search-empty-tip';

@@ -7,7 +7,7 @@ import Icon from '../../../../icon';
 import CustomDropdownItem from '../../../../dropdown/item';
 import CommonOperationConfirmationDialog from '../../../../dialog/common-operation-confirmation-dialog';
 import { useAskPage, useSessions } from '../../hooks';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 import './index.css';
 

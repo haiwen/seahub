@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, InputGroup, InputGroupText, Input, Modal, ModalBody } from 'reactstrap';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import { Utils } from '../utils/utils';
 import { gettext } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';

@@ -6,7 +6,7 @@ import { gettext } from '../../../utils/constants';
 import { Utils, validateName } from '../../../utils/utils';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const propTypes = {
   parentNode: PropTypes.object,

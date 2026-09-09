@@ -5,7 +5,7 @@ import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 class DismissGroupDialog extends React.Component {
 

@@ -7,7 +7,7 @@ import toaster from '../toast';
 import UserSelect from '../user-select';
 import { orgAdminAPI } from '../../utils/org-admin-api';
 import OrgUserInfo from '../../models/org-user';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,

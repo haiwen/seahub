@@ -8,7 +8,7 @@ import { fileAccessLogAPI } from '../../utils/file-access-log-api';
 import toaster from '../toast';
 import Loading from '../loading';
 import EmptyTip from '../empty-tip';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 import '../../css/file-access-log.css';
 

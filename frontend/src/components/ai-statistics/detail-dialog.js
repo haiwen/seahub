@@ -5,7 +5,7 @@ import { Button, Input, Modal, ModalBody, ModalFooter } from 'reactstrap';
 
 import EmptyTip from '../empty-tip';
 import Loading from '../loading';
-import SeahubModalHeader from '../common/seahub-modal-header';
+import SeahubModalHeader from '../seahub-modal-header';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalFooter, Alert, Button, Input, InputGroup } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import Icon from '../icon';
 
 const propTypes = {

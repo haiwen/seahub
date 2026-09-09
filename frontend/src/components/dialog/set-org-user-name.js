@@ -4,7 +4,7 @@ import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const propTypes = {
   orgID: PropTypes.string,

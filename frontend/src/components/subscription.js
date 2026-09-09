@@ -6,7 +6,7 @@ import { gettext, serviceURL } from '../utils/constants';
 import { Utils } from '../utils/utils';
 import { subscriptionAPI } from '../utils/subscription-api';
 import Loading from './loading';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 import '../css/layout.css';
 import '../css/subscription.css';

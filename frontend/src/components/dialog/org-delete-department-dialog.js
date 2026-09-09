@@ -5,7 +5,7 @@ import { gettext, orgID } from '../../utils/constants';
 import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const propTypes = {
   groupName: PropTypes.string,

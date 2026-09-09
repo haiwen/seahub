@@ -4,7 +4,7 @@ import { Button, Modal, ModalBody, ModalFooter, Input, Form, FormGroup, Label, A
 import { gettext, orgID } from '../../utils/constants';
 import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,

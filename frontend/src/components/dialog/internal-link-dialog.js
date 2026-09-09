@@ -6,7 +6,7 @@ import copy from '../copy-to-clipboard';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const propTypes = {
   path: PropTypes.string.isRequired,

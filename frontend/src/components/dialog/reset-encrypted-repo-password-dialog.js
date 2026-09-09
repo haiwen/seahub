@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, ModalBody } from 'reactstrap';
 import { gettext, contactEmail } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,

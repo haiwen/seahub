@@ -6,7 +6,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 import toaster from '../toast';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const propTypes = {
   accepter: PropTypes.string.isRequired,

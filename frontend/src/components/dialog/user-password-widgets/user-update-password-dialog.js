@@ -6,7 +6,7 @@ import PasswordInput from './password-input';
 import { userAPI } from '../../../utils/user-api';
 import { gettext } from '../../../utils/constants';
 import { Utils, validatePassword } from '../../../utils/utils';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const propTypes = {
   toggle: PropTypes.func,

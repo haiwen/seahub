@@ -8,7 +8,7 @@ import { RepoInfo } from '../../models';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../toast';
 import { MODE_TYPE_MAP } from '../../constants';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const propTypes = {
   path: PropTypes.string.isRequired,

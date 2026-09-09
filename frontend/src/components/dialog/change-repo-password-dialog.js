@@ -5,7 +5,7 @@ import { gettext, repoPasswordMinLength } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../toast';
-import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,

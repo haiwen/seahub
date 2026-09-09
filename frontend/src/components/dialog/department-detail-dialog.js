@@ -9,7 +9,7 @@ import EmptyTip from '../empty-tip';
 import Loading from '../loading';
 import { eventBus } from '../event-bus';
 import Department from '../../models/department';
-import SeahubModalHeader from '../common/seahub-modal-header';
+import SeahubModalHeader from '../seahub-modal-header';
 import DepartmentGroup from './department-detail-widget/department-group';
 import DepartmentGroupMembers from './department-detail-widget/department-group-members';
 import DepartmentGroupMemberSelected from './department-detail-widget/department-group-member-selected';
