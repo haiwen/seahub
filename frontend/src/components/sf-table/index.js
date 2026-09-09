@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import TableMain from './table-main';
 
 import './index.css';

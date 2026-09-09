@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
-import { Utils } from '../../utils/utils';
-import { gettext } from '../../utils/constants';
-import UploadListItem from './upload-list-item';
-import ForbidUploadListItem from './forbid-upload-list-item';
+import PropTypes from 'prop-types';
 import CustomDropdown from '../../components/dropdown';
+import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import ForbidUploadListItem from './forbid-upload-list-item';
+import UploadListItem from './upload-list-item';
 
 const propTypes = {
   totalProgress: PropTypes.number.isRequired,

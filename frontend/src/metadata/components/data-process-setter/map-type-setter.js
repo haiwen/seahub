@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { EVENT_BUS_TYPE, MAP_TYPE, STORAGE_MAP_TYPE_KEY } from '../../constants';
 import { gettext } from '../../../utils/constants';
+import { EVENT_BUS_TYPE, MAP_TYPE, STORAGE_MAP_TYPE_KEY } from '../../constants';
 import RadioGroup from '../radio-group';
 
 const MAP_TYPES = [

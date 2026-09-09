@@ -1,6 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Modal, ModalBody } from 'reactstrap';
+import PropTypes from 'prop-types';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {

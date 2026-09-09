@@ -1,11 +1,11 @@
 import React, { useContext, useCallback, useMemo, useState, useRef } from 'react';
-import metadataAPI from '../api';
-import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
-import { PRIVATE_COLUMN_KEY, EVENT_BUS_TYPE } from '../constants';
 import { gettext, lang } from '../../utils/constants';
-import { OCRResultPopover } from '../components/popover';
+import { Utils } from '../../utils/utils';
+import metadataAPI from '../api';
 import FileTagsDialog from '../components/dialog/file-tags-dialog';
+import { OCRResultPopover } from '../components/popover';
+import { PRIVATE_COLUMN_KEY, EVENT_BUS_TYPE } from '../constants';
 
 // This hook provides content related to metadata ai operation
 const MetadataAIOperationsContext = React.createContext(null);

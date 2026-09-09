@@ -1,8 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Modal, ModalBody } from 'reactstrap';
-import { gettext } from '../../../../../utils/constants';
+import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
+import { gettext } from '../../../../../utils/constants';
 import ProcessDetails from './process-details';
 
 import './thought-process-dialog.css';

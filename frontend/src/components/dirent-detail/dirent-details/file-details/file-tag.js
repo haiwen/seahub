@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo, useState } from 'react';
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { v4 as uuidV4 } from 'uuid';
-import classnames from 'classnames';
-import { getDirentPath } from '../utils';
-import EditFileTagPopover from '../../../popover/edit-filetag-popover';
-import FileTagList from '../../../file-tag-list';
-import { Utils } from '../../../../utils/utils';
 import { gettext } from '../../../../utils/constants';
+import { Utils } from '../../../../utils/utils';
+import FileTagList from '../../../file-tag-list';
+import EditFileTagPopover from '../../../popover/edit-filetag-popover';
+import { getDirentPath } from '../utils';
 
 const FileTag = ({ repoID, dirent, path, repoTags, fileTagList, onFileTagChanged }) => {
   const [isEditFileTagShow, setEditFileTagShow] = useState(false);

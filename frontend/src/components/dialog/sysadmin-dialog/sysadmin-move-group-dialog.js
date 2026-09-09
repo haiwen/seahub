@@ -1,16 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Button, Modal, ModalBody, ModalFooter, Popover } from 'reactstrap';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import SeahubModalHeader from '@/components/seahub-modal-header';
+import SearchEmptyTip from '../../../components/search-empty-tip';
 import toaster from '../../../components/toast';
 import { gettext, orgID } from '../../../utils/constants';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
-import SeahubModalHeader from '@/components/seahub-modal-header';
-import SearchInput from '../../search-input';
 import ClickOutside from '../../click-outside';
-import SearchEmptyTip from '../../../components/search-empty-tip';
-import classnames from 'classnames';
+import SearchInput from '../../search-input';
 
 import '../../../css/department-select.css';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Utils } from '../../../../../utils/utils';
 import { gettext, siteRoot } from '../../../../../utils/constants';
+import { Utils } from '../../../../../utils/utils';
 
 class FolderRecord extends React.Component {
 

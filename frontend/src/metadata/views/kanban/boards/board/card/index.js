@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import Formatter from '../formatter';
-import { getCellValueByColumn, isValidCellValue } from '../../../../../utils/cell';
-import { CellType } from '../../../../../constants';
+import PropTypes from 'prop-types';
 import { Utils } from '../../../../../../utils/utils';
+import { CellType } from '../../../../../constants';
 import { useMetadataView } from '../../../../../hooks/metadata-view';
+import { getCellValueByColumn, isValidCellValue } from '../../../../../utils/cell';
+import Formatter from '../formatter';
 
 import './index.css';
 

@@ -1,12 +1,12 @@
 import React, { forwardRef, useCallback, useEffect, useState, useImperativeHandle, useRef } from 'react';
 import axios from 'axios';
 import classnames from 'classnames';
-import SearchInput from '../search-input';
 import { KeyCodes } from '../../constants';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import toaster from '../toast';
 import Options from '../option-editor/options';
+import SearchInput from '../search-input';
+import toaster from '../toast';
 
 const OptionEditorContainer = forwardRef(({
   isMultiple = false,

@@ -1,16 +1,16 @@
 import React, { useCallback, useState, useRef, useEffect, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { Modal, ModalBody, Input, Button } from 'reactstrap';
 import isHotkey from 'is-hotkey';
-import searchAPI from '../../utils/search-api';
+import PropTypes from 'prop-types';
 import { gettext, mediaUrl } from '../../utils/constants';
+import searchAPI from '../../utils/search-api';
 import { debounce, Utils } from '../../utils/utils';
-import toaster from '../toast';
-import Loading from '../loading';
-import Wiki2SearchResult from './wiki2-search-result';
-import IconBtn from '../icon-btn';
 import Icon from '../icon';
+import IconBtn from '../icon-btn';
+import Loading from '../loading';
+import toaster from '../toast';
 import Tooltip from '../tooltip';
+import Wiki2SearchResult from './wiki2-search-result';
 
 import './wiki2-search.css';
 

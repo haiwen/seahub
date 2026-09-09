@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SelectEditor from './select-editor';
 import { gettext, isEmailConfigured, canUseGlobalAddressBook } from '../../utils/constants';
+import SelectEditor from './select-editor';
 
 const propTypes = {
   isTextMode: PropTypes.bool.isRequired,

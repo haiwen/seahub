@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
-import Loading from '../../components/loading';
+import { hideMenu, handleContextClick } from '../../components/context-menu/actions';
+import ContextMenu from '../../components/context-menu/context-menu';
+import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import EmptyTip from '../../components/empty-tip';
 import LibsMobileThead from '../../components/libs-mobile-thead';
-import { LIST_MODE } from '../../components/dir-view-mode/constants';
-import ContextMenu from '../../components/context-menu/context-menu';
-import { hideMenu, handleContextClick } from '../../components/context-menu/actions';
-import Item from './item';
+import Loading from '../../components/loading';
 import RepoListCard from '../../components/repo-list-card/repo-list-card';
+import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import Item from './item';
 
 class Content extends Component {
 

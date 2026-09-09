@@ -1,6 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
 import { formatWithTimezone } from '../../../../utils/time';
 
 const TimeFormatter = ({ record }) => {

@@ -1,17 +1,17 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
-import { gettext, siteRoot } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import PropTypes from 'prop-types';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
-import UserLink from '../user-link';
-import LogUserSelector from '../../dashboard/log-user-selector';
+import { gettext, siteRoot } from '../../../utils/constants';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { Utils } from '../../../utils/utils';
 import LogRepoSelector from '../../dashboard/log-repo-selector';
+import LogUserSelector from '../../dashboard/log-user-selector';
+import UserLink from '../user-link';
 
 dayjs.extend(relativeTime);
 

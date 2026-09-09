@@ -1,24 +1,24 @@
 import React, { useMemo, useState } from 'react';
-import { GridUtilsAdapter } from '@/components/sf-table/utils/grid-utils-adapter';
-import CellFormatter from '../../components/cell-formatter';
-import Editor from '../../components/cell-editors/editor';
-import { CellType, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '@/metadata/constants';
-import { getColumnDisplayName } from '../../utils/column';
-import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME } from '../../constants/column/icon';
-import { buildTableMenuOptions } from '@/metadata/utils/menu-builder';
-import { checkIsDir } from '@/metadata/utils/row';
-import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '@/metadata/utils/cell';
-import TextTranslation from '@/utils/text-translation';
-import { openInNewTab, openParentFolder } from '@/metadata/utils/file';
 import { DropdownItem, Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
-import Icon from '@/components/icon';
-import { POPUP_EDITOR_COLUMN_TYPES } from '@/metadata/constants/column/type';
-import { EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS } from '@/metadata/constants/column/private';
-import { DROPDOWN_SUBMENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
-import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '@/components/event-bus';
 import { setPendingAttachments } from '@/components/dir-view-mode/dir-chat/hooks/ai-chat-tools';
 import { AttachmentObject } from '@/components/dir-view-mode/dir-chat/models';
+import { DROPDOWN_SUBMENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
+import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '@/components/event-bus';
+import Icon from '@/components/icon';
+import { GridUtilsAdapter } from '@/components/sf-table/utils/grid-utils-adapter';
+import { CellType, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '@/metadata/constants';
+import { EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS } from '@/metadata/constants/column/private';
+import { POPUP_EDITOR_COLUMN_TYPES } from '@/metadata/constants/column/type';
+import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '@/metadata/utils/cell';
+import { openInNewTab, openParentFolder } from '@/metadata/utils/file';
+import { buildTableMenuOptions } from '@/metadata/utils/menu-builder';
+import { checkIsDir } from '@/metadata/utils/row';
+import TextTranslation from '@/utils/text-translation';
 import { Utils } from '@/utils/utils';
+import Editor from '../../components/cell-editors/editor';
+import CellFormatter from '../../components/cell-formatter';
+import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME } from '../../constants/column/icon';
+import { getColumnDisplayName } from '../../utils/column';
 
 export const adaptMetadataColumnsToSfTable = (repoID, repoInfo, metadataColumns) => {
   if (!Array.isArray(metadataColumns)) {

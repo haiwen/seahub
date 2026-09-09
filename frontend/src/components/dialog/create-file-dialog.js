@@ -1,9 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Button, Modal, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
+import PropTypes from 'prop-types';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import { gettext } from '../../utils/constants';
 import { Utils, validateName } from '../../utils/utils';
-import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const propTypes = {
   fileType: PropTypes.string,

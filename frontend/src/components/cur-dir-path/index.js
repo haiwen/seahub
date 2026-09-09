@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SortOptionsDialog from '../../components/dialog/sort-options';
-import DirPath from './dir-path';
-import withDynamicPathWidth from './withDynamicPathWidth';
-import Icon from '../icon';
 import {
   SETTINGS_MODE,
   TRASH_MODE
 } from '../../components/dir-view-mode/constants';
+import Icon from '../icon';
+import DirPath from './dir-path';
+import withDynamicPathWidth from './withDynamicPathWidth';
 
 // Wrap DirPath with dynamic width HOC (without extra wrapper)
 const DirPathWithDynamicWidth = withDynamicPathWidth(DirPath);

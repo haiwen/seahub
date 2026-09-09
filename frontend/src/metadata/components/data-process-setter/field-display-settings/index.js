@@ -1,13 +1,13 @@
 import React, { useRef, useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
+import { Transition } from 'react-transition-group';
 import { Label } from 'reactstrap';
 import classnames from 'classnames';
-import { Transition } from 'react-transition-group';
-import FieldItem from './field-item';
+import PropTypes from 'prop-types';
+import Tooltip from '@/components/tooltip';
 import { gettext } from '@/utils/constants';
 import Icon from '../../../../components/icon';
 import { Utils } from '../../../../utils/utils';
-import Tooltip from '@/components/tooltip';
+import FieldItem from './field-item';
 
 import './index.css';
 

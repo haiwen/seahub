@@ -1,13 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
 import { Modal, ModalBody } from 'reactstrap';
 import classnames from 'classnames';
+import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
+import CustomDropdown from '../../../components/dropdown';
+import Rename from '../../../components/rename';
 import { gettext, filePath } from '../../../utils/constants';
 import URLDecorator from '../../../utils/url-decorator';
-import Rename from '../../../components/rename';
 import { isMobile } from '../../../utils/utils';
-import CustomDropdown from '../../../components/dropdown';
 
 import '../../../css/history-record-item.css';
 

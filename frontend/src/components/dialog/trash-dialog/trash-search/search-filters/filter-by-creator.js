@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import isHotkey from 'is-hotkey';
+import PropTypes from 'prop-types';
+import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
+import { SEARCH_FILTERS_KEY } from '../../../../../constants';
 import { gettext } from '../../../../../utils/constants';
-import { Utils } from '../../../../../utils/utils';
-import UserItem from './user-item';
 import { seafileAPI } from '../../../../../utils/seafile-api';
+import { Utils } from '../../../../../utils/utils';
+import Icon from '../../../../icon';
 import ModalPortal from '../../../../modal-portal';
 import toaster from '../../../../toast';
-import { SEARCH_FILTERS_KEY } from '../../../../../constants';
-import Icon from '../../../../icon';
-import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
+import UserItem from './user-item';
 
 import './filter-by-creator.css';
 

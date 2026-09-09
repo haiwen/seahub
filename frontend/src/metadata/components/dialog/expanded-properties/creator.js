@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { getCellValueByColumn } from '../../../utils/cell';
-import Collaborator from '../../cell-formatter/collaborator';
-import { useCollaborators } from '../../../hooks';
 import { mediaUrl } from '../../../../utils/constants';
+import { useCollaborators } from '../../../hooks';
+import { getCellValueByColumn } from '../../../utils/cell';
 import { isValidEmail } from '../../../utils/validate';
+import Collaborator from '../../cell-formatter/collaborator';
 
 const Creator = ({ record, column }) => {
   const [collaborator, setCollaborator] = useState(null);

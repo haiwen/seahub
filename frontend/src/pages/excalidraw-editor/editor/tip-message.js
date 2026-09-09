@@ -1,8 +1,8 @@
 import React from 'react';
 import dayjs from 'dayjs';
-import EventBus from '../utils/event-bus';
-import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
+import { gettext } from '../../../utils/constants';
+import EventBus from '../utils/event-bus';
 
 class TipMessage extends React.Component {
   constructor(props) {

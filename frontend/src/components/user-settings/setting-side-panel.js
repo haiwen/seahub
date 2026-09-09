@@ -1,7 +1,7 @@
 import React from 'react';
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import Logo from '../logo';
-import classnames from 'classnames';
 import SideNav from './side-nav';
 
 const propTypes = {

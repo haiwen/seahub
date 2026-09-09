@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import HistoryFilterPopover from './history-filter-popover';
+import PropTypes from 'prop-types';
+import OpIcon from '@/components/op-icon';
 import { gettext } from '../../../utils/constants';
 import { isEnter, isSpace } from '../../../utils/hotkey';
 import { HISTORY_MODE } from '../constants';
-import OpIcon from '@/components/op-icon';
+import HistoryFilterPopover from './history-filter-popover';
 
 const DEFAULT_FILTER = {
   date: { value: '', from: null, to: null },

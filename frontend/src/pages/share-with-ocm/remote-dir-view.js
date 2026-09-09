@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import axios from 'axios';
-import { Utils } from '../../utils/utils';
-import { seafileAPI } from '../../utils/seafile-api';
-import { siteRoot, gettext } from '../../utils/constants';
+import PropTypes from 'prop-types';
 import toaster from '../../components/toast';
-import DirPathBar from './remote-dir-path';
+import { siteRoot, gettext } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import DirContent from './remote-dir-content';
+import DirPathBar from './remote-dir-path';
 
 import '../../css/lib-content-view.css';
 

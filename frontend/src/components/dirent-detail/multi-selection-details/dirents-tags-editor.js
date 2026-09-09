@@ -1,19 +1,19 @@
 import React, { useCallback, useMemo, useState, useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { Popover } from 'reactstrap';
+import PropTypes from 'prop-types';
+import { KeyCodes } from '../../../constants';
 import Editor from '../../../metadata/components/cell-editors/tags-editor';
 import DeleteTag from '../../../metadata/components/cell-editors/tags-editor/delete-tags';
-import { getRowById } from '../../sf-table/utils/table';
-import { gettext } from '../../../utils/constants';
-import { KeyCodes } from '../../../constants';
-import { getEventClassName } from '../../../utils/dom';
 import { PRIVATE_COLUMN_KEY, EVENT_BUS_TYPE } from '../../../metadata/constants';
-import { useTags } from '../../../tag/hooks';
-import tagsAPI from '../../../tag/api';
-import { Utils } from '../../../utils/utils';
-import toaster from '../../toast';
 import { getCellValueByColumn } from '../../../metadata/utils/cell';
+import tagsAPI from '../../../tag/api';
+import { useTags } from '../../../tag/hooks';
 import { getTagId, getTagName } from '../../../tag/utils/cell';
+import { gettext } from '../../../utils/constants';
+import { getEventClassName } from '../../../utils/dom';
+import { Utils } from '../../../utils/utils';
+import { getRowById } from '../../sf-table/utils/table';
+import toaster from '../../toast';
 
 const TAGS_EDITOR_WIDTH = 400;
 const EDITOR_VIEWPORT_MARGIN = 8;

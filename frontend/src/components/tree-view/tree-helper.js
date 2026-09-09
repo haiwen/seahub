@@ -1,7 +1,7 @@
+import Dirent from '../../models/dirent';
 import { Utils } from '../../utils/utils';
 import Tree from './tree';
 import TreeNode from './tree-node';
-import Dirent from '../../models/dirent';
 
 class TreeHelper {
 

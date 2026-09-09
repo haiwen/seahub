@@ -1,20 +1,20 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { toKeyCode } from 'is-hotkey';
-import toaster from '../../../components/toast';
+import HeaderDropdownMenu from '@/components/sf-table/table-main/records-header/dropdown-menu';
+import CellType from '@/metadata/constants/column/type';
+import { useTags } from '@/tag/hooks';
 import SFTable from '../../../components/sf-table';
-import { useMetadataView } from '../../hooks/metadata-view';
+import toaster from '../../../components/toast';
 import { useMetadataStatus } from '../../../hooks';
-import { Utils } from '../../../utils/utils';
 import { isModZ, isModShiftZ } from '../../../utils/hotkey';
-import { getValidGroupbys } from '../../utils/group';
-import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, MAX_LOAD_NUMBER, TABLE_NOT_DISPLAY_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../../constants';
-import { adaptMetadataColumnsToSfTable, useMetadataTableAdapter } from './adapter';
+import { Utils } from '../../../utils/utils';
 import ExpandedPropertiesDialog from '../../components/dialog/expanded-properties';
+import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, MAX_LOAD_NUMBER, TABLE_NOT_DISPLAY_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../../constants';
+import { useMetadataView } from '../../hooks/metadata-view';
 import { getCellValueByColumn, getTagsFromRecord, isValidCellValue } from '../../utils/cell';
 import { getFormatRecordData } from '../../utils/cell/cell-format-utils';
-import CellType from '@/metadata/constants/column/type';
-import HeaderDropdownMenu from '@/components/sf-table/table-main/records-header/dropdown-menu';
-import { useTags } from '@/tag/hooks';
+import { getValidGroupbys } from '../../utils/group';
+import { adaptMetadataColumnsToSfTable, useMetadataTableAdapter } from './adapter';
 
 const Table = () => {
   const [isLoadingMore, setLoadingMore] = useState(false);

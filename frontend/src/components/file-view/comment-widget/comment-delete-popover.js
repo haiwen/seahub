@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useEffect } from 'react';
-import isHotkey from 'is-hotkey';
 import { Button, UncontrolledPopover } from 'reactstrap';
+import isHotkey from 'is-hotkey';
 import { getEventClassName } from '@/utils/dom';
 import { gettext } from '../../../utils/constants';
 

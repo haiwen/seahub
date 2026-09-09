@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import SimpleViewer from './simple-viewer';
 import editorApi from './editor-api';
+import SimpleViewer from './simple-viewer';
 
 import './index.css';
 

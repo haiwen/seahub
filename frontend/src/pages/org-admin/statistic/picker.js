@@ -1,8 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
 import Calendar from '@seafile/seafile-calendar';
 import DatePicker from '@seafile/seafile-calendar/lib/Picker';
+import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
 import { translateCalendar } from '../../../utils/date-format-utils';
 import 'dayjs/locale/zh-cn';
 import 'dayjs/locale/en-gb';

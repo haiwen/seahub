@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { gettext, isPro } from '../../../../utils/constants';
-import Icon from '../../../../components/icon';
+import PropTypes from 'prop-types';
 import CustomDropdown from '../../../../components/dropdown';
+import Icon from '../../../../components/icon';
+import { gettext, isPro } from '../../../../utils/constants';
 
 const LEFT_INDENT = 20;
 

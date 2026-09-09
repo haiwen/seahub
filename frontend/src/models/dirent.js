@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { lang } from '../utils/constants';
 import { Utils } from '../utils/utils';
 import FileTag from './file-tag';
-import { lang } from '../utils/constants';
 
 import 'dayjs/locale/ar';
 import 'dayjs/locale/de';

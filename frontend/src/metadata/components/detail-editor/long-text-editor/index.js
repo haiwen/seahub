@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import LongTextFormatter from '../../cell-formatter/long-text';
-import Editor from '../../cell-editors/long-text-editor';
 import { gettext } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
+import Editor from '../../cell-editors/long-text-editor';
+import LongTextFormatter from '../../cell-formatter/long-text';
 
 import './index.css';
 

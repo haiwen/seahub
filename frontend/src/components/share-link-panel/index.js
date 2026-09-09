@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ShareLink from '../../models/share-link';
 import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import ShareLink from '../../models/share-link';
-import toaster from '../toast';
 import Loading from '../loading';
-import LinkDetails from './link-details';
-import LinkCreation from './link-creation';
-import LinkList from './link-list';
-import LinkAuthenticatedUsers from './link-authenticated-users';
+import toaster from '../toast';
 import LinkAuthenticatedEmails from './link-authenticated-emails';
+import LinkAuthenticatedUsers from './link-authenticated-users';
+import LinkCreation from './link-creation';
+import LinkDetails from './link-details';
+import LinkList from './link-list';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,

@@ -1,15 +1,15 @@
 import React, { useCallback } from 'react';
-import Loading from '../../components/loading';
 import CenteredLoading from '../../components/centered-loading';
-import Table from './table';
+import Loading from '../../components/loading';
+import { gettext } from '../../utils/constants';
+import { VIEW_TYPE } from '../constants';
+import { useMetadataView } from '../hooks/metadata-view';
+import Card from './card';
 import Gallery from './gallery';
 import Kanban from './kanban';
 import Map from './map';
-import Card from './card';
 import Statistics from './statistics';
-import { useMetadataView } from '../hooks/metadata-view';
-import { VIEW_TYPE } from '../constants';
-import { gettext } from '../../utils/constants';
+import Table from './table';
 
 const View = () => {
   const { isLoading, isBeingBuilt, metadata, errorMessage } = useMetadataView();

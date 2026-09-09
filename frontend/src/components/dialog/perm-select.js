@@ -1,11 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Modal, ModalBody } from 'reactstrap';
-import { Utils } from '../../utils/utils';
+import PropTypes from 'prop-types';
 import CustomPermission from '../../models/custom-permission';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 import toaster from '../toast';
-import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {
   repoID: PropTypes.string,

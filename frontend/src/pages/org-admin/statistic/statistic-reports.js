@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
-import MainPanelTopbar from '../main-panel-topbar';
-import dayjs from 'dayjs';
-import StatisticNav from './statistic-nav';
 import { Button, Input } from 'reactstrap';
+import dayjs from 'dayjs';
 import { siteRoot, gettext, orgID, serviceURL } from '../../../utils/constants';
+import MainPanelTopbar from '../main-panel-topbar';
+import StatisticNav from './statistic-nav';
 
 class OrgStatisticReports extends React.Component {
 

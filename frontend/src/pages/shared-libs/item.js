@@ -1,21 +1,21 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import { DropdownItem } from 'reactstrap';
 import { Link, navigate } from '@gatsbyjs/reach-router';
-import { gettext, siteRoot, isPro } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
-import toaster from '../../components/toast';
-import ModalPortal from '../../components/modal-portal';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import PropTypes from 'prop-types';
 import ShareDialog from '../../components/dialog/share-dialog';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
-import OpIcon from '../../components/op-icon';
 import CustomDropdown from '../../components/dropdown';
-import MobileItemMenu from '../../components/mobile-item-menu';
-import { formatWithTimezone } from '../../utils/time';
 import EventBus, { EVENT_BUS_TYPE } from '../../components/event-bus';
+import MobileItemMenu from '../../components/mobile-item-menu';
+import ModalPortal from '../../components/modal-portal';
+import OpIcon from '../../components/op-icon';
+import toaster from '../../components/toast';
+import { gettext, siteRoot, isPro } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { formatWithTimezone } from '../../utils/time';
+import { Utils } from '../../utils/utils';
 
 
 dayjs.extend(relativeTime);

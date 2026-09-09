@@ -3,10 +3,10 @@ import {
   reconcileElements,
   restoreElements,
 } from '@excalidraw/excalidraw';
-import { getSyncableElements } from '.';
 import isUrl from 'is-url';
 import context from '../context';
 import { formatImageUrlFromExternalLink } from '../utils/common-utils';
+import { getSyncableElements } from '.';
 
 class ServerScreenCache {
   static cache = new Map();

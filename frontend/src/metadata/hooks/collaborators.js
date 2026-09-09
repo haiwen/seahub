@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import React, { useContext, useState, useCallback, useEffect, useRef } from 'react';
-import { UserService } from '../services';
 import { mediaUrl } from '../../utils/constants';
-import { isValidEmail } from '../utils/validate';
-import User from '../model/user';
 import metadataAPI from '../api';
+import User from '../model/user';
+import { UserService } from '../services';
+import { isValidEmail } from '../utils/validate';
 
 const CollaboratorsContext = React.createContext(null);
 

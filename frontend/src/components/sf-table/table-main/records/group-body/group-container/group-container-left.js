@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import GroupHeaderLeft from './group-header-left';
 import { GROUP_FROZEN_HEADER as Z_INDEX_GROUP_FROZEN_HEADER } from '../../../../constants/z-index';
+import GroupHeaderLeft from './group-header-left';
 
 class GroupContainerLeft extends Component {
 

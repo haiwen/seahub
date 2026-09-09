@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import DirentListView from '../../components/dirent-list-view/dirent-list-view';
 import DirentNoneView from '../../components/dirent-list-view/dirent-none-view';
 import RepoInfoBar from '../../components/repo-info-bar';
-import DirentListView from '../../components/dirent-list-view/dirent-list-view';
 import Loading from '../loading';
 
 const propTypes = {

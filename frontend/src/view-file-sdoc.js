@@ -1,12 +1,12 @@
 import React, { Suspense } from 'react';
-import { createRoot } from 'react-dom/client';
 import { I18nextProvider } from 'react-i18next';
-import i18n from './_i18n/i18n-sdoc-editor';
-import { Utils } from './utils/utils';
-import Loading from './components/loading';
-import SdocEditor from './pages/sdoc/sdoc-editor';
-import { MetadataMiddlewareProvider, MetadataStatusProvider } from './hooks';
 import { SimpleViewer } from '@seafile/seafile-sdoc-editor';
+import { createRoot } from 'react-dom/client';
+import i18n from './_i18n/i18n-sdoc-editor';
+import Loading from './components/loading';
+import { MetadataMiddlewareProvider, MetadataStatusProvider } from './hooks';
+import SdocEditor from './pages/sdoc/sdoc-editor';
+import { Utils } from './utils/utils';
 
 const { serviceURL, avatarURL, siteRoot, lang, mediaUrl, isPro, fileServerRoot } = window.app.config;
 const { username, name } = window.app.userInfo;

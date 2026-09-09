@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../../utils/seafile-api';
 import { siteRoot, gettext, enableRepoSnapshotLabel } from '../../../utils/constants';
-import Loading from '../../loading';
-import SFTable from '../../sf-table';
-import { transformCommitsToTableData } from './data-transformer';
-import { createHistoryColumns } from './columns';
+import { seafileAPI } from '../../../utils/seafile-api';
 import CommitDetails from '../../dialog/commit-details';
 import UpdateRepoCommitLabels from '../../dialog/edit-repo-commit-labels';
 import { eventBus, EVENT_BUS_TYPE } from '../../event-bus';
+import Loading from '../../loading';
+import SFTable from '../../sf-table';
+import { createHistoryColumns } from './columns';
+import { transformCommitsToTableData } from './data-transformer';
 
 import './index.css';
 

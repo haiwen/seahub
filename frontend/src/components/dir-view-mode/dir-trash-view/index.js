@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import deepCopy from 'deep-copy';
-import { repoTrashAPI } from './api';
-import { ensureLeadingSlash, generateTrashItem, getTrashPath, isFiltersValid, transformTrashListToTableData } from './utils';
+import { gettext, siteRoot } from '../../../utils/constants';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { Utils } from '../../../utils/utils';
+import EventBus, { eventBus, EVENT_BUS_TYPE } from '../../event-bus';
 import Loading from '../../loading';
 import SFTable from '../../sf-table';
-import EventBus, { eventBus, EVENT_BUS_TYPE } from '../../event-bus';
-import { Utils } from '../../../utils/utils';
-import { gettext, siteRoot } from '../../../utils/constants';
 import toaster from '../../toast';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { repoTrashAPI } from './api';
+import { ensureLeadingSlash, generateTrashItem, getTrashPath, isFiltersValid, transformTrashListToTableData } from './utils';
 
 import './index.css';
 

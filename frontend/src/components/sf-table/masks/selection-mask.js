@@ -1,6 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import CellMask from './cell-mask';
 
 function SelectionMask({ innerRef, selectedPosition, getSelectedDimensions, children, className }) {

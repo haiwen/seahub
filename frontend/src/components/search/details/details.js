@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Utils } from '../../../utils/utils';
-import FileDetails from '../../dirent-detail/dirent-details/file-details';
-import DirDetails from '../../dirent-detail/dirent-details/dir-details';
 import { useMetadataStatus } from '../../../hooks';
-import tagsAPI from '../../../tag/api';
 import { PER_LOAD_NUMBER } from '../../../metadata/constants';
-import { normalizeColumns } from '../../../tag/utils/column';
+import tagsAPI from '../../../tag/api';
 import { TAGS_DEFAULT_SORT } from '../../../tag/constants/sort';
 import TagsData from '../../../tag/model/tagsData';
+import { normalizeColumns } from '../../../tag/utils/column';
+import { Utils } from '../../../utils/utils';
+import DirDetails from '../../dirent-detail/dirent-details/dir-details';
+import FileDetails from '../../dirent-detail/dirent-details/file-details';
 import toaster from '../../toast';
 
 const Details = ({ repoID, path, dirent, direntDetail }) => {

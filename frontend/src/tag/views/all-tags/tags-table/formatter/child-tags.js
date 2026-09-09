@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
+import { getRowsByIds } from '../../../../../components/sf-table/utils/table';
 import NumberFormatter from '../../../../../metadata/components/cell-formatter/number';
 import { useTags } from '../../../../hooks';
-import { getRowsByIds } from '../../../../../components/sf-table/utils/table';
 
 const ChildTagsFormatter = ({ record, column }) => {
   const { tagsData } = useTags();

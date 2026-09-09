@@ -1,11 +1,11 @@
 import React, { useMemo, useCallback, useState } from 'react';
 import { Button } from 'reactstrap';
-import { gettext } from '../../../utils/constants';
-import Icon from '../../../components/icon';
-import HideColumnPopover from '../popover/hidden-column-popover';
-import { useMetadataDetails } from '../../hooks';
-import { useMetadataStatus } from '../../../hooks';
 import Tooltip from '@/components/tooltip';
+import Icon from '../../../components/icon';
+import { useMetadataStatus } from '../../../hooks';
+import { gettext } from '../../../utils/constants';
+import { useMetadataDetails } from '../../hooks';
+import HideColumnPopover from '../popover/hidden-column-popover';
 
 const SettingsIcon = () => {
   const [isShowSetter, setShowSetter] = useState(false);

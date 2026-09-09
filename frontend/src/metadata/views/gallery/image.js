@@ -1,9 +1,9 @@
 import React, { useCallback, useState, useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { Utils } from '../../../utils/utils';
-import { gettext } from '../../../utils/constants';
+import PropTypes from 'prop-types';
 import Icon from '../../../components/icon';
+import { gettext } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
 
 const Image = ({
   isSelected,

@@ -1,5 +1,4 @@
 import assign from 'object-assign';
-
 import { store } from './helpers';
 
 export const MENU_SHOW = 'REACT_CONTEXTMENU_SHOW';

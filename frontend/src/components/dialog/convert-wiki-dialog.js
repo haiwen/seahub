@@ -1,12 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Button, Modal, ModalBody, ModalFooter, Input, Label } from 'reactstrap';
-import { gettext, isPro } from '../../utils/constants';
-import wikiAPI from '../../utils/wiki-api';
-import { Utils } from '../../utils/utils';
-import toaster from '../toast';
-import { SeahubSelect } from '../select';
+import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
+import { gettext, isPro } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import wikiAPI from '../../utils/wiki-api';
+import { SeahubSelect } from '../select';
+import toaster from '../toast';
 
 const propTypes = {
   toggleCancel: PropTypes.func.isRequired,

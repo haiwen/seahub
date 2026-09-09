@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import CustomDropdown from '../../../../components/dropdown';
+import Icon from '../../../../components/icon';
 import toaster from '../../../../components/toast';
 import { gettext } from '../../../../utils/constants';
 import { getWikPageLink } from '../../utils';
 import { INSERT_POSITION } from '../constants';
-import Icon from '../../../../components/icon';
-import CustomDropdown from '../../../../components/dropdown';
 
 const { serviceURL: serviceUrl } = window.app.config;
 

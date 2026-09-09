@@ -1,5 +1,5 @@
 import TreeHelper from './tree-helper';
-import TreeView from './tree-view';
 import TreeNode from './tree-node';
+import TreeView from './tree-view';
 
 export { TreeHelper, TreeView, TreeNode };

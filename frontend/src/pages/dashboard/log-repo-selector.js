@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Input, Popover } from 'reactstrap';
-import { gettext } from '../../utils/constants';
-import SearchEmptyTip from '../../components/search-empty-tip';
-import { Utils } from '../../utils/utils';
-import toaster from '../../components/toast';
+import PropTypes from 'prop-types';
 import Icon from '../../components/icon';
+import SearchEmptyTip from '../../components/search-empty-tip';
+import toaster from '../../components/toast';
+import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 
 import '../../css/log-filter.css';
 

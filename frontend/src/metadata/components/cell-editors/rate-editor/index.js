@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import RateItem from './rate-item';
 import { DEFAULT_RATE_DATA } from '../../../constants';
+import RateItem from './rate-item';
 
 import './index.css';
 

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
-import toaster from '../../../components/toast';
 import OpMenu from '../../../components/dialog/op-menu';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
+import toaster from '../../../components/toast';
+import { gettext } from '../../../utils/constants';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { Utils } from '../../../utils/utils';
 
 const virusFileItemPropTypes = {
   virusFile: PropTypes.object.isRequired,

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import HistoryListItem from './history-list-item';
 import Loading from '../loading';
+import HistoryListItem from './history-list-item';
 
 const propTypes = {
   hasMore: PropTypes.bool.isRequired,

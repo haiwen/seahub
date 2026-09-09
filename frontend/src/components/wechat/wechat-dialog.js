@@ -1,9 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Modal, ModalBody } from 'reactstrap';
+import PropTypes from 'prop-types';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import { mediaUrl } from '../../utils/constants';
 import { isWorkWeixin } from './weixin-utils';
-import SeahubModalHeader from '@/components/seahub-modal-header';
 import '../../css/wechat-dialog.css';
 
 const propTypes = {

@@ -2,14 +2,14 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { UncontrolledTooltip } from 'reactstrap';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import ClickOutside from '../../../../../components/click-outside';
 import Icon from '../../../../../components/icon';
-import { gettext } from '../../../../../utils/constants';
-import { Utils } from '../../../../../utils/utils';
+import IconBtn from '../../../../../components/icon-btn';
+import { getRowById } from '../../../../../components/sf-table/utils/table';
 import { useMetadataStatus } from '../../../../../hooks';
 import { useTags } from '../../../../../tag/hooks';
-import { getRowById } from '../../../../../components/sf-table/utils/table';
-import IconBtn from '../../../../../components/icon-btn';
-import ClickOutside from '../../../../../components/click-outside';
+import { gettext } from '../../../../../utils/constants';
+import { Utils } from '../../../../../utils/utils';
 import TagsEditor from '../../../cell-editors/tags-editor';
 
 const TagsFilter = ({ value: oldValue, onChange: onChangeAPI }) => {

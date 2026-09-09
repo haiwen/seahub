@@ -1,8 +1,8 @@
 import React, { Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../../_i18n/i18n-comment-editor';
-import CommentPanel from './comment-panel';
 import Loading from '../loading';
+import CommentPanel from './comment-panel';
 
 export default function I18nCommentPanel(props) {
   return (

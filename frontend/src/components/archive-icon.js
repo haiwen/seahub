@@ -1,6 +1,6 @@
 import React from 'react';
-import Icon from './icon';
 import { gettext } from '../utils/constants';
+import Icon from './icon';
 import Tooltip from './tooltip';
 
 export default function ArchiveIcon({ currentRepoInfo, className = 'ml-1' }) {

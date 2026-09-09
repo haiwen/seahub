@@ -1,13 +1,13 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { useDrag, useDrop } from 'react-dnd';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import CustomizeSelect from '../../../../../components/customize-select';
 import Icon from '../../../../../components/icon';
 import OpElement from '../../../../../components/op-element';
 import { gettext } from '../../../../../utils/constants';
-import { getColumnByKey } from '../../../../utils/column';
 import { COLUMNS_ICON_CONFIG, SORT_TYPE, SORT_COLUMN_OPTIONS } from '../../../../constants';
+import { getColumnByKey } from '../../../../utils/column';
 import { getGroupbyGranularityByColumn, isShowGroupCountType, getSelectedCountType, getDefaultCountType } from '../../../../utils/group';
 
 /*

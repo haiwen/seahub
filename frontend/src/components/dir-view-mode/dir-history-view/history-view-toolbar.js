@@ -1,9 +1,9 @@
 import React, { useCallback, useState, useRef, useEffect } from 'react';
-import OpIcon from '../../op-icon';
-import { gettext } from '../../../utils/constants';
 import { KeyCodes } from '../../../constants';
+import { gettext } from '../../../utils/constants';
 import { eventBus, EVENT_BUS_TYPE } from '../../event-bus';
 import Icon from '../../icon';
+import OpIcon from '../../op-icon';
 import HistoryFilterSetter from './history-filter-setter';
 
 const HistoryViewToolbar = () => {

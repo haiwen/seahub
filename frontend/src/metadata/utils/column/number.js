@@ -1,5 +1,5 @@
-import { getColumnType } from './core';
 import { CellType, NUMERIC_COLUMNS_TYPES } from '../../constants';
+import { getColumnType } from './core';
 
 /**
  * Check whether is numeric column:

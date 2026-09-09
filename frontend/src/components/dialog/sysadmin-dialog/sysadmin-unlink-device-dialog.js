@@ -1,8 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { gettext, isPro } from '../../../utils/constants';
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
+import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
+import { gettext, isPro } from '../../../utils/constants';
 
 const propTypes = {
   unlinkDevice: PropTypes.func.isRequired,

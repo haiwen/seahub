@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import PropTypes from 'prop-types';
 import { Tooltip as ReactstrapTooltip } from 'reactstrap';
+import PropTypes from 'prop-types';
 import { getTooltipOpenState } from './tooltip-utils';
 
 import '../css/tooltip.css';

@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import PropTypes from 'prop-types';
 import { gettext } from '../../../../../utils/constants';
 
 import './index.css';

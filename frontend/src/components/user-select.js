@@ -1,18 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { Popover } from 'reactstrap';
-import { seafileAPI } from '../utils/seafile-api';
-import { gettext } from '../utils/constants';
-import SearchEmptyTip from './search-empty-tip';
-import { Utils } from '../utils/utils';
-import toaster from './toast';
-import KeyCodes from '../constants/keyCodes';
-import SearchInput from './search-input';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import UserItem from '../components/user-item';
+import KeyCodes from '../constants/keyCodes';
+import { gettext } from '../utils/constants';
+import { seafileAPI } from '../utils/seafile-api';
+import { Utils } from '../utils/utils';
 import ClickOutside from './click-outside';
 import Icon from './icon';
+import SearchEmptyTip from './search-empty-tip';
+import SearchInput from './search-input';
 import SelectDropdownIndicator from './select-dropdown-indicator';
+import toaster from './toast';
 
 import '../css/user-select.css';
 

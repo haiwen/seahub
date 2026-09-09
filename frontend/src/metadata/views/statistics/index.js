@@ -1,15 +1,15 @@
 import React, { useState, useMemo } from 'react';
-import { gettext } from '../../../utils/constants';
+import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import SortMenu from '../../../components/sort-menu';
+import { gettext } from '../../../utils/constants';
 import RadioGroup from '../../components/radio-group';
-import EmptyTip from '../../../components/empty-tip';
-import { useMetadataView } from '../../hooks/metadata-view';
+import { TIME_GROUPING_OPTIONS, CREATOR_SORT_OPTIONS } from '../../constants/view/statistics';
 import { useCollaborators } from '../../hooks/collaborators';
+import { useMetadataView } from '../../hooks/metadata-view';
 import { PieChart, BarChart, HorizontalBarChart, SummaryCards } from './charts';
 import { useStatisticsData } from './useStatisticsData';
 import { processFileTypeData, processTimeData, processCreatorData } from './utils';
-import { TIME_GROUPING_OPTIONS, CREATOR_SORT_OPTIONS } from '../../constants/view/statistics';
 
 import './index.css';
 

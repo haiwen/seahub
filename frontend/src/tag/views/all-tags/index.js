@@ -1,16 +1,16 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import CenteredLoading from '../../../components/centered-loading';
+import { getRowById } from '../../../components/sf-table/utils/table';
 import toaster from '../../../components/toast';
-import TagsTable from './tags-table';
-import View from '../view';
-import { TagViewProvider, useTags } from '../../hooks';
+import { PRIVATE_FILE_TYPE } from '../../../constants';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../../../metadata/constants';
 import { siteRoot } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
-import { PRIVATE_FILE_TYPE } from '../../../constants';
-import { getRowById } from '../../../components/sf-table/utils/table';
-import { getTagName } from '../../utils/cell';
 import { ALL_TAGS_ID } from '../../constants';
+import { TagViewProvider, useTags } from '../../hooks';
+import { getTagName } from '../../utils/cell';
+import View from '../view';
+import TagsTable from './tags-table';
 
 import './index.css';
 

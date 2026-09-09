@@ -1,5 +1,5 @@
-import { getMultipleIndexesOrderbyOptions } from '../core';
 import { SORT_TYPE } from '../../../constants';
+import { getMultipleIndexesOrderbyOptions } from '../core';
 
 /**
  * Sort multiple-select

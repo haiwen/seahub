@@ -1,14 +1,14 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { getTagColor, getTagName, getTagFilesLinks } from '../../utils/cell';
-import { checkTreeNodeHasChildNodes, getTreeNodeId, getTreeNodeKey } from '../../../components/sf-table/utils/tree';
-import { getRowById } from '../../../components/sf-table/utils/table';
-import { useTags } from '../../hooks';
-import { SIDEBAR_INIT_LEFT_INDENT } from '../../constants/sidebar-tree';
-import { getAllChildTagsIdsFromNode } from '../../utils/tree';
-import { Utils } from '../../../utils/utils';
+import PropTypes from 'prop-types';
 import Icon from '../../../components/icon';
+import { getRowById } from '../../../components/sf-table/utils/table';
+import { checkTreeNodeHasChildNodes, getTreeNodeId, getTreeNodeKey } from '../../../components/sf-table/utils/tree';
+import { Utils } from '../../../utils/utils';
+import { SIDEBAR_INIT_LEFT_INDENT } from '../../constants/sidebar-tree';
+import { useTags } from '../../hooks';
+import { getTagColor, getTagName, getTagFilesLinks } from '../../utils/cell';
+import { getAllChildTagsIdsFromNode } from '../../utils/tree';
 
 import './index.css';
 

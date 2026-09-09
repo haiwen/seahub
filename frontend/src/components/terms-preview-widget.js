@@ -1,6 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { processor } from '@seafile/seafile-editor';
+import PropTypes from 'prop-types';
 import Loading from './loading';
 
 import '../css/terms-preview.css';

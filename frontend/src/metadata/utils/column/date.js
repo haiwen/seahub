@@ -1,5 +1,5 @@
-import { getColumnType } from './core';
 import { DATE_COLUMN_OPTIONS, DATE_FORMAT_MAP, DEFAULT_DATE_FORMAT } from '../../constants';
+import { getColumnType } from './core';
 
 /**
  * Check whether is date column:

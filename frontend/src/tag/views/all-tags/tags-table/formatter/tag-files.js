@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { getRowById } from '../../../../../components/sf-table/utils/table';
+import { getTreeNodeId } from '../../../../../components/sf-table/utils/tree';
 import NumberFormatter from '../../../../../metadata/components/cell-formatter/number';
 import { useTags } from '../../../../hooks';
 import { getTagFilesLinks } from '../../../../utils/cell';
 import { getAllChildTagsIdsFromNode } from '../../../../utils/tree';
-import { getRowById } from '../../../../../components/sf-table/utils/table';
-import { getTreeNodeId } from '../../../../../components/sf-table/utils/tree';
 
 const TagFilesFormatter = ({ treeNodeIndex }) => {
   const { tagsData } = useTags();

@@ -1,23 +1,23 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import ModalPortal from '../../../components/modal-portal';
 import { Link } from '@gatsbyjs/reach-router';
+import PropTypes from 'prop-types';
+import AboutDialog from '../../../components/dialog/about-dialog';
+import EventBus, { EVENT_BUS_TYPE } from '../../../components/event-bus';
+import Icon from '../../../components/icon';
+import ModalPortal from '../../../components/modal-portal';
+import toaster from '../../../components/toast';
+import Tooltip from '../../../components/tooltip';
+import WechatDialog from '../../../components/wechat/wechat-dialog';
+import { isWorkWeixin } from '../../../components/wechat/weixin-utils';
+import { ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY, SIDE_PANEL_FOLDED_WIDTH, SUB_NAV_ITEM_HEIGHT } from '../../../constants';
+import { FOLDED_SIDE_NAV_FILES, FOLDED_SIDE_NAV } from '../../../constants/zIndexes';
+import Group from '../../../models/group';
 import { gettext, siteRoot, canInvitePeople, canCreateWiki, enableTC, sideNavFooterCustomHtml, showWechatSupportGroup,
   isPro, isDBSqlite3, customNavItems, curNoteMsg, enableShowAbout } from '../../../utils/constants';
-import { ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY, SIDE_PANEL_FOLDED_WIDTH, SUB_NAV_ITEM_HEIGHT } from '../../../constants';
-import LibrariesSubNav from './libraries-sub-nav';
-import ShareAdminSubNav from './share-admin-sub-nav';
-import AboutDialog from '../../../components/dialog/about-dialog';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
-import Group from '../../../models/group';
-import toaster from '../../../components/toast';
-import { FOLDED_SIDE_NAV_FILES, FOLDED_SIDE_NAV } from '../../../constants/zIndexes';
-import { isWorkWeixin } from '../../../components/wechat/weixin-utils';
-import WechatDialog from '../../../components/wechat/wechat-dialog';
-import Icon from '../../../components/icon';
-import Tooltip from '../../../components/tooltip';
-import EventBus, { EVENT_BUS_TYPE } from '../../../components/event-bus';
+import LibrariesSubNav from './libraries-sub-nav';
+import ShareAdminSubNav from './share-admin-sub-nav';
 
 import './main-side-nav-folded.css';
 

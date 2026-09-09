@@ -1,17 +1,17 @@
-import deepCopy from 'deep-copy';
 import dayjs from 'dayjs';
+import deepCopy from 'deep-copy';
+import { getColumnByKey } from '../../components/sf-table/utils/column';
 import { getRowById, getRowsByIds } from '../../components/sf-table/utils/table';
+import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../../metadata/constants';
+import { ALL_TAGS_SORT, TAGS_DEFAULT_SORT } from '../constants/sort';
+import TagsData from '../model/tagsData';
+import { normalizeColumns } from '../utils/column';
+import DataProcessor from './data-processor';
+import LocalOperator from './local-operator';
 import {
   Operation, LOCAL_APPLY_OPERATION_TYPE, NEED_APPLY_AFTER_SERVER_OPERATION, OPERATION_TYPE, UNDO_OPERATION_TYPE,
 } from './operations';
-import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '../../metadata/constants';
-import DataProcessor from './data-processor';
 import ServerOperator from './server-operator';
-import LocalOperator from './local-operator';
-import TagsData from '../model/tagsData';
-import { normalizeColumns } from '../utils/column';
-import { getColumnByKey } from '../../components/sf-table/utils/column';
-import { ALL_TAGS_SORT, TAGS_DEFAULT_SORT } from '../constants/sort';
 
 class Store {
 

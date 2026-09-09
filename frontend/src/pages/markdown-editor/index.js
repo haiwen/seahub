@@ -4,21 +4,20 @@ import {
   EventBus,
   MarkdownEditor as SeafileMarkdownEditor,
 } from '@seafile/seafile-editor';
-import { Utils } from '../../utils/utils';
-import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, mediaUrl } from '../../utils/constants';
-import toaster from '../../components/toast';
-import ShareDialog from '../../components/dialog/share-dialog';
+import CryptoJS from 'crypto-js';
+import URL from 'url-parse';
 import InsertFileDialog from '../../components/dialog/insert-file-dialog';
-import HeaderToolbar from './header-toolbar';
-import editorApi from './editor-api';
-import DetailListView from './detail-list-view';
+import ShareDialog from '../../components/dialog/share-dialog';
+import toaster from '../../components/toast';
+import { gettext, mediaUrl } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import WebSocketClient from '../../utils/websocket-service';
+import DetailListView from './detail-list-view';
+import editorApi from './editor-api';
+import HeaderToolbar from './header-toolbar';
 
 import './css/markdown-editor.css';
-
-const CryptoJS = require('crypto-js');
-const URL = require('url-parse');
 
 const { repoID, filePath, fileName, isLocked, lockedByMe, filePerm } = window.app.pageOptions;
 const { siteRoot, serviceUrl } = window.app.config;

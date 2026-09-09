@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { getType } from '../../../utils/utils';
+import PropTypes from 'prop-types';
 import { ROW_HEIGHT } from '@/metadata/constants';
+import { getType } from '../../../utils/utils';
 
 const TextFormatter = ({ value, className, children: emptyFormatter, height }) => {
   const textRef = useRef(null);

@@ -1,18 +1,18 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { EVENT_BUS_TYPE } from '@/metadata/constants';
+import { ROW_HEIGHT } from '../../../../metadata/constants';
+import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
+import EventBus from '../../../event-bus';
 import Loading from '../../../loading';
-import { RightScrollbar } from '../../scrollbar';
-import Record from './record';
+import { SEQUENCE_COLUMN_WIDTH } from '../../constants/grid';
 import InteractionMasks from '../../masks/interaction-masks';
+import { RightScrollbar } from '../../scrollbar';
+import { checkEditableViaClickCell, checkIsColumnSupportDirectEdit, getColumnByIndex, getColumnIndexByKey } from '../../utils/column';
 import { RecordMetrics } from '../../utils/record-metrics';
 import { getColumnScrollPosition, getColVisibleStartIdx, getColVisibleEndIdx } from '../../utils/records-body';
-import EventBus from '../../../event-bus';
-import { EVENT_BUS_TYPE } from '@/metadata/constants';
-import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
-import { checkEditableViaClickCell, checkIsColumnSupportDirectEdit, getColumnByIndex, getColumnIndexByKey } from '../../utils/column';
 import { checkIsCellSupportOpenEditor } from '../../utils/selection';
-import { SEQUENCE_COLUMN_WIDTH } from '../../constants/grid';
-import { ROW_HEIGHT } from '../../../../metadata/constants';
+import Record from './record';
 
 const RENDER_MORE_NUMBER = 10;
 const CONTENT_HEIGHT = window.innerHeight - 174;

@@ -1,22 +1,22 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import { eventBus } from '../../../../components/event-bus';
+import Icon from '../../../../components/icon';
+import OpIcon from '../../../../components/op-icon';
+import toaster from '../../../../components/toast';
+import { gettext, wikiId, wikiPermission } from '../../../../utils/constants';
+import { Utils } from '../../../../utils/utils';
+import wikiAPI from '../../../../utils/wiki-api';
 import NameEditPopover from '../../common/name-edit-popover';
 import NavItemIcon from '../../common/nav-item-icon';
-import PageDropdownMenu from './page-dropdownmenu';
-import { gettext, wikiId, wikiPermission } from '../../../../utils/constants';
-import AddNewPageDialog from '../add-new-page-dialog';
-import CustomIcon from '../../custom-icon';
-import { eventBus } from '../../../../components/event-bus';
-import { INSERT_POSITION } from '../constants';
-import toaster from '../../../../components/toast';
-import wikiAPI from '../../../../utils/wiki-api';
-import { Utils } from '../../../../utils/utils';
-import OpIcon from '../../../../components/op-icon';
-import Icon from '../../../../components/icon';
 import { DEFAULT_PAGE_NAME } from '../../constant';
+import CustomIcon from '../../custom-icon';
+import AddNewPageDialog from '../add-new-page-dialog';
+import { INSERT_POSITION } from '../constants';
+import PageDropdownMenu from './page-dropdownmenu';
 
 const PageItem = ({
   page,

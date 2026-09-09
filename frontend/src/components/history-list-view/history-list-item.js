@@ -1,6 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
 import { gettext, filePath } from '../../utils/constants';
 import URLDecorator from '../../utils/url-decorator';
 import CustomDropdown from '../dropdown';

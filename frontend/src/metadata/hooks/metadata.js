@@ -1,11 +1,11 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import metadataAPI from '../api';
-import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
-import Folder from '../model/metadata/folder';
 import { PRIVATE_FILE_TYPE } from '../../constants';
-import { VIEW_TYPE, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW } from '../constants';
 import { useMetadataStatus } from '../../hooks';
+import { Utils } from '../../utils/utils';
+import metadataAPI from '../api';
+import { VIEW_TYPE, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW } from '../constants';
+import Folder from '../model/metadata/folder';
 import { getViewName } from '../utils/view';
 
 const CACHED_COLLAPSED_FOLDERS_PREFIX = 'sf-metadata-collapsed-folders';

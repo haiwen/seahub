@@ -1,23 +1,23 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
+import DepartmentDetailDialog from '../../components/dialog/department-detail-dialog';
+import DismissGroupDialog from '../../components/dialog/dismiss-group-dialog';
+import InviteMembersDialog from '../../components/dialog/group-invite-members-dialog';
+import GroupMembersDialog from '../../components/dialog/group-members-dialog';
+import ImportMembersDialog from '../../components/dialog/import-members-dialog';
+import LeaveGroupDialog from '../../components/dialog/leave-group-dialog';
+import RenameGroupDialog from '../../components/dialog/rename-group-dialog';
+import TransferGroupDialog from '../../components/dialog/transfer-group-dialog';
+import CustomDropdown from '../../components/dropdown';
+import EventBus, { EVENT_BUS_TYPE } from '../../components/event-bus';
+import Icon from '../../components/icon';
+import ManageMembersDialog from '../../components/manage-members-dialog';
+import toaster from '../../components/toast';
+import { Repo } from '../../models';
 import { gettext, username, canAddRepo, isMultiTenancy } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import toaster from '../../components/toast';
-import { Repo } from '../../models';
-import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
-import GroupMembersDialog from '../../components/dialog/group-members-dialog';
-import DismissGroupDialog from '../../components/dialog/dismiss-group-dialog';
-import RenameGroupDialog from '../../components/dialog/rename-group-dialog';
-import TransferGroupDialog from '../../components/dialog/transfer-group-dialog';
-import ImportMembersDialog from '../../components/dialog/import-members-dialog';
-import ManageMembersDialog from '../../components/manage-members-dialog';
-import DepartmentDetailDialog from '../../components/dialog/department-detail-dialog';
-import LeaveGroupDialog from '../../components/dialog/leave-group-dialog';
-import InviteMembersDialog from '../../components/dialog/group-invite-members-dialog';
-import CustomDropdown from '../../components/dropdown';
-import Icon from '../../components/icon';
-import EventBus, { EVENT_BUS_TYPE } from '../../components/event-bus';
 
 import '../../css/group-view.css';
 

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import SelectOption from '../select-option';
 
 import './index.css';

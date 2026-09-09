@@ -1,15 +1,15 @@
 import React, { Fragment } from 'react';
 import dayjs from 'dayjs';
+import Chart from '../../../components/chart';
+import Loading from '../../../components/loading';
+import toaster from '../../../components/toast';
 import { gettext, orgID } from '../../../utils/constants';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
-import MainPanelTopbar from '../main-panel-topbar';
-import StatisticNav from './statistic-nav';
-import StatisticCommonTool from './statistic-common-tool';
-import Loading from '../../../components/loading';
-import UsersTraffic from './statistic-traffic-users';
 import { Utils } from '../../../utils/utils';
-import toaster from '../../../components/toast';
-import Chart from '../../../components/chart';
+import MainPanelTopbar from '../main-panel-topbar';
+import StatisticCommonTool from './statistic-common-tool';
+import StatisticNav from './statistic-nav';
+import UsersTraffic from './statistic-traffic-users';
 
 class OrgStatisticTraffic extends React.Component {
 

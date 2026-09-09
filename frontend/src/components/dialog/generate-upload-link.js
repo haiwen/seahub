@@ -1,17 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Button, Form, FormGroup, Label, Input, InputGroup, Alert } from 'reactstrap';
 import copy from 'copy-to-clipboard';
 import dayjs from 'dayjs';
-import { Button, Form, FormGroup, Label, Input, InputGroup, Alert } from 'reactstrap';
+import PropTypes from 'prop-types';
+import UploadLink from '../../models/upload-link';
 import { gettext, shareLinkForceUsePassword, shareLinkPasswordMinLength, shareLinkPasswordStrengthLevel, canSendShareLinkEmail, uploadLinkExpireDaysMin, uploadLinkExpireDaysMax, uploadLinkExpireDaysDefault } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import UploadLink from '../../models/upload-link';
-import toaster from '../toast';
-import SendLink from '../send-link';
-import SharedLink from '../shared-link';
-import SetLinkExpiration from '../set-link-expiration';
 import Icon from '../icon';
+import SendLink from '../send-link';
+import SetLinkExpiration from '../set-link-expiration';
+import SharedLink from '../shared-link';
+import toaster from '../toast';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,

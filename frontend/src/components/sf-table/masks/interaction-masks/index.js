@@ -1,36 +1,36 @@
 import React, { isValidElement, cloneElement } from 'react';
-import PropTypes from 'prop-types';
 import deepCopy from 'deep-copy';
-import toaster from '../../../toast';
-import EditorPortal from '../../editors/editor-portal';
-import EditorContainer from '../../editors/editor-container';
-import DragHandler from '../drag-handler';
-import DragMask from '../drag-mask';
-import SelectionRangeMask from '../selection-range-mask';
-import SelectionMask from '../selection-mask';
-import { gettext } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
-import { isEmptyObject } from '../../../../utils/object';
+import PropTypes from 'prop-types';
+import { EVENT_BUS_TYPE } from '@/metadata/constants';
+import { openFile } from '@/metadata/utils/file';
 import { KeyCodes } from '../../../../constants';
+import { CellType, PRIVATE_COLUMN_KEY } from '../../../../metadata/constants';
+import { gettext } from '../../../../utils/constants';
+import { isSpace } from '../../../../utils/hotkey';
+import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../../utils/keyboard-utils';
+import { isEmptyObject } from '../../../../utils/object';
+import { Utils } from '../../../../utils/utils';
+import EventBus from '../../../event-bus';
+import toaster from '../../../toast';
+import { GRID_HEADER_DOUBLE_HEIGHT, GRID_HEADER_DEFAULT_HEIGHT, HEADER_HEIGHT_TYPE, PASTE_SOURCE, EDITOR_TYPE } from '../../constants/grid';
 import { GROUP_ROW_TYPE } from '../../constants/group';
 import { TRANSFER_TYPES } from '../../constants/transfer-types';
-import { GRID_HEADER_DOUBLE_HEIGHT, GRID_HEADER_DEFAULT_HEIGHT, HEADER_HEIGHT_TYPE, PASTE_SOURCE, EDITOR_TYPE } from '../../constants/grid';
+import EditorContainer from '../../editors/editor-container';
+import EditorPortal from '../../editors/editor-portal';
+import { checkIsNameColumn, getColumnIndexByKey } from '../../utils/column';
+import getEventTransfer, { setEventTransfer } from '../../utils/event-transfer';
+import { getGroupRecordByIndex } from '../../utils/group-metrics';
+import { RecordMetrics } from '../../utils/record-metrics';
 import {
   getNewSelectedRange, getSelectedDimensions, selectedRangeIsSingleCell,
   getSelectedRangeDimensions, getSelectedRow, getSelectedColumn,
   getRecordsFromSelectedRange, getSelectedCellValue, checkIsSelectedCellEditable,
 } from '../../utils/selection';
-import { checkIsNameColumn, getColumnIndexByKey } from '../../utils/column';
-import { CellType, PRIVATE_COLUMN_KEY } from '../../../../metadata/constants';
-import { RecordMetrics } from '../../utils/record-metrics';
-import { getGroupRecordByIndex } from '../../utils/group-metrics';
 import { TreeMetrics } from '../../utils/tree-metrics';
-import getEventTransfer, { setEventTransfer } from '../../utils/event-transfer';
-import { isSpace } from '../../../../utils/hotkey';
-import EventBus from '../../../event-bus';
-import { EVENT_BUS_TYPE } from '@/metadata/constants';
-import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../../utils/keyboard-utils';
-import { openFile } from '@/metadata/utils/file';
+import DragHandler from '../drag-handler';
+import DragMask from '../drag-mask';
+import SelectionMask from '../selection-mask';
+import SelectionRangeMask from '../selection-range-mask';
 
 import './index.css';
 

@@ -1,19 +1,19 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dropdown, DropdownToggle } from 'reactstrap';
 import PropTypes from 'prop-types';
-import ColumnPopover from '@/metadata/components/popover/column-popover';
+import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 import Icon from '@/components/icon';
+import ModalPortal from '@/components/modal-portal';
+import toaster from '@/components/toast';
+import Tooltip from '@/components/tooltip';
+import ColumnPopover from '@/metadata/components/popover/column-popover';
+import ColumnTypeDropdownMenu from '@/metadata/components/popover/column-popover/column-type-dropdown-menu';
+import { COMMON_FORM_FIELD_TYPE } from '@/metadata/components/popover/column-popover/constants';
+import { ValidateColumnFormFields } from '@/metadata/components/popover/column-popover/utils';
+import { useMetadataView } from '@/metadata/hooks/metadata-view';
+import { getColumnDisplayName } from '@/metadata/utils/column';
 import { gettext } from '@/utils/constants';
 import { getEventClassName } from '@/utils/dom';
-import ColumnTypeDropdownMenu from '@/metadata/components/popover/column-popover/column-type-dropdown-menu';
-import { useMetadataView } from '@/metadata/hooks/metadata-view';
-import { ValidateColumnFormFields } from '@/metadata/components/popover/column-popover/utils';
-import { COMMON_FORM_FIELD_TYPE } from '@/metadata/components/popover/column-popover/constants';
-import toaster from '@/components/toast';
-import { getColumnDisplayName } from '@/metadata/utils/column';
-import Tooltip from '@/components/tooltip';
-import ModalPortal from '@/components/modal-portal';
-import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 
 import './index.css';
 

@@ -1,6 +1,22 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
+import PropTypes from 'prop-types';
+import AboutDialog from '../../../components/dialog/about-dialog';
+import CreateGroupDialog from '../../../components/dialog/create-group-dialog';
+import EventBus, { EVENT_BUS_TYPE } from '../../../components/event-bus';
+import Icon from '../../../components/icon';
+import ModalPortal from '../../../components/modal-portal';
+import OpIcon from '../../../components/op-icon';
+import toaster from '../../../components/toast';
+import WechatDialog from '../../../components/wechat/wechat-dialog';
+import { isWorkWeixin } from '../../../components/wechat/weixin-utils';
+import {
+  ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY,
+  SIDE_NAV_FILES_UNFOLDED_KEY,
+  SIDE_NAV_SHARE_ADMIN_UNFOLDED_KEY,
+  SUB_NAV_ITEM_HEIGHT
+} from '../../../constants';
+import Group from '../../../models/group';
 import {
   gettext, siteRoot, canAddGroup, canAddRepo, canShareRepo,
   canGenerateShareLink, canGenerateUploadLink, canInvitePeople,
@@ -8,25 +24,9 @@ import {
   canViewOrg, enableOCM, enableOCMViaWebdav, canCreateWiki,
   isPro, isDBSqlite3, customNavItems, helpLink
 } from '../../../utils/constants';
-import ModalPortal from '../../../components/modal-portal';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
-import Group from '../../../models/group';
-import toaster from '../../../components/toast';
-import CreateGroupDialog from '../../../components/dialog/create-group-dialog';
-import AboutDialog from '../../../components/dialog/about-dialog';
 import LibrariesSubNav from './libraries-sub-nav';
-import {
-  ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY,
-  SIDE_NAV_FILES_UNFOLDED_KEY,
-  SIDE_NAV_SHARE_ADMIN_UNFOLDED_KEY,
-  SUB_NAV_ITEM_HEIGHT
-} from '../../../constants';
-import { isWorkWeixin } from '../../../components/wechat/weixin-utils';
-import WechatDialog from '../../../components/wechat/wechat-dialog';
-import EventBus, { EVENT_BUS_TYPE } from '../../../components/event-bus';
-import OpIcon from '../../../components/op-icon';
-import Icon from '../../../components/icon';
 
 const propTypes = {
   currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,

@@ -1,9 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { SeafileCommentEditor, commentProcessor } from '@seafile/comment-editor';
+import PropTypes from 'prop-types';
 import { gettext } from '../../../utils/constants';
-import CommentDeletePopover from './comment-delete-popover';
 import CustomDropdown from '../../dropdown';
+import CommentDeletePopover from './comment-delete-popover';
 
 const { username } = window.app.pageOptions;
 

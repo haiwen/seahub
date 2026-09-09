@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Modal, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import { gettext, LARGE_DIALOG_STYLE } from '../../../utils/constants';
-import SysAdminShareToUser from './sysadmin-share-to-user';
-import SysAdminShareToGroup from './sysadmin-share-to-group';
+import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
+import { gettext, LARGE_DIALOG_STYLE } from '../../../utils/constants';
+import SysAdminShareToGroup from './sysadmin-share-to-group';
+import SysAdminShareToUser from './sysadmin-share-to-user';
 import '../../../css/share-link-dialog.css';
 
 const propTypes = {

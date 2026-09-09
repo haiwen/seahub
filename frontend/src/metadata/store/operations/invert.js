@@ -1,7 +1,7 @@
 import deepCopy from 'deep-copy';
-import Operation from './model';
-import { OPERATION_TYPE } from './constants';
 import { getColumnOriginName } from '../../utils/column';
+import { OPERATION_TYPE } from './constants';
+import Operation from './model';
 
 function createOperation(op) {
   return new Operation(op);

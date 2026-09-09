@@ -1,13 +1,13 @@
-import { seafileAPI } from '../../utils/seafile-api';
-import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
-import { OPERATION_TYPE } from './operations';
-import { getColumnByKey } from '../utils/column';
 import { getRowById } from '../../components/sf-table/utils/table';
-import { checkIsDir } from '../utils/row';
-import { getFileNameFromRecord, getServerOptions } from '../utils/cell';
+import { gettext } from '../../utils/constants';
 import ObjectUtils from '../../utils/object';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import { CellType } from '../constants';
+import { getFileNameFromRecord, getServerOptions } from '../utils/cell';
+import { getColumnByKey } from '../utils/column';
+import { checkIsDir } from '../utils/row';
+import { OPERATION_TYPE } from './operations';
 
 const MAX_LOAD_RECORDS = 100;
 

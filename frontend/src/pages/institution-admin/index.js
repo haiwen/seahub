@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { LocationProvider, globalHistory } from '@gatsbyjs/reach-router';
-import { createRoot } from 'react-dom/client';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
-import SidePanel from './side-panel';
+import { LocationProvider, globalHistory } from '@gatsbyjs/reach-router';
+import { createRoot } from 'react-dom/client';
 import MainPanel from './main-panel';
+import SidePanel from './side-panel';
 
 import '../../css/layout.css';
 import '../../css/toolbar.css';

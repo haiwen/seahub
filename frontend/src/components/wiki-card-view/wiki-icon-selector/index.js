@@ -1,13 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { Alert, Button, ModalBody, ModalFooter } from 'reactstrap';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import { gettext } from '../../../utils/constants';
+import Icon from '../../icon';
 import SeahubModalHeader from '../../seahub-modal-header';
 import SearchEmptyTip from '../../search-empty-tip';
-import Icon from '../../icon';
 import SearchInput from '../../search-input';
 import Tooltip from '../../tooltip';
-import { gettext } from '../../../utils/constants';
 import { WIKI_ICON_CATEGORIES } from '../constants';
 import { filterWikiIconOptions } from '../constants-utils';
 import { WikiIconGlyph } from '../wiki-icon';

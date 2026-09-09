@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { getNumberDisplayString } from '../../utils/cell/column/number';
+import PropTypes from 'prop-types';
 import { ROW_HEIGHT } from '@/metadata/constants';
+import { getNumberDisplayString } from '../../utils/cell/column/number';
 
 const NumberFormatter = ({ value, formats, className, children: emptyFormatter, height }) => {
   const numberRef = useRef(null);

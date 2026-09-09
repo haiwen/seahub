@@ -1,12 +1,12 @@
 import React, { useMemo, useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { HideColumnPopover } from '../popover';
+import PropTypes from 'prop-types';
+import OpIcon from '@/components/op-icon';
+import { useMetadataStatus } from '../../../hooks';
 import { gettext } from '../../../utils/constants';
 import { isEnter, isSpace } from '../../../utils/hotkey';
 import { TABLE_NOT_DISPLAY_COLUMN_KEYS } from '../../constants';
-import { useMetadataStatus } from '../../../hooks';
-import OpIcon from '@/components/op-icon';
+import { HideColumnPopover } from '../popover';
 
 const HideColumnSetter = ({ readOnly, columns, wrapperClass, hiddenColumns, modifyHiddenColumns, modifyColumnOrder }) => {
   const [isShowSetter, setShowSetter] = useState(false);

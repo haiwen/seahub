@@ -1,12 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { DropdownItem } from 'reactstrap';
+import PropTypes from 'prop-types';
+import MobileItemMenu from '../components/mobile-item-menu';
 import { gettext, isPro, folderPermEnabled, enableRepoSnapshotLabel, enableResetEncryptedRepoPassword, isEmailConfigured, enableMultipleOfficeSuite, enableStorageClasses } from '../utils/constants';
 import { Utils } from '../utils/utils';
-import MobileItemMenu from '../components/mobile-item-menu';
+import CustomDropdown from './dropdown';
 import Icon from './icon';
 import Tooltip from './tooltip';
-import CustomDropdown from './dropdown';
 
 const propTypes = {
   isPC: PropTypes.bool,

@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { KeyCodes, TAG_COLORS } from '../../constants';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import toaster from '../toast';
 import CommonAddTool from '../common-add-tool';
-import SearchInput from '../search-input';
 import CustomizePopover from '../customize-popover';
+import SearchInput from '../search-input';
+import toaster from '../toast';
 import TagItem from './tag-item';
-import { KeyCodes, TAG_COLORS } from '../../constants';
 
 import '../../css/repo-tag.css';
 import '../../css/edit-filetag-popover.css';

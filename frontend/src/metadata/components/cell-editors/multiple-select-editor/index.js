@@ -1,16 +1,16 @@
 import React, { forwardRef, useMemo, useImperativeHandle, useCallback, useState, useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import CommonAddTool from '../../../../components/common-add-tool';
-import SearchInput from '../../../../components/search-input';
+import Icon from '../../../../components/icon';
 import SearchEmptyTip from '../../../../components/search-empty-tip';
-import DeleteOption from './delete-options';
+import SearchInput from '../../../../components/search-input';
+import { KeyCodes } from '../../../../constants';
+import { gettext } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
 import { getColumnOptionIdsByNames } from '../../../utils/cell';
 import { getColumnOptions, generateNewOption } from '../../../utils/column';
-import { KeyCodes } from '../../../../constants';
-import { gettext } from '../../../../utils/constants';
-import Icon from '../../../../components/icon';
+import DeleteOption from './delete-options';
 
 const SELECT_EDITOR_MIN_WIDTH = 300;
 

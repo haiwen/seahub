@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Utils } from '../../../utils/utils';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { Utils } from '../../../utils/utils';
 import Content from './repos';
 
 class AllWikis extends Component {

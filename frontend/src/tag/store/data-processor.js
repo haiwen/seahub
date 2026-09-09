@@ -1,17 +1,17 @@
-import { isTableRows } from '../../metadata/utils/row';
-import { getColumnByKey } from '../../metadata/utils/column';
-import { getGroupRows } from '../../metadata/utils/group';
 import { getRowsByIds } from '../../components/sf-table/utils/table';
-import { OPERATION_TYPE } from './operations';
-import { buildTagsTree, setNodeAllChildTagsIds, sortTree } from '../utils/tree';
-import { getRecordIdFromRecord } from '../../metadata/utils/cell';
 import {
   addTreeChildNode, checkTreeNodeHasChildNodes, createTreeNode, generateNodeKey, getTreeNodeDepth, getTreeNodeId, getTreeNodeKey,
   resetTreeHasChildNodesStatus,
   updatedKeyTreeNodeMap,
 } from '../../components/sf-table/utils/tree';
-import { checkIsSortByChildTagsCount, checkIsSortByName } from '../utils/sort';
+import { getRecordIdFromRecord } from '../../metadata/utils/cell';
+import { getColumnByKey } from '../../metadata/utils/column';
+import { getGroupRows } from '../../metadata/utils/group';
+import { isTableRows } from '../../metadata/utils/row';
 import { PRIVATE_COLUMN_KEY } from '../constants';
+import { checkIsSortByChildTagsCount, checkIsSortByName } from '../utils/sort';
+import { buildTagsTree, setNodeAllChildTagsIds, sortTree } from '../utils/tree';
+import { OPERATION_TYPE } from './operations';
 
 // const DEFAULT_COMPUTER_PROPERTIES_CONTROLLER = {
 //   isUpdateSummaries: true,

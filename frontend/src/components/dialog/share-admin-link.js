@@ -1,10 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
-import copy from '../copy-to-clipboard';
-import { gettext } from '../../utils/constants';
-import toaster from '../../components/toast';
+import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
+import toaster from '../../components/toast';
+import { gettext } from '../../utils/constants';
+import copy from '../copy-to-clipboard';
 
 const propTypes = {
   link: PropTypes.string.isRequired,

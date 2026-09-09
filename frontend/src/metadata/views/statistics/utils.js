@@ -1,6 +1,6 @@
 import { mediaUrl } from '../../../utils/constants';
-import { getCollaborator } from '../../utils/cell/column/collaborator';
 import { FILE_TYPE_NAMES, FILE_TYPE_COLORS } from '../../constants/view/statistics';
+import { getCollaborator } from '../../utils/cell/column/collaborator';
 
 export const processFileTypeData = (fileTypeStats) => {
   if (!fileTypeStats) return [];

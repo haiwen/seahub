@@ -1,8 +1,8 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import Audio from './components/file-content-view/audio';
 import SharedFileView from './components/shared-file-view/shared-file-view';
 import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
-import Audio from './components/file-content-view/audio';
 
 const { rawPath, err } = window.shared.pageOptions;
 

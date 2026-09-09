@@ -1,13 +1,13 @@
 import React, { useCallback, useMemo } from 'react';
-import FixedWidthTable from '../../../../components/fixed-width-table';
-import { Utils } from '../../../../utils/utils';
-import { gettext } from '../../../../utils/constants';
 import classNames from 'classnames';
+import { hideMenu } from '../../../../components/context-menu/actions';
+import FixedWidthTable from '../../../../components/fixed-width-table';
+import Icon from '../../../../components/icon';
 import { getRecordIdFromRecord } from '../../../../metadata/utils/cell';
+import { gettext } from '../../../../utils/constants';
+import { Utils } from '../../../../utils/utils';
 import { useTags, useTagView } from '../../../hooks';
 import TagFile from './item';
-import { hideMenu } from '../../../../components/context-menu/actions';
-import Icon from '../../../../components/icon';
 
 const ListView = ({ repoID, openImagePreview, onTagFileContextMenu }) => {
   const { tagsData } = useTags();

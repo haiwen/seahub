@@ -1,14 +1,14 @@
 import React from 'react';
 import { Modal } from 'reactstrap';
 import PropTypes from 'prop-types';
-import SelectDirentBody from './select-dirent-body';
-import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
-import { RepoInfo } from '../../models';
-import { seafileAPI } from '../../utils/seafile-api';
-import toaster from '../toast';
-import { MODE_TYPE_MAP } from '../../constants';
 import SeahubModalHeader from '@/components/seahub-modal-header';
+import { MODE_TYPE_MAP } from '../../constants';
+import { RepoInfo } from '../../models';
+import { gettext } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
+import SelectDirentBody from './select-dirent-body';
 
 const propTypes = {
   path: PropTypes.string.isRequired,

@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, lang } from '../../../../utils/constants';
-import { MAP_TYPE, KeyCodes } from '../../../../constants';
-import IconBtn from '../../../../components/icon-btn';
 import Icon from '../../../../components/icon';
+import IconBtn from '../../../../components/icon-btn';
+import { MAP_TYPE, KeyCodes } from '../../../../constants';
+import { gettext, lang } from '../../../../utils/constants';
 
 const performSearch = (type, inputValue, map, callbacks) => {
   if (!inputValue.trim()) return;

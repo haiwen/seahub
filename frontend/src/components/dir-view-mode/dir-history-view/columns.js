@@ -1,10 +1,10 @@
 import React from 'react';
 import { gettext } from '../../../utils/constants';
 import DescriptionFormatter from './formatters/description-formatter';
-import TimeFormatter from './formatters/time-formatter';
-import ModifierFormatter from './formatters/modifier-formatter';
 import DeviceFormatter from './formatters/device-formatter';
+import ModifierFormatter from './formatters/modifier-formatter';
 import TagsFormatter from './formatters/tags-formatter';
+import TimeFormatter from './formatters/time-formatter';
 
 /**
  * Factory function to create column definitions for history table

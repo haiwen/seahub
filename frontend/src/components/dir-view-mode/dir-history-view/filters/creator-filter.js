@@ -1,16 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import classNames from 'classnames';
 import isHotkey from 'is-hotkey';
-import { gettext } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
-import UserItem from '../../../search/search-filters/user-item';
-import { seafileAPI } from '../../../../utils/seafile-api';
-import toaster from '../../../toast';
-import Icon from '../../../icon';
-import { HISTORY_MODE } from '../../constants';
+import PropTypes from 'prop-types';
 import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
+import { gettext } from '../../../../utils/constants';
+import { seafileAPI } from '../../../../utils/seafile-api';
+import { Utils } from '../../../../utils/utils';
+import Icon from '../../../icon';
+import UserItem from '../../../search/search-filters/user-item';
+import toaster from '../../../toast';
+import { HISTORY_MODE } from '../../constants';
 
 import '../../../search/search-filters/filter-by-creator.css';
 

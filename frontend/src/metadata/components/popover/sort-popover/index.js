@@ -1,17 +1,17 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import isHotkey from 'is-hotkey';
 import { UncontrolledPopover } from 'reactstrap';
-import CustomizeSelect from '../../../../components/customize-select';
+import isHotkey from 'is-hotkey';
+import PropTypes from 'prop-types';
 import CommonAddTool from '../../../../components/common-add-tool';
+import CustomizeSelect from '../../../../components/customize-select';
 import Icon from '../../../../components/icon';
 import { gettext } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
-import { getColumnByKey } from '../../../utils/column';
 import { getEventClassName } from '../../../../utils/dom';
+import { Utils } from '../../../../utils/utils';
 import {
   EVENT_BUS_TYPE, COLUMNS_ICON_CONFIG, VIEW_SORT_COLUMN_RULES, VIEW_FIRST_SORT_COLUMN_RULES, SORT_TYPE, VIEW_TYPE,
 } from '../../../constants';
+import { getColumnByKey } from '../../../utils/column';
 import { execSortsOperation, getDisplaySorts, isSortsEmpty, SORT_OPERATION } from './utils';
 
 import './index.css';

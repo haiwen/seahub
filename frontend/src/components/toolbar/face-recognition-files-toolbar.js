@@ -1,19 +1,19 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { gettext } from '../../utils/constants';
-import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../metadata/constants';
-import { useFileOperations } from '../../hooks/file-operations';
-import RowUtils from '../sf-table/utils/row';
-import { buildGalleryToolbarMenuOptions } from '../../metadata/utils/menu-builder';
-import { getColumnByKey } from '../sf-table/utils/column';
 import { useMetadataStatus } from '../../hooks';
-import TextTranslation from '../../utils/text-translation';
-import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
-import { checkIsDir } from '../../metadata/utils/row';
+import { useFileOperations } from '../../hooks/file-operations';
+import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../metadata/constants';
 import { getFileNameFromRecord } from '../../metadata/utils/cell';
+import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
+import { buildGalleryToolbarMenuOptions } from '../../metadata/utils/menu-builder';
+import { checkIsDir } from '../../metadata/utils/row';
+import { gettext } from '../../utils/constants';
+import TextTranslation from '../../utils/text-translation';
 import { Utils } from '../../utils/utils';
+import CustomDropdown from '../dropdown';
 import Icon from '../icon';
 import OpIcon from '../op-icon';
-import CustomDropdown from '../dropdown';
+import { getColumnByKey } from '../sf-table/utils/column';
+import RowUtils from '../sf-table/utils/row';
 
 const FaceRecognitionFilesToolbar = ({ repoID }) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);

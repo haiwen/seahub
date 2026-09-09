@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import MyLibraryMoreOperations from './my-library-more-operations';
 import DepartmentLibraryMoreOperations from './department-library-more-operations';
+import MyLibraryMoreOperations from './my-library-more-operations';
 
 const propTypes = {
   repo: PropTypes.object.isRequired,

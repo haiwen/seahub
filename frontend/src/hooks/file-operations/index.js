@@ -1,13 +1,13 @@
 import React, { useCallback, useContext, useRef } from 'react';
-import { DownloadFileProvider } from './download';
+import { AccessLogProvider } from './access-log';
+import { CopyFileProvider } from './copy';
 import { CreateFileProvider } from './create-file';
 import { CreateFolderProvider } from './create-folder';
-import { RenameFileProvider } from './rename';
+import { DownloadFileProvider } from './download';
 import { MoveFileProvider } from './move';
-import { CopyFileProvider } from './copy';
-import { ShareFileProvider } from './share';
 import { LibSubFolderPermissionProvider } from './permission';
-import { AccessLogProvider } from './access-log';
+import { RenameFileProvider } from './rename';
+import { ShareFileProvider } from './share';
 
 // This hook provides content about file operations, like a middleware
 const FileOperationsContext = React.createContext(null);

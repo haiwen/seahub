@@ -1,15 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, repoID, siteRoot, username, isPro } from '../../utils/constants';
-import SeafileMarkdownViewer from '../../components/seafile-markdown-viewer';
-import WikiDirListView from '../../components/wiki-dir-list-view/wiki-dir-list-view';
-import Loading from '../../components/loading';
-import { Utils } from '../../utils/utils';
-import Search from '../../components/search/search';
-import Notification from '../../components/notification';
 import Account from '../../components/account';
-import SdocWikiPageViewer from '../../components/sdoc-wiki-page-viewer';
 import Icon from '../../components/icon';
+import Loading from '../../components/loading';
+import Notification from '../../components/notification';
+import SdocWikiPageViewer from '../../components/sdoc-wiki-page-viewer';
+import SeafileMarkdownViewer from '../../components/seafile-markdown-viewer';
+import Search from '../../components/search/search';
+import WikiDirListView from '../../components/wiki-dir-list-view/wiki-dir-list-view';
+import { gettext, repoID, siteRoot, username, isPro } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   path: PropTypes.string.isRequired,

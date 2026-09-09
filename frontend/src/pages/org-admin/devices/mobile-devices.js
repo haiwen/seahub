@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
-import DevicesNav from './devices-nav';
-import DevicesByPlatform from './devices-by-platform';
 import MainPanelTopbar from '../main-panel-topbar';
+import DevicesByPlatform from './devices-by-platform';
+import DevicesNav from './devices-nav';
 
 class MobileDevices extends Component {
 

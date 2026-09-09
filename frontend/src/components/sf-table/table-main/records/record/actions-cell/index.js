@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { isMobile, Utils } from '../../../../../../utils/utils';
-import { gettext } from '../../../../../../utils/constants';
-import { SEQUENCE_COLUMN_WIDTH } from '../../../../constants/grid';
-import Tooltip from '@/components/tooltip';
+import PropTypes from 'prop-types';
 import OpIcon from '@/components/op-icon';
+import Tooltip from '@/components/tooltip';
+import { gettext } from '../../../../../../utils/constants';
+import { isMobile, Utils } from '../../../../../../utils/utils';
+import { SEQUENCE_COLUMN_WIDTH } from '../../../../constants/grid';
 
 import './index.css';
 

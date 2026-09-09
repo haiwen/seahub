@@ -1,6 +1,6 @@
 import React from 'react';
-import dayjs from 'dayjs';
 import { Button, Input } from 'reactstrap';
+import dayjs from 'dayjs';
 import { siteRoot, gettext, serviceURL } from '../../../utils/constants';
 
 class StatisticReports extends React.Component {

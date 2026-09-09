@@ -1,5 +1,5 @@
-import { userAPI } from './user-api';
 import { enableNotificationServer, notificationServerUrl } from './constants';
+import { userAPI } from './user-api';
 
 
 class WebSocketClient {

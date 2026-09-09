@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { FormGroup } from 'reactstrap';
-import HistoryDateFilter from './date-filter';
-import HistoryCreatorFilter from './creator-filter';
+import PropTypes from 'prop-types';
 import { HISTORY_MODE, TRASH_MODE } from '../../constants';
 import FilterBySuffix from '../../dir-trash-view/file-suffix-filter';
+import HistoryCreatorFilter from './creator-filter';
+import HistoryDateFilter from './date-filter';
 
 import './basic-filters.css';
 

@@ -1,17 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import DetailItem from '../../detail-item';
-import Collapse from './collapse';
+import { CAPTURE_INFO_SHOW_KEY } from '../../../../constants';
+import { useMetadataStatus } from '../../../../hooks';
+import { MetadataDetails, useMetadataDetails } from '../../../../metadata';
 import Formatter from '../../../../metadata/components/formatter';
 import { CellType, PRIVATE_COLUMN_KEY } from '../../../../metadata/constants';
-import { gettext } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
-import { MetadataDetails, useMetadataDetails } from '../../../../metadata';
-import ObjectUtils from '../../../../utils/object';
 import { getCellValueByColumn, getDateDisplayString, decimalToExposureTime } from '../../../../metadata/utils/cell';
-import { useMetadataStatus } from '../../../../hooks';
-import { CAPTURE_INFO_SHOW_KEY } from '../../../../constants';
+import { gettext } from '../../../../utils/constants';
+import ObjectUtils from '../../../../utils/object';
+import { Utils } from '../../../../utils/utils';
+import DetailItem from '../../detail-item';
 import People from '../../people';
+import Collapse from './collapse';
 import FileTag from './file-tag';
 
 import './index.css';

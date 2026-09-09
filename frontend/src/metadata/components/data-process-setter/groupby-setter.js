@@ -1,12 +1,12 @@
 import React, { useMemo, useCallback, useState } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { GroupbysPopover } from '../popover';
-import { gettext } from '../../../utils/constants';
-import { SUPPORT_GROUP_COLUMN_TYPES } from '../../constants';
-import { isEnter, isSpace } from '../../../utils/hotkey';
-import { getValidGroupbys } from '../../utils/group';
+import PropTypes from 'prop-types';
 import OpIcon from '@/components/op-icon';
+import { gettext } from '../../../utils/constants';
+import { isEnter, isSpace } from '../../../utils/hotkey';
+import { SUPPORT_GROUP_COLUMN_TYPES } from '../../constants';
+import { getValidGroupbys } from '../../utils/group';
+import { GroupbysPopover } from '../popover';
 
 const GroupbySetter = ({
   target = 'sf-metadata-groupby-popover',

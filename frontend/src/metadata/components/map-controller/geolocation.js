@@ -1,6 +1,6 @@
 import classnames from 'classnames';
-import { Utils } from '../../../utils/utils';
 import { wgs84_to_gcj02 } from '../../../utils/coord-transform';
+import { Utils } from '../../../utils/utils';
 
 export const createGeolocationControl = ({ map, callback }) => {
   const container = document.createElement('div');

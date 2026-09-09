@@ -1,10 +1,10 @@
 import React from 'react';
 import { useDragLayer } from 'react-dnd';
-import CustomIcon from '../../custom-icon';
-import NavItemIcon from '../../common/nav-item-icon';
-import Icon from '../../../../components/icon';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import Icon from '../../../../components/icon';
+import NavItemIcon from '../../common/nav-item-icon';
+import CustomIcon from '../../custom-icon';
 
 const PageDragLayer = ({ pages, getFoldState }) => {
   const { isDragging, item, currentOffset } = useDragLayer((monitor) => ({

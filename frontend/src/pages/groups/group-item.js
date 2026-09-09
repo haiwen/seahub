@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { LIST_MODE } from '../../components/dir-view-mode/constants';
+import EventBus, { EVENT_BUS_TYPE } from '../../components/event-bus';
+import Icon from '../../components/icon';
+import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
+import toaster from '../../components/toast';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import toaster from '../../components/toast';
-import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
-import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import GroupOperationMenu from './group-op-menu';
-import Icon from '../../components/icon';
-import EventBus, { EVENT_BUS_TYPE } from '../../components/event-bus';
 
 const propTypes = {
   inAllLibs: PropTypes.bool,

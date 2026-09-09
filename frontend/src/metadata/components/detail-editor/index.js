@@ -1,17 +1,17 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { lang } from '../../../utils/constants';
+import { CellType } from '../../constants';
 import CheckboxEditor from './checkbox-editor';
-import TextEditor from './text-editor';
-import NumberEditor from './number-editor';
-import SingleSelectEditor from './single-select-editor';
-import MultipleSelectEditor from './multiple-select-editor';
 import CollaboratorEditor from './collaborator-editor';
 import DetailDateEditor from './date-editor';
 import LongTextEditor from './long-text-editor';
+import MultipleSelectEditor from './multiple-select-editor';
+import NumberEditor from './number-editor';
 import RateEditor from './rate-editor';
+import SingleSelectEditor from './single-select-editor';
 import TagsEditor from './tags-editor';
-import { lang } from '../../../utils/constants';
-import { CellType } from '../../constants';
+import TextEditor from './text-editor';
 
 import './index.css';
 

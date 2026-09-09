@@ -1,9 +1,9 @@
 import React from 'react';
-import ParentTagsFormatter from './parent-tags';
-import TagNameFormatter from './tag-name';
-import ChildTagsFormatter from './child-tags';
-import TagFilesFormatter from './tag-files';
 import { PRIVATE_COLUMN_KEY } from '../../../../constants';
+import ChildTagsFormatter from './child-tags';
+import ParentTagsFormatter from './parent-tags';
+import TagFilesFormatter from './tag-files';
+import TagNameFormatter from './tag-name';
 
 export const createColumnFormatter = ({ column, otherProps }) => {
   switch (column.key) {

@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import Switch from '../../../../components/switch';
+import PropTypes from 'prop-types';
 import Icon from '../../../../components/icon';
+import Switch from '../../../../components/switch';
 
 function FieldItem({ field, index, isCollapsed, onToggleField, onMoveField, fieldIconConfig, updateDragOverKey, dragOverColumnKey, draggingColumnIndex, updateDraggingKey }) {
   let enteredCounter = 0;

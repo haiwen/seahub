@@ -1,16 +1,16 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalFooter, FormGroup, Input, Button, Alert, Label } from 'reactstrap';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import IconBtn from '../../../../components/icon-btn';
 import toaster from '../../../../components/toast';
-import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext } from '../../../../utils/constants';
-import { getTagColor, getTagId, getTagName } from '../../../utils/cell';
-import { isValidTagName } from '../../../utils/validate/tag';
 import { SELECT_OPTION_COLORS } from '../../../../metadata/constants';
+import { gettext } from '../../../../utils/constants';
 import { isEnter } from '../../../../utils/hotkey';
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
+import { getTagColor, getTagId, getTagName } from '../../../utils/cell';
+import { isValidTagName } from '../../../utils/validate/tag';
 
 import './index.css';
 

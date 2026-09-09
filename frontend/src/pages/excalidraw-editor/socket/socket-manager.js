@@ -1,13 +1,13 @@
-import { stateDebug } from '../utils/debug';
-import SocketClient from './socket-client';
 import { CaptureUpdateAction, getSceneVersion, reconcileElements, restoreElements } from '@excalidraw/excalidraw';
-import { CURSOR_SYNC_TIMEOUT, LOAD_IMAGES_TIMEOUT } from '../constants';
 import throttle from 'lodash.throttle';
-import EventBus from '../utils/event-bus';
+import { CURSOR_SYNC_TIMEOUT, LOAD_IMAGES_TIMEOUT } from '../constants';
 import FileManager from '../data/file-manager';
 import { loadFilesFromServer, saveFilesToServer } from '../data/server-storage';
-import { updateStaleImageStatuses } from '../utils/exdraw-utils';
+import { stateDebug } from '../utils/debug';
 import { isInitializedImageElement } from '../utils/element-utils';
+import EventBus from '../utils/event-bus';
+import { updateStaleImageStatuses } from '../utils/exdraw-utils';
+import SocketClient from './socket-client';
 
 const STATE = {
   IDLE: 'idle',

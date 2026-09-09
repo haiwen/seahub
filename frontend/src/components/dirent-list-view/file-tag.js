@@ -1,7 +1,7 @@
 import React from 'react';
+import { UncontrolledTooltip } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { v4 as uuidv4 } from 'uuid';
-import { UncontrolledTooltip } from 'reactstrap';
 
 export default class FileTag extends React.PureComponent {
 

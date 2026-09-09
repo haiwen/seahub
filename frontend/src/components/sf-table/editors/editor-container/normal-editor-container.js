@@ -1,17 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import ClickOutside from '../../../click-outside';
-import Editor from './editor';
-import { EDITOR_CONTAINER as Z_INDEX_EDITOR_CONTAINER } from '../../constants/z-index';
-import { Utils } from '../../../../utils/utils';
-import { getEventClassName } from '../../../../utils/dom';
-import { checkCellValueChanged } from '../../utils/selection';
-import { getCellValueByColumn } from '../../utils/cell';
-import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../../utils/keyboard-utils';
-import EventBus from '../../../event-bus';
+import PropTypes from 'prop-types';
 import { EVENT_BUS_TYPE } from '@/metadata/constants';
+import { getEventClassName } from '../../../../utils/dom';
+import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../../utils/keyboard-utils';
+import { Utils } from '../../../../utils/utils';
+import ClickOutside from '../../../click-outside';
+import EventBus from '../../../event-bus';
+import { EDITOR_CONTAINER as Z_INDEX_EDITOR_CONTAINER } from '../../constants/z-index';
+import { getCellValueByColumn } from '../../utils/cell';
 import { checkIsPrivateColumn } from '../../utils/column';
+import { checkCellValueChanged } from '../../utils/selection';
+import Editor from './editor';
 
 class NormalEditorContainer extends React.Component {
 

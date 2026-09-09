@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import Editor from '../../cell-editors/rate-editor';
 import { gettext } from '../../../../utils/constants';
+import Editor from '../../cell-editors/rate-editor';
 
 import './index.css';
 

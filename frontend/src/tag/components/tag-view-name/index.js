@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useTags } from '../../hooks';
 import { getRowById } from '../../../components/sf-table/utils/table';
-import { getTagName } from '../../utils/cell';
-import { ALL_TAGS_ID } from '../../constants';
-import { gettext } from '../../../utils/constants';
-import AllTagsOperationToolbar from './all-tags-operation-toolbar';
 import { EVENT_BUS_TYPE } from '../../../metadata/constants';
+import { gettext } from '../../../utils/constants';
+import { ALL_TAGS_ID } from '../../constants';
+import { useTags } from '../../hooks';
+import { getTagName } from '../../utils/cell';
+import AllTagsOperationToolbar from './all-tags-operation-toolbar';
 
 const TagViewName = ({ id, canSelectAllTags, repoID }) => {
   const { tagsData, context } = useTags();

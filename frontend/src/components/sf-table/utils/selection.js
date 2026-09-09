@@ -1,9 +1,9 @@
 import ObjectUtils, { isEmptyObject } from '../../../utils/object';
+import { CELL_MASK as Z_INDEX_CELL_MASK, FROZEN_CELL_MASK as Z_INDEX_FROZEN_CELL_MASK } from '../constants/z-index';
 import { getCellValueByColumn } from './cell';
 import { checkIsColumnEditable, checkIsColumnSupportPreview, getColumnByIndex } from './column';
 import { getGroupByPath } from './group';
 import { getGroupRecordByIndex } from './group-metrics';
-import { CELL_MASK as Z_INDEX_CELL_MASK, FROZEN_CELL_MASK as Z_INDEX_FROZEN_CELL_MASK } from '../constants/z-index';
 
 const SELECT_DIRECTION = {
   UP: 'upwards',

@@ -1,21 +1,21 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { Link } from '@gatsbyjs/reach-router';
 import { Button } from 'reactstrap';
+import { Link } from '@gatsbyjs/reach-router';
+import classnames from 'classnames';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import classnames from 'classnames';
-import { Utils } from '../../../utils/utils';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
-import { siteRoot, gettext } from '../../../utils/constants';
-import toaster from '../../../components/toast';
+import PropTypes from 'prop-types';
+import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
+import SysAdminAddInstitutionDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-institution-dialog';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import OpIcon from '../../../components/op-icon';
-import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
-import MainPanelTopbar from '../main-panel-topbar';
-import SysAdminAddInstitutionDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-institution-dialog';
 import Paginator from '../../../components/paginator';
+import toaster from '../../../components/toast';
+import { siteRoot, gettext } from '../../../utils/constants';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { Utils } from '../../../utils/utils';
+import MainPanelTopbar from '../main-panel-topbar';
 
 dayjs.extend(relativeTime);
 

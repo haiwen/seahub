@@ -1,15 +1,15 @@
 import React, { useState, useRef, useCallback, useLayoutEffect, useEffect } from 'react';
-import { createRoot } from 'react-dom/client';
+import { processorWithMath } from '@seafile/seafile-editor';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
-import { processorWithMath } from '@seafile/seafile-editor';
-import SeafileCodeMirror from './code-mirror';
-import HeaderToolbar from '../markdown-editor/header-toolbar/header-toolbar';
-import editorApi from '../markdown-editor/editor-api';
-import { getPlainOptions } from './helper';
-import { gettext } from '../../utils/constants';
-import toaster from '../../components/toast';
+import { createRoot } from 'react-dom/client';
 import CodeMirrorLoading from '../../components/code-mirror-loading';
+import toaster from '../../components/toast';
+import { gettext } from '../../utils/constants';
+import editorApi from '../markdown-editor/editor-api';
+import HeaderToolbar from '../markdown-editor/header-toolbar/header-toolbar';
+import SeafileCodeMirror from './code-mirror';
+import { getPlainOptions } from './helper';
 
 import './style.css';
 import '../markdown-editor/css/markdown-editor.css';

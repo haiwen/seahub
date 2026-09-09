@@ -1,24 +1,24 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
-import { Utils } from '../../../../utils/utils';
-import { seafileAPI } from '../../../../utils/seafile-api';
-import { userAPI } from '../../../../utils/user-api';
-import { gettext, siteRoot } from '../../../../utils/constants';
-import ModalPortal from '../../../../components/modal-portal';
-import toaster from '../../../../components/toast';
-import RenameRepoDialog from '../../../../components/dialog/rename-repo';
-import TransferDialog from '../../../../components/dialog/transfer-dialog';
+import PropTypes from 'prop-types';
 import ChangeRepoPasswordDialog from '../../../../components/dialog/change-repo-password-dialog';
-import ResetEncryptedRepoPasswordDialog from '../../../../components/dialog/reset-encrypted-repo-password-dialog';
 import LabelRepoStateDialog from '../../../../components/dialog/label-repo-state-dialog';
 import LibSubFolderPermissionDialog from '../../../../components/dialog/lib-sub-folder-permission-dialog';
+import RenameRepoDialog from '../../../../components/dialog/rename-repo';
 import RepoAPITokenDialog from '../../../../components/dialog/repo-api-token-dialog';
-import RepoWebhookDialog from '../../../../components/dialog/repo-webhook-dialog';
-import RepoShareAdminDialog from '../../../../components/dialog/repo-share-admin-dialog';
-import OfficeSuiteDialog from '../../../../components/dialog/repo-office-suite-dialog';
 import RepoArchiveDialog from '../../../../components/dialog/repo-archive-dialog';
+import OfficeSuiteDialog from '../../../../components/dialog/repo-office-suite-dialog';
+import RepoShareAdminDialog from '../../../../components/dialog/repo-share-admin-dialog';
+import RepoWebhookDialog from '../../../../components/dialog/repo-webhook-dialog';
+import ResetEncryptedRepoPasswordDialog from '../../../../components/dialog/reset-encrypted-repo-password-dialog';
+import TransferDialog from '../../../../components/dialog/transfer-dialog';
 import LibraryOpMenu from '../../../../components/library-op-menu';
+import ModalPortal from '../../../../components/modal-portal';
+import toaster from '../../../../components/toast';
+import { gettext, siteRoot } from '../../../../utils/constants';
+import { seafileAPI } from '../../../../utils/seafile-api';
+import { userAPI } from '../../../../utils/user-api';
+import { Utils } from '../../../../utils/utils';
 import Icon from '../../../icon';
 
 const propTypes = {

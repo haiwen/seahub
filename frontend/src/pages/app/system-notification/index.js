@@ -1,6 +1,6 @@
 import React from 'react';
-import { curNoteMsg, curNoteID, siteRoot, gettext } from '../../../utils/constants';
 import Icon from '../../../components/icon';
+import { curNoteMsg, curNoteID, siteRoot, gettext } from '../../../utils/constants';
 
 import './system-notification.css';
 

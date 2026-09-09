@@ -1,15 +1,15 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import PropTypes from 'prop-types';
+import EmptyTip from '../../components/empty-tip';
+import Icon from '../../components/icon';
+import Loading from '../../components/loading';
+import toaster from '../../components/toast';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
-import toaster from '../../components/toast';
-import Loading from '../../components/loading';
-import EmptyTip from '../../components/empty-tip';
 import { formatWithTimezone } from '../../utils/time';
-import Icon from '../../components/icon';
+import { Utils } from '../../utils/utils';
 
 import '../../css/lib-content-view.css';
 

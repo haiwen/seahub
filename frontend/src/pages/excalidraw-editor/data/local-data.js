@@ -1,4 +1,3 @@
-import debounce from 'lodash.debounce';
 import {
   createStore,
   entries,
@@ -7,11 +6,12 @@ import {
   set,
   setMany,
 } from 'idb-keyval';
-import Locker from './locker';
-import FileManager from './file-manager';
-import { updateBrowserStateVersion } from './tab-sync';
+import debounce from 'lodash.debounce';
 import { SAVE_TO_LOCAL_STORAGE_TIMEOUT, STORAGE_KEYS } from '../constants';
+import FileManager from './file-manager';
 import { saveDataStateToLocalStorage } from './local-storage';
+import Locker from './locker';
+import { updateBrowserStateVersion } from './tab-sync';
 
 const defaultOnFilesSaved = () => {};
 

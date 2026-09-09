@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
-import { gettext } from '../../utils/constants';
+import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
+import { gettext } from '../../utils/constants';
 
 const propTypes = {
   formActionURL: PropTypes.string.isRequired,

@@ -1,8 +1,8 @@
 import { chatAndSearchAvailable, enableSeafileAI, gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
-import { checkIsDir } from './row';
-import { getFileNameFromRecord } from './cell';
 import TextTranslation from '../../utils/text-translation';
+import { Utils } from '../../utils/utils';
+import { getFileNameFromRecord } from './cell';
+import { checkIsDir } from './row';
 
 export const shouldEnableOption = (records, optionKey, readOnly, metadataStatus, isMultiple, areRecordsInSameFolder, isNameCol, isSelectedRange) => {
   if (!records || records.length === 0) return false;

@@ -1,10 +1,10 @@
 import React, { useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { CHAT_MESSAGE_TYPE } from '../../constants';
 import { Attachments } from '../../components';
-import ThoughtProcess from '../thought-process';
+import { CHAT_MESSAGE_TYPE } from '../../constants';
 import CustomizeMarkdownViewer from '../customize-markdown-viewer';
 import MessageOperations from '../message-operations';
+import ThoughtProcess from '../thought-process';
 
 import './index.css';
 

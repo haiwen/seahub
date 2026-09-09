@@ -1,11 +1,11 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import Logo from './components/logo';
-import EmptyTip from './components/empty-tip';
 import Account from './components/account';
+import EmptyTip from './components/empty-tip';
+import Logo from './components/logo';
 import TermsPreviewWidget from './components/terms-preview-widget';
-import { Utils } from './utils/utils';
 import { gettext } from './utils/constants';
+import { Utils } from './utils/utils';
 
 import './css/tc-accept.css';
 

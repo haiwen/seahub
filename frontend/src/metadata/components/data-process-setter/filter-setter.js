@@ -1,13 +1,13 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import deepCopy from 'deep-copy';
-import { FilterPopover } from '../popover';
-import { getValidFilters } from '../../utils/filter';
+import PropTypes from 'prop-types';
+import OpIcon from '@/components/op-icon';
 import { gettext } from '../../../utils/constants';
 import { isEnter, isSpace } from '../../../utils/hotkey';
 import { VIEW_TYPE } from '../../constants';
-import OpIcon from '@/components/op-icon';
+import { getValidFilters } from '../../utils/filter';
+import { FilterPopover } from '../popover';
 
 const FilterSetter = ({
   readOnly,

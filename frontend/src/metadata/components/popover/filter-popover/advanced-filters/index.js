@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import FilterItem from './filter-item';
-import { ValidateFilter } from '../../../../utils/validate';
-import { getColumnByKey } from '../../../../utils/column';
 import { FILTER_COLUMN_OPTIONS } from '../../../../constants';
+import { getColumnByKey } from '../../../../utils/column';
+import { ValidateFilter } from '../../../../utils/validate';
+import FilterItem from './filter-item';
 import FilterItemUtils from './filter-item-utils';
 
 import './index.css';

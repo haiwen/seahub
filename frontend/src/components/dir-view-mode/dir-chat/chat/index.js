@@ -1,19 +1,19 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import { chatAPI } from '../../../../utils/chat-api';
 import { gettext, username } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
 import CenteredLoading from '../../../centered-loading';
+import { eventBus, EVENT_BUS_TYPE } from '../../../event-bus';
 import Icon from '../../../icon';
 import toaster from '../../../toast';
-import { eventBus, EVENT_BUS_TYPE } from '../../../event-bus';
-import { chatAPI } from '../../../../utils/chat-api';
-import { ChatMessage, ChatSession } from '../models';
-import { ASK_PAGE_SLUG_ID, CHAT_MESSAGE_TYPE } from '../constants';
-import ChatInput from '../chat-input';
-import ChatHistory from '../chat-history';
-import { useAskPage, useDocuments, useSessions } from '../hooks';
 import ChatHeader from '../chat-header';
+import ChatHistory from '../chat-history';
+import ChatInput from '../chat-input';
+import { ASK_PAGE_SLUG_ID, CHAT_MESSAGE_TYPE } from '../constants';
+import { useAskPage, useDocuments, useSessions } from '../hooks';
+import { ChatMessage, ChatSession } from '../models';
 
 import './index.css';
 

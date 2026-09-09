@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import GroupbyItem from './groupby-item';
+import PropTypes from 'prop-types';
 import { gettext } from '../../../../../utils/constants';
+import GroupbyItem from './groupby-item';
 
 const Groupbys = ({ readOnly, groupbys, columns, onDelete, onUpdate, onMove }) => {
   const isEmpty = useMemo(() => {

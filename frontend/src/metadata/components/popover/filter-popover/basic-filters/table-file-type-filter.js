@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import CustomizeSelect from '../../../../../components/customize-select';
 import Icon from '../../../../../components/icon';
 import { gettext } from '../../../../../utils/constants';

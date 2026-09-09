@@ -1,20 +1,20 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Utils } from '../../../utils/utils';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
-import { gettext, username } from '../../../utils/constants';
-import toaster from '../../../components/toast';
+import PropTypes from 'prop-types';
+import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
+import OpMenu from '../../../components/dialog/op-menu';
+import SysAdminUserDeactivateDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-user-deactivate-dialog';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Selector from '../../../components/single-selector';
-import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
-import OpMenu from '../../../components/dialog/op-menu';
+import toaster from '../../../components/toast';
+import { gettext, username } from '../../../utils/constants';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { Utils } from '../../../utils/utils';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import OrgNav from './org-nav';
-import SysAdminUserDeactivateDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-user-deactivate-dialog';
 
 dayjs.extend(relativeTime);
 

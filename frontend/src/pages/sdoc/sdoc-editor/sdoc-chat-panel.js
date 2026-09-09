@@ -1,12 +1,12 @@
 import React, { useCallback, useLayoutEffect, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { Tooltip } from '@seafile/sdoc-editor';
+import PropTypes from 'prop-types';
 import DirChat from '../../../components/dir-view-mode/dir-chat';
-import ChatToolbar from '../../../components/toolbar/chat-toolbar';
+import { ASK_PAGE_SLUG_ID } from '../../../components/dir-view-mode/dir-chat/constants';
+import { AttachmentObject } from '../../../components/dir-view-mode/dir-chat/models';
 import Icon from '../../../components/icon';
 import OpIcon from '../../../components/op-icon';
-import { AttachmentObject } from '../../../components/dir-view-mode/dir-chat/models';
-import { ASK_PAGE_SLUG_ID } from '../../../components/dir-view-mode/dir-chat/constants';
+import ChatToolbar from '../../../components/toolbar/chat-toolbar';
 import { gettext } from '../../../utils/constants';
 import { getDocSessionIds, getLatestDocSessionId, removeDocSession, removeDocSessions, touchDocSession } from './sdoc-chat-session-storage';
 

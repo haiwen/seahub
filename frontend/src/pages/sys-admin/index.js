@@ -1,80 +1,68 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
+import { I18nextProvider } from 'react-i18next';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { globalHistory, LocationProvider, Router } from '@gatsbyjs/reach-router';
-import { I18nextProvider } from 'react-i18next';
+import { createRoot } from 'react-dom/client';
+import i18n from '../../_i18n/i18n-seafile-editor';
 import { siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import i18n from '../../_i18n/i18n-seafile-editor';
-
-import SidePanel from './side-panel';
-import MainPanel from './main-panel';
-
-import Info from './info';
-import StatisticLayout from './statistic/layout';
-
-import SearchUsers from './users/search-users';
-import User from './users/user-info';
-import UserOwnedRepos from './users/user-repos';
-import UserSharedRepos from './users/user-shared-repos';
-import UserLinks from './users/user-links';
-import UserGroups from './users/user-groups';
-import { UsersLayout, UserLayout } from './users';
-
-import SearchRepos from './repos/search-repos';
-import DirView from './repos/dir-view';
-
+import AbuseReports from './abuse-reports';
+import AdminLogs from './admin-logs';
+import AdminLoginLogs from './admin-logs/login-logs';
+import AdminOperationLogs from './admin-logs/operation-logs';
+import DingtalkDepartments from './department-integration/dingtalk-departments';
+import WorkWeixinDepartments from './department-integration/work-weixin-departments';
+import Departments from './departments/departments';
+import Devices from './devices';
+import DesktopDevices from './devices/desktop-devices';
+import DeviceErrors from './devices/devices-errors';
+import MobileDevices from './devices/mobile-devices';
+import FileScanRecords from './file-scan-records';
+import GroupMembers from './groups/group-members';
+import GroupRepos from './groups/group-repos';
 import Groups from './groups/groups';
 import SearchGroups from './groups/search-groups';
-import GroupRepos from './groups/group-repos';
-import GroupMembers from './groups/group-members';
-
-import Departments from './departments/departments';
-
+import Info from './info';
+import InstitutionAdmins from './institutions/institution-admins';
+import InstitutionInfo from './institutions/institution-info';
+import InstitutionUsers from './institutions/institution-users';
+import Institutions from './institutions/institutions';
+import Invitations from './invitations/invitations';
+import LibrariesAndLinks from './libraries-and-links';
+import Logs from './logs-page';
+import FileAccessLogs from './logs-page/file-access-logs';
+import FIleTransferLogs from './logs-page/file-transfer-log';
+import FileUpdateLogs from './logs-page/file-update-logs';
+import GroupMemberAuditLogs from './logs-page/group-member-audit-logs';
+import LoginLogs from './logs-page/login-logs';
+import SharePermissionLogs from './logs-page/share-permission-logs';
+import MainPanel from './main-panel';
+import Notifications from './notifications/notifications';
+import OrgAdmins from './orgs/org-admins';
+import OrgGroups from './orgs/org-groups';
+import OrgInfo from './orgs/org-info';
+import OrgRepos from './orgs/org-repos';
+import OrgUsers from './orgs/org-users';
 import Orgs from './orgs/orgs';
 import OrgsTrafficExceeded from './orgs/orgs-traffic-exceeded';
 import SearchOrgs from './orgs/search-orgs';
-import OrgInfo from './orgs/org-info';
-import OrgUsers from './orgs/org-users';
-import OrgAdmins from './orgs/org-admins';
-import OrgGroups from './orgs/org-groups';
-import OrgRepos from './orgs/org-repos';
-
-import Institutions from './institutions/institutions';
-import InstitutionInfo from './institutions/institution-info';
-import InstitutionUsers from './institutions/institution-users';
-import InstitutionAdmins from './institutions/institution-admins';
-
-import LoginLogs from './logs-page/login-logs';
-import FileAccessLogs from './logs-page/file-access-logs';
-import FileUpdateLogs from './logs-page/file-update-logs';
-import SharePermissionLogs from './logs-page/share-permission-logs';
-import FIleTransferLogs from './logs-page/file-transfer-log';
-import GroupMemberAuditLogs from './logs-page/group-member-audit-logs';
-import WebSettings from './web-settings/web-settings';
-import Notifications from './notifications/notifications';
-import FileScanRecords from './file-scan-records';
-import WorkWeixinDepartments from './department-integration/work-weixin-departments';
-import DingtalkDepartments from './department-integration/dingtalk-departments';
-import Invitations from './invitations/invitations';
+import DirView from './repos/dir-view';
+import SearchRepos from './repos/search-repos';
+import SidePanel from './side-panel';
+import StatisticLayout from './statistic/layout';
 import TermsAndConditions from './terms-and-conditions/terms-and-conditions';
-
+import { UsersLayout, UserLayout } from './users';
+import SearchUsers from './users/search-users';
+import UserGroups from './users/user-groups';
+import User from './users/user-info';
+import UserLinks from './users/user-links';
+import UserOwnedRepos from './users/user-repos';
+import UserSharedRepos from './users/user-shared-repos';
+import VirusScan from './virus-scan';
 import AllVirusFiles from './virus-scan/all-virus-files';
 import UnhandledVirusFiles from './virus-scan/unhandled-virus-files';
-
-import AdminOperationLogs from './admin-logs/operation-logs';
-import AdminLoginLogs from './admin-logs/login-logs';
-
-import AbuseReports from './abuse-reports';
-import Devices from './devices';
-import DesktopDevices from './devices/desktop-devices';
-import MobileDevices from './devices/mobile-devices';
-import DeviceErrors from './devices/devices-errors';
-import LibrariesAndLinks from './libraries-and-links';
-import Logs from './logs-page';
-import VirusScan from './virus-scan';
-import AdminLogs from './admin-logs';
+import WebSettings from './web-settings/web-settings';
 
 import '../../css/layout.css';
 import '../../css/toolbar.css';

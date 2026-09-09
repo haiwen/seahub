@@ -1,7 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import PropTypes from 'prop-types';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 

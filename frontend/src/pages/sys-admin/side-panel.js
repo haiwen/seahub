@@ -1,13 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
+import PropTypes from 'prop-types';
+import Icon from '../../components/icon';
 import Logo from '../../components/logo';
 import { gettext, siteRoot, isPro, otherPermission, canViewSystemInfo, canViewStatistic,
   canConfigSystem, canManageLibrary, canManageUser, canManageGroup, canViewUserLog,
   canViewAdminLog, constanceEnabled, multiTenancy, multiInstitution, sysadminExtraEnabled,
   enableGuestInvitation, enableTermsAndConditions, enableFileScan, enableWorkWeixin, enableDingtalk,
   enableShareLinkReportAbuse, isDBSqlite3 } from '../../utils/constants';
-import Icon from '../../components/icon';
 
 const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,

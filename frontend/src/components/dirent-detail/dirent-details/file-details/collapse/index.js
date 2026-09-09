@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { CAPTURE_INFO_SHOW_KEY } from '../../../../../constants';
+import PropTypes from 'prop-types';
 import OpIcon from '@/components/op-icon';
 import { gettext } from '@/utils/constants';
+import { CAPTURE_INFO_SHOW_KEY } from '../../../../../constants';
 
 import './index.css';
 

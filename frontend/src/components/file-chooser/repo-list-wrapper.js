@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import RepoListView from './repo-list-view';
-import RecentlyUsedListView from './recently-used-list-view';
-import FavoritesListView from './favorites-list-view';
+import { MODE_TYPE_MAP } from '../../constants';
 import { gettext, mediaUrl } from '../../utils/constants';
+import Icon from '../icon';
+import Loading from '../loading';
+import FavoritesListView from './favorites-list-view';
+import RecentlyUsedListView from './recently-used-list-view';
+import RepoListView from './repo-list-view';
 import SearchedListView from './searched-list-view';
 import { SearchStatus } from './searcher';
-import { MODE_TYPE_MAP } from '../../constants';
-import Loading from '../loading';
-import Icon from '../icon';
 
 const RepoListWrapper = (props) => {
   const {

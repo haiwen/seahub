@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import PropTypes from 'prop-types';
+import CommitDetails from '../../../components/dialog/commit-details';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
-import Paginator from '../../../components/paginator';
-import UserLink from '../user-link';
 import ModalPortal from '../../../components/modal-portal';
-import CommitDetails from '../../../components/dialog/commit-details';
-import LogUserSelector from '../../dashboard/log-user-selector';
+import Paginator from '../../../components/paginator';
+import { gettext } from '../../../utils/constants';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { Utils } from '../../../utils/utils';
 import LogRepoSelector from '../../dashboard/log-repo-selector';
+import LogUserSelector from '../../dashboard/log-user-selector';
+import UserLink from '../user-link';
 
 dayjs.extend(relativeTime);
 

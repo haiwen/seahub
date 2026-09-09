@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../utils/constants';
 import { ROW_HEIGHT } from '../metadata/constants';
+import { gettext } from '../utils/constants';
+import CustomDropdown from './dropdown';
 import Icon from './icon';
 import Tooltip from './tooltip';
-import CustomDropdown from './dropdown';
 
 const ROW_HEIGHT_OPTIONS = [
   { label: gettext('Default'), icon: 'default', value: ROW_HEIGHT },

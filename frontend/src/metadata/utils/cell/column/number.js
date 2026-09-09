@@ -1,6 +1,6 @@
+import { DEFAULT_NUMBER_FORMAT, DISPLAY_INTERNAL_ERRORS } from '../../../constants';
 import { NPminus, NPdivide } from '../../helper/number-precision';
 import { round } from '../../number';
-import { DEFAULT_NUMBER_FORMAT, DISPLAY_INTERNAL_ERRORS } from '../../../constants';
 
 const SIZES = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
 

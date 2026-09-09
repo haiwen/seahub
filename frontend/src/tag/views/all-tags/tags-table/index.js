@@ -1,24 +1,24 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import EventBus from '../../../../components/event-bus';
 import SFTable from '../../../../components/sf-table';
+import { LOCAL_KEY_TREE_NODE_FOLDED } from '../../../../components/sf-table/constants/tree';
+import { getRowById } from '../../../../components/sf-table/utils/table';
+import { getTreeNodeByKey, getTreeNodeId } from '../../../../components/sf-table/utils/tree';
+import toaster from '../../../../components/toast';
+import { EVENT_BUS_TYPE } from '../../../../metadata/constants';
+import { gettext } from '../../../../utils/constants';
+import { isNumber } from '../../../../utils/number';
 import EditTagDialog from '../../../components/dialog/edit-tag-dialog';
 import MergeTagsSelector from '../../../components/merge-tags-selector';
-import DraggedTagsLayer from './dragged-tags-layer';
-import { createTableColumns } from './columns-factory';
-import { createContextMenuOptions } from './context-menu-options';
-import { gettext } from '../../../../utils/constants';
 import { PRIVATE_COLUMN_KEY, VISIBLE_COLUMNS_KEYS } from '../../../constants';
 import { useTags } from '../../../hooks';
-import EventBus from '../../../../components/event-bus';
-import { EVENT_BUS_TYPE } from '../../../../metadata/constants';
-import { LOCAL_KEY_TREE_NODE_FOLDED } from '../../../../components/sf-table/constants/tree';
-import { isNumber } from '../../../../utils/number';
-import { getTreeNodeByKey, getTreeNodeId } from '../../../../components/sf-table/utils/tree';
-import { getRowById } from '../../../../components/sf-table/utils/table';
-import { getParentLinks } from '../../../utils/cell';
-import ServerOperator from '../../../store/server-operator';
-import toaster from '../../../../components/toast';
 import { OPERATION_TYPE } from '../../../store/operations/constants';
+import ServerOperator from '../../../store/server-operator';
+import { getParentLinks } from '../../../utils/cell';
+import { createTableColumns } from './columns-factory';
+import { createContextMenuOptions } from './context-menu-options';
+import DraggedTagsLayer from './dragged-tags-layer';
 
 import './index.css';
 

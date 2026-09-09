@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
+import CustomDropdown from '../../components/dropdown';
+import Selector from '../../components/single-selector';
+import toaster from '../../components/toast';
 import { gettext, siteRoot, orgID, username } from '../../utils/constants';
 import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
-import toaster from '../../components/toast';
-import Selector from '../../components/single-selector';
-import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
-import CustomDropdown from '../../components/dropdown';
 
 const propTypes = {
   user: PropTypes.object,

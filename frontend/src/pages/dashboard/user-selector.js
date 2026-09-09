@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Input, Popover } from 'reactstrap';
-import { gettext } from '../../utils/constants';
-import SearchEmptyTip from '../../components/search-empty-tip';
-import { Utils } from '../../utils/utils';
-import OpIcon from '../../components/op-icon';
-import Icon from '../../components/icon';
+import PropTypes from 'prop-types';
 import OpElement from '@/components/op-element';
+import Icon from '../../components/icon';
+import OpIcon from '../../components/op-icon';
+import SearchEmptyTip from '../../components/search-empty-tip';
+import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 
 import '../../css/files-activities.css';
 

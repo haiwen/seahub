@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
+import { getRowById } from '../../../../components/sf-table/utils/table';
 import { getTreeNodeByKey, getTreeNodeId } from '../../../../components/sf-table/utils/tree';
 import { useTags } from '../../../hooks';
-import { getRowById } from '../../../../components/sf-table/utils/table';
 import TagNameFormatter from './formatter/tag-name';
 
 const DraggedTagsLayer = ({ draggedNodesKeys }) => {

@@ -1,15 +1,15 @@
 import React, { useCallback, useMemo, useRef } from 'react';
-import Icon from '../../../components/icon';
+import Tooltip from '@/components/tooltip';
 import CustomDropdown from '../../../components/dropdown';
-import { useMetadataDetails } from '../../hooks';
+import Icon from '../../../components/icon';
 import { useMetadataStatus, useMetadataAIOperations } from '../../../hooks';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
+import { useMetadataDetails } from '../../hooks';
 import { getFileNameFromRecord, getFileObjIdFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
 import { getColumnByKey } from '../../utils/column';
-import { PRIVATE_COLUMN_KEY } from './constants';
 import { checkIsDir } from '../../utils/row';
-import Tooltip from '@/components/tooltip';
+import { PRIVATE_COLUMN_KEY } from './constants';
 
 const OPERATION = {
   GENERATE_DESCRIPTION: 'generate-description',

@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { getCellValueByColumn, getDateDisplayString } from '../../../utils/cell';
-import DateEditor from '../../cell-editors/date-editor';
 import ClickOutside from '../../../../components/click-outside';
 import { lang } from '../../../../utils/constants';
+import { getCellValueByColumn, getDateDisplayString } from '../../../utils/cell';
+import DateEditor from '../../cell-editors/date-editor';
 
 const Date = ({ record, column, onCommit }) => {
   const [isEditorShown, setIsEditorShown] = useState(false);

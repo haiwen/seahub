@@ -1,46 +1,31 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import Cookies from 'js-cookie';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import classnames from 'classnames';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { navigate } from '@gatsbyjs/reach-router';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-
+import classnames from 'classnames';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import Cookies from 'js-cookie';
+import PropTypes from 'prop-types';
+import { getDirTableColumnOrder, setDirTableColumnOrder } from '@/components/dir-view-mode/dir-table-view/columns';
 import {
-  chatAndSearchAvailable,
-  enableThumbnailServer,
-  gettext,
-  SF_DIRECTORY_TREE_SORT_BY_KEY,
-  SF_DIRECTORY_TREE_SORT_ORDER_KEY,
-  siteRoot,
-  thumbnailSizeForOriginal,
-  username
-} from '../../utils/constants';
-
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
-import { Dirent, FileTag, RepoTag, RepoInfo } from '../../models';
-
-import TreeNode from '../../components/tree-view/tree-node';
-import treeHelper from '../../components/tree-view/tree-helper';
-import toaster from '../../components/toast';
-import ModalPortal from '../../components/modal-portal';
-import LibDecryptDialog from '../../components/dialog/lib-decrypt-dialog';
-import FileUploader from '../../components/file-uploader/file-uploader';
+  LIST_VIEW_HIDDEN_COLUMNS_DEFAULT,
+  getDirHiddenColumnKeys,
+  DIR_BASE_COLUMNS,
+  DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS,
+  getDirTableHiddenColumnKeys,
+  DIR_TABLE_DEFAULT_METADATA_COLUMNS,
+  getDirTableRowHeightKey
+} from '@/constants/dir-column-config';
+import Column from '@/metadata/model/column';
+import { normalizeColumns } from '@/metadata/utils/column';
+import CurDirPath from '../../components/cur-dir-path';
+import DirTool from '../../components/cur-dir-path/dir-tool';
 import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dirent-progress-dialog';
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
-import EventBus, { EVENT_BUS_TYPE, eventBus } from '../../components/event-bus';
-import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY, RECENTLY_USED_LIST_KEY } from '../../constants';
-import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, ROW_HEIGHT } from '../../metadata/constants';
-import { MetadataStatusProvider, FileOperationsProvider, MetadataMiddlewareProvider } from '../../hooks';
-import { MetadataProvider } from '../../metadata/hooks';
-import metadataAPI from '../../metadata/api';
-import { PRIVATE_COLUMN_KEY } from '../../metadata/constants/column/private';
-
+import LibDecryptDialog from '../../components/dialog/lib-decrypt-dialog';
 import {
   LIST_MODE,
   TABLE_MODE,
@@ -52,28 +37,36 @@ import {
   TRASH_MODE,
   CHAT_MODE
 } from '../../components/dir-view-mode/constants';
-
-import CurDirPath from '../../components/cur-dir-path';
-import DirTool from '../../components/cur-dir-path/dir-tool';
-import Detail from '../../components/dirent-detail';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
+import Detail from '../../components/dirent-detail';
+import EventBus, { EVENT_BUS_TYPE, eventBus } from '../../components/event-bus';
+import FileUploader from '../../components/file-uploader/file-uploader';
+import ModalPortal from '../../components/modal-portal';
+import toaster from '../../components/toast';
 import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-toolbar';
 import ViewToolbar from '../../components/toolbar/view-toolbar';
-import WebSocketClient from '../../utils/websocket-service';
-import Column from '@/metadata/model/column';
-
+import treeHelper from '../../components/tree-view/tree-helper';
+import TreeNode from '../../components/tree-view/tree-node';
+import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY, RECENTLY_USED_LIST_KEY } from '../../constants';
+import { MetadataStatusProvider, FileOperationsProvider, MetadataMiddlewareProvider } from '../../hooks';
+import metadataAPI from '../../metadata/api';
+import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, ROW_HEIGHT } from '../../metadata/constants';
+import { PRIVATE_COLUMN_KEY } from '../../metadata/constants/column/private';
+import { MetadataProvider } from '../../metadata/hooks';
+import { Dirent, FileTag, RepoTag, RepoInfo } from '../../models';
 import {
-  LIST_VIEW_HIDDEN_COLUMNS_DEFAULT,
-  getDirHiddenColumnKeys,
-  DIR_BASE_COLUMNS,
-  DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS,
-  getDirTableHiddenColumnKeys,
-  DIR_TABLE_DEFAULT_METADATA_COLUMNS,
-  getDirTableRowHeightKey
-} from '@/constants/dir-column-config';
-
-import { normalizeColumns } from '@/metadata/utils/column';
-import { getDirTableColumnOrder, setDirTableColumnOrder } from '@/components/dir-view-mode/dir-table-view/columns';
+  chatAndSearchAvailable,
+  enableThumbnailServer,
+  gettext,
+  SF_DIRECTORY_TREE_SORT_BY_KEY,
+  SF_DIRECTORY_TREE_SORT_ORDER_KEY,
+  siteRoot,
+  thumbnailSizeForOriginal,
+  username
+} from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
+import WebSocketClient from '../../utils/websocket-service';
 
 import '../../css/lib-content-view.css';
 

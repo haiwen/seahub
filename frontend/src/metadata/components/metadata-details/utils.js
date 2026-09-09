@@ -1,5 +1,5 @@
-import { getNormalizedColumnType } from '../../utils/column';
 import { getCellValueByColumn } from '../../utils/cell';
+import { getNormalizedColumnType } from '../../utils/column';
 
 export const normalizeFields = (fields) => {
   if (!Array.isArray(fields) || fields.length === 0) return [];

@@ -1,13 +1,13 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
-import MylibRepoListItem from './mylib-repo-list-item';
-import LibsMobileThead from '../../components/libs-mobile-thead';
-import { LIST_MODE } from '../../components/dir-view-mode/constants';
-import ContextMenu from '../../components/context-menu/context-menu';
-import { Utils } from '../../utils/utils';
+import PropTypes from 'prop-types';
 import { hideMenu, handleContextClick } from '../../components/context-menu/actions';
+import ContextMenu from '../../components/context-menu/context-menu';
+import { LIST_MODE } from '../../components/dir-view-mode/constants';
+import LibsMobileThead from '../../components/libs-mobile-thead';
 import RepoListCard from '../../components/repo-list-card/repo-list-card';
+import { Utils } from '../../utils/utils';
+import MylibRepoListItem from './mylib-repo-list-item';
 
 const propTypes = {
   repoList: PropTypes.array.isRequired,

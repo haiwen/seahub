@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CustomPermissionItem from './custom-permission-item';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
+import CustomPermissionItem from './custom-permission-item';
 
 const propTypes = {
   permissions: PropTypes.array.isRequired,

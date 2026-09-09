@@ -1,6 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
+import PropTypes from 'prop-types';
 import { gettext, siteRoot } from '../../../utils/constants';
 
 const NAV_ITEMS = [

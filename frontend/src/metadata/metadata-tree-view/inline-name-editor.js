@@ -1,7 +1,7 @@
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { Input } from 'reactstrap';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import { isEnter } from '../../utils/hotkey';
 
 const InlineNameEditor = forwardRef(({ name, className, onSubmit }, ref) => {

@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ListCustomPermission from './list-custom-permissions';
+import CustomPermission from '../../../models/custom-permission';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { Utils } from '../../../utils/utils';
+import Loading from '../../loading';
+import toaster from '../../toast';
 import AddCustomPermission from './add-custom-permission';
 import EditCustomPermission from './edit-custom-permission';
-import Loading from '../../loading';
-import { seafileAPI } from '../../../utils/seafile-api';
-import toaster from '../../toast';
-import { Utils } from '../../../utils/utils';
-import CustomPermission from '../../../models/custom-permission';
+import ListCustomPermission from './list-custom-permissions';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired

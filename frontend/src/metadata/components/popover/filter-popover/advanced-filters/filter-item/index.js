@@ -1,25 +1,25 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { UncontrolledTooltip } from 'reactstrap';
+import PropTypes from 'prop-types';
 import CustomizeSelect from '../../../../../../components/customize-select';
-import SearchInput from '../../../../../../components/search-input';
 import Icon from '../../../../../../components/icon';
 import IconBtn from '../../../../../../components/icon-btn';
-import CollaboratorFilter from './collaborator-filter';
-import FilterCalendar from '../filter-calendar';
-import RateItem from '../../../../cell-editors/rate-editor/rate-item';
+import SearchInput from '../../../../../../components/search-input';
 import { gettext } from '../../../../../../utils/constants';
 import { Utils } from '../../../../../../utils/utils';
+import {
+  CellType, DELETED_OPTION_BACKGROUND_COLOR, DELETED_OPTION_TIPS, FILTER_PREDICATE_TYPE, FILTER_TERM_MODIFIER_TYPE, FILTER_ERR_MSG,
+  filterTermModifierIsWithin,
+} from '../../../../../constants';
 import { isCheckboxColumn, isDateColumn, getColumnOptions as getSelectColumnOptions } from '../../../../../utils/column';
 import {
   getFilterByColumn, getUpdatedFilterBySelectSingle, getUpdatedFilterBySelectMultiple, getUpdatedFilterByCreator, getUpdatedFilterByCollaborator,
   getColumnOptions, getUpdatedFilterByPredicate,
 } from '../../../../../utils/filter';
-import {
-  CellType, DELETED_OPTION_BACKGROUND_COLOR, DELETED_OPTION_TIPS, FILTER_PREDICATE_TYPE, FILTER_TERM_MODIFIER_TYPE, FILTER_ERR_MSG,
-  filterTermModifierIsWithin,
-} from '../../../../../constants';
+import RateItem from '../../../../cell-editors/rate-editor/rate-item';
+import FilterCalendar from '../filter-calendar';
 import FilterItemUtils from '../filter-item-utils';
+import CollaboratorFilter from './collaborator-filter';
 
 import './index.css';
 

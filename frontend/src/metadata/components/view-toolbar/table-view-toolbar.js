@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { FilterSetter, GroupbySetter, SortSetter, HideColumnSetter, Search } from '../data-process-setter';
-import { PRIVATE_COLUMN_KEY } from '../../constants';
-import { useMetadataStatus } from '../../../hooks';
 import SetRowHeight from '../../../components/set-row-height';
+import { useMetadataStatus } from '../../../hooks';
+import { PRIVATE_COLUMN_KEY } from '../../constants';
+import { FilterSetter, GroupbySetter, SortSetter, HideColumnSetter, Search } from '../data-process-setter';
 
 const TableViewToolbar = ({
   readOnly,

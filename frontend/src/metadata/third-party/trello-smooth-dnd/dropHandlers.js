@@ -1,7 +1,7 @@
-import { addChildAt, removeChildAt } from './utils';
 import {
   wrapperClass,
 } from './constants';
+import { addChildAt, removeChildAt } from './utils';
 
 export function domDropHandler({ element, draggables, layout, options }) {
   return (dropResult, onDrop) => {

@@ -1,19 +1,19 @@
 import React, { useCallback, useMemo, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import CustomizePopover from '../../../../components/customize-popover';
 import CommonAddTool from '../../../../components/common-add-tool';
-import SearchInput from '../../../../components/search-input';
+import CustomizePopover from '../../../../components/customize-popover';
 import SearchEmptyTip from '../../../../components/search-empty-tip';
+import SearchInput from '../../../../components/search-input';
 import toaster from '../../../../components/toast';
-import ConfirmDeletePopover from './confirm-delete-popover';
-import OptionsContainer from './options-container';
-import OptionFooter from './options-footer';
-import Option from './option';
 import { gettext } from '../../../../utils/constants';
 import { useMetadataView } from '../../../hooks/metadata-view';
-import { getColumnOptions, getOptionNameById, generateNewOption } from '../../../utils/column';
-import { checkIsPredefinedOption } from '../../../utils/cell';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
+import { checkIsPredefinedOption } from '../../../utils/cell';
+import { getColumnOptions, getOptionNameById, generateNewOption } from '../../../utils/column';
+import ConfirmDeletePopover from './confirm-delete-popover';
+import Option from './option';
+import OptionsContainer from './options-container';
+import OptionFooter from './options-footer';
 
 import './index.css';
 

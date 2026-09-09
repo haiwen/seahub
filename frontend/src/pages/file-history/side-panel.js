@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import HistoryListView from '../../components/history-list-view/history-list-view';
+import Loading from '../../components/loading';
+import toaster from '../../components/toast';
 import { gettext, PER_PAGE, filePath } from '../../utils/constants';
 import editUtilities from '../../utils/editor-utilities';
-import Loading from '../../components/loading';
-import HistoryListView from '../../components/history-list-view/history-list-view';
-import toaster from '../../components/toast';
 
 const propTypes = {
   onItemClick: PropTypes.func.isRequired,

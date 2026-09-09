@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Button, Input, InputGroup } from 'reactstrap';
+import PropTypes from 'prop-types';
 import { gettext } from '../utils/constants';
 import ButtonQR from './btn-qr-code';
 

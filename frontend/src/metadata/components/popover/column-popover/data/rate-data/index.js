@@ -1,14 +1,14 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import { FormGroup, Label } from 'reactstrap';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 import CustomizePopover from '../../../../../../components/customize-popover';
 import CustomizeSelect from '../../../../../../components/customize-select';
 import Icon from '../../../../../../components/icon';
 import IconBtn from '../../../../../../components/icon-btn';
 import { gettext } from '../../../../../../utils/constants';
 import { RATE_MAX_NUMBER, RATE_COLORS, RATE_TYPES, DEFAULT_RATE_DATA } from '../../../../../constants';
-import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 
 import './index.css';
 

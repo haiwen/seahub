@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Utils } from '../../../../../utils/utils';
 import CellFormatter from '../../../../components/cell-formatter';
 import { CellType } from '../../../../constants';
-import { Utils } from '../../../../../utils/utils';
 
 const SPECIAL_FILE_ICON = [
   'excel.png',

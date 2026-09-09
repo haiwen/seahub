@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { Utils } from '../../../../utils/utils';
+import PropTypes from 'prop-types';
 import { ROW_HEIGHT } from '@/metadata/constants';
 import { gettext, mediaUrl } from '@/utils/constants';
+import { Utils } from '../../../../utils/utils';
 
 import './index.css';
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { getColorScheme } from '../../utils/utils';
 import { gettext, SF_COLOR_MODE } from '../../utils/constants';
+import { getColorScheme } from '../../utils/utils';
 import OpIcon from '../op-icon';
 
 class ColorMode extends Component {

@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import RepoInfoBar from '../../components/repo-info-bar';
 import DirentGridView from '../../components/dirent-grid-view/dirent-grid-view';
 import DirentNoneView from '../../components/dirent-list-view/dirent-none-view';
+import RepoInfoBar from '../../components/repo-info-bar';
 
 const propTypes = {
   path: PropTypes.string.isRequired,

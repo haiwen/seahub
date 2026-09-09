@@ -1,19 +1,19 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
-import { gettext, isPro, isSeafilePlus, siteRoot } from '../../utils/constants';
 import { Button, Input, InputGroup } from 'reactstrap';
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
-import UserSelect from '../user-select';
-import SharePermissionEditor from '../select-editor/share-permission-editor';
-import FileChooser from '../file-chooser';
-import toaster from '../../components/toast';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import BackIcon from '../../components/back-icon';
 import EmptyTip from '../../components/empty-tip';
 import Loading from '../../components/loading';
-import OpIcon from '../op-icon';
+import toaster from '../../components/toast';
+import { gettext, isPro, isSeafilePlus, siteRoot } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
+import FileChooser from '../file-chooser';
 import Icon from '../icon';
+import OpIcon from '../op-icon';
+import SharePermissionEditor from '../select-editor/share-permission-editor';
+import UserSelect from '../user-select';
 
 class UserItem extends React.Component {
 

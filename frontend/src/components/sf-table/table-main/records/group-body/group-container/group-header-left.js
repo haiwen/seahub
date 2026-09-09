@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import { gettext } from '../../../../../../utils/constants';
 import IconBtn from '../../../../../icon-btn';
-import GroupTitle from './group-title';
 import { GROUP_HEADER_HEIGHT } from '../../../../constants/group';
 import { GROUP_FROZEN_HEADER as Z_INDEX_GROUP_FROZEN_HEADER } from '../../../../constants/z-index';
-import { gettext } from '../../../../../../utils/constants';
+import GroupTitle from './group-title';
 
 class GroupHeaderLeft extends Component {
 

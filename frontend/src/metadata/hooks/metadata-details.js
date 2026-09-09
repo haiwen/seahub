@@ -1,23 +1,23 @@
 import React, { useContext, useEffect, useCallback, useState, useMemo, useRef } from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import metadataAPI from '../api';
-import { Utils } from '../../utils/utils';
+import { eventBus, EVENT_BUS_TYPE as DIRENT_EVENT_BUS_TYPE } from '../../components/event-bus';
 import toaster from '../../components/toast';
-import { useMetadataStatus } from '../../hooks/metadata-status';
 import { SYSTEM_FOLDERS } from '../../constants';
-import Column from '../model/column';
+import { useMetadataStatus } from '../../hooks/metadata-status';
+import tagsAPI from '../../tag/api';
+import ObjectUtils from '../../utils/object';
+import { Utils } from '../../utils/utils';
+import metadataAPI from '../api';
+import { NOT_DISPLAY_COLUMN_KEYS } from '../components/metadata-details/constants';
 import { normalizeFields } from '../components/metadata-details/utils';
 import { CellType, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, UTC_FORMAT_DEFAULT } from '../constants';
+import Column from '../model/column';
 import {
   getCellValueByColumn, getColumnOptionNamesByIds, getColumnOptionNameById, getRecordIdFromRecord,
   getServerOptions, getFileNameFromRecord, getParentDirFromRecord
 } from '../utils/cell';
-import tagsAPI from '../../tag/api';
 import { getColumnByKey, getColumnOptions, getColumnOriginName } from '../utils/column';
-import ObjectUtils from '../../utils/object';
-import { NOT_DISPLAY_COLUMN_KEYS } from '../components/metadata-details/constants';
-import { eventBus, EVENT_BUS_TYPE as DIRENT_EVENT_BUS_TYPE } from '../../components/event-bus';
 
 dayjs.extend(utc);
 

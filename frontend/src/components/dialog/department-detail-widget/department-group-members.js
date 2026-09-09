@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, mediaUrl } from '../../../utils/constants';
-import EmptyTip from '../../empty-tip';
-import Loading from '../../loading';
-import Icon from '../../icon';
-import { Utils } from '../../../utils/utils';
 import Tooltip from '@/components/tooltip';
+import { gettext, mediaUrl } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
+import EmptyTip from '../../empty-tip';
+import Icon from '../../icon';
+import Loading from '../../loading';
 
 const ItemPropTypes = {
   member: PropTypes.object,

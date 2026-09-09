@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Button, ButtonGroup } from 'reactstrap';
-import IconButton from '../icon-button';
-import { gettext, siteRoot } from '../../utils/constants';
-import { Utils, isImageRotateable } from '../../utils/utils';
+import PropTypes from 'prop-types';
 import Icon from '../../components/icon';
 import Switch from '../../components/switch';
-import ImageZoomer from './image-zoomer';
-import Tooltip from '../tooltip';
+import { gettext, siteRoot } from '../../utils/constants';
+import { Utils, isImageRotateable } from '../../utils/utils';
 import CustomDropdown from '../dropdown';
+import IconButton from '../icon-button';
+import Tooltip from '../tooltip';
+import ImageZoomer from './image-zoomer';
 
 const propTypes = {
   isLocked: PropTypes.bool.isRequired,

@@ -1,15 +1,15 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import Audio from './components/file-content-view/audio';
+import Image from './components/file-content-view/image';
+import Markdown from './components/file-content-view/markdown';
+import PDF from './components/file-content-view/pdf';
+import SDoc from './components/file-content-view/sdoc';
+import SVG from './components/file-content-view/svg';
+import Text from './components/file-content-view/text';
+import Video from './components/file-content-view/video';
 import FileView from './components/history-trash-file-view/file-view';
 import FileViewTip from './components/history-trash-file-view/file-view-tip';
-import Image from './components/file-content-view/image';
-import SVG from './components/file-content-view/svg';
-import PDF from './components/file-content-view/pdf';
-import Text from './components/file-content-view/text';
-import Markdown from './components/file-content-view/markdown';
-import SDoc from './components/file-content-view/sdoc';
-import Video from './components/file-content-view/video';
-import Audio from './components/file-content-view/audio';
 
 const {
   fileType, err

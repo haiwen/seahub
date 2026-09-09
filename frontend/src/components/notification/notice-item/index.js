@@ -1,10 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { processor } from '@seafile/seafile-editor';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import PropTypes from 'prop-types';
 import { gettext, siteRoot, mediaUrl } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
-import { processor } from '@seafile/seafile-editor';
 import './index.css';
 
 const propTypes = {

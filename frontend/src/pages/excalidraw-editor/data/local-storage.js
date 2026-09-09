@@ -1,8 +1,8 @@
-import { clearAppStateForLocalStorage, getDefaultAppState } from '../utils/app-state-utils';
+import { debounce } from '../../../utils/utils';
 import { SAVE_TO_LOCAL_STORAGE_TIMEOUT, STORAGE_KEYS, CANVAS_SEARCH_TAB, DEFAULT_SIDEBAR } from '../constants';
+import { clearAppStateForLocalStorage, getDefaultAppState } from '../utils/app-state-utils';
 // import { clearElementsForLocalStorage } from '../utils/element-utils';
 import { updateBrowserStateVersion } from './tab-sync';
-import { debounce } from '../../../utils/utils';
 
 const MAX_DOC_STORAGE_BYTES = 2 * 1024 * 1024;
 const MAX_TOTAL_STORAGE_BYTES = 4 * 1024 * 1024;

@@ -1,28 +1,28 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import RecordsHeader from '../records-header';
-import Body from './body';
-import TreeBody from './tree-body';
-import GroupBody from './group-body';
-import RecordsFooter from '../records-footer';
-import ContextMenu from '../../context-menu';
-import RecordDragLayer from './record-drag-layer';
-import { RecordMetrics } from '../../utils/record-metrics';
-import { TreeMetrics } from '../../utils/tree-metrics';
-import { recalculate } from '../../utils/column';
-import { getVisibleBoundaries } from '../../utils/records-body';
-import { getColOverScanEndIdx, getColOverScanStartIdx } from '../../utils/grid';
-import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
-import { isMobile } from '../../../../utils/utils';
+import PropTypes from 'prop-types';
+import { EVENT_BUS_TYPE } from '@/metadata/constants';
 import { addClassName, removeClassName, getEventClassName } from '../../../../utils/dom';
-import { isWindowsBrowser, isWebkitBrowser } from '../../utils';
+import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
+import { isNumber } from '../../../../utils/number';
+import { isMobile } from '../../../../utils/utils';
 import EventBus from '../../../event-bus';
 import { CANVAS_RIGHT_INTERVAL } from '../../constants/grid';
 import { GROUP_ROW_TYPE } from '../../constants/group';
-import { isNumber } from '../../../../utils/number';
+import ContextMenu from '../../context-menu';
+import { isWindowsBrowser, isWebkitBrowser } from '../../utils';
+import { recalculate } from '../../utils/column';
+import { getColOverScanEndIdx, getColOverScanStartIdx } from '../../utils/grid';
+import { RecordMetrics } from '../../utils/record-metrics';
+import { getVisibleBoundaries } from '../../utils/records-body';
 import { getTreeNodeKey } from '../../utils/tree';
-import { EVENT_BUS_TYPE } from '@/metadata/constants';
+import { TreeMetrics } from '../../utils/tree-metrics';
+import RecordsFooter from '../records-footer';
+import RecordsHeader from '../records-header';
+import Body from './body';
+import GroupBody from './group-body';
+import RecordDragLayer from './record-drag-layer';
+import TreeBody from './tree-body';
 
 class Records extends Component {
 

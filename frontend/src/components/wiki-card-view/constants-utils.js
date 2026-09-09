@@ -1,10 +1,10 @@
+import { gettext } from '../../utils/constants';
 import {
   DEFAULT_WIKI_COLOR,
   DEFAULT_WIKI_ICON,
   WIKI_HOMEPAGE_ICONS,
   WIKI_ICON_CATEGORIES,
 } from './constants';
-import { gettext } from '../../utils/constants';
 
 const WIKI_ICON_OPTIONS = WIKI_ICON_CATEGORIES.flatMap(category => category.icons);
 const WIKI_ICON_OPTIONS_BY_ID = new Map(WIKI_ICON_OPTIONS.map(option => [option.icon, option]));

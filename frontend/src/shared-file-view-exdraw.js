@@ -1,8 +1,8 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { Utils } from './utils/utils';
-import ExcaliViewer from './pages/excalidraw-viewer';
 import ExcalidrawEdiableViewer from './pages/excalidraw-editable-viewer';
+import ExcaliViewer from './pages/excalidraw-viewer';
+import { Utils } from './utils/utils';
 
 const { siteRoot, avatarURL } = window.app.config;
 const { username } = window.app.pageOptions;

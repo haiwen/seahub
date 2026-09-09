@@ -1,9 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
-import { siteRoot, gettext, haveLDAP, isDefaultAdmin } from '../../../utils/constants';
+import PropTypes from 'prop-types';
 import SortMenu from '../../../components/sort-menu';
 import { NAV_ITEM_MARGIN } from '../../../constants';
+import { siteRoot, gettext, haveLDAP, isDefaultAdmin } from '../../../utils/constants';
 
 const propTypes = {
   currentItem: PropTypes.string.isRequired,

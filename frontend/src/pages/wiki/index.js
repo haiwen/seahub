@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
-import { Utils } from '../../utils/utils';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import treeHelper from '../../components/tree-view/tree-helper';
+import TreeNode from '../../components/tree-view/tree-node';
+import Dirent from '../../models/dirent';
 import { wikiId, slug, siteRoot, initialPath, isDir, sharedToken, hasIndex, lang, serviceURL } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import Dirent from '../../models/dirent';
-import TreeNode from '../../components/tree-view/tree-node';
-import treeHelper from '../../components/tree-view/tree-helper';
-import SidePanel from './side-panel';
+import { Utils } from '../../utils/utils';
 import MainPanel from './main-panel';
+import SidePanel from './side-panel';
 
 import '../../css/layout.css';
 import '../../css/toolbar.css';

@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useRef } from 'react';
-import PropTypes from 'prop-types';
 import { getPreviewContent, LongTextInlineEditor } from '@seafile/seafile-editor';
-import { getCellValueByColumn } from '../../../utils/cell';
+import PropTypes from 'prop-types';
 import { lang } from '../../../../utils/constants';
+import { getCellValueByColumn } from '../../../utils/cell';
 
 const LongText = ({ record, column, onCommit }) => {
   const ref = useRef(null);

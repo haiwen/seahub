@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { DropdownItem } from 'reactstrap';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
 import Icon from '../icon';
 
 export const CustomDropdownItem = ({

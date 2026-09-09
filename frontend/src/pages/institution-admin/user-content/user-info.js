@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from '@gatsbyjs/reach-router';
-import { Utils } from '../../../utils/utils';
-import { gettext } from '../../../utils/constants';
-import Loading from '../../../components/loading';
-import EditIcon from '../../../components/edit-icon';
 import SetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
+import EditIcon from '../../../components/edit-icon';
+import Loading from '../../../components/loading';
+import { gettext } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
 import instAdminAPI from '../api';
 
 export default function UserInfo() {

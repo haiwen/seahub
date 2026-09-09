@@ -1,18 +1,18 @@
 import React, { useMemo, useCallback, useState, useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { useMetadataView } from '../../../hooks/metadata-view';
-import { CARD_SETTINGS_KEYS, PRIVATE_COLUMN_KEY, EVENT_BUS_TYPE } from '../../../constants';
+import PropTypes from 'prop-types';
+import EmptyTip from '../../../../components/empty-tip';
+import { getRowById } from '../../../../components/sf-table/utils/table';
+import { useTags } from '../../../../tag/hooks';
 import { gettext } from '../../../../utils/constants';
+import ImagePreviewer from '../../../components/cell-formatter/image-previewer';
+import { CARD_SETTINGS_KEYS, PRIVATE_COLUMN_KEY, EVENT_BUS_TYPE } from '../../../constants';
+import { useMetadataView } from '../../../hooks/metadata-view';
 import { getRecordIdFromRecord, getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/cell';
 import { openFile } from '../../../utils/file';
 import { checkIsDir } from '../../../utils/row';
-import EmptyTip from '../../../../components/empty-tip';
-import CardItem from './card-item';
-import ImagePreviewer from '../../../components/cell-formatter/image-previewer';
 import ContextMenu from '../context-menu';
-import { getRowById } from '../../../../components/sf-table/utils/table';
-import { useTags } from '../../../../tag/hooks';
+import CardItem from './card-item';
 
 import './index.css';
 

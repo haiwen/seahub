@@ -1,16 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
-import { gettext, ocmRemoteServers } from '../../utils/constants';
 import { Input, Button } from 'reactstrap';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import { gettext, ocmRemoteServers } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import toaster from '../toast';
-import OpIcon from '../op-icon';
-import SharePermissionEditor from '../select-editor/share-permission-editor';
-import { SeahubSelect } from '../select';
 import EmptyTip from '../empty-tip';
 import Loading from '../loading';
+import OpIcon from '../op-icon';
+import { SeahubSelect } from '../select';
+import SharePermissionEditor from '../select-editor/share-permission-editor';
+import toaster from '../toast';
 
 class ShareItem extends React.Component {
 

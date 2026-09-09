@@ -1,26 +1,26 @@
 import React, { Component, Fragment } from 'react';
-import axios from 'axios';
-import PropTypes from 'prop-types';
-import isHotkey from 'is-hotkey';
-import classnames from 'classnames';
 import MediaQuery from 'react-responsive';
+import axios from 'axios';
+import classnames from 'classnames';
+import isHotkey from 'is-hotkey';
+import PropTypes from 'prop-types';
+import { PRIVATE_FILE_TYPE, SEARCH_FILTER_BY_DATE_OPTION_KEY, SEARCH_FILTER_BY_DATE_TYPE_KEY, SEARCH_FILTERS_KEY, SEARCH_FILTERS_SHOW_KEY } from '../../constants';
+import { SEARCH_MASK, SEARCH_CONTAINER } from '../../constants/zIndexes';
+import { CollaboratorsProvider } from '../../metadata';
+import { gettext, mediaUrl } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import searchAPI from '../../utils/search-api';
-import { gettext, mediaUrl } from '../../utils/constants';
+import { debounce, Utils } from '../../utils/utils';
+import Icon from '../icon';
+import Loading from '../loading';
+import OpIcon from '../op-icon';
+import toaster from '../toast';
+import Tooltip from '../tooltip';
+import SearchedItemDetails from './details';
+import SearchFilters from './search-filters';
 import SearchResultItem from './search-result-item';
 import SearchResultLibrary from './search-result-library';
-import { debounce, Utils } from '../../utils/utils';
-import toaster from '../toast';
-import Loading from '../loading';
-import { SEARCH_MASK, SEARCH_CONTAINER } from '../../constants/zIndexes';
-import { PRIVATE_FILE_TYPE, SEARCH_FILTER_BY_DATE_OPTION_KEY, SEARCH_FILTER_BY_DATE_TYPE_KEY, SEARCH_FILTERS_KEY, SEARCH_FILTERS_SHOW_KEY } from '../../constants';
-import SearchFilters from './search-filters';
 import SearchTags from './search-tags';
-import SearchedItemDetails from './details';
-import { CollaboratorsProvider } from '../../metadata';
-import Icon from '../icon';
-import OpIcon from '../op-icon';
-import Tooltip from '../tooltip';
 
 const propTypes = {
   repoID: PropTypes.string,

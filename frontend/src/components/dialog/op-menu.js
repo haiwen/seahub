@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from '../icon';
 import CustomDropdown from '../dropdown';
+import Icon from '../icon';
 
 const propTypes = {
   onFreezedItem: PropTypes.func.isRequired,

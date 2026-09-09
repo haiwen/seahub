@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { FormGroup, Label, Input, Button } from 'reactstrap';
-import { Utils } from '../../../utils/utils';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
-import { gettext, isPro } from '../../../utils/constants';
-import toaster from '../../../components/toast';
-import Loading from '../../../components/loading';
-import EditIcon from '../../../components/edit-icon';
+import PropTypes from 'prop-types';
 import SysAdminSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
 import SysAdminSetUploadDownloadRateLimitDialog from '../../../components/dialog/sysadmin-dialog/set-upload-download-rate-limit';
 import SysAdminUpdateUserDialog from '../../../components/dialog/sysadmin-dialog/update-user';
-import Selector from '../../../components/single-selector';
+import EditIcon from '../../../components/edit-icon';
 import { eventBus, EVENT_BUS_TYPE } from '../../../components/event-bus';
+import Loading from '../../../components/loading';
+import Selector from '../../../components/single-selector';
+import toaster from '../../../components/toast';
+import { gettext, isPro } from '../../../utils/constants';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { Utils } from '../../../utils/utils';
 
 const { twoFactorAuthEnabled, availableRoles } = window.sysadmin.pageOptions;
 

@@ -1,11 +1,11 @@
 import { CaptureUpdateAction, newElementWith } from '@excalidraw/excalidraw';
-import io from 'socket.io-client';
 import throttle from 'lodash.throttle';
+import io from 'socket.io-client';
+import { FILE_UPLOAD_TIMEOUT } from '../constants';
 import { isSyncableElement } from '../data';
 import { clientDebug, serverDebug } from '../utils/debug';
-import SocketManager from './socket-manager';
 import { getFilename } from '../utils/element-utils';
-import { FILE_UPLOAD_TIMEOUT } from '../constants';
+import SocketManager from './socket-manager';
 
 class SocketClient {
   constructor(config) {

@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import DetailItem from '../detail-item';
+import { SYSTEM_FOLDERS } from '../../../constants';
+import { useMetadataStatus } from '../../../hooks';
+import { MetadataDetails } from '../../../metadata';
 import Formatter from '../../../metadata/components/formatter';
 import { CellType } from '../../../metadata/constants';
 import { gettext } from '../../../utils/constants';
-import { MetadataDetails } from '../../../metadata';
-import { useMetadataStatus } from '../../../hooks';
 import { Utils } from '../../../utils/utils';
-import { SYSTEM_FOLDERS } from '../../../constants';
+import DetailItem from '../detail-item';
 
 const DirDetails = ({ repoID, readOnly = false, direntDetail, tagsData }) => {
   const { enableMetadata, enableMetadataManagement } = useMetadataStatus();

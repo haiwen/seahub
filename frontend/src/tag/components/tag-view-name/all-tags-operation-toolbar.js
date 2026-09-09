@@ -1,16 +1,16 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import EditTagDialog from '../dialog/edit-tag-dialog';
-import { gettext } from '../../../utils/constants';
-import { useTags } from '../../hooks';
-import tagsAPI from '../../api';
 import ImportTagsDialog from '../../../components/dialog/import-tags-dialog';
-import toaster from '../../../components/toast';
-import { Utils } from '../../../utils/utils';
-import Icon from '../../../components/icon';
 import CustomDropdown from '../../../components/dropdown';
 import EventBus from '../../../components/event-bus';
+import Icon from '../../../components/icon';
+import toaster from '../../../components/toast';
 import { EVENT_BUS_TYPE } from '../../../metadata/constants';
+import { gettext } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
+import tagsAPI from '../../api';
+import { useTags } from '../../hooks';
+import EditTagDialog from '../dialog/edit-tag-dialog';
 
 const AllTagsOperationToolbar = ({ repoID }) => {
   const [isShowEditTagDialog, setShowEditTagDialog] = useState(false);

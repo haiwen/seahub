@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import { getGeolocationDisplayString } from '../../utils/cell/column/geolocation';
 
 const GeolocationFormatter = ({ isBaiduMap, format, value, children: emptyFormatter, className, hyphen = ' ', record }) => {

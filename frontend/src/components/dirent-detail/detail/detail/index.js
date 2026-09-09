@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import ResizeBar from '../../../resize-bar';
 import { DRAG_HANDLER_HEIGHT } from '../../../resize-bar/constants';
 

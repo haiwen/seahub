@@ -1,7 +1,3 @@
-import Mediator from './mediator';
-import layoutManager from './layoutManager';
-import { hasClass, addClass, removeClass, getParent, listenScrollParent, getParentRelevantContainerElement } from './utils';
-import { domDropHandler } from './dropHandlers';
 import {
   wrapperClass,
   animationClass,
@@ -16,6 +12,10 @@ import {
   dropPlaceholderDefaultClass
 } from './constants';
 import { defaultOptions } from './defaults';
+import { domDropHandler } from './dropHandlers';
+import layoutManager from './layoutManager';
+import Mediator from './mediator';
+import { hasClass, addClass, removeClass, getParent, listenScrollParent, getParentRelevantContainerElement } from './utils';
 
 function setAnimation(element, add, animationDuration) {
   if (add) {

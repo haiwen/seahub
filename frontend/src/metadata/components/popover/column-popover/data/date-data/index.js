@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo } from 'react';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { FormGroup, Label } from 'reactstrap';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import CustomizeSelect from '../../../../../../components/customize-select';
 import Switch from '../../../../../../components/switch';
 import { gettext } from '../../../../../../utils/constants';
-import { getDateDisplayString } from '../../../../../utils/cell';
 import { DEFAULT_DATE_FORMAT, PRIVATE_COLUMN_KEY } from '../../../../../constants';
+import { getDateDisplayString } from '../../../../../utils/cell';
 
 import './index.css';
 

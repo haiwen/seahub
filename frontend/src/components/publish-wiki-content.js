@@ -1,11 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import copy from 'copy-to-clipboard';
-import { gettext, serviceURL } from '../utils/constants';
 import { Button, ModalBody, ModalFooter, Alert, InputGroup, InputGroupText } from 'reactstrap';
-import toaster from './toast';
-import Switch from './switch';
+import copy from 'copy-to-clipboard';
+import PropTypes from 'prop-types';
+import { gettext, serviceURL } from '../utils/constants';
 import wikiAPI from '../utils/wiki-api';
+import Switch from './switch';
+import toaster from './toast';
 
 import '../css/publish-wiki-dialog.css';
 

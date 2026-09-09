@@ -1,10 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import className from 'classnames';
-import { basicSetup } from 'codemirror';
-import { EditorView } from '@codemirror/view';
 import { markdown } from '@codemirror/lang-markdown';
 import { languages } from '@codemirror/language-data';
+import { EditorView } from '@codemirror/view';
+import className from 'classnames';
+import { basicSetup } from 'codemirror';
+import PropTypes from 'prop-types';
 
 import './code-mirror.css';
 

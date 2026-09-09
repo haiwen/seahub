@@ -2,9 +2,9 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import UploadListItem from './upload-list-item';
-import ForbidUploadListItem from './forbid-upload-list-item';
 import Icon from '../icon';
+import ForbidUploadListItem from './forbid-upload-list-item';
+import UploadListItem from './upload-list-item';
 
 const propTypes = {
   uploadBitrate: PropTypes.number.isRequired,

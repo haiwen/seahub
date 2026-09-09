@@ -1,5 +1,5 @@
-import { isValidSort } from '../../../utils/sort';
 import { SORT_TYPE } from '../../../constants';
+import { isValidSort } from '../../../utils/sort';
 
 export const SORT_OPERATION = {
   ADD_SORT: 'add_sort',

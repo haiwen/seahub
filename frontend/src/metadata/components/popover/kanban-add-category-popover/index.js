@@ -1,13 +1,13 @@
 import React, { useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
-import toaster from '../../../../components/toast';
+import PropTypes from 'prop-types';
 import CustomizePopover from '../../../../components/customize-popover';
-import Color from '../options-popover/option/color';
-import Name from '../options-popover/option/name';
-import { generateNewOption } from '../../../utils/column';
+import toaster from '../../../../components/toast';
 import { gettext } from '../../../../utils/constants';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
+import { generateNewOption } from '../../../utils/column';
+import Color from '../options-popover/option/color';
+import Name from '../options-popover/option/name';
 
 import './index.css';
 

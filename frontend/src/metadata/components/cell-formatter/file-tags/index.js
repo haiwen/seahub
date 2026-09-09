@@ -1,10 +1,10 @@
 import React, { useContext, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { getRowById } from '../../../../components/sf-table/utils/table';
-import { getTagColor, getTagName } from '../../../../tag/utils/cell';
+import PropTypes from 'prop-types';
 import { ROW_HEIGHT } from '@/metadata/constants';
 import { TagsContext } from '@/tag/hooks';
+import { getRowById } from '../../../../components/sf-table/utils/table';
+import { getTagColor, getTagName } from '../../../../tag/utils/cell';
 
 import '../../tag-ui/index.css';
 import './index.css';

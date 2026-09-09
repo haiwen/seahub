@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import { useMetadataView } from '../../hooks/metadata-view';
 import { EVENT_BUS_TYPE } from '../../constants';
+import { useMetadataView } from '../../hooks/metadata-view';
 import Boards from './boards';
 import Settings from './settings';
 

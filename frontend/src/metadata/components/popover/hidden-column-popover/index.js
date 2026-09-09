@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import { UncontrolledPopover } from 'reactstrap';
 import isHotkey from 'is-hotkey';
+import PropTypes from 'prop-types';
 import SearchInput from '../../../../components/search-input';
-import HiddenColumns from './hidden-columns';
-import { gettext } from '../../../../utils/constants';
 import { KeyCodes } from '../../../../constants';
+import { gettext } from '../../../../utils/constants';
 import { getEventClassName } from '../../../../utils/dom';
 import { Utils } from '../../../../utils/utils';
+import HiddenColumns from './hidden-columns';
 
 import './index.css';
 

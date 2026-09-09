@@ -1,8 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
-import { siteRoot, gettext } from '../../../utils/constants';
+import PropTypes from 'prop-types';
 import { NAV_ITEM_MARGIN } from '../../../constants';
+import { siteRoot, gettext } from '../../../utils/constants';
 
 const propTypes = {
   email: PropTypes.string,

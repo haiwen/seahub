@@ -1,16 +1,16 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
-import copy from 'copy-to-clipboard';
 import classnames from 'classnames';
-import QRCodePopover from '../qr-code-popover';
-import toaster from '../toast';
+import copy from 'copy-to-clipboard';
+import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
+import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
-import Icon from '../icon';
 import ClickOutside from '../click-outside';
+import Icon from '../icon';
 import OpIcon from '../op-icon';
+import QRCodePopover from '../qr-code-popover';
+import toaster from '../toast';
 
 const propTypes = {
   idx: PropTypes.number.isRequired,

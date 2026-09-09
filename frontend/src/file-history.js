@@ -1,12 +1,12 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
 import axios from 'axios';
-import { fileName, historyRepoID } from './utils/constants';
-import SidePanel from './pages/file-history/side-panel';
-import MainPanel from './pages/file-history/main-panel';
-import { seafileAPI } from './utils/seafile-api';
+import { createRoot } from 'react-dom/client';
 import { gettext } from '@/utils/constants';
 import Icon from './components/icon';
+import MainPanel from './pages/file-history/main-panel';
+import SidePanel from './pages/file-history/side-panel';
+import { fileName, historyRepoID } from './utils/constants';
+import { seafileAPI } from './utils/seafile-api';
 
 import './css/layout.css';
 import './css/file-history.css';

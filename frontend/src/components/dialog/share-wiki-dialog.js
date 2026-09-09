@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Modal, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
+import PropTypes from 'prop-types';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import { gettext, username, additionalShareDialogNote, canShareRepo, LARGE_DIALOG_STYLE } from '../../utils/constants';
-import ShareToUser from './share-to-user';
-import ShareToGroup from './share-to-group';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 import toaster from '../toast';
-import SeahubModalHeader from '@/components/seahub-modal-header';
+import ShareToGroup from './share-to-group';
+import ShareToUser from './share-to-user';
 
 import '../../css/share-link-dialog.css';
 

@@ -1,14 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
+import PropTypes from 'prop-types';
 import CreatableSelect from 'react-select/creatable';
-import { MenuSelectStyle } from '../select/seahub-select-style';
+import SeahubModalHeader from '@/components/seahub-modal-header';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
+import { MenuSelectStyle } from '../select/seahub-select-style';
 import toaster from '../toast';
-import SeahubModalHeader from '@/components/seahub-modal-header';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FilterByText from './filter-by-text';
 import FilterByCreator from './filter-by-creator';
 import FilterByDate from './filter-by-date';
 import FilterBySuffix from './filter-by-suffix';
+import FilterByText from './filter-by-text';
 
 import './index.css';
 

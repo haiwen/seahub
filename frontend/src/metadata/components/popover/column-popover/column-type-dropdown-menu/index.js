@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { DROPDOWN_SUBMENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 import Icon from '../../../../../components/icon';
 import SearchEmptyTip from '../../../../../components/search-empty-tip';
 import { gettext } from '../../../../../utils/constants';
 import { COLUMNS } from './constants';
-import { DROPDOWN_SUBMENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 
 import './index.css';
 

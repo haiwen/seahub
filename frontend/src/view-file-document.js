@@ -1,11 +1,11 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { seafileAPI } from './utils/seafile-api';
-import { gettext, mediaUrl } from './utils/constants';
 import FileView from './components/file-view/file-view';
 import FileViewTip from './components/file-view/file-view-tip';
 import Loading from './components/loading';
 import PDFViewer from './components/pdf-viewer';
+import { gettext, mediaUrl } from './utils/constants';
+import { seafileAPI } from './utils/seafile-api';
 
 import './css/pdf-file-view.css';
 

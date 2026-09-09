@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
-import toaster from '../../../components/toast';
-import OpMenu from '../../../components/dialog/op-menu';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
+import OpMenu from '../../../components/dialog/op-menu';
+import { eventBus, EVENT_BUS_TYPE } from '../../../components/event-bus';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
-import { eventBus, EVENT_BUS_TYPE } from '../../../components/event-bus';
+import toaster from '../../../components/toast';
+import { gettext } from '../../../utils/constants';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { Utils } from '../../../utils/utils';
 
 const virusFileItemPropTypes = {
   resetPerPage: PropTypes.func,

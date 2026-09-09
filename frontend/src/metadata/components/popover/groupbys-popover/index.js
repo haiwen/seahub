@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import { UncontrolledPopover } from 'reactstrap';
 import isHotkey from 'is-hotkey';
+import PropTypes from 'prop-types';
 import CommonAddTool from '../../../../components/common-add-tool';
-import Groupbys from './groupbys';
 import { gettext } from '../../../../utils/constants';
-import { generateDefaultGroupby, getGroupbyColumns } from '../../../utils/group';
 import { getEventClassName } from '../../../../utils/dom';
-import { EVENT_BUS_TYPE, MAX_GROUP_LEVEL } from '../../../constants';
 import { Utils } from '../../../../utils/utils';
+import { EVENT_BUS_TYPE, MAX_GROUP_LEVEL } from '../../../constants';
+import { generateDefaultGroupby, getGroupbyColumns } from '../../../utils/group';
+import Groupbys from './groupbys';
 
 import './index.css';
 

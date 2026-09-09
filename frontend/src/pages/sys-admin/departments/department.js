@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../utils/constants';
-import SortMenu from '../../../components/sort-menu';
-import Paginator from '../../../components/paginator';
-import Loading from '../../../components/loading';
-import EmptyTip from '../../../components/empty-tip';
-import ModalPortal from '../../../components/modal-portal';
 import DeleteRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-repo-dialog';
+import CustomDropdown from '../../../components/dropdown';
+import EmptyTip from '../../../components/empty-tip';
+import Icon from '../../../components/icon';
+import Loading from '../../../components/loading';
+import ModalPortal from '../../../components/modal-portal';
+import Paginator from '../../../components/paginator';
+import SortMenu from '../../../components/sort-menu';
+import { gettext } from '../../../utils/constants';
 import { getDepartmentMenuItems } from './departments-node-dropdown-menu';
 import MemberItem from './member-item';
 import RepoItem from './repo-item';
-import Icon from '../../../components/icon';
-import CustomDropdown from '../../../components/dropdown';
 
 const propTypes = {
   rootNodes: PropTypes.array,

@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
-import { Utils } from '../../../utils/utils';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
-import { siteRoot, gettext } from '../../../utils/constants';
+import PropTypes from 'prop-types';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
+import { siteRoot, gettext } from '../../../utils/constants';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { Utils } from '../../../utils/utils';
 
 class Content extends Component {
 

@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import CustomizeSelect from '../../../../../components/customize-select';
-import { gettext } from '../../../../../utils/constants';
 import Icon from '../../../../../components/icon';
+import { gettext } from '../../../../../utils/constants';
 
 const OPTIONS = [
   { value: 'picture', name: gettext('Only pictures') },

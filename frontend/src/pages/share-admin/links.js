@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { Link, navigate } from '@gatsbyjs/reach-router';
-import { gettext, siteRoot, canGenerateShareLink, canGenerateUploadLink } from '../../utils/constants';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import CustomDropdown from '../../components/dropdown';
+import Icon from '../../components/icon';
 import OpElement from '../../components/op-element';
 import OpIcon from '../../components/op-icon';
-import Icon from '../../components/icon';
-import CustomDropdown from '../../components/dropdown';
+import { gettext, siteRoot, canGenerateShareLink, canGenerateUploadLink } from '../../utils/constants';
 import ShareAdminShareLinks from './share-links';
 import ShareAdminUploadLinks from './upload-links';
 

@@ -1,14 +1,14 @@
 import React from 'react';
+import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-import { Button } from 'reactstrap';
-import { Utils } from '../../utils/utils';
-import toaster from '../toast';
 import { shareLinkAPI } from '../../utils/share-link-api';
+import { Utils } from '../../utils/utils';
 import BackIcon from '../back-icon';
 import EmptyTip from '../empty-tip';
 import Loading from '../loading';
 import OpIcon from '../op-icon';
+import toaster from '../toast';
 
 class EmailItem extends React.Component {
 

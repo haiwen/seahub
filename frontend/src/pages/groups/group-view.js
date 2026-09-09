@@ -1,23 +1,23 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import Cookies from 'js-cookie';
-import classnames from 'classnames';
 import { navigate } from '@gatsbyjs/reach-router';
+import classnames from 'classnames';
+import Cookies from 'js-cookie';
+import PropTypes from 'prop-types';
+import SortOptionsDialog from '../../components/dialog/sort-options';
+import { LIST_MODE, GRID_MODE } from '../../components/dir-view-mode/constants';
+import EmptyTip from '../../components/empty-tip';
+import EventBus, { EVENT_BUS_TYPE } from '../../components/event-bus';
+import Icon from '../../components/icon';
+import Loading from '../../components/loading';
+import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
+import ReposSortMenu from '../../components/sort-menu';
+import toaster from '../../components/toast';
+import ViewModes from '../../components/view-modes';
+import { Group, Repo } from '../../models';
 import { gettext, siteRoot, username, mediaUrl } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import Loading from '../../components/loading';
-import EmptyTip from '../../components/empty-tip';
-import toaster from '../../components/toast';
-import { Group, Repo } from '../../models';
-import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
-import SortOptionsDialog from '../../components/dialog/sort-options';
-import ViewModes from '../../components/view-modes';
-import ReposSortMenu from '../../components/sort-menu';
-import { LIST_MODE, GRID_MODE } from '../../components/dir-view-mode/constants';
 import GroupOperationMenu from './group-op-menu';
-import Icon from '../../components/icon';
-import EventBus, { EVENT_BUS_TYPE } from '../../components/event-bus';
 
 import '../../css/group-view.css';
 

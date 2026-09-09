@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
+import PropTypes from 'prop-types';
+import Icon from '../../components/icon';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import Icon from '../../components/icon';
-import IconButton from '../icon-button';
 import CustomDropdown from '../dropdown';
+import IconButton from '../icon-button';
 
 const propTypes = {
   isCommentUpdated: PropTypes.bool,

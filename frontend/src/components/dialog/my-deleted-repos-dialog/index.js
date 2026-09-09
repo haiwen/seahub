@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { Modal, ModalBody } from 'reactstrap';
-import { gettext, trashReposExpireDays, enableUserCleanTrash } from '../../../utils/constants';
+import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
+import { gettext, trashReposExpireDays, enableUserCleanTrash } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
-import toaster from '../../toast';
-import Loading from '../../loading';
 import EmptyTip from '../../empty-tip';
+import Loading from '../../loading';
+import toaster from '../../toast';
 import Repos from './repos';
 
 import './index.css';

@@ -1,10 +1,10 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import VirtualList from '../virtual-list/virtual-list';
-import DirentListItem from './dirent-list-item';
-import { useCollaborators } from '../../metadata';
 import { useTags } from '@/tag/hooks';
 import { Utils } from '@/utils/utils';
+import { useCollaborators } from '../../metadata';
+import VirtualList from '../virtual-list/virtual-list';
+import DirentListItem from './dirent-list-item';
 
 import './dirent-virtual-list.css';
 

@@ -1,22 +1,22 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import ContextMenu from '../../../components/context-menu';
-import RenameDialog from '../../../components/dialog/rename-dialog';
-import { getRowById } from '../../../../components/sf-table/utils/table';
-import { checkIsDir } from '../../../utils/row';
-import { getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/cell';
-import { openInNewTab, openParentFolder } from '../../../utils/file';
-import { useMetadataView } from '../../../hooks/metadata-view';
-import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../constants';
-import { useFileOperations } from '../../../../hooks/file-operations';
-import TextTranslation from '../../../../utils/text-translation';
-import { getColumnByKey } from '../../../utils/column';
-import { buildKanbanMenuOptions } from '../../../utils/menu-builder';
-import { useMetadataStatus } from '../../../../hooks';
-import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '../../../../components/event-bus';
 import { setPendingAttachments } from '../../../../components/dir-view-mode/dir-chat/hooks/ai-chat-tools';
 import { AttachmentObject } from '../../../../components/dir-view-mode/dir-chat/models';
+import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '../../../../components/event-bus';
+import { getRowById } from '../../../../components/sf-table/utils/table';
+import { useMetadataStatus } from '../../../../hooks';
+import { useFileOperations } from '../../../../hooks/file-operations';
+import TextTranslation from '../../../../utils/text-translation';
 import { Utils } from '../../../../utils/utils';
+import ContextMenu from '../../../components/context-menu';
+import RenameDialog from '../../../components/dialog/rename-dialog';
+import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../constants';
+import { useMetadataView } from '../../../hooks/metadata-view';
+import { getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/cell';
+import { getColumnByKey } from '../../../utils/column';
+import { openInNewTab, openParentFolder } from '../../../utils/file';
+import { buildKanbanMenuOptions } from '../../../utils/menu-builder';
+import { checkIsDir } from '../../../utils/row';
 
 const KanbanContextMenu = ({ selectedCard, onDelete, onRename }) => {
   const [isRenameDialogShow, setIsRenameDialogShow] = useState(false);

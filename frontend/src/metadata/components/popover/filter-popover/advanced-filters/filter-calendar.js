@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import Calendar from '@seafile/seafile-calendar';
+import DatePicker from '@seafile/seafile-calendar/lib/Picker';
 import localeData from 'dayjs/plugin/localeData';
 import utc from 'dayjs/plugin/utc';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
-import Calendar from '@seafile/seafile-calendar';
-import DatePicker from '@seafile/seafile-calendar/lib/Picker';
-import dayjs from '../../../../utils/dayjs';
+import PropTypes from 'prop-types';
 import { gettext, lang } from '../../../../../utils/constants';
-import { getDateColumnFormat } from '../../../../utils/column';
 import { translateCalendar } from '../../../../../utils/date-format-utils';
+import { getDateColumnFormat } from '../../../../utils/column';
+import dayjs from '../../../../utils/dayjs';
 
 import 'dayjs/locale/zh-cn';
 import 'dayjs/locale/en-gb';

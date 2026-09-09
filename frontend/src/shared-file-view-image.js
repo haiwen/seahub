@@ -1,10 +1,10 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import Icon from './components/icon';
 import SharedFileView from './components/shared-file-view/shared-file-view';
 import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
-import { Utils } from './utils/utils';
 import { gettext, siteRoot, enableThumbnailServer } from './utils/constants';
-import Icon from './components/icon';
+import { Utils } from './utils/utils';
 
 import './css/image-file-view.css';
 

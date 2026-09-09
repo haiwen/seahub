@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import PageItem from './pages/page-item';
-import PageDragLayer from './pages/page-drag-layer';
-import { gettext, wikiPermission } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
-import toaster from '../../../components/toast';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import CustomDropdown from '../../../components/dropdown';
 import Icon from '../../../components/icon';
 import OpIcon from '../../../components/op-icon';
-import CustomDropdown from '../../../components/dropdown';
+import toaster from '../../../components/toast';
+import { gettext, wikiPermission } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
+import PageDragLayer from './pages/page-drag-layer';
+import PageItem from './pages/page-item';
 
 import '../css/wiki-nav.css';
 

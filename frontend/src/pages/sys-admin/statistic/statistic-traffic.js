@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react';
 import dayjs from 'dayjs';
+import Chart from '../../../components/chart';
+import Loading from '../../../components/loading';
+import toaster from '../../../components/toast';
 import { gettext } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { Utils } from '../../../utils/utils';
 import StatisticCommonTool from './statistic-common-tool';
-import Loading from '../../../components/loading';
 import OrgsTraffic from './statistic-traffic-orgs';
 import UsersTraffic from './statistic-traffic-users';
-import { Utils } from '../../../utils/utils';
-import toaster from '../../../components/toast';
-import Chart from '../../../components/chart';
 
 class StatisticTraffic extends React.Component {
 

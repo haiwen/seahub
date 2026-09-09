@@ -1,15 +1,15 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { getTreeNodeById, getTreeNodeByKey } from '../../components/sf-table/utils/tree';
+import { useFileOperations } from '../../hooks/file-operations';
+import { EVENT_BUS_TYPE } from '../../metadata/constants';
+import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import tagsAPI from '../api';
-import { useTags } from './tags';
-import { getTreeNodeById, getTreeNodeByKey } from '../../components/sf-table/utils/tree';
-import { getAllChildTagsIdsFromNode } from '../utils/tree';
-import { seafileAPI } from '../../utils/seafile-api';
 import { TAG_FILE_KEY } from '../constants/file';
-import { EVENT_BUS_TYPE } from '../../metadata/constants';
 import { getFileById, sortTagFiles } from '../utils/file';
 import { getSortBy, getSortOrder } from '../utils/sort';
-import { useFileOperations } from '../../hooks/file-operations';
+import { getAllChildTagsIdsFromNode } from '../utils/tree';
+import { useTags } from './tags';
 
 const TagViewContext = React.createContext(null);
 

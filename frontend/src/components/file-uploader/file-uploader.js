@@ -1,13 +1,13 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import Resumablejs from '@seafile/resumablejs';
 import MD5 from 'MD5';
+import PropTypes from 'prop-types';
 import { gettext, resumableUploadFileBlockSize, maxUploadFileSize, maxNumberOfFilesForFileupload } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import UploadProgressDialog from './upload-progress-dialog';
 import UploadRemindDialog from '../dialog/upload-remind-dialog';
 import toaster from '../toast';
+import UploadProgressDialog from './upload-progress-dialog';
 import '../../css/file-uploader.css';
 
 const propTypes = {

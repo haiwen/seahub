@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot } from '../../utils/constants';
-import EmptyTip from '../empty-tip';
-import LinkItem from './link-item';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
-import Loading from '../loading';
+import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import EmptyTip from '../empty-tip';
+import Loading from '../loading';
+import LinkItem from './link-item';
 
 const propTypes = {
   shareLinks: PropTypes.array.isRequired,

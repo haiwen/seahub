@@ -2,10 +2,10 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import ModalPortal from '../modal-portal';
 import ShareDialog from '../dialog/share-dialog';
-import Icon from '../icon';
 import CustomDropdown from '../dropdown';
+import Icon from '../icon';
+import ModalPortal from '../modal-portal';
 
 const propTypes = {
   path: PropTypes.string.isRequired,

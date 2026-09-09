@@ -1,8 +1,8 @@
-import { isDateColumn } from '../column';
 import {
   CellType, FILTER_PREDICATE_TYPE, FILTER_COLUMN_OPTIONS, FILTER_TERM_MODIFIER_TYPE, FILTER_ERR_MSG,
   filterTermModifierNotWithin, filterTermModifierIsWithin,
 } from '../../constants';
+import { isDateColumn } from '../column';
 
 export const SPECIAL_TERM_TYPE = {
   CREATOR: 'creator',

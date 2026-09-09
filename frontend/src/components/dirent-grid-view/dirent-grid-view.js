@@ -1,24 +1,24 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import DirentGridItem from '../../components/dirent-grid-view/dirent-grid-item';
+import { Dirent } from '../../models';
 import { siteRoot, username, enableSeadoc, thumbnailDefaultSize, thumbnailSizeForOriginal, gettext, fileServerRoot } from '../../utils/constants';
-import { updateImageThumbnail, Utils } from '../../utils/utils';
+import { getSelectionRect } from '../../utils/grid-selection';
+import imageAPI from '../../utils/image-api';
 import { seafileAPI } from '../../utils/seafile-api';
+import { updateImageThumbnail, Utils } from '../../utils/utils';
+import { hideMenu, showMenu } from '../context-menu/actions';
+import ContextMenu from '../context-menu/context-menu';
+import ImageDialog from '../dialog/image-dialog';
+import { withDirentContextMenu } from '../dir-view-mode/hoc/withDirentContextMenu';
+import { getCreateMenuList } from '../dir-view-mode/utils/contextMenuUtils';
+import { menuHandlers } from '../dir-view-mode/utils/menuHandlers';
+import EmptyTip from '../empty-tip';
+import { EVENT_BUS_TYPE } from '../event-bus';
 import Loading from '../loading';
 import ModalPortal from '../modal-portal';
-import ImageDialog from '../dialog/image-dialog';
-import DirentGridItem from '../../components/dirent-grid-view/dirent-grid-item';
-import ContextMenu from '../context-menu/context-menu';
-import { hideMenu, showMenu } from '../context-menu/actions';
 import toaster from '../toast';
-import imageAPI from '../../utils/image-api';
-import { EVENT_BUS_TYPE } from '../event-bus';
-import EmptyTip from '../empty-tip';
-import { Dirent } from '../../models';
 import { VirtualGrid } from '../virtual-list';
-import { getSelectionRect } from '../../utils/grid-selection';
-import { withDirentContextMenu } from '../dir-view-mode/hoc/withDirentContextMenu';
-import { menuHandlers } from '../dir-view-mode/utils/menuHandlers';
-import { getCreateMenuList } from '../dir-view-mode/utils/contextMenuUtils';
 
 import '../../css/grid-view.css';
 

@@ -1,19 +1,19 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { Button, Input, InputGroup } from 'reactstrap';
-import { gettext, isPro, isSeafilePlus, siteRoot } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
-import SharePermissionEditor from '../select-editor/share-permission-editor';
-import FileChooser from '../file-chooser';
-import GroupSelect from '../group-select';
-import toaster from '../../components/toast';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import BackIcon from '../../components/back-icon';
 import EmptyTip from '../../components/empty-tip';
 import Loading from '../../components/loading';
-import OpIcon from '../op-icon';
+import toaster from '../../components/toast';
+import { gettext, isPro, isSeafilePlus, siteRoot } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
+import FileChooser from '../file-chooser';
+import GroupSelect from '../group-select';
 import Icon from '../icon';
+import OpIcon from '../op-icon';
+import SharePermissionEditor from '../select-editor/share-permission-editor';
 
 class GroupItem extends React.Component {
 
