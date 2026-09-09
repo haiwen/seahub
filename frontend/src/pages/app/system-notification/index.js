@@ -1,8 +1,8 @@
 import React from 'react';
-import { curNoteMsg, curNoteID, siteRoot, gettext } from '../utils/constants';
-import Icon from './icon';
+import { curNoteMsg, curNoteID, siteRoot, gettext } from '../../../utils/constants';
+import Icon from '../../../components/icon';
 
-import '../css/system-notification.css';
+import './system-notification.css';
 
 class SystemNotification extends React.Component {
 

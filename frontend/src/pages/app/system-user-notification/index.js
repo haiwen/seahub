@@ -1,8 +1,8 @@
 import React from 'react';
 import SystemUserNotificationItem from './system-user-notification-item';
-import { notificationAPI } from '../utils/notification-api';
+import { notificationAPI } from '../../../utils/notification-api';
 
-import '../css/system-notification.css';
+import '../system-notification/system-notification.css';
 
 class SystemUserNotification extends React.Component {
 
@@ -26,11 +26,10 @@ class SystemUserNotification extends React.Component {
     if (!userNoteMsgs) {
       return null;
     }
-    const userNoteMsgItem = userNoteMsgs.map((item, index) => {
+    const userNoteMsgItem = userNoteMsgs.map((item) => {
       return (
         <SystemUserNotificationItem
-          key={index}
-          notificationItem={item}
+          key={item.id}
           msg={item.msg_format}
           notificationID={item.id}
         />

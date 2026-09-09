@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import ModalPortal from './modal-portal';
 import { Link } from '@gatsbyjs/reach-router';
 import {
   gettext, siteRoot, canAddGroup, canAddRepo, canShareRepo,
@@ -8,26 +7,27 @@ import {
   enableTC, sideNavFooterCustomHtml, enableShowAbout, showWechatSupportGroup,
   canViewOrg, enableOCM, enableOCMViaWebdav, canCreateWiki,
   isPro, isDBSqlite3, customNavItems, helpLink
-} from '../utils/constants';
-import { seafileAPI } from '../utils/seafile-api';
-import { Utils } from '../utils/utils';
-import Group from '../models/group';
-import toaster from './toast';
-import CreateGroupDialog from '../components/dialog/create-group-dialog';
-import AboutDialog from './dialog/about-dialog';
-import LibrariesSubNav from '../components/libraries-sub-nav';
+} from '../../../utils/constants';
+import ModalPortal from '../../../components/modal-portal';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { Utils } from '../../../utils/utils';
+import Group from '../../../models/group';
+import toaster from '../../../components/toast';
+import CreateGroupDialog from '../../../components/dialog/create-group-dialog';
+import AboutDialog from '../../../components/dialog/about-dialog';
+import LibrariesSubNav from './libraries-sub-nav';
 import {
   ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY,
   SIDE_NAV_FILES_UNFOLDED_KEY,
   SIDE_NAV_SHARE_ADMIN_UNFOLDED_KEY,
   SUB_NAV_ITEM_HEIGHT
-} from '../constants';
-import { isWorkWeixin } from './wechat/weixin-utils';
-import WechatDialog from './wechat/wechat-dialog';
-import { EVENT_BUS_TYPE } from './common/event-bus-type';
-import EventBus from './common/event-bus';
-import OpIcon from '../components/op-icon';
-import Icon from '../components/icon';
+} from '../../../constants';
+import { isWorkWeixin } from '../../../components/wechat/weixin-utils';
+import WechatDialog from '../../../components/wechat/wechat-dialog';
+import { EVENT_BUS_TYPE } from '../../../components/common/event-bus-type';
+import EventBus from '../../../components/common/event-bus';
+import OpIcon from '../../../components/op-icon';
+import Icon from '../../../components/icon';
 
 const propTypes = {
   currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,

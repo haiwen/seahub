@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Logo from './logo';
-import CommonToolbar from './toolbar/common-toolbar';
-import Icon from './icon';
+import Logo from '../../../components/logo';
+import CommonToolbar from '../../../components/toolbar/common-toolbar';
+import Icon from '../../../components/icon';
 
-import '../css/header.css';
+import '../../../css/header.css';
 
 const propTypes = {
   children: PropTypes.object,
