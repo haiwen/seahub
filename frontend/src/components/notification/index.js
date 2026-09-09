@@ -3,11 +3,11 @@ import NotificationPopover from './notification-popover';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import NoticeItem from './notice-item';
-import UserNotificationsDialog from '../../user-notifications';
+import UserNotificationsDialog from './user-notifications';
 import { Utils } from '../../utils/utils';
 import OpIcon from '../op-icon';
 
-import '../../css/notification.css';
+import './index.css';
 
 class Notification extends React.Component {
   constructor(props) {

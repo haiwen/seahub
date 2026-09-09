@@ -6,7 +6,7 @@ import WikiDirListView from '../../components/wiki-dir-list-view/wiki-dir-list-v
 import Loading from '../../components/loading';
 import { Utils } from '../../utils/utils';
 import Search from '../../components/search/search';
-import Notification from '../../components/common/notification';
+import Notification from '../../components/notification';
 import Account from '../../components/common/account';
 import SdocWikiPageViewer from '../../components/sdoc-wiki-page-viewer';
 import Icon from '../../components/icon';

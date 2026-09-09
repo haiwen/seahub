@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { gettext, siteRoot, mediaUrl } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
 import { processor } from '@seafile/seafile-editor';
-import '../../css/notice-item.css';
+import './index.css';
 
 const propTypes = {
   noticeItem: PropTypes.object.isRequired,

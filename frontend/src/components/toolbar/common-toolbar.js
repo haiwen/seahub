@@ -5,7 +5,7 @@ import Search from '../search/search';
 import SearchByName from '../search/search-by-name';
 import Wiki2GlobalSearch from '../search/wiki2-global-search';
 import toaster from '../toast';
-import Notification from '../common/notification';
+import Notification from '../notification';
 import Account from '../common/account';
 import ColorMode from '../common/color-mode';
 import Logout from '../common/logout';
