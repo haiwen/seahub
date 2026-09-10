@@ -19,8 +19,6 @@ import { gettext, username, canAddRepo, isMultiTenancy } from '../../utils/const
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 
-import '../../css/group-view.css';
-
 const propTypes = {
   group: PropTypes.object.isRequired,
   addNewRepo: PropTypes.func.isRequired,
