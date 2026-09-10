@@ -3,11 +3,11 @@ import { Button } from 'reactstrap';
 import { navigate } from '@gatsbyjs/reach-router';
 import className from 'classnames';
 import PropTypes from 'prop-types';
-import { gettext } from '../utils/constants';
-import CustomDropdown from './dropdown';
-import Icon from './icon';
+import { gettext } from '../../utils/constants';
+import CustomDropdown from '../dropdown';
+import Icon from '../icon';
 
-import '../css/pagination.css';
+import './index.css';
 
 const propTypes = {
   currentPage: PropTypes.number.isRequired,

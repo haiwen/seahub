@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
-import ClickOutside from './click-outside';
-import QRCodePopover from './qr-code-popover';
+import ClickOutside from '../click-outside';
+import QRCodePopover from '../qr-code-popover';
 
-import '../css/btn-qr-code.css';
+import './index.css';
 
 const propTypes = {
   link: PropTypes.string.isRequired

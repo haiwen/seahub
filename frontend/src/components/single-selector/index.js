@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '@/utils/constants';
-import { Utils } from '../utils/utils';
-import Icon from './icon';
+import { Utils } from '../../utils/utils';
+import Icon from '../icon';
 
-import '../css/single-selector.css';
+import './index.css';
 
 const propTypes = {
   customSelectorToggle: PropTypes.object,

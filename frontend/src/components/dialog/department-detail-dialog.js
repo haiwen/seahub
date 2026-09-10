@@ -7,7 +7,7 @@ import { seafileAPI } from '../../utils/seafile-api.js';
 import { Utils } from '../../utils/utils';
 import EmptyTip from '../empty-tip';
 import { eventBus } from '../event-bus';
-import Icon from '../icon.js';
+import Icon from '../icon';
 import Loading from '../loading';
 import SeahubModalHeader from '../seahub-modal-header';
 import toaster from '../toast';

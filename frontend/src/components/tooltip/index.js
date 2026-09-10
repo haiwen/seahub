@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from 'react';
 import { Tooltip as ReactstrapTooltip } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { getTooltipOpenState } from './tooltip-utils';
+import { getTooltipOpenState } from '../tooltip-utils';
 
-import '../css/tooltip.css';
+import './index.css';
 
 const propTypes = {
   target: PropTypes.string.isRequired,

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { mediaUrl } from '../utils/constants';
-import '../css/empty-tip.css';
+import { mediaUrl } from '../../utils/constants';
+import './index.css';
 
 function EmptyTip({ className = '', title, text, children }) {
   return (

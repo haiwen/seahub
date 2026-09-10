@@ -6,10 +6,10 @@ import localeData from 'dayjs/plugin/localeData';
 import utc from 'dayjs/plugin/utc';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import PropTypes from 'prop-types';
-import { translateCalendar } from '../utils/date-format-utils';
+import { translateCalendar } from '../../utils/date-format-utils';
 
 import '@seafile/seafile-calendar/assets/index.css';
-import '../css/date-and-time-picker.css';
+import './index.css';
 
 dayjs.extend(utc);
 dayjs.extend(localeData);

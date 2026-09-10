@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../utils/constants';
+import { gettext } from '../../utils/constants';
 
-import '../css/file-tag-list.css';
+import './index.css';
 
 function FileTagList({ fileTagList }) {
   if (Array.isArray(fileTagList) && fileTagList.length > 0) {

@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../utils/constants';
-import { Utils } from '../utils/utils';
-import { GRID_MODE, LIST_MODE, TABLE_MODE } from './dir-view-mode/constants';
-import CustomDropdown from './dropdown';
-import Icon from './icon';
-import Tooltip from './tooltip';
+import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import { GRID_MODE, LIST_MODE, TABLE_MODE } from '../dir-view-mode/constants';
+import CustomDropdown from '../dropdown';
+import Icon from '../icon';
+import Tooltip from '../tooltip';
 
-import '../css/view-modes.css';
+import './index.css';
 
 const propTypes = {
   currentViewMode: PropTypes.string.isRequired,

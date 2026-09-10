@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { gettext } from '@/utils/constants';
-import { Utils } from '../utils/utils';
-import Icon from './icon';
-import OpIcon from './op-icon';
+import { Utils } from '../../utils/utils';
+import Icon from '../icon';
+import OpIcon from '../op-icon';
 
-import '../css/search-input.css';
+import './index.css';
 
 const propTypes = {
   placeholder: PropTypes.string,

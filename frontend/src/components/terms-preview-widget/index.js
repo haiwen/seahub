@@ -1,9 +1,9 @@
 import React from 'react';
 import { processor } from '@seafile/seafile-editor';
 import PropTypes from 'prop-types';
-import Loading from './loading';
+import Loading from '../loading';
 
-import '../css/terms-preview.css';
+import './index.css';
 
 const propTypes = {
   content: PropTypes.string,
