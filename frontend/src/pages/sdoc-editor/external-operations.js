@@ -1,13 +1,13 @@
 import React from 'react';
 import { EventBus, EXTERNAL_EVENT } from '@seafile/seafile-sdoc-editor';
 import PropTypes from 'prop-types';
-import CreateFile from '../../../components/dialog/create-file-dialog';
-import InternalLinkDialog from '../../../components/dialog/internal-link-dialog';
-import ShareDialog from '../../../components/dialog/share-dialog';
-import SearchedItemDetails from '../../../components/search/details';
-import toaster from '../../../components/toast';
-import { seafileAPI } from '../../../utils/seafile-api';
-import { Utils } from '../../../utils/utils';
+import CreateFile from '../../components/dialog/create-file-dialog';
+import InternalLinkDialog from '../../components/dialog/internal-link-dialog';
+import ShareDialog from '../../components/dialog/share-dialog';
+import SearchedItemDetails from '../../components/search/details';
+import toaster from '../../components/toast';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,

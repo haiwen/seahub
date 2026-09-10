@@ -1,4 +1,4 @@
-import LocalStorage from '../../../utils/local-storage-utils';
+import LocalStorage from '../../utils/local-storage-utils';
 
 const SDOC_CHAT_SESSION_STORAGE_KEY = 'sdoc_ai_doc_sessions';
 const SDOC_CHAT_SESSION_STORAGE_VERSION = 1;

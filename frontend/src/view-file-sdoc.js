@@ -5,7 +5,7 @@ import { createRoot } from 'react-dom/client';
 import i18n from './_i18n/i18n-sdoc-editor';
 import Loading from './components/loading';
 import { MetadataMiddlewareProvider, MetadataStatusProvider } from './hooks';
-import SdocEditor from './pages/sdoc/sdoc-editor';
+import SdocEditor from './pages/sdoc-editor';
 import { Utils } from './utils/utils';
 
 const { serviceURL, avatarURL, siteRoot, lang, mediaUrl, isPro, fileServerRoot } = window.app.config;
