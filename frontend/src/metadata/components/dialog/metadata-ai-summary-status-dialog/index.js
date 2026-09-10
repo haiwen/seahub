@@ -9,8 +9,6 @@ import metadataAPI from '../../../api';
 import { EVENT_BUS_TYPE } from '../../../constants';
 import TurnOffConfirmDialog from '../turn-off-confirm-dialog';
 
-import '../metadata-face-recognition-dialog/index.css';
-
 const MetadataAISummaryStatusDialog = ({ value: oldValue, repoID, submit, enableMetadata }) => {
   const [value, setValue] = useState(oldValue);
   const [submitting, setSubmitting] = useState(false);
