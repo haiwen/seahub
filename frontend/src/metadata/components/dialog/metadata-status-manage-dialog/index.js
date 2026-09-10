@@ -200,6 +200,7 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
             </Button>
             {isHiddenColumnsVisible && (
               <HideColumnPopover
+                maxHeight={300}
                 placement="bottom-end"
                 target="metadata-status-hide-properties-button"
                 hiddenColumns={hiddenColumns}
