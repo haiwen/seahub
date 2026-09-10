@@ -7,27 +7,27 @@ import CreatorFormatter from '@/metadata/components/cell-formatter/creator';
 import FileTagsFormatter from '@/metadata/components/cell-formatter/file-tags';
 import { getNumberDisplayString } from '@/metadata/utils/cell';
 import TextTranslation from '@/utils/text-translation';
-import MobileItemMenu from '../../components/mobile-item-menu';
-import OpIcon from '../../components/op-icon';
-import { DIR_COLUMN_KEYS } from '../../constants/dir-column-config';
-import { PRIVATE_COLUMN_KEY } from '../../metadata/constants';
-import { Dirent } from '../../models';
-import { gettext, siteRoot, mediaUrl, enableVideoThumbnail, enablePDFThumbnail, enableThumbnailServer } from '../../utils/constants';
-import { toggleStar } from '../../utils/dirent-operations';
-import { imageThumbnailCenter, videoThumbnailCenter } from '../../utils/thumbnail-center';
-import { formatUnixWithTimezone } from '../../utils/time';
-import URLDecorator from '../../utils/url-decorator';
-import { Utils } from '../../utils/utils';
-import { menuHandlers } from '../dir-view-mode/utils/menuHandlers';
-import CustomDropdown from '../dropdown';
-import { EVENT_BUS_TYPE } from '../event-bus';
-import Icon from '../icon';
-import Rename from '../rename';
-import StatusEditor from './status-editor';
+import { DIR_COLUMN_KEYS } from '../../../constants/dir-column-config';
+import { PRIVATE_COLUMN_KEY } from '../../../metadata/constants';
+import { Dirent } from '../../../models';
+import { gettext, siteRoot, mediaUrl, enableVideoThumbnail, enablePDFThumbnail, enableThumbnailServer } from '../../../utils/constants';
+import { toggleStar } from '../../../utils/dirent-operations';
+import { imageThumbnailCenter, videoThumbnailCenter } from '../../../utils/thumbnail-center';
+import { formatUnixWithTimezone } from '../../../utils/time';
+import URLDecorator from '../../../utils/url-decorator';
+import { Utils } from '../../../utils/utils';
+import { menuHandlers } from '../../dir-view-mode/utils/menuHandlers';
+import CustomDropdown from '../../dropdown';
+import { EVENT_BUS_TYPE } from '../../event-bus';
+import Icon from '../../icon';
+import MobileItemMenu from '../../mobile-item-menu';
+import OpIcon from '../../op-icon';
+import Rename from '../../rename';
+import StatusEditor from '../status-editor';
 
-import '../../css/dirent-list-item.css';
-import '../../metadata/components/cell-formatter/collaborator/index.css';
 import './index.css';
+import '../../../metadata/components/cell-formatter/collaborator/index.css';
+import '../index.css';
 
 const propTypes = {
   path: PropTypes.string.isRequired,

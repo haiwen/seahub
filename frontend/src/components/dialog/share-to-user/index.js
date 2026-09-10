@@ -2,20 +2,20 @@ import React from 'react';
 import { Button } from 'reactstrap';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import EmptyTip from '../../components/empty-tip';
-import Loading from '../../components/loading';
-import { gettext, isPro, isSeafilePlus } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils, isMobile } from '../../utils/utils';
-import OpIcon from '../op-icon';
-import SharePermissionEditor from '../select-editor/share-permission-editor';
-import SelectUsersIcon from '../select-members-to-share-with';
-import toaster from '../toast';
-import UserSelect from '../user-select';
-import DepartmentDetailDialog from './department-detail-dialog';
+import { gettext, isPro, isSeafilePlus } from '../../../utils/constants';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { Utils, isMobile } from '../../../utils/utils';
+import EmptyTip from '../../empty-tip';
+import Loading from '../../loading';
+import OpIcon from '../../op-icon';
+import SharePermissionEditor from '../../select-editor/share-permission-editor';
+import SelectUsersIcon from '../../select-members-to-share-with';
+import toaster from '../../toast';
+import UserSelect from '../../user-select';
+import DepartmentDetailDialog from '../department-detail-dialog';
 
-import '../../css/invitations.css';
-import '../../css/share-to-user.css';
+import '../../../css/invitations.css';
+import './index.css';
 
 class UserItem extends React.Component {
 

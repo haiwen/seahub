@@ -2,13 +2,13 @@ import React, { Fragment } from 'react';
 import { Modal, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext, LARGE_DIALOG_STYLE } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
-import LibSubFolderSetGroupPermissionDialog from './lib-sub-folder-set-group-permission-dialog';
-import LibSubFolderSetUserPermissionDialog from './lib-sub-folder-set-user-permission-dialog';
+import { gettext, LARGE_DIALOG_STYLE } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
+import LibSubFolderSetGroupPermissionDialog from '../lib-sub-folder-set-group-permission-dialog';
+import LibSubFolderSetUserPermissionDialog from '../lib-sub-folder-set-user-permission-dialog';
 
-import '../../css/share-link-dialog.css';
-import '../../css/lib-sub-folder-permission-dialog.css';
+import '../../../css/share-link-dialog.css';
+import './index.css';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,

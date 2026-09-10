@@ -1,17 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { KeyCodes, TAG_COLORS } from '../../constants';
-import { gettext } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
-import CommonAddTool from '../common-add-tool';
-import CustomizePopover from '../customize-popover';
-import SearchInput from '../search-input';
-import toaster from '../toast';
-import TagItem from './tag-item';
+import { KeyCodes, TAG_COLORS } from '../../../constants';
+import { gettext } from '../../../utils/constants';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { Utils } from '../../../utils/utils';
+import CommonAddTool from '../../common-add-tool';
+import CustomizePopover from '../../customize-popover';
+import SearchInput from '../../search-input';
+import toaster from '../../toast';
+import TagItem from '../tag-item';
 
-import '../../css/repo-tag.css';
-import '../../css/edit-filetag-popover.css';
+import './index.css';
 
 class EditFileTagPopover extends React.Component {
 

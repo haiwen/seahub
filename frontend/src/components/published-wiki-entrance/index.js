@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { serviceURL, gettext } from '../utils/constants';
-import Tooltip from './tooltip';
+import { serviceURL, gettext } from '../../utils/constants';
+import Tooltip from '../tooltip';
 
-import '../css/published-wiki-entrance.css';
+import './index.css';
 
 const propTypes = {
   wikiID: PropTypes.string.isRequired,

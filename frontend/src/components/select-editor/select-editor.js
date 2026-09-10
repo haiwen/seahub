@@ -9,7 +9,7 @@ import Icon from '../icon';
 import { MenuSelectStyle } from '../select';
 import SelectDropdownIndicator from '../select-dropdown-indicator';
 
-import '../../css/select-editor.css';
+import './index.css';
 
 const propTypes = {
   isTextMode: PropTypes.bool.isRequired, // there will be two mode. first: text and select. second: just select

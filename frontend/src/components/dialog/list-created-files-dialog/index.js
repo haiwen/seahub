@@ -4,10 +4,10 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext, siteRoot } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { gettext, siteRoot } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
 
-import '../../css/list-created-files-dialog.css';
+import './index.css';
 
 const propTypes = {
   activity: PropTypes.object.isRequired,

@@ -2,15 +2,15 @@ import React, { Fragment } from 'react';
 import { Modal, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext, canGenerateShareLink, canGenerateUploadLink, LARGE_DIALOG_STYLE } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
-import IconButton from '../icon-button';
-import RepoShareAdminGroupShares from './repo-share-admin/group-shares';
-import RepoShareAdminShareLinks from './repo-share-admin/share-links';
-import RepoShareAdminUploadLinks from './repo-share-admin/upload-links';
-import RepoShareAdminUserShares from './repo-share-admin/user-shares';
+import { gettext, canGenerateShareLink, canGenerateUploadLink, LARGE_DIALOG_STYLE } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
+import IconButton from '../../icon-button';
+import RepoShareAdminGroupShares from '../repo-share-admin/group-shares';
+import RepoShareAdminShareLinks from '../repo-share-admin/share-links';
+import RepoShareAdminUploadLinks from '../repo-share-admin/upload-links';
+import RepoShareAdminUserShares from '../repo-share-admin/user-shares';
 
-import '../../css/repo-share-admin.css';
+import './index.css';
 
 const propTypes = {
   repo: PropTypes.object.isRequired,

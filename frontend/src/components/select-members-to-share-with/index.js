@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { cloudMode, gettext, isOrgContext } from '../utils/constants';
-import { seafileAPI } from '../utils/seafile-api';
-import OpIcon from './op-icon';
+import { cloudMode, gettext, isOrgContext } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import OpIcon from '../op-icon';
 
-import '../css/select-users-icon.css';
+import './index.css';
 
 const propTypes = {
   onClick: PropTypes.func

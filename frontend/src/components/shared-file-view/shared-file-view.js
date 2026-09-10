@@ -11,7 +11,7 @@ import CustomDropdown from '../dropdown';
 import Switch from '../switch';
 import toaster from '../toast';
 
-import '../../css/shared-file-view.css';
+import './index.css';
 
 const propTypes = {
   content: PropTypes.object.isRequired,

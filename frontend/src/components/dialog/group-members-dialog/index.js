@@ -2,11 +2,11 @@ import React from 'react';
 import { Modal, ModalBody } from 'reactstrap';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
-import Loading from '../loading';
-import toaster from '../toast';
+import { gettext } from '../../../utils/constants';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { Utils } from '../../../utils/utils';
+import Loading from '../../loading';
+import toaster from '../../toast';
 
 import './index.css';
 

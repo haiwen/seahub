@@ -6,7 +6,7 @@ import { gettext } from '../../../utils/constants';
 import TermsPreviewWidget from '../../terms-preview-widget';
 import TermsEditorDialog from '../terms-editor-dialog';
 
-import '../../../css/terms-conditions-editor.css';
+import './terms-conditions-editor.css';
 
 const propTypes = {
   isUpdate: PropTypes.bool,
