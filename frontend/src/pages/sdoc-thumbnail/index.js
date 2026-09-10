@@ -1,9 +1,6 @@
-import React, { Suspense, useEffect, useState } from 'react';
-import { I18nextProvider } from 'react-i18next';
+import React, { useEffect, useState } from 'react';
 import { SDocViewer } from '@seafile/seafile-sdoc-editor';
 import axios from 'axios';
-import { createRoot } from 'react-dom/client';
-import i18n from '../../_i18n/i18n-sdoc-editor';
 import Loading from '../../components/loading';
 
 import './index.css';
@@ -47,13 +44,3 @@ export default function SdocThumbnail() {
     </div>
   );
 }
-
-
-const root = createRoot(document.getElementById('wrapper'));
-root.render(
-  <I18nextProvider i18n={ i18n } >
-    <Suspense fallback={<Loading />}>
-      <SdocThumbnail />
-    </Suspense>
-  </I18nextProvider>
-);
