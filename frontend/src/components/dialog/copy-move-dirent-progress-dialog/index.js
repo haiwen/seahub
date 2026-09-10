@@ -2,9 +2,9 @@ import React from 'react';
 import { Modal, ModalBody } from 'reactstrap';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext } from '../../utils/constants';
+import { gettext } from '../../../utils/constants';
 
-import '../../css/copy-move-dirent-progress-dialog.css';
+import './index.css';
 
 const propTypes = {
   type: PropTypes.oneOf(['move', 'copy']).isRequired,

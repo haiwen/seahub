@@ -2,14 +2,14 @@ import React from 'react';
 import { Button, Modal, ModalBody, ModalFooter, TabContent, TabPane } from 'reactstrap';
 import PropTypes from 'prop-types';
 import makeAnimated from 'react-select/animated';
-import { gettext, isPro } from '../../utils/constants';
-import { userAPI } from '../../utils/user-api';
-import { Utils } from '../../utils/utils';
-import SeahubModalHeader from '../seahub-modal-header';
-import { SeahubSelect } from '../select';
-import toaster from '../toast';
+import { gettext, isPro } from '../../../utils/constants';
+import { userAPI } from '../../../utils/user-api';
+import { Utils } from '../../../utils/utils';
+import SeahubModalHeader from '../../seahub-modal-header';
+import { SeahubSelect } from '../../select';
+import toaster from '../../toast';
 
-import '../../css/repo-office-suite-dialog.css';
+import './index.css';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,

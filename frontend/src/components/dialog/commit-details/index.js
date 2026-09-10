@@ -3,13 +3,13 @@ import { Modal, ModalBody } from 'reactstrap';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext, siteRoot } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
-import Icon from '../icon';
-import Loading from '../loading';
+import { gettext, siteRoot } from '../../../utils/constants';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { Utils } from '../../../utils/utils';
+import Icon from '../../icon';
+import Loading from '../../loading';
 
-import '../../css/commit-details.css';
+import './index.css';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Modal, ModalBody, Form } from 'reactstrap';
 import PropTypes from 'prop-types';
-import SeahubModalCloseIcon from '../../components/seahub-modal-close';
-import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
+import { gettext, siteRoot, mediaUrl } from '../../../utils/constants';
+import { seafileAPI } from '../../../utils/seafile-api';
+import SeahubModalCloseIcon from '../../seahub-modal-close';
 
-import '../../css/lib-decrypt.css';
+import './index.css';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,

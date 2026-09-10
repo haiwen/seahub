@@ -3,13 +3,13 @@ import { Button, Modal, ModalBody, Label } from 'reactstrap';
 import copy from 'copy-to-clipboard';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
-import Icon from '../icon';
-import toaster from '../toast';
+import { gettext } from '../../../utils/constants';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { Utils } from '../../../utils/utils';
+import Icon from '../../icon';
+import toaster from '../../toast';
 
-import '../../css/group-invite-members-dialog.css';
+import './index.css';
 
 const propTypes = {
   groupID: PropTypes.number.isRequired,

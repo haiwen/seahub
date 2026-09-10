@@ -3,14 +3,14 @@ import { Modal, ModalBody } from 'reactstrap';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext, siteRoot } from '../../utils/constants';
-import { fileAccessLogAPI } from '../../utils/file-access-log-api';
-import { Utils } from '../../utils/utils';
-import EmptyTip from '../empty-tip';
-import Loading from '../loading';
-import toaster from '../toast';
+import { gettext, siteRoot } from '../../../utils/constants';
+import { fileAccessLogAPI } from '../../../utils/file-access-log-api';
+import { Utils } from '../../../utils/utils';
+import EmptyTip from '../../empty-tip';
+import Loading from '../../loading';
+import toaster from '../../toast';
 
-import '../../css/file-access-log.css';
+import './index.css';
 
 dayjs.locale(window.app.config.lang);
 
