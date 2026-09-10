@@ -7,7 +7,7 @@ import ContextMenu from '../context-menu/context-menu';
 import { LIST_MODE } from '../dir-view-mode/constants';
 import LibsMobileThead from '../libs-mobile-thead';
 import Loading from '../loading';
-import RepoListCard from '../repo-list-card/repo-list-card';
+import RepoListCard from '../repo-list-card';
 import toaster from '../toast';
 import SharedRepoListItem from './shared-repo-list-item';
 
