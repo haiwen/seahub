@@ -150,10 +150,10 @@ class AdminVirusFileView(APIView):
         parent_dir = os.path.dirname(virus_file.file_path)
         filename = os.path.basename(virus_file.file_path)
         try:
+            delete_virus_file(virus_id)
             seafile_api.del_file(virus_file.repo_id, parent_dir,
                                  json.dumps([filename]),
                                  request.user.username)
-            delete_virus_file(virus_id)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -264,10 +264,10 @@ class AdminVirusFilesBatchView(APIView):
                 filename = os.path.basename(virus_file.file_path)
                 virus_id = int(virus_file.vid)
                 try:
+                    delete_virus_file(virus_id)
                     seafile_api.del_file(virus_file.repo_id, parent_dir,
                                          json.dumps([filename]),
                                          request.user.username)
-                    delete_virus_file(virus_id)
                 except Exception as e:
                     logger.error(e)
                     result['failed'].append({
