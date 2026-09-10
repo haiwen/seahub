@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
-import SearchFileDialog from '../dialog/search-file-dialog';
-import Icon from '../icon';
+import { gettext } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
+import SearchFileDialog from '../../dialog/search-file-dialog';
+import Icon from '../../icon';
 
-import '../../css/search-by-name.css';
+import './index.css';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,

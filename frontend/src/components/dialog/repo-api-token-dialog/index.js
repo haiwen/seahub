@@ -4,15 +4,15 @@ import classnames from 'classnames';
 import copy from 'copy-to-clipboard';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext, LARGE_DIALOG_STYLE } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
-import Loading from '../loading';
-import OpIcon from '../op-icon';
-import RepoAPITokenPermissionEditor from '../select-editor/repo-api-token-permission-editor';
-import toaster from '../toast';
+import { gettext, LARGE_DIALOG_STYLE } from '../../../utils/constants';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { Utils } from '../../../utils/utils';
+import Loading from '../../loading';
+import OpIcon from '../../op-icon';
+import RepoAPITokenPermissionEditor from '../../select-editor/repo-api-token-permission-editor';
+import toaster from '../../toast';
 
-import '../../css/repo-api-token-dialog.css';
+import './index.css';
 
 const apiTokenItemPropTypes = {
   item: PropTypes.object.isRequired,
