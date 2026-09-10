@@ -1,8 +1,8 @@
 import React from 'react';
 import { MarkdownViewer } from '@seafile/seafile-editor';
-import { mediaUrl } from '../../utils/constants';
+import { mediaUrl } from '../../../utils/constants';
 
-import '../../css/md-file-view.css';
+import './index.css';
 
 const { fileContent } = window.app.pageOptions;
 

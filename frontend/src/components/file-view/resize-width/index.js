@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import '../../css/resize-width.css';
+import './index.css';
 
 const ResizeWidth = ({ minWidth, maxWidth, resizeWidth: resizeWidthAPI, resizeWidthEnd }) => {
   const [isShowHandlerBar, setIsShowHandlerBar] = useState(false);

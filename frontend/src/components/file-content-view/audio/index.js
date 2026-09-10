@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AudioPlayer from '../audio-player';
+import AudioPlayer from '../../audio-player';
 
-import '../../css/audio-file-view.css';
+import './index.css';
 
 const propTypes = {
   src: PropTypes.string
