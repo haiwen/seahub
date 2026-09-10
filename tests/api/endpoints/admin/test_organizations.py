@@ -164,13 +164,13 @@ class AdminOrganizationTest(BaseTestCase):
         assert json_resp['role'] == 'custom'
 
     @patch('seahub.api2.endpoints.admin.organizations.seafile_api.org_set_download_rate_limit')
-    def test_can_clear_monthly_traffic_limit(self, mock_set_download_rate_limit):
-        OrgSettings.objects.add_or_update(self.org, monthly_traffic_limit=1024)
+    def test_can_clear_monthly_download_traffic_limit(self, mock_set_download_rate_limit):
+        OrgSettings.objects.add_or_update(self.org, monthly_download_traffic_limit=1024)
 
-        resp = self.client.put(self.url, 'monthly_traffic_limit=0',
+        resp = self.client.put(self.url, 'monthly_download_traffic_limit=0',
                                'application/x-www-form-urlencoded')
 
         self.assertEqual(200, resp.status_code)
         self.assertEqual(
-            OrgSettings.objects.get_monthly_traffic_limit_by_org(self.org), 0)
+            OrgSettings.objects.get_monthly_download_traffic_limit_by_org(self.org), 0)
         mock_set_download_rate_limit.assert_called_once_with(self.org.org_id, -1)

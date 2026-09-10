@@ -18,7 +18,7 @@ from seahub.organizations.settings import ORG_MEMBER_QUOTA_DEFAULT, \
         ORG_ENABLE_REACTIVATE
 from seahub.organizations.signals import org_deleted
 from seahub.organizations.utils import generate_org_reactivate_link, \
-        get_org_traffic_limit
+        get_org_monthly_download_traffic_limit
 from seahub.utils import is_valid_email, IS_EMAIL_CONFIGURED, send_html_email, \
         get_org_traffic_by_month
 from seahub.utils.file_size import get_file_size_unit
@@ -78,7 +78,7 @@ def get_org_info(org):
     org_info['quota'] = seafile_api.get_org_quota(org_id)
     org_info['quota_usage'] = seafile_api.get_org_quota_usage(org_id)
 
-    org_info['monthly_traffic_limit'] = get_org_traffic_limit(org)
+    org_info['monthly_download_traffic_limit'] = get_org_monthly_download_traffic_limit(org)
     current_date = datetime.now()
     org_info['monthly_traffic_usage'] = get_org_traffic_by_month(org_id, current_date)
 
@@ -511,20 +511,20 @@ class AdminOrganization(APIView):
             OrgAdminSettings.objects.update_or_create(org_id=org_id, key='force_adfs_login',
                                                       defaults={'value': force_adfs_login})
 
-        monthly_traffic_limit = request.data.get('monthly_traffic_limit', None)
-        if monthly_traffic_limit is not None:
+        monthly_download_traffic_limit = request.data.get('monthly_download_traffic_limit', None)
+        if monthly_download_traffic_limit is not None:
             try:
-                monthly_traffic_limit = int(monthly_traffic_limit)
+                monthly_download_traffic_limit = int(monthly_download_traffic_limit)
             except ValueError:
-                error_msg = 'monthly_traffic_limit invalid.'
+                error_msg = 'monthly_download_traffic_limit invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            if monthly_traffic_limit < 0:
-                error_msg = 'monthly_traffic_limit invalid.'
+            if monthly_download_traffic_limit < 0:
+                error_msg = 'monthly_download_traffic_limit invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            monthly_traffic_limit = monthly_traffic_limit * get_file_size_unit('MB')
-            OrgSettings.objects.add_or_update(org, monthly_traffic_limit=monthly_traffic_limit)
+            monthly_download_traffic_limit = monthly_download_traffic_limit * get_file_size_unit('MB')
+            OrgSettings.objects.add_or_update(org, monthly_download_traffic_limit=monthly_download_traffic_limit)
             # Clear a prior monthly traffic throttle. seafevents will reapply it
             # during its next check if the updated limit is still exceeded.
             seafile_api.org_set_download_rate_limit(org_id, -1)
