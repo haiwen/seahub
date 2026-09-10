@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import CustomIcon from '../../../components/custom-icon';
 import { gettext, mediaUrl } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import NavItemIcon from '../common/nav-item-icon';
-import CustomIcon from '../custom-icon';
 import { getPaths } from '../utils/index';
 
 import './index.css';
