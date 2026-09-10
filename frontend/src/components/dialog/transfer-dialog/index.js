@@ -3,17 +3,17 @@ import { Button, Modal, ModalBody, ModalFooter,
   Nav, NavItem, NavLink, TabContent, TabPane, Label } from 'reactstrap';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext, isPro, orgID, LARGE_DIALOG_STYLE } from '../../utils/constants';
-import { orgAdminAPI } from '../../utils/org-admin-api';
-import { seafileAPI } from '../../utils/seafile-api';
-import { systemAdminAPI } from '../../utils/system-admin-api';
-import { Utils } from '../../utils/utils';
-import CustomizeSelect from '../customize-select';
-import Switch from '../switch';
-import toaster from '../toast';
-import UserSelect from '../user-select';
+import { gettext, isPro, orgID, LARGE_DIALOG_STYLE } from '../../../utils/constants';
+import { orgAdminAPI } from '../../../utils/org-admin-api';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { Utils } from '../../../utils/utils';
+import CustomizeSelect from '../../customize-select';
+import Switch from '../../switch';
+import toaster from '../../toast';
+import UserSelect from '../../user-select';
 
-import '../../css/transfer-dialog.css';
+import './index.css';
 
 const propTypes = {
   itemName: PropTypes.string.isRequired,

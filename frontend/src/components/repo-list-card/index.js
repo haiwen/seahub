@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-import '../../css/repo-list-card.css';
+import './index.css';
 
 const propTypes = {
   children: PropTypes.node.isRequired,

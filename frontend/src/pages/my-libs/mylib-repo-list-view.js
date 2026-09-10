@@ -5,7 +5,7 @@ import { hideMenu, handleContextClick } from '../../components/context-menu/acti
 import ContextMenu from '../../components/context-menu/context-menu';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import LibsMobileThead from '../../components/libs-mobile-thead';
-import RepoListCard from '../../components/repo-list-card/repo-list-card';
+import RepoListCard from '../../components/repo-list-card';
 import { Utils } from '../../utils/utils';
 import MylibRepoListItem from './mylib-repo-list-item';
 

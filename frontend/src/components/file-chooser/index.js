@@ -12,7 +12,7 @@ import toaster from '../toast';
 import RepoListWrapper from './repo-list-wrapper';
 import SearchedListView from './searched-list-view';
 
-import '../../css/file-chooser.css';
+import './index.css';
 
 const propTypes = {
   isShowFile: PropTypes.bool,

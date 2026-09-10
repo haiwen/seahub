@@ -1,13 +1,13 @@
 import React from 'react';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
-import toaster from '../toast';
-import CommentList from './comment-widget/comment-list';
-import ReplyList from './comment-widget/reply-list';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { Utils } from '../../../utils/utils';
+import toaster from '../../toast';
+import CommentList from '../comment-widget/comment-list';
+import ReplyList from '../comment-widget/reply-list';
 
-import '../../css/comments-list.css';
+import './index.css';
 
 const { username, repoID, filePath, fileUuid } = window.app.pageOptions;
 

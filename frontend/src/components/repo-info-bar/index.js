@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ListTaggedFilesDialog from './dialog/list-taggedfiles-dialog';
-import ModalPortal from './modal-portal';
-import RepoInfoBarMigrate from './repo-info-bar-migrate';
+import ListTaggedFilesDialog from '../dialog/list-taggedfiles-dialog';
+import ModalPortal from '../modal-portal';
+import RepoInfoBarMigrate from '../repo-info-bar-migrate';
 
-import '../css/repo-info-bar.css';
+import './index.css';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
