@@ -1,22 +1,19 @@
 import React from 'react';
-import { I18nextProvider } from 'react-i18next';
 import { UncontrolledTooltip } from 'reactstrap';
 import { DiffViewer } from '@seafile/seafile-sdoc-editor';
 import classnames from 'classnames';
 import dayjs from 'dayjs';
-import { createRoot } from 'react-dom/client';
-import i18n from '../../../_i18n/i18n-sdoc-editor';
-import GoBack from '../../../components/go-back';
-import Loading from '../../../components/loading';
-import toaster from '../../../components/toast';
-import { PER_PAGE, gettext, historyRepoID, mediaUrl } from '../../../utils/constants';
-import SDocServerApi from '../../../utils/sdoc-server-api';
-import { seafileAPI } from '../../../utils/seafile-api';
-import { Utils, isMobile } from '../../../utils/utils';
+import GoBack from '../../components/go-back';
+import Loading from '../../components/loading';
+import toaster from '../../components/toast';
+import { PER_PAGE, gettext, historyRepoID, mediaUrl } from '../../utils/constants';
+import SDocServerApi from '../../utils/sdoc-server-api';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils, isMobile } from '../../utils/utils';
 import { formatHistoryContent, getCurrentAndLastVersion } from './helper';
 import SidePanel from './side-panel';
 
-import '../../../css/layout.css';
+import '../../css/layout.css';
 import './index.css';
 
 const { serviceURL, avatarURL, siteRoot } = window.app.config;
@@ -476,9 +473,4 @@ class SdocFileHistory extends React.Component {
   }
 }
 
-const root = createRoot(document.getElementById('wrapper'));
-root.render(
-  <I18nextProvider i18n={ i18n } >
-    <SdocFileHistory />
-  </I18nextProvider>
-);
+export default SdocFileHistory;

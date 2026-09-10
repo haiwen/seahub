@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { SimpleEditor } from '@seafile/seafile-sdoc-editor';
-import EmbeddedFileDetails from '../../../components/dirent-detail/embedded-file-details';
-import Tooltip from '../../../components/tooltip';
-import { useMetadataStatus } from '../../../hooks';
-import { useCollaborators } from '../../../metadata';
-import Dirent from '../../../models/dirent';
-import { chatAndSearchAvailable, gettext, mediaUrl } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api';
-import { Utils } from '../../../utils/utils';
+import EmbeddedFileDetails from '../../components/dirent-detail/embedded-file-details';
+import Tooltip from '../../components/tooltip';
+import { useMetadataStatus } from '../../hooks';
+import { useCollaborators } from '../../metadata';
+import Dirent from '../../models/dirent';
+import { chatAndSearchAvailable, gettext, mediaUrl } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import ExternalOperations from './external-operations';
 import SdocChatPanel, { SdocChatPluginIcon } from './sdoc-chat-panel';
 

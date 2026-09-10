@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button } from 'reactstrap';
 import { DiffViewer } from '@seafile/seafile-sdoc-editor';
-import { createRoot } from 'react-dom/client';
 import GoBack from '../../components/go-back';
 import Loading from '../../components/loading';
 import toaster from '../../components/toast';
@@ -134,5 +133,4 @@ class SdocRevision extends React.Component {
   }
 }
 
-const root = createRoot(document.getElementById('wrapper'));
-root.render(<SdocRevision />);
+export default SdocRevision;

@@ -1,11 +1,8 @@
 import React, { Suspense } from 'react';
-import { I18nextProvider } from 'react-i18next';
 import { PublishedRevisionViewer } from '@seafile/seafile-sdoc-editor';
-import { createRoot } from 'react-dom/client';
-import i18n from '../../../_i18n/i18n-sdoc-editor';
-import Loading from '../../../components/loading';
-import { mediaUrl } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import Loading from '../../components/loading';
+import { mediaUrl } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 
 const { serviceURL, avatarURL, siteRoot, lang } = window.app.config;
 const { username, name } = window.app.userInfo || {};
@@ -46,11 +43,12 @@ window.seafile = {
   revisionId,
 };
 
-const root = createRoot(document.getElementById('wrapper'));
-root.render(
-  <I18nextProvider i18n={ i18n } >
+const SdocPublishedRevision = () => {
+  return (
     <Suspense fallback={<Loading />}>
       <PublishedRevisionViewer mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}/>
     </Suspense>
-  </I18nextProvider>
-);
+  );
+};
+
+export default SdocPublishedRevision;

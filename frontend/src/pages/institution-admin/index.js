@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
-import { LocationProvider, globalHistory } from '@gatsbyjs/reach-router';
-import { createRoot } from 'react-dom/client';
 import MainPanel from './main-panel';
 import SidePanel from './side-panel';
 
@@ -29,10 +27,3 @@ export default function Institutions() {
     </>
   );
 }
-
-const root = createRoot(document.getElementById('wrapper'));
-root.render(
-  <LocationProvider history={globalHistory}>
-    <Institutions />
-  </LocationProvider>
-);

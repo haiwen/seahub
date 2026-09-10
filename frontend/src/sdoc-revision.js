@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import FileHistory from './pages/file-history-old';
+import SdocRevision from './pages/sdoc-revision';
 
 const root = createRoot(document.getElementById('wrapper'));
-root.render(<FileHistory />);
+root.render(<SdocRevision />);
