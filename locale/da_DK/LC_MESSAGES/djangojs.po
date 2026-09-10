@@ -34,7 +34,7 @@ msgstr ""
 #: frontend/src/repo-folder-trash.js:206 frontend/src/repo-folder-trash.js:209
 #: frontend/src/repo-history.js:113 frontend/src/repo-snapshot.js:152
 msgid "Back"
-msgstr ""
+msgstr "Tilbage"
 
 #: frontend/src/components/common/account.js:76
 msgid "Exit System Admin"
@@ -68,7 +68,7 @@ msgstr ""
 
 #: frontend/src/components/common/account.js:132
 msgid "Used:"
-msgstr ""
+msgstr "Brugt:"
 
 #: frontend/src/components/common/account.js:140
 msgid "AI credit used:"
@@ -91,7 +91,7 @@ msgstr ""
 #: frontend/src/pages/wiki2/wiki-settings/index.js:34
 #: frontend/src/settings.js:161
 msgid "Settings"
-msgstr ""
+msgstr "Indstillinger"
 
 #: frontend/src/components/common/account.js:155
 #| msgid "Custom properties"
@@ -136,7 +136,7 @@ msgstr ""
 #: frontend/src/metadata/components/popover/sort-popover/index.js:223
 #: frontend/src/pages/excalidraw-editor/extension/select-image-dialog/local-image/index.js:180
 msgid "No results"
-msgstr ""
+msgstr "Ingen resultater"
 
 #: frontend/src/components/common/notice-item.js:52
 msgid "File {file_link} has a new comment from user {author}."
@@ -338,7 +338,7 @@ msgstr ""
 #: frontend/src/user-notifications.js:175
 #| msgid "Mark all read"
 msgid "Mark all as read"
-msgstr ""
+msgstr "Markér alle som læst"
 
 #: frontend/src/components/common/notification.js:186
 #| msgid "All Notifications"
@@ -383,7 +383,7 @@ msgstr ""
 #: frontend/src/pages/wiki2/wiki-trash-dialog.js:102
 #: frontend/src/user-notifications.js:187
 msgid "Close"
-msgstr ""
+msgstr "Luk"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:90
 msgid "Chat"
@@ -419,7 +419,7 @@ msgstr ""
 #: frontend/src/utils/table-headers.js:176
 #: frontend/src/utils/text-translation.js:156
 msgid "Tags"
-msgstr ""
+msgstr "Tags"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:275
 #| msgid "Cleaned trash"
@@ -435,7 +435,7 @@ msgstr ""
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:221
 #: frontend/src/utils/text-translation.js:160
 msgid "Trash"
-msgstr ""
+msgstr "Papirkurv"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:346
 #: frontend/src/components/dir-view-mode/dir-others/index.js:64
@@ -446,7 +446,7 @@ msgstr ""
 #: frontend/src/pages/wiki2/main-panel.js:374
 #: frontend/src/utils/text-translation.js:144
 msgid "History"
-msgstr ""
+msgstr "Historik"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:354
 #| msgid ""
@@ -699,7 +699,7 @@ msgstr ""
 #: frontend/src/tag/components/dialog/edit-tag-dialog/index.js:112
 #: frontend/src/tc-accept.js:43
 msgid "Cancel"
-msgstr ""
+msgstr "Annuller"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:110
 #: frontend/src/components/dialog/add-wiki-dialog/index.js:643
@@ -821,7 +821,7 @@ msgstr ""
 #: frontend/src/pages/wiki2/wiki-nav/add-new-page-dialog.js:126
 #: frontend/src/tag/components/dialog/edit-tag-dialog/index.js:113
 msgid "Submit"
-msgstr ""
+msgstr "Indsend"
 
 #: frontend/src/components/dialog/add-wiki-dialog/index.js:72
 #: frontend/src/components/dialog/convert-wiki-dialog.js:48
@@ -949,7 +949,7 @@ msgstr ""
 #: frontend/src/tag/views/tag-files/list/index.js:147
 #: frontend/src/utils/table-headers.js:85
 msgid "Name"
-msgstr ""
+msgstr "Navn"
 
 #: frontend/src/components/dialog/add-wiki-dialog/index.js:477
 #: frontend/src/components/dialog/convert-wiki-dialog.js:101
@@ -961,7 +961,7 @@ msgstr ""
 #: frontend/src/components/dialog/convert-wiki-dialog.js:101
 #: frontend/src/components/dialog/import-confluence-dialog.js:143
 msgid "Optional"
-msgstr ""
+msgstr "Valgfrit"
 
 #: frontend/src/components/dialog/add-wiki-dialog/index.js:483
 #: frontend/src/components/dialog/convert-wiki-dialog.js:106
@@ -1032,7 +1032,7 @@ msgstr ""
 #: frontend/src/components/popover/edit-wiki-popover/index.js:649
 #: frontend/src/pages/markdown-editor/index.js:95
 msgid "Refresh"
-msgstr ""
+msgstr "Opdater"
 
 #: frontend/src/components/dialog/add-wiki-dialog/index.js:619
 #: frontend/src/components/popover/edit-wiki-popover/index.js:703
@@ -1052,7 +1052,7 @@ msgstr ""
 #: frontend/src/components/dialog/add-wiki-page-dialog.js:58
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:204
 msgid "New page"
-msgstr ""
+msgstr "Ny side"
 
 #: frontend/src/components/dialog/change-group-dialog.js:30
 msgid "Are you sure to change group {placeholder} to department ?"
@@ -1096,7 +1096,7 @@ msgstr ""
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:120
 msgid "New Password"
-msgstr ""
+msgstr "Ny adgangskode"
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:121
 #: frontend/src/components/dialog/create-repo-dialog.js:228
@@ -1199,7 +1199,7 @@ msgstr ""
 #: frontend/src/components/file-view/comment-widget/comment-delete-popover.js:64
 #: frontend/src/pages/excalidraw-editor/extension/select-image-dialog/index.js:96
 msgid "Confirm"
-msgstr ""
+msgstr "Bekræft"
 
 #: frontend/src/components/dialog/confirm-delete-account.js:28
 #: frontend/src/components/user-settings/delete-account.js:36
@@ -1362,7 +1362,7 @@ msgstr ""
 #: frontend/src/pages/wiki2/common/delete-dialog.js:27
 #: frontend/src/utils/text-translation.js:52
 msgid "Delete"
-msgstr ""
+msgstr "Slet"
 
 #: frontend/src/components/dialog/confirm-disconnect-dingtalk.js:28
 #: frontend/src/components/dialog/confirm-disconnect-dingtalk.js:37
@@ -1418,7 +1418,7 @@ msgstr ""
 #: frontend/src/repo-snapshot.js:318 frontend/src/repo-snapshot.js:342
 #: frontend/src/repo-snapshot.js:343
 msgid "Restore"
-msgstr ""
+msgstr "Gendan"
 
 #: frontend/src/components/dialog/confirm-unlink-device.js:40
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-unlink-device-dialog.js:37
@@ -1456,13 +1456,13 @@ msgstr ""
 #: frontend/src/components/dialog/move-dirent-dialog.js:97
 #: frontend/src/components/dialog/move-dirent-dialog.js:149
 msgid "Invalid destination path"
-msgstr ""
+msgstr "Ugyldig destinationssti"
 
 #: frontend/src/components/dialog/copy-dirent-dialog.js:128
 #: frontend/src/components/dialog/move-dirent-dialog.js:134
 #: frontend/src/components/dialog/move-dirent-dialog.js:170
 msgid "Can not move folder %(src)s to its subfolder %(des)s"
-msgstr ""
+msgstr "Kan ikke flytte mappen %(src)s til dens undermappe %(des)s"
 
 #: frontend/src/components/dialog/copy-dirent-dialog.js:157
 msgid "Can not copy folder %(src)s to its subfolder %(des)s"
@@ -1501,7 +1501,7 @@ msgstr ""
 #: frontend/src/metadata/utils/validate/view.js:9
 #: frontend/src/tag/utils/validate/tag.js:9 frontend/src/utils/utils.js:2048
 msgid "Name is required"
-msgstr ""
+msgstr "Navn er påkrævet"
 
 #: frontend/src/components/dialog/create-department-repo-dialog.js:62
 #: frontend/src/components/dialog/create-repo-dialog.js:84
@@ -1509,7 +1509,7 @@ msgstr ""
 #: frontend/src/components/popover/edit-wiki-popover/index.js:393
 #: frontend/src/components/rename.js:95
 msgid "Name should not include '/'."
-msgstr ""
+msgstr "Navnet må ikke indeholde '/'."
 
 #: frontend/src/components/dialog/create-department-repo-dialog.js:78
 msgid "New Department Library"
@@ -1556,18 +1556,18 @@ msgstr ""
 #: frontend/src/components/dialog/create-repo-dialog.js:92
 #: frontend/src/components/dialog/org-add-user-dialog.js:116
 msgid "Please enter password"
-msgstr ""
+msgstr "Indtast venligst adgangskode"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:97
 #: frontend/src/components/dialog/org-add-user-dialog.js:121
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:27
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:32
 msgid "Please enter the password again"
-msgstr ""
+msgstr "Indtast venligst adgangskoden igen"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:102
 msgid "Password is too short"
-msgstr ""
+msgstr "Adgangskoden er for kort"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:107
 #: frontend/src/components/dialog/generate-upload-link.js:166
@@ -1576,7 +1576,7 @@ msgstr ""
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:36
 #: frontend/src/components/share-link-panel/link-creation.js:212
 msgid "Passwords don't match"
-msgstr ""
+msgstr "Adgangskoderne stemmer ikke overens"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:170
 #: frontend/src/components/dialog/org-add-repo-dialog.js:66
@@ -1628,7 +1628,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:47
 #: frontend/src/utils/text-translation.js:68
 msgid "Permission"
-msgstr ""
+msgstr "Tilladelse"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:202
 #: frontend/src/components/dialog/create-repo-dialog.js:208
@@ -1637,7 +1637,7 @@ msgstr ""
 #: frontend/src/components/select-editor/repo-api-token-permission-editor.js:57
 #: frontend/src/utils/utils.js:930
 msgid "Read-Write"
-msgstr ""
+msgstr "Læs-skriv"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:203
 #: frontend/src/components/dialog/create-repo-dialog.js:208
@@ -1645,7 +1645,7 @@ msgstr ""
 #: frontend/src/components/select-editor/repo-api-token-permission-editor.js:57
 #: frontend/src/utils/utils.js:933
 msgid "Read-Only"
-msgstr ""
+msgstr "Skrivebeskyttet"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:218
 msgid "Encrypt"
@@ -1673,7 +1673,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:220
 #: frontend/src/settings.js:56 frontend/src/settings.js:171
 msgid "Password"
-msgstr ""
+msgstr "Adgangskode"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:242
 #: frontend/src/components/dialog/generate-upload-link.js:409
@@ -1681,7 +1681,7 @@ msgstr ""
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-user-dialog.js:169
 #: frontend/src/components/share-link-panel/link-creation.js:350
 msgid "Password again"
-msgstr ""
+msgstr "Adgangskode igen"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:77
 msgid "Description is required"
@@ -1760,11 +1760,11 @@ msgstr ""
 #: frontend/src/shared-dir-view.js:1379 frontend/src/shared-dir-view.js:1398
 #: frontend/src/utils/text-translation.js:44
 msgid "Download"
-msgstr ""
+msgstr "Download"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:156
 msgid "Create"
-msgstr ""
+msgstr "Opret"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:167
 #: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:97
@@ -1806,7 +1806,7 @@ msgstr ""
 #: frontend/src/pages/sdoc/sdoc-file-history/history-version.js:164
 #: frontend/src/utils/text-translation.js:64
 msgid "Copy"
-msgstr ""
+msgstr "Kopiér"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:202
 msgid "Preview online"
@@ -1838,7 +1838,7 @@ msgstr ""
 #: frontend/src/pages/wiki/main-panel.js:111
 #: frontend/src/pages/wiki/main-panel.js:112 frontend/src/repo-history.js:307
 msgid "Edit"
-msgstr ""
+msgstr "Rediger"
 
 #: frontend/src/components/dialog/delete-dialog.js:22
 msgid "Delete File"
@@ -2030,7 +2030,7 @@ msgstr ""
 #: frontend/src/user-notifications.js:266
 #: frontend/src/user-notifications.js:271
 msgid "User"
-msgstr ""
+msgstr "Bruger"
 
 #: frontend/src/components/dialog/file-access-log.js:104
 #: frontend/src/metadata/components/popover/column-popover/column-type.js:41
@@ -2039,7 +2039,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:61
 #: frontend/src/pages/sys-admin/users/user-links.js:48
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 #: frontend/src/components/dialog/file-access-log.js:105
 #: frontend/src/components/user-settings/linked-devices.js:36
@@ -2053,7 +2053,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:62
 #: frontend/src/pages/sys-admin/logs-page/login-logs.js:43
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: frontend/src/components/dialog/file-access-log.js:105
 #: frontend/src/components/user-settings/linked-devices.js:35
@@ -2086,7 +2086,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/statistic/statistic-ai.js:17
 #: frontend/src/pages/sys-admin/statistic/statistic-ai.js:21
 msgid "Date"
-msgstr ""
+msgstr "Dato"
 
 #: frontend/src/components/dialog/file-access-log.js:115
 #: frontend/src/components/shared-file-view/shared-file-view.js:227
@@ -2094,7 +2094,7 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-logs-file-update.js:199
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:152
 msgid "Anonymous User"
-msgstr ""
+msgstr "Anonym bruger"
 
 #: frontend/src/components/dialog/file-access-log.js:130
 msgid "This file has (apparently) not been accessed yet"
@@ -2131,14 +2131,14 @@ msgstr ""
 #: frontend/src/components/dialog/generate-upload-link.js:186
 #: frontend/src/components/share-link-panel/link-creation.js:233
 msgid "Please enter days"
-msgstr ""
+msgstr "Indtast venligst dage"
 
 #: frontend/src/components/dialog/generate-upload-link.js:190
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:58
 #: frontend/src/components/dir-view-mode/dir-settings-view/lib-history-setting-panel.js:56
 #: frontend/src/components/share-link-panel/link-creation.js:237
 msgid "Please enter a non-negative integer"
-msgstr ""
+msgstr "Indtast venligst et ikke-negativt heltal"
 
 #: frontend/src/components/dialog/generate-upload-link.js:222
 msgid "Upload link is copied to the clipboard."
@@ -2181,7 +2181,7 @@ msgstr ""
 #: frontend/src/components/share-link-panel/link-details.js:231
 #: frontend/src/pages/sys-admin/terms-and-conditions/item.js:113
 msgid "Update"
-msgstr ""
+msgstr "Opdater"
 
 #: frontend/src/components/dialog/generate-upload-link.js:369
 #: frontend/src/components/dir-view-mode/dir-chat/chat-input/index.js:128
@@ -2195,13 +2195,13 @@ msgstr ""
 #: frontend/src/components/share-link-panel/link-creation.js:319
 #: frontend/src/components/share-link-panel/link-creation.js:329
 msgid "Add password protection"
-msgstr ""
+msgstr "Tilføj beskyttelse med adgangskode"
 
 #: frontend/src/components/dialog/generate-upload-link.js:427
 #: frontend/src/components/share-link-panel/link-creation.js:368
 #| msgid "Add option"
 msgid "Add auto expiration"
-msgstr ""
+msgstr "Tilføj automatisk udløb"
 
 #: frontend/src/components/dialog/generate-upload-link.js:453
 #: frontend/src/components/share-link-panel/link-creation.js:452
@@ -2215,7 +2215,7 @@ msgstr ""
 #: frontend/src/components/user-settings/web-api-auth-token.js:96
 #| msgid "Generate Link"
 msgid "Generate"
-msgstr ""
+msgstr "Generer"
 
 #: frontend/src/components/dialog/group-invite-members-dialog.js:66
 #| msgid "Internal link has been copied to clipboard"
@@ -2285,7 +2285,7 @@ msgstr ""
 #: frontend/src/metadata/components/data-process-setter/gallery-slider-setter/index.js:74
 #: frontend/src/metadata/components/data-process-setter/gallery-slider-setter/index.js:78
 msgid "Zoom in"
-msgstr ""
+msgstr "Zoom ind"
 
 #: frontend/src/components/dialog/image-dialog/index.js:103
 #: frontend/src/components/dialog/image-dialog/index.js:106
@@ -2293,7 +2293,7 @@ msgstr ""
 #: frontend/src/metadata/components/data-process-setter/gallery-slider-setter/index.js:52
 #: frontend/src/metadata/components/data-process-setter/gallery-slider-setter/index.js:56
 msgid "Zoom out"
-msgstr ""
+msgstr "Zoom ud"
 
 #: frontend/src/components/dialog/image-dialog/index.js:104
 msgid "Metadata"
@@ -2431,14 +2431,14 @@ msgstr ""
 #: frontend/src/components/dialog/internal-link.js:41
 #: frontend/src/components/dialog/org-admin-invite-user-via-weixin-dialog.js:23
 msgid "Internal link has been copied to clipboard"
-msgstr ""
+msgstr "Kopiér internt link"
 
 #: frontend/src/components/dialog/internal-link-dialog.js:64
 #: frontend/src/components/dialog/internal-link.js:54
 msgid ""
 "An internal link is a link to a file or folder that can be accessed by users"
 " with read permission to the file or folder."
-msgstr ""
+msgstr "Link til denne fil i Wiki"
 
 #: frontend/src/components/dialog/internal-link-dialog.js:68
 #: frontend/src/components/dialog/share-dialog.js:128
@@ -2543,7 +2543,7 @@ msgstr ""
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:65
 #| msgid "Confirm password"
 msgid "Wrong password"
-msgstr ""
+msgstr "Forkert adgangskode"
 
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:69
 msgid "The password will be kept in the server for only 1 hour."
@@ -2596,7 +2596,7 @@ msgstr ""
 #: frontend/src/repo-snapshot.js:309
 #: frontend/src/utils/text-translation.js:227
 msgid "Folder"
-msgstr ""
+msgstr "Mappe"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:339
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:302
@@ -2680,7 +2680,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/repo-history.js:123
 #: frontend/src/repo-history.js:142 frontend/src/repo-history.js:149
 msgid "Time"
-msgstr ""
+msgstr "Tid"
 
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:81
 msgid "Tagged Files"
@@ -2723,7 +2723,7 @@ msgstr ""
 #: frontend/src/tag/views/tag-files/list/index.js:160
 #: frontend/src/utils/table-headers.js:100
 msgid "Size"
-msgstr ""
+msgstr "Størrelse"
 
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:88
 #: frontend/src/components/dialog/search-file-dialog.js:99
@@ -2868,12 +2868,12 @@ msgstr ""
 #: frontend/src/pages/invitations/invitations-view.js:200
 #: frontend/src/pages/sys-admin/users/ldap-users.js:45
 msgid "Email"
-msgstr ""
+msgstr "E-mail"
 
 #: frontend/src/components/dialog/org-add-user-dialog.js:160
 #| msgid "Confirm password"
 msgid "Confirm Password"
-msgstr ""
+msgstr "Bekræft adgangskode"
 
 #: frontend/src/components/dialog/org-admin-delete-org-dialog.js:42
 #| msgid "Passwords don't match"
@@ -2920,7 +2920,7 @@ msgstr ""
 #: frontend/src/pages/upload-link/file-uploader.js:431
 #: frontend/src/pages/wikis/wikis.js:165
 msgid "Internal Server Error"
-msgstr ""
+msgstr "Intern serverfejl"
 
 #: frontend/src/components/dialog/org-admin-logs-export-excel-dialog.js:116
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:116
@@ -3052,7 +3052,7 @@ msgstr ""
 #: frontend/src/components/popover/edit-wiki-popover/index.js:390
 #: frontend/src/components/rename.js:89
 msgid "Name is required."
-msgstr ""
+msgstr "Navn er påkrævet."
 
 #: frontend/src/components/dialog/rename-wiki-dialog.js:70
 msgid "Rename Wiki"
@@ -3071,7 +3071,7 @@ msgstr ""
 #: frontend/src/components/dialog/trash-dialog/index.js:170
 #: frontend/src/repo-folder-trash.js:133 frontend/src/utils/utils.js:1530
 msgid "Permission denied"
-msgstr ""
+msgstr "Adgang nægtet"
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:220
 #: frontend/src/components/dialog/trash-dialog/index.js:175
@@ -3108,7 +3108,7 @@ msgstr ""
 #: frontend/src/pages/wikis/wikis.js:379 frontend/src/repo-folder-trash.js:138
 #: frontend/src/repo-folder-trash.js:348 frontend/src/utils/utils.js:1537
 msgid "Error"
-msgstr ""
+msgstr "Fejl"
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:222
 #: frontend/src/components/dialog/trash-dialog/index.js:181
@@ -3298,7 +3298,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:58
 #: frontend/src/utils/table-headers.js:145
 msgid "Creator"
-msgstr ""
+msgstr "Opretter"
 
 #: frontend/src/components/dialog/repo-share-admin/share-links.js:266
 #: frontend/src/components/dialog/share-admin-link.js:30
@@ -3308,7 +3308,7 @@ msgstr ""
 #: frontend/src/components/share-link-panel/link-list.js:94
 #: frontend/src/components/share-link-panel/link-list.js:109
 msgid "Link"
-msgstr ""
+msgstr "Link"
 
 #: frontend/src/components/dialog/repo-share-admin/share-links.js:267
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:257
@@ -3324,7 +3324,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/links/share-links.js:57
 #: frontend/src/pages/sys-admin/links/upload-links.js:53
 msgid "Expiration"
-msgstr ""
+msgstr "Udløb"
 
 #: frontend/src/components/dialog/repo-share-admin/share-links.js:268
 #: frontend/src/pages/share-admin/share-links.js:101
@@ -3462,7 +3462,7 @@ msgstr ""
 #: frontend/src/components/sf-table/searcher/searcher-input.js:52
 #: frontend/src/pages/excalidraw-editor/extension/select-image-dialog/index.js:83
 msgid "Search"
-msgstr ""
+msgstr "Søg"
 
 #: frontend/src/components/dialog/search-file-dialog.js:84
 #: frontend/src/components/dir-view-mode/dir-chat/chat-input/library-files-selector.js:99
@@ -3472,7 +3472,7 @@ msgstr ""
 
 #: frontend/src/components/dialog/search-file-dialog.js:92
 msgid "No result"
-msgstr ""
+msgstr "Intet resultat"
 
 #: frontend/src/components/dialog/select-dirent-body.js:83
 #| msgid "Please select a library to share."
@@ -3544,7 +3544,7 @@ msgstr ""
 #: frontend/src/components/dialog/share-dialog.js:272
 #: frontend/src/components/share-link-panel/link-list.js:60
 msgid "Share Link"
-msgstr ""
+msgstr "Del link"
 
 #: frontend/src/components/dialog/share-dialog.js:137
 #: frontend/src/components/dialog/share-wiki-dialog.js:84
@@ -3586,7 +3586,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/repos/repos.js:245
 #: frontend/src/utils/text-translation.js:40
 msgid "Share"
-msgstr ""
+msgstr "Del"
 
 #: frontend/src/components/dialog/share-repo-dialog.js:39
 #: frontend/src/pages/org-admin/departments/repo-item.js:44
@@ -3843,7 +3843,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/virus-scan/all-virus-files.js:169
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:189
 msgid "Owner"
-msgstr ""
+msgstr "Ejer"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-org-dialog.js:103
 msgid "Owner can use admin panel in an organization, must be a new account."
@@ -3871,7 +3871,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/user-info.js:137
 #: frontend/src/pages/sys-admin/users/users-filter-bar.js:68
 msgid "Role"
-msgstr ""
+msgstr "Rolle"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-user-dialog.js:143
 msgid ""
@@ -3932,7 +3932,7 @@ msgstr ""
 #: frontend/src/components/dir-view-mode/dir-settings-view/lib-old-files-auto-del-setting-panel.js:114
 #: frontend/src/components/set-link-expiration.js:88
 msgid "days"
-msgstr ""
+msgstr "Dage"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-move-group-dialog.js:131
 msgid "Department moved successfully"
@@ -4071,7 +4071,7 @@ msgstr ""
 #: frontend/src/components/dialog/transfer-dialog.js:217
 #| msgid "Select a department"
 msgid "Search department"
-msgstr ""
+msgstr "Søg efter afdeling"
 
 #: frontend/src/components/dialog/transfer-dialog.js:230
 #| msgid ""
@@ -4105,7 +4105,7 @@ msgstr ""
 #: frontend/src/components/dialog/trash-dialog/index.js:106
 #| msgid "Search files"
 msgid "Search failed"
-msgstr ""
+msgstr "Søgning mislykkedes"
 
 #: frontend/src/components/dialog/trash-dialog/index.js:230
 #: frontend/src/repo-folder-trash.js:187
@@ -4159,7 +4159,7 @@ msgstr ""
 #: frontend/src/repo-folder-trash.js:383 frontend/src/repo-folder-trash.js:440
 #: frontend/src/repo-snapshot.js:333
 msgid "File"
-msgstr ""
+msgstr "Fil"
 
 #: frontend/src/components/dialog/trash-dialog/table/index.js:13
 #: frontend/src/repo-folder-trash.js:255
@@ -4275,7 +4275,7 @@ msgstr ""
 #: frontend/src/components/search/wiki2-search.js:225
 #| msgid "Clear Trash"
 msgid "Clear search"
-msgstr ""
+msgstr "Ryd søgning"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-trash.js:142
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-trash.js:143
@@ -4305,7 +4305,7 @@ msgstr ""
 
 #: frontend/src/components/dialog/upload-remind-dialog.js:43
 msgid "Replace"
-msgstr ""
+msgstr "Erstat"
 
 #: frontend/src/components/dialog/upload-remind-dialog.js:44
 msgid "Don't replace"
@@ -4313,7 +4313,7 @@ msgstr ""
 
 #: frontend/src/components/dialog/user-password-widgets/password-strength-checker.js:27
 msgid "Password strength"
-msgstr ""
+msgstr "Adgangskodestyrke"
 
 #: frontend/src/components/dialog/user-password-widgets/password-strength-checker.js:41
 msgid ""
@@ -4325,12 +4325,12 @@ msgstr ""
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:23
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:28
 msgid "Password cannot be blank"
-msgstr ""
+msgstr "Adgangskode må ikke være tom"
 
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:35
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:43
 msgid "Password strength should be strong or very strong"
-msgstr ""
+msgstr "Adgangskodens styrke skal være stærk eller meget stærk"
 
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:42
 msgid "Password set"
@@ -4347,7 +4347,7 @@ msgstr ""
 
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:24
 msgid "Current password cannot be blank"
-msgstr ""
+msgstr "Nuværende adgangskode må ikke være tom"
 
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:40
 msgid "New password cannot be the same as old password"
@@ -4368,7 +4368,7 @@ msgstr ""
 
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:71
 msgid "New password"
-msgstr ""
+msgstr "Ny adgangskode"
 
 #: frontend/src/components/dialog/view-link-dialog.js:22
 msgid "Link has been copied to clipboard"
@@ -4438,7 +4438,7 @@ msgstr ""
 #: frontend/src/metadata/views/gallery/content.js:161
 #: frontend/src/pages/excalidraw-editor/extension/select-image-dialog/local-image/index.js:144
 msgid "Empty"
-msgstr ""
+msgstr "Tom"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:63
 msgid "Time usage"
@@ -4507,7 +4507,7 @@ msgstr ""
 #: frontend/src/user-notifications.js:267
 #: frontend/src/user-notifications.js:272
 msgid "Message"
-msgstr ""
+msgstr "Besked"
 
 #: frontend/src/components/dir-view-mode/dir-chat/chat-history/thought-process/thought-process-dialog.js:160
 #| msgid "No tags"
@@ -4563,7 +4563,7 @@ msgstr ""
 #: frontend/src/components/dir-view-mode/dir-chat/components/thinking/index.js:12
 #| msgid "Saving..."
 msgid "Thinking..."
-msgstr ""
+msgstr "Tænker"
 
 #: frontend/src/components/dir-view-mode/dir-chat/constants.js:26
 #: frontend/src/metadata/components/metadata-details/ai-icon.js:128
@@ -4711,7 +4711,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/repo-history.js:125
 #: frontend/src/repo-history.js:144 frontend/src/repo-history.js:151
 msgid "Device"
-msgstr ""
+msgstr "Enhed"
 
 #: frontend/src/components/dir-view-mode/dir-history-view/columns.js:65
 #: frontend/src/pages/org-admin/devices/devices-by-platform.js:49
@@ -4741,7 +4741,7 @@ msgstr ""
 #: frontend/src/components/dir-view-mode/dir-history-view/history-filter-setter.js:37
 #: frontend/src/metadata/components/data-process-setter/filter-setter.js:42
 msgid "1 filter"
-msgstr ""
+msgstr "1 filter"
 
 #: frontend/src/components/dir-view-mode/dir-history-view/history-filter-setter.js:38
 #: frontend/src/metadata/components/data-process-setter/filter-setter.js:43
@@ -4751,7 +4751,7 @@ msgstr ""
 #: frontend/src/components/dir-view-mode/dir-history-view/history-filter-setter.js:39
 #: frontend/src/metadata/components/data-process-setter/filter-setter.js:44
 msgid "Filter"
-msgstr ""
+msgstr "Filter"
 
 #: frontend/src/components/dir-view-mode/dir-history-view/index.js:216
 #: frontend/src/components/dirent-detail/multi-selection-details/index.js:196
@@ -4764,12 +4764,12 @@ msgstr ""
 #: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:137
 #: frontend/src/repo-history.js:293 frontend/src/utils/text-translation.js:72
 msgid "Details"
-msgstr ""
+msgstr "Detaljer"
 
 #: frontend/src/components/dir-view-mode/dir-new.js:139
 #: frontend/src/translate.js:48
 msgid "New"
-msgstr ""
+msgstr "Ny"
 
 #: frontend/src/components/dir-view-mode/dir-new.js:160
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:126
@@ -4855,7 +4855,7 @@ msgstr ""
 #: frontend/src/file-history-old.js:245 frontend/src/repo-folder-trash.js:299
 #: frontend/src/utils/text-translation.js:329
 msgid "More"
-msgstr ""
+msgstr "Flere"
 
 #: frontend/src/components/dir-view-mode/dir-others/watch-unwatch-file-changes.js:26
 #| msgid "Successfully restored the library."
@@ -4959,7 +4959,7 @@ msgstr ""
 #: frontend/src/metadata/utils/column/index.js:201
 #: frontend/src/pages/markdown-editor/detail-list-view/index.js:30
 msgid "Location"
-msgstr ""
+msgstr "Placering"
 
 #: frontend/src/components/dirent-detail/detail-list-view.js:79
 #: frontend/src/components/dirent-detail/detail-list-view.js:102
@@ -5140,7 +5140,7 @@ msgstr ""
 #: frontend/src/pages/starred/starred.js:205
 #: frontend/src/utils/text-translation.js:180
 msgid "Unstar"
-msgstr ""
+msgstr "Fjern stjernemarkering"
 
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:742
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:743
@@ -5166,7 +5166,7 @@ msgstr ""
 #: frontend/src/pages/shared-libs/item.js:324
 #: frontend/src/utils/text-translation.js:176
 msgid "Star"
-msgstr ""
+msgstr "Markér med stjerne"
 
 #: frontend/src/components/dirent-list-view/dirent-none-view.js:149
 msgid "This folder has no content at this time."
@@ -5249,7 +5249,7 @@ msgstr ""
 
 #: frontend/src/components/file-uploader/file-uploader.js:445
 msgid "Out of quota."
-msgstr ""
+msgstr "Kvoten er opbrugt."
 
 #: frontend/src/components/file-uploader/file-uploader.js:454
 #: frontend/src/components/shared-link-file-uploader/file-uploader.js:443
@@ -5291,7 +5291,7 @@ msgstr ""
 #: frontend/src/pages/upload-link/upload-list-item.js:97
 #: frontend/src/pages/upload-link/upload-list-item.js:131
 msgid "Saving..."
-msgstr ""
+msgstr "Gemmer"
 
 #: frontend/src/components/file-uploader/upload-list-item.js:118
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:118
@@ -5368,7 +5368,7 @@ msgstr ""
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:98
 #| msgid "Rename"
 msgid "name"
-msgstr ""
+msgstr "navn"
 
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:122
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:118
@@ -5392,37 +5392,37 @@ msgstr ""
 #: frontend/src/components/file-view/comment-widget/comment-delete-popover.js:60
 #| msgid "Are you sure to delete "
 msgid "Are you sure to delete this comment?"
-msgstr ""
+msgstr "Er du sikker på, at du vil slette denne kommentar?"
 
 #: frontend/src/components/file-view/comment-widget/comment-delete-popover.js:60
 #| msgid "Are you sure to delete "
 msgid "Are you sure to delete this reply?"
-msgstr ""
+msgstr "Er du sikker på, at du vil slette dette svar?"
 
 #: frontend/src/components/file-view/comment-widget/comment-item.js:85
 #| msgid "Mark all read"
 msgid "Mark as resolved"
-msgstr ""
+msgstr "Marker som løst"
 
 #: frontend/src/components/file-view/comment-widget/comment-item.js:87
 #| msgid "Submit"
 msgid "Resubmit"
-msgstr ""
+msgstr "Indsend igen"
 
 #: frontend/src/components/file-view/comment-widget/comment-list.js:103
 #: frontend/src/components/file-view/comment-widget/comment-list.js:127
 #| msgid "No tags"
 msgid "All comments"
-msgstr ""
+msgstr "Alle kommentarer"
 
 #: frontend/src/components/file-view/comment-widget/comment-list.js:109
 msgid "Resolved comments"
-msgstr ""
+msgstr "Løste kommentarer"
 
 #: frontend/src/components/file-view/comment-widget/comment-list.js:115
 #| msgid "Unfreeze Document"
 msgid "Unresolved comments"
-msgstr ""
+msgstr "Ulost kommentarer"
 
 #: frontend/src/components/file-view/comment-widget/comment-list.js:130
 msgid "All comments ({comments_count})"
@@ -5430,12 +5430,12 @@ msgstr ""
 
 #: frontend/src/components/file-view/comment-widget/comment-list.js:181
 msgid "No comment yet."
-msgstr ""
+msgstr "Ingen kommentarer endnu"
 
 #: frontend/src/components/file-view/comment-widget/reply-list.js:91
 #| msgid "File details"
 msgid "Comment details"
-msgstr ""
+msgstr "Kommentardetaljer"
 
 #: frontend/src/components/file-view/file-info.js:28
 #: frontend/src/pages/markdown-editor/header-toolbar/file-info.js:14
@@ -5453,7 +5453,7 @@ msgstr ""
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:72
 #: frontend/src/utils/text-translation.js:245
 msgid "Open parent folder"
-msgstr ""
+msgstr "Åbn overordnet mappe"
 
 #: frontend/src/components/file-view/file-toolbar.js:120
 #: frontend/src/components/file-view/file-toolbar.js:165
@@ -5477,7 +5477,7 @@ msgstr ""
 #: frontend/src/pages/wiki2/wiki-comment/plugin-item.js:27
 #| msgid "Document"
 msgid "Comment"
-msgstr ""
+msgstr "Kommentar"
 
 #: frontend/src/components/file-view/file-toolbar.js:139
 #: frontend/src/components/shared-file-view/shared-file-view.js:93
@@ -5490,7 +5490,7 @@ msgstr ""
 
 #: frontend/src/components/file-view/file-toolbar.js:205
 msgid "Print"
-msgstr ""
+msgstr "Udskriv"
 
 #: frontend/src/components/file-view/file-toolbar.js:232
 #: frontend/src/components/file-view/file-toolbar.js:295
@@ -5501,7 +5501,7 @@ msgstr ""
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:330
 #: frontend/src/shared-dir-view.js:255 frontend/src/shared-dir-view.js:883
 msgid "Save"
-msgstr ""
+msgstr "Gem"
 
 #: frontend/src/components/file-view/file-view-tip.js:16
 #: frontend/src/components/history-trash-file-view/file-view-tip.js:17
@@ -5538,7 +5538,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/users-nav.js:30
 #: frontend/src/utils/utils.js:936
 msgid "Admin"
-msgstr ""
+msgstr "Administrator"
 
 #: frontend/src/components/group-members.js:75
 #: frontend/src/components/group-members.js:122
@@ -5552,7 +5552,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/user-groups.js:119
 #: frontend/src/pages/sys-admin/users/user-links.js:162
 msgid "Member"
-msgstr ""
+msgstr "Medlem"
 
 #: frontend/src/components/history-trash-file-view/file-view.js:33
 msgid "Current Path: "
@@ -5619,7 +5619,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/users-content.js:561
 #: frontend/src/utils/text-translation.js:202
 msgid "Reset Password"
-msgstr ""
+msgstr "Nulstil adgangskode"
 
 #: frontend/src/components/library-op-menu.js:178
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:311
@@ -5680,7 +5680,7 @@ msgstr ""
 #: frontend/src/components/main-side-nav.js:467
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:60
 msgid "Help"
-msgstr ""
+msgstr "Hjælp"
 
 #: frontend/src/components/main-side-nav-folded.js:440
 #: frontend/src/components/main-side-nav-folded.js:444
@@ -5794,7 +5794,7 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:104
 #: frontend/src/pages/org-admin/org-users-list.js:81
 msgid "Previous"
-msgstr ""
+msgstr "Forrige"
 
 #: frontend/src/components/paginator.js:97
 #: frontend/src/components/paginator.js:98
@@ -5807,7 +5807,7 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:106
 #: frontend/src/pages/org-admin/org-users-list.js:83
 msgid "Next"
-msgstr ""
+msgstr "Næste"
 
 #: frontend/src/components/pdf-viewer.js:21
 msgid "Thumbnail"
@@ -5815,7 +5815,7 @@ msgstr ""
 
 #: frontend/src/components/pdf-viewer.js:22
 msgid "Outline"
-msgstr ""
+msgstr "Indholdsfortegnelse"
 
 #: frontend/src/components/pdf-viewer.js:344
 #| msgid "Document"
@@ -5836,11 +5836,11 @@ msgstr ""
 #: frontend/src/components/popover/edit-filetag-popover.js:141
 #: frontend/src/tag/views/all-tags/tags-table/index.js:317
 msgid "No tags"
-msgstr ""
+msgstr "Ingen tags"
 
 #: frontend/src/components/popover/edit-filetag-popover.js:145
 msgid "Tag not found"
-msgstr ""
+msgstr "Tag ikke fundet"
 
 #: frontend/src/components/popover/edit-filetag-popover.js:158
 msgid "Find a tag"
@@ -5848,7 +5848,7 @@ msgstr ""
 
 #: frontend/src/components/popover/edit-filetag-popover.js:186
 msgid "Create a new tag"
-msgstr ""
+msgstr "Tilføj valgmulighed"
 
 #: frontend/src/components/popover/edit-wiki-popover/index.js:558
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:263
@@ -5910,12 +5910,12 @@ msgstr ""
 #: frontend/src/pages/sdoc-revision/index.js:123
 #: frontend/src/pages/wiki2/side-panel.js:398
 msgid "Publish"
-msgstr ""
+msgstr "Udgiv"
 
 #: frontend/src/components/published-wiki-entrance.js:31
 #| msgid "Publish"
 msgid "Published"
-msgstr ""
+msgstr "Publiceret"
 
 #: frontend/src/components/published-wiki-entrance.js:34
 #| msgid "Wiki published"
@@ -5967,12 +5967,12 @@ msgstr ""
 #: frontend/src/components/sdoc-wiki-page-viewer/index.js:133
 #: frontend/src/components/seafile-markdown-viewer/index.js:147
 msgid "Last modified by"
-msgstr ""
+msgstr "Sidst ændret af"
 
 #: frontend/src/components/search/details/index.js:37
 #| msgid "Folder does not exist."
 msgid "Library does not exist"
-msgstr ""
+msgstr "Biblioteket findes ikke"
 
 #: frontend/src/components/search/search-by-name.js:63
 #: frontend/src/components/toolbar/common-toolbar.js:113
@@ -6002,7 +6002,7 @@ msgstr ""
 #: frontend/src/components/search/wiki2-global-search.js:229
 #: frontend/src/components/search/wiki2-search.js:234
 msgid "Type characters to start search"
-msgstr ""
+msgstr "Skriv tegn for at starte søgning"
 
 #: frontend/src/components/search/search.js:841
 #: frontend/src/components/search/search.js:898
@@ -6035,7 +6035,7 @@ msgstr ""
 #: frontend/src/components/search/wiki2-search.js:246
 #| msgid "Wikis"
 msgid "Wiki pages"
-msgstr ""
+msgstr "Wiki-sider"
 
 #: frontend/src/components/search/wiki2-global-search.js:279
 #| msgid "Search files"
@@ -6046,11 +6046,11 @@ msgstr ""
 #: frontend/src/metadata/metadata-tree-view/index.js:58
 #: frontend/src/metadata/metadata-tree-view/index.js:62
 msgid "Untitled"
-msgstr ""
+msgstr "Uden titel"
 
 #: frontend/src/components/search/wiki2-search-result.js:43
 msgid "Current page"
-msgstr ""
+msgstr "Aktuel side"
 
 #: frontend/src/components/select-editor/select-editor.js:95
 #: frontend/src/components/select-editor/select-editor.js:106
@@ -6083,7 +6083,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/users-filter-bar.js:16
 #: frontend/src/utils/text-translation.js:84
 msgid "Default"
-msgstr ""
+msgstr "Standard"
 
 #: frontend/src/components/select-editor/sysadmin-user-role-editor.js:21
 #: frontend/src/pages/sys-admin/invitations/invitations.js:179
@@ -6091,7 +6091,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:187
 #: frontend/src/pages/sys-admin/users/users-filter-bar.js:18
 msgid "Guest"
-msgstr ""
+msgstr "Gæst"
 
 #: frontend/src/components/select-members-to-share-with.js:60
 #| msgid "Select a department"
@@ -6458,7 +6458,7 @@ msgstr ""
 #: frontend/src/components/share-link-panel/link-creation.js:389
 #| msgid "Edit permission"
 msgid "Set permission"
-msgstr ""
+msgstr "Indstil tilladelse"
 
 #: frontend/src/components/share-link-panel/link-creation.js:406
 #| msgid "Access Log"
@@ -6541,7 +6541,7 @@ msgstr ""
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:274
 #: frontend/src/pages/wikis/wikis.js:381
 msgid "Failed. Please check the network."
-msgstr ""
+msgstr "Mislykkedes. Kontroller venligst netværket."
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:266
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:296
@@ -6664,7 +6664,7 @@ msgstr ""
 #: frontend/src/components/toolbar/chat-toolbar.js:26
 #| msgid "New Tag"
 msgid "New chat"
-msgstr ""
+msgstr "Ny chat"
 
 #: frontend/src/components/toolbar/common-toolbar.js:104
 #| msgid "Search files"
@@ -6824,7 +6824,7 @@ msgstr ""
 #: frontend/src/components/user-settings/two-factor-auth.js:20
 #| msgid "Two-Factor Authentication"
 msgid "Disable Two-Factor Authentication"
-msgstr ""
+msgstr "Deaktivér to-faktor-godkendelse"
 
 #: frontend/src/components/user-settings/two-factor-auth.js:23
 msgid ""
@@ -6854,12 +6854,12 @@ msgstr ""
 #: frontend/src/components/user-settings/two-factor-auth.js:39
 #| msgid "Two-Factor Authentication"
 msgid "Enable Two-Factor Authentication"
-msgstr ""
+msgstr "Aktivér to-faktor-godkendelse"
 
 #: frontend/src/components/user-settings/two-factor-auth.js:48
 #: frontend/src/settings.js:62
 msgid "Two-Factor Authentication"
-msgstr ""
+msgstr "To-faktor-godkendelse"
 
 #: frontend/src/components/user-settings/user-avatar-form.js:34
 msgid "Please choose an image file."
@@ -6943,7 +6943,7 @@ msgstr ""
 
 #: frontend/src/components/user-settings/webdav-password.js:99
 msgid "Set Password"
-msgstr ""
+msgstr "Angiv adgangskode"
 
 #: frontend/src/components/user-settings/webdav-password.js:105
 msgid "Delete Password"
@@ -7130,7 +7130,7 @@ msgstr ""
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/location-controls.js:23
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/location-controls.js:24
 msgid "Full screen"
-msgstr ""
+msgstr "Fuld skærm"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/location-controls.js:32
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/location-controls.js:33
@@ -7170,7 +7170,7 @@ msgstr ""
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:260
 #| msgid "Saving..."
 msgid "Searching..."
-msgstr ""
+msgstr "Søger..."
 
 #: frontend/src/metadata/components/cell-editors/multiple-select-editor/index.js:239
 #: frontend/src/metadata/components/cell-editors/single-select-editor/index.js:242
@@ -7182,7 +7182,7 @@ msgstr ""
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:479
 #: frontend/src/metadata/components/popover/options-popover/index.js:218
 msgid "Search option"
-msgstr ""
+msgstr "Søg efter valgmulighed"
 
 #: frontend/src/metadata/components/cell-editors/single-select-editor/index.js:296
 #: frontend/src/metadata/components/popover/options-popover/index.js:233
@@ -7300,15 +7300,15 @@ msgstr ""
 
 #: frontend/src/metadata/components/data-process-setter/sort-setter.js:20
 msgid "1 sort"
-msgstr ""
+msgstr "1 sortering"
 
 #: frontend/src/metadata/components/data-process-setter/sort-setter.js:21
 msgid "sorts"
-msgstr ""
+msgstr "Sorteringer"
 
 #: frontend/src/metadata/components/data-process-setter/sort-setter.js:22
 msgid "Sort"
-msgstr ""
+msgstr "Sortér"
 
 #: frontend/src/metadata/components/dialog/file-tags-dialog/index.js:55
 #| msgid "Failed to generate image description"
@@ -7542,7 +7542,7 @@ msgstr ""
 
 #: frontend/src/metadata/components/popover/column-popover/data/rate-data/index.js:59
 msgid "Style"
-msgstr ""
+msgstr "Typografi"
 
 #: frontend/src/metadata/components/popover/column-popover/data/rate-data/index.js:98
 msgid "Max"
@@ -7581,16 +7581,16 @@ msgstr ""
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item-utils.js:84
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item-utils.js:97
 msgid "And"
-msgstr ""
+msgstr "Og"
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item-utils.js:88
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item-utils.js:102
 msgid "Or"
-msgstr ""
+msgstr "Eller"
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:363
 msgid "Select option(s)"
-msgstr ""
+msgstr "Vælg valgmulighed(er)"
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:458
 msgid "deleted option"
@@ -7598,7 +7598,7 @@ msgstr ""
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:477
 msgid "Select an option"
-msgstr ""
+msgstr "Vælg en valgmulighed"
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:495
 msgid "Select collaborators"
@@ -7613,7 +7613,7 @@ msgstr ""
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:572
 #: frontend/src/metadata/components/popover/filter-popover/basic-filters/tags-filter.js:67
 msgid "Invalid filter"
-msgstr ""
+msgstr "Ugyldigt filter"
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:620
 #: frontend/src/metadata/components/popover/groupbys-popover/groupbys/groupby-item.js:193
@@ -7657,23 +7657,23 @@ msgstr ""
 
 #: frontend/src/metadata/components/popover/filter-popover/index.js:150
 msgid "No filters"
-msgstr ""
+msgstr "Ingen filtre"
 
 #: frontend/src/metadata/components/popover/filter-popover/index.js:166
 #| msgid "1 filter"
 msgid "Add filter"
-msgstr ""
+msgstr "Tilføj filter"
 
 #: frontend/src/metadata/components/popover/groupbys-popover/groupbys/groupby-item.js:90
 #: frontend/src/metadata/components/popover/sort-popover/index.js:21
 #: frontend/src/metadata/components/popover/sort-popover/index.js:192
 msgid "Up"
-msgstr ""
+msgstr "stigende"
 
 #: frontend/src/metadata/components/popover/groupbys-popover/groupbys/groupby-item.js:93
 #: frontend/src/metadata/components/popover/sort-popover/index.js:24
 msgid "Down"
-msgstr ""
+msgstr "faldende"
 
 #: frontend/src/metadata/components/popover/groupbys-popover/groupbys/groupby-item.js:104
 #: frontend/src/pages/common/ai-statistics/index.js:353
@@ -7823,12 +7823,12 @@ msgstr ""
 #: frontend/src/metadata/components/popover/sort-popover/index.js:260
 #| msgid "sorts"
 msgid "No sorts"
-msgstr ""
+msgstr "Ingen sorteringer"
 
 #: frontend/src/metadata/components/popover/sort-popover/index.js:267
 #| msgid "Add User"
 msgid "Add sort"
-msgstr ""
+msgstr "Tilføj sortering"
 
 #: frontend/src/metadata/components/view-details/index.js:19
 msgid "There is no information to display."
@@ -7938,27 +7938,27 @@ msgstr ""
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:32
 msgid "contains"
-msgstr ""
+msgstr "indeholder"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:33
 msgid "does not contain"
-msgstr ""
+msgstr "indeholder ikke"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:34
 msgid "is"
-msgstr ""
+msgstr "er"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:35
 msgid "is not"
-msgstr ""
+msgstr "er ikke"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:42
 msgid "is empty"
-msgstr ""
+msgstr "er tom"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:43
 msgid "is not empty"
-msgstr ""
+msgstr "er ikke tom"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:44
 msgid "is within..."
@@ -7998,11 +7998,11 @@ msgstr ""
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:53
 msgid "is current user's ID"
-msgstr ""
+msgstr "er aktuelt bruger-ID"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:54
 msgid "include the current user"
-msgstr ""
+msgstr "inkludér mig"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:55
 msgid "is any of..."
@@ -8019,7 +8019,7 @@ msgstr ""
 
 #: frontend/src/metadata/constants/view/index.js:36
 msgid "Table"
-msgstr ""
+msgstr "Tabel"
 
 #: frontend/src/metadata/constants/view/index.js:37
 msgid "Kanban"
@@ -8027,7 +8027,7 @@ msgstr ""
 
 #: frontend/src/metadata/constants/view/index.js:39
 msgid "Card"
-msgstr ""
+msgstr "Kort"
 
 #: frontend/src/metadata/constants/view/statistics.js:5
 #: frontend/src/metadata/utils/column/index.js:290
@@ -8042,7 +8042,7 @@ msgstr ""
 #: frontend/src/metadata/constants/view/statistics.js:7
 #: frontend/src/metadata/utils/column/index.js:296
 msgid "Video"
-msgstr ""
+msgstr "Video"
 
 #: frontend/src/metadata/constants/view/statistics.js:8
 #: frontend/src/metadata/utils/column/index.js:299
@@ -8052,7 +8052,7 @@ msgstr ""
 #: frontend/src/metadata/constants/view/statistics.js:9
 #: frontend/src/metadata/utils/column/index.js:302
 msgid "Code"
-msgstr ""
+msgstr "Inline-kode"
 
 #: frontend/src/metadata/constants/view/statistics.js:10
 #: frontend/src/metadata/utils/column/index.js:305
@@ -8067,7 +8067,7 @@ msgstr ""
 #: frontend/src/metadata/constants/view/statistics.js:27
 #: frontend/src/metadata/utils/column/index.js:168
 msgid "Created time"
-msgstr ""
+msgstr "Oprettelsestidspunkt"
 
 #: frontend/src/metadata/constants/view/statistics.js:28
 #| msgid "Modified files"
@@ -8142,7 +8142,7 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-groups.js:130
 #: frontend/src/tag/hooks/tag-view.js:118
 msgid "Successfully deleted {name}"
-msgstr ""
+msgstr "Slettede {name} med succes"
 
 #: frontend/src/metadata/hooks/metadata-view.js:379
 #: frontend/src/metadata/hooks/metadata-view.js:449
@@ -8411,12 +8411,12 @@ msgstr ""
 #: frontend/src/metadata/views/card/settings/index.js:112
 #: frontend/src/metadata/views/kanban/settings/index.js:157
 msgid "Hide all"
-msgstr ""
+msgstr "Skjul alle"
 
 #: frontend/src/metadata/views/card/settings/index.js:113
 #: frontend/src/metadata/views/kanban/settings/index.js:158
 msgid "Show all"
-msgstr ""
+msgstr "Vis alle"
 
 #: frontend/src/metadata/views/face-recognition/peoples/index.js:66
 msgid "Identifying portraits..."
@@ -8462,7 +8462,7 @@ msgstr ""
 #: frontend/src/pages/wiki2/wiki-collaborators-operation/index.js:123
 #| msgid "Collaborator"
 msgid "Collaborators"
-msgstr ""
+msgstr "Deltagere"
 
 #: frontend/src/metadata/views/statistics/index.js:68
 #| msgid "No options available"
@@ -8523,7 +8523,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:188
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:246
 msgid "Library"
-msgstr ""
+msgstr "Bibliotek"
 
 #: frontend/src/metadata/views/view.js:49 frontend/src/translate.js:53
 #| msgid "Extended properties"
@@ -8557,7 +8557,7 @@ msgstr ""
 #: frontend/src/pages/common/ai-statistics/index.js:151
 #| msgid "Library"
 msgid "Library ID"
-msgstr ""
+msgstr "Biblioteks-id"
 
 #: frontend/src/pages/common/ai-statistics/detail-dialog.js:92
 #: frontend/src/pages/common/ai-statistics/index.js:188
@@ -8631,19 +8631,19 @@ msgstr ""
 
 #: frontend/src/pages/dashboard/activity-item.js:67
 msgid "Created library"
-msgstr ""
+msgstr "Oprettet bibliotek"
 
 #: frontend/src/pages/dashboard/activity-item.js:71
 msgid "Renamed library"
-msgstr ""
+msgstr "Omdøbt bibliotek"
 
 #: frontend/src/pages/dashboard/activity-item.js:75
 msgid "Deleted library"
-msgstr ""
+msgstr "Slettet bibliotek"
 
 #: frontend/src/pages/dashboard/activity-item.js:79
 msgid "Restored library"
-msgstr ""
+msgstr "Gendannet bibliotek"
 
 #: frontend/src/pages/dashboard/activity-item.js:83
 msgid "Cleaned trash"
@@ -8685,7 +8685,7 @@ msgstr ""
 #: frontend/src/pages/dashboard/activity-item.js:131
 #: frontend/src/pages/dashboard/activity-item.js:183
 msgid "Created file"
-msgstr ""
+msgstr "Oprettet fil"
 
 #: frontend/src/pages/dashboard/activity-item.js:139
 #| msgid "Files"
@@ -8716,13 +8716,13 @@ msgstr ""
 #: frontend/src/pages/dashboard/activity-item.js:169
 #: frontend/src/pages/dashboard/activity-item.js:188
 msgid "Deleted file"
-msgstr ""
+msgstr "Slettet fil"
 
 #: frontend/src/pages/dashboard/activity-item.js:164
 #: frontend/src/pages/dashboard/activity-item.js:169
 #: frontend/src/pages/dashboard/activity-item.js:225
 msgid "Deleted folder"
-msgstr ""
+msgstr "Slettet mappe"
 
 #: frontend/src/pages/dashboard/activity-item.js:183
 msgid "Created draft"
@@ -8734,15 +8734,15 @@ msgstr ""
 
 #: frontend/src/pages/dashboard/activity-item.js:193
 msgid "Restored file"
-msgstr ""
+msgstr "Gendannet fil"
 
 #: frontend/src/pages/dashboard/activity-item.js:198
 msgid "Renamed file"
-msgstr ""
+msgstr "Omdøbt fil"
 
 #: frontend/src/pages/dashboard/activity-item.js:205
 msgid "Moved file"
-msgstr ""
+msgstr "Flyttet fil"
 
 #: frontend/src/pages/dashboard/activity-item.js:210
 msgid "Updated draft"
@@ -8750,23 +8750,23 @@ msgstr ""
 
 #: frontend/src/pages/dashboard/activity-item.js:210
 msgid "Updated file"
-msgstr ""
+msgstr "Opdateret fil"
 
 #: frontend/src/pages/dashboard/activity-item.js:220
 msgid "Created folder"
-msgstr ""
+msgstr "Oprettet mappe"
 
 #: frontend/src/pages/dashboard/activity-item.js:230
 msgid "Restored folder"
-msgstr ""
+msgstr "Gendannet mappe"
 
 #: frontend/src/pages/dashboard/activity-item.js:235
 msgid "Renamed folder"
-msgstr ""
+msgstr "Omdøbt mappe"
 
 #: frontend/src/pages/dashboard/activity-item.js:242
 msgid "Moved folder"
-msgstr ""
+msgstr "Flyttet mappe"
 
 #: frontend/src/pages/dashboard/content.js:22
 msgid "No more activities"
@@ -8961,7 +8961,7 @@ msgstr ""
 #: frontend/src/pages/institution-admin/user-list-search/index.js:71
 #: frontend/src/pages/institution-admin/user-list/index.js:112
 msgid "Create At"
-msgstr ""
+msgstr "Oprettet den"
 
 #: frontend/src/pages/institution-admin/user-content/user-groups.js:40
 #: frontend/src/pages/institution-admin/user-list-search/index.js:72
@@ -8991,7 +8991,7 @@ msgstr ""
 #: frontend/src/pages/institution-admin/user-list/index.js:109
 #: frontend/src/pages/org-admin/org-user-profile.js:143
 msgid "Contact Email"
-msgstr ""
+msgstr "Kontakt-e-mail"
 
 #: frontend/src/pages/institution-admin/user-list-search/index.js:69
 #: frontend/src/pages/institution-admin/user-list/index.js:110
@@ -9011,7 +9011,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:192
 #: frontend/src/utils/table-headers.js:166
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: frontend/src/pages/institution-admin/user-list-search/index.js:70
 #: frontend/src/pages/institution-admin/user-list/index.js:111
@@ -9040,7 +9040,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/ldap-users.js:47
 #: frontend/src/pages/sys-admin/users/users-content.js:73
 msgid "Last Login"
-msgstr ""
+msgstr "Sidste login"
 
 #: frontend/src/pages/institution-admin/user-list-search/index.js:90
 #: frontend/src/pages/institution-admin/user-list/index.js:142
@@ -9059,7 +9059,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/orgs/orgs-filter-bar.js:19
 #: frontend/src/pages/sys-admin/users/users-filter-bar.js:37
 msgid "Active"
-msgstr ""
+msgstr "Aktiv"
 
 #: frontend/src/pages/institution-admin/user-list/user-item.js:21
 #: frontend/src/pages/org-admin/org-user-item.js:124
@@ -9071,7 +9071,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/orgs/orgs-filter-bar.js:20
 #: frontend/src/pages/sys-admin/users/users-filter-bar.js:38
 msgid "Inactive"
-msgstr ""
+msgstr "Inaktiv"
 
 #: frontend/src/pages/invitations/invitations-view.js:125
 #: frontend/src/pages/invitations/invitations-view.js:201
@@ -9205,7 +9205,7 @@ msgstr ""
 #: frontend/src/pages/wiki/main-panel.js:83
 #: frontend/src/pages/wiki2/main-panel.js:435
 msgid "Folder does not exist."
-msgstr ""
+msgstr "Mappen findes ikke."
 
 #: frontend/src/pages/libraries/libraries-more-menu.js:12
 msgid "Only show groups with libraries"
@@ -9223,15 +9223,15 @@ msgstr ""
 
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:51
 msgid "Switch to plain text editor"
-msgstr ""
+msgstr "Skift til almindelig teksteditor"
 
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:54
 msgid "Switch to rich text editor"
-msgstr ""
+msgstr "Skift til rig teksteditor"
 
 #: frontend/src/pages/markdown-editor/index.js:94
 msgid "This file has been updated."
-msgstr ""
+msgstr "Denne fil er blevet opdateret"
 
 #: frontend/src/pages/markdown-editor/index.js:139
 msgid "Another user is editing this file!"
@@ -9252,7 +9252,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:171
 #: frontend/src/repo-snapshot.js:123
 msgid "Successfully restored the library."
-msgstr ""
+msgstr "Biblioteket blev gendannet med succes."
 
 #: frontend/src/pages/my-libs/my-libs.js:40
 #| msgid ""
@@ -9593,7 +9593,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/virus-scan/all-virus-files.js:80
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:90
 msgid "Deleted"
-msgstr ""
+msgstr "Slettet"
 
 #: frontend/src/pages/org-admin/org-logs-file-update.js:118
 #: frontend/src/pages/org-admin/org-logs-group-member-audit.js:74
@@ -9676,7 +9676,7 @@ msgstr ""
 
 #: frontend/src/pages/org-admin/org-saml-config.js:85
 msgid "Copied"
-msgstr ""
+msgstr "Kopieret"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:100
 #: frontend/src/pages/org-admin/side-panel.js:116
@@ -9728,7 +9728,7 @@ msgstr ""
 
 #: frontend/src/pages/org-admin/org-saml-config.js:210
 msgid "Verify"
-msgstr ""
+msgstr "Bekræft"
 
 #: frontend/src/pages/org-admin/org-user-item.js:60
 msgid "Resetting user's password, please wait for a moment."
@@ -9776,12 +9776,12 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-users-admins.js:59
 #, javascript-format
 msgid "Successfully revoke the admin permission of %s"
-msgstr ""
+msgstr "Administratorrettighederne for %s blev tilbagekaldt med succes"
 
 #: frontend/src/pages/org-admin/org-users-admins.js:73
 #, javascript-format
 msgid "Successfully set %s as admin."
-msgstr ""
+msgstr "%s blev angivet som administrator med succes."
 
 #: frontend/src/pages/org-admin/org-users-admins.js:88
 #: frontend/src/pages/org-admin/org-users-search-users.js:155
@@ -9865,7 +9865,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/statistic/statistic-ai.js:42
 #| msgid "Departments"
 msgid "Department"
-msgstr ""
+msgstr "Afdeling"
 
 #: frontend/src/pages/org-admin/statistic/statistic-common-tool.js:112
 #: frontend/src/pages/sys-admin/statistic/statistic-common-tool.js:112
@@ -9886,7 +9886,7 @@ msgstr ""
 #: frontend/src/pages/org-admin/statistic/statistic-file.js:20
 #: frontend/src/pages/sys-admin/statistic/statistic-file.js:18
 msgid "Added"
-msgstr ""
+msgstr "Tilføjet"
 
 #: frontend/src/pages/org-admin/statistic/statistic-file.js:21
 #: frontend/src/pages/sys-admin/statistic/statistic-file.js:19
@@ -9896,7 +9896,7 @@ msgstr ""
 #: frontend/src/pages/org-admin/statistic/statistic-file.js:22
 #: frontend/src/pages/sys-admin/statistic/statistic-file.js:20
 msgid "Modified"
-msgstr ""
+msgstr "Ændret"
 
 #: frontend/src/pages/org-admin/statistic/statistic-file.js:56
 #: frontend/src/pages/sys-admin/statistic/statistic-file.js:51
@@ -9997,22 +9997,22 @@ msgstr ""
 #: frontend/src/pages/org-admin/statistic/traffic-table.js:29
 #: frontend/src/pages/sys-admin/statistic/traffic-table.js:29
 msgid "Sync Upload"
-msgstr ""
+msgstr "Synkroniseringsupload"
 
 #: frontend/src/pages/org-admin/statistic/traffic-table.js:30
 #: frontend/src/pages/sys-admin/statistic/traffic-table.js:30
 msgid "Sync Download"
-msgstr ""
+msgstr "Synkroniseringsdownload"
 
 #: frontend/src/pages/org-admin/statistic/traffic-table.js:31
 #: frontend/src/pages/sys-admin/statistic/traffic-table.js:31
 msgid "Web Upload"
-msgstr ""
+msgstr "Web-upload"
 
 #: frontend/src/pages/org-admin/statistic/traffic-table.js:32
 #: frontend/src/pages/sys-admin/statistic/traffic-table.js:32
 msgid "Web Download"
-msgstr ""
+msgstr "Web-download"
 
 #: frontend/src/pages/org-admin/statistic/traffic-table.js:33
 #: frontend/src/pages/sys-admin/statistic/traffic-table.js:33
@@ -10094,25 +10094,25 @@ msgstr ""
 
 #: frontend/src/pages/sdoc/sdoc-file-history/index.js:311
 msgid "No changes"
-msgstr ""
+msgstr "Ingen ændringer"
 
 #: frontend/src/pages/sdoc/sdoc-file-history/index.js:324
 msgid "Changes"
-msgstr ""
+msgstr "Ændringer"
 
 #: frontend/src/pages/sdoc/sdoc-file-history/index.js:332
 #: frontend/src/pages/sdoc/sdoc-file-history/index.js:333
 #: frontend/src/pages/sdoc/sdoc-file-history/index.js:349
 #| msgid "Last modified time"
 msgid "Last modification"
-msgstr ""
+msgstr "Seneste ændring"
 
 #: frontend/src/pages/sdoc/sdoc-file-history/index.js:343
 #: frontend/src/pages/sdoc/sdoc-file-history/index.js:344
 #: frontend/src/pages/sdoc/sdoc-file-history/index.js:352
 #| msgid "Notifications"
 msgid "Next modification"
-msgstr ""
+msgstr "Næste ændring"
 
 #: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:200
 msgid "No version history"
@@ -10255,7 +10255,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/admin-logs/login-logs.js:101
 #: frontend/src/pages/sys-admin/logs-page/login-logs.js:114
 msgid "Success"
-msgstr ""
+msgstr "Succes"
 
 #: frontend/src/pages/sys-admin/admin-logs/logs-nav.js:16
 msgid "Admin Operation Logs"
@@ -10267,7 +10267,7 @@ msgstr ""
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:46
 msgid "Operation"
-msgstr ""
+msgstr "Handling"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:47
 msgid "Detail"
@@ -10360,7 +10360,7 @@ msgstr ""
 
 #: frontend/src/pages/sys-admin/file-scan-records.js:33
 msgid "Suggestion"
-msgstr ""
+msgstr "Forslag"
 
 #: frontend/src/pages/sys-admin/file-scan-records.js:111
 msgid "Content Scan Records"
@@ -10605,7 +10605,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/links/share-links.js:53
 #: frontend/src/pages/sys-admin/links/upload-links.js:49
 msgid "Token"
-msgstr ""
+msgstr "Token"
 
 #: frontend/src/pages/sys-admin/logs-page/file-access-item-menu.js:30
 msgid "only show {placeholder}"
@@ -10623,7 +10623,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/main-panel-topbar.js:22
 #: frontend/src/pages/wiki2/main-panel.js:403
 msgid "Side Nav Menu"
-msgstr ""
+msgstr "Sidemeny"
 
 #: frontend/src/pages/sys-admin/notifications/notifications.js:47
 #: frontend/src/translate.js:13
@@ -10702,7 +10702,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/orgs/org-info.js:278
 #| msgid "Successfully saved"
 msgid "Successfully saved."
-msgstr ""
+msgstr "Gemt med succes."
 
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:145
 msgid ""
@@ -10741,7 +10741,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/users.js:343
 #: frontend/src/pages/sys-admin/users/users.js:360
 msgid "Edit succeeded"
-msgstr ""
+msgstr "Redigering lykkedes"
 
 #: frontend/src/pages/sys-admin/orgs/orgs-traffic-exceeded.js:101
 #: frontend/src/pages/sys-admin/orgs/orgs.js:136
@@ -10895,7 +10895,7 @@ msgstr ""
 
 #: frontend/src/pages/sys-admin/users/user-info.js:125
 msgid "Login ID"
-msgstr ""
+msgstr "Login-id"
 
 #: frontend/src/pages/sys-admin/users/user-info.js:160
 #| msgid "Set Download Rate Limit"
@@ -10909,7 +10909,7 @@ msgstr ""
 
 #: frontend/src/pages/sys-admin/users/user-nav.js:21
 msgid "Shared Links"
-msgstr ""
+msgstr "Delingslinks"
 
 #: frontend/src/pages/sys-admin/users/users-nav.js:24
 msgid "LDAP"
@@ -10917,7 +10917,7 @@ msgstr ""
 
 #: frontend/src/pages/sys-admin/users/users-nav.js:25
 msgid "LDAP(imported)"
-msgstr ""
+msgstr "LDAP(importeret)"
 
 #: frontend/src/pages/sys-admin/virus-scan/all-virus-files.js:66
 #: frontend/src/pages/sys-admin/virus-scan/index.js:49
@@ -11287,7 +11287,7 @@ msgstr ""
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:30
 #: frontend/src/shared-dir-view.js:273
 msgid "Upload Folder"
-msgstr ""
+msgstr "Upload mappe"
 
 #: frontend/src/pages/wiki/side-panel.js:69
 #| msgid "Restore Library"
@@ -11321,7 +11321,7 @@ msgstr ""
 #: frontend/src/utils/text-translation.js:140
 #| msgid "Export as docx"
 msgid "Export as Markdown"
-msgstr ""
+msgstr "Eksporter som Markdown"
 
 #: frontend/src/pages/wiki2/publish-wiki-popover.js:35
 #| msgid "Publish"
@@ -11376,7 +11376,7 @@ msgstr ""
 
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-dropdownmenu.js:125
 msgid "Copy link"
-msgstr ""
+msgstr "Kopiér link"
 
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-dropdownmenu.js:137
 #| msgid "Add permission"
@@ -11420,7 +11420,7 @@ msgstr ""
 #: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:223
 #: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:279
 msgid "Cover"
-msgstr ""
+msgstr "Forsidebillede"
 
 #: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:306
 msgid "Images wider than 1500 pixels work best."
@@ -11494,11 +11494,11 @@ msgstr ""
 
 #: frontend/src/settings.js:55
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 #: frontend/src/settings.js:60
 msgid "Language"
-msgstr ""
+msgstr "Sprog"
 
 #: frontend/src/settings.js:93
 msgid "User info updated"
@@ -11844,7 +11844,7 @@ msgstr ""
 #: frontend/src/translate.js:40
 #| msgid "{user} restored folder {folderName} in library {libraryName}."
 msgid "Face recognition is done for library {libraryName}."
-msgstr ""
+msgstr "Ansigtsgenkendelse er udført for biblioteket {libraryName}."
 
 #: frontend/src/translate.js:41
 msgid "A folder named {upload_folder_link} is uploaded to {uploaded_link}."
@@ -11964,7 +11964,7 @@ msgstr ""
 
 #: frontend/src/utils/text-translation.js:136
 msgid "Export as docx"
-msgstr ""
+msgstr "Eksporter som DOCX"
 
 #: frontend/src/utils/text-translation.js:148
 msgid "Access Log"
@@ -12131,23 +12131,23 @@ msgstr ""
 
 #: frontend/src/utils/utils.js:981
 msgid "Preview and download"
-msgstr ""
+msgstr "Forhåndsvis og download"
 
 #: frontend/src/utils/utils.js:991
 msgid "Preview only"
-msgstr ""
+msgstr "Kun forhåndsvisning"
 
 #: frontend/src/utils/utils.js:1001
 msgid "Download and upload"
-msgstr ""
+msgstr "Download og upload"
 
 #: frontend/src/utils/utils.js:1011
 msgid "Edit on cloud and download"
-msgstr ""
+msgstr "Rediger i skyen og download"
 
 #: frontend/src/utils/utils.js:1021
 msgid "Edit on cloud only"
-msgstr ""
+msgstr "Kun rediger i skyen"
 
 #: frontend/src/utils/utils.js:1532
 msgid "Too many requests"

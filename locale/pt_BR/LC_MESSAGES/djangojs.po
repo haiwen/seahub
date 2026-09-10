@@ -6038,7 +6038,7 @@ msgstr ""
 #: frontend/src/components/search/wiki2-search.js:246
 #| msgid "Wikis"
 msgid "Wiki pages"
-msgstr ""
+msgstr "Páginas Wiki"
 
 #: frontend/src/components/search/wiki2-global-search.js:279
 #| msgid "Search files"
@@ -6667,7 +6667,7 @@ msgstr "Mover"
 #: frontend/src/components/toolbar/chat-toolbar.js:26
 #| msgid "New Tag"
 msgid "New chat"
-msgstr ""
+msgstr "Novo chat"
 
 #: frontend/src/components/toolbar/common-toolbar.js:104
 #| msgid "Search files"

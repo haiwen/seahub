@@ -4,41 +4,24 @@
 # 
 # Translators:
 # Translators:
-# Carlos Marchi <carlosmarchi@gmail.com>, 2014
-# Carlos Madera <carlos.madera@gmail.com>, 2013-2014
-# Carlos Madera <carlos.madera@gmail.com>, 2013
-# cunhaal <cunha00@hotmail.com>, 2017
-# douglasfernandes <douglasfernandes@gmail.com>, 2013
-# douglasfernandes <douglasfernandes@gmail.com>, 2013
-# Erick Melo <erickmelo@gmail.com>, 2016
-# Fernando Macedo, 2026
-# Gilberto Cézar de Almeida <gibalmeida@gmail.com>, 2015
-# Leandro Magnabosco <leandroqm@gmail.com>, 2016
-# Marcos Rodrigo Ladeia <marcosrodrigo.ladeia@gmail.com>, 2015
-# Paulo Cotta <cotta.paulo@gmail.com>, 2013
-# Paulo Cotta <cotta.paulo@gmail.com>, 2013-2014
-# Rodrigo Almeida <rodrigoalmeidadj@yahoo.com.br>, 2016
-# Seafile Info <info@seafile.com>, 2026
-# William Alves <williamalves.ads@gmail.com>, 2015
-# zheng xie <xiez1989@gmail.com>, 2013
-# zheng xie <xiez1989@gmail.com>, 2013,2017
+# Jonas Pedersen <nonsa123@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-02 15:41+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Fernando Macedo, 2026\n"
-"Language-Team: Portuguese (Brazil) (http://app.transifex.com/haiwen/seahub/language/pt_BR/)\n"
+"Last-Translator: Jonas Pedersen <nonsa123@gmail.com>, 2015\n"
+"Language-Team: Danish (Denmark) (http://app.transifex.com/haiwen/seahub/language/da_DK/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pt_BR\n"
-"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+"Language: da_DK\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: seahub/adfs_auth/utils.py:56
 msgid "ADFS/SAML login relevant settings invalid."
-msgstr "Configurações relacionadas ao login ADFS/SAML inválidas."
+msgstr "ADFS/SAML-loginrelaterede indstillinger er ugyldige."
 
 #: seahub/adfs_auth/views.py:56 seahub/adfs_auth/views.py:578
 #: seahub/adfs_auth/views.py:607 seahub/adfs_auth/views.py:647
@@ -47,102 +30,102 @@ msgstr "Configurações relacionadas ao login ADFS/SAML inválidas."
 #: seahub/adfs_auth/views.py:743 seahub/adfs_auth/views.py:747
 #: seahub/adfs_auth/views.py:815 seahub/adfs_auth/views.py:819
 msgid "Internal server error. Please contact system administrator."
-msgstr "Erro interno do servidor. Contate o administrador do sistema."
+msgstr "Intern serverfejl. Kontakt venligst systemadministratoren."
 
 #: seahub/adfs_auth/views.py:57
 msgid ""
 "Login failed: Bad response from ADFS/SAML service. Please report to your "
 "organization (company) administrator."
-msgstr "Falha no login: resposta inválida do serviço ADFS/SAML. Informe o administrador da sua organização."
+msgstr "Login mislykkedes: Dårligt svar fra ADFS/SAML-tjenesten. Rapportér det venligst til din organisations (virksomheds) administrator."
 
 #: seahub/adfs_auth/views.py:123 seahub/adfs_auth/views.py:139
 #: seahub/api2/endpoints/admin/users.py:795
 #: seahub/api2/endpoints/admin/users.py:1301 seahub/base/accounts.py:1242
 #: seahub/forms.py:30 seahub/institutions/api_views.py:202
 msgid "The number of users exceeds the limit."
-msgstr "O número de usuários excede o limite."
+msgstr "Antallet af brugere overstiger grænsen."
 
 #: seahub/adfs_auth/views.py:221 seahub/adfs_auth/views.py:431
 msgid "Failed to bind SAML, please login first."
-msgstr "Falha ao vincular SAML. Faça login primeiro."
+msgstr "Kunne ikke binde SAML, log venligst ind først."
 
 #: seahub/adfs_auth/views.py:271
 #, python-format
 msgid ""
 "Login failed: The email %s is not consistent with the email %s from "
 "ADFS/SAML service"
-msgstr "Falha no login: o e-mail %s não corresponde ao e-mail %s do serviço ADFS/SAML."
+msgstr "Login mislykkedes: E-mailen %s stemmer ikke overens med e-mailen %s fra ADFS/SAML-tjenesten"
 
 #: seahub/adfs_auth/views.py:304
 #| msgid "User %s not found."
 msgid "User not found in Team."
-msgstr "Usuário não encontrado na equipe."
+msgstr "Brugeren blev ikke fundet i Team."
 
 #: seahub/adfs_auth/views.py:339 seahub/adfs_auth/views.py:541
 msgid ""
 "Login failed: user is deactivated. Please report to your organization "
 "(company) administrator."
-msgstr "Falha no login: usuário desativado. Informe o administrador da organização."
+msgstr "Login mislykkedes: brugeren er deaktiveret. Rapportér det venligst til din organisations (virksomheds) administrator."
 
 #: seahub/adfs_auth/views.py:603 seahub/adfs_auth/views.py:663
 #: seahub/adfs_auth/views.py:714
 msgid ""
 "Login failed: ADFS/SAML service error. Please report to your organization "
 "(company) administrator."
-msgstr "Falha no login: erro no serviço ADFS/SAML. Informe o administrador da organização."
+msgstr "Login mislykkedes: Fejl i ADFS/SAML-tjenesten. Rapportér det venligst til din organisations (virksomheds) administrator."
 
 #: seahub/adfs_auth/views.py:751
 msgid "Failed to unbind SAML, please set a password first."
-msgstr "Falha ao desvincular SAML. Defina uma senha primeiro."
+msgstr "Kunne ikke afbinde SAML, angiv venligst først en adgangskode."
 
 #: seahub/adfs_auth/views.py:754
 #| msgid "Failed to bind SAML, please login first."
 msgid "Failed to unbind SAML, the user is forced login by SSO."
-msgstr "Falha ao desvincular SAML: o usuário é obrigado a logar via SSO."
+msgstr "Kunne ikke afbinde SAML, brugeren er tvunget til at logge ind via SSO."
 
 #: seahub/adfs_auth/views.py:759
 msgid "Failed to unbind SAML, please set a contact email first."
-msgstr "Falha ao desvincular SAML. Defina um e-mail de contato primeiro."
+msgstr "Kunne ikke afbinde SAML, angiv venligst først en kontakt-e-mail."
 
 #: seahub/ai/apis.py:813
 msgid "New chat"
-msgstr "Novo chat"
+msgstr "Ny chat"
 
 #: seahub/ai/utils.py:394
 msgid ""
 "Due to your read-only permission for this library, the document cannot be "
 "uploaded to this library."
-msgstr "Devido à sua permissão de somente leitura para esta biblioteca, o documento não pode ser carregado nesta biblioteca."
+msgstr "På grund af din skrivebeskyttede adgang til dette bibliotek kan dokumentet ikke uploades til dette bibliotek."
 
 #: seahub/api2/endpoints/admin/account.py:205
 #: seahub/api2/endpoints/user.py:101 seahub/api2/views.py:374
 msgid "Name is too long (maximum is 64 characters)"
-msgstr "O nome é muito extenso (máximo de 64 caracteres)"
+msgstr "Navnet er for langt (maksimalt 64 tegn)"
 
 #: seahub/api2/endpoints/admin/account.py:209
 #: seahub/api2/endpoints/user.py:105 seahub/api2/views.py:378
 #: seahub/forms.py:44 seahub/profile/forms.py:27
 msgid "Name should not include '/'."
-msgstr "O nome não pode conter '/'."
+msgstr "Navnet må ikke indeholde '/'."
 
 #: seahub/api2/endpoints/admin/account.py:224
 msgid "Login id can't be empty"
-msgstr "ID de login não pode estar vazio."
+msgstr "Login-id må ikke være tomt"
 
 #: seahub/api2/endpoints/admin/account.py:228
 #: seahub/api2/endpoints/admin/users.py:880
 #: seahub/api2/endpoints/admin/users.py:1329
 #, python-format
 msgid "Login id %s already exists."
-msgstr "ID de login %s já existe."
+msgstr "Login-id %s findes allerede."
 
 #: seahub/api2/endpoints/admin/account.py:235
 msgid "Department is too long (maximum is 512 characters)"
-msgstr "O Departamento é longo demais (máximo de 512 caracteres)"
+msgstr "Afdelingen er for lang (maksimalt 512 tegn)"
 
 #: seahub/api2/endpoints/admin/account.py:251 seahub/forms.py:155
 msgid "Space quota can't be empty"
-msgstr "A cota do espaço não pode estar vazia"
+msgstr "Pladskvoten må ikke være tom"
 
 #: seahub/api2/endpoints/admin/account.py:257
 #: seahub/api2/endpoints/admin/users.py:1377
@@ -151,7 +134,7 @@ msgstr "A cota do espaço não pode estar vazia"
 #: seahub/api2/endpoints/admin/users.py:1398
 #: seahub/institutions/api_views.py:174
 msgid "Must be an integer that is greater than or equal to 0."
-msgstr "Deve ser um número inteiro superior ou igual a 0."
+msgstr "Skal være et helt tal, der er større end eller lig med 0."
 
 #: seahub/api2/endpoints/admin/account.py:316
 #: seahub/api2/endpoints/admin/users.py:1409
@@ -159,7 +142,7 @@ msgstr "Deve ser um número inteiro superior ou igual a 0."
 #: seahub/organizations/api/admin/user_set_password.py:55
 #: seahub/views/sysadmin.py:582
 msgid "Unable to reset password."
-msgstr "Não foi possível redefinir a senha."
+msgstr "Kunne ikke nulstille adgangskoden."
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:82
 #: seahub/api2/endpoints/admin/groups.py:135
@@ -169,79 +152,79 @@ msgstr "Não foi possível redefinir a senha."
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
 "brackets or underscore."
-msgstr "O nome só pode conter letras, números, espaços, hífens, pontos, aspas simples, colchetes ou sublinhados."
+msgstr "Navnet må kun indeholde bogstaver, tal, mellemrum, bindestreg, punktum, enkelt citationstegn, parenteser eller understregning."
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:87
 #: seahub/api2/endpoints/admin/groups.py:142
 #: seahub/api2/endpoints/admin/groups.py:279
 #: seahub/api2/endpoints/groups.py:242 seahub/api2/endpoints/groups.py:315
 msgid "There is already a group with that name."
-msgstr "Já existe um grupo com esse nome."
+msgstr "Der findes allerede en gruppe med det navn."
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:235
 msgid "There are libraries in this department."
-msgstr "Há bibliotecas neste departamento."
+msgstr "Der er biblioteker i denne afdeling."
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:239
 msgid "There are sub-departments in this department."
-msgstr "Há subdepartamentos neste departamento."
+msgstr "Der er underafdelinger i denne afdeling."
 
 #: seahub/api2/endpoints/admin/default_library.py:32
 #: seahub/api2/endpoints/admin/default_library.py:33
 #: seahub/views/__init__.py:564 seahub/views/__init__.py:565
 #: seahub/views/__init__.py:569 seahub/views/__init__.py:570
 msgid "My Library"
-msgstr "Minha Biblioteca"
+msgstr "Mit bibliotek"
 
 #: seahub/api2/endpoints/admin/groups.py:223
 #: seahub/api2/endpoints/groups.py:341
 #, python-format
 msgid "User %s is already group owner."
-msgstr "O usuário %s já é proprietário do grupo."
+msgstr "Brugeren %s er allerede gruppeejer."
 
 #: seahub/api2/endpoints/admin/institution_users.py:169
 #, python-format
 msgid ""
 "Failed to add %s to the institution: user already belongs to an institution"
-msgstr "Falha ao adicionar %s à instituição: o usuário já pertence a uma instituição."
+msgstr "Kunne ikke tilføje %s til institutionen: brugeren tilhører allerede en institution"
 
 #: seahub/api2/endpoints/admin/institution_users.py:174
 #, python-format
 msgid ""
 "Failed to add %s to the institution: user already belongs to this "
 "institution"
-msgstr "Falha ao adicionar %s à instituição: o usuário já pertence a esta instituição."
+msgstr "Kunne ikke tilføje %s til institutionen: brugeren tilhører allerede denne institution"
 
 #: seahub/api2/endpoints/admin/libraries.py:291 seahub/views/sysadmin.py:793
 msgid "System library can not be deleted."
-msgstr "A biblioteca do sistema não pode ser excluída."
+msgstr "Systembiblioteket kan ikke slettes."
 
 #: seahub/api2/endpoints/admin/libraries.py:413 seahub/api2/views.py:1923
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
-msgstr "Falha na transferência: a função de %s é %s, não é possível adicionar a biblioteca."
+msgstr "Overførsel mislykkedes: rollen for %s er %s, bibliotek kan ikke tilføjes."
 
 #: seahub/api2/endpoints/admin/libraries.py:439 seahub/api2/views.py:1928
 msgid "Library can not be transferred to owner."
-msgstr "A biblioteca não pode ser transferida para o proprietário."
+msgstr "Biblioteket kan ikke overføres til ejeren."
 
 #: seahub/api2/endpoints/admin/organizations.py:494
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Your team {org.org_name} has been deactivated"
-msgstr "Sua equipe {org.org_name} foi desativada."
+msgstr "Dit team {org.org_name} er blevet deaktiveret"
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:155
 #: seahub/api2/endpoints/share_links.py:602
 #: seahub/api2/endpoints/share_links.py:826
 msgid "There is an associated published library."
-msgstr "Há uma biblioteca publicada associada."
+msgstr "Der er et tilknyttet publiceret bibliotek."
 
 #: seahub/api2/endpoints/admin/shares.py:185
 #, python-format
 msgid "User %s is already library owner."
-msgstr "O usuário %s já é proprietário da biblioteca"
+msgstr "Brugeren %s er allerede biblioteksejer."
 
 #: seahub/api2/endpoints/admin/shares.py:193
 #: seahub/api2/endpoints/invitations.py:51
@@ -249,7 +232,7 @@ msgstr "O usuário %s já é proprietário da biblioteca"
 #: seahub/api2/endpoints/repo_share_invitations.py:157
 #, python-format
 msgid "Email %s invalid."
-msgstr "O e-mail %s é inválido."
+msgstr "E-mail %s er ugyldig."
 
 #: seahub/api2/endpoints/admin/shares.py:211
 #: seahub/api2/endpoints/admin/shares.py:268
@@ -260,7 +243,7 @@ msgstr "O e-mail %s é inválido."
 #: seahub/api2/endpoints/repo_share_invitations.py:199
 #, python-format
 msgid "This item has been shared to %s."
-msgstr "Este item já foi compartilhado com %s."
+msgstr "Dette element er blevet delt med %s."
 
 #: seahub/api2/endpoints/admin/statistics.py:432
 #: seahub/base/management/commands/export_user_traffic_report.py:46
@@ -268,7 +251,7 @@ msgstr "Este item já foi compartilhado com %s."
 #: seahub/notifications/templates/notifications/notice_email.html:20
 #: seahub/organizations/api/admin/statistics.py:359
 msgid "Time"
-msgstr "Hora"
+msgstr "Tid"
 
 #: seahub/api2/endpoints/admin/statistics.py:432
 #: seahub/base/management/commands/export_file_access_log.py:58
@@ -276,7 +259,7 @@ msgstr "Hora"
 #: seahub/notifications/templates/notifications/file_updates_email.html:19
 #: seahub/organizations/api/admin/statistics.py:359
 msgid "User"
-msgstr "Usuário"
+msgstr "Bruger"
 
 #: seahub/api2/endpoints/admin/statistics.py:432
 #: seahub/api2/endpoints/admin/statistics.py:481
@@ -291,43 +274,43 @@ msgstr "Usuário"
 #: seahub/views/sysadmin.py:737 seahub/views/sysadmin.py:868
 #: seahub/views/sysadmin.py:883
 msgid "Name"
-msgstr "Nome"
+msgstr "Navn"
 
 #: seahub/api2/endpoints/admin/statistics.py:432
 #: seahub/base/management/commands/export_user_traffic_report.py:46
 #: seahub/organizations/api/admin/statistics.py:359
 msgid "Web Download"
-msgstr "Download na Web"
+msgstr "Web-download"
 
 #: seahub/api2/endpoints/admin/statistics.py:433
 #: seahub/base/management/commands/export_user_traffic_report.py:47
 #: seahub/organizations/api/admin/statistics.py:360
 msgid "Sync Download"
-msgstr "Download por Sincronização"
+msgstr "Synkroniseringsdownload"
 
 #: seahub/api2/endpoints/admin/statistics.py:433
 #: seahub/base/management/commands/export_user_traffic_report.py:47
 #: seahub/organizations/api/admin/statistics.py:360
 msgid "Link Download"
-msgstr "Download por Link"
+msgstr "Link-download"
 
 #: seahub/api2/endpoints/admin/statistics.py:434
 #: seahub/base/management/commands/export_user_traffic_report.py:48
 #: seahub/organizations/api/admin/statistics.py:361
 msgid "Web Upload"
-msgstr "Envio na Web"
+msgstr "Web-upload"
 
 #: seahub/api2/endpoints/admin/statistics.py:434
 #: seahub/base/management/commands/export_user_traffic_report.py:48
 #: seahub/organizations/api/admin/statistics.py:361
 msgid "Sync Upload"
-msgstr "Envio por Sincronização"
+msgstr "Synkroniseringsupload"
 
 #: seahub/api2/endpoints/admin/statistics.py:435
 #: seahub/base/management/commands/export_user_traffic_report.py:49
 #: seahub/organizations/api/admin/statistics.py:362
 msgid "Link Upload"
-msgstr "Envio por Link"
+msgstr "Link-upload"
 
 #: seahub/api2/endpoints/admin/statistics.py:481
 #: seahub/base/management/commands/export_user_storage_report.py:41
@@ -349,7 +332,7 @@ msgstr "E-mail"
 #: seahub/templates/registration/password_set_form.html:12
 #: seahub/views/sysadmin.py:253 seahub/views/sysadmin.py:257
 msgid "Contact Email"
-msgstr "E-mail de contato"
+msgstr "Kontakt-e-mail"
 
 #: seahub/api2/endpoints/admin/statistics.py:482
 #: seahub/base/management/commands/export_user_storage_report.py:42
@@ -358,7 +341,7 @@ msgstr "E-mail de contato"
 #: seahub/organizations/api/admin/statistics.py:407
 #: seahub/views/sysadmin.py:254 seahub/views/sysadmin.py:258
 msgid "Space Usage"
-msgstr "Espaço utilizado"
+msgstr "Pladsforbrug"
 
 #: seahub/api2/endpoints/admin/statistics.py:482
 #: seahub/base/management/commands/export_user_storage_report.py:42
@@ -368,91 +351,91 @@ msgstr "Espaço utilizado"
 #: seahub/views/sysadmin.py:254 seahub/views/sysadmin.py:258
 #: seahub/views/sysadmin.py:870 seahub/views/sysadmin.py:884
 msgid "Space Quota"
-msgstr "Cota do Armazenamento"
+msgstr "Pladskvote"
 
 #: seahub/api2/endpoints/admin/users.py:656
 #: seahub/api2/endpoints/admin/users.py:693
 #: seahub/organizations/api/admin/users.py:155
 msgid "There are more than 500 users, and sort is not offered."
-msgstr "Há mais de 500 usuários, ordenação não disponível."
+msgstr "Der er mere end 500 brugere, og sortering tilbydes ikke."
 
 #: seahub/api2/endpoints/admin/users.py:894
 #, python-format
 msgid "Successfully added user %(user)s."
-msgstr "Usuário %(user)s adicionado com sucesso."
+msgstr "Brugeren %(user)s blev tilføjet med succes."
 
 #: seahub/api2/endpoints/admin/users.py:898
 #: seahub/api2/endpoints/admin/users_batch.py:390 seahub/views/sysadmin.py:633
 #, python-format
 msgid "You are invited to join %s"
-msgstr "Você foi convidado para entrar %s"
+msgstr "Du inviteres til at deltage i %s"
 
 #: seahub/api2/endpoints/admin/users.py:902
 #, python-format
 msgid "Successfully added user %(user)s. An email notification has been sent."
-msgstr "Usuário %(user)s adicionado. Notificação por e-mail enviada."
+msgstr "Brugeren %(user)s blev tilføjet med succes. En e-mailnotifikation er blevet sendt."
 
 #: seahub/api2/endpoints/admin/users.py:905
 #, python-format
 msgid ""
 "Successfully added user %(user)s. But email notification can not be sent, "
 "because Email service is not properly configured."
-msgstr "Usuário %(user)s adicionado, mas notificação não enviada: serviço de e-mail mal configurado."
+msgstr "Brugeren %(user)s blev tilføjet med succes. Men e-mailnotifikation kan ikke sendes, fordi e-mailtjenesten ikke er korrekt konfigureret."
 
 #: seahub/api2/endpoints/admin/users.py:1440
 msgid "Edit succeeded"
-msgstr "Editado com sucesso"
+msgstr "Redigering lykkedes"
 
 #: seahub/api2/endpoints/admin/users.py:1446 seahub/views/sysadmin.py:530
 #, python-format
 msgid "Your account on %s is activated"
-msgstr "Sua conta em  %s está ativada"
+msgstr "Din konto på %s er aktiveret"
 
 #: seahub/api2/endpoints/admin/users.py:1453
 msgid "Edit succeeded, an email has been sent."
-msgstr "Editado com sucesso, um e-mail foi enviado."
+msgstr "Redigering lykkedes, en e-mail er blevet sendt."
 
 #: seahub/api2/endpoints/admin/users.py:1457
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
-msgstr "Editado com sucesso, mas falhou ao enviar o e-mail, favor verificar sua configuração de e-mail."
+msgstr "Redigering lykkedes, men det lykkedes ikke at sende e-mail. Kontroller venligst din e-mail-konfiguration."
 
 #: seahub/api2/endpoints/admin/users.py:1543 seahub/auth/forms.py:194
 #: seahub/organizations/api/admin/user_set_password.py:80
 #, python-format
 msgid "Reset Password on %s"
-msgstr "Redefinir senha em %s"
+msgstr "Nulstil adgangskode på %s"
 
 #: seahub/api2/endpoints/admin/users.py:1547
 #: seahub/organizations/api/admin/user_set_password.py:84
 #, python-brace-format
 msgid "A password reset link has been sent to {contact_email}."
-msgstr "Link de redefinição de senha enviado para {contact_email}."
+msgstr "Et link til nulstilling af adgangskoden er blevet sendt til {contact_email}."
 
 #: seahub/api2/endpoints/admin/users.py:1565 seahub/views/sysadmin.py:571
 #, python-format
 msgid "Password has been reset on %s"
-msgstr "A senha foi reconfigurada em %s"
+msgstr "Adgangskoden er blevet nulstillet på %s"
 
 #: seahub/api2/endpoints/admin/users.py:1567
 #, python-format
 msgid "Successfully reset password, an email has been sent to %(user)s."
-msgstr "Senha redefinida com sucesso. E-mail enviado para %(user)s."
+msgstr "Adgangskoden blev nulstillet med succes, en e-mail er blevet sendt til %(user)s."
 
 #: seahub/api2/endpoints/admin/users.py:1571 seahub/views/sysadmin.py:605
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
-msgstr "Reiniciada com sucesso a senha para %(passwd)s, mas falhou ao enviar um e-mail %(user)s, favor verifique sua configuração de e-mail."
+msgstr "Adgangskoden blev nulstillet til %(passwd)s, men det lykkedes ikke at sende e-mail til %(user)s. Kontroller venligst din e-mail-konfiguration."
 
 #: seahub/api2/endpoints/admin/users.py:1574
 #: seahub/organizations/api/admin/user_set_password.py:94
 #: seahub/views/sysadmin.py:609
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
-msgstr "Reiniciada com sucesso a senha para %(passwd)s para o usuário %(user)s."
+msgstr "Adgangskoden blev nulstillet til %(passwd)s for brugeren %(user)s."
 
 #: seahub/api2/endpoints/admin/users.py:1577 seahub/views/sysadmin.py:612
 #, python-format
@@ -460,15 +443,15 @@ msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
 "notification can not be sent, because Email service is not properly "
 "configured."
-msgstr "Reiniciada com sucesso a senha para %(passwd)s, para usuário %(user)s, mas uma notificação de e-mail não pode ser enviada porque o serviço de e-mail não esta configurado corretamente."
+msgstr "Adgangskoden blev nulstillet til %(passwd)s for brugeren %(user)s. Men e-mail-notifikation kan ikke sendes, fordi e-mailtjenesten ikke er korrekt konfigureret."
 
 #: seahub/api2/endpoints/admin/users_batch.py:173
 msgid "must be an integer that is greater than or equal to 0."
-msgstr "deve ser um número inteiro que é maior ou igual a 0."
+msgstr "skal være et helt tal, der er større end eller lig med 0."
 
 #: seahub/api2/endpoints/admin/virus_scan_records.py:257
 msgid "Virus file is not found."
-msgstr "Arquivo com vírus não encontrado."
+msgstr "Virusfilen blev ikke fundet."
 
 #: seahub/api2/endpoints/admin/virus_scan_records.py:275
 #: seahub/api2/endpoints/admin/virus_scan_records.py:290
@@ -501,19 +484,19 @@ msgstr "Arquivo com vírus não encontrado."
 #: seahub/views/sysadmin.py:188 seahub/wiki/views.py:210
 #: seahub/wiki/views.py:217 seahub/wiki/views.py:226
 msgid "Internal Server Error"
-msgstr "Erro interno do servidor"
+msgstr "Intern serverfejl"
 
 #: seahub/api2/endpoints/copy_move_task.py:81
 #: seahub/api2/endpoints/move_folder_merge.py:137
 #: seahub/api2/endpoints/via_repo_token.py:1384
 msgid "Destination path is too long."
-msgstr "O caminho destino é muito extenso"
+msgstr "Destinationsstien er for lang."
 
 #: seahub/api2/endpoints/copy_move_task.py:91
 #: seahub/api2/endpoints/move_folder_merge.py:133
 #: seahub/api2/endpoints/via_repo_token.py:1380
 msgid "Invalid destination path"
-msgstr "O caminho destino é inválido"
+msgstr "Ugyldig destinationssti"
 
 #: seahub/api2/endpoints/copy_move_task.py:148
 #: seahub/api2/endpoints/move_folder_merge.py:176
@@ -526,12 +509,12 @@ msgstr "O caminho destino é inválido"
 #: seahub/seadoc/apis.py:598 seahub/seadoc/apis.py:692
 #: seahub/seadoc/apis.py:3249
 msgid "Out of quota."
-msgstr "Sem cota disponível."
+msgstr "Kvoten er opbrugt."
 
 #: seahub/api2/endpoints/copy_move_task.py:164
 #, python-format
 msgid "Can not move folder %(src)s to its subfolder %(des)s"
-msgstr "Não é possível mover a pasta %(src)s para sua subpasta %(des)s."
+msgstr "Kan ikke flytte mappen %(src)s til dens undermappe %(des)s"
 
 #: seahub/api2/endpoints/copy_move_task.py:180
 #: seahub/api2/endpoints/file.py:322 seahub/api2/endpoints/file.py:402
@@ -541,35 +524,35 @@ msgstr "Não é possível mover a pasta %(src)s para sua subpasta %(des)s."
 #: seahub/api2/endpoints/via_repo_token.py:1264
 #: seahub/api2/endpoints/wiki2.py:864
 msgid "File is locked"
-msgstr "Arquivo bloqueado"
+msgstr "Filen er låst"
 
 #: seahub/api2/endpoints/copy_move_task.py:247
 msgid "Cancel failed"
-msgstr "Falha ao Cancelar"
+msgstr "Annullering mislykkedes"
 
 #: seahub/api2/endpoints/dir_shared_items.py:356
 #: seahub/api2/endpoints/group_owned_libraries.py:953
 msgid "username invalid."
-msgstr "nome do usuário é inválido."
+msgstr "brugernavn ugyldigt."
 
 #: seahub/api2/endpoints/dir_shared_items.py:365
 #: seahub/api2/endpoints/group_owned_libraries.py:962
 #, python-format
 msgid "User %s not found."
-msgstr "Usuário %s  não encontrado."
+msgstr "Brugeren %s blev ikke fundet."
 
 #: seahub/api2/endpoints/dir_shared_items.py:396
 #: seahub/api2/endpoints/dir_shared_items.py:412
 #| msgid "Library can not be transferred to owner."
 msgid "Library can not be shared to owner"
-msgstr "A biblioteca não pode ser compartilhada com o proprietário."
+msgstr "Biblioteket kan ikke deles med ejeren"
 
 #: seahub/api2/endpoints/file.py:204 seahub/api2/endpoints/upload_links.py:540
 #: seahub/api2/endpoints/via_repo_token.py:964
 #: seahub/api2/endpoints/wiki2.py:661 seahub/api2/endpoints/wikis.py:128
 #: seahub/api2/views.py:2064 seahub/seadoc/apis.py:3256
 msgid "The number of files in library exceeds the limit"
-msgstr "O número de arquivos na biblioteca excedeu o limite."
+msgstr "Antallet af filer i biblioteket overstiger grænsen"
 
 #: seahub/api2/endpoints/file.py:310
 #: seahub/api2/endpoints/file_participants.py:113
@@ -591,38 +574,38 @@ msgstr "O número de arquivos na biblioteca excedeu o limite."
 #: seahub/views/sysadmin.py:139 seahub/views/sysadmin.py:155
 #: seahub/views/sysadmin.py:184
 msgid "Permission denied."
-msgstr "Permissão negada."
+msgstr "Adgang nægtet."
 
 #: seahub/api2/endpoints/file.py:333
 msgid "File extension is not in the whitelist"
-msgstr "Extensão de arquivo não está na lista permitida."
+msgstr "Filendelsen er ikke på hvidlisten"
 
 #: seahub/api2/endpoints/file.py:764 seahub/api2/endpoints/file.py:784
 #: seahub/api2/endpoints/via_repo_token.py:1281
 msgid "File is not locked."
-msgstr "O arquivo não está bloqueado."
+msgstr "Filen er ikke låst."
 
 #: seahub/api2/endpoints/file.py:811 seahub/api2/endpoints/share_links.py:908
 msgid "You can not refresh this file's lock."
-msgstr "Não é possível atualizar o bloqueio deste arquivo."
+msgstr "Du kan ikke opdatere låsen for denne fil."
 
 #: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2877
 msgid "The participant already exists."
-msgstr "O participante já existe."
+msgstr "Deltageren findes allerede."
 
 #: seahub/api2/endpoints/file_tag.py:256 seahub/api2/endpoints/file_tag.py:280
 #: seahub/api2/endpoints/file_tag.py:300
 #: seahub/api2/endpoints/revision_tag.py:55
 #: seahub/api2/endpoints/revision_tag.py:109
 msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
-msgstr "A tag só pode conter letras, números, pontos, hífens ou sublinhados."
+msgstr "Tagget må kun indeholde bogstaver, tal, punktum, bindestreg eller understregning."
 
 #: seahub/api2/endpoints/group_members.py:110
 #: seahub/api2/endpoints/group_members.py:358
 #: seahub/api2/endpoints/group_members.py:517
 #, python-format
 msgid "User %s is already a group member."
-msgstr "O usuário %s já é membro do grupo."
+msgstr "Brugeren %s er allerede gruppemedlem."
 
 #: seahub/api2/endpoints/group_members.py:116
 #: seahub/api2/endpoints/group_members.py:367
@@ -632,52 +615,52 @@ msgstr "O usuário %s já é membro do grupo."
 #: seahub/organizations/api/admin/users.py:337
 #, python-format
 msgid "User %s not found in organization."
-msgstr "O usuário %s não foi encontrado na organização."
+msgstr "Brugeren %s blev ikke fundet i organisationen."
 
 #: seahub/api2/endpoints/group_members.py:119
 #: seahub/api2/endpoints/group_members.py:375
 #: seahub/api2/endpoints/group_members.py:534
 #, python-format
 msgid "User %s is an organization user."
-msgstr "O usuário %s é um usuário da organização."
+msgstr "Brugeren %s er en organisationsbruger."
 
 #: seahub/api2/endpoints/group_members.py:438 seahub/group/error_msg.py:17
 #: seahub/group/error_msg.py:23 seahub/views/file.py:571
 msgid "Group does not exist"
-msgstr "O grupo não existe"
+msgstr "Gruppen findes ikke"
 
 #: seahub/api2/endpoints/group_members.py:577
 #| msgid "Email or Username"
 msgid "Email or LoginID"
-msgstr "E-mail ou ID de Login"
+msgstr "E-mail eller login-id"
 
 #: seahub/api2/endpoints/group_members.py:588 seahub/views/sysadmin.py:244
 #: seahub/views/sysadmin.py:352 seahub/views/sysadmin.py:734
 #: seahub/views/sysadmin.py:746 seahub/views/sysadmin.py:894
 msgid "Failed to export Excel"
-msgstr "Falha ao exportar para Excel"
+msgstr "Det lykkedes ikke at eksportere Excel"
 
 #: seahub/api2/endpoints/group_owned_libraries.py:399
 #: seahub/api2/endpoints/group_owned_libraries.py:675
 msgid "Permission already exists."
-msgstr "Permissão já existe."
+msgstr "Tilladelsen findes allerede."
 
 #: seahub/api2/endpoints/invitation.py:110
 #, python-format
 msgid "%(user)s revoked your access to %(site_name)s."
-msgstr "%(user)s revogou seu acesso a %(site_name)s."
+msgstr "%(user)s har tilbagekaldt din adgang til %(site_name)s."
 
 #: seahub/api2/endpoints/invitations.py:55
 #: seahub/api2/endpoints/invitations.py:123
 #: seahub/api2/endpoints/repo_share_invitations.py:164
 msgid "The email address is not allowed to be invited as a guest."
-msgstr "O endereço de email não pode ser cadastrado como convidado."
+msgstr "E-mailadressen må ikke inviteres som gæst."
 
 #: seahub/api2/endpoints/invitations.py:60
 #: seahub/api2/endpoints/invitations.py:132
 #, python-format
 msgid "%s is already invited."
-msgstr "%s já está convidado."
+msgstr "%s er allerede inviteret."
 
 #: seahub/api2/endpoints/invitations.py:68
 #: seahub/api2/endpoints/invitations.py:144
@@ -686,7 +669,7 @@ msgstr "%s já está convidado."
 #: seahub/organizations/api/admin/users.py:268
 #, python-format
 msgid "User %s already exists."
-msgstr "O usuário %s já existe."
+msgstr "Brugeren %s findes allerede."
 
 #: seahub/api2/endpoints/invitations.py:72
 #: seahub/api2/endpoints/invitations.py:151
@@ -694,7 +677,7 @@ msgstr "O usuário %s já existe."
 msgid ""
 "An (inactive) regular account already exists for this mail address, can not "
 "proceed to create guest account"
-msgstr "Já existe uma conta normal (inativa) associada a este endereço de e-mail; não é possível criar uma conta de convidado"
+msgstr "Der findes allerede en (inaktiv) normal konto for denne e-mailadresse, kan ikke fortsætte med at oprette en gæstekonto"
 
 #: seahub/api2/endpoints/invitations.py:165
 #: seahub/api2/endpoints/repo_share_invitations.py:224
@@ -704,28 +687,28 @@ msgstr "Já existe uma conta normal (inativa) associada a este endereço de e-ma
 msgid ""
 "Failed to send email, email service is not properly configured, please "
 "contact administrator."
-msgstr "Falha ao enviar e-mail, o serviço de e-mail não está configurado corretamente. Por favor, contate o administrador."
+msgstr "Det lykkedes ikke at sende e-mail, e-mailtjenesten er ikke korrekt konfigureret, kontakt venligst administratoren."
 
 #: seahub/api2/endpoints/multi_share_links.py:108
 #: seahub/api2/endpoints/multi_share_links.py:367
 #: seahub/api2/endpoints/share_links.py:357
 #: seahub/api2/endpoints/upload_links.py:171
 msgid "Password is required."
-msgstr "Senha obrigatoria"
+msgstr "Adgangskode er påkrævet."
 
 #: seahub/api2/endpoints/multi_share_links.py:113
 #: seahub/api2/endpoints/share_links.py:363
 #: seahub/api2/endpoints/upload_links.py:177
 #: seahub/api2/endpoints/webdav_secret.py:60
 msgid "Password is too short."
-msgstr "Senha muito curta."
+msgstr "Adgangskoden er for kort."
 
 #: seahub/api2/endpoints/multi_share_links.py:117
 #: seahub/api2/endpoints/share_links.py:367
 #: seahub/api2/endpoints/upload_links.py:181
 #: seahub/api2/endpoints/webdav_secret.py:64
 msgid "Password is too weak."
-msgstr "Senha muito fraca."
+msgstr "Adgangskoden er for svag."
 
 #: seahub/api2/endpoints/multi_share_links.py:121
 #: seahub/api2/endpoints/share_links.py:371
@@ -734,7 +717,7 @@ msgstr "Senha muito fraca."
 msgid ""
 "Password can only contain number, upper letter, lower letter and other "
 "symbols."
-msgstr "A senha só pode conter números, letras maiúsculas, minúsculas e símbolos."
+msgstr "Adgangskoden må kun indeholde tal, store bogstaver, små bogstaver og andre symboler."
 
 #: seahub/api2/endpoints/multi_share_links.py:144
 #: seahub/api2/endpoints/multi_share_links.py:390
@@ -744,7 +727,7 @@ msgstr "A senha só pode conter números, letras maiúsculas, minúsculas e sím
 #: seahub/api2/endpoints/upload_links.py:397 seahub/api2/views.py:3719
 #, python-format
 msgid "Expire days should be greater or equal to %s"
-msgstr "Dias de expiração devem ser maiores ou iguais a %s."
+msgstr "Udløbsdage skal være større end eller lig med %s"
 
 #: seahub/api2/endpoints/multi_share_links.py:149
 #: seahub/api2/endpoints/multi_share_links.py:396
@@ -754,7 +737,7 @@ msgstr "Dias de expiração devem ser maiores ou iguais a %s."
 #: seahub/api2/endpoints/upload_links.py:403 seahub/api2/views.py:3725
 #, python-format
 msgid "Expire days should be less than or equal to %s"
-msgstr "Dias de expiração devem ser menores ou iguais a %s."
+msgstr "Udløbsdage skal være mindre end eller lig med %s"
 
 #: seahub/api2/endpoints/multi_share_links.py:169
 #: seahub/api2/endpoints/multi_share_links.py:418
@@ -764,7 +747,7 @@ msgstr "Dias de expiração devem ser menores ou iguais a %s."
 #: seahub/api2/endpoints/upload_links.py:427
 #, python-format
 msgid "Expiration time should be later than %s."
-msgstr "O horário de expiração deve ser posterior a %s."
+msgstr "Udløbstidspunktet skal være senere end %s."
 
 #: seahub/api2/endpoints/multi_share_links.py:178
 #: seahub/api2/endpoints/multi_share_links.py:427
@@ -774,47 +757,47 @@ msgstr "O horário de expiração deve ser posterior a %s."
 #: seahub/api2/endpoints/upload_links.py:436
 #, python-format
 msgid "Expiration time should be earlier than %s."
-msgstr "O horário de expiração deve ser anterior a %s."
+msgstr "Udløbstidspunktet skal være tidligere end %s."
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
 #: seahub/seadoc/apis.py:745
 #: seahub/templates/remote_user/create_unknown_user_false.html:4
 #: seahub/templates/remote_user/error.html:4
 msgid "Error"
-msgstr "Erro"
+msgstr "Fejl"
 
 #: seahub/api2/endpoints/repo_commit_revert.py:66
 msgid "This library has not been decrypted."
-msgstr "Esta biblioteca não foi descriptografada."
+msgstr "Dette bibliotek er ikke blevet dekrypteret."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:45
 #: seahub/api2/endpoints/user.py:90 seahub/api2/endpoints/user.py:97
 #: seahub/api2/endpoints/user.py:113 seahub/group/views.py:187
 #: seahub/organizations/api/admin/users.py:787
 msgid "Feature disabled."
-msgstr "Recurso desativado."
+msgstr "Funktionen er deaktiveret."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:75
 #: seahub/api2/endpoints/repo_set_password.py:171
 msgid "Can not reset this library's password."
-msgstr "Não é possível redefinir a senha desta biblioteca."
+msgstr "Kan ikke nulstille dette biblioteks adgangskode."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:82
 #, python-format
 msgid "New password of library %s"
-msgstr "Nova senha da biblioteca %s."
+msgstr "Nyt kodeord for biblioteket %s"
 
 #: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4156
 msgid "Wrong password"
-msgstr "Senha incorreta"
+msgstr "Forkert adgangskode"
 
 #: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4162
 msgid "Decrypt library error"
-msgstr "Falha ao descriptografar a biblioteca"
+msgstr "Fejl ved dekryptering af bibliotek"
 
 #: seahub/api2/endpoints/repo_set_password.py:138
 msgid "Wrong old password"
-msgstr "Senha antiga errada."
+msgstr "Forkert gammel adgangskode"
 
 #: seahub/api2/endpoints/repos_batch.py:1300
 #: seahub/api2/endpoints/repos_batch.py:1559
@@ -822,80 +805,80 @@ msgstr "Senha antiga errada."
 #: seahub/api2/endpoints/repos_batch.py:1732
 #, python-format
 msgid "File %s is locked."
-msgstr "O arquivo %s está bloqueado."
+msgstr "Filen %s er låst."
 
 #: seahub/api2/endpoints/repos_batch.py:1310
 #: seahub/api2/endpoints/repos_batch.py:1569
 #, python-format
 msgid "Can't move folder %s, please check its permission."
-msgstr "Não é possível mover a pasta %s. Verifique as permissões."
+msgstr "Kan ikke flytte mappen %s, kontroller venligst dens tilladelse."
 
 #: seahub/api2/endpoints/repos_batch.py:1659
 #, python-format
 msgid "Can't delete folder %s, please check its permission."
-msgstr "Não é possível excluir a pasta %s. Verifique as permissões."
+msgstr "Kan ikke slette mappen %s, kontroller venligst dens tilladelse."
 
 #: seahub/api2/endpoints/send_share_link_email.py:82
 #: seahub/notifications/models.py:1077
 msgid "file"
-msgstr "arquivo"
+msgstr "fil"
 
 #: seahub/api2/endpoints/send_share_link_email.py:83
 #, python-format
 msgid "A file is shared to you on %s"
-msgstr "Um arquivo está compartilhado com você em %s"
+msgstr "En fil er delt med dig på %s"
 
 #: seahub/api2/endpoints/send_share_link_email.py:85
 #: seahub/notifications/models.py:1077
 msgid "folder"
-msgstr "pasta"
+msgstr "mappe"
 
 #: seahub/api2/endpoints/send_share_link_email.py:86
 #, python-format
 msgid "A folder is shared to you on %s"
-msgstr "Uma pasta foi compartilhada com você em %s."
+msgstr "En mappe er delt med dig på %s"
 
 #: seahub/api2/endpoints/send_share_link_email.py:127
 #, python-format
 #| msgid "Password has been reset on %s"
 msgid "Password for the shared %s on %s"
-msgstr "Senha para o compartilhamento %s em %s"
+msgstr "Adgangskode til den delte %s på %s"
 
 #: seahub/api2/endpoints/send_upload_link_email.py:73
 #, python-format
 msgid "An upload link is shared to you on %s"
-msgstr "Um link de upload está compartilhado com você em %s"
+msgstr "Et upload-link er delt med dig på %s"
 
 #: seahub/api2/endpoints/send_upload_link_email.py:88
 msgid "email invalid."
-msgstr "E-mail inválido."
+msgstr "e-mail ugyldig."
 
 #: seahub/api2/endpoints/send_upload_link_email.py:119
 #, python-format
 #| msgid "Bad upload link token."
 msgid "Password for the upload link on %s"
-msgstr "Senha para a ligação de upload em %s"
+msgstr "Adgangskode til upload-linket på %s"
 
 #: seahub/api2/endpoints/share_link_auth.py:147
 #, python-format
 msgid "User %s does not exist."
-msgstr "O usuário %s não existe."
+msgstr "Brugeren %s findes ikke."
 
 #: seahub/api2/endpoints/share_link_auth.py:310
 #, python-format
 msgid "Email %s already exists."
-msgstr "O e-mail %s já existe."
+msgstr "E-mail %s findes allerede."
 
 #: seahub/api2/endpoints/share_link_auth.py:316
 #, python-format
 msgid "Email %s is invalid."
-msgstr "O e-mail %s é inválido."
+msgstr "E-mail %s er ugyldig."
 
 #: seahub/api2/endpoints/share_links.py:500
 #: seahub/api2/endpoints/share_links.py:509
 #, python-format
 msgid "Share link %s already exists."
-msgstr "O link de compartilhamento %s já existe."
+msgstr "Delingslinket %s findes allerede."
 
 #: seahub/api2/endpoints/subscription.py:32
 #: seahub/api2/endpoints/subscription.py:68
@@ -910,16 +893,16 @@ msgstr "O link de compartilhamento %s já existe."
 #: seahub/work_weixin/views.py:152 seahub/work_weixin/views.py:172
 #: seahub/work_weixin/views.py:233
 msgid "Feature is not enabled."
-msgstr "Recurso não ativado."
+msgstr "Funktionen er ikke aktiveret."
 
 #: seahub/api2/endpoints/user.py:119
 #, python-format
 msgid "Contact email %s already exists."
-msgstr "E-mail de contato %s já existe."
+msgstr "Kontakt-e-mailen %s findes allerede."
 
 #: seahub/api2/endpoints/user.py:133
 msgid "telephone is too long (maximum is 100 characters)."
-msgstr "Telefone muito longo (máximo 100 caracteres)."
+msgstr "Telefonnummeret er for langt (maksimalt 100 tegn)."
 
 #: seahub/api2/endpoints/user_avatar.py:41
 #: seahub/organizations/api/admin/logo.py:56 seahub/utils/error_msg.py:8
@@ -927,7 +910,7 @@ msgstr "Telefone muito longo (máximo 100 caracteres)."
 msgid ""
 "%(ext)s is an invalid file extension. Authorized extensions are : "
 "%(valid_exts_list)s"
-msgstr "A extensão %(ext)s não é uma extensão de arquivo válida. As extensões autorizadas são: %(valid_exts_list)s"
+msgstr "%(ext)s er en ugyldig filendelse. Tilladte filendelser er: %(valid_exts_list)s"
 
 #: seahub/api2/endpoints/user_avatar.py:45
 #: seahub/organizations/api/admin/logo.py:64 seahub/utils/error_msg.py:13
@@ -935,67 +918,67 @@ msgstr "A extensão %(ext)s não é uma extensão de arquivo válida. As extens�
 msgid ""
 "Your file is too big (%(size)s), the maximum allowed size is "
 "%(max_valid_size)s"
-msgstr "O seu arquivo é muito grande: (%(size)s), o máximo permitido é %(max_valid_size)s"
+msgstr "Din fil er for stor (%(size)s), den maksimalt tilladte størrelse er %(max_valid_size)s"
 
 #: seahub/api2/endpoints/user_avatar.py:51 seahub/avatar/forms.py:43
 #, python-format
 msgid ""
 "You already have %(nb_avatars)d avatars, and the maximum allowed is "
 "%(nb_max_avatars)d."
-msgstr "Você já tem %(nb_avatars)d avatars, e o máximo permitido é %(nb_max_avatars)d."
+msgstr "Du har allerede %(nb_avatars)d avatarer, og det maksimalt tilladte antal er %(nb_max_avatars)d."
 
 #: seahub/api2/endpoints/webdav_secret.py:56
 #| msgid "Length of WebDav password should be less than 30."
 msgid "Length of WebDAV password should be less than 30."
-msgstr "O comprimento da senha WebDAV deve ser inferior a 30 caracteres."
+msgstr "Længden på WebDAV-adgangskoden skal være mindre end 30."
 
 #: seahub/api2/endpoints/wiki2.py:264 seahub/api2/endpoints/wiki2.py:1721
 #: seahub/api2/endpoints/wikis.py:212
 msgid "Name can only contain letters, numbers, blank, hyphen or underscore."
-msgstr "O nome só pode conter letras, números, espaços, hífens ou sublinhados."
+msgstr "Navnet må kun indeholde bogstaver, tal, mellemrum, bindestreg eller understregning."
 
 #: seahub/api2/endpoints/wiki2.py:1463
 msgid "URL is invalid"
-msgstr "URL inválida"
+msgstr "URL er ugyldig"
 
 #: seahub/api2/endpoints/wiki2.py:1467
 msgid "The custom part of URL should have 5-30 characters."
-msgstr "A parte personalizada da URL deve ter de 5 a 30 caracteres."
+msgstr "Den brugerdefinerede del af URL'en skal have 5-30 tegn."
 
 #: seahub/api2/endpoints/wiki2.py:1494
 msgid "This custom domain is already in use and cannot be used for your wiki"
-msgstr "Este domínio personalizado já está em uso e não pode ser usado na sua wiki"
+msgstr "Dette brugerdefinerede domæne er allerede i brug og kan ikke bruges til din wiki"
 
 #: seahub/api2/endpoints/wikis.py:115 seahub/api2/endpoints/wikis.py:219
 #, python-format
 msgid "%s is taken by others, please try another name."
-msgstr "%s já está em uso por outros. Tente outro nome."
+msgstr "%s er allerede taget af andre, prøv venligst et andet navn."
 
 #: seahub/api2/endpoints/wikis.py:199
 msgid "Wiki not found."
-msgstr "Wiki não encontrada."
+msgstr "Wiki blev ikke fundet."
 
 #: seahub/api2/endpoints/wikis.py:208
 msgid "Name is required."
-msgstr "O nome é obrigatório."
+msgstr "Navn er påkrævet."
 
 #: seahub/api2/utils.py:339
 msgid "A share link for you"
-msgstr "Um link de compartilhamento para você"
+msgstr "Et delingslink til dig"
 
 #: seahub/api2/views.py:1914
 #| msgid "Permission error: only group staff can add member"
 msgid "Permission error: you are not the admin of the department"
-msgstr "Erro de permissão: você não é administrador do departamento"
+msgstr "Tilladelsesfejl: du er ikke administrator for afdelingen"
 
 #: seahub/auth/decorators.py:73
 msgid "Please log in."
-msgstr "Por favor identifique-se"
+msgstr "Log venligst ind."
 
 #: seahub/auth/forms.py:32 seahub/templates/registration/login.html:50
 #: seahub/templates/registration/multi_adfs_sso.html:52
 msgid "Email or Username"
-msgstr "E-mail ou nome do usuário"
+msgstr "E-mail eller brugernavn"
 
 #: seahub/auth/forms.py:33 seahub/auth/forms.py:267
 #: seahub/base/accounts.py:1230
@@ -1009,35 +992,35 @@ msgstr "E-mail ou nome do usuário"
 #: seahub/templates/sysadmin/sudo_mode.html:43 seahub/views/sysadmin.py:867
 #: seahub/views/sysadmin.py:882
 msgid "Password"
-msgstr "Senha"
+msgstr "Adgangskode"
 
 #: seahub/auth/forms.py:71 seahub/auth/forms.py:72 seahub/auth/forms.py:122
 #: seahub/auth/forms.py:123
 msgid "This account is inactive."
-msgstr "Esta conta está inativa."
+msgstr "Denne konto er inaktiv."
 
 #: seahub/auth/forms.py:83 seahub/auth/forms.py:84
 #: seahub/templates/registration/login.html:76
 msgid "Please use Single Sign-On to login."
-msgstr "Use o Login Único (SSO) para entrar."
+msgstr "Brug venligst Single Sign-On til at logge ind."
 
 #: seahub/auth/forms.py:100
 msgid ""
 "Please enter a correct email/username and password. Note that both fields "
 "are case-sensitive."
-msgstr "Por favor entre com o usuário/e-mail e senha. Observe que ambos os campos são sensíveis a letras maiúsculas."
+msgstr "Indtast venligst en korrekt e-mail/brugeravn og adgangskode. Bemærk, at begge felter er versalfølsomme."
 
 #: seahub/auth/forms.py:106
 msgid ""
 "That e-mail address doesn't have an associated user account. Are you sure "
 "you've registered?"
-msgstr "Este endereço de e-mail não está associado a uma conta de usuário. Certifique-se que ele esteja registrado?"
+msgstr "Den e-mailadresse har ikke en tilknyttet brugerkonto. Er du sikker på, at du har registreret dig?"
 
 #: seahub/auth/forms.py:128
 msgid ""
 "Your Web browser doesn't appear to have cookies enabled. Cookies are "
 "required for logging in."
-msgstr "Seu navegador aparentemente não possui cookies habilitados. Cookies são requeridos para fazer login."
+msgstr "Din webbrowser ser ikke ud til at have cookies aktiveret. Cookies er påkrævet for at logge ind."
 
 #: seahub/auth/forms.py:146
 msgid "E-mail"
@@ -1045,136 +1028,136 @@ msgstr "E-mail"
 
 #: seahub/auth/forms.py:204
 msgid "New password"
-msgstr "Nova senha"
+msgstr "Ny adgangskode"
 
 #: seahub/auth/forms.py:205
 msgid "New password confirmation"
-msgstr "Nova senha confirmada"
+msgstr "Bekræftelse af ny adgangskode"
 
 #: seahub/auth/forms.py:232 seahub/auth/forms.py:279
 #: seahub/base/accounts.py:1285 seahub/organizations/forms.py:71
 msgid "The two password fields didn't match."
-msgstr "As senhas não coincidem."
+msgstr "De to adgangskodefelter stemte ikke overens."
 
 #: seahub/auth/forms.py:247
 msgid "Old password"
-msgstr "Senha anterior"
+msgstr "Gammel adgangskode"
 
 #: seahub/auth/forms.py:255
 msgid "Your old password was entered incorrectly. Please enter it again."
-msgstr "Sua antiga senha foi informada incorretamente. Por favor, tente novamente."
+msgstr "Din gamle adgangskode blev indtastet forkert. Indtast den venligst igen."
 
 #: seahub/auth/forms.py:268 seahub/base/accounts.py:1232
 msgid "Password (again)"
-msgstr "Informe a senha novamente"
+msgstr "Adgangskode (igen)"
 
 #: seahub/auth/forms.py:299 seahub/forms.py:35 seahub/invitations/views.py:39
 #: seahub/invitations/views.py:54 seahub/organizations/forms.py:49
 #: seahub/profile/forms.py:46
 msgid "A user with this email already exists."
-msgstr "Já existe um usuário cadastrado com este e-mail."
+msgstr "En bruger med denne e-mail findes allerede."
 
 #: seahub/auth/views.py:157
 msgid "This account has been frozen due to too many failed login attempts."
-msgstr "Esta conta foi bloqueada devido a muitas tentativas de login incorretas."
+msgstr "Denne konto er blevet frosset på grund af for mange mislykkede loginforsøg."
 
 #: seahub/auth/views.py:339
 msgid "Logged out"
-msgstr "Desconectado"
+msgstr "Logget ud"
 
 #: seahub/auth/views.py:388 seahub/organizations/views.py:241
 msgid "Cloudflare Turnstile check failed. Please refresh and try again."
-msgstr "A verificação do Cloudflare Turnstile falhou. Atualize a página e tente novamente."
+msgstr "Cloudflare Turnstile-kontrollen mislykkedes. Opdater venligst og prøv igen."
 
 #: seahub/auth/views.py:403
 msgid "Failed to send email, please contact administrator."
-msgstr "Falha ao enviar e-mail. Por favor, contate o administrador."
+msgstr "Det lykkedes ikke at sende e-mail, kontakt venligst administratoren."
 
 #: seahub/auth/views.py:486
 msgid "Unable to change password."
-msgstr "Não foi possível alterar a senha."
+msgstr "Kunne ikke ændre adgangskoden."
 
 #: seahub/auth/views.py:569
 #, python-brace-format
 msgid "Team {domain} does not have permission to use ADFS/SAML SSO."
-msgstr "A equipe {domain} não tem permissão para usar ADFS/SAML SSO."
+msgstr "Teamet {domain} har ikke tilladelse til at bruge ADFS/SAML SSO."
 
 #: seahub/avatar/models.py:144 seahub/avatar/models.py:172
 #, python-format
 msgid "Avatar for %s"
-msgstr "Avatar para %s"
+msgstr "Avatar for %s"
 
 #: seahub/avatar/views.py:77
 msgid "Successfully uploaded a new avatar."
-msgstr "Novo avatar atualizado com sucesso."
+msgstr "En ny avatar blev uploadet med succes."
 
 #: seahub/avatar/views.py:111
 msgid "Successfully updated your avatar."
-msgstr "Seu avatar foi atualizado com sucesso."
+msgstr "Din avatar blev opdateret med succes."
 
 #: seahub/avatar/views.py:151
 msgid "Successfully deleted the requested avatars."
-msgstr "Excluído com sucesso os avatares solicitados."
+msgstr "De anmodede avatarer blev slettet med succes."
 
 #: seahub/base/accounts.py:705 seahub/base/accounts.py:736
 #, python-format
 msgid "Account %(account)s froze on %(site)s."
-msgstr "Conta %(account)s bloqueada em %(site)s."
+msgstr "Kontoen %(account)s blev frosset på %(site)s."
 
 #: seahub/base/accounts.py:1220
 msgid "Email address"
-msgstr "Endereço de e-mail"
+msgstr "E-mailadresse"
 
 #: seahub/base/accounts.py:1226
 msgid "Username"
-msgstr "Nome de usuário"
+msgstr "Brugernavn"
 
 #: seahub/base/accounts.py:1227
 msgid "This value must be of length 40"
-msgstr "Este valor deve ter o tamanho de 40 caracteres"
+msgstr "Denne værdi skal have længden 40"
 
 #: seahub/base/accounts.py:1246
 msgid "Enter a valid email address."
-msgstr "Insira um e-mail válido"
+msgstr "Indtast en gyldig e-mailadresse."
 
 #: seahub/base/accounts.py:1257
 msgid "Invalid user id."
-msgstr "ID de usuário inválido"
+msgstr "Ugyldigt bruger-id."
 
 #: seahub/base/accounts.py:1307
 msgid "name"
-msgstr "nome"
+msgstr "navn"
 
 #: seahub/base/accounts.py:1310
 msgid "department"
-msgstr "departamento"
+msgstr "afdeling"
 
 #: seahub/base/accounts.py:1313
 msgid "telephone"
-msgstr "telefone"
+msgstr "telefon"
 
 #: seahub/base/accounts.py:1316
 msgid "note"
-msgstr "nota"
+msgstr "note"
 
 #: seahub/base/decorators.py:57
 msgid "Files in this library can not be viewed online."
-msgstr "Os arquivos desta biblioteca não podem ser visualizados online."
+msgstr "Filer i dette bibliotek kan ikke vises online."
 
 #: seahub/base/management/commands/check_user_quota.py:58
 #, python-format
 msgid "Your quota is almost full on %s"
-msgstr "Sua cota está quase cheia em %s"
+msgstr "Din kvote er næsten fuld på %s"
 
 #: seahub/base/management/commands/check_user_quota.py:82
 #, python-format
 #| msgid "Your quota is almost full on %s"
 msgid "The team quota is almost full on %s"
-msgstr "A cota da equipe está quase cheia em %s"
+msgstr "Teamets kvote er næsten fuld på %s"
 
 #: seahub/base/management/commands/export_file_access_log.py:58
 msgid "Type"
-msgstr "Tipo"
+msgstr "Type"
 
 #: seahub/base/management/commands/export_file_access_log.py:58
 msgid "IP"
@@ -1182,241 +1165,236 @@ msgstr "IP"
 
 #: seahub/base/management/commands/export_file_access_log.py:58
 msgid "Device"
-msgstr "Dispositivo"
+msgstr "Enhed"
 
 #: seahub/base/management/commands/export_file_access_log.py:58
 msgid "Date"
-msgstr "Data"
+msgstr "Dato"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "Library Name"
-msgstr "Nome da Biblioteca"
+msgstr "Biblioteksnavn"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "Library ID"
-msgstr "ID da Biblioteca"
+msgstr "Biblioteks-id"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "Library Owner"
-msgstr "Proprietário da Biblioteca"
+msgstr "Biblioteksejer"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "File Path"
-msgstr "Caminho do Arquivo"
+msgstr "Filsti"
 
 #: seahub/base/management/commands/export_file_access_log.py:85
 #: seahub/base/templatetags/seahub_tags.py:141
 msgid "Deleted"
-msgstr "Excluído"
+msgstr "Slettet"
 
 #: seahub/base/management/commands/export_file_access_log.py:88
 #: seahub/templates/snippets/add_watermark.html:10
 msgid "Anonymous User"
-msgstr "Usuário anônimo"
+msgstr "Anonym bruger"
 
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
 #: seahub/views/sysadmin.py:253 seahub/views/sysadmin.py:257
 msgid "Status"
-msgstr "Estado"
+msgstr "Status"
 
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/views/sysadmin.py:253 seahub/views/sysadmin.py:869
 msgid "Role"
-msgstr "Papel"
+msgstr "Rolle"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
 #: seahub/views/sysadmin.py:255 seahub/views/sysadmin.py:259
 #: seahub/views/sysadmin.py:737
 msgid "Create At"
-msgstr "Criado em"
+msgstr "Oprettet den"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
 #: seahub/views/sysadmin.py:255 seahub/views/sysadmin.py:259
 msgid "Last Login"
-msgstr "Ultimo Login"
+msgstr "Sidste login"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
 #: seahub/institutions/views.py:187 seahub/views/sysadmin.py:255
 #: seahub/views/sysadmin.py:259
 msgid "Admin"
-msgstr "Administrador"
+msgstr "Administrator"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
 #: seahub/views/sysadmin.py:255 seahub/views/sysadmin.py:259
 msgid "LDAP(imported)"
-msgstr "LDAP(imported)"
+msgstr "LDAP(importeret)"
 
 #: seahub/base/management/commands/export_users.py:118
 #: seahub/views/sysadmin.py:315
 msgid "Active"
-msgstr "Ativo"
+msgstr "Aktiv"
 
 #: seahub/base/management/commands/export_users.py:120
 #: seahub/views/sysadmin.py:317
 msgid "Inactive"
-msgstr "Inativo"
+msgstr "Inaktiv"
 
 #: seahub/base/management/commands/export_users.py:126
 #: seahub/base/management/commands/export_users.py:127
 #: seahub/templates/client_login_confirm.html:10 seahub/views/sysadmin.py:323
 #: seahub/views/sysadmin.py:324
 msgid "Yes"
-msgstr "Sim"
+msgstr "Ja"
 
 #: seahub/base/management/commands/export_users.py:132
 #: seahub/views/sysadmin.py:329
 msgid "Guest"
-msgstr "Convidado"
+msgstr "Gæst"
 
 #: seahub/base/management/commands/export_users.py:134
 #: seahub/base/management/commands/export_users.py:138
 #: seahub/views/sysadmin.py:331 seahub/views/sysadmin.py:335
 msgid "Default"
-msgstr "Padrão"
+msgstr "Standard"
 
 #: seahub/base/middleware.py:65
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Team {org_name} is inactive."
-msgstr "A equipe {org_name} está inativa."
+msgstr "Teamet {org_name} er inaktivt."
 
 #: seahub/base/middleware.py:77
 #, python-brace-format
 msgid "Please contact {SUPPORT_EMAIL} if you want to activate the team."
-msgstr "Entre em contato com {SUPPORT_EMAIL} para ativar a equipe."
+msgstr "Kontakt venligst {SUPPORT_EMAIL}, hvis du ønsker at aktivere teamet."
 
 #: seahub/base/templatetags/seahub_tags.py:140
 msgid "Added"
-msgstr "Adicionado"
+msgstr "Tilføjet"
 
 #: seahub/base/templatetags/seahub_tags.py:142
 msgid "Removed"
-msgstr "Removido"
+msgstr "Fjernet"
 
 #: seahub/base/templatetags/seahub_tags.py:143
 msgid "Modified"
-msgstr "Alterado"
+msgstr "Ændret"
 
 #: seahub/base/templatetags/seahub_tags.py:144
 msgid "Renamed"
-msgstr "Renomeado"
+msgstr "Omdøbt"
 
 #: seahub/base/templatetags/seahub_tags.py:145
 msgid "Moved"
-msgstr "Movido"
+msgstr "Flyttet"
 
 #: seahub/base/templatetags/seahub_tags.py:146
 msgid "Added folder"
-msgstr "Pasta adicionada"
+msgstr "Tilføjet mappe"
 
 #: seahub/base/templatetags/seahub_tags.py:147
 msgid "Removed folder"
-msgstr "Pasta removida"
+msgstr "Fjernet mappe"
 
 #: seahub/base/templatetags/seahub_tags.py:148
 #: seahub/notifications/management/commands/send_file_updates.py:172
 msgid "Renamed folder"
-msgstr "Pasta renomeada"
+msgstr "Omdøbt mappe"
 
 #: seahub/base/templatetags/seahub_tags.py:149
 #: seahub/notifications/management/commands/send_file_updates.py:177
 msgid "Moved folder"
-msgstr "Pasta movida"
+msgstr "Flyttet mappe"
 
 #: seahub/base/templatetags/seahub_tags.py:150
 msgid "Added or modified"
-msgstr "Adicionado ou modificado"
+msgstr "Tilføjet eller ændret"
 
 #: seahub/base/templatetags/seahub_tags.py:165
 #: seahub/base/templatetags/seahub_tags.py:236
 msgid "Reverted library to status at"
-msgstr "Biblioteca atualizada para o status de"
+msgstr "Biblioteket blev tilbageført til status ved"
 
 #: seahub/base/templatetags/seahub_tags.py:168
 #: seahub/base/templatetags/seahub_tags.py:239
 #, python-format
 msgid "Reverted file \"%(file)s\" to status at %(time)s."
-msgstr "Arquivo revertido \"%(file)s\" para o status de %(time)s."
+msgstr "Filen \"%(file)s\" blev tilbageført til status ved %(time)s."
 
 #: seahub/base/templatetags/seahub_tags.py:172
 #: seahub/base/templatetags/seahub_tags.py:243
 msgid "Recovered deleted folder"
-msgstr "Pasta excluída recuperada"
+msgstr "Gendannet slettet mappe"
 
 #: seahub/base/templatetags/seahub_tags.py:174
 #: seahub/base/templatetags/seahub_tags.py:245 seahub/views/ajax.py:457
 msgid "Changed library name or description"
-msgstr "O nome da biblioteca mudou ou sua descrição"
+msgstr "Ændret biblioteksnavn eller beskrivelse"
 
 #: seahub/base/templatetags/seahub_tags.py:176
 #: seahub/base/templatetags/seahub_tags.py:247
 msgid "Auto merge by seafile system"
-msgstr "Auto merge pelo sistema seafile"
+msgstr "Automatisk sammenfletning af Seafile-systemet"
 
 #: seahub/base/templatetags/seahub_tags.py:178
 #: seahub/base/templatetags/seahub_tags.py:249
 #: seahub/notifications/management/commands/send_file_updates.py:112
 msgid "Created library"
-msgstr "Biblioteca criada"
+msgstr "Oprettet bibliotek"
 
 #: seahub/base/templatetags/seahub_tags.py:329
 #: seahub/base/templatetags/seahub_tags.py:365
 msgid "Just now"
-msgstr "Agora"
+msgstr "Lige nu"
 
 #: seahub/base/templatetags/seahub_tags.py:340
 #, python-format
 msgid "%(days)d day ago"
 msgid_plural "%(days)d days ago"
-msgstr[0] "Passado %(days)d dia"
-msgstr[1] "%(days)d dias atrás"
-msgstr[2] "%(days)d dias atrás"
+msgstr[0] ""
+msgstr[1] ""
 
 #: seahub/base/templatetags/seahub_tags.py:347
 #, python-format
 msgid "%(hours)d hour ago"
 msgid_plural "%(hours)d hours ago"
-msgstr[0] "Passado menos de %(hours)d hora"
-msgstr[1] "%(hours)d horas atrás"
-msgstr[2] "%(hours)d horas atrás"
+msgstr[0] ""
+msgstr[1] ""
 
 #: seahub/base/templatetags/seahub_tags.py:354
 #, python-format
 msgid "%(minutes)d minute ago"
 msgid_plural "%(minutes)d minutes ago"
-msgstr[0] "Passado menos de um minuto"
-msgstr[1] "%(minutes)d minutos atrás"
-msgstr[2] "%(minutes)d minutos atrás"
+msgstr[0] ""
+msgstr[1] ""
 
 #: seahub/base/templatetags/seahub_tags.py:360
 #, python-format
 msgid "%(seconds)d second ago"
 msgid_plural "%(seconds)d seconds ago"
-msgstr[0] "Passado menos de um segundo"
-msgstr[1] "%(seconds)d segundos atrás"
-msgstr[2] "%(seconds)d segundos atrás"
+msgstr[0] ""
+msgstr[1] ""
 
 #: seahub/base/templatetags/seahub_tags.py:502
 msgid "Read-Write"
-msgstr "Leitura-Escrita"
+msgstr "Læs-skriv"
 
 #: seahub/base/templatetags/seahub_tags.py:504
 msgid "Read-Only"
-msgstr "Somente leitura"
+msgstr "Skrivebeskyttet"
 
 #: seahub/base/templatetags/seahub_tags.py:528
 #: seahub/base/templatetags/seahub_tags.py:540
 #, python-format
 msgid "%(size)d byte"
 msgid_plural "%(size)d bytes"
-msgstr[0] "%(size)d bytes"
-msgstr[1] "%(size)d bytes"
-msgstr[2] "%(size)d bytes"
+msgstr[0] ""
+msgstr[1] ""
 
 #: seahub/base/templatetags/seahub_tags.py:542
 #, python-format
@@ -1445,7 +1423,7 @@ msgstr "%s PB"
 
 #: seahub/contacts/models.py:78
 msgid "Email is required."
-msgstr "E-mail é obrigatório."
+msgstr "E-mail er påkrævet."
 
 #: seahub/dingtalk/views.py:52 seahub/dingtalk/views.py:76
 #: seahub/dingtalk/views.py:85 seahub/dingtalk/views.py:107
@@ -1466,162 +1444,162 @@ msgstr "E-mail é obrigatório."
 #: seahub/work_weixin/views.py:178 seahub/work_weixin/views.py:183
 #: seahub/work_weixin/views.py:193 seahub/work_weixin/views.py:197
 msgid "Error, please contact administrator."
-msgstr "Erro. Contate o administrador."
+msgstr "Fejl, kontakt venligst administratoren."
 
 #: seahub/dingtalk/views.py:127 seahub/dingtalk/views.py:374
 #: seahub/weixin/views.py:111
 #, python-format
 msgid "User %s not found or inactive."
-msgstr "Usuário %s não encontrado ou inativo."
+msgstr "Brugeren %s blev ikke fundet eller er inaktiv."
 
 #: seahub/forms.py:59
 msgid "The two passwords didn't match."
-msgstr "As senhas não coincidem."
+msgstr "De to adgangskoder stemte ikke overens."
 
 #: seahub/forms.py:68
 msgid "Name can't be empty"
-msgstr "Nome não pode ser vazio"
+msgstr "Navn må ikke være tomt"
 
 #: seahub/forms.py:69
 msgid "Name is too long (maximum is 255 characters)"
-msgstr "Nome é muito longo (o máximo é 255 caracteres)"
+msgstr "Navnet er for langt (maksimalt 255 tegn)"
 
 #: seahub/forms.py:72
 msgid "Description can't be empty"
-msgstr "Descrição não pode ser vazio"
+msgstr "Beskrivelse må ikke være tom"
 
 #: seahub/forms.py:73
 msgid "Description is too long (maximum is 100 characters)"
-msgstr "Descrição é muito longa (o máximo é 100 caracteres)"
+msgstr "Beskrivelsen er for lang (maksimalt 100 tegn)"
 
 #: seahub/forms.py:83 seahub/forms.py:169
 #, python-format
 msgid "Name %s is not valid"
-msgstr "Nome %s não é válido"
+msgstr "Navnet %s er ikke gyldigt"
 
 #: seahub/forms.py:97 seahub/share/views.py:200 seahub/views/ajax.py:305
 #: seahub/views/ajax.py:309 seahub/views/ajax.py:313 seahub/views/ajax.py:324
 #: seahub/views/ajax.py:444
 msgid "Argument missing"
-msgstr "Argumento ausente"
+msgstr "Manglende argument"
 
 #: seahub/forms.py:111
 msgid "Oldname is required"
-msgstr "Nome anterior é obrigatório"
+msgstr "Gammelt navn er påkrævet"
 
 #: seahub/forms.py:114 seahub/forms.py:135
 msgid "It's too long."
-msgstr "Muito extenso."
+msgstr "Det er for langt."
 
 #: seahub/forms.py:115 seahub/forms.py:136
 msgid "It's required."
-msgstr "Obrigatório"
+msgstr "Det er påkrævet."
 
 #: seahub/forms.py:122 seahub/forms.py:143
 #, python-format
 msgid "Name \"%s\" is not valid"
-msgstr "Nome %s não é válido"
+msgstr "Navnet \"%s\" er ikke gyldigt"
 
 #: seahub/forms.py:162
 msgid "Library name is required"
-msgstr "Nome da biblioteca é obrigatório"
+msgstr "Biblioteksnavn er påkrævet"
 
 #: seahub/forms.py:164
 msgid "Please enter a number"
-msgstr "Por favor, informe um número"
+msgstr "Indtast venligst et tal"
 
 #: seahub/forms.py:184
 msgid "Name is required"
-msgstr "Nome é obrigatório"
+msgstr "Navn er påkrævet"
 
 #: seahub/forms.py:185
 msgid "Please enter a valid number"
-msgstr "Por favor entre com um número válido"
+msgstr "Indtast venligst et gyldigt tal"
 
 #: seahub/forms.py:186
 msgid "Text is required"
-msgstr "Texto obrigatório"
+msgstr "Tekst er påkrævet"
 
 #: seahub/group/error_msg.py:8
 msgid "The group has already created"
-msgstr "O grupo já foi criado"
+msgstr "Gruppen er allerede oprettet"
 
 #: seahub/group/error_msg.py:9
 msgid "Failed to create group"
-msgstr "Falha ao criar o grupo"
+msgstr "Kunne ikke oprette gruppe"
 
 #: seahub/group/error_msg.py:12
 msgid "The group has already created in this org."
-msgstr "O grupo já existe nesta organização"
+msgstr "Gruppen er allerede oprettet i denne organisation."
 
 #: seahub/group/error_msg.py:13
 msgid "Failed to create org group."
-msgstr "Falha ao criar o grupo."
+msgstr "Kunne ikke oprette organisationsgruppe."
 
 #: seahub/group/error_msg.py:16
 msgid "Permission error: only group staff can add member"
-msgstr "Erro de permissão: apenas membros com autorização podem adicionar membros."
+msgstr "Tilladelsesfejl: kun gruppeansvarlige kan tilføje medlemmer"
 
 #: seahub/group/error_msg.py:18
 msgid "Group is full"
-msgstr "O grupo está completo"
+msgstr "Gruppen er fuld"
 
 #: seahub/group/error_msg.py:19
 msgid "Failed to add member to group"
-msgstr "Falha ao adicionar membro no grupo"
+msgstr "Kunne ikke tilføje medlem til gruppen"
 
 #: seahub/group/error_msg.py:22
 msgid "Only group staff can remove member"
-msgstr "Apenas grupo com autorização pode remover membros"
+msgstr "Kun gruppeansvarlige kan fjerne medlemmer"
 
 #: seahub/group/error_msg.py:24
 msgid "Can not remove myself"
-msgstr "Você não pode remover a si mesmo"
+msgstr "Kan ikke fjerne mig selv"
 
 #: seahub/group/forms.py:29
 msgid "Group name can't be empty"
-msgstr "O nome do grupo não pode ser vazio"
+msgstr "Gruppenavn må ikke være tomt"
 
 #: seahub/group/forms.py:30
 msgid "Group name is too long (maximum is 255 characters)"
-msgstr "O nome do grupo é  muito extenso (máximo de 255 caracteres)"
+msgstr "Gruppenavnet er for langt (maksimalt 255 tegn)"
 
 #: seahub/group/forms.py:46
 msgid "Verification message can't be empty"
-msgstr "Mensagem de verificação não pode ser vazio"
+msgstr "Verifikationsbesked må ikke være tom"
 
 #: seahub/group/forms.py:47
 msgid "Verification message is too long (maximun is 255 characters)"
-msgstr "Mensagem de verificação é muito extensa (máximo 255 caracteres)"
+msgstr "Verifikationsbeskeden er for lang (maksimalt 255 tegn)"
 
 #: seahub/group/templates/group/add_member_email.html:8
 msgid "Hi, "
-msgstr "Olá,"
+msgstr "Hej, "
 
 #: seahub/group/templates/group/add_member_email.html:11
 #, python-format
 msgid ""
 "%(escaped_nickname)s invited you to join group %(grp_name)s on "
 "%(site_name)s: "
-msgstr "%(escaped_nickname)s o convidou para entrar o grupo %(grp_name)s em %(site_name)s: "
+msgstr "%(escaped_nickname)s har inviteret dig til at blive medlem af gruppen %(grp_name)s på %(site_name)s: "
 
 #: seahub/group/templates/group/group_join_email.html:2
 #, python-format
 msgid ""
 "%(user)s want to join to Group \"%(group_name)s\", here is the verification "
 "message: "
-msgstr "%(user)s deseja participar do Grupo \"%(group_name)s\", esta é uma mensagem de verificação: "
+msgstr "%(user)s ønsker at blive medlem af gruppen \"%(group_name)s\", her er verifikations-beskeden: "
 
 #: seahub/group/templates/group/group_join_email.html:6
 #: seahub/templates/email_base.html:10
 msgid "Thanks for using our site!"
-msgstr "Obrigado por usar nosso site!"
+msgstr "Tak fordi du bruger vores site!"
 
 #: seahub/group/templates/group/group_join_email.html:8
 #: seahub/templates/email_base.html:15
 #, python-format
 msgid "The %(site_name)s team"
-msgstr "A equipe %(site_name)s"
+msgstr "Teamet bag %(site_name)s"
 
 #: seahub/group/views.py:110 seahub/share/views.py:137
 #: seahub/views/__init__.py:469 seahub/views/ajax.py:378
@@ -1632,52 +1610,52 @@ msgstr "A equipe %(site_name)s"
 #: seahub/views/repo.py:230 seahub/views/repo.py:258 seahub/views/repo.py:287
 #: seahub/views/repo.py:384
 msgid "Permission denied"
-msgstr "Permissão negada"
+msgstr "Adgang nægtet"
 
 #: seahub/group/views.py:178
 #, python-format
 msgid "You are invited to join a group on %s"
-msgstr "Você foi convidado a entrar no grupo %s"
+msgstr "Du er inviteret til at blive medlem af en gruppe på %s"
 
 #: seahub/group/views.py:192
 #| msgid "Group does not exist"
 msgid "Group invite link does not exist"
-msgstr "Link de convite de grupo não existe"
+msgstr "Gruppens invitationslink findes ikke"
 
 #: seahub/group/views.py:200
 msgid "Group invite link broken"
-msgstr "Link de convite de grupo quebrado"
+msgstr "Gruppens invitationslink er brudt"
 
 #: seahub/institutions/views.py:185
 msgid "Owner"
-msgstr "Proprietário"
+msgstr "Ejer"
 
 #: seahub/institutions/views.py:189
 msgid "Member"
-msgstr "Membro"
+msgstr "Medlem"
 
 #: seahub/institutions/views.py:222 seahub/views/sysadmin.py:448
 msgid "Failed to delete: the user does not exist"
-msgstr "Falha ao excluir: o usuário não existe"
+msgstr "Kunne ikke slette: brugeren findes ikke"
 
 #: seahub/institutions/views.py:226
 msgid "Failed to delete: the user is system administrator"
-msgstr "Falha ao excluir: o usuário é administrador do sistema"
+msgstr "Kunne ikke slette: brugeren er systemadministrator"
 
 #: seahub/institutions/views.py:230 seahub/views/sysadmin.py:438
 #, python-format
 msgid "Successfully deleted %s"
-msgstr "%s excluído com sucesso"
+msgstr "Slettede %s med succes"
 
 #: seahub/invitations/models.py:96
 #, python-format
 msgid "You are invited to join %(site_name)s."
-msgstr "Você foi convidado para participar de %(site_name)s."
+msgstr "Du er inviteret til at blive medlem af %(site_name)s."
 
 #: seahub/invitations/models.py:99
 #, python-brace-format
 msgid "You are invited to join team {org_name}."
-msgstr "Você foi convidado para participar da equipe {org_name}."
+msgstr "Du er inviteret til at blive medlem af teamet {org_name}."
 
 #: seahub/invitations/templates/invitations/invitation_email.html:9
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:9
@@ -1703,33 +1681,33 @@ msgstr "Você foi convidado para participar da equipe {org_name}."
 #: seahub/templates/team_quota_full.html:9
 #: seahub/templates/user_quota_full.html:9
 msgid "Hi,"
-msgstr "Oi, "
+msgstr "Hej,"
 
 #: seahub/invitations/templates/invitations/invitation_email.html:13
 #, python-format
 msgid ""
 "You are invited to join team %(org_name)s. Please click the link below:"
-msgstr "Você foi convidado para a equipe %(org_name)s. Clique no link abaixo:"
+msgstr "Du er inviteret til at blive medlem af teamet %(org_name)s. Klik venligst på linket nedenfor:"
 
 #: seahub/invitations/templates/invitations/invitation_email.html:15
 #, python-format
 msgid ""
 "%(inviter_name)s invited you to join %(site_name)s. Please click the link "
 "below:"
-msgstr "%(inviter_name)s convidou você para %(site_name)s. Clique no link abaixo:"
+msgstr "%(inviter_name)s har inviteret dig til at blive medlem af %(site_name)s. Klik venligst på linket nedenfor:"
 
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:12
 #, python-format
 msgid "%(inviter)s revoked your access to %(site_name)s."
-msgstr "%(inviter)s revogou seu acesso a %(site_name)s."
+msgstr "%(inviter)s har tilbagekaldt din adgang til %(site_name)s."
 
 #: seahub/invitations/templates/invitations/token_view.html:4
 msgid "Create Account"
-msgstr "Criar Conta"
+msgstr "Opret konto"
 
 #: seahub/invitations/templates/invitations/token_view.html:8
 msgid "Set your password"
-msgstr "Definir Senha"
+msgstr "Angiv din adgangskode"
 
 #: seahub/invitations/templates/invitations/token_view.html:22
 #: seahub/organizations/templates/organizations/org_register.html:53
@@ -1740,7 +1718,7 @@ msgstr "Definir Senha"
 #: seahub/templates/sysadmin/sudo_mode.html:4
 #: seahub/templates/sysadmin/sudo_mode.html:52
 msgid "Confirm Password"
-msgstr "Confirme a senha"
+msgstr "Bekræft adgangskode"
 
 #: seahub/invitations/templates/invitations/token_view.html:30
 #: seahub/options/templates/options/set_user_options.html:14
@@ -1753,7 +1731,7 @@ msgstr "Confirme a senha"
 #: seahub/templates/registration/password_set_form.html:35
 #: seahub/templates/share_access_validation.html:29
 msgid "Submit"
-msgstr "Enviar"
+msgstr "Indsend"
 
 #: seahub/invitations/templates/invitations/token_view.html:52
 #: seahub/organizations/templates/organizations/org_register.html:100
@@ -1764,7 +1742,7 @@ msgstr "Enviar"
 #: seahub/templates/registration/registration_form.html:102
 #: seahub/templates/sysadmin/sudo_mode.html:85
 msgid "Password cannot be blank"
-msgstr "Senha não pode ficar em branco"
+msgstr "Adgangskode må ikke være tom"
 
 #: seahub/invitations/templates/invitations/token_view.html:57
 #: seahub/organizations/templates/organizations/org_register.html:104
@@ -1773,7 +1751,7 @@ msgstr "Senha não pode ficar em branco"
 #: seahub/templates/registration/password_set_form.html:62
 #: seahub/templates/registration/registration_form.html:106
 msgid "Please enter the password again"
-msgstr "Por favor, informe a senha novamente"
+msgstr "Indtast venligst adgangskoden igen"
 
 #: seahub/invitations/templates/invitations/token_view.html:61
 #: seahub/organizations/templates/organizations/org_register.html:108
@@ -1782,20 +1760,20 @@ msgstr "Por favor, informe a senha novamente"
 #: seahub/templates/registration/password_set_form.html:66
 #: seahub/templates/registration/registration_form.html:110
 msgid "Passwords don't match"
-msgstr "As senhas não coincidem"
+msgstr "Adgangskoderne stemmer ikke overens"
 
 #: seahub/invitations/views.py:60
 msgid ""
 "An (inactive) regular account already exists for this mail address, can not "
 "proceed to accept the invitation."
-msgstr "Já existe uma conta normal (inativa) associada a este endereço de e-mail; portanto, não é possível aceitar o convite."
+msgstr "Der findes allerede en (inaktiv) normal konto for denne e-mailadresse, kan ikke fortsætte med at acceptere invitationen."
 
 #: seahub/notifications/management/commands/notify_admins_on_virus.py:68
 #: seahub/notifications/management/commands/notify_admins_on_virus.py:83
 #: seahub/notifications/management/commands/notify_admins_on_virus.py:104
 #, python-format
 msgid "Virus detected on %s"
-msgstr "Vírus detectado em %s"
+msgstr "Virus opdaget på %s"
 
 #: seahub/notifications/management/commands/send_dingtalk_notifications.py:185
 #: seahub/notifications/templates/notifications/notice_email.html:9
@@ -1806,105 +1784,104 @@ msgid ""
 msgid_plural ""
 "\n"
 "You've got %(num)s new notices on %(site_name)s:\n"
-msgstr[0] "\nVocê tem 1 novo aviso no %(site_name)s: \n"
-msgstr[1] "\nVocê tem %(num)s novos avisos em %(site_name)s:\n"
-msgstr[2] "\nVocê tem %(num)s novos avisos em %(site_name)s:\n"
+msgstr[0] ""
+msgstr[1] ""
 
 #: seahub/notifications/management/commands/send_file_updates.py:115
 msgid "Renamed library"
-msgstr "Biblioteca renomeada"
+msgstr "Omdøbt bibliotek"
 
 #: seahub/notifications/management/commands/send_file_updates.py:118
 msgid "Deleted library"
-msgstr "Biblioteca excluída"
+msgstr "Slettet bibliotek"
 
 #: seahub/notifications/management/commands/send_file_updates.py:121
 msgid "Restored library"
-msgstr "Biblioteca restaurada"
+msgstr "Gendannet bibliotek"
 
 #: seahub/notifications/management/commands/send_file_updates.py:125
 msgid "Removed all items from trash."
-msgstr "Todos os itens da lixeira foram removidos."
+msgstr "Fjernede alle elementer fra papirkurven."
 
 #: seahub/notifications/management/commands/send_file_updates.py:127
 #, python-format
 msgid "Removed items older than %s days from trash."
-msgstr "Itens com mais de %s dias foram removidos da lixeira."
+msgstr "Fjernede elementer ældre end %s dage fra papirkurven."
 
 #: seahub/notifications/management/commands/send_file_updates.py:135
 msgid "Created file"
-msgstr "Arquivo criado"
+msgstr "Oprettet fil"
 
 #: seahub/notifications/management/commands/send_file_updates.py:138
 msgid "Deleted file"
-msgstr "Arquivo excluído"
+msgstr "Slettet fil"
 
 #: seahub/notifications/management/commands/send_file_updates.py:141
 msgid "Restored file"
-msgstr "Arquivo restaurado"
+msgstr "Gendannet fil"
 
 #: seahub/notifications/management/commands/send_file_updates.py:144
 msgid "Renamed file"
-msgstr "Arquivo renomeado"
+msgstr "Omdøbt fil"
 
 #: seahub/notifications/management/commands/send_file_updates.py:150
 msgid "Moved file"
-msgstr "Arquivo movido"
+msgstr "Flyttet fil"
 
 #: seahub/notifications/management/commands/send_file_updates.py:156
 msgid "Updated file"
-msgstr "Arquivo atualizado"
+msgstr "Opdateret fil"
 
 #: seahub/notifications/management/commands/send_file_updates.py:163
 msgid "Created folder"
-msgstr "Pasta criada"
+msgstr "Oprettet mappe"
 
 #: seahub/notifications/management/commands/send_file_updates.py:166
 msgid "Deleted folder"
-msgstr "Pasta excluída"
+msgstr "Slettet mappe"
 
 #: seahub/notifications/management/commands/send_file_updates.py:169
 msgid "Restored folder"
-msgstr "Pasta restaurada"
+msgstr "Gendannet mappe"
 
 #: seahub/notifications/management/commands/send_file_updates.py:278
 #, python-format
 msgid "New file updates on %s"
-msgstr "Novas atualizações de arquivos em %s"
+msgstr "Nye filopdateringer på %s"
 
 #: seahub/notifications/management/commands/send_notices.py:461
 #, python-format
 msgid "New notice on %s"
-msgstr "Nova notificação em %s"
+msgstr "Ny besked på %s"
 
 #: seahub/notifications/management/commands/send_notices_to_social_account.py:252
 #, python-format
 msgid "You've got %(num)s new notices on %(site_name)s:\n"
-msgstr "Você tem %(num)s novas notificações em %(site_name)s:\n"
+msgstr "Du har %(num)s nye meddelelser på %(site_name)s:\n"
 
 #: seahub/notifications/models.py:636
 #, python-format
 msgid ""
 "A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a "
 "href='%(link)s'>%(name)s</a>"
-msgstr "Um arquivo de nome <a href='%(file_link)s'>%(file_name)s</a> foi enviado para <a href='%(link)s'>%(name)s</a>"
+msgstr "En fil med navnet <a href='%(file_link)s'>%(file_name)s</a> er uploadet til <a href='%(link)s'>%(name)s</a>"
 
 #: seahub/notifications/models.py:643
 #, python-format
 msgid "A file named <strong>%(file_name)s</strong> is uploaded"
-msgstr "Um arquivo <strong>%(file_name)s</strong> foi enviado"
+msgstr "En fil med navnet <strong>%(file_name)s</strong> er uploadet"
 
 #: seahub/notifications/models.py:678
 #, python-format
 msgid ""
 "A folder named <a href='%(folder_link)s'>%(folder_name)s</a> is uploaded to "
 "<a href='%(link)s'>%(name)s</a>"
-msgstr "Uma pasta <a href='%(folder_link)s'>%(folder_name)s</a> foi enviada para <a href='%(link)s'>%(name)s</a>"
+msgstr "En mappe med navnet <a href='%(folder_link)s'>%(folder_name)s</a> er uploadet til <a href='%(link)s'>%(name)s</a>"
 
 #: seahub/notifications/models.py:685
 #, python-format
 msgid "A folder named <strong>%(folder_name)s</strong> is uploaded"
-msgstr "Uma pasta <strong>%(folder_name)s</strong> foi enviada"
+msgstr "En mappe med navnet <strong>%(folder_name)s</strong> er uploadet"
 
 #: seahub/notifications/models.py:819
 #, python-format
@@ -1912,83 +1889,83 @@ msgid ""
 "User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a "
 "href='%(href)s'>%(group_name)s</a>, verification message: "
 "%(join_request_msg)s"
-msgstr "O usuário  <a href='%(user_profile)s'>%(username)s</a> requisitou acesso ao grupo <a href='%(href)s'>%(group_name)s</a>, menasgem de verificação: %(join_request_msg)s"
+msgstr "Bruger <a href='%(user_profile)s'>%(username)s</a> har bedt om at blive medlem af gruppen <a href='%(href)s'>%(group_name)s</a>, verificeringsbesked: %(join_request_msg)s"
 
 #: seahub/notifications/models.py:840
 #, python-format
 #| msgid ""
 #| "a href='%(file_url)s'>%(file_name)s</a> has a new comment from user or)s"
 msgid "Library <a href='%(lib_url)s'>%(repo_name)s</a> has been archived."
-msgstr "A biblioteca <a href='%(lib_url)s'>%(repo_name)s</a> foi arquivada"
+msgstr "Biblioteket <a href='%(lib_url)s'>%(repo_name)s</a> er blevet arkiveret."
 
 #: seahub/notifications/models.py:845
 #, python-format
 #| msgid "r account %(username)s on %(site_name)s has been activated."
 msgid "Library %(repo_name)s has been archived."
-msgstr "A biblioteca %(repo_name)s foi arquivada."
+msgstr "Biblioteket %(repo_name)s er blevet arkiveret."
 
 #: seahub/notifications/models.py:862
 #, python-format
 #| msgid ""
 #| "a href='%(file_url)s'>%(file_name)s</a> has a new comment from user or)s"
 msgid "Library <a href='%(lib_url)s'>%(repo_name)s</a> has been unarchived."
-msgstr "A biblioteca <a href='%(lib_url)s'>%(repo_name)s</a> foi desarquivada."
+msgstr "Biblioteket <a href='%(lib_url)s'>%(repo_name)s</a> er blevet fjernet fra arkiv."
 
 #: seahub/notifications/models.py:867
 #, python-format
 #| msgid "r account %(username)s on %(site_name)s has been activated."
 msgid "Library %(repo_name)s has been unarchived."
-msgstr "A biblioteca %(repo_name)s foi desarquivada."
+msgstr "Biblioteket %(repo_name)s er blevet fjernet fra arkiv."
 
 #: seahub/notifications/models.py:884
 #, python-format
 msgid "Library <a href='%(lib_url)s'>%(repo_name)s</a> archive failed."
-msgstr "Falha no arquivo da biblioteca <a href='%(lib_url)s'>%(repo_name)s</a> "
+msgstr "Arkivering af biblioteket <a href='%(lib_url)s'>%(repo_name)s</a> mislykkedes."
 
 #: seahub/notifications/models.py:889
 #, python-format
 #| msgid "Library name is required"
 msgid "Library %(repo_name)s archive failed."
-msgstr "Falha no arquivo da biblioteca %(repo_name)s."
+msgstr "Arkivering af biblioteket %(repo_name)s mislykkedes."
 
 #: seahub/notifications/models.py:906
 #, python-format
 msgid "Library <a href='%(lib_url)s'>%(repo_name)s</a> unarchive failed."
-msgstr "Falha no desarquivo da biblioteca <a href='%(lib_url)s'>%(repo_name)s</a>."
+msgstr "Det lykkedes ikke at fjerne biblioteket <a href='%(lib_url)s'>%(repo_name)s</a> fra arkiv."
 
 #: seahub/notifications/models.py:911
 #, python-format
 #| msgid "Library name is required"
 msgid "Library %(repo_name)s unarchive failed."
-msgstr "Falha no desarquivo da biblioteca %(repo_name)s."
+msgstr "Det lykkedes ikke at fjerne biblioteket %(repo_name)s fra arkiv."
 
 #: seahub/notifications/models.py:936
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group "
 "<a href='%(href)s'>%(group_name)s</a>"
-msgstr "O usuário <a href='%(user_profile)s'>%(group_staff)s</a> adicionou você ao grupo <a href='%(href)s'>%(group_name)s</a>"
+msgstr "Bruger <a href='%(user_profile)s'>%(group_staff)s</a> har føjet dig til gruppen <a href='%(href)s'>%(group_name)s</a>"
 
 #: seahub/notifications/models.py:962
 #, python-format
 msgid ""
 "File <a href='%(file_url)s'>%(file_name)s</a> has a new comment from user "
 "%(author)s"
-msgstr "O arquivo <a href='%(file_url)s'>%(file_name)s</a> tem novos comentários do usuário %(author)s"
+msgstr "Filen <a href='%(file_url)s'>%(file_name)s</a> har en ny kommentar fra brugeren %(author)s"
 
 #: seahub/notifications/models.py:979
 #, python-format
 msgid ""
 "<a href='%(file_url)s'>Draft #%(draft_id)s</a> has a new comment from user "
 "%(author)s"
-msgstr "<a href='%(file_url)s'>Rascunho #%(draft_id)s</a> tem um novo comentário de %(author)s"
+msgstr "<a href='%(file_url)s'>Kladde #%(draft_id)s</a> har en ny kommentar fra brugeren %(author)s"
 
 #: seahub/notifications/models.py:996
 #, python-format
 msgid ""
 "%(from_user)s has sent you a request for <a href='%(file_url)s'>draft "
 "#%(draft_id)s</a>"
-msgstr "%(from_user)s enviou um pedido sobre o <a href='%(file_url)s'>rascunho #%(draft_id)s</a>"
+msgstr "%(from_user)s har sendt dig en anmodning om <a href='%(file_url)s'>kladde #%(draft_id)s</a>"
 
 #: seahub/notifications/models.py:1019
 #: seahub/notifications/templates/notifications/notice_email.html:66
@@ -1996,7 +1973,7 @@ msgstr "%(from_user)s enviou um pedido sobre o <a href='%(file_url)s'>rascunho #
 msgid ""
 "Guest %(user)s accepted your <a "
 "href=\"%(url_base)s%(inv_url)s\">invitation</a> at %(time)s."
-msgstr "O convidado %(user)s aceitou seu <a href=\"%(url_base)s%(inv_url)s\">convite</a> em %(time)s."
+msgstr "Gæsten %(user)s accepterede din <a href=\"%(url_base)s%(inv_url)s\">invitation</a> kl. %(time)s."
 
 #: seahub/notifications/models.py:1043
 #, python-format
@@ -2006,70 +1983,70 @@ msgstr "O convidado %(user)s aceitou seu <a href=\"%(url_base)s%(inv_url)s\">con
 msgid ""
 "%(user)s has transferred a library named <a "
 "href=\"%(repo_url)s\">%(repo_name)s</a> to you."
-msgstr "%(user)s transferiu uma biblioteca <a href=\"%(repo_url)s\">%(repo_name)s</a> para você."
+msgstr "%(user)s har overført et bibliotek med navnet <a href=\"%(repo_url)s\">%(repo_name)s</a> til dig."
 
 #: seahub/notifications/models.py:1116
 #, python-brace-format
 msgid "{name} created {obj_type} {obj_link} in library {repo_link}."
-msgstr "{name} criou {obj_type} {obj_link} na biblioteca {repo_link}."
+msgstr "{name} oprettede {obj_type} {obj_link} i biblioteket {repo_link}."
 
 #: seahub/notifications/models.py:1118
 #, python-brace-format
 msgid ""
 "{name} created {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr "{name} criou {obj_type} {obj_link} e mais {obj_path_count_minus_one} {obj_type}(s) na biblioteca {repo_link}."
+msgstr "{name} oprettede {obj_type} {obj_link} og {obj_path_count_minus_one} andre {obj_type}(e) i biblioteket {repo_link}."
 
 #: seahub/notifications/models.py:1123
 #, python-brace-format
 msgid "{name} deleted {obj_type} {obj_name} in library {repo_link}."
-msgstr "{name} excluiu {obj_type} {obj_name} na biblioteca {repo_link}."
+msgstr "{name} slettede {obj_type} {obj_name} i biblioteket {repo_link}."
 
 #: seahub/notifications/models.py:1125
 #, python-brace-format
 msgid ""
 "{name} deleted {obj_type} {obj_name} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr "{name} excluiu {obj_type} {obj_name} e mais {obj_path_count_minus_one} {obj_type}(s) na biblioteca {repo_link}."
+msgstr "{name} slettede {obj_type} {obj_name} og {obj_path_count_minus_one} andre {obj_type}(e) i biblioteket {repo_link}."
 
 #: seahub/notifications/models.py:1129
 #, python-brace-format
 msgid "{name} restored {obj_type} {obj_link} in library {repo_link}."
-msgstr "{name} restaurou {obj_type} {obj_link} na biblioteca {repo_link}."
+msgstr "{name} gendannede {obj_type} {obj_link} i biblioteket {repo_link}."
 
 #: seahub/notifications/models.py:1133
 #, python-brace-format
 msgid ""
 "{name} renamed {obj_type} {old_obj_name} to {obj_link} in library "
 "{repo_link}."
-msgstr "{name} renomeou {obj_type} {old_obj_name} para {obj_link} na biblioteca {repo_link}."
+msgstr "{name} omdøbte {obj_type} {old_obj_name} til {obj_link} i biblioteket {repo_link}."
 
 #: seahub/notifications/models.py:1138
 #, python-brace-format
 msgid "{name} moved {obj_type} {obj_link} in library {repo_link}."
-msgstr "{name} moveu {obj_type} {obj_link} na biblioteca {repo_link}."
+msgstr "{name} flyttede {obj_type} {obj_link} i biblioteket {repo_link}."
 
 #: seahub/notifications/models.py:1140
 #, python-brace-format
 msgid ""
 "{name} moved {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr "{name} moveu {obj_type} {obj_link} e mais {obj_path_count_minus_one} {obj_type}(s) na biblioteca {repo_link}."
+msgstr "{name} flyttede {obj_type} {obj_link} og {obj_path_count_minus_one} andre {obj_type}(e) i biblioteket {repo_link}."
 
 #: seahub/notifications/models.py:1144
 #, python-brace-format
 msgid "{name} updated {obj_type} {obj_link} in library {repo_link}."
-msgstr "{name} atualizou {obj_type} {obj_link} na biblioteca {repo_link}."
+msgstr "{name} opdaterede {obj_type} {obj_link} i biblioteket {repo_link}."
 
 #: seahub/notifications/models.py:1147
 #, python-brace-format
 msgid "{name} {op_type} {obj_type} {obj_link} in library {repo_link}."
-msgstr "{name} {op_type} {obj_type} {obj_link} na biblioteca {repo_link}."
+msgstr "{name} {op_type} {obj_type} {obj_link} i biblioteket {repo_link}."
 
 #: seahub/notifications/models.py:1158
 #, python-brace-format
 msgid "Face recognition is done for library {repo_name}."
-msgstr "Reconhecimento facial concluído para a biblioteca {repo_name}."
+msgstr "Ansigtsgenkendelse er udført for biblioteket {repo_name}."
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:9
 #, python-format
@@ -2079,38 +2056,37 @@ msgid ""
 msgid_plural ""
 "\n"
 "You've got %(num)s file updates on %(site_name)s:\n"
-msgstr[0] "\nYou've got 1 new file updates on %(site_name)s:\n"
-msgstr[1] "\nYou've got %(num)s file updates on %(site_name)s:\n"
-msgstr[2] "\nYou've got %(num)s file updates on %(site_name)s:\n"
+msgstr[0] ""
+msgstr[1] ""
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:20
 msgid "Operation"
-msgstr "Operação"
+msgstr "Handling"
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:21
 #: seahub/templates/snippets/repo_dir_trash_tr.html:21
 msgid "File"
-msgstr "Arquivo"
+msgstr "Fil"
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:21
 msgid "Library"
-msgstr "Biblioteca"
+msgstr "Bibliotek"
 
 #: seahub/notifications/templates/notifications/notice_email.html:7
 #, python-format
 msgid "Hi, %(name)s"
-msgstr "Olá, %(name)s"
+msgstr "Hej, %(name)s"
 
 #: seahub/notifications/templates/notifications/notice_email.html:19
 msgid "Message"
-msgstr "Mensagem"
+msgstr "Besked"
 
 #: seahub/notifications/templates/notifications/notice_email.html:45
 #, python-format
 msgid ""
 "You have received a <a href=\"%(url_base)s%(msg_url)s\">new message</a> from"
 " %(user)s."
-msgstr "Você recebeu uma <a href=\"%(url_base)s%(msg_url)s\">nova mensagem</a> de %(user)s."
+msgstr "Du har modtaget en <a href=\"%(url_base)s%(msg_url)s\">ny besked</a> fra %(user)s."
 
 #: seahub/notifications/templates/notifications/notice_email.html:51
 #, python-format
@@ -2118,7 +2094,7 @@ msgid ""
 "A file named <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> is "
 "uploaded to your folder <a "
 "href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a>."
-msgstr "O Arquivo chamado <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a>  foi enviado para a sua pasta <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a>."
+msgstr "En fil med navnet <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> er uploadet til din mappe <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notice_email.html:54
 #, python-format
@@ -2126,7 +2102,7 @@ msgid ""
 "A folder named <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a> is"
 " uploaded to your folder <a "
 "href=\"%(url_base)s%(parent_dir_url)s\">%(parent_dir_name)s</a>."
-msgstr "Uma pasta <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a> foi enviada para sua pasta <a href=\"%(url_base)s%(parent_dir_url)s\">%(parent_dir_name)s</a>."
+msgstr "En mappe med navnet <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a> er uploadet til din mappe <a href=\"%(url_base)s%(parent_dir_url)s\">%(parent_dir_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notice_email.html:57
 #, python-format
@@ -2134,21 +2110,21 @@ msgid ""
 "User <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> has asked to join "
 "group <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>, verification "
 "message: %(msg)s"
-msgstr "Usuário <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> pediu para se juntar grupo<a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>, mensagem de verificação: %(msg)s"
+msgstr "Bruger <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> har bedt om at blive medlem af gruppen <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>, verificeringsbesked: %(msg)s"
 
 #: seahub/notifications/templates/notifications/notice_email.html:60
 #, python-format
 msgid ""
 "User <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> has added you to "
 "group <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>"
-msgstr "O usuário <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> adicionou você ao grupo <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>"
+msgstr "Bruger <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> har føjet dig til gruppen <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>"
 
 #: seahub/notifications/templates/notifications/notice_email.html:63
 #, python-format
 msgid ""
 "File <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> has a new "
 "comment from user %(author)s"
-msgstr "O arquivo <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> tem um novo comentário do usuário %(author)s"
+msgstr "Filen <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> har en ny kommentar fra brugeren %(author)s"
 
 #: seahub/notifications/templates/notifications/notice_email.html:69
 #, python-format
@@ -2156,18 +2132,18 @@ msgid ""
 "A large number of files in your library <a "
 "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> has been deleted "
 "recently."
-msgstr "Muitos arquivos na sua biblioteca <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> foram excluídos recentemente."
+msgstr "Et stort antal filer i dit bibliotek <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> er for nylig blevet slettet."
 
 #: seahub/notifications/templates/notifications/notice_email.html:84
 msgid "Go check out at the following page:"
-msgstr "Vá verificar na seguinte página:"
+msgstr "Gå og tjek følgende side:"
 
 #: seahub/notifications/templates/notifications/notice_msg/folder_share_msg.html:1
 #, python-format
 msgid ""
 "%(user)s has shared a folder named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to you."
-msgstr "%(user)s compartilhou uma pasta <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> com você."
+msgstr "%(user)s har delt en mappe med navnet <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> med dig."
 
 #: seahub/notifications/templates/notifications/notice_msg/folder_share_to_group_msg.html:1
 #, python-format
@@ -2175,14 +2151,14 @@ msgid ""
 "%(user)s has shared a folder named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to group <a "
 "href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
-msgstr "%(user)s compartilhou uma pasta <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> com o grupo <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
+msgstr "%(user)s har delt en mappe med navnet <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> med gruppen <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notice_msg/repo_share_msg.html:1
 #, python-format
 msgid ""
 "%(user)s has shared a library named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to you."
-msgstr "%(user)s compartilhou uma biblioteca chamado <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> com você."
+msgstr "%(user)s har delt et bibliotek med navnet <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> med dig."
 
 #: seahub/notifications/templates/notifications/notice_msg/repo_share_to_group_msg.html:1
 #, python-format
@@ -2190,32 +2166,32 @@ msgid ""
 "%(user)s has shared a library named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to group <a "
 "href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
-msgstr "%(user)s compartilhou uma biblioteca chamada <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> com o grupo <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
+msgstr "%(user)s har delt et bibliotek med navnet <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> med gruppen <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notify_virus.html:13
 #, python-format
 msgid ""
 "Virus detected in library %(repo_name)s during regular scanning: "
 "%(file_path)s."
-msgstr "Vírus detectado na biblioteca %(repo_name)s durante varredura: %(file_path)s."
+msgstr "Virus opdaget i biblioteket %(repo_name)s under regelmæssig scanning: %(file_path)s."
 
 #: seahub/notifications/templates/notifications/notify_virus.html:20
 msgid "Virus is detected on regular scanning:"
-msgstr "Vírus detectado na varredura regular:"
+msgstr "Virus er opdaget ved regelmæssig scanning:"
 
 #: seahub/notifications/utils.py:479
 #, python-format
 msgid "%(author)s added a new comment in document %(sdoc_name)s"
-msgstr "%(author)s adicionou um comentário no documento %(sdoc_name)s"
+msgstr "%(author)s tilføjede en ny kommentar i dokumentet %(sdoc_name)s"
 
 #: seahub/notifications/utils.py:486 seahub/notifications/utils.py:506
 msgid "Details"
-msgstr "Detalhes"
+msgstr "Detaljer"
 
 #: seahub/notifications/utils.py:492
 #, python-format
 msgid "%(author)s added a new reply in document %(sdoc_name)s"
-msgstr "%(author)s respondeu no documento %(sdoc_name)s"
+msgstr "%(author)s tilføjede et nyt svar i dokumentet %(sdoc_name)s"
 
 #: seahub/notifications/utils.py:498
 #, python-format
@@ -2223,55 +2199,55 @@ msgstr "%(author)s respondeu no documento %(sdoc_name)s"
 msgid ""
 "%(author)s has marked the comment \"%(resolve_comment)s\" as resolved in "
 "document %(sdoc_name)s\n"
-msgstr "%(author)s marcou o comentário \"%(resolve_comment)s\" como resolvido no documento %(sdoc_name)s\n"
+msgstr "%(author)s har markeret kommentaren \"%(resolve_comment)s\" som løst i dokumentet %(sdoc_name)s\n"
 
 #: seahub/oauth/views.py:225
 #: seahub/templates/remote_user/create_unknown_user_false.html:8
 #: seahub/work_weixin/views.py:111
 msgid ""
 "Error, new user registration is not allowed, please contact administrator."
-msgstr "Erro: cadastro de novos usuários não permitido. Contate o administrador."
+msgstr "Fejl, ny brugerregistrering er ikke tilladt, kontakt venligst administratoren."
 
 #: seahub/options/templates/options/set_user_options.html:7
 msgid "Please choose how to view encrypted libraries online:"
-msgstr "Por favor escolha como ver bibliotecas criptografadas online:"
+msgstr "Vælg venligst, hvordan krypterede biblioteker skal vises online:"
 
 #: seahub/options/templates/options/set_user_options.html:10
 msgid "Send passwords to the server."
-msgstr "Enviar senha para o servidor"
+msgstr "Send adgangskoder til serveren."
 
 #: seahub/options/templates/options/set_user_options.html:10
 msgid "Files will be decrypted in the server before being sent to you."
-msgstr "Os arquivos serão descriptografados no servidor antes de ser enviado a você."
+msgstr "Filer vil blive dekrypteret på serveren, før de sendes til dig."
 
 #: seahub/options/templates/options/set_user_options.html:12
 msgid "Save passwords in your browser."
-msgstr "Salve senhas no seu browser."
+msgstr "Gem adgangskoder i din browser."
 
 #: seahub/options/templates/options/set_user_options.html:12
 msgid "Files will be decrypted in your browser when you download them."
-msgstr "Os arquivos serão descriptografados no seu navegador quando você baixar eles."
+msgstr "Filer vil blive dekrypteret i din browser, når du downloader dem."
 
 #: seahub/options/templates/options/set_user_options.html:13
 msgid ""
 "Tip: the latter way is more secure, but it is not supported well by all "
 "browsers. We advise you to use the latest version of Chrome or Firefox."
-msgstr "Dica: a última forma é mais segura, mas não é suportada bem em todos os navegadores. Aconselhamos a usar a última versão do Chrome ou Firefox."
+msgstr "Tip: den sidste metode er mere sikker, men den understøttes ikke godt af alle browsere. Vi anbefaler, at du bruger den nyeste version af Chrome eller Firefox."
 
 #: seahub/organizations/api/admin/users.py:812
 #: seahub/organizations/api/admin/users.py:816
 msgid "The number of users exceeds the limit"
-msgstr "O número de usuários excedeu o limite"
+msgstr "Antallet af brugere overstiger grænsen"
 
 #: seahub/organizations/api/admin/users.py:834
 #, python-brace-format
 msgid "User {email} already exists."
-msgstr "Usuário {email} já existe."
+msgstr "Brugeren {email} findes allerede."
 
 #: seahub/organizations/forms.py:41 seahub/share/views.py:354
 #: seahub/share/views.py:367
 msgid "Email address is not valid"
-msgstr "O endereço de e-mail não é válido."
+msgstr "E-mailadressen er ikke gyldig"
 
 #: seahub/organizations/templates/organizations/org_deactivate_email.html:12
 #, python-format
@@ -2281,14 +2257,14 @@ msgstr "O endereço de e-mail não é válido."
 msgid ""
 "You are receiving this email because your team %(org_name)s has been "
 "deactivated."
-msgstr "Você recebeu este e-mail porque sua equipe %(org_name)s foi desativada."
+msgstr "Du modtager denne e-mail, fordi dit team %(org_name)s er blevet deaktiveret."
 
 #: seahub/organizations/templates/organizations/org_deactivate_email.html:16
 #, python-format
 msgid ""
 "\n"
 "If you like to continue using our site, click <a href=\"%(link)s\">here</a>. Otherwise your account will be deleted in 60 days.\n"
-msgstr "\nSe quiser continuar usando o site, clique <a href=\"%(link)s\">aqui</a>. Caso contrário, sua conta será excluída em 60 dias.\n"
+msgstr "\nHvis du vil fortsætte med at bruge vores site, klik <a href=\"%(link)s\">her</a>. Ellers vil din konto blive slettet om 60 dage.\n"
 
 #: seahub/organizations/templates/organizations/org_register.html:3
 #: seahub/organizations/templates/organizations/org_register.html:14
@@ -2300,119 +2276,119 @@ msgstr "\nSe quiser continuar usando o site, clique <a href=\"%(link)s\">aqui</a
 #: seahub/templates/registration/registration_form.html:15
 #: seahub/templates/registration/registration_form.html:25
 msgid "Signup"
-msgstr "Registre-se"
+msgstr "Tilmelding"
 
 #: seahub/organizations/templates/organizations/org_register.html:17
 #: seahub/templates/registration/registration_form.html:18
 msgid "Welcome back, you are already signed in."
-msgstr "Bemvindo de volta. você já está autenticado no sistema."
+msgstr "Velkommen tilbage, du er allerede logget ind."
 
 #: seahub/organizations/templates/organizations/org_register.html:18
 #: seahub/templates/registration/registration_form.html:19
 msgid "You will be redirected to the home page within 5 seconds."
-msgstr "Você será redirecionado para a página inicial em 5 segundos."
+msgstr "Du vil blive omdirigeret til startsiden inden for 5 sekunder."
 
 #: seahub/organizations/templates/organizations/org_register.html:26
 msgid "Organization Name"
-msgstr "Nome da Organização"
+msgstr "Organisationsnavn"
 
 #: seahub/organizations/templates/organizations/org_register.html:40
 msgid "Admin Name"
-msgstr "Nome do Administrador"
+msgstr "Administratornavn"
 
 #: seahub/organizations/templates/organizations/org_register.html:45
 msgid "Admin Email"
-msgstr "E-mail do Administrador"
+msgstr "Administrator-e-mail"
 
 #: seahub/organizations/templates/organizations/org_register.html:96
 #: seahub/templates/registration/registration_form.html:98
 msgid "Email cannot be blank"
-msgstr "E-mail não ficar em branco"
+msgstr "E-mail må ikke være tom"
 
 #: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:4
 #: seahub/templates/snippets/admin_paginator.html:4
 msgid "Previous"
-msgstr "Anterior"
+msgstr "Forrige"
 
 #: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:7
 #: seahub/templates/snippets/admin_paginator.html:7
 #: seahub/two_factor/templates/two_factor/_wizard_actions.html:5
 msgid "Next"
-msgstr "Próximo"
+msgstr "Næste"
 
 #: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:12
 #: seahub/templates/snippets/admin_paginator.html:12
 msgid "Per page: "
-msgstr "Visualizar:"
+msgstr "Pr. side: "
 
 #: seahub/organizations/views.py:363 seahub/organizations/views.py:392
 #: seahub/thumbnail/views.py:112
 msgid "Invalid token."
-msgstr "Token invalida"
+msgstr "Ugyldigt token."
 
 #: seahub/organizations/views.py:395
 #| msgid "Expiration"
 msgid "Expired token."
-msgstr "Token expirado."
+msgstr "Udløbet token."
 
 #: seahub/profile/templates/profile/set_profile_react.html:5
 msgid "Settings"
-msgstr "Configuração"
+msgstr "Indstillinger"
 
 #: seahub/profile/templates/profile/set_profile_react.html:21
 msgctxt "true name"
 msgid "Name:"
-msgstr "Nome:"
+msgstr "Navn:"
 
 #: seahub/profile/templates/profile/set_profile_react.html:27
 #: seahub/templates/registration/password_set_form.html:4
 #: seahub/templates/registration/password_set_form.html:8
 msgid "Set Password"
-msgstr "Definir Senha"
+msgstr "Angiv adgangskode"
 
 #: seahub/profile/templates/profile/set_profile_react.html:27
 msgid "Update"
-msgstr "Atualizar"
+msgstr "Opdater"
 
 #: seahub/profile/templates/profile/user_profile.html:4
 msgid "Profile"
-msgstr "Perfil"
+msgstr "Profil"
 
 #: seahub/profile/views.py:53
 msgid "Successfully edited profile."
-msgstr "Perfil editado com sucesso."
+msgstr "Profilen blev redigeret med succes."
 
 #: seahub/profile/views.py:57
 msgid "Failed to edit profile"
-msgstr "Falha ao editar o perfil."
+msgstr "Kunne ikke redigere profil"
 
 #: seahub/profile/views.py:259
 msgid "Has not accepted invitation yet"
-msgstr "Não foi aceito nenhum convite ainda"
+msgstr "Har endnu ikke accepteret invitationen"
 
 #: seahub/profile/views.py:286
 msgid "Demo account can not be deleted."
-msgstr "A conta demo não pode ser excluída."
+msgstr "Demokontoen kan ikke slettes."
 
 #: seahub/profile/views.py:317
 msgid "Failed to set default library."
-msgstr "Falha ao configurar a biblioteca default."
+msgstr "Kunne ikke angive standardbibliotek."
 
 #: seahub/profile/views.py:321
 msgid "Can not set encrypted library as default library."
-msgstr "Não é possível usar uma biblioteca compartilhada como principal."
+msgstr "Kan ikke angive et krypteret bibliotek som standardbibliotek."
 
 #: seahub/profile/views.py:326
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
-msgstr "\"%s\" definida como sua biblioteca padrão com sucesso."
+msgstr "Har med succes angivet \"%s\" som dit standardbibliotek."
 
 #: seahub/repo_metadata/apis.py:164
 #, python-format
 msgid ""
 "Metadata feature is not supported for libraries containing more than %s "
 "files"
-msgstr "O recurso de metadados não é suportado para bibliotecas com mais de %s arquivos"
+msgstr "Metadatafunktionen understøttes ikke for biblioteker, der indeholder mere end %s filer"
 
 #: seahub/seadoc/views.py:32 seahub/seadoc/views.py:86
 #: seahub/seadoc/views.py:164 seahub/seadoc/views.py:210
@@ -2420,206 +2396,206 @@ msgstr "O recurso de metadados não é suportado para bibliotecas com mais de %s
 #: seahub/views/__init__.py:503 seahub/views/__init__.py:639
 #: seahub/views/__init__.py:805 seahub/views/ajax.py:373
 msgid "Library does not exist"
-msgstr "Biblioteca não existe"
+msgstr "Biblioteket findes ikke"
 
 #: seahub/seadoc/views.py:158 seahub/seadoc/views.py:204
 msgid "File path invalid."
-msgstr "Caminho de arquivo inválido."
+msgstr "Filsti er ugyldig."
 
 #: seahub/share/decorators.py:50
 msgid "Invalid verification code, please try again."
-msgstr "Código de verificação inválido. Tente novamente."
+msgstr "Ugyldig verifikationskode, prøv venligst igen."
 
 #: seahub/share/decorators.py:81
 msgid "Link does not exist."
-msgstr "O link não existe."
+msgstr "Linket findes ikke."
 
 #: seahub/share/decorators.py:84
 msgid "Link is expired."
-msgstr "O link expirou."
+msgstr "Linket er udløbet."
 
 #: seahub/share/decorators.py:125
 msgid "The number of share link exceeds the limit."
-msgstr "O número de links de compartilhamento excedeu o limite."
+msgstr "Antallet af delingslinks overstiger grænsen."
 
 #: seahub/share/models.py:127
 msgid "Password can't be empty"
-msgstr "A senha não pode ser vazia"
+msgstr "Adgangskode må ikke være tom"
 
 #: seahub/share/models.py:134
 msgid "Please enter a correct password."
-msgstr "Por favor insira uma senha correta."
+msgstr "Indtast venligst en korrekt adgangskode."
 
 #: seahub/share/templates/share/audit_code_email.html:10
 #, python-format
 msgid "The verification code is %(code)s. It is valid for one hour."
-msgstr "O código de verificação é %(code)s. Válido por uma hora."
+msgstr "Verifikationskoden er %(code)s. Den er gyldig i en time."
 
 #: seahub/share/templates/share/share_link_email.html:9
 #, python-format
 msgid ""
 "\n"
 "    %(shared_from)s shared a file link with you.\n"
-msgstr "\n    %(shared_from)s compartilhou um link de arquivo com você.\n"
+msgstr "\n    %(shared_from)s har delt et fillink med dig.\n"
 
 #: seahub/share/templates/share/share_link_email.html:14
 #, python-format
 msgid ""
 "\n"
 "You can click <a href=%(url)s>here</a> to verify your email address and visit it.\n"
-msgstr "\nVocê pode clicar <a href=%(url)s>aqui</a> para verificar seu e-mail e acessar o conteúdo.\n"
+msgstr "\nDu kan klikke <a href=%(url)s>her</a> for at bekræfte din e-mailadresse og besøge den.\n"
 
 #: seahub/share/templates/share/share_link_email_audit.html:4
 #: seahub/share/templates/share/share_link_email_audit.html:39
 msgid "Email address verification"
-msgstr "Verificação de endereço de e-mail"
+msgstr "Bekræftelse af e-mailadresse"
 
 #: seahub/share/templates/share/share_link_email_audit.html:40
 msgid "Please provide your email address to continue."
-msgstr "Por favor informe seu endereço de e-mail para continuar."
+msgstr "Angiv venligst din e-mailadresse for at fortsætte."
 
 #: seahub/share/templates/share/share_link_email_audit.html:43
 msgid "Enter your email address"
-msgstr "Digite seu endereço de e-mail"
+msgstr "Indtast din e-mailadresse"
 
 #: seahub/share/templates/share/share_link_email_audit.html:44
 msgid "Get code"
-msgstr "Obter código"
+msgstr "Hent kode"
 
 #: seahub/share/templates/share/share_link_email_audit.html:46
 msgid "Paste the verification code here"
-msgstr "Cole o código de verificação aqui"
+msgstr "Indsæt verifikationskoden her"
 
 #: seahub/share/templates/share/share_link_email_audit.html:79
 msgid "Resend"
-msgstr "Reenviar"
+msgstr "Send igen"
 
 #: seahub/share/templates/share/share_link_email_audit.html:107
 msgid "A verification code has been sent to the email address."
-msgstr "Um código de verificação foi enviado para o endereço de e-mail."
+msgstr "En verifikationskode er blevet sendt til e-mailadressen."
 
 #: seahub/share/views.py:133
 msgid "Please choose a folder."
-msgstr "Selecione uma pasta."
+msgstr "Vælg venligst en mappe."
 
 #: seahub/share/views.py:157
 msgid "Successfully saved."
-msgstr "Salvo com sucesso."
+msgstr "Gemt med succes."
 
 #: seahub/share/views.py:187
 msgid "Preview and download"
-msgstr "Pré-visualizar e baixar"
+msgstr "Forhåndsvis og download"
 
 #: seahub/share/views.py:188
 msgid "Preview only"
-msgstr "Pré-visualizar apenas"
+msgstr "Kun forhåndsvisning"
 
 #: seahub/share/views.py:189
 msgid "Download and upload"
-msgstr "Baixar e enviar"
+msgstr "Download og upload"
 
 #: seahub/share/views.py:190
 msgid "Edit on cloud and download"
-msgstr "Editar na nuvem e baixar"
+msgstr "Rediger i skyen og download"
 
 #: seahub/share/views.py:191
 msgid "Edit on cloud only"
-msgstr "Apenas editar na nuvem"
+msgstr "Kun rediger i skyen"
 
 #: seahub/share/views.py:223
 msgid "Share Link"
-msgstr "Link compartilhado"
+msgstr "Del link"
 
 #: seahub/share/views.py:223 seahub/views/sysadmin.py:737
 msgid "Creator"
-msgstr "Criador"
+msgstr "Opretter"
 
 #: seahub/share/views.py:224
 msgid "Permission"
-msgstr "Permissão"
+msgstr "Tilladelse"
 
 #: seahub/share/views.py:224
 msgid "Expiration"
-msgstr "Expiração"
+msgstr "Udløb"
 
 #: seahub/share/views.py:254 seahub/thumbnail/views.py:43
 #: seahub/thumbnail/views.py:119 seahub/views/ajax.py:140
 #: seahub/views/ajax.py:415
 msgid "Library does not exist."
-msgstr "Biblioteca não existe."
+msgstr "Biblioteket findes ikke."
 
 #: seahub/share/views.py:258 seahub/views/ajax.py:383
 msgid "Folder does not exist."
-msgstr "A pasta não existe."
+msgstr "Mappen findes ikke."
 
 #: seahub/share/views.py:306
 msgid "Only the owner of the library has permission to share it."
-msgstr "Apenas o dono tem permissão para compartilhar."
+msgstr "Kun bibliotekets ejer har tilladelse til at dele det."
 
 #: seahub/share/views.py:344
 msgid "Please check the email(s) you entered"
-msgstr "Por favor confira os emails(s) que vôçe inseriu"
+msgstr "Kontroller venligst de e-mails, du har indtastet"
 
 #: seahub/share/views.py:360
 msgid "Share link is not found"
-msgstr "Link de compartilhamento não foi encontrado"
+msgstr "Delingslinket blev ikke fundet"
 
 #: seahub/share/views.py:375
 msgid "Verification code"
-msgstr "Código de Verificação"
+msgstr "Verifikationskode"
 
 #: seahub/share/views.py:386
 msgid "Failed to send a verification code, please try again later."
-msgstr "Falha ao enviar o código de verificação, por favor tente novamente."
+msgstr "Kunne ikke sende en verifikationskode, prøv venligst igen senere."
 
 #: seahub/templates/404.html:7
 msgid "Sorry, but the requested page could not be found."
-msgstr "Desculpe, mas a página requisitada não pode ser encontrada."
+msgstr "Beklager, den ønskede side kunne ikke findes."
 
 #: seahub/templates/base.html:8 seahub/templates/base_for_react.html:9
 #: seahub/templates/wiki/wiki_publish_ssr.html:10
 msgid "File, Collaboration, Team, Organization"
-msgstr "Arquivo, Colaboração, Equipe, Organização"
+msgstr "Fil, samarbejde, team, organisation"
 
 #: seahub/templates/base.html:35
 #: seahub/templates/wiki/wiki_publish_ssr.html:53
 msgid "Close"
-msgstr "Fechar"
+msgstr "Luk"
 
 #: seahub/templates/base.html:52
 msgid "Language"
-msgstr "Idioma"
+msgstr "Sprog"
 
 #: seahub/templates/choose_register.html:9
 msgid "Create a personal account"
-msgstr "Criar uma conta pessoal"
+msgstr "Opret en personlig konto"
 
 #: seahub/templates/choose_register.html:10
 msgid "Create an organization account"
-msgstr "Criar uma conta de organização"
+msgstr "Opret en organisationskonto"
 
 #: seahub/templates/client_login_complete.html:6
 msgid "The client has logged in. Please open the client to confirm."
-msgstr "O cliente efetuou login. Abra o cliente para confirmar."
+msgstr "Klienten er logget ind. Åbn venligst klienten for at bekræfte."
 
 #: seahub/templates/client_login_confirm.html:7
 msgid "Client Login Confirm"
-msgstr "Confirmação de Login no Cliente"
+msgstr "Bekræft klientlogin"
 
 #: seahub/templates/client_login_confirm.html:8
 msgid "Do you want to login to your client?"
-msgstr "Deseja fazer login no seu cliente?"
+msgstr "Vil du logge ind på din klient?"
 
 #: seahub/templates/decrypt_repo_form.html:7
 msgid ""
 "This library is encrypted. Please input the password if you want to browse "
 "it online. And the password will be kept on the server for only 1 hour."
-msgstr "Essa biblioteca está criptografa. Favor, informe a senha se quiser navegar online. A senha será mantida no servidor por ao menos 1 hora."
+msgstr "Dette bibliotek er krypteret. Indtast venligst adgangskoden, hvis du vil gennemse det online. Adgangskoden gemmes kun på serveren i 1 time."
 
 #: seahub/templates/decrypt_repo_form.html:26
 #: seahub/templates/share_access_validation.html:40
 msgid "Please enter the password."
-msgstr "Por favor informe a senha."
+msgstr "Indtast venligst adgangskoden."
 
 #: seahub/templates/download.html:4
 msgid "Download"
@@ -2633,35 +2609,35 @@ msgid ""
 "\n"
 "        Click <a href=\"%(link)s\">here</a> to reactivate your team and relogin.\n"
 "      "
-msgstr "\n        Clique <a href=\"%(link)s\">aqui</a> para reativar sua equipe e efetuar login novamente.\n      "
+msgstr "\n        Klik <a href=\"%(link)s\">her</a> for at genaktivere dit team og logge ind igen.\n      "
 
 #: seahub/templates/i18n.html:6
 msgid "Upload Folder"
-msgstr "Pasta de Upload"
+msgstr "Upload mappe"
 
 #: seahub/templates/i18n.html:7
 msgid "Add auto expiration"
-msgstr "Adicionar auto expiração"
+msgstr "Tilføj automatisk udløb"
 
 #: seahub/templates/i18n.html:8
 msgid "Days"
-msgstr "Dias"
+msgstr "Dage"
 
 #: seahub/templates/i18n.html:9
 msgid "Shared Links"
-msgstr "Links compartilhados"
+msgstr "Delingslinks"
 
 #: seahub/templates/i18n.html:10
 msgid "View and manage all the shared links in this library."
-msgstr "Ver e gerenciar todos os links compartilhados nesta biblioteca."
+msgstr "Se og administrer alle delingslinks i dette bibliotek."
 
 #: seahub/templates/i18n.html:11
 msgid "Owned Libs"
-msgstr "Suas Bibliotecas"
+msgstr "Egne biblioteker"
 
 #: seahub/templates/i18n.html:12
 msgid "Shared Libs"
-msgstr "Bibliotecas Compartilhadas"
+msgstr "Delte biblioteker"
 
 #: seahub/templates/onlyoffice_file_view_react.html:86
 #: seahub/templates/onlyoffice_file_view_react.html:190
@@ -2672,7 +2648,7 @@ msgstr "Bibliotecas Compartilhadas"
 #: seahub/templates/view_file_onlyoffice.html:200
 #: seahub/templates/view_file_onlyoffice.html:223
 msgid "Failed. Please check the network."
-msgstr "Falha. Por favor verifique a rede."
+msgstr "Mislykkedes. Kontroller venligst netværket."
 
 #: seahub/templates/registration/activation_email.html:12
 #, python-format
@@ -2680,35 +2656,35 @@ msgid ""
 "You (or someone pretending to be you) have asked to register an account at "
 "%(site_name)s. If this wasn't you, please ignore this email and your address"
 " will be removed from our records."
-msgstr "Você (ou alguém fingindo ser você) pediu para registar uma conta em\n%(site_name)s. Se este não foi você, por favor, ignore este e-mail e seu endereço será removido de nossos registros."
+msgstr "Du (eller nogen, der udgiver sig for at være dig) har anmodet om at registrere en konto på %(site_name)s. Hvis det ikke var dig, så ignorer venligst denne e-mail, og din adresse vil blive fjernet fra vores optegnelser."
 
 #: seahub/templates/registration/activation_email.html:14
 #, python-format
 msgid ""
 "To activate this account, please click the following link within the next "
 "%(expiration_days)s days: "
-msgstr "Para ativar esta conta, por favor, clique no seguinte link nos próximos %(expiration_days)s dias: "
+msgstr "For at aktivere denne konto skal du klikke på følgende link inden for de næste %(expiration_days)s dage: "
 
 #: seahub/templates/registration/activation_email.html:18
 #: seahub/templates/registration/registration_form.html:64
 msgid "Sign Up"
-msgstr "Cadastro"
+msgstr "Opret bruger"
 
 #: seahub/templates/registration/logged_out.html:4
 #: seahub/templates/registration/logout.html:4
 msgid "Log Out"
-msgstr "Desconectar-se"
+msgstr "Log ud"
 
 #: seahub/templates/registration/logged_out.html:8
 #: seahub/templates/registration/logout.html:8
 msgid "Thanks for your participation! "
-msgstr "Obrigado pela sua participação! "
+msgstr "Tak for din deltagelse! "
 
 #: seahub/templates/registration/logged_out.html:8
 #: seahub/templates/registration/logout.html:8
 #: seahub/templates/registration/password_change_done.html:10
 msgid "Log in again"
-msgstr " Conectar-se novamente"
+msgstr "Log ind igen"
 
 #: seahub/templates/registration/login.html:4
 #: seahub/templates/registration/login.html:48
@@ -2721,80 +2697,80 @@ msgstr " Conectar-se novamente"
 #: seahub/templates/sysadmin/user_add_email.html:23
 #: seahub/templates/sysadmin/user_batch_add_email.html:19
 msgid "Log In"
-msgstr "Entrar"
+msgstr "Log ind"
 
 #: seahub/templates/registration/login.html:58
 msgid "Refresh"
-msgstr "Atualizar"
+msgstr "Opdater"
 
 #: seahub/templates/registration/login.html:78
 msgid "Incorrect email or password"
-msgstr "E-mail ou senha incorreta"
+msgstr "Forkert e-mail eller adgangskode"
 
 #: seahub/templates/registration/login.html:86
 #, python-format
 msgid "Remember me for %(remember_days)s days "
-msgstr "Lembre me por %(remember_days)s dias "
+msgstr "Husk mig i %(remember_days)s dage "
 
 #: seahub/templates/registration/login.html:93
 #: seahub/templates/registration/login.html:97
 msgid "Single Sign-On"
-msgstr "Login Único (SSO)"
+msgstr "Single Sign-On"
 
 #: seahub/templates/registration/login.html:104
 msgid "Login with"
-msgstr "Entrar com"
+msgstr "Log ind med"
 
 #: seahub/templates/registration/login.html:129
 msgid "Forgot password?"
-msgstr "Esqueceu a senha"
+msgstr "Glemt adgangskode?"
 
 #: seahub/templates/registration/login.html:196
 msgid "Failed to refresh the CAPTCHA, please try again later."
-msgstr "Falha ao atualizar o CAPTCHA. por favor tente novamente"
+msgstr "Kunne ikke opdatere CAPTCHA'en, prøv venligst igen senere."
 
 #: seahub/templates/registration/login.html:204
 #: seahub/templates/registration/multi_adfs_sso.html:104
 msgid "Email or username cannot be blank"
-msgstr "E-mail ou nome de usuário não podem estar em branco"
+msgstr "E-mail eller brugernavn må ikke være tomt"
 
 #: seahub/templates/registration/password_change_done.html:4
 msgid "Password Change Successfully"
-msgstr "Senha alterada com sucesso"
+msgstr "Adgangskode ændret med succes"
 
 #: seahub/templates/registration/password_change_done.html:9
 msgid "Your password has been changed successfully."
-msgstr "Sua senha foi alterada com sucesso."
+msgstr "Din adgangskode er blevet ændret med succes."
 
 #: seahub/templates/registration/password_change_form.html:3
 #: seahub/templates/registration/password_change_form.html:7
 msgid "Password Modification"
-msgstr "Alteração da senha"
+msgstr "Ændring af adgangskode"
 
 #: seahub/templates/registration/password_change_form.html:9
 msgid "Please update your password before continue."
-msgstr "Por favor atualize sua senha antes de continuar."
+msgstr "Opdater venligst din adgangskode, før du fortsætter."
 
 #: seahub/templates/registration/password_change_form.html:13
 msgid "Current Password"
-msgstr "Senha Atual"
+msgstr "Nuværende adgangskode"
 
 #: seahub/templates/registration/password_change_form.html:21
 #: seahub/templates/registration/password_reset_confirm.html:14
 msgid "New Password"
-msgstr "Nova Senha"
+msgstr "Ny adgangskode"
 
 #: seahub/templates/registration/password_change_form.html:61
 msgid "Current password cannot be blank"
-msgstr "Senha atual não pode ficar em branco"
+msgstr "Nuværende adgangskode må ikke være tom"
 
 #: seahub/templates/registration/password_reset_complete.html:4
 msgid "Successfully reset password"
-msgstr "Senha alterada com sucesso"
+msgstr "Adgangskode nulstillet med succes"
 
 #: seahub/templates/registration/password_reset_complete.html:8
 msgid "Successfully reset password."
-msgstr "Senha alterada com sucesso."
+msgstr "Adgangskode blev nulstillet med succes."
 
 #: seahub/templates/registration/password_reset_confirm.html:4
 #: seahub/templates/registration/password_reset_done.html:4
@@ -2802,126 +2778,126 @@ msgstr "Senha alterada com sucesso."
 #: seahub/templates/registration/password_reset_form.html:4
 #: seahub/templates/registration/password_reset_form.html:54
 msgid "Password Reset"
-msgstr "Senha resetada"
+msgstr "Nulstilling af adgangskode"
 
 #: seahub/templates/registration/password_reset_confirm.html:11
 msgid "Reset Password"
-msgstr "Resetar senha"
+msgstr "Nulstil adgangskode"
 
 #: seahub/templates/registration/password_reset_confirm.html:39
 msgid "Failed to reset password: this link is no longer available."
-msgstr "Falha ao recuperar a senha: esse link não é mais válido."
+msgstr "Det lykkedes ikke at nulstille adgangskoden: dette link er ikke længere tilgængeligt."
 
 #: seahub/templates/registration/password_reset_done.html:46
 msgid ""
 "If your email address is in our database, you will receive a message "
 "shortly."
-msgstr "Se seu e-mail estiver em nosso banco de dados, você receberá uma mensagem em breve."
+msgstr "Hvis din e-mailadresse findes i vores database, vil du modtage en besked snart."
 
 #: seahub/templates/registration/password_reset_done.html:47
 msgid "Back to login page"
-msgstr "Voltar à página de login"
+msgstr "Tilbage til login-siden"
 
 #: seahub/templates/registration/password_reset_email.html:12
 #, python-format
 msgid ""
 "To reset the password of your account %(account)s on %(site_name)s, please "
 "click the following link: "
-msgstr "Para resetar a senha de sua conta %(account)s em %(site_name)s, por favor clique no  seguinte link:"
+msgstr "For at nulstille adgangskoden til din konto %(account)s på %(site_name)s, klik venligst på følgende link: "
 
 #: seahub/templates/registration/password_reset_email.html:20
 msgid "If you did not request it, just skip it."
-msgstr "Se não solicitou isto, favor ignorar."
+msgstr "Hvis du ikke har anmodet om det, skal du blot ignorere det."
 
 #: seahub/templates/registration/password_reset_form.html:56
 msgid "We will send you an email to set new password"
-msgstr "Iremos lhe enviar um e-mail para definir uma nova senha"
+msgstr "Vi sender dig en e-mail for at angive en ny adgangskode"
 
 #: seahub/templates/registration/password_reset_form.html:57
 msgid "Your email used in login"
-msgstr "Seu e-mail utilizado no login"
+msgstr "Din e-mail brugt til login"
 
 #: seahub/templates/registration/register_complete_email.html:1
 #, python-format
 msgid ""
 "You're receiving this e-mail because you are the admin of %(site_name)s, and"
 " a new user %(reg_email)s is joined."
-msgstr "Você recebeu este e-mail porque é administrador de %(site_name)s e um novo usuário %(reg_email)s se cadastrou."
+msgstr "Du modtager denne e-mail, fordi du er administrator for %(site_name)s, og en ny bruger %(reg_email)s er blevet oprettet."
 
 #: seahub/templates/registration/register_complete_email.html:3
 msgid "Please click the following link to view the new account:"
-msgstr "Clique no link abaixo para visualizar a nova conta:"
+msgstr "Klik venligst på følgende link for at se den nye konto:"
 
 #: seahub/templates/registration/register_complete_email_subject.html:1
 #, python-format
 msgid "New account created on %(site_name)s"
-msgstr "Nova conta criada em %(site_name)s"
+msgstr "Ny konto oprettet på %(site_name)s"
 
 #: seahub/templates/registration/registration_complete.html:4
 #: seahub/templates/shibboleth/complete.html:4
 msgid "Registration complete"
-msgstr "Registro completo"
+msgstr "Registrering fuldført"
 
 #: seahub/templates/registration/registration_complete.html:10
 msgid ""
 "An activation email has been sent. Please check your email and click on the "
 "link to activate your account."
-msgstr "Um e-mail de ativação foi enviado. Favor verificar seu e-mail e click no link para ativar sua conta."
+msgstr "En aktiverings-e-mail er blevet sendt. Tjek venligst din e-mail og klik på linket for at aktivere din konto."
 
 #: seahub/templates/registration/registration_complete.html:12
 msgid ""
 "Registration complete, please wait for administrator to activate your "
 "account."
-msgstr "Registro completo, favor aguarde que o administrador irá ativar sua conta."
+msgstr "Registreringen er fuldført, vent venligst på, at administratoren aktiverer din konto."
 
 #: seahub/templates/registration/registration_complete.html:15
 msgid "Signup function is not enabled."
-msgstr "Função de registro não está habilitada."
+msgstr "Tilmeldingsfunktionen er ikke aktiveret."
 
 #: seahub/templates/registration/registration_form.html:44
 msgid "Department"
-msgstr "Departamento"
+msgstr "Afdeling"
 
 #: seahub/templates/registration/registration_form.html:49
 msgid "Telephone"
-msgstr "Telefone"
+msgstr "Telefon"
 
 #: seahub/templates/registration/registration_form.html:54
 msgid "Note"
-msgstr "Nota"
+msgstr "Note"
 
 #: seahub/templates/remote_user/not_active.html:6
 #: seahub/templates/shibboleth/complete.html:8 seahub/work_weixin/views.py:132
 msgid ""
 "Your account is created successfully, please wait for administrator to "
 "activate your account."
-msgstr "Sua conta foi criada com sucesso. Por gentileza aguarde o administrador ativar a sua conta."
+msgstr "Din konto er oprettet med succes, vent venligst på, at administratoren aktiverer din konto."
 
 #: seahub/templates/repo_folder_trash_react.html:5
 msgid "Trash"
-msgstr "Lixeira"
+msgstr "Papirkurv"
 
 #: seahub/templates/repo_history_react.html:5
 #: seahub/templates/sysadmin/repo_history_react.html:5
 msgid "History"
-msgstr "Histórico"
+msgstr "Historik"
 
 #: seahub/templates/repo_snapshot_react.html:5
 #: seahub/templates/sysadmin/repo_snapshot_react.html:5
 msgid "Snapshot"
-msgstr "Snapshot"
+msgstr "Øjebliksbillede"
 
 #: seahub/templates/share_access_validation.html:6
 msgid ""
 "Please input the password if you want to browse the shared file/folder."
-msgstr "Digite a senha para acessar o arquivo/pasta compartilhado."
+msgstr "Indtast venligst adgangskoden, hvis du vil gennemse den delte fil/mappe."
 
 #: seahub/templates/shared_link_email.html:12
 #, python-format
 msgid ""
 "%(escaped_nickname)s shared a %(file_shared_type)s <span style=\"font-"
 "weight:bold;\">%(escaped_file_shared_name)s</span> to you on %(site_name)s:"
-msgstr "%(escaped_nickname)s compartilhou um %(file_shared_type)s <span style=\"font-weight:bold;\">%(escaped_file_shared_name)s</span> com você em %(site_name)s:"
+msgstr "%(escaped_nickname)s har delt en %(file_shared_type)s <span style=\"font-weight:bold;\">%(escaped_file_shared_name)s</span> med dig på %(site_name)s:"
 
 #: seahub/templates/shared_link_email.html:18
 #: seahub/templates/shared_upload_link_email.html:24
@@ -2929,7 +2905,7 @@ msgid ""
 "For security reasons, the link and the password are sent in two separate "
 "emails. This email contains the link. Please check the other email for the "
 "password."
-msgstr "Por motivos de segurança, o link e a senha serão enviados em dois e-mails separados. Este e-mail contém o link. Verifique o outro e-mail para obter a senha."
+msgstr "Af sikkerhedsmæssige årsager sendes linket og adgangskoden i to separate e-mails. Denne e-mail indeholder linket. Tjek venligst den anden e-mail for adgangskoden."
 
 #: seahub/templates/shared_link_email.html:22
 #: seahub/templates/shared_link_password_email.html:19
@@ -2938,7 +2914,7 @@ msgstr "Por motivos de segurança, o link e a senha serão enviados em dois e-ma
 #: seahub/templates/sysadmin/user_add_email.html:20
 #: seahub/templates/sysadmin/user_batch_add_email.html:16
 msgid "Password:"
-msgstr "Senha:"
+msgstr "Adgangskode:"
 
 #: seahub/templates/shared_link_password_email.html:12
 #, python-format
@@ -2949,7 +2925,7 @@ msgstr "Senha:"
 msgid ""
 "%(escaped_nickname)s shared a %(file_shared_type)s <span style=\"font-"
 "weight:bold;\">%(escaped_file_shared_name)s</span> to you on %(site_name)s."
-msgstr "%(escaped_nickname)s compartilhou a %(file_shared_type)s <span style=\"font-weight:bold;\">%(escaped_file_shared_name)s</span> para você em %(site_name)s."
+msgstr "%(escaped_nickname)s har delt en %(file_shared_type)s <span style=\"font-weight:bold;\">%(escaped_file_shared_name)s</span> med dig på %(site_name)s."
 
 #: seahub/templates/shared_link_password_email.html:16
 #: seahub/templates/shared_upload_link_password_email.html:19
@@ -2957,7 +2933,7 @@ msgid ""
 "For security reasons, the link and the password are sent in two separate "
 "emails. This email contains the password. Please check the other email for "
 "the link."
-msgstr "Por motivos de segurança, o link e a senha serão enviados em dois e-mails separados. Este e-mail contém a senha. Verifique o outro e-mail para obter o link."
+msgstr "Af sikkerhedsmæssige årsager sendes linket og adgangskoden i to separate e-mails. Denne e-mail indeholder adgangskoden. Tjek venligst den anden e-mail for linket."
 
 #: seahub/templates/shared_upload_link_email.html:12
 #: seahub/templates/shared_upload_link_password_email.html:12
@@ -2969,103 +2945,103 @@ msgstr "Por motivos de segurança, o link e a senha serão enviados em dois e-ma
 msgid ""
 "%(escaped_nickname)s shared an upload link for folder <span style=\"font-"
 "weight:bold;\">%(escaped_folder_name)s</span> to you on %(site_name)s."
-msgstr "%(escaped_nickname)s compartilhou um link de upload para a pasta <span style=\"font-weight:bold;\">%(escaped_folder_name)s</span> para você em %(site_name)s."
+msgstr "%(escaped_nickname)s har delt et upload-link til mappen <span style=\"font-weight:bold;\">%(escaped_folder_name)s</span> med dig på %(site_name)s."
 
 #: seahub/templates/shared_upload_link_email.html:14
 #: seahub/templates/shared_upload_link_password_email.html:14
 #, python-format
 msgid "%(escaped_nickname)s shared an upload link to you on %(site_name)s."
-msgstr "%(escaped_nickname)s compartilhou um link de upload com você em %(site_name)s."
+msgstr "%(escaped_nickname)s har delt et upload-link med dig på %(site_name)s."
 
 #: seahub/templates/shared_upload_link_email.html:20
 #: seahub/templates/shared_upload_link_email.html:28
 msgid "You can go to the following page and upload your files:"
-msgstr "Você pode ir para a página seguinte e fazer upload de seus arquivos:"
+msgstr "Du kan gå til følgende side og uploade dine filer:"
 
 #: seahub/templates/snippets/password_strength_js.html:7
 msgid "Password strength should be strong or very strong"
-msgstr "A senha deve ser forte ou muito forte"
+msgstr "Adgangskodens styrke skal være stærk eller meget stærk"
 
 #: seahub/templates/snippets/password_strength_js.html:12
 #: seahub/templates/snippets/password_strength_js.html:97
 msgid "Password strength"
-msgstr "Força da senha"
+msgstr "Adgangskodestyrke"
 
 #: seahub/templates/snippets/password_strength_js.html:19
 msgid ""
 "The password should contain different types of characters to make it strong:"
 " uppercase letters, lowercase letters, numbers and special characters."
-msgstr "A senha deve conter tipos diferentes de caracteres para ser forte: letras maiúsculas, minúsculas, números e símbolos especiais."
+msgstr "Adgangskoden bør indeholde forskellige typer tegn for at gøre den stærk: store bogstaver, små bogstaver, tal og specialtegn."
 
 #: seahub/templates/snippets/policy_service_link.html:5
 #: seahub/templates/snippets/policy_service_link.html:9
 msgid "Privacy Policy"
-msgstr "Política de Privacidade"
+msgstr "Privatlivspolitik"
 
 #: seahub/templates/snippets/policy_service_link.html:7
 #: seahub/templates/snippets/policy_service_link.html:11
 msgid "Terms of Service"
-msgstr "Termos de Serviço"
+msgstr "Servicevilkår"
 
 #: seahub/templates/snippets/repo_dir_trash_tr.html:6
 msgid "Folder"
-msgstr "Pasta"
+msgstr "Mappe"
 
 #: seahub/templates/snippets/repo_dir_trash_tr.html:11
 #: seahub/templates/snippets/repo_dir_trash_tr.html:26
 msgid "Restore"
-msgstr "Restaurar"
+msgstr "Gendan"
 
 #: seahub/templates/snippets/reset_repo_password.html:10
 #, python-format
 msgid ""
 "The new password of library %(repo_name)s is %(password)s. Please change it "
 "as soon as possible."
-msgstr "A nova senha da biblioteca %(repo_name)s é %(password)s. Altere-a assim que possível."
+msgstr "Den nye adgangskode til biblioteket %(repo_name)s er %(password)s. Skift den så hurtigt som muligt."
 
 #: seahub/templates/sysadmin/short_time_linving_password_reset_link.html:13
 #, python-format
 msgid ""
 "Administrator on %(site_name)s is resetting your password for %(account)s, "
 "please click the following link to continue: "
-msgstr "O administrador de %(site_name)s está redefinindo sua senha para %(account)s. Clique no link abaixo para continuar: "
+msgstr "Administrator på %(site_name)s er ved at nulstille din adgangskode for %(account)s, klik venligst på følgende link for at fortsætte: "
 
 #: seahub/templates/sysadmin/sudo_mode.html:39
 msgid "Confirm password to continue"
-msgstr "Confirme a senha para continuar"
+msgstr "Bekræft adgangskoden for at fortsætte"
 
 #: seahub/templates/sysadmin/sudo_mode.html:40
 msgid ""
 "You are entering admin area, we won't ask for your password again for a few "
 "hours."
-msgstr "Você está entrando na área de administração, não vamos pedir a sua senha novamente por algumas horas."
+msgstr "Du er ved at gå ind i adminområdet, vi vil ikke bede om din adgangskode igen i et par timer."
 
 #: seahub/templates/sysadmin/sudo_mode.html:47
 msgid "Incorrect password"
-msgstr "Senha incorreta"
+msgstr "Forkert adgangskode"
 
 #: seahub/templates/sysadmin/user_activation_email.html:12
 #, python-format
 msgid "Your account %(username)s on %(site_name)s has been activated."
-msgstr "Sua conta %(username)s em %(site_name)s foi ativada."
+msgstr "Din konto %(username)s på %(site_name)s er blevet aktiveret."
 
 #: seahub/templates/sysadmin/user_add_email.html:11
 #, python-format
 msgid ""
 "%(nickname)s invited you to join organization \"%(org_name)s\" on "
 "%(site_name)s."
-msgstr "%(nickname)s convidou você para participar da organização \"%(org_name)s\" em %(site_name)s."
+msgstr "%(nickname)s har inviteret dig til at blive medlem af organisationen \"%(org_name)s\" på %(site_name)s."
 
 #: seahub/templates/sysadmin/user_add_email.html:13
 #: seahub/templates/sysadmin/user_batch_add_email.html:10
 #, python-format
 msgid "%(nickname)s invited you to join %(site_name)s."
-msgstr "%(nickname)s convidou você para se juntar a %(site_name)s."
+msgstr "%(nickname)s har inviteret dig til at blive medlem af %(site_name)s."
 
 #: seahub/templates/sysadmin/user_add_email.html:18
 #: seahub/templates/sysadmin/user_batch_add_email.html:14
 msgid "Here is your account information:"
-msgstr "Aqui está a informação de sua conta:"
+msgstr "Her er dine kontooplysninger:"
 
 #: seahub/templates/sysadmin/user_add_email.html:19
 #: seahub/templates/sysadmin/user_batch_add_email.html:15
@@ -3076,58 +3052,58 @@ msgstr "E-mail:"
 #, python-format
 msgid ""
 "Account %(user)s froze due to excessive failed logins. Please check at:"
-msgstr "A conta %(user)s foi bloqueada devido a excessivas tentativas de login incorretas. Por favor verifique em:"
+msgstr "Kontoen %(user)s blev frosset på grund af for mange mislykkede loginforsøg. Se venligst her:"
 
 #: seahub/templates/sysadmin/user_reset_email.html:12
 #, python-format
 msgid ""
 "Your password on %(site_name)s has been reset. Now it is %(password)s. "
 "Please change it as soon as possible. "
-msgstr "Sua senha em %(site_name)s foi redefinido. Agora é %(password)s. Por favor, altere-o o mais rapidamente possível."
+msgstr "Din adgangskode på %(site_name)s er blevet nulstillet. Den er nu %(password)s. Skift den venligst så hurtigt som muligt. "
 
 #: seahub/templates/team_quota_full.html:12
 #, python-format
 #| msgid "Your quota is almost full on %(site_name)s."
 msgid "The team quota is almost full on %(site_name)s."
-msgstr "A cota da equipe está quase cheia em %(site_name)s."
+msgstr "Teamets kvote er næsten fuld på %(site_name)s."
 
 #: seahub/templates/team_quota_full.html:14
 #: seahub/templates/user_quota_full.html:14
 msgid "Used:"
-msgstr "Utilizado:"
+msgstr "Brugt:"
 
 #: seahub/templates/text_diff.html:12
 msgid "modification details"
-msgstr "Detalhes da modificação"
+msgstr "ændringsdetaljer"
 
 #: seahub/templates/text_diff.html:15
 msgid "Back"
-msgstr "Voltar"
+msgstr "Tilbage"
 
 #: seahub/templates/text_diff.html:21
 msgid "Current Path:"
-msgstr "Caminho atual:"
+msgstr "Aktuel sti:"
 
 #: seahub/templates/text_diff.html:33
 msgid "It's a newly-created blank file."
-msgstr "Este é um arquivo novo sem conteúdo"
+msgstr "Det er en nyoprettet tom fil."
 
 #: seahub/templates/text_diff.html:40
 msgid "before modification"
-msgstr "Antes da modificação"
+msgstr "før ændring"
 
 #: seahub/templates/text_diff.html:42
 msgid "after modification"
-msgstr "Despois da modificação"
+msgstr "efter ændring"
 
 #: seahub/templates/user_quota_full.html:12
 #, python-format
 msgid "Your quota is almost full on %(site_name)s."
-msgstr "Sua cota está quase cheia em %(site_name)s."
+msgstr "Din kvote er næsten fuld på %(site_name)s."
 
 #: seahub/templates/wiki/_wiki_publish_ssr_nav_item.html:5
 msgid "Toggle navigation section"
-msgstr "Alternar seção de navegação"
+msgstr "Skift navigationssektion"
 
 #: seahub/templates/wiki/_wiki_publish_ssr_search.html:9
 #: seahub/templates/wiki/_wiki_publish_ssr_search.html:21
@@ -3135,94 +3111,94 @@ msgstr "Alternar seção de navegação"
 #: seahub/templates/wiki/_wiki_publish_ssr_search.html:53
 #| msgid "Search Files"
 msgid "Search"
-msgstr "Pesquisar"
+msgstr "Søg"
 
 #: seahub/templates/wiki/_wiki_publish_ssr_search.html:31
 msgid "Searching..."
-msgstr "Procurando..."
+msgstr "Søger..."
 
 #: seahub/templates/wiki/_wiki_publish_ssr_search.html:32
 msgid "Untitled"
-msgstr "Sem título"
+msgstr "Uden titel"
 
 #: seahub/templates/wiki/_wiki_publish_ssr_search.html:33
 #| msgid "Current Path:"
 msgid "Current page"
-msgstr "Página atual"
+msgstr "Aktuel side"
 
 #: seahub/templates/wiki/_wiki_publish_ssr_search.html:34
 #| msgid "Search Files"
 msgid "Search failed"
-msgstr "Busca falhou"
+msgstr "Søgning mislykkedes"
 
 #: seahub/templates/wiki/_wiki_publish_ssr_search.html:61
 #: seahub/templates/wiki/_wiki_publish_ssr_search.html:110
 msgid "Clear search"
-msgstr "Limpar busca"
+msgstr "Ryd søgning"
 
 #: seahub/templates/wiki/_wiki_publish_ssr_search.html:84
 msgid "Type characters to start search"
-msgstr "Digite para iniciar a busca"
+msgstr "Skriv tegn for at starte søgning"
 
 #: seahub/templates/wiki/_wiki_publish_ssr_search.html:94
 #| msgid "No result found"
 msgid "No result"
-msgstr "Sem resultado"
+msgstr "Intet resultat"
 
 #: seahub/templates/wiki/_wiki_publish_ssr_search.html:99
 #: seahub/templates/wiki/_wiki_publish_ssr_search.html:104
 msgid "Wiki pages"
-msgstr "Páginas Wiki"
+msgstr "Wiki-sider"
 
 #: seahub/templates/wiki/wiki.html:24
 msgid "Last modified by"
-msgstr "Última modificação por"
+msgstr "Sidst ændret af"
 
 #: seahub/templates/wiki/wiki_publish_ssr.html:46
 #| msgid "Wiki not found."
 msgid "Wiki navigation"
-msgstr "Navegação Wiki"
+msgstr "Wiki-navigation"
 
 #: seahub/templates/wiki/wiki_publish_ssr.html:52
 msgid "Close navigation"
-msgstr "Fechar navegação"
+msgstr "Luk navigation"
 
 #: seahub/templates/wiki/wiki_publish_ssr.html:66
 #: seahub/templates/wiki/wiki_publish_ssr.html:72
 msgid "Pages"
-msgstr "Páginas"
+msgstr "Sider"
 
 #: seahub/templates/wiki/wiki_publish_ssr.html:88
 msgid "Resize navigation panel"
-msgstr "Redimensionar painel de navegação"
+msgstr "Tilpas navigationspanel"
 
 #: seahub/templates/wiki/wiki_publish_ssr.html:98
 #| msgid "Operation"
 msgid "Open navigation"
-msgstr "Abrir navegação"
+msgstr "Åbn navigation"
 
 #: seahub/templates/wiki/wiki_publish_ssr.html:99
 #| msgid "Expiration"
 msgid "Navigation"
-msgstr "Navegação"
+msgstr "Navigation"
 
 #: seahub/templates/wiki/wiki_publish_ssr.html:131
 msgid "Breadcrumb"
-msgstr "Navegação estrutural (migalhas de pão)"
+msgstr "Brødkrummesti"
 
 #: seahub/templates/wiki/wiki_publish_ssr.html:141
 #: seahub/templates/wiki/wiki_publish_ssr.html:708
 msgid "Cover"
-msgstr "Capa"
+msgstr "Forsidebillede"
 
 #: seahub/thumbnail/views.py:49 seahub/thumbnail/views.py:130
 #: seahub/views/__init__.py:501
 msgid "Invalid arguments."
-msgstr "Argumentos invalidos"
+msgstr "Ugyldige argumenter."
 
 #: seahub/thumbnail/views.py:65 seahub/thumbnail/views.py:143
 msgid "Failed to create thumbnail."
-msgstr "Falha ao criar miniatura."
+msgstr "Kunne ikke oprette miniaturebillede."
 
 #: seahub/two_factor/forms.py:39 seahub/two_factor/forms.py:63
 #: seahub/two_factor/forms.py:167 seahub/two_factor/forms.py:173
@@ -3235,11 +3211,11 @@ msgstr "Token"
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:32
 #: seahub/two_factor/templates/two_factor/profile/disable.html:10
 msgid "Cancel"
-msgstr "Cancelar"
+msgstr "Annuller"
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:6
 msgid "Backup Tokens"
-msgstr "Tokens de Backup"
+msgstr "Sikkerhedskopitokens"
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:8
 #| msgid ""
@@ -3254,70 +3230,70 @@ msgid ""
 "    for login verification. If you've used up all your backup tokens, you\n"
 "    can generate a new set of backup tokens. Only the backup tokens shown\n"
 "    below will be valid."
-msgstr "Tokens de backup podem ser usados quando seus números de telefone principal e alternativo\n    não estiverem disponíveis. Eles servem para verificação de login. Se esgotar todos, gere um novo conjunto.\n    Apenas os tokens exibidos abaixo serão válidos."
+msgstr "Sikkerhedskopitokens kan bruges, når dit primære og sekundære\n    telefonnummer ikke er tilgængeligt. Sikkerhedskopitokens nedenfor kan bruges\n    til loginverifikation. Hvis du har brugt alle dine sikkerhedskopitokens, kan du\n    generere et nyt sæt sikkerhedskopitokens. Kun de sikkerhedskopitokens, der vises\n    nedenfor, vil være gyldige."
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:23
 msgid "Print these tokens and keep them somewhere safe."
-msgstr "Imprima esses tokens e guarde-os em local seguro."
+msgstr "Udskriv disse tokens og opbevar dem et sikkert sted."
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:26
 msgid "You don't have any backup codes yet."
-msgstr "Você ainda não tem códigos de backup."
+msgstr "Du har endnu ingen sikkerhedskoder."
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:33
 msgid "Generate Tokens"
-msgstr "Gerar Tokens"
+msgstr "Generer tokens"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:7
 msgid "Two-Factor Authentication"
-msgstr "Autenticação de 2 fatores"
+msgstr "To-faktor-godkendelse"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:19
 msgid ""
 "Open the two-factor authentication app on your device to view your "
 "authentication token and verify your identify."
-msgstr "Abra o aplicativo de autenticação de dois fatores no seu dispositivo para ver o token e confirmar sua identidade."
+msgstr "Åbn to-faktor-godkendelsesappen på din enhed for at se din godkendelsestoken og bekræfte din identitet."
 
 #: seahub/two_factor/templates/two_factor/core/login.html:22
 msgid "Authentication token"
-msgstr "Token de autenticação"
+msgstr "Godkendelsestoken"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:27
 #, python-format
 msgid "Remember this computer for %(remember_days)s days"
-msgstr "Lembrar este computador por %(remember_days)s dias"
+msgstr "Husk denne computer i %(remember_days)s dage"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:32
 #: seahub/two_factor/templates/two_factor/core/login.html:52
 msgid "Incorrect code"
-msgstr "Código incorreto"
+msgstr "Forkert kode"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:36
 #: seahub/two_factor/templates/two_factor/core/login.html:57
 msgid "Verify"
-msgstr "Verificar"
+msgstr "Bekræft"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:41
 msgid "Don't have your phone?"
-msgstr "Não tem o telefone com você?"
+msgstr "Har du ikke din telefon?"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:42
 msgid "Enter a two-factor backup code"
-msgstr "Digite um código de backup de dois fatores"
+msgstr "Indtast en to-faktor-sikkerhedskode"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:48
 msgid "Backup code"
-msgstr "Código de backup"
+msgstr "Sikkerhedskode"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:49
 msgid ""
 "You can enter one of your backup codes in case you lost access to your "
 "mobile device."
-msgstr "Você pode usar um código de backup se perder acesso ao dispositivo móvel."
+msgstr "Du kan indtaste en af dine sikkerhedskoder, hvis du har mistet adgang til din mobile enhed."
 
 #: seahub/two_factor/templates/two_factor/core/setup.html:95
 msgid "Enable Two-Factor Authentication"
-msgstr "Habilitar Autenticação de 2 fatores"
+msgstr "Aktivér to-faktor-godkendelse"
 
 #: seahub/two_factor/templates/two_factor/core/setup.html:104
 #| msgid ""
@@ -3330,22 +3306,22 @@ msgid ""
 "    smartphone to scan the QR code below. For example, use Google\n"
 "    Authenticator. Then, enter the token generated by the app.\n"
 "    "
-msgstr "Para começar a usar um gerador de tokens, use seu\n    smartphone para escanear o código QR abaixo. Por exemplo, use o Google\n    Authenticator. Em seguida, insira o token gerado pelo aplicativo.\n    "
+msgstr "For at begynde at bruge en token-generator skal du bruge din\n    smartphone til at scanne QR-koden nedenfor. Brug for eksempel Google\n    Authenticator. Indtast derefter tokenet genereret af appen.\n    "
 
 #: seahub/two_factor/templates/two_factor/core/setup.html:109
 msgid "Alternatively you may copy the Secret Key to your password manager"
-msgstr "Alternativamente, você pode copiar a chave secreta para o seu gerenciador de senhas."
+msgstr "Alternativt kan du kopiere den hemmelige nøgle til din adgangskodeadministrator"
 
 #: seahub/two_factor/templates/two_factor/core/setup.html:230
 #: seahub/two_factor/templates/two_factor/core/setup.html:233
 #: seahub/two_factor/templates/two_factor/core/setup.html:234
 #: seahub/two_factor/templates/two_factor/core/setup.html:239
 msgid "Copied"
-msgstr "Copiado"
+msgstr "Kopieret"
 
 #: seahub/two_factor/templates/two_factor/profile/disable.html:6
 msgid "Disable Two-Factor Authentication"
-msgstr "Desabilitar Autenticação de 2 fatores"
+msgstr "Deaktivér to-faktor-godkendelse"
 
 #: seahub/two_factor/templates/two_factor/profile/disable.html:8
 #| msgid ""
@@ -3354,106 +3330,106 @@ msgstr "Desabilitar Autenticação de 2 fatores"
 msgid ""
 "You are about to disable two-factor authentication. This compromises your "
 "account security, are you sure?"
-msgstr "Você está prestes a desativar a autenticação de dois fatores. Isso reduz a segurança da sua conta. Tem certeza?"
+msgstr "Du er ved at deaktivere to-faktor-godkendelse. Det kompromitterer din kontosikkerhed, er du sikker?"
 
 #: seahub/two_factor/templates/two_factor/profile/disable.html:11
 msgid "Disable"
-msgstr "Desativar"
+msgstr "Deaktivér"
 
 #: seahub/utils/__init__.py:163
 msgid "permission error"
-msgstr "Erro de permissão"
+msgstr "tilladelsesfejl"
 
 #: seahub/views/__init__.py:320
 msgid "Unable to view recycle page"
-msgstr "Incapaz de ver a página de reciclagem"
+msgstr "Kan ikke vise papirkurvssiden"
 
 #: seahub/views/__init__.py:375
 msgid "Unable to view library modification"
-msgstr "Incapaz de verlas modificações da biblioteca"
+msgstr "Kan ikke vise biblioteksændring"
 
 #: seahub/views/__init__.py:494
 msgid "Please specify history ID"
-msgstr "Favor, especifique o ID da história"
+msgstr "Angiv venligst historie-id"
 
 #: seahub/views/__init__.py:498
 msgid "Successfully restored the library."
-msgstr "Biblioteca restaurada com sucesso."
+msgstr "Biblioteket blev gendannet med succes."
 
 #: seahub/views/__init__.py:505
 msgid "History you specified does not exist"
-msgstr "O histórico que você especificou não existe"
+msgstr "Den angivne historik findes ikke"
 
 #: seahub/views/__init__.py:507
 msgid "Unknown error"
-msgstr "Erro desconhecido"
+msgstr "Ukendt fejl"
 
 #: seahub/views/__init__.py:812 seahub/views/repo.py:291
 #, python-format
 msgid "\"%s\" does not exist."
-msgstr "\"%s\" não existe."
+msgstr "\"%s\" findes ikke."
 
 #: seahub/views/__init__.py:844
 #, python-format
 msgid "Unable to download \"%s\""
-msgstr "Incapaz de baixar \"%s\""
+msgstr "Kan ikke downloade \"%s\""
 
 #: seahub/views/ajax.py:161 seahub/views/ajax.py:438
 msgid "Library is encrypted."
-msgstr "A biblioteca está criptografada."
+msgstr "Biblioteket er krypteret."
 
 #: seahub/views/ajax.py:167
 msgid "Error: no head commit id"
-msgstr "Erro: ID do cabeçalho não commitado"
+msgstr "Fejl: intet head commit-id"
 
 #: seahub/views/ajax.py:318
 msgid "Wrong repo id"
-msgstr "id do repo errado"
+msgstr "Forkert repo-id"
 
 #: seahub/views/ajax.py:329 seahub/views/ajax.py:361
 msgid "Bad upload link token."
-msgstr "Token do link de upload invalida"
+msgstr "Ugyldigt uploadlink-token."
 
 #: seahub/views/ajax.py:335 seahub/views/file.py:565 seahub/views/file.py:597
 #: seahub/views/file.py:1336 seahub/views/file.py:1664
 #: seahub/views/file.py:2267 seahub/views/file.py:2272
 #: seahub/views/file.py:2279
 msgid "File does not exist"
-msgstr "O arquivo não existe"
+msgstr "Filen findes ikke"
 
 #: seahub/views/ajax.py:368
 msgid "Bad repo id in upload link."
-msgstr "id do repo no link upload  invalido"
+msgstr "Ugyldigt repo-id i uploadlink."
 
 #: seahub/views/ajax.py:460
 msgid "No conflict in the merge."
-msgstr "Não há conflito na mesclagem."
+msgstr "Ingen konflikt i fletningen."
 
 #: seahub/views/file.py:238
 msgid "HTTPError: failed to open file online"
-msgstr "Erro HTTP: Falha ao abrir arquivo online"
+msgstr "HTTP-fejl: kunne ikke åbne fil online"
 
 #: seahub/views/file.py:242
 msgid "URLError: failed to open file online"
-msgstr "Erro URL: Falha ao abrir arquivo online"
+msgstr "URL-fejl: kunne ikke åbne fil online"
 
 #: seahub/views/file.py:249
 msgid "The encoding you chose is not proper."
-msgstr "A codificação escolhida não é adequada."
+msgstr "Den valgte kodning er ikke korrekt."
 
 #: seahub/views/file.py:266 seahub/views/file.py:269
 msgid "Unknown file encoding"
-msgstr "Codificação de arquivo desconhecida"
+msgstr "Ukendt filkodning"
 
 #: seahub/views/file.py:397 seahub/views/file.py:415 seahub/views/file.py:840
 msgid "The library is encrypted, can not open file online."
-msgstr "A biblioteca está criptografada. Os arquivos não podem ser abertos online."
+msgstr "Biblioteket er krypteret, kan ikke åbne fil online."
 
 #: seahub/views/file.py:399 seahub/views/file.py:844 seahub/views/file.py:970
 #: seahub/views/file.py:1015
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
-msgstr "O tamanho do arquivo supera %s, não pode ser aberto online."
+msgstr "Filstørrelsen overstiger %s, kan ikke åbnes online."
 
 #: seahub/views/file.py:552 seahub/views/file.py:574 seahub/views/file.py:579
 #: seahub/views/file.py:633 seahub/views/file.py:1187
@@ -3461,130 +3437,130 @@ msgstr "O tamanho do arquivo supera %s, não pode ser aberto online."
 #: seahub/views/file.py:1392 seahub/views/file.py:1706
 #: seahub/views/file.py:2231
 msgid "Unable to view file"
-msgstr "Incapaz de visualizar o arquivo"
+msgstr "Kan ikke vise fil"
 
 #: seahub/views/file.py:870 seahub/views/file.py:1135
 #: seahub/views/file.py:1503 seahub/views/file.py:1771
 msgid "Error when prepare Office Online file preview page."
-msgstr "Erro ao preparar a página de visualização do Office Online."
+msgstr "Fejl under forberedelse af forhåndsvisningsside for Office Online-fil."
 
 #: seahub/views/file.py:905 seahub/views/file.py:1151
 #: seahub/views/file.py:1524 seahub/views/file.py:1788
 msgid "Error when prepare OnlyOffice file preview page."
-msgstr "Erro ao preparar a página de visualização do OnlyOffice."
+msgstr "Fejl under forberedelse af forhåndsvisningsside for OnlyOffice-fil."
 
 #: seahub/views/file.py:1279
 msgid "Unable to download file, invalid file path"
-msgstr "Impossivel  realizar o download do arquivo, caminho invalido"
+msgstr "Kan ikke downloade fil, ugyldig filsti"
 
 #: seahub/views/file.py:1288
 msgid "Unable to download file, wrong file path"
-msgstr "Impossivel  realizar o download do arquivo, caminho incorreto"
+msgstr "Kan ikke downloade fil, forkert filsti"
 
 #: seahub/views/file.py:1295
 msgid "Unable to download file."
-msgstr "Não foi possível baixar o arquivo."
+msgstr "Kan ikke downloade fil."
 
 #: seahub/views/file.py:1471 seahub/views/file.py:1553
 #: seahub/views/file.py:1749 seahub/views/file.py:1842
 #: seahub/views/repo.py:325
 #, python-format
 msgid "Share link for %s."
-msgstr "Link de compartilhamento para %s."
+msgstr "Delingslink for %s."
 
 #: seahub/views/file.py:1991 seahub/views/file.py:1996
 msgid "Unable to download file"
-msgstr "Não foi possível baixar o arquivo"
+msgstr "Kan ikke downloade fil"
 
 #: seahub/views/file.py:2253
 #| msgid "Wiki not found."
 msgid "revision not found"
-msgstr "Revisão não encontrada"
+msgstr "revision ikke fundet"
 
 #: seahub/views/file.py:2260
 msgid "The original file does not exist"
-msgstr "O arquivo original não existe"
+msgstr "Den oprindelige fil findes ikke"
 
 #: seahub/views/mobile.py:35
 #, python-brace-format
 msgid "User {token.user} not found"
-msgstr "Usuário {token.user} não encontrado"
+msgstr "Bruger {token.user} blev ikke fundet"
 
 #: seahub/views/mobile.py:39
 #, python-brace-format
 msgid "User {token.user} inactive"
-msgstr "Usuário {token.user} inativo"
+msgstr "Bruger {token.user} er inaktiv"
 
 #: seahub/views/sso.py:179
 msgid ""
 "This link has already been visited, please click the login button on the "
 "client again"
-msgstr "Este link já foi acessado. Clique no botão de login no cliente novamente."
+msgstr "Dette link er allerede blevet besøgt, klik venligst på login-knappen i klienten igen"
 
 #: seahub/views/sso.py:204
 msgid "Invalid link, please click the login button on the client again"
-msgstr "Link inválido. Clique no botão de login no cliente novamente."
+msgstr "Ugyldigt link, klik venligst på login-knappen i klienten igen"
 
 #: seahub/views/sso.py:209
 msgid "Login timeout, please click the login button on the client again"
-msgstr "Tempo de login esgotado. Clique no botão de login no cliente novamente."
+msgstr "Login timeout, klik venligst på login-knappen i klienten igen"
 
 #: seahub/views/sysadmin.py:136 seahub/views/sysadmin.py:152
 #: seahub/views/sysadmin.py:181
 #, python-brace-format
 #| msgid "Library %s not found."
 msgid "Library {repo_id} not found."
-msgstr "Biblioteca {repo_id} não encontrada."
+msgstr "Biblioteket {repo_id} blev ikke fundet."
 
 #: seahub/views/sysadmin.py:159
 msgid "Commit id missing."
-msgstr "ID do commit ausente."
+msgstr "Commit-id mangler."
 
 #: seahub/views/sysadmin.py:177
 msgid "Object id missing."
-msgstr "ID do objeto ausente."
+msgstr "Objekt-id mangler."
 
 #: seahub/views/sysadmin.py:253 seahub/views/sysadmin.py:257
 msgid "Login ID"
-msgstr "ID de Login"
+msgstr "Login-id"
 
 #: seahub/views/sysadmin.py:387 seahub/views/sysadmin.py:413
 msgid "Failed to set quota: internal server error"
-msgstr "Definição de cota falhou: erro interno do servidor"
+msgstr "Kunne ikke angive kvote: intern serverfejl"
 
 #: seahub/views/sysadmin.py:434
 msgid "Failed to delete: the user is an organization creator"
-msgstr "Falha ao excluir: o usuário é um criador de organização"
+msgstr "Kunne ikke slette: brugeren er en organisationsopretter"
 
 #: seahub/views/sysadmin.py:479
 #, python-format
 msgid "Successfully revoke the admin permission of %s"
-msgstr "A permissão de administrador do usuário %s foi revogada com sucesso"
+msgstr "Administratorrettighederne for %s blev tilbagekaldt med succes"
 
 #: seahub/views/sysadmin.py:481
 msgid "Failed to revoke admin: the user does not exist"
-msgstr "Falha ao revogar a permissão de administrador: o usuário não existe"
+msgstr "Kunne ikke tilbagekalde admin: brugeren findes ikke"
 
 #: seahub/views/sysadmin.py:600
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
-msgstr "Reiniciada com sucesso a senha para %(passwd)s, um e-mail foi enviado para %(user)s."
+msgstr "Adgangskoden blev nulstillet til %(passwd)s med succes, og en e-mail er sendt til %(user)s."
 
 #: seahub/views/sysadmin.py:615
 msgid "Failed to reset password: user does not exist"
-msgstr "Redefinição da senha falhou: usuário não existe."
+msgstr "Kunne ikke nulstille adgangskode: brugeren findes ikke"
 
 #: seahub/views/sysadmin.py:666
 #, python-format
 msgid "Fail to add user %s."
-msgstr "Falha ao adicionar usuário %s."
+msgstr "Kunne ikke tilføje bruger %s."
 
 #: seahub/views/sysadmin.py:691 seahub/views/sysadmin.py:704
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
-msgstr "O usuário %s foi adicionado com sucesso. Um e-mail de notificação foi enviado."
+msgstr "Bruger %s blev tilføjet med succes. En e-mailnotifikation er sendt."
 
 #: seahub/views/sysadmin.py:694 seahub/views/sysadmin.py:707
 #, python-format
@@ -3594,55 +3570,55 @@ msgstr "O usuário %s foi adicionado com sucesso. Um e-mail de notificação foi
 msgid ""
 "Successfully added user %s. An error occurs when sending email notification,"
 " please check your email configuration."
-msgstr "Usuário %s adicionado com sucesso. Ocorreu um erro ao enviar a notificação por e-mail. Verifique sua configuração de e-mail."
+msgstr "Bruger %s blev tilføjet med succes. Der opstod en fejl under afsendelse af e-mailnotifikation, kontroller venligst din e-mailkonfiguration."
 
 #: seahub/views/sysadmin.py:696 seahub/views/sysadmin.py:709
 #, python-format
 msgid "Successfully added user %s."
-msgstr "Usuário %s adicionado com sucesso."
+msgstr "Bruger %s blev tilføjet med succes."
 
 #: seahub/views/sysadmin.py:711
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
-msgstr "O usuário %s foi adicionado com sucesso mas uma notificação de e-mail não pode ser enviada, porque \" \"o serviço de e-mail não está configurado propriamente."
+msgstr "Bruger %s blev tilføjet med succes. Men e-mailnotifikation kan ikke sendes, fordi e-mailtjenesten ikke er korrekt konfigureret."
 
 #: seahub/views/sysadmin.py:766
 msgid "Input should be a number"
-msgstr "A entrada deve ser um número"
+msgstr "Input skal være et tal"
 
 #: seahub/views/sysadmin.py:772
 msgid "Success"
-msgstr "Sucesso"
+msgstr "Succes"
 
 #: seahub/views/sysadmin.py:776
 msgid "Input number should be greater than 0"
-msgstr "Insira um numero que seja maior que 0"
+msgstr "Det indtastede tal skal være større end 0"
 
 #: seahub/views/sysadmin.py:817
 msgid "Successfully deleted."
-msgstr "Excluído com sucesso."
+msgstr "Slettet med succes."
 
 #: seahub/views/sysadmin.py:847
 #, python-format
 msgid "Successfully set %s as admin."
-msgstr "%s foi definido como administrador com sucesso"
+msgstr "%s blev angivet som administrator med succes."
 
 #: seahub/views/sysadmin.py:849
 #, python-format
 msgid "Failed to set %s as admin: user does not exist."
-msgstr "Falha ao definir  %s como administrador: usuário não existe"
+msgstr "Kunne ikke angive %s som administrator: brugeren findes ikke."
 
 #: seahub/views/sysadmin.py:868 seahub/views/sysadmin.py:869
 #: seahub/views/sysadmin.py:870 seahub/views/sysadmin.py:883
 #: seahub/views/sysadmin.py:884
 msgid "Optional"
-msgstr "Opcional"
+msgstr "Valgfrit"
 
 #: seahub/wiki/views.py:159
 msgid "Unable to view Wiki"
-msgstr "Não foi possível visualizar a Wiki"
+msgstr "Kan ikke vise wiki"
 
 #~ msgid "Can not reset password, please contact LDAP admin."
 #~ msgstr "Can not reset password, please contact LDAP admin."
@@ -3692,7 +3668,6 @@ msgstr "Não foi possível visualizar a Wiki"
 #~ msgid_plural "%(total)s results"
 #~ msgstr[0] "a484a55a04c0c78131bafc85f4ec9a09_pl_0"
 #~ msgstr[1] "a484a55a04c0c78131bafc85f4ec9a09_pl_1"
-#~ msgstr[2] "a484a55a04c0c78131bafc85f4ec9a09_pl_2"
 
 #~ msgid "Folder icon"
 #~ msgstr "Folder icon"

@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-02 14:56+0800\n"
+"POT-Creation-Date: 2026-09-02 15:41+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Vladimir <pash.vld@gmail.com>, 2015-2026\n"
 "Language-Team: Russian (http://app.transifex.com/haiwen/seahub/language/ru/)\n"
@@ -112,7 +112,7 @@ msgstr "Новый чат"
 msgid ""
 "Due to your read-only permission for this library, the document cannot be "
 "uploaded to this library."
-msgstr ""
+msgstr "Поскольку у вас есть только разрешение на чтение для этой библиотеки, документ не может быть загружен в нее."
 
 #: seahub/api2/endpoints/admin/account.py:205
 #: seahub/api2/endpoints/user.py:101 seahub/api2/views.py:374
@@ -3541,15 +3541,15 @@ msgstr "Тайм-аут входа в систему, нажмите кнопк�
 #, python-brace-format
 #| msgid "Library %s not found."
 msgid "Library {repo_id} not found."
-msgstr ""
+msgstr "Библиотека {repo_id} не найдена."
 
 #: seahub/views/sysadmin.py:159
 msgid "Commit id missing."
-msgstr ""
+msgstr "Идентификатор коммита отсутствует."
 
 #: seahub/views/sysadmin.py:177
 msgid "Object id missing."
-msgstr ""
+msgstr "Идентификатор объекта отсутствует."
 
 #: seahub/views/sysadmin.py:253 seahub/views/sysadmin.py:257
 msgid "Login ID"
