@@ -4,23 +4,21 @@
 # 
 # Translators:
 # Translators:
-# Carlos Marchi <carlosmarchi@gmail.com>, 2014
-# Carlos Madera <carlos.madera@gmail.com>, 2013-2014
 # Carlos Madera <carlos.madera@gmail.com>, 2013
+# Carlos Marchi <carlosmarchi@gmail.com>, 2014
 # cunhaal <cunha00@hotmail.com>, 2017
-# douglasfernandes <douglasfernandes@gmail.com>, 2013
 # douglasfernandes <douglasfernandes@gmail.com>, 2013
 # Erick Melo <erickmelo@gmail.com>, 2016
 # Fernando Macedo, 2026
 # Gilberto Cézar de Almeida <gibalmeida@gmail.com>, 2015
+# Mykos <inaciomcr@gmail.com>, 2016,2024
 # Leandro Magnabosco <leandroqm@gmail.com>, 2016
+# Marco André Faria <marcofaria@dropagency.com>, 2014
 # Marcos Rodrigo Ladeia <marcosrodrigo.ladeia@gmail.com>, 2015
 # Paulo Cotta <cotta.paulo@gmail.com>, 2013
-# Paulo Cotta <cotta.paulo@gmail.com>, 2013-2014
 # Rodrigo Almeida <rodrigoalmeidadj@yahoo.com.br>, 2016
 # Seafile Info <info@seafile.com>, 2026
 # William Alves <williamalves.ads@gmail.com>, 2015
-# zheng xie <xiez1989@gmail.com>, 2013
 # zheng xie <xiez1989@gmail.com>, 2013,2017
 msgid ""
 msgstr ""
@@ -28,12 +26,12 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-02 15:41+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Fernando Macedo, 2026\n"
-"Language-Team: Portuguese (Brazil) (http://app.transifex.com/haiwen/seahub/language/pt_BR/)\n"
+"Last-Translator: zheng xie <xiez1989@gmail.com>, 2013,2017\n"
+"Language-Team: Portuguese (Portugal) (http://app.transifex.com/haiwen/seahub/language/pt_PT/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pt_BR\n"
+"Language: pt_PT\n"
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #: seahub/adfs_auth/utils.py:56

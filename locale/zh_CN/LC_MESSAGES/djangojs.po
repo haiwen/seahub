@@ -9228,7 +9228,7 @@ msgstr "目录不存在。"
 
 #: frontend/src/pages/libraries/libraries-more-menu.js:12
 msgid "Only show groups with libraries"
-msgstr "仅显示包含知识库的群组"
+msgstr "只显示包含资料库的群组"
 
 #: frontend/src/pages/linked-devices/linked-devices.js:29
 msgid "No linked devices"
