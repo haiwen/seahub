@@ -1,10 +1,10 @@
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import FileIcon from '../../../assets/icons/wiki-file.svg';
-import FilesIcon from '../../../assets/icons/wiki-files.svg';
+import FileIcon from '../../../../assets/icons/wiki-file.svg';
+import FilesIcon from '../../../../assets/icons/wiki-files.svg';
 
-import '../css/nav-item-icon.css';
+import './index.css';
 
 function NavItemIcon({ symbol, className, disable, onClick }) {
   return (

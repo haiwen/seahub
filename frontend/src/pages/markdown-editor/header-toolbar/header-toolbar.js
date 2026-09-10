@@ -14,7 +14,7 @@ import ButtonGroup from './button-group';
 import FileInfo from './file-info';
 import MoreMenu from './more-menu';
 
-import '../css/header-toolbar.css';
+import './index.css';
 
 const { canDownloadFile, repoID, filePath, isRepoAdmin } = window.app.pageOptions;
 

@@ -6,7 +6,7 @@ import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 
 import '../../../css/dirent-detail.css';
-import '../css/detail-list-view.css';
+import './index.css';
 
 dayjs.extend(relativeTime);
 

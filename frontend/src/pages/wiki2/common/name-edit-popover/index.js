@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { PopoverBody } from 'reactstrap';
 import PropTypes from 'prop-types';
-import CustomizePopover from '../../../components/customize-popover';
-import { gettext } from '../../../utils/constants';
+import CustomizePopover from '../../../../components/customize-popover';
+import { gettext } from '../../../../utils/constants';
 
-import '../css/name-edit-popover.css';
+import './index.css';
 
 
 class NameEditPopover extends Component {
