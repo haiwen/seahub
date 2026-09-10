@@ -41,7 +41,7 @@ const entryFiles = {
   repoFolderTrash: '/repo-folder-trash.js',
   uploadLink: '/pages/upload-link',
   subscription: '/subscription.js',
-  institutionAdmin: '/pages/institution-admin/index.js',
+  institutionAdmin: '/institution-admin.js',
   wikiViewer: '/pages/wiki-viewer/index.js',
   orgAdmin: '/org-admin.js',
   sysAdmin: '/sys-admin.js',
