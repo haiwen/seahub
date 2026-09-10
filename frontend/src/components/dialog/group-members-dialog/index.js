@@ -8,6 +8,8 @@ import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 import toaster from '../toast';
 
+import './index.css';
+
 const propTypes = {
   groupID: PropTypes.number.isRequired,
   toggleDialog: PropTypes.func.isRequired
