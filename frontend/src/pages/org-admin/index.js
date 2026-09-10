@@ -1,8 +1,5 @@
 import React from 'react';
-import { I18nextProvider } from 'react-i18next';
-import { globalHistory, LocationProvider, Router } from '@gatsbyjs/reach-router';
-import { createRoot } from 'react-dom/client';
-import i18n from '../../_i18n/i18n-seafile-editor';
+import { Router } from '@gatsbyjs/reach-router';
 import { siteRoot, enableMultiADFS } from '../../utils/constants';
 import Departments from './departments/departments';
 import OrgDesktopDevices from './devices/desktop-devices';
@@ -140,12 +137,4 @@ class Org extends React.Component {
   }
 }
 
-const root = createRoot(document.getElementById('wrapper'));
-
-root.render(
-  <I18nextProvider value={i18n}>
-    <LocationProvider history={globalHistory}>
-      <Org />
-    </LocationProvider>
-  </I18nextProvider>
-);
+export default Org;

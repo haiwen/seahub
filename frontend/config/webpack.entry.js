@@ -43,8 +43,8 @@ const entryFiles = {
   subscription: '/subscription.js',
   institutionAdmin: '/pages/institution-admin/index.js',
   wikiViewer: '/pages/wiki-viewer/index.js',
-  orgAdmin: '/pages/org-admin',
-  sysAdmin: '/pages/sys-admin',
+  orgAdmin: '/org-admin.js',
+  sysAdmin: '/sys-admin.js',
   sysadminRepoHistory: '/pages/sys-admin/repo-history.js',
   sysadminRepoSnapshot: '/pages/sys-admin/repo-snapshot.js',
 };
