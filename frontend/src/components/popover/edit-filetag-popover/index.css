@@ -1,0 +1,126 @@
+.tag-list-container {
+  max-height: 15rem;
+  list-style: none;
+  overflow: auto;
+}
+
+.add-tag-link {
+  color: #666;
+}
+
+.add-tag-link:hover {
+  color: #444;
+  text-decoration: none;
+  background: #f5f5f5;
+}
+
+.tag-list-item {
+  height: 2.5rem;
+}
+
+.tag-list-item.hl {
+  background: #f5f5f5;
+}
+
+.tag-selected-icon {
+  color: #999;
+}
+
+.tag-delete-icon {
+  color: #999;
+  font-size: 18px;
+}
+
+.tag-delete-icon:hover {
+  color: #444;
+}
+
+.tag-dialog-back {
+  color: #666;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.tag-dialog-back:hover,
+.tag-dialog-back:focus {
+  color: #444;
+}
+
+/* overwrite the code from seafile-ui */
+.tag-color-option .colorinput-color::before {
+  display: none;
+}
+
+.tag-color-option .color-selected {
+  opacity: 0;
+}
+
+.tag-color-option .colorinput-input:checked ~ .colorinput-color .color-selected {
+  opacity: 1;
+}
+
+/* tag-color */
+.tag-color-popover .popover {
+  max-width: 360px;
+}
+
+.tag-color-popover .tag-color {
+  width: 20px;
+  height: 20px;
+}
+
+.tag-color-popover .colorinput-color {
+  width: 20px;
+  height: 20px;
+}
+
+.tag-color-popover .tag-color-option .colorinput-input:checked ~ .colorinput-color .color-selected {
+  font-size: 12px;
+}
+
+.edit-filetag-popover .edit-filetag-popover-input {
+  max-height: 30px;
+  font-size: 14px;
+  color: var(--bs-body-color);
+  height: 30px;
+}
+
+.edit-filetag-popover .popover {
+  padding: 10px;
+  width: 200px;
+  padding-bottom: 0px;
+}
+
+.edit-filetag-popover .tag-list-container {
+  padding: 10px 0;
+}
+
+.edit-filetag-popover .tag-not-found {
+  opacity: 0.5;
+}
+
+.edit-filetag-popover .tag-list-item {
+  height: 30px;
+}
+
+.edit-filetag-popover .tag-item {
+  display: flex;
+  align-items: center;
+  max-width: 130px;
+  margin: 0.25rem 0;
+  padding: 0 0.5rem;
+  width: fit-content;
+  border-radius: 10px;
+}
+
+.edit-filetag-popover .tag-item .tag-name {
+  color: #fff;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.edit-filetag-popover .add-item-btn {
+  margin: 0 -10px;
+}

@@ -6,7 +6,7 @@ import { isMobile } from '../../../utils/utils';
 import Icon from '../../icon';
 import PasswordStrengthChecker from './password-strength-checker';
 
-import '../../../css/password-input.css';
+import './password-input.css';
 
 const propTypes = {
   value: PropTypes.string,

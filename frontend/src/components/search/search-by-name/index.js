@@ -1,0 +1,80 @@
+import React, { Component } from 'react';
+import isHotkey from 'is-hotkey';
+import PropTypes from 'prop-types';
+import { gettext } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
+import SearchFileDialog from '../../dialog/search-file-dialog';
+import Icon from '../../icon';
+
+import './index.css';
+
+const propTypes = {
+  repoID: PropTypes.string.isRequired,
+  repoName: PropTypes.string.isRequired
+};
+
+const controlKey = Utils.isMac() ? '⌘' : 'Ctrl';
+
+class SearchByName extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isDialogOpen: false
+    };
+  }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.onDocumentKeydown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onDocumentKeydown);
+  }
+
+  onDocumentKeydown = (e) => {
+    if (isHotkey('mod+k')(e)) {
+      this.toggleDialog();
+    }
+  };
+
+  toggleDialog = () => {
+    this.setState({
+      isDialogOpen: !this.state.isDialogOpen
+    });
+  };
+
+  render() {
+    const { repoID, repoName } = this.props;
+    return (
+      <>
+        <div className="search-by-name">
+          <Icon symbol="search" className="input-icon-addon" />
+          <div
+            type="text"
+            className="form-control search-input"
+            name="query"
+            onClick={this.toggleDialog}
+            role="button"
+            title={gettext('Search files in this library')}
+            tabIndex={0}
+            onKeyDown={Utils.onKeyDown}
+          >
+            {gettext('Search files') + ` (${controlKey} + k)`}
+          </div>
+        </div>
+        {this.state.isDialogOpen &&
+        <SearchFileDialog
+          repoID={repoID}
+          repoName={repoName}
+          toggleDialog={this.toggleDialog}
+        />
+        }
+      </>
+    );
+  }
+}
+
+SearchByName.propTypes = propTypes;
+
+export default SearchByName;

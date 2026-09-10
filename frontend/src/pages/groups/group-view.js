@@ -19,7 +19,6 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import GroupOperationMenu from './group-op-menu';
 
-import '../../css/group-view.css';
 
 const propTypes = {
   groupID: PropTypes.string

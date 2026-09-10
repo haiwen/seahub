@@ -12,7 +12,7 @@ import { Utils } from '../../../utils/utils';
 import PageDragLayer from './pages/page-drag-layer';
 import PageItem from './pages/page-item';
 
-import '../css/wiki-nav.css';
+import './index.css';
 
 class WikiNav extends Component {
 

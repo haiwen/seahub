@@ -14,7 +14,7 @@ import LibsMobileThead from '../../components/libs-mobile-thead';
 import Loading from '../../components/loading';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import OpIcon from '../../components/op-icon';
-import RepoListCard from '../../components/repo-list-card/repo-list-card';
+import RepoListCard from '../../components/repo-list-card';
 import ReposSortMenu from '../../components/sort-menu';
 import toaster from '../../components/toast';
 import ViewModes from '../../components/view-modes';

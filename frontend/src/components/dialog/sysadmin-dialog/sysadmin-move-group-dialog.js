@@ -12,7 +12,7 @@ import { Utils } from '../../../utils/utils';
 import ClickOutside from '../../click-outside';
 import SearchInput from '../../search-input';
 
-import '../../../css/department-select.css';
+import './department-select.css';
 
 export default class MoveDepartmentDialog extends React.Component {
 

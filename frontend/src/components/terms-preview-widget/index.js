@@ -1,0 +1,66 @@
+import React from 'react';
+import { processor } from '@seafile/seafile-editor';
+import PropTypes from 'prop-types';
+import Loading from '../loading';
+
+import './index.css';
+
+const propTypes = {
+  content: PropTypes.string,
+  onContentClick: PropTypes.func,
+};
+
+class TermsPreviewWidget extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      innerHtml: null,
+      isFormatValue: true,
+    };
+  }
+
+  componentDidMount() {
+    let content = this.props.content;
+    if (content) {
+      this.formatterLongTextValue(content);
+    } else {
+      this.setState({
+        isFormatValue: false,
+        innerHtml: ''
+      });
+    }
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    let mdFile = nextProps.content;
+    this.formatterLongTextValue(mdFile);
+  }
+
+  formatterLongTextValue = (mdFile) => {
+    processor.process(mdFile).then((result) => {
+      let innerHtml = String(result);
+      this.setState({
+        isFormatValue: false,
+        innerHtml: innerHtml
+      });
+    });
+  };
+
+  render() {
+    if (this.state.isFormatValue) {
+      return <Loading />;
+    }
+
+    return (
+      <div className="conditions-preview-container" onClick={this.props.onContentClick}>
+        <div dangerouslySetInnerHTML={{ __html: this.state.innerHtml }}></div>
+      </div>
+    );
+  }
+
+}
+
+TermsPreviewWidget.propTypes = propTypes;
+
+export default TermsPreviewWidget;

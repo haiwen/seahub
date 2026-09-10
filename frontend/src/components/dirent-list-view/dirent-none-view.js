@@ -8,7 +8,7 @@ import ContextMenu from '../context-menu/context-menu';
 import { EVENT_BUS_TYPE } from '../event-bus';
 import Loading from '../loading';
 
-import '../../css/tip-for-new-file.css';
+import './tip-for-new-file.css';
 
 const propTypes = {
   path: PropTypes.string.isRequired,

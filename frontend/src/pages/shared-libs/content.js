@@ -6,7 +6,7 @@ import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import EmptyTip from '../../components/empty-tip';
 import LibsMobileThead from '../../components/libs-mobile-thead';
 import Loading from '../../components/loading';
-import RepoListCard from '../../components/repo-list-card/repo-list-card';
+import RepoListCard from '../../components/repo-list-card';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Item from './item';

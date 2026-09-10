@@ -1,0 +1,311 @@
+import React from 'react';
+import { Popover } from 'reactstrap';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import KeyCodes from '../../constants/keyCodes';
+import { gettext } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
+import ClickOutside from '../click-outside';
+import Icon from '../icon';
+import SearchEmptyTip from '../search-empty-tip';
+import SearchInput from '../search-input';
+import SelectDropdownIndicator from '../select-dropdown-indicator';
+import toaster from '../toast';
+import UserItem from '../user-item';
+
+import './index.css';
+
+const propTypes = {
+  placeholder: PropTypes.string,
+  searchPlaceholder: PropTypes.string,
+  onSelectChange: PropTypes.func.isRequired,
+  isMulti: PropTypes.bool,
+  className: PropTypes.string,
+};
+
+class UserSelect extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      maxItemNum: 0,
+      itemHeight: 0,
+      searchedUsers: [],
+      searchValue: '',
+      highlightIndex: -1,
+      popoverWidth: 385,
+    };
+  }
+
+  onValueChanged = (newSearchValue) => {
+    this.setState({
+      searchValue: newSearchValue
+    });
+    const searchValue = newSearchValue.trim();
+    if (searchValue.length === 0) {
+      this.setState({
+        searchedUsers: [],
+        highlightIndex: -1,
+      });
+    } else {
+      seafileAPI.searchUsers(newSearchValue.trim()).then((res) => {
+        this.setState({
+          searchedUsers: res.data.users,
+          highlightIndex: -1,
+        });
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    }
+  };
+
+  componentDidMount() {
+    if (this.ref) {
+      const { bottom } = this.ref.getBoundingClientRect();
+      if (bottom > window.innerHeight) {
+        this.ref.style.top = `${window.innerHeight - bottom}px`;
+      }
+    }
+    if (this.container && this.userItem) {
+      this.setState({
+        maxItemNum: this.getMaxItemNum(),
+        itemHeight: parseInt(getComputedStyle(this.userItem, null).height)
+      });
+    }
+    if (this.selectedUserItemContainer) {
+      this.setState({
+        popoverWidth: this.selectedUserItemContainer.offsetWidth
+      });
+    }
+    document.addEventListener('keydown', this.onHotKey, true);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onHotKey, true);
+  }
+
+  onClickOutside = (e) => {
+    if (!this.selectedUserItemContainer.contains(e.target) && this.state.isPopoverOpen) {
+      this.setState({
+        isPopoverOpen: false,
+        searchedUsers: [],
+        searchValue: '',
+        highlightIndex: -1,
+      });
+    }
+  };
+
+  getMaxItemNum = () => {
+    let userContainerStyle = getComputedStyle(this.container, null);
+    let userItemStyle = getComputedStyle(this.userItem, null);
+    let maxContainerItemNum = Math.floor(parseInt(userContainerStyle.maxHeight) / parseInt(userItemStyle.height));
+    return maxContainerItemNum - 1;
+  };
+
+  onHotKey = (e) => {
+    if (e.keyCode === KeyCodes.Enter) {
+      this.onEnter(e);
+    } else if (e.keyCode === KeyCodes.UpArrow) {
+      this.onUpArrow(e);
+    } else if (e.keyCode === KeyCodes.DownArrow) {
+      this.onDownArrow(e);
+    } else if (e.keyCode === KeyCodes.Escape) {
+      this.onEsc(e);
+    }
+  };
+
+  onEnter = (e) => {
+    e.preventDefault();
+    let user;
+    if (this.state.searchedUsers.length === 1) {
+      user = this.state.searchedUsers[0];
+    } else if (this.state.highlightIndex > -1) {
+      user = this.state.searchedUsers[this.state.highlightIndex];
+    }
+    if (user) {
+      this.onUserClick(user);
+    }
+  };
+
+  onUpArrow = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    let { highlightIndex, maxItemNum, itemHeight } = this.state;
+    if (highlightIndex > 0) {
+      this.setState({ highlightIndex: highlightIndex - 1 }, () => {
+        if (this.container && highlightIndex < this.state.searchedUsers.length - maxItemNum) {
+          this.container.scrollTop -= itemHeight;
+        }
+      });
+    } else {
+      this.setState({ highlightIndex: this.state.searchedUsers.length - 1 }, () => {
+        if (this.container) {
+          this.container.scrollTop = this.container.scrollHeight;
+        }
+      });
+    }
+  };
+
+  onDownArrow = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    let { highlightIndex, maxItemNum, itemHeight } = this.state;
+    if (highlightIndex < this.state.searchedUsers.length - 1) {
+      this.setState({ highlightIndex: highlightIndex + 1 }, () => {
+        if (this.container && highlightIndex >= maxItemNum) {
+          this.container.scrollTop += itemHeight;
+        }
+      });
+    } else {
+      this.setState({ highlightIndex: 0 }, () => {
+        if (this.container) {
+          this.container.scrollTop = 0;
+        }
+      });
+    }
+  };
+
+  onEsc = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    this.setState({
+      isPopoverOpen: false,
+      searchedUsers: [],
+      searchValue: '',
+      highlightIndex: -1
+    });
+  };
+
+  onUserClick = (user) => {
+    const { isMulti = true } = this.props;
+    let selectedUsers = this.props.selectedUsers.slice(0);
+    const index = selectedUsers.findIndex(item => item.email === user.email);
+    if (isMulti) {
+      if (index > -1) {
+        selectedUsers.splice(index, 1);
+      } else {
+        selectedUsers.push(user);
+      }
+    } else {
+      if (index > -1) {
+        selectedUsers = [];
+      } else {
+        selectedUsers = [user];
+      }
+    }
+    this.props.onSelectChange(selectedUsers);
+  };
+
+  onKeyDown = (e) => {
+    if (e.keyCode === KeyCodes.LeftArrow || e.keyCode === KeyCodes.RightArrow) {
+      e.stopPropagation();
+    }
+  };
+
+  onDeleteSelectedCollaborator = (user) => {
+    const { selectedUsers = [] } = this.props;
+    const newSelectedCollaborator = selectedUsers.filter(item => item.email !== user.email);
+    this.props.onSelectChange(newSelectedCollaborator);
+  };
+
+  onTogglePopover = () => {
+    this.setState({
+      isPopoverOpen: !this.state.isPopoverOpen,
+      highlightIndex: -1,
+      searchedUsers: [],
+      searchValue: ''
+    });
+  };
+
+  render() {
+    const { searchValue, highlightIndex, searchedUsers } = this.state;
+    const { className = '', selectedUsers = [] } = this.props;
+    return (
+      <ClickOutside onClickOutside={this.onClickOutside}>
+        <>
+          <div
+            className={classnames('user-select-trigger sf-select', className, { 'focus': this.state.isPopoverOpen })}
+            id="user-select"
+            tabIndex={0}
+            role="button"
+            aria-haspopup="listbox"
+            aria-expanded={this.state.isPopoverOpen}
+            onClick={this.onTogglePopover}
+            onKeyDown={Utils.onKeyDown}
+            ref={ref => this.selectedUserItemContainer = ref}
+          >
+            {selectedUsers.map((user, index) => {
+              return (
+                <UserItem
+                  key={index}
+                  idx={index}
+                  user={user}
+                  enableDeleteUser={true}
+                  onDeleteUser={this.onDeleteSelectedCollaborator}
+                />
+              );
+            })}
+            {selectedUsers.length === 0 && (
+              <div className="user-select-placeholder">
+                {this.props.placeholder || gettext('Select users')}
+              </div>
+            )}
+            <SelectDropdownIndicator />
+          </div>
+          <Popover
+            placement="bottom-start"
+            isOpen={this.state.isPopoverOpen}
+            target='user-select'
+            hideArrow={true}
+            fade={false}
+            className="user-select-popover"
+            style={{ width: this.state.popoverWidth }}
+          >
+            <div className="user-select-container" ref={ref => this.ref = ref} onMouseDown={e => e.stopPropagation()}>
+              <div className="user-search-container">
+                <SearchInput
+                  autoFocus={true}
+                  placeholder={this.props.searchPlaceholder || gettext('Search users')}
+                  value={searchValue}
+                  onChange={this.onValueChanged}
+                  onKeyDown={this.onKeyDown}
+                  isClearable={true}
+                  clearValue={() => this.onValueChanged('')}
+                />
+              </div>
+              <div className="user-list-container" ref={ref => this.container = ref}>
+                {searchedUsers.length > 0 && (
+                  searchedUsers.map((user, index) => {
+                    return (
+                      <div
+                        key={user.email}
+                        className={classnames('user-item-container', { 'user-item-container-highlight': index === highlightIndex })}
+                        ref={ref => this.userItem = ref}
+                        onClick={this.onUserClick.bind(this, user)}
+                        tabIndex={0}
+                        role="option"
+                        aria-selected={index === highlightIndex}
+                        onKeyDown={Utils.onKeyDown}
+                      >
+                        <UserItem user={user} enableDeleteUser={false} />
+                        {selectedUsers.find(u => u.email === user.email) && <span><Icon symbol="check" /></span>}
+                      </div>
+                    );
+                  })
+                )}
+                {searchedUsers.length === 0 &&
+                  <SearchEmptyTip text={searchValue ? gettext('User not found') : gettext('Enter characters to start searching')} />}
+              </div>
+            </div>
+          </Popover>
+        </>
+      </ClickOutside>
+    );
+  }
+}
+
+UserSelect.propTypes = propTypes;
+
+export default UserSelect;

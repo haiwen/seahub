@@ -39,7 +39,6 @@ import { formatWithTimezone } from './utils/time';
 import { Utils } from './utils/utils';
 
 import './css/layout.css';
-import './css/header.css';
 import './css/shared-dir-view.css';
 import './css/grid-view.css';
 

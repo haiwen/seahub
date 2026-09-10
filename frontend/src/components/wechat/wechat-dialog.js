@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
 import { mediaUrl } from '../../utils/constants';
 import { isWorkWeixin } from './weixin-utils';
-import '../../css/wechat-dialog.css';
+import './index.css';
 
 const propTypes = {
   toggleWechatDialog: PropTypes.func.isRequired

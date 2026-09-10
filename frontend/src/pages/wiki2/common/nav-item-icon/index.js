@@ -1,0 +1,30 @@
+import React from 'react';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import FileIcon from '../../../../assets/icons/wiki-file.svg';
+import FilesIcon from '../../../../assets/icons/wiki-files.svg';
+
+import './index.css';
+
+function NavItemIcon({ symbol, className, disable, onClick }) {
+  return (
+    <div
+      onClick={onClick}
+      className={classNames('nav-item-icon', { 'nav-item-icon-disable': disable })}
+      role="button"
+      aria-label={symbol}
+    >
+      {symbol === 'file' && <FileIcon className='seafile-multicolor-icon' aria-hidden="true" />}
+      {symbol === 'files' && <FilesIcon className='seafile-multicolor-icon' aria-hidden="true" />}
+    </div>
+  );
+}
+
+NavItemIcon.propTypes = {
+  symbol: PropTypes.string.isRequired,
+  className: PropTypes.string,
+  disable: PropTypes.bool,
+  onClick: PropTypes.func,
+};
+
+export default NavItemIcon;

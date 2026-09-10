@@ -1,0 +1,886 @@
+import React from 'react';
+import { DropdownItem } from 'reactstrap';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import urlJoin from 'url-join';
+import CreatorFormatter from '@/metadata/components/cell-formatter/creator';
+import FileTagsFormatter from '@/metadata/components/cell-formatter/file-tags';
+import { getNumberDisplayString } from '@/metadata/utils/cell';
+import TextTranslation from '@/utils/text-translation';
+import { DIR_COLUMN_KEYS } from '../../../constants/dir-column-config';
+import { PRIVATE_COLUMN_KEY } from '../../../metadata/constants';
+import { Dirent } from '../../../models';
+import { gettext, siteRoot, mediaUrl, enableVideoThumbnail, enablePDFThumbnail, enableThumbnailServer } from '../../../utils/constants';
+import { toggleStar } from '../../../utils/dirent-operations';
+import { imageThumbnailCenter, videoThumbnailCenter } from '../../../utils/thumbnail-center';
+import { formatUnixWithTimezone } from '../../../utils/time';
+import URLDecorator from '../../../utils/url-decorator';
+import { Utils } from '../../../utils/utils';
+import { menuHandlers } from '../../dir-view-mode/utils/menuHandlers';
+import CustomDropdown from '../../dropdown';
+import { EVENT_BUS_TYPE } from '../../event-bus';
+import Icon from '../../icon';
+import MobileItemMenu from '../../mobile-item-menu';
+import OpIcon from '../../op-icon';
+import Rename from '../../rename';
+import StatusEditor from '../status-editor';
+
+import './index.css';
+import '../../../metadata/components/cell-formatter/collaborator/index.css';
+import '../index.css';
+
+const propTypes = {
+  path: PropTypes.string.isRequired,
+  repoID: PropTypes.string.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  dirent: PropTypes.object.isRequired,
+  eventBus: PropTypes.object.isRequired,
+  onItemClick: PropTypes.func.isRequired,
+  freezeItem: PropTypes.func.isRequired,
+  unfreezeItem: PropTypes.func.isRequired,
+  onItemRenameToggle: PropTypes.func.isRequired,
+  onItemSelected: PropTypes.func.isRequired,
+  onItemDelete: PropTypes.func.isRequired,
+  onItemRename: PropTypes.func.isRequired,
+  onItemMove: PropTypes.func.isRequired,
+  onItemConvert: PropTypes.func.isRequired,
+  onDirentClick: PropTypes.func.isRequired,
+  updateDirent: PropTypes.func.isRequired,
+  showImagePopup: PropTypes.func.isRequired,
+  currentRepoInfo: PropTypes.object,
+  isRepoOwner: PropTypes.bool,
+  isAdmin: PropTypes.bool.isRequired,
+  repoEncrypted: PropTypes.bool.isRequired,
+  onItemMouseDown: PropTypes.func.isRequired,
+  onItemContextMenu: PropTypes.func.isRequired,
+  onMenuItemClick: PropTypes.func.isRequired,
+  selectedDirentList: PropTypes.array.isRequired,
+  activeDirent: PropTypes.object,
+  getDirentItemMenuList: PropTypes.func.isRequired,
+  repoTags: PropTypes.array.isRequired,
+  onFileTagChanged: PropTypes.func,
+  enableDirPrivateShare: PropTypes.bool.isRequired,
+  showDirentDetail: PropTypes.func.isRequired,
+  onItemsMove: PropTypes.func.isRequired,
+  onShowDirentsDraggablePreview: PropTypes.func,
+  loadDirentList: PropTypes.func,
+  isMetadataLoading: PropTypes.bool,
+  collaborators: PropTypes.array,
+  collaboratorsCache: PropTypes.object,
+  updateCollaboratorsCache: PropTypes.func,
+  queryUser: PropTypes.func,
+  columns: PropTypes.array,
+  hiddenColumnKeys: PropTypes.array,
+  tagsData: PropTypes.object,
+};
+
+class DirentListItem extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    let { dirent } = this.props;
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(dirent.permission);
+    this.isCustomPermission = isCustomPermission;
+    this.customPermission = customPermission;
+    this.canPreview = true;
+    this.canDrag = dirent.permission === 'rw';
+    if (isCustomPermission) {
+      const { preview, modify } = customPermission.permission;
+      this.canPreview = preview || modify;
+      this.canDrag = modify;
+    }
+
+    this.state = {
+      isOperationShow: false,
+      canDrag: this.canDrag,
+      isShowTagTooltip: false,
+      isDragTipShow: false,
+      isDropTipShow: false,
+    };
+    this.isGeneratingThumbnail = false;
+    this.thumbnailCenter = null;
+    this.dragIconRef = null;
+    this.emptyContentRef = null;
+  }
+
+  componentDidMount() {
+    const { repoID, path, dirent } = this.props;
+    if (this.checkGenerateThumbnail(dirent)) {
+      this.isGeneratingThumbnail = true;
+      this.thumbnailCenter.createThumbnail({
+        repoID,
+        path: urlJoin(path, dirent.name),
+        callback: this.updateDirentThumbnail,
+      });
+    }
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.dirent && this.props.dirent) {
+      if (nextProps.dirent.name !== this.props.dirent.name) {
+        if (this.checkGenerateThumbnail(nextProps.dirent)) {
+          const { repoID, path } = nextProps;
+          this.isGeneratingThumbnail = true;
+          this.thumbnailCenter.createThumbnail({
+            repoID,
+            path: urlJoin(path, nextProps.dirent.name),
+            callback: this.updateDirentThumbnail,
+          });
+        }
+      }
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { isItemFreezed, activeDirent, dirent } = this.props;
+
+    if (prevProps.isItemFreezed !== isItemFreezed && !isItemFreezed) {
+      this.setState({
+        isOperationShow: activeDirent && activeDirent.name === dirent.name,
+      });
+    }
+
+    if (prevProps.dirent.permission !== dirent.permission) {
+      this.setState({
+        canDrag: dirent.permission === 'rw' || (this.customPermission && this.customPermission.permission.modify)
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.isGeneratingThumbnail) {
+      const { dirent } = this.props;
+      const { repoID, path } = this.props;
+      this.thumbnailCenter.cancelThumbnail({
+        repoID,
+        path: [path, dirent.name].join('/'),
+      });
+      this.thumbnailCenter = null;
+    }
+    this.setState = () => { };
+  }
+
+  checkGenerateThumbnail = (dirent) => {
+    if (this.props.repoEncrypted || dirent.encoded_thumbnail_src || dirent.encoded_thumbnail_src === '') {
+      return false;
+    }
+    const fileExt = Utils.getFileExtension(dirent.name, true);
+    if (fileExt === 'avif' && !enableThumbnailServer) {
+      return false;
+    }
+    if (enableVideoThumbnail && Utils.videoCheck(dirent.name)) {
+      this.thumbnailCenter = videoThumbnailCenter;
+      return true;
+    }
+    if (Utils.imageCheck(dirent.name) || Utils.epubCheck(dirent.name) || (enablePDFThumbnail && Utils.pdfCheck(dirent.name))) {
+      this.thumbnailCenter = imageThumbnailCenter;
+      return true;
+    }
+
+    return false;
+  };
+
+  updateDirentThumbnail = (encoded_thumbnail_src) => {
+    this.isGeneratingThumbnail = false;
+    // Let parent handle thumbnail update through props update
+    this.props.updateDirent(this.props.dirent, { encoded_thumbnail_src });
+  };
+
+  onMouseEnter = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        isOperationShow: true,
+      });
+    }
+    if (this.state.canDrag) {
+      this.setState({ isDragTipShow: true });
+    }
+  };
+
+  onMouseOver = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        isOperationShow: true,
+      });
+    }
+    if (this.state.canDrag) {
+      this.setState({ isDragTipShow: true });
+    }
+  };
+
+  onMouseLeave = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        isOperationShow: false,
+      });
+    }
+    this.setState({ isDragTipShow: false });
+  };
+
+  unfreezeItem = () => {
+    this.setState({
+      isOperationShow: false,
+    });
+    this.props.unfreezeItem();
+  };
+
+  onItemSelected = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    this.props.onItemSelected(this.props.dirent, event);
+  };
+
+  onRowClick = (event) => {
+    if (this.state.isRenaming) {
+      return;
+    }
+
+    const interactiveSelector = 'a, button, input, textarea, select, [role="button"], .op-icon, .dropdown, .dropdown-toggle';
+    if (event.target.closest(interactiveSelector)) {
+      return;
+    }
+
+    event.stopPropagation();
+    event.preventDefault();
+    this.props.onDirentClick(this.props.dirent, event);
+  };
+
+  onItemStarred = (e) => {
+    e.stopPropagation();
+    const { dirent, repoID, path, updateDirent } = this.props;
+    toggleStar(repoID, path, dirent, updateDirent);
+  };
+
+  onDirentClick = (e) => {
+    e.stopPropagation();
+
+    if (this.state.isRenaming) return;
+    this.props.onDirentClick(this.props.dirent, e);
+  };
+
+  onItemClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const dirent = this.props.dirent;
+    if (this.state.isRenaming) {
+      return;
+    }
+
+    if (dirent.isDir()) {
+      this.props.onItemClick(dirent);
+      return;
+    }
+
+    if (!this.canPreview) {
+      return;
+    }
+
+    if (Utils.imageCheck(dirent.name)) {
+      this.props.showImagePopup(dirent);
+    } else {
+      this.props.onItemClick(dirent);
+    }
+  };
+
+  onItemDelete = (e) => {
+    e.preventDefault();
+    e.nativeEvent.stopImmediatePropagation(); // for document event
+    this.props.onItemDelete(this.props.dirent);
+  };
+
+  onMobileMenuItemClick = (e) => {
+    const operation = e.target.getAttribute('data-op');
+    this.onMenuItemClick(operation, e);
+  };
+
+  onMenuItemClick = (operation, event) => {
+    // Use unified menuHandlers for all operations
+    const handler = menuHandlers[operation];
+
+    if (handler) {
+      handler({
+        eventBus: this.props.eventBus,
+        path: this.props.path,
+        repoID: this.props.repoID,
+        dirent: this.props.dirent,
+        dirents: this.props.dirent,
+        isBatch: false,
+        updateDirent: this.props.updateDirent,
+        onItemRename: this.onItemRenameToggle,
+        onItemDelete: this.props.onItemDelete,
+        onItemConvert: this.props.onItemConvert,
+        showDirentDetail: this.props.showDirentDetail,
+        loadDirentList: this.props.loadDirentList
+      });
+    }
+  };
+
+  onItemConvert = (e, dstType) => {
+    e.preventDefault();
+    e.nativeEvent.stopImmediatePropagation(); // for document event
+    this.props.onItemConvert(this.props.dirent, dstType);
+  };
+
+  onFileTagChanged = () => {
+    let direntPath = this.getDirentPath(this.props.dirent);
+    this.props.onFileTagChanged(this.props.dirent, direntPath);
+  };
+
+  onItemRenameToggle = () => {
+    this.props.onItemRenameToggle(this.props.dirent);
+    this.setState({
+      isOperationShow: false,
+      isRenaming: true,
+      canDrag: false
+    });
+  };
+
+  onRenameConfirm = (newName) => {
+    this.props.onItemRename(this.props.dirent, newName);
+    this.onRenameCancel();
+  };
+
+  onRenameCancel = () => {
+    this.setState({
+      isRenaming: false,
+      canDrag: this.canDrag // set it back to the initial value
+    });
+    this.unfreezeItem();
+  };
+
+  onPermission = () => {
+    const { path, eventBus } = this.props;
+    const { dirent } = this.props;
+    const direntPath = Utils.joinPath(path, dirent.name);
+    const name = Utils.getFileName(direntPath);
+    eventBus.dispatch(EVENT_BUS_TYPE.PERMISSION, direntPath, name);
+  };
+
+  openFileAccessLog = () => {
+    const { path, eventBus } = this.props;
+    const { dirent } = this.props;
+    const direntPath = Utils.joinPath(path, dirent.name);
+    eventBus.dispatch(EVENT_BUS_TYPE.ACCESS_LOG, direntPath, dirent.name);
+  };
+
+  onOpenWithDefault = () => {
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(this.props.dirent);
+    let url = URLDecorator.getUrl({ type: 'open_with_default', repoID: repoID, filePath: filePath });
+    window.open(url, '_blank');
+  };
+
+  onOpenWithOnlyOffice = () => {
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(this.props.dirent);
+    let url = URLDecorator.getUrl({ type: 'open_with_onlyoffice', repoID: repoID, filePath: filePath });
+    window.open(url, '_blank');
+  };
+
+  onItemDownload = (e) => {
+    e.preventDefault();
+    e.nativeEvent.stopImmediatePropagation();
+    const { path, eventBus } = this.props;
+    const { dirent } = this.props;
+    const direntList = dirent instanceof Dirent ? [dirent.toJson()] : [dirent];
+    eventBus.dispatch(EVENT_BUS_TYPE.DOWNLOAD_FILE, path, direntList);
+  };
+
+  onItemMove = () => {
+    const { path, eventBus } = this.props;
+    const { dirent } = this.props;
+    eventBus.dispatch(EVENT_BUS_TYPE.MOVE_FILE, path, dirent, false);
+  };
+
+  onItemCopy = () => {
+    const { path, eventBus } = this.props;
+    const { dirent } = this.props;
+    eventBus.dispatch(EVENT_BUS_TYPE.COPY_FILE, path, dirent, false);
+  };
+
+  onItemShare = () => {
+    const { eventBus } = this.props;
+    const { dirent } = this.props;
+    const direntPath = this.getDirentPath(dirent);
+    eventBus.dispatch(EVENT_BUS_TYPE.SHARE_FILE, direntPath, dirent);
+  };
+
+  getDirentPath = (dirent) => {
+    let path = this.props.path;
+    return path === '/' ? path + dirent.name : path + '/' + dirent.name;
+  };
+
+  onTagTooltipToggle = (e) => {
+    e.stopPropagation();
+    this.setState({ isShowTagTooltip: !this.state.isShowTagTooltip });
+  };
+
+  onItemDragStart = (e) => {
+    if (Utils.isIEBrowser() || !this.state.canDrag) {
+      return false;
+    }
+    e.dataTransfer.effectAllowed = 'move';
+    let { selectedDirentList } = this.props;
+    if (selectedDirentList.length > 0 && selectedDirentList.includes(this.props.dirent)) {
+      this.props.onShowDirentsDraggablePreview();
+      e.dataTransfer.setDragImage(this.emptyContentRef, 0, 0);
+      let selectedList = selectedDirentList.map(item => {
+        let nodeRootPath = this.getDirentPath(item);
+        let dragStartItemData = { nodeDirent: item, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath };
+        return dragStartItemData;
+      });
+      selectedList = JSON.stringify(selectedList);
+      e.dataTransfer.setData('application/drag-item-info', selectedList);
+      return;
+    }
+
+    if (e.dataTransfer && e.dataTransfer.setDragImage) {
+      e.dataTransfer.setDragImage(this.dragIconRef, 15, 15);
+    }
+
+    let nodeRootPath = this.getDirentPath(this.props.dirent);
+    let dragStartItemData = { nodeDirent: this.props.dirent, nodeParentPath: this.props.path, nodeRootPath: nodeRootPath };
+    dragStartItemData = JSON.stringify(dragStartItemData);
+
+    e.dataTransfer.setData('application/drag-item-info', dragStartItemData);
+  };
+
+  onItemDragEnter = (e) => {
+    if (Utils.isIEBrowser() || !this.state.canDrag) {
+      return false;
+    }
+    if (this.props.dirent.type === 'dir') {
+      e.stopPropagation();
+      this.setState({ isDropTipShow: true });
+    }
+  };
+
+  onItemDragOver = (e) => {
+    if (Utils.isIEBrowser() || !this.state.canDrag) {
+      return false;
+    }
+    if (e.dataTransfer.dropEffect === 'copy') {
+      return;
+    }
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  onItemDragLeave = (e) => {
+    if (Utils.isIEBrowser() || !this.state.canDrag) {
+      return false;
+    }
+
+    if (this.props.dirent.type === 'dir') {
+      e.stopPropagation();
+    }
+
+    const currentElement = e.currentTarget;
+    const relatedTarget = e.relatedTarget;
+
+    if (relatedTarget && currentElement.contains(relatedTarget)) {
+      return;
+    }
+
+    this.setState({ isDropTipShow: false });
+  };
+
+  onItemDragDrop = (e) => {
+    if (Utils.isIEBrowser() || !this.state.canDrag) {
+      return false;
+    }
+    this.setState({ isDropTipShow: false });
+    if (e.dataTransfer.files.length) { // uploaded files
+      return;
+    }
+    if (this.props.dirent.type === 'dir') {
+      e.stopPropagation();
+    } else {
+      return;
+    }
+    let dragStartItemData = e.dataTransfer.getData('application/drag-item-info');
+    dragStartItemData = JSON.parse(dragStartItemData);
+    if (Array.isArray(dragStartItemData)) {
+      let direntPaths = dragStartItemData.map(draggedItem => {
+        return draggedItem.nodeRootPath;
+      });
+
+      let selectedPath = Utils.joinPath(this.props.path, this.props.dirent.name);
+
+      if (direntPaths.some(direntPath => { return direntPath === selectedPath; })) {
+        return;
+      }
+
+      this.props.onItemsMove(this.props.currentRepoInfo, selectedPath);
+      return;
+    }
+
+    let { nodeDirent, nodeParentPath, nodeRootPath } = dragStartItemData;
+    let dropItemData = this.props.dirent;
+
+    if (nodeDirent.name === dropItemData.name) {
+      return;
+    }
+
+    if (dropItemData.type === 'dir' && nodeDirent.type === 'dir') {
+      if (nodeParentPath !== this.props.path) {
+        if (this.props.path.indexOf(nodeRootPath) !== -1) {
+          return;
+        }
+      }
+    }
+
+    let selectedPath = Utils.joinPath(this.props.path, this.props.dirent.name);
+    this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, selectedPath, nodeParentPath);
+  };
+
+  onItemMouseDown = (event) => {
+    this.props.onItemMouseDown(event);
+  };
+
+  onItemContextMenu = (event) => {
+    this.props.onItemContextMenu(event, this.props.dirent);
+  };
+
+  getDirentHref = () => {
+    let { path, repoID } = this.props;
+    let dirent = this.props.dirent;
+
+    if (!path || !dirent || !dirent.name) {
+      return '#';
+    }
+
+    let direntPath = Utils.joinPath(path, dirent.name);
+    let dirHref = '';
+    if (this.props.currentRepoInfo) {
+      dirHref = siteRoot + 'library/' + repoID + '/' + this.props.currentRepoInfo.repo_name + Utils.encodePath(direntPath);
+    }
+    let fileHref = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(direntPath);
+    if (dirent.is_sdoc_revision && dirent.revision_id) {
+      fileHref = siteRoot + 'lib/' + repoID + '/revisions/' + dirent.revision_id + '/';
+    }
+    return dirent.type === 'dir' ? dirHref : fileHref;
+  };
+
+  onError = () => {
+    const { dirent } = this.props;
+    if (Utils.isEditableSdocFile(dirent.name)) {
+      return;
+    }
+
+    if (dirent.encoded_thumbnail_src !== '') {
+      this.props.updateDirent(dirent, { encoded_thumbnail_src: '' });
+    }
+  };
+
+  getItemMenuList = (dirent, isContextmenu = true) => {
+    let options = this.props.getDirentItemMenuList(dirent, isContextmenu);
+    options = options.map(item => {
+      if (item === 'Divider') return item;
+      if (item.subOpList) {
+        return {
+          ...item,
+          onClick: (e) => this.onMenuItemClick(item.key, e),
+          subOpList: item.subOpList.map((subItem) => {
+            if (subItem === 'Divider') return subItem;
+            return {
+              ...subItem,
+              onClick: (e) => this.onMenuItemClick(subItem.key, e)
+            };
+          })
+        };
+      }
+      return {
+        ...item,
+        onClick: (e) => this.onMenuItemClick(item.key, e)
+      };
+    });
+    return options;
+  };
+
+  render() {
+    let dirent = this.props.dirent;
+    const { columns, hiddenColumnKeys, gridStyle } = this.props;
+
+    let iconUrl = Utils.getDirentIcon(dirent);
+
+    let isSelected = dirent.isSelected;
+
+    let lockedInfo = dirent.is_freezed ? gettext('Frozen by {name}') : gettext('locked by {name}');
+    lockedInfo = lockedInfo.replace('{name}', dirent.lock_owner_name);
+
+    const { canDrag, isOperationShow } = this.state;
+    const isSdocFile = Utils.isSdocFile(dirent.name);
+    const lockedImageUrl = `${mediaUrl}img/file-${dirent.is_freezed ? 'freezed-32.svg' : 'locked-32.png'}`;
+    const lockedMessage = dirent.is_freezed ? gettext('freezed') : gettext('locked');
+
+    // Check if configurable columns are visible
+    const isDir = dirent.isDir();
+    const visibleColumnKeys = columns.filter(col => !hiddenColumnKeys.includes(col.key)).map(col => col.key);
+    const showSize = visibleColumnKeys.includes(DIR_COLUMN_KEYS.SIZE);
+    const showModified = visibleColumnKeys.includes(DIR_COLUMN_KEYS.MTIME);
+    const showCreator = visibleColumnKeys.includes(PRIVATE_COLUMN_KEY.FILE_CREATOR);
+    const showLastModifier = visibleColumnKeys.includes(PRIVATE_COLUMN_KEY.FILE_MODIFIER);
+    const showAISummary = visibleColumnKeys.includes(PRIVATE_COLUMN_KEY.AI_SUMMARY);
+    const showStatus = visibleColumnKeys.includes(PRIVATE_COLUMN_KEY.FILE_STATUS);
+    const statusCol = columns.find(col => col.key === PRIVATE_COLUMN_KEY.FILE_STATUS);
+    const showTags = visibleColumnKeys.includes(PRIVATE_COLUMN_KEY.TAGS);
+    const showMetadata = !isDir && dirent.metadata;
+
+    if (!Utils.isDesktop()) {
+      return (
+        <div className="dirent-mobile-item">
+          {/* Thumbnail */}
+          <div className="dirent-mobile-thumb" onClick={this.onItemClick}>
+            <div className={classnames('dir-icon', { 'sdoc-dir-icon': isSdocFile && dirent.encoded_thumbnail_src })}>
+              {(this.canPreview && dirent.encoded_thumbnail_src) ?
+                <img
+                  ref={ref => this.dragIconRef = ref}
+                  src={`${siteRoot}${dirent.encoded_thumbnail_src}?mtime=${dirent.mtime}`}
+                  alt={dirent.name}
+                  className="thumbnail cursor-pointer"
+                  tabIndex="0"
+                  onClick={this.onItemClick}
+                  onKeyDown={Utils.onKeyDown}
+                  draggable={false}
+                  onError={this.onError}
+                /> :
+                <img ref={ref => this.dragIconRef = ref} src={iconUrl} width="24" alt='' draggable={false} />
+              }
+              {dirent.is_locked && <img className="locked" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo} draggable={false} />}
+            </div>
+          </div>
+
+          {/* Name and metadata */}
+          <div className="dirent-mobile-content" onClick={this.onItemClick}>
+            {this.state.isRenaming &&
+              <Rename
+                hasSuffix={dirent.type !== 'dir'}
+                name={dirent.name}
+                onRenameConfirm={this.onRenameConfirm}
+                onRenameCancel={this.onRenameCancel}
+              />
+            }
+            {!this.state.isRenaming && (
+              <div className="dirent-mobile-name d-flex align-items-center">
+                {(!dirent.isDir() && !this.canPreview)
+                  ? <a className="sf-link text-truncate" onClick={this.onItemClick}>{dirent.name}</a>
+                  : <a className="text-truncate" href={this.getDirentHref()} onClick={this.onItemClick}>{dirent.name}</a>
+                }
+                {dirent.starred &&
+                <OpIcon
+                  id={`star-icon-${dirent.id}`}
+                  className="star-icon ml-2 flex-shrink-0"
+                  symbol={'starred'}
+                  tooltip={gettext('Unstar')}
+                  op={this.onItemStarred}
+                />
+                }
+              </div>
+            )}
+            <div className="dirent-mobile-meta">
+              {dirent.size && <span className="item-meta-info">{dirent.size}</span>}
+              <span className="item-meta-info">{dirent.mtime_relative}</span>
+            </div>
+          </div>
+
+          {/* Operations */}
+          <div className="dirent-mobile-ops">
+            <MobileItemMenu>
+              {this.props.getDirentItemMenuList(dirent, true)
+                .filter(item => item != 'Divider' && item.key != TextTranslation.OPEN_WITH.key && item.key !== TextTranslation.MORE.key)
+                .map((item, index) => {
+                  return (
+                    <DropdownItem
+                      className="mobile-menu-item"
+                      key={index}
+                      data-op={item.key}
+                      onClick={this.onMobileMenuItemClick}
+                    >
+                      {item.value}
+                    </DropdownItem>
+                  );
+                })}
+            </MobileItemMenu>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div
+        className={classnames(
+          'dirent-virtual-item',
+          { 'tr-drop-effect': this.state.isDropTipShow },
+          { 'tr-active': isSelected },
+          { 'hover': isOperationShow },
+        )}
+        style={gridStyle || undefined}
+        draggable={canDrag}
+        onFocus={this.onMouseEnter}
+        onMouseEnter={this.onMouseEnter}
+        onMouseOver={this.onMouseOver}
+        onMouseLeave={this.onMouseLeave}
+        onDragStart={this.onItemDragStart}
+        onDragEnter={this.onItemDragEnter}
+        onDragOver={this.onItemDragOver}
+        onDragLeave={this.onItemDragLeave}
+        onDrop={this.onItemDragDrop}
+        onMouseDown={this.onItemMouseDown}
+        onClick={this.onRowClick}
+        onContextMenu={this.onItemContextMenu}
+      >
+        {/* Checkbox */}
+        <div
+          id={`checkbox-${dirent.id}`}
+          className={classnames('dirent-checkbox-wrapper', { 'tr-drag-effect': this.state.isDragTipShow && canDrag })}
+          onClick={this.onItemSelected}
+          onKeyDown={(e) => e.key === 'Enter' && this.onItemSelected(e)}
+          role="button"
+          tabIndex={0}
+          title={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
+          aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
+        >
+          {isSelected ? (
+            <Icon symbol="checkbox" />
+          ) : (
+            <div className="dirent-checkbox-unchecked form-check-input" />
+          )}
+        </div>
+
+        {/* Star */}
+        <div className="dirent-operation dirent-operation-star">
+          {dirent.starred !== undefined &&
+            <OpIcon
+              id={`star-icon-${dirent.id}`}
+              className="star-icon"
+              symbol={dirent.starred ? 'starred' : 'unstarred'}
+              tooltip={dirent.starred ? gettext('Unstar') : gettext('Star')}
+              op={this.onItemStarred}
+            />
+          }
+        </div>
+
+        {/* Icon */}
+        <div className="dirent-thumbnail">
+          <div className={classnames('dir-icon', { 'sdoc-dir-icon': isSdocFile && dirent.encoded_thumbnail_src })}>
+            {(this.canPreview && dirent.encoded_thumbnail_src) ?
+              <img
+                ref={ref => this.dragIconRef = ref}
+                src={`${siteRoot}${dirent.encoded_thumbnail_src}?mtime=${dirent.mtime}`}
+                alt={dirent.name}
+                className="thumbnail cursor-pointer"
+                tabIndex="0"
+                onClick={this.onItemClick}
+                onKeyDown={Utils.onKeyDown}
+                draggable={false}
+                onError={this.onError}
+              /> :
+              <img ref={ref => this.dragIconRef = ref} src={iconUrl} width="24" alt='' draggable={false} />
+            }
+            {dirent.is_locked && <img className="locked" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo} draggable={false} />}
+            <div ref={ref => this.emptyContentRef = ref} className="empty-content"></div>
+          </div>
+        </div>
+
+        {/* Name */}
+        <div className="dirent-property dirent-item-name">
+          {this.state.isRenaming &&
+            <Rename
+              hasSuffix={dirent.type !== 'dir'}
+              name={dirent.name}
+              onRenameConfirm={this.onRenameConfirm}
+              onRenameCancel={this.onRenameCancel}
+            />
+          }
+          {!this.state.isRenaming && (
+            <div className="dirent-item-name-content">
+              <span className="dirent-item-name-text">
+                {(!dirent.isDir() && !this.canPreview) ?
+                  <a className="sf-link" onClick={this.onItemClick}>{dirent.name}</a> :
+                  <a href={this.getDirentHref()} onClick={this.onItemClick}>{dirent.name}</a>
+                }
+              </span>
+              {this.state.isOperationShow && (
+                <CustomDropdown
+                  target={`item-dropdown-${dirent.id}`}
+                  items={this.getItemMenuList(dirent, true)}
+                  triggerClassName="op-icon mr-0"
+                  adaptivePlacement={true}
+                  freezeItem={this.props.freezeItem}
+                  unfreezeItem={this.unfreezeItem}
+                />
+              )}
+            </div>
+          )}
+        </div>
+
+        {showSize && (
+          <div className="dirent-property dirent-property-size">
+            {getNumberDisplayString(dirent.size_original, { 'format': 'byte' }) || ''}
+          </div>
+        )}
+
+        {showModified && (
+          <div className="dirent-property dirent-property-modified" title={formatUnixWithTimezone(dirent.mtime)}>
+            {dirent.mtime_relative}
+          </div>
+        )}
+
+        {showLastModifier && (
+          <div className="dirent-property dirent-property-last-modifier">
+            <CreatorFormatter
+              value={showMetadata ? dirent.metadata[PRIVATE_COLUMN_KEY.FILE_MODIFIER] : dirent.modifier_email}
+              collaborators={this.props.collaborators}
+              queryUserAPI={this.props.queryUser}
+              collaboratorsCache={this.props.collaboratorsCache}
+            />
+          </div>
+        )}
+
+        {showCreator && (
+          <div className="dirent-property dirent-property-creator">
+            <CreatorFormatter
+              value={showMetadata ? dirent.metadata[PRIVATE_COLUMN_KEY.FILE_CREATOR] : ''}
+              collaborators={this.props.collaborators}
+              queryUserAPI={this.props.queryUser}
+              collaboratorsCache={this.props.collaboratorsCache}
+            />
+          </div>
+        )}
+
+        {showAISummary && (
+          <div
+            className="dirent-property dirent-property-ai-summary text-truncate"
+            title={showMetadata ? dirent.metadata[PRIVATE_COLUMN_KEY.AI_SUMMARY] || '' : ''}
+          >
+            {showMetadata ? dirent.metadata[PRIVATE_COLUMN_KEY.AI_SUMMARY] || '' : ''}
+          </div>
+        )}
+
+        {showStatus && (
+          <div className="dirent-property dirent-property-status">
+            <StatusEditor
+              repoID={this.props.repoID}
+              value={showMetadata ? dirent.metadata[PRIVATE_COLUMN_KEY.FILE_STATUS] : ''}
+              record={dirent}
+              column={statusCol}
+              canEdit={false}
+            />
+          </div>
+        )}
+
+        {showTags && (
+          <div className="dirent-property dirent-property-tags text-truncate">
+            <FileTagsFormatter value={showMetadata ? dirent.metadata[PRIVATE_COLUMN_KEY.TAGS] : ''} tagsData={this.props.tagsData} className="sf-metadata-tags-formatter" />
+          </div>
+        )}
+      </div>
+    );
+  }
+}
+
+DirentListItem.propTypes = propTypes;
+
+export default DirentListItem;
