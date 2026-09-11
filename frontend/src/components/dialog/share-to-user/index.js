@@ -14,7 +14,6 @@ import toaster from '../../toast';
 import UserSelect from '../../user-select';
 import DepartmentDetailDialog from '../department-detail-dialog';
 
-import '../../../css/invitations.css';
 import './index.css';
 
 class UserItem extends React.Component {

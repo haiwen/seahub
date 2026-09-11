@@ -2,3 +2,9 @@
   display: block;
   margin: 0 auto;
 }
+
+.submit-btn .loading-icon {
+  margin: 1px auto;
+  width: 21px;
+  height: 21px;
+}
