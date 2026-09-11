@@ -7,6 +7,8 @@ import utc from 'dayjs/plugin/utc';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import PropTypes from 'prop-types';
 import { translateCalendar } from '../../utils/date-format-utils';
+import 'dayjs/locale/zh-cn';
+import 'dayjs/locale/en-gb';
 
 import '@seafile/seafile-calendar/assets/index.css';
 import './index.css';
@@ -51,6 +53,7 @@ class Picker extends React.Component {
         getCalendarContainer={this.getCalendarContainer}
         calendar={
           <Calendar
+            className="sf-rc-calendar"
             defaultValue={this.defaultCalendarValue}
             disabledDate={this.props.disabledDate}
             format={format}
@@ -67,7 +70,7 @@ class Picker extends React.Component {
               <div>
                 <input
                   placeholder={format}
-                  style={{ width: this.props.inputWidth || 250 }}
+                  style={{ width: this.props.inputWidth || 250, height: this.props.inputHeight }}
                   tabIndex="-1"
                   disabled={this.props.disabled}
                   readOnly={true}
@@ -91,6 +94,7 @@ Picker.propTypes = {
   value: PropTypes.object,
   disabled: PropTypes.func,
   inputWidth: PropTypes.number.isRequired,
+  inputHeight: PropTypes.number,
   onChange: PropTypes.func.isRequired
 };
 

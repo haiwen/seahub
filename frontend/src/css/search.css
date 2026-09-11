@@ -413,10 +413,6 @@
   cursor: default;
 }
 
-.rc-calendar tbody tr {
-  height: 1.75rem;
-}
-
 @media (max-width: 767px) {
   .common-toolbar .search {
     margin: 0;

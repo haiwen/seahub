@@ -105,3 +105,11 @@
 .rc-calendar-decade-panel-header {
   border-bottom: 1px solid var(--bs-calendar-time-section-border);
 }
+
+.rc-calendar.sf-metadata-rc-calendar .rc-calendar-table {
+  table-layout: auto;
+}
+
+.rc-calendar .rc-calendar-table tbody tr {
+  height: 1.75rem;
+}
