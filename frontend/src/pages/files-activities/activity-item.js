@@ -8,8 +8,6 @@ import { gettext, siteRoot } from '../../utils/constants';
 import { formatWithTimezone } from '../../utils/time';
 import { Utils } from '../../utils/utils';
 
-import '../../css/files-activities.css';
-
 dayjs.locale(window.app.config.lang);
 dayjs.extend(relativeTime);
 

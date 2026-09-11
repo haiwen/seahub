@@ -6,16 +6,14 @@ import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import ActivityItem from './activity-item';
 
-import '../../css/files-activities.css';
-
 dayjs.locale(window.app.config.lang);
 
-const contentPropTypes = {
+const activityListPropTypes = {
   isLoadingMore: PropTypes.bool.isRequired,
   items: PropTypes.array.isRequired,
 };
 
-const FileActivitiesContent = ({ items, isLoadingMore }) => {
+const ActivityList = ({ items, isLoadingMore }) => {
   const isDesktop = Utils.isDesktop();
 
   if (!items.length) {
@@ -63,6 +61,6 @@ const FileActivitiesContent = ({ items, isLoadingMore }) => {
   );
 };
 
-FileActivitiesContent.propTypes = contentPropTypes;
+ActivityList.propTypes = activityListPropTypes;
 
-export default FileActivitiesContent;
+export default ActivityList;

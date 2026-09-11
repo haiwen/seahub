@@ -8,8 +8,6 @@ import SearchEmptyTip from '../../components/search-empty-tip';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
-import '../../css/files-activities.css';
-
 const propTypes = {
   availableUsers: PropTypes.array.isRequired,
   currentSelectedUsers: PropTypes.array.isRequired,

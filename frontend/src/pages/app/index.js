@@ -12,7 +12,7 @@ import {
 } from '../../components/resize-bar/constants';
 import { siteRoot, siteTitle, mediaUrl, faviconPath } from '../../utils/constants';
 import { Utils, isMobile } from '../../utils/utils';
-import FilesActivities from '../dashboard/files-activities';
+import FilesActivities from '../files-activities';
 import GroupView from '../groups/group-view';
 import InvitationsView from '../invitations/invitations-view';
 import LibContentView from '../lib-content-view/lib-content-view';
