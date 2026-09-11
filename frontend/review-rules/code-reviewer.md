@@ -17,10 +17,11 @@ Existing issues in unchanged code are not blockers unless the change copies, ref
 
 ## Base Branch
 
-- If the user explicitly specifies `master` or `main`, use the specified branch.
-- If the user does not specify a branch, check whether `master` exists first; check `main` only if `master` does not exist.
+- If the user explicitly specifies a target branch, use the specified branch.
+- Otherwise, use the pull request target branch when it is available from pull request metadata.
+- If pull request metadata is unavailable, use the current branch's configured upstream when it clearly identifies the target branch.
+- If the target branch still cannot be determined unambiguously, ask the user to confirm it. Do not guess.
 - After confirming the base branch, use `git diff <base>...HEAD` to inspect the current branch changes.
-- If neither `master` nor `main` exists, state that the base branch cannot be determined. Do not guess or use another branch.
 
 ## Review Process
 
@@ -87,12 +88,7 @@ Do not run build scripts by default, and do not describe unexecuted checks as pa
 
 ## Fixed Output Format
 
-Use English and list findings before the summary:
-
-## Review Conclusion
-- Status: Pass / Changes required / Manual confirmation required
-- Blocking severity: None / P0 / P1 / P2
-- Summary: One-sentence conclusion
+Use English and list findings before the conclusion:
 
 ## Findings
 
@@ -102,6 +98,11 @@ Use English and list findings before the summary:
 - Impact: Actual impact and trigger conditions for the current change
 - Recommendation: A concise, actionable fix
 - Auto-fix: No
+
+## Review Conclusion
+- Status: Pass / Changes required / Manual confirmation required
+- Blocking severity: None / P0 / P1 / P2
+- Summary: One-sentence conclusion
 
 ## Checks Passed
 - Scope that was inspected and passed
