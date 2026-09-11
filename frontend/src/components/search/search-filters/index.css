@@ -241,3 +241,7 @@
 .rc-calendar {
   background-color: var(--bs-popover-bg);
 }
+
+.filter-by-date-menu .rc-calendar-disabled-cell .rc-calendar-date {
+  margin: 2px 0;
+}
