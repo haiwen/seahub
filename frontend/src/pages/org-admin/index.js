@@ -39,6 +39,8 @@ import OrgWebSettings from './web-settings/web-settings';
 
 import '../../css/layout.css';
 import '../../css/toolbar.css';
+import '../../css/org-admin.css';
+
 
 class Org extends React.Component {
   constructor(props) {

@@ -1,9 +1,7 @@
 import React from 'react';
 import { Link } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
-import { siteRoot, gettext } from '../utils/constants';
-
-import '../css/org-admin-user.css';
+import { siteRoot, gettext } from '../../utils/constants';
 
 const propTypes = {
   email: PropTypes.string.isRequired,

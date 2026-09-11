@@ -5,11 +5,11 @@ import SetOrgUserName from '../../components/dialog/set-org-user-name';
 import SetOrgUserQuota from '../../components/dialog/set-org-user-quota';
 import EditIcon from '../../components/edit-icon';
 import Loading from '../../components/loading';
-import OrgAdminUserNav from '../../components/org-admin-user-nav';
 import { gettext } from '../../utils/constants';
 import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
 import MainPanelTopbar from './main-panel-topbar';
+import OrgAdminUserNav from './org-admin-user-nav';
 
 const { orgID, orgName } = window.org.pageOptions;
 
