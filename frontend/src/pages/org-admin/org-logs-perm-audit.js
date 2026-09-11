@@ -7,7 +7,6 @@ import OrgLogsFilePermEvent from '../../models/org-logs-perm-audit';
 import { siteRoot, gettext, lang } from '../../utils/constants';
 import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
-import '../../css/org-logs.css';
 
 dayjs.locale(lang);
 

@@ -5,10 +5,10 @@ import Loading from '../../components/loading';
 import { gettext, siteRoot, username } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import FileActivitiesContent from './content';
+import ActivityList from './activity-list';
 import UserSelector from './user-selector';
 
-import '../../css/files-activities.css';
+import './index.css';
 
 dayjs.locale(window.app.config.lang);
 
@@ -267,7 +267,7 @@ class FilesActivities extends Component {
                     toggleSelectUser={this.toggleSelectUser}
                   />
                 )}
-                <FileActivitiesContent items={this.state.items} isLoadingMore={this.state.isLoadingMore} />
+                <ActivityList items={this.state.items} isLoadingMore={this.state.isLoadingMore} />
               </>
             )}
           </div>

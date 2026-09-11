@@ -7,10 +7,8 @@ import OrgLogsFileAuditEvent from '../../models/org-logs-file-audit';
 import { siteRoot, gettext, lang } from '../../utils/constants';
 import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
-import '../../css/org-logs.css';
 
 dayjs.locale(lang);
-
 class OrgLogsFileAudit extends React.Component {
 
   constructor(props) {

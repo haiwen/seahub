@@ -9,8 +9,6 @@ import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
 import UserLink from './user-link';
 
-import '../../css/org-logs.css';
-
 dayjs.locale(lang);
 
 class OrgLogsFileTransfer extends React.Component {

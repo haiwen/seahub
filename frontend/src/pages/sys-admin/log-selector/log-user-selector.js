@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Input, Popover } from 'reactstrap';
 import PropTypes from 'prop-types';
-import Icon from '../../components/icon';
-import SearchEmptyTip from '../../components/search-empty-tip';
-import toaster from '../../components/toast';
-import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import Icon from '../../../components/icon';
+import SearchEmptyTip from '../../../components/search-empty-tip';
+import toaster from '../../../components/toast';
+import { gettext } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
 
-import '../../css/log-filter.css';
+import './index.css';
 
 const propTypes = {
   componentName: PropTypes.string.isRequired,

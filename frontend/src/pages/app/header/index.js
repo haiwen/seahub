@@ -4,7 +4,7 @@ import Icon from '../../../components/icon';
 import Logo from '../../../components/logo';
 import CommonToolbar from '../../../components/toolbar/common-toolbar';
 
-import '../../../css/header.css';
+import './index.css';
 
 const propTypes = {
   children: PropTypes.object,

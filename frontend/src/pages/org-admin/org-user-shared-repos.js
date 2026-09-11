@@ -2,14 +2,12 @@ import React, { Component, Fragment } from 'react';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import Loading from '../../components/loading';
-import OrgAdminUserNav from '../../components/org-admin-user-nav';
 import { gettext } from '../../utils/constants';
 import { orgAdminAPI } from '../../utils/org-admin-api';
 import { formatWithTimezone } from '../../utils/time';
 import { Utils } from '../../utils/utils';
 import MainPanelTopbar from './main-panel-topbar';
-
-import '../../css/org-admin-user.css';
+import OrgAdminUserNav from './org-admin-user-nav';
 
 const { orgID } = window.org.pageOptions;
 
