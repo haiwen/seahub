@@ -19,11 +19,15 @@ export SEAFILE_CENTRAL_CONF_DIR=${default_conf_dir}
 script_name=$0
 function usage () {
     echo "usage : "
-    if [[ $IS_PRO_VERSION = "true" ]]; then
-        echo "$(basename ${script_name}) [--dry-run | -D] [--rm-deleted | -r] [--rm-fs | -R] [repo-id1] [repo-id2]"
-    else
-        echo "$(basename ${script_name}) [--dry-run | -D] [--rm-deleted | -r] [repo-id1] [repo-id2]"
-    fi 
+    echo "$(basename ${script_name}) [--dry-run | -D] [--rm-deleted | -r] [--rm-fs | -R] [repo-id1] [repo-id2]"
+    echo "Additional options:"
+    echo "-r, --rm-deleted: remove garbaged repos"
+    echo "-R, --rm-fs: remove fs object"
+    echo "-D, --dry-run: report blocks that can be remove, but not remove them"
+    echo "-V, --verbose: verbose output messages"
+    echo "-C, --check: check data integrity"
+    echo "-t, --thread-num: thread number for gc repos"
+    echo "-i, --id-prefix: only gc repos with this repo id prefix"
     echo ""
 }
 
