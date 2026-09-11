@@ -51,6 +51,7 @@ class Picker extends React.Component {
         getCalendarContainer={this.getCalendarContainer}
         calendar={
           <Calendar
+            className="sf-rc-calendar"
             defaultValue={this.defaultCalendarValue}
             disabledDate={this.props.disabledDate}
             format={format}
