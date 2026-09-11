@@ -11,7 +11,6 @@ import Loading from '../loading';
 import OpIcon from '../op-icon';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
 import toaster from '../toast';
-import '../../css/invitations.css';
 
 class UserItem extends React.Component {
 

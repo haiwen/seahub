@@ -16,7 +16,7 @@ import { gettext, mediaUrl } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 
-import '../../css/invitations.css';
+import './invitations-view.css';
 
 class Item extends React.Component {
 
