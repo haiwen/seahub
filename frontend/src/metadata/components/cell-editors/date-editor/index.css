@@ -84,10 +84,6 @@
   padding: 0 12px;
 }
 
-.rc-calendar-disabled-cell-first-of-row.rc-calendar-disabled-cell .rc-calendar-date {
-  margin-left: 2px;
-}
-
 .rc-calendar-time-input-col,
 .rc-calendar-right-panel {
   border-left: 1px solid var(--bs-calendar-time-section-border);
