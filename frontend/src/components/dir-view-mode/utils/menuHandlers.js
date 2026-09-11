@@ -88,7 +88,7 @@ export const menuHandlers = {
   },
 
   [TextTranslation.PROPERTIES.key]: ({ showDirentDetail }) => {
-    showDirentDetail && showDirentDetail('info');
+    showDirentDetail && showDirentDetail();
   },
 
   [TextTranslation.OPEN_WITH_DEFAULT.key]: ({ repoID, path, dirent }) => {

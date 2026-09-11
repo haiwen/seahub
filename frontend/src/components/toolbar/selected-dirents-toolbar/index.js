@@ -5,8 +5,6 @@ import OpElement from '../../../components/op-element';
 import OpIcon from '../../../components/op-icon';
 import { Dirent } from '../../../models';
 import { gettext } from '../../../utils/constants';
-import { lockFile, unlockFile, freezeDocument, exportDocx, exportSdoc, toggleStar, openHistory, openByDefault, openViaClient, openWithOnlyOffice, exportMarkdown } from '../../../utils/dirent-operations';
-import TextTranslation from '../../../utils/text-translation';
 import { Utils } from '../../../utils/utils';
 import { getDirentItemMenuList, getBatchMenuList } from '../../dir-view-mode/utils/contextMenuUtils';
 import { menuHandlers } from '../../dir-view-mode/utils/menuHandlers';
@@ -21,34 +19,21 @@ const propTypes = {
   path: PropTypes.string.isRequired,
   userPerm: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
-  repoEncrypted: PropTypes.bool.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
   eventBus: PropTypes.object.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
-  isRepoOwner: PropTypes.bool.isRequired,
-  enableDirPrivateShare: PropTypes.bool.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
-  onFilesTagChanged: PropTypes.func.isRequired,
   unSelectDirent: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
-  currentMode: PropTypes.string.isRequired,
   direntList: PropTypes.array.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
+  onItemConvert: PropTypes.func,
 };
 
 const SINGLE_EXCLUDES = ['Download', 'Delete', 'Share', 'Move', 'Copy'];
 const MULTI_EXCLUDES = ['Download', 'Delete', 'Move', 'Copy'];
 
 class SelectedDirentsToolbar extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      isFileAccessLogDialogOpen: false,
-      showLibContentViewDialogs: false,
-      fileTagList: [],
-    };
-  }
 
   onItemsDelete = () => {
     this.props.onItemsDelete();
@@ -83,180 +68,33 @@ class SelectedDirentsToolbar extends React.Component {
     eventBus.dispatch(EVENT_BUS_TYPE.RENAME_FILE, dirent, direntList);
   };
 
-  onToggleStarItem = () => {
-    const { selectedDirentList, repoID, path, updateDirent } = this.props;
-    const dirent = selectedDirentList[0];
-    if (dirent) {
-      toggleStar(repoID, path, dirent, updateDirent);
-    }
-  };
-
-  onPermission = () => {
-    const { eventBus, selectedDirentList } = this.props;
-    const dirent = selectedDirentList[0];
-    const direntPath = this.getDirentPath(dirent);
-    const name = Utils.getFileName(direntPath);
-    eventBus.dispatch(EVENT_BUS_TYPE.PERMISSION, direntPath, name);
-  };
-
-  openFileAccessLog = (dirent) => {
-    const { eventBus } = this.props;
-    const direntPath = this.getDirentPath(dirent);
-    const name = Utils.getFileName(direntPath);
-    eventBus.dispatch(EVENT_BUS_TYPE.ACCESS_LOG, direntPath, name);
-  };
-
   onMenuItemClick = (operation) => {
     const {
       repoID,
       path,
       currentRepoInfo: repoInfo,
       selectedDirentList: dirents,
-      updateDirent
+      updateDirent,
+      eventBus,
+      showDirentDetail,
+      onItemConvert,
     } = this.props;
     const dirent = dirents[0];
-    switch (operation) {
-      case 'Rename':
-        this.onRename();
-        break;
-      case 'Star':
-        this.onToggleStarItem();
-        break;
-      case 'Unstar':
-        this.onToggleStarItem();
-        break;
-      case 'Permission':
-        this.onPermission();
-        break;
-      case 'Lock':
-      case 'Unlock':
-        menuHandlers[operation]({
-          repoID,
-          path,
-          dirent,
-          updateDirent,
-          dirents,
-          isBatch: dirents.length > 1,
-          repoInfo
-        });
-        break;
-      case 'Unfreeze Document':
-        this.unlockFile(dirent);
-        break;
-      case 'Freeze Document':
-        this.onFreezeDocument(dirent);
-        break;
-      case 'History':
-        this.onHistory(dirent);
-        break;
-      case 'Access Log':
-        this.openFileAccessLog(dirent);
-        break;
-      case 'Properties':
-        this.props.showDirentDetail();
-        break;
-      case 'Open with Default':
-        this.onOpenByDefault(dirent);
-        break;
-      case 'Open via Client':
-        this.onOpenViaClient(dirent);
-        break;
-      case 'Open with OnlyOffice':
-        this.onOpenWithOnlyOffice(dirent);
-        break;
-      case 'Convert to Markdown': {
-        this.props.onItemConvert(dirent, 'markdown');
-        break;
-      }
-      case 'Convert to docx': {
-        this.props.onItemConvert(dirent, 'docx');
-        break;
-      }
-      case 'Convert to sdoc': {
-        this.props.onItemConvert(dirent, 'sdoc');
-        break;
-      }
-      case 'Export docx': {
-        this.exportDocx(dirent);
-        break;
-      }
-      case 'Export markdown': {
-        this.exportMarkdown(dirent);
-        break;
-      }
-      case 'Export sdoc': {
-        this.exportSdoc(dirent);
-        break;
-      }
-      case TextTranslation.CHAT_WITH_AI.key: {
-        menuHandlers[TextTranslation.CHAT_WITH_AI.key]({
-          path: this.props.path,
-          repoID: this.props.repoID,
-          dirent,
-          dirents,
-          isBatch: dirents.length > 1,
-        });
-        break;
-      }
-      default:
-        break;
+    if (menuHandlers[operation]) {
+      menuHandlers[operation]({
+        repoID,
+        path,
+        dirent,
+        dirents,
+        updateDirent,
+        isBatch: dirents.length > 1,
+        repoInfo,
+        eventBus,
+        showDirentDetail,
+        onItemConvert,
+        onItemRename: this.onRename,
+      });
     }
-  };
-
-  exportDocx = (dirent) => {
-    const { repoID, path } = this.props;
-    exportDocx(repoID, path, dirent);
-  };
-
-  exportMarkdown = (dirent) => {
-    const { repoID, path } = this.props;
-    exportMarkdown(repoID, path, dirent);
-  };
-
-  exportSdoc = (dirent) => {
-    const { repoID, path } = this.props;
-    exportSdoc(repoID, path, dirent);
-  };
-
-  lockFile = (dirent) => {
-    const { repoID, path, updateDirent } = this.props;
-    lockFile(repoID, path, dirent, updateDirent);
-  };
-
-  unlockFile = (dirent) => {
-    const { repoID, path, updateDirent } = this.props;
-    unlockFile(repoID, path, dirent, updateDirent);
-  };
-
-  onFreezeDocument = (dirent) => {
-    const { repoID, path, updateDirent } = this.props;
-    freezeDocument(repoID, path, dirent, updateDirent);
-  };
-
-  onOpenByDefault = (dirent) => {
-    const { repoID, path } = this.props;
-    openByDefault(repoID, path, dirent);
-  };
-
-  onOpenViaClient = (dirent) => {
-    const { repoID, path } = this.props;
-    openViaClient(repoID, path, dirent);
-  };
-
-  onOpenWithOnlyOffice = (dirent) => {
-    const { repoID, path } = this.props;
-    openWithOnlyOffice(repoID, path, dirent);
-  };
-
-  onHistory = (dirent) => {
-    const { repoID, path } = this.props;
-    openHistory(repoID, path, dirent);
-  };
-
-  toggleCancel = () => {
-    this.setState({
-      showLibContentViewDialogs: false,
-    });
   };
 
   getDirentPath = (dirent) => {
@@ -362,7 +200,7 @@ class SelectedDirentsToolbar extends React.Component {
             />
           </>
         )}
-        {selectedLen == 1 && (
+        {selectedLen === 1 && (
           <>
             {this.renderIconButtons(iconOps)}
             <CustomDropdown
