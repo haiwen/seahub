@@ -162,7 +162,7 @@ const otherDate = (filterTermModifier, filterTerm) => {
     }
     case FILTER_TERM_MODIFIER_TYPE.THE_NEXT_NUMBERS_OF_DAYS: {
       return {
-        startDate: new Date(year, month, day + 1, 0, 0, 0),
+        startDate: new Date(year, month, day, 0, 0, 0),
         endDate: new Date(year, month, day + Number(filterTerm)),
       };
     }
