@@ -20,10 +20,6 @@
   align-items: center;
 }
 
-.system-statistic-input {
-  height: 32px;
-  width: 120px;
-}
 
 .statistic-traffic-tab {
   display: flex;
@@ -85,12 +81,4 @@
 .system-statistic-button {
   margin-left: .5rem;
   height: 32px;
-}
-
-.rc-calendar table {
-  table-layout: initial;
-}
-
-.rc-calendar tbody tr {
-  height: 1.75rem;
 }

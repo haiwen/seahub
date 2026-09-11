@@ -1,0 +1,12 @@
+.admin-date-picker-input {
+  height: 32px;
+  width: 120px;
+}
+
+.admin-date-picker-calendar .rc-calendar-table tbody tr {
+  height: 1.75rem;
+}
+
+.admin-date-picker-calendar .rc-calendar-disabled-cell .rc-calendar-date {
+  margin: 2px 0;
+}
