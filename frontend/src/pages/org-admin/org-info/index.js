@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { UncontrolledTooltip } from 'reactstrap';
-import Icon from '../../components/icon';
-import { mediaUrl, gettext, enableSeafileAI } from '../../utils/constants';
-import { orgAdminAPI } from '../../utils/org-admin-api';
-import { Utils } from '../../utils/utils';
-import MainPanelTopbar from './main-panel-topbar';
-import '../../css/org-admin-info-page.css';
+import Icon from '../../../components/icon';
+import { mediaUrl, gettext, enableSeafileAI } from '../../../utils/constants';
+import { orgAdminAPI } from '../../../utils/org-admin-api';
+import { Utils } from '../../../utils/utils';
+import MainPanelTopbar from '../main-panel-topbar';
+import './index.css';
 
 
 class OrgInfo extends Component {

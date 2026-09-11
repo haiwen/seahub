@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
-import UserItem from './org-user-item';
+import { gettext } from '../../../utils/constants';
+import UserItem from '../org-user-item';
 
-import '../../css/org-admin-paginator.css';
+import './index.css';
 
 const propTypes = {
   currentTab: PropTypes.string.isRequired,

@@ -12,8 +12,6 @@ import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
 import MainPanelTopbar from './main-panel-topbar';
 
-import '../../css/org-admin-user.css';
-
 const { orgID } = window.org.pageOptions;
 
 class OrgGroupRepos extends Component {

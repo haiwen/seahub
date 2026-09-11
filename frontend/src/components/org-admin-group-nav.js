@@ -3,6 +3,8 @@ import { Link } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
 import { siteRoot, gettext } from '../utils/constants';
 
+import '../css/org-admin-user.css';
+
 const propTypes = {
   groupID: PropTypes.string,
   currentItem: PropTypes.string.isRequired

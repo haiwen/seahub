@@ -13,8 +13,6 @@ import { formatWithTimezone } from '../../utils/time';
 import { Utils } from '../../utils/utils';
 import MainPanelTopbar from './main-panel-topbar';
 
-import '../../css/org-admin-user.css';
-
 const { orgID } = window.org.pageOptions;
 
 class OrgUserOwnedRepos extends Component {
