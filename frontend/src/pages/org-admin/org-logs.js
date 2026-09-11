@@ -7,6 +7,8 @@ import ModalPortal from '../../components/modal-portal';
 import { siteRoot, gettext } from '../../utils/constants';
 import MainPanelTopbar from './main-panel-topbar';
 
+import '../../css/org-logs.css';
+
 class OrgLogs extends Component {
 
   constructor(props) {

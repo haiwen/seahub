@@ -2,20 +2,18 @@ import React from 'react';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
-import WikiCleanTrash from '../../components/dialog/wiki-clean-trash';
-import Icon from '../../components/icon';
-import ModalPortal from '../../components/modal-portal';
-import Paginator from '../../components/paginator';
-import toaster from '../../components/toast';
-import { gettext, wikiId } from '../../utils/constants';
-import { formatWithTimezone } from '../../utils/time';
-import { Utils, isMobile } from '../../utils/utils';
-import wikiAPI from '../../utils/wiki-api';
-import NavItemIcon from './common/nav-item-icon';
+import WikiCleanTrash from '../../../components/dialog/wiki-clean-trash';
+import Icon from '../../../components/icon';
+import ModalPortal from '../../../components/modal-portal';
+import Paginator from '../../../components/paginator';
+import toaster from '../../../components/toast';
+import { gettext, wikiId } from '../../../utils/constants';
+import { formatWithTimezone } from '../../../utils/time';
+import { Utils, isMobile } from '../../../utils/utils';
+import wikiAPI from '../../../utils/wiki-api';
+import NavItemIcon from '../common/nav-item-icon';
 
-import '../../css/toolbar.css';
-import '../../css/search.css';
-import '../../css/wiki-trash-dialog.css';
+import './index.css';
 
 const propTypes = {
   showTrashDialog: PropTypes.bool.isRequired,
