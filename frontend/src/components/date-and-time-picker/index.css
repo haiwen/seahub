@@ -1,8 +1,22 @@
- /* to overwrite styles from seahub_react.css */
- .sf-rc-calendar .rc-calendar-table tbody tr {
-   height: 1.75rem !important;
- }
+/* to overwrite styles from seahub_react.css */
+.sf-rc-calendar {
+  background-color: var(--bs-popover-bg);
+}
 
- .sf-rc-calendar .rc-calendar-disabled-cell .rc-calendar-date {
-   margin: 2px 0;
- }
+.sf-rc-calendar .rc-calendar-table {
+  table-layout: auto;
+}
+
+.sf-rc-calendar .rc-calendar-table tbody tr {
+  height: 1.75rem !important;
+}
+
+.sf-rc-calendar .rc-calendar-disabled-cell .rc-calendar-date {
+  margin: 2px 0;
+}
+
+/* overwrite some styles */
+/* for 'markdown file view -> share -> picker' */
+.sf-rc-calendar .rc-calendar-input:focus {
+  border-color: transparent;
+}
