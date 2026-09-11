@@ -37,7 +37,7 @@ def permission_check_admin_owner(request, username, repo_id):  # maybe add more 
         return is_group_repo_staff(request, repo_id, username)
 
 
-def get_dir_file_recursively(repo_id, path, all_dirs):
+def _collect_dir_file_recursively(repo_id, path, all_dirs):
     is_pro = is_pro_version()
     dirs = seafile_api.list_dir_by_path(repo_id, path, -1, -1)
 
@@ -64,24 +64,29 @@ def get_dir_file_recursively(repo_id, path, all_dirs):
 
         all_dirs.append(entry)
 
-        # Use dict to reduce memcache fetch cost in large for-loop.
-        file_list = [item for item in all_dirs if item['type'] == 'file']
-        contact_email_dict = {}
-        nickname_dict = {}
-        modifiers_set = {x['modifier_email'] for x in file_list}
-        for e in modifiers_set:
-            if e not in contact_email_dict:
-                contact_email_dict[e] = email2contact_email(e)
-            if e not in nickname_dict:
-                nickname_dict[e] = email2nickname(e)
-
-        for e in file_list:
-            e['modifier_contact_email'] = contact_email_dict.get(e['modifier_email'], '')
-            e['modifier_name'] = nickname_dict.get(e['modifier_email'], '')
-
         if stat.S_ISDIR(dirent.mode):
             sub_path = posixpath.join(path, dirent.obj_name)
-            get_dir_file_recursively(repo_id, sub_path, all_dirs)
+            _collect_dir_file_recursively(repo_id, sub_path, all_dirs)
+
+    return all_dirs
+
+
+def get_dir_file_recursively(repo_id, path, all_dirs):
+    _collect_dir_file_recursively(repo_id, path, all_dirs)
+
+    file_list = [item for item in all_dirs if item['type'] == 'file']
+    contact_email_dict = {}
+    nickname_dict = {}
+    modifiers_set = {x['modifier_email'] for x in file_list}
+    for e in modifiers_set:
+        if e not in contact_email_dict:
+            contact_email_dict[e] = email2contact_email(e)
+        if e not in nickname_dict:
+            nickname_dict[e] = email2nickname(e)
+
+    for e in file_list:
+        e['modifier_contact_email'] = contact_email_dict.get(e['modifier_email'], '')
+        e['modifier_name'] = nickname_dict.get(e['modifier_email'], '')
 
     return all_dirs
 
