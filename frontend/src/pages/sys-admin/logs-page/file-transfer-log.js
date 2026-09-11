@@ -9,8 +9,7 @@ import Paginator from '../../../components/paginator';
 import { gettext, siteRoot } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
-import LogRepoSelector from '../../dashboard/log-repo-selector';
-import LogUserSelector from '../../dashboard/log-user-selector';
+import { LogRepoSelector, LogUserSelector } from '../log-selector';
 import UserLink from '../user-link';
 
 dayjs.extend(relativeTime);
