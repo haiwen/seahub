@@ -1,5 +1,5 @@
  /* to overwrite styles from seahub_react.css */
- .rc-calendar .rc-calendar-table tbody tr {
+ .sf-rc-calendar .rc-calendar-table tbody tr {
    height: 1.75rem !important;
  }
 

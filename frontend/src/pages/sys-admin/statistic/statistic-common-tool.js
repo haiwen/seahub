@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { Button, ButtonGroup } from 'reactstrap';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
-import AdminDatePicker from '../../../components/admin-date-picker';
+import DateTimePicker from '../../../components/date-and-time-picker';
 import { gettext } from '../../../utils/constants';
 
 const propTypes = {
@@ -114,13 +114,19 @@ class StatisticCommonTool extends React.Component {
             <Button className={`font-weight-normal ${statisticType === 'oneYear' ? 'item-active' : ''}`} onClick={this.changeActive.bind(this, 'oneYear')}>{gettext('1 Year')}</Button>
           </ButtonGroup>
           <div className="system-statistic-input-container">
-            <AdminDatePicker
+            <DateTimePicker
+              showHourAndMinute={false}
+              inputWidth={120}
+              inputHeight={32}
               disabledDate={this.disabledStartDate}
               value={startValue}
               onChange={value => this.onChange('startValue', value?.startOf('day'))}
             />
             <span className="system-statistic-connect">-</span>
-            <AdminDatePicker
+            <DateTimePicker
+              showHourAndMinute={false}
+              inputWidth={120}
+              inputHeight={32}
               disabledDate={this.disabledEndDate}
               value={endValue}
               onChange={value => this.onChange('endValue', value?.endOf('day'))}
