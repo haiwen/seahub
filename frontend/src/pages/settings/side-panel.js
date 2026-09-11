@@ -1,8 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import Logo from '../logo';
-import SideNav from './side-nav';
+import Logo from '@/components/logo';
+import SideNav from '@/components/user-settings/side-nav';
 
 const propTypes = {
   isSidePanelClosed: PropTypes.bool,
@@ -11,7 +11,7 @@ const propTypes = {
   onCloseSidePanel: PropTypes.func.isRequired,
 };
 
-class SettingSidePanel extends React.Component {
+class SidePanel extends React.Component {
   render() {
     return (
       <div className={classnames('side-panel', { 'left-zero': !this.props.isSidePanelClosed })}>
@@ -26,6 +26,6 @@ class SettingSidePanel extends React.Component {
   }
 }
 
-SettingSidePanel.propTypes = propTypes;
+SidePanel.propTypes = propTypes;
 
-export default SettingSidePanel;
+export default SidePanel;

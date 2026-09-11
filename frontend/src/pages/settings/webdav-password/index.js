@@ -1,12 +1,12 @@
 import React from 'react';
-import { gettext } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
-import RemoveWebdavPassword from '../dialog/remove-webdav-password';
-import ResetWebdavPassword from '../dialog/reset-webdav-password';
-import SetWebdavPassword from '../dialog/set-webdav-password';
-import ModalPortal from '../modal-portal';
-import toaster from '../toast';
+import RemoveWebdavPassword from '@/components/dialog/remove-webdav-password';
+import ResetWebdavPassword from '@/components/dialog/reset-webdav-password';
+import SetWebdavPassword from '@/components/dialog/set-webdav-password';
+import ModalPortal from '@/components/modal-portal';
+import toaster from '@/components/toast';
+import { gettext } from '../../../utils/constants';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { Utils } from '../../../utils/utils';
 
 const { contactEmail, webdavUrl, webdavPasswordSetted } = window.app.pageOptions;
 

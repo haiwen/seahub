@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from '../icon';
-import CommonToolbar from '../toolbar/common-toolbar';
+import Icon from '@/components/icon';
+import CommonToolbar from '@/components/toolbar/common-toolbar';
 
 const propTypes = {
   onShowSidePanel: PropTypes.func,
@@ -11,7 +11,7 @@ const propTypes = {
   showSearch: PropTypes.bool
 };
 
-const SettingTopToolbar = ({ onShowSidePanel, onSearchedClick, searchPlaceholder, children, showSearch }) => {
+const TopToolbar = ({ onShowSidePanel, onSearchedClick, searchPlaceholder, children, showSearch }) => {
   return (
     <div className={`main-panel-north ${children ? 'border-left-show' : ''}`}>
       <div className="cur-view-toolbar">
@@ -31,6 +31,6 @@ const SettingTopToolbar = ({ onShowSidePanel, onSearchedClick, searchPlaceholder
   );
 };
 
-SettingTopToolbar.propTypes = propTypes;
+TopToolbar.propTypes = propTypes;
 
-export default SettingTopToolbar;
+export default TopToolbar;
