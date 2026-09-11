@@ -15,6 +15,9 @@ window.seafile = {
 };
 
 const formatDocument = (document) => {
+  if (!document || typeof document !== 'object') {
+    return { elements: [] };
+  }
   document.elements = document.elements ? document.elements : document.children;
   if (!Array.isArray(document.elements)) {
     document.elements = [{ type: 'paragraph', children: [{ text: '' }] }];
@@ -40,7 +43,10 @@ export default function SdocThumbnail() {
 
   return (
     <div className='sdoc-thumbnail-container'>
-      <SDocViewer document={content}/>
+      {content.elements.length === 0 ?
+        <div id="sdoc-editor-print-wrapper" className="empty-sdoc-thumbnail" /> :
+        <SDocViewer document={content}/>
+      }
     </div>
   );
 }
