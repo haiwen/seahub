@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
+import StatisticCommonTool from '../../../components/admin/statistics/statistic-common-tool';
 import Chart from '../../../components/chart';
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import { gettext } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
-import StatisticCommonTool from './statistic-common-tool';
 
 import '../../../css/system-stat.css';
 

@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { Button } from 'reactstrap';
+import DepartmentNode from '../../../components/admin/departments/department-node';
 import AddRepoDialog from '../../../components/dialog/org-add-repo-dialog';
 import SetGroupQuotaDialog from '../../../components/dialog/org-set-group-quota-dialog';
 import AddDepartmentDialog from '../../../components/dialog/sysadmin-dialog/add-department-v2-dialog';
@@ -14,7 +15,6 @@ import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { Utils } from '../../../utils/utils';
 import MainPanelTopbar from '../main-panel-topbar';
 import Department from './department';
-import DepartmentNode from './department-node';
 import DepartmentsTreePanel from './departments-tree-panel';
 
 import '../../sys-admin/departments/system-departments.css';

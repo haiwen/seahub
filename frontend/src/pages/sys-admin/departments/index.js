@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { Button } from 'reactstrap';
+import DepartmentNode from '../../../components/admin/departments/department-node';
 import AddDepartmentV2Dialog from '../../../components/dialog/sysadmin-dialog/add-department-v2-dialog';
 import DeleteDepartmentV2ConfirmDialog from '../../../components/dialog/sysadmin-dialog/delete-department-v2-confirm-dialog';
 import RenameDepartmentV2Dialog from '../../../components/dialog/sysadmin-dialog/rename-department-v2-dialog';
@@ -14,7 +15,6 @@ import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import MainPanelTopbar from '../main-panel-topbar';
 import Department from './department';
-import DepartmentNode from './department-node';
 import DepartmentsTreePanel from './departments-tree-panel';
 
 import './system-departments.css';
