@@ -24,7 +24,7 @@ class MainPanelTopbar extends Component {
           >
             <Icon symbol="menu" />
           </span>
-          <div className="operation d-flex align-items-center">
+          <div className="operation">
             {this.props.children}
           </div>
         </div>
