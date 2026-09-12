@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import CustomDropdown from '../../../components/dropdown';
 import Icon from '../../../components/icon';
+import { gettext } from '../../../utils/constants';
 import { getDepartmentMenuItems } from './departments-node-dropdown-menu';
 
 const departmentsTreeNodePropTypes = {
@@ -82,11 +83,11 @@ class DepartmentsTreeNode extends Component {
             checkedDepartmentId={this.props.checkedDepartmentId}
             listSubDepartments={this.props.listSubDepartments}
             toggleAddDepartment={this.props.toggleAddDepartment}
-            toggleSetQuotaDialog={this.props.toggleSetQuotaDialog}
             toggleAddMembers={this.props.toggleAddMembers}
             toggleRename={this.props.toggleRename}
             toggleDelete={this.props.toggleDelete}
             toggleAddLibrary={this.props.toggleAddLibrary}
+            toggleSetQuotaDialog={this.props.toggleSetQuotaDialog}
             toggleMoveDepartment={this.props.toggleMoveDepartment}
           />
         );
@@ -125,7 +126,13 @@ class DepartmentsTreeNode extends Component {
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
         >
-          <span className="departments-v2-tree-icon" onClick={(e) => this.toggleChildren(e)}>
+          <span
+            className="departments-v2-tree-icon"
+            onClick={(e) => this.toggleChildren(e)}
+            role="button"
+            aria-label={gettext('Toggle children')}
+            title={gettext('Toggle children')}
+          >
             <Icon symbol="down" className={isChildrenShow ? '' : 'rotate-270'} aria-hidden="true" />
           </span>
           <span className="departments-v2-tree-node-text text-truncate">{node.name}</span>
@@ -135,12 +142,12 @@ class DepartmentsTreeNode extends Component {
               items={getDepartmentMenuItems({
                 node,
                 toggleAddDepartment: this.props.toggleAddDepartment,
-                toggleSetQuotaDialog: this.props.toggleSetQuotaDialog,
                 toggleAddLibrary: this.props.toggleAddLibrary,
                 toggleAddMembers: this.props.toggleAddMembers,
-                toggleMoveDepartment: this.props.toggleMoveDepartment,
+                toggleSetQuotaDialog: this.props.toggleSetQuotaDialog,
                 toggleRename: this.props.toggleRename,
                 toggleDelete: this.props.toggleDelete,
+                toggleMoveDepartment: this.props.toggleMoveDepartment,
               })}
               triggerClassName="right-icon"
               freezeItem={this.handleDropdownOpen}
