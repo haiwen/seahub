@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import dayjs from 'dayjs';
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
+import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import CenteredLoading from '../../../../components/centered-loading';
 import SeahubModalHeader from '../../../../components/common/seahub-modal-header';
