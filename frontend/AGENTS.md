@@ -22,8 +22,9 @@
   them before adding another component library.
 - `HTTP`: Axios clients in `src/utils/*-api.js` call Seahub APIs and retain CSRF
   and server initialization behavior.
-- `Localization`: `i18next`, its HTTP backend, and `react-i18next` load media
-  catalog translations.
+- `Localization`: ordinary Seahub UI strings use Django JavaScript `gettext`;
+  editor integrations use `i18next`, its HTTP backend, and `react-i18next` with
+  media catalog translations.
 - `Technology choices`: prefer this stack; add dependencies or build entries
   only when it cannot meet the requirement.
 

@@ -16,6 +16,9 @@
 ## Setup and Commands
 
 - `pip install -r dev-requirements.txt`: install development dependencies.
+- `pip install -r test-requirements.txt`: install backend test dependencies.
+- `pip install pylint`: install the checker required by `code-check.sh` in the
+  active development environment.
 - `python manage.py runserver`: start the backend with a configured local
   Seafile deployment.
 - `./code-check.sh seahub.api2`: run Pylint error checks for a focused module.

@@ -109,7 +109,6 @@ Do not force uncertain evidence into a violation classification. Put it under `M
 ## Evidence Requirements
 
 Each P0, P1, or P2 finding must include:
-- A rule ID.
 - The file path and accurate line number or code range.
 - The triggering import, selector, variable, configuration, or runtime evidence.
 - The specific impact on the current change.
@@ -140,9 +139,8 @@ Use English and list findings before the conclusion:
 
 ## Findings
 
-### [P1] DEP-001 Remove the page dependency from the shared component - `src/components/file-picker/index.js:8`
+### [P1] Remove the page dependency from the shared component - `src/components/file-picker/index.js:8`
 
-- Rule: DEP-001
 - Evidence: Specific code, configuration, or runtime evidence
 - Impact: Actual impact on the current change
 - Recommendation: A concise, actionable fix

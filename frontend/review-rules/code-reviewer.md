@@ -18,7 +18,7 @@ Existing issues in unchanged code are not blockers unless the change copies, ref
 ## Base Branch
 
 - If the user explicitly specifies a target branch, use the specified branch.
-- Otherwise, use the pull request target branch when it is available from pull request metadata.
+- Otherwise, actively query pull request metadata when the repository tooling supports it, and use the pull request target branch.
 - If pull request metadata is unavailable, use the current branch's configured upstream when it clearly identifies the target branch.
 - If the target branch still cannot be determined unambiguously, ask the user to confirm it. Do not guess.
 - After confirming the base branch, use `git diff <base>...HEAD` to inspect the current branch changes.
@@ -56,9 +56,9 @@ This is a static code review. Do not:
 - Modify files, branches, or Git state.
 - Create commits, push branches, or publish review comments.
 - Run commands that modify files, branches, or Git state.
-- Run `npm`, `pnpm`, `yarn`, or `bun` build scripts.
+- Run production build commands such as `npm run build`, `pnpm build`, `yarn build`, or `bun run build` by default.
 
-To understand verification status, read existing tests, CI configuration, and prior results only. Run a build command only when the user explicitly requests that command in the current request; build results are not required for the default review conclusion.
+To understand verification status, prefer existing tests, CI configuration, and prior results. Read-only lint and targeted test commands may be run when they are useful, supported by the repository, and do not require modifying the environment. Run a production build command only when the user explicitly requests that command in the current request; build results are not required for the default review conclusion.
 
 ## Severity Levels
 
@@ -82,7 +82,7 @@ Each P0, P1, or P2 finding must include:
 
 Prefer the repository's existing tests, lint, typecheck, build, CI configuration, or prior verification results. Do not invent commands.
 
-Do not run build scripts by default, and do not describe unexecuted checks as passed. When verification was not run, state:
+Do not run production build commands by default, and do not describe unexecuted checks as passed. When verification was not run, state:
 
 `Not run: <check>; reason: <reason>.`
 
@@ -105,6 +105,8 @@ Use English and list findings before the conclusion:
 - Summary: One-sentence conclusion
 
 ## Checks Passed
+- Confirmed base branch: `<base>`
+- Base source: User / Pull request metadata / Repository metadata
 - Scope that was inspected and passed
 
 ## Manual Confirmation
