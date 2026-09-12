@@ -86,6 +86,12 @@ Do not run production build commands by default, and do not describe unexecuted 
 
 `Not run: <check>; reason: <reason>.`
 
+Every bullet under `Checks Passed` is an assertion that the stated check succeeded. Include a command there only when its tool result completed with exit code 0, and write the result explicitly with that evidence, for example `` `git diff --check <base>...HEAD` passed (exit code 0).`` Do not list a raw command without its result. A command that was skipped by a shell condition, was unavailable, or returned a non-zero exit code must instead be reported as not run or failed under `Recommended Verification`. Empty command output alone is not evidence that a check passed.
+
+Before producing the final response, audit every command mentioned under `Checks Passed` against its actual tool result. Remove or reclassify any command without an observed exit code 0. This final audit is required even when the command produced no output or used `test`, `&&`, `||`, or another shell condition.
+
+Do not wrap lint, test, typecheck, or build commands in shell conditions using `test`, `&&`, `||`, `if`, or similar constructs. Check tool and dependency availability with a separate read-only command first. Run the verification command separately only when it is available, so its exit code represents that check directly.
+
 ## Fixed Output Format
 
 Use English and list findings before the conclusion:
