@@ -2,16 +2,16 @@ import React from 'react';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import { createRoot } from 'react-dom/client';
-import Icon from '../../components/icon';
-import Loading from '../../components/loading';
-import Paginator from '../../components/paginator';
-import CommonToolbar from '../../components/toolbar/common-toolbar';
-import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from '../../utils/constants';
-import { systemAdminAPI } from '../../utils/system-admin-api';
-import { formatWithTimezone } from '../../utils/time';
-import { Utils } from '../../utils/utils';
+import Icon from '../../../components/icon';
+import Loading from '../../../components/loading';
+import Paginator from '../../../components/paginator';
+import CommonToolbar from '../../../components/toolbar/common-toolbar';
+import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from '../../../utils/constants';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { formatWithTimezone } from '../../../utils/time';
+import { Utils } from '../../../utils/utils';
 
-import '../../css/repo-history.css';
+import '../../../css/repo-history.css';
 
 const {
   repoID,
