@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import { createRoot } from 'react-dom/client';
 import Account from '../../components/account';
 import Icon from '../../components/icon';
 import Logo from '../../components/logo';
@@ -78,5 +77,5 @@ class SharedUploadLink extends React.Component {
   }
 }
 
-const root = createRoot(document.getElementById('wrapper'));
-root.render(<SharedUploadLink />);
+export default SharedUploadLink;
+

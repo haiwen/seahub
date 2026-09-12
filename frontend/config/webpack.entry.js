@@ -38,7 +38,7 @@ const entryFiles = {
   sysadminRepoSnapshot: '/pages/sys-admin/repo-snapshot.js',
   TCAccept: '/tc-accept.js',
   TCView: '/tc-view.js',
-  uploadLink: '/pages/upload-link',
+  uploadLink: '/upload-link.js',
   viewFileCollaboraOnline: '/view-file-collabora-online.js',
   viewFileDocument: '/view-file-document.js',
   viewFileOnlyoffice: '/view-file-onlyoffice.js',
