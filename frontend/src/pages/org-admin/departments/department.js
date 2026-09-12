@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { getDepartmentMenuItems } from '../../../components/admin/departments/department-menu';
 import CustomDropdown from '../../../components/dropdown';
 import EmptyTip from '../../../components/empty-tip';
 import Icon from '../../../components/icon';
 import Loading from '../../../components/loading';
 import SortMenu from '../../../components/sort-menu';
 import { gettext } from '../../../utils/constants';
-import { getDepartmentMenuItems } from './departments-node-dropdown-menu';
 import MemberItem from './member-item';
 import RepoItem from './repo-item';
 

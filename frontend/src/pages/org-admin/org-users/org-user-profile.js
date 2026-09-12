@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import SetOrgUserContactEmail from '../../../components/dialog/set-org-user-contact-email';
 import SetOrgUserName from '../../../components/dialog/set-org-user-name';
 import SetOrgUserQuota from '../../../components/dialog/set-org-user-quota';
@@ -8,7 +9,6 @@ import Loading from '../../../components/loading';
 import { gettext } from '../../../utils/constants';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { Utils } from '../../../utils/utils';
-import MainPanelTopbar from '../main-panel-topbar';
 import OrgAdminUserNav from './org-admin-user-nav';
 
 const { orgID, orgName } = window.org.pageOptions;

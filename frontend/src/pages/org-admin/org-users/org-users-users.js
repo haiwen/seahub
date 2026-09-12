@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { navigate } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import AddOrgUserDialog from '../../../components/dialog/org-add-user-dialog';
 import InviteUserDialog from '../../../components/dialog/org-admin-invite-user-dialog';
 import InviteUserViaWeiXinDialog from '../../../components/dialog/org-admin-invite-user-via-weixin-dialog';
@@ -12,7 +13,6 @@ import OrgUserInfo from '../../../models/org-user';
 import { gettext, invitationLink, orgID, siteRoot, orgEnableAdminInviteUser } from '../../../utils/constants';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { Utils } from '../../../utils/utils';
-import MainPanelTopbar from '../main-panel-topbar';
 import OrgUsersList from './org-users-list';
 import Nav from './org-users-nav';
 

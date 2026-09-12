@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
@@ -9,7 +10,6 @@ import toaster from '../../../components/toast';
 import { siteRoot, gettext, isPro } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
-import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import GroupNav from './group-nav';
 

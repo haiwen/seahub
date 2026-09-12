@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import CheckboxItem from '../../../components/web-settings/checkbox-item';
@@ -8,7 +9,6 @@ import Section from '../../../components/web-settings/section';
 import { gettext, isPro, mediaUrl, logoPath, faviconPath, loginBGPath } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
-import MainPanelTopbar from '../main-panel-topbar';
 
 import '../../../css/system-admin-web-settings.css';
 

@@ -1,6 +1,7 @@
 import React, { Fragment, Component } from 'react';
 import { Row, Col, Label, Button, Input, InputGroup } from 'reactstrap';
 import copy from 'copy-to-clipboard';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import OrgSamlConfigInput from '../../../components/web-settings/input-item';
@@ -8,7 +9,6 @@ import Section from '../../../components/web-settings/section';
 import { gettext, orgID, serviceURL } from '../../../utils/constants';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { Utils } from '../../../utils/utils';
-import MainPanelTopbar from '../main-panel-topbar';
 
 class OrgSAMLConfig extends Component {
 

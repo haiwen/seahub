@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import MainPanelTopbar from '../main-panel-topbar';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import DevicesByPlatform from './devices-by-platform';
 import DevicesNav from './devices-nav';
 

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import AddOrgAdminDialog from '../../../components/dialog/org-add-admin-dialog';
 import Icon from '../../../components/icon';
 import ModalPortal from '../../../components/modal-portal';
@@ -7,7 +8,6 @@ import OrgUserInfo from '../../../models/org-user';
 import { gettext, orgID } from '../../../utils/constants';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { Utils } from '../../../utils/utils';
-import MainPanelTopbar from '../main-panel-topbar';
 import OrgAdminList from './org-admin-list';
 import Nav from './org-users-nav';
 

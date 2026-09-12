@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import Subscription from '../../../components/subscription';
-import MainPanelTopbar from '../main-panel-topbar';
 
 const propTypes = {
   toggleSidePanel: PropTypes.func,

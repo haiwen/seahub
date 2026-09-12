@@ -2,12 +2,12 @@ import React, { Fragment } from 'react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import CustomDropdown from '../../../components/dropdown';
 import toaster from '../../../components/toast';
 import { siteRoot, gettext, serviceURL } from '../../../utils/constants';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { Utils } from '../../../utils/utils';
-import MainPanelTopbar from '../main-panel-topbar';
 import ViewLinkDialog from './view-link-dialog';
 
 dayjs.extend(relativeTime);

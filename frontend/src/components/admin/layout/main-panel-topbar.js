@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Account from '../../components/account';
-import ColorMode from '../../components/color-mode';
-import Icon from '../../components/icon';
-import { gettext } from '../../utils/constants';
+import { gettext } from '../../../utils/constants';
+import Account from '../../account';
+import ColorMode from '../../color-mode';
+import Icon from '../../icon';
 
 const propTypes = {
   children: PropTypes.any,

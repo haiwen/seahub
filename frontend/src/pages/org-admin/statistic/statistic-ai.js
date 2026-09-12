@@ -1,8 +1,8 @@
 import React, { Fragment, useCallback } from 'react';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import AIStatisticsPage from '../../../components/ai-statistics';
 import { gettext, orgID } from '../../../utils/constants';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
-import MainPanelTopbar from '../main-panel-topbar';
 import StatisticNav from './statistic-nav';
 
 const tabs = [
