@@ -1,0 +1,346 @@
+import React, { Fragment } from 'react';
+import classnames from 'classnames';
+import Cookies from 'js-cookie';
+import PropTypes from 'prop-types';
+import CreateRepoDialog from '../../../../components/dialog/create-repo-dialog';
+import ShareRepoDialog from '../../../../components/dialog/share-repo-dialog';
+import SortOptionsDialog from '../../../../components/dialog/sort-options';
+import { LIST_MODE, GRID_MODE } from '../../../../components/dir-view-mode/constants';
+import CustomDropdown from '../../../../components/dropdown';
+import EmptyTip from '../../../../components/empty-tip';
+import EventBus, { EVENT_BUS_TYPE } from '../../../../components/event-bus';
+import Icon from '../../../../components/icon';
+import Loading from '../../../../components/loading';
+import ModalPortal from '../../../../components/modal-portal';
+import SharedRepoListView from '../../../../components/shared-repo-list-view/shared-repo-list-view';
+import ReposSortMenu from '../../../../components/sort-menu';
+import toaster from '../../../../components/toast';
+import ViewModes from '../../../../components/view-modes';
+import Repo from '../../../../models/repo';
+import { gettext, canAddPublicRepo } from '../../../../utils/constants';
+import { seafileAPI } from '../../../../utils/seafile-api';
+import { Utils } from '../../../../utils/utils';
+
+const propTypes = {
+  currentViewMode: PropTypes.string,
+  inAllLibs: PropTypes.bool,
+  repoList: PropTypes.array,
+  isItemFreezed: PropTypes.bool,
+  onFreezedItem: PropTypes.func,
+  onUnfreezedItem: PropTypes.func,
+  onToggleStarRepo: PropTypes.func,
+  onUnshareRepo: PropTypes.func,
+};
+
+class SharedWithAll extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true,
+      errMessage: '',
+      repoList: [],
+      isCreateRepoDialogOpen: false,
+      isSelectRepoDialogOpen: false,
+      currentViewMode: localStorage.getItem('sf_repo_list_view_mode') || LIST_MODE,
+      sortBy: Cookies.get('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
+      sortOrder: Cookies.get('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
+      isSortOptionsDialogOpen: false,
+      libraryType: 'public',
+    };
+  }
+
+  componentDidMount() {
+    if (!this.props.repoList) {
+      seafileAPI.listRepos({ type: 'public' }).then((res) => {
+        let repoList = res.data.repos.map((item) => {
+          return new Repo(item);
+        });
+        this.setState({
+          isLoading: false,
+          repoList: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
+        });
+      }).catch((error) => {
+        this.setState({
+          isLoading: false,
+          errMessage: Utils.getErrorMsg(error, true)
+        });
+      });
+    } else {
+      this.setState({
+        isLoading: false,
+        repoList: Utils.sortRepos(this.props.repoList, this.state.sortBy, this.state.sortOrder)
+      });
+    }
+  }
+
+  onItemUnshare = (repo) => {
+    seafileAPI.unshareRepo(repo.repo_id, { share_type: 'public' }).then(() => {
+      let repoList = this.state.repoList.filter(item => {
+        return item.repo_id !== repo.repo_id;
+      });
+      this.setState({ repoList: repoList });
+      if (this.props.onUnshareRepo) {
+        this.props.onUnshareRepo(repo);
+      }
+      EventBus.getInstance().dispatch(EVENT_BUS_TYPE.SHARED_LIBRARIES_CHANGED);
+      let message = gettext('Successfully unshared {name}').replace('{name}', repo.repo_name);
+      toaster.success(message);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        errMessage = gettext('Failed to unshare {name}').replace('{name}', repo.repo_name);
+      }
+      toaster(errMessage);
+    });
+  };
+
+  onItemDelete = () => {
+    // todo need to optimized
+  };
+
+  addRepoItem = (repo) => {
+    let isExist = false;
+    let repoIndex = 0;
+    let repoList = this.state.repoList;
+    for (let i = 0; i < repoList.length; i++) {
+      if (repo.repo_id === repoList[i].repo_id) {
+        isExist = true;
+        repoIndex = i;
+        break;
+      }
+    }
+    if (isExist) {
+      this.state.repoList.splice(repoIndex, 1);
+    }
+
+    let newRepoList = this.state.repoList.map(item => { return item; });
+    newRepoList.unshift(repo);
+    this.setState({ repoList: newRepoList });
+    EventBus.getInstance().dispatch(EVENT_BUS_TYPE.SHARED_LIBRARIES_CHANGED);
+  };
+
+  sortItems = (sortBy, sortOrder) => {
+    Cookies.set('seafile-repo-dir-sort-by', sortBy);
+    Cookies.set('seafile-repo-dir-sort-order', sortOrder);
+    this.setState({
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+      repoList: Utils.sortRepos(this.state.repoList, sortBy, sortOrder)
+    });
+  };
+
+  onToggleStarRepo = (repo) => {
+    const repoList = this.state.repoList.map(item => {
+      if (item.repo_id === repo.repo_id) {
+        item.starred = !item.starred;
+      }
+      return item;
+    });
+    this.setState({ repoList });
+  };
+
+  toggleSortOptionsDialog = () => {
+    this.setState({
+      isSortOptionsDialogOpen: !this.state.isSortOptionsDialogOpen
+    });
+  };
+
+  renderContent = (currentViewMode) => {
+    const { inAllLibs = false } = this.props;
+    const { isLoading, errMessage, repoList } = this.state;
+    const isDesktop = Utils.isDesktop();
+    const emptyTip = inAllLibs
+      ? <p className={`libraries-empty-tip-in-${isDesktop ? currentViewMode : LIST_MODE}-mode`}>{gettext('No public libraries')}</p>
+      : (
+        <EmptyTip
+          title={gettext('No public libraries')}
+          text={gettext('No public libraries have been created yet. A public library is accessible by all users. You can create a public library by clicking the "Add Library" item in the dropdown menu.')}
+        >
+        </EmptyTip>
+      );
+    return (
+      <>
+        {isLoading
+          ? <Loading />
+          : errMessage
+            ? <p className="error text-center">{errMessage}</p>
+            : repoList.length == 0
+              ? emptyTip
+              : (
+                <SharedRepoListView
+                  key='public-shared-view'
+                  libraryType={this.state.libraryType}
+                  repoList={repoList}
+                  sortBy={this.state.sortBy}
+                  sortOrder={this.state.sortOrder}
+                  sortItems={this.sortItems}
+                  onItemUnshare={this.onItemUnshare}
+                  onItemDelete={this.onItemDelete}
+                  onToggleStarRepo={inAllLibs ? this.props.onToggleStarRepo : this.onToggleStarRepo}
+                  currentViewMode={currentViewMode}
+                  inAllLibs={inAllLibs}
+                  isItemFreezed={this.props.isItemFreezed}
+                  onFreezedItem={this.props.onFreezedItem}
+                  onUnfreezedItem={this.props.onUnfreezedItem}
+                />
+              )}
+      </>
+    );
+  };
+
+  renderSortIconInMobile = () => {
+    return (
+      <>
+        {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="cur-view-path-btn px-1" onClick={this.toggleSortOptionsDialog}><Icon symbol="sort" /></span>}
+      </>
+    );
+  };
+
+  onCreateRepoToggle = () => {
+    this.setState({ isCreateRepoDialogOpen: !this.state.isCreateRepoDialogOpen });
+  };
+
+  onSelectRepoToggle = () => {
+    this.setState({ isSelectRepoDialogOpen: !this.state.isSelectRepoDialogOpen });
+  };
+
+  onCreateRepo = (repo) => {
+    this.onCreateRepoToggle();
+    seafileAPI.createPublicRepo(repo).then(res => {
+      let object = {
+        repo_id: res.data.id,
+        repo_name: res.data.name,
+        permission: res.data.permission,
+        size: res.data.size,
+        owner_name: res.data.owner_name,
+        owner_email: res.data.owner,
+        mtime: res.data.mtime,
+        encrypted: res.data.encrypted,
+      };
+      let repo = new Repo(object);
+      this.addRepoItem(repo);
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
+  onRepoSelectedHandler = (selectedRepoList) => {
+    selectedRepoList.forEach(repo => {
+      seafileAPI.selectOwnedRepoToPublic(repo.repo_id, { share_type: 'public', permission: repo.sharePermission }).then(() => {
+        this.addRepoItem(repo);
+      }).catch((error) => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    });
+  };
+
+  switchViewMode = (newMode) => {
+    this.setState({
+      currentViewMode: newMode
+    }, () => {
+      localStorage.setItem('sf_repo_list_view_mode', newMode);
+    });
+  };
+
+  onSelectSortOption = (sortOption) => {
+    const [sortBy, sortOrder] = sortOption.value.split('-');
+    this.setState({ sortBy, sortOrder }, () => {
+      this.sortItems(sortBy, sortOrder);
+    });
+  };
+
+  render() {
+    const { inAllLibs = false, currentViewMode: propCurrentViewMode } = this.props;
+    const { sortBy, sortOrder, currentViewMode: stateCurrentViewMode } = this.state;
+    const currentViewMode = inAllLibs ? propCurrentViewMode : stateCurrentViewMode;
+    const isDesktop = Utils.isDesktop();
+    const addLibraryItems = [
+      { key: 'share-existing-libraries', label: gettext('Share existing libraries'), onClick: this.onSelectRepoToggle },
+      { key: 'new-library', label: gettext('New Library'), onClick: this.onCreateRepoToggle }
+    ];
+
+    if (inAllLibs) {
+      return (
+        <>
+          <div className="d-flex justify-content-between">
+            <div className="library-list-header">
+              <span className="d-flex align-items-center"><Icon symbol="share-with-all" className="role-icon" /></span>
+              {gettext('Shared with all')}
+            </div>
+          </div>
+          {this.renderContent(currentViewMode)}
+        </>
+      );
+    }
+
+    return (
+      <Fragment>
+        <div className="main-panel-center">
+          <div className="cur-view-container">
+            <div className="cur-view-path">
+              <div className="d-flex align-items-center">
+                <span className="d-flex align-items-center"><Icon symbol="share-with-all" className="role-icon" /></span>
+                <span className="library-list-title">{gettext('Shared with all')}</span>
+                {canAddPublicRepo &&
+                  <CustomDropdown
+                    items={addLibraryItems}
+                    trigger={(
+                      <>
+                        <Icon symbol="new" className="new-icon" />
+                        <Icon symbol="down" className="down-icon" />
+                      </>
+                    )}
+                    triggerClassName="ml-2 sf-dropdown-combined-toggle"
+                    menuPortal={false}
+                  />
+                }
+              </div>
+              {Utils.isDesktop() && (
+                <div className="d-flex align-items-center">
+                  <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />
+                  <ReposSortMenu className="ml-2" sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
+                </div>
+              )}
+              {this.renderSortIconInMobile()}
+            </div>
+            <div className={classnames('cur-view-content', 'repos-container', { 'pt-3': isDesktop && currentViewMode == GRID_MODE })}>
+              {this.renderContent(currentViewMode)}
+            </div>
+          </div>
+        </div>
+        {this.state.isSortOptionsDialogOpen &&
+          <SortOptionsDialog
+            toggleDialog={this.toggleSortOptionsDialog}
+            sortBy={this.state.sortBy}
+            sortOrder={this.state.sortOrder}
+            sortItems={this.sortItems}
+          />
+        }
+        {this.state.isCreateRepoDialogOpen && (
+          <ModalPortal>
+            <CreateRepoDialog
+              libraryType={this.state.libraryType}
+              onCreateToggle={this.onCreateRepoToggle}
+              onCreateRepo={this.onCreateRepo}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isSelectRepoDialogOpen && (
+          <ModalPortal>
+            <ShareRepoDialog
+              onRepoSelectedHandler={this.onRepoSelectedHandler}
+              onShareRepoDialogClose={this.onSelectRepoToggle}
+            />
+          </ModalPortal>
+        )}
+      </Fragment>
+    );
+  }
+}
+
+SharedWithAll.propTypes = propTypes;
+
+export default SharedWithAll;

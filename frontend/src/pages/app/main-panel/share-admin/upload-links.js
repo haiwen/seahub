@@ -1,0 +1,461 @@
+import React, { Component, Fragment } from 'react';
+import { DropdownItem } from 'reactstrap';
+import { Link } from '@gatsbyjs/reach-router';
+import classnames from 'classnames';
+import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
+import CommonOperationConfirmationDialog from '../../../../components/dialog/common-operation-confirmation-dialog';
+import ShareAdminLink from '../../../../components/dialog/share-admin-link';
+import EmptyTip from '../../../../components/empty-tip';
+import FixedWidthTable from '../../../../components/fixed-width-table';
+import Loading from '../../../../components/loading';
+import MobileItemMenu from '../../../../components/mobile-item-menu';
+import OpIcon from '../../../../components/op-icon';
+import toaster from '../../../../components/toast';
+import UploadLink from '../../../../models/upload-link';
+import { gettext, siteRoot } from '../../../../utils/constants';
+import { repoShareAdminAPI } from '../../../../utils/repo-share-admin-api';
+import { seafileAPI } from '../../../../utils/seafile-api';
+import { Utils } from '../../../../utils/utils';
+
+import '../../../../css/share-admin-links.css';
+
+const contentPropTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  toggleSelectAllLinks: PropTypes.func.isRequired,
+  toggleSelectLink: PropTypes.func.isRequired,
+  onRemoveLink: PropTypes.func.isRequired
+};
+
+class Content extends Component {
+
+  toggleSelectAllLinks = (e) => {
+    this.props.toggleSelectAllLinks(e.target.checked);
+  };
+
+  render() {
+    const { loading, errorMsg, items } = this.props;
+
+    if (loading) {
+      return <Loading />;
+    }
+    if (errorMsg) {
+      return <p className="error text-center">{errorMsg}</p>;
+    }
+    if (!items.length) {
+      return (
+        <EmptyTip
+          title={gettext('No upload links')}
+          text={gettext('You have not created any upload links yet. An upload link allows anyone to upload files to a folder or library. You can create an upload link for a folder or library by clicking the share icon to the right of its name.')}
+        />
+      );
+    }
+
+    const selectedItems = items.filter(item => item.isSelected);
+    const isAllLinksSelected = selectedItems.length == items.length;
+
+    const isDesktop = Utils.isDesktop();
+    return (
+      <FixedWidthTable
+        className={classnames('table-hover', { 'table-thead-hidden': !isDesktop })}
+        headers={isDesktop ? [
+          {
+            isFixed: true,
+            width: 30,
+            className: 'text-center',
+            children: (
+              <input
+                type="checkbox"
+                checked={isAllLinksSelected}
+                className="form-check-input"
+                onChange={this.toggleSelectAllLinks}
+                onKeyDown={Utils.onKeyDown}
+                aria-label={isAllLinksSelected ? gettext('Unselect items') : gettext('Select items')}
+              />
+            )
+          }, // checkbox
+          { isFixed: true, width: 40 }, // icon
+          { isFixed: false, width: 0.18, children: gettext('Name') },
+          { isFixed: false, width: 0.25, children: gettext('Library') },
+          { isFixed: false, width: 0.16, children: gettext('Visits') },
+          { isFixed: false, width: 0.16, children: gettext('Expiration') },
+          { isFixed: false, width: 0.15, children: gettext('Description') },
+          { isFixed: false, width: 0.1 }, // Operations
+        ] : [
+          { isFixed: false, width: 0.12 },
+          { isFixed: false, width: 0.8 },
+          { isFixed: false, width: 0.08 },
+        ]}
+      >
+        {items.map((item, index) => {
+          return (<Item key={index} index={index} isDesktop={isDesktop} item={item} onRemoveLink={this.props.onRemoveLink} toggleSelectLink={this.props.toggleSelectLink} />);
+        })}
+      </FixedWidthTable>
+    );
+  }
+}
+
+Content.propTypes = contentPropTypes;
+
+const itemPropTypes = {
+  isDesktop: PropTypes.bool.isRequired,
+  index: PropTypes.number.isRequired,
+  item: PropTypes.object.isRequired,
+  onRemoveLink: PropTypes.func.isRequired,
+  toggleSelectLink: PropTypes.func.isRequired
+};
+
+class Item extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      highlight: false,
+      isOpIconShown: false,
+      isLinkDialogOpen: false
+    };
+  }
+
+  toggleLinkDialog = () => {
+    this.setState({
+      isLinkDialogOpen: !this.state.isLinkDialogOpen
+    });
+  };
+
+  handleMouseOver = () => {
+    this.setState({
+      highlight: true,
+      isOpIconShown: true
+    });
+  };
+
+  handleMouseOut = () => {
+    this.setState({
+      highlight: false,
+      isOpIconShown: false
+    });
+  };
+
+  viewLink = () => {
+    this.toggleLinkDialog();
+  };
+
+  removeLink = () => {
+    this.props.onRemoveLink(this.props.item);
+  };
+
+  renderExpiration = () => {
+    const item = this.props.item;
+    if (!item.expire_date) {
+      return '--';
+    }
+    const expire_date = dayjs(item.expire_date).format('YYYY-MM-DD');
+    const expire_time = dayjs(item.expire_date).format('YYYY-MM-DD HH:mm:ss');
+    return (<span className={item.is_expired ? 'error' : ''} title={expire_time}>{expire_date}</span>);
+  };
+
+  onCheckboxClicked = (e) => {
+    e.stopPropagation();
+  };
+
+  toggleSelectLink = (e) => {
+    const { item } = this.props;
+    this.props.toggleSelectLink(item, e.target.checked);
+  };
+
+  render() {
+    const { item, index } = this.props;
+    const { isSelected = false } = item;
+    const { highlight, isOpIconShown, isLinkDialogOpen } = this.state;
+
+    const iconUrl = Utils.getFolderIconUrl(false);
+    const repoUrl = `${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}`;
+    const objUrl = `${repoUrl}${Utils.encodePath(item.path)}`;
+
+    return (
+      <Fragment>
+        {this.props.isDesktop ?
+          <tr
+            className={classnames({
+              'tr-highlight': highlight,
+              'tr-active': isSelected
+            })}
+            onMouseOver={this.handleMouseOver}
+            onMouseOut={this.handleMouseOut}
+            onFocus={this.handleMouseOver}
+          >
+            <td className="text-center">
+              <input
+                type="checkbox"
+                checked={isSelected}
+                className="form-check-input"
+                onClick={this.onCheckboxClicked}
+                onChange={this.toggleSelectLink}
+                onKeyDown={Utils.onKeyDown}
+                aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
+              />
+            </td>
+            <td className="pl-2 pr-2"><img src={iconUrl} alt="" width="24" /></td>
+            <td>
+              <Link to={objUrl}>{item.obj_name}</Link>
+              {item.obj_id === '' ? <span style={{ color: 'red' }}>{gettext('(deleted)')}</span> : null}
+            </td>
+            <td><Link to={repoUrl}>{item.repo_name}</Link></td>
+            <td>{item.view_cnt}</td>
+            <td>{this.renderExpiration()}</td>
+            <td>{item.description || '--'}</td>
+            <td>
+              <div className="d-flex align-items-center">
+                {!item.is_expired &&
+                  <OpIcon
+                    id={`view-${index}`}
+                    className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
+                    symbol="link"
+                    tooltip={gettext('View link')}
+                    op={this.viewLink}
+                  />
+                }
+                <OpIcon
+                  id={`delete-${index}`}
+                  className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
+                  symbol="delete"
+                  tooltip={gettext('Delete')}
+                  op={this.removeLink}
+                />
+              </div>
+            </td>
+          </tr>
+          :
+          <tr>
+            <td><img src={iconUrl} alt="" width="24" /></td>
+            <td>
+              <Link to={objUrl}>{item.obj_name}</Link>
+              <br />
+              <span>{item.repo_name}</span><br />
+              <span className="item-meta-info">{gettext('Visits')}: {item.view_cnt}</span>
+              <span className="item-meta-info">{gettext('Expiration')}: {this.renderExpiration()}</span>
+            </td>
+            <td>
+              <MobileItemMenu>
+                {!item.is_expired &&
+                  <DropdownItem className="mobile-menu-item" onClick={this.viewLink}>{gettext('View link')}</DropdownItem>
+                }
+                <DropdownItem className="mobile-menu-item" onClick={this.removeLink}>{gettext('Delete')}</DropdownItem>
+              </MobileItemMenu>
+            </td>
+          </tr>
+        }
+        {isLinkDialogOpen &&
+          <ShareAdminLink
+            link={item.link}
+            toggleDialog={this.toggleLinkDialog}
+          />
+        }
+      </Fragment>
+    );
+  }
+}
+
+Item.propTypes = itemPropTypes;
+
+const propTypes = {
+  updateHeaderConfig: PropTypes.func
+};
+
+const defaultProps = {
+  updateHeaderConfig: () => { }
+};
+
+class ShareAdminUploadLinks extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: true,
+      errorMsg: '',
+      items: [],
+      isCleanInvalidUploadLinksDialogOpen: false,
+      isDeleteLinksDialogOpen: false
+    };
+  }
+
+  componentDidMount() {
+    this.updateHeaderConfig();
+    this.listUserUploadLinks();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const prevSelected = prevState.items.filter(item => item.isSelected).length;
+    const curSelected = this.state.items.filter(item => item.isSelected).length;
+    if (prevSelected !== curSelected || prevState.items.length !== this.state.items.length) {
+      this.updateHeaderConfig();
+    }
+  }
+
+  updateHeaderConfig = () => {
+    const { items } = this.state;
+    const selectedLinksLen = items.filter(item => item.isSelected).length;
+
+    this.props.updateHeaderConfig({
+      activeItem: 'share-admin-upload-links',
+      selectedItemsCount: selectedLinksLen,
+      onUnselect: this.cancelSelectAllLinks,
+      onDelete: this.toggleDeleteLinksDialog,
+      deleteId: 'share-admin-upload-links-delete',
+      dropdownItems: [
+        {
+          key: 'clean-invalid-upload-links',
+          label: gettext('Clean invalid upload links'),
+          onClick: this.toggleCleanInvalidUploadLinksDialog
+        }
+      ]
+    });
+  };
+
+  listUserUploadLinks() {
+    seafileAPI.listUserUploadLinks().then((res) => {
+      let items = res.data.map(item => {
+        return new UploadLink(item);
+      });
+      this.setState({
+        loading: false,
+        items: items
+      });
+    }).catch((error) => {
+      this.setState({
+        loading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
+    });
+  }
+
+  onRemoveLink = (item) => {
+    seafileAPI.deleteUploadLink(item.token).then(() => {
+      let items = this.state.items.filter(uploadItem => {
+        return uploadItem.token !== item.token;
+      });
+      this.setState({ items: items });
+      const message = gettext('Successfully deleted 1 item.');
+      toaster.success(message);
+    }).catch((error) => {
+      const errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
+  toggleCleanInvalidUploadLinksDialog = () => {
+    this.setState({ isCleanInvalidUploadLinksDialogOpen: !this.state.isCleanInvalidUploadLinksDialogOpen });
+  };
+
+  cleanInvalidUploadLinks = () => {
+    seafileAPI.cleanInvalidUploadLinks().then(res => {
+      const newItems = this.state.items.filter(item => item.obj_id !== '').filter(item => !item.is_expired);
+      this.setState({ items: newItems });
+      toaster.success(gettext('Successfully cleaned invalid upload links.'));
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
+  toggleDeleteLinksDialog = () => {
+    this.setState({ isDeleteLinksDialogOpen: !this.state.isDeleteLinksDialogOpen });
+  };
+
+  cancelSelectAllLinks = () => {
+    this.toggleSelectAllLinks(false);
+  };
+
+  toggleSelectAllLinks = (isSelected) => {
+    const { items: links } = this.state;
+    this.setState({
+      items: links.map(item => ({
+        ...item,
+        isSelected
+      }))
+    });
+  };
+
+  toggleSelectLink = (link, isSelected) => {
+    const { items: links } = this.state;
+    this.setState({
+      items: links.map(item => item.token == link.token ? {
+        ...item,
+        isSelected
+      } : item)
+    });
+  };
+
+  deleteLinks = () => {
+    const { items } = this.state;
+    const tokens = items.filter(item => item.isSelected).map(link => link.token);
+    repoShareAdminAPI.deleteUploadLinks(tokens).then(res => {
+      const { success, failed } = res.data;
+      if (success.length) {
+        let newItems = items.filter(item => {
+          return !success.some(deletedItem => {
+            return deletedItem.token == item.token;
+          });
+        });
+        this.setState({
+          items: newItems
+        });
+        const length = success.length;
+        const msg = length == 1 ?
+          gettext('Successfully deleted 1 upload link') :
+          gettext('Successfully deleted {number_placeholder} upload links')
+            .replace('{number_placeholder}', length);
+        toaster.success(msg);
+      }
+      failed.forEach(item => {
+        const msg = `${item.token}: ${item.error_msg}`;
+        toaster.danger(msg);
+      });
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
+  render() {
+    return (
+      <Fragment>
+        <div className="cur-view-content">
+          <Content
+            loading={this.state.loading}
+            errorMsg={this.state.errorMsg}
+            items={this.state.items}
+            onRemoveLink={this.onRemoveLink}
+            toggleSelectAllLinks={this.toggleSelectAllLinks}
+            toggleSelectLink={this.toggleSelectLink}
+          />
+        </div>
+        {this.state.isCleanInvalidUploadLinksDialogOpen &&
+          <CommonOperationConfirmationDialog
+            title={gettext('Clean invalid upload links')}
+            message={gettext('Are you sure you want to clean invalid upload links?')}
+            executeOperation={this.cleanInvalidUploadLinks}
+            confirmBtnText={gettext('Clean')}
+            toggleDialog={this.toggleCleanInvalidUploadLinksDialog}
+          />
+        }
+        {this.state.isDeleteLinksDialogOpen && (
+          <CommonOperationConfirmationDialog
+            title={gettext('Delete upload links')}
+            message={gettext('Are you sure you want to delete the selected upload link(s) ?')}
+            executeOperation={this.deleteLinks}
+            confirmBtnText={gettext('Delete')}
+            toggleDialog={this.toggleDeleteLinksDialog}
+          />
+        )}
+      </Fragment>
+    );
+  }
+}
+
+ShareAdminUploadLinks.propTypes = propTypes;
+ShareAdminUploadLinks.defaultProps = defaultProps;
+
+export default ShareAdminUploadLinks;
