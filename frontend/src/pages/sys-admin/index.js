@@ -46,6 +46,7 @@ import OrgsTrafficExceeded from './orgs/orgs-traffic-exceeded';
 import SearchOrgs from './orgs/search-orgs';
 import DirView from './repos/dir-view';
 import SearchRepos from './repos/search-repos';
+import WebSettings from './settings';
 import SidePanel from './side-panel';
 import StatisticLayout from './statistic/layout';
 import TermsAndConditions from './terms-and-conditions/terms-and-conditions';
@@ -59,7 +60,6 @@ import UserSharedRepos from './users/user-shared-repos';
 import VirusScan from './virus-scan';
 import AllVirusFiles from './virus-scan/all-virus-files';
 import UnhandledVirusFiles from './virus-scan/unhandled-virus-files';
-import WebSettings from './web-settings/web-settings';
 
 import '../../css/layout.css';
 import '../../css/toolbar.css';
