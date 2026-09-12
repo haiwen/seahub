@@ -11,7 +11,7 @@ import HiddenColumns from './hidden-columns';
 
 import './index.css';
 
-const HideColumnPopover = ({ hidePopover, onChange, readOnly, target, placement, columns, hiddenColumns: oldHiddenColumns, modifyColumnOrder }) => {
+const HideColumnPopover = ({ hidePopover, onChange, readOnly, target, placement, columns, hiddenColumns: oldHiddenColumns, modifyColumnOrder, maxHeight }) => {
   const [searchValue, setSearchValue] = useState('');
   const [hiddenColumns, setHiddenColumns] = useState(oldHiddenColumns);
   const displayColumns = useMemo(() => {
@@ -105,7 +105,7 @@ const HideColumnPopover = ({ hidePopover, onChange, readOnly, target, placement,
       className="sf-metadata-hide-columns-popover"
       boundariesElement={document.body}
     >
-      <div ref={popoverRef} onClick={onPopoverInsideClick} className="sf-metadata-hide-columns-container" style={{ maxHeight: window.innerHeight - 150 }}>
+      <div ref={popoverRef} onClick={onPopoverInsideClick} className="sf-metadata-hide-columns-container" style={{ maxHeight: maxHeight || window.innerHeight - 150 }}>
         <div className="sf-metadata-hide-columns-search-container">
           <SearchInput
             placeholder={gettext('Search property')}
@@ -150,6 +150,7 @@ const HideColumnPopover = ({ hidePopover, onChange, readOnly, target, placement,
 
 HideColumnPopover.propTypes = {
   readOnly: PropTypes.bool,
+  maxHeight: PropTypes.number,
   placement: PropTypes.string.isRequired,
   target: PropTypes.string.isRequired,
   hiddenColumns: PropTypes.array.isRequired,
