@@ -1,0 +1,410 @@
+import React, { Fragment } from 'react';
+import { navigate } from '@gatsbyjs/reach-router';
+import classnames from 'classnames';
+import Cookies from 'js-cookie';
+import PropTypes from 'prop-types';
+import SortOptionsDialog from '../../../../components/dialog/sort-options';
+import { LIST_MODE, GRID_MODE } from '../../../../components/dir-view-mode/constants';
+import EmptyTip from '../../../../components/empty-tip';
+import EventBus, { EVENT_BUS_TYPE } from '../../../../components/event-bus';
+import Icon from '../../../../components/icon';
+import Loading from '../../../../components/loading';
+import SharedRepoListView from '../../../../components/shared-repo-list-view/shared-repo-list-view';
+import ReposSortMenu from '../../../../components/sort-menu';
+import toaster from '../../../../components/toast';
+import ViewModes from '../../../../components/view-modes';
+import { Group, Repo } from '../../../../models';
+import { gettext, siteRoot, username, mediaUrl } from '../../../../utils/constants';
+import { seafileAPI } from '../../../../utils/seafile-api';
+import { Utils } from '../../../../utils/utils';
+import GroupOperationMenu from './group-op-menu';
+
+
+const propTypes = {
+  groupID: PropTypes.string
+};
+
+class GroupView extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true, // first loading
+      isLoadingMore: false,
+      errMessage: '',
+      emptyTip: null,
+      currentGroup: null,
+      currentViewMode: localStorage.getItem('sf_repo_list_view_mode') || LIST_MODE,
+      sortBy: Cookies.get('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
+      sortOrder: Cookies.get('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
+      isSortOptionsDialogOpen: false,
+      repoList: [],
+      currentPage: 1,
+      perPage: 300,
+      hasNextPage: false,
+      isDepartmentGroup: false,
+    };
+  }
+
+  componentDidMount() {
+    this.loadGroup(this.props.groupID);
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.groupID !== this.props.groupID) {
+      // reset state when groupID changes
+      this.setState({
+        isLoading: true,
+        isLoadingMore: false,
+        errMessage: '',
+        emptyTip: null,
+        currentGroup: null,
+        repoList: [],
+        currentPage: 1, // reset current page to 1
+        hasNextPage: false,
+        isDepartmentGroup: false,
+      }, () => {
+        this.loadGroup(nextProps.groupID);
+      });
+    }
+  }
+
+  loadGroup = (groupID) => {
+    seafileAPI.getGroup(groupID).then((res) => {
+      let currentGroup = new Group(res.data);
+      this.setState({
+        emptyTip: this.getEmptyTip(currentGroup),
+        currentGroup,
+        isDepartmentGroup: currentGroup.parent_group_id !== 0,
+        currentPage: 1,
+        repoList: [] // empty it for the current group
+      }, () => {
+        this.loadRepos(this.state.currentPage);
+      });
+    }).catch((error) => {
+      this.setState({
+        isLoading: false,
+        errMessage: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
+    });
+  };
+
+  loadRepos = (page) => {
+    const { perPage } = this.state;
+    seafileAPI.listGroupRepos(this.props.groupID, page, perPage).then((res) => {
+      let hasNextPage = true;
+      if (res.data.length < perPage) {
+        hasNextPage = false;
+      }
+      let repoList = this.state.repoList;
+      let newRepoList = res.data.map(item => {
+        let repo = new Repo(item);
+        return repo;
+      });
+      if (newRepoList.length) {
+        repoList = repoList.concat(newRepoList);
+      }
+      this.setState({
+        isLoading: false,
+        isLoadingMore: false,
+        currentPage: page,
+        hasNextPage: hasNextPage,
+        repoList: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
+      });
+    }).catch((error) => {
+      this.setState({
+        isLoading: false,
+        isLoadingMore: false,
+        errMessage: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
+    });
+  };
+
+  getEmptyTip = (currentGroup) => {
+    if (currentGroup) {
+      if (currentGroup.parent_group_id === 0) {
+        return (
+          <EmptyTip
+            title={gettext('No libraries shared with this group')}
+            text={gettext('No libraries have been shared with this group yet. A library shared with a group can be accessed by all group members. You can share a library with a group in "My Libraries". You can also create a new library to be shared with this group by clicking the "New Library" item in the dropdown menu.')}
+          />
+        );
+      } else {
+        if (currentGroup.admins.indexOf(username) == -1) { // is a member of this group
+          return (
+            <EmptyTip title={gettext('No libraries')} />
+          );
+        } else {
+          return (
+            <EmptyTip
+              title={gettext('No libraries')}
+              text={gettext('You can create libraries by clicking the "New Library" item in the dropdown menu.')}
+            />
+          );
+        }
+      }
+    }
+    return null;
+  };
+
+  onItemDelete = (repo) => {
+    let repoList = this.state.repoList.filter(item => {
+      return item.repo_id !== repo.repo_id;
+    });
+    this.setState({ repoList: repoList });
+    this.loadGroup(this.props.groupID);
+    EventBus.getInstance().dispatch(EVENT_BUS_TYPE.GROUP_LIBRARIES_CHANGED);
+  };
+
+  onItemTransfer = (repoId, groupID, owner) => {
+    let repoList = this.state.repoList.filter(item => {
+      return item.repo_id !== repoId;
+    });
+    this.setState({ repoList: repoList });
+    this.loadGroup(this.props.groupID);
+    EventBus.getInstance().dispatch(EVENT_BUS_TYPE.GROUP_LIBRARIES_CHANGED);
+  };
+
+  onItemUnshare = (repo) => {
+    let group = this.state.currentGroup;
+    seafileAPI.unshareRepoToGroup(repo.repo_id, group.id).then(() => {
+      let repoList = this.state.repoList.filter(item => {
+        return item.repo_id !== repo.repo_id;
+      });
+      this.setState({ repoList: repoList });
+      this.loadGroup(group.id);
+      EventBus.getInstance().dispatch(EVENT_BUS_TYPE.GROUP_LIBRARIES_CHANGED);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
+  onItemRename = (repo, newName) => {
+    seafileAPI.renameGroupOwnedLibrary(this.props.groupID, repo.repo_id, newName).then(res => {
+      let repoList = this.state.repoList.map(item => {
+        if (item.repo_id === repo.repo_id) {
+          item.repo_name = newName;
+        }
+        return item;
+      });
+      this.setState({ repoList: repoList });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
+  updateRepoStatus = (repo, newStatus) => {
+    const repoList = this.state.repoList.map(item => {
+      if (item.repo_id === repo.repo_id) {
+        item.archive_status = newStatus;
+        item.status = newStatus === null ? 'normal' : 'read-only';
+        item.permission = newStatus === null ? 'rw' : 'r';
+      }
+      return item;
+    });
+    this.setState({ repoList: repoList });
+  };
+
+  onToggleStarRepo = (repo) => {
+    const repoList = this.state.repoList.map(item => {
+      if (item.repo_id === repo.repo_id) {
+        item.starred = !item.starred;
+      }
+      return item;
+    });
+    this.setState({ repoList });
+  };
+
+  sortItems = (sortBy, sortOrder) => {
+    Cookies.set('seafile-repo-dir-sort-by', sortBy);
+    Cookies.set('seafile-repo-dir-sort-order', sortOrder);
+    this.setState({
+      sortBy,
+      sortOrder,
+      repoList: Utils.sortRepos(this.state.repoList, sortBy, sortOrder)
+    });
+  };
+
+  toggleSortOptionsDialog = () => {
+    this.setState({
+      isSortOptionsDialogOpen: !this.state.isSortOptionsDialogOpen
+    });
+  };
+
+  handleScroll = (event) => {
+    // isLoadingMore: to avoid repeated request
+    const { currentPage, hasNextPage, isLoadingMore } = this.state;
+    if (hasNextPage && !isLoadingMore) {
+      const clientHeight = event.target.clientHeight;
+      const scrollHeight = event.target.scrollHeight;
+      const scrollTop = event.target.scrollTop;
+      const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
+      if (isBottom) { // scroll to the bottom
+        this.setState({ isLoadingMore: true }, () => {
+          this.loadRepos(currentPage + 1);
+        });
+      }
+    }
+  };
+
+  switchViewMode = (newMode) => {
+    this.setState({
+      currentViewMode: newMode
+    }, () => {
+      localStorage.setItem('sf_repo_list_view_mode', newMode);
+    });
+  };
+
+  onSelectSortOption = (sortOption) => {
+    const [sortBy, sortOrder] = sortOption.value.split('-');
+    this.setState({ sortBy, sortOrder }, () => {
+      this.sortItems(sortBy, sortOrder);
+    });
+  };
+
+  addNewRepo = (newRepo) => {
+    let { repoList } = this.state;
+    repoList.unshift(newRepo);
+    this.setState({ repoList: repoList });
+  };
+
+  onGroupNameChanged = (newName) => {
+    const { currentGroup } = this.state;
+    currentGroup.name = newName;
+    this.setState({
+      currentGroup: currentGroup
+    });
+  };
+
+  onGroupTransferred = (group) => {
+    this.setState({
+      currentGroup: group
+    });
+  };
+
+  onGroupDeleted = () => {
+    navigate(siteRoot);
+  };
+
+  onLeavingGroup = () => {
+    navigate(siteRoot);
+  };
+
+  render() {
+    const {
+      isLoading, repoList, errMessage, emptyTip,
+      currentGroup, isDepartmentGroup,
+      currentViewMode, sortBy, sortOrder
+    } = this.state;
+    const isDesktop = Utils.isDesktop();
+
+    let useRate = 0;
+    if (isDepartmentGroup && currentGroup.group_quota) {
+      useRate = currentGroup.group_quota_usage / currentGroup.group_quota * 100 + '%';
+    }
+
+    return (
+      <Fragment>
+        <div className="main-panel-center flex-row">
+          <div className="cur-view-container">
+            <div className="cur-view-path">
+              {currentGroup && (
+                <Fragment>
+                  <div className="d-flex align-items-center">
+                    <span className="d-flex align-items-center">
+                      <Icon symbol={isDepartmentGroup ? 'department' : 'group'} className="role-icon mr-2" title={gettext('This is a special group representing a department.')} aria-hidden="true" />
+                    </span>
+                    <span className="library-list-title">{currentGroup.name}</span>
+                    <GroupOperationMenu
+                      group={currentGroup}
+                      addNewRepo={this.addNewRepo}
+                      onGroupNameChanged={this.onGroupNameChanged}
+                      onGroupTransferred={this.onGroupTransferred}
+                      onGroupDeleted={this.onGroupDeleted}
+                      onLeavingGroup={this.onLeavingGroup}
+                    />
+                  </div>
+                  <div className="path-tool d-flex align-items-center">
+                    {isDepartmentGroup && (
+                      <>
+                        {currentGroup.group_quota > 0 &&
+                          <div className="department-usage-container mr-3">
+                            <div className="department-usage">
+                              <span id="quota-bar" className="department-quota-bar">
+                                <span id="quota-usage" className="usage" style={{ width: useRate }}>
+                                </span>
+                              </span>
+                              <span className="department-quota-info">{Utils.bytesToSize(currentGroup.group_quota_usage)} / {Utils.bytesToSize(currentGroup.group_quota)}</span>
+                            </div>
+                          </div>
+                        }
+                      </>
+                    )}
+                    {Utils.isDesktop() && (
+                      <div className="d-flex align-items-center">
+                        <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />
+                        <ReposSortMenu className="ml-2" sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption}/>
+                      </div>
+                    )}
+                    {(!Utils.isDesktop() && this.state.repoList.length > 0) &&
+                      <span className="cur-view-path-btn px-1" onClick={this.toggleSortOptionsDialog}>
+                        <Icon symbol="sort" aria-hidden="true" />
+                      </span>}
+                    {this.state.isSortOptionsDialogOpen &&
+                    <SortOptionsDialog
+                      sortBy={sortBy}
+                      sortOrder={sortOrder}
+                      sortItems={this.sortItems}
+                      toggleDialog={this.toggleSortOptionsDialog}
+                    />
+                    }
+                  </div>
+                </Fragment>
+              )}
+            </div>
+            <div
+              className={classnames('cur-view-content', 'd-block', 'repos-container', { 'pt-3': isDesktop && currentViewMode == GRID_MODE })}
+              onScroll={this.handleScroll}
+            >
+              {isLoading
+                ? <Loading />
+                : errMessage
+                  ? (
+                    <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center">
+                      <img src={`${mediaUrl}img/error-tip.png`} alt="" width="100" />
+                      <p className="mt-2">{errMessage}</p>
+                    </div>
+                  )
+                  : repoList.length == 0
+                    ? emptyTip
+                    : (
+                      <SharedRepoListView
+                        repoList={this.state.repoList}
+                        hasNextPage={this.state.hasNextPage}
+                        currentGroup={this.state.currentGroup}
+                        sortBy={this.state.sortBy}
+                        sortOrder={this.state.sortOrder}
+                        sortItems={this.sortItems}
+                        onItemUnshare={this.onItemUnshare}
+                        onItemDelete={this.onItemDelete}
+                        onItemRename={this.onItemRename}
+                        onTransferRepo={this.onItemTransfer}
+                        onToggleStarRepo={this.onToggleStarRepo}
+                        currentViewMode={currentViewMode}
+                        updateRepoStatus={this.updateRepoStatus}
+                      />
+                    )
+              }
+            </div>
+          </div>
+        </div>
+      </Fragment>
+    );
+  }
+}
+
+GroupView.propTypes = propTypes;
+
+export default GroupView;

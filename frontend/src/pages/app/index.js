@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
-import { Router, navigate } from '@gatsbyjs/reach-router';
+import { navigate } from '@gatsbyjs/reach-router';
 import EventBus from '../../components/event-bus';
 import ResizeBar from '../../components/resize-bar';
 import {
@@ -12,25 +12,8 @@ import {
 } from '../../components/resize-bar/constants';
 import { siteRoot, siteTitle, mediaUrl, faviconPath } from '../../utils/constants';
 import { Utils, isMobile } from '../../utils/utils';
-import FilesActivities from '../files-activities';
-import GroupView from '../groups/group-view';
-import InvitationsView from '../invitations/invitations-view';
-import LibContentView from '../lib-content-view/lib-content-view';
-import Libraries from '../libraries';
-import LinkedDevices from '../linked-devices/linked-devices';
-import MyLibraries from '../my-libs/my-libs';
-import MyLibDeleted from '../my-libs/my-libs-deleted';
-import OCMViaWebdav from '../ocm-via-webdav/ocm-via-webdav';
-import ShareAdminFolders from '../share-admin/folders';
-import ShareAdminLibraries from '../share-admin/libraries';
-import ShareAdminLinks from '../share-admin/links';
-import OCMRepoDir from '../share-with-ocm/remote-dir-view';
-import ShareWithOCM from '../share-with-ocm/shared-with-ocm';
-import SharedLibraries from '../shared-libs';
-import SharedWithAll from '../shared-with-all';
-import Starred from '../starred/starred';
-import Wikis from '../wikis/wikis';
 import Header from './header';
+import MainPanelRouter from './main-panel';
 import SidePanel from './side-panel';
 import SystemNotification from './system-notification';
 import SystemUserNotification from './system-user-notification';
@@ -327,42 +310,14 @@ class App extends Component {
             />
           }
           <div className="main-panel" style={mainPanelStyle}>
-            <Router className="reach-router">
-              <Libraries path={siteRoot} />
-              <Libraries path={siteRoot + 'libraries'} />
-              <MyLibraries path={siteRoot + 'my-libs'} />
-              <MyLibDeleted path={siteRoot + 'my-libs/deleted/'} />
-              <ShareAdminLinks path={siteRoot + ':shareAdminPage'} />
-              <SharedWithAll path={siteRoot + 'org/'} />
-              <Wikis
-                path={siteRoot + 'published'}
-                sidePanelRate={sidePanelRate}
-                isSidePanelFolded={isSidePanelFolded}
-              />
-              <Starred path={siteRoot + 'starred'} />
-              <InvitationsView path={siteRoot + 'invitations/'} />
-              <FilesActivities path={`${siteRoot}activities/*`} />
-              <GroupView path={siteRoot + 'group/:groupID'} />
-              <LinkedDevices path={siteRoot + 'linked-devices'} />
-              <ShareAdminLibraries path={siteRoot + 'share-admin-libs'} />
-              <ShareAdminFolders path={siteRoot + 'share-admin-folders'} />
-              <SharedLibraries path={siteRoot + 'shared-libs'} />
-              <ShareWithOCM path={siteRoot + 'shared-with-ocm'} />
-              <OCMViaWebdav path={siteRoot + 'ocm-via-webdav'} />
-              <OCMRepoDir
-                path={siteRoot + 'remote-library/:providerID/:repoID/*'}
-                pathPrefix={this.state.pathPrefix}
-                onTabNavClick={this.tabItemClick}
-              />
-              <LibContentView
-                path={siteRoot + 'library/:repoID/*'}
-                pathPrefix={this.state.pathPrefix}
-                isSidePanelFolded={isSidePanelFolded}
-                onTabNavClick={this.tabItemClick}
-                eventBus={this.eventBus}
-                resetTitle={this.resetTitle}
-              />
-            </Router>
+            <MainPanelRouter
+              sidePanelRate={sidePanelRate}
+              isSidePanelFolded={isSidePanelFolded}
+              pathPrefix={this.state.pathPrefix}
+              onTabNavClick={this.tabItemClick}
+              eventBus={this.eventBus}
+              resetTitle={this.resetTitle}
+            />
           </div>
           <MediaQuery query="(max-width: 767.8px)">
             <Modal zIndex="1030" isOpen={!isSidePanelClosed} toggle={this.toggleSidePanel} contentClassName="d-none"></Modal>

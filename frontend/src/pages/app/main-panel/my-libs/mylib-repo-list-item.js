@@ -1,0 +1,635 @@
+import React, { Fragment } from 'react';
+import MediaQuery from 'react-responsive';
+import { Link, navigate } from '@gatsbyjs/reach-router';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import PropTypes from 'prop-types';
+import ArchiveIcon from '../../../../components/archive-icon';
+import ChangeRepoPasswordDialog from '../../../../components/dialog/change-repo-password-dialog';
+import DeleteRepoDialog from '../../../../components/dialog/delete-repo-dialog';
+import LabelRepoStateDialog from '../../../../components/dialog/label-repo-state-dialog';
+import LibSubFolderPermissionDialog from '../../../../components/dialog/lib-sub-folder-permission-dialog';
+import RepoAPITokenDialog from '../../../../components/dialog/repo-api-token-dialog';
+import RepoArchiveDialog from '../../../../components/dialog/repo-archive-dialog';
+import OfficeSuiteDialog from '../../../../components/dialog/repo-office-suite-dialog';
+import RepoShareAdminDialog from '../../../../components/dialog/repo-share-admin-dialog';
+import RepoWebhookDialog from '../../../../components/dialog/repo-webhook-dialog';
+import ResetEncryptedRepoPasswordDialog from '../../../../components/dialog/reset-encrypted-repo-password-dialog';
+import ShareDialog from '../../../../components/dialog/share-dialog';
+import TransferDialog from '../../../../components/dialog/transfer-dialog';
+import { LIST_MODE } from '../../../../components/dir-view-mode/constants';
+import EventBus, { EVENT_BUS_TYPE } from '../../../../components/event-bus';
+import Icon from '../../../../components/icon';
+import LibraryOpMenu from '../../../../components/library-op-menu';
+import ModalPortal from '../../../../components/modal-portal';
+import OpIcon from '../../../../components/op-icon';
+import Rename from '../../../../components/rename';
+import toaster from '../../../../components/toast';
+import { gettext, siteRoot } from '../../../../utils/constants';
+import { seafileAPI } from '../../../../utils/seafile-api';
+import { formatWithTimezone } from '../../../../utils/time';
+import { userAPI } from '../../../../utils/user-api';
+import { Utils } from '../../../../utils/utils';
+
+const propTypes = {
+  idx: PropTypes.number,
+  currentViewMode: PropTypes.string,
+  repo: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  onRenameRepo: PropTypes.func.isRequired,
+  onDeleteRepo: PropTypes.func.isRequired,
+  onTransferRepo: PropTypes.func.isRequired,
+  onToggleStarRepo: PropTypes.func.isRequired,
+  onContextMenu: PropTypes.func.isRequired,
+};
+
+dayjs.extend(relativeTime);
+
+class MylibRepoListItem extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpIconShow: false,
+      isRenaming: false,
+      isShareDialogShow: false,
+      isDeleteDialogShow: false,
+      isTransferDialogShow: false,
+      isChangePasswordDialogShow: false,
+      isResetPasswordDialogShow: false,
+      isLabelRepoStateDialogOpen: false,
+      isFolderPermissionDialogShow: false,
+      isAPITokenDialogShow: false,
+      isRepoShareAdminDialogOpen: false,
+      isRepoDeleted: false,
+      isOfficeSuiteDialogShow: false,
+      isWebhookDialogShow: false,
+      isArchiveDialogShow: false,
+    };
+  }
+
+
+  onMouseEnter = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        isOpIconShow: true,
+        highlight: true,
+      });
+    }
+  };
+
+  onMouseLeave = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        isOpIconShow: false,
+        highlight: false
+      });
+    }
+  };
+
+  onMenuItemClick = (e, item) => {
+    e.preventDefault();
+    e.stopPropagation();
+    switch (item) {
+      case 'Star':
+      case 'Unstar':
+        this.onToggleStarRepo();
+        break;
+      case 'Share':
+        this.onShareToggle();
+        break;
+      case 'Delete':
+        this.onDeleteToggle();
+        break;
+      case 'Rename':
+        this.onRenameToggle();
+        break;
+      case 'Transfer':
+        this.onTransferToggle();
+        break;
+      case 'Change Password':
+        this.onChangePasswordToggle();
+        break;
+      case 'Reset Password':
+        this.onResetPasswordToggle();
+        break;
+      case 'Folder Permission':
+        this.onFolderPermissionToggle();
+        break;
+      case 'Label Current State':
+        this.onLabelToggle();
+        break;
+      case 'API Token':
+        this.onAPITokenToggle();
+        break;
+      case 'Webhooks':
+        this.onWebhookToggle();
+        break;
+      case 'Share Admin':
+        this.toggleRepoShareAdminDialog();
+        break;
+      case 'Office Suite':
+        this.onOfficeSuiteToggle();
+        break;
+      case 'Archive':
+        this.onArchiveToggle();
+        break;
+      default:
+        break;
+    }
+  };
+
+  visitRepo = () => {
+    if (!this.state.isRenaming && this.props.repo.repo_name) {
+      navigate(this.repoURL);
+    }
+  };
+
+  // only for clicking the star icon in mobile
+  onClickStarInMobile = (e) => {
+    e.stopPropagation();
+    this.onToggleStarRepo();
+  };
+
+  onToggleStarRepo = () => {
+    const { repo } = this.props;
+    const repoName = repo.repo_name;
+    const onSuccess = () => {
+      this.props.onToggleStarRepo(repo);
+    };
+    if (repo.starred) {
+      seafileAPI.unstarItem(repo.repo_id, '/').then(() => {
+        onSuccess();
+        const msg = gettext('Successfully unstarred {library_name_placeholder}.')
+          .replace('{library_name_placeholder}', repoName);
+        toaster.success(msg);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    } else {
+      seafileAPI.starItem(repo.repo_id, '/').then(() => {
+        onSuccess();
+        const msg = gettext('Successfully starred {library_name_placeholder}.')
+          .replace('{library_name_placeholder}', repoName);
+        toaster.success(msg);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    }
+  };
+
+  onShareToggle = () => {
+    this.setState({ isShareDialogShow: !this.state.isShareDialogShow });
+  };
+
+  onDeleteToggle = () => {
+    this.setState({ isDeleteDialogShow: !this.state.isDeleteDialogShow });
+  };
+
+  onRenameToggle = () => {
+    this.props.onFreezedItem();
+    this.setState({ isRenaming: !this.state.isRenaming });
+  };
+
+  onTransferToggle = () => {
+    this.setState({ isTransferDialogShow: !this.state.isTransferDialogShow });
+  };
+
+  onChangePasswordToggle = () => {
+    this.setState({ isChangePasswordDialogShow: !this.state.isChangePasswordDialogShow });
+  };
+
+  onResetPasswordToggle = () => {
+    this.setState({ isResetPasswordDialogShow: !this.state.isResetPasswordDialogShow });
+  };
+
+  onLabelToggle = () => {
+    this.setState({ isLabelRepoStateDialogOpen: !this.state.isLabelRepoStateDialogOpen });
+  };
+
+  onFolderPermissionToggle = () => {
+    this.setState({ isFolderPermissionDialogShow: !this.state.isFolderPermissionDialogShow });
+  };
+
+  onAPITokenToggle = () => {
+    this.setState({ isAPITokenDialogShow: !this.state.isAPITokenDialogShow });
+  };
+
+  onWebhookToggle = () => {
+    this.setState({ isWebhookDialogShow: !this.state.isWebhookDialogShow });
+  };
+
+  onOfficeSuiteToggle = () => {
+    this.setState({ isOfficeSuiteDialogShow: !this.state.isOfficeSuiteDialogShow });
+  };
+
+  onArchiveToggle = () => {
+    this.setState({ isArchiveDialogShow: !this.state.isArchiveDialogShow });
+  };
+
+  toggleRepoShareAdminDialog = () => {
+    this.setState({ isRepoShareAdminDialogOpen: !this.state.isRepoShareAdminDialogOpen });
+  };
+
+  onUnfreezedItem = () => {
+    this.setState({
+      highlight: false,
+      isOpIconShow: false,
+    });
+    this.props.onUnfreezedItem();
+  };
+
+  onRenameConfirm = (newName) => {
+    let repo = this.props.repo;
+    let repoID = repo.repo_id;
+    seafileAPI.renameRepo(repoID, newName).then(() => {
+      this.props.onRenameRepo(repo, newName);
+      this.onRenameCancel();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
+  onRenameCancel = () => {
+    this.props.onUnfreezedItem();
+    this.setState({ isRenaming: !this.state.isRenaming });
+  };
+
+  onTransferRepo = (email, reshare) => {
+    let repoID = this.props.repo.repo_id;
+    userAPI.transferRepo(repoID, email, reshare).then(res => {
+      this.props.onTransferRepo(repoID);
+      let message = gettext('Successfully transferred the library.');
+      toaster.success(message);
+    }).catch(error => {
+      if (error.response) {
+        toaster.danger(error.response.data.error_msg || gettext('Error'), { duration: 3 });
+      } else {
+        toaster.danger(gettext('Failed. Please check the network.'), { duration: 3 });
+      }
+    });
+  };
+
+  onDeleteRepo = (repo) => {
+    seafileAPI.deleteRepo(repo.repo_id).then((res) => {
+
+      this.setState({
+        isRepoDeleted: true,
+        isDeleteDialogShow: false,
+      });
+
+      this.props.onDeleteRepo(repo);
+      EventBus.getInstance().dispatch(EVENT_BUS_TYPE.GROUP_LIBRARIES_CHANGED);
+      let name = repo.repo_name;
+      var msg = gettext('Successfully deleted {name}.').replace('{name}', name);
+      toaster.success(msg);
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        let name = repo.repo_name;
+        errMessage = gettext('Failed to delete {name}.').replace('{name}', name);
+      }
+      toaster.danger(errMessage);
+
+      this.setState({ isRepoDeleted: false });
+    });
+  };
+
+  onArchiveRepo = (repo) => {
+    const newStatus = !repo.archive_status ? 'archived' : null;
+    this.props.updateRepoStatus(repo, newStatus);
+  };
+
+  handleContextMenu = (event) => {
+    this.props.onContextMenu(event, this.props.repo);
+  };
+
+  renderOperation = () => {
+    const { idx } = this.props;
+    return (
+      <>
+        <OpIcon
+          id={`share-icon-${idx}`}
+          className="op-icon"
+          symbol="share"
+          tooltip={gettext('Share')}
+          op={this.onShareToggle}
+        />
+        <OpIcon
+          id={`delete-icon-${idx}`}
+          className="op-icon"
+          symbol="delete"
+          tooltip={gettext('Delete')}
+          op={this.onDeleteToggle}
+        />
+        <LibraryOpMenu
+          isPC={true}
+          menuContainer="body"
+          repo={this.props.repo}
+          isStarred={this.props.repo.starred}
+          onMenuItemClick={this.onMenuItemClick}
+          onFreezedItem={this.props.onFreezedItem}
+          onUnfreezedItem={this.onUnfreezedItem}
+        />
+      </>
+    );
+  };
+
+  renderPCUI = () => {
+    const { idx, repo, currentViewMode = LIST_MODE } = this.props;
+    let iconUrl = Utils.getLibIconUrl(repo);
+    let iconTitle = Utils.getLibIconTitle(repo);
+    let repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
+    return currentViewMode == LIST_MODE ? (
+      <div
+        className={`repo-list-item ${this.state.highlight ? 'hover' : ''}`}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        onFocus={this.onMouseEnter}
+        onContextMenu={this.handleContextMenu}
+      >
+        <div className="repo-item-icon">
+          <img src={iconUrl} title={iconTitle} alt={iconTitle} width="20" />
+        </div>
+        <div className="repo-item-name">
+          {this.state.isRenaming && (
+            <Rename
+              name={repo.repo_name}
+              onRenameConfirm={this.onRenameConfirm}
+              onRenameCancel={this.onRenameCancel}
+            />
+          )}
+          {!this.state.isRenaming && repo.repo_name && (
+            <>
+              <Link to={repoURL}>{repo.repo_name}</Link>
+              <ArchiveIcon currentRepoInfo={repo} />
+              {repo.starred && (
+                <OpIcon
+                  id={`star-icon-${idx}`}
+                  className="star-icon"
+                  symbol="starred"
+                  tooltip={gettext('Unstar')}
+                  op={this.onToggleStarRepo}
+                />
+              )}
+            </>
+          )}
+          {!this.state.isRenaming && !repo.repo_name &&
+            <span className="text-truncate">{gettext('Broken (please contact your administrator to fix this library)')}</span>
+          }
+        </div>
+        <div className="repo-item-actions">
+          {(repo.repo_name && this.state.isOpIconShow) && (
+            <div className="d-flex align-items-center lh-1">
+              {this.renderOperation()}
+            </div>
+          )}
+        </div>
+        <div className="repo-item-size">{repo.size}</div>
+        <div className="repo-item-time" title={formatWithTimezone(repo.last_modified)}>{dayjs(repo.last_modified).fromNow()}</div>
+      </div>
+    ) : (
+      <div
+        className={`library-grid-item ${this.state.highlight ? 'hover' : ''}`}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        onFocus={this.onMouseEnter}
+        onContextMenu={this.handleContextMenu}
+      >
+        <div className="d-flex align-items-center library-info">
+          <img src={iconUrl} title={iconTitle} alt={iconTitle} width="40" className="mr-3" />
+          <div className="d-flex flex-column justify-content-center library-name-container">
+            {this.state.isRenaming && (
+              <Rename
+                name={repo.repo_name}
+                onRenameConfirm={this.onRenameConfirm}
+                onRenameCancel={this.onRenameCancel}
+              />
+            )}
+            {!this.state.isRenaming && repo.repo_name && (
+              <>
+                <div className='d-flex align-items-center'>
+                  <Link to={repoURL} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
+                  {repo.starred && (
+                    <OpIcon
+                      id={`star-icon-${idx}`}
+                      className="star-icon ml-2 flex-shrink-0"
+                      symbol="starred"
+                      tooltip={gettext('Unstar')}
+                      op={this.onToggleStarRepo}
+                    />
+                  )}
+                </div>
+                <span className="library-size">{repo.size}</span>
+              </>
+            )}
+            {!this.state.isRenaming && !repo.repo_name &&
+              (<span className="text-truncate">{gettext('Broken (please contact your administrator to fix this library)')}</span>)
+            }
+          </div>
+        </div>
+        {(repo.repo_name && this.state.isOpIconShow) && (
+          <div className="flex-shrink-0 d-flex align-items-center ml-4">
+            {this.renderOperation()}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  renderMobileUI = () => {
+    const { idx, repo } = this.props;
+    let iconUrl = Utils.getLibIconUrl(repo);
+    let iconTitle = Utils.getLibIconTitle(repo);
+    let repoURL = this.repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
+
+    return (
+      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        <td onClick={this.visitRepo}><img src={iconUrl} title={iconTitle} alt={iconTitle} width="20" /></td>
+        <td onClick={this.visitRepo}>
+          {this.state.isRenaming && (
+            <Rename
+              name={repo.repo_name}
+              onRenameConfirm={this.onRenameConfirm}
+              onRenameCancel={this.onRenameCancel}
+            />
+          )}
+          {!this.state.isRenaming && repo.repo_name && (
+            <div className='d-flex align-items-center'>
+              <Link to={repoURL} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
+              {repo.archive_status === 'archived' && <Icon className="ml-1" symbol="archive"></Icon>}
+              {repo.starred && (
+                <OpIcon
+                  id={`star-icon-${idx}`}
+                  className="star-icon ml-2 flex-shrink-0"
+                  symbol="starred"
+                  tooltip={gettext('Unstar')}
+                  op={this.onClickStarInMobile}
+                />
+              )}
+            </div>
+          )}
+          {!this.state.isRenaming && !repo.repo_name &&
+            <div className="text-truncate">{gettext('Broken (please contact your administrator to fix this library)')}</div>
+          }
+          <span className="item-meta-info">{repo.size}</span>
+          <span className="item-meta-info" title={formatWithTimezone(repo.last_modified)}>{dayjs(repo.last_modified).fromNow()}</span>
+        </td>
+        <td>
+          {repo.repo_name && (
+            <LibraryOpMenu
+              repo={this.props.repo}
+              isStarred={repo.starred}
+              onMenuItemClick={this.onMenuItemClick}
+              onFreezedItem={this.props.onFreezedItem}
+              onUnfreezedItem={this.onUnfreezedItem}
+            />
+          )}
+        </td>
+      </tr>
+    );
+  };
+
+  render() {
+    let repo = this.props.repo;
+    return (
+      <Fragment>
+        <MediaQuery query="(min-width: 768px)">
+          {this.renderPCUI()}
+        </MediaQuery>
+        <MediaQuery query="(max-width: 767.8px)">
+          {this.renderMobileUI()}
+        </MediaQuery>
+        {this.state.isShareDialogShow && (
+          <ModalPortal>
+            <ShareDialog
+              itemType={'library'}
+              itemName={repo.repo_name}
+              itemPath={'/'}
+              repoID={repo.repo_id}
+              repo={repo}
+              repoEncrypted={repo.encrypted}
+              enableDirPrivateShare={true}
+              userPerm={repo.permission}
+              toggleDialog={this.onShareToggle}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isDeleteDialogShow && (
+          <ModalPortal>
+            <DeleteRepoDialog
+              repo={repo}
+              isRepoDeleted={this.state.isRepoDeleted}
+              onDeleteRepo={this.onDeleteRepo}
+              toggle={this.onDeleteToggle}
+              isGetShare={true}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isTransferDialogShow && (
+          <ModalPortal>
+            <TransferDialog
+              itemName={repo.repo_name}
+              onTransferRepo={this.onTransferRepo}
+              toggleDialog={this.onTransferToggle}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isChangePasswordDialogShow && (
+          <ModalPortal>
+            <ChangeRepoPasswordDialog
+              repoID={repo.repo_id}
+              repoName={repo.repo_name}
+              toggleDialog={this.onChangePasswordToggle}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isResetPasswordDialogShow && (
+          <ModalPortal>
+            <ResetEncryptedRepoPasswordDialog
+              repoID={repo.repo_id}
+              toggleDialog={this.onResetPasswordToggle}
+            />
+          </ModalPortal>
+        )}
+
+        {this.state.isLabelRepoStateDialogOpen && (
+          <ModalPortal>
+            <LabelRepoStateDialog
+              repoID={repo.repo_id}
+              repoName={repo.repo_name}
+              toggleDialog={this.onLabelToggle}
+            />
+          </ModalPortal>
+        )}
+
+        {this.state.isFolderPermissionDialogShow && (
+          <ModalPortal>
+            <LibSubFolderPermissionDialog
+              toggleDialog={this.onFolderPermissionToggle}
+              repoID={repo.repo_id}
+              repoName={repo.repo_name}
+            />
+          </ModalPortal>
+        )}
+
+        {this.state.isAPITokenDialogShow && (
+          <ModalPortal>
+            <RepoAPITokenDialog
+              repo={repo}
+              onRepoAPITokenToggle={this.onAPITokenToggle}
+            />
+          </ModalPortal>
+        )}
+
+        {this.state.isWebhookDialogShow && (
+          <ModalPortal>
+            <RepoWebhookDialog
+              repo={repo}
+              onRepoWebhookToggle={this.onWebhookToggle}
+            />
+          </ModalPortal>
+        )}
+
+        {this.state.isRepoShareAdminDialogOpen && (
+          <ModalPortal>
+            <RepoShareAdminDialog
+              repo={repo}
+              toggleDialog={this.toggleRepoShareAdminDialog}
+            />
+          </ModalPortal>
+        )}
+
+        {this.state.isOfficeSuiteDialogShow && (
+          <ModalPortal>
+            <OfficeSuiteDialog
+              repoID={repo.repo_id}
+              repoName={repo.repo_name}
+              toggleDialog={this.onOfficeSuiteToggle}
+            />
+          </ModalPortal>
+        )}
+
+        {this.state.isArchiveDialogShow && (
+          <ModalPortal>
+            <RepoArchiveDialog
+              repo={repo}
+              onArchiveRepo={this.onArchiveRepo}
+              toggle={this.onArchiveToggle}
+            />
+          </ModalPortal>
+        )}
+
+      </Fragment>
+    );
+  }
+}
+
+MylibRepoListItem.propTypes = propTypes;
+
+export default MylibRepoListItem;

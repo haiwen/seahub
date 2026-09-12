@@ -1,0 +1,139 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { LIST_MODE } from '../../../../components/dir-view-mode/constants';
+import EventBus, { EVENT_BUS_TYPE } from '../../../../components/event-bus';
+import Icon from '../../../../components/icon';
+import SharedRepoListView from '../../../../components/shared-repo-list-view/shared-repo-list-view';
+import toaster from '../../../../components/toast';
+import { gettext, siteRoot } from '../../../../utils/constants';
+import { seafileAPI } from '../../../../utils/seafile-api';
+import { Utils } from '../../../../utils/utils';
+import GroupOperationMenu from './group-op-menu';
+
+const propTypes = {
+  inAllLibs: PropTypes.bool,
+  currentViewMode: PropTypes.string,
+  group: PropTypes.object.isRequired,
+  renameRelatedGroupsRepos: PropTypes.func,
+  toggleStarRelatedGroupsRepos: PropTypes.func,
+  deleteRelatedGroupsRepos: PropTypes.func,
+  addRepoToGroup: PropTypes.func,
+  unshareRepoToGroup: PropTypes.func,
+  onTransferRepo: PropTypes.func.isRequired,
+  onGroupNameChanged: PropTypes.func.isRequired,
+  onGroupTransferred: PropTypes.func.isRequired,
+  onGroupDeleted: PropTypes.func.isRequired,
+  onLeavingGroup: PropTypes.func.isRequired,
+  isItemFreezed: PropTypes.bool,
+  onFreezedItem: PropTypes.func,
+  onUnfreezedItem: PropTypes.func,
+};
+
+
+class GroupItem extends React.Component {
+
+  onItemUnshare = (repo) => {
+    const { group } = this.props;
+    const { id: group_id } = group;
+    seafileAPI.unshareRepoToGroup(repo.repo_id, group_id).then(() => {
+      this.props.unshareRepoToGroup({ repo_id: repo.repo_id, group_id });
+      EventBus.getInstance().dispatch(EVENT_BUS_TYPE.GROUP_LIBRARIES_CHANGED);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
+  onItemDelete = (repo) => {
+    this.props.deleteRelatedGroupsRepos(repo.repo_id);
+    EventBus.getInstance().dispatch(EVENT_BUS_TYPE.GROUP_LIBRARIES_CHANGED);
+  };
+
+  onTransferRepo = (repoID, groupID, newOwner) => {
+    this.props.onTransferRepo(repoID, groupID, newOwner);
+    EventBus.getInstance().dispatch(EVENT_BUS_TYPE.GROUP_LIBRARIES_CHANGED);
+  };
+
+  onItemRename = (repo, newName) => {
+    let group = this.props.group;
+    seafileAPI.renameGroupOwnedLibrary(group.id, repo.repo_id, newName).then(res => {
+      this.props.renameRelatedGroupsRepos(repo.repo_id, newName);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
+  onToggleStarRepo = (repo) => {
+    this.props.toggleStarRelatedGroupsRepos(repo.repo_id);
+  };
+
+  addNewRepo = (newRepo) => {
+    const { group } = this.props;
+    const { id: group_id } = group;
+    this.props.addRepoToGroup({ repo: newRepo, group_id });
+  };
+
+  onGroupNameChanged = (newName) => {
+    const { group } = this.props;
+    this.props.onGroupNameChanged(newName, group.id);
+  };
+
+  onGroupDeleted = () => {
+    const { group } = this.props;
+    this.props.onGroupDeleted(group.id);
+  };
+
+  onLeavingGroup = () => {
+    const { group } = this.props;
+    this.props.onLeavingGroup(group.id);
+  };
+
+  render() {
+    const { inAllLibs = false, group, currentViewMode = LIST_MODE } = this.props;
+    const isDesktop = Utils.isDesktop();
+    const emptyTip = <p className={`libraries-empty-tip-in-${isDesktop ? currentViewMode : LIST_MODE}-mode`}>{gettext('No libraries')}</p>;
+
+    return (
+      <>
+        <div className="library-list-header">
+          <Icon symbol={group.parent_group_id == 0 ? 'group' : 'department'} className="role-icon" />
+          <a href={`${siteRoot}group/${group.id}/`} title={group.name} className="ellipsis">{group.name}</a>
+          <GroupOperationMenu
+            group={group}
+            addNewRepo={this.addNewRepo}
+            onGroupNameChanged={this.onGroupNameChanged}
+            onGroupTransferred={this.props.onGroupTransferred}
+            onGroupDeleted={this.onGroupDeleted}
+            onLeavingGroup={this.onLeavingGroup}
+          />
+        </div>
+        {group.repos.length === 0 && emptyTip}
+        {group.repos.length !== 0 && (
+          <SharedRepoListView
+            key={`group-${group.id}`}
+            inAllLibs={inAllLibs}
+            theadHidden={true}
+            isShowRepoOwner={false}
+            currentGroup={this.props.group}
+            repoList={group.repos}
+            onItemUnshare={this.onItemUnshare}
+            onItemDelete={this.onItemDelete}
+            onItemRename={this.onItemRename}
+            onToggleStarRepo={this.onToggleStarRepo}
+            onTransferRepo={this.onTransferRepo}
+            currentViewMode={currentViewMode}
+            updateRepoStatus={this.props.updateRepoStatus}
+            isItemFreezed={this.props.isItemFreezed}
+            onFreezedItem={this.props.onFreezedItem}
+            onUnfreezedItem={this.props.onUnfreezedItem}
+          />
+        )}
+      </>
+    );
+  }
+}
+
+GroupItem.propTypes = propTypes;
+
+export default GroupItem;
