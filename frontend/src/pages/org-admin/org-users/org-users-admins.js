@@ -114,7 +114,7 @@ class OrgUsers extends Component {
 
     return (
       <>
-        <MainPanelTopbar children={topbarChildren}/>
+        <MainPanelTopbar {...this.props} children={topbarChildren}/>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <Nav currentItem="admins" />

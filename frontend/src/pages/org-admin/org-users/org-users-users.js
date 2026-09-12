@@ -310,7 +310,7 @@ class OrgUsers extends Component {
 
     return (
       <Fragment>
-        <MainPanelTopbar children={topbarChildren} search={this.getSearch()}/>
+        <MainPanelTopbar {...this.props} children={topbarChildren} search={this.getSearch()}/>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <Nav

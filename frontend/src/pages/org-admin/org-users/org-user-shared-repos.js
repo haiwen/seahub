@@ -38,7 +38,7 @@ class OrgUserSharedRepos extends Component {
   render() {
     return (
       <Fragment>
-        <MainPanelTopbar/>
+        <MainPanelTopbar {...this.props}/>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <OrgAdminUserNav email={this.props.email} currentItem='shared-repos' />

@@ -12,7 +12,7 @@ import StatisticNav from './statistic-nav';
 
 import '../../../css/system-stat.css';
 
-const OrgStatisticFile = () => {
+const OrgStatisticFile = (props) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 
@@ -46,7 +46,7 @@ const OrgStatisticFile = () => {
 
   return (
     <Fragment>
-      <MainPanelTopbar />
+      <MainPanelTopbar {...props} />
       <div className="cur-view-container">
         <StatisticNav currentItem="fileStatistic" />
         <div className="cur-view-content">

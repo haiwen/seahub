@@ -380,7 +380,7 @@ class Departments extends React.Component {
       isDeleteDepartmentDialogShow, sortBy, sortOrder, isMoveDeparmentDialogShow } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar />
+        <MainPanelTopbar {...this.props} />
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path">

@@ -52,7 +52,7 @@ class OrgInfo extends Component {
     const aiUsageRate = ai_credit > 0 ? ai_credit_used / ai_credit * 100 : 0;
     return (
       <Fragment>
-        <MainPanelTopbar />
+        <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">

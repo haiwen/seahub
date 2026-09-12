@@ -169,7 +169,7 @@ class OrgGroups extends Component {
     let groups = this.state.orgGroups;
     return (
       <Fragment>
-        <MainPanelTopbar search={this.getSearch()} />
+        <MainPanelTopbar {...this.props} search={this.getSearch()} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">

@@ -10,7 +10,7 @@ import { Utils } from '../../../utils/utils';
 import MainPanelTopbar from '../main-panel-topbar';
 import StatisticNav from './statistic-nav';
 
-const OrgStatisticStorage = () => {
+const OrgStatisticStorage = (props) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 
@@ -45,7 +45,7 @@ const OrgStatisticStorage = () => {
 
   return (
     <>
-      <MainPanelTopbar />
+      <MainPanelTopbar {...props} />
       <div className="cur-view-container">
         <StatisticNav currentItem="storageStatistic" />
         <div className="cur-view-content">

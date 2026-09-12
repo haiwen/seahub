@@ -21,7 +21,7 @@ const detailOptionsMap = {
   ],
 };
 
-const OrgStatisticAI = () => {
+const OrgStatisticAI = (props) => {
   const listFetcher = useCallback((date, month, groupBy, page, perPage) => {
     return orgAdminAPI.orgAdminGetAIStatistics(orgID, date, month, groupBy, page, perPage);
   }, []);
@@ -36,7 +36,7 @@ const OrgStatisticAI = () => {
 
   return (
     <Fragment>
-      <MainPanelTopbar />
+      <MainPanelTopbar {...props} />
       <div className="cur-view-container">
         <StatisticNav currentItem="aiStatistic" />
         <div className="cur-view-content">

@@ -192,11 +192,11 @@ class OrgDevicesErrors extends Component {
     return (
       <Fragment>
         {this.state.isCleanBtnShown ? (
-          <MainPanelTopbar>
+          <MainPanelTopbar {...this.props}>
             <Button className="operation-item" onClick={this.clean}>{gettext('Clean')}</Button>
           </MainPanelTopbar>
         ) : (
-          <MainPanelTopbar />
+          <MainPanelTopbar {...this.props} />
         )}
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
