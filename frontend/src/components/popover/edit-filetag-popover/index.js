@@ -8,7 +8,7 @@ import CommonAddTool from '../../common-add-tool';
 import CustomizePopover from '../../customize-popover';
 import SearchInput from '../../search-input';
 import toaster from '../../toast';
-import TagItem from '../tag-item';
+import TagItem from './tag-item';
 
 import './index.css';
 
