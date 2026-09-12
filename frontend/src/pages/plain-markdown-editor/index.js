@@ -2,7 +2,6 @@ import React, { useState, useRef, useCallback, useLayoutEffect, useEffect } from
 import { processorWithMath } from '@seafile/seafile-editor';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
-import { createRoot } from 'react-dom/client';
 import CodeMirrorLoading from '../../components/code-mirror-loading';
 import toaster from '../../components/toast';
 import { gettext } from '../../utils/constants';
@@ -261,6 +260,3 @@ const PlainMarkdownEditor = (props) => {
 PlainMarkdownEditor.propTypes = propTypes;
 
 export default PlainMarkdownEditor;
-
-const root = createRoot(document.getElementById('root'));
-root.render(<PlainMarkdownEditor />);

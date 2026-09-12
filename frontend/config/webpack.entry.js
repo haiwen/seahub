@@ -10,7 +10,7 @@ const entryFiles = {
   institutionAdmin: '/institution-admin.js',
   markdownEditor: '/markdown-editor.js',
   orgAdmin: '/org-admin.js',
-  plainMarkdownEditor: '/pages/plain-markdown-editor/index.js',
+  plainMarkdownEditor: '/plain-markdown-editor.js',
   repoFolderTrash: '/repo-folder-trash.js',
   repoHistory: '/repo-history.js',
   repoSnapshot: '/repo-snapshot.js',
