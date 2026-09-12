@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
+import PropTypes from 'prop-types';
 import CenteredLoading from '../../../../components/centered-loading';
 import SeahubModalHeader from '../../../../components/common/seahub-modal-header';
 import Icon from '../../../../components/icon';
 import toaster from '../../../../components/toast';
-import { formatWithTimezone } from '../../../../utils/time';
 import { gettext } from '../../../../utils/constants';
+import { formatWithTimezone } from '../../../../utils/time';
 import { Utils } from '../../../../utils/utils';
 import metadataAPI from '../../../api';
 
