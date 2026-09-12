@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Link } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -9,8 +9,8 @@ import Paginator from '../../../components/paginator';
 import { gettext, siteRoot } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
-import { LogRepoSelector, LogUserSelector } from '../log-selector';
 import UserLink from '../user-link';
+import { LogRepoSelector, LogUserSelector } from './log-selector';
 
 dayjs.extend(relativeTime);
 
@@ -32,18 +32,20 @@ class Content extends Component {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
       const emptyTip = (
-        <EmptyTip text={gettext('No transfer logs')}>
+        <EmptyTip text={gettext('No permission logs')}>
         </EmptyTip>
       );
       const table = (
-        <Fragment>
+        <>
           <table className="table-hover">
             <thead>
               <tr>
-                <th width="20%">{gettext('Transfer From')}</th>
-                <th width="20%">{gettext('Transfer To')}</th>
-                <th width="20%">{gettext('Operator')}</th>
-                <th width="25%">{gettext('Library')}</th>
+                <th width="15%">{gettext('Share From')}</th>
+                <th width="15%">{gettext('Share To')}</th>
+                <th width="10%">{gettext('Actions')}</th>
+                <th width="13%">{gettext('Permission')}</th>
+                <th width="20%">{gettext('Library')}</th>
+                <th width="12%">{gettext('Folder')}</th>
                 <th width="15%">{gettext('Date')}</th>
               </tr>
             </thead>
@@ -66,7 +68,7 @@ class Content extends Component {
             curPerPage={perPage}
             resetPerPage={this.props.resetPerPage}
           />
-        </Fragment>
+        </>
       );
       return items.length ? table : emptyTip;
     }
@@ -87,59 +89,42 @@ Content.propTypes = {
 
 class Item extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpIconShown: false,
-    };
-  }
-
-  handleMouseOver = () => {
-    this.setState({
-      isOpIconShown: true
-    });
+  getActionTextByEType = (etype) => {
+    if (etype.indexOf('add') != -1) {
+      return gettext('Add');
+    } else if (etype.indexOf('modify') != -1) {
+      return gettext('Modify');
+    } else if (etype.indexOf('delete') != -1) {
+      return gettext('Delete');
+    } else {
+      return '';
+    }
   };
 
-  handleMouseOut = () => {
-    this.setState({
-      isOpIconShown: false
-    });
-  };
-
-  getTransferTo = (item) => {
-    switch (item.to_type) {
+  getShareTo = (item) => {
+    switch (item.share_type) {
       case 'user':
         return <UserLink email={item.to_user_email} name={item.to_user_name} />;
       case 'group':
+      case 'department':
         return <Link to={`${siteRoot}sys/groups/${item.to_group_id}/libraries/`}>{item.to_group_name}</Link>;
+      case 'all':
+        return <Link to={`${siteRoot}org/`}>{gettext('All')}</Link>;
       default:
         return gettext('Deleted');
     }
-  };
-
-  getTransferFrom = (item) => {
-    switch (item.from_type) {
-      case 'user':
-        return <UserLink email={item.from_user_email} name={item.from_user_name} />;
-      case 'group':
-        return <Link to={`${siteRoot}sys/groups/${item.from_group_id}/libraries/`}>{item.from_group_name}</Link>;
-      default:
-        return gettext('Deleted');
-    }
-  };
-
-  getOperator = (item) => {
-    return <UserLink email={item.operator_email} name={item.operator_name} />;
   };
 
   render() {
     let { item } = this.props;
     return (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-        <td>{this.getTransferFrom(item)}</td>
-        <td>{this.getTransferTo(item)}</td>
-        <td>{this.getOperator(item)}</td>
+      <tr>
+        <td><UserLink email={item.from_user_email} name={item.from_user_name} /></td>
+        <td>{this.getShareTo(item)}</td>
+        <td>{this.getActionTextByEType(item.etype)}</td>
+        <td>{Utils.sharePerms(item.permission)}</td>
         <td>{item.repo_name ? item.repo_name : gettext('Deleted')}</td>
+        <td>{item.folder}</td>
         <td>{dayjs(item.date).fromNow()}</td>
       </tr>
     );
@@ -150,7 +135,7 @@ Item.propTypes = {
   item: PropTypes.object.isRequired,
 };
 
-class FileTransferLogs extends Component {
+class SharePermissionLogs extends Component {
 
   constructor(props) {
     super(props);
@@ -161,17 +146,21 @@ class FileTransferLogs extends Component {
       perPage: 100,
       currentPage: 1,
       hasNextPage: false,
+      isExportExcelDialogOpen: false,
       availableUsers: [],
       selectedFromUsers: [],
       selectedToUsers: [],
       selectedToGroups: [],
-      selectedOperators: [],
-      openSelector: null,
       availableRepos: [],
       selectedRepos: [],
+      openSelector: null,
     };
     this.initPage = 1;
   }
+
+  toggleExportExcelDialog = () => {
+    this.setState({ isExportExcelDialogOpen: !this.state.isExportExcelDialogOpen });
+  };
 
   componentDidMount() {
     let urlParams = (new URL(window.location)).searchParams;
@@ -190,25 +179,22 @@ class FileTransferLogs extends Component {
       selectedFromUsers,
       selectedToUsers,
       selectedToGroups,
-      selectedOperators,
       selectedRepos
     } = this.state;
 
     const options = {
-      'from_email': selectedFromUsers.filter(item => item.email).map(user => user.email),
-      'from_group': selectedFromUsers.filter(item => !item.email).map(group => group.id),
+      'from_email': selectedFromUsers.map(user => user.email),
       'to_email': selectedToUsers.map(user => user.email),
-      'to_group': selectedToGroups.map(group => group.to_group_id || group.id),
-      'operator_email': selectedOperators.map(user => user.email),
+      'to_group': selectedToGroups.map(group => group.id),
       'repo': selectedRepos.map(repo => repo.id)
     };
-    systemAdminAPI.sysAdminListFileTransferLogs(
+    systemAdminAPI.sysAdminListSharePermissionLogs(
       page,
       perPage,
       options
     ).then((res) => {
       this.setState({
-        logList: res.data.repo_transfer_log_list,
+        logList: res.data.share_permission_log_list,
         loading: false,
         currentPage: page,
         hasNextPage: res.data.has_next_page,
@@ -216,7 +202,6 @@ class FileTransferLogs extends Component {
     }).catch((error) => {
       this.setState({
         loading: false,
-        currentPage: page,
         errorMsg: Utils.getErrorMsg(error, true)
       });
     });
@@ -228,34 +213,18 @@ class FileTransferLogs extends Component {
     }, () => this.getLogsByPage(this.initPage));
   };
 
-  handleFromUserFilter = (item, shouldFetchData = true) => {
+  handleFromUserFilter = (user, shouldFetchData = true) => {
     const { selectedFromUsers } = this.state;
     let newSelectedUsers;
 
-    if (item === null) {
+    if (user === null) {
       newSelectedUsers = selectedFromUsers;
     } else {
-      if (item.email) {
-        const isSelected = selectedFromUsers.find(user => user.email === item.email);
-        if (isSelected) {
-          newSelectedUsers = selectedFromUsers.filter(user => user.email !== item.email);
-        } else {
-          newSelectedUsers = [...selectedFromUsers, item];
-        }
+      const isSelected = selectedFromUsers.find(item => item.email === user.email);
+      if (isSelected) {
+        newSelectedUsers = selectedFromUsers.filter(item => item.email !== user.email);
       } else {
-        const groupId = item.id;
-        const isSelected = selectedFromUsers.find(group => group.id === groupId);
-        if (isSelected) {
-          newSelectedUsers = selectedFromUsers.filter(group => group.id !== groupId);
-        } else {
-          const groupItem = {
-            id: groupId,
-            name: item.name,
-            from_group_id: groupId,
-            from_group_name: item.name
-          };
-          newSelectedUsers = [...selectedFromUsers, groupItem];
-        }
+        newSelectedUsers = [...selectedFromUsers, user];
       }
     }
 
@@ -286,27 +255,11 @@ class FileTransferLogs extends Component {
           newSelectedUsers = [...selectedToUsers, item];
         }
       } else {
-        const groupId = item.to_group_id || item.id;
-        const groupName = item.to_group_name || item.name;
-
-        const isSelected = selectedToGroups.find(group => {
-          const selectedGroupId = group.to_group_id || group.id;
-          return selectedGroupId === groupId;
-        });
-
+        const isSelected = selectedToGroups.find(group => group.id === item.id);
         if (isSelected) {
-          newSelectedGroups = selectedToGroups.filter(group => {
-            const selectedGroupId = group.to_group_id || group.id;
-            return selectedGroupId !== groupId;
-          });
+          newSelectedGroups = selectedToGroups.filter(group => group.id !== item.id);
         } else {
-          const groupItem = {
-            id: groupId,
-            name: groupName,
-            to_group_id: groupId,
-            to_group_name: groupName
-          };
-          newSelectedGroups = [...selectedToGroups, groupItem];
+          newSelectedGroups = [...selectedToGroups, item];
         }
       }
     }
@@ -314,31 +267,6 @@ class FileTransferLogs extends Component {
     this.setState({
       selectedToUsers: newSelectedUsers,
       selectedToGroups: newSelectedGroups,
-      currentPage: 1
-    }, () => {
-      if (shouldFetchData) {
-        this.getLogsByPage(1);
-      }
-    });
-  };
-
-  handleOperatorFilter = (user, shouldFetchData = true) => {
-    const { selectedOperators } = this.state;
-    let newSelectedUsers;
-
-    if (user === null) {
-      newSelectedUsers = selectedOperators;
-    } else {
-      const isSelected = selectedOperators.find(item => item.email === user.email);
-      if (isSelected) {
-        newSelectedUsers = selectedOperators.filter(item => item.email !== user.email);
-      } else {
-        newSelectedUsers = [...selectedOperators, user];
-      }
-    }
-
-    this.setState({
-      selectedOperators: newSelectedUsers,
       currentPage: 1
     }, () => {
       if (shouldFetchData) {
@@ -360,13 +288,12 @@ class FileTransferLogs extends Component {
     });
   };
 
-
   handleRepoFilter = (repo, shouldFetchData = true) => {
     const { selectedRepos } = this.state;
     let newSelectedRepos;
 
     if (repo === null) {
-      newSelectedRepos = [];
+      newSelectedRepos = selectedRepos;
     } else {
       const isSelected = selectedRepos.find(item => item.id === repo.id);
       if (isSelected) {
@@ -390,67 +317,43 @@ class FileTransferLogs extends Component {
     return systemAdminAPI.sysAdminSearchUsers(value);
   };
 
-  searchGroups = (value) => {
-    return systemAdminAPI.sysAdminSearchGroups(value);
-  };
-
   searchRepos = (value) => {
     return systemAdminAPI.sysAdminSearchRepos(value);
+  };
+
+  searchGroups = (value) => {
+    return systemAdminAPI.sysAdminSearchGroups(value);
   };
 
   render() {
     let {
       logList, currentPage, perPage, hasNextPage,
-      availableUsers, selectedFromUsers,
-      selectedToUsers, selectedToGroups,
-      selectedOperators,
-      availableRepos, selectedRepos,
-      openSelector
+      availableUsers, selectedFromUsers, selectedToUsers,
+      selectedToGroups, availableRepos, selectedRepos, openSelector
     } = this.state;
-
-    const selectedToItems = [
-      ...selectedToUsers,
-      ...selectedToGroups.map(group => ({
-        id: group.to_group_id || group.id,
-        name: group.to_group_name || group.name,
-        to_group_id: group.to_group_id || group.id,
-        to_group_name: group.to_group_name || group.name
-      }))
-    ];
-
     return (
       <div className="main-panel-center flex-row">
         <div className="cur-view-container">
           <div className="cur-view-content">
             <div className="d-flex align-items-center mb-2 gap-4">
               <LogUserSelector
-                componentName={gettext('Transfer From')}
+                componentName={gettext('Share From')}
                 items={availableUsers}
                 selectedItems={selectedFromUsers}
                 onSelect={this.handleFromUserFilter}
                 isOpen={openSelector === 'fromUser'}
                 onToggle={() => this.handleSelectorToggle('fromUser')}
                 searchUsersFunc={this.searchUsers}
-                searchGroupsFunc={this.searchGroups}
               />
               <LogUserSelector
-                componentName={gettext('Transfer To')}
+                componentName={gettext('Share To')}
                 items={availableUsers}
-                selectedItems={selectedToItems}
+                selectedItems={[...selectedToUsers, ...selectedToGroups]}
                 onSelect={this.handleToUserFilter}
                 isOpen={openSelector === 'toUser'}
                 onToggle={() => this.handleSelectorToggle('toUser')}
                 searchUsersFunc={this.searchUsers}
                 searchGroupsFunc={this.searchGroups}
-              />
-              <LogUserSelector
-                componentName={gettext('Operator')}
-                items={availableUsers}
-                selectedItems={selectedOperators}
-                onSelect={this.handleOperatorFilter}
-                isOpen={openSelector === 'operator'}
-                onToggle={() => this.handleSelectorToggle('operator')}
-                searchUsersFunc={this.searchUsers}
               />
               <LogRepoSelector
                 items={availableRepos}
@@ -478,4 +381,4 @@ class FileTransferLogs extends Component {
   }
 }
 
-export default FileTransferLogs;
+export default SharePermissionLogs;

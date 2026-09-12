@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
-import { systemAdminAPI } from '../../utils/system-admin-api';
-import { Utils } from '../../utils/utils';
-import MainPanelTopbar from './main-panel-topbar';
+import { gettext } from '../../../utils/constants';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { Utils } from '../../../utils/utils';
+import MainPanelTopbar from '../main-panel-topbar';
 
 
 const tablePropTypes = {

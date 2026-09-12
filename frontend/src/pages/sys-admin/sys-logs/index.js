@@ -4,8 +4,8 @@ import { useLocation } from '@gatsbyjs/reach-router';
 import LogsExportExcelDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog';
 import ModalPortal from '../../../components/modal-portal';
 import { gettext } from '../../../utils/constants';
-import LogsNav from '../logs-page/logs-nav';
 import MainPanelTopbar from '../main-panel-topbar';
+import LogsNav from './logs-nav';
 import './logs.css';
 
 const LOG_PATH_NAME_MAP = {

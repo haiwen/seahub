@@ -1,21 +1,27 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import { navigate } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
-import CommitDetails from '../../../components/dialog/commit-details';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
-import ModalPortal from '../../../components/modal-portal';
 import Paginator from '../../../components/paginator';
 import { gettext } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
-import { LogRepoSelector, LogUserSelector } from '../log-selector';
 import UserLink from '../user-link';
+import { LogRepoSelector, LogUserSelector } from './log-selector';
 
 dayjs.extend(relativeTime);
 
 class Content extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isItemFreezed: false
+    };
+  }
 
   getPreviousPage = () => {
     this.props.getLogsByPage(this.props.currentPage - 1);
@@ -25,26 +31,37 @@ class Content extends Component {
     this.props.getLogsByPage(this.props.currentPage + 1);
   };
 
+  toggleFreezeItem = (freezed) => {
+    this.setState({
+      isItemFreezed: freezed
+    });
+  };
+
   render() {
-    const { loading, errorMsg, items, perPage, currentPage, hasNextPage } = this.props;
+    const {
+      loading, errorMsg, items,
+      perPage, currentPage, hasNextPage
+    } = this.props;
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
       const emptyTip = (
-        <EmptyTip text={gettext('No file update logs')}>
+        <EmptyTip text={gettext('No file access logs')}>
         </EmptyTip>
       );
       const table = (
-        <>
-          <table className="table-hover">
+        <Fragment>
+          <table>
             <thead>
               <tr>
-                <th width="25%">{gettext('Name')}</th>
-                <th width="25%">{gettext('Date')}</th>
-                <th width="25%">{gettext('Library')}</th>
-                <th width="25%">{gettext('Action')}</th>
+                <th width="20%">{gettext('Name')}</th>
+                <th width="10%">{gettext('Type')}</th>
+                <th width="20%">{gettext('IP')}{' / '}{gettext('Device')}</th>
+                <th width="20%">{gettext('Date')}</th>
+                <th width="15%">{gettext('Library')}</th>
+                <th width="15%">{gettext('File')}{' / '}{gettext('Folder')}</th>
               </tr>
             </thead>
             {items &&
@@ -53,6 +70,8 @@ class Content extends Component {
                   return (<Item
                     key={index}
                     item={item}
+                    isFreezed={this.state.isItemFreezed}
+                    toggleFreezeItem={this.toggleFreezeItem}
                   />);
                 })}
               </tbody>
@@ -66,7 +85,7 @@ class Content extends Component {
             curPerPage={perPage}
             resetPerPage={this.props.resetPerPage}
           />
-        </>
+        </Fragment>
       );
       return items.length ? table : emptyTip;
     }
@@ -74,15 +93,16 @@ class Content extends Component {
 }
 
 Content.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  errorMsg: PropTypes.string.isRequired,
-  items: PropTypes.array.isRequired,
+  loading: PropTypes.bool,
+  errorMsg: PropTypes.string,
+  items: PropTypes.array,
   getLogsByPage: PropTypes.func,
   resetPerPage: PropTypes.func,
   currentPage: PropTypes.number,
   perPage: PropTypes.number,
   pageInfo: PropTypes.object,
   hasNextPage: PropTypes.bool,
+  toggleFreezeItem: PropTypes.func
 };
 
 
@@ -91,74 +111,63 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOpIconShown: false,
-      isCommitDetailsDialogOpen: false,
+      isHighlighted: false,
     };
   }
 
-  handleMouseOver = () => {
-    this.setState({
-      isOpIconShown: true
-    });
+  handleMouseEnter = () => {
+    if (!this.props.isFreezed) {
+      this.setState({
+        isHighlighted: true,
+      });
+    }
   };
 
-  handleMouseOut = () => {
-    this.setState({
-      isOpIconShown: false
-    });
+  handleMouseLeave = () => {
+    if (!this.props.isFreezed) {
+      this.setState({
+        isHighlighted: false,
+      });
+    }
   };
 
-
-  toggleCommitDetailsDialog = () => {
-    this.setState({
-      isCommitDetailsDialogOpen: !this.state.isCommitDetailsDialogOpen
-    });
-  };
-
-  showCommitDetails = (e) => {
-    e.preventDefault();
-    this.setState({
-      isCommitDetailsDialogOpen: !this.state.isCommitDetailsDialogOpen
-    });
+  toggleFreezeItem = (freezed) => {
+    this.props.toggleFreezeItem(freezed);
+    if (!freezed) {
+      this.setState({
+        isHighlighted: false,
+      });
+    }
   };
 
   render() {
-    let { item } = this.props;
+    const { isHighlighted } = this.state;
+    const { item } = this.props;
     return (
-      <>
-        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-          <td><UserLink email={item.email} name={item.name} /></td>
-          <td>{dayjs(item.time).fromNow()}</td>
-          <td>{item.repo_name ? item.repo_name : gettext('Deleted')}</td>
-          <td>
-            {item.file_operation}
-            {item.repo_name && !item.repo_encrypted &&
-              <a className="ml-1" href="#" onClick={this.showCommitDetails}>{gettext('Details')}</a>
-            }
-          </td>
-        </tr>
-        {this.state.isCommitDetailsDialogOpen &&
-          <ModalPortal>
-            <CommitDetails
-              repoID={item.repo_id}
-              commitID={item.commit_id}
-              commitTime={item.time}
-              toggleDialog={this.toggleCommitDetailsDialog}
-            />
-          </ModalPortal>
-        }
-      </>
+      <tr className={isHighlighted ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
+        <td>
+          <UserLink email={item.email} name={item.name} />
+        </td>
+        <td>{item.event_type}</td>
+        <td>{item.ip}{' / '}{item.device || '--'}</td>
+        <td>{dayjs(item.time).fromNow()}</td>
+        <td>
+          {item.repo_name ? item.repo_name : gettext('Deleted')}
+        </td>
+        <td>{item.file_or_dir_name}</td>
+      </tr>
     );
   }
 }
 
 
 Item.propTypes = {
-  item: PropTypes.object.isRequired,
+  item: PropTypes.object,
+  isFreezed: PropTypes.bool,
+  toggleFreezeItem: PropTypes.func,
 };
 
-
-class FileUpdateLogs extends Component {
+class FileAccessLogs extends Component {
 
   constructor(props) {
     super(props);
@@ -179,28 +188,24 @@ class FileUpdateLogs extends Component {
     this.initPage = 1;
   }
 
-  toggleExportExcelDialog = () => {
-    this.setState({ isExportExcelDialogOpen: !this.state.isExportExcelDialogOpen });
-  };
-
   componentDidMount() {
     let urlParams = (new URL(window.location)).searchParams;
     const { currentPage, perPage } = this.state;
     this.setState({
       perPage: parseInt(urlParams.get('per_page') || perPage),
-      currentPage: parseInt(urlParams.get('page') || currentPage)
+      currentPage: parseInt(urlParams.get('page') || currentPage),
     }, () => {
       this.getLogsByPage(this.state.currentPage);
     });
   }
 
   getLogsByPage = (page) => {
-    let { perPage, selectedUsers, selectedRepos } = this.state;
+    const { perPage, selectedUsers, selectedRepos } = this.state;
     let emails = selectedUsers.map(user => user.email);
     let repos = selectedRepos.map(repo => repo.id);
-    systemAdminAPI.sysAdminListFileUpdateLogs(page, perPage, { 'email': emails, 'repo': repos }).then((res) => {
+    systemAdminAPI.sysAdminListFileAccessLogs(page, perPage, { 'email': emails, 'repo': repos }).then((res) => {
       this.setState({
-        logList: res.data.file_update_log_list,
+        logList: res.data.file_access_log_list,
         loading: false,
         currentPage: page,
         hasNextPage: res.data.has_next_page,
@@ -219,6 +224,17 @@ class FileUpdateLogs extends Component {
     }, () => this.getLogsByPage(this.initPage));
   };
 
+  updateURL = (obj) => {
+    let url = new URL(location.href);
+    let searchParams = new URLSearchParams(url.search);
+    for (let key in obj) {
+      obj[key] == null ?
+        searchParams.delete(key) :
+        searchParams.set(key, obj[key]);
+    }
+    url.search = searchParams.toString();
+    navigate(url.toString());
+  };
 
   handleUserFilter = (user, shouldFetchData = true) => {
     const { selectedUsers } = this.state;
@@ -245,25 +261,12 @@ class FileUpdateLogs extends Component {
     });
   };
 
-  handleSelectorToggle = (selectorType) => {
-    const { openSelector } = this.state;
-    const wasOpen = openSelector === selectorType;
-
-    this.setState({
-      openSelector: wasOpen ? null : selectorType
-    }, () => {
-      if (wasOpen) {
-        this.getLogsByPage(1);
-      }
-    });
-  };
-
   handleRepoFilter = (repo, shouldFetchData = true) => {
     const { selectedRepos } = this.state;
     let newSelectedRepos;
 
     if (repo === null) {
-      newSelectedRepos = selectedRepos;
+      newSelectedRepos = [];
     } else {
       const isSelected = selectedRepos.find(item => item.id === repo.id);
       if (isSelected) {
@@ -283,6 +286,19 @@ class FileUpdateLogs extends Component {
     });
   };
 
+  handleSelectorToggle = (selectorType) => {
+    const { openSelector } = this.state;
+    const wasOpen = openSelector === selectorType;
+
+    this.setState({
+      openSelector: wasOpen ? null : selectorType
+    }, () => {
+      if (wasOpen) {
+        this.getLogsByPage(1);
+      }
+    });
+  };
+
   searchUsers = (value) => {
     return systemAdminAPI.sysAdminSearchUsers(value);
   };
@@ -292,7 +308,15 @@ class FileUpdateLogs extends Component {
   };
 
   render() {
-    let { logList, currentPage, perPage, hasNextPage, availableUsers, selectedUsers, availableRepos, selectedRepos } = this.state;
+    const {
+      logList,
+      currentPage, perPage, hasNextPage,
+      availableUsers,
+      selectedUsers,
+      availableRepos,
+      selectedRepos,
+      openSelector
+    } = this.state;
     return (
       <div className="main-panel-center flex-row">
         <div className="cur-view-container">
@@ -303,7 +327,7 @@ class FileUpdateLogs extends Component {
                 items={availableUsers}
                 selectedItems={selectedUsers}
                 onSelect={this.handleUserFilter}
-                isOpen={this.state.openSelector === 'user'}
+                isOpen={openSelector === 'user'}
                 onToggle={() => this.handleSelectorToggle('user')}
                 searchUsersFunc={this.searchUsers}
               />
@@ -311,7 +335,7 @@ class FileUpdateLogs extends Component {
                 items={availableRepos}
                 selectedItems={selectedRepos}
                 onSelect={this.handleRepoFilter}
-                isOpen={this.state.openSelector === 'repo'}
+                isOpen={openSelector === 'repo'}
                 onToggle={() => this.handleSelectorToggle('repo')}
                 searchReposFunc={this.searchRepos}
               />
@@ -333,4 +357,4 @@ class FileUpdateLogs extends Component {
   }
 }
 
-export default FileUpdateLogs;
+export default FileAccessLogs;
