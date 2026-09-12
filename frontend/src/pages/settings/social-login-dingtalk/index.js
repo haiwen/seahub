@@ -1,7 +1,7 @@
 import React from 'react';
-import { gettext, siteRoot } from '../../utils/constants';
-import ConfirmDisconnectDingtalk from '../dialog/confirm-disconnect-dingtalk';
-import ModalPortal from '../modal-portal';
+import ConfirmDisconnectDingtalk from '@/components/dialog/confirm-disconnect-dingtalk';
+import ModalPortal from '@/components/modal-portal';
+import { gettext, siteRoot } from '../../../utils/constants';
 
 const {
   csrfToken,
