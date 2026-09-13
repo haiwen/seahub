@@ -90,9 +90,8 @@ class Department extends React.Component {
     });
   };
 
-  onDeleteRepo = (repoID) => {
-    const { repos } = this.state;
-    this.setState({ repos: repos.filter(item => item.repo_id != repoID) });
+  onDeleteRepo = () => {
+    this.getRepos(this.props.checkedDepartmentId);
   };
 
   render() {
@@ -150,11 +149,11 @@ class Department extends React.Component {
                 <table>
                   <thead>
                     <tr>
-                      <th width="60px"></th>
+                      <th width="10%"></th>
                       <th width="25%">{gettext('Name')}</th>
-                      <th width="23%">{gettext('Role')}</th>
-                      <th width="35%">{gettext('Contact email')}</th>
-                      <th width="calc(17% - 60px)">{/* Operations */}</th>
+                      <th width="25%">{gettext('Role')}</th>
+                      <th width="30%">{gettext('Contact email')}</th>
+                      <th width="10%">{/* Operations */}</th>
                     </tr>
                   </thead>
                   <tbody>
