@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import AIStatisticsPage from '../../../components/ai-statistics';
+import AIStatisticsPage from '../../../components/admin/statistics/ai-statistics';
 import { gettext } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 

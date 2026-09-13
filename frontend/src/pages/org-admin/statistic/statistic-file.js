@@ -1,8 +1,8 @@
 import React, { Fragment, useState, useMemo, useCallback } from 'react';
 import dayjs from 'dayjs';
 import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
+import Chart from '../../../components/admin/statistics/chart';
 import StatisticCommonTool from '../../../components/admin/statistics/statistic-common-tool';
-import Chart from '../../../components/chart';
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import { gettext, orgID } from '../../../utils/constants';
