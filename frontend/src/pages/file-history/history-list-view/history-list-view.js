@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Loading from '../loading';
+import Loading from '../../../components/loading';
 import HistoryListItem from './history-list-item';
 
 const propTypes = {
