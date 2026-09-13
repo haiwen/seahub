@@ -35,6 +35,8 @@ Report all of the following:
 - A reverse dependency, circular dependency, or implicit dependency is introduced.
 - A page-private component is newly placed in a shared directory without a demonstrated reuse case, or newly introduced cross-page reuse creates a dependency on a specific page.
 
+Components under `src/components` may use the globally loaded Bootstrap and Reactstrap conventions already provided by Seahub. Treat these shared base styles as declared dependencies, not as page dependencies. Report a style dependency only when a component relies on a class, variable, DOM hierarchy, or stylesheet owned by a specific page or feature and that dependency is not explicitly imported or documented.
+
 ## Entry Points and CSS Loading
 
 Check all of the following:
@@ -90,10 +92,10 @@ Without browser, screenshot, demo, or runtime evidence, report only code-level r
 ## Shared Component Delivery
 
 Components under `src/components` must provide:
-- Self-contained styles and default variables.
+- Self-contained styles and default variables, or use the globally loaded Bootstrap and Reactstrap conventions declared above.
 - Clearly defined inputs and default behavior.
 - No dependency on a specific page.
-- The ability to run independently in a minimal environment.
+- The ability to run independently in a minimal Seahub frontend environment that provides those declared base styles.
 
 Shared components with interaction, asynchronous behavior, errors, themes, responsive behavior, or complex conditional rendering should have tests, a demo, or a reproducible verification method. When a public API, default style, variable, state, or responsive behavior changes, describe consumer impact and the migration path.
 
