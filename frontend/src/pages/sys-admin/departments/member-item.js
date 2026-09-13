@@ -22,6 +22,7 @@ class MemberItem extends React.Component {
     this.state = {
       highlighted: false,
       isDropdownFrozen: false,
+      isDeleteMemberDialogOpen: false
     };
     this.roleOptions = [
       { value: 'Admin', text: gettext('Admin'), isSelected: false },
