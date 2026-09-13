@@ -11,7 +11,7 @@ const { enableSysAdminViewRepo } = window.sysadmin.pageOptions;
 const RepoItemPropTypes = {
   repo: PropTypes.object.isRequired,
   groupID: PropTypes.number.isRequired,
-  onRepoChanged: PropTypes.func.isRequired,
+  onDeleteRepo: PropTypes.func.isRequired,
 };
 
 class RepoItem extends React.Component {
@@ -39,7 +39,7 @@ class RepoItem extends React.Component {
   };
 
   render() {
-    const { repo, groupID, onRepoChanged } = this.props;
+    const { repo, groupID } = this.props;
     const { highlight, isDeleteDialogOpen } = this.state;
     const repoName = repo.name || repo.repo_name;
     let iconUrl = Utils.getLibIconUrl(repo);
@@ -67,7 +67,7 @@ class RepoItem extends React.Component {
           <ModalPortal>
             <DeleteRepoDialog
               toggle={this.toggleDeleteDialog}
-              onRepoChanged={onRepoChanged}
+              onDeleteRepo={this.props.onDeleteRepo}
               repo={repo}
               groupID={groupID}
             />

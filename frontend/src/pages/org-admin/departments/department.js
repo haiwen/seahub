@@ -118,7 +118,7 @@ class Department extends React.Component {
               toggleMoveDepartment: this.props.toggleMoveDepartment,
             })}
             trigger={<Icon symbol="down" />}
-            triggerClassName="ml-1 sf-dropdown-toggle d-flex align-items-center"
+            triggerClassName="d-flex align-items-center ml-1 sf-dropdown-toggle"
           />
         </div>
 
@@ -131,6 +131,7 @@ class Department extends React.Component {
               <span className={`nav-link ${activeNav === 'repos' ? 'active' : ''}`} onClick={() => this.changeActiveNav('repos')}>{gettext('Libraries')}</span>
             </li>
           </ul>
+
           {showSortIcon &&
             <SortMenu
               sortBy={sortBy}

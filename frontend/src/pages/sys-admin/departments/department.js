@@ -57,7 +57,7 @@ class Department extends React.Component {
     }
   }
 
-  onRepoChanged = () => {
+  onDeleteRepo = () => {
     this.getRepos(this.props.checkedDepartmentId);
   };
 
@@ -118,9 +118,9 @@ class Department extends React.Component {
               toggleSetQuotaDialog: this.props.toggleSetQuotaDialog,
               toggleAddLibrary: this.props.toggleAddLibrary,
               toggleAddMembers: this.props.toggleAddMembers,
-              toggleMoveDepartment: this.props.toggleMoveDepartment,
               toggleRename: this.props.toggleRename,
               toggleDelete: this.props.toggleDelete,
+              toggleMoveDepartment: this.props.toggleMoveDepartment,
             })}
             trigger={<Icon symbol="down" />}
             triggerClassName="d-flex align-items-center ml-1 sf-dropdown-toggle"
@@ -147,89 +147,85 @@ class Department extends React.Component {
           }
         </div>
 
-        {activeNav === 'members' && (
-          <div className='cur-view-content'>
-            {isMembersListLoading
-              ? <Loading />
-              : membersList.length == 0
-                ? <EmptyTip text={gettext('No members')} />
-                : (
-                  <div className="w-xs-250">
-                    <table>
-                      <thead>
-                        <tr>
-                          <th width="10%"></th>
-                          <th width="25%">{gettext('Name')}</th>
-                          <th width="25%">{gettext('Role')}</th>
-                          <th width="30%">{gettext('Contact email')}</th>
-                          <th width="10%">{/* Operations */}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {membersList.map((item, index) => {
-                          return (
-                            <MemberItem
-                              key={index}
-                              member={item}
-                              deleteMember={this.props.deleteMember}
-                              setMemberStaff={this.props.setMemberStaff}
-                              unfreezeItem={this.unfreezeItem}
-                              freezeItem={this.freezeItem}
-                              isItemFreezed={this.state.isItemFreezed}
-                            />
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                    {this.props.currentPageInfo &&
-                      <Paginator
-                        gotoPreviousPage={this.props.getPreviousPageList}
-                        gotoNextPage={this.props.getNextPageList}
-                        currentPage={this.props.currentPageInfo.current_page}
-                        hasNextPage={this.props.currentPageInfo.has_next_page}
-                        curPerPage={this.props.perPage}
-                        resetPerPage={this.props.resetPerPage}
-                        noURLUpdate={true}
-                      />
-                    }
-                  </div>
-                )}
-          </div>
-        )}
+        {activeNav === 'members' &&
+          <>
+            {isMembersListLoading && <Loading />}
+            {!isMembersListLoading && membersList.length > 0 && (
+              <div className="w-xs-250">
+                <table>
+                  <thead>
+                    <tr>
+                      <th width="10%"></th>
+                      <th width="25%">{gettext('Name')}</th>
+                      <th width="25%">{gettext('Role')}</th>
+                      <th width="30%">{gettext('Contact email')}</th>
+                      <th width="10%">{/* Operations */}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {membersList.map((item, index) => {
+                      return (
+                        <MemberItem
+                          key={index}
+                          member={item}
+                          deleteMember={this.props.deleteMember}
+                          setMemberStaff={this.props.setMemberStaff}
+                          unfreezeItem={this.unfreezeItem}
+                          freezeItem={this.freezeItem}
+                          isItemFreezed={this.state.isItemFreezed}
+                        />
+                      );
+                    })}
+                  </tbody>
+                </table>
+                {this.props.currentPageInfo &&
+                  <Paginator
+                    gotoPreviousPage={this.props.getPreviousPageList}
+                    gotoNextPage={this.props.getNextPageList}
+                    currentPage={this.props.currentPageInfo.current_page}
+                    hasNextPage={this.props.currentPageInfo.has_next_page}
+                    curPerPage={this.props.perPage}
+                    resetPerPage={this.props.resetPerPage}
+                    noURLUpdate={true}
+                  />
+                }
+              </div>
+            )}
+            {!isMembersListLoading && membersList.length === 0 && (
+              <EmptyTip text={gettext('No members')} />
+            )}
+          </>
+        }
 
-        {activeNav === 'repos' && (
+        {activeNav === 'repos' && repos.length > 0 && (
           <div className="cur-view-content">
-            {repos.length == 0
-              ? <EmptyTip text={gettext('No libraries')} />
-              : (
-                <>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th width="5%"></th>
-                        <th width="50%">{gettext('Name')}</th>
-                        <th width="30%">{gettext('Size')}</th>
-                        <th width="15%"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {repos.map((repo, index) => {
-                        return (
-                          <RepoItem
-                            key={index}
-                            repo={repo}
-                            groupID={this.props.checkedDepartmentId}
-                            onRepoChanged={this.onRepoChanged}
-                          />
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </>
-              )
-            }
+            <table>
+              <thead>
+                <tr>
+                  <th width="5%"></th>
+                  <th width="50%">{gettext('Name')}</th>
+                  <th width="30%">{gettext('Size')}</th>
+                  <th width="15%"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {repos.map((repo, index) => {
+                  return (
+                    <RepoItem
+                      key={index}
+                      repo={repo}
+                      groupID={this.props.checkedDepartmentId}
+                      onDeleteRepo={this.onDeleteRepo}
+                    />
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         )}
+        {activeNav === 'repos' && repos.length === 0 &&
+          <EmptyTip text={gettext('No libraries')} />
+        }
       </div>
     );
   }
