@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { Button } from 'reactstrap';
+import Department from '../../../components/admin/departments/department';
 import DepartmentNode from '../../../components/admin/departments/department-node';
 import DepartmentsTreePanel from '../../../components/admin/departments/department-tree-panel';
 import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
@@ -15,7 +16,6 @@ import toaster from '../../../components/toast';
 import { gettext, orgID } from '../../../utils/constants';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { Utils } from '../../../utils/utils';
-import Department from './department';
 
 import '../../sys-admin/departments/system-departments.css';
 

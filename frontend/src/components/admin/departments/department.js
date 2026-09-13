@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getDepartmentMenuItems } from '../../../components/admin/departments/department-menu';
-import MemberItem from '../../../components/admin/departments/member-item';
-import RepoItem from '../../../components/admin/departments/repo-item';
-import CustomDropdown from '../../../components/dropdown';
-import EmptyTip from '../../../components/empty-tip';
-import Icon from '../../../components/icon';
-import Loading from '../../../components/loading';
-import Paginator from '../../../components/paginator';
-import SortMenu from '../../../components/sort-menu';
-import { enableSysAdminViewRepo, gettext } from '../../../utils/constants';
+import { gettext } from '../../../utils/constants';
+import CustomDropdown from '../../dropdown';
+import EmptyTip from '../../empty-tip';
+import Icon from '../../icon';
+import Loading from '../../loading';
+import Paginator from '../../paginator';
+import SortMenu from '../../sort-menu';
+import { getDepartmentMenuItems } from './department-menu';
+import MemberItem from './member-item';
+import RepoItem from './repo-item';
 
 const propTypes = {
   rootNodes: PropTypes.array,
@@ -22,6 +22,9 @@ const propTypes = {
   sortBy: PropTypes.string,
   deleteMember: PropTypes.func,
   getRepos: PropTypes.func,
+  isAddNewRepo: PropTypes.bool,
+  isSysAdmin: PropTypes.bool,
+  enableSysAdminViewRepo: PropTypes.bool,
   getPreviousPageList: PropTypes.func,
   getNextPageList: PropTypes.func,
   resetPerPage: PropTypes.func,
@@ -102,7 +105,7 @@ class Department extends React.Component {
 
   render() {
     const { activeNav, repos } = this.state;
-    const { membersList, isMembersListLoading, sortBy, sortOrder } = this.props;
+    const { membersList, isMembersListLoading, sortBy, sortOrder, isSysAdmin, enableSysAdminViewRepo } = this.props;
     const showSortIcon = activeNav == 'members';
     const currentDepartment = this.getCurrentDepartment();
 
@@ -173,13 +176,13 @@ class Department extends React.Component {
                           unfreezeItem={this.unfreezeItem}
                           freezeItem={this.freezeItem}
                           isItemFreezed={this.state.isItemFreezed}
-                          isSysAdmin={true}
+                          isSysAdmin={isSysAdmin}
                         />
                       );
                     })}
                   </tbody>
                 </table>
-                {this.props.currentPageInfo &&
+                {isSysAdmin && this.props.currentPageInfo &&
                   <Paginator
                     gotoPreviousPage={this.props.getPreviousPageList}
                     gotoNextPage={this.props.getNextPageList}
@@ -217,7 +220,7 @@ class Department extends React.Component {
                       repo={repo}
                       groupID={this.props.checkedDepartmentId}
                       onDeleteRepo={this.onDeleteRepo}
-                      isSysAdmin={true}
+                      isSysAdmin={isSysAdmin}
                       enableSysAdminViewRepo={enableSysAdminViewRepo}
                     />
                   );
@@ -235,5 +238,9 @@ class Department extends React.Component {
 }
 
 Department.propTypes = propTypes;
+Department.defaultProps = {
+  isSysAdmin: false,
+  enableSysAdminViewRepo: false,
+};
 
 export default Department;
