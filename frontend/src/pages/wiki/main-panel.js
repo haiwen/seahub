@@ -4,12 +4,12 @@ import Account from '../../components/account';
 import Icon from '../../components/icon';
 import Loading from '../../components/loading';
 import Notification from '../../components/notification';
-import SdocWikiPageViewer from '../../components/sdoc-wiki-page-viewer';
 import SeafileMarkdownViewer from '../../components/seafile-markdown-viewer';
 import Search from '../../components/search/search';
-import WikiDirListView from '../../components/wiki-dir-list-view/wiki-dir-list-view';
 import { gettext, repoID, siteRoot, username, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import SdocWikiPageViewer from './sdoc-wiki-page-viewer';
+import WikiDirListView from './wiki-dir-list-view/wiki-dir-list-view';
 
 const propTypes = {
   path: PropTypes.string.isRequired,

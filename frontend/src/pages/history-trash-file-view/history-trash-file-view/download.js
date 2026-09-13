@@ -1,5 +1,5 @@
 import React from 'react';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext, siteRoot } from '../../../utils/constants';
 
 const {
   fileName, repoID, objID, path

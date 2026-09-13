@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ListTaggedFilesDialog from '../dialog/list-taggedfiles-dialog';
 import ModalPortal from '../modal-portal';
-import RepoInfoBarMigrate from '../repo-info-bar-migrate';
+import RepoInfoBarMigrate from './repo-info-bar-migrate';
 
 import './index.css';
 

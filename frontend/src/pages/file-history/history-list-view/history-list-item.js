@@ -1,11 +1,11 @@
 import React from 'react';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
-import { gettext, filePath } from '../../utils/constants';
-import URLDecorator from '../../utils/url-decorator';
-import CustomDropdown from '../dropdown';
+import CustomDropdown from '../../../components/dropdown';
+import { gettext, filePath } from '../../../utils/constants';
+import URLDecorator from '../../../utils/url-decorator';
 
-import '../../css/history-record-item.css';
+import '../../../css/history-record-item.css';
 
 dayjs.locale(window.app.config.lang);
 
