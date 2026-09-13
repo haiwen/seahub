@@ -1,12 +1,11 @@
 import React, { Fragment } from 'react';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
-import DeleteRepoDialog from '../../../../components/dialog/org-delete-repo-dialog';
-import ModalPortal from '../../../../components/modal-portal';
-import OpIcon from '../../../../components/op-icon';
-import { gettext, lang } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
-import './index.css';
+import DeleteRepoDialog from '../../../components/dialog/org-delete-repo-dialog';
+import ModalPortal from '../../../components/modal-portal';
+import OpIcon from '../../../components/op-icon';
+import { gettext, lang } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
 
 dayjs.locale(lang);
 
