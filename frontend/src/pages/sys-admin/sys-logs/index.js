@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Button } from 'reactstrap';
 import { useLocation } from '@gatsbyjs/reach-router';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import LogsExportExcelDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog';
 import ModalPortal from '../../../components/modal-portal';
 import { gettext } from '../../../utils/constants';
-import MainPanelTopbar from '../main-panel-topbar';
 import LogsNav from './logs-nav';
 import './logs.css';
 

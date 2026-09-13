@@ -1,18 +1,18 @@
 import React, { Fragment, useState, useMemo, useCallback } from 'react';
 import dayjs from 'dayjs';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
+import StatisticCommonTool from '../../../components/admin/statistics/statistic-common-tool';
 import Chart from '../../../components/chart';
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import { gettext, orgID } from '../../../utils/constants';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { Utils } from '../../../utils/utils';
-import MainPanelTopbar from '../main-panel-topbar';
-import StatisticCommonTool from './statistic-common-tool';
 import StatisticNav from './statistic-nav';
 
 import '../../../css/system-stat.css';
 
-const OrgStatisticFile = () => {
+const OrgStatisticFile = (props) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 
@@ -46,7 +46,7 @@ const OrgStatisticFile = () => {
 
   return (
     <Fragment>
-      <MainPanelTopbar />
+      <MainPanelTopbar {...props} />
       <div className="cur-view-container">
         <StatisticNav currentItem="fileStatistic" />
         <div className="cur-view-content">

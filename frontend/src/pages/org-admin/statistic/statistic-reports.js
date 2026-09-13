@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import { Button, Input } from 'reactstrap';
 import dayjs from 'dayjs';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import { siteRoot, gettext, orgID, serviceURL } from '../../../utils/constants';
-import MainPanelTopbar from '../main-panel-topbar';
 import StatisticNav from './statistic-nav';
 
 class OrgStatisticReports extends React.Component {
@@ -61,7 +61,7 @@ class OrgStatisticReports extends React.Component {
     let { errorMessage } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar />
+        <MainPanelTopbar {...this.props} />
         <div className="cur-view-container">
           <StatisticNav currentItem="reportsStatistic" />
           <div className="cur-view-content">

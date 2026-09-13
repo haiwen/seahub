@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Account from '../../components/account';
-import ColorMode from '../../components/color-mode';
-import Icon from '../../components/icon';
+import { gettext } from '../../../utils/constants';
+import Account from '../../account';
+import ColorMode from '../../color-mode';
+import Icon from '../../icon';
 
 const propTypes = {
   children: PropTypes.any,
   search: PropTypes.any,
+  toggleSidePanel: PropTypes.func
 };
 
 class MainPanelTopbar extends Component {
@@ -15,10 +17,14 @@ class MainPanelTopbar extends Component {
     return (
       <div className={`main-panel-north ${this.props.children ? 'border-left-show' : ''}`}>
         <div className="cur-view-toolbar">
-          <span className="side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu">
+          <span
+            className="side-nav-toggle hidden-md-up d-md-none"
+            title={gettext('Side Nav Menu')}
+            onClick={this.props.toggleSidePanel}
+          >
             <Icon symbol="menu" />
           </span>
-          <div className="operation d-flex align-items-center">
+          <div className="operation">
             {this.props.children}
           </div>
         </div>

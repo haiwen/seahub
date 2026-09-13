@@ -1,16 +1,16 @@
 import React, { Fragment, useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
+import StatisticCommonTool from '../../../components/admin/statistics/statistic-common-tool';
 import Chart from '../../../components/chart';
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import { gettext, orgID } from '../../../utils/constants';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { Utils } from '../../../utils/utils';
-import MainPanelTopbar from '../main-panel-topbar';
-import StatisticCommonTool from './statistic-common-tool';
 import StatisticNav from './statistic-nav';
 
-const OrgStatisticUsers = () => {
+const OrgStatisticUsers = (props) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 
@@ -41,7 +41,7 @@ const OrgStatisticUsers = () => {
 
   return (
     <Fragment>
-      <MainPanelTopbar />
+      <MainPanelTopbar {...props} />
       <div className="cur-view-container">
         <StatisticNav currentItem="usersStatistic" />
         <div className="cur-view-content">

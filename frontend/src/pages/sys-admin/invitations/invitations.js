@@ -3,6 +3,7 @@ import { Button } from 'reactstrap';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import OpMenu from '../../../components/dialog/op-menu';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
@@ -12,7 +13,6 @@ import { gettext } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { formatWithTimezone } from '../../../utils/time';
 import { Utils } from '../../../utils/utils';
-import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 
 dayjs.extend(relativeTime);

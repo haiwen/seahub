@@ -1,5 +1,8 @@
 import React, { Fragment } from 'react';
 import { Button } from 'reactstrap';
+import DepartmentNode from '../../../components/admin/departments/department-node';
+import DepartmentsTreePanel from '../../../components/admin/departments/department-tree-panel';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import AddRepoDialog from '../../../components/dialog/org-add-repo-dialog';
 import SetGroupQuotaDialog from '../../../components/dialog/org-set-group-quota-dialog';
 import AddDepartmentDialog from '../../../components/dialog/sysadmin-dialog/add-department-v2-dialog';
@@ -12,10 +15,7 @@ import toaster from '../../../components/toast';
 import { gettext, orgID } from '../../../utils/constants';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { Utils } from '../../../utils/utils';
-import MainPanelTopbar from '../main-panel-topbar';
 import Department from './department';
-import DepartmentNode from './department-node';
-import DepartmentsTreePanel from './departments-tree-panel';
 
 import '../../sys-admin/departments/system-departments.css';
 
@@ -380,7 +380,7 @@ class Departments extends React.Component {
       isDeleteDepartmentDialogShow, sortBy, sortOrder, isMoveDeparmentDialogShow } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar />
+        <MainPanelTopbar {...this.props} />
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path">

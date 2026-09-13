@@ -2,13 +2,13 @@ import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
 import axios from 'axios';
 import PropTypes from 'prop-types';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import CreateFolderDialog from '../../../components/dialog/create-folder-dialog';
 import toaster from '../../../components/toast';
 import Dirent from '../../../models/system-admin/dirent';
 import { siteRoot, gettext } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
-import MainPanelTopbar from '../main-panel-topbar';
 import DirContent from './dir-content';
 import DirPathBar from './dir-path-bar';
 

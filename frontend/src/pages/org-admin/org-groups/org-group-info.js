@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import Loading from '../../../components/loading';
 import { gettext, siteRoot, mediaUrl } from '../../../utils/constants';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { Utils } from '../../../utils/utils';
-import MainPanelTopbar from '../main-panel-topbar';
 import OrgAdminGroupNav from './org-admin-group-nav';
 
 const { orgID } = window.org.pageOptions;
@@ -36,7 +36,7 @@ class OrgGroupInfo extends Component {
   render() {
     return (
       <Fragment>
-        <MainPanelTopbar/>
+        <MainPanelTopbar {...this.props}/>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <OrgAdminGroupNav groupID={this.props.groupID} currentItem='info' />

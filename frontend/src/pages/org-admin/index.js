@@ -1,6 +1,9 @@
 import React from 'react';
+import MediaQuery from 'react-responsive';
+import { Modal } from 'reactstrap';
 import { Router } from '@gatsbyjs/reach-router';
 import { siteRoot, enableMultiADFS } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import Departments from './departments/departments';
 import OrgDesktopDevices from './devices/desktop-devices';
 import OrgDevicesErrors from './devices/devices-errors';
@@ -86,43 +89,51 @@ class Org extends React.Component {
 
   tabItemClick = (param) => {
     this.setState({ currentTab: param });
+    if (!Utils.isDesktop() && !this.state.isSidePanelClosed) {
+      this.setState({ isSidePanelClosed: true });
+    }
   };
 
   render() {
     let { isSidePanelClosed, currentTab } = this.state;
+
+    const commonProps = {
+      toggleSidePanel: this.onCloseSidePanel
+    };
+
     return (
       <div id="main" className="org-admin">
         <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick}/>
         <div className="main-panel">
           <Router className="reach-router">
-            <OrgInfo path={siteRoot + 'org/info/'} />
-            <OrgStatisticFile path={siteRoot + 'org/statistics-admin/file/'} />
-            <OrgStatisticStorage path={siteRoot + 'org/statistics-admin/total-storage/'} />
-            <OrgStatisticUsers path={siteRoot + 'org/statistics-admin/active-users/'} />
-            <OrgStatisticTraffic path={siteRoot + 'org/statistics-admin/traffic/'} />
-            <OrgStatisticAI path={siteRoot + 'org/statistics-admin/ai/'} />
-            <OrgStatisticReport path={siteRoot + 'org/statistics-admin/reports/'} />
-            <OrgDesktopDevices path={siteRoot + 'org/deviceadmin/desktop-devices/'} />
-            <OrgMobileDevices path={siteRoot + 'org/deviceadmin/mobile-devices/'} />
-            <OrgDevicesErrors path={siteRoot + 'org/deviceadmin/devices-errors/'} />
-            <OrgWebSettings path={siteRoot + 'org/web-settings'} />
-            <OrgSubscription path={siteRoot + 'org/subscription'} onCloseSidePanel={this.onCloseSidePanel} />
-            <OrgUsers path={siteRoot + 'org/useradmin'} />
-            <OrgUsersSearchUsers path={siteRoot + 'org/useradmin/search-users'} />
-            <OrgAdmins path={siteRoot + 'org/useradmin/admins/'} />
-            <OrgUserProfile path={siteRoot + 'org/useradmin/info/:email/'} />
-            <OrgUserRepos path={siteRoot + 'org/useradmin/info/:email/repos/'} />
-            <OrgUserSharedRepos path={siteRoot + 'org/useradmin/info/:email/shared-repos/'} />
-            <OrgGroups path={siteRoot + 'org/groupadmin'} />
-            <OrgGroupsSearchGroups path={siteRoot + 'org/groupadmin/search-groups'} />
-            <OrgGroupInfo path={siteRoot + 'org/groupadmin/:groupID/'} />
-            <OrgGroupRepos path={siteRoot + 'org/groupadmin/:groupID/repos/'} />
-            <OrgGroupMembers path={siteRoot + 'org/groupadmin/:groupID/members/'} />
-            <OrgAllRepos path={siteRoot + 'org/repoadmin'}/>
-            <OrgTrashRepos path={siteRoot + 'org/repoadmin-trash'}/>
-            <OrgLinks path={siteRoot + 'org/publinkadmin'}/>
-            <Departments path={siteRoot + 'org/departmentadmin/'} />
-            <OrgLogs path={siteRoot + 'org/logadmin'} currentTab={currentTab} tabItemClick={this.tabItemClick}>
+            <OrgInfo path={siteRoot + 'org/info/'} {...commonProps} />
+            <OrgStatisticFile path={siteRoot + 'org/statistics-admin/file/'} {...commonProps} />
+            <OrgStatisticStorage path={siteRoot + 'org/statistics-admin/total-storage/'} {...commonProps} />
+            <OrgStatisticUsers path={siteRoot + 'org/statistics-admin/active-users/'} {...commonProps} />
+            <OrgStatisticTraffic path={siteRoot + 'org/statistics-admin/traffic/'} {...commonProps} />
+            <OrgStatisticAI path={siteRoot + 'org/statistics-admin/ai/'} {...commonProps} />
+            <OrgStatisticReport path={siteRoot + 'org/statistics-admin/reports/'} {...commonProps} />
+            <OrgDesktopDevices path={siteRoot + 'org/deviceadmin/desktop-devices/'} {...commonProps} />
+            <OrgMobileDevices path={siteRoot + 'org/deviceadmin/mobile-devices/'} {...commonProps} />
+            <OrgDevicesErrors path={siteRoot + 'org/deviceadmin/devices-errors/'} {...commonProps} />
+            <OrgWebSettings path={siteRoot + 'org/web-settings'} {...commonProps} />
+            <OrgSubscription path={siteRoot + 'org/subscription'} {...commonProps} />
+            <OrgUsers path={siteRoot + 'org/useradmin'} {...commonProps} />
+            <OrgUsersSearchUsers path={siteRoot + 'org/useradmin/search-users'} {...commonProps} />
+            <OrgAdmins path={siteRoot + 'org/useradmin/admins/'} {...commonProps} />
+            <OrgUserProfile path={siteRoot + 'org/useradmin/info/:email/'} {...commonProps} />
+            <OrgUserRepos path={siteRoot + 'org/useradmin/info/:email/repos/'} {...commonProps} />
+            <OrgUserSharedRepos path={siteRoot + 'org/useradmin/info/:email/shared-repos/'} {...commonProps} />
+            <OrgGroups path={siteRoot + 'org/groupadmin'} {...commonProps} />
+            <OrgGroupsSearchGroups path={siteRoot + 'org/groupadmin/search-groups'} {...commonProps} />
+            <OrgGroupInfo path={siteRoot + 'org/groupadmin/:groupID/'} {...commonProps} />
+            <OrgGroupRepos path={siteRoot + 'org/groupadmin/:groupID/repos/'} {...commonProps} />
+            <OrgGroupMembers path={siteRoot + 'org/groupadmin/:groupID/members/'} {...commonProps} />
+            <OrgAllRepos path={siteRoot + 'org/repoadmin'} {...commonProps} />
+            <OrgTrashRepos path={siteRoot + 'org/repoadmin-trash'} {...commonProps} />
+            <OrgLinks path={siteRoot + 'org/publinkadmin'} {...commonProps} />
+            <Departments path={siteRoot + 'org/departmentadmin/'} {...commonProps} />
+            <OrgLogs path={siteRoot + 'org/logadmin'} currentTab={currentTab} tabItemClick={this.tabItemClick} {...commonProps}>
               <OrgLogsFileAudit path='/' />
               <OrgLogsFileUpdate path='file-update' />
               <OrgLogsPermAudit path='perm-audit' />
@@ -130,10 +141,13 @@ class Org extends React.Component {
               <OrgLogsGroupMemberAudit path='group-member-audit' />
             </OrgLogs>
             {enableMultiADFS &&
-              <OrgSAMLConfig path={siteRoot + 'org/samlconfig/'}/>
+              <OrgSAMLConfig path={siteRoot + 'org/samlconfig/'} {...commonProps} />
             }
           </Router>
         </div>
+        <MediaQuery query="(max-width: 767.8px)">
+          <Modal zIndex="1030" isOpen={!isSidePanelClosed} toggle={this.onCloseSidePanel} contentClassName="d-none"></Modal>
+        </MediaQuery>
       </div>
     );
   }

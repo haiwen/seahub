@@ -1,13 +1,13 @@
 import React, { Fragment } from 'react';
 import { Input } from 'reactstrap';
 import dayjs from 'dayjs';
+import TrafficTable from '../../../components/admin/statistics/traffic-table';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import toaster from '../../../components/toast';
 import { gettext } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
-import TrafficTable from './traffic-table';
 import TrafficTableBody from './traffic-table-body';
 
 class UsersTraffic extends React.Component {

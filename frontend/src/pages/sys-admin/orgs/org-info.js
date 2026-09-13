@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'reactstrap';
 import PropTypes from 'prop-types';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import SysAdminSetOrgQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
 import SysAdminSetOrgMaxUserNumberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-org-max-user-number-dialog';
 import SysAdminSetOrgMonthlyDownloadTrafficLimitDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-org-monthly-download-traffic-limit-dialog';
@@ -12,7 +13,6 @@ import CheckboxItem from '../../../components/web-settings/checkbox-item';
 import { gettext, serviceURL } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
-import MainPanelTopbar from '../main-panel-topbar';
 import OrgNav from './org-nav';
 
 class Content extends Component {

@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import CustomDropdown from '../../../components/dropdown';
-import Icon from '../../../components/icon';
 import { gettext } from '../../../utils/constants';
-import { getDepartmentMenuItems } from './departments-node-dropdown-menu';
+import CustomDropdown from '../../dropdown';
+import Icon from '../../icon';
+import { getDepartmentMenuItems } from './department-menu';
 
-const departmentsV2TreeNodePropTypes = {
+const departmentsTreeNodePropTypes = {
   node: PropTypes.object,
   checkedDepartmentId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   listSubDepartments: PropTypes.func,
@@ -16,10 +16,11 @@ const departmentsV2TreeNodePropTypes = {
   toggleAddLibrary: PropTypes.func,
   toggleAddMembers: PropTypes.func,
   toggleRename: PropTypes.func,
-  toggleDelete: PropTypes.func
+  toggleDelete: PropTypes.func,
+  toggleMoveDepartment: PropTypes.func
 };
 
-class DepartmentsV2TreeNode extends Component {
+class DepartmentsTreeNode extends Component {
 
   constructor(props) {
     super(props);
@@ -75,7 +76,7 @@ class DepartmentsV2TreeNode extends Component {
     if (nodes.length > 0) {
       return nodes.map((node) => {
         return (
-          <DepartmentsV2TreeNode
+          <DepartmentsTreeNode
             key={node.id}
             node={node}
             onChangeDepartment={this.props.onChangeDepartment}
@@ -163,6 +164,6 @@ class DepartmentsV2TreeNode extends Component {
   }
 }
 
-DepartmentsV2TreeNode.propTypes = departmentsV2TreeNodePropTypes;
+DepartmentsTreeNode.propTypes = departmentsTreeNodePropTypes;
 
-export default DepartmentsV2TreeNode;
+export default DepartmentsTreeNode;

@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from 'reactstrap';
 import { useLocation, navigate, Router } from '@gatsbyjs/reach-router';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import Icon from '../../../components/icon';
 import toaster from '../../../components/toast';
 import { gettext, siteRoot } from '../../../utils/constants';
 import LinksNav from '../links/links-nav';
 import ShareLinks from '../links/share-links';
 import UploadLinks from '../links/upload-links';
-import MainPanelTopbar from '../main-panel-topbar';
 import AllRepos from '../repos/all-repos';
 import AllWikis from '../repos/all-wikis';
 import SystemRepo from '../repos/system-repo';

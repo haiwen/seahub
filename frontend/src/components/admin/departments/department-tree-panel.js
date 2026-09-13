@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Icon from '../../../components/icon';
 import { gettext } from '../../../utils/constants';
-import TreeNode from './tree-node';
+import Icon from '../../icon';
+import DepartmentTreeNode from './department-tree-node';
 
 const DepartmentsTreePanelPropTypes = {
   rootNodes: PropTypes.array,
@@ -18,14 +18,15 @@ const DepartmentsTreePanelPropTypes = {
   toggleMoveDepartment: PropTypes.func,
 };
 
-class DepartmentsTreePanel extends Component {
+class DepartmentTreePanel extends Component {
   render() {
     const { rootNodes, checkedDepartmentId } = this.props;
+
     return (
       <div className="departments-tree-panel p-4">
         {rootNodes.map(rootNode => {
           return (
-            <TreeNode
+            <DepartmentTreeNode
               key={rootNode.id}
               node={rootNode}
               checkedDepartmentId={checkedDepartmentId}
@@ -42,12 +43,10 @@ class DepartmentsTreePanel extends Component {
           );
         })}
         <button
-          className='btn btn-secondary w-100 h-6 d-flex align-items-center text-start border-0 font-weight-normal new-dept-btn shadow-none'
+          className="btn btn-secondary w-100 h-5 d-flex align-items-center text-start border-0 font-weight-normal new-dept-btn shadow-none"
           onClick={() => {this.props.toggleAddDepartment(null);}}
         >
-          <span className="d-flex align-items-center">
-            <Icon symbol="new" className="new-dept-btn-icon" />
-          </span>
+          <Icon symbol="new" className="new-dept-btn-icon mr-1" />
           {gettext('New Department')}
         </button>
       </div>
@@ -55,6 +54,6 @@ class DepartmentsTreePanel extends Component {
   }
 }
 
-DepartmentsTreePanel.propTypes = DepartmentsTreePanelPropTypes;
+DepartmentTreePanel.propTypes = DepartmentsTreePanelPropTypes;
 
-export default DepartmentsTreePanel;
+export default DepartmentTreePanel;

@@ -1,17 +1,17 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import Subscription from '../../../components/subscription';
-import MainPanelTopbar from '../main-panel-topbar';
 
 const propTypes = {
-  onCloseSidePanel: PropTypes.func,
+  toggleSidePanel: PropTypes.func,
 };
 
 class OrgSubscription extends Component {
   render() {
     return (
       <Fragment>
-        <MainPanelTopbar onCloseSidePanel={this.props.onCloseSidePanel} />
+        <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">

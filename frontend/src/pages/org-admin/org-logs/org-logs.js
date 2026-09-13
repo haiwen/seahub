@@ -2,10 +2,10 @@ import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
 import { Link } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import OrgLogsExportExcelDialog from '../../../components/dialog/org-admin-logs-export-excel-dialog';
 import ModalPortal from '../../../components/modal-portal';
 import { siteRoot, gettext } from '../../../utils/constants';
-import MainPanelTopbar from '../main-panel-topbar';
 
 import '../../../css/org-logs.css';
 
@@ -43,9 +43,9 @@ class OrgLogs extends Component {
     return (
       <Fragment>
         {this.props.currentTab === 'repo-transfer' || this.props.currentTab === 'group-member-audit' ?
-          <MainPanelTopbar />
+          <MainPanelTopbar {...this.props} />
           :
-          <MainPanelTopbar>
+          <MainPanelTopbar {...this.props}>
             <Button className="btn btn-secondary operation-item" onClick={this.toggleExportExcelDialog}>{gettext('Export Excel')}</Button>
           </MainPanelTopbar>
         }

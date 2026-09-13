@@ -1,6 +1,6 @@
 import React from 'react';
 import { Router, useLocation } from '@gatsbyjs/reach-router';
-import MainPanelTopbar from '../main-panel-topbar';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import StatisticAI from './statistic-ai';
 import StatisticFile from './statistic-file';
 import StatisticMetrics from './statistic-metrics';

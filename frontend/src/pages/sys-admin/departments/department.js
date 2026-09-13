@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { getDepartmentMenuItems } from '../../../components/admin/departments/department-menu';
 import DeleteRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-repo-dialog';
 import CustomDropdown from '../../../components/dropdown';
 import EmptyTip from '../../../components/empty-tip';
@@ -9,7 +10,6 @@ import ModalPortal from '../../../components/modal-portal';
 import Paginator from '../../../components/paginator';
 import SortMenu from '../../../components/sort-menu';
 import { gettext } from '../../../utils/constants';
-import { getDepartmentMenuItems } from './departments-node-dropdown-menu';
 import MemberItem from './member-item';
 import RepoItem from './repo-item';
 

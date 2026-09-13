@@ -2,8 +2,8 @@ import React, { Fragment } from 'react';
 import { Button, ButtonGroup } from 'reactstrap';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
-import DateTimePicker from '../../../components/date-and-time-picker';
 import { gettext } from '../../../utils/constants';
+import DateTimePicker from '../../date-and-time-picker';
 
 const propTypes = {
   getActivesFiles: PropTypes.func.isRequired,

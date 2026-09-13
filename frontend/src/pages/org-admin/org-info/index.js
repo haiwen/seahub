@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import { UncontrolledTooltip } from 'reactstrap';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import Icon from '../../../components/icon';
 import { mediaUrl, gettext, enableSeafileAI } from '../../../utils/constants';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { Utils } from '../../../utils/utils';
-import MainPanelTopbar from '../main-panel-topbar';
 import './index.css';
 
 
@@ -52,7 +52,7 @@ class OrgInfo extends Component {
     const aiUsageRate = ai_credit > 0 ? ai_credit_used / ai_credit * 100 : 0;
     return (
       <Fragment>
-        <MainPanelTopbar />
+        <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">

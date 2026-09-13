@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import { gettext, isPro, isDefaultAdmin, seafileVersion } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
-import MainPanelTopbar from '../main-panel-topbar';
 
 import './index.css';
 

@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import Loading from '../../../components/loading';
 import { gettext } from '../../../utils/constants';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { formatWithTimezone } from '../../../utils/time';
 import { Utils } from '../../../utils/utils';
-import MainPanelTopbar from '../main-panel-topbar';
 import OrgAdminUserNav from './org-admin-user-nav';
 
 const { orgID } = window.org.pageOptions;
@@ -38,7 +38,7 @@ class OrgUserSharedRepos extends Component {
   render() {
     return (
       <Fragment>
-        <MainPanelTopbar/>
+        <MainPanelTopbar {...this.props}/>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <OrgAdminUserNav email={this.props.email} currentItem='shared-repos' />

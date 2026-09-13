@@ -1,8 +1,8 @@
 import React, { Fragment, useCallback } from 'react';
+import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import AIStatisticsPage from '../../../components/ai-statistics';
 import { gettext, orgID } from '../../../utils/constants';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
-import MainPanelTopbar from '../main-panel-topbar';
 import StatisticNav from './statistic-nav';
 
 const tabs = [
@@ -21,7 +21,7 @@ const detailOptionsMap = {
   ],
 };
 
-const OrgStatisticAI = () => {
+const OrgStatisticAI = (props) => {
   const listFetcher = useCallback((date, month, groupBy, page, perPage) => {
     return orgAdminAPI.orgAdminGetAIStatistics(orgID, date, month, groupBy, page, perPage);
   }, []);
@@ -36,7 +36,7 @@ const OrgStatisticAI = () => {
 
   return (
     <Fragment>
-      <MainPanelTopbar />
+      <MainPanelTopbar {...props} />
       <div className="cur-view-container">
         <StatisticNav currentItem="aiStatistic" />
         <div className="cur-view-content">
