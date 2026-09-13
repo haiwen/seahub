@@ -9,7 +9,7 @@ import OrgDesktopDevices from './devices/desktop-devices';
 import OrgDevicesErrors from './devices/devices-errors';
 import OrgMobileDevices from './devices/mobile-devices';
 import OrgAllRepos from './libraries/org-all-repos';
-import OrgTrashRepos from './libraries/org-repo-trash';
+import OrgTrashRepos from './libraries/org-trash-repos';
 import OrgGroupInfo from './org-groups/org-group-info';
 import OrgGroupMembers from './org-groups/org-group-members';
 import OrgGroupRepos from './org-groups/org-group-repos';
