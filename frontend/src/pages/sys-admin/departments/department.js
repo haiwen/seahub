@@ -151,7 +151,7 @@ class Department extends React.Component {
           <>
             {isMembersListLoading && <Loading />}
             {!isMembersListLoading && membersList.length > 0 && (
-              <div className="w-xs-250">
+              <div className="cur-view-content">
                 <table>
                   <thead>
                     <tr>
