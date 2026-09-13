@@ -2,10 +2,10 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import CenteredLoading from '../../../../components/centered-loading';
-import toaster from '../../../../components/toast';
-import { gettext } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
+import CenteredLoading from '@/components/centered-loading';
+import toaster from '@/components/toast';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import { getFileNameFromRecord, getParentDirFromRecord, getTagsFromRecord, getRecordIdFromRecord } from '../../../utils/cell';
 
 import './index.css';

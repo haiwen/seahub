@@ -1,8 +1,8 @@
-import { getRowById } from '../../components/sf-table/utils/table';
-import { gettext } from '../../utils/constants';
-import ObjectUtils from '../../utils/object';
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
+import { getRowById } from '@/components/sf-table/utils/table';
+import { gettext } from '@/utils/constants';
+import ObjectUtils from '@/utils/object';
+import { seafileAPI } from '@/utils/seafile-api';
+import { Utils } from '@/utils/utils';
 import { CellType } from '../constants';
 import { getFileNameFromRecord, getServerOptions } from '../utils/cell';
 import { getColumnByKey } from '../utils/column';

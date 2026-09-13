@@ -1,4 +1,4 @@
-import { gettext } from '../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import { VIEW_TYPE } from '../../constants';
 import { getValidFilters } from '../filter';
 import { getValidGroupbys } from '../group';

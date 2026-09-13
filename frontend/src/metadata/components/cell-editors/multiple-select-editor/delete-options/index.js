@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import IconBtn from '../../../../../components/icon-btn';
-import { gettext } from '../../../../../utils/constants';
+import IconBtn from '@/components/icon-btn';
+import { gettext } from '@/utils/constants';
 import { DELETED_OPTION_TIPS, DELETED_OPTION_BACKGROUND_COLOR } from '../../../../constants';
 
 import './index.css';

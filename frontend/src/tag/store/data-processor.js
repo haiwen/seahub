@@ -1,13 +1,13 @@
-import { getRowsByIds } from '../../components/sf-table/utils/table';
+import { getRowsByIds } from '@/components/sf-table/utils/table';
 import {
   addTreeChildNode, checkTreeNodeHasChildNodes, createTreeNode, generateNodeKey, getTreeNodeDepth, getTreeNodeId, getTreeNodeKey,
   resetTreeHasChildNodesStatus,
   updatedKeyTreeNodeMap,
-} from '../../components/sf-table/utils/tree';
-import { getRecordIdFromRecord } from '../../metadata/utils/cell';
-import { getColumnByKey } from '../../metadata/utils/column';
-import { getGroupRows } from '../../metadata/utils/group';
-import { isTableRows } from '../../metadata/utils/row';
+} from '@/components/sf-table/utils/tree';
+import { getRecordIdFromRecord } from '@/metadata/utils/cell';
+import { getColumnByKey } from '@/metadata/utils/column';
+import { getGroupRows } from '@/metadata/utils/group';
+import { isTableRows } from '@/metadata/utils/row';
 import { PRIVATE_COLUMN_KEY } from '../constants';
 import { checkIsSortByChildTagsCount, checkIsSortByName } from '../utils/sort';
 import { buildTagsTree, setNodeAllChildTagsIds, sortTree } from '../utils/tree';

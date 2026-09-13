@@ -1,5 +1,5 @@
-import { siteRoot } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { siteRoot } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import { PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '../../constants';
 
 /**

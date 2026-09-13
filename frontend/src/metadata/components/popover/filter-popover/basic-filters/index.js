@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { FormGroup, Label } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import { FILTER_PREDICATE_TYPE, PRIVATE_COLUMN_KEY, VIEW_TYPE } from '../../../../constants';
 import FileOrFolderFilter from './file-folder-filter';
 import GalleryFileTypeFilter from './gallery-file-type-filter';

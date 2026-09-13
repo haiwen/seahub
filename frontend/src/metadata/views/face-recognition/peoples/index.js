@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import CenteredLoading from '../../../../components/centered-loading';
-import EmptyTip from '../../../../components/empty-tip';
-import toaster from '../../../../components/toast';
-import { gettext } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
+import CenteredLoading from '@/components/centered-loading';
+import EmptyTip from '@/components/empty-tip';
+import toaster from '@/components/toast';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import { PER_LOAD_NUMBER } from '../../../constants';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import People from './people';

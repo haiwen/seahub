@@ -3,8 +3,8 @@ import { FormGroup, FormFeedback, Label, Dropdown, DropdownToggle } from 'reacts
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import Icon from '@/components/icon';
-import ModalPortal from '../../../../components/modal-portal';
-import { gettext } from '../../../../utils/constants';
+import ModalPortal from '@/components/modal-portal';
+import { gettext } from '@/utils/constants';
 import ColumnTypeDropdownMenu from './column-type-dropdown-menu';
 
 const ColumnType = forwardRef(({ column, onChange }, ref) => {

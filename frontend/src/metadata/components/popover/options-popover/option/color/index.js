@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import CustomizePopover from '../../../../../../components/customize-popover';
-import IconBtn from '../../../../../../components/icon-btn';
+import CustomizePopover from '@/components/customize-popover';
+import IconBtn from '@/components/icon-btn';
 import { SELECT_OPTION_COLORS } from '../../../../../constants';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../../../store/operations';
 

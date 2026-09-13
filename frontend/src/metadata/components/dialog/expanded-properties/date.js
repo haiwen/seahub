@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import ClickOutside from '../../../../components/click-outside';
-import { lang } from '../../../../utils/constants';
+import ClickOutside from '@/components/click-outside';
+import { lang } from '@/utils/constants';
 import { getCellValueByColumn, getDateDisplayString } from '../../../utils/cell';
 import DateEditor from '../../cell-editors/date-editor';
 

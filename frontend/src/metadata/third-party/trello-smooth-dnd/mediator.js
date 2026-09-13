@@ -1,5 +1,5 @@
 import './polyfills';
-import { debounce, isMobile } from '../../../utils/utils';
+import { debounce, isMobile } from '@/utils/utils';
 import * as constants from './constants';
 import { defaultOptions } from './defaults';
 import dragScroller from './dragscroller';

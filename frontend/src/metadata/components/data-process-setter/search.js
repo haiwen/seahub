@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import SFTableSearcher from '../../../components/sf-table/searcher';
+import SFTableSearcher from '@/components/sf-table/searcher';
 import { EVENT_BUS_TYPE } from '../../constants';
 
 const Search = ({ viewId, columns }) => {

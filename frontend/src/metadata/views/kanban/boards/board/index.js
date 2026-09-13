@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import { getRowById } from '@/components/sf-table/utils/table';
+import { useTags } from '@/tag/hooks';
 import { gettext } from '@/utils/constants';
-import { getRowById } from '../../../../../components/sf-table/utils/table';
-import { useTags } from '../../../../../tag/hooks';
 import { useMetadataView } from '../../../../hooks/metadata-view';
 import { getRecordIdFromRecord } from '../../../../utils/cell';
 import Container from '../../dnd/container';

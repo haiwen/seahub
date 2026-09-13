@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import CustomizeSelect from '../../../../../components/customize-select';
-import Icon from '../../../../../components/icon';
-import { gettext } from '../../../../../utils/constants';
+import CustomizeSelect from '@/components/customize-select';
+import Icon from '@/components/icon';
+import { gettext } from '@/utils/constants';
 import { getFileTypeColumnOptions } from '../../../../utils/column';
 
 const CLEAR_SELECTED_OPTIONS = 'clear-selected-options';

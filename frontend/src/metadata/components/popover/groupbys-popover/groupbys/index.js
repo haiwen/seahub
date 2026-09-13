@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import GroupbyItem from './groupby-item';
 
 const Groupbys = ({ readOnly, groupbys, columns, onDelete, onUpdate, onMove }) => {

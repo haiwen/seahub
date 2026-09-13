@@ -1,9 +1,9 @@
 import React, { useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
+import Icon from '@/components/icon';
+import toaster from '@/components/toast';
 import Tooltip from '@/components/tooltip';
 import { gettext } from '@/utils/constants';
-import Icon from '../../components/icon';
-import toaster from '../../components/toast';
 import { VIEW_TYPE, VIEW_TYPE_ICON } from '../constants';
 import { useMetadata } from '../hooks';
 import { validateName } from '../utils/validate';

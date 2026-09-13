@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { mediaUrl } from '../../../../utils/constants';
+import { mediaUrl } from '@/utils/constants';
 import { useCollaborators } from '../../../hooks';
 import { getCellValueByColumn } from '../../../utils/cell';
 import { isValidEmail } from '../../../utils/validate';

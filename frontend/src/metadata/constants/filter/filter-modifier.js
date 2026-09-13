@@ -1,4 +1,4 @@
-import { gettext } from '../../../utils/constants';
+import { gettext } from '@/utils/constants';
 
 const FILTER_TERM_MODIFIER_TYPE = {
   TODAY: 'today',

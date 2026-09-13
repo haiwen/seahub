@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import Icon from '../../../../components/icon';
+import Icon from '@/components/icon';
 
 import './index.css';
 

@@ -1,12 +1,12 @@
 import React, { useMemo, useCallback, useState, useRef, useEffect } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import ClickOutside from '../../../components/click-outside';
-import ModalPortal from '../../../components/modal-portal';
-import { EDITOR_CONTAINER as Z_INDEX_EDITOR_CONTAINER } from '../../../components/sf-table/constants/z-index';
-import { getRowsByIds } from '../../../components/sf-table/utils/table';
-import { KeyCodes } from '../../../constants';
-import { gettext } from '../../../utils/constants';
+import ClickOutside from '@/components/click-outside';
+import ModalPortal from '@/components/modal-portal';
+import { EDITOR_CONTAINER as Z_INDEX_EDITOR_CONTAINER } from '@/components/sf-table/constants/z-index';
+import { getRowsByIds } from '@/components/sf-table/utils/table';
+import { KeyCodes } from '@/constants';
+import { gettext } from '@/utils/constants';
 import { useTags } from '../../hooks';
 import { getTagColor, getTagId, getTagName } from '../../utils/cell';
 

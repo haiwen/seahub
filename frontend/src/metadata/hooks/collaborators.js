@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useContext, useState, useCallback, useEffect, useRef } from 'react';
-import { mediaUrl } from '../../utils/constants';
+import { mediaUrl } from '@/utils/constants';
 import metadataAPI from '../api';
 import User from '../model/user';
 import { UserService } from '../services';

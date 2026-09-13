@@ -1,6 +1,6 @@
 import React from 'react';
-import Icon from '../../../../../components/icon';
-import { gettext } from '../../../../../utils/constants';
+import Icon from '@/components/icon';
+import { gettext } from '@/utils/constants';
 import { COLUMNS_ICON_CONFIG, FILTER_PREDICATE_SHOW, FILTER_TERM_MODIFIER_SHOW } from '../../../../constants';
 
 class FilterItemUtils {

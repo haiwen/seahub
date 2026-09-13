@@ -1,4 +1,4 @@
-import { gettext } from '../../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import { PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '../../../constants';
 import { createColumnEditor } from './editors/editor-factory';
 import { createColumnFormatter } from './formatter/formatter-factory';

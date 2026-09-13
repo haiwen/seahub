@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { mediaUrl } from '../../../utils/constants';
+import { mediaUrl } from '@/utils/constants';
 import { isValidEmail } from '../../utils/validate/email';
 import Collaborator from './collaborator';
 

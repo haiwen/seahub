@@ -1,7 +1,7 @@
-import EventBus from '../components/event-bus';
-import tagsAPI from '../tag/api';
-import { username, lang } from '../utils/constants';
-import { Utils } from '../utils/utils';
+import EventBus from '@/components/event-bus';
+import tagsAPI from '@/tag/api';
+import { username, lang } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import metadataAPI from './api';
 import {
   PRIVATE_COLUMN_KEYS, EDITABLE_DATA_PRIVATE_COLUMN_KEYS, EDITABLE_PRIVATE_COLUMN_KEYS, DELETABLE_PRIVATE_COLUMN_KEY,

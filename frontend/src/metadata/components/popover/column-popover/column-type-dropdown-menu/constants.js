@@ -1,4 +1,4 @@
-import { gettext } from '../../../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import { CellType, COLUMNS_ICON_CONFIG, DEFAULT_DATE_FORMAT, DEFAULT_RATE_DATA, DEFAULT_SHOOTING_TIME_FORMAT, PRIVATE_COLUMN_KEY } from '../../../../constants';
 import { DEFAULT_FILE_STATUS_OPTIONS } from '../../../../constants/column/format';
 import { getColumnDisplayName } from '../../../../utils/column';

@@ -1,5 +1,5 @@
 import deepCopy from 'deep-copy';
-import { gettext } from '../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import {
   CellType, DEFAULT_DATE_FORMAT, PRIVATE_COLUMN_KEY, NOT_DISPLAY_COLUMN_KEYS, PRIVATE_COLUMN_KEYS, SEQUENCE_COLUMN_WIDTH,
   PREDEFINED_FILE_STATUS_OPTION_KEY, PREDEFINED_FILE_TYPE_OPTION_KEY

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { PRIVATE_FILE_TYPE } from '../../../constants';
-import { gettext } from '../../../utils/constants';
+import { PRIVATE_FILE_TYPE } from '@/constants';
+import { gettext } from '@/utils/constants';
 import { FACE_RECOGNITION_VIEW_ID } from '../../constants';
 import { useMetadataView } from '../../hooks/metadata-view';
 import Peoples from './peoples';

@@ -1,9 +1,9 @@
 import React, { useCallback, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { KeyCodes } from '../../../../constants';
-import { gettext } from '../../../../utils/constants';
-import ObjectUtils from '../../../../utils/object';
-import { Utils } from '../../../../utils/utils';
+import { KeyCodes } from '@/constants';
+import { gettext } from '@/utils/constants';
+import ObjectUtils from '@/utils/object';
+import { Utils } from '@/utils/utils';
 import { DEFAULT_NUMBER_FORMAT } from '../../../constants';
 import { isCellValueChanged, getNumberDisplayString, replaceNumberNotAllowInput, formatStringToNumber } from '../../../utils/cell';
 

@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { MAP_TYPE } from '../../../../constants';
-import { baiduMapKey, googleMapId, googleMapKey } from '../../../../utils/constants';
-import { convertToMapCoords } from '../../../../utils/coord-transform';
-import { initMapInfo, loadMapSource } from '../../../../utils/map-utils';
+import { MAP_TYPE } from '@/constants';
+import { baiduMapKey, googleMapId, googleMapKey } from '@/utils/constants';
+import { convertToMapCoords } from '@/utils/coord-transform';
+import { initMapInfo, loadMapSource } from '@/utils/map-utils';
 import { DEFAULT_POSITION } from '../../../constants';
 import { isValidPosition } from '../../../utils/validate';
 import { createBMapGeolocationControl, createBMapZoomControl } from '../../map-controller';

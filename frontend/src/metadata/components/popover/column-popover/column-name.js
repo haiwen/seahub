@@ -2,7 +2,7 @@ import React, { useState, forwardRef, useImperativeHandle, useCallback, useEffec
 import { FormGroup, FormFeedback, Input } from 'reactstrap';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../../utils/constants';
+import { gettext } from '@/utils/constants';
 
 // eslint-disable-next-line react/display-name
 const ColumnName = forwardRef(({ readOnly, value }, ref) => {

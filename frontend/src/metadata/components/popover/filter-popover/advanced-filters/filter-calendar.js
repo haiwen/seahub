@@ -5,8 +5,8 @@ import localeData from 'dayjs/plugin/localeData';
 import utc from 'dayjs/plugin/utc';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import PropTypes from 'prop-types';
-import { gettext, lang } from '../../../../../utils/constants';
-import { translateCalendar } from '../../../../../utils/date-format-utils';
+import { gettext, lang } from '@/utils/constants';
+import { translateCalendar } from '@/utils/date-format-utils';
 import { getDateColumnFormat } from '../../../../utils/column';
 import dayjs from '../../../../utils/dayjs';
 

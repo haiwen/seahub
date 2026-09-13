@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { ROW_HEIGHT } from '@/metadata/constants';
 import { gettext, mediaUrl } from '@/utils/constants';
-import { Utils } from '../../../../utils/utils';
+import { Utils } from '@/utils/utils';
 
 import './index.css';
 

@@ -1,4 +1,4 @@
-import Column from '../../metadata/model/column';
+import Column from '@/metadata/model/column';
 import { ALL_TAGS_SORT } from '../constants/sort';
 
 class TagsData {

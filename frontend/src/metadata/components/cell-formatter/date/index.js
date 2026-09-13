@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { formatWithTimezone } from '../../../../utils/time';
+import { formatWithTimezone } from '@/utils/time';
 import { getDateDisplayString } from '../../../utils/cell/column/date';
 
 import './index.css';

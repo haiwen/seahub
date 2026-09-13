@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useMemo, useRef } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import EmptyTip from '../../../components/empty-tip';
-import Icon from '../../../components/icon';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import EmptyTip from '@/components/empty-tip';
+import Icon from '@/components/icon';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import { GALLERY_DATE_MODE, GALLERY_DEFAULT_GRID_GAP, GALLERY_YEAR_MODE_GRID_GAP } from '../../constants';
 import DayImages from './day-images';
 import Image from './image';

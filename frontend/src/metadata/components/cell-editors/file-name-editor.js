@@ -1,6 +1,6 @@
 import React, { useImperativeHandle, useRef, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { Utils } from '../../../utils/utils';
+import { Utils } from '@/utils/utils';
 import { EDITOR_TYPE } from '../../constants';
 import { checkIsDir } from '../../utils/row';
 import ImagePreviewer from '../cell-formatter/image-previewer';

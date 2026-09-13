@@ -1,11 +1,11 @@
 import React from 'react';
+import EventBus from '@/components/event-bus';
+import { OPERATION } from '@/components/sf-table/constants/operation';
+import { checkIsNameColumn, getColumnByIndex } from '@/components/sf-table/utils/column';
+import { RecordMetrics } from '@/components/sf-table/utils/record-metrics';
+import { TreeMetrics } from '@/components/sf-table/utils/tree-metrics';
 import { EVENT_BUS_TYPE } from '@/metadata/constants';
-import EventBus from '../../../../components/event-bus';
-import { OPERATION } from '../../../../components/sf-table/constants/operation';
-import { checkIsNameColumn, getColumnByIndex } from '../../../../components/sf-table/utils/column';
-import { RecordMetrics } from '../../../../components/sf-table/utils/record-metrics';
-import { TreeMetrics } from '../../../../components/sf-table/utils/tree-metrics';
-import { gettext } from '../../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
 
 export const createContextMenuOptions = ({

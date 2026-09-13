@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import Icon from '../../../components/icon';
-import { getRowById } from '../../../components/sf-table/utils/table';
-import { checkTreeNodeHasChildNodes, getTreeNodeId, getTreeNodeKey } from '../../../components/sf-table/utils/tree';
-import { Utils } from '../../../utils/utils';
+import Icon from '@/components/icon';
+import { getRowById } from '@/components/sf-table/utils/table';
+import { checkTreeNodeHasChildNodes, getTreeNodeId, getTreeNodeKey } from '@/components/sf-table/utils/tree';
+import { Utils } from '@/utils/utils';
 import { SIDEBAR_INIT_LEFT_INDENT } from '../../constants/sidebar-tree';
 import { useTags } from '../../hooks';
 import { getTagColor, getTagName, getTagFilesLinks } from '../../utils/cell';

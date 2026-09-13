@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import CustomizePopover from '../../../../../components/customize-popover';
-import Loading from '../../../../../components/loading';
-import { gettext } from '../../../../../utils/constants';
+import CustomizePopover from '@/components/customize-popover';
+import Loading from '@/components/loading';
+import { gettext } from '@/utils/constants';
 
 import './index.css';
 

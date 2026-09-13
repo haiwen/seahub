@@ -1,4 +1,4 @@
-import { gettext } from '../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import { PREDEFINED_FILE_TYPE_OPTION_KEY } from '../column/predefined';
 
 export const FILE_TYPE_NAMES = {

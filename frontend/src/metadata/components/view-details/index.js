@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Detail, Header, Body } from '../../../components/dirent-detail/detail';
-import EmptyTip from '../../../components/empty-tip';
-import { gettext } from '../../../utils/constants';
+import { Detail, Header, Body } from '@/components/dirent-detail/detail';
+import EmptyTip from '@/components/empty-tip';
+import { gettext } from '@/utils/constants';
 import { VIEW_TYPES_SUPPORT_SHOW_DETAIL } from '../../constants';
 import { useMetadata } from '../../hooks';
 

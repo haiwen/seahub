@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { useMetadataStatus } from '../../hooks';
-import { TagsProvider } from '../../tag/hooks';
+import { useMetadataStatus } from '@/hooks';
+import { TagsProvider } from '@/tag/hooks';
 import CollaboratorsProvider from './collaborators';
 import { MetadataAIOperationsProvider } from './metadata-ai-operation';
 
