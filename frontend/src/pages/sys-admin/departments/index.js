@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { Button } from 'reactstrap';
+import Department from '../../../components/admin/departments/department';
 import DepartmentNode from '../../../components/admin/departments/department-node';
 import DepartmentsTreePanel from '../../../components/admin/departments/department-tree-panel';
 import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
@@ -12,10 +13,9 @@ import MoveDepartmentDialog from '../../../components/dialog/sysadmin-dialog/sys
 import SetGroupQuotaDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog';
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
-import { gettext } from '../../../utils/constants';
+import { enableSysAdminViewRepo, gettext } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
-import Department from './department';
 
 import './system-departments.css';
 
@@ -155,7 +155,7 @@ class Departments extends React.Component {
       cb && cb(res.data.libraries);
     }).catch(error => {
       if (error.response && error.response.status === 404) {
-        cb && cb(null);
+        cb && cb([]);
         return;
       }
       let errMessage = Utils.getErrorMsg(error);
@@ -457,6 +457,8 @@ class Departments extends React.Component {
                     currentPageInfo={this.state.currentPageInfo}
                     perPage={this.state.perPage}
                     toggleMoveDepartment={this.toggleMoveDepartment}
+                    isSysAdmin={true}
+                    enableSysAdminViewRepo={enableSysAdminViewRepo}
                   />
                 </>
               }

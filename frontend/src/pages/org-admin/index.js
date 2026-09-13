@@ -4,7 +4,7 @@ import { Modal } from 'reactstrap';
 import { Router } from '@gatsbyjs/reach-router';
 import { siteRoot, enableMultiADFS } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import Departments from './departments/departments';
+import Departments from './departments';
 import OrgDesktopDevices from './devices/desktop-devices';
 import OrgDevicesErrors from './devices/devices-errors';
 import OrgMobileDevices from './devices/mobile-devices';

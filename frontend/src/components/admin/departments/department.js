@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getDepartmentMenuItems } from '../../../components/admin/departments/department-menu';
-import CustomDropdown from '../../../components/dropdown';
-import EmptyTip from '../../../components/empty-tip';
-import Icon from '../../../components/icon';
-import Loading from '../../../components/loading';
-import SortMenu from '../../../components/sort-menu';
 import { gettext } from '../../../utils/constants';
+import CustomDropdown from '../../dropdown';
+import EmptyTip from '../../empty-tip';
+import Icon from '../../icon';
+import Loading from '../../loading';
+import Paginator from '../../paginator';
+import SortMenu from '../../sort-menu';
+import { getDepartmentMenuItems } from './department-menu';
 import MemberItem from './member-item';
 import RepoItem from './repo-item';
 
@@ -21,6 +22,14 @@ const propTypes = {
   sortBy: PropTypes.string,
   deleteMember: PropTypes.func,
   getRepos: PropTypes.func,
+  isAddNewRepo: PropTypes.bool,
+  isSysAdmin: PropTypes.bool,
+  enableSysAdminViewRepo: PropTypes.bool,
+  getPreviousPageList: PropTypes.func,
+  getNextPageList: PropTypes.func,
+  resetPerPage: PropTypes.func,
+  currentPageInfo: PropTypes.object,
+  perPage: PropTypes.number,
 };
 
 class Department extends React.Component {
@@ -50,6 +59,10 @@ class Department extends React.Component {
       this.getRepos(nextProps.checkedDepartmentId);
     }
   }
+
+  onDeleteRepo = () => {
+    this.getRepos(this.props.checkedDepartmentId);
+  };
 
   freezeItem = () => {
     this.setState({ isItemFreezed: true });
@@ -86,18 +99,13 @@ class Department extends React.Component {
 
   getRepos = (id) => {
     this.props.getRepos(id, (repos) => {
-      this.setState({ repos });
+      this.setState({ repos: Array.isArray(repos) ? repos : [] });
     });
-  };
-
-  onDeleteRepo = (repoID) => {
-    const { repos } = this.state;
-    this.setState({ repos: repos.filter(item => item.repo_id != repoID) });
   };
 
   render() {
     const { activeNav, repos } = this.state;
-    const { membersList, isMembersListLoading, sortBy, sortOrder } = this.props;
+    const { membersList, isMembersListLoading, sortBy, sortOrder, isSysAdmin, enableSysAdminViewRepo } = this.props;
     const showSortIcon = activeNav == 'members';
     const currentDepartment = this.getCurrentDepartment();
 
@@ -118,7 +126,7 @@ class Department extends React.Component {
               toggleMoveDepartment: this.props.toggleMoveDepartment,
             })}
             trigger={<Icon symbol="down" />}
-            triggerClassName="ml-1 sf-dropdown-toggle d-flex align-items-center"
+            triggerClassName="d-flex align-items-center ml-1 sf-dropdown-toggle"
           />
         </div>
 
@@ -131,6 +139,7 @@ class Department extends React.Component {
               <span className={`nav-link ${activeNav === 'repos' ? 'active' : ''}`} onClick={() => this.changeActiveNav('repos')}>{gettext('Libraries')}</span>
             </li>
           </ul>
+
           {showSortIcon &&
             <SortMenu
               sortBy={sortBy}
@@ -144,16 +153,16 @@ class Department extends React.Component {
         {activeNav === 'members' &&
           <>
             {isMembersListLoading && <Loading />}
-            {!isMembersListLoading && membersList.length > 0 &&
-              <div className='cur-view-content'>
+            {!isMembersListLoading && membersList.length > 0 && (
+              <div className="cur-view-content">
                 <table>
                   <thead>
                     <tr>
-                      <th width="60px"></th>
+                      <th width="10%"></th>
                       <th width="25%">{gettext('Name')}</th>
-                      <th width="23%">{gettext('Role')}</th>
-                      <th width="35%">{gettext('Contact email')}</th>
-                      <th width="calc(17% - 60px)">{/* Operations */}</th>
+                      <th width="25%">{gettext('Role')}</th>
+                      <th width="30%">{gettext('Contact email')}</th>
+                      <th width="10%">{/* Operations */}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -167,20 +176,32 @@ class Department extends React.Component {
                           unfreezeItem={this.unfreezeItem}
                           freezeItem={this.freezeItem}
                           isItemFreezed={this.state.isItemFreezed}
+                          isSysAdmin={isSysAdmin}
                         />
                       );
                     })}
                   </tbody>
                 </table>
+                {isSysAdmin && this.props.currentPageInfo &&
+                  <Paginator
+                    gotoPreviousPage={this.props.getPreviousPageList}
+                    gotoNextPage={this.props.getNextPageList}
+                    currentPage={this.props.currentPageInfo.current_page}
+                    hasNextPage={this.props.currentPageInfo.has_next_page}
+                    curPerPage={this.props.perPage}
+                    resetPerPage={this.props.resetPerPage}
+                    noURLUpdate={true}
+                  />
+                }
               </div>
-            }
-            {!isMembersListLoading && membersList.length === 0 &&
+            )}
+            {!isMembersListLoading && membersList.length === 0 && (
               <EmptyTip text={gettext('No members')} />
-            }
+            )}
           </>
         }
 
-        {(activeNav === 'repos' && repos.length > 0) &&
+        {activeNav === 'repos' && repos.length > 0 && (
           <div className="cur-view-content">
             <table>
               <thead>
@@ -199,14 +220,16 @@ class Department extends React.Component {
                       repo={repo}
                       groupID={this.props.checkedDepartmentId}
                       onDeleteRepo={this.onDeleteRepo}
+                      isSysAdmin={isSysAdmin}
+                      enableSysAdminViewRepo={enableSysAdminViewRepo}
                     />
                   );
                 })}
               </tbody>
             </table>
           </div>
-        }
-        {(activeNav === 'repos' && repos.length === 0) &&
+        )}
+        {activeNav === 'repos' && repos.length === 0 &&
           <EmptyTip text={gettext('No libraries')} />
         }
       </div>
@@ -215,5 +238,9 @@ class Department extends React.Component {
 }
 
 Department.propTypes = propTypes;
+Department.defaultProps = {
+  isSysAdmin: false,
+  enableSysAdminViewRepo: false,
+};
 
 export default Department;
