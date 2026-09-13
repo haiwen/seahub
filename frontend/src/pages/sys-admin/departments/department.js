@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { getDepartmentMenuItems } from '../../../components/admin/departments/department-menu';
-import DeleteRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-repo-dialog';
 import CustomDropdown from '../../../components/dropdown';
 import EmptyTip from '../../../components/empty-tip';
 import Icon from '../../../components/icon';
 import Loading from '../../../components/loading';
-import ModalPortal from '../../../components/modal-portal';
 import Paginator from '../../../components/paginator';
 import SortMenu from '../../../components/sort-menu';
 import { gettext } from '../../../utils/constants';
@@ -39,8 +37,6 @@ class Department extends React.Component {
       isItemFreezed: false,
       activeNav: 'members',
       repos: [],
-      deletedRepo: {},
-      showDeleteRepoDialog: false,
     };
 
     this.sortOptions = [
@@ -60,20 +56,6 @@ class Department extends React.Component {
       this.getRepos(nextProps.checkedDepartmentId);
     }
   }
-
-  showDeleteRepoDialog = (repo) => {
-    this.setState({
-      showDeleteRepoDialog: true,
-      deletedRepo: repo,
-    });
-  };
-
-  toggleCancel = () => {
-    this.setState({
-      showDeleteRepoDialog: false,
-      deletedRepo: {},
-    });
-  };
 
   onRepoChanged = () => {
     this.getRepos(this.props.checkedDepartmentId);
@@ -233,21 +215,16 @@ class Department extends React.Component {
                     <tbody>
                       {repos.map((repo, index) => {
                         return (
-                          <RepoItem key={index} repo={repo} showDeleteRepoDialog={this.showDeleteRepoDialog} />
+                          <RepoItem
+                            key={index}
+                            repo={repo}
+                            groupID={this.props.checkedDepartmentId}
+                            onRepoChanged={this.onRepoChanged}
+                          />
                         );
                       })}
                     </tbody>
                   </table>
-                  {this.state.showDeleteRepoDialog && (
-                    <ModalPortal>
-                      <DeleteRepoDialog
-                        toggle={this.toggleCancel}
-                        onRepoChanged={this.onRepoChanged}
-                        repo={this.state.deletedRepo}
-                        groupID={this.props.checkedDepartmentId}
-                      />
-                    </ModalPortal>
-                  )}
                 </>
               )
             }
