@@ -1,18 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
-import CustomDropdown from '../../../components/dropdown';
-import RoleSelector from '../../../components/single-selector';
 import { gettext, siteRoot } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
+import CommonOperationConfirmationDialog from '../../dialog/common-operation-confirmation-dialog';
+import CustomDropdown from '../../dropdown';
+import RoleSelector from '../../single-selector';
 
 const propTypes = {
   isItemFreezed: PropTypes.bool,
+  isSysAdmin: PropTypes.bool,
   member: PropTypes.object,
   setMemberStaff: PropTypes.func,
   deleteMember: PropTypes.func,
   unfreezeItem: PropTypes.func,
   freezeItem: PropTypes.func,
+};
+
+const getMemberUrl = (email, isSysAdmin) => {
+  const memberUrlPrefix = isSysAdmin ? 'sys/users' : 'org/useradmin/info';
+  return `${siteRoot}${memberUrlPrefix}/${encodeURIComponent(email)}/`;
 };
 
 class MemberItem extends React.Component {
@@ -83,7 +89,7 @@ class MemberItem extends React.Component {
   };
 
   render() {
-    const { member } = this.props;
+    const { member, isSysAdmin } = this.props;
     const { highlighted, isDropdownFrozen, isDeleteMemberDialogOpen } = this.state;
 
     this.roleOptions = this.roleOptions.map(item => {
@@ -97,7 +103,7 @@ class MemberItem extends React.Component {
         <tr className={`departments-members-item ${highlighted ? 'tr-highlight' : ''}`} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
           <td><img className="avatar" src={member.avatar_url} alt="" /></td>
           <td className='text-truncate'>
-            <a href={`${siteRoot}sys/users/${encodeURIComponent(member.email)}/`}>{member.name}</a>
+            <a href={getMemberUrl(member.email, isSysAdmin)}>{member.name}</a>
           </td>
           <td>
             <RoleSelector
@@ -138,5 +144,8 @@ class MemberItem extends React.Component {
 }
 
 MemberItem.propTypes = propTypes;
+MemberItem.defaultProps = {
+  isSysAdmin: false,
+};
 
 export default MemberItem;

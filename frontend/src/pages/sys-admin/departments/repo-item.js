@@ -46,7 +46,7 @@ class RepoItem extends React.Component {
     return (
       <>
         <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-          <td><img src={iconUrl} width="24" alt="" /></td>
+          <td><img src={iconUrl} width="24" alt={gettext('icon')} /></td>
           <td>
             {enableSysAdminViewRepo
               ? <a href={`${siteRoot}sys/libraries/${repo.repo_id}/${encodeURIComponent(repoName)}/`}>{repoName}</a>

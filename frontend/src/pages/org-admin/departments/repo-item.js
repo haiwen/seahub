@@ -1,13 +1,16 @@
 import React, { Fragment } from 'react';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import DeleteRepoDialog from '../../../components/dialog/org-delete-repo-dialog';
 import ModalPortal from '../../../components/modal-portal';
 import OpIcon from '../../../components/op-icon';
-import { gettext, lang } from '../../../utils/constants';
+import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 
-dayjs.locale(lang);
+const RepoItemPropTypes = {
+  repo: PropTypes.object.isRequired,
+  groupID: PropTypes.number.isRequired,
+  onDeleteRepo: PropTypes.func.isRequired,
+};
 
 class RepoItem extends React.Component {
 
@@ -15,7 +18,7 @@ class RepoItem extends React.Component {
     super(props);
     this.state = {
       highlight: false,
-      isDeleteDialogOpen: false
+      isDeleteDialogOpen: false,
     };
   }
 
@@ -29,7 +32,7 @@ class RepoItem extends React.Component {
 
   toggleDeleteDialog = () => {
     this.setState({
-      isDeleteDialogOpen: !this.state.isDeleteDialogOpen
+      isDeleteDialogOpen: !this.state.isDeleteDialogOpen,
     });
   };
 
@@ -47,7 +50,7 @@ class RepoItem extends React.Component {
             <OpIcon
               className={`op-icon ${highlight ? '' : 'vh'}`}
               symbol="delete"
-              title="Delete"
+              title={gettext('Delete')}
               op={this.toggleDeleteDialog}
             />
           </td>
@@ -66,12 +69,6 @@ class RepoItem extends React.Component {
     );
   }
 }
-
-const RepoItemPropTypes = {
-  repo: PropTypes.object.isRequired,
-  groupID: PropTypes.number.isRequired,
-  onDeleteRepo: PropTypes.func.isRequired,
-};
 
 RepoItem.propTypes = RepoItemPropTypes;
 
