@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getRowById } from '../../../components/sf-table/utils/table';
-import { EVENT_BUS_TYPE } from '../../../metadata/constants';
-import { gettext } from '../../../utils/constants';
+import { getRowById } from '@/components/sf-table/utils/table';
+import { EVENT_BUS_TYPE } from '@/metadata/constants';
+import { gettext } from '@/utils/constants';
 import { ALL_TAGS_ID } from '../../constants';
 import { useTags } from '../../hooks';
 import { getTagName } from '../../utils/cell';

@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import Rename from '../../../../../components/rename';
-import { gettext, mediaUrl, siteRoot, thumbnailDefaultSize } from '../../../../../utils/constants';
-import { Utils } from '../../../../../utils/utils';
+import Rename from '@/components/rename';
+import { gettext, mediaUrl, siteRoot, thumbnailDefaultSize } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import OpMenu from './op-menu';
 
 import './index.css';

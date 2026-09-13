@@ -1,5 +1,5 @@
-import { siteRoot } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { siteRoot } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import { getFileNameFromRecord, getParentDirFromRecord } from './cell';
 import { checkIsDir } from './row';
 

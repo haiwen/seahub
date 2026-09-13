@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import OpIcon from '@/components/op-icon';
-import { getRowById } from '../../../../../components/sf-table/utils/table';
-import { getTagColor, getTagName } from '../../../../../tag/utils/cell';
-import { gettext } from '../../../../../utils/constants';
-import { Utils } from '../../../../../utils/utils';
+import { getRowById } from '@/components/sf-table/utils/table';
+import { getTagColor, getTagName } from '@/tag/utils/cell';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import React from './index';
 
 import '../../../tag-ui/index.css';

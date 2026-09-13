@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import { getRowsByIds } from '../../../../../components/sf-table/utils/table';
-import NumberFormatter from '../../../../../metadata/components/cell-formatter/number';
+import { getRowsByIds } from '@/components/sf-table/utils/table';
+import NumberFormatter from '@/metadata/components/cell-formatter/number';
 import { useTags } from '../../../../hooks';
 
 const ChildTagsFormatter = ({ record, column }) => {

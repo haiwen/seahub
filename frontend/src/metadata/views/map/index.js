@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import ImageDialog from '../../../components/dialog/image-dialog';
-import ModalPortal from '../../../components/modal-portal';
-import { MAP_TYPE as MAP_PROVIDER, PRIVATE_FILE_TYPE } from '../../../constants';
-import { baiduMapKey, fileServerRoot, googleMapKey, siteRoot, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '../../../utils/constants';
-import { gcj02_to_bd09, wgs84_to_gcj02 } from '../../../utils/coord-transform';
-import { initMapInfo, loadBMap, loadGMap } from '../../../utils/map-utils';
-import { Utils } from '../../../utils/utils';
+import ImageDialog from '@/components/dialog/image-dialog';
+import ModalPortal from '@/components/modal-portal';
+import { MAP_TYPE as MAP_PROVIDER, PRIVATE_FILE_TYPE } from '@/constants';
+import { baiduMapKey, fileServerRoot, googleMapKey, siteRoot, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '@/utils/constants';
+import { gcj02_to_bd09, wgs84_to_gcj02 } from '@/utils/coord-transform';
+import { initMapInfo, loadBMap, loadGMap } from '@/utils/map-utils';
+import { Utils } from '@/utils/utils';
 import { EVENT_BUS_TYPE, MAP_TYPE, PREDEFINED_FILE_TYPE_OPTION_KEY, STORAGE_MAP_CENTER_KEY, STORAGE_MAP_TYPE_KEY, STORAGE_MAP_ZOOM_KEY, DEFAULT_POSITION, DEFAULT_ZOOM } from '../../constants';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { getFileNameFromRecord, getFileTypeFromRecord, getImageLocationFromRecord, getParentDirFromRecord,

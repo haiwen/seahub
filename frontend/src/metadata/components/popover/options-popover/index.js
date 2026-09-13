@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import CommonAddTool from '../../../../components/common-add-tool';
-import CustomizePopover from '../../../../components/customize-popover';
-import SearchEmptyTip from '../../../../components/search-empty-tip';
-import SearchInput from '../../../../components/search-input';
-import toaster from '../../../../components/toast';
-import { gettext } from '../../../../utils/constants';
+import CommonAddTool from '@/components/common-add-tool';
+import CustomizePopover from '@/components/customize-popover';
+import SearchEmptyTip from '@/components/search-empty-tip';
+import SearchInput from '@/components/search-input';
+import toaster from '@/components/toast';
+import { gettext } from '@/utils/constants';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
 import { checkIsPredefinedOption } from '../../../utils/cell';

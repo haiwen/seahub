@@ -1,8 +1,8 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import toaster from '../../components/toast';
-import { PRIVATE_FILE_TYPE } from '../../constants';
-import { useMetadataStatus } from '../../hooks';
-import { Utils } from '../../utils/utils';
+import toaster from '@/components/toast';
+import { PRIVATE_FILE_TYPE } from '@/constants';
+import { useMetadataStatus } from '@/hooks';
+import { Utils } from '@/utils/utils';
 import metadataAPI from '../api';
 import { VIEW_TYPE, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW } from '../constants';
 import Folder from '../model/metadata/folder';

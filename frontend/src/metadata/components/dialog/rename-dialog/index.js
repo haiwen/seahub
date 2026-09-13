@@ -2,9 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button, Modal, Input, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext } from '../../../../utils/constants';
-import { isEnter } from '../../../../utils/hotkey';
-import { validateName } from '../../../../utils/utils';
+import { gettext } from '@/utils/constants';
+import { isEnter } from '@/utils/hotkey';
+import { validateName } from '@/utils/utils';
 
 const RenameDialog = ({ isDir, oldName, onSubmit, onCancel }) => {
   const [newName, setNewName] = useState('');

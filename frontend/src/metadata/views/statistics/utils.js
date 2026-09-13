@@ -1,4 +1,4 @@
-import { mediaUrl } from '../../../utils/constants';
+import { mediaUrl } from '@/utils/constants';
 import { FILE_TYPE_NAMES, FILE_TYPE_COLORS } from '../../constants/view/statistics';
 import { getCollaborator } from '../../utils/cell/column/collaborator';
 

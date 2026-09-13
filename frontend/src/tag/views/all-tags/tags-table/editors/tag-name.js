@@ -1,7 +1,7 @@
 import React, { forwardRef, useCallback, useMemo } from 'react';
-import { OPERATION } from '../../../../../components/sf-table/constants/operation';
-import { getRecordIdFromRecord } from '../../../../../metadata/utils/cell';
-import { gettext } from '../../../../../utils/constants';
+import { OPERATION } from '@/components/sf-table/constants/operation';
+import { getRecordIdFromRecord } from '@/metadata/utils/cell';
+import { gettext } from '@/utils/constants';
 import EditTagDialog from '../../../../components/dialog/edit-tag-dialog';
 import { PRIVATE_COLUMN_KEY } from '../../../../constants';
 import { useTags } from '../../../../hooks';

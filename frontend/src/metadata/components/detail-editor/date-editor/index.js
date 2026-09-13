@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import ClickOutside from '../../../../components/click-outside';
-import { gettext } from '../../../../utils/constants';
-import { getEventClassName } from '../../../../utils/dom';
+import ClickOutside from '@/components/click-outside';
+import { gettext } from '@/utils/constants';
+import { getEventClassName } from '@/utils/dom';
 import { CellType, DEFAULT_DATE_FORMAT, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { getDateDisplayString, isCellValueChanged } from '../../../utils/cell';
 import DateEditor from '../../cell-editors/date-editor';

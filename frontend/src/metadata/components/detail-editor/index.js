@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { lang } from '../../../utils/constants';
+import { lang } from '@/utils/constants';
 import { CellType } from '../../constants';
 import CheckboxEditor from './checkbox-editor';
 import CollaboratorEditor from './collaborator-editor';

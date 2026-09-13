@@ -1,4 +1,4 @@
-import { gettext } from '../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import CellType from './type';
 
 // text value limit

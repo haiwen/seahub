@@ -1,4 +1,4 @@
-import { gettext } from '../../../utils/constants';
+import { gettext } from '@/utils/constants';
 
 const FILTER_PREDICATE_TYPE = {
   CONTAINS: 'contains',

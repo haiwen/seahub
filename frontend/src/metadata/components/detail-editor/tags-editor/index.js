@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo, useState, useRef, useEffect } from 'react';
 import { Popover } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { getRowById } from '../../../../components/sf-table/utils/table';
-import { KeyCodes } from '../../../../constants';
-import { useTags } from '../../../../tag/hooks';
-import { gettext } from '../../../../utils/constants';
-import { getEventClassName } from '../../../../utils/dom';
-import { Utils } from '../../../../utils/utils';
+import { getRowById } from '@/components/sf-table/utils/table';
+import { KeyCodes } from '@/constants';
+import { useTags } from '@/tag/hooks';
+import { gettext } from '@/utils/constants';
+import { getEventClassName } from '@/utils/dom';
+import { Utils } from '@/utils/utils';
 import { getRecordIdFromRecord } from '../../../utils/cell';
 import Editor from '../../cell-editors/tags-editor';
 import DeleteTag from '../../cell-editors/tags-editor/delete-tags';

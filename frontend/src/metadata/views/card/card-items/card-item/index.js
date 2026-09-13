@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import Icon from '../../../../../components/icon';
-import { siteRoot, gettext, fileServerRoot, thumbnailSizeForOriginal, enableThumbnailServer } from '../../../../../utils/constants';
-import { Utils } from '../../../../../utils/utils';
+import Icon from '@/components/icon';
+import { siteRoot, gettext, fileServerRoot, thumbnailSizeForOriginal, enableThumbnailServer } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import { useMetadataView } from '../../../../hooks/metadata-view';
 import {
   getCellValueByColumn,

@@ -1,5 +1,5 @@
-import { appAvatarURL, googleMapId, mediaUrl } from '../../../utils/constants';
-import { wgs84_to_gcj02 } from '../../../utils/coord-transform';
+import { appAvatarURL, googleMapId, mediaUrl } from '@/utils/constants';
+import { wgs84_to_gcj02 } from '@/utils/coord-transform';
 import { createGeolocationControl } from '../../components/map-controller/geolocation';
 import { createZoomControl } from '../../components/map-controller/zoom';
 import { MIN_ZOOM, MAX_ZOOM } from '../../constants';

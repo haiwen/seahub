@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import SortMenu from '../../components/sort-menu';
-import ViewModes from '../../components/view-modes';
+import SortMenu from '@/components/sort-menu';
+import ViewModes from '@/components/view-modes';
 import { useTags } from '../hooks';
 import { getSortBy, getSortOrder } from '../utils/sort';
 

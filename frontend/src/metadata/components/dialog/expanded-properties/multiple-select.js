@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import ClickOutside from '../../../../components/click-outside';
-import Icon from '../../../../components/icon';
+import ClickOutside from '@/components/click-outside';
+import Icon from '@/components/icon';
 import { getColumnOptionNamesByIds } from '../../../utils/cell';
 import MultipleSelectEditor from '../../cell-editors/multiple-select-editor';
 import SelectOption from '../../cell-formatter/select-option';

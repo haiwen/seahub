@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
-import CustomizePopover from '../../../../components/customize-popover';
-import toaster from '../../../../components/toast';
-import { gettext } from '../../../../utils/constants';
+import CustomizePopover from '@/components/customize-popover';
+import toaster from '@/components/toast';
+import { gettext } from '@/utils/constants';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
 import { generateNewOption } from '../../../utils/column';
 import Color from '../options-popover/option/color';

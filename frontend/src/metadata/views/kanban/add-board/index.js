@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import Icon from '../../../../components/icon';
-import { gettext } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
+import Icon from '@/components/icon';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import AddCategoryPopover from '../../../components/popover/kanban-add-category-popover';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';

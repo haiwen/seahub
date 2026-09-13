@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import DetailItem from '../../../components/dirent-detail/detail-item';
-import { useMetadataStatus } from '../../../hooks';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import DetailItem from '@/components/dirent-detail/detail-item';
+import { useMetadataStatus } from '@/hooks';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import { PRIVATE_COLUMN_KEY, IMAGE_PRIVATE_COLUMN_KEYS } from '../../constants';
 import { useMetadataDetails } from '../../hooks';
 import { getCellValueByColumn, getFileNameFromRecord } from '../../utils/cell';

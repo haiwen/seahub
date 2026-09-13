@@ -2,15 +2,15 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Button } from 'reactstrap';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { eventBus, EVENT_BUS_TYPE } from '../../../../components/event-bus';
-import Loading from '../../../../components/loading';
-import OpIcon from '../../../../components/op-icon';
-import Switch from '../../../../components/switch';
-import toaster from '../../../../components/toast';
-import tagsAPI from '../../../../tag/api';
-import { ALL_TAGS_ID } from '../../../../tag/constants';
-import { gettext } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
+import { eventBus, EVENT_BUS_TYPE } from '@/components/event-bus';
+import Loading from '@/components/loading';
+import OpIcon from '@/components/op-icon';
+import Switch from '@/components/switch';
+import toaster from '@/components/toast';
+import tagsAPI from '@/tag/api';
+import { ALL_TAGS_ID } from '@/tag/constants';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import TurnOffConfirmDialog from '../turn-off-confirm-dialog';
 
 const MetadataTagsStatusDialog = ({

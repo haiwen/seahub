@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { KeyCodes } from '../../../../constants';
+import { KeyCodes } from '@/constants';
 import { isCellValueChanged } from '../../../utils/cell';
 import { getTrimmedString } from '../../../utils/common';
 import { CellValueType } from './constants';

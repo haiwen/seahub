@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { MAP_TYPE } from '../../../../constants';
-import { baiduMapKey, googleMapKey } from '../../../../utils/constants';
-import { convertToWGS84 } from '../../../../utils/coord-transform';
-import { initMapInfo } from '../../../../utils/map-utils';
+import { MAP_TYPE } from '@/constants';
+import { baiduMapKey, googleMapKey } from '@/utils/constants';
+import { convertToWGS84 } from '@/utils/coord-transform';
+import { initMapInfo } from '@/utils/map-utils';
 import LocationControls from './location-controls';
 import MapContainer from './map-container';
 import SearchComponent from './search-component';

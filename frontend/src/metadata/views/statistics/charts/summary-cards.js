@@ -1,4 +1,4 @@
-import { gettext, mediaUrl } from '../../../../utils/constants';
+import { gettext, mediaUrl } from '@/utils/constants';
 
 import './summary-cards.css';
 

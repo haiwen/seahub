@@ -1,7 +1,7 @@
 import React, { useContext, useCallback, useMemo, useState, useRef } from 'react';
-import toaster from '../../components/toast';
-import { gettext, lang } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import toaster from '@/components/toast';
+import { gettext, lang } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import metadataAPI from '../api';
 import FileTagsDialog from '../components/dialog/file-tags-dialog';
 import { OCRResultPopover } from '../components/popover';

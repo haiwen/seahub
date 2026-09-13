@@ -1,5 +1,5 @@
-import { getRowsByIds } from '../../components/sf-table/utils/table';
-import { username } from '../../utils/constants';
+import { getRowsByIds } from '@/components/sf-table/utils/table';
+import { username } from '@/utils/constants';
 import { CellType } from '../constants';
 import {
   getCellValueByColumn, getOption, isValidCellValue, checkIsPredefinedOption, getColumnOptionIdsByNames,

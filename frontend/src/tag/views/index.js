@@ -1,5 +1,5 @@
 import React from 'react';
-import CenteredLoading from '../../components/centered-loading';
+import CenteredLoading from '@/components/centered-loading';
 import { ALL_TAGS_ID } from '../constants';
 import { TagViewProvider, useTags } from '../hooks';
 import AllTags from './all-tags';

@@ -1,6 +1,6 @@
 import deepCopy from 'deep-copy';
-import { getRowById, getRowsByIds } from '../../components/sf-table/utils/table';
-import { Utils } from '../../utils/utils';
+import { getRowById, getRowsByIds } from '@/components/sf-table/utils/table';
+import { Utils } from '@/utils/utils';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, DEFAULT_RETRY_TIMES, DEFAULT_RETRY_INTERVAL } from '../constants';
 import Metadata from '../model/metadata';
 import { getFileNameFromRecord, checkDuplicatedName } from '../utils/cell';

@@ -1,8 +1,8 @@
 import React, { useCallback, useRef } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import Icon from '../../../../../components/icon';
-import Switch from '../../../../../components/switch';
+import Icon from '@/components/icon';
+import Switch from '@/components/switch';
 import { COLUMNS_ICON_CONFIG } from '../../../../constants';
 
 const HideColumnItem = ({

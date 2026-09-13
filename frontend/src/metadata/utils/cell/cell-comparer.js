@@ -1,4 +1,4 @@
-import ObjectUtils from '../../../utils/object';
+import ObjectUtils from '@/utils/object';
 import { CellType } from '../../constants';
 import { isEmptyObject } from '../common';
 

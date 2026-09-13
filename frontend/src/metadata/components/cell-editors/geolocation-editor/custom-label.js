@@ -1,5 +1,5 @@
-import Icon from '../../../../components/icon';
-import { gettext } from '../../../../utils/constants';
+import Icon from '@/components/icon';
+import { gettext } from '@/utils/constants';
 
 const generateLabelContent = (info, isBMap = false) => {
   const { location_translated, title, tag } = info;

@@ -1,4 +1,4 @@
-import { gettext } from '../../../utils/constants';
+import { gettext } from '@/utils/constants';
 
 export const validateName = (name, names) => {
   if (typeof name !== 'string') {

@@ -2,8 +2,8 @@ import React, { useCallback, useRef } from 'react';
 import { UncontrolledTooltip } from 'reactstrap';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import Icon from '../../../../components/icon';
-import { Utils } from '../../../../utils/utils';
+import Icon from '@/components/icon';
+import { Utils } from '@/utils/utils';
 import { DEFAULT_RATE_DATA } from '../../../constants';
 
 const RateItem = ({

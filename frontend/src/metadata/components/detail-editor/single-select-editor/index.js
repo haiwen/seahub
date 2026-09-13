@@ -1,9 +1,9 @@
 import React, { useMemo, useCallback, useState, useRef, useEffect } from 'react';
 import { Popover } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { KeyCodes } from '../../../../constants';
-import { gettext } from '../../../../utils/constants';
-import { getEventClassName } from '../../../../utils/dom';
+import { KeyCodes } from '@/constants';
+import { gettext } from '@/utils/constants';
+import { getEventClassName } from '@/utils/dom';
 import { getOption } from '../../../utils/cell';
 import { getColumnOptions } from '../../../utils/column';
 import Editor from '../../cell-editors/single-select-editor';

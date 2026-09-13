@@ -1,6 +1,6 @@
-import { appAvatarURL, mediaUrl } from '../../../utils/constants';
-import { gcj02_to_bd09, wgs84_to_gcj02 } from '../../../utils/coord-transform';
-import { Utils } from '../../../utils/utils';
+import { appAvatarURL, mediaUrl } from '@/utils/constants';
+import { gcj02_to_bd09, wgs84_to_gcj02 } from '@/utils/coord-transform';
+import { Utils } from '@/utils/utils';
 import { createBMapGeolocationControl, createBMapZoomControl } from '../../components/map-controller';
 import { MIN_ZOOM, MAX_ZOOM } from '../../constants';
 import { customAvatarOverlay, customImageOverlay } from './overlay';

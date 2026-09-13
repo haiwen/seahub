@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import OpIcon from '../../../components/op-icon';
-import { gettext } from '../../../utils/constants';
+import OpIcon from '@/components/op-icon';
+import { gettext } from '@/utils/constants';
 import { EVENT_BUS_TYPE, FACE_RECOGNITION_VIEW_ID, VIEW_TYPE } from '../../constants';
 import { GalleryGroupBySetter, SortSetter } from '../data-process-setter';
 

@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { KeyCodes } from '../../../../constants';
-import { siteRoot, thumbnailDefaultSize, enableThumbnailServer } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
+import { KeyCodes } from '@/constants';
+import { siteRoot, thumbnailDefaultSize, enableThumbnailServer } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import { CellType } from '../../../constants';
 import { getCellValueByColumn, getFileMTimeFromRecord, getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/cell';
 import { checkIsDir } from '../../../utils/row';

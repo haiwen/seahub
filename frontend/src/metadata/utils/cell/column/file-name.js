@@ -1,4 +1,4 @@
-import { Utils } from '../../../../utils/utils';
+import { Utils } from '@/utils/utils';
 
 export const checkDuplicatedName = (rows, parentDir, fileName) => {
   if (!Array.isArray(rows) || rows.length === 0 || !parentDir || !fileName) return false;

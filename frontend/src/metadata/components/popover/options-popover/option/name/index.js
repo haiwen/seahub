@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Input } from 'reactstrap';
 import PropTypes from 'prop-types';
-import toaster from '../../../../../../components/toast';
-import { KeyCodes } from '../../../../../../constants';
-import { gettext } from '../../../../../../utils/constants';
+import toaster from '@/components/toast';
+import { KeyCodes } from '@/constants';
+import { gettext } from '@/utils/constants';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../../../store/operations';
 
 import './index.css';

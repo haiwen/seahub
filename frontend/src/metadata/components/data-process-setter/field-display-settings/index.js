@@ -3,10 +3,10 @@ import { Transition } from 'react-transition-group';
 import { Label } from 'reactstrap';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
+import Icon from '@/components/icon';
 import Tooltip from '@/components/tooltip';
 import { gettext } from '@/utils/constants';
-import Icon from '../../../../components/icon';
-import { Utils } from '../../../../utils/utils';
+import { Utils } from '@/utils/utils';
 import FieldItem from './field-item';
 
 import './index.css';

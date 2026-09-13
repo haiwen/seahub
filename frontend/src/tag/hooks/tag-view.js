@@ -1,9 +1,9 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { getTreeNodeById, getTreeNodeByKey } from '../../components/sf-table/utils/tree';
-import { useFileOperations } from '../../hooks/file-operations';
-import { EVENT_BUS_TYPE } from '../../metadata/constants';
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
+import { getTreeNodeById, getTreeNodeByKey } from '@/components/sf-table/utils/tree';
+import { useFileOperations } from '@/hooks/file-operations';
+import { EVENT_BUS_TYPE } from '@/metadata/constants';
+import { seafileAPI } from '@/utils/seafile-api';
+import { Utils } from '@/utils/utils';
 import tagsAPI from '../api';
 import { TAG_FILE_KEY } from '../constants/file';
 import { getFileById, sortTagFiles } from '../utils/file';

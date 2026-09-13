@@ -1,5 +1,5 @@
 import React from 'react';
-import { lang } from '../../../utils/constants';
+import { lang } from '@/utils/constants';
 import { CellType } from '../../constants';
 import { checkIsDir } from '../../utils/row';
 import CollaboratorEditor from './collaborator-editor';

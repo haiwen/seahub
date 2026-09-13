@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import { seafileAPI } from '../../../../utils/seafile-api';
-import { Utils } from '../../../../utils/utils';
+import { seafileAPI } from '@/utils/seafile-api';
+import { Utils } from '@/utils/utils';
 
 const getImageFileNameWithTimestamp = () => {
   var d = Date.now();

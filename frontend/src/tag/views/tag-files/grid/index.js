@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { hideMenu } from '../../../../components/context-menu/actions';
-import { getRecordIdFromRecord } from '../../../../metadata/utils/cell';
+import { hideMenu } from '@/components/context-menu/actions';
+import { getRecordIdFromRecord } from '@/metadata/utils/cell';
 import { useTags, useTagView } from '../../../hooks';
 import TagFile from './item';
 

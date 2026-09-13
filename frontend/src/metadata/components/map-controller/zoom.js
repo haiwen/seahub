@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import { Utils } from '../../../utils/utils';
+import { Utils } from '@/utils/utils';
 import { MIN_ZOOM, MAX_ZOOM } from '../../constants/view/map';
 
 const buttonClassName = 'sf-map-control sf-map-zoom-control d-flex align-items-center justify-content-center';

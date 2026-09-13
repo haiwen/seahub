@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useRef } from 'react';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import PropTypes from 'prop-types';
-import Icon from '../../../../components/icon';
-import { gettext } from '../../../../utils/constants';
+import Icon from '@/components/icon';
+import { gettext } from '@/utils/constants';
 import { CellType, COLUMNS_ICON_CONFIG, PRIVATE_COLUMN_KEYS } from '../../../constants';
 import { getCellValueByColumn, getFileNameFromRecord, isCellValueChanged } from '../../../utils/cell';
 import Checkbox from './checkbox';

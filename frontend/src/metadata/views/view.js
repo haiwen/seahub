@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
-import CenteredLoading from '../../components/centered-loading';
-import Loading from '../../components/loading';
-import { gettext } from '../../utils/constants';
+import CenteredLoading from '@/components/centered-loading';
+import Loading from '@/components/loading';
+import { gettext } from '@/utils/constants';
 import { VIEW_TYPE } from '../constants';
 import { useMetadataView } from '../hooks/metadata-view';
 import Card from './card';

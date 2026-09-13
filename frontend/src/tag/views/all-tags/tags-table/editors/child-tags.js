@@ -1,7 +1,7 @@
 import React, { forwardRef, useCallback, useMemo } from 'react';
-import { getRowById } from '../../../../../components/sf-table/utils/table';
-import TagsEditor from '../../../../../metadata/components/cell-editors/tags-editor';
-import { getRecordIdFromRecord } from '../../../../../metadata/utils/cell';
+import { getRowById } from '@/components/sf-table/utils/table';
+import TagsEditor from '@/metadata/components/cell-editors/tags-editor';
+import { getRecordIdFromRecord } from '@/metadata/utils/cell';
 import { useTags } from '../../../../hooks';
 import { getChildLinks } from '../../../../utils/cell';
 

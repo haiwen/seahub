@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { EVENT_BUS_TYPE as COMMON_EVENT_BUS_TYPE } from '../../components/event-bus';
-import { getRowById } from '../../components/sf-table/utils/table';
-import { checkTreeNodeHasChildNodes, getTreeChildNodes, getTreeNodeDepth, getTreeNodeId, getTreeNodeKey } from '../../components/sf-table/utils/tree';
-import { PRIVATE_FILE_TYPE } from '../../constants';
-import { EVENT_BUS_TYPE } from '../../metadata/constants';
+import { EVENT_BUS_TYPE as COMMON_EVENT_BUS_TYPE } from '@/components/event-bus';
+import { getRowById } from '@/components/sf-table/utils/table';
+import { checkTreeNodeHasChildNodes, getTreeChildNodes, getTreeNodeDepth, getTreeNodeId, getTreeNodeKey } from '@/components/sf-table/utils/tree';
+import { PRIVATE_FILE_TYPE } from '@/constants';
+import { EVENT_BUS_TYPE } from '@/metadata/constants';
 import { PRIVATE_COLUMN_KEY, ALL_TAGS_ID } from '../constants';
 import { SIDEBAR_INIT_LEFT_INDENT } from '../constants/sidebar-tree';
 import { useTags } from '../hooks';

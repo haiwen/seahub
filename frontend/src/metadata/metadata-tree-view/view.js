@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import CustomDropdown from '../../components/dropdown';
-import Icon from '../../components/icon';
-import toaster from '../../components/toast';
-import { baiduMapKey, gettext, googleMapKey } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import CustomDropdown from '@/components/dropdown';
+import Icon from '@/components/icon';
+import toaster from '@/components/toast';
+import { baiduMapKey, gettext, googleMapKey } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import {
   FACE_RECOGNITION_VIEW_ID, METADATA_VIEWS_DRAG_DATA_KEY, METADATA_VIEWS_KEY,
   VIEW_DEFAULT_SETTINGS, VIEW_INCOMPATIBLE_PROPERTIES, VIEW_PROPERTY_KEYS,

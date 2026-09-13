@@ -2,12 +2,12 @@ import React, { Component, Fragment } from 'react';
 import { UncontrolledPopover } from 'reactstrap';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
-import CommonAddTool from '../../../../components/common-add-tool';
-import CustomizeSelect from '../../../../components/customize-select';
-import Icon from '../../../../components/icon';
-import { gettext } from '../../../../utils/constants';
-import { getEventClassName } from '../../../../utils/dom';
-import { Utils } from '../../../../utils/utils';
+import CommonAddTool from '@/components/common-add-tool';
+import CustomizeSelect from '@/components/customize-select';
+import Icon from '@/components/icon';
+import { gettext } from '@/utils/constants';
+import { getEventClassName } from '@/utils/dom';
+import { Utils } from '@/utils/utils';
 import {
   EVENT_BUS_TYPE, COLUMNS_ICON_CONFIG, VIEW_SORT_COLUMN_RULES, VIEW_FIRST_SORT_COLUMN_RULES, SORT_TYPE, VIEW_TYPE,
 } from '../../../constants';

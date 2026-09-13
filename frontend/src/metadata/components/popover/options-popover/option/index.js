@@ -2,8 +2,8 @@ import React, { useCallback, useRef, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import Icon from '../../../../../components/icon';
-import IconBtn from '../../../../../components/icon-btn';
+import Icon from '@/components/icon';
+import IconBtn from '@/components/icon-btn';
 import Color from './color';
 import Name from './name';
 

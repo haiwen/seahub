@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react';
 import { UncontrolledTooltip } from 'reactstrap';
 import PropTypes from 'prop-types';
-import CustomizeSelect from '../../../../../../components/customize-select';
-import Icon from '../../../../../../components/icon';
-import IconBtn from '../../../../../../components/icon-btn';
-import SearchInput from '../../../../../../components/search-input';
-import { gettext } from '../../../../../../utils/constants';
-import { Utils } from '../../../../../../utils/utils';
+import CustomizeSelect from '@/components/customize-select';
+import Icon from '@/components/icon';
+import IconBtn from '@/components/icon-btn';
+import SearchInput from '@/components/search-input';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import {
   CellType, DELETED_OPTION_BACKGROUND_COLOR, DELETED_OPTION_TIPS, FILTER_PREDICATE_TYPE, FILTER_TERM_MODIFIER_TYPE, FILTER_ERR_MSG,
   filterTermModifierIsWithin,

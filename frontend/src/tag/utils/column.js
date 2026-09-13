@@ -1,4 +1,4 @@
-import { CellType } from '../../metadata/constants';
+import { CellType } from '@/metadata/constants';
 import { PRIVATE_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../constants';
 
 const DEFAULT_COLUMN_WIDTH = 200;

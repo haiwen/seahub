@@ -1,4 +1,4 @@
-import { gettext } from '../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import { PRIVATE_COLUMN_KEY } from '../column';
 import { FILTER_PREDICATE_TYPE } from '../filter';
 import { SORT_COLUMN_OPTIONS, GALLERY_SORT_COLUMN_OPTIONS, GALLERY_FIRST_SORT_COLUMN_OPTIONS, SORT_TYPE,

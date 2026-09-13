@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { getTreeNodeKey } from '../../../../../components/sf-table/utils/tree';
-import FileTagsFormatter from '../../../../../metadata/components/cell-formatter/file-tags';
-import { getRecordIdFromRecord } from '../../../../../metadata/utils/cell';
-import { isNumber } from '../../../../../utils/number';
+import { getTreeNodeKey } from '@/components/sf-table/utils/tree';
+import FileTagsFormatter from '@/metadata/components/cell-formatter/file-tags';
+import { getRecordIdFromRecord } from '@/metadata/utils/cell';
+import { isNumber } from '@/utils/number';
 import { useTags } from '../../../../hooks';
 
 const TagNameFormatter = ({ record, isCellSelected, setDisplayTag, treeNodeIndex }) => {
