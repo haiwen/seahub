@@ -155,7 +155,7 @@ class Departments extends React.Component {
       cb && cb(res.data.libraries);
     }).catch(error => {
       if (error.response && error.response.status === 404) {
-        cb && cb(null);
+        cb && cb([]);
         return;
       }
       let errMessage = Utils.getErrorMsg(error);

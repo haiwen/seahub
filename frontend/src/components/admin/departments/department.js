@@ -99,7 +99,7 @@ class Department extends React.Component {
 
   getRepos = (id) => {
     this.props.getRepos(id, (repos) => {
-      this.setState({ repos });
+      this.setState({ repos: Array.isArray(repos) ? repos : [] });
     });
   };
 
