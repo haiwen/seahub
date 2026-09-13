@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { VIEW_TYPE } from '../../metadata/constants';
-import { useMetadata } from '../../metadata/hooks';
-import { ALL_TAGS_ID } from '../../tag/constants';
+import { VIEW_TYPE } from '@/features/metadata/constants';
+import { useMetadata } from '@/features/metadata/hooks';
+import { ALL_TAGS_ID } from '@/features/tag/constants';
 import { TAGS_MODE, TRASH_MODE, CHAT_MODE } from '../dir-view-mode/constants';
 import AllTagsToolbar from './all-tags-toolbar';
 import CardFilesToolbar from './card-files-toolbar';

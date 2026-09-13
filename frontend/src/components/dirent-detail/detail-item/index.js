@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { CellType, COLUMNS_ICON_CONFIG } from '../../../metadata/constants';
+import { CellType, COLUMNS_ICON_CONFIG } from '@/features/metadata/constants';
 import Icon from '../../icon';
 
 import './index.css';

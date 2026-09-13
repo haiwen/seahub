@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import { MetadataDetails, useMetadataDetails } from '@/features/metadata';
+import Formatter from '@/features/metadata/components/formatter';
+import { CellType, PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
+import { getCellValueByColumn, getDateDisplayString, decimalToExposureTime } from '@/features/metadata/utils/cell';
 import { CAPTURE_INFO_SHOW_KEY } from '../../../../constants';
 import { useMetadataStatus } from '../../../../hooks';
-import { MetadataDetails, useMetadataDetails } from '../../../../metadata';
-import Formatter from '../../../../metadata/components/formatter';
-import { CellType, PRIVATE_COLUMN_KEY } from '../../../../metadata/constants';
-import { getCellValueByColumn, getDateDisplayString, decimalToExposureTime } from '../../../../metadata/utils/cell';
 import { gettext } from '../../../../utils/constants';
 import ObjectUtils from '../../../../utils/object';
 import { Utils } from '../../../../utils/utils';

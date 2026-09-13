@@ -1,4 +1,4 @@
-import { CellType, PRIVATE_COLUMN_KEY } from '@/metadata/constants';
+import { CellType, PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
 import { gettext } from '@/utils/constants';
 
 // List mode

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { PER_LOAD_NUMBER } from '@/features/metadata/constants';
+import tagsAPI from '@/features/tag/api';
+import { TAGS_DEFAULT_SORT } from '@/features/tag/constants/sort';
+import TagsData from '@/features/tag/model/tagsData';
+import { normalizeColumns } from '@/features/tag/utils/column';
 import { useMetadataStatus } from '../../../hooks';
-import { PER_LOAD_NUMBER } from '../../../metadata/constants';
-import tagsAPI from '../../../tag/api';
-import { TAGS_DEFAULT_SORT } from '../../../tag/constants/sort';
-import TagsData from '../../../tag/model/tagsData';
-import { normalizeColumns } from '../../../tag/utils/column';
 import { Utils } from '../../../utils/utils';
 import DirDetails from '../../dirent-detail/dirent-details/dir-details';
 import FileDetails from '../../dirent-detail/dirent-details/file-details';

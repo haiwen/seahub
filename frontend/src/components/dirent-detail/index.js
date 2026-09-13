@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { MetadataContext } from '@/features/metadata';
+import ViewDetails from '@/features/metadata/components/view-details';
+import { useTags } from '@/features/tag/hooks';
 import { PRIVATE_FILE_TYPE } from '../../constants';
-import { MetadataContext } from '../../metadata';
-import ViewDetails from '../../metadata/components/view-details';
-import { useTags } from '../../tag/hooks';
 import ObjectUtils from '../../utils/object';
 import { METADATA_MODE, TAGS_MODE } from '../dir-view-mode/constants';
 import DirentDetail from './dirent-details';

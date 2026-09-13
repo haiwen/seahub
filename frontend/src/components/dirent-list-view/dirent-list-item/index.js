@@ -3,12 +3,12 @@ import { DropdownItem } from 'reactstrap';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import urlJoin from 'url-join';
-import CreatorFormatter from '@/metadata/components/cell-formatter/creator';
-import FileTagsFormatter from '@/metadata/components/cell-formatter/file-tags';
-import { getNumberDisplayString } from '@/metadata/utils/cell';
+import CreatorFormatter from '@/features/metadata/components/cell-formatter/creator';
+import FileTagsFormatter from '@/features/metadata/components/cell-formatter/file-tags';
+import { PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
+import { getNumberDisplayString } from '@/features/metadata/utils/cell';
 import TextTranslation from '@/utils/text-translation';
 import { DIR_COLUMN_KEYS } from '../../../constants/dir-column-config';
-import { PRIVATE_COLUMN_KEY } from '../../../metadata/constants';
 import { Dirent } from '../../../models';
 import { gettext, siteRoot, mediaUrl, enableVideoThumbnail, enablePDFThumbnail, enableThumbnailServer } from '../../../utils/constants';
 import { toggleStar } from '../../../utils/dirent-operations';
@@ -26,7 +26,7 @@ import Rename from '../../rename';
 import StatusEditor from '../status-editor';
 
 import './index.css';
-import '../../../metadata/components/cell-formatter/collaborator/index.css';
+import '@/features/metadata/components/cell-formatter/collaborator/index.css';
 import '../index.css';
 
 const propTypes = {

@@ -6,12 +6,12 @@ import Icon from '@/components/icon';
 import ModalPortal from '@/components/modal-portal';
 import toaster from '@/components/toast';
 import Tooltip from '@/components/tooltip';
-import ColumnPopover from '@/metadata/components/popover/column-popover';
-import ColumnTypeDropdownMenu from '@/metadata/components/popover/column-popover/column-type-dropdown-menu';
-import { COMMON_FORM_FIELD_TYPE } from '@/metadata/components/popover/column-popover/constants';
-import { ValidateColumnFormFields } from '@/metadata/components/popover/column-popover/utils';
-import { useMetadataView } from '@/metadata/hooks/metadata-view';
-import { getColumnDisplayName } from '@/metadata/utils/column';
+import ColumnPopover from '@/features/metadata/components/popover/column-popover';
+import ColumnTypeDropdownMenu from '@/features/metadata/components/popover/column-popover/column-type-dropdown-menu';
+import { COMMON_FORM_FIELD_TYPE } from '@/features/metadata/components/popover/column-popover/constants';
+import { ValidateColumnFormFields } from '@/features/metadata/components/popover/column-popover/utils';
+import { useMetadataView } from '@/features/metadata/hooks/metadata-view';
+import { getColumnDisplayName } from '@/features/metadata/utils/column';
 import { gettext } from '@/utils/constants';
 import { getEventClassName } from '@/utils/dom';
 

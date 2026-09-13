@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AIIcon from '../../../metadata/components/metadata-details/ai-icon';
-import SettingsIcon from '../../../metadata/components/metadata-details/settings-icon';
-import { EVENT_BUS_TYPE } from '../../../metadata/constants';
-import { MetadataDetailsProvider } from '../../../metadata/hooks';
+import AIIcon from '@/features/metadata/components/metadata-details/ai-icon';
+import SettingsIcon from '@/features/metadata/components/metadata-details/settings-icon';
+import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
+import { MetadataDetailsProvider } from '@/features/metadata/hooks';
 import { siteRoot, thumbnailSizeForGrid, enableSeafileAI, fileServerRoot, MimetypesKind } from '../../../utils/constants';
 import ObjectUtils from '../../../utils/object';
 import { seafileAPI } from '../../../utils/seafile-api';

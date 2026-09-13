@@ -1,0 +1,42 @@
+import React, { useContext } from 'react';
+import { TagsProvider } from '@/features/tag/hooks';
+import { useMetadataStatus } from '@/hooks';
+import CollaboratorsProvider from './collaborators';
+import { MetadataAIOperationsProvider } from './metadata-ai-operation';
+
+const MetadataMiddlewareContext = React.createContext(null);
+
+export const MetadataMiddlewareProvider = ({ repoID, currentPath, repoInfo, selectTagsView, tagsChangedCallback, children }) => {
+  const { enableMetadata, enableTags } = useMetadataStatus();
+
+  return (
+    <MetadataMiddlewareContext.Provider value={{}}>
+      <CollaboratorsProvider repoID={repoID}>
+        <TagsProvider
+          repoID={repoID}
+          currentPath={currentPath}
+          repoInfo={repoInfo}
+          selectTagsView={selectTagsView}
+          tagsChangedCallback={tagsChangedCallback}
+        >
+          <MetadataAIOperationsProvider
+            repoID={repoID}
+            enableMetadata={enableMetadata}
+            enableTags={enableTags}
+            repoInfo={repoInfo}
+          >
+            {children}
+          </MetadataAIOperationsProvider>
+        </TagsProvider>
+      </CollaboratorsProvider>
+    </MetadataMiddlewareContext.Provider>
+  );
+};
+
+export const useMetadataMiddleware = () => {
+  const context = useContext(MetadataMiddlewareContext);
+  if (!context) {
+    throw new Error('\'MetadataMiddlewareContext\' is null');
+  }
+  return context;
+};

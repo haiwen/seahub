@@ -4,12 +4,12 @@ import { SdocWikiEditor, DocInfo, ErrorBoundary, EXTERNAL_EVENT } from '@seafile
 import classnames from 'classnames';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
+import { metadataAPI } from '@/features/metadata';
+import User from '@/features/metadata/model/user';
 import CustomDropdown from '../../components/dropdown';
 import Icon from '../../components/icon';
 import Loading from '../../components/loading';
 import Switch from '../../components/switch';
-import { metadataAPI } from '../../metadata';
-import User from '../../metadata/model/user';
 import { gettext, wikiPermission, wikiId, siteRoot, isPro, seadocServerUrl, mediaUrl } from '../../utils/constants';
 import SDocServerApi from '../../utils/sdoc-server-api';
 import { seafileAPI } from '../../utils/seafile-api';

@@ -1,7 +1,7 @@
 import React, { cloneElement, isValidElement, useCallback, useMemo, useRef } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { ROW_HEIGHT } from '@/metadata/constants';
+import { ROW_HEIGHT } from '@/features/metadata/constants';
 import { gettext } from '@/utils/constants';
 import OpIcon from '../../../../../../components/op-icon';
 import { Utils } from '../../../../../../utils/utils';

@@ -1,0 +1,455 @@
+import React, { forwardRef, useMemo, useCallback, useState, useRef, useEffect, useImperativeHandle } from 'react';
+import classnames from 'classnames';
+import CommonAddTool from '@/components/common-add-tool';
+import Icon from '@/components/icon';
+import SearchEmptyTip from '@/components/search-empty-tip';
+import SearchInput from '@/components/search-input';
+import { getRowById } from '@/components/sf-table/utils/table';
+import { checkIsTreeNodeShown, checkTreeNodeHasChildNodes, getNodesWithAncestors, getTreeNodeDepth, getTreeNodeId, getTreeNodeKey } from '@/components/sf-table/utils/tree';
+import { KeyCodes } from '@/constants';
+import { PRIVATE_COLUMN_KEY as TAG_PRIVATE_COLUMN_KEY, RECENTLY_USED_TAG_IDS } from '@/features/tag/constants';
+import { useTags } from '@/features/tag/hooks';
+import { getTagId, getTagName, getTagsByName, getTagByName, getTagColor } from '@/features/tag/utils/cell';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
+import { SELECT_OPTION_COLORS } from '../../../constants';
+import DeleteTag from './delete-tags';
+import TagItem from './tag-item';
+
+import '../../tag-ui/index.css';
+import './index.css';
+
+const TagsEditor = forwardRef(({
+  column,
+  value: oldValue,
+  onPressTab,
+  onSelect,
+  onDeselect,
+  canAddTag = false,
+  showRecentlyUsed = true,
+  customStyle = {},
+}, ref) => {
+  const { tagsData, context, addTag } = useTags();
+
+  const [value, setValue] = useState((oldValue || []).map(item => item?.row_id).filter(item => getRowById(tagsData, item)));
+  const [searchValue, setSearchValue] = useState('');
+  const [highlightNodeIndex, setHighlightNodeIndex] = useState(-1);
+  const [maxItemNum, setMaxItemNum] = useState(0);
+  const [nodes, setNodes] = useState([]);
+  const [keyNodeFoldedMap, setKeyNodeFoldedMap] = useState({});
+  const [searchedKeyNodeFoldedMap, setSearchedKeyNodeFoldedMap] = useState({});
+  const [recentlyUsed, setRecentlyUsed] = useState([]);
+  const itemHeight = 30;
+  const editorContainerRef = useRef(null);
+
+  const localStorage = context.localStorage;
+
+  const tags = useMemo(() => {
+    if (!tagsData) return [];
+    return tagsData?.rows || [];
+  }, [tagsData]);
+
+  const displayTags = useMemo(() => getTagsByName(tags, searchValue), [searchValue, tags]);
+  const recentlyUsedTags = useMemo(() => recentlyUsed, [recentlyUsed]);
+  const hasExpandableNodes = useMemo(() => {
+    return nodes.some(node => checkTreeNodeHasChildNodes(node));
+  }, [nodes]);
+
+  const isShowCreateBtn = useMemo(() => {
+    if (!canAddTag) return false;
+    if (!searchValue) return false;
+    return !getTagByName(displayTags, searchValue);
+  }, [displayTags, searchValue, canAddTag]);
+
+  const style = useMemo(() => {
+    return { width: column.width };
+  }, [column]);
+
+  useImperativeHandle(ref, () => ({
+    getValue: () => {
+      return { [column.key]: value.map(id => ({ row_id: id })) };
+    }
+  }));
+
+  const onChangeSearch = useCallback((newSearchValue) => {
+    if (searchValue === newSearchValue) return;
+    setSearchValue(newSearchValue);
+  }, [searchValue]);
+
+  const handleSelectTags = useCallback((tagId) => {
+    const newValue = value.slice(0);
+    let optionIdx = value.indexOf(tagId);
+    if (optionIdx > -1) {
+      newValue.splice(optionIdx, 1);
+      onDeselect(tagId);
+    } else {
+      newValue.push(tagId);
+      onSelect(tagId);
+    }
+    setValue(newValue);
+
+    const ids = recentlyUsed.map(item => getTagId(item));
+    if (ids.indexOf(tagId) > -1) return;
+    const tag = getRowById(tagsData, tagId);
+    const updated = [tag, ...recentlyUsed.filter(item => getTagId(item) !== tagId)].slice(0, 10);
+    setRecentlyUsed(updated);
+
+    const newIds = updated.map(tag => getTagId(tag));
+    localStorage.setItem(RECENTLY_USED_TAG_IDS, JSON.stringify(newIds));
+  }, [value, tagsData, recentlyUsed, localStorage, onSelect, onDeselect]);
+
+  const onTreeMenuMouseEnter = useCallback((i) => {
+    setHighlightNodeIndex(i);
+  }, []);
+
+  const onTreeMenuMouseLeave = useCallback(() => {
+    setHighlightNodeIndex(-1);
+  }, []);
+
+  const createTag = useCallback((event) => {
+    event && event.stopPropagation();
+    event && event.nativeEvent.stopImmediatePropagation();
+    const defaultOptions = SELECT_OPTION_COLORS.slice(0, 24);
+    const defaultOption = defaultOptions[Math.floor(Math.random() * defaultOptions.length)];
+    addTag({ [TAG_PRIVATE_COLUMN_KEY.TAG_NAME]: searchValue, [TAG_PRIVATE_COLUMN_KEY.TAG_COLOR]: defaultOption.COLOR }, {
+      success_callback: (operation) => {
+        const tags = operation.tags?.map(tag => getTagId(tag));
+        const newValue = [...value, ...tags];
+        onSelect(tags[0]);
+        setValue(newValue);
+
+        const updatedRecentlyUsed = [...tags.map(tag => getRowById(tagsData, tag)), ...recentlyUsed].slice(0, 10);
+        setRecentlyUsed(updatedRecentlyUsed);
+        const ids = updatedRecentlyUsed.map(item => getTagId(item));
+        localStorage && localStorage.setItem(RECENTLY_USED_TAG_IDS, JSON.stringify(ids));
+      },
+      fail_callback: () => {
+
+      },
+    });
+  }, [value, searchValue, tagsData, localStorage, recentlyUsed, addTag, onSelect]);
+
+  const getMaxItemNum = useCallback(() => {
+    let selectContainerStyle = getComputedStyle(editorContainerRef.current, null);
+    let maxSelectItemNum = Math.floor(parseInt(selectContainerStyle.maxHeight) / parseInt(itemHeight));
+    return maxSelectItemNum - 1;
+  }, [editorContainerRef]);
+
+  const onEnter = useCallback((event) => {
+    event.preventDefault();
+    let tag;
+    if (highlightNodeIndex > -1 && nodes[highlightNodeIndex]) {
+      const tagId = getTreeNodeId(nodes[highlightNodeIndex]);
+      tag = getRowById(tagsData, tagId);
+    }
+    if (tag) {
+      const newTagId = getTagId(tag);
+      handleSelectTags(newTagId);
+      return;
+    }
+    if (isShowCreateBtn) {
+      createTag();
+    }
+  }, [isShowCreateBtn, handleSelectTags, createTag, tagsData, highlightNodeIndex, nodes]);
+
+  const updateScroll = useCallback((index) => {
+    const visibleStart = Math.floor(editorContainerRef.current.scrollTop / itemHeight);
+    const visibleEnd = visibleStart + maxItemNum;
+
+    if (index < visibleStart) {
+      editorContainerRef.current.scrollTop -= itemHeight;
+    } else if (index >= visibleEnd) {
+      editorContainerRef.current.scrollTop += itemHeight;
+    }
+  }, [maxItemNum]);
+
+  const onUpArrow = useCallback((event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const newIndex = highlightNodeIndex - 1;
+    if (newIndex < 0) return;
+    const pos = recentlyUsedTags.length > 0 ? newIndex + recentlyUsedTags.length + 2 : newIndex;
+    updateScroll(pos);
+    setHighlightNodeIndex(newIndex);
+  }, [recentlyUsedTags, highlightNodeIndex, updateScroll]);
+
+  const onDownArrow = useCallback((event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const newIndex = highlightNodeIndex + 1;
+    if (newIndex >= nodes.length) return;
+    const pos = recentlyUsedTags.length > 0 ? newIndex + recentlyUsedTags.length + 2 : newIndex;
+    updateScroll(pos);
+    setHighlightNodeIndex(newIndex);
+  }, [nodes, recentlyUsedTags, highlightNodeIndex, updateScroll]);
+
+  const onHotKey = useCallback((event) => {
+    if (event.keyCode === KeyCodes.Enter) {
+      onEnter(event);
+    } else if (event.keyCode === KeyCodes.UpArrow) {
+      onUpArrow(event);
+    } else if (event.keyCode === KeyCodes.DownArrow) {
+      onDownArrow(event);
+    } else if (event.keyCode === KeyCodes.Tab) {
+      if (Utils.isFunction(onPressTab)) {
+        onPressTab(event);
+      }
+    }
+  }, [onEnter, onUpArrow, onDownArrow, onPressTab]);
+
+  const onKeyDown = useCallback((event) => {
+    if (
+      event.keyCode === KeyCodes.ChineseInputMethod ||
+      event.keyCode === KeyCodes.Enter ||
+      event.keyCode === KeyCodes.LeftArrow ||
+      event.keyCode === KeyCodes.RightArrow ||
+      event.keyCode === KeyCodes.Space
+    ) {
+      event.stopPropagation();
+    }
+  }, []);
+
+  const getShownNodes = useCallback(() => {
+    const tree = tagsData?.rows_tree;
+    if (!Array.isArray(tree)) {
+      return [];
+    }
+    let shownNodes = [];
+
+    tree.forEach((node, index) => {
+      const nodeId = getTreeNodeId(node);
+      const row = getRowById(tagsData, nodeId);
+      if (!row) return;
+      const nodeKey = getTreeNodeKey(node);
+      if (row && checkIsTreeNodeShown(nodeKey, keyNodeFoldedMap)) {
+        shownNodes.push({
+          ...node,
+          node_index: index,
+        });
+      }
+    });
+    return shownNodes;
+  }, [tagsData, keyNodeFoldedMap]);
+
+  const getSearchedNodes = useCallback(() => {
+    const tree = tagsData?.rows_tree;
+    if (!Array.isArray(tree)) {
+      return [];
+    }
+    let searchedNodes = [];
+    const processedNodes = new Set();
+
+    tree.forEach((node) => {
+      const nodeId = getTreeNodeId(node);
+      const row = getRowById(tagsData, nodeId);
+      if (!row) return;
+
+      const value = searchValue.toLowerCase();
+      const tagName = getTagName(row).toLowerCase();
+      if (!tagName.includes(value)) return;
+
+      const nodesWithAncestors = getNodesWithAncestors(node, tree);
+
+      nodesWithAncestors.forEach(ancestor => {
+        const ancestorKey = getTreeNodeKey(ancestor);
+
+        if (!processedNodes.has(ancestorKey)) {
+          if (checkIsTreeNodeShown(ancestorKey, searchedKeyNodeFoldedMap)) {
+            searchedNodes.push(ancestor);
+            processedNodes.add(ancestorKey);
+          }
+        }
+      });
+
+      const currentNodeKey = getTreeNodeKey(node);
+      if (!processedNodes.has(currentNodeKey)) {
+        searchedNodes.push(node);
+        processedNodes.add(currentNodeKey);
+      }
+    });
+
+    return searchedNodes;
+  }, [tagsData, searchValue, searchedKeyNodeFoldedMap]);
+
+  const toggleExpandTreeNode = useCallback((e, nodeKey) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!searchValue) {
+      const updatedKeyNodeFoldedMap = { ...keyNodeFoldedMap };
+      if (updatedKeyNodeFoldedMap[nodeKey]) {
+        delete updatedKeyNodeFoldedMap[nodeKey];
+      } else {
+        updatedKeyNodeFoldedMap[nodeKey] = true;
+      }
+      setKeyNodeFoldedMap(updatedKeyNodeFoldedMap);
+    } else {
+      const updatedSearchedKeyNodeFoldedMap = { ...searchedKeyNodeFoldedMap };
+      if (updatedSearchedKeyNodeFoldedMap[nodeKey]) {
+        delete updatedSearchedKeyNodeFoldedMap[nodeKey];
+      } else {
+        updatedSearchedKeyNodeFoldedMap[nodeKey] = true;
+      }
+      setSearchedKeyNodeFoldedMap(updatedSearchedKeyNodeFoldedMap);
+    }
+  }, [keyNodeFoldedMap, searchedKeyNodeFoldedMap, searchValue]);
+
+  useEffect(() => {
+    if (editorContainerRef.current) {
+      setMaxItemNum(getMaxItemNum());
+    }
+    document.addEventListener('keydown', onHotKey, true);
+    return () => {
+      document.removeEventListener('keydown', onHotKey, true);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onHotKey]);
+
+  useEffect(() => {
+    const saved = localStorage && localStorage.getItem(RECENTLY_USED_TAG_IDS);
+    const ids = saved ? JSON.parse(saved) : [];
+    const tags = ids.map(id => getRowById(tagsData, id)).filter(Boolean);
+    setRecentlyUsed(tags);
+  }, [tagsData, localStorage]);
+
+  useEffect(() => {
+    if (tagsData?.rows_tree) {
+      const updatedKeyNodeFoldedMap = tagsData.rows_tree.reduce((acc, node) => {
+        const nodeKey = getTreeNodeKey(node);
+        if (checkTreeNodeHasChildNodes(node)) {
+          acc[nodeKey] = true;
+        }
+        return acc;
+      }, {});
+      setKeyNodeFoldedMap(updatedKeyNodeFoldedMap);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (tagsData?.rows_tree) {
+      const shownNodes = searchValue ? getSearchedNodes() : getShownNodes();
+      setNodes(shownNodes);
+    }
+  }, [tagsData, searchValue, getSearchedNodes, getShownNodes]);
+
+  const renderRecentlyUsed = useCallback(() => {
+    if (recentlyUsedTags.length === 0) return null;
+
+    return (
+      <div className="sf-metadata-ui-tags-container">
+        {recentlyUsedTags.map((tag, i) => {
+          const tagId = getTagId(tag);
+          const tagName = getTagName(tag);
+          const tagColor = getTagColor(tag);
+          const isSelected = value.includes(tagId);
+          return (
+            <div
+              key={tagId}
+              className={classnames('sf-metadata-ui-tag', {
+                'sf-metadata-ui-tag-selected': isSelected,
+              })}
+              title={tagName}
+              onClick={() => handleSelectTags(tagId)}
+              tabIndex={0}
+              role="button"
+              onKeyDown={Utils.onKeyDown}
+            >
+              <span className="sf-metadata-ui-tag-color" style={{ backgroundColor: tagColor }}></span>
+              <span className="sf-metadata-ui-tag-text">{tagName}</span>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }, [recentlyUsedTags, value, handleSelectTags]);
+
+  const renderOptions = useCallback(() => {
+    if (nodes.length === 0) {
+      const noOptionsTip = searchValue ? gettext('No tags available') : gettext('No tag');
+      return <SearchEmptyTip text={noOptionsTip} />;
+    }
+    const isRecentlyUsedVisible = showRecentlyUsed && recentlyUsedTags.length > 0 && !searchValue;
+    return (
+      <>
+        {isRecentlyUsedVisible && (
+          <>
+            <div className="sf-metadata-tags-editor-title">{gettext('Recently used tags')}</div>
+            {renderRecentlyUsed()}
+            <div className="sf-metadata-tags-editor-divider"></div>
+          </>
+        )}
+        {!searchValue && <div className="sf-metadata-tags-editor-title">{gettext('All tags')}</div>}
+        {nodes.map((node, i) => {
+          const nodeKey = getTreeNodeKey(node);
+          const tagId = getTreeNodeId(node);
+          const tag = getRowById(tagsData, tagId);
+          if (!tag) return null;
+
+          return (
+            <TagItem
+              node={node}
+              key={`${nodeKey}_${i}`}
+              tag={tag}
+              isSelected={value.includes(tagId)}
+              highlight={highlightNodeIndex === i}
+              onSelect={handleSelectTags}
+              onMouseEnter={() => onTreeMenuMouseEnter(i)}
+              onMouseLeave={onTreeMenuMouseLeave}
+              depth={getTreeNodeDepth(node)}
+              hasChildren={checkTreeNodeHasChildNodes(node)}
+              hasExpandableNodes={hasExpandableNodes}
+              isFolded={!searchValue ? keyNodeFoldedMap[nodeKey] : searchedKeyNodeFoldedMap[nodeKey]}
+              onToggleExpand={(e) => toggleExpandTreeNode(e, nodeKey)}
+            />
+          );
+        })}
+      </>
+    );
+  }, [nodes, tagsData, value, highlightNodeIndex, searchValue, recentlyUsedTags, keyNodeFoldedMap, searchedKeyNodeFoldedMap, showRecentlyUsed, renderRecentlyUsed, toggleExpandTreeNode, handleSelectTags, onTreeMenuMouseEnter, onTreeMenuMouseLeave, hasExpandableNodes]);
+
+  return (
+    <div className="sf-metadata-tags-editor sf-metadata-tags-tree-container popover" style={{ ...style, ...customStyle }}>
+      <DeleteTag value={value} tags={tagsData} onDelete={handleSelectTags} />
+      <div className="sf-metadata-search-tags-container">
+        <SearchInput
+          placeholder={gettext('Search tag')}
+          onKeyDown={onKeyDown}
+          onChange={onChangeSearch}
+          autoFocus={true}
+          className="sf-metadata-search-tags"
+          isClearable={true}
+          style={{ width: '100%' }}
+          components={{
+            ClearIndicator: ({ clearValue }) => (
+              <span className="d-flex search-control attr-action-icon" aria-label={gettext('Clear')} onClick={clearValue}>
+                <Icon symbol="close" />
+              </span>
+            )
+          }}
+          clearValue={() => setSearchValue('')}
+        />
+      </div>
+      <div className="sf-metadata-tags-editor-container" ref={editorContainerRef}>
+        {renderOptions()}
+      </div>
+      {isShowCreateBtn && (
+        <CommonAddTool
+          callBack={createTag}
+          footerName={(
+            <>
+              <span className="label">{gettext('Add tag')} </span>
+              <span className="add-tag-value">{searchValue}</span>
+            </>
+          )}
+          className="add-search-result"
+        />
+      )}
+    </div>
+  );
+});
+
+TagsEditor.displayName = 'TagsEditor';
+
+export default TagsEditor;

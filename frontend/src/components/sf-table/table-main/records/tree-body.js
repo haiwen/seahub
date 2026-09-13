@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { EVENT_BUS_TYPE } from '@/metadata/constants';
+import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
 import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
 import EventBus from '../../../event-bus';
 import Loading from '../../../loading';

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { SeafileMetadata } from '@/features/metadata';
+import { TagsView } from '@/features/tag';
 import { SIDE_PANEL_FOLDED_WIDTH } from '../../constants';
-import { SeafileMetadata } from '../../metadata';
-import { TagsView } from '../../tag';
 import { mediaUrl } from '../../utils/constants';
 import ResizeBar from '../resize-bar';
 import { DRAG_HANDLER_HEIGHT, MAX_SIDE_PANEL_RATE, MIN_SIDE_PANEL_RATE } from '../resize-bar/constants';

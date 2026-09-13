@@ -1,0 +1,405 @@
+import React, { useMemo, useState } from 'react';
+import { DropdownItem, Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
+import { setPendingAttachments } from '@/components/dir-view-mode/dir-chat/hooks/ai-chat-tools';
+import { AttachmentObject } from '@/components/dir-view-mode/dir-chat/models';
+import { DROPDOWN_SUBMENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
+import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '@/components/event-bus';
+import Icon from '@/components/icon';
+import { GridUtilsAdapter } from '@/components/sf-table/utils/grid-utils-adapter';
+import { CellType, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '@/features/metadata/constants';
+import { EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS } from '@/features/metadata/constants/column/private';
+import { POPUP_EDITOR_COLUMN_TYPES } from '@/features/metadata/constants/column/type';
+import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '@/features/metadata/utils/cell';
+import { openInNewTab, openParentFolder } from '@/features/metadata/utils/file';
+import { buildTableMenuOptions } from '@/features/metadata/utils/menu-builder';
+import { checkIsDir } from '@/features/metadata/utils/row';
+import TextTranslation from '@/utils/text-translation';
+import { Utils } from '@/utils/utils';
+import Editor from '../../components/cell-editors/editor';
+import CellFormatter from '../../components/cell-formatter';
+import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME } from '../../constants/column/icon';
+import { getColumnDisplayName } from '../../utils/column';
+
+export const adaptMetadataColumnsToSfTable = (repoID, repoInfo, metadataColumns) => {
+  if (!Array.isArray(metadataColumns)) {
+    return metadataColumns;
+  }
+
+  return metadataColumns.map(column => {
+    const displayName = getColumnDisplayName(column.key, column.name);
+    const iconName = COLUMNS_ICON_CONFIG[column.type] || 'text';
+    const iconTooltip = COLUMNS_ICON_NAME[column.type] || 'Text';
+    const is_private = PRIVATE_COLUMN_KEYS.includes(column.key);
+
+    return {
+      ...column,
+      display_name: displayName,
+      icon_name: iconName,
+      icon_tooltip: iconTooltip,
+      formatter: <CellFormatter repoID={repoID} />,
+      editor: <Editor repoInfo={repoInfo} />,
+      is_name_column: column.type === CellType.FILE_NAME,
+      is_popup_editor: POPUP_EDITOR_COLUMN_TYPES.includes(column.type),
+      is_support_preview: [CellType.FILE_NAME].includes(column?.type),
+      is_support_direct_edit: [CellType.CHECKBOX].includes(column?.type),
+      editable_via_click_cell: is_private ? EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS.includes(column.key) : true,
+      is_private,
+    };
+  });
+};
+
+/**
+ * GridUtils and PasteUtils adapter for metadata table.
+ * Provides a unified interface for drag-fill and paste operations.
+ */
+export { GridUtilsAdapter } from '@/components/sf-table/utils/grid-utils-adapter';
+export { GridUtilsAdapter as MetadataGridUtilsAdapter } from '@/components/sf-table/utils/grid-utils-adapter';
+
+// Create context menu options for SFTable using metadata's menu pattern
+// This replicates the logic from metadata/views/table/context-menu.js
+export const createMetadataContextMenuOptions = ({
+  repoID,
+  readOnly,
+  enableFaceRecognition,
+  enableTags,
+  recordMetrics,
+  selectedPosition,
+  selectedRange,
+  recordGetterByIndex,
+  isGroupView,
+  metadata,
+  deleteRecords,
+  updateRecordDetails,
+  updateFaceRecognition,
+  updateRecordDescription,
+  onOCR,
+  generateFileTags,
+  hideMenu,
+  onClearSelected,
+}) => {
+  const metadataStatus = {
+    enableFaceRecognition,
+    enableGenerateDescription: metadata?.columns?.some(c => c.key === PRIVATE_COLUMN_KEY.FILE_DESCRIPTION) || false,
+    enableTags,
+  };
+
+  const selectedIds = recordMetrics ? Object.keys(recordMetrics.idSelectedRecordMap || {}).filter(id => recordMetrics.idSelectedRecordMap[id]) : [];
+  let records = [];
+  let isSelectedRange = false;
+  let isNameColumn = false;
+  let areRecordsInSameFolder = true;
+  let isMultiple = false;
+
+  // Handle MULTIPLE selection FIRST (via checkbox/row selection) - priority over selectedPosition
+  if (selectedIds.length > 1) {
+    records = selectedIds.map(id => metadata?.id_row_map?.[id]).filter(Boolean);
+    isMultiple = records.length > 1;
+
+    if (isMultiple) {
+      const firstPath = records[0] ? getParentDirFromRecord(records[0]) : '';
+      areRecordsInSameFolder = records.every(record => getParentDirFromRecord(record) === firstPath);
+    }
+    isSelectedRange = false;
+  } else if (selectedRange) {
+    // Handle range selection second (from drag selection)
+    const { topLeft, bottomRight } = selectedRange;
+    for (let i = topLeft.rowIdx; i <= bottomRight.rowIdx; i++) {
+      const record = recordGetterByIndex ? recordGetterByIndex({ isGroupView, groupRecordIndex: topLeft.groupRecordIndex, recordIndex: i }) : null;
+      if (record) {
+        records.push(record);
+      }
+    }
+    isMultiple = records.length > 1;
+    isSelectedRange = true;
+  } else if (selectedPosition && selectedPosition.rowIdx !== undefined) {
+    // Handle single cell selection (lowest priority)
+    const { groupRecordIndex, rowIdx: recordIndex, idx } = selectedPosition;
+    const column = metadata?.columns?.[idx];
+    isNameColumn = column && (column.key === PRIVATE_COLUMN_KEY.FILE_NAME);
+
+    const record = recordGetterByIndex ? recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex }) : null;
+    if (record) {
+      records = [record];
+    }
+    isMultiple = false;
+  }
+
+  if (records.length === 0) {
+    return [];
+  }
+
+  const menuOptions = buildTableMenuOptions(
+    records,
+    readOnly,
+    metadataStatus,
+    isMultiple,
+    areRecordsInSameFolder,
+    isNameColumn,
+    isSelectedRange
+  );
+
+  // Helper to get current records for event handling
+  const singleRecord = records.length === 1 ? records[0] : null;
+
+  // Handle option click
+  const handleOptionClick = (option, event) => {
+    event?.stopPropagation();
+    event?.preventDefault();
+
+    const eventBus = window.sfMetadataContext?.eventBus;
+    if (!eventBus) return;
+
+    switch (option.key) {
+      case TextTranslation.OPEN_FILE_IN_NEW_TAB.key:
+      case TextTranslation.OPEN_FOLDER_IN_NEW_TAB.key:
+        if (singleRecord) {
+          openInNewTab(repoID, singleRecord);
+        }
+        break;
+      case TextTranslation.OPEN_PARENT_FOLDER.key:
+        if (singleRecord) {
+          openParentFolder(singleRecord);
+        }
+        break;
+      case TextTranslation.RENAME.key:
+        if (singleRecord && singleRecord._id) {
+          eventBus.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR);
+        }
+        break;
+      case TextTranslation.MOVE.key:
+      case TextTranslation.MOVE_FILE.key:
+      case TextTranslation.MOVE_FOLDER.key:
+        if (records.length > 0) {
+          eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, records);
+        }
+        break;
+      case TextTranslation.COPY.key:
+        if (records.length > 0) {
+          eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_COPY_DIALOG, records);
+        }
+        break;
+      case TextTranslation.DOWNLOAD.key:
+        if (records.length > 0) {
+          const recordsIds = records.map(r => getRecordIdFromRecord(r)).filter(Boolean);
+          if (recordsIds.length > 0) {
+            eventBus.dispatch(EVENT_BUS_TYPE.DOWNLOAD_RECORDS, recordsIds);
+          }
+        }
+        break;
+      case TextTranslation.CHAT_WITH_AI.key: {
+        const attachments = records
+          .filter((record) => !checkIsDir(record))
+          .map((record) => {
+            const fileName = getFileNameFromRecord(record);
+            const parentDir = getParentDirFromRecord(record);
+            return new AttachmentObject({
+              repo_id: repoID,
+              path: Utils.joinPath(parentDir, fileName),
+              name: fileName,
+            });
+          });
+
+        setPendingAttachments(attachments, !isMultiple);
+        globalEventBus.dispatch(DIR_EVENT_BUS_TYPE.SWITCH_TO_CHAT_VIEW);
+        if (attachments.length > 0) {
+          EventBus.getInstance().dispatch(DIR_EVENT_BUS_TYPE.CHAT_ATTACH_FILES, {
+            attachments,
+            reset: !isMultiple,
+          });
+        }
+        break;
+      }
+      case TextTranslation.DELETE.key:
+      case TextTranslation.DELETE_FILE.key:
+      case TextTranslation.DELETE_FOLDER.key:
+      case TextTranslation.DELETE_SELECTED.key:
+        if (records.length > 0) {
+          if (records.some(r => checkIsDir(r))) {
+            // Has folder - need delete dialog (cannot handle in this simple function)
+            eventBus.dispatch(EVENT_BUS_TYPE.DELETE_RECORDS, records.map(r => getRecordIdFromRecord(r)).filter(Boolean));
+          } else {
+            const recordsIds = records.map(r => getRecordIdFromRecord(r)).filter(Boolean);
+            if (recordsIds.length > 0 && deleteRecords) {
+              deleteRecords(recordsIds);
+            }
+          }
+        }
+        break;
+      case TextTranslation.CLEAR_SELECTED.key:
+        onClearSelected?.();
+        break;
+      case TextTranslation.COPY_SELECTED.key:
+        // Handled by SFTable's copy mechanism
+        break;
+      case TextTranslation.EXTRACT_FILE_DETAIL.key:
+        if (singleRecord) {
+          updateRecordDetails([singleRecord]);
+        }
+        break;
+      case TextTranslation.EXTRACT_FILE_DETAILS.key:
+        if (records.length > 0) {
+          updateRecordDetails(records);
+        }
+        break;
+      case TextTranslation.DETECT_FACES.key:
+        if (records.length > 0) {
+          updateFaceRecognition(records);
+        }
+        break;
+      case TextTranslation.GENERATE_DESCRIPTION.key:
+        if (singleRecord) {
+          updateRecordDescription(singleRecord);
+        }
+        break;
+      case TextTranslation.GENERATE_TAGS.key:
+        if (singleRecord) {
+          generateFileTags(singleRecord);
+        }
+        break;
+      case TextTranslation.EXTRACT_TEXT.key:
+        if (singleRecord) {
+          onOCR(singleRecord, 'sf-table-rdg-selected');
+        }
+        break;
+      default:
+        break;
+    }
+
+    hideMenu?.(false);
+  };
+
+  // Inner component: owns its own isOpen state so hover works
+  const SubMenuDropdown = ({ option }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const closeTimerRef = React.useRef(null);
+
+    const onMouseEnter = (e) => {
+      e.stopPropagation();
+      if (closeTimerRef.current) {
+        clearTimeout(closeTimerRef.current);
+        closeTimerRef.current = null;
+      }
+      setIsOpen(true);
+    };
+
+    const onMouseLeave = (e) => {
+      e.stopPropagation();
+      closeTimerRef.current = setTimeout(() => {
+        setIsOpen(false);
+        closeTimerRef.current = null;
+      }, 300);
+    };
+
+    return (
+      <Dropdown
+        key={option.key}
+        direction="right"
+        className="w-100"
+        isOpen={isOpen}
+        toggle={() => { }}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+      >
+        <DropdownToggle
+          tag="span"
+          className="dropdown-item"
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+        >
+          <span className="mr-auto">{option.value}</span>
+          <Icon symbol="down" className="rotate-270" />
+        </DropdownToggle>
+        <DropdownMenu
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+          modifiers={[DROPDOWN_SUBMENU_OFFSET_DEFAULT]}
+        >
+          {option.subOpList.map((subItem, subIndex) => {
+            if (subItem === 'Divider') {
+              return <DropdownItem key={`sub-divider-${subIndex}`} divider />;
+            }
+            return (
+              <DropdownItem key={subItem.key} toggle={false} onClick={(e) => { e.stopPropagation(); handleOptionClick(subItem, e); }}>
+                {subItem.value}
+              </DropdownItem>
+            );
+          })}
+        </DropdownMenu>
+      </Dropdown >
+    );
+  };
+
+  // Render menu options as React elements
+  const renderOptions = () => {
+    return menuOptions.map((option, index) => {
+      if (option === 'Divider') {
+        return <DropdownItem key={`divider-${index}`} divider />;
+      }
+      if (option.subOpList) {
+        return <SubMenuDropdown key={option.key} option={option} />;
+      }
+      return (
+        <DropdownItem key={option.key} toggle={false} onClick={(e) => { e.stopPropagation(); handleOptionClick(option, e); }}>
+          {option.value}
+        </DropdownItem>
+      );
+    });
+  };
+
+  return renderOptions();
+};
+
+export const useMetadataTableAdapter = ({
+  repoID,
+  metadata,
+  readOnly,
+  modifyRecord,
+  modifyRecords,
+  recordGetterByIndex,
+  recordGetterById,
+  modifyColumnData,
+  updateFileTags,
+  deleteRecords,
+  updateRecordDetails,
+  updateFaceRecognition,
+  updateRecordDescription,
+  onOCR,
+  generateFileTags,
+  tagsData,
+}) => {
+  return useMemo(() => {
+    const api = {
+      modifyRecord,
+      modifyRecords,
+      recordGetterByIndex,
+      recordGetterById,
+      modifyColumnData,
+      updateFileTags,
+      getTagsData: () => tagsData || {},
+      getCollaborators: () => {
+        if (!window.sfMetadata) return [];
+        return window.sfMetadata.getCollaborators() || [];
+      },
+    };
+    const adapter = new GridUtilsAdapter({
+      renderRecordsIds: metadata?.view?.rows || [],
+      api,
+    });
+
+    // Attach context menu options creator
+    adapter.createContextMenuOptions = (props) => createMetadataContextMenuOptions({
+      ...props,
+      repoID,
+      metadata,
+      readOnly,
+      deleteRecords,
+      updateRecordDetails,
+      updateFaceRecognition,
+      updateRecordDescription,
+      onOCR,
+      generateFileTags,
+    });
+
+    return adapter;
+  }, [modifyRecord, modifyRecords, recordGetterByIndex, recordGetterById, modifyColumnData, updateFileTags, metadata, repoID, readOnly, deleteRecords, updateRecordDetails, updateFaceRecognition, updateRecordDescription, onOCR, generateFileTags, tagsData]);
+};

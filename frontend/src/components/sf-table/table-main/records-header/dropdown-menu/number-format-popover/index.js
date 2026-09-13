@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import CustomizePopover from '@/components/customize-popover';
 import CustomizeSelect from '@/components/customize-select';
 import Switch from '@/components/switch';
-import { DEFAULT_NUMBER_FORMAT } from '@/metadata/constants';
+import { DEFAULT_NUMBER_FORMAT } from '@/features/metadata/constants';
 import { gettext } from '@/utils/constants';
 
 import './index.css';

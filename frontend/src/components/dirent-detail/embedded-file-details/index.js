@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { MetadataContext } from '../../../metadata';
-import AIIcon from '../../../metadata/components/metadata-details/ai-icon';
-import SettingsIcon from '../../../metadata/components/metadata-details/settings-icon';
-import { MetadataDetailsProvider } from '../../../metadata/hooks';
-import { useTags } from '../../../tag/hooks';
+import { MetadataContext } from '@/features/metadata';
+import AIIcon from '@/features/metadata/components/metadata-details/ai-icon';
+import SettingsIcon from '@/features/metadata/components/metadata-details/settings-icon';
+import { MetadataDetailsProvider } from '@/features/metadata/hooks';
+import { useTags } from '@/features/tag/hooks';
 import { enableSeafileAI } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';

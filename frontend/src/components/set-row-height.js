@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ROW_HEIGHT } from '../metadata/constants';
+import { ROW_HEIGHT } from '@/features/metadata/constants';
 import { gettext } from '../utils/constants';
 import CustomDropdown from './dropdown';
 import Icon from './icon';

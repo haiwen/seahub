@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { MetadataTreeView, useMetadata } from '@/features/metadata';
 import { useMetadataStatus } from '../../../hooks';
-import { MetadataTreeView, useMetadata } from '../../../metadata';
 import { gettext } from '../../../utils/constants';
 import { eventBus, EVENT_BUS_TYPE } from '../../event-bus';
 import TreeSection from '../../tree-section';

@@ -1,7 +1,7 @@
 import { v4 } from 'uuid';
-import CTimeFormatter from '../../../metadata/components/cell-formatter/ctime';
-import NumberFormatter from '../../../metadata/components/cell-formatter/number';
-import TextFormatter from '../../../metadata/components/cell-formatter/text';
+import CTimeFormatter from '@/features/metadata/components/cell-formatter/ctime';
+import NumberFormatter from '@/features/metadata/components/cell-formatter/number';
+import TextFormatter from '@/features/metadata/components/cell-formatter/text';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import FileName from './formatter/file-name';

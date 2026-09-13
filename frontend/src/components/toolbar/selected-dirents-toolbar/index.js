@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { EVENT_BUS_TYPE as TABLE_EVENT_BUS_TYPE } from '@/metadata/constants';
+import { EVENT_BUS_TYPE as TABLE_EVENT_BUS_TYPE } from '@/features/metadata/constants';
 import OpElement from '../../../components/op-element';
 import OpIcon from '../../../components/op-icon';
 import { Dirent } from '../../../models';

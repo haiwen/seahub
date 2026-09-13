@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { EVENT_BUS_TYPE } from '@/metadata/constants';
+import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
 import { getEventClassName } from '../../../../utils/dom';
 import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../../utils/keyboard-utils';
 import { Utils } from '../../../../utils/utils';

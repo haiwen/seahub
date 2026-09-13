@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
+import { getFileById, getFileObj, filterTagFileOperations } from '@/features/tag/utils/file';
 import OpElement from '../../components/op-element';
 import OpIcon from '../../components/op-icon';
-import { EVENT_BUS_TYPE } from '../../metadata/constants';
-import { getFileById, getFileObj, filterTagFileOperations } from '../../tag/utils/file';
 import { gettext } from '../../utils/constants';
 import TextTranslation from '../../utils/text-translation';
 import { getDirentItemMenuList, getTagFilesOperations } from '../dir-view-mode/utils/contextMenuUtils';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { PRIVATE_COLUMN_KEY } from '@/metadata/constants';
+import { PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
 import Icon from '../components/icon';
 import { DIR_COLUMN_KEYS } from '../constants/dir-column-config';
 import { gettext } from './constants';

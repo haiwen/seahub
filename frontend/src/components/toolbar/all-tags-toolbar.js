@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
 import OpElement from '../../components/op-element';
 import OpIcon from '../../components/op-icon';
-import { EVENT_BUS_TYPE } from '../../metadata/constants';
 import { gettext } from '../../utils/constants';
 import TextTranslation from '../../utils/text-translation';
 import CustomDropdown from '../dropdown';
