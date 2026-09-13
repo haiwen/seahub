@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { getDepartmentMenuItems } from '../../../components/admin/departments/department-menu';
 import MemberItem from '../../../components/admin/departments/member-item';
+import RepoItem from '../../../components/admin/departments/repo-item';
 import CustomDropdown from '../../../components/dropdown';
 import EmptyTip from '../../../components/empty-tip';
 import Icon from '../../../components/icon';
 import Loading from '../../../components/loading';
 import SortMenu from '../../../components/sort-menu';
 import { gettext } from '../../../utils/constants';
-import RepoItem from './repo-item';
 
 const propTypes = {
   rootNodes: PropTypes.array,

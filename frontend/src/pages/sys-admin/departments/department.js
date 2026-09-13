@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { getDepartmentMenuItems } from '../../../components/admin/departments/department-menu';
 import MemberItem from '../../../components/admin/departments/member-item';
+import RepoItem from '../../../components/admin/departments/repo-item';
 import CustomDropdown from '../../../components/dropdown';
 import EmptyTip from '../../../components/empty-tip';
 import Icon from '../../../components/icon';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import SortMenu from '../../../components/sort-menu';
-import { gettext } from '../../../utils/constants';
-import RepoItem from './repo-item';
+import { enableSysAdminViewRepo, gettext } from '../../../utils/constants';
 
 const propTypes = {
   rootNodes: PropTypes.array,
@@ -217,6 +217,8 @@ class Department extends React.Component {
                       repo={repo}
                       groupID={this.props.checkedDepartmentId}
                       onDeleteRepo={this.onDeleteRepo}
+                      isSysAdmin={true}
+                      enableSysAdminViewRepo={enableSysAdminViewRepo}
                     />
                   );
                 })}

@@ -1,18 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import DeleteRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-repo-dialog';
-import ModalPortal from '../../../components/modal-portal';
-import OpIcon from '../../../components/op-icon';
-import { siteRoot, gettext } from '../../../utils/constants';
+import { gettext, siteRoot } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
+import OrgDeleteRepoDialog from '../../dialog/org-delete-repo-dialog';
+import SysAdminDeleteRepoDialog from '../../dialog/sysadmin-dialog/sysadmin-delete-repo-dialog';
+import ModalPortal from '../../modal-portal';
+import OpIcon from '../../op-icon';
 
-const { enableSysAdminViewRepo } = window.sysadmin.pageOptions;
-
-const RepoItemPropTypes = {
+const propTypes = {
   repo: PropTypes.object.isRequired,
   groupID: PropTypes.number.isRequired,
   onDeleteRepo: PropTypes.func.isRequired,
+  isSysAdmin: PropTypes.bool,
+  enableSysAdminViewRepo: PropTypes.bool,
 };
+
+const getDeleteRepoDialog = (isSysAdmin) => (
+  isSysAdmin ? SysAdminDeleteRepoDialog : OrgDeleteRepoDialog
+);
+
+const getRepoUrl = (repoName, repoID) => (
+  `${siteRoot}sys/libraries/${repoID}/${encodeURIComponent(repoName)}/`
+);
 
 class RepoItem extends React.Component {
 
@@ -39,17 +48,20 @@ class RepoItem extends React.Component {
   };
 
   render() {
-    const { repo, groupID } = this.props;
+    const { repo, groupID, isSysAdmin, enableSysAdminViewRepo } = this.props;
     const { highlight, isDeleteDialogOpen } = this.state;
     const repoName = repo.name || repo.repo_name;
-    let iconUrl = Utils.getLibIconUrl(repo);
+    const DeleteRepoDialog = getDeleteRepoDialog(isSysAdmin);
+    const showRepoLink = isSysAdmin && enableSysAdminViewRepo;
+    const iconUrl = Utils.getLibIconUrl(repo);
+
     return (
       <>
         <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
           <td><img src={iconUrl} width="24" alt={gettext('icon')} /></td>
           <td>
-            {enableSysAdminViewRepo
-              ? <a href={`${siteRoot}sys/libraries/${repo.repo_id}/${encodeURIComponent(repoName)}/`}>{repoName}</a>
+            {showRepoLink
+              ? <a href={getRepoUrl(repoName, repo.repo_id)}>{repoName}</a>
               : <span>{repoName}</span>
             }
           </td>
@@ -78,6 +90,10 @@ class RepoItem extends React.Component {
   }
 }
 
-RepoItem.propTypes = RepoItemPropTypes;
+RepoItem.propTypes = propTypes;
+RepoItem.defaultProps = {
+  isSysAdmin: false,
+  enableSysAdminViewRepo: false,
+};
 
 export default RepoItem;
