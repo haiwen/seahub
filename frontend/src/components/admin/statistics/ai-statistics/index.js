@@ -2,12 +2,12 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Input } from 'reactstrap';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
-import EmptyTip from '../empty-tip';
-import Loading from '../loading';
-import Paginator from '../paginator';
-import toaster from '../toast';
+import { gettext } from '../../../../utils/constants';
+import { Utils } from '../../../../utils/utils';
+import EmptyTip from '../../../empty-tip';
+import Loading from '../../../loading';
+import Paginator from '../../../paginator';
+import toaster from '../../../toast';
 import AIStatisticsDetailDialog from './detail-dialog';
 
 const propTypes = {
