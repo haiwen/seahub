@@ -1,0 +1,167 @@
+import { useCallback, useMemo, useState } from 'react';
+import classnames from 'classnames';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import PropTypes from 'prop-types';
+import FileTagsFormatter from '@/features/metadata/components/cell-formatter/file-tags';
+import {
+  getParentDirFromRecord, getRecordIdFromRecord, getFileNameFromRecord, getFileSizedFromRecord,
+  getFileMTimeFromRecord, getTagsFromRecord, getFilePathByRecord,
+} from '@/features/metadata/utils/cell';
+import { openFile } from '@/features/metadata/utils/file';
+import { gettext, siteRoot, thumbnailDefaultSize } from '@/utils/constants';
+import { formatWithTimezone } from '@/utils/time';
+import { Utils } from '@/utils/utils';
+
+import './index.css';
+
+dayjs.extend(relativeTime);
+
+const TagFile = ({ repoID, file, tagsData, selectedFileIds, onSelectFile, openImagePreview, onContextMenu }) => {
+  const [highlight, setHighlight] = useState(false);
+  const [isIconLoadError, setIconLoadError] = useState(false);
+
+  const fileId = useMemo(() => getRecordIdFromRecord(file), [file]);
+  const parentDir = useMemo(() => getParentDirFromRecord(file), [file]);
+  const name = useMemo(() => getFileNameFromRecord(file), [file]);
+  const size = useMemo(() => {
+    const sizeBytes = getFileSizedFromRecord(file);
+    return Utils.bytesToSize(sizeBytes);
+  }, [file]);
+  const mtime = useMemo(() => {
+    const time = getFileMTimeFromRecord(file);
+    if (time) return time;
+    return '';
+  }, [file]);
+  const tags = useMemo(() => getTagsFromRecord(file), [file]);
+
+  const mtimeTip = useMemo(() => mtime ? formatWithTimezone(mtime) : '', [mtime]);
+  const mtimeRelative = useMemo(() => mtime ? dayjs(mtime).fromNow() : '', [mtime]);
+  const path = useMemo(() => getFilePathByRecord(repoID, file), [repoID, file]);
+
+  const displayIcons = useMemo(() => {
+    const defaultIconUrl = Utils.getFileIconUrl(name);
+    if (Utils.imageCheck(name)) {
+      const path = Utils.encodePath(Utils.joinPath(parentDir, name));
+      const thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}${path}?mtime=${getFileMTimeFromRecord(file)}`;
+      return { iconUrl: thumbnail, defaultIconUrl };
+    }
+    return { iconUrl: defaultIconUrl, defaultIconUrl };
+  }, [repoID, file, name, parentDir]);
+
+  const displayIcon = useMemo(() => {
+    if (!isIconLoadError) return displayIcons.iconUrl;
+    return displayIcons.defaultIconUrl;
+  }, [isIconLoadError, displayIcons]);
+
+  const isSelected = useMemo(() => selectedFileIds ? selectedFileIds.includes(fileId) : false, [fileId, selectedFileIds]);
+
+  const onMouseEnter = useCallback(() => {
+    setHighlight(true);
+  }, []);
+
+  const onMouseLeave = useCallback(() => {
+    setHighlight(false);
+  }, []);
+
+  const handleSelected = useCallback((event) => {
+    event.stopPropagation();
+    const newSelectedFileIds = selectedFileIds.includes(fileId)
+      ? selectedFileIds.filter(id => id !== fileId)
+      : [...selectedFileIds, fileId];
+    onSelectFile(newSelectedFileIds);
+  }, [fileId, selectedFileIds, onSelectFile]);
+
+  const onIconLoadError = useCallback(() => {
+    setIconLoadError(true);
+  }, []);
+
+  const handleClickFileName = useCallback((event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const canPreview = window.sfTagsDataContext.canPreview();
+    if (!canPreview) return;
+    openFile(repoID, file, () => {
+      openImagePreview(file);
+    });
+  }, [repoID, file, openImagePreview]);
+
+  const handleClick = useCallback((event) => {
+    event.stopPropagation();
+    if (event.target.tagName === 'TD' && event.target.closest('td').querySelector('input[type="checkbox"]') === null) {
+      onSelectFile([fileId]);
+      return;
+    }
+    const newSelectedFileIds = selectedFileIds.includes(fileId)
+      ? selectedFileIds.filter(id => id !== fileId)
+      : [...selectedFileIds, fileId];
+    onSelectFile(newSelectedFileIds);
+  }, [fileId, selectedFileIds, onSelectFile]);
+
+  const handleContextMenu = useCallback((event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    onContextMenu(event, file);
+  }, [file, onContextMenu]);
+
+  return (
+    <tr
+      tabIndex="0"
+      className={classnames({
+        'tr-highlight': highlight,
+        'tr-active': isSelected
+      })}
+      onClick={handleClick}
+      onKeyDown={Utils.onKeyDown}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      onContextMenu={handleContextMenu}
+    >
+      <td className="pl10 pr-2" onClick={handleSelected}>
+        <input
+          type="checkbox"
+          className="cursor-pointer form-check-input"
+          checked={isSelected}
+          aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
+          onChange={handleSelected}
+          onKeyDown={Utils.onKeyDown}
+        />
+      </td>
+      <td className="pl-2 pr-2">
+        <div className="dir-icon" onDragStart={(e) => e.preventDefault()}>
+          <img
+            src={displayIcon}
+            onError={onIconLoadError}
+            className="thumbnail cursor-pointer"
+            alt=""
+            onClick={handleClickFileName}
+            tabIndex="0"
+            role="button"
+            onKeyDown={Utils.onKeyDown}
+          />
+        </div>
+      </td>
+      <td className="name">
+        <a href={path} onClick={handleClickFileName}>{name}</a>
+      </td>
+      <td className="tag-list-title">
+        <FileTagsFormatter value={tags} tagsData={tagsData} className="sf-metadata-tags-formatter" />
+      </td>
+      <td className="file-size">{size || ''}</td>
+      <td className="last-update" title={mtimeTip}>{mtimeRelative}</td>
+    </tr>
+  );
+
+};
+
+TagFile.propTypes = {
+  repoID: PropTypes.string,
+  tagsData: PropTypes.object,
+  file: PropTypes.object,
+  selectedFileIds: PropTypes.array,
+  onSelectFile: PropTypes.func,
+  openImagePreview: PropTypes.func,
+  onContextMenu: PropTypes.func,
+};
+
+export default TagFile;

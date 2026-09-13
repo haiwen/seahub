@@ -1,0 +1,74 @@
+import React, { useCallback, useMemo } from 'react';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import EventBus from '@/components/event-bus';
+import { EDITOR_TYPE } from '@/components/sf-table/constants/grid';
+import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
+import { openFile } from '@/features/metadata/utils/file';
+import { siteRoot, thumbnailDefaultSize, enableThumbnailServer } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
+import { getParentDirFromRecord, getFileMTimeFromRecord } from '../../utils/cell';
+import { checkIsDir } from '../../utils/row';
+import FileNameFormatter from './file-name-formatter';
+
+const FileName = ({ repoID, record, className: propsClassName, value, hideIcon = false, isCellSelected, onItemClick, ...params }) => {
+  const parentDir = useMemo(() => getParentDirFromRecord(record), [record]);
+  const isDir = useMemo(() => checkIsDir(record), [record]);
+  const className = useMemo(() => {
+    if (!value) return;
+    if (!Utils.imageCheck(value)) return propsClassName;
+    return classnames(propsClassName, 'sf-metadata-image-file-formatter');
+  }, [propsClassName, value]);
+
+  const iconUrl = useMemo(() => {
+    if (hideIcon) return {};
+    if (isDir) {
+      const icon = Utils.getFolderIconUrl();
+      return { iconUrl: icon, defaultIconUrl: icon, iconType: 'file-img' };
+    }
+    const defaultIconUrl = Utils.getFileIconUrl(value);
+    if (Utils.imageCheck(value)) {
+      const fileExt = Utils.getFileExtension(value, true);
+      if (fileExt === 'avif' && !enableThumbnailServer) {
+        return { iconUrl: defaultIconUrl, defaultIconUrl, iconType: 'file-img' };
+      }
+      const path = Utils.encodePath(Utils.joinPath(parentDir, value));
+      const thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}${path}?mtime=${getFileMTimeFromRecord(record)}`;
+      return { iconUrl: thumbnail, defaultIconUrl, iconType: 'thumbnail' };
+    }
+    return { iconUrl: defaultIconUrl, defaultIconUrl, iconType: 'file-img' };
+  }, [isDir, hideIcon, value, parentDir, record, repoID]);
+
+  const handleFilenameClick = useCallback((event) => {
+    event.preventDefault();
+    event.nativeEvent.stopImmediatePropagation();
+
+    if (!isCellSelected) return;
+
+    // For directories, use onItemClick to navigate within dirtableview
+    if (isDir && onItemClick) {
+      onItemClick(record);
+      return;
+    }
+
+    // For files, open in new window or preview
+    const eventBus = EventBus.getInstance();
+    openFile(repoID, record, () => {
+      eventBus.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR, EDITOR_TYPE.PREVIEWER);
+    });
+  }, [isCellSelected, isDir, onItemClick, record, repoID]);
+
+  return (<FileNameFormatter { ...params } className={className} value={value} record={record} onClickName={handleFilenameClick} { ...iconUrl } />);
+
+};
+
+FileName.propTypes = {
+  value: PropTypes.string,
+  hideIcon: PropTypes.bool,
+  record: PropTypes.object,
+  className: PropTypes.string,
+  onFileNameClick: PropTypes.func,
+  onItemClick: PropTypes.func,
+};
+
+export default FileName;

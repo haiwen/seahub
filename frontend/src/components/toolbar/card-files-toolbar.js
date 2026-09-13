@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
+import { getFileNameFromRecord, getParentDirFromRecord } from '@/features/metadata/utils/cell';
+import { openInNewTab, openParentFolder } from '@/features/metadata/utils/file';
+import { buildCardToolbarMenuOptions } from '@/features/metadata/utils/menu-builder';
+import { checkIsDir } from '@/features/metadata/utils/row';
 import OpIcon from '../../components/op-icon';
 import { useMetadataStatus } from '../../hooks';
-import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../metadata/constants';
-import { getFileNameFromRecord, getParentDirFromRecord } from '../../metadata/utils/cell';
-import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
-import { buildCardToolbarMenuOptions } from '../../metadata/utils/menu-builder';
-import { checkIsDir } from '../../metadata/utils/row';
 import { gettext } from '../../utils/constants';
 import TextTranslation from '../../utils/text-translation';
 import { Utils } from '../../utils/utils';

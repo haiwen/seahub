@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import FileNameFormatter from '../../../../metadata/components/cell-formatter/file-name-formatter';
+import FileNameFormatter from '@/features/metadata/components/cell-formatter/file-name-formatter';
 import { Utils } from '../../../../utils/utils';
 import EventBus, { EVENT_BUS_TYPE } from '../../../event-bus';
 

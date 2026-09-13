@@ -1,10 +1,9 @@
 import React, { isValidElement, cloneElement } from 'react';
 import deepCopy from 'deep-copy';
 import PropTypes from 'prop-types';
-import { EVENT_BUS_TYPE } from '@/metadata/constants';
-import { openFile } from '@/metadata/utils/file';
+import { EVENT_BUS_TYPE, CellType, PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
+import { openFile } from '@/features/metadata/utils/file';
 import { KeyCodes } from '../../../../constants';
-import { CellType, PRIVATE_COLUMN_KEY } from '../../../../metadata/constants';
 import { gettext } from '../../../../utils/constants';
 import { isSpace } from '../../../../utils/hotkey';
 import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../../utils/keyboard-utils';

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { getTagColor, getTagId, getTagName } from '@/features/tag/utils/cell';
 import { PRIVATE_FILE_TYPE } from '../../../constants';
-import { getTagColor, getTagId, getTagName } from '../../../tag/utils/cell';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import { EVENT_BUS_TYPE } from '../../event-bus';

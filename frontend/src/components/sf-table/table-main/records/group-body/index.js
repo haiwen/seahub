@@ -1,8 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { EVENT_BUS_TYPE } from '@/metadata/constants';
-import { ROW_HEIGHT } from '../../../../../metadata/constants';
+import { EVENT_BUS_TYPE, ROW_HEIGHT } from '@/features/metadata/constants';
 import { addClassName, removeClassName } from '../../../../../utils/dom';
 import { isShiftKeyDown } from '../../../../../utils/keyboard-utils';
 import EventBus from '../../../../event-bus';

@@ -19,8 +19,12 @@ import {
   DIR_TABLE_DEFAULT_METADATA_COLUMNS,
   getDirTableRowHeightKey
 } from '@/constants/dir-column-config';
-import Column from '@/metadata/model/column';
-import { normalizeColumns } from '@/metadata/utils/column';
+import metadataAPI from '@/features/metadata/api';
+import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, ROW_HEIGHT } from '@/features/metadata/constants';
+import { PRIVATE_COLUMN_KEY } from '@/features/metadata/constants/column/private';
+import { MetadataProvider } from '@/features/metadata/hooks';
+import Column from '@/features/metadata/model/column';
+import { normalizeColumns } from '@/features/metadata/utils/column';
 import CurDirPath from '../../../../components/cur-dir-path';
 import DirTool from '../../../../components/cur-dir-path/dir-tool';
 import CopyMoveDirentProgressDialog from '../../../../components/dialog/copy-move-dirent-progress-dialog';
@@ -49,10 +53,6 @@ import treeHelper from '../../../../components/tree-view/tree-helper';
 import TreeNode from '../../../../components/tree-view/tree-node';
 import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY, RECENTLY_USED_LIST_KEY } from '../../../../constants';
 import { MetadataStatusProvider, FileOperationsProvider, MetadataMiddlewareProvider } from '../../../../hooks';
-import metadataAPI from '../../../../metadata/api';
-import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, ROW_HEIGHT } from '../../../../metadata/constants';
-import { PRIVATE_COLUMN_KEY } from '../../../../metadata/constants/column/private';
-import { MetadataProvider } from '../../../../metadata/hooks';
 import { Dirent, FileTag, RepoTag, RepoInfo } from '../../../../models';
 import {
   chatAndSearchAvailable,

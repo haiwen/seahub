@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Loading from '@/components/loading';
+import { MetadataDetailsProvider } from '@/features/metadata';
 import { MetadataStatusProvider } from '../../../hooks';
-import { MetadataDetailsProvider } from '../../../metadata';
 import { Repo } from '../../../models';
 import { gettext, mediaUrl, siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';

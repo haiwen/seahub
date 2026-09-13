@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { MetadataDetails } from '@/features/metadata';
+import Formatter from '@/features/metadata/components/formatter';
+import { CellType } from '@/features/metadata/constants';
 import { SYSTEM_FOLDERS } from '../../../constants';
 import { useMetadataStatus } from '../../../hooks';
-import { MetadataDetails } from '../../../metadata';
-import Formatter from '../../../metadata/components/formatter';
-import { CellType } from '../../../metadata/constants';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import DetailItem from '../detail-item';

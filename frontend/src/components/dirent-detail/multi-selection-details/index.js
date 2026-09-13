@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import metadataAPI from '@/features/metadata/api';
+import RateEditor from '@/features/metadata/components/detail-editor/rate-editor';
+import { CellType, PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
+import { getCellValueByColumn, getFileObjIdFromRecord, getRecordIdFromRecord } from '@/features/metadata/utils/cell';
+import { getColumnDisplayName } from '@/features/metadata/utils/column';
 import { useMetadataStatus } from '../../../hooks';
-import metadataAPI from '../../../metadata/api';
-import RateEditor from '../../../metadata/components/detail-editor/rate-editor';
-import { CellType, PRIVATE_COLUMN_KEY } from '../../../metadata/constants';
-import { getCellValueByColumn, getFileObjIdFromRecord, getRecordIdFromRecord } from '../../../metadata/utils/cell';
-import { getColumnDisplayName } from '../../../metadata/utils/column';
 import { gettext, siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import Loading from '../../loading';

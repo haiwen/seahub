@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import HeaderDropdownMenu from '@/components/sf-table/table-main/records-header/dropdown-menu';
 import Tooltip from '@/components/tooltip';
-import { EVENT_BUS_TYPE } from '@/metadata/constants';
+import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
 import { Utils } from '../../../../../utils/utils';
 import EventBus from '../../../../event-bus';
 import Icon from '../../../../icon';

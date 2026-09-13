@@ -3,4 +3,4 @@ export { MetadataStatusProvider, useMetadataStatus } from './metadata-status';
 export {
   MetadataMiddlewareProvider,
   MetadataAIOperationsProvider, useMetadataAIOperations,
-} from '../metadata';
+} from '@/features/metadata';

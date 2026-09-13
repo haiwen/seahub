@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
-import { CellType } from '../../../metadata/constants';
-import { NOT_SUPPORT_DRAG_COPY_COLUMN_TYPES } from '../../../metadata/constants/view/table';
-import { checkIsDir } from '../../../metadata/utils/row/core';
+import { CellType } from '@/features/metadata/constants';
+import { NOT_SUPPORT_DRAG_COPY_COLUMN_TYPES } from '@/features/metadata/constants/view/table';
+import { checkIsDir } from '@/features/metadata/utils/row/core';
 import { OVER_SCAN_COLUMNS } from '../constants/grid';
 import { RATE_MAX_NUMBER } from '../constants/rate';
 import { REG_STRING_NUMBER_PARTS, REG_NUMBER_DIGIT } from '../constants/reg';

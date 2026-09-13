@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { EVENT_BUS_TYPE } from '@/metadata/constants';
+import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
 import { addClassName, removeClassName, getEventClassName } from '../../../../utils/dom';
 import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
 import { isNumber } from '../../../../utils/number';

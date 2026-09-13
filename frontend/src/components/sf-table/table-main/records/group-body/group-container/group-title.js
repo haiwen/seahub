@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { CellType } from '../../../../../../metadata/constants';
-import { getOptionName } from '../../../../../../metadata/utils/cell';
+import { CellType } from '@/features/metadata/constants';
+import { getOptionName } from '@/features/metadata/utils/cell';
 import { gettext } from '../../../../../../utils/constants';
 
 const EMPTY_TIP = `(${gettext('Empty')})`;

@@ -1,9 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { EVENT_BUS_TYPE } from '@/metadata/constants';
-import { getFileNameFromRecord } from '@/metadata/utils/cell';
-import { CellType, PRIVATE_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../../../../metadata/constants';
+import { EVENT_BUS_TYPE, CellType, PRIVATE_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
+import { getFileNameFromRecord } from '@/features/metadata/utils/cell';
 import { Utils } from '../../../../utils/utils';
 import ClickOutside from '../../../click-outside';
 import EventBus from '../../../event-bus';

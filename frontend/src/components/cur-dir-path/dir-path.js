@@ -1,13 +1,13 @@
 import React, { Fragment } from 'react';
 import { Link } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
+import MetadataViewName from '@/features/metadata/components/metadata-view-name';
+import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
+import TagViewName from '@/features/tag/components/tag-view-name';
+import { ALL_TAGS_ID } from '@/features/tag/constants';
 import OpIcon from '../../components/op-icon';
 import DirOperationToolbar from '../../components/toolbar/dir-operation-toolbar';
 import { PRIVATE_FILE_TYPE } from '../../constants';
-import MetadataViewName from '../../metadata/components/metadata-view-name';
-import { EVENT_BUS_TYPE } from '../../metadata/constants';
-import TagViewName from '../../tag/components/tag-view-name';
-import { ALL_TAGS_ID } from '../../tag/constants';
 import { siteRoot, gettext, username, enableUserCleanTrash } from '../../utils/constants';
 import { debounce, Utils } from '../../utils/utils';
 import ArchiveIcon from '../archive-icon';

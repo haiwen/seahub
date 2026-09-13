@@ -1,0 +1,152 @@
+import React, { useState, useCallback, useEffect } from 'react';
+import { Button } from 'reactstrap';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import { eventBus, EVENT_BUS_TYPE } from '@/components/event-bus';
+import Loading from '@/components/loading';
+import OpIcon from '@/components/op-icon';
+import Switch from '@/components/switch';
+import toaster from '@/components/toast';
+import tagsAPI from '@/features/tag/api';
+import { ALL_TAGS_ID } from '@/features/tag/constants';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
+import TurnOffConfirmDialog from '../turn-off-confirm-dialog';
+
+const MetadataTagsStatusDialog = ({
+  value: oldValue,
+  repoID,
+  submit,
+  enableMetadata,
+  isMigrationTipShown
+}) => {
+  const [value, setValue] = useState(oldValue);
+  const [submitting, setSubmitting] = useState(false);
+  const [showTurnOffConfirmDialog, setShowTurnOffConfirmDialog] = useState(false);
+  const [isMigrating, setIsMigrating] = useState(false);
+
+  const onSubmit = useCallback((nextValue) => {
+    if (!nextValue) {
+      setShowTurnOffConfirmDialog(true);
+      return;
+    }
+    setSubmitting(true);
+    tagsAPI.openTags(repoID).then(res => {
+      setSubmitting(false);
+      submit(true);
+      setValue(nextValue);
+    }).catch(error => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+      setSubmitting(false);
+    });
+  }, [repoID, submit]);
+
+  const migrateTag = useCallback(() => {
+    setIsMigrating(true);
+    tagsAPI.migrateTags(repoID).then(res => {
+      setIsMigrating(false);
+      toaster.success(gettext('Tags migrated successfully'));
+      eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_TO_TAGS_VIEW, ALL_TAGS_ID);
+    }).catch(error => {
+      setIsMigrating(false);
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    });
+  }, [repoID]);
+
+  const turnOffConfirmToggle = useCallback(() => {
+    setShowTurnOffConfirmDialog(!showTurnOffConfirmDialog);
+  }, [showTurnOffConfirmDialog]);
+
+  const turnOffConfirmSubmit = useCallback(() => {
+    setShowTurnOffConfirmDialog(false);
+    setSubmitting(true);
+    tagsAPI.closeTags(repoID).then(res => {
+      setSubmitting(false);
+      submit(false);
+      setValue(false);
+    }).catch(error => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+      setSubmitting(false);
+    });
+  }, [repoID, submit]);
+
+  const onValueChange = useCallback(() => {
+    const nextValue = !value;
+    const submitDisabled = oldValue === nextValue || submitting || isMigrating || !enableMetadata;
+    if (!submitDisabled) {
+      onSubmit(nextValue);
+    }
+  }, [value, onSubmit, oldValue, submitting, enableMetadata, isMigrating]);
+
+  useEffect(() => {
+    if (value && !enableMetadata) {
+      setValue(false);
+    }
+  }, [value, enableMetadata]);
+
+  return (
+    <div className='library-setting-item'>
+      <h3 className='library-setting-item-heading'>{gettext('Tags')}</h3>
+      <>
+        <div className='d-flex align-items-center'>
+          <Switch
+            checked={value}
+            disabled={submitting || isMigrating || !enableMetadata}
+            size="large"
+            textPosition="right"
+            onChange={onValueChange}
+            placeholder={gettext('Tags')}
+          />
+          {!enableMetadata &&
+          <OpIcon
+            id="tags-help-icon"
+            className="ml-1 position-relative help-icon"
+            symbol="question-circle-stroked"
+            tooltip={gettext('Please turn on extended properties setting first')}
+            placement='right'
+          />
+          }
+        </div>
+        <p className="setting-tip">
+          {gettext('Enable tags to add tags to files and search files by tags.')}
+        </p>
+        {isMigrationTipShown &&
+        <div className="mt-4">
+          <p className='m-0 migrate-tags-tip'>{gettext('This library contains tags of old version. Do you like to migrate the tags to new version?')}</p>
+          <Button
+            color="primary"
+            outline={true}
+            className='mt-2 migrate-tags-btn'
+            onClick={isMigrating ? () => {} : migrateTag}
+          >
+            <Loading className={classnames('tags-migrating-icon', { 'visible': isMigrating })} />
+            <span className={classnames('migrate-tags-btn-text', { 'visible': !isMigrating })}>{gettext('Migrate old version tags')}</span>
+          </Button>
+        </div>
+        }
+      </>
+      {showTurnOffConfirmDialog && (
+        <TurnOffConfirmDialog
+          title={gettext('Turn off tags')}
+          toggle={turnOffConfirmToggle}
+          submit={turnOffConfirmSubmit}
+        >
+          <p>{gettext('Do you really want to turn off tags? Existing tags will all be deleted.')}</p>
+        </TurnOffConfirmDialog>
+      )}
+    </div>
+  );
+};
+
+MetadataTagsStatusDialog.propTypes = {
+  value: PropTypes.bool.isRequired,
+  repoID: PropTypes.string.isRequired,
+  submit: PropTypes.func.isRequired,
+  enableMetadata: PropTypes.bool.isRequired,
+  isMigrationTipShown: PropTypes.bool
+};
+
+export default MetadataTagsStatusDialog;

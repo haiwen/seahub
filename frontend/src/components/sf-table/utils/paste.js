@@ -1,5 +1,5 @@
+import { CellType, PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
 import { Utils } from '@/utils/utils';
-import { CellType, PRIVATE_COLUMN_KEY } from '../../../metadata/constants';
 import { PASTE_SOURCE, TRANSFER_TYPES } from '../constants/transfer-types';
 import { getCellValueByColumn, getFileNameFromRecord, isCellValueChanged } from './cell';
 import { getColumnByIndex, getColumnOriginName } from './column';
