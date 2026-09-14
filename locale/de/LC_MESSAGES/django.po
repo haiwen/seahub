@@ -82,7 +82,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-02 14:56+0800\n"
+"POT-Creation-Date: 2026-09-02 15:41+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>, 2015-2021,2024-2025\n"
 "Language-Team: German (http://app.transifex.com/haiwen/seahub/language/de/)\n"
@@ -162,7 +162,7 @@ msgstr "Das Lösen der SAML-Verbindung ist fehlgeschlagen. Legen Sie zunächst e
 
 #: seahub/ai/apis.py:813
 msgid "New chat"
-msgstr ""
+msgstr "Neuer Chat"
 
 #: seahub/ai/utils.py:394
 msgid ""
@@ -3221,7 +3221,7 @@ msgstr "Kein Ergebnis"
 #: seahub/templates/wiki/_wiki_publish_ssr_search.html:99
 #: seahub/templates/wiki/_wiki_publish_ssr_search.html:104
 msgid "Wiki pages"
-msgstr ""
+msgstr "Wiki-Seiten"
 
 #: seahub/templates/wiki/wiki.html:24
 msgid "Last modified by"

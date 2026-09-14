@@ -6987,7 +6987,7 @@ msgstr "AI 服务器未配置"
 
 #: frontend/src/components/wiki-card-view/constants-utils.js:70
 msgid "Credit not enough"
-msgstr "额度不足"
+msgstr "点数不足"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:153
 #: frontend/src/pages/wiki2/side-panel.js:262
@@ -8556,12 +8556,12 @@ msgstr "修改"
 #: frontend/src/pages/common/ai-statistics/detail-dialog.js:66
 #: frontend/src/pages/common/ai-statistics/detail-dialog.js:74
 msgid "Input tokens"
-msgstr "输入令牌"
+msgstr "输入 tokens"
 
 #: frontend/src/pages/common/ai-statistics/detail-dialog.js:67
 #: frontend/src/pages/common/ai-statistics/detail-dialog.js:75
 msgid "Output tokens"
-msgstr "输出令牌"
+msgstr "输出 tokens"
 
 #: frontend/src/pages/common/ai-statistics/detail-dialog.js:68
 #: frontend/src/pages/common/ai-statistics/detail-dialog.js:76
@@ -8570,7 +8570,7 @@ msgstr "输出令牌"
 #: frontend/src/pages/common/ai-statistics/index.js:177
 #: frontend/src/pages/common/ai-statistics/index.js:230
 msgid "Credit used"
-msgstr "已用额度"
+msgstr "已用点数"
 
 #: frontend/src/pages/common/ai-statistics/detail-dialog.js:73
 #: frontend/src/pages/common/ai-statistics/index.js:151
