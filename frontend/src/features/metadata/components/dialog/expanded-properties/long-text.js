@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef } from 'react';
-import { getPreviewContent, LongTextInlineEditor } from '@seafile/seafile-editor';
+import { getPreviewContent, LongTextInlineEditor, MarkdownPreview } from '@seafile/seafile-editor';
 import PropTypes from 'prop-types';
 import { lang } from '@/utils/constants';
 import { getCellValueByColumn } from '../../../utils/cell';
@@ -31,7 +31,7 @@ const LongText = ({ record, column, onCommit }) => {
   if (!column.editable) {
     return (
       <div className="form-control disabled readonly-long-text">
-        <span>{value?.text || ''}</span>
+        <MarkdownPreview value={value?.text || ''} isShowOutline={false} />
       </div>
     );
   }

@@ -49,8 +49,32 @@
   height: auto;
   min-height: 38px;
   align-items: flex-start;
-  white-space: pre-wrap;
   overflow-wrap: anywhere;
+}
+
+.expanded-properties-content-container .readonly-long-text .longtext-preview-container {
+  height: auto;
+  padding: 0;
+  overflow: visible;
+}
+
+.expanded-properties-content-container .readonly-long-text .sf-slate-viewer-scroll-container {
+  overflow: visible;
+  background-color: transparent;
+}
+
+.expanded-properties-content-container .readonly-long-text .sf-slate-viewer-scroll-container .article {
+  background-color: transparent;
+  color: var(--bs-body-color);
+}
+
+.expanded-properties-content-container .readonly-long-text .article h1,
+.expanded-properties-content-container .readonly-long-text .article h2,
+.expanded-properties-content-container .readonly-long-text .article h3,
+.expanded-properties-content-container .readonly-long-text .article h4,
+.expanded-properties-content-container .readonly-long-text .article h5,
+.expanded-properties-content-container .readonly-long-text .article h6 {
+  color: var(--bs-body-color);
 }
 
 .expanded-properties-content-container .form-control.shrink {
