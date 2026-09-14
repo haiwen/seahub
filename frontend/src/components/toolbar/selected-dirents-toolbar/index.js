@@ -28,6 +28,7 @@ const propTypes = {
   direntList: PropTypes.array.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
   onItemConvert: PropTypes.func,
+  loadDirentList: PropTypes.func,
 };
 
 const SINGLE_EXCLUDES = ['Download', 'Delete', 'Share', 'Move', 'Copy'];
@@ -78,6 +79,7 @@ class SelectedDirentsToolbar extends React.Component {
       eventBus,
       showDirentDetail,
       onItemConvert,
+      loadDirentList
     } = this.props;
     const dirent = dirents[0];
     if (menuHandlers[operation]) {
@@ -92,6 +94,7 @@ class SelectedDirentsToolbar extends React.Component {
         eventBus,
         showDirentDetail,
         onItemConvert,
+        loadDirentList,
         onItemRename: this.onRename,
       });
     }
