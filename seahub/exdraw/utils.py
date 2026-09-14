@@ -148,6 +148,61 @@ def gen_exdraw_image_parent_path(file_uuid, repo_id, username):
         seafile_api.mkdir_with_parents(repo_id, '/', parent_path[1:], username)
     return parent_path
 
+
+def copy_exdraw_images(src_repo_id, src_path, dst_repo_id, dst_path, username, is_async=True):
+    src_repo = seafile_api.get_repo(src_repo_id)
+    src_file_uuid = get_exdraw_file_uuid(src_repo, src_path)
+    src_image_parent_path = EXDRAW_IMAGES_DIR + src_file_uuid + '/'
+    src_dir_id = seafile_api.get_dir_id_by_path(src_repo_id, src_image_parent_path)
+    if not src_dir_id:
+        return
+
+    dst_repo = seafile_api.get_repo(dst_repo_id)
+    dst_file_uuid = get_exdraw_file_uuid(dst_repo, dst_path)
+    dir_id = seafile_api.get_dir_id_by_path(dst_repo_id, EXDRAW_IMAGES_DIR)
+    if not dir_id:
+        seafile_api.mkdir_with_parents(
+            dst_repo_id, '/', EXDRAW_IMAGES_DIR.strip('/'), username)
+
+    need_progress = 1 if is_async else 0
+    synchronous = 0 if is_async else 1
+    seafile_api.copy_file(
+        src_repo_id, EXDRAW_IMAGES_DIR,
+        json.dumps([src_file_uuid]),
+        dst_repo_id, EXDRAW_IMAGES_DIR,
+        json.dumps([dst_file_uuid]),
+        username=username,
+        need_progress=need_progress, synchronous=synchronous,
+    )
+
+
+def move_exdraw_images(src_repo_id, src_path, dst_repo_id, dst_path, username, is_async=True):
+    src_repo = seafile_api.get_repo(src_repo_id)
+    src_file_uuid = get_exdraw_file_uuid(src_repo, src_path)
+    src_image_parent_path = EXDRAW_IMAGES_DIR + src_file_uuid + '/'
+    src_dir_id = seafile_api.get_dir_id_by_path(src_repo_id, src_image_parent_path)
+    if not src_dir_id:
+        return
+
+    dst_repo = seafile_api.get_repo(dst_repo_id)
+    dst_file_uuid = get_exdraw_file_uuid(dst_repo, dst_path)
+    dir_id = seafile_api.get_dir_id_by_path(dst_repo_id, EXDRAW_IMAGES_DIR)
+    if not dir_id:
+        seafile_api.mkdir_with_parents(
+            dst_repo_id, '/', EXDRAW_IMAGES_DIR.strip('/'), username)
+
+    need_progress = 1 if is_async else 0
+    synchronous = 0 if is_async else 1
+    seafile_api.move_file(
+        src_repo_id, EXDRAW_IMAGES_DIR,
+        json.dumps([src_file_uuid]),
+        dst_repo_id, EXDRAW_IMAGES_DIR,
+        json.dumps([dst_file_uuid]),
+        replace=False, username=username,
+        need_progress=need_progress, synchronous=synchronous,
+    )
+
+
 def get_exdraw_asset_upload_link(repo_id, parent_path, username):
     obj_id = json.dumps({'parent_dir': parent_path})
     token = seafile_api.get_fileserver_access_token(
