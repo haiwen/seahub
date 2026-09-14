@@ -5,7 +5,7 @@ import ViewDetails from '@/features/metadata/components/view-details';
 import { useTags } from '@/features/tag/hooks';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import ObjectUtils from '../../utils/object';
-import { METADATA_MODE, TAGS_MODE } from '../dir-view-mode/constants';
+import { METADATA_MODE, TAGS_MODE } from '../constants/view-mode';
 import DirentDetail from './dirent-details';
 import LibDetail from './lib-details';
 import MultiSelectionDetails from './multi-selection-details';

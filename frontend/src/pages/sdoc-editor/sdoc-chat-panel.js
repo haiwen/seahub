@@ -1,9 +1,9 @@
 import React, { useCallback, useLayoutEffect, useMemo } from 'react';
 import { Tooltip } from '@seafile/sdoc-editor';
 import PropTypes from 'prop-types';
-import DirChat from '../../components/dir-view-mode/dir-chat';
-import { ASK_PAGE_SLUG_ID } from '../../components/dir-view-mode/dir-chat/constants';
-import { AttachmentObject } from '../../components/dir-view-mode/dir-chat/models';
+import DirChat from '../../components/dir-chat';
+import { ASK_PAGE_SLUG_ID } from '../../components/dir-chat/constants';
+import { AttachmentObject } from '../../components/dir-chat/models';
 import Icon from '../../components/icon';
 import OpIcon from '../../components/op-icon';
 import ChatToolbar from '../../components/toolbar/chat-toolbar';

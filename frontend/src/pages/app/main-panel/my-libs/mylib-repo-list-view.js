@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 import MediaQuery from 'react-responsive';
 import PropTypes from 'prop-types';
+import { LIST_MODE } from '../../../../components/constants/view-mode';
 import { hideMenu, handleContextClick } from '../../../../components/context-menu/actions';
 import ContextMenu from '../../../../components/context-menu/context-menu';
-import { LIST_MODE } from '../../../../components/dir-view-mode/constants';
 import LibsMobileThead from '../../../../components/libs-mobile-thead';
 import RepoListCard from '../../../../components/repo-list-card';
 import { Utils } from '../../../../utils/utils';

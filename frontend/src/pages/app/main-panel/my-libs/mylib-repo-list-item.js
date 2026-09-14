@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import ArchiveIcon from '../../../../components/archive-icon';
+import { LIST_MODE } from '../../../../components/constants/view-mode';
 import ChangeRepoPasswordDialog from '../../../../components/dialog/change-repo-password-dialog';
 import DeleteRepoDialog from '../../../../components/dialog/delete-repo-dialog';
 import LabelRepoStateDialog from '../../../../components/dialog/label-repo-state-dialog';
@@ -17,7 +18,6 @@ import RepoWebhookDialog from '../../../../components/dialog/repo-webhook-dialog
 import ResetEncryptedRepoPasswordDialog from '../../../../components/dialog/reset-encrypted-repo-password-dialog';
 import ShareDialog from '../../../../components/dialog/share-dialog';
 import TransferDialog from '../../../../components/dialog/transfer-dialog';
-import { LIST_MODE } from '../../../../components/dir-view-mode/constants';
 import EventBus, { EVENT_BUS_TYPE } from '../../../../components/event-bus';
 import Icon from '../../../../components/icon';
 import LibraryOpMenu from '../../../../components/library-op-menu';

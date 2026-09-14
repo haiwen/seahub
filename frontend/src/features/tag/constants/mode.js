@@ -1,4 +1,4 @@
-import { LIST_MODE } from '@/components/dir-view-mode/constants';
+import { LIST_MODE } from '@/components/constants/view-mode';
 
 export const TAG_FILES_VIEW_MODE = 'tag_files_view_mode';
 

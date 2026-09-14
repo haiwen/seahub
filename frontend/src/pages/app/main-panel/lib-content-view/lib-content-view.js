@@ -25,11 +25,6 @@ import { PRIVATE_COLUMN_KEY } from '@/features/metadata/constants/column/private
 import { MetadataProvider } from '@/features/metadata/hooks';
 import Column from '@/features/metadata/model/column';
 import { normalizeColumns } from '@/features/metadata/utils/column';
-import CurDirPath from '../../../../components/cur-dir-path';
-import DirTool from '../../../../components/cur-dir-path/dir-tool';
-import CopyMoveDirentProgressDialog from '../../../../components/dialog/copy-move-dirent-progress-dialog';
-import DeleteFolderDialog from '../../../../components/dialog/delete-folder-dialog';
-import LibDecryptDialog from '../../../../components/dialog/lib-decrypt-dialog';
 import {
   LIST_MODE,
   TABLE_MODE,
@@ -40,7 +35,12 @@ import {
   SETTINGS_MODE,
   TRASH_MODE,
   CHAT_MODE
-} from '../../../../components/dir-view-mode/constants';
+} from '../../../../components/constants/view-mode';
+import CurDirPath from '../../../../components/cur-dir-path';
+import DirTool from '../../../../components/cur-dir-path/dir-tool';
+import CopyMoveDirentProgressDialog from '../../../../components/dialog/copy-move-dirent-progress-dialog';
+import DeleteFolderDialog from '../../../../components/dialog/delete-folder-dialog';
+import LibDecryptDialog from '../../../../components/dialog/lib-decrypt-dialog';
 import DirColumnView from '../../../../components/dir-view-mode/dir-column-view';
 import Detail from '../../../../components/dirent-detail';
 import EventBus, { EVENT_BUS_TYPE, eventBus } from '../../../../components/event-bus';

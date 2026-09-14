@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useRef, useMemo, useEffect } from 'react';
+import { LIST_MODE } from '@/components/constants/view-mode';
 import { hideMenu, showMenu } from '@/components/context-menu/actions';
 import ContextMenu from '@/components/context-menu/context-menu';
-import { LIST_MODE } from '@/components/dir-view-mode/constants';
 import { getDirentItemMenuList, getTagFilesOperations } from '@/components/dir-view-mode/utils/contextMenuUtils';
 import { menuHandlers } from '@/components/dir-view-mode/utils/menuHandlers';
 import EmptyTip from '@/components/empty-tip';

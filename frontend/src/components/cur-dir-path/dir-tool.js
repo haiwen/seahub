@@ -14,7 +14,7 @@ import SortMenu from '../../components/sort-menu';
 import ViewModes from '../../components/view-modes';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import TextTranslation from '../../utils/text-translation';
-import { HISTORY_MODE, LIST_MODE, SETTINGS_MODE, TRASH_MODE, TABLE_MODE, CHAT_MODE } from '../dir-view-mode/constants';
+import { HISTORY_MODE, LIST_MODE, SETTINGS_MODE, TRASH_MODE, TABLE_MODE, CHAT_MODE } from '../constants/view-mode';
 import HistoryViewToolbar from '../dir-view-mode/dir-history-view/history-view-toolbar';
 import TrashViewToolbar from '../dir-view-mode/dir-trash-view/trash-view-toolbar';
 import ChatToolbar from '../toolbar/chat-toolbar';

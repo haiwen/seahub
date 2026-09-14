@@ -6,10 +6,10 @@ import PropTypes from 'prop-types';
 import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 import { gettext } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
+import { HISTORY_MODE } from '../../../constants/view-mode';
 import Picker from '../../../date-and-time-picker';
 import Icon from '../../../icon';
 import OpIcon from '../../../op-icon';
-import { HISTORY_MODE } from '../../constants';
 
 const DATE_INPUT_WIDTH = 118;
 

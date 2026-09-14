@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import OpIcon from '@/components/op-icon';
 import { gettext } from '../../../utils/constants';
 import { isEnter, isSpace } from '../../../utils/hotkey';
-import { HISTORY_MODE } from '../constants';
+import { HISTORY_MODE } from '../../constants/view-mode';
 import HistoryFilterPopover from './history-filter-popover';
 
 const DEFAULT_FILTER = {

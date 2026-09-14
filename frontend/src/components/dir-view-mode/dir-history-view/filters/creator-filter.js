@@ -7,10 +7,10 @@ import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 import { gettext } from '../../../../utils/constants';
 import { seafileAPI } from '../../../../utils/seafile-api';
 import { Utils } from '../../../../utils/utils';
+import { HISTORY_MODE } from '../../../constants/view-mode';
 import Icon from '../../../icon';
 import UserItem from '../../../search/search-filters/user-item';
 import toaster from '../../../toast';
-import { HISTORY_MODE } from '../../constants';
 
 import '../../../search/search-filters/filter-by-creator.css';
 

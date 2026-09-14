@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
 import { getEventClassName } from '../../../utils/dom';
-import { TRASH_MODE } from '../constants';
+import { TRASH_MODE } from '../../constants/view-mode';
 import HistoryBasicFilters from './filters/basic-filters';
 
 const HistoryFilterPopover = ({ mode, target, filters, onClose, onChange }) => {

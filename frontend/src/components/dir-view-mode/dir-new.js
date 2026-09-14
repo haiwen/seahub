@@ -6,7 +6,7 @@ import {
   TAGS_MODE,
   HISTORY_MODE,
   TRASH_MODE
-} from '../../components/dir-view-mode/constants';
+} from '../../components/constants/view-mode';
 import { enableSeadoc, gettext, onlyofficeSupportEditDocxf } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';

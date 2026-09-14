@@ -4,8 +4,8 @@ import { lockFile, unlockFile, batchLockFile, batchUnlockFile, freezeDocument, u
 import { seafileAPI } from '@/utils/seafile-api';
 import TextTranslation from '@/utils/text-translation';
 import { Utils } from '@/utils/utils';
-import { setPendingAttachments } from '../dir-chat/hooks/ai-chat-tools';
-import { AttachmentObject } from '../dir-chat/models';
+import { setPendingAttachments } from '../../dir-chat/hooks/ai-chat-tools';
+import { AttachmentObject } from '../../dir-chat/models';
 
 // Base handlers that all dirent views can use
 export const menuHandlers = {

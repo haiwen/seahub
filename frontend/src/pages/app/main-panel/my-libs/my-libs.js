@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import classnames from 'classnames';
 import Cookies from 'js-cookie';
+import { LIST_MODE, GRID_MODE } from '../../../../components/constants/view-mode';
 import CreateRepoDialog from '../../../../components/dialog/create-repo-dialog';
 import DeletedReposDialog from '../../../../components/dialog/my-deleted-repos-dialog';
 import SortOptionsDialog from '../../../../components/dialog/sort-options';
-import { LIST_MODE, GRID_MODE } from '../../../../components/dir-view-mode/constants';
 import CustomDropdown from '../../../../components/dropdown';
 import EmptyTip from '../../../../components/empty-tip';
 import Icon from '../../../../components/icon';
