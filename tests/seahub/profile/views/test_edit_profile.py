@@ -42,16 +42,25 @@ class EditProfileTest(BaseTestCase):
         assert email2nickname(self.tmp_user.username) == 'new nickname'
 
     @patch('seahub.profile.views.render', return_value=HttpResponse())
-    @override_settings(ENABLE_WEBDAV_SECRET=True, ENABLE_SEAFDAV=False)
-    def test_webdav_setting_is_hidden_when_seafdav_is_disabled(self, mock_render):
+    @override_settings(ENABLE_WEBDAV=False, ENABLE_WEBDAV_SECRET=True)
+    def test_webdav_setting_is_hidden_when_webdav_is_disabled(self, mock_render):
         resp = self.client.get(self.url)
 
         self.assertEqual(200, resp.status_code)
         self.assertFalse(mock_render.call_args.args[2]['ENABLE_WEBDAV_SECRET'])
 
     @patch('seahub.profile.views.render', return_value=HttpResponse())
-    @override_settings(ENABLE_WEBDAV_SECRET=True, ENABLE_SEAFDAV=True)
-    def test_webdav_setting_is_shown_when_seafdav_and_secret_are_enabled(
+    @override_settings(ENABLE_WEBDAV=True, ENABLE_WEBDAV_SECRET=False)
+    def test_webdav_setting_is_hidden_when_webdav_secret_is_disabled(
+            self, mock_render):
+        resp = self.client.get(self.url)
+
+        self.assertEqual(200, resp.status_code)
+        self.assertFalse(mock_render.call_args.args[2]['ENABLE_WEBDAV_SECRET'])
+
+    @patch('seahub.profile.views.render', return_value=HttpResponse())
+    @override_settings(ENABLE_WEBDAV=True, ENABLE_WEBDAV_SECRET=True)
+    def test_webdav_setting_is_shown_when_webdav_and_secret_are_enabled(
             self, mock_render):
         resp = self.client.get(self.url)
 
