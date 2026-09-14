@@ -28,6 +28,14 @@ const LongText = ({ record, column, onCommit }) => {
     onCommit(column, value?.text?.trim());
   }, [column, onCommit]);
 
+  if (!column.editable) {
+    return (
+      <div className="form-control disabled">
+        <span>{value?.text || ''}</span>
+      </div>
+    );
+  }
+
   return (
     <div ref={ref} className="long-text-container">
       <LongTextInlineEditor
