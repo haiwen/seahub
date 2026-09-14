@@ -13,6 +13,8 @@ By default, review only:
 
 Existing issues in unchanged code are not blockers unless the change copies, references, or expands them.
 
+New components and new component-owned styles must follow the requirements below. Do not require an unrelated existing component, entry point, stylesheet, or selector to be migrated as part of a change that does not modify it.
+
 ## Directory Model
 
 Standard directories:
@@ -21,7 +23,7 @@ Standard directories:
 - `src/pages/<page-name>/<component-name>/`: private components used only by the current page.
 - `src/<feature>/components/`: components owned by an established feature area, such as `metadata` or `tag`.
 
-New directories and component files should follow the semantic `kebab-case` convention documented in `AGENTS.md` and used by nearby code. Do not require existing files to be renamed as part of an unrelated change.
+New shared, page-private, and feature-owned components must be created in semantic `kebab-case` directories with a stable `index.js` entry point. Do not add suffixes such as `_page` or `_component`. Existing standalone component files do not need to be moved or renamed as part of an unrelated change.
 
 ## Dependency Boundaries
 
@@ -40,8 +42,9 @@ Components under `src/components` may use the globally loaded Bootstrap and Reac
 ## Entry Points and CSS Loading
 
 Check all of the following:
-- Entry points follow the established structure in `config/webpack.entry.js`; do not require an `index.js` wrapper for existing top-level or standalone files.
-- New component styles follow the ownership pattern used by the surrounding feature. Prefer colocated styles for self-contained components, but allow established shared styles under `src/css`.
+- New shared, page-private, and feature-owned components are created in directories with an `index.js` entry point. Existing top-level Webpack entries and standalone component files may retain their established structure.
+- New shared, page-private, and feature-owned component styles are colocated in the component's `index.css` and explicitly imported by its entry point. New page-level styles are maintained in the page's `index.css`.
+- New component-specific business styles are not added to `src/css`. Existing stylesheets under `src/css` may be changed when the PR modifies their existing owner.
 - CSS imports are not duplicated, omitted, or loaded implicitly.
 - Do not recommend chaining other component CSS through CSS `@import`.
 
@@ -52,21 +55,21 @@ Report all of the following:
 - Component styles are scattered across page CSS, unrelated components, or unbounded global CSS.
 - A deep page DOM path is used to override internal component styles.
 - An ID, excessively deep nesting, duplicate class, or `!important` is used to solve an ordinary style conflict.
-- A newly introduced generic business class such as `.item`, `.content`, `.header`, `.active`, or `.box` leaks styles beyond its intended owner. Do not report established framework utilities or nearby conventions without a demonstrated conflict.
-- Global CSS, CSS Modules, inline styles, or multiple naming systems are mixed in a way that creates a demonstrated scope, ownership, or behavior problem.
+- A newly introduced unscoped business class such as `.item`, `.content`, `.header`, `.active`, or `.box` is used, unless it is an established Bootstrap or Reactstrap utility or state class.
+- New component-owned styles mix global CSS, CSS Modules, inline visual styles, or unrelated naming systems without a documented reason. Do not report established mixed patterns in unchanged code; for an existing component, report newly introduced mixing only when it expands the component's style boundary or makes ownership unclear.
 
 Prefer a component modifier, component parameter, event, or explicit extension interface to handle variations. Do not hide boundary problems by increasing selector specificity.
 
 ## Naming
 
-Where the surrounding component uses BEM, directory names, component names, and CSS Blocks should describe the same business object. Follow that established BEM pattern:
+New component-owned CSS must use BEM. The directory name, component name, and CSS Block must describe the same business object:
 - Block: `.file-list`
 - Element: `.file-list__item`
 - Modifier: `.file-list--compact`
 - State: `.file-list__item.is-selected`
 - JavaScript behavior hook: `.js-file-list-trigger`
 
-Within BEM-based components, Elements must not be used outside their Block. Modifiers express stable variants. `is-*` and `has-*` express state. `js-*` hooks must not provide visual styling. Do not require unrelated existing components or framework classes to be converted to BEM.
+Elements must not be used outside their Block. Modifiers express stable variants. `is-*` and `has-*` express state. `js-*` hooks must not provide visual styling. Existing components and framework classes do not need to be converted to BEM unless the PR intentionally migrates that component.
 
 ## Variables and Values
 
@@ -97,7 +100,7 @@ Components under `src/components` must provide:
 - No dependency on a specific page.
 - The ability to run independently in a minimal Seahub frontend environment that provides those declared base styles.
 
-Shared components with interaction, asynchronous behavior, errors, themes, responsive behavior, or complex conditional rendering should have tests, a demo, or a reproducible verification method. When a public API, default style, variable, state, or responsive behavior changes, describe consumer impact and the migration path.
+New shared components with interaction, asynchronous behavior, errors, themes, responsive behavior, or complex conditional rendering should have tests, a demo, or a reproducible verification method. When a public API, default style, variable, state, or responsive behavior changes, describe consumer impact and the migration path.
 
 ## Severity Levels
 
