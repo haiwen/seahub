@@ -27,7 +27,6 @@ import StatusEditor from '../status-editor';
 
 import './index.css';
 import '@/features/metadata/components/cell-formatter/collaborator/index.css';
-import '../index.css';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
