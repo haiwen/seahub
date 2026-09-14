@@ -6,7 +6,7 @@ import { useTags } from '@/features/tag/hooks';
 import OpIcon from '../../../components/op-icon';
 import { useMetadataStatus } from '../../../hooks';
 import { gettext } from '../../../utils/constants';
-import TreeSection from '../../tree-section';
+import TreeSection from '../tree-section';
 
 const DirTags = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
   const [isShowEditTagDialog, setIsShowEditTagDialog] = useState(false);

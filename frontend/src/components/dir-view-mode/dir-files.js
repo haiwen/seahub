@@ -11,8 +11,8 @@ import CustomDropdown from '../dropdown';
 import { EVENT_BUS_TYPE } from '../event-bus';
 import ModalPortal from '../modal-portal';
 import toaster from '../toast';
-import TreeSection from '../tree-section';
 import TreeView from '../tree-view/tree-view';
+import TreeSection from './tree-section';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,

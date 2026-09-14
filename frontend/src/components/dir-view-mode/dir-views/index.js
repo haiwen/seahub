@@ -4,8 +4,8 @@ import { MetadataTreeView, useMetadata } from '@/features/metadata';
 import { useMetadataStatus } from '../../../hooks';
 import { gettext } from '../../../utils/constants';
 import { eventBus, EVENT_BUS_TYPE } from '../../event-bus';
-import TreeSection from '../../tree-section';
 import ExtensionPrompts from '../extension-prompts';
+import TreeSection from '../tree-section';
 import ViewsMoreOperations from './views-more-operations';
 
 import './index.css';

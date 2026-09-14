@@ -7,6 +7,14 @@
   margin-top: 12px;
 }
 
+.tree-section:first-child {
+  margin-top: 12px;
+}
+
+.tree-section:last-child {
+  margin-bottom: 28px;
+}
+
 .tree-section .tree-section-header {
   font-size: 0.8125rem;
   display: flex;
