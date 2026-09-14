@@ -1,7 +1,6 @@
 import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE } from '@/components/event-bus';
 import { Dirent } from '@/models';
-import { lockFile, unlockFile, batchLockFile, batchUnlockFile, freezeDocument, unfreezeDocument, exportDocx, exportMarkdown, exportSdoc, openHistory, openViaClient, openByDefault, openWithOnlyOffice, toggleStar } from '@/utils/dirent-operations';
-import { seafileAPI } from '@/utils/seafile-api';
+import { lockFile, unlockFile, batchLockFile, batchUnlockFile, freezeDocument, unfreezeDocument, exportDocx, exportMarkdown, exportSdoc, openHistory, openViaClient, openByDefault, openWithOnlyOffice, toggleStar, convertWithOnlyOffice } from '@/utils/dirent-operations';
 import TextTranslation from '@/utils/text-translation';
 import { Utils } from '@/utils/utils';
 import { setPendingAttachments } from '../dir-chat/hooks/ai-chat-tools';
@@ -88,7 +87,7 @@ export const menuHandlers = {
   },
 
   [TextTranslation.PROPERTIES.key]: ({ showDirentDetail }) => {
-    showDirentDetail && showDirentDetail('info');
+    showDirentDetail && showDirentDetail();
   },
 
   [TextTranslation.OPEN_WITH_DEFAULT.key]: ({ repoID, path, dirent }) => {
@@ -179,8 +178,6 @@ export const menuHandlers = {
   },
 
   [TextTranslation.ONLYOFFICE_CONVERT.key]: async ({ repoID, path, dirent, loadDirentList }) => {
-    const filePath = Utils.joinPath(path, dirent.name);
-    const res = await seafileAPI.onlyofficeConvert(repoID, filePath);
-    loadDirentList && loadDirentList(res.data.parent_dir);
+    convertWithOnlyOffice(repoID, path, dirent, loadDirentList);
   },
 };

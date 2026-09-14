@@ -3112,6 +3112,7 @@ class LibContentView extends React.Component {
                               showDirentDetail={this.showDirentDetail}
                               currentMode={this.state.currentMode}
                               onItemConvert={this.onConvertItem}
+                              loadDirentList={this.loadDirentList}
                             />
                           )
                         ) : (
