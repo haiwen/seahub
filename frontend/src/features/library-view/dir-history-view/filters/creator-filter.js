@@ -12,7 +12,7 @@ import { gettext } from '@/utils/constants';
 import { seafileAPI } from '@/utils/seafile-api';
 import { Utils } from '@/utils/utils';
 
-import '../../../search/search-filters/filter-by-creator.css';
+import '@/components/search/search-filters/filter-by-creator.css';
 
 const HistoryCreatorFilter = ({ mode = HISTORY_MODE, value: selectedOptions = [], onChange }) => {
   const [isOpen, setIsOpen] = useState(false);

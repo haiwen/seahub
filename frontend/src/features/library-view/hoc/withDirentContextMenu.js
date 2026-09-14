@@ -1,5 +1,5 @@
 import React from 'react';
-import { getDirentItemMenuList, getBatchMenuList } from '../utils/contextMenuUtils';
+import { getDirentItemMenuList, getBatchMenuList } from '@/components/dirent-operation-menu/contextMenuUtils';
 
 export const withDirentContextMenu = (WrappedComponent) => {
   return class extends React.Component {

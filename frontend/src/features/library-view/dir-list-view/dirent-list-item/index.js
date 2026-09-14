@@ -3,6 +3,7 @@ import { DropdownItem } from 'reactstrap';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import urlJoin from 'url-join';
+import { menuHandlers } from '@/components/dirent-operation-menu/menuHandlers';
 import CustomDropdown from '@/components/dropdown';
 import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';
@@ -22,7 +23,6 @@ import { imageThumbnailCenter, videoThumbnailCenter } from '@/utils/thumbnail-ce
 import { formatUnixWithTimezone } from '@/utils/time';
 import URLDecorator from '@/utils/url-decorator';
 import { Utils } from '@/utils/utils';
-import { menuHandlers } from '../../utils/menuHandlers';
 import StatusEditor from '../status-editor';
 
 import './index.css';

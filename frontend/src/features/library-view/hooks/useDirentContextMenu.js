@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import * as ContextMenuUtils from '../utils/contextMenuUtils';
+import * as ContextMenuUtils from '@/components/dirent-operation-menu/contextMenuUtils';
 
 export const useDirentContextMenu = ({ repoInfo, userPerm }) => {
   const getItemMenuList = useCallback((dirent, isContextmenu = true) => {

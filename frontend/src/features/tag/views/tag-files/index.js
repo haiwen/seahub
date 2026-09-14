@@ -2,8 +2,8 @@ import React, { useCallback, useState, useRef, useMemo, useEffect } from 'react'
 import { LIST_MODE } from '@/components/constants/view-mode';
 import { hideMenu, showMenu } from '@/components/context-menu/actions';
 import ContextMenu from '@/components/context-menu/context-menu';
-import { getDirentItemMenuList, getTagFilesOperations } from '@/components/dir-view-mode/utils/contextMenuUtils';
-import { menuHandlers } from '@/components/dir-view-mode/utils/menuHandlers';
+import { getDirentItemMenuList, getTagFilesOperations } from '@/components/dirent-operation-menu/contextMenuUtils';
+import { menuHandlers } from '@/components/dirent-operation-menu/menuHandlers';
 import EmptyTip from '@/components/empty-tip';
 import toaster from '@/components/toast';
 import ImagePreviewer from '@/features/metadata/components/cell-formatter/image-previewer';

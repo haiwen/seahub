@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import HistoryViewToolbar from '@/features/library-view/dir-history-view/history-view-toolbar';
+import TrashViewToolbar from '@/features/library-view/dir-trash-view/trash-view-toolbar';
 import { HideColumnSetter } from '@/features/metadata/components/data-process-setter';
 import MetadataViewToolBar from '@/features/metadata/components/view-toolbar';
 import { PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
@@ -15,8 +17,6 @@ import ViewModes from '../../components/view-modes';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import TextTranslation from '../../utils/text-translation';
 import { HISTORY_MODE, LIST_MODE, SETTINGS_MODE, TRASH_MODE, TABLE_MODE, CHAT_MODE } from '../constants/view-mode';
-import HistoryViewToolbar from '../dir-view-mode/dir-history-view/history-view-toolbar';
-import TrashViewToolbar from '../dir-view-mode/dir-trash-view/trash-view-toolbar';
 import ChatToolbar from '../toolbar/chat-toolbar';
 
 const propTypes = {

@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { Link } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
+import { getTrashPath } from '@/features/library-view/dir-trash-view/utils';
 import MetadataViewName from '@/features/metadata/components/metadata-view-name';
 import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
 import TagViewName from '@/features/tag/components/tag-view-name';
@@ -12,7 +13,6 @@ import { siteRoot, gettext, username, enableUserCleanTrash } from '../../utils/c
 import { debounce, Utils } from '../../utils/utils';
 import ArchiveIcon from '../archive-icon';
 import CleanTrash from '../dialog/clean-trash';
-import { getTrashPath } from '../dir-view-mode/dir-trash-view/utils';
 import CustomDropdown from '../dropdown';
 import EventBus from '../event-bus';
 import Icon from '../icon';

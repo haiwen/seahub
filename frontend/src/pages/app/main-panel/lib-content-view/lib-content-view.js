@@ -9,7 +9,6 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
-import { getDirTableColumnOrder, setDirTableColumnOrder } from '@/components/dir-view-mode/dir-table-view/columns';
 import {
   LIST_VIEW_HIDDEN_COLUMNS_DEFAULT,
   getDirHiddenColumnKeys,
@@ -19,6 +18,8 @@ import {
   DIR_TABLE_DEFAULT_METADATA_COLUMNS,
   getDirTableRowHeightKey
 } from '@/constants/dir-column-config';
+import DirColumnView from '@/features/library-view/dir-column-view';
+import { getDirTableColumnOrder, setDirTableColumnOrder } from '@/features/library-view/dir-table-view/columns';
 import metadataAPI from '@/features/metadata/api';
 import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, ROW_HEIGHT } from '@/features/metadata/constants';
 import { PRIVATE_COLUMN_KEY } from '@/features/metadata/constants/column/private';
@@ -41,7 +42,6 @@ import DirTool from '../../../../components/cur-dir-path/dir-tool';
 import CopyMoveDirentProgressDialog from '../../../../components/dialog/copy-move-dirent-progress-dialog';
 import DeleteFolderDialog from '../../../../components/dialog/delete-folder-dialog';
 import LibDecryptDialog from '../../../../components/dialog/lib-decrypt-dialog';
-import DirColumnView from '../../../../components/dir-view-mode/dir-column-view';
 import Detail from '../../../../components/dirent-detail';
 import EventBus, { EVENT_BUS_TYPE, eventBus } from '../../../../components/event-bus';
 import FileUploader from '../../../../components/file-uploader/file-uploader';
