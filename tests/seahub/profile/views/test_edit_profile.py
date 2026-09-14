@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.test import override_settings
 from django.urls import reverse
 from unittest.mock import patch
 
@@ -39,3 +40,20 @@ class EditProfileTest(BaseTestCase):
         self.assertEqual(302, resp.status_code)
         self.assertRegex(resp['Location'], r'/profile/')
         assert email2nickname(self.tmp_user.username) == 'new nickname'
+
+    @patch('seahub.profile.views.render', return_value=HttpResponse())
+    @override_settings(ENABLE_WEBDAV_SECRET=True, ENABLE_SEAFDAV=False)
+    def test_webdav_setting_is_hidden_when_seafdav_is_disabled(self, mock_render):
+        resp = self.client.get(self.url)
+
+        self.assertEqual(200, resp.status_code)
+        self.assertFalse(mock_render.call_args.args[2]['ENABLE_WEBDAV_SECRET'])
+
+    @patch('seahub.profile.views.render', return_value=HttpResponse())
+    @override_settings(ENABLE_WEBDAV_SECRET=True, ENABLE_SEAFDAV=True)
+    def test_webdav_setting_is_shown_when_seafdav_and_secret_are_enabled(
+            self, mock_render):
+        resp = self.client.get(self.url)
+
+        self.assertEqual(200, resp.status_code)
+        self.assertTrue(mock_render.call_args.args[2]['ENABLE_WEBDAV_SECRET'])

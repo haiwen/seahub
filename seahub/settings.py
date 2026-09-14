@@ -906,6 +906,7 @@ ENABLE_PDF_THUMBNAIL = True
 # template for create new office file
 OFFICE_TEMPLATE_ROOT = os.path.join(MEDIA_ROOT, 'office-template')
 
+ENABLE_WEBDAV = os.environ.get('ENABLE_SEAFDAV', 'false').lower() == 'true'
 ENABLE_WEBDAV_SECRET = True
 WEBDAV_SECRET_MIN_LENGTH = 1
 WEBDAV_SECRET_STRENGTH_LEVEL = 1

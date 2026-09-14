@@ -141,8 +141,10 @@ def edit_profile(request):
 
     can_update_password = user_local_password_enabled(request.user)
 
+    enable_webdav_secret = settings.ENABLE_WEBDAV and settings.ENABLE_WEBDAV_SECRET
+
     WEBDAV_SECRET_SETTED = False
-    if settings.ENABLE_WEBDAV_SECRET and \
+    if enable_webdav_secret and \
             UserOptions.objects.get_webdav_secret(username):
         WEBDAV_SECRET_SETTED = True
 
@@ -160,7 +162,7 @@ def edit_profile(request):
             'two_factor_auth_enabled': show_two_factor_auth,
             'can_update_password': can_update_password,
             'ENABLE_GET_AUTH_TOKEN_BY_SESSION': settings.ENABLE_GET_AUTH_TOKEN_BY_SESSION,
-            'ENABLE_WEBDAV_SECRET': settings.ENABLE_WEBDAV_SECRET,
+            'ENABLE_WEBDAV_SECRET': enable_webdav_secret,
             'WEBDAV_SECRET_SETTED': WEBDAV_SECRET_SETTED,
             'WEBDAV_URL': get_webdav_url(),
             'WEBDAV_SECRET_MIN_LENGTH': settings.WEBDAV_SECRET_MIN_LENGTH,
