@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { getCreateMenuList } from '@/components/dirent-operation-menu/contextMenuUtils';
+import { menuHandlers } from '@/components/dirent-operation-menu/menuHandlers';
 import { DROPDOWN_SUBMENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 import EventBus from '@/components/event-bus';
 import Icon from '@/components/icon';
@@ -19,8 +21,6 @@ import { siteRoot, enableSeadoc } from '@/utils/constants';
 import TextTranslation from '@/utils/text-translation';
 import { Utils } from '@/utils/utils';
 import { useDirentContextMenu } from '../hooks/useDirentContextMenu';
-import { getCreateMenuList } from '../utils/contextMenuUtils';
-import { menuHandlers } from '../utils/menuHandlers';
 import { createDirentTableColumns, setDirTableColumnWidth } from './columns';
 import { transformDirentsToTableData } from './data-transformer';
 

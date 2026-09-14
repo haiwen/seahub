@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { hideMenu, showMenu } from '@/components/context-menu/actions';
 import ContextMenu from '@/components/context-menu/context-menu';
 import ImageDialog from '@/components/dialog/image-dialog';
+import { getCreateMenuList } from '@/components/dirent-operation-menu/contextMenuUtils';
+import { menuHandlers } from '@/components/dirent-operation-menu/menuHandlers';
 import DirentsDraggedPreview from '@/components/draggable/dirents-dragged-preview';
 import EmptyTip from '@/components/empty-tip';
 import { EVENT_BUS_TYPE } from '@/components/event-bus';
@@ -15,8 +17,6 @@ import { seafileAPI } from '@/utils/seafile-api';
 import { createTableHeaders } from '@/utils/table-headers';
 import { updateImageThumbnail, Utils } from '@/utils/utils';
 import { withDirentContextMenu } from '../hoc/withDirentContextMenu';
-import { getCreateMenuList } from '../utils/contextMenuUtils';
-import { menuHandlers } from '../utils/menuHandlers';
 import DirentVirtualListView from './dirent-virtual-list-view';
 
 const propTypes = {

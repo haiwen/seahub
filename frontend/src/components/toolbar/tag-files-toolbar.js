@@ -5,7 +5,7 @@ import OpElement from '../../components/op-element';
 import OpIcon from '../../components/op-icon';
 import { gettext } from '../../utils/constants';
 import TextTranslation from '../../utils/text-translation';
-import { getDirentItemMenuList, getTagFilesOperations } from '../dir-view-mode/utils/contextMenuUtils';
+import { getDirentItemMenuList, getTagFilesOperations } from '../dirent-operation-menu/contextMenuUtils';
 import CustomDropdown from '../dropdown';
 import Icon from '../icon';
 
