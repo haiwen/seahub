@@ -200,12 +200,6 @@ export const openWithOnlyOffice = (repoID, path, dirent) => {
   window.open(url, '_blank');
 };
 
-export const convertWithOnlyOffice = (repoID, path, dirent) => {
-  const filePath = Utils.joinPath(path, dirent.name);
-  const url = URLDecorator.getUrl({ type: 'open_with_onlyoffice', repoID, filePath });
-  window.open(url, '_blank');
-};
-
 export const freezeDocument = async (repoID, path, dirent, updateState) => {
   const filePath = Utils.joinPath(path, dirent.name);
   try {
@@ -237,6 +231,17 @@ export const unfreezeDocument = async (repoID, path, dirent, updateState) => {
       });
     }
     toaster.success(gettext('Successfully unfroze {name_placeholder}').replace('{name_placeholder}', dirent.name));
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const convertWithOnlyOffice = async (repoID, path, dirent, loadDirentList) => {
+  try {
+    const filePath = Utils.joinPath(path, dirent.name);
+    const res = await seafileAPI.onlyofficeConvert(repoID, filePath);
+    loadDirentList && loadDirentList(res.data.parent_dir);
+    toaster.success(gettext('Successfully converted {name_placeholder}').replace('{name_placeholder}', dirent.name));
   } catch (error) {
     handleError(error);
   }
