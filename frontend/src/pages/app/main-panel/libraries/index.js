@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Button } from 'reactstrap';
 import Cookies from 'js-cookie';
+import { LIST_MODE } from '../../../../components/constants/view-mode';
 import CreateGroupDialog from '../../../../components/dialog/create-group-dialog';
 import CreateRepoDialog from '../../../../components/dialog/create-repo-dialog';
 import GuideForNewDialog from '../../../../components/dialog/guide-for-new-dialog';
 import DeletedReposDialog from '../../../../components/dialog/my-deleted-repos-dialog';
-import { LIST_MODE } from '../../../../components/dir-view-mode/constants';
 import EventBus, { EVENT_BUS_TYPE } from '../../../../components/event-bus';
 import Icon from '../../../../components/icon';
 import Loading from '../../../../components/loading';

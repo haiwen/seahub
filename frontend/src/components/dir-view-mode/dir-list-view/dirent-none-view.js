@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { enableSeadoc, gettext, onlyofficeSupportEditDocxf } from '../../../utils/constants';
-import TextTranslation from '../../../utils/text-translation';
-import { Utils } from '../../../utils/utils';
-import { hideMenu, showMenu } from '../../context-menu/actions';
-import ContextMenu from '../../context-menu/context-menu';
-import { EVENT_BUS_TYPE } from '../../event-bus';
-import Loading from '../../loading';
+import { hideMenu, showMenu } from '@/components/context-menu/actions';
+import ContextMenu from '@/components/context-menu/context-menu';
+import { EVENT_BUS_TYPE } from '@/components/event-bus';
+import Loading from '@/components/loading';
+import { enableSeadoc, gettext, onlyofficeSupportEditDocxf } from '@/utils/constants';
+import TextTranslation from '@/utils/text-translation';
+import { Utils } from '@/utils/utils';
 
 import './tip-for-new-file.css';
 

@@ -3,13 +3,13 @@ import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap
 import classNames from 'classnames';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
+import { HISTORY_MODE } from '@/components/constants/view-mode';
+import Picker from '@/components/date-and-time-picker';
 import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
-import { gettext } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
-import Picker from '../../../date-and-time-picker';
-import Icon from '../../../icon';
-import OpIcon from '../../../op-icon';
-import { HISTORY_MODE } from '../../constants';
+import Icon from '@/components/icon';
+import OpIcon from '@/components/op-icon';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 const DATE_INPUT_WIDTH = 118;
 

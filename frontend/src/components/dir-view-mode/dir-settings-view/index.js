@@ -6,8 +6,8 @@ import {
   MetadataAISummaryStatusDialog as LibAISummarySettingPanel,
   MetadataTagsStatusDialog as LibMetadataTagsStatusSettingPanel,
 } from '@/features/metadata';
-import { useMetadataStatus } from '../../../hooks';
-import { chatAndSearchAvailable, enableRepoAutoDel, gettext, siteRoot } from '../../../utils/constants';
+import { useMetadataStatus } from '@/hooks';
+import { chatAndSearchAvailable, enableRepoAutoDel, gettext, siteRoot } from '@/utils/constants';
 import LibHistorySettingPanel from './lib-history-setting-panel';
 import LibAutoDelSettingPanel from './lib-old-files-auto-del-setting-panel';
 

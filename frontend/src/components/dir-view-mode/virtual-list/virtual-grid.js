@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { debounce } from '../../../utils/utils';
+import { debounce } from '@/utils/utils';
 import './virtual-scroll.css';
 
 const VirtualGrid = ({

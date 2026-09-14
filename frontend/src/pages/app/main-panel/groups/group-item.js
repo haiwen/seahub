@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { LIST_MODE } from '../../../../components/dir-view-mode/constants';
+import { LIST_MODE } from '../../../../components/constants/view-mode';
 import EventBus, { EVENT_BUS_TYPE } from '../../../../components/event-bus';
 import Icon from '../../../../components/icon';
 import SharedRepoListView from '../../../../components/shared-repo-list-view/shared-repo-list-view';

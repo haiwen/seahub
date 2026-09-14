@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { DropdownItem, Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
-import { setPendingAttachments } from '@/components/dir-view-mode/dir-chat/hooks/ai-chat-tools';
-import { AttachmentObject } from '@/components/dir-view-mode/dir-chat/models';
+import { setPendingAttachments } from '@/components/dir-chat/hooks/ai-chat-tools';
+import { AttachmentObject } from '@/components/dir-chat/models';
 import { DROPDOWN_SUBMENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';

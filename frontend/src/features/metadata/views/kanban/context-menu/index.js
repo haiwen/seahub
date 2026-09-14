@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { setPendingAttachments } from '@/components/dir-view-mode/dir-chat/hooks/ai-chat-tools';
-import { AttachmentObject } from '@/components/dir-view-mode/dir-chat/models';
+import { setPendingAttachments } from '@/components/dir-chat/hooks/ai-chat-tools';
+import { AttachmentObject } from '@/components/dir-chat/models';
 import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '@/components/event-bus';
 import { getRowById } from '@/components/sf-table/utils/table';
 import { useMetadataStatus } from '@/hooks';

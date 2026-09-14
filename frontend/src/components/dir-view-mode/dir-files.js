@@ -1,17 +1,17 @@
 import React from 'react';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
-import { fileServerRoot, gettext, siteRoot, thumbnailSizeForOriginal, thumbnailDefaultSize, SF_DIRECTORY_TREE_SORT_BY_KEY, SF_DIRECTORY_TREE_SORT_ORDER_KEY } from '../../utils/constants';
-import imageAPI from '../../utils/image-api';
-import { seafileAPI } from '../../utils/seafile-api';
-import TextTranslation from '../../utils/text-translation';
-import { updateImageThumbnail, Utils } from '../../utils/utils';
-import ImageDialog from '../dialog/image-dialog';
-import CustomDropdown from '../dropdown';
-import { EVENT_BUS_TYPE } from '../event-bus';
-import ModalPortal from '../modal-portal';
-import toaster from '../toast';
-import TreeView from '../tree-view/tree-view';
+import ImageDialog from '@/components/dialog/image-dialog';
+import CustomDropdown from '@/components/dropdown';
+import { EVENT_BUS_TYPE } from '@/components/event-bus';
+import ModalPortal from '@/components/modal-portal';
+import toaster from '@/components/toast';
+import TreeView from '@/components/tree-view/tree-view';
+import { fileServerRoot, gettext, siteRoot, thumbnailSizeForOriginal, thumbnailDefaultSize, SF_DIRECTORY_TREE_SORT_BY_KEY, SF_DIRECTORY_TREE_SORT_ORDER_KEY } from '@/utils/constants';
+import imageAPI from '@/utils/image-api';
+import { seafileAPI } from '@/utils/seafile-api';
+import TextTranslation from '@/utils/text-translation';
+import { updateImageThumbnail, Utils } from '@/utils/utils';
 import TreeSection from './tree-section';
 
 const propTypes = {

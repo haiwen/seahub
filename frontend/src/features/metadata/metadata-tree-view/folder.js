@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { ADD_VIEW_KEY, ADD_VIEW_OPTIONS } from '@/components/dir-view-mode/dir-views/views-more-operations';
 import CustomDropdown from '@/components/dropdown';
 import Icon from '@/components/icon';
 import toaster from '@/components/toast';
 import { PRIVATE_FILE_TYPE } from '@/constants';
+import { ADD_VIEW_KEY, ADD_VIEW_OPTIONS } from '@/features/metadata/utils/views-more-operations';
 import { baiduMapKey, gettext, googleMapKey } from '@/utils/constants';
 import TextTranslation from '@/utils/text-translation';
 import { Utils } from '@/utils/utils';

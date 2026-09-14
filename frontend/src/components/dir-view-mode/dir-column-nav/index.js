@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { chatAndSearchAvailable, gettext } from '../../../utils/constants';
-import { eventBus, EVENT_BUS_TYPE } from '../../event-bus';
-import Loading from '../../loading';
-import OpIcon from '../../op-icon';
+import { eventBus, EVENT_BUS_TYPE } from '@/components/event-bus';
+import Loading from '@/components/loading';
+import OpIcon from '@/components/op-icon';
+import { chatAndSearchAvailable, gettext } from '@/utils/constants';
 import DirFiles from '../dir-files';
 import DirNew from '../dir-new';
 import DirOthers from '../dir-others';

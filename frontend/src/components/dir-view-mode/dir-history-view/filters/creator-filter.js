@@ -3,14 +3,14 @@ import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap
 import classNames from 'classnames';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
+import { HISTORY_MODE } from '@/components/constants/view-mode';
 import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
-import { gettext } from '../../../../utils/constants';
-import { seafileAPI } from '../../../../utils/seafile-api';
-import { Utils } from '../../../../utils/utils';
-import Icon from '../../../icon';
-import UserItem from '../../../search/search-filters/user-item';
-import toaster from '../../../toast';
-import { HISTORY_MODE } from '../../constants';
+import Icon from '@/components/icon';
+import UserItem from '@/components/search/search-filters/user-item';
+import toaster from '@/components/toast';
+import { gettext } from '@/utils/constants';
+import { seafileAPI } from '@/utils/seafile-api';
+import { Utils } from '@/utils/utils';
 
 import '../../../search/search-filters/filter-by-creator.css';
 

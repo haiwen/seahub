@@ -6,15 +6,15 @@ import {
   TAGS_MODE,
   HISTORY_MODE,
   TRASH_MODE
-} from '../../components/dir-view-mode/constants';
-import { enableSeadoc, gettext, onlyofficeSupportEditDocxf } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
-import TipDialog from '../dialog/tip-dialog';
-import CustomDropdown from '../dropdown';
-import { EVENT_BUS_TYPE } from '../event-bus';
-import Icon from '../icon';
-import toaster from '../toast';
+} from '@/components/constants/view-mode';
+import TipDialog from '@/components/dialog/tip-dialog';
+import CustomDropdown from '@/components/dropdown';
+import { EVENT_BUS_TYPE } from '@/components/event-bus';
+import Icon from '@/components/icon';
+import toaster from '@/components/toast';
+import { enableSeadoc, gettext, onlyofficeSupportEditDocxf } from '@/utils/constants';
+import { seafileAPI } from '@/utils/seafile-api';
+import { Utils } from '@/utils/utils';
 
 const propTypes = {
   currentMode: PropTypes.string,

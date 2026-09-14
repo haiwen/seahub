@@ -1,10 +1,10 @@
 import React from 'react';
 import { Form, FormGroup, Label, Input, Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api';
-import { Utils } from '../../../utils/utils';
-import toaster from '../../toast';
+import toaster from '@/components/toast';
+import { gettext } from '@/utils/constants';
+import { seafileAPI } from '@/utils/seafile-api';
+import { Utils } from '@/utils/utils';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired
