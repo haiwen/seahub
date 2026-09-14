@@ -45,6 +45,14 @@
   background-color: var(--bs-input-disabled-bg);
 }
 
+.expanded-properties-content-container .form-control.readonly-long-text {
+  height: auto;
+  min-height: 38px;
+  align-items: flex-start;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 .expanded-properties-content-container .form-control.shrink {
   width: 320px;
 }

@@ -30,7 +30,7 @@ const LongText = ({ record, column, onCommit }) => {
 
   if (!column.editable) {
     return (
-      <div className="form-control disabled">
+      <div className="form-control disabled readonly-long-text">
         <span>{value?.text || ''}</span>
       </div>
     );
