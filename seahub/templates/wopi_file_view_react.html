@@ -15,3 +15,7 @@ accessTokenTtl: '{{access_token_ttl}}',
 {% block render_bundle %}
 {% render_bundle 'viewFileCollaboraOnline' 'js' %}
 {% endblock %}
+{% block wiki-v1-extra_content %}
+{% include 'col_ex.html' %}
+{% endblock %}
+
