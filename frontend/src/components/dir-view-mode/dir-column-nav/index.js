@@ -10,8 +10,6 @@ import DirOthers from '../dir-others';
 import DirTags from '../dir-tags';
 import DirViews from '../dir-views';
 
-import './index.css';
-
 const propTypes = {
   currentPath: PropTypes.string.isRequired,
   userPerm: PropTypes.string.isRequired,

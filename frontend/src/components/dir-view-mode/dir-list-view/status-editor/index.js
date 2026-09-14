@@ -7,8 +7,8 @@ import SingleSelectFormatter from '@/features/metadata/components/cell-formatter
 import { PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
 import { DEFAULT_FILE_STATUS_OPTIONS } from '@/features/metadata/constants/column/format';
 import { getColumnOptionNameById, getServerOptions } from '@/features/metadata/utils/cell';
-import { KeyCodes } from '../../constants';
-import { eventBus, EVENT_BUS_TYPE } from '../event-bus';
+import { KeyCodes } from '../../../../constants';
+import { eventBus, EVENT_BUS_TYPE } from '../../../event-bus';
 
 import './index.css';
 

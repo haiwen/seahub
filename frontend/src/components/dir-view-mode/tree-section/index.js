@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import OpIcon from '../../components/op-icon';
-import { TREE_PANEL_SECTION_STATE_KEY } from '../../constants';
-import { gettext } from '../../utils/constants';
+import { TREE_PANEL_SECTION_STATE_KEY } from '../../../constants';
+import { gettext } from '../../../utils/constants';
+import OpIcon from '../../op-icon';
 
 import './index.css';
 
