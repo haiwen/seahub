@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { gettext } from '../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import './virtual-scroll.css';
 
 const VirtualList = ({

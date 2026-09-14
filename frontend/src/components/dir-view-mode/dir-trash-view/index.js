@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import deepCopy from 'deep-copy';
-import { gettext, siteRoot } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api';
-import { Utils } from '../../../utils/utils';
-import EventBus, { eventBus, EVENT_BUS_TYPE } from '../../event-bus';
-import Loading from '../../loading';
-import SFTable from '../../sf-table';
-import toaster from '../../toast';
+import EventBus, { eventBus, EVENT_BUS_TYPE } from '@/components/event-bus';
+import Loading from '@/components/loading';
+import SFTable from '@/components/sf-table';
+import toaster from '@/components/toast';
+import { gettext, siteRoot } from '@/utils/constants';
+import { seafileAPI } from '@/utils/seafile-api';
+import { Utils } from '@/utils/utils';
 import { repoTrashAPI } from './api';
 import { ensureLeadingSlash, generateTrashItem, getTrashPath, isFiltersValid, transformTrashListToTableData } from './utils';
 

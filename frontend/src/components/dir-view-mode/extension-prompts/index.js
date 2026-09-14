@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
-import { gettext } from '../../../utils/constants';
-import Icon from '../../icon';
+import Icon from '@/components/icon';
+import { gettext } from '@/utils/constants';
 
 import './index.css';
 

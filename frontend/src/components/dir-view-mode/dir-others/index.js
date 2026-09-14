@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext, username, isPro, siteRoot } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
-import { eventBus, EVENT_BUS_TYPE } from '../../event-bus';
+import { eventBus, EVENT_BUS_TYPE } from '@/components/event-bus';
+import { gettext, username, isPro, siteRoot } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import TreeSection from '../tree-section';
 import Item from './item';
 import LibraryMoreOperations from './library-more-operations';

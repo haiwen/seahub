@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { eventBus, EVENT_BUS_TYPE } from '@/components/event-bus';
 import { MetadataTreeView, useMetadata } from '@/features/metadata';
-import { useMetadataStatus } from '../../../hooks';
-import { gettext } from '../../../utils/constants';
-import { eventBus, EVENT_BUS_TYPE } from '../../event-bus';
+import { useMetadataStatus } from '@/hooks';
+import { gettext } from '@/utils/constants';
 import ExtensionPrompts from '../extension-prompts';
 import TreeSection from '../tree-section';
 import ViewsMoreOperations from './views-more-operations';

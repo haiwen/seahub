@@ -1,7 +1,7 @@
 import React from 'react';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
-import { formatWithTimezone } from '../../../../utils/time';
+import { formatWithTimezone } from '@/utils/time';
 
 const TimeFormatter = ({ record }) => {
   if (!record) return null;

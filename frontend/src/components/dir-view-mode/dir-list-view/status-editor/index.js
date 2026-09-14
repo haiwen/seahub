@@ -1,14 +1,14 @@
 import React, { useMemo, useState, useRef, useEffect, useCallback } from 'react';
 import { Popover } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { eventBus, EVENT_BUS_TYPE } from '@/components/event-bus';
+import { KeyCodes } from '@/constants';
 import { metadataAPI } from '@/features/metadata';
 import SingleSelectEditor from '@/features/metadata/components/cell-editors/single-select-editor';
 import SingleSelectFormatter from '@/features/metadata/components/cell-formatter/single-select';
 import { PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
 import { DEFAULT_FILE_STATUS_OPTIONS } from '@/features/metadata/constants/column/format';
 import { getColumnOptionNameById, getServerOptions } from '@/features/metadata/utils/cell';
-import { KeyCodes } from '../../../../constants';
-import { eventBus, EVENT_BUS_TYPE } from '../../../event-bus';
 
 import './index.css';
 

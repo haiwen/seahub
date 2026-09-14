@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import Loading from '../../loading';
-import RepoInfoBar from '../../repo-info-bar';
+import Loading from '@/components/loading';
+import RepoInfoBar from '@/components/repo-info-bar';
 import DirentListView from './dirent-list-view';
 import DirentNoneView from './dirent-none-view';
 

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import RepoInfoBar from '../../repo-info-bar';
+import RepoInfoBar from '@/components/repo-info-bar';
 import DirentNoneView from '../dir-list-view/dirent-none-view';
 import DirentGridView from './dirent-grid-view';
 
