@@ -154,7 +154,17 @@ html, body { padding:0; margin:0; height:100%; }
             {% endif %}
         }
     };
-    var docEditor = new DocsAPI.DocEditor("placeholder", config);
+    var isSafari = /^((?!chrome|android).)*safari/i.test(window.navigator.userAgent);
+    var docEditor;
+    if (!isSafari) {
+        docEditor = new DocsAPI.DocEditor("placeholder", config);
+    } else {
+        window.onload = function () {
+            window.requestAnimationFrame(function () {
+                docEditor = new DocsAPI.DocEditor("placeholder", config);
+            });
+        };
+    }
 </script>
 <script type="text/javascript">
     var SEAFILE_GLOBAL = {
