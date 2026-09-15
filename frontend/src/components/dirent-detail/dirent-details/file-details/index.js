@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { MetadataDetails, useMetadataDetails } from '@/features/metadata';
 import Formatter from '@/features/metadata/components/formatter';
+import MetadataDetails from '@/features/metadata/components/metadata-details';
 import { CellType, PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
+import { useMetadataDetails } from '@/features/metadata/hooks/metadata-details';
 import { getCellValueByColumn, getDateDisplayString, decimalToExposureTime } from '@/features/metadata/utils/cell';
 import { CAPTURE_INFO_SHOW_KEY } from '../../../../constants';
 import { useMetadataStatus } from '../../../../hooks';

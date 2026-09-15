@@ -23,7 +23,8 @@ import { getDirTableColumnOrder, setDirTableColumnOrder } from '@/features/libra
 import metadataAPI from '@/features/metadata/api';
 import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, ROW_HEIGHT } from '@/features/metadata/constants';
 import { PRIVATE_COLUMN_KEY } from '@/features/metadata/constants/column/private';
-import { MetadataProvider } from '@/features/metadata/hooks';
+import { MetadataProvider } from '@/features/metadata/hooks/metadata';
+import { MetadataMiddlewareProvider } from '@/features/metadata/hooks/metadata-middleware';
 import Column from '@/features/metadata/model/column';
 import { normalizeColumns } from '@/features/metadata/utils/column';
 import {
@@ -52,7 +53,7 @@ import ViewToolbar from '../../../../components/toolbar/view-toolbar';
 import treeHelper from '../../../../components/tree-view/tree-helper';
 import TreeNode from '../../../../components/tree-view/tree-node';
 import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY, RECENTLY_USED_LIST_KEY } from '../../../../constants';
-import { MetadataStatusProvider, FileOperationsProvider, MetadataMiddlewareProvider } from '../../../../hooks';
+import { FileOperationsProvider, MetadataStatusProvider } from '../../../../hooks';
 import { Dirent, FileTag, RepoTag, RepoInfo } from '../../../../models';
 import {
   chatAndSearchAvailable,

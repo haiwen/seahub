@@ -3,11 +3,11 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import EventBus from '@/components/event-bus';
 import { EDITOR_TYPE } from '@/components/sf-table/constants/grid';
-import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
-import { openFile } from '@/features/metadata/utils/file';
 import { siteRoot, thumbnailDefaultSize, enableThumbnailServer } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
+import { EVENT_BUS_TYPE } from '../../constants';
 import { getParentDirFromRecord, getFileMTimeFromRecord } from '../../utils/cell';
+import { openFile } from '../../utils/file';
 import { checkIsDir } from '../../utils/row';
 import FileNameFormatter from './file-name-formatter';
 

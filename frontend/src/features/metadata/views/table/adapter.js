@@ -6,19 +6,19 @@ import { DROPDOWN_SUBMENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';
 import { GridUtilsAdapter } from '@/components/sf-table/utils/grid-utils-adapter';
-import { CellType, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '@/features/metadata/constants';
-import { EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS } from '@/features/metadata/constants/column/private';
-import { POPUP_EDITOR_COLUMN_TYPES } from '@/features/metadata/constants/column/type';
-import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '@/features/metadata/utils/cell';
-import { openInNewTab, openParentFolder } from '@/features/metadata/utils/file';
-import { buildTableMenuOptions } from '@/features/metadata/utils/menu-builder';
-import { checkIsDir } from '@/features/metadata/utils/row';
 import TextTranslation from '@/utils/text-translation';
 import { Utils } from '@/utils/utils';
 import Editor from '../../components/cell-editors/editor';
 import CellFormatter from '../../components/cell-formatter';
+import { CellType, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '../../constants';
 import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME } from '../../constants/column/icon';
+import { EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS } from '../../constants/column/private';
+import { POPUP_EDITOR_COLUMN_TYPES } from '../../constants/column/type';
+import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
 import { getColumnDisplayName } from '../../utils/column';
+import { openInNewTab, openParentFolder } from '../../utils/file';
+import { buildTableMenuOptions } from '../../utils/menu-builder';
+import { checkIsDir } from '../../utils/row';
 
 export const adaptMetadataColumnsToSfTable = (repoID, repoInfo, metadataColumns) => {
   if (!Array.isArray(metadataColumns)) {

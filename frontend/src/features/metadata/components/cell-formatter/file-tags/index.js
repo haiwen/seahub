@@ -2,9 +2,9 @@ import React, { useContext, useMemo } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { getRowById } from '@/components/sf-table/utils/table';
-import { ROW_HEIGHT } from '@/features/metadata/constants';
 import { TagsContext } from '@/features/tag/hooks';
 import { getTagColor, getTagName } from '@/features/tag/utils/cell';
+import { ROW_HEIGHT } from '../../../constants';
 
 import '../../tag-ui/index.css';
 import './index.css';

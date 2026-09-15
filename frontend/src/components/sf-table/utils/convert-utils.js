@@ -11,7 +11,7 @@ import {
 } from '@/features/metadata/utils/cell';
 import { getColumnOptions, generatorCellOption, generatorCellOptions, isLongTextValueExceedLimit, getValidLongTextValue } from '@/features/metadata/utils/column';
 import { formatTextToDate } from '@/features/metadata/utils/date';
-import { isNumber } from '@/features/metadata/utils/number';
+import { isNumber } from '../../../utils/number';
 
 const SUPPORT_PASTE_FROM_COLUMN = {
   [CellType.MULTIPLE_SELECT]: [CellType.MULTIPLE_SELECT, CellType.TEXT, CellType.SINGLE_SELECT],

@@ -7,5 +7,4 @@ export { default as MetadataTagsStatusDialog } from './components/dialog/metadat
 export { default as MetadataDetails } from './components/metadata-details';
 export { default as MetadataTreeView } from './metadata-tree-view';
 export { default as metadataAPI } from './api';
-export { default as MetadataContext } from './context';
 export { MetadataManagerAPI } from './api';

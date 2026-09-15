@@ -2,8 +2,15 @@ import { CellType, DEFAULT_DATE_FORMAT } from '../../constants';
 import { getColumnOptions } from '../column';
 import DateUtils from '../date';
 import {
-  getDateDisplayString, getNumberDisplayString, getLongtextDisplayString, getOptionName, getCollaboratorsName, getColumnOptionNamesByIds,
-  getGeolocationDisplayString, getColumnOptionIdsByNames, getTagsDisplayString,
+  getDateDisplayString,
+  getNumberDisplayString,
+  getLongtextDisplayString,
+  getOptionName,
+  getCollaboratorsName,
+  getColumnOptionNamesByIds,
+  getGeolocationDisplayString,
+  getColumnOptionIdsByNames,
+  getTagsDisplayString,
 } from './column';
 import { getCellValueByColumn } from './core';
 

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { MetadataDetails } from '@/features/metadata';
 import Formatter from '@/features/metadata/components/formatter';
+import MetadataDetails from '@/features/metadata/components/metadata-details';
 import { CellType } from '@/features/metadata/constants';
 import { SYSTEM_FOLDERS } from '../../../constants';
 import { useMetadataStatus } from '../../../hooks';

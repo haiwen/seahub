@@ -4,8 +4,7 @@ import { setPendingAttachments } from '@/components/dir-chat/hooks/ai-chat-tools
 import { AttachmentObject } from '@/components/dir-chat/models';
 import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '@/components/event-bus';
 import { getRowById } from '@/components/sf-table/utils/table';
-import { useFileOperations } from '@/hooks/file-operations';
-import { useMetadataStatus } from '@/hooks/metadata-status';
+import { useFileOperations, useMetadataStatus } from '@/hooks';
 import TextTranslation from '@/utils/text-translation';
 import { Utils } from '@/utils/utils';
 import ContextMenu from '../../../components/context-menu';

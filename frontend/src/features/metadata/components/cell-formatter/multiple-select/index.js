@@ -1,9 +1,8 @@
 import React, { useMemo } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { ROW_HEIGHT } from '@/features/metadata/constants';
 import { gettext } from '@/utils/constants';
-import { DELETED_OPTION_BACKGROUND_COLOR, DELETED_OPTION_TIPS } from '../../../constants';
+import { DELETED_OPTION_BACKGROUND_COLOR, DELETED_OPTION_TIPS, ROW_HEIGHT } from '../../../constants';
 import SelectOption from '../select-option';
 
 import './index.css';

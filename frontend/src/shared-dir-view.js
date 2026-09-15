@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import { createRoot } from 'react-dom/client';
+import { MetadataAIOperationsProvider } from '@/features/metadata/hooks/metadata-ai-operation';
 import Account from './components/account';
 import { LIST_MODE } from './components/constants/view-mode';
 import CopyMoveDirentProgressDialog from './components/dialog/copy-move-dirent-progress-dialog';
@@ -28,7 +29,6 @@ import FileUploader from './components/shared-link-file-uploader/file-uploader';
 import SortMenu from './components/sort-menu';
 import toaster from './components/toast';
 import ViewModes from './components/view-modes';
-import { MetadataAIOperationsProvider } from './hooks';
 import RepoTag from './models/repo-tag';
 import {
   useGoFileserver, fileServerRoot, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle,

@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { ROW_HEIGHT } from '@/features/metadata/constants';
+import { ROW_HEIGHT } from '../../constants';
 import AsyncCollaborator from './async-collaborator';
 
 const CollaboratorsFormatter = ({ value, className, children: emptyFormatter, ...params }) => {

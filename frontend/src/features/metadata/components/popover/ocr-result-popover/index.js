@@ -11,12 +11,11 @@ import { gettext } from '@/utils/constants';
 import { getTarget } from '@/utils/dom';
 import { Utils } from '@/utils/utils';
 import metadataAPI from '../../../api';
-import { useMetadataAIOperations } from '../../../hooks';
 import { getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/cell';
 
 import './index.css';
 
-const OCRResultPopover = ({ repoID, target, record, onToggle, saveToDescription }) => {
+const OCRResultPopover = ({ repoID, target, record, onToggle, saveToDescription, canModify }) => {
   const [isLoading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [value, setValue] = useState('');
@@ -25,8 +24,6 @@ const OCRResultPopover = ({ repoID, target, record, onToggle, saveToDescription 
 
   const popoverRef = useRef(null);
   const bodyRef = useRef(null);
-
-  const { canModify } = useMetadataAIOperations();
 
   const parentDir = useMemo(() => getParentDirFromRecord(record), [record]);
   const fileName = useMemo(() => getFileNameFromRecord(record), [record]);
@@ -189,6 +186,7 @@ OCRResultPopover.propTypes = {
   target: PropTypes.oneOfType([PropTypes.string, PropTypes.node, PropTypes.object]),
   onToggle: PropTypes.func,
   saveToDescription: PropTypes.func,
+  canModify: PropTypes.bool,
 };
 
 export default OCRResultPopover;

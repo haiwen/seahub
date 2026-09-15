@@ -2,9 +2,10 @@ import React, { Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { SimpleViewer } from '@seafile/seafile-sdoc-editor';
 import { createRoot } from 'react-dom/client';
+import { MetadataMiddlewareProvider } from '@/features/metadata/hooks/metadata-middleware';
 import i18n from './_i18n/i18n-sdoc-editor';
 import Loading from './components/loading';
-import { MetadataMiddlewareProvider, MetadataStatusProvider } from './hooks';
+import { MetadataStatusProvider } from './hooks';
 import SdocEditor from './pages/sdoc-editor';
 import { Utils } from './utils/utils';
 

@@ -6,7 +6,7 @@ import {
 import isUrl from 'is-url';
 import context from '../context';
 import { formatImageUrlFromExternalLink } from '../utils/common-utils';
-import { getSyncableElements } from '.';
+import { getSyncableElements } from './syncable-elements';
 
 class ServerScreenCache {
   static cache = new Map();

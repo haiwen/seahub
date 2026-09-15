@@ -2,9 +2,10 @@
 import React, { Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { createRoot } from 'react-dom/client';
+import { MetadataMiddlewareProvider } from '@/features/metadata/hooks/metadata-middleware';
 import i18n from './_i18n/i18n-seafile-editor';
 import Loading from './components/loading';
-import { MetadataMiddlewareProvider, MetadataStatusProvider } from './hooks';
+import { MetadataStatusProvider } from './hooks';
 import MarkdownEditor from './pages/markdown-editor';
 
 const { repoID, repoEncrypted, filePerm } = window.app.pageOptions;

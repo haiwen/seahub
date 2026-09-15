@@ -8,7 +8,7 @@ import { isValidEmail } from '../utils/validate';
 
 const CollaboratorsContext = React.createContext(null);
 
-const CollaboratorsProvider = React.memo(({ repoID, children }) => {
+export const CollaboratorsProvider = React.memo(({ repoID, children }) => {
   const [collaboratorsCache, setCollaboratorsCache] = useState({});
   const [collaborators, setCollaborators] = useState([]);
   const collaboratorsCacheRef = useRef(collaboratorsCache);
@@ -105,5 +105,3 @@ export const useCollaborators = () => {
   const { collaborators, collaboratorsCache, updateCollaboratorsCache, getCollaborator, queryUser } = context;
   return { collaborators, collaboratorsCache, updateCollaboratorsCache, getCollaborator, queryUser };
 };
-
-export default CollaboratorsProvider;
