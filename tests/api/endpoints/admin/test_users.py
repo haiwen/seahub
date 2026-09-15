@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
+from io import BytesIO
 import json
 
+from django.core.files.uploadedfile import SimpleUploadedFile
+from openpyxl import Workbook
 from seaserv import ccnet_api, seafile_api
 from tests.common.utils import randstring
 from django.urls import reverse
 from seahub.constants import DEFAULT_USER, GUEST_USER
 from seahub.test_utils import BaseTestCase
+from seahub.auth.utils import get_virtual_id_by_email
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.profile.models import DetailedProfile
@@ -95,6 +99,40 @@ class AdminUsersTest(BaseTestCase):
                 'application/json')
 
         self.assertEqual(403, resp.status_code)
+
+
+class AdminImportUsersTest(BaseTestCase):
+
+    def setUp(self):
+        self.url = reverse('api-v2.1-admin-import-users')
+        self.tmp_email = '%s@example.com' % randstring(10)
+
+    def tearDown(self):
+        self.remove_user(get_virtual_id_by_email(self.tmp_email))
+
+    def test_import_users_with_short_rows(self):
+        self.login_as(self.admin)
+
+        wb = Workbook()
+        ws = wb.active
+        ws.append(['Email', 'Password'])
+        ws.append([self.tmp_email, 'secret'])
+
+        content = BytesIO()
+        wb.save(content)
+        xlsx_file = SimpleUploadedFile(
+            'users.xlsx',
+            content.getvalue(),
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        )
+
+        resp = self.client.post(self.url, {'file': xlsx_file})
+
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertEqual([], json_resp['failed'])
+        self.assertEqual(1, len(json_resp['success']))
+
 
 class AdminUserTest(BaseTestCase):
 
