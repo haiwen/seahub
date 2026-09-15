@@ -11,7 +11,7 @@ import { gettext } from '@/utils/constants';
 import { getTarget } from '@/utils/dom';
 import { Utils } from '@/utils/utils';
 import metadataAPI from '../../../api';
-import { useMetadataAIOperations } from '../../../hooks';
+import { useMetadataAIOperations } from '../../../hooks/metadata-ai-operation';
 import { getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/cell';
 
 import './index.css';
