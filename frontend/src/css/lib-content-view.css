@@ -74,11 +74,6 @@
   justify-content: center;
 }
 
-/* Special handling: keep the new button transparent in dark mode. */
-[data-bs-theme="dark"] .dir-content-nav .dir-new-btn {
-  background-color: transparent;
-}
-
 .dir-content-nav .dir-new-btn:hover {
   background-color: var(--bs-btn-hover-bg);
   color: var(--bs-btn-hover-color);
