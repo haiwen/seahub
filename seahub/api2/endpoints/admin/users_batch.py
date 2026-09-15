@@ -293,7 +293,9 @@ class AdminImportUsers(APIView):
         next(rows)
         for row in rows:
             if not all(col.value is None for col in row):
-                records.append([col.value for col in row])
+                row_values = [col.value for col in row]
+                row_values += [None] * (6 - len(row_values))
+                records.append(row_values)
 
         if user_number_over_limit(new_users=len(records)):
             error_msg = 'The number of users exceeds the limit.'
