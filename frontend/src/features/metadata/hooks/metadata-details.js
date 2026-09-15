@@ -5,7 +5,7 @@ import { eventBus, EVENT_BUS_TYPE as DIRENT_EVENT_BUS_TYPE } from '@/components/
 import toaster from '@/components/toast';
 import { SYSTEM_FOLDERS } from '@/constants';
 import tagsAPI from '@/features/tag/api';
-import { useMetadataStatus } from '@/hooks/metadata-status';
+import { useMetadataStatus } from '@/hooks';
 import ObjectUtils from '@/utils/object';
 import { Utils } from '@/utils/utils';
 import metadataAPI from '../api';
