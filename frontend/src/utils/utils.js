@@ -1,5 +1,4 @@
 import React from 'react';
-import PermissionDeniedTip from '../components/permission-denied-tip';
 import toaster from '../components/toast';
 import { PRIVATE_FILE_TYPE } from '../constants';
 import { compareTwoString } from './compare-two-string';
@@ -7,6 +6,7 @@ import { mediaUrl, gettext, serviceURL, siteRoot, isPro, fileAuditEnabled, canGe
   enableResetEncryptedRepoPassword, isEmailConfigured, isSystemStaff,
   enableOnlyoffice, onlyofficeEditFileExtension,
   enableOfficeWebApp, officeWebAppEditFileExtension, enableMultipleOfficeSuite, officeSuiteEditFileExtension } from './constants';
+import PermissionDeniedTip from './permission-denied-tip';
 import TextTranslation from './text-translation';
 
 export const Utils = {

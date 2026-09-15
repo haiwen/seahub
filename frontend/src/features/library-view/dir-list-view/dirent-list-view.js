@@ -14,10 +14,10 @@ import { Dirent } from '@/models';
 import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal, thumbnailDefaultSize, fileServerRoot } from '@/utils/constants';
 import imageAPI from '@/utils/image-api';
 import { seafileAPI } from '@/utils/seafile-api';
-import { createTableHeaders } from '@/utils/table-headers';
 import { updateImageThumbnail, Utils } from '@/utils/utils';
 import { withDirentContextMenu } from '../hoc/withDirentContextMenu';
 import DirentVirtualListView from './dirent-virtual-list-view';
+import { createTableHeaders } from './table-headers';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
