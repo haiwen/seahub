@@ -186,6 +186,7 @@ export const MetadataAIOperationsProvider = ({
           record={recordRef.current}
           onToggle={closeOcrResultDialog}
           saveToDescription={opCallBack.current}
+          canModify={canModify}
         />
       )}
     </MetadataAIOperationsContext.Provider>
