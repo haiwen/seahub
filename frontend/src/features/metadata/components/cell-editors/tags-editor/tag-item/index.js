@@ -7,7 +7,6 @@ import { getTagColor, getTagId, getTagName } from '@/features/tag/utils/cell';
 import { gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 
-import '../../../tag-ui/index.css';
 import './index.css';
 
 const TagItem = ({
