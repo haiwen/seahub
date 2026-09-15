@@ -4,7 +4,7 @@ import { gettext, lang } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import metadataAPI from '../api';
 import FileTagsDialog from '../components/dialog/file-tags-dialog';
-import { OCRResultPopover } from '../components/popover';
+import OCRResultPopover from '../components/popover/ocr-result-popover';
 import { PRIVATE_COLUMN_KEY, EVENT_BUS_TYPE } from '../constants';
 
 // This hook provides content related to metadata ai operation
