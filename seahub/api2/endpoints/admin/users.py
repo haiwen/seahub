@@ -1798,7 +1798,7 @@ class AdminUpdateUserCcnetEmail(APIView):
             error_msg = 'new_email invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        new_ccnet_email = new_ccnet_email.strip()
+        new_ccnet_email = new_ccnet_email.strip().lower()
         if not is_valid_email(new_ccnet_email):
             error_msg = 'new_email invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
