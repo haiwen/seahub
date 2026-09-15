@@ -226,7 +226,7 @@ class UserSelect extends React.Component {
       <ClickOutside onClickOutside={this.onClickOutside}>
         <>
           <div
-            className={classnames('user-select-trigger sf-select', className, { 'focus': this.state.isPopoverOpen })}
+            className={classnames('user-select-trigger sf-select justify-content-start', className, { 'focus': this.state.isPopoverOpen })}
             id="user-select"
             tabIndex={0}
             role="button"
