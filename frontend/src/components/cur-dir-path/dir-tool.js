@@ -15,8 +15,8 @@ import SetRowHeight from '../../components/set-row-height';
 import SortMenu from '../../components/sort-menu';
 import ViewModes from '../../components/view-modes';
 import { PRIVATE_FILE_TYPE } from '../../constants';
+import { HISTORY_MODE, LIST_MODE, SETTINGS_MODE, TRASH_MODE, TABLE_MODE, CHAT_MODE } from '../../constants/view-mode';
 import TextTranslation from '../../utils/text-translation';
-import { HISTORY_MODE, LIST_MODE, SETTINGS_MODE, TRASH_MODE, TABLE_MODE, CHAT_MODE } from '../constants/view-mode';
 import ChatToolbar from '../toolbar/chat-toolbar';
 
 const propTypes = {

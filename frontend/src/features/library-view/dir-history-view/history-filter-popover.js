@@ -3,7 +3,7 @@ import { UncontrolledPopover } from 'reactstrap';
 import classNames from 'classnames';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
-import { TRASH_MODE } from '@/components/constants/view-mode';
+import { TRASH_MODE } from '@/constants/view-mode';
 import { getEventClassName } from '@/utils/dom';
 import HistoryBasicFilters from './filters/basic-filters';
 

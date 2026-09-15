@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { FormGroup } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { HISTORY_MODE, TRASH_MODE } from '@/components/constants/view-mode';
+import { HISTORY_MODE, TRASH_MODE } from '@/constants/view-mode';
 import FilterBySuffix from '../../dir-trash-view/file-suffix-filter';
 import HistoryCreatorFilter from './creator-filter';
 import HistoryDateFilter from './date-filter';

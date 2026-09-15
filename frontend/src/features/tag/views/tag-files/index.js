@@ -1,5 +1,4 @@
 import React, { useCallback, useState, useRef, useMemo, useEffect } from 'react';
-import { LIST_MODE } from '@/components/constants/view-mode';
 import { hideMenu, showMenu } from '@/components/context-menu/actions';
 import ContextMenu from '@/components/context-menu/context-menu';
 import { getDirentItemMenuList, getTagFilesOperations } from '@/components/dirent-operation-menu/contextMenuUtils';
@@ -15,6 +14,7 @@ import {
 import { menuHandlers } from '@/components/dirent-operation-menu/menuHandlers';
 import EmptyTip from '@/components/empty-tip';
 import toaster from '@/components/toast';
+import { LIST_MODE } from '@/constants/view-mode';
 import ImagePreviewer from '@/features/metadata/components/cell-formatter/image-previewer';
 import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
 import { getRecordIdFromRecord } from '@/features/metadata/utils/cell';

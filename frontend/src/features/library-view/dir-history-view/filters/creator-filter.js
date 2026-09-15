@@ -4,11 +4,11 @@ import classNames from 'classnames';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
-import { HISTORY_MODE } from '@/components/constants/view-mode';
 import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 import Icon from '@/components/icon';
 import UserItem from '@/components/search/search-filters/user-item';
 import toaster from '@/components/toast';
+import { HISTORY_MODE } from '@/constants/view-mode';
 import { gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 

@@ -4,7 +4,6 @@ import classnames from 'classnames';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '../../../../api/seafile-api';
-import { LIST_MODE, GRID_MODE } from '../../../../components/constants/view-mode';
 import SortOptionsDialog from '../../../../components/dialog/sort-options';
 import EmptyTip from '../../../../components/empty-tip';
 import EventBus, { EVENT_BUS_TYPE } from '../../../../components/event-bus';
@@ -14,6 +13,7 @@ import SharedRepoListView from '../../../../components/shared-repo-list-view/sha
 import ReposSortMenu from '../../../../components/sort-menu';
 import toaster from '../../../../components/toast';
 import ViewModes from '../../../../components/view-modes';
+import { LIST_MODE, GRID_MODE } from '../../../../constants/view-mode';
 import { Group, Repo } from '../../../../models';
 import { gettext, siteRoot, username, mediaUrl } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';

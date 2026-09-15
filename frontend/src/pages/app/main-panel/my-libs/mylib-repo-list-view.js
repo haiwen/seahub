@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
 import MediaQuery from 'react-responsive';
 import PropTypes from 'prop-types';
-import { LIST_MODE } from '../../../../components/constants/view-mode';
 import { hideMenu, handleContextClick } from '../../../../components/context-menu/actions';
 import ContextMenu from '../../../../components/context-menu/context-menu';
 import LibsMobileThead from '../../../../components/libs-mobile-thead';
 import RepoListCard from '../../../../components/repo-list-card';
+import { LIST_MODE } from '../../../../constants/view-mode';
 import { Utils } from '../../../../utils/utils';
 import MylibRepoListItem from './mylib-repo-list-item';
 
