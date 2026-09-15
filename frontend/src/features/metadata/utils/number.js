@@ -1,3 +1,5 @@
+import { NPdivide } from './helper/number-precision';
+
 /**
  * Check whether is number
  * @param {number} number
@@ -36,8 +38,27 @@ const round = (number, decimalDigits = 0) => {
   return Math.round(fixedNum) / offsets;
 };
 
+/**
+ * @param {string} sNumber e.g. '1.23'
+ * @param {string} format e.g. 'percent'
+ * @returns float number from string. e.g. '1.23' = 1.23
+ */
+const getFloatNumber = (sNumber, format) => {
+  if (!sNumber && sNumber !== 0) {
+    return null;
+  }
+  if (typeof sNumber === 'number') return sNumber;
+  if (typeof sNumber !== 'string') return null;
+  const parsedNum = parseFloat(sNumber.replace(/[^.-\d]/g, ''));
+  if (format === 'percent' && !isNaN(parsedNum)) {
+    return NPdivide(parsedNum, 100);
+  }
+  return isNaN(parsedNum) ? null : parsedNum;
+};
+
 export {
   isNumber,
   isNumberEqual,
   round,
+  getFloatNumber
 };
