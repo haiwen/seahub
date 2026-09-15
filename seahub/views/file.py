@@ -55,7 +55,7 @@ from seahub.utils import render_error, is_org_context, \
     get_conf_text_ext, PREVIEW_FILEEXT, \
     normalize_file_path, get_service_url, \
     normalize_cache_key, gen_file_get_url_by_sharelink, gen_file_get_url_new, \
-    get_site_scheme_and_netloc, get_file_history_suffix
+    get_site_scheme_and_netloc, get_file_history_suffix, IS_EMAIL_CONFIGURED
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_types import (IMAGE, PDF, SVG, AUDIO,
                                      MARKDOWN, TEXT, VIDEO, SEADOC, EXCALIDRAW, EPUB)
@@ -700,6 +700,7 @@ def view_lib_file(request, repo_id, path):
         'file_download_url': gen_file_get_url_new(repo_id, path),
         'mobile_login': mobile_login,
         'enable_onlyoffice': ENABLE_ONLYOFFICE,
+        'is_email_configured': IS_EMAIL_CONFIGURED,
     }
 
     # check whether file is starred

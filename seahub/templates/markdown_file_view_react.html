@@ -64,6 +64,8 @@
                 enableSeafileAI: {% if enable_seafile_ai %} true {% else %} false {% endif %},
                 fileUuid: '{{ file_uuid }}',
                 username: '{{ user.username|escapejs }}',
+                canUseGlobalAddressBook: {% if user.permissions.can_use_global_address_book %} true {% else %} false {% endif %},
+                isEmailConfigured: '{{ is_email_configured }}',
             },
             userInfo: {
             username: '{{ user.username }}',
