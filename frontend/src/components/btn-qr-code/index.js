@@ -47,7 +47,7 @@ class ButtonQR extends React.Component {
           <ClickOutside onClickOutside={this.onClickOutside}>
             <QRCodePopover
               container={this.btn}
-              target="qr-code-button"
+              target={this.btn.current}
               value={link}
             />
           </ClickOutside>
