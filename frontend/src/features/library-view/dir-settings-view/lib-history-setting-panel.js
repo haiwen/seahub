@@ -1,9 +1,9 @@
 import React from 'react';
 import { Form, FormGroup, Label, Input, Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '@/api/seafile-api';
 import toaster from '@/components/toast';
 import { gettext, enableRepoHistorySetting } from '@/utils/constants';
-import { seafileAPI } from '@/utils/seafile-api';
 import { Utils } from '@/utils/utils';
 
 const propTypes = {

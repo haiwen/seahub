@@ -1,7 +1,7 @@
 import axios from 'axios';
 import FormData from 'form-data';
 import Cookies from 'js-cookie';
-import { siteRoot } from './constants';
+import { siteRoot } from '../utils/constants';
 
 class SeafileAPI {
 

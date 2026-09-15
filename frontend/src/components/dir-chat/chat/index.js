@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { chatAPI } from '../../../utils/chat-api';
+import { chatAPI } from '../../../api/chat-api';
 import { gettext, username } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import CenteredLoading from '../../centered-loading';

@@ -3,10 +3,10 @@ import { Button, Modal, ModalBody, ModalFooter, FormGroup, Label, Input, Alert }
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
+import { systemAdminAPI } from '../../../api/system-admin-api';
+import { userAPI } from '../../../api/user-api';
 import toaster from '../../../components/toast';
 import { gettext, siteRoot } from '../../../utils/constants';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
-import { userAPI } from '../../../utils/user-api';
 import { Utils } from '../../../utils/utils';
 import SeahubIODialog from '../../dialog/seahub-io-dialog';
 

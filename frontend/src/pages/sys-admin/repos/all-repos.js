@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import { systemAdminAPI } from '../../../api/system-admin-api';
 import SysAdminCreateRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog';
 import toaster from '../../../components/toast';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import Content from './repos';
 

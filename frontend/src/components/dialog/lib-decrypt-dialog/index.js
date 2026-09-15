@@ -1,8 +1,8 @@
 import React from 'react';
 import { Modal, ModalBody, Form } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '../../../api/seafile-api';
 import { gettext, siteRoot, mediaUrl } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api';
 import SeahubModalCloseIcon from '../../seahub-modal-close';
 
 import './index.css';

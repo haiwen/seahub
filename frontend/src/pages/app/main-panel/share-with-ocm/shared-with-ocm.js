@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '../../../../api/seafile-api';
 import { LIST_MODE, GRID_MODE } from '../../../../components/constants/view-mode';
 import SortOptionsDialog from '../../../../components/dialog/sort-options';
 import EmptyTip from '../../../../components/empty-tip';
@@ -19,7 +20,6 @@ import ReposSortMenu from '../../../../components/sort-menu';
 import toaster from '../../../../components/toast';
 import ViewModes from '../../../../components/view-modes';
 import { gettext, siteRoot } from '../../../../utils/constants';
-import { seafileAPI } from '../../../../utils/seafile-api';
 import { Utils } from '../../../../utils/utils';
 
 const propTypes = {

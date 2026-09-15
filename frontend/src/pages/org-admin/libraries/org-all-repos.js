@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { navigate } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
+import { orgAdminAPI } from '../../../api/org-admin-api';
 import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import TransferDialog from '../../../components/dialog/transfer-dialog';
 import CustomDropdown from '../../../components/dropdown';
@@ -11,7 +12,6 @@ import Paginator from '../../../components/paginator';
 import toaster from '../../../components/toast/index';
 import OrgAdminRepo from '../../../models/org-admin-repo';
 import { gettext, siteRoot, orgID } from '../../../utils/constants';
-import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { Utils } from '../../../utils/utils';
 import ReposNav from './org-repo-nav';
 

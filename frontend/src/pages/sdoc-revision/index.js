@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button } from 'reactstrap';
 import { DiffViewer } from '@seafile/seafile-sdoc-editor';
+import { seafileAPI } from '../../api/seafile-api';
 import GoBack from '../../components/go-back';
 import Loading from '../../components/loading';
 import toaster from '../../components/toast';
 import { gettext, mediaUrl } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 
 import '../../css/layout.css';

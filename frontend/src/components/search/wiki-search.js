@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import MediaQuery from 'react-responsive';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '../../api/seafile-api';
 import { SEARCH_MASK, SEARCH_CONTAINER } from '../../constants/zIndexes';
 import { gettext } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Icon from '../icon';
 import More from '../more';

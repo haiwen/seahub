@@ -3,6 +3,7 @@ import { navigate } from '@gatsbyjs/reach-router';
 import classnames from 'classnames';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '../../../../api/seafile-api';
 import { LIST_MODE, GRID_MODE } from '../../../../components/constants/view-mode';
 import SortOptionsDialog from '../../../../components/dialog/sort-options';
 import EmptyTip from '../../../../components/empty-tip';
@@ -15,7 +16,6 @@ import toaster from '../../../../components/toast';
 import ViewModes from '../../../../components/view-modes';
 import { Group, Repo } from '../../../../models';
 import { gettext, siteRoot, username, mediaUrl } from '../../../../utils/constants';
-import { seafileAPI } from '../../../../utils/seafile-api';
 import { Utils } from '../../../../utils/utils';
 import GroupOperationMenu from './group-op-menu';
 

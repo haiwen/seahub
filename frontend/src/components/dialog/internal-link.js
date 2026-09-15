@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '../../api/seafile-api';
 import { gettext } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import copy from '../copy-to-clipboard';
 import Loading from '../loading';

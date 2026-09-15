@@ -1,13 +1,13 @@
 import React, { Fragment, Component } from 'react';
 import { Row, Col, Label, Button, Input, InputGroup } from 'reactstrap';
 import copy from 'copy-to-clipboard';
+import { orgAdminAPI } from '../../../api/org-admin-api';
 import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import OrgSamlConfigInput from '../../../components/admin/web-settings/input-item';
 import Section from '../../../components/admin/web-settings/section';
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import { gettext, orgID, serviceURL } from '../../../utils/constants';
-import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { Utils } from '../../../utils/utils';
 
 class OrgSAMLConfig extends Component {

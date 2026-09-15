@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
 import { navigate } from '@gatsbyjs/reach-router';
+import { systemAdminAPI } from '../../../api/system-admin-api';
 import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import SysAdminAddOrgDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-org-dialog';
 import toaster from '../../../components/toast';
 import { siteRoot, gettext } from '../../../utils/constants';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import OrgsNav from '../orgs/orgs-nav';
 import Search from '../search';

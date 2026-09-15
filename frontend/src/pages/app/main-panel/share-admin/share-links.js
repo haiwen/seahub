@@ -4,6 +4,8 @@ import { Link } from '@gatsbyjs/reach-router';
 import classnames from 'classnames';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '../../../../api/seafile-api';
+import { shareLinkAPI } from '../../../../api/share-link-api';
 import CommonOperationConfirmationDialog from '../../../../components/dialog/common-operation-confirmation-dialog';
 import ShareAdminLink from '../../../../components/dialog/share-admin-link';
 import ShareLinkPermissionSelect from '../../../../components/dialog/share-link-permission-select';
@@ -16,8 +18,6 @@ import Selector from '../../../../components/single-selector';
 import toaster from '../../../../components/toast';
 import ShareLink from '../../../../models/share-link';
 import { isPro, gettext, siteRoot } from '../../../../utils/constants';
-import { seafileAPI } from '../../../../utils/seafile-api';
-import { shareLinkAPI } from '../../../../utils/share-link-api';
 import { Utils } from '../../../../utils/utils';
 
 import '../../../../css/share-admin-links.css';

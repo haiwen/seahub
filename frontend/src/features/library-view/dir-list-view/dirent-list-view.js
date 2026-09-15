@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import imageAPI from '@/api/image-api';
+import { seafileAPI } from '@/api/seafile-api';
 import { hideMenu, showMenu } from '@/components/context-menu/actions';
 import ContextMenu from '@/components/context-menu/context-menu';
 import ImageDialog from '@/components/dialog/image-dialog';
@@ -12,8 +14,6 @@ import ModalPortal from '@/components/modal-portal';
 import toaster from '@/components/toast';
 import { Dirent } from '@/models';
 import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal, thumbnailDefaultSize, fileServerRoot } from '@/utils/constants';
-import imageAPI from '@/utils/image-api';
-import { seafileAPI } from '@/utils/seafile-api';
 import { updateImageThumbnail, Utils } from '@/utils/utils';
 import { withDirentContextMenu } from '../hoc/withDirentContextMenu';
 import DirentVirtualListView from './dirent-virtual-list-view';

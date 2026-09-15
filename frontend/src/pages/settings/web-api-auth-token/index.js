@@ -1,8 +1,8 @@
 import React from 'react';
 import Icon from '@/components/icon';
 import toaster from '@/components/toast';
+import { seafileAPI } from '../../../api/seafile-api';
 import { gettext } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 
 class WebAPIAuthToken extends React.Component {

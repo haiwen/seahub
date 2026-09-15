@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import deepCopy from 'deep-copy';
-import { chatAPI } from '../../../utils/chat-api';
+import { chatAPI } from '../../../api/chat-api';
 import { useAskPage } from './page-type';
 import { useSessions } from './sessions';
 

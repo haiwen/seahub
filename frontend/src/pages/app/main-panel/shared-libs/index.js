@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import classnames from 'classnames';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '../../../../api/seafile-api';
 import { LIST_MODE, GRID_MODE } from '../../../../components/constants/view-mode';
 import SortOptionsDialog from '../../../../components/dialog/sort-options';
 import Icon from '../../../../components/icon';
@@ -9,7 +10,6 @@ import ReposSortMenu from '../../../../components/sort-menu';
 import ViewModes from '../../../../components/view-modes';
 import Repo from '../../../../models/repo';
 import { gettext } from '../../../../utils/constants';
-import { seafileAPI } from '../../../../utils/seafile-api';
 import { Utils } from '../../../../utils/utils';
 import Content from './content';
 

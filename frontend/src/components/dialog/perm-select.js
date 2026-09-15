@@ -1,8 +1,8 @@
 import React from 'react';
 import { Modal, ModalBody } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '../../api/seafile-api';
 import CustomPermission from '../../models/custom-permission';
-import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 import toaster from '../toast';

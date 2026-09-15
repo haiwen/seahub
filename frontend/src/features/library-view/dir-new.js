@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '@/api/seafile-api';
 import {
   METADATA_MODE,
   TAGS_MODE,
@@ -13,7 +14,6 @@ import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';
 import toaster from '@/components/toast';
 import { enableSeadoc, gettext, onlyofficeSupportEditDocxf } from '@/utils/constants';
-import { seafileAPI } from '@/utils/seafile-api';
 import { Utils } from '@/utils/utils';
 
 const propTypes = {

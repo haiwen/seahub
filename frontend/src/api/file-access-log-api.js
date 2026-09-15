@@ -1,9 +1,8 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { siteRoot } from './constants';
+import { siteRoot } from '../utils/constants';
 
-class SubscriptionAPI {
-
+class FileAccessLogAPI {
   init({ server, username, password, token }) {
     this.server = server;
     this.username = username;
@@ -20,12 +19,11 @@ class SubscriptionAPI {
 
   initForSeahubUsage({ siteRoot, xcsrfHeaders }) {
     if (siteRoot && siteRoot.charAt(siteRoot.length - 1) === '/') {
-      var server = siteRoot.substring(0, siteRoot.length - 1);
+      let server = siteRoot.substring(0, siteRoot.length - 1);
       this.server = server;
     } else {
       this.server = siteRoot;
     }
-
     this.req = axios.create({
       headers: {
         'X-CSRFToken': xcsrfHeaders,
@@ -34,28 +32,19 @@ class SubscriptionAPI {
     return this;
   }
 
-  getSubscription() {
-    const url = this.server + '/api/v2.1/subscription/';
-    return this.req.get(url);
-  }
-
-  getSubscriptionPlans(paymentType) {
-    const url = this.server + '/api/v2.1/subscription/plans/';
-    let params = {
-      payment_type: paymentType,
+  listFileAccessLog(repoID, filePath, page, perPage) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/file/access-log/';
+    const params = {
+      path: filePath,
+      page: page || 1,
+      per_page: perPage || 100
     };
     return this.req.get(url, { params: params });
   }
 
-  getSubscriptionLogs() {
-    const url = this.server + '/api/v2.1/subscription/logs/';
-    return this.req.get(url);
-  }
-
 }
 
-let subscriptionAPI = new SubscriptionAPI();
+let fileAccessLogAPI = new FileAccessLogAPI();
 let xcsrfHeaders = Cookies.get('sfcsrftoken');
-subscriptionAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
-
-export { subscriptionAPI };
+fileAccessLogAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
+export { fileAccessLogAPI };

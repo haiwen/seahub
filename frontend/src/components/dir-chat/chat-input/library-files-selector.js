@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useEffect } from 'react';
+import { seafileAPI } from '../../../api/seafile-api';
 import { gettext } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api';
 import SyncSelector from '../components/selector/sync-selector';
 import AttachmentObject from '../models/attachment_object';
 

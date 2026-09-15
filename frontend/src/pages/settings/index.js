@@ -1,11 +1,11 @@
 import React from 'react';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
+import { seafileAPI } from '../../api/seafile-api';
 import UserSetPassword from '../../components/dialog/user-password-widgets/user-set-password-dialog';
 import UserUpdatePassword from '../../components/dialog/user-password-widgets/user-update-password-dialog';
 import toaster from '../../components/toast';
 import { isPro, isDBSqlite3, gettext } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import DeleteAccount from './delete-account';
 import EmailNotice from './email-notice';

@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '../../../../api/seafile-api';
 import { LIST_MODE } from '../../../../components/constants/view-mode';
 import EventBus, { EVENT_BUS_TYPE } from '../../../../components/event-bus';
 import Icon from '../../../../components/icon';
 import SharedRepoListView from '../../../../components/shared-repo-list-view/shared-repo-list-view';
 import toaster from '../../../../components/toast';
 import { gettext, siteRoot } from '../../../../utils/constants';
-import { seafileAPI } from '../../../../utils/seafile-api';
 import { Utils } from '../../../../utils/utils';
 import GroupOperationMenu from './group-op-menu';
 

@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import classnames from 'classnames';
 import Cookies from 'js-cookie';
+import { seafileAPI } from '../../../../api/seafile-api';
 import { LIST_MODE, GRID_MODE } from '../../../../components/constants/view-mode';
 import CreateRepoDialog from '../../../../components/dialog/create-repo-dialog';
 import DeletedReposDialog from '../../../../components/dialog/my-deleted-repos-dialog';
@@ -15,7 +16,6 @@ import toaster from '../../../../components/toast';
 import ViewModes from '../../../../components/view-modes';
 import Repo from '../../../../models/repo';
 import { gettext } from '../../../../utils/constants';
-import { seafileAPI } from '../../../../utils/seafile-api';
 import { Utils } from '../../../../utils/utils';
 import MylibRepoListView from './mylib-repo-list-view';
 

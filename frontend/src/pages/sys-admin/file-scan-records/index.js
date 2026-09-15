@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { systemAdminAPI } from '../../../api/system-admin-api';
 import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import { gettext } from '../../../utils/constants';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 
 

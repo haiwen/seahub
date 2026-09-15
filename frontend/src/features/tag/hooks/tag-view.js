@@ -1,8 +1,8 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { seafileAPI } from '@/api/seafile-api';
 import { getTreeNodeById, getTreeNodeByKey } from '@/components/sf-table/utils/tree';
 import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
 import { useFileOperations } from '@/hooks/file-operations';
-import { seafileAPI } from '@/utils/seafile-api';
 import { Utils } from '@/utils/utils';
 import tagsAPI from '../api';
 import { TAG_FILE_KEY } from '../constants/file';

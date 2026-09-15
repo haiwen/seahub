@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { seafileAPI } from '../../utils/seafile-api';
+import { seafileAPI } from '../../api/seafile-api';
 
 const { rawPath, docUuid, exdrawAccessToken, exdrawServerUrl } = window.shared.pageOptions;
 

@@ -3,10 +3,10 @@ import { Button, Modal, ModalBody, ModalFooter,
   Nav, NavItem, NavLink, TabContent, TabPane, Label } from 'reactstrap';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
+import { orgAdminAPI } from '../../../api/org-admin-api';
+import { seafileAPI } from '../../../api/seafile-api';
+import { systemAdminAPI } from '../../../api/system-admin-api';
 import { gettext, isPro, orgID, LARGE_DIALOG_STYLE } from '../../../utils/constants';
-import { orgAdminAPI } from '../../../utils/org-admin-api';
-import { seafileAPI } from '../../../utils/seafile-api';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import CustomizeSelect from '../../customize-select';
 import Switch from '../../switch';

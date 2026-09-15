@@ -1,9 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 import { gettext } from '@/utils/constants';
+import { seafileAPI } from '../../api/seafile-api';
 import Icon from '../../components/icon';
 import { fileName, historyRepoID } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
 import MainPanel from './main-panel';
 import SidePanel from './side-panel';
 

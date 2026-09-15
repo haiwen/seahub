@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Link } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
+import { systemAdminAPI } from '../../../api/system-admin-api';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
@@ -10,7 +11,6 @@ import Paginator from '../../../components/paginator';
 import Selector from '../../../components/single-selector';
 import toaster from '../../../components/toast';
 import { siteRoot, gettext } from '../../../utils/constants';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import UserLink from '../user-link';
 

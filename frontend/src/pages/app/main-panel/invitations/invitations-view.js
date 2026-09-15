@@ -3,6 +3,7 @@ import { DropdownItem } from 'reactstrap';
 import classnames from 'classnames';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '../../../../api/seafile-api';
 import InvitationRevokeDialog from '../../../../components/dialog/invitation-revoke-dialog';
 import InvitePeopleDialog from '../../../../components/dialog/invite-people-dialog';
 import CustomDropdown from '../../../../components/dropdown';
@@ -13,7 +14,6 @@ import MobileItemMenu from '../../../../components/mobile-item-menu';
 import OpIcon from '../../../../components/op-icon';
 import toaster from '../../../../components/toast';
 import { gettext, mediaUrl } from '../../../../utils/constants';
-import { seafileAPI } from '../../../../utils/seafile-api';
 import { Utils } from '../../../../utils/utils';
 
 import './invitations-view.css';

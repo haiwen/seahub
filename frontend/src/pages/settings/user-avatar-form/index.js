@@ -1,8 +1,8 @@
 import React from 'react';
 import Icon from '@/components/icon';
 import toaster from '@/components/toast';
+import { seafileAPI } from '../../../api/seafile-api';
 import { gettext, siteRoot } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 
 const { avatarURL, csrfToken } = window.app.pageOptions;

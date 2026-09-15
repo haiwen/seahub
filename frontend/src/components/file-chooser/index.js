@@ -1,10 +1,10 @@
 import React from 'react';
 import { Input } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '../../api/seafile-api';
 import { MODE_TYPE_MAP } from '../../constants';
 import RepoInfo from '../../models/repo-info';
 import { gettext, isPro } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import IconBtn from '../icon-btn';
 import Loading from '../loading';

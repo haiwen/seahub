@@ -4,6 +4,8 @@ import { Link, navigate } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '../../../../api/seafile-api';
+import { userAPI } from '../../../../api/user-api';
 import ArchiveIcon from '../../../../components/archive-icon';
 import { LIST_MODE } from '../../../../components/constants/view-mode';
 import ChangeRepoPasswordDialog from '../../../../components/dialog/change-repo-password-dialog';
@@ -26,9 +28,7 @@ import OpIcon from '../../../../components/op-icon';
 import Rename from '../../../../components/rename';
 import toaster from '../../../../components/toast';
 import { gettext, siteRoot } from '../../../../utils/constants';
-import { seafileAPI } from '../../../../utils/seafile-api';
 import { formatWithTimezone } from '../../../../utils/time';
-import { userAPI } from '../../../../utils/user-api';
 import { Utils } from '../../../../utils/utils';
 
 const propTypes = {

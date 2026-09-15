@@ -3,11 +3,11 @@ import { I18nextProvider } from 'react-i18next';
 import { EventBus, SdocWikiEditor } from '@seafile/seafile-sdoc-editor';
 import PropTypes from 'prop-types';
 import i18n from '../../_i18n/i18n-sdoc-editor';
+import SDocServerApi from '../../api/sdoc-server-api';
+import wikiAPI from '../../api/wiki-api';
 import Loading from '../../components/loading';
 import { mediaUrl, seadocServerUrl, wikiId } from '../../utils/constants';
-import SDocServerApi from '../../utils/sdoc-server-api';
 import { Utils } from '../../utils/utils';
-import wikiAPI from '../../utils/wiki-api';
 
 const centeredContainerStyle = {
   flex: 1,

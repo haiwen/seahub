@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '../../../../api/seafile-api';
 import EmptyTip from '../../../../components/empty-tip';
 import Loading from '../../../../components/loading';
 import MobileItemMenu from '../../../../components/mobile-item-menu';
@@ -12,7 +13,6 @@ import OpIcon from '../../../../components/op-icon';
 import SortMenu from '../../../../components/sort-menu';
 import toaster from '../../../../components/toast';
 import { gettext, siteRoot, enableVideoThumbnail, enablePDFThumbnail, thumbnailDefaultSize } from '../../../../utils/constants';
-import { seafileAPI } from '../../../../utils/seafile-api';
 import { Utils } from '../../../../utils/utils';
 
 dayjs.extend(relativeTime);

@@ -3,6 +3,7 @@ import { DropdownItem } from 'reactstrap';
 import { Link } from '@gatsbyjs/reach-router';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '../../../../api/seafile-api';
 import PermSelect from '../../../../components/dialog/perm-select';
 import EmptyTip from '../../../../components/empty-tip';
 import FixedWidthTable from '../../../../components/fixed-width-table';
@@ -14,7 +15,6 @@ import SharePermissionEditor from '../../../../components/select-editor/share-pe
 import toaster from '../../../../components/toast';
 import SharedFolderInfo from '../../../../models/shared-folder-info';
 import { gettext, siteRoot, isPro } from '../../../../utils/constants';
-import { seafileAPI } from '../../../../utils/seafile-api';
 import { Utils } from '../../../../utils/utils';
 
 class Content extends Component {

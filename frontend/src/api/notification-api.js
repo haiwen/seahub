@@ -1,8 +1,8 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { siteRoot } from './constants';
+import { siteRoot } from '../utils/constants';
 
-class SearchAPI {
+class NotificationAPI {
 
   init({ server, username, password, token }) {
     this.server = server;
@@ -44,25 +44,22 @@ class SearchAPI {
     }
   }
 
-  searchRepos(query_str) {
-    let url = this.server + '/api2/items-search/';
-    let params = {};
-    params.query_str = query_str;
-    return this.req.get(url, { params });
+  listSysUserUnseenNotifications() {
+    const url = this.server + '/api/v2.1/sys-user-notifications/unseen/';
+    return this.req.get(url);
+
   }
 
-  searchWiki(query, search_wiki, cancelToken) {
-    let url = this.server + '/api/v2.1/wiki2/search/';
-    let data = {
-      query: query,
-      search_wiki: search_wiki
-    };
-    return this.req.post(url, data, { cancelToken: cancelToken });
+  setSysUserNotificationToSeen(notificationID) {
+    const url = this.server + 'api/v2.1/sys-user-notifications/' + notificationID + '/seen/';
+    return this.req.put(url);
   }
+
+
 }
 
-let searchAPI = new SearchAPI();
+let notificationAPI = new NotificationAPI();
 let xcsrfHeaders = Cookies.get('sfcsrftoken');
-searchAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
+notificationAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
-export default searchAPI;
+export { notificationAPI };

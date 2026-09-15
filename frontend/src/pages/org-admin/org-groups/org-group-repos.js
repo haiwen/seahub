@@ -2,13 +2,13 @@ import React, { Component, Fragment } from 'react';
 import { Link } from '@gatsbyjs/reach-router';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
+import { orgAdminAPI } from '../../../api/org-admin-api';
 import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import DeleteRepoDialog from '../../../components/dialog/delete-repo-dialog';
 import Loading from '../../../components/loading';
 import OpIcon from '../../../components/op-icon';
 import toaster from '../../../components/toast';
 import { gettext, siteRoot, mediaUrl } from '../../../utils/constants';
-import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { Utils } from '../../../utils/utils';
 import OrgAdminGroupNav from './org-admin-group-nav';
 

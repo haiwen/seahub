@@ -1,5 +1,5 @@
+import { seafileAPI } from '../api/seafile-api';
 import { repoID, historyRepoID } from './constants';
-import { seafileAPI } from './seafile-api';
 
 class EditorUtilities {
 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button } from 'reactstrap';
 import Cookies from 'js-cookie';
+import { seafileAPI } from '../../../../api/seafile-api';
 import { LIST_MODE } from '../../../../components/constants/view-mode';
 import CreateGroupDialog from '../../../../components/dialog/create-group-dialog';
 import CreateRepoDialog from '../../../../components/dialog/create-repo-dialog';
@@ -18,7 +19,6 @@ import { ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY } from '../../../../constants';
 import Group from '../../../../models/group';
 import Repo from '../../../../models/repo';
 import { gettext, canAddRepo, canViewOrg, canAddGroup, enableOCM } from '../../../../utils/constants';
-import { seafileAPI } from '../../../../utils/seafile-api';
 import { Utils } from '../../../../utils/utils';
 import GroupItem from '../groups/group-item';
 import MylibRepoListView from '../my-libs/mylib-repo-list-view';

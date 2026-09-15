@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '../../api/seafile-api';
 import { cloudMode, gettext, isOrgContext } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
 import OpIcon from '../op-icon';
 
 import './index.css';

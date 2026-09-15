@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
+import { systemAdminAPI } from '../../../api/system-admin-api';
 import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import SysAdminAddInstitutionDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-institution-dialog';
@@ -14,7 +15,6 @@ import OpIcon from '../../../components/op-icon';
 import Paginator from '../../../components/paginator';
 import toaster from '../../../components/toast';
 import { siteRoot, gettext } from '../../../utils/constants';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 
 dayjs.extend(relativeTime);

@@ -4,6 +4,8 @@ import { Link } from '@gatsbyjs/reach-router';
 import classnames from 'classnames';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
+import { repoShareAdminAPI } from '../../../../api/repo-share-admin-api';
+import { seafileAPI } from '../../../../api/seafile-api';
 import CommonOperationConfirmationDialog from '../../../../components/dialog/common-operation-confirmation-dialog';
 import ShareAdminLink from '../../../../components/dialog/share-admin-link';
 import EmptyTip from '../../../../components/empty-tip';
@@ -14,8 +16,6 @@ import OpIcon from '../../../../components/op-icon';
 import toaster from '../../../../components/toast';
 import UploadLink from '../../../../models/upload-link';
 import { gettext, siteRoot } from '../../../../utils/constants';
-import { repoShareAdminAPI } from '../../../../utils/repo-share-admin-api';
-import { seafileAPI } from '../../../../utils/seafile-api';
 import { Utils } from '../../../../utils/utils';
 
 import '../../../../css/share-admin-links.css';

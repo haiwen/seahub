@@ -1,9 +1,9 @@
 import React, { Fragment, } from 'react';
 import { Modal, ModalBody, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '../../../api/seafile-api.js';
 import Department from '../../../models/department';
 import { gettext, isOrgContext, username, LARGE_DIALOG_STYLE } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api.js';
 import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../empty-tip';
 import { eventBus } from '../../event-bus';
