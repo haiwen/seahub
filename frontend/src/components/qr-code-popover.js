@@ -97,7 +97,7 @@ const QRCodePopover = ({ container, target, value }) => {
 
   return (
     <Popover
-      placement="bottom"
+      placement="left"
       isOpen={true}
       fade={true}
       container={container}
