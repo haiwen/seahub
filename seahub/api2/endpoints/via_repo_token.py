@@ -531,7 +531,7 @@ class ViaRepoBatchMove(APIView):
         """
         repo_id = request.repo_api_token_obj.repo_id
         permission = check_folder_permission_by_repo_api(request, repo_id, None)
-        if not permission:
+        if permission != PERMISSION_READ_WRITE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -601,7 +601,7 @@ class ViaRepoBatchCopy(APIView):
         """
         repo_id = request.repo_api_token_obj.repo_id
         permission = check_folder_permission_by_repo_api(request, repo_id, None)
-        if not permission:
+        if permission != PERMISSION_READ_WRITE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         # argument check
@@ -667,7 +667,7 @@ class ViaRepoBatchDelete(APIView):
         """
         repo_id = request.repo_api_token_obj.repo_id
         permission = check_folder_permission_by_repo_api(request, repo_id, None)
-        if not permission:
+        if permission != PERMISSION_READ_WRITE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
