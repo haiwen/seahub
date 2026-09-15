@@ -10,6 +10,7 @@ import { useMetadataStatus } from '@/hooks';
 import { chatAndSearchAvailable, enableRepoAutoDel, gettext, siteRoot } from '@/utils/constants';
 import LibHistorySettingPanel from './lib-history-setting-panel';
 import LibAutoDelSettingPanel from './lib-old-files-auto-del-setting-panel';
+import MetadataBackupPanel from './metadata-backup-panel';
 
 import './index.css';
 
@@ -180,6 +181,12 @@ const LibSettings = ({ repoID, currentRepoInfo, isMigrationTipShown }) => {
             submit={updateEnableTags}
             enableMetadata={enableMetadata}
             isMigrationTipShown={isMigrationTipShown}
+          />
+        )}
+        {enableExtendedPropertiesSetting && (
+          <MetadataBackupPanel
+            repoID={repoID} 
+            enableMetadata={enableMetadata}
           />
         )}
       </div>
