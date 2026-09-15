@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import { DEFAULT_DATE_FORMAT, DATE_UNIT } from '../constants';
-import { getFloatNumber } from './cell';
+import { getFloatNumber } from './number';
 
 const MONTH_QUARTERS = [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4];
 const FORMATTING_TOKENS = /(\[[^[]*\])|([-:/.()\s]+)|(A|a|YYYY|YY?|MM?M?M?|Do|DD?|hh?|HH?|mm?|ss?|S{1,3}|z|ZZ?)/g;

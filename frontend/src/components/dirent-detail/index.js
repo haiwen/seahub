@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { MetadataContext } from '@/features/metadata';
 import ViewDetails from '@/features/metadata/components/view-details';
+import MetadataContext from '@/features/metadata/context';
 import { useTags } from '@/features/tag/hooks';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import ObjectUtils from '../../utils/object';
