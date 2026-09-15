@@ -60,6 +60,33 @@ class MetadataManagerAPI {
     return this.req.get(url);
   }
 
+  exportMetadataBackup(repoID) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/backup/export/';
+    return this.req.post(url);
+  }
+
+  importMetadataBackup(repoID, file) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/backup/import/';
+    const form = new FormData();
+    form.append('file', file);
+    return this.req.post(url, form);
+  }
+
+  getMetadataBackupTask(repoID, taskID) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/backup/tasks/' + taskID + '/';
+    return this.req.get(url);
+  }
+
+  restoreMetadataBackup(repoID, taskID) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/backup/tasks/' + taskID + '/restore/';
+    return this.req.post(url);
+  }
+
+  downloadMetadataBackup(repoID, taskID) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/backup/tasks/' + taskID + '/download/';
+    return this.req.get(url, { responseType: 'blob' });
+  }
+
   createMetadata(repoID) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/';
     return this.req.put(url);
