@@ -1,6 +1,6 @@
 import React from 'react';
+import { seafileAPI } from '../../api/seafile-api';
 import { gettext } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import OpIcon from '../op-icon';
 import NoticeItem from './notice-item';

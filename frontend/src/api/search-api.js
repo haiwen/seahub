@@ -1,8 +1,8 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { siteRoot } from './constants';
+import { siteRoot } from '../utils/constants';
 
-class ImageAPI {
+class SearchAPI {
 
   init({ server, username, password, token }) {
     this.server = server;
@@ -44,18 +44,25 @@ class ImageAPI {
     }
   }
 
-  rotateImage(repoID, path, angle) {
-    let url = `${this.server}/api/v2.1/repos/${repoID}/image-rotate/`;
-    let form = new FormData();
-    form.append('path', path);
-    form.append('angle', angle);
-    return this._sendPostRequest(url, form);
+  searchRepos(query_str) {
+    let url = this.server + '/api2/items-search/';
+    let params = {};
+    params.query_str = query_str;
+    return this.req.get(url, { params });
   }
 
+  searchWiki(query, search_wiki, cancelToken) {
+    let url = this.server + '/api/v2.1/wiki2/search/';
+    let data = {
+      query: query,
+      search_wiki: search_wiki
+    };
+    return this.req.post(url, data, { cancelToken: cancelToken });
+  }
 }
 
-let imageAPI = new ImageAPI();
+let searchAPI = new SearchAPI();
 let xcsrfHeaders = Cookies.get('sfcsrftoken');
-imageAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
+searchAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
-export default imageAPI;
+export default searchAPI;

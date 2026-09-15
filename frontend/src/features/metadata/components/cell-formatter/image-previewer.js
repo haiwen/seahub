@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import imageAPI from '@/api/image-api';
+import { seafileAPI } from '@/api/seafile-api';
 import ImageDialog from '@/components/dialog/image-dialog';
 import toaster from '@/components/toast';
 import { siteRoot, thumbnailSizeForOriginal, fileServerRoot, thumbnailDefaultSize } from '@/utils/constants';
-import imageAPI from '@/utils/image-api';
-import { seafileAPI } from '@/utils/seafile-api';
 import { updateImageThumbnail, Utils } from '@/utils/utils';
 import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord, getFileMTimeFromRecord } from '../../utils/cell';
 

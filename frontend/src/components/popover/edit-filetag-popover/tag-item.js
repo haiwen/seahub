@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../../utils/seafile-api';
+import { seafileAPI } from '../../../api/seafile-api';
 import { Utils } from '../../../utils/utils';
 import Icon from '../../icon';
 import toaster from '../../toast';

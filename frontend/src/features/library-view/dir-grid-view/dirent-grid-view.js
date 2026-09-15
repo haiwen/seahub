@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import imageAPI from '@/api/image-api';
+import { seafileAPI } from '@/api/seafile-api';
 import { hideMenu, showMenu } from '@/components/context-menu/actions';
 import ContextMenu from '@/components/context-menu/context-menu';
 import ImageDialog from '@/components/dialog/image-dialog';
@@ -13,8 +15,6 @@ import toaster from '@/components/toast';
 import { Dirent } from '@/models';
 import { siteRoot, username, enableSeadoc, thumbnailDefaultSize, thumbnailSizeForOriginal, gettext, fileServerRoot } from '@/utils/constants';
 import { getSelectionRect } from '@/utils/grid-selection';
-import imageAPI from '@/utils/image-api';
-import { seafileAPI } from '@/utils/seafile-api';
 import { updateImageThumbnail, Utils } from '@/utils/utils';
 import { withDirentContextMenu } from '../hoc/withDirentContextMenu';
 import { VirtualGrid } from '../virtual-list';

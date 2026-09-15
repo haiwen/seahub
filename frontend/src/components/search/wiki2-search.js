@@ -2,8 +2,8 @@ import React, { useCallback, useState, useRef, useEffect, useMemo } from 'react'
 import { Modal, ModalBody, Input, Button } from 'reactstrap';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
+import searchAPI from '../../api/search-api';
 import { gettext, mediaUrl } from '../../utils/constants';
-import searchAPI from '../../utils/search-api';
 import { debounce, Utils } from '../../utils/utils';
 import Icon from '../icon';
 import IconBtn from '../icon-btn';

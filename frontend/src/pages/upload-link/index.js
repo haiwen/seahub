@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
+import { seafileAPI } from '../../api/seafile-api';
 import Account from '../../components/account';
 import Icon from '../../components/icon';
 import Logo from '../../components/logo';
 import { gettext } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import FileUploader from './file-uploader';
 

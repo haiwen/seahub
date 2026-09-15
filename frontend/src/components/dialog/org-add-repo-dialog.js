@@ -2,8 +2,8 @@ import React from 'react';
 import { Button, Modal, ModalBody, ModalFooter, Input, Form, FormGroup, Label, Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
+import { orgAdminAPI } from '../../api/org-admin-api';
 import { gettext, orgID } from '../../utils/constants';
-import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {

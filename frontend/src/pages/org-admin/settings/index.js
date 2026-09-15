@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { InputGroupText } from 'reactstrap';
+import { orgAdminAPI } from '../../../api/org-admin-api';
 import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import CheckboxItem from '../../../components/admin/web-settings/checkbox-item';
 import FileItem from '../../../components/admin/web-settings/file-item';
@@ -9,7 +10,6 @@ import DeleteOrganizationDialog from '../../../components/dialog/org-admin-delet
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import { gettext, mediaUrl, logoPath, orgID, orgEnableAdminCustomLogo, orgEnableAdminCustomName, orgEnableAdminDeleteOrg, enableMultiADFS, enableSSO } from '../../../utils/constants';
-import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { Utils } from '../../../utils/utils';
 
 import '../../../css/system-admin-web-settings.css';

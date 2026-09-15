@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
 import { navigate } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '@/api/seafile-api';
+import { userAPI } from '@/api/user-api';
 import ChangeRepoPasswordDialog from '@/components/dialog/change-repo-password-dialog';
 import LibSubFolderPermissionDialog from '@/components/dialog/lib-sub-folder-permission-dialog';
 import RenameRepoDialog from '@/components/dialog/rename-repo';
@@ -15,8 +17,6 @@ import LibraryOpMenu from '@/components/library-op-menu';
 import ModalPortal from '@/components/modal-portal';
 import toaster from '@/components/toast';
 import { gettext, siteRoot } from '@/utils/constants';
-import { seafileAPI } from '@/utils/seafile-api';
-import { userAPI } from '@/utils/user-api';
 import { Utils } from '@/utils/utils';
 
 const propTypes = {

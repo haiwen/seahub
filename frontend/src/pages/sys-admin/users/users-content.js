@@ -3,6 +3,7 @@ import { Link } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
+import { systemAdminAPI } from '../../../api/system-admin-api';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import OpMenu from '../../../components/dialog/op-menu';
 import SysAdminUserSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
@@ -14,7 +15,6 @@ import Paginator from '../../../components/paginator';
 import Selector from '../../../components/single-selector';
 import toaster from '../../../components/toast';
 import { isPro, username, gettext, multiInstitution, siteRoot } from '../../../utils/constants';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import UserLink from '../user-link';
 

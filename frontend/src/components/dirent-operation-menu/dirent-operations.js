@@ -1,5 +1,5 @@
+import { seafileAPI } from '@/api/seafile-api';
 import { gettext, name, username } from '@/utils/constants';
-import { seafileAPI } from '@/utils/seafile-api';
 import URLDecorator from '@/utils/url-decorator';
 import { Utils } from '@/utils/utils';
 import toaster from '../toast';

@@ -1,14 +1,14 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { siteRoot } from './constants';
+import { siteRoot } from '../utils/constants';
 
-class NotificationAPI {
+class SubscriptionAPI {
 
   init({ server, username, password, token }) {
     this.server = server;
     this.username = username;
     this.password = password;
-    this.token = token;
+    this.token = token; // none
     if (this.token && this.server) {
       this.req = axios.create({
         baseURL: this.server,
@@ -34,32 +34,28 @@ class NotificationAPI {
     return this;
   }
 
-  _sendPostRequest(url, form) {
-    if (form.getHeaders) {
-      return this.req.post(url, form, {
-        headers: form.getHeaders()
-      });
-    } else {
-      return this.req.post(url, form);
-    }
-  }
-
-  listSysUserUnseenNotifications() {
-    const url = this.server + '/api/v2.1/sys-user-notifications/unseen/';
+  getSubscription() {
+    const url = this.server + '/api/v2.1/subscription/';
     return this.req.get(url);
-
   }
 
-  setSysUserNotificationToSeen(notificationID) {
-    const url = this.server + 'api/v2.1/sys-user-notifications/' + notificationID + '/seen/';
-    return this.req.put(url);
+  getSubscriptionPlans(paymentType) {
+    const url = this.server + '/api/v2.1/subscription/plans/';
+    let params = {
+      payment_type: paymentType,
+    };
+    return this.req.get(url, { params: params });
   }
 
+  getSubscriptionLogs() {
+    const url = this.server + '/api/v2.1/subscription/logs/';
+    return this.req.get(url);
+  }
 
 }
 
-let notificationAPI = new NotificationAPI();
+let subscriptionAPI = new SubscriptionAPI();
 let xcsrfHeaders = Cookies.get('sfcsrftoken');
-notificationAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
+subscriptionAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
-export { notificationAPI };
+export { subscriptionAPI };

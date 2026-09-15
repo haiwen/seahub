@@ -1,13 +1,14 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { siteRoot } from './constants';
+import { siteRoot } from '../utils/constants';
 
-class FileAccessLogAPI {
+class ImageAPI {
+
   init({ server, username, password, token }) {
     this.server = server;
     this.username = username;
     this.password = password;
-    this.token = token; // none
+    this.token = token;
     if (this.token && this.server) {
       this.req = axios.create({
         baseURL: this.server,
@@ -19,11 +20,12 @@ class FileAccessLogAPI {
 
   initForSeahubUsage({ siteRoot, xcsrfHeaders }) {
     if (siteRoot && siteRoot.charAt(siteRoot.length - 1) === '/') {
-      let server = siteRoot.substring(0, siteRoot.length - 1);
+      var server = siteRoot.substring(0, siteRoot.length - 1);
       this.server = server;
     } else {
       this.server = siteRoot;
     }
+
     this.req = axios.create({
       headers: {
         'X-CSRFToken': xcsrfHeaders,
@@ -32,19 +34,28 @@ class FileAccessLogAPI {
     return this;
   }
 
-  listFileAccessLog(repoID, filePath, page, perPage) {
-    const url = this.server + '/api/v2.1/repos/' + repoID + '/file/access-log/';
-    const params = {
-      path: filePath,
-      page: page || 1,
-      per_page: perPage || 100
-    };
-    return this.req.get(url, { params: params });
+  _sendPostRequest(url, form) {
+    if (form.getHeaders) {
+      return this.req.post(url, form, {
+        headers: form.getHeaders()
+      });
+    } else {
+      return this.req.post(url, form);
+    }
+  }
+
+  rotateImage(repoID, path, angle) {
+    let url = `${this.server}/api/v2.1/repos/${repoID}/image-rotate/`;
+    let form = new FormData();
+    form.append('path', path);
+    form.append('angle', angle);
+    return this._sendPostRequest(url, form);
   }
 
 }
 
-let fileAccessLogAPI = new FileAccessLogAPI();
+let imageAPI = new ImageAPI();
 let xcsrfHeaders = Cookies.get('sfcsrftoken');
-fileAccessLogAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
-export { fileAccessLogAPI };
+imageAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
+
+export default imageAPI;

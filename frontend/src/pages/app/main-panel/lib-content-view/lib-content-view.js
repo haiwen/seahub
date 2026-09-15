@@ -27,6 +27,7 @@ import { MetadataProvider } from '@/features/metadata/hooks/metadata';
 import { MetadataMiddlewareProvider } from '@/features/metadata/hooks/metadata-middleware';
 import Column from '@/features/metadata/model/column';
 import { normalizeColumns } from '@/features/metadata/utils/column';
+import { seafileAPI } from '../../../../api/seafile-api';
 import {
   LIST_MODE,
   TABLE_MODE,
@@ -65,7 +66,6 @@ import {
   thumbnailSizeForOriginal,
   username
 } from '../../../../utils/constants';
-import { seafileAPI } from '../../../../utils/seafile-api';
 import { Utils } from '../../../../utils/utils';
 import WebSocketClient from '../../../../utils/websocket-service';
 

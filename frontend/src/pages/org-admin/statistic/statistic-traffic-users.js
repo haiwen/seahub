@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react';
 import { Input } from 'reactstrap';
 import dayjs from 'dayjs';
+import { orgAdminAPI } from '../../../api/org-admin-api';
 import TrafficTable from '../../../components/admin/statistics/traffic-table';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import toaster from '../../../components/toast';
 import { gettext, orgID } from '../../../utils/constants';
-import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { Utils } from '../../../utils/utils';
 import TrafficTableBody from './traffic-table-body';
 

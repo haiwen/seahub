@@ -6,6 +6,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import { createRoot } from 'react-dom/client';
 import { MetadataAIOperationsProvider } from '@/features/metadata/hooks/metadata-ai-operation';
+import { seafileAPI } from './api/seafile-api';
 import Account from './components/account';
 import { LIST_MODE } from './components/constants/view-mode';
 import CopyMoveDirentProgressDialog from './components/dialog/copy-move-dirent-progress-dialog';
@@ -34,7 +35,6 @@ import {
   useGoFileserver, fileServerRoot, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle,
   thumbnailSizeForOriginal, thumbnailDefaultSize, thumbnailSizeForGrid, enableThumbnailServer
 } from './utils/constants';
-import { seafileAPI } from './utils/seafile-api';
 import { formatWithTimezone } from './utils/time';
 import { Utils } from './utils/utils';
 

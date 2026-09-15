@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import { Form, FormGroup, Input, Col } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { orgAdminAPI } from '../../../api/org-admin-api';
 import toaster from '../../../components/toast';
 import OrgUserInfo from '../../../models/org-user';
 import { gettext, orgID } from '../../../utils/constants';
-import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { Utils } from '../../../utils/utils';
 import UserItem from './org-user-item';
 

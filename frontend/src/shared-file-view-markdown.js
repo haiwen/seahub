@@ -3,12 +3,12 @@ import { I18nextProvider } from 'react-i18next';
 import { MarkdownViewer } from '@seafile/seafile-editor';
 import { createRoot } from 'react-dom/client';
 import i18n from './_i18n/i18n-seafile-editor';
+import { seafileAPI } from './api/seafile-api';
 import Loading from './components/loading';
 import SharedFileView from './components/shared-file-view/shared-file-view';
 import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
 import toaster from './components/toast';
 import { serviceURL, mediaUrl } from './utils/constants';
-import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
 
 const { repoID, sharedToken, rawPath, err } = window.shared.pageOptions;

@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { Button } from 'reactstrap';
+import { systemAdminAPI } from '../../../api/system-admin-api';
 import Department from '../../../components/admin/departments/department';
 import DepartmentNode from '../../../components/admin/departments/department-node';
 import DepartmentsTreePanel from '../../../components/admin/departments/department-tree-panel';
@@ -14,7 +15,6 @@ import SetGroupQuotaDialog from '../../../components/dialog/sysadmin-dialog/sysa
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import { enableSysAdminViewRepo, gettext } from '../../../utils/constants';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 
 import './system-departments.css';

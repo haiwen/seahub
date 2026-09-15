@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
+import { systemAdminAPI } from '../../../api/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import Content from './repos';
 

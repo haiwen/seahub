@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '../../api/seafile-api';
 import CustomPermission from '../../models/custom-permission';
 import { isPro } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import SelectEditor from './select-editor';

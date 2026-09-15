@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Button } from 'reactstrap';
 import { useLocation, navigate } from '@gatsbyjs/reach-router';
+import { systemAdminAPI } from '../../../api/system-admin-api';
 import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import { eventBus, EVENT_BUS_TYPE } from '../../../components/event-bus';
 import toaster from '../../../components/toast';
 import { gettext, siteRoot } from '../../../utils/constants';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import Search from '../search';
 import AdminUsers from './admin-users';

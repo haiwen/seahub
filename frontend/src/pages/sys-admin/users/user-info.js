@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { FormGroup, Label, Input, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { systemAdminAPI } from '../../../api/system-admin-api';
 import SysAdminSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
 import SysAdminSetUploadDownloadRateLimitDialog from '../../../components/dialog/sysadmin-dialog/set-upload-download-rate-limit';
 import SysAdminUpdateUserDialog from '../../../components/dialog/sysadmin-dialog/update-user';
@@ -10,7 +11,6 @@ import Loading from '../../../components/loading';
 import Selector from '../../../components/single-selector';
 import toaster from '../../../components/toast';
 import { gettext, isPro } from '../../../utils/constants';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 
 const { twoFactorAuthEnabled, availableRoles } = window.sysadmin.pageOptions;

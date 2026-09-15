@@ -4,6 +4,8 @@ import { Modal } from 'reactstrap';
 import { EventBus } from '@seafile/seafile-sdoc-editor';
 import dayjs from 'dayjs';
 import throttle from 'lodash.throttle';
+import SDocServerApi from '../../api/sdoc-server-api';
+import wikiAPI from '../../api/wiki-api';
 import { eventBus } from '../../components/event-bus';
 import ResizeBar from '../../components/resize-bar';
 import {
@@ -12,9 +14,7 @@ import {
 import toaster from '../../components/toast';
 import { wikiId, siteRoot, lang, isWiki2, seadocServerUrl, wikiPermission } from '../../utils/constants';
 import LocalStorage from '../../utils/local-storage-utils';
-import SDocServerApi from '../../utils/sdoc-server-api';
 import { Utils } from '../../utils/utils';
-import wikiAPI from '../../utils/wiki-api';
 import MainPanel from './main-panel';
 import WikiConfig from './models/wiki-config';
 import SidePanel from './side-panel';

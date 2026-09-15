@@ -3,9 +3,9 @@ import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import CreatableSelect from 'react-select/creatable';
 import SeahubModalHeader from '@/components/seahub-modal-header';
+import wikiAPI from '../../api/wiki-api';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import wikiAPI from '../../utils/wiki-api';
 import { MenuSelectStyle } from '../select/seahub-select-style';
 import toaster from '../toast';
 

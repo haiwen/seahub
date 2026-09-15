@@ -3,10 +3,10 @@ import { Popover } from 'reactstrap';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import Loading from '@/components/loading';
+import { seafileAPI } from '../../../api/seafile-api';
 import Icon from '../../../components/icon';
 import toaster from '../../../components/toast';
 import { gettext, wikiPermission } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import { WIKI_COVER_LIST } from '../constant';
 

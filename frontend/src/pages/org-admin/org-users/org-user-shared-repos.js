@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
+import { orgAdminAPI } from '../../../api/org-admin-api';
 import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import Loading from '../../../components/loading';
 import { gettext } from '../../../utils/constants';
-import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { formatWithTimezone } from '../../../utils/time';
 import { Utils } from '../../../utils/utils';
 import OrgAdminUserNav from './org-admin-user-nav';

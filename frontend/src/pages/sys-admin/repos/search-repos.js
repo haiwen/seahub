@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { Form, FormGroup, Input, Label, Col } from 'reactstrap';
+import { systemAdminAPI } from '../../../api/system-admin-api';
 import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
 import toaster from '../../../components/toast';
 import { gettext } from '../../../utils/constants';
-import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import Content from './repos';
 

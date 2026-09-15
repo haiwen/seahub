@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
+import wikiAPI from '../../../api/wiki-api';
 import WikiCleanTrash from '../../../components/dialog/wiki-clean-trash';
 import Icon from '../../../components/icon';
 import ModalPortal from '../../../components/modal-portal';
@@ -10,7 +11,6 @@ import toaster from '../../../components/toast';
 import { gettext, wikiId } from '../../../utils/constants';
 import { formatWithTimezone } from '../../../utils/time';
 import { Utils, isMobile } from '../../../utils/utils';
-import wikiAPI from '../../../utils/wiki-api';
 import NavItemIcon from '../common/nav-item-icon';
 
 import './index.css';

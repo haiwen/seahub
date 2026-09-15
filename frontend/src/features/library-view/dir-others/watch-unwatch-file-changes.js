@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '@/api/seafile-api';
 import Icon from '@/components/icon';
 import toaster from '@/components/toast';
 import { gettext } from '@/utils/constants';
-import { seafileAPI } from '@/utils/seafile-api';
 import { Utils } from '@/utils/utils';
 
 const propTypes = {

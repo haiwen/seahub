@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '../../../../api/seafile-api';
 import CreateRepoDialog from '../../../../components/dialog/create-repo-dialog';
 import DepartmentDetailDialog from '../../../../components/dialog/department-detail-dialog';
 import DismissGroupDialog from '../../../../components/dialog/dismiss-group-dialog';
@@ -16,7 +17,6 @@ import ManageMembersDialog from '../../../../components/manage-members-dialog';
 import toaster from '../../../../components/toast';
 import { Repo } from '../../../../models';
 import { gettext, username, canAddRepo, isMultiTenancy } from '../../../../utils/constants';
-import { seafileAPI } from '../../../../utils/seafile-api';
 import { Utils } from '../../../../utils/utils';
 
 const propTypes = {

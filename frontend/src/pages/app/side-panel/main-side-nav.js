@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { Link } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '../../../api/seafile-api';
 import AboutDialog from '../../../components/dialog/about-dialog';
 import CreateGroupDialog from '../../../components/dialog/create-group-dialog';
 import EventBus, { EVENT_BUS_TYPE } from '../../../components/event-bus';
@@ -24,7 +25,6 @@ import {
   canViewOrg, enableOCM, enableOCMViaWebdav, canCreateWiki,
   isPro, isDBSqlite3, customNavItems, helpLink
 } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import LibrariesSubNav from './libraries-sub-nav';
 

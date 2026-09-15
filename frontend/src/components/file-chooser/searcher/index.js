@@ -2,9 +2,9 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Tooltip from '@/components/tooltip';
+import { seafileAPI } from '../../../api/seafile-api';
 import { SEARCH_CONTAINER } from '../../../constants/zIndexes';
 import { gettext } from '../../../utils/constants';
-import { seafileAPI } from '../../../utils/seafile-api';
 import Icon from '../../icon';
 
 import './index.css';

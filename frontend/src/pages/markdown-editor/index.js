@@ -6,11 +6,11 @@ import {
 } from '@seafile/seafile-editor';
 import CryptoJS from 'crypto-js';
 import URL from 'url-parse';
+import { seafileAPI } from '../../api/seafile-api';
 import InsertFileDialog from '../../components/dialog/insert-file-dialog';
 import ShareDialog from '../../components/dialog/share-dialog';
 import toaster from '../../components/toast';
 import { gettext, mediaUrl } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import WebSocketClient from '../../utils/websocket-service';
 import DetailListView from './detail-list-view';

@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react';
 import { Button } from 'reactstrap';
+import { seafileAPI } from '../../api/seafile-api';
 import Icon from '../../components/icon';
 import Loading from '../../components/loading';
 import Logo from '../../components/logo';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import { gettext, PER_PAGE, filePath, fileName, historyRepoID, useNewAPI, canDownload } from '../../utils/constants';
 import editUtilities from '../../utils/editor-utilities';
-import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import HistoryItem from './history-item';
 

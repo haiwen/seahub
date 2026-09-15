@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../utils/seafile-api';
+import { seafileAPI } from '../../api/seafile-api';
 import FavoritesListItem from './favorites-list-item';
 
 const FavoritesListView = ({ currentRepoInfo, repoList, onDirentItemClick }) => {
