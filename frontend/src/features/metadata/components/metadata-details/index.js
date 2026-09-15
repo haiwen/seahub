@@ -5,7 +5,7 @@ import { useMetadataStatus } from '@/hooks';
 import { gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import { PRIVATE_COLUMN_KEY, IMAGE_PRIVATE_COLUMN_KEYS } from '../../constants';
-import { useMetadataDetails } from '../../hooks';
+import { useMetadataDetails } from '../../hooks/metadata-details';
 import { getCellValueByColumn, getFileNameFromRecord } from '../../utils/cell';
 import { checkIsDir } from '../../utils/row';
 import CellFormatter from '../cell-formatter';

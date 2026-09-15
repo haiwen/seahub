@@ -4,7 +4,7 @@ import axios from 'axios';
 import classnames from 'classnames';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
-import { CollaboratorsProvider } from '@/features/metadata';
+import { CollaboratorsProvider } from '@/features/metadata/hooks/collaborators';
 import { PRIVATE_FILE_TYPE, SEARCH_FILTER_BY_DATE_OPTION_KEY, SEARCH_FILTER_BY_DATE_TYPE_KEY, SEARCH_FILTERS_KEY, SEARCH_FILTERS_SHOW_KEY } from '../../constants';
 import { SEARCH_MASK, SEARCH_CONTAINER } from '../../constants/zIndexes';
 import { gettext, mediaUrl } from '../../utils/constants';

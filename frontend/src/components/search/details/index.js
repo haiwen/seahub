@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Loading from '@/components/loading';
-import { MetadataDetailsProvider } from '@/features/metadata';
+import { MetadataDetailsProvider } from '@/features/metadata/hooks/metadata-details';
 import { MetadataStatusProvider } from '../../../hooks';
 import { Repo } from '../../../models';
 import { gettext, mediaUrl, siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';

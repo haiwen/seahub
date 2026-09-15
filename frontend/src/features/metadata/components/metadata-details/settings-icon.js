@@ -4,7 +4,7 @@ import Icon from '@/components/icon';
 import Tooltip from '@/components/tooltip';
 import { useMetadataStatus } from '@/hooks';
 import { gettext } from '@/utils/constants';
-import { useMetadataDetails } from '../../hooks';
+import { useMetadataDetails } from '../../hooks/metadata-details';
 import HideColumnPopover from '../popover/hidden-column-popover';
 
 const SettingsIcon = () => {

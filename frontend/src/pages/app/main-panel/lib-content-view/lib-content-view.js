@@ -23,7 +23,7 @@ import { getDirTableColumnOrder, setDirTableColumnOrder } from '@/features/libra
 import metadataAPI from '@/features/metadata/api';
 import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, ROW_HEIGHT } from '@/features/metadata/constants';
 import { PRIVATE_COLUMN_KEY } from '@/features/metadata/constants/column/private';
-import { MetadataProvider } from '@/features/metadata/hooks';
+import { MetadataProvider } from '@/features/metadata/hooks/metadata';
 import { MetadataMiddlewareProvider } from '@/features/metadata/hooks/metadata-middleware';
 import Column from '@/features/metadata/model/column';
 import { normalizeColumns } from '@/features/metadata/utils/column';
