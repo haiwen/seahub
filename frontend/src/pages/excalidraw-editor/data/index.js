@@ -1,6 +1,7 @@
-import { isInvisiblySmallElement, restore } from '@excalidraw/excalidraw';
-import { DELETED_ELEMENT_TIMEOUT } from '../constants';
+import { restore } from '@excalidraw/excalidraw';
 import { loadFromServerStorage } from './server-storage';
+
+export { getSyncableElements, isSyncableElement } from './syncable-elements';
 
 // Supply local state even if importing from backend to ensure we restore
 // localStorage user settings which we do not persist on server.
@@ -16,19 +17,4 @@ export const loadScene = async (localDataState) => {
     // from a different database
     files: data.files,
   };
-};
-
-export const isSyncableElement = (element) => {
-  if (element.isDeleted) {
-    if (element.updated > Date.now() - DELETED_ELEMENT_TIMEOUT) {
-      return true;
-    }
-    return false;
-  }
-  return !isInvisiblySmallElement(element);
-};
-
-
-export const getSyncableElements = (elements) => {
-  return elements.filter((element) => isSyncableElement(element));
 };
