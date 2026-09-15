@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { LIST_MODE } from '../../../../components/constants/view-mode';
 import { hideMenu, handleContextClick } from '../../../../components/context-menu/actions';
 import ContextMenu from '../../../../components/context-menu/context-menu';
 import EmptyTip from '../../../../components/empty-tip';
 import LibsMobileThead from '../../../../components/libs-mobile-thead';
 import Loading from '../../../../components/loading';
 import RepoListCard from '../../../../components/repo-list-card';
+import { LIST_MODE } from '../../../../constants/view-mode';
 import { gettext } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
 import Item from './item';

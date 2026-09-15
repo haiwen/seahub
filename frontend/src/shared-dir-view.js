@@ -8,7 +8,6 @@ import { createRoot } from 'react-dom/client';
 import { MetadataAIOperationsProvider } from '@/features/metadata/hooks/metadata-ai-operation';
 import { seafileAPI } from './api/seafile-api';
 import Account from './components/account';
-import { LIST_MODE } from './components/constants/view-mode';
 import CopyMoveDirentProgressDialog from './components/dialog/copy-move-dirent-progress-dialog';
 import ImageDialog from './components/dialog/image-dialog';
 import SaveSharedDirDialog from './components/dialog/save-shared-dir-dialog';
@@ -30,6 +29,7 @@ import FileUploader from './components/shared-link-file-uploader/file-uploader';
 import SortMenu from './components/sort-menu';
 import toaster from './components/toast';
 import ViewModes from './components/view-modes';
+import { LIST_MODE } from './constants/view-mode';
 import RepoTag from './models/repo-tag';
 import {
   useGoFileserver, fileServerRoot, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle,

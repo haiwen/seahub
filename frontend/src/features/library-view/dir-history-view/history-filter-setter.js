@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { HISTORY_MODE } from '@/components/constants/view-mode';
 import OpIcon from '@/components/op-icon';
+import { HISTORY_MODE } from '@/constants/view-mode';
 import { gettext } from '@/utils/constants';
 import { isEnter, isSpace } from '@/utils/hotkey';
 import HistoryFilterPopover from './history-filter-popover';

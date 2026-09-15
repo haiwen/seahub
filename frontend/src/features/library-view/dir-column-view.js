@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CHAT_MODE, GRID_MODE, LIST_MODE, METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH_MODE, TABLE_MODE, SETTINGS_MODE } from '@/components/constants/view-mode';
 import DirChat from '@/components/dir-chat';
 import ResizeBar from '@/components/resize-bar';
 import { DRAG_HANDLER_HEIGHT, MAX_SIDE_PANEL_RATE, MIN_SIDE_PANEL_RATE } from '@/components/resize-bar/constants';
 import { SIDE_PANEL_FOLDED_WIDTH } from '@/constants';
+import { CHAT_MODE, GRID_MODE, LIST_MODE, METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH_MODE, TABLE_MODE, SETTINGS_MODE } from '@/constants/view-mode';
 import { SeafileMetadata } from '@/features/metadata';
 import { TagsView } from '@/features/tag';
 import { mediaUrl } from '@/utils/constants';

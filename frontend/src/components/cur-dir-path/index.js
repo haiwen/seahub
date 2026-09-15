@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import SortOptionsDialog from '../../components/dialog/sort-options';
 import {
   SETTINGS_MODE,
   TRASH_MODE
-} from '../../components/constants/view-mode';
-import SortOptionsDialog from '../../components/dialog/sort-options';
+} from '../../constants/view-mode';
 import Icon from '../icon';
 import DirPath from './dir-path';
 import withDynamicPathWidth from './withDynamicPathWidth';

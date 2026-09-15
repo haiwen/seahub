@@ -3,7 +3,6 @@ import classnames from 'classnames';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '../../../../api/seafile-api';
-import { LIST_MODE, GRID_MODE } from '../../../../components/constants/view-mode';
 import CreateRepoDialog from '../../../../components/dialog/create-repo-dialog';
 import ShareRepoDialog from '../../../../components/dialog/share-repo-dialog';
 import SortOptionsDialog from '../../../../components/dialog/sort-options';
@@ -17,6 +16,7 @@ import SharedRepoListView from '../../../../components/shared-repo-list-view/sha
 import ReposSortMenu from '../../../../components/sort-menu';
 import toaster from '../../../../components/toast';
 import ViewModes from '../../../../components/view-modes';
+import { LIST_MODE, GRID_MODE } from '../../../../constants/view-mode';
 import Repo from '../../../../models/repo';
 import { gettext, canAddPublicRepo } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';

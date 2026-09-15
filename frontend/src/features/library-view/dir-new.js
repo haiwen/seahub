@@ -2,17 +2,17 @@ import React from 'react';
 import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
-import {
-  METADATA_MODE,
-  TAGS_MODE,
-  HISTORY_MODE,
-  TRASH_MODE
-} from '@/components/constants/view-mode';
 import TipDialog from '@/components/dialog/tip-dialog';
 import CustomDropdown from '@/components/dropdown';
 import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';
 import toaster from '@/components/toast';
+import {
+  METADATA_MODE,
+  TAGS_MODE,
+  HISTORY_MODE,
+  TRASH_MODE
+} from '@/constants/view-mode';
 import { enableSeadoc, gettext, onlyofficeSupportEditDocxf } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 

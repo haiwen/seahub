@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { LIST_MODE } from '../../constants/view-mode';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import { LIST_MODE } from '../constants/view-mode';
 import { hideMenu, handleContextClick } from '../context-menu/actions';
 import ContextMenu from '../context-menu/context-menu';
 import LibsMobileThead from '../libs-mobile-thead';

@@ -28,17 +28,6 @@ import { MetadataMiddlewareProvider } from '@/features/metadata/hooks/metadata-m
 import Column from '@/features/metadata/model/column';
 import { normalizeColumns } from '@/features/metadata/utils/column';
 import { seafileAPI } from '../../../../api/seafile-api';
-import {
-  LIST_MODE,
-  TABLE_MODE,
-  GRID_MODE,
-  METADATA_MODE,
-  TAGS_MODE,
-  HISTORY_MODE,
-  SETTINGS_MODE,
-  TRASH_MODE,
-  CHAT_MODE
-} from '../../../../components/constants/view-mode';
 import CurDirPath from '../../../../components/cur-dir-path';
 import DirTool from '../../../../components/cur-dir-path/dir-tool';
 import CopyMoveDirentProgressDialog from '../../../../components/dialog/copy-move-dirent-progress-dialog';
@@ -54,6 +43,17 @@ import ViewToolbar from '../../../../components/toolbar/view-toolbar';
 import treeHelper from '../../../../components/tree-view/tree-helper';
 import TreeNode from '../../../../components/tree-view/tree-node';
 import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY, RECENTLY_USED_LIST_KEY } from '../../../../constants';
+import {
+  LIST_MODE,
+  TABLE_MODE,
+  GRID_MODE,
+  METADATA_MODE,
+  TAGS_MODE,
+  HISTORY_MODE,
+  SETTINGS_MODE,
+  TRASH_MODE,
+  CHAT_MODE
+} from '../../../../constants/view-mode';
 import { FileOperationsProvider, MetadataStatusProvider } from '../../../../hooks';
 import { Dirent, FileTag, RepoTag, RepoInfo } from '../../../../models';
 import {
