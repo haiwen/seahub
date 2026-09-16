@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import CenteredLoading from '../../centered-loading';
 import EmptyTip from '../../empty-tip';
 import Icon from '../../icon';

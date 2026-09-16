@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Loading from '../../components/loading';
-import { Utils } from '../../utils/utils';
+import Loading from '@/components/loading';
+import { Utils } from '@/utils/utils';
 import editorApi from './api/editor-api';
 import context from './context';
 import SimpleEditor from './editor';

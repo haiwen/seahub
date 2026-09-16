@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext, mediaUrl } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { gettext, mediaUrl } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import IconBtn from '../../icon-btn';
 
 const UserItem = ({ user, isCancellable, onCancel }) => {

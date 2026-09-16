@@ -1,11 +1,11 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import SharedFileView from './components/shared-file-view/shared-file-view';
-import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
-import VideoPlayer from './components/video-player';
-import { MimetypesKind } from './utils/constants';
+import SharedFileView from '@/components/shared-file-view/shared-file-view';
+import SharedFileViewTip from '@/components/shared-file-view/shared-file-view-tip';
+import VideoPlayer from '@/components/video-player';
+import { MimetypesKind } from '@/utils/constants';
 
-import './css/video-file-view.css';
+import '@/css/video-file-view.css';
 
 const { rawPath, err, fileExt } = window.shared.pageOptions;
 

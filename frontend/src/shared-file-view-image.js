@@ -1,12 +1,12 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import Icon from './components/icon';
-import SharedFileView from './components/shared-file-view/shared-file-view';
-import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
-import { gettext, siteRoot, enableThumbnailServer } from './utils/constants';
-import { Utils } from './utils/utils';
+import Icon from '@/components/icon';
+import SharedFileView from '@/components/shared-file-view/shared-file-view';
+import SharedFileViewTip from '@/components/shared-file-view/shared-file-view-tip';
+import { gettext, siteRoot, enableThumbnailServer } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
-import './css/image-file-view.css';
+import '@/css/image-file-view.css';
 
 const { fileName, rawPath, err, prevImgPath, nextImgPath, repoEncrypted, fileExt, filePath, sharedToken, lastModified } = window.shared.pageOptions;
 const { thumbnailSizeForOriginal } = window.app.pageOptions;

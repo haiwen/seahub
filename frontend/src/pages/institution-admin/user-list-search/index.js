@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from '@gatsbyjs/reach-router';
-import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
-import Loading from '../../../components/loading';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import CommonOperationConfirmationDialog from '@/components/dialog/common-operation-confirmation-dialog';
+import Loading from '@/components/loading';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import instAdminAPI from '../api';
 import UserItem from '../user-list/user-item';
 

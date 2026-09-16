@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Modal, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext } from '../../utils/constants';
+import { gettext } from '@/utils/constants';
 
 const propTypes = {
   wikiPageName: PropTypes.string,

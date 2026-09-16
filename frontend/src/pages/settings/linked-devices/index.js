@@ -4,13 +4,13 @@ import classnames from 'classnames';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '@/api/seafile-api';
 import ConfirmUnlinkDeviceDialog from '@/components/dialog/confirm-unlink-device';
 import Icon from '@/components/icon';
 import MobileItemMenu from '@/components/mobile-item-menu';
-import { seafileAPI } from '../../../api/seafile-api';
-import toaster from '../../../components/toast';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import toaster from '@/components/toast';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 dayjs.extend(relativeTime);
 

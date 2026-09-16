@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, ModalBody, ModalFooter, Button, Form, FormGroup, Input, InputGroup, InputGroupText } from 'reactstrap';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext } from '../../../utils/constants';
+import { gettext } from '@/utils/constants';
 
 const propTypes = {
   uploadOrDownload: PropTypes.string.isRequired,

@@ -1,13 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { systemAdminAPI } from '../../../api/system-admin-api';
-import OpMenu from '../../../components/dialog/op-menu';
-import LinkDialog from '../../../components/dialog/share-admin-link';
-import EmptyTip from '../../../components/empty-tip';
-import Loading from '../../../components/loading';
-import toaster from '../../../components/toast';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { systemAdminAPI } from '@/api/system-admin-api';
+import OpMenu from '@/components/dialog/op-menu';
+import LinkDialog from '@/components/dialog/share-admin-link';
+import EmptyTip from '@/components/empty-tip';
+import Loading from '@/components/loading';
+import toaster from '@/components/toast';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 class Content extends Component {
 

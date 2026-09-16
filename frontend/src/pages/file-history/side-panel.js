@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Loading from '../../components/loading';
-import toaster from '../../components/toast';
-import { gettext, PER_PAGE, filePath } from '../../utils/constants';
-import editUtilities from '../../utils/editor-utilities';
+import Loading from '@/components/loading';
+import toaster from '@/components/toast';
+import { gettext, PER_PAGE, filePath } from '@/utils/constants';
+import editUtilities from '@/utils/editor-utilities';
 import HistoryListView from './history-list-view/history-list-view';
 
 const propTypes = {

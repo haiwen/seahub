@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { gettext } from '../../../utils/constants';
+import { gettext } from '@/utils/constants';
 
 const SFTableSearcherInput = ({ recordsCount, columnsCount, setHasSearchValue, searchCells, onKeyDown }) => {
   const [searchValue, setSearchValue] = useState('');

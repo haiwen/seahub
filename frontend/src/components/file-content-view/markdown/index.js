@@ -1,6 +1,6 @@
 import React from 'react';
 import { MarkdownViewer } from '@seafile/seafile-editor';
-import { mediaUrl } from '../../../utils/constants';
+import { mediaUrl } from '@/utils/constants';
 
 import './index.css';
 

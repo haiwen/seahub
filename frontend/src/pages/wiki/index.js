@@ -3,18 +3,18 @@ import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { seafileAPI } from '../../api/seafile-api';
-import treeHelper from '../../components/tree-view/tree-helper';
-import TreeNode from '../../components/tree-view/tree-node';
-import Dirent from '../../models/dirent';
-import { wikiId, slug, siteRoot, initialPath, isDir, sharedToken, hasIndex, lang, serviceURL } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { seafileAPI } from '@/api/seafile-api';
+import treeHelper from '@/components/tree-view/tree-helper';
+import TreeNode from '@/components/tree-view/tree-node';
+import Dirent from '@/models/dirent';
+import { wikiId, slug, siteRoot, initialPath, isDir, sharedToken, hasIndex, lang, serviceURL } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import MainPanel from './main-panel';
 import SidePanel from './side-panel';
 
-import '../../css/layout.css';
-import '../../css/toolbar.css';
-import '../../css/search.css';
+import '@/css/layout.css';
+import '@/css/toolbar.css';
+import '@/css/search.css';
 import './wiki.css';
 
 dayjs.locale(lang);

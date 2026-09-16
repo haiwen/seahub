@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useCallback, useState, useRef, forwardRef, useImperativeHandle } from 'react';
-import { seafileAPI } from '../../api/seafile-api';
-import ZipDownloadDialog from '../../components/dialog/zip-download-dialog';
-import { EVENT_BUS_TYPE } from '../../components/event-bus';
-import ModalPortal from '../../components/modal-portal';
-import toaster from '../../components/toast';
-import { useGoFileserver, fileServerRoot } from '../../utils/constants';
-import URLDecorator from '../../utils/url-decorator';
-import { Utils } from '../../utils/utils';
+import { seafileAPI } from '@/api/seafile-api';
+import ZipDownloadDialog from '@/components/dialog/zip-download-dialog';
+import { EVENT_BUS_TYPE } from '@/components/event-bus';
+import ModalPortal from '@/components/modal-portal';
+import toaster from '@/components/toast';
+import { useGoFileserver, fileServerRoot } from '@/utils/constants';
+import URLDecorator from '@/utils/url-decorator';
+import { Utils } from '@/utils/utils';
 
 // This hook provides content about download
 const DownloadFileContext = React.createContext(null);

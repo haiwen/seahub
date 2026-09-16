@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 import ModalPortal from '@/components/modal-portal';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext, siteRoot } from '../../../utils/constants';
+import { gettext, siteRoot } from '@/utils/constants';
 
 const {
   csrfToken,

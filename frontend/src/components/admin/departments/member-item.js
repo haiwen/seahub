@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { gettext, siteRoot } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import CommonOperationConfirmationDialog from '../../dialog/common-operation-confirmation-dialog';
 import CustomDropdown from '../../dropdown';
 import RoleSelector from '../../single-selector';

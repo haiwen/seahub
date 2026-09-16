@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import Icon from '../../icon';
 import DepartmentTreeNode from './department-tree-node';
 

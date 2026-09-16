@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { SIDE_PANEL_FOLDED_WIDTH } from '../../constants';
-import { gettext } from '../../utils/constants';
-import { isMobile } from '../../utils/utils';
+import { SIDE_PANEL_FOLDED_WIDTH } from '@/constants';
+import { gettext } from '@/utils/constants';
+import { isMobile } from '@/utils/utils';
 import Icon from '../icon';
 import OpIcon from '../op-icon';
 import WikiCardItem from './wiki-card-item';

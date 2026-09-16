@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState, useImperativeHandle, forwardRef } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import ClickOutside from '../../click-outside';
 import Icon from '../../icon';
 import Tooltip from '../../tooltip';

@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { gettext, siteRoot } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
-import { gettext, siteRoot } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
 import EmptyTip from '../empty-tip';
 import Loading from '../loading';
 import LinkItem from './link-item';

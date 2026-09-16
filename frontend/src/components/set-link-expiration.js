@@ -2,8 +2,8 @@ import React, { Fragment } from 'react';
 import { FormGroup, Label, Input, InputGroup, InputGroupText, FormText } from 'reactstrap';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
-import { gettext } from '../utils/constants';
-import { Utils } from '../utils/utils';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import DateTimePicker from './date-and-time-picker';
 
 const propTypes = {

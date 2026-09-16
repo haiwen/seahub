@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CustomDropdown from '../../../../components/dropdown';
-import Icon from '../../../../components/icon';
-import Tooltip from '../../../../components/tooltip';
-import { gettext } from '../../../../utils/constants';
+import CustomDropdown from '@/components/dropdown';
+import Icon from '@/components/icon';
+import Tooltip from '@/components/tooltip';
+import { gettext } from '@/utils/constants';
 
 const LibrariesMoreMenu = ({ className, onlyShowGroupsWithLibraries, onToggleOnlyShowGroupsWithLibraries }) => {
   const target = 'libraries-more-menu';

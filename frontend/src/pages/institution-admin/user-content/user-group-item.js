@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { Link } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot } from '../../../utils/constants';
+import { gettext, siteRoot } from '@/utils/constants';
 
 const UserGroupItem = ({ group }) => {
 

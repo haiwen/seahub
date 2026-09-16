@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Utils } from '../../../utils/utils';
+import { Utils } from '@/utils/utils';
 
 export default function RepoListItem({ item, onItemClick }) {
 

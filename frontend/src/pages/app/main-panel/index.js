@@ -1,7 +1,7 @@
 import React from 'react';
 import { Router } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
-import { siteRoot } from '../../../utils/constants';
+import { siteRoot } from '@/utils/constants';
 import FilesActivities from './files-activities';
 import GroupView from './groups/group-view';
 import InvitationsView from './invitations/invitations-view';

@@ -1,4 +1,4 @@
-import { gettext } from '../../utils/constants';
+import { gettext } from '@/utils/constants';
 import {
   DEFAULT_WIKI_COLOR,
   DEFAULT_WIKI_ICON,

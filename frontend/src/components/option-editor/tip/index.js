@@ -1,5 +1,5 @@
 import React from 'react';
-import { gettext, mediaUrl } from '../../../utils/constants';
+import { gettext, mediaUrl } from '@/utils/constants';
 
 import './index.css';
 

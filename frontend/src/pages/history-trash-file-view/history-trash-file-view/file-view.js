@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import watermark from 'watermark-dom';
-import { gettext, siteName } from '../../../utils/constants';
+import { gettext, siteName } from '@/utils/constants';
 import Download from './download';
 
-import '../../../css/file-view.css';
+import '@/css/file-view.css';
 
 const propTypes = {
   content: PropTypes.object.isRequired

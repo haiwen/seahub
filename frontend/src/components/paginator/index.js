@@ -3,7 +3,7 @@ import { Button } from 'reactstrap';
 import { navigate } from '@gatsbyjs/reach-router';
 import className from 'classnames';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
+import { gettext } from '@/utils/constants';
 import CustomDropdown from '../dropdown';
 import Icon from '../icon';
 

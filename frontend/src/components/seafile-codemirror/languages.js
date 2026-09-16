@@ -6,7 +6,7 @@ import { python } from '@codemirror/lang-python';
 import { StreamLanguage } from '@codemirror/language';
 import { shell } from '@codemirror/legacy-modes/mode/shell';
 import { loadLanguage } from '@uiw/codemirror-extensions-langs';
-import { Utils } from '../../utils/utils';
+import { Utils } from '@/utils/utils';
 
 export const getLanguageExtensions = (fileExt) => {
   const mode = Utils.chooseLanguage(fileExt);

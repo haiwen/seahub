@@ -3,10 +3,10 @@ import { Button, Form, FormGroup, Label, Input, InputGroup, Alert } from 'reacts
 import copy from 'copy-to-clipboard';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../api/seafile-api';
-import UploadLink from '../../models/upload-link';
-import { gettext, shareLinkForceUsePassword, shareLinkPasswordMinLength, shareLinkPasswordStrengthLevel, canSendShareLinkEmail, uploadLinkExpireDaysMin, uploadLinkExpireDaysMax, uploadLinkExpireDaysDefault } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { seafileAPI } from '@/api/seafile-api';
+import UploadLink from '@/models/upload-link';
+import { gettext, shareLinkForceUsePassword, shareLinkPasswordMinLength, shareLinkPasswordStrengthLevel, canSendShareLinkEmail, uploadLinkExpireDaysMin, uploadLinkExpireDaysMax, uploadLinkExpireDaysDefault } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import Icon from '../icon';
 import SendLink from '../send-link';
 import SetLinkExpiration from '../set-link-expiration';

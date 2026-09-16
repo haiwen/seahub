@@ -1,9 +1,9 @@
 import React from 'react';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
-import OpIcon from '../../../components/op-icon';
-import InternalLinkOperation from '../../../components/operations/internal-link-operation';
-import { gettext } from '../../../utils/constants';
+import OpIcon from '@/components/op-icon';
+import InternalLinkOperation from '@/components/operations/internal-link-operation';
+import { gettext } from '@/utils/constants';
 
 const { repoID, filePath } = window.app.pageOptions;
 

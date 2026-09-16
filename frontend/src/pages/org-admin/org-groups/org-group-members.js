@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
-import { orgAdminAPI } from '../../../api/org-admin-api';
-import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
-import Loading from '../../../components/loading';
-import { gettext, siteRoot, mediaUrl } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { orgAdminAPI } from '@/api/org-admin-api';
+import MainPanelTopbar from '@/components/admin/layout/main-panel-topbar';
+import Loading from '@/components/loading';
+import { gettext, siteRoot, mediaUrl } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import OrgAdminGroupNav from './org-admin-group-nav';
 
 const { orgID } = window.org.pageOptions;

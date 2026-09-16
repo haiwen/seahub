@@ -5,11 +5,11 @@ import { getFileNameFromRecord, getParentDirFromRecord } from '@/features/metada
 import { openInNewTab, openParentFolder } from '@/features/metadata/utils/file';
 import { buildTableToolbarMenuOptions } from '@/features/metadata/utils/menu-builder';
 import { checkIsDir } from '@/features/metadata/utils/row';
+import { useMetadataStatus } from '@/hooks';
+import { gettext } from '@/utils/constants';
+import TextTranslation from '@/utils/text-translation';
+import { Utils } from '@/utils/utils';
 import OpIcon from '../../components/op-icon';
-import { useMetadataStatus } from '../../hooks';
-import { gettext } from '../../utils/constants';
-import TextTranslation from '../../utils/text-translation';
-import { Utils } from '../../utils/utils';
 import { setPendingAttachments } from '../dir-chat/hooks/ai-chat-tools';
 import { AttachmentObject } from '../dir-chat/models';
 import CustomDropdown from '../dropdown';

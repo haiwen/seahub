@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { UncontrolledPopover } from 'reactstrap';
 import isHotkey from 'is-hotkey';
-import Icon from '../../../components/icon';
-import SearchInput from '../../../components/search-input';
-import { KeyCodes } from '../../../constants';
-import { gettext } from '../../../utils/constants';
-import { getEventClassName } from '../../../utils/dom';
+import Icon from '@/components/icon';
+import SearchInput from '@/components/search-input';
+import { KeyCodes } from '@/constants';
+import { gettext } from '@/utils/constants';
+import { getEventClassName } from '@/utils/dom';
 import RepoListItem from './repo-list-item';
 
 import './index.css';

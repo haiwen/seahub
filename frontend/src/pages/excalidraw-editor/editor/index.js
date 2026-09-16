@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { CaptureUpdateAction, Excalidraw, MainMenu, newElementWith, reconcileElements, restoreElements, useHandleLibrary } from '@excalidraw/excalidraw';
 import isHotkey from 'is-hotkey';
 import isUrl from 'is-url';
-import { gettext } from '../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import { langList } from '../constants';
 import context from '../context';
 import { getSyncableElements } from '../data';

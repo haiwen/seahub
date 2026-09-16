@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { systemAdminAPI } from '../../../api/system-admin-api';
+import { systemAdminAPI } from '@/api/system-admin-api';
+import { isPro, gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import EmptyTip from '../../../components/empty-tip';
-import { isPro, gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
 import Icon from '../../icon';
 import Loading from '../../loading';
 import SharePermissionEditor from '../../select-editor/share-permission-editor';

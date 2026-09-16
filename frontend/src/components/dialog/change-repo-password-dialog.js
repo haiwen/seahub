@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button, Modal, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '@/api/seafile-api';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { seafileAPI } from '../../api/seafile-api';
-import { gettext, repoPasswordMinLength } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { gettext, repoPasswordMinLength } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import toaster from '../toast';
 
 const propTypes = {

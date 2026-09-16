@@ -1,9 +1,9 @@
 import React from 'react';
 import { Table } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../api/seafile-api';
-import { gettext } from '../utils/constants';
-import { Utils } from '../utils/utils';
+import { seafileAPI } from '@/api/seafile-api';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import OpIcon from './op-icon';
 import RoleSelector from './single-selector';
 import toaster from './toast';

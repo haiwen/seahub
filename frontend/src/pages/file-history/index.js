@@ -1,14 +1,13 @@
 import React from 'react';
 import axios from 'axios';
-import { gettext } from '@/utils/constants';
-import { seafileAPI } from '../../api/seafile-api';
-import Icon from '../../components/icon';
-import { fileName, historyRepoID } from '../../utils/constants';
+import { seafileAPI } from '@/api/seafile-api';
+import Icon from '@/components/icon';
+import { fileName, gettext, historyRepoID } from '@/utils/constants';
 import MainPanel from './main-panel';
 import SidePanel from './side-panel';
 
-import '../../css/layout.css';
-import '../../css/file-history.css';
+import '@/css/layout.css';
+import '@/css/file-history.css';
 
 class FileHistory extends React.Component {
 

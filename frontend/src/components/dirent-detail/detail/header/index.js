@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Tooltip from '@/components/tooltip';
-import { gettext } from '../../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import Icon from '../../../icon';
 
 import './index.css';

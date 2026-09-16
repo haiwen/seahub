@@ -1,4 +1,4 @@
-import { Utils } from '../../utils/utils';
+import { Utils } from '@/utils/utils';
 import Tree from './tree';
 import TreeNode from './tree-node';
 

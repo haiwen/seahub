@@ -1,4 +1,4 @@
-import { shallowCloneObject } from '../../../utils/object';
+import { shallowCloneObject } from '@/utils/object';
 
 export const checkIsNameColumn = (column) => {
   if (!column) return false;

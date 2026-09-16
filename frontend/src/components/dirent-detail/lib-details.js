@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '@/api/seafile-api';
 import Formatter from '@/features/metadata/components/formatter';
 import { CellType } from '@/features/metadata/constants';
-import { seafileAPI } from '../../api/seafile-api';
-import Repo from '../../models/repo';
-import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import Repo from '@/models/repo';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import Loading from '../loading';
 import toaster from '../toast';
 import { Detail, Header, Body } from './detail';

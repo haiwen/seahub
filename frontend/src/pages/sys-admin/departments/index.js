@@ -1,21 +1,21 @@
 import React, { Fragment } from 'react';
 import { Button } from 'reactstrap';
-import { systemAdminAPI } from '../../../api/system-admin-api';
-import Department from '../../../components/admin/departments/department';
-import DepartmentNode from '../../../components/admin/departments/department-node';
-import DepartmentsTreePanel from '../../../components/admin/departments/department-tree-panel';
-import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
-import AddDepartmentV2Dialog from '../../../components/dialog/sysadmin-dialog/add-department-v2-dialog';
-import DeleteDepartmentV2ConfirmDialog from '../../../components/dialog/sysadmin-dialog/delete-department-v2-confirm-dialog';
-import RenameDepartmentV2Dialog from '../../../components/dialog/sysadmin-dialog/rename-department-v2-dialog';
-import AddDepartMemberV2Dialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-depart-member-v2-dialog';
-import AddRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-repo-dialog';
-import MoveDepartmentDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-move-group-dialog';
-import SetGroupQuotaDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog';
-import Loading from '../../../components/loading';
-import toaster from '../../../components/toast';
-import { enableSysAdminViewRepo, gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { systemAdminAPI } from '@/api/system-admin-api';
+import Department from '@/components/admin/departments/department';
+import DepartmentNode from '@/components/admin/departments/department-node';
+import DepartmentsTreePanel from '@/components/admin/departments/department-tree-panel';
+import MainPanelTopbar from '@/components/admin/layout/main-panel-topbar';
+import AddDepartmentV2Dialog from '@/components/dialog/sysadmin-dialog/add-department-v2-dialog';
+import DeleteDepartmentV2ConfirmDialog from '@/components/dialog/sysadmin-dialog/delete-department-v2-confirm-dialog';
+import RenameDepartmentV2Dialog from '@/components/dialog/sysadmin-dialog/rename-department-v2-dialog';
+import AddDepartMemberV2Dialog from '@/components/dialog/sysadmin-dialog/sysadmin-add-depart-member-v2-dialog';
+import AddRepoDialog from '@/components/dialog/sysadmin-dialog/sysadmin-add-repo-dialog';
+import MoveDepartmentDialog from '@/components/dialog/sysadmin-dialog/sysadmin-move-group-dialog';
+import SetGroupQuotaDialog from '@/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog';
+import Loading from '@/components/loading';
+import toaster from '@/components/toast';
+import { enableSysAdminViewRepo, gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 import './system-departments.css';
 

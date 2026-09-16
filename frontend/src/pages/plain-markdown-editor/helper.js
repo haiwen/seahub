@@ -1,5 +1,5 @@
-import { seafileAPI } from '../../api/seafile-api';
-import { Utils } from '../../utils/utils';
+import { seafileAPI } from '@/api/seafile-api';
+import { Utils } from '@/utils/utils';
 
 const getFileInfo = async (repoID, filePath) => {
   const fileInfoRes = await seafileAPI.getFileInfo(repoID, filePath);

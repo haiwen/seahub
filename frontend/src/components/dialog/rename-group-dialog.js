@@ -1,10 +1,10 @@
 import React from 'react';
 import { Modal, ModalBody, ModalFooter, Input, Label, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '@/api/seafile-api';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { seafileAPI } from '../../api/seafile-api';
-import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import toaster from '../toast';
 
 class RenameGroupDialog extends React.Component {

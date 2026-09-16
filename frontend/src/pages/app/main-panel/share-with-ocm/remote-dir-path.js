@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import { Link } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
-import { siteRoot, gettext } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
+import { siteRoot, gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import LastPathItemWrapper from './last-path-item-wrapper';
 
 const propTypes = {

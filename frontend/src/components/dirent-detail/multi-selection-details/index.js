@@ -5,9 +5,9 @@ import RateEditor from '@/features/metadata/components/detail-editor/rate-editor
 import { CellType, PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
 import { getCellValueByColumn, getFileObjIdFromRecord, getRecordIdFromRecord } from '@/features/metadata/utils/cell';
 import { getColumnDisplayName } from '@/features/metadata/utils/column';
-import { useMetadataStatus } from '../../../hooks';
-import { gettext, siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { useMetadataStatus } from '@/hooks';
+import { gettext, siteRoot, thumbnailSizeForGrid } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import Loading from '../../loading';
 import { Detail, Header, Body } from '../detail';
 import DetailItem from '../detail-item';

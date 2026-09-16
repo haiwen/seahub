@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Modal, ModalBody, Input } from 'reactstrap';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import LocalImage from './local-image';
 
 import './index.css';

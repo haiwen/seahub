@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from '@gatsbyjs/reach-router';
-import EmptyTip from '../../../components/empty-tip';
-import Loading from '../../../components/loading';
-import { gettext } from '../../../utils/constants';
+import EmptyTip from '@/components/empty-tip';
+import Loading from '@/components/loading';
+import { gettext } from '@/utils/constants';
 import instAdminAPI from '../api';
 import UserGroupItem from './user-group-item';
 

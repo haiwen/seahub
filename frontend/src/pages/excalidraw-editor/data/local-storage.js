@@ -1,4 +1,4 @@
-import { debounce } from '../../../utils/utils';
+import { debounce } from '@/utils/utils';
 import { SAVE_TO_LOCAL_STORAGE_TIMEOUT, STORAGE_KEYS, CANVAS_SEARCH_TAB, DEFAULT_SIDEBAR } from '../constants';
 import { clearAppStateForLocalStorage, getDefaultAppState } from '../utils/app-state-utils';
 // import { clearElementsForLocalStorage } from '../utils/element-utils';

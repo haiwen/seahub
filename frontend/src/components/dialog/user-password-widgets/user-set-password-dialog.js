@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Modal, ModalBody, ModalFooter, Button, Form, Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { userAPI } from '@/api/user-api';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { userAPI } from '../../../api/user-api';
-import { gettext } from '../../../utils/constants';
-import { Utils, validatePassword } from '../../../utils/utils';
+import { gettext } from '@/utils/constants';
+import { Utils, validatePassword } from '@/utils/utils';
 import toaster from '../../toast';
 import PasswordInput from './password-input';
 

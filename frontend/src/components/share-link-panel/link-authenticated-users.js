@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { shareLinkAPI } from '../../api/share-link-api';
+import { shareLinkAPI } from '@/api/share-link-api';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import BackIcon from '../../components/back-icon';
-import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
 import EmptyTip from '../empty-tip';
 import Loading from '../loading';
 import OpIcon from '../op-icon';

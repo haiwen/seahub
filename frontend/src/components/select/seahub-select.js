@@ -1,7 +1,7 @@
 import React from 'react';
 import Select, { components } from 'react-select';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
+import { gettext } from '@/utils/constants';
 import Icon from '../icon';
 import SearchEmptyTip from '../search-empty-tip';
 import SelectDropdownIndicator from '../select-dropdown-indicator';

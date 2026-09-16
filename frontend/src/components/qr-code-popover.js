@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { Popover, PopoverBody, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { QRCodeSVG } from 'qrcode.react';
-import { gettext } from '../utils/constants';
+import { gettext } from '@/utils/constants';
 import toaster from './toast';
 
 const QRCodePopover = ({ container, target, value, placement = 'left' }) => {

@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import EventBus from '@/components/event-bus';
+import { KeyCodes } from '@/constants';
 import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
+import { gettext } from '@/utils/constants';
+import { isModG, isModShiftG } from '@/utils/hotkey';
 import OpIcon from '../../../components/op-icon';
-import { KeyCodes } from '../../../constants';
-import { gettext } from '../../../utils/constants';
-import { isModG, isModShiftG } from '../../../utils/hotkey';
 import Icon from '../../icon';
 import { checkHasSearchResult } from '../utils/search';
 import SFTableSearcherInput from './searcher-input';

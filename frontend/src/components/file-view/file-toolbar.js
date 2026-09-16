@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
 import { Button, ButtonGroup } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { gettext, siteRoot } from '@/utils/constants';
+import { Utils, isImageRotateable } from '@/utils/utils';
 import Icon from '../../components/icon';
 import Switch from '../../components/switch';
-import { gettext, siteRoot } from '../../utils/constants';
-import { Utils, isImageRotateable } from '../../utils/utils';
 import CustomDropdown from '../dropdown';
 import IconButton from '../icon-button';
 import Tooltip from '../tooltip';

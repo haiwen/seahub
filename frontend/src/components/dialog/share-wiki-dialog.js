@@ -1,16 +1,16 @@
 import React, { Fragment } from 'react';
 import { Modal, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '@/api/seafile-api';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { seafileAPI } from '../../api/seafile-api';
-import { gettext, username, additionalShareDialogNote, canShareRepo, LARGE_DIALOG_STYLE } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { gettext, username, additionalShareDialogNote, canShareRepo, LARGE_DIALOG_STYLE } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import Loading from '../loading';
 import toaster from '../toast';
 import ShareToGroup from './share-to-group';
 import ShareToUser from './share-to-user';
 
-import '../../css/share-link-dialog.css';
+import '@/css/share-link-dialog.css';
 
 const propTypes = {
   isGroupOwnedRepo: PropTypes.bool,

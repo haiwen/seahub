@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import Account from '../../account';
 import ColorMode from '../../color-mode';
 import Icon from '../../icon';

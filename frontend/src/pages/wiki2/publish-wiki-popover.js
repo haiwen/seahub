@@ -1,10 +1,10 @@
 import React from 'react';
 import { PopoverHeader } from 'reactstrap';
 import PropTypes from 'prop-types';
-import CustomizePopover from '../../components/customize-popover';
-import Icon from '../../components/icon';
-import PublishWikiContent, { DEFAULT_URL } from '../../components/publish-wiki-content';
-import { gettext } from '../../utils/constants';
+import CustomizePopover from '@/components/customize-popover';
+import Icon from '@/components/icon';
+import PublishWikiContent, { DEFAULT_URL } from '@/components/publish-wiki-content';
+import { gettext } from '@/utils/constants';
 
 const propTypes = {
   target: PropTypes.string.isRequired,

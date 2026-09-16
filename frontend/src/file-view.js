@@ -1,17 +1,17 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import ImageAPI from './api/image-api';
-import Audio from './components/file-content-view/audio';
-import EPUB from './components/file-content-view/epub';
-import Image from './components/file-content-view/image';
-import PDF from './components/file-content-view/pdf';
-import SVG from './components/file-content-view/svg';
-import Video from './components/file-content-view/video';
-import FileView from './components/file-view/file-view';
-import FileViewTip from './components/file-view/file-view-tip';
-import toaster from './components/toast';
-import { gettext } from './utils/constants';
-import { Utils } from './utils/utils';
+import ImageAPI from '@/api/image-api';
+import Audio from '@/components/file-content-view/audio';
+import EPUB from '@/components/file-content-view/epub';
+import Image from '@/components/file-content-view/image';
+import PDF from '@/components/file-content-view/pdf';
+import SVG from '@/components/file-content-view/svg';
+import Video from '@/components/file-content-view/video';
+import FileView from '@/components/file-view/file-view';
+import FileViewTip from '@/components/file-view/file-view-tip';
+import toaster from '@/components/toast';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 const {
   repoID, filePath,

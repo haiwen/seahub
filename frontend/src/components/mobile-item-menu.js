@@ -2,7 +2,7 @@
 import React from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { gettext } from '../utils/constants';
+import { gettext } from '@/utils/constants';
 import Icon from './icon';
 
 const propTypes = {

@@ -2,8 +2,8 @@ import React from 'react';
 import MediaQuery from 'react-responsive';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import Logo from '../../../components/logo';
-import { SIDE_PANEL_FOLDED_WIDTH } from '../../../constants';
+import Logo from '@/components/logo';
+import { SIDE_PANEL_FOLDED_WIDTH } from '@/constants';
 import MainSideNav from './main-side-nav';
 import MainSideNavFolded from './main-side-nav-folded';
 

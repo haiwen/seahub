@@ -8,7 +8,7 @@
  * - "records-body" refers to the main scrollable body area of the table
  */
 
-import { isMobile } from '../../../utils/utils';
+import { isMobile } from '@/utils/utils';
 import { checkIsColumnFrozen } from './column';
 
 export const getColumnScrollPosition = (columns, idx, tableContentWidth) => {

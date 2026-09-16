@@ -1,5 +1,5 @@
 import React from 'react';
-import { notificationAPI } from '../../../api/notification-api';
+import { notificationAPI } from '@/api/notification-api';
 import SystemUserNotificationItem from './system-user-notification-item';
 
 import '../system-notification/system-notification.css';

@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react'
 import { Popover } from 'reactstrap';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '@/api/seafile-api';
+import Icon from '@/components/icon';
 import Loading from '@/components/loading';
-import { seafileAPI } from '../../../api/seafile-api';
-import Icon from '../../../components/icon';
-import toaster from '../../../components/toast';
-import { gettext, wikiPermission } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import toaster from '@/components/toast';
+import { gettext, wikiPermission } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import { WIKI_COVER_LIST } from '../constant';
 
 import './page-cover.css';

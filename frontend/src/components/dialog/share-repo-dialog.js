@@ -3,11 +3,11 @@ import { Button, Modal, ModalBody, ModalFooter, Input, Alert } from 'reactstrap'
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '@/api/seafile-api';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { seafileAPI } from '../../api/seafile-api';
-import Repo from '../../models/repo';
-import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import Repo from '@/models/repo';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 const shareRepoListItemProps = {
   repo: PropTypes.object.isRequired,

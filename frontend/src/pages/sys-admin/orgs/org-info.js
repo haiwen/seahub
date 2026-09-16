@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { systemAdminAPI } from '../../../api/system-admin-api';
-import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
-import CheckboxItem from '../../../components/admin/web-settings/checkbox-item';
-import SysAdminSetOrgQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
-import SysAdminSetOrgMaxUserNumberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-org-max-user-number-dialog';
-import SysAdminSetOrgMonthlyDownloadTrafficLimitDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-org-monthly-download-traffic-limit-dialog';
-import SysAdminSetOrgNameDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-org-name-dialog';
-import EditIcon from '../../../components/edit-icon';
-import Loading from '../../../components/loading';
-import toaster from '../../../components/toast';
-import { gettext, serviceURL } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { systemAdminAPI } from '@/api/system-admin-api';
+import MainPanelTopbar from '@/components/admin/layout/main-panel-topbar';
+import CheckboxItem from '@/components/admin/web-settings/checkbox-item';
+import SysAdminSetOrgQuotaDialog from '@/components/dialog/sysadmin-dialog/set-quota';
+import SysAdminSetOrgMaxUserNumberDialog from '@/components/dialog/sysadmin-dialog/sysadmin-set-org-max-user-number-dialog';
+import SysAdminSetOrgMonthlyDownloadTrafficLimitDialog from '@/components/dialog/sysadmin-dialog/sysadmin-set-org-monthly-download-traffic-limit-dialog';
+import SysAdminSetOrgNameDialog from '@/components/dialog/sysadmin-dialog/sysadmin-set-org-name-dialog';
+import EditIcon from '@/components/edit-icon';
+import Loading from '@/components/loading';
+import toaster from '@/components/toast';
+import { gettext, serviceURL } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import OrgNav from './org-nav';
 
 class Content extends Component {

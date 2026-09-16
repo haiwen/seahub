@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Button, ModalFooter } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import Icon from '../../icon';
 
 const ItemPropTypes = {

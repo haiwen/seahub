@@ -1,31 +1,31 @@
 import React, { Fragment } from 'react';
 import { Link } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../../api/seafile-api';
-import AboutDialog from '../../../components/dialog/about-dialog';
-import CreateGroupDialog from '../../../components/dialog/create-group-dialog';
-import EventBus, { EVENT_BUS_TYPE } from '../../../components/event-bus';
-import Icon from '../../../components/icon';
-import ModalPortal from '../../../components/modal-portal';
-import OpIcon from '../../../components/op-icon';
-import toaster from '../../../components/toast';
-import WechatDialog from '../../../components/wechat/wechat-dialog';
-import { isWorkWeixin } from '../../../components/wechat/weixin-utils';
+import { seafileAPI } from '@/api/seafile-api';
+import AboutDialog from '@/components/dialog/about-dialog';
+import CreateGroupDialog from '@/components/dialog/create-group-dialog';
+import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
+import Icon from '@/components/icon';
+import ModalPortal from '@/components/modal-portal';
+import OpIcon from '@/components/op-icon';
+import toaster from '@/components/toast';
+import WechatDialog from '@/components/wechat/wechat-dialog';
+import { isWorkWeixin } from '@/components/wechat/weixin-utils';
 import {
   ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY,
   SIDE_NAV_FILES_UNFOLDED_KEY,
   SIDE_NAV_SHARE_ADMIN_UNFOLDED_KEY,
   SUB_NAV_ITEM_HEIGHT
-} from '../../../constants';
-import Group from '../../../models/group';
+} from '@/constants';
+import Group from '@/models/group';
 import {
   gettext, siteRoot, canAddGroup, canAddRepo, canShareRepo,
   canGenerateShareLink, canGenerateUploadLink, canInvitePeople,
   enableTC, sideNavFooterCustomHtml, enableShowAbout, showWechatSupportGroup,
   canViewOrg, enableOCM, enableOCMViaWebdav, canCreateWiki,
   isPro, isDBSqlite3, customNavItems, helpLink
-} from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+} from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import LibrariesSubNav from './libraries-sub-nav';
 
 const propTypes = {

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Input, Button, InputGroup } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import Icon from '../../icon';
 import SettingItemBase from './setting-item-base';
 

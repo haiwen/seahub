@@ -1,8 +1,8 @@
 import React from 'react';
+import Icon from '@/components/icon';
+import { DIR_COLUMN_KEYS } from '@/constants/dir-column-config';
 import { PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
 import { gettext } from '@/utils/constants';
-import Icon from '../../../components/icon';
-import { DIR_COLUMN_KEYS } from '../../../constants/dir-column-config';
 
 export const createTableHeaders = (
   sortOptions = {},

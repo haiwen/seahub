@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext } from '../../utils/constants';
+import { gettext } from '@/utils/constants';
 
 const propTypes = {
   restoreRepo: PropTypes.func.isRequired,

@@ -1,4 +1,4 @@
-import { Utils } from '../utils/utils';
+import { Utils } from '@/utils/utils';
 
 class RepoInfo {
   constructor(object) {

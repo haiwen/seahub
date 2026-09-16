@@ -1,21 +1,21 @@
 import React, { Fragment } from 'react';
 import { Link } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../../api/seafile-api';
-import AboutDialog from '../../../components/dialog/about-dialog';
-import EventBus, { EVENT_BUS_TYPE } from '../../../components/event-bus';
-import Icon from '../../../components/icon';
-import ModalPortal from '../../../components/modal-portal';
-import toaster from '../../../components/toast';
-import Tooltip from '../../../components/tooltip';
-import WechatDialog from '../../../components/wechat/wechat-dialog';
-import { isWorkWeixin } from '../../../components/wechat/weixin-utils';
-import { ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY, SIDE_PANEL_FOLDED_WIDTH, SUB_NAV_ITEM_HEIGHT } from '../../../constants';
-import { FOLDED_SIDE_NAV_FILES, FOLDED_SIDE_NAV } from '../../../constants/zIndexes';
-import Group from '../../../models/group';
+import { seafileAPI } from '@/api/seafile-api';
+import AboutDialog from '@/components/dialog/about-dialog';
+import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
+import Icon from '@/components/icon';
+import ModalPortal from '@/components/modal-portal';
+import toaster from '@/components/toast';
+import Tooltip from '@/components/tooltip';
+import WechatDialog from '@/components/wechat/wechat-dialog';
+import { isWorkWeixin } from '@/components/wechat/weixin-utils';
+import { ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY, SIDE_PANEL_FOLDED_WIDTH, SUB_NAV_ITEM_HEIGHT } from '@/constants';
+import { FOLDED_SIDE_NAV_FILES, FOLDED_SIDE_NAV } from '@/constants/zIndexes';
+import Group from '@/models/group';
 import { gettext, siteRoot, canInvitePeople, canCreateWiki, enableTC, sideNavFooterCustomHtml, showWechatSupportGroup,
-  isPro, isDBSqlite3, customNavItems, curNoteMsg, enableShowAbout } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+  isPro, isDBSqlite3, customNavItems, curNoteMsg, enableShowAbout } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import LibrariesSubNav from './libraries-sub-nav';
 import ShareAdminSubNav from './share-admin-sub-nav';
 

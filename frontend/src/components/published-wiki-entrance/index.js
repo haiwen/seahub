@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { serviceURL, gettext } from '../../utils/constants';
+import { serviceURL, gettext } from '@/utils/constants';
 import Tooltip from '../tooltip';
 
 import './index.css';

@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import Icon from '../../../components/icon';
+import Icon from '@/components/icon';
 
 const propTypes = {
   node: PropTypes.object.isRequired,

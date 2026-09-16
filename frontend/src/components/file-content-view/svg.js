@@ -1,6 +1,6 @@
 import React from 'react';
 
-import '../../css/svg-file-view.css';
+import '@/css/svg-file-view.css';
 
 const {
   fileName, rawPath

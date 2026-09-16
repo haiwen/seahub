@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot } from '../../../utils/constants';
+import { gettext, siteRoot } from '@/utils/constants';
 
 const NAV_ITEMS = [
   { name: 'info', urlPart: '', text: gettext('Info') },

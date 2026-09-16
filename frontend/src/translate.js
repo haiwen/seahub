@@ -1,4 +1,4 @@
-import { gettext } from './utils/constants';
+import { gettext } from '@/utils/constants';
 
 gettext('You have not shared any folders');
 gettext('You don\'t have any share links');

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
-import Icon from '../../../components/icon';
+import Icon from '@/components/icon';
 import {
   gettext, siteRoot, canAddRepo, canViewOrg, enableOCM, enableOCMViaWebdav
-} from '../../../utils/constants';
+} from '@/utils/constants';
 
 const propTypes = {
   currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,

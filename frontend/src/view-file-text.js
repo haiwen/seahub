@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createRoot } from 'react-dom/client';
-import { seafileAPI } from './api/seafile-api';
-import FileView from './components/file-view/file-view';
-import FileViewTip from './components/file-view/file-view-tip';
-import SeafileCodeMirror from './components/seafile-codemirror';
-import toaster from './components/toast';
-import { gettext } from './utils/constants';
-import { Utils } from './utils/utils';
+import { seafileAPI } from '@/api/seafile-api';
+import FileView from '@/components/file-view/file-view';
+import FileViewTip from '@/components/file-view/file-view-tip';
+import SeafileCodeMirror from '@/components/seafile-codemirror';
+import toaster from '@/components/toast';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
-import './css/text-file-view.css';
+import '@/css/text-file-view.css';
 const {
   err, fileExt, fileContent, repoID, filePath, fileName, canEditFile, username
 } = window.app.pageOptions;

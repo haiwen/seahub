@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Utils } from '../../utils/utils';
+import { Utils } from '@/utils/utils';
 import Icon from '../icon';
 
 const FavoritesListItem = ({ item, isSelected, onItemClick }) => {

@@ -1,13 +1,13 @@
 import React, { Fragment } from 'react';
-import { seafileAPI } from '../../api/seafile-api';
-import Account from '../../components/account';
-import Icon from '../../components/icon';
-import Logo from '../../components/logo';
-import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { seafileAPI } from '@/api/seafile-api';
+import Account from '@/components/account';
+import Icon from '@/components/icon';
+import Logo from '@/components/logo';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import FileUploader from './file-uploader';
 
-import '../../css/upload-link.css';
+import '@/css/upload-link.css';
 
 const loggedUser = window.app.pageOptions.username;
 const {

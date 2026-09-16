@@ -1,9 +1,9 @@
 import React from 'react';
 import { Popover } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { NAV_ITEM_MARGIN } from '../../../constants';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { NAV_ITEM_MARGIN } from '@/constants';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import SeahubModalCloseIcon from '../../seahub-modal-close';
 
 import './index.css';

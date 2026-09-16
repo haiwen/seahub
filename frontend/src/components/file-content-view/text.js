@@ -1,6 +1,6 @@
 import React from 'react';
 import SeafileCodeMirror from '../seafile-codemirror';
-import '../../css/text-file-view.css';
+import '@/css/text-file-view.css';
 
 const { fileExt, fileContent } = window.app.pageOptions;
 

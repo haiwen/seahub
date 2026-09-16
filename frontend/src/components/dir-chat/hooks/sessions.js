@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useMemo, useRef, useState, useCallback } from 'react';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import { eventBus, EVENT_BUS_TYPE } from '../../../components/event-bus';
 import toaster from '../../../components/toast';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
 import { ASK_PAGE_SLUG_ID, SESSION_TAB_TYPE } from '../constants';
 import { ChatSession } from '../models';
 import { useAskPage } from './page-type';

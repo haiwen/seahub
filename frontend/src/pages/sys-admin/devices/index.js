@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button } from 'reactstrap';
 import { useLocation } from '@gatsbyjs/reach-router';
-import { systemAdminAPI } from '../../../api/system-admin-api';
-import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
-import { EVENT_BUS_TYPE, eventBus } from '../../../components/event-bus';
-import toaster from '../../../components/toast';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { systemAdminAPI } from '@/api/system-admin-api';
+import MainPanelTopbar from '@/components/admin/layout/main-panel-topbar';
+import { EVENT_BUS_TYPE, eventBus } from '@/components/event-bus';
+import toaster from '@/components/toast';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import DevicesNav from './devices-nav';
 
 const Devices = ({ children, ...commonProps }) => {

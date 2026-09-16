@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { RECENTLY_USED_LIST_KEY } from '../../constants';
+import { RECENTLY_USED_LIST_KEY } from '@/constants';
 import RecentlyUsedListItem from './recently-used-list-item';
 
 const RecentlyUsedListView = ({ currentRepoInfo, repoList, onDirentItemClick }) => {

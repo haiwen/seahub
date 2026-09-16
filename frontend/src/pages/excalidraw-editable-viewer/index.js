@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import context from '../excalidraw-editor/context';
 import SimpleEditor from '../excalidraw-editor/editor';
 import SocketManager from '../excalidraw-editor/socket/socket-manager';

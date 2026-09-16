@@ -3,7 +3,7 @@ import { FormGroup, Label } from 'reactstrap';
 import { MarkdownViewer } from '@seafile/seafile-editor';
 import classnames from 'classnames';
 import Icon from '@/components/icon';
-import { gettext } from '../../../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import { formatDetailsJSONValue, formatDetailsValue, shouldHighlightDetailsAsJSON } from '../tool-details-content';
 
 import './index.css';

@@ -20,7 +20,7 @@ import { withDirentContextMenu } from '../hoc/withDirentContextMenu';
 import { VirtualGrid } from '../virtual-list';
 import DirentGridItem from './dirent-grid-item';
 
-import '../../../css/grid-view.css';
+import '@/css/grid-view.css';
 
 const propTypes = {
   path: PropTypes.string.isRequired,

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Popover } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../api/seafile-api';
-import { siteRoot, isPro, gettext, appAvatarURL, enableSSOToThirdpartWebsite, enableSeafileAI } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { seafileAPI } from '@/api/seafile-api';
+import { siteRoot, isPro, gettext, appAvatarURL, enableSSOToThirdpartWebsite, enableSeafileAI } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import Icon from '../icon';
 import toaster from '../toast';
 

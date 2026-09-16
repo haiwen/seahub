@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { Utils } from '../../utils/utils';
+import { Utils } from '@/utils/utils';
 import { DROPDOWN_SUBMENU_OFFSET_DEFAULT } from '../dropdown/utils';
 import Icon from '../icon';
 import { hideMenu } from './actions';

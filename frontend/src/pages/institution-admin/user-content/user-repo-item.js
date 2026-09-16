@@ -3,8 +3,8 @@ import { Link } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
-import { enableSysAdminViewRepo, gettext, isPro, siteRoot } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { enableSysAdminViewRepo, gettext, isPro, siteRoot } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 dayjs.extend(relativeTime);
 

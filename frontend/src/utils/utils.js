@@ -1,6 +1,6 @@
 import React from 'react';
-import toaster from '../components/toast';
-import { PRIVATE_FILE_TYPE } from '../constants';
+import toaster from '@/components/toast';
+import { PRIVATE_FILE_TYPE } from '@/constants';
 import { compareTwoString } from './compare-two-string';
 import { mediaUrl, gettext, serviceURL, siteRoot, isPro, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableSeadoc, enableRepoSnapshotLabel,
   enableResetEncryptedRepoPassword, isEmailConfigured, isSystemStaff,

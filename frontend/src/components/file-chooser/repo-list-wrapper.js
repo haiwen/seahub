@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MODE_TYPE_MAP } from '../../constants';
-import { gettext, mediaUrl } from '../../utils/constants';
+import { MODE_TYPE_MAP } from '@/constants';
+import { gettext, mediaUrl } from '@/utils/constants';
 import Icon from '../icon';
 import Loading from '../loading';
 import FavoritesListView from './favorites-list-view';

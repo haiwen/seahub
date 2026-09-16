@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../api/seafile-api';
-import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { seafileAPI } from '@/api/seafile-api';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import copy from '../copy-to-clipboard';
 import Loading from '../loading';
 import toaster from '../toast';

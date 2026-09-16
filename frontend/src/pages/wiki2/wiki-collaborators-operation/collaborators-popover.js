@@ -1,7 +1,7 @@
 import React from 'react';
 import { Popover, PopoverBody, PopoverHeader } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../utils/constants';
+import { gettext } from '@/utils/constants';
 
 import './collaborators-popover.css';
 

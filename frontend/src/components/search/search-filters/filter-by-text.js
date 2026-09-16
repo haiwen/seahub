@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { SEARCH_FILTERS_KEY } from '../../../constants';
-import { gettext } from '../../../utils/constants';
+import { SEARCH_FILTERS_KEY } from '@/constants';
+import { gettext } from '@/utils/constants';
 import CustomDropdown from '../../dropdown';
 import Icon from '../../icon';
 

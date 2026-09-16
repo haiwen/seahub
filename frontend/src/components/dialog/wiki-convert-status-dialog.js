@@ -2,10 +2,10 @@ import React from 'react';
 import { Modal, ModalBody } from 'reactstrap';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext } from '../../utils/constants';
+import { gettext } from '@/utils/constants';
 import Loading from '../loading';
 
-import '../../css/seahub-io-dialog.css';
+import '@/css/seahub-io-dialog.css';
 
 
 const propTypes = {

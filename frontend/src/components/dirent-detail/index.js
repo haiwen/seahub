@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { PRIVATE_FILE_TYPE } from '@/constants';
+import { METADATA_MODE, TAGS_MODE } from '@/constants/view-mode';
 import ViewDetails from '@/features/metadata/components/view-details';
 import MetadataContext from '@/features/metadata/context';
 import { useTags } from '@/features/tag/hooks';
-import { PRIVATE_FILE_TYPE } from '../../constants';
-import { METADATA_MODE, TAGS_MODE } from '../../constants/view-mode';
-import ObjectUtils from '../../utils/object';
+import ObjectUtils from '@/utils/object';
 import DirentDetail from './dirent-details';
 import LibDetail from './lib-details';
 import MultiSelectionDetails from './multi-selection-details';

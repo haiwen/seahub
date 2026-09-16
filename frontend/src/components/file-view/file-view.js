@@ -2,14 +2,14 @@ import React, { Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import PropTypes from 'prop-types';
 import watermark from 'watermark-dom';
+import i18n from '@/_i18n/i18n-sdoc-editor';
+import { seafileAPI } from '@/api/seafile-api';
 import { MetadataMiddlewareProvider } from '@/features/metadata/hooks/metadata-middleware';
-import i18n from '../../_i18n/i18n-sdoc-editor';
-import { seafileAPI } from '../../api/seafile-api';
-import { MetadataStatusProvider } from '../../hooks';
-import { gettext, siteName } from '../../utils/constants';
-import LocalStorage from '../../utils/local-storage-utils';
-import { Utils } from '../../utils/utils';
-import WebSocketClient from '../../utils/websocket-service';
+import { MetadataStatusProvider } from '@/hooks';
+import { gettext, siteName } from '@/utils/constants';
+import LocalStorage from '@/utils/local-storage-utils';
+import { Utils } from '@/utils/utils';
+import WebSocketClient from '@/utils/websocket-service';
 import ShareDialog from '../dialog/share-dialog';
 import EmbeddedFileDetails from '../dirent-detail/embedded-file-details';
 import IconButton from '../icon-button';
@@ -22,7 +22,7 @@ import I18nCommentPanel from './i18n-comment-panel';
 import OnlyofficeFileToolbar from './onlyoffice-file-toolbar';
 import ResizeWidth from './resize-width';
 
-import '../../css/file-view.css';
+import '@/css/file-view.css';
 
 const propTypes = {
   onSave: PropTypes.func,

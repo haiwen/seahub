@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import { UncontrolledTooltip } from 'reactstrap';
-import { orgAdminAPI } from '../../../api/org-admin-api';
-import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
-import Icon from '../../../components/icon';
-import { mediaUrl, gettext, enableSeafileAI } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { orgAdminAPI } from '@/api/org-admin-api';
+import MainPanelTopbar from '@/components/admin/layout/main-panel-topbar';
+import Icon from '@/components/icon';
+import { mediaUrl, gettext, enableSeafileAI } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import './index.css';
 
 
