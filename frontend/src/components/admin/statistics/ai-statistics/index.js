@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Button, Input } from 'reactstrap';
+import { Button, ButtonGroup } from 'reactstrap';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
+import DateTimePicker from '@/components/date-and-time-picker';
 import { gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import EmptyTip from '../../../empty-tip';
@@ -9,6 +10,7 @@ import Loading from '../../../loading';
 import Paginator from '../../../paginator';
 import toaster from '../../../toast';
 import AIStatisticsDetailDialog from './detail-dialog';
+import '@/css/system-stat.css';
 
 const propTypes = {
   defaultGroupBy: PropTypes.string.isRequired,
@@ -179,6 +181,23 @@ const AIStatisticsPage = ({
     return [];
   }, [groupBy, groupLabel, showOrgColumn]);
 
+  const columnWidths = useMemo(() => {
+    const hasLibraryId = columns.some(column => column.key === 'repo_id');
+    if (!hasLibraryId) {
+      return [];
+    }
+    const defaultWidth = 100 / columns.length;
+    return columns.map((column) => {
+      if (column.key === 'repo_id') {
+        return defaultWidth * 1.5;
+      }
+      if (column.key === 'total_credit_used' || column.key === 'actions') {
+        return defaultWidth * 0.75;
+      }
+      return defaultWidth;
+    });
+  }, [columns]);
+
   const openDetails = (item) => {
     setDetailConfig({
       condition: buildCondition(groupBy, item),
@@ -208,7 +227,7 @@ const AIStatisticsPage = ({
     }
     if (key === 'actions') {
       return (
-        <Button color="link" className="p-0" onClick={() => openDetails(item)}>
+        <Button color="link" className="p-0 justify-content-start" onClick={() => openDetails(item)}>
           {gettext('View')}
         </Button>
       );
@@ -243,12 +262,14 @@ const AIStatisticsPage = ({
 
   return (
     <>
-      <div className="d-flex align-items-center flex-wrap mb-4">
+      <div className="ai-statistics-tabs mb-4" role="tablist">
         {tabs.map((tab) => (
           <Button
             key={tab.value}
-            color={groupBy === tab.value ? 'primary' : 'secondary'}
-            className="mr-2 mb-2"
+            color="link"
+            className={`ai-statistics-tab${groupBy === tab.value ? ' active' : ''}`}
+            role="tab"
+            aria-selected={groupBy === tab.value}
             onClick={() => {
               setGroupBy(tab.value);
               setCurrentPage(1);
@@ -260,35 +281,40 @@ const AIStatisticsPage = ({
       </div>
       {groupBy !== 'overview' && (
         <div className="d-flex align-items-center flex-wrap mb-4">
-          <Button
-            color={queryMode === 'date' ? 'primary' : 'secondary'}
-            className="mr-2"
-            onClick={() => {
-              setQueryMode('date');
-              setCurrentPage(1);
-            }}
-          >
-            {gettext('By date')}
-          </Button>
-          <Button
-            color={queryMode === 'month' ? 'primary' : 'secondary'}
-            className="mr-4"
-            onClick={() => {
-              setQueryMode('month');
-              setCurrentPage(1);
-            }}
-          >
-            {gettext('By month')}
-          </Button>
+          <ButtonGroup size="sm" className="mr-5">
+            <Button
+              color="secondary"
+              className={`ai-statistics-query-button${queryMode === 'date' ? ' is-selected' : ''}`}
+              onClick={() => {
+                setQueryMode('date');
+                setCurrentPage(1);
+              }}
+            >
+              {gettext('By date')}
+            </Button>
+            <Button
+              color="secondary"
+              className={`ai-statistics-query-button${queryMode === 'month' ? ' is-selected' : ''}`}
+              onClick={() => {
+                setQueryMode('month');
+                setCurrentPage(1);
+              }}
+            >
+              {gettext('By month')}
+            </Button>
+          </ButtonGroup>
           {queryMode === 'date' && (
             <>
-              <span className="mr-2">{gettext('Date')}</span>
-              <Input
-                type="date"
-                style={{ width: '180px' }}
-                value={date}
-                onChange={(event) => {
-                  setDate(event.target.value);
+              <span className="ai-statistics-query-label mr-2">{gettext('Date')}</span>
+              <DateTimePicker
+                showHourAndMinute={false}
+                inputWidth={180}
+                inputHeight={32}
+                tabIndex={0}
+                value={date ? dayjs(date) : null}
+                disabledDate={() => false}
+                onChange={(value) => {
+                  setDate(value?.format('YYYY-MM-DD') || '');
                   setCurrentPage(1);
                 }}
               />
@@ -296,13 +322,17 @@ const AIStatisticsPage = ({
           )}
           {queryMode === 'month' && (
             <>
-              <span className="mr-2">{gettext('Month')}</span>
-              <Input
-                type="month"
-                style={{ width: '180px' }}
-                value={month}
-                onChange={(event) => {
-                  setMonth(event.target.value);
+              <span className="ai-statistics-query-label mr-2">{gettext('Month')}</span>
+              <DateTimePicker
+                mode="month"
+                showHourAndMinute={false}
+                inputWidth={180}
+                inputHeight={32}
+                tabIndex={0}
+                value={month ? dayjs(`${month}-01`) : null}
+                disabledDate={() => false}
+                onChange={(value) => {
+                  setMonth(value?.format('YYYY-MM') || '');
                   setCurrentPage(1);
                 }}
               />
@@ -359,10 +389,19 @@ const AIStatisticsPage = ({
       {!isLoading && !errorMessage && (!enableOverview || groupBy !== 'overview') && items.length > 0 && (
         <>
           <table className="w-100">
+            {groupBy === 'repo' && (
+              <colgroup>
+                {columns.map((column, index) => (
+                  <col key={column.key} style={{ width: `${columnWidths[index]}%` }} />
+                ))}
+              </colgroup>
+            )}
             <thead>
               <tr>
                 {columns.map((column) => (
-                  <th key={column.key}>{column.name}</th>
+                  <th key={column.key} className={column.key === 'repo_id' ? 'ai-statistics-library-id' : undefined}>
+                    {column.name}
+                  </th>
                 ))}
               </tr>
             </thead>
@@ -370,7 +409,7 @@ const AIStatisticsPage = ({
               {items.map((item, index) => (
                 <tr key={`${groupBy}-${index}`}>
                   {columns.map((column) => (
-                    <td key={column.key}>
+                    <td key={column.key} className={column.key === 'repo_id' ? 'ai-statistics-library-id' : undefined}>
                       {renderCell(item, column.key)}
                     </td>
                   ))}

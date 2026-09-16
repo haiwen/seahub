@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Input, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
+import DateTimePicker from '@/components/date-and-time-picker';
 import { gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import EmptyTip from '../../../empty-tip';
@@ -94,8 +95,7 @@ const AIStatisticsDetailDialog = ({ condition, detailOptions, loadDetails, onTog
           <span className="mr-2">{gettext('Group by')}</span>
           <Input
             type="select"
-            className="mr-4"
-            style={{ width: '160px' }}
+            className="ai-statistics-detail-group-by mr-4"
             value={groupBy}
             onChange={(event) => setGroupBy(event.target.value)}
           >
@@ -104,27 +104,32 @@ const AIStatisticsDetailDialog = ({ condition, detailOptions, loadDetails, onTog
             ))}
           </Input>
           <span className="mr-2">{gettext('From')}</span>
-          <Input
-            type="date"
-            className="mr-4"
-            style={{ width: '170px' }}
-            value={startDate}
-            onChange={(event) => setStartDate(event.target.value)}
-          />
+          <div className="mr-4">
+            <DateTimePicker
+              showHourAndMinute={false}
+              inputWidth={170}
+              tabIndex={0}
+              value={startDate ? dayjs(startDate) : null}
+              disabledDate={() => false}
+              onChange={(value) => setStartDate(value?.format('YYYY-MM-DD') || '')}
+            />
+          </div>
           <span className="mr-2">{gettext('To')}</span>
-          <Input
-            type="date"
-            className="mr-4"
-            style={{ width: '170px' }}
-            value={endDate}
-            onChange={(event) => setEndDate(event.target.value)}
-          />
+          <div className="mr-4">
+            <DateTimePicker
+              showHourAndMinute={false}
+              inputWidth={170}
+              tabIndex={0}
+              value={endDate ? dayjs(endDate) : null}
+              disabledDate={() => false}
+              onChange={(value) => setEndDate(value?.format('YYYY-MM-DD') || '')}
+            />
+          </div>
         </div>
         <div className="d-flex align-items-center flex-wrap mb-4">
           <span className="mr-2">{gettext('Scenarios')}</span>
           <Input
-            className="mr-4"
-            style={{ maxWidth: '320px' }}
+            className="ai-statistics-detail-scenarios mr-4"
             value={scenarios}
             onChange={(event) => setScenarios(event.target.value)}
             placeholder="chat,summary"

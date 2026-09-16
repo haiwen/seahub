@@ -20,6 +20,14 @@
   align-items: center;
 }
 
+.cur-view-path.statistic-nav {
+  padding-left: 0;
+}
+
+.statistic-nav .nav-item .nav-link {
+  color: var(--bs-body-secondary-color);
+}
+
 
 .statistic-traffic-tab {
   display: flex;
@@ -33,24 +41,22 @@
   padding: 3px 0;
   border-bottom: 2px solid transparent;
   cursor: pointer;
-  color: #8a948f;
+  color: var(--bs-body-secondary-color);
 }
 
 .statistic-traffic-tab .statistic-traffic-tab-item:hover {
-  color: #eb8025;
-  border-bottom: 2px solid #eb8025;
+  color: #ED7109;
+  border-bottom: 2px solid #ED7109;
 }
 
 .statistic-traffic-tab .statistic-traffic-tab-item.active {
-  color: #eb8025;
-  border-bottom: 2px solid #eb8025;
+  color: #ED7109;
+  border-bottom: 2px solid #ED7109;
 }
 
-.statistic-reports-title {
-  background: var(--bs-th-bg);
-  margin-top: 15px;
-  color: var(--bs-body-color);
-  padding: 3px 10px;
+.statistic-reports-page .statistic-reports-title {
+  margin: 15px 0 0;
+  padding: 0;
 }
 
 .statistic-reports-submit {
@@ -68,6 +74,19 @@
   height: 30px;
 }
 
+.statistic-reports-page .statistic-reports-input {
+  width: 120px;
+  height: 32px;
+}
+
+.statistic-reports-page .statistic-reports-tip {
+  margin-right: .5rem;
+  padding: 0;
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--bs-body-color);
+}
+
 .statistic-reports-tip {
   padding: 0 10px;
   font-size: 13px;
@@ -81,4 +100,158 @@
 .system-statistic-button {
   margin-left: .5rem;
   height: 32px;
+}
+
+.ai-statistics-query-label {
+  color: var(--bs-body-color);
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.ai-statistics-query-button.is-selected {
+  background: var(--bs-nav-active-bg);
+}
+
+.ai-statistics-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 16px;
+  row-gap: 8px;
+}
+
+.ai-statistics-tabs .ai-statistics-tab {
+  min-width: 0;
+  height: auto;
+  padding: 0 0 4px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--bs-body-secondary-color);
+  display: block;
+  letter-spacing: normal;
+  text-decoration: none;
+}
+
+.ai-statistics-tabs .ai-statistics-tab.active {
+  color: #ED7109;
+  border-bottom-color: #ED7109;
+}
+
+.ai-statistics-library-id {
+  padding-right: 4rem;
+}
+
+.ai-statistics-detail-group-by {
+  width: 160px;
+}
+
+.ai-statistics-detail-scenarios {
+  max-width: 320px;
+}
+
+.cur-metrics-content {
+  padding: 10px 16px;
+  border: none;
+}
+
+.cur-metrics-content .card {
+  margin-bottom: 20px;
+}
+
+.cur-metrics-content .component-metrics-card .card-header {
+  background: var(--bs-body-bg);
+  padding: 16px 20px;
+}
+
+.cur-metrics-content .metric-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.cur-metrics-content .metric-name {
+  font-size: 14px;
+}
+
+.cur-metrics-content .metric-help-icon {
+  margin-left: 8px;
+  visibility: hidden;
+}
+
+.cur-metrics-content .metric-help-icon.is-visible {
+  visibility: visible;
+}
+
+.metrics-container {
+  padding: 0;
+}
+
+.metrics-container .loading-tip {
+  margin: 100px auto;
+  text-align: center;
+}
+
+.cur-metrics-content .card {
+  box-shadow: none;
+  border: none;
+}
+
+.cur-metrics-content .card-body {
+  border: none;
+  padding: 0;
+}
+
+.cur-metrics-content .component-header {
+  background-color: var(--bs-th-secondary-bg) !important;
+}
+
+.cur-metrics-content .component-header td {
+  padding-top: 24px !important;
+  padding-bottom: 2px !important;
+}
+
+.cur-metrics-content .component-title {
+  color: var(--bs-body-color);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.cur-metrics-content .metric-row td {
+  padding: 0;
+  font-size: 14px;
+}
+
+.metrics-container .table {
+  margin-bottom: 0;
+  border: none;
+}
+
+.metrics-container .table td {
+  vertical-align: middle;
+  background: var(--bs-body-bg);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
+  padding-left: 8px;
+}
+
+.metrics-container .table th {
+  background: var(--bs-body-bg);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
+  color: var(--bs-body-secondary-color);
+  font-size: 14px;
+}
+
+.metrics-container .metric-name-column {
+  width: 40%;
+}
+
+.metrics-container .metric-node-column {
+  width: 20%;
+}
+
+.metrics-container .metric-value-column {
+  width: 15%;
+}
+
+.metrics-container .metric-time-column {
+  width: 25%;
 }

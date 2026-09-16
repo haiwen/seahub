@@ -5,6 +5,7 @@ import Icon from '@/components/icon';
 import Loading from '@/components/loading';
 import Tooltip from '@/components/tooltip';
 import { gettext } from '@/utils/constants';
+import '@/css/system-stat.css';
 
 class ComponentMetricsTable extends Component {
   constructor(props) {
@@ -49,11 +50,9 @@ class ComponentMetricsTable extends Component {
                       {metric.help && (
                         <>
                           <span
+                            className={`metric-help-icon${hoveredRow === rowId ? ' is-visible' : ''}`}
                             id={rowId}
                             aria-hidden="true"
-                            style={{
-                              visibility: hoveredRow === rowId ? 'visible' : 'hidden',
-                            }}
                           >
                             <Icon symbol="help" />
                           </span>
@@ -153,10 +152,10 @@ class StatisticMetrics extends Component {
                   <table className="table table-striped mb-0">
                     <thead>
                       <tr>
-                        <th width="40%">{gettext('Metrics')}</th>
-                        <th width="20%">{gettext('Node')}</th>
-                        <th width="15%">{gettext('Value')}</th>
-                        <th width="25%">{gettext('Collected time')}</th>
+                        <th className="metric-name-column">{gettext('Metrics')}</th>
+                        <th className="metric-node-column">{gettext('Node')}</th>
+                        <th className="metric-value-column">{gettext('Value')}</th>
+                        <th className="metric-time-column">{gettext('Collected time')}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -178,92 +177,5 @@ class StatisticMetrics extends Component {
     );
   }
 }
-
-const style = `
-  <style>
-    .cur-metrics-content {
-      padding: 10px 16px;
-      border: none;
-    }
-
-    .cur-metrics-content .card {
-      margin-bottom: 20px;
-    }
-
-    .component-metrics-card .card-header {
-      background: var(--bs-body-bg);
-      padding: 16px 20px;
-    }
-
-    .metric-info {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .metric-name {
-      font-size: 14px;
-    }
-
-    .metrics-container {
-      padding: 0;
-    }
-
-    .metrics-container .loading-tip {
-      margin: 100px auto;
-      text-align: center;
-    }
-
-    .card {
-      box-shadow: none;
-      border: none;
-    }
-
-    .card-body {
-      border: none;
-      padding: 0;
-    }
-
-    .component-header {
-      background-color: var(--bs-th-secondary-bg) !important;
-    }
-
-    .component-header td {
-      padding-top: 24px !important;
-      padding-bottom: 2px !important;
-      }
-
-    .component-title {
-      color: var(--bs-body-color);
-      font-size: 16px;
-      font-weight: 500;
-    }
-
-    .metric-row td {
-      padding: 0;
-      font-size: 14px;
-    }
-
-    .metrics-container .table {
-      margin-bottom: 0;
-      border: none;
-    }
-
-    .metrics-container .table td {
-      vertical-align: middle;
-      background: var(--bs-body-bg);
-      border-bottom: 1px solid var(--bs-border-secondary-color);
-      padding-left: 8px;
-    }
-
-    .metrics-container .table th {
-      background: var(--bs-body-bg);
-      border-bottom: 1px solid var(--bs-border-secondary-color);
-      color: #666;
-      font-size: 14px;
-    }
-  </style>
-`;
-
-document.head.insertAdjacentHTML('beforeend', style);
 
 export default StatisticMetrics;

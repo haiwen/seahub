@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from 'reactstrap';
 import { useLocation, navigate, Router } from '@gatsbyjs/reach-router';
 import MainPanelTopbar from '@/components/admin/layout/main-panel-topbar';
-import Icon from '@/components/icon';
 import toaster from '@/components/toast';
 import { gettext, siteRoot } from '@/utils/constants';
 import LinksNav from '../links/links-nav';
@@ -176,8 +175,7 @@ const LibrariesAndLinks = ({ ...commonProps }) => {
     <>
       {path === 'all-libraries' && (
         <MainPanelTopbar search={getSearch()} { ...commonProps }>
-          <Button className="btn btn-secondary operation-item d-flex align-items-center" onClick={toggleCreateRepoDialog} aria-label={gettext('New Library')}>
-            <span className="d-inline-flex align-items-center mr-1"><Icon symbol="new" /></span>
+          <Button className="btn btn-secondary operation-item" onClick={toggleCreateRepoDialog} aria-label={gettext('New Library')}>
             {gettext('New Library')}
           </Button>
         </MainPanelTopbar>

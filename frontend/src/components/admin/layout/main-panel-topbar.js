@@ -15,7 +15,7 @@ class MainPanelTopbar extends Component {
 
   render() {
     return (
-      <div className={`main-panel-north ${this.props.children ? 'border-left-show' : ''}`}>
+      <div className={`main-panel-north admin-main-panel-north ${this.props.children ? 'border-left-show' : ''}`}>
         <div className="cur-view-toolbar">
           <span
             className="side-nav-toggle hidden-md-up d-md-none"
@@ -24,7 +24,7 @@ class MainPanelTopbar extends Component {
           >
             <Icon symbol="menu" />
           </span>
-          <div className="operation d-flex">
+          <div className="operation d-flex btn-group-sm">
             {this.props.children}
           </div>
         </div>

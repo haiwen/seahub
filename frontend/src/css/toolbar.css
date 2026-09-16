@@ -33,6 +33,18 @@
   border-radius: 2px;
 }
 
+.admin-main-panel-north .operation {
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-main-panel-north .btn-secondary {
+  margin-right: 0;
+  line-height: var(--bs-btn-line-height);
+  border-color: var(--bs-border-color);
+  border-radius: 4px;
+}
+
 /* end file-operation toolbar */
 
 #cur-folder-more-op-toggle {
@@ -44,6 +56,14 @@
   display: flex;
   margin-left: auto;
   align-items: center;
+}
+
+.admin-main-panel-north .common-toolbar .input-icon {
+  margin-right: 16px;
+}
+
+.admin-main-panel-north .common-toolbar .input-icon .search-input {
+  margin-right: 0 !important;
 }
 
 .common-toolbar .logout-icon.sf-icon-color-mode {
@@ -64,6 +84,7 @@
   align-items: center;
   font-size: 16px;
   color: var(--bs-icon-color);
+  background-color: var(--bs-body-bg);
   border-radius: 4px;
   border: 1px solid var(--bs-border-color);
 }
