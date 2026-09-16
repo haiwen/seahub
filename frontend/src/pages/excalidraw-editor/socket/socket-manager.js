@@ -1,6 +1,6 @@
 import { CaptureUpdateAction, getSceneVersion, reconcileElements, restoreElements } from '@excalidraw/excalidraw';
 import throttle from 'lodash.throttle';
-import { CURSOR_SYNC_TIMEOUT, LOAD_IMAGES_TIMEOUT } from '../constants';
+import { CURSOR_SYNC_TIMEOUT, LOAD_IMAGES_TIMEOUT, OPERATION_RETRY_DELAY } from '../constants';
 import FileManager from '../data/file-manager';
 import { loadFilesFromServer, saveFilesToServer } from '../data/server-storage';
 import { stateDebug } from '../utils/debug';
@@ -197,7 +197,19 @@ class SocketManager {
       return;
     }
     // Operations are execute failure
-    const { error_type } = result;
+    const { error_type } = result || {};
+    if (error_type === 'ack_timeout') {
+      if (this._sendingOperation) {
+        this.pendingOperationList.unshift(this._sendingOperation);
+        this._sendingOperation = null;
+      }
+
+      stateDebug(`ACK timeout. State Changed: ${this.state} -> ${STATE.IDLE}`);
+      this.state = STATE.IDLE;
+      this.dispatchConnectState('ack_timeout');
+      setTimeout(() => this.sendOperations(), OPERATION_RETRY_DELAY);
+      return;
+    }
     if (error_type === 'load_document_content_error' || error_type === 'token_expired') {
       // load_document_content_error: After a short-term reconnection, the content of the document fails to load
       this.dispatchConnectState(error_type);
