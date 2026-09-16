@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
-import OpIcon from '../../../../components/op-icon';
-import Switch from '../../../../components/switch';
-import toaster from '../../../../components/toast';
-import { gettext } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
+import OpIcon from '@/components/op-icon';
+import Switch from '@/components/switch';
+import toaster from '@/components/toast';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import metadataAPI from '../../../api';
 import { EVENT_BUS_TYPE } from '../../../constants';
 import TurnOffConfirmDialog from '../turn-off-confirm-dialog';
