@@ -30,7 +30,7 @@ from seaserv import seafile_api
 from seahub.repo_metadata.constants import FACE_RECOGNITION_VIEW_ID, METADATA_RECORD_UPDATE_LIMIT
 from seahub.file_tags.models import FileTags
 from seahub.repo_tags.models import RepoTags
-from seahub.settings import MD_FILE_COUNT_LIMIT
+from seahub.settings import EMBEDDING_MODEL_CONFIGURED, MD_FILE_COUNT_LIMIT
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.search.utils import get_invisible_repos_info_by_username, is_invisible_path
 from seahub.ai.utils import verify_ai_config, verify_chat_ai_config
@@ -2027,19 +2027,21 @@ class MetadataAISummaryStatusManage(APIView):
 
         try:
             total_files = query_count()
-            processed_count = query_count(
-                f''' AND `{METADATA_TABLE.columns.ai_summary_mtime.name}` IS NOT NULL
-                    AND (`{METADATA_TABLE.columns.file_mtime.name}` IS NULL
-                        OR `{METADATA_TABLE.columns.ai_summary_mtime.name}` >= `{METADATA_TABLE.columns.file_mtime.name}`)'''
-            )
+            processed_count = 0
             indexed_count = 0
-            if indexed_at:
-                indexed_count = query_count(
-                    f''' AND `{METADATA_TABLE.columns.ai_summary.name}` IS NOT NULL
-                        AND `{METADATA_TABLE.columns.ai_summary.name}` != ''
-                        AND `{METADATA_TABLE.columns.ai_summary_mtime.name}` <= ?''',
-                    [indexed_at.isoformat()]
+            if metadata.summary_enabled:
+                processed_count = query_count(
+                    f''' AND `{METADATA_TABLE.columns.ai_summary_mtime.name}` IS NOT NULL
+                        AND (`{METADATA_TABLE.columns.file_mtime.name}` IS NULL
+                            OR `{METADATA_TABLE.columns.ai_summary_mtime.name}` >= `{METADATA_TABLE.columns.file_mtime.name}`)'''
                 )
+                if indexed_at:
+                    indexed_count = query_count(
+                        f''' AND `{METADATA_TABLE.columns.ai_summary.name}` IS NOT NULL
+                            AND `{METADATA_TABLE.columns.ai_summary.name}` != ''
+                            AND `{METADATA_TABLE.columns.ai_summary_mtime.name}` <= ?''',
+                        [indexed_at.isoformat()]
+                    )
         except Exception as e:
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
@@ -2061,6 +2063,7 @@ class MetadataAISummaryStatusManage(APIView):
 
         return Response({
             'enabled': bool(metadata.summary_enabled),
+            'index_available': EMBEDDING_MODEL_CONFIGURED,
             'total_files': total_files,
             'latest_index_time': indexed_at,
             'summary': {

@@ -11,6 +11,8 @@ import { formatWithTimezone } from '../../../../utils/time';
 import { Utils } from '../../../../utils/utils';
 import metadataAPI from '../../../api';
 
+const STATUS_QUERY_INTERVAL = 5000;
+
 const getStatusIcon = (status) => {
   if (status === 'completed') return 'check-circle';
   if (status === 'failed') return 'exclamation-circle';
@@ -32,15 +34,49 @@ const StatusDialog = ({ repoID, toggle }) => {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    metadataAPI.getAISummaryStatus(repoID).then((res) => {
-      setStatusData(res.data);
-      setLoading(false);
-    }).catch((error) => {
-      toaster.danger(Utils.getErrorMsg(error));
-      setLoading(false);
-    });
+    let isMounted = true;
+    let isRequesting = false;
+    let interval = null;
+
+    const stopPolling = () => {
+      if (interval) {
+        clearInterval(interval);
+        interval = null;
+      }
+    };
+
+    const queryStatus = (showError = false) => {
+      if (isRequesting) return;
+      isRequesting = true;
+      metadataAPI.getAISummaryStatus(repoID).then((res) => {
+        if (isMounted) {
+          setStatusData(res.data);
+          if (res.data.enabled === false) {
+            stopPolling();
+          }
+        }
+      }).catch((error) => {
+        if (isMounted && showError) {
+          toaster.danger(Utils.getErrorMsg(error));
+        }
+      }).finally(() => {
+        isRequesting = false;
+        if (isMounted && showError) {
+          setLoading(false);
+        }
+      });
+    };
+
+    queryStatus(true);
+    interval = setInterval(queryStatus, STATUS_QUERY_INTERVAL);
+
+    return () => {
+      isMounted = false;
+      stopPolling();
+    };
   }, [repoID]);
 
+  const indexAvailable = statusData?.index_available !== false;
   const statusItems = statusData ? [
     {
       key: 'summary',
@@ -48,15 +84,15 @@ const StatusDialog = ({ repoID, toggle }) => {
       status: statusData.summary?.status || 'pending',
       label: gettext('Processed') + ': ' + (statusData.summary?.processed_count || 0) + ' ' + getFilesText(statusData.summary?.processed_count || 0),
     },
-    {
+    ...(indexAvailable ? [{
       key: 'index',
       title: gettext('Index'),
       status: statusData.index?.status || 'pending',
       label: gettext('Indexed') + ': ' + (statusData.index?.indexed_count || 0) + ' ' + getFilesText(statusData.index?.indexed_count || 0),
-    },
+    }] : []),
   ] : [];
 
-  const latestIndexTime = statusData?.latest_index_time;
+  const latestIndexTime = indexAvailable ? statusData?.latest_index_time : null;
 
   return (
     <Modal isOpen={true} toggle={toggle} className="ai-summary-status-dialog">
@@ -68,6 +104,9 @@ const StatusDialog = ({ repoID, toggle }) => {
           <p className="text-secondary mb-0">{gettext('Failed to load status.')}</p>
         ) : (
           <div className="ai-summary-status-container">
+            {statusData.enabled === false && (
+              <p className="text-danger mb-4">{gettext('AI Summary is unavailable.')}</p>
+            )}
             <div className="status-header">
               <p>{gettext('Total files')}: {statusData.total_files || 0}</p>
               {latestIndexTime && (

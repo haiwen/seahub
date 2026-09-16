@@ -104,6 +104,7 @@ class MetadataAISummaryStatusTest(BaseTestCase):
         self.metadata.ai_summary_indexed_at = timezone.now()
         self.metadata.save(update_fields=['summary_enabled', 'ai_summary_indexed_at'])
 
+    @patch('seahub.repo_metadata.apis.EMBEDDING_MODEL_CONFIGURED', False)
     @patch('seahub.repo_metadata.apis.MetadataServerAPI')
     def test_get_ai_summary_status(self, mock_metadata_server_api):
         status_cases = {
@@ -126,6 +127,8 @@ class MetadataAISummaryStatusTest(BaseTestCase):
             response = self.client.get(self.url)
             self.assertEqual(200, response.status_code)
             result = json.loads(response.content)
+            self.assertTrue(result['enabled'])
+            self.assertFalse(result['index_available'])
             self.assertEqual(5, result['total_files'])
             self.assertEqual(4, result['summary']['processed_count'])
             self.assertEqual(3, result['index']['indexed_count'])
@@ -136,6 +139,26 @@ class MetadataAISummaryStatusTest(BaseTestCase):
         first_query = mock_metadata_server_api.return_value.query_rows.call_args_list[0].args[0]
         self.assertIn('GROUP BY `_suffix`', first_query)
         self.assertNotIn('LOWER(', first_query)
+
+    @patch('seahub.repo_metadata.apis.MetadataServerAPI')
+    def test_get_ai_summary_status_when_disabled(self, mock_metadata_server_api):
+        self.metadata.summary_enabled = False
+        self.metadata.ai_summary_indexed_at = None
+        self.metadata.ai_processing_status = ''
+        self.metadata.save(update_fields=['summary_enabled', 'ai_summary_indexed_at', 'ai_processing_status'])
+        mock_metadata_server_api.return_value.query_rows.return_value = {
+            'results': [{'_suffix': 'PDF', 'count': 5}],
+        }
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(200, response.status_code)
+        result = json.loads(response.content)
+        self.assertFalse(result['enabled'])
+        self.assertEqual(5, result['total_files'])
+        self.assertEqual(0, result['summary']['processed_count'])
+        self.assertEqual(0, result['index']['indexed_count'])
+        self.assertEqual(1, mock_metadata_server_api.return_value.query_rows.call_count)
 
 
 class MetadataDetailSettingsTest(BaseTestCase):
