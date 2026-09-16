@@ -795,7 +795,7 @@ class Search extends Component {
       return (
         <div className="search-result-none search-result-start-searching-tip">
           <img className='none-image' src={`${mediaUrl}img/start-searching.png`} alt="" width="48" height="48" />
-          <span className='none-tip'>{gettext('Type characters to start search')}</span>
+          <span className='none-tip'>{gettext('Enter characters to start searching')}</span>
         </div>
       );
     } else if (!isResultGotten) {
