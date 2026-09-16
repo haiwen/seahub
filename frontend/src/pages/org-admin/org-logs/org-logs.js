@@ -2,12 +2,12 @@ import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
 import { Link } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
-import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
-import OrgLogsExportExcelDialog from '../../../components/dialog/org-admin-logs-export-excel-dialog';
-import ModalPortal from '../../../components/modal-portal';
-import { siteRoot, gettext } from '../../../utils/constants';
+import MainPanelTopbar from '@/components/admin/layout/main-panel-topbar';
+import OrgLogsExportExcelDialog from '@/components/dialog/org-admin-logs-export-excel-dialog';
+import ModalPortal from '@/components/modal-portal';
+import { siteRoot, gettext } from '@/utils/constants';
 
-import '../../../css/org-logs.css';
+import '@/css/org-logs.css';
 
 class OrgLogs extends Component {
 

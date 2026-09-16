@@ -1,7 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import FileView from './components/file-view/file-view';
-import FileViewTip from './components/file-view/file-view-tip';
+import FileView from '@/components/file-view/file-view';
+import FileViewTip from '@/components/file-view/file-view-tip';
 
 const {
   err

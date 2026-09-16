@@ -2,15 +2,15 @@ import React, { Component, Fragment } from 'react';
 import classnames from 'classnames';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../../../api/seafile-api';
-import SortOptionsDialog from '../../../../components/dialog/sort-options';
-import Icon from '../../../../components/icon';
-import ReposSortMenu from '../../../../components/sort-menu';
-import ViewModes from '../../../../components/view-modes';
-import { LIST_MODE, GRID_MODE } from '../../../../constants/view-mode';
-import Repo from '../../../../models/repo';
-import { gettext } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
+import { seafileAPI } from '@/api/seafile-api';
+import SortOptionsDialog from '@/components/dialog/sort-options';
+import Icon from '@/components/icon';
+import ReposSortMenu from '@/components/sort-menu';
+import ViewModes from '@/components/view-modes';
+import { LIST_MODE, GRID_MODE } from '@/constants/view-mode';
+import Repo from '@/models/repo';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import Content from './content';
 
 class SharedLibraries extends Component {

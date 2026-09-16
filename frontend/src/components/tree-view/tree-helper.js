@@ -1,5 +1,5 @@
-import Dirent from '../../models/dirent';
-import { Utils } from '../../utils/utils';
+import Dirent from '@/models/dirent';
+import { Utils } from '@/utils/utils';
 import Tree from './tree';
 import TreeNode from './tree-node';
 

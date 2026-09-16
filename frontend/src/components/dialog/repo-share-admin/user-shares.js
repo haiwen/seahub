@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { Link } from '@gatsbyjs/reach-router';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../../api/seafile-api';
+import { seafileAPI } from '@/api/seafile-api';
+import { gettext, siteRoot, isPro, username } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import EmptyTip from '../../../components/empty-tip';
 import SharePermissionEditor from '../../../components/select-editor/share-permission-editor';
 import toaster from '../../../components/toast';
-import { gettext, siteRoot, isPro, username } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
 import Loading from '../../loading';
 import OpIcon from '../../op-icon';
 

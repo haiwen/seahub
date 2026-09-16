@@ -1,8 +1,8 @@
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../../utils/constants';
-import URLDecorator from '../../../../utils/url-decorator';
+import { gettext } from '@/utils/constants';
+import URLDecorator from '@/utils/url-decorator';
 import Icon from '../../../icon';
 import Tooltip from '../../../tooltip';
 

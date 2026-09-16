@@ -2,8 +2,8 @@ import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo
 import { ELementTypes, MarkdownViewer } from '@seafile/seafile-editor';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { mediaUrl, siteRoot } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
+import { mediaUrl, siteRoot } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import { CHAT_MESSAGE_TYPE } from '../../constants';
 import { useDocuments } from '../../hooks';
 import CustomizeDefinition from '../customize-definition';

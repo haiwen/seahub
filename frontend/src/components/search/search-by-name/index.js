@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import SearchFileDialog from '../../dialog/search-file-dialog';
 import Icon from '../../icon';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { RESIZE_BAR } from '../../constants/zIndexes';
+import { RESIZE_BAR } from '@/constants/zIndexes';
 
 import './index.css';
 

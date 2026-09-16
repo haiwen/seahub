@@ -1,10 +1,10 @@
 import React from 'react';
 import { Modal, ModalBody } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '@/api/seafile-api';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { seafileAPI } from '../../api/seafile-api';
-import { mediaUrl, gettext, fileServerRoot } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { mediaUrl, gettext, fileServerRoot } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import Loading from '../loading';
 
 const propTypes = {

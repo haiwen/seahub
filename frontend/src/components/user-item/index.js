@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { gettext, enableShowContactEmailWhenSearchUser, enableShowLoginIDWhenSearchUser } from '../../utils/constants';
+import { gettext, enableShowContactEmailWhenSearchUser, enableShowLoginIDWhenSearchUser } from '@/utils/constants';
 import OpIcon from '../op-icon';
 
 import './index.css';

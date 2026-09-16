@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
-import { orgAdminAPI } from '../../../api/org-admin-api';
-import CustomDropdown from '../../../components/dropdown';
-import toaster from '../../../components/toast';
-import OrgLogsFilePermEvent from '../../../models/org-logs-perm-audit';
-import { siteRoot, gettext, lang } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { orgAdminAPI } from '@/api/org-admin-api';
+import CustomDropdown from '@/components/dropdown';
+import toaster from '@/components/toast';
+import OrgLogsFilePermEvent from '@/models/org-logs-perm-audit';
+import { siteRoot, gettext, lang } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 dayjs.locale(lang);
 

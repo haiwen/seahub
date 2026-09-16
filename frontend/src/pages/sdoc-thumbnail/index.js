@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { SDocViewer } from '@seafile/seafile-sdoc-editor';
 import axios from 'axios';
-import Loading from '../../components/loading';
+import Loading from '@/components/loading';
 
 import './index.css';
 

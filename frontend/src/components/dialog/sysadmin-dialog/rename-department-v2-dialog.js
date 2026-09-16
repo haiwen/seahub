@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { orgAdminAPI } from '@/api/org-admin-api';
+import { systemAdminAPI } from '@/api/system-admin-api';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { orgAdminAPI } from '../../../api/org-admin-api';
-import { systemAdminAPI } from '../../../api/system-admin-api';
-import { gettext } from '../../../utils/constants';
-import { Utils, validateName } from '../../../utils/utils';
+import { gettext } from '@/utils/constants';
+import { Utils, validateName } from '@/utils/utils';
 import toaster from '../../toast';
 
 const propTypes = {

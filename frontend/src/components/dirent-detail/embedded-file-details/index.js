@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '@/api/seafile-api';
 import AIIcon from '@/features/metadata/components/metadata-details/ai-icon';
 import SettingsIcon from '@/features/metadata/components/metadata-details/settings-icon';
 import MetadataContext from '@/features/metadata/context';
 import { MetadataDetailsProvider } from '@/features/metadata/hooks/metadata-details';
 import { useTags } from '@/features/tag/hooks';
-import { seafileAPI } from '../../../api/seafile-api';
-import { enableSeafileAI } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { enableSeafileAI } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import Loading from '../../loading';
 import toaster from '../../toast';
 import { Header, Body } from '../detail';

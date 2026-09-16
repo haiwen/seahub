@@ -1,13 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import Account from '../../components/account';
-import Icon from '../../components/icon';
-import Loading from '../../components/loading';
-import Notification from '../../components/notification';
-import SeafileMarkdownViewer from '../../components/seafile-markdown-viewer';
-import Search from '../../components/search/search';
-import { gettext, repoID, siteRoot, username, isPro } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import Account from '@/components/account';
+import Icon from '@/components/icon';
+import Loading from '@/components/loading';
+import Notification from '@/components/notification';
+import SeafileMarkdownViewer from '@/components/seafile-markdown-viewer';
+import Search from '@/components/search/search';
+import { gettext, repoID, siteRoot, username, isPro } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import SdocWikiPageViewer from './sdoc-wiki-page-viewer';
 import WikiDirListView from './wiki-dir-list-view/wiki-dir-list-view';
 

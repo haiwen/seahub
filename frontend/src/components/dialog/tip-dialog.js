@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, ModalBody } from 'reactstrap';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext } from '../../utils/constants';
+import { gettext } from '@/utils/constants';
 import Loading from '../loading';
 
 function TipDialog() {

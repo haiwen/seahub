@@ -1,10 +1,10 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import PDFViewer from './components/pdf-viewer';
-import SharedFileView from './components/shared-file-view/shared-file-view';
-import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
+import PDFViewer from '@/components/pdf-viewer';
+import SharedFileView from '@/components/shared-file-view/shared-file-view';
+import SharedFileViewTip from '@/components/shared-file-view/shared-file-view-tip';
 
-import './css/pdf-file-view.css';
+import '@/css/pdf-file-view.css';
 
 const { err } = window.shared.pageOptions;
 

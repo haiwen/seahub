@@ -1,19 +1,19 @@
 import React, { Fragment } from 'react';
 import { Button } from 'reactstrap';
-import { seafileAPI } from '../../api/seafile-api';
-import Icon from '../../components/icon';
-import Loading from '../../components/loading';
-import Logo from '../../components/logo';
-import CommonToolbar from '../../components/toolbar/common-toolbar';
-import { gettext, PER_PAGE, filePath, fileName, historyRepoID, useNewAPI, canDownload } from '../../utils/constants';
-import editUtilities from '../../utils/editor-utilities';
-import { Utils } from '../../utils/utils';
+import { seafileAPI } from '@/api/seafile-api';
+import Icon from '@/components/icon';
+import Loading from '@/components/loading';
+import Logo from '@/components/logo';
+import CommonToolbar from '@/components/toolbar/common-toolbar';
+import { gettext, PER_PAGE, filePath, fileName, historyRepoID, useNewAPI, canDownload } from '@/utils/constants';
+import editUtilities from '@/utils/editor-utilities';
+import { Utils } from '@/utils/utils';
 import HistoryItem from './history-item';
 
-import '../../css/layout.css';
-import '../../css/toolbar.css';
-import '../../css/search.css';
-import '../../css/file-history-old.css';
+import '@/css/layout.css';
+import '@/css/toolbar.css';
+import '@/css/search.css';
+import '@/css/file-history-old.css';
 
 class FileHistory extends React.Component {
 

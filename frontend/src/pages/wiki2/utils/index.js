@@ -1,4 +1,4 @@
-import { serviceURL, mediaUrl } from '../../../utils/constants';
+import { serviceURL, mediaUrl } from '@/utils/constants';
 
 const generatorBase64Code = (keyLength = 4) => {
   let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';

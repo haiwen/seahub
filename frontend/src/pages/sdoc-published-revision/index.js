@@ -1,8 +1,8 @@
 import React, { Suspense } from 'react';
 import { PublishedRevisionViewer } from '@seafile/seafile-sdoc-editor';
-import Loading from '../../components/loading';
-import { mediaUrl } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import Loading from '@/components/loading';
+import { mediaUrl } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 const { serviceURL, avatarURL, siteRoot, lang } = window.app.config;
 const { username, name } = window.app.userInfo || {};

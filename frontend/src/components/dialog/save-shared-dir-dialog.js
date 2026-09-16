@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Modal, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext } from '../../utils/constants';
+import { gettext } from '@/utils/constants';
 import FileChooser from '../file-chooser';
 
 const propTypes = {

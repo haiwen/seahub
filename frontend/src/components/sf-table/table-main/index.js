@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import CenteredLoading from '../../centered-loading';
 import EmptyTip from '../../empty-tip';
 import { SEQUENCE_COLUMN_WIDTH } from '../constants/grid';

@@ -1,25 +1,25 @@
 import React, { Component } from 'react';
 import { Button } from 'reactstrap';
 import Cookies from 'js-cookie';
-import { seafileAPI } from '../../../../api/seafile-api';
-import CreateGroupDialog from '../../../../components/dialog/create-group-dialog';
-import CreateRepoDialog from '../../../../components/dialog/create-repo-dialog';
-import GuideForNewDialog from '../../../../components/dialog/guide-for-new-dialog';
-import DeletedReposDialog from '../../../../components/dialog/my-deleted-repos-dialog';
-import EventBus, { EVENT_BUS_TYPE } from '../../../../components/event-bus';
-import Icon from '../../../../components/icon';
-import Loading from '../../../../components/loading';
-import ModalPortal from '../../../../components/modal-portal';
-import OpIcon from '../../../../components/op-icon';
-import ReposSortMenu from '../../../../components/sort-menu';
-import toaster from '../../../../components/toast';
-import ViewModes from '../../../../components/view-modes';
-import { ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY } from '../../../../constants';
-import { LIST_MODE } from '../../../../constants/view-mode';
-import Group from '../../../../models/group';
-import Repo from '../../../../models/repo';
-import { gettext, canAddRepo, canViewOrg, canAddGroup, enableOCM } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
+import { seafileAPI } from '@/api/seafile-api';
+import CreateGroupDialog from '@/components/dialog/create-group-dialog';
+import CreateRepoDialog from '@/components/dialog/create-repo-dialog';
+import GuideForNewDialog from '@/components/dialog/guide-for-new-dialog';
+import DeletedReposDialog from '@/components/dialog/my-deleted-repos-dialog';
+import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
+import Icon from '@/components/icon';
+import Loading from '@/components/loading';
+import ModalPortal from '@/components/modal-portal';
+import OpIcon from '@/components/op-icon';
+import ReposSortMenu from '@/components/sort-menu';
+import toaster from '@/components/toast';
+import ViewModes from '@/components/view-modes';
+import { ONLY_SHOW_GROUPS_WITH_LIBRARIES_KEY } from '@/constants';
+import { LIST_MODE } from '@/constants/view-mode';
+import Group from '@/models/group';
+import Repo from '@/models/repo';
+import { gettext, canAddRepo, canViewOrg, canAddGroup, enableOCM } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import GroupItem from '../groups/group-item';
 import MylibRepoListView from '../my-libs/mylib-repo-list-view';
 import SharedWithOCM from '../share-with-ocm/shared-with-ocm';
@@ -28,7 +28,7 @@ import SharedWithAll from '../shared-with-all';
 import { GroupsReposManager } from './groups-repos-manager';
 import LibrariesMoreMenu from './libraries-more-menu';
 
-import '../../../../css/files.css';
+import '@/css/files.css';
 
 class Libraries extends Component {
 

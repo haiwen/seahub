@@ -1,4 +1,4 @@
-import { Utils } from '../../../utils/utils';
+import { Utils } from '@/utils/utils';
 
 export const getDirentPath = (dirent, path) => {
   if (Utils.isMarkdownFile(path)) return path; // column mode: view file

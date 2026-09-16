@@ -3,8 +3,8 @@ import { UncontrolledPopover } from 'reactstrap';
 import Picker from '@emoji-mart/react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { gettext, wikiPermission } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { gettext, wikiPermission } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import { data } from './../utils/emoji-utils';
 
 const PageIcon = ({ currentPageConfig, onUpdatePageConfig }) => {

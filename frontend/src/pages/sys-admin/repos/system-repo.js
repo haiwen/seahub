@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { systemAdminAPI } from '../../../api/system-admin-api';
-import Loading from '../../../components/loading';
-import { gettext, siteRoot } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { systemAdminAPI } from '@/api/system-admin-api';
+import Loading from '@/components/loading';
+import { gettext, siteRoot } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 class Content extends Component {
   render() {

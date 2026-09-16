@@ -1,6 +1,6 @@
 import React from 'react';
 import { SdocWikiEditor } from '@seafile/seafile-sdoc-editor';
-import { mediaUrl } from '../../../../utils/constants';
+import { mediaUrl } from '@/utils/constants';
 import RightHeader from '../../wiki-right-header';
 
 const PreviewContent = ({

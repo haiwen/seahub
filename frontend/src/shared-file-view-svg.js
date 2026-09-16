@@ -1,9 +1,9 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import SharedFileView from './components/shared-file-view/shared-file-view';
-import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
+import SharedFileView from '@/components/shared-file-view/shared-file-view';
+import SharedFileViewTip from '@/components/shared-file-view/shared-file-view-tip';
 
-import './css/svg-file-view.css';
+import '@/css/svg-file-view.css';
 
 const { fileName, rawPath, err } = window.shared.pageOptions;
 

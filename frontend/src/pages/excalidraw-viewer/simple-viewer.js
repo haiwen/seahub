@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Excalidraw, MainMenu } from '@excalidraw/excalidraw';
 import classNames from 'classnames';
 import isUrl from 'is-url';
-import CodeMirrorLoading from '../../components/code-mirror-loading';
+import CodeMirrorLoading from '@/components/code-mirror-loading';
 import { isInitializedImageElement } from '../excalidraw-editor/utils/element-utils';
 import { updateStaleImageStatuses } from '../excalidraw-editor/utils/exdraw-utils';
 import { langList } from './constants';

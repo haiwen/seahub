@@ -1,9 +1,9 @@
 import React, { forwardRef, useCallback, useEffect, useState, useImperativeHandle, useRef } from 'react';
 import axios from 'axios';
 import classnames from 'classnames';
-import { KeyCodes } from '../../constants';
-import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { KeyCodes } from '@/constants';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import Options from '../option-editor/options';
 import SearchInput from '../search-input';
 import toaster from '../toast';

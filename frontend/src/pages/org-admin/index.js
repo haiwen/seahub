@@ -2,8 +2,8 @@ import React from 'react';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { Router } from '@gatsbyjs/reach-router';
-import { siteRoot, enableMultiADFS } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { siteRoot, enableMultiADFS } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import Departments from './departments';
 import OrgDesktopDevices from './devices/desktop-devices';
 import OrgDevicesErrors from './devices/devices-errors';
@@ -40,9 +40,9 @@ import OrgStatisticStorage from './statistic/statistic-storage';
 import OrgStatisticTraffic from './statistic/statistic-traffic';
 import OrgStatisticUsers from './statistic/statistic-users';
 
-import '../../css/layout.css';
-import '../../css/toolbar.css';
-import '../../css/org-admin.css';
+import '@/css/layout.css';
+import '@/css/toolbar.css';
+import '@/css/org-admin.css';
 
 
 class Org extends React.Component {

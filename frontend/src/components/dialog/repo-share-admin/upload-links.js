@@ -3,13 +3,13 @@ import { Link } from '@gatsbyjs/reach-router';
 import classnames from 'classnames';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
-import { repoShareAdminAPI } from '../../../api/repo-share-admin-api';
-import { seafileAPI } from '../../../api/seafile-api';
+import { repoShareAdminAPI } from '@/api/repo-share-admin-api';
+import { seafileAPI } from '@/api/seafile-api';
+import { gettext, siteRoot } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import EmptyTip from '../../../components/empty-tip';
 import toaster from '../../../components/toast';
-import { gettext, siteRoot } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
 import Icon from '../../icon';
 import Loading from '../../loading';
 

@@ -1,12 +1,12 @@
 import React from 'react';
 import { Modal, ModalBody, ModalFooter, Label, Input, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
+import wikiAPI from '@/api/wiki-api';
+import Loading from '@/components/loading';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import wikiAPI from '../../../../api/wiki-api';
-import Loading from '../../../../components/loading';
-import toaster from '../../../../components/toast';
-import { gettext, wikiId } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
+import toaster from '@/components/toast';
+import { gettext, wikiId } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import { INSERT_POSITION } from '../constants';
 
 import './index.css';

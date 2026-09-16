@@ -1,8 +1,8 @@
 import React, { useCallback, useRef, useEffect } from 'react';
 import { Button, UncontrolledPopover } from 'reactstrap';
 import isHotkey from 'is-hotkey';
+import { gettext } from '@/utils/constants';
 import { getEventClassName } from '@/utils/dom';
-import { gettext } from '../../../utils/constants';
 
 import './comment-delete-popover.css';
 

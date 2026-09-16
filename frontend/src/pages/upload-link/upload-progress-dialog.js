@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
-import CustomDropdown from '../../components/dropdown';
-import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import CustomDropdown from '@/components/dropdown';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import ForbidUploadListItem from './forbid-upload-list-item';
 import UploadListItem from './upload-list-item';
 

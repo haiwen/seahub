@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Link, globalHistory } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
-import { seafileAPI } from '../../../../api/seafile-api';
-import Loading from '../../../../components/loading';
-import { gettext, siteRoot, username } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
+import { seafileAPI } from '@/api/seafile-api';
+import Loading from '@/components/loading';
+import { gettext, siteRoot, username } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import ActivityList from './activity-list';
 import UserSelector from './user-selector';
 

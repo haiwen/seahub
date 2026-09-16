@@ -1,4 +1,4 @@
-import { gettext } from '../../utils/constants';
+import { gettext } from '@/utils/constants';
 
 export const STORAGE_CHAT_HISTORY_RECORDS_COUNT = 20;
 

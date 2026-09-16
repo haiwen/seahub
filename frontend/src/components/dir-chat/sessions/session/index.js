@@ -3,7 +3,7 @@ import { Button, Dropdown, DropdownMenu, DropdownToggle, Input, Modal, ModalBody
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext } from '../../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import CommonOperationConfirmationDialog from '../../../dialog/common-operation-confirmation-dialog';
 import CustomDropdownItem from '../../../dropdown/item';
 import Icon from '../../../icon';

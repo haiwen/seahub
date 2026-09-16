@@ -2,12 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { EventBus, SdocWikiEditor } from '@seafile/seafile-sdoc-editor';
 import PropTypes from 'prop-types';
-import i18n from '../../_i18n/i18n-sdoc-editor';
-import SDocServerApi from '../../api/sdoc-server-api';
-import wikiAPI from '../../api/wiki-api';
-import Loading from '../../components/loading';
-import { mediaUrl, seadocServerUrl, wikiId } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import i18n from '@/_i18n/i18n-sdoc-editor';
+import SDocServerApi from '@/api/sdoc-server-api';
+import wikiAPI from '@/api/wiki-api';
+import Loading from '@/components/loading';
+import { mediaUrl, seadocServerUrl, wikiId } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 const centeredContainerStyle = {
   flex: 1,

@@ -1,12 +1,12 @@
 import React from 'react';
 import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../../api/seafile-api';
-import { systemAdminAPI } from '../../../api/system-admin-api';
+import { seafileAPI } from '@/api/seafile-api';
+import { systemAdminAPI } from '@/api/system-admin-api';
+import { isPro, gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
-import { isPro, gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
 import GroupSelect from '../../group-select';
 import Icon from '../../icon';
 import SharePermissionEditor from '../../select-editor/share-permission-editor';

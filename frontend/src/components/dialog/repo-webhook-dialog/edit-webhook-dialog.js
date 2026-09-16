@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext } from '../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import toaster from '../../toast';
 
 function EditWebHookDialog({ webhook, toggle, updateWebhook, addWebhook }) {

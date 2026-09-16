@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
-import ResizeWidth from '../../../components/file-view/resize-width';
-import LocalStorage from '../../../utils/local-storage-utils';
+import ResizeWidth from '@/components/file-view/resize-width';
+import LocalStorage from '@/utils/local-storage-utils';
 import { WIKI_RIGHT_PANEL_WIDTH } from '../constant';
 import FilePreviewWrapper from './wiki-preview';
 

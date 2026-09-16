@@ -1,19 +1,19 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../../../api/seafile-api';
-import { userAPI } from '../../../../api/user-api';
-import wikiAPI from '../../../../api/wiki-api';
-import AddWikiDialog from '../../../../components/dialog/add-wiki-dialog';
-import ImportConfluenceDialog from '../../../../components/dialog/import-confluence-dialog';
-import WikiConvertStatusDialog from '../../../../components/dialog/wiki-convert-status-dialog';
-import CustomDropdown from '../../../../components/dropdown';
-import EmptyTip from '../../../../components/empty-tip';
-import Icon from '../../../../components/icon';
-import ModalPortal from '../../../../components/modal-portal';
-import toaster from '../../../../components/toast';
-import WikiCardView from '../../../../components/wiki-card-view/wiki-card-view';
-import { gettext, canCreateWiki } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
+import { seafileAPI } from '@/api/seafile-api';
+import { userAPI } from '@/api/user-api';
+import wikiAPI from '@/api/wiki-api';
+import AddWikiDialog from '@/components/dialog/add-wiki-dialog';
+import ImportConfluenceDialog from '@/components/dialog/import-confluence-dialog';
+import WikiConvertStatusDialog from '@/components/dialog/wiki-convert-status-dialog';
+import CustomDropdown from '@/components/dropdown';
+import EmptyTip from '@/components/empty-tip';
+import Icon from '@/components/icon';
+import ModalPortal from '@/components/modal-portal';
+import toaster from '@/components/toast';
+import WikiCardView from '@/components/wiki-card-view/wiki-card-view';
+import { gettext, canCreateWiki } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 
 const propTypes = {

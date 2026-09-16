@@ -2,10 +2,10 @@ import React, { Suspense } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { WikiViewer } from '@seafile/seafile-sdoc-editor';
 import PropTypes from 'prop-types';
-import i18n from '../../../_i18n/i18n-sdoc-editor';
-import Loading from '../../../components/loading';
-import { appAvatarURL, assetsUrl, gettext, mediaUrl, name, repoID, serviceURL, sharedToken, siteRoot, slug, username } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import i18n from '@/_i18n/i18n-sdoc-editor';
+import Loading from '@/components/loading';
+import { appAvatarURL, assetsUrl, gettext, mediaUrl, name, repoID, serviceURL, sharedToken, siteRoot, slug, username } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 import './style.css';
 

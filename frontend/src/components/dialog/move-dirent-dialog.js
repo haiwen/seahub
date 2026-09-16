@@ -1,12 +1,12 @@
 import React from 'react';
 import { Modal } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '@/api/seafile-api';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { seafileAPI } from '../../api/seafile-api';
-import { MODE_TYPE_MAP } from '../../constants';
-import { RepoInfo } from '../../models';
-import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { MODE_TYPE_MAP } from '@/constants';
+import { RepoInfo } from '@/models';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import toaster from '../toast';
 import SelectDirentBody from './select-dirent-body';
 

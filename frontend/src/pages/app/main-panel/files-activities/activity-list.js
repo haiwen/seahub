@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
-import EmptyTip from '../../../../components/empty-tip';
-import { gettext } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
+import EmptyTip from '@/components/empty-tip';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import ActivityItem from './activity-item';
 
 dayjs.locale(window.app.config.lang);

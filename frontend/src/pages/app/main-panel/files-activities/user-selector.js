@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Input, Popover } from 'reactstrap';
 import PropTypes from 'prop-types';
+import Icon from '@/components/icon';
 import OpElement from '@/components/op-element';
-import Icon from '../../../../components/icon';
-import OpIcon from '../../../../components/op-icon';
-import SearchEmptyTip from '../../../../components/search-empty-tip';
-import { gettext } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
+import OpIcon from '@/components/op-icon';
+import SearchEmptyTip from '@/components/search-empty-tip';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 const propTypes = {
   availableUsers: PropTypes.array.isRequired,

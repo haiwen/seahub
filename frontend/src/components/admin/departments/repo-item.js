@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { gettext, siteRoot } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import OrgDeleteRepoDialog from '../../dialog/org-delete-repo-dialog';
 import SysAdminDeleteRepoDialog from '../../dialog/sysadmin-dialog/sysadmin-delete-repo-dialog';
 import ModalPortal from '../../modal-portal';

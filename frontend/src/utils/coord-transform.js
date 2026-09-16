@@ -1,4 +1,4 @@
-import { MAP_TYPE } from '../constants';
+import { MAP_TYPE } from '@/constants';
 
 /* eslint-disable no-loss-of-precision */
 const x_PI = Math.PI * 3000.0 / 180.0;

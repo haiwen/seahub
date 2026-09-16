@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '@/api/seafile-api';
 import Loading from '@/components/loading';
 import { MetadataDetailsProvider } from '@/features/metadata/hooks/metadata-details';
-import { seafileAPI } from '../../../api/seafile-api';
-import { MetadataStatusProvider } from '../../../hooks';
-import { Repo } from '../../../models';
-import { gettext, mediaUrl, siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { MetadataStatusProvider } from '@/hooks';
+import { Repo } from '@/models';
+import { gettext, mediaUrl, siteRoot, thumbnailSizeForGrid } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import { Body, Header } from '../../dirent-detail/detail';
 import LibDetail from '../../dirent-detail/lib-details';
 import toaster from '../../toast';

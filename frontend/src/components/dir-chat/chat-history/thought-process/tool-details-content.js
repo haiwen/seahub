@@ -1,4 +1,4 @@
-import { gettext } from '../../../../utils/constants';
+import { gettext } from '@/utils/constants';
 
 const hasValue = (value) => value !== undefined && value !== null && value !== '';
 const JSON_HIGHLIGHT_DETAIL_KEYS = new Set(['tool_arguments', 'observation', 'prompt']);

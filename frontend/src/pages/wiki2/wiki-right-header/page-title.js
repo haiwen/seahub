@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import Icon from '../../../components/icon';
-import { gettext, wikiPermission } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import Icon from '@/components/icon';
+import { gettext, wikiPermission } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import { WIKI_COVER_LIST } from '../constant';
 import { generateARandomEmoji, generateEmojiIcon } from '../utils/emoji-utils';
 import PageIcon from './page-icon';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { seadocServerUrl, wikiId } from '../../utils/constants';
+import { seadocServerUrl, wikiId } from '@/utils/constants';
 import DocViewer from './doc-viewer';
 
 (function () {

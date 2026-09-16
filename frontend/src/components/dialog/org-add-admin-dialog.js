@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button, Modal, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { orgAdminAPI } from '@/api/org-admin-api';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { orgAdminAPI } from '../../api/org-admin-api';
-import OrgUserInfo from '../../models/org-user';
-import { gettext, orgID } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import OrgUserInfo from '@/models/org-user';
+import { gettext, orgID } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import toaster from '../toast';
 import UserSelect from '../user-select';
 

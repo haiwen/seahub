@@ -1,9 +1,9 @@
 import React from 'react';
 import { Modal, ModalBody } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '@/api/seafile-api';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { seafileAPI } from '../../api/seafile-api';
-import { gettext, contactEmail } from '../../utils/constants';
+import { gettext, contactEmail } from '@/utils/constants';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,

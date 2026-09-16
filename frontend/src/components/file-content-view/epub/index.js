@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { siteRoot } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { siteRoot } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 import './index.css';
 

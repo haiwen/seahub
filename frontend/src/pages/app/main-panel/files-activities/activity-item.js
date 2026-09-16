@@ -2,11 +2,11 @@ import React, { Component, Fragment } from 'react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
-import ListCreatedFileDialog from '../../../../components/dialog/list-created-files-dialog';
-import ModalPortal from '../../../../components/modal-portal';
-import { gettext, siteRoot } from '../../../../utils/constants';
-import { formatWithTimezone } from '../../../../utils/time';
-import { Utils } from '../../../../utils/utils';
+import ListCreatedFileDialog from '@/components/dialog/list-created-files-dialog';
+import ModalPortal from '@/components/modal-portal';
+import { gettext, siteRoot } from '@/utils/constants';
+import { formatWithTimezone } from '@/utils/time';
+import { Utils } from '@/utils/utils';
 
 dayjs.locale(window.app.config.lang);
 dayjs.extend(relativeTime);

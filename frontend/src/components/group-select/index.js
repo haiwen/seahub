@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Popover } from 'reactstrap';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { Utils } from '../../utils/utils';
+import { Utils } from '@/utils/utils';
 import Icon from '../icon';
 import ModalPortal from '../modal-portal';
 import SelectDropdownIndicator from '../select-dropdown-indicator';

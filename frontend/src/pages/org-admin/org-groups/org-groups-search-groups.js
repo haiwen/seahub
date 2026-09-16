@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import { Form, FormGroup, Input, Col } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { orgAdminAPI } from '../../../api/org-admin-api';
-import CustomDropdown from '../../../components/dropdown';
-import toaster from '../../../components/toast';
-import OrgGroupInfo from '../../../models/org-group';
-import { gettext, orgID, siteRoot } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { orgAdminAPI } from '@/api/org-admin-api';
+import CustomDropdown from '@/components/dropdown';
+import toaster from '@/components/toast';
+import OrgGroupInfo from '@/models/org-group';
+import { gettext, orgID, siteRoot } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 class GroupItem extends React.Component {
 

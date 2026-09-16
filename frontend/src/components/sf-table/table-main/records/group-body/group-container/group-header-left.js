@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import IconBtn from '../../../../../icon-btn';
 import { GROUP_HEADER_HEIGHT } from '../../../../constants/group';
 import { GROUP_FROZEN_HEADER as Z_INDEX_GROUP_FROZEN_HEADER } from '../../../../constants/z-index';

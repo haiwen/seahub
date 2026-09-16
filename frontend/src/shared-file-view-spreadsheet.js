@@ -1,12 +1,12 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { seafileAPI } from './api/seafile-api';
-import Loading from './components/loading';
-import SharedFileView from './components/shared-file-view/shared-file-view';
-import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
-import { siteRoot, gettext } from './utils/constants';
+import { seafileAPI } from '@/api/seafile-api';
+import Loading from '@/components/loading';
+import SharedFileView from '@/components/shared-file-view/shared-file-view';
+import SharedFileViewTip from '@/components/shared-file-view/shared-file-view-tip';
+import { siteRoot, gettext } from '@/utils/constants';
 
-import './css/spreadsheet-file-view.css';
+import '@/css/spreadsheet-file-view.css';
 
 const {
   repoID, filePath, err,

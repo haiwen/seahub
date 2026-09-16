@@ -3,12 +3,12 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import CustomDropdown from '../../../components/dropdown';
-import Icon from '../../../components/icon';
-import OpIcon from '../../../components/op-icon';
-import toaster from '../../../components/toast';
-import { gettext, wikiPermission } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import CustomDropdown from '@/components/dropdown';
+import Icon from '@/components/icon';
+import OpIcon from '@/components/op-icon';
+import toaster from '@/components/toast';
+import { gettext, wikiPermission } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import PageDragLayer from './pages/page-drag-layer';
 import PageItem from './pages/page-item';
 

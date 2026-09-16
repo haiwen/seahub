@@ -1,6 +1,6 @@
 import React from 'react';
 import { ModalHeader } from 'reactstrap';
-import { gettext } from '../../utils/constants';
+import { gettext } from '@/utils/constants';
 import Icon from '../icon';
 import Tooltip from '../tooltip';
 

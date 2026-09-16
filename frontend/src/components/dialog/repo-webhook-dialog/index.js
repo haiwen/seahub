@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
 import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '@/api/seafile-api';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { seafileAPI } from '../../../api/seafile-api';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import EmptyTip from '../../empty-tip';
 import Icon from '../../icon';
 import Loading from '../../loading';

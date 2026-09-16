@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { gettext, siteRoot } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import ShareDialog from '../dialog/share-dialog';
 import CustomDropdown from '../dropdown';
 import Icon from '../icon';

@@ -1,12 +1,12 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import dayjs from 'dayjs';
-import { systemAdminAPI } from '../../../api/system-admin-api';
-import Chart from '../../../components/admin/statistics/chart';
-import StatisticCommonTool from '../../../components/admin/statistics/statistic-common-tool';
-import Loading from '../../../components/loading';
-import toaster from '../../../components/toast';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { systemAdminAPI } from '@/api/system-admin-api';
+import Chart from '@/components/admin/statistics/chart';
+import StatisticCommonTool from '@/components/admin/statistics/statistic-common-tool';
+import Loading from '@/components/loading';
+import toaster from '@/components/toast';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 const StatisticStorage = (props) => {
   const [isLoading, setLoading] = useState(true);

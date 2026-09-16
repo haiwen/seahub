@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect } from 'react';
-import { mediaUrl, username } from '../../../utils/constants';
+import { mediaUrl, username } from '@/utils/constants';
 import { Selector } from '../components';
 
 const LLM_MODELS = window.app?.pageOptions?.llmModels || [];

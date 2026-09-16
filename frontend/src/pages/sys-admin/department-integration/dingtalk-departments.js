@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
 import deepCopy from 'deep-copy';
-import { systemAdminAPI } from '../../../api/system-admin-api';
-import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
-import ImportDingtalkDepartmentDialog from '../../../components/dialog/import-dingtalk-department-dialog';
-import toaster from '../../../components/toast';
-import { siteRoot, isPro } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { systemAdminAPI } from '@/api/system-admin-api';
+import MainPanelTopbar from '@/components/admin/layout/main-panel-topbar';
+import ImportDingtalkDepartmentDialog from '@/components/dialog/import-dingtalk-department-dialog';
+import toaster from '@/components/toast';
+import { siteRoot, isPro } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import { DingtalkDepartmentMembersList, DingtalkDepartmentsTreePanel } from './dingtalk';
 
 import './department-integration-tree.css';

@@ -1,9 +1,9 @@
 import React from 'react';
 import copy from 'copy-to-clipboard';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../api/seafile-api';
-import { enableSeadoc, gettext, onlyofficeSupportEditDocxf } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { seafileAPI } from '@/api/seafile-api';
+import { enableSeadoc, gettext, onlyofficeSupportEditDocxf } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import TipDialog from '../dialog/tip-dialog';
 import CustomDropdown from '../dropdown';
 import { EVENT_BUS_TYPE } from '../event-bus';

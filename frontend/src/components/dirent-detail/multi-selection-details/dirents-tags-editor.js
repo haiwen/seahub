@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState, useRef, useEffect } from 'react';
 import { Popover } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { KeyCodes } from '@/constants';
 import Editor from '@/features/metadata/components/cell-editors/tags-editor';
 import DeleteTag from '@/features/metadata/components/cell-editors/tags-editor/delete-tags';
 import { PRIVATE_COLUMN_KEY, EVENT_BUS_TYPE } from '@/features/metadata/constants';
@@ -8,10 +9,9 @@ import { getCellValueByColumn } from '@/features/metadata/utils/cell';
 import tagsAPI from '@/features/tag/api';
 import { useTags } from '@/features/tag/hooks';
 import { getTagId, getTagName } from '@/features/tag/utils/cell';
-import { KeyCodes } from '../../../constants';
-import { gettext } from '../../../utils/constants';
-import { getEventClassName } from '../../../utils/dom';
-import { Utils } from '../../../utils/utils';
+import { gettext } from '@/utils/constants';
+import { getEventClassName } from '@/utils/dom';
+import { Utils } from '@/utils/utils';
 import { getRowById } from '../../sf-table/utils/table';
 import toaster from '../../toast';
 

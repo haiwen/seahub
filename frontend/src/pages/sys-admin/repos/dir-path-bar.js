@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { siteRoot, gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 const propTypes = {
   repoName: PropTypes.string.isRequired,

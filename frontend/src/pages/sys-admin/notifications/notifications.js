@@ -1,16 +1,16 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { systemAdminAPI } from '../../../api/system-admin-api';
-import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
-import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
-import OpMenu from '../../../components/dialog/op-menu';
-import SysAdminAddSysNotificationDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-sys-notification-dialog';
-import EmptyTip from '../../../components/empty-tip';
-import Loading from '../../../components/loading';
-import toaster from '../../../components/toast';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { systemAdminAPI } from '@/api/system-admin-api';
+import MainPanelTopbar from '@/components/admin/layout/main-panel-topbar';
+import CommonOperationConfirmationDialog from '@/components/dialog/common-operation-confirmation-dialog';
+import OpMenu from '@/components/dialog/op-menu';
+import SysAdminAddSysNotificationDialog from '@/components/dialog/sysadmin-dialog/sysadmin-add-sys-notification-dialog';
+import EmptyTip from '@/components/empty-tip';
+import Loading from '@/components/loading';
+import toaster from '@/components/toast';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 class Content extends Component {
 

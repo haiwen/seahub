@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../../api/seafile-api';
-import CustomPermission from '../../../models/custom-permission';
-import { Utils } from '../../../utils/utils';
+import { seafileAPI } from '@/api/seafile-api';
+import CustomPermission from '@/models/custom-permission';
+import { Utils } from '@/utils/utils';
 import Loading from '../../loading';
 import toaster from '../../toast';
 import AddCustomPermission from './add-custom-permission';

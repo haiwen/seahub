@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import joinClasses from 'classnames';
 import PropTypes from 'prop-types';
-import { isMobile } from '../../../../../../utils/utils';
+import { isMobile } from '@/utils/utils';
 import { GROUP_VIEW_OFFSET } from '../../../../constants/group';
 import { GROUP_BACKDROP as Z_INDEX_GROUP_BACKDROP } from '../../../../constants/z-index';
 import { checkIsColumnFrozen } from '../../../../utils/column';

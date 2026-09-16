@@ -1,13 +1,13 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { seafileAPI } from './api/seafile-api';
-import FileView from './components/file-view/file-view';
-import FileViewTip from './components/file-view/file-view-tip';
-import Loading from './components/loading';
-import PDFViewer from './components/pdf-viewer';
-import { gettext, mediaUrl } from './utils/constants';
+import { seafileAPI } from '@/api/seafile-api';
+import FileView from '@/components/file-view/file-view';
+import FileViewTip from '@/components/file-view/file-view-tip';
+import Loading from '@/components/loading';
+import PDFViewer from '@/components/pdf-viewer';
+import { gettext, mediaUrl } from '@/utils/constants';
 
-import './css/pdf-file-view.css';
+import '@/css/pdf-file-view.css';
 
 const {
   repoID, filePath, err,

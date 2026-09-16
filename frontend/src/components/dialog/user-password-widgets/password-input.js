@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FormGroup, Label, InputGroup, Input, Button } from 'reactstrap';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { isMobile } from '../../../utils/utils';
+import { isMobile } from '@/utils/utils';
 import Icon from '../../icon';
 import PasswordStrengthChecker from './password-strength-checker';
 

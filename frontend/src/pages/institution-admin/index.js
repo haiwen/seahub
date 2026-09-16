@@ -4,8 +4,8 @@ import { Modal } from 'reactstrap';
 import MainPanel from './main-panel';
 import SidePanel from './side-panel';
 
-import '../../css/layout.css';
-import '../../css/toolbar.css';
+import '@/css/layout.css';
+import '@/css/toolbar.css';
 
 export default function Institutions() {
 

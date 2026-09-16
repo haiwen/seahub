@@ -1,12 +1,12 @@
 import React from 'react';
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { orgAdminAPI } from '@/api/org-admin-api';
+import { systemAdminAPI } from '@/api/system-admin-api';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { orgAdminAPI } from '../../../api/org-admin-api';
-import { systemAdminAPI } from '../../../api/system-admin-api';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import toaster from '../../../components/toast';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
 import UserSelect from '../../user-select';
 
 export default class AddDepartMemberV2Dialog extends React.Component {

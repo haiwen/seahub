@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import Icon from '../../../../components/icon';
+import Icon from '@/components/icon';
 import WikiTopNav from '../../top-nav';
 import { getCurrentPageConfig } from '../../utils';
 import FileLoading from '../file-loading';

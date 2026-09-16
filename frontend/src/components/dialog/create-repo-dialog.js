@@ -2,8 +2,8 @@ import React from 'react';
 import { Button, Modal, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext, enableEncryptedLibrary, enableResetEncryptedRepoPassword, isEmailConfigured, repoPasswordMinLength, libraryTemplates } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { gettext, enableEncryptedLibrary, enableResetEncryptedRepoPassword, isEmailConfigured, repoPasswordMinLength, libraryTemplates } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import { SeahubSelect } from '../select';
 
 const propTypes = {

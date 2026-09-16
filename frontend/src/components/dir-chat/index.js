@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { chatAPI } from '../../api/chat-api';
-import { siteRoot } from '../../utils/constants';
+import { chatAPI } from '@/api/chat-api';
+import { siteRoot } from '@/utils/constants';
 import CenteredLoading from '../centered-loading';
 import EventBus, { EVENT_BUS_TYPE } from '../event-bus';
 import Chat from './chat';

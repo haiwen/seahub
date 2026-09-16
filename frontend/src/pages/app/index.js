@@ -2,25 +2,25 @@ import React, { Component } from 'react';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { navigate } from '@gatsbyjs/reach-router';
-import EventBus from '../../components/event-bus';
-import ResizeBar from '../../components/resize-bar';
+import EventBus from '@/components/event-bus';
+import ResizeBar from '@/components/resize-bar';
 import {
   DRAG_HANDLER_HEIGHT,
   INIT_SIDE_PANEL_RATE,
   MAX_SIDE_PANEL_RATE,
   MIN_SIDE_PANEL_RATE
-} from '../../components/resize-bar/constants';
-import { siteRoot, siteTitle, mediaUrl, faviconPath } from '../../utils/constants';
-import { Utils, isMobile } from '../../utils/utils';
+} from '@/components/resize-bar/constants';
+import { siteRoot, siteTitle, mediaUrl, faviconPath } from '@/utils/constants';
+import { Utils, isMobile } from '@/utils/utils';
 import Header from './header';
 import MainPanelRouter from './main-panel';
 import SidePanel from './side-panel';
 import SystemNotification from './system-notification';
 import SystemUserNotification from './system-user-notification';
 
-import '../../css/layout.css';
-import '../../css/toolbar.css';
-import '../../css/search.css';
+import '@/css/layout.css';
+import '@/css/toolbar.css';
+import '@/css/search.css';
 
 
 class App extends Component {

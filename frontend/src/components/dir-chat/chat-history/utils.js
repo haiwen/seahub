@@ -1,4 +1,4 @@
-import URLDecorator from '../../../utils/url-decorator';
+import URLDecorator from '@/utils/url-decorator';
 
 const INTERNAL_REFERENCE_RE = /<reference_(\d+)>/g;
 const GROUPED_REFERENCE_RE = /\(\s*(?:Documents|Document|Reference|Source|Docs|Doc)\s*\d+(?:(?:\s*,\s*|\s+)(?:Documents|Document|Reference|Source|Docs|Doc)\s*\d+)*(?:\s*,)?\s*\)/gi;

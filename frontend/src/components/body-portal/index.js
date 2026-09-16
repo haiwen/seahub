@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import { canUseDOM } from '../../utils/dom';
+import { canUseDOM } from '@/utils/dom';
 
 class BodyPortal extends React.Component {
   componentWillUnmount() {

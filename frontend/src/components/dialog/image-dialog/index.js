@@ -2,10 +2,10 @@ import React, { useCallback, useState } from 'react';
 import Lightbox from '@seafile/react-image-lightbox';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import { SYSTEM_FOLDERS } from '@/constants';
 import { useMetadataAIOperations } from '@/features/metadata/hooks/metadata-ai-operation';
-import { SYSTEM_FOLDERS } from '../../../constants';
-import { gettext } from '../../../utils/constants';
-import { isImageRotateable } from '../../../utils/utils';
+import { gettext } from '@/utils/constants';
+import { isImageRotateable } from '@/utils/utils';
 import EmbeddedFileDetails from '../../dirent-detail/embedded-file-details';
 
 import '@seafile/react-image-lightbox/style.css';

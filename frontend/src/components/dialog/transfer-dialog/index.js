@@ -2,12 +2,12 @@ import React, { Fragment } from 'react';
 import { Button, Modal, ModalBody, ModalFooter,
   Nav, NavItem, NavLink, TabContent, TabPane, Label } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { orgAdminAPI } from '@/api/org-admin-api';
+import { seafileAPI } from '@/api/seafile-api';
+import { systemAdminAPI } from '@/api/system-admin-api';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { orgAdminAPI } from '../../../api/org-admin-api';
-import { seafileAPI } from '../../../api/seafile-api';
-import { systemAdminAPI } from '../../../api/system-admin-api';
-import { gettext, isPro, orgID, LARGE_DIALOG_STYLE } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { gettext, isPro, orgID, LARGE_DIALOG_STYLE } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import CustomizeSelect from '../../customize-select';
 import Switch from '../../switch';
 import toaster from '../../toast';

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CustomDropdown from '../../../components/dropdown';
+import CustomDropdown from '@/components/dropdown';
 
 class CollabUsersButton extends React.PureComponent {
 

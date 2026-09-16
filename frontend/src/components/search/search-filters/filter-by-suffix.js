@@ -4,9 +4,9 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 import Tooltip from '@/components/tooltip';
-import { SEARCH_FILTERS_KEY } from '../../../constants';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { SEARCH_FILTERS_KEY } from '@/constants';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import Icon from '../../icon';
 import ModalPortal from '../../modal-portal';
 

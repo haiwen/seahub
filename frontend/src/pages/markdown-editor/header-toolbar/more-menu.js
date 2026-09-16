@@ -1,10 +1,10 @@
 import React from 'react';
 import { EXTERNAL_EVENTS, EventBus } from '@seafile/seafile-editor';
 import PropTypes from 'prop-types';
+import CustomDropdown from '@/components/dropdown';
+import Icon from '@/components/icon';
 import Tooltip from '@/components/tooltip';
-import CustomDropdown from '../../../components/dropdown';
-import Icon from '../../../components/icon';
-import { gettext, canGenerateShareLink } from '../../../utils/constants';
+import { gettext, canGenerateShareLink } from '@/utils/constants';
 
 const { canDownloadFile } = window.app.pageOptions;
 

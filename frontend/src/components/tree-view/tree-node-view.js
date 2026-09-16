@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { permission } from '@/utils/constants';
+import TextTranslation from '@/utils/text-translation';
+import { Utils } from '@/utils/utils';
 import OpIcon from '../../components/op-icon';
-import { permission } from '../../utils/constants';
-import TextTranslation from '../../utils/text-translation';
-import { Utils } from '../../utils/utils';
 import CustomDropdown from '../dropdown';
 import Icon from '../icon';
 

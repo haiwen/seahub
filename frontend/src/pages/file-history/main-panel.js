@@ -1,8 +1,8 @@
 import React from 'react';
 import { MarkdownViewer } from '@seafile/seafile-editor';
 import PropTypes from 'prop-types';
-import Loading from '../../components/loading';
-import { mediaUrl } from '../../utils/constants';
+import Loading from '@/components/loading';
+import { mediaUrl } from '@/utils/constants';
 
 const propTypes = {
   renderingContent: PropTypes.bool.isRequired,

@@ -1,12 +1,12 @@
 import React from 'react';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
-import { seafileAPI } from '../../api/seafile-api';
-import UserSetPassword from '../../components/dialog/user-password-widgets/user-set-password-dialog';
-import UserUpdatePassword from '../../components/dialog/user-password-widgets/user-update-password-dialog';
-import toaster from '../../components/toast';
-import { isPro, isDBSqlite3, gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { seafileAPI } from '@/api/seafile-api';
+import UserSetPassword from '@/components/dialog/user-password-widgets/user-set-password-dialog';
+import UserUpdatePassword from '@/components/dialog/user-password-widgets/user-update-password-dialog';
+import toaster from '@/components/toast';
+import { isPro, isDBSqlite3, gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import DeleteAccount from './delete-account';
 import EmailNotice from './email-notice';
 import LanguageSetting from './language-setting';
@@ -25,10 +25,10 @@ import UserBasicInfoForm from './user-basic-info-form';
 import WebAPIAuthToken from './web-api-auth-token';
 import WebdavPassword from './webdav-password';
 
-import '../../css/layout.css';
-import '../../css/toolbar.css';
-import '../../css/search.css';
-import '../../css/user-settings.css';
+import '@/css/layout.css';
+import '@/css/toolbar.css';
+import '@/css/search.css';
+import '@/css/user-settings.css';
 
 const {
   canUpdatePassword, passwordOperationText,

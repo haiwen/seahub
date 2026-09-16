@@ -2,8 +2,8 @@ import React from 'react';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { Router } from '@gatsbyjs/reach-router';
-import { siteRoot } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { siteRoot } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import AbuseReports from './abuse-reports';
 import AdminLogs from './admin-logs';
 import AdminLoginLogs from './admin-logs/login-logs';
@@ -61,8 +61,8 @@ import VirusScan from './virus-scan';
 import AllVirusFiles from './virus-scan/all-virus-files';
 import UnhandledVirusFiles from './virus-scan/unhandled-virus-files';
 
-import '../../css/layout.css';
-import '../../css/toolbar.css';
+import '@/css/layout.css';
+import '@/css/toolbar.css';
 
 class SysAdmin extends React.Component {
   constructor(props) {

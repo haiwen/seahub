@@ -1,5 +1,5 @@
 import React from 'react';
-import { siteRoot, gettext } from '../../utils/constants';
+import { siteRoot, gettext } from '@/utils/constants';
 import Icon from '../icon';
 
 export default function Logout() {

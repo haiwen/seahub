@@ -1,4 +1,4 @@
-import { userAPI } from '../api/user-api';
+import { userAPI } from '@/api/user-api';
 import { enableNotificationServer, notificationServerUrl } from './constants';
 
 

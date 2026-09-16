@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../api/seafile-api';
-import ShareLink from '../../models/share-link';
-import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { seafileAPI } from '@/api/seafile-api';
+import ShareLink from '@/models/share-link';
+import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import Loading from '../loading';
 import toaster from '../toast';
 import LinkAuthenticatedEmails from './link-authenticated-emails';

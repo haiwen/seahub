@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Input } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { gettext } from '@/utils/constants';
 import CustomDropdown from '../../components/dropdown';
 import Icon from '../../components/icon';
-import { gettext } from '../../utils/constants';
 import IconButton from '../icon-button';
 
 const SCALE_OPTIONS = [0.15, 0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4];

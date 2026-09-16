@@ -1,10 +1,10 @@
 import React, { Fragment, } from 'react';
 import { Modal, ModalBody, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../../api/seafile-api.js';
-import Department from '../../../models/department';
-import { gettext, isOrgContext, username, LARGE_DIALOG_STYLE } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { seafileAPI } from '@/api/seafile-api.js';
+import Department from '@/models/department';
+import { gettext, isOrgContext, username, LARGE_DIALOG_STYLE } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import EmptyTip from '../../empty-tip';
 import { eventBus } from '../../event-bus';
 import Icon from '../../icon';
@@ -15,7 +15,7 @@ import DepartmentGroup from '../department-detail-widget/department-group';
 import DepartmentGroupMemberSelected from '../department-detail-widget/department-group-member-selected';
 import DepartmentGroupMembers from '../department-detail-widget/department-group-members';
 
-import '../../../css/manage-members-dialog.css';
+import '@/css/manage-members-dialog.css';
 import './index.css';
 
 const propTypes = {

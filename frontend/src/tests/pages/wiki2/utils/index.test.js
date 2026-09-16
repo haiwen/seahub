@@ -1,4 +1,4 @@
-import { generatorBase64Code, generateUniqueId, getWikPageLink } from '../../../../pages/wiki2/utils/index.js';
+import { generatorBase64Code, generateUniqueId, getWikPageLink } from '@/pages/wiki2/utils/index.js';
 
 describe('generatorBase64Code', () => {
   it('should generate a base64 code of length 4 by default', () => {

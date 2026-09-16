@@ -3,17 +3,17 @@ import { UncontrolledTooltip } from 'reactstrap';
 import { DiffViewer } from '@seafile/seafile-sdoc-editor';
 import classnames from 'classnames';
 import dayjs from 'dayjs';
-import SDocServerApi from '../../api/sdoc-server-api';
-import { seafileAPI } from '../../api/seafile-api';
-import GoBack from '../../components/go-back';
-import Loading from '../../components/loading';
-import toaster from '../../components/toast';
-import { PER_PAGE, gettext, historyRepoID, mediaUrl } from '../../utils/constants';
-import { Utils, isMobile } from '../../utils/utils';
+import SDocServerApi from '@/api/sdoc-server-api';
+import { seafileAPI } from '@/api/seafile-api';
+import GoBack from '@/components/go-back';
+import Loading from '@/components/loading';
+import toaster from '@/components/toast';
+import { PER_PAGE, gettext, historyRepoID, mediaUrl } from '@/utils/constants';
+import { Utils, isMobile } from '@/utils/utils';
 import { formatHistoryContent, getCurrentAndLastVersion } from './helper';
 import SidePanel from './side-panel';
 
-import '../../css/layout.css';
+import '@/css/layout.css';
 import './index.css';
 
 const { serviceURL, avatarURL, siteRoot } = window.app.config;

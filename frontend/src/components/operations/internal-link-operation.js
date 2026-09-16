@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
+import { gettext } from '@/utils/constants';
 import InternalLinkDialog from '../dialog/internal-link-dialog';
 import OpIcon from '../op-icon';
 

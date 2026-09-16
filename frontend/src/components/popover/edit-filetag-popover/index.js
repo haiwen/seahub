@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../../api/seafile-api';
-import { KeyCodes, TAG_COLORS } from '../../../constants';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { seafileAPI } from '@/api/seafile-api';
+import { KeyCodes, TAG_COLORS } from '@/constants';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import CommonAddTool from '../../common-add-tool';
 import CustomizePopover from '../../customize-popover';
 import SearchInput from '../../search-input';

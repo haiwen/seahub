@@ -1,21 +1,21 @@
 import React, { Fragment } from 'react';
 import { Button } from 'reactstrap';
-import { orgAdminAPI } from '../../../api/org-admin-api';
-import Department from '../../../components/admin/departments/department';
-import DepartmentNode from '../../../components/admin/departments/department-node';
-import DepartmentsTreePanel from '../../../components/admin/departments/department-tree-panel';
-import MainPanelTopbar from '../../../components/admin/layout/main-panel-topbar';
-import AddRepoDialog from '../../../components/dialog/org-add-repo-dialog';
-import SetGroupQuotaDialog from '../../../components/dialog/org-set-group-quota-dialog';
-import AddDepartmentDialog from '../../../components/dialog/sysadmin-dialog/add-department-v2-dialog';
-import DeleteDepartmentConfirmDialog from '../../../components/dialog/sysadmin-dialog/delete-department-v2-confirm-dialog';
-import RenameDepartmentDialog from '../../../components/dialog/sysadmin-dialog/rename-department-v2-dialog';
-import AddDepartMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-depart-member-v2-dialog';
-import MoveDepartmentDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-move-group-dialog';
-import Loading from '../../../components/loading';
-import toaster from '../../../components/toast';
-import { gettext, orgID } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { orgAdminAPI } from '@/api/org-admin-api';
+import Department from '@/components/admin/departments/department';
+import DepartmentNode from '@/components/admin/departments/department-node';
+import DepartmentsTreePanel from '@/components/admin/departments/department-tree-panel';
+import MainPanelTopbar from '@/components/admin/layout/main-panel-topbar';
+import AddRepoDialog from '@/components/dialog/org-add-repo-dialog';
+import SetGroupQuotaDialog from '@/components/dialog/org-set-group-quota-dialog';
+import AddDepartmentDialog from '@/components/dialog/sysadmin-dialog/add-department-v2-dialog';
+import DeleteDepartmentConfirmDialog from '@/components/dialog/sysadmin-dialog/delete-department-v2-confirm-dialog';
+import RenameDepartmentDialog from '@/components/dialog/sysadmin-dialog/rename-department-v2-dialog';
+import AddDepartMemberDialog from '@/components/dialog/sysadmin-dialog/sysadmin-add-depart-member-v2-dialog';
+import MoveDepartmentDialog from '@/components/dialog/sysadmin-dialog/sysadmin-move-group-dialog';
+import Loading from '@/components/loading';
+import toaster from '@/components/toast';
+import { gettext, orgID } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 import '../../sys-admin/departments/system-departments.css';
 

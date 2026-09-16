@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../api/seafile-api';
-import { gettext, shareLinkAlwaysSendPasswordSeparately } from '../utils/constants';
-import { Utils } from '../utils/utils';
+import { seafileAPI } from '@/api/seafile-api';
+import { gettext, shareLinkAlwaysSendPasswordSeparately } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import toaster from './toast';
 
 const propTypes = {

@@ -1,8 +1,8 @@
 import React from 'react';
+import { seafileAPI } from '@/api/seafile-api';
 import toaster from '@/components/toast';
-import { seafileAPI } from '../../../api/seafile-api';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 const {
   fileUpdatesEmailInterval,

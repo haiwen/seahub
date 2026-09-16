@@ -2,8 +2,8 @@ import React from 'react';
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import UserSelect from '../../user-select';
 
 const propTypes = {

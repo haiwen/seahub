@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
 import { Button, InputGroup, InputGroupText, Input, Modal, ModalBody } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '@/api/seafile-api';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { seafileAPI } from '../api/seafile-api';
-import { gettext } from '../utils/constants';
-import { Utils } from '../utils/utils';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import { eventBus } from './event-bus';
 import GroupMembers from './group-members';
 import Icon from './icon';
@@ -14,7 +14,7 @@ import SelectUsersIcon from './select-members-to-share-with';
 import toaster from './toast';
 import UserSelect from './user-select';
 
-import '../css/manage-members-dialog.css';
+import '@/css/manage-members-dialog.css';
 
 const propTypes = {
   toggleManageMembersDialog: PropTypes.func,

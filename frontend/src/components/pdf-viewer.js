@@ -1,5 +1,5 @@
 import React from 'react';
-import { gettext } from '../utils/constants';
+import { gettext } from '@/utils/constants';
 import Icon from './icon';
 
 class PDFViewer extends React.Component {

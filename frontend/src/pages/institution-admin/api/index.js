@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { siteRoot } from '../../../utils/constants';
+import { siteRoot } from '@/utils/constants';
 
 class InstAdminAPI {
 

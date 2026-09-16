@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import classNames from 'classnames';
-import { gettext, siteRoot } from '../../../../utils/constants';
+import { gettext, siteRoot } from '@/utils/constants';
 import Icon from '../../../icon';
 
 import './index.css';

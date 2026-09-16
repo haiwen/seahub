@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import { Progress } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../utils/constants';
-import { evaluatePasswordStrength } from '../../../utils/utils';
+import { gettext } from '@/utils/constants';
+import { evaluatePasswordStrength } from '@/utils/utils';
 
 const propTypes = {
   passwordValue: PropTypes.string.isRequired,

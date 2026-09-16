@@ -1,17 +1,17 @@
 import React, { Component, Fragment } from 'react';
 import { navigate } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
-import { systemAdminAPI } from '../../../api/system-admin-api';
-import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
-import SysAdminUserSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
-import SysAdminAddUserDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-user-dialog';
-import SysAdminBatchAddAdminDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-batch-add-admin-dialog';
-import SysAdminImportUserDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-import-user-dialog';
-import toaster from '../../../components/toast';
-import SysAdminAdminUser from '../../../models/sysadmin-admin-user';
-import SysAdminUser from '../../../models/sysadmin-user';
-import { isPro, gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { systemAdminAPI } from '@/api/system-admin-api';
+import CommonOperationConfirmationDialog from '@/components/dialog/common-operation-confirmation-dialog';
+import SysAdminUserSetQuotaDialog from '@/components/dialog/sysadmin-dialog/set-quota';
+import SysAdminAddUserDialog from '@/components/dialog/sysadmin-dialog/sysadmin-add-user-dialog';
+import SysAdminBatchAddAdminDialog from '@/components/dialog/sysadmin-dialog/sysadmin-batch-add-admin-dialog';
+import SysAdminImportUserDialog from '@/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog';
+import toaster from '@/components/toast';
+import SysAdminAdminUser from '@/models/sysadmin-admin-user';
+import SysAdminUser from '@/models/sysadmin-user';
+import { isPro, gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import Content from './users-content';
 import UsersFilterBar from './users-filter-bar';
 

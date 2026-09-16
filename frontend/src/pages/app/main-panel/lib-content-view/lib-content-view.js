@@ -9,6 +9,22 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '@/api/seafile-api';
+import CurDirPath from '@/components/cur-dir-path';
+import DirTool from '@/components/cur-dir-path/dir-tool';
+import CopyMoveDirentProgressDialog from '@/components/dialog/copy-move-dirent-progress-dialog';
+import DeleteFolderDialog from '@/components/dialog/delete-folder-dialog';
+import LibDecryptDialog from '@/components/dialog/lib-decrypt-dialog';
+import Detail from '@/components/dirent-detail';
+import EventBus, { EVENT_BUS_TYPE, eventBus } from '@/components/event-bus';
+import FileUploader from '@/components/file-uploader/file-uploader';
+import ModalPortal from '@/components/modal-portal';
+import toaster from '@/components/toast';
+import SelectedDirentsToolbar from '@/components/toolbar/selected-dirents-toolbar';
+import ViewToolbar from '@/components/toolbar/view-toolbar';
+import treeHelper from '@/components/tree-view/tree-helper';
+import TreeNode from '@/components/tree-view/tree-node';
+import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY, RECENTLY_USED_LIST_KEY } from '@/constants';
 import {
   LIST_VIEW_HIDDEN_COLUMNS_DEFAULT,
   getDirHiddenColumnKeys,
@@ -18,31 +34,6 @@ import {
   DIR_TABLE_DEFAULT_METADATA_COLUMNS,
   getDirTableRowHeightKey
 } from '@/constants/dir-column-config';
-import DirColumnView from '@/features/library-view/dir-column-view';
-import { getDirTableColumnOrder, setDirTableColumnOrder } from '@/features/library-view/dir-table-view/columns';
-import metadataAPI from '@/features/metadata/api';
-import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, ROW_HEIGHT } from '@/features/metadata/constants';
-import { PRIVATE_COLUMN_KEY } from '@/features/metadata/constants/column/private';
-import { MetadataProvider } from '@/features/metadata/hooks/metadata';
-import { MetadataMiddlewareProvider } from '@/features/metadata/hooks/metadata-middleware';
-import Column from '@/features/metadata/model/column';
-import { normalizeColumns } from '@/features/metadata/utils/column';
-import { seafileAPI } from '../../../../api/seafile-api';
-import CurDirPath from '../../../../components/cur-dir-path';
-import DirTool from '../../../../components/cur-dir-path/dir-tool';
-import CopyMoveDirentProgressDialog from '../../../../components/dialog/copy-move-dirent-progress-dialog';
-import DeleteFolderDialog from '../../../../components/dialog/delete-folder-dialog';
-import LibDecryptDialog from '../../../../components/dialog/lib-decrypt-dialog';
-import Detail from '../../../../components/dirent-detail';
-import EventBus, { EVENT_BUS_TYPE, eventBus } from '../../../../components/event-bus';
-import FileUploader from '../../../../components/file-uploader/file-uploader';
-import ModalPortal from '../../../../components/modal-portal';
-import toaster from '../../../../components/toast';
-import SelectedDirentsToolbar from '../../../../components/toolbar/selected-dirents-toolbar';
-import ViewToolbar from '../../../../components/toolbar/view-toolbar';
-import treeHelper from '../../../../components/tree-view/tree-helper';
-import TreeNode from '../../../../components/tree-view/tree-node';
-import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY, RECENTLY_USED_LIST_KEY } from '../../../../constants';
 import {
   LIST_MODE,
   TABLE_MODE,
@@ -53,9 +44,18 @@ import {
   SETTINGS_MODE,
   TRASH_MODE,
   CHAT_MODE
-} from '../../../../constants/view-mode';
-import { FileOperationsProvider, MetadataStatusProvider } from '../../../../hooks';
-import { Dirent, FileTag, RepoTag, RepoInfo } from '../../../../models';
+} from '@/constants/view-mode';
+import DirColumnView from '@/features/library-view/dir-column-view';
+import { getDirTableColumnOrder, setDirTableColumnOrder } from '@/features/library-view/dir-table-view/columns';
+import metadataAPI from '@/features/metadata/api';
+import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, ROW_HEIGHT } from '@/features/metadata/constants';
+import { PRIVATE_COLUMN_KEY } from '@/features/metadata/constants/column/private';
+import { MetadataProvider } from '@/features/metadata/hooks/metadata';
+import { MetadataMiddlewareProvider } from '@/features/metadata/hooks/metadata-middleware';
+import Column from '@/features/metadata/model/column';
+import { normalizeColumns } from '@/features/metadata/utils/column';
+import { FileOperationsProvider, MetadataStatusProvider } from '@/hooks';
+import { Dirent, FileTag, RepoTag, RepoInfo } from '@/models';
 import {
   chatAndSearchAvailable,
   enableThumbnailServer,
@@ -65,11 +65,11 @@ import {
   siteRoot,
   thumbnailSizeForOriginal,
   username
-} from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
-import WebSocketClient from '../../../../utils/websocket-service';
+} from '@/utils/constants';
+import { Utils } from '@/utils/utils';
+import WebSocketClient from '@/utils/websocket-service';
 
-import '../../../../css/lib-content-view.css';
+import '@/css/lib-content-view.css';
 
 dayjs.extend(relativeTime);
 

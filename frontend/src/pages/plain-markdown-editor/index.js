@@ -2,9 +2,9 @@ import React, { useState, useRef, useCallback, useLayoutEffect, useEffect } from
 import { processorWithMath } from '@seafile/seafile-editor';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
-import CodeMirrorLoading from '../../components/code-mirror-loading';
-import toaster from '../../components/toast';
-import { gettext } from '../../utils/constants';
+import CodeMirrorLoading from '@/components/code-mirror-loading';
+import toaster from '@/components/toast';
+import { gettext } from '@/utils/constants';
 import editorApi from '../markdown-editor/editor-api';
 import HeaderToolbar from '../markdown-editor/header-toolbar/header-toolbar';
 import SeafileCodeMirror from './code-mirror';

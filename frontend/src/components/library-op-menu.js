@@ -1,9 +1,9 @@
 import React from 'react';
 import { DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { gettext, isPro, folderPermEnabled, enableRepoSnapshotLabel, enableResetEncryptedRepoPassword, isEmailConfigured, enableMultipleOfficeSuite, enableStorageClasses } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import MobileItemMenu from '../components/mobile-item-menu';
-import { gettext, isPro, folderPermEnabled, enableRepoSnapshotLabel, enableResetEncryptedRepoPassword, isEmailConfigured, enableMultipleOfficeSuite, enableStorageClasses } from '../utils/constants';
-import { Utils } from '../utils/utils';
 import CustomDropdown from './dropdown';
 import Icon from './icon';
 import Tooltip from './tooltip';

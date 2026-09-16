@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button, Modal, ModalBody, ModalFooter, Label, Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
-import wikiAPI from '../../api/wiki-api';
-import { gettext, isPro } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import wikiAPI from '@/api/wiki-api';
+import { gettext, isPro } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import SeahubModalHeader from '../seahub-modal-header';
 import { SeahubSelect } from '../select';
 import toaster from '../toast';

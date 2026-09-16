@@ -3,11 +3,11 @@ import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap
 import classNames from 'classnames';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '@/api/seafile-api';
 import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
-import { seafileAPI } from '../../../api/seafile-api';
-import { SEARCH_FILTERS_KEY } from '../../../constants';
-import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { SEARCH_FILTERS_KEY } from '@/constants';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import Icon from '../../icon';
 import ModalPortal from '../../modal-portal';
 import toaster from '../../toast';

@@ -3,8 +3,8 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import OpIcon from '@/components/op-icon';
 import Tooltip from '@/components/tooltip';
-import { gettext } from '../../../../../../utils/constants';
-import { isMobile, Utils } from '../../../../../../utils/utils';
+import { gettext } from '@/utils/constants';
+import { isMobile, Utils } from '@/utils/utils';
 import { SEQUENCE_COLUMN_WIDTH } from '../../../../constants/grid';
 
 import './index.css';

@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { FormGroup, Label, Input, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { systemAdminAPI } from '../../../api/system-admin-api';
-import SysAdminSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
-import SysAdminSetUploadDownloadRateLimitDialog from '../../../components/dialog/sysadmin-dialog/set-upload-download-rate-limit';
-import SysAdminUpdateUserDialog from '../../../components/dialog/sysadmin-dialog/update-user';
-import EditIcon from '../../../components/edit-icon';
-import { eventBus, EVENT_BUS_TYPE } from '../../../components/event-bus';
-import Loading from '../../../components/loading';
-import Selector from '../../../components/single-selector';
-import toaster from '../../../components/toast';
-import { gettext, isPro } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { systemAdminAPI } from '@/api/system-admin-api';
+import SysAdminSetQuotaDialog from '@/components/dialog/sysadmin-dialog/set-quota';
+import SysAdminSetUploadDownloadRateLimitDialog from '@/components/dialog/sysadmin-dialog/set-upload-download-rate-limit';
+import SysAdminUpdateUserDialog from '@/components/dialog/sysadmin-dialog/update-user';
+import EditIcon from '@/components/edit-icon';
+import { eventBus, EVENT_BUS_TYPE } from '@/components/event-bus';
+import Loading from '@/components/loading';
+import Selector from '@/components/single-selector';
+import toaster from '@/components/toast';
+import { gettext, isPro } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 const { twoFactorAuthEnabled, availableRoles } = window.sysadmin.pageOptions;
 

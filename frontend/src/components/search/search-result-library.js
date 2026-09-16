@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { Utils } from '../../utils/utils';
+import { Utils } from '@/utils/utils';
 
 function SearchResultLibrary(props) {
   const { item, isHighlight, onClick } = props;

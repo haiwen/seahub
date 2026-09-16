@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SharedTrafficTableBody from '../../../components/admin/statistics/traffic-table-body';
-import { siteRoot } from '../../../utils/constants';
+import SharedTrafficTableBody from '@/components/admin/statistics/traffic-table-body';
+import { siteRoot } from '@/utils/constants';
 
 const propTypes = {
   type: PropTypes.string.isRequired,

@@ -1,9 +1,9 @@
 import React from 'react';
 import { EventBus, SocketManager } from '@seafile/sdoc-editor';
+import SDocServerApi from '@/api/sdoc-server-api.js';
+import Icon from '@/components/icon';
 import Tooltip from '@/components/tooltip';
 import { gettext } from '@/utils/constants.js';
-import SDocServerApi from '../../../api/sdoc-server-api.js';
-import Icon from '../../../components/icon';
 import CollaboratorsPopover from './collaborators-popover.js';
 
 import './index.css';

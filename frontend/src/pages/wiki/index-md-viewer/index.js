@@ -1,8 +1,8 @@
 import React from 'react';
 import { mdStringToSlate } from '@seafile/seafile-editor';
 import PropTypes from 'prop-types';
-import { isPublicWiki, repoID, serviceURL, slug } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { isPublicWiki, repoID, serviceURL, slug } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import { generateNavItems } from '../utils/generate-navs';
 import NavItem from './nav-item';
 

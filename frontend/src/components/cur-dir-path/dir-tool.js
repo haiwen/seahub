@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { PRIVATE_FILE_TYPE } from '@/constants';
+import { HISTORY_MODE, LIST_MODE, SETTINGS_MODE, TRASH_MODE, TABLE_MODE, CHAT_MODE } from '@/constants/view-mode';
 import HistoryViewToolbar from '@/features/library-view/dir-history-view/history-view-toolbar';
 import TrashViewToolbar from '@/features/library-view/dir-trash-view/trash-view-toolbar';
 import { HideColumnSetter } from '@/features/metadata/components/data-process-setter';
@@ -9,14 +11,12 @@ import TagFilesViewToolbar from '@/features/tag/components/tag-files-view-toolba
 import { ALL_TAGS_ID } from '@/features/tag/constants';
 import AllTagsSortSetter from '@/features/tag/views/all-tags/tags-table/all-tags-sort-setter';
 import TagsTableSearcher from '@/features/tag/views/all-tags/tags-table/tags-table-searcher';
+import TextTranslation from '@/utils/text-translation';
 import { EVENT_BUS_TYPE } from '../../components/event-bus';
 import OpIcon from '../../components/op-icon';
 import SetRowHeight from '../../components/set-row-height';
 import SortMenu from '../../components/sort-menu';
 import ViewModes from '../../components/view-modes';
-import { PRIVATE_FILE_TYPE } from '../../constants';
-import { HISTORY_MODE, LIST_MODE, SETTINGS_MODE, TRASH_MODE, TABLE_MODE, CHAT_MODE } from '../../constants/view-mode';
-import TextTranslation from '../../utils/text-translation';
 import ChatToolbar from '../toolbar/chat-toolbar';
 
 const propTypes = {

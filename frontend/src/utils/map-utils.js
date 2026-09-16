@@ -1,4 +1,4 @@
-import { MAP_TYPE } from '../constants';
+import { MAP_TYPE } from '@/constants';
 import { lang, mediaUrl } from './constants';
 
 export const initMapInfo = ({ baiduMapKey, googleMapKey, mineMapKey }) => {

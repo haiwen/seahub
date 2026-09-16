@@ -3,7 +3,7 @@ import { Modal, ModalBody } from 'reactstrap';
 import { SimpleEditor } from '@seafile/seafile-editor';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext } from '../../utils/constants';
+import { gettext } from '@/utils/constants';
 
 class TermsEditorDialog extends React.Component {
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, ModalBody } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { Utils } from '../../utils/utils';
+import { Utils } from '@/utils/utils';
 
 const propTypes = {
   currentPerm: PropTypes.string.isRequired,

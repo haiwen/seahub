@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import Icon from '../icon';
 import ForbidUploadListItem from './forbid-upload-list-item';
 import UploadListItem from './upload-list-item';

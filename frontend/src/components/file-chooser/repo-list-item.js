@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../api/seafile-api';
+import { seafileAPI } from '@/api/seafile-api';
+import Dirent from '@/models/dirent';
+import { Utils } from '@/utils/utils';
 import treeHelper from '../../components/tree-view/tree-helper';
 import TreeNode from '../../components/tree-view/tree-node';
-import Dirent from '../../models/dirent';
-import { Utils } from '../../utils/utils';
 import Icon from '../icon';
 import toaster from '../toast';
 import TreeListView from './tree-list-view';

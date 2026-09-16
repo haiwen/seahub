@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Tooltip from '@/components/tooltip';
-import { gettext, mediaUrl } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
+import { gettext, mediaUrl } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import EmptyTip from '../../empty-tip';
 import Icon from '../../icon';
 import Loading from '../../loading';

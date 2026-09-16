@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { Button, ButtonGroup } from 'reactstrap';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../utils/constants';
+import { gettext } from '@/utils/constants';
 import DateTimePicker from '../../date-and-time-picker';
 
 const propTypes = {

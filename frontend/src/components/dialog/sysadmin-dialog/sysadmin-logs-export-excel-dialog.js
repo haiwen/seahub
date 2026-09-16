@@ -2,12 +2,12 @@ import React from 'react';
 import { Button, Modal, ModalBody, ModalFooter, FormGroup, Label, Input, Alert } from 'reactstrap';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
+import { systemAdminAPI } from '@/api/system-admin-api';
+import { userAPI } from '@/api/user-api';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { systemAdminAPI } from '../../../api/system-admin-api';
-import { userAPI } from '../../../api/user-api';
+import { gettext, siteRoot } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import toaster from '../../../components/toast';
-import { gettext, siteRoot } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
 import SeahubIODialog from '../../dialog/seahub-io-dialog';
 
 class LogsExportExcelDialog extends React.Component {
