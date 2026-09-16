@@ -1,7 +1,7 @@
 import { CaptureUpdateAction, newElementWith } from '@excalidraw/excalidraw';
 import throttle from 'lodash.throttle';
 import io from 'socket.io-client';
-import { FILE_UPLOAD_TIMEOUT } from '../constants';
+import { FILE_UPLOAD_TIMEOUT, OPERATION_ACK_TIMEOUT } from '../constants';
 import { isSyncableElement } from '../data';
 import { clientDebug, serverDebug } from '../utils/debug';
 import { getFilename } from '../utils/element-utils';
@@ -132,7 +132,12 @@ class SocketClient {
       version: version,
     };
     const params = this.getParams(payload);
-    this.socket.emit('elements-updated', params, (result) => {
+    this.socket.timeout(OPERATION_ACK_TIMEOUT).emit('elements-updated', params, (error, result) => {
+      if (error) {
+        clientDebug('elements-updated ACK timeout.');
+        callback && callback({ error_type: 'ack_timeout' });
+        return;
+      }
       callback && callback(result);
     });
   };
