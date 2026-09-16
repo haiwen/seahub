@@ -60,7 +60,6 @@
 .rc-calendar-month-panel-cell:not(.rc-calendar-month-panel-selected-cell) .rc-calendar-month-panel-month:hover,
 .rc-calendar-year-panel-cell:not(.rc-calendar-year-panel-selected-cell) .rc-calendar-year-panel-year:hover,
 .rc-calendar-decade-panel-cell:not(.rc-calendar-decade-panel-selected-cell) .rc-calendar-decade-panel-decade:hover {
-  color: var(--bs-body-color);
   background-color: var(--bs-icon-btn-hover-bg-color);
 }
 
