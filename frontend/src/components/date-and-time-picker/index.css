@@ -14,12 +14,3 @@
 .sf-rc-calendar .rc-calendar-disabled-cell .rc-calendar-date {
   margin: 2px 0;
 }
-
-.sf-rc-calendar .rc-calendar-cell:not(.rc-calendar-selected-date) .rc-calendar-date:hover,
-.sf-rc-calendar .rc-calendar-right-panel-item-text:not(.rc-calendar-right-panel-item-selected):hover,
-.sf-rc-calendar .rc-calendar-month-panel-cell:not(.rc-calendar-month-panel-selected-cell) .rc-calendar-month-panel-month:hover,
-.sf-rc-calendar .rc-calendar-year-panel-cell:not(.rc-calendar-year-panel-selected-cell) .rc-calendar-year-panel-year:hover,
-.sf-rc-calendar .rc-calendar-decade-panel-cell:not(.rc-calendar-decade-panel-selected-cell) .rc-calendar-decade-panel-decade:hover {
-  color: var(--bs-calendar-out-range-color);
-  background-color: var(--bs-icon-btn-hover-bg-color);
-}
