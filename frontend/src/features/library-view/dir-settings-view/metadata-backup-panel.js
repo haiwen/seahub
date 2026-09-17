@@ -108,7 +108,7 @@ const MetadataBackupPanel = ({ repoID, enableMetadata }) => {
         {gettext('Export metadata to an Excel backup, or restore metadata from a backup exported by Seafile.')}
       </p>
       <div className="d-flex align-items-center">
-        <Button color="primary" outline={true} disabled={busy || !enableMetadata} onClick={exportBackup}>
+        <Button color="secondary" disabled={busy || !enableMetadata} onClick={exportBackup}>
           {operation === 'export' && <Loading className="mr-2" />}
           {gettext('Export backup')}
         </Button>
@@ -118,9 +118,6 @@ const MetadataBackupPanel = ({ repoID, enableMetadata }) => {
         </Button>
         <input ref={inputRef} type="file" accept=".xlsx" className="d-none" onChange={selectBackup} />
       </div>
-      <p className="setting-tip text-warning mt-2">
-        {gettext('Importing replaces all existing metadata. Before importing, create a library snapshot and export a metadata backup. A snapshot alone does not include metadata.')}
-      </p>
       {!enableMetadata && (
         <p className="setting-tip">{gettext('Turn on extended properties before backing up or restoring metadata.')}</p>
       )}
@@ -138,7 +135,7 @@ const MetadataBackupPanel = ({ repoID, enableMetadata }) => {
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={() => setPreview(null)}>{gettext('Cancel')}</Button>
-            <Button color="danger" onClick={restoreBackup}>{gettext('Replace metadata')}</Button>
+            <Button color="primary" onClick={restoreBackup}>{gettext('Replace metadata')}</Button>
           </ModalFooter>
         </Modal>
       )}
