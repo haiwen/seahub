@@ -29,16 +29,17 @@ const SdocArtifacts = ({ artifacts = [] }) => {
 
   return (
     <div className="sea-ai-sdoc-artifacts">
-      {sdocArtifacts.map((artifact) => {
+      {sdocArtifacts.map((artifact, index) => {
+        const artifactKey = `${artifact.path || artifact.error_code || 'sdoc'}-${index}`;
         if (artifact.status !== 'created') {
           return (
-            <div className="sea-ai-sdoc-artifact failure" key={artifact.action_id}>
+            <div className="sea-ai-sdoc-artifact failure" key={artifactKey}>
               <div>{ERROR_MESSAGES[artifact.error_code] || ERROR_MESSAGES.create_failed}</div>
             </div>
           );
         }
         return (
-          <div className="sea-ai-sdoc-artifact" key={artifact.action_id}>
+          <div className="sea-ai-sdoc-artifact" key={artifactKey}>
             <div className="sea-ai-sdoc-artifact-name">{gettext('Created')} {artifact.name}</div>
             <div className="sea-ai-sdoc-artifact-path">{gettext('Location')}: {artifact.path}</div>
             {artifact.summary && <div className="sea-ai-sdoc-artifact-summary">{artifact.summary}</div>}
