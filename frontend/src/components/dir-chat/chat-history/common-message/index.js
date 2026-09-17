@@ -4,6 +4,7 @@ import { Attachments } from '../../components';
 import { CHAT_MESSAGE_TYPE } from '../../constants';
 import CustomizeMarkdownViewer from '../customize-markdown-viewer';
 import MessageOperations from '../message-operations';
+import SdocArtifacts from '../sdoc-artifacts';
 import ThoughtProcess from '../thought-process';
 
 import './index.css';
@@ -24,6 +25,7 @@ const CommonMessage = ({ chatId, message, settings, repoID, showOperations, isSt
         {message[CHAT_MESSAGE_TYPE.AI_REPLY] && (
           <CustomizeMarkdownViewer ref={markdownMessageRef} chatId={chatId} message={message} repoID={repoID} isStreaming={isStreaming} />
         )}
+        <SdocArtifacts artifacts={message[CHAT_MESSAGE_TYPE.ARTIFACTS]} />
         {showOperations && (<MessageOperations getAIReply={getAIReply} />)}
       </div>
     </>

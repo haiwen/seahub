@@ -65,6 +65,7 @@ class ChatSessionsManager(models.Manager):
                         content=message.content,
                         attachments=message.attachments,
                         sources=message.sources,
+                        artifacts=message.artifacts,
                     )
                     for message in source_messages
                 ])
@@ -165,9 +166,11 @@ class ChatMessageThoughtProcess(models.Model):
 
 
 class ChatMessagesManager(models.Manager):
-    def create_message(self, session_uuid, message_id, role, content, sources='', attachments=None):
+    def create_message(self, session_uuid, message_id, role, content, sources='', attachments=None, artifacts=None):
         if attachments is None:
             attachments = []
+        if artifacts is None:
+            artifacts = []
         message = self.model(
             session_uuid=session_uuid,
             message_id=message_id,
@@ -175,6 +178,7 @@ class ChatMessagesManager(models.Manager):
             content=content,
             attachments=json.dumps(attachments),
             sources=sources,
+            artifacts=json.dumps(artifacts),
         )
         message.save()
         return message
@@ -199,6 +203,7 @@ class ChatMessages(models.Model):
     content = models.TextField(null=True)
     attachments = models.TextField(null=True)
     sources = models.TextField(null=True)
+    artifacts = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
@@ -223,6 +228,13 @@ class ChatMessages(models.Model):
         if not isinstance(attachments, list):
             attachments = []
 
+        try:
+            artifacts = json.loads(self.artifacts)
+        except Exception:
+            artifacts = []
+        if not isinstance(artifacts, list):
+            artifacts = []
+
         return {
             'id': self.id,
             'session_uuid': self.session_uuid,
@@ -231,6 +243,44 @@ class ChatMessages(models.Model):
             'content': self.content,
             'attachments': attachments,
             'sources': sources,
+            'artifacts': artifacts,
             'created_at': self.created_at,
             'updated_at': self.updated_at,
         }
+
+
+class AIChatArtifactManager(models.Manager):
+    def get_or_create_action(self, action_id, defaults):
+        return self.get_or_create(action_id=action_id, defaults=defaults)
+
+
+class AIChatArtifact(models.Model):
+    STATUS_RUNNING = 'running'
+    STATUS_SUCCEEDED = 'succeeded'
+    STATUS_FAILED = 'failed'
+    STATUS_CLEANUP_REQUIRED = 'cleanup_required'
+
+    id = models.BigAutoField(primary_key=True)
+    action_id = models.CharField(max_length=64, unique=True)
+    session_uuid = models.CharField(max_length=36, db_index=True)
+    message_id = models.CharField(max_length=4)
+    repo_id = models.CharField(max_length=36)
+    username = models.CharField(max_length=255)
+    artifact_type = models.CharField(max_length=64)
+    status = models.CharField(max_length=32)
+    artifact = models.TextField(null=True)
+    error_code = models.CharField(max_length=64, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = AIChatArtifactManager()
+
+    class Meta:
+        db_table = 'ai_chat_artifacts'
+
+    def get_artifact(self):
+        try:
+            artifact = json.loads(self.artifact)
+        except Exception:
+            artifact = {}
+        return artifact if isinstance(artifact, dict) else {}
