@@ -22,6 +22,20 @@ class SdocContentTest(SimpleTestCase):
         with self.assertRaisesRegex(ValueError, 'invalid_artifact'):
             build_sdoc_content('Plan', [{'type': 'image'}], 'user@example.com')
 
+    def test_builds_complete_table_structure(self):
+        content = build_sdoc_content('Plan', [{
+            'type': 'table',
+            'headers': ['Task', 'Owner'],
+            'rows': [['Review', 'Alice']],
+        }], 'user@example.com')
+
+        table = content['elements'][1]
+        self.assertEqual(table['columns'], [{'width': 120}, {'width': 120}])
+        self.assertEqual(table['ui']['alternate_highlight'], False)
+        self.assertEqual(table['children'][0]['style']['min_height'], 42)
+        self.assertEqual(table['children'][0]['children'][0]['style'], {})
+        self.assertEqual(table['children'][0]['children'][0]['inherit_style'], {})
+
 
 class SdocDirectoryTest(SimpleTestCase):
     def setUp(self):

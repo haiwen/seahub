@@ -30,7 +30,7 @@ from seahub.utils.user_permissions import get_user_role
 from seahub.utils.repo import parse_repo_perm
 from seahub.utils.ccnet_db import CcnetDB
 from seahub.organizations.models import OrgMemberQuota, OrgSettings
-from seahub.ai.models import AIChatArtifact, AIUsageStatistics, ChatMessageThoughtProcess, ChatMessages, ChatSessions
+from seahub.ai.models import AIUsageStatistics, ChatMessageThoughtProcess, ChatMessages, ChatSessions
 from seahub.seadoc.utils import get_seadoc_file_uuid, get_seadoc_upload_link
 from seahub.views import check_folder_permission
 
@@ -457,10 +457,13 @@ def _sdoc_table_row(cells):
     return {
         'id': str(uuid.uuid4()),
         'type': 'table_row',
+        'style': {'min_height': 42},
         'children': [
             {
                 'id': str(uuid.uuid4()),
                 'type': 'table_cell',
+                'style': {},
+                'inherit_style': {},
                 'children': [_sdoc_text_element(cell)],
             }
             for cell in cells
@@ -537,7 +540,22 @@ def build_sdoc_content(title, blocks, username):
             if not isinstance(rows, list) or len(rows) > 100 or not all(isinstance(row, list) and len(row) == len(headers) and all(isinstance(cell, str) for cell in row) for row in rows):
                 raise ValueError('invalid_artifact')
             total_length += sum(len(cell) for cell in headers) + sum(len(cell) for row in rows for cell in row)
-            elements.append({'id': str(uuid.uuid4()), 'type': 'table', 'children': [_sdoc_table_row(headers)] + [_sdoc_table_row(row) for row in rows]})
+            column_count = len(headers)
+            column_width = 120
+            elements.append({
+                'id': str(uuid.uuid4()),
+                'type': 'table',
+                'children': [_sdoc_table_row(headers)] + [_sdoc_table_row(row) for row in rows],
+                'columns': [{'width': column_width} for _index in range(column_count)],
+                'ui': {
+                    'alternate_highlight': False,
+                    'alternate_highlight_color': '',
+                },
+                'style': {
+                    'gridTemplateColumns': 'repeat(%s, %spx)' % (column_count, column_width),
+                    'gridAutoRows': 'minmax(42px, auto)',
+                },
+            })
         else:
             raise ValueError('invalid_artifact')
 
@@ -586,24 +604,8 @@ def _can_create_sdoc_in_directory(request, repo_id, directory):
 
 
 def _build_sdoc_result(draft, repo_id, request, session_uuid, message_id, username):
-    action_id = draft.get('action_id')
-    if not isinstance(action_id, str) or not re.fullmatch(r'[0-9a-f]{64}', action_id):
-        return {'type': 'sdoc', 'status': 'failed', 'error_code': 'invalid_artifact'}
     if not ENABLE_SEADOC:
-        return {'type': 'sdoc', 'status': 'failed', 'action_id': action_id, 'error_code': 'sdoc_not_enabled'}
-    action, created = AIChatArtifact.objects.get_or_create_action(action_id, {
-        'session_uuid': session_uuid,
-        'message_id': message_id,
-        'repo_id': repo_id,
-        'username': username,
-        'artifact_type': 'sdoc',
-        'status': AIChatArtifact.STATUS_RUNNING,
-        'artifact': json.dumps(draft),
-    })
-    if not created:
-        if action.status == AIChatArtifact.STATUS_SUCCEEDED:
-            return action.get_artifact()
-        return {'type': 'sdoc', 'status': 'failed', 'action_id': action_id, 'error_code': action.error_code or 'create_failed'}
+        return {'type': 'sdoc', 'status': 'failed', 'error_code': 'sdoc_not_enabled'}
 
     created_file_name = None
     target_dir = None
@@ -641,7 +643,6 @@ def _build_sdoc_result(draft, repo_id, request, session_uuid, message_id, userna
         result = {
             'type': 'sdoc',
             'status': 'created',
-            'action_id': action_id,
             'name': file_name,
             'path': file_path,
             'repo_id': repo_id,
@@ -653,10 +654,6 @@ def _build_sdoc_result(draft, repo_id, request, session_uuid, message_id, userna
             'actual_directory': target_dir,
             'directory_fallback_reason': fallback_reason,
         }
-        action.status = AIChatArtifact.STATUS_SUCCEEDED
-        action.artifact = json.dumps(result)
-        action.error_code = None
-        action.save(update_fields=['status', 'artifact', 'error_code', 'updated_at'])
         return result
     except (ValueError, PermissionError, RuntimeError) as error:
         error_code = str(error)
@@ -669,11 +666,7 @@ def _build_sdoc_result(draft, repo_id, request, session_uuid, message_id, userna
         except Exception as cleanup_error:
             logger.error('Failed to clean up AI generated SDoc %s: %s', created_file_name, cleanup_error)
             error_code = 'cleanup_required'
-    action.status = AIChatArtifact.STATUS_CLEANUP_REQUIRED if error_code == 'cleanup_required' else AIChatArtifact.STATUS_FAILED
-    action.error_code = error_code
-    action.artifact = json.dumps({'type': 'sdoc', 'status': 'failed', 'action_id': action_id, 'error_code': error_code})
-    action.save(update_fields=['status', 'artifact', 'error_code', 'updated_at'])
-    return action.get_artifact()
+    return {'type': 'sdoc', 'status': 'failed', 'error_code': error_code}
 
 
 def process_sdoc_artifacts(ai_result, repo_id, request, session_uuid, message_id, username):
