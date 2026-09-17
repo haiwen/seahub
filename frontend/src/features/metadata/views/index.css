@@ -32,10 +32,6 @@
   color: #666;
 }
 
-.rc-calendar.sf-metadata-rc-calendar {
-  font-family: var(--bs-body-font-family);
-}
-
 .sf-metadata-wrapper .sf-table-cell .select-all-checkbox-container {
   width: 40px;
   margin-right: 20px;

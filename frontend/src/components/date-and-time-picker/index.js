@@ -11,7 +11,6 @@ import 'dayjs/locale/zh-cn';
 import 'dayjs/locale/en-gb';
 
 import '@seafile/seafile-calendar/assets/index.css';
-import './index.css';
 
 dayjs.extend(utc);
 dayjs.extend(localeData);
