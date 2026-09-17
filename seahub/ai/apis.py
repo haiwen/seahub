@@ -795,6 +795,7 @@ class ChatView(APIView):
             'ai_reply': ai_reply.content,
             'ai_reply_message_id': ai_reply.id,
             'sources': ai_reply.to_dict()['sources'],
+            'artifacts': ai_reply.to_dict()['artifacts'],
             'session_uuid': session_uuid,
         }
         result['thought_process'] = ChatMessageThoughtProcess.objects.get_thought_process_from_session_uuid_and_message_id(
@@ -875,6 +876,7 @@ class ChatView(APIView):
             'llm_model': request.data.get('model'),
             'repo_prompt': get_repo_prompt(repo_id),
             'scenario': AI_SCENARIO_CHAT,
+            'message_id': message_id,
         }
 
         task_info = {
@@ -895,6 +897,7 @@ class ChatView(APIView):
                     query,
                     attachments,
                     repo_id,
+                    request,
                     request.user.username,
                     can_upload,
                 ),
