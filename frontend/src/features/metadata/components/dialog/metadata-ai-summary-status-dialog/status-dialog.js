@@ -28,6 +28,13 @@ const getStatusText = (status) => {
 
 const getFilesText = (count) => count === 1 ? gettext('file') : gettext('files');
 
+const isCompleted = (status) => ['completed', 'failed'].includes(status);
+
+const isProcessingCompleted = (statusData) => {
+  if (!isCompleted(statusData.summary?.status)) return false;
+  return !statusData.index_enabled || isCompleted(statusData.index?.status);
+};
+
 const StatusDialog = ({ repoID, toggle }) => {
   const [statusData, setStatusData] = useState(null);
   const [isLoading, setLoading] = useState(true);
@@ -43,7 +50,9 @@ const StatusDialog = ({ repoID, toggle }) => {
         setStatusData(res.data);
         setErrorMsg('');
         setLoading(false);
-        pollingTimer = setTimeout(queryStatus, STATUS_QUERY_INTERVAL);
+        if (!isProcessingCompleted(res.data)) {
+          pollingTimer = setTimeout(queryStatus, STATUS_QUERY_INTERVAL);
+        }
       }).catch((error) => {
         if (!isMounted) return;
         setErrorMsg(Utils.getErrorMsg(error));
