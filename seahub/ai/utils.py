@@ -7,7 +7,6 @@ import requests
 import jwt
 import time
 import uuid
-from io import BytesIO
 from copy import deepcopy
 from urllib.parse import urljoin
 
@@ -31,7 +30,7 @@ from seahub.utils.repo import parse_repo_perm
 from seahub.utils.ccnet_db import CcnetDB
 from seahub.organizations.models import OrgMemberQuota, OrgSettings
 from seahub.ai.models import AIUsageStatistics, ChatMessageThoughtProcess, ChatMessages, ChatSessions
-from seahub.seadoc.utils import get_seadoc_file_uuid, get_seadoc_upload_link
+from seahub.seadoc.utils import get_seadoc_file_uuid
 from seahub.views import check_folder_permission
 
 
@@ -609,6 +608,7 @@ def _build_sdoc_result(draft, repo_id, request, session_uuid, message_id, userna
 
     created_file_name = None
     target_dir = None
+    tmp_file = None
     try:
         requested_directory = draft.get('requested_directory')
         raw_file_name = (draft.get('file_name') or '').strip().replace('\\', '/')
@@ -623,23 +623,20 @@ def _build_sdoc_result(draft, repo_id, request, session_uuid, message_id, userna
             raise ValueError('invalid_artifact')
         file_name = check_filename_with_rename(repo_id, target_dir, file_name)
         content = build_sdoc_content(draft.get('title'), draft.get('blocks'), username)
-        seafile_api.post_empty_file(repo_id, target_dir, file_name, username)
+        fd, tmp_file = mkstemp()
+        try:
+            os.write(fd, json.dumps(content, ensure_ascii=False).encode('utf-8'))
+        finally:
+            os.close(fd)
+        try:
+            seafile_api.post_file(repo_id, tmp_file, target_dir, file_name, username)
+        except Exception as error:
+            logger.error('Failed to write AI generated SDoc: %s', error)
+            raise RuntimeError('write_failed')
         created_file_name = file_name
         file_path = posixpath.join(target_dir, file_name)
         repo = seafile_api.get_repo(repo_id)
         doc_uuid = get_seadoc_file_uuid(repo, file_path)
-        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(doc_uuid)
-        upload_link = get_seadoc_upload_link(uuid_map, username)
-        if not upload_link:
-            raise RuntimeError('write_failed')
-        response = requests.post(
-            upload_link,
-            files={'file': (file_name, BytesIO(json.dumps(content, ensure_ascii=False).encode('utf-8')), 'application/json')},
-            data={'filename': file_name, 'target_file': file_path},
-            timeout=30,
-        )
-        if not response.ok:
-            raise RuntimeError('write_failed')
         result = {
             'type': 'sdoc',
             'status': 'created',
@@ -660,6 +657,12 @@ def _build_sdoc_result(draft, repo_id, request, session_uuid, message_id, userna
     except Exception as error:
         logger.exception('Failed to create AI generated SDoc: %s', error)
         error_code = 'create_failed'
+    finally:
+        if tmp_file:
+            try:
+                os.remove(tmp_file)
+            except OSError:
+                pass
     if created_file_name:
         try:
             seafile_api.del_file(repo_id, target_dir, json.dumps([created_file_name]), username)
