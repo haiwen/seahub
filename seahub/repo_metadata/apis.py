@@ -33,6 +33,7 @@ from seahub.repo_tags.models import RepoTags
 from seahub.settings import EMBEDDING_MODEL_CONFIGURED, MD_FILE_COUNT_LIMIT
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.search.utils import get_invisible_repos_info_by_username, is_invisible_path
+from seahub.utils import HAS_FILE_SEASEARCH
 from seahub.ai.utils import verify_ai_config, verify_chat_ai_config
 
 logger = logging.getLogger(__name__)
