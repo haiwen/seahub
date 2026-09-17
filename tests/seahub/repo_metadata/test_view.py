@@ -104,9 +104,10 @@ class MetadataAISummaryStatusTest(BaseTestCase):
         self.metadata.ai_summary_indexed_at = timezone.now()
         self.metadata.save(update_fields=['summary_enabled', 'ai_summary_indexed_at'])
 
-    @patch('seahub.repo_metadata.apis.EMBEDDING_MODEL_CONFIGURED', False)
+    @patch('seahub.repo_metadata.apis.EMBEDDING_MODEL_CONFIGURED', True)
+    @patch('seahub.repo_metadata.apis.HAS_FILE_SEASEARCH', True)
     @patch('seahub.repo_metadata.apis.MetadataServerAPI')
-    def test_get_ai_summary_status(self, mock_metadata_server_api):
+    def test_get_ai_summary_status(self, mock_metadata_server_api, mock_has_file_seasearch, mock_embedding_model_configured):
         status_cases = {
             '': ('pending', 'completed'),
             'in_summary': ('crawling', 'pending'),
@@ -128,7 +129,7 @@ class MetadataAISummaryStatusTest(BaseTestCase):
             self.assertEqual(200, response.status_code)
             result = json.loads(response.content)
             self.assertTrue(result['enabled'])
-            self.assertFalse(result['index_available'])
+            self.assertTrue(result['index_enabled'])
             self.assertEqual(5, result['total_files'])
             self.assertEqual(4, result['summary']['processed_count'])
             self.assertEqual(3, result['index']['indexed_count'])
@@ -140,25 +141,33 @@ class MetadataAISummaryStatusTest(BaseTestCase):
         self.assertIn('GROUP BY `_suffix`', first_query)
         self.assertNotIn('LOWER(', first_query)
 
+    @patch('seahub.repo_metadata.apis.EMBEDDING_MODEL_CONFIGURED', False)
+    @patch('seahub.repo_metadata.apis.HAS_FILE_SEASEARCH', True)
     @patch('seahub.repo_metadata.apis.MetadataServerAPI')
-    def test_get_ai_summary_status_when_disabled(self, mock_metadata_server_api):
-        self.metadata.summary_enabled = False
-        self.metadata.ai_summary_indexed_at = None
-        self.metadata.ai_processing_status = ''
-        self.metadata.save(update_fields=['summary_enabled', 'ai_summary_indexed_at', 'ai_processing_status'])
-        mock_metadata_server_api.return_value.query_rows.return_value = {
-            'results': [{'_suffix': 'PDF', 'count': 5}],
-        }
+    def test_get_ai_summary_status_without_index(self, mock_metadata_server_api, mock_has_file_seasearch, mock_embedding_model_configured):
+        mock_metadata_server_api.return_value.query_rows.side_effect = [
+            {'results': [{'_suffix': 'pdf', 'count': 5}]},
+            {'results': [{'_suffix': 'pdf', 'count': 4}]},
+        ]
 
         response = self.client.get(self.url)
 
         self.assertEqual(200, response.status_code)
         result = json.loads(response.content)
-        self.assertFalse(result['enabled'])
-        self.assertEqual(5, result['total_files'])
-        self.assertEqual(0, result['summary']['processed_count'])
-        self.assertEqual(0, result['index']['indexed_count'])
-        self.assertEqual(1, mock_metadata_server_api.return_value.query_rows.call_count)
+        self.assertFalse(result['index_enabled'])
+        self.assertNotIn('index', result)
+
+    def test_get_ai_summary_status_when_disabled(self):
+        self.metadata.summary_enabled = False
+        self.metadata.save(update_fields=['summary_enabled'])
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(409, response.status_code)
+        self.assertEqual(
+            'The AI summary feature is not enabled for this library.',
+            json.loads(response.content)['error_msg'],
+        )
 
 
 class MetadataDetailSettingsTest(BaseTestCase):

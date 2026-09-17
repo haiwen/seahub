@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import CenteredLoading from '@/components/centered-loading';
 import Icon from '@/components/icon';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import toaster from '@/components/toast';
 import { gettext } from '@/utils/constants';
 import { formatWithTimezone } from '@/utils/time';
 import { Utils } from '@/utils/utils';
@@ -32,67 +31,52 @@ const getFilesText = (count) => count === 1 ? gettext('file') : gettext('files')
 const StatusDialog = ({ repoID, toggle }) => {
   const [statusData, setStatusData] = useState(null);
   const [isLoading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
     let isMounted = true;
-    let isRequesting = false;
-    let interval = null;
+    let pollingTimer = null;
 
-    const stopPolling = () => {
-      if (interval) {
-        clearInterval(interval);
-        interval = null;
-      }
-    };
-
-    const queryStatus = (showError = false) => {
-      if (isRequesting) return;
-      isRequesting = true;
+    const queryStatus = () => {
       metadataAPI.getAISummaryStatus(repoID).then((res) => {
-        if (isMounted) {
-          setStatusData(res.data);
-          if (res.data.enabled === false) {
-            stopPolling();
-          }
-        }
+        if (!isMounted) return;
+        setStatusData(res.data);
+        setErrorMsg('');
+        setLoading(false);
+        pollingTimer = setTimeout(queryStatus, STATUS_QUERY_INTERVAL);
       }).catch((error) => {
-        if (isMounted && showError) {
-          toaster.danger(Utils.getErrorMsg(error));
-        }
-      }).finally(() => {
-        isRequesting = false;
-        if (isMounted && showError) {
-          setLoading(false);
-        }
+        if (!isMounted) return;
+        setErrorMsg(Utils.getErrorMsg(error));
+        setLoading(false);
       });
     };
 
-    queryStatus(true);
-    interval = setInterval(queryStatus, STATUS_QUERY_INTERVAL);
+    queryStatus();
 
     return () => {
       isMounted = false;
-      stopPolling();
+      clearTimeout(pollingTimer);
     };
   }, [repoID]);
 
-  const indexAvailable = statusData?.index_available !== false;
-  const statusItems = statusData ? [
+  const statusItems = [
     {
       key: 'summary',
       title: gettext('AI Summary'),
-      status: statusData.summary?.status || 'pending',
-      label: gettext('Processed') + ': ' + (statusData.summary?.processed_count || 0) + ' ' + getFilesText(statusData.summary?.processed_count || 0),
+      status: errorMsg ? 'failed' : statusData?.summary?.status || 'pending',
+      label: gettext('Processed') + ': ' + (statusData?.summary?.processed_count || 0) + ' ' + getFilesText(statusData?.summary?.processed_count || 0),
     },
-    ...(indexAvailable ? [{
+  ];
+  if (statusData?.index_enabled) {
+    statusItems.push({
       key: 'index',
       title: gettext('Index'),
-      status: statusData.index?.status || 'pending',
+      status: errorMsg ? 'failed' : statusData.index?.status || 'pending',
       label: gettext('Indexed') + ': ' + (statusData.index?.indexed_count || 0) + ' ' + getFilesText(statusData.index?.indexed_count || 0),
-    }] : []),
-  ] : [];
+    });
+  }
 
-  const latestIndexTime = indexAvailable ? statusData?.latest_index_time : null;
+  const latestIndexTime = statusData?.latest_index_time;
 
   return (
     <Modal isOpen={true} toggle={toggle} className="ai-summary-status-dialog">
@@ -100,15 +84,11 @@ const StatusDialog = ({ repoID, toggle }) => {
       <ModalBody>
         {isLoading ? (
           <CenteredLoading />
-        ) : !statusData ? (
-          <p className="text-secondary mb-0">{gettext('Failed to load status.')}</p>
         ) : (
           <div className="ai-summary-status-container">
-            {statusData.enabled === false && (
-              <p className="text-danger mb-4">{gettext('AI Summary is unavailable.')}</p>
-            )}
+            {errorMsg && <p className="error">{errorMsg}</p>}
             <div className="status-header">
-              <p>{gettext('Total files')}: {statusData.total_files || 0}</p>
+              <p>{gettext('Total files')}: {statusData?.total_files || 0}</p>
               {latestIndexTime && (
                 <p title={formatWithTimezone(latestIndexTime)}>
                   {gettext('Latest index time') + ': ' + dayjs(latestIndexTime).format('YYYY-MM-DD HH:mm:ss')}

@@ -15,7 +15,7 @@ from seahub.api2.utils import api_error, to_python_boolean
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
-from seahub.utils import is_org_context
+from seahub.utils import HAS_FILE_SEASEARCH, is_org_context
 from seahub.views import check_folder_permission
 from seahub.repo_metadata.utils import add_init_metadata_task, recognize_faces, gen_unique_id, init_metadata, \
     get_unmodifiable_columns, can_read_metadata, init_faces, \
@@ -2000,7 +2000,12 @@ class MetadataAISummaryStatusManage(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        indexed_at = metadata.ai_summary_indexed_at
+        if not metadata.summary_enabled:
+            error_msg = 'The AI summary feature is not enabled for this library.'
+            return api_error(status.HTTP_409_CONFLICT, error_msg)
+
+        index_enabled = HAS_FILE_SEASEARCH and EMBEDDING_MODEL_CONFIGURED
+        indexed_at = metadata.ai_summary_indexed_at if index_enabled else None
         if indexed_at and indexed_at.tzinfo is None:
             indexed_at = indexed_at.replace(tzinfo=timezone.utc)
 
@@ -2027,54 +2032,55 @@ class MetadataAISummaryStatusManage(APIView):
 
         try:
             total_files = query_count()
-            processed_count = 0
+            processed_count = query_count(
+                f''' AND `{METADATA_TABLE.columns.ai_summary_mtime.name}` IS NOT NULL
+                    AND (`{METADATA_TABLE.columns.file_mtime.name}` IS NULL
+                        OR `{METADATA_TABLE.columns.ai_summary_mtime.name}` >= `{METADATA_TABLE.columns.file_mtime.name}`)'''
+            )
             indexed_count = 0
-            if metadata.summary_enabled:
-                processed_count = query_count(
-                    f''' AND `{METADATA_TABLE.columns.ai_summary_mtime.name}` IS NOT NULL
-                        AND (`{METADATA_TABLE.columns.file_mtime.name}` IS NULL
-                            OR `{METADATA_TABLE.columns.ai_summary_mtime.name}` >= `{METADATA_TABLE.columns.file_mtime.name}`)'''
+            if indexed_at:
+                indexed_count = query_count(
+                    f''' AND `{METADATA_TABLE.columns.ai_summary.name}` IS NOT NULL
+                        AND `{METADATA_TABLE.columns.ai_summary.name}` != ''
+                        AND `{METADATA_TABLE.columns.ai_summary_mtime.name}` <= ?''',
+                    [indexed_at.isoformat()]
                 )
-                if indexed_at:
-                    indexed_count = query_count(
-                        f''' AND `{METADATA_TABLE.columns.ai_summary.name}` IS NOT NULL
-                            AND `{METADATA_TABLE.columns.ai_summary.name}` != ''
-                            AND `{METADATA_TABLE.columns.ai_summary_mtime.name}` <= ?''',
-                        [indexed_at.isoformat()]
-                    )
         except Exception as e:
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         summary_status = 'completed' if total_files == processed_count else 'pending'
-        index_status = 'completed' if metadata.ai_summary_indexed_at else 'pending'
+        index_status = 'completed' if indexed_at else 'pending'
         if metadata.ai_processing_status == 'in_summary':
             summary_status = 'crawling'
             index_status = 'pending'
-        elif metadata.ai_processing_status == 'indexing':
+        elif index_enabled and metadata.ai_processing_status == 'indexing':
             summary_status = 'completed'
             index_status = 'crawling'
         elif metadata.ai_processing_status == 'summary_failed':
             summary_status = 'failed'
             index_status = 'pending'
-        elif metadata.ai_processing_status == 'index_failed':
+        elif index_enabled and metadata.ai_processing_status == 'index_failed':
             summary_status = 'completed'
             index_status = 'failed'
 
-        return Response({
+        response = {
             'enabled': bool(metadata.summary_enabled),
-            'index_available': EMBEDDING_MODEL_CONFIGURED,
+            'index_enabled': index_enabled,
             'total_files': total_files,
             'latest_index_time': indexed_at,
             'summary': {
                 'status': summary_status,
                 'processed_count': processed_count,
             },
-            'index': {
+        }
+        if index_enabled:
+            response['index'] = {
                 'status': index_status,
                 'indexed_count': indexed_count,
-            },
-        })
+            }
+
+        return Response(response)
 
     def post(self, request, repo_id):
         if not verify_chat_ai_config():
