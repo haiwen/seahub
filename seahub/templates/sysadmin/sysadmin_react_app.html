@@ -26,7 +26,6 @@
       enable_dingtalk: {% if enable_dingtalk %} true {% else %} false {% endif %},
       enableSysAdminViewRepo: {% if enable_sys_admin_view_repo %} true {% else %} false {% endif %},
       trashReposExpireDays: {{ trash_repos_expire_days }},
-      send_email_on_adding_system_member: {% if send_email_on_adding_system_member %} true {% else %} false {% endif %},
       twoFactorAuthEnabled: {% if two_factor_auth_enabled %} true {% else %} false {% endif %},
       availableRoles: (function() {
         var list = [];
