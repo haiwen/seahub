@@ -104,7 +104,8 @@ const MetadataAISummaryStatusDialog = ({ value: oldValue, repoID, submit, enable
         {value && (
           <Button
             size='sm'
-            className="btn-secondary-fill mt-2"
+            color='secondary-filled'
+            className="mt-2"
             onClick={statusDialogToggle}
           >
             {gettext('View status')}
