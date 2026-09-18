@@ -13,7 +13,9 @@ import FileChooser from '../file-chooser';
 import Icon from '../icon';
 import OpIcon from '../op-icon';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
+import SelectUsersIcon from '../select-members-to-share-with';
 import UserSelect from '../user-select';
+import DepartmentDetailDialog from './department-detail-dialog';
 
 class UserItem extends React.Component {
 
@@ -122,6 +124,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
       userFolderPermItems: [],
       folderPath: '',
       showFileChooser: false,
+      isShowDepartmentDetailDialog: false,
       isLoading: true
     };
     if (!isPro) {
@@ -170,7 +173,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
       return false;
     }
 
-    const users = selectedUsers.map((item, index) => item.email);
+    const users = selectedUsers.map(item => item.email);
 
     const request = this.props.isDepartmentRepo ?
       seafileAPI.addDepartmentRepoUserFolderPerm(this.props.repoID, this.state.permission, folderPath, users) :
@@ -193,6 +196,20 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
+  };
+
+  addUserFolderPermFromDepartment = (membersSelectedObj) => {
+    const members = Object.keys(membersSelectedObj).map(email => membersSelectedObj[email]);
+    this.setState(prevState => ({
+      selectedUsers: prevState.selectedUsers.concat(
+        members.filter(member => !prevState.selectedUsers.some(user => user.email === member.email))
+      ),
+      isShowDepartmentDetailDialog: false
+    }));
+  };
+
+  toggleDepartmentDetailDialog = () => {
+    this.setState({ isShowDepartmentDetailDialog: !this.state.isShowDepartmentDetailDialog });
   };
 
   deleteUserFolderPermItem = (item) => {
@@ -305,12 +322,15 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
           <tbody>
             <tr>
               <td>
-                <UserSelect
-                  isMulti={true}
-                  placeholder={gettext('Search users')}
-                  onSelectChange={this.handleUserSelectChange}
-                  selectedUsers={this.state.selectedUsers}
-                />
+                <div className='add-members'>
+                  <UserSelect
+                    isMulti={true}
+                    placeholder={gettext('Search users')}
+                    onSelectChange={this.handleUserSelectChange}
+                    selectedUsers={this.state.selectedUsers}
+                  />
+                  <SelectUsersIcon onClick={this.toggleDepartmentDetailDialog} />
+                </div>
               </td>
               {showPath &&
                 <td>
@@ -380,6 +400,16 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
             </>
           )}
         </div>
+        {this.state.isShowDepartmentDetailDialog &&
+          <DepartmentDetailDialog
+            toggleDepartmentDetailDialog={this.toggleDepartmentDetailDialog}
+            addUserShares={this.addUserFolderPermFromDepartment}
+            userList={this.state.selectedUsers.concat(
+              this.props.folderPath ? userFolderPermItems.map(item => ({ email: item.user_email })) : []
+            )}
+            usedFor='add_user_share'
+          />
+        }
       </div>
     );
   }
