@@ -83,6 +83,8 @@ const propTypes = {
 
 const DIR_SORT_BY_KEY = 'seafile-repo-dir-sort-by';
 const DIR_SORT_ORDER_KEY = 'seafile-repo-dir-sort-order';
+const COPY_MOVE_PROGRESS_INITIAL_INTERVAL = 1000;
+const COPY_MOVE_PROGRESS_MAX_INTERVAL = 10000;
 
 class LibContentView extends React.Component {
 
@@ -162,6 +164,9 @@ class LibContentView extends React.Component {
     this.unsubscribeEventBus = null;
     this.cachedColumns = null;
     this.cachedTableViewColumns = null;
+    this.copyMoveProgressTimer = null;
+    this.copyMoveProgressPolling = false;
+    this.copyMoveProgressInterval = COPY_MOVE_PROGRESS_INITIAL_INTERVAL;
   }
 
   updateCurrentDirent = (dirent = null) => {
@@ -440,6 +445,7 @@ class LibContentView extends React.Component {
   };
 
   componentWillUnmount() {
+    this.stopAsyncCopyMoveProgress();
     window.removeEventListener('popstate', this.onpopstate);
     window.onpopstate = this.oldOnpopstate;
     this.unsubscribeEvent();
@@ -1032,10 +1038,18 @@ class LibContentView extends React.Component {
   };
 
   async getAsyncCopyMoveProgress() {
+    if (!this.copyMoveProgressPolling) {
+      return;
+    }
+
     let { asyncOperationType, asyncCopyMoveTaskId } = this.state;
     try {
       let res = await seafileAPI.queryAsyncOperationProgress(asyncCopyMoveTaskId);
       let data = res.data;
+      if (!this.copyMoveProgressPolling || asyncCopyMoveTaskId !== this.state.asyncCopyMoveTaskId) {
+        return;
+      }
+
       if (data.failed) {
         let message = gettext('Failed to move files to another library.');
         if (asyncOperationType === 'copy') {
@@ -1046,6 +1060,7 @@ class LibContentView extends React.Component {
           asyncOperationProgress: 0,
           isCopyMoveProgressDialogShow: false,
         });
+        this.stopAsyncCopyMoveProgress();
         return;
       }
 
@@ -1078,6 +1093,7 @@ class LibContentView extends React.Component {
         }
 
         this.setState({ isCopyMoveProgressDialogShow: false });
+        this.stopAsyncCopyMoveProgress();
         let message = gettext('Successfully moved files to another library.');
         if (asyncOperationType === 'copy') {
           message = gettext('Successfully copied files to another library.');
@@ -1088,9 +1104,14 @@ class LibContentView extends React.Component {
       // init state: total is 0
       let asyncOperationProgress = !data.total ? 0 : parseInt((data.done / data.total * 100).toFixed(2));
 
-      this.getAsyncCopyMoveProgress();
       this.setState({ asyncOperationProgress: asyncOperationProgress });
+      this.scheduleAsyncCopyMoveProgress();
     } catch (error) {
+      if (!this.copyMoveProgressPolling || asyncCopyMoveTaskId !== this.state.asyncCopyMoveTaskId) {
+        return;
+      }
+
+      this.stopAsyncCopyMoveProgress();
       this.setState({
         asyncOperationProgress: 0,
         isCopyMoveProgressDialogShow: false,
@@ -1098,7 +1119,36 @@ class LibContentView extends React.Component {
     }
   }
 
+  startAsyncCopyMoveProgress = () => {
+    this.stopAsyncCopyMoveProgress();
+    this.copyMoveProgressPolling = true;
+    this.getAsyncCopyMoveProgress();
+  };
+
+  stopAsyncCopyMoveProgress = () => {
+    if (this.copyMoveProgressTimer !== null) {
+      clearTimeout(this.copyMoveProgressTimer);
+      this.copyMoveProgressTimer = null;
+    }
+    this.copyMoveProgressPolling = false;
+    this.copyMoveProgressInterval = COPY_MOVE_PROGRESS_INITIAL_INTERVAL;
+  };
+
+  scheduleAsyncCopyMoveProgress = () => {
+    if (!this.copyMoveProgressPolling || this.copyMoveProgressTimer) {
+      return;
+    }
+
+    const interval = this.copyMoveProgressInterval;
+    this.copyMoveProgressInterval = Math.min(interval * 2, COPY_MOVE_PROGRESS_MAX_INTERVAL);
+    this.copyMoveProgressTimer = setTimeout(() => {
+      this.copyMoveProgressTimer = null;
+      this.getAsyncCopyMoveProgress();
+    }, interval);
+  };
+
   cancelCopyMoveDirent = () => {
+    this.stopAsyncCopyMoveProgress();
     let taskId = this.state.asyncCopyMoveTaskId;
     seafileAPI.cancelCopyMoveOperation(taskId);
 
@@ -1164,7 +1214,7 @@ class LibContentView extends React.Component {
           isCrossRepoMove: repoID !== destRepo.repo_id,
         }, () => {
           // After moving successfully, delete related files
-          this.getAsyncCopyMoveProgress();
+          this.startAsyncCopyMoveProgress();
         });
       }
 
@@ -1231,7 +1281,7 @@ class LibContentView extends React.Component {
           asyncOperationType: 'copy',
           isCopyMoveProgressDialogShow: true
         }, () => {
-          this.getAsyncCopyMoveProgress();
+          this.startAsyncCopyMoveProgress();
         });
       }
 
@@ -1769,7 +1819,7 @@ class LibContentView extends React.Component {
       }, () => {
         this.currentMoveItemName = dirName;
         this.currentMoveItemPath = direntPath;
-        this.getAsyncCopyMoveProgress(dirName, direntPath);
+        this.startAsyncCopyMoveProgress();
       });
     }
 
@@ -1863,7 +1913,7 @@ class LibContentView extends React.Component {
         asyncOperationType: 'copy',
         isCopyMoveProgressDialogShow: true
       }, () => {
-        this.getAsyncCopyMoveProgress();
+        this.startAsyncCopyMoveProgress();
       });
       if (byDialog) {
         this.updateRecentlyUsedList(targetRepo, copyToDirentPath);
