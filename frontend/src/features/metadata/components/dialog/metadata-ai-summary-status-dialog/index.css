@@ -1,13 +1,3 @@
-.library-setting-item .ai-summary-view-status-button {
-  height: 2rem;
-  padding: 3px 12px;
-  background: var(--bs-bg-color);
-}
-
-.library-setting-item .ai-summary-view-status-button.btn.btn-secondary:hover {
-  background: var(--bs-icon-btn-hover-bg-color);
-}
-
 .ai-summary-status-dialog {
   max-height: calc(100% - 56px);
   height: auto !important;
