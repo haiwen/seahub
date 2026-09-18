@@ -84,16 +84,6 @@
   background: var(--bs-icon-btn-hover-bg-color);
 }
 
-.library-setting-item .metadata-status-hide-properties-button {
-  padding: 3px 12px;
-  height: 2rem;
-  background: var(--bs-bg-color);
-}
-
-.library-setting-item .metadata-status-hide-properties-button.btn.btn-secondary:hover {
-  background: var(--bs-icon-btn-hover-bg-color);
-}
-
 .library-setting-item .migrate-tags-tip {
   line-height: 1.375rem;
 }
