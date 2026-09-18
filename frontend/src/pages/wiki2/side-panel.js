@@ -383,7 +383,7 @@ class SidePanel extends PureComponent {
           getCurrentPageId={this.props.getCurrentPageId}
           setCurrentPage={this.props.setCurrentPage}
         />}
-        {canManagePublish &&
+        {Utils.isDesktop() && canManagePublish &&
           <>
             <Button
               id="wiki2-publish"

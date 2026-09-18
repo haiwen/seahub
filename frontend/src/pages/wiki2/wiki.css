@@ -60,13 +60,62 @@ body {
   color: var(--bs-icon-color);
 }
 
-.wiki2-main-panel .wiki2-main-panel-north .wiki2-file-history-button:hover {
-  background-color: var(--bs-icon-btn-hover-bg-color);
+@media (min-width: 768px) {
+  .wiki2-main-panel .wiki2-main-panel-north .wiki2-file-history-button:hover {
+    background-color: var(--bs-icon-btn-hover-bg-color);
+  }
 }
 
 .wiki2-main-panel .wiki2-main-panel-north .wiki2-file-history-button svg {
   width: 16px;
   height: 16px;
+}
+
+@media (max-width: 767px) {
+  .wiki2-main-panel .wiki2-main-panel-north .wiki2-main-panel-north-content {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .wiki2-main-panel .wiki2-main-panel-north .side-nav-toggle,
+  .wiki2-main-panel .wiki2-main-panel-north .wiki2-file-history-button {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+  }
+
+  .wiki2-main-panel .wiki2-main-panel-north .side-nav-toggle {
+    box-sizing: content-box;
+    width: 24px;
+    height: 24px;
+    padding: 10px;
+    margin-right: 0;
+  }
+
+  .wiki2-main-panel .wiki2-main-panel-north .wiki2-file-history-button svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .wiki2-main-panel-north .wiki2-top-nav {
+    flex: 1;
+    justify-content: center;
+    overflow: hidden;
+    font-size: 16px;
+  }
+
+  .wiki2-main-panel-north .wiki2-top-nav .wiki2-top-nav-item {
+    overflow: hidden;
+  }
+
+  .wiki2-main-panel-north .wiki2-top-nav .wiki2-top-nav-item:hover {
+    background-color: transparent;
+  }
+
+  .wiki2-main-panel-north .wiki2-top-nav .wiki2-top-nav-item .nav-item-icon {
+    flex-shrink: 0;
+    margin-right: 8px;
+  }
 }
 
 .main-panel-center .cur-view-content {

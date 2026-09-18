@@ -418,11 +418,12 @@ class MainPanel extends Component {
             </div>
           </div>
           <div className='d-flex align-items-center'>
-            {menuItems.length > 0 && <CommentPlugin unseenNotificationsCount={this.state.unseenNotificationsCount} setIsShowRightPanel={this.setIsShowRightPanel} />}
-            {menuItems.length > 0 && <WikiCollaboratorsOperation isOpenSocket={isOpenSocket} docUuid={this.state.docUuid} token={seadoc_access_token} />}
+            {Utils.isDesktop() && menuItems.length > 0 && <CommentPlugin unseenNotificationsCount={this.state.unseenNotificationsCount} setIsShowRightPanel={this.setIsShowRightPanel} />}
+            {Utils.isDesktop() && menuItems.length > 0 && <WikiCollaboratorsOperation isOpenSocket={isOpenSocket} docUuid={this.state.docUuid} token={seadoc_access_token} />}
             <CustomDropdown
               target="wiki-more-operations"
               items={menuItems}
+              trigger={Utils.isDesktop() ? undefined : <Icon symbol="more-level" />}
               className="wiki2-file-history-button"
               triggerClassName="wiki2-file-history-button"
               menuClassName="large"
