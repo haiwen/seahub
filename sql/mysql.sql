@@ -2010,6 +2010,7 @@ CREATE TABLE `chat_messages` (
   `content` longtext DEFAULT NULL,
   `attachments` longtext DEFAULT NULL,
   `sources` longtext DEFAULT NULL,
+  `artifacts` longtext DEFAULT NULL,
   `created_at` datetime(6) NOT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
   PRIMARY KEY (`id`),

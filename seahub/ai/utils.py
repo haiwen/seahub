@@ -15,19 +15,23 @@ from django.utils.translation import gettext as _
 from django.utils import timezone
 from django.db.models.functions import Coalesce
 from django.db.models import Sum, Value
+from django.urls import reverse
 from seaserv import ccnet_api, get_org_id_by_repo_id, seafile_api
 
-from seahub.settings import ENABLE_AI_CHAT, ENABLE_METADATA_MANAGEMENT, ENABLE_SEAFILE_AI, LLM_MODELS, SEAFILE_AI_SECRET_KEY, SEAFILE_AI_SERVER_URL
+from seahub.settings import ENABLE_AI_CHAT, ENABLE_METADATA_MANAGEMENT, ENABLE_SEADOC, ENABLE_SEAFILE_AI, LLM_MODELS, SEAFILE_AI_SECRET_KEY, SEAFILE_AI_SERVER_URL
 from seahub.base.accounts import User
 from seahub.tags.models import FileUUIDMap
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
 from seahub.constants import DEFAULT_USER, PERMISSION_INVISIBLE
 from seahub.share.utils import is_repo_admin
-from seahub.utils import gen_inner_file_upload_url, get_service_url, is_org_context, is_pro_version, mkstemp
+from seahub.utils import check_filename_with_rename, gen_inner_file_upload_url, get_service_url, is_org_context, is_pro_version, is_valid_dirent_name, mkstemp
 from seahub.utils.user_permissions import get_user_role
+from seahub.utils.repo import parse_repo_perm
 from seahub.utils.ccnet_db import CcnetDB
 from seahub.organizations.models import OrgMemberQuota, OrgSettings
 from seahub.ai.models import AIUsageStatistics, ChatMessageThoughtProcess, ChatMessages, ChatSessions
+from seahub.seadoc.utils import get_seadoc_file_uuid
+from seahub.views import check_folder_permission
 
 
 logger = logging.getLogger(__name__)
@@ -53,6 +57,10 @@ AI_SCENARIO_WRITING_ASSISTANT = 'writing-assistant'
 AI_SCENARIO_CHAT = 'chat'
 AI_SCENARIO_UNKNOWN = 'unknown'
 AI_SCENARIO_SEARCH_ICONS = 'search-icons'
+
+SDOC_ARTIFACT_TYPE = 'sdoc_create_request'
+SDOC_MAX_BLOCKS = 200
+SDOC_MAX_TEXT_LENGTH = 100000
 
 
 # API
@@ -421,6 +429,264 @@ def process_generated_markdown_result(ai_result, repo_id, username, can_upload=T
     return ai_result
 
 
+def _sdoc_text_element(text):
+    return {'id': str(uuid.uuid4()), 'text': text}
+
+
+def _sdoc_paragraph(text=''):
+    return {'id': str(uuid.uuid4()), 'type': 'paragraph', 'children': [_sdoc_text_element(text)]}
+
+
+def _sdoc_list(items, list_type):
+    return {
+        'id': str(uuid.uuid4()),
+        'type': list_type,
+        'children': [
+            {
+                'id': str(uuid.uuid4()),
+                'type': 'list_item',
+                'children': [_sdoc_paragraph(item)],
+            }
+            for item in items
+        ],
+    }
+
+
+def _sdoc_table_row(cells):
+    return {
+        'id': str(uuid.uuid4()),
+        'type': 'table_row',
+        'style': {'min_height': 42},
+        'children': [
+            {
+                'id': str(uuid.uuid4()),
+                'type': 'table_cell',
+                'style': {},
+                'inherit_style': {},
+                'children': [_sdoc_text_element(cell)],
+            }
+            for cell in cells
+        ],
+    }
+
+
+def build_sdoc_content(title, blocks, username):
+    if not isinstance(title, str) or not title.strip() or not isinstance(blocks, list) or not blocks or len(blocks) > SDOC_MAX_BLOCKS:
+        raise ValueError('invalid_artifact')
+
+    elements = [{'id': str(uuid.uuid4()), 'type': 'title', 'children': [_sdoc_text_element(title.strip())]}]
+    total_length = len(title)
+    for block in blocks:
+        if not isinstance(block, dict):
+            raise ValueError('invalid_artifact')
+        block_type = block.get('type')
+        if block_type in ('heading', 'paragraph', 'blockquote', 'code_block'):
+            allowed_keys = {'type', 'text'}
+            if block_type == 'heading':
+                allowed_keys.add('level')
+            if block_type == 'code_block':
+                allowed_keys.add('language')
+            if set(block) != allowed_keys:
+                raise ValueError('invalid_artifact')
+            text = block.get('text')
+            if not isinstance(text, str) or not text.strip():
+                raise ValueError('invalid_artifact')
+            total_length += len(text)
+            if block_type == 'heading':
+                level = block.get('level')
+                if not isinstance(level, int) or level < 1 or level > 6:
+                    raise ValueError('invalid_artifact')
+                elements.append({'id': str(uuid.uuid4()), 'type': 'header%s' % level, 'children': [_sdoc_text_element(text)]})
+            elif block_type == 'blockquote':
+                elements.append({'id': str(uuid.uuid4()), 'type': 'blockquote', 'children': [_sdoc_paragraph(text)]})
+            elif block_type == 'code_block':
+                language = block.get('language', '')
+                if language is not None and not isinstance(language, str):
+                    raise ValueError('invalid_artifact')
+                elements.append({
+                    'id': str(uuid.uuid4()),
+                    'type': 'code_block',
+                    'language': language or '',
+                    'children': [{'id': str(uuid.uuid4()), 'type': 'code_line', 'children': [_sdoc_text_element(text)]}],
+                })
+            else:
+                elements.append(_sdoc_paragraph(text))
+        elif block_type in ('ordered_list', 'unordered_list', 'task_list'):
+            if set(block) != {'type', 'items'}:
+                raise ValueError('invalid_artifact')
+            items = block.get('items')
+            if not isinstance(items, list) or not items or not all(isinstance(item, str) and item.strip() for item in items):
+                raise ValueError('invalid_artifact')
+            total_length += sum(len(item) for item in items)
+            if block_type == 'task_list':
+                elements.extend([
+                    {'id': str(uuid.uuid4()), 'type': 'check_list_item', 'checked': False, 'children': [_sdoc_text_element(item)]}
+                    for item in items
+                ])
+            else:
+                elements.append(_sdoc_list(items, block_type))
+        elif block_type == 'divider':
+            if set(block) != {'type'}:
+                raise ValueError('invalid_artifact')
+            elements.append({'id': str(uuid.uuid4()), 'type': 'divider', 'children': [_sdoc_text_element('')]})
+        elif block_type == 'table':
+            if set(block) != {'type', 'headers', 'rows'}:
+                raise ValueError('invalid_artifact')
+            headers = block.get('headers')
+            rows = block.get('rows')
+            if not isinstance(headers, list) or not headers or len(headers) > 20 or not all(isinstance(cell, str) for cell in headers):
+                raise ValueError('invalid_artifact')
+            if not isinstance(rows, list) or len(rows) > 100 or not all(isinstance(row, list) and len(row) == len(headers) and all(isinstance(cell, str) for cell in row) for row in rows):
+                raise ValueError('invalid_artifact')
+            total_length += sum(len(cell) for cell in headers) + sum(len(cell) for row in rows for cell in row)
+            column_count = len(headers)
+            column_width = 120
+            elements.append({
+                'id': str(uuid.uuid4()),
+                'type': 'table',
+                'children': [_sdoc_table_row(headers)] + [_sdoc_table_row(row) for row in rows],
+                'columns': [{'width': column_width} for _index in range(column_count)],
+                'ui': {
+                    'alternate_highlight': False,
+                    'alternate_highlight_color': '',
+                },
+                'style': {
+                    'gridTemplateColumns': 'repeat(%s, %spx)' % (column_count, column_width),
+                    'gridAutoRows': 'minmax(42px, auto)',
+                },
+            })
+        else:
+            raise ValueError('invalid_artifact')
+
+    if total_length > SDOC_MAX_TEXT_LENGTH:
+        raise ValueError('content_too_large')
+    elements.append(_sdoc_paragraph())
+    return {
+        'version': 0,
+        'format_version': 4,
+        'last_modify_user': username,
+        'elements': elements,
+    }
+
+
+def resolve_sdoc_target_directory(request, repo_id, requested_directory):
+    reason = None
+    if requested_directory is None:
+        target_dir = '/'
+        reason = 'not_specified'
+    elif not isinstance(requested_directory, str) or '\x00' in requested_directory:
+        target_dir = '/'
+        reason = 'invalid'
+    else:
+        requested_directory = requested_directory.strip()
+        parts = [part for part in requested_directory.replace('\\', '/').split('/') if part]
+        if not requested_directory or '..' in parts:
+            target_dir = '/'
+            reason = 'invalid'
+        else:
+            target_dir = '/' + '/'.join(parts)
+            if seafile_api.get_dir_id_by_path(repo_id, target_dir) is None:
+                target_dir = '/'
+                reason = 'not_found'
+            elif not _can_create_sdoc_in_directory(request, repo_id, target_dir):
+                target_dir = '/'
+                reason = 'permission_denied'
+
+    if not _can_create_sdoc_in_directory(request, repo_id, target_dir):
+        raise PermissionError('root_not_writable' if target_dir == '/' else 'permission_denied')
+    return target_dir, reason
+
+
+def _can_create_sdoc_in_directory(request, repo_id, directory):
+    permission = check_folder_permission(request, repo_id, directory)
+    return bool(permission and parse_repo_perm(permission).can_create)
+
+
+def _build_sdoc_result(draft, repo_id, request, session_uuid, message_id, username):
+    if not ENABLE_SEADOC:
+        return {'type': 'sdoc', 'status': 'failed', 'error_code': 'sdoc_not_enabled'}
+
+    created_file_name = None
+    target_dir = None
+    tmp_file = None
+    try:
+        requested_directory = draft.get('requested_directory')
+        raw_file_name = (draft.get('file_name') or '').strip().replace('\\', '/')
+        if requested_directory is None and '/' in raw_file_name:
+            requested_directory = posixpath.dirname(raw_file_name) or None
+            raw_file_name = posixpath.basename(raw_file_name)
+        target_dir, fallback_reason = resolve_sdoc_target_directory(request, repo_id, requested_directory)
+        file_name = os.path.basename(raw_file_name)
+        if not file_name.lower().endswith('.sdoc'):
+            file_name += '.sdoc'
+        if file_name == '.sdoc' or not is_valid_dirent_name(file_name):
+            raise ValueError('invalid_artifact')
+        file_name = check_filename_with_rename(repo_id, target_dir, file_name)
+        content = build_sdoc_content(draft.get('title'), draft.get('blocks'), username)
+        fd, tmp_file = mkstemp()
+        try:
+            os.write(fd, json.dumps(content, ensure_ascii=False).encode('utf-8'))
+        finally:
+            os.close(fd)
+        try:
+            seafile_api.post_file(repo_id, tmp_file, target_dir, file_name, username)
+        except Exception as error:
+            logger.error('Failed to write AI generated SDoc: %s', error)
+            raise RuntimeError('write_failed')
+        created_file_name = file_name
+        file_path = posixpath.join(target_dir, file_name)
+        repo = seafile_api.get_repo(repo_id)
+        doc_uuid = get_seadoc_file_uuid(repo, file_path)
+        result = {
+            'type': 'sdoc',
+            'status': 'created',
+            'name': file_name,
+            'path': file_path,
+            'repo_id': repo_id,
+            'doc_uuid': doc_uuid,
+            'url': reverse('view_lib_file', args=[repo_id, file_path]),
+            'title': draft.get('title'),
+            'summary': draft.get('summary'),
+            'requested_directory': requested_directory,
+            'actual_directory': target_dir,
+            'directory_fallback_reason': fallback_reason,
+        }
+        return result
+    except (ValueError, PermissionError, RuntimeError) as error:
+        error_code = str(error)
+    except Exception as error:
+        logger.exception('Failed to create AI generated SDoc: %s', error)
+        error_code = 'create_failed'
+    finally:
+        if tmp_file:
+            try:
+                os.remove(tmp_file)
+            except OSError:
+                pass
+    if created_file_name:
+        try:
+            seafile_api.del_file(repo_id, target_dir, json.dumps([created_file_name]), username)
+        except Exception as cleanup_error:
+            logger.error('Failed to clean up AI generated SDoc %s: %s', created_file_name, cleanup_error)
+            error_code = 'cleanup_required'
+    return {'type': 'sdoc', 'status': 'failed', 'error_code': error_code}
+
+
+def process_sdoc_artifacts(ai_result, repo_id, request, session_uuid, message_id, username):
+    if not isinstance(ai_result, dict):
+        return ai_result
+    artifacts = ai_result.get('artifacts', [])
+    if not isinstance(artifacts, list):
+        artifacts = []
+    results = []
+    for artifact in artifacts:
+        if not isinstance(artifact, dict) or artifact.get('type') != SDOC_ARTIFACT_TYPE:
+            continue
+        results.append(_build_sdoc_result(artifact, repo_id, request, session_uuid, message_id, username))
+    ai_result['artifacts'] = results
+    return ai_result
+
+
 def record_message_to_db(ai_result, session_uuid, message_id, query, attachments):
     if not isinstance(ai_result, dict):
         ai_result = {
@@ -459,6 +725,7 @@ def record_message_to_db(ai_result, session_uuid, message_id, query, attachments
             'assistant',
             ai_result['ai_reply'],
             sources=json.dumps(ai_result.get('sources', [])),
+            artifacts=ai_result.get('artifacts', []),
         )
         ChatSessions.objects.filter(session_uuid=session_uuid).update(updated_at=timezone.now())
         ai_result.update({
@@ -471,7 +738,7 @@ def record_message_to_db(ai_result, session_uuid, message_id, query, attachments
     return ai_result
 
 
-def process_stream_ai_reply(chat_task_id, ai_response, session_uuid, message_id, query, attachments, repo_id, username, can_upload=True):
+def process_stream_ai_reply(chat_task_id, ai_response, session_uuid, message_id, query, attachments, repo_id, request, username, can_upload=True):
     has_recorded_result = False
     has_generator_exit = False
     error_msg = None
@@ -486,6 +753,7 @@ def process_stream_ai_reply(chat_task_id, ai_response, session_uuid, message_id,
             if content.startswith('{"results": ') and content.endswith('}'):
                 results = json.loads(content)['results']
                 results = process_generated_markdown_result(results, repo_id, username, can_upload=can_upload)
+                results = process_sdoc_artifacts(results, repo_id, request, session_uuid, message_id, username)
                 item = 'data: %s\n\n' % json.dumps({
                     'results': record_message_to_db(results, session_uuid, message_id, query, attachments),
                 })
