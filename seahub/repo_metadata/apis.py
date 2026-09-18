@@ -2,7 +2,7 @@ import json
 import logging
 import os
 import posixpath
-from datetime import datetime
+from datetime import datetime, timezone
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -15,7 +15,7 @@ from seahub.api2.utils import api_error, to_python_boolean
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
-from seahub.utils import is_org_context
+from seahub.utils import HAS_FILE_SEASEARCH, is_org_context
 from seahub.views import check_folder_permission
 from seahub.repo_metadata.utils import add_init_metadata_task, recognize_faces, gen_unique_id, init_metadata, \
     get_unmodifiable_columns, can_read_metadata, init_faces, \
@@ -30,9 +30,10 @@ from seaserv import seafile_api
 from seahub.repo_metadata.constants import FACE_RECOGNITION_VIEW_ID, METADATA_RECORD_UPDATE_LIMIT
 from seahub.file_tags.models import FileTags
 from seahub.repo_tags.models import RepoTags
-from seahub.settings import MD_FILE_COUNT_LIMIT
+from seahub.settings import EMBEDDING_MODEL_CONFIGURED, MD_FILE_COUNT_LIMIT
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.search.utils import get_invisible_repos_info_by_username, is_invisible_path
+from seahub.utils import HAS_FILE_SEASEARCH
 from seahub.ai.utils import verify_ai_config, verify_chat_ai_config
 
 logger = logging.getLogger(__name__)
@@ -2000,7 +2001,87 @@ class MetadataAISummaryStatusManage(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        return Response({'enabled': bool(metadata.summary_enabled)})
+        if not metadata.summary_enabled:
+            error_msg = 'The AI summary feature is not enabled for this library.'
+            return api_error(status.HTTP_409_CONFLICT, error_msg)
+
+        index_enabled = HAS_FILE_SEASEARCH and EMBEDDING_MODEL_CONFIGURED
+        indexed_at = metadata.ai_summary_indexed_at if index_enabled else None
+        if indexed_at and indexed_at.tzinfo is None:
+            indexed_at = indexed_at.replace(tzinfo=timezone.utc)
+
+        from seafevents.repo_metadata.constants import METADATA_TABLE, SUMMARY_SUPPORTED_FILE_EXTENSIONS
+
+        supported_suffixes = set(SUMMARY_SUPPORTED_FILE_EXTENSIONS)
+        base_sql = f'''
+            SELECT `{METADATA_TABLE.columns.suffix.name}`, COUNT(*) AS count
+            FROM `{METADATA_TABLE.name}`
+            WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
+                AND `{METADATA_TABLE.columns.file_type.name}` = "_document"
+        '''
+
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+
+        def query_count(condition='', condition_params=None):
+            sql = base_sql + condition + f' GROUP BY `{METADATA_TABLE.columns.suffix.name}`'
+            results = metadata_server_api.query_rows(sql, condition_params or []).get('results', [])
+            return sum(
+                row.get('count') or 0
+                for row in results
+                if (row.get(METADATA_TABLE.columns.suffix.name) or '').lower() in supported_suffixes
+            )
+
+        try:
+            total_files = query_count()
+            processed_count = query_count(
+                f''' AND `{METADATA_TABLE.columns.ai_summary_mtime.name}` IS NOT NULL
+                    AND (`{METADATA_TABLE.columns.file_mtime.name}` IS NULL
+                        OR `{METADATA_TABLE.columns.ai_summary_mtime.name}` >= `{METADATA_TABLE.columns.file_mtime.name}`)'''
+            )
+            indexed_count = 0
+            if indexed_at:
+                indexed_count = query_count(
+                    f''' AND `{METADATA_TABLE.columns.ai_summary.name}` IS NOT NULL
+                        AND `{METADATA_TABLE.columns.ai_summary.name}` != ''
+                        AND `{METADATA_TABLE.columns.ai_summary_mtime.name}` <= ?''',
+                    [indexed_at.isoformat()]
+                )
+        except Exception as e:
+            logger.exception(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        summary_status = 'completed' if total_files == processed_count else 'pending'
+        index_status = 'completed' if indexed_at else 'pending'
+        if metadata.ai_processing_status == 'in_summary':
+            summary_status = 'crawling'
+            index_status = 'pending'
+        elif index_enabled and metadata.ai_processing_status == 'indexing':
+            summary_status = 'completed'
+            index_status = 'crawling'
+        elif metadata.ai_processing_status == 'summary_failed':
+            summary_status = 'failed'
+            index_status = 'pending'
+        elif index_enabled and metadata.ai_processing_status == 'index_failed':
+            summary_status = 'completed'
+            index_status = 'failed'
+
+        response = {
+            'enabled': bool(metadata.summary_enabled),
+            'index_enabled': index_enabled,
+            'total_files': total_files,
+            'latest_index_time': indexed_at,
+            'summary': {
+                'status': summary_status,
+                'processed_count': processed_count,
+            },
+        }
+        if index_enabled:
+            response['index'] = {
+                'status': index_status,
+                'indexed_count': indexed_count,
+            }
+
+        return Response(response)
 
     def post(self, request, repo_id):
         if not verify_chat_ai_config():
