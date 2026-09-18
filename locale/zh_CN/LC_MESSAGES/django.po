@@ -29,7 +29,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-02 14:56+0800\n"
+"POT-Creation-Date: 2026-09-02 15:41+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2023-2026\n"
 "Language-Team: Chinese (China) (http://app.transifex.com/haiwen/seahub/language/zh_CN/)\n"
@@ -109,7 +109,7 @@ msgstr "解绑 SAML 失败，请先设置联系邮箱。"
 
 #: seahub/ai/apis.py:813
 msgid "New chat"
-msgstr "新建聊天"
+msgstr "新建对话"
 
 #: seahub/ai/utils.py:394
 msgid ""
