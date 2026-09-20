@@ -55,8 +55,8 @@ class SelectUsersIcon extends React.Component {
       <>
         {enableSelectMembersFromDept &&
           <OpIcon
-            symbol="invite-visitors"
-            className="toggle-detail-btn"
+            symbol="invite-members"
+            className="toggle-detail-btn btn btn-secondary"
             title={gettext('Select members from department')}
             op={this.props.onClick}
           />
