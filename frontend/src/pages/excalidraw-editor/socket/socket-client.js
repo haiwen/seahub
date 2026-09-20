@@ -51,15 +51,17 @@ class SocketClient {
   };
 
   onDisconnected = (data) => {
+    clientDebug('disconnect message: %s', data);
+
+    // Every disconnect reason must go through SocketManager first so the
+    // in-flight operation is re-queued before the transport reconnects.
+    const socketManager = SocketManager.getInstance();
+    socketManager.dispatchConnectState('disconnect', data);
+
     if (data === 'ping timeout') {
       clientDebug('Disconnected due to ping timeout, trying to reconnect...');
       this.socket.connect();
-      return;
     }
-
-    clientDebug('disconnect message: %s', data);
-    const socketManager = SocketManager.getInstance();
-    socketManager.dispatchConnectState('disconnect');
   };
 
   onConnectError = () => {
@@ -109,7 +111,7 @@ class SocketClient {
     }
   }, FILE_UPLOAD_TIMEOUT);
 
-  broadcastSceneElements = (elements, version, callback) => {
+  broadcastSceneElements = (elements, version, operation_id, callback) => {
     const syncableElements = elements.reduce((acc, element) => {
       const isAddedOrUpdated = !this.broadcastedElementVersions.has(element.id) || element.version > this.broadcastedElementVersions.get(element.id);
       if (isAddedOrUpdated && isSyncableElement(element)) {
@@ -118,18 +120,12 @@ class SocketClient {
       return acc;
     }, []);
 
-    for (const syncableElement of syncableElements) {
-      this.broadcastedElementVersions.set(
-        syncableElement.id,
-        syncableElement.version,
-      );
-    }
-
     this.queueFileUpload();
 
     const payload = {
       elements: syncableElements,
       version: version,
+      operation_id: operation_id,
     };
     const params = this.getParams(payload);
     this.socket.timeout(OPERATION_ACK_TIMEOUT).emit('elements-updated', params, (error, result) => {
@@ -138,6 +134,24 @@ class SocketClient {
         callback && callback({ error_type: 'ack_timeout' });
         return;
       }
+
+      const ack_operation_id = result?.operation_id || result?.operationId;
+      if (ack_operation_id && ack_operation_id !== operation_id) {
+        callback && callback(result);
+        return;
+      }
+
+      if (result && result.success) {
+        // Mark versions only after the matching operation is confirmed. This
+        // keeps timed-out, failed, or stale operations eligible for retry.
+        for (const syncableElement of syncableElements) {
+          this.broadcastedElementVersions.set(
+            syncableElement.id,
+            syncableElement.version,
+          );
+        }
+      }
+
       callback && callback(result);
     });
   };
