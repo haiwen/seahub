@@ -95,7 +95,6 @@ def sysadmin_react_fake_view(request, **kwargs):
         'multi_tenancy': MULTI_TENANCY,
         'multi_institution': multi_institution,
         'institutions': institutions,
-        'send_email_on_adding_system_member': SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER,
         'sysadmin_extra_enabled': True if is_pro_version() else False,
         'enable_guest_invitation': ENABLE_GUEST_INVITATION,
         'enable_terms_and_conditions': config.ENABLE_TERMS_AND_CONDITIONS,
