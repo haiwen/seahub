@@ -143,7 +143,7 @@ const SimpleEditor = ({ isSharedView = false }) => {
   const handleChange = useCallback((elements, appState, files) => {
     if (filePermRef.current === 'r') return;
     const socketManager = SocketManager.getInstance();
-    socketManager.syncLocalElementsToOthers(elements);
+    socketManager.updatePreview(elements);
 
     const docUuid = context.getDocUuid();
     if (!LocalData.isSavePaused()) {
@@ -173,14 +173,24 @@ const SimpleEditor = ({ isSharedView = false }) => {
     }
   }, [excalidrawAPI]);
 
+  const handlePointerUp = useCallback(() => {
+    if (filePermRef.current === 'r') return;
+    SocketManager.getInstance().commitPreview();
+  }, []);
+
   const handlePointerUpdate = useCallback((payload) => {
     if (filePermRef.current === 'r') return;
     const socketManager = SocketManager.getInstance();
     socketManager.syncMouseLocationToOthers(payload);
   }, []);
 
+  const flushPreview = useCallback(() => {
+    SocketManager.getInstance().commitPreview();
+  }, []);
+
   const beforeUnload = useCallback((event) => {
     LocalData.flushSave();
+    flushPreview();
     const socketManager = SocketManager.getInstance();
     const fileManager = socketManager.fileManager;
     const elements = excalidrawAPI.getSceneElementsIncludingDeleted();
@@ -192,14 +202,16 @@ const SimpleEditor = ({ isSharedView = false }) => {
       event.returnValue = gettext('The uploaded image has not been saved yet. Please close this page later.');
     }
     return;
-  }, [excalidrawAPI]);
+  }, [excalidrawAPI, flushPreview]);
 
   useEffect(() => {
     window.addEventListener('beforeunload', beforeUnload);
+    window.addEventListener('blur', flushPreview);
     return () => {
       window.removeEventListener('beforeunload', beforeUnload);
+      window.removeEventListener('blur', flushPreview);
     };
-  }, [beforeUnload]);
+  }, [beforeUnload, flushPreview]);
 
   const onCustomImageDialogToggle = useCallback(() => {
     setIsShowImageDialog(!isShowImageDialog);
@@ -229,6 +241,7 @@ const SimpleEditor = ({ isSharedView = false }) => {
         initialData={initialStatePromiseRef.current.promise}
         excalidrawAPI={(api) => setExcalidrawAPI(api)}
         onChange={handleChange}
+        onPointerUp={handlePointerUp}
         onPointerUpdate={handlePointerUpdate}
         UIOptions={UIOptions}
         langCode={langList[window.app.config.lang] || 'en'}

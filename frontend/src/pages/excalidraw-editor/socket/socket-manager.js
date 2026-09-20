@@ -1,7 +1,7 @@
 import { CaptureUpdateAction, getSceneVersion, reconcileElements, restoreElements } from '@excalidraw/excalidraw';
 import throttle from 'lodash.throttle';
 import { v4 as uuidv4 } from 'uuid';
-import { CURSOR_SYNC_TIMEOUT, LOAD_IMAGES_TIMEOUT, OPERATION_RETRY_DELAY } from '../constants';
+import { CURSOR_SYNC_TIMEOUT, LOAD_IMAGES_TIMEOUT, OPERATION_RETRY_DELAY, PREVIEW_COMMIT_DELAY } from '../constants';
 import FileManager from '../data/file-manager';
 import { loadFilesFromServer, saveFilesToServer } from '../data/server-storage';
 import { stateDebug } from '../utils/debug';
@@ -27,6 +27,8 @@ class SocketManager {
     this.state = STATE.IDLE;
 
     this.pendingOperationList = [];
+    this.previewElements = null;
+    this.previewCommitTimer = null;
     this.collaborators = new Map();
     const { user } = config;
     this.collaborators.set(user._username, user, { isCurrentUser: true });
@@ -104,6 +106,31 @@ class SocketManager {
     return this.lastBroadcastedOrReceivedSceneVersion;
   };
 
+  updatePreview = (elements) => {
+    if (!this.previewElements && !this.isNeedToSync(elements)) {
+      return;
+    }
+
+    this.previewElements = elements;
+    clearTimeout(this.previewCommitTimer);
+    this.previewCommitTimer = setTimeout(() => {
+      this.commitPreview();
+    }, PREVIEW_COMMIT_DELAY);
+  };
+
+  commitPreview = () => {
+    clearTimeout(this.previewCommitTimer);
+    this.previewCommitTimer = null;
+
+    if (!this.previewElements) {
+      return;
+    }
+
+    const elements = this.previewElements;
+    this.previewElements = null;
+    this.syncLocalElementsToOthers(elements, true);
+  };
+
   fetchImageFilesFromServer = async (opts) => {
     const elements = opts.elements.filter(element => {
       return (
@@ -140,8 +167,8 @@ class SocketManager {
     return false;
   };
 
-  syncLocalElementsToOthers = (elements) => {
-    if (!this.isNeedToSync(elements)) {
+  syncLocalElementsToOthers = (elements, force = false) => {
+    if (!force && !this.isNeedToSync(elements)) {
       return;
     }
     const operation = {
@@ -269,6 +296,14 @@ class SocketManager {
   }, CURSOR_SYNC_TIMEOUT);
 
   updateLocalDataByRemoteData = (remoteElements, remoteVersion) => {
+    if (this.previewElements) {
+      if (Array.isArray(remoteElements)) {
+        this.setLastBroadcastedOrReceivedSceneVersion(remoteElements);
+      }
+      this.setVersion(remoteVersion);
+      return;
+    }
+
     const localElements = this.excalidrawAPI.getSceneElementsIncludingDeleted();
     const appState = this.excalidrawAPI.getAppState();
     const restoredRemoteElements = restoreElements(remoteElements, null);
@@ -349,6 +384,7 @@ class SocketManager {
     }
 
     if (type === 'disconnect') {
+      this.commitPreview();
       this.requeueSendingOperation();
       stateDebug(`State Changed: ${this.state} -> ${STATE.DISCONNECT}`);
       this.state = STATE.DISCONNECT;
@@ -359,6 +395,7 @@ class SocketManager {
 
   static destroy = () => {
     if (this.instance?.socketClient) {
+      this.instance.commitPreview();
       this.instance.socketClient.close();
     }
     this.instance = null;
