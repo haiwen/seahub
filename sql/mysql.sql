@@ -1945,11 +1945,15 @@ CREATE TABLE `VirusFile` (
   `repo_id` varchar(36) NOT NULL,
   `commit_id` varchar(40) NOT NULL,
   `file_path` text NOT NULL,
+  `file_id` varchar(40) DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
   `has_deleted` tinyint(1) NOT NULL,
   `has_ignored` tinyint(1) NOT NULL,
   `virus_signature` TEXT DEFAULT NULL,
   PRIMARY KEY (`vid`),
   KEY `ix_VirusFile_repo_id` (`repo_id`),
+  KEY `ix_VirusFile_file_id` (`file_id`),
+  KEY `ix_VirusFile_deleted_at` (`deleted_at`),
   KEY `ix_VirusFile_has_ignored` (`has_ignored`),
   KEY `ix_VirusFile_has_deleted` (`has_deleted`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
