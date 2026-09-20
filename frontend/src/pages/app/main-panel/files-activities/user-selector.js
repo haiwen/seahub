@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Icon from '@/components/icon';
 import OpElement from '@/components/op-element';
 import OpIcon from '@/components/op-icon';
-import SearchEmptyTip from '@/components/search-empty-tip';
 import { gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 
@@ -48,6 +47,11 @@ class UserSelector extends Component {
     });
   };
 
+  clearQuery = (e) => {
+    e.stopPropagation();
+    this.setState({ query: '' }, () => this.searchInput.focus());
+  };
+
   toggleSelectItem = (e, targetItem) => {
     e.stopPropagation();
     this.props.toggleSelectUser(targetItem);
@@ -60,19 +64,19 @@ class UserSelector extends Component {
     const filteredAvailableUsers = query.trim() ? availableUsers.filter(item => item.contact_email.indexOf(query.trim()) != -1 || item.name.indexOf(query.trim()) != -1 || item.login_id.indexOf(query.trim()) != -1) : availableUsers;
     return (
       <>
-        <span id="activity-user-selector-trigger" className="d-inline-flex">
+        <span id="activity-user-selector-trigger" className="files-activities-user-selector d-inline-flex mw-100">
           <OpElement
-            className="cur-activity-modifiers d-inline-flex align-items-center rounded"
+            className="cur-activity-modifiers d-inline-flex align-items-center rounded overflow-hidden"
             title={gettext('Toggle user selector')}
             op={this.onToggleClick}
           >
             {currentSelectedUsers.length > 0 ? (
               <>
-                <span>{gettext('Modified by:')}</span>
-                <span className="d-inline-block ml-1">{currentSelectedUsers.map(item => item.name).join(', ')}</span>
+                <span className="flex-shrink-0">{gettext('Modified by:')}</span>
+                <span className="d-inline-block ml-1 text-truncate" title={currentSelectedUsers.map(item => item.name).join(', ')}>{currentSelectedUsers.map(item => item.name).join(', ')}</span>
               </>
             ) : gettext('Modified by')}
-            <Icon symbol="down" className="w-3 h-3 ml-2 toggle-icon" />
+            <Icon symbol="down" className="w-3 h-3 ml-2 toggle-icon flex-shrink-0" />
           </OpElement>
         </span>
         <Popover
@@ -83,7 +87,8 @@ class UserSelector extends Component {
           hideArrow={true}
           fade={false}
           trigger="legacy"
-          popperClassName="activity-user-selector-popover"
+          popperClassName="files-activities-user-selector-popover"
+          innerClassName="activity-user-selector-content"
           modifiers={[
             {
               name: 'offset',
@@ -93,53 +98,69 @@ class UserSelector extends Component {
             }
           ]}
         >
-          <ul className="activity-selected-modifiers px-3 py-2 list-unstyled">
+          <ul className="activity-selected-modifiers">
             {selectedUsers.map((item, index) => {
               return (
-                <li key={index} className="activity-selected-modifier">
-                  <img src={item.avatar_url} className="avatar" alt={item.name} />
-                  <span className="activity-user-name ml-2">{item.name}</span>
+                <li key={item.email} className="activity-selected-modifier">
+                  <img src={item.avatar_url} className="avatar" alt="" />
+                  <span className="activity-user-name" title={item.name}>{item.name}</span>
                   <OpIcon
+                    id={`activity-user-selector-remove-${index}`}
                     symbol="close"
-                    className="unselect-activity-user ml-2"
-                    title={gettext('Unselect')}
+                    className="unselect-activity-user"
+                    tooltip={gettext('Remove')}
                     op={(e) => { this.toggleSelectItem(e, item); }}
                   />
                 </li>
               );
             })}
           </ul>
-          <div className="px-3 pt-3">
+          <div className="activity-user-selector-search">
             <Input
               type="text"
+              className="activity-user-selector-input"
+              innerRef={ref => this.searchInput = ref}
               placeholder={gettext('Find modifiers')}
+              aria-label={gettext('Find modifiers')}
               value={query}
               onChange={this.onQueryChange}
             />
+            {query && (
+              <OpIcon
+                id="activity-user-selector-clear"
+                symbol="close"
+                className="activity-user-selector-clear"
+                title={gettext('Clear')}
+                tooltip={gettext('Clear')}
+                op={this.clearQuery}
+              />
+            )}
           </div>
           {filteredAvailableUsers.length > 0 &&
-            <ul className="activity-user-list list-unstyled p-3 o-auto">
-              {filteredAvailableUsers.map((item, index) => {
+            <ul className="activity-user-list">
+              {filteredAvailableUsers.map((item) => {
                 return (
                   <li
-                    key={index}
-                    className="activity-user-item h-6 p-1 rounded d-flex justify-content-between align-items-center"
+                    key={item.email}
+                    className="activity-user-item d-flex justify-content-between align-items-center"
                     onClick={(e) => { this.toggleSelectItem(e, item); }}
                     tabIndex="0"
                     onKeyDown={Utils.onKeyDown}
-                    aria-label={gettext('Select')}
+                    role="button"
+                    aria-pressed={item.isSelected}
+                    aria-label={item.name}
                   >
                     <div>
-                      <img src={item.avatar_url} className="avatar w-5 h-5" alt="" />
-                      <span className="activity-user-name ml-2">{item.name}</span>
+                      <img src={item.avatar_url} className="avatar" alt="" />
+                      <span className="activity-user-name" title={item.name}>{item.name}</span>
                     </div>
-                    {item.isSelected && <Icon symbol="check" className="text-gray font-weight-bold" />}
+                    {item.isSelected && <Icon symbol="check" className="activity-user-selector-check" />}
                   </li>
                 );
               })}
             </ul>}
           {filteredAvailableUsers.length === 0 && (
-            <SearchEmptyTip text={gettext('No users')} />
+            <div className="activity-user-selector-empty" role="status">{gettext('No collaborators available')}</div>
           )}
         </Popover>
       </>

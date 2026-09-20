@@ -63,11 +63,11 @@ class GroupSelect extends Component {
         >
           <div className="selected-option">
             {selectedOptions.length > 0 ?
-              <span className="selected-option-show">
+              <span className="selected-option-show mw-100">
                 {selectedOptions.map(item =>
-                  <span key={item.id} className="selected-option-item">
-                    <span className='selected-option-item-name'>{item.name}</span>
-                    <span className="d-flex align-items-center" onClick={(e) => { e.stopPropagation(); this.props.onDeleteOption(item); }}><Icon symbol="close" /></span>
+                  <span key={item.id} className="selected-option-item mw-100">
+                    <span className='selected-option-item-name text-truncate' title={item.name}>{item.name}</span>
+                    <span className="d-flex align-items-center flex-shrink-0" onClick={(e) => { e.stopPropagation(); this.props.onDeleteOption(item); }}><Icon symbol="close" /></span>
                   </span>
                 )}
               </span>
