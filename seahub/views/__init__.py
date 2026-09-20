@@ -1217,6 +1217,7 @@ def get_metrics(request):
     metrics_text = metrics.content.decode()
     total_repos_count = seafile_api.count_repos()
     total_files_count = seafile_api.get_total_file_number()
+    total_storage = seafile_api.get_total_storage()
     
     active_db_users = ccnet_api.count_emailusers('DB')
     inactive_db_users = ccnet_api.count_inactive_emailusers('DB')
@@ -1233,6 +1234,11 @@ def get_metrics(request):
         total_files_count,
         help_txt="Total file numbers in seafile"
     )
+    storage_metric = _format_metrics(
+        "seafile_total_storage_bytes",
+        total_storage,
+        help_txt="Current total logical storage used in Seafile, in bytes"
+    )
     
     users_count_metric = _format_metrics(
         "seafile_total_users",
@@ -1242,5 +1248,6 @@ def get_metrics(request):
     
     metrics_text += repos_count_metric
     metrics_text += files_count_metric
+    metrics_text += storage_metric
     metrics_text += users_count_metric
     return HttpResponse(metrics_text)
