@@ -123,6 +123,11 @@ ALTER TABLE `PermAudit` ADD INDEX `idx_perm_audit_orgid_eid` (`org_id`,`eid`);
 ALTER TABLE `PermAudit` ADD INDEX `ix_perm_audit_timestamp` (`timestamp`);
 ALTER TABLE `VirusFile` ADD INDEX `ix_VirusFile_repo_id` (`repo_id`);
 ALTER TABLE `VirusFile` ADD COLUMN `virus_signature` TEXT DEFAULT NULL;
+ALTER TABLE `VirusFile`
+  ADD COLUMN `file_id` varchar(40) DEFAULT NULL AFTER `file_path`,
+  ADD COLUMN `deleted_at` datetime DEFAULT NULL AFTER `file_id`,
+  ADD INDEX `ix_VirusFile_file_id` (`file_id`),
+  ADD INDEX `ix_VirusFile_deleted_at` (`deleted_at`);
 ALTER TABLE `FileTrash` ADD INDEX `idx_filetrash_delete_time` (`delete_time`);
 ALTER TABLE `FileTrash` ADD INDEX `idx_filetrash_repo_delete_time` (`repo_id`, `delete_time`);
 ALTER TABLE wiki_wiki2_publish ADD COLUMN `enable_server_render` tinyint(1) NOT NULL DEFAULT 0;
