@@ -192,7 +192,9 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
             </p>
             <Button
               id="metadata-status-hide-properties-button"
-              className={classnames('mt-2 border-0 font-weight-normal metadata-status-hide-properties-button', { 'disabled': !oldValue })}
+              size='sm'
+              color='secondary-filled'
+              className={classnames('mt-2', { 'disabled': !oldValue })}
               onClick={onClickHideColumns}
             >
               <Icon symbol="hide" size={24} />
