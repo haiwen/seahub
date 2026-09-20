@@ -447,7 +447,7 @@ def process_sdoc_artifacts(ai_result, repo_id, request, session_uuid, message_id
             results.append(artifact)
             continue
         sdoc_count += 1
-        if sdoc_count > 3:
+        if sdoc_count > 1:
             results.append({
                 'type': 'sdoc',
                 'schema_version': 1,

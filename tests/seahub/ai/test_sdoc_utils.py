@@ -6,6 +6,7 @@ from seahub.ai.sdoc.compiler import compile_sdoc
 from seahub.ai.sdoc.schema import SdocArtifactError, normalize_sdoc_request
 from seahub.ai.sdoc.service import create_sdoc
 from seahub.ai.sdoc.validator import validate_sdoc
+from seahub.ai.utils import process_sdoc_artifacts
 
 
 def text(value, **marks):
@@ -121,3 +122,23 @@ class SdocServiceTest(SimpleTestCase):
 
         self.assertEqual(result['status'], 'failed')
         self.assertEqual(result['error_code'], 'directory_not_found')
+
+
+class SdocArtifactTest(SimpleTestCase):
+    @patch('seahub.ai.utils.create_sdoc', return_value={'type': 'sdoc', 'status': 'created'})
+    def test_creates_only_one_sdoc_per_ai_result(self, mock_create_sdoc):
+        artifacts = [complex_request(), complex_request()]
+
+        result = process_sdoc_artifacts(
+            {'artifacts': artifacts},
+            'repo-id',
+            RequestFactory().get('/'),
+            'session-uuid',
+            'message-id',
+            'user@example.com',
+        )
+
+        self.assertEqual(mock_create_sdoc.call_count, 1)
+        self.assertEqual(result['artifacts'][0]['status'], 'created')
+        self.assertEqual(result['artifacts'][1]['status'], 'failed')
+        self.assertEqual(result['artifacts'][1]['error_code'], 'invalid_artifact')
