@@ -10,6 +10,7 @@ import toaster from '@/components/toast';
 import {
   METADATA_MODE,
   TAGS_MODE,
+  SETTINGS_MODE,
   HISTORY_MODE,
   TRASH_MODE
 } from '@/constants/view-mode';
@@ -128,7 +129,7 @@ class DirNew extends React.Component {
 
     const newBtnClassName = 'dir-new-btn btn btn-secondary';
 
-    if ([METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH_MODE].includes(currentMode)) {
+    if ([METADATA_MODE, TAGS_MODE, SETTINGS_MODE, HISTORY_MODE, TRASH_MODE].includes(currentMode)) {
       return (
         <div className="dir-new-container d-flex">
           <Button
