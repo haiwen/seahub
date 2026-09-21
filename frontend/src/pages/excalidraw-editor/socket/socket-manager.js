@@ -365,11 +365,7 @@ class SocketManager {
 
     switch (error_type) {
       case 'ack_timeout':
-        this.requeueSendingOperation();
-
-        stateDebug(`ACK timeout. State Changed: ${this.state} -> ${STATE.IDLE}`);
-        this.state = STATE.IDLE;
-        this.dispatchConnectState('ack_timeout');
+        this.recoverSendingOperation('ack_timeout');
         setTimeout(() => this.sendOperations(), OPERATION_RETRY_DELAY);
         return;
       case 'load_document_content_error':
@@ -389,9 +385,19 @@ class SocketManager {
         this.state = STATE.CONFLICT;
         this.resolveConflicting(result);
         return;
+      case 'execute_client_operations_error':
       default:
-        return;
+        // Keep failed operations in the queue and release the sending state so
+        // later sync attempts can continue instead of getting stuck in SENDING.
+        this.recoverSendingOperation(error_type || 'sync_server_operations_error');
     }
+  };
+
+  recoverSendingOperation = (errorType) => {
+    this.requeueSendingOperation();
+    stateDebug(`Operation failed (${errorType}). State Changed: ${this.state} -> ${STATE.IDLE}`);
+    this.state = STATE.IDLE;
+    this.dispatchConnectState(errorType);
   };
 
   resolveConflicting = (result) => {
