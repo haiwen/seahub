@@ -162,6 +162,8 @@ class LibContentView extends React.Component {
     this.unsubscribeEventBus = null;
     this.cachedColumns = null;
     this.cachedTableViewColumns = null;
+    this.copyMoveProgressTimer = null;
+    this.isCopyMoveProgressPolling = false;
   }
 
   updateCurrentDirent = (dirent = null) => {
@@ -440,6 +442,7 @@ class LibContentView extends React.Component {
   };
 
   componentWillUnmount() {
+    this.stopAsyncCopyMoveProgress();
     window.removeEventListener('popstate', this.onpopstate);
     window.onpopstate = this.oldOnpopstate;
     this.unsubscribeEvent();
@@ -1036,11 +1039,16 @@ class LibContentView extends React.Component {
     try {
       let res = await seafileAPI.queryAsyncOperationProgress(asyncCopyMoveTaskId);
       let data = res.data;
+      if (!this.isCopyMoveProgressPolling || asyncCopyMoveTaskId !== this.state.asyncCopyMoveTaskId) {
+        return;
+      }
+
       if (data.failed) {
         let message = gettext('Failed to move files to another library.');
         if (asyncOperationType === 'copy') {
           message = gettext('Failed to copy files to another library.');
         }
+        this.stopAsyncCopyMoveProgress();
         toaster.danger(message);
         this.setState({
           asyncOperationProgress: 0,
@@ -1049,7 +1057,17 @@ class LibContentView extends React.Component {
         return;
       }
 
+      if (data.canceled) {
+        this.stopAsyncCopyMoveProgress();
+        this.setState({
+          asyncOperationProgress: 0,
+          isCopyMoveProgressDialogShow: false,
+        });
+        return;
+      }
+
       if (data.successful) {
+        this.stopAsyncCopyMoveProgress();
         if (asyncOperationType === 'move') {
           if (this.currentMoveItemName && this.currentMoveItemPath) {
             if (this.state.isTreePanelShown) {
@@ -1088,15 +1106,37 @@ class LibContentView extends React.Component {
       // init state: total is 0
       let asyncOperationProgress = !data.total ? 0 : parseInt((data.done / data.total * 100).toFixed(2));
 
-      this.getAsyncCopyMoveProgress();
       this.setState({ asyncOperationProgress: asyncOperationProgress });
+      this.copyMoveProgressTimer = setTimeout(() => {
+        this.copyMoveProgressTimer = null;
+        this.getAsyncCopyMoveProgress();
+      }, 2000);
     } catch (error) {
+      if (!this.isCopyMoveProgressPolling || asyncCopyMoveTaskId !== this.state.asyncCopyMoveTaskId) {
+        return;
+      }
+
+      this.stopAsyncCopyMoveProgress();
       this.setState({
         asyncOperationProgress: 0,
         isCopyMoveProgressDialogShow: false,
       });
     }
   }
+
+  startAsyncCopyMoveProgress = () => {
+    this.stopAsyncCopyMoveProgress();
+    this.isCopyMoveProgressPolling = true;
+    this.getAsyncCopyMoveProgress();
+  };
+
+  stopAsyncCopyMoveProgress = () => {
+    this.isCopyMoveProgressPolling = false;
+    if (this.copyMoveProgressTimer !== null) {
+      clearTimeout(this.copyMoveProgressTimer);
+      this.copyMoveProgressTimer = null;
+    }
+  };
 
   cancelCopyMoveDirent = () => {
     let taskId = this.state.asyncCopyMoveTaskId;
@@ -1109,6 +1149,7 @@ class LibContentView extends React.Component {
   };
 
   onMoveProgressDialogToggle = () => {
+    this.stopAsyncCopyMoveProgress();
     let { asyncOperationProgress } = this.state;
     if (asyncOperationProgress !== 100) {
       this.cancelCopyMoveDirent();
@@ -1164,7 +1205,7 @@ class LibContentView extends React.Component {
           isCrossRepoMove: repoID !== destRepo.repo_id,
         }, () => {
           // After moving successfully, delete related files
-          this.getAsyncCopyMoveProgress();
+          this.startAsyncCopyMoveProgress();
         });
       }
 
@@ -1231,7 +1272,7 @@ class LibContentView extends React.Component {
           asyncOperationType: 'copy',
           isCopyMoveProgressDialogShow: true
         }, () => {
-          this.getAsyncCopyMoveProgress();
+          this.startAsyncCopyMoveProgress();
         });
       }
 
@@ -1769,7 +1810,7 @@ class LibContentView extends React.Component {
       }, () => {
         this.currentMoveItemName = dirName;
         this.currentMoveItemPath = direntPath;
-        this.getAsyncCopyMoveProgress(dirName, direntPath);
+        this.startAsyncCopyMoveProgress();
       });
     }
 
@@ -1863,7 +1904,7 @@ class LibContentView extends React.Component {
         asyncOperationType: 'copy',
         isCopyMoveProgressDialogShow: true
       }, () => {
-        this.getAsyncCopyMoveProgress();
+        this.startAsyncCopyMoveProgress();
       });
       if (byDialog) {
         this.updateRecentlyUsedList(targetRepo, copyToDirentPath);
