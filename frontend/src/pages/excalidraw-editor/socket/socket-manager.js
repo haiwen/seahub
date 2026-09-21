@@ -8,6 +8,7 @@ import { stateDebug } from '../utils/debug';
 import { isInitializedImageElement } from '../utils/element-utils';
 import EventBus from '../utils/event-bus';
 import { updateStaleImageStatuses } from '../utils/exdraw-utils';
+import RemoteOperationIdCache from './remote-operation-id-cache';
 import SocketClient from './socket-client';
 
 const STATE = {
@@ -30,7 +31,7 @@ class SocketManager {
     this.previewElements = null;
     this.previewCommitTimer = null;
     this.pendingRemoteUpdates = [];
-    this.remoteOperationIds = new Set();
+    this.remoteOperationIds = new RemoteOperationIdCache();
     this.remoteRenderFrame = null;
     this.collaborators = new Map();
     const { user } = config;
@@ -155,11 +156,10 @@ class SocketManager {
 
     const normalizedVersion = Number.isFinite(Number(version)) ? Number(version) : this.getVersion();
     const remoteOperationId = operationId || `version:${normalizedVersion}`;
-    if (this.remoteOperationIds.has(remoteOperationId)) {
+    if (!this.remoteOperationIds.remember(remoteOperationId)) {
       return;
     }
 
-    this.remoteOperationIds.add(remoteOperationId);
     this.pendingRemoteUpdates.push({
       elements,
       version: normalizedVersion,
