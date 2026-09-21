@@ -31,6 +31,7 @@ export const FILE_UPLOAD_TIMEOUT = 300;
 export const LOAD_IMAGES_TIMEOUT = 500;
 export const OPERATION_ACK_TIMEOUT = 30000;
 export const OPERATION_RETRY_DELAY = 1000;
+export const MAX_OPERATION_RETRIES = 3;
 export const PREVIEW_COMMIT_DELAY = 300;
 
 export const LIBRARY_SIDEBAR_TAB = 'library';
