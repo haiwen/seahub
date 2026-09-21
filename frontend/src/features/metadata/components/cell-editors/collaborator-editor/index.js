@@ -233,7 +233,7 @@ const CollaboratorEditor = forwardRef(({
           >
             <div className="collaborator">
               <img className="collaborator-avatar" alt={collaborator.name} src={collaborator.avatar_url} />
-              <span className="collaborator-name" title={collaborator.name} aria-label={collaborator.name} >
+              <span className="collaborator-name text-truncate" title={collaborator.name} aria-label={collaborator.name} >
                 {collaborator.name}
               </span>
             </div>

@@ -34,7 +34,7 @@
 
 :is(.sf-metadata-collaborator-editor, .sf-metadata-selector-collaborator) .sf-metadata-delete-collaborator .collaborator .collaborator-name {
   color: #212529;
-  margin-left: 5px;
+  margin-left: 4px;
   max-width: 200px;
   flex: 1 1;
   line-height: 20px;
