@@ -12,7 +12,6 @@ from rest_framework.views import APIView
 
 from django.db import connection
 from django.db.models import Q
-from django.core.cache import cache
 from django.utils.translation import gettext as _
 from django.utils import translation
 from django.utils.timezone import make_naive, is_aware
@@ -40,10 +39,8 @@ from seahub.base.accounts import User
 from seahub.base.models import UserLastLogin
 from seahub.two_factor.models import default_device
 from seahub.profile.models import Profile
-from seahub.profile.settings import CONTACT_CACHE_TIMEOUT, CONTACT_CACHE_PREFIX, \
-    NICKNAME_CACHE_PREFIX, NICKNAME_CACHE_TIMEOUT
 from seahub.utils import is_valid_username2, is_org_context, \
-        is_pro_version, normalize_cache_key, is_valid_email, \
+        is_pro_version, is_valid_email, \
         IS_EMAIL_CONFIGURED, send_html_email, get_site_name, \
         gen_shared_link, gen_shared_upload_link
 from seahub.utils.db_api import SeafileDB
@@ -312,13 +309,9 @@ def create_user_info(request, email, role, nickname,
 
     if nickname is not None:
         Profile.objects.add_or_update(email, nickname)
-        key = normalize_cache_key(nickname, NICKNAME_CACHE_PREFIX)
-        cache.set(key, nickname, NICKNAME_CACHE_TIMEOUT)
 
     if contact_email is not None:
         Profile.objects.add_or_update(email, contact_email=contact_email)
-        key = normalize_cache_key(email, CONTACT_CACHE_PREFIX)
-        cache.set(key, contact_email, CONTACT_CACHE_TIMEOUT)
 
     if quota_total_mb:
         quota_total = int(quota_total_mb) * get_file_size_unit('MB')
@@ -365,16 +358,12 @@ def update_user_info(request, user, password, is_active, is_staff, role,
 
     if nickname is not None:
         Profile.objects.add_or_update(email, nickname)
-        key = normalize_cache_key(nickname, NICKNAME_CACHE_PREFIX)
-        cache.set(key, nickname, NICKNAME_CACHE_TIMEOUT)
 
     if login_id is not None:
         Profile.objects.add_or_update(email, login_id=login_id)
 
     if contact_email is not None:
         Profile.objects.add_or_update(email, contact_email=contact_email)
-        key = normalize_cache_key(email, CONTACT_CACHE_PREFIX)
-        cache.set(key, contact_email, CONTACT_CACHE_TIMEOUT)
 
     if institution_name is not None:
         Profile.objects.add_or_update(email, institution=institution_name)
@@ -1235,12 +1224,12 @@ class AdminUser(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
-            User.objects.get(email=email)
+            user_obj = User.objects.get(email=email)
         except User.DoesNotExist:
             error_msg = 'User %s not found.' % email
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        user_info = get_user_info(email)
+        user_info = get_user_info(user_obj.email)
         user_info['avatar_url'], _, _ = api_avatar_url(email)
         if is_pro_version():
             user_info['upload_rate_limit'] = byte_to_kb(seafile_api.get_user_upload_rate_limit(email))
@@ -1453,7 +1442,7 @@ class AdminUser(APIView):
                     logger.error(e)
                     update_status_tip = _('Edit succeeded, but failed to send email, please check your email configuration.')
 
-        user_info = get_user_info(email)
+        user_info = get_user_info(user_obj.email)
         user_info['update_status_tip'] = update_status_tip
         if is_pro_version():
             user_info['upload_rate_limit'] = byte_to_kb(seafile_api.get_user_upload_rate_limit(email))

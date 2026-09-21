@@ -17,6 +17,7 @@ from django.utils.html import escape
 
 from seahub.base.accounts import User
 from seahub.profile.models import Profile
+from seahub.profile.utils import get_profile_cache_key
 from seahub.profile.settings import NICKNAME_CACHE_TIMEOUT, NICKNAME_CACHE_PREFIX, \
     EMAIL_ID_CACHE_TIMEOUT, EMAIL_ID_CACHE_PREFIX, CONTACT_CACHE_TIMEOUT, \
     CONTACT_CACHE_PREFIX, LOGIN_ID_CACHE_PREFIX, LOGIN_ID_CACHE_TIMEOUT
@@ -373,7 +374,7 @@ def email2nickname(value):
     if not value:
         return ''
 
-    key = normalize_cache_key(value, NICKNAME_CACHE_PREFIX)
+    key = get_profile_cache_key(value, NICKNAME_CACHE_PREFIX)
     cached_nickname = cache.get(key)
     if cached_nickname and cached_nickname.strip():
         return cached_nickname.strip()
@@ -397,7 +398,7 @@ def email2contact_email(value):
     if not value:
         return ''
 
-    key = normalize_cache_key(value, CONTACT_CACHE_PREFIX)
+    key = get_profile_cache_key(value, CONTACT_CACHE_PREFIX)
     contact_email = cache.get(key)
     if contact_email and contact_email.strip():
         return contact_email

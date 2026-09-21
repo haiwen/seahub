@@ -2,24 +2,19 @@
 from django.core.cache import cache
 
 from .models import Profile
-from .settings import NICKNAME_CACHE_PREFIX, NICKNAME_CACHE_TIMEOUT, \
-        CONTACT_CACHE_TIMEOUT, CONTACT_CACHE_PREFIX
-from seahub.shortcuts import get_first_object_or_none
+from .settings import NICKNAME_CACHE_PREFIX, CONTACT_CACHE_PREFIX
 from seahub.utils import normalize_cache_key
+
+def get_profile_cache_key(username, prefix):
+    return normalize_cache_key(username.lower(), prefix)
+
 
 def refresh_cache(username):
     """
-    Function to be called when change user nickname.
+    Invalidate cached nickname and contact email after a profile change.
     """
-    profile = get_first_object_or_none(Profile.objects.filter(user=username))
-    nickname = profile.nickname if profile else username.split('@')[0]
-    contactemail = profile.contact_email if profile else ''
-
-    key = normalize_cache_key(username, NICKNAME_CACHE_PREFIX)
-    cache.set(key, nickname, NICKNAME_CACHE_TIMEOUT)
-    
-    contact_key = normalize_cache_key(username, CONTACT_CACHE_PREFIX)
-    cache.set(contact_key, contactemail, CONTACT_CACHE_TIMEOUT)
+    cache.delete(get_profile_cache_key(username, NICKNAME_CACHE_PREFIX))
+    cache.delete(get_profile_cache_key(username, CONTACT_CACHE_PREFIX))
 
 def convert_contact_emails(in_list):
     """

@@ -32,6 +32,7 @@ from seahub.api2.models import Token, TokenV2, DESKTOP_PLATFORMS
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.profile.models import Profile
+from seahub.profile.utils import get_profile_cache_key
 from seahub.profile.settings import CONTACT_CACHE_PREFIX, CONTACT_CACHE_TIMEOUT
 from seahub.utils import get_user_repos, normalize_cache_key
 from seahub.utils.mail import send_html_email_with_dj_template
@@ -410,7 +411,7 @@ def get_user_contact_email(username):
     if not username:
         return ''
 
-    key = normalize_cache_key(username, CONTACT_CACHE_PREFIX)
+    key = get_profile_cache_key(username, CONTACT_CACHE_PREFIX)
     contact_email = cache.get(key)
     if contact_email and contact_email.strip():
         return contact_email
