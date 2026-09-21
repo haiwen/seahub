@@ -29,6 +29,9 @@ class SocketManager {
     this.pendingOperationList = [];
     this.previewElements = null;
     this.previewCommitTimer = null;
+    this.pendingRemoteUpdates = [];
+    this.remoteOperationIds = new Set();
+    this.remoteRenderFrame = null;
     this.collaborators = new Map();
     const { user } = config;
     this.collaborators.set(user._username, user, { isCurrentUser: true });
@@ -126,9 +129,123 @@ class SocketManager {
       return;
     }
 
-    const elements = this.previewElements;
+    let elements = this.previewElements;
     this.previewElements = null;
+
+    if (this.pendingRemoteUpdates.length > 0) {
+      const mergedRemoteScene = this.applyRemoteSceneUpdates(this.pendingRemoteUpdates, elements);
+      this.pendingRemoteUpdates = [];
+      elements = mergedRemoteScene.elements;
+      this.setVersion(mergedRemoteScene.version);
+      this.setLastBroadcastedOrReceivedSceneVersion(elements);
+      this.excalidrawAPI.updateScene({
+        elements,
+        captureUpdate: CaptureUpdateAction.NEVER,
+      });
+      this.loadImageFiles();
+    }
+
     this.syncLocalElementsToOthers(elements, true);
+  };
+
+  enqueueRemoteSceneUpdate = (elements, version, operationId) => {
+    if (!Array.isArray(elements)) {
+      return;
+    }
+
+    const normalizedVersion = Number.isFinite(Number(version)) ? Number(version) : this.getVersion();
+    const remoteOperationId = operationId || `version:${normalizedVersion}`;
+    if (this.remoteOperationIds.has(remoteOperationId)) {
+      return;
+    }
+
+    this.remoteOperationIds.add(remoteOperationId);
+    this.pendingRemoteUpdates.push({
+      elements,
+      version: normalizedVersion,
+      operation_id: remoteOperationId,
+    });
+    this.pendingRemoteUpdates.sort((left, right) => left.version - right.version);
+
+    if (elements.length > 0) {
+      const remoteSceneVersion = getSceneVersion(elements);
+      this.lastBroadcastedOrReceivedSceneVersion = Math.max(
+        this.lastBroadcastedOrReceivedSceneVersion,
+        remoteSceneVersion,
+      );
+    }
+    this.setVersion(Math.max(this.getVersion(), normalizedVersion));
+
+    if (!this.previewElements) {
+      this.scheduleRemoteSceneRender();
+    }
+  };
+
+  scheduleRemoteSceneRender = () => {
+    if (this.remoteRenderFrame !== null) {
+      return;
+    }
+
+    const render = () => {
+      this.remoteRenderFrame = null;
+      this.flushRemoteSceneUpdates();
+    };
+
+    if (typeof window !== 'undefined' && window.requestAnimationFrame) {
+      this.remoteRenderFrame = window.requestAnimationFrame(render);
+      return;
+    }
+
+    this.remoteRenderFrame = setTimeout(render, 0);
+  };
+
+  cancelRemoteSceneRender = () => {
+    if (this.remoteRenderFrame === null) {
+      return;
+    }
+
+    if (typeof window !== 'undefined' && window.cancelAnimationFrame) {
+      window.cancelAnimationFrame(this.remoteRenderFrame);
+    } else {
+      clearTimeout(this.remoteRenderFrame);
+    }
+    this.remoteRenderFrame = null;
+  };
+
+  applyRemoteSceneUpdates = (updates, baseElements = null) => {
+    let localElements = baseElements || this.excalidrawAPI.getSceneElementsIncludingDeleted();
+    const appState = this.excalidrawAPI.getAppState();
+    let remoteVersion = this.getVersion();
+
+    updates.forEach((update) => {
+      const restoredRemoteElements = restoreElements(update.elements, null);
+      localElements = reconcileElements(localElements, restoredRemoteElements, appState);
+      remoteVersion = Math.max(remoteVersion, update.version);
+    });
+
+    return {
+      elements: localElements,
+      version: remoteVersion,
+    };
+  };
+
+  flushRemoteSceneUpdates = () => {
+    if (this.previewElements || this.pendingRemoteUpdates.length === 0) {
+      return;
+    }
+
+    const updates = this.pendingRemoteUpdates;
+    this.pendingRemoteUpdates = [];
+    const mergedRemoteScene = this.applyRemoteSceneUpdates(updates);
+
+    this.setLastBroadcastedOrReceivedSceneVersion(mergedRemoteScene.elements);
+    this.setVersion(mergedRemoteScene.version);
+    this.excalidrawAPI.updateScene({
+      elements: mergedRemoteScene.elements,
+      captureUpdate: CaptureUpdateAction.NEVER,
+    });
+
+    this.loadImageFiles();
   };
 
   fetchImageFilesFromServer = async (opts) => {
@@ -297,23 +414,20 @@ class SocketManager {
 
   updateLocalDataByRemoteData = (remoteElements, remoteVersion) => {
     if (this.previewElements) {
-      if (Array.isArray(remoteElements)) {
-        this.setLastBroadcastedOrReceivedSceneVersion(remoteElements);
-      }
-      this.setVersion(remoteVersion);
+      this.enqueueRemoteSceneUpdate(remoteElements, remoteVersion);
       return;
     }
 
-    const localElements = this.excalidrawAPI.getSceneElementsIncludingDeleted();
-    const appState = this.excalidrawAPI.getAppState();
-    const restoredRemoteElements = restoreElements(remoteElements, null);
-    const reconciledElements = reconcileElements(localElements, restoredRemoteElements, appState);
+    const mergedRemoteScene = this.applyRemoteSceneUpdates([{
+      elements: remoteElements,
+      version: remoteVersion,
+    }]);
 
-    this.setLastBroadcastedOrReceivedSceneVersion(reconciledElements);
-    this.setVersion(remoteVersion);
+    this.setLastBroadcastedOrReceivedSceneVersion(mergedRemoteScene.elements);
+    this.setVersion(mergedRemoteScene.version);
 
     this.excalidrawAPI.updateScene({
-      elements: reconciledElements,
+      elements: mergedRemoteScene.elements,
       captureUpdate: CaptureUpdateAction.NEVER,
     });
 
@@ -322,8 +436,8 @@ class SocketManager {
   };
 
   handleRemoteSceneUpdated = (params) => {
-    const { elements, version } = params;
-    this.updateLocalDataByRemoteData(elements, version);
+    const { elements, version, operation_id, operationId } = params;
+    this.enqueueRemoteSceneUpdate(elements, version, operation_id || operationId);
   };
 
   handleRemoteMouseLocationUpdated = (params) => {
@@ -396,6 +510,7 @@ class SocketManager {
   static destroy = () => {
     if (this.instance?.socketClient) {
       this.instance.commitPreview();
+      this.instance.cancelRemoteSceneRender();
       this.instance.socketClient.close();
     }
     this.instance = null;
