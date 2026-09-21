@@ -32,6 +32,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
   const messageInputRef = useRef(null);
   const currentSessionId = useRef('');
   const newSessionProblem = useRef('');
+  const pendingTitleQueryBySession = useRef({});
 
   const {
     isShowSessions,
@@ -101,6 +102,26 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
     jumpToBottom(reply ? 10 : 50);
   }, [jumpToBottom]);
 
+  const triggerTitleGeneration = useCallback((sessionId, aiReply) => {
+    const query = pendingTitleQueryBySession.current[sessionId];
+    if (!query || !aiReply) {
+      return;
+    }
+
+    delete pendingTitleQueryBySession.current[sessionId];
+    chatAPI.generateChatSessionTitle(sessionId, {
+      query,
+      ai_reply: aiReply,
+    }).then((res) => {
+      const sessionName = res.data?.session_name;
+      if (sessionName) {
+        modifyLocalSession(sessionId, { name: sessionName });
+      }
+    }).catch(() => {
+      // Keep the placeholder title if generation fails.
+    });
+  }, [modifyLocalSession]);
+
   const sendMessage = useCallback(({ message, attachments, model }) => {
     const validMessage = message.trim();
     if (!validMessage) {
@@ -133,6 +154,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
 
     createSession(validMessage.slice(0, 100)).then((newSession) => {
       const newSessionId = newSession._id;
+      pendingTitleQueryBySession.current[newSessionId] = validMessage;
       currentSessionId.current = newSessionId;
       newSessionProblem.current = '';
       togglePageSlugId(newSessionId);
@@ -278,6 +300,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
         user_message_id: userMessageId,
         ai_reply_message_id: aiReplyMessageId,
       } = data;
+      triggerTitleGeneration(replySessionId, ai_reply);
       const messageIndex = newChatHistories.findIndex((chat) => chat._id === aiReplyMessageId);
       if (messageIndex > -1) {
         return;
@@ -461,6 +484,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
           nextChatHistories = removeStatusMessage(nextChatHistories);
           nextChatHistories = removeStreamingAnswer(nextChatHistories);
           nextChatHistories = updateStreamReply(nextChatHistories, results);
+          triggerTitleGeneration(replySessionId, results.ai_reply || streamedAnswer);
         }
 
         if (done) {
@@ -581,7 +605,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
       unsubscribeAIReply();
       unsubscribeAIStreamReply();
     };
-  }, [chatHistories, isNearBottom, modifyLocalSession, pageSlugId, updateChatHistories]);
+  }, [chatHistories, isNearBottom, modifyLocalSession, pageSlugId, triggerTitleGeneration, updateChatHistories]);
 
   useEffect(() => {
     return () => {
