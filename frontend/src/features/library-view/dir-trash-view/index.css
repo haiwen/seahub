@@ -11,6 +11,10 @@
   padding-bottom: 0 !important;
 }
 
+.sf-trash-wrapper .sf-table-cell.actions-cell {
+  justify-content: center;
+}
+
 .sf-trash-wrapper.read-only .select-all-checkbox-container {
   pointer-events: none;
 }
