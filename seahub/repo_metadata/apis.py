@@ -605,15 +605,15 @@ class MetadataRecord(APIView):
         username = request.user.username
         org_id = request.user.org.org_id if is_org_context(request) else None
         repo_id_to_invisible_paths = get_invisible_repos_info_by_username(username, org_id)
-        results = [
+        query_result['results'] = [
             r for r in query_result.get('results', [])
             if not is_invisible_path(repo_id_to_invisible_paths, repo_id,
                                     posixpath.join(r.get('_parent_dir', ''), r.get('_name', '')))
         ]
-        if not results:
+        if not query_result['results']:
             error_msg = 'Record not found'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         return Response(query_result)
 
     def put(self, request, repo_id):
