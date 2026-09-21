@@ -89,6 +89,10 @@ class ChatAPI {
     return this.req.put(this.server + '/api/v2.1/ai/chat/sessions/' + sessionUUID + '/', update);
   }
 
+  generateChatSessionTitle(sessionUUID, params) {
+    return this.req.post(this.server + '/api/v2.1/ai/chat/sessions/' + sessionUUID + '/generate-title/', params);
+  }
+
   deleteChatSession(sessionUUID) {
     return this.req.delete(this.server + '/api/v2.1/ai/chat/sessions/' + sessionUUID + '/');
   }
