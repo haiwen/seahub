@@ -63,12 +63,3 @@
 .sf-metadata-selector-collaborator.sf-select .sf-option-group .sf-option-group-content {
   max-height: 220px;
 }
-
-.sf-metadata-selector-collaborator.sf-select .sf-select-option .collaborator .collaborator-avatar {
-  height: 16px;
-  width: 16px;
-}
-
-.sf-metadata-selector-collaborator.sf-select .sf-select-option .collaborator .collaborator-name {
-  color: var(--bs-body-color);
-}

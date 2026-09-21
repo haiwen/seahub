@@ -7,7 +7,7 @@
   line-height: 1;
 }
 
-:is(.sf-metadata-collaborator-editor, .sf-metadata-selector-collaborator) .sf-metadata-delete-collaborator .collaborator {
+.sf-metadata-delete-collaborator .collaborator {
   width: fit-content;
   background: #eaeaea;
   border-radius: 10px;
@@ -19,20 +19,20 @@
   padding: 0 8px 0 2px;
 }
 
-:is(.sf-metadata-collaborator-editor, .sf-metadata-selector-collaborator) .sf-metadata-delete-collaborator .collaborator .collaborator-avatar-container {
+.sf-metadata-delete-collaborator .collaborator .collaborator-avatar-container {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
-:is(.sf-metadata-collaborator-editor, .sf-metadata-selector-collaborator) .sf-metadata-delete-collaborator .collaborator .collaborator-avatar {
+.sf-metadata-delete-collaborator .collaborator .collaborator-avatar {
   height: 16px;
   width: 16px;
   border-radius: 50%;
   vertical-align: middle;
 }
 
-:is(.sf-metadata-collaborator-editor, .sf-metadata-selector-collaborator) .sf-metadata-delete-collaborator .collaborator .collaborator-name {
+.sf-metadata-delete-collaborator .collaborator .collaborator-name {
   color: #212529;
   margin-left: 4px;
   max-width: 200px;
@@ -43,12 +43,12 @@
   white-space: nowrap;
 }
 
-:is(.sf-metadata-collaborator-editor, .sf-metadata-selector-collaborator) .sf-metadata-delete-collaborator .collaborator .collaborator-remove {
+.sf-metadata-delete-collaborator .collaborator .collaborator-remove {
   font-size: 10px;
   position: relative;
   margin-left: 4px;
 }
 
-:is(.sf-metadata-collaborator-editor, .sf-metadata-selector-collaborator) .sf-metadata-delete-collaborator .collaborator .collaborator-remove .seafile-multicolor-icon-close {
+.sf-metadata-delete-collaborator .collaborator .collaborator-remove .seafile-multicolor-icon-close {
   color: #666;
 }
