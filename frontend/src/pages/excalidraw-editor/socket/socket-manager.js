@@ -1,7 +1,7 @@
 import { CaptureUpdateAction, getSceneVersion, reconcileElements, restoreElements } from '@excalidraw/excalidraw';
 import throttle from 'lodash.throttle';
 import { v4 as uuidv4 } from 'uuid';
-import { CURSOR_SYNC_TIMEOUT, LOAD_IMAGES_TIMEOUT, OPERATION_RETRY_DELAY, PREVIEW_COMMIT_DELAY } from '../constants';
+import { CURSOR_SYNC_TIMEOUT, LOAD_IMAGES_TIMEOUT, MAX_OPERATION_RETRIES, OPERATION_RETRY_DELAY, PREVIEW_COMMIT_DELAY } from '../constants';
 import FileManager from '../data/file-manager';
 import { loadFilesFromServer, saveFilesToServer } from '../data/server-storage';
 import { stateDebug } from '../utils/debug';
@@ -293,6 +293,7 @@ class SocketManager {
       operation_id: uuidv4(),
       elements,
       createdAt: Date.now(),
+      retryCount: 0,
     };
     this.pendingOperationList.push(operation);
 
@@ -366,8 +367,12 @@ class SocketManager {
 
     switch (error_type) {
       case 'ack_timeout':
-        this.recoverSendingOperation('ack_timeout');
-        setTimeout(() => this.sendOperations(), OPERATION_RETRY_DELAY);
+        if (this.recoverSendingOperation('ack_timeout')) {
+          setTimeout(() => this.sendOperations(), OPERATION_RETRY_DELAY);
+        } else {
+          this.state = STATE.SENDING;
+          this.sendNextOperations();
+        }
         return;
       case 'load_document_content_error':
       case 'token_expired':
@@ -390,16 +395,35 @@ class SocketManager {
       default:
         // Keep failed operations in the queue and release the sending state so
         // later sync attempts can continue instead of getting stuck in SENDING.
-        this.recoverSendingOperation(error_type || 'sync_server_operations_error');
-        setTimeout(() => this.sendOperations(), OPERATION_RETRY_DELAY);
+        if (this.recoverSendingOperation(error_type || 'sync_server_operations_error')) {
+          setTimeout(() => this.sendOperations(), OPERATION_RETRY_DELAY);
+        } else {
+          this.state = STATE.SENDING;
+          this.sendNextOperations();
+        }
     }
   };
 
   recoverSendingOperation = (errorType) => {
-    this.requeueSendingOperation();
+    if (!this._sendingOperation) {
+      return false;
+    }
+
+    const sendingOperation = this._sendingOperation;
+    sendingOperation.retryCount = (sendingOperation.retryCount || 0) + 1;
+    const shouldRetry = sendingOperation.retryCount <= MAX_OPERATION_RETRIES;
+
+    if (shouldRetry) {
+      this.requeueSendingOperation();
+    } else {
+      this._sendingOperation = null;
+      stateDebug(`Operation failed (${errorType}) after ${MAX_OPERATION_RETRIES} retries and was discarded.`);
+    }
+
     stateDebug(`Operation failed (${errorType}). State Changed: ${this.state} -> ${STATE.IDLE}`);
     this.state = STATE.IDLE;
     this.dispatchConnectState(errorType);
+    return shouldRetry;
   };
 
   resolveConflicting = (result) => {
