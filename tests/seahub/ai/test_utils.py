@@ -3,8 +3,8 @@ from unittest.mock import patch
 
 from django.test import RequestFactory, SimpleTestCase
 
-from seahub.ai.apis import ChatSessionView
-from seahub.ai.utils import user_passes_ai_chat_folder_permissions
+from seahub.ai.apis import ChatSessionTitleView, ChatSessionView
+from seahub.ai.utils import generate_session_title, user_passes_ai_chat_folder_permissions
 from seahub.constants import PERMISSION_INVISIBLE
 
 
@@ -104,3 +104,81 @@ class AIChatAPIPermissionTest(SimpleTestCase):
         mock_check_folder_permission.assert_called_once_with(request, 'repo-id', '/')
         mock_is_chat_and_search_enabled.assert_called_once_with('repo-id')
         mock_user_passes_permissions.assert_called_once_with(request, 'repo-id')
+
+
+class AIChatTitleTest(SimpleTestCase):
+    @patch('seahub.ai.utils.get_chat_title', return_value='  "Concise\nchat title!"  ')
+    def test_generate_session_title(self, mock_get_chat_title):
+        session = SimpleNamespace(repo_id='repo-id', session_name='placeholder', save=lambda: None)
+
+        title = generate_session_title(session, 'query', 'reply')
+
+        self.assertEqual(title, 'Concise chat title')
+        self.assertEqual(session.session_name, title)
+        mock_get_chat_title.assert_called_once_with({
+            'repo_id': 'repo-id',
+            'query': 'query',
+            'ai_reply': 'reply',
+            'scenario': 'chat',
+        })
+
+    @patch('seahub.ai.utils.get_chat_title', side_effect=RuntimeError('failed'))
+    def test_generate_session_title_keeps_placeholder_on_error(self, mock_get_chat_title):
+        session = SimpleNamespace(repo_id='repo-id', session_name='placeholder')
+
+        title = generate_session_title(session, 'query', 'reply')
+
+        self.assertEqual(title, 'placeholder')
+        mock_get_chat_title.assert_called_once()
+
+    @patch('seahub.ai.apis.generate_session_title', return_value='Generated title')
+    @patch('seahub.ai.apis.is_ai_usage_over_limit', return_value=False)
+    @patch('seahub.ai.apis.resolve_repo_ai_usage_context', return_value={
+        'repo_owner': 'owner@example.com',
+        'org_id': None,
+    })
+    @patch('seahub.ai.apis.is_chat_and_search_enabled', return_value=True)
+    @patch('seahub.ai.apis.user_passes_ai_chat_folder_permissions', return_value=True)
+    @patch('seahub.ai.apis.check_folder_permission', return_value='rw')
+    @patch('seahub.ai.apis.ChatSessions.objects.get_session_by_uuid')
+    def test_generate_chat_title_api(
+            self, mock_get_session, mock_check_folder_permission, mock_user_passes_permissions,
+            mock_is_chat_enabled, mock_resolve_usage, mock_is_over_limit, mock_generate_title):
+        user = SimpleNamespace(username='user@example.com', org=None)
+        session = SimpleNamespace(repo_id='repo-id', username=user.username)
+        request = SimpleNamespace(
+            user=user,
+            data={'query': 'query', 'ai_reply': 'reply'},
+        )
+        mock_get_session.return_value = session
+
+        response = ChatSessionTitleView().post(request, 'session-uuid')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['session_name'], 'Generated title')
+        mock_check_folder_permission.assert_called_once_with(request, 'repo-id', '/')
+        mock_user_passes_permissions.assert_called_once_with(request, 'repo-id')
+        mock_is_chat_enabled.assert_called_once_with('repo-id')
+        mock_resolve_usage.assert_called_once_with('repo-id', None, 'chat')
+        mock_is_over_limit.assert_called_once_with(user, 'owner@example.com', None)
+        mock_generate_title.assert_called_once_with(session, 'query', 'reply')
+
+    @patch('seahub.ai.apis.is_chat_and_search_enabled', return_value=True)
+    @patch('seahub.ai.apis.user_passes_ai_chat_folder_permissions', return_value=True)
+    @patch('seahub.ai.apis.check_folder_permission', return_value='rw')
+    @patch('seahub.ai.apis.ChatSessions.objects.get_session_by_uuid')
+    def test_generate_chat_title_api_rejects_non_owner(
+            self, mock_get_session, mock_check_folder_permission, mock_user_passes_permissions,
+            mock_is_chat_enabled):
+        request = SimpleNamespace(
+            user=SimpleNamespace(username='user@example.com'),
+            data={'query': 'query', 'ai_reply': 'reply'},
+        )
+        mock_get_session.return_value = SimpleNamespace(
+            repo_id='repo-id',
+            username='owner@example.com',
+        )
+
+        response = ChatSessionTitleView().post(request, 'session-uuid')
+
+        self.assertEqual(response.status_code, 403)
