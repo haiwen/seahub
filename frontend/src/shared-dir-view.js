@@ -55,8 +55,6 @@ let {
 } = window.shared.pageOptions;
 
 const showDownloadIcon = !trafficOverLimit && canDownload;
-const COPY_MOVE_PROGRESS_INITIAL_INTERVAL = 1000;
-const COPY_MOVE_PROGRESS_MAX_INTERVAL = 10000;
 
 class SharedDirView extends React.Component {
 
@@ -103,9 +101,6 @@ class SharedDirView extends React.Component {
 
     this.resizeBarRef = React.createRef();
     this.dragHandlerRef = React.createRef();
-    this.copyMoveProgressTimer = null;
-    this.copyMoveProgressPolling = false;
-    this.copyMoveProgressInterval = COPY_MOVE_PROGRESS_INITIAL_INTERVAL;
   }
 
   componentDidMount() {
@@ -118,10 +113,6 @@ class SharedDirView extends React.Component {
     this.loadTreePanel();
     this.listItems();
     this.getShareLinkRepoTags();
-  }
-
-  componentWillUnmount() {
-    this.stopAsyncCopyMoveProgress();
   }
 
   loadTreePanel = () => {
@@ -405,18 +396,10 @@ class SharedDirView extends React.Component {
   };
 
   async getAsyncCopyMoveProgress() {
-    if (!this.copyMoveProgressPolling) {
-      return;
-    }
-
     let { asyncCopyMoveTaskId } = this.state;
     try {
       let res = await seafileAPI.queryAsyncOperationProgress(asyncCopyMoveTaskId);
       let data = res.data;
-      if (!this.copyMoveProgressPolling || asyncCopyMoveTaskId !== this.state.asyncCopyMoveTaskId) {
-        return;
-      }
-
       if (data.failed) {
         let message = gettext('Failed to copy files to another library.');
         toaster.danger(message);
@@ -424,7 +407,6 @@ class SharedDirView extends React.Component {
           asyncOperationProgress: 0,
           isCopyMoveProgressDialogShow: false,
         });
-        this.stopAsyncCopyMoveProgress();
         return;
       }
 
@@ -433,7 +415,6 @@ class SharedDirView extends React.Component {
           asyncOperationProgress: 0,
           isCopyMoveProgressDialogShow: false,
         });
-        this.stopAsyncCopyMoveProgress();
         let message = gettext('Successfully copied files to another library.');
         toaster.success(message);
         return;
@@ -441,48 +422,15 @@ class SharedDirView extends React.Component {
       // init state: total is 0
       let asyncOperationProgress = !data.total ? 0 : parseInt((data.done / data.total * 100).toFixed(2));
 
+      this.getAsyncCopyMoveProgress();
       this.setState({ asyncOperationProgress: asyncOperationProgress });
-      this.scheduleAsyncCopyMoveProgress();
     } catch (error) {
-      if (!this.copyMoveProgressPolling || asyncCopyMoveTaskId !== this.state.asyncCopyMoveTaskId) {
-        return;
-      }
-
-      this.stopAsyncCopyMoveProgress();
       this.setState({
         asyncOperationProgress: 0,
         isCopyMoveProgressDialogShow: false,
       });
     }
   }
-
-  startAsyncCopyMoveProgress = () => {
-    this.stopAsyncCopyMoveProgress();
-    this.copyMoveProgressPolling = true;
-    this.getAsyncCopyMoveProgress();
-  };
-
-  stopAsyncCopyMoveProgress = () => {
-    if (this.copyMoveProgressTimer !== null) {
-      clearTimeout(this.copyMoveProgressTimer);
-      this.copyMoveProgressTimer = null;
-    }
-    this.copyMoveProgressPolling = false;
-    this.copyMoveProgressInterval = COPY_MOVE_PROGRESS_INITIAL_INTERVAL;
-  };
-
-  scheduleAsyncCopyMoveProgress = () => {
-    if (!this.copyMoveProgressPolling || this.copyMoveProgressTimer) {
-      return;
-    }
-
-    const interval = this.copyMoveProgressInterval;
-    this.copyMoveProgressInterval = Math.min(interval * 2, COPY_MOVE_PROGRESS_MAX_INTERVAL);
-    this.copyMoveProgressTimer = setTimeout(() => {
-      this.copyMoveProgressTimer = null;
-      this.getAsyncCopyMoveProgress();
-    }, interval);
-  };
 
   saveSelectedItems = () => {
     this.setState({
@@ -517,7 +465,7 @@ class SharedDirView extends React.Component {
         asyncCopyMoveTaskId: res.data.task_id,
         asyncOperatedFilesLength: itemsForSave.length,
       }, () => {
-        this.startAsyncCopyMoveProgress();
+        this.getAsyncCopyMoveProgress();
       });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -526,7 +474,6 @@ class SharedDirView extends React.Component {
   };
 
   onProgressDialogToggle = () => {
-    this.stopAsyncCopyMoveProgress();
     let { asyncOperationProgress } = this.state;
     if (asyncOperationProgress !== 100) {
       let taskId = this.state.asyncCopyMoveTaskId;
