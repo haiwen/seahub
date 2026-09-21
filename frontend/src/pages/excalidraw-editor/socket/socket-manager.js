@@ -391,6 +391,7 @@ class SocketManager {
         // Keep failed operations in the queue and release the sending state so
         // later sync attempts can continue instead of getting stuck in SENDING.
         this.recoverSendingOperation(error_type || 'sync_server_operations_error');
+        setTimeout(() => this.sendOperations(), OPERATION_RETRY_DELAY);
     }
   };
 
