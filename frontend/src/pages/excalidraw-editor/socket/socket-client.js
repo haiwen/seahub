@@ -170,6 +170,8 @@ class SocketClient {
     serverDebug('room users changed. all users count: %s', users.length);
     const socketManager = SocketManager.getInstance();
     socketManager.receiveRoomUserChanged(users);
+    // The server sends this event after the socket has joined the document room.
+    socketManager.dispatchConnectState('room-joined');
   };
 
   onLeaveRoom = (userInfo) => {

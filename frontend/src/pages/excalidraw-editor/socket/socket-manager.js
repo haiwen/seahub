@@ -26,6 +26,7 @@ class SocketManager {
     this.document = document;
     this.excalidrawAPI = excalidrawAPI;
     this.state = STATE.IDLE;
+    this.isRoomJoined = false;
 
     this.pendingOperationList = [];
     this.previewElements = null;
@@ -306,7 +307,7 @@ class SocketManager {
   };
 
   sendOperations = () => {
-    if (this.state !== STATE.IDLE) return;
+    if (!this.isRoomJoined || this.state !== STATE.IDLE) return;
     stateDebug(`State changed: ${this.state} -> ${STATE.SENDING}`);
     this.state = STATE.SENDING;
     this.sendNextOperations();
@@ -496,14 +497,24 @@ class SocketManager {
   };
 
   dispatchConnectState = (type, message) => {
-    if (type === 'reconnect') {
-      this.state = STATE.IDLE;
+    if (type === 'room-joined') {
+      this.isRoomJoined = true;
+      if (this.state === STATE.DISCONNECT) {
+        stateDebug(`State Changed: ${this.state} -> ${STATE.IDLE}`);
+        this.state = STATE.IDLE;
+      }
       if (this.pendingOperationList.length > 0) {
         this.sendOperations();
       }
     }
 
+    if (type === 'reconnect') {
+      // Wait for the room-user-change confirmation before restoring operations.
+      this.state = STATE.IDLE;
+    }
+
     if (type === 'disconnect') {
+      this.isRoomJoined = false;
       this.commitPreview();
       this.requeueSendingOperation();
       stateDebug(`State Changed: ${this.state} -> ${STATE.DISCONNECT}`);
