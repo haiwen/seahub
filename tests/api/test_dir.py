@@ -63,8 +63,8 @@ class DirTest(BaseTestCase):
         assert json_resp[1]['modifier_contact_email'] == \
                 email2contact_email(self.user.username)
 
-        p = Profile.objects.add_or_update(self.user.username,
-                'test')
-        p = Profile.objects.update_contact_email(self.user.username, self.user.username)
+        Profile.objects.add_or_update(self.user.username, 'test')
+        Profile.objects.update_contact_email(self.user.username, self.user.username)
+        assert email2contact_email(self.user.username) == self.user.username
         assert cache.get(normalize_cache_key(self.user.username, 'CONTACT_')) == \
                 self.user.username
