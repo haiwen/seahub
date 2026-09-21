@@ -1774,21 +1774,28 @@ a.sf-popover-item {
 /* info-bar */
 #info-bar {
   color: #1f0600;
-  padding: 1px 25px 1px 10px;
+  padding: 4px 10px;
   background: #fddaa4;
-  position: relative;
 }
 
-#info-bar .close {
-  position: absolute;
-  right: 5px;
-  top: 5px;
-  font-size: 16px;
-  margin: 0;
+#info-bar .info-bar-close-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-color: var(--bs-icon-color);
+  vertical-align: middle;
+  -webkit-mask: url('../img/close.svg') center / contain no-repeat;
+  mask: url('../img/close.svg') center / contain no-repeat;
 }
 
-#info-bar-info {
-  margin: 3px 0;
+#js-toggle-side-nav .mobile-help-menu-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-color: var(--bs-icon-color);
+  vertical-align: middle;
+  -webkit-mask: url('../img/menu.svg') center / contain no-repeat;
+  mask: url('../img/menu.svg') center / contain no-repeat;
 }
 
 #info-bar-info a {
