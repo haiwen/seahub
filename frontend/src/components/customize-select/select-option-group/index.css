@@ -80,10 +80,6 @@
     fill: var(--bs-icon-secondary-color);
 }
 
-.sf-select-option:not(.sf-select-option-active):hover .header-icon .sf2-icon-tick {
-    fill: var(--bs-icon-secondary-color);
-}
-
 .sf-select-option .select-option-name .single-select-option {
   margin: 0 0 0 12px;
 }

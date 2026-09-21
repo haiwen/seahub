@@ -277,19 +277,6 @@ input#pageNumber {
   font-size: 14px;
 }
 
-#sidebarHeader .sf2-icon-x3 {
-  font-family: 'seafile-font2';
-}
-
-#sidebarHeader .close-thumbnail-panel {
-  font-size: 1rem;
-  color: #999;
-}
-
-#sidebarHeader .close-thumbnail-panel:hover {
-  color: #666;
-}
-
 #thumbnailView .thumbnail {
   float: none;
   max-width: unset;
