@@ -38,20 +38,6 @@
   background-color: transparent;
 }
 
-.sf-metadata-collaborator-editor .collaborator-item {
-  display: flex;
-  align-items: center;
-  padding: 0;
-}
-
-.sf-metadata-collaborator-editor .collaborator-item:last-of-type {
-  margin-bottom: 15px;
-}
-
-.sf-metadata-collaborator-editor .collaborator-item:hover {
-  background: none;
-}
-
 .sf-metadata-collaborator-editor .collaborator-container {
   display: flex;
   align-items: center;
@@ -69,8 +55,10 @@
 }
 
 .sf-metadata-collaborator-editor .sf-metadata-collaborator-editor-container .collaborator {
-  height: 20px;
   flex: 1;
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
   overflow: hidden;
   text-overflow: ellipsis;
   background-color: transparent;
