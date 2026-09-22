@@ -62,9 +62,10 @@
             cloudMode: {% if cloud_mode %} true {% else %} false {% endif %},
             isOrgContext: {% if org is not None %} true {% else %} false {% endif %},
             enableNotificationServer: {% if enable_notification_server %} true {% else %} false {% endif %},
-            notificationServerUrl: '{{ notification_server_url }}'
+            notificationServerUrl: '{{ notification_server_url }}',
         },
         pageOptions: {
+            seadocVideoSizeLimit: {{ seadoc_video_size_limit }},
             csrfToken: "{{ csrf_token }}",
             name: "{{request.user.username|email2nickname|escapejs}}",
             contactEmail: "{{request.user.username|email2contact_email|escapejs}}",

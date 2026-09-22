@@ -29,7 +29,8 @@ from seahub.settings import SEAFILE_VERSION, SITE_DESCRIPTION, \
     FILE_SERVER_ROOT, NOTIFICATION_SERVER_URL, \
     ENABLE_METADATA_MANAGEMENT, BAIDU_MAP_KEY, GOOGLE_MAP_KEY, GOOGLE_MAP_ID, \
     ENABLE_SEAFILE_AI, ENABLE_AI_CHAT, ENABLE_NOTIFICATION_SERVER, OFFICE_SUITE_ENABLED_EDIT_FILE_TYPES, ENABLE_THUMBNAIL_SERVER, \
-    ENABLE_FACE_RECOGNITION, ENABLE_STORAGE_CLASSES, SHARE_LINK_ALWAYS_SEND_PASSWORD_SEPARATELY
+    ENABLE_FACE_RECOGNITION, ENABLE_STORAGE_CLASSES, SHARE_LINK_ALWAYS_SEND_PASSWORD_SEPARATELY, \
+    SEADOC_VIDEO_SIZE_LIMIT
 
 from seahub.organizations.models import OrgAdminSettings
 from seahub.organizations.settings import ORG_ENABLE_ADMIN_CUSTOM_LOGO
@@ -192,6 +193,7 @@ def base(request):
         'enable_repo_auto_del': ENABLE_REPO_AUTO_DEL,
         'enable_metadata_management': ENABLE_METADATA_MANAGEMENT,
         'enable_seadoc': ENABLE_SEADOC,
+        'seadoc_video_size_limit': SEADOC_VIDEO_SIZE_LIMIT,
         'enable_seafile_ai': ENABLE_SEAFILE_AI,
         'chat_and_search_available': chat_and_search_available,
         'enable_notification_server': ENABLE_NOTIFICATION_SERVER,

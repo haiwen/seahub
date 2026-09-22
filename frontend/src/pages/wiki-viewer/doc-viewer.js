@@ -89,6 +89,7 @@ function DocViewer({ pageId }) {
           accessToken: seadoc_access_token,
         });
         const { mediaUrl, serviceURL, siteRoot, lang } = window.app.config;
+        const { seadocVideoSizeLimit } = window.app.pageOptions;
         const { publishUrl } = window.wiki.config;
 
         window.seafile = {
@@ -100,6 +101,7 @@ function DocViewer({ pageId }) {
           wikiId,
           docUuid,
           publishUrl,
+          seadocVideoSizeLimit,
         };
 
         const docRes = await sdocServerApi.getDocContent();

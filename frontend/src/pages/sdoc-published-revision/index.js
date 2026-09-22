@@ -10,7 +10,7 @@ const {
   repoID, repoName, parentDir, filePerm,
   docPath, docName, docUuid, seadocAccessToken, seadocServerUrl, assetsUrl,
   isSdocRevision, isPublished, originFilename, revisionCreatedAt, originFileVersion,
-  originFilePath, originDocUuid, revisionId,
+  originFilePath, originDocUuid, revisionId, seadocVideoSizeLimit,
 } = window.app.pageOptions;
 
 window.seafile = {
@@ -41,6 +41,7 @@ window.seafile = {
   revisionCreatedAt,
   lang,
   revisionId,
+  seadocVideoSizeLimit,
 };
 
 const SdocPublishedRevision = () => {

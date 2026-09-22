@@ -9,6 +9,7 @@ import { Utils } from '@/utils/utils';
 
 const { serviceURL, siteRoot, avatarURL } = window.app.config;
 const { shareLinkUsername: username, name = 'Anonymous' } = window.shared.pageOptions;
+const { seadocVideoSizeLimit } = window.app.pageOptions;
 
 const {
   repoID, filePerm,
@@ -39,6 +40,7 @@ window.seafile = {
   downloadURL: (canDownload && !trafficOverLimit) ? `?${zipped ? 'p=' + encodeURIComponent(docPath) + '&' : ''}dl=1` : '',
   canEdit: canEdit,
   docPerm: filePerm,
+  seadocVideoSizeLimit,
   historyURL: Utils.generateHistoryURL(siteRoot, repoID, docPath),
   assetsUrl,
 };
