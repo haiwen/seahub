@@ -67,12 +67,20 @@ class AuthTokenSerializer(serializers.Serializer):
         elif all_not_none(v2_fields):
             v2 = True
         else:
+            logger.warning(
+                'auth-token rejected: reason=invalid_token_v2_params login_id=%r '
+                'platform_present=%s device_id_present=%s device_name_present=%s',
+                login_id,
+                platform is not None, device_id is not None, device_name is not None)
             raise serializers.ValidationError('invalid params')
 
         if login_id and password:
             user = authenticate(username=login_id, password=password)
             if user:
                 if not user.is_active:
+                    logger.warning(
+                        'auth-token rejected: reason=account_disabled_first_auth '
+                        'login_id=%r username=%r', login_id, user.username)
                     raise serializers.ValidationError('User account is disabled.')
             else:
                 """try login id/contact email/primary id"""
@@ -85,8 +93,15 @@ class AuthTokenSerializer(serializers.Serializer):
 
                 user = authenticate(username=username, password=password)
                 if user is None:
+                    logger.warning(
+                        'auth-token rejected: reason=credentials_rejected login_id=%r '
+                        'resolved_username=%r primary_id_used=%s',
+                        login_id, username, p_id is not None)
                     raise serializers.ValidationError('Unable to login with provided credentials.')
                 elif not user.is_active:
+                    logger.warning(
+                        'auth-token rejected: reason=account_disabled_second_auth '
+                        'login_id=%r username=%r', login_id, user.username)
                     raise serializers.ValidationError('User account is disabled.')
         else:
             raise serializers.ValidationError('Must include "username" and "password"')
@@ -97,12 +112,24 @@ class AuthTokenSerializer(serializers.Serializer):
         if v2:
             if platform in DESKTOP_PLATFORMS:
                 if not user.permissions.can_connect_with_desktop_clients():
+                    logger.warning(
+                        'auth-token rejected: reason=desktop_client_not_allowed '
+                        'login_id=%r username=%r platform=%r',
+                        login_id, user.username, platform)
                     raise serializers.ValidationError('Not allowed to connect to desktop client.')
             elif platform == 'android':
                 if not user.permissions.can_connect_with_android_clients():
+                    logger.warning(
+                        'auth-token rejected: reason=android_client_not_allowed '
+                        'login_id=%r username=%r platform=%r',
+                        login_id, user.username, platform)
                     raise serializers.ValidationError('Not allowed to connect to android client.')
             elif platform == 'ios':
                 if not user.permissions.can_connect_with_ios_clients():
+                    logger.warning(
+                        'auth-token rejected: reason=ios_client_not_allowed '
+                        'login_id=%r username=%r platform=%r',
+                        login_id, user.username, platform)
                     raise serializers.ValidationError('Not allowed to connect to ios client.')
             else:
                 logger.info('%s: unrecognized device' % login_id)
@@ -127,10 +154,16 @@ class AuthTokenSerializer(serializers.Serializer):
             # Generate challenge(send sms/call/...) if token is not provided.
             default_device(user).generate_challenge()
 
+            logger.warning(
+                'auth-token rejected: reason=two_factor_token_missing login_id=%r '
+                'username=%r', user.username, user.username)
             self.two_factor_auth_failed = True
             msg = 'Two factor auth token is missing.'
             raise serializers.ValidationError(msg)
         if not verify_two_factor_token(user, token):
+            logger.warning(
+                'auth-token rejected: reason=two_factor_token_invalid login_id=%r '
+                'username=%r', user.username, user.username)
             self.two_factor_auth_failed = True
             msg = 'Two factor auth token is invalid.'
             raise serializers.ValidationError(msg)
