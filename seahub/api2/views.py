@@ -95,6 +95,7 @@ from seahub.utils.timeutils import utc_to_local, \
         datetime_to_isoformat_timestr, datetime_to_timestamp, \
         timestamp_to_isoformat_timestr
 from seahub.utils.db_api import SeafileDB
+from seahub.utils.ccnet_db import CcnetDB
 from seahub.views import is_registered_user, check_folder_permission, \
     create_default_library, list_inner_pub_repos
 from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg, can_edit_file, should_use_origin_file_history
@@ -5755,7 +5756,7 @@ class RepoUserFolderPermBatch(APIView):
             normalized_permissions.append((path, permission, username))
             usernames.add(username)
 
-        existing_users = set(User.objects.filter(email__in=usernames).values_list('email', flat=True))
+        existing_users = set(CcnetDB().get_active_users_by_user_list(usernames))
         dir_ids = {}
         valid_permissions = []
         for path, permission, username in normalized_permissions:
@@ -5941,7 +5942,7 @@ class RepoUserFolderPermBatch(APIView):
             normalized_permissions.append((path, permission, username))
             usernames.add(username)
 
-        existing_users = set(User.objects.filter(email__in=usernames).values_list('email', flat=True))
+        existing_users = set(CcnetDB().get_active_users_by_user_list(usernames))
         dir_ids = {}
         valid_permissions = []
         for path, permission, username in normalized_permissions:
