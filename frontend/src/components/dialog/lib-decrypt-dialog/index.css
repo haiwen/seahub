@@ -57,10 +57,7 @@
 
 .lib-decrypt-form .submit {
   width: 100%;
-  height: 38px;
   margin: 16px 0 0;
-  font-size: 16px;
-  font-weight: 400;
 }
 
 @media (max-width: 575.98px) {

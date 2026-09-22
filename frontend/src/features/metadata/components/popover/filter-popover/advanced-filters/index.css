@@ -38,13 +38,13 @@
   flex: 1;
 }
 
-.sf-metadata-filters-list .filter-item .condition > div {
+.sf-metadata-filters-list .filter-item .condition>div {
   height: 38px;
   line-height: 38px;
   margin-left: 0.5rem;
 }
 
-.sf-metadata-filters-list .filter-item .condition > div:first-child {
+.sf-metadata-filters-list .filter-item .condition>div:first-child {
   margin-left: 0;
 }
 
@@ -191,14 +191,11 @@
   box-shadow: none;
 }
 
-.sf-metadata-filters-list .filter-term .date-picker-container input:focus {
-  color: var(--bs-body-color);
-  background: var(--bs-body-bg);
-  outline: 0;
-}
-
-.sf-metadata-filters-list .filter-term .date-picker-container table tr {
-  height: 30px;
+.sf-metadata-filters-list .filter-term .date-picker-container input {
+  height: 32px;
+  line-height: 30px;
+  padding: 0 12px;
+  border-radius: 4px;
 }
 
 .sf-metadata-filters-list .filter-term input[type='checkbox'] {

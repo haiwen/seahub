@@ -7,6 +7,7 @@ import localeData from 'dayjs/plugin/localeData';
 import utc from 'dayjs/plugin/utc';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import PropTypes from 'prop-types';
+import ClearIcon from '@/components/clear-icon';
 import { translateCalendar } from '@/utils/date-format-utils';
 import 'dayjs/locale/zh-cn';
 import 'dayjs/locale/en-gb';
@@ -92,6 +93,7 @@ class Picker extends React.Component {
               format={format}
               locale={translateCalendar()}
               showHourAndMinute={showHourAndMinute}
+              clearIcon={<ClearIcon />}
             />
           }
           value={this.props.value}

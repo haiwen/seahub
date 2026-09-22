@@ -5,6 +5,7 @@ import localeData from 'dayjs/plugin/localeData';
 import utc from 'dayjs/plugin/utc';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import PropTypes from 'prop-types';
+import ClearIcon from '@/components/clear-icon';
 import { gettext } from '@/utils/constants';
 import { translateCalendar } from '@/utils/date-format-utils';
 import { getEventClassName } from '@/utils/dom';
@@ -208,6 +209,7 @@ class DateEditor extends Component {
         defaultMinutesTime={defaultMinutesTime}
         onClear={this.onClear}
         onClickRightPanelTime={this.onClickRightPanelTime}
+        clearIcon={<ClearIcon />}
       />
     );
     return (
