@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ClickOutside from '../click-outside';
+import Icon from '../icon';
 import QRCodePopover from '../qr-code-popover';
 
 import './index.css';
@@ -39,9 +40,10 @@ class ButtonQR extends React.Component {
         <Button
           outline
           color="primary"
-          className="btn-icon btn-qr-code-icon sf3-font sf3-font-qr-code" onClick={this.togglePopover}
+          className="btn-icon btn-qr-code-icon" onClick={this.togglePopover}
           type="button"
         >
+          <Icon symbol="qr-code" />
         </Button>
         {isPopoverOpen && (
           <ClickOutside onClickOutside={this.onClickOutside}>
