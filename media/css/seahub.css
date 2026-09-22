@@ -1664,8 +1664,14 @@ a.sf-popover-item {
   text-decoration: none;
 }
 
-#lang-context .sf3-font.sf3-font-down {
-  font-size: 12px;
+#lang-context .lang-context-icon {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  vertical-align: middle;
+  background-color: currentColor;
+  -webkit-mask: url('../img/down.svg') center / contain no-repeat;
+  mask: url('../img/down.svg') center / contain no-repeat;
 }
 
 .captcha {
@@ -1744,16 +1750,36 @@ a.sf-popover-item {
 }
 
 #toggle-show-password {
-  height: 40px;
-  line-height: 40px;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
   position: absolute;
+  top: 12px;
   right: 10px;
   cursor: pointer;
   color: #999;
+  background-color: currentColor;
+  -webkit-mask: url('../img/eye-slash.svg') center / contain no-repeat;
+  mask: url('../img/eye-slash.svg') center / contain no-repeat;
+}
+
+#toggle-show-password.password-visibility-icon-visible {
+  -webkit-mask-image: url('../img/eye.svg');
+  mask-image: url('../img/eye.svg');
 }
 
 #toggle-show-password:hover {
   color: #666;
+}
+
+.qr-code-secret-key-copy-icon-2fa {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  background-color: currentColor;
+  -webkit-mask: url('../img/copy.svg') center / contain no-repeat;
+  mask: url('../img/copy.svg') center / contain no-repeat;
 }
 
 #log-in-panel .remember-me {
