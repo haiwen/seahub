@@ -235,6 +235,10 @@ class ObtainAuthToken(APIView):
                 'X-Seafile-OTP': 'required',
             }
 
+        logger.warning(
+            'auth-token rejected: reason=serializer_validation_failed login_id=%r '
+            'errors=%s', request.data.get('username', ''), serializer.errors)
+
         return Response(serializer.errors,
                         status=status.HTTP_400_BAD_REQUEST,
                         headers=headers)
