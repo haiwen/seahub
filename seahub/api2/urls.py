@@ -38,6 +38,7 @@ urlpatterns = [
     re_path(r'^repos/(?P<repo_id>[-0-9a-f]{36})/$', Repo.as_view(), name="api2-repo"),
     re_path(r'^repos/(?P<repo_id>[-0-9a-f]{36})/history/$', RepoHistory.as_view()),
     re_path(r'^repos/(?P<repo_id>[-0-9a-f]{36})/user-folder-perm/$', RepoUserFolderPerm.as_view(), name="api2-repo-user-folder-perm"),
+    re_path(r'^repos/(?P<repo_id>[-0-9a-f]{36})/user-folder-perm/batch/$', RepoUserFolderPermBatch.as_view(), name="api2-repo-user-folder-perm-batch"),
     re_path(r'^repos/(?P<repo_id>[-0-9a-f]{36})/group-folder-perm/$', RepoGroupFolderPerm.as_view(), name="api2-repo-group-folder-perm"),
     re_path(r'^repos/(?P<repo_id>[-0-9a-f]{36})/history-limit/$', RepoHistoryLimit.as_view(), name="api2-repo-history-limit"),
     re_path(r'^repos/(?P<repo_id>[-0-9a-f]{36})/download-info/$', DownloadRepo.as_view()),
