@@ -122,7 +122,7 @@ from seahub.api2.endpoints.via_repo_token import ViaRepoDirView, ViaRepoUploadLi
     ViaRepoMetadataViews, ViaRepoMetadataTags, ViaRepoMetadataViewsDuplicateView, ViaRepoMetadataViewsMoveView, \
     ViaRepoMetadataTagsStatusManage, ViaRepoMetadataViewsDetailView, ViaRepoMetadataTagsLinks, ViaRepoMetadataFileTags, \
     ViaRepoMetadataTagFiles, ViaRepoMetadataTagsFiles, ViaRepoMetadataMergeTags, ViaRepoRecentlyChangedFiles, \
-    ViaRepoRecentlyDeletedFiles, ViaRepoSearchFilesView
+    ViaRepoRecentlyDeletedFiles, ViaRepoSearchFilesView, ViaRepoSdocAccessTokenView
 from seahub.api2.endpoints.abuse_reports import AbuseReportsView
 from seahub.api2.endpoints.ocm import OCMProtocolView, OCMSharesView, OCMNotificationsView, \
     OCMSharesPrepareView, OCMSharePrepareView, OCMSharesReceivedView, OCMShareReceivedView
@@ -520,6 +520,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/via-repo-token/upload-link/$', ViaRepoUploadLinkView.as_view(), name='via-upload-link'),
     re_path(r'^api/v2.1/via-repo-token/download-link/$', ViaRepoDownloadLinkView.as_view(), name='via-download-link'),
     re_path(r'^api/v2.1/via-repo-token/repo-info/$', RepoInfoView.as_view(), name='via-fetch-repo'),
+    re_path(r'^api/v2.1/via-repo-token/sdoc-access-token/$', ViaRepoSdocAccessTokenView.as_view(), name='via-repo-token-sdoc-access-token'),
     re_path(r'^api/v2.1/via-repo-token/search-files/$', ViaRepoSearchFilesView.as_view(), name='via-repo-token-search-files'),
     re_path(r'^api/v2.1/via-repo-token/sync-batch-move-item/$', ViaRepoBatchMove.as_view(), name='via-repo-token-move'),
     re_path(r'^api/v2.1/via-repo-token/sync-batch-copy-item/$', ViaRepoBatchCopy.as_view(), name='via-repo-token-copy'),

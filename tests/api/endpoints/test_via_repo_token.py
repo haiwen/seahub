@@ -8,7 +8,10 @@ import uuid
 
 from django.urls import reverse
 
+import jwt
+
 from seahub.repo_api_tokens.models import RepoAPITokens
+from seahub.seadoc.utils import SEADOC_PRIVATE_KEY, get_seadoc_file_uuid
 # Face recognition has been removed. Keep the related tests below commented out
 # until legacy metadata cleanup needs to be tested again.
 # from seahub.repo_metadata.models import RepoMetadataViews
@@ -208,3 +211,79 @@ class ViaUploadLinkTest(BaseTestCase):
 #         url = reverse('via-repo-token-metadata-duplicate-views')
 #         resp = self.client.post(url, {'view_id': '_legacy_face_recognition'}, **headers)
 #         self.assertEqual(400, resp.status_code)
+
+
+class ViaRepoSdocAccessTokenTest(BaseTestCase):
+
+    def _create_repo_api_token_obj(self, app_name, permission):
+        return RepoAPITokens.objects.create_token(
+            app_name, self.repo_id, self.user.username, permission=permission)
+
+    def _auth_header(self, token):
+        return {'HTTP_AUTHORIZATION': 'token ' + token.token}
+
+    def setUp(self):
+        self.login_as(self.user)
+        self.repo_id = self.repo.id
+        self.sdoc_path = self.create_file(
+            repo_id=self.repo_id,
+            parent_dir='/',
+            filename='bridge.sdoc',
+            username=self.user.username)
+        self.read_token = self._create_repo_api_token_obj('read-app', 'r')
+        self.write_token = self._create_repo_api_token_obj('write-app', 'rw')
+        self.url = reverse('via-repo-token-sdoc-access-token')
+        self.logout()
+
+    def tearDown(self):
+        RepoAPITokens.objects.filter(repo_id=self.repo_id).delete()
+        self.remove_repo(self.repo_id)
+
+    def test_rw_token_returns_sdoc_access_context(self):
+        resp = self.client.get(self.url + '?path=/bridge.sdoc', **self._auth_header(self.write_token))
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        self.assertIn('doc_uuid', json_resp)
+        self.assertIn('access_token', json_resp)
+        self.assertIn('sdoc_server_url', json_resp)
+        self.assertEqual(86400 * 3, json_resp['expires_in'])
+
+        payload = jwt.decode(json_resp['access_token'], SEADOC_PRIVATE_KEY, algorithms=['HS256'])
+        self.assertEqual(json_resp['doc_uuid'], payload['file_uuid'])
+        self.assertEqual(self.user.username, payload['username'])
+        self.assertEqual('rw', payload['permission'])
+        self.assertEqual('bridge.sdoc', payload['filename'])
+        self.assertEqual(get_seadoc_file_uuid(self.repo, '/bridge.sdoc'), json_resp['doc_uuid'])
+
+    def test_r_token_issues_read_only_sdoc_token(self):
+        resp = self.client.get(self.url + '?path=/bridge.sdoc', **self._auth_header(self.read_token))
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        payload = jwt.decode(json_resp['access_token'], SEADOC_PRIVATE_KEY, algorithms=['HS256'])
+        self.assertEqual(self.user.username, payload['username'])
+        self.assertEqual('r', payload['permission'])
+
+    def test_rejects_non_sdoc_file(self):
+        resp = self.client.get(
+            self.url + '?path=' + self.file,
+            **self._auth_header(self.write_token))
+        self.assertEqual(400, resp.status_code)
+
+    def test_rejects_missing_path(self):
+        resp = self.client.get(self.url, **self._auth_header(self.write_token))
+        self.assertEqual(400, resp.status_code)
+
+    def test_rejects_missing_file(self):
+        resp = self.client.get(
+            self.url + '?path=/missing.sdoc',
+            **self._auth_header(self.write_token))
+        self.assertEqual(404, resp.status_code)
+
+    def test_rejects_invalid_token(self):
+        unique = str(uuid.uuid4())
+        token = hmac.new(unique.encode('utf-8'), digestmod=sha1).hexdigest()
+        headers = {'HTTP_AUTHORIZATION': 'token ' + token}
+        resp = self.client.get(self.url + '?path=/bridge.sdoc', **headers)
+        self.assertIn(resp.status_code, (401, 403))
