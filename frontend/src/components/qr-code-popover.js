@@ -5,7 +5,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { gettext } from '@/utils/constants';
 import toaster from './toast';
 
-const QRCodePopover = ({ container, target, value, placement = 'left' }) => {
+const QRCodePopover = ({ container, target, value, placement = 'bottom-end' }) => {
   const qrCodeRef = React.useRef(null);
 
   const downloadQRCode = useCallback(() => {
@@ -104,6 +104,7 @@ const QRCodePopover = ({ container, target, value, placement = 'left' }) => {
       target={target}
       onClick={onPopoverContentClick}
       onMouseDown={onPopoverMouseDown}
+      offset={[0, 4]}
     >
       <PopoverBody className="qr-code-popover-body">
         <div ref={qrCodeRef} className="qr-code-container">

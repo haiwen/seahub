@@ -5,6 +5,7 @@ import localeData from 'dayjs/plugin/localeData';
 import utc from 'dayjs/plugin/utc';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import PropTypes from 'prop-types';
+import ClearIcon from '@/components/clear-icon';
 import { gettext, lang } from '@/utils/constants';
 import { translateCalendar } from '@/utils/date-format-utils';
 import { getDateColumnFormat } from '../../../../utils/column';
@@ -123,6 +124,7 @@ class FilterCalendar extends Component {
         showDateInput={true}
         focusablePanel={false}
         onClear={this.onClear}
+        clearIcon={<ClearIcon />}
       />
     );
     return (
