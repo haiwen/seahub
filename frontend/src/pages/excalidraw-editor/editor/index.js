@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { CaptureUpdateAction, Excalidraw, MainMenu, newElementWith, reconcileElements, restoreElements, useHandleLibrary } from '@excalidraw/excalidraw';
 import isHotkey from 'is-hotkey';
 import isUrl from 'is-url';
+import Icon from '@/components/icon';
 import { gettext } from '@/utils/constants';
 import { langList } from '../constants';
 import context from '../context';
@@ -237,7 +238,7 @@ const SimpleEditor = ({ isSharedView = false }) => {
         <MainMenu>
           <MainMenu.DefaultItems.SaveAsImage />
           {!isSharedView && (
-            <MainMenu.Item className='sf3-font-upload-files sf3-font' onClick={onCustomImageDialogToggle}>
+            <MainMenu.Item icon={<Icon symbol="upload-files" className="excalidraw-link-image-icon" />} onClick={onCustomImageDialogToggle}>
               {gettext('Link image')}
             </MainMenu.Item>
           )}
