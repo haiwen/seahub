@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
-import { NAV_ITEM_MARGIN } from '@/constants';
+import { ADMIN_NAV_ITEM_GAP } from '@/constants';
 import { siteRoot, gettext } from '@/utils/constants';
 
 const propTypes = {
@@ -28,11 +28,11 @@ class LogsNav extends React.Component {
     const activeIndex = this.navItems.findIndex(item => item.name === currentItem) || 0;
     const itemWidths = this.itemRefs.map(ref => ref?.offsetWidth);
     const indicatorWidth = itemWidths[activeIndex];
-    const indicatorOffset = itemWidths.slice(0, activeIndex).reduce((prev, cur) => prev + cur, 0) + (2 * activeIndex + 1) * NAV_ITEM_MARGIN;
+    const indicatorOffset = itemWidths.slice(0, activeIndex).reduce((prev, cur) => prev + cur, 0) + activeIndex * ADMIN_NAV_ITEM_GAP;
     return (
       <div className="cur-view-path tab-nav-container">
         <ul
-          className="nav nav-indicator-container position-relative"
+          className="nav nav-indicator-container position-relative gap-6"
           style={{
             '--indicator-width': `${indicatorWidth}px`,
             '--indicator-offset': `${indicatorOffset}px`
@@ -41,7 +41,7 @@ class LogsNav extends React.Component {
           {this.navItems.map((item, index) => {
             return (
               <li
-                className="nav-item mx-3"
+                className="nav-item"
                 key={index}
                 ref={el => this.itemRefs[index] = el}
               >

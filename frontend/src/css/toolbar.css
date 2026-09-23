@@ -18,6 +18,10 @@
   background-color: #ddd;
 }
 
+.admin-main-panel-north.border-left-show:before {
+  background-color: var(--bs-border-secondary-color);
+}
+
 /* end toolbar-container */
 /* file-operation toolbar eg: edit, upload, new, share*/
 .operation-item  {
@@ -59,7 +63,7 @@
 }
 
 .admin-main-panel-north .common-toolbar .input-icon {
-  margin-right: 16px;
+  margin-right: 12px;
 }
 
 .admin-main-panel-north .common-toolbar .input-icon .search-input {

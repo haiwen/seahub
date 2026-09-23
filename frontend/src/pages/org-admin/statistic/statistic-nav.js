@@ -26,10 +26,10 @@ class Nav extends React.Component {
     const { currentItem } = this.props;
     return (
       <div className="cur-view-path tab-nav-container statistic-nav">
-        <ul className="nav">
+        <ul className="nav gap-6">
           {this.navItems.map((item, index) => {
             return (
-              <li className="nav-item mx-4" key={index}>
+              <li className="nav-item" key={index}>
                 <Link to={`${siteRoot}org/${item.urlPart}/`} className={`m-0 nav-link${currentItem == item.name ? ' active' : ''}`}>{item.text}</Link>
               </li>
             );

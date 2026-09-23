@@ -26,11 +26,11 @@ class Nav extends React.Component {
         <div className="cur-view-path">
           <h3 className="sf-heading"><Link to={`${siteRoot}sys/groups/`}>{gettext('Groups')}</Link> / {groupName}</h3>
         </div>
-        <ul className="nav border-bottom mx-4">
+        <ul className="nav border-bottom mx-4 gap-6">
           {this.navItems.map((item, index) => {
             return (
-              <li className="nav-item mr-2" key={index}>
-                <Link to={`${siteRoot}sys/${item.urlPart}/`} className={`nav-link ${currentItem == item.name ? ' active' : ''}`}>{item.text}</Link>
+              <li className="nav-item" key={index}>
+                <Link to={`${siteRoot}sys/${item.urlPart}/`} className={`nav-link m-0 ${currentItem == item.name ? ' active' : ''}`}>{item.text}</Link>
               </li>
             );
           })}

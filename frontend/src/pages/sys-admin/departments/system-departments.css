@@ -84,14 +84,13 @@
   position: relative;
 }
 
-.departments-tree-panel .new-dept-btn {
+.new-dept-btn {
   margin-top: 10px;
+  background-color: var(--bs-body-bg);
 }
 
 .departments-tree-panel .new-dept-btn-icon {
-  font-size: 1rem;
-  color: #666;
-  margin-right: 2px;
+  color: var(--bs-icon-color);
 }
 
 .department-content-main {

@@ -29,7 +29,7 @@
 
 .search-container .input-icon {
   position: relative;
-  margin: 0 16px;
+  margin: 0 12px 0 16px;
 }
 
 .search-container .input-icon svg.input-icon-addon {

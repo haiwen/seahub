@@ -35,11 +35,11 @@ class Nav extends React.Component {
     const showSortIcon = currentItem == 'all';
     return (
       <div className="cur-view-path tab-nav-container">
-        <ul className="nav">
+        <ul className="nav gap-6">
           {this.navItems.map((item, index) => {
             return (
               <li className="nav-item" key={index}>
-                <Link to={`${siteRoot}org/${item.urlPart}/`} className={`nav-link${currentItem == item.name ? ' active' : ''}`}>{item.text}</Link>
+                <Link to={`${siteRoot}org/${item.urlPart}/`} className={`nav-link m-0${currentItem == item.name ? ' active' : ''}`}>{item.text}</Link>
               </li>
             );
           })}

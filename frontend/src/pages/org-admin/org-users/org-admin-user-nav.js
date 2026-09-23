@@ -15,15 +15,15 @@ class OrgAdminUserNav extends React.Component {
     const urlBase = `${siteRoot}org/useradmin/info/${encodeURIComponent(email)}/`;
     return (
       <div className="cur-view-path org-admin-user-nav">
-        <ul className="nav">
+        <ul className="nav gap-6">
           <li className="nav-item">
-            <Link to={urlBase} className={`nav-link${currentItem == 'profile' ? ' active' : ''}`}>{gettext('Profile')}</Link>
+            <Link to={urlBase} className={`nav-link m-0${currentItem == 'profile' ? ' active' : ''}`}>{gettext('Profile')}</Link>
           </li>
           <li className="nav-item">
-            <Link to={`${urlBase}repos/`} className={`nav-link${currentItem == 'owned-repos' ? ' active' : ''}`}>{gettext('Owned Libraries')}</Link>
+            <Link to={`${urlBase}repos/`} className={`nav-link m-0${currentItem == 'owned-repos' ? ' active' : ''}`}>{gettext('Owned Libraries')}</Link>
           </li>
           <li className="nav-item">
-            <Link to={`${urlBase}shared-repos/`} className={`nav-link${currentItem == 'shared-repos' ? ' active' : ''}`}>{gettext('Shared Libraries')}</Link>
+            <Link to={`${urlBase}shared-repos/`} className={`nav-link m-0${currentItem == 'shared-repos' ? ' active' : ''}`}>{gettext('Shared Libraries')}</Link>
           </li>
         </ul>
       </div>

@@ -131,12 +131,12 @@ class Department extends React.Component {
         </div>
 
         <div className="cur-view-path tab-nav-container">
-          <ul className="nav">
+          <ul className="nav gap-6">
             <li className="nav-item">
-              <span className={`nav-link ${activeNav === 'members' ? 'active' : ''}`} onClick={() => this.changeActiveNav('members')}>{gettext('Members')}</span>
+              <span className={`nav-link m-0 ${activeNav === 'members' ? 'active' : ''}`} onClick={() => this.changeActiveNav('members')}>{gettext('Members')}</span>
             </li>
             <li className="nav-item">
-              <span className={`nav-link ${activeNav === 'repos' ? 'active' : ''}`} onClick={() => this.changeActiveNav('repos')}>{gettext('Libraries')}</span>
+              <span className={`nav-link m-0 ${activeNav === 'repos' ? 'active' : ''}`} onClick={() => this.changeActiveNav('repos')}>{gettext('Libraries')}</span>
             </li>
           </ul>
 

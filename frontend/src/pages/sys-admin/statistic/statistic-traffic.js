@@ -109,7 +109,7 @@ class StatisticTraffic extends React.Component {
     return (
       <Fragment>
         {/* <MainPanelTopbar {...this.props} /> */}
-        <div className="cur-view-container">
+        <div className="cur-view-container statistic-traffic-page">
           {/* <StatisticNav currentItem="trafficStatistic" /> */}
           <div className="cur-view-content">
             {this.renderCommonTool()}

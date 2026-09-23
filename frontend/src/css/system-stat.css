@@ -1,5 +1,5 @@
 .system-statistic-time-range {
-  margin: 15px 0 25px;
+  margin: 0 0 25px;
   display: flex;
   align-items: center;
   font-size: 13px;
@@ -8,6 +8,18 @@
 .sys-stat-tool {
   font-size: 13px;
   color: var(--bs-body-color);
+}
+
+.sys-stat-tool-button,
+.ai-statistics-query-button {
+  background-color: var(--bs-body-bg);
+  border-color: var(--bs-border-color);
+}
+
+.sys-stat-tool.btn-group .btn.statistic-button-joined,
+.ai-statistics-query.btn-group .btn.statistic-button-joined {
+  margin-left: 0;
+  border-left: 0;
 }
 
 .sys-stat-tool .item-active {
@@ -20,38 +32,31 @@
   align-items: center;
 }
 
-.cur-view-path.statistic-nav {
-  padding-left: 0;
-}
-
 .statistic-nav .nav-item .nav-link {
-  color: var(--bs-body-secondary-color);
+  color: var(--bs-body-color);
 }
 
 
 .statistic-traffic-tab {
-  display: flex;
-  font-size: 13px;
+  font-size: 14px;
+  line-height: 26px;
   color: var(--bs-body-color);
-  margin-top: 10px;
 }
 
 .statistic-traffic-tab .statistic-traffic-tab-item {
-  margin-right: 10px;
-  padding: 3px 0;
+  padding: 0 0 4px;
   border-bottom: 2px solid transparent;
   cursor: pointer;
   color: var(--bs-body-secondary-color);
 }
 
-.statistic-traffic-tab .statistic-traffic-tab-item:hover {
+.statistic-traffic-tab .statistic-traffic-tab-item.active {
   color: #ED7109;
   border-bottom: 2px solid #ED7109;
 }
 
-.statistic-traffic-tab .statistic-traffic-tab-item.active {
-  color: #ED7109;
-  border-bottom: 2px solid #ED7109;
+.statistic-traffic-page .system-statistic-time-range {
+  margin-top: 16px;
 }
 
 .statistic-reports-page .statistic-reports-title {
@@ -112,6 +117,7 @@
   background: var(--bs-nav-active-bg);
 }
 
+.statistic-traffic-tab,
 .ai-statistics-tabs {
   display: flex;
   flex-wrap: wrap;

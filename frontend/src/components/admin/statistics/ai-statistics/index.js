@@ -281,7 +281,7 @@ const AIStatisticsPage = ({
       </div>
       {groupBy !== 'overview' && (
         <div className="d-flex align-items-center flex-wrap mb-4">
-          <ButtonGroup size="sm" className="mr-5">
+          <ButtonGroup size="sm" className="ai-statistics-query mr-5">
             <Button
               color="secondary"
               className={`ai-statistics-query-button${queryMode === 'date' ? ' is-selected' : ''}`}
@@ -294,7 +294,7 @@ const AIStatisticsPage = ({
             </Button>
             <Button
               color="secondary"
-              className={`ai-statistics-query-button${queryMode === 'month' ? ' is-selected' : ''}`}
+              className={`ai-statistics-query-button statistic-button-joined${queryMode === 'month' ? ' is-selected' : ''}`}
               onClick={() => {
                 setQueryMode('month');
                 setCurrentPage(1);
