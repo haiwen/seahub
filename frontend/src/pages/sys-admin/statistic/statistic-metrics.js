@@ -7,6 +7,18 @@ import Tooltip from '@/components/tooltip';
 import { gettext } from '@/utils/constants';
 import '@/css/system-stat.css';
 
+export const getDisplayNodeName = (componentName, nodeName) => (
+  componentName === 'general' ? '--' : nodeName
+);
+
+export const sortMetricComponents = (groupedMetrics) => Object.entries(groupedMetrics).sort(
+  ([firstComponent], [secondComponent]) => {
+    if (firstComponent === 'general') return -1;
+    if (secondComponent === 'general') return 1;
+    return firstComponent.localeCompare(secondComponent);
+  }
+);
+
 class ComponentMetricsTable extends Component {
   constructor(props) {
     super(props);
@@ -62,7 +74,7 @@ class ComponentMetricsTable extends Component {
                     </div>
                   </div>
                 </td>
-                <td>{point.labels.node}</td>
+                <td>{getDisplayNodeName(componentName, point.labels.node)}</td>
                 <td className="metric-value">{point.value}</td>
                 <td>
                   <span className="collected-time">
@@ -159,7 +171,7 @@ class StatisticMetrics extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      {Object.entries(groupedMetrics).map(([component, metrics]) => (
+                      {sortMetricComponents(groupedMetrics).map(([component, metrics]) => (
                         <ComponentMetricsTable
                           key={component}
                           componentName={component}
