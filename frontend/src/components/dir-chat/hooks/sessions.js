@@ -229,8 +229,11 @@ export const SessionsProvider = ({
     });
   }, [api, updateSessionCollection]);
 
-  const modifyLocalSession = useCallback((sessionId, update) => {
+  const modifyLocalSession = useCallback((sessionId, update, condition) => {
     const updater = (session) => {
+      if (condition && !condition(session)) {
+        return session;
+      }
       const nextSession = Object.assign(Object.create(Object.getPrototypeOf(session)), session);
       Object.keys(update).forEach((key) => {
         nextSession[key] = update[key];
