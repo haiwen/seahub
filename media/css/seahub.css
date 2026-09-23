@@ -934,17 +934,6 @@ textarea:-moz-placeholder {
   text-decoration: none;
 }
 
-.side-tabnav-tabs .tab [class^="sf3-font-"] {
-  display: inline-block;
-  width: 42px;
-  margin-right: 5px;
-  text-align: center;
-  vertical-align: middle;
-  font-size: 24px;
-  line-height: 1;
-  color: #999;
-}
-
 .side-nav-toggle {
   font-size: 1.5rem;
   color: #999;
@@ -970,7 +959,6 @@ textarea:-moz-placeholder {
   background-color: #feac74;
 }
 
-.side-tabnav-tabs .tab-cur [class^="sf3-font-"],
 .side-tabnav-tabs .tab-cur a,
 #group-nav .tab-cur .sharp,
 #share-admin-nav .tab-cur .sharp {

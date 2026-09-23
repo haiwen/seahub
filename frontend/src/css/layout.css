@@ -409,10 +409,6 @@ img[src=""], img:not([src]) {
   flex-shrink: 1;
 }
 
-.path-container .op-btn .sf3-font {
-  color: #444;
-}
-
 .dir-tool {
   height: 1.5rem;
   display: flex;

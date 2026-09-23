@@ -341,13 +341,10 @@
 }
 
 .wiki-nav,
-.wiki-nav .wiki-page-item .wiki-add-page-btn .sf3-font.sf3-font-enlarge:hover,
 .wiki-nav .wiki-page-item .seafile-multicolor-icon-more-level:hover {
   color: var(--bs-body-color);
 }
 
-.wiki-nav .wiki2-trash .sf3-font,
-.wiki-nav .wiki-page-item .wiki-add-page-btn .sf3-font.sf3-font-enlarge,
 .wiki-nav .wiki-page-item .seafile-multicolor-icon-more-level {
   color: #666;
 }

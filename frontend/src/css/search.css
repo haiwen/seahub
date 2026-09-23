@@ -85,11 +85,6 @@
   border-radius: 4px;
 }
 
-.search-icon-right.sf3-font-set-up {
-  left: auto;
-  right: 25px;
-}
-
 .search-icon-arrow {
   right: 40px;
   left: auto;
@@ -323,11 +318,6 @@
 .search-page .search-page-container .search-input {
   padding-left: 0.5rem;
   width: 30rem;
-}
-
-.search-page .search-page-container .sf3-font-angles-up,
-.search-page .search-page-container .sf3-font-angles-down {
-  font-size: 1rem;
 }
 
 .search-page .advanced-search .search-file-types .search-input {
@@ -570,7 +560,6 @@
   color: var(--bs-body-secondary-color);
 }
 
-.search-types .sf3-font-enter,
 .search-types .search-types-enter-icon {
   position: absolute;
   right: 12px;

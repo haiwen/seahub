@@ -97,14 +97,3 @@
   text-align: center;
   cursor: pointer;
 }
-
-.wiki-linked-repos__body .linked-repos-table .repo-op .sf3-font {
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  color: #666;
-}
-
-.wiki-linked-repos__body .linked-repos-table .repo-op .sf3-font:hover {
-  background-color: #e5e5e5;
-}

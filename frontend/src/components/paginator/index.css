@@ -32,10 +32,6 @@
   min-width: auto;
 }
 
-.paginator-dropdown>.btn .sf3-font {
-  color: #666;
-}
-
 .paginator-dropdown .paginator-dropdown-menu .paginator-dropdown-item {
   display: flex;
   padding-left: 10px;
