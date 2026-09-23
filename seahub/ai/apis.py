@@ -602,10 +602,13 @@ class ChatSessionTitleView(APIView):
     def post(self, request, session_uuid):
         query = request.data.get('query')
         ai_reply = request.data.get('ai_reply')
+        expected_session_name = request.data.get('expected_session_name')
         if not query:
             return api_error(status.HTTP_400_BAD_REQUEST, 'query parameter is required.')
         if not ai_reply:
             return api_error(status.HTTP_400_BAD_REQUEST, 'ai_reply parameter is required.')
+        if not expected_session_name:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'expected_session_name parameter is required.')
 
         session = ChatSessions.objects.get_session_by_uuid(session_uuid)
         if not session:
@@ -618,13 +621,18 @@ class ChatSessionTitleView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if session.username != request.user.username:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied. Only the session owner can modify this session.')
+        if session.session_name != expected_session_name:
+            return Response({
+                'success': True,
+                'session_name': session.session_name,
+            })
 
         org_id = request.user.org.org_id if getattr(request.user, 'org', None) else None
         usage_context = resolve_repo_ai_usage_context(session.repo_id, org_id, AI_SCENARIO_CHAT)
         if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
-        session_name = generate_session_title(session, query, ai_reply)
+        session_name = generate_session_title(session, query, ai_reply, expected_session_name)
         return Response({
             'success': True,
             'session_name': session_name,

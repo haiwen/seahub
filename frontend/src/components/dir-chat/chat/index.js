@@ -103,19 +103,24 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
   }, [jumpToBottom]);
 
   const triggerTitleGeneration = useCallback((sessionId, aiReply) => {
-    const query = pendingTitleQueryBySession.current[sessionId];
-    if (!query || !aiReply) {
+    const pendingTitle = pendingTitleQueryBySession.current[sessionId];
+    if (!pendingTitle?.query || !pendingTitle.sessionName || !aiReply) {
       return;
     }
 
     delete pendingTitleQueryBySession.current[sessionId];
     chatAPI.generateChatSessionTitle(sessionId, {
-      query,
+      query: pendingTitle.query,
       ai_reply: aiReply,
+      expected_session_name: pendingTitle.sessionName,
     }).then((res) => {
       const sessionName = res.data?.session_name;
       if (sessionName) {
-        modifyLocalSession(sessionId, { name: sessionName });
+        modifyLocalSession(
+          sessionId,
+          { name: sessionName },
+          (session) => session.name === pendingTitle.sessionName
+        );
       }
     }).catch(() => {
       // Keep the placeholder title if generation fails.
@@ -154,7 +159,10 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
 
     createSession(validMessage.slice(0, 100)).then((newSession) => {
       const newSessionId = newSession._id;
-      pendingTitleQueryBySession.current[newSessionId] = validMessage;
+      pendingTitleQueryBySession.current[newSessionId] = {
+        query: validMessage,
+        sessionName: newSession.name,
+      };
       currentSessionId.current = newSessionId;
       newSessionProblem.current = '';
       togglePageSlugId(newSessionId);

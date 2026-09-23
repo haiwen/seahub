@@ -126,7 +126,7 @@ def get_chat_title(params):
     return resp.json().get('title', '')
 
 
-def generate_session_title(session, query, ai_reply):
+def generate_session_title(session, query, ai_reply, expected_session_name):
     try:
         title = get_chat_title({
             'repo_id': session.repo_id,
@@ -144,9 +144,15 @@ def generate_session_title(session, query, ai_reply):
     if not title:
         return session.session_name
 
-    session.session_name = title
-    session.save()
-    return title
+    updated = ChatSessions.objects.filter(
+        pk=session.pk,
+        session_name=expected_session_name,
+    ).update(session_name=title, updated_at=timezone.now())
+    if updated:
+        return title
+
+    session.refresh_from_db(fields=['session_name'])
+    return session.session_name
 
 
 # utils

@@ -107,28 +107,50 @@ class AIChatAPIPermissionTest(SimpleTestCase):
 
 
 class AIChatTitleTest(SimpleTestCase):
+    @patch('seahub.ai.utils.ChatSessions.objects.filter')
     @patch('seahub.ai.utils.get_chat_title', return_value='  "Concise\nchat title!"  ')
-    def test_generate_session_title(self, mock_get_chat_title):
-        session = SimpleNamespace(repo_id='repo-id', session_name='placeholder', save=lambda: None)
+    def test_generate_session_title(self, mock_get_chat_title, mock_filter):
+        session = SimpleNamespace(pk=1, repo_id='repo-id', session_name='placeholder')
+        mock_filter.return_value.update.return_value = 1
 
-        title = generate_session_title(session, 'query', 'reply')
+        title = generate_session_title(session, 'query', 'reply', 'placeholder')
 
         self.assertEqual(title, 'Concise chat title')
-        self.assertEqual(session.session_name, title)
         mock_get_chat_title.assert_called_once_with({
             'repo_id': 'repo-id',
             'query': 'query',
             'ai_reply': 'reply',
             'scenario': 'chat',
         })
+        mock_filter.assert_called_once_with(pk=1, session_name='placeholder')
+        update_kwargs = mock_filter.return_value.update.call_args.kwargs
+        self.assertEqual(update_kwargs['session_name'], title)
+        self.assertIn('updated_at', update_kwargs)
 
     @patch('seahub.ai.utils.get_chat_title', side_effect=RuntimeError('failed'))
     def test_generate_session_title_keeps_placeholder_on_error(self, mock_get_chat_title):
         session = SimpleNamespace(repo_id='repo-id', session_name='placeholder')
 
-        title = generate_session_title(session, 'query', 'reply')
+        title = generate_session_title(session, 'query', 'reply', 'placeholder')
 
         self.assertEqual(title, 'placeholder')
+        mock_get_chat_title.assert_called_once()
+
+    @patch('seahub.ai.utils.ChatSessions.objects.filter')
+    @patch('seahub.ai.utils.get_chat_title', return_value='Generated title')
+    def test_generate_session_title_keeps_renamed_title(self, mock_get_chat_title, mock_filter):
+        session = SimpleNamespace(pk=1, repo_id='repo-id', session_name='placeholder')
+        mock_filter.return_value.update.return_value = 0
+
+        def refresh_from_db(fields):
+            self.assertEqual(fields, ['session_name'])
+            session.session_name = 'Renamed chat'
+
+        session.refresh_from_db = refresh_from_db
+
+        title = generate_session_title(session, 'query', 'reply', 'placeholder')
+
+        self.assertEqual(title, 'Renamed chat')
         mock_get_chat_title.assert_called_once()
 
     @patch('seahub.ai.apis.generate_session_title', return_value='Generated title')
@@ -148,8 +170,13 @@ class AIChatTitleTest(SimpleTestCase):
         session = SimpleNamespace(repo_id='repo-id', username=user.username)
         request = SimpleNamespace(
             user=user,
-            data={'query': 'query', 'ai_reply': 'reply'},
+            data={
+                'query': 'query',
+                'ai_reply': 'reply',
+                'expected_session_name': 'placeholder',
+            },
         )
+        session.session_name = 'placeholder'
         mock_get_session.return_value = session
 
         response = ChatSessionTitleView().post(request, 'session-uuid')
@@ -161,7 +188,36 @@ class AIChatTitleTest(SimpleTestCase):
         mock_is_chat_enabled.assert_called_once_with('repo-id')
         mock_resolve_usage.assert_called_once_with('repo-id', None, 'chat')
         mock_is_over_limit.assert_called_once_with(user, 'owner@example.com', None)
-        mock_generate_title.assert_called_once_with(session, 'query', 'reply')
+        mock_generate_title.assert_called_once_with(session, 'query', 'reply', 'placeholder')
+
+    @patch('seahub.ai.apis.generate_session_title')
+    @patch('seahub.ai.apis.is_chat_and_search_enabled', return_value=True)
+    @patch('seahub.ai.apis.user_passes_ai_chat_folder_permissions', return_value=True)
+    @patch('seahub.ai.apis.check_folder_permission', return_value='rw')
+    @patch('seahub.ai.apis.ChatSessions.objects.get_session_by_uuid')
+    def test_generate_chat_title_api_keeps_renamed_title(
+            self, mock_get_session, mock_check_folder_permission, mock_user_passes_permissions,
+            mock_is_chat_enabled, mock_generate_title):
+        user = SimpleNamespace(username='user@example.com', org=None)
+        request = SimpleNamespace(
+            user=user,
+            data={
+                'query': 'query',
+                'ai_reply': 'reply',
+                'expected_session_name': 'placeholder',
+            },
+        )
+        mock_get_session.return_value = SimpleNamespace(
+            repo_id='repo-id',
+            username=user.username,
+            session_name='Renamed chat',
+        )
+
+        response = ChatSessionTitleView().post(request, 'session-uuid')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['session_name'], 'Renamed chat')
+        mock_generate_title.assert_not_called()
 
     @patch('seahub.ai.apis.is_chat_and_search_enabled', return_value=True)
     @patch('seahub.ai.apis.user_passes_ai_chat_folder_permissions', return_value=True)
@@ -172,7 +228,11 @@ class AIChatTitleTest(SimpleTestCase):
             mock_is_chat_enabled):
         request = SimpleNamespace(
             user=SimpleNamespace(username='user@example.com'),
-            data={'query': 'query', 'ai_reply': 'reply'},
+            data={
+                'query': 'query',
+                'ai_reply': 'reply',
+                'expected_session_name': 'placeholder',
+            },
         )
         mock_get_session.return_value = SimpleNamespace(
             repo_id='repo-id',
