@@ -219,15 +219,17 @@ class LoginLogs extends Component {
       <div className="main-panel-center flex-row">
         <div className="cur-view-container">
           <div className="cur-view-content">
-            <LogUserSelector
-              componentName={gettext('Users')}
-              items={availableUsers}
-              selectedItems={selectedUsers}
-              onSelect={this.handleUserFilter}
-              isOpen={this.state.isUserSelectorOpen}
-              onToggle={this.toggleUserSelector}
-              searchUsersFunc={this.searchUsers}
-            />
+            <div className="d-flex align-items-center mb-2">
+              <LogUserSelector
+                componentName={gettext('Users')}
+                items={availableUsers}
+                selectedItems={selectedUsers}
+                onSelect={this.handleUserFilter}
+                isOpen={this.state.isUserSelectorOpen}
+                onToggle={this.toggleUserSelector}
+                searchUsersFunc={this.searchUsers}
+              />
+            </div>
             <Content
               loading={this.state.loading}
               errorMsg={this.state.errorMsg}
