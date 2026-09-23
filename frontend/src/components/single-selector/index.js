@@ -79,7 +79,7 @@ class Selector extends Component {
           )}
         </div>
         {isPopoverOpen && (
-          <div className={`options-container position-absolute rounded shadow mt-1 ${menuCustomClass}`} ref={ref => this.selector = ref}>
+          <div className={`options-container position-absolute mt-1 ${menuCustomClass}`} ref={ref => this.selector = ref}>
             <ul className="option-list list-unstyled o-auto" role="menu">
               {options.map((item, index) => {
                 return (

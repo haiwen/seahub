@@ -56,7 +56,7 @@ class UsersFilterBar extends Component {
     };
 
     return (
-      <div className="users-filter-bar mt-4 mb-2 d-flex align-items-center">
+      <div className="users-filter-bar mb-2 d-flex align-items-center">
         <span className="filter-item mr-2">{`${gettext('Status')}:`}</span>
         <Selector
           isDropdownToggleShown={true}

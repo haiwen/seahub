@@ -1,5 +1,5 @@
 .system-statistic-time-range {
-  margin: 15px 0 25px;
+  margin: 0 0 25px;
   display: flex;
   align-items: center;
   font-size: 13px;
@@ -8,6 +8,18 @@
 .sys-stat-tool {
   font-size: 13px;
   color: var(--bs-body-color);
+}
+
+.sys-stat-tool-button,
+.ai-statistics-query-button {
+  background-color: var(--bs-body-bg);
+  border-color: var(--bs-border-color);
+}
+
+.sys-stat-tool.btn-group .btn.statistic-button-joined,
+.ai-statistics-query.btn-group .btn.statistic-button-joined {
+  margin-left: 0;
+  border-left: 0;
 }
 
 .sys-stat-tool .item-active {

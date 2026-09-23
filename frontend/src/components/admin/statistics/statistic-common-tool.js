@@ -109,9 +109,9 @@ class StatisticCommonTool extends React.Component {
         {this.props.children}
         <div className="system-statistic-time-range">
           <ButtonGroup size="sm" className="sys-stat-tool">
-            <Button className={`font-weight-normal ${statisticType === 'oneWeek' ? 'item-active' : ''}`} onClick={this.changeActive.bind(this, 'oneWeek')}>{gettext('7 Days')}</Button>
-            <Button className={`font-weight-normal ${statisticType === 'oneMonth' ? 'item-active' : ''}`} onClick={this.changeActive.bind(this, 'oneMonth')}>{gettext('30 Days')}</Button>
-            <Button className={`font-weight-normal ${statisticType === 'oneYear' ? 'item-active' : ''}`} onClick={this.changeActive.bind(this, 'oneYear')}>{gettext('1 Year')}</Button>
+            <Button className={`sys-stat-tool-button font-weight-normal ${statisticType === 'oneWeek' ? 'item-active' : ''}`} onClick={this.changeActive.bind(this, 'oneWeek')}>{gettext('7 Days')}</Button>
+            <Button className={`sys-stat-tool-button statistic-button-joined font-weight-normal ${statisticType === 'oneMonth' ? 'item-active' : ''}`} onClick={this.changeActive.bind(this, 'oneMonth')}>{gettext('30 Days')}</Button>
+            <Button className={`sys-stat-tool-button statistic-button-joined font-weight-normal ${statisticType === 'oneYear' ? 'item-active' : ''}`} onClick={this.changeActive.bind(this, 'oneYear')}>{gettext('1 Year')}</Button>
           </ButtonGroup>
           <div className="system-statistic-input-container">
             <DateTimePicker

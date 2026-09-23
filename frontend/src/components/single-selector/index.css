@@ -3,7 +3,8 @@
 }
 
 .sf-single-selector .cur-option .toggle-icon {
-  color: #999;
+  font-size: 12px;
+  color: var(--bs-icon-color);
 }
 
 .sf-single-selector .options-container {

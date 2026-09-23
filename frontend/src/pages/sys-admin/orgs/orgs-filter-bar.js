@@ -25,7 +25,7 @@ class OrgsFilterBar extends Component {
     const currentSelectedStatusOption = this.statusOptions.filter(item => item.isSelected)[0];
 
     return (
-      <div className="orgs-filter-bar mt-4 mb-2 d-flex align-items-center">
+      <div className="orgs-filter-bar mb-2 d-flex align-items-center">
         <span className="filter-item mr-2">{`${gettext('Status')}:`}</span>
         <Selector
           isDropdownToggleShown={true}
