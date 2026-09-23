@@ -1706,27 +1706,14 @@ class RepoHistoryLimit(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        # check permission
-        if is_org_context(request):
-            repo_owner = seafile_api.get_org_repo_owner(repo_id)
-        else:
-            repo_owner = seafile_api.get_repo_owner(repo_id)
-
-        username = request.user.username
         # no settings for virtual repo
         if repo.is_virtual:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if '@seafile_group' in repo_owner:
-            group_id = get_group_id_by_repo_owner(repo_owner)
-            if not is_group_admin(group_id, username):
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        else:
-            if username != repo_owner:
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if not is_repo_admin(request.user.username, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
             keep_days = seafile_api.get_repo_history_limit(repo_id)
@@ -1743,27 +1730,14 @@ class RepoHistoryLimit(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        # check permission
-        if is_org_context(request):
-            repo_owner = seafile_api.get_org_repo_owner(repo_id)
-        else:
-            repo_owner = seafile_api.get_repo_owner(repo_id)
-
-        username = request.user.username
         # no settings for virtual repo
         if repo.is_virtual or not config.ENABLE_REPO_HISTORY_SETTING:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if '@seafile_group' in repo_owner:
-            group_id = get_group_id_by_repo_owner(repo_owner)
-            if not is_group_admin(group_id, username):
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        else:
-            if username != repo_owner:
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if not is_repo_admin(request.user.username, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check arg validation
         keep_days = request.data.get('keep_days', None)
