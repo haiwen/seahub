@@ -1,0 +1,222 @@
+<div id="wi-container" class="wi-module" style="max-width: 800px; margin: 20px 0; padding: 20px; border: 1px solid #eee; border-radius: 8px; background: #f9f9f9;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+    <h3 style="margin: 0; color: #333;">DeepSeek AI 问答模块</h3>
+    <button id="close-btn" style="padding: 4px 10px; border: none; border-radius: 4px; background: #ff4444; color: white; cursor: pointer; font-size: 12px;">× 关闭</button>
+  </div>
+
+  <!-- 输入区域（Prompt） -->
+  <div id="input-area" style="margin-bottom: 15px;">
+    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #555;">AI 提问（Prompt）：</label>
+    <textarea
+      id="ai-prompt-input"
+      rows="3"
+      style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; resize: vertical; font-size: 14px;"
+      placeholder="请输入你想让AI回答的问题或指令..."></textarea>
+    <button id="process-btn" style="margin-top: 10px; padding: 8px 16px; border: none; border-radius: 4px; background: #2196F3; color: white; cursor: pointer; font-size: 14px;">
+      <span id="process-btn-text">🤖 生成回答</span>
+      <span id="loading-spinner" style="display: none; margin-left: 8px;">⏳ 生成中...</span>
+    </button>
+  </div>
+
+  <!-- 输出区域（AI回答） -->
+  <div id="output-area" style="margin-bottom: 15px;">
+    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #555;">AI 回答：</label>
+    <textarea
+      id="ai-answer-output"
+      rows="6"
+      style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: #f5f5f5; resize: vertical; font-size: 14px;"
+      readonly
+      placeholder="AI生成的回答将显示在这里..."></textarea>
+  </div>
+
+  <!-- 提交按钮（禁用状态初始） -->
+  <button id="submit-btn" style="padding: 10px 20px; border: none; border-radius: 4px; background: #cccccc; color: #666; cursor: not-allowed; font-size: 14px;" disabled>
+    🚀 提交到Collabora
+  </button>
+</div>
+
+<script>
+// 全局配置
+const DEEPSEEK_CONFIG = {
+  apiKey: 'sk-bb3d0b5a40d44792a837f51ac3c8fe02', // 你的DeepSeek API Key
+  apiUrl: 'https://api.deepseek.com/v1/chat/completions', // DeepSeek API地址
+  model: 'deepseek-chat', // 使用的模型（可替换为deepseek-coder等）
+};
+
+// 全局变量
+let coolWindow = null;
+let isReady = false;
+const container = document.getElementById('wi-container');
+const processBtn = document.getElementById('process-btn');
+const submitBtn = document.getElementById('submit-btn');
+const promptInput = document.getElementById('ai-prompt-input');
+const answerOutput = document.getElementById('ai-answer-output');
+
+// 初始化：隐藏模块
+container.style.display = 'none';
+
+// ========== 事件绑定 ==========
+// 关闭按钮
+document.getElementById('close-btn').addEventListener('click', () => {
+  container.style.display = 'none';
+  resetModule(); // 重置模块状态
+});
+
+// 生成回答按钮
+processBtn.addEventListener('click', async () => {
+  const prompt = promptInput.value.trim();
+  if (!prompt) {
+    alert('请输入提问内容！');
+    promptInput.focus();
+    return;
+  }
+
+  // 设置加载状态
+  setLoadingState(true);
+
+  try {
+    // 调用DeepSeek API
+    const answer = await callDeepseekAPI(prompt);
+    answerOutput.value = answer;
+    submitBtn.disabled = false; // 启用提交按钮
+    submitBtn.style.background = '#4CAF50';
+    submitBtn.style.color = 'white';
+    submitBtn.style.cursor = 'pointer';
+  } catch (error) {
+    alert(`生成失败：${error.message}`);
+    console.error('DeepSeek API Error:', error);
+  } finally {
+    // 恢复按钮状态
+    setLoadingState(false);
+  }
+});
+
+// 提交到Collabora按钮
+submitBtn.addEventListener('click', () => {
+  const answer = answerOutput.value.trim();
+  if (!answer) {
+    alert('暂无AI回答内容可提交！');
+    return;
+  }
+  submitToCollabora(answer);
+});
+
+// 监听Collabora消息
+window.addEventListener('message', (e) => {
+  const allowedOrigins = [
+    'https://office.yourdomain.com',
+    'https://collabora.yourdomain.com',
+    'https://demo.seatable.cn:6232'
+  ];
+  if (!allowedOrigins.includes(e.origin)) return;
+
+  let data = {};
+  try {
+    data = JSON.parse(e.data);
+  } catch (err) {
+    return;
+  }
+
+  // Collabora就绪
+  if (data) {
+    coolWindow = e.source;
+    isReady = true;
+    coolWindow.postMessage(JSON.stringify({
+      'MessageId': 'Host_PostmessageReady',
+      'SendTIme': Date.now(),
+      'Values': {}
+    }), '*');
+  }
+
+  // 显示AI模块
+  if (data.MessageId === 'UI_InsertAIContent') {
+    container.style.display = 'block';
+    promptInput.focus();
+    resetModule(); // 重置状态
+  }
+});
+
+// ========== 核心函数 ==========
+/**
+ * 调用DeepSeek API获取回答
+ * @param {string} prompt 用户提问
+ * @returns {Promise<string>} AI回答
+ */
+async function callDeepseekAPI(prompt) {
+  const requestBody = {
+    model: DEEPSEEK_CONFIG.model,
+    messages: [
+      { role: 'user', content: prompt }
+    ],
+    temperature: 0.7, // 随机性（0-1）
+    max_tokens: 2000, // 最大生成token数
+    stream: false // 非流式输出
+  };
+
+  const response = await fetch(DEEPSEEK_CONFIG.apiUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${DEEPSEEK_CONFIG.apiKey}`
+    },
+    body: JSON.stringify(requestBody)
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error?.message || `API请求失败（${response.status}）`);
+  }
+
+  const result = await response.json();
+  return result.choices[0]?.message?.content || 'AI未返回有效回答';
+}
+
+/**
+ * 提交内容到Collabora
+ * @param {string} content 要提交的内容
+ */
+function submitToCollabora(content) {
+  if (!isReady || !coolWindow) {
+    alert('Collabora还未就绪，请稍候！');
+    return;
+  }
+
+  coolWindow.postMessage(JSON.stringify({
+    'MessageId': 'Action_Paste',
+    'Values': {
+      'Text': content,
+      'Mimetype': 'text/plain;charset=utf-8',
+      'Data': content
+    }
+  }), '*');
+
+  alert('内容已成功提交到文档！');
+  // 可选：提交后重置模块
+  container.style.display = 'none';
+  resetModule(); // 重置模块状态
+}
+
+// ========== 工具函数 ==========
+/**
+ * 设置加载状态
+ * @param {boolean} isLoading 是否加载中
+ */
+function setLoadingState(isLoading) {
+  document.getElementById('process-btn-text').style.display = isLoading ? 'none' : 'inline';
+  document.getElementById('loading-spinner').style.display = isLoading ? 'inline' : 'none';
+  processBtn.disabled = isLoading;
+  processBtn.style.opacity = isLoading ? '0.7' : '1';
+}
+
+/**
+ * 重置模块状态
+ */
+function resetModule() {
+  promptInput.value = '';
+  answerOutput.value = '';
+  submitBtn.disabled = true;
+  submitBtn.style.background = '#cccccc';
+  submitBtn.style.color = '#666';
+  submitBtn.style.cursor = 'not-allowed';
+}
+</script>
