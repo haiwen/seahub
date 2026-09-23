@@ -5,6 +5,7 @@ import Icon from '@/components/icon';
 import Loading from '@/components/loading';
 import Tooltip from '@/components/tooltip';
 import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 import '@/css/system-stat.css';
 
 export const getDisplayNodeName = (componentName, nodeName) => (
@@ -17,6 +18,10 @@ export const sortMetricComponents = (groupedMetrics) => Object.entries(groupedMe
     if (secondComponent === 'general') return 1;
     return firstComponent.localeCompare(secondComponent);
   }
+);
+
+export const getDisplayMetricValue = (metricName, value) => (
+  metricName === 'general_total_storage' ? Utils.bytesToSize(value) : value
 );
 
 class ComponentMetricsTable extends Component {
@@ -75,7 +80,7 @@ class ComponentMetricsTable extends Component {
                   </div>
                 </td>
                 <td>{getDisplayNodeName(componentName, point.labels.node)}</td>
-                <td className="metric-value">{point.value}</td>
+                <td className="metric-value">{getDisplayMetricValue(metric.name, point.value)}</td>
                 <td>
                   <span className="collected-time">
                     {dayjs(point.labels.collected_at).format('YYYY-MM-DD HH:mm:ss')}
