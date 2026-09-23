@@ -13,3 +13,8 @@
   background-color: var(--bs-icon-btn-hover-bg-color);
   border-radius: 4px;
 }
+
+.sf-clear-icon .seafile-multicolor-icon {
+  height: 12px;
+  width: 12px;
+}
