@@ -52,34 +52,34 @@ class OrgLogs extends Component {
         <div className="main-panel-center flex-row">
           <div className="cur-view-container h-100">
             <div className="cur-view-path org-user-nav">
-              <ul className="nav">
+              <ul className="nav gap-6">
                 <li className="nav-item" onClick={() => this.tabItemClick('fileaudit')}>
                   <Link
-                    className={`nav-link ${this.props.currentTab === 'fileaudit' ? 'active' : ''}`}
+                    className={`nav-link m-0 ${this.props.currentTab === 'fileaudit' ? 'active' : ''}`}
                     to={siteRoot + 'org/logadmin/'} title={gettext('File Access')}>{gettext('File Access')}
                   </Link>
                 </li>
                 <li className="nav-item" onClick={() => this.tabItemClick('file-update')}>
                   <Link
-                    className={`nav-link ${this.props.currentTab === 'file-update' ? 'active' : ''}`}
+                    className={`nav-link m-0 ${this.props.currentTab === 'file-update' ? 'active' : ''}`}
                     to={siteRoot + 'org/logadmin/file-update/'} title={gettext('File Update')}>{gettext('File Update')}
                   </Link>
                 </li>
                 <li className="nav-item" onClick={() => this.tabItemClick('perm-audit')}>
                   <Link
-                    className={`nav-link ${this.props.currentTab === 'perm-audit' ? 'active' : ''}`}
+                    className={`nav-link m-0 ${this.props.currentTab === 'perm-audit' ? 'active' : ''}`}
                     to={siteRoot + 'org/logadmin/perm-audit/'} title={gettext('Permission')}>{gettext('Permission')}
                   </Link>
                 </li>
                 <li className="nav-item" onClick={() => this.tabItemClick('repo-transfer')}>
                   <Link
-                    className={`nav-link ${this.props.currentTab === 'repo-transfer' ? 'active' : ''}`}
+                    className={`nav-link m-0 ${this.props.currentTab === 'repo-transfer' ? 'active' : ''}`}
                     to={siteRoot + 'org/logadmin/repo-transfer/'} title={gettext('Repo Transfer')}>{gettext('Repo Transfer')}
                   </Link>
                 </li>
                 <li className="nav-item" onClick={() => this.tabItemClick('group-member-audit')}>
                   <Link
-                    className={`nav-link ${this.props.currentTab === 'group-member-audit' ? 'active' : ''}`}
+                    className={`nav-link m-0 ${this.props.currentTab === 'group-member-audit' ? 'active' : ''}`}
                     to={siteRoot + 'org/logadmin/group-member-audit/'} title={gettext('Group Invite')}>{gettext('Group Invite')}
                   </Link>
                 </li>

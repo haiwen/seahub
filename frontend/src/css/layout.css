@@ -447,6 +447,13 @@ img[src=""], img:not([src]) {
   color: var(--bs-body-secondary-color);
 }
 
+.sys-admin .main-panel .nav-item,
+.sys-admin .main-panel .nav-link,
+.org-admin .main-panel .nav-item,
+.org-admin .main-panel .nav-link {
+  min-width: fit-content;
+}
+
 .nav-indicator-container .nav-item {
   height: 40px;
   min-width: fit-content;

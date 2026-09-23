@@ -15,15 +15,15 @@ class OrgAdminGroupNav extends React.Component {
     const urlBase = `${siteRoot}org/groupadmin/${groupID}/`;
     return (
       <div className="cur-view-path org-admin-user-nav">
-        <ul className="nav">
+        <ul className="nav gap-6">
           <li className="nav-item">
-            <Link to={urlBase} className={`nav-link${currentItem == 'info' ? ' active' : ''}`}>{gettext('Group info')}</Link>
+            <Link to={urlBase} className={`nav-link m-0${currentItem == 'info' ? ' active' : ''}`}>{gettext('Group info')}</Link>
           </li>
           <li className="nav-item">
-            <Link to={`${urlBase}repos/`} className={`nav-link${currentItem == 'repos' ? ' active' : ''}`}>{gettext('Libraries')}</Link>
+            <Link to={`${urlBase}repos/`} className={`nav-link m-0${currentItem == 'repos' ? ' active' : ''}`}>{gettext('Libraries')}</Link>
           </li>
           <li className="nav-item">
-            <Link to={`${urlBase}members/`} className={`nav-link${currentItem == 'members' ? ' active' : ''}`}>{gettext('Members')}</Link>
+            <Link to={`${urlBase}members/`} className={`nav-link m-0${currentItem == 'members' ? ' active' : ''}`}>{gettext('Members')}</Link>
           </li>
         </ul>
       </div>

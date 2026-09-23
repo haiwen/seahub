@@ -20,38 +20,31 @@
   align-items: center;
 }
 
-.cur-view-path.statistic-nav {
-  padding-left: 0;
-}
-
 .statistic-nav .nav-item .nav-link {
-  color: var(--bs-body-secondary-color);
+  color: var(--bs-body-color);
 }
 
 
 .statistic-traffic-tab {
-  display: flex;
-  font-size: 13px;
+  font-size: 14px;
+  line-height: 26px;
   color: var(--bs-body-color);
-  margin-top: 10px;
 }
 
 .statistic-traffic-tab .statistic-traffic-tab-item {
-  margin-right: 10px;
-  padding: 3px 0;
+  padding: 0 0 4px;
   border-bottom: 2px solid transparent;
   cursor: pointer;
   color: var(--bs-body-secondary-color);
 }
 
-.statistic-traffic-tab .statistic-traffic-tab-item:hover {
+.statistic-traffic-tab .statistic-traffic-tab-item.active {
   color: #ED7109;
   border-bottom: 2px solid #ED7109;
 }
 
-.statistic-traffic-tab .statistic-traffic-tab-item.active {
-  color: #ED7109;
-  border-bottom: 2px solid #ED7109;
+.statistic-traffic-page .system-statistic-time-range {
+  margin-top: 16px;
 }
 
 .statistic-reports-page .statistic-reports-title {
@@ -112,6 +105,7 @@
   background: var(--bs-nav-active-bg);
 }
 
+.statistic-traffic-tab,
 .ai-statistics-tabs {
   display: flex;
   flex-wrap: wrap;
