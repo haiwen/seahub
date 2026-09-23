@@ -117,6 +117,8 @@ export const enablePDFThumbnail = window.app.pageOptions.enablePDFThumbnail;
 
 export const enableOfficeWebApp = window.app.pageOptions.enableOfficeWebApp || false;
 export const officeWebAppEditFileExtension = window.app.pageOptions.officeWebAppEditFileExtension || [];
+export const enableWPSWeboffice = window.app.pageOptions.enableWPSWeboffice || false;
+export const wpsWebofficeFileExtension = window.app.pageOptions.wpsWebofficeFileExtension || [];
 export const enableOnlyoffice = window.app.pageOptions.enableOnlyoffice || false;
 export const onlyofficeEditFileExtension = window.app.pageOptions.onlyofficeEditFileExtension || [];
 export const onlyofficeSupportEditDocxf = window.app.pageOptions.onlyofficeSupportEditDocxf || false;
