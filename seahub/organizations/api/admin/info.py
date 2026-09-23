@@ -28,7 +28,7 @@ from seahub.organizations.models import OrgAdminSettings, \
 from seahub.organizations.settings import ORG_ENABLE_ADMIN_CUSTOM_NAME
 
 from django.conf import settings as dj_settings
-from seahub.ai.utils import get_ai_credit_by_user, get_ai_credit_used_by_user
+from seahub.ai.utils import get_org_ai_credit_info
 
 logger = logging.getLogger(__name__)
 
@@ -93,8 +93,11 @@ def get_org_info(request, org_id):
     info['monthly_download_traffic_limit'] = get_org_monthly_download_traffic_limit(request.user.org)
 
     if dj_settings.ENABLE_SEAFILE_AI and dj_settings.SEAFILE_AI_SERVER_URL:
-        info['ai_credit'] = get_ai_credit_by_user(request.user, org_id)
-        info['ai_credit_used'] = round(get_ai_credit_used_by_user(request.user, org_id), 2)
+        credit_info = get_org_ai_credit_info(request.user, org_id)
+        info['ai_credit'] = credit_info['included_ai_credit']
+        info['ai_credit_used'] = round(credit_info['ai_credit_used'], 2)
+        info['additional_ai_credit'] = round(credit_info['additional_ai_credit'], 2)
+        info['available_ai_credit'] = round(credit_info['available_ai_credit'], 2)
 
     info['storage_quota'] = storage_quota
     info['storage_usage'] = storage_usage

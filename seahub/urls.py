@@ -182,6 +182,7 @@ from seahub.api2.endpoints.admin.users_batch import AdminUsersBatch, AdminAdminU
 from seahub.api2.endpoints.admin.operation_logs import AdminOperationLogs
 from seahub.api2.endpoints.admin.organizations import AdminOrganizations, \
     AdminOrganization, AdminSearchOrganization, AdminOrganizationsBaseInfo, TrafficExceededOrganizations
+from seahub.api2.endpoints.admin.ai_credit import AdminOrganizationAICredit
 from seahub.api2.endpoints.admin.institutions import AdminInstitutions, AdminInstitution
 from seahub.api2.endpoints.admin.institution_users import AdminInstitutionUsers, AdminInstitutionUser
 from seahub.api2.endpoints.admin.org_users import AdminOrgAdminUsers, AdminOrgUsers, AdminOrgUser
@@ -812,6 +813,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/organizations-basic-info/$', AdminOrganizationsBaseInfo.as_view(), name='api-v2.1-admin-organizations-basic-info'),
     re_path(r'^api/v2.1/admin/search-organization/$', AdminSearchOrganization.as_view(), name='api-v2.1-admin-Search-organization'),
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/$', AdminOrganization.as_view(), name='api-v2.1-admin-organization'),
+    re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/ai-credit/$', AdminOrganizationAICredit.as_view(), name='api-v2.1-admin-organization-ai-credit'),
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/users/$', AdminOrgUsers.as_view(), name='api-v2.1-admin-org-users'),
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/users/(?P<email>[^/]+)/$', AdminOrgUser.as_view(), name='api-v2.1-admin-org-user'),
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/admin-users/$', AdminOrgAdminUsers.as_view(), name='api-v2.1-admin-org-staff'),

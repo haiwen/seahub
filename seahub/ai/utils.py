@@ -27,6 +27,7 @@ from seahub.utils import gen_inner_file_upload_url, get_service_url, is_org_cont
 from seahub.utils.user_permissions import get_user_role
 from seahub.utils.ccnet_db import CcnetDB
 from seahub.organizations.models import OrgMemberQuota, OrgSettings
+from seahub.ai.credits import get_org_additional_ai_credit
 from seahub.ai.models import AIUsageStatistics, ChatMessageThoughtProcess, ChatMessages, ChatSessions
 
 
@@ -190,6 +191,19 @@ def get_ai_credit_used_by_user(user, org_id):
     return convert_cost_to_credit(cost)
 
 
+def get_org_ai_credit_info(user, org_id):
+    included_credit = get_ai_credit_by_user(user, org_id)
+    used_credit = get_ai_credit_used_by_user(user, org_id)
+    additional_credit = get_org_additional_ai_credit(org_id)
+    available_credit = -1 if included_credit < 0 else max(included_credit - used_credit, 0) + additional_credit
+    return {
+        'included_ai_credit': included_credit,
+        'ai_credit_used': used_credit,
+        'additional_ai_credit': additional_credit,
+        'available_ai_credit': available_credit,
+    }
+
+
 def is_ai_usage_over_limit(user, repo_owner, org_id):
     if org_id and org_id > 0:
         ai_credit = get_ai_credit_by_user(user, org_id)
@@ -204,6 +218,9 @@ def is_ai_usage_over_limit(user, repo_owner, org_id):
 
     if ai_credit < 0:
         return False
+
+    if org_id and org_id > 0:
+        return used_credit >= ai_credit and get_org_additional_ai_credit(org_id) <= 0
 
     return used_credit >= ai_credit
 

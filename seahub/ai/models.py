@@ -22,6 +22,31 @@ class AIUsageStatistics(models.Model):
         db_table = 'ai_usage_statistics'
 
 
+class OrgAdditionalAICredit(models.Model):
+    org_id = models.BigIntegerField(unique=True, db_index=True)
+    credits = models.FloatField(default=0)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'org_additional_ai_credit'
+
+
+class AICreditTransaction(models.Model):
+    transaction_id = models.CharField(max_length=255, unique=True, db_index=True)
+    org_id = models.BigIntegerField(db_index=True)
+    operation = models.CharField(max_length=32)
+    source = models.CharField(max_length=32)
+    requested_delta = models.FloatField()
+    applied_delta = models.FloatField()
+    credits_before = models.FloatField()
+    credits_after = models.FloatField()
+    operator = models.CharField(max_length=255, blank=True, default='')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'ai_credit_transaction'
+
+
 class ChatSessionsManager(models.Manager):
     def create_session(self, repo_id, session_name, username):
         session_uuid = str(uuid.uuid4())
