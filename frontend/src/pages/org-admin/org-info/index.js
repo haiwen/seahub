@@ -3,7 +3,7 @@ import { UncontrolledTooltip } from 'reactstrap';
 import { orgAdminAPI } from '@/api/org-admin-api';
 import MainPanelTopbar from '@/components/admin/layout/main-panel-topbar';
 import Icon from '@/components/icon';
-import { mediaUrl, gettext, enableSeafileAI } from '@/utils/constants';
+import { mediaUrl, gettext, enableSeafileAI, enableExternalBillingService, siteRoot } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import './index.css';
 
@@ -23,6 +23,7 @@ class OrgInfo extends Component {
       active_members: 0,
       ai_credit_used: 0,
       ai_credit: 0,
+      additional_ai_credit: 0,
     };
   }
 
@@ -31,12 +32,12 @@ class OrgInfo extends Component {
       const {
         org_id, org_name, traffic_this_month, monthly_download_traffic_limit,
         member_quota, member_usage, active_members,
-        storage_quota, storage_usage, ai_credit_used, ai_credit
+        storage_quota, storage_usage, ai_credit_used, ai_credit, additional_ai_credit
       } = res.data;
       this.setState({
         org_id, org_name, traffic_this_month, monthly_download_traffic_limit,
         member_quota, member_usage, active_members,
-        storage_quota, storage_usage, ai_credit_used, ai_credit
+        storage_quota, storage_usage, ai_credit_used, ai_credit, additional_ai_credit
       });
     });
   }
@@ -45,11 +46,12 @@ class OrgInfo extends Component {
     const {
       org_id, org_name, traffic_this_month, monthly_download_traffic_limit,
       member_quota, member_usage, active_members,
-      storage_quota, storage_usage, ai_credit_used, ai_credit
+      storage_quota, storage_usage, ai_credit_used, ai_credit, additional_ai_credit
     } = this.state;
     let download_traffic = traffic_this_month.link_file_download + traffic_this_month.sync_file_download + traffic_this_month.web_file_download;
     download_traffic = download_traffic ? download_traffic : 0;
     const aiUsageRate = ai_credit > 0 ? ai_credit_used / ai_credit * 100 : 0;
+    const aiUsageProgress = Math.min(aiUsageRate, 100);
     return (
       <Fragment>
         <MainPanelTopbar {...this.props} />
@@ -140,17 +142,28 @@ class OrgInfo extends Component {
                 </div>
                 {enableSeafileAI && (
                   <div className="info-content-item">
-                    <h4 className="info-content-item-heading">{gettext('AI credit used this month')}</h4>
+                    <h4 className="info-content-item-heading">{gettext('Included AI credits')}</h4>
 
                     <>
                       <p className="info-content-space-text">{`${aiUsageRate.toFixed(2)}%`}</p>
                       <div className="progress-container">
                         <div className="progress">
-                          <div className="progress-bar" role="progressbar" style={{ width: `${aiUsageRate}%` }} aria-valuenow={aiUsageRate} aria-valuemin="0" aria-valuemax="100"></div>
+                          <div className="progress-bar" role="progressbar" style={{ width: `${aiUsageProgress}%` }} aria-valuenow={aiUsageProgress} aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                         <p className="progress-text m-0">{`${ai_credit_used} / ${ai_credit > 0 ? ai_credit : '--'}`}</p>
                       </div>
                     </>
+                  </div>
+                )}
+                {enableSeafileAI && (
+                  <div className="info-content-item">
+                    <h4 className="info-content-item-heading">{gettext('Additional AI credits')}</h4>
+                    <p className="info-content-space-text">{additional_ai_credit ?? 0}</p>
+                    {enableExternalBillingService && (
+                      <a href={`${siteRoot}billing/`} target="_blank" rel="noreferrer" className="btn btn-primary mt-3">
+                        {gettext('Add credits')}
+                      </a>
+                    )}
                   </div>
                 )}
               </div>
