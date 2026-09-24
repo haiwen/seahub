@@ -45,12 +45,23 @@ logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
 
 
+class IsRepoAccessibleOrNotFound(IsRepoAccessible):
+    """Allow the endpoint to return its existing 404 for a missing library."""
+
+    def has_permission(self, request, view, obj=None):
+        repo_id = view.kwargs.get('repo_id', '')
+        if not seafile_api.get_repo(repo_id):
+            return True
+
+        return super().has_permission(request, view, obj)
+
+
 class DirSharedItemsEndpoint(APIView):
     """Support uniform interface(list, share, unshare, modify) for sharing
     library/folder to users/groups.
     """
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated, IsRepoAccessible)
+    permission_classes = (IsAuthenticated, IsRepoAccessibleOrNotFound)
     throttle_classes = (UserRateThrottle,)
 
     def list_user_shared_items(self, request, repo_id, path):
