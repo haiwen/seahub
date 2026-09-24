@@ -70,6 +70,14 @@ class SidePanel extends PureComponent {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    const { isLoading, config } = this.props;
+    if (prevProps.isLoading && !isLoading && prevProps.config !== config &&
+        wikiPermission === 'rw' && config.navigation.length === 0) {
+      this.handleAddNewPage();
+    }
+  }
+
   componentWillUnmount() {
     this.unsubscribeLibraryToggle();
   }
