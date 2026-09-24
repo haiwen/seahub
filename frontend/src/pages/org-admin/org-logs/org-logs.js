@@ -43,7 +43,7 @@ class OrgLogs extends Component {
     return (
       <Fragment>
         {this.props.currentTab === 'repo-transfer' || this.props.currentTab === 'group-member-audit' ?
-          <MainPanelTopbar {...this.props} />
+          <MainPanelTopbar toggleSidePanel={this.props.toggleSidePanel} />
           :
           <MainPanelTopbar {...this.props}>
             <Button className="btn btn-secondary operation-item" onClick={this.toggleExportExcelDialog}>{gettext('Export Excel')}</Button>
