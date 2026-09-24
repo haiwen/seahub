@@ -6,7 +6,6 @@ import Loading from '@/components/loading';
 import Logo from '@/components/logo';
 import CommonToolbar from '@/components/toolbar/common-toolbar';
 import { gettext, PER_PAGE, filePath, fileName, historyRepoID, useNewAPI, canDownload } from '@/utils/constants';
-import editUtilities from '@/utils/editor-utilities';
 import { Utils } from '@/utils/utils';
 import HistoryItem from './history-item';
 
@@ -40,7 +39,7 @@ class FileHistory extends React.Component {
   }
 
   listNewHistoryRecords = (filePath, PER_PAGE) => {
-    editUtilities.listFileHistoryRecords(filePath, 1, PER_PAGE).then(res => {
+    seafileAPI.listFileHistoryRecords(historyRepoID, filePath, 1, PER_PAGE).then(res => {
       let historyData = res.data;
       if (!historyData) {
         this.setState({ isLoading: false });
@@ -110,7 +109,7 @@ class FileHistory extends React.Component {
           currentPage: currentPage,
           isReloadingData: true,
         });
-        editUtilities.listFileHistoryRecords(filePath, currentPage, PER_PAGE).then(res => {
+        seafileAPI.listFileHistoryRecords(historyRepoID, filePath, currentPage, PER_PAGE).then(res => {
           this.updateNewRecords(res.data);
         });
       } else {
@@ -162,7 +161,7 @@ class FileHistory extends React.Component {
   onItemRestore = (item) => {
     let commitId = item.commit_id;
     let filePath = item.path;
-    editUtilities.revertFile(filePath, commitId).then(res => {
+    seafileAPI.revertFile(historyRepoID, filePath, commitId).then(res => {
       if (res.data.success) {
         this.setState({ isLoading: true });
         this.refreshFileList();
@@ -172,7 +171,7 @@ class FileHistory extends React.Component {
 
   refreshFileList() {
     if (useNewAPI) {
-      editUtilities.listFileHistoryRecords(filePath, 1, PER_PAGE).then((res) => {
+      seafileAPI.listFileHistoryRecords(historyRepoID, filePath, 1, PER_PAGE).then((res) => {
         this.initNewRecords(res.data);
       });
     } else {
