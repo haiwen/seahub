@@ -9,6 +9,7 @@ from django.urls import reverse
 from seahub.test_utils import BaseTestCase
 from tests.common.utils import randstring
 from seahub.group.utils import is_group_admin
+from seahub.share.models import ExtraSharePermission
 
 try:
     from seahub.settings import LOCAL_PRO_DEV_ENV
@@ -75,6 +76,19 @@ class RepoTest(BaseTestCase):
         resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
         json_resp = json.loads(resp.content)
         assert json_resp['keep_days'] == -1
+
+    def test_shared_repo_admin_can_get_and_set_history_limit(self):
+        ExtraSharePermission.objects.create_share_permission(
+            self.user_repo_id, self.tmp_user.username, 'admin')
+        self.login_as(self.tmp_user)
+        url = reverse("api2-repo-history-limit", args=[self.user_repo_id])
+
+        resp = self.client.get(url)
+        self.assertEqual(200, resp.status_code)
+
+        resp = self.client.put(url, 'keep_days=6', 'application/x-www-form-urlencoded')
+        self.assertEqual(200, resp.status_code)
+        self.assertEqual(6, json.loads(resp.content)['keep_days'])
 
     def test_can_not_get_if_not_repo_owner(self):
         self.login_as(self.admin)
