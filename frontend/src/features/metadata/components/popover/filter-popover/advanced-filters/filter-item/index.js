@@ -35,7 +35,6 @@ const propTypes = {
   deleteFilter: PropTypes.func.isRequired,
   updateFilter: PropTypes.func.isRequired,
   updateConjunction: PropTypes.func.isRequired,
-  collaborators: PropTypes.array,
   errMsg: PropTypes.string,
 };
 
@@ -369,14 +368,8 @@ class FilterItem extends React.Component {
     );
   };
 
-  getAllCollaborators = () => {
-    const collaborators = window.sfMetadata.collaborators;
-    const collaboratorsCache = window.sfMetadata.collaboratorsCache;
-    return [...collaborators, ...Object.values(collaboratorsCache)];
-  };
-
   renderFilterTerm = (filterColumn) => {
-    const { index, filter, collaborators, readOnly } = this.props;
+    const { index, filter, readOnly } = this.props;
     const { type } = filterColumn;
     const { filter_term, filter_predicate, filter_term_modifier } = filter;
     // predicate is empty or not empty
@@ -428,13 +421,11 @@ class FilterItem extends React.Component {
         if (filter_predicate === FILTER_PREDICATE_TYPE.INCLUDE_ME) {
           return null;
         }
-        const creators = collaborators;
         return (
           <CollaboratorFilter
             readOnly={readOnly}
             filterIndex={index}
             filterTerm={filter_term || []}
-            collaborators={creators}
             onSelectCollaborator={this.onSelectCreator}
           />
         );
@@ -484,14 +475,12 @@ class FilterItem extends React.Component {
       }
       case CellType.COLLABORATOR: {
         if (filter_predicate === FILTER_PREDICATE_TYPE.INCLUDE_ME) return null;
-        const allCollaborators = this.getAllCollaborators();
         return (
           <CollaboratorFilter
             readOnly={readOnly}
             filterIndex={index}
             filterTerm={filter_term || []}
             filter_predicate={filter_predicate}
-            collaborators={allCollaborators}
             placeholder={gettext('Select collaborators')}
             onSelectCollaborator={this.onSelectCollaborator}
           />

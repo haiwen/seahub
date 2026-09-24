@@ -15,7 +15,6 @@ const FilterSetter = ({
   wrapperClass,
   filters: propsFilters,
   isPre,
-  collaborators,
   filtersClassName,
   target = 'sf-metadata-filter-popover',
   filterConjunction,
@@ -71,7 +70,6 @@ const FilterSetter = ({
           target={target}
           readOnly={readOnly}
           columns={columns}
-          collaborators={collaborators}
           filterConjunction={filterConjunction}
           filters={filters}
           basicFilters={basicFilters}
@@ -95,7 +93,6 @@ FilterSetter.propTypes = {
   filters: PropTypes.array,
   columns: PropTypes.array,
   modifyFilters: PropTypes.func,
-  collaborators: PropTypes.array,
   isPre: PropTypes.bool,
   basicFilters: PropTypes.array,
   viewType: PropTypes.string,

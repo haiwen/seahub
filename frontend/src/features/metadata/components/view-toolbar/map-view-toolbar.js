@@ -6,7 +6,6 @@ import { FilterSetter, MapTypeSetter } from '../data-process-setter';
 const MapViewToolBar = ({
   readOnly,
   view: oldView,
-  collaborators,
   modifyFilters,
 }) => {
   const viewType = useMemo(() => VIEW_TYPE.MAP, []);
@@ -35,7 +34,6 @@ const MapViewToolBar = ({
           filters={oldView.filters}
           columns={filterColumns}
           modifyFilters={modifyFilters}
-          collaborators={collaborators}
           viewType={viewType}
         />
       </div>
@@ -47,7 +45,6 @@ const MapViewToolBar = ({
 MapViewToolBar.propTypes = {
   readOnly: PropTypes.bool,
   view: PropTypes.object,
-  collaborators: PropTypes.array,
   modifyFilters: PropTypes.func,
 };
 

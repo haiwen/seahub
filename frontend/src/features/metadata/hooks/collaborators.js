@@ -39,20 +39,6 @@ export const CollaboratorsProvider = React.memo(({ repoID, children }) => {
     });
   }, [repoID]);
 
-  useEffect(() => {
-    if (!window.sfMetadata) {
-      window.sfMetadata = {};
-      window.sfMetadata.getCollaboratorsFromCache = () => {
-        return Object.values(window.sfMetadata.collaboratorsCache || {}) || [];
-      };
-      window.sfMetadata.getCollaborators = () => {
-        return [...window.sfMetadata.collaborators, ...(Object.values(window.sfMetadata.collaboratorsCache || {}) || [])];
-      };
-    }
-    window.sfMetadata.collaborators = collaborators;
-    window.sfMetadata.collaboratorsCache = collaboratorsCache;
-  }, [collaborators, collaboratorsCache]);
-
   const updateCollaboratorsCache = useCallback((user) => {
     setCollaboratorsCache(prevCache => {
       if (prevCache[user.email]) {
@@ -88,8 +74,15 @@ export const CollaboratorsProvider = React.memo(({ repoID, children }) => {
     return null;
   }, [collaborators, collaboratorsCache]);
 
+  const getAllCollaborators = useCallback(() => {
+    return [
+      ...collaborators,
+      ...Object.values(collaboratorsCache),
+    ];
+  }, [collaborators, collaboratorsCache]);
+
   return (
-    <CollaboratorsContext.Provider value={{ collaborators, collaboratorsCache, updateCollaboratorsCache, getCollaborator, queryUser }}>
+    <CollaboratorsContext.Provider value={{ collaborators, collaboratorsCache, updateCollaboratorsCache, getCollaborator, getAllCollaborators, queryUser }}>
       {children}
     </CollaboratorsContext.Provider>
   );
@@ -102,6 +95,6 @@ export const useCollaborators = () => {
   if (!context) {
     throw new Error('\'CollaboratorsContext\' is null');
   }
-  const { collaborators, collaboratorsCache, updateCollaboratorsCache, getCollaborator, queryUser } = context;
-  return { collaborators, collaboratorsCache, updateCollaboratorsCache, getCollaborator, queryUser };
+  const { collaborators, collaboratorsCache, updateCollaboratorsCache, getCollaborator, getAllCollaborators, queryUser } = context;
+  return { collaborators, collaboratorsCache, updateCollaboratorsCache, getCollaborator, getAllCollaborators, queryUser };
 };

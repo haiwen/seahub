@@ -11,7 +11,6 @@ import './index.css';
 
 const ViewToolBar = ({ viewId, isCustomPermission, onToggleDetail, onCloseDetail }) => {
   const [view, setView] = useState(null);
-  const [collaborators, setCollaborators] = useState([]);
 
   const onHeaderClick = useCallback(() => {
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
@@ -52,7 +51,6 @@ const ViewToolBar = ({ viewId, isCustomPermission, onToggleDetail, onCloseDetail
         timer && clearInterval(timer);
         timer = null;
         setView(window.sfMetadataStore.data.view);
-        setCollaborators(window.sfMetadataStore?.collaborators || []);
         unsubscribeViewChange = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.VIEW_CHANGED, viewChange);
       }
     }, 300);
@@ -77,7 +75,6 @@ const ViewToolBar = ({ viewId, isCustomPermission, onToggleDetail, onCloseDetail
         <TableViewToolbar
           readOnly={readOnly}
           view={view}
-          collaborators={collaborators}
           modifyFilters={modifyFilters}
           modifySorts={modifySorts}
           modifyGroupbys={modifyGroupbys}
@@ -91,7 +88,6 @@ const ViewToolBar = ({ viewId, isCustomPermission, onToggleDetail, onCloseDetail
           readOnly={readOnly}
           isCustomPermission={isCustomPermission}
           view={view}
-          collaborators={collaborators}
           modifyFilters={modifyFilters}
           modifySorts={modifySorts}
           onToggleDetail={onToggleDetail}
@@ -102,7 +98,6 @@ const ViewToolBar = ({ viewId, isCustomPermission, onToggleDetail, onCloseDetail
           isCustomPermission={isCustomPermission}
           readOnly={readOnly}
           view={view}
-          collaborators={collaborators}
           modifyFilters={modifyFilters}
           modifySorts={modifySorts}
           onToggleDetail={onToggleDetail}
@@ -114,7 +109,6 @@ const ViewToolBar = ({ viewId, isCustomPermission, onToggleDetail, onCloseDetail
           isCustomPermission={isCustomPermission}
           readOnly={readOnly}
           view={view}
-          collaborators={collaborators}
           modifyFilters={modifyFilters}
           modifySorts={modifySorts}
           onToggleDetail={onToggleDetail}
@@ -125,7 +119,6 @@ const ViewToolBar = ({ viewId, isCustomPermission, onToggleDetail, onCloseDetail
         <MapViewToolBar
           readOnly={readOnly}
           view={view}
-          collaborators={collaborators}
           modifyFilters={modifyFilters}
         />
       )}

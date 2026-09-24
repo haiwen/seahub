@@ -20,7 +20,6 @@ const propTypes = {
   modifyFilterConjunction: PropTypes.func,
   emptyPlaceholder: PropTypes.string,
   value: PropTypes.object,
-  collaborators: PropTypes.array,
   scheduleUpdate: PropTypes.func,
   isPre: PropTypes.bool,
 };
@@ -97,7 +96,6 @@ class AdvancedFilters extends Component {
         deleteFilter={this.deleteFilter}
         updateFilter={this.updateFilter}
         updateConjunction={this.updateConjunction}
-        collaborators={this.props.collaborators}
         isPre={this.props.isPre}
       />
     );

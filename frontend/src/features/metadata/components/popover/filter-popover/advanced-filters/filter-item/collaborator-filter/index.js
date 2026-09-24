@@ -2,13 +2,17 @@ import React, { Fragment, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import CustomizeSelect from '@/components/customize-select';
 import Icon from '@/components/icon';
+import { useCollaborators } from '@/features/metadata/hooks';
 import { gettext } from '@/utils/constants';
 import { FILTER_PREDICATE_TYPE } from '../../../../../../constants';
 import DeleteCollaborator from '../../../../../cell-editors/collaborator-editor/delete-collaborator';
 
 import './index.css';
 
-const CollaboratorFilter = ({ readOnly, filterIndex, filterTerm, collaborators, placeholder, filter_predicate, onSelectCollaborator }) => {
+const CollaboratorFilter = ({ readOnly, filterIndex, filterTerm, placeholder, filter_predicate, onSelectCollaborator }) => {
+  const { getAllCollaborators } = useCollaborators();
+  const collaborators = useMemo(() => getAllCollaborators(), [getAllCollaborators]);
+
   const supportMultipleSelectOptions = useMemo(() => {
     return [
       FILTER_PREDICATE_TYPE.HAS_ANY_OF,
@@ -72,13 +76,12 @@ const CollaboratorFilter = ({ readOnly, filterIndex, filterTerm, collaborators, 
     return (
       <DeleteCollaborator
         value={selectedCollaborators}
-        collaborators={collaborators}
         onDelete={onDeleteCollaborator}
         removable={!readOnly}
         showRemoveTooltip={false}
       />
     );
-  }, [selectedCollaborators, collaborators, onDeleteCollaborator, readOnly]);
+  }, [selectedCollaborators, onDeleteCollaborator, readOnly]);
 
   return (
     <CustomizeSelect
@@ -101,7 +104,6 @@ CollaboratorFilter.propTypes = {
   filterIndex: PropTypes.number,
   filterTerm: PropTypes.oneOfType([PropTypes.array, PropTypes.string]), // Make the current bug execution the correct code, this can restore in this Component
   filter_predicate: PropTypes.string,
-  collaborators: PropTypes.array,
   onSelectCollaborator: PropTypes.func,
   readOnly: PropTypes.bool,
   placeholder: PropTypes.string,

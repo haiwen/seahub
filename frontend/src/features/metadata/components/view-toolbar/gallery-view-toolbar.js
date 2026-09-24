@@ -7,7 +7,7 @@ import { PRIVATE_COLUMN_KEY } from '../../constants';
 import { GalleryGroupBySetter, FilterSetter, SortSetter } from '../data-process-setter';
 
 const GalleryViewToolbar = ({
-  readOnly, isCustomPermission, view, collaborators,
+  readOnly, isCustomPermission, view,
   modifyFilters, modifySorts, onToggleDetail,
 }) => {
   const { globalHiddenColumns } = useMetadataStatus();
@@ -35,7 +35,6 @@ const GalleryViewToolbar = ({
           filters={view.filters}
           columns={filterColumns}
           modifyFilters={modifyFilters}
-          collaborators={collaborators}
           viewType={viewType}
         />
         <SortSetter
@@ -66,7 +65,6 @@ GalleryViewToolbar.propTypes = {
   readOnly: PropTypes.bool,
   isCustomPermission: PropTypes.bool,
   view: PropTypes.object.isRequired,
-  collaborators: PropTypes.array,
   modifyFilters: PropTypes.func,
   modifySorts: PropTypes.func,
   onToggleDetail: PropTypes.func,

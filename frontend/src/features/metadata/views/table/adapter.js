@@ -6,6 +6,7 @@ import { DROPDOWN_SUBMENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';
 import { GridUtilsAdapter } from '@/components/sf-table/utils/grid-utils-adapter';
+import { useCollaborators } from '@/features/metadata/hooks';
 import TextTranslation from '@/utils/text-translation';
 import { Utils } from '@/utils/utils';
 import Editor from '../../components/cell-editors/editor';
@@ -367,6 +368,8 @@ export const useMetadataTableAdapter = ({
   generateFileTags,
   tagsData,
 }) => {
+  const { getAllCollaborators } = useCollaborators();
+
   return useMemo(() => {
     const api = {
       modifyRecord,
@@ -376,10 +379,7 @@ export const useMetadataTableAdapter = ({
       modifyColumnData,
       updateFileTags,
       getTagsData: () => tagsData || {},
-      getCollaborators: () => {
-        if (!window.sfMetadata) return [];
-        return window.sfMetadata.getCollaborators() || [];
-      },
+      getCollaborators: getAllCollaborators,
     };
     const adapter = new GridUtilsAdapter({
       renderRecordsIds: metadata?.view?.rows || [],
@@ -401,5 +401,5 @@ export const useMetadataTableAdapter = ({
     });
 
     return adapter;
-  }, [modifyRecord, modifyRecords, recordGetterByIndex, recordGetterById, modifyColumnData, updateFileTags, metadata, repoID, readOnly, deleteRecords, updateRecordDetails, updateFaceRecognition, updateRecordDescription, onOCR, generateFileTags, tagsData]);
+  }, [modifyRecord, modifyRecords, recordGetterByIndex, recordGetterById, modifyColumnData, updateFileTags, metadata, repoID, readOnly, deleteRecords, updateRecordDetails, updateFaceRecognition, updateRecordDescription, onOCR, generateFileTags, tagsData, getAllCollaborators]);
 };

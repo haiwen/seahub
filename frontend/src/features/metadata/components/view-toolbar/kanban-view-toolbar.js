@@ -10,7 +10,6 @@ const KanbanViewToolBar = ({
   isCustomPermission,
   readOnly,
   view,
-  collaborators,
   modifyFilters,
   modifySorts,
   onToggleDetail,
@@ -49,7 +48,6 @@ const KanbanViewToolBar = ({
           filters={view.filters}
           columns={filterColumns}
           modifyFilters={modifyFilters}
-          collaborators={collaborators}
           viewType={viewType}
         />
         <SortSetter
@@ -90,7 +88,6 @@ const KanbanViewToolBar = ({
 KanbanViewToolBar.propTypes = {
   readOnly: PropTypes.bool,
   view: PropTypes.object,
-  collaborators: PropTypes.array,
   modifyFilters: PropTypes.func,
   modifySorts: PropTypes.func,
   onToggleDetail: PropTypes.func,

@@ -8,7 +8,6 @@ import { FilterSetter, GroupbySetter, SortSetter, HideColumnSetter, Search } fro
 const TableViewToolbar = ({
   readOnly,
   view,
-  collaborators,
   modifyFilters,
   modifySorts,
   modifyGroupbys,
@@ -41,7 +40,6 @@ const TableViewToolbar = ({
           filters={view.filters}
           columns={filterColumns}
           modifyFilters={modifyFilters}
-          collaborators={collaborators}
           viewType={viewType}
         />
         <SortSetter
@@ -85,7 +83,6 @@ const TableViewToolbar = ({
 TableViewToolbar.propTypes = {
   readOnly: PropTypes.bool,
   view: PropTypes.object.isRequired,
-  collaborators: PropTypes.array,
   modifyFilters: PropTypes.func,
   modifySorts: PropTypes.func,
   modifyGroupbys: PropTypes.func,
