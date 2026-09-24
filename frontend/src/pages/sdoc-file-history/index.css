@@ -67,31 +67,26 @@
   background-color: #EFEFEF;
 }
 
-.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-last .sf3-font,
-.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-next .sf3-font {
-  color: #212529;
-  opacity: .5;
-}
-
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-last:hover,
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-next:hover {
   cursor: pointer;
-  opacity: .75;
   background-color: #F5F5F5;
 }
 
-.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-last:hover .sf3-font,
-.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-next:hover .sf3-font {
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-last:hover .sdoc-file-history-change-icon,
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-next:hover .sdoc-file-history-change-icon {
   opacity: .75;
 }
 
-.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-switch .sf3-font-history {
-  font-size: 18px;
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-switch .sdoc-file-history-switch-icon {
+  width: 18px;
+  height: 18px;
   color: #666;
 }
 
-.sdoc-file-history .sdoc-file-history-header .go-back .sf3-font-down {
-  font-size: 1.25rem !important;
+.sdoc-file-history .sdoc-file-history-header .go-back .seafile-multicolor-icon-down {
+  width: 20px;
+  height: 20px;
 }
 
 .sdoc-file-history .sdoc-file-history-content {
@@ -264,12 +259,20 @@
   cursor: pointer;
 }
 
-.sdoc-file-history-versions .history-list-item .history-operation a.sf3-font {
+.sdoc-file-history-versions .history-list-item .history-operation a.sdoc-history-more-icon {
   color: #666;
 }
 
-.sdoc-file-history-versions .history-list-item .history-operation:hover a.sf3-font {
+.sdoc-file-history-versions .history-list-item .history-operation:hover a.sdoc-history-more-icon {
   color: #212529;
+}
+
+.sdoc-file-history .sdoc-history-more-icon .seafile-multicolor-icon,
+.sdoc-file-history .sdoc-history-operation-icon,
+.sdoc-file-history .sdoc-file-history-close-icon {
+  width: 16px;
+  height: 16px;
+  color: inherit;
 }
 
 .sdoc-file-history-versions .history-list-item.item-active {
@@ -344,8 +347,6 @@
 }
 
 .sdoc-file-history-versions .daily-history-detail-toggle .direction-icon {
-  font-size: 18px;
-  color: #666;
   transform: rotate(-90deg);
   transition: all .1s;
 }

@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import CustomDropdown from '@/components/dropdown';
+import Icon from '@/components/icon';
 import Rename from '@/components/rename';
 import { gettext, filePath } from '@/utils/constants';
 import URLDecorator from '@/utils/url-decorator';
@@ -106,7 +107,7 @@ class HistoryVersion extends React.Component {
                 title={gettext('Show daily history')}
                 onClick={this.showDailyHistory}
               >
-                <i aria-hidden="true" className="direction-icon sf3-font sf3-font-down"></i>
+                <Icon symbol="down" className="direction-icon" />
               </div>
             )}
           </div>
@@ -127,12 +128,14 @@ class HistoryVersion extends React.Component {
           {this.isMobile ?
             <>
               <a
-                className={`sf3-font sf3-font-more ${(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}`}
+                className={`sdoc-history-more-icon ${(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}`}
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 aria-expanded={this.state.isMenuShow}
                 onClick={this.onToggleClick}
-              />
+              >
+                <Icon symbol="more" />
+              </a>
               <Modal
                 className='sdoc-mobile-history-options-modal'
                 isOpen={this.state.isMenuShow}
@@ -140,17 +143,17 @@ class HistoryVersion extends React.Component {
               >
                 <ModalBody className='sdoc-operation-mobile-modal-body'>
                   <div className='option-item'>
-                    <i aria-hidden="true" className='mr-3 sf3-font sf3-font-download1'></i>
+                    <Icon symbol="download" className='mr-3 sdoc-history-operation-icon' />
                     <a href={url} onClick={this.onItemDownLoad} aria-label={gettext('Download')} title={gettext('Download')}>{gettext('Download')}</a>
                   </div>
                   {(path[0] !== 0 && path[1] !== 0 && path[2] !== 0) && (
                     <div className='option-item'>
-                      <i className='mr-3 sf3-font sf3-font-copy1'></i>
+                      <Icon symbol="copy" className='mr-3 sdoc-history-operation-icon' />
                       <span href={url} onClick={this.onItemCopy}>{gettext('Copy')}</span>
                     </div>
                   )}
                   <div className='option-item' onClick={this.toggleRename}>
-                    <i className='mr-3 sf3-font sf3-font-rename'></i>
+                    <Icon symbol="rename" className='mr-3 sdoc-history-operation-icon' />
                     <span>{gettext('Rename')}</span>
                   </div>
                 </ModalBody>

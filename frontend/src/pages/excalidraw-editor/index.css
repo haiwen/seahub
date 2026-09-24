@@ -24,6 +24,10 @@
   --bs-dropdown-padding-x: auto;
 }
 
+.excalidraw .dropdown-menu-item__icon .excalidraw-link-image-icon {
+  color: inherit;
+}
+
 .excali-container {
   position: relative;
   height: 100%;

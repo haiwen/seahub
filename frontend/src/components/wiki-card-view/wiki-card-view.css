@@ -139,11 +139,6 @@
   margin-left: 5px;
 }
 
-.wiki-card-item .wiki-card-item-avatar-container .sf3-font-department {
-  font-size: 14px;
-  color: var(--bs-icon-secondary-color);
-}
-
 /* wiki-item-bottom */
 .wiki-card-item .wiki-item-bottom {
   min-height: 24px;

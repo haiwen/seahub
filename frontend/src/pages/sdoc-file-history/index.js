@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import SDocServerApi from '@/api/sdoc-server-api';
 import { seafileAPI } from '@/api/seafile-api';
 import GoBack from '@/components/go-back';
+import Icon from '@/components/icon';
 import Loading from '@/components/loading';
 import toaster from '@/components/toast';
 import { PER_PAGE, gettext, historyRepoID, mediaUrl } from '@/utils/constants';
@@ -295,7 +296,7 @@ class SdocFileHistory extends React.Component {
       return (
         <div className="sdoc-file-history-header-right d-flex align-items-center justify-content-end">
           <div className='sdoc-file-changes-switch'>
-            <i className="sf3-font sf3-font-history" onClick={onChangeSidePanelDisplay}></i>
+            <Icon symbol="history" className="sdoc-file-history-switch-icon" onClick={onChangeSidePanelDisplay} />
           </div>
         </div>
       );
@@ -308,7 +309,7 @@ class SdocFileHistory extends React.Component {
             {gettext('No changes')}
           </div>
           <div className='sdoc-file-changes-switch ml-4'>
-            <i className="sf3-font sf3-font-history" onClick={onChangeSidePanelDisplay}></i>
+            <Icon symbol="history" className="sdoc-file-history-switch-icon" onClick={onChangeSidePanelDisplay} />
           </div>
         </div>
       );
@@ -329,7 +330,7 @@ class SdocFileHistory extends React.Component {
             aria-label={gettext('Last modification')}
             title={gettext('Last modification')}
           >
-            <span aria-hidden="true" className="sf3-font sf3-font-down rotate-180 d-inline-block"></span>
+            <Icon symbol="down" className="sdoc-file-history-change-icon rotate-180 d-inline-block" />
           </div>
           <div className="sdoc-file-changes-divider"></div>
           <div
@@ -340,7 +341,7 @@ class SdocFileHistory extends React.Component {
             aria-label={gettext('Next modification')}
             title={gettext('Next modification')}
           >
-            <span aria-hidden="true" className="sf3-font sf3-font-down"></span>
+            <Icon symbol="down" className="sdoc-file-history-change-icon" />
           </div>
           <UncontrolledTooltip placement="bottom" target="sdoc-file-changes-last" delay={0} fade={false}>
             {gettext('Last modification')}
@@ -354,7 +355,7 @@ class SdocFileHistory extends React.Component {
           id="sdoc-file-changes-panel-switch"
           onClick={this.changeSidePanelStatus}
         >
-          <i className="sf3-font sf3-font-history"></i>
+          <Icon symbol="history" className="sdoc-file-history-switch-icon" />
         </div>
       </div>
     );

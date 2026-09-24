@@ -231,7 +231,7 @@ const CardFilesToolbar = ({ repoID, updateCurrentDirent }) => {
       <OpIcon
         id="download-btn"
         symbol="download"
-        className="cur-view-path-btn sf3-font"
+        className="cur-view-path-btn"
         tooltip={gettext('Download')}
         op={downloadRecords}
         aria-label={gettext('Download')}
@@ -241,7 +241,7 @@ const CardFilesToolbar = ({ repoID, updateCurrentDirent }) => {
         <OpIcon
           id="delete-btn"
           symbol="delete"
-          className="cur-view-path-btn sf3-font"
+          className="cur-view-path-btn"
           tooltip={gettext('Delete')}
           op={deleteRecords}
           aria-label={gettext('Delete')}

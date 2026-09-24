@@ -21,7 +21,6 @@
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/seafile-ui.css?t=20260713" />
 {% endblock %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=20260525" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/sf_font3/iconfont.css" />
 {% block extra_style %}{% endblock %}
 {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
 {% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />{% endif %}
@@ -30,9 +29,9 @@
     <div id="wrapper" class="{{ LANGUAGE_CODE }} d-flex fd-col h100">
         {% block info_bar_message %}
         {% if request.user.is_authenticated and request.cur_note %}
-        <div id="info-bar">
-            <p id="info-bar-info">{{ request.cur_note.message|urlize }}</p>
-            <span class="close sf2-icon-x1 op-icon" data="{{ request.cur_note.id }}" title="{% trans "Close" %}"></span>
+        <div id="info-bar" class="d-flex justify-content-between">
+            <p id="info-bar-info" class="m-0">{{ request.cur_note.message|urlize }}</p>
+            <span class="close" data="{{ request.cur_note.id }}" title="{% trans "Close" %}"><span class="info-bar-close-icon" aria-hidden="true"></span></span>
         </div>
         {% endif %}
         {% endblock info_bar_message %}
@@ -48,7 +47,7 @@
             {% if not request.user.is_authenticated %}
             {# for non-logged-in user #}
             <div id="lang">
-                <a href="#" id="lang-context" data-lang="{{ LANGUAGE_CODE }}">{{ LANGUAGE_CODE|language_name_local|capfirst }} <span class="sf3-font sf3-font-down" aria-hidden="true"></span></a>
+                <a href="#" id="lang-context" data-lang="{{ LANGUAGE_CODE }}">{{ LANGUAGE_CODE|language_name_local|capfirst }} <span class="lang-context-icon" aria-hidden="true"></span></a>
                 <div id="lang-context-selector" class="sf-popover hide" aria-label="{% trans "Language" %}" tabindex="0">
                     <ul class="sf-popover-con">
                         {% for LANG in LANGUAGES %}

@@ -385,10 +385,6 @@
   background-color: var(--bs-body-bg) !important;
 }
 
-.sf-select-option:not(.sf-select-option-active):hover .sf-metadata-filter-header-icon .sf2-icon-tick {
-  color: var(--bs-icon-secondary-color);
-}
-
 .sf-select-option:not(.sf-select-option-active):hover .sf-metadata-filter-header-icon .seafile-multicolor-icon {
   color: var(--bs-icon-secondary-color);
 }

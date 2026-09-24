@@ -2,7 +2,6 @@
  * CONTENTS
  *
  * Font Icons
- * sf2-icon-xx ...........seafile-font2
  *
  *
  * Helper
@@ -31,229 +30,6 @@
  * file-tag
  * mobile-menu
  */
-/****** sf2-icon-xx ********/
-@font-face {
-  font-family: 'seafile-font2';
-  src: url('sf_font2/seafile-font2.eot');
-  src: url('sf_font2/seafile-font2.eot?#iefix') format('embedded-opentype'),
-    url('sf_font2/seafile-font2.woff') format('woff'),
-    url('sf_font2/seafile-font2.ttf') format('truetype'),
-    url('sf_font2/seafile-font2.svg#seafile-font2') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
-[class^="sf2-icon-"],
-[class*=" sf2-icon-"] {
-  font-family: 'seafile-font2';
-  speak: none;
-  font-weight: normal;
-  font-style: normal;
-  font-variant: normal;
-  text-transform: none;
-  -webkit-font-smoothing: antialiased;
-}
-
-.sf2-icon-histogram:before {
-  content: "\e000";
-}
-
-.sf2-icon-wrench:before {
-  content: "\e001";
-}
-
-.sf2-icon-clock:before {
-  content: "\e002";
-}
-
-.sf2-icon-bell:before {
-  content: "\e003";
-}
-
-.sf2-icon-delete:before {
-  content: "\e006";
-}
-
-.sf2-icon-monitor:before {
-  content: "\e007";
-}
-
-.sf2-icon-download:before {
-  content: "\e008";
-}
-
-.sf2-icon-msgs:before {
-  content: "\e00b";
-}
-
-.sf2-icon-group:before {
-  content: "\e00c";
-}
-
-.sf2-icon-link:before {
-  content: "\e00e";
-}
-
-.sf2-icon-user:before {
-  content: "\e00f";
-}
-
-.sf2-icon-organization:before {
-  content: "\e010";
-}
-
-.sf2-icon-share:before {
-  content: "\e011";
-}
-
-.sf2-icon-star:before {
-  content: "\e012";
-}
-
-.sf2-icon-wiki:before {
-  content: "\e013";
-}
-
-.sf2-icon-wiki-view:before {
-  content: "\e013";
-}
-
-.sf2-icon-history:before {
-  content: "\e014";
-}
-
-.sf2-icon-cog1:before {
-  content: "\e015";
-}
-
-.sf2-icon-trash:before {
-  content: "\e016";
-}
-
-.sf2-icon-security:before {
-  content: "\e017";
-}
-
-.sf2-icon-tick:before {
-  content: "\e01e";
-}
-
-.sf2-icon-x2:before {
-  content: "\e01f";
-}
-
-.sf2-icon-edit:before {
-  content: "\e018";
-}
-
-.sf2-icon-caret-down:before {
-  content: "\e01a";
-}
-
-.sf2-icon-cog2:before {
-  content: "\e01b";
-}
-
-.sf2-icon-x1:before {
-  content: "\e01d";
-}
-
-.sf2-icon-minus:before {
-  content: "\e01c"
-}
-
-.sf2-icon-confirm:before {
-  content: "\e01e"
-}
-
-.sf2-icon-cancel:before {
-  content: "\e01f"
-}
-
-.sf2-icon-user2:before {
-  content: "\e020";
-}
-
-.sf2-icon-grid-view:before {
-  content: "\e025";
-}
-
-.sf2-icon-list-view:before {
-  content: "\e026";
-}
-
-.sf2-icon-plus:before {
-  content: "\e027";
-}
-
-.sf2-icon-copy:before {
-  content: "\e028"
-}
-
-.sf2-icon-move:before {
-  content: "\e029"
-}
-
-.sf2-icon-reply:before {
-  content: "\e02a";
-}
-
-.sf2-icon-admin-log:before {
-  content: "\e02e";
-}
-
-.sf2-icon-info:before {
-  content: "\e02f";
-}
-
-.sf2-icon-menu:before {
-  content: "\e031";
-}
-
-.sf2-icon-more:before {
-  content: "\e032";
-}
-
-.sf2-icon-x3:before {
-  content: "\e035";
-}
-
-.sf2-icon-close:before {
-  content: "\e035";
-}
-
-.sf2-icon-two-columns:before {
-  content: "\e036";
-}
-
-.sf2-icon-tag:before {
-  content: "\e037"
-}
-
-.sf2-icon-review:before {
-  content: "\e038"
-}
-
-.sf2-icon-readme:before {
-  content: "\e039"
-}
-
-.sf2-icon-drafts:before {
-  content: "\e03a"
-}
-
-.sf2-icon-recycle:before {
-  content: "\e03b"
-}
-
-.sf2-icon-library:before {
-  content: "\e00d";
-}
-
-.sf2-icon-invite:before {
-  content: "\e02b";
-}
-
 /* common class and element style*/
 body {
   overflow-y: auto;
@@ -554,21 +330,6 @@ textarea::placeholder {
 .action-icon,
 .attr-action-icon {
   color: #666 !important;
-}
-
-.action-icon.sf3-font-copy1,
-.action-icon.sf3-font-delete1 {
-  width: 24px;
-  height: 24px;
-  border-radius: 2px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.action-icon.sf3-font-delete1:hover,
-.action-icon.sf3-font-copy1:hover {
-  background-color: var(--bs-hover-bg);
 }
 
 .action-icon:focus,
@@ -923,16 +684,12 @@ textarea::placeholder {
 }
 
 .side-nav-con .active .seafile-multicolor-icon,
-.side-nav-con .active [class^="sf2-icon-"],
-.side-nav-con .active [class^="sf3-font-"],
 .side-nav-con .active .nav-icon,
 .side-nav-con .active .sharp {
   color: #fff;
 }
 
-.side-nav-con .seafile-multicolor-icon,
-.side-nav-con [class^="sf2-icon-"],
-.side-nav-con [class^="sf3-font-"] {
+.side-nav-con .seafile-multicolor-icon {
   font-size: 1.25rem;
   line-height: 1;
   color: var(--bs-icon-secondary-color);
@@ -950,15 +707,6 @@ textarea::placeholder {
 .side-nav-con .toggle-icon {
   color: #666666;
   margin-left: auto;
-}
-
-.side-nav-con .toggle-icon.sf3-font-down {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  width: 24px;
-  height: 24px;
 }
 
 #draft-num {
@@ -1177,7 +925,6 @@ table td {
   font-size: 0;
 }
 
-.table-thead-hidden thead .sf3-font,
 .table-thead-hidden thead .seafile-multicolor-icon {
   display: none !important;
 }
@@ -1264,14 +1011,6 @@ a.table-sort-op {
   }
 }
 
-a.table-sort-op .sf3-font.sf3-font-sort3 {
-  font-size: 12px;
-}
-
-a.table-sort-op.sf3-font {
-  font-size: 13px;
-}
-
 a.table-sort-op:hover {
   outline: none;
   text-decoration: none;
@@ -1282,11 +1021,6 @@ a.table-sort-op:hover {
   vertical-align: middle;
 }
 
-.dropdown-item .sf3-font,
-.dropdown-item .sf2-icon-tick {
-  color: var(--bs-icon-color);
-}
-
 .dropdown-item:active {
   background-color: var(--bs-dropdown-link-hover-bg);
   color: var(--bs-body-color);
@@ -1294,15 +1028,6 @@ a.table-sort-op:hover {
 
 .dropdown-item:focus-visible {
   outline: none;
-}
-
-.dropdown-item .sf3-font,
-.dropdown-item .sf2-icon-tick {
-  color: var(--bs-icon-color);
-}
-
-.dropdown-item .sf3-font-down {
-  color: var(--bs-body-secondary-color);
 }
 
 .err-tip {
@@ -1652,8 +1377,6 @@ a.table-sort-op:hover {
 }
 
 .side-panel .side-nav-con .active .seafile-multicolor-icon,
-.side-panel .side-nav-con .active [class^="sf2-icon-"],
-.side-panel .side-nav-con .active [class^="sf3-font-"],
 .side-panel .side-nav-con .active .nav-icon,
 .side-panel .side-nav-con .active .sharp {
   color: var(--bs-icon-secondary-color);
@@ -1702,12 +1425,6 @@ a.table-sort-op:hover {
 
 .rotate-270 {
   transform: rotate(270deg) !important;
-}
-
-/* All triangle icon use 12px */
-.sf3-font-down {
-  font-size: 12px !important;
-  color: var(--bs-body-secondary-color);
 }
 
 .visually-hidden {

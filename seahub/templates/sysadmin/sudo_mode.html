@@ -41,7 +41,7 @@ html, body, #wrapper { height:100%; }
     <form action="" method="post" class="con">{% csrf_token %}
       <div class="position-relative">
         <input id="password-input" type="password" name="password" placeholder="{% trans "Password" %}" aria-label="{% trans "Password" %}" title="{% trans "Password" %}" value="" class="input" autocomplete="off" />
-        <i id="toggle-show-password" class="sf3-font sf3-font-eye-slash"></i>
+        <span id="toggle-show-password" class="password-visibility-icon" aria-hidden="true"></span>
       </div>
       {% if password_error %}
       <p class="error mt-1">{% trans "Incorrect password" %}</p>
@@ -72,8 +72,8 @@ $el.removeClass('vh');
 $('input[name="password"]').trigger('focus');
 
 $('#toggle-show-password').click(function() {
-  $(this).toggleClass('sf3-font-eye-slash sf3-font-eye');
-  if ($(this).hasClass('sf3-font-eye-slash')) {
+  $(this).toggleClass('password-visibility-icon-visible');
+  if (!$(this).hasClass('password-visibility-icon-visible')) {
     $('#password-input').attr('type', 'password');
   } else {
     $('#password-input').attr('type', 'text');

@@ -21,10 +21,6 @@ body {
   top: -5px;
 }
 
-.go-back .sf3-font-down {
-  font-size: 1.75rem !important;
-}
-
 .op-bar {
   padding: 9px 10px;
   background: var(--bs-bg-color);
