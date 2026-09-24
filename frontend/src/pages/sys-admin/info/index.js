@@ -92,7 +92,7 @@ class Info extends Component {
               {errorMsg && <p className="error text-center mt-4">{errorMsg}</p>}
               {(!loading && !errorMsg) &&
               <dl className="flex-1 m-0">
-                <dt className="info-item-heading">{gettext('System Info')}</dt>
+                <dt className="info-item-heading mt-0">{gettext('System Info')}</dt>
                 {isPro ?
                   <dd className="info-item-content">
                     {gettext('Professional Edition')}
