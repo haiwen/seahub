@@ -12,11 +12,10 @@ from rest_framework.views import APIView
 from django.utils.translation import gettext as _
 
 import seaserv
-from seaserv import seafile_api, ccnet_api
+from seaserv import seafile_api, ccnet_api, check_permission
 from constance import config
 
 from seahub.api2.authentication import TokenAuthentication
-from seahub.api2.permissions import IsRepoAccessible
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.api2.endpoints.utils import is_org_user
@@ -45,23 +44,12 @@ logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
 
 
-class IsRepoAccessibleOrNotFound(IsRepoAccessible):
-    """Allow the endpoint to return its existing 404 for a missing library."""
-
-    def has_permission(self, request, view, obj=None):
-        repo_id = view.kwargs.get('repo_id', '')
-        if not seafile_api.get_repo(repo_id):
-            return True
-
-        return super().has_permission(request, view, obj)
-
-
 class DirSharedItemsEndpoint(APIView):
     """Support uniform interface(list, share, unshare, modify) for sharing
     library/folder to users/groups.
     """
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated, IsRepoAccessibleOrNotFound)
+    permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
     def list_user_shared_items(self, request, repo_id, path):
@@ -217,6 +205,9 @@ class DirSharedItemsEndpoint(APIView):
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)
 
+        if not check_permission(repo_id, request.user.username):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         shared_to_user, shared_to_group = self.handle_shared_to_args(request)
 
         path = request.GET.get('p', '/')
@@ -236,13 +227,16 @@ class DirSharedItemsEndpoint(APIView):
     def post(self, request, repo_id, format=None):
         """Update shared item permission.
         """
-        if not request.user.permissions.can_share_repo():
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-
         username = request.user.username
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)
+
+        if not check_permission(repo_id, username):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        if not request.user.permissions.can_share_repo():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         path = request.GET.get('p', '/')
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:
@@ -325,13 +319,16 @@ class DirSharedItemsEndpoint(APIView):
 
     def put(self, request, repo_id, format=None):
 
-        if not request.user.permissions.can_share_repo():
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-
         username = request.user.username
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)
+
+        if not check_permission(repo_id, username):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        if not request.user.permissions.can_share_repo():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         path = request.GET.get('p', '/')
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:
@@ -558,13 +555,16 @@ class DirSharedItemsEndpoint(APIView):
 
     def delete(self, request, repo_id, format=None):
 
-        if not request.user.permissions.can_share_repo():
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-
         username = request.user.username
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)
+
+        if not check_permission(repo_id, username):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        if not request.user.permissions.can_share_repo():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         path = request.GET.get('p', '/')
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:
