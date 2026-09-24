@@ -1,8 +1,7 @@
 import { userAPI } from '@/api/user-api';
-import { enableNotificationServer, notificationServerUrl } from './constants';
+import { enableNotificationServer, notificationServerUrl } from '@/utils/constants';
 
-
-class WebSocketClient {
+class RepoNotificationWebSocket {
   constructor(onMessageCallback, repoId) {
     this.url = notificationServerUrl; // WebSocket address;
     this.repoId = repoId;
@@ -10,6 +9,7 @@ class WebSocketClient {
     this.shouldReconnect = true;
     this.reconnectAttempts = 0;
     this.maxReconnectAttempts = 5;
+    this.reconnectTimer = null;
     this.onMessageCallback = onMessageCallback;
     if (enableNotificationServer) {
       this.connect();
@@ -17,32 +17,37 @@ class WebSocketClient {
   }
 
   async connect() {
-    this.socket = new WebSocket(this.url);
+    const socket = new WebSocket(this.url);
+    this.socket = socket;
 
-    this.socket.onopen = async () => {
+    socket.onopen = async () => {
       const msg = await this.formatSubscriptionMsg();
-      this.socket.send(JSON.stringify(msg));
+      if (this.shouldReconnect && this.socket === socket) {
+        socket.send(JSON.stringify(msg));
+      }
     };
 
     // listen message from WebSocket server
-    this.socket.onmessage = async (event) => {
+    socket.onmessage = async (event) => {
       const parsedData = JSON.parse(event.data);
       // jwt-expire reconnect
       if (parsedData.type === 'jwt-expired') {
         const msg = await this.formatSubscriptionMsg();
-        this.socket.send(JSON.stringify(msg));
+        if (this.shouldReconnect && this.socket === socket) {
+          socket.send(JSON.stringify(msg));
+        }
       } else {
         this.onMessageCallback(parsedData);
       }
     };
 
-    this.socket.onerror = (error) => {
+    socket.onerror = (error) => {
       return error;
     };
 
     // reconnect WebSocket
-    this.socket.onclose = () => {
-      if (this.shouldReconnect) {
+    socket.onclose = () => {
+      if (this.socket === socket && this.shouldReconnect) {
         this.reconnect();
       }
     };
@@ -89,6 +94,10 @@ class WebSocketClient {
 
   close() {
     this.shouldReconnect = false;
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
+    }
     if (this.socket) {
       if (this.socket.readyState === WebSocket.OPEN) {
         const msg = this.formatUnSubscriptionMsg();
@@ -105,11 +114,15 @@ class WebSocketClient {
       return;
     }
     const delay = Math.min(1000 * Math.pow(2, this.reconnectAttempts), 30000);
-    setTimeout(() => {
+    this.reconnectTimer = setTimeout(() => {
+      this.reconnectTimer = null;
+      if (!this.shouldReconnect) {
+        return;
+      }
       this.reconnectAttempts++;
       this.connect();
     }, delay);
   }
 }
 
-export default WebSocketClient;
+export default RepoNotificationWebSocket;
