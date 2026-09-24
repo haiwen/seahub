@@ -44,6 +44,50 @@ def normalize_repo_status_str(status):
         return ''
 
 
+def check_repo_name_conflict(request, repo_name, group_id=None):
+    """Return True if repo_name conflicts with the request user's owned
+    libraries or group-owned libraries.
+    """
+    username = request.user.username
+    org_id = request.user.org.org_id if is_org_context(request) else -1
+
+    if org_id and org_id > 0:
+        owned_repos = seafile_api.get_org_owned_repo_list(
+            org_id, username, ret_corrupted=True)
+    else:
+        owned_repos = seafile_api.get_owned_repo_list(
+            username, ret_corrupted=True)
+
+    if any(repo.name == repo_name for repo in owned_repos):
+        return True
+
+    if group_id is None:
+        if org_id and org_id > 0:
+            group_repos = seafile_api.get_org_group_repos_by_user(
+                username, org_id)
+        else:
+            group_repos = seafile_api.get_group_repos_by_user(username)
+        group_owner = None
+    else:
+        group_id = int(group_id)
+        group_owner = '%s@seafile_group' % group_id
+        if org_id and org_id > 0:
+            group_repos = seafile_api.get_org_group_repos(org_id, group_id)
+        else:
+            group_repos = seafile_api.get_repos_by_group(group_id)
+
+    for repo in group_repos:
+        if repo.repo_name != repo_name:
+            continue
+        if group_owner is None:
+            if repo.user.endswith('@seafile_group'):
+                return True
+        elif repo.user == group_owner:
+            return True
+
+    return False
+
+
 def get_available_repo_perms():
     perms = [PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN]
     if is_pro_version():

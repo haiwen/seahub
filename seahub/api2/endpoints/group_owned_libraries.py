@@ -31,7 +31,8 @@ from seahub.utils import is_valid_dirent_name, is_org_context, \
         is_pro_version, normalize_dir_path, is_valid_username, \
         send_perm_audit_msg, is_valid_org_id, transfer_repo
 from seahub.utils.repo import (
-    get_library_storages, get_repo_owner, get_available_repo_perms
+    get_library_storages, get_repo_owner, get_available_repo_perms,
+    check_repo_name_conflict
 )
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.rpc import SeafileAPI
@@ -135,6 +136,10 @@ class GroupOwnedLibraries(APIView):
         if group_quota <= 0 and group_quota != -2:
             error_msg = 'No group quota.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if check_repo_name_conflict(request, repo_name, group_id):
+            error_msg = 'Library name already exists.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # create group owned repo
         group_id = int(group_id)
