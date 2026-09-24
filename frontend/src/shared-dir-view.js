@@ -101,6 +101,8 @@ class SharedDirView extends React.Component {
 
     this.resizeBarRef = React.createRef();
     this.dragHandlerRef = React.createRef();
+    this.copyMoveProgressTimer = null;
+    this.isCopyMoveProgressPolling = false;
   }
 
   componentDidMount() {
@@ -113,6 +115,10 @@ class SharedDirView extends React.Component {
     this.loadTreePanel();
     this.listItems();
     this.getShareLinkRepoTags();
+  }
+
+  componentWillUnmount() {
+    this.stopAsyncCopyMoveProgress();
   }
 
   loadTreePanel = () => {
@@ -400,8 +406,13 @@ class SharedDirView extends React.Component {
     try {
       let res = await seafileAPI.queryAsyncOperationProgress(asyncCopyMoveTaskId);
       let data = res.data;
+      if (!this.isCopyMoveProgressPolling || asyncCopyMoveTaskId !== this.state.asyncCopyMoveTaskId) {
+        return;
+      }
+
       if (data.failed) {
         let message = gettext('Failed to copy files to another library.');
+        this.stopAsyncCopyMoveProgress();
         toaster.danger(message);
         this.setState({
           asyncOperationProgress: 0,
@@ -410,7 +421,17 @@ class SharedDirView extends React.Component {
         return;
       }
 
+      if (data.canceled) {
+        this.stopAsyncCopyMoveProgress();
+        this.setState({
+          asyncOperationProgress: 0,
+          isCopyMoveProgressDialogShow: false,
+        });
+        return;
+      }
+
       if (data.successful) {
+        this.stopAsyncCopyMoveProgress();
         this.setState({
           asyncOperationProgress: 0,
           isCopyMoveProgressDialogShow: false,
@@ -422,15 +443,37 @@ class SharedDirView extends React.Component {
       // init state: total is 0
       let asyncOperationProgress = !data.total ? 0 : parseInt((data.done / data.total * 100).toFixed(2));
 
-      this.getAsyncCopyMoveProgress();
       this.setState({ asyncOperationProgress: asyncOperationProgress });
+      this.copyMoveProgressTimer = setTimeout(() => {
+        this.copyMoveProgressTimer = null;
+        this.getAsyncCopyMoveProgress();
+      }, 2000);
     } catch (error) {
+      if (!this.isCopyMoveProgressPolling || asyncCopyMoveTaskId !== this.state.asyncCopyMoveTaskId) {
+        return;
+      }
+
+      this.stopAsyncCopyMoveProgress();
       this.setState({
         asyncOperationProgress: 0,
         isCopyMoveProgressDialogShow: false,
       });
     }
   }
+
+  startAsyncCopyMoveProgress = () => {
+    this.stopAsyncCopyMoveProgress();
+    this.isCopyMoveProgressPolling = true;
+    this.getAsyncCopyMoveProgress();
+  };
+
+  stopAsyncCopyMoveProgress = () => {
+    this.isCopyMoveProgressPolling = false;
+    if (this.copyMoveProgressTimer !== null) {
+      clearTimeout(this.copyMoveProgressTimer);
+      this.copyMoveProgressTimer = null;
+    }
+  };
 
   saveSelectedItems = () => {
     this.setState({
@@ -465,7 +508,7 @@ class SharedDirView extends React.Component {
         asyncCopyMoveTaskId: res.data.task_id,
         asyncOperatedFilesLength: itemsForSave.length,
       }, () => {
-        this.getAsyncCopyMoveProgress();
+        this.startAsyncCopyMoveProgress();
       });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -474,6 +517,7 @@ class SharedDirView extends React.Component {
   };
 
   onProgressDialogToggle = () => {
+    this.stopAsyncCopyMoveProgress();
     let { asyncOperationProgress } = this.state;
     if (asyncOperationProgress !== 100) {
       let taskId = this.state.asyncCopyMoveTaskId;
