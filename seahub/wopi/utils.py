@@ -39,6 +39,65 @@ def generate_access_token_cache_key(token):
     return 'wopi_access_token_' + str(token)
 
 
+def get_wopi_file_id(repo_id, file_path):
+    repo = seafile_api.get_repo(repo_id)
+    if repo.is_virtual:
+        origin_repo_id = repo.origin_repo_id
+        origin_file_path = posixpath.join(repo.origin_path, file_path.strip('/'))
+        repo_path_info = '_'.join([origin_repo_id, origin_file_path])
+    else:
+        repo_path_info = '_'.join([repo_id, file_path])
+
+    return hashlib.sha1(repo_path_info.encode('utf8')).hexdigest()
+
+
+def generate_wopi_access_token(request_user, repo_id, file_path,
+                               can_edit=False, can_download=True,
+                               can_write_relative=False,
+                               obj_id=''):
+    user_repo_path_info = {
+        'request_user': request_user,
+        'repo_id': repo_id,
+        'file_path': file_path,
+        'obj_id': obj_id,
+        'can_edit': can_edit,
+        'can_download': can_download,
+        'can_write_relative': can_write_relative,
+    }
+
+    # collobora office only allowed alphanumeric and _
+    uid = uuid.uuid4()
+    access_token = uid.hex
+    key = generate_access_token_cache_key(access_token)
+    cache.set(key, user_repo_path_info, WOPI_ACCESS_TOKEN_EXPIRATION)
+
+    # access_token_ttl property tells office web app
+    # when access token expires
+    utc_timestamp = time.time()
+    access_token_ttl = int((utc_timestamp + WOPI_ACCESS_TOKEN_EXPIRATION) * 1000)
+
+    return access_token, access_token_ttl
+
+
+def get_wopi_file_url(request_user, repo_id, file_path,
+                      can_edit=False, can_download=True,
+                      can_write_relative=False,
+                      obj_id=''):
+    base_url = get_site_scheme_and_netloc()
+    file_id = get_wopi_file_id(repo_id, file_path)
+    file_endpoint = reverse('WOPIFilesView', args=[file_id])
+    access_token, access_token_ttl = generate_wopi_access_token(
+        request_user, repo_id, file_path,
+        can_edit=can_edit, can_download=can_download,
+        can_write_relative=can_write_relative,
+        obj_id=obj_id,
+    )
+    file_url = urllib.parse.urljoin(base_url, file_endpoint)
+    file_url = file_url + '?' + urllib.parse.urlencode({'access_token': access_token})
+
+    return file_url, access_token, access_token_ttl
+
+
 def get_file_info_by_token(token):
     """ Get file info from cache by access token
 
@@ -66,7 +125,8 @@ def generate_discovery_cache_key(name, ext):
 
 def get_wopi_dict(request_user, repo_id, file_path,
                   action_name='view', can_download=True,
-                  language_code='en', obj_id=''):
+                  language_code='en', obj_id='',
+                  can_write_relative=False):
     """ Prepare dict data for WOPI host page
     """
 
@@ -145,15 +205,7 @@ def get_wopi_dict(request_user, repo_id, file_path,
         return None
 
     # generate full action url
-    repo = seafile_api.get_repo(repo_id)
-    if repo.is_virtual:
-        origin_repo_id = repo.origin_repo_id
-        origin_file_path = posixpath.join(repo.origin_path, file_path.strip('/'))
-        repo_path_info = '_'.join([origin_repo_id, origin_file_path])
-    else:
-        repo_path_info = '_'.join([repo_id, file_path])
-
-    fake_file_id = hashlib.sha1(repo_path_info.encode('utf8')).hexdigest()
+    fake_file_id = get_wopi_file_id(repo_id, file_path)
     base_url = get_site_scheme_and_netloc()
     check_file_info_endpoint = reverse('WOPIFilesView', args=[fake_file_id])
     WOPISrc = urllib.parse.urljoin(base_url, check_file_info_endpoint)
@@ -205,26 +257,13 @@ def get_wopi_dict(request_user, repo_id, file_path,
     # `lang` parameter is used for Collabora Office
     full_action_url += f'&ui={WOPI_UI_LLCC}&rs={WOPI_UI_LLCC}&lang={WOPI_UI_LLCC}'
 
-    # generate access token
-    user_repo_path_info = {
-        'request_user': request_user,
-        'repo_id': repo_id,
-        'file_path': file_path,
-        'obj_id': obj_id,
-        'can_edit': action_name == 'edit',
-        'can_download': can_download,
-    }
-
-    # collobora office only allowed alphanumeric and _
-    uid = uuid.uuid4()
-    access_token = uid.hex
-    key = generate_access_token_cache_key(access_token)
-    cache.set(key, user_repo_path_info, WOPI_ACCESS_TOKEN_EXPIRATION)
-
-    # access_token_ttl property tells office web app
-    # when access token expires
-    utc_timestamp = time.time()
-    access_token_ttl = int((utc_timestamp + WOPI_ACCESS_TOKEN_EXPIRATION) * 1000)
+    file_url, access_token, access_token_ttl = get_wopi_file_url(
+        request_user, repo_id, file_path,
+        can_edit=action_name == 'edit',
+        can_download=can_download,
+        can_write_relative=can_write_relative,
+        obj_id=obj_id,
+    )
 
     wopi_dict = {}
     wopi_dict['repo_id'] = repo_id
@@ -233,6 +272,7 @@ def get_wopi_dict(request_user, repo_id, file_path,
     wopi_dict['action_url'] = full_action_url
     wopi_dict['access_token'] = access_token
     wopi_dict['access_token_ttl'] = access_token_ttl
+    wopi_dict['file_url'] = file_url
     wopi_dict['doc_title'] = file_name
     wopi_dict['enable_watermark'] = ENABLE_WATERMARK and action_name == 'view'
 
