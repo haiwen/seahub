@@ -1,4 +1,6 @@
 .orgs-filter-bar .filter-item,
 .orgs-filter-bar .cur-option {
+  display: inline-flex;
+  align-items: center;
   font-size: 14px;
 }
