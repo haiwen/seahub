@@ -117,6 +117,44 @@ def search_icons(params):
     return resp
 
 
+def get_chat_title(params):
+    headers = gen_headers()
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/generate-chat-title')
+    resp = requests.post(url, json=params, headers=headers, timeout=30)
+    if resp.status_code != 200:
+        raise RuntimeError('generate chat title error status: %s body: %s' % (resp.status_code, resp.text))
+    return resp.json().get('title', '')
+
+
+def generate_session_title(session, query, ai_reply, expected_session_name):
+    try:
+        title = get_chat_title({
+            'repo_id': session.repo_id,
+            'query': query,
+            'ai_reply': ai_reply,
+            'scenario': AI_SCENARIO_CHAT,
+        })
+    except Exception as error:
+        logger.warning('Failed to generate chat title: %s', error)
+        return session.session_name
+
+    title = (title or '').strip().replace('\r', ' ').replace('\n', ' ')
+    title = ' '.join(title.strip('\'"').split())
+    title = title.rstrip('.,!?;:，。！？；：')[:60]
+    if not title:
+        return session.session_name
+
+    updated = ChatSessions.objects.filter(
+        pk=session.pk,
+        session_name=expected_session_name,
+    ).update(session_name=title, updated_at=timezone.now())
+    if updated:
+        return title
+
+    session.refresh_from_db(fields=['session_name'])
+    return session.session_name
+
+
 # utils
 def get_ai_credit_by_user(user, org_id):
     if org_id and org_id > 0:
