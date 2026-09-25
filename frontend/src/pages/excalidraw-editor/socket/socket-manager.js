@@ -1,12 +1,14 @@
 import { CaptureUpdateAction, getSceneVersion, reconcileElements, restoreElements } from '@excalidraw/excalidraw';
 import throttle from 'lodash.throttle';
-import { CURSOR_SYNC_TIMEOUT, LOAD_IMAGES_TIMEOUT } from '../constants';
+import { v4 as uuidv4 } from 'uuid';
+import { CURSOR_SYNC_TIMEOUT, LOAD_IMAGES_TIMEOUT, MAX_OPERATION_RETRIES, OPERATION_RETRY_DELAY, PREVIEW_COMMIT_DELAY } from '../constants';
 import FileManager from '../data/file-manager';
 import { loadFilesFromServer, saveFilesToServer } from '../data/server-storage';
 import { stateDebug } from '../utils/debug';
 import { isInitializedImageElement } from '../utils/element-utils';
 import EventBus from '../utils/event-bus';
 import { updateStaleImageStatuses } from '../utils/exdraw-utils';
+import RemoteOperationIdCache from './remote-operation-id-cache';
 import SocketClient from './socket-client';
 
 const STATE = {
@@ -24,9 +26,14 @@ class SocketManager {
     this.document = document;
     this.excalidrawAPI = excalidrawAPI;
     this.state = STATE.IDLE;
+    this.isRoomJoined = false;
 
     this.pendingOperationList = [];
-    this.pendingOperationBeginTimeList = [];
+    this.previewElements = null;
+    this.previewCommitTimer = null;
+    this.pendingRemoteUpdates = [];
+    this.remoteOperationIds = new RemoteOperationIdCache();
+    this.remoteRenderFrame = null;
     this.collaborators = new Map();
     const { user } = config;
     this.collaborators.set(user._username, user, { isCurrentUser: true });
@@ -104,6 +111,144 @@ class SocketManager {
     return this.lastBroadcastedOrReceivedSceneVersion;
   };
 
+  updatePreview = (elements) => {
+    if (!this.previewElements && !this.isNeedToSync(elements)) {
+      return;
+    }
+
+    this.previewElements = elements;
+    clearTimeout(this.previewCommitTimer);
+    this.previewCommitTimer = setTimeout(() => {
+      this.commitPreview();
+    }, PREVIEW_COMMIT_DELAY);
+  };
+
+  commitPreview = () => {
+    clearTimeout(this.previewCommitTimer);
+    this.previewCommitTimer = null;
+
+    if (!this.previewElements) {
+      return;
+    }
+
+    let elements = this.previewElements;
+    this.previewElements = null;
+
+    if (this.pendingRemoteUpdates.length > 0) {
+      const mergedRemoteScene = this.applyRemoteSceneUpdates(this.pendingRemoteUpdates, elements);
+      this.pendingRemoteUpdates = [];
+      elements = mergedRemoteScene.elements;
+      this.setVersion(mergedRemoteScene.version);
+      this.setLastBroadcastedOrReceivedSceneVersion(elements);
+      this.excalidrawAPI.updateScene({
+        elements,
+        captureUpdate: CaptureUpdateAction.NEVER,
+      });
+      this.loadImageFiles();
+    }
+
+    this.syncLocalElementsToOthers(elements, true);
+  };
+
+  enqueueRemoteSceneUpdate = (elements, version, operationId) => {
+    if (!Array.isArray(elements)) {
+      return;
+    }
+
+    const normalizedVersion = Number.isFinite(Number(version)) ? Number(version) : this.getVersion();
+    const remoteOperationId = operationId || `version:${normalizedVersion}`;
+    if (!this.remoteOperationIds.remember(remoteOperationId)) {
+      return;
+    }
+
+    this.pendingRemoteUpdates.push({
+      elements,
+      version: normalizedVersion,
+      operation_id: remoteOperationId,
+    });
+    this.pendingRemoteUpdates.sort((left, right) => left.version - right.version);
+
+    if (elements.length > 0) {
+      const remoteSceneVersion = getSceneVersion(elements);
+      this.lastBroadcastedOrReceivedSceneVersion = Math.max(
+        this.lastBroadcastedOrReceivedSceneVersion,
+        remoteSceneVersion,
+      );
+    }
+    this.setVersion(Math.max(this.getVersion(), normalizedVersion));
+
+    if (!this.previewElements) {
+      this.scheduleRemoteSceneRender();
+    }
+  };
+
+  scheduleRemoteSceneRender = () => {
+    if (this.remoteRenderFrame !== null) {
+      return;
+    }
+
+    const render = () => {
+      this.remoteRenderFrame = null;
+      this.flushRemoteSceneUpdates();
+    };
+
+    if (typeof window !== 'undefined' && window.requestAnimationFrame) {
+      this.remoteRenderFrame = window.requestAnimationFrame(render);
+      return;
+    }
+
+    this.remoteRenderFrame = setTimeout(render, 0);
+  };
+
+  cancelRemoteSceneRender = () => {
+    if (this.remoteRenderFrame === null) {
+      return;
+    }
+
+    if (typeof window !== 'undefined' && window.cancelAnimationFrame) {
+      window.cancelAnimationFrame(this.remoteRenderFrame);
+    } else {
+      clearTimeout(this.remoteRenderFrame);
+    }
+    this.remoteRenderFrame = null;
+  };
+
+  applyRemoteSceneUpdates = (updates, baseElements = null) => {
+    let localElements = baseElements || this.excalidrawAPI.getSceneElementsIncludingDeleted();
+    const appState = this.excalidrawAPI.getAppState();
+    let remoteVersion = this.getVersion();
+
+    updates.forEach((update) => {
+      const restoredRemoteElements = restoreElements(update.elements, null);
+      localElements = reconcileElements(localElements, restoredRemoteElements, appState);
+      remoteVersion = Math.max(remoteVersion, update.version);
+    });
+
+    return {
+      elements: localElements,
+      version: remoteVersion,
+    };
+  };
+
+  flushRemoteSceneUpdates = () => {
+    if (this.previewElements || this.pendingRemoteUpdates.length === 0) {
+      return;
+    }
+
+    const updates = this.pendingRemoteUpdates;
+    this.pendingRemoteUpdates = [];
+    const mergedRemoteScene = this.applyRemoteSceneUpdates(updates);
+
+    this.setLastBroadcastedOrReceivedSceneVersion(mergedRemoteScene.elements);
+    this.setVersion(mergedRemoteScene.version);
+    this.excalidrawAPI.updateScene({
+      elements: mergedRemoteScene.elements,
+      captureUpdate: CaptureUpdateAction.NEVER,
+    });
+
+    this.loadImageFiles();
+  };
+
   fetchImageFilesFromServer = async (opts) => {
     const elements = opts.elements.filter(element => {
       return (
@@ -140,17 +285,21 @@ class SocketManager {
     return false;
   };
 
-  syncLocalElementsToOthers = (elements) => {
-    if (!this.isNeedToSync(elements)) {
+  syncLocalElementsToOthers = (elements, force = false) => {
+    if (!force && !this.isNeedToSync(elements)) {
       return;
     }
-    this.pendingOperationList.push(elements);
+    const operation = {
+      operation_id: uuidv4(),
+      elements,
+      createdAt: Date.now(),
+      retryCount: 0,
+    };
+    this.pendingOperationList.push(operation);
 
-    const lastOpBeginTime = new Date().getTime();
-    this.pendingOperationBeginTimeList.push(lastOpBeginTime);
-    const firstOpBeginTime = this.pendingOperationBeginTimeList[0];
-
-    const isExceedExecuteTime = (lastOpBeginTime - firstOpBeginTime) / 1000 > 30 ? true : false;
+    const oldestOperation = this._sendingOperation || this.pendingOperationList[0];
+    const isExceedExecuteTime = oldestOperation
+      && (operation.createdAt - oldestOperation.createdAt) / 1000 > 30;
     if (isExceedExecuteTime || this.pendingOperationList.length > 500) {
       this.dispatchConnectState('pending_operations_exceed_limit');
     }
@@ -159,7 +308,7 @@ class SocketManager {
   };
 
   sendOperations = () => {
-    if (this.state !== STATE.IDLE) return;
+    if (!this.isRoomJoined || this.state !== STATE.IDLE) return;
     stateDebug(`State changed: ${this.state} -> ${STATE.SENDING}`);
     this.state = STATE.SENDING;
     this.sendNextOperations();
@@ -175,45 +324,106 @@ class SocketManager {
 
     this.dispatchConnectState('is-saving');
     const version = this.document.version;
-    const elements = this.pendingOperationList.shift();
-    this._sendingOperation = elements;
+    const operation = this.pendingOperationList.shift();
+    this._sendingOperation = operation;
 
-    this.socketClient.broadcastSceneElements(elements, version, this.sendOperationsCallback);
+    this.socketClient.broadcastSceneElements(
+      operation.elements,
+      version,
+      operation.operation_id,
+      (result) => this.sendOperationsCallback(result, operation.operation_id),
+    );
   };
 
-  sendOperationsCallback = (result) => {
+  sendOperationsCallback = (result, operation_id) => {
+    const currentOperation = this._sendingOperation;
+    if (!currentOperation || currentOperation.operation_id !== operation_id) {
+      return;
+    }
+
+    const ack_operation_id = result?.operation_id || result?.operationId;
+    if (ack_operation_id && ack_operation_id !== operation_id) {
+      return;
+    }
+
     if (result && result.success) {
       const { version: serverVersion } = result;
       this.setVersion(serverVersion);
       const lastSavedAt = new Date().getTime();
       this.dispatchConnectState('saved', lastSavedAt);
 
-      this.setLastBroadcastedOrReceivedSceneVersion(this._sendingOperation);
+      this.setLastBroadcastedOrReceivedSceneVersion(currentOperation.elements);
 
       // send next operations
-      this.pendingOperationBeginTimeList.shift(); // remove current operation's begin time
       this._sendingOperation = null;
       this.sendNextOperations();
       return;
     }
-    // Operations are execute failure
-    const { error_type } = result;
-    if (error_type === 'load_document_content_error' || error_type === 'token_expired') {
-      // load_document_content_error: After a short-term reconnection, the content of the document fails to load
-      this.dispatchConnectState(error_type);
+    this.handleOperationError(result);
+  };
 
-      // reset sending control
-      stateDebug(`State Changed: ${this.state} -> ${STATE.NEED_RELOAD}`);
-      this.state = STATE.NEED_RELOAD;
-      this._sendingOperation = null;
-    } else if (error_type === 'version_behind_server') {
-      // Put the failed operation into the pending list and re-execute it
-      this.pendingOperationList.unshift(this._sendingOperation);
+  handleOperationError = (result) => {
+    const { error_type } = result || {};
 
-      stateDebug(`State Changed: ${this.state} -> ${STATE.CONFLICT}`);
-      this.state = STATE.CONFLICT;
-      this.resolveConflicting(result);
+    switch (error_type) {
+      case 'ack_timeout':
+        if (this.recoverSendingOperation('ack_timeout')) {
+          setTimeout(() => this.sendOperations(), OPERATION_RETRY_DELAY);
+        } else {
+          this.state = STATE.SENDING;
+          this.sendNextOperations();
+        }
+        return;
+      case 'load_document_content_error':
+      case 'token_expired':
+        // load_document_content_error: After a short-term reconnection, the content of the document fails to load
+        this.dispatchConnectState(error_type);
+
+        stateDebug(`State Changed: ${this.state} -> ${STATE.NEED_RELOAD}`);
+        this.state = STATE.NEED_RELOAD;
+        this._sendingOperation = null;
+        return;
+      case 'version_behind_server':
+        // Put the failed operation into the pending list and re-execute it
+        this.pendingOperationList.unshift(this._sendingOperation);
+
+        stateDebug(`State Changed: ${this.state} -> ${STATE.CONFLICT}`);
+        this.state = STATE.CONFLICT;
+        this.resolveConflicting(result);
+        return;
+      case 'execute_client_operations_error':
+      default:
+        // Keep failed operations in the queue and release the sending state so
+        // later sync attempts can continue instead of getting stuck in SENDING.
+        if (this.recoverSendingOperation(error_type || 'sync_server_operations_error')) {
+          setTimeout(() => this.sendOperations(), OPERATION_RETRY_DELAY);
+        } else {
+          this.state = STATE.SENDING;
+          this.sendNextOperations();
+        }
     }
+  };
+
+  recoverSendingOperation = (errorType) => {
+    if (!this._sendingOperation) {
+      return false;
+    }
+
+    const sendingOperation = this._sendingOperation;
+    sendingOperation.retryCount = (sendingOperation.retryCount || 0) + 1;
+    const shouldRetry = sendingOperation.retryCount <= MAX_OPERATION_RETRIES;
+
+    if (shouldRetry) {
+      this.requeueSendingOperation();
+    } else {
+      this._sendingOperation = null;
+      stateDebug(`Operation failed (${errorType}) after ${MAX_OPERATION_RETRIES} retries and was discarded.`);
+    }
+
+    stateDebug(`Operation failed (${errorType}). State Changed: ${this.state} -> ${STATE.IDLE}`);
+    this.state = STATE.IDLE;
+    this.dispatchConnectState(errorType);
+    return shouldRetry;
   };
 
   resolveConflicting = (result) => {
@@ -221,7 +431,6 @@ class SocketManager {
 
     this.updateLocalDataByRemoteData(elements, version);
 
-    this.pendingOperationBeginTimeList.shift();
     this._sendingOperation = null;
     this.state = STATE.SENDING;
     this.sendNextOperations();
@@ -236,16 +445,21 @@ class SocketManager {
   }, CURSOR_SYNC_TIMEOUT);
 
   updateLocalDataByRemoteData = (remoteElements, remoteVersion) => {
-    const localElements = this.excalidrawAPI.getSceneElementsIncludingDeleted();
-    const appState = this.excalidrawAPI.getAppState();
-    const restoredRemoteElements = restoreElements(remoteElements, null);
-    const reconciledElements = reconcileElements(localElements, restoredRemoteElements, appState);
+    if (this.previewElements) {
+      this.enqueueRemoteSceneUpdate(remoteElements, remoteVersion);
+      return;
+    }
 
-    this.setLastBroadcastedOrReceivedSceneVersion(reconciledElements);
-    this.setVersion(remoteVersion);
+    const mergedRemoteScene = this.applyRemoteSceneUpdates([{
+      elements: remoteElements,
+      version: remoteVersion,
+    }]);
+
+    this.setLastBroadcastedOrReceivedSceneVersion(mergedRemoteScene.elements);
+    this.setVersion(mergedRemoteScene.version);
 
     this.excalidrawAPI.updateScene({
-      elements: reconciledElements,
+      elements: mergedRemoteScene.elements,
       captureUpdate: CaptureUpdateAction.NEVER,
     });
 
@@ -254,8 +468,8 @@ class SocketManager {
   };
 
   handleRemoteSceneUpdated = (params) => {
-    const { elements, version } = params;
-    this.updateLocalDataByRemoteData(elements, version);
+    const { elements, version, operation_id, operationId } = params;
+    this.enqueueRemoteSceneUpdate(elements, version, operation_id || operationId);
   };
 
   handleRemoteMouseLocationUpdated = (params) => {
@@ -295,20 +509,39 @@ class SocketManager {
     }
   };
 
+  requeueSendingOperation = () => {
+    if (!this._sendingOperation) {
+      return;
+    }
+
+    // Clear the in-flight reference before re-queueing so repeated disconnect
+    // events cannot enqueue the same operation more than once.
+    const sendingOperation = this._sendingOperation;
+    this._sendingOperation = null;
+    this.pendingOperationList.unshift(sendingOperation);
+  };
+
   dispatchConnectState = (type, message) => {
-    if (type === 'reconnect') {
-      this.state = STATE.IDLE;
+    if (type === 'room-joined') {
+      this.isRoomJoined = true;
+      if (this.state === STATE.DISCONNECT) {
+        stateDebug(`State Changed: ${this.state} -> ${STATE.IDLE}`);
+        this.state = STATE.IDLE;
+      }
       if (this.pendingOperationList.length > 0) {
         this.sendOperations();
       }
     }
 
+    if (type === 'reconnect') {
+      // Wait for the room-user-change confirmation before restoring operations.
+      this.state = STATE.IDLE;
+    }
+
     if (type === 'disconnect') {
-      // current state is sending
-      if (this._sendingOperation) {
-        this.pendingOperationList.unshift(this._sendingOperation);
-        this._sendingOperation = null;
-      }
+      this.isRoomJoined = false;
+      this.commitPreview();
+      this.requeueSendingOperation();
       stateDebug(`State Changed: ${this.state} -> ${STATE.DISCONNECT}`);
       this.state = STATE.DISCONNECT;
     }
@@ -318,6 +551,8 @@ class SocketManager {
 
   static destroy = () => {
     if (this.instance?.socketClient) {
+      this.instance.commitPreview();
+      this.instance.cancelRemoteSceneRender();
       this.instance.socketClient.close();
     }
     this.instance = null;

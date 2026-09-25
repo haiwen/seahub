@@ -29,6 +29,10 @@ export const SAVE_TO_LOCAL_STORAGE_TIMEOUT = 300;
 export const INITIAL_SCENE_UPDATE_TIMEOUT = 5000;
 export const FILE_UPLOAD_TIMEOUT = 300;
 export const LOAD_IMAGES_TIMEOUT = 500;
+export const OPERATION_ACK_TIMEOUT = 30000;
+export const OPERATION_RETRY_DELAY = 1000;
+export const MAX_OPERATION_RETRIES = 3;
+export const PREVIEW_COMMIT_DELAY = 300;
 
 export const LIBRARY_SIDEBAR_TAB = 'library';
 export const CANVAS_SEARCH_TAB = 'search';
@@ -58,4 +62,3 @@ export const MIMETYPE_TO_FILE_SUFFIX = {
   'image/avif': 'avif',
   'image/jfif': 'jfif'
 };
-
