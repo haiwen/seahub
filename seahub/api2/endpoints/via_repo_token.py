@@ -27,7 +27,7 @@ from seahub.repo_metadata.utils import get_update_record, get_unmodifiable_colum
     remove_tags_table, init_tags, get_table_by_name, filter_face_recognition_views
 from seahub.seadoc.models import SeadocHistoryName, SeadocCommentReply
 from seahub.utils.file_op import if_locked_by_online_office
-from seahub.seadoc.utils import get_seadoc_file_uuid
+from seahub.seadoc.utils import gen_seadoc_access_token, get_seadoc_file_uuid
 from seahub.settings import MAX_PATH
 from seahub.api2.endpoints.move_folder_merge import move_folder_with_merge
 from seahub.api2.endpoints.multi_share_links import check_permissions_arg, get_share_link_info
@@ -515,6 +515,69 @@ class RepoInfoView(APIView):
             'last_modified': timestamp_to_isoformat_timestr(repo.last_modify),
         }
         return Response(data)
+
+
+class ViaRepoSdocAccessTokenView(APIView):
+    authentication_classes = (RepoAPITokenAuthentication, )
+    throttle_classes = (UserRateThrottle,)
+    SDOC_ACCESS_TOKEN_EXPIRES_IN = 86400 * 3
+
+    def get(self, request):
+        path = request.GET.get('path', None)
+        if not path or path[0] != '/':
+            error_msg = 'path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        path = normalize_file_path(path)
+        filename = os.path.basename(path)
+        filetype, _fileext = get_file_type_and_ext(filename)
+        if filetype != SEADOC:
+            error_msg = 'seadoc file type %s invalid.' % filetype
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        repo_id = request.repo_api_token_obj.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        parent_dir = os.path.dirname(path)
+        permission = check_folder_permission_by_repo_api(request, repo_id, parent_dir)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            file_id = seafile_api.get_file_id_by_path(repo_id, path)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if not file_id:
+            error_msg = 'File %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = request.repo_api_token_obj.generated_by
+        if not username:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        jwt_permission = permission if permission in (PERMISSION_READ, PERMISSION_READ_WRITE) else PERMISSION_READ
+        file_uuid = get_seadoc_file_uuid(repo, path)
+        access_token = gen_seadoc_access_token(
+            file_uuid, filename, username, permission=jwt_permission)
+        if isinstance(access_token, bytes):
+            access_token = access_token.decode('utf-8')
+
+        sdoc_server_url = getattr(settings, 'SEADOC_SERVER_URL', '') or ''
+        sdoc_server_url = sdoc_server_url.rstrip('/')
+        return Response({
+            'doc_uuid': file_uuid,
+            'access_token': access_token,
+            'sdoc_server_url': sdoc_server_url,
+            'expires_in': self.SDOC_ACCESS_TOKEN_EXPIRES_IN,
+        })
 
 
 class ViaRepoSearchFilesView(APIView):
@@ -1335,7 +1398,6 @@ class ViaRepoTokenFile(APIView):
         try:  # rm sdoc fileuuid
             filetype, fileext = get_file_type_and_ext(file_name)
             if filetype == SEADOC:
-                from seahub.seadoc.utils import get_seadoc_file_uuid
                 file_uuid = get_seadoc_file_uuid(repo, path)
                 FileComment.objects.filter(uuid=file_uuid).delete()
                 FileUUIDMap.objects.delete_fileuuidmap_by_path(
