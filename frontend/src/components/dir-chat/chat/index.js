@@ -208,6 +208,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
           [CHAT_MESSAGE_TYPE.AI_REPLY]: item.content || '',
           [CHAT_MESSAGE_TYPE.SOURCES]: Array.isArray(item.sources) ? item.sources : [],
           [CHAT_MESSAGE_TYPE.THOUGHT_PROCESS]: item.thought_process,
+          [CHAT_MESSAGE_TYPE.ARTIFACTS]: Array.isArray(item.artifacts) ? item.artifacts : [],
         };
         return new ChatMessage({
           id: item.id,
@@ -277,6 +278,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
         sources = [],
         user_message_id: userMessageId,
         ai_reply_message_id: aiReplyMessageId,
+        artifacts = [],
       } = data;
       const messageIndex = newChatHistories.findIndex((chat) => chat._id === aiReplyMessageId);
       if (messageIndex > -1) {
@@ -287,6 +289,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
         [CHAT_MESSAGE_TYPE.AI_REPLY]: ai_reply,
         [CHAT_MESSAGE_TYPE.SOURCES]: sources,
         [CHAT_MESSAGE_TYPE.THOUGHT_PROCESS]: data.thought_process,
+        [CHAT_MESSAGE_TYPE.ARTIFACTS]: artifacts,
       };
       if (newChatHistories[newChatHistories.length - 1]) {
         newChatHistories[newChatHistories.length - 1]._id = userMessageId;
@@ -380,6 +383,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
           sources = [],
           user_message_id: userMessageId,
           ai_reply_message_id: aiReplyMessageId,
+          artifacts = [],
         } = replyData;
         const messageIndex = nextChatHistories.findIndex((chat) => chat._id === aiReplyMessageId);
         if (messageIndex > -1) {
@@ -389,6 +393,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
           [CHAT_MESSAGE_TYPE.AI_REPLY]: ai_reply,
           [CHAT_MESSAGE_TYPE.SOURCES]: sources,
           [CHAT_MESSAGE_TYPE.THOUGHT_PROCESS]: replyData.thought_process,
+          [CHAT_MESSAGE_TYPE.ARTIFACTS]: artifacts,
         };
         if (nextChatHistories[nextChatHistories.length - 1]) {
           nextChatHistories[nextChatHistories.length - 1]._id = userMessageId;
