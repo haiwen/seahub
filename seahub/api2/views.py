@@ -85,7 +85,7 @@ from seahub.utils.repo import get_repo_owner, get_library_storages, \
         get_locked_files_by_dir, get_related_users_by_repo, \
         is_valid_repo_id_format, can_set_folder_perm_by_user, \
         add_encrypted_repo_secret_key_to_database, get_available_repo_perms, \
-        parse_repo_perm
+        parse_repo_perm, check_repo_name_conflict
 from seahub.utils.star import star_file, unstar_file, get_dir_starred_files
 from seahub.utils.file_tags import get_files_tags_in_dir
 from seahub.utils.file_types import MARKDOWN
@@ -1142,6 +1142,10 @@ class Repos(APIView):
         if not is_valid_dirent_name(repo_name):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'name invalid.')
+
+        if check_repo_name_conflict(request, repo_name):
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             'Library name already exists.')
 
         repo_desc = request.data.get("desc", '')
         org_id = -1
