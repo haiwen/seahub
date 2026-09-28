@@ -605,11 +605,11 @@ class DirDetailView(APIView):
                     WHERE 
                         (`{METADATA_TABLE.columns.is_dir.name}` = False) AND 
                         (
-                          `{METADATA_TABLE.columns.parent_dir.name}` ILIKE '{path}%' OR
-                          `{METADATA_TABLE.columns.parent_dir.name}` = '{path[:-1]}'
+                          `{METADATA_TABLE.columns.parent_dir.name}` ILIKE ? OR
+                          `{METADATA_TABLE.columns.parent_dir.name}` = ?
                         )
                     """
-                results = metadata_server_api.query_rows(sql, [])
+                results = metadata_server_api.query_rows(sql, [f'{path}%', path[:-1]])
                 result_row = results.get('results')[0]
                 dir_info['file_count'] = result_row.get('file_count', 0)
                 dir_info['size'] = result_row.get('total_size', 0)
