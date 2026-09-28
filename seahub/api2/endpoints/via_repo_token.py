@@ -69,11 +69,13 @@ def check_folder_permission_by_repo_api(request, repo_id, path):
     :param path: repo path
     :return:
     """
-    repo_status = seafile_api.get_repo_status(repo_id)
-    if repo_status == 1:
+    permission = request.repo_api_token_obj.permission
+    if not permission:
+        return None
+    if seafile_api.get_repo_status(repo_id) == 1:
         return PERMISSION_READ
 
-    return request.repo_api_token_obj.permission  # and return repo_api_token's permission
+    return permission
 
 
 class ViaRepoDirView(APIView):

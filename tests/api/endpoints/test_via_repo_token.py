@@ -159,6 +159,26 @@ class ViaRepoBatchTest(BaseTestCase):
         self.assertIsNotNone(seafile_api.get_file_id_by_path(
             self.repo_id, self.dst_folder_path + '/' + self.file_name))
 
+    def test_batch_move_rejects_read_write_token_on_read_only_repo(self):
+        seafile_api.set_repo_status(self.repo_id, 1)
+        data = {
+            'src_parent_dir': '/',
+            'src_dirents': [self.file_name],
+            'dst_parent_dir': self.dst_folder_path,
+        }
+
+        resp = self.client.post(
+            reverse('via-repo-token-move'),
+            json.dumps(data),
+            'application/json',
+            **self._auth_header(self.write_token))
+
+        self.assertEqual(403, resp.status_code)
+        self.assertIsNotNone(
+            seafile_api.get_file_id_by_path(self.repo_id, self.file))
+        self.assertIsNone(seafile_api.get_file_id_by_path(
+            self.repo_id, self.dst_folder_path + '/' + self.file_name))
+
     def test_batch_copy_rejects_read_only_token(self):
         data = {
             'src_parent_dir': '/',

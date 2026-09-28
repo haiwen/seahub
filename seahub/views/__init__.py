@@ -126,10 +126,6 @@ def check_folder_permission(request, repo_id, path):
     - `repo_id`:
     - `path`:
     """
-    repo_status = seafile_api.get_repo_status(repo_id)
-    if repo_status == 1:
-        return PERMISSION_READ
-
     username = request.user.username
     if not username:
         return None
@@ -138,8 +134,14 @@ def check_folder_permission(request, repo_id, path):
     except SearpcError as e:
         logger.warning(e)
         return None
-    if permission == PERMISSION_INVISIBLE:
+    if not permission or permission == PERMISSION_INVISIBLE:
         return None
+
+    # A read-only repository makes every existing permission read-only; it
+    # must not grant access to users who have no permission for the repository.
+    if seafile_api.get_repo_status(repo_id) == 1:
+        return PERMISSION_READ
+
     return permission
 
 def get_seadoc_file_uuid(repo, path):

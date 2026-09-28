@@ -77,6 +77,25 @@ class FileViewTest(BaseTestCase):
         resp = self.client.get(self.url + '?p=' + self.file_path)
         self.assertEqual(403, resp.status_code)
 
+    def test_get_file_info_with_invalid_perm_on_read_only_repo(self):
+        seafile_api.set_repo_status(self.repo_id, 1)
+
+        self.login_as(self.admin)
+        resp = self.client.get(self.url + '?p=' + self.file_path)
+        self.assertEqual(403, resp.status_code)
+
+    def test_read_only_repo_downgrades_read_write_permission(self):
+        seafile_api.share_repo(self.repo_id, self.user_name, self.admin_name, 'rw')
+        seafile_api.set_repo_status(self.repo_id, 1)
+
+        self.login_as(self.admin)
+        resp = self.client.get(self.url + '?p=' + self.file_path)
+        self.assertEqual(200, resp.status_code)
+
+        resp = self.client.post(
+            self.url + '?p=/new-file.txt', {'operation': 'create'})
+        self.assertEqual(403, resp.status_code)
+
     # for test http POST request
     def test_post_operation_invalid(self):
         self.login_as(self.user)

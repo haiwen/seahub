@@ -120,6 +120,20 @@ class DirSharedItemsTest(BaseTestCase):
         assert len(json_resp) == 2
 
     # test put request
+    def test_share_nonexistent_repo(self):
+        self.login_as(self.user)
+
+        repo_id = '00000000-0000-0000-0000-000000000000'
+        resp = self.client.put(
+            '/api2/repos/%s/dir/shared_items/?p=/' % repo_id,
+            "share_type=user&username=%s" % self.admin.email,
+            'application/x-www-form-urlencoded',
+        )
+
+        self.assertEqual(404, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertEqual('Library %s not found.' % repo_id, json_resp['error_msg'])
+
     def test_can_share_repo_to_users(self):
         self.login_as(self.user)
 
