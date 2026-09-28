@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { CaptureUpdateAction, Excalidraw, MainMenu, newElementWith, reconcileElements, restoreElements, useHandleLibrary } from '@excalidraw/excalidraw';
 import isHotkey from 'is-hotkey';
 import isUrl from 'is-url';
+import Icon from '@/components/icon';
 import { gettext } from '@/utils/constants';
 import { langList } from '../constants';
 import context from '../context';
@@ -17,16 +18,6 @@ import { LibraryIndexedDBAdapter } from './library-adapter';
 import TipMessage from './tip-message';
 
 import '@excalidraw/excalidraw/index.css';
-
-const LinkImageIcon = (
-  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M15 8h.01" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M12 20H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v5" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="m4 15 4-4c.928-.893 2.072-.893 3 0l4 4" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="m14 14 1-1c.617-.593 1.328-.793 2.009-.598" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M19 22v-6M16 19l3-3 3 3" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
 
 const UIOptions = {
   canvasActions: {
@@ -247,7 +238,7 @@ const SimpleEditor = ({ isSharedView = false }) => {
         <MainMenu>
           <MainMenu.DefaultItems.SaveAsImage />
           {!isSharedView && (
-            <MainMenu.Item icon={LinkImageIcon} onClick={onCustomImageDialogToggle}>
+            <MainMenu.Item icon={<Icon symbol="link-image" className="excalidraw-link-image-icon" />} onClick={onCustomImageDialogToggle}>
               {gettext('Link image')}
             </MainMenu.Item>
           )}
