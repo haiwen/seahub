@@ -123,6 +123,7 @@ class Wiki extends Component {
         repoId: repo_id,
         wikiRepoId,
       }, () => {
+        if (config.navigation.length === 0) return;
         let pageId = this.getFirstPageId(config);
         let openedByUrl = false;
         // opened by url

@@ -70,6 +70,14 @@ class SidePanel extends PureComponent {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    const { isLoading, config } = this.props;
+    if (prevProps.isLoading && !isLoading && prevProps.config !== config &&
+        wikiPermission === 'rw' && config.navigation.length === 0) {
+      this.handleAddNewPage();
+    }
+  }
+
   componentWillUnmount() {
     this.unsubscribeLibraryToggle();
   }
@@ -82,6 +90,7 @@ class SidePanel extends PureComponent {
     config.pages.splice(index, 1);
     wikiAPI.deleteWiki2Page(wikiId, pageId).then((res) => {
       if (res.data.success === true) {
+        PageUtils.deletePage(navigation, pageId);
         this.props.updateWikiConfig(config);
         toaster.success(
           <span>
