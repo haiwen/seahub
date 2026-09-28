@@ -126,14 +126,16 @@ def check_folder_permission(request, repo_id, path):
     - `repo_id`:
     - `path`:
     """
-    repo_status = seafile_api.get_repo_status(repo_id)
-    if repo_status == 1:
-        return PERMISSION_READ
-
     username = request.user.username
     permission = seafile_api.check_permission_by_path(repo_id, path, username)
-    if permission == PERMISSION_INVISIBLE:
+    if not permission or permission == PERMISSION_INVISIBLE:
         return None
+
+    # A read-only repository makes every existing permission read-only; it
+    # must not grant access to users who have no permission for the repository.
+    if seafile_api.get_repo_status(repo_id) == 1:
+        return PERMISSION_READ
+
     return permission
 
 def get_seadoc_file_uuid(repo, path):
