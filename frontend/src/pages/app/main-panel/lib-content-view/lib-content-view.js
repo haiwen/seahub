@@ -56,6 +56,7 @@ import Column from '@/features/metadata/model/column';
 import { normalizeColumns } from '@/features/metadata/utils/column';
 import { FileOperationsProvider, MetadataStatusProvider } from '@/hooks';
 import { Dirent, FileTag, RepoTag, RepoInfo } from '@/models';
+import RepoNotificationWebSocket from '@/services/repo-notification-websocket';
 import {
   chatAndSearchAvailable,
   enableThumbnailServer,
@@ -67,7 +68,6 @@ import {
   username
 } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
-import RepoNotificationWebSocket from '@/services/repo-notification-websocket';
 
 import '@/css/lib-content-view.css';
 
