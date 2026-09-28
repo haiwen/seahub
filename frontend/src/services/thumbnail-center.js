@@ -1,5 +1,5 @@
 import { seafileAPI } from '@/api/seafile-api';
-import { thumbnailDefaultSize } from '../utils/constants';
+import { thumbnailDefaultSize } from '@/utils/constants';
 
 class ThumbnailCenter {
 

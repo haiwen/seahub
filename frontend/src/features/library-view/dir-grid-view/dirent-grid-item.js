@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import urlJoin from 'url-join';
 import Icon from '@/components/icon';
 import { gettext, siteRoot, mediaUrl, enableVideoThumbnail, enablePDFThumbnail, fileServerRoot, enableThumbnailServer } from '@/utils/constants';
-import { imageThumbnailCenter, videoThumbnailCenter } from '@/utils/thumbnail-center';
+import { imageThumbnailCenter, videoThumbnailCenter } from '@/services/thumbnail-center';
 import { Utils } from '@/utils/utils';
 
 const propTypes = {
