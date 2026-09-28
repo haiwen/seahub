@@ -9,7 +9,7 @@
 
 .sf-metadata-hide-columns-popover .sf-metadata-hide-columns-search-container {
   width: 100%;
-  padding: 0px 8px;
+  padding: 8px 8px 0 8px;
 }
 
 .sf-metadata-hide-columns-popover .sf-metadata-hide-columns-search-container .search-input-wrapper {
@@ -27,6 +27,7 @@
 
 .sf-metadata-hide-columns-popover .sf-metadata-hide-columns-search-container .search-text-clear {
   right: 6px;
+  border-radius: 4px;
 }
 
 .sf-metadata-hide-columns-popover .hide-columns-list {
@@ -72,7 +73,7 @@
   flex: 1;
   display: flex;
   align-items: center;
-  overflow: hidden;
+  min-width: 0;
 }
 
 .sf-metadata-hide-columns-popover .hide-column-item .hide-column-item-switch .custom-switch {
@@ -109,6 +110,15 @@
 
 .sf-metadata-hide-columns-popover .hide-column-item .custom-switch .custom-switch-input:checked~.custom-switch-indicator:before {
   left: 12px;
+}
+
+.sf-metadata-hide-columns-popover .hide-column-item .custom-switch .custom-switch-input:checked~.custom-switch-indicator {
+  background: #ed7109;
+}
+
+.sf-metadata-hide-columns-popover .hide-column-item .custom-switch .custom-switch-input:focus~.custom-switch-indicator {
+  border-color: #ed7109;
+  box-shadow: 0 0 0 2px rgba(237, 113, 9, .25);
 }
 
 .sf-metadata-hide-columns-popover .hide-column-item .seafile-multicolor-icon {
