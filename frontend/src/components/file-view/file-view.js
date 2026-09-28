@@ -6,10 +6,10 @@ import i18n from '@/_i18n/i18n-sdoc-editor';
 import { seafileAPI } from '@/api/seafile-api';
 import { MetadataMiddlewareProvider } from '@/features/metadata/hooks/metadata-middleware';
 import { MetadataStatusProvider } from '@/hooks';
+import RepoNotificationWebSocket from '@/services/repo-notification-websocket';
 import { gettext, siteName } from '@/utils/constants';
 import LocalStorage from '@/utils/local-storage-utils';
 import { Utils } from '@/utils/utils';
-import WebSocketClient from '@/utils/websocket-service';
 import ShareDialog from '../dialog/share-dialog';
 import EmbeddedFileDetails from '../dirent-detail/embedded-file-details';
 import IconButton from '../icon-button';
@@ -62,7 +62,7 @@ class FileView extends React.Component {
       isShareDialogOpen: false
     };
 
-    this.socketManager = new WebSocketClient(this.onMessageCallback, repoID);
+    this.socketManager = new RepoNotificationWebSocket(this.onMessageCallback, repoID);
   }
 
   componentDidMount() {
@@ -79,6 +79,10 @@ class FileView extends React.Component {
     this.setState({ width });
 
     this.checkShareEnabled();
+  }
+
+  componentWillUnmount() {
+    this.socketManager.close();
   }
 
   checkShareEnabled = () => {

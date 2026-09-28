@@ -56,6 +56,7 @@ import Column from '@/features/metadata/model/column';
 import { normalizeColumns } from '@/features/metadata/utils/column';
 import { FileOperationsProvider, MetadataStatusProvider } from '@/hooks';
 import { Dirent, FileTag, RepoTag, RepoInfo } from '@/models';
+import RepoNotificationWebSocket from '@/services/repo-notification-websocket';
 import {
   chatAndSearchAvailable,
   enableThumbnailServer,
@@ -67,7 +68,6 @@ import {
   username
 } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
-import WebSocketClient from '@/utils/websocket-service';
 
 import '@/css/lib-content-view.css';
 
@@ -94,7 +94,7 @@ class LibContentView extends React.Component {
       isTreePanelShown = storedTreePanelState === 'true';
     }
 
-    this.socket = new WebSocketClient(this.onMessageCallback, this.props.repoID);
+    this.socket = new RepoNotificationWebSocket(this.onMessageCallback, this.props.repoID);
     this.state = {
       currentMode: Cookies.get('seafile_view_mode') || LIST_MODE,
       isTreePanelShown: isTreePanelShown, // display the 'dirent tree' side panel

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '@/api/seafile-api';
 import Loading from '@/components/loading';
 import toaster from '@/components/toast';
-import { gettext, PER_PAGE, filePath } from '@/utils/constants';
-import editUtilities from '@/utils/editor-utilities';
+import { gettext, PER_PAGE, filePath, historyRepoID } from '@/utils/constants';
 import HistoryListView from './history-list-view/history-list-view';
 
 const propTypes = {
@@ -26,7 +26,7 @@ class SidePanel extends React.Component {
   }
 
   componentDidMount() {
-    editUtilities.listFileHistoryRecords(filePath, 1, PER_PAGE).then(res => {
+    seafileAPI.listFileHistoryRecords(historyRepoID, filePath, 1, PER_PAGE).then(res => {
       let historyList = res.data;
       if (historyList.length === 0) {
         this.setState({ isLoading: false });
@@ -37,7 +37,7 @@ class SidePanel extends React.Component {
   }
 
   refreshFileList() {
-    editUtilities.listFileHistoryRecords(filePath, 1, PER_PAGE).then(res => {
+    seafileAPI.listFileHistoryRecords(historyRepoID, filePath, 1, PER_PAGE).then(res => {
       this.initResultState(res.data);
     });
   }
@@ -75,7 +75,7 @@ class SidePanel extends React.Component {
         currentPage: currentPage,
         isReloadingData: true,
       });
-      editUtilities.listFileHistoryRecords(filePath, currentPage, PER_PAGE).then(res => {
+      seafileAPI.listFileHistoryRecords(historyRepoID, filePath, currentPage, PER_PAGE).then(res => {
         this.updateResultState(res.data);
         this.setState({ isReloadingData: false });
       });
@@ -84,7 +84,7 @@ class SidePanel extends React.Component {
 
   onItemRestore = (currentItem) => {
     let commitId = currentItem.commit_id;
-    editUtilities.revertFile(filePath, commitId).then(res => {
+    seafileAPI.revertFile(historyRepoID, filePath, commitId).then(res => {
       if (res.data.success) {
         this.setState({ isLoading: true });
         this.refreshFileList();

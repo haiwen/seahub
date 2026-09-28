@@ -8,7 +8,6 @@ import Loading from '@/components/loading';
 import Switch from '@/components/switch';
 import toaster from '@/components/toast';
 import { gettext, historyRepoID, PER_PAGE } from '@/utils/constants';
-import editUtilities from '@/utils/editor-utilities';
 import { Utils } from '@/utils/utils';
 import { getCurrentAndLastVersion, getLastVersion } from './helper';
 import HistoryVersion from './history-version';
@@ -116,7 +115,7 @@ class SidePanel extends Component {
 
   restoreVersion = (currentItem) => {
     const { commit_id, path } = currentItem;
-    editUtilities.revertFile(path, commit_id).then(res => {
+    seafileAPI.revertFile(historyRepoID, path, commit_id).then(res => {
       if (res.data.success) {
         this.props.reloadDocContent();
       }

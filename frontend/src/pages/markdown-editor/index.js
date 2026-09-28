@@ -10,9 +10,9 @@ import { seafileAPI } from '@/api/seafile-api';
 import InsertFileDialog from '@/components/dialog/insert-file-dialog';
 import ShareDialog from '@/components/dialog/share-dialog';
 import toaster from '@/components/toast';
+import RepoNotificationWebSocket from '@/services/repo-notification-websocket';
 import { gettext, mediaUrl } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
-import WebSocketClient from '@/utils/websocket-service';
 import DetailListView from './detail-list-view';
 import editorApi from './editor-api';
 import HeaderToolbar from './header-toolbar';
@@ -65,7 +65,7 @@ class MarkdownEditor extends React.Component {
     this.editorRef = React.createRef();
     this.isParticipant = false;
     this.editorSelection = null;
-    this.socketManager = new WebSocketClient(this.onMessageCallback, repoID);
+    this.socketManager = new RepoNotificationWebSocket(this.onMessageCallback, repoID);
   }
 
   toggleLockFile = () => {
@@ -260,6 +260,7 @@ class MarkdownEditor extends React.Component {
   componentWillUnmount() {
     window.removeEventListener('beforeunload', this.onUnload);
     this.unsubscribeInsertSeafileImage();
+    this.socketManager.close();
     if (!this.socket) return;
     this.socket.emit('repo_update', {
       request: 'unwatch_update',

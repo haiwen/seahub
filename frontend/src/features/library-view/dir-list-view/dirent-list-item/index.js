@@ -17,9 +17,9 @@ import FileTagsFormatter from '@/features/metadata/components/cell-formatter/fil
 import { PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
 import { getNumberDisplayString } from '@/features/metadata/utils/cell';
 import { Dirent } from '@/models';
+import { imageThumbnailCenter, videoThumbnailCenter } from '@/services/thumbnail-center';
 import { gettext, siteRoot, mediaUrl, enableVideoThumbnail, enablePDFThumbnail, enableThumbnailServer } from '@/utils/constants';
 import TextTranslation from '@/utils/text-translation';
-import { imageThumbnailCenter, videoThumbnailCenter } from '@/utils/thumbnail-center';
 import { formatUnixWithTimezone } from '@/utils/time';
 import URLDecorator from '@/utils/url-decorator';
 import { Utils } from '@/utils/utils';
