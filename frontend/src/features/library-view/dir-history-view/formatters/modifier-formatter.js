@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AsyncCollaborator from '@/features/metadata/components/cell-formatter/async-collaborator';
-import { useCollaborators } from '@/features/metadata/hooks';
+import { useCollaborators } from '@/hooks/collaborators';
 import { mediaUrl } from '@/utils/constants';
 
 const ModifierFormatter = ({ record }) => {

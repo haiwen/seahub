@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useCollaborators } from '@/features/metadata';
 import { useTags } from '@/features/tag/hooks';
+import { useCollaborators } from '@/hooks/collaborators';
 import { Utils } from '@/utils/utils';
 import VirtualList from '../virtual-list/virtual-list';
 import DirentListItem from './dirent-list-item';

@@ -6,6 +6,7 @@ import { getRowById } from '@/components/sf-table/utils/table';
 import toaster from '@/components/toast';
 import { useTags } from '@/features/tag/hooks';
 import { useFileOperations, useMetadataStatus } from '@/hooks';
+import { useCollaborators } from '@/hooks/collaborators';
 import { Dirent } from '@/models';
 import { gettext } from '@/utils/constants';
 import { Utils, validateName } from '@/utils/utils';
@@ -23,7 +24,6 @@ import Store from '../store';
 import { getCellValueByColumn, getCollaboratorsName, getFileNameFromRecord, getFileObjIdFromRecord, getNumberDisplayString, getParentDirFromRecord, getRecordIdFromRecord, getUniqueFileName } from '../utils/cell';
 import { getColumnByKey } from '../utils/column';
 import { checkIsDir } from '../utils/row';
-import { useCollaborators } from './collaborators';
 import { useMetadata } from './metadata';
 import { useMetadataAIOperations } from './metadata-ai-operation';
 

@@ -1,0 +1,100 @@
+/* eslint-disable react/prop-types */
+import React, { useContext, useState, useCallback, useEffect, useRef } from 'react';
+import collaboratorAPI from '@/api/collaborator-api';
+import Collaborator from '@/models/collaborator';
+import { mediaUrl } from '@/utils/constants';
+import { isValidEmail } from '@/utils/email';
+import UserService from './user-service';
+
+const CollaboratorsContext = React.createContext(null);
+
+export const CollaboratorsProvider = React.memo(({ repoID, children }) => {
+  const [collaboratorsCache, setCollaboratorsCache] = useState({});
+  const [collaborators, setCollaborators] = useState([]);
+  const collaboratorsCacheRef = useRef(collaboratorsCache);
+  const userServiceRef = useRef(null);
+
+  useEffect(() => {
+    collaboratorsCacheRef.current = collaboratorsCache;
+  }, [collaboratorsCache]);
+
+  useEffect(() => {
+    // Initialize UserService only once
+    if (!userServiceRef.current) {
+      userServiceRef.current = new UserService({ mediaUrl, api: collaboratorAPI.listUserInfo });
+    }
+  }, []);
+
+  const queryUser = useCallback((email, callback) => {
+    if (!userServiceRef.current) {
+      return () => {};
+    }
+    return userServiceRef.current.queryUser(email, callback);
+  }, []);
+
+  useEffect(() => {
+    collaboratorAPI.listRepoRelatedUsers(repoID).then(res => {
+      const collaborators = Array.isArray(res?.data?.user_list) ? res.data.user_list.map(user => new Collaborator(user)) : [];
+      setCollaborators(collaborators);
+    });
+  }, [repoID]);
+
+  const updateCollaboratorsCache = useCallback((user) => {
+    setCollaboratorsCache(prevCache => {
+      if (prevCache[user.email]) {
+        return prevCache;
+      }
+      const newCache = { ...prevCache, [user.email]: user };
+      collaboratorsCacheRef.current = newCache;
+      return newCache;
+    });
+  }, []);
+
+  const getCollaborator = useCallback((email) => {
+    let collaborator = collaborators && collaborators.find(c => c.email === email);
+    if (collaborator) return collaborator;
+    const defaultAvatarUrl = `${mediaUrl}/avatars/default.png`;
+    if (email === 'anonymous' || email === 'seafevents') {
+      collaborator = {
+        email,
+        name: email,
+        avatar_url: defaultAvatarUrl,
+      };
+      return collaborator;
+    }
+    collaborator = collaboratorsCache[email];
+    if (collaborator) return collaborator;
+    if (!isValidEmail(email)) {
+      return {
+        email: email,
+        name: email,
+        avatar_url: defaultAvatarUrl,
+      };
+    }
+    return null;
+  }, [collaborators, collaboratorsCache]);
+
+  const getAllCollaborators = useCallback(() => {
+    return [
+      ...collaborators,
+      ...Object.values(collaboratorsCache),
+    ];
+  }, [collaborators, collaboratorsCache]);
+
+  return (
+    <CollaboratorsContext.Provider value={{ collaborators, collaboratorsCache, updateCollaboratorsCache, getCollaborator, getAllCollaborators, queryUser }}>
+      {children}
+    </CollaboratorsContext.Provider>
+  );
+});
+
+CollaboratorsProvider.displayName = 'CollaboratorsProvider';
+
+export const useCollaborators = () => {
+  const context = useContext(CollaboratorsContext);
+  if (!context) {
+    throw new Error('\'CollaboratorsContext\' is null');
+  }
+  const { collaborators, collaboratorsCache, updateCollaboratorsCache, getCollaborator, getAllCollaborators, queryUser } = context;
+  return { collaborators, collaboratorsCache, updateCollaboratorsCache, getCollaborator, getAllCollaborators, queryUser };
+};

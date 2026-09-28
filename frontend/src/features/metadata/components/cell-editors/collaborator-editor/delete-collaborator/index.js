@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import OpIcon from '@/components/op-icon';
+import { useCollaborators } from '@/hooks/collaborators';
 import { gettext } from '@/utils/constants';
-import { useCollaborators } from '../../../../hooks';
 
 import './index.css';
 
-const DeleteCollaborator = ({ value, onDelete, collaborators = [], removable = true, showRemoveTooltip = true }) => {
+const DeleteCollaborator = ({ value, onDelete, removable = true, showRemoveTooltip = true }) => {
   const { getCollaborator: getCollaboratorFromContext } = useCollaborators();
 
   const getCollaborator = (email) => {
-    return collaborators.find(collaborator => collaborator.email === email) || getCollaboratorFromContext(email);
+    return getCollaboratorFromContext(email);
   };
 
   return (
@@ -44,7 +44,6 @@ const DeleteCollaborator = ({ value, onDelete, collaborators = [], removable = t
 DeleteCollaborator.propTypes = {
   value: PropTypes.array.isRequired,
   onDelete: PropTypes.func,
-  collaborators: PropTypes.array,
   removable: PropTypes.bool,
   showRemoveTooltip: PropTypes.bool,
 };

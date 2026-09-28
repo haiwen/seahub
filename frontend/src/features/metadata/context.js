@@ -1,3 +1,4 @@
+import collaboratorAPI from '@/api/collaborator-api';
 import EventBus from '@/components/event-bus';
 import tagsAPI from '@/features/tag/api';
 import { username, lang } from '@/utils/constants';
@@ -75,7 +76,7 @@ class Context {
   // collaborators
   getCollaborators = () => {
     const repoID = this.settings['repoID'];
-    return this.metadataAPI.getCollaborators(repoID);
+    return collaboratorAPI.listRepoRelatedUsers(repoID);
   };
 
   // metadata

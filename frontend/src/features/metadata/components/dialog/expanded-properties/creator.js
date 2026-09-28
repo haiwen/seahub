@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useCollaborators } from '@/hooks/collaborators';
 import { mediaUrl } from '@/utils/constants';
-import { useCollaborators } from '../../../hooks';
+import { isValidEmail } from '@/utils/email';
 import { getCellValueByColumn } from '../../../utils/cell';
-import { isValidEmail } from '../../../utils/validate';
 import Collaborator from '../../cell-formatter/collaborator';
 
 const Creator = ({ record, column }) => {

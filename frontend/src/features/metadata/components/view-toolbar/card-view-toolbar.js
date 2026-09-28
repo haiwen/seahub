@@ -10,7 +10,6 @@ const CardViewToolbar = ({
   isCustomPermission,
   readOnly,
   view,
-  collaborators,
   modifyFilters,
   modifySorts,
   onToggleDetail,
@@ -49,7 +48,6 @@ const CardViewToolbar = ({
           filters={view.filters}
           columns={filterColumns}
           modifyFilters={modifyFilters}
-          collaborators={collaborators}
           viewType={viewType}
         />
         <SortSetter
@@ -90,7 +88,6 @@ const CardViewToolbar = ({
 CardViewToolbar.propTypes = {
   readOnly: PropTypes.bool,
   view: PropTypes.object,
-  collaborators: PropTypes.array,
   modifyFilters: PropTypes.func,
   modifySorts: PropTypes.func,
   onToggleDetail: PropTypes.func,

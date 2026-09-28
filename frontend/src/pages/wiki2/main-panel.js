@@ -4,6 +4,7 @@ import { SdocWikiEditor, DocInfo, ErrorBoundary, EXTERNAL_EVENT } from '@seafile
 import classnames from 'classnames';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
+import collaboratorAPI from '@/api/collaborator-api';
 import SDocServerApi from '@/api/sdoc-server-api';
 import { seafileAPI } from '@/api/seafile-api';
 import wikiAPI from '@/api/wiki-api';
@@ -11,8 +12,7 @@ import CustomDropdown from '@/components/dropdown';
 import Icon from '@/components/icon';
 import Loading from '@/components/loading';
 import Switch from '@/components/switch';
-import { metadataAPI } from '@/features/metadata';
-import User from '@/features/metadata/model/user';
+import Collaborator from '@/models/collaborator';
 import { gettext, wikiPermission, wikiId, siteRoot, isPro, seadocServerUrl, mediaUrl } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import WikiTopNav from './top-nav';
@@ -232,9 +232,9 @@ class MainPanel extends Component {
   };
 
   fetchCollaborators(wikiId) {
-    metadataAPI.getCollaborators(wikiId).then(res => {
+    collaboratorAPI.listRepoRelatedUsers(wikiId).then(res => {
       const collaborators = Array.isArray(res?.data?.user_list)
-        ? res.data.user_list.map(user => new User(user))
+        ? res.data.user_list.map(user => new Collaborator(user))
         : [];
       this.setState({ collaborators });
     });

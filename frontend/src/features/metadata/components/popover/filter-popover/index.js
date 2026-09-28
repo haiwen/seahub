@@ -151,7 +151,6 @@ class FilterPopover extends Component {
                   updateFilter={this.updateFilter}
                   deleteFilter={this.deleteFilter}
                   modifyFilterConjunction={this.modifyFilterConjunction}
-                  collaborators={this.props.collaborators}
                   readOnly={readOnly}
                   scheduleUpdate={scheduleUpdate}
                   isPre={this.props.isPre}
@@ -183,7 +182,6 @@ FilterPopover.propTypes = {
   columns: PropTypes.array.isRequired,
   filterConjunction: PropTypes.string,
   filters: PropTypes.array,
-  collaborators: PropTypes.array,
   isPre: PropTypes.bool,
   basicFilters: PropTypes.array,
   hidePopover: PropTypes.func,
