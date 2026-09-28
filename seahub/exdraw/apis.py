@@ -122,7 +122,7 @@ class ExdrawUploadFile(APIView):
                 uuid_map.repo_id, uuid_map.parent_path, uuid_map.filename, '')
 
         last_modify_user = request.POST.get('last_modify_user', '')
-        upload_link = get_exdraw_upload_link(uuid_map, last_modify_user)
+        upload_link = get_exdraw_upload_link(uuid_map, last_modify_user, is_inner=True)
         if not upload_link:
             error_msg = 'exdraw file %s not found.' % uuid_map.filename
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
