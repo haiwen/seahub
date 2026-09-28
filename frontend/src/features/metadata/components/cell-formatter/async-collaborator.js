@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { isValidEmail } from '../../utils/validate/email';
+import { isValidEmail } from '@/utils/email';
 import Collaborator from './collaborator';
 
 const AsyncCollaborator = ({ value, mediaUrl, api, collaborators, collaboratorsCache, updateCollaboratorsCache }) => {

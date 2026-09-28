@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import OpIcon from '@/components/op-icon';
+import { useCollaborators } from '@/hooks/collaborators';
 import { gettext } from '@/utils/constants';
-import { useCollaborators } from '../../../../hooks';
 
 import './index.css';
 

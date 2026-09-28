@@ -45,11 +45,6 @@ class MetadataManagerAPI {
     }
   }
 
-  getCollaborators = (repoID) => {
-    const url = this.server + '/api/v2.1/repos/' + repoID + '/related-users/';
-    return this.req.get(url);
-  };
-
   getMetadataStatus(repoID) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/';
     return this.req.get(url);
@@ -152,12 +147,6 @@ class MetadataManagerAPI {
     }
     return this.req.put(url, data);
   }
-
-  listUserInfo = (userIds) => {
-    const url = this.server + '/api/v2.1/user-list/';
-    const params = { user_id_list: userIds };
-    return this._sendPostRequest(url, params, { headers: { 'Content-type': 'application/json' } });
-  };
 
   // views
   addFolder = (repoID, name) => {

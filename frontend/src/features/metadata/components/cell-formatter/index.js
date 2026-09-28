@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useCollaborators } from '@/hooks/collaborators';
 import { CellType } from '../../constants';
-import { useCollaborators } from '../../hooks';
 import Formatter from '../formatter';
 import FileName from './file-name';
 

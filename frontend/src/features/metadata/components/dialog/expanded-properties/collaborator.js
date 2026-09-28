@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import ClickOutside from '@/components/click-outside';
 import Icon from '@/components/icon';
-import { useCollaborators } from '../../../hooks';
+import { useCollaborators } from '@/hooks/collaborators';
 import { getCellValueByColumn } from '../../../utils/cell';
 import CollaboratorEditor from '../../cell-editors/collaborator-editor';
 import AsyncCollaborator from '../../cell-formatter/async-collaborator';

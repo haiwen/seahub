@@ -2,7 +2,7 @@ import React, { Fragment, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import CustomizeSelect from '@/components/customize-select';
 import Icon from '@/components/icon';
-import { useCollaborators } from '@/features/metadata/hooks';
+import { useCollaborators } from '@/hooks/collaborators';
 import { gettext } from '@/utils/constants';
 import { FILTER_PREDICATE_TYPE } from '../../../../../../constants';
 import DeleteCollaborator from '../../../../../cell-editors/collaborator-editor/delete-collaborator';

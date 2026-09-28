@@ -1,4 +1,4 @@
-class User {
+class Collaborator {
   constructor(object) {
     this.avatar_url = object.avatar_url || '';
     this.contact_email = object.contact_email || '';
@@ -10,4 +10,4 @@ class User {
   }
 }
 
-export default User;
+export default Collaborator;

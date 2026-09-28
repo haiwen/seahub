@@ -5,9 +5,9 @@ import Icon from '@/components/icon';
 import SearchEmptyTip from '@/components/search-empty-tip';
 import SearchInput from '@/components/search-input';
 import { KeyCodes } from '@/constants';
+import { useCollaborators } from '@/hooks/collaborators';
 import { gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
-import { useCollaborators } from '../../../hooks';
 import DeleteCollaborator from './delete-collaborator';
 
 import './index.css';

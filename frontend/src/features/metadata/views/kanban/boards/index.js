@@ -3,10 +3,10 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import EmptyTip from '@/components/empty-tip';
 import { getRowById } from '@/components/sf-table/utils/table';
+import { useCollaborators } from '@/hooks/collaborators';
 import { gettext } from '@/utils/constants';
 import ImagePreviewer from '../../../components/cell-formatter/image-previewer';
 import { CellType, KANBAN_SETTINGS_KEYS, UNCATEGORIZED } from '../../../constants';
-import { useCollaborators } from '../../../hooks';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
 import { checkIsPredefinedOption, getCellValueByColumn, isValidCellValue, getRecordIdFromRecord,

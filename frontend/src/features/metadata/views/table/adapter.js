@@ -6,7 +6,7 @@ import { DROPDOWN_SUBMENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';
 import { GridUtilsAdapter } from '@/components/sf-table/utils/grid-utils-adapter';
-import { useCollaborators } from '@/features/metadata/hooks';
+import { useCollaborators } from '@/hooks/collaborators';
 import TextTranslation from '@/utils/text-translation';
 import { Utils } from '@/utils/utils';
 import Editor from '../../components/cell-editors/editor';

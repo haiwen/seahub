@@ -8,7 +8,7 @@ import { seafileAPI } from '@/api/seafile-api';
 import searchAPI from '@/api/search-api';
 import { PRIVATE_FILE_TYPE, SEARCH_FILTER_BY_DATE_OPTION_KEY, SEARCH_FILTER_BY_DATE_TYPE_KEY, SEARCH_FILTERS_KEY, SEARCH_FILTERS_SHOW_KEY } from '@/constants';
 import { SEARCH_MASK, SEARCH_CONTAINER } from '@/constants/zIndexes';
-import { CollaboratorsProvider } from '@/features/metadata/hooks/collaborators';
+import { CollaboratorsProvider } from '@/hooks/collaborators';
 import { gettext, mediaUrl } from '@/utils/constants';
 import { debounce, Utils } from '@/utils/utils';
 import Icon from '../icon';
