@@ -90,6 +90,7 @@ class SidePanel extends PureComponent {
     config.pages.splice(index, 1);
     wikiAPI.deleteWiki2Page(wikiId, pageId).then((res) => {
       if (res.data.success === true) {
+        PageUtils.deletePage(navigation, pageId);
         this.props.updateWikiConfig(config);
         toaster.success(
           <span>
