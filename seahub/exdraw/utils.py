@@ -11,7 +11,7 @@ from seahub.constants import PERMISSION_INVISIBLE
 from seahub.exdraw.settings import EXDRAW_IMAGES_DIR
 from seahub.tags.models import FileUUIDMap
 from seahub.settings import EXCALIDRAW_PRIVATE_KEY
-from seahub.utils import normalize_file_path, gen_file_get_url, gen_file_upload_url, gen_inner_file_get_url
+from seahub.utils import gen_inner_file_upload_url, normalize_file_path, gen_file_get_url, gen_file_upload_url, gen_inner_file_get_url
 from seahub.utils.auth import AUTHORIZATION_PREFIX
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
@@ -107,7 +107,7 @@ def get_exdraw_file_uuid(repo, path):
     return file_uuid
 
 
-def get_exdraw_upload_link(uuid_map, last_modify_user=''):
+def get_exdraw_upload_link(uuid_map, last_modify_user='', is_inner=False):
     repo_id = uuid_map.repo_id
     parent_path = uuid_map.parent_path
 
@@ -116,7 +116,10 @@ def get_exdraw_upload_link(uuid_map, last_modify_user=''):
         repo_id, obj_id, 'update', last_modify_user, use_onetime=True)
     if not token:
         return None
-    upload_link = gen_file_upload_url(token, 'update-api')
+    if is_inner:
+        upload_link = gen_inner_file_upload_url('update-api', token)
+    else:
+        upload_link = gen_file_upload_url(token, 'update-api')
     return upload_link
 
 

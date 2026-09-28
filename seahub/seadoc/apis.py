@@ -215,7 +215,7 @@ class SeadocUploadFile(APIView):
                 uuid_map.repo_id, uuid_map.parent_path, uuid_map.filename, '')
         #
         last_modify_user = request.POST.get('last_modify_user', '')
-        upload_link = get_seadoc_upload_link(uuid_map, last_modify_user)
+        upload_link = get_seadoc_upload_link(uuid_map, last_modify_user, is_inner=True)
         if not upload_link:
             error_msg = 'seadoc file %s not found.' % uuid_map.filename
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -2175,7 +2175,7 @@ class SeadocRevisionView(APIView):
                 uuid_map.repo_id, uuid_map.parent_path, uuid_map.filename, '')
 
         username = request.user.username
-        upload_link = get_seadoc_upload_link(uuid_map, username)
+        upload_link = get_seadoc_upload_link(uuid_map, username, is_inner=True)
         if not upload_link:
             error_msg = 'seadoc file %s not found.' % uuid_map.filename
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
