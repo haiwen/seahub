@@ -111,7 +111,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
     delete pendingTitleQueryBySession.current[sessionId];
     chatAPI.generateChatSessionTitle(sessionId, {
       query: pendingTitle.query,
-      ai_reply: aiReply,
+      ai_reply: aiReply.slice(0, 500),
       expected_session_name: pendingTitle.sessionName,
     }).then((res) => {
       const sessionName = res.data?.session_name;
