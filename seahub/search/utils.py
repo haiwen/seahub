@@ -252,7 +252,7 @@ def ai_search_files(keyword, searched_repos, count, suffixes, search_path=None, 
     if resp.status_code == 500:
         raise Exception('search in library error status: %s body: %s', resp.status_code, resp.text)
     resp_json = resp.json()
-    files_found = resp_json.get('results')
+    files_found = resp_json.get('results') or []
     total = len(files_found)
 
     return files_found, total
