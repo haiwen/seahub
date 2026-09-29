@@ -26,6 +26,11 @@ const Session = ({ session, isSelected, isTeamTab = false, embedded = false, onS
     setIsOpen((currentValue) => !currentValue);
   }, []);
 
+  const openRenameDialog = useCallback(() => {
+    setRenameValue(session.name);
+    setIsShowRenameDialog(true);
+  }, [session.name]);
+
   const onSelectSession = useCallback(() => {
     togglePageSlugId(session._id);
     onSelect && onSelect(session);
@@ -67,7 +72,7 @@ const Session = ({ session, isSelected, isTeamTab = false, embedded = false, onS
                 label: gettext('Rename'),
                 icon: <Icon symbol="rename" />,
               }}
-              onClick={() => setIsShowRenameDialog(true)}
+              onClick={openRenameDialog}
             />
             {session.is_shared ? (
               <CustomDropdownItem

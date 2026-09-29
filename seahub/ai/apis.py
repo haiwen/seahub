@@ -27,7 +27,8 @@ from seahub.ai.utils import AI_SCENARIO_SEARCH_ICONS, image_caption, translate, 
     generate_file_tags, ocr, search_icons, is_ai_usage_over_limit, gen_chat_task_id, gen_message_id, \
     get_ai_reply, process_stream_ai_reply, resolve_repo_ai_usage_context, strip_content_details_from_attachments, \
     verify_chat_ai_config, AI_REPLY_TIMEOUT, AI_SCENARIO_CHAT, AI_SCENARIO_FILE_TAGS, AI_SCENARIO_IMAGE_CAPTION, \
-    AI_SCENARIO_OCR, AI_SCENARIO_SUMMARY, AI_SCENARIO_TRANSLATE, AI_SCENARIO_WRITING_ASSISTANT, user_passes_ai_chat_folder_permissions
+    AI_SCENARIO_OCR, AI_SCENARIO_SUMMARY, AI_SCENARIO_TRANSLATE, AI_SCENARIO_WRITING_ASSISTANT, user_passes_ai_chat_folder_permissions, \
+    generate_session_title
 from seahub.tags.models import FileUUIDMap
 from seahub.views.file import get_file_view_path_and_perm, get_file_content
 
@@ -591,6 +592,51 @@ class ChatSessionView(APIView):
         ChatMessageThoughtProcess.objects.filter(session_uuid=session_uuid).delete()
         session.delete()
         return Response({'success': True})
+
+
+class ChatSessionTitleView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request, session_uuid):
+        query = request.data.get('query')
+        ai_reply = request.data.get('ai_reply')
+        expected_session_name = request.data.get('expected_session_name')
+        if not query:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'query parameter is required.')
+        if not ai_reply:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'ai_reply parameter is required.')
+        if not expected_session_name:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'expected_session_name parameter is required.')
+
+        session = ChatSessions.objects.get_session_by_uuid(session_uuid)
+        if not session:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Session not found.')
+        if not check_folder_permission(request, session.repo_id, '/'):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        if not is_chat_and_search_enabled(session.repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'AI Chat and Search is not enabled for this library.')
+        if not user_passes_ai_chat_folder_permissions(request, session.repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        if session.username != request.user.username:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied. Only the session owner can modify this session.')
+        if session.session_name != expected_session_name:
+            return Response({
+                'success': True,
+                'session_name': session.session_name,
+            })
+
+        org_id = request.user.org.org_id if getattr(request.user, 'org', None) else None
+        usage_context = resolve_repo_ai_usage_context(session.repo_id, org_id, AI_SCENARIO_CHAT)
+        if is_ai_usage_over_limit(request.user, usage_context['repo_owner'], usage_context['org_id']):
+            return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
+
+        session_name = generate_session_title(session, query, ai_reply, expected_session_name)
+        return Response({
+            'success': True,
+            'session_name': session_name,
+        })
 
 
 class ChatSessionCopyView(APIView):
