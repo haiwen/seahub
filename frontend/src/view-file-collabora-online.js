@@ -1,12 +1,12 @@
 import React from 'react';
 import { Button, Input, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { createRoot } from 'react-dom/client';
+import { seafileAPI } from '@/api/seafile-api';
 import FileView from '@/components/file-view/file-view';
 import FileViewTip from '@/components/file-view/file-view-tip';
-import SeahubModalHeader from './components/common/seahub-modal-header';
-import toaster from './components/toast';
+import SeahubModalHeader from '@/components/seahub-modal-header';
+import toaster from '@/components/toast';
 import { gettext, siteRoot } from './utils/constants';
-import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
 
 const {
