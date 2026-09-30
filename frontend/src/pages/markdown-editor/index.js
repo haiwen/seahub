@@ -4,7 +4,6 @@ import {
   EventBus,
   MarkdownEditor as SeafileMarkdownEditor,
 } from '@seafile/seafile-editor';
-import CryptoJS from 'crypto-js';
 import URL from 'url-parse';
 import { seafileAPI } from '@/api/seafile-api';
 import InsertFileDialog from '@/components/dialog/insert-file-dialog';
@@ -31,7 +30,6 @@ class MarkdownEditor extends React.Component {
     this.state = {
       markdownContent: '',
       loading: true,
-      mode: 'editor',
       fileInfo: {
         repoID: repoID,
         name: fileName,
@@ -49,8 +47,6 @@ class MarkdownEditor extends React.Component {
       showInsertFileDialog: false,
       collabUsers: userInfo ?
         [{ user: userInfo, is_editing: false }] : [],
-      value: null,
-      isShowHistory: false,
       readOnly: true,
       contentChanged: false,
       saving: false,
@@ -71,32 +67,15 @@ class MarkdownEditor extends React.Component {
   toggleLockFile = () => {
     const { repoID, path } = this.state.fileInfo;
     if (this.state.isLocked) {
-      seafileAPI.unlockfile(repoID, path).then((res) => {
+      seafileAPI.unlockfile(repoID, path).then(() => {
         this.setState({ isLocked: false, lockedByMe: false });
       });
     } else {
-      seafileAPI.lockfile(repoID, path).then((res) => {
+      seafileAPI.lockfile(repoID, path).then(() => {
         this.setState({ isLocked: true, lockedByMe: true });
       });
     }
   };
-
-  receiveUpdateData(data) {
-    let currentTime = new Date();
-    if ((parseFloat(currentTime - this.lastModifyTime) / 1000) <= 5) {
-      return;
-    }
-    editorApi.fileMetaData().then((res) => {
-      if (res.data.id !== this.state.fileInfo.id) {
-        toaster.notify(
-          <span>
-            {gettext('This file has been updated.')}
-            <a href='' >{' '}{gettext('Refresh')}</a>
-          </span>,
-          { id: 'repo_updated', duration: 3600 });
-      }
-    });
-  }
 
   onMessageCallback = (data) => {
     const { type, content } = data;
@@ -108,50 +87,6 @@ class MarkdownEditor extends React.Component {
     }
   };
 
-  receivePresenceData(data) {
-    let collabUsers = [];
-    let editingUsers = [];
-    switch (data.response) {
-      case 'user_join':
-        toaster.notify(`user ${data.user.name} joined`, {
-          duration: 3
-        });
-        return;
-
-      case 'user_left':
-        toaster.notify(`user ${data.user.name} left`, {
-          duration: 3
-        });
-        return;
-      case 'update_users':
-        for (var prop in data.users) {
-          if (Object.prototype.hasOwnProperty.call(data.users, prop)) {
-            if (prop === this.socket_id) {
-              data.users[prop]['myself'] = true;
-              break;
-            }
-          }
-        }
-        collabUsers = Object.values(data.users);
-        editingUsers = collabUsers.filter(ele => ele.is_editing === true && ele.myself === undefined);
-        if (editingUsers.length > 0) {
-          const message = gettext('Another user is editing this file!');
-          toaster.danger(message, { duration: 3 });
-        }
-        this.setState({ collabUsers });
-        return;
-      case 'user_editing':
-        toaster.danger(`user ${data.user.name} is editing this file!`, {
-          duration: 3
-        });
-        return;
-      default:
-        // eslint-disable-next-line
-        console.log('unknown response type: ' + data.response);
-        return;
-    }
-  }
-
   toggleCancel = () => {
     this.setState({
       showMarkdownEditorDialog: false,
@@ -160,7 +95,7 @@ class MarkdownEditor extends React.Component {
     });
   };
 
-  setEditorMode = (editorMode) => { // rich | plain
+  setEditorMode = () => {
     const { origin, pathname } = window.location;
     window.location.href = origin + pathname + '?mode=plain';
   };
@@ -211,7 +146,7 @@ class MarkdownEditor extends React.Component {
       const customPermissionRes = await seafileAPI.getCustomPermission(repoID, permissionID);
       const customPermission = customPermissionRes.data.permission;
       const { modify: canModify } = customPermission.permission;
-      hasPermission = canModify ? true : hasPermission;
+      hasPermission = canModify || hasPermission;
     }
 
     // Goto rich edit page
@@ -221,33 +156,13 @@ class MarkdownEditor extends React.Component {
       loading: false,
       fileInfo: { ...fileInfo, mtime, size, starred, permission, lastModifier, id },
       markdownContent,
-      value: '',
       readOnly: !hasPermission,
     });
-
-    if (userInfo && this.socket) {
-      const { repoID, path } = this.state.fileInfo;
-      this.socket.emit('presence', {
-        request: 'join_room',
-        doc_id: CryptoJS.MD5(repoID + path).toString(),
-        user: userInfo
-      });
-
-      this.socket.emit('repo_update', {
-        request: 'watch_update',
-        repo_id: editorApi.repoID,
-        user: {
-          name: editorApi.name,
-          username: editorApi.username,
-          contact_email: editorApi.contact_email,
-        },
-      });
-    }
 
     this.listFileParticipants();
     window.showParticipants = true;
     setTimeout(() => {
-      let url = new URL(window.location.href);
+      const url = new URL(window.location.href);
       if (url.hash) {
         window.location.href = url;
       }
@@ -261,16 +176,6 @@ class MarkdownEditor extends React.Component {
     window.removeEventListener('beforeunload', this.onUnload);
     this.unsubscribeInsertSeafileImage();
     this.socketManager.close();
-    if (!this.socket) return;
-    this.socket.emit('repo_update', {
-      request: 'unwatch_update',
-      repo_id: editorApi.repoID,
-      user: {
-        name: editorApi.name,
-        username: editorApi.username,
-        contact_email: editorApi.contact_email,
-      },
-    });
   }
 
   onUnload = (event) => {
@@ -295,22 +200,22 @@ class MarkdownEditor extends React.Component {
 
   setFileInfoMtime = (fileInfo) => {
     const { fileInfo: oldFileInfo } = this.state;
-    const newFileInfo = Object.assign({}, oldFileInfo, { mtime: fileInfo.mtime, id: fileInfo.id, lastModifier: fileInfo.last_modifier_name });
+    const newFileInfo = { ...oldFileInfo, mtime: fileInfo.mtime, id: fileInfo.id, lastModifier: fileInfo.last_modifier_name };
     this.setState({ fileInfo: newFileInfo });
   };
 
   toggleStar = () => {
     const { fileInfo } = this.state;
     const { starred } = fileInfo;
-    const newFileInfo = Object.assign({}, fileInfo, { starred: !starred });
+    const newFileInfo = { ...fileInfo, starred: !starred };
     if (starred) {
-      editorApi.unstarItem().then((response) => {
+      editorApi.unstarItem().then(() => {
         this.setState({ fileInfo: newFileInfo });
       });
       return;
     }
 
-    editorApi.starItem().then((response) => {
+    editorApi.starItem().then(() => {
       this.setState({ fileInfo: newFileInfo });
     });
   };
@@ -355,7 +260,7 @@ class MarkdownEditor extends React.Component {
     }
 
     const emails = [userName];
-    editorApi.addFileParticipants(emails).then((res) => {
+    editorApi.addFileParticipants(emails).then(() => {
       this.isParticipant = true;
       this.listFileParticipants();
     });
@@ -374,7 +279,6 @@ class MarkdownEditor extends React.Component {
         contentChanged: false,
       });
 
-      this.lastModifyTime = new Date();
       const message = gettext('Successfully saved');
       toaster.success(message, { duration: 2, });
 
@@ -407,7 +311,7 @@ class MarkdownEditor extends React.Component {
           openDialogs={this.openDialogs}
           toggleShareLinkDialog={this.toggleShareLinkDialog}
           onEdit={this.setEditorMode}
-          showFileHistory={this.state.isShowHistory ? false : true }
+          showFileHistory
           toggleHistory={this.toggleHistory}
           readOnly={this.state.readOnly}
           editorMode={this.state.editorMode}
