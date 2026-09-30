@@ -238,7 +238,7 @@ const SimpleEditor = ({ isSharedView = false }) => {
         <MainMenu>
           <MainMenu.DefaultItems.SaveAsImage />
           {!isSharedView && (
-            <MainMenu.Item icon={<Icon symbol="upload-files" className="excalidraw-link-image-icon" />} onClick={onCustomImageDialogToggle}>
+            <MainMenu.Item icon={<Icon symbol="link-image" className="excalidraw-link-image-icon" />} onClick={onCustomImageDialogToggle}>
               {gettext('Link image')}
             </MainMenu.Item>
           )}
