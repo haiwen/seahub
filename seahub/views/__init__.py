@@ -75,9 +75,10 @@ from seahub.organizations.models import OrgAdminSettings, DISABLE_ORG_USER_CLEAN
 LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
 CUSTOM_NAV_ITEMS = getattr(settings, 'CUSTOM_NAV_ITEMS', '')
 
-ENABLE_METRIC = getattr(settings, 'ENABLE_METRIC', False)
 METRIC_AUTH_USER = getattr(settings, 'METRIC_AUTH_USER', None)
 METRIC_AUTH_PWD = getattr(settings, 'METRIC_AUTH_PWD', None)
+ENABLE_METRIC = os.environ.get('ENABLE_METRIC', False)
+
 
 
 # Get an instance of a logger
