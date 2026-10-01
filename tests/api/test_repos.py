@@ -157,7 +157,7 @@ class NewReposApiTest(BaseTestCase):
         enc_version = 2
         enc_info = seafile_api.generate_magic_and_random_key(enc_version, repo_id, password)
         data = {
-            'name': 'enc-test',
+            'name': 'enc-test-' + randstring(6),
             'repo_id': repo_id,
             'enc_version': enc_version,
             'magic': enc_info.magic,
@@ -165,6 +165,7 @@ class NewReposApiTest(BaseTestCase):
         }
         repo = self.client.post(REPOS_URL, data=data)
         repo = json.loads(repo.content)
+        self.addCleanup(self.remove_repo, repo_id)
         assert repo['repo_id'] == repo_id
         assert repo['encrypted']
         assert repo['magic'] == enc_info.magic

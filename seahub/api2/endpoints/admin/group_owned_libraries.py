@@ -18,7 +18,8 @@ from seahub.api2.endpoints.utils import api_check_group
 from seahub.signals import repo_created
 from seahub.utils import is_valid_dirent_name, is_org_context, \
         is_pro_version
-from seahub.utils.repo import get_library_storages, get_repo_owner, get_available_repo_perms
+from seahub.utils.repo import get_library_storages, get_repo_owner, \
+        get_available_repo_perms, check_repo_name_conflict
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.share.utils import normalize_custom_permission_name
 from seahub.share.signals import share_repo_to_group_successful
@@ -68,6 +69,10 @@ class AdminGroupOwnedLibraries(APIView):
         if not repo_name or \
                 not is_valid_dirent_name(repo_name):
             error_msg = "repo_name invalid."
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if check_repo_name_conflict(request, repo_name, group_id):
+            error_msg = 'Library name already exists.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         password = request.data.get("password", None)
