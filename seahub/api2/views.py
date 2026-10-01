@@ -94,6 +94,8 @@ from seahub.utils.file_op import check_file_lock
 from seahub.utils.timeutils import utc_to_local, \
         datetime_to_isoformat_timestr, datetime_to_timestamp, \
         timestamp_to_isoformat_timestr
+from seahub.utils.db_api import SeafileDB
+from seahub.utils.ccnet_db import CcnetDB
 from seahub.views import is_registered_user, check_folder_permission, \
     create_default_library, list_inner_pub_repos
 from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg, can_edit_file, should_use_origin_file_history
@@ -5639,6 +5641,295 @@ class RepoUserFolderPerm(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+
+class RepoUserFolderPermBatch(APIView):
+    """Bulk add user folder permissions for one library."""
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+    parser_classes = (parsers.JSONParser,)
+
+    # The duplicate check binds two values per item and must also support
+    # SQLite deployments, whose default bound-variable limit is 999.
+    MAX_BATCH_SIZE = 400
+
+    def post(self, request, repo_id, format=None):
+        permissions = request.data
+        if not isinstance(permissions, list) or not permissions:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Request body must be a non-empty JSON array.')
+        if len(permissions) > self.MAX_BATCH_SIZE:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Too many permissions.')
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)
+
+        if is_org_context(request):
+            repo_owner = seafile_api.get_org_repo_owner(repo_id)
+        else:
+            repo_owner = seafile_api.get_repo_owner(repo_id)
+
+        operator = request.user.username
+        if not (is_pro_version() and can_set_folder_perm_by_user(operator, repo, repo_owner)):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        result = {'success': 0, 'failed': []}
+        normalized_permissions = []
+        usernames = set()
+        seen_permissions = set()
+        for index, item in enumerate(permissions):
+            if not isinstance(item, dict):
+                result['failed'].append({
+                    'username': None,
+                    'reason': 'Item %s must be an object.' % index,
+                })
+                continue
+
+            username = item.get('username')
+            path = item.get('path')
+            permission = item.get('permission')
+            if not isinstance(username, str) or not is_valid_username(username):
+                result['failed'].append({
+                    'username': username,
+                    'reason': 'Item %s has an invalid username.' % index,
+                })
+                continue
+            if not isinstance(path, str) or not path.strip():
+                result['failed'].append({
+                    'username': username,
+                    'reason': 'Item %s has an invalid path.' % index,
+                })
+                continue
+            if not isinstance(permission, str):
+                result['failed'].append({
+                    'username': username,
+                    'reason': 'Item %s has an invalid permission.' % index,
+                })
+                continue
+
+            permission = permission if permission in get_available_repo_perms() \
+                else normalize_custom_permission_name(permission)
+            if not permission:
+                result['failed'].append({
+                    'username': username,
+                    'reason': 'Item %s has an invalid permission.' % index,
+                })
+                continue
+
+            path = '/' if path.strip('/') == '' else normalize_file_path(path)
+            permission_key = (path, username)
+            if permission_key in seen_permissions:
+                result['failed'].append({
+                    'username': username,
+                    'reason': 'Duplicate username and path in request.',
+                })
+                continue
+
+            seen_permissions.add(permission_key)
+            normalized_permissions.append((path, permission, username))
+            usernames.add(username)
+
+        existing_users = set(CcnetDB().get_active_users_by_user_list(usernames))
+        dir_ids = {}
+        valid_permissions = []
+        for path, permission, username in normalized_permissions:
+            if username not in existing_users:
+                result['failed'].append({
+                    'username': username,
+                    'reason': 'User %s not found.' % username,
+                })
+                continue
+            if path not in dir_ids:
+                dir_ids[path] = seafile_api.get_dir_id_by_path(repo_id, path)
+            if not dir_ids[path]:
+                result['failed'].append({
+                    'username': username,
+                    'reason': 'Folder %s not found.' % path,
+                })
+                continue
+            valid_permissions.append((path, permission, username))
+
+        try:
+            existing_permissions = SeafileDB().add_folder_user_perms(repo_id, valid_permissions)
+        except Exception:
+            logger.exception('Failed to add batch folder user permissions for repo %s', repo_id)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        added_permissions = []
+        for path, permission, username in valid_permissions:
+            if (path, username) in existing_permissions:
+                result['failed'].append({
+                    'username': username,
+                    'reason': 'Permission already exists.',
+                })
+                continue
+            added_permissions.append((path, permission, username))
+            result['success'] += 1
+
+        if not added_permissions:
+            return Response(result)
+
+        try:
+            # Direct database writes do not update the core server's timestamp
+            # cache. Updating one inserted row refreshes it once for the entire
+            # batch without turning the batch into N RPC calls.
+            path, permission, username = added_permissions[0]
+            seafile_api.set_folder_user_perm(repo_id, path, permission, username)
+        except SearpcError:
+            logger.exception('Failed to refresh folder permission cache for repo %s', repo_id)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Permissions were saved but cache refresh failed.')
+
+        for path, permission, username in added_permissions:
+            send_perm_audit_msg('add-repo-perm', operator, username, repo_id, path, permission)
+
+        return Response(result)
+
+    def put(self, request, repo_id, format=None):
+        permissions = request.data
+        if not isinstance(permissions, list) or not permissions:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Request body must be a non-empty JSON array.')
+        if len(permissions) > self.MAX_BATCH_SIZE:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Too many permissions.')
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)
+        repo_owner = seafile_api.get_org_repo_owner(repo_id) if is_org_context(request) \
+            else seafile_api.get_repo_owner(repo_id)
+        operator = request.user.username
+        if not (is_pro_version() and can_set_folder_perm_by_user(operator, repo, repo_owner)):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        result = {'success': 0, 'failed': []}
+        valid_permissions = self._get_valid_batch_permissions(
+            repo_id, permissions, result, require_permission=True)
+        try:
+            existing_permissions = SeafileDB().update_folder_user_perms(repo_id, valid_permissions)
+        except Exception:
+            logger.exception('Failed to update batch folder user permissions for repo %s', repo_id)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        updated_permissions = []
+        for path, permission, username in valid_permissions:
+            if (path, username) not in existing_permissions:
+                result['failed'].append({'username': username, 'reason': 'Permission not found.'})
+                continue
+            updated_permissions.append((path, permission, username))
+            result['success'] += 1
+
+        if not updated_permissions:
+            return Response(result)
+
+        try:
+            path, permission, username = updated_permissions[0]
+            seafile_api.set_folder_user_perm(repo_id, path, permission, username)
+        except SearpcError:
+            logger.exception('Failed to refresh folder permission cache for repo %s', repo_id)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Permissions were saved but cache refresh failed.')
+
+        for path, permission, username in updated_permissions:
+            send_perm_audit_msg('modify-repo-perm', operator, username, repo_id, path, permission)
+        return Response(result)
+
+    def delete(self, request, repo_id, format=None):
+        permissions = request.data
+        if not isinstance(permissions, list) or not permissions:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Request body must be a non-empty JSON array.')
+        if len(permissions) > self.MAX_BATCH_SIZE:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Too many permissions.')
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)
+        repo_owner = seafile_api.get_org_repo_owner(repo_id) if is_org_context(request) \
+            else seafile_api.get_repo_owner(repo_id)
+        operator = request.user.username
+        if not (is_pro_version() and can_set_folder_perm_by_user(operator, repo, repo_owner)):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        result = {'success': 0, 'failed': []}
+        valid_permissions = self._get_valid_batch_permissions(
+            repo_id, permissions, result, require_permission=False)
+        try:
+            existing_permissions = SeafileDB().delete_folder_user_perms(repo_id, valid_permissions)
+        except Exception:
+            logger.exception('Failed to delete batch folder user permissions for repo %s', repo_id)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        deleted_permissions = []
+        for path, _permission, username in valid_permissions:
+            if (path, username) not in existing_permissions:
+                result['failed'].append({'username': username, 'reason': 'Permission not found.'})
+                continue
+            deleted_permissions.append((path, username))
+            result['success'] += 1
+
+        if not deleted_permissions:
+            return Response(result)
+
+        try:
+            path, username = deleted_permissions[0]
+            seafile_api.rm_folder_user_perm(repo_id, path, username)
+        except SearpcError:
+            logger.exception('Failed to refresh folder permission cache for repo %s', repo_id)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Permissions were deleted but cache refresh failed.')
+
+        for path, username in deleted_permissions:
+            send_perm_audit_msg('delete-repo-perm', operator, username, repo_id, path, '')
+        return Response(result)
+
+    def _get_valid_batch_permissions(self, repo_id, permissions, result, require_permission):
+        normalized_permissions = []
+        usernames = set()
+        seen_permissions = set()
+        for index, item in enumerate(permissions):
+            if not isinstance(item, dict):
+                result['failed'].append({'username': None, 'reason': 'Item %s must be an object.' % index})
+                continue
+
+            username = item.get('username')
+            path = item.get('path')
+            permission = item.get('permission') if require_permission else ''
+            if not isinstance(username, str) or not is_valid_username(username):
+                result['failed'].append({'username': username, 'reason': 'Item %s has an invalid username.' % index})
+                continue
+            if not isinstance(path, str) or not path.strip():
+                result['failed'].append({'username': username, 'reason': 'Item %s has an invalid path.' % index})
+                continue
+            if require_permission:
+                if not isinstance(permission, str):
+                    result['failed'].append({'username': username, 'reason': 'Item %s has an invalid permission.' % index})
+                    continue
+                permission = permission if permission in get_available_repo_perms() \
+                    else normalize_custom_permission_name(permission)
+                if not permission:
+                    result['failed'].append({'username': username, 'reason': 'Item %s has an invalid permission.' % index})
+                    continue
+
+            path = '/' if path.strip('/') == '' else normalize_file_path(path)
+            permission_key = (path, username)
+            if permission_key in seen_permissions:
+                result['failed'].append({'username': username, 'reason': 'Duplicate username and path in request.'})
+                continue
+            seen_permissions.add(permission_key)
+            normalized_permissions.append((path, permission, username))
+            usernames.add(username)
+
+        existing_users = set(CcnetDB().get_active_users_by_user_list(usernames))
+        dir_ids = {}
+        valid_permissions = []
+        for path, permission, username in normalized_permissions:
+            if username not in existing_users:
+                result['failed'].append({'username': username, 'reason': 'User %s not found.' % username})
+                continue
+            if path not in dir_ids:
+                dir_ids[path] = seafile_api.get_dir_id_by_path(repo_id, path)
+            if not dir_ids[path]:
+                result['failed'].append({'username': username, 'reason': 'Folder %s not found.' % path})
+                continue
+            valid_permissions.append((path, permission, username))
+        return valid_permissions
 
 class RepoGroupFolderPerm(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
