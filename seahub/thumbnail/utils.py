@@ -360,6 +360,9 @@ def create_psd_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
 def pdf_bytes_to_images(pdf_bytes, prefix_path, dpi=150):
     with tempfile.NamedTemporaryFile(delete=True, suffix='.pdf') as tmpfile:
         tmpfile.write(pdf_bytes)
+        # pdfinfo/pdftoppm read the file by name: what is still in the write
+        # buffer would be missing on disk
+        tmpfile.flush()
         tmp_file = tmpfile.name
         
         if len(pdf_bytes) > LARGE_PDF_SIZE_THRESHOLD:
