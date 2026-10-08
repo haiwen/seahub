@@ -1391,6 +1391,7 @@ class Wiki2PublishView(APIView):
 
 
 class WikiSearch(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle, )
 
     def post(self, request):
