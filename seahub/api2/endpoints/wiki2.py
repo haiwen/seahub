@@ -1415,8 +1415,8 @@ class WikiSearch(APIView):
 
         wiki = Wiki.objects.get(wiki_id=search_wiki)
         if not wiki:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         wiki_publish = Wiki2Publish.objects.filter(repo_id=search_wiki).first()
         if not wiki_publish and (not request.user.is_authenticated or
