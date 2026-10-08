@@ -134,7 +134,9 @@ class FileContent extends React.Component {
       accessToken,
       nextMentionedUsers,
     )
-      .then(() => {})
+      .then(() => {
+        nextMentionedUsers.forEach((username) => this.mentionedUsers.delete(username));
+      })
       .catch((error) => {
         const errorMessage = error?.response?.data?.error_msg || error?.message || gettext('Failed to cache mention notifications.');
         toaster.danger(errorMessage);
