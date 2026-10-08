@@ -74,19 +74,7 @@
 }
 
 .sf-metadata-field-display-setting-item-container .sf-metadata-switch .custom-switch .custom-switch-indicator {
-  width: 22px;
-  height: 12px;
-  border-radius: 6px;
   margin-right: .25rem;
-}
-
-.sf-metadata-field-display-setting-item-container .sf-metadata-switch .custom-switch .custom-switch-indicator::before {
-  height: 8px;
-  width: 8px;
-}
-
-.sf-metadata-field-display-setting-item-container .sf-metadata-switch .custom-switch-input:checked~.custom-switch-indicator:before {
-  left: 12px;
 }
 
 .sf-metadata-field-display-setting-item-container.hide-column-can-drop::after,

@@ -175,7 +175,6 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
         <Switch
           checked={value}
           disabled={submitting}
-          size="large"
           textPosition="right"
           className={classnames('change-metadata-status-management w-100', { 'disabled': submitting })}
           onChange={onValueChange}

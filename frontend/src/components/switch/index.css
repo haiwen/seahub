@@ -3,6 +3,21 @@
   cursor: pointer;
 }
 
+.seahub-switch .custom-switch-indicator {
+  width: 28px;
+  height: 16px;
+  border-radius: 8px;
+}
+
+.seahub-switch .custom-switch-indicator:before {
+  height: 12px;
+  width: 12px;
+}
+
+.seahub-switch.small {
+  font-size: inherit;
+}
+
 .seahub-switch.small .custom-switch-indicator {
   width: 22px;
   height: 12px;
@@ -15,8 +30,12 @@
   width: 8px;
 }
 
+.seahub-switch .custom-switch-input:checked~.custom-switch-indicator:before {
+  left: 13px;
+}
+
 .seahub-switch.small .custom-switch-input:checked~.custom-switch-indicator:before {
-  left: 12px;
+  left: 11px;
 }
 
 .seahub-switch.disabled .custom-switch,

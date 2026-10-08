@@ -92,6 +92,7 @@ class SharedFileView extends React.Component {
         label: gettext('Line wrapping'),
         right_slot: (
           <Switch
+            size="small"
             checked={this.props.lineWrapping}
             className="txt-line-wrap-menu"
             onChange={() => this.props.updateLineWrapping(!this.props.lineWrapping)}

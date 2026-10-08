@@ -126,6 +126,7 @@ const Settings = ({
         <div className="sf-metadata-setting-divide-line"></div>
         <div className="setting-item">
           <Switch
+            size="small"
             placeholder={gettext('Don\'t show empty values')}
             checked={settings[KANBAN_SETTINGS_KEYS.HIDE_EMPTY_VALUE] || false}
             onChange={() => handleUpdateSettings(KANBAN_SETTINGS_KEYS.HIDE_EMPTY_VALUE, !settings[KANBAN_SETTINGS_KEYS.HIDE_EMPTY_VALUE])}
@@ -134,6 +135,7 @@ const Settings = ({
         <div className="sf-metadata-setting-divide-line"></div>
         <div className="setting-item">
           <Switch
+            size="small"
             placeholder={gettext('Show property names')}
             checked={settings[KANBAN_SETTINGS_KEYS.SHOW_COLUMN_NAME] || false}
             onChange={() => handleUpdateSettings(KANBAN_SETTINGS_KEYS.SHOW_COLUMN_NAME, !settings[KANBAN_SETTINGS_KEYS.SHOW_COLUMN_NAME])}
@@ -142,6 +144,7 @@ const Settings = ({
         <div className="sf-metadata-setting-divide-line"></div>
         <div className="setting-item">
           <Switch
+            size="small"
             placeholder={gettext('Text wraps')}
             checked={settings[KANBAN_SETTINGS_KEYS.TEXT_WRAP] || false}
             onChange={() => handleUpdateSettings(KANBAN_SETTINGS_KEYS.TEXT_WRAP, !settings[KANBAN_SETTINGS_KEYS.TEXT_WRAP])}

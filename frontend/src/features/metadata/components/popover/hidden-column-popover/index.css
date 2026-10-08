@@ -97,21 +97,6 @@
   transition: .3s color;
 }
 
-.sf-metadata-hide-columns-popover .hide-column-item .custom-switch .custom-switch-indicator {
-  border-radius: 8px;
-  height: 16px;
-  width: 28px;
-}
-
-.sf-metadata-hide-columns-popover .hide-column-item .custom-switch .custom-switch-indicator:before {
-  height: 12px;
-  width: 12px;
-}
-
-.sf-metadata-hide-columns-popover .hide-column-item .custom-switch .custom-switch-input:checked~.custom-switch-indicator:before {
-  left: 12px;
-}
-
 .sf-metadata-hide-columns-popover .hide-column-item .seafile-multicolor-icon {
   font-size: 14px;
   margin-right: 8px;

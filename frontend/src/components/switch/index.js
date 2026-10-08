@@ -35,7 +35,7 @@ Switch.propTypes = {
   disabled: PropTypes.bool,
   placeholder: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   className: PropTypes.string,
-  size: PropTypes.oneOf(['large', 'small', undefined]),
+  size: PropTypes.oneOf(['small', undefined]),
   textPosition: PropTypes.oneOf(['left', 'right', undefined]),
   onChange: PropTypes.func,
   setRef: PropTypes.func

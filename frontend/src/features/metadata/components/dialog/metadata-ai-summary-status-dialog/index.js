@@ -82,7 +82,6 @@ const MetadataAISummaryStatusDialog = ({ value: oldValue, repoID, submit, enable
           <Switch
             checked={value}
             disabled={submitting || !enableMetadata}
-            size="large"
             textPosition="right"
             className="change-face-recognition-status-management"
             onChange={onValueChange}

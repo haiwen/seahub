@@ -52,17 +52,5 @@
 }
 
 .sf-metadata-view-kanban-setting-panel .custom-switch-indicator {
-  border-radius: 6px;
-  height: 12px;
-  width: 22px;
   margin-right: 8px;
-}
-
-.sf-metadata-view-kanban-setting-panel .custom-switch .custom-switch-indicator:before {
-  height: 8px;
-  width: 8px;
-}
-
-.sf-metadata-view-kanban-setting-panel .custom-switch .custom-switch-input:checked~.custom-switch-indicator:before {
-  left: 12px;
 }

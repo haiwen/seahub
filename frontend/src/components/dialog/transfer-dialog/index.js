@@ -194,7 +194,6 @@ class TransferDialog extends React.Component {
                 <Switch
                   checked={reshare}
                   disabled={false}
-                  size="large"
                   textPosition="right"
                   className='transfer-repo-reshare-switch w-100 mt-6 mb-1'
                   onChange={this.toggleReshareStatus}
@@ -221,7 +220,6 @@ class TransferDialog extends React.Component {
                   <Switch
                     checked={reshare}
                     disabled={false}
-                    size="large"
                     textPosition="right"
                     className='transfer-repo-reshare-switch w-100 mt-6 mb-1'
                     onChange={this.toggleReshareStatus}

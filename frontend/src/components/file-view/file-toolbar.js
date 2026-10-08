@@ -94,7 +94,7 @@ class FileToolbar extends React.Component {
       items.push({
         key: 'line-wrapping',
         label: gettext('Line wrapping'),
-        right_slot: <Switch className="txt-line-wrap-menu" checked={this.props.lineWrapping} onChange={this.toggleLineWrapping} />,
+        right_slot: <Switch size="small" className="txt-line-wrap-menu" checked={this.props.lineWrapping} onChange={this.toggleLineWrapping} />,
         keepOpen: true,
       });
     }
