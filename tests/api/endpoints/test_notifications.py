@@ -1,7 +1,8 @@
 import json
+from seaserv import seafile_api
+
 from seahub.test_utils import BaseTestCase
-from seahub.notifications.models import UserNotification
-from seahub.base.accounts import UserManager
+from seahub.notifications.models import MSG_TYPE_WOPI_MENTION, UserNotification
 
 class NotificationsTest(BaseTestCase):
     def setUp(self):
@@ -85,3 +86,31 @@ class NotificationTest(BaseTestCase):
         resp = self.client.put(self.endpoint, data, 'application/x-www-form-urlencoded')
         self.assertEqual(403, resp.status_code)
 
+
+class WOPIMentionNotificationFormattingTest(BaseTestCase):
+    def setUp(self):
+        self.endpoint = '/api/v2.1/notifications/'
+        self.file_name = 'mentioned.txt'
+        self.file_path = '/' + self.file_name
+        self.create_file(repo_id=self.repo.id, parent_dir='/', filename=self.file_name,
+                         username=self.user.username)
+        seafile_api.share_repo(self.repo.id, self.user.username, self.admin.username, 'rw')
+
+    def test_wopi_mention_notification_is_returned(self):
+        detail = json.dumps({
+            'repo_id': self.repo.id,
+            'file_path': self.file_path,
+            'from_user': self.admin.username,
+            'mentioned_user': self.user.username,
+        })
+        UserNotification.objects.add_wopi_mention_msg(self.user.username, detail)
+
+        self.login_as(self.user)
+        resp = self.client.get(self.endpoint)
+        self.assertEqual(200, resp.status_code)
+
+        payload = json.loads(resp.content)
+        notice = payload['notification_list'][0]
+        self.assertEqual(MSG_TYPE_WOPI_MENTION, notice['type'])
+        self.assertEqual(self.file_name, notice['detail']['file_name'])
+        self.assertEqual(self.admin.username, notice['detail']['from_user_email'])
