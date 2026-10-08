@@ -14,6 +14,8 @@ import toaster from '../toast';
 import Tooltip from '../tooltip';
 import UserSelect from '../user-select';
 
+import './link-creation.css';
+
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,

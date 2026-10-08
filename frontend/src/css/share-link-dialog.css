@@ -46,6 +46,10 @@
   width: 75%;
 }
 
+.share-link-details-item button:hover {
+  border-left: 1px solid transparent !important;
+}
+
 .share-dialog .share-dialog-content .share-list-container table td {
   padding: 0rem 0.1875rem;
 }
@@ -160,6 +164,11 @@
   margin-bottom: 1rem;
 }
 
+.generate-upload-link #passwd-visible:hover,
+.generate-upload-link #passwd-generate:hover {
+  border-left: 1px solid transparent !important;
+}
+
 .generate-share-link .passwd,
 .generate-upload-link .passwd {
   width: 60%;
@@ -184,8 +193,8 @@ input.expire-input {
 .expire-input-border {
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
-  height: 2.375rem!important;
-  padding: 0.375rem 0.75rem!important;
+  height: 2.375rem !important;
+  padding: 0.375rem 0.75rem !important;
 }
 
 .share-dialog-main .permission-editor .permission-editor__menu {
