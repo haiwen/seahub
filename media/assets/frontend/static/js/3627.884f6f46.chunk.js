@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkseahub_frontend=self.webpackChunkseahub_frontend||[]).push([[3627],{63627:function(e,n,u){u.r(n),u.d(n,{CynefinModule:function(){return r.X},createCynefinServices:function(){return r.t}});var r=u(45652);u(14209)}}]);
