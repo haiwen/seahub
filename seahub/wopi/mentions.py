@@ -15,6 +15,7 @@ WOPI_MENTION_CACHE_EXPIRATION = 12 * 60 * 60
 WOPI_MENTION_LOCK_TIMEOUT = 10
 WOPI_MENTION_INITIAL_STATE = {
     'mentioned_users': [],
+    'delivered_users': [],
     'updated_at': 0,
 }
 
@@ -60,6 +61,8 @@ def get_cached_wopi_mentions_state(access_token):
     state.update(value)
     if not isinstance(state.get('mentioned_users'), list):
         state['mentioned_users'] = []
+    if not isinstance(state.get('delivered_users'), list):
+        state['delivered_users'] = []
     return state
 
 
@@ -74,9 +77,10 @@ def cache_wopi_mentions(access_token, request_user, repo_id, file_path, mentione
         state = get_cached_wopi_mentions_state(access_token)
 
         cached_users = set(state['mentioned_users'])
+        delivered_users = set(state['delivered_users'])
         cached_users.update(
             username for username in mentioned_users
-            if username and username != request_user and username in valid_users
+            if username and username != request_user and username in valid_users and username not in delivered_users
         )
 
         state.update({
@@ -98,12 +102,13 @@ def flush_cached_wopi_mentions(access_token, request_user, repo_id, file_path, o
     try:
         state = get_cached_wopi_mentions_state(access_token)
         mentioned_users = state['mentioned_users']
-        failed_users = flush_wopi_mention_notifications(
+        delivered_users, failed_users = flush_wopi_mention_notifications(
             repo_id, file_path, request_user, mentioned_users, org_id=org_id
         )
 
         state.update({
             'mentioned_users': sorted(failed_users),
+            'delivered_users': sorted(set(state['delivered_users']) | delivered_users),
             'updated_at': int(time.time()),
         })
         cache.set(cache_key, state, WOPI_MENTION_CACHE_EXPIRATION)
@@ -125,9 +130,10 @@ def add_wopi_mention_notification(repo_id, file_path, from_user, to_user):
 def flush_wopi_mention_notifications(repo_id, file_path, from_user, mentioned_users, org_id=None):
     mentioned_users = {username for username in mentioned_users if username and username != from_user}
     if not mentioned_users:
-        return set()
+        return set(), set()
 
     related_users = set(get_active_related_users_by_repo(repo_id, org_id))
+    delivered_users = set()
     failed_users = set()
     for to_user in mentioned_users:
         if to_user not in related_users:
@@ -135,9 +141,10 @@ def flush_wopi_mention_notifications(repo_id, file_path, from_user, mentioned_us
 
         try:
             add_wopi_mention_notification(repo_id, file_path, from_user, to_user)
+            delivered_users.add(to_user)
         except Exception as e:
             logger.error('Failed to create WOPI mention notification for %s in %s%s: %s',
                          to_user, repo_id, file_path, e)
             failed_users.add(to_user)
 
-    return failed_users
+    return delivered_users, failed_users
