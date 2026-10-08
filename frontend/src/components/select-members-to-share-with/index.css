@@ -9,6 +9,11 @@
   cursor: pointer;
 }
 
+.add-members .btn.toggle-detail-btn:hover {
+  border: 1px solid transparent;
+  border-left: 1px solid var(--bs-border-color);
+}
+
 /* for the input before .toggle-detail-btn */
 .add-members .user-select-trigger:has(+ .toggle-detail-btn) {
   padding-right: 40px;

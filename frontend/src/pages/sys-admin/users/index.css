@@ -1,3 +1,8 @@
 .sys-admin-user-layout>div {
   width: 100%;
 }
+
+.btn.btn-secondary.sys-password-visible:hover,
+.btn.btn-secondary.sys-password-generate:hover {
+  border-left: 1px solid transparent;
+}

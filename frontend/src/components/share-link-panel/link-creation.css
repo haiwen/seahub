@@ -1,0 +1,4 @@
+.generate-share-link .btn.password-toggle-btn:hover,
+.generate-share-link .btn.password-generate-btn:hover {
+  border-left: 1px solid transparent;
+}
