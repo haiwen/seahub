@@ -185,7 +185,7 @@ const LibSettings = ({ repoID, currentRepoInfo, isMigrationTipShown }) => {
         )}
         {enableExtendedPropertiesSetting && (
           <MetadataBackupPanel
-            repoID={repoID} 
+            repoID={repoID}
             enableMetadata={enableMetadata}
           />
         )}
