@@ -154,10 +154,6 @@
   margin-left: 1.25rem;
 }
 
-.link-operation-icon {
-  color: #9aa0ac;
-}
-
 .tip {
   color: var(--bs-body-secondary-color);
   font-size: 13px;
