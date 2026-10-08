@@ -397,10 +397,10 @@ class GenerateUploadLink extends React.Component {
               <span className="tip">{passwordLengthTip}</span>
               <InputGroup style={{ width: inputWidth }}>
                 <Input id="passwd" type={this.state.passwordVisible ? 'text' : 'password'} value={this.state.password || ''} onChange={this.inputPassword} />
-                <Button id="passwd-visible" onClick={this.togglePasswordVisible}>
+                <Button className="passwd-visible" onClick={this.togglePasswordVisible}>
                   <Icon symbol={this.state.passwordVisible ? 'eye' : 'eye-slash'} className="link-operation-icon" />
                 </Button>
-                <Button id='passwd-generate' className="d-flex align-items-center" onClick={this.generatePassword}>
+                <Button className="passwd-generate d-flex align-items-center" onClick={this.generatePassword}>
                   <Icon symbol="magic" className="link-operation-icon" />
                 </Button>
               </InputGroup>

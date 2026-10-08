@@ -2,7 +2,7 @@
   width: 100%;
 }
 
-#sys-password-visible:hover,
-#sys-password-generate:hover {
+.sys-password-visible:hover,
+.sys-password-generate:hover {
   border-left: 1px solid transparent !important;
 }

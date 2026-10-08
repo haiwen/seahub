@@ -157,10 +157,10 @@ class SysAdminAddUserDialog extends React.Component {
               <Label>{gettext('Password')}</Label>
               <InputGroup>
                 <Input autoComplete="new-password" type={isPasswordVisible ? 'text' : 'password'} value={password || ''} onChange={this.inputPassword} />
-                <Button id="sys-password-visible" className="mt-0" onClick={this.togglePasswordVisible}>
+                <Button className="sys-password-visible mt-0" onClick={this.togglePasswordVisible}>
                   <Icon symbol={this.state.isPasswordVisible ? 'eye' : 'eye-slash'} className="link-operation-icon" />
                 </Button>
-                <Button id="sys-password-generate" className="mt-0" onClick={this.generatePassword}>
+                <Button className="sys-password-generate mt-0" onClick={this.generatePassword}>
                   <Icon symbol="magic" className="link-operation-icon" />
                 </Button>
               </InputGroup>

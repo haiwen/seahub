@@ -164,8 +164,8 @@
   margin-bottom: 1rem;
 }
 
-.generate-upload-link #passwd-visible:hover,
-.generate-upload-link #passwd-generate:hover {
+.generate-upload-link .passwd-visible:hover,
+.generate-upload-link .passwd-generate:hover {
   border-left: 1px solid transparent !important;
 }
 

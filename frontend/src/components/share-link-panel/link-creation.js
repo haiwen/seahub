@@ -307,7 +307,7 @@ class LinkCreation extends React.Component {
             {type === 'batch' ? gettext('Generate links in batch') : gettext('Generate Link')}
           </h6>
         </div>
-        <Form className="pt-4">
+        <Form className="generate-share-link pt-4">
           {type === 'batch' && (
             <FormGroup>
               <Label for="link-number" className="p-0">{gettext('Number of links')}</Label>
@@ -338,13 +338,13 @@ class LinkCreation extends React.Component {
                   <span className="tip">{gettext('(at least {passwordMinLength} characters and includes {passwordStrengthLevel} of the following: number, upper letter, lower letter and other symbols)').replace('{passwordMinLength}', shareLinkPasswordMinLength).replace('{passwordStrengthLevel}', shareLinkPasswordStrengthLevel)}</span>
                   <InputGroup style={{ width: inputWidth }}>
                     <Input id="passwd" type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password || ''} onChange={this.inputPassword} />
-                    <Button id="password-toggle-btn" className="d-flex align-items-center" aria-label={this.state.isPasswordVisible ? gettext('Hide password') : gettext('Show password')} onClick={this.togglePasswordVisible}>
+                    <Button className="password-toggle-btn d-flex align-items-center" aria-label={this.state.isPasswordVisible ? gettext('Hide password') : gettext('Show password')} onClick={this.togglePasswordVisible}>
                       <Icon symbol={this.state.isPasswordVisible ? 'eye' : 'eye-slash'} className="link-operation-icon" />
-                      <Tooltip target="password-toggle-btn">{this.state.isPasswordVisible ? gettext('Hide password') : gettext('Show password')}</Tooltip>
+                      <Tooltip target=".password-toggle-btn">{this.state.isPasswordVisible ? gettext('Hide password') : gettext('Show password')}</Tooltip>
                     </Button>
-                    <Button id="password-generate-btn" className="d-flex align-items-center" aria-label={gettext('Generate password')} onClick={this.generatePassword}>
+                    <Button className="password-generate-btn d-flex align-items-center" aria-label={gettext('Generate password')} onClick={this.generatePassword}>
                       <Icon symbol="magic" className="link-operation-icon" />
-                      <Tooltip target="password-generate-btn">{gettext('Generate password')}</Tooltip>
+                      <Tooltip target=".password-generate-btn">{gettext('Generate password')}</Tooltip>
                     </Button>
                   </InputGroup>
                 </FormGroup>
