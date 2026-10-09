@@ -262,7 +262,10 @@ class UserSelect extends React.Component {
       <ClickOutside onClickOutside={this.onClickOutside}>
         <>
           <div
-            className={classnames('user-select-trigger sf-select justify-content-start', className, { 'focus': this.state.isPopoverOpen })}
+            className={classnames('user-select-trigger sf-select justify-content-start', className, {
+              'focus': this.state.isPopoverOpen,
+              'has-selected-users': selectedUsers.length > 0,
+            })}
             id={this.triggerId}
             tabIndex={0}
             role="button"
@@ -304,6 +307,19 @@ class UserSelect extends React.Component {
               this.updatePopover = update;
               return (
                 <div className="user-select-container" ref={ref => this.ref = ref} onMouseDown={e => e.stopPropagation()}>
+                  <div className="user-select-selected-users">
+                    {selectedUsers.map((user, index) => {
+                      return (
+                        <UserItem
+                          key={user.email}
+                          idx={selectedUsers.length + index}
+                          user={user}
+                          enableDeleteUser={true}
+                          onDeleteUser={this.onDeleteSelectedCollaborator}
+                        />
+                      );
+                    })}
+                  </div>
                   <div className="user-search-container">
                     <SearchInput
                       autoFocus={true}
@@ -315,7 +331,10 @@ class UserSelect extends React.Component {
                       clearValue={() => this.onValueChanged('')}
                     />
                   </div>
-                  <div className="user-list-container" ref={ref => this.container = ref}>
+                  <div
+                    className={classnames('user-list-container', { 'user-list-container-empty': searchedUsers.length === 0 })}
+                    ref={ref => this.container = ref}
+                  >
                     {searchedUsers.length > 0 && (
                       searchedUsers.map((user, index) => {
                         return (
@@ -330,15 +349,17 @@ class UserSelect extends React.Component {
                             onKeyDown={Utils.onKeyDown}
                           >
                             <UserItem user={user} enableDeleteUser={false} />
-                            {selectedUsers.find(u => u.email === user.email) && <span><Icon symbol="check" /></span>}
+                            {selectedUsers.find(u => u.email === user.email) && (
+                              <Icon symbol="check" className="user-select-check-icon" />
+                            )}
                           </div>
                         );
                       })
                     )}
                     {searchedUsers.length === 0 &&
                       <SearchEmptyTip
-                        imageType={searchValue ? 'no-results' : 'start-searching'}
-                        text={searchValue ? gettext('User not found') : gettext('Enter characters to start searching')}
+                        showImage={false}
+                        text={searchValue ? gettext('No results') : gettext('Enter characters to start searching')}
                       />}
                   </div>
                 </div>

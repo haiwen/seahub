@@ -1,17 +1,21 @@
-.user-select-trigger {
+.user-select-trigger.sf-select {
   position: relative;
   display: flex;
   appearance: none;
   background-clip: padding-box;
   width: 100%;
-  padding: 8px;
+  padding: 8px 36px 8px 8px;
   flex-wrap: wrap;
   gap: 4px;
   min-height: 38px;
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 20px;
   background-color: inherit;
   align-items: center;
+}
+
+.user-select-trigger.has-selected-users {
+  background-color: var(--bs-th-bg);
 }
 
 .user-select-trigger .user-item {
@@ -23,13 +27,18 @@
 }
 
 .user-select-popover {
+  --bs-popover-border-color: var(--bs-border-quartus-color);
+  --bs-popover-body-padding-x: 0;
+  --bs-popover-body-padding-y: 0;
   max-width: max-content;
-  border-radius: 4px;
+  border-radius: 8px;
+  box-shadow: var(--bs-popover-box-shadow);
+  overflow: hidden;
 }
 
 .user-select-popover .popover {
   max-width: max-content;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .selected-user-item-container.focus {
@@ -44,53 +53,83 @@
   position: relative;
 }
 
+.user-select-container .user-select-selected-users {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  min-height: 36px;
+  padding: 8px;
+  background-color: var(--bs-th-bg);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
+}
+
+.user-select-container .user-select-selected-users .user-item {
+  margin: 0;
+}
+
 .user-select-container .user-search-container {
   width: 100%;
   min-width: 170px;
   position: relative;
   display: flex;
   align-items: center;
-  padding: 0;
-  height: 32px;
-  border-bottom: 1px solid var(--bs-border-secondary-color);
+  padding: 8px 8px 0;
 }
 
 .user-select-container .user-search-container .form-control {
-  height: 32px;
-  border: none;
+  height: 28px;
+  border: 1px solid var(--bs-border-secondary-color);
   border-radius: 4px;
-  padding: 6px 40px 6px 16px;
-  cursor: pointer;
+  padding: 3px 28px 3px 8px;
+  color: var(--bs-body-color);
+  font-size: 13px;
+  line-height: 20px;
+  cursor: text;
 }
 
 .user-select-container .user-search-container .form-control:focus {
   outline: none;
+  border-color: var(--bs-form-select-focus-border-color);
   box-shadow: none;
-  background-color: transparent;
+  background-color: var(--bs-popover-bg);
 }
 
-.user-select-container .user-search-container .input-icon-addon {
+.user-select-container .user-search-container .form-control::placeholder {
+  color: var(--bs-placeholder-input-color);
+  opacity: 1;
+}
+
+.user-select-container .user-search-container .search-text-clear {
   width: 20px;
   min-width: 20px;
   height: 20px;
-  top: 6px;
-  right: 13px;
-  font-size: .875rem;
+  top: 12px;
+  right: 12px;
+  color: var(--bs-icon-color);
+  font-size: 12px;
   cursor: pointer;
   pointer-events: auto;
 }
 
-.user-select-container .user-search-container .input-icon-addon:hover {
+.user-select-container .user-search-container .search-text-clear:hover {
   background-color: var(--bs-icon-btn-hover-bg-color);
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 .user-select-container .user-list-container {
-  min-height: 40px;
   max-height: 200px;
-  margin: 8px 0;
-  padding: 0 8px;
-  overflow: auto;
+  overflow-x: hidden;
+}
+
+.user-select-container .user-list-container:not(.user-list-container-empty) {
+  padding: 8px;
+  overflow-y: auto;
+}
+
+.user-select-container .user-list-container.user-list-container-empty {
+  padding: 48px 8px;
+  overflow: hidden;
 }
 
 .user-select-container .user-list-container .user-item-container {
@@ -106,12 +145,23 @@
 
 .user-select-container .user-list-container .user-item-container:hover,
 .user-select-container .user-list-container .user-item-container-highlight {
-  background: var(--bs-bg-color);
+  background: var(--bs-dropdown-link-hover-bg);
   cursor: pointer;
 }
 
 .user-select-container .user-list-container .search-empty-tip {
-  margin: -8px 0;
+  height: auto;
+  padding: 0;
+  color: var(--bs-body-secondary-color);
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.user-select-container .user-list-container .user-select-check-icon {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  color: var(--bs-icon-color);
 }
 
 .user-select-popover .popover .user-item {
