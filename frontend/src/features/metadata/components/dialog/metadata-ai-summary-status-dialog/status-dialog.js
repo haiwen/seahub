@@ -89,7 +89,7 @@ const StatusDialog = ({ repoID, toggle }) => {
 
   return (
     <Modal isOpen={true} toggle={toggle} className="ai-summary-status-dialog">
-      <SeahubModalHeader toggle={toggle}>{gettext('AI Chat and Search status')}</SeahubModalHeader>
+      <SeahubModalHeader toggle={toggle}>{gettext('AI chat and search status')}</SeahubModalHeader>
       <ModalBody>
         {isLoading ? (
           <CenteredLoading />
