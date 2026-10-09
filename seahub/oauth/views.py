@@ -3,22 +3,56 @@
 import os
 import sys
 import logging
+import hashlib
 from django.http import HttpResponseRedirect
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _
+from django.views.decorators.http import require_POST
 
 from seaserv import seafile_api, ccnet_api
 
 from seahub.api2.utils import get_api_token
 from seahub import auth
+from seahub.auth.decorators import login_required
 from seahub.profile.models import Profile
+from seahub.options.models import UserOptions
 from seahub.utils import is_valid_email, render_error, get_service_url
 from seahub.utils.file_size import get_quota_from_string
-from seahub.base.accounts import User
+from seahub.utils.auth import user_local_password_enabled, VIRTUAL_ID_EMAIL_DOMAIN
+from seahub.base.accounts import User, UNUSABLE_PASSWORD
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
 from seahub.auth.models import SocialAuthUser
 import seahub.settings as settings
 
 logger = logging.getLogger(__name__)
+
+# UserOptions key storing a hash of the OAuth uid a user explicitly
+# disconnected, so the callback does not auto-link that identity again.
+OAUTH_UNBIND_OPTION_KEY = 'oauth_unbind_uid'
+
+
+def _oauth_uid_hash(uid):
+    return hashlib.sha1(str(uid).encode('utf-8')).hexdigest()
+
+
+def _oauth_identity_disconnected(uid):
+    return UserOptions.objects.filter(
+        option_key=OAUTH_UNBIND_OPTION_KEY,
+        option_val=_oauth_uid_hash(uid)).exists()
+
+
+def _can_login_without_oauth(username):
+    """Return whether ``username`` can log in once its OAuth binding is gone.
+
+    Accounts created for SSO/OAuth users have a virtual username, so they can
+    only log in through their contact email or login ID.
+    """
+    if not username.endswith(VIRTUAL_ID_EMAIL_DOMAIN):
+        return True
+
+    profile = Profile.objects.get_profile_by_user(username)
+    return bool(profile and (profile.contact_email or profile.login_id))
+
 
 LDAP_PROVIDER = getattr(settings, 'LDAP_PROVIDER', 'ldap')
 SSO_LDAP_USE_SAME_UID = getattr(settings, 'SSO_LDAP_USE_SAME_UID', False)
@@ -122,9 +156,9 @@ def oauth_login(request):
         logger.error(e)
         return render_error(request, _('Error, please contact administrator.'))
 
+    request.session.pop('oauth_connect', None)
     request.session['oauth_state'] = state
-    request.session['oauth_redirect'] = request.GET.get(
-        auth.REDIRECT_FIELD_NAME, '/')
+    request.session['oauth_redirect'] = _get_safe_next_url(request)
     return HttpResponseRedirect(authorization_url)
 
 
@@ -136,9 +170,14 @@ def oauth_callback(request):
     callback URL. With this redirection comes an authorization code included
     in the redirect URL. We will use that to obtain an access token.
     """
+    oauth_state = request.session.get('oauth_state')
+    if not oauth_state:
+        logger.error('OAuth state is not found in session.')
+        return render_error(request, _('Error, please contact administrator.'))
+
     session = OAuth2Session(client_id=CLIENT_ID,
                             scope=SCOPE,
-                            state=request.session.get('oauth_state', None),
+                            state=oauth_state,
                             redirect_uri=REDIRECT_URL)
 
     service_url = get_service_url().strip('/')
@@ -186,10 +225,37 @@ def oauth_callback(request):
         logger.error('user_info_json: %s' % user_info_json)
         return render_error(request, _('Error, please contact administrator.'))
 
+    # `oauth_connect` is set by the `oauth_connect` view: bind the OAuth
+    # account to the currently logged-in local user instead of logging in.
+    if request.session.pop('oauth_connect', False):
+        if not request.user.is_authenticated:
+            return render_error(request, _('Failed to connect OAuth, please login first.'))
+
+        oauth_user = SocialAuthUser.objects.get_by_provider_and_uid(OAUTH_PROVIDER, uid)
+        if oauth_user and oauth_user.username != request.user.username:
+            return render_error(request, _('The OAuth account has already been connected to another account.'))
+
+        if not oauth_user:
+            if not SocialAuthUser.objects.add(request.user.username, OAUTH_PROVIDER, uid):
+                logger.error('Failed to bind OAuth uid %s to user %s.',
+                             uid, request.user.username)
+                return render_error(request, _('Failed to connect OAuth, please contact administrator.'))
+
+        UserOptions.objects.unset_user_option(
+            request.user.username, OAUTH_UNBIND_OPTION_KEY)
+
+        return HttpResponseRedirect(request.session.get('oauth_redirect',
+                                                        settings.LOGIN_REDIRECT_URL))
+
     # compatible with old users via email
     old_email = oauth_user_info.get('email', '')
 
     oauth_user = SocialAuthUser.objects.get_by_provider_and_uid(OAUTH_PROVIDER, uid)
+    if not oauth_user and _oauth_identity_disconnected(uid):
+        # The user explicitly disconnected this OAuth identity; do not
+        # auto-link it to a local account again.
+        logger.info('OAuth account %s was disconnected; skip auto-link.', uid)
+        return render_error(request, _('This OAuth account was disconnected from your account. Please login with your password first, then connect it again.'))
     if not oauth_user and SSO_LDAP_USE_SAME_UID:
         oauth_user = SocialAuthUser.objects.get_by_provider_and_uid(LDAP_PROVIDER, uid)
         if oauth_user:
@@ -281,6 +347,70 @@ def oauth_callback(request):
     response.set_cookie('seahub_auth', email + '@' + api_token.key)
     response.set_cookie('via_oauth', 'true')
     return response
+
+
+def _get_safe_next_url(request):
+    next_url = request.GET.get(auth.REDIRECT_FIELD_NAME, settings.LOGIN_REDIRECT_URL)
+    if not url_has_allowed_host_and_scheme(url=next_url,
+                                           allowed_hosts={request.get_host()}):
+        next_url = settings.LOGIN_REDIRECT_URL
+    return next_url
+
+
+@login_required
+@oauth_check
+def oauth_connect(request):
+    """Connect the currently logged-in local account to the OAuth provider."""
+    next_url = _get_safe_next_url(request)
+
+    if SocialAuthUser.objects.filter(
+            username=request.user.username, provider=OAUTH_PROVIDER).exists():
+        return HttpResponseRedirect(next_url)
+
+    session = OAuth2Session(client_id=CLIENT_ID,
+                            scope=SCOPE,
+                            redirect_uri=REDIRECT_URL)
+    try:
+        authorization_url, state = session.authorization_url(AUTHORIZATION_URL)
+    except Exception as e:
+        logger.error(e)
+        return render_error(request, _('Error, please contact administrator.'))
+
+    request.session['oauth_state'] = state
+    request.session['oauth_redirect'] = next_url
+    request.session['oauth_connect'] = True
+    return HttpResponseRedirect(authorization_url)
+
+
+@login_required
+@require_POST
+@oauth_check
+def oauth_disconnect(request):
+    """Disconnect the currently logged-in local account from the OAuth provider.
+
+    The disconnect is remembered in UserOptions, so the callback does not
+    re-link the OAuth account by email on a later OAuth login.
+    """
+    if request.user.enc_password == UNUSABLE_PASSWORD:
+        return render_error(request, _('Failed to unbind OAuth, please set a password first.'))
+
+    if not user_local_password_enabled(request.user):
+        return render_error(request, _('Failed to unbind OAuth, the user is forced login by SSO.'))
+
+    if not _can_login_without_oauth(request.user.username):
+        return render_error(request, _('Failed to unbind OAuth, please set a contact email or login ID first.'))
+
+    bound_uids = list(SocialAuthUser.objects.filter(
+        username=request.user.username,
+        provider=OAUTH_PROVIDER).values_list('uid', flat=True))
+    SocialAuthUser.objects.delete_by_username_and_provider(
+        request.user.username, OAUTH_PROVIDER)
+    for uid in bound_uids:
+        UserOptions.objects.set_user_option(
+            request.user.username, OAUTH_UNBIND_OPTION_KEY,
+            _oauth_uid_hash(uid))
+
+    return HttpResponseRedirect(_get_safe_next_url(request))
 
 
 def custom_oauth_login_view(request):
