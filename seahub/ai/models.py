@@ -22,29 +22,43 @@ class AIUsageStatistics(models.Model):
         db_table = 'ai_usage_statistics'
 
 
-class OrgAdditionalAICredit(models.Model):
+class OrgAdditionalCredit(models.Model):
+    id = models.BigAutoField(primary_key=True)
     org_id = models.BigIntegerField(unique=True, db_index=True)
-    credits = models.FloatField(default=0)
+    balance = models.BigIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = 'org_additional_ai_credit'
 
 
-class AICreditTransaction(models.Model):
-    transaction_id = models.CharField(max_length=255, unique=True, db_index=True)
+class UserAdditionalAICredit(models.Model):
+    id = models.BigAutoField(primary_key=True)
     org_id = models.BigIntegerField(db_index=True)
-    operation = models.CharField(max_length=32)
-    source = models.CharField(max_length=32)
-    requested_delta = models.FloatField()
-    applied_delta = models.FloatField()
-    credits_before = models.FloatField()
-    credits_after = models.FloatField()
-    operator = models.CharField(max_length=255, blank=True, default='')
+    username = models.CharField(max_length=255, db_index=True)
+    balance = models.BigIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'user_additional_ai_credit'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['org_id', 'username'],
+                name='unique_user_additional_ai_credit',
+            ),
+        ]
+
+
+class OrgAdditionalCreditStripeSession(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    stripe_session_id = models.CharField(max_length=255, unique=True, db_index=True, db_collation='utf8mb4_bin')
+    org_id = models.BigIntegerField(db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'ai_credit_transaction'
+        db_table = 'org_additional_ai_credit_stripe_session'
 
 
 class ChatSessionsManager(models.Manager):
