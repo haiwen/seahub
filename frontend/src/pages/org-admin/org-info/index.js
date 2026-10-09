@@ -24,7 +24,6 @@ class OrgInfo extends Component {
       role_ai_credit_used: 0,
       role_monthly_ai_credit: 0,
       additional_ai_credit: 0,
-      available_ai_credit: 0,
     };
   }
 
@@ -34,13 +33,13 @@ class OrgInfo extends Component {
         org_id, org_name, traffic_this_month, monthly_download_traffic_limit,
         member_quota, member_usage, active_members,
         storage_quota, storage_usage, role_ai_credit_used, role_monthly_ai_credit,
-        additional_ai_credit, available_ai_credit
+        additional_ai_credit
       } = res.data;
       this.setState({
         org_id, org_name, traffic_this_month, monthly_download_traffic_limit,
         member_quota, member_usage, active_members,
         storage_quota, storage_usage, role_ai_credit_used, role_monthly_ai_credit,
-        additional_ai_credit, available_ai_credit
+        additional_ai_credit
       });
     });
   }
@@ -50,7 +49,7 @@ class OrgInfo extends Component {
       org_id, org_name, traffic_this_month, monthly_download_traffic_limit,
       member_quota, member_usage, active_members,
       storage_quota, storage_usage, role_ai_credit_used, role_monthly_ai_credit,
-      additional_ai_credit, available_ai_credit
+      additional_ai_credit
     } = this.state;
     let download_traffic = traffic_this_month.link_file_download + traffic_this_month.sync_file_download + traffic_this_month.web_file_download;
     download_traffic = download_traffic ? download_traffic : 0;
@@ -163,7 +162,6 @@ class OrgInfo extends Component {
                   <div className="info-content-item">
                     <h4 className="info-content-item-heading">{gettext('Additional AI credits')}</h4>
                     <p className="info-content-space-text">{additional_ai_credit ?? 0}</p>
-                    <p>{gettext('Available AI credits:')}{' '}{available_ai_credit >= 0 ? available_ai_credit : '--'}</p>
                     {enableExternalBillingService && role_monthly_ai_credit >= 0 && (
                       <a href={`${siteRoot}billing/`} target="_blank" rel="noreferrer" className="btn btn-primary mt-3">
                         {gettext('Add credits')}

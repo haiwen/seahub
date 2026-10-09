@@ -27,7 +27,6 @@ class Account extends Component {
       aiCredit: '',
       aiCreditUsed: '',
       aiUsageRate: '',
-      availableAICredit: '',
       isStaff: false,
       isOrgStaff: false,
       usageRate: '',
@@ -58,7 +57,6 @@ class Account extends Component {
           aiCredit: isOrgContext ? resp.data.role_monthly_ai_credit : resp.data.ai_credit,
           aiCreditUsed: isOrgContext ? resp.data.role_ai_credit_used : resp.data.ai_credit_used,
           aiUsageRate: resp.data.ai_usage_rate,
-          availableAICredit: resp.data.available_ai_credit,
         });
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
@@ -144,7 +142,6 @@ class Account extends Component {
                   <span id="quota-usage" className="usage" style={{ width: this.state.aiUsageRate }}>
                   </span>
                 </div>
-                {isOrgContext && <p>{gettext('Available AI credits:')}{' '}{this.state.availableAICredit >= 0 ? this.state.availableAICredit : '--'}</p>}
               </div>
             }
           </div>
