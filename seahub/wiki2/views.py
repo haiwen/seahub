@@ -11,6 +11,7 @@ from seaserv import seafile_api
 from django.conf import settings
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
+from django.utils.html import strip_spaces_between_tags
 from django.utils.http import http_date
 from django.urls import reverse
 
@@ -351,7 +352,7 @@ def wiki_publish_view(request, publish_url, page_id=None):
         if not html_resp.ok:
             raise ValueError('converter returned non-success status {}'.format(html_resp.status_code))
 
-        wiki_html = html_resp.content.decode('utf-8')
+        wiki_html = strip_spaces_between_tags(html_resp.content.decode('utf-8').strip())
         template_name = 'wiki/wiki_publish_ssr.html'
         render_context.update({
             "wiki_repo_name": wiki.name,
