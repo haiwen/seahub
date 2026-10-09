@@ -411,3 +411,58 @@ def event_archive_status(task_id):
     params = {'task_id': task_id}
     resp = requests.get(url, params=params, headers=headers)
     return resp
+
+
+def add_metadata_backup_export_task(repo_id, repo_name, username, max_file_size):
+    payload = {'exp': int(time.time()) + 300}
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {'Authorization': 'Token %s' % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/metadata-backup/export')
+    params = {
+        'repo_id': repo_id,
+        'repo_name': repo_name,
+        'username': username,
+        'max_file_size': max_file_size,
+    }
+    return requests.post(url, json=params, headers=headers, timeout=30)
+
+
+def add_metadata_backup_import_task(repo_id, username, source, max_file_size):
+    payload = {'exp': int(time.time()) + 300}
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {'Authorization': 'Token %s' % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/metadata-backup/import')
+    params = {
+        'repo_id': repo_id,
+        'username': username,
+        'max_file_size': max_file_size,
+    }
+    files = {'file': (source.name, source.file, source.content_type)}
+    return requests.post(url, data=params, files=files, headers=headers, timeout=300)
+
+
+def get_metadata_backup_task(task_id, repo_id, username):
+    payload = {'exp': int(time.time()) + 300}
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {'Authorization': 'Token %s' % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/metadata-backup/status')
+    params = {'task_id': task_id, 'repo_id': repo_id, 'username': username}
+    return requests.get(url, params=params, headers=headers, timeout=30)
+
+
+def add_metadata_backup_restore_task(task_id, repo_id, username):
+    payload = {'exp': int(time.time()) + 300}
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {'Authorization': 'Token %s' % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/metadata-backup/restore')
+    params = {'task_id': task_id, 'repo_id': repo_id, 'username': username}
+    return requests.post(url, json=params, headers=headers, timeout=30)
+
+
+def download_metadata_backup(task_id, repo_id, username):
+    payload = {'exp': int(time.time()) + 300}
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {'Authorization': 'Token %s' % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/metadata-backup/download')
+    params = {'task_id': task_id, 'repo_id': repo_id, 'username': username}
+    return requests.get(url, params=params, headers=headers, stream=True, timeout=300)
