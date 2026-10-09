@@ -92,6 +92,7 @@ function FieldItem({ field, index, isCollapsed, onToggleField, onMoveField, fiel
       </div>
       <Switch
         size="small"
+        isSettingItem
         checked={field.shown}
         className="sf-metadata-switch flex-fill"
         placeholder={placeholder()}

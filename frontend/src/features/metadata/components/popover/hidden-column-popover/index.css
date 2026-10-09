@@ -76,25 +76,14 @@
   min-width: 0;
 }
 
-.sf-metadata-hide-columns-popover .hide-column-item .hide-column-item-switch .custom-switch {
-  width: 100%;
-}
-
-.sf-metadata-hide-columns-popover .hide-column-item .custom-switch {
-  padding-left: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
 .sf-metadata-hide-columns-popover .hide-column-item .custom-switch .custom-switch-description {
   display: inline-flex;
   align-items: center;
-  margin-left: 0;
-  padding-right: 5px;
   flex: 1;
-  color: var(--bs-body-color);
-  transition: .3s color;
+}
+
+.sf-metadata-hide-columns-popover .hide-column-item .custom-switch .custom-switch-indicator {
+  margin-right: 0;
 }
 
 .sf-metadata-hide-columns-popover .hide-column-item .seafile-multicolor-icon {

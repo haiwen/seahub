@@ -3,6 +3,27 @@
   cursor: pointer;
 }
 
+.seahub-switch .custom-switch-description {
+  color: var(--bs-body-color);
+}
+
+.seahub-switch .custom-switch-input:checked~.custom-switch-description {
+  color: var(--bs-body-color);
+}
+
+.seahub-switch.seahub-switch--setting-item .custom-switch {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.seahub-switch.seahub-switch--setting-item .custom-switch-description {
+  margin: 0;
+}
+
+.seahub-switch.seahub-switch--setting-item .custom-switch-indicator {
+  margin-right: 8px;
+}
+
 .seahub-switch .custom-switch-indicator {
   width: 28px;
   height: 16px;

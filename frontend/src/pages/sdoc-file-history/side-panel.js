@@ -286,6 +286,7 @@ class SidePanel extends Component {
             placeholder={gettext('Show changes')}
             className="sdoc-history-show-changes w-100"
             size="small"
+            isSettingItem
             onChange={this.onShowChanges}
           />
         </div>

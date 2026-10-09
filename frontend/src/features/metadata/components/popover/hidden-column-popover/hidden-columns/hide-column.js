@@ -96,6 +96,7 @@ const HideColumnItem = ({
         </span>
       )}
       <Switch
+        isSettingItem
         className="hide-column-item-switch"
         disabled={readOnly}
         checked={isHidden}

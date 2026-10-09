@@ -182,18 +182,19 @@
 }
 
 .sdoc-file-history .sdoc-file-history-diff-switch .custom-switch {
-  width: 100%;
   padding-left: 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   cursor: pointer;
 }
 
 .sdoc-file-history .sdoc-file-history-diff-switch .custom-switch-description {
-  margin-left: 0;
   flex: 1;
   padding-right: 8px;
+}
+
+.sdoc-file-history .sdoc-file-history-diff-switch .custom-switch .custom-switch-indicator {
+  margin-right: 0;
 }
 
 /* history versions */
