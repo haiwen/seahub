@@ -84,6 +84,12 @@ window.app.pageOptions = {
   socialNextPage: "{{ social_next_page|escapejs }}",
   {% endif %}
 
+  enableOAuth: {% if enable_oauth %} true {% else %} false {% endif %},
+  {% if enable_oauth %}
+  oauthConnected: {% if oauth_connected %} true {% else %} false {% endif %},
+  socialNextPage: "{{ social_next_page|escapejs }}",
+  {% endif %}
+
   enableADFS: {% if enable_adfs %} true {% else %} false {% endif %},
   {% if enable_adfs %}
   samlConnected: {% if saml_connected %} true {% else %} false {% endif %},
