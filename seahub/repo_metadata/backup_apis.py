@@ -1,8 +1,3 @@
-import time
-from urllib.parse import urljoin
-
-import jwt
-import requests
 from django.http import StreamingHttpResponse
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
@@ -12,14 +7,13 @@ from rest_framework.views import APIView
 
 from seaserv import seafile_api
 from seahub.api2.authentication import TokenAuthentication
+from seahub.api2.endpoints.utils import add_metadata_backup_export_task, add_metadata_backup_import_task, \
+    get_metadata_backup_task, add_metadata_backup_restore_task, download_metadata_backup
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.repo_metadata.models import RepoMetadata
-from seahub.settings import SEAFEVENTS_SERVER_URL, SECRET_KEY
+from seahub.settings import METADATA_BACKUP_FILE_SIZE_LIMIT
 from seahub.utils.repo import is_repo_admin
-
-
-MAX_BACKUP_FILE_SIZE = 100 * 1024 * 1024
 
 
 class MetadataBackupBase(APIView):
@@ -45,12 +39,19 @@ class MetadataBackupExport(MetadataBackupBase):
         repo, error = self.check_access(request, repo_id)
         if error:
             return error
-        response = _seafevents_request('post', '/metadata-backup/export', json={
-            'repo_id': repo_id,
-            'repo_name': repo.name,
-            'username': request.user.username,
-        })
-        return _json_response(response)
+        response = add_metadata_backup_export_task(
+            repo_id, repo.name, request.user.username, METADATA_BACKUP_FILE_SIZE_LIMIT
+        )
+        try:
+            data = response.json()
+        except ValueError:
+            data = {}
+        finally:
+            response.close()
+        if response.status_code < 200 or response.status_code >= 300:
+            code = response.status_code if response.status_code < 500 else status.HTTP_500_INTERNAL_SERVER_ERROR
+            return api_error(code, data.get('error_msg') or data.get('error') or 'Metadata backup operation failed.')
+        return Response(data, status=response.status_code)
 
 
 class MetadataBackupImport(MetadataBackupBase):
@@ -62,15 +63,21 @@ class MetadataBackupImport(MetadataBackupBase):
         source = request.FILES.get('file')
         if not source or not source.name.lower().endswith('.xlsx'):
             return api_error(status.HTTP_400_BAD_REQUEST, 'An .xlsx metadata backup is required.')
-        if source.size > MAX_BACKUP_FILE_SIZE:
+        if source.size > METADATA_BACKUP_FILE_SIZE_LIMIT:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Metadata backup file is too large.')
-        response = _seafevents_request(
-            'post', '/metadata-backup/import',
-            data={'repo_id': repo_id, 'username': request.user.username},
-            files={'file': (source.name, source.file, source.content_type)},
-            timeout=300,
+        response = add_metadata_backup_import_task(
+            repo_id, request.user.username, source, METADATA_BACKUP_FILE_SIZE_LIMIT
         )
-        return _json_response(response)
+        try:
+            data = response.json()
+        except ValueError:
+            data = {}
+        finally:
+            response.close()
+        if response.status_code < 200 or response.status_code >= 300:
+            code = response.status_code if response.status_code < 500 else status.HTTP_500_INTERNAL_SERVER_ERROR
+            return api_error(code, data.get('error_msg') or data.get('error') or 'Metadata backup operation failed.')
+        return Response(data, status=response.status_code)
 
 
 class MetadataBackupTask(MetadataBackupBase):
@@ -79,12 +86,17 @@ class MetadataBackupTask(MetadataBackupBase):
         _, error = self.check_access(request, repo_id)
         if error:
             return error
-        response = _seafevents_request('get', '/metadata-backup/status', params={
-            'repo_id': repo_id,
-            'username': request.user.username,
-            'task_id': task_id,
-        })
-        return _json_response(response)
+        response = get_metadata_backup_task(task_id, repo_id, request.user.username)
+        try:
+            data = response.json()
+        except ValueError:
+            data = {}
+        finally:
+            response.close()
+        if response.status_code < 200 or response.status_code >= 300:
+            code = response.status_code if response.status_code < 500 else status.HTTP_500_INTERNAL_SERVER_ERROR
+            return api_error(code, data.get('error_msg') or data.get('error') or 'Metadata backup operation failed.')
+        return Response(data, status=response.status_code)
 
 
 class MetadataBackupRestore(MetadataBackupBase):
@@ -93,12 +105,17 @@ class MetadataBackupRestore(MetadataBackupBase):
         _, error = self.check_access(request, repo_id)
         if error:
             return error
-        response = _seafevents_request('post', '/metadata-backup/restore', json={
-            'repo_id': repo_id,
-            'username': request.user.username,
-            'task_id': task_id,
-        })
-        return _json_response(response)
+        response = add_metadata_backup_restore_task(task_id, repo_id, request.user.username)
+        try:
+            data = response.json()
+        except ValueError:
+            data = {}
+        finally:
+            response.close()
+        if response.status_code < 200 or response.status_code >= 300:
+            code = response.status_code if response.status_code < 500 else status.HTTP_500_INTERNAL_SERVER_ERROR
+            return api_error(code, data.get('error_msg') or data.get('error') or 'Metadata backup operation failed.')
+        return Response(data, status=response.status_code)
 
 
 class MetadataBackupDownload(MetadataBackupBase):
@@ -107,13 +124,16 @@ class MetadataBackupDownload(MetadataBackupBase):
         _, error = self.check_access(request, repo_id)
         if error:
             return error
-        upstream = _seafevents_request('get', '/metadata-backup/download', params={
-            'repo_id': repo_id,
-            'username': request.user.username,
-            'task_id': task_id,
-        }, stream=True, timeout=300)
+        upstream = download_metadata_backup(task_id, repo_id, request.user.username)
         if upstream.status_code < 200 or upstream.status_code >= 300:
-            return _json_response(upstream)
+            try:
+                data = upstream.json()
+            except ValueError:
+                data = {}
+            finally:
+                upstream.close()
+            code = upstream.status_code if upstream.status_code < 500 else status.HTTP_500_INTERNAL_SERVER_ERROR
+            return api_error(code, data.get('error_msg') or data.get('error') or 'Metadata backup operation failed.')
 
         def stream():
             try:
@@ -130,28 +150,3 @@ class MetadataBackupDownload(MetadataBackupBase):
         if upstream.headers.get('Content-Length'):
             response['Content-Length'] = upstream.headers['Content-Length']
         return response
-
-
-def _seafevents_request(method, path, timeout=30, **kwargs):
-    token = jwt.encode({'exp': int(time.time()) + 300}, SECRET_KEY, algorithm='HS256')
-    headers = kwargs.pop('headers', {})
-    headers['Authorization'] = f'Token {token}'
-    return requests.request(
-        method, urljoin(SEAFEVENTS_SERVER_URL, path),
-        headers=headers, timeout=timeout, **kwargs
-    )
-
-
-def _json_response(response):
-    try:
-        try:
-            data = response.json()
-        except ValueError:
-            data = {}
-        if response.status_code < 200 or response.status_code >= 300:
-            message = data.get('error_msg') or data.get('error') or 'Metadata backup operation failed.'
-            code = response.status_code if response.status_code < 500 else status.HTTP_500_INTERNAL_SERVER_ERROR
-            return api_error(code, message)
-        return Response(data, status=response.status_code)
-    finally:
-        response.close()

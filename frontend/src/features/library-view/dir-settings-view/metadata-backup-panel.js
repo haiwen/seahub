@@ -10,6 +10,13 @@ import { Utils } from '@/utils/utils';
 
 const POLL_INTERVAL = 1000;
 
+const getDownloadFilename = (contentDisposition) => {
+  const encoded = contentDisposition?.match(/filename\*=UTF-8''([^;]+)/i);
+  if (encoded) return decodeURIComponent(encoded[1]);
+  const filename = contentDisposition?.match(/filename="?([^";]+)"?/i);
+  return filename ? filename[1] : 'metadata-backup.xlsx';
+};
+
 const MetadataBackupPanel = ({ repoID, enableMetadata }) => {
   const [operation, setOperation] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -47,7 +54,7 @@ const MetadataBackupPanel = ({ repoID, enableMetadata }) => {
           const url = window.URL.createObjectURL(download.data);
           const link = document.createElement('a');
           link.href = url;
-          link.download = 'metadata-backup.xlsx';
+          link.download = getDownloadFilename(download.headers['content-disposition']);
           document.body.appendChild(link);
           link.click();
           link.remove();

@@ -1008,6 +1008,9 @@ ENABLE_REPO_WIKI_MODE = True
 # Enable metadata for new repo
 ENABLE_METADATA_FOR_NEW_LIBRARY = False
 
+# Maximum size in bytes for metadata Excel backup imports and exports.
+METADATA_BACKUP_FILE_SIZE_LIMIT = 100 * 1024 * 1024
+
 ############################
 # HU berlin additional #
 ############################
