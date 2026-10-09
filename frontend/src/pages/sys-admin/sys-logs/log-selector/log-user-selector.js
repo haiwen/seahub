@@ -31,7 +31,24 @@ class LogUserSelector extends Component {
       isLoading: false
     };
     this.finalValue = '';
+    this.searchRequestId = 0;
     this.selectorId = uniqueId('log-user-selector-');
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.isOpen && !this.props.isOpen) {
+      this.finalValue = '';
+      this.searchRequestId++;
+      this.setState({
+        query: '',
+        searchResults: [],
+        isLoading: false
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    this.searchRequestId++;
   }
 
   onQueryChange = (e) => {
@@ -48,6 +65,7 @@ class LogUserSelector extends Component {
 
   handleSearchUser = (value) => {
     this.finalValue = value;
+    const searchRequestId = ++this.searchRequestId;
     if (!value.trim()) {
       this.setState({
         searchResults: [],
@@ -61,18 +79,19 @@ class LogUserSelector extends Component {
     });
 
     setTimeout(() => {
-      if (this.finalValue === value) {
+      if (this.finalValue === value && this.searchRequestId === searchRequestId) {
         if (this.props.searchUsersFunc) {
           this.props.searchUsersFunc(value).then((res) => {
-            if (this.finalValue !== value) return;
+            if (this.finalValue !== value || this.searchRequestId !== searchRequestId) return;
             const users = res.data.user_list || res.data.users || [];
             this.setState({
               searchResults: users,
               isLoading: false
             }, () => {
+              if (this.finalValue !== value || this.searchRequestId !== searchRequestId) return;
               if (this.props.searchGroupsFunc) {
                 this.props.searchGroupsFunc(value).then((res) => {
-                  if (this.finalValue !== value) return;
+                  if (this.finalValue !== value || this.searchRequestId !== searchRequestId) return;
                   const groups = res.data.group_list || res.data.groups || [];
                   this.setState({
                     searchResults: [...users, ...groups]
@@ -81,7 +100,7 @@ class LogUserSelector extends Component {
               }
             });
           }).catch((error) => {
-            if (this.finalValue !== value) return;
+            if (this.finalValue !== value || this.searchRequestId !== searchRequestId) return;
             this.setState({
               isLoading: false
             });
@@ -91,7 +110,7 @@ class LogUserSelector extends Component {
         }
         if (this.props.searchGroupsFunc && !this.props.searchUsersFunc) {
           this.props.searchGroupsFunc(value).then((res) => {
-            if (this.finalValue !== value) return;
+            if (this.finalValue !== value || this.searchRequestId !== searchRequestId) return;
             const groups = res.data.group_list || res.data.groups || [];
             this.setState({
               searchResults: groups,

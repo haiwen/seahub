@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Input, Popover } from 'reactstrap';
+import { uniqueId } from 'lodash-es';
 import PropTypes from 'prop-types';
 import Icon from '@/components/icon';
+import OpIcon from '@/components/op-icon';
 import toaster from '@/components/toast';
 import { gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
@@ -27,6 +29,24 @@ class LogRepoSelector extends Component {
       searchResults: []
     };
     this.finalValue = '';
+    this.searchRequestId = 0;
+    this.selectorId = uniqueId('log-repo-selector-');
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.isOpen && !this.props.isOpen) {
+      this.finalValue = '';
+      this.searchRequestId++;
+      this.setState({
+        query: '',
+        searchResults: [],
+        isLoading: false
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    this.searchRequestId++;
   }
 
   onQueryChange = (e) => {
@@ -35,19 +55,28 @@ class LogRepoSelector extends Component {
     this.searchRepos(value);
   };
 
+  clearQuery = (e) => {
+    e.stopPropagation();
+    this.setState({ query: '' }, () => this.searchInput.focus());
+    this.searchRepos('');
+  };
+
   searchRepos = (value) => {
     this.finalValue = value;
+    const searchRequestId = ++this.searchRequestId;
     if (value.length > 0) {
       this.setState({ isLoading: true });
       setTimeout(() => {
-        if (this.finalValue === value) {
+        if (this.finalValue === value && this.searchRequestId === searchRequestId) {
           this.props.searchReposFunc(value).then((res) => {
+            if (this.finalValue !== value || this.searchRequestId !== searchRequestId) return;
             const repos = res.data.repo_list || res.data.repos || [];
             this.setState({
               searchResults: repos,
               isLoading: false
             });
           }).catch(error => {
+            if (this.finalValue !== value || this.searchRequestId !== searchRequestId) return;
             this.setState({ isLoading: false });
             let errMessage = Utils.getErrorMsg(error);
             toaster.danger(errMessage);
@@ -55,7 +84,7 @@ class LogRepoSelector extends Component {
         }
       }, 500);
     } else {
-      this.setState({ searchResults: [] });
+      this.setState({ searchResults: [], isLoading: false });
     }
   };
 
@@ -104,9 +133,13 @@ class LogRepoSelector extends Component {
               <li key={index} className="activity-selected-modifier">
                 <i className="fas fa-folder"></i>
                 <span className="activity-user-name" title={item.name}>{item.name}</span>
-                <span className="unselect-activity-user" onClick={(e) => { this.toggleSelectItem(e, item); }}>
-                  <Icon symbol="close" />
-                </span>
+                <OpIcon
+                  id={`${this.selectorId}-remove-${index}`}
+                  symbol="close"
+                  className="unselect-activity-user"
+                  tooltip={gettext('Remove')}
+                  op={(e) => { this.toggleSelectItem(e, item); }}
+                />
               </li>
             ))}
           </ul>
@@ -114,10 +147,20 @@ class LogRepoSelector extends Component {
             <Input
               type="text"
               className="activity-user-selector-input"
+              innerRef={ref => this.searchInput = ref}
               placeholder={gettext('Find libraries')}
               value={query}
               onChange={this.onQueryChange}
             />
+            {query && (
+              <OpIcon
+                id={`${this.selectorId}-clear`}
+                symbol="close"
+                className="activity-user-selector-clear"
+                tooltip={gettext('Clear')}
+                op={this.clearQuery}
+              />
+            )}
           </div>
           {isLoading ? (
             <div className="activity-user-loading">{gettext('Loading...')}</div>
