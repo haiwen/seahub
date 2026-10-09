@@ -94,10 +94,7 @@ def get_org_info(request, org_id):
 
     if dj_settings.ENABLE_SEAFILE_AI and dj_settings.SEAFILE_AI_SERVER_URL:
         credit_info = get_org_ai_credit_info(request.user, org_id)
-        info['ai_credit'] = credit_info['included_ai_credit']
-        info['ai_credit_used'] = round(credit_info['ai_credit_used'], 2)
-        info['additional_ai_credit'] = round(credit_info['additional_ai_credit'], 2)
-        info['available_ai_credit'] = round(credit_info['available_ai_credit'], 2)
+        info.update(credit_info)
 
     info['storage_quota'] = storage_quota
     info['storage_usage'] = storage_usage

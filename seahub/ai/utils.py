@@ -1,5 +1,6 @@
 import json
 import logging
+import math
 import os
 import posixpath
 import re
@@ -186,21 +187,25 @@ def convert_cost_to_credit(cost):
 def get_ai_credit_used_by_user(user, org_id):
     if org_id and org_id > 0:
         cost = get_ai_cost_by_org(org_id)
+        return math.ceil(convert_cost_to_credit(cost))
     else:
         cost = get_ai_cost_by_repo_owner(user.username)
     return convert_cost_to_credit(cost)
 
 
 def get_org_ai_credit_info(user, org_id):
-    included_credit = get_ai_credit_by_user(user, org_id)
+    monthly_credit = get_ai_credit_by_user(user, org_id)
     used_credit = get_ai_credit_used_by_user(user, org_id)
     additional_credit = get_org_additional_ai_credit(org_id)
-    available_credit = -1 if included_credit < 0 else max(included_credit - used_credit, 0) + additional_credit
+    remaining_credit = -1 if monthly_credit < 0 else max(monthly_credit - used_credit, 0)
     return {
-        'included_ai_credit': included_credit,
+        'ai_credit': -1 if monthly_credit < 0 else monthly_credit + additional_credit,
         'ai_credit_used': used_credit,
+        'role_monthly_ai_credit': monthly_credit,
+        'role_ai_credit_used': used_credit if monthly_credit < 0 else min(used_credit, monthly_credit),
+        'role_ai_credit_remaining': remaining_credit,
         'additional_ai_credit': additional_credit,
-        'available_ai_credit': available_credit,
+        'available_ai_credit': -1 if monthly_credit < 0 else remaining_credit + additional_credit,
     }
 
 
@@ -220,7 +225,7 @@ def is_ai_usage_over_limit(user, repo_owner, org_id):
         return False
 
     if org_id and org_id > 0:
-        return used_credit >= ai_credit and get_org_additional_ai_credit(org_id) <= 0
+        return math.ceil(used_credit) >= ai_credit and get_org_additional_ai_credit(org_id) <= 0
 
     return used_credit >= ai_credit
 

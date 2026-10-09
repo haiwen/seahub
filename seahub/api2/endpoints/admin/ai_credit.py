@@ -1,5 +1,3 @@
-import math
-
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
@@ -8,7 +6,8 @@ from rest_framework.views import APIView
 
 from seaserv import ccnet_api
 
-from seahub.ai.credits import set_org_additional_ai_credit
+from seahub.ai.credits import AICreditSessionConflict, InsufficientAICredit, \
+        adjust_org_additional_ai_credit, set_org_additional_ai_credit
 from seahub.ai.utils import get_org_ai_credit_info
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.permissions import IsProVersion
@@ -49,21 +48,40 @@ class AdminOrganizationAICredit(APIView):
         if error:
             return error
 
-        additional_credit = request.data.get('additional_ai_credit')
         try:
-            additional_credit = float(additional_credit)
-        except (TypeError, ValueError):
-            return api_error(status.HTTP_400_BAD_REQUEST, 'additional_ai_credit invalid.')
-
-        if not math.isfinite(additional_credit) or additional_credit < 0:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'additional_ai_credit invalid.')
-
-        set_org_additional_ai_credit(
-            org.org_id,
-            additional_credit,
-            operator=request.user.username,
-        )
+            set_org_additional_ai_credit(org.org_id, request.data.get('balance'), request.user.username)
+        except ValueError as error:
+            return api_error(status.HTTP_400_BAD_REQUEST, str(error))
 
         credit_info = get_org_ai_credit_info(request.user, org.org_id)
         credit_info['org_id'] = org.org_id
         return Response(credit_info)
+
+
+class AdminOrganizationAICreditAdjustments(AdminOrganizationAICredit):
+    http_method_names = ['post', 'options']
+
+    def post(self, request, org_id):
+        org, error = self._validate_org(request, org_id)
+        if error:
+            return error
+
+        try:
+            balance, already_processed = adjust_org_additional_ai_credit(
+                org.org_id,
+                request.data.get('delta'),
+                request.user.username,
+                stripe_session_id=request.data.get('stripe_session_id'),
+            )
+        except ValueError as error:
+            return api_error(status.HTTP_400_BAD_REQUEST, str(error))
+        except InsufficientAICredit:
+            return api_error(status.HTTP_409_CONFLICT, 'Insufficient additional AI credits.')
+        except AICreditSessionConflict:
+            return api_error(status.HTTP_409_CONFLICT, 'stripe_session_id belongs to another organization.')
+
+        return Response({
+            'org_id': org.org_id,
+            'additional_ai_credit': balance,
+            'already_processed': already_processed,
+        })

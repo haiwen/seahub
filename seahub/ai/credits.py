@@ -1,92 +1,85 @@
-import uuid
+from django.conf import settings
+from django.db import transaction
 
-from django.db import IntegrityError, transaction
+from seahub.admin_log.models import ORG_AI_CREDIT_ADJUST, ORG_AI_CREDIT_SET
+from seahub.admin_log.signals import admin_operation
+from seahub.ai.models import OrgAdditionalCredit, OrgAdditionalCreditStripeSession
 
-from seahub.ai.models import AICreditTransaction, OrgAdditionalAICredit
+
+MAX_AI_CREDIT_BALANCE = (1 << 63) - 1
 
 
-class AICreditTransactionConflict(Exception):
+class InsufficientAICredit(Exception):
     pass
 
 
-def _get_existing_transaction(org_id, credit_delta, transaction_id):
-    credit_transaction = AICreditTransaction.objects.filter(transaction_id=transaction_id).first()
-    if not credit_transaction:
-        return None
-    if credit_transaction.org_id != org_id or credit_transaction.requested_delta != credit_delta:
-        raise AICreditTransactionConflict
-    return credit_transaction
+class AICreditSessionConflict(Exception):
+    pass
 
 
 def get_org_additional_ai_credit(org_id):
-    credit = OrgAdditionalAICredit.objects.filter(org_id=org_id).first()
-    return credit.credits if credit else 0
+    balance = OrgAdditionalCredit.objects.filter(org_id=org_id).values_list('balance', flat=True).first()
+    return balance if balance is not None else 0
 
 
-def _ensure_org_additional_ai_credit(org_id):
-    OrgAdditionalAICredit.objects.get_or_create(
-        org_id=org_id,
-        defaults={'credits': 0},
+def _lock_org_credit(org_id):
+    OrgAdditionalCredit.objects.get_or_create(org_id=org_id)
+    return OrgAdditionalCredit.objects.select_for_update().get(org_id=org_id)
+
+
+def _save_credit(credit, balance, operation, operator):
+    before = credit.balance
+    credit.balance = balance
+    credit.save(update_fields=['balance', 'updated_at'])
+    admin_operation.send(
+        sender=None,
+        admin_name=operator,
+        operation=operation,
+        detail={
+            'org_id': credit.org_id,
+            'balance_before': before,
+            'balance_after': balance,
+            'delta': balance - before,
+        },
     )
 
 
-def set_org_additional_ai_credit(org_id, credits, operator=''):
-    _ensure_org_additional_ai_credit(org_id)
+def set_org_additional_ai_credit(org_id, balance, operator):
+    if type(balance) is not int or not 0 <= balance <= MAX_AI_CREDIT_BALANCE:
+        raise ValueError('balance must be a non-negative integer within the BIGINT range.')
+
     with transaction.atomic():
-        credit = OrgAdditionalAICredit.objects.select_for_update().get(org_id=org_id)
-        credits_before = credit.credits
-        credit.credits = credits
-        credit.save(update_fields=['credits', 'updated_at'])
-
-        credit_transaction = AICreditTransaction.objects.create(
-            transaction_id='admin-%s' % uuid.uuid4(),
-            org_id=org_id,
-            operation='set',
-            source='admin',
-            requested_delta=credits - credits_before,
-            applied_delta=credits - credits_before,
-            credits_before=credits_before,
-            credits_after=credits,
-            operator=operator,
-        )
-
-    return credit_transaction
+        credit = _lock_org_credit(org_id)
+        _save_credit(credit, balance, ORG_AI_CREDIT_SET, operator)
+    return balance
 
 
-def adjust_org_additional_ai_credit(org_id, credit_delta, transaction_id, source='billing'):
-    existing_transaction = _get_existing_transaction(org_id, credit_delta, transaction_id)
-    if existing_transaction:
-        return existing_transaction, True
+def adjust_org_additional_ai_credit(org_id, delta, operator, stripe_session_id=None):
+    if type(delta) is not int or delta == 0 or abs(delta) > settings.ORG_ADDITIONAL_AI_CREDIT_MAX_ADJUSTMENT:
+        raise ValueError('delta must be a non-zero integer within the adjustment limit.')
+    if stripe_session_id is not None:
+        if not isinstance(stripe_session_id, str) or not stripe_session_id.strip() or len(stripe_session_id) > 255:
+            raise ValueError('stripe_session_id invalid.')
+        if delta < 0:
+            raise ValueError('delta must be positive for a Stripe payment.')
 
-    _ensure_org_additional_ai_credit(org_id)
-    try:
-        with transaction.atomic():
-            credit = OrgAdditionalAICredit.objects.select_for_update().get(org_id=org_id)
-            existing_transaction = _get_existing_transaction(org_id, credit_delta, transaction_id)
-            if existing_transaction:
-                return existing_transaction, True
-
-            credits_before = credit.credits
-            credits_after = max(credits_before + credit_delta, 0)
-            applied_delta = credits_after - credits_before
-
-            credit.credits = credits_after
-            credit.save(update_fields=['credits', 'updated_at'])
-
-            credit_transaction = AICreditTransaction.objects.create(
-                transaction_id=transaction_id,
-                org_id=org_id,
-                operation='adjust',
-                source=source,
-                requested_delta=credit_delta,
-                applied_delta=applied_delta,
-                credits_before=credits_before,
-                credits_after=credits_after,
+    with transaction.atomic():
+        if stripe_session_id is not None:
+            stripe_session, created = OrgAdditionalCreditStripeSession.objects.get_or_create(
+                stripe_session_id=stripe_session_id,
+                defaults={'org_id': org_id},
             )
-    except IntegrityError:
-        existing_transaction = _get_existing_transaction(org_id, credit_delta, transaction_id)
-        if existing_transaction:
-            return existing_transaction, True
-        raise
+            if stripe_session.org_id != org_id:
+                raise AICreditSessionConflict
+            if not created:
+                return get_org_additional_ai_credit(org_id), True
 
-    return credit_transaction, False
+        credit = _lock_org_credit(org_id)
+        balance = credit.balance + delta
+        if balance < 0:
+            raise InsufficientAICredit
+        if balance > MAX_AI_CREDIT_BALANCE:
+            raise ValueError('balance exceeds the BIGINT range.')
+        _save_credit(credit, balance, ORG_AI_CREDIT_ADJUST, operator)
+
+    return balance, False

@@ -321,17 +321,16 @@ class AccountInfo(APIView):
         if ENABLE_SEAFILE_AI and SEAFILE_AI_SERVER_URL:
             if org_id:
                 credit_info = get_org_ai_credit_info(request.user, org_id)
-                info['ai_credit'] = credit_info['included_ai_credit']
-                info['ai_credit_used'] = round(credit_info['ai_credit_used'], 2)
-                info['additional_ai_credit'] = round(credit_info['additional_ai_credit'], 2)
-                info['available_ai_credit'] = round(credit_info['available_ai_credit'], 2)
+                info.update(credit_info)
             else:
                 info['ai_credit'] = get_ai_credit_by_user(request.user, org_id)
                 info['ai_credit_used'] = round(get_ai_credit_used_by_user(request.user, org_id), 2)
-            if info['ai_credit'] <= 0:
+            monthly_credit = info.get('role_monthly_ai_credit', info['ai_credit'])
+            role_credit_used = info.get('role_ai_credit_used', info['ai_credit_used'])
+            if monthly_credit <= 0:
                 info['ai_usage_rate'] = '0%'
             else:
-                info['ai_usage_rate'] = str(float(info['ai_credit_used']) / info['ai_credit'] * 100) + '%'
+                info['ai_usage_rate'] = str(float(role_credit_used) / monthly_credit * 100) + '%'
 
         if quota_total > 0:
             info['space_usage'] = str(float(quota_usage) / quota_total * 100) + '%'
