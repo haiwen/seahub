@@ -40,6 +40,7 @@
   --bs-popover-body-padding-x: 0;
   width: 300px;
   max-width: calc(100vw - 16px);
+  border-radius: 8px;
   box-shadow: var(--bs-popover-box-shadow);
   overflow: hidden;
 }
@@ -59,7 +60,7 @@
   padding: 8px;
   list-style: none;
   background: var(--bs-th-bg);
-  border-bottom: 1px solid var(--bs-popover-border-color);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
 }
 
 .files-activities-user-selector-popover .activity-selected-modifier,
@@ -140,7 +141,7 @@
   justify-content: center;
   width: 20px;
   height: 20px;
-  border-radius: 3px;
+  border-radius: 4px;
   cursor: pointer;
 }
 
@@ -155,9 +156,9 @@
 }
 
 .files-activities-user-selector-popover .activity-user-list {
-  max-height: calc(200px - 16px);
-  margin: 8px 0;
-  padding: 0 8px;
+  max-height: 200px;
+  margin: 0;
+  padding: 8px;
   overflow-y: auto;
   list-style: none;
 }
@@ -171,7 +172,7 @@
 }
 
 .files-activities-user-selector-popover .activity-user-item:hover {
-  background: var(--bs-body-secondary-bg);
+  background: var(--bs-dropdown-link-hover-bg);
 }
 
 .files-activities-user-selector-popover .activity-user-name {
