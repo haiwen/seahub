@@ -728,7 +728,7 @@ html, body {
   font-size: 26pt;
   font-weight: bold;
   padding-top: 0.5rem;
-  margin-bottom: 1.6em;
+  margin-bottom: .4em;
   color: var(--bs-body-color, #212529);
   word-break: break-word;
 }
