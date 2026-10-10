@@ -41,7 +41,7 @@ expanded and should be migrated when the affected module is touched.
 | `utils` | Other `utils`, `constants` | `api`, `models`, `hooks`, `components`, `features`, `pages` |
 | `models` | Other `models`, `constants`, `utils` | `api`, `hooks`, `components`, `features`, `pages` |
 | `api` | Other `api`, `constants`, `utils` | `models`, `hooks`, `components`, `features`, `pages` |
-| `hooks` | Other `hooks`, `api`, `models`, `constants`, `utils` | `components`, `features`, `pages` |
+| `hooks` | Other `hooks`, shared `components`, `api`, `models`, `constants`, `utils` | `features`, `pages` |
 | `components` | Other shared `components`, `hooks`, `api`, `models`, `constants`, `utils`, `_i18n` | `features`, `pages` |
 | `features` | Its own modules, another feature's public entry point when necessary, shared `components`, `hooks`, `api`, `models`, `constants`, `utils`, `_i18n` | `pages` and another feature's private modules |
 | `pages` | Its own page modules, `features`, `components`, `hooks`, `api`, `models`, `constants`, `utils`, `_i18n` | Another page's private modules |
@@ -51,17 +51,18 @@ In addition to the table above:
 
 - Dependencies are directional and direct. A transitive dependency does not
   grant permission to import a module directly.
-- Do not introduce circular dependencies at either the top-level layer or the
-  feature/component sub-tree level. If two layers need the same behavior,
-  extract the shared contract or implementation into the lowest appropriate
-  layer.
+- Do not introduce circular module dependencies across top-level layers or
+  within feature/component subtrees. Although `hooks` and `components` may
+  import each other, individual module dependencies must remain acyclic. If
+  two modules need the same behavior, extract the shared contract or
+  implementation into the lowest appropriate layer.
 - `src/components` is a shared UI layer. A shared component must not know about
   a specific page or feature. Feature-specific UI belongs under
   `src/features/<feature>/components`; page-specific UI belongs under its page.
-- `src/hooks` contains reusable, UI-agnostic React hooks. A hook that opens a
-  dialog, renders a toast, or imports a feature is a UI workflow and should be
-  colocated with the owning feature/component instead of being added to the
-  global hooks layer.
+- `src/hooks` contains reusable React hooks and may import shared components
+  for reusable UI workflows such as opening a dialog or rendering a toast.
+  Hooks specific to a feature, page, or component should remain colocated with
+  their owner; global hooks must not import features or pages.
 - `src/utils` is for framework-agnostic helpers. API clients belong in
   `src/api`; UI side effects such as rendering a toast or opening a modal do
   not belong in `src/utils`.
@@ -87,7 +88,7 @@ In addition to the table above:
   follow-up migration plan; do not silently weaken the dependency direction.
 
 The current repository contains legacy reverse dependencies, including shared
-components importing feature internals, global hooks importing UI/feature code,
+components importing feature internals, global hooks importing feature/page code,
 and utility/constants modules importing higher-level code. These are migration
 items, not examples for new code.
 
