@@ -194,7 +194,7 @@ const LibrariesAndLinks = ({ ...commonProps }) => {
       ) : (
         <LinksNav currentItem={curTab} sortBy={safeLinkSortBy} sortOrder={safeLinkSortOrder} sortItems={sortItems} />
       )}
-      <Router className="d-flex overflow-hidden">
+      <Router className="reach-router overflow-hidden">
         <AllRepos
           path="all-libraries"
           sortBy={sortBy}
