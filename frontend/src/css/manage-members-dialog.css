@@ -21,6 +21,11 @@
   position: relative;
 }
 
+.group-manage-members-dialog .add-members > .position-relative {
+  flex: 1;
+  min-width: 0;
+}
+
 .group-error {
   margin-top: 10px;
 }
