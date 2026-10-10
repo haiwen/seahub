@@ -102,4 +102,4 @@ if [[ -d ${INSTALLPATH}/pro ]]; then
 fi
 
 manage_py=${INSTALLPATH}/seahub/manage.py
-exec "$PYTHON" "$manage_py" createsuperuser
+exec "$PYTHON" "$manage_py" createsuperuser "$@"
