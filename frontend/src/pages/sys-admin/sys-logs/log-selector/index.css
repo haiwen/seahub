@@ -61,12 +61,6 @@
   line-height: 20px;
 }
 
-.activity-user-selector-popover .avatar {
-  flex-shrink: 0;
-  width: 16px;
-  height: 16px;
-}
-
 .unselect-activity-user {
   display: inline-flex;
   flex-shrink: 0;
@@ -158,16 +152,6 @@
   list-style: none;
 }
 
-.log-user-selector-popover {
-  border-radius: 8px;
-}
-
-.log-user-selector-popover .activity-user-list {
-  max-height: 200px;
-  margin: 0;
-  padding: 8px;
-}
-
 .activity-user-loading {
   display: flex;
   align-items: center;
@@ -185,10 +169,6 @@
 
 .activity-user-item:hover {
   background: var(--bs-body-secondary-bg);
-}
-
-.log-user-selector-popover .activity-user-item:hover {
-  background: var(--bs-dropdown-link-hover-bg);
 }
 
 .activity-user-name {

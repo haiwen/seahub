@@ -5,9 +5,11 @@
   background-clip: padding-box;
   width: 100%;
   padding: 8px 36px 8px 8px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 4px;
+  height: 38px;
   min-height: 38px;
+  overflow: hidden;
   font-weight: 400;
   line-height: 20px;
   background-color: inherit;
@@ -18,7 +20,18 @@
   background-color: var(--bs-th-bg);
 }
 
+.user-select-trigger__content {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
 .user-select-trigger .user-item {
+  flex-shrink: 0;
+  max-width: none;
   margin: 0;
 }
 
@@ -26,156 +39,19 @@
   color: #868e96;
 }
 
-.user-select-popover {
-  --bs-popover-border-color: var(--bs-border-quartus-color);
-  --bs-popover-body-padding-x: 0;
-  --bs-popover-body-padding-y: 0;
-  max-width: max-content;
-  border-radius: 8px;
-  box-shadow: var(--bs-popover-box-shadow);
-  overflow: hidden;
-}
-
-.user-select-popover .popover {
-  max-width: max-content;
-  border-radius: 8px;
-}
-
-.selected-user-item-container.focus {
-  border: 1px solid var(--bs-form-select-focus-border-color);
-}
-
-.selected-user-item-container .user-select-placeholder {
-  color: #868e96;
-}
-
-.user-select-container {
-  position: relative;
-}
-
-.user-select-container .user-select-selected-users {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px;
-  min-height: 36px;
-  padding: 8px;
-  background-color: var(--bs-th-bg);
-  border-bottom: 1px solid var(--bs-border-secondary-color);
-}
-
-.user-select-container .user-select-selected-users .user-item {
-  margin: 0;
-}
-
-.user-select-container .user-search-container {
-  width: 100%;
-  min-width: 170px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: 8px 8px 0;
-}
-
-.user-select-container .user-search-container .form-control {
-  height: 28px;
-  border: 1px solid var(--bs-border-secondary-color);
-  border-radius: 4px;
-  padding: 3px 28px 3px 8px;
-  color: var(--bs-body-color);
-  font-size: 13px;
-  line-height: 20px;
-  cursor: text;
-}
-
-.user-select-container .user-search-container .form-control:focus {
-  outline: none;
-  border-color: var(--bs-form-select-focus-border-color);
-  box-shadow: none;
-  background-color: var(--bs-popover-bg);
-}
-
-.user-select-container .user-search-container .form-control::placeholder {
-  color: var(--bs-placeholder-input-color);
-  opacity: 1;
-}
-
-.user-select-container .user-search-container .search-text-clear {
-  width: 20px;
-  min-width: 20px;
-  height: 20px;
-  top: 12px;
-  right: 12px;
-  color: var(--bs-icon-color);
-  font-size: 12px;
-  cursor: pointer;
-  pointer-events: auto;
-}
-
-.user-select-container .user-search-container .search-text-clear:hover {
-  background-color: var(--bs-icon-btn-hover-bg-color);
-  border-radius: 4px;
-}
-
-.user-select-container .user-list-container {
-  max-height: 200px;
-  overflow-x: hidden;
-}
-
-.user-select-container .user-list-container:not(.user-list-container-empty) {
-  padding: 8px;
-  overflow-y: auto;
-}
-
-.user-select-container .user-list-container.user-list-container-empty {
-  padding: 48px 8px;
-  overflow: hidden;
-}
-
-.user-select-container .user-list-container .user-item-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 32px;
-  padding: 0 8px;
-  font-size: 14px;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-.user-select-container .user-list-container .user-item-container:hover,
-.user-select-container .user-list-container .user-item-container-highlight {
-  background: var(--bs-dropdown-link-hover-bg);
-  cursor: pointer;
-}
-
-.user-select-container .user-list-container .search-empty-tip {
-  height: auto;
-  padding: 0;
-  color: var(--bs-body-secondary-color);
-  font-size: 14px;
-  line-height: 22px;
-}
-
-.user-select-container .user-list-container .user-select-check-icon {
-  flex-shrink: 0;
-  width: 14px;
-  height: 14px;
-  color: var(--bs-icon-color);
-}
-
-.user-select-popover .popover .user-item {
-  background: transparent;
-  margin: 0;
-  overflow: hidden;
-}
-
-.user-select-popover .user-item .user-name-container {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .user-select-trigger .user-item .user-name-container {
-  overflow: hidden;
+  overflow: visible;
+}
+
+.user-select-trigger .user-item .user-name {
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.user-select-trigger .user-item .user-remove {
+  flex-shrink: 0;
+}
+
+.user-select-trigger .user-item .user-name {
+  color: var(--bs-body-color);
 }
