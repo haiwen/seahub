@@ -108,6 +108,8 @@ class Item extends Component {
       case 'user_migrate': return gettext('Migrate User');
       case 'group_member_add': return gettext('Add User to Group');
       case 'group_member_delete': return gettext('Delete User from Group');
+      case 'org_ai_credit_set': return gettext('Set organization AI credits');
+      case 'org_ai_credit_adjust': return gettext('Adjust organization AI credits');
       default: return '';
     }
   };
@@ -134,6 +136,14 @@ class Item extends Component {
     }
 
     switch (item.operation) {
+      case 'org_ai_credit_set':
+      case 'org_ai_credit_adjust':
+        return gettext('Organization {org_id}: AI credit balance changed from {before} to {after} (delta: {delta})')
+          .replace('{org_id}', Utils.HTMLescape(String(detail.org_id)))
+          .replace('{before}', Utils.HTMLescape(String(detail.balance_before)))
+          .replace('{after}', Utils.HTMLescape(String(detail.balance_after)))
+          .replace('{delta}', Utils.HTMLescape(String(detail.delta)));
+
       case 'repo_create':
         detailText = gettext('Created library {library_name} with {owner} as its owner')
           .replace('{owner}', '<a href="' + ownerPageUrl + '">' + detail.owner + '</a>');
