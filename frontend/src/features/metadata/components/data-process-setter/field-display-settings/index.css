@@ -6,7 +6,7 @@
   align-items: center;
   color: #ccc;
   cursor: pointer;
-  transition: transform .3s cubic-bezier(.645,.045,.355,1);
+  transition: transform .3s cubic-bezier(.645, .045, .355, 1);
 }
 
 .sf-metadata-field-display-setting .sf-metadata-field-display-setting-header .sf-metadata-field-display-toggle-btn:hover {
@@ -50,14 +50,6 @@
   vertical-align: -0.15em;
 }
 
-.sf-metadata-field-display-setting-item-container .sf-metadata-switch.custom-switch {
-  width: 100%;
-  padding-left: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
 .sf-metadata-field-display-setting-item-container .sf-metadata-switch .custom-switch .seafile-multicolor-icon {
   fill: #666;
   transform: scale(0.8);
@@ -67,26 +59,11 @@
 }
 
 .sf-metadata-field-display-setting-item-container .sf-metadata-switch .custom-switch .custom-switch-description {
-  margin-left: 0;
-  padding-right: 5px;
   flex: 1;
-  transition: .3s color;
 }
 
 .sf-metadata-field-display-setting-item-container .sf-metadata-switch .custom-switch .custom-switch-indicator {
-  width: 22px;
-  height: 12px;
-  border-radius: 6px;
   margin-right: .25rem;
-}
-
-.sf-metadata-field-display-setting-item-container .sf-metadata-switch .custom-switch .custom-switch-indicator::before {
-  height: 8px;
-  width: 8px;
-}
-
-.sf-metadata-field-display-setting-item-container .sf-metadata-switch .custom-switch-input:checked~.custom-switch-indicator:before {
-  left: 12px;
 }
 
 .sf-metadata-field-display-setting-item-container.hide-column-can-drop::after,

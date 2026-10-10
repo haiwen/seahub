@@ -5,9 +5,9 @@ import { Utils } from '@/utils/utils';
 
 import './index.css';
 
-function Switch({ onChange, checked, placeholder, disabled, className, size, textPosition = 'left', setRef }) {
+function Switch({ onChange, checked, placeholder, disabled, className, size, isSettingItem, textPosition = 'left', setRef }) {
   return (
-    <div className={classnames('seahub-switch position-relative', className, size, { 'disabled': disabled })} ref={setRef}>
+    <div className={classnames('seahub-switch position-relative', className, size, isSettingItem && 'seahub-switch--setting-item', { 'disabled': disabled })} ref={setRef}>
       <label className="custom-switch">
         <input
           className="custom-switch-input"
@@ -35,7 +35,8 @@ Switch.propTypes = {
   disabled: PropTypes.bool,
   placeholder: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   className: PropTypes.string,
-  size: PropTypes.oneOf(['large', 'small', undefined]),
+  size: PropTypes.oneOf(['small', undefined]),
+  isSettingItem: PropTypes.bool,
   textPosition: PropTypes.oneOf(['left', 'right', undefined]),
   onChange: PropTypes.func,
   setRef: PropTypes.func

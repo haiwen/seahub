@@ -95,7 +95,6 @@ const MetadataTagsStatusDialog = ({
           <Switch
             checked={value}
             disabled={submitting || isMigrating || !enableMetadata}
-            size="large"
             textPosition="right"
             onChange={onValueChange}
             placeholder={gettext('Tags')}

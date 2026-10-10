@@ -57,21 +57,6 @@
   color: var(--bs-body-color);
 }
 
-.transfer-repo-reshare-switch .custom-switch-indicator {
-  border-radius: 8px;
-  height: 16px;
-  width: 28px;
-}
-
-.transfer-repo-reshare-switch .custom-switch .custom-switch-indicator:before {
-  height: 12px;
-  width: 12px;
-}
-
-.transfer-repo-reshare-switch .custom-switch .custom-switch-input:checked~.custom-switch-indicator:before {
-  left: 12px;
-}
-
 .transfer-dialog-content .transfer-dialog-main .transfer-repo-department-select {
   min-height: 38px;
   padding: 6px 40px 6px 16px;

@@ -50,20 +50,6 @@
   min-height: 2rem;
 }
 
-.library-setting-item .seahub-switch.large .custom-switch-indicator {
-  width: 1.75rem;
-  height: 1rem;
-}
-
-.library-setting-item .seahub-switch.large .custom-switch-indicator::before {
-  width: .75rem;
-  height: .75rem;
-}
-
-.library-setting-item .seahub-switch.large .custom-switch-input:checked~.custom-switch-indicator::before {
-  left: 14px;
-}
-
 .library-setting-item .setting-tip {
   font-size: .75rem;
   line-height: 1.25rem;

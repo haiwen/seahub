@@ -81,6 +81,8 @@ const Settings = ({
       <div className="setting-panel-body">
         <div className="setting-item">
           <Switch
+            size="small"
+            isSettingItem
             placeholder={gettext('Don\'t show empty values')}
             checked={settings[CARD_SETTINGS_KEYS.HIDE_EMPTY_VALUE] || false}
             onChange={() => handleUpdateSettings(CARD_SETTINGS_KEYS.HIDE_EMPTY_VALUE, !settings[CARD_SETTINGS_KEYS.HIDE_EMPTY_VALUE])}
@@ -89,6 +91,8 @@ const Settings = ({
         <div className="sf-metadata-setting-divide-line"></div>
         <div className="setting-item">
           <Switch
+            size="small"
+            isSettingItem
             placeholder={gettext('Show property names')}
             checked={settings[CARD_SETTINGS_KEYS.SHOW_COLUMN_NAME] || false}
             onChange={() => handleUpdateSettings(CARD_SETTINGS_KEYS.SHOW_COLUMN_NAME, !settings[CARD_SETTINGS_KEYS.SHOW_COLUMN_NAME])}
@@ -97,6 +101,8 @@ const Settings = ({
         <div className="sf-metadata-setting-divide-line"></div>
         <div className="setting-item">
           <Switch
+            size="small"
+            isSettingItem
             placeholder={gettext('Text wraps')}
             checked={settings[CARD_SETTINGS_KEYS.TEXT_WRAP] || false}
             onChange={() => handleUpdateSettings(CARD_SETTINGS_KEYS.TEXT_WRAP, !settings[CARD_SETTINGS_KEYS.TEXT_WRAP])}
