@@ -71,7 +71,7 @@ $el.removeClass('vh');
 
 $('input[name="password"]').trigger('focus');
 
-$('#toggle-show-password').click(function() {
+$('#toggle-show-password').on('click', function() {
   $(this).toggleClass('password-visibility-icon-visible');
   if (!$(this).hasClass('password-visibility-icon-visible')) {
     $('#password-input').attr('type', 'password');
