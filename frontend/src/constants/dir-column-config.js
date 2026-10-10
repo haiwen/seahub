@@ -1,5 +1,6 @@
-import { CellType, PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
-import { gettext } from '@/utils/constants';
+import { CellType, PRIVATE_COLUMN_KEY } from './metadata-column';
+
+const gettext = window.gettext || ((str) => str);
 
 // List mode
 export const DIR_COLUMN_KEYS = {
