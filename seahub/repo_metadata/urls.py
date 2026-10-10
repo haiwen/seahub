@@ -5,6 +5,8 @@ from .apis import MetadataRecords, MetadataManage, MetadataColumns, MetadataReco
     MetadataTagsLinks, MetadataFileTags, MetadataTagFiles, MetadataMergeTags, MetadataTagsFiles, MetadataDetailsSettingsView, \
     MetadataMigrateTags, MetadataExportTags, MetadataImportTags, MetadataGlobalHiddenColumnsView, \
     MetadataBatchRecords, MetadataStatistics, MetadataCheckRecordsLimit, MetadataAISummaryStatusManage
+from .backup_apis import MetadataBackupExport, MetadataBackupImport, MetadataBackupTask, \
+    MetadataBackupRestore, MetadataBackupDownload
 
 urlpatterns = [
     re_path(r'^$', MetadataManage.as_view(), name='api-v2.1-metadata'),
@@ -39,6 +41,13 @@ urlpatterns = [
     re_path(r'^global-hidden-columns/$', MetadataGlobalHiddenColumnsView.as_view(), name='api-v2.1-metadata-global-hidden-columns'),
 
     re_path(r'^check-records-limit/$', MetadataCheckRecordsLimit.as_view(), name='api-v2.1-metadata-check-records-limit'),
+
+    # backup and restore
+    re_path(r'^backup/export/$', MetadataBackupExport.as_view(), name='api-v2.1-metadata-backup-export'),
+    re_path(r'^backup/import/$', MetadataBackupImport.as_view(), name='api-v2.1-metadata-backup-import'),
+    re_path(r'^backup/tasks/(?P<task_id>[-0-9a-f]{36})/$', MetadataBackupTask.as_view(), name='api-v2.1-metadata-backup-task'),
+    re_path(r'^backup/tasks/(?P<task_id>[-0-9a-f]{36})/restore/$', MetadataBackupRestore.as_view(), name='api-v2.1-metadata-backup-restore'),
+    re_path(r'^backup/tasks/(?P<task_id>[-0-9a-f]{36})/download/$', MetadataBackupDownload.as_view(), name='api-v2.1-metadata-backup-download'),
 
     # tags api
     re_path(r'^tags-status/$', MetadataTagsStatusManage.as_view(), name='api-v2.1-metadata-tags-status'),
