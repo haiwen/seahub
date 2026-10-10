@@ -1,20 +1,37 @@
-.user-select-trigger {
+.user-select-trigger.sf-select {
   position: relative;
   display: flex;
   appearance: none;
   background-clip: padding-box;
   width: 100%;
-  padding: 8px;
-  flex-wrap: wrap;
+  padding: 8px 36px 8px 8px;
+  flex-wrap: nowrap;
   gap: 4px;
+  height: 38px;
   min-height: 38px;
+  overflow: hidden;
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 20px;
   background-color: inherit;
   align-items: center;
 }
 
+.user-select-trigger.has-selected-users {
+  background-color: var(--bs-th-bg);
+}
+
+.user-select-trigger__content {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
 .user-select-trigger .user-item {
+  flex-shrink: 0;
+  max-width: none;
   margin: 0;
 }
 
@@ -22,110 +39,19 @@
   color: #868e96;
 }
 
-.user-select-popover {
-  max-width: max-content;
-  border-radius: 4px;
-}
-
-.user-select-popover .popover {
-  max-width: max-content;
-  border-radius: 4px;
-}
-
-.selected-user-item-container.focus {
-  border: 1px solid var(--bs-form-select-focus-border-color);
-}
-
-.selected-user-item-container .user-select-placeholder {
-  color: #868e96;
-}
-
-.user-select-container {
-  position: relative;
-}
-
-.user-select-container .user-search-container {
-  width: 100%;
-  min-width: 170px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: 0;
-  height: 32px;
-  border-bottom: 1px solid var(--bs-border-secondary-color);
-}
-
-.user-select-container .user-search-container .form-control {
-  height: 32px;
-  border: none;
-  border-radius: 4px;
-  padding: 6px 40px 6px 16px;
-  cursor: pointer;
-}
-
-.user-select-container .user-search-container .form-control:focus {
-  outline: none;
-  box-shadow: none;
-  background-color: transparent;
-}
-
-.user-select-container .user-search-container .input-icon-addon {
-  width: 20px;
-  min-width: 20px;
-  height: 20px;
-  top: 6px;
-  right: 13px;
-  font-size: .875rem;
-  cursor: pointer;
-  pointer-events: auto;
-}
-
-.user-select-container .user-search-container .input-icon-addon:hover {
-  background-color: var(--bs-icon-btn-hover-bg-color);
-  border-radius: 3px;
-}
-
-.user-select-container .user-list-container {
-  min-height: 40px;
-  max-height: 200px;
-  margin: 8px 0;
-  padding: 0 8px;
-  overflow: auto;
-}
-
-.user-select-container .user-list-container .user-item-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 32px;
-  padding: 0 8px;
-  font-size: 14px;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-.user-select-container .user-list-container .user-item-container:hover,
-.user-select-container .user-list-container .user-item-container-highlight {
-  background: var(--bs-bg-color);
-  cursor: pointer;
-}
-
-.user-select-container .user-list-container .search-empty-tip {
-  margin: -8px 0;
-}
-
-.user-select-popover .popover .user-item {
-  background: transparent;
-  margin: 0;
-  overflow: hidden;
-}
-
-.user-select-popover .user-item .user-name-container {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .user-select-trigger .user-item .user-name-container {
-  overflow: hidden;
+  overflow: visible;
+}
+
+.user-select-trigger .user-item .user-name {
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.user-select-trigger .user-item .user-remove {
+  flex-shrink: 0;
+}
+
+.user-select-trigger .user-item .user-name {
+  color: var(--bs-body-color);
 }

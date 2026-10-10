@@ -1,18 +1,16 @@
 import React from 'react';
-import { Popover } from 'reactstrap';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
+import ClickOutside from '@/components/click-outside';
+import UserSelectPopover from '@/components/popover/user-select-popover';
+import SearchInput from '@/components/search-input';
+import SelectDropdownIndicator from '@/components/select-dropdown-indicator';
+import toaster from '@/components/toast';
+import UserItem from '@/components/user-item';
 import KeyCodes from '@/constants/keyCodes';
-import { gettext } from '@/utils/constants';
+import { gettext, enableShowContactEmailWhenSearchUser, enableShowLoginIDWhenSearchUser } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
-import ClickOutside from '../click-outside';
-import Icon from '../icon';
-import SearchEmptyTip from '../search-empty-tip';
-import SearchInput from '../search-input';
-import SelectDropdownIndicator from '../select-dropdown-indicator';
-import toaster from '../toast';
-import UserItem from '../user-item';
 
 import './index.css';
 
@@ -39,6 +37,7 @@ class UserSelect extends React.Component {
       searchValue: '',
       highlightIndex: -1,
       popoverWidth: 385,
+      isPopoverOpen: false,
     };
   }
 
@@ -66,18 +65,6 @@ class UserSelect extends React.Component {
   };
 
   componentDidMount() {
-    if (this.ref) {
-      const { bottom } = this.ref.getBoundingClientRect();
-      if (bottom > window.innerHeight) {
-        this.ref.style.top = `${window.innerHeight - bottom}px`;
-      }
-    }
-    if (this.container && this.userItem) {
-      this.setState({
-        maxItemNum: this.getMaxItemNum(),
-        itemHeight: parseInt(getComputedStyle(this.userItem, null).height)
-      });
-    }
     if (this.selectedUserItemContainer) {
       this.setState({
         popoverWidth: this.selectedUserItemContainer.offsetWidth
@@ -97,6 +84,7 @@ class UserSelect extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    this.updateListMetrics();
     if (
       this.state.isPopoverOpen &&
       prevProps.selectedUsers !== this.props.selectedUsers
@@ -104,6 +92,27 @@ class UserSelect extends React.Component {
       this.updatePopoverPosition();
     }
   }
+
+  updateListMetrics = () => {
+    if (this.container && this.userItem) {
+      const maxItemNum = this.getMaxItemNum();
+      const itemHeight = parseInt(getComputedStyle(this.userItem).height);
+      if (Number.isFinite(maxItemNum) && Number.isFinite(itemHeight) && (maxItemNum !== this.state.maxItemNum || itemHeight !== this.state.itemHeight)) {
+        this.setState({ maxItemNum, itemHeight });
+      }
+    }
+  };
+
+  setListRef = (ref) => {
+    this.container = ref;
+    this.updateListMetrics();
+  };
+
+  setOptionRef = (ref, index) => {
+    if (index !== 0) return;
+    this.userItem = ref;
+    this.updateListMetrics();
+  };
 
   componentWillUnmount() {
     if (this.resizeObserver) {
@@ -132,6 +141,10 @@ class UserSelect extends React.Component {
   };
 
   onHotKey = (e) => {
+    if (!this.state.isPopoverOpen || e.isComposing || e.keyCode === 229) return;
+    if (!this.selectedUserItemContainer.contains(e.target) && !(this.panel && this.panel.contains(e.target))) return;
+    // Buttons and focusable options retain their own Enter/Space activation.
+    if (e.keyCode === KeyCodes.Enter && e.target.tagName !== 'INPUT') return;
     if (e.keyCode === KeyCodes.Enter) {
       this.onEnter(e);
     } else if (e.keyCode === KeyCodes.UpArrow) {
@@ -207,7 +220,7 @@ class UserSelect extends React.Component {
 
   onUserClick = (user) => {
     const { isMulti = true } = this.props;
-    let selectedUsers = this.props.selectedUsers.slice(0);
+    let selectedUsers = (this.props.selectedUsers || []).slice(0);
     const index = selectedUsers.findIndex(item => item.email === user.email);
     if (isMulti) {
       if (index > -1) {
@@ -255,6 +268,35 @@ class UserSelect extends React.Component {
     });
   };
 
+  setPopoverUpdate = (update) => {
+    this.updatePopover = update;
+  };
+
+  toOption = (user) => ({
+    key: `user:${user.email}`,
+    name: user.name,
+    avatarUrl: user.avatar_url,
+    secondaryText: [
+      enableShowContactEmailWhenSearchUser ? `(${user.contact_email})` : null,
+      enableShowLoginIDWhenSearchUser ? `(${user.login_id})` : null,
+    ].filter(Boolean).join(' ') || null,
+    data: user,
+  });
+
+  renderSearchInput = ({ className, renderClearButton }) => (
+    <SearchInput
+      autoFocus={true}
+      className={className}
+      placeholder={this.props.searchPlaceholder || gettext('Search users')}
+      value={this.state.searchValue}
+      onChange={this.onValueChanged}
+      onKeyDown={this.onKeyDown}
+      isClearable={true}
+      clearValue={() => this.onValueChanged('')}
+      components={{ ClearIndicator: ({ clearValue }) => renderClearButton(clearValue) }}
+    />
+  );
+
   render() {
     const { searchValue, highlightIndex, searchedUsers } = this.state;
     const { className = '', selectedUsers = [] } = this.props;
@@ -262,7 +304,10 @@ class UserSelect extends React.Component {
       <ClickOutside onClickOutside={this.onClickOutside}>
         <>
           <div
-            className={classnames('user-select-trigger sf-select justify-content-start', className, { 'focus': this.state.isPopoverOpen })}
+            className={classnames('user-select-trigger sf-select justify-content-start', className, {
+              'focus': this.state.isPopoverOpen,
+              'has-selected-users': selectedUsers.length > 0,
+            })}
             id={this.triggerId}
             tabIndex={0}
             role="button"
@@ -272,79 +317,46 @@ class UserSelect extends React.Component {
             onKeyDown={Utils.onKeyDown}
             ref={ref => this.selectedUserItemContainer = ref}
           >
-            {selectedUsers.map((user, index) => {
-              return (
-                <UserItem
-                  key={index}
-                  idx={index}
-                  user={user}
-                  enableDeleteUser={true}
-                  onDeleteUser={this.onDeleteSelectedCollaborator}
-                />
-              );
-            })}
-            {selectedUsers.length === 0 && (
-              <div className="user-select-placeholder">
-                {this.props.placeholder || gettext('Select users')}
-              </div>
-            )}
+            <div className="user-select-trigger__content">
+              {selectedUsers.map((user, index) => {
+                return (
+                  <UserItem
+                    key={index}
+                    idx={index}
+                    removeButtonId={`${this.triggerId}-trigger-remove-${index}`}
+                    user={user}
+                    enableDeleteUser={true}
+                    onDeleteUser={this.onDeleteSelectedCollaborator}
+                  />
+                );
+              })}
+              {selectedUsers.length === 0 && (
+                <div className="user-select-placeholder">
+                  {this.props.placeholder || gettext('Select users')}
+                </div>
+              )}
+            </div>
             <SelectDropdownIndicator />
           </div>
-          <Popover
-            placement="bottom-start"
+          <UserSelectPopover
             isOpen={this.state.isPopoverOpen}
             target={this.triggerId}
-            hideArrow={true}
-            fade={false}
-            popperClassName="user-select-popover"
-            style={{ width: this.state.popoverWidth }}
-            offset={[0, 4]}
-          >
-            {({ update }) => {
-              this.updatePopover = update;
-              return (
-                <div className="user-select-container" ref={ref => this.ref = ref} onMouseDown={e => e.stopPropagation()}>
-                  <div className="user-search-container">
-                    <SearchInput
-                      autoFocus={true}
-                      placeholder={this.props.searchPlaceholder || gettext('Search users')}
-                      value={searchValue}
-                      onChange={this.onValueChanged}
-                      onKeyDown={this.onKeyDown}
-                      isClearable={true}
-                      clearValue={() => this.onValueChanged('')}
-                    />
-                  </div>
-                  <div className="user-list-container" ref={ref => this.container = ref}>
-                    {searchedUsers.length > 0 && (
-                      searchedUsers.map((user, index) => {
-                        return (
-                          <div
-                            key={user.email}
-                            className={classnames('user-item-container', { 'user-item-container-highlight': index === highlightIndex })}
-                            ref={ref => this.userItem = ref}
-                            onClick={this.onUserClick.bind(this, user)}
-                            tabIndex={0}
-                            role="option"
-                            aria-selected={index === highlightIndex}
-                            onKeyDown={Utils.onKeyDown}
-                          >
-                            <UserItem user={user} enableDeleteUser={false} />
-                            {selectedUsers.find(u => u.email === user.email) && <span><Icon symbol="check" /></span>}
-                          </div>
-                        );
-                      })
-                    )}
-                    {searchedUsers.length === 0 &&
-                      <SearchEmptyTip
-                        imageType={searchValue ? 'no-results' : 'start-searching'}
-                        text={searchValue ? gettext('User not found') : gettext('Enter characters to start searching')}
-                      />}
-                  </div>
-                </div>
-              );
-            }}
-          </Popover>
+            onToggle={this.onTogglePopover}
+            trigger="manual"
+            width={this.state.popoverWidth}
+            options={searchedUsers.map(this.toOption)}
+            selectedOptions={selectedUsers.map(this.toOption)}
+            query={searchValue}
+            highlightIndex={highlightIndex}
+            emptyText={searchValue ? gettext('No results') : gettext('Enter characters to start searching')}
+            renderSearchInput={this.renderSearchInput}
+            onSelect={option => this.onUserClick(option.data)}
+            onRemove={option => this.onDeleteSelectedCollaborator(option.data)}
+            panelRef={ref => this.panel = ref}
+            listRef={this.setListRef}
+            optionRef={this.setOptionRef}
+            onPopoverUpdate={this.setPopoverUpdate}
+          />
         </>
       </ClickOutside>
     );

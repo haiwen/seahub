@@ -1,8 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
+import OpIcon from '@/components/op-icon';
 import { gettext, enableShowContactEmailWhenSearchUser, enableShowLoginIDWhenSearchUser } from '@/utils/constants';
-import OpIcon from '../op-icon';
 
 import './index.css';
 
@@ -18,6 +18,8 @@ const propTypes = {
   className: PropTypes.string,
   enableDeleteUser: PropTypes.bool,
   onDeleteUser: PropTypes.func,
+  secondaryText: PropTypes.string,
+  removeButtonId: PropTypes.string,
 };
 
 class UserItem extends React.Component {
@@ -25,11 +27,11 @@ class UserItem extends React.Component {
   onDeleteUser = (event) => {
     event.stopPropagation();
     event && event.nativeEvent.stopImmediatePropagation();
-    this.props.onDeleteUser(this.props.user);
+    this.props.onDeleteUser(this.props.user, event);
   };
 
   render() {
-    const { idx, className, user, enableDeleteUser = true } = this.props;
+    const { idx, className, user, enableDeleteUser = true, secondaryText, removeButtonId } = this.props;
     const { name, avatar_url, contact_email, login_id } = user;
     return (
       <div className={classnames('user-item', className)} title={name}>
@@ -38,12 +40,18 @@ class UserItem extends React.Component {
         </span>
         <div className="user-name-container d-flex align-items-center">
           <span className="user-name text-truncate">{name}</span>
-          {(enableShowContactEmailWhenSearchUser && !enableDeleteUser) && <span className="user-option-email">({contact_email})</span>}
-          {(enableShowLoginIDWhenSearchUser && !enableDeleteUser) && <span className="user-option-email">({login_id})</span>}
+          {secondaryText !== undefined ? (
+            secondaryText && <span className="user-option-email">{secondaryText}</span>
+          ) : (
+            <>
+              {(enableShowContactEmailWhenSearchUser && !enableDeleteUser) && <span className="user-option-email">({contact_email})</span>}
+              {(enableShowLoginIDWhenSearchUser && !enableDeleteUser) && <span className="user-option-email">({login_id})</span>}
+            </>
+          )}
         </div>
         {enableDeleteUser && (
           <OpIcon
-            id={`remove-btn-${idx}`}
+            id={removeButtonId || `remove-btn-${idx}`}
             className="user-remove"
             symbol="close"
             tooltip={gettext('Remove')}
