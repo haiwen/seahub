@@ -2208,6 +2208,7 @@ class LibContentView extends React.Component {
         direntList: nextDirentList,
         selectedDirentList: [],
         lastSelectedIndex: nextSelectedIndex,
+        currentDirent: null,
         detailDirent: null,
       });
     }
@@ -2226,7 +2227,9 @@ class LibContentView extends React.Component {
         isDirentSelected: isAllDirentSelected,
         isAllDirentSelected: isAllDirentSelected,
         direntList: direntList,
-        selectedDirentList: isAllDirentSelected ? [...direntList] : []
+        selectedDirentList: isAllDirentSelected ? [...direntList] : [],
+        currentDirent: shouldUnselectAll ? null : prevState.currentDirent,
+        detailDirent: shouldUnselectAll ? null : prevState.detailDirent,
       };
     });
   };

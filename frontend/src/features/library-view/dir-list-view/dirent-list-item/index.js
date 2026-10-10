@@ -309,7 +309,11 @@ class DirentListItem extends React.Component {
         onItemRename: this.onItemRenameToggle,
         onItemDelete: this.props.onItemDelete,
         onItemConvert: this.props.onItemConvert,
-        showDirentDetail: this.props.showDirentDetail,
+        showDirentDetail: () => {
+          event.stopPropagation();
+          this.props.onDirentClick(this.props.dirent);
+          this.props.showDirentDetail();
+        },
         loadDirentList: this.props.loadDirentList
       });
     }
