@@ -1,7 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { siteRoot } from '@/utils/constants';
-import { VIEW_TYPE_DEFAULT_BASIC_FILTER, VIEW_TYPE_DEFAULT_SORTS } from './constants';
 
 class MetadataManagerAPI {
 
@@ -180,15 +179,12 @@ class MetadataManagerAPI {
     return this.req.get(url);
   };
 
-  addView = (repoID, name, type = 'table', folder_id = '') => {
+  addView = (repoID, name, type = 'table', folder_id = '', data = {}) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/views/';
     let params = {
       name,
       type,
-      data: {
-        basic_filters: VIEW_TYPE_DEFAULT_BASIC_FILTER[type],
-        sorts: VIEW_TYPE_DEFAULT_SORTS[type],
-      }
+      data,
     };
     if (folder_id) {
       params.folder_id = folder_id;

@@ -9,6 +9,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
+import metadataAPI from '@/api/metadata-api';
 import { seafileAPI } from '@/api/seafile-api';
 import CopyMoveDirentProgressDialog from '@/components/dialog/copy-move-dirent-progress-dialog';
 import DeleteFolderDialog from '@/components/dialog/delete-folder-dialog';
@@ -47,7 +48,6 @@ import { getDirTableColumnOrder, setDirTableColumnOrder } from '@/features/libra
 import Detail from '@/features/library-view/dirent-detail';
 import SelectedDirentsToolbar from '@/features/library-view/toolbar/selected-dirents-toolbar';
 import ViewToolbar from '@/features/library-view/toolbar/view-toolbar';
-import metadataAPI from '@/features/metadata/api';
 import { ROW_HEIGHT } from '@/features/metadata/constants';
 import { PRIVATE_COLUMN_KEY } from '@/features/metadata/constants/column/private';
 import { MetadataProvider } from '@/features/metadata/hooks/metadata';

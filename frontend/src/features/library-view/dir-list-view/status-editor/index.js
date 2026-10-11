@@ -1,9 +1,9 @@
 import React, { useMemo, useState, useRef, useEffect, useCallback } from 'react';
 import { Popover } from 'reactstrap';
 import PropTypes from 'prop-types';
+import metadataAPI from '@/api/metadata-api';
 import { KeyCodes } from '@/constants';
 import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
-import { metadataAPI } from '@/features/metadata';
 import SingleSelectEditor from '@/features/metadata/components/cell-editors/single-select-editor';
 import SingleSelectFormatter from '@/features/metadata/components/cell-formatter/single-select';
 import { PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
