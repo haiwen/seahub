@@ -94,8 +94,30 @@ function set_env_config () {
 # log function
 function log() {
     local time=$(date +"%F %T")
-    echo "[$time] $1 "
+    if [[ ${SEAFILE_LOG_TO_STDOUT} = "true" || ${MONITOR_LOG_FD_OPEN} != "true" ]]; then
+        echo "[$time] $1 "
+    else
+        echo "[$time] $1 " >&3
+    fi
 }
+
+function reopen_monitor_log() {
+    [[ ${SEAFILE_LOG_TO_STDOUT} = "true" ]] && return
+
+    exec 3>&-
+    if exec 3>>"${TOPDIR}/logs/seafile-monitor.log"; then
+        MONITOR_LOG_FD_OPEN=true
+    else
+        MONITOR_LOG_FD_OPEN=false
+        echo "Failed to reopen ${TOPDIR}/logs/seafile-monitor.log" >&2
+    fi
+}
+
+if [[ ${SEAFILE_LOG_TO_STDOUT} != "true" ]]; then
+    MONITOR_LOG_FD_OPEN=false
+    reopen_monitor_log
+    trap reopen_monitor_log USR1
+fi
 
 # check process number
 # $1 : process name
