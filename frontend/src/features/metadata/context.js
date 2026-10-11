@@ -1,9 +1,9 @@
 import collaboratorAPI from '@/api/collaborator-api';
+import metadataAPI from '@/api/metadata-api';
 import tagsAPI from '@/features/tag/api';
 import { username, lang } from '@/utils/constants';
 import EventBus from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
-import metadataAPI from './api';
 import {
   PRIVATE_COLUMN_KEYS, EDITABLE_DATA_PRIVATE_COLUMN_KEYS, EDITABLE_PRIVATE_COLUMN_KEYS, DELETABLE_PRIVATE_COLUMN_KEY,
   FACE_RECOGNITION_VIEW_ID,

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
+import metadataAPI from '@/api/metadata-api';
 import toaster from '@/components/toast';
 import { Utils } from '@/utils/utils';
-import metadataAPI from '../../api';
 
 export const useStatisticsData = (repoID) => {
   const [isLoading, setIsLoading] = useState(true);

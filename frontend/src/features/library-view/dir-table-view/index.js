@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import PropTypes from 'prop-types';
+import metadataAPI from '@/api/metadata-api';
 import { getCreateMenuList } from '@/components/dirent-operation-menu/contextMenuUtils';
 import { menuHandlers } from '@/components/dirent-operation-menu/menuHandlers';
 import { DROPDOWN_SUBMENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
@@ -11,7 +12,6 @@ import { GridUtilsAdapter } from '@/components/sf-table/utils/grid-utils-adapter
 import { RecordMetrics } from '@/components/sf-table/utils/record-metrics';
 import { getRowById, getRowsByIds } from '@/components/sf-table/utils/table';
 import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
-import { metadataAPI } from '@/features/metadata';
 import { PRIVATE_COLUMN_KEY, CellType } from '@/features/metadata/constants';
 import { getColumnOptionNameById, getColumnOptionNamesByIds } from '@/features/metadata/utils/cell';
 import tagsAPI from '@/features/tag/api';

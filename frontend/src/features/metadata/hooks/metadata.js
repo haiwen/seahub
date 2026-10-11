@@ -1,10 +1,10 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import metadataAPI from '@/api/metadata-api';
 import toaster from '@/components/toast';
 import { PRIVATE_FILE_TYPE } from '@/constants';
 import { useMetadataStatus } from '@/hooks';
 import { Utils } from '@/utils/utils';
-import metadataAPI from '../api';
-import { VIEW_TYPE, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW } from '../constants';
+import { VIEW_TYPE, VIEW_TYPE_DEFAULT_BASIC_FILTER, VIEW_TYPE_DEFAULT_SORTS, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW } from '../constants';
 import Folder from '../model/metadata/folder';
 import { getViewName } from '../utils/view';
 
@@ -199,8 +199,12 @@ export const MetadataProvider = ({ repoID, selectMetadataView, children }) => {
     selectView(newView);
   }, [navigation, addViewIntoMap, setNavigation, selectView]);
 
-  const addView = useCallback(({ folderId, name, type, successCallback, failCallback }) => {
-    metadataAPI.addView(repoID, name, type, folderId).then(res => {
+  const addView = useCallback(({ folderId, name, type = VIEW_TYPE.TABLE, successCallback, failCallback }) => {
+    const data = {
+      basic_filters: VIEW_TYPE_DEFAULT_BASIC_FILTER[type],
+      sorts: VIEW_TYPE_DEFAULT_SORTS[type],
+    };
+    metadataAPI.addView(repoID, name, type, folderId, data).then(res => {
       const view = res.data.view;
       addViewCallback(view, folderId);
       successCallback && successCallback();

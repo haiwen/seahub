@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import metadataAPI from '@/api/metadata-api';
 import { Detail, Header, Body } from '@/components/dirent-detail/detail';
 import DetailItem from '@/components/dirent-detail/detail-item';
 import Loading from '@/components/loading';
-import metadataAPI from '@/features/metadata/api';
 import RateEditor from '@/features/metadata/components/detail-editor/rate-editor';
 import { CellType, PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
 import { getCellValueByColumn, getFileObjIdFromRecord, getRecordIdFromRecord } from '@/features/metadata/utils/cell';

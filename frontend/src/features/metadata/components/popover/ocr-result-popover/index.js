@@ -4,13 +4,13 @@ import { deserializeHtml, slateToMdString } from '@seafile/seafile-editor';
 import classnames from 'classnames';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
+import metadataAPI from '@/api/metadata-api';
 import BodyPortal from '@/components/body-portal';
 import ClickOutside from '@/components/click-outside';
 import Loading from '@/components/loading';
 import { gettext } from '@/utils/constants';
 import { getTarget } from '@/utils/dom';
 import { Utils } from '@/utils/utils';
-import metadataAPI from '../../../api';
 import { getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/cell';
 
 import './index.css';

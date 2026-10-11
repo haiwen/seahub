@@ -1,9 +1,9 @@
 import React, { useContext, useCallback, useMemo, useState, useRef } from 'react';
+import metadataAPI from '@/api/metadata-api';
 import toaster from '@/components/toast';
 import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext, lang } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
-import metadataAPI from '../api';
 import FileTagsDialog from '../components/dialog/file-tags-dialog';
 import OCRResultPopover from '../components/popover/ocr-result-popover';
 import { PRIVATE_COLUMN_KEY } from '../constants';
