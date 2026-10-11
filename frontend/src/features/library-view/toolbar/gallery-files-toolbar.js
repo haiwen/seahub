@@ -1,4 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { setPendingAttachments } from '@/components/dir-chat/hooks/ai-chat-tools';
+import { AttachmentObject } from '@/components/dir-chat/models';
+import CustomDropdown from '@/components/dropdown';
+import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '@/components/event-bus';
+import Icon from '@/components/icon';
+import OpIcon from '@/components/op-icon';
+import RowUtils from '@/components/sf-table/utils/row';
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
 import { getParentDirFromRecord } from '@/features/metadata/utils/cell';
 import { getFileNameFromRecord } from '@/features/metadata/utils/cell/core';
@@ -10,13 +17,6 @@ import { useMetadataStatus } from '@/hooks';
 import { gettext } from '@/utils/constants';
 import TextTranslation from '@/utils/text-translation';
 import { Utils } from '@/utils/utils';
-import { setPendingAttachments } from '../dir-chat/hooks/ai-chat-tools';
-import { AttachmentObject } from '../dir-chat/models';
-import CustomDropdown from '../dropdown';
-import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '../event-bus';
-import Icon from '../icon';
-import OpIcon from '../op-icon';
-import RowUtils from '../sf-table/utils/row';
 
 const GalleryFilesToolbar = () => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);

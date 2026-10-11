@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { getDirentItemMenuList, getBatchMenuList } from '@/components/dirent-operation-menu/contextMenuUtils';
+import { menuHandlers } from '@/components/dirent-operation-menu/menuHandlers';
+import CustomDropdown from '@/components/dropdown';
+import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
+import Icon from '@/components/icon';
+import OpElement from '@/components/op-element';
+import OpIcon from '@/components/op-icon';
+import Tooltip from '@/components/tooltip';
 import { EVENT_BUS_TYPE as TABLE_EVENT_BUS_TYPE } from '@/features/metadata/constants';
 import { Dirent } from '@/models';
 import { gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
-import OpElement from '../../../components/op-element';
-import OpIcon from '../../../components/op-icon';
-import { getDirentItemMenuList, getBatchMenuList } from '../../dirent-operation-menu/contextMenuUtils';
-import { menuHandlers } from '../../dirent-operation-menu/menuHandlers';
-import CustomDropdown from '../../dropdown';
-import EventBus, { EVENT_BUS_TYPE } from '../../event-bus';
-import Icon from '../../icon';
-import Tooltip from '../../tooltip';
 
 import './index.css';
 

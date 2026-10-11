@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { getDirentItemMenuList, getTagFilesOperations } from '@/components/dirent-operation-menu/contextMenuUtils';
+import CustomDropdown from '@/components/dropdown';
+import Icon from '@/components/icon';
+import OpElement from '@/components/op-element';
+import OpIcon from '@/components/op-icon';
 import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
 import { getFileById, getFileObj, filterTagFileOperations } from '@/features/tag/utils/file';
 import { gettext } from '@/utils/constants';
 import TextTranslation from '@/utils/text-translation';
-import OpElement from '../../components/op-element';
-import OpIcon from '../../components/op-icon';
-import { getDirentItemMenuList, getTagFilesOperations } from '../dirent-operation-menu/contextMenuUtils';
-import CustomDropdown from '../dropdown';
-import Icon from '../icon';
 
 const SINGLE_EXCLUDES = ['Download', 'Delete', 'Share', 'Move', 'Copy'];
 const MULTI_EXCLUDES = ['Download', 'Delete'];

@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
+import ChatToolbar from '@/components/toolbar/chat-toolbar';
 import { TAGS_MODE, TRASH_MODE, CHAT_MODE } from '@/constants/view-mode';
 import { VIEW_TYPE } from '@/features/metadata/constants';
 import { useMetadata } from '@/features/metadata/hooks';
 import { ALL_TAGS_ID } from '@/features/tag/constants';
 import AllTagsToolbar from './all-tags-toolbar';
 import CardFilesToolbar from './card-files-toolbar';
-import ChatToolbar from './chat-toolbar';
 import GalleryFilesToolbar from './gallery-files-toolbar';
 import KanbanFilesToolbar from './kanban-files-toolbar';
 import TableFilesToolbar from './table-files-toolbar';

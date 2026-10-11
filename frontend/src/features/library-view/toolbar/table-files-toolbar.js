@@ -1,24 +1,24 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import { setPendingAttachments } from '@/components/dir-chat/hooks/ai-chat-tools';
+import { AttachmentObject } from '@/components/dir-chat/models';
+import CustomDropdown from '@/components/dropdown';
+import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '@/components/event-bus';
+import Icon from '@/components/icon';
+import OpIcon from '@/components/op-icon';
+import { getColumnByKey } from '@/components/sf-table/utils/column';
+import RowUtils from '@/components/sf-table/utils/row';
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
 import { getFileNameFromRecord, getParentDirFromRecord } from '@/features/metadata/utils/cell';
 import { openInNewTab, openParentFolder } from '@/features/metadata/utils/file';
-import { buildKanbanToolbarMenuOptions } from '@/features/metadata/utils/menu-builder';
+import { buildTableToolbarMenuOptions } from '@/features/metadata/utils/menu-builder';
 import { checkIsDir } from '@/features/metadata/utils/row';
 import { useMetadataStatus } from '@/hooks';
 import { gettext } from '@/utils/constants';
 import TextTranslation from '@/utils/text-translation';
 import { Utils } from '@/utils/utils';
-import OpIcon from '../../components/op-icon';
-import { setPendingAttachments } from '../dir-chat/hooks/ai-chat-tools';
-import { AttachmentObject } from '../dir-chat/models';
-import CustomDropdown from '../dropdown';
-import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '../event-bus';
-import Icon from '../icon';
-import { getColumnByKey } from '../sf-table/utils/column';
-import RowUtils from '../sf-table/utils/row';
 
-const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
+const TableFilesToolbar = ({ repoID }) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
   const [metadata, setMetadata] = useState({});
   const metadataRef = useRef([]);
@@ -27,6 +27,7 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
   const { enableFaceRecognition, enableTags } = useMetadataStatus();
 
   const eventBus = window.sfMetadataContext && window.sfMetadataContext.eventBus;
+  const sfEventBus = EventBus.getInstance();
 
   const records = useMemo(() => selectedRecordIds.map(id => RowUtils.getRecordById(id, metadataRef.current)).filter(Boolean) || [], [selectedRecordIds]);
 
@@ -46,29 +47,29 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
       enableGenerateDescription: getColumnByKey(metadataRef.current.columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION) !== null,
       enableTags
     };
-    return buildKanbanToolbarMenuOptions(
+    return buildTableToolbarMenuOptions(
       records,
       readOnly,
       metadataStatus,
       isMultiple,
       areRecordsInSameFolder,
-      false
+      true
     );
   }, [records, metadata.columns, enableFaceRecognition, enableTags, readOnly, isMultiple, areRecordsInSameFolder]);
 
   const unSelect = useCallback(() => {
     setSelectedRecordIds([]);
     eventBus && eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_SELECTED_RECORD_IDS, []);
-    updateCurrentDirent();
-  }, [eventBus, updateCurrentDirent]);
+    sfEventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
+  }, [eventBus, sfEventBus]);
 
   const deleteRecords = useCallback(() => {
     eventBus && eventBus.dispatch(EVENT_BUS_TYPE.DELETE_RECORDS, selectedRecordIds, {
       success_callback: () => {
-        updateCurrentDirent();
+        sfEventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
       }
     });
-  }, [eventBus, selectedRecordIds, updateCurrentDirent]);
+  }, [eventBus, sfEventBus, selectedRecordIds]);
 
   const toggleMoveDialog = useCallback(() => {
     eventBus && eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, records);
@@ -165,10 +166,6 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
         openParentFolder(records[0]);
         break;
       }
-      case TextTranslation.RENAME.key: {
-        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_KANBAN_RENAME_DIALOG);
-        break;
-      }
       default:
         break;
     }
@@ -221,33 +218,50 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
         <span>{length}{' '}{gettext('selected')}</span>
       </span>
 
-      {!isMultiple && !readOnly && (
+      {!readOnly && (!isMultiple || areRecordsInSameFolder) && (
         <>
-          <OpIcon id="move-btn" symbol="move" className="cur-view-path-btn" tooltip={gettext('Move')} aria-label={gettext('Move')} op={toggleMoveDialog} />
-          <OpIcon id="copy-btn" symbol="copy" className="cur-view-path-btn" tooltip={gettext('Copy')} aria-label={gettext('Copy')} op={toggleCopyDialog} />
+          <OpIcon
+            id="move-btn"
+            className="cur-view-path-btn"
+            symbol="move"
+            tooltip={gettext('Move')}
+            aria-label={gettext('Move')}
+            op={toggleMoveDialog}
+          />
+          <OpIcon
+            id="copy-btn"
+            className="cur-view-path-btn"
+            symbol="copy"
+            tooltip={gettext('Copy')}
+            aria-label={gettext('Copy')}
+            op={toggleCopyDialog}
+          />
         </>
       )}
+
       <OpIcon
         id="download-btn"
-        symbol="download"
         className="cur-view-path-btn"
+        symbol="download"
         tooltip={gettext('Download')}
         aria-label={gettext('Download')}
         op={downloadRecords}
       />
+
       {!readOnly && (
         <OpIcon
           id="delete-btn"
-          symbol="delete"
           className="cur-view-path-btn"
+          symbol="delete"
           tooltip={gettext('Delete')}
           aria-label={gettext('Delete')}
           op={deleteRecords}
         />
       )}
+
       {length > 0 && (
         <CustomDropdown
-          target="kanban-files-toolbar-menu"
+          target="table-files-toolbar-menu"
           forwardedRef={menuRef}
           items={getMenuList()}
           triggerClassName="cur-view-path-btn"
@@ -257,8 +271,8 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
   );
 };
 
-KanbanFilesToolbar.propTypes = {
+TableFilesToolbar.propTypes = {
   repoID: PropTypes.string.isRequired,
 };
 
-export default KanbanFilesToolbar;
+export default TableFilesToolbar;
