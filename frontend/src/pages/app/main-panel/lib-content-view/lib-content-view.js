@@ -10,8 +10,6 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
-import CurDirPath from '@/components/cur-dir-path';
-import DirTool from '@/components/cur-dir-path/dir-tool';
 import CopyMoveDirentProgressDialog from '@/components/dialog/copy-move-dirent-progress-dialog';
 import DeleteFolderDialog from '@/components/dialog/delete-folder-dialog';
 import LibDecryptDialog from '@/components/dialog/lib-decrypt-dialog';
@@ -45,6 +43,8 @@ import {
   TRASH_MODE,
   CHAT_MODE
 } from '@/constants/view-mode';
+import CurDirPath from '@/features/library-view/cur-dir-path';
+import DirTool from '@/features/library-view/cur-dir-path/dir-tool';
 import DirColumnView from '@/features/library-view/dir-column-view';
 import { getDirTableColumnOrder, setDirTableColumnOrder } from '@/features/library-view/dir-table-view/columns';
 import metadataAPI from '@/features/metadata/api';
