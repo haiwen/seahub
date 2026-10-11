@@ -3,11 +3,11 @@ import { Button } from 'reactstrap';
 import { navigate } from '@gatsbyjs/reach-router';
 import { systemAdminAPI } from '@/api/system-admin-api';
 import MainPanelTopbar from '@/components/admin/layout/main-panel-topbar';
+import Search from '@/components/admin/search';
 import SysAdminCreateGroupDialog from '@/components/dialog/sysadmin-dialog/sysadmin-create-group-dialog';
 import toaster from '@/components/toast';
 import { siteRoot, gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
-import Search from '../search';
 import Content from './groups-content';
 
 class Groups extends Component {

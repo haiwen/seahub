@@ -17,7 +17,7 @@ import toaster from '@/components/toast';
 import { gettext, orgID } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 
-import '../../sys-admin/departments/system-departments.css';
+import '@/components/admin/departments/system-departments.css';
 
 class Departments extends React.Component {
 

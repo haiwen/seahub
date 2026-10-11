@@ -1,5 +1,6 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import tagsAPI from '@/api/tag-api';
 import ImportTagsDialog from '@/components/dialog/import-tags-dialog';
 import CustomDropdown from '@/components/dropdown';
 import Icon from '@/components/icon';
@@ -8,7 +9,6 @@ import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext } from '@/utils/constants';
 import EventBus from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
-import tagsAPI from '../../api';
 import { useTags } from '../../hooks';
 import EditTagDialog from '../dialog/edit-tag-dialog';
 

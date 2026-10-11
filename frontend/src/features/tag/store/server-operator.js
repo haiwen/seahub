@@ -1,7 +1,7 @@
+import tagsAPI from '@/api/tag-api';
 import { getColumnByKey } from '@/features/metadata/utils/column';
 import { gettext } from '@/utils/constants';
 import ObjectUtils from '@/utils/object';
-import tagsAPI from '../api';
 import { PRIVATE_COLUMN_KEY } from '../constants';
 import { OPERATION_TYPE } from './operations';
 

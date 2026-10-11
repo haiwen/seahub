@@ -1,6 +1,6 @@
 import collaboratorAPI from '@/api/collaborator-api';
 import metadataAPI from '@/api/metadata-api';
-import tagsAPI from '@/features/tag/api';
+import tagsAPI from '@/api/tag-api';
 import { username, lang } from '@/utils/constants';
 import EventBus from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';

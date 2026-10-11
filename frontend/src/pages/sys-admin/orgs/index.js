@@ -3,12 +3,12 @@ import { Button } from 'reactstrap';
 import { navigate } from '@gatsbyjs/reach-router';
 import { systemAdminAPI } from '@/api/system-admin-api';
 import MainPanelTopbar from '@/components/admin/layout/main-panel-topbar';
+import Search from '@/components/admin/search';
 import SysAdminAddOrgDialog from '@/components/dialog/sysadmin-dialog/sysadmin-add-org-dialog';
 import toaster from '@/components/toast';
 import { siteRoot, gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import OrgsNav from '../orgs/orgs-nav';
-import Search from '../search';
 import Content from './orgs-content';
 import OrgsFilterBar from './orgs-filter-bar';
 

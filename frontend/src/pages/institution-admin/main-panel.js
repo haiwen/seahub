@@ -1,8 +1,8 @@
 import React from 'react';
 import { Router, navigate } from '@gatsbyjs/reach-router';
 import MainPanelTopbar from '@/components/admin/layout/main-panel-topbar';
+import Search from '@/components/admin/search';
 import { gettext, siteRoot } from '@/utils/constants';
-import Search from '../sys-admin/search';
 import UserContent from './user-content';
 import UserGroups from './user-content/user-groups';
 import UserInfo from './user-content/user-info';

@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from 'reactstrap';
 import { useLocation, navigate, Router } from '@gatsbyjs/reach-router';
 import MainPanelTopbar from '@/components/admin/layout/main-panel-topbar';
+import Search from '@/components/admin/search';
 import toaster from '@/components/toast';
 import { gettext, siteRoot } from '@/utils/constants';
 import LinksNav from '../links/links-nav';
@@ -11,7 +12,6 @@ import AllRepos from '../repos/all-repos';
 import AllWikis from '../repos/all-wikis';
 import SystemRepo from '../repos/system-repo';
 import TrashRepos from '../repos/trash-repos';
-import Search from '../search';
 import ReposNav from './repos-nav';
 
 const LINKS_PATH_NAME_MAP = {

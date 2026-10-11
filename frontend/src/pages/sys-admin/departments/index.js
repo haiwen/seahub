@@ -17,7 +17,7 @@ import toaster from '@/components/toast';
 import { enableSysAdminViewRepo, gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 
-import './system-departments.css';
+import '@/components/admin/departments/system-departments.css';
 
 class Departments extends React.Component {
 
