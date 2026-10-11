@@ -7,7 +7,6 @@ import CustomDropdown from '@/components/dropdown';
 import EventBus from '@/components/event-bus';
 import Icon from '@/components/icon';
 import OpIcon from '@/components/op-icon';
-import DirOperationToolbar from '@/components/toolbar/dir-operation-toolbar';
 import Tooltip from '@/components/tooltip';
 import { PRIVATE_FILE_TYPE } from '@/constants';
 import MetadataViewName from '@/features/metadata/components/metadata-view-name';
@@ -17,6 +16,7 @@ import { ALL_TAGS_ID } from '@/features/tag/constants';
 import { siteRoot, gettext, username, enableUserCleanTrash } from '@/utils/constants';
 import { debounce, Utils } from '@/utils/utils';
 import { getTrashPath } from '../dir-trash-view/utils';
+import DirOperationToolbar from '../toolbar/dir-operation-toolbar';
 
 const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
