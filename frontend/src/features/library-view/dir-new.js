@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
 import TipDialog from '@/components/dialog/tip-dialog';
 import CustomDropdown from '@/components/dropdown';
-import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';
 import toaster from '@/components/toast';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import {
   METADATA_MODE,
   TAGS_MODE,

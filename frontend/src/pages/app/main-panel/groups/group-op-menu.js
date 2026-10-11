@@ -11,12 +11,13 @@ import LeaveGroupDialog from '@/components/dialog/leave-group-dialog';
 import RenameGroupDialog from '@/components/dialog/rename-group-dialog';
 import TransferGroupDialog from '@/components/dialog/transfer-group-dialog';
 import CustomDropdown from '@/components/dropdown';
-import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';
 import ManageMembersDialog from '@/components/manage-members-dialog';
 import toaster from '@/components/toast';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { Repo } from '@/models';
 import { gettext, username, canAddRepo, isMultiTenancy } from '@/utils/constants';
+import EventBus from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
 
 const propTypes = {

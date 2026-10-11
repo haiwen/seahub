@@ -3,9 +3,10 @@ import { Button, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Icon from '@/components/icon';
 import Tooltip from '@/components/tooltip';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
-import { EVENT_BUS_TYPE, GALLERY_ZOOM_GEAR_MIN, GALLERY_ZOOM_GEAR_MAX, STORAGE_GALLERY_ZOOM_GEAR_KEY } from '../../../constants';
+import { GALLERY_ZOOM_GEAR_MIN, GALLERY_ZOOM_GEAR_MAX, STORAGE_GALLERY_ZOOM_GEAR_KEY } from '../../../constants';
 
 import './index.css';
 

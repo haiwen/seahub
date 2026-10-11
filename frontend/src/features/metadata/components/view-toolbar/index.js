@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { EVENT_BUS_TYPE, VIEW_TYPE } from '../../constants';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
+import { VIEW_TYPE } from '../../constants';
 import CardViewToolBar from './card-view-toolbar';
 import GalleryViewToolbar from './gallery-view-toolbar';
 import KanbanViewToolBar from './kanban-view-toolbar';

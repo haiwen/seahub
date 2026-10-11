@@ -6,16 +6,17 @@ import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
 import SortOptionsDialog from '@/components/dialog/sort-options';
 import EmptyTip from '@/components/empty-tip';
-import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';
 import Loading from '@/components/loading';
 import SharedRepoListView from '@/components/shared-repo-list-view/shared-repo-list-view';
 import ReposSortMenu from '@/components/sort-menu';
 import toaster from '@/components/toast';
 import ViewModes from '@/components/view-modes';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { LIST_MODE, GRID_MODE } from '@/constants/view-mode';
 import { Group, Repo } from '@/models';
 import { gettext, siteRoot, username, mediaUrl } from '@/utils/constants';
+import EventBus from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
 import GroupOperationMenu from './group-op-menu';
 

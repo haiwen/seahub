@@ -4,14 +4,14 @@ import { seafileAPI } from '@/api/seafile-api';
 import { Detail, Header, Body } from '@/components/dirent-detail/detail';
 import DirDetails from '@/components/dirent-detail/dirent-details/dir-details';
 import FileDetails from '@/components/dirent-detail/dirent-details/file-details';
-import { eventBus } from '@/components/event-bus';
 import toaster from '@/components/toast';
 import VideoPlayer from '@/components/video-player';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import AIIcon from '@/features/metadata/components/metadata-details/ai-icon';
 import SettingsIcon from '@/features/metadata/components/metadata-details/settings-icon';
-import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
 import { MetadataDetailsProvider } from '@/features/metadata/hooks/metadata-details';
 import { siteRoot, thumbnailSizeForGrid, enableSeafileAI, fileServerRoot, MimetypesKind } from '@/utils/constants';
+import { eventBus } from '@/utils/event-bus';
 import ObjectUtils from '@/utils/object';
 import { Utils } from '@/utils/utils';
 

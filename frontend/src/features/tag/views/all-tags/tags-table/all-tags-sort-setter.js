@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import SortMenu from '@/components/sort-menu';
-import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext } from '@/utils/constants';
 import { ALL_TAGS_SORT, ALL_TAGS_SORT_KEY, TAGS_DEFAULT_SORT } from '../../../constants/sort';
 import { getSortBy, getSortOrder } from '../../../utils/sort';

@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import FileNameFormatter from '@/features/metadata/components/cell-formatter/file-name-formatter';
+import EventBus from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
 
 const FileName = ({ repoID, column, record, className: propsClassName, value, hideIcon = false, isCellSelected, ...params }) => {

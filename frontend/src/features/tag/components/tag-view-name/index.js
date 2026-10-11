@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { getRowById } from '@/components/sf-table/utils/table';
-import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext } from '@/utils/constants';
 import { ALL_TAGS_ID } from '../../constants';
 import { useTags } from '../../hooks';

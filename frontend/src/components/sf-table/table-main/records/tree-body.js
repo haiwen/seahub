@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
+import EventBus from '@/utils/event-bus';
 import { isShiftKeyDown } from '@/utils/keyboard-utils';
-import EventBus from '../../../event-bus';
 import Loading from '../../../loading';
 import { LOCAL_KEY_TREE_NODE_FOLDED } from '../../constants/tree';
 import InteractionMasks from '../../masks/interaction-masks';

@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext } from '@/utils/constants';
-import { EVENT_BUS_TYPE, GALLERY_DATE_MODE, STORAGE_GALLERY_DATE_MODE_KEY } from '../../constants';
+import { GALLERY_DATE_MODE, STORAGE_GALLERY_DATE_MODE_KEY } from '../../constants';
 import RadioGroup from '../radio-group';
 import GallerySliderSetter from './gallery-slider-setter';
 

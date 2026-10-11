@@ -13,7 +13,6 @@ import { seafileAPI } from '@/api/seafile-api';
 import CopyMoveDirentProgressDialog from '@/components/dialog/copy-move-dirent-progress-dialog';
 import DeleteFolderDialog from '@/components/dialog/delete-folder-dialog';
 import LibDecryptDialog from '@/components/dialog/lib-decrypt-dialog';
-import EventBus, { EVENT_BUS_TYPE, eventBus } from '@/components/event-bus';
 import FileUploader from '@/components/file-uploader/file-uploader';
 import ModalPortal from '@/components/modal-portal';
 import toaster from '@/components/toast';
@@ -29,6 +28,7 @@ import {
   DIR_TABLE_DEFAULT_METADATA_COLUMNS,
   getDirTableRowHeightKey
 } from '@/constants/dir-column-config';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import {
   LIST_MODE,
   TABLE_MODE,
@@ -48,7 +48,7 @@ import Detail from '@/features/library-view/dirent-detail';
 import SelectedDirentsToolbar from '@/features/library-view/toolbar/selected-dirents-toolbar';
 import ViewToolbar from '@/features/library-view/toolbar/view-toolbar';
 import metadataAPI from '@/features/metadata/api';
-import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, ROW_HEIGHT } from '@/features/metadata/constants';
+import { ROW_HEIGHT } from '@/features/metadata/constants';
 import { PRIVATE_COLUMN_KEY } from '@/features/metadata/constants/column/private';
 import { MetadataProvider } from '@/features/metadata/hooks/metadata';
 import { MetadataMiddlewareProvider } from '@/features/metadata/hooks/metadata-middleware';
@@ -67,6 +67,7 @@ import {
   thumbnailSizeForOriginal,
   username
 } from '@/utils/constants';
+import EventBus, { eventBus } from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
 
 import '@/css/lib-content-view.css';
@@ -2528,7 +2529,7 @@ class LibContentView extends React.Component {
     if (!isLocal) {
       await metadataAPI.modifyColumnData(repoID, key, data);
       if (this.state.isDirentDetailShow && window?.sfMetadataContext?.eventBus) {
-        window.sfMetadataContext.eventBus.dispatch(METADATA_EVENT_BUS_TYPE.LOCAL_COLUMN_DATA_CHANGED, key, data);
+        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_COLUMN_DATA_CHANGED, key, data);
       }
     }
   };

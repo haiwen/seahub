@@ -2,14 +2,15 @@ import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { setPendingAttachments } from '@/components/dir-chat/hooks/ai-chat-tools';
 import { AttachmentObject } from '@/components/dir-chat/models';
-import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '@/components/event-bus';
 import { getRowById } from '@/components/sf-table/utils/table';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { useFileOperations, useMetadataStatus } from '@/hooks';
+import EventBus, { eventBus as globalEventBus } from '@/utils/event-bus';
 import TextTranslation from '@/utils/text-translation';
 import { Utils } from '@/utils/utils';
 import ContextMenu from '../../../components/context-menu';
 import RenameDialog from '../../../components/dialog/rename-dialog';
-import { PRIVATE_COLUMN_KEY, EVENT_BUS_TYPE } from '../../../constants';
+import { PRIVATE_COLUMN_KEY } from '../../../constants';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/cell';
 import { getColumnByKey } from '../../../utils/column';
@@ -105,9 +106,9 @@ const CardContextMenu = ({ selectedCard, onDelete, onRename }) => {
         })] : [];
 
         setPendingAttachments(attachments, true);
-        globalEventBus.dispatch(DIR_EVENT_BUS_TYPE.SWITCH_TO_CHAT_VIEW);
+        globalEventBus.dispatch(EVENT_BUS_TYPE.SWITCH_TO_CHAT_VIEW);
         if (attachments.length > 0) {
-          EventBus.getInstance().dispatch(DIR_EVENT_BUS_TYPE.CHAT_ATTACH_FILES, {
+          EventBus.getInstance().dispatch(EVENT_BUS_TYPE.CHAT_ATTACH_FILES, {
             attachments,
             reset: true,
           });

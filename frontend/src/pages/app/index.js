@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { navigate } from '@gatsbyjs/reach-router';
-import EventBus from '@/components/event-bus';
 import ResizeBar from '@/components/resize-bar';
 import {
   DRAG_HANDLER_HEIGHT,
@@ -11,6 +10,7 @@ import {
   MIN_SIDE_PANEL_RATE
 } from '@/components/resize-bar/constants';
 import { siteRoot, siteTitle, mediaUrl, faviconPath } from '@/utils/constants';
+import EventBus from '@/utils/event-bus';
 import { Utils, isMobile } from '@/utils/utils';
 import Header from './header';
 import MainPanelRouter from './main-panel';

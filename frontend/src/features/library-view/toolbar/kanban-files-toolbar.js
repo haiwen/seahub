@@ -3,18 +3,19 @@ import PropTypes from 'prop-types';
 import { setPendingAttachments } from '@/components/dir-chat/hooks/ai-chat-tools';
 import { AttachmentObject } from '@/components/dir-chat/models';
 import CustomDropdown from '@/components/dropdown';
-import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';
 import OpIcon from '@/components/op-icon';
 import { getColumnByKey } from '@/components/sf-table/utils/column';
 import RowUtils from '@/components/sf-table/utils/row';
-import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
+import { PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
 import { getFileNameFromRecord, getParentDirFromRecord } from '@/features/metadata/utils/cell';
 import { openInNewTab, openParentFolder } from '@/features/metadata/utils/file';
 import { buildKanbanToolbarMenuOptions } from '@/features/metadata/utils/menu-builder';
 import { checkIsDir } from '@/features/metadata/utils/row';
 import { useMetadataStatus } from '@/hooks';
 import { gettext } from '@/utils/constants';
+import EventBus, { eventBus as globalEventBus } from '@/utils/event-bus';
 import TextTranslation from '@/utils/text-translation';
 import { Utils } from '@/utils/utils';
 
@@ -112,9 +113,9 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
           });
 
         setPendingAttachments(attachments, !isMultiple);
-        globalEventBus.dispatch(DIR_EVENT_BUS_TYPE.SWITCH_TO_CHAT_VIEW);
+        globalEventBus.dispatch(EVENT_BUS_TYPE.SWITCH_TO_CHAT_VIEW);
         if (attachments.length > 0) {
-          EventBus.getInstance().dispatch(DIR_EVENT_BUS_TYPE.CHAT_ATTACH_FILES, {
+          EventBus.getInstance().dispatch(EVENT_BUS_TYPE.CHAT_ATTACH_FILES, {
             attachments,
             reset: !isMultiple,
           });

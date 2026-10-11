@@ -1,6 +1,6 @@
-import EventBus from '@/components/event-bus';
 import LocalStorage from '@/features/metadata/utils/local-storage';
 import { username, lang } from '@/utils/constants';
+import EventBus from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
 import tagsAPI from './api';
 

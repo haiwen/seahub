@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import { EVENT_BUS_TYPE } from '../../constants';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { useMetadataView } from '../../hooks/metadata-view';
 import CardItems from './card-items';
 import Settings from './settings';

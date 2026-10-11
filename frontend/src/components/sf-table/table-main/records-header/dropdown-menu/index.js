@@ -1,13 +1,14 @@
 import React, { useState, useCallback, useMemo, forwardRef, useImperativeHandle } from 'react';
 import classnames from 'classnames';
 import CustomDropdown from '@/components/dropdown';
-import EventBus from '@/components/event-bus';
 import Icon from '@/components/icon';
 import ModalPortal from '@/components/modal-portal';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { RenamePopover, OptionsPopover } from '@/features/metadata/components/popover';
-import { CellType, DEFAULT_DATE_FORMAT, SORT_COLUMN_OPTIONS, SHOW_DISABLED_SORT_COLUMNS, SORT_TYPE, EVENT_BUS_TYPE } from '@/features/metadata/constants';
+import { CellType, DEFAULT_DATE_FORMAT, SORT_COLUMN_OPTIONS, SHOW_DISABLED_SORT_COLUMNS, SORT_TYPE } from '@/features/metadata/constants';
 import { getDateDisplayString } from '@/features/metadata/utils/cell';
 import { gettext } from '@/utils/constants';
+import EventBus from '@/utils/event-bus';
 import NumberFormatPopover from './number-format-popover';
 
 import './index.css';

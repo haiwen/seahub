@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { EVENT_BUS_TYPE, ROW_HEIGHT } from '@/features/metadata/constants';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
+import { ROW_HEIGHT } from '@/features/metadata/constants';
 import { addClassName, removeClassName } from '@/utils/dom';
+import EventBus from '@/utils/event-bus';
 import { isShiftKeyDown } from '@/utils/keyboard-utils';
-import EventBus from '../../../../event-bus';
 import { GROUP_HEADER_HEIGHT, GROUP_ROW_TYPE, GROUP_VIEW_OFFSET } from '../../../constants/group';
 import InteractionMasks from '../../../masks/interaction-masks';
 import { RightScrollbar } from '../../../scrollbar';

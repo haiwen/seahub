@@ -1,12 +1,12 @@
 import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { getEventClassName } from '@/utils/dom';
+import EventBus from '@/utils/event-bus';
 import { isCtrlKeyHeldDown, isKeyPrintable } from '@/utils/keyboard-utils';
 import { Utils } from '@/utils/utils';
 import ClickOutside from '../../../click-outside';
-import EventBus from '../../../event-bus';
 import { EDITOR_CONTAINER as Z_INDEX_EDITOR_CONTAINER } from '../../constants/z-index';
 import { getCellValueByColumn } from '../../utils/cell';
 import { checkIsPrivateColumn } from '../../utils/column';

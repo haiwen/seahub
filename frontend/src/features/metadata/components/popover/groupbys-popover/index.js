@@ -3,10 +3,11 @@ import { UncontrolledPopover } from 'reactstrap';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
 import CommonAddTool from '@/components/common-add-tool';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext } from '@/utils/constants';
 import { getEventClassName } from '@/utils/dom';
 import { Utils } from '@/utils/utils';
-import { EVENT_BUS_TYPE, MAX_GROUP_LEVEL } from '../../../constants';
+import { MAX_GROUP_LEVEL } from '../../../constants';
 import { generateDefaultGroupby, getGroupbyColumns } from '../../../utils/group';
 import Groupbys from './groupbys';
 

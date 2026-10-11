@@ -1,17 +1,18 @@
 import React, { useContext, useEffect, useCallback, useState, useMemo, useRef } from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { eventBus, EVENT_BUS_TYPE as DIRENT_EVENT_BUS_TYPE } from '@/components/event-bus';
 import toaster from '@/components/toast';
 import { SYSTEM_FOLDERS } from '@/constants';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import tagsAPI from '@/features/tag/api';
 import { useMetadataStatus } from '@/hooks';
+import { eventBus } from '@/utils/event-bus';
 import ObjectUtils from '@/utils/object';
 import { Utils } from '@/utils/utils';
 import metadataAPI from '../api';
 import { NOT_DISPLAY_COLUMN_KEYS } from '../components/metadata-details/constants';
 import { normalizeFields } from '../components/metadata-details/utils';
-import { CellType, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, UTC_FORMAT_DEFAULT } from '../constants';
+import { CellType, PRIVATE_COLUMN_KEY, UTC_FORMAT_DEFAULT } from '../constants';
 import Column from '../model/column';
 import {
   getCellValueByColumn, getColumnOptionNamesByIds, getColumnOptionNameById, getRecordIdFromRecord,
@@ -98,7 +99,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
       }
       const fileName = getFileNameFromRecord(record);
       if (field.key === PRIVATE_COLUMN_KEY.FILE_STATUS) {
-        eventBus.dispatch(DIRENT_EVENT_BUS_TYPE.DIRENT_METADATA_CHANGED, fileName, update);
+        eventBus.dispatch(EVENT_BUS_TYPE.DIRENT_METADATA_CHANGED, fileName, update);
       }
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
@@ -130,7 +131,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
         const oldValue = getCellValueByColumn(record, newField) || [];
         update = { [fileName]: [...oldValue, newOption.name] };
       }
-      eventBus.dispatch(DIRENT_EVENT_BUS_TYPE.COLUMN_DATA_MODIFIED, fieldKey, newData, true);
+      eventBus.dispatch(EVENT_BUS_TYPE.COLUMN_DATA_MODIFIED, fieldKey, newData, true);
       return metadataAPI.modifyRecord(repoID, { recordId: record._id }, update);
     }).then(res => {
       setOriginColumns(newColumns);
@@ -158,7 +159,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
         window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, { recordId: record_id }, update);
       }
       const fileName = getFileNameFromRecord(record);
-      eventBus.dispatch(DIRENT_EVENT_BUS_TYPE.DIRENT_METADATA_CHANGED, fileName, update);
+      eventBus.dispatch(EVENT_BUS_TYPE.DIRENT_METADATA_CHANGED, fileName, update);
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);

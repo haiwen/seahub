@@ -3,12 +3,13 @@ import { Link } from '@gatsbyjs/reach-router';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext, siteRoot, isPro, username } from '@/utils/constants';
+import EventBus from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
 import EmptyTip from '../../../components/empty-tip';
 import SharePermissionEditor from '../../../components/select-editor/share-permission-editor';
 import toaster from '../../../components/toast';
-import EventBus, { EVENT_BUS_TYPE } from '../../event-bus';
 import Loading from '../../loading';
 import OpIcon from '../../op-icon';
 

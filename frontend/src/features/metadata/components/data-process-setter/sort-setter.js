@@ -2,9 +2,9 @@ import React, { useCallback, useState, useMemo, useEffect } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import OpIcon from '@/components/op-icon';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
-import { EVENT_BUS_TYPE } from '../../constants';
 import { getValidSorts } from '../../utils/sort';
 import { SortPopover } from '../popover';
 

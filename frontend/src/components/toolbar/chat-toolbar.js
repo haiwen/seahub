@@ -1,8 +1,9 @@
 import React, { useCallback } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext } from '@/utils/constants';
-import EventBus, { EVENT_BUS_TYPE } from '../event-bus';
+import EventBus from '@/utils/event-bus';
 import OpIcon from '../op-icon';
 
 const ChatToolbar = ({ className, isCompact = false, showHistory = true }) => {

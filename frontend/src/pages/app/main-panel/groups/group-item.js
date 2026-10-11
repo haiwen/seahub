@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
-import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';
 import SharedRepoListView from '@/components/shared-repo-list-view/shared-repo-list-view';
 import toaster from '@/components/toast';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { LIST_MODE } from '@/constants/view-mode';
 import { gettext, siteRoot } from '@/utils/constants';
+import EventBus from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
 import GroupOperationMenu from './group-op-menu';
 

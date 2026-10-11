@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { addClassName, removeClassName, getEventClassName } from '@/utils/dom';
+import EventBus from '@/utils/event-bus';
 import { isShiftKeyDown } from '@/utils/keyboard-utils';
 import { isNumber } from '@/utils/number';
 import { isMobile } from '@/utils/utils';
-import EventBus from '../../../event-bus';
 import { CANVAS_RIGHT_INTERVAL } from '../../constants/grid';
 import { GROUP_ROW_TYPE } from '../../constants/group';
 import ContextMenu from '../../context-menu';

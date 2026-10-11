@@ -1,10 +1,11 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { eventBus, EVENT_BUS_TYPE } from '@/components/event-bus';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { MetadataTreeView, useMetadata } from '@/features/metadata';
 import ViewsMoreOperations from '@/features/metadata/utils/views-more-operations';
 import { useMetadataStatus } from '@/hooks';
 import { gettext } from '@/utils/constants';
+import { eventBus } from '@/utils/event-bus';
 import ExtensionPrompts from '../extension-prompts';
 import TreeSection from '../tree-section';
 

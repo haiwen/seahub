@@ -6,11 +6,12 @@ import SysAdminSetQuotaDialog from '@/components/dialog/sysadmin-dialog/set-quot
 import SysAdminSetUploadDownloadRateLimitDialog from '@/components/dialog/sysadmin-dialog/set-upload-download-rate-limit';
 import SysAdminUpdateUserDialog from '@/components/dialog/sysadmin-dialog/update-user';
 import EditIcon from '@/components/edit-icon';
-import { eventBus, EVENT_BUS_TYPE } from '@/components/event-bus';
 import Loading from '@/components/loading';
 import Selector from '@/components/single-selector';
 import toaster from '@/components/toast';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext, isPro } from '@/utils/constants';
+import { eventBus } from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
 
 const { twoFactorAuthEnabled, availableRoles } = window.sysadmin.pageOptions;

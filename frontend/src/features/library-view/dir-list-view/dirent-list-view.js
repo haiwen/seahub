@@ -9,9 +9,9 @@ import { getCreateMenuList } from '@/components/dirent-operation-menu/contextMen
 import { menuHandlers } from '@/components/dirent-operation-menu/menuHandlers';
 import DirentsDraggedPreview from '@/components/draggable/dirents-dragged-preview';
 import EmptyTip from '@/components/empty-tip';
-import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import ModalPortal from '@/components/modal-portal';
 import toaster from '@/components/toast';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { Dirent } from '@/models';
 import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal, thumbnailDefaultSize, fileServerRoot } from '@/utils/constants';
 import { updateImageThumbnail, Utils } from '@/utils/utils';

@@ -5,11 +5,12 @@ import PropTypes from 'prop-types';
 import CommonAddTool from '@/components/common-add-tool';
 import CustomizeSelect from '@/components/customize-select';
 import Icon from '@/components/icon';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext } from '@/utils/constants';
 import { getEventClassName } from '@/utils/dom';
 import { Utils } from '@/utils/utils';
 import {
-  EVENT_BUS_TYPE, COLUMNS_ICON_CONFIG, VIEW_SORT_COLUMN_RULES, VIEW_FIRST_SORT_COLUMN_RULES, SORT_TYPE, VIEW_TYPE,
+  COLUMNS_ICON_CONFIG, VIEW_SORT_COLUMN_RULES, VIEW_FIRST_SORT_COLUMN_RULES, SORT_TYPE, VIEW_TYPE,
 } from '../../../constants';
 import { getColumnByKey } from '../../../utils/column';
 import { execSortsOperation, getDisplaySorts, isSortsEmpty, SORT_OPERATION } from './utils';

@@ -1,9 +1,10 @@
 import React, { useCallback, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { chatAPI } from '@/api/chat-api';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { siteRoot } from '@/utils/constants';
+import EventBus from '@/utils/event-bus';
 import CenteredLoading from '../centered-loading';
-import EventBus, { EVENT_BUS_TYPE } from '../event-bus';
 import Chat from './chat';
 import { ASK_PAGE_SLUG_ID } from './constants';
 import Documents from './documents';
