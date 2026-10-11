@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo, useState, useRef, useEffect } from 'react';
 import { Popover } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { getRowById } from '@/components/sf-table/utils/table';
+import toaster from '@/components/toast';
 import { KeyCodes } from '@/constants';
 import Editor from '@/features/metadata/components/cell-editors/tags-editor';
 import DeleteTag from '@/features/metadata/components/cell-editors/tags-editor/delete-tags';
@@ -12,8 +14,6 @@ import { getTagId, getTagName } from '@/features/tag/utils/cell';
 import { gettext } from '@/utils/constants';
 import { getEventClassName } from '@/utils/dom';
 import { Utils } from '@/utils/utils';
-import { getRowById } from '../../sf-table/utils/table';
-import toaster from '../../toast';
 
 const TAGS_EDITOR_WIDTH = 400;
 const EDITOR_VIEWPORT_MARGIN = 8;
