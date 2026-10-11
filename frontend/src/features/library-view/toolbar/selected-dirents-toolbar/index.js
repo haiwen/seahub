@@ -8,7 +8,6 @@ import Icon from '@/components/icon';
 import OpElement from '@/components/op-element';
 import OpIcon from '@/components/op-icon';
 import Tooltip from '@/components/tooltip';
-import { EVENT_BUS_TYPE as TABLE_EVENT_BUS_TYPE } from '@/features/metadata/constants';
 import { Dirent } from '@/models';
 import { gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
@@ -105,7 +104,7 @@ class SelectedDirentsToolbar extends React.Component {
   };
 
   handleUnselect = () => {
-    EventBus.getInstance().dispatch(TABLE_EVENT_BUS_TYPE.SELECT_NONE);
+    EventBus.getInstance().dispatch(EVENT_BUS_TYPE.SELECT_NONE);
     this.props.unSelectDirent();
   };
 

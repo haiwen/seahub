@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import CenteredLoading from '@/components/centered-loading';
+import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import { getRowById } from '@/components/sf-table/utils/table';
 import toaster from '@/components/toast';
 import { PRIVATE_FILE_TYPE } from '@/constants';
-import { EVENT_BUS_TYPE, PER_LOAD_NUMBER } from '@/features/metadata/constants';
+import { PER_LOAD_NUMBER } from '@/features/metadata/constants';
 import { siteRoot } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import { ALL_TAGS_ID } from '../../constants';

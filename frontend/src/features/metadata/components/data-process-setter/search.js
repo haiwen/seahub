@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import SFTableSearcher from '@/components/sf-table/searcher';
-import { EVENT_BUS_TYPE } from '../../constants';
 
 const Search = ({ viewId, columns }) => {
   const [searchResult, setSearchResult] = useState(null);

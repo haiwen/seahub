@@ -1,11 +1,10 @@
 import React, { useCallback, useMemo } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import EventBus from '@/components/event-bus';
+import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
 import { EDITOR_TYPE } from '@/components/sf-table/constants/grid';
 import { siteRoot, thumbnailDefaultSize, enableThumbnailServer } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
-import { EVENT_BUS_TYPE } from '../../constants';
 import { getParentDirFromRecord, getFileMTimeFromRecord } from '../../utils/cell';
 import { openFile } from '../../utils/file';
 import { checkIsDir } from '../../utils/row';

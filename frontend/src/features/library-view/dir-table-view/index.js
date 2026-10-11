@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { getCreateMenuList } from '@/components/dirent-operation-menu/contextMenuUtils';
 import { menuHandlers } from '@/components/dirent-operation-menu/menuHandlers';
 import { DROPDOWN_SUBMENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
-import EventBus from '@/components/event-bus';
+import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';
 import SFTable from '@/components/sf-table';
 import { getColumnByKey, getColumnOriginName } from '@/components/sf-table/utils/column';
@@ -12,7 +12,7 @@ import { GridUtilsAdapter } from '@/components/sf-table/utils/grid-utils-adapter
 import { RecordMetrics } from '@/components/sf-table/utils/record-metrics';
 import { getRowById, getRowsByIds } from '@/components/sf-table/utils/table';
 import { metadataAPI } from '@/features/metadata';
-import { PRIVATE_COLUMN_KEY, EVENT_BUS_TYPE, CellType } from '@/features/metadata/constants';
+import { PRIVATE_COLUMN_KEY, CellType } from '@/features/metadata/constants';
 import { getColumnOptionNameById, getColumnOptionNamesByIds } from '@/features/metadata/utils/cell';
 import tagsAPI from '@/features/tag/api';
 import { useTags } from '@/features/tag/hooks';

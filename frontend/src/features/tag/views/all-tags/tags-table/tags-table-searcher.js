@@ -1,10 +1,9 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import EventBus from '@/components/event-bus';
+import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
 import SFTableSearcher from '@/components/sf-table/searcher';
 import { getSearchRule } from '@/components/sf-table/utils/search';
 import { getRowById } from '@/components/sf-table/utils/table';
 import { getTreeNodeId, getTreeNodeKey } from '@/components/sf-table/utils/tree';
-import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
 import { PRIVATE_COLUMN_KEY, VISIBLE_COLUMNS_KEYS } from '../../../constants';
 import { useTags } from '../../../hooks';
 

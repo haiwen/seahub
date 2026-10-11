@@ -1,11 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Button, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';
 import Tooltip from '@/components/tooltip';
 import { gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
-import { EVENT_BUS_TYPE, GALLERY_ZOOM_GEAR_MIN, GALLERY_ZOOM_GEAR_MAX, STORAGE_GALLERY_ZOOM_GEAR_KEY } from '../../../constants';
+import { GALLERY_ZOOM_GEAR_MIN, GALLERY_ZOOM_GEAR_MAX, STORAGE_GALLERY_ZOOM_GEAR_KEY } from '../../../constants';
 
 import './index.css';
 

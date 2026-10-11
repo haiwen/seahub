@@ -2,6 +2,7 @@ import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react'
 import PropTypes from 'prop-types';
 import CenteredLoading from '@/components/centered-loading';
 import ImageDialog from '@/components/dialog/image-dialog';
+import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import ModalPortal from '@/components/modal-portal';
 import { getRowById } from '@/components/sf-table/utils/table';
 import { siteRoot, fileServerRoot, thumbnailSizeForGrid, thumbnailSizeForOriginal, thumbnailDefaultSize, enableVideoThumbnail } from '@/utils/constants';
@@ -9,7 +10,7 @@ import { getEventClassName } from '@/utils/dom';
 import ObjectUtils from '@/utils/object';
 import { Utils } from '@/utils/utils';
 import PeoplesDialog from '../../components/dialog/peoples-dialog';
-import { EVENT_BUS_TYPE, GALLERY_DATE_MODE, DATE_TAG_HEIGHT, STORAGE_GALLERY_DATE_MODE_KEY, STORAGE_GALLERY_ZOOM_GEAR_KEY, VIEW_TYPE_DEFAULT_SORTS, VIEW_TYPE } from '../../constants';
+import { GALLERY_DATE_MODE, DATE_TAG_HEIGHT, STORAGE_GALLERY_DATE_MODE_KEY, STORAGE_GALLERY_ZOOM_GEAR_KEY, VIEW_TYPE_DEFAULT_SORTS, VIEW_TYPE } from '../../constants';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { getDateDisplayString, getFileMTimeFromRecord, getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
 import { openFile } from '../../utils/file';

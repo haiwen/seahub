@@ -2,11 +2,11 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { setPendingAttachments } from '@/components/dir-chat/hooks/ai-chat-tools';
 import { AttachmentObject } from '@/components/dir-chat/models';
 import CustomDropdown from '@/components/dropdown';
-import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '@/components/event-bus';
+import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';
 import OpIcon from '@/components/op-icon';
 import RowUtils from '@/components/sf-table/utils/row';
-import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
+import { PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
 import { getParentDirFromRecord } from '@/features/metadata/utils/cell';
 import { getFileNameFromRecord } from '@/features/metadata/utils/cell/core';
 import { getColumnByKey } from '@/features/metadata/utils/column';
@@ -80,9 +80,9 @@ const GalleryFilesToolbar = () => {
           });
 
         setPendingAttachments(attachments, records.length === 1);
-        globalEventBus.dispatch(DIR_EVENT_BUS_TYPE.SWITCH_TO_CHAT_VIEW);
+        globalEventBus.dispatch(EVENT_BUS_TYPE.SWITCH_TO_CHAT_VIEW);
         if (attachments.length > 0) {
-          EventBus.getInstance().dispatch(DIR_EVENT_BUS_TYPE.CHAT_ATTACH_FILES, {
+          EventBus.getInstance().dispatch(EVENT_BUS_TYPE.CHAT_ATTACH_FILES, {
             attachments,
             reset: records.length === 1,
           });

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import EventBus from '@/components/event-bus';
+import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
 import { KeyCodes } from '@/constants';
-import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
 import { gettext } from '@/utils/constants';
 import { isModG, isModShiftG } from '@/utils/hotkey';
 import OpIcon from '../../../components/op-icon';

@@ -1,11 +1,11 @@
 import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { EVENT_BUS_TYPE, CellType, PRIVATE_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
+import { CellType, PRIVATE_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
 import { getFileNameFromRecord } from '@/features/metadata/utils/cell';
 import { Utils } from '@/utils/utils';
 import ClickOutside from '../../../click-outside';
-import EventBus from '../../../event-bus';
+import EventBus, { EVENT_BUS_TYPE } from '../../../event-bus';
 import { EDITOR_CONTAINER as Z_INDEX_EDITOR_CONTAINER } from '../../constants/z-index';
 import { getCellValueByColumn, getColumnOptionNameById, getColumnOptionNamesByIds } from '../../utils/cell';
 import { checkIsColumnEditable, getColumnOriginName } from '../../utils/column';

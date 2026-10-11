@@ -1,12 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import EventBus from '@/components/event-bus';
+import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
 import SFTable from '@/components/sf-table';
 import { LOCAL_KEY_TREE_NODE_FOLDED } from '@/components/sf-table/constants/tree';
 import { getRowById } from '@/components/sf-table/utils/table';
 import { getTreeNodeByKey, getTreeNodeId } from '@/components/sf-table/utils/tree';
 import toaster from '@/components/toast';
-import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
 import { gettext } from '@/utils/constants';
 import { isNumber } from '@/utils/number';
 import EditTagDialog from '../../../components/dialog/edit-tag-dialog';

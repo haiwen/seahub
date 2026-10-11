@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { EVENT_BUS_TYPE, ROW_HEIGHT } from '@/features/metadata/constants';
+import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
+import { ROW_HEIGHT } from '@/features/metadata/constants';
 import { isShiftKeyDown } from '@/utils/keyboard-utils';
-import EventBus from '../../../event-bus';
 import Loading from '../../../loading';
 import { SEQUENCE_COLUMN_WIDTH } from '../../constants/grid';
 import InteractionMasks from '../../masks/interaction-masks';

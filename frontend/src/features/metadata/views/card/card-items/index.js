@@ -2,11 +2,12 @@ import React, { useMemo, useCallback, useState, useRef, useEffect } from 'react'
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import EmptyTip from '@/components/empty-tip';
+import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import { getRowById } from '@/components/sf-table/utils/table';
 import { useTags } from '@/features/tag/hooks';
 import { gettext } from '@/utils/constants';
 import ImagePreviewer from '../../../components/cell-formatter/image-previewer';
-import { CARD_SETTINGS_KEYS, PRIVATE_COLUMN_KEY, EVENT_BUS_TYPE } from '../../../constants';
+import { CARD_SETTINGS_KEYS, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { getRecordIdFromRecord, getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/cell';
 import { openFile } from '../../../utils/file';

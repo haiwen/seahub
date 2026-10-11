@@ -1,10 +1,9 @@
 import React from 'react';
-import EventBus from '@/components/event-bus';
+import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
 import { OPERATION } from '@/components/sf-table/constants/operation';
 import { checkIsNameColumn, getColumnByIndex } from '@/components/sf-table/utils/column';
 import { RecordMetrics } from '@/components/sf-table/utils/record-metrics';
 import { TreeMetrics } from '@/components/sf-table/utils/tree-metrics';
-import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
 import { gettext } from '@/utils/constants';
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
 

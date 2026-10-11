@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useContext, useEffect, useRef, useState, useCallback } from 'react';
-import EventBus from '@/components/event-bus';
+import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
 import { getSearchRule } from '@/components/sf-table/utils/search';
 import { getRowById } from '@/components/sf-table/utils/table';
 import toaster from '@/components/toast';
@@ -12,7 +12,6 @@ import { gettext } from '@/utils/constants';
 import { Utils, validateName } from '@/utils/utils';
 import {
   CellType,
-  EVENT_BUS_TYPE,
   PER_LOAD_NUMBER,
   PRIVATE_COLUMN_KEY,
   SUPPORT_SEARCH_COLUMN_LIST,

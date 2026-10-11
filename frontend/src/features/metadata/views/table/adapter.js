@@ -3,7 +3,7 @@ import { DropdownItem, Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap
 import { setPendingAttachments } from '@/components/dir-chat/hooks/ai-chat-tools';
 import { AttachmentObject } from '@/components/dir-chat/models';
 import { DROPDOWN_SUBMENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
-import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE as DIR_EVENT_BUS_TYPE } from '@/components/event-bus';
+import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';
 import { GridUtilsAdapter } from '@/components/sf-table/utils/grid-utils-adapter';
 import { useCollaborators } from '@/hooks/collaborators';
@@ -11,7 +11,7 @@ import TextTranslation from '@/utils/text-translation';
 import { Utils } from '@/utils/utils';
 import Editor from '../../components/cell-editors/editor';
 import CellFormatter from '../../components/cell-formatter';
-import { CellType, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '../../constants';
+import { CellType, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '../../constants';
 import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME } from '../../constants/column/icon';
 import { EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS } from '../../constants/column/private';
 import { POPUP_EDITOR_COLUMN_TYPES } from '../../constants/column/type';
@@ -201,9 +201,9 @@ export const createMetadataContextMenuOptions = ({
           });
 
         setPendingAttachments(attachments, !isMultiple);
-        globalEventBus.dispatch(DIR_EVENT_BUS_TYPE.SWITCH_TO_CHAT_VIEW);
+        globalEventBus.dispatch(EVENT_BUS_TYPE.SWITCH_TO_CHAT_VIEW);
         if (attachments.length > 0) {
-          EventBus.getInstance().dispatch(DIR_EVENT_BUS_TYPE.CHAT_ATTACH_FILES, {
+          EventBus.getInstance().dispatch(EVENT_BUS_TYPE.CHAT_ATTACH_FILES, {
             attachments,
             reset: !isMultiple,
           });

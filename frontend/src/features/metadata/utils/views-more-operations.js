@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
 import CustomDropdown from '@/components/dropdown';
-import EventBus from '@/components/event-bus';
+import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';
 import Tooltip from '@/components/tooltip';
 import { baiduMapKey, gettext, googleMapKey } from '@/utils/constants';
 import TextTranslation from '@/utils/text-translation';
-import { EVENT_BUS_TYPE, VIEW_TYPE, VIEW_TYPE_ICON, VIEW_TYPE_LABEL } from '../constants';
+import { VIEW_TYPE, VIEW_TYPE_ICON, VIEW_TYPE_LABEL } from '../constants';
 
 export const ADD_VIEW_KEY = {
   ADD_FOLDER: 'ADD_FOLDER',
