@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { EVENT_BUS_TYPE } from '@/components/event-bus';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext } from '@/utils/constants';
 import { MAP_TYPE, STORAGE_MAP_TYPE_KEY } from '../../constants';
 import RadioGroup from '../radio-group';

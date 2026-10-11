@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { getDirentItemMenuList, getTagFilesOperations } from '@/components/dirent-operation-menu/contextMenuUtils';
 import CustomDropdown from '@/components/dropdown';
-import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';
 import OpElement from '@/components/op-element';
 import OpIcon from '@/components/op-icon';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { getFileById, getFileObj, filterTagFileOperations } from '@/features/tag/utils/file';
 import { gettext } from '@/utils/constants';
 import TextTranslation from '@/utils/text-translation';

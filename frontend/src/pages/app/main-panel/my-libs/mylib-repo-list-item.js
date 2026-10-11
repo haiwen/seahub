@@ -19,15 +19,16 @@ import RepoWebhookDialog from '@/components/dialog/repo-webhook-dialog';
 import ResetEncryptedRepoPasswordDialog from '@/components/dialog/reset-encrypted-repo-password-dialog';
 import ShareDialog from '@/components/dialog/share-dialog';
 import TransferDialog from '@/components/dialog/transfer-dialog';
-import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';
 import LibraryOpMenu from '@/components/library-op-menu';
 import ModalPortal from '@/components/modal-portal';
 import OpIcon from '@/components/op-icon';
 import Rename from '@/components/rename';
 import toaster from '@/components/toast';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { LIST_MODE } from '@/constants/view-mode';
 import { gettext, siteRoot } from '@/utils/constants';
+import EventBus from '@/utils/event-bus';
 import { formatWithTimezone } from '@/utils/time';
 import { Utils } from '@/utils/utils';
 

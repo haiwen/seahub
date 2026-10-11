@@ -8,7 +8,6 @@ import ShareRepoDialog from '@/components/dialog/share-repo-dialog';
 import SortOptionsDialog from '@/components/dialog/sort-options';
 import CustomDropdown from '@/components/dropdown';
 import EmptyTip from '@/components/empty-tip';
-import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';
 import Loading from '@/components/loading';
 import ModalPortal from '@/components/modal-portal';
@@ -16,9 +15,11 @@ import SharedRepoListView from '@/components/shared-repo-list-view/shared-repo-l
 import ReposSortMenu from '@/components/sort-menu';
 import toaster from '@/components/toast';
 import ViewModes from '@/components/view-modes';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { LIST_MODE, GRID_MODE } from '@/constants/view-mode';
 import Repo from '@/models/repo';
 import { gettext, canAddPublicRepo } from '@/utils/constants';
+import EventBus from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
 
 const propTypes = {

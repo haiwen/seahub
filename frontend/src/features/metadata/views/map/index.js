@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ImageDialog from '@/components/dialog/image-dialog';
-import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import ModalPortal from '@/components/modal-portal';
 import { MAP_TYPE as MAP_PROVIDER, PRIVATE_FILE_TYPE } from '@/constants';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { baiduMapKey, fileServerRoot, googleMapKey, siteRoot, thumbnailSizeForGrid, thumbnailSizeForOriginal } from '@/utils/constants';
 import { gcj02_to_bd09, wgs84_to_gcj02 } from '@/utils/coord-transform';
 import { initMapInfo, loadBMap, loadGMap } from '@/utils/map-utils';

@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
 import AboutDialog from '@/components/dialog/about-dialog';
 import CreateGroupDialog from '@/components/dialog/create-group-dialog';
-import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';
 import ModalPortal from '@/components/modal-portal';
 import OpIcon from '@/components/op-icon';
@@ -17,6 +16,7 @@ import {
   SIDE_NAV_SHARE_ADMIN_UNFOLDED_KEY,
   SUB_NAV_ITEM_HEIGHT
 } from '@/constants';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import Group from '@/models/group';
 import {
   gettext, siteRoot, canAddGroup, canAddRepo, canShareRepo,
@@ -25,6 +25,7 @@ import {
   canViewOrg, enableOCM, enableOCMViaWebdav, canCreateWiki,
   isPro, isDBSqlite3, customNavItems, helpLink
 } from '@/utils/constants';
+import EventBus from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
 import LibrariesSubNav from './libraries-sub-nav';
 

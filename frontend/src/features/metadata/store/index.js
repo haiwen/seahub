@@ -1,6 +1,6 @@
 import deepCopy from 'deep-copy';
-import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import { getRowById, getRowsByIds } from '@/components/sf-table/utils/table';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { Utils } from '@/utils/utils';
 import { PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, DEFAULT_RETRY_TIMES, DEFAULT_RETRY_INTERVAL } from '../constants';
 import Metadata from '../model/metadata';

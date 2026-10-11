@@ -1,14 +1,15 @@
 /* eslint-disable react/prop-types */
 import React, { useContext, useEffect, useRef, useState, useCallback } from 'react';
-import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
 import { getSearchRule } from '@/components/sf-table/utils/search';
 import { getRowById } from '@/components/sf-table/utils/table';
 import toaster from '@/components/toast';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { useTags } from '@/features/tag/hooks';
 import { useFileOperations, useMetadataStatus } from '@/hooks';
 import { useCollaborators } from '@/hooks/collaborators';
 import { Dirent } from '@/models';
 import { gettext } from '@/utils/constants';
+import EventBus from '@/utils/event-bus';
 import { Utils, validateName } from '@/utils/utils';
 import {
   CellType,

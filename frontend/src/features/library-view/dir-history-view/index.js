@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
 import CommitDetails from '@/components/dialog/commit-details';
 import UpdateRepoCommitLabels from '@/components/dialog/edit-repo-commit-labels';
-import { eventBus, EVENT_BUS_TYPE } from '@/components/event-bus';
 import Loading from '@/components/loading';
 import SFTable from '@/components/sf-table';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { siteRoot, gettext, enableRepoSnapshotLabel } from '@/utils/constants';
+import { eventBus } from '@/utils/event-bus';
 import { createHistoryColumns } from './columns';
 import { transformCommitsToTableData } from './data-transformer';
 

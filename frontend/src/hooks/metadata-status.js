@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useCallback, useState, useMemo } from 'react';
-import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import Loading from '@/components/loading';
 import toaster from '@/components/toast';
 import { PRIVATE_FILE_TYPE } from '@/constants';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import metadataAPI from '@/features/metadata/api';
 import { enableSeafileAI, gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';

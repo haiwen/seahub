@@ -1,7 +1,8 @@
 import { setPendingAttachments } from '@/components/dir-chat/hooks/ai-chat-tools';
 import { AttachmentObject } from '@/components/dir-chat/models';
-import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE } from '@/components/event-bus';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { Dirent } from '@/models';
+import EventBus, { eventBus as globalEventBus } from '@/utils/event-bus';
 import TextTranslation from '@/utils/text-translation';
 import { Utils } from '@/utils/utils';
 import { lockFile, unlockFile, batchLockFile, batchUnlockFile, freezeDocument, unfreezeDocument, exportDocx, exportMarkdown, exportSdoc, openHistory, openViaClient, openByDefault, openWithOnlyOffice, toggleStar, convertWithOnlyOffice } from './dirent-operations';

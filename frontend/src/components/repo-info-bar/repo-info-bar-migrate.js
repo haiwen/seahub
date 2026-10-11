@@ -1,8 +1,9 @@
 import React from 'react';
 import { Button } from 'reactstrap';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { useMetadataStatus } from '@/hooks';
 import { gettext } from '@/utils/constants';
-import { eventBus, EVENT_BUS_TYPE } from '../event-bus';
+import { eventBus } from '@/utils/event-bus';
 
 const RepoInfoBarMigrate = () => {
 

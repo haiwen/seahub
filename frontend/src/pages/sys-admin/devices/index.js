@@ -3,9 +3,10 @@ import { Button } from 'reactstrap';
 import { useLocation } from '@gatsbyjs/reach-router';
 import { systemAdminAPI } from '@/api/system-admin-api';
 import MainPanelTopbar from '@/components/admin/layout/main-panel-topbar';
-import { EVENT_BUS_TYPE, eventBus } from '@/components/event-bus';
 import toaster from '@/components/toast';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext } from '@/utils/constants';
+import { eventBus } from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
 import DevicesNav from './devices-nav';
 

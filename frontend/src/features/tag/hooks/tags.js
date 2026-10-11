@@ -1,8 +1,8 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import { getRowById } from '@/components/sf-table/utils/table';
 import toaster from '@/components/toast';
 import { PRIVATE_FILE_TYPE } from '@/constants';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { PER_LOAD_NUMBER } from '@/features/metadata/constants';
 import { getColumnOriginName } from '@/features/metadata/utils/column';
 import { useMetadataStatus } from '@/hooks';

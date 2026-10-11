@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import OpIcon from '@/components/op-icon';
 import Switch from '@/components/switch';
 import toaster from '@/components/toast';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import metadataAPI from '../../../api';

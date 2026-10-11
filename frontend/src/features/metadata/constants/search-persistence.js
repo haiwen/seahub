@@ -1,4 +1,4 @@
-import { EVENT_BUS_TYPE } from '@/components/event-bus';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { OPERATION_TYPE } from '../store/operations/constants';
 
 /**

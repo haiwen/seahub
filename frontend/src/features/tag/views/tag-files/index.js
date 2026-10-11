@@ -13,8 +13,8 @@ import {
 } from '@/components/dirent-operation-menu/dirent-operations';
 import { menuHandlers } from '@/components/dirent-operation-menu/menuHandlers';
 import EmptyTip from '@/components/empty-tip';
-import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import toaster from '@/components/toast';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { LIST_MODE } from '@/constants/view-mode';
 import ImagePreviewer from '@/features/metadata/components/cell-formatter/image-previewer';
 import { getRecordIdFromRecord } from '@/features/metadata/utils/cell';

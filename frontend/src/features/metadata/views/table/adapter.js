@@ -3,10 +3,11 @@ import { DropdownItem, Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap
 import { setPendingAttachments } from '@/components/dir-chat/hooks/ai-chat-tools';
 import { AttachmentObject } from '@/components/dir-chat/models';
 import { DROPDOWN_SUBMENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
-import EventBus, { eventBus as globalEventBus, EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';
 import { GridUtilsAdapter } from '@/components/sf-table/utils/grid-utils-adapter';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { useCollaborators } from '@/hooks/collaborators';
+import EventBus, { eventBus as globalEventBus } from '@/utils/event-bus';
 import TextTranslation from '@/utils/text-translation';
 import { Utils } from '@/utils/utils';
 import Editor from '../../components/cell-editors/editor';

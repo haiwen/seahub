@@ -1,6 +1,6 @@
 import React, { useContext, useCallback, useMemo, useState, useRef } from 'react';
-import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import toaster from '@/components/toast';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext, lang } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import metadataAPI from '../api';

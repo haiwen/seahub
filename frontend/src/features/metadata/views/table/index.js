@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { toKeyCode } from 'is-hotkey';
-import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import SFTable from '@/components/sf-table';
 import HeaderDropdownMenu from '@/components/sf-table/table-main/records-header/dropdown-menu';
 import toaster from '@/components/toast';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { useTags } from '@/features/tag/hooks';
 import { useMetadataStatus } from '@/hooks';
 import { isModZ, isModShiftZ } from '@/utils/hotkey';

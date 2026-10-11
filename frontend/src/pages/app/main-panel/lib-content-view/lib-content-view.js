@@ -13,7 +13,6 @@ import { seafileAPI } from '@/api/seafile-api';
 import CopyMoveDirentProgressDialog from '@/components/dialog/copy-move-dirent-progress-dialog';
 import DeleteFolderDialog from '@/components/dialog/delete-folder-dialog';
 import LibDecryptDialog from '@/components/dialog/lib-decrypt-dialog';
-import EventBus, { eventBus, EVENT_BUS_TYPE } from '@/components/event-bus';
 import FileUploader from '@/components/file-uploader/file-uploader';
 import ModalPortal from '@/components/modal-portal';
 import toaster from '@/components/toast';
@@ -29,6 +28,7 @@ import {
   DIR_TABLE_DEFAULT_METADATA_COLUMNS,
   getDirTableRowHeightKey
 } from '@/constants/dir-column-config';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import {
   LIST_MODE,
   TABLE_MODE,
@@ -67,6 +67,7 @@ import {
   thumbnailSizeForOriginal,
   username
 } from '@/utils/constants';
+import EventBus, { eventBus } from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
 
 import '@/css/lib-content-view.css';

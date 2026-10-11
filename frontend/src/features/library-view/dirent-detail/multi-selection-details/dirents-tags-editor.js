@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo, useState, useRef, useEffect } from 'react';
 import { Popover } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import { getRowById } from '@/components/sf-table/utils/table';
 import toaster from '@/components/toast';
 import { KeyCodes } from '@/constants';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import Editor from '@/features/metadata/components/cell-editors/tags-editor';
 import DeleteTag from '@/features/metadata/components/cell-editors/tags-editor/delete-tags';
 import { PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';

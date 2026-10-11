@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';
 import OpElement from '@/components/op-element';
 import OpIcon from '@/components/op-icon';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext } from '@/utils/constants';
+import EventBus from '@/utils/event-bus';
 
 const TrashToolbar = () => {
   const [selectedTrashIds, setSelectedTrashIds] = useState([]);

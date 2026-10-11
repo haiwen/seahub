@@ -2,9 +2,9 @@ import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react'
 import PropTypes from 'prop-types';
 import CenteredLoading from '@/components/centered-loading';
 import ImageDialog from '@/components/dialog/image-dialog';
-import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import ModalPortal from '@/components/modal-portal';
 import { getRowById } from '@/components/sf-table/utils/table';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { siteRoot, fileServerRoot, thumbnailSizeForGrid, thumbnailSizeForOriginal, thumbnailDefaultSize, enableVideoThumbnail } from '@/utils/constants';
 import { getEventClassName } from '@/utils/dom';
 import ObjectUtils from '@/utils/object';

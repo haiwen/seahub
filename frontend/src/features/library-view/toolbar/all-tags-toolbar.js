@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import CustomDropdown from '@/components/dropdown';
-import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
 import Icon from '@/components/icon';
 import OpElement from '@/components/op-element';
 import OpIcon from '@/components/op-icon';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext } from '@/utils/constants';
+import EventBus from '@/utils/event-bus';
 import TextTranslation from '@/utils/text-translation';
 
 const AllTagsToolbar = () => {

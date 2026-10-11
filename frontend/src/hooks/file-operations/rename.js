@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useCallback, useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import RenameDialog from '@/components/dialog/rename-dialog';
-import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import ModalPortal from '@/components/modal-portal';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 
 // This hook provides content about rename file
 const RenameFileContext = React.createContext(null);

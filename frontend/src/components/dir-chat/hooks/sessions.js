@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useMemo, useRef, useState, useCallback } from 'react';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext } from '@/utils/constants';
+import { eventBus } from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
-import { eventBus, EVENT_BUS_TYPE } from '../../../components/event-bus';
 import toaster from '../../../components/toast';
 import { ASK_PAGE_SLUG_ID, SESSION_TAB_TYPE } from '../constants';
 import { ChatSession } from '../models';

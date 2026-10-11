@@ -6,15 +6,16 @@ import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
 import PermSelect from '@/components/dialog/perm-select';
 import EmptyTip from '@/components/empty-tip';
-import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
 import FixedWidthTable from '@/components/fixed-width-table';
 import Icon from '@/components/icon';
 import MobileItemMenu from '@/components/mobile-item-menu';
 import OpIcon from '@/components/op-icon';
 import SharePermissionEditor from '@/components/select-editor/share-permission-editor';
 import toaster from '@/components/toast';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import SharedRepoInfo from '@/models/shared-repo-info';
 import { gettext, siteRoot, isPro } from '@/utils/constants';
+import EventBus from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
 
 class Content extends Component {

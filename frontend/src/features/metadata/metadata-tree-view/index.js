@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
-import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
 import { PRIVATE_FILE_TYPE } from '@/constants';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext } from '@/utils/constants';
+import EventBus from '@/utils/event-bus';
 import { TREE_NODE_LEFT_INDENT, VIEWS_TYPE_FOLDER } from '../constants';
 import { useMetadata } from '../hooks';
 import ViewsFolder from './folder';

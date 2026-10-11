@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import OpIcon from '@/components/op-icon';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import { PRIVATE_COLUMN_KEY } from '../../constants';

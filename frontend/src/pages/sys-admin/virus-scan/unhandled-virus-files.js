@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import { systemAdminAPI } from '@/api/system-admin-api';
 import CommonOperationConfirmationDialog from '@/components/dialog/common-operation-confirmation-dialog';
 import OpMenu from '@/components/dialog/op-menu';
-import { eventBus, EVENT_BUS_TYPE } from '@/components/event-bus';
 import Loading from '@/components/loading';
 import Paginator from '@/components/paginator';
 import toaster from '@/components/toast';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext } from '@/utils/constants';
+import { eventBus } from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
 
 const virusFileItemPropTypes = {

@@ -1,11 +1,12 @@
 import React, { isValidElement, cloneElement } from 'react';
 import deepCopy from 'deep-copy';
 import PropTypes from 'prop-types';
-import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
 import { KeyCodes } from '@/constants';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { CellType, PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
 import { openFile } from '@/features/metadata/utils/file';
 import { gettext } from '@/utils/constants';
+import EventBus from '@/utils/event-bus';
 import { isSpace } from '@/utils/hotkey';
 import { isCtrlKeyHeldDown, isKeyPrintable } from '@/utils/keyboard-utils';
 import { isEmptyObject } from '@/utils/object';

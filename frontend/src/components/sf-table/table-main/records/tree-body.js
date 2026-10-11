@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
+import EventBus from '@/utils/event-bus';
 import { isShiftKeyDown } from '@/utils/keyboard-utils';
 import Loading from '../../../loading';
 import { LOCAL_KEY_TREE_NODE_FOLDED } from '../../constants/tree';

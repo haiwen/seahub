@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import OpIcon from '@/components/op-icon';
 import SetRowHeight from '@/components/set-row-height';
 import SortMenu from '@/components/sort-menu';
 import ChatToolbar from '@/components/toolbar/chat-toolbar';
 import ViewModes from '@/components/view-modes';
 import { PRIVATE_FILE_TYPE } from '@/constants';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { HISTORY_MODE, LIST_MODE, SETTINGS_MODE, TRASH_MODE, TABLE_MODE, CHAT_MODE } from '@/constants/view-mode';
 import { HideColumnSetter } from '@/features/metadata/components/data-process-setter';
 import MetadataViewToolBar from '@/features/metadata/components/view-toolbar';

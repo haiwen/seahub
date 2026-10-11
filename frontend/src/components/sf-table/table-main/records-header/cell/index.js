@@ -1,9 +1,10 @@
 import React, { useRef, useCallback, useMemo } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import EventBus, { EVENT_BUS_TYPE } from '@/components/event-bus';
 import HeaderDropdownMenu from '@/components/sf-table/table-main/records-header/dropdown-menu';
 import Tooltip from '@/components/tooltip';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
+import EventBus from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
 import Icon from '../../../../icon';
 import { MIN_COLUMN_WIDTH } from '../../../constants/grid';

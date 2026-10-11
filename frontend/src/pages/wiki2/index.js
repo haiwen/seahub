@@ -6,13 +6,13 @@ import dayjs from 'dayjs';
 import throttle from 'lodash.throttle';
 import SDocServerApi from '@/api/sdoc-server-api';
 import wikiAPI from '@/api/wiki-api';
-import { eventBus } from '@/components/event-bus';
 import ResizeBar from '@/components/resize-bar';
 import {
   DRAG_HANDLER_HEIGHT, INIT_SIDE_PANEL_RATE, MAX_SIDE_PANEL_RATE_IN_WIKI, MIN_SIDE_PANEL_RATE
 } from '@/components/resize-bar/constants';
 import toaster from '@/components/toast';
 import { wikiId, siteRoot, lang, isWiki2, seadocServerUrl, wikiPermission } from '@/utils/constants';
+import { eventBus } from '@/utils/event-bus';
 import LocalStorage from '@/utils/local-storage-utils';
 import { Utils } from '@/utils/utils';
 import MainPanel from './main-panel';

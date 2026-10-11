@@ -1,7 +1,7 @@
 import collaboratorAPI from '@/api/collaborator-api';
-import EventBus from '@/components/event-bus';
 import tagsAPI from '@/features/tag/api';
 import { username, lang } from '@/utils/constants';
+import EventBus from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
 import metadataAPI from './api';
 import {

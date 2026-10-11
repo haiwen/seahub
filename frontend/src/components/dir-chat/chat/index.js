@@ -2,10 +2,11 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { chatAPI } from '@/api/chat-api';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext, username } from '@/utils/constants';
+import { eventBus } from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
 import CenteredLoading from '../../centered-loading';
-import { eventBus, EVENT_BUS_TYPE } from '../../event-bus';
 import Icon from '../../icon';
 import toaster from '../../toast';
 import ChatHeader from '../chat-header';

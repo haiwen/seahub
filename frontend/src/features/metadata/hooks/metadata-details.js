@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useCallback, useState, useMemo, useRef } from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { eventBus, EVENT_BUS_TYPE } from '@/components/event-bus';
 import toaster from '@/components/toast';
 import { SYSTEM_FOLDERS } from '@/constants';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import tagsAPI from '@/features/tag/api';
 import { useMetadataStatus } from '@/hooks';
+import { eventBus } from '@/utils/event-bus';
 import ObjectUtils from '@/utils/object';
 import { Utils } from '@/utils/utils';
 import metadataAPI from '../api';

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useCallback, useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import CreateFileDialog from '@/components/dialog/create-file-dialog';
-import { EVENT_BUS_TYPE } from '@/components/event-bus';
 import ModalPortal from '@/components/modal-portal';
+import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 
 // This hook provides content about create file
 const CreateFileContext = React.createContext(null);
