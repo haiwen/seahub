@@ -1,8 +1,8 @@
+import tagsAPI from '@/api/tag-api';
 import LocalStorage from '@/features/metadata/utils/local-storage';
 import { username, lang } from '@/utils/constants';
 import EventBus from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
-import tagsAPI from './api';
 
 class Context {
 

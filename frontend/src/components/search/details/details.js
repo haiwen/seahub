@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import tagsAPI from '@/api/tag-api';
 import { PER_LOAD_NUMBER } from '@/features/metadata/constants';
-import tagsAPI from '@/features/tag/api';
 import { TAGS_DEFAULT_SORT } from '@/features/tag/constants/sort';
 import TagsData from '@/features/tag/model/tagsData';
 import { normalizeColumns } from '@/features/tag/utils/column';
