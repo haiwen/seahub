@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
+import { CellType } from '@/constants/metadata-column';
 import Formatter from '@/features/metadata/components/formatter';
-import { CellType } from '@/features/metadata/constants';
 import Repo from '@/models/repo';
 import { gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
