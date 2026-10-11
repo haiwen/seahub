@@ -1,5 +1,8 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { Detail, Header, Body } from '@/components/dirent-detail/detail';
+import DetailItem from '@/components/dirent-detail/detail-item';
+import Loading from '@/components/loading';
 import metadataAPI from '@/features/metadata/api';
 import RateEditor from '@/features/metadata/components/detail-editor/rate-editor';
 import { CellType, PRIVATE_COLUMN_KEY } from '@/features/metadata/constants';
@@ -8,9 +11,6 @@ import { getColumnDisplayName } from '@/features/metadata/utils/column';
 import { useMetadataStatus } from '@/hooks';
 import { gettext, siteRoot, thumbnailSizeForGrid } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
-import Loading from '../../loading';
-import { Detail, Header, Body } from '../detail';
-import DetailItem from '../detail-item';
 import DirentsTagsEditor from './dirents-tags-editor';
 
 import './index.css';

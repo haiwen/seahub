@@ -1,6 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
+import { Detail, Header, Body } from '@/components/dirent-detail/detail';
+import DirDetails from '@/components/dirent-detail/dirent-details/dir-details';
+import FileDetails from '@/components/dirent-detail/dirent-details/file-details';
+import { eventBus } from '@/components/event-bus';
+import toaster from '@/components/toast';
+import VideoPlayer from '@/components/video-player';
 import AIIcon from '@/features/metadata/components/metadata-details/ai-icon';
 import SettingsIcon from '@/features/metadata/components/metadata-details/settings-icon';
 import { EVENT_BUS_TYPE } from '@/features/metadata/constants';
@@ -8,12 +14,6 @@ import { MetadataDetailsProvider } from '@/features/metadata/hooks/metadata-deta
 import { siteRoot, thumbnailSizeForGrid, enableSeafileAI, fileServerRoot, MimetypesKind } from '@/utils/constants';
 import ObjectUtils from '@/utils/object';
 import { Utils } from '@/utils/utils';
-import { eventBus } from '../../event-bus';
-import toaster from '../../toast';
-import VideoPlayer from '../../video-player';
-import { Detail, Header, Body } from '../detail';
-import DirDetails from './dir-details';
-import FileDetails from './file-details';
 
 import './index.css';
 
