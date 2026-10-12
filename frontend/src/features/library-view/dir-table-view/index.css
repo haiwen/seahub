@@ -39,6 +39,10 @@
   text-align: right;
 }
 
+.dir-table-view .sf-table-cell.actions-cell {
+  justify-content: center;
+}
+
 .dir-table-view .sf-table-cell.actions-cell .action-cell-content {
   justify-content: center;
 }

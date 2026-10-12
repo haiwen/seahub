@@ -2,6 +2,10 @@
   width: 100%;
 }
 
+.sf-metadata-all-tags-wrapper .sf-table-cell.actions-cell {
+  justify-content: center;
+}
+
 .sf-table-child-tags-formatter,
 .sf-table-tag-files-formatter {
   text-align: right;
