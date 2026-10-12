@@ -120,6 +120,17 @@ def edit_profile(request):
         enable_weixin = False
         social_connected_weixin = False
 
+    if getattr(settings, 'ENABLE_OAUTH', False) and \
+            not getattr(settings, 'ENABLE_CUSTOM_OAUTH', False):
+        oauth_provider = getattr(settings, 'OAUTH_PROVIDER', '') or \
+            getattr(settings, 'OAUTH_PROVIDER_DOMAIN', '')
+        enable_oauth = True
+        oauth_connected = SocialAuthUser.objects.filter(
+            username=request.user.username, provider=oauth_provider).exists()
+    else:
+        enable_oauth = False
+        oauth_connected = False
+
     if ENABLE_ADFS_LOGIN:
         enable_adfs = True
         saml_connected = SocialAuthUser.objects.filter(
@@ -178,6 +189,8 @@ def edit_profile(request):
             'social_connected_dingtalk': social_connected_dingtalk,
             'enable_weixin': enable_weixin,
             'social_connected_weixin': social_connected_weixin,
+            'enable_oauth': enable_oauth,
+            'oauth_connected': oauth_connected,
             'ENABLE_USER_SET_CONTACT_EMAIL': settings.ENABLE_USER_SET_CONTACT_EMAIL,
             'ENABLE_USER_SET_NAME': settings.ENABLE_USER_SET_NAME,
             'user_unusable_password': request.user.enc_password == UNUSABLE_PASSWORD,
