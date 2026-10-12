@@ -67,6 +67,18 @@ class OAuthConnectTest(BaseTestCase):
         self.assertEqual('/profile/', resp['Location'])
         mock_session_cls.assert_not_called()
 
+    def test_oauth_connect_rejects_external_next(self):
+        SocialAuthUser.objects.add(self.user.username, 'oauth', 'some-uid')
+        mock_session_cls = MagicMock()
+
+        settings = dict(ENABLE_OAUTH_SETTINGS, OAuth2Session=mock_session_cls)
+        with patch.dict(oauth_views.__dict__, settings):
+            resp = self.client.get(reverse('oauth_connect'),
+                                   {'next': '//evil.example.com/'})
+
+        self.assertEqual(302, resp.status_code)
+        self.assertEqual('/', resp['Location'])
+
     def _disconnect(self):
         with patch.dict(oauth_views.__dict__, ENABLE_OAUTH_SETTINGS):
             return self.client.post(reverse('oauth_disconnect') + '?next=/')
@@ -79,6 +91,16 @@ class OAuthConnectTest(BaseTestCase):
         self.assertEqual(302, resp.status_code)
         self.assertFalse(SocialAuthUser.objects.filter(
             username=self.user.username, provider='oauth').exists())
+
+    def test_oauth_disconnect_rejects_external_next(self):
+        SocialAuthUser.objects.add(self.user.username, 'oauth', 'some-uid')
+
+        with patch.dict(oauth_views.__dict__, ENABLE_OAUTH_SETTINGS):
+            resp = self.client.post(
+                reverse('oauth_disconnect') + '?next=//evil.example.com/')
+
+        self.assertEqual(302, resp.status_code)
+        self.assertEqual('/', resp['Location'])
 
     def test_oauth_disconnect_rejects_get(self):
         with patch.dict(oauth_views.__dict__, ENABLE_OAUTH_SETTINGS):

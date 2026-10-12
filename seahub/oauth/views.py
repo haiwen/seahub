@@ -221,8 +221,8 @@ def oauth_callback(request):
 
         if not oauth_user:
             if not SocialAuthUser.objects.add(request.user.username, OAUTH_PROVIDER, uid):
-                logger.error('Failed to bind OAuth uid %s to user %s.',
-                             uid, request.user.username)
+                logger.error('Failed to bind OAuth account to user %s.',
+                             request.user.username)
                 return render_error(request, _('Failed to connect OAuth, please contact administrator.'))
 
         return HttpResponseRedirect(request.session.get('oauth_redirect',
@@ -327,10 +327,9 @@ def oauth_callback(request):
 
 def _get_safe_next_url(request):
     next_url = request.GET.get(auth.REDIRECT_FIELD_NAME, settings.LOGIN_REDIRECT_URL)
-    if not url_has_allowed_host_and_scheme(url=next_url,
-                                           allowed_hosts={request.get_host()}):
-        next_url = settings.LOGIN_REDIRECT_URL
-    return next_url
+    if url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+        return next_url
+    return settings.LOGIN_REDIRECT_URL
 
 
 @login_required
