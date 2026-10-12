@@ -16,6 +16,7 @@ import MainPanel from './main-panel';
 import SidePanel from './side-panel';
 import SocialLogin from './social-login';
 import SocialLoginDingtalk from './social-login-dingtalk';
+import SocialLoginOAuth from './social-login-oauth';
 import SocialLoginSAML from './social-login-saml';
 import SocialLoginWeixin from './social-login-weixin';
 import TopToolbar from './top-toolbar';
@@ -39,6 +40,7 @@ const {
   enableWechatWork,
   enableDingtalk,
   enableWeixin,
+  enableOAuth,
   isOrgContext,
   enableADFS,
   enableMultiADFS,
@@ -59,7 +61,7 @@ class Settings extends React.Component {
       { show: true, href: '#lang-setting', text: gettext('Language') },
       { show: isPro, href: '#email-notice', text: gettext('Email Notification') },
       { show: twoFactorAuthEnabled, href: '#two-factor-auth', text: gettext('Two-Factor Authentication') },
-      { show: (enableWechatWork || enableDingtalk || enableWeixin || enableADFS || (enableMultiADFS && isOrgContext)), href: '#social-auth', text: gettext('Single Sign On (SSO)') },
+      { show: (enableWechatWork || enableDingtalk || enableWeixin || enableOAuth || enableADFS || (enableMultiADFS && isOrgContext)), href: '#social-auth', text: gettext('Single Sign On (SSO)') },
       { show: true, href: '#linked-devices', text: gettext('Linked Devices') },
       { show: enableDeleteAccount, href: '#del-account', text: gettext('Delete Account') },
     ];
@@ -181,6 +183,7 @@ class Settings extends React.Component {
                 {enableWechatWork && <SocialLogin />}
                 {enableDingtalk && <SocialLoginDingtalk />}
                 {enableWeixin && <SocialLoginWeixin />}
+                {enableOAuth && <SocialLoginOAuth />}
                 {(enableADFS || (enableMultiADFS && isOrgContext)) && <SocialLoginSAML />}
                 <LinkedDevices />
                 {enableDeleteAccount && <DeleteAccount />}

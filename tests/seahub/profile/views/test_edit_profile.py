@@ -66,3 +66,23 @@ class EditProfileTest(BaseTestCase):
 
         self.assertEqual(200, resp.status_code)
         self.assertTrue(mock_render.call_args.args[2]['ENABLE_WEBDAV_SECRET'])
+
+    @patch('seahub.profile.views.render', return_value=HttpResponse())
+    @override_settings(ENABLE_OAUTH=True, OAUTH_PROVIDER='oauth')
+    def test_oauth_setting_is_shown_when_oauth_is_enabled(self, mock_render):
+        resp = self.client.get(self.url)
+
+        self.assertEqual(200, resp.status_code)
+        self.assertTrue(mock_render.call_args.args[2]['enable_oauth'])
+        self.assertFalse(mock_render.call_args.args[2]['oauth_connected'])
+
+    @patch('seahub.profile.views.render', return_value=HttpResponse())
+    @override_settings(ENABLE_OAUTH=True, OAUTH_PROVIDER='oauth')
+    def test_oauth_setting_reports_connected_account(self, mock_render):
+        SocialAuthUser.objects.add(
+            self.tmp_user.username, 'oauth', self.tmp_user.username)
+
+        resp = self.client.get(self.url)
+
+        self.assertEqual(200, resp.status_code)
+        self.assertTrue(mock_render.call_args.args[2]['oauth_connected'])
