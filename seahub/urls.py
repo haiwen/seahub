@@ -244,7 +244,6 @@ urlpatterns = [
     path('oauth/', include('seahub.oauth.urls')),
     path('thirdparty-editor/', include('seahub.thirdparty_editor.urls')),
     path('ocm-via-webdav/', include('seahub.ocm_via_webdav.urls')),
-    path('cad/', include('seahub.cad.urls')),
 
     path('sso-to-thirdpart/', sso_to_thirdpart, name='sso-to-thirdpart'),
 
