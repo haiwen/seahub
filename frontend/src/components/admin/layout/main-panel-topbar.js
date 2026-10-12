@@ -18,7 +18,7 @@ class MainPanelTopbar extends Component {
       <div className={`main-panel-north admin-main-panel-north ${this.props.children ? 'border-left-show' : ''}`}>
         <div className="cur-view-toolbar">
           <span
-            className="side-nav-toggle hidden-md-up d-md-none"
+            className="side-nav-toggle d-md-none"
             title={gettext('Side Nav Menu')}
             onClick={this.props.toggleSidePanel}
           >

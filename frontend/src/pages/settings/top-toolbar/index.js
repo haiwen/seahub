@@ -15,7 +15,7 @@ const TopToolbar = ({ onShowSidePanel, onSearchedClick, searchPlaceholder, child
   return (
     <div className={`main-panel-north ${children ? 'border-left-show' : ''}`}>
       <div className="cur-view-toolbar">
-        <span title="Side Nav Menu" onClick={onShowSidePanel} className="side-nav-toggle hidden-md-up d-md-none d-flex align-items-center">
+        <span title="Side Nav Menu" onClick={onShowSidePanel} className="side-nav-toggle d-md-none d-flex align-items-center">
           <Icon symbol="menu" />
         </span>
         {children}
