@@ -173,6 +173,7 @@ class WikiNav extends Component {
       children: [
         { key: 'import-docx', label: gettext('Import page from docx'), onClick: () => this.handleImportPage('.docx') },
         { key: 'import-md', label: gettext('Import page from Markdown'), onClick: () => this.handleImportPage('.md') },
+        { key: 'import-sdoc', label: gettext('Import page from sdoczip'), onClick: () => this.handleImportPage('.sdoczip') },
       ],
     }];
     return (

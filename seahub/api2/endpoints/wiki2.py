@@ -29,6 +29,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, is_wiki_repo, to_python_boolean
 from seahub.utils.db_api import SeafileDB
 from seahub.wiki2.models import Wiki2 as Wiki
+from seahub.wiki2.import_page import import_sdoc_wiki_page
 from seahub.wiki.models import Wiki as OldWiki
 from seahub.wiki2.models import WikiPageTrash, Wiki2Publish, WikiFileViews, Wiki2Settings
 from seahub.repo_metadata.models import RepoMetadata
@@ -2007,7 +2008,7 @@ class Wiki2ImportPageView(APIView):
 
         filename = file.name
         extension = filename.split('.')[-1].lower()
-        if extension not in  ['docx', 'md']:
+        if extension not in  ['docx', 'md', 'sdoczip']:
             error_msg = 'file invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -2025,6 +2026,9 @@ class Wiki2ImportPageView(APIView):
         repo_id = wiki_id
         if check_quota(repo_id) < 0:
             return api_error(443, _("Out of quota."))
+
+        if extension == 'sdoczip':
+            return import_sdoc_wiki_page(wiki, username, file, from_page_id)
 
         tmp_wiki_path = '/tmp/wiki/page'
         if not os.path.exists(tmp_wiki_path):
