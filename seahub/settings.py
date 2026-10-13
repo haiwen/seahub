@@ -295,6 +295,7 @@ INSTALLED_APPS = [
     'seahub.subscription',
     'seahub.billing',
     'seahub.exdraw',
+    'seahub.weboffice',
 ]
 
 

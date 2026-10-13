@@ -157,6 +157,8 @@
             showLogoutIcon: {% if show_logout_icon %} true {% else %} false {% endif %},
             additionalShareDialogNote: {% if additional_share_dialog_note %} {{ additional_share_dialog_note|safe }} {% else %} null {% endif %},
             additionalAboutDialogLinks: {% if additional_about_dialog_links %} {{ additional_about_dialog_links|safe }} {% else %} null {% endif %},
+            enableWPSWeboffice: {% if enable_wps_weboffice %} true {% else %} false {% endif %},
+            wpsWebofficeFileExtension: {% if wps_weboffice_file_extension %} {{wps_weboffice_file_extension|safe}} {% else %} [] {% endif %},
             enableOnlyoffice: {% if enable_onlyoffice %} true {% else %} false {% endif %},
             onlyofficeEditFileExtension: {% if onlyoffice_edit_file_extension %} {{onlyoffice_edit_file_extension|safe}} {% else %} [] {% endif %},
             onlyofficeSupportEditDocxf: {% if onlyoffice_support_edit_docxf %} true {% else %} false {% endif %},
