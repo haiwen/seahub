@@ -168,6 +168,7 @@ class WikiNav extends Component {
     const isDesktop = Utils.isDesktop();
     const importDocxLabel = gettext('Import page from docx');
     const importMdLabel = gettext('Import page from Markdown');
+    const importSdocLabel = gettext('Import page from sdoczip');
     const pageOperationItems = [{
       key: 'import-page',
       label: gettext('Import page'),
@@ -175,6 +176,7 @@ class WikiNav extends Component {
       children: [
         { key: 'import-docx', label: importDocxLabel, onClick: () => this.handleImportPage('.docx') },
         { key: 'import-md', label: importMdLabel, onClick: () => this.handleImportPage('.md') },
+        { key: 'import-sdoc', label: importSdocLabel, onClick: () => this.handleImportPage('.sdoczip') },
       ],
     }];
     return (

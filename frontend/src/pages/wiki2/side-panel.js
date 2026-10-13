@@ -178,6 +178,9 @@ class SidePanel extends PureComponent {
       const { page_id, name, path, docUuid } = res.data;
       task_id = res.data.task_id;
       newPage = new Page({ id: page_id, name, icon: '', path, docUuid });
+      if (res.data.is_finished === true) {
+        return res;
+      }
       this.setState({
         taskId: task_id
       });
@@ -192,6 +195,7 @@ class SidePanel extends PureComponent {
         this.queryImportPageStatus(task_id, 'import', newPage, from_page_id);
       }
     }).catch((error) => {
+      this.setState({ isShowImportPageDialog: false });
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
       errorCallback && errorCallback();

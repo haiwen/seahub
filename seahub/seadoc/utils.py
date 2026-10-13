@@ -174,6 +174,42 @@ def get_seadoc_asset_upload_link(repo_id, parent_path, username):
     return upload_link
 
 
+def import_sdoc_zip(repo_id, parent_dir, filename, file_uuid, username, local_file_path):
+    with ZipFile(local_file_path) as zip_file:
+        content = zip_file.read('content.json')
+        json.loads(content)
+        FileUUIDMap.objects.create_fileuuidmap_by_uuid(
+            file_uuid, repo_id, parent_dir, filename, is_dir=False)
+        seafile_api.mkdir_with_parents(repo_id, '/', parent_dir.strip('/'), username)
+        upload_link = get_seadoc_asset_upload_link(repo_id, parent_dir, username)
+        if not upload_link:
+            raise Exception('upload token invalid')
+
+        files = {'file': (filename, content)}
+        data = {'parent_dir': parent_dir, 'target_file': posixpath.join(parent_dir, filename)}
+        resp = requests.post(upload_link, files=files, data=data)
+        if not resp.ok:
+            raise Exception('Save sdoc file failed')
+
+        image_names = [name for name in zip_file.namelist()
+                       if name.startswith('images/') and not name.endswith('/')]
+        if image_names:
+            image_parent_path = gen_seadoc_image_parent_path(file_uuid, repo_id, username)
+            image_upload_link = get_seadoc_asset_upload_link(repo_id, image_parent_path, username)
+            if not image_upload_link:
+                raise Exception('upload token invalid')
+            for image_name in image_names:
+                image_filename = posixpath.basename(image_name)
+                files = {'file': (image_filename, zip_file.read(image_name))}
+                data = {
+                    'parent_dir': image_parent_path,
+                    'target_file': posixpath.join(image_parent_path, image_filename),
+                }
+                resp = requests.post(image_upload_link, files=files, data=data)
+                if not resp.ok:
+                    raise Exception('Upload sdoc image failed')
+
+
 def get_seadoc_asset_download_link(repo_id, parent_path, filename, username):
     file_path = posixpath.join(parent_path, filename)
     obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
