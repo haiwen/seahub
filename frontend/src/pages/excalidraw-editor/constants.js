@@ -29,6 +29,7 @@ export const SAVE_TO_LOCAL_STORAGE_TIMEOUT = 300;
 export const INITIAL_SCENE_UPDATE_TIMEOUT = 5000;
 export const FILE_UPLOAD_TIMEOUT = 300;
 export const LOAD_IMAGES_TIMEOUT = 500;
+export const PREVIEW_COMMIT_DELAY = 300;
 
 export const LIBRARY_SIDEBAR_TAB = 'library';
 export const CANVAS_SEARCH_TAB = 'search';
