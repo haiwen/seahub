@@ -29,9 +29,9 @@
     <div id="wrapper" class="{{ LANGUAGE_CODE }} d-flex fd-col h100">
         {% block info_bar_message %}
         {% if request.user.is_authenticated and request.cur_note %}
-        <div id="info-bar" class="d-flex justify-content-between">
+        <div id="info-bar" class="d-flex justify-content-between align-items-center">
             <p id="info-bar-info" class="m-0">{{ request.cur_note.message|urlize }}</p>
-            <span class="close" data="{{ request.cur_note.id }}" title="{% trans "Close" %}"><span class="info-bar-close-icon" aria-hidden="true"></span></span>
+            <span class="close d-flex align-items-center" data="{{ request.cur_note.id }}" title="{% trans "Close" %}" role="button" aria-label="{% trans 'Close' %}"><span class="info-bar-close-icon" aria-hidden="true"></span></span>
         </div>
         {% endif %}
         {% endblock info_bar_message %}
@@ -123,7 +123,7 @@ function ajaxErrorHandler(xhr, textStatus, errorThrown) {
 {% if request.user.is_authenticated %}
 {% if request.cur_note %}
 $('#info-bar .close').on('click', function() {
-    $('#info-bar').addClass('hide');
+    $('#info-bar').addClass('d-none');
     if (navigator.cookieEnabled) {
         var date = new Date(),
             cookies = document.cookie.split('; '),
