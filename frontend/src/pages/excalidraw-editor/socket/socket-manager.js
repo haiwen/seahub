@@ -159,13 +159,8 @@ class SocketManager {
     });
     this.pendingRemoteUpdates.sort((left, right) => left.version - right.version);
 
-    if (elements.length > 0) {
-      const remoteSceneVersion = getSceneVersion(elements);
-      this.lastBroadcastedOrReceivedSceneVersion = Math.max(
-        this.lastBroadcastedOrReceivedSceneVersion,
-        remoteSceneVersion,
-      );
-    }
+    // Advance the scene baseline only when applying updates; local edits may
+    // arrive before the scheduled render and must still enter the preview queue.
     this.setVersion(Math.max(this.getVersion(), normalizedVersion));
 
     if (!this.previewElements) {
