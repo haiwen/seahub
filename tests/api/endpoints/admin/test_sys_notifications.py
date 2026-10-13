@@ -52,6 +52,71 @@ class AdminSysNotificationsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         assert json_resp['notification']['msg'] == data['msg']
 
+    def test_create_notification_at_max_length(self):
+        self.login_as(self.admin)
+
+        data = {
+            'msg': 'a' * Notification.MESSAGE_MAX_LENGTH,
+        }
+        resp = self.client.post(self.url, json.dumps(data),
+                'application/json')
+
+        self.assertEqual(200, resp.status_code)
+
+    def test_create_notification_with_too_long_msg(self):
+        self.login_as(self.admin)
+
+        data = {
+            'msg': 'a' * (Notification.MESSAGE_MAX_LENGTH + 1),
+        }
+        resp = self.client.post(self.url, json.dumps(data),
+                'application/json')
+
+        self.assertEqual(400, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert 'too long' in json_resp['error_msg']
+        self.assertEqual(1, Notification.objects.count())
+
+    def test_create_notification_with_crlf_msg(self):
+        self.login_as(self.admin)
+
+        # browsers submit textarea line breaks as CRLF, normalize them
+        # before counting the length
+        msg = 'a' * (Notification.MESSAGE_MAX_LENGTH - 3) + '\r\n' + 'aa'
+        self.assertEqual(Notification.MESSAGE_MAX_LENGTH + 1, len(msg))
+
+        data = {'msg': msg}
+        resp = self.client.post(self.url, json.dumps(data),
+                'application/json')
+
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertEqual(
+                'a' * (Notification.MESSAGE_MAX_LENGTH - 3) + '\n' + 'aa',
+                json_resp['notification']['msg'])
+
+    def test_create_notification_with_too_long_crlf_msg(self):
+        self.login_as(self.admin)
+
+        msg = 'a' * (Notification.MESSAGE_MAX_LENGTH - 2) + '\r\n' + 'aa'
+
+        data = {'msg': msg}
+        resp = self.client.post(self.url, json.dumps(data),
+                'application/json')
+
+        self.assertEqual(400, resp.status_code)
+        self.assertEqual(1, Notification.objects.count())
+
+    def test_create_notification_with_non_string_msg(self):
+        self.login_as(self.admin)
+
+        for value in (123, True, ['a'], {'key': 'value'}):
+            data = {'msg': value}
+            resp = self.client.post(self.url, json.dumps(data),
+                    'application/json')
+            self.assertEqual(400, resp.status_code)
+        self.assertEqual(1, Notification.objects.count())
+
     def test_create_notification_with_invalid_user_permission(self):
         self.login_as(self.user)
         data = {

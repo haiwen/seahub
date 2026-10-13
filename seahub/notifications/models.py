@@ -46,7 +46,8 @@ class Notification(models.Model):
     """
         global system notification
     """
-    message = models.CharField(max_length=512)
+    MESSAGE_MAX_LENGTH = 512
+    message = models.CharField(max_length=MESSAGE_MAX_LENGTH)
     primary = models.BooleanField(default=False, db_index=True)
     objects = NotificationManager()
 

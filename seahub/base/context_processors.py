@@ -77,6 +77,8 @@ def base(request):
     Add seahub base configure to the context.
 
     """
+    from seahub.notifications.models import Notification
+
     try:
         org = request.user.org
     except AttributeError:
@@ -153,6 +155,7 @@ def base(request):
         'share_link_password_strength_level': config.SHARE_LINK_PASSWORD_STRENGTH_LEVEL,
         'share_link_always_send_password_separately': SHARE_LINK_ALWAYS_SEND_PASSWORD_SEPARATELY,
         'repo_password_min_length': config.REPO_PASSWORD_MIN_LENGTH,
+        'sys_notification_message_max_length': Notification.MESSAGE_MAX_LENGTH,
         'events_enabled': EVENTS_ENABLED,
         'sysadmin_extra_enabled': True if is_pro_version() else False,
         'multi_tenancy': MULTI_TENANCY,

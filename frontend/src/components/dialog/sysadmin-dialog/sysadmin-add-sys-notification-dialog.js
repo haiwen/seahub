@@ -1,8 +1,9 @@
 import React from 'react';
-import { Button, Modal, ModalBody, ModalFooter, Form, FormGroup, Input } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter, Form, FormGroup, Input, FormText, Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
-import { gettext } from '@/utils/constants';
+import { gettext, sysNotificationMessageMaxLength } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
@@ -15,7 +16,9 @@ class SysAdminAddSysNotificationDialog extends React.Component {
     super(props);
     this.state = {
       value: '',
-      isSubmitBtnActive: false
+      isSubmitBtnActive: false,
+      isSubmitting: false,
+      errorMsg: ''
     };
   }
 
@@ -23,13 +26,21 @@ class SysAdminAddSysNotificationDialog extends React.Component {
     const value = e.target.value;
     this.setState({
       value: value,
-      isSubmitBtnActive: value.trim() != ''
+      isSubmitBtnActive: value.trim() != '',
+      errorMsg: ''
     });
   };
 
   handleSubmit = () => {
-    this.toggle();
-    this.props.addNotification(this.state.value.trim());
+    this.setState({ isSubmitting: true, errorMsg: '' });
+    this.props.addNotification(this.state.value.trim()).then(() => {
+      this.toggle();
+    }).catch((error) => {
+      this.setState({
+        isSubmitting: false,
+        errorMsg: Utils.getErrorMsg(error)
+      });
+    });
   };
 
   toggle = () => {
@@ -37,6 +48,7 @@ class SysAdminAddSysNotificationDialog extends React.Component {
   };
 
   render() {
+    const { value, isSubmitBtnActive, isSubmitting, errorMsg } = this.state;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <SeahubModalHeader toggle={this.toggle}>{gettext('Add new notification')}</SeahubModalHeader>
@@ -45,15 +57,20 @@ class SysAdminAddSysNotificationDialog extends React.Component {
             <FormGroup>
               <Input
                 type="textarea"
-                value={this.state.value}
+                value={value}
                 onChange={this.handleChange}
+                maxLength={sysNotificationMessageMaxLength}
+                disabled={isSubmitting}
+                style={{ minHeight: '120px' }}
               />
+              <FormText color="muted" className="text-right">{value.length}/{sysNotificationMessageMaxLength}</FormText>
             </FormGroup>
+            {errorMsg && <Alert color="danger">{errorMsg}</Alert>}
           </Form>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.handleSubmit} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
+          <Button color="primary" onClick={this.handleSubmit} disabled={!isSubmitBtnActive || isSubmitting}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );

@@ -89,6 +89,7 @@ export const thumbnailSizeForOriginal = window.app.pageOptions.thumbnailSizeForO
 export const thumbnailDefaultSize = window.app.pageOptions.thumbnailDefaultSize;
 export const thumbnailSizeForGrid = window.app.pageOptions.thumbnailSizeForGrid;
 export const repoPasswordMinLength = window.app.pageOptions.repoPasswordMinLength;
+export const sysNotificationMessageMaxLength = window.app.pageOptions.sysNotificationMessageMaxLength;
 export const canAddPublicRepo = window.app.pageOptions.canAddPublicRepo;
 export const canInvitePeople = window.app.pageOptions.canInvitePeople;
 export const canLockUnlockFile = window.app.pageOptions.canLockUnlockFile;

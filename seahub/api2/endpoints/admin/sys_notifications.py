@@ -1,6 +1,7 @@
 import logging
 
 from django.core.cache import cache
+from django.utils.translation import gettext as _
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
@@ -68,8 +69,17 @@ class AdminSysNotificationsView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         msg = request.data.get('msg', '')
-        if not msg:
+        if not isinstance(msg, str) or not msg:
             error_msg = 'msg invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # Browsers submit textarea line breaks as CRLF in form data, while the
+        # frontend counts them as a single LF character, so normalize line
+        # breaks before checking the length to keep the limit consistent.
+        msg = msg.replace('\r\n', '\n')
+
+        if len(msg) > Notification.MESSAGE_MAX_LENGTH:
+            error_msg = _('msg is too long (max %d characters).') % Notification.MESSAGE_MAX_LENGTH
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
