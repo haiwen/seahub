@@ -7,7 +7,6 @@ import { stateDebug } from '../utils/debug';
 import { isInitializedImageElement } from '../utils/element-utils';
 import EventBus from '../utils/event-bus';
 import { updateStaleImageStatuses } from '../utils/exdraw-utils';
-import RemoteOperationIdCache from './remote-operation-id-cache';
 import SocketClient from './socket-client';
 
 const STATE = {
@@ -31,7 +30,6 @@ class SocketManager {
     this.previewElements = null;
     this.previewCommitTimer = null;
     this.pendingRemoteUpdates = [];
-    this.remoteOperationIds = new RemoteOperationIdCache();
     this.remoteRenderFrame = null;
     this.collaborators = new Map();
     const { user } = config;
@@ -149,21 +147,15 @@ class SocketManager {
     this.syncLocalElementsToOthers(elements, true);
   };
 
-  enqueueRemoteSceneUpdate = (elements, version, operationId) => {
+  enqueueRemoteSceneUpdate = (elements, version) => {
     if (!Array.isArray(elements)) {
       return;
     }
 
     const normalizedVersion = Number.isFinite(Number(version)) ? Number(version) : this.getVersion();
-    const remoteOperationId = operationId || `version:${normalizedVersion}`;
-    if (!this.remoteOperationIds.remember(remoteOperationId)) {
-      return;
-    }
-
     this.pendingRemoteUpdates.push({
       elements,
       version: normalizedVersion,
-      operation_id: remoteOperationId,
     });
     this.pendingRemoteUpdates.sort((left, right) => left.version - right.version);
 
@@ -403,8 +395,8 @@ class SocketManager {
   };
 
   handleRemoteSceneUpdated = (params) => {
-    const { elements, version, operation_id, operationId } = params;
-    this.enqueueRemoteSceneUpdate(elements, version, operation_id || operationId);
+    const { elements, version } = params;
+    this.enqueueRemoteSceneUpdate(elements, version);
   };
 
   handleRemoteMouseLocationUpdated = (params) => {
