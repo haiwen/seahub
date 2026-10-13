@@ -34,7 +34,7 @@ class Header extends React.Component {
         </div>
         <div className={`flex-shrink-0 d-flex flex-fill ${children ? 'border-left-show' : ''}`}>
           <div className="cur-view-toolbar">
-            <span title="Side Nav Menu" onClick={onShowSidePanel} className="side-nav-toggle hidden-md-up d-md-none d-flex align-items-center">
+            <span title="Side Nav Menu" onClick={onShowSidePanel} className="side-nav-toggle d-md-none d-flex align-items-center">
               <Icon symbol="menu" />
             </span>
             {children}

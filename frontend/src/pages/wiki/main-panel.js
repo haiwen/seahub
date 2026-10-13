@@ -89,7 +89,7 @@ class MainPanel extends Component {
           {!username &&
             <Fragment>
               <div className="cur-view-toolbar">
-                <span className="hidden-md-up d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick}>
+                <span className="d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick}>
                   <Icon symbol="menu" />
                 </span>
               </div>
@@ -103,7 +103,7 @@ class MainPanel extends Component {
           {username && (
             <Fragment>
               <div className="cur-view-toolbar">
-                <span className="hidden-md-up d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick}>
+                <span className="d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick}>
                   <Icon symbol="menu" />
                 </span>
                 {this.props.permission == 'rw' && (
