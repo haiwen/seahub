@@ -199,7 +199,7 @@ class DirSharedItemsEndpoint(APIView):
         return has_shared
 
     def get(self, request, repo_id, format=None):
-        """List shared items(shared to users/groups) for a folder/library.
+        """List shared items(shared with users/groups) for a folder/library.
         """
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -377,7 +377,7 @@ class DirSharedItemsEndpoint(APIView):
                 if self.has_shared_to_user(request, repo_id, path, to_user):
                     result['failed'].append({
                         'email': to_user,
-                        'error_msg': _('This item has been shared to %s.') % email2nickname(to_user)
+                        'error_msg': _('This item has been shared with %s.') % email2nickname(to_user)
                         })
                     continue
 
@@ -401,7 +401,7 @@ class DirSharedItemsEndpoint(APIView):
                         repo_owner = seafile_api.get_org_repo_owner(repo_id)
                         # can't share to owner
                         if to_user == repo_owner:
-                            error_msg = _('Library can not be shared to owner')
+                            error_msg = _('Library can not be shared with owner')
                             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                         share_dir_to_user(repo, path, repo_owner, username, to_user, permission, org_id)
@@ -417,7 +417,7 @@ class DirSharedItemsEndpoint(APIView):
                         repo_owner = seafile_api.get_repo_owner(repo_id)
                         # can't share to owner
                         if to_user == repo_owner:
-                            error_msg = _('Library can not be shared to owner')
+                            error_msg = _('Library can not be shared with owner')
                             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                         share_dir_to_user(repo, path, repo_owner, username, to_user, permission, None)
@@ -490,7 +490,7 @@ class DirSharedItemsEndpoint(APIView):
                 if self.has_shared_to_group(request, repo_id, path, gid):
                     result['failed'].append({
                         'group_name': group.group_name,
-                        'error_msg': _('This item has been shared to %s.') % group.group_name
+                        'error_msg': _('This item has been shared with %s.') % group.group_name
                         })
                     continue
 

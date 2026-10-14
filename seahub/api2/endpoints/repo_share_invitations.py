@@ -196,7 +196,7 @@ class RepoShareInvitationsBatchView(APIView):
             if shared_queryset.filter(invitation=invitation).exists():
                 result['failed'].append({
                     'email': accepter,
-                    'error_msg': _('This item has been shared to %s.') % accepter
+                    'error_msg': _('This item has been shared with %s.') % accepter
                 })
                 continue
 

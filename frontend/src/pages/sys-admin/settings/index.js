@@ -213,7 +213,7 @@ class WebSettings extends Component {
                     displayName={gettext('Enable sharing to all groups')}
                     keyText='ENABLE_SHARE_TO_ALL_GROUPS'
                     value={config_dict['ENABLE_SHARE_TO_ALL_GROUPS']}
-                    helpTip={gettext('Enable users to share libraries to any groups in the system.')}
+                    helpTip={gettext('Enable users to share libraries with any groups in the system.')}
                   />
                 </Section>
 

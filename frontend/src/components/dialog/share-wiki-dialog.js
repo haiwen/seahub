@@ -81,14 +81,14 @@ class ShareWikiDialog extends React.Component {
                 { canShareRepo && (
                   <NavItem role="tab" aria-selected={activeTab === 'shareToUser'} aria-controls="share-to-user-panel">
                     <NavLink className={activeTab === 'shareToUser' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToUser')} tabIndex="0" onKeyDown={this.onTabKeyDown}>
-                      {gettext('Share to user')}
+                      {gettext('Share with user')}
                     </NavLink>
                   </NavItem>
                 )}
                 { canShareRepo && (
                   <NavItem role="tab" aria-selected={activeTab === 'shareToGroup'} aria-controls="share-to-group-panel">
                     <NavLink className={activeTab === 'shareToGroup' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToGroup')} tabIndex="0" onKeyDown={this.onTabKeyDown}>
-                      {gettext('Share to group')}
+                      {gettext('Share with group')}
                     </NavLink>
                   </NavItem>
                 )}

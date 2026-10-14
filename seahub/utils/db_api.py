@@ -60,7 +60,7 @@ class SeafileDB:
 
     def get_repo_user_share_list(self, repo_id, org_id=''):
 
-        # get repos shared to user
+        # get repos shared with user
 
         if not org_id:
             sql = f"""
@@ -101,7 +101,7 @@ class SeafileDB:
 
     def get_repo_group_share_list(self, repo_id, org_id=''):
 
-        # get repos shared to group
+        # get repos shared with group
 
         if not org_id:
             sql = f"""
@@ -142,7 +142,7 @@ class SeafileDB:
 
     def get_folder_user_share_list(self, repo_id, org_id=''):
 
-        # get folders shared to user
+        # get folders shared with user
         if not org_id:
             sql = f"""
             SELECT
@@ -186,7 +186,7 @@ class SeafileDB:
 
     def get_folder_group_share_list(self, repo_id, org_id=''):
 
-        # get folders shared to group
+        # get folders shared with group
 
         if not org_id:
             sql = f"""
@@ -621,7 +621,7 @@ class SeafileDB:
             return wikis
 
     def delete_received_share_by_user(self, username, org_id=''):
-        # Delete the share content shared to <username>
+        # Delete the share content shared with <username>
         if org_id:
             delete_share_sql = f"""
             DELETE FROM `{self.db_name}`.`OrgSharedRepo` WHERE to_email=%s AND org_id=%s

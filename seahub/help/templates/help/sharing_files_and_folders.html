@@ -42,12 +42,12 @@
   <li>{% trans "Copy the link to email, instant messaging client or any other tool to send it to others." %}</li>
 </ol>
 <h4>{% trans "Sharing libraries or folders" %}</h4>
-<p>{% trans "You can share a library or folder to other registered Seafile users. The shared library or folder can be accessed by others with the web app and Seafile clients." %}</p>
+<p>{% trans "You can share a library or folder with other registered Seafile users. The shared library or folder can be accessed by others with the web app and Seafile clients." %}</p>
 <p>{% trans "You can choose the range of the share:" %}</p>
 <ul>
-  <li>{% trans "Share to user: You can share to one or more users." %}</li>
-  <li>{% trans "Share to group: You can share to a group." %}</li>
-  <li>{% trans "Share to organization: If you're using a private server, sometimes it's useful to share to all members on the server (the entire organization)." %}</li>
+  <li>{% trans "Share with user: You can share with one or more users." %}</li>
+  <li>{% trans "Share with group: You can share with a group." %}</li>
+  <li>{% trans "Share with organization: If you're using a private server, sometimes it's useful to share with all members on the server (the entire organization)." %}</li>
 </ul>
 <p>{% trans "You can also set permission on the share:" %}</p>
 <ul>
@@ -57,13 +57,13 @@
   <li>{% trans "Online Read-Write: users can view and edit files online via a web browser. The files cannot be downloaded." %}</li>
   <li>{% trans "Online Read-only: users can only view files online via a web browser. The files cannot be downloaded." %}</li>
 </ul>
-<p>{% trans "To share a library or folder to a user or group:" %}</p>
+<p>{% trans "To share a library or folder with a user or group:" %}</p>
 <ol>
   <li>{% blocktrans %}Hover your mouse over the library or folder and click on the "Share" icon that appears.{% endblocktrans %}</li>
-  <li>{% blocktrans %}A pop-up window will appear with share options. Click the "Share to user" or "Share to group" tab on the left panel. Select the user or group. Then click "Submit".{% endblocktrans %}</li>
+  <li>{% blocktrans %}A pop-up window will appear with share options. Click the "Share with user" or "Share with group" tab on the left panel. Select the user or group. Then click "Submit".{% endblocktrans %}</li>
 </ol>
-<p>{% blocktrans %}After you share a library or folder to a user, the user can see it by clicking the "Shared with me" tab on the left panel in Seafile web app. If you share it to a group, the group members can only see it by navigating into the group.{% endblocktrans %}</p>
-<p>{% blocktrans %}To share a library to the entire organization: In Seafile web app, click the "Shared with all" tab on the left panel. Then click the "Add Library" button. In the drop-down menu, you can choose to share an existing library or create a new library and share it.{% endblocktrans %}</p>
+<p>{% blocktrans %}After you share a library or folder with a user, the user can see it by clicking the "Shared with me" tab on the left panel in Seafile web app. If you share it with a group, the group members can only see it by navigating into the group.{% endblocktrans %}</p>
+<p>{% blocktrans %}To share a library with the entire organization: In Seafile web app, click the "Shared with all" tab on the left panel. Then click the "Add Library" button. In the drop-down menu, you can choose to share an existing library or create a new library and share it.{% endblocktrans %}</p>
 <h4>{% trans "Internal links" %}</h4>
 <p>{% trans "Only logged in users who have read permission to the file or folder can access this link. It is used for internal file sharing. It's a convenient way for sharing files among team members who have access to a common library. You may just copy the link and paste it into an email or IM software." %}</p>
 {% endblock %}

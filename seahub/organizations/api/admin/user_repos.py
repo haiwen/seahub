@@ -83,7 +83,7 @@ class OrgAdminUserBesharedRepos(APIView):
     permission_classes = (IsProVersion, IsOrgAdminUser)
 
     def get(self, request, org_id, email):
-        """Org admin list repos by shared to user
+        """Org admin list repos by shared with user
 
         """
         # resource check

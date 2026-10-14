@@ -56,7 +56,7 @@ class DeleteRepoDialog extends Component {
 
     let alert_message = '';
     if (this.state.sharedToUserCount > 0 || this.state.sharedToGroupCount > 0) {
-      alert_message = gettext('This library has been shared to {user_amount} user(s) and {group_amount} group(s).');
+      alert_message = gettext('This library has been shared with {user_amount} user(s) and {group_amount} group(s).');
       alert_message = alert_message.replace('{user_amount}', this.state.sharedToUserCount);
       alert_message = alert_message.replace('{group_amount}', this.state.sharedToGroupCount);
     }

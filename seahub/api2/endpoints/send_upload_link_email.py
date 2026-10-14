@@ -70,7 +70,7 @@ class SendUploadLinkView(APIView):
 
         shared_upload_link = gen_shared_upload_link(token)
         folder_name = os.path.basename(link.path.rstrip('/'))
-        link_title = _('An upload link is shared to you on %s') % get_site_name()
+        link_title = _('An upload link is shared with you on %s') % get_site_name()
 
         result = {}
         result['failed'] = []

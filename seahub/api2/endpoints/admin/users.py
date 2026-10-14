@@ -1710,7 +1710,7 @@ class AdminUserBeSharedRepos(APIView):
     permission_classes = (IsAdminUser,)
 
     def get(self, request, email):
-        """ List 'all' libraries shared to a user
+        """ List 'all' libraries shared with a user
 
         Permission checking:
         1. only admin can perform this action.

@@ -48,12 +48,12 @@ class SysAdminShareDialog extends React.Component {
               <Fragment>
                 <NavItem>
                   <NavLink className={activeTab === 'shareToUser' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToUser')}>
-                    {gettext('Share to user')}
+                    {gettext('Share with user')}
                   </NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink className={activeTab === 'shareToGroup' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToGroup')}>
-                    {gettext('Share to group')}
+                    {gettext('Share with group')}
                   </NavLink>
                 </NavItem>
               </Fragment>

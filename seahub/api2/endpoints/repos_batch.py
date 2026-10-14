@@ -198,7 +198,7 @@ class ReposBatchView(APIView):
                     if self.has_shared_to_user(request, repo_id, to_username):
                         result['failed'].append({
                             'repo_id': repo_id,
-                            'error_msg': 'This item has been shared to %s.' % to_username
+                            'error_msg': 'This item has been shared with %s.' % to_username
                             })
                         continue
 
@@ -267,7 +267,7 @@ class ReposBatchView(APIView):
                     if self.has_shared_to_group(request, repo_id, to_group_id):
                         result['failed'].append({
                             'repo_id': repo_id,
-                            'error_msg': 'This item has been shared to %s.' % group_name
+                            'error_msg': 'This item has been shared with %s.' % group_name
                             })
                         continue
 
@@ -330,7 +330,7 @@ class ReposBatchView(APIView):
                     if not self.has_shared_to_user(request, repo_id, to_username):
                         result['failed'].append({
                             'repo_id': repo_id,
-                            'error_msg': 'This item has not been shared to %s.' % to_username
+                            'error_msg': 'This item has not been shared with %s.' % to_username
                             })
                         continue
 
@@ -389,7 +389,7 @@ class ReposBatchView(APIView):
                     if not self.has_shared_to_group(request, repo_id, to_group_id):
                         result['failed'].append({
                             'repo_id': repo_id,
-                            'error_msg': 'This item has not been shared to %s.' % group_name
+                            'error_msg': 'This item has not been shared with %s.' % group_name
                         })
                         continue
 

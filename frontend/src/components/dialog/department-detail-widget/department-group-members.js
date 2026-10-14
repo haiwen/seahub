@@ -121,7 +121,7 @@ class DepartmentGroupMembers extends Component {
     const unselectedItems = itemsShown.filter(item => !(item.email in memberSelected) && !selectedMemberMap[item.email]);
     const addedItems = itemsShown.filter(item => selectedMemberMap[item.email]);
 
-    const tip = usedFor === 'add_group_member' ? gettext('User is already in this group') : gettext('It is already shared to user');
+    const tip = usedFor === 'add_group_member' ? gettext('User is already in this group') : gettext('It is already shared with user');
     return (
       <div className="department-dialog-member pt-4">
         <div className="w-100">
