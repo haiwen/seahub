@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import PropTypes from 'prop-types';
+import metadataAPI from '@/api/metadata-api';
 import Loading from '@/components/loading';
 import SeahubModalHeader from '@/components/seahub-modal-header';
 import toaster from '@/components/toast';
-import metadataAPI from '@/features/metadata/api';
 import { gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 
