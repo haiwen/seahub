@@ -1,93 +1,9 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load render_bundle from webpack_loader %}
 
 {% block extra_style %}
-<style>
-  .seahub-toast-manager {
-    position: fixed;
-    margin: 0 auto;
-    max-width: 560px;
-    top: 15px;
-    left: 0;
-    right: 0;
-    z-index: 999999;
-  }
-
-  .seahub-toast-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 0;
-    margin-bottom: 0;
-    transition: all 100ms cubic-bezier(0.0, 0.0, 0.2, 1);
-  }
-
-  @keyframes setupToastOpenAnimation {
-    from {
-      opacity: 0;
-      transform: translateY(-120%);
-    }
-
-    to {
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes setupToastCloseAnimation {
-    from {
-      transform: scale(1);
-      opacity: 1;
-    }
-
-    to {
-      transform: scale(0.9);
-      opacity: 0;
-    }
-  }
-
-  .seahub-toast-container.entering,
-  .seahub-toast-container.entered {
-    animation: setupToastOpenAnimation 240ms cubic-bezier(0.175, 0.885, 0.320, 1.175) both;
-  }
-
-  .seahub-toast-container.exiting {
-    animation: setupToastCloseAnimation 120ms cubic-bezier(0.4, 0.0, 1, 1) both;
-  }
-
-  .seahub-toast-alert-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    box-sizing: border-box;
-    border-radius: 3px;
-    box-shadow: var(--bs-box-shadow-none, rgba(67, 90, 111, 0.3) 0 0 1px, rgba(67, 90, 111, 0.47) 0 8px 10px -4px);
-    padding: 10px 16px;
-    background: var(--bs-popover-bg);
-  }
-
-  .seahub-toast-alert-container.success {
-    border-left: 3px solid rgb(71, 184, 129);
-    color: rgb(71, 184, 129);
-  }
-
-  .seahub-toast-alert-container .toast-alert-icon {
-    margin-right: 10px;
-    width: 20px;
-    height: 20px;
-    line-height: 20px;
-    font-size: 14px;
-    font-weight: 700;
-    text-align: center;
-  }
-
-  .seahub-toast-alert-container .toast-text-title {
-    margin: 0;
-    font-weight: 600;
-    font-size: 14px;
-    color: var(--bs-body-color);
-  }
-</style>
+{% render_bundle 'twoFactorSetup' 'css' %}
 {% endblock %}
 
 {% block main_content %}
@@ -107,7 +23,7 @@
     {% endblocktrans %}</p>
     <img src="{{ QR_URL }}" alt="QR Code" width="185" height="185" class="my-5" />
     <p>{% trans "Alternatively you may copy the Secret Key to your password manager" %}:<br/>
-    <span>{{ QR_KEY }}</span>&nbsp&nbsp<span id='qr-code-secret-key' class="qr-code-secret-key-copy-icon-2fa" data-secret-key={{QR_KEY}} aria-label="{% trans "Copy Secret Key" %}" role="button"></span></p>
+    <span>{{ QR_KEY }}</span>&nbsp&nbsp<span id='qr-code-secret-key' class="qr-code-secret-key-copy-icon-2fa" data-secret-key={{QR_KEY}} data-copy-success-message="{% trans 'Copied' %}" aria-label="{% trans "Copy Secret Key" %}" role="button"></span></p>
     {% elif wizard.steps.current == 'sms' %}
     <p>Please enter the phone number you wish to receive the
     text messages on. This number will be validated in the next step.
@@ -161,85 +77,6 @@
   $('input[type="text"], input[type="number"]', $('.tfa-panel')).trigger('focus');
   $('#id_generator-token').prev().addClass('d-none');
   $('#id_generator-token').addClass('form-control').attr('placeholder', '{% trans "Token" %}');
-
-  (function() {
-    var copyBtn = document.getElementById('qr-code-secret-key');
-    if (!copyBtn) {
-      return;
-    }
-
-    var getToastManager = function() {
-      var manager = document.querySelector('.seahub-toast-manager');
-      if (manager) {
-        return manager;
-      }
-      manager = document.createElement('div');
-      manager.className = 'seahub-toast-manager';
-      document.body.appendChild(manager);
-      return manager;
-    };
-
-    var showSuccessToast = function(message) {
-      var manager = getToastManager();
-      var toastContainer = document.createElement('div');
-      toastContainer.className = 'seahub-toast-container entering';
-      toastContainer.innerHTML = '' +
-        '<div class="seahub-toast-alert-container success">' +
-          '<div class="toast-alert-icon">✓</div>' +
-          '<div class="toast-text-container">' +
-            '<p class="toast-text-title"></p>' +
-          '</div>' +
-        '</div>';
-      toastContainer.querySelector('.toast-text-title').textContent = message;
-      manager.appendChild(toastContainer);
-
-      setTimeout(function() {
-        toastContainer.classList.remove('entering');
-        toastContainer.classList.add('entered');
-      }, 10);
-
-      setTimeout(function() {
-        toastContainer.classList.remove('entered');
-        toastContainer.classList.add('exiting');
-        setTimeout(function() {
-          if (toastContainer.parentNode) {
-            toastContainer.parentNode.removeChild(toastContainer);
-          }
-        }, 120);
-      }, 2000);
-    };
-
-    var fallbackCopy = function(text) {
-      var input = document.createElement('input');
-      input.value = text;
-      document.body.appendChild(input);
-      input.select();
-      var copied = document.execCommand('copy');
-      document.body.removeChild(input);
-      return copied;
-    };
-
-    copyBtn.addEventListener('click', function() {
-      var secretKey = copyBtn.getAttribute('data-secret-key') || '';
-      if (!secretKey) {
-        return;
-      }
-
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(secretKey).then(function() {
-          showSuccessToast('{% trans "Copied" %}');
-        }).catch(function() {
-          if (fallbackCopy(secretKey)) {
-            showSuccessToast('{% trans "Copied" %}');
-            showSuccessToast('{% trans "Copied" %}');
-          }
-        });
-      } else {
-        if (fallbackCopy(secretKey)) {
-          showSuccessToast('{% trans "Copied" %}');
-        }
-      }
-    });
-  })();
 </script>
+{% render_bundle 'twoFactorSetup' 'js' %}
 {% endblock %}
