@@ -137,7 +137,7 @@ const MetadataBackupPanel = ({ repoID, enableMetadata }) => {
             <p className="mb-1">{gettext('Metadata columns')}: {preview.columns}</p>
             <p>{gettext('Tags')}: {preview.tags}</p>
             <p className="text-warning mb-0">
-              {gettext('Create a library snapshot and export a metadata backup first if you may need to undo this operation.')}
+              {gettext('Export a metadata backup first if you may need to undo this operation.')}
             </p>
           </ModalBody>
           <ModalFooter>
