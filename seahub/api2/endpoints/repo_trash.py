@@ -395,13 +395,9 @@ class RepoTrash2(APIView):
             }
             return Response(result)
 
-        # pre-filter by repo history
-
-        elif keep_days == -1:
-            qset = FileTrash.objects.by_repo_id(repo_id)
-
-        else:
-            qset = FileTrash.objects.by_repo_id(repo_id).by_history_limit(keep_days)
+        # Limit trash visibility to at most 90 days, even with all history enabled.
+        keep_days = SHOW_REPO_TRASH_DAYS if keep_days == -1 else min(keep_days, SHOW_REPO_TRASH_DAYS)
+        qset = FileTrash.objects.by_repo_id(repo_id).by_history_limit(keep_days)
 
         deleted_entries = qset[start:end]
         total_count = qset.count()
@@ -515,12 +511,9 @@ class SearchRepoTrash2(APIView):
             }
             return Response(result)
 
-        # pre-filter by repo history
-        elif keep_days == -1:
-            qset = FileTrash.objects.by_repo_id(repo_id)
-
-        else:
-            qset = FileTrash.objects.by_repo_id(repo_id).by_history_limit(keep_days)
+        # Apply the same visibility limit as the trash listing.
+        keep_days = SHOW_REPO_TRASH_DAYS if keep_days == -1 else min(keep_days, SHOW_REPO_TRASH_DAYS)
+        qset = FileTrash.objects.by_repo_id(repo_id).by_history_limit(keep_days)
 
         if q:
             qset = qset.by_keywords(q)
