@@ -59,6 +59,9 @@ def check_parameter(func):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        if request.method in ('POST', 'PUT') and repo.is_virtual:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Virtual libraries cannot be shared.')
+
         if not seafile_api.get_dir_id_by_path(repo_id, path):
             error_msg = 'Folder %s not found.' % path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)

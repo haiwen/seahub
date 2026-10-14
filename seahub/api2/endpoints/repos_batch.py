@@ -125,10 +125,18 @@ class ReposBatchView(APIView):
         # filter out invalid repo id
         for repo_id in repo_id_list:
 
-            if not seafile_api.get_repo(repo_id):
+            repo = seafile_api.get_repo(repo_id)
+            if not repo:
                 result['failed'].append({
                     'repo_id': repo_id,
                     'error_msg': 'Library %s not found.' % repo_id
+                })
+                continue
+
+            if operation == 'share' and repo.is_virtual:
+                result['failed'].append({
+                    'repo_id': repo_id,
+                    'error_msg': 'Virtual libraries cannot be shared.'
                 })
                 continue
 

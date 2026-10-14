@@ -922,6 +922,9 @@ class GroupOwnedLibraryUserShare(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        if repo.is_virtual:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Virtual libraries cannot be shared.')
+
         repo_owner = get_repo_owner(request, repo_id)
         group_id = get_group_id_by_repo_owner(repo_owner)
         if not ccnet_api.get_group(group_id):
@@ -1044,6 +1047,9 @@ class GroupOwnedLibraryUserShare(APIView):
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if repo.is_virtual:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Virtual libraries cannot be shared.')
 
         repo_owner = get_repo_owner(request, repo_id)
         group_id = get_group_id_by_repo_owner(repo_owner)
@@ -1203,6 +1209,9 @@ class GroupOwnedLibraryGroupShare(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        if repo.is_virtual:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Virtual libraries cannot be shared.')
+
         repo_owner = get_repo_owner(request, repo_id)
         group_id = get_group_id_by_repo_owner(repo_owner)
         if not ccnet_api.get_group(group_id):
@@ -1300,6 +1309,9 @@ class GroupOwnedLibraryGroupShare(APIView):
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if repo.is_virtual:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Virtual libraries cannot be shared.')
 
         repo_owner = get_repo_owner(request, repo_id)
         group_id = get_group_id_by_repo_owner(repo_owner)

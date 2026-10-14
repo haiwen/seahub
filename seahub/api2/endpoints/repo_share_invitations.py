@@ -114,6 +114,9 @@ class RepoShareInvitationsBatchView(APIView):
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)
 
+        if repo.is_virtual:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Virtual libraries cannot be shared.')
+
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:
             return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found.' % path)
 
