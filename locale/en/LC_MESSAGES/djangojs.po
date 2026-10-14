@@ -22,10 +22,7 @@ msgstr ""
 msgid "Exit System Admin"
 msgstr "Exit System Admin"
 
-#: frontend/src/pages/wiki2/wiki-right-header/ai-cover-panel.js
-msgid "AI cover"
-msgstr "AI cover"
-
+#: frontend/src/pages/wiki2/wiki-right-header/ai-cover-panel/index.js
 msgid "Describe your cover"
 msgstr "Describe your cover"
 

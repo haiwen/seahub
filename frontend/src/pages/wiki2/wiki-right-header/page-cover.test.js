@@ -56,9 +56,9 @@ test('closing popover hides the presentation panel', () => {
   expect(screen.getByLabelText('AI prompt').value).toBe('');
 });
 
-test('page without a cover anchors the same popover to its AI button', () => {
+test('page without a cover does not render a standalone AI popover', () => {
   render(<Cover currentPageConfig={{ ...page, cover_img_url: '' }} />);
-  expect(screen.getByTestId('cover-popover').getAttribute('data-target')).toBe('wiki-ai-cover-btn');
-  expect(screen.getByLabelText('AI prompt')).toBeTruthy();
+  expect(screen.queryByTestId('cover-popover')).toBeNull();
+  expect(screen.queryByLabelText('AI prompt')).toBeNull();
   expect(screen.queryByAltText('Cover')).toBeNull();
 });

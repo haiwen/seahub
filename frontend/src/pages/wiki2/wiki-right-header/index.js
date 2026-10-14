@@ -21,10 +21,6 @@ function RightHeader({ isUpdateBySide, currentPageConfig, onUpdatePageConfig }) 
   useEffect(() => { setIsCoverPopoverOpen(false); }, [currentPageConfig.id]);
   const props = {
     isUpdateBySide, currentPageConfig, onUpdatePageConfig,
-    onGenerateCover: available ? () => {
-      setCoverPanel('ai');
-      setIsCoverPopoverOpen(true);
-    } : null,
   };
   return (
     <>

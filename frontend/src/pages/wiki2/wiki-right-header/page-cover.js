@@ -222,12 +222,12 @@ function PageCover({ currentPageConfig, onUpdatePageConfig, aiAvailable,
     return '';
   }, [uploadPreviewUrl, currentPageConfig.cover_img_url, getCoverImgUrl, getCustomCoverUrl, docUuid]);
 
-  if (!currentCoverUrl && !isUploading && !isPopoverOpen) {
+  if (!currentCoverUrl && !isUploading) {
     return null;
   }
 
   return (
-    <div id="wiki-page-cover" className={classNames('wiki-page-cover', { 'wiki-page-cover-empty': !currentCoverUrl && !isUploading })}
+    <div id="wiki-page-cover" className="wiki-page-cover"
       onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       {currentCoverUrl && <img className="wiki-page-cover__img" alt={gettext('Cover')} src={currentCoverUrl} />}
       {/* Upload progress overlay */}
@@ -249,7 +249,7 @@ function PageCover({ currentPageConfig, onUpdatePageConfig, aiAvailable,
           )}
           <Popover
             flip
-            target={currentCoverUrl ? 'wiki-change-cover-btn' : 'wiki-ai-cover-btn'}
+            target="wiki-change-cover-btn"
             placement="bottom-start"
             hideArrow={true}
             popperClassName="wiki-page-cover-popover"
@@ -330,7 +330,7 @@ function PageCover({ currentPageConfig, onUpdatePageConfig, aiAvailable,
                 </div>
               )}
               {isPopoverOpen && aiAvailable && (
-                <div className="wiki-ai-cover-container" hidden={activePanel !== 'ai'}>
+                <div className="wiki-page-cover-panel__ai-container" hidden={activePanel !== 'ai'}>
                   <AICoverPanel page={currentPageConfig} cover={aiCover}
                     onClose={() => setIsPopoverOpen(false)} />
                 </div>

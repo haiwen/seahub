@@ -42,10 +42,7 @@ msgstr ""
 msgid "Exit System Admin"
 msgstr "退出系统管理"
 
-#: frontend/src/pages/wiki2/wiki-right-header/ai-cover-panel.js
-msgid "AI cover"
-msgstr "AI 封面"
-
+#: frontend/src/pages/wiki2/wiki-right-header/ai-cover-panel/index.js
 msgid "Describe your cover"
 msgstr "描述你想要的封面"
 

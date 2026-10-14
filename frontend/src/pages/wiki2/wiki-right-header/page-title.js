@@ -15,10 +15,9 @@ const propTypes = {
   isUpdateBySide: PropTypes.bool,
   currentPageConfig: PropTypes.object.isRequired,
   onUpdatePageConfig: PropTypes.func,
-  onGenerateCover: PropTypes.func,
 };
 
-const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePageConfig, onGenerateCover }) => {
+const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePageConfig }) => {
   const [isShowController, setIsShowController] = useState(false);
   const isDesktop = Utils.isDesktop();
 
@@ -72,11 +71,6 @@ const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePageConfig, onGe
                 <Icon symbol='gallery' />
                 <span className='text'>{gettext('Add cover')}</span>
               </div>
-            }
-            {!currentPageConfig.cover_img_url && onGenerateCover &&
-              <button type="button" id="wiki-ai-cover-btn" className="wiki-page-controller-item border-0 bg-transparent" onClick={onGenerateCover}>
-                <span className="text">{gettext('AI cover')}</span>
-              </button>
             }
           </div>
           {!currentPageConfig.locked ?
