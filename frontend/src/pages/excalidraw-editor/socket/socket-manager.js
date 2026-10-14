@@ -109,7 +109,7 @@ class SocketManager {
   };
 
   updatePreview = (elements) => {
-    if (!this.previewElements && !this.isNeedToSync(elements)) {
+    if (!this.previewElements && !this.hasUnsyncedSceneChanges(elements)) {
       return;
     }
 
@@ -263,16 +263,14 @@ class SocketManager {
     });
   }, LOAD_IMAGES_TIMEOUT);
 
-  isNeedToSync = (elements) => {
-    const currentVersion = getSceneVersion(elements);
-    if (currentVersion > this.lastBroadcastedOrReceivedSceneVersion) {
-      return true;
-    }
-    return false;
+  hasUnsyncedSceneChanges = (elements) => {
+    // Compare scene versions against the sync baseline, not the document version.
+    const currentSceneVersion = getSceneVersion(elements);
+    return currentSceneVersion > this.lastBroadcastedOrReceivedSceneVersion;
   };
 
   syncLocalElementsToOthers = (elements, force = false) => {
-    if (!force && !this.isNeedToSync(elements)) {
+    if (!force && !this.hasUnsyncedSceneChanges(elements)) {
       return;
     }
     this.pendingOperationList.push(elements);

@@ -60,6 +60,16 @@ describe('SocketManager remote scene baseline', () => {
     jest.useRealTimers();
   });
 
+  test.each([
+    [0, false],
+    [1, false],
+    [2, true],
+  ])('detects unsynced changes for scene version %i relative to the baseline', (sceneVersion, expected) => {
+    manager.setVersion(8);
+
+    expect(manager.hasUnsyncedSceneChanges([{ id: 'local', version: sceneVersion }])).toBe(expected);
+  });
+
   test('records the document version without advancing the unapplied scene baseline', () => {
     manager.handleRemoteSceneUpdated({
       elements: [{ id: 'remote', version: 3 }], version: 8,

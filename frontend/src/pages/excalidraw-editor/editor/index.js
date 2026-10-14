@@ -118,7 +118,7 @@ const SimpleEditor = ({ isSharedView = false }) => {
       const socketManager = SocketManager.getInstance(excalidrawAPI, data.scene, config);
       // Track last synced version with remote scene so local offline edits can be auto-synced.
       socketManager.setLastBroadcastedOrReceivedSceneVersion(data.remoteElements);
-      if (socketManager.isNeedToSync(data.scene.elements)) {
+      if (socketManager.hasUnsyncedSceneChanges(data.scene.elements)) {
         socketManager.syncLocalElementsToOthers(data.scene.elements);
       }
       loadImages(data, /* isInitialLoad */true);
