@@ -58,6 +58,16 @@ class WikiAPI {
     return this.req.post(url, { query, count });
   }
 
+  getCoverGenerationAvailability() {
+    return this.req.get(this.server + '/api/v2.1/ai/generate-cover-image/');
+  }
+
+  generateCoverImage(wikiId, pageId, prompt, signal) {
+    return this.req.post(this.server + '/api/v2.1/ai/generate-cover-image/', {
+      wiki_id: wikiId, page_id: pageId, prompt,
+    }, { responseType: 'blob', timeout: 210000, signal });
+  }
+
   listWikiDir(wikiId, dirPath, withParents) {
     const path = encodeURIComponent(dirPath);
     let url = this.server + '/api/v2.1/wikis/' + wikiId + '/dir/?p=' + path;

@@ -1,0 +1,27 @@
+.wiki-ai-cover-panel .wiki-ai-cover-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 12px 0;
+}
+
+.wiki-ai-cover-panel .wiki-ai-cover-preview {
+  width: 100%;
+  height: 160px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--bs-hover-bg);
+}
+
+.wiki-ai-cover-panel .wiki-ai-cover-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wiki-ai-cover-panel .wiki-ai-cover-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}

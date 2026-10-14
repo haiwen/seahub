@@ -42,6 +42,47 @@ msgstr ""
 msgid "Exit System Admin"
 msgstr "退出系统管理"
 
+#: frontend/src/pages/wiki2/wiki-right-header/ai-cover-panel.js
+msgid "AI cover"
+msgstr "AI 封面"
+
+msgid "Describe your cover"
+msgstr "描述你想要的封面"
+
+msgid "Use page title"
+msgstr "使用页面标题"
+
+msgid "Generate again"
+msgstr "重新生成"
+
+msgid "Your description will be sent to the AI service. The page content will not be sent."
+msgstr "你的描述将发送给 AI 服务，不会发送页面正文。"
+
+msgid "Generating image…"
+msgstr "正在生成图片…"
+
+msgid "You can close this panel and reopen it to view the progress or result. Refreshing or leaving this page will clear it."
+msgstr "关闭面板后可重新打开查看进度或结果。刷新或离开当前页面会清空状态。"
+
+msgid "Cover preview"
+msgstr "封面预览"
+
+msgid "Image generation failed or timed out. You can try again."
+msgstr "图片生成失败或超时，你可以重试。"
+
+msgid "Failed to save cover. Try again without generating a new image."
+msgstr "封面保存失败。可以直接重试，无需重新生成图片。"
+
+msgid "Use cover"
+msgstr "使用封面"
+
+msgid "Saving…"
+msgstr "正在保存…"
+
+#: frontend/src/pages/wiki2/wiki-right-header/page-cover.js
+msgid "AI generate"
+msgstr "AI 生成"
+
 #: frontend/src/components/account/index.js:78
 msgid "Exit Organization Admin"
 msgstr "退出团队管理"

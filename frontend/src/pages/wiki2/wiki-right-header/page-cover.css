@@ -1,4 +1,8 @@
 /* Cover */
+.cur-view-content .wiki-page-cover.wiki-page-cover-empty {
+  height: 0;
+}
+
 .cur-view-content .wiki-page-cover {
   position: relative;
   height: 30vh;
@@ -88,6 +92,10 @@
   grid-template-columns: 522px;
   gap: 0;
   padding: 0;
+}
+
+.wiki-page-cover-panel__body .wiki-ai-cover-container {
+  grid-column: 1 / -1;
 }
 
 .wiki-cover-gallery-grid {

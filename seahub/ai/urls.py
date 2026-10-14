@@ -1,9 +1,10 @@
 from django.urls import re_path
 from .apis import ImageCaption, GenerateSummary, GenerateFileTags, OCR, Translate, WritingAssistant, \
     ChatMessagesView, ChatMarkdownArtifactView, ChatSessionCopyView, ChatSessionView, ChatSessionsView, \
-    ChatSessionTitleView, ChatView, AISearchIcons
+    ChatSessionTitleView, ChatView, AISearchIcons, GenerateCoverImage
 
 urlpatterns = [
+    re_path(r'^generate-cover-image/$', GenerateCoverImage.as_view(), name='api-v2.1-generate-cover-image'),
     re_path(r'^image-caption/$', ImageCaption.as_view(), name='api-v2.1-image-caption'),
     re_path(r'^generate-file-tags/$', GenerateFileTags.as_view(), name='api-v2.1-generate-file-tags'),
     re_path(r'^generate-summary/$', GenerateSummary.as_view(), name='api-v2.1-generate-summary'),

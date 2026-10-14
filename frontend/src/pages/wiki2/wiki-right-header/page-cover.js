@@ -9,23 +9,30 @@ import toaster from '@/components/toast';
 import { gettext, wikiPermission } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import { WIKI_COVER_LIST } from '../constant';
+import AICoverPanel from './ai-cover-panel';
+import useAICover from './use-ai-cover';
 
 import './page-cover.css';
 
-function PageCover({ currentPageConfig, onUpdatePageConfig }) {
+function PageCover({ currentPageConfig, onUpdatePageConfig, aiAvailable,
+  isPopoverOpen, onPopoverChange, activePanel, onPanelChange }) {
 
   const [isShowCoverController, setIsShowCoverController] = useState(false);
-  const [activePanel, setActivePanel] = useState('gallery');
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadPreviewUrl, setUploadPreviewUrl] = useState(null);
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 46 });
   const [isDragging, setIsDragging] = useState(false);
-  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const setIsPopoverOpen = onPopoverChange;
+  // Keep requests and candidates alive independently of the popover's DOM.
+  const aiCover = useAICover({ page: currentPageConfig, onUpdatePageConfig,
+    onClose: () => setIsPopoverOpen(false) });
+  const isSavingAI = aiCover.saving;
 
   const fileInputRef = useRef(null);
   const galleryTabRef = useRef(null);
   const uploadTabRef = useRef(null);
+  const aiTabRef = useRef(null);
   const isDraggingRef = useRef(false);
   const isDesktop = Utils.isDesktop();
 
@@ -55,7 +62,7 @@ function PageCover({ currentPageConfig, onUpdatePageConfig }) {
 
     // Use requestAnimationFrame to ensure DOM is rendered before measuring
     const updateIndicator = () => {
-      const activeTab = activePanel === 'gallery' ? galleryTabRef.current : uploadTabRef.current;
+      const activeTab = { gallery: galleryTabRef, upload: uploadTabRef, ai: aiTabRef }[activePanel]?.current;
       if (activeTab) {
         setIndicatorStyle({
           left: activeTab.offsetLeft,
@@ -80,7 +87,7 @@ function PageCover({ currentPageConfig, onUpdatePageConfig }) {
       ...currentPageConfig,
       cover_img_url: imageName,
     });
-  }, [currentPageConfig, onUpdatePageConfig]);
+  }, [currentPageConfig, onUpdatePageConfig, setIsPopoverOpen]);
 
   const removeCoverImage = useCallback(() => {
     setUploadPreviewUrl(null);
@@ -129,7 +136,7 @@ function PageCover({ currentPageConfig, onUpdatePageConfig }) {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg || gettext('Failed to upload image.'));
     });
-  }, [docUuid, serviceUrl, accessToken, updatePageCover]);
+  }, [docUuid, serviceUrl, accessToken, updatePageCover, setIsPopoverOpen]);
 
   const handleClickUpload = useCallback(() => {
     fileInputRef.current?.click();
@@ -190,16 +197,17 @@ function PageCover({ currentPageConfig, onUpdatePageConfig }) {
   }, [handleFileSelect]);
 
   const handlePanelSwitch = useCallback((panel) => {
-    setActivePanel(panel);
+    if (isSavingAI) return;
+    onPanelChange(panel);
 
-    const activeTab = panel === 'gallery' ? galleryTabRef.current : uploadTabRef.current;
+    const activeTab = { gallery: galleryTabRef, upload: uploadTabRef, ai: aiTabRef }[panel]?.current;
     if (activeTab) {
       setIndicatorStyle({
         left: activeTab.offsetLeft,
         width: activeTab.offsetWidth
       });
     }
-  }, []);
+  }, [isSavingAI, onPanelChange]);
 
   // Get current cover URL for display (handles both preview and existing)
   const currentCoverUrl = useMemo(() => {
@@ -214,13 +222,14 @@ function PageCover({ currentPageConfig, onUpdatePageConfig }) {
     return '';
   }, [uploadPreviewUrl, currentPageConfig.cover_img_url, getCoverImgUrl, getCustomCoverUrl, docUuid]);
 
-  if (!currentCoverUrl && !isUploading) {
+  if (!currentCoverUrl && !isUploading && !isPopoverOpen) {
     return null;
   }
 
   return (
-    <div id="wiki-page-cover" className="wiki-page-cover" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-      <img className="wiki-page-cover__img" alt={gettext('Cover')} src={currentCoverUrl} />
+    <div id="wiki-page-cover" className={classNames('wiki-page-cover', { 'wiki-page-cover-empty': !currentCoverUrl && !isUploading })}
+      onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+      {currentCoverUrl && <img className="wiki-page-cover__img" alt={gettext('Cover')} src={currentCoverUrl} />}
       {/* Upload progress overlay */}
       {isUploading && uploadPreviewUrl && (
         <div className="wiki-page-cover-upload-mask">
@@ -230,22 +239,24 @@ function PageCover({ currentPageConfig, onUpdatePageConfig }) {
           </div>
         </div>
       )}
-      {isDesktop && wikiPermission === 'rw' && isShowCoverController && (
+      {isDesktop && wikiPermission === 'rw' && (isShowCoverController || isPopoverOpen) && (
         <>
-          <button className="wiki-cover-controller-btn border-0 d-flex align-items-center" id='wiki-change-cover-btn'>
-            <Icon symbol="gallery" className="mr-1" />
-            {gettext('Change cover')}
-          </button>
+          {currentCoverUrl && (
+            <button className="wiki-cover-controller-btn border-0 d-flex align-items-center" id='wiki-change-cover-btn'>
+              <Icon symbol="gallery" className="mr-1" />
+              {gettext('Change cover')}
+            </button>
+          )}
           <Popover
             flip
-            target="wiki-change-cover-btn"
+            target={currentCoverUrl ? 'wiki-change-cover-btn' : 'wiki-ai-cover-btn'}
             placement="bottom-start"
             hideArrow={true}
             popperClassName="wiki-page-cover-popover"
             innerClassName="wiki-page-cover-panel wiki-page-panel"
             trigger="legacy"
             isOpen={isPopoverOpen}
-            toggle={() => setIsPopoverOpen(!isPopoverOpen)}
+            toggle={() => { if (!isSavingAI) setIsPopoverOpen(!isPopoverOpen); }}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="wiki-page-cover-panel__header popover-header">
@@ -264,9 +275,21 @@ function PageCover({ currentPageConfig, onUpdatePageConfig }) {
                 >
                   {gettext('Upload')}
                 </span>
+                {aiAvailable && (
+                  <button type="button" ref={aiTabRef}
+                    className={classNames('wiki-page-cover-panel__tab border-0 bg-transparent p-0', { active: activePanel === 'ai' })}
+                    disabled={isSavingAI} onClick={() => handlePanelSwitch('ai')}>
+                    {gettext('AI generate')}
+                  </button>
+                )}
                 <span className={`wiki-page-cover-panel__tab-indicator ${activePanel}`} style={indicatorStyle} />
               </div>
-              <span onClick={removeCoverImage} className="wiki-remove-icon-btn">{gettext('Remove')}</span>
+              {currentCoverUrl && (
+                <button type="button" onClick={removeCoverImage} disabled={isSavingAI}
+                  className="wiki-remove-icon-btn border-0 bg-transparent">
+                  {gettext('Remove')}
+                </button>
+              )}
             </div>
             <div className={classNames('wiki-page-cover-panel__body popover-body', { 'upload-panel': activePanel === 'upload' })}>
               {activePanel === 'gallery' && (
@@ -306,6 +329,12 @@ function PageCover({ currentPageConfig, onUpdatePageConfig }) {
                   <span className="wiki-cover-upload-text">{gettext('Images wider than 1500 pixels work best.')}</span>
                 </div>
               )}
+              {isPopoverOpen && aiAvailable && (
+                <div className="wiki-ai-cover-container" hidden={activePanel !== 'ai'}>
+                  <AICoverPanel page={currentPageConfig} cover={aiCover}
+                    onClose={() => setIsPopoverOpen(false)} />
+                </div>
+              )}
             </div>
           </Popover>
         </>
@@ -317,6 +346,11 @@ function PageCover({ currentPageConfig, onUpdatePageConfig }) {
 PageCover.propTypes = {
   currentPageConfig: PropTypes.object,
   onUpdatePageConfig: PropTypes.func,
+  aiAvailable: PropTypes.bool,
+  isPopoverOpen: PropTypes.bool.isRequired,
+  onPopoverChange: PropTypes.func.isRequired,
+  activePanel: PropTypes.string.isRequired,
+  onPanelChange: PropTypes.func.isRequired,
 };
 
 export default PageCover;

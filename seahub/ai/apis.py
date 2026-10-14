@@ -2,8 +2,10 @@ import time
 import logging
 import os.path
 import json
+import uuid
+import requests
 from django.core.cache import cache
-from django.http import StreamingHttpResponse
+from django.http import HttpResponse, StreamingHttpResponse
 from django.utils.translation import gettext as _
 from pysearpc import SearpcError
 
@@ -17,7 +19,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from seahub.api2.utils import api_error, get_file_size
+from seahub.api2.utils import api_error, get_file_size, is_wiki_repo
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthentication
 from seahub.utils import get_file_type_and_ext, IMAGE
@@ -33,6 +35,70 @@ from seahub.tags.models import FileUUIDMap
 from seahub.views.file import get_file_view_path_and_perm, get_file_content
 
 logger = logging.getLogger(__name__)
+
+
+class GenerateCoverImage(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        from seahub.ai.utils import generate_cover_image
+        if not verify_ai_config():
+            return Response({'available': False})
+        try:
+            response = generate_cover_image()
+            available = response.status_code == 200 and response.json().get('available') is True
+        except (requests.RequestException, ValueError):
+            available = False
+        return Response({'available': available})
+
+    def post(self, request):
+        from seahub.ai.utils import generate_cover_image
+        from seahub.wiki2.models import Wiki2
+        from seahub.wiki2.utils import check_wiki_permission, get_wiki_config
+        if not verify_ai_config():
+            return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, 'Cover image generation is not configured.')
+        prompt = request.data.get('prompt')
+        wiki_id = request.data.get('wiki_id')
+        page_id = request.data.get('page_id')
+        if not isinstance(prompt, str) or not 1 <= len(prompt.strip()) <= 2000:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Enter a description of up to 2000 characters.')
+        if not isinstance(wiki_id, str) or not isinstance(page_id, str):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid wiki or page.')
+        try:
+            uuid.UUID(wiki_id)
+        except ValueError:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid wiki or page.')
+        repo = seafile_api.get_repo(wiki_id)
+        if not repo or not is_wiki_repo(repo):
+            return api_error(status.HTTP_404_NOT_FOUND, 'Wiki not found.')
+        wiki = Wiki2.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Wiki not found.')
+        if check_wiki_permission(wiki, request.user.username) != 'rw':
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        pages = get_wiki_config(wiki.repo_id, request.user.username).get('pages', [])
+        page = next((p for p in pages if p.get('id') == page_id), None)
+        if not page or not page.get('docUuid'):
+            return api_error(status.HTTP_404_NOT_FOUND, 'Page not found.')
+        try:
+            response = generate_cover_image({'prompt': prompt.strip()})
+        except requests.Timeout:
+            return api_error(status.HTTP_504_GATEWAY_TIMEOUT, 'Image generation timed out.')
+        except requests.RequestException:
+            return api_error(status.HTTP_502_BAD_GATEWAY, 'Image generation failed.')
+        if response.status_code != 200:
+            code = response.status_code if response.status_code in (400, 429, 503, 504) else 502
+            return api_error(code, 'Image generation timed out.' if code == 504 else 'Image generation failed.')
+        if (response.headers.get('Content-Type', '').split(';')[0] != 'image/png'
+                or not response.content.startswith(b'\x89PNG\r\n\x1a\n')
+                or len(response.content) > 16 * 1024 * 1024):
+            return api_error(status.HTTP_502_BAD_GATEWAY, 'Invalid generated image.')
+        # Recheck access after a potentially long upstream request.
+        if check_wiki_permission(wiki, request.user.username) != 'rw':
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        return HttpResponse(response.content, content_type='image/png', headers={'Cache-Control': 'no-store'})
 
 
 def is_chat_and_search_enabled(repo_id):
