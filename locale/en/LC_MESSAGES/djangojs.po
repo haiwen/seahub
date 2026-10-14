@@ -22,44 +22,6 @@ msgstr ""
 msgid "Exit System Admin"
 msgstr "Exit System Admin"
 
-#: frontend/src/pages/wiki2/wiki-right-header/ai-cover-panel/index.js
-msgid "Describe your cover"
-msgstr "Describe your cover"
-
-msgid "Use page title"
-msgstr "Use page title"
-
-msgid "Generate again"
-msgstr "Generate again"
-
-msgid "Your description will be sent to the AI service. The page content will not be sent."
-msgstr "Your description will be sent to the AI service. The page content will not be sent."
-
-msgid "Generating image…"
-msgstr "Generating image…"
-
-msgid "You can close this panel and reopen it to view the progress or result. Refreshing or leaving this page will clear it."
-msgstr "You can close this panel and reopen it to view the progress or result. Refreshing or leaving this page will clear it."
-
-msgid "Cover preview"
-msgstr "Cover preview"
-
-msgid "Image generation failed or timed out. You can try again."
-msgstr "Image generation failed or timed out. You can try again."
-
-msgid "Failed to save cover. Try again without generating a new image."
-msgstr "Failed to save cover. Try again without generating a new image."
-
-msgid "Use cover"
-msgstr "Use cover"
-
-msgid "Saving…"
-msgstr "Saving…"
-
-#: frontend/src/pages/wiki2/wiki-right-header/page-cover.js
-msgid "AI generate"
-msgstr "AI generate"
-
 #: frontend/src/components/account/index.js:78
 msgid "Exit Organization Admin"
 msgstr "Exit Organization Admin"
