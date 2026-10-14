@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from django.utils.translation import gettext as _
 
 from seaserv import seafile_api, ccnet_api
 
@@ -25,7 +26,8 @@ from seahub.group.utils import is_group_member, is_group_admin, \
 from seahub.utils import is_org_context, is_valid_dirent_name, \
         send_perm_audit_msg
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from seahub.utils.repo import get_repo_owner, get_available_repo_perms
+from seahub.utils.repo import get_repo_owner, get_available_repo_perms, \
+        check_repo_name_conflict
 from seahub.share.models import ExtraGroupsSharePermission
 from seahub.share.signals import share_repo_to_group_successful
 from seahub.share.utils import is_repo_admin, check_group_share_in_permission, \
@@ -204,6 +206,10 @@ class GroupLibraries(APIView):
         if not is_group_member(group_id, request.user.username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if check_repo_name_conflict(request, repo_name):
+            error_msg = _('Library name already exists.')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # create group repo
         org_id = -1
