@@ -174,13 +174,23 @@ class SidePanel extends PureComponent {
     this.setState({
       isShowImportPageDialog: true
     });
+    if (file.name.toLowerCase().endsWith('.sdoczip')) {
+      wikiAPI.importWiki2SdocPage(wikiId, from_page_id, file).then(res => {
+        const { page_id, name, path, docUuid } = res.data;
+        const page = new Page({ id: page_id, name, icon: '', path, docUuid });
+        this.setState({ isShowImportPageDialog: false });
+        this.addPage(page, from_page_id, successCallback, errorCallback, jumpToNewPage);
+      }).catch(error => {
+        this.setState({ isShowImportPageDialog: false });
+        toaster.danger(Utils.getErrorMsg(error));
+        errorCallback && errorCallback();
+      });
+      return;
+    }
     wikiAPI.importWiki2Page(wikiId, from_page_id, file).then(res => {
       const { page_id, name, path, docUuid } = res.data;
       task_id = res.data.task_id;
       newPage = new Page({ id: page_id, name, icon: '', path, docUuid });
-      if (res.data.is_finished === true) {
-        return res;
-      }
       this.setState({
         taskId: task_id
       });
