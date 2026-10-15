@@ -51,17 +51,11 @@ def import_sdoc_wiki_page(wiki, username, file, from_page_id):
 
         wiki_config = get_wiki_config(repo_id, username)
         navigation = wiki_config.get('navigation', [])
-        if not from_page_id:
-            page_ids = {element.get('id') for element in navigation if element.get('type') != 'folder'}
-        else:
-            page_ids = []
-            get_current_level_page_ids(navigation, from_page_id, page_ids)
-        names = [page.get('name') for page in wiki_config.get('pages', []) if page.get('id') in page_ids]
         doc_uuid = str(uuid.uuid4())
         filename = os.path.splitext(file.name)[0] + '.sdoc'
         page_info = {
             'page_id': gen_unique_id(get_all_wiki_ids(navigation)),
-            'name': get_no_duplicate_obj_name(os.path.splitext(file.name)[0], names),
+            'name': os.path.splitext(file.name)[0],
             'path': posixpath.join(WIKI_PAGES_DIR, doc_uuid, filename),
             'docUuid': doc_uuid,
         }
@@ -76,6 +70,11 @@ def import_sdoc_wiki_page(wiki, username, file, from_page_id):
             clean_up_sdoc_import(repo_id, username, page_info)
             return Response({'error_msg': 'Current page does not exist'}, status=404)
         pages = wiki_config.get('pages', [])
+        # The inserted page's siblings are the pages that share its name scope.
+        page_ids = []
+        get_current_level_page_ids(navigation, page_info['page_id'], page_ids)
+        names = [page.get('name') for page in pages if page.get('id') in page_ids]
+        page_info['name'] = get_no_duplicate_obj_name(page_info['name'], names)
         page = {
             'id': page_info['page_id'], 'name': page_info['name'], 'path': page_info['path'],
             'docUuid': page_info['docUuid'], 'icon': '', 'locked': False,
