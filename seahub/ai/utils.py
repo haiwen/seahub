@@ -75,6 +75,22 @@ def image_caption(params):
     return resp
 
 
+def generate_cover_image(params=None):
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/generate-cover-image/')
+    if params is None:
+        return requests.get(url, headers=gen_headers(), timeout=10)
+    with requests.post(url, json=params, headers=gen_headers(), timeout=(10, 195),
+                       stream=True, allow_redirects=False) as response:
+        content = bytearray()
+        for chunk in response.iter_content(64 * 1024):
+            content.extend(chunk)
+            if len(content) > 16 * 1024 * 1024:
+                raise requests.RequestException('Cover image response is too large.')
+        # Preserve the existing response interface while bounding the buffered body.
+        response._content = bytes(content)
+        return response
+
+
 def generate_summary(params):
     headers = gen_headers()
     url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/generate-summary')

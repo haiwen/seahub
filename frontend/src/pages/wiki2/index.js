@@ -315,7 +315,7 @@ class Wiki extends Component {
   };
 
   getNewWikiConfigs = (pageId, newPage) => {
-    if (this.state.currentPageId === pageId) {
+    if (this.state.currentPageId === pageId && newPage.name !== undefined) {
       this.updateDocumentTitle(newPage.name);
     }
     const { config } = this.state;
@@ -363,14 +363,24 @@ class Wiki extends Component {
     }, 300);
   };
 
-  onUpdatePageConfig = (pageId, newPage) => {
+  onUpdatePageConfig = (pageId, newPage, options = {}) => {
+    // AI adoption must persist before replacing the visible cover. Existing callers
+    // retain their optimistic behavior; failures here propagate to the preview.
+    if (options.persistFirst) {
+      return wikiAPI.updateWiki2PageConfig(wikiId, pageId, newPage).then(() => {
+        const wikiConfig = this.getNewWikiConfigs(pageId, newPage);
+        this.setState({ config: new WikiConfig(wikiConfig) });
+      });
+    }
     const wikiConfig = this.getNewWikiConfigs(pageId, newPage);
     this.setState({ config: new WikiConfig(wikiConfig) }, () => {
-      if (newPage.icon || newPage.cover_img_url) {
-        this.updatePageConfig(pageId, newPage);
-        return;
+      const { name, ...pageConfig } = newPage;
+      if (name !== undefined) {
+        this.updatePageConfigByThrottle(pageId, { name });
       }
-      this.updatePageConfigByThrottle(pageId, newPage);
+      if (Object.keys(pageConfig).length) {
+        this.updatePageConfig(pageId, pageConfig);
+      }
     });
   };
 

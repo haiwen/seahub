@@ -13,13 +13,12 @@ const PageIcon = ({ currentPageConfig, onUpdatePageConfig }) => {
 
   const handleSetIcon = useCallback((emoji) => {
     onUpdatePageConfig && onUpdatePageConfig(currentPageConfig.id, {
-      ...currentPageConfig,
       icon: emoji
     });
     setTimeout(() => {
       popoverRef.current?.toggle();
     }, 300);
-  }, [currentPageConfig, onUpdatePageConfig]);
+  }, [currentPageConfig.id, onUpdatePageConfig]);
 
   const handleIconRemove = useCallback(() => {
     handleSetIcon('');

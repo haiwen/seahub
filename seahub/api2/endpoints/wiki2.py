@@ -1005,7 +1005,7 @@ class Wiki2PageConfigView(APIView):
         wiki.owner = repo_owner
 
         username = request.user.username
-        if not check_wiki_permission(wiki, username):
+        if check_wiki_permission(wiki, username) != PERMISSION_READ_WRITE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

@@ -90,6 +90,10 @@
   padding: 0;
 }
 
+.wiki-page-cover-panel__ai-container {
+  grid-column: 1 / -1;
+}
+
 .wiki-cover-gallery-grid {
   display: contents;
 }
