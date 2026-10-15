@@ -44,14 +44,16 @@ def normalize_repo_status_str(status):
         return ''
 
 
-def check_repo_name_conflict(request, repo_name, group_id=None):
+def check_repo_name_conflict(request, repo_name, group_id=None, username=None):
     """Return True if a library named ``repo_name`` already exists under the
     same owner.
 
     For personal, public and group-shared libraries the owner is the request
-    user; for a group-owned library the owner is the given group.
+    user unless ``username`` is provided; for a group-owned library the owner
+    is the given group.
     """
-    username = request.user.username
+    if username is None:
+        username = request.user.username
     org_id = request.user.org.org_id if is_org_context(request) else -1
 
     if group_id is None:

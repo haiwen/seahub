@@ -1,7 +1,7 @@
 import time
 
 from tests.api.apitestbase import ApiTestBase
-from tests.common.utils import apiurl
+from tests.common.utils import apiurl, randstring
 
 
 class GroupRepoTest(ApiTestBase):
@@ -11,6 +11,9 @@ class GroupRepoTest(ApiTestBase):
         data = {"name": 'grepo-test'}
         data.update(kwargs)
         resp = self.post(path, data=data, expected=expected)
+        if resp.status_code == 200:
+            repo_url = apiurl('/api2/repos/%s/' % resp.json()['id'])
+            self.addCleanup(self.delete, repo_url, expected=(200, 404))
 
         return resp
 
@@ -41,6 +44,12 @@ class GroupRepoTest(ApiTestBase):
 
             assert resp.status_code == 400
 
+    def test_add_with_duplicate_name(self):
+        with self.get_tmp_group() as group:
+            name = 'grepo-test-' + randstring(6)
+            self.create_group_repo(group.group_id, name=name, expected=200)
+            self.create_group_repo(group.group_id, name=name, expected=400)
+
     def test_can_list(self):
         with self.get_tmp_group() as group:
             self.create_group_repo(group.group_id)
@@ -67,9 +76,9 @@ class GroupRepoTest(ApiTestBase):
         with self.get_tmp_group() as group:
             self.create_group_repo(group.group_id)
             time.sleep(1)
-            self.create_group_repo(group.group_id)
+            self.create_group_repo(group.group_id, name='grepo-test-2')
             time.sleep(1)
-            self.create_group_repo(group.group_id)
+            self.create_group_repo(group.group_id, name='grepo-test-3')
 
             path = apiurl('/api2/groups/%s/repos/' % group.group_id)
             resp = self.get(path)

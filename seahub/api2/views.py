@@ -4815,6 +4815,10 @@ class GroupRepos(APIView):
         if not repo_name or not is_valid_dirent_name(repo_name):
             return api_error(status.HTTP_400_BAD_REQUEST, 'name invalid.')
 
+        if check_repo_name_conflict(request, repo_name):
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             _('Library name already exists.'))
+
         org_id = -1
         if is_org_context(request):
             org_id = request.user.org.org_id

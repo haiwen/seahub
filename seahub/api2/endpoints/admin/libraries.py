@@ -22,7 +22,8 @@ from seahub.admin_log.models import REPO_CREATE, REPO_DELETE, REPO_TRANSFER
 from seahub.share.models import FileShare, UploadLinkShare
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.group.utils import is_group_member, group_id_to_name
-from seahub.utils.repo import get_related_users_by_repo, normalize_repo_status_code, normalize_repo_status_str
+from seahub.utils.repo import get_related_users_by_repo, normalize_repo_status_code, \
+        normalize_repo_status_str, check_repo_name_conflict
 from seahub.utils import is_valid_dirent_name, is_valid_email, transfer_repo
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
@@ -217,6 +218,10 @@ class AdminLibraries(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         else:
             repo_owner = username
+
+        if check_repo_name_conflict(request, repo_name, username=repo_owner):
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             _('Library name already exists.'))
 
         try:
             repo_id = seafile_api.create_repo(repo_name, '', repo_owner)

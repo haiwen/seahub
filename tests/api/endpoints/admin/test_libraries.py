@@ -83,6 +83,26 @@ class AdminLibrariesTest(BaseTestCase):
 
         self.remove_repo(json_resp['id'])
 
+    def test_create_with_duplicate_owner_library_name(self):
+        self.login_as(self.admin)
+        data = {
+            'name': self.repo.repo_name,
+            'owner': self.user.username,
+        }
+
+        resp = self.client.post(self.libraries_url, data)
+        self.assertEqual(400, resp.status_code)
+
+    def test_create_with_same_name_for_different_owner(self):
+        self.login_as(self.admin)
+        data = {'name': self.repo.repo_name}
+
+        resp = self.client.post(self.libraries_url, data)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.addCleanup(self.remove_repo, json_resp['id'])
+        self.assertEqual(self.admin.username, json_resp['owner'])
+
     def test_create_with_invalid_user_permission(self):
         self.login_as(self.user)
 
