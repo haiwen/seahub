@@ -374,11 +374,13 @@ class Wiki extends Component {
     }
     const wikiConfig = this.getNewWikiConfigs(pageId, newPage);
     this.setState({ config: new WikiConfig(wikiConfig) }, () => {
-      if (newPage.icon || newPage.cover_img_url) {
-        this.updatePageConfig(pageId, newPage);
-        return;
+      const { name, ...pageConfig } = newPage;
+      if (name !== undefined) {
+        this.updatePageConfigByThrottle(pageId, { name });
       }
-      this.updatePageConfigByThrottle(pageId, newPage);
+      if (Object.keys(pageConfig).length) {
+        this.updatePageConfig(pageId, pageConfig);
+      }
     });
   };
 
