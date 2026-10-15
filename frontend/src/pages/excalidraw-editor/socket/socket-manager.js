@@ -28,6 +28,7 @@ class SocketManager {
     this.pendingOperationList = [];
     this.pendingOperationBeginTimeList = [];
     this.previewElements = null;
+    this.lastObservedElementVersions = null;
     this.previewCommitTimer = null;
     this.pendingRemoteUpdates = [];
     this.remoteRenderFrame = null;
@@ -109,6 +110,18 @@ class SocketManager {
   };
 
   updatePreview = (elements) => {
+    const previousElements = this.lastObservedElementVersions;
+    // App-state-only changes must not restart the pending commit timer.
+    if (previousElements && previousElements.length === elements.length && elements.every((element, index) => {
+      const previousElement = previousElements[index];
+      return element.id === previousElement.id && element.version === previousElement.version &&
+        element.versionNonce === previousElement.versionNonce;
+    })) {
+      return;
+    }
+    // Store scalar snapshots because Excalidraw can mutate elements in place.
+    this.lastObservedElementVersions = elements.map(({ id, version, versionNonce }) => ({ id, version, versionNonce }));
+
     if (!this.previewElements && !this.hasUnsyncedSceneChanges(elements)) {
       return;
     }
