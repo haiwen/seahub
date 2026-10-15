@@ -254,13 +254,10 @@ class Notifications extends Component {
   };
 
   addNotification = (msg) => {
-    systemAdminAPI.sysAdminAddSysNotification(msg).then(res => {
+    return systemAdminAPI.sysAdminAddSysNotification(msg).then(res => {
       let notificationList = this.state.notificationList;
       notificationList.unshift(res.data.notification);
       this.setState({ notificationList: notificationList });
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
     });
   };
 
