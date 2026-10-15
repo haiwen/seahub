@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from django.utils.translation import gettext as _
 
 from seaserv import seafile_api
 
@@ -18,7 +19,8 @@ from seahub.api2.endpoints.utils import api_check_group
 from seahub.signals import repo_created
 from seahub.utils import is_valid_dirent_name, is_org_context, \
         is_pro_version
-from seahub.utils.repo import get_library_storages, get_repo_owner, get_available_repo_perms
+from seahub.utils.repo import get_library_storages, get_repo_owner, \
+        get_available_repo_perms, check_repo_name_conflict
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.share.utils import normalize_custom_permission_name
 from seahub.share.signals import share_repo_to_group_successful
@@ -85,6 +87,10 @@ class AdminGroupOwnedLibraries(APIView):
         if group_quota <= 0 and group_quota != -2:
             error_msg = 'No group quota.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if check_repo_name_conflict(request, repo_name, group_id):
+            error_msg = _('Library name already exists.')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         group_id = int(group_id)
 

@@ -44,6 +44,37 @@ def normalize_repo_status_str(status):
         return ''
 
 
+def check_repo_name_conflict(request, repo_name, group_id=None, username=None):
+    """Return True if a library named ``repo_name`` already exists under the
+    same owner.
+
+    For personal, public and group-shared libraries the owner is the request
+    user unless ``username`` is provided; for a group-owned library the owner
+    is the given group.
+    """
+    if username is None:
+        username = request.user.username
+    org_id = request.user.org.org_id if is_org_context(request) else -1
+
+    if group_id is None:
+        if org_id and org_id > 0:
+            owned_repos = seafile_api.get_org_owned_repo_list(
+                org_id, username, ret_corrupted=True)
+        else:
+            owned_repos = seafile_api.get_owned_repo_list(
+                username, ret_corrupted=True)
+        return any(repo.name == repo_name for repo in owned_repos)
+
+    group_id = int(group_id)
+    group_owner = '%s@seafile_group' % group_id
+    if org_id and org_id > 0:
+        group_repos = seafile_api.get_org_group_repos(org_id, group_id)
+    else:
+        group_repos = seafile_api.get_repos_by_group(group_id)
+    return any(repo.repo_name == repo_name and repo.user == group_owner
+               for repo in group_repos)
+
+
 def get_available_repo_perms():
     perms = [PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN]
     if is_pro_version():
