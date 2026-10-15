@@ -54,3 +54,4 @@ gettext('Extended properties are being built.');
 gettext('Delete property');
 gettext('Sort ascending');
 gettext('Pages');
+gettext('Change cover');
