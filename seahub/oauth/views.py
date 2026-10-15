@@ -14,7 +14,7 @@ from seahub.api2.utils import get_api_token
 from seahub import auth
 from seahub.auth.decorators import login_required
 from seahub.profile.models import Profile
-from seahub.utils import is_valid_email, render_error, get_service_url
+from seahub.utils import render_error, get_service_url
 from seahub.utils.file_size import get_quota_from_string
 from seahub.utils.auth import user_local_password_enabled, VIRTUAL_ID_EMAIL_DOMAIN
 from seahub.base.accounts import User, UNUSABLE_PASSWORD
@@ -228,9 +228,7 @@ def oauth_callback(request):
         return HttpResponseRedirect(request.session.get('oauth_redirect',
                                                         settings.LOGIN_REDIRECT_URL))
 
-    # compatible with old users via email
-    old_email = oauth_user_info.get('email', '')
-
+    # Resolve existing OAuth bindings, including configured LDAP UID linking.
     oauth_user = SocialAuthUser.objects.get_by_provider_and_uid(OAUTH_PROVIDER, uid)
     if not oauth_user and SSO_LDAP_USE_SAME_UID:
         oauth_user = SocialAuthUser.objects.get_by_provider_and_uid(LDAP_PROVIDER, uid)
@@ -239,18 +237,6 @@ def oauth_callback(request):
     if oauth_user:
         email = oauth_user.username
         is_new_user = False
-    elif old_email:
-        if not is_valid_email(str(old_email)):
-            # In previous versions, if 'email' is not in mailbox format,
-            # we combine 'email' and 'provider' to mailbox format.
-            old_email = '%s@%s' % (str(old_email), OAUTH_PROVIDER)
-        try:
-            old_user = User.objects.get_old_user(old_email, OAUTH_PROVIDER, uid)
-            email = old_user.username
-            is_new_user = False
-        except User.DoesNotExist:
-            email = None
-            is_new_user = True
     else:
         email = None
         is_new_user = True
@@ -293,7 +279,10 @@ def oauth_callback(request):
         profile.nickname = name.strip()
         profile.save()
 
-    if contact_email:
+    # Contact emails are unique; an unbound identity may share an existing
+    # account's email, but must not take over that account or its address.
+    if contact_email and not Profile.objects.filter(
+            contact_email=contact_email.strip()).exclude(user=email).exists():
         profile.contact_email = contact_email.strip()
         profile.save()
 
