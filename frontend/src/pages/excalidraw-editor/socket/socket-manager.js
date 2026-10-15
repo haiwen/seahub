@@ -169,6 +169,7 @@ class SocketManager {
     this.pendingRemoteUpdates.push({
       elements,
       version: normalizedVersion,
+      editingTextElementId: this.excalidrawAPI.getAppState().editingTextElement?.id,
     });
     this.pendingRemoteUpdates.sort((left, right) => left.version - right.version);
 
@@ -218,7 +219,16 @@ class SocketManager {
     let remoteVersion = this.getVersion();
 
     updates.forEach((update) => {
-      const restoredRemoteElements = restoreElements(update.elements, null);
+      let restoredRemoteElements = restoreElements(update.elements, null);
+      if (update.editingTextElementId) {
+        const protectedTextElement = localElements.find(element => element.id === update.editingTextElementId);
+        if (protectedTextElement) {
+          // Keep receive-time protection after editing ends, using the latest local text.
+          restoredRemoteElements = restoredRemoteElements.map(element => (
+            element.id === protectedTextElement.id ? protectedTextElement : element
+          ));
+        }
+      }
       localElements = reconcileElements(localElements, restoredRemoteElements, appState);
       remoteVersion = Math.max(remoteVersion, update.version);
     });
