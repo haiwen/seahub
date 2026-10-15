@@ -56,7 +56,7 @@ class AdminSysNotificationsTest(BaseTestCase):
         self.login_as(self.admin)
 
         data = {
-            'msg': 'a' * Notification.MESSAGE_MAX_LENGTH,
+            'msg': 'a' * 512,
         }
         resp = self.client.post(self.url, json.dumps(data),
                 'application/json')
@@ -67,7 +67,7 @@ class AdminSysNotificationsTest(BaseTestCase):
         self.login_as(self.admin)
 
         data = {
-            'msg': 'a' * (Notification.MESSAGE_MAX_LENGTH + 1),
+            'msg': 'a' * 513,
         }
         resp = self.client.post(self.url, json.dumps(data),
                 'application/json')
@@ -82,8 +82,8 @@ class AdminSysNotificationsTest(BaseTestCase):
 
         # browsers submit textarea line breaks as CRLF, normalize them
         # before counting the length
-        msg = 'a' * (Notification.MESSAGE_MAX_LENGTH - 3) + '\r\n' + 'aa'
-        self.assertEqual(Notification.MESSAGE_MAX_LENGTH + 1, len(msg))
+        msg = 'a' * 509 + '\r\n' + 'aa'
+        self.assertEqual(513, len(msg))
 
         data = {'msg': msg}
         resp = self.client.post(self.url, json.dumps(data),
@@ -92,13 +92,13 @@ class AdminSysNotificationsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
         self.assertEqual(
-                'a' * (Notification.MESSAGE_MAX_LENGTH - 3) + '\n' + 'aa',
+                'a' * 509 + '\n' + 'aa',
                 json_resp['notification']['msg'])
 
     def test_create_notification_with_too_long_crlf_msg(self):
         self.login_as(self.admin)
 
-        msg = 'a' * (Notification.MESSAGE_MAX_LENGTH - 2) + '\r\n' + 'aa'
+        msg = 'a' * 510 + '\r\n' + 'aa'
 
         data = {'msg': msg}
         resp = self.client.post(self.url, json.dumps(data),

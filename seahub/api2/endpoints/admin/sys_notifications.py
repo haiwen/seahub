@@ -1,7 +1,6 @@
 import logging
 
 from django.core.cache import cache
-from django.utils.translation import gettext as _
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
@@ -78,8 +77,8 @@ class AdminSysNotificationsView(APIView):
         # breaks before checking the length to keep the limit consistent.
         msg = msg.replace('\r\n', '\n')
 
-        if len(msg) > Notification.MESSAGE_MAX_LENGTH:
-            error_msg = _('msg is too long (max %d characters).') % Notification.MESSAGE_MAX_LENGTH
+        if len(msg) > 512:
+            error_msg = 'msg is too long (max 512 characters).'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
