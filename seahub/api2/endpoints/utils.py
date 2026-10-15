@@ -17,7 +17,8 @@ from seaserv import ccnet_api, seafile_api
 
 from seahub.api2.utils import api_error
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
-from seahub.utils import get_log_events_by_time, is_pro_version, is_org_context
+from seahub.utils import get_log_events_by_time, is_pro_version, \
+        is_org_context, get_service_url
 
 from seahub.settings import SEADOC_PRIVATE_KEY, FILE_CONVERTER_SERVER_URL, SECRET_KEY, \
                             SEAFEVENTS_SERVER_URL
@@ -316,6 +317,7 @@ def sdoc_export_to_html(path, username, doc_uuid, download_url,
         'dst_type': dst_type,
         'publish_url': publish_url,
         'page_id_name_dict': page_id_name_dict,
+        'image_root_url': get_service_url(),
     }
     url = FILE_CONVERTER_SERVER_URL.rstrip('/') + '/api/v1/sdoc-export-to-html/'
     resp = requests.post(url, json=params, headers=headers, timeout=30)
