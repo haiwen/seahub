@@ -238,6 +238,9 @@ class DirSharedItemsEndpoint(APIView):
         if not request.user.permissions.can_share_repo():
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
+        if repo.is_virtual:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Virtual libraries cannot be shared.')
+
         path = request.GET.get('p', '/')
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:
             return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found.' % path)
@@ -329,6 +332,9 @@ class DirSharedItemsEndpoint(APIView):
 
         if not request.user.permissions.can_share_repo():
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        if repo.is_virtual:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Virtual libraries cannot be shared.')
 
         path = request.GET.get('p', '/')
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:

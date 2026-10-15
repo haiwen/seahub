@@ -154,6 +154,9 @@ class SharedRepo(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        if repo.is_virtual:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Virtual libraries cannot be shared.')
+
         # permission check
         username = request.user.username
         if is_org_context(request):
