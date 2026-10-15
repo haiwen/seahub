@@ -9,10 +9,6 @@ pro_pylibs_dir=${INSTALLPATH}/pro/python
 seafesdir=$pro_pylibs_dir/seafes
 seahubdir=${INSTALLPATH}/seahub
 seafile_rpc_pipe_path=${INSTALLPATH}/runtime
-manage_py=${INSTALLPATH}/seahub/manage.py
-gunicorn_conf=${TOPDIR}/conf/gunicorn.conf.py
-gunicorn_exe=${INSTALLPATH}/seahub/thirdpart/bin/gunicorn
-logdir=${TOPDIR}/logs
 
 export PATH=${INSTALLPATH}/seafile/bin:$PATH
 export ORIG_LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
@@ -25,7 +21,6 @@ export PYTHONPATH=$PYTHONPATH:$pro_pylibs_dir
 export SEAFES_DIR=$seafesdir
 export SEAHUB_DIR=$seahubdir
 export SEAFDAV_CONF=${central_config_dir}/seafdav.conf
-export SEAHUB_LOG_DIR=${logdir}
 
 function check_python_executable() {
     if [[ "$PYTHON" != "" && -x $PYTHON ]]; then
@@ -191,12 +186,6 @@ function start_seafdav() {
     sleep 1
 }
 
-function start_seahub() {
-    export DJANGO_SETTINGS_MODULE=seahub.settings
-    $PYTHON $gunicorn_exe seahub.wsgi:application -c "${gunicorn_conf}" --preload &
-    sleep 1
-}
-
 # monitor
 function monitor_seaf_server() {
     process_name="seaf-server"
@@ -234,15 +223,6 @@ function monitor_seafdav() {
     fi
 }
 
-function monitor_seahub() {
-    process_name="seahub.wsgi:application"
-    check_num=$(check_process $process_name)
-    if [ $check_num -eq 0 ]; then
-        log "Start $process_name"
-        start_seahub
-    fi
-}
-
 
 # check enabled
 set_file_config
@@ -262,7 +242,6 @@ while [ 1 ]; do
     if [ $CLUSTER_MODE ] && [ $CLUSTER_MODE = "backend" ]; then
        :
     else
-        monitor_seahub
         monitor_seafevents
     fi
 

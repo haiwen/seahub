@@ -182,6 +182,10 @@ function start_seahub () {
     echo
     echo "Seahub is started"
     echo
+
+    if [[ ${CLUSTER_MODE} != "backend" ]]; then
+        bash ${INSTALLPATH}/seahub-monitor.sh &
+    fi
 }
 
 function set_env_config () {
@@ -250,6 +254,8 @@ function clear_sessions () {
 }
 
 function stop_seahub () {
+    pkill -9 -f "seahub-monitor.sh"
+
     if ! pgrep -f "seahub.wsgi:application" 2>/dev/null 1>&2; then
         echo "Seahub is not running"
         rm -f ${pidfile}
