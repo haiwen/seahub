@@ -163,6 +163,7 @@ export default class PageDropdownMenu extends Component {
         children: [
           { key: 'import-docx', label: gettext('Import page from docx'), onClick: () => this.importPage('.docx') },
           { key: 'import-md', label: gettext('Import page from Markdown'), onClick: () => this.importPage('.md') },
+          { key: 'import-sdoc', label: gettext('Import page from sdoczip'), onClick: () => this.importPage('.sdoczip') },
         ],
       },
       'Divider',

@@ -6,6 +6,7 @@ import time
 import logging
 import posixpath
 import shutil
+import tempfile
 import requests
 from zipfile import ZipFile, is_zipfile
 
@@ -172,6 +173,35 @@ def get_seadoc_asset_upload_link(repo_id, parent_path, username):
     upload_link = gen_file_upload_url(token, 'upload-api')
     upload_link = upload_link + '?replace=1'
     return upload_link
+
+
+def extract_sdoc_zip_member(zip_file, member, local_path):
+    with zip_file.open(member) as source, open(local_path, 'wb') as target:
+        shutil.copyfileobj(source, target, length=64 * 1024)
+
+
+def import_sdoc_zip(repo_id, parent_dir, filename, file_uuid, username, local_file_path):
+    with ZipFile(local_file_path) as zip_file, tempfile.TemporaryDirectory() as tmp_dir:
+        members = zip_file.infolist()
+        image_members = [member for member in members
+                         if member.filename.startswith('images/') and not member.is_dir()]
+
+        # Only pass closed local files to seaf-server; reuse this path for each image.
+        tmp_path = os.path.join(tmp_dir, 'content')
+        extract_sdoc_zip_member(zip_file, zip_file.getinfo('content.json'), tmp_path)
+        with open(tmp_path, 'rb') as content_file:
+            json.load(content_file)
+        FileUUIDMap.objects.create_fileuuidmap_by_uuid(
+            file_uuid, repo_id, parent_dir, filename, is_dir=False)
+        seafile_api.mkdir_with_parents(repo_id, '/', parent_dir.strip('/'), username)
+        seafile_api.post_file(repo_id, tmp_path, parent_dir, filename, username)
+
+        if image_members:
+            image_parent_path = gen_seadoc_image_parent_path(file_uuid, repo_id, username)
+            for member in image_members:
+                extract_sdoc_zip_member(zip_file, member, tmp_path)
+                seafile_api.post_file(repo_id, tmp_path, image_parent_path,
+                                      posixpath.basename(member.filename), username)
 
 
 def get_seadoc_asset_download_link(repo_id, parent_path, filename, username):
