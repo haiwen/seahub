@@ -31,6 +31,10 @@ function PageCover({ currentPageConfig, onUpdatePageConfig }) {
 
   const { docUuid, serviceUrl, accessToken } = window.seafile || {};
 
+  const changeCoverLabel = useMemo(() => {
+    return gettext('Change cover');
+  }, []);
+
   const onMouseEnter = useCallback(() => {
     setIsShowCoverController(true);
   }, []);
@@ -234,7 +238,7 @@ function PageCover({ currentPageConfig, onUpdatePageConfig }) {
         <>
           <button className="wiki-cover-controller-btn border-0 d-flex align-items-center" id='wiki-change-cover-btn'>
             <Icon symbol="gallery" className="mr-1" />
-            {gettext('Change cover')}
+            {changeCoverLabel}
           </button>
           <Popover
             flip

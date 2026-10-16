@@ -166,13 +166,15 @@ class WikiNav extends Component {
     let id_page_map = {};
     pages.forEach(page => id_page_map[page.id] = page);
     const isDesktop = Utils.isDesktop();
+    const importDocxLabel = gettext('Import page from docx');
+    const importMdLabel = gettext('Import page from Markdown');
     const pageOperationItems = [{
       key: 'import-page',
       label: gettext('Import page'),
       icon_dom: <Icon symbol="import-sdoc" aria-hidden="true" />,
       children: [
-        { key: 'import-docx', label: gettext('Import page from docx'), onClick: () => this.handleImportPage('.docx') },
-        { key: 'import-md', label: gettext('Import page from Markdown'), onClick: () => this.handleImportPage('.md') },
+        { key: 'import-docx', label: importDocxLabel, onClick: () => this.handleImportPage('.docx') },
+        { key: 'import-md', label: importMdLabel, onClick: () => this.handleImportPage('.md') },
       ],
     }];
     return (
