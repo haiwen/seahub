@@ -1,0 +1,3905 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: seahub\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-16 15:38+0800\n"
+"PO-Revision-Date: 2013-10-25 07:03+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Serbian (http://app.transifex.com/haiwen/seahub/language/sr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sr\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: seahub/adfs_auth/utils.py:56
+msgid "ADFS/SAML login relevant settings invalid."
+msgstr "Neispravna podešavanja za ADFS/SAML prijavu."
+
+#: seahub/adfs_auth/views.py:56 seahub/adfs_auth/views.py:578
+#: seahub/adfs_auth/views.py:607 seahub/adfs_auth/views.py:647
+#: seahub/adfs_auth/views.py:667 seahub/adfs_auth/views.py:684
+#: seahub/adfs_auth/views.py:688 seahub/adfs_auth/views.py:718
+#: seahub/adfs_auth/views.py:743 seahub/adfs_auth/views.py:747
+#: seahub/adfs_auth/views.py:815 seahub/adfs_auth/views.py:819
+msgid "Internal server error. Please contact system administrator."
+msgstr "Interna greška servera. Obratite se administratoru sistema."
+
+#: seahub/adfs_auth/views.py:57
+msgid ""
+"Login failed: Bad response from ADFS/SAML service. Please report to your "
+"organization (company) administrator."
+msgstr "Prijava nije uspela: ADFS/SAML servis je vratio neispravan odgovor. Prijavite problem administratoru svoje organizacije (preduzeća)."
+
+#: seahub/adfs_auth/views.py:123 seahub/adfs_auth/views.py:139
+#: seahub/api2/endpoints/admin/users.py:784
+#: seahub/api2/endpoints/admin/users.py:1290 seahub/base/accounts.py:1242
+#: seahub/forms.py:30 seahub/institutions/api_views.py:202
+msgid "The number of users exceeds the limit."
+msgstr "Broj korisnika premašuje ograničenje."
+
+#: seahub/adfs_auth/views.py:221 seahub/adfs_auth/views.py:431
+msgid "Failed to bind SAML, please login first."
+msgstr "Povezivanje sa SAML-om nije uspelo. Prvo se prijavite."
+
+#: seahub/adfs_auth/views.py:271
+#, python-format
+msgid ""
+"Login failed: The email %s is not consistent with the email %s from "
+"ADFS/SAML service"
+msgstr "Prijava nije uspela: adresa e-pošte %s ne podudara se sa adresom %s koju je vratio ADFS/SAML servis."
+
+#: seahub/adfs_auth/views.py:304
+#| msgid "User %s not found."
+msgid "User not found in Team."
+msgstr "Korisnik nije pronađen u timu."
+
+#: seahub/adfs_auth/views.py:339 seahub/adfs_auth/views.py:541
+msgid ""
+"Login failed: user is deactivated. Please report to your organization "
+"(company) administrator."
+msgstr "Prijava nije uspela: korisnik je deaktiviran. Prijavite problem administratoru svoje organizacije (preduzeća)."
+
+#: seahub/adfs_auth/views.py:603 seahub/adfs_auth/views.py:663
+#: seahub/adfs_auth/views.py:714
+msgid ""
+"Login failed: ADFS/SAML service error. Please report to your organization "
+"(company) administrator."
+msgstr "Prijava nije uspela: greška ADFS/SAML servisa. Prijavite problem administratoru svoje organizacije (preduzeća)."
+
+#: seahub/adfs_auth/views.py:751
+msgid "Failed to unbind SAML, please set a password first."
+msgstr "Prekid povezivanja sa SAML-om nije uspeo. Najpre postavite lozinku."
+
+#: seahub/adfs_auth/views.py:754
+#| msgid "Failed to bind SAML, please login first."
+msgid "Failed to unbind SAML, the user is forced login by SSO."
+msgstr "Prekid povezivanja sa SAML-om nije uspeo jer je za korisnika obavezna prijava putem SSO-a."
+
+#: seahub/adfs_auth/views.py:759
+msgid "Failed to unbind SAML, please set a contact email first."
+msgstr "Prekid povezivanja sa SAML-om nije uspeo. Najpre unesite kontakt-adresu e-pošte."
+
+#: seahub/ai/apis.py:846
+msgid "New chat"
+msgstr "Novo ćaskanje"
+
+#: seahub/ai/utils.py:432
+msgid ""
+"Due to your read-only permission for this library, the document cannot be "
+"uploaded to this library."
+msgstr "Nemate dozvolu za upis u ovu biblioteku, pa dokument ne može da se otpremi u nju."
+
+#: seahub/api2/endpoints/admin/account.py:205
+#: seahub/api2/endpoints/user.py:101 seahub/api2/views.py:374
+msgid "Name is too long (maximum is 64 characters)"
+msgstr "Naziv je predugačak (najviše 64 znaka)"
+
+#: seahub/api2/endpoints/admin/account.py:209
+#: seahub/api2/endpoints/user.py:105 seahub/api2/views.py:378
+#: seahub/forms.py:44 seahub/profile/forms.py:27
+msgid "Name should not include '/'."
+msgstr "Naziv ne sme da sadrži znak „/“."
+
+#: seahub/api2/endpoints/admin/account.py:224
+msgid "Login id can't be empty"
+msgstr "ID za prijavu ne može biti prazan"
+
+#: seahub/api2/endpoints/admin/account.py:228
+#: seahub/api2/endpoints/admin/users.py:869
+#: seahub/api2/endpoints/admin/users.py:1318
+#, python-format
+msgid "Login id %s already exists."
+msgstr "ID za prijavu %s već postoji."
+
+#: seahub/api2/endpoints/admin/account.py:235
+msgid "Department is too long (maximum is 512 characters)"
+msgstr "Naziv odeljenja je predugačak (najviše 512 znakova)"
+
+#: seahub/api2/endpoints/admin/account.py:251 seahub/forms.py:155
+msgid "Space quota can't be empty"
+msgstr "Kvota prostora ne može biti prazna"
+
+#: seahub/api2/endpoints/admin/account.py:257
+#: seahub/api2/endpoints/admin/users.py:1366
+#: seahub/api2/endpoints/admin/users.py:1370
+#: seahub/api2/endpoints/admin/users.py:1383
+#: seahub/api2/endpoints/admin/users.py:1387
+#: seahub/institutions/api_views.py:174
+msgid "Must be an integer that is greater than or equal to 0."
+msgstr "Mora biti ceo broj veći ili jednak 0."
+
+#: seahub/api2/endpoints/admin/account.py:316
+#: seahub/api2/endpoints/admin/users.py:1398
+#: seahub/api2/endpoints/admin/users.py:1514 seahub/auth/forms.py:166
+#: seahub/organizations/api/admin/user_set_password.py:55
+#: seahub/views/sysadmin.py:581
+msgid "Unable to reset password."
+msgstr "Nije moguće resetovati lozinku."
+
+#: seahub/api2/endpoints/admin/address_book/groups.py:82
+#: seahub/api2/endpoints/admin/groups.py:135
+#: seahub/api2/endpoints/admin/groups.py:275
+#: seahub/api2/endpoints/groups.py:237 seahub/api2/endpoints/groups.py:310
+#: seahub/api2/views.py:4644 seahub/group/forms.py:36
+msgid ""
+"Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
+"brackets or underscore."
+msgstr "Naziv može da sadrži samo slova, brojeve, razmake, crticu, tačku, apostrof, zagrade ili donju crtu."
+
+#: seahub/api2/endpoints/admin/address_book/groups.py:87
+#: seahub/api2/endpoints/admin/groups.py:142
+#: seahub/api2/endpoints/admin/groups.py:279
+#: seahub/api2/endpoints/groups.py:242 seahub/api2/endpoints/groups.py:315
+msgid "There is already a group with that name."
+msgstr "Grupa sa tim nazivom već postoji."
+
+#: seahub/api2/endpoints/admin/address_book/groups.py:235
+msgid "There are libraries in this department."
+msgstr "U ovom odeljenju postoje biblioteke."
+
+#: seahub/api2/endpoints/admin/address_book/groups.py:239
+msgid "There are sub-departments in this department."
+msgstr "U ovom odeljenju postoje pododeljenja."
+
+#: seahub/api2/endpoints/admin/default_library.py:32
+#: seahub/api2/endpoints/admin/default_library.py:33
+#: seahub/views/__init__.py:566 seahub/views/__init__.py:567
+#: seahub/views/__init__.py:571 seahub/views/__init__.py:572
+msgid "My Library"
+msgstr "Moja biblioteka"
+
+#: seahub/api2/endpoints/admin/group_owned_libraries.py:92
+#: seahub/api2/endpoints/admin/libraries.py:224
+#: seahub/api2/endpoints/group_libraries.py:211
+#: seahub/api2/endpoints/group_owned_libraries.py:141
+#: seahub/api2/views.py:1148 seahub/api2/views.py:1391
+#: seahub/api2/views.py:4820
+#| msgid "User %s already exists."
+msgid "Library name already exists."
+msgstr ""
+
+#: seahub/api2/endpoints/admin/groups.py:223
+#: seahub/api2/endpoints/groups.py:341
+#, python-format
+msgid "User %s is already group owner."
+msgstr "Korisnik %s je već vlasnik grupe."
+
+#: seahub/api2/endpoints/admin/institution_users.py:169
+#, python-format
+msgid ""
+"Failed to add %s to the institution: user already belongs to an institution"
+msgstr "Nije moguće dodati %s u ustanovu: korisnik već pripada nekoj ustanovi."
+
+#: seahub/api2/endpoints/admin/institution_users.py:174
+#, python-format
+msgid ""
+"Failed to add %s to the institution: user already belongs to this "
+"institution"
+msgstr "Nije moguće dodati %s u ustanovu: korisnik već pripada ovoj ustanovi."
+
+#: seahub/api2/endpoints/admin/libraries.py:296 seahub/views/sysadmin.py:792
+msgid "System library can not be deleted."
+msgstr "Sistemska biblioteka ne može da se obriše."
+
+#: seahub/api2/endpoints/admin/libraries.py:418 seahub/api2/views.py:1905
+#, python-format
+msgid "Transfer failed: role of %s is %s, can not add library."
+msgstr "Prenos nije uspeo: uloga korisnika %s je %s, pa nije moguće dodati biblioteku."
+
+#: seahub/api2/endpoints/admin/libraries.py:444 seahub/api2/views.py:1910
+msgid "Library can not be transferred to owner."
+msgstr "Biblioteka ne može da se prenese vlasniku."
+
+#: seahub/api2/endpoints/admin/organizations.py:494
+#, python-brace-format
+#| msgid "This account is inactive."
+msgid "Your team {org.org_name} has been deactivated"
+msgstr "Vaš tim {org.org_name} je deaktiviran"
+
+#: seahub/api2/endpoints/admin/share_links.py:225
+#: seahub/api2/endpoints/repo_share_links.py:155
+#: seahub/api2/endpoints/share_links.py:602
+#: seahub/api2/endpoints/share_links.py:826
+msgid "There is an associated published library."
+msgstr "Postoji povezana objavljena biblioteka."
+
+#: seahub/api2/endpoints/admin/shares.py:188
+#, python-format
+msgid "User %s is already library owner."
+msgstr "Korisnik %s je već vlasnik biblioteke."
+
+#: seahub/api2/endpoints/admin/shares.py:196
+#: seahub/api2/endpoints/invitations.py:51
+#: seahub/api2/endpoints/invitations.py:116
+#: seahub/api2/endpoints/repo_share_invitations.py:160
+#, python-format
+msgid "Email %s invalid."
+msgstr "Adresa e-pošte %s nije ispravna."
+
+#: seahub/api2/endpoints/admin/shares.py:214
+#: seahub/api2/endpoints/admin/shares.py:271
+#: seahub/api2/endpoints/dir_shared_items.py:386
+#: seahub/api2/endpoints/dir_shared_items.py:499
+#: seahub/api2/endpoints/group_owned_libraries.py:977
+#: seahub/api2/endpoints/group_owned_libraries.py:1261
+#: seahub/api2/endpoints/repo_share_invitations.py:202
+#, python-format
+msgid "This item has been shared to %s."
+msgstr "Ova stavka je podeljena sa korisnikom %s."
+
+#: seahub/api2/endpoints/admin/statistics.py:432
+#: seahub/base/management/commands/export_user_traffic_report.py:46
+#: seahub/notifications/templates/notifications/file_updates_email.html:22
+#: seahub/notifications/templates/notifications/notice_email.html:20
+#: seahub/organizations/api/admin/statistics.py:359
+msgid "Time"
+msgstr "Vreme"
+
+#: seahub/api2/endpoints/admin/statistics.py:432
+#: seahub/base/management/commands/export_file_access_log.py:58
+#: seahub/base/management/commands/export_user_traffic_report.py:46
+#: seahub/notifications/templates/notifications/file_updates_email.html:19
+#: seahub/organizations/api/admin/statistics.py:359
+msgid "User"
+msgstr "Korisnik"
+
+#: seahub/api2/endpoints/admin/statistics.py:432
+#: seahub/api2/endpoints/admin/statistics.py:481
+#: seahub/base/management/commands/export_user_storage_report.py:41
+#: seahub/base/management/commands/export_user_traffic_report.py:46
+#: seahub/base/management/commands/export_users.py:43
+#: seahub/base/management/commands/export_users.py:47
+#: seahub/organizations/api/admin/statistics.py:359
+#: seahub/organizations/api/admin/statistics.py:406
+#: seahub/templates/registration/registration_form.html:28
+#: seahub/views/sysadmin.py:252 seahub/views/sysadmin.py:256
+#: seahub/views/sysadmin.py:736 seahub/views/sysadmin.py:867
+#: seahub/views/sysadmin.py:882
+msgid "Name"
+msgstr "Naziv"
+
+#: seahub/api2/endpoints/admin/statistics.py:432
+#: seahub/base/management/commands/export_user_traffic_report.py:46
+#: seahub/organizations/api/admin/statistics.py:359
+msgid "Web Download"
+msgstr "Preuzimanje preko veba"
+
+#: seahub/api2/endpoints/admin/statistics.py:433
+#: seahub/base/management/commands/export_user_traffic_report.py:47
+#: seahub/organizations/api/admin/statistics.py:360
+msgid "Sync Download"
+msgstr "Preuzimanje sinhronizacijom"
+
+#: seahub/api2/endpoints/admin/statistics.py:433
+#: seahub/base/management/commands/export_user_traffic_report.py:47
+#: seahub/organizations/api/admin/statistics.py:360
+msgid "Link Download"
+msgstr "Preuzimanje putem veze"
+
+#: seahub/api2/endpoints/admin/statistics.py:434
+#: seahub/base/management/commands/export_user_traffic_report.py:48
+#: seahub/organizations/api/admin/statistics.py:361
+msgid "Web Upload"
+msgstr "Otpremanje preko veba"
+
+#: seahub/api2/endpoints/admin/statistics.py:434
+#: seahub/base/management/commands/export_user_traffic_report.py:48
+#: seahub/organizations/api/admin/statistics.py:361
+msgid "Sync Upload"
+msgstr "Otpremanje sinhronizacijom"
+
+#: seahub/api2/endpoints/admin/statistics.py:435
+#: seahub/base/management/commands/export_user_traffic_report.py:49
+#: seahub/organizations/api/admin/statistics.py:362
+msgid "Link Upload"
+msgstr "Otpremanje putem veze"
+
+#: seahub/api2/endpoints/admin/statistics.py:481
+#: seahub/base/management/commands/export_user_storage_report.py:41
+#: seahub/base/management/commands/export_users.py:43
+#: seahub/base/management/commands/export_users.py:47
+#: seahub/invitations/templates/invitations/token_view.html:11
+#: seahub/organizations/api/admin/statistics.py:406
+#: seahub/templates/registration/registration_form.html:32
+#: seahub/views/sysadmin.py:252 seahub/views/sysadmin.py:256
+#: seahub/views/sysadmin.py:865 seahub/views/sysadmin.py:880
+msgid "Email"
+msgstr "E-pošta"
+
+#: seahub/api2/endpoints/admin/statistics.py:481 seahub/auth/forms.py:293
+#: seahub/base/management/commands/export_user_storage_report.py:41
+#: seahub/base/management/commands/export_users.py:43
+#: seahub/base/management/commands/export_users.py:47
+#: seahub/organizations/api/admin/statistics.py:406
+#: seahub/templates/registration/password_set_form.html:12
+#: seahub/views/sysadmin.py:252 seahub/views/sysadmin.py:256
+msgid "Contact Email"
+msgstr "Kontakt-adresa e-pošte"
+
+#: seahub/api2/endpoints/admin/statistics.py:482
+#: seahub/base/management/commands/export_user_storage_report.py:42
+#: seahub/base/management/commands/export_users.py:44
+#: seahub/base/management/commands/export_users.py:48
+#: seahub/organizations/api/admin/statistics.py:407
+#: seahub/views/sysadmin.py:253 seahub/views/sysadmin.py:257
+msgid "Space Usage"
+msgstr "Zauzeće prostora"
+
+#: seahub/api2/endpoints/admin/statistics.py:482
+#: seahub/base/management/commands/export_user_storage_report.py:42
+#: seahub/base/management/commands/export_users.py:44
+#: seahub/base/management/commands/export_users.py:48
+#: seahub/organizations/api/admin/statistics.py:407
+#: seahub/views/sysadmin.py:253 seahub/views/sysadmin.py:257
+#: seahub/views/sysadmin.py:869 seahub/views/sysadmin.py:883
+msgid "Space Quota"
+msgstr "Kvota prostora"
+
+#: seahub/api2/endpoints/admin/users.py:645
+#: seahub/api2/endpoints/admin/users.py:682
+#: seahub/organizations/api/admin/users.py:155
+msgid "There are more than 500 users, and sort is not offered."
+msgstr "Ima više od 500 korisnika, pa sortiranje nije dostupno."
+
+#: seahub/api2/endpoints/admin/users.py:883
+#, python-format
+msgid "Successfully added user %(user)s."
+msgstr "Korisnik %(user)s je uspešno dodat."
+
+#: seahub/api2/endpoints/admin/users.py:887
+#: seahub/api2/endpoints/admin/users_batch.py:392 seahub/views/sysadmin.py:632
+#, python-format
+msgid "You are invited to join %s"
+msgstr "Pozvani ste da se pridružite na lokaciji %s"
+
+#: seahub/api2/endpoints/admin/users.py:891
+#, python-format
+msgid "Successfully added user %(user)s. An email notification has been sent."
+msgstr "Korisnik %(user)s je uspešno dodat. Poslato je obaveštenje e-poštom."
+
+#: seahub/api2/endpoints/admin/users.py:894
+#, python-format
+msgid ""
+"Successfully added user %(user)s. But email notification can not be sent, "
+"because Email service is not properly configured."
+msgstr "Korisnik %(user)s je uspešno dodat, ali obaveštenje nije moguće poslati jer servis e-pošte nije ispravno podešen."
+
+#: seahub/api2/endpoints/admin/users.py:1429
+msgid "Edit succeeded"
+msgstr "Izmena je uspešno obavljena"
+
+#: seahub/api2/endpoints/admin/users.py:1435 seahub/views/sysadmin.py:529
+#, python-format
+msgid "Your account on %s is activated"
+msgstr "Vaš nalog na lokaciji %s je aktiviran"
+
+#: seahub/api2/endpoints/admin/users.py:1442
+msgid "Edit succeeded, an email has been sent."
+msgstr "Izmena je uspešno obavljena i poslata je poruka e-pošte."
+
+#: seahub/api2/endpoints/admin/users.py:1446
+msgid ""
+"Edit succeeded, but failed to send email, please check your email "
+"configuration."
+msgstr "Izmena je uspešno obavljena, ali slanje poruke e-pošte nije uspelo. Proverite podešavanja e-pošte."
+
+#: seahub/api2/endpoints/admin/users.py:1532 seahub/auth/forms.py:194
+#: seahub/organizations/api/admin/user_set_password.py:80
+#, python-format
+msgid "Reset Password on %s"
+msgstr "Resetovanje lozinke na lokaciji %s"
+
+#: seahub/api2/endpoints/admin/users.py:1536
+#: seahub/organizations/api/admin/user_set_password.py:84
+#, python-brace-format
+msgid "A password reset link has been sent to {contact_email}."
+msgstr "Veza za resetovanje lozinke poslata je na adresu {contact_email}."
+
+#: seahub/api2/endpoints/admin/users.py:1554 seahub/views/sysadmin.py:570
+#, python-format
+msgid "Password has been reset on %s"
+msgstr "Lozinka je resetovana na lokaciji %s"
+
+#: seahub/api2/endpoints/admin/users.py:1556
+#, python-format
+msgid "Successfully reset password, an email has been sent to %(user)s."
+msgstr "Lozinka je uspešno resetovana, a poruka e-pošte poslata je korisniku %(user)s."
+
+#: seahub/api2/endpoints/admin/users.py:1560 seahub/views/sysadmin.py:604
+#, python-format
+msgid ""
+"Successfully reset password to %(passwd)s, but failed to send email to "
+"%(user)s, please check your email configuration."
+msgstr "Lozinka je uspešno resetovana na %(passwd)s, ali slanje poruke e-pošte korisniku %(user)s nije uspelo. Proverite podešavanja e-pošte."
+
+#: seahub/api2/endpoints/admin/users.py:1563
+#: seahub/organizations/api/admin/user_set_password.py:94
+#: seahub/views/sysadmin.py:608
+#, python-format
+msgid "Successfully reset password to %(passwd)s for user %(user)s."
+msgstr "Lozinka korisnika %(user)s uspešno je resetovana na %(passwd)s."
+
+#: seahub/api2/endpoints/admin/users.py:1566 seahub/views/sysadmin.py:611
+#, python-format
+msgid ""
+"Successfully reset password to %(passwd)s for user %(user)s. But email "
+"notification can not be sent, because Email service is not properly "
+"configured."
+msgstr "Lozinka korisnika %(user)s uspešno je resetovana na %(passwd)s, ali obaveštenje nije moguće poslati jer servis e-pošte nije ispravno podešen."
+
+#: seahub/api2/endpoints/admin/users_batch.py:173
+msgid "must be an integer that is greater than or equal to 0."
+msgstr "mora biti ceo broj veći ili jednak 0."
+
+#: seahub/api2/endpoints/admin/virus_scan_records.py:257
+msgid "Virus file is not found."
+msgstr "Datoteka sa virusom nije pronađena."
+
+#: seahub/api2/endpoints/admin/virus_scan_records.py:275
+#: seahub/api2/endpoints/admin/virus_scan_records.py:290
+#: seahub/api2/endpoints/admin/virus_scan_records.py:305
+#: seahub/api2/endpoints/file_participants.py:129
+#: seahub/api2/endpoints/file_tag.py:175
+#: seahub/api2/endpoints/invitations.py:84
+#: seahub/api2/endpoints/repo_set_password.py:72
+#: seahub/api2/endpoints/repo_share_invitations.py:213
+#: seahub/api2/endpoints/send_upload_link_email.py:126
+#: seahub/api2/endpoints/send_upload_link_email.py:145
+#: seahub/api2/endpoints/share_links.py:615
+#: seahub/api2/endpoints/subscription.py:52
+#: seahub/api2/endpoints/subscription.py:92
+#: seahub/api2/endpoints/subscription.py:129
+#: seahub/api2/endpoints/upload_links.py:335
+#: seahub/api2/endpoints/wiki2.py:523 seahub/api2/endpoints/wiki2.py:551
+#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4147
+#: seahub/notifications/models.py:628 seahub/notifications/models.py:669
+#: seahub/notifications/models.py:711 seahub/notifications/models.py:762
+#: seahub/notifications/models.py:818 seahub/notifications/models.py:845
+#: seahub/notifications/models.py:867 seahub/notifications/models.py:889
+#: seahub/notifications/models.py:911 seahub/notifications/models.py:936
+#: seahub/notifications/models.py:958 seahub/notifications/models.py:984
+#: seahub/notifications/models.py:1008 seahub/notifications/models.py:1025
+#: seahub/notifications/models.py:1042 seahub/notifications/models.py:1071
+#: seahub/seadoc/apis.py:2886 seahub/share/views.py:230
+#: seahub/subscription/views.py:90 seahub/utils/__init__.py:176
+#: seahub/views/__init__.py:843 seahub/views/ajax.py:398
+#: seahub/views/ajax.py:402 seahub/views/sysadmin.py:187
+#: seahub/wiki/views.py:210 seahub/wiki/views.py:217 seahub/wiki/views.py:226
+msgid "Internal Server Error"
+msgstr "Interna greška servera"
+
+#: seahub/api2/endpoints/copy_move_task.py:81
+#: seahub/api2/endpoints/move_folder_merge.py:137
+#: seahub/api2/endpoints/via_repo_token.py:1386
+msgid "Destination path is too long."
+msgstr "Odredišna putanja je predugačka."
+
+#: seahub/api2/endpoints/copy_move_task.py:91
+#: seahub/api2/endpoints/move_folder_merge.py:133
+#: seahub/api2/endpoints/via_repo_token.py:1382
+msgid "Invalid destination path"
+msgstr "Neispravna odredišna putanja"
+
+#: seahub/api2/endpoints/copy_move_task.py:148
+#: seahub/api2/endpoints/move_folder_merge.py:176
+#: seahub/api2/endpoints/repos_batch.py:505
+#: seahub/api2/endpoints/wiki2.py:2027 seahub/api2/views.py:1998
+#: seahub/api2/views.py:2038 seahub/api2/views.py:2100
+#: seahub/api2/views.py:2144 seahub/api2/views.py:2190
+#: seahub/api2/views.py:2239 seahub/api2/views.py:2706
+#: seahub/api2/views.py:2814 seahub/seadoc/apis.py:471
+#: seahub/seadoc/apis.py:598 seahub/seadoc/apis.py:692
+#: seahub/seadoc/apis.py:3249
+msgid "Out of quota."
+msgstr "Kvota je premašena."
+
+#: seahub/api2/endpoints/copy_move_task.py:164
+#, python-format
+msgid "Can not move folder %(src)s to its subfolder %(des)s"
+msgstr "Nije moguće premestiti fasciklu %(src)s u njenu podfasciklu %(des)s"
+
+#: seahub/api2/endpoints/copy_move_task.py:180
+#: seahub/api2/endpoints/file.py:322 seahub/api2/endpoints/file.py:402
+#: seahub/api2/endpoints/file.py:517 seahub/api2/endpoints/file.py:593
+#: seahub/api2/endpoints/file.py:746 seahub/api2/endpoints/file.py:859
+#: seahub/api2/endpoints/file.py:972
+#: seahub/api2/endpoints/via_repo_token.py:1126
+#: seahub/api2/endpoints/via_repo_token.py:1266
+#: seahub/api2/endpoints/wiki2.py:864
+msgid "File is locked"
+msgstr "Datoteka je zaključana"
+
+#: seahub/api2/endpoints/copy_move_task.py:247
+msgid "Cancel failed"
+msgstr "Otkazivanje nije uspelo"
+
+#: seahub/api2/endpoints/dir_shared_items.py:370
+#: seahub/api2/endpoints/group_owned_libraries.py:961
+msgid "username invalid."
+msgstr "Korisničko ime nije ispravno."
+
+#: seahub/api2/endpoints/dir_shared_items.py:379
+#: seahub/api2/endpoints/group_owned_libraries.py:970
+#, python-format
+msgid "User %s not found."
+msgstr "Korisnik %s nije pronađen."
+
+#: seahub/api2/endpoints/dir_shared_items.py:410
+#: seahub/api2/endpoints/dir_shared_items.py:426
+#| msgid "Library can not be transferred to owner."
+msgid "Library can not be shared to owner"
+msgstr "Biblioteka ne može da se podeli sa njenim vlasnikom"
+
+#: seahub/api2/endpoints/file.py:204 seahub/api2/endpoints/upload_links.py:540
+#: seahub/api2/endpoints/via_repo_token.py:966
+#: seahub/api2/endpoints/wiki2.py:661 seahub/api2/endpoints/wikis.py:128
+#: seahub/api2/views.py:2046 seahub/seadoc/apis.py:3256
+msgid "The number of files in library exceeds the limit"
+msgstr "Broj datoteka u biblioteci premašuje ograničenje"
+
+#: seahub/api2/endpoints/file.py:310
+#: seahub/api2/endpoints/file_participants.py:113
+#: seahub/api2/endpoints/file_tag.py:203 seahub/api2/endpoints/file_tag.py:216
+#: seahub/api2/endpoints/share_links.py:595
+#: seahub/api2/endpoints/subscription.py:36
+#: seahub/api2/endpoints/subscription.py:72
+#: seahub/api2/endpoints/subscription.py:112
+#: seahub/api2/endpoints/upload_links.py:322
+#: seahub/api2/endpoints/wiki2.py:1713 seahub/api2/endpoints/wikis.py:108
+#: seahub/api2/endpoints/wikis.py:203 seahub/profile/forms.py:24
+#: seahub/profile/views.py:276 seahub/seadoc/apis.py:2870
+#: seahub/seadoc/views.py:37 seahub/seadoc/views.py:91
+#: seahub/seadoc/views.py:174 seahub/seadoc/views.py:220
+#: seahub/subscription/views.py:27 seahub/subscription/views.py:43
+#: seahub/thumbnail/views.py:54 seahub/thumbnail/views.py:124
+#: seahub/views/__init__.py:646 seahub/views/ajax.py:83
+#: seahub/views/ajax.py:113 seahub/views/ajax.py:119 seahub/views/sso.py:259
+#: seahub/views/sysadmin.py:138 seahub/views/sysadmin.py:154
+#: seahub/views/sysadmin.py:183
+msgid "Permission denied."
+msgstr "Dozvola je odbijena."
+
+#: seahub/api2/endpoints/file.py:333
+msgid "File extension is not in the whitelist"
+msgstr "Ekstenzija datoteke nije na listi dozvoljenih ekstenzija"
+
+#: seahub/api2/endpoints/file.py:764 seahub/api2/endpoints/file.py:784
+#: seahub/api2/endpoints/file.py:1059
+#: seahub/api2/endpoints/via_repo_token.py:1283
+msgid "File is not locked."
+msgstr "Datoteka nije zaključana."
+
+#: seahub/api2/endpoints/file.py:811 seahub/api2/endpoints/share_links.py:908
+msgid "You can not refresh this file's lock."
+msgstr "Ne možete da osvežite zaključavanje ove datoteke."
+
+#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2877
+msgid "The participant already exists."
+msgstr "Učesnik već postoji."
+
+#: seahub/api2/endpoints/file_tag.py:256 seahub/api2/endpoints/file_tag.py:280
+#: seahub/api2/endpoints/file_tag.py:300
+#: seahub/api2/endpoints/revision_tag.py:55
+#: seahub/api2/endpoints/revision_tag.py:109
+msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
+msgstr "Oznaka može da sadrži samo slova, brojeve, tačku, crticu ili donju crtu."
+
+#: seahub/api2/endpoints/group_members.py:110
+#: seahub/api2/endpoints/group_members.py:358
+#: seahub/api2/endpoints/group_members.py:517
+#, python-format
+msgid "User %s is already a group member."
+msgstr "Korisnik %s je već član grupe."
+
+#: seahub/api2/endpoints/group_members.py:116
+#: seahub/api2/endpoints/group_members.py:367
+#: seahub/api2/endpoints/group_members.py:526 seahub/api2/views.py:1900
+#: seahub/organizations/api/admin/user_repos.py:50
+#: seahub/organizations/api/admin/user_repos.py:103
+#: seahub/organizations/api/admin/users.py:337
+#, python-format
+msgid "User %s not found in organization."
+msgstr "Korisnik %s nije pronađen u organizaciji."
+
+#: seahub/api2/endpoints/group_members.py:119
+#: seahub/api2/endpoints/group_members.py:375
+#: seahub/api2/endpoints/group_members.py:534
+#, python-format
+msgid "User %s is an organization user."
+msgstr "Korisnik %s je korisnik organizacije."
+
+#: seahub/api2/endpoints/group_members.py:438 seahub/group/error_msg.py:17
+#: seahub/group/error_msg.py:23 seahub/views/file.py:571
+msgid "Group does not exist"
+msgstr "Grupa ne postoji"
+
+#: seahub/api2/endpoints/group_members.py:577
+#| msgid "Email or Username"
+msgid "Email or LoginID"
+msgstr "E-pošta ili ID za prijavu"
+
+#: seahub/api2/endpoints/group_members.py:588 seahub/views/sysadmin.py:243
+#: seahub/views/sysadmin.py:351 seahub/views/sysadmin.py:733
+#: seahub/views/sysadmin.py:745 seahub/views/sysadmin.py:893
+msgid "Failed to export Excel"
+msgstr "Izvoz u Excel nije uspeo"
+
+#: seahub/api2/endpoints/group_owned_libraries.py:404
+#: seahub/api2/endpoints/group_owned_libraries.py:680
+msgid "Permission already exists."
+msgstr "Dozvola već postoji."
+
+#: seahub/api2/endpoints/invitation.py:110
+#, python-format
+msgid "%(user)s revoked your access to %(site_name)s."
+msgstr "Korisnik %(user)s vam je ukinuo pristup lokaciji %(site_name)s."
+
+#: seahub/api2/endpoints/invitations.py:55
+#: seahub/api2/endpoints/invitations.py:123
+#: seahub/api2/endpoints/repo_share_invitations.py:167
+msgid "The email address is not allowed to be invited as a guest."
+msgstr "Ova adresa e-pošte ne može da bude pozvana kao gost."
+
+#: seahub/api2/endpoints/invitations.py:60
+#: seahub/api2/endpoints/invitations.py:132
+#, python-format
+msgid "%s is already invited."
+msgstr "%s je već pozvan."
+
+#: seahub/api2/endpoints/invitations.py:68
+#: seahub/api2/endpoints/invitations.py:144
+#: seahub/api2/endpoints/repo_share_invitations.py:178
+#: seahub/api2/endpoints/share_link_auth.py:138 seahub/base/accounts.py:1253
+#: seahub/organizations/api/admin/users.py:268
+#, python-format
+msgid "User %s already exists."
+msgstr "Korisnik %s već postoji."
+
+#: seahub/api2/endpoints/invitations.py:72
+#: seahub/api2/endpoints/invitations.py:151
+#: seahub/api2/endpoints/repo_share_invitations.py:185
+msgid ""
+"An (inactive) regular account already exists for this mail address, can not "
+"proceed to create guest account"
+msgstr "Za ovu adresu e-pošte već postoji (neaktivan) standardni nalog; nije moguće nastaviti sa kreiranjem gostujućeg naloga."
+
+#: seahub/api2/endpoints/invitations.py:165
+#: seahub/api2/endpoints/repo_share_invitations.py:227
+#: seahub/api2/endpoints/send_share_link_email.py:34
+#: seahub/api2/endpoints/send_upload_link_email.py:34 seahub/auth/forms.py:153
+#: seahub/organizations/api/admin/users.py:791
+msgid ""
+"Failed to send email, email service is not properly configured, please "
+"contact administrator."
+msgstr "Slanje poruke e-pošte nije uspelo jer servis nije ispravno podešen. Obratite se administratoru."
+
+#: seahub/api2/endpoints/multi_share_links.py:108
+#: seahub/api2/endpoints/multi_share_links.py:367
+#: seahub/api2/endpoints/share_links.py:357
+#: seahub/api2/endpoints/upload_links.py:171
+msgid "Password is required."
+msgstr "Lozinka je obavezna."
+
+#: seahub/api2/endpoints/multi_share_links.py:113
+#: seahub/api2/endpoints/share_links.py:363
+#: seahub/api2/endpoints/upload_links.py:177
+#: seahub/api2/endpoints/webdav_secret.py:60
+msgid "Password is too short."
+msgstr "Lozinka je prekratka."
+
+#: seahub/api2/endpoints/multi_share_links.py:117
+#: seahub/api2/endpoints/share_links.py:367
+#: seahub/api2/endpoints/upload_links.py:181
+#: seahub/api2/endpoints/webdav_secret.py:64
+msgid "Password is too weak."
+msgstr "Lozinka je preslaba."
+
+#: seahub/api2/endpoints/multi_share_links.py:121
+#: seahub/api2/endpoints/share_links.py:371
+#: seahub/api2/endpoints/upload_links.py:185
+#: seahub/api2/endpoints/webdav_secret.py:52
+msgid ""
+"Password can only contain number, upper letter, lower letter and other "
+"symbols."
+msgstr "Lozinka može da sadrži samo brojeve, velika i mala slova i druge simbole."
+
+#: seahub/api2/endpoints/multi_share_links.py:144
+#: seahub/api2/endpoints/multi_share_links.py:390
+#: seahub/api2/endpoints/share_links.py:394
+#: seahub/api2/endpoints/share_links.py:739
+#: seahub/api2/endpoints/upload_links.py:208
+#: seahub/api2/endpoints/upload_links.py:397 seahub/api2/views.py:3707
+#, python-format
+msgid "Expire days should be greater or equal to %s"
+msgstr "Broj dana do isteka mora biti veći ili jednak %s"
+
+#: seahub/api2/endpoints/multi_share_links.py:149
+#: seahub/api2/endpoints/multi_share_links.py:396
+#: seahub/api2/endpoints/share_links.py:400
+#: seahub/api2/endpoints/share_links.py:745
+#: seahub/api2/endpoints/upload_links.py:214
+#: seahub/api2/endpoints/upload_links.py:403 seahub/api2/views.py:3713
+#, python-format
+msgid "Expire days should be less than or equal to %s"
+msgstr "Broj dana do isteka mora biti manji ili jednak %s"
+
+#: seahub/api2/endpoints/multi_share_links.py:169
+#: seahub/api2/endpoints/multi_share_links.py:418
+#: seahub/api2/endpoints/share_links.py:422
+#: seahub/api2/endpoints/share_links.py:769
+#: seahub/api2/endpoints/upload_links.py:236
+#: seahub/api2/endpoints/upload_links.py:427
+#, python-format
+msgid "Expiration time should be later than %s."
+msgstr "Vreme isteka mora biti nakon %s."
+
+#: seahub/api2/endpoints/multi_share_links.py:178
+#: seahub/api2/endpoints/multi_share_links.py:427
+#: seahub/api2/endpoints/share_links.py:431
+#: seahub/api2/endpoints/share_links.py:778
+#: seahub/api2/endpoints/upload_links.py:245
+#: seahub/api2/endpoints/upload_links.py:436
+#, python-format
+msgid "Expiration time should be earlier than %s."
+msgstr "Vreme isteka mora biti pre %s."
+
+#: seahub/api2/endpoints/query_copy_move_progress.py:47
+#: seahub/seadoc/apis.py:745
+#: seahub/templates/remote_user/create_unknown_user_false.html:4
+#: seahub/templates/remote_user/error.html:4
+msgid "Error"
+msgstr "Greška"
+
+#: seahub/api2/endpoints/repo_commit_revert.py:66
+msgid "This library has not been decrypted."
+msgstr "Ova biblioteka nije dešifrovana."
+
+#: seahub/api2/endpoints/repo_send_new_password.py:45
+#: seahub/api2/endpoints/user.py:90 seahub/api2/endpoints/user.py:97
+#: seahub/api2/endpoints/user.py:113 seahub/group/views.py:187
+#: seahub/organizations/api/admin/users.py:787
+msgid "Feature disabled."
+msgstr "Funkcija je onemogućena."
+
+#: seahub/api2/endpoints/repo_send_new_password.py:75
+#: seahub/api2/endpoints/repo_set_password.py:171
+msgid "Can not reset this library's password."
+msgstr "Lozinka ove biblioteke ne može da se resetuje."
+
+#: seahub/api2/endpoints/repo_send_new_password.py:82
+#, python-format
+msgid "New password of library %s"
+msgstr "Nova lozinka biblioteke %s"
+
+#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4144
+msgid "Wrong password"
+msgstr "Pogrešna lozinka"
+
+#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4150
+msgid "Decrypt library error"
+msgstr "Greška pri dešifrovanju biblioteke"
+
+#: seahub/api2/endpoints/repo_set_password.py:138
+msgid "Wrong old password"
+msgstr "Pogrešna stara lozinka"
+
+#: seahub/api2/endpoints/repos_batch.py:1308
+#: seahub/api2/endpoints/repos_batch.py:1567
+#: seahub/api2/endpoints/repos_batch.py:1659
+#: seahub/api2/endpoints/repos_batch.py:1740
+#, python-format
+msgid "File %s is locked."
+msgstr "Datoteka %s je zaključana."
+
+#: seahub/api2/endpoints/repos_batch.py:1318
+#: seahub/api2/endpoints/repos_batch.py:1577
+#, python-format
+msgid "Can't move folder %s, please check its permission."
+msgstr "Nije moguće premestiti fasciklu %s. Proverite dozvole."
+
+#: seahub/api2/endpoints/repos_batch.py:1667
+#, python-format
+msgid "Can't delete folder %s, please check its permission."
+msgstr "Nije moguće obrisati fasciklu %s. Proverite dozvole."
+
+#: seahub/api2/endpoints/send_share_link_email.py:82
+#: seahub/notifications/models.py:1111
+msgid "file"
+msgstr "datoteka"
+
+#: seahub/api2/endpoints/send_share_link_email.py:83
+#, python-format
+msgid "A file is shared to you on %s"
+msgstr "Sa vama je podeljena datoteka na lokaciji %s"
+
+#: seahub/api2/endpoints/send_share_link_email.py:85
+#: seahub/notifications/models.py:1111
+msgid "folder"
+msgstr "fascikla"
+
+#: seahub/api2/endpoints/send_share_link_email.py:86
+#, python-format
+msgid "A folder is shared to you on %s"
+msgstr "Sa vama je podeljena fascikla na lokaciji %s"
+
+#: seahub/api2/endpoints/send_share_link_email.py:127
+#, python-format
+#| msgid "Password has been reset on %s"
+msgid "Password for the shared %s on %s"
+msgstr "Lozinka za deljenu stavku %s na lokaciji %s"
+
+#: seahub/api2/endpoints/send_upload_link_email.py:73
+#, python-format
+msgid "An upload link is shared to you on %s"
+msgstr "Sa vama je podeljena veza za otpremanje na lokaciji %s"
+
+#: seahub/api2/endpoints/send_upload_link_email.py:88
+msgid "email invalid."
+msgstr "Adresa e-pošte nije ispravna."
+
+#: seahub/api2/endpoints/send_upload_link_email.py:119
+#, python-format
+#| msgid "Bad upload link token."
+msgid "Password for the upload link on %s"
+msgstr "Lozinka za vezu za otpremanje na lokaciji %s"
+
+#: seahub/api2/endpoints/share_link_auth.py:147
+#, python-format
+msgid "User %s does not exist."
+msgstr "Korisnik %s ne postoji."
+
+#: seahub/api2/endpoints/share_link_auth.py:310
+#, python-format
+msgid "Email %s already exists."
+msgstr "Adresa e-pošte %s već postoji."
+
+#: seahub/api2/endpoints/share_link_auth.py:316
+#, python-format
+msgid "Email %s is invalid."
+msgstr "Adresa e-pošte %s nije ispravna."
+
+#: seahub/api2/endpoints/share_links.py:500
+#: seahub/api2/endpoints/share_links.py:509
+#, python-format
+msgid "Share link %s already exists."
+msgstr "Veza za deljenje %s već postoji."
+
+#: seahub/api2/endpoints/subscription.py:32
+#: seahub/api2/endpoints/subscription.py:68
+#: seahub/api2/endpoints/subscription.py:108 seahub/oauth/views.py:288
+#: seahub/oauth/views.py:300 seahub/organizations/api/admin/info.py:139
+#: seahub/organizations/api/admin/logo.py:33
+#: seahub/organizations/api/admin/logo.py:42 seahub/subscription/views.py:24
+#: seahub/subscription/views.py:40 seahub/weixin/views.py:41
+#: seahub/weixin/views.py:65 seahub/weixin/views.py:165
+#: seahub/weixin/views.py:189 seahub/weixin/views.py:231
+#: seahub/work_weixin/views.py:38 seahub/work_weixin/views.py:63
+#: seahub/work_weixin/views.py:152 seahub/work_weixin/views.py:172
+#: seahub/work_weixin/views.py:233
+msgid "Feature is not enabled."
+msgstr "Funkcija nije omogućena."
+
+#: seahub/api2/endpoints/user.py:119
+#, python-format
+msgid "Contact email %s already exists."
+msgstr "Kontakt-adresa e-pošte %s već postoji."
+
+#: seahub/api2/endpoints/user.py:133
+msgid "telephone is too long (maximum is 100 characters)."
+msgstr "Broj telefona je predugačak (najviše 100 znakova)."
+
+#: seahub/api2/endpoints/user_avatar.py:41
+#: seahub/organizations/api/admin/logo.py:56 seahub/utils/error_msg.py:8
+#, python-format
+msgid ""
+"%(ext)s is an invalid file extension. Authorized extensions are : "
+"%(valid_exts_list)s"
+msgstr "Ekstenzija %(ext)s nije ispravna. Dozvoljene ekstenzije su: %(valid_exts_list)s"
+
+#: seahub/api2/endpoints/user_avatar.py:45
+#: seahub/organizations/api/admin/logo.py:64 seahub/utils/error_msg.py:13
+#, python-format
+msgid ""
+"Your file is too big (%(size)s), the maximum allowed size is "
+"%(max_valid_size)s"
+msgstr "Datoteka je prevelika (%(size)s). Najveća dozvoljena veličina je %(max_valid_size)s"
+
+#: seahub/api2/endpoints/user_avatar.py:51 seahub/avatar/forms.py:43
+#, python-format
+msgid ""
+"You already have %(nb_avatars)d avatars, and the maximum allowed is "
+"%(nb_max_avatars)d."
+msgstr "Već imate %(nb_avatars)d avatara, a dozvoljeno je najviše %(nb_max_avatars)d."
+
+#: seahub/api2/endpoints/webdav_secret.py:56
+#| msgid "Length of WebDav password should be less than 30."
+msgid "Length of WebDAV password should be less than 30."
+msgstr "Lozinka za WebDAV mora imati manje od 30 znakova."
+
+#: seahub/api2/endpoints/wiki2.py:264 seahub/api2/endpoints/wiki2.py:1728
+#: seahub/api2/endpoints/wikis.py:212
+msgid "Name can only contain letters, numbers, blank, hyphen or underscore."
+msgstr "Naziv može da sadrži samo slova, brojeve, razmake, crticu ili donju crtu."
+
+#: seahub/api2/endpoints/wiki2.py:1463
+msgid "URL is invalid"
+msgstr "URL nije ispravan"
+
+#: seahub/api2/endpoints/wiki2.py:1467
+msgid "The custom part of URL should have 5-30 characters."
+msgstr "Prilagođeni deo URL-a mora imati od 5 do 30 znakova."
+
+#: seahub/api2/endpoints/wiki2.py:1494
+msgid "This custom domain is already in use and cannot be used for your wiki"
+msgstr "Ovaj prilagođeni domen se već koristi i ne može se upotrebiti za vaš wiki"
+
+#: seahub/api2/endpoints/wikis.py:115 seahub/api2/endpoints/wikis.py:219
+#, python-format
+msgid "%s is taken by others, please try another name."
+msgstr "%s je zauzeo neko drugi. Pokušajte sa drugim nazivom."
+
+#: seahub/api2/endpoints/wikis.py:199
+msgid "Wiki not found."
+msgstr "Wiki nije pronađen."
+
+#: seahub/api2/endpoints/wikis.py:208
+msgid "Name is required."
+msgstr "Naziv je obavezan."
+
+#: seahub/api2/utils.py:340
+msgid "A share link for you"
+msgstr "Veza za deljenje za vas"
+
+#: seahub/api2/views.py:1896
+#| msgid "Permission error: only group staff can add member"
+msgid "Permission error: you are not the admin of the department"
+msgstr "Greška u dozvolama: niste administrator odeljenja"
+
+#: seahub/auth/decorators.py:73
+msgid "Please log in."
+msgstr "Prijavite se."
+
+#: seahub/auth/forms.py:32 seahub/templates/registration/login.html:50
+#: seahub/templates/registration/multi_adfs_sso.html:52
+msgid "Email or Username"
+msgstr "Adresa e-pošte ili korisničko ime"
+
+#: seahub/auth/forms.py:33 seahub/auth/forms.py:267
+#: seahub/base/accounts.py:1230
+#: seahub/invitations/templates/invitations/token_view.html:15
+#: seahub/organizations/templates/organizations/org_register.html:49
+#: seahub/share/views.py:224 seahub/templates/decrypt_repo_form.html:10
+#: seahub/templates/registration/login.html:52
+#: seahub/templates/registration/password_set_form.html:18
+#: seahub/templates/registration/registration_form.html:34
+#: seahub/templates/share_access_validation.html:23
+#: seahub/templates/sysadmin/sudo_mode.html:43 seahub/views/sysadmin.py:866
+#: seahub/views/sysadmin.py:881
+msgid "Password"
+msgstr "Lozinka"
+
+#: seahub/auth/forms.py:71 seahub/auth/forms.py:72 seahub/auth/forms.py:122
+#: seahub/auth/forms.py:123
+msgid "This account is inactive."
+msgstr "Ovaj nalog je neaktivan."
+
+#: seahub/auth/forms.py:83 seahub/auth/forms.py:84
+#: seahub/templates/registration/login.html:76
+msgid "Please use Single Sign-On to login."
+msgstr "Za prijavu koristite jedinstvenu prijavu (SSO)."
+
+#: seahub/auth/forms.py:100
+msgid ""
+"Please enter a correct email/username and password. Note that both fields "
+"are case-sensitive."
+msgstr "Unesite ispravnu adresu e-pošte/korisničko ime i lozinku. Imajte u vidu da se razlikuju velika i mala slova u oba polja."
+
+#: seahub/auth/forms.py:106
+msgid ""
+"That e-mail address doesn't have an associated user account. Are you sure "
+"you've registered?"
+msgstr "Sa tom adresom e-pošte nije povezan nijedan korisnički nalog. Da li ste sigurni da ste se registrovali?"
+
+#: seahub/auth/forms.py:128
+msgid ""
+"Your Web browser doesn't appear to have cookies enabled. Cookies are "
+"required for logging in."
+msgstr "Izgleda da su kolačići onemogućeni u vašem veb-pregledaču. Kolačići su neophodni za prijavu."
+
+#: seahub/auth/forms.py:146
+msgid "E-mail"
+msgstr "E-pošta"
+
+#: seahub/auth/forms.py:204
+msgid "New password"
+msgstr "Nova lozinka"
+
+#: seahub/auth/forms.py:205
+msgid "New password confirmation"
+msgstr "Potvrda nove lozinke"
+
+#: seahub/auth/forms.py:232 seahub/auth/forms.py:279
+#: seahub/base/accounts.py:1285 seahub/organizations/forms.py:71
+msgid "The two password fields didn't match."
+msgstr "Unete lozinke se ne podudaraju."
+
+#: seahub/auth/forms.py:247
+msgid "Old password"
+msgstr "Stara lozinka"
+
+#: seahub/auth/forms.py:255
+msgid "Your old password was entered incorrectly. Please enter it again."
+msgstr "Pogrešno ste uneli staru lozinku. Unesite je ponovo."
+
+#: seahub/auth/forms.py:268 seahub/base/accounts.py:1232
+msgid "Password (again)"
+msgstr "Lozinka (ponovo)"
+
+#: seahub/auth/forms.py:299 seahub/forms.py:35 seahub/invitations/views.py:39
+#: seahub/invitations/views.py:54 seahub/organizations/forms.py:49
+#: seahub/profile/forms.py:46
+msgid "A user with this email already exists."
+msgstr "Korisnik sa ovom adresom e-pošte već postoji."
+
+#: seahub/auth/views.py:157
+msgid "This account has been frozen due to too many failed login attempts."
+msgstr "Ovaj nalog je zamrznut zbog previše neuspelih pokušaja prijave."
+
+#: seahub/auth/views.py:339
+msgid "Logged out"
+msgstr "Odjavljeni ste"
+
+#: seahub/auth/views.py:388 seahub/organizations/views.py:241
+msgid "Cloudflare Turnstile check failed. Please refresh and try again."
+msgstr "Provera Cloudflare Turnstile nije uspela. Osvežite stranicu i pokušajte ponovo."
+
+#: seahub/auth/views.py:403
+msgid "Failed to send email, please contact administrator."
+msgstr "Slanje poruke e-pošte nije uspelo. Obratite se administratoru."
+
+#: seahub/auth/views.py:486
+msgid "Unable to change password."
+msgstr "Nije moguće promeniti lozinku."
+
+#: seahub/auth/views.py:569
+#, python-brace-format
+msgid "Team {domain} does not have permission to use ADFS/SAML SSO."
+msgstr "Tim {domain} nema dozvolu da koristi ADFS/SAML SSO."
+
+#: seahub/avatar/models.py:144 seahub/avatar/models.py:172
+#, python-format
+msgid "Avatar for %s"
+msgstr "Avatar korisnika %s"
+
+#: seahub/avatar/views.py:77
+msgid "Successfully uploaded a new avatar."
+msgstr "Novi avatar je uspešno otpremljen."
+
+#: seahub/avatar/views.py:111
+msgid "Successfully updated your avatar."
+msgstr "Vaš avatar je uspešno ažuriran."
+
+#: seahub/avatar/views.py:151
+msgid "Successfully deleted the requested avatars."
+msgstr "Izabrani avatari su uspešno obrisani."
+
+#: seahub/base/accounts.py:705 seahub/base/accounts.py:736
+#, python-format
+msgid "Account %(account)s froze on %(site)s."
+msgstr "Nalog %(account)s je zamrznut na lokaciji %(site)s."
+
+#: seahub/base/accounts.py:1220
+msgid "Email address"
+msgstr "Adresa e-pošte"
+
+#: seahub/base/accounts.py:1226
+msgid "Username"
+msgstr "Korisničko ime"
+
+#: seahub/base/accounts.py:1227
+msgid "This value must be of length 40"
+msgstr "Ova vrednost mora imati 40 znakova"
+
+#: seahub/base/accounts.py:1246
+msgid "Enter a valid email address."
+msgstr "Unesite ispravnu adresu e-pošte."
+
+#: seahub/base/accounts.py:1257
+msgid "Invalid user id."
+msgstr "Neispravan ID korisnika."
+
+#: seahub/base/accounts.py:1307
+msgid "name"
+msgstr "ime"
+
+#: seahub/base/accounts.py:1310
+msgid "department"
+msgstr "odeljenje"
+
+#: seahub/base/accounts.py:1313
+msgid "telephone"
+msgstr "telefon"
+
+#: seahub/base/accounts.py:1316
+msgid "note"
+msgstr "napomena"
+
+#: seahub/base/decorators.py:57
+msgid "Files in this library can not be viewed online."
+msgstr "Datoteke u ovoj biblioteci ne mogu da se pregledaju na mreži."
+
+#: seahub/base/management/commands/check_user_quota.py:58
+#, python-format
+msgid "Your quota is almost full on %s"
+msgstr "Vaša kvota je skoro popunjena na lokaciji %s"
+
+#: seahub/base/management/commands/check_user_quota.py:82
+#, python-format
+#| msgid "Your quota is almost full on %s"
+msgid "The team quota is almost full on %s"
+msgstr "Kvota tima je skoro popunjena na lokaciji %s"
+
+#: seahub/base/management/commands/export_file_access_log.py:58
+msgid "Type"
+msgstr "Tip"
+
+#: seahub/base/management/commands/export_file_access_log.py:58
+msgid "IP"
+msgstr "IP adresa"
+
+#: seahub/base/management/commands/export_file_access_log.py:58
+msgid "Device"
+msgstr "Uređaj"
+
+#: seahub/base/management/commands/export_file_access_log.py:58
+msgid "Date"
+msgstr "Datum"
+
+#: seahub/base/management/commands/export_file_access_log.py:59
+msgid "Library Name"
+msgstr "Naziv biblioteke"
+
+#: seahub/base/management/commands/export_file_access_log.py:59
+msgid "Library ID"
+msgstr "ID biblioteke"
+
+#: seahub/base/management/commands/export_file_access_log.py:59
+msgid "Library Owner"
+msgstr "Vlasnik biblioteke"
+
+#: seahub/base/management/commands/export_file_access_log.py:59
+msgid "File Path"
+msgstr "Putanja datoteke"
+
+#: seahub/base/management/commands/export_file_access_log.py:85
+#: seahub/base/templatetags/seahub_tags.py:142
+msgid "Deleted"
+msgstr "Obrisano"
+
+#: seahub/base/management/commands/export_file_access_log.py:88
+#: seahub/templates/snippets/add_watermark.html:10
+msgid "Anonymous User"
+msgstr "Anonimni korisnik"
+
+#: seahub/base/management/commands/export_users.py:43
+#: seahub/base/management/commands/export_users.py:47
+#: seahub/views/sysadmin.py:252 seahub/views/sysadmin.py:256
+msgid "Status"
+msgstr "Status"
+
+#: seahub/base/management/commands/export_users.py:43
+#: seahub/views/sysadmin.py:252 seahub/views/sysadmin.py:868
+msgid "Role"
+msgstr "Uloga"
+
+#: seahub/base/management/commands/export_users.py:45
+#: seahub/base/management/commands/export_users.py:49
+#: seahub/views/sysadmin.py:254 seahub/views/sysadmin.py:258
+#: seahub/views/sysadmin.py:736
+msgid "Create At"
+msgstr "Datum kreiranja"
+
+#: seahub/base/management/commands/export_users.py:45
+#: seahub/base/management/commands/export_users.py:49
+#: seahub/views/sysadmin.py:254 seahub/views/sysadmin.py:258
+msgid "Last Login"
+msgstr "Poslednja prijava"
+
+#: seahub/base/management/commands/export_users.py:45
+#: seahub/base/management/commands/export_users.py:49
+#: seahub/institutions/views.py:187 seahub/views/sysadmin.py:254
+#: seahub/views/sysadmin.py:258
+msgid "Admin"
+msgstr "Administrator"
+
+#: seahub/base/management/commands/export_users.py:45
+#: seahub/base/management/commands/export_users.py:49
+#: seahub/views/sysadmin.py:254 seahub/views/sysadmin.py:258
+msgid "LDAP(imported)"
+msgstr "LDAP (uvezeno)"
+
+#: seahub/base/management/commands/export_users.py:118
+#: seahub/views/sysadmin.py:314
+msgid "Active"
+msgstr "Aktivan"
+
+#: seahub/base/management/commands/export_users.py:120
+#: seahub/views/sysadmin.py:316
+msgid "Inactive"
+msgstr "Neaktivan"
+
+#: seahub/base/management/commands/export_users.py:126
+#: seahub/base/management/commands/export_users.py:127
+#: seahub/templates/client_login_confirm.html:10 seahub/views/sysadmin.py:322
+#: seahub/views/sysadmin.py:323
+msgid "Yes"
+msgstr "Da"
+
+#: seahub/base/management/commands/export_users.py:132
+#: seahub/views/sysadmin.py:328
+msgid "Guest"
+msgstr "Gost"
+
+#: seahub/base/management/commands/export_users.py:134
+#: seahub/base/management/commands/export_users.py:138
+#: seahub/views/sysadmin.py:330 seahub/views/sysadmin.py:334
+msgid "Default"
+msgstr "Podrazumevano"
+
+#: seahub/base/middleware.py:65
+#, python-brace-format
+#| msgid "This account is inactive."
+msgid "Team {org_name} is inactive."
+msgstr "Tim {org_name} je neaktivan."
+
+#: seahub/base/middleware.py:77
+#, python-brace-format
+msgid "Please contact {SUPPORT_EMAIL} if you want to activate the team."
+msgstr "Obratite se na {SUPPORT_EMAIL} ako želite da aktivirate tim."
+
+#: seahub/base/templatetags/seahub_tags.py:141
+msgid "Added"
+msgstr "Dodato"
+
+#: seahub/base/templatetags/seahub_tags.py:143
+msgid "Removed"
+msgstr "Uklonjeno"
+
+#: seahub/base/templatetags/seahub_tags.py:144
+msgid "Modified"
+msgstr "Izmenjeno"
+
+#: seahub/base/templatetags/seahub_tags.py:145
+msgid "Renamed"
+msgstr "Preimenovano"
+
+#: seahub/base/templatetags/seahub_tags.py:146
+msgid "Moved"
+msgstr "Premešteno"
+
+#: seahub/base/templatetags/seahub_tags.py:147
+msgid "Added folder"
+msgstr "Dodata fascikla"
+
+#: seahub/base/templatetags/seahub_tags.py:148
+msgid "Removed folder"
+msgstr "Uklonjena fascikla"
+
+#: seahub/base/templatetags/seahub_tags.py:149
+#: seahub/notifications/management/commands/send_file_updates.py:172
+msgid "Renamed folder"
+msgstr "Preimenovana fascikla"
+
+#: seahub/base/templatetags/seahub_tags.py:150
+#: seahub/notifications/management/commands/send_file_updates.py:177
+msgid "Moved folder"
+msgstr "Premeštena fascikla"
+
+#: seahub/base/templatetags/seahub_tags.py:151
+msgid "Added or modified"
+msgstr "Dodato ili izmenjeno"
+
+#: seahub/base/templatetags/seahub_tags.py:166
+#: seahub/base/templatetags/seahub_tags.py:237
+msgid "Reverted library to status at"
+msgstr "Biblioteka je vraćena u stanje od"
+
+#: seahub/base/templatetags/seahub_tags.py:169
+#: seahub/base/templatetags/seahub_tags.py:240
+#, python-format
+msgid "Reverted file \"%(file)s\" to status at %(time)s."
+msgstr "Datoteka „%(file)s“ vraćena je u stanje od %(time)s."
+
+#: seahub/base/templatetags/seahub_tags.py:173
+#: seahub/base/templatetags/seahub_tags.py:244
+msgid "Recovered deleted folder"
+msgstr "Oporavljena obrisana fascikla"
+
+#: seahub/base/templatetags/seahub_tags.py:175
+#: seahub/base/templatetags/seahub_tags.py:246 seahub/views/ajax.py:457
+msgid "Changed library name or description"
+msgstr "Promenjen naziv ili opis biblioteke"
+
+#: seahub/base/templatetags/seahub_tags.py:177
+#: seahub/base/templatetags/seahub_tags.py:248
+msgid "Auto merge by seafile system"
+msgstr "Automatsko spajanje koje je izvršio sistem Seafile"
+
+#: seahub/base/templatetags/seahub_tags.py:179
+#: seahub/base/templatetags/seahub_tags.py:250
+#: seahub/notifications/management/commands/send_file_updates.py:112
+msgid "Created library"
+msgstr "Kreirana biblioteka"
+
+#: seahub/base/templatetags/seahub_tags.py:330
+#: seahub/base/templatetags/seahub_tags.py:366
+msgid "Just now"
+msgstr "Upravo sada"
+
+#: seahub/base/templatetags/seahub_tags.py:341
+#, python-format
+msgid "%(days)d day ago"
+msgid_plural "%(days)d days ago"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: seahub/base/templatetags/seahub_tags.py:348
+#, python-format
+msgid "%(hours)d hour ago"
+msgid_plural "%(hours)d hours ago"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: seahub/base/templatetags/seahub_tags.py:355
+#, python-format
+msgid "%(minutes)d minute ago"
+msgid_plural "%(minutes)d minutes ago"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: seahub/base/templatetags/seahub_tags.py:361
+#, python-format
+msgid "%(seconds)d second ago"
+msgid_plural "%(seconds)d seconds ago"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: seahub/base/templatetags/seahub_tags.py:503
+msgid "Read-Write"
+msgstr "Čitanje i upis"
+
+#: seahub/base/templatetags/seahub_tags.py:505
+msgid "Read-Only"
+msgstr "Samo za čitanje"
+
+#: seahub/base/templatetags/seahub_tags.py:529
+#: seahub/base/templatetags/seahub_tags.py:541
+#, python-format
+msgid "%(size)d byte"
+msgid_plural "%(size)d bytes"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: seahub/base/templatetags/seahub_tags.py:543
+#, python-format
+msgid "%s KB"
+msgstr "%s KB"
+
+#: seahub/base/templatetags/seahub_tags.py:545
+#, python-format
+msgid "%s MB"
+msgstr "%s MB"
+
+#: seahub/base/templatetags/seahub_tags.py:547
+#, python-format
+msgid "%s GB"
+msgstr "%s GB"
+
+#: seahub/base/templatetags/seahub_tags.py:549
+#, python-format
+msgid "%s TB"
+msgstr "%s TB"
+
+#: seahub/base/templatetags/seahub_tags.py:551
+#, python-format
+msgid "%s PB"
+msgstr "%s PB"
+
+#: seahub/contacts/models.py:78
+msgid "Email is required."
+msgstr "Adresa e-pošte je obavezna."
+
+#: seahub/dingtalk/views.py:52 seahub/dingtalk/views.py:76
+#: seahub/dingtalk/views.py:85 seahub/dingtalk/views.py:107
+#: seahub/dingtalk/views.py:124 seahub/dingtalk/views.py:168
+#: seahub/dingtalk/views.py:193 seahub/dingtalk/views.py:202
+#: seahub/dingtalk/views.py:224 seahub/dingtalk/views.py:261
+#: seahub/dingtalk/views.py:304 seahub/dingtalk/views.py:351
+#: seahub/dingtalk/views.py:371 seahub/dingtalk/views.py:444
+#: seahub/dingtalk/views.py:491 seahub/oauth/views.py:100
+#: seahub/oauth/views.py:123 seahub/oauth/views.py:169
+#: seahub/oauth/views.py:181 seahub/oauth/views.py:187
+#: seahub/oauth/views.py:222 seahub/templates/remote_user/error.html:8
+#: seahub/weixin/views.py:70 seahub/weixin/views.py:87
+#: seahub/weixin/views.py:108 seahub/weixin/views.py:194
+#: seahub/weixin/views.py:212 seahub/work_weixin/views.py:69
+#: seahub/work_weixin/views.py:74 seahub/work_weixin/views.py:84
+#: seahub/work_weixin/views.py:88 seahub/work_weixin/views.py:107
+#: seahub/work_weixin/views.py:178 seahub/work_weixin/views.py:183
+#: seahub/work_weixin/views.py:193 seahub/work_weixin/views.py:197
+msgid "Error, please contact administrator."
+msgstr "Došlo je do greške. Obratite se administratoru."
+
+#: seahub/dingtalk/views.py:127 seahub/dingtalk/views.py:374
+#: seahub/weixin/views.py:111
+#, python-format
+msgid "User %s not found or inactive."
+msgstr "Korisnik %s nije pronađen ili je neaktivan."
+
+#: seahub/forms.py:59
+msgid "The two passwords didn't match."
+msgstr "Lozinke se ne podudaraju."
+
+#: seahub/forms.py:68
+msgid "Name can't be empty"
+msgstr "Naziv ne može biti prazan"
+
+#: seahub/forms.py:69
+msgid "Name is too long (maximum is 255 characters)"
+msgstr "Naziv je predugačak (najviše 255 znakova)"
+
+#: seahub/forms.py:72
+msgid "Description can't be empty"
+msgstr "Opis ne može biti prazan"
+
+#: seahub/forms.py:73
+msgid "Description is too long (maximum is 100 characters)"
+msgstr "Opis je predugačak (najviše 100 znakova)"
+
+#: seahub/forms.py:83 seahub/forms.py:169
+#, python-format
+msgid "Name %s is not valid"
+msgstr "Naziv %s nije ispravan"
+
+#: seahub/forms.py:97 seahub/share/views.py:200 seahub/views/ajax.py:305
+#: seahub/views/ajax.py:309 seahub/views/ajax.py:313 seahub/views/ajax.py:324
+#: seahub/views/ajax.py:444
+msgid "Argument missing"
+msgstr "Nedostaje argument"
+
+#: seahub/forms.py:111
+msgid "Oldname is required"
+msgstr "Stari naziv je obavezan"
+
+#: seahub/forms.py:114 seahub/forms.py:135
+msgid "It's too long."
+msgstr "Predugačko je."
+
+#: seahub/forms.py:115 seahub/forms.py:136
+msgid "It's required."
+msgstr "Ovo polje je obavezno."
+
+#: seahub/forms.py:122 seahub/forms.py:143
+#, python-format
+msgid "Name \"%s\" is not valid"
+msgstr "Naziv „%s“ nije ispravan"
+
+#: seahub/forms.py:162
+msgid "Library name is required"
+msgstr "Naziv biblioteke je obavezan"
+
+#: seahub/forms.py:164
+msgid "Please enter a number"
+msgstr "Unesite broj"
+
+#: seahub/forms.py:184
+msgid "Name is required"
+msgstr "Naziv je obavezan"
+
+#: seahub/forms.py:185
+msgid "Please enter a valid number"
+msgstr "Unesite ispravan broj"
+
+#: seahub/forms.py:186
+msgid "Text is required"
+msgstr "Tekst je obavezan"
+
+#: seahub/group/error_msg.py:8
+msgid "The group has already created"
+msgstr "Grupa je već kreirana"
+
+#: seahub/group/error_msg.py:9
+msgid "Failed to create group"
+msgstr "Kreiranje grupe nije uspelo"
+
+#: seahub/group/error_msg.py:12
+msgid "The group has already created in this org."
+msgstr "Grupa je već kreirana u ovoj organizaciji."
+
+#: seahub/group/error_msg.py:13
+msgid "Failed to create org group."
+msgstr "Kreiranje grupe organizacije nije uspelo."
+
+#: seahub/group/error_msg.py:16
+msgid "Permission error: only group staff can add member"
+msgstr "Greška u dozvolama: samo osoblje grupe može da dodaje članove"
+
+#: seahub/group/error_msg.py:18
+msgid "Group is full"
+msgstr "Grupa je popunjena"
+
+#: seahub/group/error_msg.py:19
+msgid "Failed to add member to group"
+msgstr "Dodavanje člana u grupu nije uspelo"
+
+#: seahub/group/error_msg.py:22
+msgid "Only group staff can remove member"
+msgstr "Samo osoblje grupe može da uklanja članove"
+
+#: seahub/group/error_msg.py:24
+msgid "Can not remove myself"
+msgstr "Ne možete sami sebe da uklonite"
+
+#: seahub/group/forms.py:29
+msgid "Group name can't be empty"
+msgstr "Naziv grupe ne može biti prazan"
+
+#: seahub/group/forms.py:30
+msgid "Group name is too long (maximum is 255 characters)"
+msgstr "Naziv grupe je predugačak (najviše 255 znakova)"
+
+#: seahub/group/forms.py:46
+msgid "Verification message can't be empty"
+msgstr "Verifikaciona poruka ne može biti prazna"
+
+#: seahub/group/forms.py:47
+msgid "Verification message is too long (maximun is 255 characters)"
+msgstr "Verifikaciona poruka je predugačka (najviše 255 znakova)"
+
+#: seahub/group/templates/group/add_member_email.html:8
+msgid "Hi, "
+msgstr "Zdravo, "
+
+#: seahub/group/templates/group/add_member_email.html:11
+#, python-format
+msgid ""
+"%(escaped_nickname)s invited you to join group %(grp_name)s on "
+"%(site_name)s: "
+msgstr "Korisnik %(escaped_nickname)s poziva vas da se pridružite grupi %(grp_name)s na lokaciji %(site_name)s: "
+
+#: seahub/group/templates/group/group_join_email.html:2
+#, python-format
+msgid ""
+"%(user)s want to join to Group \"%(group_name)s\", here is the verification "
+"message: "
+msgstr "Korisnik %(user)s želi da se pridruži grupi „%(group_name)s“. Verifikaciona poruka: "
+
+#: seahub/group/templates/group/group_join_email.html:6
+#: seahub/templates/email_base.html:10
+msgid "Thanks for using our site!"
+msgstr "Hvala što koristite naš sajt!"
+
+#: seahub/group/templates/group/group_join_email.html:8
+#: seahub/templates/email_base.html:15
+#, python-format
+msgid "The %(site_name)s team"
+msgstr "Tim sajta %(site_name)s"
+
+#: seahub/group/views.py:110 seahub/share/views.py:137
+#: seahub/views/__init__.py:471 seahub/views/ajax.py:378
+#: seahub/views/ajax.py:424 seahub/views/file.py:1311
+#: seahub/views/file.py:1339 seahub/views/file.py:1625
+#: seahub/views/file.py:1665 seahub/views/file.py:2112
+#: seahub/views/file.py:2118 seahub/views/repo.py:115 seahub/views/repo.py:172
+#: seahub/views/repo.py:230 seahub/views/repo.py:258 seahub/views/repo.py:287
+#: seahub/views/repo.py:384
+msgid "Permission denied"
+msgstr "Dozvola je odbijena"
+
+#: seahub/group/views.py:178
+#, python-format
+msgid "You are invited to join a group on %s"
+msgstr "Pozvani ste da se pridružite grupi na lokaciji %s"
+
+#: seahub/group/views.py:192
+#| msgid "Group does not exist"
+msgid "Group invite link does not exist"
+msgstr "Veza za poziv u grupu ne postoji"
+
+#: seahub/group/views.py:200
+msgid "Group invite link broken"
+msgstr "Veza za poziv u grupu je neispravna"
+
+#: seahub/institutions/views.py:185
+msgid "Owner"
+msgstr "Vlasnik"
+
+#: seahub/institutions/views.py:189
+msgid "Member"
+msgstr "Član"
+
+#: seahub/institutions/views.py:222 seahub/views/sysadmin.py:447
+msgid "Failed to delete: the user does not exist"
+msgstr "Brisanje nije uspelo: korisnik ne postoji"
+
+#: seahub/institutions/views.py:226
+msgid "Failed to delete: the user is system administrator"
+msgstr "Brisanje nije uspelo: korisnik je administrator sistema"
+
+#: seahub/institutions/views.py:230 seahub/views/sysadmin.py:437
+#, python-format
+msgid "Successfully deleted %s"
+msgstr "Uspešno obrisano: %s"
+
+#: seahub/invitations/models.py:96
+#, python-format
+msgid "You are invited to join %(site_name)s."
+msgstr "Pozvani ste da se pridružite sajtu %(site_name)s."
+
+#: seahub/invitations/models.py:99
+#, python-brace-format
+msgid "You are invited to join team {org_name}."
+msgstr "Pozvani ste da se pridružite timu {org_name}."
+
+#: seahub/invitations/templates/invitations/invitation_email.html:9
+#: seahub/invitations/templates/invitations/invitation_revoke_email.html:9
+#: seahub/notifications/templates/notifications/file_updates_email.html:7
+#: seahub/notifications/templates/notifications/notify_virus.html:10
+#: seahub/notifications/templates/notifications/notify_virus.html:17
+#: seahub/organizations/templates/organizations/org_deactivate_email.html:9
+#: seahub/share/templates/share/audit_code_email.html:7
+#: seahub/share/templates/share/share_link_email.html:6
+#: seahub/templates/registration/activation_email.html:9
+#: seahub/templates/registration/password_reset_email.html:9
+#: seahub/templates/shared_link_email.html:9
+#: seahub/templates/shared_link_password_email.html:9
+#: seahub/templates/shared_upload_link_email.html:8
+#: seahub/templates/shared_upload_link_password_email.html:8
+#: seahub/templates/snippets/reset_repo_password.html:7
+#: seahub/templates/sysadmin/short_time_linving_password_reset_link.html:10
+#: seahub/templates/sysadmin/user_activation_email.html:9
+#: seahub/templates/sysadmin/user_add_email.html:7
+#: seahub/templates/sysadmin/user_batch_add_email.html:7
+#: seahub/templates/sysadmin/user_freeze_email.html:9
+#: seahub/templates/sysadmin/user_reset_email.html:9
+#: seahub/templates/team_quota_full.html:9
+#: seahub/templates/user_quota_full.html:9
+msgid "Hi,"
+msgstr "Zdravo,"
+
+#: seahub/invitations/templates/invitations/invitation_email.html:13
+#, python-format
+msgid ""
+"You are invited to join team %(org_name)s. Please click the link below:"
+msgstr "Pozvani ste da se pridružite timu %(org_name)s. Kliknite na vezu ispod:"
+
+#: seahub/invitations/templates/invitations/invitation_email.html:15
+#, python-format
+msgid ""
+"%(inviter_name)s invited you to join %(site_name)s. Please click the link "
+"below:"
+msgstr "Korisnik %(inviter_name)s poziva vas da se pridružite sajtu %(site_name)s. Kliknite na vezu ispod:"
+
+#: seahub/invitations/templates/invitations/invitation_revoke_email.html:12
+#, python-format
+msgid "%(inviter)s revoked your access to %(site_name)s."
+msgstr "Korisnik %(inviter)s vam je ukinuo pristup sajtu %(site_name)s."
+
+#: seahub/invitations/templates/invitations/token_view.html:4
+msgid "Create Account"
+msgstr "Kreiraj nalog"
+
+#: seahub/invitations/templates/invitations/token_view.html:8
+msgid "Set your password"
+msgstr "Postavite lozinku"
+
+#: seahub/invitations/templates/invitations/token_view.html:22
+#: seahub/organizations/templates/organizations/org_register.html:53
+#: seahub/templates/registration/password_change_form.html:29
+#: seahub/templates/registration/password_reset_confirm.html:22
+#: seahub/templates/registration/password_set_form.html:26
+#: seahub/templates/registration/registration_form.html:38
+#: seahub/templates/sysadmin/sudo_mode.html:4
+#: seahub/templates/sysadmin/sudo_mode.html:52
+msgid "Confirm Password"
+msgstr "Potvrdi lozinku"
+
+#: seahub/invitations/templates/invitations/token_view.html:30
+#: seahub/options/templates/options/set_user_options.html:14
+#: seahub/organizations/templates/organizations/org_register.html:65
+#: seahub/share/templates/share/share_link_email_audit.html:54
+#: seahub/templates/decrypt_repo_form.html:13
+#: seahub/templates/registration/password_change_form.html:38
+#: seahub/templates/registration/password_reset_confirm.html:31
+#: seahub/templates/registration/password_reset_form.html:63
+#: seahub/templates/registration/password_set_form.html:35
+#: seahub/templates/share_access_validation.html:29
+msgid "Submit"
+msgstr "Potvrdi"
+
+#: seahub/invitations/templates/invitations/token_view.html:52
+#: seahub/organizations/templates/organizations/org_register.html:100
+#: seahub/templates/registration/login.html:208
+#: seahub/templates/registration/password_change_form.html:65
+#: seahub/templates/registration/password_reset_confirm.html:61
+#: seahub/templates/registration/password_set_form.html:58
+#: seahub/templates/registration/registration_form.html:102
+#: seahub/templates/sysadmin/sudo_mode.html:85
+msgid "Password cannot be blank"
+msgstr "Lozinka ne može biti prazna"
+
+#: seahub/invitations/templates/invitations/token_view.html:57
+#: seahub/organizations/templates/organizations/org_register.html:104
+#: seahub/templates/registration/password_change_form.html:69
+#: seahub/templates/registration/password_reset_confirm.html:65
+#: seahub/templates/registration/password_set_form.html:62
+#: seahub/templates/registration/registration_form.html:106
+msgid "Please enter the password again"
+msgstr "Ponovo unesite lozinku"
+
+#: seahub/invitations/templates/invitations/token_view.html:61
+#: seahub/organizations/templates/organizations/org_register.html:108
+#: seahub/templates/registration/password_change_form.html:73
+#: seahub/templates/registration/password_reset_confirm.html:69
+#: seahub/templates/registration/password_set_form.html:66
+#: seahub/templates/registration/registration_form.html:110
+msgid "Passwords don't match"
+msgstr "Lozinke se ne podudaraju"
+
+#: seahub/invitations/views.py:60
+msgid ""
+"An (inactive) regular account already exists for this mail address, can not "
+"proceed to accept the invitation."
+msgstr "Za ovu adresu e-pošte već postoji (neaktivan) standardni nalog; nije moguće nastaviti sa prihvatanjem poziva."
+
+#: seahub/notifications/management/commands/notify_admins_on_virus.py:68
+#: seahub/notifications/management/commands/notify_admins_on_virus.py:83
+#: seahub/notifications/management/commands/notify_admins_on_virus.py:104
+#, python-format
+msgid "Virus detected on %s"
+msgstr "Virus je otkriven na lokaciji %s"
+
+#: seahub/notifications/management/commands/send_dingtalk_notifications.py:185
+#: seahub/notifications/templates/notifications/notice_email.html:9
+#, python-format
+msgid ""
+"\n"
+"You've got 1 new notice on %(site_name)s:\n"
+msgid_plural ""
+"\n"
+"You've got %(num)s new notices on %(site_name)s:\n"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: seahub/notifications/management/commands/send_file_updates.py:115
+msgid "Renamed library"
+msgstr "Preimenovana biblioteka"
+
+#: seahub/notifications/management/commands/send_file_updates.py:118
+msgid "Deleted library"
+msgstr "Obrisana biblioteka"
+
+#: seahub/notifications/management/commands/send_file_updates.py:121
+msgid "Restored library"
+msgstr "Vraćena biblioteka"
+
+#: seahub/notifications/management/commands/send_file_updates.py:125
+msgid "Removed all items from trash."
+msgstr "Sve stavke su uklonjene iz korpe za otpatke."
+
+#: seahub/notifications/management/commands/send_file_updates.py:127
+#, python-format
+msgid "Removed items older than %s days from trash."
+msgstr "Iz korpe za otpatke uklonjene su stavke starije od %s dana."
+
+#: seahub/notifications/management/commands/send_file_updates.py:135
+msgid "Created file"
+msgstr "Kreirana datoteka"
+
+#: seahub/notifications/management/commands/send_file_updates.py:138
+msgid "Deleted file"
+msgstr "Obrisana datoteka"
+
+#: seahub/notifications/management/commands/send_file_updates.py:141
+msgid "Restored file"
+msgstr "Vraćena datoteka"
+
+#: seahub/notifications/management/commands/send_file_updates.py:144
+msgid "Renamed file"
+msgstr "Preimenovana datoteka"
+
+#: seahub/notifications/management/commands/send_file_updates.py:150
+msgid "Moved file"
+msgstr "Premeštena datoteka"
+
+#: seahub/notifications/management/commands/send_file_updates.py:156
+msgid "Updated file"
+msgstr "Ažurirana datoteka"
+
+#: seahub/notifications/management/commands/send_file_updates.py:163
+msgid "Created folder"
+msgstr "Kreirana fascikla"
+
+#: seahub/notifications/management/commands/send_file_updates.py:166
+msgid "Deleted folder"
+msgstr "Obrisana fascikla"
+
+#: seahub/notifications/management/commands/send_file_updates.py:169
+msgid "Restored folder"
+msgstr "Vraćena fascikla"
+
+#: seahub/notifications/management/commands/send_file_updates.py:278
+#, python-format
+msgid "New file updates on %s"
+msgstr "Nova ažuriranja datoteka na lokaciji %s"
+
+#: seahub/notifications/management/commands/send_notices.py:475
+#, python-format
+msgid "New notice on %s"
+msgstr "Novo obaveštenje na lokaciji %s"
+
+#: seahub/notifications/management/commands/send_notices_to_social_account.py:252
+#, python-format
+msgid "You've got %(num)s new notices on %(site_name)s:\n"
+msgstr "Imate %(num)s novih obaveštenja na lokaciji %(site_name)s:\n"
+
+#: seahub/notifications/models.py:646
+#, python-format
+msgid ""
+"A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a "
+"href='%(link)s'>%(name)s</a>"
+msgstr "Datoteka <a href='%(file_link)s'>%(file_name)s</a> otpremljena je u <a href='%(link)s'>%(name)s</a>"
+
+#: seahub/notifications/models.py:653
+#, python-format
+msgid "A file named <strong>%(file_name)s</strong> is uploaded"
+msgstr "Datoteka <strong>%(file_name)s</strong> je otpremljena"
+
+#: seahub/notifications/models.py:688
+#, python-format
+msgid ""
+"A folder named <a href='%(folder_link)s'>%(folder_name)s</a> is uploaded to "
+"<a href='%(link)s'>%(name)s</a>"
+msgstr "Fascikla <a href='%(folder_link)s'>%(folder_name)s</a> otpremljena je u <a href='%(link)s'>%(name)s</a>"
+
+#: seahub/notifications/models.py:695
+#, python-format
+msgid "A folder named <strong>%(folder_name)s</strong> is uploaded"
+msgstr "Fascikla <strong>%(folder_name)s</strong> je otpremljena"
+
+#: seahub/notifications/models.py:829
+#, python-format
+msgid ""
+"User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a "
+"href='%(href)s'>%(group_name)s</a>, verification message: "
+"%(join_request_msg)s"
+msgstr "Korisnik <a href='%(user_profile)s'>%(username)s</a> zatražio je da se pridruži grupi <a href='%(href)s'>%(group_name)s</a>. Verifikaciona poruka: %(join_request_msg)s"
+
+#: seahub/notifications/models.py:850
+#, python-format
+#| msgid ""
+#| "a href='%(file_url)s'>%(file_name)s</a> has a new comment from user or)s"
+msgid "Library <a href='%(lib_url)s'>%(repo_name)s</a> has been archived."
+msgstr "Biblioteka <a href='%(lib_url)s'>%(repo_name)s</a> je arhivirana."
+
+#: seahub/notifications/models.py:855
+#, python-format
+#| msgid "r account %(username)s on %(site_name)s has been activated."
+msgid "Library %(repo_name)s has been archived."
+msgstr "Biblioteka %(repo_name)s je arhivirana."
+
+#: seahub/notifications/models.py:872
+#, python-format
+#| msgid ""
+#| "a href='%(file_url)s'>%(file_name)s</a> has a new comment from user or)s"
+msgid "Library <a href='%(lib_url)s'>%(repo_name)s</a> has been unarchived."
+msgstr "Arhiva biblioteke <a href='%(lib_url)s'>%(repo_name)s</a> je vraćena."
+
+#: seahub/notifications/models.py:877
+#, python-format
+#| msgid "r account %(username)s on %(site_name)s has been activated."
+msgid "Library %(repo_name)s has been unarchived."
+msgstr "Arhiva biblioteke %(repo_name)s je vraćena."
+
+#: seahub/notifications/models.py:894
+#, python-format
+msgid "Library <a href='%(lib_url)s'>%(repo_name)s</a> archive failed."
+msgstr "Arhiviranje biblioteke <a href='%(lib_url)s'>%(repo_name)s</a> nije uspelo."
+
+#: seahub/notifications/models.py:899
+#, python-format
+#| msgid "Library name is required"
+msgid "Library %(repo_name)s archive failed."
+msgstr "Arhiviranje biblioteke %(repo_name)s nije uspelo."
+
+#: seahub/notifications/models.py:916
+#, python-format
+msgid "Library <a href='%(lib_url)s'>%(repo_name)s</a> unarchive failed."
+msgstr "Vraćanje arhive biblioteke <a href='%(lib_url)s'>%(repo_name)s</a> nije uspelo."
+
+#: seahub/notifications/models.py:921
+#, python-format
+#| msgid "Library name is required"
+msgid "Library %(repo_name)s unarchive failed."
+msgstr "Vraćanje arhive biblioteke %(repo_name)s nije uspelo."
+
+#: seahub/notifications/models.py:946
+#, python-format
+msgid ""
+"User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group "
+"<a href='%(href)s'>%(group_name)s</a>"
+msgstr "Korisnik <a href='%(user_profile)s'>%(group_staff)s</a> vas je dodao u grupu <a href='%(href)s'>%(group_name)s</a>"
+
+#: seahub/notifications/models.py:972
+#, python-format
+msgid ""
+"File <a href='%(file_url)s'>%(file_name)s</a> has a new comment from user "
+"%(author)s"
+msgstr "Korisnik %(author)s je ostavio novi komentar na datoteci <a href='%(file_url)s'>%(file_name)s</a>"
+
+#: seahub/notifications/models.py:996
+#, python-format
+#| msgid ""
+#| "_user)s has sent you a request for <a href='%(file_url)s'>draft ft_id)s</a>"
+msgid ""
+"%(from_user)s mentioned you in <a href='%(file_url)s'>%(file_name)s</a>"
+msgstr "Korisnik %(from_user)s vas je pomenuo u datoteci <a href='%(file_url)s'>%(file_name)s</a>"
+
+#: seahub/notifications/models.py:1013
+#, python-format
+msgid ""
+"<a href='%(file_url)s'>Draft #%(draft_id)s</a> has a new comment from user "
+"%(author)s"
+msgstr "Korisnik %(author)s je ostavio novi komentar na <a href='%(file_url)s'>nacrtu br. %(draft_id)s</a>"
+
+#: seahub/notifications/models.py:1030
+#, python-format
+msgid ""
+"%(from_user)s has sent you a request for <a href='%(file_url)s'>draft "
+"#%(draft_id)s</a>"
+msgstr "Korisnik %(from_user)s vam je poslao zahtev za <a href='%(file_url)s'>nacrt br. %(draft_id)s</a>"
+
+#: seahub/notifications/models.py:1053
+#: seahub/notifications/templates/notifications/notice_email.html:69
+#, python-format
+msgid ""
+"Guest %(user)s accepted your <a "
+"href=\"%(url_base)s%(inv_url)s\">invitation</a> at %(time)s."
+msgstr "Gost %(user)s je prihvatio vaš <a href=\"%(url_base)s%(inv_url)s\">poziv</a> u %(time)s."
+
+#: seahub/notifications/models.py:1077
+#, python-format
+#| msgid ""
+#| ")s has transfered a library named <a href=\"%(repo_url)s\">epo_name)s</a> "
+#| "you."
+msgid ""
+"%(user)s has transferred a library named <a "
+"href=\"%(repo_url)s\">%(repo_name)s</a> to you."
+msgstr "Korisnik %(user)s vam je preneo biblioteku <a href=\"%(repo_url)s\">%(repo_name)s</a>."
+
+#: seahub/notifications/models.py:1150
+#, python-brace-format
+msgid "{name} created {obj_type} {obj_link} in library {repo_link}."
+msgstr "Korisnik {name} je kreirao {obj_type} {obj_link} u biblioteci {repo_link}."
+
+#: seahub/notifications/models.py:1152
+#, python-brace-format
+msgid ""
+"{name} created {obj_type} {obj_link} and {obj_path_count_minus_one} other "
+"{obj_type}(s) in library {repo_link}."
+msgstr "Korisnik {name} je kreirao {obj_type} {obj_link} i još {obj_path_count_minus_one} stavki tipa {obj_type} u biblioteci {repo_link}."
+
+#: seahub/notifications/models.py:1157
+#, python-brace-format
+msgid "{name} deleted {obj_type} {obj_name} in library {repo_link}."
+msgstr "Korisnik {name} je obrisao {obj_type} {obj_name} u biblioteci {repo_link}."
+
+#: seahub/notifications/models.py:1159
+#, python-brace-format
+msgid ""
+"{name} deleted {obj_type} {obj_name} and {obj_path_count_minus_one} other "
+"{obj_type}(s) in library {repo_link}."
+msgstr "Korisnik {name} je obrisao {obj_type} {obj_name} i još {obj_path_count_minus_one} stavki tipa {obj_type} u biblioteci {repo_link}."
+
+#: seahub/notifications/models.py:1163
+#, python-brace-format
+msgid "{name} restored {obj_type} {obj_link} in library {repo_link}."
+msgstr "Korisnik {name} je vratio {obj_type} {obj_link} u biblioteci {repo_link}."
+
+#: seahub/notifications/models.py:1167
+#, python-brace-format
+msgid ""
+"{name} renamed {obj_type} {old_obj_name} to {obj_link} in library "
+"{repo_link}."
+msgstr "Korisnik {name} je preimenovao {obj_type} {old_obj_name} u {obj_link} u biblioteci {repo_link}."
+
+#: seahub/notifications/models.py:1172
+#, python-brace-format
+msgid "{name} moved {obj_type} {obj_link} in library {repo_link}."
+msgstr "Korisnik {name} je premestio {obj_type} {obj_link} u biblioteci {repo_link}."
+
+#: seahub/notifications/models.py:1174
+#, python-brace-format
+msgid ""
+"{name} moved {obj_type} {obj_link} and {obj_path_count_minus_one} other "
+"{obj_type}(s) in library {repo_link}."
+msgstr "Korisnik {name} je premestio {obj_type} {obj_link} i još {obj_path_count_minus_one} stavki tipa {obj_type} u biblioteci {repo_link}."
+
+#: seahub/notifications/models.py:1178
+#, python-brace-format
+msgid "{name} updated {obj_type} {obj_link} in library {repo_link}."
+msgstr "Korisnik {name} je ažurirao {obj_type} {obj_link} u biblioteci {repo_link}."
+
+#: seahub/notifications/models.py:1181
+#, python-brace-format
+msgid "{name} {op_type} {obj_type} {obj_link} in library {repo_link}."
+msgstr "Korisnik {name} je izvršio radnju {op_type} nad stavkom {obj_type} {obj_link} u biblioteci {repo_link}."
+
+#: seahub/notifications/models.py:1192
+#, python-brace-format
+msgid "Face recognition is done for library {repo_name}."
+msgstr "Prepoznavanje lica za biblioteku {repo_name} je završeno."
+
+#: seahub/notifications/templates/notifications/file_updates_email.html:9
+#, python-format
+msgid ""
+"\n"
+"You've got 1 new file updates on %(site_name)s:\n"
+msgid_plural ""
+"\n"
+"You've got %(num)s file updates on %(site_name)s:\n"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: seahub/notifications/templates/notifications/file_updates_email.html:20
+msgid "Operation"
+msgstr "Radnja"
+
+#: seahub/notifications/templates/notifications/file_updates_email.html:21
+#: seahub/templates/snippets/repo_dir_trash_tr.html:21
+msgid "File"
+msgstr "Datoteka"
+
+#: seahub/notifications/templates/notifications/file_updates_email.html:21
+msgid "Library"
+msgstr "Biblioteka"
+
+#: seahub/notifications/templates/notifications/notice_email.html:7
+#, python-format
+msgid "Hi, %(name)s"
+msgstr "Zdravo, %(name)s"
+
+#: seahub/notifications/templates/notifications/notice_email.html:19
+msgid "Message"
+msgstr "Poruka"
+
+#: seahub/notifications/templates/notifications/notice_email.html:45
+#, python-format
+msgid ""
+"You have received a <a href=\"%(url_base)s%(msg_url)s\">new message</a> from"
+" %(user)s."
+msgstr "Primili ste <a href=\"%(url_base)s%(msg_url)s\">novu poruku</a> od korisnika %(user)s."
+
+#: seahub/notifications/templates/notifications/notice_email.html:51
+#, python-format
+msgid ""
+"A file named <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> is "
+"uploaded to your folder <a "
+"href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a>."
+msgstr "Datoteka <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> otpremljena je u vašu fasciklu <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a>."
+
+#: seahub/notifications/templates/notifications/notice_email.html:54
+#, python-format
+msgid ""
+"A folder named <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a> is"
+" uploaded to your folder <a "
+"href=\"%(url_base)s%(parent_dir_url)s\">%(parent_dir_name)s</a>."
+msgstr "Fascikla <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a> otpremljena je u vašu fasciklu <a href=\"%(url_base)s%(parent_dir_url)s\">%(parent_dir_name)s</a>."
+
+#: seahub/notifications/templates/notifications/notice_email.html:57
+#, python-format
+msgid ""
+"User <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> has asked to join "
+"group <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>, verification "
+"message: %(msg)s"
+msgstr "Korisnik <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> zatražio je da se pridruži grupi <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>. Verifikaciona poruka: %(msg)s"
+
+#: seahub/notifications/templates/notifications/notice_email.html:60
+#, python-format
+msgid ""
+"User <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> has added you to "
+"group <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>"
+msgstr "Korisnik <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> vas je dodao u grupu <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>"
+
+#: seahub/notifications/templates/notifications/notice_email.html:63
+#, python-format
+msgid ""
+"File <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> has a new "
+"comment from user %(author)s"
+msgstr "Korisnik %(author)s je ostavio novi komentar na datoteci <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a>"
+
+#: seahub/notifications/templates/notifications/notice_email.html:66
+#, python-format
+#| msgid ""
+#| ")s has shared a folder named <a f=\"%(url_base)s%(lib_url)s\">ib_name)s</a> "
+#| "to you."
+msgid ""
+"%(author)s mentioned you in <a "
+"href=\"%(url_base)s%(file_url)s\">%(file_name)s</a>"
+msgstr "Korisnik %(author)s vas je pomenuo u datoteci <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a>"
+
+#: seahub/notifications/templates/notifications/notice_email.html:72
+#, python-format
+msgid ""
+"A large number of files in your library <a "
+"href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> has been deleted "
+"recently."
+msgstr "Nedavno je obrisan veliki broj datoteka iz vaše biblioteke <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#: seahub/notifications/templates/notifications/notice_email.html:87
+msgid "Go check out at the following page:"
+msgstr "Pogledajte na sledećoj stranici:"
+
+#: seahub/notifications/templates/notifications/notice_msg/folder_share_msg.html:1
+#, python-format
+msgid ""
+"%(user)s has shared a folder named <a "
+"href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to you."
+msgstr "Korisnik %(user)s je podelio fasciklu <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> sa vama."
+
+#: seahub/notifications/templates/notifications/notice_msg/folder_share_to_group_msg.html:1
+#, python-format
+msgid ""
+"%(user)s has shared a folder named <a "
+"href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to group <a "
+"href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
+msgstr "Korisnik %(user)s je podelio fasciklu <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> sa grupom <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
+
+#: seahub/notifications/templates/notifications/notice_msg/repo_share_msg.html:1
+#, python-format
+msgid ""
+"%(user)s has shared a library named <a "
+"href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to you."
+msgstr "Korisnik %(user)s je podelio biblioteku <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> sa vama."
+
+#: seahub/notifications/templates/notifications/notice_msg/repo_share_to_group_msg.html:1
+#, python-format
+msgid ""
+"%(user)s has shared a library named <a "
+"href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to group <a "
+"href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
+msgstr "Korisnik %(user)s je podelio biblioteku <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> sa grupom <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
+
+#: seahub/notifications/templates/notifications/notify_virus.html:13
+#, python-format
+msgid ""
+"Virus detected in library %(repo_name)s during regular scanning: "
+"%(file_path)s."
+msgstr "Tokom redovnog skeniranja otkriven je virus u biblioteci %(repo_name)s: %(file_path)s."
+
+#: seahub/notifications/templates/notifications/notify_virus.html:20
+msgid "Virus is detected on regular scanning:"
+msgstr "Tokom redovnog skeniranja otkriven je virus:"
+
+#: seahub/notifications/utils.py:508
+#, python-format
+msgid "%(author)s added a new comment in document %(sdoc_name)s"
+msgstr "Korisnik %(author)s je dodao novi komentar u dokument %(sdoc_name)s"
+
+#: seahub/notifications/utils.py:515 seahub/notifications/utils.py:535
+msgid "Details"
+msgstr "Detalji"
+
+#: seahub/notifications/utils.py:521
+#, python-format
+msgid "%(author)s added a new reply in document %(sdoc_name)s"
+msgstr "Korisnik %(author)s je dodao novi odgovor u dokument %(sdoc_name)s"
+
+#: seahub/notifications/utils.py:527
+#, python-format
+#| msgid "%(author)s added a new comment in document %(sdoc_name)s"
+msgid ""
+"%(author)s has marked the comment \"%(resolve_comment)s\" as resolved in "
+"document %(sdoc_name)s\n"
+msgstr "Korisnik %(author)s je označio komentar „%(resolve_comment)s“ kao rešen u dokumentu %(sdoc_name)s\n"
+
+#: seahub/oauth/views.py:225
+#: seahub/templates/remote_user/create_unknown_user_false.html:8
+#: seahub/work_weixin/views.py:111
+msgid ""
+"Error, new user registration is not allowed, please contact administrator."
+msgstr "Greška: registracija novih korisnika nije dozvoljena. Obratite se administratoru."
+
+#: seahub/options/templates/options/set_user_options.html:7
+msgid "Please choose how to view encrypted libraries online:"
+msgstr "Izaberite kako želite da pregledate šifrovane biblioteke na mreži:"
+
+#: seahub/options/templates/options/set_user_options.html:10
+msgid "Send passwords to the server."
+msgstr "Pošalji lozinke serveru."
+
+#: seahub/options/templates/options/set_user_options.html:10
+msgid "Files will be decrypted in the server before being sent to you."
+msgstr "Datoteke će biti dešifrovane na serveru pre nego što vam budu poslate."
+
+#: seahub/options/templates/options/set_user_options.html:12
+msgid "Save passwords in your browser."
+msgstr "Sačuvaj lozinke u pregledaču."
+
+#: seahub/options/templates/options/set_user_options.html:12
+msgid "Files will be decrypted in your browser when you download them."
+msgstr "Datoteke će biti dešifrovane u vašem pregledaču prilikom preuzimanja."
+
+#: seahub/options/templates/options/set_user_options.html:13
+msgid ""
+"Tip: the latter way is more secure, but it is not supported well by all "
+"browsers. We advise you to use the latest version of Chrome or Firefox."
+msgstr "Savet: drugi način je bezbedniji, ali ga ne podržavaju svi pregledači u potpunosti. Preporučujemo da koristite najnoviju verziju pregledača Chrome ili Firefox."
+
+#: seahub/organizations/api/admin/users.py:812
+#: seahub/organizations/api/admin/users.py:816
+msgid "The number of users exceeds the limit"
+msgstr "Broj korisnika premašuje ograničenje"
+
+#: seahub/organizations/api/admin/users.py:834
+#, python-brace-format
+msgid "User {email} already exists."
+msgstr "Korisnik {email} već postoji."
+
+#: seahub/organizations/forms.py:41 seahub/share/views.py:354
+#: seahub/share/views.py:367
+msgid "Email address is not valid"
+msgstr "Adresa e-pošte nije ispravna"
+
+#: seahub/organizations/templates/organizations/org_deactivate_email.html:12
+#, python-format
+#| msgid ""
+#| " receiving this e-mail because you are the admin of %(site_name)s,  a newer "
+#| "%(reg_email)s is joined."
+msgid ""
+"You are receiving this email because your team %(org_name)s has been "
+"deactivated."
+msgstr "Primili ste ovu poruku e-pošte jer je vaš tim %(org_name)s deaktiviran."
+
+#: seahub/organizations/templates/organizations/org_deactivate_email.html:16
+#, python-format
+msgid ""
+"\n"
+"If you like to continue using our site, click <a href=\"%(link)s\">here</a>. Otherwise your account will be deleted in 60 days.\n"
+msgstr "\nAko želite da nastavite da koristite naš sajt, kliknite <a href=\"%(link)s\">ovde</a>. U suprotnom, vaš nalog će biti obrisan za 60 dana.\n"
+
+#: seahub/organizations/templates/organizations/org_register.html:3
+#: seahub/organizations/templates/organizations/org_register.html:14
+#: seahub/organizations/templates/organizations/org_register.html:24
+#: seahub/templates/choose_register.html:3
+#: seahub/templates/choose_register.html:8
+#: seahub/templates/registration/login.html:131
+#: seahub/templates/registration/registration_form.html:3
+#: seahub/templates/registration/registration_form.html:15
+#: seahub/templates/registration/registration_form.html:25
+msgid "Signup"
+msgstr "Registracija"
+
+#: seahub/organizations/templates/organizations/org_register.html:17
+#: seahub/templates/registration/registration_form.html:18
+msgid "Welcome back, you are already signed in."
+msgstr "Dobro došli nazad, već ste prijavljeni."
+
+#: seahub/organizations/templates/organizations/org_register.html:18
+#: seahub/templates/registration/registration_form.html:19
+msgid "You will be redirected to the home page within 5 seconds."
+msgstr "Bićete preusmereni na početnu stranicu za 5 sekundi."
+
+#: seahub/organizations/templates/organizations/org_register.html:26
+msgid "Organization Name"
+msgstr "Naziv organizacije"
+
+#: seahub/organizations/templates/organizations/org_register.html:40
+msgid "Admin Name"
+msgstr "Ime administratora"
+
+#: seahub/organizations/templates/organizations/org_register.html:45
+msgid "Admin Email"
+msgstr "Adresa e-pošte administratora"
+
+#: seahub/organizations/templates/organizations/org_register.html:96
+#: seahub/templates/registration/registration_form.html:98
+msgid "Email cannot be blank"
+msgstr "Adresa e-pošte ne može biti prazna"
+
+#: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:4
+#: seahub/templates/snippets/admin_paginator.html:4
+msgid "Previous"
+msgstr "Prethodno"
+
+#: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:7
+#: seahub/templates/snippets/admin_paginator.html:7
+#: seahub/two_factor/templates/two_factor/_wizard_actions.html:5
+msgid "Next"
+msgstr "Sledeće"
+
+#: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:12
+#: seahub/templates/snippets/admin_paginator.html:12
+msgid "Per page: "
+msgstr "Po stranici: "
+
+#: seahub/organizations/views.py:363 seahub/organizations/views.py:392
+#: seahub/thumbnail/views.py:112
+msgid "Invalid token."
+msgstr "Neispravan token."
+
+#: seahub/organizations/views.py:395
+#| msgid "Expiration"
+msgid "Expired token."
+msgstr "Token je istekao."
+
+#: seahub/profile/templates/profile/set_profile_react.html:5
+msgid "Settings"
+msgstr "Podešavanja"
+
+#: seahub/profile/templates/profile/set_profile_react.html:21
+msgctxt "true name"
+msgid "Name:"
+msgstr "Ime:"
+
+#: seahub/profile/templates/profile/set_profile_react.html:27
+#: seahub/templates/registration/password_set_form.html:4
+#: seahub/templates/registration/password_set_form.html:8
+msgid "Set Password"
+msgstr "Postavi lozinku"
+
+#: seahub/profile/templates/profile/set_profile_react.html:27
+msgid "Update"
+msgstr "Ažuriraj"
+
+#: seahub/profile/templates/profile/user_profile.html:4
+msgid "Profile"
+msgstr "Profil"
+
+#: seahub/profile/views.py:53
+msgid "Successfully edited profile."
+msgstr "Profil je uspešno izmenjen."
+
+#: seahub/profile/views.py:57
+msgid "Failed to edit profile"
+msgstr "Izmena profila nije uspela"
+
+#: seahub/profile/views.py:261
+msgid "Has not accepted invitation yet"
+msgstr "Poziv još nije prihvaćen"
+
+#: seahub/profile/views.py:288
+msgid "Demo account can not be deleted."
+msgstr "Demonstracioni nalog ne može da se obriše."
+
+#: seahub/profile/views.py:319
+msgid "Failed to set default library."
+msgstr "Postavljanje podrazumevane biblioteke nije uspelo."
+
+#: seahub/profile/views.py:323
+msgid "Can not set encrypted library as default library."
+msgstr "Šifrovana biblioteka ne može da se postavi kao podrazumevana."
+
+#: seahub/profile/views.py:328
+#, python-format
+msgid "Successfully set \"%s\" as your default library."
+msgstr "Biblioteka „%s“ uspešno je postavljena kao podrazumevana."
+
+#: seahub/repo_metadata/apis.py:162
+#, python-format
+msgid ""
+"Metadata feature is not supported for libraries containing more than %s "
+"files"
+msgstr "Funkcija metapodataka nije podržana za biblioteke koje sadrže više od %s datoteka"
+
+#: seahub/seadoc/views.py:32 seahub/seadoc/views.py:86
+#: seahub/seadoc/views.py:164 seahub/seadoc/views.py:210
+#: seahub/seadoc/views.py:247 seahub/views/__init__.py:462
+#: seahub/views/__init__.py:505 seahub/views/__init__.py:641
+#: seahub/views/__init__.py:807 seahub/views/ajax.py:373
+msgid "Library does not exist"
+msgstr "Biblioteka ne postoji"
+
+#: seahub/seadoc/views.py:158 seahub/seadoc/views.py:204
+msgid "File path invalid."
+msgstr "Putanja datoteke nije ispravna."
+
+#: seahub/share/decorators.py:50
+msgid "Invalid verification code, please try again."
+msgstr "Verifikacioni kôd nije ispravan. Pokušajte ponovo."
+
+#: seahub/share/decorators.py:81
+msgid "Link does not exist."
+msgstr "Veza ne postoji."
+
+#: seahub/share/decorators.py:84
+msgid "Link is expired."
+msgstr "Veza je istekla."
+
+#: seahub/share/decorators.py:125
+msgid "The number of share link exceeds the limit."
+msgstr "Broj veza za deljenje premašuje ograničenje."
+
+#: seahub/share/models.py:127
+msgid "Password can't be empty"
+msgstr "Lozinka ne može biti prazna"
+
+#: seahub/share/models.py:134
+msgid "Please enter a correct password."
+msgstr "Unesite ispravnu lozinku."
+
+#: seahub/share/templates/share/audit_code_email.html:10
+#, python-format
+msgid "The verification code is %(code)s. It is valid for one hour."
+msgstr "Verifikacioni kôd je %(code)s. Važi jedan sat."
+
+#: seahub/share/templates/share/share_link_email.html:9
+#, python-format
+msgid ""
+"\n"
+"    %(shared_from)s shared a file link with you.\n"
+msgstr "\n    Korisnik %(shared_from)s je podelio vezu do datoteke sa vama.\n"
+
+#: seahub/share/templates/share/share_link_email.html:14
+#, python-format
+msgid ""
+"\n"
+"You can click <a href=%(url)s>here</a> to verify your email address and visit it.\n"
+msgstr "\nKliknite <a href=%(url)s>ovde</a> da potvrdite adresu e-pošte i posetite vezu.\n"
+
+#: seahub/share/templates/share/share_link_email_audit.html:4
+#: seahub/share/templates/share/share_link_email_audit.html:39
+msgid "Email address verification"
+msgstr "Potvrda adrese e-pošte"
+
+#: seahub/share/templates/share/share_link_email_audit.html:40
+msgid "Please provide your email address to continue."
+msgstr "Unesite adresu e-pošte da biste nastavili."
+
+#: seahub/share/templates/share/share_link_email_audit.html:43
+msgid "Enter your email address"
+msgstr "Unesite adresu e-pošte"
+
+#: seahub/share/templates/share/share_link_email_audit.html:44
+msgid "Get code"
+msgstr "Zatraži kôd"
+
+#: seahub/share/templates/share/share_link_email_audit.html:46
+msgid "Paste the verification code here"
+msgstr "Ovde nalepite verifikacioni kôd"
+
+#: seahub/share/templates/share/share_link_email_audit.html:79
+msgid "Resend"
+msgstr "Pošalji ponovo"
+
+#: seahub/share/templates/share/share_link_email_audit.html:107
+msgid "A verification code has been sent to the email address."
+msgstr "Verifikacioni kôd je poslat na adresu e-pošte."
+
+#: seahub/share/views.py:133
+msgid "Please choose a folder."
+msgstr "Izaberite fasciklu."
+
+#: seahub/share/views.py:157
+msgid "Successfully saved."
+msgstr "Uspešno sačuvano."
+
+#: seahub/share/views.py:187
+msgid "Preview and download"
+msgstr "Pregled i preuzimanje"
+
+#: seahub/share/views.py:188
+msgid "Preview only"
+msgstr "Samo pregled"
+
+#: seahub/share/views.py:189
+msgid "Download and upload"
+msgstr "Preuzimanje i otpremanje"
+
+#: seahub/share/views.py:190
+msgid "Edit on cloud and download"
+msgstr "Uredi u oblaku i preuzmi"
+
+#: seahub/share/views.py:191
+msgid "Edit on cloud only"
+msgstr "Uredi samo u oblaku"
+
+#: seahub/share/views.py:223
+msgid "Share Link"
+msgstr "Link za dijeljenje"
+
+#: seahub/share/views.py:223 seahub/views/sysadmin.py:736
+msgid "Creator"
+msgstr "Kreator"
+
+#: seahub/share/views.py:224
+msgid "Permission"
+msgstr "Dozvola"
+
+#: seahub/share/views.py:224
+msgid "Expiration"
+msgstr "Isticanje"
+
+#: seahub/share/views.py:254 seahub/thumbnail/views.py:43
+#: seahub/thumbnail/views.py:119 seahub/views/ajax.py:140
+#: seahub/views/ajax.py:415
+msgid "Library does not exist."
+msgstr "Biblioteka ne postoji."
+
+#: seahub/share/views.py:258 seahub/views/ajax.py:383
+msgid "Folder does not exist."
+msgstr "Fascikla ne postoji."
+
+#: seahub/share/views.py:306
+msgid "Only the owner of the library has permission to share it."
+msgstr "Samo vlasnik biblioteke ima dozvolu da je deli."
+
+#: seahub/share/views.py:344
+msgid "Please check the email(s) you entered"
+msgstr "Proverite unete adrese e-pošte"
+
+#: seahub/share/views.py:360
+msgid "Share link is not found"
+msgstr "Veza za deljenje nije pronađena"
+
+#: seahub/share/views.py:375
+msgid "Verification code"
+msgstr "Verifikacioni kôd"
+
+#: seahub/share/views.py:386
+msgid "Failed to send a verification code, please try again later."
+msgstr "Slanje verifikacionog koda nije uspelo. Pokušajte ponovo kasnije."
+
+#: seahub/templates/404.html:7
+msgid "Sorry, but the requested page could not be found."
+msgstr "Žao nam je, tražena stranica nije pronađena."
+
+#: seahub/templates/base.html:8 seahub/templates/base_for_react.html:9
+#: seahub/templates/wiki/wiki_publish_ssr.html:10
+msgid "File, Collaboration, Team, Organization"
+msgstr "Datoteke, saradnja, tim, organizacija"
+
+#: seahub/templates/base.html:34
+#: seahub/templates/wiki/wiki_publish_ssr.html:52
+msgid "Close"
+msgstr "Zatvori"
+
+#: seahub/templates/base.html:51
+msgid "Language"
+msgstr "Jezik"
+
+#: seahub/templates/choose_register.html:9
+msgid "Create a personal account"
+msgstr "Kreiraj lični nalog"
+
+#: seahub/templates/choose_register.html:10
+msgid "Create an organization account"
+msgstr "Kreiraj nalog organizacije"
+
+#: seahub/templates/client_login_complete.html:6
+msgid "The client has logged in. Please open the client to confirm."
+msgstr "Klijent se prijavio. Otvorite klijent da biste potvrdili."
+
+#: seahub/templates/client_login_confirm.html:7
+msgid "Client Login Confirm"
+msgstr "Potvrda prijave klijenta"
+
+#: seahub/templates/client_login_confirm.html:8
+msgid "Do you want to login to your client?"
+msgstr "Želite li da se prijavite u klijent?"
+
+#: seahub/templates/decrypt_repo_form.html:7
+msgid ""
+"This library is encrypted. Please input the password if you want to browse "
+"it online. And the password will be kept on the server for only 1 hour."
+msgstr "Ova biblioteka je šifrovana. Unesite lozinku ako želite da je pregledate na mreži. Lozinka će biti sačuvana na serveru samo jedan sat."
+
+#: seahub/templates/decrypt_repo_form.html:26
+#: seahub/templates/share_access_validation.html:40
+msgid "Please enter the password."
+msgstr "Unesite lozinku."
+
+#: seahub/templates/download.html:4
+msgid "Download"
+msgstr "Preuzmi"
+
+#: seahub/templates/error.html:11
+#, python-format
+#| msgid ""
+#| "n click <a href=%(url)s>here</a> to verify your email address and it \n"
+msgid ""
+"\n"
+"        Click <a href=\"%(link)s\">here</a> to reactivate your team and relogin.\n"
+"      "
+msgstr "\n        Kliknite <a href=\"%(link)s\">ovde</a> da ponovo aktivirate tim i prijavite se.\n      "
+
+#: seahub/templates/i18n.html:6
+msgid "Upload Folder"
+msgstr "Otpremi fasciklu"
+
+#: seahub/templates/i18n.html:7
+msgid "Add auto expiration"
+msgstr "Dodaj automatsko istekanje"
+
+#: seahub/templates/i18n.html:8
+msgid "Days"
+msgstr "Dana"
+
+#: seahub/templates/i18n.html:9
+msgid "Shared Links"
+msgstr "Deljene veze"
+
+#: seahub/templates/i18n.html:10
+msgid "View and manage all the shared links in this library."
+msgstr "Pregledajte i upravljajte svim deljenim vezama u ovoj biblioteci."
+
+#: seahub/templates/i18n.html:11
+msgid "Owned Libs"
+msgstr "Biblioteke u mom vlasništvu"
+
+#: seahub/templates/i18n.html:12
+msgid "Shared Libs"
+msgstr "Deljene biblioteke"
+
+#: seahub/templates/onlyoffice_file_view_react.html:86
+#: seahub/templates/onlyoffice_file_view_react.html:190
+#: seahub/templates/onlyoffice_file_view_react.html:213
+#: seahub/templates/sdoc_file_view_react.html:68
+#: seahub/templates/sdoc_file_view_react.html:91
+#: seahub/templates/view_file_onlyoffice.html:99
+#: seahub/templates/view_file_onlyoffice.html:200
+#: seahub/templates/view_file_onlyoffice.html:223
+msgid "Failed. Please check the network."
+msgstr "Nije uspelo. Proverite mrežnu vezu."
+
+#: seahub/templates/registration/activation_email.html:12
+#, python-format
+msgid ""
+"You (or someone pretending to be you) have asked to register an account at "
+"%(site_name)s. If this wasn't you, please ignore this email and your address"
+" will be removed from our records."
+msgstr "Vi (ili neko ko se predstavlja kao vi) zatražili ste registraciju naloga na lokaciji %(site_name)s. Ako to niste bili vi, zanemarite ovu poruku i vaša adresa će biti uklonjena iz naše evidencije."
+
+#: seahub/templates/registration/activation_email.html:14
+#, python-format
+msgid ""
+"To activate this account, please click the following link within the next "
+"%(expiration_days)s days: "
+msgstr "Da biste aktivirali ovaj nalog, kliknite na sledeću vezu u roku od %(expiration_days)s dana: "
+
+#: seahub/templates/registration/activation_email.html:18
+#: seahub/templates/registration/registration_form.html:64
+msgid "Sign Up"
+msgstr "Registruj se"
+
+#: seahub/templates/registration/logged_out.html:4
+#: seahub/templates/registration/logout.html:4
+msgid "Log Out"
+msgstr "Odjavi se"
+
+#: seahub/templates/registration/logged_out.html:8
+#: seahub/templates/registration/logout.html:8
+msgid "Thanks for your participation! "
+msgstr "Hvala vam na učešću! "
+
+#: seahub/templates/registration/logged_out.html:8
+#: seahub/templates/registration/logout.html:8
+#: seahub/templates/registration/password_change_done.html:10
+msgid "Log in again"
+msgstr "Prijavi se ponovo"
+
+#: seahub/templates/registration/login.html:4
+#: seahub/templates/registration/login.html:48
+#: seahub/templates/registration/login.html:89
+#: seahub/templates/registration/multi_adfs_sso.html:4
+#: seahub/templates/registration/multi_adfs_sso.html:50
+#: seahub/templates/registration/multi_adfs_sso.html:61
+#: seahub/templates/registration/password_reset_complete.html:8
+#: seahub/templates/sysadmin/user_activation_email.html:15
+#: seahub/templates/sysadmin/user_add_email.html:23
+#: seahub/templates/sysadmin/user_batch_add_email.html:19
+msgid "Log In"
+msgstr "Prijavi se"
+
+#: seahub/templates/registration/login.html:58
+msgid "Refresh"
+msgstr "Osvježi"
+
+#: seahub/templates/registration/login.html:78
+msgid "Incorrect email or password"
+msgstr "Pogrešna adresa e-pošte ili lozinka"
+
+#: seahub/templates/registration/login.html:86
+#, python-format
+msgid "Remember me for %(remember_days)s days "
+msgstr "Ostani prijavljen/a %(remember_days)s dana "
+
+#: seahub/templates/registration/login.html:93
+#: seahub/templates/registration/login.html:97
+msgid "Single Sign-On"
+msgstr "Jedinstvena prijava (SSO)"
+
+#: seahub/templates/registration/login.html:104
+msgid "Login with"
+msgstr "Prijavi se pomoću"
+
+#: seahub/templates/registration/login.html:129
+msgid "Forgot password?"
+msgstr "Zaboravili ste lozinku?"
+
+#: seahub/templates/registration/login.html:196
+msgid "Failed to refresh the CAPTCHA, please try again later."
+msgstr "Osvežavanje CAPTCHA provere nije uspelo. Pokušajte ponovo kasnije."
+
+#: seahub/templates/registration/login.html:204
+#: seahub/templates/registration/multi_adfs_sso.html:104
+msgid "Email or username cannot be blank"
+msgstr "Adresa e-pošte ili korisničko ime ne mogu biti prazni"
+
+#: seahub/templates/registration/password_change_done.html:4
+msgid "Password Change Successfully"
+msgstr "Lozinka je uspešno promenjena"
+
+#: seahub/templates/registration/password_change_done.html:9
+msgid "Your password has been changed successfully."
+msgstr "Lozinka je uspešno promenjena."
+
+#: seahub/templates/registration/password_change_form.html:3
+#: seahub/templates/registration/password_change_form.html:7
+msgid "Password Modification"
+msgstr "Promena lozinke"
+
+#: seahub/templates/registration/password_change_form.html:9
+msgid "Please update your password before continue."
+msgstr "Ažurirajte lozinku pre nego što nastavite."
+
+#: seahub/templates/registration/password_change_form.html:13
+msgid "Current Password"
+msgstr "Trenutna lozinka"
+
+#: seahub/templates/registration/password_change_form.html:21
+#: seahub/templates/registration/password_reset_confirm.html:14
+msgid "New Password"
+msgstr "Nova lozinka"
+
+#: seahub/templates/registration/password_change_form.html:61
+msgid "Current password cannot be blank"
+msgstr "Trenutna lozinka ne može biti prazna"
+
+#: seahub/templates/registration/password_reset_complete.html:4
+msgid "Successfully reset password"
+msgstr "Lozinka je uspešno resetovana"
+
+#: seahub/templates/registration/password_reset_complete.html:8
+msgid "Successfully reset password."
+msgstr "Lozinka je uspešno resetovana."
+
+#: seahub/templates/registration/password_reset_confirm.html:4
+#: seahub/templates/registration/password_reset_done.html:4
+#: seahub/templates/registration/password_reset_done.html:44
+#: seahub/templates/registration/password_reset_form.html:4
+#: seahub/templates/registration/password_reset_form.html:54
+msgid "Password Reset"
+msgstr "Resetovanje lozinke"
+
+#: seahub/templates/registration/password_reset_confirm.html:11
+msgid "Reset Password"
+msgstr "Resetuj lozinku"
+
+#: seahub/templates/registration/password_reset_confirm.html:39
+msgid "Failed to reset password: this link is no longer available."
+msgstr "Resetovanje lozinke nije uspelo: ova veza više nije dostupna."
+
+#: seahub/templates/registration/password_reset_done.html:46
+msgid ""
+"If your email address is in our database, you will receive a message "
+"shortly."
+msgstr "Ako se vaša adresa e-pošte nalazi u našoj bazi, uskoro ćete dobiti poruku."
+
+#: seahub/templates/registration/password_reset_done.html:47
+msgid "Back to login page"
+msgstr "Nazad na stranicu za prijavu"
+
+#: seahub/templates/registration/password_reset_email.html:12
+#, python-format
+msgid ""
+"To reset the password of your account %(account)s on %(site_name)s, please "
+"click the following link: "
+msgstr "Da biste resetovali lozinku naloga %(account)s na lokaciji %(site_name)s, kliknite na sledeću vezu: "
+
+#: seahub/templates/registration/password_reset_email.html:20
+msgid "If you did not request it, just skip it."
+msgstr "Ako to niste zatražili, zanemarite ovu poruku."
+
+#: seahub/templates/registration/password_reset_form.html:56
+msgid "We will send you an email to set new password"
+msgstr "Poslaćemo vam poruku e-pošte za postavljanje nove lozinke"
+
+#: seahub/templates/registration/password_reset_form.html:57
+msgid "Your email used in login"
+msgstr "Adresa e-pošte koju koristite za prijavu"
+
+#: seahub/templates/registration/register_complete_email.html:1
+#, python-format
+msgid ""
+"You're receiving this e-mail because you are the admin of %(site_name)s, and"
+" a new user %(reg_email)s is joined."
+msgstr "Primili ste ovu poruku jer ste administrator sajta %(site_name)s, a novi korisnik %(reg_email)s se pridružio."
+
+#: seahub/templates/registration/register_complete_email.html:3
+msgid "Please click the following link to view the new account:"
+msgstr "Kliknite na sledeću vezu da biste pregledali novi nalog:"
+
+#: seahub/templates/registration/register_complete_email_subject.html:1
+#, python-format
+msgid "New account created on %(site_name)s"
+msgstr "Kreiran je novi nalog na sajtu %(site_name)s"
+
+#: seahub/templates/registration/registration_complete.html:4
+#: seahub/templates/shibboleth/complete.html:4
+msgid "Registration complete"
+msgstr "Registracija je završena"
+
+#: seahub/templates/registration/registration_complete.html:10
+msgid ""
+"An activation email has been sent. Please check your email and click on the "
+"link to activate your account."
+msgstr "Poslata je poruka za aktivaciju. Proverite svoju e-poštu i kliknite na vezu da biste aktivirali nalog."
+
+#: seahub/templates/registration/registration_complete.html:12
+msgid ""
+"Registration complete, please wait for administrator to activate your "
+"account."
+msgstr "Registracija je završena. Sačekajte da administrator aktivira vaš nalog."
+
+#: seahub/templates/registration/registration_complete.html:15
+msgid "Signup function is not enabled."
+msgstr "Registracija nije omogućena."
+
+#: seahub/templates/registration/registration_form.html:44
+msgid "Department"
+msgstr "Odeljenje"
+
+#: seahub/templates/registration/registration_form.html:49
+msgid "Telephone"
+msgstr "Telefon"
+
+#: seahub/templates/registration/registration_form.html:54
+msgid "Note"
+msgstr "Napomena"
+
+#: seahub/templates/remote_user/not_active.html:6
+#: seahub/templates/shibboleth/complete.html:8 seahub/work_weixin/views.py:132
+msgid ""
+"Your account is created successfully, please wait for administrator to "
+"activate your account."
+msgstr "Vaš nalog je uspešno kreiran. Sačekajte da ga administrator aktivira."
+
+#: seahub/templates/repo_folder_trash_react.html:5
+msgid "Trash"
+msgstr "Korpa za otpatke"
+
+#: seahub/templates/repo_history_react.html:5
+#: seahub/templates/sysadmin/repo_history_react.html:5
+msgid "History"
+msgstr "Istorija"
+
+#: seahub/templates/repo_snapshot_react.html:5
+#: seahub/templates/sysadmin/repo_snapshot_react.html:5
+msgid "Snapshot"
+msgstr "Snimak stanja"
+
+#: seahub/templates/share_access_validation.html:6
+msgid ""
+"Please input the password if you want to browse the shared file/folder."
+msgstr "Unesite lozinku ako želite da pregledate deljenu datoteku/fasciklu."
+
+#: seahub/templates/shared_link_email.html:12
+#, python-format
+msgid ""
+"%(escaped_nickname)s shared a %(file_shared_type)s <span style=\"font-"
+"weight:bold;\">%(escaped_file_shared_name)s</span> to you on %(site_name)s:"
+msgstr "Korisnik %(escaped_nickname)s je podelio %(file_shared_type)s <span style=\"font-weight:bold;\">%(escaped_file_shared_name)s</span> sa vama na lokaciji %(site_name)s:"
+
+#: seahub/templates/shared_link_email.html:18
+#: seahub/templates/shared_upload_link_email.html:24
+msgid ""
+"For security reasons, the link and the password are sent in two separate "
+"emails. This email contains the link. Please check the other email for the "
+"password."
+msgstr "Iz bezbednosnih razloga, veza i lozinka šalju se u odvojenim porukama e-pošte. Ova poruka sadrži vezu. Lozinku potražite u drugoj poruci."
+
+#: seahub/templates/shared_link_email.html:22
+#: seahub/templates/shared_link_password_email.html:19
+#: seahub/templates/shared_upload_link_email.html:32
+#: seahub/templates/shared_upload_link_password_email.html:22
+#: seahub/templates/sysadmin/user_add_email.html:20
+#: seahub/templates/sysadmin/user_batch_add_email.html:16
+msgid "Password:"
+msgstr "Lozinka:"
+
+#: seahub/templates/shared_link_password_email.html:12
+#, python-format
+#| msgid ""
+#| "ped_nickname)s shared a %(file_shared_type)s <span "
+#| "style=\"font-:bold;\">%(escaped_file_shared_name)s</span> to you on "
+#| "ite_name)s:"
+msgid ""
+"%(escaped_nickname)s shared a %(file_shared_type)s <span style=\"font-"
+"weight:bold;\">%(escaped_file_shared_name)s</span> to you on %(site_name)s."
+msgstr "Korisnik %(escaped_nickname)s je podelio %(file_shared_type)s <span style=\"font-weight:bold;\">%(escaped_file_shared_name)s</span> sa vama na lokaciji %(site_name)s."
+
+#: seahub/templates/shared_link_password_email.html:16
+#: seahub/templates/shared_upload_link_password_email.html:19
+msgid ""
+"For security reasons, the link and the password are sent in two separate "
+"emails. This email contains the password. Please check the other email for "
+"the link."
+msgstr "Iz bezbednosnih razloga, veza i lozinka šalju se u odvojenim porukama e-pošte. Ova poruka sadrži lozinku. Vezu potražite u drugoj poruci."
+
+#: seahub/templates/shared_upload_link_email.html:12
+#: seahub/templates/shared_upload_link_password_email.html:12
+#, python-format
+#| msgid ""
+#| "ped_nickname)s shared a %(file_shared_type)s <span "
+#| "style=\"font-:bold;\">%(escaped_file_shared_name)s</span> to you on "
+#| "ite_name)s:"
+msgid ""
+"%(escaped_nickname)s shared an upload link for folder <span style=\"font-"
+"weight:bold;\">%(escaped_folder_name)s</span> to you on %(site_name)s."
+msgstr "Korisnik %(escaped_nickname)s je podelio vezu za otpremanje u fasciklu <span style=\"font-weight:bold;\">%(escaped_folder_name)s</span> sa vama na lokaciji %(site_name)s."
+
+#: seahub/templates/shared_upload_link_email.html:14
+#: seahub/templates/shared_upload_link_password_email.html:14
+#, python-format
+msgid "%(escaped_nickname)s shared an upload link to you on %(site_name)s."
+msgstr "Korisnik %(escaped_nickname)s je podelio vezu za otpremanje sa vama na lokaciji %(site_name)s."
+
+#: seahub/templates/shared_upload_link_email.html:20
+#: seahub/templates/shared_upload_link_email.html:28
+msgid "You can go to the following page and upload your files:"
+msgstr "Možete otići na sledeću stranicu i otpremiti svoje datoteke:"
+
+#: seahub/templates/snippets/password_strength_js.html:7
+msgid "Password strength should be strong or very strong"
+msgstr "Jačina lozinke treba da bude jaka ili veoma jaka"
+
+#: seahub/templates/snippets/password_strength_js.html:12
+#: seahub/templates/snippets/password_strength_js.html:97
+msgid "Password strength"
+msgstr "Jačina lozinke"
+
+#: seahub/templates/snippets/password_strength_js.html:19
+msgid ""
+"The password should contain different types of characters to make it strong:"
+" uppercase letters, lowercase letters, numbers and special characters."
+msgstr "Da bi bila jaka, lozinka treba da sadrži različite vrste znakova: velika i mala slova, brojeve i specijalne znakove."
+
+#: seahub/templates/snippets/policy_service_link.html:5
+#: seahub/templates/snippets/policy_service_link.html:9
+msgid "Privacy Policy"
+msgstr "Politika privatnosti"
+
+#: seahub/templates/snippets/policy_service_link.html:7
+#: seahub/templates/snippets/policy_service_link.html:11
+msgid "Terms of Service"
+msgstr "Uslovi korišćenja"
+
+#: seahub/templates/snippets/repo_dir_trash_tr.html:6
+msgid "Folder"
+msgstr "Fascikla"
+
+#: seahub/templates/snippets/repo_dir_trash_tr.html:11
+#: seahub/templates/snippets/repo_dir_trash_tr.html:26
+msgid "Restore"
+msgstr "Vrati"
+
+#: seahub/templates/snippets/reset_repo_password.html:10
+#, python-format
+msgid ""
+"The new password of library %(repo_name)s is %(password)s. Please change it "
+"as soon as possible."
+msgstr "Nova lozinka biblioteke %(repo_name)s je %(password)s. Promenite je što pre."
+
+#: seahub/templates/sysadmin/short_time_linving_password_reset_link.html:13
+#, python-format
+msgid ""
+"Administrator on %(site_name)s is resetting your password for %(account)s, "
+"please click the following link to continue: "
+msgstr "Administrator sajta %(site_name)s resetuje lozinku za nalog %(account)s. Kliknite na sledeću vezu da biste nastavili: "
+
+#: seahub/templates/sysadmin/sudo_mode.html:39
+msgid "Confirm password to continue"
+msgstr "Potvrdite lozinku da biste nastavili"
+
+#: seahub/templates/sysadmin/sudo_mode.html:40
+msgid ""
+"You are entering admin area, we won't ask for your password again for a few "
+"hours."
+msgstr "Ulazite u administratorski deo. Nećemo ponovo tražiti lozinku nekoliko sati."
+
+#: seahub/templates/sysadmin/sudo_mode.html:47
+msgid "Incorrect password"
+msgstr "Pogrešna lozinka"
+
+#: seahub/templates/sysadmin/user_activation_email.html:12
+#, python-format
+msgid "Your account %(username)s on %(site_name)s has been activated."
+msgstr "Vaš nalog %(username)s na lokaciji %(site_name)s je aktiviran."
+
+#: seahub/templates/sysadmin/user_add_email.html:11
+#, python-format
+msgid ""
+"%(nickname)s invited you to join organization \"%(org_name)s\" on "
+"%(site_name)s."
+msgstr "Korisnik %(nickname)s vas poziva da se pridružite organizaciji „%(org_name)s“ na lokaciji %(site_name)s."
+
+#: seahub/templates/sysadmin/user_add_email.html:13
+#: seahub/templates/sysadmin/user_batch_add_email.html:10
+#, python-format
+msgid "%(nickname)s invited you to join %(site_name)s."
+msgstr "Korisnik %(nickname)s vas poziva da se pridružite sajtu %(site_name)s."
+
+#: seahub/templates/sysadmin/user_add_email.html:18
+#: seahub/templates/sysadmin/user_batch_add_email.html:14
+msgid "Here is your account information:"
+msgstr "Podaci o vašem nalogu:"
+
+#: seahub/templates/sysadmin/user_add_email.html:19
+#: seahub/templates/sysadmin/user_batch_add_email.html:15
+msgid "Email:"
+msgstr "E-pošta:"
+
+#: seahub/templates/sysadmin/user_freeze_email.html:12
+#, python-format
+msgid ""
+"Account %(user)s froze due to excessive failed logins. Please check at:"
+msgstr "Nalog %(user)s je zamrznut zbog previše neuspelih prijava. Proverite na:"
+
+#: seahub/templates/sysadmin/user_reset_email.html:12
+#, python-format
+msgid ""
+"Your password on %(site_name)s has been reset. Now it is %(password)s. "
+"Please change it as soon as possible. "
+msgstr "Lozinka za vaš nalog na lokaciji %(site_name)s je resetovana. Nova lozinka je %(password)s. Promenite je što pre. "
+
+#: seahub/templates/team_quota_full.html:12
+#, python-format
+#| msgid "Your quota is almost full on %(site_name)s."
+msgid "The team quota is almost full on %(site_name)s."
+msgstr "Kvota tima je skoro popunjena na lokaciji %(site_name)s."
+
+#: seahub/templates/team_quota_full.html:14
+#: seahub/templates/user_quota_full.html:14
+msgid "Used:"
+msgstr "Zauzeto:"
+
+#: seahub/templates/text_diff.html:12
+msgid "modification details"
+msgstr "detalji izmene"
+
+#: seahub/templates/text_diff.html:15
+msgid "Back"
+msgstr "Nazad"
+
+#: seahub/templates/text_diff.html:21
+msgid "Current Path:"
+msgstr "Trenutna putanja:"
+
+#: seahub/templates/text_diff.html:33
+msgid "It's a newly-created blank file."
+msgstr "Ovo je novokreirana prazna datoteka."
+
+#: seahub/templates/text_diff.html:40
+msgid "before modification"
+msgstr "pre izmene"
+
+#: seahub/templates/text_diff.html:42
+msgid "after modification"
+msgstr "posle izmene"
+
+#: seahub/templates/user_quota_full.html:12
+#, python-format
+msgid "Your quota is almost full on %(site_name)s."
+msgstr "Vaša kvota je skoro popunjena na lokaciji %(site_name)s."
+
+#: seahub/templates/wiki/_wiki_publish_ssr_nav_item.html:5
+msgid "Toggle navigation section"
+msgstr "Prikaži/sakrij odeljak za navigaciju"
+
+#: seahub/templates/wiki/_wiki_publish_ssr_search.html:9
+#: seahub/templates/wiki/_wiki_publish_ssr_search.html:21
+#: seahub/templates/wiki/_wiki_publish_ssr_search.html:30
+#: seahub/templates/wiki/_wiki_publish_ssr_search.html:53
+#| msgid "Search Files"
+msgid "Search"
+msgstr "Pretraga"
+
+#: seahub/templates/wiki/_wiki_publish_ssr_search.html:31
+msgid "Searching..."
+msgstr "Pretraga..."
+
+#: seahub/templates/wiki/_wiki_publish_ssr_search.html:32
+msgid "Untitled"
+msgstr "Bez naslova"
+
+#: seahub/templates/wiki/_wiki_publish_ssr_search.html:33
+#| msgid "Current Path:"
+msgid "Current page"
+msgstr "Trenutna stranica"
+
+#: seahub/templates/wiki/_wiki_publish_ssr_search.html:34
+#| msgid "Search Files"
+msgid "Search failed"
+msgstr "Pretraga nije uspela"
+
+#: seahub/templates/wiki/_wiki_publish_ssr_search.html:61
+#: seahub/templates/wiki/_wiki_publish_ssr_search.html:110
+msgid "Clear search"
+msgstr "Obriši pretragu"
+
+#: seahub/templates/wiki/_wiki_publish_ssr_search.html:84
+msgid "Enter characters to start searching"
+msgstr "Unesite tekst da biste započeli pretragu"
+
+#: seahub/templates/wiki/_wiki_publish_ssr_search.html:94
+#| msgid "No result found"
+msgid "No result"
+msgstr "Nema rezultata"
+
+#: seahub/templates/wiki/_wiki_publish_ssr_search.html:99
+#: seahub/templates/wiki/_wiki_publish_ssr_search.html:104
+msgid "Wiki pages"
+msgstr "Wiki stranice"
+
+#: seahub/templates/wiki/wiki.html:24
+msgid "Last modified by"
+msgstr "Poslednji izmenio/la"
+
+#: seahub/templates/wiki/wiki_publish_ssr.html:45
+#| msgid "Wiki not found."
+msgid "Wiki navigation"
+msgstr "Wiki navigacija"
+
+#: seahub/templates/wiki/wiki_publish_ssr.html:51
+msgid "Close navigation"
+msgstr "Zatvori navigaciju"
+
+#: seahub/templates/wiki/wiki_publish_ssr.html:65
+#: seahub/templates/wiki/wiki_publish_ssr.html:71
+msgid "Pages"
+msgstr "Stranice"
+
+#: seahub/templates/wiki/wiki_publish_ssr.html:87
+msgid "Resize navigation panel"
+msgstr "Promeni veličinu panela za navigaciju"
+
+#: seahub/templates/wiki/wiki_publish_ssr.html:97
+#| msgid "Operation"
+msgid "Open navigation"
+msgstr "Otvori navigaciju"
+
+#: seahub/templates/wiki/wiki_publish_ssr.html:98
+#| msgid "Expiration"
+msgid "Navigation"
+msgstr "Navigacija"
+
+#: seahub/templates/wiki/wiki_publish_ssr.html:130
+msgid "Breadcrumb"
+msgstr "Putanja navigacije"
+
+#: seahub/templates/wiki/wiki_publish_ssr.html:140
+#: seahub/templates/wiki/wiki_publish_ssr.html:707
+msgid "Cover"
+msgstr "Naslovna slika"
+
+#: seahub/thumbnail/views.py:49 seahub/thumbnail/views.py:130
+#: seahub/views/__init__.py:503
+msgid "Invalid arguments."
+msgstr "Neispravni argumenti."
+
+#: seahub/thumbnail/views.py:65 seahub/thumbnail/views.py:143
+msgid "Failed to create thumbnail."
+msgstr "Kreiranje sličice nije uspelo."
+
+#: seahub/two_factor/forms.py:40 seahub/two_factor/forms.py:68
+#: seahub/two_factor/forms.py:189 seahub/two_factor/forms.py:195
+#: seahub/two_factor/forms.py:319
+#: seahub/two_factor/templates/two_factor/core/setup.html:79
+msgid "Token"
+msgstr "Token"
+
+#: seahub/two_factor/templates/two_factor/_wizard_actions.html:4
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:32
+#: seahub/two_factor/templates/two_factor/profile/disable.html:10
+msgid "Cancel"
+msgstr "Otkaži"
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:6
+msgid "Backup Tokens"
+msgstr "Rezervni tokeni"
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:8
+#| msgid ""
+#| " tokens can be used when your primary and backup\n"
+#| "phone numbers aren't available. The backup tokens below can be d\n"
+#| "for login verification. If you've used up all your backup tokens, \n"
+#| "can generate a new set of backup tokens. Only the backup tokens wn\n"
+#| "below will be valid."
+msgid ""
+"Backup tokens can be used when your primary and backup\n"
+"    phone numbers aren't available. The backup tokens below can be used\n"
+"    for login verification. If you've used up all your backup tokens, you\n"
+"    can generate a new set of backup tokens. Only the backup tokens shown\n"
+"    below will be valid."
+msgstr "Rezervne tokene možete koristiti kada vaši primarni i rezervni\n    brojevi telefona nisu dostupni. Rezervni tokeni ispod mogu se koristiti\n    za potvrdu prijave. Ako potrošite sve rezervne tokene, možete\n    generisati novi skup rezervnih tokena. Važe samo rezervni tokeni\n    prikazani ispod."
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:23
+msgid "Print these tokens and keep them somewhere safe."
+msgstr "Odštampajte ove tokene i čuvajte ih na bezbednom mestu."
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:26
+msgid "You don't have any backup codes yet."
+msgstr "Još nemate rezervne kodove."
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:33
+msgid "Generate Tokens"
+msgstr "Generiši tokene"
+
+#: seahub/two_factor/templates/two_factor/core/login.html:7
+msgid "Two-Factor Authentication"
+msgstr "Dvofaktorska autentifikacija"
+
+#: seahub/two_factor/templates/two_factor/core/login.html:19
+msgid ""
+"Open the two-factor authentication app on your device to view your "
+"authentication token and verify your identify."
+msgstr "Otvorite aplikaciju za dvofaktorsku autentifikaciju na uređaju da biste videli autentifikacioni token i potvrdili svoj identitet."
+
+#: seahub/two_factor/templates/two_factor/core/login.html:22
+msgid "Authentication token"
+msgstr "Autentifikacioni token"
+
+#: seahub/two_factor/templates/two_factor/core/login.html:27
+#, python-format
+msgid "Remember this computer for %(remember_days)s days"
+msgstr "Zapamti ovaj računar na %(remember_days)s dana"
+
+#: seahub/two_factor/templates/two_factor/core/login.html:32
+#: seahub/two_factor/templates/two_factor/core/login.html:52
+msgid "Incorrect code"
+msgstr "Pogrešan kôd"
+
+#: seahub/two_factor/templates/two_factor/core/login.html:36
+#: seahub/two_factor/templates/two_factor/core/login.html:57
+msgid "Verify"
+msgstr "Potvrdi"
+
+#: seahub/two_factor/templates/two_factor/core/login.html:41
+msgid "Don't have your phone?"
+msgstr "Nemate telefon?"
+
+#: seahub/two_factor/templates/two_factor/core/login.html:42
+msgid "Enter a two-factor backup code"
+msgstr "Unesite rezervni kôd za dvofaktorsku autentifikaciju"
+
+#: seahub/two_factor/templates/two_factor/core/login.html:48
+msgid "Backup code"
+msgstr "Rezervni kôd"
+
+#: seahub/two_factor/templates/two_factor/core/login.html:49
+msgid ""
+"You can enter one of your backup codes in case you lost access to your "
+"mobile device."
+msgstr "Možete uneti jedan od rezervnih kodova ako ste izgubili pristup mobilnom uređaju."
+
+#: seahub/two_factor/templates/two_factor/core/setup.html:11
+msgid "Enable Two-Factor Authentication"
+msgstr "Omogući dvofaktorsku autentifikaciju"
+
+#: seahub/two_factor/templates/two_factor/core/setup.html:20
+#| msgid ""
+#| "rt using a token generator, please use your\n"
+#| "  smartphone to scan the QR code below. For example, use Google\n"
+#| "  Authenticator. Then, enter the token generated by the app.\n"
+#| "  "
+msgid ""
+"To start using a token generator, please use your\n"
+"    smartphone to scan the QR code below. For example, use Google\n"
+"    Authenticator. Then, enter the token generated by the app.\n"
+"    "
+msgstr "Da biste počeli da koristite generator tokena,\n    pametnim telefonom skenirajte QR kôd ispod. Na primer, koristite Google\n    Authenticator. Zatim unesite token koji je generisala aplikacija.\n    "
+
+#: seahub/two_factor/templates/two_factor/core/setup.html:25
+msgid "Alternatively you may copy the Secret Key to your password manager"
+msgstr "Takođe možete da kopirate tajni ključ u upravljač lozinki"
+
+#: seahub/two_factor/templates/two_factor/core/setup.html:26
+msgid "Copied"
+msgstr "Kopirano"
+
+#: seahub/two_factor/templates/two_factor/core/setup.html:26
+msgid "Copy Secret Key"
+msgstr "Kopiraj tajni ključ"
+
+#: seahub/two_factor/templates/two_factor/profile/disable.html:6
+msgid "Disable Two-Factor Authentication"
+msgstr "Onemogući dvofaktorsku autentifikaciju"
+
+#: seahub/two_factor/templates/two_factor/profile/disable.html:8
+#| msgid ""
+#| "e about to disable two-factor authentication. This\n"
+#| "mpromises your account security, are you sure?"
+msgid ""
+"You are about to disable two-factor authentication. This compromises your "
+"account security, are you sure?"
+msgstr "Upravo ćete onemogućiti dvofaktorsku autentifikaciju. Time se ugrožava bezbednost vašeg naloga. Da li ste sigurni?"
+
+#: seahub/two_factor/templates/two_factor/profile/disable.html:11
+msgid "Disable"
+msgstr "Onemogući"
+
+#: seahub/two_factor/views/core.py:131
+msgid ""
+"Two-factor authentication is already enabled for this account. Please use "
+"the existing authenticator to sign in."
+msgstr "Dvofaktorska autentifikacija je već omogućena za ovaj nalog. Za prijavu koristite postojeću aplikaciju za autentifikaciju."
+
+#: seahub/utils/__init__.py:163
+msgid "permission error"
+msgstr "greška u dozvolama"
+
+#: seahub/views/__init__.py:322
+msgid "Unable to view recycle page"
+msgstr "Nije moguće pregledati stranicu korpe za otpatke"
+
+#: seahub/views/__init__.py:377
+msgid "Unable to view library modification"
+msgstr "Nije moguće pregledati izmene biblioteke"
+
+#: seahub/views/__init__.py:496
+msgid "Please specify history ID"
+msgstr "Navedite ID istorije"
+
+#: seahub/views/__init__.py:500
+msgid "Successfully restored the library."
+msgstr "Biblioteka je uspešno vraćena."
+
+#: seahub/views/__init__.py:507
+msgid "History you specified does not exist"
+msgstr "Navedena istorija ne postoji"
+
+#: seahub/views/__init__.py:509
+msgid "Unknown error"
+msgstr "Nepoznata greška"
+
+#: seahub/views/__init__.py:814 seahub/views/repo.py:291
+#, python-format
+msgid "\"%s\" does not exist."
+msgstr "„%s“ ne postoji."
+
+#: seahub/views/__init__.py:846
+#, python-format
+msgid "Unable to download \"%s\""
+msgstr "Nije moguće preuzeti „%s“"
+
+#: seahub/views/ajax.py:161 seahub/views/ajax.py:438
+msgid "Library is encrypted."
+msgstr "Biblioteka je šifrovana."
+
+#: seahub/views/ajax.py:167
+msgid "Error: no head commit id"
+msgstr "Greška: nedostaje ID najnovijeg urezivanja"
+
+#: seahub/views/ajax.py:318
+msgid "Wrong repo id"
+msgstr "Pogrešan ID skladišta"
+
+#: seahub/views/ajax.py:329 seahub/views/ajax.py:361
+msgid "Bad upload link token."
+msgstr "Neispravan token veze za otpremanje."
+
+#: seahub/views/ajax.py:335 seahub/views/file.py:565 seahub/views/file.py:597
+#: seahub/views/file.py:1331 seahub/views/file.py:1659
+#: seahub/views/file.py:2262 seahub/views/file.py:2267
+#: seahub/views/file.py:2274
+msgid "File does not exist"
+msgstr "Datoteka ne postoji"
+
+#: seahub/views/ajax.py:368
+msgid "Bad repo id in upload link."
+msgstr "Neispravan ID skladišta u vezi za otpremanje."
+
+#: seahub/views/ajax.py:460
+msgid "No conflict in the merge."
+msgstr "Nema sukoba pri spajanju."
+
+#: seahub/views/file.py:238
+msgid "HTTPError: failed to open file online"
+msgstr "HTTPError: otvaranje datoteke na mreži nije uspelo"
+
+#: seahub/views/file.py:242
+msgid "URLError: failed to open file online"
+msgstr "URLError: otvaranje datoteke na mreži nije uspelo"
+
+#: seahub/views/file.py:249
+msgid "The encoding you chose is not proper."
+msgstr "Izabrano kodiranje nije odgovarajuće."
+
+#: seahub/views/file.py:266 seahub/views/file.py:269
+msgid "Unknown file encoding"
+msgstr "Nepoznato kodiranje datoteke"
+
+#: seahub/views/file.py:397 seahub/views/file.py:415 seahub/views/file.py:841
+msgid "The library is encrypted, can not open file online."
+msgstr "Biblioteka je šifrovana, pa datoteka ne može da se otvori na mreži."
+
+#: seahub/views/file.py:399 seahub/views/file.py:845 seahub/views/file.py:973
+#: seahub/views/file.py:1018
+#, python-format
+msgid "File size surpasses %s, can not be opened online."
+msgstr "Veličina datoteke premašuje %s, pa ona ne može da se otvori na mreži."
+
+#: seahub/views/file.py:552 seahub/views/file.py:574 seahub/views/file.py:579
+#: seahub/views/file.py:633 seahub/views/file.py:1182
+#: seahub/views/file.py:1208 seahub/views/file.py:1238
+#: seahub/views/file.py:1387 seahub/views/file.py:1701
+#: seahub/views/file.py:2226
+msgid "Unable to view file"
+msgstr "Nije moguće pregledati datoteku"
+
+#: seahub/views/file.py:873 seahub/views/file.py:1130
+#: seahub/views/file.py:1498 seahub/views/file.py:1766
+msgid "Error when prepare Office Online file preview page."
+msgstr "Greška pri pripremi stranice za pregled datoteke u usluzi Office Online."
+
+#: seahub/views/file.py:908 seahub/views/file.py:1146
+#: seahub/views/file.py:1519 seahub/views/file.py:1783
+msgid "Error when prepare OnlyOffice file preview page."
+msgstr "Greška pri pripremi stranice za pregled datoteke u usluzi OnlyOffice."
+
+#: seahub/views/file.py:1274
+msgid "Unable to download file, invalid file path"
+msgstr "Nije moguće preuzeti datoteku: putanja datoteke nije ispravna"
+
+#: seahub/views/file.py:1283
+msgid "Unable to download file, wrong file path"
+msgstr "Nije moguće preuzeti datoteku: pogrešna putanja datoteke"
+
+#: seahub/views/file.py:1290
+msgid "Unable to download file."
+msgstr "Nije moguće preuzeti datoteku."
+
+#: seahub/views/file.py:1466 seahub/views/file.py:1548
+#: seahub/views/file.py:1744 seahub/views/file.py:1837
+#: seahub/views/repo.py:325
+#, python-format
+msgid "Share link for %s."
+msgstr "Veza za deljenje za %s."
+
+#: seahub/views/file.py:1986 seahub/views/file.py:1991
+msgid "Unable to download file"
+msgstr "Nije moguće preuzeti datoteku"
+
+#: seahub/views/file.py:2248
+#| msgid "Wiki not found."
+msgid "revision not found"
+msgstr "revizija nije pronađena"
+
+#: seahub/views/file.py:2255
+msgid "The original file does not exist"
+msgstr "Originalna datoteka ne postoji"
+
+#: seahub/views/mobile.py:35
+#, python-brace-format
+msgid "User {token.user} not found"
+msgstr "Korisnik {token.user} nije pronađen"
+
+#: seahub/views/mobile.py:39
+#, python-brace-format
+msgid "User {token.user} inactive"
+msgstr "Korisnik {token.user} je neaktivan"
+
+#: seahub/views/sso.py:179
+msgid ""
+"This link has already been visited, please click the login button on the "
+"client again"
+msgstr "Ova veza je već posećena. Ponovo kliknite na dugme za prijavu u klijentu."
+
+#: seahub/views/sso.py:204
+msgid "Invalid link, please click the login button on the client again"
+msgstr "Neispravna veza. Ponovo kliknite na dugme za prijavu u klijentu."
+
+#: seahub/views/sso.py:209
+msgid "Login timeout, please click the login button on the client again"
+msgstr "Vreme za prijavu je isteklo. Ponovo kliknite na dugme za prijavu u klijentu."
+
+#: seahub/views/sysadmin.py:135 seahub/views/sysadmin.py:151
+#: seahub/views/sysadmin.py:180
+#, python-brace-format
+#| msgid "Library %s not found."
+msgid "Library {repo_id} not found."
+msgstr "Biblioteka {repo_id} nije pronađena."
+
+#: seahub/views/sysadmin.py:158
+msgid "Commit id missing."
+msgstr "Nedostaje ID urezivanja."
+
+#: seahub/views/sysadmin.py:176
+msgid "Object id missing."
+msgstr "Nedostaje ID objekta."
+
+#: seahub/views/sysadmin.py:252 seahub/views/sysadmin.py:256
+msgid "Login ID"
+msgstr "ID za prijavu"
+
+#: seahub/views/sysadmin.py:386 seahub/views/sysadmin.py:412
+msgid "Failed to set quota: internal server error"
+msgstr "Postavljanje kvote nije uspelo: interna greška servera"
+
+#: seahub/views/sysadmin.py:433
+msgid "Failed to delete: the user is an organization creator"
+msgstr "Brisanje nije uspelo: korisnik je kreator organizacije"
+
+#: seahub/views/sysadmin.py:478
+#, python-format
+msgid "Successfully revoke the admin permission of %s"
+msgstr "Administratorska dozvola korisnika %s uspešno je opozvana"
+
+#: seahub/views/sysadmin.py:480
+msgid "Failed to revoke admin: the user does not exist"
+msgstr "Opoziv administratorske dozvole nije uspeo: korisnik ne postoji"
+
+#: seahub/views/sysadmin.py:599
+#, python-format
+msgid ""
+"Successfully reset password to %(passwd)s, an email has been sent to "
+"%(user)s."
+msgstr "Lozinka je uspešno resetovana na %(passwd)s, a poruka e-pošte poslata je korisniku %(user)s."
+
+#: seahub/views/sysadmin.py:614
+msgid "Failed to reset password: user does not exist"
+msgstr "Resetovanje lozinke nije uspelo: korisnik ne postoji"
+
+#: seahub/views/sysadmin.py:665
+#, python-format
+msgid "Fail to add user %s."
+msgstr "Dodavanje korisnika %s nije uspelo."
+
+#: seahub/views/sysadmin.py:690 seahub/views/sysadmin.py:703
+#, python-format
+msgid "Successfully added user %s. An email notification has been sent."
+msgstr "Korisnik %s je uspešno dodat. Poslato je obaveštenje e-poštom."
+
+#: seahub/views/sysadmin.py:693 seahub/views/sysadmin.py:706
+#, python-format
+#| msgid ""
+#| "sfully added user %s. An error accurs when sending email ification, ase "
+#| "check your email configuration."
+msgid ""
+"Successfully added user %s. An error occurs when sending email notification,"
+" please check your email configuration."
+msgstr "Korisnik %s je uspešno dodat. Došlo je do greške pri slanju obaveštenja e-poštom. Proverite podešavanja e-pošte."
+
+#: seahub/views/sysadmin.py:695 seahub/views/sysadmin.py:708
+#, python-format
+msgid "Successfully added user %s."
+msgstr "Korisnik %s je uspešno dodat."
+
+#: seahub/views/sysadmin.py:710
+#, python-format
+msgid ""
+"Successfully added user %s. But email notification can not be sent, because "
+"Email service is not properly configured."
+msgstr "Korisnik %s je uspešno dodat, ali obaveštenje nije moguće poslati jer servis e-pošte nije ispravno podešen."
+
+#: seahub/views/sysadmin.py:765
+msgid "Input should be a number"
+msgstr "Unos mora biti broj"
+
+#: seahub/views/sysadmin.py:771
+msgid "Success"
+msgstr "Uspešno"
+
+#: seahub/views/sysadmin.py:775
+msgid "Input number should be greater than 0"
+msgstr "Uneti broj mora biti veći od 0"
+
+#: seahub/views/sysadmin.py:816
+msgid "Successfully deleted."
+msgstr "Uspešno obrisano."
+
+#: seahub/views/sysadmin.py:846
+#, python-format
+msgid "Successfully set %s as admin."
+msgstr "Korisnik %s je uspešno postavljen za administratora."
+
+#: seahub/views/sysadmin.py:848
+#, python-format
+msgid "Failed to set %s as admin: user does not exist."
+msgstr "Postavljanje korisnika %s za administratora nije uspelo: korisnik ne postoji."
+
+#: seahub/views/sysadmin.py:867 seahub/views/sysadmin.py:868
+#: seahub/views/sysadmin.py:869 seahub/views/sysadmin.py:882
+#: seahub/views/sysadmin.py:883
+msgid "Optional"
+msgstr "Opciono"
+
+#: seahub/wiki/views.py:159
+msgid "Unable to view Wiki"
+msgstr "Nije moguće pregledati wiki"
+
+#~ msgid "Can not reset password, please contact LDAP admin."
+#~ msgstr "Can not reset password, please contact LDAP admin."
+
+#~ msgid "Enter a valid e-mail address."
+#~ msgstr "Enter a valid e-mail address."
+
+#~ msgid "It is required."
+#~ msgstr "It is required."
+
+#~ msgid "Failed. You can only invite {org_members_quota} members."
+#~ msgstr "Failed. You can only invite {org_members_quota} members."
+
+#~ msgid "New Password: "
+#~ msgstr "New Password: "
+
+#~ msgid "Confirm Password: "
+#~ msgstr "Confirm Password: "
+
+#~ msgid "We've sent a password reset email to your mailbox."
+#~ msgstr "We've sent a password reset email to your mailbox."
+
+#~ msgid ""
+#~ "Failed to create new user: the number of users exceeds the organization "
+#~ "quota. Please report to your organization (company) administrator."
+#~ msgstr ""
+#~ "Failed to create new user: the number of users exceeds the organization "
+#~ "quota. Please report to your organization (company) administrator."
+
+#~ msgid ""
+#~ "Login failed: failed to create user. Please report to your organization "
+#~ "(company) administrator."
+#~ msgstr ""
+#~ "Login failed: failed to create user. Please report to your organization "
+#~ "(company) administrator."
+
+#~ msgid "advanced"
+#~ msgstr "advanced"
+
+#~ msgid "Last Update"
+#~ msgstr "Last Update"
+
+#~ msgid "Size"
+#~ msgstr "Size"
+
+#~ msgid "%(total)s result"
+#~ msgid_plural "%(total)s results"
+#~ msgstr[0] "a484a55a04c0c78131bafc85f4ec9a09_pl_0"
+#~ msgstr[1] "a484a55a04c0c78131bafc85f4ec9a09_pl_1"
+#~ msgstr[2] "a484a55a04c0c78131bafc85f4ec9a09_pl_2"
+
+#~ msgid "Folder icon"
+#~ msgstr "Folder icon"
+
+#~ msgid "Invalid start date, should be yyyy-mm-dd"
+#~ msgstr "Invalid start date, should be yyyy-mm-dd"
+
+#~ msgid "Invalid end date, should be yyyy-mm-dd"
+#~ msgstr "Invalid end date, should be yyyy-mm-dd"
+
+#~ msgid "Start date should be earlier than end date."
+#~ msgstr "Start date should be earlier than end date."
+
+#~ msgid "Invalid argument."
+#~ msgstr "Invalid argument."
+
+#~ msgid "Invalid date."
+#~ msgstr "Invalid date."
+
+#~ msgid "Invalid file size."
+#~ msgstr "Invalid file size."
+
+#~ msgid "Invalid file size range."
+#~ msgstr "Invalid file size range."
+
+#~ msgid "Invalid date range."
+#~ msgstr "Invalid date range."
+
+#~ msgid "Insufficient password strength"
+#~ msgstr "Insufficient password strength"
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created file <a"
+#~ " href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created file <a"
+#~ " href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created file <a"
+#~ " href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
+#~ "%(obj_path_count_minus_one)s other file(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created file <a"
+#~ " href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
+#~ "%(obj_path_count_minus_one)s other file(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted file "
+#~ "%(obj_name)s in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted file "
+#~ "%(obj_name)s in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted file "
+#~ "%(obj_name)s and %(obj_path_count_minus_one)s other file(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted file "
+#~ "%(obj_name)s and %(obj_path_count_minus_one)s other file(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> restored file "
+#~ "<a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> restored file "
+#~ "<a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> renamed file "
+#~ "%(old_obj_name)s to <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in "
+#~ "library <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> renamed file "
+#~ "%(old_obj_name)s to <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in "
+#~ "library <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved file <a "
+#~ "href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved file <a "
+#~ "href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved file <a "
+#~ "href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
+#~ "%(obj_path_count_minus_one)s other file(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved file <a "
+#~ "href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
+#~ "%(obj_path_count_minus_one)s other file(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> updated file <a"
+#~ " href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> updated file <a"
+#~ " href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created folder "
+#~ "<a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created folder "
+#~ "<a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created folder "
+#~ "<a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
+#~ "%(obj_path_count_minus_one)s other folder(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> created folder "
+#~ "<a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
+#~ "%(obj_path_count_minus_one)s other folder(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted folder "
+#~ "%(obj_name)s in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted folder "
+#~ "%(obj_name)s in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted folder "
+#~ "%(obj_name)s and %(obj_path_count_minus_one)s other folder(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> deleted folder "
+#~ "%(obj_name)s and %(obj_path_count_minus_one)s other folder(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> restored folder"
+#~ " <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> restored folder"
+#~ " <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> renamed folder "
+#~ "%(old_obj_name)s to <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in "
+#~ "library <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> renamed folder "
+#~ "%(old_obj_name)s to <a href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in "
+#~ "library <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved folder <a"
+#~ " href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved folder <a"
+#~ " href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+
+#~ msgid ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved folder <a"
+#~ " href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
+#~ "%(obj_path_count_minus_one)s other folder(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."
+#~ msgstr ""
+#~ " User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> moved folder <a"
+#~ " href=\"%(url_base)s%(obj_url)s\">%(obj_name)s</a> and "
+#~ "%(obj_path_count_minus_one)s other folder(s) in library <a "
+#~ "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a>."

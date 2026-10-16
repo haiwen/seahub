@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-09 11:09+0800\n"
+"POT-Creation-Date: 2026-10-16 15:38+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Vladimir <pash.vld@gmail.com>, 2015-2026\n"
 "Language-Team: Russian (http://app.transifex.com/haiwen/seahub/language/ru/)\n"
@@ -165,7 +165,7 @@ msgstr "Невозможно сбросить пароль."
 #: seahub/api2/endpoints/admin/groups.py:135
 #: seahub/api2/endpoints/admin/groups.py:275
 #: seahub/api2/endpoints/groups.py:237 seahub/api2/endpoints/groups.py:310
-#: seahub/api2/views.py:4633 seahub/group/forms.py:36
+#: seahub/api2/views.py:4644 seahub/group/forms.py:36
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
 "brackets or underscore."
@@ -193,6 +193,16 @@ msgstr "В этом отделе есть суб-отделы."
 msgid "My Library"
 msgstr "Моя библиотека"
 
+#: seahub/api2/endpoints/admin/group_owned_libraries.py:92
+#: seahub/api2/endpoints/admin/libraries.py:224
+#: seahub/api2/endpoints/group_libraries.py:211
+#: seahub/api2/endpoints/group_owned_libraries.py:141
+#: seahub/api2/views.py:1148 seahub/api2/views.py:1391
+#: seahub/api2/views.py:4820
+#| msgid "User %s already exists."
+msgid "Library name already exists."
+msgstr ""
+
 #: seahub/api2/endpoints/admin/groups.py:223
 #: seahub/api2/endpoints/groups.py:341
 #, python-format
@@ -212,16 +222,16 @@ msgid ""
 "institution"
 msgstr "Не удалось добавить %s в учреждение: пользователь уже принадлежит этому учреждению"
 
-#: seahub/api2/endpoints/admin/libraries.py:291 seahub/views/sysadmin.py:792
+#: seahub/api2/endpoints/admin/libraries.py:296 seahub/views/sysadmin.py:792
 msgid "System library can not be deleted."
 msgstr "Системная библиотека не может быть удалена."
 
-#: seahub/api2/endpoints/admin/libraries.py:413 seahub/api2/views.py:1897
+#: seahub/api2/endpoints/admin/libraries.py:418 seahub/api2/views.py:1905
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
 msgstr "Передача не удалась: роль %s в %s, невозможно добавить библиотеку.."
 
-#: seahub/api2/endpoints/admin/libraries.py:439 seahub/api2/views.py:1902
+#: seahub/api2/endpoints/admin/libraries.py:444 seahub/api2/views.py:1910
 msgid "Library can not be transferred to owner."
 msgstr "Библиотека не может быть передана владельцу."
 
@@ -238,26 +248,26 @@ msgstr "Ваша команда {org.org_name} была деактивирова
 msgid "There is an associated published library."
 msgstr "Есть связанная опубликованная библиотека."
 
-#: seahub/api2/endpoints/admin/shares.py:185
+#: seahub/api2/endpoints/admin/shares.py:188
 #, python-format
 msgid "User %s is already library owner."
 msgstr "Пользователь %s уже владелец библиотеки."
 
-#: seahub/api2/endpoints/admin/shares.py:193
+#: seahub/api2/endpoints/admin/shares.py:196
 #: seahub/api2/endpoints/invitations.py:51
 #: seahub/api2/endpoints/invitations.py:116
-#: seahub/api2/endpoints/repo_share_invitations.py:157
+#: seahub/api2/endpoints/repo_share_invitations.py:160
 #, python-format
 msgid "Email %s invalid."
 msgstr "Email %s недействителен."
 
-#: seahub/api2/endpoints/admin/shares.py:211
-#: seahub/api2/endpoints/admin/shares.py:268
-#: seahub/api2/endpoints/dir_shared_items.py:380
-#: seahub/api2/endpoints/dir_shared_items.py:493
-#: seahub/api2/endpoints/group_owned_libraries.py:969
-#: seahub/api2/endpoints/group_owned_libraries.py:1247
-#: seahub/api2/endpoints/repo_share_invitations.py:199
+#: seahub/api2/endpoints/admin/shares.py:214
+#: seahub/api2/endpoints/admin/shares.py:271
+#: seahub/api2/endpoints/dir_shared_items.py:386
+#: seahub/api2/endpoints/dir_shared_items.py:499
+#: seahub/api2/endpoints/group_owned_libraries.py:977
+#: seahub/api2/endpoints/group_owned_libraries.py:1261
+#: seahub/api2/endpoints/repo_share_invitations.py:202
 #, python-format
 msgid "This item has been shared to %s."
 msgstr "Этот элемент доступен для %s."
@@ -477,7 +487,7 @@ msgstr "Файл с вирусом не найден."
 #: seahub/api2/endpoints/file_tag.py:175
 #: seahub/api2/endpoints/invitations.py:84
 #: seahub/api2/endpoints/repo_set_password.py:72
-#: seahub/api2/endpoints/repo_share_invitations.py:210
+#: seahub/api2/endpoints/repo_share_invitations.py:213
 #: seahub/api2/endpoints/send_upload_link_email.py:126
 #: seahub/api2/endpoints/send_upload_link_email.py:145
 #: seahub/api2/endpoints/share_links.py:615
@@ -486,7 +496,7 @@ msgstr "Файл с вирусом не найден."
 #: seahub/api2/endpoints/subscription.py:129
 #: seahub/api2/endpoints/upload_links.py:335
 #: seahub/api2/endpoints/wiki2.py:523 seahub/api2/endpoints/wiki2.py:551
-#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4139
+#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4147
 #: seahub/notifications/models.py:628 seahub/notifications/models.py:669
 #: seahub/notifications/models.py:711 seahub/notifications/models.py:762
 #: seahub/notifications/models.py:818 seahub/notifications/models.py:845
@@ -517,12 +527,12 @@ msgstr "Неправильный путь назначения"
 
 #: seahub/api2/endpoints/copy_move_task.py:148
 #: seahub/api2/endpoints/move_folder_merge.py:176
-#: seahub/api2/endpoints/repos_batch.py:497
-#: seahub/api2/endpoints/wiki2.py:2027 seahub/api2/views.py:1990
-#: seahub/api2/views.py:2030 seahub/api2/views.py:2092
-#: seahub/api2/views.py:2136 seahub/api2/views.py:2182
-#: seahub/api2/views.py:2231 seahub/api2/views.py:2698
-#: seahub/api2/views.py:2806 seahub/seadoc/apis.py:471
+#: seahub/api2/endpoints/repos_batch.py:505
+#: seahub/api2/endpoints/wiki2.py:2027 seahub/api2/views.py:1998
+#: seahub/api2/views.py:2038 seahub/api2/views.py:2100
+#: seahub/api2/views.py:2144 seahub/api2/views.py:2190
+#: seahub/api2/views.py:2239 seahub/api2/views.py:2706
+#: seahub/api2/views.py:2814 seahub/seadoc/apis.py:471
 #: seahub/seadoc/apis.py:598 seahub/seadoc/apis.py:692
 #: seahub/seadoc/apis.py:3249
 msgid "Out of quota."
@@ -548,19 +558,19 @@ msgstr "Файл заблокирован"
 msgid "Cancel failed"
 msgstr "Не удалось отменить"
 
-#: seahub/api2/endpoints/dir_shared_items.py:364
-#: seahub/api2/endpoints/group_owned_libraries.py:953
+#: seahub/api2/endpoints/dir_shared_items.py:370
+#: seahub/api2/endpoints/group_owned_libraries.py:961
 msgid "username invalid."
 msgstr "имя пользователя недействительно."
 
-#: seahub/api2/endpoints/dir_shared_items.py:373
-#: seahub/api2/endpoints/group_owned_libraries.py:962
+#: seahub/api2/endpoints/dir_shared_items.py:379
+#: seahub/api2/endpoints/group_owned_libraries.py:970
 #, python-format
 msgid "User %s not found."
 msgstr "Пользователь %s не найден."
 
-#: seahub/api2/endpoints/dir_shared_items.py:404
-#: seahub/api2/endpoints/dir_shared_items.py:420
+#: seahub/api2/endpoints/dir_shared_items.py:410
+#: seahub/api2/endpoints/dir_shared_items.py:426
 #| msgid "Library can not be transferred to owner."
 msgid "Library can not be shared to owner"
 msgstr "Библиотека не может быть передана владельцу"
@@ -568,7 +578,7 @@ msgstr "Библиотека не может быть передана влад�
 #: seahub/api2/endpoints/file.py:204 seahub/api2/endpoints/upload_links.py:540
 #: seahub/api2/endpoints/via_repo_token.py:966
 #: seahub/api2/endpoints/wiki2.py:661 seahub/api2/endpoints/wikis.py:128
-#: seahub/api2/views.py:2038 seahub/seadoc/apis.py:3256
+#: seahub/api2/views.py:2046 seahub/seadoc/apis.py:3256
 msgid "The number of files in library exceeds the limit"
 msgstr "Количество файлов в библиотеке превышает лимит"
 
@@ -628,7 +638,7 @@ msgstr "Пользователь %s уже участник группы."
 
 #: seahub/api2/endpoints/group_members.py:116
 #: seahub/api2/endpoints/group_members.py:367
-#: seahub/api2/endpoints/group_members.py:526 seahub/api2/views.py:1892
+#: seahub/api2/endpoints/group_members.py:526 seahub/api2/views.py:1900
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
 #: seahub/organizations/api/admin/users.py:337
@@ -659,8 +669,8 @@ msgstr "Email или LoginID"
 msgid "Failed to export Excel"
 msgstr "Не удалось экспортировать в Excel"
 
-#: seahub/api2/endpoints/group_owned_libraries.py:399
-#: seahub/api2/endpoints/group_owned_libraries.py:675
+#: seahub/api2/endpoints/group_owned_libraries.py:404
+#: seahub/api2/endpoints/group_owned_libraries.py:680
 msgid "Permission already exists."
 msgstr "Разрешение уже существует."
 
@@ -671,7 +681,7 @@ msgstr "%(user)s отозвал доступ к %(site_name)s."
 
 #: seahub/api2/endpoints/invitations.py:55
 #: seahub/api2/endpoints/invitations.py:123
-#: seahub/api2/endpoints/repo_share_invitations.py:164
+#: seahub/api2/endpoints/repo_share_invitations.py:167
 msgid "The email address is not allowed to be invited as a guest."
 msgstr "Адрес электронной почты не может быть приглашен в качестве гостя."
 
@@ -683,7 +693,7 @@ msgstr "%s уже приглашен."
 
 #: seahub/api2/endpoints/invitations.py:68
 #: seahub/api2/endpoints/invitations.py:144
-#: seahub/api2/endpoints/repo_share_invitations.py:175
+#: seahub/api2/endpoints/repo_share_invitations.py:178
 #: seahub/api2/endpoints/share_link_auth.py:138 seahub/base/accounts.py:1253
 #: seahub/organizations/api/admin/users.py:268
 #, python-format
@@ -692,14 +702,14 @@ msgstr "Пользователь %s уже существует."
 
 #: seahub/api2/endpoints/invitations.py:72
 #: seahub/api2/endpoints/invitations.py:151
-#: seahub/api2/endpoints/repo_share_invitations.py:182
+#: seahub/api2/endpoints/repo_share_invitations.py:185
 msgid ""
 "An (inactive) regular account already exists for this mail address, can not "
 "proceed to create guest account"
 msgstr "Для этого почтового адреса уже существует (неактивная) обычная учетная запись, невозможно создать гостевую учетную запись"
 
 #: seahub/api2/endpoints/invitations.py:165
-#: seahub/api2/endpoints/repo_share_invitations.py:224
+#: seahub/api2/endpoints/repo_share_invitations.py:227
 #: seahub/api2/endpoints/send_share_link_email.py:34
 #: seahub/api2/endpoints/send_upload_link_email.py:34 seahub/auth/forms.py:153
 #: seahub/organizations/api/admin/users.py:791
@@ -743,7 +753,7 @@ msgstr "Пароль может содержать только цифры, за
 #: seahub/api2/endpoints/share_links.py:394
 #: seahub/api2/endpoints/share_links.py:739
 #: seahub/api2/endpoints/upload_links.py:208
-#: seahub/api2/endpoints/upload_links.py:397 seahub/api2/views.py:3699
+#: seahub/api2/endpoints/upload_links.py:397 seahub/api2/views.py:3707
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr "Срок действия должен быть больше или равен  %s"
@@ -753,7 +763,7 @@ msgstr "Срок действия должен быть больше или ра
 #: seahub/api2/endpoints/share_links.py:400
 #: seahub/api2/endpoints/share_links.py:745
 #: seahub/api2/endpoints/upload_links.py:214
-#: seahub/api2/endpoints/upload_links.py:403 seahub/api2/views.py:3705
+#: seahub/api2/endpoints/upload_links.py:403 seahub/api2/views.py:3713
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr "Срок действия должен быть меньше или равен %s"
@@ -806,11 +816,11 @@ msgstr "Не удается сбросить пароль этой библио�
 msgid "New password of library %s"
 msgstr "Новый пароль библиотеки %s"
 
-#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4136
+#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4144
 msgid "Wrong password"
 msgstr "Неверный пароль"
 
-#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4142
+#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4150
 msgid "Decrypt library error"
 msgstr "Ошибка расшифровки библиотеки"
 
@@ -818,21 +828,21 @@ msgstr "Ошибка расшифровки библиотеки"
 msgid "Wrong old password"
 msgstr "Неверный старый пароль"
 
-#: seahub/api2/endpoints/repos_batch.py:1300
-#: seahub/api2/endpoints/repos_batch.py:1559
-#: seahub/api2/endpoints/repos_batch.py:1651
-#: seahub/api2/endpoints/repos_batch.py:1732
+#: seahub/api2/endpoints/repos_batch.py:1308
+#: seahub/api2/endpoints/repos_batch.py:1567
+#: seahub/api2/endpoints/repos_batch.py:1659
+#: seahub/api2/endpoints/repos_batch.py:1740
 #, python-format
 msgid "File %s is locked."
 msgstr "Файл %s заблокирован."
 
-#: seahub/api2/endpoints/repos_batch.py:1310
-#: seahub/api2/endpoints/repos_batch.py:1569
+#: seahub/api2/endpoints/repos_batch.py:1318
+#: seahub/api2/endpoints/repos_batch.py:1577
 #, python-format
 msgid "Can't move folder %s, please check its permission."
 msgstr "Не удается переместить папку %s, пожалуйста, проверьте ее разрешения."
 
-#: seahub/api2/endpoints/repos_batch.py:1659
+#: seahub/api2/endpoints/repos_batch.py:1667
 #, python-format
 msgid "Can't delete folder %s, please check its permission."
 msgstr "Не удается удалить папку %s, пожалуйста, проверьте ее разрешения."
@@ -985,7 +995,7 @@ msgstr "Необходимо имя."
 msgid "A share link for you"
 msgstr "Общедоступная ссылка"
 
-#: seahub/api2/views.py:1888
+#: seahub/api2/views.py:1896
 #| msgid "Permission error: only group staff can add member"
 msgid "Permission error: you are not the admin of the department"
 msgstr "Ошибка разрешения: вы не являетесь администратором отдела"
@@ -1632,10 +1642,10 @@ msgstr "Команда %(site_name)s"
 
 #: seahub/group/views.py:110 seahub/share/views.py:137
 #: seahub/views/__init__.py:471 seahub/views/ajax.py:378
-#: seahub/views/ajax.py:424 seahub/views/file.py:1319
-#: seahub/views/file.py:1347 seahub/views/file.py:1633
-#: seahub/views/file.py:1673 seahub/views/file.py:2120
-#: seahub/views/file.py:2126 seahub/views/repo.py:115 seahub/views/repo.py:172
+#: seahub/views/ajax.py:424 seahub/views/file.py:1311
+#: seahub/views/file.py:1339 seahub/views/file.py:1625
+#: seahub/views/file.py:1665 seahub/views/file.py:2112
+#: seahub/views/file.py:2118 seahub/views/repo.py:115 seahub/views/repo.py:172
 #: seahub/views/repo.py:230 seahub/views/repo.py:258 seahub/views/repo.py:287
 #: seahub/views/repo.py:384
 msgid "Permission denied"
@@ -1990,7 +2000,7 @@ msgstr "Файл <a href='%(file_url)s'>%(file_name)s</a> имеет новый 
 #| "_user)s has sent you a request for <a href='%(file_url)s'>draft ft_id)s</a>"
 msgid ""
 "%(from_user)s mentioned you in <a href='%(file_url)s'>%(file_name)s</a>"
-msgstr ""
+msgstr "%(from_user)s упомянул вас в <a href='%(file_url)s'>%(file_name)s</a>"
 
 #: seahub/notifications/models.py:1013
 #, python-format
@@ -2175,7 +2185,7 @@ msgstr "Файл <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> имее
 msgid ""
 "%(author)s mentioned you in <a "
 "href=\"%(url_base)s%(file_url)s\">%(file_name)s</a>"
-msgstr ""
+msgstr "%(author)s упомянул вас в <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a>"
 
 #: seahub/notifications/templates/notifications/notice_email.html:72
 #, python-format
@@ -3254,7 +3264,7 @@ msgstr "Не удалось создать эскиз."
 #: seahub/two_factor/forms.py:40 seahub/two_factor/forms.py:68
 #: seahub/two_factor/forms.py:189 seahub/two_factor/forms.py:195
 #: seahub/two_factor/forms.py:319
-#: seahub/two_factor/templates/two_factor/core/setup.html:163
+#: seahub/two_factor/templates/two_factor/core/setup.html:79
 msgid "Token"
 msgstr "Токен"
 
@@ -3342,11 +3352,11 @@ msgid ""
 "mobile device."
 msgstr "Вы можете ввести один из своих резервных кодов, если вы потеряли доступ к мобильному устройству."
 
-#: seahub/two_factor/templates/two_factor/core/setup.html:95
+#: seahub/two_factor/templates/two_factor/core/setup.html:11
 msgid "Enable Two-Factor Authentication"
 msgstr "Включить двухфакторную аутентификацию"
 
-#: seahub/two_factor/templates/two_factor/core/setup.html:104
+#: seahub/two_factor/templates/two_factor/core/setup.html:20
 #| msgid ""
 #| "rt using a token generator, please use your\n"
 #| "  smartphone to scan the QR code below. For example, use Google\n"
@@ -3359,20 +3369,17 @@ msgid ""
 "    "
 msgstr "Чтобы начать использовать генератор токенов,\nотсканируйте QR-код, указанный ниже, с помощью смартфона. Например, используйте Google\nAuthenticator. Затем введите токен, сгенерированный приложением."
 
-#: seahub/two_factor/templates/two_factor/core/setup.html:109
+#: seahub/two_factor/templates/two_factor/core/setup.html:25
 msgid "Alternatively you may copy the Secret Key to your password manager"
 msgstr "В качестве альтернативы вы можете скопировать секретный ключ в свой менеджер паролей"
 
-#: seahub/two_factor/templates/two_factor/core/setup.html:110
-msgid "Copy Secret Key"
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/setup.html:230
-#: seahub/two_factor/templates/two_factor/core/setup.html:233
-#: seahub/two_factor/templates/two_factor/core/setup.html:234
-#: seahub/two_factor/templates/two_factor/core/setup.html:239
+#: seahub/two_factor/templates/two_factor/core/setup.html:26
 msgid "Copied"
 msgstr "Скопировано"
+
+#: seahub/two_factor/templates/two_factor/core/setup.html:26
+msgid "Copy Secret Key"
+msgstr "Копировать секретный ключ"
 
 #: seahub/two_factor/templates/two_factor/profile/disable.html:6
 msgid "Disable Two-Factor Authentication"
@@ -3395,7 +3402,7 @@ msgstr "Отключить"
 msgid ""
 "Two-factor authentication is already enabled for this account. Please use "
 "the existing authenticator to sign in."
-msgstr ""
+msgstr "Для этой учетной записи уже включена двухфакторная аутентификация. Для входа используйте существующий аутентификатор."
 
 #: seahub/utils/__init__.py:163
 msgid "permission error"
@@ -3452,9 +3459,9 @@ msgid "Bad upload link token."
 msgstr "Плохой токен ссылки загрузки."
 
 #: seahub/views/ajax.py:335 seahub/views/file.py:565 seahub/views/file.py:597
-#: seahub/views/file.py:1339 seahub/views/file.py:1667
-#: seahub/views/file.py:2270 seahub/views/file.py:2275
-#: seahub/views/file.py:2282
+#: seahub/views/file.py:1331 seahub/views/file.py:1659
+#: seahub/views/file.py:2262 seahub/views/file.py:2267
+#: seahub/views/file.py:2274
 msgid "File does not exist"
 msgstr "Файл не существует"
 
@@ -3493,52 +3500,52 @@ msgid "File size surpasses %s, can not be opened online."
 msgstr "Размер файла превышает %s, и не может быть открыт в онлайн режиме."
 
 #: seahub/views/file.py:552 seahub/views/file.py:574 seahub/views/file.py:579
-#: seahub/views/file.py:633 seahub/views/file.py:1190
-#: seahub/views/file.py:1216 seahub/views/file.py:1246
-#: seahub/views/file.py:1395 seahub/views/file.py:1709
-#: seahub/views/file.py:2234
+#: seahub/views/file.py:633 seahub/views/file.py:1182
+#: seahub/views/file.py:1208 seahub/views/file.py:1238
+#: seahub/views/file.py:1387 seahub/views/file.py:1701
+#: seahub/views/file.py:2226
 msgid "Unable to view file"
 msgstr "Не удается посмотреть файл"
 
-#: seahub/views/file.py:873 seahub/views/file.py:1138
-#: seahub/views/file.py:1506 seahub/views/file.py:1774
+#: seahub/views/file.py:873 seahub/views/file.py:1130
+#: seahub/views/file.py:1498 seahub/views/file.py:1766
 msgid "Error when prepare Office Online file preview page."
 msgstr "Ошибка при подготовке страницы предварительного просмотра файла Office Online."
 
-#: seahub/views/file.py:908 seahub/views/file.py:1154
-#: seahub/views/file.py:1527 seahub/views/file.py:1791
+#: seahub/views/file.py:908 seahub/views/file.py:1146
+#: seahub/views/file.py:1519 seahub/views/file.py:1783
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr "Ошибка при подготовке страницы предварительного просмотра файла OnlyOffice."
 
-#: seahub/views/file.py:1282
+#: seahub/views/file.py:1274
 msgid "Unable to download file, invalid file path"
 msgstr "Невозможно скачать файл, неверный путь"
 
-#: seahub/views/file.py:1291
+#: seahub/views/file.py:1283
 msgid "Unable to download file, wrong file path"
 msgstr "Невозможно скачать файл, неправильный путь"
 
-#: seahub/views/file.py:1298
+#: seahub/views/file.py:1290
 msgid "Unable to download file."
 msgstr "Не удается загрузить файл."
 
-#: seahub/views/file.py:1474 seahub/views/file.py:1556
-#: seahub/views/file.py:1752 seahub/views/file.py:1845
+#: seahub/views/file.py:1466 seahub/views/file.py:1548
+#: seahub/views/file.py:1744 seahub/views/file.py:1837
 #: seahub/views/repo.py:325
 #, python-format
 msgid "Share link for %s."
 msgstr "Общедоступная ссылка для %s."
 
-#: seahub/views/file.py:1994 seahub/views/file.py:1999
+#: seahub/views/file.py:1986 seahub/views/file.py:1991
 msgid "Unable to download file"
 msgstr "Не удается скачать файл"
 
-#: seahub/views/file.py:2256
+#: seahub/views/file.py:2248
 #| msgid "Wiki not found."
 msgid "revision not found"
 msgstr "редакция не найдена"
 
-#: seahub/views/file.py:2263
+#: seahub/views/file.py:2255
 msgid "The original file does not exist"
 msgstr "Исходный файл не существует"
 

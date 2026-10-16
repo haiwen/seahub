@@ -236,11 +236,11 @@
   "Underline": "Souligné",
   "Row_number": "Numéro de ligne",
   "Column_number": "Numéro de colonne",
-  "This_link_is_not_verified": "This link is not verified",
-  "This_link_is_not_verified_tip": "Before continuing, please ensure you trust this link. If you do not trust the URL, do not open the link to access the site.",
+  "This_link_is_not_verified": "Ce lien n'est pas vérifié.",
+  "This_link_is_not_verified_tip": "Le lien n'est pas vérifié.",
   "Copy_link": "Copier le lien",
   "Zoom_in": "Agrandir",
   "Zoom_out": "Dézoomer",
-  "Divider": "Divider",
+  "Divider": "Séparateur",
   "Close": "Fermer"
 }
