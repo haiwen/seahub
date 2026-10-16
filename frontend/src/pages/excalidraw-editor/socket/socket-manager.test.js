@@ -26,6 +26,11 @@ jest.mock('@excalidraw/excalidraw', () => ({
   },
 }));
 
+jest.mock('uuid', () => {
+  let operationId = 0;
+  return { v4: jest.fn(() => `operation-${operationId++}`) };
+});
+
 jest.mock('./socket-client', () => jest.fn().mockImplementation(() => ({
   broadcastSceneElements: jest.fn(),
 })));
@@ -109,7 +114,7 @@ describe('SocketManager remote scene baseline', () => {
     const mergedElements = [{ id: 'local', version: 2 }, ...remoteElements];
     expect(manager.socketClient.broadcastSceneElements).toHaveBeenCalledTimes(1);
     expect(manager.socketClient.broadcastSceneElements).toHaveBeenCalledWith(
-      mergedElements, 8, manager.sendOperationsCallback,
+      expect.objectContaining({ elements: mergedElements }), 8, expect.any(Function), expect.any(Function),
     );
     expect(manager.excalidrawAPI.updateScene).toHaveBeenCalledWith({
       elements: mergedElements, captureUpdate: CaptureUpdateAction.NEVER,
@@ -118,7 +123,7 @@ describe('SocketManager remote scene baseline', () => {
     expect(manager.previewElements).toBeNull();
     expect(manager.previewCommitTimer).toBeNull();
 
-    manager.sendOperationsCallback({ success: true, version: 9 });
+    manager.socketClient.broadcastSceneElements.mock.calls[0][2]({ success: true, version: 9 });
     manager.updatePreview(mergedElements);
     jest.advanceTimersByTime(PREVIEW_COMMIT_DELAY);
     expect(manager.socketClient.broadcastSceneElements).toHaveBeenCalledTimes(1);
@@ -133,9 +138,10 @@ describe('SocketManager remote scene baseline', () => {
     manager.commitPreview();
 
     expect(manager.socketClient.broadcastSceneElements).toHaveBeenCalledWith(
-      [{ id: 'local', version: 2, isDeleted: true }, ...remoteElements],
+      expect.objectContaining({ elements: [{ id: 'local', version: 2, isDeleted: true }, ...remoteElements] }),
       8,
-      manager.sendOperationsCallback,
+      expect.any(Function),
+      expect.any(Function),
     );
   });
 
@@ -166,9 +172,10 @@ describe('SocketManager remote scene baseline', () => {
     manager.commitPreview();
 
     expect(manager.socketClient.broadcastSceneElements).toHaveBeenCalledWith(
-      [{ id: 'local', version: 2 }, { id: 'remote', version: 5 }],
+      expect.objectContaining({ elements: [{ id: 'local', version: 2 }, { id: 'remote', version: 5 }] }),
       10,
-      manager.sendOperationsCallback,
+      expect.any(Function),
+      expect.any(Function),
     );
     expect(manager.pendingRemoteUpdates).toEqual([]);
   });
@@ -197,7 +204,7 @@ describe('SocketManager remote scene baseline', () => {
     const mergedElements = [finalLocalElement, remoteElements[1]];
     expect(sceneElements).toEqual(mergedElements);
     expect(manager.socketClient.broadcastSceneElements).toHaveBeenCalledWith(
-      mergedElements, 8, manager.sendOperationsCallback,
+      expect.objectContaining({ elements: mergedElements }), 8, expect.any(Function), expect.any(Function),
     );
     expect(manager.pendingRemoteUpdates).toEqual([]);
   });
@@ -224,7 +231,7 @@ describe('SocketManager remote scene baseline', () => {
 
     expect(sceneElements).toEqual(localElements);
     expect(manager.socketClient.broadcastSceneElements).toHaveBeenCalledWith(
-      localElements, 8, manager.sendOperationsCallback,
+      expect.objectContaining({ elements: localElements }), 8, expect.any(Function), expect.any(Function),
     );
   });
 
@@ -242,7 +249,7 @@ describe('SocketManager remote scene baseline', () => {
 
     expect(sceneElements).toEqual([laterRemoteElement]);
     expect(manager.pendingRemoteUpdates).toEqual([]);
-    manager.sendOperationsCallback({ success: true, version: 10 });
+    manager.socketClient.broadcastSceneElements.mock.calls[0][2]({ success: true, version: 10 });
 
     const latestRemoteElement = { id: 'local', version: 7, text: 'latest remote' };
     manager.handleRemoteSceneUpdated({ elements: [latestRemoteElement], version: 11 });
@@ -283,7 +290,7 @@ describe('SocketManager remote scene baseline', () => {
 
     expect(sceneElements).toEqual([{ id: 'local', version: 2, text: 'draft' }]);
     expect(manager.socketClient.broadcastSceneElements).toHaveBeenCalledWith(
-      sceneElements, 8, manager.sendOperationsCallback,
+      expect.objectContaining({ elements: sceneElements }), 8, expect.any(Function), expect.any(Function),
     );
   });
 });
