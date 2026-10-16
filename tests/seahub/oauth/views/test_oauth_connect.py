@@ -257,6 +257,32 @@ class OAuthConnectTest(BaseTestCase):
         self.assertEqual(self.user.username,
                          Profile.objects.get_profile_by_contact_email(contact_email).user)
 
+    def test_oauth_login_does_not_take_existing_login_id(self):
+        login_id = 'login_%s' % randstring(8)
+        Profile.objects.add_or_update(self.user.username, login_id=login_id)
+
+        self._login_with_oauth(
+            {'sub': 'oauth-uid', 'login': login_id},
+            {'sub': (True, 'uid'), 'login': (True, 'login_id')})
+
+        username = self.client.session[oauth_views.auth.SESSION_KEY]
+        self.assertNotEqual(self.user.username, username)
+        self.assertTrue(SocialAuthUser.objects.filter(
+            username=username, provider='oauth', uid='oauth-uid').exists())
+        self.assertEqual(self.user.username,
+                         Profile.objects.get(login_id=login_id).user)
+        self.assertFalse(Profile.objects.get_profile_by_user(username).login_id)
+
+    def test_oauth_login_sets_available_login_id(self):
+        login_id = 'login_%s' % randstring(8)
+
+        self._login_with_oauth(
+            {'sub': 'oauth-uid', 'login': login_id},
+            {'sub': (True, 'uid'), 'login': (True, 'login_id')})
+
+        self.assertEqual(self.client.session[oauth_views.auth.SESSION_KEY],
+                         Profile.objects.get(login_id=login_id).user)
+
     def test_oauth_login_prefers_uid_binding_over_email_match(self):
         SocialAuthUser.objects.add(self.other_user.username, 'oauth', self.user.username)
 
@@ -378,6 +404,62 @@ class OAuthConnectTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         self.assertFalse(SocialAuthUser.objects.filter(
             username=self.user.username, provider='oauth').exists())
+
+    def test_oauth_callback_connect_checks_ldap_uid_ownership(self):
+        for same_uid_enabled, ldap_owner, allowed in (
+                (True, self.other_user, False),
+                (True, self.user, True),
+                (False, self.other_user, True)):
+            with self.subTest(same_uid_enabled=same_uid_enabled,
+                              ldap_owner=ldap_owner.username):
+                SocialAuthUser.objects.add(ldap_owner.username, 'ldap', 'oauth@example.com')
+                self._start_connect()
+                mock_session = self._mock_callback_session(
+                    {'email': 'oauth@example.com'})
+                settings = dict(
+                    ENABLE_OAUTH_SETTINGS,
+                    SSO_LDAP_USE_SAME_UID=same_uid_enabled,
+                    LDAP_PROVIDER='ldap',
+                    OAuth2Session=MagicMock(return_value=mock_session))
+
+                with patch.dict(oauth_views.__dict__, settings):
+                    resp = self.client.get(reverse('oauth_callback'),
+                                           {'code': 'abc', 'state': 'xyz'})
+
+                self.assertEqual(302 if allowed else 200, resp.status_code)
+                self.assertEqual(allowed, SocialAuthUser.objects.filter(
+                    username=self.user.username, provider='oauth',
+                    uid='oauth@example.com').exists())
+                self.assertEqual(self.user.username,
+                                 self.client.session[oauth_views.auth.SESSION_KEY])
+                SocialAuthUser.objects.filter(
+                    provider__in=['oauth', 'ldap'], uid='oauth@example.com').delete()
+
+    @patch.object(oauth_views.auth, 'login')
+    def test_oauth_callback_connect_conflict_retry_does_not_login(self, mock_login):
+        SocialAuthUser.objects.add(self.other_user.username, 'oauth',
+                                   'oauth@example.com')
+        mock_session = self._mock_callback_session(
+            {'email': 'oauth@example.com'})
+        self._start_connect()
+
+        settings = dict(ENABLE_OAUTH_SETTINGS,
+                        OAuth2Session=MagicMock(return_value=mock_session))
+        with patch.dict(oauth_views.__dict__, settings):
+            resp = self.client.get(reverse('oauth_callback'),
+                                   {'code': 'abc', 'state': 'xyz'})
+            self.assertEqual(200, resp.status_code)
+            self.assertNotIn('oauth_state', self.client.session)
+            self.assertNotIn('oauth_connect', self.client.session)
+
+            resp = self.client.get(reverse('oauth_callback'),
+                                   {'code': 'new-code', 'state': 'xyz'})
+
+        self.assertEqual(200, resp.status_code)
+        mock_session.fetch_token.assert_called_once()
+        mock_login.assert_not_called()
+        self.assertEqual(self.user.username,
+                         self.client.session[oauth_views.auth.SESSION_KEY])
 
     @patch.object(SocialAuthUser.objects, 'add', return_value=None)
     def test_oauth_callback_connect_reports_binding_failure(self, mock_add):

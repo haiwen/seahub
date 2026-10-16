@@ -154,7 +154,9 @@ def oauth_callback(request):
     callback URL. With this redirection comes an authorization code included
     in the redirect URL. We will use that to obtain an access token.
     """
-    oauth_state = request.session.get('oauth_state')
+    # Consume the state and operation together so retries cannot become logins.
+    oauth_state = request.session.pop('oauth_state', None)
+    oauth_connect = request.session.pop('oauth_connect', False)
     if not oauth_state:
         logger.error('OAuth state is not found in session.')
         return render_error(request, _('Error, please contact administrator.'))
@@ -211,7 +213,7 @@ def oauth_callback(request):
 
     # `oauth_connect` is set by the `oauth_connect` view: bind the OAuth
     # account to the currently logged-in local user instead of logging in.
-    if request.session.pop('oauth_connect', False):
+    if oauth_connect:
         if not request.user.is_authenticated:
             return render_error(request, _('Failed to connect OAuth, please login first.'))
 
@@ -220,6 +222,11 @@ def oauth_callback(request):
             return render_error(request, _('The OAuth account has already been connected to another account.'))
 
         if not oauth_user:
+            if SSO_LDAP_USE_SAME_UID:
+                ldap_user = SocialAuthUser.objects.get_by_provider_and_uid(LDAP_PROVIDER, uid)
+                if ldap_user and ldap_user.username != request.user.username:
+                    return render_error(request, _('The OAuth account has already been connected to another LDAP account.'))
+
             if not SocialAuthUser.objects.add(request.user.username, OAUTH_PROVIDER, uid):
                 logger.error('Failed to bind OAuth account to user %s.',
                              request.user.username)
@@ -286,7 +293,8 @@ def oauth_callback(request):
         profile.contact_email = contact_email.strip()
         profile.save()
 
-    if login_id:
+    if login_id and not Profile.objects.filter(
+            login_id=login_id.strip()).exclude(user=email).exists():
         profile.login_id = login_id.strip()
         profile.save()
 
