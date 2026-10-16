@@ -38,6 +38,7 @@ const entryFiles = {
   sysadminRepoSnapshot: '/pages/sys-admin/repo-snapshot/index.js',
   TCAccept: '/tc-accept.js',
   TCView: '/tc-view.js',
+  twoFactorSetup: '/two-factor-setup.js',
   uploadLink: '/upload-link.js',
   viewFileCollaboraOnline: '/view-file-collabora-online.js',
   viewFileDocument: '/view-file-document.js',
