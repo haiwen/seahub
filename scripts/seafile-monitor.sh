@@ -127,8 +127,8 @@ function check_process() {
         return 0
     fi
 
-    process_num=$(ps -ef | grep "$1" | grep -v "grep" | wc -l)
-    echo $process_num
+    process_num=$(pgrep -fc "$1" || true)
+    echo ${process_num:-0}
 }
 
 # start
