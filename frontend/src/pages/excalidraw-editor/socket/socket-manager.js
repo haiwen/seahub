@@ -1,6 +1,6 @@
 import { CaptureUpdateAction, getSceneVersion, reconcileElements, restoreElements } from '@excalidraw/excalidraw';
 import throttle from 'lodash.throttle';
-import { CURSOR_SYNC_TIMEOUT, LOAD_IMAGES_TIMEOUT } from '../constants';
+import { CURSOR_SYNC_TIMEOUT, LOAD_IMAGES_TIMEOUT, PREVIEW_COMMIT_DELAY } from '../constants';
 import FileManager from '../data/file-manager';
 import { loadFilesFromServer, saveFilesToServer } from '../data/server-storage';
 import { stateDebug } from '../utils/debug';
@@ -27,6 +27,11 @@ class SocketManager {
 
     this.pendingOperationList = [];
     this.pendingOperationBeginTimeList = [];
+    this.previewElements = null;
+    this.lastObservedElementVersions = null;
+    this.previewCommitTimer = null;
+    this.pendingRemoteUpdates = [];
+    this.remoteRenderFrame = null;
     this.collaborators = new Map();
     const { user } = config;
     this.collaborators.set(user._username, user, { isCurrentUser: true });
@@ -104,6 +109,155 @@ class SocketManager {
     return this.lastBroadcastedOrReceivedSceneVersion;
   };
 
+  updatePreview = (elements) => {
+    const previousElements = this.lastObservedElementVersions;
+    // App-state-only changes must not restart the pending commit timer.
+    if (previousElements && previousElements.length === elements.length && elements.every((element, index) => {
+      const previousElement = previousElements[index];
+      return element.id === previousElement.id && element.version === previousElement.version &&
+        element.versionNonce === previousElement.versionNonce;
+    })) {
+      return;
+    }
+    // Store scalar snapshots because Excalidraw can mutate elements in place.
+    this.lastObservedElementVersions = elements.map(({ id, version, versionNonce }) => ({ id, version, versionNonce }));
+
+    if (!this.previewElements && !this.hasUnsyncedSceneChanges(elements)) {
+      return;
+    }
+
+    this.previewElements = elements;
+    clearTimeout(this.previewCommitTimer);
+    this.previewCommitTimer = setTimeout(() => {
+      this.commitPreview();
+    }, PREVIEW_COMMIT_DELAY);
+  };
+
+  commitPreview = () => {
+    clearTimeout(this.previewCommitTimer);
+    this.previewCommitTimer = null;
+
+    if (!this.previewElements) {
+      return;
+    }
+
+    let elements = this.previewElements;
+    this.previewElements = null;
+
+    if (this.pendingRemoteUpdates.length > 0) {
+      const mergedRemoteScene = this.applyRemoteSceneUpdates(this.pendingRemoteUpdates, elements);
+      this.pendingRemoteUpdates = [];
+      elements = mergedRemoteScene.elements;
+      this.setVersion(mergedRemoteScene.version);
+      this.setLastBroadcastedOrReceivedSceneVersion(elements);
+      this.excalidrawAPI.updateScene({
+        elements,
+        captureUpdate: CaptureUpdateAction.NEVER,
+      });
+      this.loadImageFiles();
+    }
+
+    this.syncLocalElementsToOthers(elements, true);
+  };
+
+  enqueueRemoteSceneUpdate = (elements, version) => {
+    if (!Array.isArray(elements)) {
+      return;
+    }
+
+    const normalizedVersion = Number.isFinite(Number(version)) ? Number(version) : this.getVersion();
+    this.pendingRemoteUpdates.push({
+      elements,
+      version: normalizedVersion,
+      editingTextElementId: this.excalidrawAPI.getAppState().editingTextElement?.id,
+    });
+    this.pendingRemoteUpdates.sort((left, right) => left.version - right.version);
+
+    // Advance the scene baseline only when applying updates; local edits may
+    // arrive before the scheduled render and must still enter the preview queue.
+    this.setVersion(Math.max(this.getVersion(), normalizedVersion));
+
+    if (!this.previewElements) {
+      this.scheduleRemoteSceneRender();
+    }
+  };
+
+  scheduleRemoteSceneRender = () => {
+    if (this.remoteRenderFrame !== null) {
+      return;
+    }
+
+    const render = () => {
+      this.remoteRenderFrame = null;
+      this.flushRemoteSceneUpdates();
+    };
+
+    if (typeof window !== 'undefined' && window.requestAnimationFrame) {
+      this.remoteRenderFrame = window.requestAnimationFrame(render);
+      return;
+    }
+
+    this.remoteRenderFrame = setTimeout(render, 0);
+  };
+
+  cancelRemoteSceneRender = () => {
+    if (this.remoteRenderFrame === null) {
+      return;
+    }
+
+    if (typeof window !== 'undefined' && window.cancelAnimationFrame) {
+      window.cancelAnimationFrame(this.remoteRenderFrame);
+    } else {
+      clearTimeout(this.remoteRenderFrame);
+    }
+    this.remoteRenderFrame = null;
+  };
+
+  applyRemoteSceneUpdates = (updates, baseElements = null) => {
+    let localElements = baseElements || this.excalidrawAPI.getSceneElementsIncludingDeleted();
+    const appState = this.excalidrawAPI.getAppState();
+    let remoteVersion = this.getVersion();
+
+    updates.forEach((update) => {
+      let restoredRemoteElements = restoreElements(update.elements, null);
+      if (update.editingTextElementId) {
+        const protectedTextElement = localElements.find(element => element.id === update.editingTextElementId);
+        if (protectedTextElement) {
+          // Keep receive-time protection after editing ends, using the latest local text.
+          restoredRemoteElements = restoredRemoteElements.map(element => (
+            element.id === protectedTextElement.id ? protectedTextElement : element
+          ));
+        }
+      }
+      localElements = reconcileElements(localElements, restoredRemoteElements, appState);
+      remoteVersion = Math.max(remoteVersion, update.version);
+    });
+
+    return {
+      elements: localElements,
+      version: remoteVersion,
+    };
+  };
+
+  flushRemoteSceneUpdates = () => {
+    if (this.previewElements || this.pendingRemoteUpdates.length === 0) {
+      return;
+    }
+
+    const updates = this.pendingRemoteUpdates;
+    this.pendingRemoteUpdates = [];
+    const mergedRemoteScene = this.applyRemoteSceneUpdates(updates);
+
+    this.setLastBroadcastedOrReceivedSceneVersion(mergedRemoteScene.elements);
+    this.setVersion(mergedRemoteScene.version);
+    this.excalidrawAPI.updateScene({
+      elements: mergedRemoteScene.elements,
+      captureUpdate: CaptureUpdateAction.NEVER,
+    });
+
+    this.loadImageFiles();
+  };
+
   fetchImageFilesFromServer = async (opts) => {
     const elements = opts.elements.filter(element => {
       return (
@@ -132,16 +286,14 @@ class SocketManager {
     });
   }, LOAD_IMAGES_TIMEOUT);
 
-  isNeedToSync = (elements) => {
-    const currentVersion = getSceneVersion(elements);
-    if (currentVersion > this.lastBroadcastedOrReceivedSceneVersion) {
-      return true;
-    }
-    return false;
+  hasUnsyncedSceneChanges = (elements) => {
+    // Compare scene versions against the sync baseline, not the document version.
+    const currentSceneVersion = getSceneVersion(elements);
+    return currentSceneVersion > this.lastBroadcastedOrReceivedSceneVersion;
   };
 
-  syncLocalElementsToOthers = (elements) => {
-    if (!this.isNeedToSync(elements)) {
+  syncLocalElementsToOthers = (elements, force = false) => {
+    if (!force && !this.hasUnsyncedSceneChanges(elements)) {
       return;
     }
     this.pendingOperationList.push(elements);
@@ -236,16 +388,21 @@ class SocketManager {
   }, CURSOR_SYNC_TIMEOUT);
 
   updateLocalDataByRemoteData = (remoteElements, remoteVersion) => {
-    const localElements = this.excalidrawAPI.getSceneElementsIncludingDeleted();
-    const appState = this.excalidrawAPI.getAppState();
-    const restoredRemoteElements = restoreElements(remoteElements, null);
-    const reconciledElements = reconcileElements(localElements, restoredRemoteElements, appState);
+    if (this.previewElements) {
+      this.enqueueRemoteSceneUpdate(remoteElements, remoteVersion);
+      return;
+    }
 
-    this.setLastBroadcastedOrReceivedSceneVersion(reconciledElements);
-    this.setVersion(remoteVersion);
+    const mergedRemoteScene = this.applyRemoteSceneUpdates([{
+      elements: remoteElements,
+      version: remoteVersion,
+    }]);
+
+    this.setLastBroadcastedOrReceivedSceneVersion(mergedRemoteScene.elements);
+    this.setVersion(mergedRemoteScene.version);
 
     this.excalidrawAPI.updateScene({
-      elements: reconciledElements,
+      elements: mergedRemoteScene.elements,
       captureUpdate: CaptureUpdateAction.NEVER,
     });
 
@@ -255,7 +412,7 @@ class SocketManager {
 
   handleRemoteSceneUpdated = (params) => {
     const { elements, version } = params;
-    this.updateLocalDataByRemoteData(elements, version);
+    this.enqueueRemoteSceneUpdate(elements, version);
   };
 
   handleRemoteMouseLocationUpdated = (params) => {
@@ -304,6 +461,7 @@ class SocketManager {
     }
 
     if (type === 'disconnect') {
+      this.commitPreview();
       // current state is sending
       if (this._sendingOperation) {
         this.pendingOperationList.unshift(this._sendingOperation);
@@ -318,6 +476,8 @@ class SocketManager {
 
   static destroy = () => {
     if (this.instance?.socketClient) {
+      this.instance.commitPreview();
+      this.instance.cancelRemoteSceneRender();
       this.instance.socketClient.close();
     }
     this.instance = null;

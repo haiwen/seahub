@@ -79,7 +79,7 @@ class TipMessage extends React.Component {
 
   onPendingOpExceedLimit = () => {
     toaster.closeAll();
-    const copyright = 'There are multiple operations not synced to the server. Please check your network.';
+    const copyright = 'Your changes are still syncing. Please wait a moment and try again when this message disappears.';
     const message = gettext(copyright);
     toaster.warning(message, { duration: 5 });
   };
