@@ -1,5 +1,5 @@
 import { CaptureUpdateAction } from '@excalidraw/excalidraw';
-import { MAX_OPERATION_RETRIES, OPERATION_RETRY_DELAY, PREVIEW_COMMIT_DELAY } from '../constants';
+import { PREVIEW_COMMIT_DELAY } from '../constants';
 import SocketManager from './socket-manager';
 
 jest.mock('@excalidraw/excalidraw', () => ({
@@ -25,11 +25,6 @@ jest.mock('@excalidraw/excalidraw', () => ({
     return Array.from(elements.values());
   },
 }));
-
-jest.mock('uuid', () => {
-  let operationId = 0;
-  return { v4: jest.fn(() => `operation-${operationId++}`) };
-});
 
 jest.mock('./socket-client', () => jest.fn().mockImplementation(() => ({
   broadcastSceneElements: jest.fn(),
@@ -65,7 +60,6 @@ describe('SocketManager remote scene baseline', () => {
       { elements: sceneElements, version: 1 },
       { user: { _username: 'test-user' } },
     );
-    manager.dispatchConnectState('room-joined');
     manager.loadImageFiles = jest.fn();
     manager.excalidrawAPI.updateScene.mockClear();
   });
@@ -115,7 +109,7 @@ describe('SocketManager remote scene baseline', () => {
     const mergedElements = [{ id: 'local', version: 2 }, ...remoteElements];
     expect(manager.socketClient.broadcastSceneElements).toHaveBeenCalledTimes(1);
     expect(manager.socketClient.broadcastSceneElements).toHaveBeenCalledWith(
-      mergedElements, 8, expect.any(String), expect.any(Function),
+      mergedElements, 8, manager.sendOperationsCallback,
     );
     expect(manager.excalidrawAPI.updateScene).toHaveBeenCalledWith({
       elements: mergedElements, captureUpdate: CaptureUpdateAction.NEVER,
@@ -124,7 +118,7 @@ describe('SocketManager remote scene baseline', () => {
     expect(manager.previewElements).toBeNull();
     expect(manager.previewCommitTimer).toBeNull();
 
-    manager.socketClient.broadcastSceneElements.mock.calls[0][3]({ success: true, version: 9 });
+    manager.sendOperationsCallback({ success: true, version: 9 });
     manager.updatePreview(mergedElements);
     jest.advanceTimersByTime(PREVIEW_COMMIT_DELAY);
     expect(manager.socketClient.broadcastSceneElements).toHaveBeenCalledTimes(1);
@@ -141,7 +135,7 @@ describe('SocketManager remote scene baseline', () => {
     expect(manager.socketClient.broadcastSceneElements).toHaveBeenCalledWith(
       [{ id: 'local', version: 2, isDeleted: true }, ...remoteElements],
       8,
-      expect.any(String), expect.any(Function),
+      manager.sendOperationsCallback,
     );
   });
 
@@ -174,7 +168,7 @@ describe('SocketManager remote scene baseline', () => {
     expect(manager.socketClient.broadcastSceneElements).toHaveBeenCalledWith(
       [{ id: 'local', version: 2 }, { id: 'remote', version: 5 }],
       10,
-      expect.any(String), expect.any(Function),
+      manager.sendOperationsCallback,
     );
     expect(manager.pendingRemoteUpdates).toEqual([]);
   });
@@ -203,7 +197,7 @@ describe('SocketManager remote scene baseline', () => {
     const mergedElements = [finalLocalElement, remoteElements[1]];
     expect(sceneElements).toEqual(mergedElements);
     expect(manager.socketClient.broadcastSceneElements).toHaveBeenCalledWith(
-      mergedElements, 8, expect.any(String), expect.any(Function),
+      mergedElements, 8, manager.sendOperationsCallback,
     );
     expect(manager.pendingRemoteUpdates).toEqual([]);
   });
@@ -230,7 +224,7 @@ describe('SocketManager remote scene baseline', () => {
 
     expect(sceneElements).toEqual(localElements);
     expect(manager.socketClient.broadcastSceneElements).toHaveBeenCalledWith(
-      localElements, 8, expect.any(String), expect.any(Function),
+      localElements, 8, manager.sendOperationsCallback,
     );
   });
 
@@ -248,7 +242,7 @@ describe('SocketManager remote scene baseline', () => {
 
     expect(sceneElements).toEqual([laterRemoteElement]);
     expect(manager.pendingRemoteUpdates).toEqual([]);
-    manager.socketClient.broadcastSceneElements.mock.calls[0][3]({ success: true, version: 10 });
+    manager.sendOperationsCallback({ success: true, version: 10 });
 
     const latestRemoteElement = { id: 'local', version: 7, text: 'latest remote' };
     manager.handleRemoteSceneUpdated({ elements: [latestRemoteElement], version: 11 });
@@ -289,123 +283,7 @@ describe('SocketManager remote scene baseline', () => {
 
     expect(sceneElements).toEqual([{ id: 'local', version: 2, text: 'draft' }]);
     expect(manager.socketClient.broadcastSceneElements).toHaveBeenCalledWith(
-      sceneElements, 8, expect.any(String), expect.any(Function),
+      sceneElements, 8, manager.sendOperationsCallback,
     );
-  });
-});
-
-describe('SocketManager operation recovery', () => {
-  let manager;
-  const elements = [{ id: 'local', version: 2 }];
-
-  beforeEach(() => {
-    jest.useFakeTimers();
-    jest.clearAllMocks();
-    manager = new SocketManager(
-      {
-        updateScene: jest.fn(),
-        getSceneElementsIncludingDeleted: jest.fn(() => elements),
-        getAppState: jest.fn(() => ({})),
-      },
-      { elements: [{ id: 'local', version: 1 }], version: 1 },
-      { user: { _username: 'test-user' } },
-    );
-    manager.loadImageFiles = jest.fn();
-  });
-
-  afterEach(() => {
-    manager.cancelRemoteSceneRender();
-    jest.clearAllTimers();
-    jest.useRealTimers();
-  });
-
-  const startOperation = () => {
-    manager.dispatchConnectState('room-joined');
-    manager.syncLocalElementsToOthers(elements);
-    return manager._sendingOperation;
-  };
-
-  test('holds local operations until the room has been joined', () => {
-    manager.syncLocalElementsToOthers(elements);
-    expect(manager.socketClient.broadcastSceneElements).not.toHaveBeenCalled();
-    expect(manager.pendingOperationList).toHaveLength(1);
-
-    manager.dispatchConnectState('room-joined');
-    expect(manager.socketClient.broadcastSceneElements).toHaveBeenCalledTimes(1);
-    expect(manager.state).toBe('sending');
-  });
-
-  test.each([
-    { error_type: 'ack_timeout' },
-    { error_type: 'execute_client_operations_error' },
-    undefined,
-  ])('automatically retries %j at most three times without another edit', result => {
-    const operation = startOperation();
-    for (let attempt = 0; attempt <= MAX_OPERATION_RETRIES; attempt += 1) {
-      const [, , operationId, callback] = manager.socketClient.broadcastSceneElements.mock.calls[attempt];
-      expect(operationId).toBe(operation.operation_id);
-      callback(result);
-      expect(manager._sendingOperation).toBeNull();
-      if (attempt < MAX_OPERATION_RETRIES) {
-        expect(operation.retryCount).toBe(attempt + 1);
-        expect(manager.pendingOperationList).toEqual([operation]);
-        jest.advanceTimersByTime(OPERATION_RETRY_DELAY);
-      }
-    }
-
-    jest.advanceTimersByTime(OPERATION_RETRY_DELAY * 2);
-    expect(manager.socketClient.broadcastSceneElements).toHaveBeenCalledTimes(MAX_OPERATION_RETRIES + 1);
-    expect(manager.pendingOperationList).toEqual([]);
-    expect(manager.state).toBe('idle');
-  });
-
-  test('continues with the next operation after reaching the retry limit', () => {
-    const operation = startOperation();
-    operation.retryCount = MAX_OPERATION_RETRIES;
-    const nextElements = [{ id: 'local', version: 3 }];
-    manager.syncLocalElementsToOthers(nextElements);
-    const nextOperation = manager.pendingOperationList[0];
-    manager.socketClient.broadcastSceneElements.mock.calls[0][3]({
-      error_type: 'execute_client_operations_error',
-    });
-
-    expect(manager._sendingOperation).toBe(nextOperation);
-    expect(manager.pendingOperationList).toEqual([]);
-    expect(manager.socketClient.broadcastSceneElements).toHaveBeenLastCalledWith(
-      nextElements, 1, nextOperation.operation_id, expect.any(Function),
-    );
-  });
-
-  test('requeues once, waits for rejoin and ignores the old transport ACK', () => {
-    const operation = startOperation();
-    const staleCallback = manager.socketClient.broadcastSceneElements.mock.calls[0][3];
-    manager.dispatchConnectState('disconnect');
-    manager.dispatchConnectState('disconnect');
-    expect(manager.pendingOperationList).toEqual([operation]);
-    expect(manager._sendingOperation).toBeNull();
-
-    manager.dispatchConnectState('reconnect');
-    jest.advanceTimersByTime(OPERATION_RETRY_DELAY);
-    manager.sendOperations();
-    expect(manager.socketClient.broadcastSceneElements).toHaveBeenCalledTimes(1);
-
-    manager.dispatchConnectState('room-joined');
-    expect(manager.socketClient.broadcastSceneElements).toHaveBeenCalledTimes(2);
-    staleCallback({ success: true, version: 99, operation_id: operation.operation_id });
-    expect(manager.getVersion()).toBe(1);
-    expect(manager._sendingOperation).toBe(operation);
-    manager.socketClient.broadcastSceneElements.mock.calls[1][3]({ success: true, version: 2 });
-    expect(manager.getVersion()).toBe(2);
-    expect(manager.state).toBe('idle');
-  });
-
-  test.each(['load_document_content_error', 'token_expired'])('stops retrying for %s', errorType => {
-    startOperation();
-    manager.socketClient.broadcastSceneElements.mock.calls[0][3]({ error_type: errorType });
-    jest.advanceTimersByTime(OPERATION_RETRY_DELAY);
-
-    expect(manager.state).toBe('need_reload');
-    expect(manager._sendingOperation).toBeNull();
-    expect(manager.socketClient.broadcastSceneElements).toHaveBeenCalledTimes(1);
   });
 });
