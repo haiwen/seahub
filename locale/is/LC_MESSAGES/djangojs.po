@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 15:38+0800\n"
+"POT-Creation-Date: 2026-10-16 15:53+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Icelandic (http://app.transifex.com/haiwen/seahub/language/is/)\n"
@@ -11476,14 +11476,12 @@ msgstr "Afritun mistókst"
 
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-dropdownmenu.js:122
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:169
-#: frontend/src/translate.js:58
 #| msgid "Import tags"
 msgid "Import page from docx"
 msgstr "Flytja inn síðu úr docx"
 
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-dropdownmenu.js:123
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:170
-#: frontend/src/translate.js:59
 #| msgid "Export as docx"
 msgid "Import page from Markdown"
 msgstr "Flytja inn síðu úr Markdown"
@@ -11522,7 +11520,6 @@ msgid "Search libraries"
 msgstr ""
 
 #: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:35
-#: frontend/src/translate.js:57
 msgid "Change cover"
 msgstr "Breyta forsíðu"
 
