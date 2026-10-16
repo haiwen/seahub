@@ -1,6 +1,6 @@
 import os
 import configparser
-from django.db import connection
+from django.db import connection, transaction
 
 
 class RepoTrash(object):
@@ -716,6 +716,112 @@ class SeafileDB:
                 else:
                     permission_to_folder_path[permission].append(path)
             return permission_to_folder_path
+
+    def add_folder_user_perms(self, repo_id, permissions):
+        """Add new folder permissions atomically.
+
+        ``permissions`` contains (path, permission, username) tuples that have
+        already been validated by the caller.
+        """
+        if not permissions:
+            return set()
+
+        table_name = f'`{self.db_name}`.`FolderUserPerm`'
+        conditions = ' OR '.join(['(`path`=%s AND `user`=%s)'] * len(permissions))
+        existing_sql = f'''
+            SELECT `path`, `user`
+            FROM {table_name}
+            WHERE repo_id=%s AND ({conditions})
+        '''
+        existing_params = [repo_id]
+        for path, _permission, username in permissions:
+            existing_params.extend([path, username])
+
+        insert_sql = f'''
+            INSERT INTO {table_name} (repo_id, `path`, permission, `user`)
+            VALUES (%s, %s, %s, %s)
+        '''
+        with transaction.atomic():
+            with connection.cursor() as cursor:
+                cursor.execute(existing_sql, existing_params)
+                existing_permissions = set(cursor.fetchall())
+                new_permissions = [
+                    (path, permission, username)
+                    for path, permission, username in permissions
+                    if (path, username) not in existing_permissions
+                ]
+
+                if new_permissions:
+                    cursor.executemany(
+                        insert_sql,
+                        [(repo_id, path, permission, username)
+                         for path, permission, username in new_permissions]
+                    )
+
+        return existing_permissions
+
+    def update_folder_user_perms(self, repo_id, permissions):
+        """Update existing folder permissions and return missing entries."""
+        return self._change_folder_user_perms(repo_id, permissions, 'update')
+
+    def delete_folder_user_perms(self, repo_id, permissions):
+        """Delete existing folder permissions and return missing entries."""
+        return self._change_folder_user_perms(repo_id, permissions, 'delete')
+
+    def _change_folder_user_perms(self, repo_id, permissions, operation):
+        if not permissions:
+            return set()
+
+        table_name = f'`{self.db_name}`.`FolderUserPerm`'
+        conditions = ' OR '.join(['(`path`=%s AND `user`=%s)'] * len(permissions))
+        existing_sql = f'''
+            SELECT `path`, `user`
+            FROM {table_name}
+            WHERE repo_id=%s AND ({conditions})
+        '''
+        existing_params = [repo_id]
+        for path, _permission, username in permissions:
+            existing_params.extend([path, username])
+
+        if operation == 'update':
+            change_sql = f'''
+                UPDATE {table_name}
+                SET permission=%s
+                WHERE repo_id=%s AND `path`=%s AND `user`=%s
+            '''
+        else:
+            change_sql = f'''
+                DELETE FROM {table_name}
+                WHERE repo_id=%s AND `path`=%s AND `user`=%s
+            '''
+
+        with transaction.atomic():
+            with connection.cursor() as cursor:
+                cursor.execute(existing_sql, existing_params)
+                existing_permissions = set(cursor.fetchall())
+                changed_permissions = [
+                    (path, permission, username)
+                    for path, permission, username in permissions
+                    if (path, username) in existing_permissions
+                ]
+
+                if not changed_permissions:
+                    return existing_permissions
+
+                if operation == 'update':
+                    cursor.executemany(
+                        change_sql,
+                        [(permission, repo_id, path, username)
+                         for path, permission, username in changed_permissions]
+                    )
+                else:
+                    cursor.executemany(
+                        change_sql,
+                        [(repo_id, path, username)
+                         for path, _permission, username in changed_permissions]
+                    )
+
+        return existing_permissions
 
     def get_share_to_group_folder_permission_by_group_ids_and_repo_id(self, group_ids, repo_id):
         if not group_ids:
