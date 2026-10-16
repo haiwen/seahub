@@ -479,7 +479,12 @@ module.exports = function (webpackEnv) {
             // Unlike the application JS, we only compile the standard ES features.
             {
               test: /\.(js|mjs)$/,
-              exclude: /@babel(?:\/|\\{1,2})runtime/,
+              exclude: [
+                /@babel(?:\/|\\{1,2})runtime/,
+                // Excalidraw composes Unicode regexes from .source; Babel's
+                // legacy regex transforms break the resulting expressions.
+                /[/\\]node_modules[/\\]@excalidraw[/\\]excalidraw[/\\]/,
+              ],
               loader: require.resolve('babel-loader'),
               options: {
                 babelrc: false,
