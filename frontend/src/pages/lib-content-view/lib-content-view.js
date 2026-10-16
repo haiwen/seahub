@@ -1334,6 +1334,18 @@ class LibContentView extends React.Component {
       });
     }
 
+    if (repoID === targetRepo.repo_id) {
+      if (moveToDirentPath === this.state.path) {
+        this.loadDirentList(this.state.path);
+      } else if (nodeParentPath === this.state.path) {
+        if (isBatchOperation) {
+          this.moveDirents(batchFileNames);
+        } else {
+          this.moveDirent(direntPath, moveToDirentPath);
+        }
+      }
+    }
+
     if (this.state.isTreePanelShown) {
       if (isBatchOperation) {
         const direntPaths = batchFileNames.map(fileName => Utils.joinPath(nodeParentPath, fileName));
