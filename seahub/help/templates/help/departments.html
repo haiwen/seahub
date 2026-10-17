@@ -29,7 +29,7 @@
 <h5 id="assign-storage-quota-for-departments">{% trans "Assign storage quota for departments" %}</h5>
 <p>{% trans "The libraries created inside a department are owned by the department itself, not by any individual user. So the system admin can assign storage quota to a department. The total size of all the libraries in a department cannot exceed the storage quota. <strong>Please note that the quota of sub-department doesn't depend on the quota of its parent department.</strong>" %}</p>
 <h5 id="create-and-manage-shared-libraries-in-departments">{% trans "Create and manage shared libraries in departments" %}</h5>
-<p>{% trans "Department libraries can be created by the system admin or department admin. There is also an option to control whether individual users can share libraries to a department." %}</p>
+<p>{% trans "Department libraries can be created by the system admin or department admin. There is also an option to control whether individual users can share libraries with a department." %}</p>
 <p>{% trans "All the above operations can be done in the system admin interface. See the below screenshot for information." %}</p>
 <p><img src="{{ MEDIA_URL }}img/help/sys_admin_departments.png" alt=""></p>
 <h4 id="dept-admin">{% trans "Department admin" %}</h4>
@@ -45,7 +45,7 @@
 <ul>
   <li>{% trans "Create or delete library" %}</li>
   <li>{% trans "Change library name" %}</li>
-  <li>{% trans "Share a library to users or groups outside of this department. This is very useful for cross-department collaboration." %}</li>
+  <li>{% trans "Share a library with users or groups outside of this department. This is very useful for cross-department collaboration." %}</li>
   <li>{% blocktrans %}Set fine-grained permission to folders in the libraries for users or sub-departments in this department. This works like <a href="{{ SITE_ROOT }}help/folder_permission/">the folder permission feature</a>.{% endblocktrans %}</li>
 </ul>
 <p><img src="{{ MEDIA_URL }}img/help/dept_admin_manage_libs.png" alt=""></p>

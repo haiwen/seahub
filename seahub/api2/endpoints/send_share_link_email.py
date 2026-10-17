@@ -80,10 +80,10 @@ class SendShareLinkView(APIView):
 
         if link.s_type == 'f':
             file_shared_type = _("file")
-            link_title = _('A file is shared to you on %s') % get_site_name()
+            link_title = _('A file is shared with you on %s') % get_site_name()
         else:
             file_shared_type = _("folder")
-            link_title = _('A folder is shared to you on %s') % get_site_name()
+            link_title = _('A folder is shared with you on %s') % get_site_name()
 
         for to_email in to_email_list:
 

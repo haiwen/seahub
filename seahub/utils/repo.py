@@ -324,13 +324,13 @@ def get_related_users_by_repo(repo_id, org_id=None):
     """ Return all users who can view this library.
 
     1. repo owner
-    2. users repo has been shared to
-    3. members of groups repo has been shared to
+    2. users repo has been shared with
+    3. members of groups repo has been shared with
     """
 
     users = []
 
-    # 1. users repo has been shared to
+    # 1. users repo has been shared with
     if org_id and org_id > 0:
         users.extend(seafile_api.org_get_shared_users_by_repo(org_id, repo_id))
         owner = seafile_api.get_org_repo_owner(repo_id)
@@ -342,7 +342,7 @@ def get_related_users_by_repo(repo_id, org_id=None):
     if owner not in users:
         users.append(owner)
 
-    # 3. members of groups repo has been shared to
+    # 3. members of groups repo has been shared with
     groups = get_shared_groups_by_repo(repo_id, org_id)
     for group in groups:
         members = ccnet_api.get_group_members(group.id)

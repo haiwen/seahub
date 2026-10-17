@@ -99,9 +99,9 @@ class NoticeItem extends React.Component {
       let notice = '';
       // 1. handle translate
       if (path === '/') { // share repo
-        notice = gettext('{share_from} has shared a library named {repo_link} to you.');
+        notice = gettext('{share_from} has shared a library named {repo_link} with you.');
       } else { // share folder
-        notice = gettext('{share_from} has shared a folder named {repo_link} to you.');
+        notice = gettext('{share_from} has shared a folder named {repo_link} with you.');
       }
       // 2. handle xss(cross-site scripting)
       notice = notice.replace('{share_from}', shareFrom);
@@ -165,9 +165,9 @@ class NoticeItem extends React.Component {
       let notice = '';
       // 1. handle translate
       if (path === '/') {
-        notice = gettext('{share_from} has shared a library named {repo_link} to group {group_link}.');
+        notice = gettext('{share_from} has shared a library named {repo_link} with group {group_link}.');
       } else {
-        notice = gettext('{share_from} has shared a folder named {repo_link} to group {group_link}.');
+        notice = gettext('{share_from} has shared a folder named {repo_link} with group {group_link}.');
       }
       // 2. handle xss(cross-site scripting)
       notice = notice.replace('{share_from}', shareFrom);

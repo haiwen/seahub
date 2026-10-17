@@ -600,7 +600,7 @@ class PrivateFileDirShareManager(models.Manager):
                                            path, PERMISSION_READ)
 
     def get_private_share_in_file(self, username, repo_id, path):
-        """Get a file that private shared to ``username``.
+        """Get a file that private shared with ``username``.
         """
         path = normalize_file_path(path)
 
@@ -620,7 +620,7 @@ class PrivateFileDirShareManager(models.Manager):
         return pfs
 
     def get_private_share_in_dir(self, username, repo_id, path):
-        """Get a directory that private shared to ``username``.
+        """Get a directory that private shared with ``username``.
         """
         path = normalize_dir_path(path)
 
@@ -645,13 +645,13 @@ class PrivateFileDirShareManager(models.Manager):
             from_user=from_user)
 
     def list_private_share_in_by_user(self, to_user):
-        """List files/directories private shared to ``to_user``.
+        """List files/directories private shared with ``to_user``.
         """
         return super(PrivateFileDirShareManager, self).filter(
             to_user=to_user)
 
     def list_private_share_in_dirs_by_user_and_repo(self, to_user, repo_id):
-        """List directories private shared to ``to_user`` base on ``repo_id``.
+        """List directories private shared with ``to_user`` base on ``repo_id``.
         """
         return super(PrivateFileDirShareManager, self).filter(
             to_user=to_user, repo_id=repo_id, s_type='d')

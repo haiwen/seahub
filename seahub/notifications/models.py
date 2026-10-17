@@ -341,7 +341,7 @@ class UserNotificationManager(models.Manager):
                                            MSG_TYPE_FOLDER_UPLOADED, detail)
 
     def add_repo_share_msg(self, to_user, detail):
-        """Notify ``to_user`` that others shared a repo to him/her.
+        """Notify ``to_user`` that others shared a repo with him/her.
 
         Arguments:
         - `self`:
@@ -359,7 +359,7 @@ class UserNotificationManager(models.Manager):
 
 
     def add_repo_share_to_group_msg(self, to_user, detail):
-        """Notify ``to_user`` that others shared a repo to group.
+        """Notify ``to_user`` that others shared a repo with group.
 
         Arguments:
         - `self`:
@@ -370,7 +370,7 @@ class UserNotificationManager(models.Manager):
                    MSG_TYPE_REPO_SHARE_TO_GROUP, detail)
 
     def add_user_message(self, to_user, detail):
-        """Notify ``to_user`` that others sent a message to him/her.
+        """Notify ``to_user`` that others sent a message with him/her.
 
         Arguments:
         - `self`:

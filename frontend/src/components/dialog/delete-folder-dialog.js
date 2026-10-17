@@ -47,7 +47,7 @@ class DeleteFolderDialog extends Component {
 
     let alert_message = '';
     if (sharedToUserCount > 0 || sharedToGroupCount > 0) {
-      alert_message = gettext('This folder has been shared to {user_amount} user(s) and {group_amount} group(s).')
+      alert_message = gettext('This folder has been shared with {user_amount} user(s) and {group_amount} group(s).')
         .replace('{user_amount}', sharedToUserCount)
         .replace('{group_amount}', sharedToGroupCount);
     }

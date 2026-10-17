@@ -156,7 +156,7 @@ class AdminShares(APIView):
 
     @check_parameter
     def post(self, request, repo, path, share_type):
-        """ Admin share a library to user/group.
+        """ Admin share a library with user/group.
 
         Permission checking:
         1. admin user.
@@ -211,7 +211,7 @@ class AdminShares(APIView):
                 if has_shared_to_user(repo.repo_id, path, email):
                     result['failed'].append({
                         'email': email,
-                        'error_msg': _('This item has been shared to %s.') % email
+                        'error_msg': _('This item has been shared with %s.') % email
                     })
                     continue
 
@@ -268,7 +268,7 @@ class AdminShares(APIView):
                 if has_shared_to_group(repo.repo_id, path, group_id):
                     result['failed'].append({
                         'group_name': group.group_name,
-                        'error_msg': _('This item has been shared to %s.') % group.group_name
+                        'error_msg': _('This item has been shared with %s.') % group.group_name
                         })
                     continue
 

@@ -40,7 +40,7 @@ class GroupLibrariesTest(BaseTestCase):
 
     def test_can_unshare(self):
 
-        # make sure repo is shared to group
+        # make sure repo is shared with group
         repos = seafile_api.get_repos_by_group(self.group_id)
         assert len(repos) == 1
 
@@ -55,7 +55,7 @@ class GroupLibrariesTest(BaseTestCase):
 
     def test_can_not_unshare_if_not_admin(self):
 
-        # make sure repo is shared to group
+        # make sure repo is shared with group
         repos = seafile_api.get_repos_by_group(self.group_id)
         assert len(repos) == 1
 

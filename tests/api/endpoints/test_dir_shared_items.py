@@ -155,7 +155,7 @@ class DirSharedItemsTest(BaseTestCase):
         )
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert 'has been shared to' in json_resp['failed'][0]['error_msg']
+        assert 'has been shared with' in json_resp['failed'][0]['error_msg']
 
     @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
     def test_can_share_repo_to_org_users(self):
@@ -178,7 +178,7 @@ class DirSharedItemsTest(BaseTestCase):
         )
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert 'has been shared to' in json_resp['failed'][0]['error_msg']
+        assert 'has been shared with' in json_resp['failed'][0]['error_msg']
 
     def test_can_share_folder_to_users(self):
         self.login_as(self.user)
@@ -203,7 +203,7 @@ class DirSharedItemsTest(BaseTestCase):
         )
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert 'has been shared to' in json_resp['failed'][0]['error_msg']
+        assert 'has been shared with' in json_resp['failed'][0]['error_msg']
 
     @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
     def test_can_share_folder_to_org_users(self):
@@ -229,7 +229,7 @@ class DirSharedItemsTest(BaseTestCase):
         )
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert 'has been shared to' in json_resp['failed'][0]['error_msg']
+        assert 'has been shared with' in json_resp['failed'][0]['error_msg']
 
     def test_can_share_repo_to_groups(self):
         self.login_as(self.user)
@@ -256,7 +256,7 @@ class DirSharedItemsTest(BaseTestCase):
         )
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert 'has been shared to' in json_resp['failed'][0]['error_msg']
+        assert 'has been shared with' in json_resp['failed'][0]['error_msg']
 
     @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
     def test_can_share_repo_to_groups_with_perms(self):
@@ -302,7 +302,7 @@ class DirSharedItemsTest(BaseTestCase):
         )
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert 'has been shared to' in json_resp['failed'][0]['error_msg']
+        assert 'has been shared with' in json_resp['failed'][0]['error_msg']
 
     def test_can_share_folder_to_groups(self):
         self.login_as(self.user)
@@ -331,7 +331,7 @@ class DirSharedItemsTest(BaseTestCase):
         )
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert 'has been shared to' in json_resp['failed'][0]['error_msg']
+        assert 'has been shared with' in json_resp['failed'][0]['error_msg']
 
     @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
     def test_can_share_folder_to_org_groups(self):

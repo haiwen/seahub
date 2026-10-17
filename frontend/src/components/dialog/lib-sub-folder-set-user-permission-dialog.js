@@ -316,7 +316,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
     );
     return (
       <div className='h-100 d-flex flex-column'>
-        <p className="small permission-tips">{gettext('Folder permission is only effective after the library is shared to users or groups. It is used to fine tune sub-folder permissions.')}</p>
+        <p className="small permission-tips">{gettext('Folder permission is only effective after the library is shared with users or groups. It is used to fine tune sub-folder permissions.')}</p>
         <table className="w-xs-250">
           {thead}
           <tbody>

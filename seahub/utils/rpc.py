@@ -76,7 +76,7 @@ class RPCWrapper(object):
     def get_shared_users_by_repo_path(self, repo_id, repo_owner, path='/',
                                       org_id=None):
         """
-        Get user list this repo/folder is shared to.
+        Get user list this repo/folder is shared with.
         Return: a list of SharedUser objects (lib/repo.vala)
         """
         if is_valid_org_id(org_id):

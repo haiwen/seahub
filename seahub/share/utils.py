@@ -38,14 +38,14 @@ def normalize_custom_permission_name(permission):
 
 def is_repo_admin(username, repo_id):
 
-    # repo is shared to user with admin permission
+    # repo is shared with user with admin permission
     try:
         user_share_permission = ExtraSharePermission.objects. \
             get_user_permission(repo_id, username)
         if user_share_permission == PERMISSION_ADMIN:
             return True
 
-        # get all groups that repo is shared to with admin permission
+        # get all groups that repo is shared with with admin permission
         group_ids = ExtraGroupsSharePermission.objects.get_admin_groups_by_repo(repo_id)
         for group_id in group_ids:
             if is_group_admin(group_id, username):
@@ -73,7 +73,7 @@ def is_repo_admin(username, repo_id):
     return False
 
 def share_dir_to_user(repo, path, owner, share_from, share_to, permission, org_id=None):
-    # Share  repo or subdir to user with permission(r, rw, admin).
+    # Share  repo or subdir with user with permission(r, rw, admin).
     extra_share_permission = ''
     if permission == PERMISSION_ADMIN:
         extra_share_permission = permission
@@ -99,7 +99,7 @@ def share_dir_to_user(repo, path, owner, share_from, share_to, permission, org_i
         ExtraSharePermission.objects.create_share_permission(repo.repo_id, share_to, extra_share_permission)
 
 def share_dir_to_group(repo, path, owner, share_from, gid, permission, org_id=None):
-    # Share  repo or subdir to group with permission(r, rw, admin).
+    # Share  repo or subdir with group with permission(r, rw, admin).
     extra_share_permission = ''
     if permission == PERMISSION_ADMIN:
         extra_share_permission = permission

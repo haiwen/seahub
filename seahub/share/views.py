@@ -340,7 +340,7 @@ def ajax_private_share_dir(request):
             "shared_failed": shared_failed
             }), content_type=content_type)
     else:
-        # for case: only share to users and the emails are not valid
+        # for case: only share with users and the emails are not valid
         data = json.dumps({"error": _("Please check the email(s) you entered")})
         return HttpResponse(data, status=400, content_type=content_type)
 
