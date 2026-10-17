@@ -8,16 +8,16 @@
 # llj <lingjun.li1@gmail.com>, 2024
 # imwhatiam <imwhatiam123@gmail.com>, 2024
 # Michael An <michael18811380328@163.com>, 2024
-# Seafile Info <info@seafile.com>, 2025
+# Seafile Info <info@seafile.com>, 2026
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-05 10:24+0800\n"
+"POT-Creation-Date: 2026-10-17 21:05+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/haiwen/teams/5086/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -311,7 +311,7 @@ msgstr ""
 msgid ""
 "Department libraries can be created by the system admin or department admin."
 " There is also an option to control whether individual users can share "
-"libraries to a department."
+"libraries with a department."
 msgstr "部门资料库可以由系统管理员或部门管理员创建。 还有一个选项可以控制单个用户是否可以将资料库共享给部门。"
 
 #: templates/help/departments.html:33
@@ -365,8 +365,8 @@ msgstr "修改资料库的名称"
 
 #: templates/help/departments.html:48
 msgid ""
-"Share a library to users or groups outside of this department. This is very "
-"useful for cross-department collaboration."
+"Share a library with users or groups outside of this department. This is "
+"very useful for cross-department collaboration."
 msgstr "将资料库共享给部门外的用户或群组。这点对跨部门协作非常有用。"
 
 #: templates/help/departments.html:49
@@ -640,6 +640,12 @@ msgstr ""
 "当你退出 SeaDrive 应用程序或者切换 Seafile 帐号后，Windows 资源管理器中的 “SeaDrive” "
 "快捷方式不会消失。这是特意设计的行为。如果以后还需要访问帐号，就不需要删除它们。"
 
+#: templates/help/drive_client_2.0_for_windows_10.html:52
+msgid ""
+"In some corner cases, the \"SeaDrive\" shortcut will be left-over in Windows"
+" Explorer and you want to remove it."
+msgstr "在某些情况下，你可能需要删除 Windows 资源管理器中的 “SeaDrive” 快捷方式。"
+
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
@@ -903,14 +909,14 @@ msgstr ""
 
 #: templates/help/folder_permission.html:10
 msgid ""
-"You shared a library to a group with \"read only\" permission. You also want"
-" to allow a specific member of the group to modify files in one sub-folder. "
-"You can grant write permission of this sub-folder to this person."
+"You shared a library with a group with \"read only\" permission. You also "
+"want to allow a specific member of the group to modify files in one sub-"
+"folder. You can grant write permission of this sub-folder to this person."
 msgstr "你将一个资料库以“只读”权限共享给一个群组。你也想允许群组中的一个特定成员修改一个子目录中的文件。你可以授予该成员这个子目录的写权限。"
 
 #: templates/help/folder_permission.html:11
 msgid ""
-"You shared a library to 3 groups. There are 3 sub-folders under that "
+"You shared a library with 3 groups. There are 3 sub-folders under that "
 "library, one for each group to upload files. However you don't want users to"
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
@@ -920,8 +926,8 @@ msgstr ""
 
 #: templates/help/folder_permission.html:13
 msgid ""
-"Folder permissions are only effective for libraries and folders you share to"
-" others. To effectively set folder permissions to its sub-folders, you "
+"Folder permissions are only effective for libraries and folders you share "
+"with others. To effectively set folder permissions to its sub-folders, you "
 "should first share the parent library or folder; otherwise the folder "
 "permission won't take effect."
 msgstr "目录权限只对已共享出去的资料库和目录有效。为了有效设置子目录的目录权限，你应该先将父资料库或目录共享出去。"
@@ -990,7 +996,7 @@ msgstr "高级：不同权限之间的优先级"
 #: templates/help/folder_permission.html:27
 msgid ""
 "Folder permissions have higher priority than the permission set in share. "
-"For example, if you share a library to user A with \"read write\" "
+"For example, if you share a library with user A with \"read write\" "
 "permission, and also set \"read only\" permission to a sub-folder of that "
 "library. Then user A only has \"read only\" access to the sub-folder, while "
 "he/she has \"read write\" access to all other sub-folders and files."
@@ -1088,7 +1094,7 @@ msgstr "请注意，你的 Seafile 系统管理员可能没有开启全文搜索
 
 #: templates/help/groups_managing.html:6
 msgid ""
-"Creating a group is a convenient way to share files to many people. In "
+"Creating a group is a convenient way to share files with many people. In "
 "Seafile, you can create and manage a group easily."
 msgstr "创建一个群组是将文件共享给许多人的一种便捷的方式。在 Seafile 中，你可以轻松地创建和管理一个群组。"
 
@@ -1118,7 +1124,7 @@ msgstr "群组管理员可以添加/删除群组成员，也可以在群组中�
 msgid ""
 "Click on the \"Shared with groups\" tab on the left panel, and you'll see "
 "all the groups you're in. Clicking into any group, you'll see the libraries "
-"shared into this group."
+"shared with this group."
 msgstr "点击展开左侧面板上的“群组共享”，你可以看到你所在的所有群组。点击进入任意一个群组，你可以看到所有共享到该群组的资料库。"
 
 #: templates/help/groups_managing.html:14
@@ -1132,7 +1138,7 @@ msgstr "要创建一个新群组，可以点击左侧面板上的“群组共享
 #, python-format
 msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
-"and folders</a> about how to share libraries or folders to a group."
+"and folders</a> about how to share libraries or folders with a group."
 msgstr ""
 "关于如何共享资料库或目录到一个群组，请参考 <a "
 "href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">共享文件和目录</a>。 "
@@ -1416,6 +1422,13 @@ msgid ""
 "library state at the point of time."
 msgstr "点击任意修改记录上的“查看快照”链接，你可以看到那个时间点上的资料库状态。"
 
+#: templates/help/library_history_and_snapshots.html:13
+msgid ""
+"In the snapshot view, you can download or restore any file or folder. If "
+"you're the library's owner, you can restore the entire library to this point"
+" of time."
+msgstr "在快照页面，你可以下载或恢复任意的文件或目录。如果你是资料库的所有者，你还可以将整个资料库都恢复到这个时间点。"
+
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
 msgid ""
@@ -1521,6 +1534,23 @@ msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
 msgstr "文件浏览页面提供当前资料库的所有文件标签。"
+
+#: templates/help/read-only_syncing.html:6
+#, python-format
+msgid ""
+"For read-only libraries or folders, Seafile will show a forbidden icon (<img"
+" src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />) to "
+"indicate they are read-only. However, users can still modify the synced "
+"local copies. When a local copy is modified, Seafile will ignore the "
+"modified one. When the copy at the server is also modified, the client will "
+"popup a notification, saying that the local modified copy conflicts with the"
+" copy at the server side. To prevent data loss, the local copy is renamed to"
+" a conflict file."
+msgstr ""
+"对于只读资料库和目录，Seafile 会显示一个禁止图标(<img "
+"src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />) "
+"以说明它们是只读的。然而用户仍然可以修改同步后的本地副本。当一个本地副本被修改后， Seafile 会忽略它。当服务器端的副本被修改后， "
+"客户端会弹出通知，说明本地修改后的副本和服务器端的副本有冲突。为了避免数据丢失，本地副本会被重命名为一个冲突文件。"
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
@@ -1707,6 +1737,13 @@ msgid ""
 "permissions:"
 msgstr "你也可以设置共享外链的访问权限。有以下三种："
 
+#: templates/help/sharing_files_and_folders.html:21
+msgid ""
+"Preview and Download: the file or files in the folder can be downloaded. If "
+"the type of files can be previewed in web browser, they can also be viewed "
+"online (e.g. Office files)."
+msgstr "预览和下载：文件或者目录中的文件可以下载。如果该文件支持在浏览器中预览，那么它们也可以在线查看（例如 Office 文件）。"
+
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
 "Preview only: the file or files in the folder can only be viewed in web "
@@ -1802,7 +1839,7 @@ msgstr "共享资料库或目录"
 
 #: templates/help/sharing_files_and_folders.html:45
 msgid ""
-"You can share a library or folder to other registered Seafile users. The "
+"You can share a library or folder with other registered Seafile users. The "
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
 msgstr ""
@@ -1813,17 +1850,17 @@ msgid "You can choose the range of the share:"
 msgstr "你可以选择共享的范围："
 
 #: templates/help/sharing_files_and_folders.html:48
-msgid "Share to user: You can share to one or more users."
+msgid "Share with user: You can share with one or more users."
 msgstr "共享给用户：可以共享给一个或多个用户。"
 
 #: templates/help/sharing_files_and_folders.html:49
-msgid "Share to group: You can share to a group."
+msgid "Share with group: You can share with a group."
 msgstr "共享给群组：可以共享给一个群组。"
 
 #: templates/help/sharing_files_and_folders.html:50
 msgid ""
-"Share to organization: If you're using a private server, sometimes it's "
-"useful to share to all members on the server (the entire organization)."
+"Share with organization: If you're using a private server, sometimes it's "
+"useful to share with all members on the server (the entire organization)."
 msgstr "共享给团队：如果使用的是私有服务器，有时共享给服务器（整个团队）上的所有成员很有用。"
 
 #: templates/help/sharing_files_and_folders.html:52
@@ -1855,7 +1892,7 @@ msgid ""
 msgstr "仅云端预览：用户只能通过 web 浏览器在线查看文件，不能下载文件。"
 
 #: templates/help/sharing_files_and_folders.html:60
-msgid "To share a library or folder to a user or group:"
+msgid "To share a library or folder with a user or group:"
 msgstr "共享一个资料库或目录给用户或群组："
 
 #: templates/help/sharing_files_and_folders.html:62
@@ -1866,16 +1903,16 @@ msgstr "将鼠标移动到资料库或目录上，然后点击出现的“共享
 
 #: templates/help/sharing_files_and_folders.html:63
 msgid ""
-"A pop-up window will appear with share options. Click the \"Share to user\" "
-"or \"Share to group\" tab on the left panel. Select the user or group. Then "
-"click \"Submit\"."
+"A pop-up window will appear with share options. Click the \"Share with "
+"user\" or \"Share with group\" tab on the left panel. Select the user or "
+"group. Then click \"Submit\"."
 msgstr "一个包含共享选项的弹框会弹出来。点击左侧面板中的“共享给用户”或“共享给群组”，选择目标用户或群组，然后点击“提交”。"
 
 #: templates/help/sharing_files_and_folders.html:65
 msgid ""
-"After you share a library or folder to a user, the user can see it by "
+"After you share a library or folder with a user, the user can see it by "
 "clicking the \"Shared with me\" tab on the left panel in Seafile web app. If"
-" you share it to a group, the group members can only see it by navigating "
+" you share it with a group, the group members can only see it by navigating "
 "into the group."
 msgstr ""
 "将一个资料库或目录共享给一个用户后，该用户可以在 Seafile web app "
@@ -1883,10 +1920,10 @@ msgstr ""
 
 #: templates/help/sharing_files_and_folders.html:66
 msgid ""
-"To share a library to the entire organization: In Seafile web app, click the"
-" \"Shared with all\" tab on the left panel. Then click the \"Add Library\" "
-"button. In the drop-down menu, you can choose to share an existing library "
-"or create a new library and share it."
+"To share a library with the entire organization: In Seafile web app, click "
+"the \"Shared with all\" tab on the left panel. Then click the \"Add "
+"Library\" button. In the drop-down menu, you can choose to share an existing"
+" library or create a new library and share it."
 msgstr ""
 "共享一个资料库到整个团队：在 Seafile web app "
 "中，点击左侧面板上的“公共资料库”。然后点击“添加资料库”按钮。在弹出的下拉菜单中，你可以选择共享一个已存在的资料库，或者新建一个资料库并共享它。"
@@ -2112,7 +2149,7 @@ msgstr "只读"
 
 #: templates/help/using_drive_client.html:70
 msgid ""
-"The folder or library of this file is shared with read-only permission to "
+"The folder or library of this file is shared with read-only permission with "
 "you. You cannot modify, delete or move the file."
 msgstr "文件所在的目录或者资料库是以只读权限共享给你的，你不能修改, 删除, 或移动该文件。"
 

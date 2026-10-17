@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-05 10:24+0800\n"
+"POT-Creation-Date: 2026-10-17 21:05+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Greek (https://app.transifex.com/haiwen/teams/5086/el/)\n"
@@ -352,12 +352,8 @@ msgstr ""
 msgid ""
 "Department libraries can be created by the system admin or department admin."
 " There is also an option to control whether individual users can share "
-"libraries to a department."
+"libraries with a department."
 msgstr ""
-"Οι βιβλιοθήκες τμημάτων μπορούν να δημιουργηθούν από τον διαχειριστή "
-"συστήματος ή τον διαχειριστή τμήματος. Υπάρχει επίσης μια επιλογή για τον "
-"έλεγχο του αν οι μεμονωμένοι χρήστες μπορούν να μοιράζονται βιβλιοθήκες σε "
-"ένα τμήμα."
 
 #: templates/help/departments.html:33
 msgid ""
@@ -421,11 +417,9 @@ msgstr "Αλλαγή ονόματος βιβλιοθήκης"
 
 #: templates/help/departments.html:48
 msgid ""
-"Share a library to users or groups outside of this department. This is very "
-"useful for cross-department collaboration."
+"Share a library with users or groups outside of this department. This is "
+"very useful for cross-department collaboration."
 msgstr ""
-"Κοινή χρήση μιας βιβλιοθήκης με χρήστες ή ομάδες εκτός αυτού του τμήματος. "
-"Αυτό είναι πολύ χρήσιμο για τη συνεργασία μεταξύ τμημάτων."
 
 #: templates/help/departments.html:49
 #, python-format
@@ -781,6 +775,12 @@ msgstr ""
 "αφαιρέσετε εάν εξακολουθείτε να χρειάζεται να έχετε πρόσβαση στον λογαριασμό"
 " αργότερα."
 
+#: templates/help/drive_client_2.0_for_windows_10.html:52
+msgid ""
+"In some corner cases, the \"SeaDrive\" shortcut will be left-over in Windows"
+" Explorer and you want to remove it."
+msgstr ""
+
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
@@ -1134,38 +1134,26 @@ msgstr ""
 
 #: templates/help/folder_permission.html:10
 msgid ""
-"You shared a library to a group with \"read only\" permission. You also want"
-" to allow a specific member of the group to modify files in one sub-folder. "
-"You can grant write permission of this sub-folder to this person."
+"You shared a library with a group with \"read only\" permission. You also "
+"want to allow a specific member of the group to modify files in one sub-"
+"folder. You can grant write permission of this sub-folder to this person."
 msgstr ""
-"Μοιραστήκατε μια βιβλιοθήκη σε μια ομάδα με άδεια \"μόνο για ανάγνωση\". "
-"Θέλετε επίσης να επιτρέψετε σε ένα συγκεκριμένο μέλος της ομάδας να "
-"τροποποιεί αρχεία σε έναν υποφάκελο. Μπορείτε να παραχωρήσετε άδεια εγγραφής"
-" αυτού του υποφακέλου σε αυτό το άτομο."
 
 #: templates/help/folder_permission.html:11
 msgid ""
-"You shared a library to 3 groups. There are 3 sub-folders under that "
+"You shared a library with 3 groups. There are 3 sub-folders under that "
 "library, one for each group to upload files. However you don't want users to"
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
 msgstr ""
-"Μοιραστήκατε μια βιβλιοθήκη σε 3 ομάδες. Υπάρχουν 3 υποφάκελοι κάτω από "
-"αυτήν τη βιβλιοθήκη, ένας για κάθε ομάδα για τη μεταφόρτωση αρχείων. Ωστόσο,"
-" δεν θέλετε οι χρήστες να αλλάζουν αρχεία που δεν ανήκουν στην ομάδα τους. "
-"Μπορείτε να εκχωρήσετε άδεια εγγραφής ενός υποφακέλου μόνο στην ομάδα του."
 
 #: templates/help/folder_permission.html:13
 msgid ""
-"Folder permissions are only effective for libraries and folders you share to"
-" others. To effectively set folder permissions to its sub-folders, you "
+"Folder permissions are only effective for libraries and folders you share "
+"with others. To effectively set folder permissions to its sub-folders, you "
 "should first share the parent library or folder; otherwise the folder "
 "permission won't take effect."
 msgstr ""
-"Τα δικαιώματα φακέλων είναι αποτελεσματικά μόνο για βιβλιοθήκες και φακέλους"
-" που μοιράζεστε με άλλους. Για να ορίσετε αποτελεσματικά δικαιώματα φακέλων "
-"στους υποφακέλους του, θα πρέπει πρώτα να μοιραστείτε τη γονική βιβλιοθήκη ή"
-" τον φάκελο. διαφορετικά το δικαίωμα φακέλου δεν θα τεθεί σε ισχύ."
 
 #: templates/help/folder_permission.html:14
 msgid ""
@@ -1254,17 +1242,11 @@ msgstr "Για προχωρημένους: προτεραιότητα μεταξ
 #: templates/help/folder_permission.html:27
 msgid ""
 "Folder permissions have higher priority than the permission set in share. "
-"For example, if you share a library to user A with \"read write\" "
+"For example, if you share a library with user A with \"read write\" "
 "permission, and also set \"read only\" permission to a sub-folder of that "
 "library. Then user A only has \"read only\" access to the sub-folder, while "
 "he/she has \"read write\" access to all other sub-folders and files."
 msgstr ""
-"Τα δικαιώματα φακέλων έχουν υψηλότερη προτεραιότητα από την άδεια που έχει "
-"οριστεί στην κοινή χρήση. Για παράδειγμα, εάν μοιράζεστε μια βιβλιοθήκη στον"
-" χρήστη Α με άδεια \"ανάγνωσης εγγραφής\" και ορίσετε επίσης άδεια \"μόνο "
-"για ανάγνωση\" σε έναν υποφάκελο αυτής της βιβλιοθήκης. Στη συνέχεια, ο "
-"χρήστης Α έχει πρόσβαση μόνο για ανάγνωση στον υποφάκελο, ενώ έχει πρόσβαση "
-"\"ανάγνωσης εγγραφής\" σε όλους τους άλλους υποφακέλους και αρχεία."
 
 #: templates/help/folder_permission.html:28
 msgid ""
@@ -1374,12 +1356,9 @@ msgstr ""
 
 #: templates/help/groups_managing.html:6
 msgid ""
-"Creating a group is a convenient way to share files to many people. In "
+"Creating a group is a convenient way to share files with many people. In "
 "Seafile, you can create and manage a group easily."
 msgstr ""
-"Η δημιουργία μιας ομάδας είναι ένας βολικός τρόπος για να μοιράζεστε αρχεία "
-"με πολλά άτομα. Στο Seafile, μπορείτε να δημιουργήσετε και να διαχειριστείτε"
-" μια ομάδα εύκολα."
 
 #: templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
@@ -1416,11 +1395,8 @@ msgstr ""
 msgid ""
 "Click on the \"Shared with groups\" tab on the left panel, and you'll see "
 "all the groups you're in. Clicking into any group, you'll see the libraries "
-"shared into this group."
+"shared with this group."
 msgstr ""
-"Κάντε κλικ στην καρτέλα \"Κοινόχρηστα με ομάδες\" στο αριστερό πλαίσιο και "
-"θα δείτε όλες τις ομάδες στις οποίες ανήκετε. Κάνοντας κλικ σε οποιαδήποτε "
-"ομάδα, θα δείτε τις βιβλιοθήκες που μοιράζονται σε αυτήν την ομάδα."
 
 #: templates/help/groups_managing.html:14
 msgid ""
@@ -1437,11 +1413,8 @@ msgstr ""
 #, python-format
 msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
-"and folders</a> about how to share libraries or folders to a group."
+"and folders</a> about how to share libraries or folders with a group."
 msgstr ""
-"Δείτε το <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">κοινή "
-"χρήση αρχείων και φακέλων</a> σχετικά με τον τρόπο κοινής χρήσης βιβλιοθηκών"
-" ή φακέλων σε μια ομάδα."
 
 #: templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
@@ -1789,6 +1762,13 @@ msgstr ""
 "τροποποίησης. Θα δείτε την κατάσταση της βιβλιοθήκης εκείνη τη χρονική "
 "στιγμή."
 
+#: templates/help/library_history_and_snapshots.html:13
+msgid ""
+"In the snapshot view, you can download or restore any file or folder. If "
+"you're the library's owner, you can restore the entire library to this point"
+" of time."
+msgstr ""
+
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
 msgid ""
@@ -1924,6 +1904,19 @@ msgid ""
 msgstr ""
 "Η διεπαφή του προγράμματος περιήγησης αρχείων παρέχει μια περίληψη όλων των "
 "ετικετών αρχείων στην τρέχουσα βιβλιοθήκη."
+
+#: templates/help/read-only_syncing.html:6
+#, python-format
+msgid ""
+"For read-only libraries or folders, Seafile will show a forbidden icon (<img"
+" src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />) to "
+"indicate they are read-only. However, users can still modify the synced "
+"local copies. When a local copy is modified, Seafile will ignore the "
+"modified one. When the copy at the server is also modified, the client will "
+"popup a notification, saying that the local modified copy conflicts with the"
+" copy at the server side. To prevent data loss, the local copy is renamed to"
+" a conflict file."
+msgstr ""
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
@@ -2183,6 +2176,13 @@ msgstr ""
 "Μπορείτε επίσης να ορίσετε άδεια πρόσβασης για την κοινή χρήση συνδέσμων. "
 "Υπάρχουν τρεις τύποι αδειών:"
 
+#: templates/help/sharing_files_and_folders.html:21
+msgid ""
+"Preview and Download: the file or files in the folder can be downloaded. If "
+"the type of files can be previewed in web browser, they can also be viewed "
+"online (e.g. Office files)."
+msgstr ""
+
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
 "Preview only: the file or files in the folder can only be viewed in web "
@@ -2316,36 +2316,28 @@ msgstr "Κοινή χρήση βιβλιοθηκών ή φακέλων"
 
 #: templates/help/sharing_files_and_folders.html:45
 msgid ""
-"You can share a library or folder to other registered Seafile users. The "
+"You can share a library or folder with other registered Seafile users. The "
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
 msgstr ""
-"Μπορείτε να μοιραστείτε μια βιβλιοθήκη ή έναν φάκελο με άλλους "
-"εγγεγραμμένους χρήστες του Seafile. Η κοινόχρηστη βιβλιοθήκη ή ο φάκελος "
-"είναι προσβάσιμος από άλλους με την εφαρμογή web και τους πελάτες Seafile."
 
 #: templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
 msgstr "Μπορείτε να επιλέξετε το εύρος της κοινής χρήσης:"
 
 #: templates/help/sharing_files_and_folders.html:48
-msgid "Share to user: You can share to one or more users."
+msgid "Share with user: You can share with one or more users."
 msgstr ""
-"Κοινή χρήση σε χρήστη: Μπορείτε να μοιραστείτε σε έναν ή περισσότερους "
-"χρήστες."
 
 #: templates/help/sharing_files_and_folders.html:49
-msgid "Share to group: You can share to a group."
-msgstr "Κοινή χρήση σε ομάδα: Μπορείτε να μοιραστείτε σε μια ομάδα."
+msgid "Share with group: You can share with a group."
+msgstr ""
 
 #: templates/help/sharing_files_and_folders.html:50
 msgid ""
-"Share to organization: If you're using a private server, sometimes it's "
-"useful to share to all members on the server (the entire organization)."
+"Share with organization: If you're using a private server, sometimes it's "
+"useful to share with all members on the server (the entire organization)."
 msgstr ""
-"Κοινή χρήση στον οργανισμό: Εάν χρησιμοποιείτε ιδιωτικό διακομιστή, μερικές "
-"φορές είναι χρήσιμο να μοιράζεστε με όλα τα μέλη του διακομιστή (ολόκληρο "
-"τον οργανισμό)."
 
 #: templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
@@ -2388,9 +2380,8 @@ msgstr ""
 "αρχείων."
 
 #: templates/help/sharing_files_and_folders.html:60
-msgid "To share a library or folder to a user or group:"
+msgid "To share a library or folder with a user or group:"
 msgstr ""
-"Για να μοιραστείτε μια βιβλιοθήκη ή έναν φάκελο με έναν χρήστη ή μια ομάδα:"
 
 #: templates/help/sharing_files_and_folders.html:62
 msgid ""
@@ -2402,39 +2393,26 @@ msgstr ""
 
 #: templates/help/sharing_files_and_folders.html:63
 msgid ""
-"A pop-up window will appear with share options. Click the \"Share to user\" "
-"or \"Share to group\" tab on the left panel. Select the user or group. Then "
-"click \"Submit\"."
+"A pop-up window will appear with share options. Click the \"Share with "
+"user\" or \"Share with group\" tab on the left panel. Select the user or "
+"group. Then click \"Submit\"."
 msgstr ""
-"Θα εμφανιστεί ένα αναδυόμενο παράθυρο με επιλογές κοινής χρήσης. Κάντε κλικ "
-"στην καρτέλα \"Κοινή χρήση σε χρήστη\" ή \"Κοινή χρήση σε ομάδα\" στο "
-"αριστερό πλαίσιο. Επιλέξτε το χρήστη ή την ομάδα. Στη συνέχεια κάντε κλικ "
-"στο \"Υποβολή\"."
 
 #: templates/help/sharing_files_and_folders.html:65
 msgid ""
-"After you share a library or folder to a user, the user can see it by "
+"After you share a library or folder with a user, the user can see it by "
 "clicking the \"Shared with me\" tab on the left panel in Seafile web app. If"
-" you share it to a group, the group members can only see it by navigating "
+" you share it with a group, the group members can only see it by navigating "
 "into the group."
 msgstr ""
-"Αφού μοιραστείτε μια βιβλιοθήκη ή έναν φάκελο με έναν χρήστη, ο χρήστης "
-"μπορεί να τον δει κάνοντας κλικ στην καρτέλα \"Κοινόχρηστα με εμένα\" στο "
-"αριστερό πλαίσιο στην εφαρμογή web Seafile. Εάν το μοιραστείτε σε μια ομάδα,"
-" τα μέλη της ομάδας μπορούν να το δουν μόνο πλοηγώντας στην ομάδα."
 
 #: templates/help/sharing_files_and_folders.html:66
 msgid ""
-"To share a library to the entire organization: In Seafile web app, click the"
-" \"Shared with all\" tab on the left panel. Then click the \"Add Library\" "
-"button. In the drop-down menu, you can choose to share an existing library "
-"or create a new library and share it."
+"To share a library with the entire organization: In Seafile web app, click "
+"the \"Shared with all\" tab on the left panel. Then click the \"Add "
+"Library\" button. In the drop-down menu, you can choose to share an existing"
+" library or create a new library and share it."
 msgstr ""
-"Για να μοιραστείτε μια βιβλιοθήκη με ολόκληρο τον οργανισμό: Στην εφαρμογή "
-"web Seafile, κάντε κλικ στην καρτέλα \"Κοινόχρηστα με όλους\" στο αριστερό "
-"πλαίσιο. Στη συνέχεια, κάντε κλικ στο κουμπί \"Προσθήκη βιβλιοθήκης\". Στο "
-"αναπτυσσόμενο μενού, μπορείτε να επιλέξετε να μοιραστείτε μια υπάρχουσα "
-"βιβλιοθήκη ή να δημιουργήσετε μια νέα βιβλιοθήκη και να τη μοιραστείτε."
 
 #: templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
@@ -2723,12 +2701,9 @@ msgstr "Μόνο για ανάγνωση"
 
 #: templates/help/using_drive_client.html:70
 msgid ""
-"The folder or library of this file is shared with read-only permission to "
+"The folder or library of this file is shared with read-only permission with "
 "you. You cannot modify, delete or move the file."
 msgstr ""
-"Ο φάκελος ή η βιβλιοθήκη αυτού του αρχείου μοιράζεται με άδεια μόνο για "
-"ανάγνωση σε εσάς. Δεν μπορείτε να τροποποιήσετε, να διαγράψετε ή να "
-"μετακινήσετε το αρχείο."
 
 #: templates/help/using_drive_client.html:74
 msgid ""

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-05 10:24+0800\n"
+"POT-Creation-Date: 2026-10-17 21:05+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
 "Language-Team: Italian (https://app.transifex.com/haiwen/teams/5086/it/)\n"
@@ -353,12 +353,8 @@ msgstr ""
 msgid ""
 "Department libraries can be created by the system admin or department admin."
 " There is also an option to control whether individual users can share "
-"libraries to a department."
+"libraries with a department."
 msgstr ""
-"Le librerie del dipartimento possono essere create dall'amministratore di "
-"sistema o dall'amministratore del dipartimento. C'   anche un'opzione per "
-"controllare se gli utenti individuali possono condividere librerie con un "
-"dipartimento."
 
 #: templates/help/departments.html:33
 msgid ""
@@ -423,11 +419,9 @@ msgstr "Cambia nome libreria"
 
 #: templates/help/departments.html:48
 msgid ""
-"Share a library to users or groups outside of this department. This is very "
-"useful for cross-department collaboration."
+"Share a library with users or groups outside of this department. This is "
+"very useful for cross-department collaboration."
 msgstr ""
-"Condividi una libreria con utenti o gruppi esterni a questo dipartimento. Ci"
-"   molto utile per la collaborazione tra dipartimenti."
 
 #: templates/help/departments.html:49
 #, python-format
@@ -773,6 +767,12 @@ msgstr ""
 "Questo   un comportamento previsto. Non   necessario rimuoverli se ancora "
 "avrai bisogno di accedere all'account in futuro."
 
+#: templates/help/drive_client_2.0_for_windows_10.html:52
+msgid ""
+"In some corner cases, the \"SeaDrive\" shortcut will be left-over in Windows"
+" Explorer and you want to remove it."
+msgstr ""
+
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
@@ -1113,40 +1113,26 @@ msgstr ""
 
 #: templates/help/folder_permission.html:10
 msgid ""
-"You shared a library to a group with \"read only\" permission. You also want"
-" to allow a specific member of the group to modify files in one sub-folder. "
-"You can grant write permission of this sub-folder to this person."
+"You shared a library with a group with \"read only\" permission. You also "
+"want to allow a specific member of the group to modify files in one sub-"
+"folder. You can grant write permission of this sub-folder to this person."
 msgstr ""
-"Hai condiviso una libreria a un gruppo con autorizzazione \"solo lettura\". "
-"Vuoi anche consentire a un membro specifico del gruppo di modificare i file "
-"in una sottocartella. Puoi concedere l'autorizzazione di scrittura per "
-"questa sottocartella a questa persona."
 
 #: templates/help/folder_permission.html:11
 msgid ""
-"You shared a library to 3 groups. There are 3 sub-folders under that "
+"You shared a library with 3 groups. There are 3 sub-folders under that "
 "library, one for each group to upload files. However you don't want users to"
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
 msgstr ""
-"Hai condiviso una libreria a 3 gruppi. Ci sono 3 sottocartelle sotto quella "
-"libreria, una per ogni gruppo per caricare i file. Tuttavia, non vuoi che "
-"gli utenti modifichino i file che non appartengono al loro gruppo. Puoi "
-"concedere l'autorizzazione di scrittura di una sottocartella solo al suo "
-"gruppo."
 
 #: templates/help/folder_permission.html:13
 msgid ""
-"Folder permissions are only effective for libraries and folders you share to"
-" others. To effectively set folder permissions to its sub-folders, you "
+"Folder permissions are only effective for libraries and folders you share "
+"with others. To effectively set folder permissions to its sub-folders, you "
 "should first share the parent library or folder; otherwise the folder "
 "permission won't take effect."
 msgstr ""
-"Le autorizzazioni per le cartelle sono solo efficaci per le librerie e le "
-"cartelle che condividi con gli altri. Per impostare efficacemente le "
-"autorizzazioni per le sottocartelle, devi prima condividere la libreria o "
-"cartella padre; altrimenti, le autorizzazioni per le cartelle non avranno "
-"effetto."
 
 #: templates/help/folder_permission.html:14
 msgid ""
@@ -1235,18 +1221,11 @@ msgstr "Avanzato: priorita tra diverse autorizzazioni"
 #: templates/help/folder_permission.html:27
 msgid ""
 "Folder permissions have higher priority than the permission set in share. "
-"For example, if you share a library to user A with \"read write\" "
+"For example, if you share a library with user A with \"read write\" "
 "permission, and also set \"read only\" permission to a sub-folder of that "
 "library. Then user A only has \"read only\" access to the sub-folder, while "
 "he/she has \"read write\" access to all other sub-folders and files."
 msgstr ""
-"Le autorizzazioni per le cartelle hanno priorita maggiore rispetto "
-"all'autorizzazione impostata nella condivisione. Ad esempio, se si condivide"
-" una libreria con l'utente A con autorizzazione \"lettura e scrittura\" e si"
-" imposta l'autorizzazione \"solo lettura\" su una sottocartella di quella "
-"libreria, allora l'utente A ha solo accesso \"solo lettura\" alla "
-"sottocartella, mentre ha accesso \"lettura e scrittura\" a tutte le altre "
-"sottocartelle e file."
 
 #: templates/help/folder_permission.html:28
 msgid ""
@@ -1355,11 +1334,9 @@ msgstr ""
 
 #: templates/help/groups_managing.html:6
 msgid ""
-"Creating a group is a convenient way to share files to many people. In "
+"Creating a group is a convenient way to share files with many people. In "
 "Seafile, you can create and manage a group easily."
 msgstr ""
-"Creare un gruppo è un modo conveniente per condividere file con molte "
-"persone. In Seafile, puoi creare e gestire facilmente un gruppo."
 
 #: templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
@@ -1395,11 +1372,8 @@ msgstr ""
 msgid ""
 "Click on the \"Shared with groups\" tab on the left panel, and you'll see "
 "all the groups you're in. Clicking into any group, you'll see the libraries "
-"shared into this group."
+"shared with this group."
 msgstr ""
-"Fai clic sulla scheda \"Condiviso con gruppi\" nel pannello di sinistra e "
-"vedrai tutti i gruppi a cui appartieni. Cliccando su qualsiasi gruppo, "
-"vedrai le librerie condivise in questo gruppo."
 
 #: templates/help/groups_managing.html:14
 msgid ""
@@ -1415,11 +1389,8 @@ msgstr ""
 #, python-format
 msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
-"and folders</a> about how to share libraries or folders to a group."
+"and folders</a> about how to share libraries or folders with a group."
 msgstr ""
-"Vedi <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">condivisione "
-"di file e cartelle</a> su come condividere librerie o cartelle con un "
-"gruppo."
 
 #: templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
@@ -1763,6 +1734,13 @@ msgstr ""
 "Fai clic sul link \"visualizza snapshot\" su qualsiasi registro di modifica."
 " Vedrai lo stato della libreria in quel momento."
 
+#: templates/help/library_history_and_snapshots.html:13
+msgid ""
+"In the snapshot view, you can download or restore any file or folder. If "
+"you're the library's owner, you can restore the entire library to this point"
+" of time."
+msgstr ""
+
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
 msgid ""
@@ -1897,6 +1875,19 @@ msgid ""
 msgstr ""
 "L'interfaccia del browser dei file fornisce un sommario di tutte le tag dei "
 "file nella libreria corrente."
+
+#: templates/help/read-only_syncing.html:6
+#, python-format
+msgid ""
+"For read-only libraries or folders, Seafile will show a forbidden icon (<img"
+" src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />) to "
+"indicate they are read-only. However, users can still modify the synced "
+"local copies. When a local copy is modified, Seafile will ignore the "
+"modified one. When the copy at the server is also modified, the client will "
+"popup a notification, saying that the local modified copy conflicts with the"
+" copy at the server side. To prevent data loss, the local copy is renamed to"
+" a conflict file."
+msgstr ""
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
@@ -2150,6 +2141,13 @@ msgstr ""
 "Puoi anche impostare i permessi di accesso per i link di condivisione. Ci "
 "sono tre tipi di permessi:"
 
+#: templates/help/sharing_files_and_folders.html:21
+msgid ""
+"Preview and Download: the file or files in the folder can be downloaded. If "
+"the type of files can be previewed in web browser, they can also be viewed "
+"online (e.g. Office files)."
+msgstr ""
+
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
 "Preview only: the file or files in the folder can only be viewed in web "
@@ -2274,34 +2272,28 @@ msgstr "Condivisione librerie o cartelle"
 
 #: templates/help/sharing_files_and_folders.html:45
 msgid ""
-"You can share a library or folder to other registered Seafile users. The "
+"You can share a library or folder with other registered Seafile users. The "
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
 msgstr ""
-" Puoi condividere una libreria o cartella con altri utenti Seafile "
-"registrati. La libreria o cartella condivisa può essere accessibile da altri"
-" utenti con l'app web e i client Seafile."
 
 #: templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
 msgstr "Puoi scegliere la gamma della condivisione:"
 
 #: templates/help/sharing_files_and_folders.html:48
-msgid "Share to user: You can share to one or more users."
-msgstr "Condividi a utente: puoi condividere a un utente o più utenti."
+msgid "Share with user: You can share with one or more users."
+msgstr ""
 
 #: templates/help/sharing_files_and_folders.html:49
-msgid "Share to group: You can share to a group."
-msgstr "Condividi a gruppo: puoi condividere a un gruppo."
+msgid "Share with group: You can share with a group."
+msgstr ""
 
 #: templates/help/sharing_files_and_folders.html:50
 msgid ""
-"Share to organization: If you're using a private server, sometimes it's "
-"useful to share to all members on the server (the entire organization)."
+"Share with organization: If you're using a private server, sometimes it's "
+"useful to share with all members on the server (the entire organization)."
 msgstr ""
-"Condividi a organizzazione: se si utilizza un server privato, talvolta può "
-"essere utile condividere a tutti i membri del server (l'intera "
-"organizzazione)."
 
 #: templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
@@ -2341,8 +2333,8 @@ msgstr ""
 "un browser web. I file non possono essere scaricati."
 
 #: templates/help/sharing_files_and_folders.html:60
-msgid "To share a library or folder to a user or group:"
-msgstr "Per condividere una libreria o cartella a un utente o gruppo:"
+msgid "To share a library or folder with a user or group:"
+msgstr ""
 
 #: templates/help/sharing_files_and_folders.html:62
 msgid ""
@@ -2354,38 +2346,26 @@ msgstr ""
 
 #: templates/help/sharing_files_and_folders.html:63
 msgid ""
-"A pop-up window will appear with share options. Click the \"Share to user\" "
-"or \"Share to group\" tab on the left panel. Select the user or group. Then "
-"click \"Submit\"."
+"A pop-up window will appear with share options. Click the \"Share with "
+"user\" or \"Share with group\" tab on the left panel. Select the user or "
+"group. Then click \"Submit\"."
 msgstr ""
-"Una finestra a comparsa apparirà con opzioni di condivisione. Fai clic sul "
-"pulsante \"Condividi a utente\" o \"Condividi a gruppo\" nel pannello di "
-"sinistra. Seleziona l'utente o il gruppo. Quindi fai clic su \"Invia\"."
 
 #: templates/help/sharing_files_and_folders.html:65
 msgid ""
-"After you share a library or folder to a user, the user can see it by "
+"After you share a library or folder with a user, the user can see it by "
 "clicking the \"Shared with me\" tab on the left panel in Seafile web app. If"
-" you share it to a group, the group members can only see it by navigating "
+" you share it with a group, the group members can only see it by navigating "
 "into the group."
 msgstr ""
-"Dopo aver condiviso una libreria o cartella con un utente, l'utente può "
-"vederla facendo clic sulla scheda \"Condiviso con me\" nel pannello di "
-"sinistra nell'app web Seafile. Se condividi con un gruppo, i membri del "
-"gruppo possono vederla solo navigando nel gruppo."
 
 #: templates/help/sharing_files_and_folders.html:66
 msgid ""
-"To share a library to the entire organization: In Seafile web app, click the"
-" \"Shared with all\" tab on the left panel. Then click the \"Add Library\" "
-"button. In the drop-down menu, you can choose to share an existing library "
-"or create a new library and share it."
+"To share a library with the entire organization: In Seafile web app, click "
+"the \"Shared with all\" tab on the left panel. Then click the \"Add "
+"Library\" button. In the drop-down menu, you can choose to share an existing"
+" library or create a new library and share it."
 msgstr ""
-"Per condividere una libreria con l'intera organizzazione: nell'app web "
-"Seafile, fai clic sulla scheda \"Condiviso con tutti\" nel pannello di "
-"sinistra. Quindi fai clic sul pulsante \"Aggiungi libreria\". Nel menu a "
-"discesa, puoi scegliere di condividere una libreria esistente o creare una "
-"nuova libreria e condividerla."
 
 #: templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
@@ -2665,11 +2645,9 @@ msgstr "Sola lettura"
 
 #: templates/help/using_drive_client.html:70
 msgid ""
-"The folder or library of this file is shared with read-only permission to "
+"The folder or library of this file is shared with read-only permission with "
 "you. You cannot modify, delete or move the file."
 msgstr ""
-"La cartella o la libreria di questo file è condivisa con permesso di sola "
-"lettura. Non puoi modificare, eliminare o spostare il file."
 
 #: templates/help/using_drive_client.html:74
 msgid ""
