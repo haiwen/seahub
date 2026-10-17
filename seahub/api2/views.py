@@ -118,7 +118,7 @@ from seahub.views.file import get_office_feature_by_repo
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.repo_metadata.utils import init_metadata, init_tags, add_init_metadata_task
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
-from seahub.ai.utils import get_ai_credit_by_user, get_ai_credit_used_by_user
+from seahub.ai.utils import get_ai_credit_by_user, get_ai_credit_used_by_user, get_org_ai_credit_info
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -319,12 +319,18 @@ class AccountInfo(APIView):
             quota_usage = seafile_api.get_user_self_usage(email)
 
         if ENABLE_SEAFILE_AI and SEAFILE_AI_SERVER_URL:
-            info['ai_credit'] = get_ai_credit_by_user(request.user, org_id)
-            info['ai_credit_used'] = round(get_ai_credit_used_by_user(request.user, org_id), 2)
-            if info['ai_credit'] <= 0:
+            if org_id:
+                credit_info = get_org_ai_credit_info(request.user, org_id)
+                info.update(credit_info)
+            else:
+                info['ai_credit'] = get_ai_credit_by_user(request.user, org_id)
+                info['ai_credit_used'] = round(get_ai_credit_used_by_user(request.user, org_id), 2)
+            monthly_credit = info.get('role_monthly_ai_credit', info['ai_credit'])
+            role_credit_used = info.get('role_ai_credit_used', info['ai_credit_used'])
+            if monthly_credit <= 0:
                 info['ai_usage_rate'] = '0%'
             else:
-                info['ai_usage_rate'] = str(float(info['ai_credit_used']) / info['ai_credit'] * 100) + '%'
+                info['ai_usage_rate'] = str(float(role_credit_used) / monthly_credit * 100) + '%'
 
         if quota_total > 0:
             info['space_usage'] = str(float(quota_usage) / quota_total * 100) + '%'

@@ -1085,6 +1085,7 @@ METADATA_FILE_TYPES = {
 #         seafile ai         #
 ##############################
 ENABLE_SEAFILE_AI = False
+ORG_ADDITIONAL_AI_CREDIT_MAX_ADJUSTMENT = 10_000_000
 ENABLE_FACE_RECOGNITION = False
 
 SEAFILE_AI_SERVER_URL = ''

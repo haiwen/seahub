@@ -626,6 +626,16 @@ class SystemAdminAPI {
     return this.req.get(url);
   }
 
+  sysAdminGetOrgAICredit(orgID) {
+    const url = this.server + '/api/v2.1/admin/organizations/' + orgID + '/ai-credits/';
+    return this.req.get(url);
+  }
+
+  sysAdminSetOrgAICredit(orgID, balance) {
+    const url = this.server + '/api/v2.1/admin/organizations/' + orgID + '/ai-credits/';
+    return this.req.put(url, { balance: balance });
+  }
+
   sysAdminUpdateOrg(orgID, orgInfo) {
     const url = this.server + '/api/v2.1/admin/organizations/' + orgID + '/';
     let formData = new FormData();
