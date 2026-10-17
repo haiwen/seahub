@@ -76,8 +76,8 @@ class OrgLogsFileUpdate extends Component {
         <table>
           <thead>
             <tr>
-              <th width="18%">{gettext('Share From')}</th>
-              <th width="15%">{gettext('Share To')}</th>
+              <th width="18%">{gettext('Share from')}</th>
+              <th width="15%">{gettext('Share with')}</th>
               <th width="8%">{gettext('Actions')}</th>
               <th width="13%">{gettext('Permission')}</th>
               <th width="15%">{gettext('Library')}</th>

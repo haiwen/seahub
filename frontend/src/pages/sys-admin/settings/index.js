@@ -210,7 +210,7 @@ class WebSettings extends Component {
                 <Section headingText={gettext('Groups')}>
                   <CheckboxItem
                     saveSetting={this.saveSetting}
-                    displayName={gettext('Enable sharing to all groups')}
+                    displayName={gettext('Enable sharing with all groups')}
                     keyText='ENABLE_SHARE_TO_ALL_GROUPS'
                     value={config_dict['ENABLE_SHARE_TO_ALL_GROUPS']}
                     helpTip={gettext('Enable users to share libraries with any groups in the system.')}
