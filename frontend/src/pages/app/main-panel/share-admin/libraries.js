@@ -58,7 +58,7 @@ class Content extends Component {
         headers={isDesktop ? [
           { isFixed: true, width: 40 },
           { isFixed: false, width: 0.35, children: (<a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a>) },
-          { isFixed: false, width: 0.3, children: gettext('Share To') },
+          { isFixed: false, width: 0.3, children: gettext('Share with') },
           { isFixed: false, width: 0.25, children: gettext('Permission') },
           { isFixed: false, width: 0.1 },
         ] : [
@@ -265,7 +265,7 @@ class Item extends Component {
               <Link to={repoUrl}>{item.repo_name}</Link>
               <span className="item-meta-info-highlighted">{Utils.sharePerms(share_permission)}</span>
               <br />
-              <span className="item-meta-info">{`${gettext('Share To:')} ${shareTo}`}</span>
+              <span className="item-meta-info">{`${gettext('Share with:')} ${shareTo}`}</span>
             </td>
             <td>
               <MobileItemMenu>

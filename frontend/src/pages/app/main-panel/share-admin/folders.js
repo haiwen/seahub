@@ -58,7 +58,7 @@ class Content extends Component {
           { isFixed: true, width: 40 }, // icon
           { isFixed: false, width: 0.25, children: (<a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a>) },
           { isFixed: false, width: 0.25, children: gettext('Library') },
-          { isFixed: false, width: 0.2, children: gettext('Share To') },
+          { isFixed: false, width: 0.2, children: gettext('Share with') },
           { isFixed: false, width: 0.2, children: gettext('Permission') },
           { isFixed: false, width: 0.1 },
         ] : [
@@ -252,7 +252,7 @@ class Item extends Component {
               <Link to={folderUrl}>{item.folder_name}</Link>
               <span className="item-meta-info-highlighted">{Utils.sharePerms(share_permission)}</span>
               <br />
-              <span className="item-meta-info">{`${gettext('Share To:')} ${item.share_type == 'personal' ? item.user_name : item.group_name}`}</span>
+              <span className="item-meta-info">{`${gettext('Share with:')} ${item.share_type == 'personal' ? item.user_name : item.group_name}`}</span>
             </td>
             <td>
               <MobileItemMenu>

@@ -40,8 +40,8 @@ class Content extends Component {
           <table className="table-hover">
             <thead>
               <tr>
-                <th width="15%">{gettext('Share From')}</th>
-                <th width="15%">{gettext('Share To')}</th>
+                <th width="15%">{gettext('Share from')}</th>
+                <th width="15%">{gettext('Share with')}</th>
                 <th width="10%">{gettext('Actions')}</th>
                 <th width="13%">{gettext('Permission')}</th>
                 <th width="20%">{gettext('Library')}</th>
@@ -337,7 +337,7 @@ class SharePermissionLogs extends Component {
           <div className="cur-view-content">
             <div className="d-flex align-items-center mb-2 gap-4">
               <LogUserSelector
-                componentName={gettext('Share From')}
+                componentName={gettext('Share from')}
                 items={availableUsers}
                 selectedItems={selectedFromUsers}
                 onSelect={this.handleFromUserFilter}
@@ -346,7 +346,7 @@ class SharePermissionLogs extends Component {
                 searchUsersFunc={this.searchUsers}
               />
               <LogUserSelector
-                componentName={gettext('Share To')}
+                componentName={gettext('Share with')}
                 items={availableUsers}
                 selectedItems={[...selectedToUsers, ...selectedToGroups]}
                 onSelect={this.handleToUserFilter}

@@ -28,7 +28,7 @@ class Content extends Component {
             <tr>
               <th width="5%"></th>
               <th width="35%">{gettext('Name')}</th>
-              <th width="20%">{gettext('Share From')}</th>
+              <th width="20%">{gettext('Share from')}</th>
               <th width="20%">{gettext('Size')}</th>
               <th width="20%">{gettext('Last Update')}</th>
             </tr>
