@@ -93,16 +93,9 @@
 var SEAFILE_GLOBAL = {
     csrfCookieName: '{{ CSRF_COOKIE_NAME }}'
 };
-var app = {
-    ui : {
-        currentDropdown: false,
-        currentHighlightedItem: false,
-        freezeItemHightlight: false
-    }
-}
 </script>
 <script type="text/javascript" src="{% static "scripts/lib/jquery.min.js" %}" id="jquery"></script>{# 'id="jquery"' is for pdf file view with pdf2html #}
-<script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1536127546642"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1792151463000"></script>
 <script type="text/javascript">
 function prepareAjaxErrorMsg(xhr) {
     var error_msg;
@@ -115,10 +108,6 @@ function prepareAjaxErrorMsg(xhr) {
         error_msg = gettext("Failed. Please check the network.");
     }
     return error_msg;
-}
-function ajaxErrorHandler(xhr, textStatus, errorThrown) {
-    var error_msg = prepareAjaxErrorMsg(xhr);
-    feedback(error_msg, 'error');
 }
 {% if request.user.is_authenticated %}
 {% if request.cur_note %}
