@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-05 10:24+0800\n"
+"POT-Creation-Date: 2026-10-17 21:05+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Danish (Denmark) (https://app.transifex.com/haiwen/teams/5086/da_DK/)\n"
@@ -342,11 +342,8 @@ msgstr ""
 msgid ""
 "Department libraries can be created by the system admin or department admin."
 " There is also an option to control whether individual users can share "
-"libraries to a department."
+"libraries with a department."
 msgstr ""
-"Afdelingsbiblioteker kan oprettes af systemadministratoren eller "
-"afdelingsadministratoren. Der er også en indstilling til at kontrollere, om "
-"individuelle brugere kan dele biblioteker med en afdeling."
 
 #: templates/help/departments.html:33
 msgid ""
@@ -410,11 +407,9 @@ msgstr "Ændre biblioteksnavn"
 
 #: templates/help/departments.html:48
 msgid ""
-"Share a library to users or groups outside of this department. This is very "
-"useful for cross-department collaboration."
+"Share a library with users or groups outside of this department. This is "
+"very useful for cross-department collaboration."
 msgstr ""
-"Dele et bibliotek med brugere eller grupper uden for denne afdeling. Dette "
-"er meget nyttigt til samarbejde på tværs af afdelinger."
 
 #: templates/help/departments.html:49
 #, python-format
@@ -746,6 +741,12 @@ msgstr ""
 "er tilsigtet adfærd. Du behøver ikke at fjerne den, hvis du stadig har brug "
 "for at få adgang til kontoen senere."
 
+#: templates/help/drive_client_2.0_for_windows_10.html:52
+msgid ""
+"In some corner cases, the \"SeaDrive\" shortcut will be left-over in Windows"
+" Explorer and you want to remove it."
+msgstr ""
+
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
@@ -1073,37 +1074,26 @@ msgstr ""
 
 #: templates/help/folder_permission.html:10
 msgid ""
-"You shared a library to a group with \"read only\" permission. You also want"
-" to allow a specific member of the group to modify files in one sub-folder. "
-"You can grant write permission of this sub-folder to this person."
+"You shared a library with a group with \"read only\" permission. You also "
+"want to allow a specific member of the group to modify files in one sub-"
+"folder. You can grant write permission of this sub-folder to this person."
 msgstr ""
-"Du har delt et bibliotek med en gruppe med \"read only\"-tilladelse. Du vil "
-"også give et bestemt medlem af gruppen mulighed for at ændre filer i en "
-"undermappe. Du kan give denne person skriverettighed til denne undermappe."
 
 #: templates/help/folder_permission.html:11
 msgid ""
-"You shared a library to 3 groups. There are 3 sub-folders under that "
+"You shared a library with 3 groups. There are 3 sub-folders under that "
 "library, one for each group to upload files. However you don't want users to"
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
 msgstr ""
-"Du har delt et bibliotek med 3 grupper. Der er 3 undermapper i biblioteket, "
-"én til hver gruppe, som kan uploade filer. Du ønsker dog ikke, at brugere "
-"skal kunne ændre filer, der ikke tilhører deres gruppe. Du kan give "
-"skriverettighed til en undermappe kun til den tilhørende gruppe."
 
 #: templates/help/folder_permission.html:13
 msgid ""
-"Folder permissions are only effective for libraries and folders you share to"
-" others. To effectively set folder permissions to its sub-folders, you "
+"Folder permissions are only effective for libraries and folders you share "
+"with others. To effectively set folder permissions to its sub-folders, you "
 "should first share the parent library or folder; otherwise the folder "
 "permission won't take effect."
 msgstr ""
-"Mappetilladelser gælder kun for biblioteker og mapper, som du deler med "
-"andre. For effektivt at kunne angive mappetilladelser for undermapper, skal "
-"du først dele overbiblioteket eller -mappen; ellers vil mappetilladelsen "
-"ikke træde i kraft."
 
 #: templates/help/folder_permission.html:14
 msgid ""
@@ -1185,17 +1175,11 @@ msgstr "Avanceret: prioritet mellem forskellige tilladelser"
 #: templates/help/folder_permission.html:27
 msgid ""
 "Folder permissions have higher priority than the permission set in share. "
-"For example, if you share a library to user A with \"read write\" "
+"For example, if you share a library with user A with \"read write\" "
 "permission, and also set \"read only\" permission to a sub-folder of that "
 "library. Then user A only has \"read only\" access to the sub-folder, while "
 "he/she has \"read write\" access to all other sub-folders and files."
 msgstr ""
-"Mappetilladelser har højere prioritet end tilladelsen angivet i delingen. "
-"Hvis du for eksempel deler et bibliotek med bruger A med \"read "
-"write\"-tilladelse og samtidig angiver \"read only\"-tilladelse til en "
-"undermappe i det bibliotek, har bruger A kun \"read only\"-adgang til "
-"undermappen, mens han/hun har \"read write\"-adgang til alle andre "
-"undermapper og filer."
 
 #: templates/help/folder_permission.html:28
 msgid ""
@@ -1300,11 +1284,9 @@ msgstr ""
 
 #: templates/help/groups_managing.html:6
 msgid ""
-"Creating a group is a convenient way to share files to many people. In "
+"Creating a group is a convenient way to share files with many people. In "
 "Seafile, you can create and manage a group easily."
 msgstr ""
-"At oprette en gruppe er en praktisk måde at dele filer med mange mennesker "
-"på. I Seafile kan du nemt oprette og administrere en gruppe."
 
 #: templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
@@ -1338,11 +1320,8 @@ msgstr ""
 msgid ""
 "Click on the \"Shared with groups\" tab on the left panel, and you'll see "
 "all the groups you're in. Clicking into any group, you'll see the libraries "
-"shared into this group."
+"shared with this group."
 msgstr ""
-"Klik på fanen \"Shared with groups\" i venstre panel, og du vil se alle de "
-"grupper, du er medlem af. Når du klikker ind i en gruppe, ser du de "
-"biblioteker, der er delt med denne gruppe."
 
 #: templates/help/groups_managing.html:14
 msgid ""
@@ -1358,11 +1337,8 @@ msgstr ""
 #, python-format
 msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
-"and folders</a> about how to share libraries or folders to a group."
+"and folders</a> about how to share libraries or folders with a group."
 msgstr ""
-"Se <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">deling af filer "
-"og mapper</a> for at få oplysninger om, hvordan du deler biblioteker eller "
-"mapper med en gruppe."
 
 #: templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
@@ -1696,6 +1672,13 @@ msgstr ""
 "Klik på linket \"view snapshot\" på en vilkårlig ændringspost. Du vil se "
 "bibliotekets tilstand på det pågældende tidspunkt."
 
+#: templates/help/library_history_and_snapshots.html:13
+msgid ""
+"In the snapshot view, you can download or restore any file or folder. If "
+"you're the library's owner, you can restore the entire library to this point"
+" of time."
+msgstr ""
+
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
 msgid ""
@@ -1795,6 +1778,19 @@ msgstr ""
 msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
+msgstr ""
+
+#: templates/help/read-only_syncing.html:6
+#, python-format
+msgid ""
+"For read-only libraries or folders, Seafile will show a forbidden icon (<img"
+" src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />) to "
+"indicate they are read-only. However, users can still modify the synced "
+"local copies. When a local copy is modified, Seafile will ignore the "
+"modified one. When the copy at the server is also modified, the client will "
+"popup a notification, saying that the local modified copy conflicts with the"
+" copy at the server side. To prevent data loss, the local copy is renamed to"
+" a conflict file."
 msgstr ""
 
 #: templates/help/read-only_syncing.html:7
@@ -1979,6 +1975,13 @@ msgid ""
 "permissions:"
 msgstr ""
 
+#: templates/help/sharing_files_and_folders.html:21
+msgid ""
+"Preview and Download: the file or files in the folder can be downloaded. If "
+"the type of files can be previewed in web browser, they can also be viewed "
+"online (e.g. Office files)."
+msgstr ""
+
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
 "Preview only: the file or files in the folder can only be viewed in web "
@@ -2078,33 +2081,28 @@ msgstr "Dele biblioteker eller mapper"
 
 #: templates/help/sharing_files_and_folders.html:45
 msgid ""
-"You can share a library or folder to other registered Seafile users. The "
+"You can share a library or folder with other registered Seafile users. The "
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
 msgstr ""
-"Du kan dele et bibliotek eller en mappe med andre registrerede Seafile-"
-"brugere. Det delte bibliotek eller den delte mappe kan tilgås af andre via "
-"webappen og Seafile-klienterne."
 
 #: templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
 msgstr "Du kan vælge delingens omfang:"
 
 #: templates/help/sharing_files_and_folders.html:48
-msgid "Share to user: You can share to one or more users."
-msgstr "Del til bruger: Du kan dele med en eller flere brugere."
+msgid "Share with user: You can share with one or more users."
+msgstr ""
 
 #: templates/help/sharing_files_and_folders.html:49
-msgid "Share to group: You can share to a group."
-msgstr "Del til gruppe: Du kan dele med en gruppe."
+msgid "Share with group: You can share with a group."
+msgstr ""
 
 #: templates/help/sharing_files_and_folders.html:50
 msgid ""
-"Share to organization: If you're using a private server, sometimes it's "
-"useful to share to all members on the server (the entire organization)."
+"Share with organization: If you're using a private server, sometimes it's "
+"useful to share with all members on the server (the entire organization)."
 msgstr ""
-"Del til organisation: Hvis du bruger en privat server, er det nogle gange "
-"nyttigt at dele med alle medlemmer på serveren (hele organisationen)."
 
 #: templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
@@ -2142,9 +2140,8 @@ msgstr ""
 "Filerne kan ikke downloades."
 
 #: templates/help/sharing_files_and_folders.html:60
-msgid "To share a library or folder to a user or group:"
+msgid "To share a library or folder with a user or group:"
 msgstr ""
-"Sådan deler du et bibliotek eller en mappe med en bruger eller gruppe:"
 
 #: templates/help/sharing_files_and_folders.html:62
 msgid ""
@@ -2156,37 +2153,26 @@ msgstr ""
 
 #: templates/help/sharing_files_and_folders.html:63
 msgid ""
-"A pop-up window will appear with share options. Click the \"Share to user\" "
-"or \"Share to group\" tab on the left panel. Select the user or group. Then "
-"click \"Submit\"."
+"A pop-up window will appear with share options. Click the \"Share with "
+"user\" or \"Share with group\" tab on the left panel. Select the user or "
+"group. Then click \"Submit\"."
 msgstr ""
-"Et pop op-vindue vises med delingsmuligheder. Klik på fanen \"Share to "
-"user\" eller \"Share to group\" i venstre panel. Vælg brugeren eller "
-"gruppen. Klik derefter på \"Submit\"."
 
 #: templates/help/sharing_files_and_folders.html:65
 msgid ""
-"After you share a library or folder to a user, the user can see it by "
+"After you share a library or folder with a user, the user can see it by "
 "clicking the \"Shared with me\" tab on the left panel in Seafile web app. If"
-" you share it to a group, the group members can only see it by navigating "
+" you share it with a group, the group members can only see it by navigating "
 "into the group."
 msgstr ""
-"Når du har delt et bibliotek eller en mappe med en bruger, kan brugeren se "
-"det ved at klikke på fanen \"Shared with me\" i venstre panel i Seafile-"
-"webappen. Hvis du deler det med en gruppe, kan gruppemedlemmerne kun se det "
-"ved at navigere ind i gruppen."
 
 #: templates/help/sharing_files_and_folders.html:66
 msgid ""
-"To share a library to the entire organization: In Seafile web app, click the"
-" \"Shared with all\" tab on the left panel. Then click the \"Add Library\" "
-"button. In the drop-down menu, you can choose to share an existing library "
-"or create a new library and share it."
+"To share a library with the entire organization: In Seafile web app, click "
+"the \"Shared with all\" tab on the left panel. Then click the \"Add "
+"Library\" button. In the drop-down menu, you can choose to share an existing"
+" library or create a new library and share it."
 msgstr ""
-"Untuk at dele et bibliotek med hele organisationen: I Seafile-webappen skal "
-"du klikke på fanen \"Shared with all\" i venstre panel. Klik derefter på "
-"knappen \"Add Library\". I rullemenuen kan du vælge at dele et eksisterende "
-"bibliotek eller oprette et nyt bibliotek og dele det."
 
 #: templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
@@ -2459,11 +2445,9 @@ msgstr "Skrivebeskyttet"
 
 #: templates/help/using_drive_client.html:70
 msgid ""
-"The folder or library of this file is shared with read-only permission to "
+"The folder or library of this file is shared with read-only permission with "
 "you. You cannot modify, delete or move the file."
 msgstr ""
-"Mappen eller biblioteket for denne fil er delt med skrivebeskyttet adgang "
-"til dig. Du kan ikke ændre, slette eller flytte filen."
 
 #: templates/help/using_drive_client.html:74
 msgid ""

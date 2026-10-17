@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 15:53+0800\n"
+"POT-Creation-Date: 2026-10-17 21:05+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: Ahmed Vila <ahmed@vila.ba>, 2017\n"
 "Language-Team: Bosnian (http://app.transifex.com/haiwen/seahub/language/bs/)\n"
@@ -69,7 +69,7 @@ msgstr ""
 #: frontend/src/features/metadata/views/kanban/settings/index.js:102
 #: frontend/src/pages/org-admin/settings/index.js:132
 #: frontend/src/pages/org-admin/side-panel.js:57
-#: frontend/src/pages/settings/index.js:160
+#: frontend/src/pages/settings/index.js:162
 #: frontend/src/pages/sys-admin/settings/index.js:93
 #: frontend/src/pages/sys-admin/side-panel.js:87
 #: frontend/src/pages/wiki2/wiki-settings/index.js:34
@@ -1165,6 +1165,7 @@ msgstr ""
 #: frontend/src/pages/excalidraw-editor/extension/select-image-dialog/index.js:95
 #: frontend/src/pages/org-admin/input-item.js:93
 #: frontend/src/pages/org-admin/org-links/view-link-dialog.js:38
+#: frontend/src/pages/settings/social-login-oauth/index.js:65
 #: frontend/src/pages/settings/social-login-saml/index.js:69
 #: frontend/src/pages/upload-link/upload-list-item.js:161
 #: frontend/src/pages/wiki2/common/delete-dialog.js:26
@@ -1586,7 +1587,7 @@ msgstr ""
 
 #: frontend/src/components/dialog/confirm-delete-account.js:28
 #: frontend/src/pages/settings/delete-account/index.js:36
-#: frontend/src/pages/settings/index.js:64
+#: frontend/src/pages/settings/index.js:66
 msgid "Delete Account"
 msgstr ""
 
@@ -1601,6 +1602,9 @@ msgstr ""
 #: frontend/src/components/dialog/confirm-disconnect-weixin.js:28
 #: frontend/src/components/dialog/confirm-disconnect-weixin.js:37
 #: frontend/src/pages/settings/social-login-dingtalk/index.js:41
+#: frontend/src/pages/settings/social-login-oauth/index.js:50
+#: frontend/src/pages/settings/social-login-oauth/index.js:57
+#: frontend/src/pages/settings/social-login-oauth/index.js:66
 #: frontend/src/pages/settings/social-login-saml/index.js:54
 #: frontend/src/pages/settings/social-login-saml/index.js:61
 #: frontend/src/pages/settings/social-login-saml/index.js:70
@@ -1612,6 +1616,7 @@ msgstr ""
 #: frontend/src/components/dialog/confirm-disconnect-dingtalk.js:30
 #: frontend/src/components/dialog/confirm-disconnect-wechat.js:30
 #: frontend/src/components/dialog/confirm-disconnect-weixin.js:30
+#: frontend/src/pages/settings/social-login-oauth/index.js:59
 #: frontend/src/pages/settings/social-login-saml/index.js:63
 msgid "Are you sure you want to disconnect?"
 msgstr ""
@@ -1885,8 +1890,8 @@ msgstr ""
 #: frontend/src/components/share-link-panel/link-details.js:195
 #: frontend/src/components/share-link-panel/link-list.js:99
 #: frontend/src/components/share-link-panel/link-list.js:114
-#: frontend/src/pages/settings/index.js:55
-#: frontend/src/pages/settings/index.js:170
+#: frontend/src/pages/settings/index.js:57
+#: frontend/src/pages/settings/index.js:172
 #: frontend/src/pages/sys-admin/settings/index.js:220
 msgid "Password"
 msgstr ""
@@ -2053,8 +2058,10 @@ msgid "Edit"
 msgstr ""
 
 #: frontend/src/components/dialog/delete-folder-dialog.js:50
+#| msgid ""
+#| "older has been shared to {user_amount} user(s) and {group_amount} up(s)."
 msgid ""
-"This folder has been shared to {user_amount} user(s) and {group_amount} "
+"This folder has been shared with {user_amount} user(s) and {group_amount} "
 "group(s)."
 msgstr ""
 
@@ -2063,8 +2070,10 @@ msgid "Delete Folder"
 msgstr ""
 
 #: frontend/src/components/dialog/delete-repo-dialog.js:59
+#| msgid ""
+#| "ibrary has been shared to {user_amount} user(s) and {group_amount} up(s)."
 msgid ""
-"This library has been shared to {user_amount} user(s) and {group_amount} "
+"This library has been shared with {user_amount} user(s) and {group_amount} "
 "group(s)."
 msgstr ""
 
@@ -2112,7 +2121,8 @@ msgid "User is already in this group"
 msgstr ""
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:124
-msgid "It is already shared to user"
+#| msgid "No libraries shared with this group"
+msgid "It is already shared with user"
 msgstr ""
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:130
@@ -2721,8 +2731,8 @@ msgstr ""
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:339
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:319
 msgid ""
-"Folder permission is only effective after the library is shared to users or "
-"groups. It is used to fine tune sub-folder permissions."
+"Folder permission is only effective after the library is shared with users "
+"or groups. It is used to fine tune sub-folder permissions."
 msgstr ""
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:350
@@ -3568,13 +3578,15 @@ msgstr ""
 #: frontend/src/components/dialog/share-dialog.js:137
 #: frontend/src/components/dialog/share-wiki-dialog.js:84
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-dialog.js:51
-msgid "Share to user"
+#| msgid "Share to user"
+msgid "Share with user"
 msgstr ""
 
 #: frontend/src/components/dialog/share-dialog.js:144
 #: frontend/src/components/dialog/share-wiki-dialog.js:91
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-dialog.js:56
-msgid "Share to group"
+#| msgid "Share to group"
+msgid "Share with group"
 msgstr ""
 
 #: frontend/src/components/dialog/share-dialog.js:151
@@ -3582,7 +3594,8 @@ msgid "Custom sharing permissions"
 msgstr ""
 
 #: frontend/src/components/dialog/share-dialog.js:167
-msgid "Share to other server"
+#| msgid "Share to other server"
+msgid "Share with other server"
 msgstr ""
 
 #: frontend/src/components/dialog/share-dialog.js:332
@@ -3994,7 +4007,7 @@ msgstr ""
 #: frontend/src/components/dialog/transfer-dialog/index.js:202
 #| msgid ""
 #| "the library is shared to another user, the sharing will be ketp."
-msgid "If the library is shared to another user, the sharing will be kept."
+msgid "If the library is shared with another user, the sharing will be kept."
 msgstr ""
 
 #: frontend/src/components/dialog/transfer-dialog/index.js:206
@@ -4014,7 +4027,7 @@ msgstr ""
 #| msgid ""
 #| " library is shared to another department, the sharing will be ketp."
 msgid ""
-"If the library is shared to another department, the sharing will be kept."
+"If the library is shared with another department, the sharing will be kept."
 msgstr ""
 
 #: frontend/src/components/dialog/transfer-dialog/index.js:244
@@ -5134,11 +5147,13 @@ msgid "User {user_link} has added you to {group_link}"
 msgstr ""
 
 #: frontend/src/components/notification/notice-item/index.js:102
-msgid "{share_from} has shared a library named {repo_link} to you."
+#| msgid "{share_from} has shared a library named {repo_link} to you."
+msgid "{share_from} has shared a library named {repo_link} with you."
 msgstr ""
 
 #: frontend/src/components/notification/notice-item/index.js:104
-msgid "{share_from} has shared a folder named {repo_link} to you."
+#| msgid "{share_from} has shared a folder named {repo_link} to you."
+msgid "{share_from} has shared a folder named {repo_link} with you."
 msgstr ""
 
 #: frontend/src/components/notification/notice-item/index.js:125
@@ -5162,13 +5177,17 @@ msgid "{share_from} has cancelled the sharing of folder {repo_name}."
 msgstr ""
 
 #: frontend/src/components/notification/notice-item/index.js:168
+#| msgid ""
+#| "_from} has shared a library named {repo_link} to group {group_link}."
 msgid ""
-"{share_from} has shared a library named {repo_link} to group {group_link}."
+"{share_from} has shared a library named {repo_link} with group {group_link}."
 msgstr ""
 
 #: frontend/src/components/notification/notice-item/index.js:170
+#| msgid ""
+#| "_from} has shared a folder named {repo_link} to group {group_link}."
 msgid ""
-"{share_from} has shared a folder named {repo_link} to group {group_link}."
+"{share_from} has shared a folder named {repo_link} with group {group_link}."
 msgstr ""
 
 #: frontend/src/components/notification/notice-item/index.js:190
@@ -8829,7 +8848,7 @@ msgid "Successfully unlinked %(name)s."
 msgstr ""
 
 #: frontend/src/pages/app/main-panel/linked-devices/linked-devices.js:217
-#: frontend/src/pages/settings/index.js:63
+#: frontend/src/pages/settings/index.js:65
 #: frontend/src/pages/settings/linked-devices/index.js:233
 msgid "Linked Devices"
 msgstr ""
@@ -8914,7 +8933,8 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-logs/org-logs-perm-audit.js:80
 #: frontend/src/pages/sys-admin/sys-logs/share-permission-logs.js:44
 #: frontend/src/pages/sys-admin/sys-logs/share-permission-logs.js:349
-msgid "Share To"
+#| msgid "Shared with me"
+msgid "Share with"
 msgstr ""
 
 #: frontend/src/pages/app/main-panel/share-admin/folders.js:176
@@ -8926,7 +8946,8 @@ msgstr ""
 
 #: frontend/src/pages/app/main-panel/share-admin/folders.js:255
 #: frontend/src/pages/app/main-panel/share-admin/libraries.js:268
-msgid "Share To:"
+#| msgid "Shared with me"
+msgid "Share with:"
 msgstr ""
 
 #: frontend/src/pages/app/main-panel/share-admin/folders.js:350
@@ -9594,7 +9615,8 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-logs/org-logs-perm-audit.js:79
 #: frontend/src/pages/sys-admin/sys-logs/share-permission-logs.js:43
 #: frontend/src/pages/sys-admin/sys-logs/share-permission-logs.js:340
-msgid "Share From"
+#| msgid "Share From"
+msgid "Share from"
 msgstr ""
 
 #: frontend/src/pages/org-admin/org-logs/org-logs.js:49
@@ -10086,7 +10108,7 @@ msgid "Email notification updated"
 msgstr ""
 
 #: frontend/src/pages/settings/email-notice/index.js:68
-#: frontend/src/pages/settings/index.js:60
+#: frontend/src/pages/settings/index.js:62
 msgid "Email Notification"
 msgstr ""
 
@@ -10110,47 +10132,48 @@ msgid ""
 "joining group should be sent to your mailbox."
 msgstr ""
 
-#: frontend/src/pages/settings/index.js:54
+#: frontend/src/pages/settings/index.js:56
 msgid "Profile"
 msgstr ""
 
-#: frontend/src/pages/settings/index.js:56
+#: frontend/src/pages/settings/index.js:58
 #: frontend/src/pages/settings/web-api-auth-token/index.js:76
 msgid "Web API Auth Token"
 msgstr ""
 
-#: frontend/src/pages/settings/index.js:57
+#: frontend/src/pages/settings/index.js:59
 #: frontend/src/pages/settings/webdav-password/index.js:93
 msgid "WebDAV Access"
 msgstr ""
 
-#: frontend/src/pages/settings/index.js:58
+#: frontend/src/pages/settings/index.js:60
 #: frontend/src/pages/settings/list-in-address-book/index.js:30
 msgid "Global Address Book"
 msgstr ""
 
-#: frontend/src/pages/settings/index.js:59
+#: frontend/src/pages/settings/index.js:61
 msgid "Language"
 msgstr ""
 
-#: frontend/src/pages/settings/index.js:61
+#: frontend/src/pages/settings/index.js:63
 #: frontend/src/pages/settings/two-factor-auth/index.js:48
 msgid "Two-Factor Authentication"
 msgstr ""
 
-#: frontend/src/pages/settings/index.js:62
+#: frontend/src/pages/settings/index.js:64
 #: frontend/src/pages/settings/social-login-dingtalk/index.js:38
+#: frontend/src/pages/settings/social-login-oauth/index.js:47
 #: frontend/src/pages/settings/social-login-saml/index.js:51
 #: frontend/src/pages/settings/social-login-weixin/index.js:38
 #: frontend/src/pages/settings/social-login/index.js:38
 msgid "Single Sign On (SSO)"
 msgstr ""
 
-#: frontend/src/pages/settings/index.js:92
+#: frontend/src/pages/settings/index.js:94
 msgid "User info updated"
 msgstr ""
 
-#: frontend/src/pages/settings/index.js:164
+#: frontend/src/pages/settings/index.js:166
 msgid "Profile Setting"
 msgstr ""
 
@@ -10172,6 +10195,7 @@ msgid ""
 msgstr ""
 
 #: frontend/src/pages/settings/social-login-dingtalk/index.js:42
+#: frontend/src/pages/settings/social-login-oauth/index.js:51
 #: frontend/src/pages/settings/social-login-saml/index.js:55
 #: frontend/src/pages/settings/social-login-weixin/index.js:42
 #: frontend/src/pages/settings/social-login/index.js:42
@@ -10975,11 +10999,12 @@ msgid "Freeze user account when failed login attempts exceed limit."
 msgstr ""
 
 #: frontend/src/pages/sys-admin/settings/index.js:213
-msgid "Enable sharing to all groups"
+msgid "Enable sharing with all groups"
 msgstr ""
 
 #: frontend/src/pages/sys-admin/settings/index.js:216
-msgid "Enable users to share libraries to any groups in the system."
+#| msgid "Enable users to share libraries to any groups in the system."
+msgid "Enable users to share libraries with any groups in the system."
 msgstr ""
 
 #: frontend/src/pages/sys-admin/settings/index.js:224
@@ -12106,6 +12131,12 @@ msgstr ""
 #| msgid "Save"
 msgid "Save as"
 msgstr ""
+
+#~ msgid "Share To"
+#~ msgstr "Share To"
+
+#~ msgid "Share To:"
+#~ msgstr "Share To:"
 
 #~ msgid "New Department Library"
 #~ msgstr "New Department Library"

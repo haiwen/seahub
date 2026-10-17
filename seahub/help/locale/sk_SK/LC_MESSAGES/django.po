@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-05 10:24+0800\n"
+"POT-Creation-Date: 2026-10-17 21:05+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Slovak (Slovakia) (https://app.transifex.com/haiwen/teams/5086/sk_SK/)\n"
@@ -340,11 +340,8 @@ msgstr ""
 msgid ""
 "Department libraries can be created by the system admin or department admin."
 " There is also an option to control whether individual users can share "
-"libraries to a department."
+"libraries with a department."
 msgstr ""
-"Knižnice oddelení môže vytvárať systémový administrátor alebo administrátor "
-"oddelenia. K dispozícii je aj možnosť ovládať, či môžu jednotliví "
-"používatelia zdieľať knižnice s oddelením."
 
 #: templates/help/departments.html:33
 msgid ""
@@ -407,11 +404,9 @@ msgstr "Zmeniť názov knižnice"
 
 #: templates/help/departments.html:48
 msgid ""
-"Share a library to users or groups outside of this department. This is very "
-"useful for cross-department collaboration."
+"Share a library with users or groups outside of this department. This is "
+"very useful for cross-department collaboration."
 msgstr ""
-"Zdieľať knižnicu s používateľmi alebo skupinami mimo tohto oddelenia. To je "
-"veľmi užitočné pre spoluprácu medzi oddeleniami."
 
 #: templates/help/departments.html:49
 #, python-format
@@ -747,6 +742,12 @@ msgstr ""
 "správanie. Nemusíte ich odstraňovať, ak k danému účtu ešte budete neskôr "
 "potrebovať pristupovať."
 
+#: templates/help/drive_client_2.0_for_windows_10.html:52
+msgid ""
+"In some corner cases, the \"SeaDrive\" shortcut will be left-over in Windows"
+" Explorer and you want to remove it."
+msgstr ""
+
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
@@ -1074,37 +1075,26 @@ msgstr ""
 
 #: templates/help/folder_permission.html:10
 msgid ""
-"You shared a library to a group with \"read only\" permission. You also want"
-" to allow a specific member of the group to modify files in one sub-folder. "
-"You can grant write permission of this sub-folder to this person."
+"You shared a library with a group with \"read only\" permission. You also "
+"want to allow a specific member of the group to modify files in one sub-"
+"folder. You can grant write permission of this sub-folder to this person."
 msgstr ""
-"Zdieľali ste knižnicu so skupinou s oprávnením „iba na čítanie“. Chcete však"
-" umožniť konkrétnemu členovi skupiny upravovať súbory v jednom podpriečinku."
-" Tejto osobe môžete udeliť oprávnenie na zápis do tohto podpriečinka."
 
 #: templates/help/folder_permission.html:11
 msgid ""
-"You shared a library to 3 groups. There are 3 sub-folders under that "
+"You shared a library with 3 groups. There are 3 sub-folders under that "
 "library, one for each group to upload files. However you don't want users to"
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
 msgstr ""
-"Zdieľali ste knižnicu s 3 skupinami. V rámci tejto knižnice sú 3 "
-"podpriečinky, jeden pre každú skupinu na nahrávanie súborov. Nechcete však, "
-"aby používatelia menili súbory, ktoré nepatria do ich skupiny. Oprávnenie na"
-" zápis do podpriečinka môžete udeliť iba jeho skupine."
 
 #: templates/help/folder_permission.html:13
 msgid ""
-"Folder permissions are only effective for libraries and folders you share to"
-" others. To effectively set folder permissions to its sub-folders, you "
+"Folder permissions are only effective for libraries and folders you share "
+"with others. To effectively set folder permissions to its sub-folders, you "
 "should first share the parent library or folder; otherwise the folder "
 "permission won't take effect."
 msgstr ""
-"Oprávnenia priečinkov sú účinné iba pre knižnice a priečinky, ktoré zdieľate"
-" s ostatnými. Aby ste mohli efektívne nastaviť oprávnenia priečinka k jeho "
-"podpriečinkom, mali by ste najprv zdieľať nadradenú knižnicu alebo "
-"priečinok; inak sa oprávnenia priečinka neprejavia."
 
 #: templates/help/folder_permission.html:14
 msgid ""
@@ -1190,17 +1180,11 @@ msgstr "Pokročilé: priorita medzi rôznymi oprávneniami"
 #: templates/help/folder_permission.html:27
 msgid ""
 "Folder permissions have higher priority than the permission set in share. "
-"For example, if you share a library to user A with \"read write\" "
+"For example, if you share a library with user A with \"read write\" "
 "permission, and also set \"read only\" permission to a sub-folder of that "
 "library. Then user A only has \"read only\" access to the sub-folder, while "
 "he/she has \"read write\" access to all other sub-folders and files."
 msgstr ""
-"Oprávnenia priečinkov majú vyššiu prioritu ako oprávnenia nastavené v "
-"zdieľaní. Napríklad, ak zdieľate knižnicu s používateľom A s oprávnením "
-"„čítanie a zápis“ a zároveň nastavíte oprávnenie „iba na čítanie“ pre "
-"podpriečinok tejto knižnice. Potom má používateľ A k tomuto podpriečinku "
-"prístup iba v režime „iba na čítanie“, zatiaľ čo ku všetkým ostatným "
-"podpriečinkom a súborom má prístup „čítanie a zápis“."
 
 #: templates/help/folder_permission.html:28
 msgid ""
@@ -1307,11 +1291,9 @@ msgstr ""
 
 #: templates/help/groups_managing.html:6
 msgid ""
-"Creating a group is a convenient way to share files to many people. In "
+"Creating a group is a convenient way to share files with many people. In "
 "Seafile, you can create and manage a group easily."
 msgstr ""
-"Vytvorenie skupiny je pohodlný spôsob zdieľania súborov mnohým ľuďom. V "
-"Seafile môžete skupinu jednoducho vytvoriť a spravovať."
 
 #: templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
@@ -1345,11 +1327,8 @@ msgstr ""
 msgid ""
 "Click on the \"Shared with groups\" tab on the left panel, and you'll see "
 "all the groups you're in. Clicking into any group, you'll see the libraries "
-"shared into this group."
+"shared with this group."
 msgstr ""
-"Kliknite na kartu „Zdieľané so skupinami“ na ľavom paneli a uvidíte všetky "
-"skupiny, v ktorých sa nachádzate. Po kliknutí na ktorúkoľvek skupinu uvidíte"
-" knižnice zdieľané v tejto skupine."
 
 #: templates/help/groups_managing.html:14
 msgid ""
@@ -1365,11 +1344,8 @@ msgstr ""
 #, python-format
 msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
-"and folders</a> about how to share libraries or folders to a group."
+"and folders</a> about how to share libraries or folders with a group."
 msgstr ""
-"Pozrite si časť <a "
-"href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">zdieľanie súborov a "
-"priečinkov</a> o tom, ako zdieľať knižnice alebo priečinky so skupinou."
 
 #: templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
@@ -1702,6 +1678,13 @@ msgstr ""
 "Kliknite na odkaz „zobraziť snímku“ pri ľubovoľnom zázname o úprave. Uvidíte"
 " stav knižnice v danom čase."
 
+#: templates/help/library_history_and_snapshots.html:13
+msgid ""
+"In the snapshot view, you can download or restore any file or folder. If "
+"you're the library's owner, you can restore the entire library to this point"
+" of time."
+msgstr ""
+
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
 msgid ""
@@ -1833,6 +1816,19 @@ msgid ""
 msgstr ""
 "Rozhranie prehliadača súborov poskytuje súhrn všetkých štítkov súborov v "
 "aktuálnej knižnici."
+
+#: templates/help/read-only_syncing.html:6
+#, python-format
+msgid ""
+"For read-only libraries or folders, Seafile will show a forbidden icon (<img"
+" src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />) to "
+"indicate they are read-only. However, users can still modify the synced "
+"local copies. When a local copy is modified, Seafile will ignore the "
+"modified one. When the copy at the server is also modified, the client will "
+"popup a notification, saying that the local modified copy conflicts with the"
+" copy at the server side. To prevent data loss, the local copy is renamed to"
+" a conflict file."
+msgstr ""
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
@@ -2086,6 +2082,13 @@ msgstr ""
 "Môžete tiež nastaviť prístupové oprávnenie pre odkazy na zdieľanie. Existujú"
 " tri typy oprávnení:"
 
+#: templates/help/sharing_files_and_folders.html:21
+msgid ""
+"Preview and Download: the file or files in the folder can be downloaded. If "
+"the type of files can be previewed in web browser, they can also be viewed "
+"online (e.g. Office files)."
+msgstr ""
+
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
 "Preview only: the file or files in the folder can only be viewed in web "
@@ -2207,35 +2210,28 @@ msgstr "Zdieľanie knižníc alebo priečinkov"
 
 #: templates/help/sharing_files_and_folders.html:45
 msgid ""
-"You can share a library or folder to other registered Seafile users. The "
+"You can share a library or folder with other registered Seafile users. The "
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
 msgstr ""
-"Knižnicu alebo priečinok môžete zdieľať s ostatnými registrovanými "
-"používateľmi Seafile. Zdieľaná knižnica alebo priečinok je prístupný "
-"ostatným prostredníctvom webovej aplikácie a klientov Seafile."
 
 #: templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
 msgstr "Môžete si vybrať rozsah zdieľania:"
 
 #: templates/help/sharing_files_and_folders.html:48
-msgid "Share to user: You can share to one or more users."
+msgid "Share with user: You can share with one or more users."
 msgstr ""
-"Zdieľať s používateľom: Môžete zdieľať s jedným alebo viacerými "
-"používateľmi."
 
 #: templates/help/sharing_files_and_folders.html:49
-msgid "Share to group: You can share to a group."
-msgstr "Zdieľať so skupinou: Môžete zdieľať so skupinou."
+msgid "Share with group: You can share with a group."
+msgstr ""
 
 #: templates/help/sharing_files_and_folders.html:50
 msgid ""
-"Share to organization: If you're using a private server, sometimes it's "
-"useful to share to all members on the server (the entire organization)."
+"Share with organization: If you're using a private server, sometimes it's "
+"useful to share with all members on the server (the entire organization)."
 msgstr ""
-"Zdieľať s organizáciou: Ak používate súkromný server, niekedy je užitočné "
-"zdieľať so všetkými členmi na serveri (s celou organizáciou)."
 
 #: templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
@@ -2275,8 +2271,8 @@ msgstr ""
 "prostredníctvom webového prehliadača. Súbory nie je možné sťahovať."
 
 #: templates/help/sharing_files_and_folders.html:60
-msgid "To share a library or folder to a user or group:"
-msgstr "Zdieľanie knižnice alebo priečinka s používateľom alebo skupinou:"
+msgid "To share a library or folder with a user or group:"
+msgstr ""
 
 #: templates/help/sharing_files_and_folders.html:62
 msgid ""
@@ -2288,37 +2284,26 @@ msgstr ""
 
 #: templates/help/sharing_files_and_folders.html:63
 msgid ""
-"A pop-up window will appear with share options. Click the \"Share to user\" "
-"or \"Share to group\" tab on the left panel. Select the user or group. Then "
-"click \"Submit\"."
+"A pop-up window will appear with share options. Click the \"Share with "
+"user\" or \"Share with group\" tab on the left panel. Select the user or "
+"group. Then click \"Submit\"."
 msgstr ""
-"Zobrazí sa kontextové okno s možnosťami zdieľania. Kliknite na kartu "
-"„Zdieľať s používateľom“ alebo „Zdieľať so skupinou“ na ľavom paneli. "
-"Vyberte používateľa alebo skupinu. Potom kliknite na „Odoslať“."
 
 #: templates/help/sharing_files_and_folders.html:65
 msgid ""
-"After you share a library or folder to a user, the user can see it by "
+"After you share a library or folder with a user, the user can see it by "
 "clicking the \"Shared with me\" tab on the left panel in Seafile web app. If"
-" you share it to a group, the group members can only see it by navigating "
+" you share it with a group, the group members can only see it by navigating "
 "into the group."
 msgstr ""
-"Po zdieľaní knižnice alebo priečinka s používateľom ju tento používateľ "
-"uvidí po kliknutí na kartu „Zdieľané so mnou“ na ľavom paneli vo webovej "
-"aplikácii Seafile. Ak ju zdieľate so skupinou, členovia skupiny ju uvidia "
-"iba po vstupe do danej skupiny."
 
 #: templates/help/sharing_files_and_folders.html:66
 msgid ""
-"To share a library to the entire organization: In Seafile web app, click the"
-" \"Shared with all\" tab on the left panel. Then click the \"Add Library\" "
-"button. In the drop-down menu, you can choose to share an existing library "
-"or create a new library and share it."
+"To share a library with the entire organization: In Seafile web app, click "
+"the \"Shared with all\" tab on the left panel. Then click the \"Add "
+"Library\" button. In the drop-down menu, you can choose to share an existing"
+" library or create a new library and share it."
 msgstr ""
-"Zdieľanie knižnice s celou organizáciou: Vo webovej aplikácii Seafile "
-"kliknite na kartu „Zdieľané so všetkými“ na ľavom paneli. Potom kliknite na "
-"tlačidlo „Pridať knižnicu“. V rozbaľovacej ponuke si môžete vybrať zdieľanie"
-" existujúcej knižnice alebo vytvorenie novej knižnice a jej zdieľanie."
 
 #: templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
@@ -2593,11 +2578,9 @@ msgstr "Iba na čítanie"
 
 #: templates/help/using_drive_client.html:70
 msgid ""
-"The folder or library of this file is shared with read-only permission to "
+"The folder or library of this file is shared with read-only permission with "
 "you. You cannot modify, delete or move the file."
 msgstr ""
-"Priečinok alebo knižnica tohto súboru je s vami zdieľaná s oprávnením iba na"
-" čítanie. Súbor nemôžete upravovať, odstraňovať ani presúvať."
 
 #: templates/help/using_drive_client.html:74
 msgid ""

@@ -28,7 +28,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 15:53+0800\n"
+"POT-Creation-Date: 2026-10-17 21:05+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2023-2026\n"
 "Language-Team: Chinese (China) (http://app.transifex.com/haiwen/seahub/language/zh_CN/)\n"
@@ -88,7 +88,7 @@ msgstr "已使用的 AI 点数："
 #: frontend/src/features/metadata/views/kanban/settings/index.js:102
 #: frontend/src/pages/org-admin/settings/index.js:132
 #: frontend/src/pages/org-admin/side-panel.js:57
-#: frontend/src/pages/settings/index.js:160
+#: frontend/src/pages/settings/index.js:162
 #: frontend/src/pages/sys-admin/settings/index.js:93
 #: frontend/src/pages/sys-admin/side-panel.js:87
 #: frontend/src/pages/wiki2/wiki-settings/index.js:34
@@ -1184,6 +1184,7 @@ msgstr "修改"
 #: frontend/src/pages/excalidraw-editor/extension/select-image-dialog/index.js:95
 #: frontend/src/pages/org-admin/input-item.js:93
 #: frontend/src/pages/org-admin/org-links/view-link-dialog.js:38
+#: frontend/src/pages/settings/social-login-oauth/index.js:65
 #: frontend/src/pages/settings/social-login-saml/index.js:69
 #: frontend/src/pages/upload-link/upload-list-item.js:161
 #: frontend/src/pages/wiki2/common/delete-dialog.js:26
@@ -1605,7 +1606,7 @@ msgstr "确认"
 
 #: frontend/src/components/dialog/confirm-delete-account.js:28
 #: frontend/src/pages/settings/delete-account/index.js:36
-#: frontend/src/pages/settings/index.js:64
+#: frontend/src/pages/settings/index.js:66
 msgid "Delete Account"
 msgstr "注销账号"
 
@@ -1620,6 +1621,9 @@ msgstr "确定要注销该账号吗？"
 #: frontend/src/components/dialog/confirm-disconnect-weixin.js:28
 #: frontend/src/components/dialog/confirm-disconnect-weixin.js:37
 #: frontend/src/pages/settings/social-login-dingtalk/index.js:41
+#: frontend/src/pages/settings/social-login-oauth/index.js:50
+#: frontend/src/pages/settings/social-login-oauth/index.js:57
+#: frontend/src/pages/settings/social-login-oauth/index.js:66
 #: frontend/src/pages/settings/social-login-saml/index.js:54
 #: frontend/src/pages/settings/social-login-saml/index.js:61
 #: frontend/src/pages/settings/social-login-saml/index.js:70
@@ -1631,6 +1635,7 @@ msgstr "断开连接"
 #: frontend/src/components/dialog/confirm-disconnect-dingtalk.js:30
 #: frontend/src/components/dialog/confirm-disconnect-wechat.js:30
 #: frontend/src/components/dialog/confirm-disconnect-weixin.js:30
+#: frontend/src/pages/settings/social-login-oauth/index.js:59
 #: frontend/src/pages/settings/social-login-saml/index.js:63
 msgid "Are you sure you want to disconnect?"
 msgstr "你确定要断开连接吗？"
@@ -1904,8 +1909,8 @@ msgstr "出于安全原因，加密资料库的密码不会存储在服务器上
 #: frontend/src/components/share-link-panel/link-details.js:195
 #: frontend/src/components/share-link-panel/link-list.js:99
 #: frontend/src/components/share-link-panel/link-list.js:114
-#: frontend/src/pages/settings/index.js:55
-#: frontend/src/pages/settings/index.js:170
+#: frontend/src/pages/settings/index.js:57
+#: frontend/src/pages/settings/index.js:172
 #: frontend/src/pages/sys-admin/settings/index.js:220
 msgid "Password"
 msgstr "密码"
@@ -2072,8 +2077,10 @@ msgid "Edit"
 msgstr "编辑"
 
 #: frontend/src/components/dialog/delete-folder-dialog.js:50
+#| msgid ""
+#| "older has been shared to {user_amount} user(s) and {group_amount} up(s)."
 msgid ""
-"This folder has been shared to {user_amount} user(s) and {group_amount} "
+"This folder has been shared with {user_amount} user(s) and {group_amount} "
 "group(s)."
 msgstr "该目录已被共享给 {user_amount} 个用户和 {group_amount} 个群组。"
 
@@ -2082,8 +2089,10 @@ msgid "Delete Folder"
 msgstr "删除目录"
 
 #: frontend/src/components/dialog/delete-repo-dialog.js:59
+#| msgid ""
+#| "ibrary has been shared to {user_amount} user(s) and {group_amount} up(s)."
 msgid ""
-"This library has been shared to {user_amount} user(s) and {group_amount} "
+"This library has been shared with {user_amount} user(s) and {group_amount} "
 "group(s)."
 msgstr "该资料库已被共享给 {user_amount} 个用户和 {group_amount} 个群组。"
 
@@ -2131,7 +2140,8 @@ msgid "User is already in this group"
 msgstr "用户已在这个群组中"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:124
-msgid "It is already shared to user"
+#| msgid "No libraries shared with this group"
+msgid "It is already shared with user"
 msgstr "已分享给用户"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:130
@@ -2740,9 +2750,9 @@ msgstr "目录"
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:339
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:319
 msgid ""
-"Folder permission is only effective after the library is shared to users or "
-"groups. It is used to fine tune sub-folder permissions."
-msgstr "目录权限只有在库共享给用户或组后才有效。它用于微调子目录权限。"
+"Folder permission is only effective after the library is shared with users "
+"or groups. It is used to fine tune sub-folder permissions."
+msgstr "目录权限只有在资料库共享给用户或群组后才有效。它用于微调子目录权限。"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:350
 #: frontend/src/components/dialog/share-to-group.js:397
@@ -3587,13 +3597,15 @@ msgstr "共享链接"
 #: frontend/src/components/dialog/share-dialog.js:137
 #: frontend/src/components/dialog/share-wiki-dialog.js:84
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-dialog.js:51
-msgid "Share to user"
+#| msgid "Share to user"
+msgid "Share with user"
 msgstr "共享给用户"
 
 #: frontend/src/components/dialog/share-dialog.js:144
 #: frontend/src/components/dialog/share-wiki-dialog.js:91
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-dialog.js:56
-msgid "Share to group"
+#| msgid "Share to group"
+msgid "Share with group"
 msgstr "共享给群组"
 
 #: frontend/src/components/dialog/share-dialog.js:151
@@ -3601,7 +3613,8 @@ msgid "Custom sharing permissions"
 msgstr "自定义共享权限"
 
 #: frontend/src/components/dialog/share-dialog.js:167
-msgid "Share to other server"
+#| msgid "Share to other server"
+msgid "Share with other server"
 msgstr "共享到其他服务器"
 
 #: frontend/src/components/dialog/share-dialog.js:332
@@ -4013,7 +4026,7 @@ msgstr "用户"
 #: frontend/src/components/dialog/transfer-dialog/index.js:202
 #| msgid ""
 #| "the library is shared to another user, the sharing will be ketp."
-msgid "If the library is shared to another user, the sharing will be kept."
+msgid "If the library is shared with another user, the sharing will be kept."
 msgstr "如果资料库共享给其他用户，共享关系将被保留。"
 
 #: frontend/src/components/dialog/transfer-dialog/index.js:206
@@ -4033,7 +4046,7 @@ msgstr "搜索部门"
 #| msgid ""
 #| " library is shared to another department, the sharing will be ketp."
 msgid ""
-"If the library is shared to another department, the sharing will be kept."
+"If the library is shared with another department, the sharing will be kept."
 msgstr "如果资料库共享给其他部门，共享关系将被保留。"
 
 #: frontend/src/components/dialog/transfer-dialog/index.js:244
@@ -5153,12 +5166,14 @@ msgid "User {user_link} has added you to {group_link}"
 msgstr "用户 {user_link} 将你加入到群组 {group_link}。"
 
 #: frontend/src/components/notification/notice-item/index.js:102
-msgid "{share_from} has shared a library named {repo_link} to you."
-msgstr "{share_from} 共享了资料库 {repo_link} 给你。"
+#| msgid "{share_from} has shared a library named {repo_link} to you."
+msgid "{share_from} has shared a library named {repo_link} with you."
+msgstr "{share_from} 给你共享了资料库 {repo_link}。"
 
 #: frontend/src/components/notification/notice-item/index.js:104
-msgid "{share_from} has shared a folder named {repo_link} to you."
-msgstr "{share_from} 给你共享了一个名为 {repo_link} 的目录。"
+#| msgid "{share_from} has shared a folder named {repo_link} to you."
+msgid "{share_from} has shared a folder named {repo_link} with you."
+msgstr "{share_from} 给你共享了目录 {repo_link}。"
 
 #: frontend/src/components/notification/notice-item/index.js:125
 msgid ""
@@ -5181,13 +5196,17 @@ msgid "{share_from} has cancelled the sharing of folder {repo_name}."
 msgstr "{share_from} 已经取消了目录 {repo_name} 的共享。"
 
 #: frontend/src/components/notification/notice-item/index.js:168
+#| msgid ""
+#| "_from} has shared a library named {repo_link} to group {group_link}."
 msgid ""
-"{share_from} has shared a library named {repo_link} to group {group_link}."
+"{share_from} has shared a library named {repo_link} with group {group_link}."
 msgstr "{share_from} 给群组 {group_link} 共享了一个资料库 {repo_link}。"
 
 #: frontend/src/components/notification/notice-item/index.js:170
+#| msgid ""
+#| "_from} has shared a folder named {repo_link} to group {group_link}."
 msgid ""
-"{share_from} has shared a folder named {repo_link} to group {group_link}."
+"{share_from} has shared a folder named {repo_link} with group {group_link}."
 msgstr "{share_from} 给群组 {group_link} 共享了一个目录 {repo_link} 。"
 
 #: frontend/src/components/notification/notice-item/index.js:190
@@ -8848,7 +8867,7 @@ msgid "Successfully unlinked %(name)s."
 msgstr "成功断开连接 %(name)s 。"
 
 #: frontend/src/pages/app/main-panel/linked-devices/linked-devices.js:217
-#: frontend/src/pages/settings/index.js:63
+#: frontend/src/pages/settings/index.js:65
 #: frontend/src/pages/settings/linked-devices/index.js:233
 msgid "Linked Devices"
 msgstr "已连接的设备"
@@ -8933,7 +8952,8 @@ msgstr "其他服务器共享"
 #: frontend/src/pages/org-admin/org-logs/org-logs-perm-audit.js:80
 #: frontend/src/pages/sys-admin/sys-logs/share-permission-logs.js:44
 #: frontend/src/pages/sys-admin/sys-logs/share-permission-logs.js:349
-msgid "Share To"
+#| msgid "Shared with me"
+msgid "Share with"
 msgstr "共享给"
 
 #: frontend/src/pages/app/main-panel/share-admin/folders.js:176
@@ -8945,8 +8965,9 @@ msgstr "成功更改权限。"
 
 #: frontend/src/pages/app/main-panel/share-admin/folders.js:255
 #: frontend/src/pages/app/main-panel/share-admin/libraries.js:268
-msgid "Share To:"
-msgstr "共享给："
+#| msgid "Shared with me"
+msgid "Share with:"
+msgstr "共享给:"
 
 #: frontend/src/pages/app/main-panel/share-admin/folders.js:350
 #: frontend/src/pages/app/side-panel/main-side-nav.js:309
@@ -9613,7 +9634,8 @@ msgstr "删除成员"
 #: frontend/src/pages/org-admin/org-logs/org-logs-perm-audit.js:79
 #: frontend/src/pages/sys-admin/sys-logs/share-permission-logs.js:43
 #: frontend/src/pages/sys-admin/sys-logs/share-permission-logs.js:340
-msgid "Share From"
+#| msgid "Share From"
+msgid "Share from"
 msgstr "共享来源"
 
 #: frontend/src/pages/org-admin/org-logs/org-logs.js:49
@@ -10105,7 +10127,7 @@ msgid "Email notification updated"
 msgstr "邮箱通知已更新"
 
 #: frontend/src/pages/settings/email-notice/index.js:68
-#: frontend/src/pages/settings/index.js:60
+#: frontend/src/pages/settings/index.js:62
 msgid "Email Notification"
 msgstr "邮件通知"
 
@@ -10129,47 +10151,48 @@ msgid ""
 "joining group should be sent to your mailbox."
 msgstr "是否将共享资料库或是加入群组之类的协作通知发送到你的邮箱。"
 
-#: frontend/src/pages/settings/index.js:54
+#: frontend/src/pages/settings/index.js:56
 msgid "Profile"
 msgstr "个人信息"
 
-#: frontend/src/pages/settings/index.js:56
+#: frontend/src/pages/settings/index.js:58
 #: frontend/src/pages/settings/web-api-auth-token/index.js:76
 msgid "Web API Auth Token"
 msgstr "Web API Auth Token"
 
-#: frontend/src/pages/settings/index.js:57
+#: frontend/src/pages/settings/index.js:59
 #: frontend/src/pages/settings/webdav-password/index.js:93
 msgid "WebDAV Access"
 msgstr "WebDAV 访问"
 
-#: frontend/src/pages/settings/index.js:58
+#: frontend/src/pages/settings/index.js:60
 #: frontend/src/pages/settings/list-in-address-book/index.js:30
 msgid "Global Address Book"
 msgstr "通讯录"
 
-#: frontend/src/pages/settings/index.js:59
+#: frontend/src/pages/settings/index.js:61
 msgid "Language"
 msgstr "语言"
 
-#: frontend/src/pages/settings/index.js:61
+#: frontend/src/pages/settings/index.js:63
 #: frontend/src/pages/settings/two-factor-auth/index.js:48
 msgid "Two-Factor Authentication"
 msgstr "两步验证"
 
-#: frontend/src/pages/settings/index.js:62
+#: frontend/src/pages/settings/index.js:64
 #: frontend/src/pages/settings/social-login-dingtalk/index.js:38
+#: frontend/src/pages/settings/social-login-oauth/index.js:47
 #: frontend/src/pages/settings/social-login-saml/index.js:51
 #: frontend/src/pages/settings/social-login-weixin/index.js:38
 #: frontend/src/pages/settings/social-login/index.js:38
 msgid "Single Sign On (SSO)"
 msgstr "单点登录(SSO)"
 
-#: frontend/src/pages/settings/index.js:92
+#: frontend/src/pages/settings/index.js:94
 msgid "User info updated"
 msgstr "用户信息已更新"
 
-#: frontend/src/pages/settings/index.js:164
+#: frontend/src/pages/settings/index.js:166
 msgid "Profile Setting"
 msgstr "个人信息设置"
 
@@ -10191,6 +10214,7 @@ msgid ""
 msgstr "在通讯录中列出你的账户, 以便其他人可以通过输入你的名字找到你。"
 
 #: frontend/src/pages/settings/social-login-dingtalk/index.js:42
+#: frontend/src/pages/settings/social-login-oauth/index.js:51
 #: frontend/src/pages/settings/social-login-saml/index.js:55
 #: frontend/src/pages/settings/social-login-weixin/index.js:42
 #: frontend/src/pages/settings/social-login/index.js:42
@@ -10994,11 +11018,12 @@ msgid "Freeze user account when failed login attempts exceed limit."
 msgstr "当用户登录失败超过限制时，冻结用户账户。"
 
 #: frontend/src/pages/sys-admin/settings/index.js:213
-msgid "Enable sharing to all groups"
+msgid "Enable sharing with all groups"
 msgstr "开启所有群组共享"
 
 #: frontend/src/pages/sys-admin/settings/index.js:216
-msgid "Enable users to share libraries to any groups in the system."
+#| msgid "Enable users to share libraries to any groups in the system."
+msgid "Enable users to share libraries with any groups in the system."
 msgstr "允许用户将资料库共享给系统中的任何群组。"
 
 #: frontend/src/pages/sys-admin/settings/index.js:224
@@ -12125,6 +12150,12 @@ msgstr "名称不能是两个点"
 #| msgid "Save"
 msgid "Save as"
 msgstr "另存为"
+
+#~ msgid "Share To"
+#~ msgstr "Share To"
+
+#~ msgid "Share To:"
+#~ msgstr "Share To:"
 
 #~ msgid "New Department Library"
 #~ msgstr "New Department Library"

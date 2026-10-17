@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 15:38+0800\n"
+"POT-Creation-Date: 2026-10-17 21:05+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Vietnamese (http://app.transifex.com/haiwen/seahub/language/vi/)\n"
@@ -252,8 +252,9 @@ msgstr "Email %s không hợp lệ."
 #: seahub/api2/endpoints/group_owned_libraries.py:1261
 #: seahub/api2/endpoints/repo_share_invitations.py:202
 #, python-format
-msgid "This item has been shared to %s."
-msgstr "Mục này đã được chia sẻ cho %s."
+#| msgid "This item has been shared to %s."
+msgid "This item has been shared with %s."
+msgstr ""
 
 #: seahub/api2/endpoints/admin/statistics.py:432
 #: seahub/base/management/commands/export_user_traffic_report.py:46
@@ -555,7 +556,7 @@ msgstr "Không tìm thấy người dùng %s."
 #: seahub/api2/endpoints/dir_shared_items.py:410
 #: seahub/api2/endpoints/dir_shared_items.py:426
 #| msgid "Library can not be transferred to owner."
-msgid "Library can not be shared to owner"
+msgid "Library can not be shared with owner"
 msgstr ""
 
 #: seahub/api2/endpoints/file.py:204 seahub/api2/endpoints/upload_links.py:540
@@ -575,7 +576,7 @@ msgstr "Số lượng tệp trong thư viện vượt quá giới hạn"
 #: seahub/api2/endpoints/upload_links.py:322
 #: seahub/api2/endpoints/wiki2.py:1713 seahub/api2/endpoints/wikis.py:108
 #: seahub/api2/endpoints/wikis.py:203 seahub/profile/forms.py:24
-#: seahub/profile/views.py:276 seahub/seadoc/apis.py:2870
+#: seahub/profile/views.py:289 seahub/seadoc/apis.py:2870
 #: seahub/seadoc/views.py:37 seahub/seadoc/views.py:91
 #: seahub/seadoc/views.py:174 seahub/seadoc/views.py:220
 #: seahub/subscription/views.py:27 seahub/subscription/views.py:43
@@ -837,8 +838,9 @@ msgstr "tệp"
 
 #: seahub/api2/endpoints/send_share_link_email.py:83
 #, python-format
-msgid "A file is shared to you on %s"
-msgstr "Một tệp đã được chia sẻ cho bạn trên %s"
+#| msgid "A file is shared to you on %s"
+msgid "A file is shared with you on %s"
+msgstr ""
 
 #: seahub/api2/endpoints/send_share_link_email.py:85
 #: seahub/notifications/models.py:1111
@@ -847,8 +849,9 @@ msgstr "thư mục"
 
 #: seahub/api2/endpoints/send_share_link_email.py:86
 #, python-format
-msgid "A folder is shared to you on %s"
-msgstr "Một thư mục đã được chia sẻ cho bạn trên %s"
+#| msgid "A folder is shared to you on %s"
+msgid "A folder is shared with you on %s"
+msgstr ""
 
 #: seahub/api2/endpoints/send_share_link_email.py:127
 #, python-format
@@ -858,8 +861,9 @@ msgstr ""
 
 #: seahub/api2/endpoints/send_upload_link_email.py:73
 #, python-format
-msgid "An upload link is shared to you on %s"
-msgstr "Một liên kết tải lên đã được chia sẻ cho bạn trên %s"
+#| msgid "An upload link is shared to you on %s"
+msgid "An upload link is shared with you on %s"
+msgstr ""
 
 #: seahub/api2/endpoints/send_upload_link_email.py:88
 msgid "email invalid."
@@ -894,8 +898,8 @@ msgstr "Liên kết chia sẻ %s đã tồn tại."
 
 #: seahub/api2/endpoints/subscription.py:32
 #: seahub/api2/endpoints/subscription.py:68
-#: seahub/api2/endpoints/subscription.py:108 seahub/oauth/views.py:288
-#: seahub/oauth/views.py:300 seahub/organizations/api/admin/info.py:139
+#: seahub/api2/endpoints/subscription.py:108 seahub/oauth/views.py:379
+#: seahub/oauth/views.py:391 seahub/organizations/api/admin/info.py:139
 #: seahub/organizations/api/admin/logo.py:33
 #: seahub/organizations/api/admin/logo.py:42 seahub/subscription/views.py:24
 #: seahub/subscription/views.py:40 seahub/weixin/views.py:41
@@ -1439,10 +1443,11 @@ msgstr "Yêu cầu email."
 #: seahub/dingtalk/views.py:224 seahub/dingtalk/views.py:261
 #: seahub/dingtalk/views.py:304 seahub/dingtalk/views.py:351
 #: seahub/dingtalk/views.py:371 seahub/dingtalk/views.py:444
-#: seahub/dingtalk/views.py:491 seahub/oauth/views.py:100
-#: seahub/oauth/views.py:123 seahub/oauth/views.py:169
-#: seahub/oauth/views.py:181 seahub/oauth/views.py:187
-#: seahub/oauth/views.py:222 seahub/templates/remote_user/error.html:8
+#: seahub/dingtalk/views.py:491 seahub/oauth/views.py:118
+#: seahub/oauth/views.py:141 seahub/oauth/views.py:162
+#: seahub/oauth/views.py:194 seahub/oauth/views.py:206
+#: seahub/oauth/views.py:212 seahub/oauth/views.py:257
+#: seahub/oauth/views.py:349 seahub/templates/remote_user/error.html:8
 #: seahub/weixin/views.py:70 seahub/weixin/views.py:87
 #: seahub/weixin/views.py:108 seahub/weixin/views.py:194
 #: seahub/weixin/views.py:212 seahub/work_weixin/views.py:69
@@ -2163,33 +2168,45 @@ msgstr "Vui lòng kiểm tra tại trang sau:"
 
 #: seahub/notifications/templates/notifications/notice_msg/folder_share_msg.html:1
 #, python-format
+#| msgid ""
+#| ")s has shared a folder named <a f=\"%(url_base)s%(lib_url)s\">ib_name)s</a> "
+#| "to you."
 msgid ""
 "%(user)s has shared a folder named <a "
-"href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to you."
-msgstr "%(user)s đã chia sẻ một thư mục có tên <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> cho bạn."
+"href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> with you."
+msgstr ""
 
 #: seahub/notifications/templates/notifications/notice_msg/folder_share_to_group_msg.html:1
 #, python-format
+#| msgid ""
+#| ")s has shared a folder named <a f=\"%(url_base)s%(lib_url)s\">ib_name)s</a> "
+#| "to group <a f=\"%(url_base)s%(group_url)s\">roup_name)s</a>."
 msgid ""
 "%(user)s has shared a folder named <a "
-"href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to group <a "
+"href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> with group <a "
 "href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
-msgstr "%(user)s đã chia sẻ một thư mục có tên <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> cho nhóm <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
+msgstr ""
 
 #: seahub/notifications/templates/notifications/notice_msg/repo_share_msg.html:1
 #, python-format
+#| msgid ""
+#| ")s has shared a library named <a f=\"%(url_base)s%(lib_url)s\">ib_name)s</a>"
+#| " to you."
 msgid ""
 "%(user)s has shared a library named <a "
-"href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to you."
-msgstr "%(user)s đã chia sẻ một thư viện có tên <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> cho bạn."
+"href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> with you."
+msgstr ""
 
 #: seahub/notifications/templates/notifications/notice_msg/repo_share_to_group_msg.html:1
 #, python-format
+#| msgid ""
+#| ")s has shared a library named <a f=\"%(url_base)s%(lib_url)s\">ib_name)s</a>"
+#| " to group <a f=\"%(url_base)s%(group_url)s\">roup_name)s</a>."
 msgid ""
 "%(user)s has shared a library named <a "
-"href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to group <a "
+"href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> with group <a "
 "href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
-msgstr "%(user)s đã chia sẻ một thư viện có tên <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> cho nhóm <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
+msgstr ""
 
 #: seahub/notifications/templates/notifications/notify_virus.html:13
 #, python-format
@@ -2224,12 +2241,45 @@ msgid ""
 "document %(sdoc_name)s\n"
 msgstr "%(author)s đã đánh dấu bình luận \"%(resolve_comment)s\" là đã giải quyết trong tài liệu %(sdoc_name)s\n"
 
-#: seahub/oauth/views.py:225
+#: seahub/oauth/views.py:218
+#| msgid "Failed to bind SAML, please login first."
+msgid "Failed to connect OAuth, please login first."
+msgstr ""
+
+#: seahub/oauth/views.py:222
+msgid "The OAuth account has already been connected to another account."
+msgstr ""
+
+#: seahub/oauth/views.py:228
+msgid "The OAuth account has already been connected to another LDAP account."
+msgstr ""
+
+#: seahub/oauth/views.py:233
+#| msgid "Failed to send email, please contact administrator."
+msgid "Failed to connect OAuth, please contact administrator."
+msgstr ""
+
+#: seahub/oauth/views.py:260
 #: seahub/templates/remote_user/create_unknown_user_false.html:8
 #: seahub/work_weixin/views.py:111
 msgid ""
 "Error, new user registration is not allowed, please contact administrator."
 msgstr "Lỗi, việc đăng ký người dùng mới không được phép, vui lòng liên hệ quản trị viên."
+
+#: seahub/oauth/views.py:363
+#| msgid "Failed to unbind SAML, please set a password first."
+msgid "Failed to unbind OAuth, please set a password first."
+msgstr ""
+
+#: seahub/oauth/views.py:366
+#| msgid "Failed to bind SAML, please login first."
+msgid "Failed to unbind OAuth, the user is forced login by SSO."
+msgstr ""
+
+#: seahub/oauth/views.py:369
+#| msgid "Failed to unbind SAML, please set a contact email first."
+msgid "Failed to unbind OAuth, please set a contact email or login ID first."
+msgstr ""
 
 #: seahub/options/templates/options/set_user_options.html:7
 msgid "Please choose how to view encrypted libraries online:"
@@ -2385,23 +2435,23 @@ msgstr "Chỉnh sửa profile thành công"
 msgid "Failed to edit profile"
 msgstr "Chỉnh sửa profile thất bại"
 
-#: seahub/profile/views.py:261
+#: seahub/profile/views.py:274
 msgid "Has not accepted invitation yet"
 msgstr "Lời mời chưa được chấp nhận"
 
-#: seahub/profile/views.py:288
+#: seahub/profile/views.py:301
 msgid "Demo account can not be deleted."
 msgstr "Tài khoản demo không thể xóa."
 
-#: seahub/profile/views.py:319
+#: seahub/profile/views.py:332
 msgid "Failed to set default library."
 msgstr "Cài đặt thư viện mặc định thất bại."
 
-#: seahub/profile/views.py:323
+#: seahub/profile/views.py:336
 msgid "Can not set encrypted library as default library."
 msgstr "Không thể mã hóa thư viện mặc định"
 
-#: seahub/profile/views.py:328
+#: seahub/profile/views.py:341
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
 msgstr "Cài đặt \"%s\" thành thư viện mặc định thành công "
@@ -2917,10 +2967,15 @@ msgstr "Vui lòng nhập mật khẩu nếu bạn muốn xem tệp/thư mục đ
 
 #: seahub/templates/shared_link_email.html:12
 #, python-format
+#| msgid ""
+#| "ped_nickname)s shared a %(file_shared_type)s <span "
+#| "style=\"font-:bold;\">%(escaped_file_shared_name)s</span> to you on "
+#| "ite_name)s:"
 msgid ""
 "%(escaped_nickname)s shared a %(file_shared_type)s <span style=\"font-"
-"weight:bold;\">%(escaped_file_shared_name)s</span> to you on %(site_name)s:"
-msgstr "%(escaped_nickname)s đã chia sẻ một %(file_shared_type)s <span style=\"font-weight:bold;\">%(escaped_file_shared_name)s</span> cho bạn trên %(site_name)s:"
+"weight:bold;\">%(escaped_file_shared_name)s</span> with you on "
+"%(site_name)s:"
+msgstr ""
 
 #: seahub/templates/shared_link_email.html:18
 #: seahub/templates/shared_upload_link_email.html:24
@@ -2947,7 +3002,8 @@ msgstr "Mật khẩu:"
 #| "ite_name)s:"
 msgid ""
 "%(escaped_nickname)s shared a %(file_shared_type)s <span style=\"font-"
-"weight:bold;\">%(escaped_file_shared_name)s</span> to you on %(site_name)s."
+"weight:bold;\">%(escaped_file_shared_name)s</span> with you on "
+"%(site_name)s."
 msgstr ""
 
 #: seahub/templates/shared_link_password_email.html:16
@@ -2967,14 +3023,16 @@ msgstr ""
 #| "ite_name)s:"
 msgid ""
 "%(escaped_nickname)s shared an upload link for folder <span style=\"font-"
-"weight:bold;\">%(escaped_folder_name)s</span> to you on %(site_name)s."
+"weight:bold;\">%(escaped_folder_name)s</span> with you on %(site_name)s."
 msgstr ""
 
 #: seahub/templates/shared_upload_link_email.html:14
 #: seahub/templates/shared_upload_link_password_email.html:14
 #, python-format
-msgid "%(escaped_nickname)s shared an upload link to you on %(site_name)s."
-msgstr "%(escaped_nickname)s đã chia sẻ một liên kết tải lên cho bạn trên %(site_name)s."
+#| msgid ""
+#| "scaped_nickname)s shared an upload link to you on %(site_name)s."
+msgid "%(escaped_nickname)s shared an upload link with you on %(site_name)s."
+msgstr ""
 
 #: seahub/templates/shared_upload_link_email.html:20
 #: seahub/templates/shared_upload_link_email.html:28
