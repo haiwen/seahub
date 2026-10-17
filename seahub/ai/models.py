@@ -65,6 +65,7 @@ class ChatSessionsManager(models.Manager):
                         content=message.content,
                         attachments=message.attachments,
                         sources=message.sources,
+                        artifacts=message.artifacts,
                     )
                     for message in source_messages
                 ])
@@ -165,9 +166,11 @@ class ChatMessageThoughtProcess(models.Model):
 
 
 class ChatMessagesManager(models.Manager):
-    def create_message(self, session_uuid, message_id, role, content, sources='', attachments=None):
+    def create_message(self, session_uuid, message_id, role, content, sources='', attachments=None, artifacts=None):
         if attachments is None:
             attachments = []
+        if artifacts is None:
+            artifacts = []
         message = self.model(
             session_uuid=session_uuid,
             message_id=message_id,
@@ -175,6 +178,7 @@ class ChatMessagesManager(models.Manager):
             content=content,
             attachments=json.dumps(attachments),
             sources=sources,
+            artifacts=json.dumps(artifacts),
         )
         message.save()
         return message
@@ -199,6 +203,7 @@ class ChatMessages(models.Model):
     content = models.TextField(null=True)
     attachments = models.TextField(null=True)
     sources = models.TextField(null=True)
+    artifacts = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
@@ -223,6 +228,13 @@ class ChatMessages(models.Model):
         if not isinstance(attachments, list):
             attachments = []
 
+        try:
+            artifacts = json.loads(self.artifacts)
+        except Exception:
+            artifacts = []
+        if not isinstance(artifacts, list):
+            artifacts = []
+
         return {
             'id': self.id,
             'session_uuid': self.session_uuid,
@@ -231,6 +243,7 @@ class ChatMessages(models.Model):
             'content': self.content,
             'attachments': attachments,
             'sources': sources,
+            'artifacts': artifacts,
             'created_at': self.created_at,
             'updated_at': self.updated_at,
         }
