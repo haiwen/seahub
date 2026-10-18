@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/lv';
 import { lang } from '@/utils/constants';
 
 dayjs.locale(lang);

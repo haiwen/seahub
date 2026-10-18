@@ -1314,33 +1314,33 @@ msgstr "Tūlīt"
 #, python-format
 msgid "%(days)d day ago"
 msgid_plural "%(days)d days ago"
-msgstr[0] "%(days)d dienas"
-msgstr[1] "%(days)d dienām"
-msgstr[2] "%(days)d dienām"
+msgstr[0] "pirms %(days)d dienas"
+msgstr[1] "pirms %(days)d dienām"
+msgstr[2] "pirms %(days)d dienām"
 
 #: seahub/base/templatetags/seahub_tags.py:348
 #, python-format
 msgid "%(hours)d hour ago"
 msgid_plural "%(hours)d hours ago"
-msgstr[0] "%(hours)d stundas"
-msgstr[1] "%(hours)d stundām"
-msgstr[2] "%(hours)d stundām"
+msgstr[0] "pirms %(hours)d stundas"
+msgstr[1] "pirms %(hours)d stundām"
+msgstr[2] "pirms %(hours)d stundām"
 
 #: seahub/base/templatetags/seahub_tags.py:355
 #, python-format
 msgid "%(minutes)d minute ago"
 msgid_plural "%(minutes)d minutes ago"
-msgstr[0] "%(minutes)d minūtes"
-msgstr[1] "%(minutes)d minūtēm"
-msgstr[2] "%(minutes)d minūtēm"
+msgstr[0] "pirms %(minutes)d minūtes"
+msgstr[1] "pirms %(minutes)d minūtēm"
+msgstr[2] "pirms %(minutes)d minūtēm"
 
 #: seahub/base/templatetags/seahub_tags.py:361
 #, python-format
 msgid "%(seconds)d second ago"
 msgid_plural "%(seconds)d seconds ago"
-msgstr[0] "%(seconds)d sekundes"
-msgstr[1] "%(seconds)d sekundēm"
-msgstr[2] "%(seconds)d sekundēm"
+msgstr[0] "pirms %(seconds)d sekundes"
+msgstr[1] "pirms %(seconds)d sekundēm"
+msgstr[2] "pirms %(seconds)d sekundēm"
 
 #: seahub/base/templatetags/seahub_tags.py:503
 msgid "Read-Write"
@@ -1356,8 +1356,8 @@ msgstr "Tikai lasīt"
 msgid "%(size)d byte"
 msgid_plural "%(size)d bytes"
 msgstr[0] "%(size)d baits"
-msgstr[1] "%(size)d baits"
-msgstr[2] "%(size)d baiti"
+msgstr[1] "%(size)d baiti"
+msgstr[2] "%(size)d baitu"
 
 #: seahub/base/templatetags/seahub_tags.py:543
 #, python-format
@@ -1702,9 +1702,9 @@ msgid ""
 msgid_plural ""
 "\n"
 "You've got %(num)s new notices on %(site_name)s:\n"
-msgstr[0] "\nJums ir %(num)s jauni paziņojumi no %(site_name)s:\n"
-msgstr[1] "\nJums ir 1 jauns paziņojums no %(site_name)s:\n"
-msgstr[2] "\nJums ir %(num)s jauni paziņojumi no %(site_name)s:\n"
+msgstr[0] "\nJums ir %(num)s jauns paziņojums vietnē %(site_name)s:\n"
+msgstr[1] "\nJums ir %(num)s jauni paziņojumi vietnē %(site_name)s:\n"
+msgstr[2] "\nJums ir %(num)s jaunu paziņojumu vietnē %(site_name)s:\n"
 
 #: seahub/notifications/management/commands/send_file_updates.py:115
 msgid "Renamed library"
@@ -1927,9 +1927,9 @@ msgid ""
 msgid_plural ""
 "\n"
 "You've got %(num)s file updates on %(site_name)s:\n"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "\nJums ir %(num)s jauns datņu atjauninājums vietnē %(site_name)s:\n"
+msgstr[1] "\nJums ir %(num)s jauni datņu atjauninājumi vietnē %(site_name)s:\n"
+msgstr[2] "\nJums ir %(num)s jaunu datņu atjauninājumu vietnē %(site_name)s:\n"
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:20
 msgid "Operation"
