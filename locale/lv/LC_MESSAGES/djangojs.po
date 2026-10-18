@@ -34,7 +34,7 @@ msgstr ""
 
 #: frontend/src/components/common/account.js:109
 msgid "Exit System Admin"
-msgstr "Iziet no administratora loga"
+msgstr "Pamest pārvaldību"
 
 #: frontend/src/components/common/account.js:114
 msgid "Exit Organization Admin"
