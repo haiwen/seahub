@@ -26,7 +26,8 @@ class SocketManager {
     this.state = STATE.IDLE;
 
     this.pendingOperationList = [];
-    this.pendingOperationBeginTimeList = [];
+    this._sendingOperation = null;
+    this._sendingOperationCallback = null;
     this.previewElements = null;
     this.lastObservedElementVersions = null;
     this.previewCommitTimer = null;
@@ -296,13 +297,14 @@ class SocketManager {
     if (!force && !this.hasUnsyncedSceneChanges(elements)) {
       return;
     }
-    this.pendingOperationList.push(elements);
+    const operation = {
+      elements,
+      createAt: Date.now(),
+    };
+    this.pendingOperationList.push(operation);
 
-    const lastOpBeginTime = new Date().getTime();
-    this.pendingOperationBeginTimeList.push(lastOpBeginTime);
-    const firstOpBeginTime = this.pendingOperationBeginTimeList[0];
-
-    const isExceedExecuteTime = (lastOpBeginTime - firstOpBeginTime) / 1000 > 30 ? true : false;
+    const firstOperation = this._sendingOperation || this.pendingOperationList[0];
+    const isExceedExecuteTime = operation.createAt - firstOperation.createAt > 30 * 1000;
     if (isExceedExecuteTime || this.pendingOperationList.length > 500) {
       this.dispatchConnectState('pending_operations_exceed_limit');
     }
@@ -325,56 +327,78 @@ class SocketManager {
       return;
     }
 
-    this.dispatchConnectState('is-saving');
-    const version = this.document.version;
-    const elements = this.pendingOperationList.shift();
-    this._sendingOperation = elements;
+    const operation = this.pendingOperationList.shift();
+    this._sendingOperation = operation;
+    const callback = (result) => {
+      // Acknowledgements from an earlier attempt must not affect a retry.
+      if (this._sendingOperationCallback !== callback) return;
+      this.sendOperationsCallback(result);
+    };
+    this._sendingOperationCallback = callback;
 
-    this.socketClient.broadcastSceneElements(elements, version, this.sendOperationsCallback);
+    try {
+      this.dispatchConnectState('is-saving');
+      this.socketClient.broadcastSceneElements(operation.elements, this.getVersion(), callback);
+    } catch (error) {
+      if (this._sendingOperationCallback === callback) {
+        this.handleOperationError(error);
+      }
+    }
   };
 
   sendOperationsCallback = (result) => {
-    if (result && result.success) {
-      const { version: serverVersion } = result;
-      this.setVersion(serverVersion);
-      const lastSavedAt = new Date().getTime();
-      this.dispatchConnectState('saved', lastSavedAt);
+    if (!this._sendingOperation || this.state !== STATE.SENDING) return;
 
-      this.setLastBroadcastedOrReceivedSceneVersion(this._sendingOperation);
+    try {
+      if (!result?.success || !Number.isFinite(result.version)) {
+        this.handleOperationError(result);
+        return;
+      }
 
-      // send next operations
-      this.pendingOperationBeginTimeList.shift(); // remove current operation's begin time
+      this.setVersion(Math.max(this.getVersion(), result.version));
+      this.setLastBroadcastedOrReceivedSceneVersion(this._sendingOperation.elements);
       this._sendingOperation = null;
+      this._sendingOperationCallback = null;
+      this.dispatchConnectState('saved', Date.now());
       this.sendNextOperations();
-      return;
-    }
-    // Operations are execute failure
-    const { error_type } = result;
-    if (error_type === 'load_document_content_error' || error_type === 'token_expired') {
-      // load_document_content_error: After a short-term reconnection, the content of the document fails to load
-      this.dispatchConnectState(error_type);
-
-      // reset sending control
-      stateDebug(`State Changed: ${this.state} -> ${STATE.NEED_RELOAD}`);
-      this.state = STATE.NEED_RELOAD;
-      this._sendingOperation = null;
-    } else if (error_type === 'version_behind_server') {
-      // Put the failed operation into the pending list and re-execute it
-      this.pendingOperationList.unshift(this._sendingOperation);
-
-      stateDebug(`State Changed: ${this.state} -> ${STATE.CONFLICT}`);
-      this.state = STATE.CONFLICT;
-      this.resolveConflicting(result);
+    } catch (error) {
+      this.handleOperationError(error);
     }
   };
 
-  resolveConflicting = (result) => {
-    const { elements, version } = result;
+  requeueSendingOperation = () => {
+    if (this._sendingOperation) {
+      this.pendingOperationList.unshift(this._sendingOperation);
+      this._sendingOperation = null;
+    }
+    this._sendingOperationCallback = null;
+  };
 
+  handleOperationError = (error) => {
+    stateDebug('Operation failed: %O', error);
+    this.requeueSendingOperation();
+
+    const errorType = error?.error_type;
+    if (errorType === 'version_behind_server' && Array.isArray(error.elements) && Number.isFinite(error.version)) {
+      stateDebug(`State Changed: ${this.state} -> ${STATE.CONFLICT}`);
+      this.state = STATE.CONFLICT;
+      try {
+        this.resolveConflicting(error);
+      } catch (conflictError) {
+        this.handleOperationError(conflictError);
+      }
+      return;
+    }
+
+    stateDebug(`State Changed: ${this.state} -> ${STATE.NEED_RELOAD}`);
+    this.state = STATE.NEED_RELOAD;
+    const eventType = errorType === 'load_document_content_error' || errorType === 'token_expired'
+      ? errorType : 'sync_server_operations_error';
+    this.dispatchConnectState(eventType);
+  };
+
+  resolveConflicting = ({ elements, version }) => {
     this.updateLocalDataByRemoteData(elements, version);
-
-    this.pendingOperationBeginTimeList.shift();
-    this._sendingOperation = null;
     this.state = STATE.SENDING;
     this.sendNextOperations();
   };
@@ -453,6 +477,10 @@ class SocketManager {
   };
 
   dispatchConnectState = (type, message) => {
+    if (this.state === STATE.NEED_RELOAD && (type === 'reconnect' || type === 'disconnect')) {
+      return;
+    }
+
     if (type === 'reconnect') {
       this.state = STATE.IDLE;
       if (this.pendingOperationList.length > 0) {
@@ -461,14 +489,10 @@ class SocketManager {
     }
 
     if (type === 'disconnect') {
-      this.commitPreview();
-      // current state is sending
-      if (this._sendingOperation) {
-        this.pendingOperationList.unshift(this._sendingOperation);
-        this._sendingOperation = null;
-      }
       stateDebug(`State Changed: ${this.state} -> ${STATE.DISCONNECT}`);
       this.state = STATE.DISCONNECT;
+      this.requeueSendingOperation();
+      this.commitPreview();
     }
 
     this.eventBus.dispatch(type, message);

@@ -51,15 +51,14 @@ class SocketClient {
   };
 
   onDisconnected = (data) => {
-    if (data === 'ping timeout') {
-      clientDebug('Disconnected due to ping timeout, trying to reconnect...');
-      this.socket.connect();
-      return;
-    }
-
     clientDebug('disconnect message: %s', data);
     const socketManager = SocketManager.getInstance();
     socketManager.dispatchConnectState('disconnect');
+
+    if (data === 'ping timeout') {
+      clientDebug('Disconnected due to ping timeout, trying to reconnect...');
+      this.socket.connect();
+    }
   };
 
   onConnectError = () => {
@@ -118,13 +117,7 @@ class SocketClient {
       return acc;
     }, []);
 
-    for (const syncableElement of syncableElements) {
-      this.broadcastedElementVersions.set(
-        syncableElement.id,
-        syncableElement.version,
-      );
-    }
-
+    const elementVersions = syncableElements.map(({ id, version }) => [id, version]);
     this.queueFileUpload();
 
     const payload = {
@@ -133,6 +126,13 @@ class SocketClient {
     };
     const params = this.getParams(payload);
     this.socket.emit('elements-updated', params, (result) => {
+      // Failed sends must remain eligible for conflict and disconnect retries.
+      if (result?.success && Number.isFinite(result.version)) {
+        for (const [id, elementVersion] of elementVersions) {
+          const previousVersion = this.broadcastedElementVersions.get(id) || 0;
+          this.broadcastedElementVersions.set(id, Math.max(previousVersion, elementVersion));
+        }
+      }
       callback && callback(result);
     });
   };
