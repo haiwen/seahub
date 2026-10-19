@@ -81,7 +81,7 @@ const TextTranslation = {
   },
   OPEN_WITH_DEFAULT: {
     key: 'Open with Default',
-    value: gettext('Default program')
+    value: gettext('Default')
   },
   OPEN_VIA_CLIENT: {
     key: 'Open via Client',

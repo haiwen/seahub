@@ -11551,6 +11551,3 @@ msgstr "Ja bibliotēka tiek koplietota ar citu lietotāju, koplietošana tiks sa
 
 msgid "Desktop client"
 msgstr "Darbvirsmas klientu"
-
-msgid "Default program"
-msgstr "Noklusējuma programma"
