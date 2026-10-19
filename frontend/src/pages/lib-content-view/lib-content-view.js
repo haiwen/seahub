@@ -1308,7 +1308,10 @@ class LibContentView extends React.Component {
 
   // list operations
   moveItemsAjaxCallback = (repoID, targetRepo, dirent, moveToDirentPath, nodeParentPath, taskId, byDialog = false, options = {}) => {
-    this.updateCurrentNotExistDirent(dirent);
+    const isCurrentRepo = repoID === this.props.repoID;
+    if (isCurrentRepo) {
+      this.updateCurrentNotExistDirent(dirent);
+    }
 
     const {
       isBatchOperation = false,
@@ -1334,17 +1337,35 @@ class LibContentView extends React.Component {
       });
     }
 
-    if (this.state.isTreePanelShown) {
+    if (isCurrentRepo && repoID === targetRepo.repo_id) {
+      if (moveToDirentPath === this.state.path) {
+        this.setState({
+          selectedDirentList: [],
+          isDirentSelected: false,
+          isAllDirentSelected: false,
+          lastSelectedIndex: null,
+        });
+        this.loadDirentList(this.state.path);
+      } else if (nodeParentPath === this.state.path) {
+        if (isBatchOperation) {
+          this.moveDirents(batchFileNames);
+        } else {
+          this.moveDirent(direntPath, moveToDirentPath);
+        }
+      }
+    }
+
+    if (isCurrentRepo && this.state.isTreePanelShown) {
       if (isBatchOperation) {
         const direntPaths = batchFileNames.map(fileName => Utils.joinPath(nodeParentPath, fileName));
         this.deleteTreeNodes(direntPaths, () => {
-          if (repoID === targetRepo.repo_id) {
+          if (repoID === this.props.repoID && repoID === targetRepo.repo_id) {
             this.updateMoveCopyTreeNode(moveToDirentPath);
           }
         });
       } else {
         this.deleteTreeNode(direntPath, () => {
-          if (repoID === targetRepo.repo_id) {
+          if (repoID === this.props.repoID && repoID === targetRepo.repo_id) {
             this.updateMoveCopyTreeNode(moveToDirentPath);
           }
         });
