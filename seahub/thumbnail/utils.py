@@ -421,6 +421,7 @@ def pdf_bytes_to_images(pdf_bytes, prefix_path, dpi=150):
         except subprocess.CalledProcessError as e:
             logger.error(f'pdftoppm failed: {e}')
             return (False, 500)
+        return (True, 200)
 
 def create_pdf_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
     t1 = timeit.default_timer()
@@ -432,23 +433,23 @@ def create_pdf_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
 
     inner_path = gen_inner_file_get_url(token, os.path.basename(path))
     tmp_path = str(os.path.join(tempfile.gettempdir(), '%s' % file_id[:8]))
+    tmp_png_path = tmp_path + '.png'
     pdf_file = urllib.request.urlopen(inner_path)
     try:
-        pdf_bytes_to_images(pdf_file.read(), tmp_path)
-        tmp_path = tmp_path + '.png'
+        success, status_code = pdf_bytes_to_images(pdf_file.read(), tmp_path)
+        if not success:
+            return (False, status_code)
+        t2 = timeit.default_timer()
+        logger.debug('Create PDF thumbnail of [%s](size: %s) takes: %s' % (path, file_size, (t2 - t1)))
+        return _create_thumbnail_common(tmp_png_path, thumbnail_file, size)
     except Exception as e:
         logger.error(e)
         return (False, 500)
-    t2 = timeit.default_timer()
-    logger.debug('Create PDF thumbnail of [%s](size: %s) takes: %s' % (path, file_size, (t2 - t1)))
-    try:
-        ret = _create_thumbnail_common(tmp_path, thumbnail_file, size)
-        os.unlink(tmp_path)
-        return ret
-    except Exception as e:
-        logger.error(e)
-        os.unlink(tmp_path)
-        return (False, 500)
+    finally:
+        try:
+            os.unlink(tmp_png_path)
+        except FileNotFoundError:
+            pass
 
 def create_video_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
 
