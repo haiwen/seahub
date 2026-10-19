@@ -20,7 +20,8 @@ from seahub.wiki2.models import Wiki2Publish, Wiki2Settings
 from seahub.utils import get_file_type_and_ext, render_permission_error
 from seahub.utils.file_types import SEADOC
 from seahub.auth.decorators import login_required
-from seahub.wiki2.utils import check_wiki_permission, get_wiki_config
+from seahub.wiki2.utils import (check_wiki_permission, get_wiki_config,
+                               WIKI_CONFIG_PATH, WIKI_CONFIG_FILE_NAME)
 from seahub.views import get_seadoc_file_uuid
 from seahub.utils import gen_file_get_url
 from seahub.utils.repo import get_repo_owner, is_repo_admin, list_user_admin_reops
@@ -176,11 +177,23 @@ def wiki_publish_view(request, publish_url, page_id=None):
 
     file_path = ''
 
-    if page_id:
-        wiki_config = get_wiki_config(wiki.repo_id, '')
-        pages = wiki_config.get('pages', [])
-        page_info = next(filter(lambda t: t['id'] == page_id, pages), {})
-        file_path = page_info.get('path', '')
+    wiki_config = None
+    try:
+        wiki_config = get_wiki_config(wiki.repo_id, '', timeout=(3, 5))
+    except Exception as e:
+        logger.warning('Failed to read published wiki config %s: %s', wiki_id, e)
+
+    pages = wiki_config.get('pages', []) if wiki_config else []
+    page_info = next((page for page in pages if page['id'] == page_id), {})
+    file_path = page_info.get('path', '')
+
+    # Match the React viewer: it only opens pages when page navigation exists.
+    navigation = wiki_config.get('navigation', []) if wiki_config else []
+    page_navigation = [item for item in navigation if item.get('type') == 'page']
+    react_page = {}
+    if page_navigation:
+        react_page = page_info or next(
+            (page for page in pages if page['id'] == page_navigation[0].get('id')), {})
 
     is_page = False
     if file_path:
@@ -188,13 +201,23 @@ def wiki_publish_view(request, publish_url, page_id=None):
 
     latest_contributor = ''
     last_modified = 0
+    config_last_modified = 0
+    if wiki_config is not None:
+        try:
+            config_path = posixpath.join(WIKI_CONFIG_PATH, WIKI_CONFIG_FILE_NAME)
+            config_dirent = seafile_api.get_dirent_by_path(wiki.repo_id, config_path)
+            if config_dirent:
+                config_last_modified = config_dirent.mtime
+        except Exception as e:
+            logger.warning(e)
     file_type, ext = get_file_type_and_ext(posixpath.basename(file_path))
     repo = seafile_api.get_repo(wiki.repo_id)
     if is_page and file_type == SEADOC:
         try:
             dirent = seafile_api.get_dirent_by_path(wiki.repo_id, file_path)
             if dirent:
-                latest_contributor, last_modified = dirent.modifier, dirent.mtime
+                latest_contributor = dirent.modifier
+                last_modified = dirent.mtime
         except Exception as e:
             logger.warning(e)
 
@@ -216,20 +239,20 @@ def wiki_publish_view(request, publish_url, page_id=None):
         "seadoc_server_url": SEADOC_SERVER_URL,
         "permission": 'public',
         "publish_url": publish_url,
+        "wiki_repo_name": wiki.name,
+        "wiki_title": react_page.get('name', ''),
     }
 
-    if not wiki_publish.enable_server_render:
+    if not wiki_publish.enable_server_render or wiki_config is None:
         response = render(request, template_name, render_context)
-        response['Last-Modified'] = http_date(last_modified)
+        response['Last-Modified'] = http_date(max(last_modified, config_last_modified))
         return response
 
     # server-side rendering of sdoc → HTML
     try:
-        wiki_config = get_wiki_config(wiki.repo_id, '')
-        pages = wiki_config.get('pages', [])
         if not pages:
             response = render(request, template_name, render_context)
-            response['Last-Modified'] = http_date(last_modified)
+            response['Last-Modified'] = http_date(max(last_modified, config_last_modified))
             return response
 
         navigation = wiki_config.get('navigation', [])
@@ -365,12 +388,14 @@ def wiki_publish_view(request, publish_url, page_id=None):
             "wiki_pages_json": json.dumps(wiki_pages),
         })
         response = render(request, template_name, render_context)
-        response['Last-Modified'] = http_date(last_modified)
+        response['Last-Modified'] = http_date(max(last_modified, config_last_modified))
         return response
     except Exception as e:
         logger.warning('SSR fallback for published wiki %s: %s', wiki_id, e)
+        template_name = 'wiki/wiki_publish.html'
+        render_context['wiki_title'] = react_page.get('name', '')
         response = render(request, template_name, render_context)
-        response['Last-Modified'] = http_date(last_modified)
+        response['Last-Modified'] = http_date(max(last_modified, config_last_modified))
         return response
 
 

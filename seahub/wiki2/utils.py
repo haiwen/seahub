@@ -50,14 +50,14 @@ def can_edit_wiki(wiki, username):
     return permission == PERMISSION_READ_WRITE
 
 
-def get_wiki_config(repo_id, username):
+def get_wiki_config(repo_id, username, timeout=None):
     config_path = posixpath.join(WIKI_CONFIG_PATH, WIKI_CONFIG_FILE_NAME)
     file_id = seafile_api.get_file_id_by_path(repo_id, config_path)
     if not file_id:
         return {}
     token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username, use_onetime=True)
     url = gen_inner_file_get_url(token, WIKI_CONFIG_FILE_NAME)
-    resp = requests.get(url)
+    resp = requests.get(url, timeout=timeout)
     wiki_config = json.loads(resp.content)
     return wiki_config
 

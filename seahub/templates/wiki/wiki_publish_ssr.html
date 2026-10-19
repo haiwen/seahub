@@ -6,7 +6,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{{ wiki_title }} - {{ wiki_repo_name }}</title>
+        <title>{% if wiki_title %}{{ wiki_title }} - {% endif %}{{ wiki_repo_name }}</title>
         <meta name="keywords" content="{% trans 'File, Collaboration, Team, Organization' %}">
         {% if site_description != '' %}
         <meta name="description" content="{{ site_description }}">
@@ -14,8 +14,8 @@
         <meta property="og:type" content="website">
         <meta property="og:site_name" content="{{ site_name }}">
         <meta property="og:url" content="{{ service_url }}{{ request.path }}">
-        <meta property="og:title" content="{{ wiki_title }} - {{ wiki_repo_name }}">
-        <meta property="og:description" content="{{ wiki_title }}">
+        <meta property="og:title" content="{% if wiki_title %}{{ wiki_title }} - {% endif %}{{ wiki_repo_name }}">
+        <meta property="og:description" content="{% if wiki_title %}{{ wiki_title }}{% else %}{{ wiki_repo_name }}{% endif %}">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="color-scheme" content="dark light">
         <link
