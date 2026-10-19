@@ -5,6 +5,7 @@ export const defaultContentForSDoc = {
 
 export const dirPath = '/';
 export const gettext = window.gettext || ((str) => str);
+export const pgettext = window.pgettext || ((ctx, str) => str);
 
 export const internalFilePath = '/_Internal/seatable-integration.json';
 
