@@ -50,16 +50,16 @@ class SocketClient {
     }
   };
 
-  onDisconnected = (data) => {
-    if (data === 'ping timeout') {
+  onDisconnected = (reason) => {
+    clientDebug('disconnect message: %s', reason);
+    const socketManager = SocketManager.getInstance();
+    // Requeue before reconnecting, including when the ping has timed out.
+    socketManager.dispatchConnectState('disconnect', reason);
+
+    if (reason === 'ping timeout') {
       clientDebug('Disconnected due to ping timeout, trying to reconnect...');
       this.socket.connect();
-      return;
     }
-
-    clientDebug('disconnect message: %s', data);
-    const socketManager = SocketManager.getInstance();
-    socketManager.dispatchConnectState('disconnect');
   };
 
   onConnectError = () => {
@@ -109,7 +109,8 @@ class SocketClient {
     }
   }, FILE_UPLOAD_TIMEOUT);
 
-  broadcastSceneElements = (elements, version, callback) => {
+  broadcastSceneElements = (operation, version, callback, isCurrentAttempt) => {
+    const { elements, operation_id } = operation;
     const syncableElements = elements.reduce((acc, element) => {
       const isAddedOrUpdated = !this.broadcastedElementVersions.has(element.id) || element.version > this.broadcastedElementVersions.get(element.id);
       if (isAddedOrUpdated && isSyncableElement(element)) {
@@ -118,22 +119,36 @@ class SocketClient {
       return acc;
     }, []);
 
-    for (const syncableElement of syncableElements) {
-      this.broadcastedElementVersions.set(
-        syncableElement.id,
-        syncableElement.version,
-      );
-    }
-
+    // Excalidraw can mutate elements while the acknowledgement is pending.
+    const sentElementVersions = syncableElements.map(({ id, version }) => ({ id, version }));
     this.queueFileUpload();
 
-    const payload = {
+    const params = this.getParams({
       elements: syncableElements,
-      version: version,
-    };
-    const params = this.getParams(payload);
+      version,
+      operation_id,
+    });
+    let acknowledged = false;
     this.socket.emit('elements-updated', params, (result) => {
-      callback && callback(result);
+      // A stale acknowledgement must not confirm versions or advance the queue.
+      if (acknowledged || !isCurrentAttempt()) return;
+      acknowledged = true;
+
+      const ackOperationId = result?.operation_id ?? result?.operationId;
+      if (ackOperationId != null && ackOperationId !== operation_id) {
+        callback({ error_type: 'sync_server_operations_error' });
+        return;
+      }
+
+      if (result?.success && Number.isFinite(result.version)) {
+        for (const { id, version } of sentElementVersions) {
+          this.broadcastedElementVersions.set(
+            id,
+            Math.max(this.broadcastedElementVersions.get(id) || 0, version),
+          );
+        }
+      }
+      callback(result);
     });
   };
 
