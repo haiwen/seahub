@@ -16,7 +16,7 @@ i18n
     ns: ['comment-editor'],
     defaultNS: 'comment-editor',
 
-    whitelist: ['en', 'zh-CN', 'fr', 'de', 'cs', 'es', 'es-AR', 'es-MX', 'ru'],
+    whitelist: ['en', 'zh-CN', 'fr', 'de', 'cs', 'es', 'es-AR', 'es-MX', 'ru', 'lv'],
 
     backend: {
       loadPath: mediaUrl + '{{ ns }}/locales/{{ lng }}/{{ ns }}.json',
