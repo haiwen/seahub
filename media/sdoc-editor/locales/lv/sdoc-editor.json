@@ -217,7 +217,7 @@
           "Bold": "Treknraksts",
           "Italic": "Slīpraksts",
           "Italic_Bold": "Treknslīpraksts",
-          "Inline_code": "Iekļautais kods"
+          "Inline_code": "Kods"
         }
       },
       {
@@ -333,7 +333,7 @@
   "Standard_purple": "Standarta violets",
   "Highlight_color": "Izcēlums",
   "Font_color": "Fonta krāsa",
-  "Default": "Noklusējums",
+  "Default": "Noklusējuma",
   "No_revisions": "Nav redakciju",
   "1_revision": "1 redakcija",
   "x_revisions": "{{count}} redakcijas",
@@ -674,7 +674,7 @@
   "Toggle_header_one": "Pārslēgt 1. līmeņa virsrakstu",
   "Toggle_header_two": "Pārslēgt 2. līmeņa virsrakstu",
   "Toggle_header_three": "Pārslēgt 3. līmeņa virsrakstu",
-  "Support_Figma_Seatable_link": "Tiek atbalstītas SeaTable un Figma saites",
+  "Support_Figma_Seatable_link" : "Tiek atbalstītas SeaTable un Figma saites",
   "Embed_link_invalid_tip": "Iegultā saite nav derīga, tā ir jāizdzēš un jāpievieno no jauna.",
   "Embed_link": "Iegultā saite",
   "Add_embed_link": "Pievienot iegulto saiti",

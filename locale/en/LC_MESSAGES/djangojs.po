@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 21:05+0800\n"
+"POT-Creation-Date: 2026-10-20 11:55+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: English (http://app.transifex.com/haiwen/seahub/language/"
@@ -295,7 +295,7 @@ msgstr "New Department"
 #: frontend/src/features/metadata/constants/view/statistics.js:34
 #: frontend/src/pages/app/main-panel/share-with-ocm/shared-with-ocm.js:274
 #: frontend/src/pages/app/main-panel/starred/starred.js:248
-#: frontend/src/utils/text-translation.js:321
+#: frontend/src/utils/text-translation.js:323
 #, fuzzy
 #| msgid "locked by {name}"
 msgid "Ascending by name"
@@ -306,7 +306,7 @@ msgstr "locked by {name}"
 #: frontend/src/features/metadata/constants/view/statistics.js:35
 #: frontend/src/pages/app/main-panel/share-with-ocm/shared-with-ocm.js:275
 #: frontend/src/pages/app/main-panel/starred/starred.js:249
-#: frontend/src/utils/text-translation.js:325
+#: frontend/src/utils/text-translation.js:327
 #, fuzzy
 #| msgid "locked by {name}"
 msgid "Descending by name"
@@ -2726,7 +2726,7 @@ msgstr "Successfully added label(s) for library {placeholder}"
 
 #: frontend/src/components/dialog/label-repo-state-dialog.js:84
 #: frontend/src/components/library-op-menu.js:181
-#: frontend/src/utils/text-translation.js:216
+#: frontend/src/utils/text-translation.js:218
 msgid "Label Current State"
 msgstr "Label Current State"
 
@@ -2803,7 +2803,7 @@ msgstr "Groups"
 #: frontend/src/pages/sys-admin/sys-logs/file-access-logs.js:64
 #: frontend/src/pages/sys-admin/sys-logs/share-permission-logs.js:48
 #: frontend/src/repo-folder-trash.js:372 frontend/src/repo-folder-trash.js:432
-#: frontend/src/repo-snapshot.js:309 frontend/src/utils/text-translation.js:227
+#: frontend/src/repo-snapshot.js:309 frontend/src/utils/text-translation.js:229
 msgid "Folder"
 msgstr "Folder"
 
@@ -4609,7 +4609,7 @@ msgstr "Share"
 #: frontend/src/pages/app/main-panel/share-admin/libraries.js:273
 #: frontend/src/pages/sys-admin/groups/group-repos.js:156
 #: frontend/src/pages/sys-admin/groups/group-repos.js:166
-#: frontend/src/utils/text-translation.js:221
+#: frontend/src/utils/text-translation.js:223
 msgid "Unshare"
 msgstr "Unshare"
 
@@ -4747,7 +4747,7 @@ msgstr "Last modifier"
 #: frontend/src/features/metadata/components/dialog/metadata-tags-status-dialog/index.js:101
 #: frontend/src/features/metadata/components/popover/filter-popover/basic-filters/tags-filter.js:86
 #: frontend/src/features/metadata/utils/column/index.js:217
-#: frontend/src/utils/text-translation.js:156
+#: frontend/src/utils/text-translation.js:158
 msgid "Tags"
 msgstr "Tags"
 
@@ -5129,21 +5129,21 @@ msgstr "locked"
 #: frontend/src/components/file-view/file-toolbar.js:126
 #: frontend/src/components/file-view/onlyoffice-file-toolbar.js:27
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:72
-#: frontend/src/utils/text-translation.js:245
+#: frontend/src/utils/text-translation.js:247
 msgid "Open parent folder"
 msgstr "Open parent folder"
 
 #: frontend/src/components/file-view/file-toolbar.js:120
 #: frontend/src/components/file-view/file-toolbar.js:165
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:173
-#: frontend/src/utils/text-translation.js:96
+#: frontend/src/utils/text-translation.js:98
 msgid "Lock"
 msgstr "Lock"
 
 #: frontend/src/components/file-view/file-toolbar.js:123
 #: frontend/src/components/file-view/file-toolbar.js:169
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:181
-#: frontend/src/utils/text-translation.js:100
+#: frontend/src/utils/text-translation.js:102
 msgid "Unlock"
 msgstr "Unlock"
 
@@ -5213,7 +5213,7 @@ msgstr ""
 #: frontend/src/features/library-view/dir-list-view/dirent-list-item/index.js:762
 #: frontend/src/pages/app/main-panel/shared-libs/item.js:177
 #: frontend/src/pages/app/main-panel/shared-libs/item.js:324
-#: frontend/src/utils/text-translation.js:176
+#: frontend/src/utils/text-translation.js:178
 msgid "Star"
 msgstr "Star"
 
@@ -5235,7 +5235,7 @@ msgstr "Star"
 #: frontend/src/pages/app/main-panel/shared-libs/item.js:324
 #: frontend/src/pages/app/main-panel/starred/starred.js:158
 #: frontend/src/pages/app/main-panel/starred/starred.js:205
-#: frontend/src/utils/text-translation.js:180
+#: frontend/src/utils/text-translation.js:182
 msgid "Unstar"
 msgstr "Unstar"
 
@@ -5247,13 +5247,13 @@ msgstr "Unstar"
 #: frontend/src/pages/sys-admin/groups/groups-content.js:207
 #: frontend/src/pages/sys-admin/repos/repos.js:254
 #: frontend/src/pages/sys-admin/users/user-repos.js:164
-#: frontend/src/utils/text-translation.js:186
+#: frontend/src/utils/text-translation.js:188
 msgid "Transfer"
 msgstr "Transfer"
 
 #: frontend/src/components/library-op-menu.js:172
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:326
-#: frontend/src/utils/text-translation.js:198
+#: frontend/src/utils/text-translation.js:200
 msgid "Change Password"
 msgstr "Change Password"
 
@@ -5265,13 +5265,13 @@ msgstr "Change Password"
 #: frontend/src/pages/sys-admin/orgs/org-users.js:204
 #: frontend/src/pages/sys-admin/orgs/org-users.js:309
 #: frontend/src/pages/sys-admin/users/users-content.js:561
-#: frontend/src/utils/text-translation.js:202
+#: frontend/src/utils/text-translation.js:204
 msgid "Reset Password"
 msgstr "Reset Password"
 
 #: frontend/src/components/library-op-menu.js:178
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:311
-#: frontend/src/utils/text-translation.js:190
+#: frontend/src/utils/text-translation.js:192
 msgid "Folder Permission"
 msgstr "Folder Permission"
 
@@ -5280,14 +5280,14 @@ msgstr "Folder Permission"
 #: frontend/src/pages/app/side-panel/main-side-nav-folded.js:390
 #: frontend/src/pages/app/side-panel/main-side-nav.js:459
 #: frontend/src/pages/app/side-panel/main-side-nav.js:460
-#: frontend/src/utils/text-translation.js:194
+#: frontend/src/utils/text-translation.js:196
 msgid "Share Admin"
 msgstr "Share Admin"
 
 #: frontend/src/components/library-op-menu.js:193
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:344
 #: frontend/src/features/metadata/components/popover/filter-popover/index.js:145
-#: frontend/src/utils/text-translation.js:206
+#: frontend/src/utils/text-translation.js:208
 msgid "Advanced"
 msgstr "Advanced"
 
@@ -5301,7 +5301,7 @@ msgstr ""
 #: frontend/src/features/library-view/dir-others/library-more-operations/my-library-more-operations.js:215
 #: frontend/src/pages/file-history-old/index.js:243
 #: frontend/src/repo-folder-trash.js:299
-#: frontend/src/utils/text-translation.js:329
+#: frontend/src/utils/text-translation.js:331
 msgid "More"
 msgstr "More"
 
@@ -5358,28 +5358,28 @@ msgstr "Mark all read"
 msgid "View all notifications"
 msgstr "All Notifications"
 
-#: frontend/src/components/notification/notice-item/index.js:53
+#: frontend/src/components/notification/notice-item/index.js:54
 msgid "File {file_link} has a new comment from user {author}."
 msgstr ""
 
-#: frontend/src/components/notification/notice-item/index.js:86
+#: frontend/src/components/notification/notice-item/index.js:87
 #: frontend/src/translate.js:37
 msgid "User {user_link} has added you to {group_link}"
 msgstr "User {user_link} has added you to {group_link}"
 
-#: frontend/src/components/notification/notice-item/index.js:102
+#: frontend/src/components/notification/notice-item/index.js:103
 #, fuzzy
 #| msgid "{share_from} has shared a library named {repo_link} to you."
 msgid "{share_from} has shared a library named {repo_link} with you."
 msgstr "{share_from} has shared a library named {repo_link} to you."
 
-#: frontend/src/components/notification/notice-item/index.js:104
+#: frontend/src/components/notification/notice-item/index.js:105
 #, fuzzy
 #| msgid "{share_from} has shared a folder named {repo_link} to you."
 msgid "{share_from} has shared a folder named {repo_link} with you."
 msgstr "{share_from} has shared a folder named {repo_link} to you."
 
-#: frontend/src/components/notification/notice-item/index.js:125
+#: frontend/src/components/notification/notice-item/index.js:126
 msgid ""
 "{share_from} has changed the permission of library {repo_link} to "
 "{permission}."
@@ -5387,7 +5387,7 @@ msgstr ""
 "{share_from} has changed the permission of library {repo_link} to "
 "{permission}."
 
-#: frontend/src/components/notification/notice-item/index.js:127
+#: frontend/src/components/notification/notice-item/index.js:128
 msgid ""
 "{share_from} has changed the permission of folder {repo_link} to "
 "{permission}."
@@ -5395,15 +5395,15 @@ msgstr ""
 "{share_from} has changed the permission of folder {repo_link} to "
 "{permission}."
 
-#: frontend/src/components/notification/notice-item/index.js:147
+#: frontend/src/components/notification/notice-item/index.js:148
 msgid "{share_from} has cancelled the sharing of library {repo_name}."
 msgstr "{share_from} has cancelled the sharing of library {repo_name}."
 
-#: frontend/src/components/notification/notice-item/index.js:149
+#: frontend/src/components/notification/notice-item/index.js:150
 msgid "{share_from} has cancelled the sharing of folder {repo_name}."
 msgstr "{share_from} has cancelled the sharing of folder {repo_name}."
 
-#: frontend/src/components/notification/notice-item/index.js:168
+#: frontend/src/components/notification/notice-item/index.js:169
 #, fuzzy
 #| msgid ""
 #| "{share_from} has shared a library named {repo_link} to group {group_link}."
@@ -5412,7 +5412,7 @@ msgid ""
 msgstr ""
 "{share_from} has shared a library named {repo_link} to group {group_link}."
 
-#: frontend/src/components/notification/notice-item/index.js:170
+#: frontend/src/components/notification/notice-item/index.js:171
 #, fuzzy
 #| msgid ""
 #| "{share_from} has shared a folder named {repo_link} to group {group_link}."
@@ -5421,17 +5421,17 @@ msgid ""
 msgstr ""
 "{share_from} has shared a folder named {repo_link} to group {group_link}."
 
-#: frontend/src/components/notification/notice-item/index.js:190
+#: frontend/src/components/notification/notice-item/index.js:191
 #, fuzzy
 #| msgid "{user} has transfered a library named {repo_link} to you."
 msgid "{user} has transferred a library named {repo_link} to you."
 msgstr "{user} has transfered a library named {repo_link} to you."
 
-#: frontend/src/components/notification/notice-item/index.js:287
+#: frontend/src/components/notification/notice-item/index.js:288
 msgid "{user} created file {fileName} in library {libraryName}."
 msgstr "{user} created file {fileName} in library {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:287
+#: frontend/src/components/notification/notice-item/index.js:288
 msgid ""
 "{user} created file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
@@ -5439,11 +5439,11 @@ msgstr ""
 "{user} created file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:290
+#: frontend/src/components/notification/notice-item/index.js:291
 msgid "{user} deleted file {fileName} in library {libraryName}."
 msgstr "{user} deleted file {fileName} in library {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:290
+#: frontend/src/components/notification/notice-item/index.js:291
 msgid ""
 "{user} deleted file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
@@ -5451,11 +5451,11 @@ msgstr ""
 "{user} deleted file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:294
+#: frontend/src/components/notification/notice-item/index.js:295
 msgid "{user} restored file {fileName} in library {libraryName}."
 msgstr "{user} restored file {fileName} in library {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:297
+#: frontend/src/components/notification/notice-item/index.js:298
 #, fuzzy
 #| msgid ""
 #| "{user} renamed file {oldFileName} {fileName} in library {libraryName}."
@@ -5463,11 +5463,11 @@ msgid ""
 "{user} renamed file {oldFileName} to {fileName} in library {libraryName}."
 msgstr "{user} renamed file {oldFileName} {fileName} in library {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:301
+#: frontend/src/components/notification/notice-item/index.js:302
 msgid "{user} moved file {fileName} in library {libraryName}."
 msgstr "{user} moved file {fileName} in library {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:301
+#: frontend/src/components/notification/notice-item/index.js:302
 msgid ""
 "{user} moved file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
@@ -5475,15 +5475,15 @@ msgstr ""
 "{user} moved file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:304
+#: frontend/src/components/notification/notice-item/index.js:305
 msgid "{user} updated file {fileName} in library {libraryName}."
 msgstr "{user} updated file {fileName} in library {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:316
+#: frontend/src/components/notification/notice-item/index.js:317
 msgid "{user} created folder {folderName} in library {libraryName}."
 msgstr "{user} created folder {folderName} in library {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:316
+#: frontend/src/components/notification/notice-item/index.js:317
 msgid ""
 "{user} created folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
@@ -5491,11 +5491,11 @@ msgstr ""
 "{user} created folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:319
+#: frontend/src/components/notification/notice-item/index.js:320
 msgid "{user} deleted folder {folderName} in library {libraryName}."
 msgstr "{user} deleted folder {folderName} in library {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:319
+#: frontend/src/components/notification/notice-item/index.js:320
 msgid ""
 "{user} deleted folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
@@ -5503,11 +5503,11 @@ msgstr ""
 "{user} deleted folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:323
+#: frontend/src/components/notification/notice-item/index.js:324
 msgid "{user} restored folder {folderName} in library {libraryName}."
 msgstr "{user} restored folder {folderName} in library {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:326
+#: frontend/src/components/notification/notice-item/index.js:327
 #, fuzzy
 #| msgid ""
 #| "{user} renamed folder {oldFolderName} {folderName} in library "
@@ -5518,11 +5518,11 @@ msgid ""
 msgstr ""
 "{user} renamed folder {oldFolderName} {folderName} in library {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:330
+#: frontend/src/components/notification/notice-item/index.js:331
 msgid "{user} moved folder {folderName} in library {libraryName}."
 msgstr "{user} moved folder {folderName} in library {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:330
+#: frontend/src/components/notification/notice-item/index.js:331
 msgid ""
 "{user} moved folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
@@ -5530,25 +5530,25 @@ msgstr ""
 "{user} moved folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:380
-#: frontend/src/components/notification/notice-item/index.js:407
+#: frontend/src/components/notification/notice-item/index.js:381
+#: frontend/src/components/notification/notice-item/index.js:408
 msgid "Marked \"{resolve_comment}\" as resolved in document {sdoc_link}"
 msgstr ""
 
-#: frontend/src/components/notification/notice-item/index.js:384
-#: frontend/src/components/notification/notice-item/index.js:411
+#: frontend/src/components/notification/notice-item/index.js:385
+#: frontend/src/components/notification/notice-item/index.js:412
 msgid "Marked as resolved in document {sdoc_link}"
 msgstr ""
 
-#: frontend/src/components/notification/notice-item/index.js:388
+#: frontend/src/components/notification/notice-item/index.js:389
 msgid "Added a new comment in document {sdoc_link}:"
 msgstr ""
 
-#: frontend/src/components/notification/notice-item/index.js:415
+#: frontend/src/components/notification/notice-item/index.js:416
 msgid "Added a new reply in document {sdoc_link}:"
 msgstr ""
 
-#: frontend/src/components/notification/notice-item/index.js:468
+#: frontend/src/components/notification/notice-item/index.js:469
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:90
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:98
 #: frontend/src/pages/sys-admin/libraries-and-links/repos-nav.js:21
@@ -5558,13 +5558,13 @@ msgstr ""
 msgid "System"
 msgstr "System"
 
-#: frontend/src/components/notification/notice-item/index.js:479
+#: frontend/src/components/notification/notice-item/index.js:480
 #, fuzzy
 #| msgid "Email notification updated"
 msgid "Mark notification as read"
 msgstr "Email notification updated"
 
-#: frontend/src/components/notification/notice-item/index.js:502
+#: frontend/src/components/notification/notice-item/index.js:503
 #, fuzzy
 #| msgid "All Notifications"
 msgid "View notification"
@@ -5991,7 +5991,6 @@ msgstr "Specific people with email address"
 #: frontend/src/pages/sys-admin/invitations/invitations.js:188
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:185
 #: frontend/src/pages/sys-admin/users/users-filter-bar.js:16
-#: frontend/src/utils/text-translation.js:84
 msgid "Default"
 msgstr "Default"
 
@@ -6437,7 +6436,7 @@ msgstr "Code"
 
 #: frontend/src/components/share-link-panel/link-list.js:71
 #: frontend/src/pages/wiki2/main-panel.js:379
-#: frontend/src/utils/text-translation.js:116
+#: frontend/src/utils/text-translation.js:118
 msgid "Export"
 msgstr "Export"
 
@@ -6755,7 +6754,7 @@ msgstr "Cleaned trash"
 #: frontend/src/pages/org-admin/libraries/org-repo-nav.js:19
 #: frontend/src/pages/sys-admin/libraries-and-links/repos-nav.js:22
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:223
-#: frontend/src/utils/text-translation.js:160
+#: frontend/src/utils/text-translation.js:162
 msgid "Trash"
 msgstr "Trash"
 
@@ -6765,7 +6764,7 @@ msgstr "Trash"
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:57
 #: frontend/src/pages/sys-admin/repos/repos.js:248
 #: frontend/src/pages/wiki2/main-panel.js:374
-#: frontend/src/utils/text-translation.js:144
+#: frontend/src/utils/text-translation.js:146
 msgid "History"
 msgstr "History"
 
@@ -7673,24 +7672,24 @@ msgid "Turn off"
 msgstr "Turn off"
 
 #: frontend/src/features/metadata/components/metadata-details/ai-icon.js:105
-#: frontend/src/utils/text-translation.js:281
+#: frontend/src/utils/text-translation.js:283
 msgid "Generate description"
 msgstr "Generate description"
 
 #: frontend/src/features/metadata/components/metadata-details/ai-icon.js:111
-#: frontend/src/utils/text-translation.js:293
+#: frontend/src/utils/text-translation.js:295
 #, fuzzy
 #| msgid "Exact date"
 msgid "Extract text"
 msgstr "Exact date"
 
 #: frontend/src/features/metadata/components/metadata-details/ai-icon.js:115
-#: frontend/src/utils/text-translation.js:249
+#: frontend/src/utils/text-translation.js:251
 msgid "Extract file detail"
 msgstr "Extract file detail"
 
 #: frontend/src/features/metadata/components/metadata-details/ai-icon.js:119
-#: frontend/src/utils/text-translation.js:285
+#: frontend/src/utils/text-translation.js:287
 #, fuzzy
 #| msgid "Set Quota"
 msgid "Suggest file tags"
@@ -8050,7 +8049,7 @@ msgstr "There is no information to display."
 #: frontend/src/features/metadata/components/view-toolbar/kanban-view-toolbar.js:79
 #: frontend/src/features/metadata/views/card/settings/index.js:117
 #: frontend/src/features/metadata/views/kanban/settings/index.js:162
-#: frontend/src/utils/text-translation.js:152
+#: frontend/src/utils/text-translation.js:154
 msgid "Properties"
 msgstr "Properties"
 
@@ -8898,7 +8897,7 @@ msgid "Delete tags"
 msgstr "Delete page"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/context-menu-options.js:133
-#: frontend/src/utils/text-translation.js:311
+#: frontend/src/utils/text-translation.js:313
 #, fuzzy
 #| msgid "Delete page"
 msgid "Merge tags"
@@ -8913,7 +8912,7 @@ msgstr "Set Quota"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/context-menu-options.js:188
 #: frontend/src/features/tag/views/all-tags/tags-table/index.js:335
-#: frontend/src/utils/text-translation.js:315
+#: frontend/src/utils/text-translation.js:317
 #, fuzzy
 #| msgid "New Tag"
 msgid "New child tag"
@@ -12152,7 +12151,7 @@ msgid "Modify name"
 msgstr "Modify name"
 
 #: frontend/src/pages/wiki2/main-panel.js:358
-#: frontend/src/utils/text-translation.js:112
+#: frontend/src/utils/text-translation.js:114
 #, fuzzy
 #| msgid "Delete page"
 msgid "Freeze page"
@@ -12165,7 +12164,7 @@ msgid "Export as sdoc"
 msgstr "Export as docx"
 
 #: frontend/src/pages/wiki2/main-panel.js:382
-#: frontend/src/utils/text-translation.js:140
+#: frontend/src/utils/text-translation.js:142
 #, fuzzy
 #| msgid "Export as docx"
 msgid "Export as Markdown"
@@ -12645,139 +12644,146 @@ msgstr ""
 msgid "Open with"
 msgstr "Open file"
 
-#: frontend/src/utils/text-translation.js:88
+#: frontend/src/utils/text-translation.js:86
+#, fuzzy
+#| msgid "Default"
+msgctxt "Open with"
+msgid "Default"
+msgstr "Default"
+
+#: frontend/src/utils/text-translation.js:90
 #, fuzzy
 #| msgid "Desktop"
 msgid "Desktop client"
 msgstr "Desktop"
 
-#: frontend/src/utils/text-translation.js:92
+#: frontend/src/utils/text-translation.js:94
 #, fuzzy
 #| msgid "Only files"
 msgid "OnlyOffice"
 msgstr "Only files"
 
-#: frontend/src/utils/text-translation.js:104
+#: frontend/src/utils/text-translation.js:106
 msgid "Freeze Document"
 msgstr "Freeze Document"
 
-#: frontend/src/utils/text-translation.js:108
+#: frontend/src/utils/text-translation.js:110
 msgid "Unfreeze Document"
 msgstr "Unfreeze Document"
 
-#: frontend/src/utils/text-translation.js:120
+#: frontend/src/utils/text-translation.js:122
 msgid "Convert & Export"
 msgstr "Convert & Export"
 
-#: frontend/src/utils/text-translation.js:124
+#: frontend/src/utils/text-translation.js:126
 msgid "Convert to Markdown"
 msgstr "Convert to Markdown"
 
-#: frontend/src/utils/text-translation.js:128
+#: frontend/src/utils/text-translation.js:130
 msgid "Convert to sdoc"
 msgstr "Convert to sdoc"
 
-#: frontend/src/utils/text-translation.js:132
+#: frontend/src/utils/text-translation.js:134
 msgid "Convert to docx"
 msgstr "Convert to docx"
 
-#: frontend/src/utils/text-translation.js:136
+#: frontend/src/utils/text-translation.js:138
 msgid "Export as docx"
 msgstr "Export as docx"
 
-#: frontend/src/utils/text-translation.js:148
+#: frontend/src/utils/text-translation.js:150
 msgid "Access Log"
 msgstr "Access Log"
 
-#: frontend/src/utils/text-translation.js:164
+#: frontend/src/utils/text-translation.js:166
 msgid "Convert with ONLYOFFICE"
 msgstr "Convert with ONLYOFFICE"
 
-#: frontend/src/utils/text-translation.js:168
+#: frontend/src/utils/text-translation.js:170
 msgid "Display files"
 msgstr "Display files"
 
-#: frontend/src/utils/text-translation.js:172
+#: frontend/src/utils/text-translation.js:174
 msgid "Export as zip"
 msgstr "Export as zip"
 
-#: frontend/src/utils/text-translation.js:212
+#: frontend/src/utils/text-translation.js:214
 msgid "API Token"
 msgstr "API Token"
 
-#: frontend/src/utils/text-translation.js:231
+#: frontend/src/utils/text-translation.js:233
 msgid "Add view"
 msgstr "Add view"
 
-#: frontend/src/utils/text-translation.js:237
+#: frontend/src/utils/text-translation.js:239
 msgid "Open file in new tab"
 msgstr "Open file in new tab"
 
-#: frontend/src/utils/text-translation.js:241
+#: frontend/src/utils/text-translation.js:243
 msgid "Open folder in new tab"
 msgstr "Open folder in new tab"
 
-#: frontend/src/utils/text-translation.js:253
+#: frontend/src/utils/text-translation.js:255
 msgid "Extract file details"
 msgstr "Extract file details"
 
-#: frontend/src/utils/text-translation.js:257
+#: frontend/src/utils/text-translation.js:259
 msgid "Delete file"
 msgstr "Delete file"
 
-#: frontend/src/utils/text-translation.js:261
+#: frontend/src/utils/text-translation.js:263
 msgid "Delete folder"
 msgstr "Delete folder"
 
-#: frontend/src/utils/text-translation.js:265
+#: frontend/src/utils/text-translation.js:267
 #, fuzzy
 #| msgid "Moved file"
 msgid "Move file"
 msgstr "Moved file"
 
-#: frontend/src/utils/text-translation.js:269
+#: frontend/src/utils/text-translation.js:271
 #, fuzzy
 #| msgid "Moved folder"
 msgid "Move folder"
 msgstr "Moved folder"
 
-#: frontend/src/utils/text-translation.js:273
+#: frontend/src/utils/text-translation.js:275
 msgid "Rename file"
 msgstr "Rename file"
 
-#: frontend/src/utils/text-translation.js:277
+#: frontend/src/utils/text-translation.js:279
 msgid "Rename folder"
 msgstr "Rename folder"
 
-#: frontend/src/utils/text-translation.js:289
+#: frontend/src/utils/text-translation.js:291
 #, fuzzy
 #| msgid "Select Image"
 msgid "Detect faces"
 msgstr "Select Image"
 
-#: frontend/src/utils/text-translation.js:297
+#: frontend/src/utils/text-translation.js:299
 msgid "Clear selected"
 msgstr "Clear selected"
 
-#: frontend/src/utils/text-translation.js:301
+#: frontend/src/utils/text-translation.js:303
 msgid "Delete selected"
 msgstr "Delete selected"
 
-#: frontend/src/utils/text-translation.js:305
+#: frontend/src/utils/text-translation.js:307
 msgid "Copy selected"
 msgstr "Copy selected"
 
-#: frontend/src/utils/text-translation.js:335
+#: frontend/src/utils/text-translation.js:337
 msgid "Remove from this group"
 msgstr ""
 
-#: frontend/src/utils/text-translation.js:339
+#: frontend/src/utils/text-translation.js:341
 #, fuzzy
 #| msgid "Add group"
 msgid "Add to groups"
 msgstr "Add group"
 
-#: frontend/src/utils/text-translation.js:343
+#: frontend/src/utils/text-translation.js:345
 #, fuzzy
 #| msgid "Set user quota"
 msgid "Set as cover photo"

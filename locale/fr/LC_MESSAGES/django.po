@@ -35,7 +35,7 @@
 # Ralf Dyllick <rdb@datamate.org>, 2022-2023,2025
 # Romain N <romain.nuel@inria.fr>, 2017
 # schaeffer <jonathan.schaeffer@univ-brest.fr>, 2014
-# Seafile Info <info@seafile.com>, 2025
+# Seafile Info <info@seafile.com>, 2025-2026
 # zheng xie <xiez1989@gmail.com>, 2015-2016
 msgid ""
 msgstr ""
@@ -43,7 +43,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-17 21:05+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2025-2026\n"
 "Language-Team: French (http://app.transifex.com/haiwen/seahub/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -286,7 +286,7 @@ msgstr "L'e-mail %s n'est pas valide."
 #, python-format
 #| msgid "This item has been shared to %s."
 msgid "This item has been shared with %s."
-msgstr ""
+msgstr "Cet objet a été partagé avec %s."
 
 #: seahub/api2/endpoints/admin/statistics.py:432
 #: seahub/base/management/commands/export_user_traffic_report.py:46
@@ -589,7 +589,7 @@ msgstr "L'utilisateur %s est introuvable."
 #: seahub/api2/endpoints/dir_shared_items.py:426
 #| msgid "Library can not be transferred to owner."
 msgid "Library can not be shared with owner"
-msgstr ""
+msgstr "La bibliothèque ne peut pas être partagée avec le propriétaire"
 
 #: seahub/api2/endpoints/file.py:204 seahub/api2/endpoints/upload_links.py:540
 #: seahub/api2/endpoints/via_repo_token.py:966
@@ -872,7 +872,7 @@ msgstr "fichier"
 #, python-format
 #| msgid "A file is shared to you on %s"
 msgid "A file is shared with you on %s"
-msgstr ""
+msgstr "Un fichier a été partagé avec vous sur %s"
 
 #: seahub/api2/endpoints/send_share_link_email.py:85
 #: seahub/notifications/models.py:1111
@@ -883,7 +883,7 @@ msgstr "dossier"
 #, python-format
 #| msgid "A folder is shared to you on %s"
 msgid "A folder is shared with you on %s"
-msgstr ""
+msgstr "Un fichier a été partagé avec vous sur %s"
 
 #: seahub/api2/endpoints/send_share_link_email.py:127
 #, python-format
@@ -895,7 +895,7 @@ msgstr "Mot de passe pour le partage %s sur %s"
 #, python-format
 #| msgid "An upload link is shared to you on %s"
 msgid "An upload link is shared with you on %s"
-msgstr ""
+msgstr "Un lien d'envoi a été partagé pour vous sur %s"
 
 #: seahub/api2/endpoints/send_upload_link_email.py:88
 msgid "email invalid."
@@ -2220,7 +2220,7 @@ msgstr "Veuillez vérifier sur la page suivante :"
 msgid ""
 "%(user)s has shared a folder named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> with you."
-msgstr ""
+msgstr "%(user)s à partagé avec vous un dossier nommé <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notice_msg/folder_share_to_group_msg.html:1
 #, python-format
@@ -2231,7 +2231,7 @@ msgid ""
 "%(user)s has shared a folder named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> with group <a "
 "href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
-msgstr ""
+msgstr "%(user)s a partagé un dossier nommé <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> avec le groupe <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notice_msg/repo_share_msg.html:1
 #, python-format
@@ -2241,7 +2241,7 @@ msgstr ""
 msgid ""
 "%(user)s has shared a library named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> with you."
-msgstr ""
+msgstr "%(user)s a partagé une bibliothèque nommée <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> avec vous."
 
 #: seahub/notifications/templates/notifications/notice_msg/repo_share_to_group_msg.html:1
 #, python-format
@@ -2252,7 +2252,7 @@ msgid ""
 "%(user)s has shared a library named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> with group <a "
 "href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
-msgstr ""
+msgstr "%(user)s a partagé une bibliothèque nommée <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> au groupe <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notify_virus.html:13
 #, python-format
@@ -3021,7 +3021,7 @@ msgid ""
 "%(escaped_nickname)s shared a %(file_shared_type)s <span style=\"font-"
 "weight:bold;\">%(escaped_file_shared_name)s</span> with you on "
 "%(site_name)s:"
-msgstr ""
+msgstr "%(escaped_nickname)s a partagé un(e) %(file_shared_type)s <span style=\"font-weight:bold;\">%(escaped_file_shared_name)s</span> avec vous sur %(site_name)s."
 
 #: seahub/templates/shared_link_email.html:18
 #: seahub/templates/shared_upload_link_email.html:24
@@ -3050,7 +3050,7 @@ msgid ""
 "%(escaped_nickname)s shared a %(file_shared_type)s <span style=\"font-"
 "weight:bold;\">%(escaped_file_shared_name)s</span> with you on "
 "%(site_name)s."
-msgstr ""
+msgstr "%(escaped_nickname)s a partagé un(e) %(file_shared_type)s <span style=\"font-weight:bold;\">%(escaped_file_shared_name)s</span> avec vous sur %(site_name)s."
 
 #: seahub/templates/shared_link_password_email.html:16
 #: seahub/templates/shared_upload_link_password_email.html:19
@@ -3070,7 +3070,7 @@ msgstr "Pour des raisons de sécurité, le lien et le mot de passe sont envoyés
 msgid ""
 "%(escaped_nickname)s shared an upload link for folder <span style=\"font-"
 "weight:bold;\">%(escaped_folder_name)s</span> with you on %(site_name)s."
-msgstr ""
+msgstr "%(escaped_nickname)s a partagé un lien de téléversement pour le dossier <span style=\"font-weight:bold;\">%(escaped_folder_name)s</span> avec vous sur %(site_name)s."
 
 #: seahub/templates/shared_upload_link_email.html:14
 #: seahub/templates/shared_upload_link_password_email.html:14
@@ -3078,7 +3078,7 @@ msgstr ""
 #| msgid ""
 #| "scaped_nickname)s shared an upload link to you on %(site_name)s."
 msgid "%(escaped_nickname)s shared an upload link with you on %(site_name)s."
-msgstr ""
+msgstr "%(escaped_nickname)s ont partagé un lien d'envoi avec vous sur %(site_name)s."
 
 #: seahub/templates/shared_upload_link_email.html:20
 #: seahub/templates/shared_upload_link_email.html:28

@@ -776,7 +776,7 @@ msgstr ""
 #: seahub/templates/remote_user/create_unknown_user_false.html:4
 #: seahub/templates/remote_user/error.html:4
 msgid "Error"
-msgstr ""
+msgstr "Greška"
 
 #: seahub/api2/endpoints/repo_commit_revert.py:66
 msgid "This library has not been decrypted."
@@ -1007,7 +1007,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sudo_mode.html:43 seahub/views/sysadmin.py:866
 #: seahub/views/sysadmin.py:881
 msgid "Password"
-msgstr ""
+msgstr "Lozinka"
 
 #: seahub/auth/forms.py:71 seahub/auth/forms.py:72 seahub/auth/forms.py:122
 #: seahub/auth/forms.py:123
@@ -1184,7 +1184,7 @@ msgstr ""
 
 #: seahub/base/management/commands/export_file_access_log.py:58
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "Library Name"
@@ -1275,7 +1275,7 @@ msgstr ""
 #: seahub/base/management/commands/export_users.py:138
 #: seahub/views/sysadmin.py:330 seahub/views/sysadmin.py:334
 msgid "Default"
-msgstr ""
+msgstr "Zadano"
 
 #: seahub/base/middleware.py:65
 #, python-brace-format
@@ -1752,7 +1752,7 @@ msgstr ""
 #: seahub/templates/registration/password_set_form.html:35
 #: seahub/templates/share_access_validation.html:29
 msgid "Submit"
-msgstr ""
+msgstr "Pošalji"
 
 #: seahub/invitations/templates/invitations/token_view.html:52
 #: seahub/organizations/templates/organizations/org_register.html:100
@@ -2097,7 +2097,7 @@ msgstr ""
 #: seahub/notifications/templates/notifications/file_updates_email.html:21
 #: seahub/templates/snippets/repo_dir_trash_tr.html:21
 msgid "File"
-msgstr ""
+msgstr "Datoteka"
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:21
 msgid "Library"
@@ -2400,7 +2400,7 @@ msgstr ""
 #: seahub/templates/snippets/admin_paginator.html:7
 #: seahub/two_factor/templates/two_factor/_wizard_actions.html:5
 msgid "Next"
-msgstr ""
+msgstr "Sljedeće"
 
 #: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:12
 #: seahub/templates/snippets/admin_paginator.html:12
@@ -2434,7 +2434,7 @@ msgstr ""
 
 #: seahub/profile/templates/profile/set_profile_react.html:27
 msgid "Update"
-msgstr ""
+msgstr "Ažuriraj"
 
 #: seahub/profile/templates/profile/user_profile.html:4
 msgid "Profile"
@@ -2570,11 +2570,11 @@ msgstr ""
 
 #: seahub/share/views.py:187
 msgid "Preview and download"
-msgstr ""
+msgstr "Pregled i preuzimanje"
 
 #: seahub/share/views.py:188
 msgid "Preview only"
-msgstr ""
+msgstr "Samo pregled"
 
 #: seahub/share/views.py:189
 msgid "Download and upload"
@@ -2590,11 +2590,11 @@ msgstr ""
 
 #: seahub/share/views.py:223
 msgid "Share Link"
-msgstr ""
+msgstr "Link za dijeljenje"
 
 #: seahub/share/views.py:223 seahub/views/sysadmin.py:736
 msgid "Creator"
-msgstr ""
+msgstr "Kreator"
 
 #: seahub/share/views.py:224
 msgid "Permission"
@@ -2646,7 +2646,7 @@ msgstr ""
 #: seahub/templates/base.html:34
 #: seahub/templates/wiki/wiki_publish_ssr.html:52
 msgid "Close"
-msgstr ""
+msgstr "Zatvori"
 
 #: seahub/templates/base.html:51
 msgid "Language"
@@ -2703,7 +2703,7 @@ msgstr ""
 
 #: seahub/templates/i18n.html:7
 msgid "Add auto expiration"
-msgstr ""
+msgstr "Dodaj automatsko istekanje"
 
 #: seahub/templates/i18n.html:8
 msgid "Days"
@@ -2787,7 +2787,7 @@ msgstr ""
 
 #: seahub/templates/registration/login.html:58
 msgid "Refresh"
-msgstr ""
+msgstr "Osvježi"
 
 #: seahub/templates/registration/login.html:78
 msgid "Incorrect email or password"
@@ -3205,7 +3205,7 @@ msgstr ""
 #: seahub/templates/wiki/_wiki_publish_ssr_search.html:53
 #| msgid "Search Files"
 msgid "Search"
-msgstr ""
+msgstr "Pretraži"
 
 #: seahub/templates/wiki/_wiki_publish_ssr_search.html:31
 msgid "Searching..."
@@ -3305,7 +3305,7 @@ msgstr ""
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:32
 #: seahub/two_factor/templates/two_factor/profile/disable.html:10
 msgid "Cancel"
-msgstr ""
+msgstr "Otkaži"
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:6
 msgid "Backup Tokens"
@@ -3408,7 +3408,7 @@ msgstr ""
 
 #: seahub/two_factor/templates/two_factor/core/setup.html:26
 msgid "Copied"
-msgstr ""
+msgstr "Kopirano"
 
 #: seahub/two_factor/templates/two_factor/core/setup.html:26
 msgid "Copy Secret Key"

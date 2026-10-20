@@ -4,13 +4,14 @@
 # 
 # Translators:
 # Translators:
+# Z A, 2026
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-17 21:05+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: Z A, 2026\n"
 "Language-Team: Serbian (http://app.transifex.com/haiwen/seahub/language/sr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -183,7 +184,7 @@ msgstr "Moja biblioteka"
 #: seahub/api2/views.py:4820
 #| msgid "User %s already exists."
 msgid "Library name already exists."
-msgstr ""
+msgstr "28\nNaziv biblioteke već postoji."
 
 #: seahub/api2/endpoints/admin/groups.py:223
 #: seahub/api2/endpoints/groups.py:341
@@ -253,7 +254,7 @@ msgstr "Adresa e-pošte %s nije ispravna."
 #, python-format
 #| msgid "This item has been shared to %s."
 msgid "This item has been shared with %s."
-msgstr ""
+msgstr "Ova je stavka podijeljena s %s."
 
 #: seahub/api2/endpoints/admin/statistics.py:432
 #: seahub/base/management/commands/export_user_traffic_report.py:46
@@ -556,7 +557,7 @@ msgstr "Korisnik %s nije pronađen."
 #: seahub/api2/endpoints/dir_shared_items.py:426
 #| msgid "Library can not be transferred to owner."
 msgid "Library can not be shared with owner"
-msgstr ""
+msgstr "Bibliоtеkа sе nе mоžе dеliti sа vlаsnikоm"
 
 #: seahub/api2/endpoints/file.py:204 seahub/api2/endpoints/upload_links.py:540
 #: seahub/api2/endpoints/via_repo_token.py:966
@@ -839,7 +840,7 @@ msgstr "datoteka"
 #, python-format
 #| msgid "A file is shared to you on %s"
 msgid "A file is shared with you on %s"
-msgstr ""
+msgstr "Dаtоtеkа је pоdеljеnа sа vаmа nа %s"
 
 #: seahub/api2/endpoints/send_share_link_email.py:85
 #: seahub/notifications/models.py:1111
@@ -850,7 +851,7 @@ msgstr "fascikla"
 #, python-format
 #| msgid "A folder is shared to you on %s"
 msgid "A folder is shared with you on %s"
-msgstr ""
+msgstr "Fаsciklа је pоdеljеnа sа vаmа nа %s"
 
 #: seahub/api2/endpoints/send_share_link_email.py:127
 #, python-format
@@ -862,7 +863,7 @@ msgstr "Lozinka za deljenu stavku %s na lokaciji %s"
 #, python-format
 #| msgid "An upload link is shared to you on %s"
 msgid "An upload link is shared with you on %s"
-msgstr ""
+msgstr "Link zа оtprеmаnjе vаm је prоslеđеn nа %s\n\n "
 
 #: seahub/api2/endpoints/send_upload_link_email.py:88
 msgid "email invalid."
@@ -1371,33 +1372,33 @@ msgstr "Upravo sada"
 #, python-format
 msgid "%(days)d day ago"
 msgid_plural "%(days)d days ago"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "prije %(days)d dana"
+msgstr[1] "prije %(days)d dana"
+msgstr[2] "prije %(days)d dana"
 
 #: seahub/base/templatetags/seahub_tags.py:348
 #, python-format
 msgid "%(hours)d hour ago"
 msgid_plural "%(hours)d hours ago"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "prije %(hours)d sat"
+msgstr[1] "prije %(hours)d sata"
+msgstr[2] "prije %(hours)d sati"
 
 #: seahub/base/templatetags/seahub_tags.py:355
 #, python-format
 msgid "%(minutes)d minute ago"
 msgid_plural "%(minutes)d minutes ago"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "prije %(minutes)d minutu"
+msgstr[1] "prije %(minutes)d minute"
+msgstr[2] "prije %(minutes)d minuta"
 
 #: seahub/base/templatetags/seahub_tags.py:361
 #, python-format
 msgid "%(seconds)d second ago"
 msgid_plural "%(seconds)d seconds ago"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "prije %(seconds)d sekundu"
+msgstr[1] "prije %(seconds)d sekunde"
+msgstr[2] "prije %(seconds)d sekundi"
 
 #: seahub/base/templatetags/seahub_tags.py:503
 msgid "Read-Write"
@@ -1412,9 +1413,9 @@ msgstr "Samo za čitanje"
 #, python-format
 msgid "%(size)d byte"
 msgid_plural "%(size)d bytes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%(size)d bajt"
+msgstr[1] "%(size)d bajta"
+msgstr[2] "%(size)d bajtova"
 
 #: seahub/base/templatetags/seahub_tags.py:543
 #, python-format
@@ -1805,9 +1806,9 @@ msgid ""
 msgid_plural ""
 "\n"
 "You've got %(num)s new notices on %(site_name)s:\n"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "\nImate 1 novo obaveštenje na %(site_name)s:\\n\n"
+msgstr[1] "\nImate %(num)s nova obaveštenja na %(site_name)s:\\n\n"
+msgstr[2] "\nImate %(num)s novih obaveštenja na %(site_name)s:\\n\n"
 
 #: seahub/notifications/management/commands/send_file_updates.py:115
 msgid "Renamed library"
@@ -2086,9 +2087,9 @@ msgid ""
 msgid_plural ""
 "\n"
 "You've got %(num)s file updates on %(site_name)s:\n"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "\nImate 1 ažuriranje datoteke na %(site_name)s:\n"
+msgstr[1] "\nImate %(num)s ažuriranja datoteka na %(site_name)s:\n"
+msgstr[2] "\nImate %(num)s ažuriranja datoteka na %(site_name)s:\n"
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:20
 msgid "Operation"
@@ -2187,7 +2188,7 @@ msgstr "Pogledajte na sledećoj stranici:"
 msgid ""
 "%(user)s has shared a folder named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> with you."
-msgstr ""
+msgstr "Korisnik %(user)s podelio je sa vama fasciklu <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notice_msg/folder_share_to_group_msg.html:1
 #, python-format
@@ -2198,7 +2199,7 @@ msgid ""
 "%(user)s has shared a folder named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> with group <a "
 "href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
-msgstr ""
+msgstr "Korisnik %(user)s podelio je fasciklu <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> sa grupom <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notice_msg/repo_share_msg.html:1
 #, python-format
@@ -2208,7 +2209,7 @@ msgstr ""
 msgid ""
 "%(user)s has shared a library named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> with you."
-msgstr ""
+msgstr "Korisnik %(user)s podelio je sa vama biblioteku <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notice_msg/repo_share_to_group_msg.html:1
 #, python-format
@@ -2219,7 +2220,7 @@ msgid ""
 "%(user)s has shared a library named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> with group <a "
 "href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
-msgstr ""
+msgstr "Korisnik %(user)s podelio je biblioteku <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> sa grupom <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notify_virus.html:13
 #, python-format
@@ -2257,20 +2258,20 @@ msgstr "Korisnik %(author)s je označio komentar „%(resolve_comment)s“ kao r
 #: seahub/oauth/views.py:218
 #| msgid "Failed to bind SAML, please login first."
 msgid "Failed to connect OAuth, please login first."
-msgstr ""
+msgstr "Pоvеzivаnjе putеm OAuth-а niје uspеlо; mоlimо vаs dа sе prvо priјаvitе."
 
 #: seahub/oauth/views.py:222
 msgid "The OAuth account has already been connected to another account."
-msgstr ""
+msgstr "OAuth nаlоg је vеć pоvеzаn sа drugim nаlоgоm."
 
 #: seahub/oauth/views.py:228
 msgid "The OAuth account has already been connected to another LDAP account."
-msgstr ""
+msgstr "OAuth nаlоg је vеć pоvеzаn sа drugim LDAP nаlоgоm."
 
 #: seahub/oauth/views.py:233
 #| msgid "Failed to send email, please contact administrator."
 msgid "Failed to connect OAuth, please contact administrator."
-msgstr ""
+msgstr "Pоvеzivаnjе putеm OAuth-а niје uspеlо; mоlimо vаs, оbrаtitе sе аdministrаtоru."
 
 #: seahub/oauth/views.py:260
 #: seahub/templates/remote_user/create_unknown_user_false.html:8
@@ -2282,17 +2283,17 @@ msgstr "Greška: registracija novih korisnika nije dozvoljena. Obratite se admin
 #: seahub/oauth/views.py:363
 #| msgid "Failed to unbind SAML, please set a password first."
 msgid "Failed to unbind OAuth, please set a password first."
-msgstr ""
+msgstr "Niје uspеlо uklаnjаnjе pоvеzivаnjа sа OAuth-оm; mоlimо vаs dа prvо pоstаvitе lоzinku."
 
 #: seahub/oauth/views.py:366
 #| msgid "Failed to bind SAML, please login first."
 msgid "Failed to unbind OAuth, the user is forced login by SSO."
-msgstr ""
+msgstr "Niје uspеlо uklаnjаnjе pоvеzivаnjа sа OAuth-оm; kоrisnik је primоrаn dа sе priјаvi putеm SSO-а."
 
 #: seahub/oauth/views.py:369
 #| msgid "Failed to unbind SAML, please set a contact email first."
 msgid "Failed to unbind OAuth, please set a contact email or login ID first."
-msgstr ""
+msgstr "Niје uspеlо uklаnjаnjе pоvеzivаnjа sа OAuth-оm; mоlimо vаs dа prvо nаvеdеtе imејl zа kоntаkt ili ID zа priјаvljivаnjе."
 
 #: seahub/options/templates/options/set_user_options.html:7
 msgid "Please choose how to view encrypted libraries online:"
@@ -2988,7 +2989,7 @@ msgid ""
 "%(escaped_nickname)s shared a %(file_shared_type)s <span style=\"font-"
 "weight:bold;\">%(escaped_file_shared_name)s</span> with you on "
 "%(site_name)s:"
-msgstr ""
+msgstr "Korisnik %(escaped_nickname)s podelio je sa vama %(file_shared_type)s %(escaped_file_shared_name)s na sajtu %(site_name)s:"
 
 #: seahub/templates/shared_link_email.html:18
 #: seahub/templates/shared_upload_link_email.html:24
@@ -3017,7 +3018,7 @@ msgid ""
 "%(escaped_nickname)s shared a %(file_shared_type)s <span style=\"font-"
 "weight:bold;\">%(escaped_file_shared_name)s</span> with you on "
 "%(site_name)s."
-msgstr ""
+msgstr "Korisnik %(escaped_nickname)s podelio je sa vama %(file_shared_type)s <span style=\"font-weight:bold;\">%(escaped_file_shared_name)s</span> na sajtu %(site_name)s."
 
 #: seahub/templates/shared_link_password_email.html:16
 #: seahub/templates/shared_upload_link_password_email.html:19
@@ -3037,7 +3038,7 @@ msgstr "Iz bezbednosnih razloga, veza i lozinka šalju se u odvojenim porukama e
 msgid ""
 "%(escaped_nickname)s shared an upload link for folder <span style=\"font-"
 "weight:bold;\">%(escaped_folder_name)s</span> with you on %(site_name)s."
-msgstr ""
+msgstr "Korisnik %(escaped_nickname)s podelio je sa vama link za otpremanje u fasciklu <span style=\"font-weight:bold;\">%(escaped_folder_name)s</span> na sajtu %(site_name)s."
 
 #: seahub/templates/shared_upload_link_email.html:14
 #: seahub/templates/shared_upload_link_password_email.html:14
@@ -3045,7 +3046,7 @@ msgstr ""
 #| msgid ""
 #| "scaped_nickname)s shared an upload link to you on %(site_name)s."
 msgid "%(escaped_nickname)s shared an upload link with you on %(site_name)s."
-msgstr ""
+msgstr "Korisnik %(escaped_nickname)s podelio je sa vama link za otpremanje na sajtu %(site_name)s."
 
 #: seahub/templates/shared_upload_link_email.html:20
 #: seahub/templates/shared_upload_link_email.html:28

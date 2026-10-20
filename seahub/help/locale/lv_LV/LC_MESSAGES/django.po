@@ -3,6 +3,10 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
+# Translators:
+# vsv <vs@ktr.lv>, 2026
+# Ivars Strazdins <ivars.strazdins@gmail.com>, 2026
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -10,6 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-17 21:05+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
+"Last-Translator: Ivars Strazdins <ivars.strazdins@gmail.com>, 2026\n"
 "Language-Team: Latvian (Latvia) (https://app.transifex.com/haiwen/teams/5086/lv_LV/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,142 +24,142 @@ msgstr ""
 
 #: templates/help/base.html:34
 msgid "Side Nav Menu"
-msgstr ""
+msgstr "Sānu navigācijas izvēlne"
 
 #: templates/help/base.html:48 templates/help/base.html:50
 #: templates/help/introduction.html:6
 msgid "Introduction"
-msgstr ""
+msgstr "Ievads"
 
 #: templates/help/base.html:53
 msgid "Managing files and folders"
-msgstr ""
+msgstr "Datņu un mapju pārvaldība"
 
 #: templates/help/base.html:55 templates/help/libraries_managing.html:5
 msgid "Managing files with libraries"
-msgstr ""
+msgstr "Datņu pārvaldība ar bibliotēkām"
 
 #: templates/help/base.html:56
 msgid "Restoring deleted files"
-msgstr ""
+msgstr "Izdzēsto datņu atjaunošana"
 
 #: templates/help/base.html:57
 msgid "Finding old file versions"
-msgstr ""
+msgstr "Veco datņu versiju atrašana"
 
 #: templates/help/base.html:58
 #: templates/help/library_history_and_snapshots.html:6
 msgid "Library history and snapshots"
-msgstr ""
+msgstr "Bibliotēkas vēsture un momentuzņēmumi"
 
 #: templates/help/base.html:59
 msgid "Setting history retention period"
-msgstr ""
+msgstr "Vēstures glabāšanas perioda iestatīšana"
 
 #: templates/help/base.html:60 templates/help/deleting_a_library.html:5
 msgid "Deleting a library"
-msgstr ""
+msgstr "Bibliotēkas dzēšana"
 
 #: templates/help/base.html:61
 #: templates/help/viewing_files_within_web_app.html:5
 msgid "Viewing files within Web App"
-msgstr ""
+msgstr "Datņu skatīšana tīmekļa lietotnē"
 
 #: templates/help/base.html:62 templates/help/full_text_file_search.html:5
 msgid "Full text file search"
-msgstr ""
+msgstr "Pilnteksta datņu meklēšana"
 
 #: templates/help/base.html:65
 msgid "Sharing and collaboration"
-msgstr ""
+msgstr "Koplietošana un sadarbība"
 
 #: templates/help/base.html:67 templates/help/sharing_files_and_folders.html:5
 msgid "Sharing files and folders"
-msgstr ""
+msgstr "Datņu un mapju koplietošana"
 
 #: templates/help/base.html:68 templates/help/groups_managing.html:5
 msgid "Managing groups"
-msgstr ""
+msgstr "Grupu pārvaldība"
 
 #: templates/help/base.html:69
 msgid "Locking files"
-msgstr ""
+msgstr "Datņu bloķēšana"
 
 #: templates/help/base.html:70
 msgid "Folder permission"
-msgstr ""
+msgstr "Mapes tiesības"
 
 #: templates/help/base.html:71
 msgid "Departments sharing"
-msgstr ""
+msgstr "Nodaļu koplietošana"
 
 #: templates/help/base.html:74
 msgid "Wiki and knowledge management"
-msgstr ""
+msgstr "Viki un zināšanu pārvaldība"
 
 #: templates/help/base.html:76 templates/help/manage_library_as_wiki.html:5
 msgid "Managing a library as Wiki"
-msgstr ""
+msgstr "Bibliotēkas pārvaldība viki režīmā"
 
 #: templates/help/base.html:79
 msgid "Desktop client and syncing"
-msgstr ""
+msgstr "Darbvirsmas klients un sinhronizācija"
 
 #: templates/help/base.html:81
 msgid "Install and sync files"
-msgstr ""
+msgstr "Instalēšana un datņu sinhronizēšana"
 
 #: templates/help/base.html:82
 msgid "Syncing existing folders"
-msgstr ""
+msgstr "Esošo mapju sinhronizēšana"
 
 #: templates/help/base.html:83 templates/help/selective_sync.html:6
 msgid "Selectively sync sub-folders"
-msgstr ""
+msgstr "Selektīva apakšmapju sinhronizēšana"
 
 #: templates/help/base.html:84 templates/help/read-only_syncing.html:5
 msgid "Read-only syncing"
-msgstr ""
+msgstr "Sinhronizēšana tikai lasīšanas režīmā"
 
 #: templates/help/base.html:85
 msgid "Unsync and resync libraries"
-msgstr ""
+msgstr "Bibliotēku sinhronizācijas pārtraukšana un atsākšana"
 
 #: templates/help/base.html:86 templates/help/sync_interval.html:6
 msgid "Setting sync interval"
-msgstr ""
+msgstr "Sinhronizācijas intervāla iestatīšana"
 
 #: templates/help/base.html:87
 msgid "Proxy settings"
-msgstr ""
+msgstr "Starpniekservera iestatījumi"
 
 #: templates/help/base.html:88 templates/help/conflicts.html:5
 msgid "File conflicts"
-msgstr ""
+msgstr "Datņu konflikti"
 
 #: templates/help/base.html:89
 msgid "Excluding files"
-msgstr ""
+msgstr "Datņu izslēgšana"
 
 #: templates/help/base.html:92
 msgid "Drive client"
-msgstr ""
+msgstr "Diska klients"
 
 #: templates/help/base.html:94 templates/help/using_drive_client.html:6
 msgid "Using Seafile drive client"
-msgstr ""
+msgstr "Seafile diska klienta izmantošana"
 
 #: templates/help/base.html:95
 msgid "Using drive client 2.0 on Windows"
-msgstr ""
+msgstr "Diska klienta 2.0 izmantošana operētājsistēmā Windows"
 
 #: templates/help/base.html:98
 msgid "Security and encryption"
-msgstr ""
+msgstr "Drošība un šifrēšana"
 
 #: templates/help/base.html:100
 msgid "How to use encrypted libraries"
-msgstr ""
+msgstr "Kā lietot šifrētas bibliotēkas"
 
 #: templates/help/conflicts.html:7
 msgid ""
@@ -162,6 +167,10 @@ msgid ""
 "you may add, delete or edit files in the library together. Every change you "
 "make to the library would be automatically synced to others' computers."
 msgstr ""
+"Tiklīdz jūs un jūsu draugi būsiet sinhronizējuši koplietotu datņu bibliotēku"
+" savos datoros, jūs varēsiet kopā pievienot, dzēst vai rediģēt datnes "
+"bibliotēkā. Visas jūsu veiktās izmaiņas bibliotēkā tiks automātiski "
+"sinhronizētas uz citu datoriem."
 
 #: templates/help/conflicts.html:9
 msgid ""
@@ -172,36 +181,48 @@ msgid ""
 "author's email address, plus the current time, e.g. test.txt (SFConflict "
 "name@example.com 2015-03-07-11-30-28)."
 msgstr ""
+"Dažkārt jūs un jūsu draugi varat vienlaikus rediģēt vienu un to pašu datni. "
+"Jūsu izmaiņas var savstarpēji konfliktēt. Šādā gadījumā Seafile saglabā "
+"nemainītu pirmo versiju, kas sinhronizēta ar mākoni, bet otru versiju "
+"pārsauc par \"konflikta datni\". Konflikta datnes nosaukuma beigās ir tās "
+"autora e-pasta adrese un pašreizējais laiks, piemēram, test.txt (SFConflict "
+"name@example.com 2015-03-07-11-30-28)."
 
 #: templates/help/deleting_a_library.html:6
 msgid ""
 "You can delete a library owned by you. A deleted library can be restored by "
 "you or Seafile server's administrator."
 msgstr ""
+"Jūs varat dzēst bibliotēku, kas pieder jums. Izdzēstu bibliotēku varat "
+"atjaunot jūs vai Seafile servera administrators."
 
 #: templates/help/deleting_a_library.html:7
 msgid "After a library is deleted, it has following effects:"
-msgstr ""
+msgstr "Pēc bibliotēkas izdzēšanas rodas šādas sekas:"
 
 #: templates/help/deleting_a_library.html:9
 msgid "Share of the files and folders within this library are all canceled."
-msgstr ""
+msgstr "Tiek atcelta visu šīs bibliotēkas datņu un mapju koplietošana."
 
 #: templates/help/deleting_a_library.html:10
 msgid ""
 "Desktop clients synced with this library cannot sync with it any more. But "
 "the local files on the client won't be deleted."
 msgstr ""
+"Darbvirsmas klienti, kas bija sinhronizēti ar šo bibliotēku, vairs nevarēs "
+"ar to sinhronizēties. Taču klientā esošās vietējās datnes netiks dzēstas."
 
 #: templates/help/departments.html:5
 msgid "Managing and using departments"
-msgstr ""
+msgstr "Nodaļu pārvaldība un izmantošana"
 
 #: templates/help/departments.html:6
 msgid ""
 "Some organizations consist of complex department hierarchy. There are "
 "usually two common use cases for file management in these organizations:"
 msgstr ""
+"Dažām organizācijām ir sarežģīta nodaļu hierarhija. Šādās organizācijās "
+"datņu pārvaldībai parasti ir divi izplatīti lietošanas gadījumi:"
 
 #: templates/help/departments.html:8
 msgid ""
@@ -209,6 +230,9 @@ msgid ""
 " hierarchy should map the department hierarchy. There will be separate "
 "folder or space assigned to each department."
 msgstr ""
+"Organizācijai ir jābūt vienai kopīgai datņu koplietošanas telpai. Mapju "
+"hierarhijai jāatspoguļo nodaļu hierarhija. Katrai nodaļai tiks piešķirta "
+"atsevišķa mape vai telpa."
 
 #: templates/help/departments.html:9
 msgid ""
@@ -216,46 +240,54 @@ msgid ""
 "individual employees. So that the ownership of files doesn't have to be "
 "changed when an employee leaves the organization."
 msgstr ""
+"Koplietošanas telpai jāpieder organizācijai, nevis atsevišķiem darbiniekiem,"
+" un organizācijai tā arī jāpārvalda. Tādējādi, kad darbinieks aiziet no "
+"organizācijas, datņu īpašumtiesības nav jāmaina."
 
 #: templates/help/departments.html:11
 msgid ""
 "The \"Departments\" feature is designed to meet the above two use cases. "
 "We'll introduce this feature from 3 different perspectives:"
 msgstr ""
+"Funkcija \"Nodaļas\" ir izstrādāta, lai aptvertu abus iepriekš minētos "
+"lietošanas gadījumus. Ar šo funkciju iepazīstināsim no trim dažādām "
+"perspektīvām:"
 
 #: templates/help/departments.html:13 templates/help/departments.html:17
 msgid "System admin"
-msgstr ""
+msgstr "Sistēmas administrators"
 
 #: templates/help/departments.html:14 templates/help/departments.html:35
 msgid "Department admin"
-msgstr ""
+msgstr "Nodaļas administrators"
 
 #: templates/help/departments.html:15 templates/help/departments.html:52
 msgid "Department members"
-msgstr ""
+msgstr "Nodaļas dalībnieki"
 
 #: templates/help/departments.html:18
 msgid "The system admin can:"
-msgstr ""
+msgstr "Sistēmas administrators var:"
 
 #: templates/help/departments.html:20 templates/help/departments.html:24
 msgid "Manage department hierarchy and members"
-msgstr ""
+msgstr "Pārvaldīt nodaļu hierarhiju un dalībniekus"
 
 #: templates/help/departments.html:21 templates/help/departments.html:29
 msgid "Assign storage quota for departments"
-msgstr ""
+msgstr "Piešķirt nodaļām krātuves kvotu"
 
 #: templates/help/departments.html:22 templates/help/departments.html:31
 msgid "Create and manage shared libraries in departments"
-msgstr ""
+msgstr "Izveidot un pārvaldīt koplietojamās bibliotēkas nodaļās"
 
 #: templates/help/departments.html:25
 msgid ""
 "The system admin can set up the department hierarchy in two ways: manual "
 "setup or import from Active Directory."
 msgstr ""
+"Sistēmas administrators var izveidot nodaļu hierarhiju divos veidos: manuāli"
+" vai importējot no Active Directory."
 
 #: templates/help/departments.html:26
 msgid ""
@@ -265,6 +297,11 @@ msgid ""
 "of each member to 'member' or 'admin'. We'll introduce how a department "
 "admin can manage department later."
 msgstr ""
+"Sistēmas administrators var izveidot jebkādu skaitu augšējā līmeņa nodaļu un"
+" jebkura līmeņa apakšnodaļas katrā nodaļā. Katrā nodaļas līmenī var "
+"pievienot dalībniekus. Sistēmas administrators var iestatīt katra dalībnieka"
+" lomu kā \"dalībnieks\" vai \"administrators\". Kā nodaļas administrators "
+"var pārvaldīt nodaļu, tiks aprakstīts tālāk."
 
 #: templates/help/departments.html:27
 msgid ""
@@ -273,12 +310,18 @@ msgid ""
 "under an OU will be imported as sub-departments. Department libraries can be"
 " automatically created in the import process."
 msgstr ""
+"Sistēmas administrators var arī importēt hierarhiju no Active Directory "
+"organizācijas vienībām (OU). Katra OU tiks importēta kā nodaļa. Zem OU "
+"esošās apakš-OU tiks importētas kā apakšnodaļas. Importēšanas gaitā var "
+"automātiski izveidot nodaļu bibliotēkas."
 
 #: templates/help/departments.html:28
 msgid ""
 "System admin can also delete a department after all the sub-departments and "
 "libraries are deleted."
 msgstr ""
+"Sistēmas administrators var dzēst arī nodaļu pēc tam, kad ir izdzēstas visas"
+" apakšnodaļas un bibliotēkas."
 
 #: templates/help/departments.html:30
 msgid ""
@@ -288,6 +331,11 @@ msgid ""
 "cannot exceed the storage quota. <strong>Please note that the quota of sub-"
 "department doesn't depend on the quota of its parent department.</strong>"
 msgstr ""
+"Nodaļā izveidotās bibliotēkas pieder pašai nodaļai, nevis kādam atsevišķam "
+"lietotājam. Tāpēc sistēmas administrators var piešķirt nodaļai krātuves "
+"kvotu. Visu nodaļas bibliotēku kopējais lielums nedrīkst pārsniegt krātuves "
+"kvotu. <strong>Lūdzu, ņemiet vērā, ka apakšnodaļas kvota nav atkarīga no tās"
+" vecāknodaļas kvotas.</strong>"
 
 #: templates/help/departments.html:32
 msgid ""
@@ -295,12 +343,17 @@ msgid ""
 " There is also an option to control whether individual users can share "
 "libraries with a department."
 msgstr ""
+"Nodaļu bibliotēkas var izveidot sistēmas administrators vai nodaļas "
+"administrators. Ir arī iespēja noteikt, vai atsevišķi lietotāji drīkst "
+"koplietot bibliotēkas ar nodaļu."
 
 #: templates/help/departments.html:33
 msgid ""
 "All the above operations can be done in the system admin interface. See the "
 "below screenshot for information."
 msgstr ""
+"Visas iepriekš minētās darbības var veikt sistēmas administratora saskarnē. "
+"Informāciju skatiet tālāk esošajā ekrānuzņēmumā."
 
 #: templates/help/departments.html:36
 msgid ""
@@ -308,18 +361,21 @@ msgid ""
 "admin to some members of a department. Department admins can perform the "
 "following operations in a department after login to his/her own account."
 msgstr ""
+"Kā minēts iepriekš, nodaļas administrators ir īpaša loma, ko sistēmas "
+"administrators piešķir atsevišķiem nodaļas dalībniekiem. Pēc pieteikšanās "
+"savā kontā nodaļas administratori nodaļā var veikt šādas darbības:"
 
 #: templates/help/departments.html:38
 msgid "Access to the libraries of the department"
-msgstr ""
+msgstr "Piekļuve nodaļas bibliotēkām"
 
 #: templates/help/departments.html:39
 msgid "Manage members in his/her department"
-msgstr ""
+msgstr "Pārvaldīt savas nodaļas dalībniekus"
 
 #: templates/help/departments.html:40
 msgid "Manage libraries in his/her department"
-msgstr ""
+msgstr "Pārvaldīt savas nodaļas bibliotēkas"
 
 #: templates/help/departments.html:42
 msgid ""
@@ -328,26 +384,34 @@ msgid ""
 " the department. But if the departments are imported from AD, the changes to"
 " membership will be overwritten on the next sync with AD."
 msgstr ""
+"Ja lietotājs ir nodaļas administrators, viņš var pievienot vai dzēst nodaļas"
+" dalībniekus. Par nodaļas dalībnieku var pievienot jebkuru sistēmā "
+"reģistrētu lietotāju. Taču, ja nodaļas ir importētas no AD, izmaiņas "
+"dalībnieku sastāvā tiks pārrakstītas nākamajā sinhronizācijā ar AD."
 
 #: templates/help/departments.html:44
 msgid ""
 "Department admin can manage the libraries in the department. The supported "
 "operations are:"
 msgstr ""
+"Nodaļas administrators var pārvaldīt nodaļas bibliotēkas. Tiek atbalstītas "
+"šādas darbības:"
 
 #: templates/help/departments.html:46
 msgid "Create or delete library"
-msgstr ""
+msgstr "Izveidot vai dzēst bibliotēku"
 
 #: templates/help/departments.html:47
 msgid "Change library name"
-msgstr ""
+msgstr "Mainīt bibliotēkas nosaukumu"
 
 #: templates/help/departments.html:48
 msgid ""
 "Share a library with users or groups outside of this department. This is "
 "very useful for cross-department collaboration."
 msgstr ""
+"Koplietot bibliotēku ar lietotājiem vai grupām ārpus šīs nodaļas. Tas ir "
+"noderīgi sadarbībai starp nodaļām."
 
 #: templates/help/departments.html:49
 #, python-format
@@ -357,6 +421,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
 "feature</a>."
 msgstr ""
+"Iestatīt detalizētas tiesības uz mapēm bibliotēkās šīs nodaļas lietotājiem "
+"vai apakšnodaļām. Tas darbojas līdzīgi <a "
+"href=\"%(SITE_ROOT)shelp/folder_permission/\">mapju tiesību funkcijai</a>."
 
 #: templates/help/departments.html:53
 msgid ""
@@ -369,16 +436,25 @@ msgid ""
 "access to the groups \"EMEA\", \"Sales\" and \"ACME\". The groups for "
 "departments are marked with a \"building\" icon next to its name."
 msgstr ""
+"Parasts nodaļas dalībnieks var izmantot nodaļu tāpat kā grupu. Katra nodaļa "
+"tās dalībniekiem tiek attēlota kā grupa. Lietotājs var piekļūt ne tikai tās "
+"nodaļas bibliotēkām, kurai viņš pieder, bet arī savas nodaļas vecāknodaļu "
+"bibliotēkām. Piemēram, ja Džons ir apakšnodaļā \"EMEA\", kas pakārtota "
+"nodaļai \"Sales\", un \"Sales\" ir apakšnodaļa uzņēmumā \"ACME\", tad Džons "
+"var piekļūt grupām \"EMEA\", \"Sales\" un \"ACME\". Nodaļu grupas tiek "
+"apzīmētas ar \"ēkas\" ikonu blakus to nosaukumiem."
 
 #: templates/help/desktop_proxy.html:6
 msgid "Using proxy in Seafile client"
-msgstr ""
+msgstr "Starpniekservera izmantošana Seafile klientā"
 
 #: templates/help/desktop_proxy.html:8
 msgid ""
 "Seafile client supports 3 types of proxy servers: HTTP proxy, SOCKS5 proxy "
 "and system proxy settings."
 msgstr ""
+"Seafile klients atbalsta 3 veidu starpniekserverus: HTTP starpniekserveri, "
+"SOCKS5 starpniekserveri un sistēmas starpniekservera iestatījumus."
 
 #: templates/help/desktop_proxy.html:10
 msgid ""
@@ -388,6 +464,11 @@ msgid ""
 " to auto-detect proxy server information. So you don't have to manually "
 "enter proxy server address."
 msgstr ""
+"Izmantojot HTTP vai SOCKS5 starpniekserveri, jāievada starpniekservera "
+"adrese un ports. Ja izmantojat sistēmas starpniekservera iestatījumus, "
+"Seafile klients nolasa starpniekservera iestatījumus no operētājsistēmas. "
+"Operētājsistēmā ir mehānismi starpniekservera informācijas automātiskai "
+"noteikšanai. Tāpēc starpniekservera adrese nav jāievada manuāli."
 
 #: templates/help/desktop_proxy.html:12
 msgid ""
@@ -395,10 +476,14 @@ msgid ""
 "area. Choose \"Settings\" in the menu. In the pop-up settings dialog, you "
 "can change proxy settings in the \"Network\" tab."
 msgstr ""
+"Lai mainītu starpniekservera iestatījumus, noklikšķiniet uz Seafile ikonas "
+"sistēmas paziņojumu apgabalā. Izvēlnē izvēlieties \"Iestatījumi\". "
+"Uznirstošajā iestatījumu dialoglodziņā starpniekservera iestatījumus varat "
+"mainīt cilnē \"Tīkls\"."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:6
 msgid "SeaDrive 2.0 for Windows 10"
-msgstr ""
+msgstr "SeaDrive 2.0 sistēmai Windows 10"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:8
 msgid ""
@@ -407,10 +492,15 @@ msgid ""
 "Update for Windows 10) and later versions. We recommend Windows 10 users to "
 "upgrade to SeaDrive 2.0 for more native virtual drive experience."
 msgstr ""
+"SeaDrive 2.0 (un turpmākās versijas) ir pārstrādāts ar dziļāku integrāciju "
+"Windows 10 operētajā sistēmā. Tas atbalsta Windows 10 versiju 1709 (Windows "
+"10 2017. gada rudens atjauninājumu) un jaunākas versijas. Iesakām Windows 10"
+" lietotājiem jaunināt uz SeaDrive 2.0, lai iegūtu dabiskāku virtuālā diska "
+"lietošanas pieredzi."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:10
 msgid "Install and access the Virtual Drive"
-msgstr ""
+msgstr "Virtuālā diska instalēšana un piekļuve tam"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:11
 msgid ""
@@ -421,40 +511,56 @@ msgid ""
 " your seafile account. The download is progressive, so in the mean time you "
 "can already access some files in the virtual drive."
 msgstr ""
+"SeaDrive 2.0 varat lejupielādēt no oficiālās Seafile tīmekļa vietnes. Pēc "
+"instalēšanas un pieteikšanās savā Seafile kontā SeaDrive sāks lejupielādēt "
+"bibliotēku un datņu sarakstus no servera (tāpat kā SeaDrive 1.0.x). Tas var "
+"aizņemt kādu laiku atkarībā no jūsu Seafile kontā pieejamo datņu skaita. "
+"Lejupielāde notiek pakāpeniski, tāpēc tikmēr jau varat piekļūt dažām datnēm "
+"virtuālajā diskā."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:12
 msgid ""
 "To access the virtual drive, just open Windows file explorer. There is a "
 "\"seadrive\" node in the navigation pane of Windows file explorer."
 msgstr ""
+"Lai piekļūtu virtuālajam diskam, vienkārši atveriet Windows failu pārlūku. "
+"Windows failu pārlūka navigācijas rūtī ir mezgls \"seadrive\"."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:16
 msgid "Accessing files in the Virtual Drive"
-msgstr ""
+msgstr "Piekļuve datnēm virtuālajā diskā"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:17
 msgid ""
 "Libraries are grouped into 4 categories in the virtual drive: My Libraries, "
 "Shared with me, Shared with groups and Shared with all."
 msgstr ""
+"Virtuālajā diskā bibliotēkas ir sadalītas 4 kategorijās: Manas bibliotēkas, "
+"Ar mani koplietotais, Ar grupām koplietotais un Ar visiem koplietotais."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:18
 msgid ""
 "As you can see, the file status icons is more integrated into Windows file "
 "explorer. The icons are a bit different form version 1.0."
 msgstr ""
+"Kā redzat, datņu statusa ikonas ir vairāk integrētas Windows failu pārlūkā. "
+"Ikonas nedaudz atšķiras no 1.0. versijas."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:19
 msgid ""
 "Files in the virtual drive are created as \"placeholders\" in the local file"
 " system. They may be in 3 states:"
 msgstr ""
+"Virtuālā diska datnes vietējā failu sistēmā tiek izveidotas kā \"vietturi\"."
+" Tām var būt 3 stāvokļi:"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:21
 msgid ""
 "<b>Placeholder file</b>: An empty representation of the file and can only be"
 " opened when there is network connection."
 msgstr ""
+"<b>Viettura datne</b>: tukšs datnes attēlojums, ko var atvērt tikai tad, ja "
+"ir tīkla savienojums."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:22
 msgid ""
@@ -464,12 +570,19 @@ msgid ""
 "connections. The operating system may decide to clear a full file when more "
 "disk space is needed."
 msgstr ""
+"<b>Pilna datne</b>: datne ir lejupielādēta un saglabāta lokāli. Lejupielāde "
+"notiek automātiski, pirmo reizi atverot viettura datni. Šīs datnes ir "
+"pieejamas ikreiz, kad atverat SeaDrive, neatkarīgi no tīkla savienojumiem. "
+"Operētājsistēma var izlemt notīrīt pilnu datni, kad nepieciešams vairāk "
+"diska vietas."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:23
 msgid ""
 "<b>Pinned full file</b>: The file has been downloaded and saved locally. It "
 "is guaranteed to be available offline."
 msgstr ""
+"<b>Piespraustā pilnā datne</b>: datne ir lejupielādēta un saglabāta lokāli. "
+"Tiek garantēta tās pieejamība bezsaistē."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:26
 msgid ""
@@ -479,6 +592,11 @@ msgid ""
 "locally; choose \"Free up space\" when you want to clean the cache for a "
 "file or folder."
 msgstr ""
+"Jūs varat kontrolēt, kuras datnes vai mapes tiek kešotas lokāli. To var "
+"mainīt kontekstizvēlnē, ar peles labo pogu noklikšķinot uz datnes vai mapes."
+" Izvēlieties \"Vienmēr paturēt šajā ierīcē\", ja vēlaties piespraust datni "
+"vai mapi lokāli; izvēlieties \"Atbrīvot vietu\", ja vēlaties notīrīt datnes "
+"vai mapes kešatmiņu."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:28
 msgid ""
@@ -486,10 +604,13 @@ msgid ""
 "updated on the server. In SeaDrive 2.0, full and pinned files are "
 "automatically kept in sync with the server."
 msgstr ""
+"SeaDrive 1.0 versijā kešotās datnes netiek automātiski atjauninātas, kad tās"
+" tiek atjauninātas serverī. SeaDrive 2.0 versijā pilnās un piespraustās "
+"datnes tiek automātiski sinhronizētas ar serveri."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:30
 msgid "File Download and Control"
-msgstr ""
+msgstr "Datņu lejupielāde un kontrole"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:31
 msgid ""
@@ -498,6 +619,9 @@ msgid ""
 "download, there will be a progress bar shown up in file explorer and you may"
 " cancel the download."
 msgstr ""
+"Ikreiz, kad atverat viettura datni, operētājsistēma automātiski sāks to "
+"lejupielādēt. Ja datnes lejupielāde var aizņemt kādu laiku, failu pārlūkā "
+"tiks parādīta progresa josla, un jūs varat atcelt lejupielādi."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:32
 msgid ""
@@ -506,15 +630,19 @@ msgid ""
 "operating system about this and you may choose to cancel the download or "
 "disallow the application from automatically downloading files in the future."
 msgstr ""
+"Dažkārt fona lietotne var mēģināt lejupielādēt datni virtuālajā diskā "
+"(piemēram, antivīrusu programmatūra). Operētājsistēma jūs par to informēs, "
+"un jūs varēsiet izvēlēties atcelt lejupielādi vai aizliegt lietotnei turpmāk"
+" automātiski lejupielādēt datnes."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:34
 #: templates/help/using_drive_client.html:79
 msgid "FAQ"
-msgstr ""
+msgstr "Biežāk uzdotie jautājumi"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:35
 msgid "Can I create, delete, rename libraries?"
-msgstr ""
+msgstr "Vai es varu izveidot, dzēst un pārsaukt bibliotēkas?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:36
 msgid ""
@@ -523,10 +651,14 @@ msgid ""
 " rename libraries under the \"My Libraries\" category. Creating, deleting or"
 " renaming libraries in other categories will be ignored."
 msgstr ""
+"Jā. Kad virtuālajā diskā izveidojat, dzēšat vai pārsaucat bibliotēku mapes, "
+"darbība tiks atspoguļota serverī. Bibliotēkas varat izveidot, dzēst un "
+"pārsaukt tikai kategorijā \"Manas bibliotēkas\". Bibliotēku izveidošana, "
+"dzēšana vai pārsaukšana citās kategorijās tiks ignorēta."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:38
 msgid "Can I create files or folders outside of a library folder?"
-msgstr ""
+msgstr "Vai es varu izveidot datnes vai mapes ārpus bibliotēkas mapes?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:39
 msgid ""
@@ -534,10 +666,13 @@ msgid ""
 "synced to the server. A new folder under the \"My Libraries\" folder will be"
 " handled as a new library."
 msgstr ""
+"Jā. Taču datnes, kas izveidotas ārpus bibliotēkas mapes, tiks ignorētas un "
+"netiks sinhronizētas ar serveri. Jauna mape mapē \"Manas bibliotēkas\" tiks "
+"uzskatīta par jaunu bibliotēku."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:41
 msgid "Can I access encrypted libraries?"
-msgstr ""
+msgstr "Vai es varu piekļūt šifrētām bibliotēkām?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:42
 msgid ""
@@ -547,10 +682,16 @@ msgid ""
 " area and choose \"Show encrypted libraries\". A window will show up and you"
 " can choose to sync or unsync an encrypted library."
 msgstr ""
+"Jā. Pēc noklusējuma šifrētās bibliotēkas netiek sinhronizētas un netiek "
+"rādītas virtuālajā diskā. Jums manuāli jāizvēlas, kuras šifrētās bibliotēkas"
+" sinhronizēt, un jāievada parole. Vienkārši ar peles labo pogu noklikšķiniet"
+" uz SeaDrive ikonas sistēmas paplātes apgabalā un izvēlieties \"Rādīt "
+"šifrētās bibliotēkas\". Parādīsies logs, kurā varat izvēlēties šifrētu "
+"bibliotēku sinhronizēt vai pārtraukt tās sinhronizāciju."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
-msgstr ""
+msgstr "Vai tas ir saderīgs ar SeaDrive 1.0?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:45
 msgid ""
@@ -560,10 +701,15 @@ msgid ""
 " be accessible in 2.0 version. You can start SeaDrive 1.0 again to upload "
 "the files to server or copy them out."
 msgstr ""
+"SeaDrive 2.0 izmantos visus esošos kontus un to metadatus (kas glabājas mapē"
+" C:\\users\\username\\seadrive\\). Taču tas neizmantos SeaDrive 1.0 kešotās "
+"datnes. Tāpēc neviena 1.0 versijā lokāli kešotā datne 2.0 versijā nebūs "
+"pieejama. Varat vēlreiz palaist SeaDrive 1.0, lai augšupielādētu datnes "
+"serverī vai izkopētu tās."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:47
 msgid "How do I clean the cache?"
-msgstr ""
+msgstr "Kā notīrīt kešatmiņu?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:48
 msgid ""
@@ -574,10 +720,17 @@ msgid ""
 "Because placeholders are just normal files created on your local disk, your "
 "cache size is only limited by the available disk space on your computer."
 msgstr ""
+"Jūs varat manuāli izvēlēties, kuras mapes vai datnes kešot lokāli. Ja "
+"konstatējat, ka mape aizņem pārāk daudz vietas, vienkārši izvēlieties šai "
+"mapei \"Atbrīvot vietu\", un visas kešotās datnes šajā mapē tiks notīrītas. "
+"Nav jāiestata kešatmiņas tīrīšanas laiks un kešatmiņas lieluma ierobežojums "
+"kā SeaDrive 1.0 versijā. Tā kā vietturi ir parastas datnes, kas izveidotas "
+"jūsu vietējā diskā, kešatmiņas lielumu ierobežo tikai jūsu datorā pieejamā "
+"diska vieta."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:50
 msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
-msgstr ""
+msgstr "Kā noņemt atlikušos SeaDrive īsinājumus programmā Windows Explorer?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
@@ -586,18 +739,26 @@ msgid ""
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
 msgstr ""
+"Īsinājums \"SeaDrive\" programmā Windows Explorer nepazudīs pēc tam, kad "
+"aizverat SeaDrive programmu vai pārslēdzat Seafile kontus programmā "
+"SeaDrive. Tā ir paredzēta uzvedība. Tos nav jānoņem, ja vēlāk jums joprojām "
+"būs nepieciešama piekļuve kontam."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:52
 msgid ""
 "In some corner cases, the \"SeaDrive\" shortcut will be left-over in Windows"
 " Explorer and you want to remove it."
 msgstr ""
+"Dažos retos gadījumos īsinājums \"SeaDrive\" paliek programmā Windows "
+"Explorer un jūs vēlaties to noņemt."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
 "choose \"Remove account information\" in the prompt dialog."
 msgstr ""
+"Parasti šos īsinājumus var noņemt, atinstalējot SeaDrive programmu un "
+"pieprasījuma dialoglodziņā izvēloties \"Noņemt konta informāciju\"."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -608,10 +769,15 @@ msgid ""
 " in registry editor. Remove the sub-keys correspond to the shortcut you want"
 " to remove."
 msgstr ""
+"Ja atinstalēšanas laikā īsinājumus neizdodas noņemt, SeaDrive īsinājumu "
+"programmā Windows Explorer varat noņemt, rediģējot reģistru. Reģistra "
+"redaktorā atveriet ceļu "
+"\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\\"."
+" Noņemiet apakšatslēgas, kas atbilst īsinājumam, kuru vēlaties noņemt."
 
 #: templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
-msgstr ""
+msgstr "Kā lietot šifrētas bibliotēkas"
 
 #: templates/help/encrypted_libraries.html:8
 msgid ""
@@ -621,10 +787,15 @@ msgid ""
 "stored on the server. So even the server administrator can't access your "
 "file contents."
 msgstr ""
+"Seafile nodrošina datu šifrēšanu no gala līdz galam klienta pusē. Jūs varat "
+"izveidot šifrētas bibliotēkas, lai izmantotu šo funkciju. Datņu saturs "
+"šifrētajās bibliotēkās tiek šifrēts klienta pusē. Šifrēšanas parole netiek "
+"glabāta serverī. Tāpēc pat servera administrators nevar piekļūt jūsu datņu "
+"saturam."
 
 #: templates/help/encrypted_libraries.html:10
 msgid "When creating an encrypted library:"
-msgstr ""
+msgstr "Veidojot šifrētu bibliotēku:"
 
 #: templates/help/encrypted_libraries.html:12
 msgid ""
@@ -632,6 +803,9 @@ msgid ""
 "the server. The server uses this password to create the library. But it "
 "doesn't store the plain text password."
 msgstr ""
+"Ja šifrētu bibliotēku izveidojat tīmekļa lietotnē, parole tiek nosūtīta "
+"serverim. Serveris izmanto šo paroli bibliotēkas izveidei. Taču tas neglabā "
+"paroli atklātā tekstā."
 
 #: templates/help/encrypted_libraries.html:13
 #, python-format
@@ -640,10 +814,13 @@ msgid ""
 "client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
 "the password is not sent to the server."
 msgstr ""
+"Ja šifrētu bibliotēku izveidojat no vietējās mapes ar darbvirsmas klientu "
+"(sk. <a href=\"%(SITE_ROOT)shelp/install_sync/\">datņu sinhronizāciju</a>), "
+"parole netiek nosūtīta serverim."
 
 #: templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
-msgstr ""
+msgstr "Piekļūstot šifrētajai bibliotēkai:"
 
 #: templates/help/encrypted_libraries.html:19
 msgid ""
@@ -651,6 +828,9 @@ msgid ""
 " will cache the password in encrypted format for 1 hour. It won't store the "
 "password on disk."
 msgstr ""
+"Ja izmantojat tīmekļa lietotni, jums parole jāievada; tā tiek nosūtīta "
+"serverim. Serveris vienu stundu glabā paroli kešatmiņā šifrētā formātā. "
+"Parole netiek glabāta diskā."
 
 #: templates/help/encrypted_libraries.html:20
 msgid ""
@@ -658,22 +838,29 @@ msgid ""
 "the server. The client decrypts and encrypts file contents locally. The "
 "plain text password is not stored on the client disk either."
 msgstr ""
+"Ja bibliotēkas sinhronizēšanai izmantojat darbvirsmas klientu, parole netiek"
+" nosūtīta serverim. Klients datņu saturu šifrē un atšifrē lokāli. Parole "
+"atklātā tekstā netiek glabāta arī klienta diskā."
 
 #: templates/help/encrypted_libraries.html:21
 msgid ""
 "iOS client supports client side encryption since version 2.1.6. Android "
 "client supports it since version 2.1.0."
 msgstr ""
+"iOS klients atbalsta klienta puses šifrēšanu kopš versijas 2.1.6. Android "
+"klients to atbalsta kopš versijas 2.1.0."
 
 #: templates/help/encrypted_libraries.html:25
 msgid ""
 "Note that encrypted library only encrypts the contents of the files, but not"
 " the folder and file names."
 msgstr ""
+"Ņemiet vērā, ka šifrētā bibliotēka šifrē tikai datņu saturu, bet ne mapju un"
+" datņu nosaukumus."
 
 #: templates/help/file_locking.html:5
 msgid "File locking"
-msgstr ""
+msgstr "Datņu bloķēšana"
 
 #: templates/help/file_locking.html:6
 msgid ""
@@ -683,22 +870,31 @@ msgid ""
 " the file when one person wants to exclusively modify the file. Seafile "
 "Professional Edition supports file locking."
 msgstr ""
+"Kad ar vienu datni strādā vairāk nekā viens cilvēks, iespējams, ka vairāki "
+"cilvēki to maina aptuveni vienlaikus. Seafile šo situāciju labi risina ar "
+"konfliktu datnēm. Taču bieži ir ērtāk bloķēt datni, ja viens cilvēks vēlas "
+"to mainīt vienpersoniski. Seafile Professional Edition atbalsta datņu "
+"bloķēšanu."
 
 #: templates/help/file_locking.html:7
 msgid ""
 "File locking works on both the web app and the desktop syncing client. We'll"
 " introduce them one by one."
 msgstr ""
+"Datņu bloķēšana darbojas gan tīmekļa lietotnē, gan darbvirsmas "
+"sinhronizācijas klientā. Aplūkosim abus pēc kārtas."
 
 #: templates/help/file_locking.html:8
 msgid "File locking on the Web App"
-msgstr ""
+msgstr "Datņu bloķēšana tīmekļa lietotnē"
 
 #: templates/help/file_locking.html:9
 msgid ""
 "To lock a file, you can navigate into the file's folder on the web app, and "
 "click on the \"operations\" drop-down menu."
 msgstr ""
+"Lai bloķētu datni, tīmekļa lietotnē atveriet mapi, kurā atrodas datne, un "
+"noklikšķiniet uz nolaižamās izvēlnes \"Darbības\"."
 
 #: templates/help/file_locking.html:11
 msgid ""
@@ -707,28 +903,38 @@ msgid ""
 "file. And you can also unlock a file that's locked by you. But you cannot "
 "unlock files locked by others."
 msgstr ""
+"Pēc datnes bloķēšanas datnes ikonas stūrī redzama sarkana \"stopzīme\". "
+"Novietojot peles kursoru uz stopzīmes, varat redzēt, kas datni ir bloķējis. "
+"Varat arī atbloķēt datni, kuru bloķējāt jūs. Taču nevarat atbloķēt citu "
+"lietotāju bloķētas datnes."
 
 #: templates/help/file_locking.html:13
 msgid "File locking on the desktop client"
-msgstr ""
+msgstr "Datņu bloķēšana darbvirsmas klientā"
 
 #: templates/help/file_locking.html:14
 msgid ""
 "After a library is synced to the desktop, you can lock/unlock files in that "
 "library inside File Explorer on Windows or Finder on Mac OS."
 msgstr ""
+"Pēc bibliotēkas sinhronizēšanas uz darbvirsmu datnes šajā bibliotēkā varat "
+"bloķēt un atbloķēt Windows failu pārlūkā vai Mac OS programmā Finder."
 
 #: templates/help/file_locking.html:15
 msgid ""
 "To lock a file, just right click on a synced file and choose \"lock this "
 "file\" in the \"Seafile\" menu."
 msgstr ""
+"Lai bloķētu datni, vienkārši ar peles labo pogu noklikšķiniet uz "
+"sinhronizētas datnes un izvēlnē \"Seafile\" izvēlieties \"Bloķēt šo datni\"."
 
 #: templates/help/file_locking.html:17
 msgid ""
 "If a file is locked by you, you can see an orange \"stop sign\" on the file "
 "icon. You can choose to unlock it."
 msgstr ""
+"Ja datni esat bloķējis jūs, uz datnes ikonas redzama oranža \"stopzīme\". "
+"Varat izvēlēties to atbloķēt."
 
 #: templates/help/file_locking.html:19
 msgid ""
@@ -736,16 +942,21 @@ msgid ""
 "file icon. The file is automatically set to read-only. You cannot modify it "
 "until it's unlocked."
 msgstr ""
+"Ja datni ir bloķējis cits lietotājs, uz datnes ikonas redzama sarkana "
+"\"stopzīme\". Datne automātiski tiek iestatīta kā tikai lasāma. To nevarat "
+"mainīt, kamēr tā nav atbloķēta."
 
 #: templates/help/file_locking.html:21
 msgid ""
 "If a library is not synced, you can still use cloud file browser to lock and"
 " unlock files in it."
 msgstr ""
+"Ja bibliotēka nav sinhronizēta, tās datņu bloķēšanai un atbloķēšanai "
+"joprojām varat izmantot mākoņa datņu pārlūku."
 
 #: templates/help/file_locking.html:22
 msgid "Auto locking office files"
-msgstr ""
+msgstr "Office datņu automātiskā bloķēšana"
 
 #: templates/help/file_locking.html:23
 msgid ""
@@ -755,18 +966,23 @@ msgid ""
 " propagated to other computers syncing this library. It prevents concurrent "
 "editing the same Office file and is convenient for collaboration."
 msgstr ""
+"Kad bibliotēka ir sinhronizēta uz darbvirsmu, atverot tajā Microsoft Office "
+"datni, Seafile to automātiski bloķē. Aizverot datni, Seafile to automātiski "
+"atbloķē. Bloķēšanas stāvoklis tiek izplatīts uz citiem datoriem, kas "
+"sinhronizē šo bibliotēku. Tas novērš vienlaicīgu vienas un tās pašas Office "
+"datnes rediģēšanu un ir ērti sadarbībai."
 
 #: templates/help/file_locking.html:24
 msgid "Details about file locking"
-msgstr ""
+msgstr "Sīkāka informācija par datņu bloķēšanu"
 
 #: templates/help/file_locking.html:25
 msgid "There are a few useful tips about how file locking works:"
-msgstr ""
+msgstr "Ir daži noderīgi padomi par to, kā darbojas datņu bloķēšana:"
 
 #: templates/help/file_locking.html:27
 msgid "A locked file can only be unlocked by the user who locked it."
-msgstr ""
+msgstr "Bloķētu datni var atbloķēt tikai lietotājs, kurš to bloķējis."
 
 #: templates/help/file_locking.html:28
 msgid ""
@@ -775,16 +991,22 @@ msgid ""
 "locked file. The purpose of file locking is mainly to prevent concurrent "
 "editing."
 msgstr ""
+"Citi lietotāji nevar mainīt, pārvietot, pārsaukt vai dzēst bloķētu datni. "
+"Taču citi lietotāji joprojām var pārvietot, dzēst vai pārsaukt bloķētās "
+"datnes vecākmapi. Datņu bloķēšanas mērķis galvenokārt ir novērst vienlaicīgu"
+" rediģēšanu."
 
 #: templates/help/file_locking.html:29
 msgid ""
 "When a locked file's parent folder is renamed or moved inside the same "
 "library, it remains locked after the operation."
 msgstr ""
+"Ja bloķētas datnes vecākmape tiek pārsaukta vai pārvietota tajā pašā "
+"bibliotēkā, datne pēc darbības paliek bloķēta."
 
 #: templates/help/finding_older_version_files.html:6
 msgid "Finding older version of files"
-msgstr ""
+msgstr "Vecāku datņu versiju atrašana"
 
 #: templates/help/finding_older_version_files.html:7
 msgid ""
@@ -793,10 +1015,14 @@ msgid ""
 "a configurable period. When you want to access an older version of a file, "
 "the file history feature becomes very handy."
 msgstr ""
+"Seafile reģistrē visu datņu izmaiņu vēsturi. Ikreiz, kad datne tiek mainīta,"
+" tiek izveidota jauna versija, bet vecā versija joprojām tiek glabāta "
+"konfigurējamu laika periodu. Ja vēlaties piekļūt vecākai datnes versijai, "
+"datnes vēstures funkcija ir ļoti noderīga."
 
 #: templates/help/finding_older_version_files.html:8
 msgid "To list all the versions of a file:"
-msgstr ""
+msgstr "Lai uzskaitītu visas datnes versijas:"
 
 #: templates/help/finding_older_version_files.html:10
 msgid ""
@@ -804,16 +1030,21 @@ msgid ""
 "cursor onto the row of that file. An operation menu will appear. You can "
 "click the \"History\" button in that menu."
 msgstr ""
+"Seafile tīmekļa lietotnē pārejiet uz mapi, kurā atrodas datne. Novietojiet "
+"peles kursoru uz šīs datnes rindas. Parādīsies darbību izvēlne. Šajā izvēlnē"
+" varat noklikšķināt uz pogas \"Vēsture\"."
 
 #: templates/help/finding_older_version_files.html:11
 msgid ""
 "A list of all versions of that file will be displayed in time order, from "
 "newer to older. The list also contains the file's rename history."
 msgstr ""
+"Tiks parādīts visu šīs datnes versiju saraksts laika secībā no jaunākās uz "
+"vecāko. Saraksts satur arī datnes pārsaukšanas vēsturi."
 
 #: templates/help/finding_older_version_files.html:12
 msgid "You can download, restore, view any version of the file."
-msgstr ""
+msgstr "Jūs varat lejupielādēt, atjaunot un skatīt jebkuru datnes versiju."
 
 #: templates/help/finding_older_version_files.html:14
 #, python-format
@@ -822,10 +1053,13 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Datņu versiju glabāšanas periodu varat konfigurēt: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">vēstures glabāšanas "
+"perioda iestatīšana</a>."
 
 #: templates/help/folder_permission.html:6
 msgid "Use folder permission for fine-grained access control"
-msgstr ""
+msgstr "Mapju tiesību izmantošana detalizētai piekļuves kontrolei"
 
 #: templates/help/folder_permission.html:8
 #, python-format
@@ -836,6 +1070,11 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing libraries</a>."
 " Here are some use cases:"
 msgstr ""
+"Koplietotām bibliotēkām vai mapēm varat personai vai grupai iestatīt "
+"tiesības uz to apakšmapēm. Pieejamās tiesības ir tādas pašas kā tās, kas "
+"aprakstītas <a "
+"href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">bibliotēku "
+"koplietošanā</a>. Šeit ir daži lietošanas gadījumi:"
 
 #: templates/help/folder_permission.html:10
 msgid ""
@@ -843,6 +1082,9 @@ msgid ""
 "want to allow a specific member of the group to modify files in one sub-"
 "folder. You can grant write permission of this sub-folder to this person."
 msgstr ""
+"Jūs koplietojāt bibliotēku ar grupu, kurai ir tiesības \"tikai lasīt\". "
+"Vēlaties arī atļaut konkrētam grupas dalībniekam mainīt datnes vienā "
+"apakšmapē. Šai personai varat piešķirt rakstīšanas tiesības uz šo apakšmapi."
 
 #: templates/help/folder_permission.html:11
 msgid ""
@@ -851,6 +1093,10 @@ msgid ""
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
 msgstr ""
+"Jūs koplietojāt bibliotēku ar 3 grupām. Šajā bibliotēkā ir 3 apakšmapes — pa"
+" vienai katrai grupai datņu augšupielādei. Taču jūs nevēlaties, lai "
+"lietotāji mainītu datnes, kas nepieder viņu grupai. Varat piešķirt "
+"rakstīšanas tiesības uz apakšmapi tikai tās grupai."
 
 #: templates/help/folder_permission.html:13
 msgid ""
@@ -859,17 +1105,23 @@ msgid ""
 "should first share the parent library or folder; otherwise the folder "
 "permission won't take effect."
 msgstr ""
+"Mapju tiesības ir spēkā tikai tām bibliotēkām un mapēm, kuras koplietojat ar"
+" citiem. Lai noteiktu mapju tiesības uz apakšmapēm, vispirms jākoplieto "
+"attiecīgā vecākbibliotēka vai vecākmape; pretējā gadījumā tiesības nestāsies"
+" spēkā."
 
 #: templates/help/folder_permission.html:14
 msgid ""
 "One important design goal of folder permission is to support hierarchical "
 "permissions:"
 msgstr ""
+"Viens no svarīgiem mapju tiesību izstrādes mērķiem ir atbalstīt hierarhiskas"
+" tiesības:"
 
 #: templates/help/folder_permission.html:16
 msgid ""
 "Sub-folders automatically inherit folder permissions from its parent folder."
-msgstr ""
+msgstr "Apakšmapes automātiski pārmanto mapju tiesības no savas vecākmapes."
 
 #: templates/help/folder_permission.html:17
 msgid ""
@@ -879,10 +1131,14 @@ msgid ""
 "\"meeting files/today\" for user A. Then user A's permission to \"meeting "
 "files/today\" is \"read only\"."
 msgstr ""
+"Apakšmapēm iestatītās tiesības aizstāj vecākmapē iestatītās. Piemēram, "
+"lietotājam A jūs iestatāt tiesības \"lasīt un rakstīt\" mapei \"sapulču "
+"datnes\" un tiesības \"tikai lasīt\" apakšmapei \"sapulču datnes/šodiena\". "
+"Tad lietotāja A tiesības uz \"sapulču datnes/šodiena\" ir \"tikai lasīt\"."
 
 #: templates/help/folder_permission.html:19
 msgid "Basic usage"
-msgstr ""
+msgstr "Pamatlietošana"
 
 #: templates/help/folder_permission.html:20
 msgid ""
@@ -891,6 +1147,10 @@ msgid ""
 "\"permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions on this folder."
 msgstr ""
+"Tikai bibliotēkas īpašnieks var iestatīt mapju tiesības tās apakšmapēm. "
+"Datņu pārlūkošanas saskarnē noklikšķiniet uz pogas \"Vairāk darbību\" un "
+"nolaižamajā izvēlnē izvēlieties \"Tiesības\". Uznirstošajā logā varat "
+"apskatīt un iestatīt šīs mapes tiesības."
 
 #: templates/help/folder_permission.html:21
 msgid ""
@@ -899,6 +1159,10 @@ msgid ""
 "Permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions in this library."
 msgstr ""
+"Ja vēlaties skatīt visas bibliotēkā iestatītās mapju tiesības, novietojiet "
+"peles kursoru uz bibliotēkas. Noklikšķiniet uz pogas \"Vairāk darbību\" un "
+"nolaižamajā izvēlnē izvēlieties \"Mapes tiesības\". Uznirstošajā logā varat "
+"apskatīt un iestatīt mapju tiesības šajā bibliotēkā."
 
 #: templates/help/folder_permission.html:22
 msgid ""
@@ -906,16 +1170,21 @@ msgid ""
 "next to \"read only\" sub-folders. When the user navigate into that sub-"
 "folder, he/she won't be able to add/modify/delete files."
 msgstr ""
+"Kad citi lietotāji pāriet uz mapi, blakus apakšmapēm ar tiesībām \"tikai "
+"lasīt\" būs neliela \"acs\" ikona. Kad lietotājs pāriet uz šo apakšmapi, "
+"viņš nevarēs pievienot, mainīt vai dzēst datnes."
 
 #: templates/help/folder_permission.html:24
 msgid ""
 "If a \"read only\" folder is synced to PC with the Seafile desktop App, "
 "changes under a \"read only\" folder won't be uploaded to the cloud."
 msgstr ""
+"Ja mape \"tikai lasīt\" tiek sinhronizēta uz datoru ar Seafile darbvirsmas "
+"lietotni, izmaiņas mapē \"tikai lasīt\" netiks augšupielādētas mākonī."
 
 #: templates/help/folder_permission.html:25
 msgid "Advanced: priority between different permissions"
-msgstr ""
+msgstr "Padziļināti: dažādu tiesību prioritāte"
 
 #: templates/help/folder_permission.html:27
 msgid ""
@@ -925,6 +1194,12 @@ msgid ""
 "library. Then user A only has \"read only\" access to the sub-folder, while "
 "he/she has \"read write\" access to all other sub-folders and files."
 msgstr ""
+"Mapju tiesībām ir augstāka prioritāte nekā koplietošanas laikā iestatītajām "
+"tiesībām. Piemēram, ja koplietojat bibliotēku ar lietotāju A ar tiesībām "
+"\"lasīt un rakstīt\" un papildus iestatāt tiesības \"tikai lasīt\" kādai šīs"
+" bibliotēkas apakšmapei, tad lietotājam A uz šo apakšmapi attiecas vienīgi "
+"tiesības \"tikai lasīt\", savukārt uz visām pārējām apakšmapēm un datnēm — "
+"tiesības \"lasīt un rakstīt\"."
 
 #: templates/help/folder_permission.html:28
 msgid ""
@@ -933,16 +1208,20 @@ msgid ""
 "if the system matches a permission specific to the user, it'll ignore all "
 "permissions set for the groups the user belongs to."
 msgstr ""
+"Konkrētam lietotājam iestatītajām mapju tiesībām ir augstāka prioritāte nekā"
+" grupai iestatītajām tiesībām. Proti, pārbaudot tiesības uz mapi, ja sistēma"
+" atrod lietotājam specifiski iestatītas tiesības, tā ignorē visas tiesības, "
+"kas iestatītas grupām, kurās lietotājs ir dalībnieks."
 
 #: templates/help/folder_permission.html:29
 msgid ""
 "Permissions on sub-folders have higher priority than those on parent "
 "folders."
-msgstr ""
+msgstr "Apakšmapju tiesībām ir augstāka prioritāte nekā vecākmapju tiesībām."
 
 #: templates/help/folder_permission.html:31
 msgid "Here is a more complex example:"
-msgstr ""
+msgstr "Šeit ir sarežģītāks piemērs:"
 
 #: templates/help/folder_permission.html:32
 msgid ""
@@ -954,6 +1233,13 @@ msgid ""
 "first matched for folder \"A/B\" and user \"John\", which is inherited from "
 "its parent \"A\"."
 msgstr ""
+"Pieņemsim, ka mapju struktūra ir \"A/B\" un lietotājs \"Džons\" ir grupā "
+"\"Personāls\". Ja lietotājam Džonam iestatāt tiesības \"tikai lasīt\" uz "
+"mapi A un grupai \"Personāls\" iestatāt tiesības \"lasīt un rakstīt\" uz "
+"mapi \"A/B\", tad Džonam uz mapi \"A/B\" joprojām ir vienīgi tiesības "
+"\"tikai lasīt\". Tas ir tāpēc, ka saskaņā ar 2. noteikumu mapei \"A/B\" un "
+"lietotājam \"Džons\" vispirms tiek piemērotas tiesības \"tikai lasīt\", kas "
+"pārmantotas no tās vecākmapes \"A\"."
 
 #: templates/help/full_text_file_search.html:6
 msgid ""
@@ -961,46 +1247,49 @@ msgid ""
 "as well as the content of certain files, in the Seafile web app. Currently "
 "Seafile can search the contents of the following types of files:"
 msgstr ""
+"Ja izmantojat Pro Edition serveri, Seafile tīmekļa lietotnē varat meklēt "
+"datņu un mapju nosaukumus, kā arī noteiktu datņu saturu. Pašlaik Seafile var"
+" meklēt šādu veidu datņu saturu:"
 
 #: templates/help/full_text_file_search.html:8
 #: templates/help/viewing_files_within_web_app.html:8
 msgid "Microsoft Office Doc: .doc, .docx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office dokuments: .doc, .docx (tikai Pro Edition serverī)"
 
 #: templates/help/full_text_file_search.html:9
 #: templates/help/viewing_files_within_web_app.html:9
 msgid "Microsoft Office PowerPoint: .ppt, .pptx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office PowerPoint: .ppt, .pptx (tikai Pro Edition serverī)"
 
 #: templates/help/full_text_file_search.html:10
 #: templates/help/viewing_files_within_web_app.html:10
 msgid "Microsoft Office Excel: .xls, .xlsx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Excel: .xls, .xlsx (tikai Pro Edition serverī)"
 
 #: templates/help/full_text_file_search.html:11
 #: templates/help/viewing_files_within_web_app.html:11
 msgid "LibreOffice files"
-msgstr ""
+msgstr "LibreOffice datnes"
 
 #: templates/help/full_text_file_search.html:12
 #: templates/help/viewing_files_within_web_app.html:12
 msgid "PDF files"
-msgstr ""
+msgstr "PDF datnes"
 
 #: templates/help/full_text_file_search.html:13
 #: templates/help/viewing_files_within_web_app.html:14
 msgid "Markdown files: .md"
-msgstr ""
+msgstr "Markdown datnes: .md"
 
 #: templates/help/full_text_file_search.html:14
 #: templates/help/viewing_files_within_web_app.html:15
 msgid "Various source code files"
-msgstr ""
+msgstr "Dažādas pirmkoda datnes"
 
 #: templates/help/full_text_file_search.html:15
 #: templates/help/viewing_files_within_web_app.html:16
 msgid "Text files: .txt, .log"
-msgstr ""
+msgstr "Teksta datnes: .txt, .log"
 
 #: templates/help/full_text_file_search.html:17
 msgid ""
@@ -1008,34 +1297,45 @@ msgid ""
 "text search feature. In that case, you can only search file and folder "
 "names."
 msgstr ""
+"Ņemiet vērā, ka jūsu Seafile sistēmas administrators var nebūt iespējojis "
+"pilnteksta meklēšanas funkciju. Tādā gadījumā varat meklēt tikai datņu un "
+"mapju nosaukumus."
 
 #: templates/help/groups_managing.html:6
 msgid ""
 "Creating a group is a convenient way to share files with many people. In "
 "Seafile, you can create and manage a group easily."
 msgstr ""
+"Grupas izveide ir ērts veids, kā koplietot datnes ar daudziem cilvēkiem. "
+"Seafile vidē grupu var viegli izveidot un pārvaldīt."
 
 #: templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
-msgstr ""
+msgstr "Lūk, kā grupas darbojas Seafile vidē:"
 
 #: templates/help/groups_managing.html:9
 msgid ""
 "Each group has a owner. The owner is the creator of the group by default. "
 "He/she can transfer the ownership of the group to another member."
 msgstr ""
+"Katrai grupai ir īpašnieks. Pēc noklusējuma īpašnieks ir grupas izveidotājs."
+" Viņš var nodot grupas īpašumtiesības citam dalībniekam."
 
 #: templates/help/groups_managing.html:10
 msgid ""
 "Each group can have multiple admins. The group owner and group admins can "
 "add more group admins."
 msgstr ""
+"Katrai grupai var būt vairāki administratori. Grupas īpašnieks un grupas "
+"administratori var pievienot citus grupas administratorus."
 
 #: templates/help/groups_managing.html:11
 msgid ""
 "The group admin can add/delete members in the group. And he/she can also "
 "unshare a library in the group."
 msgstr ""
+"Grupas administrators var pievienot un dzēst grupas dalībniekus. Viņš var "
+"arī pārtraukt bibliotēkas koplietošanu ar grupu."
 
 #: templates/help/groups_managing.html:13
 msgid ""
@@ -1043,6 +1343,9 @@ msgid ""
 "all the groups you're in. Clicking into any group, you'll see the libraries "
 "shared with this group."
 msgstr ""
+"Noklikšķiniet uz cilnes \"Koplietots ar grupām\" kreisajā panelī, un jūs "
+"redzēsiet visas grupas, kurās esat. Atverot jebkuru grupu, jūs redzēsiet "
+"bibliotēkas, kas koplietotas ar šo grupu."
 
 #: templates/help/groups_managing.html:14
 msgid ""
@@ -1050,6 +1353,9 @@ msgid ""
 "panel. Then click on \"All Groups\". In the page, you can click the \"New "
 "Group\" button to create a group."
 msgstr ""
+"Lai izveidotu jaunu grupu, noklikšķiniet uz cilnes \"Koplietots ar grupām\" "
+"kreisajā panelī. Pēc tam noklikšķiniet uz \"Visas grupas\". Lapā varat "
+"noklikšķināt uz pogas \"Jauna grupa\", lai izveidotu grupu."
 
 #: templates/help/groups_managing.html:15
 #, python-format
@@ -1057,10 +1363,13 @@ msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
 "and folders</a> about how to share libraries or folders with a group."
 msgstr ""
+"Skatiet sadaļu <a "
+"href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">Datņu un mapju "
+"koplietošana</a>, lai uzzinātu, kā koplietot bibliotēkas vai mapes ar grupu."
 
 #: templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
-msgstr ""
+msgstr "Datņu/mapju izslēgšana no sinhronizācijas"
 
 #: templates/help/ignore.html:8
 msgid ""
@@ -1070,14 +1379,19 @@ msgid ""
 "should not sync. Each line in a ignore.txt file specifies a pattern. The "
 "following pattern format are supported."
 msgstr ""
+"Dažkārt jūs nevēlaties sinhronizēt atsevišķas datnes vai mapes bibliotēkā. "
+"Lai to panāktu, izveidojiet datni seafile-ignore.txt bibliotēkas saknes "
+"mapē. Šī īpašā datne norāda datnes un mapes, kuras Seafile nedrīkst "
+"sinhronizēt. Katra rinda datnē ignore.txt norāda šablonu. Tiek atbalstīti "
+"šādi šablonu formāti."
 
 #: templates/help/ignore.html:10
 msgid "A blank line matches no files."
-msgstr ""
+msgstr "Tukša rinda neatbilst nevienai datnei."
 
 #: templates/help/ignore.html:11
 msgid "A line starting with # serves as a comment."
-msgstr ""
+msgstr "Rinda, kas sākas ar #, tiek uzskatīta par komentāru."
 
 #: templates/help/ignore.html:12
 msgid ""
@@ -1087,6 +1401,11 @@ msgid ""
 "the paths under a folder. For instance, \"foo/*.html\" matches "
 "\"foo/a.html\" and \"foo/templates/b.html\"."
 msgstr ""
+"Seafile atbalsta aizstājējzīmes šablonā. Piemēram, \"foo/*\" atbilst "
+"\"foo/1\" un \"foo/hello\". \"foo/?\" atbilst \"foo/1\", bet ne "
+"\"foo/hello\". Ņemiet vērā, ka aizstājējzīme * rekursīvi atbilst visiem "
+"ceļiem mapē. Piemēram, \"foo/*.html\" atbilst \"foo/a.html\" un "
+"\"foo/templates/b.html\"."
 
 #: templates/help/ignore.html:13
 msgid ""
@@ -1094,6 +1413,9 @@ msgid ""
 "words, \"foo/\" will match a folder \"foo\" and paths underneath it, but "
 "will not match a regular file or a symbolic link \"foo\"."
 msgstr ""
+"Ja šablons beidzas ar slīpsvītru, tas atbilst tikai mapei. Citiem vārdiem "
+"sakot, \"foo/\" atbilst mapei \"foo\" un ceļiem tajā, bet neatbilst parastai"
+" datnei vai simboliskajai saitei \"foo\"."
 
 #: templates/help/ignore.html:14
 msgid ""
@@ -1102,14 +1424,17 @@ msgid ""
 "symbolic link; while \"foo/\" and \"foo*\" match a folder and paths under "
 "it."
 msgstr ""
+"Ja šablons nebeidzas ar slīpsvītru vai aizstājējzīmi, tas neatbilst mapei. "
+"Piemēram, \"foo\" var atbilst tikai parastai datnei \"foo\" vai "
+"simboliskajai saitei, bet \"foo/\" un \"foo*\" atbilst mapei un ceļiem tajā."
 
 #: templates/help/ignore.html:18
 msgid "Example"
-msgstr ""
+msgstr "Piemērs"
 
 #: templates/help/ignore.html:36
 msgid "Notes"
-msgstr ""
+msgstr "Piezīmes"
 
 #: templates/help/ignore.html:38
 msgid ""
@@ -1117,12 +1442,17 @@ msgid ""
 "client side. You can still create a file from seahub web interface that's "
 "excluded on the client. In this case,"
 msgstr ""
+"Datne seafile-ignore.txt kontrolē tikai to, kuras datnes izslēgt klienta "
+"pusē. Jūs joprojām varat izveidot datni Seahub tīmekļa saskarnē, lai gan "
+"klientā tā ir izslēgta. Šādā gadījumā"
 
 #: templates/help/ignore.html:40
 msgid ""
 "The created file will still be synced back to clients. But any later local "
 "changes to those files will be ignored."
 msgstr ""
+"Izveidotā datne joprojām tiks sinhronizēta atpakaļ uz klientiem. Taču "
+"jebkādas vēlākas šo datņu vietējās izmaiņas tiks ignorētas."
 
 #: templates/help/ignore.html:41
 msgid ""
@@ -1130,6 +1460,9 @@ msgid ""
 "to clients; If the file on the client is also modified, a conflict file will"
 " be generated on the client."
 msgstr ""
+"Ja datne tiek mainīta Seahub vidē, arī jaunā versija tiks sinhronizēta "
+"atpakaļ uz klientiem; ja datne tiek mainīta arī klientā, klientā tiks "
+"izveidota konflikta datne."
 
 #: templates/help/ignore.html:45
 msgid ""
@@ -1137,58 +1470,69 @@ msgid ""
 "already synced, and some time later you add it to the ignore list, its "
 "existing versions won't be removed."
 msgstr ""
+"seafile-ignore.txt ignorē tikai tās datnes, kas vēl nav sinhronizētas. Ja "
+"datne jau ir sinhronizēta un kādu laiku vēlāk jūs to pievienojat ignorēšanas"
+" sarakstam, tās esošās versijas netiks noņemtas."
 
 #: templates/help/install_sync.html:6
 msgid "Installing Seafile client program"
-msgstr ""
+msgstr "Seafile klienta programmas instalēšana"
 
 #: templates/help/install_sync.html:8
 msgid ""
 "After downloading Seafile client program, you have 3 steps left to get it up"
 " and running."
 msgstr ""
+"Pēc Seafile klienta programmas lejupielādes jums jāveic vēl 3 darbības, lai "
+"to sāktu lietot."
 
 #: templates/help/install_sync.html:10
 msgid "1. Select a disk partition to store local Seafile data"
-msgstr ""
+msgstr "1. Atlasiet diska nodalījumu vietējo Seafile datu glabāšanai"
 
 #: templates/help/install_sync.html:11
 msgid "Selecting a folder to store Seafile data"
-msgstr ""
+msgstr "Mapes atlase Seafile datu glabāšanai"
 
 #: templates/help/install_sync.html:13
 msgid "2. Add an account"
-msgstr ""
+msgstr "2. Pievienojiet kontu"
 
 #: templates/help/install_sync.html:14
 msgid "Add an account on your private Seafile server or our public server."
 msgstr ""
+"Pievienojiet kontu savā privātajā Seafile serverī vai mūsu publiskajā "
+"serverī."
 
 #: templates/help/install_sync.html:18
 msgid "3. Sync a library"
-msgstr ""
+msgstr "3. Sinhronizējiet bibliotēku"
 
 #: templates/help/install_sync.html:20
 msgid "Click the \"Sync this library\" button to sync it with a local folder."
 msgstr ""
+"Noklikšķiniet uz pogas \"Sinhronizēt šo bibliotēku\", lai sinhronizētu to ar"
+" vietējo mapi."
 
 #: templates/help/install_sync.html:21
 msgid ""
 "Then you add some files into the library. They will be automatically synced "
 "with cloud platform."
 msgstr ""
+"Pēc tam pievienojiet bibliotēkai dažas datnes. Tās tiks automātiski "
+"sinhronizētas ar mākoņa platformu."
 
 #: templates/help/install_sync.html:26
 msgid "4. (Optional) Create a library"
-msgstr ""
+msgstr "4. (Neobligāti) Izveidojiet bibliotēku"
 
 #: templates/help/install_sync.html:28
 msgid "You can also create a library from a local folder."
-msgstr ""
+msgstr "Bibliotēku varat izveidot arī no vietējās mapes."
 
 #: templates/help/install_sync.html:34
 msgid "5. Browse files on the cloud"
-msgstr ""
+msgstr "5. Pārlūkojiet datnes mākonī"
 
 #: templates/help/install_sync.html:35
 msgid ""
@@ -1196,12 +1540,18 @@ msgid ""
 "syncing them. Seafile client comes with a \"cloud file browser\" to meet "
 "this need. Click an unsynced library will open the cloud file browser."
 msgstr ""
+"Dažkārt datnes mākonī vēlaties mainīt tieši, tās nesinhronizējot. Seafile "
+"klientā ir iebūvēts \"mākoņa datņu pārlūks\", kas nodrošina šo iespēju. "
+"Noklikšķinot uz nesinhronizētas bibliotēkas, tiks atvērts mākoņa datņu "
+"pārlūks."
 
 #: templates/help/introduction.html:8
 msgid ""
 "Seafile is an enterprise file hosting platform with high reliability and "
 "performance."
 msgstr ""
+"Seafile ir uzņēmuma datņu mitināšanas platforma ar augstu uzticamību un "
+"veiktspēju."
 
 #: templates/help/introduction.html:9
 #, python-format
@@ -1212,6 +1562,11 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/using_drive_client\">the drive client</a>. It also "
 "has mobile clients for Android and iOS."
 msgstr ""
+"Seafile ietver tīmekļa saskarni, kurā varat pārvaldīt un koplietot datnes. "
+"Tam ir divu veidu galddatora klienti — <a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">datņu sinhronizācijas klients</a> "
+"un <a href=\"%(SITE_ROOT)shelp/using_drive_client\">diska klients</a>. Tam "
+"ir arī mobilie klienti operētājsistēmām Android un iOS."
 
 #: templates/help/introduction.html:10
 msgid ""
@@ -1219,6 +1574,8 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile web "
 "site</a>."
 msgstr ""
+"Klientus varat lejupielādēt <a href=\"https://www.seafile.com/en/download/\""
+" target=\"_blank\">Seafile tīmekļa vietnē</a>."
 
 #: templates/help/introduction.html:11
 msgid ""
@@ -1226,6 +1583,9 @@ msgid ""
 "help in our forum: <a href=\"https://forum.seafile.com\" "
 "target=\"_blank\">https://forum.seafile.com</a>."
 msgstr ""
+"Ja šajā rokasgrāmatā nav jums nepieciešamās informācijas, palīdzību varat "
+"meklēt mūsu forumā: <a href=\"https://forum.seafile.com\" "
+"target=\"_blank\">https://forum.seafile.com</a>."
 
 #: templates/help/libraries_managing.html:6
 msgid ""
@@ -1235,18 +1595,27 @@ msgid ""
 "library works mostly like a top level folder. But it also has some special "
 "properties:"
 msgstr ""
+"Seafile datņu organizēšanai izmanto \"bibliotēkas\". Bibliotēka ir augšējā "
+"līmeņa konteiners datņu un mapju kopai. Varat izveidot bibliotēku katram "
+"projektam, pie kura strādājat, vai katram dokumentu veidam, ko vēlaties "
+"glabāt Seafile. Bibliotēka lielākoties darbojas kā augšējā līmeņa mape. Taču"
+" tai ir arī dažas īpašas īpašības:"
 
 #: templates/help/libraries_managing.html:8
 msgid ""
 "Each library keeps its own file modification history. There is no global "
 "file modification history across all libraries."
 msgstr ""
+"Katra bibliotēka saglabā savu datņu izmaiņu vēsturi. Nav globālas datņu "
+"izmaiņu vēstures visām bibliotēkām."
 
 #: templates/help/libraries_managing.html:9
 msgid ""
 "Each library can be synced to desktop clients separately. You can choose "
 "which libraries to be synced."
 msgstr ""
+"Katru bibliotēku var sinhronizēt ar galddatora klientiem atsevišķi. Varat "
+"izvēlēties, kuras bibliotēkas sinhronizēt."
 
 #: templates/help/libraries_managing.html:11
 msgid ""
@@ -1255,12 +1624,18 @@ msgid ""
 "can also create more libraries. Here is what it looks like when you've "
 "created a few libraries."
 msgstr ""
+"Pirmajā pieteikšanās reizē Seafile tīmekļa lietotnē jums automātiski tiek "
+"izveidota noklusējuma bibliotēka ar nosaukumu \"Mana bibliotēka\". Varat "
+"izveidot arī citas bibliotēkas. Lūk, kā tas izskatās, kad esat izveidojis "
+"dažas bibliotēkas."
 
 #: templates/help/libraries_managing.html:13
 msgid ""
 "You can navigate into a library and manage your files and folders. You can "
 "upload, download, rename, move, copy and delete files."
 msgstr ""
+"Varat atvērt bibliotēku un pārvaldīt savas datnes un mapes. Varat "
+"augšupielādēt, lejupielādēt, pārsaukt, pārvietot, kopēt un dzēst datnes."
 
 #: templates/help/libraries_managing.html:15
 #, python-format
@@ -1269,6 +1644,9 @@ msgid ""
 "desktop client</a>, you can do any file operations inside the local library "
 "folder. The operations will be uploaded to the server. "
 msgstr ""
+"Pēc tam, kad <a href=\"%(SITE_ROOT)shelp/install_sync/\">bibliotēka ir "
+"sinhronizēta ar galddatora klientu</a>, vietējā bibliotēkas mapē varat veikt"
+" jebkādas datņu darbības. Veiktās darbības tiks augšupielādētas serverī. "
 
 #: templates/help/library_history_and_snapshots.html:7
 msgid ""
@@ -1277,6 +1655,10 @@ msgid ""
 "creates a \"snapshot\" of the previous state of the library. The snapshot "
 "contains the complete file and folder structure of the library."
 msgstr ""
+"Seafile izseko izmaiņu vēsturi visai bibliotēkai. Ikreiz, kad bibliotēkā "
+"tiek veikta datņu darbība (datnes atjaunināšana, dzēšana u. c.), Seafile "
+"izveido bibliotēkas iepriekšējā stāvokļa \"momentuzņēmumu\". Momentuzņēmums "
+"satur pilnīgu bibliotēkas datņu un mapju struktūru."
 
 #: templates/help/library_history_and_snapshots.html:8
 msgid ""
@@ -1287,10 +1669,16 @@ msgid ""
 "files in the library will be restored to that point of time, all at once. It"
 " works like a \"time machine\" for the library."
 msgstr ""
+"Dažkārt bibliotēkā esat mainījis daudzas datnes un konstatējat, ka vēlaties "
+"atsaukt visas šīs izmaiņas. Daudzu datņu atgriešana to iepriekšējās versijās"
+" var būt apgrūtinoša. Šādos brīžos ļoti noder momentuzņēmumu funkcija. Varat"
+" atjaunot visu bibliotēku jebkurā pagātnes brīdī. Visas bibliotēkas datnes "
+"tiks atjaunotas uz šo brīdi vienlaikus. Tā darbojas kā bibliotēkas \"laika "
+"mašīna\"."
 
 #: templates/help/library_history_and_snapshots.html:9
 msgid "To view library history and snapshots:"
-msgstr ""
+msgstr "Lai skatītu bibliotēkas vēsturi un momentuzņēmumus:"
 
 #: templates/help/library_history_and_snapshots.html:11
 msgid ""
@@ -1298,12 +1686,17 @@ msgid ""
 "\"History\" icon in the library navigation top bar. All the change record of"
 " the library will be displayed in a list."
 msgstr ""
+"Seafile tīmekļa lietotnē atveriet bibliotēkas saknes mapi. Noklikšķiniet uz "
+"ikonas \"Vēsture\" bibliotēkas navigācijas augšējā joslā. Visi bibliotēkas "
+"izmaiņu ieraksti tiks parādīti sarakstā."
 
 #: templates/help/library_history_and_snapshots.html:12
 msgid ""
 "Click the \"view snapshot\" link on any modification record. You'll see the "
 "library state at the point of time."
 msgstr ""
+"Noklikšķiniet uz saites \"Skatīt momentuzņēmumu\" jebkurā izmaiņu ierakstā. "
+"Jūs redzēsiet bibliotēkas stāvokli attiecīgajā brīdī."
 
 #: templates/help/library_history_and_snapshots.html:13
 msgid ""
@@ -1311,6 +1704,8 @@ msgid ""
 "you're the library's owner, you can restore the entire library to this point"
 " of time."
 msgstr ""
+"Momentuzņēmuma skatā varat lejupielādēt vai atjaunot jebkuru datni vai mapi."
+" Ja esat bibliotēkas īpašnieks, varat atjaunot visu bibliotēku uz šo brīdi."
 
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
@@ -1319,6 +1714,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Varat konfigurēt bibliotēkas vēstures glabāšanas periodu: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">vēstures glabāšanas "
+"perioda iestatīšana</a>."
 
 #: templates/help/manage_library_as_wiki.html:6
 msgid ""
@@ -1328,6 +1726,11 @@ msgid ""
 "files store textual, tabular as well as graphical information; You can also "
 "add links to other documents in a Markdown file."
 msgstr ""
+"Nelielu strukturētu datu uzkrāšana un glabāšana vienkārši lietojamā veidā — "
+"tam ir paredzēti Seafile viki. Viki lapas tiek rakstītas Markdown (MD) — "
+"vienkāršā iezīmēšanas valodā —, lai nodrošinātu savstarpēju saderību starp "
+"platformām. MD datnes glabā tekstuālu, tabulveida un grafisku informāciju; "
+"Markdown datnē varat pievienot arī saites uz citiem dokumentiem."
 
 #: templates/help/manage_library_as_wiki.html:7
 msgid ""
@@ -1336,10 +1739,14 @@ msgid ""
 " Seafile libraries, they can be synced and shared with other users just like"
 " any ordinary library."
 msgstr ""
+"Standarta bibliotēku Seafile var pārvaldīt kā viki, izmantojot versijā 7.0 "
+"ieviesto \"Kolonnu skatu\". Tā kā Seafile viki ir ieviesti kā standarta "
+"Seafile bibliotēkas, tos var sinhronizēt un koplietot ar citiem lietotājiem "
+"tāpat kā jebkuru parastu bibliotēku."
 
 #: templates/help/manage_library_as_wiki.html:8
 msgid "Column view"
-msgstr ""
+msgstr "Kolonnu skats"
 
 #: templates/help/manage_library_as_wiki.html:9
 msgid ""
@@ -1350,10 +1757,16 @@ msgid ""
 "File actions such as renaming, moving, and opening via client are available "
 "in a right-click-accessible context menu."
 msgstr ""
+"Viki parasti ir sānjosla ar koka veida mapju struktūru, kas ļauj ātri un "
+"vienkārši pārlūkot viki lapas. Seafile \"Kolonnu skats\" ļauj pārvaldīt "
+"bibliotēkas datnes tāpat kā viki telpu. Lietotāji tajā var pārlūkot un "
+"pārvietot datnes un mapes, vienkārši velkot un nometot. Datņu darbības, "
+"piemēram, pārsaukšana, pārvietošana un atvēršana klientā, ir pieejamas "
+"kontekstizvēlnē, ko atver ar peles labo pogu."
 
 #: templates/help/manage_library_as_wiki.html:12
 msgid "WYSIWYG Markdown editor"
-msgstr ""
+msgstr "WYSIWYG Markdown redaktors"
 
 #: templates/help/manage_library_as_wiki.html:13
 msgid ""
@@ -1369,12 +1782,25 @@ msgid ""
 "table’s content: A table can be copied in its entirety or in part without "
 "leaving the WYSIWYG view."
 msgstr ""
+"Viki lapas Seafile tiek saglabātas kā parasti dokumenti Markdown formātā. "
+"Lai bibliotēkā izveidotu jaunu viki lapu, vienkārši izveidojiet jaunu "
+"Markdown dokumentu. MD datnes var rediģēt tieši Seafile tīmekļa saskarnē, "
+"izmantojot tiešsaistes MD redaktoru. Tīmekļa redaktors nodrošina patīkamu "
+"lietošanas pieredzi un plašas teksta, attēlu un tabulu formatēšanas "
+"iespējas. Attēlus MD datnēs var importēt no bibliotēkām un vietējās "
+"krātuves, kā arī izmantojot hipersaites. Redaktora \"to, ko redzi, to arī "
+"iegūsti\" (WYSIWYG) saskarnē var veikt arī vienkāršas attēlu rediģēšanas "
+"darbības, piemēram, mērogošanu. Tabulas var ievietot un mainīt tikai ar "
+"dažiem klikšķiem. Tas pats attiecas uz tabulas saturu: tabulu var kopēt "
+"pilnībā vai daļēji, neizejot no WYSIWYG skata."
 
 #: templates/help/manage_library_as_wiki.html:15
 msgid ""
 "The change history of a Markdown file can be easily accessed by clicking the"
 " \"File History\" button in the menu on top of the editor interface."
 msgstr ""
+"Markdown datnes izmaiņu vēsturi var viegli atvērt, noklikšķinot uz pogas "
+"\"Datnes vēsture\" redaktora saskarnes augšdaļas izvēlnē."
 
 #: templates/help/manage_library_as_wiki.html:17
 msgid ""
@@ -1382,10 +1808,12 @@ msgid ""
 "Table of contents, file information, and collaborative commenting are "
 "provided in this side bar."
 msgstr ""
+"Markdown redaktora labajā pusē varat atvērt slēptu sānjoslu. Šajā sānjoslā "
+"ir pieejams satura rādītājs, datnes informācija un kopīga komentēšana."
 
 #: templates/help/manage_library_as_wiki.html:19
 msgid "File tagging and related documents"
-msgstr ""
+msgstr "Datņu atzīmēšana ar birkām un saistītie dokumenti"
 
 #: templates/help/manage_library_as_wiki.html:20
 msgid ""
@@ -1394,12 +1822,17 @@ msgid ""
 "can be managed from the side bar of the Markdown editor, or from the file "
 "browser interface."
 msgstr ""
+"Datņu atzīmēšana ar birkām ir svarīga zināšanu pārvaldības funkcija. Seafile"
+" ļauj lietotājiem katrai bibliotēkai definēt birkas un piešķirt tās datnēm. "
+"Birkas var pārvaldīt Markdown redaktora sānjoslā vai datņu pārlūka saskarnē."
 
 #: templates/help/manage_library_as_wiki.html:23
 msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
 msgstr ""
+"Datņu pārlūka saskarne sniedz visu pašreizējās bibliotēkas datņu birku "
+"kopsavilkumu."
 
 #: templates/help/read-only_syncing.html:6
 #, python-format
@@ -1413,16 +1846,26 @@ msgid ""
 " copy at the server side. To prevent data loss, the local copy is renamed to"
 " a conflict file."
 msgstr ""
+"Tikai lasāmām bibliotēkām vai mapēm Seafile rāda aizlieguma ikonu (<img "
+"src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />), "
+"norādot, ka tās ir tikai lasāmas. Tomēr lietotāji joprojām var mainīt "
+"sinhronizētās vietējās kopijas. Kad vietējā kopija tiek mainīta, Seafile "
+"mainīto kopiju ignorē. Kad tiek mainīta arī serverī esošā kopija, klients "
+"parāda paziņojumu, ka vietējā mainītā kopija ir pretrunā ar servera puses "
+"kopiju. Lai novērstu datu zudumu, vietējā kopija tiek pārsaukta par "
+"konflikta datni."
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
 "If you want the be-shared users not be able to modify local copies, you can "
 "consider using the Seafile Drive client."
 msgstr ""
+"Ja vēlaties, lai lietotāji, ar kuriem koplietots, nevarētu mainīt vietējās "
+"kopijas, apsveriet Seafile Drive klienta izmantošanu."
 
 #: templates/help/restoring_deleted_files.html:6
 msgid "Restoring deleted files and folders"
-msgstr ""
+msgstr "Izdzēsto datņu un mapju atjaunošana"
 
 #: templates/help/restoring_deleted_files.html:7
 msgid ""
@@ -1430,16 +1873,21 @@ msgid ""
 "Sometimes you find files are deleted mistakenly. You can find back your "
 "deleted files in the trash bin of each library."
 msgstr ""
+"Katra bibliotēka Seafile automātiski reģistrē jūsu datņu dzēšanas darbības. "
+"Dažkārt gadās, ka datnes tiek nejauši izdzēstas. Izdzēstās datnes varat "
+"atrast katras bibliotēkas atkritnē."
 
 #: templates/help/restoring_deleted_files.html:8
 msgid "Here is how to use the trash bin feature:"
-msgstr ""
+msgstr "Lūk, kā izmantot atkritnes funkciju:"
 
 #: templates/help/restoring_deleted_files.html:10
 msgid ""
 "In Seafile Web App, navigate into the parent folder containing the deleted "
 "file or folder."
 msgstr ""
+"Seafile tīmekļa lietotnē atveriet mapi, kurā atradās izdzēstā datne vai "
+"mape."
 
 #: templates/help/restoring_deleted_files.html:11
 msgid ""
@@ -1447,6 +1895,9 @@ msgid ""
 " folders will be listed in deletion time order. In the bottom of the list, "
 "you can click the \"more\" button to load more deleted files."
 msgstr ""
+"Noklikšķiniet uz ikonas \"Atkritne\" bibliotēkas darbību joslā. Izdzēstās "
+"datnes un mapes tiks parādītas dzēšanas laika secībā. Saraksta apakšā varat "
+"noklikšķināt uz pogas \"Vairāk\", lai ielādētu vairāk izdzēsto datņu."
 
 #: templates/help/restoring_deleted_files.html:12
 msgid ""
@@ -1454,6 +1905,9 @@ msgid ""
 "folder's parent folder has been deleted, it will be restored to the "
 "library's root folder."
 msgstr ""
+"Izdzēsto datņu sarakstā varat atjaunot datnes un mapes. Ja datnes vai mapes "
+"vecākmape ir izdzēsta, attiecīgā datne vai mape tiks atjaunota bibliotēkas "
+"saknes mapē."
 
 #: templates/help/restoring_deleted_files.html:13
 msgid ""
@@ -1461,6 +1915,9 @@ msgid ""
 "the current folder. Files deleted in the sub-folders of the current folder "
 "are also included in the list."
 msgstr ""
+"Ņemiet vērā, ka atkritnē ir tikai tās datnes un apakšmapes, kas izdzēstas "
+"tieši pašreizējā mapē. Sarakstā ir iekļautas arī datnes, kas izdzēstas "
+"pašreizējās mapes apakšmapēs."
 
 #: templates/help/restoring_deleted_files.html:15
 #, python-format
@@ -1469,6 +1926,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Varat konfigurēt izdzēsto datņu glabāšanas periodu: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">vēstures glabāšanas "
+"perioda iestatīšana</a>."
 
 #: templates/help/selective_sync.html:8
 msgid ""
@@ -1477,6 +1937,9 @@ msgid ""
 "selectively sync a sub-folder in a library, instead of syncing the entire "
 "library."
 msgstr ""
+"Seafile serverī var būt ļoti lielas bibliotēkas, bet pašlaik jūs interesē "
+"tikai kāda apakšmape vienā bibliotēkā. Tādā gadījumā varat sinhronizēt tikai"
+" atsevišķu bibliotēkas apakšmapi, nevis visu bibliotēku."
 
 #: templates/help/selective_sync.html:10
 msgid ""
@@ -1485,40 +1948,54 @@ msgid ""
 "folder. Right click on the sub-folder. Choose \"Sync this folder\" in the "
 "pop-up menu."
 msgstr ""
+"Lai sinhronizētu apakšmapi, atveriet mākoņa datņu pārlūku, veicot "
+"dubultklikšķi uz bibliotēkas, kas vēl nav sinhronizēta. Atveriet šīs "
+"apakšmapes vecākmapi. Noklikšķiniet ar peles labo pogu uz apakšmapes. "
+"Uznirstošajā izvēlnē izvēlieties \"Sinhronizēt šo mapi\"."
 
 #: templates/help/selective_sync.html:14
 msgid ""
 "After syncing the sub-folder, you can see its syncing status in the \"Synced"
 " Libraries\" group in the client's main window."
 msgstr ""
+"Pēc apakšmapes sinhronizācijas tās sinhronizācijas statusu varat redzēt "
+"grupā \"Sinhronizētās bibliotēkas\" klienta galvenajā logā."
 
 #: templates/help/setting_library_history.html:6
 msgid "Setting library history retention period"
-msgstr ""
+msgstr "Bibliotēkas vēstures glabāšanas perioda iestatīšana"
 
 #: templates/help/setting_library_history.html:7
 msgid ""
 "A library's history retention period length controls how long you can access"
 " your history data in the following features:"
 msgstr ""
+"Bibliotēkas vēstures glabāšanas perioda ilgums nosaka, cik ilgi varat "
+"piekļūt saviem vēstures datiem šādās funkcijās:"
 
 #: templates/help/setting_library_history.html:9
 msgid ""
 "Restore deleted files: you cannot restore files and folders deleted before "
 "the retention period."
 msgstr ""
+"Izdzēsto datņu atjaunošana: nevarat atjaunot datnes un mapes, kas izdzēstas "
+"ārpus glabāšanas perioda."
 
 #: templates/help/setting_library_history.html:10
 msgid ""
 "File versions: you cannot access file versions older than the retention "
 "period."
 msgstr ""
+"Datņu versijas: nevarat piekļūt datņu versijām, kas vecākas par glabāšanas "
+"periodu."
 
 #: templates/help/setting_library_history.html:11
 msgid ""
 "Library history and snapshots: you cannot access library snapshots older "
 "than the retention period."
 msgstr ""
+"Bibliotēkas vēsture un momentuzņēmumi: nevarat piekļūt bibliotēkas "
+"momentuzņēmumiem, kas vecāki par glabāšanas periodu."
 
 #: templates/help/setting_library_history.html:13
 msgid ""
@@ -1526,51 +2003,68 @@ msgid ""
 "library, separately. You must be the library's owner to set the retention "
 "period. To set retention period length:"
 msgstr ""
+"Veco datņu versiju glabāšanas periodu var konfigurēt katrai bibliotēkai "
+"atsevišķi. Lai iestatītu glabāšanas periodu, jums jābūt bibliotēkas "
+"īpašniekam. Lai iestatītu glabāšanas perioda ilgumu:"
 
 #: templates/help/setting_library_history.html:15
 msgid ""
 "In Seafile Web App, click the \"Mine\" tab in the navigation panel (as in "
 "the below screenshot). All libraries owned by you will be listed."
 msgstr ""
+"Seafile tīmekļa lietotnē noklikšķiniet uz cilnes \"Manas\" navigācijas "
+"panelī (kā parādīts zemāk esošajā ekrānuzņēmumā). Tiks parādītas visas jums "
+"piederošās bibliotēkas."
 
 #: templates/help/setting_library_history.html:16
 msgid ""
 "Move the cursor onto the row of the library. An operation menu will appear. "
 "Click \"History Setting\" in the drop-down menu."
 msgstr ""
+"Novietojiet kursoru uz bibliotēkas rindas. Parādīsies darbību izvēlne. "
+"Nolaižamajā izvēlnē noklikšķiniet uz \"Vēstures iestatījumi\"."
 
 #: templates/help/setting_library_history.html:17
 msgid "In the pop-up dialog, you can set the length of file retention period."
-msgstr ""
+msgstr "Uznirstošajā dialogā varat iestatīt datņu glabāšanas perioda ilgumu."
 
 #: templates/help/sharing_files_and_folders.html:6
 msgid ""
 "In Seafile there are a few ways to share files and folders with others:"
-msgstr ""
+msgstr "Seafile ir vairāki veidi, kā koplietot datnes un mapes ar citiem:"
 
 #: templates/help/sharing_files_and_folders.html:8
 msgid ""
 "Using links: there are multiple types of links that can be used to share "
 "with various scope of collaborators."
 msgstr ""
+"Saišu izmantošana: pastāv vairāku veidu saites, ko var izmantot "
+"koplietošanai ar dažāda loka lietotājiem."
 
 #: templates/help/sharing_files_and_folders.html:10
 msgid ""
 "Share links: Any user who has access to the links can access the files or "
 "folders pointed by the link. No login is required."
 msgstr ""
+"Koplietošanas saites: jebkurš lietotājs, kam ir piekļuve saitei, var piekļūt"
+" saites norādītajām datnēm vai mapēm. Pieteikšanās nav nepieciešama."
 
 #: templates/help/sharing_files_and_folders.html:11
 msgid ""
 "Upload links: Any user who has access to the links can upload files to the "
 "folder pointed by the link. No login is required."
 msgstr ""
+"Augšupielādes saites: jebkurš lietotājs, kam ir piekļuve saitei, var "
+"augšupielādēt datnes saites norādītajā mapē. Pieteikšanās nav nepieciešama."
 
 #: templates/help/sharing_files_and_folders.html:12
 msgid ""
 "Internal links: Only logged in users who have read permission to the file or"
 " folder can access this link. Used for internal file sharing."
 msgstr ""
+"Iekšējās saites: šai saitei var piekļūt tikai pieteikušies lietotāji, kuriem"
+" ir lasīšanas tiesības uz datni vai mapi. Izmanto iekšējai datņu "
+"koplietošanai."
 
 #: templates/help/sharing_files_and_folders.html:15
 msgid ""
@@ -1578,10 +2072,13 @@ msgid ""
 "library or folder for specific users or groups. Users have to log in to "
 "access the folders."
 msgstr ""
+"Bibliotēku vai mapju koplietošana: izmanto, lai konkrētiem lietotājiem vai "
+"grupām noteiktu piekļuves tiesības uz bibliotēku vai mapi. Lai piekļūtu "
+"mapēm, lietotājiem ir jāpieteicas."
 
 #: templates/help/sharing_files_and_folders.html:17
 msgid "Creating share links to files or folders"
-msgstr ""
+msgstr "Koplietošanas saišu izveide datnēm vai mapēm"
 
 #: templates/help/sharing_files_and_folders.html:18
 msgid ""
@@ -1589,12 +2086,17 @@ msgid ""
 "anyone, including those who don't have a Seafile account. You can also use "
 "password and expiration time to protect your links."
 msgstr ""
+"Koplietošanas saites ir publiskas saites uz datnēm vai mapēm. Tām var "
+"piekļūt ikviens, tostarp tie, kam nav Seafile konta. Saites varat aizsargāt "
+"ar paroli un derīguma termiņu."
 
 #: templates/help/sharing_files_and_folders.html:19
 msgid ""
 "You can also set access permission to share links. There are three types of "
 "permissions:"
 msgstr ""
+"Koplietošanas saitēm varat iestatīt arī piekļuves tiesības. Ir trīs tiesību "
+"veidi:"
 
 #: templates/help/sharing_files_and_folders.html:21
 msgid ""
@@ -1602,6 +2104,9 @@ msgid ""
 "the type of files can be previewed in web browser, they can also be viewed "
 "online (e.g. Office files)."
 msgstr ""
+"Priekšskatīšana un lejupielāde: datni vai mapē esošās datnes var "
+"lejupielādēt. Ja datņu tips ir priekšskatāms tīmekļa pārlūkā, tās var skatīt"
+" arī tiešsaistē (piem., Office datnes)."
 
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
@@ -1609,6 +2114,9 @@ msgid ""
 "browser, but cannot be downloaded. This is useful for sharing confidential "
 "data."
 msgstr ""
+"Tikai priekšskatīšana: datni vai mapē esošās datnes var skatīt tikai tīmekļa"
+" pārlūkā, bet nevar lejupielādēt. Tas noder konfidenciālu datu "
+"koplietošanai."
 
 #: templates/help/sharing_files_and_folders.html:23
 msgid ""
@@ -1616,16 +2124,21 @@ msgid ""
 "file can be edited in web browser (e.g. an Office file), any user who has "
 "access to the link is allowed to edit it."
 msgstr ""
+"Rediģēšana mākonī un lejupielāde: līdzīgi kā \"Priekšskatīšana un "
+"lejupielāde\", taču, ja datni var rediģēt tīmekļa pārlūkā (piem., Office "
+"datni), jebkurš lietotājs, kam ir piekļuve saitei, drīkst to rediģēt."
 
 #: templates/help/sharing_files_and_folders.html:25
 msgid "To create a share link in Seafile web app:"
-msgstr ""
+msgstr "Lai izveidotu koplietošanas saiti Seafile tīmekļa lietotnē:"
 
 #: templates/help/sharing_files_and_folders.html:27
 msgid ""
 "Navigate into the parent folder containing the file or folder. Hover your "
 "mouse over the file or folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Atveriet mapi, kurā atrodas datne vai mape. Novietojiet peles kursoru uz "
+"datnes vai mapes un noklikšķiniet uz parādītās ikonas \"Koplietot\"."
 
 #: templates/help/sharing_files_and_folders.html:28
 msgid ""
@@ -1633,6 +2146,10 @@ msgid ""
 " on the left panel. Then click \"Generate\" button to create a link. You can"
 " use password, expiration time and permission to protect your link."
 msgstr ""
+"Tiks atvērts uznirstošais logs ar koplietošanas opcijām. Kreisajā panelī "
+"noklikšķiniet uz cilnes \"Koplietošanas saite\". Pēc tam noklikšķiniet uz "
+"pogas \"Ģenerēt\", lai izveidotu saiti. Saites aizsardzībai varat izmantot "
+"paroli, derīguma termiņu un tiesības."
 
 #: templates/help/sharing_files_and_folders.html:29
 #: templates/help/sharing_files_and_folders.html:42
@@ -1640,10 +2157,12 @@ msgid ""
 "Copy the link to email, instant messaging client or any other tool to send "
 "it to others."
 msgstr ""
+"Kopējiet saiti e-pastā, tūlītējās ziņapmaiņas klientā vai jebkurā citā rīkā,"
+" lai nosūtītu to citiem."
 
 #: templates/help/sharing_files_and_folders.html:31
 msgid "You can also create share links from the desktop clients."
-msgstr ""
+msgstr "Koplietošanas saites varat izveidot arī no galddatora klientiem."
 
 #: templates/help/sharing_files_and_folders.html:33
 msgid ""
@@ -1652,6 +2171,11 @@ msgid ""
 " on the file or folder that you want to create a link to. In the pop-up "
 "menu, choose \"Seafile\" then \"Create share link\"."
 msgstr ""
+"Ja bibliotēka ir sinhronizēta, veiciet dubultklikšķi uz tās Seafile klienta "
+"galvenajā logā. Tiks atvērta šīs bibliotēkas vietējā mape. Noklikšķiniet ar "
+"peles labo pogu uz datnes vai mapes, uz kuru vēlaties izveidot saiti. "
+"Uznirstošajā izvēlnē izvēlieties \"Seafile\" un pēc tam \"Izveidot "
+"koplietošanas saiti\"."
 
 #: templates/help/sharing_files_and_folders.html:34
 msgid ""
@@ -1659,10 +2183,13 @@ msgid ""
 " Seafile client. The cloud file browser window will be opened, and you can "
 "create a link to a file or folder in it."
 msgstr ""
+"Ja bibliotēka nav sinhronizēta, veiciet dubultklikšķi uz tās Seafile klienta"
+" galvenajā logā. Tiks atvērts mākoņa datņu pārlūka logs, kurā varat izveidot"
+" saiti uz datni vai mapi."
 
 #: templates/help/sharing_files_and_folders.html:36
 msgid "Creating upload links to folders"
-msgstr ""
+msgstr "Augšupielādes saišu izveide mapēm"
 
 #: templates/help/sharing_files_and_folders.html:37
 msgid ""
@@ -1670,16 +2197,21 @@ msgid ""
 "upload links for folders. Others cannot see the files in the folders. They "
 "can only upload files to them."
 msgstr ""
+"Augšupielādes saites varat izmantot, lai vāktu datnes no citiem lietotājiem."
+" Augšupielādes saites var izveidot tikai mapēm. Citi lietotāji neredz mapēs "
+"esošās datnes. Viņi var tikai augšupielādēt datnes tajās."
 
 #: templates/help/sharing_files_and_folders.html:38
 msgid "To create an upload link in Seafile web app:"
-msgstr ""
+msgstr "Lai izveidotu augšupielādes saiti Seafile tīmekļa lietotnē:"
 
 #: templates/help/sharing_files_and_folders.html:40
 msgid ""
 "Navigate into the parent folder containing the folder. Hover your mouse over"
 " the folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Atveriet mapi, kurā atrodas attiecīgā mape. Novietojiet peles kursoru uz "
+"mapes un noklikšķiniet uz parādītās ikonas \"Koplietot\"."
 
 #: templates/help/sharing_files_and_folders.html:41
 msgid ""
@@ -1687,10 +2219,14 @@ msgid ""
 "tab on the left panel. Then click \"Generate\" button to create a link. You "
 "can use password to protect your link."
 msgstr ""
+"Tiks atvērts uznirstošais logs ar koplietošanas opcijām. Kreisajā panelī "
+"noklikšķiniet uz cilnes \"Augšupielādes saite\". Pēc tam noklikšķiniet uz "
+"pogas \"Ģenerēt\", lai izveidotu saiti. Saites aizsardzībai varat izmantot "
+"paroli."
 
 #: templates/help/sharing_files_and_folders.html:44
 msgid "Sharing libraries or folders"
-msgstr ""
+msgstr "Bibliotēku vai mapju koplietošana"
 
 #: templates/help/sharing_files_and_folders.html:45
 msgid ""
@@ -1698,62 +2234,79 @@ msgid ""
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
 msgstr ""
+"Varat koplietot bibliotēku vai mapi ar citiem reģistrētiem Seafile "
+"lietotājiem. Citi lietotāji koplietotajai bibliotēkai vai mapei var piekļūt,"
+" izmantojot tīmekļa lietotni un Seafile klientus."
 
 #: templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
-msgstr ""
+msgstr "Varat izvēlēties, ar ko koplietot:"
 
 #: templates/help/sharing_files_and_folders.html:48
 msgid "Share with user: You can share with one or more users."
 msgstr ""
+"Koplietot ar lietotāju: varat koplietot ar vienu vai vairākiem lietotājiem."
 
 #: templates/help/sharing_files_and_folders.html:49
 msgid "Share with group: You can share with a group."
-msgstr ""
+msgstr "Koplietot ar grupu: varat koplietot ar grupu."
 
 #: templates/help/sharing_files_and_folders.html:50
 msgid ""
 "Share with organization: If you're using a private server, sometimes it's "
 "useful to share with all members on the server (the entire organization)."
 msgstr ""
+"Koplietot ar organizāciju: ja izmantojat privāto serveri, dažkārt ir "
+"lietderīgi koplietot ar visiem servera dalībniekiem (visu organizāciju)."
 
 #: templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
-msgstr ""
+msgstr "Koplietošanai varat iestatīt arī tiesības:"
 
 #: templates/help/sharing_files_and_folders.html:54
 msgid "Read-Write: users can read, write, upload, download and sync files."
 msgstr ""
+"Lasīšana un rakstīšana: lietotāji var lasīt, rakstīt, augšupielādēt, "
+"lejupielādēt un sinhronizēt datnes."
 
 #: templates/help/sharing_files_and_folders.html:55
 msgid "Read-only: users can read, download and sync files."
 msgstr ""
+"Tikai lasīšana: lietotāji var lasīt, lejupielādēt un sinhronizēt datnes."
 
 #: templates/help/sharing_files_and_folders.html:56
 msgid "Admin: besides the write permission, users can also share the library."
 msgstr ""
+"Administrators: papildus rakstīšanas tiesībām lietotāji var arī koplietot "
+"bibliotēku."
 
 #: templates/help/sharing_files_and_folders.html:57
 msgid ""
 "Online Read-Write: users can view and edit files online via a web browser. "
 "The files cannot be downloaded."
 msgstr ""
+"Tiešsaistes lasīšana un rakstīšana: lietotāji var skatīt un rediģēt datnes "
+"tiešsaistē, izmantojot tīmekļa pārlūku. Datnes nevar lejupielādēt."
 
 #: templates/help/sharing_files_and_folders.html:58
 msgid ""
 "Online Read-only: users can only view files online via a web browser. The "
 "files cannot be downloaded."
 msgstr ""
+"Tiešsaistes tikai lasīšana: lietotāji var tikai skatīt datnes tiešsaistē, "
+"izmantojot tīmekļa pārlūku. Datnes nevar lejupielādēt."
 
 #: templates/help/sharing_files_and_folders.html:60
 msgid "To share a library or folder with a user or group:"
-msgstr ""
+msgstr "Lai koplietotu bibliotēku vai mapi ar lietotāju vai grupu:"
 
 #: templates/help/sharing_files_and_folders.html:62
 msgid ""
 "Hover your mouse over the library or folder and click on the \"Share\" icon "
 "that appears."
 msgstr ""
+"Novietojiet peles kursoru uz bibliotēkas vai mapes un noklikšķiniet uz "
+"parādītās ikonas \"Koplietot\"."
 
 #: templates/help/sharing_files_and_folders.html:63
 msgid ""
@@ -1761,6 +2314,10 @@ msgid ""
 "user\" or \"Share with group\" tab on the left panel. Select the user or "
 "group. Then click \"Submit\"."
 msgstr ""
+"Tiks atvērts uznirstošais logs ar koplietošanas opcijām. Kreisajā panelī "
+"noklikšķiniet uz cilnes \"Koplietot ar lietotāju\" vai \"Koplietot ar "
+"grupu\". Atlasiet lietotāju vai grupu. Pēc tam noklikšķiniet uz "
+"\"Iesniegt\"."
 
 #: templates/help/sharing_files_and_folders.html:65
 msgid ""
@@ -1769,6 +2326,10 @@ msgid ""
 " you share it with a group, the group members can only see it by navigating "
 "into the group."
 msgstr ""
+"Pēc tam, kad esat koplietojis bibliotēku vai mapi ar lietotāju, šis "
+"lietotājs to var redzēt, noklikšķinot uz cilnes \"Ar mani koplietotais\" "
+"Seafile tīmekļa lietotnes kreisajā panelī. Ja koplietojat to ar grupu, "
+"grupas dalībnieki to var redzēt tikai atverot grupu."
 
 #: templates/help/sharing_files_and_folders.html:66
 msgid ""
@@ -1777,10 +2338,15 @@ msgid ""
 "Library\" button. In the drop-down menu, you can choose to share an existing"
 " library or create a new library and share it."
 msgstr ""
+"Lai koplietotu bibliotēku ar visu organizāciju: Seafile tīmekļa lietotnē "
+"noklikšķiniet uz cilnes \"Koplietots ar visiem\" kreisajā panelī. Pēc tam "
+"noklikšķiniet uz pogas \"Pievienot bibliotēku\". Nolaižamajā izvēlnē varat "
+"izvēlēties koplietot esošu bibliotēku vai izveidot jaunu bibliotēku un "
+"koplietot to."
 
 #: templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
-msgstr ""
+msgstr "Iekšējās saites"
 
 #: templates/help/sharing_files_and_folders.html:68
 msgid ""
@@ -1790,6 +2356,11 @@ msgid ""
 "library. You may just copy the link and paste it into an email or IM "
 "software."
 msgstr ""
+"Šai saitei var piekļūt tikai pieteikušies lietotāji, kuriem ir lasīšanas "
+"tiesības uz datni vai mapi. To izmanto iekšējai datņu koplietošanai. Tas ir "
+"ērts veids, kā koplietot datnes starp komandas dalībniekiem, kuriem ir "
+"piekļuve kopīgai bibliotēkai. Vienkārši nokopējiet saiti un ielīmējiet to "
+"e-pastā vai tūlītējās ziņapmaiņas programmā."
 
 #: templates/help/sync_interval.html:8
 msgid ""
@@ -1800,10 +2371,16 @@ msgid ""
 "local folder. You can set the interval of this periodic sync. The interval "
 "is set in the unit of seconds."
 msgstr ""
+"Parasti Seafile klients automātiski konstatē izmaiņas vietējā mapē un "
+"augšupielādē tās serverī. Tomēr, ja vietējā mape atrodas Windows tīkla "
+"koplietošanas diskā, Seafile klients nevar droši konstatēt izmaiņas. Šādā "
+"gadījumā varat likt Seafile klientam periodiski pārbaudīt izmaiņas vietējā "
+"mapē. Varat iestatīt šīs periodiskās sinhronizācijas intervālu. Intervāls "
+"tiek iestatīts sekundēs."
 
 #: templates/help/syncing_existing_folders.html:6
 msgid "Syncing with an existing folder"
-msgstr ""
+msgstr "Sinhronizācija ar esošu mapi"
 
 #: templates/help/syncing_existing_folders.html:8
 #, python-format
@@ -1817,24 +2394,36 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/conflicts/\">conflict files</a> if file contents "
 "are different in the local folder and the library. "
 msgstr ""
+"Dažkārt Seafile serverī jau ir bibliotēka (kuru ir koplietojuši citi vai "
+"kura augšupielādēta no cita datora). Šo bibliotēku varat sinhronizēt ar "
+"esošu mapi savā datorā. Vietējai mapei jābūt ar tādu pašu nosaukumu kā "
+"bibliotēkai. Datnes vietējā mapē tiks sapludinātas ar bibliotēkas datnēm. "
+"Neviena datne vietējā mapē vai bibliotēkā netiks pārrakstīta vai pazudīs. Ja"
+" datņu saturs vietējā mapē un bibliotēkā atšķiras, sapludināšanas rezultātā "
+"tiks izveidotas dažas <a href=\"%(SITE_ROOT)shelp/conflicts/\">konflikta "
+"datnes</a>. "
 
 #: templates/help/syncing_existing_folders.html:10
 msgid ""
 "To sync a library with an existing folder, right click on the library in "
 "Seafile client's main window and click \"Sync this library\"."
 msgstr ""
+"Lai sinhronizētu bibliotēku ar esošu mapi, Seafile klienta galvenajā logā "
+"noklikšķiniet ar peles labo pogu uz bibliotēkas un noklikšķiniet uz "
+"\"Sinhronizēt šo bibliotēku\"."
 
 #: templates/help/syncing_existing_folders.html:14
 msgid "In the pop-up dialog, click the \"Sync with an existing folder\" link."
 msgstr ""
+"Uznirstošajā dialogā noklikšķiniet uz saites \"Sinhronizēt ar esošu mapi\"."
 
 #: templates/help/syncing_existing_folders.html:18
 msgid "Then choose an existing folder to sync with this library."
-msgstr ""
+msgstr "Pēc tam izvēlieties esošu mapi, ar kuru sinhronizēt šo bibliotēku."
 
 #: templates/help/unsync_resync.html:6
 msgid "Unsync and resync library"
-msgstr ""
+msgstr "Bibliotēkas sinhronizācijas pārtraukšana un atkārtota sinhronizēšana"
 
 #: templates/help/unsync_resync.html:8
 #, python-format
@@ -1846,6 +2435,13 @@ msgid ""
 "<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
 "folder</a> feature."
 msgstr ""
+"Ja vairs nevēlaties sinhronizēt vietējo mapi ar bibliotēku, varat pārtraukt "
+"sinhronizāciju. Pēc bibliotēkas sinhronizācijas pārtraukšanas izmaiņas "
+"vietējā mapē un datnēs netiks augšupielādētas, un izmaiņas bibliotēkā netiks"
+" lejupielādētas. Ja vēlaties atkal sinhronizēt bibliotēku ar vietējo mapi, "
+"varat izmantot funkciju <a "
+"href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sinhronizēt ar esošu "
+"mapi</a>."
 
 #: templates/help/unsync_resync.html:10
 msgid ""
@@ -1854,6 +2450,11 @@ msgid ""
 "unsync and then immediately sync the library with the same folder. You can "
 "find this action in the pop-up menu of the client's main window."
 msgstr ""
+"Dažkārt klientā rodas iekšējas kļūdas, kas bloķē sinhronizāciju. Šādos "
+"gadījumos parasti palīdz bibliotēkas \"atkārtota sinhronizēšana\". Atkārtota"
+" sinhronizēšana nozīmē sinhronizācijas pārtraukšanu un tūlītēju bibliotēkas "
+"sinhronizēšanu ar to pašu mapi. Šo darbību varat atrast klienta galvenā loga"
+" uznirstošajā izvēlnē."
 
 #: templates/help/using_drive_client.html:7
 msgid ""
@@ -1861,16 +2462,21 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
 "start it by double clicking the \"SeaDrive\" app icon on your desktop."
 msgstr ""
+"Pēc diska klienta instalēšanas saskaņā ar norādījumiem <a "
+"href=\"https://www.seafile.com/en/download/\">lejupielādes lapā</a> varat to"
+" palaist, veicot dubultklikšķi uz lietotnes \"SeaDrive\" ikonas darbvirsmā."
 
 #: templates/help/using_drive_client.html:8
 msgid ""
 "You'll be asked to choose a drive letter for the virtual drive. By default, "
 "\"S:\" will be used."
 msgstr ""
+"Jums tiks lūgts izvēlēties virtuālā diska burtu. Pēc noklusējuma tiks "
+"izmantots \"S:\"."
 
 #: templates/help/using_drive_client.html:9
 msgid "Then you'll be asked to log into your Seafile server."
-msgstr ""
+msgstr "Pēc tam jums tiks lūgts pieteikties savā Seafile serverī."
 
 #: templates/help/using_drive_client.html:12
 msgid ""
@@ -1879,6 +2485,10 @@ msgid ""
 "at this moment. So it'll not take very long. You can let it run in the "
 "background. You'll be noticed when the fetch is done."
 msgstr ""
+"Pēc veiksmīgas pieteikšanās serverī Drive klients sāk iegūt bibliotēku un "
+"datņu sarakstu no servera. Šajā brīdī datņu saturs netiek lejupielādēts, "
+"tāpēc tas neaizņems daudz laika. Varat ļaut tam darboties fonā. Kad iegūšana"
+" būs pabeigta, jūs saņemsiet paziņojumu."
 
 #: templates/help/using_drive_client.html:14
 msgid ""
@@ -1888,35 +2498,42 @@ msgid ""
 "when you open a file. Recently opened file will be cached in your local "
 "disk. All cached files will be marked with a green tick."
 msgstr ""
+"Tiks atvērta virtuālā diska mape. Jūs konstatēsiet, ka tā darbojas tāpat kā "
+"parasts cietais disks jūsu datorā. Augšējā līmeņa mapes virtuālajā diskā ir "
+"Seafile servera bibliotēkas. Datnes saturs tiks lejupielādēts, kad atvērsiet"
+" datni. Nesen atvērtās datnes tiks saglabātas kešatmiņā jūsu vietējā diskā. "
+"Visas kešatmiņā saglabātās datnes tiks atzīmētas ar zaļu atzīmi."
 
 #: templates/help/using_drive_client.html:17
 msgid "Synced State"
-msgstr ""
+msgstr "Sinhronizācijas stāvoklis"
 
 #: templates/help/using_drive_client.html:18
 msgid ""
 "Files and folders in the virtual drive are in either cloud-only, synced, or "
 "in partially synced state."
 msgstr ""
+"Datnes un mapes virtuālajā diskā var būt vai nu tikai mākonī, vai "
+"sinhronizētas, vai daļēji sinhronizētas."
 
 #: templates/help/using_drive_client.html:22
 #: templates/help/using_drive_client.html:51
 msgid "State"
-msgstr ""
+msgstr "Stāvoklis"
 
 #: templates/help/using_drive_client.html:23
 #: templates/help/using_drive_client.html:52
 msgid "Icon"
-msgstr ""
+msgstr "Ikona"
 
 #: templates/help/using_drive_client.html:24
 #: templates/help/using_drive_client.html:53
 msgid "Details"
-msgstr ""
+msgstr "Detaļas"
 
 #: templates/help/using_drive_client.html:29
 msgid "Cloud-only content"
-msgstr ""
+msgstr "Saturs tikai mākonī"
 
 #: templates/help/using_drive_client.html:31
 msgid ""
@@ -1926,71 +2543,88 @@ msgid ""
 "downloaded is only information about the file, such as its name, its size "
 "and the date it was updated."
 msgstr ""
+"Saturs tikai mākonī ir redzams virtuālajā diskā, bet neaizņem pilnu vietu, "
+"ko aizņemtu pati datne. Datņu pārlūkā datne ir redzama, taču saturs netiek "
+"pilnībā lejupielādēts, līdz tas kļūst nepieciešams. Tiek lejupielādēta tikai"
+" informācija par datni, piemēram, tās nosaukums, izmērs un atjaunināšanas "
+"datums."
 
 #: templates/help/using_drive_client.html:34
 msgid "Synced content"
-msgstr ""
+msgstr "Sinhronizēts saturs"
 
 #: templates/help/using_drive_client.html:36
 msgid ""
 "Synced content is downloaded and saved on the hard drive of your computer. "
 "You can directly edit these files from applications on your computer."
 msgstr ""
+"Sinhronizētais saturs tiek lejupielādēts un saglabāts jūsu datora cietajā "
+"diskā. Šīs datnes varat tieši rediģēt datora lietojumprogrammās."
 
 #: templates/help/using_drive_client.html:39
 msgid "Partially synced content"
-msgstr ""
+msgstr "Daļēji sinhronizēts saturs"
 
 #: templates/help/using_drive_client.html:41
 msgid ""
 "Partially synced folders contain both synced and cloud-only files or "
 "folders."
 msgstr ""
+"Daļēji sinhronizētajās mapēs ir gan sinhronizētas datnes un mapes, gan "
+"tādas, kas atrodas tikai mākonī."
 
 #: templates/help/using_drive_client.html:46
 msgid "Special States"
-msgstr ""
+msgstr "Īpašie stāvokļi"
 
 #: templates/help/using_drive_client.html:47
 msgid ""
 "For files that are already synced to local computer, they may be in 3 other "
 "special states, besides the normal \"synced\" state. "
 msgstr ""
+"Datnes, kas jau ir sinhronizētas ar vietējo datoru, papildus parastajam "
+"\"sinhronizētajam\" stāvoklim var būt vēl 3 īpašos stāvokļos. "
 
 #: templates/help/using_drive_client.html:58
 msgid "Locked by other user"
-msgstr ""
+msgstr "Aizslēdzis cits lietotājs"
 
 #: templates/help/using_drive_client.html:60
 msgid ""
 "The file is locked by other user on the server. You can only open the file "
 "in read-only mode. You cannot modify, delete, rename or move the file."
 msgstr ""
+"Datni serverī ir aizslēdzis cits lietotājs. Datni varat atvērt tikai "
+"lasīšanas režīmā. Datni nevarat mainīt, dzēst, pārsaukt vai pārvietot."
 
 #: templates/help/using_drive_client.html:63
 msgid "Locked by me"
-msgstr ""
+msgstr "Aizslēdzu es"
 
 #: templates/help/using_drive_client.html:65
 msgid ""
 "The file is locked by you. This prevents others from modifying the file."
-msgstr ""
+msgstr "Datni esat aizslēdzis pats. Tas citiem neļauj datni mainīt."
 
 #: templates/help/using_drive_client.html:68
 msgid "Read-only"
-msgstr ""
+msgstr "Tikai lasāma"
 
 #: templates/help/using_drive_client.html:70
 msgid ""
 "The folder or library of this file is shared with read-only permission with "
 "you. You cannot modify, delete or move the file."
 msgstr ""
+"Šīs datnes mape vai bibliotēka ir koplietota ar jums, piešķirot tikai "
+"lasīšanas tiesības. Datni nevarat mainīt, dzēst vai pārvietot."
 
 #: templates/help/using_drive_client.html:74
 msgid ""
 "The Drive client regularly cleans up unused cached files in the background. "
 "You can also limit the local cache space."
 msgstr ""
+"Drive klients regulāri fonā notīra neizmantotās kešotās datnes. Varat arī "
+"ierobežot vietējās kešatmiņas apjomu."
 
 #: templates/help/using_drive_client.html:76
 msgid ""
@@ -1998,10 +2632,13 @@ msgid ""
 "on the current selected server will be shown in the virtual drive. You can "
 "switch among accounts."
 msgstr ""
+"Drive klientā varat pieteikties vairākos kontos. Tomēr virtuālajā diskā tiks"
+" parādītas tikai datnes no pašlaik izvēlētā servera. Varat pārslēgties starp"
+" kontiem."
 
 #: templates/help/using_drive_client.html:80
 msgid "1. Why can't I create new files or delete folders in root folder?"
-msgstr ""
+msgstr "1. Kāpēc saknes mapē nevar izveidot jaunas datnes vai dzēst mapes?"
 
 #: templates/help/using_drive_client.html:81
 msgid ""
@@ -2012,13 +2649,21 @@ msgid ""
 "represents libraries, we don't want users to delete their libraries by "
 "mistake. So the Drive client doesn't support deleting top level folders."
 msgstr ""
+"Virtuālā diska saknes mapē ir tikai bibliotēku mapes. Seafile var "
+"sinhronizēt tikai datnes bibliotēkās. Datnes saknes mapē nevar augšupielādēt"
+" Seafile serverī, tāpēc nav jēgas atbalstīt datņu izveidi saknes mapē. Tā kā"
+" augšējā līmeņa mapes virtuālajā diskā ir bibliotēkas, mēs nevēlamies, lai "
+"lietotāji nejauši izdzēstu savas bibliotēkas. Tāpēc Drive klients neatbalsta"
+" augšējā līmeņa mapju dzēšanu."
 
 #: templates/help/viewing_files_within_web_app.html:6
 msgid ""
 "Some types of files can be directly opened and viewed within the Seafile Web"
 " App. Currently they are:"
 msgstr ""
+"Dažu veidu datnes var tieši atvērt un skatīt Seafile tīmekļa lietotnē. "
+"Pašlaik tās ir:"
 
 #: templates/help/viewing_files_within_web_app.html:13
 msgid "Image files"
-msgstr ""
+msgstr "Attēlu datnes"

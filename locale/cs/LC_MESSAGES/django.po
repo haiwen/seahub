@@ -3625,7 +3625,7 @@ msgstr "Vypršel časový limit přihlášení, klikněte prosím znovu na tlač
 #, python-brace-format
 #| msgid "Library %s not found."
 msgid "Library {repo_id} not found."
-msgstr ""
+msgstr "Knihovna {repo_id} nebyla nalezena."
 
 #: seahub/views/sysadmin.py:158
 msgid "Commit id missing."

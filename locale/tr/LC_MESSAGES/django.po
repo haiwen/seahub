@@ -3611,7 +3611,7 @@ msgstr "Giriş zaman aşımı, lütfen istemciye tekrar giriş düğmesine tıkl
 #, python-brace-format
 #| msgid "Library %s not found."
 msgid "Library {repo_id} not found."
-msgstr ""
+msgstr "{repo_id} kütüphanesi bulunamadı."
 
 #: seahub/views/sysadmin.py:158
 msgid "Commit id missing."
