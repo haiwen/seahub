@@ -1,0 +1,12 @@
+<script type="text/javascript">
+  (function () {
+    var mode;
+    try {
+      mode = localStorage.getItem('sf_color_mode');
+    } catch (error) {}
+    if (mode !== 'light' && mode !== 'dark') {
+      mode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.body.setAttribute('data-bs-theme', mode);
+  })();
+</script>

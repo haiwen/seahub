@@ -8,6 +8,7 @@ import collaboratorAPI from '@/api/collaborator-api';
 import SDocServerApi from '@/api/sdoc-server-api';
 import { seafileAPI } from '@/api/seafile-api';
 import wikiAPI from '@/api/wiki-api';
+import ColorMode from '@/components/color-mode';
 import CustomDropdown from '@/components/dropdown';
 import Icon from '@/components/icon';
 import Loading from '@/components/loading';
@@ -418,6 +419,7 @@ class MainPanel extends Component {
             </div>
           </div>
           <div className='d-flex align-items-center'>
+            {document.body.hasAttribute('data-wiki-editor-theme') && <ColorMode variant="icon" />}
             {Utils.isDesktop() && menuItems.length > 0 && <CommentPlugin unseenNotificationsCount={this.state.unseenNotificationsCount} setIsShowRightPanel={this.setIsShowRightPanel} />}
             {Utils.isDesktop() && menuItems.length > 0 && <WikiCollaboratorsOperation isOpenSocket={isOpenSocket} docUuid={this.state.docUuid} token={seadoc_access_token} />}
             <CustomDropdown

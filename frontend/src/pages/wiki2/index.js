@@ -25,6 +25,7 @@ import '@/css/layout.css';
 import '@/css/toolbar.css';
 import '@/css/search.css';
 import './wiki.css';
+import './index.css';
 
 dayjs.locale(lang);
 

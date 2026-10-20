@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { navigate } from '@gatsbyjs/reach-router';
+import { subscribeColorMode } from '@/components/color-mode';
 import ResizeBar from '@/components/resize-bar';
 import {
   DRAG_HANDLER_HEIGHT,
@@ -76,19 +77,12 @@ class App extends Component {
     this.navigateClientUrlToLib();
 
     this.initCurrentTabByLocation();
-    this.colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    this.colorSchemeQuery.addEventListener('change', this.handleColorSchemeChange);
+    this.unsubscribeColorMode = subscribeColorMode(() => this.forceUpdate());
   }
 
   componentWillUnmount() {
-    this.colorSchemeQuery.removeEventListener('change', this.handleColorSchemeChange);
+    this.unsubscribeColorMode();
   }
-
-  handleColorSchemeChange = (e) => {
-    const isDark = e.matches;
-    document.body.setAttribute('data-bs-theme', isDark ? 'dark' : 'light');
-    this.forceUpdate();
-  };
 
   initCurrentTabByLocation = () => {
     // when visit the siteRoot page, highlight the 'Libraries' tab in the side nav.

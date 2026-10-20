@@ -3,6 +3,7 @@ import { UncontrolledPopover } from 'reactstrap';
 import Picker from '@emoji-mart/react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import { useColorMode } from '@/components/color-mode';
 import { gettext, wikiPermission } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import { data } from './../utils/emoji-utils';
@@ -10,6 +11,7 @@ import { data } from './../utils/emoji-utils';
 const PageIcon = ({ currentPageConfig, onUpdatePageConfig }) => {
   const popoverRef = useRef(null);
   const isDesktop = Utils.isDesktop();
+  const colorMode = useColorMode(document.body.hasAttribute('data-wiki-editor-theme'));
 
   const handleSetIcon = useCallback((emoji) => {
     onUpdatePageConfig && onUpdatePageConfig(currentPageConfig.id, {
@@ -55,7 +57,7 @@ const PageIcon = ({ currentPageConfig, onUpdatePageConfig }) => {
               skinTonePosition="none"
               locale={window.seafile.lang.slice(0, 2)}
               maxFrequentRows={2}
-              theme="light"
+              theme={colorMode}
             />
           </div>
         </UncontrolledPopover>

@@ -2,6 +2,8 @@
 {% load i18n %}
 {% load render_bundle from webpack_loader %}
 {% load seahub_tags %}
+{% block body_theme_attributes %}data-wiki-editor-theme="true"{% endblock %}
+{% block color_mode_init %}{% include "snippets/color_mode_init.html" %}{% endblock %}
 {% block extra_ogp_tags %}
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="{{ site_name }}">
