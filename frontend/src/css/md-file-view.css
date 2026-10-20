@@ -16,4 +16,5 @@
   border: 1px solid #ccc;
   box-shadow: 0 0 6px #ccc;
   padding: 70px 75px;
+  min-width: 800px;
 }
