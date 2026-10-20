@@ -1,6 +1,5 @@
 import json
 import logging
-import re
 
 from django.db import transaction
 from rest_framework import status
@@ -14,6 +13,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, is_wiki_repo
 from seahub.base.models import Webhooks, WebhookJobs
 from seahub.share.utils import is_repo_admin, normalize_custom_permission_name
+from seahub.utils.webhook import validate_webhook_url
 from seaserv import seafile_api
 
 logger = logging.getLogger(__name__)
@@ -45,11 +45,9 @@ class WebhooksView(APIView):
     def post(self, request, repo_id):
         # arguments check
         url = request.data.get('url')
-        url = url.strip() if url else url
-        if not url:
+        if not isinstance(url, str) or not url.strip():
             return api_error(status.HTTP_400_BAD_REQUEST, 'url invalid.')
-        if not re.match(r'^https?://', url):
-            return api_error(status.HTTP_400_BAD_REQUEST, 'url invalid')
+        url = url.strip()
 
         secret = request.data.get('secret')
         secret = secret.strip() if secret else secret
@@ -66,7 +64,12 @@ class WebhooksView(APIView):
         if not is_repo_admin(request.user.username, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
+        try:
+            validate_webhook_url(url)
+        except ValueError:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'url must resolve only to public IP addresses.')
+
         if Webhooks.objects.filter(repo_id=repo_id, url=url).exists():
             return api_error(status.HTTP_409_CONFLICT, 'Webhook exists.')
 
@@ -92,10 +95,9 @@ class WebhooksView(APIView):
     def put(self, request, repo_id, webhook_id):
         # arguments check
         url = request.data.get('url')
-        if url:
-            url = url.strip()
-        if not re.match(r'^https?://', url):
+        if not isinstance(url, str) or not url.strip():
             return api_error(status.HTTP_400_BAD_REQUEST, 'url invalid')
+        url = url.strip()
         secret = request.data.get('secret')
         if secret:
             secret = secret.strip()
@@ -118,6 +120,11 @@ class WebhooksView(APIView):
         if not is_repo_admin(request.user.username, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            validate_webhook_url(url)
+        except ValueError:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'url must resolve only to public IP addresses.')
 
         if Webhooks.objects.filter(repo_id=repo_id, url=url).exclude(id=webhook_id).exists():
             return api_error(status.HTTP_409_CONFLICT, 'Webhook exists.')
