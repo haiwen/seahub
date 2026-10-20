@@ -1,13 +1,12 @@
 import React, { Fragment } from 'react';
 import { DropdownItem } from 'reactstrap';
 import { Link, navigate } from '@gatsbyjs/reach-router';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
 import { userAPI } from '@/api/user-api';
 import { LIST_MODE } from '@/constants/view-mode';
 import { gettext, siteRoot, isPro, username, folderPermEnabled, isSystemStaff, enableResetEncryptedRepoPassword, isEmailConfigured, enableStorageClasses } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { formatWithTimezone } from '@/utils/time';
 import { Utils } from '@/utils/utils';
 import ChangeRepoPasswordDialog from '../../components/dialog/change-repo-password-dialog';
@@ -29,8 +28,6 @@ import CustomDropdown from '../dropdown';
 import Icon from '../icon';
 import Rename from '../rename';
 import toaster from '../toast';
-
-dayjs.extend(relativeTime);
 
 const propTypes = {
   idx: PropTypes.number,

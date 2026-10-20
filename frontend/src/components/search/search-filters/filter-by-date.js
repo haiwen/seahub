@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import classNames from 'classnames';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import { DROPDOWN_MENU_OFFSET_DEFAULT } from '@/components/dropdown/utils';
 import { SEARCH_FILTERS_KEY, SEARCH_FILTER_BY_DATE_OPTION_KEY, SEARCH_FILTER_BY_DATE_TYPE_KEY } from '@/constants';
 import { gettext } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 import OpIcon from '../../../components/op-icon';
 import Picker from '../../date-and-time-picker';

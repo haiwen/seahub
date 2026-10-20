@@ -2,8 +2,6 @@ import React, { Component, Fragment } from 'react';
 import { DropdownItem } from 'reactstrap';
 import { Link, navigate } from '@gatsbyjs/reach-router';
 import classnames from 'classnames';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
 import EmptyTip from '@/components/empty-tip';
@@ -13,9 +11,8 @@ import OpIcon from '@/components/op-icon';
 import SortMenu from '@/components/sort-menu';
 import toaster from '@/components/toast';
 import { gettext, siteRoot, enableVideoThumbnail, enablePDFThumbnail, thumbnailDefaultSize } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
-
-dayjs.extend(relativeTime);
 
 class Content extends Component {
 

@@ -5,8 +5,6 @@ import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { navigate } from '@gatsbyjs/reach-router';
 import classnames from 'classnames';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
 import metadataAPI from '@/api/metadata-api';
@@ -67,12 +65,11 @@ import {
   thumbnailSizeForOriginal,
   username
 } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import EventBus, { eventBus } from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
 
 import '@/css/lib-content-view.css';
-
-dayjs.extend(relativeTime);
 
 const propTypes = {
   eventBus: PropTypes.object,

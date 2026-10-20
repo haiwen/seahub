@@ -1,6 +1,5 @@
 import React from 'react';
 import { navigate } from '@gatsbyjs/reach-router';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import { createRoot } from 'react-dom/client';
 import { seafileAPI } from '@/api/seafile-api';
@@ -12,6 +11,7 @@ import ModalPortal from '@/components/modal-portal';
 import Paginator from '@/components/paginator';
 import CommonToolbar from '@/components/toolbar/common-toolbar';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { formatWithTimezone } from '@/utils/time';
 import { Utils } from '@/utils/utils';
 

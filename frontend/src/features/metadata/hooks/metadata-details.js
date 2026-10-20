@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useCallback, useState, useMemo, useRef } from 'react';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 import metadataAPI from '@/api/metadata-api';
 import tagsAPI from '@/api/tag-api';
 import toaster from '@/components/toast';
 import { SYSTEM_FOLDERS } from '@/constants';
 import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { useMetadataStatus } from '@/hooks';
+import dayjs from '@/utils/dayjs';
 import { eventBus } from '@/utils/event-bus';
 import ObjectUtils from '@/utils/object';
 import { Utils } from '@/utils/utils';
@@ -19,8 +18,6 @@ import {
   getServerOptions, getFileNameFromRecord, getParentDirFromRecord
 } from '../utils/cell';
 import { getColumnByKey, getColumnOptions, getColumnOriginName } from '../utils/column';
-
-dayjs.extend(utc);
 
 const MetadataDetailsContext = React.createContext(null);
 

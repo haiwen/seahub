@@ -1,6 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 import deepCopy from 'deep-copy';
 import PropTypes from 'prop-types';
 import metadataAPI from '@/api/metadata-api';
@@ -8,6 +6,7 @@ import CenteredLoading from '@/components/centered-loading';
 import toaster from '@/components/toast';
 import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 import { PER_LOAD_NUMBER, FACE_RECOGNITION_VIEW_ID, UTC_FORMAT_DEFAULT, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { useCollaborators } from '../../../hooks/collaborators';
@@ -20,8 +19,6 @@ import Gallery from '../../gallery/main';
 
 import './index.css';
 import '../../gallery/index.css';
-
-dayjs.extend(utc);
 
 const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onAddPeoplePhotos, onSetPeoplePhoto, onRemovePeoplePhotos }) => {
   const [isLoading, setLoading] = useState(true);

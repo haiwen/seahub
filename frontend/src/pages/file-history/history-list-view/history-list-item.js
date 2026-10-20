@@ -1,13 +1,11 @@
 import React from 'react';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import CustomDropdown from '@/components/dropdown';
 import { gettext, filePath } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import URLDecorator from '@/utils/url-decorator';
 
 import '@/css/history-record-item.css';
-
-dayjs.locale(window.app.config.lang);
 
 const propTypes = {
   index: PropTypes.number.isRequired,

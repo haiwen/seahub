@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import metadataAPI from '@/api/metadata-api';
 import CenteredLoading from '@/components/centered-loading';
 import Icon from '@/components/icon';
 import SeahubModalHeader from '@/components/seahub-modal-header';
 import { gettext } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { formatWithTimezone } from '@/utils/time';
 import { Utils } from '@/utils/utils';
 

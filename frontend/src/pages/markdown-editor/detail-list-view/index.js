@@ -1,14 +1,11 @@
 import React from 'react';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import { gettext } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 
 import '@/css/dirent-detail.css';
 import './index.css';
-
-dayjs.extend(relativeTime);
 
 const { filePath } = window.app.pageOptions;
 

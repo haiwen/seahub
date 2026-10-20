@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from '@gatsbyjs/reach-router';
 import classnames from 'classnames';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import { repoShareAdminAPI } from '@/api/repo-share-admin-api';
 import { seafileAPI } from '@/api/seafile-api';
 import { gettext, siteRoot } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import EmptyTip from '../../../components/empty-tip';

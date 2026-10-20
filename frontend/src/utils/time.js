@@ -1,8 +1,4 @@
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import 'dayjs/locale/lv';
-
-dayjs.extend(relativeTime);
+import dayjs from './dayjs';
 
 const DEFAULT_TIMEZONE_FORMAT = 'MMMM D, YYYY, h:mm:ss A';
 

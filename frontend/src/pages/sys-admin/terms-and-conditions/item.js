@@ -1,8 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { processor } from '@seafile/seafile-editor';
 import classnames from 'classnames';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import CommonOperationConfirmationDialog from '@/components/dialog/common-operation-confirmation-dialog';
 import OpMenu from '@/components/dialog/op-menu';
@@ -10,10 +8,9 @@ import AddOrUpdateTermDialog from '@/components/dialog/sysadmin-dialog/sysadmin-
 import TermsPreviewDialog from '@/components/dialog/terms-preview-dialog';
 import ModalPortal from '@/components/modal-portal';
 import { gettext } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import getPreviewContent from '@/utils/markdown-utils';
 import { Utils } from '@/utils/utils';
-
-dayjs.extend(relativeTime);
 
 class Item extends Component {
 

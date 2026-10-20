@@ -1,8 +1,8 @@
 import React from 'react';
 import { SeafileCommentEditor, commentProcessor } from '@seafile/comment-editor';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import { gettext } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import CustomDropdown from '../../dropdown';
 import CommentDeletePopover from './comment-delete-popover';
 

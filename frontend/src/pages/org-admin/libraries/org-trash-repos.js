@@ -1,8 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
 import classnames from 'classnames';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import { orgAdminAPI } from '@/api/org-admin-api';
 import MainPanelTopbar from '@/components/admin/layout/main-panel-topbar';
@@ -14,11 +12,10 @@ import ModalPortal from '@/components/modal-portal';
 import Paginator from '@/components/paginator';
 import toaster from '@/components/toast/index';
 import { gettext, orgID } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 import UserLink from '../user-link';
 import ReposNav from './org-repo-nav';
-
-dayjs.extend(relativeTime);
 
 class Content extends Component {
 

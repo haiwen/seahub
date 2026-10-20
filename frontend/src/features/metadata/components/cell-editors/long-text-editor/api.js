@@ -1,5 +1,5 @@
-import dayjs from 'dayjs';
 import { seafileAPI } from '@/api/seafile-api';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 
 const getImageFileNameWithTimestamp = () => {

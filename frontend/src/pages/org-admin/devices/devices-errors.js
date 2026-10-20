@@ -1,8 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
 import { Link } from '@gatsbyjs/reach-router';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import { orgAdminAPI } from '@/api/org-admin-api';
 import MainPanelTopbar from '@/components/admin/layout/main-panel-topbar';
@@ -11,13 +9,11 @@ import Loading from '@/components/loading';
 import Paginator from '@/components/paginator';
 import toaster from '@/components/toast';
 import { siteRoot, gettext, orgID } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { formatWithTimezone } from '@/utils/time';
 import { Utils } from '@/utils/utils';
 import UserLink from '../user-link';
 import DevicesNav from './devices-nav';
-
-
-dayjs.extend(relativeTime);
 
 class Content extends Component {
 

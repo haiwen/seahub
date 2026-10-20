@@ -1,21 +1,7 @@
-import dayjs from 'dayjs';
-import localizedFormat from 'dayjs/plugin/localizedFormat';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import { lang } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 import FileTag from './file-tag';
-
-import 'dayjs/locale/ar';
-import 'dayjs/locale/de';
-import 'dayjs/locale/en';
-import 'dayjs/locale/es';
-import 'dayjs/locale/fr';
-import 'dayjs/locale/lv';
-import 'dayjs/locale/ru';
-import 'dayjs/locale/zh-cn';
-
-dayjs.extend(relativeTime);
-dayjs.extend(localizedFormat);
 
 class Dirent {
   constructor(json) {

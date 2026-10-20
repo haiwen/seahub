@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
 import { Button, Input, InputGroup } from 'reactstrap';
 import copy from 'copy-to-clipboard';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import { shareLinkAPI } from '@/api/share-link-api';
 import ShareLink from '@/models/share-link';
 import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, canSendShareLinkEmail } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 import BackIcon from '../../components/back-icon';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';

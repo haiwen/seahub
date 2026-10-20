@@ -1,11 +1,10 @@
 import React from 'react';
 import { Button, Modal, ModalBody, ModalFooter, Alert } from 'reactstrap';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
 import SeahubModalHeader from '@/components/seahub-modal-header';
 import { gettext, siteRoot } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 
 const propTypes = {
@@ -14,7 +13,6 @@ const propTypes = {
   toggleDialog: PropTypes.func.isRequired
 };
 
-dayjs.extend(relativeTime);
 
 class SearchFileDialog extends React.Component {
 

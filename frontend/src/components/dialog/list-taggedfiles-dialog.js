@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
 import SeahubModalHeader from '@/components/seahub-modal-header';
 import { gettext, siteRoot, LARGE_DIALOG_STYLE } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 import Icon from '../icon';
 import toaster from '../toast';

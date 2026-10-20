@@ -1,17 +1,13 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
-import { gettext, lang } from '@/utils/constants';
+import { gettext } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 import Icon from '../../icon';
 import ModalPortal from '../../modal-portal';
 import toaster from '../../toast';
 import CommonOperationConfirmationDialog from '../common-operation-confirmation-dialog';
-
-dayjs.locale(lang);
-dayjs.extend(relativeTime);
 
 const RepoItem = ({ repo, filterRestoredRepo, enableUserCleanTrash }) => {
   const repoID = useMemo(() => repo.repo_id, [repo]);

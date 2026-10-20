@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import dayjs from 'dayjs';
 import { systemAdminAPI } from '@/api/system-admin-api';
 import Icon from '@/components/icon';
 import Loading from '@/components/loading';
 import Tooltip from '@/components/tooltip';
 import { gettext } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 import '@/css/system-stat.css';
 

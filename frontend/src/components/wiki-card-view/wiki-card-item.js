@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import wikiAPI from '@/api/wiki-api';
 import { siteRoot, gettext, username, canPublishWiki } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 import ConvertWikiDialog from '../dialog/convert-wiki-dialog';
 import DeleteWikiDialog from '../dialog/delete-wiki-dialog';
@@ -18,8 +17,6 @@ import EditWikiPopover from '../popover/edit-wiki-popover';
 import PublishedWikiEntrance from '../published-wiki-entrance';
 import toaster from '../toast';
 import WikiIcon from './wiki-icon';
-
-dayjs.extend(relativeTime);
 
 const propTypes = {
   wiki: PropTypes.object.isRequired,

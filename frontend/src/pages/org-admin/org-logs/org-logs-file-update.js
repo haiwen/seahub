@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import { orgAdminAPI } from '@/api/org-admin-api';
 import FileUpdateDetailDialog from '@/components/dialog/org-logs-file-update-detail';
@@ -7,10 +6,9 @@ import CustomDropdown from '@/components/dropdown';
 import ModalPortal from '@/components/modal-portal';
 import toaster from '@/components/toast';
 import OrgLogsFileUpdateEvent from '@/models/org-logs-file-update';
-import { siteRoot, gettext, lang } from '@/utils/constants';
+import { siteRoot, gettext } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
-
-dayjs.locale(lang);
 
 class OrgLogsFileUpdate extends Component {
 

@@ -1,9 +1,9 @@
-import dayjs from 'dayjs';
 import deepCopy from 'deep-copy';
 import { getColumnByKey } from '@/components/sf-table/utils/column';
 import { getRowById, getRowsByIds } from '@/components/sf-table/utils/table';
 import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { PER_LOAD_NUMBER } from '@/features/metadata/constants';
+import dayjs from '@/utils/dayjs';
 import { ALL_TAGS_SORT, TAGS_DEFAULT_SORT } from '../constants/sort';
 import TagsData from '../model/tagsData';
 import { normalizeColumns } from '../utils/column';

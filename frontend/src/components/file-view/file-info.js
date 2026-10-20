@@ -1,7 +1,7 @@
 import React from 'react';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import { isPro, gettext, mediaUrl, siteRoot } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import OpIcon from '../../components/op-icon';
 import InternalLinkOperation from '../operations/internal-link-operation';
 

@@ -88,5 +88,30 @@
         }
       }
     ]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["src/**/*.{js,jsx,mjs}"],
+      "excludedFiles": ["src/utils/dayjs.js"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "dayjs",
+                "message": "Import dayjs from the shared utils/dayjs module."
+              }
+            ],
+            "patterns": [
+              {
+                "group": ["dayjs/*"],
+                "message": "Configure dayjs plugins and locales in src/utils/dayjs.js."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
 }

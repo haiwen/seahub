@@ -1,13 +1,10 @@
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
+import dayjs from '@/utils/dayjs';
 import { UTC_FORMAT_DEFAULT, PRIVATE_COLUMN_KEY } from '../../constants';
 import Column from '../../model/column';
 import View from '../../model/metadata/view';
 import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
 import { getColumnOriginName } from '../../utils/column';
 import { OPERATION_TYPE } from './constants';
-
-dayjs.extend(utc);
 
 export default function apply(data, operation) {
   const { op_type } = operation;

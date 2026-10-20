@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 import classnames from 'classnames';
 import copy from 'copy-to-clipboard';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import { gettext } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 import ClickOutside from '../click-outside';

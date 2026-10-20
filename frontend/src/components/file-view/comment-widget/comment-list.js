@@ -1,11 +1,11 @@
 import React from 'react';
 import { SeafileCommentEditor } from '@seafile/comment-editor';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
 import OpIcon from '@/components/op-icon';
 import Tooltip from '@/components/tooltip';
 import { gettext } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 import CustomDropdown from '../../dropdown';
 import Icon from '../../icon';
