@@ -6,7 +6,7 @@ import copy
 from django.db import models
 
 from seahub.utils import get_no_duplicate_obj_name
-from seahub.repo_metadata.constants import FACE_RECOGNITION_VIEW_ID
+from seahub.repo_metadata.constants import DEFAULT_GLOBAL_HIDDEN_COLUMNS, FACE_RECOGNITION_VIEW_ID
 
 
 logger = logging.getLogger(__name__)
@@ -49,6 +49,12 @@ class RepoMetadataManager(models.Manager):
             metadata.ai_processing_status = ''
             metadata.from_commit = from_commit
             metadata.to_commit = None
+
+        global_hidden_columns = json.loads(metadata.global_hidden_columns) if metadata.global_hidden_columns else []
+        for column_key in DEFAULT_GLOBAL_HIDDEN_COLUMNS:
+            if column_key not in global_hidden_columns:
+                global_hidden_columns.append(column_key)
+        metadata.global_hidden_columns = json.dumps(global_hidden_columns)
         metadata.save()
         return metadata
 
