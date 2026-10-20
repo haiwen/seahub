@@ -220,6 +220,62 @@ class AdminUserTest(BaseTestCase):
         ccnet_email = ccnet_api.get_emailuser(self.tmp_email)
         assert ccnet_email.is_active == False
 
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
+    def test_update_is_active_logs_admin_operation(self, mock_has_permission):
+
+        mock_has_permission.return_value = True
+        self.login_as(self.admin)
+
+        url = reverse('api-v2.1-admin-admin-operation-logs')
+
+        # the user is inactive by default, so setting it inactive again
+        # should not write a log
+        data = {"email": self.tmp_email, "is_active": 'False'}
+        resp = self.client.put(self.url, json.dumps(data),
+                'application/json')
+        self.assertEqual(200, resp.status_code)
+
+        resp = self.client.get(url)
+        json_resp = json.loads(resp.content)
+        assert json_resp['total_count'] == 0
+
+        # active the user
+        data = {"email": self.tmp_email, "is_active": 'true'}
+        resp = self.client.put(self.url, json.dumps(data),
+                'application/json')
+        self.assertEqual(200, resp.status_code)
+
+        resp = self.client.get(url)
+        json_resp = json.loads(resp.content)
+        assert json_resp['total_count'] == 1
+        log = json_resp['data'][0]
+        assert log['operation'] == 'user_activate'
+        assert log['email'] == self.admin.username
+        # `detail.email` is the login email used for the user page link,
+        # `detail.contact_email` is shown in the log page
+        assert log['detail']['email'] == self.tmp_email
+        assert log['detail']['contact_email'] == ''
+
+        # active the user again, nothing changed, so no new log
+        resp = self.client.put(self.url, json.dumps(data),
+                'application/json')
+        self.assertEqual(200, resp.status_code)
+
+        resp = self.client.get(url)
+        json_resp = json.loads(resp.content)
+        assert json_resp['total_count'] == 1
+
+        # inactive the user
+        data = {"email": self.tmp_email, "is_active": 'False'}
+        resp = self.client.put(self.url, json.dumps(data),
+                'application/json')
+        self.assertEqual(200, resp.status_code)
+
+        resp = self.client.get(url)
+        json_resp = json.loads(resp.content)
+        assert json_resp['total_count'] == 2
+        assert json_resp['data'][0]['operation'] == 'user_deactivate'
+
     def test_update_is_staff(self):
 
         self.login_as(self.admin)

@@ -106,6 +106,8 @@ class Item extends Component {
       case 'user_add': return gettext('Add User');
       case 'user_delete': return gettext('Delete User');
       case 'user_migrate': return gettext('Migrate User');
+      case 'user_activate': return gettext('Active');
+      case 'user_deactivate': return gettext('Inactive');
       case 'group_member_add': return gettext('Add User to Group');
       case 'group_member_delete': return gettext('Delete User from Group');
       default: return '';
@@ -193,6 +195,14 @@ class Item extends Component {
           .replace('{user_to}', '<span class="font-weight-bold">' + detail.to + '</span>');
         return detailText;
 
+      case 'user_activate':
+      case 'user_deactivate':
+        // `detail.email` is the login email, and `detail.contact_email` is
+        // the contact email, fall back to the login email when it is empty
+        detailText = '<a href="' + userPageUrl + '">' +
+          Utils.HTMLescape(detail.contact_email || detail.email) + '</a>';
+        return detailText;
+
       case 'group_member_add':
         detailText = gettext('Added user {user} to group {group}')
           .replace('{user}', '<span class="font-weight-bold">' + detail.user + '</span>')
@@ -211,9 +221,16 @@ class Item extends Component {
 
   render() {
     let { item } = this.props;
+    let isUserStatusLog = item.operation == 'user_activate' || item.operation == 'user_deactivate';
+    let contactEmail = isUserStatusLog ? (item.contact_email || item.email) : item.email;
+    let userPageUrl = siteRoot + 'sys/users/' + encodeURIComponent(item.email) + '/';
     return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-        <td><UserLink email={item.email} name={item.name} /></td>
+        <td>
+          {isUserStatusLog ?
+            <a href={userPageUrl}>{contactEmail}</a> :
+            <UserLink email={item.email} name={item.name} />}
+        </td>
         <td>{this.getOperationText(item.operation)}</td>
         <td>
           <span dangerouslySetInnerHTML={{ __html: this.getOperationDetail(item) }}></span>

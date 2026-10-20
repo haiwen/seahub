@@ -58,7 +58,8 @@ from seahub.utils.licenseparse import user_number_over_limit
 from seahub.institutions.models import Institution
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.admin_log.signals import admin_operation
-from seahub.admin_log.models import USER_DELETE, USER_ADD
+from seahub.admin_log.models import USER_DELETE, USER_ADD, \
+        USER_ACTIVATE, USER_DEACTIVATE
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 from seahub.group.utils import group_id_to_name
 from seahub.institutions.models import InstitutionAdmin
@@ -1397,6 +1398,7 @@ class AdminUser(APIView):
         if password and not user_local_password_enabled(user_obj):
             return api_error(status.HTTP_400_BAD_REQUEST, _('Unable to reset password.'))
 
+        old_is_active = user_obj.is_active
         try:
             update_user_info(request,
                              user=user_obj,
@@ -1423,6 +1425,19 @@ class AdminUser(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if is_active is not None and old_is_active != user_obj.is_active:
+            # send admin operation log signal
+            profile = Profile.objects.get_profile_by_user(user_obj.email)
+            admin_op_detail = {
+                # login email, used to link to the user page
+                "email": user_obj.email,
+                # shown in the log page, empty if the user has not set it
+                "contact_email": profile.contact_email if profile and profile.contact_email else '',
+            }
+            operation = USER_ACTIVATE if user_obj.is_active else USER_DEACTIVATE
+            admin_operation.send(sender=None, admin_name=request.user.username,
+                                 operation=operation, detail=admin_op_detail)
 
         update_status_tip = ''
         if is_active is not None:
