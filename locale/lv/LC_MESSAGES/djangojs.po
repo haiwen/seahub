@@ -11539,6 +11539,12 @@ msgstr ""
 #~ msgid "No faces"
 #~ msgstr "No faces"
 
+# Latvian entry for the contextual open-with string added by pgettext in
+# frontend/src/utils/text-translation.js
+#: frontend/src/utils/text-translation.js:86
+msgctxt "Open with"
+msgid "Default"
+msgstr "Noklusējuma programma"
 # Latvian entries for source strings added/changed after the last Transifex sync
 msgid "Share with user"
 msgstr "Koplietot ar lietotāju"

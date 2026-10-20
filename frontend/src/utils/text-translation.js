@@ -1,4 +1,4 @@
-import { gettext } from './constants';
+import { gettext, pgettext } from './constants';
 
 // item --> '' : {key : '', value : gettext('')};
 const TextTranslation = {
@@ -81,7 +81,9 @@ const TextTranslation = {
   },
   OPEN_WITH_DEFAULT: {
     key: 'Open with Default',
-    value: gettext('Default')
+    // Contextual translation: 'Default' is also used as a user-role filter
+    // value (see orgs-content.js), where Latvian needs a different word.
+    value: pgettext('Open with', 'Default')
   },
   OPEN_VIA_CLIENT: {
     key: 'Open via Client',
