@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import classnames from 'classnames';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
 import Icon from '@/components/icon';
@@ -8,11 +7,10 @@ import Loading from '@/components/loading';
 import Switch from '@/components/switch';
 import toaster from '@/components/toast';
 import { gettext, historyRepoID, PER_PAGE } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 import { getCurrentAndLastVersion, getLastVersion } from './helper';
 import HistoryVersion from './history-version';
-
-dayjs.locale(window.app.config.lang);
 
 const { docUuid } = window.fileHistory.pageOptions;
 

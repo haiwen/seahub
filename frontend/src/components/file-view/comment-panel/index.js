@@ -1,7 +1,7 @@
 import React from 'react';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 import toaster from '../../toast';
 import CommentList from '../comment-widget/comment-list';

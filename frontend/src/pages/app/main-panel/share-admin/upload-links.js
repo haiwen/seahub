@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import { DropdownItem } from 'reactstrap';
 import { Link } from '@gatsbyjs/reach-router';
 import classnames from 'classnames';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import { repoShareAdminAPI } from '@/api/repo-share-admin-api';
 import { seafileAPI } from '@/api/seafile-api';
@@ -16,6 +15,7 @@ import OpIcon from '@/components/op-icon';
 import toaster from '@/components/toast';
 import UploadLink from '@/models/upload-link';
 import { gettext, siteRoot } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 
 import '@/css/share-admin-links.css';

@@ -1,12 +1,11 @@
 import React from 'react';
 import { Button, Modal, ModalBody, ModalFooter, Input, Alert } from 'reactstrap';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
 import SeahubModalHeader from '@/components/seahub-modal-header';
 import Repo from '@/models/repo';
 import { gettext } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 
 const shareRepoListItemProps = {
@@ -15,7 +14,6 @@ const shareRepoListItemProps = {
   onPermissionChange: PropTypes.func.isRequired,
 };
 
-dayjs.extend(relativeTime);
 
 class ShareRepoListItem extends React.Component {
 

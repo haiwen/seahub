@@ -1,18 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from '@gatsbyjs/reach-router';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
 import EmptyTip from '@/components/empty-tip';
 import Icon from '@/components/icon';
 import Loading from '@/components/loading';
 import toaster from '@/components/toast';
-import { gettext, siteRoot, lang, trashReposExpireDays } from '@/utils/constants';
+import { gettext, siteRoot, trashReposExpireDays } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
-
-dayjs.locale(lang);
-dayjs.extend(relativeTime);
 
 class MyLibsDeleted extends Component {
 

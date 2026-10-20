@@ -1,15 +1,12 @@
 import React, { Fragment } from 'react';
 import { Link } from '@gatsbyjs/reach-router';
 import classnames from 'classnames';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import Icon from '@/components/icon';
 import Loading from '@/components/loading';
 import { gettext } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
-
-dayjs.extend(relativeTime);
 
 class DirentItem extends React.Component {
 

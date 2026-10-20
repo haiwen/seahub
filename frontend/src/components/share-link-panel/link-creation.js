@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
 import { Button, Form, FormGroup, Label, Input, InputGroup, Alert } from 'reactstrap';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
 import { shareLinkAPI } from '@/api/share-link-api';
 import ShareLink from '@/models/share-link';
 import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, shareLinkForceUsePassword, shareLinkPasswordMinLength, shareLinkPasswordStrengthLevel, isEmailConfigured, canUseGlobalAddressBook } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 import BackIcon from '../../components/back-icon';
 import Icon from '../icon';

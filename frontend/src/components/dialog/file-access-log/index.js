@@ -1,18 +1,16 @@
 import React from 'react';
 import { Modal, ModalBody } from 'reactstrap';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import { fileAccessLogAPI } from '@/api/file-access-log-api';
 import SeahubModalHeader from '@/components/seahub-modal-header';
 import { gettext, siteRoot } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 import EmptyTip from '../../empty-tip';
 import Loading from '../../loading';
 import toaster from '../../toast';
 
 import './index.css';
-
-dayjs.locale(window.app.config.lang);
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,

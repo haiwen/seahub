@@ -1,7 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import { systemAdminAPI } from '@/api/system-admin-api';
 import MainPanelTopbar from '@/components/admin/layout/main-panel-topbar';
@@ -14,11 +12,10 @@ import Loading from '@/components/loading';
 import Selector from '@/components/single-selector';
 import toaster from '@/components/toast';
 import { gettext, username } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 import UserLink from '../user-link';
 import OrgNav from './org-nav';
-
-dayjs.extend(relativeTime);
 
 class Content extends Component {
 

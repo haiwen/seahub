@@ -1,10 +1,10 @@
 import React from 'react';
 import { Modal, ModalBody } from 'reactstrap';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
 import SeahubModalHeader from '@/components/seahub-modal-header';
 import { gettext, siteRoot } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 import Icon from '../../icon';
 import Loading from '../../loading';

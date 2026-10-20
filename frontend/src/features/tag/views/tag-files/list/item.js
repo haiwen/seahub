@@ -1,7 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
 import classnames from 'classnames';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import FileTagsFormatter from '@/features/metadata/components/cell-formatter/file-tags';
 import {
@@ -10,12 +8,11 @@ import {
 } from '@/features/metadata/utils/cell';
 import { openFile } from '@/features/metadata/utils/file';
 import { gettext, siteRoot, thumbnailDefaultSize } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { formatWithTimezone } from '@/utils/time';
 import { Utils } from '@/utils/utils';
 
 import './index.css';
-
-dayjs.extend(relativeTime);
 
 const TagFile = ({ repoID, file, tagsData, selectedFileIds, onSelectFile, openImagePreview, onContextMenu }) => {
   const [highlight, setHighlight] = useState(false);

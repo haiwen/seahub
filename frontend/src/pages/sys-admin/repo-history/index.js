@@ -1,5 +1,4 @@
 import React from 'react';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import { createRoot } from 'react-dom/client';
 import { systemAdminAPI } from '@/api/system-admin-api';
@@ -8,6 +7,7 @@ import Loading from '@/components/loading';
 import Paginator from '@/components/paginator';
 import CommonToolbar from '@/components/toolbar/common-toolbar';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { formatWithTimezone } from '@/utils/time';
 import { Utils } from '@/utils/utils';
 

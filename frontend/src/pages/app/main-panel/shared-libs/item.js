@@ -1,8 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { DropdownItem } from 'reactstrap';
 import { Link, navigate } from '@gatsbyjs/reach-router';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
 import ShareDialog from '@/components/dialog/share-dialog';
@@ -14,12 +12,10 @@ import toaster from '@/components/toast';
 import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { LIST_MODE } from '@/constants/view-mode';
 import { gettext, siteRoot, isPro } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import EventBus from '@/utils/event-bus';
 import { formatWithTimezone } from '@/utils/time';
 import { Utils } from '@/utils/utils';
-
-
-dayjs.extend(relativeTime);
 
 class Item extends Component {
 

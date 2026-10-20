@@ -1,10 +1,9 @@
 import React from 'react';
 import { Button, Modal, ModalBody, ModalFooter, Table } from 'reactstrap';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import SeahubModalHeader from '@/components/seahub-modal-header';
 import { gettext, siteRoot } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 
 import './index.css';
@@ -14,7 +13,6 @@ const propTypes = {
   toggleCancel: PropTypes.func.isRequired,
 };
 
-dayjs.extend(relativeTime);
 
 class ListCreatedFileDialog extends React.Component {
 

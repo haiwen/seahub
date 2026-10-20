@@ -1,25 +1,15 @@
 import React, { Component } from 'react';
 import Calendar from '@seafile/seafile-calendar';
 import DatePicker from '@seafile/seafile-calendar/lib/Picker';
-import localeData from 'dayjs/plugin/localeData';
-import utc from 'dayjs/plugin/utc';
-import weekOfYear from 'dayjs/plugin/weekOfYear';
 import PropTypes from 'prop-types';
 import ClearIcon from '@/components/clear-icon';
 import { gettext } from '@/utils/constants';
 import { translateCalendar } from '@/utils/date-format-utils';
+import dayjs from '@/utils/dayjs';
 import { getEventClassName } from '@/utils/dom';
 import { Utils } from '@/utils/utils';
-import dayjs from '../../../utils/dayjs';
-
-import 'dayjs/locale/zh-cn';
-import 'dayjs/locale/en-gb';
 
 import '@seafile/seafile-calendar/assets/index.css';
-
-dayjs.extend(utc);
-dayjs.extend(localeData);
-dayjs.extend(weekOfYear);
 
 let now = dayjs();
 

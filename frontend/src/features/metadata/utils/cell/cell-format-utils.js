@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import dayjs from '@/utils/dayjs';
 import { CellType } from '../../constants';
 import { getColumnOriginName } from '../column';
 import { getCellValueDisplayString } from './common';

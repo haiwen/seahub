@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from '@gatsbyjs/reach-router';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import Selector from '@/components/single-selector';
 import { gettext, username } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
-
-dayjs.extend(relativeTime);
 
 const OPERATIONS = [
   {

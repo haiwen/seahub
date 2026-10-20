@@ -1,6 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
 import EmptyTip from '@/components/empty-tip';
@@ -8,12 +6,11 @@ import Icon from '@/components/icon';
 import Loading from '@/components/loading';
 import toaster from '@/components/toast';
 import { gettext, siteRoot } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { formatWithTimezone } from '@/utils/time';
 import { Utils } from '@/utils/utils';
 
 import '@/css/lib-content-view.css';
-
-dayjs.extend(relativeTime);
 
 class OCMViaWebdav extends Component {
 

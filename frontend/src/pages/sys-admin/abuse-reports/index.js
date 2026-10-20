@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
-import dayjs from 'dayjs';
 import { systemAdminAPI } from '@/api/system-admin-api';
 import MainPanelTopbar from '@/components/admin/layout/main-panel-topbar';
 import toaster from '@/components/toast';
 import { gettext, siteRoot } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 
 class AbuseReports extends Component {
 

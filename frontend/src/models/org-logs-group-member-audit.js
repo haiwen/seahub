@@ -1,7 +1,4 @@
-import dayjs from 'dayjs';
-import { lang } from '@/utils/constants';
-
-dayjs.locale(lang);
+import dayjs from '@/utils/dayjs';
 
 class OrgGroupMemberAuditLog {
   constructor(object) {

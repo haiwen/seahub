@@ -1,8 +1,6 @@
 import React from 'react';
 import { DropdownItem } from 'reactstrap';
 import classnames from 'classnames';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import { createRoot } from 'react-dom/client';
 import { seafileAPI } from '@/api/seafile-api';
@@ -35,15 +33,13 @@ import {
   useGoFileserver, fileServerRoot, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle,
   thumbnailSizeForOriginal, thumbnailDefaultSize, thumbnailSizeForGrid, enableThumbnailServer
 } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { formatWithTimezone } from '@/utils/time';
 import { Utils } from '@/utils/utils';
 
 import '@/css/layout.css';
 import '@/css/shared-dir-view.css';
 import '@/css/grid-view.css';
-
-dayjs.locale(window.app.config.lang);
-dayjs.extend(relativeTime);
 
 let loginUser = window.app.pageOptions.name;
 let {

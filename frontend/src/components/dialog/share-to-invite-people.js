@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
 import { Button, Input } from 'reactstrap';
 import classnames from 'classnames';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
 import { gettext } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 import EmptyTip from '../empty-tip';
 import Loading from '../loading';

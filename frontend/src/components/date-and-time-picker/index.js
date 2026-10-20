@@ -2,22 +2,12 @@ import React from 'react';
 import Calendar from '@seafile/seafile-calendar';
 import MonthCalendar from '@seafile/seafile-calendar/lib/MonthCalendar';
 import DatePicker from '@seafile/seafile-calendar/lib/Picker';
-import dayjs from 'dayjs';
-import localeData from 'dayjs/plugin/localeData';
-import utc from 'dayjs/plugin/utc';
-import weekOfYear from 'dayjs/plugin/weekOfYear';
 import PropTypes from 'prop-types';
 import ClearIcon from '@/components/clear-icon';
 import { translateCalendar } from '@/utils/date-format-utils';
-import 'dayjs/locale/zh-cn';
-import 'dayjs/locale/en-gb';
+import dayjs from '@/utils/dayjs';
 
 import '@seafile/seafile-calendar/assets/index.css';
-
-dayjs.extend(utc);
-dayjs.extend(localeData);
-dayjs.extend(weekOfYear);
-
 
 class Picker extends React.Component {
 

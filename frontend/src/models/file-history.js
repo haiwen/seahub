@@ -1,5 +1,4 @@
-import dayjs from 'dayjs';
-dayjs.locale(window.app.config.lang);
+import dayjs from '@/utils/dayjs';
 
 export default class FileHistory {
 

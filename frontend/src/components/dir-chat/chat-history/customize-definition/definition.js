@@ -1,13 +1,10 @@
 import React, { useCallback, useMemo } from 'react';
 import classNames from 'classnames';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import { gettext } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 
 import './index.css';
-
-dayjs.extend(relativeTime);
 
 const stripMarkTags = (content) => (content || '').replace(/<\/?mark>/g, '');
 

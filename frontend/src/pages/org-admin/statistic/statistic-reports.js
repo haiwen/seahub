@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import { Button, Input } from 'reactstrap';
-import dayjs from 'dayjs';
 import MainPanelTopbar from '@/components/admin/layout/main-panel-topbar';
 import { siteRoot, gettext, orgID, serviceURL } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { formatMonthInput, isValidMonthInput, normalizeMonthValue } from '@/utils/month-input';
 import StatisticNav from './statistic-nav';
 

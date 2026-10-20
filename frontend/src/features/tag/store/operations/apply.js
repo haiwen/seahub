@@ -1,15 +1,12 @@
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 import { getRowById, getRowsByIds } from '@/components/sf-table/utils/table';
 import { UTC_FORMAT_DEFAULT } from '@/features/metadata/constants';
 import { getRecordIdFromRecord } from '@/features/metadata/utils/cell';
 import { username } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { PRIVATE_COLUMN_KEY } from '../../constants';
 import { getChildLinks, getParentLinks, getTagFilesLinks } from '../../utils/cell';
 import { addRowLinks, removeRowLinks } from '../../utils/link';
 import { OPERATION_TYPE } from './constants';
-
-dayjs.extend(utc);
 
 export default function apply(data, operation) {
   const { op_type } = operation;

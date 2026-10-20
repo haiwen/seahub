@@ -1,6 +1,5 @@
 import React from 'react';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import wikiAPI from '@/api/wiki-api';
 import WikiCleanTrash from '@/components/dialog/wiki-clean-trash';
@@ -9,6 +8,7 @@ import ModalPortal from '@/components/modal-portal';
 import Paginator from '@/components/paginator';
 import toaster from '@/components/toast';
 import { gettext, wikiId } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { formatWithTimezone } from '@/utils/time';
 import { Utils, isMobile } from '@/utils/utils';
 import NavItemIcon from '../common/nav-item-icon';

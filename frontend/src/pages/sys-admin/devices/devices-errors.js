@@ -1,7 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from '@gatsbyjs/reach-router';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import { systemAdminAPI } from '@/api/system-admin-api';
 import EmptyTip from '@/components/empty-tip';
@@ -9,12 +7,11 @@ import Loading from '@/components/loading';
 import Paginator from '@/components/paginator';
 import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { siteRoot, gettext } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { eventBus } from '@/utils/event-bus';
 import { formatWithTimezone } from '@/utils/time';
 import { Utils } from '@/utils/utils';
 import UserLink from '../user-link';
-
-dayjs.extend(relativeTime);
 
 class Content extends Component {
 

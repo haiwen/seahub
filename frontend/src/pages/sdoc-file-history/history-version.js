@@ -1,18 +1,16 @@
 import React from 'react';
 import { Modal, ModalBody } from 'reactstrap';
 import classnames from 'classnames';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import CustomDropdown from '@/components/dropdown';
 import Icon from '@/components/icon';
 import Rename from '@/components/rename';
 import { gettext, filePath } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import URLDecorator from '@/utils/url-decorator';
 import { isMobile } from '@/utils/utils';
 
 import '@/css/history-record-item.css';
-
-dayjs.locale(window.app.config.lang);
 
 class HistoryVersion extends React.Component {
 

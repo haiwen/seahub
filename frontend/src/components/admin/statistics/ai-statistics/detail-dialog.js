@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Input, Modal, ModalBody, ModalFooter } from 'reactstrap';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import DateTimePicker from '@/components/date-and-time-picker';
 import { gettext } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 import EmptyTip from '../../../empty-tip';
 import Loading from '../../../loading';

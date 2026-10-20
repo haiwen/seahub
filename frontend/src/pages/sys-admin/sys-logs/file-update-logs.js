@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import PropTypes from 'prop-types';
 import { systemAdminAPI } from '@/api/system-admin-api';
 import CommitDetails from '@/components/dialog/commit-details';
@@ -9,11 +7,10 @@ import Loading from '@/components/loading';
 import ModalPortal from '@/components/modal-portal';
 import Paginator from '@/components/paginator';
 import { gettext } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 import UserLink from '../user-link';
 import { LogRepoSelector, LogUserSelector } from './log-selector';
-
-dayjs.extend(relativeTime);
 
 class Content extends Component {
 

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import classnames from 'classnames';
-import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
+import dayjs from '@/utils/dayjs';
 import { formatWithTimezone } from '@/utils/time';
 
 const CTimeFormatter = ({ value, className, children: emptyFormatter, format }) => {
