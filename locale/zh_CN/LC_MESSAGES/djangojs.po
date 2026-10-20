@@ -28,7 +28,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 21:05+0800\n"
+"POT-Creation-Date: 2026-10-20 11:32+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2023-2026\n"
 "Language-Team: Chinese (China) (http://app.transifex.com/haiwen/seahub/language/zh_CN/)\n"
@@ -96,7 +96,6 @@ msgid "Settings"
 msgstr "设置"
 
 #: frontend/src/components/account/index.js:155
-#| msgid "Custom properties"
 msgid "Customer Portal"
 msgstr "客户门户"
 
@@ -106,18 +105,15 @@ msgid "Log out"
 msgstr "退出"
 
 #: frontend/src/components/admin/departments/department-menu.js:5
-#| msgid "No sub-departments"
 msgid "Add sub-department"
 msgstr "增加子部门"
 
 #: frontend/src/components/admin/departments/department-menu.js:6
-#| msgid "Library"
 msgid "Add Library"
 msgstr "添加资料库"
 
 #: frontend/src/components/admin/departments/department-menu.js:7
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-depart-member-v2-dialog.js:59
-#| msgid "Add Member"
 msgid "Add members"
 msgstr "添加成员"
 
@@ -279,17 +275,14 @@ msgid "Delete"
 msgstr "删除"
 
 #: frontend/src/components/admin/departments/department-menu.js:10
-#| msgid "No department"
 msgid "Move department"
 msgstr "移动部门"
 
 #: frontend/src/components/admin/departments/department-menu.js:11
-#| msgid "Set Quota"
 msgid "Set quota"
 msgstr "设置容量"
 
 #: frontend/src/components/admin/departments/department-menu.js:12
-#| msgid "Departments"
 msgid "Department ID"
 msgstr "部门 ID"
 
@@ -308,8 +301,7 @@ msgstr "新建部门"
 #: frontend/src/features/metadata/constants/view/statistics.js:34
 #: frontend/src/pages/app/main-panel/share-with-ocm/shared-with-ocm.js:274
 #: frontend/src/pages/app/main-panel/starred/starred.js:248
-#: frontend/src/utils/text-translation.js:321
-#| msgid "locked by {name}"
+#: frontend/src/utils/text-translation.js:323
 msgid "Ascending by name"
 msgstr "按名称升序排列"
 
@@ -318,8 +310,7 @@ msgstr "按名称升序排列"
 #: frontend/src/features/metadata/constants/view/statistics.js:35
 #: frontend/src/pages/app/main-panel/share-with-ocm/shared-with-ocm.js:275
 #: frontend/src/pages/app/main-panel/starred/starred.js:249
-#: frontend/src/utils/text-translation.js:325
-#| msgid "locked by {name}"
+#: frontend/src/utils/text-translation.js:327
 msgid "Descending by name"
 msgstr "按名称降序排列"
 
@@ -479,7 +470,6 @@ msgid "Role"
 msgstr "用户角色"
 
 #: frontend/src/components/admin/departments/department.js:164
-#| msgid "Contact Email"
 msgid "Contact email"
 msgstr "联系邮箱"
 
@@ -679,13 +669,11 @@ msgstr "资料库"
 
 #: frontend/src/components/admin/statistics/ai-statistics/detail-dialog.js:73
 #: frontend/src/components/admin/statistics/ai-statistics/index.js:151
-#| msgid "Library"
 msgid "Library ID"
 msgstr "资料库  ID"
 
 #: frontend/src/components/admin/statistics/ai-statistics/detail-dialog.js:92
 #: frontend/src/components/admin/statistics/ai-statistics/index.js:205
-#| msgid "File details"
 msgid "AI usage details"
 msgstr "AI 使用详情"
 
@@ -787,7 +775,6 @@ msgstr "拥有者"
 #: frontend/src/components/admin/statistics/ai-statistics/index.js:175
 #: frontend/src/components/admin/statistics/ai-statistics/index.js:217
 #: frontend/src/pages/sys-admin/statistic/statistic-ai.js:9
-#| msgid "Team name"
 msgid "Team"
 msgstr "团队"
 
@@ -828,7 +815,6 @@ msgid "View"
 msgstr "查看"
 
 #: frontend/src/components/admin/statistics/ai-statistics/index.js:293
-#| msgid "By day"
 msgid "By date"
 msgstr "按日期"
 
@@ -847,17 +833,14 @@ msgid "Month"
 msgstr "月"
 
 #: frontend/src/components/admin/statistics/ai-statistics/index.js:350
-#| msgid "Current path: "
 msgid "Current month"
 msgstr "当月"
 
 #: frontend/src/components/admin/statistics/ai-statistics/index.js:356
-#| msgid "The past month"
 msgid "Last month"
 msgstr "上个月"
 
 #: frontend/src/components/admin/statistics/ai-statistics/index.js:362
-#| msgid "Last Update"
 msgid "Last month same day"
 msgstr "上月同日"
 
@@ -887,7 +870,6 @@ msgid "30 Days"
 msgstr "30天"
 
 #: frontend/src/components/admin/statistics/statistic-common-tool.js:114
-#| msgid "Year"
 msgid "1 Year"
 msgstr "1年"
 
@@ -1194,8 +1176,6 @@ msgid "Cancel"
 msgstr "取消"
 
 #: frontend/src/components/archive-icon.js:13
-#| msgid ""
-#| "ibrary has been set to read-only by admin and cannot be updated."
 msgid "This library has been archived, cannot be updated."
 msgstr "此资料库已归档，不能被更新。"
 
@@ -1232,7 +1212,6 @@ msgid "Dark mode"
 msgstr "暗色模式"
 
 #: frontend/src/components/color-mode/index.js:29
-#| msgid "Switch sort mode"
 msgid "Light mode"
 msgstr "亮色模式"
 
@@ -1344,7 +1323,6 @@ msgstr "我的知识库"
 
 #: frontend/src/components/dialog/add-wiki-dialog/index.js:354
 #: frontend/src/components/popover/edit-wiki-popover/index.js:322
-#| msgid "Custom CSS"
 msgid "Custom"
 msgstr "自定义"
 
@@ -1391,13 +1369,11 @@ msgstr "没有可选选项"
 #: frontend/src/components/dialog/add-wiki-dialog/index.js:491
 #: frontend/src/components/popover/edit-wiki-popover/index.js:573
 #: frontend/src/features/tag/components/dialog/edit-tag-dialog/index.js:78
-#| msgid "Color space"
 msgid "Color"
 msgstr "颜色"
 
 #: frontend/src/components/dialog/add-wiki-dialog/index.js:502
 #: frontend/src/components/popover/edit-wiki-popover/index.js:584
-#| msgid "Select a color"
 msgid "Select color"
 msgstr "选择颜色"
 
@@ -1413,7 +1389,6 @@ msgstr "自动匹配"
 
 #: frontend/src/components/dialog/add-wiki-dialog/index.js:526
 #: frontend/src/components/popover/edit-wiki-popover/index.js:610
-#| msgid "Hide all"
 msgid "View all"
 msgstr "查看全部"
 
@@ -1423,13 +1398,11 @@ msgstr "查看全部"
 #: frontend/src/components/popover/edit-wiki-popover/index.js:672
 #: frontend/src/components/wiki-card-view/wiki-icon-selector/index.js:82
 #: frontend/src/components/wiki-card-view/wiki-icon-selector/index.js:147
-#| msgid "Select option(s)"
 msgid "Select icon"
 msgstr "选择图标"
 
 #: frontend/src/components/dialog/add-wiki-dialog/index.js:561
 #: frontend/src/components/popover/edit-wiki-popover/index.js:645
-#| msgid "Suggestion"
 msgid "Suggested icons"
 msgstr "建议图标"
 
@@ -1564,7 +1537,6 @@ msgstr "修改详情"
 
 #: frontend/src/components/dialog/commit-details/index.js:64
 #: frontend/src/features/library-view/dir-history-view/index.js:242
-#| msgid "View Related Snapshot"
 msgid "View snapshot"
 msgstr "查看快照"
 
@@ -2077,8 +2049,6 @@ msgid "Edit"
 msgstr "编辑"
 
 #: frontend/src/components/dialog/delete-folder-dialog.js:50
-#| msgid ""
-#| "older has been shared to {user_amount} user(s) and {group_amount} up(s)."
 msgid ""
 "This folder has been shared with {user_amount} user(s) and {group_amount} "
 "group(s)."
@@ -2089,8 +2059,6 @@ msgid "Delete Folder"
 msgstr "删除目录"
 
 #: frontend/src/components/dialog/delete-repo-dialog.js:59
-#| msgid ""
-#| "ibrary has been shared to {user_amount} user(s) and {group_amount} up(s)."
 msgid ""
 "This library has been shared with {user_amount} user(s) and {group_amount} "
 "group(s)."
@@ -2108,17 +2076,14 @@ msgid "Delete Library"
 msgstr "删除资料库"
 
 #: frontend/src/components/dialog/department-detail-dialog/index.js:234
-#| msgid "Search groups"
 msgid "Select group members"
 msgstr "选择群组成员"
 
 #: frontend/src/components/dialog/department-detail-dialog/index.js:234
-#| msgid "Select a user"
 msgid "Select shared users"
 msgstr "选择共享用户"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-member-selected.js:79
-#| msgid "selected"
 msgid "Selected"
 msgstr "已选择"
 
@@ -2130,22 +2095,18 @@ msgid "Add"
 msgstr "添加"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:107
-#| msgid "Members"
 msgid "members"
 msgstr "成员"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:124
-#| msgid "No libraries shared with this group"
 msgid "User is already in this group"
 msgstr "用户已在这个群组中"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:124
-#| msgid "No libraries shared with this group"
 msgid "It is already shared with user"
 msgstr "已分享给用户"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:130
-#| msgid "Search groups"
 msgid "Search results"
 msgstr "搜索结果"
 
@@ -2162,22 +2123,18 @@ msgstr "选择全部"
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:151
 #: frontend/src/features/tag/views/tag-files/list/index.js:98
 #: frontend/src/features/tag/views/tag-files/list/index.js:99
-#| msgid "Select all"
 msgid "Unselect all"
 msgstr "取消选择全部"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:181
-#| msgid "No users"
 msgid "No users found"
 msgstr "未找到用户"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group.js:76
-#| msgid "No department"
 msgid "Toggle department group menu"
 msgstr "切换部门群组菜单"
 
 #: frontend/src/components/dialog/dismiss-group-dialog.js:16
-#| msgid "deleted"
 msgid "Group deleted"
 msgstr "群组已删除"
 
@@ -2202,7 +2159,6 @@ msgstr "编辑标签"
 
 #: frontend/src/components/dialog/edit-repo-commit-labels.js:101
 #, javascript-format
-#| msgid "Add option"
 msgid "Add option: %s"
 msgstr "增加选项：%s"
 
@@ -2326,7 +2282,6 @@ msgstr "显示"
 
 #: frontend/src/components/dialog/generate-upload-link.js:332
 #: frontend/src/components/share-link-panel/link-details.js:215
-#| msgid "Expiration days"
 msgid "Expiration date"
 msgstr "过期日期"
 
@@ -2352,13 +2307,11 @@ msgstr "增加密码保护"
 
 #: frontend/src/components/dialog/generate-upload-link.js:427
 #: frontend/src/components/share-link-panel/link-creation.js:370
-#| msgid "Add option"
 msgid "Add auto expiration"
 msgstr "增加自动过期"
 
 #: frontend/src/components/dialog/generate-upload-link.js:453
 #: frontend/src/components/share-link-panel/link-creation.js:454
-#| msgid "Description"
 msgid "Add description"
 msgstr "添加描述"
 
@@ -2366,23 +2319,19 @@ msgstr "添加描述"
 #: frontend/src/components/dialog/group-invite-members-dialog/index.js:101
 #: frontend/src/components/share-link-panel/link-creation.js:473
 #: frontend/src/pages/settings/web-api-auth-token/index.js:96
-#| msgid "Generate Link"
 msgid "Generate"
 msgstr "生成链接"
 
 #: frontend/src/components/dialog/group-invite-members-dialog/index.js:66
-#| msgid "Internal link has been copied to clipboard"
 msgid "Invitation link has been copied to clipboard"
 msgstr "邀请链接已经复制到剪切板"
 
 #: frontend/src/components/dialog/group-invite-members-dialog/index.js:81
 #: frontend/src/pages/app/main-panel/groups/group-op-menu.js:176
-#| msgid "Invite users"
 msgid "Invite members"
 msgstr "邀请成员"
 
 #: frontend/src/components/dialog/group-invite-members-dialog/index.js:85
-#| msgid "No invitations"
 msgid "Group invitation link"
 msgstr "群组邀请链接"
 
@@ -2397,7 +2346,6 @@ msgid "Group members"
 msgstr "群组成员"
 
 #: frontend/src/components/dialog/guide-for-new-dialog.js:24
-#| msgid "Upload files to {folder_name_placeholder}"
 msgid "Welcome to {site_name_placeholder}"
 msgstr "欢迎使用 {site_name_placeholder}"
 
@@ -2428,7 +2376,6 @@ msgid "Next (Right arrow key)"
 msgstr "向后 (右方向键)"
 
 #: frontend/src/components/dialog/image-dialog/index.js:101
-#| msgid "Close"
 msgid "Close (Esc)"
 msgstr "关闭(Esc)"
 
@@ -2458,12 +2405,10 @@ msgid "Rotate"
 msgstr "旋转"
 
 #: frontend/src/components/dialog/image-dialog/index.js:110
-#| msgid "Loading"
 msgid "Open metadata"
 msgstr "打开元数据"
 
 #: frontend/src/components/dialog/image-dialog/index.js:111
-#| msgid "Choose date"
 msgid "Close metadata"
 msgstr "关闭元数据"
 
@@ -2476,12 +2421,10 @@ msgid "OCR"
 msgstr "OCR"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:69
-#| msgid "Please select an expiration time"
 msgid "Select a Confluence HTML exported file (.html.zip)"
 msgstr "选择一个 Confluence HTML 导出文件（.HTML.zip）"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:81
-#| msgid "Please select an expiration time"
 msgid "Select a Confluence exported file"
 msgstr "选择一个 Confluence 导出文件"
 
@@ -2490,7 +2433,6 @@ msgid "Confluence file imported"
 msgstr "已导入 Confluence 文件"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:95
-#| msgid "Failed to restore {name}"
 msgid "Failed to import Confluence file"
 msgstr "导入 Confluence 文件失败"
 
@@ -2499,7 +2441,6 @@ msgid "Import Confluence Wiki"
 msgstr "导入 Confluence 知识库"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:121
-#| msgid "Please select an expiration time"
 msgid "Confluence export file"
 msgstr "Confluence 导出文件"
 
@@ -2509,12 +2450,10 @@ msgid "Select File"
 msgstr "选择文件"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:134
-#| msgid "Clear selected"
 msgid "No file selected"
 msgstr "没有选中的文件"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:138
-#| msgid "Please select an expiration time"
 msgid "Select a Confluence HTML export file (.html.zip)"
 msgstr "选择一个 Confluence HTML 导出文件（.HTML.zip）"
 
@@ -2525,12 +2464,10 @@ msgid ""
 msgstr "导入过程可能需要几分钟，取决于 Confluence 导出的大小。"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:168
-#| msgid "Exporting..."
 msgid "Importing..."
 msgstr "导入中..."
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:168
-#| msgid "Import tags"
 msgid "Import"
 msgstr "导入"
 
@@ -2547,7 +2484,6 @@ msgstr "通过 .xlsx 文件导入成员"
 #: frontend/src/components/dialog/import-members-dialog.js:54
 #: frontend/src/components/dialog/org-import-users-dialog.js:53
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:54
-#| msgid "Download and upload"
 msgid "Download an example file"
 msgstr "下载示例文件"
 
@@ -2555,7 +2491,6 @@ msgstr "下载示例文件"
 #: frontend/src/components/dialog/org-import-users-dialog.js:54
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:55
 #: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:308
-#| msgid "Upload Files"
 msgid "Upload file"
 msgstr "上传文件"
 
@@ -2564,19 +2499,16 @@ msgid "Import tags"
 msgstr "导入标签"
 
 #: frontend/src/components/dialog/import-tags-dialog.js:31
-#| msgid "Import tags"
 msgid "Importing tags..."
 msgstr "导入标签..."
 
 #: frontend/src/components/dialog/import-wiki-page-dialog.js:27
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-dropdownmenu.js:163
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:173
-#| msgid "Import tags"
 msgid "Import page"
 msgstr "导入页面"
 
 #: frontend/src/components/dialog/import-wiki-page-dialog.js:31
-#| msgid "Import tags"
 msgid "Importing page..."
 msgstr "导入页面中..."
 
@@ -2669,7 +2601,7 @@ msgstr "给资料库 {placeholder} 添加标签成功"
 
 #: frontend/src/components/dialog/label-repo-state-dialog.js:84
 #: frontend/src/components/library-op-menu.js:181
-#: frontend/src/utils/text-translation.js:216
+#: frontend/src/utils/text-translation.js:218
 msgid "Label Current State"
 msgstr "标记当前版本"
 
@@ -2689,7 +2621,6 @@ msgid "Leave"
 msgstr "退出"
 
 #: frontend/src/components/dialog/lib-decrypt-dialog/index.js:63
-#| msgid "Reset library password"
 msgid "This library is password protected"
 msgstr "该资料库已加密"
 
@@ -2698,7 +2629,6 @@ msgid "The password will be kept in the server for only 1 hour."
 msgstr "密码将在服务器上保存 1 小时。"
 
 #: frontend/src/components/dialog/lib-decrypt-dialog/index.js:66
-#| msgid "Confirm password"
 msgid "Wrong password"
 msgstr "密码错误"
 
@@ -2720,7 +2650,6 @@ msgstr "设置 {placeholder} 的权限"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:311
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:291
-#| msgid "Folder"
 msgid "Add Folder"
 msgstr "增加目录"
 
@@ -2731,7 +2660,6 @@ msgstr "增加目录"
 #: frontend/src/pages/org-admin/org-logs/org-logs-group-member-audit.js:70
 #: frontend/src/pages/sys-admin/sys-logs/group-member-audit-logs.js:44
 #: frontend/src/pages/sys-admin/sys-logs/group-member-audit-logs.js:324
-#| msgid "Groups"
 msgid "Group"
 msgstr "群组"
 
@@ -2743,7 +2671,7 @@ msgstr "群组"
 #: frontend/src/pages/sys-admin/sys-logs/share-permission-logs.js:48
 #: frontend/src/repo-folder-trash.js:372 frontend/src/repo-folder-trash.js:432
 #: frontend/src/repo-snapshot.js:309
-#: frontend/src/utils/text-translation.js:227
+#: frontend/src/utils/text-translation.js:229
 msgid "Folder"
 msgstr "目录"
 
@@ -2775,7 +2703,6 @@ msgstr "查找群组"
 #: frontend/src/components/share-link-panel/link-authenticated-users.js:211
 #: frontend/src/components/share-link-panel/link-list.js:78
 #: frontend/src/features/metadata/views/card/card-items/index.js:155
-#| msgid "items"
 msgid "No items"
 msgstr "没有项目"
 
@@ -2798,17 +2725,14 @@ msgid "Search users"
 msgstr "搜索用户"
 
 #: frontend/src/components/dialog/list-created-files-dialog/index.js:33
-#| msgid "Delete Folder"
 msgid "Deleted Folders"
 msgstr "已删除的目录"
 
 #: frontend/src/components/dialog/list-created-files-dialog/index.js:33
-#| msgid "Deleted files"
 msgid "Deleted Files"
 msgstr "已删除的文件"
 
 #: frontend/src/components/dialog/list-created-files-dialog/index.js:35
-#| msgid "Created folder"
 msgid "Created Folders"
 msgstr "已创建的目录"
 
@@ -2921,12 +2845,10 @@ msgid ""
 msgstr "提示：{placeholder} 天前删除的资料库会被自动清除。"
 
 #: frontend/src/components/dialog/my-deleted-repos-dialog/repos.js:47
-#| msgid "No deleted libraries"
 msgid "Delete all deleted libraries"
 msgstr "删除所有已删除库"
 
 #: frontend/src/components/dialog/my-deleted-repos-dialog/repos.js:48
-#| msgid "Are you sure you want to delete the selected user(s) ?"
 msgid "Are you sure you want to delete all deleted libraries?"
 msgstr "确定要删除所有已删除库吗？"
 
@@ -2970,18 +2892,15 @@ msgid "Email"
 msgstr "邮箱"
 
 #: frontend/src/components/dialog/org-add-user-dialog.js:160
-#| msgid "Confirm password"
 msgid "Confirm Password"
 msgstr "确认密码"
 
 #: frontend/src/components/dialog/org-admin-delete-org-dialog.js:42
-#| msgid "Passwords don't match"
 msgid "Names don't match"
 msgstr "名称不匹配"
 
 #: frontend/src/components/dialog/org-admin-delete-org-dialog.js:59
 #: frontend/src/pages/org-admin/settings/index.js:228
-#| msgid "Delete Time"
 msgid "Delete Team"
 msgstr "删除团队"
 
@@ -3070,7 +2989,6 @@ msgstr "设置配额"
 
 #: frontend/src/components/dialog/org-set-group-quota-dialog.js:66
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:66
-#| msgid "Please enter a new password"
 msgid "Please enter a new quota"
 msgstr "请输入一个新的配额"
 
@@ -3107,12 +3025,10 @@ msgid "Rename Folder"
 msgstr "重命名目录"
 
 #: frontend/src/components/dialog/rename-dialog.js:98
-#| msgid "Rename file"
 msgid "Rename file to"
 msgstr "重命名文件为"
 
 #: frontend/src/components/dialog/rename-dialog.js:98
-#| msgid "Rename folder"
 msgid "Rename folder to"
 msgstr "重命名目录为"
 
@@ -3125,7 +3041,6 @@ msgid "Rename group to"
 msgstr "重命名群组为"
 
 #: frontend/src/components/dialog/rename-repo.js:59
-#| msgid "Renamed library"
 msgid "Rename Library"
 msgstr "重命名资料库"
 
@@ -3141,7 +3056,6 @@ msgid "Rename Wiki"
 msgstr "重命名知识库"
 
 #: frontend/src/components/dialog/rename-wiki-dialog.js:72
-#| msgid "Rename Wiki"
 msgid "Rename Wiki to"
 msgstr "重命名知识库为"
 
@@ -3203,12 +3117,10 @@ msgid "Please check the network."
 msgstr "请检查网络是否已连接。"
 
 #: frontend/src/components/dialog/repo-api-token-dialog/index.js:245
-#| msgid "Name"
 msgid "App Name"
 msgstr "APP 名称"
 
 #: frontend/src/components/dialog/repo-api-token-dialog/index.js:307
-#| msgid "{placeholder} Access Log"
 msgid "{placeholder} API Token"
 msgstr "{placeholder} API Token"
 
@@ -3225,12 +3137,10 @@ msgid ""
 msgstr "资料库正在取消归档中，你将在取消归档完成后收到通知。"
 
 #: frontend/src/components/dialog/repo-archive-dialog.js:133
-#| msgid "Read-Write library"
 msgid "Archive library"
 msgstr "归档资料库"
 
 #: frontend/src/components/dialog/repo-archive-dialog.js:133
-#| msgid "Restore Library"
 msgid "Unarchive library"
 msgstr "取消归档资料库"
 
@@ -3247,12 +3157,10 @@ msgid "Unarchive"
 msgstr "取消归档"
 
 #: frontend/src/components/dialog/repo-archive-dialog.js:138
-#| msgid "Are you sure you want to remove {placeholder} ?"
 msgid "Are you sure you want to archive {placeholder} ?"
 msgstr "你确定归档资料库 {placeholder} 吗？"
 
 #: frontend/src/components/dialog/repo-archive-dialog.js:140
-#| msgid "Are you sure you want to remove {placeholder} ?"
 msgid "Are you sure you want to unarchive {placeholder} ?"
 msgstr "你确定取消归档资料库 {placeholder} 吗？"
 
@@ -3269,12 +3177,10 @@ msgid ""
 msgstr "资料库将被移动回主存储，用户在取消归档过程中无法访问资料库。"
 
 #: frontend/src/components/dialog/repo-office-suite-dialog/index.js:43
-#| msgid "Successfully change the group"
 msgid "Successfully changed the office suite."
 msgstr "已成功更改办公套件。"
 
 #: frontend/src/components/dialog/repo-office-suite-dialog/index.js:88
-#| msgid "Select all"
 msgid "Select an office suite"
 msgstr "选择一个办公套件"
 
@@ -3315,7 +3221,6 @@ msgid "Group Shares"
 msgstr "群组共享"
 
 #: frontend/src/components/dialog/repo-share-admin/share-links.js:176
-#| msgid "Successfully deleted 1 item."
 msgid "Successfully deleted 1 item"
 msgstr "成功删除 1 个条目"
 
@@ -3336,7 +3241,6 @@ msgstr "成功删除了 {number_placeholder} 个共享链接"
 #: frontend/src/components/share-link-panel/link-list.js:91
 #: frontend/src/pages/app/main-panel/share-admin/share-links.js:93
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:75
-#| msgid "Select all"
 msgid "Unselect items"
 msgstr "取消选择项目"
 
@@ -3344,7 +3248,6 @@ msgstr "取消选择项目"
 #: frontend/src/components/share-link-panel/link-list.js:91
 #: frontend/src/pages/app/main-panel/share-admin/share-links.js:93
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:75
-#| msgid "Select all"
 msgid "Select items"
 msgstr "选择项目"
 
@@ -3397,33 +3300,27 @@ msgstr "确定要删除勾选的共享链接吗？"
 
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:352
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:446
-#| msgid "No upload links"
 msgid "Delete upload links"
 msgstr "删除上传链接"
 
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:353
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:447
-#| msgid "Are you sure you want to delete the selected share link(s) ?"
 msgid "Are you sure you want to delete the selected upload link(s) ?"
 msgstr "你确定要删除所选的上传链接吗？"
 
 #: frontend/src/components/dialog/repo-webhook-dialog/delete-webhook-dialog.js:9
-#| msgid "Delete Member"
 msgid "Delete webhook"
 msgstr "删除 Webhook"
 
 #: frontend/src/components/dialog/repo-webhook-dialog/delete-webhook-dialog.js:11
-#| msgid "Are you sure you want to delete this page?"
 msgid "Are you sure you want to delete this webhook?"
 msgstr "你确定删除 Webhook Webhook 吗？"
 
 #: frontend/src/components/dialog/repo-webhook-dialog/edit-webhook-dialog.js:26
-#| msgid "URL is required"
 msgid "Url is required"
 msgstr "URL 是必填项"
 
 #: frontend/src/components/dialog/repo-webhook-dialog/edit-webhook-dialog.js:38
-#| msgid "Updated file"
 msgid "Update webhook"
 msgstr "更新 Webhook"
 
@@ -3523,24 +3420,20 @@ msgid "No result"
 msgstr "没有结果"
 
 #: frontend/src/components/dialog/select-dirent-body.js:83
-#| msgid "Please select a library to share."
 msgid "Please select a library or folder first."
 msgstr "请先选择一个资料库或目录。"
 
 #: frontend/src/components/dialog/select-dirent-body.js:181
 #: frontend/src/components/file-chooser/repo-list-wrapper.js:86
-#| msgid "Create Library"
 msgid "Current Library"
 msgstr "当前资料库"
 
 #: frontend/src/components/dialog/select-dirent-body.js:188
 #: frontend/src/components/file-chooser/repo-list-wrapper.js:108
-#| msgid "Owned Libraries"
 msgid "Other Libraries"
 msgstr "其他资料库"
 
 #: frontend/src/components/dialog/select-dirent-body.js:195
-#| msgid "Space Used"
 msgid "Recently Used"
 msgstr "最近使用"
 
@@ -3550,12 +3443,10 @@ msgstr "最近使用"
 #: frontend/src/pages/app/side-panel/main-side-nav-folded.js:322
 #: frontend/src/pages/app/side-panel/main-side-nav.js:416
 #: frontend/src/pages/app/side-panel/main-side-nav.js:417
-#| msgid "No favorites"
 msgid "Favorites"
 msgstr "收藏夹"
 
 #: frontend/src/components/dialog/select-dirent-body.js:265
-#| msgid "New Folder"
 msgid "New folder"
 msgstr "新建目录"
 
@@ -3597,14 +3488,12 @@ msgstr "共享链接"
 #: frontend/src/components/dialog/share-dialog.js:137
 #: frontend/src/components/dialog/share-wiki-dialog.js:84
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-dialog.js:51
-#| msgid "Share to user"
 msgid "Share with user"
 msgstr "共享给用户"
 
 #: frontend/src/components/dialog/share-dialog.js:144
 #: frontend/src/components/dialog/share-wiki-dialog.js:91
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-dialog.js:56
-#| msgid "Share to group"
 msgid "Share with group"
 msgstr "共享给群组"
 
@@ -3613,7 +3502,6 @@ msgid "Custom sharing permissions"
 msgstr "自定义共享权限"
 
 #: frontend/src/components/dialog/share-dialog.js:167
-#| msgid "Share to other server"
 msgid "Share with other server"
 msgstr "共享到其他服务器"
 
@@ -3687,22 +3575,18 @@ msgid "Successfully deleted 1 item."
 msgstr "成功删除 1 个条目。"
 
 #: frontend/src/components/dialog/share-to-other-server.js:198
-#| msgid "At server"
 msgid "Server"
 msgstr "服务器"
 
 #: frontend/src/components/dialog/share-to-other-server.js:199
-#| msgid "Email"
 msgid "User Email"
 msgstr "用户邮箱"
 
 #: frontend/src/components/dialog/share-to-other-server.js:214
-#| msgid "Select a user"
 msgid "Select a server"
 msgstr "选择一个服务器"
 
 #: frontend/src/components/dialog/share-to-user/index.js:491
-#| msgid "Search users"
 msgid "Search users..."
 msgstr "搜索用户..."
 
@@ -3731,36 +3615,30 @@ msgid "By time descending"
 msgstr "按时间降序"
 
 #: frontend/src/components/dialog/sysadmin-dialog/add-department-v2-dialog.js:73
-#| msgid "No department"
 msgid "Add department at"
 msgstr "添加部门到"
 
 #: frontend/src/components/dialog/sysadmin-dialog/add-department-v2-dialog.js:75
-#| msgid "Change to department"
 msgid "Create top department"
 msgstr "创建顶层部门"
 
 #: frontend/src/components/dialog/sysadmin-dialog/delete-department-v2-confirm-dialog.js:19
-#| msgid "Delete Department"
 msgid "Delete department"
 msgstr "删除部门"
 
 #: frontend/src/components/dialog/sysadmin-dialog/delete-department-v2-confirm-dialog.js:23
-#| msgid "Are you sure to delete "
 msgid "Are you sure to delete"
 msgstr "确定要删除"
 
 #: frontend/src/components/dialog/sysadmin-dialog/set-quota.js:70
 #: frontend/src/components/dialog/sysadmin-dialog/set-upload-download-rate-limit.js:71
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-monthly-download-traffic-limit-dialog.js:70
-#| msgid "An integer that is greater than or equal to 0."
 msgid "An integer that is greater than 0."
 msgstr "一个大于 0 的整数"
 
 #: frontend/src/components/dialog/sysadmin-dialog/set-quota.js:72
 #: frontend/src/components/dialog/sysadmin-dialog/set-upload-download-rate-limit.js:73
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-monthly-download-traffic-limit-dialog.js:72
-#| msgid "Unselect"
 msgid "Unset"
 msgstr "未设置"
 
@@ -3909,22 +3787,18 @@ msgid "Department moved successfully"
 msgstr "部门已成功移动"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-move-group-dialog.js:143
-#| msgid "Change to department"
 msgid "Move to department"
 msgstr "移动到部门"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-move-group-dialog.js:159
-#| msgid "Select a department"
 msgid "Select target department"
 msgstr "选择目标部门"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-move-group-dialog.js:175
-#| msgid "Select a department"
 msgid "Search departments"
 msgstr "搜索部门"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-move-group-dialog.js:196
-#| msgid "User not found"
 msgid "Department not found"
 msgstr "部门未找到"
 
@@ -3945,7 +3819,6 @@ msgid "Set max number of members"
 msgstr "设置最大成员数"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-monthly-download-traffic-limit-dialog.js:55
-#| msgid "Traffic"
 msgid "Set Traffic"
 msgstr "设置流量"
 
@@ -3956,12 +3829,10 @@ msgstr "设置名称"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-user-deactivate-dialog.js:34
 #: frontend/src/pages/org-admin/org-users/org-user-item.js:187
-#| msgid "Set user name"
 msgid "Set user inactive"
 msgstr "将用户设置为“未激活”"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-user-deactivate-dialog.js:39
-#| msgid "Are you sure you want to delete the selected share link(s) ?"
 msgid "Do you want to keep the library sharing relationships?"
 msgstr "你想保持资料库共享关系吗？"
 
@@ -3972,7 +3843,6 @@ msgid "Keep sharing"
 msgstr "保留共享"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-user-deactivate-dialog.js:63
-#| msgid "Keep sharing"
 msgid "Do not keep sharing"
 msgstr "不要保持共享"
 
@@ -3991,7 +3861,6 @@ msgid "Import sdoc"
 msgstr "导入 sdoc"
 
 #: frontend/src/components/dialog/tip-dialog.js:13
-#| msgid "Converting, please wait..."
 msgid "Importing sdoc, please wait..."
 msgstr "正在导入sdoc，请稍候..."
 
@@ -4024,8 +3893,6 @@ msgid "Users"
 msgstr "用户"
 
 #: frontend/src/components/dialog/transfer-dialog/index.js:202
-#| msgid ""
-#| "the library is shared to another user, the sharing will be ketp."
 msgid "If the library is shared with another user, the sharing will be kept."
 msgstr "如果资料库共享给其他用户，共享关系将被保留。"
 
@@ -4038,13 +3905,10 @@ msgid "Departments"
 msgstr "组织架构"
 
 #: frontend/src/components/dialog/transfer-dialog/index.js:216
-#| msgid "Select a department"
 msgid "Search department"
 msgstr "搜索部门"
 
 #: frontend/src/components/dialog/transfer-dialog/index.js:228
-#| msgid ""
-#| " library is shared to another department, the sharing will be ketp."
 msgid ""
 "If the library is shared with another department, the sharing will be kept."
 msgstr "如果资料库共享给其他部门，共享关系将被保留。"
@@ -4054,7 +3918,6 @@ msgid "Transfer Library {library_name}"
 msgstr "转让资料库 {library_name}"
 
 #: frontend/src/components/dialog/transfer-group-dialog/index.js:44
-#| msgid "Group has been transfered"
 msgid "Group has been transferred"
 msgstr "群组已被转让"
 
@@ -4151,12 +4014,10 @@ msgid "New password"
 msgstr "新密码"
 
 #: frontend/src/components/dialog/wiki-convert-status-dialog.js:25
-#| msgid "Convert Wiki"
 msgid "Converting"
 msgstr "转换中"
 
 #: frontend/src/components/dialog/wiki-convert-status-dialog.js:30
-#| msgid "Exporting..."
 msgid "Converting..."
 msgstr "转换中..."
 
@@ -4169,18 +4030,15 @@ msgid "Packaging..."
 msgstr "正在打包"
 
 #: frontend/src/components/dir-chat/chat-history/customize-definition/definition.js:63
-#| msgid "Update"
 msgid "Updated"
 msgstr "更新于"
 
 #: frontend/src/components/dir-chat/chat-history/customize-link/index.js:89
 #: frontend/src/components/dir-chat/chat-history/customize-link/index.js:90
-#| msgid "New files"
 msgid "View file"
 msgstr "查看文件"
 
 #: frontend/src/components/dir-chat/chat-history/message-operations/index.js:14
-#| msgid "This file has been updated."
 msgid "The content has been copied"
 msgstr "内容已被复制"
 
@@ -4191,7 +4049,6 @@ msgstr "思考过程"
 
 #: frontend/src/components/dir-chat/chat-history/thought-process/process-details/index.js:59
 #: frontend/src/components/dir-chat/chat-history/thought-process/process-details/index.js:73
-#| msgid "File details"
 msgid "Toggle details"
 msgstr "切换细节"
 
@@ -4223,14 +4080,12 @@ msgstr "时间使用"
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:67
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:84
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:184
-#| msgid "Actions"
 msgid "Action steps"
 msgstr "操作步骤"
 
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:71
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:87
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:192
-#| msgid "General information"
 msgid "Answer generation"
 msgstr "答案生成"
 
@@ -4240,20 +4095,17 @@ msgstr "Token 使用"
 
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:93
 #: frontend/src/features/metadata/constants/view/index.js:40
-#| msgid "Status"
 msgid "Statistics"
 msgstr "统计"
 
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:106
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:126
 #: frontend/src/components/dir-chat/chat-history/thought-process/tool-details-content.js:37
-#| msgid "Departments"
 msgid "Arguments"
 msgstr "参数"
 
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:110
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:130
-#| msgid "Extract file detail"
 msgid "Execution detail"
 msgstr "执行细节"
 
@@ -4266,7 +4118,6 @@ msgid "Step"
 msgstr "步骤"
 
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:146
-#| msgid "Custom properties"
 msgid "System prompts"
 msgstr "系统提示"
 
@@ -4286,12 +4137,10 @@ msgid "Message"
 msgstr "消息"
 
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:160
-#| msgid "No tags"
 msgid "Attachments"
 msgstr "附件"
 
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:167
-#| msgid "User info updated"
 msgid "User input"
 msgstr "用户输入"
 
@@ -4310,7 +4159,6 @@ msgid "Result"
 msgstr "搜索结果"
 
 #: frontend/src/components/dir-chat/chat-history/thought-process/tool-details-content.js:38
-#| msgid "Operation"
 msgid "Observation"
 msgstr "观察"
 
@@ -4332,12 +4180,10 @@ msgid "Start a new chat from this conversation"
 msgstr "从此对话开始新对话"
 
 #: frontend/src/components/dir-chat/components/attachments/index.js:49
-#| msgid "Created library"
 msgid "Seafile library"
 msgstr "Seafile 资料库"
 
 #: frontend/src/components/dir-chat/components/thinking/index.js:12
-#| msgid "Saving..."
 msgid "Thinking..."
 msgstr "思考中..."
 
@@ -4374,20 +4220,17 @@ msgid "More operations"
 msgstr "更多操作"
 
 #: frontend/src/components/dir-chat/documents/index.js:137
-#| msgid "Open folder"
 msgid "Open file"
 msgstr "打开文件"
 
 #: frontend/src/components/dir-chat/documents/index.js:152
 #: frontend/src/features/metadata/views/kanban/boards/board/header/index.js:63
-#| msgid "Collapse all"
 msgid "Collapse"
 msgstr "折叠"
 
 #: frontend/src/components/dir-chat/documents/index.js:152
 #: frontend/src/components/sf-table/table-main/records/record/actions-cell/index.js:102
 #: frontend/src/features/metadata/views/kanban/boards/board/header/index.js:63
-#| msgid "Expand all"
 msgid "Expand"
 msgstr "展开"
 
@@ -4396,17 +4239,14 @@ msgid "Started a new chat from this conversation"
 msgstr "已从此对话开始新对话"
 
 #: frontend/src/components/dir-chat/hooks/sessions.js:214
-#| msgid "Team name"
 msgid "Chat shared"
 msgstr "对话已分享"
 
 #: frontend/src/components/dir-chat/hooks/sessions.js:226
-#| msgid "Team name"
 msgid "Chat unshared"
 msgstr "已取消对话分享"
 
 #: frontend/src/components/dir-chat/sessions/index.js:36
-#| msgid "No shared links"
 msgid "No shared chats"
 msgstr "暂无共享对话"
 
@@ -4417,13 +4257,11 @@ msgid ""
 msgstr "对该知识库拥有读取或写入权限的所有人都可查看共享对话"
 
 #: frontend/src/components/dir-chat/sessions/index.js:40
-#| msgid "No changes"
 msgid "No chats"
 msgstr "没有对话"
 
 #: frontend/src/components/dir-chat/sessions/index.js:89
 #: frontend/src/components/toolbar/chat-toolbar.js:34
-#| msgid "History"
 msgid "Histories"
 msgstr "历史"
 
@@ -4432,7 +4270,6 @@ msgid "Mine"
 msgstr "我拥有的"
 
 #: frontend/src/components/dir-chat/sessions/index.js:118
-#| msgid "Share"
 msgid "Shared"
 msgstr "共享给我的"
 
@@ -4445,22 +4282,19 @@ msgstr "共享给我的"
 #: frontend/src/pages/app/main-panel/share-admin/libraries.js:273
 #: frontend/src/pages/sys-admin/groups/group-repos.js:156
 #: frontend/src/pages/sys-admin/groups/group-repos.js:166
-#: frontend/src/utils/text-translation.js:221
+#: frontend/src/utils/text-translation.js:223
 msgid "Unshare"
 msgstr "取消共享"
 
 #: frontend/src/components/dir-chat/sessions/session/index.js:107
-#| msgid "Team name"
 msgid "Chat name"
 msgstr "对话名称"
 
 #: frontend/src/components/dir-chat/sessions/session/index.js:120
-#| msgid "Deleted option"
 msgid "Delete chat"
 msgstr "删除对话"
 
 #: frontend/src/components/dir-chat/sessions/session/index.js:121
-#| msgid "Are you sure you want to delete this page?"
 msgid "Are you sure you want to delete this chat?"
 msgstr "你确定要删除此对话吗？"
 
@@ -4497,7 +4331,6 @@ msgstr "文件"
 #: frontend/src/features/metadata/components/data-process-setter/field-display-settings/index.js:64
 #: frontend/src/pages/app/side-panel/main-side-nav.js:389
 #: frontend/src/pages/app/side-panel/main-side-nav.js:463
-#| msgid "Folder"
 msgid "Fold"
 msgstr "折叠"
 
@@ -4517,7 +4350,6 @@ msgstr "展开"
 #: frontend/src/components/dirent-detail/dirent-details/file-details/file-tag.js:32
 #: frontend/src/features/library-view/dirent-detail/multi-selection-details/dirents-tags-editor.js:195
 #: frontend/src/features/metadata/components/detail-editor/tags-editor/index.js:146
-#| msgid "Edit Quota"
 msgid "Edit tags"
 msgstr "编辑标签"
 
@@ -4578,7 +4410,7 @@ msgstr "修改者"
 #: frontend/src/features/metadata/components/dialog/metadata-tags-status-dialog/index.js:101
 #: frontend/src/features/metadata/components/popover/filter-popover/basic-filters/tags-filter.js:86
 #: frontend/src/features/metadata/utils/column/index.js:217
-#: frontend/src/utils/text-translation.js:156
+#: frontend/src/utils/text-translation.js:158
 msgid "Tags"
 msgstr "标签"
 
@@ -4598,12 +4430,10 @@ msgid "Unknown people"
 msgstr "未知人物"
 
 #: frontend/src/components/dirent-operation-menu/dirent-operations.js:23
-#| msgid "Successfully starred {library_name_placeholder}."
 msgid "Successfully locked {name_placeholder}"
 msgstr "已成功锁定 {name_placeholder}"
 
 #: frontend/src/components/dirent-operation-menu/dirent-operations.js:41
-#| msgid "Successfully unstarred {library_name_placeholder}."
 msgid "Successfully unlocked {name_placeholder}"
 msgstr "已成功解锁 {name_placeholder}"
 
@@ -4616,47 +4446,38 @@ msgid "At most 100 files can be unlocked in one time."
 msgstr "一次最多可以解锁100个文件。"
 
 #: frontend/src/components/dirent-operation-menu/dirent-operations.js:110
-#| msgid "Successfully moved {name}."
 msgid "Successfully locked {name}."
 msgstr "已成功锁定 {name}。"
 
 #: frontend/src/components/dirent-operation-menu/dirent-operations.js:111
-#| msgid "Successfully moved {name}."
 msgid "Successfully unlocked {name}."
 msgstr "已成功解锁 {name}。"
 
 #: frontend/src/components/dirent-operation-menu/dirent-operations.js:114
-#| msgid "Successfully deleted {name} and {n} other items"
 msgid "Successfully locked {name} and {n} other item(s)."
 msgstr "已成功锁定 {name} 和 {n} 个其他项目。"
 
 #: frontend/src/components/dirent-operation-menu/dirent-operations.js:115
-#| msgid "Successfully deleted {name} and {n} other items"
 msgid "Successfully unlocked {name} and {n} other item(s)."
 msgstr "已成功解锁 {name} 和 {n} 个其他项目。"
 
 #: frontend/src/components/dirent-operation-menu/dirent-operations.js:166
-#| msgid "Successfully unstarred {library_name_placeholder}."
 msgid "Successfully unstarred {name_placeholder}"
 msgstr "成功取消 {name_placeholder} 的星标"
 
 #: frontend/src/components/dirent-operation-menu/dirent-operations.js:168
-#| msgid "Successfully starred {library_name_placeholder}."
 msgid "Successfully starred {name_placeholder}"
 msgstr "成功添加 {name_placeholder} 的星标"
 
 #: frontend/src/components/dirent-operation-menu/dirent-operations.js:214
-#| msgid "Successfully starred {library_name_placeholder}."
 msgid "Successfully froze {name_placeholder}"
 msgstr "已成功冻结 {name_placeholder}"
 
 #: frontend/src/components/dirent-operation-menu/dirent-operations.js:232
-#| msgid "Successfully unstarred {library_name_placeholder}."
 msgid "Successfully unfroze {name_placeholder}"
 msgstr "已成功解冻 {name_placeholder}"
 
 #: frontend/src/components/dirent-operation-menu/dirent-operations.js:243
-#| msgid "Successfully unstarred {library_name_placeholder}."
 msgid "Successfully converted {name_placeholder}"
 msgstr "已成功转换 {name_placeholder}"
 
@@ -4678,19 +4499,16 @@ msgstr "没有匹配的结果"
 #: frontend/src/components/search/wiki2-global-search.js:316
 #: frontend/src/components/search/wiki2-search.js:223
 #: frontend/src/components/search/wiki2-search.js:225
-#| msgid "Clear Trash"
 msgid "Clear search"
 msgstr "清空搜索"
 
 #: frontend/src/components/file-content-view/image.js:93
 #: frontend/src/shared-file-view-image.js:53
-#| msgid "you can also press ← "
 msgid "You can also press ← "
 msgstr "你也可以按 ← "
 
 #: frontend/src/components/file-content-view/image.js:98
 #: frontend/src/shared-file-view-image.js:58
-#| msgid "you can also press →"
 msgid "You can also press →"
 msgstr "你也可以按 →"
 
@@ -4770,7 +4588,6 @@ msgstr "保存中..."
 #: frontend/src/components/file-uploader/upload-list-item.js:118
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:118
 #: frontend/src/pages/upload-link/upload-list-item.js:126
-#| msgid "Saving..."
 msgid "Waiting..."
 msgstr "等候中..."
 
@@ -4783,7 +4600,6 @@ msgstr "上传中..."
 #: frontend/src/components/file-uploader/upload-list-item.js:134
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:134
 #: frontend/src/pages/upload-link/upload-list-item.js:140
-#| msgid "Upload"
 msgid "Uploaded"
 msgstr "已上传"
 
@@ -4791,7 +4607,6 @@ msgstr "已上传"
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:138
 #: frontend/src/pages/upload-link/upload-list-item.js:146
 #: frontend/src/pages/upload-link/upload-list-item.js:147
-#| msgid "Upload Files"
 msgid "Upload failed"
 msgstr "上传失败"
 
@@ -4822,7 +4637,6 @@ msgstr "文件上传中..."
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:82
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:78
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:81
-#| msgid "All records loaded"
 msgid "All files uploaded"
 msgstr "所有文件上传完毕"
 
@@ -4840,7 +4654,6 @@ msgstr "取消全部"
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:121
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:117
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:98
-#| msgid "Rename"
 msgid "name"
 msgstr "名称"
 
@@ -4853,7 +4666,6 @@ msgstr "大小"
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:123
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:119
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:100
-#| msgid "In progress"
 msgid "progress"
 msgstr "进度"
 
@@ -4864,28 +4676,23 @@ msgid "state"
 msgstr "状态"
 
 #: frontend/src/components/file-view/comment-widget/comment-delete-popover.js:60
-#| msgid "Are you sure to delete "
 msgid "Are you sure to delete this comment?"
 msgstr "你确定要删除这个评论吗？"
 
 #: frontend/src/components/file-view/comment-widget/comment-delete-popover.js:60
-#| msgid "Are you sure to delete "
 msgid "Are you sure to delete this reply?"
 msgstr "你确定要删除这个回复吗？"
 
 #: frontend/src/components/file-view/comment-widget/comment-item.js:85
-#| msgid "Mark all read"
 msgid "Mark as resolved"
 msgstr "标记为已解决"
 
 #: frontend/src/components/file-view/comment-widget/comment-item.js:87
-#| msgid "Submit"
 msgid "Resubmit"
 msgstr "重新提出"
 
 #: frontend/src/components/file-view/comment-widget/comment-list.js:103
 #: frontend/src/components/file-view/comment-widget/comment-list.js:127
-#| msgid "No tags"
 msgid "All comments"
 msgstr "所有评论"
 
@@ -4894,7 +4701,6 @@ msgid "Resolved comments"
 msgstr "已解决评论"
 
 #: frontend/src/components/file-view/comment-widget/comment-list.js:115
-#| msgid "Unfreeze Document"
 msgid "Unresolved comments"
 msgstr "未解决评论"
 
@@ -4907,7 +4713,6 @@ msgid "No comment yet."
 msgstr "还没有评论"
 
 #: frontend/src/components/file-view/comment-widget/reply-list.js:91
-#| msgid "File details"
 msgid "Comment details"
 msgstr "评论详情"
 
@@ -4933,21 +4738,21 @@ msgstr "已锁定"
 #: frontend/src/components/file-view/file-toolbar.js:126
 #: frontend/src/components/file-view/onlyoffice-file-toolbar.js:27
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:72
-#: frontend/src/utils/text-translation.js:245
+#: frontend/src/utils/text-translation.js:247
 msgid "Open parent folder"
 msgstr "打开父目录"
 
 #: frontend/src/components/file-view/file-toolbar.js:120
 #: frontend/src/components/file-view/file-toolbar.js:165
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:173
-#: frontend/src/utils/text-translation.js:96
+#: frontend/src/utils/text-translation.js:98
 msgid "Lock"
 msgstr "锁定"
 
 #: frontend/src/components/file-view/file-toolbar.js:123
 #: frontend/src/components/file-view/file-toolbar.js:169
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:181
-#: frontend/src/utils/text-translation.js:100
+#: frontend/src/utils/text-translation.js:102
 msgid "Unlock"
 msgstr "解锁"
 
@@ -4957,7 +4762,6 @@ msgstr "解锁"
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:218
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:63
 #: frontend/src/pages/wiki2/wiki-comment/plugin-item.js:27
-#| msgid "Document"
 msgid "Comment"
 msgstr "评论"
 
@@ -4993,7 +4797,6 @@ msgid "Online view is not applicable to this file format"
 msgstr "此文件格式不支持云端查看"
 
 #: frontend/src/components/file-view/image-zoomer.js:13
-#| msgid "Images"
 msgid "Page fit"
 msgstr "适应页面"
 
@@ -5015,7 +4818,7 @@ msgstr "返回"
 #: frontend/src/features/library-view/dir-list-view/dirent-list-item/index.js:762
 #: frontend/src/pages/app/main-panel/shared-libs/item.js:177
 #: frontend/src/pages/app/main-panel/shared-libs/item.js:324
-#: frontend/src/utils/text-translation.js:176
+#: frontend/src/utils/text-translation.js:178
 msgid "Star"
 msgstr "添加星标"
 
@@ -5037,7 +4840,7 @@ msgstr "添加星标"
 #: frontend/src/pages/app/main-panel/shared-libs/item.js:324
 #: frontend/src/pages/app/main-panel/starred/starred.js:158
 #: frontend/src/pages/app/main-panel/starred/starred.js:205
-#: frontend/src/utils/text-translation.js:180
+#: frontend/src/utils/text-translation.js:182
 msgid "Unstar"
 msgstr "取消星标"
 
@@ -5049,13 +4852,13 @@ msgstr "取消星标"
 #: frontend/src/pages/sys-admin/groups/groups-content.js:207
 #: frontend/src/pages/sys-admin/repos/repos.js:254
 #: frontend/src/pages/sys-admin/users/user-repos.js:164
-#: frontend/src/utils/text-translation.js:186
+#: frontend/src/utils/text-translation.js:188
 msgid "Transfer"
 msgstr "转让"
 
 #: frontend/src/components/library-op-menu.js:172
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:326
-#: frontend/src/utils/text-translation.js:198
+#: frontend/src/utils/text-translation.js:200
 msgid "Change Password"
 msgstr "修改密码"
 
@@ -5067,13 +4870,13 @@ msgstr "修改密码"
 #: frontend/src/pages/sys-admin/orgs/org-users.js:204
 #: frontend/src/pages/sys-admin/orgs/org-users.js:309
 #: frontend/src/pages/sys-admin/users/users-content.js:561
-#: frontend/src/utils/text-translation.js:202
+#: frontend/src/utils/text-translation.js:204
 msgid "Reset Password"
 msgstr "重置密码"
 
 #: frontend/src/components/library-op-menu.js:178
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:311
-#: frontend/src/utils/text-translation.js:190
+#: frontend/src/utils/text-translation.js:192
 msgid "Folder Permission"
 msgstr "目录权限"
 
@@ -5082,14 +4885,14 @@ msgstr "目录权限"
 #: frontend/src/pages/app/side-panel/main-side-nav-folded.js:390
 #: frontend/src/pages/app/side-panel/main-side-nav.js:459
 #: frontend/src/pages/app/side-panel/main-side-nav.js:460
-#: frontend/src/utils/text-translation.js:194
+#: frontend/src/utils/text-translation.js:196
 msgid "Share Admin"
 msgstr "共享管理"
 
 #: frontend/src/components/library-op-menu.js:193
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:344
 #: frontend/src/features/metadata/components/popover/filter-popover/index.js:145
-#: frontend/src/utils/text-translation.js:206
+#: frontend/src/utils/text-translation.js:208
 msgid "Advanced"
 msgstr "高级"
 
@@ -5103,7 +4906,7 @@ msgstr "办公套件"
 #: frontend/src/features/library-view/dir-others/library-more-operations/my-library-more-operations.js:215
 #: frontend/src/pages/file-history-old/index.js:243
 #: frontend/src/repo-folder-trash.js:299
-#: frontend/src/utils/text-translation.js:329
+#: frontend/src/utils/text-translation.js:331
 msgid "More"
 msgstr "更多"
 
@@ -5126,7 +4929,6 @@ msgid "Add group member"
 msgstr "增加群组成员"
 
 #: frontend/src/components/manage-members-dialog.js:209
-#| msgid "Search groups"
 msgid "Search group members"
 msgstr "搜索群组成员"
 
@@ -5141,185 +4943,171 @@ msgid "Notifications"
 msgstr "通知"
 
 #: frontend/src/components/notification/index.js:184
-#| msgid "Notifications"
 msgid "Notification"
 msgstr "通知"
 
 #: frontend/src/components/notification/index.js:185
 #: frontend/src/components/notification/user-notifications/index.js:173
-#| msgid "Mark all read"
 msgid "Mark all as read"
 msgstr "全部标记为已读"
 
 #: frontend/src/components/notification/index.js:186
-#| msgid "All Notifications"
 msgid "View all notifications"
 msgstr "查看所有通知"
 
-#: frontend/src/components/notification/notice-item/index.js:53
+#: frontend/src/components/notification/notice-item/index.js:54
 msgid "File {file_link} has a new comment from user {author}."
 msgstr "文件 {file_link} 有来自用户 {author} 新的评论。"
 
-#: frontend/src/components/notification/notice-item/index.js:86
+#: frontend/src/components/notification/notice-item/index.js:87
 #: frontend/src/translate.js:37
 msgid "User {user_link} has added you to {group_link}"
 msgstr "用户 {user_link} 将你加入到群组 {group_link}。"
 
-#: frontend/src/components/notification/notice-item/index.js:102
-#| msgid "{share_from} has shared a library named {repo_link} to you."
+#: frontend/src/components/notification/notice-item/index.js:103
 msgid "{share_from} has shared a library named {repo_link} with you."
 msgstr "{share_from} 给你共享了资料库 {repo_link}。"
 
-#: frontend/src/components/notification/notice-item/index.js:104
-#| msgid "{share_from} has shared a folder named {repo_link} to you."
+#: frontend/src/components/notification/notice-item/index.js:105
 msgid "{share_from} has shared a folder named {repo_link} with you."
 msgstr "{share_from} 给你共享了目录 {repo_link}。"
 
-#: frontend/src/components/notification/notice-item/index.js:125
+#: frontend/src/components/notification/notice-item/index.js:126
 msgid ""
 "{share_from} has changed the permission of library {repo_link} to "
 "{permission}."
 msgstr "{share_from} 已经将资料库 {repo_link} 的权限改为 {permission}。"
 
-#: frontend/src/components/notification/notice-item/index.js:127
+#: frontend/src/components/notification/notice-item/index.js:128
 msgid ""
 "{share_from} has changed the permission of folder {repo_link} to "
 "{permission}."
 msgstr "{share_from} 已经将目录 {repo_link} 的权限改为 {permission}。"
 
-#: frontend/src/components/notification/notice-item/index.js:147
+#: frontend/src/components/notification/notice-item/index.js:148
 msgid "{share_from} has cancelled the sharing of library {repo_name}."
 msgstr "{share_from} 已经取消了资料库 {repo_name} 的共享。"
 
-#: frontend/src/components/notification/notice-item/index.js:149
+#: frontend/src/components/notification/notice-item/index.js:150
 msgid "{share_from} has cancelled the sharing of folder {repo_name}."
 msgstr "{share_from} 已经取消了目录 {repo_name} 的共享。"
 
-#: frontend/src/components/notification/notice-item/index.js:168
-#| msgid ""
-#| "_from} has shared a library named {repo_link} to group {group_link}."
+#: frontend/src/components/notification/notice-item/index.js:169
 msgid ""
 "{share_from} has shared a library named {repo_link} with group {group_link}."
 msgstr "{share_from} 给群组 {group_link} 共享了一个资料库 {repo_link}。"
 
-#: frontend/src/components/notification/notice-item/index.js:170
-#| msgid ""
-#| "_from} has shared a folder named {repo_link} to group {group_link}."
+#: frontend/src/components/notification/notice-item/index.js:171
 msgid ""
 "{share_from} has shared a folder named {repo_link} with group {group_link}."
 msgstr "{share_from} 给群组 {group_link} 共享了一个目录 {repo_link} 。"
 
-#: frontend/src/components/notification/notice-item/index.js:190
-#| msgid "{user} has transfered a library named {repo_link} to you."
+#: frontend/src/components/notification/notice-item/index.js:191
 msgid "{user} has transferred a library named {repo_link} to you."
 msgstr "{user} 转让了一个资料库 {repo_link} 给你。"
 
-#: frontend/src/components/notification/notice-item/index.js:287
+#: frontend/src/components/notification/notice-item/index.js:288
 msgid "{user} created file {fileName} in library {libraryName}."
 msgstr "{user} 在资料库 {libraryName} 中创建了文件 {fileName}。"
 
-#: frontend/src/components/notification/notice-item/index.js:287
+#: frontend/src/components/notification/notice-item/index.js:288
 msgid ""
 "{user} created file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
 msgstr "{user} 在资料库 {libraryName} 中创建了文件 {fileName} 和 {fileCount} 个其他文件。"
 
-#: frontend/src/components/notification/notice-item/index.js:290
+#: frontend/src/components/notification/notice-item/index.js:291
 msgid "{user} deleted file {fileName} in library {libraryName}."
 msgstr "{user} 在资料库 {libraryName} 中删除了文件 {fileName}。"
 
-#: frontend/src/components/notification/notice-item/index.js:290
+#: frontend/src/components/notification/notice-item/index.js:291
 msgid ""
 "{user} deleted file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
 msgstr "{user} 在资料库 {libraryName} 中删除了文件 {fileName} 和 {fileCount} 个其他文件。"
 
-#: frontend/src/components/notification/notice-item/index.js:294
+#: frontend/src/components/notification/notice-item/index.js:295
 msgid "{user} restored file {fileName} in library {libraryName}."
 msgstr "{user} 在资料库 {libraryName} 中恢复了文件 {fileName}。"
 
-#: frontend/src/components/notification/notice-item/index.js:297
-#| msgid ""
-#| " renamed file {oldFileName} {fileName} in library {libraryName}."
+#: frontend/src/components/notification/notice-item/index.js:298
 msgid ""
 "{user} renamed file {oldFileName} to {fileName} in library {libraryName}."
 msgstr "用户 {user} 重命名了文件 {oldFileName} 为 {fileName}，并将其添加到资料库 {libraryName}。"
 
-#: frontend/src/components/notification/notice-item/index.js:301
+#: frontend/src/components/notification/notice-item/index.js:302
 msgid "{user} moved file {fileName} in library {libraryName}."
 msgstr "{user} 移动了资料库 {libraryName} 中的文件 {fileName}。"
 
-#: frontend/src/components/notification/notice-item/index.js:301
+#: frontend/src/components/notification/notice-item/index.js:302
 msgid ""
 "{user} moved file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
 msgstr "{user} 在资料库 {libraryName} 中移动了文件 {fileName} 和 {fileCount} 个其他文件。"
 
-#: frontend/src/components/notification/notice-item/index.js:304
+#: frontend/src/components/notification/notice-item/index.js:305
 msgid "{user} updated file {fileName} in library {libraryName}."
 msgstr "{user} 在资料库 {libraryName} 中更新了文件 {fileName}。"
 
-#: frontend/src/components/notification/notice-item/index.js:316
+#: frontend/src/components/notification/notice-item/index.js:317
 msgid "{user} created folder {folderName} in library {libraryName}."
 msgstr "{user} 在资料库 {libraryName} 中创建了目录 {folderName}。"
 
-#: frontend/src/components/notification/notice-item/index.js:316
+#: frontend/src/components/notification/notice-item/index.js:317
 msgid ""
 "{user} created folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
 msgstr "{user} 在资料库 {libraryName} 中创建了目录 {folderName} 和 {folderCount} 个其他目录。"
 
-#: frontend/src/components/notification/notice-item/index.js:319
+#: frontend/src/components/notification/notice-item/index.js:320
 msgid "{user} deleted folder {folderName} in library {libraryName}."
 msgstr "{user} 在资料库 {libraryName} 中删除了目录 {folderName}。"
 
-#: frontend/src/components/notification/notice-item/index.js:319
+#: frontend/src/components/notification/notice-item/index.js:320
 msgid ""
 "{user} deleted folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
 msgstr "{user} 在资料库 {libraryName} 中删除了目录 {folderName} 和 {folderCount} 个其他目录。"
 
-#: frontend/src/components/notification/notice-item/index.js:323
+#: frontend/src/components/notification/notice-item/index.js:324
 msgid "{user} restored folder {folderName} in library {libraryName}."
 msgstr "{user} 在资料库 {libraryName} 中恢复了目录 {folderName}。"
 
-#: frontend/src/components/notification/notice-item/index.js:326
-#| msgid ""
-#| " renamed folder {oldFolderName} {folderName} in library braryName}."
+#: frontend/src/components/notification/notice-item/index.js:327
 msgid ""
 "{user} renamed folder {oldFolderName} to {folderName} in library "
 "{libraryName}."
 msgstr "用户 {user} 重命名了目录 {oldFolderName} 为 {folderName}，并将其添加到资料库 {libraryName}。"
 
-#: frontend/src/components/notification/notice-item/index.js:330
+#: frontend/src/components/notification/notice-item/index.js:331
 msgid "{user} moved folder {folderName} in library {libraryName}."
 msgstr "{user} 移动了资料库 {libraryName} 中的目录 {folderName}。"
 
-#: frontend/src/components/notification/notice-item/index.js:330
+#: frontend/src/components/notification/notice-item/index.js:331
 msgid ""
 "{user} moved folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
 msgstr "{user} 移动了资料库 {libraryName} 中的目录 {folderName} 和 {folderCount} 个其他目录。"
 
-#: frontend/src/components/notification/notice-item/index.js:380
-#: frontend/src/components/notification/notice-item/index.js:407
+#: frontend/src/components/notification/notice-item/index.js:381
+#: frontend/src/components/notification/notice-item/index.js:408
 msgid "Marked \"{resolve_comment}\" as resolved in document {sdoc_link}"
 msgstr "在文档 {sdoc_link} 中，标记 \"{resolve_comment}\" 为已解决"
 
-#: frontend/src/components/notification/notice-item/index.js:384
-#: frontend/src/components/notification/notice-item/index.js:411
+#: frontend/src/components/notification/notice-item/index.js:385
+#: frontend/src/components/notification/notice-item/index.js:412
 msgid "Marked as resolved in document {sdoc_link}"
 msgstr "在文档 {sdoc_link} 中，标记为已解决"
 
-#: frontend/src/components/notification/notice-item/index.js:388
+#: frontend/src/components/notification/notice-item/index.js:389
 msgid "Added a new comment in document {sdoc_link}:"
 msgstr "已经在文档 {sdoc_link} 中增加了一条新评论："
 
-#: frontend/src/components/notification/notice-item/index.js:415
+#: frontend/src/components/notification/notice-item/index.js:416
 msgid "Added a new reply in document {sdoc_link}:"
 msgstr "已经在文档 {sdoc_link} 中增加了一条新回复："
 
-#: frontend/src/components/notification/notice-item/index.js:468
+#: frontend/src/components/notification/notice-item/index.js:469
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:90
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:98
 #: frontend/src/pages/sys-admin/libraries-and-links/repos-nav.js:21
@@ -5329,37 +5117,31 @@ msgstr "已经在文档 {sdoc_link} 中增加了一条新回复："
 msgid "System"
 msgstr "系统"
 
-#: frontend/src/components/notification/notice-item/index.js:479
-#| msgid "Email notification updated"
+#: frontend/src/components/notification/notice-item/index.js:480
 msgid "Mark notification as read"
 msgstr "将通知标记为已读"
 
-#: frontend/src/components/notification/notice-item/index.js:502
-#| msgid "All Notifications"
+#: frontend/src/components/notification/notice-item/index.js:503
 msgid "View notification"
 msgstr "查看通知"
 
 #: frontend/src/components/notification/notification-popover/index.js:96
 #: frontend/src/components/notification/user-notifications/index.js:214
 #: frontend/src/features/library-view/dir-settings-view/index.js:114
-#| msgid "Generate Link"
 msgid "General"
 msgstr "通用"
 
 #: frontend/src/components/notification/notification-popover/index.js:110
 #: frontend/src/components/notification/user-notifications/index.js:226
-#| msgid "Permission"
 msgid "Discussion"
 msgstr "讨论"
 
 #: frontend/src/components/notification/user-notifications/index.js:266
 #: frontend/src/components/notification/user-notifications/index.js:271
-#| msgid "Updated file"
 msgid "Update time"
 msgstr "更新时间"
 
 #: frontend/src/components/option-editor/option-editor-container/index.js:44
-#| msgid "Add User"
 msgid "Add tag"
 msgstr "增加标签"
 
@@ -5404,12 +5186,10 @@ msgid "Outline"
 msgstr "目录"
 
 #: frontend/src/components/pdf-viewer.js:344
-#| msgid "Document"
 msgid "Decrypt document"
 msgstr "解密文档"
 
 #: frontend/src/components/pdf-viewer.js:426
-#| msgid "Document"
 msgid "Print document"
 msgstr "打印文档"
 
@@ -5432,19 +5212,16 @@ msgstr "新建标签"
 
 #: frontend/src/components/popover/edit-wiki-popover/index.js:558
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:263
-#| msgid "File name"
 msgid "Edit name and icon"
 msgstr "编辑名称和图标"
 
 #: frontend/src/components/popover/user-select-popover/index.js:112
 #: frontend/src/pages/sys-admin/sys-logs/log-selector/log-repo-selector.js:166
-#| msgid "Loading"
 msgid "Loading..."
 msgstr "加载中..."
 
 #: frontend/src/components/publish-wiki-content/index.js:89
 #: frontend/src/pages/wiki2/side-panel.js:285
-#| msgid "Wiki published"
 msgid "Wiki unpublished"
 msgstr "知识库已取消发布"
 
@@ -5467,7 +5244,6 @@ msgid ""
 msgstr "URL 的自定义部分长度必须在5到30个字符之间，并且只能包含字母（a-z），数字和连字符。"
 
 #: frontend/src/components/publish-wiki-content/index.js:153
-#| msgid "Wiki published"
 msgid "SEO: Pre-render published pages"
 msgstr "SEO：预渲染已发布的页面"
 
@@ -5481,13 +5257,11 @@ msgstr "在服务器上预渲染已发布的知识库页面，以便搜索引擎
 #: frontend/src/components/publish-wiki-content/index.js:199
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:275
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:332
-#| msgid "Publish"
 msgid "Unpublish"
 msgstr "取消发布"
 
 #: frontend/src/components/publish-wiki-content/index.js:182
 #: frontend/src/components/publish-wiki-content/index.js:201
-#| msgid "Publish"
 msgid "Republish"
 msgstr "重新发布"
 
@@ -5499,12 +5273,10 @@ msgid "Publish"
 msgstr "发布"
 
 #: frontend/src/components/published-wiki-entrance/index.js:31
-#| msgid "Publish"
 msgid "Published"
 msgstr "已发布"
 
 #: frontend/src/components/published-wiki-entrance/index.js:34
-#| msgid "Wiki published"
 msgid "View published page"
 msgstr "查看已发布页面"
 
@@ -5513,12 +5285,10 @@ msgid "QR code downloaded successfully"
 msgstr "二维码已成功下载"
 
 #: frontend/src/components/qr-code-popover.js:62
-#| msgid "URL is copied to the clipboard"
 msgid "QR code copied to clipboard"
 msgstr "二维码已复制到剪贴板"
 
 #: frontend/src/components/qr-code-popover.js:64
-#| msgid "Failed to modify filter"
 msgid "Failed to copy QR code"
 msgstr "复制二维码失败"
 
@@ -5528,7 +5298,6 @@ msgid ""
 msgstr "提示：有旧版本的标签。请将标签迁移到新版本。"
 
 #: frontend/src/components/repo-info-bar/repo-info-bar-migrate.js:21
-#| msgid "Migrate User"
 msgid "Migrate"
 msgstr "迁移"
 
@@ -5546,7 +5315,6 @@ msgstr "所在服务器"
 #: frontend/src/constants/dir-column-config.js:16
 #: frontend/src/features/library-view/dir-list-view/table-headers.js:115
 #: frontend/src/features/tag/views/tag-files/list/index.js:148
-#| msgid "Last modifier"
 msgid "Last modified"
 msgstr "最后修改"
 
@@ -5556,7 +5324,6 @@ msgid "Last modified by"
 msgstr "最近修改"
 
 #: frontend/src/components/search/details/index.js:37
-#| msgid "Folder does not exist."
 msgid "Library does not exist"
 msgstr "资料库不存在"
 
@@ -5569,7 +5336,6 @@ msgstr "搜索文件"
 
 #: frontend/src/components/search/search-filters/filter-by-creator.js:127
 #: frontend/src/features/library-view/dir-history-view/filters/creator-filter.js:124
-#| msgid "Search users"
 msgid "Search user"
 msgstr "搜索用户"
 
@@ -5577,7 +5343,6 @@ msgstr "搜索用户"
 #: frontend/src/components/search/search-filters/filter-by-date.js:37
 #: frontend/src/components/search/search-filters/filter-by-date.js:50
 #: frontend/src/features/library-view/dir-history-view/filters/date-filter.js:185
-#| msgid "Created time"
 msgid "Create time"
 msgstr "创建时间"
 
@@ -5591,28 +5356,24 @@ msgstr "今天"
 #: frontend/src/components/search/search-filters/filter-by-date.js:65
 #: frontend/src/features/library-view/dir-history-view/filters/date-filter.js:42
 #: frontend/src/features/library-view/dir-history-view/filters/date-filter.js:59
-#| msgid "Last Update"
 msgid "Last 7 days"
 msgstr "最近 7 天"
 
 #: frontend/src/components/search/search-filters/filter-by-date.js:68
 #: frontend/src/features/library-view/dir-history-view/filters/date-filter.js:44
 #: frontend/src/features/library-view/dir-history-view/filters/date-filter.js:62
-#| msgid "Last Update"
 msgid "Last 30 days"
 msgstr "最近 30 天"
 
 #: frontend/src/components/search/search-filters/filter-by-date.js:73
 #: frontend/src/features/library-view/dir-history-view/filters/date-filter.js:46
 #: frontend/src/features/library-view/dir-history-view/filters/date-filter.js:67
-#| msgid "Custom properties"
 msgid "Custom time"
 msgstr "自定义时间"
 
 #: frontend/src/components/search/search-filters/filter-by-suffix.js:57
 #: frontend/src/features/library-view/dir-trash-view/file-suffix-filter/index.js:57
 #: frontend/src/features/metadata/utils/column/index.js:219
-#| msgid "File status"
 msgid "File suffix"
 msgstr "文件后缀"
 
@@ -5622,19 +5383,16 @@ msgid "Separate multiple suffixes by \",\"(like sdoc, pdf)"
 msgstr "用 “，” 分隔多个后缀（如 sdoc，pdf）"
 
 #: frontend/src/components/search/search-filters/filter-by-text.js:15
-#| msgid "File name"
 msgid "File name and content"
 msgstr "文件名和内容"
 
 #: frontend/src/components/search/search-filters/filter-by-text.js:18
-#| msgid "File name"
 msgid "File name only"
 msgstr "仅文件名"
 
 #: frontend/src/components/search/search-tags/index.js:61
 #: frontend/src/features/tag/views/all-tags/tags-table/context-menu-options.js:166
 #: frontend/src/features/tag/views/all-tags/tags-table/editors/tag-name.js:34
-#| msgid "Edit Quota"
 msgid "Edit tag"
 msgstr "编辑标签"
 
@@ -5646,12 +5404,10 @@ msgstr "在全部资料库中"
 
 #: frontend/src/components/search/search.js:873
 #: frontend/src/components/search/search.js:902
-#| msgid "Search files in this library"
 msgid "in this library"
 msgstr "在这个资料库中"
 
 #: frontend/src/components/search/search.js:881
-#| msgid "Parent folder"
 msgid "in this folder"
 msgstr "在这个目录"
 
@@ -5671,18 +5427,15 @@ msgstr "展示高级搜索"
 
 #: frontend/src/components/search/wiki2-global-search.js:72
 #: frontend/src/components/toolbar/common-toolbar.js:89
-#| msgid "Tag not found"
 msgid "Page not found"
 msgstr "页面不存在"
 
 #: frontend/src/components/search/wiki2-global-search.js:241
 #: frontend/src/components/search/wiki2-search.js:246
-#| msgid "Wikis"
 msgid "Wiki pages"
 msgstr "知识库页面"
 
 #: frontend/src/components/search/wiki2-global-search.js:279
-#| msgid "Search files"
 msgid "Search wikis"
 msgstr "搜索知识库页面"
 
@@ -5725,7 +5478,6 @@ msgstr "拥有指定邮箱的人"
 #: frontend/src/pages/sys-admin/invitations/invitations.js:188
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:185
 #: frontend/src/pages/sys-admin/users/users-filter-bar.js:16
-#: frontend/src/utils/text-translation.js:84
 msgid "Default"
 msgstr "默认"
 
@@ -5738,7 +5490,6 @@ msgid "Guest"
 msgstr "访客"
 
 #: frontend/src/components/select-members-to-share-with/index.js:60
-#| msgid "Select a department"
 msgid "Select members from department"
 msgstr "从部门中选择成员"
 
@@ -5759,7 +5510,6 @@ msgid "Send to:"
 msgstr "发送到："
 
 #: frontend/src/components/send-link.js:126
-#| msgid "Add password protection"
 msgid "Send password separately"
 msgstr "单独发送密码"
 
@@ -5805,17 +5555,14 @@ msgid "Set row height"
 msgstr "设置行高"
 
 #: frontend/src/components/set-row-height.js:47
-#| msgid "Select all"
 msgid "Select row height"
 msgstr "选择行高"
 
 #: frontend/src/components/sf-table/masks/interaction-masks/index.js:735
-#| msgid "xxx cells selected"
 msgid "xxx cells cut"
 msgstr "xxx 个单元格已剪切"
 
 #: frontend/src/components/sf-table/masks/interaction-masks/index.js:735
-#| msgid "1 cell copied"
 msgid "1 cell cut"
 msgstr "1 个单元格已剪切"
 
@@ -5856,7 +5603,6 @@ msgid "xxx record"
 msgstr "xxx 个记录"
 
 #: frontend/src/components/sf-table/table-main/records-footer/index.js:145
-#| msgid "show more"
 msgid "Load more"
 msgstr "加载更多"
 
@@ -5922,12 +5668,10 @@ msgid "Dollar"
 msgstr "美元"
 
 #: frontend/src/components/sf-table/table-main/records-header/dropdown-menu/number-format-popover/index.js:37
-#| msgid "European"
 msgid "Euro"
 msgstr "欧元"
 
 #: frontend/src/components/sf-table/table-main/records-header/dropdown-menu/number-format-popover/index.js:38
-#| msgid "Custom properties"
 msgid "Custom currency"
 msgstr "自定义货币"
 
@@ -5960,12 +5704,10 @@ msgid "After"
 msgstr "后"
 
 #: frontend/src/components/sf-table/table-main/records-header/dropdown-menu/number-format-popover/index.js:150
-#| msgid "email is required"
 msgid "Currency symbol is required"
 msgstr "货币符号是必填项"
 
 #: frontend/src/components/sf-table/table-main/records-header/dropdown-menu/number-format-popover/index.js:291
-#| msgid "Edit format settings"
 msgid "Number format settings"
 msgstr "数字格式设置"
 
@@ -5975,7 +5717,6 @@ msgid "Format"
 msgstr "格式"
 
 #: frontend/src/components/sf-table/table-main/records-header/dropdown-menu/number-format-popover/index.js:306
-#| msgid "Custom properties"
 msgid "Custom symbol"
 msgstr "自定义符号"
 
@@ -6000,13 +5741,11 @@ msgid "Enforce precision"
 msgstr "指定精度"
 
 #: frontend/src/components/sf-table/table-main/records-header/dropdown-menu/number-format-popover/index.js:363
-#| msgid "Permission"
 msgid "Precision"
 msgstr "精度"
 
 #: frontend/src/components/sf-table/table-main/records-header/insert-column/index.js:111
 #: frontend/src/components/sf-table/table-main/records-header/insert-column/index.js:115
-#| msgid "Add icon"
 msgid "Add column"
 msgstr "增加列"
 
@@ -6020,26 +5759,22 @@ msgstr "该行已锁定，无法修改"
 
 #: frontend/src/components/sf-table/table-main/records/record/actions-cell/index.js:85
 #: frontend/src/components/sf-table/table-main/records/record/actions-cell/index.js:86
-#| msgid "Select all"
 msgid "Select"
 msgstr "选择"
 
 #: frontend/src/components/share-link-panel/link-authenticated-emails.js:123
 #: frontend/src/components/share-link-panel/link-authenticated-users.js:128
 #, javascript-format
-#| msgid "successfully added user %s."
 msgid "Successfully added %s."
 msgstr "成功添加 %s。"
 
 #: frontend/src/components/share-link-panel/link-authenticated-emails.js:188
 #: frontend/src/components/share-link-panel/link-details.js:283
-#| msgid "Activated Users"
 msgid "Authenticated emails"
 msgstr "验证的邮箱"
 
 #: frontend/src/components/share-link-panel/link-authenticated-users.js:186
 #: frontend/src/components/share-link-panel/link-details.js:280
-#| msgid "Activated Users"
 msgid "Authenticated users"
 msgstr "验证的用户"
 
@@ -6074,29 +5809,24 @@ msgstr "链接数量"
 
 #: frontend/src/components/share-link-panel/link-creation.js:341
 #: frontend/src/components/share-link-panel/link-creation.js:343
-#| msgid "Set password"
 msgid "Hide password"
 msgstr "隐藏密码"
 
 #: frontend/src/components/share-link-panel/link-creation.js:341
 #: frontend/src/components/share-link-panel/link-creation.js:343
-#| msgid "New password"
 msgid "Show password"
 msgstr "显示密码"
 
 #: frontend/src/components/share-link-panel/link-creation.js:345
 #: frontend/src/components/share-link-panel/link-creation.js:347
-#| msgid "Set password"
 msgid "Generate password"
 msgstr "生成密码"
 
 #: frontend/src/components/share-link-panel/link-creation.js:391
-#| msgid "Edit permission"
 msgid "Set permission"
 msgstr "设置权限"
 
 #: frontend/src/components/share-link-panel/link-creation.js:408
-#| msgid "Access Log"
 msgid "Set access scope"
 msgstr "设置访问范围"
 
@@ -6106,42 +5836,36 @@ msgid "Share link is copied to the clipboard."
 msgstr "共享链接已复制到剪贴板。"
 
 #: frontend/src/components/share-link-panel/link-details.js:58
-#| msgid "Share link is copied to the clipboard."
 msgid "Raw file link is copied to the clipboard."
 msgstr "原始文件链接已复制到剪贴板。"
 
 #: frontend/src/components/share-link-panel/link-details.js:183
-#| msgid "New file name"
 msgid "Raw file link"
 msgstr "原始文件链接"
 
 #: frontend/src/components/share-link-panel/link-details.js:269
 #: frontend/src/components/share-link-panel/link-list.js:96
 #: frontend/src/components/share-link-panel/link-list.js:111
-#| msgid "Access Log"
 msgid "Access scope"
 msgstr "访问范围"
 
 #: frontend/src/components/share-link-panel/link-details.js:305
 #: frontend/src/components/share-link-panel/link-item.js:200
-#| msgid "Delete share links"
 msgid "Delete share link"
 msgstr "删除共享链接"
 
 #: frontend/src/components/share-link-panel/link-details.js:306
 #: frontend/src/components/share-link-panel/link-item.js:201
-#| msgid "Are you sure you want to delete the selected share link(s) ?"
 msgid "Are you sure you want to delete the share link?"
 msgstr "确定删除该共享链接吗？"
 
 #: frontend/src/components/share-link-panel/link-item.js:184
-#| msgid "Code"
 msgid "QR Code"
 msgstr "二维码"
 
 #: frontend/src/components/share-link-panel/link-list.js:71
 #: frontend/src/pages/wiki2/main-panel.js:379
-#: frontend/src/utils/text-translation.js:116
+#: frontend/src/utils/text-translation.js:118
 msgid "Export"
 msgstr "导出"
 
@@ -6170,7 +5894,6 @@ msgstr "当前路径："
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:161
 #: frontend/src/pages/upload-link/index.js:47
-#| msgid "Shared by"
 msgid "Shared by:"
 msgstr "共享来源："
 
@@ -6229,7 +5952,6 @@ msgid "Successfully starred {library_name_placeholder}."
 msgstr "成功添加星标 {library_name_placeholder}"
 
 #: frontend/src/components/single-selector/index.js:70
-#| msgid "Clear selected"
 msgid "Toggle selector menu"
 msgstr "切换选择器菜单"
 
@@ -6259,17 +5981,14 @@ msgid "Switch sort mode"
 msgstr "切换排序模式"
 
 #: frontend/src/components/toolbar/chat-toolbar.js:26
-#| msgid "New Tag"
 msgid "New chat"
 msgstr "新建对话"
 
 #: frontend/src/components/toolbar/common-toolbar.js:104
-#| msgid "Search files"
 msgid "Search wiki pages"
 msgstr "搜索知识库页面"
 
 #: frontend/src/components/user-select/index.js:335
-#| msgid "Select a user"
 msgid "Select users"
 msgstr "选择用户"
 
@@ -6282,7 +6001,6 @@ msgid "List view"
 msgstr "列表视图"
 
 #: frontend/src/components/view-modes/index.js:79
-#| msgid "Table"
 msgid "Table view"
 msgstr "表格视图"
 
@@ -6300,7 +6018,6 @@ msgid "Wiki published"
 msgstr "知识库已发布"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:281
-#| msgid "Convert Wiki"
 msgid "Convert to new Wiki"
 msgstr "转换为新知识库"
 
@@ -6309,36 +6026,30 @@ msgid "Visit the wiki"
 msgstr "访问知识库"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:330
-#| msgid "Publish Wiki"
 msgid "Unpublish Wiki"
 msgstr "取消发布知识库"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:331
-#| msgid "Are you sure you want to unlink this device?"
 msgid "Are you sure you want to unpublish Wiki"
 msgstr "你确定要取消发布知识库吗"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:338
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:350
-#| msgid "Delete File"
 msgid "Delete Wiki"
 msgstr "删除知识库"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:339
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:351
-#| msgid "Are you sure you want to delete"
 msgid "Are you sure you want to delete Wiki"
 msgstr "你确定要删除知识库吗"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:344
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:356
-#| msgid "Leave Share"
 msgid "Leave Share Wiki"
 msgstr "离开共享知识库"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:345
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:357
-#| msgid "Are you sure you want to delete %s ?"
 msgid "Are you sure you want to leave share Wiki"
 msgstr "你确定要离开共享知识库吗"
 
@@ -6350,7 +6061,6 @@ msgid "Shared with me"
 msgstr "共享给我的"
 
 #: frontend/src/components/wiki-card-view/wiki-card-view.js:114
-#| msgid "No shared links"
 msgid "No shared Wikis"
 msgstr "没有共享的知识库"
 
@@ -6359,7 +6069,6 @@ msgid "Old Wikis"
 msgstr "旧版知识库"
 
 #: frontend/src/components/wiki-card-view/wiki-icon-selector/index.js:31
-#| msgid "Community Edition"
 msgid "Common icons"
 msgstr "常用图标"
 
@@ -6396,12 +6105,10 @@ msgid "Business & finance icons"
 msgstr "商业与金融图标"
 
 #: frontend/src/components/wiki-card-view/wiki-icon-selector/index.js:112
-#| msgid "No users"
 msgid "No icons found"
 msgstr "未找到图标"
 
 #: frontend/src/components/wiki-card-view/wiki-icon-selector/index.js:155
-#| msgid "Search option"
 msgid "Search icons"
 msgstr "搜索图标"
 
@@ -6424,12 +6131,10 @@ msgstr "视图"
 #: frontend/src/features/library-view/cur-dir-path/dir-path.js:189
 #: frontend/src/features/library-view/cur-dir-path/dir-path.js:204
 #: frontend/src/features/library-view/cur-dir-path/dir-path.js:213
-#| msgid "Refresh"
 msgid "Refresh the view"
 msgstr "刷新视图"
 
 #: frontend/src/features/library-view/cur-dir-path/dir-path.js:275
-#| msgid "Cleaned trash"
 msgid "Clean trash"
 msgstr "清空回收站"
 
@@ -6440,7 +6145,7 @@ msgstr "清空回收站"
 #: frontend/src/pages/org-admin/libraries/org-repo-nav.js:19
 #: frontend/src/pages/sys-admin/libraries-and-links/repos-nav.js:22
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:223
-#: frontend/src/utils/text-translation.js:160
+#: frontend/src/utils/text-translation.js:162
 msgid "Trash"
 msgstr "回收站"
 
@@ -6450,21 +6155,17 @@ msgstr "回收站"
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:57
 #: frontend/src/pages/sys-admin/repos/repos.js:248
 #: frontend/src/pages/wiki2/main-panel.js:374
-#: frontend/src/utils/text-translation.js:144
+#: frontend/src/utils/text-translation.js:146
 msgid "History"
 msgstr "历史"
 
 #: frontend/src/features/library-view/cur-dir-path/dir-path.js:354
-#| msgid ""
-#| " snapshot will be generated after modification, which records the rary te "
-#| "after the modification."
 msgid ""
 "Tip: a snapshot will be generated after modification, which records the "
 "library state after the modification"
 msgstr "提示：修改后会生成一个快照，记录修改后的资料库状态。"
 
 #: frontend/src/features/library-view/cur-dir-path/dir-path.js:443
-#| msgid "Delete page"
 msgid "Close the panel"
 msgstr "关闭面板"
 
@@ -6476,7 +6177,6 @@ msgstr "打开面板"
 #: frontend/src/pages/sdoc-editor/sdoc-chat-panel.js:79
 #: frontend/src/pages/sdoc-editor/sdoc-chat-panel.js:125
 #: frontend/src/utils/text-translation.js:48
-#| msgid "Shared with me"
 msgid "Chat with AI"
 msgstr "与 AI 对话"
 
@@ -6551,7 +6251,6 @@ msgid "Labels"
 msgstr "标签"
 
 #: frontend/src/features/library-view/dir-history-view/filters/creator-filter.js:90
-#| msgid "Deleted"
 msgid "Deleted by"
 msgstr "删除人"
 
@@ -6562,7 +6261,6 @@ msgstr "删除人"
 #: frontend/src/pages/wiki2/wiki-trash-dialog/index.js:144
 #: frontend/src/pages/wiki2/wiki-trash-dialog/index.js:152
 #: frontend/src/repo-folder-trash.js:256
-#| msgid "Deleted Time"
 msgid "Deleted time"
 msgstr "删除时间"
 
@@ -6585,7 +6283,6 @@ msgstr "过滤"
 #: frontend/src/features/library-view/dir-list-view/dirent-list-item/index.js:746
 #: frontend/src/pages/app/main-panel/share-admin/share-links.js:296
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:197
-#| msgid "Unselect"
 msgid "Unselect this item"
 msgstr "取消选择该条目"
 
@@ -6593,7 +6290,6 @@ msgstr "取消选择该条目"
 #: frontend/src/features/library-view/dir-list-view/dirent-list-item/index.js:746
 #: frontend/src/pages/app/main-panel/share-admin/share-links.js:296
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:197
-#| msgid "Select File"
 msgid "Select this item"
 msgstr "选择该条目"
 
@@ -6606,12 +6302,10 @@ msgid "You can create files quickly"
 msgstr "你可以快速创建文件"
 
 #: frontend/src/features/library-view/dir-list-view/table-headers.js:15
-#| msgid "Select all"
 msgid "Unselect all items"
 msgstr "取消选择所有条目"
 
 #: frontend/src/features/library-view/dir-list-view/table-headers.js:15
-#| msgid "Select all"
 msgid "Select all items"
 msgstr "选择所有条目"
 
@@ -6647,7 +6341,6 @@ msgstr "新建"
 
 #: frontend/src/features/library-view/dir-new.js:161
 #: frontend/src/features/library-view/toolbar/dir-operation-toolbar.js:126
-#| msgid "New File"
 msgid "New Text File"
 msgstr "新建文本文件"
 
@@ -6660,7 +6353,6 @@ msgstr "新建 SeaDoc 文件"
 #: frontend/src/features/library-view/dir-new.js:166
 #: frontend/src/features/library-view/toolbar/dir-operation-toolbar.js:131
 #: frontend/src/utils/text-translation.js:32
-#| msgid "New Excel File"
 msgid "New Excalidraw File"
 msgstr "新建 Excalidraw 文件"
 
@@ -6690,7 +6382,6 @@ msgstr "新建 Word 文件"
 
 #: frontend/src/features/library-view/dir-new.js:176
 #: frontend/src/features/library-view/toolbar/dir-operation-toolbar.js:140
-#| msgid "New SeaDoc File"
 msgid "New Docxf File"
 msgstr "新建 Docxf 文件"
 
@@ -6708,17 +6399,14 @@ msgstr "其他"
 
 #: frontend/src/features/library-view/dir-others/library-more-operations/department-library-more-operations.js:122
 #: frontend/src/features/library-view/dir-others/library-more-operations/my-library-more-operations.js:170
-#| msgid "Successfully restored the library."
 msgid "Successfully renamed the library."
 msgstr "重命名资料库成功"
 
 #: frontend/src/features/library-view/dir-others/watch-unwatch-file-changes.js:26
-#| msgid "Successfully restored the library."
 msgid "Successfully watched the library."
 msgstr "关注资料库成功"
 
 #: frontend/src/features/library-view/dir-others/watch-unwatch-file-changes.js:38
-#| msgid "Successfully restored the library."
 msgid "Successfully unwatched the library."
 msgstr "取消关注资料库成功"
 
@@ -6754,12 +6442,10 @@ msgstr "自动删除在以下天数内未修改的文件："
 #: frontend/src/features/library-view/dir-tags/index.js:72
 #: frontend/src/features/tag/components/tag-view-name/all-tags-operation-toolbar.js:72
 #: frontend/src/features/tag/components/tag-view-name/all-tags-operation-toolbar.js:108
-#| msgid "New Tag"
 msgid "New tag"
 msgstr "新标签"
 
 #: frontend/src/features/library-view/dir-trash-view/index.js:85
-#| msgid "Restored file"
 msgid "Restored {n} items"
 msgstr "已恢复 {n} 项"
 
@@ -6768,17 +6454,14 @@ msgstr "已恢复 {n} 项"
 #: frontend/src/pages/wiki2/side-panel.js:118
 #: frontend/src/pages/wiki2/wiki-trash-dialog/index.js:244
 #: frontend/src/repo-folder-trash.js:344 frontend/src/repo-snapshot.js:280
-#| msgid "Restored file"
 msgid "Restored 1 item"
 msgstr "已恢复1个项目"
 
 #: frontend/src/features/library-view/dir-trash-view/index.js:367
-#| msgid "Restored file"
 msgid "Restore items"
 msgstr "恢复项目"
 
 #: frontend/src/features/library-view/dir-trash-view/no-permission-view.js:7
-#| msgid "You do not have permission"
 msgid "You do not have permission to access Trash."
 msgstr "你没有权限访问回收站。"
 
@@ -6789,12 +6472,10 @@ msgid "File name"
 msgstr "文件名"
 
 #: frontend/src/features/library-view/dirent-detail/multi-selection-details/index.js:205
-#| msgid "xxx cells selected"
 msgid "{xxx} items have been selected"
 msgstr "{xxx} 个项目已经被选中"
 
 #: frontend/src/features/library-view/dirent-detail/multi-selection-details/index.js:209
-#| msgid "Loading"
 msgid "Loading metadata..."
 msgstr "加载元数据中..."
 
@@ -6849,13 +6530,11 @@ msgid "Move"
 msgstr "移动"
 
 #: frontend/src/features/library-view/toolbar/dir-operation-toolbar.js:59
-#| msgid "Link has been copied to clipboard"
 msgid "The path has been copied to the clipboard"
 msgstr "路径已复制到剪贴板"
 
 #: frontend/src/features/library-view/toolbar/dir-operation-toolbar.js:200
 #: frontend/src/translate.js:47
-#| msgid "Copy"
 msgid "Copy path"
 msgstr "复制路径"
 
@@ -6876,12 +6555,10 @@ msgstr "搜索协作人"
 
 #: frontend/src/features/metadata/components/cell-editors/date-editor/index.js:203
 #: frontend/src/features/metadata/components/popover/filter-popover/advanced-filters/filter-calendar.js:121
-#| msgid "End date"
 msgid "Enter date"
 msgstr "输入日期"
 
 #: frontend/src/features/metadata/components/cell-editors/date-editor/index.js:232
-#| msgid "Please select a file"
 msgid "Please select"
 msgstr "请选择"
 
@@ -6903,13 +6580,11 @@ msgstr "全屏"
 
 #: frontend/src/features/metadata/components/cell-editors/geolocation-editor/location-controls.js:32
 #: frontend/src/features/metadata/components/cell-editors/geolocation-editor/location-controls.js:33
-#| msgid "Deleted option"
 msgid "Delete location"
 msgstr "删除位置"
 
 #: frontend/src/features/metadata/components/cell-editors/geolocation-editor/search-component.js:12
 #: frontend/src/features/metadata/components/cell-editors/geolocation-editor/search-component.js:170
-#| msgid "is not empty"
 msgid "Map is not ready"
 msgstr "地图尚未准备就绪"
 
@@ -6927,17 +6602,14 @@ msgstr "搜索服务不可用"
 #: frontend/src/features/metadata/components/cell-editors/geolocation-editor/search-component.js:41
 #: frontend/src/features/metadata/components/cell-editors/geolocation-editor/search-component.js:62
 #: frontend/src/features/metadata/components/cell-editors/geolocation-editor/search-component.js:111
-#| msgid "No results"
 msgid "No results found"
 msgstr "未找到结果"
 
 #: frontend/src/features/metadata/components/cell-editors/geolocation-editor/search-component.js:217
-#| msgid "Please enter the old password"
 msgid "Please enter the address"
 msgstr "请输入地址"
 
 #: frontend/src/features/metadata/components/cell-editors/geolocation-editor/search-component.js:260
-#| msgid "Saving..."
 msgid "Searching..."
 msgstr "搜索中..."
 
@@ -6959,12 +6631,10 @@ msgid "Add option"
 msgstr "增加选项"
 
 #: frontend/src/features/metadata/components/cell-editors/tags-editor/index.js:370
-#| msgid "No options available"
 msgid "No tags available"
 msgstr "没有可获取的标签"
 
 #: frontend/src/features/metadata/components/cell-editors/tags-editor/index.js:370
-#| msgid "No tags"
 msgid "No tag"
 msgstr "没有标签"
 
@@ -6972,17 +6642,14 @@ msgstr "没有标签"
 #: frontend/src/features/tag/components/tag-view-name/index.js:22
 #: frontend/src/features/tag/components/tag-view-name/index.js:30
 #: frontend/src/features/tag/tags-tree-view/all-tags/index.js:28
-#| msgid "No tags"
 msgid "All tags"
 msgstr "全部标签"
 
 #: frontend/src/features/metadata/components/cell-editors/tags-editor/index.js:417
-#| msgid "Search"
 msgid "Search tag"
 msgstr "搜索标签"
 
 #: frontend/src/features/metadata/components/cell-editors/tags-editor/tag-item/index.js:42
-#| msgid "Select Image"
 msgid "Select tag"
 msgstr "选择标签"
 
@@ -7014,7 +6681,6 @@ msgid "Grouped by 1 property"
 msgstr "按 1 个属性分组"
 
 #: frontend/src/features/metadata/components/data-process-setter/groupby-setter.js:32
-#| msgid "Grouped by xxx properties"
 msgid "Grouped by {name_placeholder} properties"
 msgstr "按照 {name_placeholder} 属性分组"
 
@@ -7023,7 +6689,6 @@ msgid "1 hidden property"
 msgstr "1 个隐藏属性"
 
 #: frontend/src/features/metadata/components/data-process-setter/hide-column-setter.js:25
-#| msgid "Failed to modify hidden properties"
 msgid "{name_placeholder} hidden properties"
 msgstr "{name_placeholder} 个隐藏属性"
 
@@ -7034,7 +6699,6 @@ msgstr "隐藏属性"
 
 #: frontend/src/features/metadata/components/data-process-setter/map-type-setter.js:9
 #: frontend/src/features/metadata/constants/view/index.js:38
-#| msgid "Max"
 msgid "Map"
 msgstr "地图"
 
@@ -7051,7 +6715,6 @@ msgid "1 preset hidden property"
 msgstr "1 个预隐藏属性"
 
 #: frontend/src/features/metadata/components/data-process-setter/pre-hide-column-setter.js:50
-#| msgid "xxx preset hidden properties"
 msgid "{name_placeholder} preset hidden properties"
 msgstr "{name_placeholder} 预隐藏属性"
 
@@ -7068,22 +6731,18 @@ msgid "Sort"
 msgstr "排序"
 
 #: frontend/src/features/metadata/components/dialog/file-tags-dialog/index.js:36
-#| msgid "Failed to generate image description"
 msgid "Failed to suggest file tags"
 msgstr "建议文件标签失败"
 
 #: frontend/src/features/metadata/components/dialog/file-tags-dialog/index.js:88
-#| msgid "No tags"
 msgid "tags"
 msgstr "标签"
 
 #: frontend/src/features/metadata/components/dialog/file-tags-dialog/index.js:95
-#| msgid "Set Quota"
 msgid "Matching tags"
 msgstr "匹配的标签"
 
 #: frontend/src/features/metadata/components/dialog/file-tags-dialog/index.js:114
-#| msgid "No results matching"
 msgid "No matching tags"
 msgstr "没有匹配的标签"
 
@@ -7094,7 +6753,6 @@ msgstr "AI 对话与搜索"
 
 #: frontend/src/features/metadata/components/dialog/metadata-ai-summary-status-dialog/index.js:95
 #: frontend/src/features/metadata/components/dialog/metadata-tags-status-dialog/index.js:108
-#| msgid "Turn off extended properties"
 msgid "Please turn on extended properties setting first"
 msgstr "请先开启扩展属性设置"
 
@@ -7105,7 +6763,6 @@ msgid ""
 msgstr "在文件上启用 AI 对话和 AI 搜索。系统将对你的文件进行摘要，以便 AI 在对话中高效查找你的文件。"
 
 #: frontend/src/features/metadata/components/dialog/metadata-ai-summary-status-dialog/index.js:110
-#| msgid "File status"
 msgid "View status"
 msgstr "查看状态"
 
@@ -7114,16 +6771,12 @@ msgid "Turn off AI Chat and Search"
 msgstr "关闭 AI 对话与搜索"
 
 #: frontend/src/features/metadata/components/dialog/metadata-ai-summary-status-dialog/index.js:119
-#| msgid ""
-#| " really want to turn off extended properties? Existing properties l all "
-#| "deleted."
 msgid ""
 "Do you really want to turn off AI Chat and Search? AI chat and file search "
 "will no longer be available, and existing AI summaries will all be deleted."
 msgstr "你确定要关闭 AI 对话与搜索吗？AI 对话和文件搜索将不再可用，所有已有的 AI 摘要将被删除。"
 
 #: frontend/src/features/metadata/components/dialog/metadata-ai-summary-status-dialog/status-dialog.js:23
-#| msgid "Compressed"
 msgid "Completed"
 msgstr "已完成"
 
@@ -7139,18 +6792,15 @@ msgid "Crawling"
 msgstr "爬取中"
 
 #: frontend/src/features/metadata/components/dialog/metadata-ai-summary-status-dialog/status-dialog.js:26
-#| msgid "Sending..."
 msgid "Pending"
 msgstr "等待中"
 
 #: frontend/src/features/metadata/components/dialog/metadata-ai-summary-status-dialog/status-dialog.js:29
-#| msgid "Files"
 msgid "file"
 msgstr "文件"
 
 #: frontend/src/features/metadata/components/dialog/metadata-ai-summary-status-dialog/status-dialog.js:29
 #: frontend/src/pages/app/main-panel/files-activities/activity-item.js:137
-#| msgid "Files"
 msgid "files"
 msgstr "文件"
 
@@ -7159,7 +6809,6 @@ msgid "AI Summary"
 msgstr "AI 总结"
 
 #: frontend/src/features/metadata/components/dialog/metadata-ai-summary-status-dialog/status-dialog.js:76
-#| msgid "Compressed"
 msgid "Processed"
 msgstr "已处理"
 
@@ -7176,22 +6825,18 @@ msgid "AI chat and search status"
 msgstr "AI 对话和搜索状态"
 
 #: frontend/src/features/metadata/components/dialog/metadata-ai-summary-status-dialog/status-dialog.js:100
-#| msgid "Text files"
 msgid "Total files"
 msgstr "文件总数"
 
 #: frontend/src/features/metadata/components/dialog/metadata-ai-summary-status-dialog/status-dialog.js:103
-#| msgid "Last modified time"
 msgid "Latest index time"
 msgstr "最新索引时间"
 
 #: frontend/src/features/metadata/components/dialog/metadata-status-manage-dialog/index.js:167
-#| msgid "1 hidden property"
 msgid "1 Hidden property"
 msgstr "1 个隐藏属性"
 
 #: frontend/src/features/metadata/components/dialog/metadata-status-manage-dialog/index.js:169
-#| msgid "Hide properties"
 msgid "Hidden properties"
 msgstr "隐藏属性"
 
@@ -7211,7 +6856,6 @@ msgid ""
 msgstr "为文件启用扩展属性后，你可以向文件添加不同的属性，如协作者、文件过期时间、文件描述。你还可以基于文件的扩展特性创建不同的视图。"
 
 #: frontend/src/features/metadata/components/dialog/metadata-status-manage-dialog/index.js:188
-#| msgid "xxx hidden properties"
 msgid "Global hidden properties"
 msgstr "全局隐藏属性"
 
@@ -7244,19 +6888,14 @@ msgid ""
 msgstr "此资料库包含旧版本的标签。你想将标签迁移到新版本吗？"
 
 #: frontend/src/features/metadata/components/dialog/metadata-tags-status-dialog/index.js:126
-#| msgid "Visit old version page"
 msgid "Migrate old version tags"
 msgstr "迁移旧版标签"
 
 #: frontend/src/features/metadata/components/dialog/metadata-tags-status-dialog/index.js:133
-#| msgid "Turn off"
 msgid "Turn off tags"
 msgstr "关闭标签"
 
 #: frontend/src/features/metadata/components/dialog/metadata-tags-status-dialog/index.js:137
-#| msgid ""
-#| " really want to turn off extended properties? Existing properties l all "
-#| "deleted."
 msgid ""
 "Do you really want to turn off tags? Existing tags will all be deleted."
 msgstr "你真的要关闭标签吗？现有标签将全部删除。"
@@ -7286,24 +6925,22 @@ msgid "Turn off"
 msgstr "关闭"
 
 #: frontend/src/features/metadata/components/metadata-details/ai-icon.js:105
-#: frontend/src/utils/text-translation.js:281
+#: frontend/src/utils/text-translation.js:283
 msgid "Generate description"
 msgstr "生成描述"
 
 #: frontend/src/features/metadata/components/metadata-details/ai-icon.js:111
-#: frontend/src/utils/text-translation.js:293
-#| msgid "Exact date"
+#: frontend/src/utils/text-translation.js:295
 msgid "Extract text"
 msgstr "提取文本"
 
 #: frontend/src/features/metadata/components/metadata-details/ai-icon.js:115
-#: frontend/src/utils/text-translation.js:249
+#: frontend/src/utils/text-translation.js:251
 msgid "Extract file detail"
 msgstr "提取文件详细信息"
 
 #: frontend/src/features/metadata/components/metadata-details/ai-icon.js:119
-#: frontend/src/utils/text-translation.js:285
-#| msgid "Set Quota"
+#: frontend/src/utils/text-translation.js:287
 msgid "Suggest file tags"
 msgstr "建议的文件标签"
 
@@ -7336,12 +6973,10 @@ msgid "Rate"
 msgstr "评分"
 
 #: frontend/src/features/metadata/components/popover/column-popover/column-type-dropdown-menu/index.js:59
-#| msgid "Search property"
 msgid "Search properties"
 msgstr "搜索属性"
 
 #: frontend/src/features/metadata/components/popover/column-popover/column-type-dropdown-menu/index.js:67
-#| msgid "No options available"
 msgid "No properties available"
 msgstr "无可用属性"
 
@@ -7473,7 +7108,6 @@ msgid "No filters"
 msgstr "没有过滤条件"
 
 #: frontend/src/features/metadata/components/popover/filter-popover/index.js:166
-#| msgid "1 filter"
 msgid "Add filter"
 msgstr "增加过滤条件"
 
@@ -7554,27 +7188,22 @@ msgid "There is another option with this name"
 msgstr "还有一个相同名称的选项"
 
 #: frontend/src/features/metadata/components/popover/ocr-result-popover/index.js:135
-#| msgid "Failed to extract file details"
 msgid "Failed to extract text"
 msgstr "提取文本失败"
 
 #: frontend/src/features/metadata/components/popover/ocr-result-popover/index.js:153
-#| msgid "result"
 msgid "OCR result"
 msgstr "OCR 结果"
 
 #: frontend/src/features/metadata/components/popover/ocr-result-popover/index.js:159
-#| msgid "Converting, please wait..."
 msgid "Extracting text, please wait..."
 msgstr "正在提取文本，请稍候..."
 
 #: frontend/src/features/metadata/components/popover/ocr-result-popover/index.js:167
-#| msgid "File details"
 msgid "No text extracted"
 msgstr "未提取任何文本"
 
 #: frontend/src/features/metadata/components/popover/ocr-result-popover/index.js:173
-#| msgid "Failed to delete property"
 msgid "Save to description field"
 msgstr "保存到描述字段"
 
@@ -7583,7 +7212,6 @@ msgid "{name} rows use this option."
 msgstr "{name} 行使用这个选项。"
 
 #: frontend/src/features/metadata/components/popover/options-popover/confirm-delete-popover/index.js:29
-#| msgid "Are you sure you want to delete this page?"
 msgid "Are you sure you want to delete this option?"
 msgstr "你确定要删除这个选项？"
 
@@ -7597,7 +7225,6 @@ msgid "The imported options are invalid"
 msgstr "导入的选项无效"
 
 #: frontend/src/features/metadata/components/popover/options-popover/options-footer.js:88
-#| msgid "The imported option already exists"
 msgid "The imported options already exists"
 msgstr "导入的标签已经存在"
 
@@ -7621,17 +7248,14 @@ msgid "Import options"
 msgstr "导入选项"
 
 #: frontend/src/features/metadata/components/popover/options-popover/options-footer.js:125
-#| msgid "Import options"
 msgid "Export options"
 msgstr "导出选项"
 
 #: frontend/src/features/metadata/components/popover/sort-popover/index.js:261
-#| msgid "sorts"
 msgid "No sorts"
 msgstr "没有排序"
 
 #: frontend/src/features/metadata/components/popover/sort-popover/index.js:268
-#| msgid "Add User"
 msgid "Add sort"
 msgstr "增加排序"
 
@@ -7645,7 +7269,7 @@ msgstr "没有可显示的信息。"
 #: frontend/src/features/metadata/components/view-toolbar/kanban-view-toolbar.js:79
 #: frontend/src/features/metadata/views/card/settings/index.js:117
 #: frontend/src/features/metadata/views/kanban/settings/index.js:162
-#: frontend/src/utils/text-translation.js:152
+#: frontend/src/utils/text-translation.js:154
 msgid "Properties"
 msgstr "属性"
 
@@ -7875,27 +7499,22 @@ msgid "Created time"
 msgstr "创建时间"
 
 #: frontend/src/features/metadata/constants/view/statistics.js:28
-#| msgid "Modified files"
 msgid "Modified time"
 msgstr "修改时间"
 
 #: frontend/src/features/metadata/constants/view/statistics.js:32
-#| msgid "locked by {name}"
 msgid "Ascending by count"
 msgstr "按个数递增"
 
 #: frontend/src/features/metadata/constants/view/statistics.js:33
-#| msgid "locked by {name}"
 msgid "Descending by count"
 msgstr "按个数递减"
 
 #: frontend/src/features/metadata/hooks/metadata-ai-operation.js:77
-#| msgid "Generate description"
 msgid "Generating description by AI..."
 msgstr "正在通过 AI 生成描述..."
 
 #: frontend/src/features/metadata/hooks/metadata-ai-operation.js:81
-#| msgid "Description is required"
 msgid "Description generated"
 msgstr "描述已生成"
 
@@ -7904,12 +7523,10 @@ msgid "Failed to generate description"
 msgstr "生成描述失败"
 
 #: frontend/src/features/metadata/hooks/metadata-ai-operation.js:96
-#| msgid "Extract file details"
 msgid "Extracting file details by AI..."
 msgstr "正在通过 AI 提取文件详细信息..."
 
 #: frontend/src/features/metadata/hooks/metadata-ai-operation.js:127
-#| msgid "File details"
 msgid "File details extracted"
 msgstr "文件详细信息已提取"
 
@@ -7918,17 +7535,14 @@ msgid "Failed to extract file details"
 msgstr "提取文件详细信息失败"
 
 #: frontend/src/features/metadata/hooks/metadata-ai-operation.js:147
-#| msgid "Extract file details"
 msgid "Detecting faces by AI..."
 msgstr "通过 AI 检测人脸..."
 
 #: frontend/src/features/metadata/hooks/metadata-ai-operation.js:150
-#| msgid "selected"
 msgid "Faces detected"
 msgstr "人脸已检测"
 
 #: frontend/src/features/metadata/hooks/metadata-ai-operation.js:154
-#| msgid "Failed to delete {name}"
 msgid "Failed to detect faces"
 msgstr "人脸检测失败"
 
@@ -7993,38 +7607,31 @@ msgid "Failed to restore records"
 msgstr "恢复记录失败"
 
 #: frontend/src/features/metadata/store/server-operator.js:97
-#| msgid "Failed to modify filter"
 msgid "Failed to move folder"
 msgstr "移动目录失败"
 
 #: frontend/src/features/metadata/store/server-operator.js:97
 #: frontend/src/features/metadata/store/server-operator.js:110
-#| msgid "Failed to modify filter"
 msgid "Failed to move file"
 msgstr "移动文件失败"
 
 #: frontend/src/features/metadata/store/server-operator.js:109
-#| msgid "Failed to modify filter"
 msgid "Failed to move {n} items"
 msgstr "移动 {n} 个项目失败"
 
 #: frontend/src/features/metadata/store/server-operator.js:123
-#| msgid "Failed to duplicate page"
 msgid "Failed to duplicate folder"
 msgstr "复制目录失败"
 
 #: frontend/src/features/metadata/store/server-operator.js:123
-#| msgid "Failed to duplicate page"
 msgid "Failed to duplicate file"
 msgstr "复制文件失败"
 
 #: frontend/src/features/metadata/store/server-operator.js:135
-#| msgid "Failed to copy %(name)s"
 msgid "Failed to copy {n} items"
 msgstr "复制 {n} 个项目失败"
 
 #: frontend/src/features/metadata/store/server-operator.js:136
-#| msgid "Failed to modify filter"
 msgid "Failed to copy file"
 msgstr "复制文件失败"
 
@@ -8049,7 +7656,6 @@ msgid "Failed to modify property order"
 msgstr "修改属性顺序失败"
 
 #: frontend/src/features/metadata/store/server-operator.js:200
-#| msgid "Failed to modify sort"
 msgid "Failed to modify row height"
 msgstr "修改行高失败"
 
@@ -8070,7 +7676,6 @@ msgid "Failed to modify hidden properties"
 msgstr "更改隐藏属性失败"
 
 #: frontend/src/features/metadata/store/server-operator.js:245
-#| msgid "Failed to modify sort"
 msgid "Failed to modify settings"
 msgstr "修改设置失败"
 
@@ -8079,23 +7684,19 @@ msgid "Failed to modify people name"
 msgstr "修改人员姓名失败"
 
 #: frontend/src/features/metadata/store/server-operator.js:269
-#| msgid "Failed to rename property"
 msgid "Failed to remove people photos"
 msgstr "删除人物照片失败"
 
 #: frontend/src/features/metadata/store/server-operator.js:278
-#| msgid "Failed to rename property"
 msgid "Failed to add people photos"
 msgstr "增加人像照片失败"
 
 #: frontend/src/features/metadata/store/server-operator.js:287
-#| msgid "Failed to rename property"
 msgid "Failed to set people cover photo"
 msgstr "设置人像封面照片失败"
 
 #: frontend/src/features/metadata/store/server-operator.js:304
 #: frontend/src/features/tag/store/server-operator.js:64
-#| msgid "Failed to modify sort"
 msgid "Failed to modify tags"
 msgstr "更改标签失败"
 
@@ -8152,7 +7753,6 @@ msgid "File owner"
 msgstr "文件所有者"
 
 #: frontend/src/features/metadata/utils/column/index.js:215
-#| msgid "File Update"
 msgid "File rate"
 msgstr "文件评分"
 
@@ -8198,19 +7798,16 @@ msgstr "名称已经存在"
 
 #: frontend/src/features/metadata/views/card/settings/index.js:86
 #: frontend/src/features/metadata/views/kanban/settings/index.js:131
-#| msgid "Don't send emails"
 msgid "Don't show empty values"
 msgstr "不显示空值"
 
 #: frontend/src/features/metadata/views/card/settings/index.js:96
 #: frontend/src/features/metadata/views/kanban/settings/index.js:141
-#| msgid "Property name"
 msgid "Show property names"
 msgstr "显示属性名称"
 
 #: frontend/src/features/metadata/views/card/settings/index.js:106
 #: frontend/src/features/metadata/views/kanban/settings/index.js:151
-#| msgid "Text files"
 msgid "Text wraps"
 msgstr "文本换行"
 
@@ -8228,14 +7825,12 @@ msgid "items"
 msgstr "个项目"
 
 #: frontend/src/features/metadata/views/face-recognition/person-photos/index.js:156
-#| msgid "Convert to sdoc"
 msgid "Cover photo has been set"
 msgstr "封面照片已设置"
 
 #: frontend/src/features/metadata/views/kanban/add-board/index.js:43
 #: frontend/src/features/metadata/views/kanban/add-board/index.js:46
 #: frontend/src/features/metadata/views/kanban/add-board/index.js:50
-#| msgid "New Tag"
 msgid "New category"
 msgstr "新类别"
 
@@ -8248,12 +7843,10 @@ msgid "This list is collapsed"
 msgstr "列表已折叠"
 
 #: frontend/src/features/metadata/views/kanban/boards/index.js:280
-#| msgid "No changes"
 msgid "No categories"
 msgstr "无类别"
 
 #: frontend/src/features/metadata/views/kanban/settings/index.js:118
-#| msgid "Delete property"
 msgid "Title property"
 msgstr "标题属性"
 
@@ -8261,58 +7854,47 @@ msgstr "标题属性"
 #: frontend/src/features/metadata/views/statistics/charts/summary-cards.js:27
 #: frontend/src/features/metadata/views/statistics/charts/summary-cards.js:31
 #: frontend/src/pages/wiki2/wiki-collaborators-operation/index.js:123
-#| msgid "Collaborator"
 msgid "Collaborators"
 msgstr "协作人"
 
 #: frontend/src/features/metadata/views/statistics/index.js:68
-#| msgid "No options available"
 msgid "No data available for statistics"
 msgstr "没有可用于统计的数据"
 
 #: frontend/src/features/metadata/views/statistics/index.js:77
-#| msgid "File type"
 msgid "Files by type"
 msgstr "按文件类型分布"
 
 #: frontend/src/features/metadata/views/statistics/index.js:86
-#| msgid "File collaborators"
 msgid "Files by creator"
 msgstr "按创建者分布"
 
 #: frontend/src/features/metadata/views/statistics/index.js:99
-#| msgid "No collaborators available"
 msgid "No creator data available"
 msgstr "没有可用的创建者数据"
 
 #: frontend/src/features/metadata/views/statistics/index.js:107
-#| msgid "File expire time"
 msgid "Files by time"
 msgstr "按时间分布"
 
 #: frontend/src/features/metadata/views/statistics/index.js:123
-#| msgid "No options available"
 msgid "No time-based data available"
 msgstr "没有可用的基于时间的数据"
 
 #: frontend/src/features/metadata/views/view.js:49
 #: frontend/src/translate.js:53
-#| msgid "Extended properties"
 msgid "Extended properties are being built."
 msgstr "扩展属性正在创建中。"
 
 #: frontend/src/features/tag/components/merge-tags-selector/index.js:157
-#| msgid "Delete page"
 msgid "Merge tags to"
 msgstr "迁移标签到"
 
 #: frontend/src/features/tag/components/tag-view-name/all-tags-operation-toolbar.js:46
-#| msgid "Successfully edited labels."
 msgid "Successfully imported tags."
 msgstr "已成功导入标签。"
 
 #: frontend/src/features/tag/components/tag-view-name/all-tags-operation-toolbar.js:52
-#| msgid "Failed to restore {name}"
 msgid "Failed to import tags"
 msgstr "导入标签失败"
 
@@ -8330,120 +7912,98 @@ msgstr "复制"
 #: frontend/src/features/tag/store/server-operator.js:27
 #: frontend/src/features/tag/store/server-operator.js:37
 #: frontend/src/features/tag/store/server-operator.js:48
-#| msgid "Failed to modify sort"
 msgid "Failed to add tags"
 msgstr "增加标签失败"
 
 #: frontend/src/features/tag/store/server-operator.js:73
-#| msgid "Failed to delete {name}"
 msgid "Failed to delete tags"
 msgstr "删除标签失败"
 
 #: frontend/src/features/tag/store/server-operator.js:85
-#| msgid "Failed to modify sort"
 msgid "Failed to add linked tags"
 msgstr "增加链接标签失败"
 
 #: frontend/src/features/tag/store/server-operator.js:97
 #: frontend/src/features/tag/store/server-operator.js:106
-#| msgid "Failed to delete {name}"
 msgid "Failed to delete linked tags"
 msgstr "删除链接标签失败"
 
 #: frontend/src/features/tag/store/server-operator.js:115
-#| msgid "Failed to restore {name}"
 msgid "Failed to merge tags"
 msgstr "合并标签失败"
 
 #: frontend/src/features/tag/store/server-operator.js:146
-#| msgid "Failed to restore {name}"
 msgid "Failed to export tags"
 msgstr "导出标签失败"
 
 #: frontend/src/features/tag/store/server-operator.js:153
 #: frontend/src/features/tag/store/server-operator.js:159
-#| msgid "Failed to restore {name}"
 msgid "Failed to restore tags"
 msgstr "还原标签失败"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/all-tags-sort-setter.js:16
-#| msgid "By name ascending"
 msgid "By tag name ascending"
 msgstr "按标签名称升序排列"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/all-tags-sort-setter.js:17
-#| msgid "By name descending"
 msgid "By tag name descending"
 msgstr "按标签名称降序排列"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/all-tags-sort-setter.js:18
-#| msgid "File name"
 msgid "By child tags count ascending"
 msgstr "按子标签数量升序排列"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/all-tags-sort-setter.js:19
-#| msgid "By time descending"
 msgid "By child tags count descending"
 msgstr "按子标签数量降序排列"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/all-tags-sort-setter.js:20
-#| msgid "By size ascending"
 msgid "By file count ascending"
 msgstr "按文件数量升序排列"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/all-tags-sort-setter.js:21
-#| msgid "By size descending"
 msgid "By file count descending"
 msgstr "按文件数量降序排列"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/columns-factory.js:14
-#| msgid "Tags"
 msgid "Tag"
 msgstr "标签"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/columns-factory.js:15
-#| msgid "Import tags"
 msgid "Parent tags"
 msgstr "上级标签"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/columns-factory.js:16
-#| msgid "File name"
 msgid "Child tags count"
 msgstr "子标签数量"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/columns-factory.js:17
-#| msgid "File name"
 msgid "File count"
 msgstr "文件个数"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/context-menu-options.js:101
 #: frontend/src/features/tag/views/all-tags/tags-table/context-menu-options.js:180
-#| msgid "Delete page"
 msgid "Delete tag"
 msgstr "删除标签"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/context-menu-options.js:107
 #: frontend/src/features/tag/views/all-tags/tags-table/context-menu-options.js:140
-#| msgid "Delete page"
 msgid "Delete tags"
 msgstr "删除标签"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/context-menu-options.js:133
-#: frontend/src/utils/text-translation.js:311
-#| msgid "Delete page"
+#: frontend/src/utils/text-translation.js:313
 msgid "Merge tags"
 msgstr "合并标签"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/context-menu-options.js:173
 #: frontend/src/features/tag/views/all-tags/tags-table/context-menu-options.js:193
-#| msgid "Set Quota"
 msgid "Set child tags"
 msgstr "设置子标签"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/context-menu-options.js:188
 #: frontend/src/features/tag/views/all-tags/tags-table/index.js:335
-#: frontend/src/utils/text-translation.js:315
-#| msgid "New Tag"
+#: frontend/src/utils/text-translation.js:317
 msgid "New child tag"
 msgstr "新建子标签"
 
@@ -8453,12 +8013,10 @@ msgid "Converting, please wait..."
 msgstr "转换中，请稍候..."
 
 #: frontend/src/features/tag/views/tag-files/index.js:275
-#| msgid "No file"
 msgid "No files"
 msgstr "没有文件"
 
 #: frontend/src/file-view.js:54
-#| msgid "Images"
 msgid "Image saved"
 msgstr "图片已保存"
 
@@ -8489,17 +8047,14 @@ msgid "Cleaned trash"
 msgstr "清空回收站"
 
 #: frontend/src/pages/app/main-panel/files-activities/activity-item.js:83
-#| msgid "Removed all items from trash."
 msgid "Removed all items from trash"
 msgstr "已从回收站中删除所有项目"
 
 #: frontend/src/pages/app/main-panel/files-activities/activity-item.js:85
-#| msgid "Removed items older than {n} days from trash."
 msgid "Removed items older than {n} days from trash"
 msgstr "已从回收站中删除超过 {n} 天的项目"
 
 #: frontend/src/pages/app/main-panel/files-activities/activity-item.js:105
-#| msgid "{file} and {n} other files"
 msgid "{folder} and {n} other folders"
 msgstr "{folder} 和 {n} 个其他目录"
 
@@ -8508,7 +8063,6 @@ msgid "{file} and {n} other files"
 msgstr "{file} 及 {n} 个其他文件"
 
 #: frontend/src/pages/app/main-panel/files-activities/activity-item.js:113
-#| msgid "Created {n} files"
 msgid "Created {n} folders"
 msgstr "创建了 {n} 个目录"
 
@@ -8527,22 +8081,18 @@ msgid "Created file"
 msgstr "创建文件"
 
 #: frontend/src/pages/app/main-panel/files-activities/activity-item.js:137
-#| msgid "Folder"
 msgid "folders"
 msgstr "目录"
 
 #: frontend/src/pages/app/main-panel/files-activities/activity-item.js:143
-#| msgid "Deleted Time"
 msgid "Deleted {n} {type}"
 msgstr "删除了 {n} 个 {type}"
 
 #: frontend/src/pages/app/main-panel/files-activities/activity-item.js:147
-#| msgid "{file} and {n} other files"
 msgid "{name} and {n} other files"
 msgstr "{name} 和 {n} 个其他文件"
 
 #: frontend/src/pages/app/main-panel/files-activities/activity-item.js:149
-#| msgid "{file} and {n} other files"
 msgid "{name} and {n} other folders"
 msgstr "{name} 和 {n} 个其他目录"
 
@@ -8619,19 +8169,16 @@ msgid "File"
 msgstr "文件"
 
 #: frontend/src/pages/app/main-panel/files-activities/index.js:248
-#| msgid "All Notifications"
 msgid "All Activities"
 msgstr "所有活动"
 
 #: frontend/src/pages/app/main-panel/files-activities/index.js:251
-#| msgid "No more activities"
 msgid "My Activities"
 msgstr "我的活动"
 
 #: frontend/src/pages/app/main-panel/files-activities/user-selector.js:83
 #: frontend/src/pages/sys-admin/sys-logs/log-selector/log-user-selector.js:151
 #: frontend/src/pages/sys-admin/sys-logs/log-selector/log-user-selector.js:153
-#| msgid "Please select a file"
 msgid "Toggle user selector"
 msgstr "切换用户选择器"
 
@@ -8648,7 +8195,6 @@ msgid "Find modifiers"
 msgstr "查找修改人"
 
 #: frontend/src/pages/app/main-panel/groups/group-op-menu.js:125
-#| msgid "Successfully sent to {placeholder}"
 msgid "Successfully imported {user_placeholder}"
 msgstr "已成功导入 {user_placeholder}"
 
@@ -8673,11 +8219,6 @@ msgid "No libraries shared with this group"
 msgstr "没有资料库被共享到当前群组"
 
 #: frontend/src/pages/app/main-panel/groups/group-view.js:130
-#| msgid ""
-#| "raries have been shared with this group yet. A library shared with roup  be "
-#| "accessed by all group members. You can share a library h a group in  "
-#| "Libraries\". You can also create a new library to be red with this up by "
-#| "clicking the \"New Library\" button in the menu ."
 msgid ""
 "No libraries have been shared with this group yet. A library shared with a "
 "group can be accessed by all group members. You can share a library with a "
@@ -8686,7 +8227,6 @@ msgid ""
 msgstr "尚未与此群组共享任何资料库。所有群组成员都可以访问与群组共享的资料库。你可以在“我的资料库”中与群组共享资料库。你还可以通过单击下拉菜单中的“新建资料库”选项，来创建要与此群组共享的新资料库。"
 
 #: frontend/src/pages/app/main-panel/groups/group-view.js:142
-#| msgid "n create libraries by clicking the \"New Library\" button above."
 msgid ""
 "You can create libraries by clicking the \"New Library\" item in the "
 "dropdown menu."
@@ -8711,10 +8251,6 @@ msgid "No guest invitations"
 msgstr "没有邀请"
 
 #: frontend/src/pages/app/main-panel/invitations/invitations-view.js:189
-#| msgid ""
-#| "ve not invited any guests yet. A guest can access shared libraries ough  web"
-#| " interface allowing more efficient ways to collaborate n through ks. You can"
-#| " invite a guest by clicking the \"Invite Guesttem in the menu."
 msgid ""
 "You have not invited any guests yet. A guest can access shared libraries "
 "through the web interface allowing more efficient ways to collaborate than "
@@ -8777,7 +8313,6 @@ msgid "Failed to delete {name}"
 msgstr "删除 {name} 失败"
 
 #: frontend/src/pages/app/main-panel/lib-content-view/lib-content-view.js:1840
-#| msgid "Successfully deleted {name} and {n} other items"
 msgid "Successfully moved {name} and {n} other items"
 msgstr "成功移动了 {name} 和 {n} 个其他项目"
 
@@ -8790,7 +8325,6 @@ msgid "Failed to move {name}."
 msgstr "移动 {name} 失败。"
 
 #: frontend/src/pages/app/main-panel/lib-content-view/lib-content-view.js:1930
-#| msgid "Successfully deleted {name} and {n} other items"
 msgid "Successfully copied {name} and {n} other items"
 msgstr "成功复制了 {name} 和 {n} 个其他项目"
 
@@ -8862,7 +8396,6 @@ msgstr "最后访问时间"
 
 #: frontend/src/pages/app/main-panel/linked-devices/linked-devices.js:120
 #: frontend/src/pages/settings/linked-devices/index.js:120
-#| msgid "Successfully copied %(name)s."
 msgid "Successfully unlinked %(name)s."
 msgstr "成功断开连接 %(name)s 。"
 
@@ -8886,11 +8419,6 @@ msgid "Successfully restored the library."
 msgstr "资料库还原成功。"
 
 #: frontend/src/pages/app/main-panel/my-libs/my-libs.js:40
-#| msgid ""
-#| "ve not created any libraries yet. A library is a container to anize your es "
-#| "and folders. A library can also be shared with others  synced to your nected"
-#| " devices. You can create a library by cking the \"New Library\" ton in the "
-#| "menu bar."
 msgid ""
 "You have not created any libraries yet. A library is a container to organize"
 " your files and folders. A library can also be shared with others and synced"
@@ -8914,12 +8442,10 @@ msgid "Successfully unshared {name}"
 msgstr "成功取消共享 {name}"
 
 #: frontend/src/pages/app/main-panel/ocm-via-webdav/ocm-via-webdav.js:167
-#| msgid "No libraries have been shared with you"
 msgid "No files or folders have been shared with you"
 msgstr "没有与你共享任何文件或目录"
 
 #: frontend/src/pages/app/main-panel/ocm-via-webdav/ocm-via-webdav.js:168
-#| msgid "No libraries have been shared with you from other servers."
 msgid "No files or folders have been shared with you from other servers."
 msgstr "没有从其他服务器与你共享任何文件或目录。"
 
@@ -8930,7 +8456,6 @@ msgid "Shared By"
 msgstr "共享来源"
 
 #: frontend/src/pages/app/main-panel/ocm-via-webdav/ocm-via-webdav.js:181
-#| msgid "Shared with me"
 msgid "Sharing Time"
 msgstr "共享时间"
 
@@ -8943,7 +8468,6 @@ msgstr "共享时间"
 #: frontend/src/pages/app/side-panel/libraries-sub-nav.js:111
 #: frontend/src/pages/app/side-panel/libraries-sub-nav.js:120
 #: frontend/src/pages/app/side-panel/libraries-sub-nav.js:126
-#| msgid "Share to other server"
 msgid "Shared from other servers"
 msgstr "其他服务器共享"
 
@@ -8952,20 +8476,17 @@ msgstr "其他服务器共享"
 #: frontend/src/pages/org-admin/org-logs/org-logs-perm-audit.js:80
 #: frontend/src/pages/sys-admin/sys-logs/share-permission-logs.js:44
 #: frontend/src/pages/sys-admin/sys-logs/share-permission-logs.js:349
-#| msgid "Shared with me"
 msgid "Share with"
 msgstr "共享给"
 
 #: frontend/src/pages/app/main-panel/share-admin/folders.js:176
 #: frontend/src/pages/app/main-panel/share-admin/libraries.js:150
 #: frontend/src/pages/app/main-panel/share-admin/share-links.js:235
-#| msgid "Successfully edited labels."
 msgid "Successfully modified permission."
 msgstr "成功更改权限。"
 
 #: frontend/src/pages/app/main-panel/share-admin/folders.js:255
 #: frontend/src/pages/app/main-panel/share-admin/libraries.js:268
-#| msgid "Shared with me"
 msgid "Share with:"
 msgstr "共享给:"
 
@@ -8973,7 +8494,6 @@ msgstr "共享给:"
 #: frontend/src/pages/app/side-panel/main-side-nav.js:309
 #: frontend/src/pages/app/side-panel/main-side-nav.js:310
 #: frontend/src/pages/app/side-panel/share-admin-sub-nav.js:22
-#| msgid "Folder"
 msgid "Folders"
 msgstr "目录"
 
@@ -8989,13 +8509,11 @@ msgid ""
 msgstr "你还没共享任何资料库给其他用户。可以在“我的资料库”页面通过点击资料库名称旁边的共享图标来共享一个资料库。"
 
 #: frontend/src/pages/app/main-panel/share-admin/libraries.js:210
-#| msgid "No members"
 msgid "all members"
 msgstr "所有成员"
 
 #: frontend/src/pages/app/main-panel/share-admin/share-links.js:305
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:203
-#| msgid "deleted"
 msgid "(deleted)"
 msgstr "（已删除）"
 
@@ -9003,54 +8521,44 @@ msgstr "（已删除）"
 #: frontend/src/pages/app/main-panel/share-admin/share-links.js:366
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:216
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:243
-#| msgid "View Link"
 msgid "View link"
 msgstr "查看链接"
 
 #: frontend/src/pages/app/main-panel/share-admin/share-links.js:447
 #: frontend/src/pages/app/main-panel/share-admin/share-links.js:611
-#| msgid "Delete share links"
 msgid "Clean invalid share links"
 msgstr "清除无效的共享链接"
 
 #: frontend/src/pages/app/main-panel/share-admin/share-links.js:529
-#| msgid "Successfully deleted 1 share link"
 msgid "Successfully cleaned invalid share links."
 msgstr "无效的共享链接已清除。"
 
 #: frontend/src/pages/app/main-panel/share-admin/share-links.js:612
-#| msgid "Are you sure you want to delete the selected share link(s) ?"
 msgid "Are you sure you want to clean invalid share links?"
 msgstr "确定要清除无效的共享链接吗？"
 
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:310
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:437
-#| msgid "No upload links"
 msgid "Clean invalid upload links"
 msgstr "清除无效的上传链接"
 
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:356
-#| msgid "Successfully cleared trash."
 msgid "Successfully cleaned invalid upload links."
 msgstr "无效的上传链接已清除。"
 
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:407
-#| msgid "Successfully deleted 1 share link"
 msgid "Successfully deleted 1 upload link"
 msgstr "已成功删除 1 个上传链接"
 
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:408
-#| msgid "Successfully deleted {number_placeholder} share links"
 msgid "Successfully deleted {number_placeholder} upload links"
 msgstr "已成功删除 {number_placeholder} 个上传链接"
 
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:438
-#| msgid "Are you sure you want to clear trash?"
 msgid "Are you sure you want to clean invalid upload links?"
 msgstr "确定要清除无效的上传链接吗？"
 
 #: frontend/src/pages/app/main-panel/share-with-ocm/remote-dir-view.js:126
-#| msgid "Successfully converted the file."
 msgid "Successfully added the file."
 msgstr "已成功添加文件。"
 
@@ -9063,7 +8571,6 @@ msgid "No libraries have been shared with you from other servers."
 msgstr "还没有共享自其他服务器的资料库。"
 
 #: frontend/src/pages/app/main-panel/shared-libs/content.js:73
-#| msgid "Shared Libraries"
 msgid "No shared libraries"
 msgstr "没有共享的资料库"
 
@@ -9073,34 +8580,28 @@ msgid "Failed to unshare {name}"
 msgstr "{name} 取消共享失败"
 
 #: frontend/src/pages/app/main-panel/shared-with-all/index.js:155
-#| msgid "No libraries"
 msgid "No public libraries"
 msgstr "没有公共资料库"
 
 #: frontend/src/pages/app/main-panel/shared-with-all/index.js:262
-#| msgid "Shared Libraries"
 msgid "Share existing libraries"
 msgstr "共享已有资料库 "
 
 #: frontend/src/pages/app/main-panel/shared-with-all/index.js:272
 #: frontend/src/pages/app/main-panel/shared-with-all/index.js:287
 #: frontend/src/pages/app/side-panel/libraries-sub-nav.js:96
-#| msgid "Shared with me"
 msgid "Shared with all"
 msgstr "公共资料库"
 
 #: frontend/src/pages/app/main-panel/wikis/wikis.js:123
-#| msgid "Please select an expiration time"
 msgid "Confluence imported"
 msgstr "Confluence 已导入"
 
 #: frontend/src/pages/app/main-panel/wikis/wikis.js:137
-#| msgid "Failed to restore {name}"
 msgid "Failed to import Confluence"
 msgstr "导入 Confluence 失败"
 
 #: frontend/src/pages/app/main-panel/wikis/wikis.js:375
-#| msgid "Successfully transferred the library."
 msgid "Successfully transferred the wiki."
 msgstr "已成功转让知识库。"
 
@@ -9114,7 +8615,6 @@ msgid "Wikis"
 msgstr "知识库"
 
 #: frontend/src/pages/app/main-panel/wikis/wikis.js:477
-#| msgid "Import sdoc"
 msgid "Import Confluence"
 msgstr "导入 Confluence"
 
@@ -9130,7 +8630,6 @@ msgstr "你可以点击下面的 “添加知识库” 按钮添加新的知识�
 #: frontend/src/pages/app/side-panel/main-side-nav-folded.js:342
 #: frontend/src/pages/app/side-panel/main-side-nav.js:425
 #: frontend/src/pages/app/side-panel/main-side-nav.js:426
-#| msgid "Active"
 msgid "Activities"
 msgstr "文件活动"
 
@@ -9152,7 +8651,6 @@ msgstr "客户端"
 #: frontend/src/pages/app/side-panel/main-side-nav-folded.js:460
 #: frontend/src/pages/app/side-panel/main-side-nav.js:509
 #: frontend/src/pages/app/side-panel/main-side-nav.js:510
-#| msgid "About Us"
 msgid "About"
 msgstr "关于"
 
@@ -9169,12 +8667,10 @@ msgstr "展开侧边栏"
 #: frontend/src/pages/app/side-panel/share-admin-sub-nav.js:34
 #: frontend/src/pages/org-admin/side-panel.js:103
 #: frontend/src/pages/sys-admin/side-panel.js:199
-#| msgid "Link"
 msgid "Links"
 msgstr "链接"
 
 #: frontend/src/pages/app/side-panel/main-side-nav.js:375
-#| msgid "Color space"
 msgid "Workspace"
 msgstr "工作区"
 
@@ -9187,7 +8683,6 @@ msgid "Fold the sidebar"
 msgstr "收起侧边栏"
 
 #: frontend/src/pages/excalidraw-editable-viewer/index.js:83
-#| msgid "Set user name"
 msgid "Your name"
 msgstr "你的名字"
 
@@ -9197,7 +8692,6 @@ msgid ""
 msgstr "上传的图片尚未保存。请稍后关闭此页面。"
 
 #: frontend/src/pages/excalidraw-editor/extension/select-image-dialog/index.js:72
-#| msgid "Select Image"
 msgid "Select image"
 msgstr "选择图片"
 
@@ -9287,7 +8781,6 @@ msgstr "已用空间 / 容量 "
 #: frontend/src/pages/institution-admin/user-content/user-repo-item.js:31
 #: frontend/src/pages/sys-admin/users/user-repos.js:152
 #: frontend/src/pages/sys-admin/users/user-shared-repos.js:88
-#| msgid "Move {placeholder} to"
 msgid "Broken ({repo_id_placeholder})"
 msgstr "已损坏 ({repo_id_placeholder})"
 
@@ -9377,7 +8870,6 @@ msgstr "保存失败"
 
 #: frontend/src/pages/org-admin/departments/index.js:433
 #: frontend/src/pages/sys-admin/departments/index.js:468
-#| msgid "Rename Department"
 msgid "Enable departments feature"
 msgstr "开启部门功能"
 
@@ -9388,7 +8880,6 @@ msgstr "成功断开连接该设备 。"
 
 #: frontend/src/pages/org-admin/devices/devices-errors.js:176
 #: frontend/src/pages/sys-admin/devices/index.js:23
-#| msgid "Successfully cleared trash."
 msgid "Successfully cleaned all errors."
 msgstr "成功清除所有错误。"
 
@@ -9431,7 +8922,6 @@ msgstr "可读写资料库"
 
 #: frontend/src/pages/org-admin/libraries/org-repo-nav.js:23
 #: frontend/src/pages/sys-admin/libraries-and-links/repos-nav.js:25
-#| msgid "Deleted files"
 msgid "Descending by files"
 msgstr "按文件降序排列"
 
@@ -9510,12 +9000,10 @@ msgid "ID"
 msgstr "ID"
 
 #: frontend/src/pages/org-admin/org-info/index.js:82
-#| msgid "Active Users"
 msgid "Active users"
 msgstr "活跃用户"
 
 #: frontend/src/pages/org-admin/org-info/index.js:87
-#| msgid "Total Users"
 msgid "Total users"
 msgstr "总用户"
 
@@ -9524,12 +9012,10 @@ msgid "User number limit"
 msgstr "用户数限制"
 
 #: frontend/src/pages/org-admin/org-info/index.js:99
-#| msgid "Space Used"
 msgid "Space used"
 msgstr "已使用空间"
 
 #: frontend/src/pages/org-admin/org-info/index.js:116
-#| msgid "This month"
 msgid "Traffic this month"
 msgstr "本月流量"
 
@@ -9540,7 +9026,6 @@ msgid ""
 msgstr "超过流量限制后，文件下载速度将受到限制。"
 
 #: frontend/src/pages/org-admin/org-info/index.js:143
-#| msgid "This month"
 msgid "AI credit used this month"
 msgstr "本月已使用的 AI 点数"
 
@@ -9573,14 +9058,12 @@ msgstr "只显示"
 #: frontend/src/pages/org-admin/org-logs/org-logs-file-transfer.js:70
 #: frontend/src/pages/sys-admin/sys-logs/file-transfer-log.js:43
 #: frontend/src/pages/sys-admin/sys-logs/file-transfer-log.js:427
-#| msgid "Transfer Group"
 msgid "Transfer From"
 msgstr "转让自"
 
 #: frontend/src/pages/org-admin/org-logs/org-logs-file-transfer.js:71
 #: frontend/src/pages/sys-admin/sys-logs/file-transfer-log.js:44
 #: frontend/src/pages/sys-admin/sys-logs/file-transfer-log.js:437
-#| msgid "Transfer"
 msgid "Transfer To"
 msgstr "转让到"
 
@@ -9590,7 +9073,6 @@ msgstr "转让到"
 #: frontend/src/pages/sys-admin/sys-logs/file-transfer-log.js:447
 #: frontend/src/pages/sys-admin/sys-logs/group-member-audit-logs.js:45
 #: frontend/src/pages/sys-admin/sys-logs/group-member-audit-logs.js:333
-#| msgid "Operation"
 msgid "Operator"
 msgstr "操作人员"
 
@@ -9621,20 +9103,17 @@ msgstr "操作"
 
 #: frontend/src/pages/org-admin/org-logs/org-logs-group-member-audit.js:124
 #: frontend/src/pages/sys-admin/sys-logs/group-member-audit-logs.js:119
-#| msgid "Add Member"
 msgid "Add member"
 msgstr "增加成员"
 
 #: frontend/src/pages/org-admin/org-logs/org-logs-group-member-audit.js:126
 #: frontend/src/pages/sys-admin/sys-logs/group-member-audit-logs.js:121
-#| msgid "Delete Member"
 msgid "Delete member"
 msgstr "删除成员"
 
 #: frontend/src/pages/org-admin/org-logs/org-logs-perm-audit.js:79
 #: frontend/src/pages/sys-admin/sys-logs/share-permission-logs.js:43
 #: frontend/src/pages/sys-admin/sys-logs/share-permission-logs.js:340
-#| msgid "Share From"
 msgid "Share from"
 msgstr "共享来源"
 
@@ -9658,12 +9137,10 @@ msgstr "文件更新"
 
 #: frontend/src/pages/org-admin/org-logs/org-logs.js:77
 #: frontend/src/pages/sys-admin/sys-logs/logs-nav.js:20
-#| msgid "Transfer"
 msgid "Repo Transfer"
 msgstr "资料库转让"
 
 #: frontend/src/pages/org-admin/org-logs/org-logs.js:83
-#| msgid "deleted"
 msgid "Group Invite"
 msgstr "群组邀请"
 
@@ -9749,7 +9226,6 @@ msgid "Resetting user's password, please wait for a moment."
 msgstr "重置用户密码，请稍等。"
 
 #: frontend/src/pages/org-admin/org-users/org-user-item.js:100
-#| msgid "Reset"
 msgid "ResetPwd"
 msgstr "重置密码"
 
@@ -9768,7 +9244,6 @@ msgstr "确定要将 {user_placeholder} 设置为“未激活”状态?"
 
 #: frontend/src/pages/org-admin/org-users/org-user-item.js:190
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:303
-#| msgid "Select all"
 msgid "Set"
 msgstr "设置"
 
@@ -9837,7 +9312,6 @@ msgstr "添加用户"
 
 #: frontend/src/pages/org-admin/org-users/org-users-users.js:284
 #: frontend/src/pages/org-admin/org-users/org-users-users.js:285
-#| msgid "Invite users"
 msgid "Invite users via WeChat"
 msgstr "通过微信邀请用户"
 
@@ -9850,12 +9324,10 @@ msgid "Logo updated"
 msgstr "标识已更新"
 
 #: frontend/src/pages/org-admin/settings/index.js:93
-#| msgid "System settings updated"
 msgid "Setting updated"
 msgstr "设置已更新"
 
 #: frontend/src/pages/org-admin/settings/index.js:102
-#| msgid "Set user default quota"
 msgid "User default quota updated"
 msgstr "用户默认配额已更新"
 
@@ -9878,7 +9350,6 @@ msgid "Not allow user to create encrypted libraries"
 msgstr "不允许用户创建加密资料库"
 
 #: frontend/src/pages/org-admin/settings/index.js:190
-#| msgid "Allow user to clean library trash"
 msgid "Disable user clean trash"
 msgstr "禁用用户清理回收站"
 
@@ -9887,35 +9358,29 @@ msgid "Not allow user to clean library trash"
 msgstr "不允许用户清空资料库回收站"
 
 #: frontend/src/pages/org-admin/settings/index.js:204
-#| msgid "Set user default quota"
 msgid "User default quota"
 msgstr "用户默认配额"
 
 #: frontend/src/pages/org-admin/settings/index.js:206
-#| msgid "Tip: 0 means default limit"
 msgid "Tip: 0 means default limit, the unit is MB"
 msgstr "提示：0 表示默认限制，单位为 MB"
 
 #: frontend/src/pages/org-admin/settings/index.js:216
-#| msgid "Disable SAML user email / password login"
 msgid "Disable SSO user email / password login"
 msgstr "已禁用 SSO 用户邮箱/密码登录"
 
 #: frontend/src/pages/org-admin/settings/index.js:219
 #: frontend/src/pages/sys-admin/orgs/org-info.js:111
-#| msgid "Force user to use SSO login if SAML account is bound"
 msgid "Force user to use SSO login if SSO account is bound"
 msgstr "如果绑定了 SSO 账号，则强制用户使用 SSO 登录"
 
 #: frontend/src/pages/org-admin/side-panel.js:45
 #: frontend/src/pages/sys-admin/side-panel.js:59
-#| msgid "Status"
 msgid "Statistic"
 msgstr "统计"
 
 #: frontend/src/pages/org-admin/side-panel.js:51
 #: frontend/src/pages/sys-admin/side-panel.js:73
-#| msgid "Device"
 msgid "Devices"
 msgstr "设备"
 
@@ -9929,7 +9394,6 @@ msgid "Logs"
 msgstr "日志"
 
 #: frontend/src/pages/org-admin/statistic/statistic-ai.js:9
-#| msgid "Online Preview"
 msgid "Overview"
 msgstr "概览"
 
@@ -9937,7 +9401,6 @@ msgstr "概览"
 #: frontend/src/pages/org-admin/statistic/statistic-ai.js:47
 #: frontend/src/pages/sys-admin/statistic/statistic-ai.js:8
 #: frontend/src/pages/sys-admin/statistic/statistic-ai.js:42
-#| msgid "Departments"
 msgid "Department"
 msgstr "部门"
 
@@ -9983,7 +9446,6 @@ msgstr "统计报表"
 
 #: frontend/src/pages/org-admin/statistic/statistic-reports.js:39
 #: frontend/src/pages/sys-admin/statistic/statistic-reports.js:37
-#| msgid "Invalid month, should be yyyymm."
 msgid "Invalid month, should be YYYY-MM."
 msgstr "月份无效，格式应该是 YYYY-MM。"
 
@@ -10025,25 +9487,21 @@ msgstr "月份:"
 
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:122
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:124
-#| msgid "Traffic"
 msgid "Total Traffic"
 msgstr "总流量"
 
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:134
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:136
-#| msgid "Traffic"
 msgid "Web Traffic"
 msgstr "网页端流量"
 
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:146
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:148
-#| msgid "Share Link"
 msgid "Share Link Traffic"
 msgstr "外链流量"
 
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:158
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:160
-#| msgid "Traffic"
 msgid "Sync Traffic"
 msgstr "同步端流量"
 
@@ -10056,7 +9514,6 @@ msgstr "活跃用户"
 
 #: frontend/src/pages/sdoc-file-history/history-version.js:106
 #: frontend/src/pages/sdoc-file-history/history-version.js:107
-#| msgid "No version history"
 msgid "Show daily history"
 msgstr "显示每日历史记录"
 
@@ -10071,14 +9528,12 @@ msgstr "改动"
 #: frontend/src/pages/sdoc-file-history/index.js:330
 #: frontend/src/pages/sdoc-file-history/index.js:331
 #: frontend/src/pages/sdoc-file-history/index.js:347
-#| msgid "Last modified time"
 msgid "Last modification"
 msgstr "上一个修改"
 
 #: frontend/src/pages/sdoc-file-history/index.js:341
 #: frontend/src/pages/sdoc-file-history/index.js:342
 #: frontend/src/pages/sdoc-file-history/index.js:350
-#| msgid "Notifications"
 msgid "Next modification"
 msgstr "下一个修改"
 
@@ -10141,7 +9596,6 @@ msgid ""
 msgstr "添加，删除和修改的文件列表将发送到你的邮箱。"
 
 #: frontend/src/pages/settings/email-notice/index.js:81
-#| msgid "Notifications of file changes"
 msgid "Notifications of collaboration"
 msgstr "协作通知"
 
@@ -10227,7 +9681,6 @@ msgid "Status: enabled"
 msgstr "状态：已启用"
 
 #: frontend/src/pages/settings/two-factor-auth/index.js:20
-#| msgid "Two-Factor Authentication"
 msgid "Disable Two-Factor Authentication"
 msgstr "关闭两步验证"
 
@@ -10246,7 +9699,6 @@ msgid "You have {num} backup codes remaining."
 msgstr "你还剩余 {num} 个备用验证码。"
 
 #: frontend/src/pages/settings/two-factor-auth/index.js:28
-#| msgid "Show changes"
 msgid "Show Codes"
 msgstr "显示验证码"
 
@@ -10257,7 +9709,6 @@ msgid ""
 msgstr "你的账号并未开启两步验证，请开启两步验证增加账号安全性。"
 
 #: frontend/src/pages/settings/two-factor-auth/index.js:39
-#| msgid "Two-Factor Authentication"
 msgid "Enable Two-Factor Authentication"
 msgstr "开启两步验证"
 
@@ -10278,7 +9729,6 @@ msgid "Avatar updated"
 msgstr "头像已更新"
 
 #: frontend/src/pages/settings/user-avatar-form/index.js:93
-#| msgid "Avatar"
 msgid "Avatar:"
 msgstr "头像："
 
@@ -10390,12 +9840,10 @@ msgid "Migrate User"
 msgstr "迁移用户"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:109
-#| msgid "Add group"
 msgid "Add User to Group"
 msgstr "增加用户到群组"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:110
-#| msgid "Delete Group"
 msgid "Delete User from Group"
 msgstr "从群组中删除用户"
 
@@ -10436,12 +9884,10 @@ msgid "User migrate from {user_from} to {user_to}"
 msgstr "用户从 {user_from} 迁移到 {user_to}"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:197
-#| msgid "Added user {user}"
 msgid "Added user {user} to group {group}"
 msgstr "用户 {user} 已经添加到群组 {group}"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:203
-#| msgid "Deleted user {user}"
 msgid "Deleted user {user} from group {group}"
 msgstr "用户 {user} 已经从群组 {group} 中删除"
 
@@ -10471,37 +9917,30 @@ msgid "Are you sure you want to remove {placeholder} ?"
 msgstr "确定要移除 {placeholder} 吗？"
 
 #: frontend/src/pages/sys-admin/groups/group-members.js:191
-#| msgid "Delete Member"
 msgid "Remove Member"
 msgstr "移除成员"
 
 #: frontend/src/pages/sys-admin/groups/group-members.js:278
-#| msgid "Successfully sent to {placeholder}"
 msgid "Successfully added {email_placeholder}"
 msgstr "成功添加 {email_placeholder}"
 
 #: frontend/src/pages/sys-admin/groups/group-members.js:284
-#| msgid "Failed to send to {email_placeholder}: {errorMsg_placeholder}"
 msgid "Failed to add {email_placeholder}: {error_msg_placeholder}"
 msgstr "添加 {email_placeholder} 失败： {error_msg_placeholder}"
 
 #: frontend/src/pages/sys-admin/groups/group-members.js:303
-#| msgid "Successfully sent to {placeholder}"
 msgid "Successfully removed {placeholder}."
 msgstr "成功移除 {placeholder}。"
 
 #: frontend/src/pages/sys-admin/groups/group-repos.js:135
-#| msgid "Are you sure you want to remove {placeholder} ?"
 msgid "Are you sure you want to unshare {placeholder} ?"
 msgstr "确定要取消共享 {placeholder} 吗？"
 
 #: frontend/src/pages/sys-admin/groups/group-repos.js:163
-#| msgid "Restore Library"
 msgid "Unshare Library"
 msgstr "取消共享资料库"
 
 #: frontend/src/pages/sys-admin/groups/group-repos.js:215
-#| msgid "Successfully unstarred {library_name_placeholder}."
 msgid "Successfully unshared library {placeholder}"
 msgstr "成功取消共享资料库 {placeholder}"
 
@@ -10583,19 +10022,16 @@ msgid "Organizations"
 msgstr "团队"
 
 #: frontend/src/pages/sys-admin/institutions/index.js:162
-#| msgid "Delete Notification"
 msgid "Delete Institution"
 msgstr "删除机构"
 
 #: frontend/src/pages/sys-admin/institutions/index.js:262
-#| msgid "Add institution"
 msgid "Add Institution"
 msgstr "添加机构"
 
 #: frontend/src/pages/sys-admin/institutions/index.js:267
 #: frontend/src/pages/sys-admin/institutions/institution-nav.js:28
 #: frontend/src/pages/sys-admin/side-panel.js:171
-#| msgid "No institutions"
 msgid "Institutions"
 msgstr "机构"
 
@@ -10607,7 +10043,6 @@ msgstr "确定要撤销 {placeholder} 的管理权限吗？"
 
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:197
 #: frontend/src/pages/sys-admin/users/users-content.js:573
-#| msgid "Revoke Admin"
 msgid "Revoke"
 msgstr "撤销"
 
@@ -10619,13 +10054,11 @@ msgstr "成功撤销 {placeholder} 的管理权限。"
 
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:268
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:352
-#| msgid "deleted"
 msgid "User deleted"
 msgstr "用户已删除"
 
 #: frontend/src/pages/sys-admin/institutions/institution-info.js:108
 #: frontend/src/pages/sys-admin/orgs/org-info.js:226
-#| msgid "Successfully set it."
 msgid "Successfully set quota."
 msgstr "容量设置成功。"
 
@@ -10644,7 +10077,6 @@ msgid "Are you sure you want to set {placeholder} as Admin?"
 msgstr "确定要将 {placeholder} 设为管理员？"
 
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:311
-#| msgid "Name updated"
 msgid "Admin updated"
 msgstr "管理员已更新"
 
@@ -10775,32 +10207,26 @@ msgid "Number of groups"
 msgstr "群组数量"
 
 #: frontend/src/pages/sys-admin/orgs/org-info.js:96
-#| msgid "Monthly User Traffic"
 msgid "Monthly Download Traffic Limit"
 msgstr "每月下载流量限制"
 
 #: frontend/src/pages/sys-admin/orgs/org-info.js:104
-#| msgid "ISO"
 msgid "SSO"
 msgstr "SSO"
 
 #: frontend/src/pages/sys-admin/orgs/org-info.js:240
-#| msgid "Successfully set it."
 msgid "Successfully set monthly traffic limit."
 msgstr "已成功设置每月流量限制。"
 
 #: frontend/src/pages/sys-admin/orgs/org-info.js:254
-#| msgid "Successfully set it."
 msgid "Successfully set name."
 msgstr "名称设置成功。"
 
 #: frontend/src/pages/sys-admin/orgs/org-info.js:268
-#| msgid "Set max number of members"
 msgid "Successfully set max number of members."
 msgstr "最大成员数设置成功。"
 
 #: frontend/src/pages/sys-admin/orgs/org-info.js:278
-#| msgid "Successfully saved"
 msgid "Successfully saved."
 msgstr "保存成功。"
 
@@ -10811,22 +10237,18 @@ msgid ""
 msgstr "该团队中的 {userCount} 个用户和 {repoCount} 个资料库也将被删除。"
 
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:237
-#| msgid "deleted"
 msgid "Team deleted"
 msgstr "团队已删除"
 
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:291
-#| msgid "Organization"
 msgid "Delete Organization"
 msgstr "删除团体"
 
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:300
-#| msgid "Search organizations"
 msgid "Set organization inactive"
 msgstr "设置团队未激活"
 
 #: frontend/src/pages/sys-admin/orgs/orgs-nav.js:16
-#| msgid "Traffic"
 msgid "Traffic exceeded"
 msgstr "流量已超限"
 
@@ -10859,13 +10281,11 @@ msgstr "未知"
 
 #: frontend/src/pages/sys-admin/repo-history/index.js:238
 #: frontend/src/repo-history.js:316
-#| msgid "(current version)"
 msgid "Current Version"
 msgstr "当前版本"
 
 #: frontend/src/pages/sys-admin/repo-history/index.js:239
 #: frontend/src/repo-history.js:317 frontend/src/utils/text-translation.js:76
-#| msgid "View Related Snapshot"
 msgid "View Snapshot"
 msgstr "查看镜像"
 
@@ -10875,7 +10295,6 @@ msgid "{placeholder} Snapshot"
 msgstr "{placeholder} 镜像"
 
 #: frontend/src/pages/sys-admin/repos/repos.js:257
-#| msgid "History Versions"
 msgid "History Setting"
 msgstr "历史设置"
 
@@ -10927,7 +10346,6 @@ msgid "Site title shown in a browser tab"
 msgstr "网站标题，显示在浏览器 tab 中。"
 
 #: frontend/src/pages/sys-admin/settings/index.js:113
-#| msgid "File name"
 msgid "Site name"
 msgstr "网站名称"
 
@@ -10940,12 +10358,10 @@ msgid "Logo"
 msgstr "标志"
 
 #: frontend/src/pages/sys-admin/settings/index.js:129
-#| msgid "icon"
 msgid "Favicon"
 msgstr "网站图标"
 
 #: frontend/src/pages/sys-admin/settings/index.js:138
-#| msgid "Login Background Image"
 msgid "Login background image"
 msgstr "登录背景图"
 
@@ -10962,7 +10378,6 @@ msgid "Custom CSS"
 msgstr "定制的 CSS"
 
 #: frontend/src/pages/sys-admin/settings/index.js:167
-#| msgid "allow new registrations"
 msgid "Allow new registrations"
 msgstr "允许新注册"
 
@@ -10973,7 +10388,6 @@ msgid ""
 msgstr "允许用户注册。如果关闭此功能，将禁止任何人进行注册。"
 
 #: frontend/src/pages/sys-admin/settings/index.js:174
-#| msgid "activate after registration"
 msgid "Activate after registration"
 msgstr "注册后激活"
 
@@ -10984,7 +10398,6 @@ msgid ""
 msgstr "用户注册后立即激活用户。如果关闭此功能，新注册用户需要通过管理员或者激活邮件来进行激活"
 
 #: frontend/src/pages/sys-admin/settings/index.js:181
-#| msgid "send activation email"
 msgid "Send activation email"
 msgstr "发送激活邮件"
 
@@ -10993,7 +10406,6 @@ msgid "Send activation Email after user registration."
 msgstr "用户注册后发送激活邮件。"
 
 #: frontend/src/pages/sys-admin/settings/index.js:188
-#| msgid "keep sign in"
 msgid "Keep sign in"
 msgstr "保持登录"
 
@@ -11022,12 +10434,10 @@ msgid "Enable sharing with all groups"
 msgstr "开启所有群组共享"
 
 #: frontend/src/pages/sys-admin/settings/index.js:216
-#| msgid "Enable users to share libraries to any groups in the system."
 msgid "Enable users to share libraries with any groups in the system."
 msgstr "允许用户将资料库共享给系统中的任何群组。"
 
 #: frontend/src/pages/sys-admin/settings/index.js:224
-#| msgid "Confirm password"
 msgid "Strong password"
 msgstr "强密码"
 
@@ -11036,7 +10446,6 @@ msgid "Force user to use a strong password when sign up or change password."
 msgstr "强制在新用户注册时或者用户修改密码时使用强密码。"
 
 #: frontend/src/pages/sys-admin/settings/index.js:231
-#| msgid "New Password Again"
 msgid "Force password change"
 msgstr "强制更改密码"
 
@@ -11051,22 +10460,18 @@ msgid "Enable two factor authentication"
 msgstr "开启两步验证"
 
 #: frontend/src/pages/sys-admin/settings/index.js:250
-#| msgid "Library Type"
 msgid "Library history"
 msgstr "资料库历史"
 
 #: frontend/src/pages/sys-admin/settings/index.js:253
-#| msgid "Allow user to change library history settings"
 msgid "Allow users to change library history settings"
 msgstr "允许用户更改资料库历史设置"
 
 #: frontend/src/pages/sys-admin/settings/index.js:260
-#| msgid "Allow user to create encrypted libraries"
 msgid "Allow users to create encrypted libraries"
 msgstr "允许用户创建加密资料库"
 
 #: frontend/src/pages/sys-admin/settings/index.js:264
-#| msgid "library password minimum length"
 msgid "Library password minimum length"
 msgstr "资料库密码最小长度"
 
@@ -11076,17 +10481,14 @@ msgid ""
 msgstr "加密资料库的最小密码长度。"
 
 #: frontend/src/pages/sys-admin/settings/index.js:271
-#| msgid "share/upload link force password"
 msgid "Share/upload link force password"
 msgstr "分享/上传链接强制密码"
 
 #: frontend/src/pages/sys-admin/settings/index.js:274
-#| msgid "Force user use password when generating share/upload link."
 msgid "Force users to use password when generating share/upload link."
 msgstr "强制用户在生成共享/上传链接时使用密码。"
 
 #: frontend/src/pages/sys-admin/settings/index.js:278
-#| msgid "share/upload link password minimum length"
 msgid "Share/upload link password minimum length"
 msgstr "共享/上传链接密码最小长度"
 
@@ -11096,7 +10498,6 @@ msgid ""
 msgstr "共享外链/上传外链密码需要包含的最少字符个数。"
 
 #: frontend/src/pages/sys-admin/settings/index.js:285
-#| msgid "share/upload link password strength level"
 msgid "Share/upload link password strength level"
 msgstr "共享/上传链接密码强度级别"
 
@@ -11108,12 +10509,10 @@ msgid ""
 msgstr "共享外链/上传外链的密码强度 (1-4)。例如，3 表示密码必须包含以下中的三种：数字，大写字母，小写字母和其他符号"
 
 #: frontend/src/pages/sys-admin/settings/index.js:292
-#| msgid "Allow user to clean library trash"
 msgid "Enable users to clean trash"
 msgstr "开启用户清理回收站"
 
 #: frontend/src/pages/sys-admin/settings/index.js:295
-#| msgid "Allow user to clean library trash"
 msgid "Allow users to clean library trash"
 msgstr "允许用户清理资料库回收站"
 
@@ -11122,7 +10521,6 @@ msgid "Online Preview"
 msgstr "在线预览"
 
 #: frontend/src/pages/sys-admin/settings/index.js:304
-#| msgid "text file extensions"
 msgid "Text file extensions"
 msgstr "文本文件扩展名"
 
@@ -11137,7 +10535,6 @@ msgid "Sync"
 msgstr "同步"
 
 #: frontend/src/pages/sys-admin/settings/index.js:314
-#| msgid "Files and folders"
 msgid "Disable sync with any folder"
 msgstr "禁用与任何目录同步"
 
@@ -11148,7 +10545,6 @@ msgid ""
 msgstr "如果启用此功能，桌面客户端将不能同步 Seafile 目录外的目录。"
 
 #: frontend/src/pages/sys-admin/settings/index.js:325
-#| msgid "No terms and conditions"
 msgid "Enable terms and conditions"
 msgstr "开启条款和条件"
 
@@ -11159,12 +10555,10 @@ msgid ""
 msgstr "允许系统管理员添加条款，并且所有用户都必须接受该条款。"
 
 #: frontend/src/pages/sys-admin/side-panel.js:227
-#| msgid "File name"
 msgid "File Scan"
 msgstr "文件扫描"
 
 #: frontend/src/pages/sys-admin/side-panel.js:241
-#| msgid "Virus"
 msgid "Virus Scan"
 msgstr "病毒扫描"
 
@@ -11174,7 +10568,6 @@ msgid "Terms and Conditions"
 msgstr "软件使用条款"
 
 #: frontend/src/pages/sys-admin/side-panel.js:283
-#| msgid "Admin Login Logs"
 msgid "Admin Logs"
 msgstr "管理员日志"
 
@@ -11192,7 +10585,6 @@ msgid "Value"
 msgstr "值"
 
 #: frontend/src/pages/sys-admin/statistic/statistic-metrics.js:175
-#| msgid "Created time"
 msgid "Collected time"
 msgstr "收集时间"
 
@@ -11202,22 +10594,18 @@ msgstr "只显示 {placeholder}"
 
 #: frontend/src/pages/sys-admin/sys-logs/log-selector/log-repo-selector.js:107
 #: frontend/src/pages/sys-admin/sys-logs/log-selector/log-repo-selector.js:109
-#| msgid "Single select"
 msgid "Toggle repo selector"
 msgstr "切换资料库选择器"
 
 #: frontend/src/pages/sys-admin/sys-logs/log-selector/log-repo-selector.js:151
-#| msgid "in all libraries"
 msgid "Find libraries"
 msgstr "查找资料库"
 
 #: frontend/src/pages/sys-admin/sys-logs/log-selector/log-repo-selector.js:169
-#| msgid "Tag not found"
 msgid "Library not found"
 msgstr "资料库未找到"
 
 #: frontend/src/pages/sys-admin/sys-logs/log-selector/log-user-selector.js:176
-#| msgid "Add user"
 msgid "Find users"
 msgstr "查找用户"
 
@@ -11230,7 +10618,6 @@ msgid "Login"
 msgstr "登录"
 
 #: frontend/src/pages/sys-admin/sys-logs/logs-nav.js:21
-#| msgid "Group members"
 msgid "Group Member"
 msgstr "群组成员"
 
@@ -11277,7 +10664,6 @@ msgid "Set Contact Email"
 msgstr "设置联系邮箱"
 
 #: frontend/src/pages/sys-admin/users/user-info.js:109
-#| msgid "User"
 msgid "User ID"
 msgstr "用户 ID"
 
@@ -11286,12 +10672,10 @@ msgid "Login ID"
 msgstr "登录 ID"
 
 #: frontend/src/pages/sys-admin/users/user-info.js:160
-#| msgid "Set Download Rate Limit"
 msgid "Download Rate Limit"
 msgstr "下载速率限制"
 
 #: frontend/src/pages/sys-admin/users/user-info.js:183
-#| msgid "Two-Factor Authentication"
 msgid "Force Two-Factor Authentication"
 msgstr "强制两步验证"
 
@@ -11331,25 +10715,21 @@ msgstr "未处理"
 
 #: frontend/src/pages/sys-admin/virus-scan/all-virus-files.js:170
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:190
-#| msgid "Deleted files"
 msgid "Infected File"
 msgstr "受感染文件"
 
 #: frontend/src/pages/sys-admin/virus-scan/all-virus-files.js:171
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:191
-#| msgid "Picture"
 msgid "Signature"
 msgstr "签名"
 
 #: frontend/src/pages/sys-admin/virus-scan/index.js:50
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:421
-#| msgid "Delete page"
 msgid "Delete all"
 msgstr "全部删除"
 
 #: frontend/src/pages/sys-admin/virus-scan/index.js:51
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:421
-#| msgid "Ignore"
 msgid "Ignore all"
 msgstr "全部忽略"
 
@@ -11362,34 +10742,28 @@ msgid "Failed to ignore %(virus_file) from library %(library): %(error_msg)"
 msgstr "无法忽略资料库 %(library) 中的 %(virus_file) : %(error_msg)"
 
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:404
-#| msgid "Successfully deleted 1 item."
 msgid "Successfully deleted {count} items."
 msgstr "成功删除 {count} 项。"
 
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:405
-#| msgid "Successfully restored 1 item."
 msgid "Successfully ignored {count} items."
 msgstr "成功忽略 {count} 项。"
 
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:417
-#| msgid "Deleted files"
 msgid "Delete all unhandled files"
 msgstr "删除所有未处理文件"
 
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:417
-#| msgid "Created file"
 msgid "Ignore all unhandled files"
 msgstr "忽略所有未处理文件"
 
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:419
-#| msgid "Are you sure you want to delete the selected user(s) ?"
 msgid ""
 "Are you sure you want to delete all unhandled infected files across all "
 "pages?"
 msgstr "你确定要删除所有页面上的未处理受感染文件吗？"
 
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:420
-#| msgid "Are you sure you want to delete this page?"
 msgid ""
 "Are you sure you want to ignore all unhandled infected files across all "
 "pages?"
@@ -11400,7 +10774,6 @@ msgid "Failed to upload {file_name}."
 msgstr "{file_name} 上传失败。"
 
 #: frontend/src/pages/upload-link/index.js:43
-#| msgid "Upload Files"
 msgid "Upload files to"
 msgstr "上传文件到"
 
@@ -11423,7 +10796,6 @@ msgid "Upload Folder"
 msgstr "上传目录"
 
 #: frontend/src/pages/wiki/side-panel.js:70
-#| msgid "Restore Library"
 msgid "Go to Library"
 msgstr "前往资料库"
 
@@ -11440,46 +10812,38 @@ msgid "Modify name"
 msgstr "更改名称"
 
 #: frontend/src/pages/wiki2/main-panel.js:358
-#: frontend/src/utils/text-translation.js:112
-#| msgid "Delete page"
+#: frontend/src/utils/text-translation.js:114
 msgid "Freeze page"
 msgstr "冻结页面"
 
 #: frontend/src/pages/wiki2/main-panel.js:381
-#| msgid "Export as docx"
 msgid "Export as sdoc"
 msgstr "导出为 sdoc"
 
 #: frontend/src/pages/wiki2/main-panel.js:382
-#: frontend/src/utils/text-translation.js:140
-#| msgid "Export as docx"
+#: frontend/src/utils/text-translation.js:142
 msgid "Export as Markdown"
 msgstr "导出为 Markdown"
 
 #: frontend/src/pages/wiki2/publish-wiki-popover.js:35
-#| msgid "Publish"
 msgid "Page published"
 msgstr "页面已发布"
 
 #: frontend/src/pages/wiki2/side-panel.js:97
-#| msgid "{number_placeholder} / Page"
 msgid "Page {name_placeholder} deleted."
 msgstr "页面 {name_placeholder} 已删除。"
 
 #: frontend/src/pages/wiki2/side-panel.js:152
-#| msgid "Tags imported"
 msgid "Page imported"
 msgstr "页面已导入"
 
 #: frontend/src/pages/wiki2/side-panel.js:166
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-dropdownmenu.js:92
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:101
-#| msgid "Failed to restore {name}"
 msgid "Failed to import page"
 msgstr "导入页面失败"
 
 #: frontend/src/pages/wiki2/side-panel.js:411
-#| msgid "Wiki published"
 msgid "Manage Published Pages"
 msgstr "管理已发布页面"
 
@@ -11488,12 +10852,10 @@ msgid "Page is frozen"
 msgstr "页面已冻结"
 
 #: frontend/src/pages/wiki2/wiki-collaborators-operation/collaborators-popover.js:24
-#| msgid "Invite users"
 msgid "Online members"
 msgstr "在线成员"
 
 #: frontend/src/pages/wiki2/wiki-collaborators-operation/collaborators-popover.js:28
-#| msgid "More"
 msgid "Me"
 msgstr "我"
 
@@ -11519,13 +10881,11 @@ msgstr "复制失败"
 
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-dropdownmenu.js:122
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:169
-#| msgid "Import tags"
 msgid "Import page from docx"
 msgstr "从 docx 导入页面"
 
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-dropdownmenu.js:123
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:170
-#| msgid "Export as docx"
 msgid "Import page from Markdown"
 msgstr "从 Markdown 导入页面"
 
@@ -11534,7 +10894,6 @@ msgid "Copy link"
 msgstr "复制链接"
 
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-dropdownmenu.js:139
-#| msgid "Add permission"
 msgid "Add page above"
 msgstr "在上方增加页面"
 
@@ -11548,17 +10907,14 @@ msgstr "不能把父页面移动到子页面"
 
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-item.js:387
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-item.js:396
-#| msgid "Add permission"
 msgid "Add page inside"
 msgstr "添加子页面"
 
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-item.js:404
-#| msgid "Add permission"
 msgid "Add page"
 msgstr "增加页面"
 
 #: frontend/src/pages/wiki2/wiki-repo-popover/index.js:94
-#| msgid "Search Libraries"
 msgid "Search libraries"
 msgstr "搜索资料库"
 
@@ -11567,12 +10923,10 @@ msgid "Change cover"
 msgstr "更换封面"
 
 #: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:106
-#| msgid "Please choose an image file."
 msgid "Please select an image file."
 msgstr "请选择一张图片文件。"
 
 #: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:134
-#| msgid "Failed to upload {file_name}."
 msgid "Failed to upload image."
 msgstr "上传图片失败。"
 
@@ -11599,7 +10953,6 @@ msgstr "增加封面"
 
 #: frontend/src/pages/wiki2/wiki-settings/index.js:47
 #: frontend/src/pages/wiki2/wiki-settings/linked-repo-panel.js:117
-#| msgid "No deleted libraries"
 msgid "Connected libraries"
 msgstr "已连接的资料库"
 
@@ -11615,7 +10968,6 @@ msgid ""
 msgstr "注意，资料库必须开启扩展属性功能才能连接到知识库页面。"
 
 #: frontend/src/pages/wiki2/wiki-settings/linked-repo-panel.js:119
-#| msgid "Library"
 msgid "Add library"
 msgstr "添加资料库"
 
@@ -11632,12 +10984,10 @@ msgid "Original path"
 msgstr "原路径"
 
 #: frontend/src/shared-dir-view.js:253
-#| msgid "IP"
 msgid "ZIP"
 msgstr "ZIP"
 
 #: frontend/src/shared-dir-view.js:877
-#| msgid "Shared by"
 msgid "Shared by: "
 msgstr "共享来源："
 
@@ -11772,10 +11122,6 @@ msgid ""
 msgstr "你还没添加任何资料库，目录或文件到你的收藏夹。收藏夹可以让你快速访问最常用的条目。你可以通过点击其名称左侧的星标，将一个资料库，目录或文件添加到收藏夹。"
 
 #: frontend/src/translate.js:33
-#| msgid ""
-#| "lic libraries have been created yet. A public library is accessible all rs. "
-#| "You can create a public library by clicking the \"Add rary\" button the menu"
-#| " bar."
 msgid ""
 "No public libraries have been created yet. A public library is accessible by"
 " all users. You can create a public library by clicking the \"Add Library\" "
@@ -11790,27 +11136,22 @@ msgid ""
 msgstr "没有资料库被直接共享给你。一个资料库可以以完全的或受限的权限被共享。如果你需要访问其他用户拥有的一个资料库，你可以要求这个用户把这个资料库共享给你。"
 
 #: frontend/src/translate.js:35
-#| msgid "Group not found"
 msgid "Group info"
 msgstr "群组信息"
 
 #: frontend/src/translate.js:36
-#| msgid "Change cover"
 msgid "Change view type"
 msgstr "更改视图类型"
 
 #: frontend/src/translate.js:38
-#| msgid "No users"
 msgid "No user shares"
 msgstr "没有用户共享"
 
 #: frontend/src/translate.js:39
-#| msgid "No groups"
 msgid "No group shares"
 msgstr "没有群组共享"
 
 #: frontend/src/translate.js:40
-#| msgid "{user} restored folder {folderName} in library {libraryName}."
 msgid "Face recognition is done for library {libraryName}."
 msgstr "资料库 {libraryName} 的人脸识别已完成。"
 
@@ -11839,17 +11180,14 @@ msgid "Grid view"
 msgstr "网格视图"
 
 #: frontend/src/translate.js:49
-#| msgid "Open via Client"
 msgid "Open with OnlyOffice"
 msgstr "使用 OnlyOffice 打开"
 
 #: frontend/src/translate.js:50
-#| msgid "Open via Client"
 msgid "Open with client"
 msgstr "使用客户端打开"
 
 #: frontend/src/translate.js:51
-#| msgid "Add permission"
 msgid "Add page below"
 msgstr "在下方增加页面"
 
@@ -11866,7 +11204,6 @@ msgid "Sort ascending"
 msgstr "升序排序"
 
 #: frontend/src/translate.js:56
-#| msgid "Images"
 msgid "Pages"
 msgstr "页面"
 
@@ -11877,138 +11214,135 @@ msgid ""
 msgstr "权限错误。请尝试 {placeholder-left}重新登录。{placeholder-right}"
 
 #: frontend/src/utils/text-translation.js:80
-#| msgid "Open file"
 msgid "Open with"
 msgstr "打开方式"
 
-#: frontend/src/utils/text-translation.js:88
-#| msgid "Desktop"
+#: frontend/src/utils/text-translation.js:86
+msgctxt "Open with"
+msgid "Default"
+msgstr "默认"
+
+#: frontend/src/utils/text-translation.js:90
 msgid "Desktop client"
 msgstr "桌面客户端"
 
-#: frontend/src/utils/text-translation.js:92
-#| msgid "Only files"
+#: frontend/src/utils/text-translation.js:94
 msgid "OnlyOffice"
 msgstr "OnlyOffice"
 
-#: frontend/src/utils/text-translation.js:104
+#: frontend/src/utils/text-translation.js:106
 msgid "Freeze Document"
 msgstr "冻结文档"
 
-#: frontend/src/utils/text-translation.js:108
+#: frontend/src/utils/text-translation.js:110
 msgid "Unfreeze Document"
 msgstr "解除冻结"
 
-#: frontend/src/utils/text-translation.js:120
+#: frontend/src/utils/text-translation.js:122
 msgid "Convert & Export"
 msgstr "转换 & 导出"
 
-#: frontend/src/utils/text-translation.js:124
+#: frontend/src/utils/text-translation.js:126
 msgid "Convert to Markdown"
 msgstr "转换为 Markdown"
 
-#: frontend/src/utils/text-translation.js:128
+#: frontend/src/utils/text-translation.js:130
 msgid "Convert to sdoc"
 msgstr "转换为 sdoc"
 
-#: frontend/src/utils/text-translation.js:132
+#: frontend/src/utils/text-translation.js:134
 msgid "Convert to docx"
 msgstr "转换为 docx"
 
-#: frontend/src/utils/text-translation.js:136
+#: frontend/src/utils/text-translation.js:138
 msgid "Export as docx"
 msgstr "导出为 docx"
 
-#: frontend/src/utils/text-translation.js:148
+#: frontend/src/utils/text-translation.js:150
 msgid "Access Log"
 msgstr "访问日志"
 
-#: frontend/src/utils/text-translation.js:164
+#: frontend/src/utils/text-translation.js:166
 msgid "Convert with ONLYOFFICE"
 msgstr "用 ONLYOFFICE 转换"
 
-#: frontend/src/utils/text-translation.js:168
+#: frontend/src/utils/text-translation.js:170
 msgid "Display files"
 msgstr "显示文件"
 
-#: frontend/src/utils/text-translation.js:172
+#: frontend/src/utils/text-translation.js:174
 msgid "Export as zip"
 msgstr "导出为 zip"
 
-#: frontend/src/utils/text-translation.js:212
+#: frontend/src/utils/text-translation.js:214
 msgid "API Token"
 msgstr "API Token"
 
-#: frontend/src/utils/text-translation.js:231
+#: frontend/src/utils/text-translation.js:233
 msgid "Add view"
 msgstr "增加视图"
 
-#: frontend/src/utils/text-translation.js:237
+#: frontend/src/utils/text-translation.js:239
 msgid "Open file in new tab"
 msgstr "在新标签中打开文件"
 
-#: frontend/src/utils/text-translation.js:241
+#: frontend/src/utils/text-translation.js:243
 msgid "Open folder in new tab"
 msgstr "在新标签中打开目录"
 
-#: frontend/src/utils/text-translation.js:253
+#: frontend/src/utils/text-translation.js:255
 msgid "Extract file details"
 msgstr "提取文件详细信息"
 
-#: frontend/src/utils/text-translation.js:257
+#: frontend/src/utils/text-translation.js:259
 msgid "Delete file"
 msgstr "删除文件"
 
-#: frontend/src/utils/text-translation.js:261
+#: frontend/src/utils/text-translation.js:263
 msgid "Delete folder"
 msgstr "删除目录"
 
-#: frontend/src/utils/text-translation.js:265
-#| msgid "Moved file"
+#: frontend/src/utils/text-translation.js:267
 msgid "Move file"
 msgstr "移动文件"
 
-#: frontend/src/utils/text-translation.js:269
-#| msgid "Moved folder"
+#: frontend/src/utils/text-translation.js:271
 msgid "Move folder"
 msgstr "移动目录"
 
-#: frontend/src/utils/text-translation.js:273
+#: frontend/src/utils/text-translation.js:275
 msgid "Rename file"
 msgstr "重命名文件"
 
-#: frontend/src/utils/text-translation.js:277
+#: frontend/src/utils/text-translation.js:279
 msgid "Rename folder"
 msgstr "重命名目录"
 
-#: frontend/src/utils/text-translation.js:289
-#| msgid "Select Image"
+#: frontend/src/utils/text-translation.js:291
 msgid "Detect faces"
 msgstr "检测人脸"
 
-#: frontend/src/utils/text-translation.js:297
+#: frontend/src/utils/text-translation.js:299
 msgid "Clear selected"
 msgstr "清除所选内容"
 
-#: frontend/src/utils/text-translation.js:301
+#: frontend/src/utils/text-translation.js:303
 msgid "Delete selected"
 msgstr "删除已选中"
 
-#: frontend/src/utils/text-translation.js:305
+#: frontend/src/utils/text-translation.js:307
 msgid "Copy selected"
 msgstr "复制所选内容"
 
-#: frontend/src/utils/text-translation.js:335
+#: frontend/src/utils/text-translation.js:337
 msgid "Remove from this group"
 msgstr "从这个组中删除"
 
-#: frontend/src/utils/text-translation.js:339
-#| msgid "Add group"
+#: frontend/src/utils/text-translation.js:341
 msgid "Add to groups"
 msgstr "增加到群组"
 
-#: frontend/src/utils/text-translation.js:343
-#| msgid "Set user quota"
+#: frontend/src/utils/text-translation.js:345
 msgid "Set as cover photo"
 msgstr "设置为封面照片"
 
@@ -12147,7 +11481,6 @@ msgid "Name cannot be double dots"
 msgstr "名称不能是两个点"
 
 #: frontend/src/view-file-collabora-online.js:252
-#| msgid "Save"
 msgid "Save as"
 msgstr "另存为"
 

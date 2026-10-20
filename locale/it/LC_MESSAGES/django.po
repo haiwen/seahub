@@ -3621,7 +3621,7 @@ msgstr "Timeout di accesso, fare nuovamente clic sul pulsante di accesso sul cli
 #, python-brace-format
 #| msgid "Library %s not found."
 msgid "Library {repo_id} not found."
-msgstr ""
+msgstr "Libreria {repo_id} non trovata."
 
 #: seahub/views/sysadmin.py:158
 msgid "Commit id missing."

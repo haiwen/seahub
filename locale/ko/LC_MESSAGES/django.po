@@ -3604,7 +3604,7 @@ msgstr "로그인 시간을 초과했습니다. 클라이언트에서 로그인 
 #, python-brace-format
 #| msgid "Library %s not found."
 msgid "Library {repo_id} not found."
-msgstr ""
+msgstr "{repo_id} 라이브러리가 없습니다."
 
 #: seahub/views/sysadmin.py:158
 msgid "Commit id missing."

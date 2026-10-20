@@ -3206,7 +3206,7 @@ msgstr "Uključi/isključi odjeljak za navigaciju"
 #: seahub/templates/wiki/_wiki_publish_ssr_search.html:53
 #| msgid "Search Files"
 msgid "Search"
-msgstr "Pretraživanje"
+msgstr "Pretraži"
 
 #: seahub/templates/wiki/_wiki_publish_ssr_search.html:31
 msgid "Searching..."

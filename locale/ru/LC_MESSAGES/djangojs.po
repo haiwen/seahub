@@ -6,14 +6,15 @@
 # Translators:
 # Denis Baranov <baranov@itlibertas.com>, 2015
 # Michael Klimenko <michaelkl@mail.ru>, 2015
+# Seafile Info <info@seafile.com>, 2026
 # Vladimir <pash.vld@gmail.com>, 2015-2026
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 21:05+0800\n"
+"POT-Creation-Date: 2026-10-20 11:32+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
-"Last-Translator: Vladimir <pash.vld@gmail.com>, 2015-2026\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Russian (http://app.transifex.com/haiwen/seahub/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -79,7 +80,6 @@ msgid "Settings"
 msgstr "Настройки"
 
 #: frontend/src/components/account/index.js:155
-#| msgid "Custom properties"
 msgid "Customer Portal"
 msgstr "Портал клиентов"
 
@@ -89,18 +89,15 @@ msgid "Log out"
 msgstr "Выход"
 
 #: frontend/src/components/admin/departments/department-menu.js:5
-#| msgid "No sub-departments"
 msgid "Add sub-department"
 msgstr "Добавить подразделение"
 
 #: frontend/src/components/admin/departments/department-menu.js:6
-#| msgid "Library"
 msgid "Add Library"
 msgstr "Добавить библиотеку"
 
 #: frontend/src/components/admin/departments/department-menu.js:7
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-depart-member-v2-dialog.js:59
-#| msgid "Add Member"
 msgid "Add members"
 msgstr "Добавить пользователей"
 
@@ -262,17 +259,14 @@ msgid "Delete"
 msgstr "Удалить"
 
 #: frontend/src/components/admin/departments/department-menu.js:10
-#| msgid "No department"
 msgid "Move department"
 msgstr "Перемещение отдела"
 
 #: frontend/src/components/admin/departments/department-menu.js:11
-#| msgid "Set Quota"
 msgid "Set quota"
 msgstr "Установить квоту"
 
 #: frontend/src/components/admin/departments/department-menu.js:12
-#| msgid "Departments"
 msgid "Department ID"
 msgstr "ID отдела"
 
@@ -291,8 +285,7 @@ msgstr "Новый отдел"
 #: frontend/src/features/metadata/constants/view/statistics.js:34
 #: frontend/src/pages/app/main-panel/share-with-ocm/shared-with-ocm.js:274
 #: frontend/src/pages/app/main-panel/starred/starred.js:248
-#: frontend/src/utils/text-translation.js:321
-#| msgid "locked by {name}"
+#: frontend/src/utils/text-translation.js:323
 msgid "Ascending by name"
 msgstr "Возрастание по имени"
 
@@ -301,8 +294,7 @@ msgstr "Возрастание по имени"
 #: frontend/src/features/metadata/constants/view/statistics.js:35
 #: frontend/src/pages/app/main-panel/share-with-ocm/shared-with-ocm.js:275
 #: frontend/src/pages/app/main-panel/starred/starred.js:249
-#: frontend/src/utils/text-translation.js:325
-#| msgid "locked by {name}"
+#: frontend/src/utils/text-translation.js:327
 msgid "Descending by name"
 msgstr "Убывание по имени"
 
@@ -462,7 +454,6 @@ msgid "Role"
 msgstr "Роль"
 
 #: frontend/src/components/admin/departments/department.js:164
-#| msgid "Contact Email"
 msgid "Contact email"
 msgstr "Контактный адрес электронной почты"
 
@@ -662,13 +653,11 @@ msgstr "Библиотека"
 
 #: frontend/src/components/admin/statistics/ai-statistics/detail-dialog.js:73
 #: frontend/src/components/admin/statistics/ai-statistics/index.js:151
-#| msgid "Library"
 msgid "Library ID"
 msgstr "ID библиотеки"
 
 #: frontend/src/components/admin/statistics/ai-statistics/detail-dialog.js:92
 #: frontend/src/components/admin/statistics/ai-statistics/index.js:205
-#| msgid "File details"
 msgid "AI usage details"
 msgstr "Подробности использования ИИ"
 
@@ -770,7 +759,6 @@ msgstr "Владелец"
 #: frontend/src/components/admin/statistics/ai-statistics/index.js:175
 #: frontend/src/components/admin/statistics/ai-statistics/index.js:217
 #: frontend/src/pages/sys-admin/statistic/statistic-ai.js:9
-#| msgid "Team name"
 msgid "Team"
 msgstr "Команда"
 
@@ -811,7 +799,6 @@ msgid "View"
 msgstr "Просмотр"
 
 #: frontend/src/components/admin/statistics/ai-statistics/index.js:293
-#| msgid "By day"
 msgid "By date"
 msgstr "По дате"
 
@@ -830,17 +817,14 @@ msgid "Month"
 msgstr "Месяц"
 
 #: frontend/src/components/admin/statistics/ai-statistics/index.js:350
-#| msgid "Current path: "
 msgid "Current month"
 msgstr "Текущий месяц"
 
 #: frontend/src/components/admin/statistics/ai-statistics/index.js:356
-#| msgid "The past month"
 msgid "Last month"
 msgstr "Прошлый месяц"
 
 #: frontend/src/components/admin/statistics/ai-statistics/index.js:362
-#| msgid "Last Update"
 msgid "Last month same day"
 msgstr "В прошлом месяце в тот же день"
 
@@ -870,7 +854,6 @@ msgid "30 Days"
 msgstr "30 дней"
 
 #: frontend/src/components/admin/statistics/statistic-common-tool.js:114
-#| msgid "Year"
 msgid "1 Year"
 msgstr "1 год"
 
@@ -1177,8 +1160,6 @@ msgid "Cancel"
 msgstr "Отменить"
 
 #: frontend/src/components/archive-icon.js:13
-#| msgid ""
-#| "ibrary has been set to read-only by admin and cannot be updated."
 msgid "This library has been archived, cannot be updated."
 msgstr "Эта библиотека заархивирована, не может быть обновлена."
 
@@ -1215,7 +1196,6 @@ msgid "Dark mode"
 msgstr "Темный режим"
 
 #: frontend/src/components/color-mode/index.js:29
-#| msgid "Switch sort mode"
 msgid "Light mode"
 msgstr "Светлый режим"
 
@@ -1327,7 +1307,6 @@ msgstr "Мои Wiki"
 
 #: frontend/src/components/dialog/add-wiki-dialog/index.js:354
 #: frontend/src/components/popover/edit-wiki-popover/index.js:322
-#| msgid "Custom CSS"
 msgid "Custom"
 msgstr "Пользовательский"
 
@@ -1374,13 +1353,11 @@ msgstr "Нет доступных опций"
 #: frontend/src/components/dialog/add-wiki-dialog/index.js:491
 #: frontend/src/components/popover/edit-wiki-popover/index.js:573
 #: frontend/src/features/tag/components/dialog/edit-tag-dialog/index.js:78
-#| msgid "Color space"
 msgid "Color"
 msgstr "Цвет"
 
 #: frontend/src/components/dialog/add-wiki-dialog/index.js:502
 #: frontend/src/components/popover/edit-wiki-popover/index.js:584
-#| msgid "Select a color"
 msgid "Select color"
 msgstr "Выбрать цвет"
 
@@ -1396,7 +1373,6 @@ msgstr "Авто совпадение"
 
 #: frontend/src/components/dialog/add-wiki-dialog/index.js:526
 #: frontend/src/components/popover/edit-wiki-popover/index.js:610
-#| msgid "Hide all"
 msgid "View all"
 msgstr "Посмотреть все"
 
@@ -1406,13 +1382,11 @@ msgstr "Посмотреть все"
 #: frontend/src/components/popover/edit-wiki-popover/index.js:672
 #: frontend/src/components/wiki-card-view/wiki-icon-selector/index.js:82
 #: frontend/src/components/wiki-card-view/wiki-icon-selector/index.js:147
-#| msgid "Select option(s)"
 msgid "Select icon"
 msgstr "Выбрать значок"
 
 #: frontend/src/components/dialog/add-wiki-dialog/index.js:561
 #: frontend/src/components/popover/edit-wiki-popover/index.js:645
-#| msgid "Suggestion"
 msgid "Suggested icons"
 msgstr "Предлагаемые значки"
 
@@ -1547,7 +1521,6 @@ msgstr "Подробности изменения"
 
 #: frontend/src/components/dialog/commit-details/index.js:64
 #: frontend/src/features/library-view/dir-history-view/index.js:242
-#| msgid "View Related Snapshot"
 msgid "View snapshot"
 msgstr "Просмотр снимка"
 
@@ -2060,24 +2033,20 @@ msgid "Edit"
 msgstr "Редактировать"
 
 #: frontend/src/components/dialog/delete-folder-dialog.js:50
-#| msgid ""
-#| "older has been shared to {user_amount} user(s) and {group_amount} up(s)."
 msgid ""
 "This folder has been shared with {user_amount} user(s) and {group_amount} "
 "group(s)."
-msgstr ""
+msgstr "Доступ к этой папке предоставлен {user_amount} пользователю(ям) и {group_amount} группе(ам)."
 
 #: frontend/src/components/dialog/delete-folder-dialog.js:57
 msgid "Delete Folder"
 msgstr "Удалить папку"
 
 #: frontend/src/components/dialog/delete-repo-dialog.js:59
-#| msgid ""
-#| "ibrary has been shared to {user_amount} user(s) and {group_amount} up(s)."
 msgid ""
 "This library has been shared with {user_amount} user(s) and {group_amount} "
 "group(s)."
-msgstr ""
+msgstr "Доступ к этой библиотеке предоставлен {user_amount} пользователю(ям) и {group_amount} группе(ам)."
 
 #: frontend/src/components/dialog/delete-repo-dialog.js:68
 #: frontend/src/components/dialog/org-delete-repo-dialog.js:33
@@ -2091,17 +2060,14 @@ msgid "Delete Library"
 msgstr "Удалить библиотеку"
 
 #: frontend/src/components/dialog/department-detail-dialog/index.js:234
-#| msgid "Search groups"
 msgid "Select group members"
 msgstr "Выбрать участников группы"
 
 #: frontend/src/components/dialog/department-detail-dialog/index.js:234
-#| msgid "Select a user"
 msgid "Select shared users"
 msgstr "Выбрать общих пользователей"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-member-selected.js:79
-#| msgid "selected"
 msgid "Selected"
 msgstr "Выбрано"
 
@@ -2113,22 +2079,18 @@ msgid "Add"
 msgstr "Добавить"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:107
-#| msgid "Members"
 msgid "members"
 msgstr "участники"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:124
-#| msgid "No libraries shared with this group"
 msgid "User is already in this group"
 msgstr "Пользователь уже состоит в этой группе"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:124
-#| msgid "No libraries shared with this group"
 msgid "It is already shared with user"
-msgstr ""
+msgstr "Он уже доступен пользователю"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:130
-#| msgid "Search groups"
 msgid "Search results"
 msgstr "Результаты поиска"
 
@@ -2145,22 +2107,18 @@ msgstr "Выбрать все"
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:151
 #: frontend/src/features/tag/views/tag-files/list/index.js:98
 #: frontend/src/features/tag/views/tag-files/list/index.js:99
-#| msgid "Select all"
 msgid "Unselect all"
 msgstr "Отменить выбор всех"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:181
-#| msgid "No users"
 msgid "No users found"
 msgstr "Пользователи не найдены"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group.js:76
-#| msgid "No department"
 msgid "Toggle department group menu"
 msgstr "Переключить меню группы отделов"
 
 #: frontend/src/components/dialog/dismiss-group-dialog.js:16
-#| msgid "deleted"
 msgid "Group deleted"
 msgstr "Группа удалена"
 
@@ -2185,7 +2143,6 @@ msgstr "Изменить метки"
 
 #: frontend/src/components/dialog/edit-repo-commit-labels.js:101
 #, javascript-format
-#| msgid "Add option"
 msgid "Add option: %s"
 msgstr "Добавить параметр: %s"
 
@@ -2309,7 +2266,6 @@ msgstr "Показать"
 
 #: frontend/src/components/dialog/generate-upload-link.js:332
 #: frontend/src/components/share-link-panel/link-details.js:215
-#| msgid "Expiration days"
 msgid "Expiration date"
 msgstr "Дата истечения"
 
@@ -2335,13 +2291,11 @@ msgstr "Защитить паролем"
 
 #: frontend/src/components/dialog/generate-upload-link.js:427
 #: frontend/src/components/share-link-panel/link-creation.js:370
-#| msgid "Add option"
 msgid "Add auto expiration"
 msgstr "Добавить авто истечение срока действия"
 
 #: frontend/src/components/dialog/generate-upload-link.js:453
 #: frontend/src/components/share-link-panel/link-creation.js:454
-#| msgid "Description"
 msgid "Add description"
 msgstr "Добавить описание"
 
@@ -2349,23 +2303,19 @@ msgstr "Добавить описание"
 #: frontend/src/components/dialog/group-invite-members-dialog/index.js:101
 #: frontend/src/components/share-link-panel/link-creation.js:473
 #: frontend/src/pages/settings/web-api-auth-token/index.js:96
-#| msgid "Generate Link"
 msgid "Generate"
 msgstr "Создать"
 
 #: frontend/src/components/dialog/group-invite-members-dialog/index.js:66
-#| msgid "Internal link has been copied to clipboard"
 msgid "Invitation link has been copied to clipboard"
 msgstr "Ссылка на приглашение скопирована в буфер обмена"
 
 #: frontend/src/components/dialog/group-invite-members-dialog/index.js:81
 #: frontend/src/pages/app/main-panel/groups/group-op-menu.js:176
-#| msgid "Invite users"
 msgid "Invite members"
 msgstr "Приглашение участников"
 
 #: frontend/src/components/dialog/group-invite-members-dialog/index.js:85
-#| msgid "No invitations"
 msgid "Group invitation link"
 msgstr "Ссылка для приглашения в группу"
 
@@ -2380,7 +2330,6 @@ msgid "Group members"
 msgstr "Члены группы"
 
 #: frontend/src/components/dialog/guide-for-new-dialog.js:24
-#| msgid "Upload files to {folder_name_placeholder}"
 msgid "Welcome to {site_name_placeholder}"
 msgstr "Добро пожаловать в {site_name_placeholder}"
 
@@ -2411,7 +2360,6 @@ msgid "Next (Right arrow key)"
 msgstr "Вперед (→)"
 
 #: frontend/src/components/dialog/image-dialog/index.js:101
-#| msgid "Close"
 msgid "Close (Esc)"
 msgstr "Закрыть (Esc)"
 
@@ -2441,12 +2389,10 @@ msgid "Rotate"
 msgstr "Вращать"
 
 #: frontend/src/components/dialog/image-dialog/index.js:110
-#| msgid "Loading"
 msgid "Open metadata"
 msgstr "Открыть метаданные"
 
 #: frontend/src/components/dialog/image-dialog/index.js:111
-#| msgid "Choose date"
 msgid "Close metadata"
 msgstr "Закрыть метаданные"
 
@@ -2459,12 +2405,10 @@ msgid "OCR"
 msgstr "Распознавание текста"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:69
-#| msgid "Please select an expiration time"
 msgid "Select a Confluence HTML exported file (.html.zip)"
 msgstr "Выбрать экспортированный файл Confluence HTML (.html.zip)"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:81
-#| msgid "Please select an expiration time"
 msgid "Select a Confluence exported file"
 msgstr "Выбрать экспортированный файл Confluence"
 
@@ -2473,7 +2417,6 @@ msgid "Confluence file imported"
 msgstr "Файл Confluence импортирован"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:95
-#| msgid "Failed to restore {name}"
 msgid "Failed to import Confluence file"
 msgstr "Не удалось импортировать файл Confluence"
 
@@ -2482,7 +2425,6 @@ msgid "Import Confluence Wiki"
 msgstr "Импорт Confluence Wiki"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:121
-#| msgid "Please select an expiration time"
 msgid "Confluence export file"
 msgstr "Файл экспорта Confluence"
 
@@ -2492,12 +2434,10 @@ msgid "Select File"
 msgstr "Выбрать файл"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:134
-#| msgid "Clear selected"
 msgid "No file selected"
 msgstr "Файл не выбран"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:138
-#| msgid "Please select an expiration time"
 msgid "Select a Confluence HTML export file (.html.zip)"
 msgstr "Выбрать файл экспорта Confluence HTML (.html.zip)"
 
@@ -2508,12 +2448,10 @@ msgid ""
 msgstr "Процесс импорта может занять несколько минут в зависимости от размера вашего экспорта Confluence."
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:168
-#| msgid "Exporting..."
 msgid "Importing..."
 msgstr "Импорт..."
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:168
-#| msgid "Import tags"
 msgid "Import"
 msgstr "Импорт"
 
@@ -2530,7 +2468,6 @@ msgstr "Импорт участников из файла .xlsx"
 #: frontend/src/components/dialog/import-members-dialog.js:54
 #: frontend/src/components/dialog/org-import-users-dialog.js:53
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:54
-#| msgid "Download and upload"
 msgid "Download an example file"
 msgstr "Скачать пример файла"
 
@@ -2538,7 +2475,6 @@ msgstr "Скачать пример файла"
 #: frontend/src/components/dialog/org-import-users-dialog.js:54
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:55
 #: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:308
-#| msgid "Upload Files"
 msgid "Upload file"
 msgstr "Загрузить файл"
 
@@ -2547,19 +2483,16 @@ msgid "Import tags"
 msgstr "Импорт тегов"
 
 #: frontend/src/components/dialog/import-tags-dialog.js:31
-#| msgid "Import tags"
 msgid "Importing tags..."
 msgstr "Импорт тегов..."
 
 #: frontend/src/components/dialog/import-wiki-page-dialog.js:27
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-dropdownmenu.js:163
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:173
-#| msgid "Import tags"
 msgid "Import page"
 msgstr "Страница импорта"
 
 #: frontend/src/components/dialog/import-wiki-page-dialog.js:31
-#| msgid "Import tags"
 msgid "Importing page..."
 msgstr "Импорт страницы..."
 
@@ -2652,7 +2585,7 @@ msgstr "Успешно добавлены метки для библиотеки
 
 #: frontend/src/components/dialog/label-repo-state-dialog.js:84
 #: frontend/src/components/library-op-menu.js:181
-#: frontend/src/utils/text-translation.js:216
+#: frontend/src/utils/text-translation.js:218
 msgid "Label Current State"
 msgstr "Текущее состояние метки"
 
@@ -2672,7 +2605,6 @@ msgid "Leave"
 msgstr "Покинуть"
 
 #: frontend/src/components/dialog/lib-decrypt-dialog/index.js:63
-#| msgid "Reset library password"
 msgid "This library is password protected"
 msgstr "Эта библиотека защищена паролем"
 
@@ -2681,7 +2613,6 @@ msgid "The password will be kept in the server for only 1 hour."
 msgstr "Пароль будет храниться на сервере в течение 1 часа."
 
 #: frontend/src/components/dialog/lib-decrypt-dialog/index.js:66
-#| msgid "Confirm password"
 msgid "Wrong password"
 msgstr "Неверный пароль"
 
@@ -2703,7 +2634,6 @@ msgstr "Установить разрешение для {placeholder}"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:311
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:291
-#| msgid "Folder"
 msgid "Add Folder"
 msgstr "Добавить папку"
 
@@ -2714,7 +2644,6 @@ msgstr "Добавить папку"
 #: frontend/src/pages/org-admin/org-logs/org-logs-group-member-audit.js:70
 #: frontend/src/pages/sys-admin/sys-logs/group-member-audit-logs.js:44
 #: frontend/src/pages/sys-admin/sys-logs/group-member-audit-logs.js:324
-#| msgid "Groups"
 msgid "Group"
 msgstr "Группа"
 
@@ -2726,7 +2655,7 @@ msgstr "Группа"
 #: frontend/src/pages/sys-admin/sys-logs/share-permission-logs.js:48
 #: frontend/src/repo-folder-trash.js:372 frontend/src/repo-folder-trash.js:432
 #: frontend/src/repo-snapshot.js:309
-#: frontend/src/utils/text-translation.js:227
+#: frontend/src/utils/text-translation.js:229
 msgid "Folder"
 msgstr "Папка"
 
@@ -2735,7 +2664,7 @@ msgstr "Папка"
 msgid ""
 "Folder permission is only effective after the library is shared with users "
 "or groups. It is used to fine tune sub-folder permissions."
-msgstr ""
+msgstr "Разрешение папки вступает в силу только после предоставления доступа к библиотеке пользователям или группам. Оно используется для точной настройки разрешений вложенных папок."
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:350
 #: frontend/src/components/dialog/share-to-group.js:397
@@ -2758,7 +2687,6 @@ msgstr "Поиск групп"
 #: frontend/src/components/share-link-panel/link-authenticated-users.js:211
 #: frontend/src/components/share-link-panel/link-list.js:78
 #: frontend/src/features/metadata/views/card/card-items/index.js:155
-#| msgid "items"
 msgid "No items"
 msgstr "Нет элементов"
 
@@ -2781,17 +2709,14 @@ msgid "Search users"
 msgstr "Поиск пользователей"
 
 #: frontend/src/components/dialog/list-created-files-dialog/index.js:33
-#| msgid "Delete Folder"
 msgid "Deleted Folders"
 msgstr "Удаленные папки"
 
 #: frontend/src/components/dialog/list-created-files-dialog/index.js:33
-#| msgid "Deleted files"
 msgid "Deleted Files"
 msgstr "Удаленные файлы"
 
 #: frontend/src/components/dialog/list-created-files-dialog/index.js:35
-#| msgid "Created folder"
 msgid "Created Folders"
 msgstr "Созданные папки"
 
@@ -2904,12 +2829,10 @@ msgid ""
 msgstr "Совет: библиотеки, удаленные {placeholder} дней назад, будут очищены автоматически."
 
 #: frontend/src/components/dialog/my-deleted-repos-dialog/repos.js:47
-#| msgid "No deleted libraries"
 msgid "Delete all deleted libraries"
 msgstr "Удалить все удаленные библиотеки"
 
 #: frontend/src/components/dialog/my-deleted-repos-dialog/repos.js:48
-#| msgid "Are you sure you want to delete the selected user(s) ?"
 msgid "Are you sure you want to delete all deleted libraries?"
 msgstr "Вы уверены, что хотите удалить все удаленные библиотеки?"
 
@@ -2953,18 +2876,15 @@ msgid "Email"
 msgstr "Email"
 
 #: frontend/src/components/dialog/org-add-user-dialog.js:160
-#| msgid "Confirm password"
 msgid "Confirm Password"
 msgstr "Подтвердите пароль"
 
 #: frontend/src/components/dialog/org-admin-delete-org-dialog.js:42
-#| msgid "Passwords don't match"
 msgid "Names don't match"
 msgstr "Имена не совпадают"
 
 #: frontend/src/components/dialog/org-admin-delete-org-dialog.js:59
 #: frontend/src/pages/org-admin/settings/index.js:228
-#| msgid "Delete Time"
 msgid "Delete Team"
 msgstr "Удалить команду"
 
@@ -3053,7 +2973,6 @@ msgstr "Установить квоту"
 
 #: frontend/src/components/dialog/org-set-group-quota-dialog.js:66
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:66
-#| msgid "Please enter a new password"
 msgid "Please enter a new quota"
 msgstr "Введите новую квоту"
 
@@ -3090,12 +3009,10 @@ msgid "Rename Folder"
 msgstr "Переименовать папку"
 
 #: frontend/src/components/dialog/rename-dialog.js:98
-#| msgid "Rename file"
 msgid "Rename file to"
 msgstr "Переименовать файл в"
 
 #: frontend/src/components/dialog/rename-dialog.js:98
-#| msgid "Rename folder"
 msgid "Rename folder to"
 msgstr "Переименовать папку в"
 
@@ -3108,7 +3025,6 @@ msgid "Rename group to"
 msgstr "Переименовать группу в"
 
 #: frontend/src/components/dialog/rename-repo.js:59
-#| msgid "Renamed library"
 msgid "Rename Library"
 msgstr "Переименовать библиотеку"
 
@@ -3124,7 +3040,6 @@ msgid "Rename Wiki"
 msgstr "Переименовать Wiki"
 
 #: frontend/src/components/dialog/rename-wiki-dialog.js:72
-#| msgid "Rename Wiki"
 msgid "Rename Wiki to"
 msgstr "Переименовать Wiki в"
 
@@ -3186,12 +3101,10 @@ msgid "Please check the network."
 msgstr "Пожалуйста, проверьте сеть."
 
 #: frontend/src/components/dialog/repo-api-token-dialog/index.js:245
-#| msgid "Name"
 msgid "App Name"
 msgstr "Имя приложения"
 
 #: frontend/src/components/dialog/repo-api-token-dialog/index.js:307
-#| msgid "{placeholder} Access Log"
 msgid "{placeholder} API Token"
 msgstr "{placeholder} Токен API"
 
@@ -3208,12 +3121,10 @@ msgid ""
 msgstr "Библиотека разархивируется. Вы будете уведомлены, как только оно будет завершено."
 
 #: frontend/src/components/dialog/repo-archive-dialog.js:133
-#| msgid "Read-Write library"
 msgid "Archive library"
 msgstr "Архивировать библиотеку"
 
 #: frontend/src/components/dialog/repo-archive-dialog.js:133
-#| msgid "Restore Library"
 msgid "Unarchive library"
 msgstr "Разархивировать библиотеку"
 
@@ -3230,12 +3141,10 @@ msgid "Unarchive"
 msgstr "Разархивировать"
 
 #: frontend/src/components/dialog/repo-archive-dialog.js:138
-#| msgid "Are you sure you want to remove {placeholder} ?"
 msgid "Are you sure you want to archive {placeholder} ?"
 msgstr "Вы уверены, что хотите заархивировать {placeholder}?"
 
 #: frontend/src/components/dialog/repo-archive-dialog.js:140
-#| msgid "Are you sure you want to remove {placeholder} ?"
 msgid "Are you sure you want to unarchive {placeholder} ?"
 msgstr "Вы уверены, что хотите разархивировать {placeholder}?"
 
@@ -3252,12 +3161,10 @@ msgid ""
 msgstr "Библиотека будет перемещена обратно в основное хранилище. Пользователи не смогут получить доступ к библиотеке во время процесса разархивирования."
 
 #: frontend/src/components/dialog/repo-office-suite-dialog/index.js:43
-#| msgid "Successfully change the group"
 msgid "Successfully changed the office suite."
 msgstr "Офисный пакет изменен."
 
 #: frontend/src/components/dialog/repo-office-suite-dialog/index.js:88
-#| msgid "Select all"
 msgid "Select an office suite"
 msgstr "Выбрать офисный пакет"
 
@@ -3298,7 +3205,6 @@ msgid "Group Shares"
 msgstr "Общие ресурсы групп"
 
 #: frontend/src/components/dialog/repo-share-admin/share-links.js:176
-#| msgid "Successfully deleted 1 item."
 msgid "Successfully deleted 1 item"
 msgstr "Успешно удален 1 объект"
 
@@ -3319,7 +3225,6 @@ msgstr "Удалено {number_placeholder} ссылок общего досту
 #: frontend/src/components/share-link-panel/link-list.js:91
 #: frontend/src/pages/app/main-panel/share-admin/share-links.js:93
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:75
-#| msgid "Select all"
 msgid "Unselect items"
 msgstr "Отменить выбор элементов"
 
@@ -3327,7 +3232,6 @@ msgstr "Отменить выбор элементов"
 #: frontend/src/components/share-link-panel/link-list.js:91
 #: frontend/src/pages/app/main-panel/share-admin/share-links.js:93
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:75
-#| msgid "Select all"
 msgid "Select items"
 msgstr "Выбрать элементы"
 
@@ -3380,33 +3284,27 @@ msgstr "Вы уверены, что хотите удалить выбранны
 
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:352
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:446
-#| msgid "No upload links"
 msgid "Delete upload links"
 msgstr "Удалить ссылки для загрузки"
 
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:353
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:447
-#| msgid "Are you sure you want to delete the selected share link(s) ?"
 msgid "Are you sure you want to delete the selected upload link(s) ?"
 msgstr "Вы уверены, что хотите удалить выбранные ссылки для загрузки ?"
 
 #: frontend/src/components/dialog/repo-webhook-dialog/delete-webhook-dialog.js:9
-#| msgid "Delete Member"
 msgid "Delete webhook"
 msgstr "Удалить вебхук"
 
 #: frontend/src/components/dialog/repo-webhook-dialog/delete-webhook-dialog.js:11
-#| msgid "Are you sure you want to delete this page?"
 msgid "Are you sure you want to delete this webhook?"
 msgstr "Вы уверены, что хотите удалить этот вебхук?"
 
 #: frontend/src/components/dialog/repo-webhook-dialog/edit-webhook-dialog.js:26
-#| msgid "URL is required"
 msgid "Url is required"
 msgstr "URL обязателен"
 
 #: frontend/src/components/dialog/repo-webhook-dialog/edit-webhook-dialog.js:38
-#| msgid "Updated file"
 msgid "Update webhook"
 msgstr "Обновить вебхук"
 
@@ -3506,24 +3404,20 @@ msgid "No result"
 msgstr "Ничего не найдено"
 
 #: frontend/src/components/dialog/select-dirent-body.js:83
-#| msgid "Please select a library to share."
 msgid "Please select a library or folder first."
 msgstr "Сначала выберите библиотеку или папку."
 
 #: frontend/src/components/dialog/select-dirent-body.js:181
 #: frontend/src/components/file-chooser/repo-list-wrapper.js:86
-#| msgid "Create Library"
 msgid "Current Library"
 msgstr "Текущая библиотека"
 
 #: frontend/src/components/dialog/select-dirent-body.js:188
 #: frontend/src/components/file-chooser/repo-list-wrapper.js:108
-#| msgid "Owned Libraries"
 msgid "Other Libraries"
 msgstr "Другие библиотеки"
 
 #: frontend/src/components/dialog/select-dirent-body.js:195
-#| msgid "Space Used"
 msgid "Recently Used"
 msgstr "Недавно использованный"
 
@@ -3533,12 +3427,10 @@ msgstr "Недавно использованный"
 #: frontend/src/pages/app/side-panel/main-side-nav-folded.js:322
 #: frontend/src/pages/app/side-panel/main-side-nav.js:416
 #: frontend/src/pages/app/side-panel/main-side-nav.js:417
-#| msgid "No favorites"
 msgid "Favorites"
 msgstr "Избранные"
 
 #: frontend/src/components/dialog/select-dirent-body.js:265
-#| msgid "New Folder"
 msgid "New folder"
 msgstr "Новая папка"
 
@@ -3580,25 +3472,22 @@ msgstr "Общедоступная ссылка"
 #: frontend/src/components/dialog/share-dialog.js:137
 #: frontend/src/components/dialog/share-wiki-dialog.js:84
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-dialog.js:51
-#| msgid "Share to user"
 msgid "Share with user"
-msgstr ""
+msgstr "Общий доступ для пользователя"
 
 #: frontend/src/components/dialog/share-dialog.js:144
 #: frontend/src/components/dialog/share-wiki-dialog.js:91
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-dialog.js:56
-#| msgid "Share to group"
 msgid "Share with group"
-msgstr ""
+msgstr "Общие с группами"
 
 #: frontend/src/components/dialog/share-dialog.js:151
 msgid "Custom sharing permissions"
 msgstr "Пользовательские разрешения на общий доступ"
 
 #: frontend/src/components/dialog/share-dialog.js:167
-#| msgid "Share to other server"
 msgid "Share with other server"
-msgstr ""
+msgstr "Поделиться с другим сервером"
 
 #: frontend/src/components/dialog/share-dialog.js:332
 #: frontend/src/components/dialog/share-wiki-dialog.js:161
@@ -3670,22 +3559,18 @@ msgid "Successfully deleted 1 item."
 msgstr "Успешно удален 1 объект."
 
 #: frontend/src/components/dialog/share-to-other-server.js:198
-#| msgid "At server"
 msgid "Server"
 msgstr "Сервер"
 
 #: frontend/src/components/dialog/share-to-other-server.js:199
-#| msgid "Email"
 msgid "User Email"
 msgstr "Email пользователя"
 
 #: frontend/src/components/dialog/share-to-other-server.js:214
-#| msgid "Select a user"
 msgid "Select a server"
 msgstr "Выбрать сервер"
 
 #: frontend/src/components/dialog/share-to-user/index.js:491
-#| msgid "Search users"
 msgid "Search users..."
 msgstr "Поиск пользователей..."
 
@@ -3714,36 +3599,30 @@ msgid "By time descending"
 msgstr "По времени в порядке убывания"
 
 #: frontend/src/components/dialog/sysadmin-dialog/add-department-v2-dialog.js:73
-#| msgid "No department"
 msgid "Add department at"
 msgstr "Добавить отдел в"
 
 #: frontend/src/components/dialog/sysadmin-dialog/add-department-v2-dialog.js:75
-#| msgid "Change to department"
 msgid "Create top department"
 msgstr "Создать верхний отдел"
 
 #: frontend/src/components/dialog/sysadmin-dialog/delete-department-v2-confirm-dialog.js:19
-#| msgid "Delete Department"
 msgid "Delete department"
 msgstr "Удалить отдел"
 
 #: frontend/src/components/dialog/sysadmin-dialog/delete-department-v2-confirm-dialog.js:23
-#| msgid "Are you sure to delete "
 msgid "Are you sure to delete"
 msgstr "Вы уверены, что хотите удалить"
 
 #: frontend/src/components/dialog/sysadmin-dialog/set-quota.js:70
 #: frontend/src/components/dialog/sysadmin-dialog/set-upload-download-rate-limit.js:71
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-monthly-download-traffic-limit-dialog.js:70
-#| msgid "An integer that is greater than or equal to 0."
 msgid "An integer that is greater than 0."
 msgstr "Целое число, которое больше 0."
 
 #: frontend/src/components/dialog/sysadmin-dialog/set-quota.js:72
 #: frontend/src/components/dialog/sysadmin-dialog/set-upload-download-rate-limit.js:73
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-monthly-download-traffic-limit-dialog.js:72
-#| msgid "Unselect"
 msgid "Unset"
 msgstr "Сброс"
 
@@ -3892,22 +3771,18 @@ msgid "Department moved successfully"
 msgstr "Отдел перемещен"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-move-group-dialog.js:143
-#| msgid "Change to department"
 msgid "Move to department"
 msgstr "Переместить в отдел"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-move-group-dialog.js:159
-#| msgid "Select a department"
 msgid "Select target department"
 msgstr "Выбрать целевой отдел"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-move-group-dialog.js:175
-#| msgid "Select a department"
 msgid "Search departments"
 msgstr "Поиск отделов"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-move-group-dialog.js:196
-#| msgid "User not found"
 msgid "Department not found"
 msgstr "Отдел не найден"
 
@@ -3928,7 +3803,6 @@ msgid "Set max number of members"
 msgstr "Установить максимальное количество участников"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-monthly-download-traffic-limit-dialog.js:55
-#| msgid "Traffic"
 msgid "Set Traffic"
 msgstr "Установить трафик"
 
@@ -3939,12 +3813,10 @@ msgstr "Установить имя"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-user-deactivate-dialog.js:34
 #: frontend/src/pages/org-admin/org-users/org-user-item.js:187
-#| msgid "Set user name"
 msgid "Set user inactive"
 msgstr "Сделать пользователя неактивным"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-user-deactivate-dialog.js:39
-#| msgid "Are you sure you want to delete the selected share link(s) ?"
 msgid "Do you want to keep the library sharing relationships?"
 msgstr "Вы хотите сохранить отношения совместного использования библиотеки?"
 
@@ -3955,7 +3827,6 @@ msgid "Keep sharing"
 msgstr "Сохранить общий доступ"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-user-deactivate-dialog.js:63
-#| msgid "Keep sharing"
 msgid "Do not keep sharing"
 msgstr "Не сохранять общий доступ"
 
@@ -3974,7 +3845,6 @@ msgid "Import sdoc"
 msgstr "Импорт sdoc"
 
 #: frontend/src/components/dialog/tip-dialog.js:13
-#| msgid "Converting, please wait..."
 msgid "Importing sdoc, please wait..."
 msgstr "Импорт sdoc, подождите..."
 
@@ -4007,10 +3877,8 @@ msgid "Users"
 msgstr "Пользователя(ей)"
 
 #: frontend/src/components/dialog/transfer-dialog/index.js:202
-#| msgid ""
-#| "the library is shared to another user, the sharing will be ketp."
 msgid "If the library is shared with another user, the sharing will be kept."
-msgstr ""
+msgstr "Если библиотека передана ​​другому пользователю, общий доступ сохранится."
 
 #: frontend/src/components/dialog/transfer-dialog/index.js:206
 #: frontend/src/pages/org-admin/departments/index.js:387
@@ -4021,23 +3889,19 @@ msgid "Departments"
 msgstr "Отделы"
 
 #: frontend/src/components/dialog/transfer-dialog/index.js:216
-#| msgid "Select a department"
 msgid "Search department"
 msgstr "Поисковый отдел"
 
 #: frontend/src/components/dialog/transfer-dialog/index.js:228
-#| msgid ""
-#| " library is shared to another department, the sharing will be ketp."
 msgid ""
 "If the library is shared with another department, the sharing will be kept."
-msgstr ""
+msgstr "Если библиотека передана другому отделу, общий доступ сохранится."
 
 #: frontend/src/components/dialog/transfer-dialog/index.js:244
 msgid "Transfer Library {library_name}"
 msgstr "Передать библиотеку {library_name}"
 
 #: frontend/src/components/dialog/transfer-group-dialog/index.js:44
-#| msgid "Group has been transfered"
 msgid "Group has been transferred"
 msgstr "Группа была передана"
 
@@ -4134,12 +3998,10 @@ msgid "New password"
 msgstr "Новый пароль"
 
 #: frontend/src/components/dialog/wiki-convert-status-dialog.js:25
-#| msgid "Convert Wiki"
 msgid "Converting"
 msgstr "Преобразование"
 
 #: frontend/src/components/dialog/wiki-convert-status-dialog.js:30
-#| msgid "Exporting..."
 msgid "Converting..."
 msgstr "Преобразование..."
 
@@ -4152,18 +4014,15 @@ msgid "Packaging..."
 msgstr "Упаковка..."
 
 #: frontend/src/components/dir-chat/chat-history/customize-definition/definition.js:63
-#| msgid "Update"
 msgid "Updated"
 msgstr "Обновлено"
 
 #: frontend/src/components/dir-chat/chat-history/customize-link/index.js:89
 #: frontend/src/components/dir-chat/chat-history/customize-link/index.js:90
-#| msgid "New files"
 msgid "View file"
 msgstr "Просмотр файла"
 
 #: frontend/src/components/dir-chat/chat-history/message-operations/index.js:14
-#| msgid "This file has been updated."
 msgid "The content has been copied"
 msgstr "Содержание было скопировано"
 
@@ -4174,7 +4033,6 @@ msgstr "Мыслительный процесс"
 
 #: frontend/src/components/dir-chat/chat-history/thought-process/process-details/index.js:59
 #: frontend/src/components/dir-chat/chat-history/thought-process/process-details/index.js:73
-#| msgid "File details"
 msgid "Toggle details"
 msgstr "Переключить детали"
 
@@ -4206,14 +4064,12 @@ msgstr "Использование времени"
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:67
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:84
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:184
-#| msgid "Actions"
 msgid "Action steps"
 msgstr "Шаги действий"
 
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:71
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:87
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:192
-#| msgid "General information"
 msgid "Answer generation"
 msgstr "Генерация ответов"
 
@@ -4223,20 +4079,17 @@ msgstr "Использование токенов"
 
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:93
 #: frontend/src/features/metadata/constants/view/index.js:40
-#| msgid "Status"
 msgid "Statistics"
 msgstr "Статистика"
 
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:106
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:126
 #: frontend/src/components/dir-chat/chat-history/thought-process/tool-details-content.js:37
-#| msgid "Departments"
 msgid "Arguments"
 msgstr "Аргументы"
 
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:110
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:130
-#| msgid "Extract file detail"
 msgid "Execution detail"
 msgstr "Детали выполнения"
 
@@ -4249,7 +4102,6 @@ msgid "Step"
 msgstr "Шаг"
 
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:146
-#| msgid "Custom properties"
 msgid "System prompts"
 msgstr "Системные подсказки"
 
@@ -4269,12 +4121,10 @@ msgid "Message"
 msgstr "Сообщение"
 
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:160
-#| msgid "No tags"
 msgid "Attachments"
 msgstr "Вложения"
 
 #: frontend/src/components/dir-chat/chat-history/thought-process/thought-process-dialog.js:167
-#| msgid "User info updated"
 msgid "User input"
 msgstr "Пользовательский ввод"
 
@@ -4293,7 +4143,6 @@ msgid "Result"
 msgstr "Результат"
 
 #: frontend/src/components/dir-chat/chat-history/thought-process/tool-details-content.js:38
-#| msgid "Operation"
 msgid "Observation"
 msgstr "Наблюдение"
 
@@ -4315,12 +4164,10 @@ msgid "Start a new chat from this conversation"
 msgstr "Начать новый чат из этого разговора"
 
 #: frontend/src/components/dir-chat/components/attachments/index.js:49
-#| msgid "Created library"
 msgid "Seafile library"
 msgstr "Библиотека Seafile"
 
 #: frontend/src/components/dir-chat/components/thinking/index.js:12
-#| msgid "Saving..."
 msgid "Thinking..."
 msgstr "Думаю..."
 
@@ -4357,20 +4204,17 @@ msgid "More operations"
 msgstr "Больше операций"
 
 #: frontend/src/components/dir-chat/documents/index.js:137
-#| msgid "Open folder"
 msgid "Open file"
 msgstr "Открыть файл"
 
 #: frontend/src/components/dir-chat/documents/index.js:152
 #: frontend/src/features/metadata/views/kanban/boards/board/header/index.js:63
-#| msgid "Collapse all"
 msgid "Collapse"
 msgstr "Свернуть"
 
 #: frontend/src/components/dir-chat/documents/index.js:152
 #: frontend/src/components/sf-table/table-main/records/record/actions-cell/index.js:102
 #: frontend/src/features/metadata/views/kanban/boards/board/header/index.js:63
-#| msgid "Expand all"
 msgid "Expand"
 msgstr "Развернуть"
 
@@ -4379,17 +4223,14 @@ msgid "Started a new chat from this conversation"
 msgstr "Начат новый чат из этого разговора"
 
 #: frontend/src/components/dir-chat/hooks/sessions.js:214
-#| msgid "Team name"
 msgid "Chat shared"
 msgstr "Чат общий"
 
 #: frontend/src/components/dir-chat/hooks/sessions.js:226
-#| msgid "Team name"
 msgid "Chat unshared"
 msgstr "Чат частный"
 
 #: frontend/src/components/dir-chat/sessions/index.js:36
-#| msgid "No shared links"
 msgid "No shared chats"
 msgstr "Нет общих чатов"
 
@@ -4400,13 +4241,11 @@ msgid ""
 msgstr "Общие чаты могут просматривать все, кто имеет права на чтение или запись\n в библиотеке"
 
 #: frontend/src/components/dir-chat/sessions/index.js:40
-#| msgid "No changes"
 msgid "No chats"
 msgstr "Нет чатов"
 
 #: frontend/src/components/dir-chat/sessions/index.js:89
 #: frontend/src/components/toolbar/chat-toolbar.js:34
-#| msgid "History"
 msgid "Histories"
 msgstr "Истории"
 
@@ -4415,7 +4254,6 @@ msgid "Mine"
 msgstr "Мои"
 
 #: frontend/src/components/dir-chat/sessions/index.js:118
-#| msgid "Share"
 msgid "Shared"
 msgstr "Доступные"
 
@@ -4428,22 +4266,19 @@ msgstr "Доступные"
 #: frontend/src/pages/app/main-panel/share-admin/libraries.js:273
 #: frontend/src/pages/sys-admin/groups/group-repos.js:156
 #: frontend/src/pages/sys-admin/groups/group-repos.js:166
-#: frontend/src/utils/text-translation.js:221
+#: frontend/src/utils/text-translation.js:223
 msgid "Unshare"
 msgstr "Закрыть доступ"
 
 #: frontend/src/components/dir-chat/sessions/session/index.js:107
-#| msgid "Team name"
 msgid "Chat name"
 msgstr "Имя чата"
 
 #: frontend/src/components/dir-chat/sessions/session/index.js:120
-#| msgid "Deleted option"
 msgid "Delete chat"
 msgstr "Удалить чат"
 
 #: frontend/src/components/dir-chat/sessions/session/index.js:121
-#| msgid "Are you sure you want to delete this page?"
 msgid "Are you sure you want to delete this chat?"
 msgstr "Вы уверены, что хотите удалить этот чат?"
 
@@ -4480,7 +4315,6 @@ msgstr "Файлы"
 #: frontend/src/features/metadata/components/data-process-setter/field-display-settings/index.js:64
 #: frontend/src/pages/app/side-panel/main-side-nav.js:389
 #: frontend/src/pages/app/side-panel/main-side-nav.js:463
-#| msgid "Folder"
 msgid "Fold"
 msgstr "Свернуть"
 
@@ -4500,7 +4334,6 @@ msgstr "Развернуть"
 #: frontend/src/components/dirent-detail/dirent-details/file-details/file-tag.js:32
 #: frontend/src/features/library-view/dirent-detail/multi-selection-details/dirents-tags-editor.js:195
 #: frontend/src/features/metadata/components/detail-editor/tags-editor/index.js:146
-#| msgid "Edit Quota"
 msgid "Edit tags"
 msgstr "Редактировать теги"
 
@@ -4561,7 +4394,7 @@ msgstr "Последний модификатор"
 #: frontend/src/features/metadata/components/dialog/metadata-tags-status-dialog/index.js:101
 #: frontend/src/features/metadata/components/popover/filter-popover/basic-filters/tags-filter.js:86
 #: frontend/src/features/metadata/utils/column/index.js:217
-#: frontend/src/utils/text-translation.js:156
+#: frontend/src/utils/text-translation.js:158
 msgid "Tags"
 msgstr "Теги"
 
@@ -4581,12 +4414,10 @@ msgid "Unknown people"
 msgstr "Неизвестные люди"
 
 #: frontend/src/components/dirent-operation-menu/dirent-operations.js:23
-#| msgid "Successfully starred {library_name_placeholder}."
 msgid "Successfully locked {name_placeholder}"
 msgstr "Заблокировано {name_placeholder}"
 
 #: frontend/src/components/dirent-operation-menu/dirent-operations.js:41
-#| msgid "Successfully unstarred {library_name_placeholder}."
 msgid "Successfully unlocked {name_placeholder}"
 msgstr "Разблокировано {name_placeholder}"
 
@@ -4599,47 +4430,38 @@ msgid "At most 100 files can be unlocked in one time."
 msgstr "За один раз можно разблокировать не более 100 файлов."
 
 #: frontend/src/components/dirent-operation-menu/dirent-operations.js:110
-#| msgid "Successfully moved {name}."
 msgid "Successfully locked {name}."
 msgstr "Заблокировано {name}."
 
 #: frontend/src/components/dirent-operation-menu/dirent-operations.js:111
-#| msgid "Successfully moved {name}."
 msgid "Successfully unlocked {name}."
 msgstr "Разблокировано {name}."
 
 #: frontend/src/components/dirent-operation-menu/dirent-operations.js:114
-#| msgid "Successfully deleted {name} and {n} other items"
 msgid "Successfully locked {name} and {n} other item(s)."
 msgstr "Заблокировано {name} и еще {n} других элементов."
 
 #: frontend/src/components/dirent-operation-menu/dirent-operations.js:115
-#| msgid "Successfully deleted {name} and {n} other items"
 msgid "Successfully unlocked {name} and {n} other item(s)."
 msgstr "Разблокировано {name} и еще {n} других элементов."
 
 #: frontend/src/components/dirent-operation-menu/dirent-operations.js:166
-#| msgid "Successfully unstarred {library_name_placeholder}."
 msgid "Successfully unstarred {name_placeholder}"
 msgstr "Отметка снята с {name_placeholder}"
 
 #: frontend/src/components/dirent-operation-menu/dirent-operations.js:168
-#| msgid "Successfully starred {library_name_placeholder}."
 msgid "Successfully starred {name_placeholder}"
 msgstr "Отмечено {name_placeholder}"
 
 #: frontend/src/components/dirent-operation-menu/dirent-operations.js:214
-#| msgid "Successfully starred {library_name_placeholder}."
 msgid "Successfully froze {name_placeholder}"
 msgstr "Заморожено {name_placeholder}"
 
 #: frontend/src/components/dirent-operation-menu/dirent-operations.js:232
-#| msgid "Successfully unstarred {library_name_placeholder}."
 msgid "Successfully unfroze {name_placeholder}"
 msgstr "Разморожено  {name_placeholder}"
 
 #: frontend/src/components/dirent-operation-menu/dirent-operations.js:243
-#| msgid "Successfully unstarred {library_name_placeholder}."
 msgid "Successfully converted {name_placeholder}"
 msgstr "Преобразовано {name_placeholder}"
 
@@ -4661,19 +4483,16 @@ msgstr "Ничего не найдено"
 #: frontend/src/components/search/wiki2-global-search.js:316
 #: frontend/src/components/search/wiki2-search.js:223
 #: frontend/src/components/search/wiki2-search.js:225
-#| msgid "Clear Trash"
 msgid "Clear search"
 msgstr "Очистить поиск"
 
 #: frontend/src/components/file-content-view/image.js:93
 #: frontend/src/shared-file-view-image.js:53
-#| msgid "you can also press ← "
 msgid "You can also press ← "
 msgstr "Вы также можете нажать ← "
 
 #: frontend/src/components/file-content-view/image.js:98
 #: frontend/src/shared-file-view-image.js:58
-#| msgid "you can also press →"
 msgid "You can also press →"
 msgstr "Вы также можете нажать →"
 
@@ -4753,7 +4572,6 @@ msgstr "Сохранение..."
 #: frontend/src/components/file-uploader/upload-list-item.js:118
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:118
 #: frontend/src/pages/upload-link/upload-list-item.js:126
-#| msgid "Saving..."
 msgid "Waiting..."
 msgstr "Ожидайте..."
 
@@ -4766,7 +4584,6 @@ msgstr "Загрузка..."
 #: frontend/src/components/file-uploader/upload-list-item.js:134
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:134
 #: frontend/src/pages/upload-link/upload-list-item.js:140
-#| msgid "Upload"
 msgid "Uploaded"
 msgstr "Загружено"
 
@@ -4774,7 +4591,6 @@ msgstr "Загружено"
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:138
 #: frontend/src/pages/upload-link/upload-list-item.js:146
 #: frontend/src/pages/upload-link/upload-list-item.js:147
-#| msgid "Upload Files"
 msgid "Upload failed"
 msgstr "Ошибка загрузки"
 
@@ -4805,7 +4621,6 @@ msgstr "Файл загружается..."
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:82
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:78
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:81
-#| msgid "All records loaded"
 msgid "All files uploaded"
 msgstr " Все файлы загружены"
 
@@ -4823,7 +4638,6 @@ msgstr "Отменить все"
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:121
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:117
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:98
-#| msgid "Rename"
 msgid "name"
 msgstr "имя"
 
@@ -4836,7 +4650,6 @@ msgstr "размер"
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:123
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:119
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:100
-#| msgid "In progress"
 msgid "progress"
 msgstr "прогресс"
 
@@ -4847,28 +4660,23 @@ msgid "state"
 msgstr "состояние"
 
 #: frontend/src/components/file-view/comment-widget/comment-delete-popover.js:60
-#| msgid "Are you sure to delete "
 msgid "Are you sure to delete this comment?"
 msgstr "Вы уверены, что удалите этот комментарий?"
 
 #: frontend/src/components/file-view/comment-widget/comment-delete-popover.js:60
-#| msgid "Are you sure to delete "
 msgid "Are you sure to delete this reply?"
 msgstr "Вы уверены, что удалите этот ответ?"
 
 #: frontend/src/components/file-view/comment-widget/comment-item.js:85
-#| msgid "Mark all read"
 msgid "Mark as resolved"
 msgstr "Отметить как разрешенный"
 
 #: frontend/src/components/file-view/comment-widget/comment-item.js:87
-#| msgid "Submit"
 msgid "Resubmit"
 msgstr "Повторить отправку"
 
 #: frontend/src/components/file-view/comment-widget/comment-list.js:103
 #: frontend/src/components/file-view/comment-widget/comment-list.js:127
-#| msgid "No tags"
 msgid "All comments"
 msgstr "Все комментарии"
 
@@ -4877,7 +4685,6 @@ msgid "Resolved comments"
 msgstr "Разрешённые комментарии"
 
 #: frontend/src/components/file-view/comment-widget/comment-list.js:115
-#| msgid "Unfreeze Document"
 msgid "Unresolved comments"
 msgstr "Неразрешённые комментарии"
 
@@ -4890,7 +4697,6 @@ msgid "No comment yet."
 msgstr "Комментариев пока нет."
 
 #: frontend/src/components/file-view/comment-widget/reply-list.js:91
-#| msgid "File details"
 msgid "Comment details"
 msgstr "Подробности комментария"
 
@@ -4916,21 +4722,21 @@ msgstr "заблокирован"
 #: frontend/src/components/file-view/file-toolbar.js:126
 #: frontend/src/components/file-view/onlyoffice-file-toolbar.js:27
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:72
-#: frontend/src/utils/text-translation.js:245
+#: frontend/src/utils/text-translation.js:247
 msgid "Open parent folder"
 msgstr "Открыть родительскую папку"
 
 #: frontend/src/components/file-view/file-toolbar.js:120
 #: frontend/src/components/file-view/file-toolbar.js:165
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:173
-#: frontend/src/utils/text-translation.js:96
+#: frontend/src/utils/text-translation.js:98
 msgid "Lock"
 msgstr "Заблокировать"
 
 #: frontend/src/components/file-view/file-toolbar.js:123
 #: frontend/src/components/file-view/file-toolbar.js:169
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:181
-#: frontend/src/utils/text-translation.js:100
+#: frontend/src/utils/text-translation.js:102
 msgid "Unlock"
 msgstr "Разблокировать"
 
@@ -4940,7 +4746,6 @@ msgstr "Разблокировать"
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:218
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:63
 #: frontend/src/pages/wiki2/wiki-comment/plugin-item.js:27
-#| msgid "Document"
 msgid "Comment"
 msgstr "Комментарий"
 
@@ -4976,7 +4781,6 @@ msgid "Online view is not applicable to this file format"
 msgstr "Онлайн-просмотр не применим к этому формату файла"
 
 #: frontend/src/components/file-view/image-zoomer.js:13
-#| msgid "Images"
 msgid "Page fit"
 msgstr "Размер страницы"
 
@@ -4998,7 +4802,7 @@ msgstr "Вернуться назад"
 #: frontend/src/features/library-view/dir-list-view/dirent-list-item/index.js:762
 #: frontend/src/pages/app/main-panel/shared-libs/item.js:177
 #: frontend/src/pages/app/main-panel/shared-libs/item.js:324
-#: frontend/src/utils/text-translation.js:176
+#: frontend/src/utils/text-translation.js:178
 msgid "Star"
 msgstr "Отметить"
 
@@ -5020,7 +4824,7 @@ msgstr "Отметить"
 #: frontend/src/pages/app/main-panel/shared-libs/item.js:324
 #: frontend/src/pages/app/main-panel/starred/starred.js:158
 #: frontend/src/pages/app/main-panel/starred/starred.js:205
-#: frontend/src/utils/text-translation.js:180
+#: frontend/src/utils/text-translation.js:182
 msgid "Unstar"
 msgstr "Снять отметку"
 
@@ -5032,13 +4836,13 @@ msgstr "Снять отметку"
 #: frontend/src/pages/sys-admin/groups/groups-content.js:207
 #: frontend/src/pages/sys-admin/repos/repos.js:254
 #: frontend/src/pages/sys-admin/users/user-repos.js:164
-#: frontend/src/utils/text-translation.js:186
+#: frontend/src/utils/text-translation.js:188
 msgid "Transfer"
 msgstr "Передать"
 
 #: frontend/src/components/library-op-menu.js:172
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:326
-#: frontend/src/utils/text-translation.js:198
+#: frontend/src/utils/text-translation.js:200
 msgid "Change Password"
 msgstr "Изменить пароль"
 
@@ -5050,13 +4854,13 @@ msgstr "Изменить пароль"
 #: frontend/src/pages/sys-admin/orgs/org-users.js:204
 #: frontend/src/pages/sys-admin/orgs/org-users.js:309
 #: frontend/src/pages/sys-admin/users/users-content.js:561
-#: frontend/src/utils/text-translation.js:202
+#: frontend/src/utils/text-translation.js:204
 msgid "Reset Password"
 msgstr "Сбросить пароль"
 
 #: frontend/src/components/library-op-menu.js:178
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:311
-#: frontend/src/utils/text-translation.js:190
+#: frontend/src/utils/text-translation.js:192
 msgid "Folder Permission"
 msgstr "Разрешения папки"
 
@@ -5065,14 +4869,14 @@ msgstr "Разрешения папки"
 #: frontend/src/pages/app/side-panel/main-side-nav-folded.js:390
 #: frontend/src/pages/app/side-panel/main-side-nav.js:459
 #: frontend/src/pages/app/side-panel/main-side-nav.js:460
-#: frontend/src/utils/text-translation.js:194
+#: frontend/src/utils/text-translation.js:196
 msgid "Share Admin"
 msgstr "Предоставленные ресурсы"
 
 #: frontend/src/components/library-op-menu.js:193
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:344
 #: frontend/src/features/metadata/components/popover/filter-popover/index.js:145
-#: frontend/src/utils/text-translation.js:206
+#: frontend/src/utils/text-translation.js:208
 msgid "Advanced"
 msgstr "Расширенный"
 
@@ -5086,7 +4890,7 @@ msgstr "Офисный пакет"
 #: frontend/src/features/library-view/dir-others/library-more-operations/my-library-more-operations.js:215
 #: frontend/src/pages/file-history-old/index.js:243
 #: frontend/src/repo-folder-trash.js:299
-#: frontend/src/utils/text-translation.js:329
+#: frontend/src/utils/text-translation.js:331
 msgid "More"
 msgstr "Подробнее"
 
@@ -5109,7 +4913,6 @@ msgid "Add group member"
 msgstr "Добавить члена группы"
 
 #: frontend/src/components/manage-members-dialog.js:209
-#| msgid "Search groups"
 msgid "Search group members"
 msgstr "Поиск участников группы"
 
@@ -5124,185 +4927,171 @@ msgid "Notifications"
 msgstr "Уведомления"
 
 #: frontend/src/components/notification/index.js:184
-#| msgid "Notifications"
 msgid "Notification"
 msgstr "Уведомление"
 
 #: frontend/src/components/notification/index.js:185
 #: frontend/src/components/notification/user-notifications/index.js:173
-#| msgid "Mark all read"
 msgid "Mark all as read"
 msgstr "Отметить все как прочитанное"
 
 #: frontend/src/components/notification/index.js:186
-#| msgid "All Notifications"
 msgid "View all notifications"
 msgstr "Просмотреть все уведомления"
 
-#: frontend/src/components/notification/notice-item/index.js:53
+#: frontend/src/components/notification/notice-item/index.js:54
 msgid "File {file_link} has a new comment from user {author}."
 msgstr "К файлу {file_link} добавлен новый комментарий от пользователя {author}."
 
-#: frontend/src/components/notification/notice-item/index.js:86
+#: frontend/src/components/notification/notice-item/index.js:87
 #: frontend/src/translate.js:37
 msgid "User {user_link} has added you to {group_link}"
 msgstr "Пользователь {user_link} добавил вас в {group_link}"
 
-#: frontend/src/components/notification/notice-item/index.js:102
-#| msgid "{share_from} has shared a library named {repo_link} to you."
+#: frontend/src/components/notification/notice-item/index.js:103
 msgid "{share_from} has shared a library named {repo_link} with you."
-msgstr ""
+msgstr "{share_from} поделился с вами библиотекой {repo_link}."
 
-#: frontend/src/components/notification/notice-item/index.js:104
-#| msgid "{share_from} has shared a folder named {repo_link} to you."
+#: frontend/src/components/notification/notice-item/index.js:105
 msgid "{share_from} has shared a folder named {repo_link} with you."
-msgstr ""
+msgstr "{share_from} поделился с вами папкой {repo_link}."
 
-#: frontend/src/components/notification/notice-item/index.js:125
+#: frontend/src/components/notification/notice-item/index.js:126
 msgid ""
 "{share_from} has changed the permission of library {repo_link} to "
 "{permission}."
 msgstr "{share_from} изменил разрешение библиотеки {repo_link} на {permission}."
 
-#: frontend/src/components/notification/notice-item/index.js:127
+#: frontend/src/components/notification/notice-item/index.js:128
 msgid ""
 "{share_from} has changed the permission of folder {repo_link} to "
 "{permission}."
 msgstr "{share_from} изменил разрешение папки {repo_link} на {permission}."
 
-#: frontend/src/components/notification/notice-item/index.js:147
+#: frontend/src/components/notification/notice-item/index.js:148
 msgid "{share_from} has cancelled the sharing of library {repo_name}."
 msgstr "{share_from} отменил общий доступ к библиотеке {repo_name}."
 
-#: frontend/src/components/notification/notice-item/index.js:149
+#: frontend/src/components/notification/notice-item/index.js:150
 msgid "{share_from} has cancelled the sharing of folder {repo_name}."
 msgstr "{share_from} отменил общий доступ к папке {repo_name}."
 
-#: frontend/src/components/notification/notice-item/index.js:168
-#| msgid ""
-#| "_from} has shared a library named {repo_link} to group {group_link}."
+#: frontend/src/components/notification/notice-item/index.js:169
 msgid ""
 "{share_from} has shared a library named {repo_link} with group {group_link}."
-msgstr ""
+msgstr "{share_from} поделился библиотекой {repo_link} в группе {group_link}."
 
-#: frontend/src/components/notification/notice-item/index.js:170
-#| msgid ""
-#| "_from} has shared a folder named {repo_link} to group {group_link}."
+#: frontend/src/components/notification/notice-item/index.js:171
 msgid ""
 "{share_from} has shared a folder named {repo_link} with group {group_link}."
-msgstr ""
+msgstr "{share_from} поделился папкой {repo_link} в группе {group_link}."
 
-#: frontend/src/components/notification/notice-item/index.js:190
-#| msgid "{user} has transfered a library named {repo_link} to you."
+#: frontend/src/components/notification/notice-item/index.js:191
 msgid "{user} has transferred a library named {repo_link} to you."
 msgstr "{user} передал вам библиотеку {repo_link}."
 
-#: frontend/src/components/notification/notice-item/index.js:287
+#: frontend/src/components/notification/notice-item/index.js:288
 msgid "{user} created file {fileName} in library {libraryName}."
 msgstr "{user} создал файл {fileName} в библиотеке {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:287
+#: frontend/src/components/notification/notice-item/index.js:288
 msgid ""
 "{user} created file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
 msgstr "{user} создал файл {fileName} и {fileCount} других файлов в библиотеке {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:290
+#: frontend/src/components/notification/notice-item/index.js:291
 msgid "{user} deleted file {fileName} in library {libraryName}."
 msgstr "{user} удалил файл {fileName} в библиотеке {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:290
+#: frontend/src/components/notification/notice-item/index.js:291
 msgid ""
 "{user} deleted file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
 msgstr "{user} удалил файл {fileName} и {fileCount} других файлов в библиотеке {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:294
+#: frontend/src/components/notification/notice-item/index.js:295
 msgid "{user} restored file {fileName} in library {libraryName}."
 msgstr "{user} восстановил файл {fileName} в библиотеке {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:297
-#| msgid ""
-#| " renamed file {oldFileName} {fileName} in library {libraryName}."
+#: frontend/src/components/notification/notice-item/index.js:298
 msgid ""
 "{user} renamed file {oldFileName} to {fileName} in library {libraryName}."
 msgstr "Пользователь {user} переименовал файл {oldFileName} в {fileName} в библиотеке {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:301
+#: frontend/src/components/notification/notice-item/index.js:302
 msgid "{user} moved file {fileName} in library {libraryName}."
 msgstr "{user} переместил файл {fileName} в библиотеке {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:301
+#: frontend/src/components/notification/notice-item/index.js:302
 msgid ""
 "{user} moved file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
 msgstr "{user} переместил файл {fileName} и {fileCount} других файлов в библиотеке {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:304
+#: frontend/src/components/notification/notice-item/index.js:305
 msgid "{user} updated file {fileName} in library {libraryName}."
 msgstr "{user} обновил файл {fileName} в библиотеке {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:316
+#: frontend/src/components/notification/notice-item/index.js:317
 msgid "{user} created folder {folderName} in library {libraryName}."
 msgstr "{user} создал папку {folderName} в библиотеке {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:316
+#: frontend/src/components/notification/notice-item/index.js:317
 msgid ""
 "{user} created folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
 msgstr "{user} создал папку {folderName} и {folderCount} других папок в библиотеке {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:319
+#: frontend/src/components/notification/notice-item/index.js:320
 msgid "{user} deleted folder {folderName} in library {libraryName}."
 msgstr "{user} удалил папку {folderName} в библиотеке {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:319
+#: frontend/src/components/notification/notice-item/index.js:320
 msgid ""
 "{user} deleted folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
 msgstr "{user} удалил папку {folderName} и {folderCount} других папок в библиотеке {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:323
+#: frontend/src/components/notification/notice-item/index.js:324
 msgid "{user} restored folder {folderName} in library {libraryName}."
 msgstr "{user} восстановил папку {folderName} в библиотеке {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:326
-#| msgid ""
-#| " renamed folder {oldFolderName} {folderName} in library braryName}."
+#: frontend/src/components/notification/notice-item/index.js:327
 msgid ""
 "{user} renamed folder {oldFolderName} to {folderName} in library "
 "{libraryName}."
 msgstr "Пользователь {user} переименовал папку {oldFolderName} в {folderName} в библиотеке {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:330
+#: frontend/src/components/notification/notice-item/index.js:331
 msgid "{user} moved folder {folderName} in library {libraryName}."
 msgstr "{user} переместил папку {folderName} в библиотеке {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:330
+#: frontend/src/components/notification/notice-item/index.js:331
 msgid ""
 "{user} moved folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
 msgstr "{user} переместил папку {folderName} и {folderCount} других папок в библиотеке {libraryName}."
 
-#: frontend/src/components/notification/notice-item/index.js:380
-#: frontend/src/components/notification/notice-item/index.js:407
+#: frontend/src/components/notification/notice-item/index.js:381
+#: frontend/src/components/notification/notice-item/index.js:408
 msgid "Marked \"{resolve_comment}\" as resolved in document {sdoc_link}"
 msgstr "Помечено \"{resolve_comment}\" как разрешенное в документе {sdoc_link}"
 
-#: frontend/src/components/notification/notice-item/index.js:384
-#: frontend/src/components/notification/notice-item/index.js:411
+#: frontend/src/components/notification/notice-item/index.js:385
+#: frontend/src/components/notification/notice-item/index.js:412
 msgid "Marked as resolved in document {sdoc_link}"
 msgstr "Помечен как разрешенный в документе {sdoc_link}"
 
-#: frontend/src/components/notification/notice-item/index.js:388
+#: frontend/src/components/notification/notice-item/index.js:389
 msgid "Added a new comment in document {sdoc_link}:"
 msgstr "Добавлен новый комментарий в документе {sdoc_link}:"
 
-#: frontend/src/components/notification/notice-item/index.js:415
+#: frontend/src/components/notification/notice-item/index.js:416
 msgid "Added a new reply in document {sdoc_link}:"
 msgstr "Добавлен новый ответ в документе {sdoc_link}:"
 
-#: frontend/src/components/notification/notice-item/index.js:468
+#: frontend/src/components/notification/notice-item/index.js:469
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:90
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:98
 #: frontend/src/pages/sys-admin/libraries-and-links/repos-nav.js:21
@@ -5312,37 +5101,31 @@ msgstr "Добавлен новый ответ в документе {sdoc_link}
 msgid "System"
 msgstr "Система"
 
-#: frontend/src/components/notification/notice-item/index.js:479
-#| msgid "Email notification updated"
+#: frontend/src/components/notification/notice-item/index.js:480
 msgid "Mark notification as read"
 msgstr "Пометить уведомление как прочитанное"
 
-#: frontend/src/components/notification/notice-item/index.js:502
-#| msgid "All Notifications"
+#: frontend/src/components/notification/notice-item/index.js:503
 msgid "View notification"
 msgstr "Просмотр уведомлений"
 
 #: frontend/src/components/notification/notification-popover/index.js:96
 #: frontend/src/components/notification/user-notifications/index.js:214
 #: frontend/src/features/library-view/dir-settings-view/index.js:114
-#| msgid "Generate Link"
 msgid "General"
 msgstr "Общая информация"
 
 #: frontend/src/components/notification/notification-popover/index.js:110
 #: frontend/src/components/notification/user-notifications/index.js:226
-#| msgid "Permission"
 msgid "Discussion"
 msgstr "Обсуждение"
 
 #: frontend/src/components/notification/user-notifications/index.js:266
 #: frontend/src/components/notification/user-notifications/index.js:271
-#| msgid "Updated file"
 msgid "Update time"
 msgstr "Время обновления"
 
 #: frontend/src/components/option-editor/option-editor-container/index.js:44
-#| msgid "Add User"
 msgid "Add tag"
 msgstr "Добавить тег"
 
@@ -5387,12 +5170,10 @@ msgid "Outline"
 msgstr "Контур"
 
 #: frontend/src/components/pdf-viewer.js:344
-#| msgid "Document"
 msgid "Decrypt document"
 msgstr "Расшифровать документ"
 
 #: frontend/src/components/pdf-viewer.js:426
-#| msgid "Document"
 msgid "Print document"
 msgstr "Печать документа"
 
@@ -5415,19 +5196,16 @@ msgstr "Создать новый тег"
 
 #: frontend/src/components/popover/edit-wiki-popover/index.js:558
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:263
-#| msgid "File name"
 msgid "Edit name and icon"
 msgstr "Изменить имя и значок"
 
 #: frontend/src/components/popover/user-select-popover/index.js:112
 #: frontend/src/pages/sys-admin/sys-logs/log-selector/log-repo-selector.js:166
-#| msgid "Loading"
 msgid "Loading..."
 msgstr "Загрузка..."
 
 #: frontend/src/components/publish-wiki-content/index.js:89
 #: frontend/src/pages/wiki2/side-panel.js:285
-#| msgid "Wiki published"
 msgid "Wiki unpublished"
 msgstr "Вики не опубликована"
 
@@ -5450,7 +5228,6 @@ msgid ""
 msgstr "Пользовательская часть URL должна иметь длину от 5 до 30 символов и может содержать только буквы (a–z), цифры и дефисы."
 
 #: frontend/src/components/publish-wiki-content/index.js:153
-#| msgid "Wiki published"
 msgid "SEO: Pre-render published pages"
 msgstr "SEO: предварительный рендеринг опубликованных страниц"
 
@@ -5464,13 +5241,11 @@ msgstr "Предварительная обработка опубликован
 #: frontend/src/components/publish-wiki-content/index.js:199
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:275
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:332
-#| msgid "Publish"
 msgid "Unpublish"
 msgstr "Отменить публикацию"
 
 #: frontend/src/components/publish-wiki-content/index.js:182
 #: frontend/src/components/publish-wiki-content/index.js:201
-#| msgid "Publish"
 msgid "Republish"
 msgstr "Переиздать"
 
@@ -5482,12 +5257,10 @@ msgid "Publish"
 msgstr "Опубликовать"
 
 #: frontend/src/components/published-wiki-entrance/index.js:31
-#| msgid "Publish"
 msgid "Published"
 msgstr "Опубликовано"
 
 #: frontend/src/components/published-wiki-entrance/index.js:34
-#| msgid "Wiki published"
 msgid "View published page"
 msgstr "Посмотреть опубликованную страницу"
 
@@ -5496,12 +5269,10 @@ msgid "QR code downloaded successfully"
 msgstr "QR-код скачан"
 
 #: frontend/src/components/qr-code-popover.js:62
-#| msgid "URL is copied to the clipboard"
 msgid "QR code copied to clipboard"
 msgstr "QR-код скопирован в буфер обмена"
 
 #: frontend/src/components/qr-code-popover.js:64
-#| msgid "Failed to modify filter"
 msgid "Failed to copy QR code"
 msgstr "Не удалось скопировать QR-код"
 
@@ -5511,7 +5282,6 @@ msgid ""
 msgstr "Советы: Есть теги старой версии. Перенесите теги в новую версию."
 
 #: frontend/src/components/repo-info-bar/repo-info-bar-migrate.js:21
-#| msgid "Migrate User"
 msgid "Migrate"
 msgstr "Миграция"
 
@@ -5529,7 +5299,6 @@ msgstr "На сервере"
 #: frontend/src/constants/dir-column-config.js:16
 #: frontend/src/features/library-view/dir-list-view/table-headers.js:115
 #: frontend/src/features/tag/views/tag-files/list/index.js:148
-#| msgid "Last modifier"
 msgid "Last modified"
 msgstr "Последнее изменение"
 
@@ -5539,7 +5308,6 @@ msgid "Last modified by"
 msgstr "Последнее изменение:"
 
 #: frontend/src/components/search/details/index.js:37
-#| msgid "Folder does not exist."
 msgid "Library does not exist"
 msgstr "Библиотека не существует"
 
@@ -5552,7 +5320,6 @@ msgstr "Поиск файлов"
 
 #: frontend/src/components/search/search-filters/filter-by-creator.js:127
 #: frontend/src/features/library-view/dir-history-view/filters/creator-filter.js:124
-#| msgid "Search users"
 msgid "Search user"
 msgstr "Поиск пользователя"
 
@@ -5560,7 +5327,6 @@ msgstr "Поиск пользователя"
 #: frontend/src/components/search/search-filters/filter-by-date.js:37
 #: frontend/src/components/search/search-filters/filter-by-date.js:50
 #: frontend/src/features/library-view/dir-history-view/filters/date-filter.js:185
-#| msgid "Created time"
 msgid "Create time"
 msgstr "Время создания"
 
@@ -5574,28 +5340,24 @@ msgstr "Сегодня"
 #: frontend/src/components/search/search-filters/filter-by-date.js:65
 #: frontend/src/features/library-view/dir-history-view/filters/date-filter.js:42
 #: frontend/src/features/library-view/dir-history-view/filters/date-filter.js:59
-#| msgid "Last Update"
 msgid "Last 7 days"
 msgstr "Последние 7 дней"
 
 #: frontend/src/components/search/search-filters/filter-by-date.js:68
 #: frontend/src/features/library-view/dir-history-view/filters/date-filter.js:44
 #: frontend/src/features/library-view/dir-history-view/filters/date-filter.js:62
-#| msgid "Last Update"
 msgid "Last 30 days"
 msgstr "Последние 30 дней"
 
 #: frontend/src/components/search/search-filters/filter-by-date.js:73
 #: frontend/src/features/library-view/dir-history-view/filters/date-filter.js:46
 #: frontend/src/features/library-view/dir-history-view/filters/date-filter.js:67
-#| msgid "Custom properties"
 msgid "Custom time"
 msgstr "Пользовательское время"
 
 #: frontend/src/components/search/search-filters/filter-by-suffix.js:57
 #: frontend/src/features/library-view/dir-trash-view/file-suffix-filter/index.js:57
 #: frontend/src/features/metadata/utils/column/index.js:219
-#| msgid "File status"
 msgid "File suffix"
 msgstr "Суффикс файла"
 
@@ -5605,19 +5367,16 @@ msgid "Separate multiple suffixes by \",\"(like sdoc, pdf)"
 msgstr "Разделяйте несколько суффиксов с помощью \",\" (например, sdoc, pdf)"
 
 #: frontend/src/components/search/search-filters/filter-by-text.js:15
-#| msgid "File name"
 msgid "File name and content"
 msgstr "Имя файла и содержимое"
 
 #: frontend/src/components/search/search-filters/filter-by-text.js:18
-#| msgid "File name"
 msgid "File name only"
 msgstr "Только имя файла"
 
 #: frontend/src/components/search/search-tags/index.js:61
 #: frontend/src/features/tag/views/all-tags/tags-table/context-menu-options.js:166
 #: frontend/src/features/tag/views/all-tags/tags-table/editors/tag-name.js:34
-#| msgid "Edit Quota"
 msgid "Edit tag"
 msgstr "Редактировать тег"
 
@@ -5629,12 +5388,10 @@ msgstr "во всех библиотеках"
 
 #: frontend/src/components/search/search.js:873
 #: frontend/src/components/search/search.js:902
-#| msgid "Search files in this library"
 msgid "in this library"
 msgstr "в этой библиотеке"
 
 #: frontend/src/components/search/search.js:881
-#| msgid "Parent folder"
 msgid "in this folder"
 msgstr "в этой папке"
 
@@ -5654,18 +5411,15 @@ msgstr "Показать расширенный поиск"
 
 #: frontend/src/components/search/wiki2-global-search.js:72
 #: frontend/src/components/toolbar/common-toolbar.js:89
-#| msgid "Tag not found"
 msgid "Page not found"
 msgstr "Страница не найдена"
 
 #: frontend/src/components/search/wiki2-global-search.js:241
 #: frontend/src/components/search/wiki2-search.js:246
-#| msgid "Wikis"
 msgid "Wiki pages"
 msgstr "Вики-страницы"
 
 #: frontend/src/components/search/wiki2-global-search.js:279
-#| msgid "Search files"
 msgid "Search wikis"
 msgstr "Поиск вики"
 
@@ -5708,7 +5462,6 @@ msgstr "Конкретные люди с адресом электронной �
 #: frontend/src/pages/sys-admin/invitations/invitations.js:188
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:185
 #: frontend/src/pages/sys-admin/users/users-filter-bar.js:16
-#: frontend/src/utils/text-translation.js:84
 msgid "Default"
 msgstr "По умолчанию"
 
@@ -5721,7 +5474,6 @@ msgid "Guest"
 msgstr "Гость"
 
 #: frontend/src/components/select-members-to-share-with/index.js:60
-#| msgid "Select a department"
 msgid "Select members from department"
 msgstr "Выбрать участников из отдела"
 
@@ -5742,7 +5494,6 @@ msgid "Send to:"
 msgstr "Отправить: "
 
 #: frontend/src/components/send-link.js:126
-#| msgid "Add password protection"
 msgid "Send password separately"
 msgstr "Отправить пароль отдельно"
 
@@ -5788,17 +5539,14 @@ msgid "Set row height"
 msgstr "Установить высоту строки"
 
 #: frontend/src/components/set-row-height.js:47
-#| msgid "Select all"
 msgid "Select row height"
 msgstr "Выбрать высоту строки"
 
 #: frontend/src/components/sf-table/masks/interaction-masks/index.js:735
-#| msgid "xxx cells selected"
 msgid "xxx cells cut"
 msgstr "xxx ячеек вырезано"
 
 #: frontend/src/components/sf-table/masks/interaction-masks/index.js:735
-#| msgid "1 cell copied"
 msgid "1 cell cut"
 msgstr "1 ячейка вырезана"
 
@@ -5839,7 +5587,6 @@ msgid "xxx record"
 msgstr "xxx запись"
 
 #: frontend/src/components/sf-table/table-main/records-footer/index.js:145
-#| msgid "show more"
 msgid "Load more"
 msgstr "Загрузить больше"
 
@@ -5905,12 +5652,10 @@ msgid "Dollar"
 msgstr "Доллар"
 
 #: frontend/src/components/sf-table/table-main/records-header/dropdown-menu/number-format-popover/index.js:37
-#| msgid "European"
 msgid "Euro"
 msgstr "Евро"
 
 #: frontend/src/components/sf-table/table-main/records-header/dropdown-menu/number-format-popover/index.js:38
-#| msgid "Custom properties"
 msgid "Custom currency"
 msgstr "Пользовательская валюта"
 
@@ -5943,12 +5688,10 @@ msgid "After"
 msgstr "После"
 
 #: frontend/src/components/sf-table/table-main/records-header/dropdown-menu/number-format-popover/index.js:150
-#| msgid "email is required"
 msgid "Currency symbol is required"
 msgstr "Символ валюты обязателен"
 
 #: frontend/src/components/sf-table/table-main/records-header/dropdown-menu/number-format-popover/index.js:291
-#| msgid "Edit format settings"
 msgid "Number format settings"
 msgstr "Настройки числового формата"
 
@@ -5958,7 +5701,6 @@ msgid "Format"
 msgstr "Формат"
 
 #: frontend/src/components/sf-table/table-main/records-header/dropdown-menu/number-format-popover/index.js:306
-#| msgid "Custom properties"
 msgid "Custom symbol"
 msgstr "Пользовательский символ"
 
@@ -5983,13 +5725,11 @@ msgid "Enforce precision"
 msgstr "Обеспечение точности"
 
 #: frontend/src/components/sf-table/table-main/records-header/dropdown-menu/number-format-popover/index.js:363
-#| msgid "Permission"
 msgid "Precision"
 msgstr "Точность"
 
 #: frontend/src/components/sf-table/table-main/records-header/insert-column/index.js:111
 #: frontend/src/components/sf-table/table-main/records-header/insert-column/index.js:115
-#| msgid "Add icon"
 msgid "Add column"
 msgstr "Добавить столбец"
 
@@ -6003,26 +5743,22 @@ msgstr "Строка заблокирована и не может быть из
 
 #: frontend/src/components/sf-table/table-main/records/record/actions-cell/index.js:85
 #: frontend/src/components/sf-table/table-main/records/record/actions-cell/index.js:86
-#| msgid "Select all"
 msgid "Select"
 msgstr "Выбор"
 
 #: frontend/src/components/share-link-panel/link-authenticated-emails.js:123
 #: frontend/src/components/share-link-panel/link-authenticated-users.js:128
 #, javascript-format
-#| msgid "successfully added user %s."
 msgid "Successfully added %s."
 msgstr "Добавлено %s."
 
 #: frontend/src/components/share-link-panel/link-authenticated-emails.js:188
 #: frontend/src/components/share-link-panel/link-details.js:283
-#| msgid "Activated Users"
 msgid "Authenticated emails"
 msgstr "Аутентифицированные электронные письма"
 
 #: frontend/src/components/share-link-panel/link-authenticated-users.js:186
 #: frontend/src/components/share-link-panel/link-details.js:280
-#| msgid "Activated Users"
 msgid "Authenticated users"
 msgstr "Аутентифицированные пользователи"
 
@@ -6057,29 +5793,24 @@ msgstr "Количество ссылок"
 
 #: frontend/src/components/share-link-panel/link-creation.js:341
 #: frontend/src/components/share-link-panel/link-creation.js:343
-#| msgid "Set password"
 msgid "Hide password"
 msgstr "Скрыть пароль"
 
 #: frontend/src/components/share-link-panel/link-creation.js:341
 #: frontend/src/components/share-link-panel/link-creation.js:343
-#| msgid "New password"
 msgid "Show password"
 msgstr "Показать пароль"
 
 #: frontend/src/components/share-link-panel/link-creation.js:345
 #: frontend/src/components/share-link-panel/link-creation.js:347
-#| msgid "Set password"
 msgid "Generate password"
 msgstr "Создать пароль"
 
 #: frontend/src/components/share-link-panel/link-creation.js:391
-#| msgid "Edit permission"
 msgid "Set permission"
 msgstr "Установить разрешения"
 
 #: frontend/src/components/share-link-panel/link-creation.js:408
-#| msgid "Access Log"
 msgid "Set access scope"
 msgstr "Установить область доступа"
 
@@ -6089,42 +5820,36 @@ msgid "Share link is copied to the clipboard."
 msgstr "Ссылка скопирована в буфер обмена."
 
 #: frontend/src/components/share-link-panel/link-details.js:58
-#| msgid "Share link is copied to the clipboard."
 msgid "Raw file link is copied to the clipboard."
 msgstr "Ссылка на необработанный файл скопирована в буфер обмена."
 
 #: frontend/src/components/share-link-panel/link-details.js:183
-#| msgid "New file name"
 msgid "Raw file link"
 msgstr "Ссылка на необработанный файл"
 
 #: frontend/src/components/share-link-panel/link-details.js:269
 #: frontend/src/components/share-link-panel/link-list.js:96
 #: frontend/src/components/share-link-panel/link-list.js:111
-#| msgid "Access Log"
 msgid "Access scope"
 msgstr "Область доступа"
 
 #: frontend/src/components/share-link-panel/link-details.js:305
 #: frontend/src/components/share-link-panel/link-item.js:200
-#| msgid "Delete share links"
 msgid "Delete share link"
 msgstr "Удалить ссылку на общий доступ"
 
 #: frontend/src/components/share-link-panel/link-details.js:306
 #: frontend/src/components/share-link-panel/link-item.js:201
-#| msgid "Are you sure you want to delete the selected share link(s) ?"
 msgid "Are you sure you want to delete the share link?"
 msgstr "Вы уверены, что хотите удалить ссылку?"
 
 #: frontend/src/components/share-link-panel/link-item.js:184
-#| msgid "Code"
 msgid "QR Code"
 msgstr "QR код"
 
 #: frontend/src/components/share-link-panel/link-list.js:71
 #: frontend/src/pages/wiki2/main-panel.js:379
-#: frontend/src/utils/text-translation.js:116
+#: frontend/src/utils/text-translation.js:118
 msgid "Export"
 msgstr "Экспорт"
 
@@ -6153,7 +5878,6 @@ msgstr " "
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:161
 #: frontend/src/pages/upload-link/index.js:47
-#| msgid "Shared by"
 msgid "Shared by:"
 msgstr "Общий доступ:"
 
@@ -6212,7 +5936,6 @@ msgid "Successfully starred {library_name_placeholder}."
 msgstr "Отмечено {library_name_placeholder}."
 
 #: frontend/src/components/single-selector/index.js:70
-#| msgid "Clear selected"
 msgid "Toggle selector menu"
 msgstr "Переключить меню выбора"
 
@@ -6242,17 +5965,14 @@ msgid "Switch sort mode"
 msgstr "Переключить режим сортировки"
 
 #: frontend/src/components/toolbar/chat-toolbar.js:26
-#| msgid "New Tag"
 msgid "New chat"
 msgstr "Новый чат"
 
 #: frontend/src/components/toolbar/common-toolbar.js:104
-#| msgid "Search files"
 msgid "Search wiki pages"
 msgstr "Поиск вики-страниц"
 
 #: frontend/src/components/user-select/index.js:335
-#| msgid "Select a user"
 msgid "Select users"
 msgstr "Выбор пользователей"
 
@@ -6265,7 +5985,6 @@ msgid "List view"
 msgstr "Вид списка"
 
 #: frontend/src/components/view-modes/index.js:79
-#| msgid "Table"
 msgid "Table view"
 msgstr "Вид таблицы"
 
@@ -6283,7 +6002,6 @@ msgid "Wiki published"
 msgstr "Wiki опубликована"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:281
-#| msgid "Convert Wiki"
 msgid "Convert to new Wiki"
 msgstr "Преобразовать в новую Wiki"
 
@@ -6292,36 +6010,30 @@ msgid "Visit the wiki"
 msgstr "Посетить Wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:330
-#| msgid "Publish Wiki"
 msgid "Unpublish Wiki"
 msgstr "Отменить публикацию Wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:331
-#| msgid "Are you sure you want to unlink this device?"
 msgid "Are you sure you want to unpublish Wiki"
 msgstr "Вы уверены, что хотите отменить публикацию Wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:338
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:350
-#| msgid "Delete File"
 msgid "Delete Wiki"
 msgstr "Удалить Wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:339
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:351
-#| msgid "Are you sure you want to delete"
 msgid "Are you sure you want to delete Wiki"
 msgstr "Вы уверены, что хотите удалить Wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:344
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:356
-#| msgid "Leave Share"
 msgid "Leave Share Wiki"
 msgstr "Покинуть общедоступную Wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:345
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:357
-#| msgid "Are you sure you want to delete %s ?"
 msgid "Are you sure you want to leave share Wiki"
 msgstr "Вы уверены, что хотите покинуть общедоступную Wiki"
 
@@ -6333,7 +6045,6 @@ msgid "Shared with me"
 msgstr "Общие со мной"
 
 #: frontend/src/components/wiki-card-view/wiki-card-view.js:114
-#| msgid "No shared links"
 msgid "No shared Wikis"
 msgstr "Нет общих Wiki"
 
@@ -6342,7 +6053,6 @@ msgid "Old Wikis"
 msgstr "Старые Wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-icon-selector/index.js:31
-#| msgid "Community Edition"
 msgid "Common icons"
 msgstr "Общие значки"
 
@@ -6379,12 +6089,10 @@ msgid "Business & finance icons"
 msgstr "Значки бизнеса и финансов"
 
 #: frontend/src/components/wiki-card-view/wiki-icon-selector/index.js:112
-#| msgid "No users"
 msgid "No icons found"
 msgstr "Значки не найдены"
 
 #: frontend/src/components/wiki-card-view/wiki-icon-selector/index.js:155
-#| msgid "Search option"
 msgid "Search icons"
 msgstr "Поиск значков"
 
@@ -6407,12 +6115,10 @@ msgstr "Представления"
 #: frontend/src/features/library-view/cur-dir-path/dir-path.js:189
 #: frontend/src/features/library-view/cur-dir-path/dir-path.js:204
 #: frontend/src/features/library-view/cur-dir-path/dir-path.js:213
-#| msgid "Refresh"
 msgid "Refresh the view"
 msgstr "Обновить вид"
 
 #: frontend/src/features/library-view/cur-dir-path/dir-path.js:275
-#| msgid "Cleaned trash"
 msgid "Clean trash"
 msgstr "Очистить корзину"
 
@@ -6423,7 +6129,7 @@ msgstr "Очистить корзину"
 #: frontend/src/pages/org-admin/libraries/org-repo-nav.js:19
 #: frontend/src/pages/sys-admin/libraries-and-links/repos-nav.js:22
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:223
-#: frontend/src/utils/text-translation.js:160
+#: frontend/src/utils/text-translation.js:162
 msgid "Trash"
 msgstr "Корзина"
 
@@ -6433,21 +6139,17 @@ msgstr "Корзина"
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:57
 #: frontend/src/pages/sys-admin/repos/repos.js:248
 #: frontend/src/pages/wiki2/main-panel.js:374
-#: frontend/src/utils/text-translation.js:144
+#: frontend/src/utils/text-translation.js:146
 msgid "History"
 msgstr "История"
 
 #: frontend/src/features/library-view/cur-dir-path/dir-path.js:354
-#| msgid ""
-#| " snapshot will be generated after modification, which records the rary te "
-#| "after the modification."
 msgid ""
 "Tip: a snapshot will be generated after modification, which records the "
 "library state after the modification"
 msgstr "Совет: после внесения изменений будет создан моментальный снимок, в котором будет записано состояние библиотеки после внесения изменений"
 
 #: frontend/src/features/library-view/cur-dir-path/dir-path.js:443
-#| msgid "Delete page"
 msgid "Close the panel"
 msgstr "Закрыть панель"
 
@@ -6459,7 +6161,6 @@ msgstr "Открыть панель"
 #: frontend/src/pages/sdoc-editor/sdoc-chat-panel.js:79
 #: frontend/src/pages/sdoc-editor/sdoc-chat-panel.js:125
 #: frontend/src/utils/text-translation.js:48
-#| msgid "Shared with me"
 msgid "Chat with AI"
 msgstr "Чат с ИИ"
 
@@ -6534,7 +6235,6 @@ msgid "Labels"
 msgstr "Метки"
 
 #: frontend/src/features/library-view/dir-history-view/filters/creator-filter.js:90
-#| msgid "Deleted"
 msgid "Deleted by"
 msgstr "Удалено"
 
@@ -6545,7 +6245,6 @@ msgstr "Удалено"
 #: frontend/src/pages/wiki2/wiki-trash-dialog/index.js:144
 #: frontend/src/pages/wiki2/wiki-trash-dialog/index.js:152
 #: frontend/src/repo-folder-trash.js:256
-#| msgid "Deleted Time"
 msgid "Deleted time"
 msgstr "Время удаления"
 
@@ -6568,7 +6267,6 @@ msgstr "Фильтр"
 #: frontend/src/features/library-view/dir-list-view/dirent-list-item/index.js:746
 #: frontend/src/pages/app/main-panel/share-admin/share-links.js:296
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:197
-#| msgid "Unselect"
 msgid "Unselect this item"
 msgstr "Отменить выбор этого элемента"
 
@@ -6576,7 +6274,6 @@ msgstr "Отменить выбор этого элемента"
 #: frontend/src/features/library-view/dir-list-view/dirent-list-item/index.js:746
 #: frontend/src/pages/app/main-panel/share-admin/share-links.js:296
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:197
-#| msgid "Select File"
 msgid "Select this item"
 msgstr "Выбрать этот элемент"
 
@@ -6589,12 +6286,10 @@ msgid "You can create files quickly"
 msgstr "Вы можете создавать файлы быстро"
 
 #: frontend/src/features/library-view/dir-list-view/table-headers.js:15
-#| msgid "Select all"
 msgid "Unselect all items"
 msgstr "Отменить выбор всех элементов"
 
 #: frontend/src/features/library-view/dir-list-view/table-headers.js:15
-#| msgid "Select all"
 msgid "Select all items"
 msgstr "Выбрать все элементы"
 
@@ -6630,7 +6325,6 @@ msgstr "Новый"
 
 #: frontend/src/features/library-view/dir-new.js:161
 #: frontend/src/features/library-view/toolbar/dir-operation-toolbar.js:126
-#| msgid "New File"
 msgid "New Text File"
 msgstr "Новый текстовый файл"
 
@@ -6643,7 +6337,6 @@ msgstr "Новый файл SeaDoc"
 #: frontend/src/features/library-view/dir-new.js:166
 #: frontend/src/features/library-view/toolbar/dir-operation-toolbar.js:131
 #: frontend/src/utils/text-translation.js:32
-#| msgid "New Excel File"
 msgid "New Excalidraw File"
 msgstr "Новый файл Excalidraw"
 
@@ -6673,7 +6366,6 @@ msgstr "Новый Word файл"
 
 #: frontend/src/features/library-view/dir-new.js:176
 #: frontend/src/features/library-view/toolbar/dir-operation-toolbar.js:140
-#| msgid "New SeaDoc File"
 msgid "New Docxf File"
 msgstr "Новый файл Docxf"
 
@@ -6691,17 +6383,14 @@ msgstr "Другие"
 
 #: frontend/src/features/library-view/dir-others/library-more-operations/department-library-more-operations.js:122
 #: frontend/src/features/library-view/dir-others/library-more-operations/my-library-more-operations.js:170
-#| msgid "Successfully restored the library."
 msgid "Successfully renamed the library."
 msgstr "Переименовал библиотеку."
 
 #: frontend/src/features/library-view/dir-others/watch-unwatch-file-changes.js:26
-#| msgid "Successfully restored the library."
 msgid "Successfully watched the library."
 msgstr "Просмотрел библиотеку."
 
 #: frontend/src/features/library-view/dir-others/watch-unwatch-file-changes.js:38
-#| msgid "Successfully restored the library."
 msgid "Successfully unwatched the library."
 msgstr "Отключил просмотр библиотеки."
 
@@ -6737,12 +6426,10 @@ msgstr "Автоматически удалять файлы, которые н�
 #: frontend/src/features/library-view/dir-tags/index.js:72
 #: frontend/src/features/tag/components/tag-view-name/all-tags-operation-toolbar.js:72
 #: frontend/src/features/tag/components/tag-view-name/all-tags-operation-toolbar.js:108
-#| msgid "New Tag"
 msgid "New tag"
 msgstr "Новый тег"
 
 #: frontend/src/features/library-view/dir-trash-view/index.js:85
-#| msgid "Restored file"
 msgid "Restored {n} items"
 msgstr "Восстановлено {n} элементов"
 
@@ -6751,17 +6438,14 @@ msgstr "Восстановлено {n} элементов"
 #: frontend/src/pages/wiki2/side-panel.js:118
 #: frontend/src/pages/wiki2/wiki-trash-dialog/index.js:244
 #: frontend/src/repo-folder-trash.js:344 frontend/src/repo-snapshot.js:280
-#| msgid "Restored file"
 msgid "Restored 1 item"
 msgstr "Восстановлен 1 элемент"
 
 #: frontend/src/features/library-view/dir-trash-view/index.js:367
-#| msgid "Restored file"
 msgid "Restore items"
 msgstr "Восстановить элементы"
 
 #: frontend/src/features/library-view/dir-trash-view/no-permission-view.js:7
-#| msgid "You do not have permission"
 msgid "You do not have permission to access Trash."
 msgstr "У вас нет разрешения на доступ к корзине."
 
@@ -6772,12 +6456,10 @@ msgid "File name"
 msgstr "Родительская папка"
 
 #: frontend/src/features/library-view/dirent-detail/multi-selection-details/index.js:205
-#| msgid "xxx cells selected"
 msgid "{xxx} items have been selected"
 msgstr "Выбрано {xxx} элементов"
 
 #: frontend/src/features/library-view/dirent-detail/multi-selection-details/index.js:209
-#| msgid "Loading"
 msgid "Loading metadata..."
 msgstr "Загрузка метаданных..."
 
@@ -6832,13 +6514,11 @@ msgid "Move"
 msgstr "Переместить"
 
 #: frontend/src/features/library-view/toolbar/dir-operation-toolbar.js:59
-#| msgid "Link has been copied to clipboard"
 msgid "The path has been copied to the clipboard"
 msgstr "Путь был скопирован в буфер обмена"
 
 #: frontend/src/features/library-view/toolbar/dir-operation-toolbar.js:200
 #: frontend/src/translate.js:47
-#| msgid "Copy"
 msgid "Copy path"
 msgstr "Копировать путь"
 
@@ -6859,12 +6539,10 @@ msgstr "Поиск соавторов"
 
 #: frontend/src/features/metadata/components/cell-editors/date-editor/index.js:203
 #: frontend/src/features/metadata/components/popover/filter-popover/advanced-filters/filter-calendar.js:121
-#| msgid "End date"
 msgid "Enter date"
 msgstr "Введите дату"
 
 #: frontend/src/features/metadata/components/cell-editors/date-editor/index.js:232
-#| msgid "Please select a file"
 msgid "Please select"
 msgstr "Выберите"
 
@@ -6886,13 +6564,11 @@ msgstr "Полный экран"
 
 #: frontend/src/features/metadata/components/cell-editors/geolocation-editor/location-controls.js:32
 #: frontend/src/features/metadata/components/cell-editors/geolocation-editor/location-controls.js:33
-#| msgid "Deleted option"
 msgid "Delete location"
 msgstr "Удалить местоположение"
 
 #: frontend/src/features/metadata/components/cell-editors/geolocation-editor/search-component.js:12
 #: frontend/src/features/metadata/components/cell-editors/geolocation-editor/search-component.js:170
-#| msgid "is not empty"
 msgid "Map is not ready"
 msgstr "Карта еще не готова"
 
@@ -6910,17 +6586,14 @@ msgstr "Служба поиска недоступна"
 #: frontend/src/features/metadata/components/cell-editors/geolocation-editor/search-component.js:41
 #: frontend/src/features/metadata/components/cell-editors/geolocation-editor/search-component.js:62
 #: frontend/src/features/metadata/components/cell-editors/geolocation-editor/search-component.js:111
-#| msgid "No results"
 msgid "No results found"
 msgstr "Результатов не найдено"
 
 #: frontend/src/features/metadata/components/cell-editors/geolocation-editor/search-component.js:217
-#| msgid "Please enter the old password"
 msgid "Please enter the address"
 msgstr "Введите адрес"
 
 #: frontend/src/features/metadata/components/cell-editors/geolocation-editor/search-component.js:260
-#| msgid "Saving..."
 msgid "Searching..."
 msgstr "Поиск..."
 
@@ -6942,12 +6615,10 @@ msgid "Add option"
 msgstr "Добавить параметр"
 
 #: frontend/src/features/metadata/components/cell-editors/tags-editor/index.js:370
-#| msgid "No options available"
 msgid "No tags available"
 msgstr "Нет доступных тегов"
 
 #: frontend/src/features/metadata/components/cell-editors/tags-editor/index.js:370
-#| msgid "No tags"
 msgid "No tag"
 msgstr "Нет тега"
 
@@ -6955,17 +6626,14 @@ msgstr "Нет тега"
 #: frontend/src/features/tag/components/tag-view-name/index.js:22
 #: frontend/src/features/tag/components/tag-view-name/index.js:30
 #: frontend/src/features/tag/tags-tree-view/all-tags/index.js:28
-#| msgid "No tags"
 msgid "All tags"
 msgstr "Все теги"
 
 #: frontend/src/features/metadata/components/cell-editors/tags-editor/index.js:417
-#| msgid "Search"
 msgid "Search tag"
 msgstr "Поиск тега"
 
 #: frontend/src/features/metadata/components/cell-editors/tags-editor/tag-item/index.js:42
-#| msgid "Select Image"
 msgid "Select tag"
 msgstr "Выбрать тег"
 
@@ -6997,7 +6665,6 @@ msgid "Grouped by 1 property"
 msgstr "Сгруппировано по 1 свойству"
 
 #: frontend/src/features/metadata/components/data-process-setter/groupby-setter.js:32
-#| msgid "Grouped by xxx properties"
 msgid "Grouped by {name_placeholder} properties"
 msgstr "Сгруппировано по свойствам {name_placeholder}"
 
@@ -7006,7 +6673,6 @@ msgid "1 hidden property"
 msgstr "1 скрытое свойство"
 
 #: frontend/src/features/metadata/components/data-process-setter/hide-column-setter.js:25
-#| msgid "Failed to modify hidden properties"
 msgid "{name_placeholder} hidden properties"
 msgstr "{name_placeholder} скрытые свойства"
 
@@ -7017,7 +6683,6 @@ msgstr "Скрыть свойства"
 
 #: frontend/src/features/metadata/components/data-process-setter/map-type-setter.js:9
 #: frontend/src/features/metadata/constants/view/index.js:38
-#| msgid "Max"
 msgid "Map"
 msgstr "Карта"
 
@@ -7034,7 +6699,6 @@ msgid "1 preset hidden property"
 msgstr "1 предустановленное скрытое свойство"
 
 #: frontend/src/features/metadata/components/data-process-setter/pre-hide-column-setter.js:50
-#| msgid "xxx preset hidden properties"
 msgid "{name_placeholder} preset hidden properties"
 msgstr "{name_placeholder} предустановленные скрытые свойства"
 
@@ -7051,22 +6715,18 @@ msgid "Sort"
 msgstr "Сортировка"
 
 #: frontend/src/features/metadata/components/dialog/file-tags-dialog/index.js:36
-#| msgid "Failed to generate image description"
 msgid "Failed to suggest file tags"
 msgstr "Не удалось предложить теги файлов"
 
 #: frontend/src/features/metadata/components/dialog/file-tags-dialog/index.js:88
-#| msgid "No tags"
 msgid "tags"
 msgstr "теги"
 
 #: frontend/src/features/metadata/components/dialog/file-tags-dialog/index.js:95
-#| msgid "Set Quota"
 msgid "Matching tags"
 msgstr "Совпадающие теги"
 
 #: frontend/src/features/metadata/components/dialog/file-tags-dialog/index.js:114
-#| msgid "No results matching"
 msgid "No matching tags"
 msgstr "Нет совпадающих тегов"
 
@@ -7077,7 +6737,6 @@ msgstr "ИИ чат и поиск"
 
 #: frontend/src/features/metadata/components/dialog/metadata-ai-summary-status-dialog/index.js:95
 #: frontend/src/features/metadata/components/dialog/metadata-tags-status-dialog/index.js:108
-#| msgid "Turn off extended properties"
 msgid "Please turn on extended properties setting first"
 msgstr "Сначала включите настройку расширенных свойств"
 
@@ -7088,7 +6747,6 @@ msgid ""
 msgstr "Включите ИИ-чат и ИИ-поиск в ваших файлах. Ваши файлы будут суммированы, чтобы искусственный интеллект мог эффективно находить ваши файлы во время чата."
 
 #: frontend/src/features/metadata/components/dialog/metadata-ai-summary-status-dialog/index.js:110
-#| msgid "File status"
 msgid "View status"
 msgstr "Посмотреть статус"
 
@@ -7097,16 +6755,12 @@ msgid "Turn off AI Chat and Search"
 msgstr "Отключить ИИ чат и поиск"
 
 #: frontend/src/features/metadata/components/dialog/metadata-ai-summary-status-dialog/index.js:119
-#| msgid ""
-#| " really want to turn off extended properties? Existing properties l all "
-#| "deleted."
 msgid ""
 "Do you really want to turn off AI Chat and Search? AI chat and file search "
 "will no longer be available, and existing AI summaries will all be deleted."
 msgstr "Вы действительно хотите отключить ИИ чат и поиск? Чат ИИ и поиск файлов больше не будут доступны, а все существующие сводки ИИ будут удалены."
 
 #: frontend/src/features/metadata/components/dialog/metadata-ai-summary-status-dialog/status-dialog.js:23
-#| msgid "Compressed"
 msgid "Completed"
 msgstr "Завершено"
 
@@ -7122,18 +6776,15 @@ msgid "Crawling"
 msgstr "Сканирование"
 
 #: frontend/src/features/metadata/components/dialog/metadata-ai-summary-status-dialog/status-dialog.js:26
-#| msgid "Sending..."
 msgid "Pending"
 msgstr "В ожидании"
 
 #: frontend/src/features/metadata/components/dialog/metadata-ai-summary-status-dialog/status-dialog.js:29
-#| msgid "Files"
 msgid "file"
 msgstr "файл"
 
 #: frontend/src/features/metadata/components/dialog/metadata-ai-summary-status-dialog/status-dialog.js:29
 #: frontend/src/pages/app/main-panel/files-activities/activity-item.js:137
-#| msgid "Files"
 msgid "files"
 msgstr "файлы"
 
@@ -7142,7 +6793,6 @@ msgid "AI Summary"
 msgstr "Обзор ИИ"
 
 #: frontend/src/features/metadata/components/dialog/metadata-ai-summary-status-dialog/status-dialog.js:76
-#| msgid "Compressed"
 msgid "Processed"
 msgstr "Обработанный"
 
@@ -7159,22 +6809,18 @@ msgid "AI chat and search status"
 msgstr "ИИ чат и статус поиска"
 
 #: frontend/src/features/metadata/components/dialog/metadata-ai-summary-status-dialog/status-dialog.js:100
-#| msgid "Text files"
 msgid "Total files"
 msgstr "Всего файлов"
 
 #: frontend/src/features/metadata/components/dialog/metadata-ai-summary-status-dialog/status-dialog.js:103
-#| msgid "Last modified time"
 msgid "Latest index time"
 msgstr "Время последнего обновления индекса"
 
 #: frontend/src/features/metadata/components/dialog/metadata-status-manage-dialog/index.js:167
-#| msgid "1 hidden property"
 msgid "1 Hidden property"
 msgstr "1 Скрытое свойство"
 
 #: frontend/src/features/metadata/components/dialog/metadata-status-manage-dialog/index.js:169
-#| msgid "Hide properties"
 msgid "Hidden properties"
 msgstr "Скрытые свойства"
 
@@ -7194,7 +6840,6 @@ msgid ""
 msgstr "После включения расширенных свойств файлов вы можете добавлять к файлам различные свойства, такие как соавторы, время истечения срока действия файла, описание файла. Вы также можете создавать различные представления для расширенных свойств файлов."
 
 #: frontend/src/features/metadata/components/dialog/metadata-status-manage-dialog/index.js:188
-#| msgid "xxx hidden properties"
 msgid "Global hidden properties"
 msgstr "Глобальные скрытые свойства"
 
@@ -7227,19 +6872,14 @@ msgid ""
 msgstr "Эта библиотека содержит теги старой версии. Хотите перенести теги в новую версию?"
 
 #: frontend/src/features/metadata/components/dialog/metadata-tags-status-dialog/index.js:126
-#| msgid "Visit old version page"
 msgid "Migrate old version tags"
 msgstr "Перенос тегов старой версии"
 
 #: frontend/src/features/metadata/components/dialog/metadata-tags-status-dialog/index.js:133
-#| msgid "Turn off"
 msgid "Turn off tags"
 msgstr "Отключить теги"
 
 #: frontend/src/features/metadata/components/dialog/metadata-tags-status-dialog/index.js:137
-#| msgid ""
-#| " really want to turn off extended properties? Existing properties l all "
-#| "deleted."
 msgid ""
 "Do you really want to turn off tags? Existing tags will all be deleted."
 msgstr "Вы действительно хотите отключить теги? Все существующие теги будут удалены."
@@ -7269,24 +6909,22 @@ msgid "Turn off"
 msgstr "Выключить"
 
 #: frontend/src/features/metadata/components/metadata-details/ai-icon.js:105
-#: frontend/src/utils/text-translation.js:281
+#: frontend/src/utils/text-translation.js:283
 msgid "Generate description"
 msgstr "Создать описание"
 
 #: frontend/src/features/metadata/components/metadata-details/ai-icon.js:111
-#: frontend/src/utils/text-translation.js:293
-#| msgid "Exact date"
+#: frontend/src/utils/text-translation.js:295
 msgid "Extract text"
 msgstr "Извлечь текст"
 
 #: frontend/src/features/metadata/components/metadata-details/ai-icon.js:115
-#: frontend/src/utils/text-translation.js:249
+#: frontend/src/utils/text-translation.js:251
 msgid "Extract file detail"
 msgstr "Извлечь подробную информацию о файле"
 
 #: frontend/src/features/metadata/components/metadata-details/ai-icon.js:119
-#: frontend/src/utils/text-translation.js:285
-#| msgid "Set Quota"
+#: frontend/src/utils/text-translation.js:287
 msgid "Suggest file tags"
 msgstr "Предложить теги файлов"
 
@@ -7319,12 +6957,10 @@ msgid "Rate"
 msgstr "Оценить"
 
 #: frontend/src/features/metadata/components/popover/column-popover/column-type-dropdown-menu/index.js:59
-#| msgid "Search property"
 msgid "Search properties"
 msgstr "Поисковые свойства"
 
 #: frontend/src/features/metadata/components/popover/column-popover/column-type-dropdown-menu/index.js:67
-#| msgid "No options available"
 msgid "No properties available"
 msgstr "Нет доступных объектов"
 
@@ -7456,7 +7092,6 @@ msgid "No filters"
 msgstr "Без фильтров"
 
 #: frontend/src/features/metadata/components/popover/filter-popover/index.js:166
-#| msgid "1 filter"
 msgid "Add filter"
 msgstr "Добавить фильтр"
 
@@ -7537,27 +7172,22 @@ msgid "There is another option with this name"
 msgstr "Есть еще один вариант с таким названием"
 
 #: frontend/src/features/metadata/components/popover/ocr-result-popover/index.js:135
-#| msgid "Failed to extract file details"
 msgid "Failed to extract text"
 msgstr "Не удалось извлечь текст"
 
 #: frontend/src/features/metadata/components/popover/ocr-result-popover/index.js:153
-#| msgid "result"
 msgid "OCR result"
 msgstr "Результат распознавания текста"
 
 #: frontend/src/features/metadata/components/popover/ocr-result-popover/index.js:159
-#| msgid "Converting, please wait..."
 msgid "Extracting text, please wait..."
 msgstr "Извлечение текста, подождите..."
 
 #: frontend/src/features/metadata/components/popover/ocr-result-popover/index.js:167
-#| msgid "File details"
 msgid "No text extracted"
 msgstr "Текст не извлечен"
 
 #: frontend/src/features/metadata/components/popover/ocr-result-popover/index.js:173
-#| msgid "Failed to delete property"
 msgid "Save to description field"
 msgstr "Сохранить в поле описания"
 
@@ -7566,7 +7196,6 @@ msgid "{name} rows use this option."
 msgstr "{name} строк используют этот параметр."
 
 #: frontend/src/features/metadata/components/popover/options-popover/confirm-delete-popover/index.js:29
-#| msgid "Are you sure you want to delete this page?"
 msgid "Are you sure you want to delete this option?"
 msgstr "Вы уверены, что хотите удалить этот параметр?"
 
@@ -7580,7 +7209,6 @@ msgid "The imported options are invalid"
 msgstr "Импортированные параметры недействительны"
 
 #: frontend/src/features/metadata/components/popover/options-popover/options-footer.js:88
-#| msgid "The imported option already exists"
 msgid "The imported options already exists"
 msgstr "Импортированные параметры уже существуют"
 
@@ -7604,17 +7232,14 @@ msgid "Import options"
 msgstr "Импорт параметров"
 
 #: frontend/src/features/metadata/components/popover/options-popover/options-footer.js:125
-#| msgid "Import options"
 msgid "Export options"
 msgstr "Экспорт параметров"
 
 #: frontend/src/features/metadata/components/popover/sort-popover/index.js:261
-#| msgid "sorts"
 msgid "No sorts"
 msgstr "Нет сортировок"
 
 #: frontend/src/features/metadata/components/popover/sort-popover/index.js:268
-#| msgid "Add User"
 msgid "Add sort"
 msgstr "Добавить сортировку"
 
@@ -7628,7 +7253,7 @@ msgstr "Нет информации для отображения."
 #: frontend/src/features/metadata/components/view-toolbar/kanban-view-toolbar.js:79
 #: frontend/src/features/metadata/views/card/settings/index.js:117
 #: frontend/src/features/metadata/views/kanban/settings/index.js:162
-#: frontend/src/utils/text-translation.js:152
+#: frontend/src/utils/text-translation.js:154
 msgid "Properties"
 msgstr "Свойства"
 
@@ -7858,27 +7483,22 @@ msgid "Created time"
 msgstr "Время создания"
 
 #: frontend/src/features/metadata/constants/view/statistics.js:28
-#| msgid "Modified files"
 msgid "Modified time"
 msgstr "Время изменения"
 
 #: frontend/src/features/metadata/constants/view/statistics.js:32
-#| msgid "locked by {name}"
 msgid "Ascending by count"
 msgstr "По возрастанию количества"
 
 #: frontend/src/features/metadata/constants/view/statistics.js:33
-#| msgid "locked by {name}"
 msgid "Descending by count"
 msgstr "По убыванию количества"
 
 #: frontend/src/features/metadata/hooks/metadata-ai-operation.js:77
-#| msgid "Generate description"
 msgid "Generating description by AI..."
 msgstr "Создание описания с помощью ИИ..."
 
 #: frontend/src/features/metadata/hooks/metadata-ai-operation.js:81
-#| msgid "Description is required"
 msgid "Description generated"
 msgstr "Описание создано"
 
@@ -7887,12 +7507,10 @@ msgid "Failed to generate description"
 msgstr "Не удалось создать описание"
 
 #: frontend/src/features/metadata/hooks/metadata-ai-operation.js:96
-#| msgid "Extract file details"
 msgid "Extracting file details by AI..."
 msgstr "Извлечение сведений о файле с помощью ИИ..."
 
 #: frontend/src/features/metadata/hooks/metadata-ai-operation.js:127
-#| msgid "File details"
 msgid "File details extracted"
 msgstr "Сведения о файле извлечены"
 
@@ -7901,17 +7519,14 @@ msgid "Failed to extract file details"
 msgstr "Не удалось извлечь сведения о файле"
 
 #: frontend/src/features/metadata/hooks/metadata-ai-operation.js:147
-#| msgid "Extract file details"
 msgid "Detecting faces by AI..."
 msgstr "Распознавание лиц с помощью ИИ..."
 
 #: frontend/src/features/metadata/hooks/metadata-ai-operation.js:150
-#| msgid "selected"
 msgid "Faces detected"
 msgstr "Обнаруженные лица"
 
 #: frontend/src/features/metadata/hooks/metadata-ai-operation.js:154
-#| msgid "Failed to delete {name}"
 msgid "Failed to detect faces"
 msgstr "Не удалось обнаружить лица"
 
@@ -7976,38 +7591,31 @@ msgid "Failed to restore records"
 msgstr "Не удалось восстановить записи"
 
 #: frontend/src/features/metadata/store/server-operator.js:97
-#| msgid "Failed to modify filter"
 msgid "Failed to move folder"
 msgstr "Не удалось переместить папку"
 
 #: frontend/src/features/metadata/store/server-operator.js:97
 #: frontend/src/features/metadata/store/server-operator.js:110
-#| msgid "Failed to modify filter"
 msgid "Failed to move file"
 msgstr "Не удалось переместить файл"
 
 #: frontend/src/features/metadata/store/server-operator.js:109
-#| msgid "Failed to modify filter"
 msgid "Failed to move {n} items"
 msgstr "Не удалось переместить {n} элементов"
 
 #: frontend/src/features/metadata/store/server-operator.js:123
-#| msgid "Failed to duplicate page"
 msgid "Failed to duplicate folder"
 msgstr "Не удалось дублировать папку"
 
 #: frontend/src/features/metadata/store/server-operator.js:123
-#| msgid "Failed to duplicate page"
 msgid "Failed to duplicate file"
 msgstr "Не удалось дублировать файл"
 
 #: frontend/src/features/metadata/store/server-operator.js:135
-#| msgid "Failed to copy %(name)s"
 msgid "Failed to copy {n} items"
 msgstr "Не удалось скопировать {n} элементов"
 
 #: frontend/src/features/metadata/store/server-operator.js:136
-#| msgid "Failed to modify filter"
 msgid "Failed to copy file"
 msgstr "Не удалось скопировать файл"
 
@@ -8032,7 +7640,6 @@ msgid "Failed to modify property order"
 msgstr "Не удалось изменить порядок свойств"
 
 #: frontend/src/features/metadata/store/server-operator.js:200
-#| msgid "Failed to modify sort"
 msgid "Failed to modify row height"
 msgstr "Не удалось изменить высоту строки"
 
@@ -8053,7 +7660,6 @@ msgid "Failed to modify hidden properties"
 msgstr "Не удалось изменить скрытые свойства"
 
 #: frontend/src/features/metadata/store/server-operator.js:245
-#| msgid "Failed to modify sort"
 msgid "Failed to modify settings"
 msgstr "Не удалось изменить настройки"
 
@@ -8062,23 +7668,19 @@ msgid "Failed to modify people name"
 msgstr "Не удалось изменить имя человека"
 
 #: frontend/src/features/metadata/store/server-operator.js:269
-#| msgid "Failed to rename property"
 msgid "Failed to remove people photos"
 msgstr "Не удалось удалить фотографии людей"
 
 #: frontend/src/features/metadata/store/server-operator.js:278
-#| msgid "Failed to rename property"
 msgid "Failed to add people photos"
 msgstr "Не удалось добавить фотографии людей"
 
 #: frontend/src/features/metadata/store/server-operator.js:287
-#| msgid "Failed to rename property"
 msgid "Failed to set people cover photo"
 msgstr "Не удалось установить фотографию людей на обложке"
 
 #: frontend/src/features/metadata/store/server-operator.js:304
 #: frontend/src/features/tag/store/server-operator.js:64
-#| msgid "Failed to modify sort"
 msgid "Failed to modify tags"
 msgstr "Не удалось изменить теги"
 
@@ -8135,7 +7737,6 @@ msgid "File owner"
 msgstr "Владелец файла"
 
 #: frontend/src/features/metadata/utils/column/index.js:215
-#| msgid "File Update"
 msgid "File rate"
 msgstr "Скорость передачи файлов"
 
@@ -8181,19 +7782,16 @@ msgstr "Имя уже существует"
 
 #: frontend/src/features/metadata/views/card/settings/index.js:86
 #: frontend/src/features/metadata/views/kanban/settings/index.js:131
-#| msgid "Don't send emails"
 msgid "Don't show empty values"
 msgstr "Не показывать пустые значения"
 
 #: frontend/src/features/metadata/views/card/settings/index.js:96
 #: frontend/src/features/metadata/views/kanban/settings/index.js:141
-#| msgid "Property name"
 msgid "Show property names"
 msgstr "Показать имена свойств"
 
 #: frontend/src/features/metadata/views/card/settings/index.js:106
 #: frontend/src/features/metadata/views/kanban/settings/index.js:151
-#| msgid "Text files"
 msgid "Text wraps"
 msgstr "Перенос текста"
 
@@ -8211,14 +7809,12 @@ msgid "items"
 msgstr "элементы"
 
 #: frontend/src/features/metadata/views/face-recognition/person-photos/index.js:156
-#| msgid "Convert to sdoc"
 msgid "Cover photo has been set"
 msgstr "Обложка установлена"
 
 #: frontend/src/features/metadata/views/kanban/add-board/index.js:43
 #: frontend/src/features/metadata/views/kanban/add-board/index.js:46
 #: frontend/src/features/metadata/views/kanban/add-board/index.js:50
-#| msgid "New Tag"
 msgid "New category"
 msgstr "Новая категория"
 
@@ -8231,12 +7827,10 @@ msgid "This list is collapsed"
 msgstr "Этот список свернут"
 
 #: frontend/src/features/metadata/views/kanban/boards/index.js:280
-#| msgid "No changes"
 msgid "No categories"
 msgstr "Нет категорий"
 
 #: frontend/src/features/metadata/views/kanban/settings/index.js:118
-#| msgid "Delete property"
 msgid "Title property"
 msgstr "Титульное свойство"
 
@@ -8244,58 +7838,47 @@ msgstr "Титульное свойство"
 #: frontend/src/features/metadata/views/statistics/charts/summary-cards.js:27
 #: frontend/src/features/metadata/views/statistics/charts/summary-cards.js:31
 #: frontend/src/pages/wiki2/wiki-collaborators-operation/index.js:123
-#| msgid "Collaborator"
 msgid "Collaborators"
 msgstr "Участники"
 
 #: frontend/src/features/metadata/views/statistics/index.js:68
-#| msgid "No options available"
 msgid "No data available for statistics"
 msgstr "Нет доступных данных для статистики"
 
 #: frontend/src/features/metadata/views/statistics/index.js:77
-#| msgid "File type"
 msgid "Files by type"
 msgstr "Файлы по типу"
 
 #: frontend/src/features/metadata/views/statistics/index.js:86
-#| msgid "File collaborators"
 msgid "Files by creator"
 msgstr "Файлы по создателю"
 
 #: frontend/src/features/metadata/views/statistics/index.js:99
-#| msgid "No collaborators available"
 msgid "No creator data available"
 msgstr "Данные о создателе недоступны"
 
 #: frontend/src/features/metadata/views/statistics/index.js:107
-#| msgid "File expire time"
 msgid "Files by time"
 msgstr "Файлы по времени"
 
 #: frontend/src/features/metadata/views/statistics/index.js:123
-#| msgid "No options available"
 msgid "No time-based data available"
 msgstr "Нет доступных данных, основанных на времени"
 
 #: frontend/src/features/metadata/views/view.js:49
 #: frontend/src/translate.js:53
-#| msgid "Extended properties"
 msgid "Extended properties are being built."
 msgstr "Расширенные свойства создаются."
 
 #: frontend/src/features/tag/components/merge-tags-selector/index.js:157
-#| msgid "Delete page"
 msgid "Merge tags to"
 msgstr "Объединить теги с"
 
 #: frontend/src/features/tag/components/tag-view-name/all-tags-operation-toolbar.js:46
-#| msgid "Successfully edited labels."
 msgid "Successfully imported tags."
 msgstr "Теги импортированы."
 
 #: frontend/src/features/tag/components/tag-view-name/all-tags-operation-toolbar.js:52
-#| msgid "Failed to restore {name}"
 msgid "Failed to import tags"
 msgstr "Не удалось импортировать теги"
 
@@ -8313,120 +7896,98 @@ msgstr "копировать"
 #: frontend/src/features/tag/store/server-operator.js:27
 #: frontend/src/features/tag/store/server-operator.js:37
 #: frontend/src/features/tag/store/server-operator.js:48
-#| msgid "Failed to modify sort"
 msgid "Failed to add tags"
 msgstr "Не удалось добавить теги"
 
 #: frontend/src/features/tag/store/server-operator.js:73
-#| msgid "Failed to delete {name}"
 msgid "Failed to delete tags"
 msgstr "Не удалось удалить теги"
 
 #: frontend/src/features/tag/store/server-operator.js:85
-#| msgid "Failed to modify sort"
 msgid "Failed to add linked tags"
 msgstr "Не удалось добавить связанные теги"
 
 #: frontend/src/features/tag/store/server-operator.js:97
 #: frontend/src/features/tag/store/server-operator.js:106
-#| msgid "Failed to delete {name}"
 msgid "Failed to delete linked tags"
 msgstr "Не удалось удалить связанные теги"
 
 #: frontend/src/features/tag/store/server-operator.js:115
-#| msgid "Failed to restore {name}"
 msgid "Failed to merge tags"
 msgstr "Не удалось объединить теги"
 
 #: frontend/src/features/tag/store/server-operator.js:146
-#| msgid "Failed to restore {name}"
 msgid "Failed to export tags"
 msgstr "Не удалось экспортировать теги"
 
 #: frontend/src/features/tag/store/server-operator.js:153
 #: frontend/src/features/tag/store/server-operator.js:159
-#| msgid "Failed to restore {name}"
 msgid "Failed to restore tags"
 msgstr "Не удалось восстановить теги"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/all-tags-sort-setter.js:16
-#| msgid "By name ascending"
 msgid "By tag name ascending"
 msgstr "По имени тега по возрастанию"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/all-tags-sort-setter.js:17
-#| msgid "By name descending"
 msgid "By tag name descending"
 msgstr "По имени тега по убыванию"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/all-tags-sort-setter.js:18
-#| msgid "File name"
 msgid "By child tags count ascending"
 msgstr "Количество дочерних тегов по возрастанию"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/all-tags-sort-setter.js:19
-#| msgid "By time descending"
 msgid "By child tags count descending"
 msgstr "По количеству дочерних тегов по убыванию"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/all-tags-sort-setter.js:20
-#| msgid "By size ascending"
 msgid "By file count ascending"
 msgstr "По возрастанию количества файлов"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/all-tags-sort-setter.js:21
-#| msgid "By size descending"
 msgid "By file count descending"
 msgstr "По убыванию количества файлов"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/columns-factory.js:14
-#| msgid "Tags"
 msgid "Tag"
 msgstr "Тег"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/columns-factory.js:15
-#| msgid "Import tags"
 msgid "Parent tags"
 msgstr "Родительские теги"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/columns-factory.js:16
-#| msgid "File name"
 msgid "Child tags count"
 msgstr "Количество дочерних тегов"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/columns-factory.js:17
-#| msgid "File name"
 msgid "File count"
 msgstr "Количество файлов"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/context-menu-options.js:101
 #: frontend/src/features/tag/views/all-tags/tags-table/context-menu-options.js:180
-#| msgid "Delete page"
 msgid "Delete tag"
 msgstr "Удалить тег"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/context-menu-options.js:107
 #: frontend/src/features/tag/views/all-tags/tags-table/context-menu-options.js:140
-#| msgid "Delete page"
 msgid "Delete tags"
 msgstr "Удалить теги"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/context-menu-options.js:133
-#: frontend/src/utils/text-translation.js:311
-#| msgid "Delete page"
+#: frontend/src/utils/text-translation.js:313
 msgid "Merge tags"
 msgstr "Объединение тегов"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/context-menu-options.js:173
 #: frontend/src/features/tag/views/all-tags/tags-table/context-menu-options.js:193
-#| msgid "Set Quota"
 msgid "Set child tags"
 msgstr "Установить дочерние теги"
 
 #: frontend/src/features/tag/views/all-tags/tags-table/context-menu-options.js:188
 #: frontend/src/features/tag/views/all-tags/tags-table/index.js:335
-#: frontend/src/utils/text-translation.js:315
-#| msgid "New Tag"
+#: frontend/src/utils/text-translation.js:317
 msgid "New child tag"
 msgstr "Новый дочерний тег"
 
@@ -8436,12 +7997,10 @@ msgid "Converting, please wait..."
 msgstr "Преобразование, пожалуйста, подождите..."
 
 #: frontend/src/features/tag/views/tag-files/index.js:275
-#| msgid "No file"
 msgid "No files"
 msgstr "Нет файлов"
 
 #: frontend/src/file-view.js:54
-#| msgid "Images"
 msgid "Image saved"
 msgstr "Изображение сохранено"
 
@@ -8472,17 +8031,14 @@ msgid "Cleaned trash"
 msgstr "Корзина очищена"
 
 #: frontend/src/pages/app/main-panel/files-activities/activity-item.js:83
-#| msgid "Removed all items from trash."
 msgid "Removed all items from trash"
 msgstr "Из корзины удалены все объекты"
 
 #: frontend/src/pages/app/main-panel/files-activities/activity-item.js:85
-#| msgid "Removed items older than {n} days from trash."
 msgid "Removed items older than {n} days from trash"
 msgstr "Из корзины удалены объекты старше {n} дней"
 
 #: frontend/src/pages/app/main-panel/files-activities/activity-item.js:105
-#| msgid "{file} and {n} other files"
 msgid "{folder} and {n} other folders"
 msgstr "{folder} и {n} других папок"
 
@@ -8491,7 +8047,6 @@ msgid "{file} and {n} other files"
 msgstr "{file} и {n} других файлов"
 
 #: frontend/src/pages/app/main-panel/files-activities/activity-item.js:113
-#| msgid "Created {n} files"
 msgid "Created {n} folders"
 msgstr "Создано {n} папок"
 
@@ -8510,22 +8065,18 @@ msgid "Created file"
 msgstr "Созданный файл"
 
 #: frontend/src/pages/app/main-panel/files-activities/activity-item.js:137
-#| msgid "Folder"
 msgid "folders"
 msgstr "папки"
 
 #: frontend/src/pages/app/main-panel/files-activities/activity-item.js:143
-#| msgid "Deleted Time"
 msgid "Deleted {n} {type}"
 msgstr "Удалено {n} {type}"
 
 #: frontend/src/pages/app/main-panel/files-activities/activity-item.js:147
-#| msgid "{file} and {n} other files"
 msgid "{name} and {n} other files"
 msgstr "{name} и {n} других файлов"
 
 #: frontend/src/pages/app/main-panel/files-activities/activity-item.js:149
-#| msgid "{file} and {n} other files"
 msgid "{name} and {n} other folders"
 msgstr "{name} и {n} других папок"
 
@@ -8602,19 +8153,16 @@ msgid "File"
 msgstr "Файл"
 
 #: frontend/src/pages/app/main-panel/files-activities/index.js:248
-#| msgid "All Notifications"
 msgid "All Activities"
 msgstr "Все действия"
 
 #: frontend/src/pages/app/main-panel/files-activities/index.js:251
-#| msgid "No more activities"
 msgid "My Activities"
 msgstr "Мои действия"
 
 #: frontend/src/pages/app/main-panel/files-activities/user-selector.js:83
 #: frontend/src/pages/sys-admin/sys-logs/log-selector/log-user-selector.js:151
 #: frontend/src/pages/sys-admin/sys-logs/log-selector/log-user-selector.js:153
-#| msgid "Please select a file"
 msgid "Toggle user selector"
 msgstr "Переключить выбор пользователя"
 
@@ -8631,7 +8179,6 @@ msgid "Find modifiers"
 msgstr "Поиск модификаторов"
 
 #: frontend/src/pages/app/main-panel/groups/group-op-menu.js:125
-#| msgid "Successfully sent to {placeholder}"
 msgid "Successfully imported {user_placeholder}"
 msgstr "Импортирован {user_placeholder}"
 
@@ -8656,11 +8203,6 @@ msgid "No libraries shared with this group"
 msgstr "В этой группе нет общих библиотек"
 
 #: frontend/src/pages/app/main-panel/groups/group-view.js:130
-#| msgid ""
-#| "raries have been shared with this group yet. A library shared with roup  be "
-#| "accessed by all group members. You can share a library h a group in  "
-#| "Libraries\". You can also create a new library to be red with this up by "
-#| "clicking the \"New Library\" button in the menu ."
 msgid ""
 "No libraries have been shared with this group yet. A library shared with a "
 "group can be accessed by all group members. You can share a library with a "
@@ -8669,7 +8211,6 @@ msgid ""
 msgstr "Для этой группы еще не было предоставлено общего доступа к библиотекам. Доступ к библиотеке, общей для группы, могут получить все участники группы. Вы можете предоставить общий доступ к библиотеке для группы в разделе \"Мои библиотеки\". Вы также можете создать новую библиотеку для общего доступа к этой группе, нажав на пункт \"Новая библиотека\" в выпадающем меню."
 
 #: frontend/src/pages/app/main-panel/groups/group-view.js:142
-#| msgid "n create libraries by clicking the \"New Library\" button above."
 msgid ""
 "You can create libraries by clicking the \"New Library\" item in the "
 "dropdown menu."
@@ -8694,10 +8235,6 @@ msgid "No guest invitations"
 msgstr "Нет гостевых приглашений"
 
 #: frontend/src/pages/app/main-panel/invitations/invitations-view.js:189
-#| msgid ""
-#| "ve not invited any guests yet. A guest can access shared libraries ough  web"
-#| " interface allowing more efficient ways to collaborate n through ks. You can"
-#| " invite a guest by clicking the \"Invite Guesttem in the menu."
 msgid ""
 "You have not invited any guests yet. A guest can access shared libraries "
 "through the web interface allowing more efficient ways to collaborate than "
@@ -8760,7 +8297,6 @@ msgid "Failed to delete {name}"
 msgstr "Не удалось удалить {name}"
 
 #: frontend/src/pages/app/main-panel/lib-content-view/lib-content-view.js:1840
-#| msgid "Successfully deleted {name} and {n} other items"
 msgid "Successfully moved {name} and {n} other items"
 msgstr "Перемещено {name} и {n} других элементов"
 
@@ -8773,7 +8309,6 @@ msgid "Failed to move {name}."
 msgstr "Не удалось переместить {name}."
 
 #: frontend/src/pages/app/main-panel/lib-content-view/lib-content-view.js:1930
-#| msgid "Successfully deleted {name} and {n} other items"
 msgid "Successfully copied {name} and {n} other items"
 msgstr "Скопировано {name} и {n} других элементов"
 
@@ -8845,7 +8380,6 @@ msgstr "Последний доступ"
 
 #: frontend/src/pages/app/main-panel/linked-devices/linked-devices.js:120
 #: frontend/src/pages/settings/linked-devices/index.js:120
-#| msgid "Successfully copied %(name)s."
 msgid "Successfully unlinked %(name)s."
 msgstr "Отвязан %(name)s."
 
@@ -8869,11 +8403,6 @@ msgid "Successfully restored the library."
 msgstr "Успешно восстановлена библиотека."
 
 #: frontend/src/pages/app/main-panel/my-libs/my-libs.js:40
-#| msgid ""
-#| "ve not created any libraries yet. A library is a container to anize your es "
-#| "and folders. A library can also be shared with others  synced to your nected"
-#| " devices. You can create a library by cking the \"New Library\" ton in the "
-#| "menu bar."
 msgid ""
 "You have not created any libraries yet. A library is a container to organize"
 " your files and folders. A library can also be shared with others and synced"
@@ -8897,12 +8426,10 @@ msgid "Successfully unshared {name}"
 msgstr "Закрыт доступ к {name}"
 
 #: frontend/src/pages/app/main-panel/ocm-via-webdav/ocm-via-webdav.js:167
-#| msgid "No libraries have been shared with you"
 msgid "No files or folders have been shared with you"
 msgstr "Вам не предоставлялся доступ к каким-либо файлам или папкам"
 
 #: frontend/src/pages/app/main-panel/ocm-via-webdav/ocm-via-webdav.js:168
-#| msgid "No libraries have been shared with you from other servers."
 msgid "No files or folders have been shared with you from other servers."
 msgstr "Вам не предоставлялся доступ к каким-либо файлам или папкам с других серверов."
 
@@ -8913,7 +8440,6 @@ msgid "Shared By"
 msgstr "Доступно для"
 
 #: frontend/src/pages/app/main-panel/ocm-via-webdav/ocm-via-webdav.js:181
-#| msgid "Shared with me"
 msgid "Sharing Time"
 msgstr "Совместное использование"
 
@@ -8926,7 +8452,6 @@ msgstr "Совместное использование"
 #: frontend/src/pages/app/side-panel/libraries-sub-nav.js:111
 #: frontend/src/pages/app/side-panel/libraries-sub-nav.js:120
 #: frontend/src/pages/app/side-panel/libraries-sub-nav.js:126
-#| msgid "Share to other server"
 msgid "Shared from other servers"
 msgstr "Отправлено с других серверов"
 
@@ -8935,20 +8460,17 @@ msgstr "Отправлено с других серверов"
 #: frontend/src/pages/org-admin/org-logs/org-logs-perm-audit.js:80
 #: frontend/src/pages/sys-admin/sys-logs/share-permission-logs.js:44
 #: frontend/src/pages/sys-admin/sys-logs/share-permission-logs.js:349
-#| msgid "Shared with me"
 msgid "Share with"
 msgstr ""
 
 #: frontend/src/pages/app/main-panel/share-admin/folders.js:176
 #: frontend/src/pages/app/main-panel/share-admin/libraries.js:150
 #: frontend/src/pages/app/main-panel/share-admin/share-links.js:235
-#| msgid "Successfully edited labels."
 msgid "Successfully modified permission."
 msgstr "Разрешения изменены."
 
 #: frontend/src/pages/app/main-panel/share-admin/folders.js:255
 #: frontend/src/pages/app/main-panel/share-admin/libraries.js:268
-#| msgid "Shared with me"
 msgid "Share with:"
 msgstr ""
 
@@ -8956,7 +8478,6 @@ msgstr ""
 #: frontend/src/pages/app/side-panel/main-side-nav.js:309
 #: frontend/src/pages/app/side-panel/main-side-nav.js:310
 #: frontend/src/pages/app/side-panel/share-admin-sub-nav.js:22
-#| msgid "Folder"
 msgid "Folders"
 msgstr "Папки"
 
@@ -8972,13 +8493,11 @@ msgid ""
 msgstr "Вы еще не поделились библиотеками с другими пользователями. Вы можете поделиться библиотекой с другими пользователями, щелкнув значок общего доступа справа от имени библиотеки в разделе \"Мои библиотеки\"."
 
 #: frontend/src/pages/app/main-panel/share-admin/libraries.js:210
-#| msgid "No members"
 msgid "all members"
 msgstr "все участники"
 
 #: frontend/src/pages/app/main-panel/share-admin/share-links.js:305
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:203
-#| msgid "deleted"
 msgid "(deleted)"
 msgstr "(удалено)"
 
@@ -8986,54 +8505,44 @@ msgstr "(удалено)"
 #: frontend/src/pages/app/main-panel/share-admin/share-links.js:366
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:216
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:243
-#| msgid "View Link"
 msgid "View link"
 msgstr "Посмотреть ссылку"
 
 #: frontend/src/pages/app/main-panel/share-admin/share-links.js:447
 #: frontend/src/pages/app/main-panel/share-admin/share-links.js:611
-#| msgid "Delete share links"
 msgid "Clean invalid share links"
 msgstr "Удалить недействительные общедоступные ссылки"
 
 #: frontend/src/pages/app/main-panel/share-admin/share-links.js:529
-#| msgid "Successfully deleted 1 share link"
 msgid "Successfully cleaned invalid share links."
 msgstr "Удалены недействительные общедоступные ссылки."
 
 #: frontend/src/pages/app/main-panel/share-admin/share-links.js:612
-#| msgid "Are you sure you want to delete the selected share link(s) ?"
 msgid "Are you sure you want to clean invalid share links?"
 msgstr "Вы уверены, что хотите удалить недействительные общедоступные ссылки?"
 
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:310
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:437
-#| msgid "No upload links"
 msgid "Clean invalid upload links"
 msgstr "Удалить недействительные ссылки для загрузки"
 
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:356
-#| msgid "Successfully cleared trash."
 msgid "Successfully cleaned invalid upload links."
 msgstr "Удалены недействительные ссылки для загрузки."
 
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:407
-#| msgid "Successfully deleted 1 share link"
 msgid "Successfully deleted 1 upload link"
 msgstr "Удалена 1 ссылка для загрузки"
 
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:408
-#| msgid "Successfully deleted {number_placeholder} share links"
 msgid "Successfully deleted {number_placeholder} upload links"
 msgstr "Удалено {number_placeholder} ссылок для загрузки"
 
 #: frontend/src/pages/app/main-panel/share-admin/upload-links.js:438
-#| msgid "Are you sure you want to clear trash?"
 msgid "Are you sure you want to clean invalid upload links?"
 msgstr "Вы уверены, что хотите удалить недействительные ссылки для загрузки?"
 
 #: frontend/src/pages/app/main-panel/share-with-ocm/remote-dir-view.js:126
-#| msgid "Successfully converted the file."
 msgid "Successfully added the file."
 msgstr "Файл добавлен."
 
@@ -9046,7 +8555,6 @@ msgid "No libraries have been shared with you from other servers."
 msgstr "Вам не предоставили доступ к библиотекам с других серверов."
 
 #: frontend/src/pages/app/main-panel/shared-libs/content.js:73
-#| msgid "Shared Libraries"
 msgid "No shared libraries"
 msgstr "Нет общих библиотек"
 
@@ -9056,34 +8564,28 @@ msgid "Failed to unshare {name}"
 msgstr "Не удалось закрыть доступ к {name}"
 
 #: frontend/src/pages/app/main-panel/shared-with-all/index.js:155
-#| msgid "No libraries"
 msgid "No public libraries"
 msgstr "Нет публичных библиотек"
 
 #: frontend/src/pages/app/main-panel/shared-with-all/index.js:262
-#| msgid "Shared Libraries"
 msgid "Share existing libraries"
 msgstr "Поделиться существующими библиотеками"
 
 #: frontend/src/pages/app/main-panel/shared-with-all/index.js:272
 #: frontend/src/pages/app/main-panel/shared-with-all/index.js:287
 #: frontend/src/pages/app/side-panel/libraries-sub-nav.js:96
-#| msgid "Shared with me"
 msgid "Shared with all"
 msgstr "Общие со всеми"
 
 #: frontend/src/pages/app/main-panel/wikis/wikis.js:123
-#| msgid "Please select an expiration time"
 msgid "Confluence imported"
 msgstr "Confluence импортирован"
 
 #: frontend/src/pages/app/main-panel/wikis/wikis.js:137
-#| msgid "Failed to restore {name}"
 msgid "Failed to import Confluence"
 msgstr "Не удалось импортировать Confluence"
 
 #: frontend/src/pages/app/main-panel/wikis/wikis.js:375
-#| msgid "Successfully transferred the library."
 msgid "Successfully transferred the wiki."
 msgstr "Вики передана."
 
@@ -9097,7 +8599,6 @@ msgid "Wikis"
 msgstr "Wiki"
 
 #: frontend/src/pages/app/main-panel/wikis/wikis.js:477
-#| msgid "Import sdoc"
 msgid "Import Confluence"
 msgstr "Импорт Confluence"
 
@@ -9113,7 +8614,6 @@ msgstr "Вы можете нажать кнопку \"Добавить Wiki\", �
 #: frontend/src/pages/app/side-panel/main-side-nav-folded.js:342
 #: frontend/src/pages/app/side-panel/main-side-nav.js:425
 #: frontend/src/pages/app/side-panel/main-side-nav.js:426
-#| msgid "Active"
 msgid "Activities"
 msgstr "Активность"
 
@@ -9135,7 +8635,6 @@ msgstr "Клиенты"
 #: frontend/src/pages/app/side-panel/main-side-nav-folded.js:460
 #: frontend/src/pages/app/side-panel/main-side-nav.js:509
 #: frontend/src/pages/app/side-panel/main-side-nav.js:510
-#| msgid "About Us"
 msgid "About"
 msgstr "О Seafile"
 
@@ -9152,12 +8651,10 @@ msgstr "Развернуть боковую панель"
 #: frontend/src/pages/app/side-panel/share-admin-sub-nav.js:34
 #: frontend/src/pages/org-admin/side-panel.js:103
 #: frontend/src/pages/sys-admin/side-panel.js:199
-#| msgid "Link"
 msgid "Links"
 msgstr "Ссылки"
 
 #: frontend/src/pages/app/side-panel/main-side-nav.js:375
-#| msgid "Color space"
 msgid "Workspace"
 msgstr "Рабочее пространство"
 
@@ -9170,7 +8667,6 @@ msgid "Fold the sidebar"
 msgstr "Свернуть боковую панель"
 
 #: frontend/src/pages/excalidraw-editable-viewer/index.js:83
-#| msgid "Set user name"
 msgid "Your name"
 msgstr "Ваше имя"
 
@@ -9180,7 +8676,6 @@ msgid ""
 msgstr "Загруженное изображение еще не сохранено. Закройте эту страницу позже."
 
 #: frontend/src/pages/excalidraw-editor/extension/select-image-dialog/index.js:72
-#| msgid "Select Image"
 msgid "Select image"
 msgstr "Выбрать изображение"
 
@@ -9270,7 +8765,6 @@ msgstr "Использовано пространства / Квота"
 #: frontend/src/pages/institution-admin/user-content/user-repo-item.js:31
 #: frontend/src/pages/sys-admin/users/user-repos.js:152
 #: frontend/src/pages/sys-admin/users/user-shared-repos.js:88
-#| msgid "Move {placeholder} to"
 msgid "Broken ({repo_id_placeholder})"
 msgstr "Поврежден ({repo_id_placeholder})"
 
@@ -9360,7 +8854,6 @@ msgstr "Не удалось сохранить"
 
 #: frontend/src/pages/org-admin/departments/index.js:433
 #: frontend/src/pages/sys-admin/departments/index.js:468
-#| msgid "Rename Department"
 msgid "Enable departments feature"
 msgstr "Включить функцию отделов"
 
@@ -9371,7 +8864,6 @@ msgstr "Устройство отвязано."
 
 #: frontend/src/pages/org-admin/devices/devices-errors.js:176
 #: frontend/src/pages/sys-admin/devices/index.js:23
-#| msgid "Successfully cleared trash."
 msgid "Successfully cleaned all errors."
 msgstr "Очищены все ошибки."
 
@@ -9414,7 +8906,6 @@ msgstr "Чтение и запись библиотеки"
 
 #: frontend/src/pages/org-admin/libraries/org-repo-nav.js:23
 #: frontend/src/pages/sys-admin/libraries-and-links/repos-nav.js:25
-#| msgid "Deleted files"
 msgid "Descending by files"
 msgstr "Убывание по файлам"
 
@@ -9493,12 +8984,10 @@ msgid "ID"
 msgstr "ID"
 
 #: frontend/src/pages/org-admin/org-info/index.js:82
-#| msgid "Active Users"
 msgid "Active users"
 msgstr "Активные пользователи"
 
 #: frontend/src/pages/org-admin/org-info/index.js:87
-#| msgid "Total Users"
 msgid "Total users"
 msgstr "Всего пользователей"
 
@@ -9507,12 +8996,10 @@ msgid "User number limit"
 msgstr "Ограничение количества пользователей"
 
 #: frontend/src/pages/org-admin/org-info/index.js:99
-#| msgid "Space Used"
 msgid "Space used"
 msgstr "Используемое пространство"
 
 #: frontend/src/pages/org-admin/org-info/index.js:116
-#| msgid "This month"
 msgid "Traffic this month"
 msgstr "Трафик в этом месяце"
 
@@ -9523,7 +9010,6 @@ msgid ""
 msgstr "После превышения лимита трафика скорость скачивания файлов будет ограничена."
 
 #: frontend/src/pages/org-admin/org-info/index.js:143
-#| msgid "This month"
 msgid "AI credit used this month"
 msgstr "Кредит на ИИ, использованный в этом месяце"
 
@@ -9556,14 +9042,12 @@ msgstr "Только показать"
 #: frontend/src/pages/org-admin/org-logs/org-logs-file-transfer.js:70
 #: frontend/src/pages/sys-admin/sys-logs/file-transfer-log.js:43
 #: frontend/src/pages/sys-admin/sys-logs/file-transfer-log.js:427
-#| msgid "Transfer Group"
 msgid "Transfer From"
 msgstr "Передача из"
 
 #: frontend/src/pages/org-admin/org-logs/org-logs-file-transfer.js:71
 #: frontend/src/pages/sys-admin/sys-logs/file-transfer-log.js:44
 #: frontend/src/pages/sys-admin/sys-logs/file-transfer-log.js:437
-#| msgid "Transfer"
 msgid "Transfer To"
 msgstr "Передача в"
 
@@ -9573,7 +9057,6 @@ msgstr "Передача в"
 #: frontend/src/pages/sys-admin/sys-logs/file-transfer-log.js:447
 #: frontend/src/pages/sys-admin/sys-logs/group-member-audit-logs.js:45
 #: frontend/src/pages/sys-admin/sys-logs/group-member-audit-logs.js:333
-#| msgid "Operation"
 msgid "Operator"
 msgstr "Оператор"
 
@@ -9604,22 +9087,19 @@ msgstr "Действие"
 
 #: frontend/src/pages/org-admin/org-logs/org-logs-group-member-audit.js:124
 #: frontend/src/pages/sys-admin/sys-logs/group-member-audit-logs.js:119
-#| msgid "Add Member"
 msgid "Add member"
 msgstr "Добавить участника"
 
 #: frontend/src/pages/org-admin/org-logs/org-logs-group-member-audit.js:126
 #: frontend/src/pages/sys-admin/sys-logs/group-member-audit-logs.js:121
-#| msgid "Delete Member"
 msgid "Delete member"
 msgstr "Удалить участника"
 
 #: frontend/src/pages/org-admin/org-logs/org-logs-perm-audit.js:79
 #: frontend/src/pages/sys-admin/sys-logs/share-permission-logs.js:43
 #: frontend/src/pages/sys-admin/sys-logs/share-permission-logs.js:340
-#| msgid "Share From"
 msgid "Share from"
-msgstr ""
+msgstr "Общий доступ от"
 
 #: frontend/src/pages/org-admin/org-logs/org-logs.js:49
 #: frontend/src/pages/sys-admin/groups/index.js:149
@@ -9641,12 +9121,10 @@ msgstr "Обновление файла"
 
 #: frontend/src/pages/org-admin/org-logs/org-logs.js:77
 #: frontend/src/pages/sys-admin/sys-logs/logs-nav.js:20
-#| msgid "Transfer"
 msgid "Repo Transfer"
 msgstr "Передача репо"
 
 #: frontend/src/pages/org-admin/org-logs/org-logs.js:83
-#| msgid "deleted"
 msgid "Group Invite"
 msgstr "Групповое приглашение"
 
@@ -9732,7 +9210,6 @@ msgid "Resetting user's password, please wait for a moment."
 msgstr "Сброс пароля пользователя..."
 
 #: frontend/src/pages/org-admin/org-users/org-user-item.js:100
-#| msgid "Reset"
 msgid "ResetPwd"
 msgstr "Изменить пароль"
 
@@ -9751,7 +9228,6 @@ msgstr "Вы уверены, что хотите сделать пользова
 
 #: frontend/src/pages/org-admin/org-users/org-user-item.js:190
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:303
-#| msgid "Select all"
 msgid "Set"
 msgstr "Сделать"
 
@@ -9820,7 +9296,6 @@ msgstr "Добавить пользователя"
 
 #: frontend/src/pages/org-admin/org-users/org-users-users.js:284
 #: frontend/src/pages/org-admin/org-users/org-users-users.js:285
-#| msgid "Invite users"
 msgid "Invite users via WeChat"
 msgstr "Пригласить пользователей через WeChat"
 
@@ -9833,12 +9308,10 @@ msgid "Logo updated"
 msgstr "Логотип обновлен"
 
 #: frontend/src/pages/org-admin/settings/index.js:93
-#| msgid "System settings updated"
 msgid "Setting updated"
 msgstr "Настройка обновлена"
 
 #: frontend/src/pages/org-admin/settings/index.js:102
-#| msgid "Set user default quota"
 msgid "User default quota updated"
 msgstr "Квота пользователя по умолчанию обновлена"
 
@@ -9861,7 +9334,6 @@ msgid "Not allow user to create encrypted libraries"
 msgstr "Не разрешать пользователю создавать зашифрованные библиотеки"
 
 #: frontend/src/pages/org-admin/settings/index.js:190
-#| msgid "Allow user to clean library trash"
 msgid "Disable user clean trash"
 msgstr "Отключите очистку корзины пользователем"
 
@@ -9870,35 +9342,29 @@ msgid "Not allow user to clean library trash"
 msgstr "Не разрешать пользователю очищать мусор библиотеки"
 
 #: frontend/src/pages/org-admin/settings/index.js:204
-#| msgid "Set user default quota"
 msgid "User default quota"
 msgstr "Квота пользователя по умолчанию"
 
 #: frontend/src/pages/org-admin/settings/index.js:206
-#| msgid "Tip: 0 means default limit"
 msgid "Tip: 0 means default limit, the unit is MB"
 msgstr "Подсказка: 0 означает ограничение по умолчанию, единица измерения - МБ"
 
 #: frontend/src/pages/org-admin/settings/index.js:216
-#| msgid "Disable SAML user email / password login"
 msgid "Disable SSO user email / password login"
 msgstr "Отключить единый вход пользователя по электронной почте / паролю"
 
 #: frontend/src/pages/org-admin/settings/index.js:219
 #: frontend/src/pages/sys-admin/orgs/org-info.js:111
-#| msgid "Force user to use SSO login if SAML account is bound"
 msgid "Force user to use SSO login if SSO account is bound"
 msgstr "Принудительно использовать вход SSO, если учетная запись SSO привязана"
 
 #: frontend/src/pages/org-admin/side-panel.js:45
 #: frontend/src/pages/sys-admin/side-panel.js:59
-#| msgid "Status"
 msgid "Statistic"
 msgstr "Статистика"
 
 #: frontend/src/pages/org-admin/side-panel.js:51
 #: frontend/src/pages/sys-admin/side-panel.js:73
-#| msgid "Device"
 msgid "Devices"
 msgstr "Устройства"
 
@@ -9912,7 +9378,6 @@ msgid "Logs"
 msgstr "Журналы"
 
 #: frontend/src/pages/org-admin/statistic/statistic-ai.js:9
-#| msgid "Online Preview"
 msgid "Overview"
 msgstr "Обзор"
 
@@ -9920,7 +9385,6 @@ msgstr "Обзор"
 #: frontend/src/pages/org-admin/statistic/statistic-ai.js:47
 #: frontend/src/pages/sys-admin/statistic/statistic-ai.js:8
 #: frontend/src/pages/sys-admin/statistic/statistic-ai.js:42
-#| msgid "Departments"
 msgid "Department"
 msgstr "Отдел"
 
@@ -9966,7 +9430,6 @@ msgstr "Отчеты"
 
 #: frontend/src/pages/org-admin/statistic/statistic-reports.js:39
 #: frontend/src/pages/sys-admin/statistic/statistic-reports.js:37
-#| msgid "Invalid month, should be yyyymm."
 msgid "Invalid month, should be YYYY-MM."
 msgstr "Недопустимый месяц. Должно быть ГГГГ-ММ."
 
@@ -10008,25 +9471,21 @@ msgstr "Месяц:"
 
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:122
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:124
-#| msgid "Traffic"
 msgid "Total Traffic"
 msgstr "Общий трафик"
 
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:134
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:136
-#| msgid "Traffic"
 msgid "Web Traffic"
 msgstr "Веб трафик"
 
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:146
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:148
-#| msgid "Share Link"
 msgid "Share Link Traffic"
 msgstr "Трафик по общедоступным ссылкам"
 
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:158
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:160
-#| msgid "Traffic"
 msgid "Sync Traffic"
 msgstr "Трафик синхронизации"
 
@@ -10039,7 +9498,6 @@ msgstr "Активные пользователи"
 
 #: frontend/src/pages/sdoc-file-history/history-version.js:106
 #: frontend/src/pages/sdoc-file-history/history-version.js:107
-#| msgid "No version history"
 msgid "Show daily history"
 msgstr "Показать ежедневную историю"
 
@@ -10054,14 +9512,12 @@ msgstr "Изменения"
 #: frontend/src/pages/sdoc-file-history/index.js:330
 #: frontend/src/pages/sdoc-file-history/index.js:331
 #: frontend/src/pages/sdoc-file-history/index.js:347
-#| msgid "Last modified time"
 msgid "Last modification"
 msgstr "Последняя модификация"
 
 #: frontend/src/pages/sdoc-file-history/index.js:341
 #: frontend/src/pages/sdoc-file-history/index.js:342
 #: frontend/src/pages/sdoc-file-history/index.js:350
-#| msgid "Notifications"
 msgid "Next modification"
 msgstr "Следующая модификация"
 
@@ -10124,7 +9580,6 @@ msgid ""
 msgstr "Список добавленных, удаленных и измененных файлов будет отправлен на ваш почтовый ящик."
 
 #: frontend/src/pages/settings/email-notice/index.js:81
-#| msgid "Notifications of file changes"
 msgid "Notifications of collaboration"
 msgstr "Уведомления о сотрудничестве"
 
@@ -10210,7 +9665,6 @@ msgid "Status: enabled"
 msgstr "Статус: включено"
 
 #: frontend/src/pages/settings/two-factor-auth/index.js:20
-#| msgid "Two-Factor Authentication"
 msgid "Disable Two-Factor Authentication"
 msgstr "Отключить двухфакторную аутентификацию"
 
@@ -10229,7 +9683,6 @@ msgid "You have {num} backup codes remaining."
 msgstr "У вас {num} резервных кодов."
 
 #: frontend/src/pages/settings/two-factor-auth/index.js:28
-#| msgid "Show changes"
 msgid "Show Codes"
 msgstr "Показать коды"
 
@@ -10240,7 +9693,6 @@ msgid ""
 msgstr "Двухфакторная аутентификация не включена для вашего аккаунта. Включить двухфакторную аутентификацию для обеспечения повышенной безопасности."
 
 #: frontend/src/pages/settings/two-factor-auth/index.js:39
-#| msgid "Two-Factor Authentication"
 msgid "Enable Two-Factor Authentication"
 msgstr "Включить двухфакторную аутентификацию"
 
@@ -10261,7 +9713,6 @@ msgid "Avatar updated"
 msgstr "Аватар обновлен"
 
 #: frontend/src/pages/settings/user-avatar-form/index.js:93
-#| msgid "Avatar"
 msgid "Avatar:"
 msgstr "Аватар:"
 
@@ -10373,12 +9824,10 @@ msgid "Migrate User"
 msgstr "Миграция пользователя"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:109
-#| msgid "Add group"
 msgid "Add User to Group"
 msgstr "Добавить пользователя в группу"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:110
-#| msgid "Delete Group"
 msgid "Delete User from Group"
 msgstr "Удалить пользователя из группы"
 
@@ -10419,12 +9868,10 @@ msgid "User migrate from {user_from} to {user_to}"
 msgstr "Миграция пользователя из {user_from} в {user_to}"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:197
-#| msgid "Added user {user}"
 msgid "Added user {user} to group {group}"
 msgstr "Добавлен пользователь {user} в группу {group}"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:203
-#| msgid "Deleted user {user}"
 msgid "Deleted user {user} from group {group}"
 msgstr "Удален пользователь {user} из группы {group}"
 
@@ -10454,37 +9901,30 @@ msgid "Are you sure you want to remove {placeholder} ?"
 msgstr "Вы уверены, что хотите удалить {placeholder} ?"
 
 #: frontend/src/pages/sys-admin/groups/group-members.js:191
-#| msgid "Delete Member"
 msgid "Remove Member"
 msgstr "Удалить участника"
 
 #: frontend/src/pages/sys-admin/groups/group-members.js:278
-#| msgid "Successfully sent to {placeholder}"
 msgid "Successfully added {email_placeholder}"
 msgstr "Добавлен {email_placeholder}"
 
 #: frontend/src/pages/sys-admin/groups/group-members.js:284
-#| msgid "Failed to send to {email_placeholder}: {errorMsg_placeholder}"
 msgid "Failed to add {email_placeholder}: {error_msg_placeholder}"
 msgstr "Не удалось добавить {email_placeholder}: {error_msg_placeholder}"
 
 #: frontend/src/pages/sys-admin/groups/group-members.js:303
-#| msgid "Successfully sent to {placeholder}"
 msgid "Successfully removed {placeholder}."
 msgstr "Удален {placeholder}."
 
 #: frontend/src/pages/sys-admin/groups/group-repos.js:135
-#| msgid "Are you sure you want to remove {placeholder} ?"
 msgid "Are you sure you want to unshare {placeholder} ?"
 msgstr "Вы уверены, что хотите закрыть доступ к {placeholder} ?"
 
 #: frontend/src/pages/sys-admin/groups/group-repos.js:163
-#| msgid "Restore Library"
 msgid "Unshare Library"
 msgstr "Закрыть доступ к библиотеке"
 
 #: frontend/src/pages/sys-admin/groups/group-repos.js:215
-#| msgid "Successfully unstarred {library_name_placeholder}."
 msgid "Successfully unshared library {placeholder}"
 msgstr "Успешно закрыт доступ к библиотеке {placeholder}"
 
@@ -10566,19 +10006,16 @@ msgid "Organizations"
 msgstr "Сообщества"
 
 #: frontend/src/pages/sys-admin/institutions/index.js:162
-#| msgid "Delete Notification"
 msgid "Delete Institution"
 msgstr "Удалить учреждение"
 
 #: frontend/src/pages/sys-admin/institutions/index.js:262
-#| msgid "Add institution"
 msgid "Add Institution"
 msgstr "Добавить учреждение"
 
 #: frontend/src/pages/sys-admin/institutions/index.js:267
 #: frontend/src/pages/sys-admin/institutions/institution-nav.js:28
 #: frontend/src/pages/sys-admin/side-panel.js:171
-#| msgid "No institutions"
 msgid "Institutions"
 msgstr "Учреждения"
 
@@ -10590,7 +10027,6 @@ msgstr "Вы уверены, что хотите отозвать права а�
 
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:197
 #: frontend/src/pages/sys-admin/users/users-content.js:573
-#| msgid "Revoke Admin"
 msgid "Revoke"
 msgstr "Отозвать"
 
@@ -10602,13 +10038,11 @@ msgstr "Права администратора отозваны у {placeholder
 
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:268
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:352
-#| msgid "deleted"
 msgid "User deleted"
 msgstr "Пользователь удален"
 
 #: frontend/src/pages/sys-admin/institutions/institution-info.js:108
 #: frontend/src/pages/sys-admin/orgs/org-info.js:226
-#| msgid "Successfully set it."
 msgid "Successfully set quota."
 msgstr "Квота установлена."
 
@@ -10627,7 +10061,6 @@ msgid "Are you sure you want to set {placeholder} as Admin?"
 msgstr "Вы уверены, что хотите назначить {placeholder} администратором?"
 
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:311
-#| msgid "Name updated"
 msgid "Admin updated"
 msgstr "Администратор обновлен"
 
@@ -10758,32 +10191,26 @@ msgid "Number of groups"
 msgstr "Количество групп"
 
 #: frontend/src/pages/sys-admin/orgs/org-info.js:96
-#| msgid "Monthly User Traffic"
 msgid "Monthly Download Traffic Limit"
 msgstr "Ежемесячный лимит скачиваемого трафика"
 
 #: frontend/src/pages/sys-admin/orgs/org-info.js:104
-#| msgid "ISO"
 msgid "SSO"
 msgstr "SSO"
 
 #: frontend/src/pages/sys-admin/orgs/org-info.js:240
-#| msgid "Successfully set it."
 msgid "Successfully set monthly traffic limit."
 msgstr "Установлен месячный лимит трафика."
 
 #: frontend/src/pages/sys-admin/orgs/org-info.js:254
-#| msgid "Successfully set it."
 msgid "Successfully set name."
 msgstr "Имя установлено."
 
 #: frontend/src/pages/sys-admin/orgs/org-info.js:268
-#| msgid "Set max number of members"
 msgid "Successfully set max number of members."
 msgstr "Максимальное количество участников установлено."
 
 #: frontend/src/pages/sys-admin/orgs/org-info.js:278
-#| msgid "Successfully saved"
 msgid "Successfully saved."
 msgstr "Успешно добавлен."
 
@@ -10794,22 +10221,18 @@ msgid ""
 msgstr "{userCount} пользователей и {repoCount} библиотек этого сообщества также будут удалены."
 
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:237
-#| msgid "deleted"
 msgid "Team deleted"
 msgstr "Команда удалена"
 
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:291
-#| msgid "Organization"
 msgid "Delete Organization"
 msgstr "Удалить сообщество"
 
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:300
-#| msgid "Search organizations"
 msgid "Set organization inactive"
 msgstr "Сделать организацию неактивной"
 
 #: frontend/src/pages/sys-admin/orgs/orgs-nav.js:16
-#| msgid "Traffic"
 msgid "Traffic exceeded"
 msgstr "Трафик превышен"
 
@@ -10842,13 +10265,11 @@ msgstr "Неизвестно"
 
 #: frontend/src/pages/sys-admin/repo-history/index.js:238
 #: frontend/src/repo-history.js:316
-#| msgid "(current version)"
 msgid "Current Version"
 msgstr "Текущая версия"
 
 #: frontend/src/pages/sys-admin/repo-history/index.js:239
 #: frontend/src/repo-history.js:317 frontend/src/utils/text-translation.js:76
-#| msgid "View Related Snapshot"
 msgid "View Snapshot"
 msgstr "Просмотр снимка"
 
@@ -10858,7 +10279,6 @@ msgid "{placeholder} Snapshot"
 msgstr "{placeholder} Снимок"
 
 #: frontend/src/pages/sys-admin/repos/repos.js:257
-#| msgid "History Versions"
 msgid "History Setting"
 msgstr "Настройка истории"
 
@@ -10910,7 +10330,6 @@ msgid "Site title shown in a browser tab"
 msgstr "Название сайта, отображаемое на вкладке браузера"
 
 #: frontend/src/pages/sys-admin/settings/index.js:113
-#| msgid "File name"
 msgid "Site name"
 msgstr "Название сайта"
 
@@ -10923,12 +10342,10 @@ msgid "Logo"
 msgstr "Логотип"
 
 #: frontend/src/pages/sys-admin/settings/index.js:129
-#| msgid "icon"
 msgid "Favicon"
 msgstr "Значок"
 
 #: frontend/src/pages/sys-admin/settings/index.js:138
-#| msgid "Login Background Image"
 msgid "Login background image"
 msgstr "Фоновое изображение при входа в систему"
 
@@ -10945,7 +10362,6 @@ msgid "Custom CSS"
 msgstr "Пользовательский CSS"
 
 #: frontend/src/pages/sys-admin/settings/index.js:167
-#| msgid "allow new registrations"
 msgid "Allow new registrations"
 msgstr "Разрешить новые регистрации"
 
@@ -10956,7 +10372,6 @@ msgid ""
 msgstr "Разрешить новые регистрации пользователей. Снимите этот флажок, чтобы никто не мог создать новый аккаунт."
 
 #: frontend/src/pages/sys-admin/settings/index.js:174
-#| msgid "activate after registration"
 msgid "Activate after registration"
 msgstr "Активировать после регистрации"
 
@@ -10967,7 +10382,6 @@ msgid ""
 msgstr "Активировать пользователя сразу после регистрации. Если флажок снят, пользователь должен быть активирован администратором или с помощью письма активации по электронной почте"
 
 #: frontend/src/pages/sys-admin/settings/index.js:181
-#| msgid "send activation email"
 msgid "Send activation email"
 msgstr "Отправить письмо для активации"
 
@@ -10976,7 +10390,6 @@ msgid "Send activation Email after user registration."
 msgstr "Отправить письмо активации после регистрации пользователя."
 
 #: frontend/src/pages/sys-admin/settings/index.js:188
-#| msgid "keep sign in"
 msgid "Keep sign in"
 msgstr "Сохранять вход в систему"
 
@@ -11002,15 +10415,13 @@ msgstr "Замораживать аккаунт пользователя при 
 
 #: frontend/src/pages/sys-admin/settings/index.js:213
 msgid "Enable sharing with all groups"
-msgstr ""
+msgstr "Включить общий доступ ко всем группам"
 
 #: frontend/src/pages/sys-admin/settings/index.js:216
-#| msgid "Enable users to share libraries to any groups in the system."
 msgid "Enable users to share libraries with any groups in the system."
-msgstr ""
+msgstr "Разрешить пользователям обмениваться библиотеками с любыми группами в системе."
 
 #: frontend/src/pages/sys-admin/settings/index.js:224
-#| msgid "Confirm password"
 msgid "Strong password"
 msgstr "Надежный пароль"
 
@@ -11019,7 +10430,6 @@ msgid "Force user to use a strong password when sign up or change password."
 msgstr "Принудительно использовать надежный пароль при регистрации или изменении пароля."
 
 #: frontend/src/pages/sys-admin/settings/index.js:231
-#| msgid "New Password Again"
 msgid "Force password change"
 msgstr "Принудительная смена пароля"
 
@@ -11034,22 +10444,18 @@ msgid "Enable two factor authentication"
 msgstr "Включить двухфакторную аутентификацию"
 
 #: frontend/src/pages/sys-admin/settings/index.js:250
-#| msgid "Library Type"
 msgid "Library history"
 msgstr "История библиотеки"
 
 #: frontend/src/pages/sys-admin/settings/index.js:253
-#| msgid "Allow user to change library history settings"
 msgid "Allow users to change library history settings"
 msgstr "Разрешить пользователям изменять настройки истории библиотеки"
 
 #: frontend/src/pages/sys-admin/settings/index.js:260
-#| msgid "Allow user to create encrypted libraries"
 msgid "Allow users to create encrypted libraries"
 msgstr "Разрешить пользователям создавать зашифрованные библиотеки"
 
 #: frontend/src/pages/sys-admin/settings/index.js:264
-#| msgid "library password minimum length"
 msgid "Library password minimum length"
 msgstr "Минимальная длина пароля библиотеки"
 
@@ -11059,17 +10465,14 @@ msgid ""
 msgstr "Наименьшее количество символов, которое должен включать пароль зашифрованной библиотеки."
 
 #: frontend/src/pages/sys-admin/settings/index.js:271
-#| msgid "share/upload link force password"
 msgid "Share/upload link force password"
 msgstr "Принудительный пароль для ссылки Общий доступ/Загрузить"
 
 #: frontend/src/pages/sys-admin/settings/index.js:274
-#| msgid "Force user use password when generating share/upload link."
 msgid "Force users to use password when generating share/upload link."
 msgstr "Заставить пользователей использовать пароль при создании ссылки общий доступ/загрузить."
 
 #: frontend/src/pages/sys-admin/settings/index.js:278
-#| msgid "share/upload link password minimum length"
 msgid "Share/upload link password minimum length"
 msgstr "Минимальная длина пароля для ссылки Общий доступ/Загрузить"
 
@@ -11079,7 +10482,6 @@ msgid ""
 msgstr "Наименьшее количество символов, которое должен включать пароль для ссылки общего доступа/загрузки."
 
 #: frontend/src/pages/sys-admin/settings/index.js:285
-#| msgid "share/upload link password strength level"
 msgid "Share/upload link password strength level"
 msgstr "Уровень надежности пароля для ссылки Общий доступ/Загрузить"
 
@@ -11091,12 +10493,10 @@ msgid ""
 msgstr "Уровень надежности (1-4) пароля ссылки для общего доступа/загрузки. Например, '3' означает, что пароль должен иметь  не менее 3 из следующих символов: числа, заглавные буквы, строчные буквы и другие символы"
 
 #: frontend/src/pages/sys-admin/settings/index.js:292
-#| msgid "Allow user to clean library trash"
 msgid "Enable users to clean trash"
 msgstr "Разрешить пользователям очищать корзину"
 
 #: frontend/src/pages/sys-admin/settings/index.js:295
-#| msgid "Allow user to clean library trash"
 msgid "Allow users to clean library trash"
 msgstr "Разрешить пользователям очищать корзину библиотеки"
 
@@ -11105,7 +10505,6 @@ msgid "Online Preview"
 msgstr "Онлайн предпросмотр"
 
 #: frontend/src/pages/sys-admin/settings/index.js:304
-#| msgid "text file extensions"
 msgid "Text file extensions"
 msgstr "Расширения текстовых файлов"
 
@@ -11120,7 +10519,6 @@ msgid "Sync"
 msgstr "Синхронизация"
 
 #: frontend/src/pages/sys-admin/settings/index.js:314
-#| msgid "Files and folders"
 msgid "Disable sync with any folder"
 msgstr "Отключить синхронизацию с любой папкой"
 
@@ -11131,7 +10529,6 @@ msgid ""
 msgstr "Если включить, пользователи с настольного компьютера не смогут синхронизировать папку вне папки Seafile по умолчанию."
 
 #: frontend/src/pages/sys-admin/settings/index.js:325
-#| msgid "No terms and conditions"
 msgid "Enable terms and conditions"
 msgstr "Включить Условия использования"
 
@@ -11142,12 +10539,10 @@ msgid ""
 msgstr "Включить системного администратора добавить \"Условия и положения\", и все пользователи должны будут принять эти условия."
 
 #: frontend/src/pages/sys-admin/side-panel.js:227
-#| msgid "File name"
 msgid "File Scan"
 msgstr "Сканирование файлов"
 
 #: frontend/src/pages/sys-admin/side-panel.js:241
-#| msgid "Virus"
 msgid "Virus Scan"
 msgstr "Антивирус"
 
@@ -11157,7 +10552,6 @@ msgid "Terms and Conditions"
 msgstr "Условия и Положения"
 
 #: frontend/src/pages/sys-admin/side-panel.js:283
-#| msgid "Admin Login Logs"
 msgid "Admin Logs"
 msgstr "Журналы администратора"
 
@@ -11175,7 +10569,6 @@ msgid "Value"
 msgstr "Значение"
 
 #: frontend/src/pages/sys-admin/statistic/statistic-metrics.js:175
-#| msgid "Created time"
 msgid "Collected time"
 msgstr "Собранное время"
 
@@ -11185,22 +10578,18 @@ msgstr "показывать только {placeholder}"
 
 #: frontend/src/pages/sys-admin/sys-logs/log-selector/log-repo-selector.js:107
 #: frontend/src/pages/sys-admin/sys-logs/log-selector/log-repo-selector.js:109
-#| msgid "Single select"
 msgid "Toggle repo selector"
 msgstr "Переключить выбор репозитория"
 
 #: frontend/src/pages/sys-admin/sys-logs/log-selector/log-repo-selector.js:151
-#| msgid "in all libraries"
 msgid "Find libraries"
 msgstr "Поиск библиотек"
 
 #: frontend/src/pages/sys-admin/sys-logs/log-selector/log-repo-selector.js:169
-#| msgid "Tag not found"
 msgid "Library not found"
 msgstr "Библиотека не найдена"
 
 #: frontend/src/pages/sys-admin/sys-logs/log-selector/log-user-selector.js:176
-#| msgid "Add user"
 msgid "Find users"
 msgstr "Поиск пользователей"
 
@@ -11213,7 +10602,6 @@ msgid "Login"
 msgstr "Вход"
 
 #: frontend/src/pages/sys-admin/sys-logs/logs-nav.js:21
-#| msgid "Group members"
 msgid "Group Member"
 msgstr "Члены группы"
 
@@ -11260,7 +10648,6 @@ msgid "Set Contact Email"
 msgstr "Установить контактный email"
 
 #: frontend/src/pages/sys-admin/users/user-info.js:109
-#| msgid "User"
 msgid "User ID"
 msgstr "User ID"
 
@@ -11269,12 +10656,10 @@ msgid "Login ID"
 msgstr "Login ID"
 
 #: frontend/src/pages/sys-admin/users/user-info.js:160
-#| msgid "Set Download Rate Limit"
 msgid "Download Rate Limit"
 msgstr "Ограничение скорости скачивания"
 
 #: frontend/src/pages/sys-admin/users/user-info.js:183
-#| msgid "Two-Factor Authentication"
 msgid "Force Two-Factor Authentication"
 msgstr "Требовать двухфакторную аутентификацию"
 
@@ -11314,25 +10699,21 @@ msgstr "Необработанный"
 
 #: frontend/src/pages/sys-admin/virus-scan/all-virus-files.js:170
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:190
-#| msgid "Deleted files"
 msgid "Infected File"
 msgstr "Зараженный файл"
 
 #: frontend/src/pages/sys-admin/virus-scan/all-virus-files.js:171
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:191
-#| msgid "Picture"
 msgid "Signature"
 msgstr "Подпись"
 
 #: frontend/src/pages/sys-admin/virus-scan/index.js:50
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:421
-#| msgid "Delete page"
 msgid "Delete all"
 msgstr "Удалить все"
 
 #: frontend/src/pages/sys-admin/virus-scan/index.js:51
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:421
-#| msgid "Ignore"
 msgid "Ignore all"
 msgstr "Игнорировать все"
 
@@ -11345,34 +10726,28 @@ msgid "Failed to ignore %(virus_file) from library %(library): %(error_msg)"
 msgstr "Не удалось игнорировать %(virus_file) из библиотеки %(library): %(error_msg)"
 
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:404
-#| msgid "Successfully deleted 1 item."
 msgid "Successfully deleted {count} items."
 msgstr "Удалено {count} элементов."
 
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:405
-#| msgid "Successfully restored 1 item."
 msgid "Successfully ignored {count} items."
 msgstr "Проигнорировано {count} элементов."
 
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:417
-#| msgid "Deleted files"
 msgid "Delete all unhandled files"
 msgstr "Удалить все необработанные файлы"
 
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:417
-#| msgid "Created file"
 msgid "Ignore all unhandled files"
 msgstr "Игнорировать все необработанные файлы"
 
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:419
-#| msgid "Are you sure you want to delete the selected user(s) ?"
 msgid ""
 "Are you sure you want to delete all unhandled infected files across all "
 "pages?"
 msgstr "Вы уверены, что хотите удалить все необработанные зараженные файлы на всех страницах?"
 
 #: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:420
-#| msgid "Are you sure you want to delete this page?"
 msgid ""
 "Are you sure you want to ignore all unhandled infected files across all "
 "pages?"
@@ -11383,7 +10758,6 @@ msgid "Failed to upload {file_name}."
 msgstr "Не удалось загрузить {file_name}."
 
 #: frontend/src/pages/upload-link/index.js:43
-#| msgid "Upload Files"
 msgid "Upload files to"
 msgstr "Загрузить файлы в"
 
@@ -11406,7 +10780,6 @@ msgid "Upload Folder"
 msgstr "Загрузить папку"
 
 #: frontend/src/pages/wiki/side-panel.js:70
-#| msgid "Restore Library"
 msgid "Go to Library"
 msgstr "Перейти в библиотеку"
 
@@ -11423,46 +10796,38 @@ msgid "Modify name"
 msgstr "Изменить имя"
 
 #: frontend/src/pages/wiki2/main-panel.js:358
-#: frontend/src/utils/text-translation.js:112
-#| msgid "Delete page"
+#: frontend/src/utils/text-translation.js:114
 msgid "Freeze page"
 msgstr "Заморозить страницу"
 
 #: frontend/src/pages/wiki2/main-panel.js:381
-#| msgid "Export as docx"
 msgid "Export as sdoc"
 msgstr "Экспортировать как sdoc"
 
 #: frontend/src/pages/wiki2/main-panel.js:382
-#: frontend/src/utils/text-translation.js:140
-#| msgid "Export as docx"
+#: frontend/src/utils/text-translation.js:142
 msgid "Export as Markdown"
 msgstr "Экспортировать как Markdown"
 
 #: frontend/src/pages/wiki2/publish-wiki-popover.js:35
-#| msgid "Publish"
 msgid "Page published"
 msgstr "Страница опубликована"
 
 #: frontend/src/pages/wiki2/side-panel.js:97
-#| msgid "{number_placeholder} / Page"
 msgid "Page {name_placeholder} deleted."
 msgstr "Страница {name_placeholder} удалена."
 
 #: frontend/src/pages/wiki2/side-panel.js:152
-#| msgid "Tags imported"
 msgid "Page imported"
 msgstr "Страница импортирована"
 
 #: frontend/src/pages/wiki2/side-panel.js:166
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-dropdownmenu.js:92
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:101
-#| msgid "Failed to restore {name}"
 msgid "Failed to import page"
 msgstr "Не удалось импортировать страницу"
 
 #: frontend/src/pages/wiki2/side-panel.js:411
-#| msgid "Wiki published"
 msgid "Manage Published Pages"
 msgstr "Управление опубликованными страницами"
 
@@ -11471,12 +10836,10 @@ msgid "Page is frozen"
 msgstr "Страница заморожена"
 
 #: frontend/src/pages/wiki2/wiki-collaborators-operation/collaborators-popover.js:24
-#| msgid "Invite users"
 msgid "Online members"
 msgstr "Участники в сети"
 
 #: frontend/src/pages/wiki2/wiki-collaborators-operation/collaborators-popover.js:28
-#| msgid "More"
 msgid "Me"
 msgstr "Мне"
 
@@ -11502,13 +10865,11 @@ msgstr "Не удалось скопировать"
 
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-dropdownmenu.js:122
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:169
-#| msgid "Import tags"
 msgid "Import page from docx"
 msgstr "Импорт страницы из docx"
 
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-dropdownmenu.js:123
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:170
-#| msgid "Export as docx"
 msgid "Import page from Markdown"
 msgstr "Импорт страницы из Markdown"
 
@@ -11517,7 +10878,6 @@ msgid "Copy link"
 msgstr "Копировать ссылку"
 
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-dropdownmenu.js:139
-#| msgid "Add permission"
 msgid "Add page above"
 msgstr "Добавить страницу выше"
 
@@ -11531,17 +10891,14 @@ msgstr "Невозможно переместить родительскую с�
 
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-item.js:387
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-item.js:396
-#| msgid "Add permission"
 msgid "Add page inside"
 msgstr "Добавить страницу внутри"
 
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-item.js:404
-#| msgid "Add permission"
 msgid "Add page"
 msgstr "Добавить страницу"
 
 #: frontend/src/pages/wiki2/wiki-repo-popover/index.js:94
-#| msgid "Search Libraries"
 msgid "Search libraries"
 msgstr "Поиск библиотек"
 
@@ -11550,12 +10907,10 @@ msgid "Change cover"
 msgstr "Сменить обложку"
 
 #: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:106
-#| msgid "Please choose an image file."
 msgid "Please select an image file."
 msgstr "Выберите файл изображения."
 
 #: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:134
-#| msgid "Failed to upload {file_name}."
 msgid "Failed to upload image."
 msgstr "Не удалось загрузить изображение."
 
@@ -11582,7 +10937,6 @@ msgstr "Добавить обложку"
 
 #: frontend/src/pages/wiki2/wiki-settings/index.js:47
 #: frontend/src/pages/wiki2/wiki-settings/linked-repo-panel.js:117
-#| msgid "No deleted libraries"
 msgid "Connected libraries"
 msgstr "Подключенные библиотеки"
 
@@ -11598,7 +10952,6 @@ msgid ""
 msgstr "Обратите внимание, что для подключения к Wiki в библиотеке должна быть включена функция расширенных свойств."
 
 #: frontend/src/pages/wiki2/wiki-settings/linked-repo-panel.js:119
-#| msgid "Library"
 msgid "Add library"
 msgstr "Добавить библиотеку"
 
@@ -11615,12 +10968,10 @@ msgid "Original path"
 msgstr "Исходный путь"
 
 #: frontend/src/shared-dir-view.js:253
-#| msgid "IP"
 msgid "ZIP"
 msgstr "ZIP"
 
 #: frontend/src/shared-dir-view.js:877
-#| msgid "Shared by"
 msgid "Shared by: "
 msgstr "Общий доступ: "
 
@@ -11755,10 +11106,6 @@ msgid ""
 msgstr "Вы еще не добавили ни одной библиотеки, папки или файла в избранное. Избранное дает вам быстрый доступ к вашим наиболее часто используемым объектам. Вы можете добавить библиотеку, папку или файл в избранное, нажав на звездочку слева от ее названия."
 
 #: frontend/src/translate.js:33
-#| msgid ""
-#| "lic libraries have been created yet. A public library is accessible all rs. "
-#| "You can create a public library by clicking the \"Add rary\" button the menu"
-#| " bar."
 msgid ""
 "No public libraries have been created yet. A public library is accessible by"
 " all users. You can create a public library by clicking the \"Add Library\" "
@@ -11773,27 +11120,22 @@ msgid ""
 msgstr "Ни одна библиотека не была передана напрямую вам. Общая библиотека может быть предоставлена ​​с полным или ограниченным разрешением. Если вам нужен доступ к библиотеке, принадлежащей другому пользователю, попросите пользователя поделиться этой библиотекой с вами."
 
 #: frontend/src/translate.js:35
-#| msgid "Group not found"
 msgid "Group info"
 msgstr "Информация о группе"
 
 #: frontend/src/translate.js:36
-#| msgid "Change cover"
 msgid "Change view type"
 msgstr "Изменить тип представления"
 
 #: frontend/src/translate.js:38
-#| msgid "No users"
 msgid "No user shares"
 msgstr "Нет общих ресурсов пользователя"
 
 #: frontend/src/translate.js:39
-#| msgid "No groups"
 msgid "No group shares"
 msgstr "Нет общих ресурсов группы"
 
 #: frontend/src/translate.js:40
-#| msgid "{user} restored folder {folderName} in library {libraryName}."
 msgid "Face recognition is done for library {libraryName}."
 msgstr "Распознавание лиц выполнено для библиотеки {libraryName}."
 
@@ -11822,17 +11164,14 @@ msgid "Grid view"
 msgstr "Вид сетки"
 
 #: frontend/src/translate.js:49
-#| msgid "Open via Client"
 msgid "Open with OnlyOffice"
 msgstr "Открыть с помощью OnlyOffice"
 
 #: frontend/src/translate.js:50
-#| msgid "Open via Client"
 msgid "Open with client"
 msgstr "Открыть с помощью клиента"
 
 #: frontend/src/translate.js:51
-#| msgid "Add permission"
 msgid "Add page below"
 msgstr "Добавить страницу ниже"
 
@@ -11849,7 +11188,6 @@ msgid "Sort ascending"
 msgstr "Сортировка по возрастанию"
 
 #: frontend/src/translate.js:56
-#| msgid "Images"
 msgid "Pages"
 msgstr "Страницы"
 
@@ -11860,138 +11198,135 @@ msgid ""
 msgstr "Доступ запрещен. Попробуйте {placeholder-left} войти снова.{placeholder-right}"
 
 #: frontend/src/utils/text-translation.js:80
-#| msgid "Open file"
 msgid "Open with"
 msgstr "Открыть с помощью"
 
-#: frontend/src/utils/text-translation.js:88
-#| msgid "Desktop"
+#: frontend/src/utils/text-translation.js:86
+msgctxt "Open with"
+msgid "Default"
+msgstr "По умолчанию"
+
+#: frontend/src/utils/text-translation.js:90
 msgid "Desktop client"
 msgstr "Настольный клиент"
 
-#: frontend/src/utils/text-translation.js:92
-#| msgid "Only files"
+#: frontend/src/utils/text-translation.js:94
 msgid "OnlyOffice"
 msgstr "OnlyOffice"
 
-#: frontend/src/utils/text-translation.js:104
+#: frontend/src/utils/text-translation.js:106
 msgid "Freeze Document"
 msgstr "Заморозить документ"
 
-#: frontend/src/utils/text-translation.js:108
+#: frontend/src/utils/text-translation.js:110
 msgid "Unfreeze Document"
 msgstr "Разморозить документ"
 
-#: frontend/src/utils/text-translation.js:120
+#: frontend/src/utils/text-translation.js:122
 msgid "Convert & Export"
 msgstr "Преобразование & Экспорт"
 
-#: frontend/src/utils/text-translation.js:124
+#: frontend/src/utils/text-translation.js:126
 msgid "Convert to Markdown"
 msgstr "Преобразовать в Markdown"
 
-#: frontend/src/utils/text-translation.js:128
+#: frontend/src/utils/text-translation.js:130
 msgid "Convert to sdoc"
 msgstr "Преобразовать в sdoc"
 
-#: frontend/src/utils/text-translation.js:132
+#: frontend/src/utils/text-translation.js:134
 msgid "Convert to docx"
 msgstr "Преобразовать в docx"
 
-#: frontend/src/utils/text-translation.js:136
+#: frontend/src/utils/text-translation.js:138
 msgid "Export as docx"
 msgstr "Экспортировать в формате docx"
 
-#: frontend/src/utils/text-translation.js:148
+#: frontend/src/utils/text-translation.js:150
 msgid "Access Log"
 msgstr "Журнал доступа"
 
-#: frontend/src/utils/text-translation.js:164
+#: frontend/src/utils/text-translation.js:166
 msgid "Convert with ONLYOFFICE"
 msgstr "Конвертировать с помощью ONLYOFFICE"
 
-#: frontend/src/utils/text-translation.js:168
+#: frontend/src/utils/text-translation.js:170
 msgid "Display files"
 msgstr "Показать файлы"
 
-#: frontend/src/utils/text-translation.js:172
+#: frontend/src/utils/text-translation.js:174
 msgid "Export as zip"
 msgstr "Экспортировать в формате zip"
 
-#: frontend/src/utils/text-translation.js:212
+#: frontend/src/utils/text-translation.js:214
 msgid "API Token"
 msgstr "Токен API"
 
-#: frontend/src/utils/text-translation.js:231
+#: frontend/src/utils/text-translation.js:233
 msgid "Add view"
 msgstr "Добавить представление"
 
-#: frontend/src/utils/text-translation.js:237
+#: frontend/src/utils/text-translation.js:239
 msgid "Open file in new tab"
 msgstr "Открыть файл в новой вкладке"
 
-#: frontend/src/utils/text-translation.js:241
+#: frontend/src/utils/text-translation.js:243
 msgid "Open folder in new tab"
 msgstr "Открыть папку в новой вкладке"
 
-#: frontend/src/utils/text-translation.js:253
+#: frontend/src/utils/text-translation.js:255
 msgid "Extract file details"
 msgstr "Извлечь сведения о файле"
 
-#: frontend/src/utils/text-translation.js:257
+#: frontend/src/utils/text-translation.js:259
 msgid "Delete file"
 msgstr "Удалить файл"
 
-#: frontend/src/utils/text-translation.js:261
+#: frontend/src/utils/text-translation.js:263
 msgid "Delete folder"
 msgstr "Удалить папку"
 
-#: frontend/src/utils/text-translation.js:265
-#| msgid "Moved file"
+#: frontend/src/utils/text-translation.js:267
 msgid "Move file"
 msgstr "Переместить файл"
 
-#: frontend/src/utils/text-translation.js:269
-#| msgid "Moved folder"
+#: frontend/src/utils/text-translation.js:271
 msgid "Move folder"
 msgstr "Переместить папку"
 
-#: frontend/src/utils/text-translation.js:273
+#: frontend/src/utils/text-translation.js:275
 msgid "Rename file"
 msgstr "Переименовать файл"
 
-#: frontend/src/utils/text-translation.js:277
+#: frontend/src/utils/text-translation.js:279
 msgid "Rename folder"
 msgstr "Переименовать папку"
 
-#: frontend/src/utils/text-translation.js:289
-#| msgid "Select Image"
+#: frontend/src/utils/text-translation.js:291
 msgid "Detect faces"
 msgstr "Обнаружение лиц"
 
-#: frontend/src/utils/text-translation.js:297
+#: frontend/src/utils/text-translation.js:299
 msgid "Clear selected"
 msgstr "Очистить выбранное"
 
-#: frontend/src/utils/text-translation.js:301
+#: frontend/src/utils/text-translation.js:303
 msgid "Delete selected"
 msgstr "Удалить выбранное"
 
-#: frontend/src/utils/text-translation.js:305
+#: frontend/src/utils/text-translation.js:307
 msgid "Copy selected"
 msgstr "Копировать выбранное"
 
-#: frontend/src/utils/text-translation.js:335
+#: frontend/src/utils/text-translation.js:337
 msgid "Remove from this group"
 msgstr "Удалить из этой группы"
 
-#: frontend/src/utils/text-translation.js:339
-#| msgid "Add group"
+#: frontend/src/utils/text-translation.js:341
 msgid "Add to groups"
 msgstr "Добавление в группы"
 
-#: frontend/src/utils/text-translation.js:343
-#| msgid "Set user quota"
+#: frontend/src/utils/text-translation.js:345
 msgid "Set as cover photo"
 msgstr "Установить в качестве фотографии для обложки"
 
@@ -12130,7 +11465,6 @@ msgid "Name cannot be double dots"
 msgstr "Имя не может состоять из двух точек"
 
 #: frontend/src/view-file-collabora-online.js:252
-#| msgid "Save"
 msgid "Save as"
 msgstr "Сохранить как"
 

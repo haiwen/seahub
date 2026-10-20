@@ -12,7 +12,7 @@
 # Ralf Dyllick <rdb@datamate.org>, 2024
 # Marco, 2024
 # Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>, 2024
-# Seafile Info <info@seafile.com>, 2024
+# Seafile Info <info@seafile.com>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -21,7 +21,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-17 21:05+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: Seafile Info <info@seafile.com>, 2024\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: German (https://app.transifex.com/haiwen/teams/5086/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -362,6 +362,10 @@ msgid ""
 " There is also an option to control whether individual users can share "
 "libraries with a department."
 msgstr ""
+"Abteilungsbibliotheken können vom Systemadministrator oder "
+"Abteilungsadministrator erstellt werden. Es besteht auch die Möglichkeit, zu"
+" steuern, ob einzelne Benutzer Bibliotheken für eine Abteilung freigeben "
+"können."
 
 #: templates/help/departments.html:33
 msgid ""
@@ -429,6 +433,9 @@ msgid ""
 "Share a library with users or groups outside of this department. This is "
 "very useful for cross-department collaboration."
 msgstr ""
+"Geben Sie eine Bibliothek für Benutzer oder Gruppen außerhalb dieser "
+"Abteilung frei. Dies ist sehr nützlich für die abteilungsübergreifende "
+"Zusammenarbeit."
 
 #: templates/help/departments.html:49
 #, python-format
@@ -787,6 +794,8 @@ msgid ""
 "In some corner cases, the \"SeaDrive\" shortcut will be left-over in Windows"
 " Explorer and you want to remove it."
 msgstr ""
+"In einigen Sonderfällen bleibt die Verknüpfung „SeaDrvie“ im Windows "
+"Explorer übrig und Sie möchten sie entfernen."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
@@ -1141,6 +1150,10 @@ msgid ""
 "want to allow a specific member of the group to modify files in one sub-"
 "folder. You can grant write permission of this sub-folder to this person."
 msgstr ""
+"Sie haben einer Gruppe eine Bibliothek mit der Berechtigung „Nur Lesen“ "
+"freigegeben. Sie möchten außerdem einem bestimmten Mitglied der Gruppe "
+"erlauben, Dateien in einem Unterordner zu ändern. Sie können dieser Person "
+"Schreibberechtigung für diesen Unterordner erteilen."
 
 #: templates/help/folder_permission.html:11
 msgid ""
@@ -1149,6 +1162,11 @@ msgid ""
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
 msgstr ""
+"Sie haben eine Bibliothek für drei Gruppen freigegeben. Unter dieser "
+"Bibliothek befinden sich drei Unterordner, einer für jede Gruppe, in die "
+"Dateien hochgeladen werden können. Sie möchten jedoch nicht, dass Benutzer "
+"Dateien ändern, die nicht zu ihrer Gruppe gehören. Sie können die "
+"Schreibberechtigung für einen Unterordner nur seiner Gruppe erteilen."
 
 #: templates/help/folder_permission.html:13
 msgid ""
@@ -1157,6 +1175,11 @@ msgid ""
 "should first share the parent library or folder; otherwise the folder "
 "permission won't take effect."
 msgstr ""
+"Ordnerberechtigungen gelten nur für Bibliotheken und Ordner, die Sie für "
+"andere freigeben. Um Ordnerberechtigungen für Unterordner wirksam "
+"festzulegen, sollten Sie zuerst die übergeordnete Bibliothek oder den "
+"übergeordneten Ordner freigeben. Andernfalls wird die Ordnerberechtigung "
+"nicht wirksam."
 
 #: templates/help/folder_permission.html:14
 msgid ""
@@ -1250,6 +1273,13 @@ msgid ""
 "library. Then user A only has \"read only\" access to the sub-folder, while "
 "he/she has \"read write\" access to all other sub-folders and files."
 msgstr ""
+"Ordnerberechtigungen haben eine höhere Priorität als die in der Freigabe "
+"festgelegte Berechtigung. Wenn Sie beispielsweise eine Bibliothek für "
+"Benutzer A mit der Berechtigung „Lesen und Schreiben“ freigeben und für "
+"einen Unterordner dieser Bibliothek auch die Berechtigung „Nur Lesen“ "
+"festlegen, hat Benutzer A nur „Nur Lesen“-Zugriff auf den Unterordner, "
+"während er/sie „Lesen und Schreiben“-Zugriff auf alle anderen Unterordner "
+"und Dateien hat."
 
 #: templates/help/folder_permission.html:28
 msgid ""
@@ -1362,6 +1392,9 @@ msgid ""
 "Creating a group is a convenient way to share files with many people. In "
 "Seafile, you can create and manage a group easily."
 msgstr ""
+"Das Erstellen einer Gruppe ist eine praktische Möglichkeit, Dateien für "
+"viele Personen freizugeben. In Seafile können Sie ganz einfach eine Gruppe "
+"erstellen und verwalten."
 
 #: templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
@@ -1398,6 +1431,10 @@ msgid ""
 "all the groups you're in. Clicking into any group, you'll see the libraries "
 "shared with this group."
 msgstr ""
+"Klicken Sie im linken Bereich auf die Registerkarte „Mit Gruppen geteilt“, "
+"um alle Gruppen anzuzeigen, denen Sie angehören. Wenn Sie auf eine beliebige"
+" Gruppe klicken, werden die Bibliotheken angezeigt, die mit dieser Gruppe "
+"geteilt wurden."
 
 #: templates/help/groups_managing.html:14
 msgid ""
@@ -1416,6 +1453,9 @@ msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
 "and folders</a> about how to share libraries or folders with a group."
 msgstr ""
+"Sehen <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">Dateien und "
+"Ordner freigeben</a> Informationen zum Freigeben von Bibliotheken oder "
+"Ordnern für eine Gruppe."
 
 #: templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
@@ -1768,6 +1808,10 @@ msgid ""
 "you're the library's owner, you can restore the entire library to this point"
 " of time."
 msgstr ""
+"In der Snapshot-Ansicht können Sie beliebige Dateien oder Ordner "
+"herunterladen oder wiederherstellen. Wenn Sie der Eigentümer der Bibliothek "
+"sind, können Sie die gesamte Bibliothek bis zu diesem Zeitpunkt "
+"wiederherstellen."
 
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
@@ -1916,6 +1960,15 @@ msgid ""
 " copy at the server side. To prevent data loss, the local copy is renamed to"
 " a conflict file."
 msgstr ""
+"Für nur lesbare Bibliotheken oder Ordner zeigt Seafile ein verbotenes Symbol"
+" an (<img src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" "
+"/>) um anzuzeigen, dass sie schreibgeschützt sind. Benutzer können die "
+"synchronisierten lokalen Kopien jedoch weiterhin ändern. Wenn eine lokale "
+"Kopie geändert wird, ignoriert Seafile die geänderte Kopie. Wenn die Kopie "
+"auf dem Server ebenfalls geändert wird, zeigt der Client eine "
+"Benachrichtigung an, dass die lokal geänderte Kopie mit der Kopie auf der "
+"Serverseite in Konflikt steht. Um Datenverlust zu vermeiden, wird die lokale"
+" Kopie in eine Konfliktdatei umbenannt."
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
@@ -2181,6 +2234,10 @@ msgid ""
 "the type of files can be previewed in web browser, they can also be viewed "
 "online (e.g. Office files)."
 msgstr ""
+"Vorschau und Download: Die Datei bzw. Dateien im Ordner können "
+"heruntergeladen werden. Wenn der Dateityp im Webbrowser in der Vorschau "
+"angezeigt werden kann, können sie auch online angezeigt werden (z. B. "
+"Office-Dateien)."
 
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
@@ -2312,6 +2369,10 @@ msgid ""
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
 msgstr ""
+"Sie können eine Bibliothek oder einen Ordner für andere registrierte "
+"Seafile-Benutzer freigeben. Auf die freigegebene Bibliothek oder den "
+"freigegebenen Ordner können andere über die Web-App und Seafile-Clients "
+"zugreifen."
 
 #: templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
@@ -2320,16 +2381,21 @@ msgstr "Sie können den Anteilsbereich wählen:"
 #: templates/help/sharing_files_and_folders.html:48
 msgid "Share with user: You can share with one or more users."
 msgstr ""
+"Für Benutzer freigeben: Sie können für einen oder mehrere Benutzer "
+"freigeben."
 
 #: templates/help/sharing_files_and_folders.html:49
 msgid "Share with group: You can share with a group."
-msgstr ""
+msgstr "Mit Gruppe teilen: Sie können mit einer Gruppe teilen."
 
 #: templates/help/sharing_files_and_folders.html:50
 msgid ""
 "Share with organization: If you're using a private server, sometimes it's "
 "useful to share with all members on the server (the entire organization)."
 msgstr ""
+"Mit Organisation teilen: Wenn Sie einen privaten Server verwenden, ist es "
+"manchmal sinnvoll, die Inhalte mit allen Mitgliedern auf dem Server (der "
+"gesamten Organisation) zu teilen."
 
 #: templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
@@ -2372,6 +2438,8 @@ msgstr ""
 #: templates/help/sharing_files_and_folders.html:60
 msgid "To share a library or folder with a user or group:"
 msgstr ""
+"So geben Sie eine Bibliothek oder einen Ordner für einen Benutzer oder eine "
+"Gruppe frei:"
 
 #: templates/help/sharing_files_and_folders.html:62
 msgid ""
@@ -2387,6 +2455,10 @@ msgid ""
 "user\" or \"Share with group\" tab on the left panel. Select the user or "
 "group. Then click \"Submit\"."
 msgstr ""
+"Ein Popup-Fenster mit Freigabeoptionen wird angezeigt. Klicken Sie im linken"
+" Bereich auf die Registerkarte „Für Benutzer freigeben“ oder „Für Gruppe "
+"freigeben“. Wählen Sie den Benutzer oder die Gruppe aus. Klicken Sie dann "
+"auf „Senden“."
 
 #: templates/help/sharing_files_and_folders.html:65
 msgid ""
@@ -2395,6 +2467,11 @@ msgid ""
 " you share it with a group, the group members can only see it by navigating "
 "into the group."
 msgstr ""
+"Nachdem Sie eine Bibliothek oder einen Ordner für einen Benutzer freigegeben"
+" haben, kann dieser diese sehen, indem er in der Seafile-Web-App im linken "
+"Bereich auf die Registerkarte „Mit mir geteilt“ klickt. Wenn Sie die "
+"Bibliothek oder den Ordner für eine Gruppe freigeben, können die "
+"Gruppenmitglieder diese nur sehen, indem sie in die Gruppe navigieren."
 
 #: templates/help/sharing_files_and_folders.html:66
 msgid ""
@@ -2403,6 +2480,11 @@ msgid ""
 "Library\" button. In the drop-down menu, you can choose to share an existing"
 " library or create a new library and share it."
 msgstr ""
+"So geben Sie eine Bibliothek für die gesamte Organisation frei: Klicken Sie "
+"in der Seafile-Web-App im linken Bereich auf die Registerkarte „Für alle "
+"freigegeben“. Klicken Sie dann auf die Schaltfläche „Bibliothek hinzufügen“."
+" Im Dropdown-Menü können Sie auswählen, ob Sie eine vorhandene Bibliothek "
+"freigeben oder eine neue Bibliothek erstellen und freigeben möchten."
 
 #: templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
@@ -2695,6 +2777,9 @@ msgid ""
 "The folder or library of this file is shared with read-only permission with "
 "you. You cannot modify, delete or move the file."
 msgstr ""
+"Der Ordner oder die Bibliothek dieser Datei wird Ihnen nur mit "
+"Leseberechtigung zur Verfügung gestellt. Sie können die Datei nicht ändern, "
+"löschen oder verschieben."
 
 #: templates/help/using_drive_client.html:74
 msgid ""

@@ -3635,7 +3635,7 @@ msgstr "انتهت مهلة تسجيل الدخول، يرجى النقر فوق
 #, python-brace-format
 #| msgid "Library %s not found."
 msgid "Library {repo_id} not found."
-msgstr ""
+msgstr "لم يتم العثور على المكتبة {repo_id}."
 
 #: seahub/views/sysadmin.py:158
 msgid "Commit id missing."
