@@ -6,12 +6,14 @@ file_filter = locale/<lang>/LC_MESSAGES/djangojs.po
 source_file = locale/en/LC_MESSAGES/djangojs.po
 source_lang = en
 type        = PO
+lang_map    = lv_LV: lv
 
 [o:haiwen:p:seahub:r:djangopo]
 file_filter = locale/<lang>/LC_MESSAGES/django.po
 source_file = locale/en/LC_MESSAGES/django.po
 source_lang = en
 type        = PO
+lang_map    = lv_LV: lv
 
 [o:haiwen:p:seahub:r:helpdjangopo]
 file_filter   = seahub/help/locale/<lang>/LC_MESSAGES/django.po
@@ -19,6 +21,7 @@ source_file   = seahub/help/locale/en/LC_MESSAGES/django.po
 type          = PO
 minimum_perc  = 0
 resource_name = help/django.po
+lang_map      = lv_LV: lv
 
 [o:haiwen:p:seahub:r:sdoc-editor]
 file_filter   = media/sdoc-editor/locales/<lang>/sdoc-editor.json
@@ -26,10 +29,12 @@ source_file   = media/sdoc-editor/locales/en/sdoc-editor.json
 type          = KEYVALUEJSON
 minimum_perc  = 0
 resource_name = sdoc-editor
+lang_map      = lv_LV: lv
 
 [o:haiwen:p:seahub:r:seafile-editor]
 file_filter = media/seafile-editor/locales/<lang>/seafile-editor.json
 source_file = media/seafile-editor/locales/en/seafile-editor.json
 source_lang = en
 type        = KEYVALUEJSON
+lang_map    = lv_LV: lv
 

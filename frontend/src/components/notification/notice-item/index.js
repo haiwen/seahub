@@ -2,8 +2,9 @@ import React from 'react';
 import { processor } from '@seafile/seafile-editor';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/lv';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot, mediaUrl } from '@/utils/constants';
+import { gettext, siteRoot, mediaUrl, lang } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import './index.css';
 
@@ -490,7 +491,7 @@ class NoticeItem extends React.Component {
           <p className="m-0" dangerouslySetInnerHTML={{ __html: notice }}></p>
         </td>
         <td>
-          {dayjs(noticeItem.time).fromNow()}
+          {dayjs(noticeItem.time).locale(lang).fromNow()}
         </td>
       </tr>
     ) : (
@@ -511,7 +512,7 @@ class NoticeItem extends React.Component {
               <img className="notification-user-avatar" src={avatar_url} alt="" />
               <span className="ml-2 notification-user-name" title={displayName}>{displayName}</span>
             </div>
-            <span className="notification-time">{dayjs(noticeItem.time).fromNow()}</span>
+            <span className="notification-time">{dayjs(noticeItem.time).locale(lang).fromNow()}</span>
           </div>
         </div>
         <div className="notification-content-wrapper">
