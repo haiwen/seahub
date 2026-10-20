@@ -110,13 +110,15 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enableTags, enableMetadata, enableAISummary, showView]);
 
-  const updateEnableMetadata = useCallback((newValue) => {
+  const updateEnableMetadata = useCallback((newValue, hiddenColumns) => {
     if (newValue === enableMetadata) return;
     if (!newValue) {
       cancelMetadataURL(true);
       setEnableTags(false);
       setEnableAISummary(false);
       setEnableFaceRecognition(false);
+    } else {
+      setGlobalHiddenColumns(hiddenColumns);
     }
     setDetailsSettings({});
     setIsBeingBuilt(newValue);
