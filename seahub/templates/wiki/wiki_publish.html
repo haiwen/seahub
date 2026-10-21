@@ -6,9 +6,9 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="{{ site_name }}">
 <meta property="og:url" content="{{ service_url }}{{ request.path }}">
-<meta property="og:title" content="{{ repo_name }}">
+<meta property="og:title" content="{% if wiki_title %}{{ wiki_title }} - {% endif %}{{ wiki_repo_name }}">
 <meta property="og:image" content="{{ service_url }}{{ MEDIA_URL }}img/file/{{ filename|file_icon_filter }}">
-<meta property="og:description" content="{{ filename }}">
+<meta property="og:description" content="{% if wiki_title %}{{ wiki_title }}{% else %}{{ wiki_repo_name }}{% endif %}">
 {% endblock %}
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}seafile-editor/seafile-editor-font.css">
@@ -16,7 +16,7 @@
 {% render_bundle 'wiki2' 'css' %}
 {% endblock %}
 
-{% block wiki_title %}{{repo_name}}{% endblock %}
+{% block wiki_title %}{% if wiki_title %}{{ wiki_title }} - {% endif %}{{ wiki_repo_name }}{% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
