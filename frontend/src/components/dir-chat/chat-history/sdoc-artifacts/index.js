@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '@/utils/constants';
+import { gettext, siteRoot } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 import './index.css';
 
@@ -19,6 +20,7 @@ const ERROR_MESSAGES = {
   default_directory_unavailable: gettext('The document could not be created because the AI Generated folder is unavailable.'),
   create_failed: gettext('The document could not be created. No document link is available.'),
   write_failed: gettext('The document could not be saved. No document link is available.'),
+  creation_unconfirmed: gettext('Document creation could not be confirmed. Please check the AI Generated folder before trying again.'),
 };
 
 const SdocArtifacts = ({ artifacts = [] }) => {
@@ -30,6 +32,9 @@ const SdocArtifacts = ({ artifacts = [] }) => {
   return (
     <div className="sea-ai-sdoc-artifacts">
       {sdocArtifacts.map((artifact, index) => {
+        const relativePath = artifact.relative_path;
+        const path = relativePath ? `/AI Generated/${relativePath}` : artifact.path;
+        const url = relativePath && artifact.repo_id ? `${siteRoot}lib/${artifact.repo_id}/file${Utils.encodePath(path)}` : artifact.url;
         const artifactKey = `${artifact.path || artifact.error_code || 'sdoc'}-${index}`;
         if (artifact.status !== 'created') {
           return (
@@ -41,9 +46,9 @@ const SdocArtifacts = ({ artifacts = [] }) => {
         return (
           <div className="sea-ai-sdoc-artifact" key={artifactKey}>
             <div className="sea-ai-sdoc-artifact-name">{gettext('Created')} {artifact.name}</div>
-            <div className="sea-ai-sdoc-artifact-path">{gettext('Location')}: {artifact.path}</div>
+            <div className="sea-ai-sdoc-artifact-path">{gettext('Location')}: {path}</div>
             {artifact.summary && <div className="sea-ai-sdoc-artifact-summary">{artifact.summary}</div>}
-            <a href={artifact.url} target="_blank" rel="noopener noreferrer" className="sea-ai-sdoc-artifact-link">{gettext('Open document')}</a>
+            <a href={url} target="_blank" rel="noopener noreferrer" className="sea-ai-sdoc-artifact-link">{gettext('Open document')}</a>
           </div>
         );
       })}

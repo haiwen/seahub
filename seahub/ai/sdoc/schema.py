@@ -267,15 +267,12 @@ def _normalize_element(value, state, depth=1):
 
 
 def normalize_sdoc_request(value):
-    _exact_keys(value, {'type', 'schema_version', 'file_name', 'title', 'elements'}, {'requested_directory', 'summary'})
+    _exact_keys(value, {'type', 'schema_version', 'file_name', 'title', 'elements'}, {'summary'})
     if value.get('type') != 'sdoc_create_request':
         raise SdocArtifactError()
     if value.get('schema_version') != SCHEMA_VERSION:
         raise SdocArtifactError('unsupported_schema_version')
     file_name = _string(value.get('file_name')).strip()
-    requested_directory = value.get('requested_directory')
-    if requested_directory is not None:
-        requested_directory = _string(requested_directory).strip()
     summary = value.get('summary')
     if summary is not None:
         summary = _string(summary).strip()
@@ -291,7 +288,6 @@ def normalize_sdoc_request(value):
         'type': 'sdoc_create_request',
         'schema_version': SCHEMA_VERSION,
         'file_name': file_name,
-        'requested_directory': requested_directory,
         'title': {'children': title_children},
         'elements': normalized_elements,
     }

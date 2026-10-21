@@ -26,27 +26,7 @@ def _can_create(request, repo_id, path):
     return bool(permission and parse_repo_perm(permission).can_create)
 
 
-def _normalize_directory(path):
-    if not isinstance(path, str) or '\x00' in path:
-        raise SdocArtifactError('invalid_directory')
-    path = path.strip().replace('\\', '/')
-    parts = [part for part in path.split('/') if part]
-    if not path or '..' in parts:
-        raise SdocArtifactError('invalid_directory')
-    if not parts:
-        return '/'
-    return '/' + '/'.join(parts) + '/'
-
-
-def _resolve_directory(request, repo_id, requested_directory, username):
-    if requested_directory is not None:
-        directory = _normalize_directory(requested_directory)
-        if seafile_api.get_dir_id_by_path(repo_id, directory) is None:
-            raise SdocArtifactError('directory_not_found')
-        if not _can_create(request, repo_id, directory):
-            raise SdocArtifactError('permission_denied')
-        return directory
-
+def _resolve_directory(request, repo_id, username):
     directory = DEFAULT_DIRECTORY
     directory_id = seafile_api.get_dir_id_by_path(repo_id, directory)
     if directory_id is None:
@@ -101,15 +81,13 @@ def create_sdoc(draft, repo_id, request, username):
     try:
         normalized = normalize_sdoc_request(draft)
         file_name = _normalize_file_name(normalized['file_name'])
-        directory = _resolve_directory(request, repo_id, normalized.get('requested_directory'), username)
-        file_name = check_filename_with_rename(repo_id, directory, file_name)
         content = validate_sdoc(compile_sdoc(normalized, username))
+        directory = _resolve_directory(request, repo_id, username)
+        file_name = check_filename_with_rename(repo_id, directory, file_name)
 
         fd, tmp_file = mkstemp()
-        try:
-            os.write(fd, json.dumps(content, ensure_ascii=False).encode('utf-8'))
-        finally:
-            os.close(fd)
+        with os.fdopen(fd, 'w', encoding='utf-8') as file_obj:
+            json.dump(content, file_obj, ensure_ascii=False)
         try:
             seafile_api.post_file(repo_id, tmp_file, directory, file_name, username)
         except Exception as error:
@@ -126,6 +104,7 @@ def create_sdoc(draft, repo_id, request, username):
             'status': 'created',
             'name': file_name,
             'path': file_path,
+            'relative_path': file_name,
             'repo_id': repo_id,
             'doc_uuid': doc_uuid,
             'url': reverse('view_lib_file', args=[repo_id, file_path]),
