@@ -4,6 +4,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
+from django.core.handlers.wsgi import WSGIRequest
 from django.http import Http404, HttpResponse
 from django.template import Context, Engine
 from django.test import RequestFactory, SimpleTestCase
@@ -11,6 +12,8 @@ from django.utils.html import escape
 from django.utils.http import http_date
 from requests.exceptions import Timeout
 
+from seahub.auth.middleware import LazyUser
+from seahub.auth.models import AnonymousUser
 from seahub.wiki2 import views
 from seahub.wiki2.utils import get_wiki_config
 
@@ -102,6 +105,8 @@ class PublishedWikiMetadataTest(SimpleTestCase):
         if page_id:
             path += page_id + '/'
         request = RequestFactory().get(path)
+        request.session = {}
+        request.user = AnonymousUser()
         return views.wiki_publish_view(request, 'manual', page_id)
 
     def assert_metadata(self, response, name, page_id=None):
@@ -132,6 +137,12 @@ class PublishedWikiMetadataTest(SimpleTestCase):
             for page_id in (None, 'XXXX'):
                 with self.subTest(ssr=ssr, page_id=page_id):
                     self.assert_metadata(self.get_page(page_id), 'Install', page_id)
+
+    def test_metadata_after_authentication_middleware_sets_lazy_user(self):
+        # AuthenticationMiddleware installs this descriptor on the request class.
+        # Restore it afterwards so this test does not leak state into other tests.
+        with patch.object(WSGIRequest, 'user', LazyUser(), create=True):
+            self.assert_metadata(self.get_page('BBBB'), 'Upgrade', 'BBBB')
 
     def test_rename_updates_metadata_and_last_modified(self):
         for ssr in (False, True):
