@@ -70,7 +70,10 @@ class FileHistory extends React.Component {
             renderingContent={this.state.renderingContent}
           />
         </div>
-        <SidePanel onItemClick={this.onHistoryItemClick}/>
+        <SidePanel
+          onItemClick={this.onHistoryItemClick}
+          onHistoryEmpty={() => this.setDiffContent('', '')}
+        />
       </div>
     );
   }
