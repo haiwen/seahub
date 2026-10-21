@@ -1,6 +1,7 @@
 {% extends "base_for_react.html" %}
 {% load render_bundle from webpack_loader %}
 {% load seahub_tags %}
+{% block color_mode_init %}{% include "snippets/color_mode_init.html" %}{% endblock %}
 
 {% block extra_style %}
 {% render_bundle 'app' 'css' %}

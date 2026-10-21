@@ -1,0 +1,27 @@
+.sf-icon-color-mode {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  font-size: 16px;
+  color: var(--bs-icon-color);
+  background-color: var(--bs-body-bg);
+  border-radius: 4px;
+  border: 1px solid var(--bs-border-color);
+  cursor: pointer;
+}
+
+.sf-icon-color-mode:hover {
+  background-color: var(--bs-icon-btn-hover-bg-color);
+}
+
+.sf-icon-color-mode--icon {
+  background-color: transparent;
+  border: none;
+  border-radius: 3px;
+}
+
+.sf-icon-color-mode:focus-visible {
+  outline: 2px solid var(--bs-body-color);
+  outline-offset: 2px;
+}

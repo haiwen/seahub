@@ -1,36 +1,55 @@
-import React, { Component } from 'react';
-import { gettext, SF_COLOR_MODE } from '@/utils/constants';
-import { getColorScheme } from '@/utils/utils';
-import OpIcon from '../op-icon';
+import React, { Component, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import OpIcon from '@/components/op-icon';
+import { gettext } from '@/utils/constants';
+import { getEffectiveColorMode, setColorMode, subscribeColorMode } from './theme';
+
+import './index.css';
+
+export { subscribeColorMode } from './theme';
+
+export const useColorMode = (enabled = true) => {
+  const [mode, setMode] = useState(() => enabled ? getEffectiveColorMode() : 'light');
+  useEffect(() => {
+    if (enabled) return subscribeColorMode(setMode);
+  }, [enabled]);
+  return mode;
+};
 
 class ColorMode extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      colorMode: getColorScheme()
+      colorMode: getEffectiveColorMode()
     };
   }
 
   componentDidMount() {
-    const { colorMode } = this.state;
-    document.body.setAttribute('data-bs-theme', colorMode);
+    this.unsubscribe = subscribeColorMode(colorMode => this.setState({ colorMode }));
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
   }
 
   onColorModeChange = () => {
     const colorMode = this.state.colorMode === 'light' ? 'dark' : 'light';
-    this.setState({ colorMode });
-    localStorage.setItem(SF_COLOR_MODE, colorMode);
-    document.body.setAttribute('data-bs-theme', colorMode);
+    setColorMode(colorMode);
   };
 
   render() {
     const { colorMode } = this.state;
     const symbol = colorMode === 'light' ? 'dark-mode' : 'light-mode';
     const title = colorMode === 'light' ? gettext('Dark mode') : gettext('Light mode');
+    const compact = this.props.variant === 'icon';
     return (
-      <OpIcon id="color-mode-icon-btn" symbol={symbol} className="sf-icon-color-mode" tooltip={title} style={{ width: 32, height: 32 }} op={this.onColorModeChange} />
+      <OpIcon id="color-mode-icon-btn" symbol={symbol} className={`sf-icon-color-mode${compact ? ' sf-icon-color-mode--icon' : ''}`} tooltip={title} style={{ width: compact ? 24 : 32, height: compact ? 24 : 32 }} op={this.onColorModeChange} />
     );
   }
 }
+
+ColorMode.propTypes = {
+  variant: PropTypes.oneOf(['default', 'icon']),
+};
 
 export default ColorMode;

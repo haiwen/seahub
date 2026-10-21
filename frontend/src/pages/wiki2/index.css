@@ -1,0 +1,50 @@
+/* Internal Wiki only, including its body-mounted previews and popovers. */
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki2-side-panel {
+  border-right-color: var(--bs-border-color);
+}
+
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-file-preview-panel-wrapper,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .file-preview-zoom-out-container,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .collaborators-popover .popover-header,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .collaborators-popover .rename-container input {
+  background: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  border-color: var(--bs-border-color);
+}
+
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-file-preview-panel-header {
+  border-color: var(--bs-border-color);
+}
+
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-file-preview-panel-header .sdoc-preview-title,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-file-preview-panel-header .title,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-file-preview-panel-body a,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-zoom-out-container a,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .collaborators-popover .collaborator-name,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .collaborators-popover .sdocfont:hover {
+  color: var(--bs-body-color);
+}
+
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-nav-body .seafile-multicolor-icon,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .nav-item-icon .seafile-multicolor-icon,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-nav-group-header,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-nav-item-icon,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-nav .seafile-multicolor-icon-more-level,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-plugin-operation-btn-container svg {
+  color: var(--bs-icon-color);
+}
+
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-plugin-operation-btn-container svg {
+  fill: var(--bs-icon-color);
+}
+
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-nav-body .dropdown-item .seafile-multicolor-icon {
+  fill: var(--bs-icon-color) !important;
+}
+
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .nav-item-icon:hover:not(.nav-item-icon-disable),
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-nav-item-icon:hover,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .collaborators-popover .collaborator-details:hover,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .file-preview-full-screen:hover {
+  background-color: var(--bs-nav-hover-bg);
+}

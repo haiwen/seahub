@@ -2135,8 +2135,12 @@ export const getType = (value) => {
 };
 
 export const getColorScheme = () => {
-  const manualMode = localStorage.getItem('sf_color_mode');
-  if (manualMode) return manualMode;
+  try {
+    const manualMode = localStorage.getItem('sf_color_mode');
+    if (manualMode === 'light' || manualMode === 'dark') return manualMode;
+  } catch (error) {
+    // Fall back to the system preference when storage is unavailable.
+  }
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 };
 

@@ -2,6 +2,22 @@ body {
   overflow: hidden;
 }
 
+body[data-wiki-editor-theme] .wiki2-main-panel-north .sf-icon-color-mode {
+  margin-right: 10px;
+}
+
+body[data-wiki-editor-theme][data-bs-theme="dark"] .wiki2-main-panel .doc-info .tip-message {
+  color: var(--bs-body-secondary-color);
+}
+
+@media (max-width: 767px) {
+  body[data-wiki-editor-theme] .wiki2-main-panel-north .sf-icon-color-mode {
+    min-width: 44px;
+    min-height: 44px;
+    margin-right: 0;
+  }
+}
+
 .wiki2-main-panel {
   flex: calc(100% - 300px);
   display: flex;
@@ -231,27 +247,27 @@ body {
 }
 
 .sdoc-side-menu-popover .sdoc-side-menu.sdoc-dropdown-menu {
-  background-color: var(--bs-body-bg);
+  background-color: var(--sdoc-menu-bg, var(--bs-body-bg));
   color: var(--bs-body-color);
 }
 
 .sdoc-side-menu-popover .sdoc-side-menu.sdoc-dropdown-menu .sdoc-dropdown-menu-item:hover {
-  background-color: var(--bs-nav-active-bg);
+  background-color: var(--sdoc-menu-hover, var(--bs-nav-active-bg));
 }
 
 .sdoc-side-menu-popover .sdoc-side-menu.sdoc-dropdown-menu .sdoc-dropdown-menu-divider {
-  border-color: var(--bs-border-secondary-color);
+  border-color: var(--sdoc-menu-border, var(--bs-border-secondary-color));
 }
 
 .sdoc-dropdown-menu.sdoc-sub-dropdown-menu .popover {
-  background-color: var(--bs-body-bg);
+  background-color: var(--sdoc-menu-bg, var(--bs-body-bg));
 }
 
 .sdoc-dropdown-menu.sdoc-sub-dropdown-menu .sdoc-dropdown-menu-container .sdoc-dropdown-menu-item:hover {
-  background-color: var(--bs-tr-hover-bg);
+  background-color: var(--sdoc-menu-hover, var(--bs-tr-hover-bg));
   color: var(--bs-body-color);
 }
 
 .sdoc-dropdown-menu.sdoc-sub-dropdown-menu .popover .sdoc-selected-table-size-custom:hover {
-  background-color: var(--bs-tr-hover-bg);
+  background-color: var(--sdoc-menu-hover, var(--bs-tr-hover-bg));
 }
