@@ -121,6 +121,7 @@ export default class PageDropdownMenu extends Component {
     const { canDeletePage = true } = this.props;
     const importDocxLabel = gettext('Import page from docx');
     const importMdLabel = gettext('Import page from Markdown');
+    const importSdocLabel = gettext('Import page from sdoczip');
     const menuItems = [
       {
         key: 'copy-link',
@@ -165,6 +166,7 @@ export default class PageDropdownMenu extends Component {
         children: [
           { key: 'import-docx', label: importDocxLabel, onClick: () => this.importPage('.docx') },
           { key: 'import-md', label: importMdLabel, onClick: () => this.importPage('.md') },
+          { key: 'import-sdoc', label: importSdocLabel, onClick: () => this.importPage('.sdoczip') },
         ],
       },
       'Divider',

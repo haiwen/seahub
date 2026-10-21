@@ -37,7 +37,7 @@ from seahub.wiki2.utils import get_wiki_config, WIKI_PAGES_DIR, is_group_wiki, \
     check_wiki_admin_permission, check_wiki_permission, get_all_wiki_ids, get_and_gen_page_nav_by_id, \
     get_current_level_page_ids, save_wiki_config, gen_unique_id, gen_new_page_nav_by_id, pop_nav, \
     delete_page, move_nav, revert_nav, get_sub_ids_by_page_id, get_parent_id_stack, add_convert_wiki_task, \
-    import_confluence_to_wiki, import_wiki_page
+    import_confluence_to_wiki, import_wiki_page, import_sdoc_wiki_page, InvalidSdocImportError, WikiPageNotFoundError
 
 from seahub.utils import is_org_context, get_user_repos, is_pro_version, is_valid_dirent_name, \
     get_no_duplicate_obj_name, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_get_url, get_service_url, normalize_dir_path, normalize_file_path
@@ -1992,6 +1992,42 @@ class ImportConfluenceView(APIView):
         return repo_id
 
 
+class Wiki2ImportSdocPageView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request, wiki_id):
+        from_page_id = request.data.get('from_page_id', None)
+        file = request.FILES.get('file')
+        if not file or os.path.splitext(file.name)[1].lower() != '.sdoczip':
+            return api_error(status.HTTP_400_BAD_REQUEST, 'file invalid.')
+
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Wiki not found.')
+
+        wiki.owner = get_repo_owner(request, wiki_id)
+        username = request.user.username
+        if check_wiki_permission(wiki, username) != PERMISSION_READ_WRITE:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        if check_quota(wiki.repo_id) < 0:
+            return api_error(443, _("Out of quota."))
+
+        try:
+            page_info = import_sdoc_wiki_page(wiki, username, file, from_page_id)
+        except InvalidSdocImportError as e:
+            return api_error(status.HTTP_400_BAD_REQUEST, str(e))
+        except WikiPageNotFoundError as e:
+            return api_error(status.HTTP_404_NOT_FOUND, str(e))
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response(dict(page_info, is_finished=True))
+
+
 class Wiki2ImportPageView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
@@ -2018,7 +2054,7 @@ class Wiki2ImportPageView(APIView):
 
         wiki.owner = get_repo_owner(request, wiki_id)
         username = request.user.username
-        if not check_wiki_admin_permission(wiki, username):
+        if check_wiki_permission(wiki, username) != PERMISSION_READ_WRITE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
