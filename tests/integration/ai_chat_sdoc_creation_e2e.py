@@ -144,6 +144,12 @@ def main():
         artifact = next((item for item in artifacts if item.get('type') == 'sdoc' and item.get('status') == 'created'), None)
         if not artifact:
             raise E2EError('Chat did not return a created SDoc artifact: %s' % json.dumps(result, ensure_ascii=False))
+        relative_path = artifact.get('relative_path')
+        if not relative_path or '/' in relative_path or '\\' in relative_path:
+            raise E2EError('Chat did not return a path relative to AI Generated.')
+        if 'elements' in artifact or 'content' in artifact:
+            raise E2EError('Chat returned document content instead of a file reference.')
+        artifact['path'] = '/AI Generated/' + relative_path
 
         history = request_json('GET', seahub_url + '/api/v2.1/ai/chat/sessions/%s/messages/' % session_uuid, seahub_token)
         persisted = [item for message in history.get('messages', []) for item in message.get('artifacts', []) if item.get('doc_uuid') == artifact['doc_uuid']]

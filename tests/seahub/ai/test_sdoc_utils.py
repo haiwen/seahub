@@ -1,3 +1,5 @@
+import json
+import os
 from unittest.mock import patch
 
 from django.test import RequestFactory, SimpleTestCase
@@ -105,40 +107,64 @@ class SdocServiceTest(SimpleTestCase):
     @patch('seahub.ai.sdoc.service.seafile_api.get_dir_id_by_path', return_value='dir-id')
     def test_creates_in_default_directory_with_renamed_file(self, mock_get_dir, mock_permission,
                                                             mock_rename, mock_post, mock_repo, mock_uuid):
+        temp_paths = []
+
+        def inspect_upload(repo_id, temp_path, directory, filename, username):
+            temp_paths.append(temp_path)
+            with open(temp_path, encoding='utf-8') as file_obj:
+                content = json.load(file_obj)
+            self.assertEqual(validate_sdoc(content)['format_version'], 4)
+            self.assertEqual(directory, '/AI Generated/')
+            self.assertEqual(filename, 'Plan (1).sdoc')
+
+        mock_post.side_effect = inspect_upload
         result = create_sdoc(complex_request(), '12345678-1234-1234-1234-123456789abc', self.request, 'user@example.com')
 
         self.assertEqual(result['status'], 'created')
         self.assertEqual(result['schema_version'], 1)
         self.assertEqual(result['name'], 'Plan (1).sdoc')
         self.assertEqual(result['path'], '/AI Generated/Plan (1).sdoc')
+        self.assertEqual(result['relative_path'], 'Plan (1).sdoc')
         mock_rename.assert_called_once_with('12345678-1234-1234-1234-123456789abc', '/AI Generated/', 'Plan.sdoc')
+        mock_post.assert_called_once()
+        self.assertFalse(os.path.exists(temp_paths[0]))
+
+    @patch('seahub.ai.sdoc.service.ENABLE_SEADOC', True)
+    @patch('seahub.ai.sdoc.service.seafile_api.post_file')
+    @patch('seahub.ai.sdoc.service.check_folder_permission', return_value='r')
+    @patch('seahub.ai.sdoc.service.seafile_api.get_dir_id_by_path', return_value='dir-id')
+    def test_read_only_directory_does_not_create_file(self, mock_get_dir, mock_permission, mock_post):
+        result = create_sdoc(complex_request(), 'repo-id', self.request, 'user@example.com')
+        self.assertEqual(result['error_code'], 'default_directory_unavailable')
+        mock_post.assert_not_called()
 
     @patch('seahub.ai.sdoc.service.ENABLE_SEADOC', True)
     @patch('seahub.ai.sdoc.service.seafile_api.get_dir_id_by_path', return_value=None)
-    def test_explicit_missing_directory_fails_without_fallback(self, mock_get_dir):
+    def test_custom_directory_is_rejected(self, mock_get_dir):
         request_data = complex_request()
         request_data['requested_directory'] = '/missing'
         result = create_sdoc(request_data, 'repo-id', self.request, 'user@example.com')
 
         self.assertEqual(result['status'], 'failed')
-        self.assertEqual(result['error_code'], 'directory_not_found')
+        self.assertEqual(result['error_code'], 'invalid_artifact')
+        mock_get_dir.assert_not_called()
 
 
 class SdocArtifactTest(SimpleTestCase):
-    @patch('seahub.ai.utils.create_sdoc', return_value={'type': 'sdoc', 'status': 'created'})
-    def test_creates_only_one_sdoc_per_ai_result(self, mock_create_sdoc):
-        artifacts = [complex_request(), complex_request()]
+    @patch('seahub.ai.sdoc.service.seafile_api.post_file')
+    def test_final_result_only_contains_file_reference_without_writing(self, mock_post):
+        artifact = {
+            'type': 'sdoc', 'status': 'created', 'relative_path': 'Plan.sdoc',
+            'elements': [{'text': 'must not reach the browser'}],
+        }
+        result = process_sdoc_artifacts({'artifacts': [artifact]})
+        self.assertEqual(result['artifacts'], [{
+            'type': 'sdoc', 'status': 'created', 'relative_path': 'Plan.sdoc',
+        }])
+        mock_post.assert_not_called()
 
-        result = process_sdoc_artifacts(
-            {'artifacts': artifacts},
-            'repo-id',
-            RequestFactory().get('/'),
-            'session-uuid',
-            'message-id',
-            'user@example.com',
-        )
-
-        self.assertEqual(mock_create_sdoc.call_count, 1)
-        self.assertEqual(result['artifacts'][0]['status'], 'created')
-        self.assertEqual(result['artifacts'][1]['status'], 'failed')
-        self.assertEqual(result['artifacts'][1]['error_code'], 'invalid_artifact')
+    @patch('seahub.ai.sdoc.service.seafile_api.post_file')
+    def test_final_result_does_not_execute_legacy_creation_requests(self, mock_post):
+        result = process_sdoc_artifacts({'artifacts': [complex_request()]})
+        self.assertEqual(result['artifacts'], [])
+        mock_post.assert_not_called()
