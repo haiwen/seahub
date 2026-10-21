@@ -8,6 +8,7 @@ import HistoryListView from './history-list-view/history-list-view';
 
 const propTypes = {
   onItemClick: PropTypes.func.isRequired,
+  onHistoryEmpty: PropTypes.func.isRequired,
 };
 
 class SidePanel extends React.Component {
@@ -27,11 +28,6 @@ class SidePanel extends React.Component {
 
   componentDidMount() {
     seafileAPI.listFileHistoryRecords(historyRepoID, filePath, 1, PER_PAGE).then(res => {
-      let historyList = res.data;
-      if (historyList.length === 0) {
-        this.setState({ isLoading: false });
-        throw Error('there has an error in server');
-      }
       this.initResultState(res.data);
     });
   }
@@ -43,6 +39,11 @@ class SidePanel extends React.Component {
   }
 
   initResultState(result) {
+    if (result.data.length === 0) {
+      this.setState({ historyInfo: '', isLoading: false, hasMore: false });
+      this.props.onHistoryEmpty();
+      return;
+    }
     if (result.data.length) {
       this.setState({
         historyInfo: result.data,
@@ -105,6 +106,11 @@ class SidePanel extends React.Component {
           <div className="history-side-panel-title">{gettext('History Versions')}</div>
           <div className="history-body">
             {this.state.isLoading && <Loading />}
+            {!this.state.isLoading && !this.state.historyInfo && (
+              <div className="text-center empty-tip-color p-4">
+                {gettext('No version history')}
+              </div>
+            )}
             {this.state.historyInfo &&
               <HistoryListView
                 hasMore={this.state.hasMore}
