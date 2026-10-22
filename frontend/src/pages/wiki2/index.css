@@ -18,11 +18,26 @@ body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-file-preview-pan
 
 body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-file-preview-panel-header .sdoc-preview-title,
 body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-file-preview-panel-header .title,
-body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-file-preview-panel-body a,
-body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-zoom-out-container a,
 body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .collaborators-popover .collaborator-name,
 body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .collaborators-popover .sdocfont:hover {
   color: var(--bs-body-color);
+}
+
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-file-preview-panel-body a,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-zoom-out-container a,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .sdoc-editor__article .virtual-link,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .sdoc-editor__article .virtual-link a,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .sdoc-file-link-render .sdoc-file-text-link a,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .sdoc-file-render .sdoc-file-text-link a {
+  color: var(--bs-link-color, #ff8000);
+  text-decoration-color: currentColor;
+}
+
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .sdoc-editor__article .virtual-link:hover,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .sdoc-editor__article .virtual-link a:hover,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .sdoc-file-link-render .sdoc-file-text-link a:hover,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .sdoc-file-render .sdoc-file-text-link a:hover {
+  color: var(--bs-link-hover-color, #c60);
 }
 
 body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-nav-body .seafile-multicolor-icon,
