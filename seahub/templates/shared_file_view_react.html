@@ -1,6 +1,7 @@
 {% extends "base_for_react.html" %}
 {% load seahub_tags i18n %}
 {% load render_bundle from webpack_loader %}
+{% block body_color_mode %}{% if filetype == 'SDoc' %}light{% elif request.session.dark_mode %}dark{% else %}light{% endif %}{% endblock %}
 
 {% block sub_title %}{{file_name}} - {% endblock %}
 

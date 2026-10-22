@@ -36,7 +36,11 @@ export const subscribeColorMode = (listener) => {
   if (users++ === 0) {
     manualMode = readManualMode();
     query = window.matchMedia('(prefers-color-scheme: dark)');
-    query.addEventListener('change', onSystemChange);
+    if (query.addEventListener) {
+      query.addEventListener('change', onSystemChange);
+    } else {
+      query.addListener(onSystemChange);
+    }
     window.addEventListener('storage', onStorage);
   }
   listeners.add(listener);
@@ -44,7 +48,11 @@ export const subscribeColorMode = (listener) => {
   return () => {
     listeners.delete(listener);
     if (--users === 0) {
-      query.removeEventListener('change', onSystemChange);
+      if (query.removeEventListener) {
+        query.removeEventListener('change', onSystemChange);
+      } else {
+        query.removeListener(onSystemChange);
+      }
       window.removeEventListener('storage', onStorage);
     }
   };
