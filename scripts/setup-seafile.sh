@@ -184,7 +184,7 @@ function get_server_name () {
         echo
         echo "server name cannot be empty"
         get_server_name
-    elif [[ ! ${server_name} =~ ^[a-zA-Z0-9_-]{3,14}$ ]]; then
+    elif [[ ! ${server_name} =~ ^[a-zA-Z0-9_-]{3,15}$ ]]; then
         printf "\n\033[33m${server_name}\033[m is not a valid name.\n"
         get_server_name;
     fi
@@ -392,7 +392,7 @@ function validate_params() {
     if [[ "$server_name" == "" ]]; then
         server_name=${SERVER_NAME:-`hostname -s`}
     fi
-    if [[ ! ${server_name} =~ ^[a-zA-Z0-9_-]{3,14}$ ]]; then
+    if [[ ! ${server_name} =~ ^[a-zA-Z0-9_-]{3,15}$ ]]; then
         echo "Invalid server name param"
         err_and_quit;
     fi
