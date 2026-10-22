@@ -20,9 +20,9 @@
   justify-content: center;
   font-weight: 600;
   font-size: 16px;
-  border-bottom: 1px solid #ededed;
-  color: #212529;
-  background: #fff;
+  border-bottom: 1px solid var(--bs-border-color, #ededed);
+  color: var(--bs-body-color, #212529);
+  background: var(--bs-body-bg, #fff);
 }
 
 .collaborators-popover .popover-container .content-list {
@@ -45,7 +45,7 @@
 }
 
 .content-list .collaborator-details:hover {
-  background-color: #f8f8f8;
+  background-color: var(--bs-dropdown-link-hover-bg, #f8f8f8);
 }
 
 .content-list .collaborator-details .collaborator-tag {
@@ -71,7 +71,7 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: #212529;
+  color: var(--bs-body-color, #212529);
 }
 
 .content-list .collaborator-details .sdocfont {
@@ -82,7 +82,7 @@
 }
 
 .content-list .collaborator-details .sdocfont:hover {
-  color: #333;
+  color: var(--bs-body-color, #333);
   cursor: pointer;
 }
 
@@ -97,12 +97,14 @@
   border-radius: 2px;
   word-wrap: break-word;
   vertical-align: middle;
-  border: 1px solid #ccc;
+  color: var(--bs-body-color, #212529);
+  background-color: var(--bs-body-bg, #fff);
+  border: 1px solid var(--bs-border-color, #ccc);
 }
 
 
 .content-list .collaborator-details .rename-container input:focus {
-  background-color: #fff;
+  background-color: var(--bs-body-bg, #fff);
   border-color: #1991eb;
   outline: 0;
   box-shadow: 0 0 0 2px rgba(70, 127, 207, 0.25);

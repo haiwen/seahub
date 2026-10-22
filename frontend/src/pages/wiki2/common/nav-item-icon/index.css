@@ -10,15 +10,15 @@
 }
 
 .nav-item-icon .seafile-multicolor-icon {
-  color: #666666;
+  color: var(--bs-icon-color, #666666);
   height: 16px;
   width: 16px;
 }
 
 .nav-item-icon:hover:not(.nav-item-icon-disable) {
-  background-color: #DFDFDD;
+  background-color: var(--bs-icon-btn-hover-bg-color, #DFDFDD);
 }
 
 .wiki-nav-body .dropdown-item .seafile-multicolor-icon {
-  fill: #666666 !important;
+  fill: var(--bs-icon-color, #666666) !important;
 }

@@ -42,7 +42,7 @@
 }
 
 .repo-list-popover__list .repo-list-item:hover {
-  background-color: #f5f5f5;
+  background-color: var(--bs-dropdown-link-hover-bg, #f5f5f5);
   cursor: pointer;
 }
 

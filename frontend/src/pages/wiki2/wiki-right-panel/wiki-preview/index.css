@@ -7,7 +7,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: #fff;
+  background: var(--bs-body-bg, #fff);
 }
 
 .wiki-file-preview-drawer .wiki-file-preview-panel-header {
@@ -16,7 +16,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #EAECEF;
+  border-bottom: 1px solid var(--bs-border-color, #EAECEF);
 }
 
 .wiki-file-preview-drawer .wiki-file-preview-panel-header .wiki-file-preview-panel-header-left {
@@ -36,16 +36,16 @@
 
 .wiki-file-preview-drawer .wiki-file-preview-panel-header-right .file-preview-full-screen:hover {
   border-radius: 3px;
-  background-color: #EFEFEF;
+  background-color: var(--bs-nav-hover-bg, #EFEFEF);
 }
 
 .wiki-file-preview-drawer .wiki-file-preview-panel-header-right .file-preview-full-screen .icon-font {
-  color: #999;
+  color: var(--bs-icon-color, #999);
   font-size: 14px;
 }
 
 .wiki-file-preview-drawer .wiki-file-preview-panel-header .wiki-file-preview-panel-header-left .sdoc-preview-title {
-  color: #212529;
+  color: var(--bs-body-color, #212529);
   font-size: 16px;
   font-weight: 500;
   max-width: 360px;
@@ -80,7 +80,7 @@
 }
 
 .wiki-file-preview-drawer .wiki-file-preview-panel-header .wiki-file-preview-panel-header-left .title {
-  color: #212529;
+  color: var(--bs-body-color, #212529);
   font-size: 16px;
   font-weight: 500;
 }
@@ -118,11 +118,11 @@
 
 .wiki-zoom-out-container a,
 .wiki-file-preview-panel-body a {
-  color: #212529;
+  color: var(--bs-body-color, #212529);
   font-weight: 500;
   text-decoration: underline;
   text-underline-position: under;
-  text-decoration-color: rgb(55 53 47 / 25%);
+  text-decoration-color: var(--bs-border-color, rgb(55 53 47 / 25%));
 }
 
 .wiki-zoom-out-container .wiki-page-cover,
@@ -184,7 +184,7 @@
 
 .wiki-zoom-out-container .file-preview-zoom-out-container {
   pointer-events: auto;
-  background: #fff;
+  background: var(--bs-body-bg, #fff);
   border-radius: 12px;
   width: 80%;
   max-height: 80%;
