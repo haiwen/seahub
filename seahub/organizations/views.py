@@ -216,6 +216,7 @@ def org_register(request):
     - `request`:
     """
     login_bg_image_path = get_login_bg_image_path()
+    response_status = 200
 
     if request.method == 'POST':
         form = OrgRegistrationForm(request.POST)
@@ -261,47 +262,46 @@ def org_register(request):
                                                                                 password, site,
                                                                                 send_email=config.REGISTRATION_SEND_MAIL)
             except DuplicatedContactEmailError:
-                err_msg = _("A user with this email already exists.")
-                return HttpResponse(json.dumps({'error': str(err_msg)}),
-                                    status=400, content_type='application/json; charset=utf-8')
-
-            create_org(org_name, url_prefix, new_user.username)
-            new_org = get_org_by_url_prefix(url_prefix)
-            try:
-                org_operation_signal.send(sender=None, org=new_org, operation='create')
-            except Exception as e:
-                logger.error(e)
-
-            if name:
-                Profile.objects.add_or_update(new_user.username, name)
-
-            if settings.ENABLE_RISK_CONTROL:
-                try:
-                    from seahub.api2.utils import get_client_ip
-                    from django.utils import timezone
-                    ip = get_client_ip(request)
-                    message = {
-                        'register_ip': ip,
-                        'register_time': str(timezone.now().isoformat()),
-                        'account_type': 'org',
-                        'account_id': new_org.org_id,
-                        'account_name': org_name,
-                    }
-                    payload = {'exp': int(time.time()) + 300, }
-                    token = jwt.encode(payload, settings.JWT_PRIVATE_KEY, algorithm='HS256')
-                    headers = {"Authorization": "Token %s" % token}
-                    url = settings.RISK_CONTROL_SERVER_URL.rstrip('/') + '/api/seafile/account-risk-control/'
-                    resp = requests.post(
-                        url, json=message, headers=headers, timeout=10)
-                except Exception as e:
-                    logger.error('Risk control account registration error, %s, %s, %s', new_org.org_id, org_name, e)
-
-            if new_user.is_active:
-                new_user.backend = settings.AUTHENTICATION_BACKENDS[0]
-                login(request, new_user)
-                return HttpResponseRedirect(reverse('libraries'))
+                form.add_error('email', _("A user with this email already exists."))
+                response_status = 400
             else:
-                return HttpResponseRedirect(reverse('registration_complete'))
+                create_org(org_name, url_prefix, new_user.username)
+                new_org = get_org_by_url_prefix(url_prefix)
+                try:
+                    org_operation_signal.send(sender=None, org=new_org, operation='create')
+                except Exception as e:
+                    logger.error(e)
+
+                if name:
+                    Profile.objects.add_or_update(new_user.username, name)
+
+                if settings.ENABLE_RISK_CONTROL:
+                    try:
+                        from seahub.api2.utils import get_client_ip
+                        from django.utils import timezone
+                        ip = get_client_ip(request)
+                        message = {
+                            'register_ip': ip,
+                            'register_time': str(timezone.now().isoformat()),
+                            'account_type': 'org',
+                            'account_id': new_org.org_id,
+                            'account_name': org_name,
+                        }
+                        payload = {'exp': int(time.time()) + 300, }
+                        token = jwt.encode(payload, settings.JWT_PRIVATE_KEY, algorithm='HS256')
+                        headers = {"Authorization": "Token %s" % token}
+                        url = settings.RISK_CONTROL_SERVER_URL.rstrip('/') + '/api/seafile/account-risk-control/'
+                        resp = requests.post(
+                            url, json=message, headers=headers, timeout=10)
+                    except Exception as e:
+                        logger.error('Risk control account registration error, %s, %s, %s', new_org.org_id, org_name, e)
+
+                if new_user.is_active:
+                    new_user.backend = settings.AUTHENTICATION_BACKENDS[0]
+                    login(request, new_user)
+                    return HttpResponseRedirect(reverse('libraries'))
+                else:
+                    return HttpResponseRedirect(reverse('registration_complete'))
 
     else:
         form = OrgRegistrationForm()
@@ -324,7 +324,7 @@ def org_register(request):
     if enable_turnstile:
         context['turnstile_site_key'] = getattr(settings, 'TURNSTILE_SITE_KEY', '')
 
-    return render(request, 'organizations/org_register.html', context)
+    return render(request, 'organizations/org_register.html', context, status=response_status)
 
 
 @login_required
