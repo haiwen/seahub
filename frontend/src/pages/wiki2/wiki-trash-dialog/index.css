@@ -7,10 +7,6 @@
   display: flex;
 }
 
-body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .trash-dialog {
-  --bs-modal-header-border-color: var(--bs-border-color);
-}
-
 body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .trash-dialog .paginator .paginator-dropdown .btn:active,
 body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .trash-dialog .paginator .paginator-dropdown .btn:focus {
   background-color: var(--bs-modal-bg);

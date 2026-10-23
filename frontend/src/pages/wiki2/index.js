@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import throttle from 'lodash.throttle';
 import SDocServerApi from '@/api/sdoc-server-api';
 import wikiAPI from '@/api/wiki-api';
+import { subscribeColorMode } from '@/components/color-mode';
 import ResizeBar from '@/components/resize-bar';
 import {
   DRAG_HANDLER_HEIGHT, INIT_SIDE_PANEL_RATE, MAX_SIDE_PANEL_RATE_IN_WIKI, MIN_SIDE_PANEL_RATE
@@ -64,6 +65,10 @@ class Wiki extends Component {
     this.unsubscribeOpenWikiPageLink = eventBus.subscribe('open_wiki_page_id_link', ({ page_id }) => {
       this.setCurrentPage(page_id);
     });
+    // Keep system preference and cross-tab changes in sync even before the header renders.
+    if (document.body.hasAttribute('data-wiki-editor-theme')) {
+      this.unsubscribeColorMode = subscribeColorMode(() => {});
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -77,6 +82,7 @@ class Wiki extends Component {
   componentWillUnmount() {
     window.removeEventListener('popstate', this.onPopState);
     this.unsubscribeOpenWikiPageLink && this.unsubscribeOpenWikiPageLink();
+    this.unsubscribeColorMode && this.unsubscribeColorMode();
   }
 
   onPopstate = (e) => {

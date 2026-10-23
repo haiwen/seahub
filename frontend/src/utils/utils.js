@@ -5,7 +5,7 @@ import { compareTwoString } from './compare-two-string';
 import { mediaUrl, gettext, serviceURL, siteRoot, isPro, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableSeadoc, enableRepoSnapshotLabel,
   enableResetEncryptedRepoPassword, isEmailConfigured, isSystemStaff,
   enableOnlyoffice, onlyofficeEditFileExtension,
-  enableOfficeWebApp, officeWebAppEditFileExtension, enableMultipleOfficeSuite, officeSuiteEditFileExtension } from './constants';
+  enableOfficeWebApp, officeWebAppEditFileExtension, enableMultipleOfficeSuite, officeSuiteEditFileExtension, SF_COLOR_MODE } from './constants';
 import PermissionDeniedTip from './permission-denied-tip';
 import TextTranslation from './text-translation';
 
@@ -2136,7 +2136,7 @@ export const getType = (value) => {
 
 export const getColorScheme = () => {
   try {
-    const manualMode = localStorage.getItem('sf_color_mode');
+    const manualMode = localStorage.getItem(SF_COLOR_MODE);
     if (manualMode === 'light' || manualMode === 'dark') return manualMode;
   } catch (error) {
     // Fall back to the system preference when storage is unavailable.

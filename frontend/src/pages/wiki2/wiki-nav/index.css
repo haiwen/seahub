@@ -96,8 +96,12 @@
 }
 
 .wiki-nav .wiki-page-item-main .wiki-nav-item-icon:hover {
-  background-color: var(--bs-icon-btn-hover-bg-color, #e5e5e5);
+  background-color: #e5e5e5;
   cursor: pointer;
+}
+
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-nav .wiki-page-item-main .wiki-nav-item-icon:hover {
+  background-color: var(--bs-icon-btn-hover-bg-color);
 }
 
 .wiki-nav .wiki-page-item-main:has(.wiki-nav-item-icon) .nav-item-icon {
@@ -129,7 +133,11 @@
 }
 
 .wiki-nav-footer:hover {
-  background-color: var(--bs-wiki-nav-hover-bg, #EFEFED);
+  background-color: #EFEFED;
+}
+
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-nav-footer:hover {
+  background-color: var(--bs-wiki-nav-hover-bg);
 }
 
 .wiki-nav-footer.return-to-app {
@@ -192,7 +200,11 @@
 }
 
 .wiki-nav .wiki-page-item-wrapper.wiki-page-wrapper-highlight {
-  background-color: var(--bs-nav-active-bg, rgb(200, 220, 240));
+  background-color: rgb(200, 220, 240);
+}
+
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-nav .wiki-page-item-wrapper.wiki-page-wrapper-highlight {
+  background-color: var(--bs-tr-active-bg);
 }
 
 .wiki-nav .wiki-page-item-wrapper.wiki-page-wrapper-highlight .wiki-page-item.selected-page {
@@ -328,8 +340,13 @@
   position: absolute;
   left: var(--drop-indicator-left, 0px);
   right: 8px;
-  background-color: var(--bs-nav-active-bg, rgb(200, 220, 240));
+  background-color: rgb(200, 220, 240);
   z-index: 1;
+}
+
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-nav .wiki-page-item.page-can-drop-bottom::after,
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-nav .wiki-page-item.page-can-drop-top::after {
+  background-color: var(--bs-wiki-nav-active-bg);
 }
 
 .wiki-nav .wiki-page-item.page-can-drop-bottom::after {

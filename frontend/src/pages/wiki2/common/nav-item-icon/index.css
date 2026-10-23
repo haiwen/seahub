@@ -16,7 +16,11 @@
 }
 
 .nav-item-icon:hover:not(.nav-item-icon-disable) {
-  background-color: var(--bs-icon-btn-hover-bg-color, #DFDFDD);
+  background-color: #DFDFDD;
+}
+
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .nav-item-icon:hover:not(.nav-item-icon-disable) {
+  background-color: var(--bs-icon-btn-hover-bg-color);
 }
 
 .wiki-nav-body .dropdown-item .seafile-multicolor-icon {

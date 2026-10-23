@@ -1,3 +1,4 @@
+import { SF_COLOR_MODE } from '@/utils/constants';
 import { getColorScheme } from '@/utils/utils';
 
 const listeners = new Set();
@@ -7,7 +8,7 @@ let manualMode;
 
 const readManualMode = () => {
   try {
-    const value = localStorage.getItem('sf_color_mode');
+    const value = localStorage.getItem(SF_COLOR_MODE);
     return value === 'light' || value === 'dark' ? value : null;
   } catch (error) {
     return null;
@@ -27,7 +28,7 @@ const onSystemChange = () => {
 };
 
 const onStorage = (event) => {
-  if (event.storageArea !== localStorage || (event.key !== null && event.key !== 'sf_color_mode')) return;
+  if (event.storageArea !== localStorage || (event.key !== null && event.key !== SF_COLOR_MODE)) return;
   manualMode = readManualMode();
   applyColorMode();
 };
@@ -62,7 +63,7 @@ export const setColorMode = (mode) => {
   if (mode !== 'light' && mode !== 'dark') return;
   manualMode = mode;
   try {
-    localStorage.setItem('sf_color_mode', mode);
+    localStorage.setItem(SF_COLOR_MODE, mode);
   } catch (error) {
     // Keep the selection for this page when browser storage is unavailable.
   }

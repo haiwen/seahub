@@ -1,6 +1,7 @@
 /* Internal Wiki only, including its body-mounted previews and popovers. */
-body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki2-side-panel {
-  border-right-color: var(--bs-border-color);
+/* Scoped here so modal headers in the Seahub main interface keep their colors. */
+body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .modal {
+  --bs-modal-header-border-color: var(--bs-border-secondary-color);
 }
 
 body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-file-preview-panel-wrapper,
@@ -12,32 +13,11 @@ body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .collaborators-popover
   border-color: var(--bs-border-color);
 }
 
-body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-file-preview-panel-header {
-  border-color: var(--bs-border-color);
-}
-
 body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-file-preview-panel-header .sdoc-preview-title,
 body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-file-preview-panel-header .title,
 body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .collaborators-popover .collaborator-name,
 body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .collaborators-popover .sdocfont:hover {
   color: var(--bs-body-color);
-}
-
-body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-file-preview-panel-body a,
-body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-zoom-out-container a,
-body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .sdoc-editor__article .virtual-link,
-body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .sdoc-editor__article .virtual-link a,
-body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .sdoc-file-link-render .sdoc-file-text-link a,
-body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .sdoc-file-render .sdoc-file-text-link a {
-  color: var(--bs-link-color, #ff8000);
-  text-decoration-color: currentColor;
-}
-
-body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .sdoc-editor__article .virtual-link:hover,
-body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .sdoc-editor__article .virtual-link a:hover,
-body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .sdoc-file-link-render .sdoc-file-text-link a:hover,
-body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .sdoc-file-render .sdoc-file-text-link a:hover {
-  color: var(--bs-link-hover-color, #c60);
 }
 
 body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-nav-body .seafile-multicolor-icon,
@@ -55,11 +35,4 @@ body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-plugin-operation
 
 body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-nav-body .dropdown-item .seafile-multicolor-icon {
   fill: var(--bs-icon-color) !important;
-}
-
-body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .nav-item-icon:hover:not(.nav-item-icon-disable),
-body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .wiki-nav-item-icon:hover,
-body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .collaborators-popover .collaborator-details:hover,
-body[data-wiki-editor-theme="true"][data-bs-theme="dark"] .file-preview-full-screen:hover {
-  background-color: var(--bs-nav-hover-bg);
 }
