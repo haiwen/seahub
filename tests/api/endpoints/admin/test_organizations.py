@@ -174,3 +174,21 @@ class AdminOrganizationTest(BaseTestCase):
         self.assertEqual(
             OrgSettings.objects.get_monthly_download_traffic_limit_by_org(self.org), 0)
         mock_set_download_rate_limit.assert_called_once_with(self.org.org_id, -1)
+
+    def test_can_update_force_2fa(self):
+        with patch('seahub.utils.two_factor_auth.config') as mock_config:
+            mock_config.ENABLE_TWO_FACTOR_AUTH = True
+
+            resp = self.client.put(self.url, 'force_2fa=1',
+                                   'application/x-www-form-urlencoded')
+            self.assertEqual(200, resp.status_code)
+
+            json_resp = json.loads(resp.content)
+            assert json_resp['force_2fa'] is True
+            assert OrgSettings.objects.is_force_2fa_by_org_id(self.org.org_id) is True
+
+    def test_update_force_2fa_with_invalid_value(self):
+        resp = self.client.put(self.url, 'force_2fa=abc',
+                               'application/x-www-form-urlencoded')
+        self.assertEqual(400, resp.status_code)
+        assert OrgSettings.objects.is_force_2fa_by_org_id(self.org.org_id) is False

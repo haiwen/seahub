@@ -44,6 +44,9 @@ from seahub.organizations.settings import ORG_ENABLE_ADMIN_INVITE_USER
 from seahub.organizations.views import get_org_user_self_usage, \
         get_org_user_quota, is_org_staff, org_user_exists, \
         unset_org_user, set_org_user, set_org_staff, unset_org_staff
+from seahub.options.models import UserOptions
+from seahub.two_factor.models import default_device
+from seahub.utils.two_factor_auth import has_two_factor_auth
 
 
 logger = logging.getLogger(__name__)
@@ -327,7 +330,7 @@ class OrgAdminUser(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            User.objects.get(email=email)
+            user = User.objects.get(email=email)
         except User.DoesNotExist:
             err_msg = 'User %s not found.' % email
             return api_error(status.HTTP_404_NOT_FOUND, err_msg)
@@ -341,6 +344,10 @@ class OrgAdminUser(APIView):
         user_info = get_user_info(email, org_id)
         avatar_url, is_default, date_uploaded = api_avatar_url(email)
         user_info['avatar_url'] = avatar_url
+
+        if has_two_factor_auth():
+            user_info['has_default_device'] = default_device(user) is not None
+            user_info['is_force_2fa'] = UserOptions.objects.is_force_2fa(email)
 
         return Response(user_info)
 

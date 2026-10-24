@@ -185,6 +185,7 @@ export const orgEnableAdminInviteUser = window.org ? window.org.pageOptions.orgE
 export const orgEnableAdminDeleteOrg = window.org ? window.org.pageOptions.orgEnableAdminDeleteOrg === 'True' : false;
 export const enableMultiADFS = window.org ? window.org.pageOptions.enableMultiADFS === 'True' : false;
 export const enableSSO = window.org ? window.org.pageOptions.enableSSO === 'True' : false;
+export const orgTwoFactorAuthEnabled = window.org ? window.org.pageOptions.twoFactorAuthEnabled : false;
 export const enableSubscription = window.org ? window.org.pageOptions.enableSubscription : false;
 export const enableExternalBillingService = window.org ? window.org.pageOptions.enableExternalBillingService : false;
 
@@ -193,6 +194,7 @@ export const constanceEnabled = window.sysadmin ? window.sysadmin.pageOptions.co
 export const multiTenancy = window.sysadmin ? window.sysadmin.pageOptions.multi_tenancy : '';
 export const multiInstitution = window.sysadmin ? window.sysadmin.pageOptions.multi_institution : '';
 export const sysadminExtraEnabled = window.sysadmin ? window.sysadmin.pageOptions.sysadmin_extra_enabled : '';
+export const sysadminTwoFactorAuthEnabled = window.sysadmin ? window.sysadmin.pageOptions.twoFactorAuthEnabled : false;
 export const enableGuestInvitation = window.sysadmin ? window.sysadmin.pageOptions.enable_guest_invitation : '';
 export const enableTermsAndConditions = window.sysadmin ? window.sysadmin.pageOptions.enable_terms_and_conditions : '';
 export const isDefaultAdmin = window.sysadmin ? window.sysadmin.pageOptions.is_default_admin : '';

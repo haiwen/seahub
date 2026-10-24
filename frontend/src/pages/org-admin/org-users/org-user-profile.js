@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { Button, FormGroup, Input, Label } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { orgAdminAPI } from '@/api/org-admin-api';
 import MainPanelTopbar from '@/components/admin/layout/main-panel-topbar';
@@ -7,11 +8,12 @@ import SetOrgUserName from '@/components/dialog/set-org-user-name';
 import SetOrgUserQuota from '@/components/dialog/set-org-user-quota';
 import EditIcon from '@/components/edit-icon';
 import Loading from '@/components/loading';
+import toaster from '@/components/toast';
 import { gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import OrgAdminUserNav from './org-admin-user-nav';
 
-const { orgID, orgName } = window.org.pageOptions;
+const { orgID, orgName, twoFactorAuthEnabled } = window.org.pageOptions;
 
 class OrgUserProfile extends Component {
 
@@ -55,6 +57,31 @@ class OrgUserProfile extends Component {
     });
   };
 
+  disable2FA = () => {
+    const email = decodeURIComponent(this.props.email);
+    orgAdminAPI.orgAdminDeleteTwoFactorAuth(orgID, email).then(res => {
+      this.setState({
+        has_default_device: false
+      });
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
+  toggleForce2fa = (e) => {
+    const email = decodeURIComponent(this.props.email);
+    const checked = e.target.checked;
+    orgAdminAPI.orgAdminSetForceTwoFactorAuth(orgID, email, checked).then(res => {
+      this.setState({
+        is_force_2fa: checked
+      });
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
   render() {
     return (
       <Fragment>
@@ -68,6 +95,8 @@ class OrgUserProfile extends Component {
                 updateName={this.updateName}
                 updateContactEmail={this.updateContactEmail}
                 updateQuota={this.updateQuota}
+                disable2FA={this.disable2FA}
+                toggleForce2fa={this.toggleForce2fa}
               />
             </div>
           </div>
@@ -110,7 +139,8 @@ class Content extends Component {
     const {
       loading, errorMsg,
       avatar_url, email, contact_email,
-      name, quota_total, quota_usage
+      name, quota_total, quota_usage,
+      has_default_device, is_force_2fa
     } = this.props.data;
     const { isSetNameDialogOpen, isSetContactEmailDialogOpen, isSetQuotaDialogOpen } = this.state;
 
@@ -152,6 +182,29 @@ class Content extends Component {
             {`${Utils.bytesToSize(quota_usage)}${quota_total > 0 ? ' / ' + Utils.bytesToSize(quota_total) : ''}`}
             <EditIcon onClick={this.toggleSetQuotaDialog} />
           </dd>
+
+          {twoFactorAuthEnabled &&
+            <Fragment>
+              <dt>{gettext('Two-Factor Authentication')}</dt>
+              <dd>
+                {has_default_device ?
+                  <Fragment>
+                    <p className="mb-1">{gettext('Status: enabled')}</p>
+                    <Button color="secondary" onClick={this.props.disable2FA}>
+                      {gettext('Disable Two-Factor Authentication')}
+                    </Button>
+                  </Fragment> :
+                  <p className="mb-1">{gettext('Status: disabled')}</p>
+                }
+                <FormGroup check>
+                  <Label check>
+                    <Input type="checkbox" checked={is_force_2fa} onChange={this.props.toggleForce2fa} />
+                    <span>{gettext('Force Two-Factor Authentication')}</span>
+                  </Label>
+                </FormGroup>
+              </dd>
+            </Fragment>
+          }
         </dl>
         {isSetNameDialogOpen &&
         <SetOrgUserName
@@ -190,6 +243,8 @@ Content.propTypes = {
   updateName: PropTypes.func.isRequired,
   updateContactEmail: PropTypes.func.isRequired,
   updateQuota: PropTypes.func.isRequired,
+  disable2FA: PropTypes.func.isRequired,
+  toggleForce2fa: PropTypes.func.isRequired,
 };
 
 OrgUserProfile.propTypes = {

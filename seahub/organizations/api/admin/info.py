@@ -23,8 +23,9 @@ from seahub.utils.file_size import get_file_size_unit
 from seahub.organizations.utils import get_org_monthly_download_traffic_limit
 from seahub.organizations.api.permissions import IsOrgAdmin
 from seahub.organizations.models import OrgAdminSettings, \
-        OrgMemberQuota, FORCE_ADFS_LOGIN, DISABLE_ORG_ENCRYPTED_LIBRARY, \
+        OrgMemberQuota, OrgSettings, FORCE_ADFS_LOGIN, DISABLE_ORG_ENCRYPTED_LIBRARY, \
         DISABLE_ORG_USER_CLEAN_TRASH
+from seahub.utils.two_factor_auth import has_two_factor_auth
 from seahub.organizations.settings import ORG_ENABLE_ADMIN_CUSTOM_NAME
 
 from django.conf import settings as dj_settings
@@ -87,6 +88,9 @@ def get_org_info(request, org_id):
 
     if settings.ENABLE_MULTI_ADFS is False:
         info[FORCE_ADFS_LOGIN] = False
+
+    if has_two_factor_auth():
+        info['force_2fa'] = OrgSettings.objects.is_force_2fa_by_org_id(org_id)
 
     current_date = datetime.now()
     info['traffic_this_month'] = get_org_traffic_by_month(org_id, current_date)
