@@ -56,7 +56,8 @@ class SdocServerAPI(object):
         response = requests.get(url, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
 
-    def apply_change_set(self, access_token, data):
+    @staticmethod
+    def build_review_request(data):
         commands = []
         for item in data['selected_items']:
             if item['kind'] in ('set_block_type', 'set_list_type'):
@@ -74,9 +75,26 @@ class SdocServerAPI(object):
             else:
                 raise ValueError('Unsupported review command: %s' % item['kind'])
             commands.append(command)
+        return {'commands': commands, 'review': data}
+
+    @staticmethod
+    def validate_review_request(body):
+        # Transport limits of the element-commands API, not element capabilities.
+        for command in body['commands']:
+            text = command['payload'].get('text')
+            if text is not None and len(text.encode('utf-8')) > 256 * 1024:
+                return 'review_text_too_large'
+        # Prepare exactly as requests.post(json=...) does, including escaping.
+        prepared = requests.Request('POST', 'http://sdoc', json=body).prepare()
+        if len(prepared.body) > 1024 * 1024:
+            return 'review_request_too_large'
+        return None
+
+    def apply_change_set(self, access_token, data):
+        body = self.build_review_request(data)
         url = self.sdoc_server_url + '/api/v1/docs/' + self.doc_uuid + '/element-commands?from=seahub'
         headers = {'Authorization': 'Token ' + access_token}
-        response = requests.post(url, json={'commands': commands, 'review': data}, headers=headers, timeout=self.timeout)
+        response = requests.post(url, json=body, headers=headers, timeout=self.timeout)
         return parse_response(response)
 
     def get_apply_result(self, access_token, apply_attempt_id, timeout=5):

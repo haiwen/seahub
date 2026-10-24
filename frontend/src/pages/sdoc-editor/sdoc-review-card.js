@@ -221,11 +221,29 @@ const SdocReviewCard = ({ reviewTaskId, onMessageContentChange, onTaskRunningCha
     setBulkPending('approve');
     try {
       let response;
+      const approveBatch = async (itemIds) => {
+        try {
+          response = await chatAPI.approveSdocReview(reviewTaskId, itemIds);
+          setTask(response.data.task);
+          setCard(response.data.card);
+        } catch (error) {
+          const code = error.response?.data?.error_code;
+          const isSizeError = error.response?.status === 413 &&
+            ['review_request_too_large', 'review_text_too_large'].includes(code);
+          if (!isSizeError) throw error;
+          if (itemIds.length === 1) {
+            toaster.danger(Utils.getErrorMsg(error));
+            return;
+          }
+          // These errors occur before a decision exists: each half gets its
+          // own signed decision and attempt, never a split of an existing one.
+          const middle = Math.floor(itemIds.length / 2);
+          await approveBatch(itemIds.slice(0, middle));
+          await approveBatch(itemIds.slice(middle));
+        }
+      };
       for (let index = 0; index < pendingIds.length; index += REVIEW_DECISION_BATCH_SIZE) {
-        response = await chatAPI.approveSdocReview(
-          reviewTaskId, pendingIds.slice(index, index + REVIEW_DECISION_BATCH_SIZE));
-        setTask(response.data.task);
-        setCard(response.data.card);
+        await approveBatch(pendingIds.slice(index, index + REVIEW_DECISION_BATCH_SIZE));
       }
       const resultItems = response?.data.card?.items || [];
       if (resultItems.length > COLLAPSED_ITEM_LIMIT && resultItems.every((item) => item.state !== 'pending')) {

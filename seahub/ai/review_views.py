@@ -1377,6 +1377,18 @@ class ReviewTaskApproveView(APIView):
             'selected_items': selected_payloads,
         }
 
+        size_error = SdocServerAPI.validate_review_request(
+            SdocServerAPI.build_review_request(apply_payload))
+        if size_error:
+            message = (
+                'The replacement text is too large to apply.'
+                if size_error == 'review_text_too_large'
+                else 'The review request is too large. Approve fewer suggestions at a time.'
+            )
+            return Response(
+                {'error_code': size_error, 'error_msg': message},
+                status=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE)
+
         token = generate_sdoc_service_token(
             uuid_map.uuid, uuid_map.filename, request.user.username, 'sdoc_agent_apply',
             apply_attempt_id=apply_payload['apply_attempt_id'],

@@ -23,9 +23,46 @@ from seahub.ai.review_views import (
 )
 from seahub.ai.sdoc_intent import route_sdoc_prompt
 from seahub.ai.utils import enqueue_sdoc_review_apply_attempt, enqueue_sdoc_review_task
+from seahub.seadoc.sdoc_server_api import SdocServerAPI
 
 
 INTERNAL_KEY = 'internal-review-key-at-least-32-bytes-long'
+
+
+class SDocReviewRequestSizeTest(SimpleTestCase):
+    def _body(self, texts):
+        return SdocServerAPI.build_review_request({
+            'selected_items': [
+                {'kind': 'replace_block_text', 'target': {'block_id': str(index)},
+                 'after_text': text}
+                for index, text in enumerate(texts)
+            ],
+        })
+
+    def test_rejects_escaped_wire_body_but_accepts_smaller_batches(self):
+        texts = ['中' * 9000] * 10
+        self.assertEqual(SdocServerAPI.validate_review_request(self._body(texts)),
+                         'review_request_too_large')
+        self.assertIsNone(SdocServerAPI.validate_review_request(self._body(texts[:5])))
+
+    def test_checks_utf8_text_limit(self):
+        self.assertEqual(
+            SdocServerAPI.validate_review_request(self._body(['中' * 87382])),
+            'review_text_too_large')
+        self.assertIsNone(SdocServerAPI.validate_review_request(self._body(['a' * (256 * 1024)])))
+
+    def test_counts_review_metadata_in_request_limit(self):
+        body = self._body(['small'])
+        body['review']['metadata'] = 'a' * (1024 * 1024)
+        self.assertEqual(SdocServerAPI.validate_review_request(body),
+                         'review_request_too_large')
+
+    def test_accepts_attribute_commands(self):
+        body = SdocServerAPI.build_review_request({'selected_items': [
+            {'kind': 'set_block_type', 'target': {'block_id': 'block'},
+             'after_type': 'header2'},
+        ]})
+        self.assertIsNone(SdocServerAPI.validate_review_request(body))
 
 
 class SDocReviewIntentTest(SimpleTestCase):
