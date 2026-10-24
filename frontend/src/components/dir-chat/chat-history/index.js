@@ -6,8 +6,8 @@ import CommonMessage from './common-message';
 
 import './index.css';
 
-const ChatHistory = ({ chat, settings, repoID }) => {
-  const { _id, message = {}, isUserSpeak = false, type } = chat;
+const ChatHistory = ({ chat, settings, repoID, messageRenderers, onMessageContentChange, onExtensionStateChange, enableMessageMathJax = true }) => {
+  const { _id, message = {}, isUserSpeak = false, type, extensions = [] } = chat;
   const chatId = useMemo(() => _id || '', [_id]);
   const isStreaming = chatId === 'streaming-answer';
   const showOperations = useMemo(() => {
@@ -17,13 +17,37 @@ const ChatHistory = ({ chat, settings, repoID }) => {
     return true;
   }, [chatId, isStreaming, isUserSpeak, type]);
 
-  if (Object.keys(message).length === 0) {
+  const hasMessageContent = Object.values(message).some((value) => Boolean(value));
+
+  if (!hasMessageContent && extensions.length === 0) {
     return null;
   }
 
   return (
     <div className={classNames('sea-ai-ask-chat', { 'user-input-chat': isUserSpeak })}>
-      <CommonMessage chatId={chatId} message={message} settings={settings} repoID={repoID} showOperations={showOperations} isStreaming={isStreaming} />
+      {hasMessageContent && (
+        <CommonMessage
+          chatId={chatId}
+          message={message}
+          settings={settings}
+          repoID={repoID}
+          showOperations={showOperations}
+          isStreaming={isStreaming}
+          enableMessageMathJax={enableMessageMathJax}
+        />
+      )}
+      {extensions.map((extension, index) => {
+        const Renderer = messageRenderers && messageRenderers[extension.type];
+        return Renderer ? (
+          <Renderer
+            key={`${extension.type}-${index}`}
+            extension={extension}
+            chatId={chatId}
+            onMessageContentChange={(content) => onMessageContentChange?.(chatId, content)}
+            onTaskRunningChange={onExtensionStateChange}
+          />
+        ) : null;
+      })}
     </div>
   );
 };
@@ -32,6 +56,10 @@ ChatHistory.propTypes = {
   chat: PropTypes.object,
   settings: PropTypes.object,
   repoID: PropTypes.string,
+  messageRenderers: PropTypes.object,
+  onMessageContentChange: PropTypes.func,
+  onExtensionStateChange: PropTypes.func,
+  enableMessageMathJax: PropTypes.bool,
 };
 
 export default ChatHistory;

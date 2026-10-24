@@ -208,7 +208,7 @@ class ChatMessages(models.Model):
         db_table = 'chat_messages'
         unique_together = (('session_uuid', 'message_id', 'role'),)
 
-    def to_dict(self):
+    def to_dict(self, review_task_by_assistant_message_id=None):
         try:
             sources = json.loads(self.sources)
         except Exception:
@@ -223,6 +223,18 @@ class ChatMessages(models.Model):
         if not isinstance(attachments, list):
             attachments = []
 
+        extensions = []
+        if self.role == 'assistant':
+            if review_task_by_assistant_message_id is None:
+                try:
+                    review_task = ReviewTask.objects.filter(assistant_message_id=self.id).first()
+                except Exception:
+                    review_task = None
+            else:
+                review_task = review_task_by_assistant_message_id.get(self.id)
+            if review_task and review_task.generation_status != ReviewTask.GENERATION_CANCELLED:
+                extensions.append({'type': 'sdoc_review', 'review_task_id': str(review_task.id)})
+
         return {
             'id': self.id,
             'session_uuid': self.session_uuid,
@@ -231,6 +243,333 @@ class ChatMessages(models.Model):
             'content': self.content,
             'attachments': attachments,
             'sources': sources,
+            'extensions': extensions,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at,
+        }
+
+
+class ReviewTask(models.Model):
+    GENERATION_QUEUED = 'queued'
+    GENERATION_READING = 'reading'
+    GENERATION_DRAFTING = 'drafting'
+    GENERATION_REVIEW_READY = 'review_ready'
+    GENERATION_FAILED = 'failed'
+    GENERATION_CANCELLED = 'cancelled'
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    chat_session_id = models.CharField(max_length=36, db_index=True)
+    assistant_message = models.OneToOneField(
+        ChatMessages, null=True, blank=True, on_delete=models.SET_NULL,
+        related_name='review_task', db_column='assistant_message_id')
+    repo_id = models.CharField(max_length=36, db_index=True)
+    path = models.TextField()
+    file_uuid = models.CharField(max_length=36, db_index=True)
+    requester = models.CharField(max_length=255)
+    prompt = models.TextField()
+    route = models.CharField(max_length=32, default='review')
+    org_id = models.BigIntegerField(null=True, blank=True)
+    message_id = models.CharField(max_length=4, null=True, blank=True)
+    allowed_block_ids = models.JSONField(default=list)
+    allowed_text_targets = models.JSONField(default=list)
+    scope_summary = models.TextField(default='')
+    scope_snapshot_id = models.CharField(max_length=36, null=True, blank=True)
+    scope_document_incarnation = models.CharField(max_length=36, null=True, blank=True)
+    scope_sdoc_version = models.BigIntegerField(null=True, blank=True)
+    generation_status = models.CharField(max_length=32, default=GENERATION_QUEUED, db_index=True)
+    generation_revision = models.IntegerField(default=0)
+    generation_attempt_id = models.UUIDField(null=True, blank=True, db_index=True)
+    generation_deadline_at = models.DateTimeField(null=True, blank=True)
+    error_code = models.CharField(max_length=64, null=True, blank=True)
+    total_chunks = models.IntegerField(default=0)
+    completed_chunks = models.IntegerField(default=0)
+    total_review_blocks = models.IntegerField(default=0)
+    completed_review_blocks = models.IntegerField(default=0)
+    generation_truncated = models.BooleanField(default=False)
+    generation_stop_reason = models.CharField(max_length=64, null=True, blank=True)
+    generation_finished_at = models.DateTimeField(null=True, blank=True)
+    base_sdoc_version = models.BigIntegerField(null=True, blank=True)
+    current_changeset_revision = models.ForeignKey(
+        'ReviewChangeSetRevision', null=True, blank=True, on_delete=models.RESTRICT,
+        related_name='+', db_column='current_changeset_revision_id')
+    current_card_revision = models.ForeignKey(
+        'ReviewCardRevision', null=True, blank=True, on_delete=models.RESTRICT,
+        related_name='+', db_column='current_card_revision_id')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'ai_review_task'
+
+    def to_dict(self):
+        return {
+            'id': str(self.id),
+            'task_id': str(self.id),
+            'chat_session_id': self.chat_session_id,
+            'assistant_message_id': self.assistant_message_id,
+            'assistant_content': self.assistant_message.content if self.assistant_message_id else None,
+            'generation_status': self.generation_status,
+            'generation_attempt_id': str(self.generation_attempt_id) if self.generation_attempt_id else None,
+            'error_code': self.error_code,
+            'total_chunks': self.total_chunks,
+            'completed_chunks': self.completed_chunks,
+            'total_review_blocks': self.total_review_blocks,
+            'completed_review_blocks': self.completed_review_blocks,
+            'generation_truncated': self.generation_truncated,
+            'generation_stop_reason': self.generation_stop_reason,
+            'generation_finished_at': self.generation_finished_at,
+            'route': self.route,
+            'prompt': self.prompt,
+            'scope_summary': self.scope_summary,
+            'base_sdoc_version': self.base_sdoc_version,
+            'current_changeset_revision_id': self.current_changeset_revision_id,
+            'current_card_revision_id': self.current_card_revision_id,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at,
+        }
+
+
+class ReviewChangeSetRevision(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    review_task = models.ForeignKey(
+        ReviewTask, on_delete=models.RESTRICT, related_name='changeset_revisions',
+        db_column='review_task_id')
+    changeset_revision = models.IntegerField()
+    snapshot_id = models.CharField(max_length=36)
+    file_uuid = models.CharField(max_length=36, db_index=True)
+    document_incarnation = models.CharField(max_length=36)
+    exact_sdoc_version = models.BigIntegerField()
+    projection_version = models.CharField(max_length=64, default='sdoc-agent-context/v1')
+    scope_summary = models.TextField()
+    revision_brief = models.JSONField(default=dict)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'ai_review_changeset_revision'
+        unique_together = (('review_task', 'changeset_revision'),)
+
+    def to_dict(self):
+        return {
+            'id': str(self.id),
+            'changeset_revision_id': str(self.id),
+            'review_task_id': self.review_task_id,
+            'changeset_revision': self.changeset_revision,
+            'snapshot_id': self.snapshot_id,
+            'file_uuid': self.file_uuid,
+            'document_incarnation': self.document_incarnation,
+            'exact_sdoc_version': self.exact_sdoc_version,
+            'projection_version': self.projection_version,
+            'scope_summary': self.scope_summary,
+            'revision_brief': self.revision_brief,
+        }
+
+
+class ReviewGenerationChunk(models.Model):
+    """Durable receipt for one progressive generation chunk."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    review_task = models.ForeignKey(
+        ReviewTask, on_delete=models.RESTRICT, related_name='generation_chunks',
+        db_column='review_task_id')
+    generation_attempt_id = models.UUIDField()
+    chunk_index = models.IntegerField()
+    block_count = models.IntegerField(default=0)
+    created_item_count = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'ai_review_generation_chunk'
+        unique_together = (('review_task', 'generation_attempt_id', 'chunk_index'),)
+
+
+class ReviewChangeItem(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    item_id = models.UUIDField(default=uuid.uuid4, editable=False, db_index=True)
+    changeset_revision = models.ForeignKey(
+        ReviewChangeSetRevision, on_delete=models.RESTRICT, related_name='items',
+        db_column='changeset_revision_id')
+    logical_item_id = models.UUIDField(null=True, blank=True, db_index=True)
+    target_key = models.CharField(max_length=160, null=True, blank=True, db_index=True)
+    kind = models.CharField(max_length=64)
+    target = models.JSONField(default=dict)
+    precondition = models.JSONField(default=dict)
+    # Immutable display data; it is intentionally excluded from the strict
+    # SDoc apply target/precondition contract.
+    preview = models.JSONField(default=dict)
+    after_text = models.TextField(default='')
+    after_type = models.CharField(max_length=64, null=True, blank=True)
+    rationale = models.TextField()
+    sort_order = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'ai_review_change_item'
+        unique_together = (('changeset_revision', 'item_id'), ('changeset_revision', 'target_key'))
+        ordering = ('sort_order',)
+
+    def to_dict(self):
+        return {
+            'id': str(self.id),
+            'item_id': str(self.item_id),
+            'changeset_revision_id': self.changeset_revision_id,
+            'logical_item_id': str(self.logical_item_id) if self.logical_item_id else None,
+            'target_key': self.target_key,
+            'kind': self.kind,
+            'target': self.target,
+            'precondition': self.precondition,
+            'preview': self.preview,
+            'after_text': self.after_text,
+            'after_type': self.after_type,
+            'rationale': self.rationale,
+            'sort_order': self.sort_order,
+        }
+
+
+class ReviewCardRevision(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    review_task = models.ForeignKey(
+        ReviewTask, on_delete=models.RESTRICT, related_name='card_revisions',
+        db_column='review_task_id')
+    changeset_revision = models.ForeignKey(
+        ReviewChangeSetRevision, on_delete=models.RESTRICT, related_name='card_revisions',
+        db_column='changeset_revision_id')
+    card_revision = models.IntegerField()
+    supersedes_decision = models.ForeignKey(
+        'ReviewDecision', null=True, blank=True, on_delete=models.RESTRICT,
+        related_name='+', db_column='supersedes_decision_id')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'ai_review_card_revision'
+        unique_together = (('review_task', 'card_revision'),)
+
+
+class ReviewCardRevisionItem(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    card_revision_item_id = models.UUIDField(default=uuid.uuid4, editable=False, db_index=True)
+    card_revision = models.ForeignKey(
+        ReviewCardRevision, on_delete=models.RESTRICT, related_name='membership_items',
+        db_column='card_revision_id')
+    change_item = models.ForeignKey(
+        ReviewChangeItem, on_delete=models.RESTRICT, related_name='card_memberships',
+        db_column='change_item_id')
+    reviewable = models.BooleanField(default=True)
+    conflicted = models.BooleanField(default=False)
+    selectable = models.BooleanField(default=True)
+    conflict_summary = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'ai_review_card_revision_item'
+        unique_together = (('card_revision', 'change_item'),)
+
+    def to_dict(self):
+        return {
+            'card_revision_item_id': str(self.card_revision_item_id),
+            'change_item_id': str(self.change_item.item_id),
+            'reviewable': self.reviewable,
+            'conflicted': self.conflicted,
+            'selectable': self.selectable,
+            'conflict_summary': self.conflict_summary,
+        }
+
+
+class ReviewDecision(models.Model):
+    KIND_APPROVED = 'approved'
+    KIND_REJECTED = 'rejected'
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    review_decision_id = models.UUIDField(default=uuid.uuid4, editable=False, db_index=True)
+    card_revision = models.ForeignKey(
+        ReviewCardRevision, on_delete=models.RESTRICT, related_name='decisions',
+        db_column='card_revision_id')
+    decision_kind = models.CharField(max_length=16)
+    selection_digest = models.CharField(max_length=64)
+    operator = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'ai_review_decision'
+
+    def to_dict(self):
+        return {
+            'review_decision_id': str(self.review_decision_id),
+            'decision_kind': self.decision_kind,
+            'selection_digest': self.selection_digest,
+            'operator': self.operator,
+            'created_at': self.created_at,
+        }
+
+
+class ReviewDecisionSelection(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    decision = models.ForeignKey(
+        ReviewDecision, on_delete=models.RESTRICT, related_name='selections',
+        db_column='decision_id')
+    card_revision_item = models.ForeignKey(
+        ReviewCardRevisionItem, on_delete=models.RESTRICT, related_name='decision_selections',
+        db_column='card_revision_item_id')
+
+    class Meta:
+        db_table = 'ai_review_decision_selection'
+        # A card item represents one user-decidable suggestion.  It must not
+        # be claimed by both an approve and a reject decision (or by two
+        # concurrent approve requests).
+        unique_together = (('decision', 'card_revision_item'), ('card_revision_item',))
+
+
+class ApplyAttempt(models.Model):
+    STATUS_PENDING = 'pending'
+    STATUS_PREFLIGHT_CONFLICTED = 'preflight_conflicted'
+    STATUS_COMMITTING = 'committing'
+    STATUS_APPLIED = 'applied'
+    STATUS_OUTCOME_UNKNOWN = 'outcome_unknown'
+    STATUS_FAILED_PRECOMMIT = 'failed_precommit'
+
+    PERSISTENCE_NOT_REQUESTED = 'not_requested'
+    PERSISTENCE_PERSISTED = 'persisted'
+    PERSISTENCE_SAVE_PENDING = 'save_pending'
+    PERSISTENCE_FILE_UNAVAILABLE = 'file_unavailable'
+
+    VERIFICATION_UNVERIFIED = 'unverified'
+    VERIFICATION_CONFIRMED_APPLIED = 'confirmed_applied'
+    VERIFICATION_CONFIRMED_NOT_APPLIED = 'confirmed_not_applied'
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    apply_attempt_id = models.UUIDField(default=uuid.uuid4, editable=False, db_index=True)
+    review_decision = models.OneToOneField(
+        ReviewDecision, on_delete=models.RESTRICT, related_name='apply_attempt',
+        db_column='review_decision_id')
+    status = models.CharField(max_length=32, default=STATUS_PENDING, db_index=True)
+    persistence_status = models.CharField(max_length=32, default=PERSISTENCE_NOT_REQUESTED)
+    verification_status = models.CharField(max_length=32, default=VERIFICATION_UNVERIFIED)
+    approved_by = models.CharField(max_length=255)
+    selection_digest = models.CharField(max_length=64)
+    apply_payload_digest = models.CharField(max_length=64)
+    card_revision_number = models.IntegerField()
+    changeset_revision_number = models.IntegerField()
+    snapshot_id = models.CharField(max_length=36)
+    document_incarnation = models.CharField(max_length=36)
+    applied_sdoc_version = models.BigIntegerField(null=True, blank=True)
+    operation_log_correlation_id = models.CharField(max_length=36, null=True, blank=True)
+    result_query_deadline_at = models.DateTimeField(null=True, blank=True)
+    error_code = models.CharField(max_length=64, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'ai_review_apply_attempt'
+
+    def to_dict(self):
+        return {
+            'apply_attempt_id': str(self.apply_attempt_id),
+            'review_decision_id': self.review_decision_id,
+            'status': self.status,
+            'persistence_status': self.persistence_status,
+            'verification_status': self.verification_status,
+            'approved_by': self.approved_by,
+            'applied_sdoc_version': self.applied_sdoc_version,
+            'error_code': self.error_code,
             'created_at': self.created_at,
             'updated_at': self.updated_at,
         }

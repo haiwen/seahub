@@ -127,6 +127,18 @@
   cursor: default;
 }
 
+.sea-ai-ask-chat-operations-container .icon-send-wrapper.review-stop {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+.sea-ai-review-stop-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background-color: #fff;
+}
+
 .sea-ai-ask-chat-operations-container-left .sea-ai-ask-icon-btn,
 .sea-ai-ask-chat-operations-container-right .sea-ai-ask-icon-btn {
   margin: 0;

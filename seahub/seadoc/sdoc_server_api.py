@@ -18,14 +18,17 @@ def parse_response(response):
 
 class SdocServerAPI(object):
 
-    def __init__(self, doc_uuid, filename, username):
+    def __init__(self, doc_uuid, filename, username, access_token=None):
         self.doc_uuid = doc_uuid
         self.filename = filename
         self.username = username
         self.headers = None
         self.sdoc_server_url = SEADOC_SERVER_URL.rstrip('/')
         self.timeout = 30
-        self._init()
+        if access_token:
+            self.headers = {'Authorization': 'Token ' + access_token}
+        else:
+            self._init()
 
     def _init(self):
         sdoc_server_access_token = gen_seadoc_access_token(
@@ -46,6 +49,58 @@ class SdocServerAPI(object):
     def get_doc(self):
         url = self.sdoc_server_url + '/api/v1/docs/' + self.doc_uuid + '/?from=seahub'
         response = requests.get(url, headers=self.headers)
+        return parse_response(response)
+
+    def get_review_snapshot(self):
+        url = self.sdoc_server_url + '/api/v1/docs/' + self.doc_uuid + '/review-snapshot/?from=seahub'
+        response = requests.get(url, headers=self.headers, timeout=self.timeout)
+        return parse_response(response)
+
+    @staticmethod
+    def build_review_request(data):
+        commands = []
+        for item in data['selected_items']:
+            if item['kind'] in ('set_block_type', 'set_list_type'):
+                command = {
+                    'kind': 'update_element_attributes',
+                    'target_element_id': item['target']['block_id'],
+                    'payload': {'type': item['after_type']},
+                }
+            elif item['kind'] == 'replace_block_text':
+                command = {
+                    'kind': 'replace_element_content',
+                    'target_element_id': item['target']['block_id'],
+                    'payload': {'text': item['after_text']},
+                }
+            else:
+                raise ValueError('Unsupported review command: %s' % item['kind'])
+            commands.append(command)
+        return {'commands': commands, 'review': data}
+
+    @staticmethod
+    def validate_review_request(body):
+        # Transport limits of the element-commands API, not element capabilities.
+        for command in body['commands']:
+            text = command['payload'].get('text')
+            if text is not None and len(text.encode('utf-8')) > 256 * 1024:
+                return 'review_text_too_large'
+        # Prepare exactly as requests.post(json=...) does, including escaping.
+        prepared = requests.Request('POST', 'http://sdoc', json=body).prepare()
+        if len(prepared.body) > 1024 * 1024:
+            return 'review_request_too_large'
+        return None
+
+    def apply_change_set(self, access_token, data):
+        body = self.build_review_request(data)
+        url = self.sdoc_server_url + '/api/v1/docs/' + self.doc_uuid + '/element-commands?from=seahub'
+        headers = {'Authorization': 'Token ' + access_token}
+        response = requests.post(url, json=body, headers=headers, timeout=self.timeout)
+        return parse_response(response)
+
+    def get_apply_result(self, access_token, apply_attempt_id, timeout=5):
+        url = self.sdoc_server_url + '/api/v1/docs/' + self.doc_uuid + '/element-commands/' + apply_attempt_id + '/?from=seahub'
+        headers = {'Authorization': 'Token ' + access_token}
+        response = requests.get(url, headers=headers, timeout=timeout)
         return parse_response(response)
 
     def save_doc(self):

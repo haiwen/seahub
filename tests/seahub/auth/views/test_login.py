@@ -116,7 +116,6 @@ class LoginTest(BaseTestCase):
 
         self.assertEqual(302, resp.status_code)
 
-    @override_settings(ENABLE_LDAP=True, USE_LDAP_SYNC_ONLY=False)
     @patch('seahub.utils.auth.DISABLE_SSO_USER_LOCAL_PWD_LOGIN', True)
     @patch('seahub.auth.forms.authenticate')
     def test_org_force_sso_blocks_ldap_password_login(
@@ -130,6 +129,7 @@ class LoginTest(BaseTestCase):
 
         self.assertFalse(form.is_valid())
         self.assertIn('disable_pwd_login', form.errors)
+        self.assertEqual(mock_authenticate.call_count, 1)
 
     @override_settings(ENABLE_LDAP=True, USE_LDAP_SYNC_ONLY=False)
     @patch('seahub.utils.auth.DISABLE_SSO_USER_LOCAL_PWD_LOGIN', True)

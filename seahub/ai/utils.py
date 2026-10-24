@@ -18,6 +18,7 @@ from django.db.models import Sum, Value
 from seaserv import ccnet_api, get_org_id_by_repo_id, seafile_api
 
 from seahub.settings import ENABLE_AI_CHAT, ENABLE_METADATA_MANAGEMENT, ENABLE_SEAFILE_AI, LLM_MODELS, SEAFILE_AI_SECRET_KEY, SEAFILE_AI_SERVER_URL
+from seahub.settings import SECRET_KEY, SEAFEVENTS_SERVER_URL
 from seahub.base.accounts import User
 from seahub.tags.models import FileUUIDMap
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
@@ -31,6 +32,16 @@ from seahub.ai.models import AIUsageStatistics, ChatMessageThoughtProcess, ChatM
 
 
 logger = logging.getLogger(__name__)
+
+
+class SdocReviewScopeError(RuntimeError):
+    pass
+
+
+class SdocReviewScopeAmbiguousError(SdocReviewScopeError):
+    def __init__(self, candidates):
+        super().__init__('review scope is ambiguous')
+        self.candidates = candidates
 
 AI_REPLY_TIMEOUT = 180
 GENERATED_MARKDOWN_DIR = '/AI Generated/'
@@ -60,6 +71,59 @@ def gen_headers():
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SEAFILE_AI_SECRET_KEY, algorithm='HS256')
     return {"Authorization": "Token %s" % token}
+
+
+def _enqueue_seafevents_task(path, payload, error_label):
+    if not SEAFEVENTS_SERVER_URL:
+        raise RuntimeError('SeafEvents server is not configured')
+    token_payload = {'exp': int(time.time()) + 300}
+    token = jwt.encode(token_payload, SECRET_KEY, algorithm='HS256')
+    url = urljoin(SEAFEVENTS_SERVER_URL, path)
+    response = requests.post(
+        url,
+        json=payload,
+        headers={'Authorization': 'Token %s' % token},
+        timeout=5,
+    )
+    if not response.ok:
+        raise RuntimeError('Failed to enqueue %s: %s' % (error_label, response.text))
+
+
+def enqueue_sdoc_review_task(task_id):
+    """Publish a persisted review task to the existing SeafEvents queue."""
+    _enqueue_seafevents_task(
+        '/add-sdoc-review-task', {'task_id': str(task_id)}, 'SDoc review task')
+
+
+def enqueue_sdoc_review_apply_attempt(apply_attempt_id):
+    """Publish an indeterminate ApplyAttempt for background reconciliation."""
+    _enqueue_seafevents_task(
+        '/add-sdoc-review-apply-attempt',
+        {'apply_attempt_id': str(apply_attempt_id)},
+        'SDoc review apply attempt')
+
+
+def resolve_sdoc_review_scope(prompt, document_context):
+    """Resolve a deterministic review scope before persisting a ReviewTask."""
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/sdoc-review-scope/')
+    response = requests.post(
+        url,
+        json={'prompt': prompt, 'document_context': document_context},
+        headers=gen_headers(),
+        timeout=10,
+    )
+    try:
+        data = response.json()
+    except ValueError as error:
+        raise SdocReviewScopeError('Invalid review scope response.') from error
+    if response.status_code == 409 and data.get('error_code') == 'scope_ambiguous':
+        raise SdocReviewScopeAmbiguousError(data.get('candidates') or [])
+    if not response.ok:
+        raise SdocReviewScopeError(data.get('error_msg') or 'Unable to resolve review scope.')
+    scope = data.get('scope') if isinstance(data, dict) else None
+    if not isinstance(scope, dict):
+        raise SdocReviewScopeError('Invalid review scope response.')
+    return scope
 
 
 def verify_ai_config():
@@ -153,6 +217,46 @@ def generate_session_title(session, query, ai_reply, expected_session_name):
 
     session.refresh_from_db(fields=['session_name'])
     return session.session_name
+
+
+def generate_sdoc_review(params):
+    headers = gen_headers()
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/sdoc-review/')
+    resp = requests.post(url, json=params, headers=headers, timeout=AI_REPLY_TIMEOUT)
+    if not resp.ok:
+        raise RuntimeError('SDoc review request failed: %s' % resp.text)
+    result = resp.json()
+    return result.get('review')
+
+
+def generate_sdoc_review_plan(params, timeout=AI_REPLY_TIMEOUT):
+    headers = gen_headers()
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/sdoc-review-plan/')
+    resp = requests.post(url, json=params, headers=headers, timeout=timeout)
+    if not resp.ok:
+        raise RuntimeError('SDoc review plan request failed: %s' % resp.text)
+    result = resp.json()
+    return result.get('plan')
+
+
+def generate_sdoc_review_chunk(params, timeout=AI_REPLY_TIMEOUT):
+    headers = gen_headers()
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/sdoc-review-chunk/')
+    resp = requests.post(url, json=params, headers=headers, timeout=timeout)
+    if not resp.ok:
+        raise RuntimeError('SDoc review chunk request failed: %s' % resp.text)
+    result = resp.json()
+    return result.get('items')
+
+
+def generate_sdoc_analyze(params):
+    headers = gen_headers()
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/sdoc-analyze/')
+    resp = requests.post(url, json=params, headers=headers, timeout=AI_REPLY_TIMEOUT)
+    if not resp.ok:
+        raise RuntimeError('SDoc analyze request failed: %s' % resp.text)
+    result = resp.json()
+    return result.get('analysis')
 
 
 # utils
