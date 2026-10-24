@@ -306,6 +306,18 @@ class OrgAdminAPI {
     return this.req.put(url);
   }
 
+  orgAdminSetForceTwoFactorAuth(orgID, email, isForce2FA) {
+    const url = this.server + '/api/v2.1/org/' + orgID + '/admin/users/' + encodeURIComponent(email) + '/two-factor-auth/';
+    let form = new FormData();
+    form.append('force_2fa', isForce2FA ? 1 : 0);
+    return this.req.put(url, form);
+  }
+
+  orgAdminDeleteTwoFactorAuth(orgID, email) {
+    const url = this.server + '/api/v2.1/org/' + orgID + '/admin/users/' + encodeURIComponent(email) + '/two-factor-auth/';
+    return this.req.delete(url);
+  }
+
   orgAdminChangeOrgUserStatus(orgID, email, isActive) {
     const url = this.server + '/api/v2.1/org/' + orgID + '/admin/users/' + encodeURIComponent(email) + '/';
     let form = new FormData();

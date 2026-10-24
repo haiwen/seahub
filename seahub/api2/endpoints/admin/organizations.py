@@ -37,6 +37,7 @@ from seahub.utils.ccnet_db import CcnetDB
 from seahub.utils.db_api import SeafileDB
 
 from seahub.organizations.models import OrgMemberQuota
+from seahub.utils.two_factor_auth import has_two_factor_auth
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -91,6 +92,9 @@ def get_org_detailed_info(org):
 
     org_id = org.org_id
     org_info = get_org_info(org)
+
+    if has_two_factor_auth():
+        org_info['force_2fa'] = OrgSettings.objects.is_force_2fa_by_org_id(org_id)
 
     # users
     users = ccnet_api.get_org_emailusers(org.url_prefix, -1, -1)
@@ -511,6 +515,16 @@ class AdminOrganization(APIView):
             OrgAdminSettings.objects.update_or_create(org_id=org_id, key='force_adfs_login',
                                                       defaults={'value': force_adfs_login})
 
+        force_2fa = request.data.get('force_2fa', None)
+        if force_2fa is not None:
+            try:
+                force_2fa = to_python_boolean(force_2fa)
+            except (AttributeError, ValueError):
+                error_msg = 'force_2fa invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            OrgSettings.objects.add_or_update(org, force_2fa=force_2fa)
+
         monthly_download_traffic_limit = request.data.get('monthly_download_traffic_limit', None)
         if monthly_download_traffic_limit is not None:
             try:
@@ -531,6 +545,8 @@ class AdminOrganization(APIView):
 
         org = ccnet_api.get_org_by_id(org_id)
         org_info = get_org_info(org)
+        if has_two_factor_auth():
+            org_info['force_2fa'] = OrgSettings.objects.is_force_2fa_by_org_id(org_id)
         return Response(org_info)
 
     def delete(self, request, org_id):

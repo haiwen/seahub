@@ -100,6 +100,13 @@ class IsOrgAdminUser(BasePermission):
     Check whether  user is org admin
     """
     def has_permission(self, request, view, obj=None):
-        org_id = int(view.kwargs.get('org_id', ''))
-        return True if request.user.org.is_staff and \
-            request.user.org.org_id == org_id else False
+        org = getattr(request.user, 'org', None)
+        if org is None:
+            return False
+
+        try:
+            org_id = int(view.kwargs.get('org_id', ''))
+        except (TypeError, ValueError):
+            return False
+
+        return bool(org.is_staff and org.org_id == org_id)
