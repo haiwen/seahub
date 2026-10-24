@@ -1,10 +1,10 @@
 import React, { useCallback, useLayoutEffect, useMemo } from 'react';
 import { Tooltip } from '@seafile/sdoc-editor';
 import PropTypes from 'prop-types';
+import { chatAPI } from '@/api/chat-api';
 import DirChat from '@/components/dir-chat';
 import { ASK_PAGE_SLUG_ID, CHAT_MESSAGE_TYPE } from '@/components/dir-chat/constants';
 import { AttachmentObject, ChatMessage } from '@/components/dir-chat/models';
-import { chatAPI } from '@/api/chat-api';
 import Icon from '@/components/icon';
 import OpIcon from '@/components/op-icon';
 import ChatToolbar from '@/components/toolbar/chat-toolbar';

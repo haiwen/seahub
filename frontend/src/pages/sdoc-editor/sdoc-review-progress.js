@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../utils/constants';
+import { gettext } from '@/utils/constants';
 
 const PROGRESS_STEPS = [
   { key: 'reading_document', label: gettext('Reading the latest content') },
