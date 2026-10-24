@@ -103,7 +103,9 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
       setSubmitting(true);
       metadataAPI.createMetadata(repoID).then(res => {
         setSubmitting(false);
-        submit(true);
+        const hiddenColumns = res.data.global_hidden_columns;
+        setHiddenColumns(hiddenColumns);
+        submit(true, hiddenColumns);
         setValue(nextValue);
       }).catch(error => {
         const errorMsg = Utils.getErrorMsg(error);
