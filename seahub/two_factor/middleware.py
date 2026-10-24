@@ -9,7 +9,9 @@ from django.http import HttpResponseRedirect
 from . import DEVICE_ID_SESSION_KEY
 from .models import Device
 from seahub.options.models import UserOptions
+from seahub.organizations.models import OrgSettings
 from seahub.settings import SITE_ROOT, ENABLE_FORCE_2FA_TO_ALL_USERS
+from seahub.utils import is_org_context
 
 
 class IsVerified(object):
@@ -76,6 +78,20 @@ class ForceTwoFactorAuthMiddleware:
                 return True
         return False
 
+    def _is_force_2fa(self, request):
+        user = request.user
+        if ENABLE_FORCE_2FA_TO_ALL_USERS:
+            return True
+
+        if UserOptions.objects.is_force_2fa(user.username):
+            return True
+
+        if is_org_context(request) and \
+                OrgSettings.objects.is_force_2fa_by_org_id(user.org.org_id):
+            return True
+
+        return False
+
     def __call__(self, request):
         if not config.ENABLE_TWO_FACTOR_AUTH:
             return self.get_response(request)
@@ -93,8 +109,7 @@ class ForceTwoFactorAuthMiddleware:
         if user.otp_device is not None:
             return self.get_response(request)
 
-        if (ENABLE_FORCE_2FA_TO_ALL_USERS or UserOptions.objects.is_force_2fa(user.username)) \
-                and not request.session.get('is_sso_user'):
+        if self._is_force_2fa(request) and not request.session.get('is_sso_user'):
             return HttpResponseRedirect(reverse('two_factor:setup'))
 
         return self.get_response(request)

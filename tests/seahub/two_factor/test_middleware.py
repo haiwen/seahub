@@ -173,3 +173,67 @@ class ForceTwoFactorAuthMiddlewareTest(SimpleTestCase):
         request.session = {'is_sso_user': True}
         mw(request)
         get_response.assert_called_once_with(request)
+
+    @patch('seahub.two_factor.middleware.OrgSettings')
+    @patch('seahub.two_factor.middleware.UserOptions')
+    @patch('seahub.two_factor.middleware.reverse', return_value='/profile/two_factor_authentication/setup/')
+    @patch('seahub.two_factor.middleware.ENABLE_FORCE_2FA_TO_ALL_USERS', False)
+    @patch('seahub.two_factor.middleware.config')
+    def test_redirects_to_setup_when_org_force_2fa_enabled(
+            self, mock_config, mock_reverse, mock_user_opts, mock_org_settings):
+        mock_config.ENABLE_TWO_FACTOR_AUTH = True
+        mock_user_opts.objects.is_force_2fa.return_value = False
+        mock_org_settings.objects.is_force_2fa_by_org_id.return_value = True
+
+        get_response = Mock(return_value=HttpResponse())
+        mw = ForceTwoFactorAuthMiddleware(get_response)
+        user = Mock(is_anonymous=False, otp_device=None, username='u@test.com',
+                    org=Mock(org_id=1))
+        request = self._make_request(path='/repo/123/', user=user)
+        request.cloud_mode = True
+
+        response = mw(request)
+
+        self.assertIsInstance(response, HttpResponseRedirect)
+        get_response.assert_not_called()
+        mock_org_settings.objects.is_force_2fa_by_org_id.assert_called_once_with(1)
+
+    @patch('seahub.two_factor.middleware.OrgSettings')
+    @patch('seahub.two_factor.middleware.UserOptions')
+    @patch('seahub.two_factor.middleware.ENABLE_FORCE_2FA_TO_ALL_USERS', False)
+    @patch('seahub.two_factor.middleware.config')
+    def test_passes_through_when_org_force_2fa_disabled(
+            self, mock_config, mock_user_opts, mock_org_settings):
+        mock_config.ENABLE_TWO_FACTOR_AUTH = True
+        mock_user_opts.objects.is_force_2fa.return_value = False
+        mock_org_settings.objects.is_force_2fa_by_org_id.return_value = False
+
+        get_response = Mock(return_value=HttpResponse())
+        mw = ForceTwoFactorAuthMiddleware(get_response)
+        user = Mock(is_anonymous=False, otp_device=None, username='u@test.com',
+                    org=Mock(org_id=1))
+        request = self._make_request(path='/home/files/', user=user)
+        request.cloud_mode = True
+
+        mw(request)
+        get_response.assert_called_once_with(request)
+
+    @patch('seahub.two_factor.middleware.OrgSettings')
+    @patch('seahub.two_factor.middleware.UserOptions')
+    @patch('seahub.two_factor.middleware.ENABLE_FORCE_2FA_TO_ALL_USERS', False)
+    @patch('seahub.two_factor.middleware.config')
+    def test_ignores_org_force_2fa_outside_org_context(
+            self, mock_config, mock_user_opts, mock_org_settings):
+        """A user without an org is not affected by the org level switch."""
+        mock_config.ENABLE_TWO_FACTOR_AUTH = True
+        mock_user_opts.objects.is_force_2fa.return_value = False
+
+        get_response = Mock(return_value=HttpResponse())
+        mw = ForceTwoFactorAuthMiddleware(get_response)
+        user = Mock(is_anonymous=False, otp_device=None, username='u@test.com', org=None)
+        request = self._make_request(path='/home/files/', user=user)
+        request.cloud_mode = True
+
+        mw(request)
+        get_response.assert_called_once_with(request)
+        mock_org_settings.objects.is_force_2fa_by_org_id.assert_not_called()
