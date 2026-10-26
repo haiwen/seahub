@@ -2,6 +2,7 @@
 // and modified according to the requirements of this page.
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
 import Resumablejs from '@seafile/resumablejs';
 import MD5 from 'MD5';
 import { gettext, resumableUploadFileBlockSize, maxUploadFileSize, maxNumberOfFilesForFileupload } from '../../utils/constants';
@@ -168,7 +169,7 @@ class FileUploader extends React.Component {
         relative_path: relative_path
       };
     }
-    resumableFile.formData['last_modify'] = resumableFile.file.lastModifiedDate;
+    resumableFile.formData['last_modify'] = dayjs(resumableFile.file.lastModifiedDate).format('YYYY-MM-DDTHH:mm:ssZ');
   };
 
   onFileAdded = (resumableFile, files) => {
