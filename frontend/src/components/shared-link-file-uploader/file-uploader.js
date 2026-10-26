@@ -178,7 +178,8 @@ class FileUploader extends React.Component {
         relative_path: relative_path
       };
     }
-    resumableFile.formData['last_modify'] = dayjs(resumableFile.file.lastModifiedDate).format('YYYY-MM-DDTHH:mm:ssZ');
+    const lastModified = resumableFile.file.lastModified;
+    resumableFile.formData['last_modify'] = dayjs(lastModified).format('YYYY-MM-DDTHH:mm:ssZ');
   };
 
   onFileAdded = (resumableFile, files) => {
