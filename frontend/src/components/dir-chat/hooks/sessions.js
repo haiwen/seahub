@@ -5,7 +5,7 @@ import { eventBus } from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
 import toaster from '../../../components/toast';
 import { ASK_PAGE_SLUG_ID, SESSION_TAB_TYPE } from '../constants';
-import { ChatSession } from '../models';
+import { ChatSession, serializeAttachmentsForServer } from '../models';
 import { useAskPage } from './page-type';
 
 const SessionsContext = React.createContext(null);
@@ -255,7 +255,7 @@ export const SessionsProvider = ({
       repo_id: repoID,
       query: problem,
       session_uuid: sessionId,
-      attachments,
+      attachments: serializeAttachmentsForServer(attachments),
       model,
     };
 

@@ -5,7 +5,7 @@ import { Attachments } from '../../components';
 
 import './index.css';
 
-const AttachmentsFormatter = ({ value = [], onRemove }) => {
+const AttachmentsFormatter = ({ value = [], onRemove, onReupload }) => {
   const containerRef = useRef(null);
   const [canScrollBefore, setCanScrollBefore] = useState(false);
   const [canScrollAfter, setCanScrollAfter] = useState(false);
@@ -53,7 +53,7 @@ const AttachmentsFormatter = ({ value = [], onRemove }) => {
         className="sea-ai-chat-attachments-container"
         onScroll={updateScrollState}
       >
-        <Attachments className="sea-ai-chat-attachments" attachments={value} onRemove={onRemove} />
+        <Attachments className="sea-ai-chat-attachments" attachments={value} onRemove={onRemove} onReupload={onReupload} />
       </div>
       {canScrollAfter && (
         <div className="sea-ai-chat-attachments-scroll-after">
@@ -73,6 +73,7 @@ const AttachmentsFormatter = ({ value = [], onRemove }) => {
 AttachmentsFormatter.propTypes = {
   value: PropTypes.array,
   onRemove: PropTypes.func,
+  onReupload: PropTypes.func,
 };
 
 export default AttachmentsFormatter;
