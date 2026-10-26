@@ -175,7 +175,7 @@ class FileUploader extends React.Component {
         relative_path: relative_path
       };
     }
-    resumableFile.formData['last_modify'] = resumableFile.file.lastModified;
+    resumableFile.formData['last_modify'] = resumableFile.file.lastModifiedDate;
   };
 
   onFileAdded = (resumableFile, files) => {
