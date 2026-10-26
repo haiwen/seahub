@@ -833,6 +833,23 @@ class ChatView(APIView):
         if not user_passes_ai_chat_folder_permissions(request, repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
+        for attachment in attachments:
+            if not isinstance(attachment, dict):
+                return api_error(status.HTTP_400_BAD_REQUEST, 'attachments invalid.')
+            if attachment.get('repo_id') != repo_id:
+                return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+            path = attachment.get('path')
+            if (not isinstance(path, str) or not path.startswith('/') or
+                    path.startswith('//') or path == '/' or '\x00' in path or
+                    path != os.path.normpath(path)):
+                return api_error(status.HTTP_400_BAD_REQUEST, 'attachments invalid.')
+            permission = check_folder_permission(request, repo_id, path)
+            if not permission:
+                return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+            attachment_permission = parse_repo_perm(permission)
+            if not (attachment_permission.can_preview or attachment_permission.can_download):
+                return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         repo_permission = check_folder_permission(request, repo_id, '/')
         can_upload = parse_repo_perm(repo_permission).can_upload if repo_permission else False
 

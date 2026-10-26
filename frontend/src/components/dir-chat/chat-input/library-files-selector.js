@@ -1,12 +1,13 @@
 import React, { useCallback, useRef, useEffect } from 'react';
 import { seafileAPI } from '@/api/seafile-api';
+import toaster from '@/components/toast';
 import { gettext } from '@/utils/constants';
 import Icon from '../../icon';
 import SyncSelector from '../components/selector/sync-selector';
-import { CHAT_IMAGE_ATTACHMENT_MAX_COUNT } from '../constants';
+import { CHAT_ATTACHMENT_TYPE, CHAT_IMAGE_ATTACHMENT_EXTENSIONS, CHAT_IMAGE_ATTACHMENT_MAX_COUNT } from '../constants';
 import AttachmentObject from '../models/attachment_object';
 
-const CHAT_ATTACHMENT_EXTENSIONS = 'md,sdoc,docx,pdf,pptx,png,jpg,jpeg,gif,webp,bmp,avif';
+const CHAT_ATTACHMENT_EXTENSIONS = ['md', 'sdoc', 'docx', 'pdf', 'pptx', ...CHAT_IMAGE_ATTACHMENT_EXTENSIONS].join(',');
 
 const LibraryFilesSelector = ({
   repoID,
@@ -80,16 +81,29 @@ const LibraryFilesSelector = ({
       updatedAttachments = updatedAttachments.filter((att) => !removedKeys.includes(att.key));
     }
 
+    let rejectedImage = false;
     if (addedKeys.length > 0) {
       for (const key of addedKeys) {
         const file = searchResultsRef.current.get(key);
         if (file) {
           const path = file.fullpath || file.path;
           const name = file.name || path.substr(path.lastIndexOf('/') + 1);
+          if (updatedAttachments.some((att) => att.repo_id === repoID && att.path === path)) {
+            continue;
+          }
+          const extension = name.split('.').pop().toLowerCase();
+          const type = CHAT_IMAGE_ATTACHMENT_EXTENSIONS.includes(extension)
+            ? CHAT_ATTACHMENT_TYPE.IMAGE : CHAT_ATTACHMENT_TYPE.FILE;
+          if (type === CHAT_ATTACHMENT_TYPE.IMAGE &&
+            updatedAttachments.filter((att) => att.type === CHAT_ATTACHMENT_TYPE.IMAGE).length >= CHAT_IMAGE_ATTACHMENT_MAX_COUNT) {
+            rejectedImage = true;
+            continue;
+          }
           const newAtt = new AttachmentObject({
             repo_id: repoID,
             path,
             name: name,
+            type,
           });
           if (!updatedAttachments.some((att) => att.key === newAtt.key)) {
             updatedAttachments.push(newAtt);
@@ -98,6 +112,9 @@ const LibraryFilesSelector = ({
       }
     }
 
+    if (rejectedImage) {
+      toaster.danger(gettext('Each message can contain at most %1$s image').replace('%1$s', CHAT_IMAGE_ATTACHMENT_MAX_COUNT));
+    }
     propsOnChange && propsOnChange(updatedAttachments);
   }, [attachments, repoID, propsOnChange]);
 

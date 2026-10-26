@@ -1,8 +1,9 @@
 import { seafileAPI } from '@/api/seafile-api';
+import { CHAT_IMAGE_ATTACHMENT_EXTENSIONS } from '../constants';
 
 export const AI_CHAT_IMAGE_DIR = '/images/ai-chat';
 export const AI_CHAT_IMAGE_RELATIVE_DIR = 'images/ai-chat';
-export const AI_CHAT_IMAGE_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'bmp', 'avif'];
+export const AI_CHAT_IMAGE_EXTENSIONS = CHAT_IMAGE_ATTACHMENT_EXTENSIONS;
 export const AI_CHAT_IMAGE_ACCEPT = AI_CHAT_IMAGE_EXTENSIONS.map((extension) => `.${extension}`).join(',');
 // Aligned with the AI OCR limit in seahub/ai/apis.py, which rejects files above 5 MB.
 export const AI_CHAT_IMAGE_MAX_SIZE = 5 * 1024 * 1024;

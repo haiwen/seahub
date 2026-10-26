@@ -23,6 +23,7 @@ export const CHAT_ATTACHMENT_TYPE = {
 };
 
 export const CHAT_IMAGE_ATTACHMENT_MAX_COUNT = 1;
+export const CHAT_IMAGE_ATTACHMENT_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'bmp', 'avif'];
 
 export const SESSION_TAB_TYPE = {
   MINE: 'mine',
