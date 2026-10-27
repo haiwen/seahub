@@ -13,7 +13,7 @@ from seaserv import ccnet_api, seafile_api
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error
+from seahub.api2.utils import api_error, is_wiki_repo
 from seahub.base.accounts import User
 from seahub.signals import repo_deleted
 from seahub.views import get_system_default_repo_id
@@ -28,8 +28,11 @@ from seahub.utils import is_valid_dirent_name, is_valid_email, transfer_repo
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
+from seahub.api2.endpoints.repo_archive import feature_check, get_archive_storage_id, get_default_storage_id
+from seahub.api2.endpoints.utils import add_repo_archive_task_request
 from seahub.constants import PERMISSION_READ_WRITE
-from seahub.base.models import RepoTransfer
+from seahub.base.models import RepoTransfer, RepoArchiveStatus, \
+        STATUS_IN_ARCHIVING, STATUS_IN_UNARCHIVING
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.repo_metadata.utils import init_metadata, init_tags, add_init_metadata_task
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
@@ -495,6 +498,72 @@ class AdminLibrary(APIView):
         repo_info = get_repo_info(repo)
 
         return Response(repo_info)
+
+
+class AdminLibraryArchive(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsAdminUser,)
+
+    def post(self, request, repo_id, format=None):
+        """ Archive a library
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        enabled, msg = feature_check()
+        if not enabled:
+            return api_error(status.HTTP_403_FORBIDDEN, msg)
+
+        archive_storage_id = get_archive_storage_id()
+        default_storage_id = get_default_storage_id()
+
+        if not archive_storage_id or not default_storage_id:
+            error_msg = 'Archive storage class or default storage class not configured.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if is_wiki_repo(repo):
+            error_msg = 'Wiki library not support archive/unarchive operation.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if repo.is_virtual:
+            error_msg = 'Virtual library not support archive/unarchive operation.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        op_type = request.data.get('op_type')
+        if op_type not in ('archive', 'unarchive'):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'op_type invalid.')
+
+        archive_status = RepoArchiveStatus.objects.get_archive_status(repo_id)
+        if archive_status in [STATUS_IN_ARCHIVING, STATUS_IN_UNARCHIVING]:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Library is being processed, please try again later.')
+
+        if op_type == 'archive':
+            origin_storage_id = repo.storage_id or default_storage_id
+            dest_storage_id = archive_storage_id
+        else:  # unarchive
+            origin_storage_id = repo.storage_id
+            dest_storage_id = default_storage_id
+
+        if origin_storage_id == dest_storage_id:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Library already in the target storage class.')
+
+        try:
+            task_id = add_repo_archive_task_request(repo_id, origin_storage_id, dest_storage_id, op_type, request.user.username)
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response({'task_id': task_id})
 
 
 class AdminSearchLibrary(APIView):
