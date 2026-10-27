@@ -374,11 +374,28 @@ def oauth_disconnect(request):
     return HttpResponseRedirect(_get_safe_next_url(request))
 
 
+def custom_oauth_login_redirect(request):
+    """Only opt-in custom providers replace the local password form."""
+    if not ENABLE_CUSTOM_OAUTH:
+        return render_error(request, _('Feature is not enabled.'))
+    if getattr(custom_oauth_login, 'intranet_login', False):
+        is_external = getattr(custom_oauth_login, 'is_external_request', None)
+        if is_external:
+            try:
+                if not is_external(request):
+                    return None
+            except ValueError:
+                return render_error(request, _('Invalid custom login configuration.'))
+        return custom_oauth_login(request)
+    return None
+
+
 def custom_oauth_login_view(request):
     if not ENABLE_CUSTOM_OAUTH:
         return render_error(request, _('Feature is not enabled.'))
 
-    if request.user.is_authenticated:
+    if (request.user.is_authenticated and
+            not getattr(custom_oauth_login, 'intranet_login', False)):
         # already authenticated
         redirect_url = request.GET.get(auth.REDIRECT_FIELD_NAME, settings.LOGIN_REDIRECT_URL)
         return HttpResponseRedirect(redirect_url)

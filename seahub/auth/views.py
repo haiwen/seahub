@@ -104,6 +104,13 @@ def login(request, template_name='registration/login.html',
         else:
             return HttpResponseRedirect(reverse(redirect_if_logged_in))
 
+    if (getattr(settings, 'ENABLE_CUSTOM_OAUTH', False) and
+            getattr(settings, 'OAUTH_AUTHORIZATION_URL', '')):
+        from seahub.oauth.views import custom_oauth_login_redirect
+        response = custom_oauth_login_redirect(request)
+        if response is not None:
+            return response
+
     ip = get_remote_ip(request)
 
     if request.method == "POST":
