@@ -285,6 +285,12 @@ def logout(request, next_page=None,
     from seahub.auth import logout
     logout(request)
 
+    if getattr(settings, 'ENABLE_CUSTOM_OAUTH', False):
+        from seahub.oauth.views import custom_oauth_logout_redirect
+        response = custom_oauth_logout_redirect(request)
+        if response is not None:
+            return response
+
     # Local logout for shibboleth user.
     shib_logout_url = getattr(settings, 'SHIBBOLETH_LOGOUT_URL', '')
     if getattr(settings, 'ENABLE_SHIB_LOGIN', False) and shib_logout_url:

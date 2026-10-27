@@ -374,6 +374,14 @@ def oauth_disconnect(request):
     return HttpResponseRedirect(_get_safe_next_url(request))
 
 
+def custom_oauth_logout_redirect(request):
+    if ENABLE_CUSTOM_OAUTH:
+        handler = getattr(custom_oauth_login, 'logout', None)
+        if handler:
+            return handler(request)
+    return None
+
+
 def custom_oauth_login_redirect(request):
     """Only opt-in custom providers replace the local password form."""
     if not ENABLE_CUSTOM_OAUTH:
