@@ -198,6 +198,12 @@ class ObtainAuthToken(APIView):
     renderer_classes = (renderers.JSONRenderer,)
 
     def post(self, request):
+        if getattr(dj_settings, 'ENABLE_CUSTOM_OAUTH', False):
+            from seahub.oauth.views import custom_oauth_token_redirect
+            response = custom_oauth_token_redirect(request)
+            if response is not None:
+                return response
+
         headers = {}
         context = { 'request': request }
         serializer = AuthTokenSerializer(data=request.data, context=context)

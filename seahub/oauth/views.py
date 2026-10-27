@@ -374,6 +374,17 @@ def oauth_disconnect(request):
     return HttpResponseRedirect(_get_safe_next_url(request))
 
 
+def custom_oauth_token_redirect(request):
+    """Let an opt-in custom provider redirect password POSTs before validation."""
+    if not ENABLE_CUSTOM_OAUTH:
+        from django.http import JsonResponse
+        return JsonResponse({'error': 'Custom authentication is unavailable.'}, status=503)
+    handler = getattr(custom_oauth_login, 'token_redirect', None)
+    if handler:
+        return handler(request)
+    return None
+
+
 def custom_oauth_logout_redirect(request):
     if ENABLE_CUSTOM_OAUTH:
         handler = getattr(custom_oauth_login, 'logout', None)
