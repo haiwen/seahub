@@ -1,0 +1,68 @@
+.sdoc-review-progress {
+  width: fit-content;
+  min-width: 196px;
+  max-width: 100%;
+  margin: 8px 0 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--bs-border-secondary-color);
+  border-radius: 8px;
+  background: var(--bs-body-bg);
+}
+
+.sdoc-review-progress__spinner {
+  display: block;
+  width: 9px;
+  height: 9px;
+  border: 2px solid #c7d2fe;
+  border-top-color: #4f46e5;
+  border-radius: 50%;
+  animation: sdoc-review-progress-spin .8s linear infinite;
+}
+
+.sdoc-review-progress__steps {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sdoc-review-progress__step {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #8490a0;
+  font-size: 12px;
+}
+
+.sdoc-review-progress__step-mark {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 13px;
+  height: 13px;
+  border: 1px solid #b8c0cc;
+  border-radius: 50%;
+  font-size: 9px;
+}
+
+.sdoc-review-progress__step.is-active {
+  color: var(--bs-body-color);
+  font-weight: 600;
+}
+
+.sdoc-review-progress__step.is-active .sdoc-review-progress__step-mark {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px #eef2ff;
+}
+
+.sdoc-review-progress__step.is-complete {
+  color: #52606d;
+}
+
+.sdoc-review-progress__step.is-complete .sdoc-review-progress__step-mark {
+  color: #227447;
+  border-color: #8fc7a6;
+}
+
+@keyframes sdoc-review-progress-spin {
+  to { transform: rotate(360deg); }
+}

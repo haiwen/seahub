@@ -46,6 +46,12 @@
   border-radius: 3px;
 }
 
+.sdoc-review-target {
+  outline: 2px solid #818cf8 !important;
+  outline-offset: 3px;
+  background: #eef2ff !important;
+}
+
 .sdoc-chat-panel-header-op:hover,
 .sdoc-chat-panel-toolbar-actions .cur-view-path-btn:hover {
   background-color: var(--bs-icon-btn-hover-bg-color);
@@ -75,6 +81,7 @@
 }
 
 .sdoc-chat-panel-content {
+  width: 100%;
   display: flex;
   flex: 1;
   min-height: 0;

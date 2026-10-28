@@ -2,13 +2,13 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { chatAPI } from '@/api/chat-api';
+import CenteredLoading from '@/components/centered-loading';
+import Icon from '@/components/icon';
+import toaster from '@/components/toast';
 import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { gettext, username } from '@/utils/constants';
 import { eventBus } from '@/utils/event-bus';
 import { Utils } from '@/utils/utils';
-import CenteredLoading from '../../centered-loading';
-import Icon from '../../icon';
-import toaster from '../../toast';
 import ChatHeader from '../chat-header';
 import ChatHistory from '../chat-history';
 import ChatInput from '../chat-input';
@@ -21,12 +21,15 @@ import './index.css';
 const STREAM_UPDATE_DELAY = 50;
 const SCROLL_BOTTOM_THRESHOLD = 24;
 
-const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = false }) => {
+const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = false, messageRenderers, messageWorkflow }) => {
   const [isReply, setReply] = useState(false);
+  const [isSubmitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [chatHistories, setChatHistories] = useState([]);
   const [fetchedSession, setFetchedSession] = useState(null);
   const [isStartingChatFromConversation, setIsStartingChatFromConversation] = useState(false);
+  const [activeTaskId, setActiveTaskId] = useState(null);
+  const [isStoppingTask, setStoppingTask] = useState(false);
 
   const timer = useRef(null);
   const chatHistoryContentRef = useRef(null);
@@ -34,6 +37,10 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
   const currentSessionId = useRef('');
   const newSessionProblem = useRef('');
   const pendingTitleQueryBySession = useRef({});
+  const runningTasks = useRef(new Map());
+  const submissionToken = useRef(null);
+
+  useEffect(() => () => { submissionToken.current = null; }, []);
 
   const {
     isShowSessions,
@@ -128,6 +135,61 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
     });
   }, [modifyLocalSession]);
 
+  const updateChatMessageContent = useCallback((chatId, content) => {
+    setChatHistories((current) => {
+      const index = current.findIndex((chat) => chat._id === chatId);
+      if (index < 0 || current[index].message?.[CHAT_MESSAGE_TYPE.AI_REPLY] === content) {
+        return current;
+      }
+      const next = current.slice();
+      const chat = current[index];
+      next[index] = new ChatMessage({
+        id: chat._id,
+        message: { ...chat.message, [CHAT_MESSAGE_TYPE.AI_REPLY]: content },
+        isUserSpeak: chat.isUserSpeak,
+        type: chat.type,
+        extensions: chat.extensions,
+      });
+      return next;
+    });
+  }, []);
+
+  const updateTaskRunning = useCallback((taskId, running, cancellable = false) => {
+    if (!taskId || pageSlugId === ASK_PAGE_SLUG_ID.NEW || currentSessionId.current !== pageSlugId) return;
+    if (running) {
+      runningTasks.current.set(taskId, cancellable);
+      setActiveTaskId(cancellable ? taskId : null);
+      modifyLocalSession(pageSlugId, { running_task: true });
+      return;
+    }
+    const wasTracked = runningTasks.current.delete(taskId);
+    if (wasTracked) {
+      const cancellableIds = Array.from(runningTasks.current).filter(([, canCancel]) => canCancel).map(([id]) => id);
+      setActiveTaskId(cancellableIds[cancellableIds.length - 1] || null);
+    }
+    if (wasTracked && runningTasks.current.size === 0) {
+      modifyLocalSession(pageSlugId, { running_task: false });
+    }
+  }, [modifyLocalSession, pageSlugId]);
+
+  const stopTask = useCallback(async () => {
+    if (!activeTaskId || isStoppingTask) return;
+    const sessionId = pageSlugId;
+    setStoppingTask(true);
+    try {
+      const updateMessages = await messageWorkflow.cancel(activeTaskId);
+      modifyLocalSession(sessionId, { running_task: false });
+      if (currentSessionId.current !== sessionId) return;
+      setChatHistories(updateMessages);
+      runningTasks.current.delete(activeTaskId);
+      setActiveTaskId(null);
+    } catch (error) {
+      toaster.danger(Utils.getErrorMsg(error));
+    } finally {
+      if (currentSessionId.current === sessionId) setStoppingTask(false);
+    }
+  }, [activeTaskId, isStoppingTask, messageWorkflow, modifyLocalSession, pageSlugId]);
+
   const sendMessage = useCallback(({ message, attachments, model }) => {
     const validMessage = message.trim();
     if (!validMessage) {
@@ -146,6 +208,62 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
     updateChatHistories(newChatHistories, false, () => {
       messageInputRef.current?.clearInput();
     });
+
+    if (messageWorkflow) {
+      const token = {};
+      submissionToken.current = token;
+      const isCurrentSubmission = () => submissionToken.current === token && currentSessionId.current === pageSlugId;
+      setSubmitting(true);
+      const updateProgress = (progressMessage) => {
+        if (isCurrentSubmission()) updateChatHistories([...newChatHistories, progressMessage]);
+      };
+      messageWorkflow.submit({
+        sessionId: pageSlugId,
+        message: validMessage,
+        attachments,
+        model,
+        createSession,
+        onProgress: updateProgress,
+      }).then((result) => {
+        if (result.runningTask) modifyLocalSession(result.sessionId, { running_task: true });
+        const isCurrent = isCurrentSubmission();
+        if (isCurrent && result.sessionId !== pageSlugId) {
+          currentSessionId.current = result.sessionId;
+          togglePageSlugId(result.sessionId);
+        }
+        if (result.fallbackToChat) {
+          if (isCurrent) updateChatHistories(newChatHistories);
+          eventBus.dispatch(EVENT_BUS_TYPE.ASK_QUESTION, {
+            sessionId: result.sessionId || pageSlugId,
+            message: result.message || validMessage,
+            attachments,
+            model,
+          });
+          return;
+        }
+        if (isCurrent && result.messages) {
+          const nextChatHistories = newChatHistories.slice();
+          nextChatHistories[nextChatHistories.length - 1] = result.messages[0] || nextChatHistories[nextChatHistories.length - 1];
+          nextChatHistories.push(...result.messages.slice(1));
+          updateChatHistories(nextChatHistories);
+        }
+      }).catch((error) => {
+        if (!isCurrentSubmission()) return;
+        const nextChatHistories = newChatHistories.slice();
+        nextChatHistories.push(new ChatMessage({
+          message: { [CHAT_MESSAGE_TYPE.TEXT]: Utils.getErrorMsg(error) },
+          type: CHAT_MESSAGE_TYPE.ERROR,
+        }));
+        updateChatHistories(nextChatHistories);
+        toaster.danger(Utils.getErrorMsg(error));
+      }).finally(() => {
+        if (submissionToken.current === token) {
+          submissionToken.current = null;
+          setSubmitting(false);
+        }
+      });
+      return;
+    }
 
     if (pageSlugId !== ASK_PAGE_SLUG_ID.NEW) {
       touchSession(pageSlugId);
@@ -176,7 +294,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
         });
       }, 3);
     });
-  }, [chatHistories, createSession, pageSlugId, togglePageSlugId, touchSession, updateChatHistories]);
+  }, [chatHistories, createSession, modifyLocalSession, messageWorkflow, pageSlugId, togglePageSlugId, touchSession, updateChatHistories]);
 
   const handleStartChatFromConversation = useCallback(() => {
     if (!session?._id || !startChatFromConversation || isStartingChatFromConversation) {
@@ -201,6 +319,11 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
     }
 
     currentSessionId.current = pageSlugId;
+    submissionToken.current = null;
+    setSubmitting(false);
+    runningTasks.current.clear();
+    setActiveTaskId(null);
+    setStoppingTask(false);
     setFetchedSession(null);
     updateChatHistories([]);
     setLoading(true);
@@ -210,11 +333,14 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
       return;
     }
 
+    let cancelled = false;
     chatAPI.getChatMessages(pageSlugId).then((res) => {
+      if (cancelled) return;
       const {
         session: sessionData,
         messages: historyMessages,
         running_task,
+        running_task_type,
         user_input,
       } = res.data;
 
@@ -223,31 +349,11 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
         modifyLocalSession(pageSlugId, { running_task: Boolean(running_task) });
       }
 
-      const messages = Array.isArray(historyMessages) ? historyMessages.map((item) => {
-        if (item.role === 'user') {
-          return new ChatMessage({
-            id: item.id,
-            message: {
-              [CHAT_MESSAGE_TYPE.TEXT]: item.content,
-              [CHAT_MESSAGE_TYPE.ATTACHMENTS]: item.attachments || [],
-            },
-            isUserSpeak: true,
-          });
-        }
+      const messages = Array.isArray(historyMessages) ? historyMessages.map(ChatMessage.fromServer) : [];
 
-        const newChatData = {
-          [CHAT_MESSAGE_TYPE.AI_REPLY]: item.content || '',
-          [CHAT_MESSAGE_TYPE.SOURCES]: Array.isArray(item.sources) ? item.sources : [],
-          [CHAT_MESSAGE_TYPE.THOUGHT_PROCESS]: item.thought_process,
-        };
-        return new ChatMessage({
-          id: item.id,
-          message: newChatData,
-          type: CHAT_MESSAGE_TYPE.GROUP,
-        });
-      }) : [];
+      const hasRunningExtension = messageWorkflow?.handlesTask(running_task_type);
 
-      if (running_task) {
+      if (running_task && !hasRunningExtension) {
         setReply(true);
         const { message = '', attachments = [] } = user_input || {};
         messages.push(new ChatMessage({
@@ -262,14 +368,16 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
       updateChatHistories(messages);
       setLoading(false);
 
-      if (running_task) {
+      if (running_task && !hasRunningExtension) {
         getChatMessage(pageSlugId);
       }
     }).catch((error) => {
+      if (cancelled) return;
       toaster.danger(Utils.getErrorMsg(error));
       setLoading(false);
     });
-  }, [getChatMessage, modifyLocalSession, pageSlugId, repoID, updateChatHistories]);
+    return () => { cancelled = true; };
+  }, [getChatMessage, messageWorkflow, modifyLocalSession, pageSlugId, repoID, updateChatHistories]);
 
   useEffect(() => {
     setReply(Boolean(session?.is_replying));
@@ -626,7 +734,7 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
 
   const isEmpty = chatHistories.length === 0 && !loading;
   const isNewChat = pageSlugId === ASK_PAGE_SLUG_ID.NEW;
-  const effectiveIsReply = loading || isReply;
+  const effectiveIsReply = loading || isReply || isSubmitting;
 
   return (
     <div className={classNames('sea-ai-ask-wrapper', { empty: isEmpty && isNewChat, 'small-page': isSmall, 'has-header': !isNewChat })}>
@@ -651,6 +759,9 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
               chat={chat}
               settings={settings}
               repoID={repoID}
+              messageRenderers={messageRenderers}
+              onMessageContentChange={updateChatMessageContent}
+              onExtensionStateChange={updateTaskRunning}
             />
           ))}
           {loading && <CenteredLoading className="flex-1" />}
@@ -677,6 +788,9 @@ const Chat = ({ repoID, settings, forceSmallPage = false, hideSessionHeader = fa
             repoID={repoID}
             sendMessage={sendMessage}
             isEmpty={isEmpty}
+            showStop={Boolean(activeTaskId)}
+            stopping={isStoppingTask}
+            onStop={stopTask}
           />
         )}
       </div>
@@ -689,6 +803,12 @@ Chat.propTypes = {
   settings: PropTypes.object,
   forceSmallPage: PropTypes.bool,
   hideSessionHeader: PropTypes.bool,
+  messageRenderers: PropTypes.object,
+  messageWorkflow: PropTypes.shape({
+    submit: PropTypes.func.isRequired,
+    cancel: PropTypes.func.isRequired,
+    handlesTask: PropTypes.func.isRequired,
+  }),
 };
 
 export default Chat;
