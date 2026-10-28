@@ -623,6 +623,7 @@ class Search(APIView):
                 results, total = [], 0
                 return Response({"total": total, "results": results, "has_more": False})
 
+            path_permissions = {}
             new_results = []
             for e in results:
                 e.pop('repo', None)
@@ -635,7 +636,10 @@ class Search(APIView):
 
                 # Use the same effective path permission as normal file access.
                 fullpath = e['fullpath'].rstrip('/') or '/'
-                permission = check_folder_permission(request, repo_id, fullpath)
+                permission_key = (repo_id, fullpath)
+                if permission_key not in path_permissions:
+                    path_permissions[permission_key] = check_folder_permission(request, repo_id, fullpath)
+                permission = path_permissions[permission_key]
                 if not permission:
                     continue
 
@@ -707,6 +711,7 @@ class Search(APIView):
                     owner = ''
                 owner_map[repo_id] = owner
 
+            path_permissions = {}
             new_results = []
             for f in results:
                 repo_id = f['repo_id']
@@ -727,7 +732,10 @@ class Search(APIView):
                         f['fullpath'] = f['fullpath'].removeprefix(origin_path)
 
                 fullpath = f['fullpath'].rstrip('/') or '/'
-                permission = check_folder_permission(request, f['repo_id'], fullpath)
+                permission_key = (f['repo_id'], fullpath)
+                if permission_key not in path_permissions:
+                    path_permissions[permission_key] = check_folder_permission(request, f['repo_id'], fullpath)
+                permission = path_permissions[permission_key]
                 if not permission:
                     continue
                 if with_permission.lower() == 'true':
