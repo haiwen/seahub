@@ -191,11 +191,17 @@ class InternalCheckFileOperationAccess(APIView):
             username = self._get_user_by_accont_token(token)
         
         if username:
-            op_perms = parse_repo_perm(seafile_api.check_permission_by_path(
-                        repo_id, '/', username))
+            permission = seafile_api.check_permission_by_path(
+                repo_id, os.path.dirname(file_path), username)
+            if not permission:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            op_perms = parse_repo_perm(permission)
 
             if op == OP_DOWNLOAD:
-                if not (ignore_download_perms or op_perms.can_download):
+                if not (op_perms.can_download or
+                        (ignore_download_perms and op_perms.can_preview)):
                     error_msg = 'Permission denied.'
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
             if op == OP_UPLOAD and not op_perms.can_upload:
