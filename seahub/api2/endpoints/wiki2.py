@@ -37,7 +37,7 @@ from seahub.wiki2.utils import is_valid_wiki_name, get_wiki_config, WIKI_PAGES_D
     import_conflunece_to_wiki, import_wiki_page
 
 from seahub.utils import is_org_context, get_user_repos, is_pro_version, is_valid_dirent_name, \
-    get_no_duplicate_obj_name, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_get_url, get_service_url
+    get_no_duplicate_obj_name, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_get_url, get_service_url, normalize_file_path
 if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
     from seahub.search.utils import search_wikis, ai_search_wikis
 
@@ -752,6 +752,11 @@ class Wiki2PageView(APIView):
             logger.error(e)
             latest_contributor, last_modified = None, 0
 
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_path(
+            repo_id, os.path.dirname(normalize_file_path(path)), filename, is_dir=False)
+        if not uuid_map or str(uuid_map.uuid) != doc_uuid:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         assets_url = '/api/v2.1/seadoc/download-image/' + doc_uuid
         seadoc_access_token = gen_seadoc_access_token(doc_uuid, filename, request.user.username, permission=permission, default_title='')
 
@@ -967,6 +972,11 @@ class Wiki2PublishPageView(APIView):
         except SearpcError as e:
             logger.error(e)
             latest_contributor, last_modified = None, 0
+
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_path(
+            repo_id, os.path.dirname(normalize_file_path(path)), filename, is_dir=False)
+        if not uuid_map or str(uuid_map.uuid) != doc_uuid:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         assets_url = '/api/v2.1/seadoc/download-image/' + doc_uuid
         seadoc_access_token = gen_seadoc_access_token(doc_uuid, filename, request.user.username, permission='r',
