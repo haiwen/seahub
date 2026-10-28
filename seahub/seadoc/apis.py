@@ -2601,6 +2601,7 @@ class SeadocDirView(APIView):
 
 class SdocRevisionBaseVersionContent(APIView):
     authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, file_uuid):
@@ -2632,6 +2633,12 @@ class SdocRevisionBaseVersionContent(APIView):
             error_msg = 'Origin file uuid %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        # permission check
+        permission = check_folder_permission(request, origin_doc_uuid_map.repo_id, origin_doc_uuid_map.parent_path)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         username = request.user.username
         token = seafile_api.get_fileserver_access_token(origin_doc_uuid_map.repo_id,
                                                         origin_file_version,
@@ -2656,6 +2663,7 @@ class SdocRevisionBaseVersionContent(APIView):
 
 class SeadocPublishedRevisionContent(APIView):
     authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, file_uuid):
@@ -2685,6 +2693,12 @@ class SeadocPublishedRevisionContent(APIView):
         if not origin_doc_uuid_map:
             error_msg = 'Origin file uuid %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        permission = check_folder_permission(request, origin_doc_uuid_map.repo_id, origin_doc_uuid_map.parent_path)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         username = request.user.username
         token = seafile_api.get_fileserver_access_token(origin_doc_uuid_map.repo_id,
