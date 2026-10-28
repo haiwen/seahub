@@ -58,7 +58,7 @@ class Command(BaseCommand):
             if not is_valid_email(email):
                 raise CommandError("Invalid email address.")
 
-        password = ''
+        password = options.get('password', None)
 
         # Try to determine the current system user's username to use as a default.
         try:
