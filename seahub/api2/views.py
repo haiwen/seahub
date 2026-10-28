@@ -98,8 +98,7 @@ from seahub.views import is_registered_user, check_folder_permission, \
 from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg, can_edit_file
 if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
     from seahub.search.utils import search_files, get_search_repos_map, SEARCH_FILEEXT, ai_search_files, \
-        RELATED_REPOS_PREFIX, SEARCH_REPOS_LIMIT, RELATED_REPOS_CACHE_TIMEOUT, format_repos, is_invisible_path, \
-        get_invisible_repos_info_by_username
+        RELATED_REPOS_PREFIX, SEARCH_REPOS_LIMIT, RELATED_REPOS_CACHE_TIMEOUT, format_repos
 from seahub.utils import transfer_repo
 import seahub.settings as settings
 from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
@@ -584,7 +583,6 @@ class Search(APIView):
 
         username = request.user.username
         org_id = request.user.org.org_id if is_org_context(request) else None
-        repo_id_to_invisible_paths = get_invisible_repos_info_by_username(username, org_id)
         if HAS_FILE_SEARCH:
             repo_id_map = {}
             # check recourse and permissin when search in a single repo
@@ -627,7 +625,7 @@ class Search(APIView):
 
             new_results = []
             for e in results:
-                repo = e.pop('repo', None)
+                e.pop('repo', None)
                 e.pop('exists', None)
                 e.pop('last_modified_by', None)
                 e.pop('name_highlight', None)
@@ -635,21 +633,13 @@ class Search(APIView):
 
                 repo_id = e['repo_id']
 
-                fullpath = e.get('fullpath', '')
-                origin_full_path = fullpath
-                origin_repo_id = repo_id
-                if repo.origin_repo_id:
-                    origin_repo_id = repo.origin_repo_id
-                    origin_full_path = os.path.join(repo.origin_path + fullpath)
-
-                if is_invisible_path(repo_id_to_invisible_paths, origin_repo_id, origin_full_path):
+                # Use the same effective path permission as normal file access.
+                fullpath = e['fullpath'].rstrip('/') or '/'
+                permission = check_folder_permission(request, repo_id, fullpath)
+                if not permission:
                     continue
 
                 if with_permission.lower() == 'true':
-                    permission = check_folder_permission(request, repo_id, '/')
-                    if not permission:
-                        # it should not happen
-                        continue
                     e['permission'] = permission
 
                 # get repo type
@@ -728,11 +718,6 @@ class Search(APIView):
                 repo_name = repo[2]
                 f['repo_name'] = repo_name
                 f.pop('_id', None)
-                origin_repo_id = f['repo_id']
-                origin_full_path = f['fullpath']
-                if is_invisible_path(repo_id_to_invisible_paths, origin_repo_id, origin_full_path):
-                    continue
-
                 if origin_path:
                     if not is_path_in_virtual_root(f['fullpath'], origin_path):
                         # this operation will reduce the result items, but it will not happen now
@@ -740,6 +725,13 @@ class Search(APIView):
                     else:
                         f['repo_id'] = real_repo_id
                         f['fullpath'] = f['fullpath'].removeprefix(origin_path)
+
+                fullpath = f['fullpath'].rstrip('/') or '/'
+                permission = check_folder_permission(request, f['repo_id'], fullpath)
+                if not permission:
+                    continue
+                if with_permission.lower() == 'true':
+                    f['permission'] = permission
 
                 f['repo_owner_email'] = owner_map.get(repo_id, '')
 
