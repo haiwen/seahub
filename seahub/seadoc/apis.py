@@ -2143,6 +2143,11 @@ class SeadocRevisionView(APIView):
     # modify by rebase op
     def put(self, request, file_uuid):
 
+        file = request.FILES.get('file', None)
+        if not file:
+            error_msg = 'file not found.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         if not file_uuid:
             error_msg = 'file_uuid %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -2167,6 +2172,45 @@ class SeadocRevisionView(APIView):
             error_msg = 'origin file %s uuid_map not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        repo_id = revision.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        origin_repo_id = repo.origin_repo_id if repo.is_virtual else repo_id
+        if uuid_map.repo_id != repo_id or origin_uuid_map.repo_id != origin_repo_id:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        origin_parent_path = origin_uuid_map.parent_path
+        if repo.is_virtual:
+            if not is_path_in_virtual_root(origin_parent_path, repo.origin_path):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            origin_parent_path = origin_parent_path[len(repo.origin_path.rstrip('/')):] or '/'
+
+        # Rebase requires edit permission on both the revision and the original document.
+        for parent_path in (uuid_map.parent_path, origin_parent_path):
+            permission = check_folder_permission(request, repo_id, parent_path)
+            if not permission or not parse_repo_perm(permission).can_edit_on_web:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if isinstance(request.successful_authenticator, SdocJWTTokenAuthentication):
+            auth = request.headers.get('authorization', '').split()
+            is_valid, payload = is_valid_seadoc_access_token(auth, file_uuid, return_payload=True)
+            permission = payload.get('permission') if is_valid else None
+            if not permission or not parse_repo_perm(permission).can_edit_on_web:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        origin_doc_path = posixpath.join(origin_uuid_map.parent_path, origin_uuid_map.filename)
+        newest_file_version = seafile_api.get_file_id_by_path(origin_uuid_map.repo_id, origin_doc_path)
+        if not newest_file_version:
+            error_msg = 'origin file %s not found.' % origin_doc_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         file_path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
         file_path = os.path.normpath(file_path)
         file_id = seafile_api.get_file_id_by_path(uuid_map.repo_id, file_path)
@@ -2183,7 +2227,6 @@ class SeadocRevisionView(APIView):
         try:
 
             # rewrite file
-            file = request.FILES.get('file', None)
             files = {'file': file}
             data = {'filename': uuid_map.filename, 'target_file': file_path}
             resp = requests.post(upload_link, files=files, data=data)
@@ -2193,8 +2236,6 @@ class SeadocRevisionView(APIView):
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
             # update origin file version
-            origin_doc_path = revision.origin_doc_path
-            newest_file_version = seafile_api.get_file_id_by_path(origin_uuid_map.repo_id, origin_doc_path)
             SeadocRevision.objects.update_origin_file_version(file_uuid, newest_file_version)
 
             # server content update
