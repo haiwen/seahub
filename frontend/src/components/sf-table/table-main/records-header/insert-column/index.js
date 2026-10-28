@@ -10,19 +10,16 @@ import ColumnPopover from '@/features/metadata/components/popover/column-popover
 import ColumnTypeDropdownMenu from '@/features/metadata/components/popover/column-popover/column-type-dropdown-menu';
 import { COMMON_FORM_FIELD_TYPE } from '@/features/metadata/components/popover/column-popover/constants';
 import { ValidateColumnFormFields } from '@/features/metadata/components/popover/column-popover/utils';
-import { useMetadataView } from '@/features/metadata/hooks/metadata-view';
 import { getColumnDisplayName } from '@/features/metadata/utils/column';
 import { gettext } from '@/utils/constants';
 import { getEventClassName } from '@/utils/dom';
 
 import './index.css';
 
-const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: insertColumnAPI }) => {
+const InsertColumn = ({ lastColumn, height, groupOffsetLeft, metadata, insertColumn: insertColumnAPI }) => {
   const [isColumnMenuOpen, setColumnMenuOpen] = useState(false);
   const [isColumnPopoverShow, setColumnPopoverShow] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState(null);
-
-  const { metadata } = useMetadataView();
 
   const id = useMemo(() => 'sf-table-add-column', []);
 
@@ -138,6 +135,7 @@ InsertColumn.propTypes = {
   lastColumn: PropTypes.object.isRequired,
   height: PropTypes.number,
   groupOffsetLeft: PropTypes.number,
+  metadata: PropTypes.object,
   insertColumn: PropTypes.func.isRequired,
 };
 
