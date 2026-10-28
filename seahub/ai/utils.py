@@ -18,6 +18,7 @@ from django.db.models import Sum, Value
 from seaserv import ccnet_api, get_org_id_by_repo_id, seafile_api
 
 from seahub.settings import ENABLE_AI_CHAT, ENABLE_METADATA_MANAGEMENT, ENABLE_SEAFILE_AI, LLM_MODELS, SEAFILE_AI_SECRET_KEY, SEAFILE_AI_SERVER_URL
+from seahub.settings import SECRET_KEY, SEAFEVENTS_SERVER_URL
 from seahub.base.accounts import User
 from seahub.tags.models import FileUUIDMap
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
@@ -31,6 +32,11 @@ from seahub.ai.models import AIUsageStatistics, ChatMessageThoughtProcess, ChatM
 
 
 logger = logging.getLogger(__name__)
+
+
+class SdocRequestUnderstandingError(RuntimeError):
+    pass
+
 
 AI_REPLY_TIMEOUT = 180
 GENERATED_MARKDOWN_DIR = '/AI Generated/'
@@ -60,6 +66,62 @@ def gen_headers():
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SEAFILE_AI_SECRET_KEY, algorithm='HS256')
     return {"Authorization": "Token %s" % token}
+
+
+def _enqueue_seafevents_task(path, payload, error_label):
+    if not SEAFEVENTS_SERVER_URL:
+        raise RuntimeError('SeafEvents server is not configured')
+    token_payload = {'exp': int(time.time()) + 300}
+    token = jwt.encode(token_payload, SECRET_KEY, algorithm='HS256')
+    url = urljoin(SEAFEVENTS_SERVER_URL, path)
+    response = requests.post(
+        url,
+        json=payload,
+        headers={'Authorization': 'Token %s' % token},
+        timeout=5,
+    )
+    if not response.ok:
+        raise RuntimeError('Failed to enqueue %s: %s' % (error_label, response.text))
+
+
+def enqueue_sdoc_review_task(task_id):
+    """Publish a persisted review task to the existing SeafEvents queue."""
+    _enqueue_seafevents_task(
+        '/add-sdoc-review-task', {'task_id': str(task_id)}, 'SDoc review task')
+
+
+def enqueue_sdoc_review_apply_attempt(apply_attempt_id):
+    """Publish an indeterminate ApplyAttempt for background reconciliation."""
+    _enqueue_seafevents_task(
+        '/add-sdoc-review-apply-attempt',
+        {'apply_attempt_id': str(apply_attempt_id)},
+        'SDoc review apply attempt')
+
+
+def understand_sdoc_request(prompt, document_context, request_context):
+    """Understand a request and bind its scope before persisting a ReviewTask."""
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/sdoc-review-scope/')
+    payload = {'prompt': prompt, 'document_context': document_context}
+    payload.update(request_context)
+    payload['understand_request'] = True
+    response = requests.post(
+        url,
+        json=payload,
+        headers=gen_headers(),
+        timeout=45,
+    )
+    try:
+        data = response.json()
+    except ValueError as error:
+        raise SdocRequestUnderstandingError('Invalid request understanding response.') from error
+    if not isinstance(data, dict):
+        raise SdocRequestUnderstandingError('Invalid request understanding response.')
+    if not response.ok:
+        raise SdocRequestUnderstandingError(data.get('error_msg') or 'Unable to understand document request.')
+    understanding = data.get('understanding')
+    if not isinstance(understanding, dict):
+        raise SdocRequestUnderstandingError('Invalid request understanding response.')
+    return understanding
 
 
 def verify_ai_config():
