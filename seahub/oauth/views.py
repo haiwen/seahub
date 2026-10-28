@@ -68,6 +68,7 @@ if ENABLE_CUSTOM_OAUTH:
         ENABLE_CUSTOM_OAUTH = True
     except ImportError:
         ENABLE_CUSTOM_OAUTH = False
+        logger.exception('[intranet-auth] custom provider import failed')
 
 
 def oauth_check(func):
@@ -278,14 +279,36 @@ def oauth_callback(request):
     return response
 
 
+def _custom_auth_log(request, event, **fields):
+    logger.info('[intranet-auth] event=%s method=%r path=%r host=%r scheme=%r details=%r',
+                event, request.method, request.path, request.META.get('HTTP_HOST', ''),
+                request.scheme, fields)
+
+
+def _call_custom_auth(request, event, handler):
+    _custom_auth_log(request, event + '.dispatch')
+    try:
+        response = handler(request)
+    except Exception as error:
+        # Log only the exception class; request parameters and exception messages
+        # can contain credentials. Preserve the exception for normal error handling.
+        _custom_auth_log(request, event + '.exception', error_type=type(error).__name__)
+        raise
+    _custom_auth_log(request, event + '.response',
+                     status=response.status_code if response is not None else 'local')
+    return response
+
+
 def custom_oauth_token_redirect(request):
     """Let an opt-in custom provider redirect password POSTs before validation."""
     if not ENABLE_CUSTOM_OAUTH:
+        _custom_auth_log(request, 'token.provider_unavailable')
         from django.http import JsonResponse
         return JsonResponse({'error': 'Custom authentication is unavailable.'}, status=503)
     handler = getattr(custom_oauth_login, 'token_redirect', None)
     if handler:
-        return handler(request)
+        return _call_custom_auth(request, 'token', handler)
+    _custom_auth_log(request, 'token.no_custom_handler')
     return None
 
 
@@ -293,27 +316,34 @@ def custom_oauth_logout_redirect(request):
     if ENABLE_CUSTOM_OAUTH:
         handler = getattr(custom_oauth_login, 'logout', None)
         if handler:
-            return handler(request)
+            return _call_custom_auth(request, 'logout', handler)
+    _custom_auth_log(request, 'logout.no_custom_handler')
     return None
 
 
 def custom_oauth_login_redirect(request):
     """Only opt-in custom providers replace the local password form."""
     if not ENABLE_CUSTOM_OAUTH:
+        _custom_auth_log(request, 'login.provider_unavailable')
         return render_error(request, _('Feature is not enabled.'))
     if getattr(custom_oauth_login, 'intranet_login', False):
         is_external = getattr(custom_oauth_login, 'is_external_request', None)
         if is_external:
             try:
                 if not is_external(request):
+                    _custom_auth_log(request, 'login.local_password_form')
                     return None
-            except ValueError:
+            except ValueError as error:
+                _custom_auth_log(request, 'login.configuration_rejected', reason=str(error))
                 return render_error(request, _('Invalid custom login configuration.'))
-        return custom_oauth_login(request)
+        return _call_custom_auth(request, 'login', custom_oauth_login)
+    _custom_auth_log(request, 'login.provider_not_opted_in')
     return None
 
 
 def custom_oauth_login_view(request):
+    _custom_auth_log(request, 'oauth_login.enter',
+                     authenticated=request.user.is_authenticated)
     if not ENABLE_CUSTOM_OAUTH:
         return render_error(request, _('Feature is not enabled.'))
 
@@ -323,11 +353,12 @@ def custom_oauth_login_view(request):
         redirect_url = request.GET.get(auth.REDIRECT_FIELD_NAME, settings.LOGIN_REDIRECT_URL)
         return HttpResponseRedirect(redirect_url)
 
-    return custom_oauth_login(request)
+    return _call_custom_auth(request, 'oauth_login', custom_oauth_login)
 
 
 def custom_oauth_callback_view(request):
+    _custom_auth_log(request, 'oauth_callback.enter')
     if not ENABLE_CUSTOM_OAUTH:
         return render_error(request, _('Feature is not enabled.'))
 
-    return custom_oauth_callback(request)
+    return _call_custom_auth(request, 'oauth_callback', custom_oauth_callback)

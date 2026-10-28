@@ -97,6 +97,11 @@ def login(request, template_name='registration/login.html',
           redirect_field_name=REDIRECT_FIELD_NAME,
           authentication_form=AuthenticationForm):
     """Displays the login form and handles the login action."""
+    if getattr(settings, 'ENABLE_CUSTOM_OAUTH', False):
+        logger.info('[intranet-auth] event=password_login.enter method=%r path=%r host=%r '
+                    'scheme=%r authenticated=%s', request.method, request.path,
+                    request.META.get('HTTP_HOST', ''), request.scheme,
+                    request.user.is_authenticated)
     redirect_to = request.GET.get(redirect_field_name, '')
     if request.user.is_authenticated:
         if redirect_to and url_has_allowed_host_and_scheme(redirect_to, allowed_hosts=request.get_host()):
@@ -109,6 +114,8 @@ def login(request, template_name='registration/login.html',
         from seahub.oauth.views import custom_oauth_login_redirect
         response = custom_oauth_login_redirect(request)
         if response is not None:
+            logger.info('[intranet-auth] event=password_login.custom_response status=%s',
+                        response.status_code)
             return response
 
     ip = get_remote_ip(request)
@@ -132,10 +139,16 @@ def login(request, template_name='registration/login.html',
                 form = authentication_form(data=request.POST)
 
         if form.is_valid():
+            if getattr(settings, 'ENABLE_CUSTOM_OAUTH', False):
+                logger.info('[intranet-auth] event=password_login.valid host=%r',
+                            request.META.get('HTTP_HOST', ''))
             return _handle_login_form_valid(request, form.get_user(),
                                             redirect_to, remember_me)
 
         # form is invalid
+        if getattr(settings, 'ENABLE_CUSTOM_OAUTH', False):
+            logger.info('[intranet-auth] event=password_login.invalid host=%r',
+                        request.META.get('HTTP_HOST', ''))
         form.db_record and user_logged_in_failed.send(sender=None, request=request)
         
         failed_attempt = incr_login_failed_attempts(username=login,
@@ -285,6 +298,8 @@ def logout(request, next_page=None,
     logout(request)
 
     if getattr(settings, 'ENABLE_CUSTOM_OAUTH', False):
+        logger.info('[intranet-auth] event=logout.local_session_cleared host=%r path=%r',
+                    request.META.get('HTTP_HOST', ''), request.path)
         from seahub.oauth.views import custom_oauth_logout_redirect
         response = custom_oauth_logout_redirect(request)
         if response is not None:

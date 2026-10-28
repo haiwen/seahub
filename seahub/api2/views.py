@@ -205,15 +205,22 @@ class ObtainAuthToken(APIView):
 
     def post(self, request):
         if getattr(dj_settings, 'ENABLE_CUSTOM_OAUTH', False):
+            logger.info('[intranet-auth] event=token.post_enter host=%r scheme=%r path=%r',
+                        request.META.get('HTTP_HOST', ''), request.scheme, request.path)
             from seahub.oauth.views import custom_oauth_token_redirect
             response = custom_oauth_token_redirect(request)
             if response is not None:
+                logger.info('[intranet-auth] event=token.custom_response status=%s',
+                            response.status_code)
                 return response
 
         headers = {}
         context = { 'request': request }
         serializer = AuthTokenSerializer(data=request.data, context=context)
         if serializer.is_valid():
+            if getattr(dj_settings, 'ENABLE_CUSTOM_OAUTH', False):
+                logger.info('[intranet-auth] event=token.credentials_valid host=%r',
+                            request.META.get('HTTP_HOST', ''))
             key = serializer.validated_data
 
             trust_dev = False
@@ -249,6 +256,9 @@ class ObtainAuthToken(APIView):
             }
             return Response({'token': key}, headers=headers)
 
+        if getattr(dj_settings, 'ENABLE_CUSTOM_OAUTH', False):
+            logger.info('[intranet-auth] event=token.credentials_invalid host=%r status=400',
+                        request.META.get('HTTP_HOST', ''))
         if serializer.two_factor_auth_failed:
             # Add a special response header so the client knows to ask the user
             # for the 2fa token.
