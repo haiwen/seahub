@@ -46,7 +46,8 @@ function calculatePathWidths(availableWidth, pathItems) {
       const ratio = totalOtherNatural > 0 ? w / totalOtherNatural : 1 / otherItemsWidth.length;
       return w + Math.floor(extraSpace * ratio);
     });
-    result.push(lastItemWidth);
+    // Let the current path use spare space instead of capping it at a text measurement.
+    result.push(usableWidth - totalOtherNatural);
     return result;
   }
 
@@ -157,10 +158,19 @@ function withDynamicPathWidth(WrappedComponent) {
       };
       window.addEventListener('resize', handleResize);
 
+      const fonts = document.fonts;
+      if (fonts) {
+        fonts.ready.then(updateWidths);
+        fonts.addEventListener('loadingdone', updateWidths);
+      }
+
       return () => {
         clearTimeout(initialTimer);
         clearTimeout(observeTimer);
         window.removeEventListener('resize', handleResize);
+        if (fonts) {
+          fonts.removeEventListener('loadingdone', updateWidths);
+        }
         mutationObserver.disconnect();
         if (resizeObserver) {
           resizeObserver.disconnect();
