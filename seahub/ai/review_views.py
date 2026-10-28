@@ -65,6 +65,9 @@ REVIEW_WORKER_TOKEN_AUDIENCE = 'seahub_sdoc_review'
 # This is a renewable worker lease, not a fixed Review duration. A healthy
 # worker renews it before long model calls and whenever it reports progress.
 REVIEW_WORKER_LEASE_SECONDS = 200
+# Keep checking an indeterminate approval after the session is unblocked.
+# A slow document write can outlast the first result-query window.
+APPLY_OUTCOME_RECONCILE_HOURS = 24
 TEXT_CHANGE_KINDS = frozenset(('replace_block_text', 'replace_table_cell_text'))
 LIST_TYPES = frozenset(('ordered_list', 'unordered_list'))
 EDITABLE_TEXT_BLOCK_TYPES = frozenset((
@@ -351,7 +354,15 @@ def _build_card_dict(task):
                         state = 'pending'
                         batch_blocked_item_count += 1
                 elif attempt and attempt.status == ApplyAttempt.STATUS_OUTCOME_UNKNOWN:
-                    state = 'outcome_unknown'
+                    # A verified save callback proves the command committed even
+                    # when the short result query was marked indeterminate.
+                    if attempt.persistence_status in (
+                            ApplyAttempt.PERSISTENCE_PERSISTED,
+                            ApplyAttempt.PERSISTENCE_SAVE_PENDING,
+                            ApplyAttempt.PERSISTENCE_FILE_UNAVAILABLE):
+                        state = 'applied'
+                    else:
+                        state = 'outcome_unknown'
                 else:
                     state = 'approved'
         if membership.conflicted and state not in ('applied', 'rejected'):
@@ -446,6 +457,15 @@ def _update_apply_persistence(attempt_id, next_status, **fields):
         elif (current.persistence_status == ApplyAttempt.PERSISTENCE_SAVE_PENDING
                 and next_status == ApplyAttempt.PERSISTENCE_NOT_REQUESTED):
             next_status = current.persistence_status
+        if fields.get('status') == ApplyAttempt.STATUS_APPLIED and hasattr(current, 'status'):
+            if current.status in (
+                    ApplyAttempt.STATUS_PENDING,
+                    ApplyAttempt.STATUS_COMMITTING,
+                    ApplyAttempt.STATUS_OUTCOME_UNKNOWN):
+                fields['error_code'] = None
+            elif current.status != ApplyAttempt.STATUS_APPLIED:
+                fields.pop('status', None)
+                fields.pop('error_code', None)
         fields.update(persistence_status=next_status, updated_at=timezone.now())
         ApplyAttempt.objects.filter(id=attempt_id).update(**fields)
     return True
@@ -1064,10 +1084,20 @@ class ReviewWorkerPendingView(APIView):
             error_code='post_commit_indeterminate',
             updated_at=now,
         )
-        apply_attempt_ids = list(
+        committing_ids = list(
             ApplyAttempt.objects.filter(status=ApplyAttempt.STATUS_COMMITTING)
             .order_by('created_at').values_list('apply_attempt_id', flat=True)[:100]
         )
+        unknown_ids = []
+        unknown_limit = 100 - len(committing_ids)
+        if unknown_limit:
+            unknown_ids = list(
+                ApplyAttempt.objects.filter(
+                    status=ApplyAttempt.STATUS_OUTCOME_UNKNOWN,
+                    created_at__gte=now - timezone.timedelta(hours=APPLY_OUTCOME_RECONCILE_HOURS),
+                ).order_by('created_at').values_list('apply_attempt_id', flat=True)[:unknown_limit]
+            )
+        apply_attempt_ids = committing_ids + unknown_ids
         return Response({
             'task_ids': [str(task_id) for task_id in task_ids],
             'apply_attempt_ids': [str(attempt_id) for attempt_id in apply_attempt_ids],
@@ -1090,11 +1120,8 @@ class ReviewWorkerApplyReconcileView(APIView):
                 apply_attempt_id=apply_attempt_id).first()
         if not attempt:
             return api_error(status.HTTP_404_NOT_FOUND, 'Apply attempt not found.')
-        if attempt.status != ApplyAttempt.STATUS_COMMITTING:
-            return Response({'terminal': True, 'attempt': attempt.to_dict()})
-        if attempt.result_query_deadline_at and attempt.result_query_deadline_at <= timezone.now():
-            ReviewTaskApproveView()._mark_outcome_unknown(attempt)
-            attempt.refresh_from_db()
+        if attempt.status not in (
+                ApplyAttempt.STATUS_COMMITTING, ApplyAttempt.STATUS_OUTCOME_UNKNOWN):
             return Response({'terminal': True, 'attempt': attempt.to_dict()})
 
         handler = ReviewTaskApproveView()
@@ -1104,6 +1131,12 @@ class ReviewWorkerApplyReconcileView(APIView):
             handler._map_apply_result(attempt, result)
             attempt.refresh_from_db()
             return Response({'terminal': True, 'attempt': attempt.to_dict()})
+        # Expiry unblocks the session, but a late durable receipt remains queryable.
+        if (attempt.status == ApplyAttempt.STATUS_COMMITTING
+                and attempt.result_query_deadline_at
+                and attempt.result_query_deadline_at <= timezone.now()):
+            handler._mark_outcome_unknown(attempt)
+            attempt.refresh_from_db()
         return Response({'terminal': False, 'attempt': attempt.to_dict()})
 
 
@@ -1869,7 +1902,8 @@ class ReviewSaveResultView(APIView):
             next_status = ApplyAttempt.PERSISTENCE_FILE_UNAVAILABLE
 
         if not _update_apply_persistence(
-                attempt.id, next_status, applied_sdoc_version=applied_version):
+                attempt.id, next_status, applied_sdoc_version=applied_version,
+                status=ApplyAttempt.STATUS_APPLIED, error_code=None):
             return api_error(status.HTTP_409_CONFLICT, 'Save result conflicts with current state.')
         attempt.refresh_from_db()
         return Response({'attempt': attempt.to_dict()})

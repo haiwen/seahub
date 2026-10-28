@@ -23,6 +23,7 @@ from seahub.ai.review_views import (
     _sdoc_apply_result_from_error,
     _update_apply_persistence,
     _build_card_dict, _map_suggestions, ReviewWorkerPendingView,
+    ReviewWorkerApplyReconcileView, _decided_item_ids,
 )
 from seahub.ai.utils import (
     enqueue_sdoc_review_apply_attempt, enqueue_sdoc_review_task,
@@ -173,6 +174,31 @@ class SDocReviewApplyStateTest(SimpleTestCase):
         ReviewTaskApproveView()._map_apply_result(SimpleNamespace(id='attempt'), {
             'status': 'applied', 'persistence_status': 'pending', 'applied_sdoc_version': 5})
         self.assertEqual(mock_update.call_args.args, ('attempt', ApplyAttempt.PERSISTENCE_SAVE_PENDING))
+
+    @patch('seahub.ai.review_views.transaction.atomic', return_value=nullcontext())
+    @patch('seahub.ai.review_views.ApplyAttempt.objects.select_for_update')
+    @patch('seahub.ai.review_views.ApplyAttempt.objects.filter')
+    def test_verified_save_promotes_only_indeterminate_attempts(
+            self, mock_filter, mock_lock, _atomic):
+        unknown = SimpleNamespace(
+            persistence_status='not_requested', applied_sdoc_version=None,
+            status=ApplyAttempt.STATUS_OUTCOME_UNKNOWN)
+        mock_lock.return_value.filter.return_value.first.return_value = unknown
+        self.assertTrue(_update_apply_persistence(
+            'attempt', 'persisted', applied_sdoc_version=8,
+            status=ApplyAttempt.STATUS_APPLIED, error_code=None))
+        self.assertEqual(mock_filter.return_value.update.call_args.kwargs['status'], 'applied')
+        self.assertIsNone(mock_filter.return_value.update.call_args.kwargs['error_code'])
+
+        failed = SimpleNamespace(
+            persistence_status='not_requested', applied_sdoc_version=None,
+            status=ApplyAttempt.STATUS_FAILED_PRECOMMIT)
+        mock_lock.return_value.filter.return_value.first.return_value = failed
+        mock_filter.reset_mock()
+        self.assertTrue(_update_apply_persistence(
+            'attempt', 'persisted', applied_sdoc_version=8,
+            status=ApplyAttempt.STATUS_APPLIED, error_code=None))
+        self.assertNotIn('status', mock_filter.return_value.update.call_args.kwargs)
 
 
 @override_settings(JWT_PRIVATE_KEY=INTERNAL_KEY)
@@ -378,6 +404,34 @@ class SDocReviewDecisionStateTest(SimpleTestCase):
                          ['conflicted', 'applied', 'rejected'])
         self.assertEqual(card['batch_conflict']['conflict_item_count'], 1)
 
+    @patch('seahub.ai.review_views.ApplyAttempt.objects.filter')
+    @patch('seahub.ai.review_views.ReviewDecisionSelection.objects.filter')
+    @patch('seahub.ai.review_views.ReviewCardRevisionItem.objects.filter')
+    def test_saved_unknown_attempt_displays_applied_but_stays_decided(
+            self, mock_memberships, mock_selections, mock_attempts):
+        item = SimpleNamespace(item_id=uuid.uuid4(), kind='replace_block_text', target={},
+                               preview={}, precondition={}, after_text='after',
+                               after_type=None, rationale='')
+        membership = SimpleNamespace(change_item=item, conflicted=False, selectable=True,
+                                     conflict_summary='')
+        decision = SimpleNamespace(id=uuid.uuid4(), decision_kind='approved')
+        attempt = SimpleNamespace(
+            review_decision_id=decision.id, status='outcome_unknown',
+            persistence_status='persisted')
+        selection = SimpleNamespace(
+            card_revision_item=membership, decision=decision, decision_id=decision.id)
+        selections = MagicMock()
+        selections.order_by.return_value = [selection]
+        selections.__iter__.return_value = iter([selection])
+        mock_memberships.return_value.select_related.return_value.order_by.return_value = [membership]
+        mock_selections.return_value.select_related.return_value = selections
+        mock_attempts.return_value = [attempt]
+        task = SimpleNamespace(id=uuid.uuid4(), generation_status='review_ready',
+                               current_card_revision=SimpleNamespace(card_revision=1))
+
+        self.assertEqual(_build_card_dict(task)['items'][0]['state'], 'applied')
+        self.assertEqual(_decided_item_ids(task.current_card_revision), {str(item.item_id)})
+
     def _request(self):
         request = RequestFactory().post('/')
         request.user = SimpleNamespace(username='reviewer@example.com')
@@ -511,6 +565,54 @@ class SDocReviewScopeTest(SimpleTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(mock_tasks.call_args_list[1].kwargs.get('generation_deadline_at__lt'), now)
+
+    @patch('seahub.ai.review_views._review_worker_forbidden', return_value=None)
+    @patch('seahub.ai.review_views.ApplyAttempt.objects.filter')
+    @patch('seahub.ai.review_views.ReviewTask.objects.filter')
+    def test_pending_keeps_recent_unknown_apply_attempts(
+            self, mock_tasks, mock_attempts, _auth):
+        now = timezone.now()
+        mock_tasks.side_effect = [[], MagicMock()]
+
+        def attempts(**kwargs):
+            result = MagicMock()
+            status = kwargs.get('status')
+            if status == ApplyAttempt.STATUS_COMMITTING and 'result_query_deadline_at__lt' not in kwargs:
+                result.order_by.return_value.values_list.return_value.__getitem__.return_value = ['commit']
+            elif status == ApplyAttempt.STATUS_OUTCOME_UNKNOWN:
+                self.assertEqual(kwargs['created_at__gte'], now - timezone.timedelta(hours=24))
+                result.order_by.return_value.values_list.return_value.__getitem__.return_value = ['unknown']
+            return result
+
+        mock_attempts.side_effect = attempts
+        with patch('seahub.ai.review_views.timezone.now', return_value=now):
+            response = ReviewWorkerPendingView().post(RequestFactory().post('/'))
+        self.assertEqual(response.data['apply_attempt_ids'], ['commit', 'unknown'])
+
+    @patch('seahub.ai.review_views._review_worker_forbidden', return_value=None)
+    @patch('seahub.ai.review_views.ApplyAttempt.objects.select_related')
+    def test_expired_reconcile_reads_the_receipt_before_giving_up(self, mock_select, _auth):
+        attempt = SimpleNamespace(
+            status=ApplyAttempt.STATUS_COMMITTING,
+            result_query_deadline_at=timezone.now() - timezone.timedelta(seconds=1),
+            to_dict=lambda: {'status': attempt.status},
+            refresh_from_db=lambda: None,
+        )
+        mock_select.return_value.filter.return_value.first.return_value = attempt
+        with patch.object(ReviewTaskApproveView, '_query_apply_result', return_value={'status': 'applied'}), \
+                patch.object(ReviewTaskApproveView, '_map_apply_result',
+                             side_effect=lambda row, result: setattr(row, 'status', 'applied')):
+            response = ReviewWorkerApplyReconcileView().post(RequestFactory().post('/'), uuid.uuid4())
+        self.assertTrue(response.data['terminal'])
+        self.assertEqual(attempt.status, 'applied')
+
+        attempt.status = ApplyAttempt.STATUS_COMMITTING
+        with patch.object(ReviewTaskApproveView, '_query_apply_result', return_value=None), \
+                patch.object(ReviewTaskApproveView, '_mark_outcome_unknown',
+                             side_effect=lambda row: setattr(row, 'status', 'outcome_unknown')):
+            response = ReviewWorkerApplyReconcileView().post(RequestFactory().post('/'), uuid.uuid4())
+        self.assertFalse(response.data['terminal'])
+        self.assertEqual(attempt.status, 'outcome_unknown')
 
     def setUp(self):
         self.task = SimpleNamespace(

@@ -64,20 +64,54 @@ const SdocReviewCard = ({ reviewTaskId, onMessageContentChange, onTaskRunningCha
   const [isExpanded, setExpanded] = useState(true);
   const [expandedItemIds, setExpandedItemIds] = useState(() => new Set());
   const messageContentCallbackRef = useRef(onMessageContentChange);
+  const snapshotRef = useRef(null);
 
   useEffect(() => {
     messageContentCallbackRef.current = onMessageContentChange;
   }, [onMessageContentChange]);
 
+  const updateSnapshot = useCallback((data) => {
+    const previous = snapshotRef.current;
+    let next = data;
+    if (previous?.card && previous.task.id === data.task.id &&
+        (!data.card || previous.card.task_id === data.card.task_id)) {
+      if (!data.card || previous.card.card_revision > data.card.card_revision) return previous;
+      if (previous.card.card_revision === data.card.card_revision) {
+        const previousItems = new Map(previous.card.items.map((item) => [item.item_id, item]));
+        const items = data.card.items.map((item) => {
+          const current = previousItems.get(item.item_id);
+          // A decision cannot be undone by an older HTTP response. Unknown
+          // outcomes may still advance, and preflight-blocked pending items
+          // remain retryable rather than being frozen as approved.
+          if (['applied', 'rejected', 'apply_failed', 'conflicted'].includes(current?.state) ||
+              (current?.state === 'outcome_unknown' && ['pending', 'approved'].includes(item.state))) {
+            return current;
+          }
+          return item;
+        });
+        const nextItemIds = new Set(items.map((item) => item.item_id));
+        previous.card.items.forEach((item) => {
+          if (!nextItemIds.has(item.item_id)) items.push(item);
+        });
+        const active = ['queued', 'reading', 'drafting'];
+        const nextTask = !active.includes(previous.task.generation_status) && active.includes(data.task.generation_status)
+          ? previous.task : data.task;
+        next = { ...data, task: nextTask, card: { ...data.card, generation_status: nextTask.generation_status, items } };
+      }
+    }
+    snapshotRef.current = next;
+    setTask(next.task);
+    setCard(next.card);
+    if (next.task?.assistant_content) {
+      messageContentCallbackRef.current?.(next.task.assistant_content);
+    }
+    return next;
+  }, []);
+
   const loadCard = useCallback(async () => {
     const response = await chatAPI.getSdocReview(reviewTaskId);
-    setTask(response.data.task);
-    setCard(response.data.card);
-    if (response.data.task?.assistant_content) {
-      messageContentCallbackRef.current?.(response.data.task.assistant_content);
-    }
-    return response.data;
-  }, [reviewTaskId]);
+    return updateSnapshot(response.data);
+  }, [reviewTaskId, updateSnapshot]);
 
   useEffect(() => {
     loadCard().catch((error) => toaster.danger(Utils.getErrorMsg(error)));
@@ -92,6 +126,7 @@ const SdocReviewCard = ({ reviewTaskId, onMessageContentChange, onTaskRunningCha
   const isGenerating = ['queued', 'reading', 'drafting'].includes(generationStatus);
   const isDecisionReady = generationStatus === 'review_ready';
   const isApplying = items.some((item) => item.state === 'approved');
+  const hasUnknownOutcome = items.some((item) => item.state === 'outcome_unknown');
   const isRunning = isGenerating || isApplying;
   const generationFailed = ['failed', 'cancelled'].includes(generationStatus);
   const truncated = !!task?.generation_truncated;
@@ -171,6 +206,29 @@ const SdocReviewCard = ({ reviewTaskId, onMessageContentChange, onTaskRunningCha
   }, [isApplying, loadCard]);
 
   useEffect(() => {
+    if (!hasUnknownOutcome) return undefined;
+    let cancelled = false;
+    let retryDelay = 1000;
+
+    const poll = async () => {
+      while (!cancelled) {
+        await new Promise((resolve) => window.setTimeout(resolve, retryDelay));
+        if (cancelled) return;
+        try {
+          const nextData = await loadCard();
+          const nextItems = nextData?.card?.items || [];
+          if (!nextItems.some((item) => item.state === 'outcome_unknown')) return;
+          retryDelay = Math.min(retryDelay * 2, 5000);
+        } catch (error) {
+          retryDelay = Math.min(retryDelay * 2, 8000);
+        }
+      }
+    };
+    poll();
+    return () => { cancelled = true; };
+  }, [hasUnknownOutcome, loadCard]);
+
+  useEffect(() => {
     if (isDone) setExpanded(false);
   }, [isDone]);
 
@@ -198,14 +256,13 @@ const SdocReviewCard = ({ reviewTaskId, onMessageContentChange, onTaskRunningCha
       const response = action === 'approve'
         ? await chatAPI.approveSdocReview(reviewTaskId, [itemId])
         : await chatAPI.rejectSdocReview(reviewTaskId, [itemId]);
-      setTask(response.data.task);
-      setCard(response.data.card);
+      updateSnapshot(response.data);
     } catch (error) {
       toaster.danger(Utils.getErrorMsg(error));
     } finally {
       setPendingItemIds((prev) => ({ ...prev, [itemId]: null }));
     }
-  }, [reviewTaskId]);
+  }, [reviewTaskId, updateSnapshot]);
 
   const collapseAfterBulkDecision = useCallback((response) => {
     const resultItems = response?.data.card?.items || [];
@@ -221,8 +278,7 @@ const SdocReviewCard = ({ reviewTaskId, onMessageContentChange, onTaskRunningCha
       const approveBatch = async (itemIds) => {
         try {
           response = await chatAPI.approveSdocReview(reviewTaskId, itemIds);
-          setTask(response.data.task);
-          setCard(response.data.card);
+          updateSnapshot(response.data);
         } catch (error) {
           const code = error.response?.data?.error_code;
           const isSizeError = error.response?.status === 413 &&
@@ -248,21 +304,20 @@ const SdocReviewCard = ({ reviewTaskId, onMessageContentChange, onTaskRunningCha
     } finally {
       setBulkPending(null);
     }
-  }, [reviewTaskId, pendingIds, collapseAfterBulkDecision]);
+  }, [reviewTaskId, pendingIds, collapseAfterBulkDecision, updateSnapshot]);
 
   const rejectAll = useCallback(async () => {
     setBulkPending('reject');
     try {
       const response = await chatAPI.rejectSdocReview(reviewTaskId, pendingIds);
-      setTask(response.data.task);
-      setCard(response.data.card);
+      updateSnapshot(response.data);
       collapseAfterBulkDecision(response);
     } catch (error) {
       toaster.danger(Utils.getErrorMsg(error));
     } finally {
       setBulkPending(null);
     }
-  }, [reviewTaskId, pendingIds, collapseAfterBulkDecision]);
+  }, [reviewTaskId, pendingIds, collapseAfterBulkDecision, updateSnapshot]);
 
   if (!task) return null;
   if (generationStatus === 'cancelled') return null;
