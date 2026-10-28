@@ -84,14 +84,8 @@ class OrgSettingsManager(models.Manager):
         except OrgSettings.DoesNotExist:
             return 0
 
-    def is_force_2fa_by_org_id(self, org_id):
-        try:
-            return self.get(org_id=org_id).force_2fa
-        except OrgSettings.DoesNotExist:
-            return False
-
     def add_or_update(self, org, role=None, is_active=None,
-                      monthly_download_traffic_limit=None, force_2fa=None):
+                      monthly_download_traffic_limit=None):
         org_id = org.org_id
         try:
             settings = self.get(org_id=org_id)
@@ -115,9 +109,6 @@ class OrgSettingsManager(models.Manager):
         if monthly_download_traffic_limit is not None:
             settings.monthly_traffic_limit = monthly_download_traffic_limit
 
-        if force_2fa is not None:
-            settings.force_2fa = force_2fa
-
         settings.save(using=self._db)
         return settings
 
@@ -131,8 +122,6 @@ class OrgSettings(models.Model):
     is_active = models.BooleanField(default=True, db_index=True)
     # The unit is bytes. 0 means no limit
     monthly_traffic_limit = models.BigIntegerField(default=0)
-    # force all members of the org to use two-factor authentication
-    force_2fa = models.BooleanField(default=False)
 
     objects = OrgSettingsManager()
 
@@ -200,6 +189,15 @@ def _delete_org_logo_file(org_logo_path):
 
 
 class OrgAdminSettingsManager(models.Manager):
+
+    def is_enable_force_2fa_by_org_id(self, org_id):
+        setting = self.filter(org_id=org_id, key='enable_force_2fa').first()
+        return setting is not None and setting.value == '1'
+
+    def set_enable_force_2fa(self, org_id, enabled):
+        return self.update_or_create(
+            org_id=org_id, key='enable_force_2fa',
+            defaults={'value': '1' if enabled else '0'})
 
     def save_org_logo(self, org_id, image_file):
 

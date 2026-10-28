@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect
 from . import DEVICE_ID_SESSION_KEY
 from .models import Device
 from seahub.options.models import UserOptions
-from seahub.organizations.models import OrgSettings
+from seahub.organizations.models import OrgAdminSettings
 from seahub.settings import SITE_ROOT, ENABLE_FORCE_2FA_TO_ALL_USERS
 from seahub.utils import is_org_context
 
@@ -87,7 +87,7 @@ class ForceTwoFactorAuthMiddleware:
             return True
 
         if is_org_context(request) and \
-                OrgSettings.objects.is_force_2fa_by_org_id(user.org.org_id):
+                OrgAdminSettings.objects.is_enable_force_2fa_by_org_id(user.org.org_id):
             return True
 
         return False

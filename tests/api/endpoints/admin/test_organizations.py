@@ -7,7 +7,7 @@ from seaserv import ccnet_api
 from django.urls import reverse
 from django.test import override_settings
 
-from seahub.organizations.models import OrgSettings
+from seahub.organizations.models import OrgAdminSettings, OrgSettings
 from seahub.test_utils import BaseTestCase
 from tests.common.utils import randstring
 
@@ -175,20 +175,22 @@ class AdminOrganizationTest(BaseTestCase):
             OrgSettings.objects.get_monthly_download_traffic_limit_by_org(self.org), 0)
         mock_set_download_rate_limit.assert_called_once_with(self.org.org_id, -1)
 
-    def test_can_update_force_2fa(self):
+    def test_can_update_enable_force_2fa(self):
         with patch('seahub.utils.two_factor_auth.config') as mock_config:
             mock_config.ENABLE_TWO_FACTOR_AUTH = True
 
-            resp = self.client.put(self.url, 'force_2fa=1',
+            resp = self.client.put(self.url, 'enable_force_2fa=1',
                                    'application/x-www-form-urlencoded')
             self.assertEqual(200, resp.status_code)
 
             json_resp = json.loads(resp.content)
-            assert json_resp['force_2fa'] is True
-            assert OrgSettings.objects.is_force_2fa_by_org_id(self.org.org_id) is True
+            assert json_resp['enable_force_2fa'] is True
+            assert OrgAdminSettings.objects.is_enable_force_2fa_by_org_id(self.org.org_id) is True
+            assert OrgAdminSettings.objects.get(
+                org_id=self.org.org_id, key='enable_force_2fa').value == '1'
 
-    def test_update_force_2fa_with_invalid_value(self):
-        resp = self.client.put(self.url, 'force_2fa=abc',
+    def test_update_enable_force_2fa_with_invalid_value(self):
+        resp = self.client.put(self.url, 'enable_force_2fa=abc',
                                'application/x-www-form-urlencoded')
         self.assertEqual(400, resp.status_code)
-        assert OrgSettings.objects.is_force_2fa_by_org_id(self.org.org_id) is False
+        assert OrgAdminSettings.objects.is_enable_force_2fa_by_org_id(self.org.org_id) is False

@@ -60,7 +60,7 @@ class Content extends Component {
     } else if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
-      const { org_name, users_count, max_user_number, groups_count, quota, quota_usage, monthly_download_traffic_limit, monthly_traffic_usage, enable_saml_login, metadata_url, domain, force_adfs_login, enable_sso, force_2fa } = this.props.orgInfo;
+      const { org_name, users_count, max_user_number, groups_count, quota, quota_usage, monthly_download_traffic_limit, monthly_traffic_usage, enable_saml_login, metadata_url, domain, force_adfs_login, enable_sso, enable_force_2fa } = this.props.orgInfo;
 
       let download_traffic = monthly_traffic_usage.link_file_download + monthly_traffic_usage.sync_file_download + monthly_traffic_usage.web_file_download;
       download_traffic = download_traffic ? download_traffic : 0;
@@ -124,8 +124,8 @@ class Content extends Component {
                   <CheckboxItem
                     saveSetting={this.updateForce2FA}
                     displayName={gettext('Force two-factor authentication for all members')}
-                    keyText='force_2fa'
-                    value={force_2fa}
+                    keyText='enable_force_2fa'
+                    value={enable_force_2fa}
                     helpTip={gettext('All members of this team must enable two-factor authentication')}
                   />
                 </dd>
@@ -305,7 +305,7 @@ class OrgInfo extends Component {
     const data = { force2Fa: value };
     systemAdminAPI.sysAdminUpdateOrg(this.props.orgID, data).then(res => {
       const newOrgInfo = Object.assign(this.state.orgInfo, {
-        force_2fa: res.data.force_2fa
+        enable_force_2fa: res.data.enable_force_2fa
       });
       this.setState({ orgInfo: newOrgInfo });
       toaster.success(gettext('Successfully saved.'));

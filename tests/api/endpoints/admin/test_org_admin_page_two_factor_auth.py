@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 from django.urls import reverse
 
-from seahub.organizations.models import OrgSettings
+from seahub.organizations.models import OrgAdminSettings
 from seahub.test_utils import BaseTestCase
 
 
@@ -33,13 +33,13 @@ class OrgAdminPageTwoFactorAuthTest(BaseTestCase):
         html = resp.content.decode('utf-8')
         assert 'twoFactorAuthEnabled:  false' in html
 
-    def test_org_info_returns_force_2fa(self):
+    def test_org_info_returns_enable_force_2fa(self):
         with patch('seahub.utils.two_factor_auth.config') as mock_config:
             mock_config.ENABLE_TWO_FACTOR_AUTH = True
-            OrgSettings.objects.add_or_update(self.org, force_2fa=True)
+            OrgAdminSettings.objects.set_enable_force_2fa(self.org.org_id, True)
 
             resp = self.client.get(reverse('api-v2.1-org-admin-info'))
             json_resp = json.loads(resp.content)
 
         self.assertEqual(200, resp.status_code)
-        assert json_resp['force_2fa'] is True
+        assert json_resp['enable_force_2fa'] is True

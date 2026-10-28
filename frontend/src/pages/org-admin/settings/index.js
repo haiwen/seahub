@@ -224,8 +224,8 @@ class OrgWebSettings extends Component {
                     <CheckboxItem
                       saveSetting={this.orgSaveSetting}
                       displayName={gettext('Force two-factor authentication for all members')}
-                      keyText='force_2fa'
-                      value={config_dict['force_2fa']}
+                      keyText='enable_force_2fa'
+                      value={config_dict['enable_force_2fa']}
                       helpTip={gettext('All members of this team must enable two-factor authentication')}
                     />
                   }

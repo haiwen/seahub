@@ -13,7 +13,7 @@ from seahub.api2.permissions import IsProVersion, IsOrgAdminUser
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
-from seahub.organizations.models import OrgAdminSettings, OrgSettings, FORCE_ADFS_LOGIN, DISABLE_ORG_USER_CLEAN_TRASH, DISABLE_ORG_ENCRYPTED_LIBRARY
+from seahub.organizations.models import OrgAdminSettings, FORCE_ADFS_LOGIN, DISABLE_ORG_USER_CLEAN_TRASH, DISABLE_ORG_ENCRYPTED_LIBRARY
 from seahub.utils.two_factor_auth import has_two_factor_auth
 
 logger = logging.getLogger(__name__)
@@ -73,15 +73,15 @@ class OrgAdminWebSettings(APIView):
                     error_msg = 'Internal Server Error'
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            if key == 'force_2fa' and has_two_factor_auth():
+            if key == 'enable_force_2fa' and has_two_factor_auth():
                 try:
-                    force_2fa = to_python_boolean(value)
+                    enable_force_2fa = to_python_boolean(value)
                 except (AttributeError, ValueError):
-                    return api_error(status.HTTP_400_BAD_REQUEST, 'force_2fa invalid.')
+                    return api_error(status.HTTP_400_BAD_REQUEST, 'enable_force_2fa invalid.')
 
                 try:
-                    OrgSettings.objects.add_or_update(org, force_2fa=force_2fa)
-                    config_dict[key] = force_2fa
+                    OrgAdminSettings.objects.set_enable_force_2fa(org_id, enable_force_2fa)
+                    config_dict[key] = enable_force_2fa
                 except Exception as e:
                     logger.error(e)
                     error_msg = 'Internal Server Error'
