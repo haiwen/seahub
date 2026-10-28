@@ -8,6 +8,7 @@ import json
 import datetime
 import posixpath
 import re
+from uuid import uuid4
 from dateutil.relativedelta import relativedelta
 from urllib.parse import quote
 
@@ -583,6 +584,13 @@ class Search(APIView):
 
         username = request.user.username
         org_id = request.user.org.org_id if is_org_context(request) else None
+        search_id = uuid4().hex[:12]
+        logger.info('Search[%s] start user=%s org_id=%s backend=%s query=%r '
+                    'search_repo=%s search_path=%r start=%s size=%s filename_only=%s '
+                    'obj_type=%s suffixes=%s time_range=%s size_range=%s',
+                    search_id, username, org_id, 'elastic' if HAS_FILE_SEARCH else 'seasearch',
+                    keyword, search_repo, search_path, start, size, search_filename_only,
+                    obj_type, suffixes, time_range, size_range)
         if HAS_FILE_SEARCH:
             repo_id_map = {}
             # check recourse and permissin when search in a single repo
@@ -592,11 +600,16 @@ class Search(APIView):
                 # recourse check
                 # Skip specical repo
                 if not repo or repo.repo_type == REPO_TYPE_WIKI:
+                    logger.info('Search[%s] stop reason=library_not_found_or_wiki repo_id=%s',
+                                search_id, repo_id)
                     error_msg = 'Library %s not found.' % repo_id
                     return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
                 # permission check
-                if not check_folder_permission(request, repo_id, '/'):
+                root_permission = check_folder_permission(request, repo_id, '/')
+                logger.info('Search[%s] root_permission repo_id=%s permission=%r',
+                            search_id, repo_id, root_permission)
+                if not root_permission:
                     error_msg = 'Permission denied.'
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
                 map_id = repo.origin_repo_id if repo.origin_repo_id else repo_id
@@ -615,18 +628,28 @@ class Search(APIView):
                 'size_range': size_range
             }
             # search file
+            logger.info('Search[%s] elastic scope=%s', search_id,
+                        [(key, repo.id, repo.origin_repo_id, repo.origin_path)
+                         for key, repo in repo_id_map.items()])
             try:
                 results, total = search_files(repo_id_map, search_path, keyword, obj_desc, start, size, org_id,
                                               search_filename_only)
             except Exception as e:
+                logger.info('Search[%s] stop reason=backend_error error=%s', search_id, e)
                 logger.error(e)
                 results, total = [], 0
                 return Response({"total": total, "results": results, "has_more": False})
 
+            logger.info('Search[%s] backend_results total=%s candidates=%s',
+                        search_id, total, len(results))
             path_permissions = {}
             new_results = []
             for e in results:
-                e.pop('repo', None)
+                repo = e.pop('repo', None)
+                if repo and repo.origin_repo_id:
+                    logger.info('Search[%s] virtual_mapping origin_repo_id=%s origin_path=%r '
+                                'repo_id=%s relative_path=%r', search_id,
+                                repo.origin_repo_id, repo.origin_path, e['repo_id'], e['fullpath'])
                 e.pop('exists', None)
                 e.pop('last_modified_by', None)
                 e.pop('name_highlight', None)
@@ -637,9 +660,13 @@ class Search(APIView):
                 # Use the same effective path permission as normal file access.
                 fullpath = e['fullpath'].rstrip('/') or '/'
                 permission_key = (repo_id, fullpath)
+                cache_hit = permission_key in path_permissions
                 if permission_key not in path_permissions:
                     path_permissions[permission_key] = check_folder_permission(request, repo_id, fullpath)
                 permission = path_permissions[permission_key]
+                logger.info('Search[%s] result repo_id=%s path=%r permission=%r '
+                            'permission_cache_hit=%s action=%s', search_id, repo_id, fullpath,
+                            permission, cache_hit, 'keep' if permission else 'filter_no_permission')
                 if not permission:
                     continue
 
@@ -665,6 +692,9 @@ class Search(APIView):
                 new_results.append(e)
 
             has_more = True if total > current_page * per_page else False
+            logger.info('Search[%s] finish total=%s candidates=%s returned=%s filtered=%s '
+                        'permission_checks=%s has_more=%s', search_id, total, len(results),
+                        len(new_results), len(results) - len(new_results), len(path_permissions), has_more)
             return Response({"total": total, "results": new_results, "has_more": has_more})
 
         elif HAS_FILE_SEASEARCH:
@@ -672,6 +702,8 @@ class Search(APIView):
                 org_id = request.user.org.org_id if is_org_context(request) else None
                 key = normalize_cache_key(username, RELATED_REPOS_PREFIX)
                 repos = cache.get(key, [])
+                logger.info('Search[%s] related_repos cache_hit=%s count=%s',
+                            search_id, bool(repos), len(repos))
                 if not repos:
                     repos = get_search_repos(username, org_id)
                     cache.set(key, repos, RELATED_REPOS_CACHE_TIMEOUT)
@@ -680,23 +712,31 @@ class Search(APIView):
                 try:
                     repo = seafile_api.get_repo(search_repo)
                 except Exception as e:
+                    logger.info('Search[%s] stop reason=library_lookup_error repo_id=%s error=%s',
+                                search_id, search_repo, e)
                     logger.error(e)
                     error_msg = 'Library %s not found.' % search_repo
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                 # permission check
-                if not check_folder_permission(request, search_repo, '/'):
+                root_permission = check_folder_permission(request, search_repo, '/')
+                logger.info('Search[%s] root_permission repo_id=%s permission=%r',
+                            search_id, search_repo, root_permission)
+                if not root_permission:
                     error_msg = 'Permission denied.'
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
                 repos = [(repo.id, repo.origin_repo_id, repo.origin_path, repo.name)]
 
             searched_repos, repos_map = format_repos(repos)
+            logger.info('Search[%s] seasearch scope=%s', search_id, searched_repos)
 
             size_range = [size_from, size_to]
             time_range = [time_from, time_to]
             results, total = ai_search_files(keyword, searched_repos, per_page, suffixes,
                                              search_path=search_path, obj_type=obj_type, time_range=time_range, size_range=size_range, search_filename_only=search_filename_only)
+            logger.info('Search[%s] backend_results total=%s candidates=%s',
+                        search_id, total, len(results))
 
             repo_ids = {f['repo_id'] for f in results}
             owner_map = {}
@@ -717,6 +757,8 @@ class Search(APIView):
                 repo_id = f['repo_id']
                 repo = repos_map.get(repo_id, None)
                 if not repo:
+                    logger.info('Search[%s] result repo_id=%s path=%r action=filter_missing_repo_mapping',
+                                search_id, repo_id, f.get('fullpath'))
                     continue
                 real_repo_id = repo[0]
                 origin_path = repo[1]
@@ -725,17 +767,27 @@ class Search(APIView):
                 f.pop('_id', None)
                 if origin_path:
                     if not is_path_in_virtual_root(f['fullpath'], origin_path):
+                        logger.info('Search[%s] result repo_id=%s path=%r origin_path=%r '
+                                    'action=filter_outside_virtual_root',
+                                    search_id, repo_id, f['fullpath'], origin_path)
                         # this operation will reduce the result items, but it will not happen now
                         continue
                     else:
                         f['repo_id'] = real_repo_id
                         f['fullpath'] = f['fullpath'].removeprefix(origin_path)
+                        logger.info('Search[%s] virtual_mapping origin_repo_id=%s origin_path=%r '
+                                    'repo_id=%s relative_path=%r', search_id, repo_id, origin_path,
+                                    f['repo_id'], f['fullpath'])
 
                 fullpath = f['fullpath'].rstrip('/') or '/'
                 permission_key = (f['repo_id'], fullpath)
+                cache_hit = permission_key in path_permissions
                 if permission_key not in path_permissions:
                     path_permissions[permission_key] = check_folder_permission(request, f['repo_id'], fullpath)
                 permission = path_permissions[permission_key]
+                logger.info('Search[%s] result repo_id=%s path=%r permission=%r '
+                            'permission_cache_hit=%s action=%s', search_id, f['repo_id'], fullpath,
+                            permission, cache_hit, 'keep' if permission else 'filter_no_permission')
                 if not permission:
                     continue
                 if with_permission.lower() == 'true':
@@ -745,6 +797,9 @@ class Search(APIView):
 
                 new_results.append(f)
 
+            logger.info('Search[%s] finish total=%s candidates=%s returned=%s filtered=%s '
+                        'permission_checks=%s has_more=False', search_id, total, len(results),
+                        len(new_results), len(results) - len(new_results), len(path_permissions))
             return Response({"total": total, "results": new_results, "has_more": False})
 
 
