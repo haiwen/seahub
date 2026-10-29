@@ -115,6 +115,12 @@ class SdocServerAPI(object):
         response = requests.get(url, headers=headers, timeout=timeout)
         return parse_response(response)
 
+    def abort_review_apply(self, access_token, apply_attempt_id):
+        url = self.sdoc_server_url + '/api/v1/docs/' + self.doc_uuid + '/element-commands/' + apply_attempt_id + '/abort/?from=seahub'
+        headers = {'Authorization': 'Token ' + access_token}
+        response = requests.post(url, json={}, headers=headers, timeout=5)
+        return parse_response(response)
+
     def save_doc(self):
         url = self.sdoc_server_url + '/api/v1/docs/' + self.doc_uuid + '/save/?from=seahub'
         response = requests.post(url, json={}, headers=self.headers)

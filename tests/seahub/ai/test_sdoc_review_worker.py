@@ -142,6 +142,15 @@ class SDocReviewRequestSizeTest(SimpleTestCase):
         attempts.return_value.update.return_value = 1
         self.assertTrue(_claim_apply_dispatch(attempt))
 
+    @patch('seahub.ai.review_views.ApplyAttempt.objects.filter')
+    def test_dispatch_atomically_starts_the_reconciliation_deadline(self, attempts):
+        now = timezone.now()
+        with patch('seahub.ai.review_views.timezone.now', return_value=now):
+            self.assertTrue(_claim_apply_dispatch(SimpleNamespace(id='attempt')))
+        fields = attempts.return_value.update.call_args.kwargs
+        self.assertEqual(fields['status'], ApplyAttempt.STATUS_COMMITTING)
+        self.assertEqual(fields['result_query_deadline_at'], now + timezone.timedelta(seconds=60))
+
     def test_frozen_scope_carries_literal_operation(self):
         operation = {'kind': 'remove_text', 'old_text': '*', 'new_text': '', 'occurrences': 'all'}
         task = SimpleNamespace(
@@ -231,6 +240,52 @@ class SDocReviewRequestSizeTest(SimpleTestCase):
 
 
 class SDocReviewApplyStateTest(SimpleTestCase):
+    @patch('seahub.ai.review_views.transaction.atomic', return_value=nullcontext())
+    @patch('seahub.ai.review_views.ReviewDecisionSelection.objects.filter')
+    @patch('seahub.ai.review_views.ApplyAttempt.objects.filter')
+    def test_confirmed_abort_releases_selections_only_on_active_attempt(self, attempts, selections, _atomic):
+        attempt = SimpleNamespace(id='attempt', review_decision_id='decision')
+        attempts.return_value.update.return_value = 1
+        ReviewTaskApproveView()._map_apply_result(attempt, {
+            'status': 'failed_precommit', 'error_code': 'apply_interrupted'})
+        selections.assert_called_once_with(decision_id='decision')
+        selections.return_value.delete.assert_called_once()
+        self.assertEqual(attempts.call_args.kwargs['status__in'], ('committing', 'outcome_unknown'))
+        selections.reset_mock()
+        attempts.return_value.update.return_value = 0
+        ReviewTaskApproveView()._map_apply_result(attempt, {
+            'status': 'failed_precommit', 'error_code': 'apply_interrupted'})
+        selections.assert_not_called()
+
+    @patch('seahub.ai.review_views.ApplyAttempt.objects.filter')
+    def test_late_unknown_cannot_overwrite_a_terminal_result(self, attempts):
+        ReviewTaskApproveView()._mark_outcome_unknown(SimpleNamespace(id='attempt'))
+        self.assertEqual(attempts.call_args.kwargs['status__in'], ('committing', 'outcome_unknown'))
+
+    @patch('seahub.seadoc.sdoc_server_api.requests.post')
+    def test_abort_client_sends_no_modification_commands(self, post):
+        post.return_value = SimpleNamespace(status_code=200, text='{"status":"failed_precommit"}')
+        api = SdocServerAPI('doc', 'test.sdoc', 'reviewer', access_token='token')
+        self.assertEqual(api.abort_review_apply('abort-token', 'attempt')['status'], 'failed_precommit')
+        self.assertTrue(post.call_args.args[0].endswith('/element-commands/attempt/abort/?from=seahub'))
+        self.assertEqual(post.call_args.kwargs['json'], {})
+        self.assertEqual(post.call_args.kwargs['timeout'], 5)
+
+    @patch('seahub.ai.review_views.generate_sdoc_service_token', return_value='token')
+    @patch('seahub.ai.review_views.SdocServerAPI')
+    def test_abort_checks_receipt_identity_and_keeps_original_file_identity(self, api, token):
+        task = SimpleNamespace(file_uuid='original-file', path='/test.sdoc')
+        attempt = SimpleNamespace(apply_attempt_id='attempt', apply_payload_digest='digest',
+                                  approved_by='reviewer', review_decision=SimpleNamespace(
+                                      card_revision=SimpleNamespace(review_task=task)))
+        receipt = {'apply_attempt_id': 'attempt', 'apply_payload_digest': 'digest',
+                   'doc_uuid': 'original-file', 'status': 'failed_precommit', 'error_code': 'apply_interrupted'}
+        api.return_value.abort_review_apply.return_value = receipt
+        self.assertEqual(ReviewTaskApproveView()._abort_apply(attempt), receipt)
+        self.assertEqual(token.call_args.args[0], 'original-file')
+        api.return_value.abort_review_apply.return_value = dict(receipt, doc_uuid='new-file')
+        self.assertIsNone(ReviewTaskApproveView()._abort_apply(attempt))
+
     @patch('seahub.ai.review_views.transaction.atomic', return_value=nullcontext())
     @patch('seahub.ai.review_views.ApplyAttempt.objects.select_for_update')
     @patch('seahub.ai.review_views.ApplyAttempt.objects.filter')
@@ -675,7 +730,7 @@ class SDocReviewScopeTest(SimpleTestCase):
     @patch('seahub.ai.review_views._review_worker_forbidden', return_value=None)
     @patch('seahub.ai.review_views.ApplyAttempt.objects.filter')
     @patch('seahub.ai.review_views.ReviewTask.objects.filter')
-    def test_pending_keeps_recent_unknown_apply_attempts(
+    def test_pending_keeps_unknown_apply_attempts_until_confirmed(
             self, mock_tasks, mock_attempts, _auth):
         now = timezone.now()
         mock_tasks.side_effect = [[], MagicMock()]
@@ -686,7 +741,7 @@ class SDocReviewScopeTest(SimpleTestCase):
             if status == ApplyAttempt.STATUS_COMMITTING and 'result_query_deadline_at__lt' not in kwargs:
                 result.order_by.return_value.values_list.return_value.__getitem__.return_value = ['commit']
             elif status == ApplyAttempt.STATUS_OUTCOME_UNKNOWN:
-                self.assertEqual(kwargs['created_at__gte'], now - timezone.timedelta(hours=24))
+                self.assertNotIn('created_at__gte', kwargs)
                 result.order_by.return_value.values_list.return_value.__getitem__.return_value = ['unknown']
             return result
 
@@ -741,11 +796,38 @@ class SDocReviewScopeTest(SimpleTestCase):
 
         attempt.status = ApplyAttempt.STATUS_COMMITTING
         with patch.object(ReviewTaskApproveView, '_query_apply_result', return_value=None), \
+                patch.object(ReviewTaskApproveView, '_abort_apply', return_value=None), \
                 patch.object(ReviewTaskApproveView, '_mark_outcome_unknown',
                              side_effect=lambda row: setattr(row, 'status', 'outcome_unknown')):
             response = ReviewWorkerApplyReconcileView().post(RequestFactory().post('/'), uuid.uuid4())
         self.assertFalse(response.data['terminal'])
         self.assertEqual(attempt.status, 'outcome_unknown')
+
+    @patch('seahub.ai.review_views._review_worker_forbidden', return_value=None)
+    @patch('seahub.ai.review_views.ApplyAttempt.objects.select_related')
+    def test_expired_reconcile_aborts_and_remains_retryable_until_confirmed(self, select, _auth):
+        attempt = SimpleNamespace(
+            status='committing', result_query_deadline_at=timezone.now() - timezone.timedelta(seconds=1),
+            to_dict=lambda: {'status': attempt.status}, refresh_from_db=lambda: None)
+        select.return_value.filter.return_value.first.return_value = attempt
+        aborted = {'status': 'failed_precommit', 'error_code': 'apply_interrupted'}
+        with patch.object(ReviewTaskApproveView, '_query_apply_result', return_value={'status': 'outcome_unknown'}), \
+                patch.object(ReviewTaskApproveView, '_abort_apply', return_value=aborted) as abort, \
+                patch.object(ReviewTaskApproveView, '_map_apply_result',
+                             side_effect=lambda row, result: setattr(row, 'status', result['status'])):
+            response = ReviewWorkerApplyReconcileView().post(RequestFactory().post('/'), uuid.uuid4())
+        self.assertTrue(response.data['terminal'])
+        abort.assert_called_once_with(attempt)
+        self.assertEqual(attempt.status, 'failed_precommit')
+
+        attempt.status = 'outcome_unknown'
+        with patch.object(ReviewTaskApproveView, '_query_apply_result', return_value={'status': 'outcome_unknown'}), \
+                patch.object(ReviewTaskApproveView, '_abort_apply', return_value=None), \
+                patch.object(ReviewTaskApproveView, '_mark_outcome_unknown'), \
+                patch.object(ReviewTaskApproveView, '_map_apply_result') as map_result:
+            response = ReviewWorkerApplyReconcileView().post(RequestFactory().post('/'), uuid.uuid4())
+        self.assertFalse(response.data['terminal'])
+        map_result.assert_not_called()
 
     def setUp(self):
         self.task = SimpleNamespace(

@@ -359,6 +359,11 @@ const SdocReviewCard = ({ reviewTaskId, onMessageContentChange, onTaskRunningCha
           {gettext('Unable to generate a review suggestion. Please try again.')}
         </div>
       )}
+      {card?.apply_interrupted && pendingCount > 0 && (
+        <div className="sdoc-review-card__banner sdoc-review-card__banner--error" role="alert">
+          {gettext('Apply failed')}. {gettext('Please try again.')}
+        </div>
+      )}
       {!isGenerating && truncated && (
         <div className="sdoc-review-card__banner">
           <div>

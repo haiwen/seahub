@@ -47,7 +47,7 @@ from seahub.ai.utils import (
 )
 from seahub.ai.apis import (
     get_sdoc_review_target, get_running_sdoc_review_task, generate_sdoc_service_token,
-    is_indeterminate_sdoc_apply_error, is_chat_and_search_enabled,
+    is_chat_and_search_enabled,
 )
 
 logger = logging.getLogger(__name__)
@@ -65,9 +65,6 @@ REVIEW_WORKER_TOKEN_AUDIENCE = 'seahub_sdoc_review'
 # This is a renewable worker lease, not a fixed Review duration. A healthy
 # worker renews it before long model calls and whenever it reports progress.
 REVIEW_WORKER_LEASE_SECONDS = 200
-# Keep checking an indeterminate approval after the session is unblocked.
-# A slow document write can outlast the first result-query window.
-APPLY_OUTCOME_RECONCILE_HOURS = 24
 TEXT_CHANGE_KINDS = frozenset(('replace_block_text', 'replace_table_cell_text'))
 LIST_TYPES = frozenset(('ordered_list', 'unordered_list'))
 EDITABLE_TEXT_BLOCK_TYPES = frozenset((
@@ -321,10 +318,10 @@ def _build_card_dict(task):
     for selection in selections:
         item_id = str(selection.card_revision_item.change_item.item_id)
         decision_by_item[item_id] = selection.decision
+    attempts = list(ApplyAttempt.objects.filter(review_decision__card_revision=card))
     attempt_by_decision_id = {
         attempt.review_decision_id: attempt
-        for attempt in ApplyAttempt.objects.filter(
-            review_decision_id__in={decision.id for decision in decision_by_item.values()})
+        for attempt in attempts
     }
 
     items = []
@@ -390,6 +387,10 @@ def _build_card_dict(task):
         'card_revision': card.card_revision,
         'generation_status': task.generation_status,
         'items': items,
+        'apply_interrupted': any(
+            attempt.status == ApplyAttempt.STATUS_FAILED_PRECOMMIT
+            and attempt.error_code in ('apply_interrupted', 'dispatch_not_started')
+            for attempt in attempts),
         'batch_conflict': {
             'conflict_item_count': conflict_item_count,
             'blocked_item_count': batch_blocked_item_count,
@@ -1068,9 +1069,11 @@ def _release_undispatched_apply(attempt, now):
 def _claim_apply_dispatch(attempt):
     # Compete atomically with release: a request whose claim was released must
     # never send its old commands, even if it resumes after a long pause.
+    now = timezone.now()
     return bool(ApplyAttempt.objects.filter(
         id=attempt.id, status=ApplyAttempt.STATUS_PENDING,
-    ).update(status=ApplyAttempt.STATUS_COMMITTING, updated_at=timezone.now()))
+    ).update(status=ApplyAttempt.STATUS_COMMITTING,
+             result_query_deadline_at=now + timezone.timedelta(seconds=60), updated_at=now))
 
 
 class ReviewWorkerPendingView(APIView):
@@ -1108,6 +1111,11 @@ class ReviewWorkerPendingView(APIView):
         )
         ApplyAttempt.objects.filter(
             status=ApplyAttempt.STATUS_COMMITTING,
+            result_query_deadline_at__isnull=True,
+            updated_at__lt=now - timezone.timedelta(seconds=60),
+        ).update(result_query_deadline_at=now)
+        ApplyAttempt.objects.filter(
+            status=ApplyAttempt.STATUS_COMMITTING,
             result_query_deadline_at__lt=now,
         ).update(
             status=ApplyAttempt.STATUS_OUTCOME_UNKNOWN,
@@ -1124,8 +1132,7 @@ class ReviewWorkerPendingView(APIView):
             unknown_ids = list(
                 ApplyAttempt.objects.filter(
                     status=ApplyAttempt.STATUS_OUTCOME_UNKNOWN,
-                    created_at__gte=now - timezone.timedelta(hours=APPLY_OUTCOME_RECONCILE_HOURS),
-                ).order_by('created_at').values_list('apply_attempt_id', flat=True)[:unknown_limit]
+                ).order_by('updated_at').values_list('apply_attempt_id', flat=True)[:unknown_limit]
             )
         apply_attempt_ids = committing_ids + unknown_ids
         return Response({
@@ -1162,14 +1169,20 @@ class ReviewWorkerApplyReconcileView(APIView):
         handler = ReviewTaskApproveView()
         result = handler._query_apply_result(attempt)
         if isinstance(result, dict) and result.get('status') in (
-                'applied', 'preflight_conflicted', 'failed_precommit', 'outcome_unknown'):
+                'applied', 'preflight_conflicted', 'failed_precommit'):
             handler._map_apply_result(attempt, result)
             attempt.refresh_from_db()
             return Response({'terminal': True, 'attempt': attempt.to_dict()})
         # Expiry unblocks the session, but a late durable receipt remains queryable.
-        if (attempt.status == ApplyAttempt.STATUS_COMMITTING
-                and attempt.result_query_deadline_at
-                and attempt.result_query_deadline_at <= timezone.now()):
+        if (attempt.status == ApplyAttempt.STATUS_OUTCOME_UNKNOWN
+                or (attempt.result_query_deadline_at
+                    and attempt.result_query_deadline_at <= timezone.now())):
+            result = handler._abort_apply(attempt)
+            if isinstance(result, dict) and result.get('status') in (
+                    'applied', 'preflight_conflicted', 'failed_precommit'):
+                handler._map_apply_result(attempt, result)
+                attempt.refresh_from_db()
+                return Response({'terminal': True, 'attempt': attempt.to_dict()})
             handler._mark_outcome_unknown(attempt)
             attempt.refresh_from_db()
         return Response({'terminal': False, 'attempt': attempt.to_dict()})
@@ -1703,20 +1716,13 @@ class ReviewTaskApproveView(APIView):
             result = _sdoc_apply_result_from_error(error)
             if result:
                 logger.info('SDoc review preflight completed with status=%s.', result.get('status'))
-            elif not is_indeterminate_sdoc_apply_error(error):
-                logger.exception('Apply SDoc review failed: %s', error)
-                ApplyAttempt.objects.filter(id=attempt.id, status=ApplyAttempt.STATUS_COMMITTING).update(
-                    status=ApplyAttempt.STATUS_FAILED_PRECOMMIT, error_code='apply_failed', updated_at=timezone.now())
-                attempt.refresh_from_db()
-                return Response({'task': task.to_dict(), 'card': _build_card_dict(task)})
             else:
+                # An unstructured error is not proof that the original request
+                # cannot execute. Reconcile/abort it before releasing selection.
                 logger.exception('Apply SDoc review result is indeterminate: %s', error)
                 result = {'status': 'in_progress'}
 
         if result.get('status') == 'in_progress':
-            deadline = timezone.now() + timezone.timedelta(seconds=60)
-            ApplyAttempt.objects.filter(id=attempt.id).update(
-                result_query_deadline_at=deadline, updated_at=timezone.now())
             try:
                 enqueue_sdoc_review_apply_attempt(attempt.apply_attempt_id)
             except Exception:
@@ -1733,17 +1739,35 @@ class ReviewTaskApproveView(APIView):
         attempt.refresh_from_db()
         return Response({'task': task.to_dict(), 'card': _build_card_dict(task)})
 
+    def _abort_apply(self, attempt):
+        try:
+            task = attempt.review_decision.card_revision.review_task
+            token = generate_sdoc_service_token(
+                task.file_uuid, os.path.basename(task.path), attempt.approved_by,
+                'sdoc_agent_apply_abort', apply_attempt_id=str(attempt.apply_attempt_id),
+                apply_payload_digest=attempt.apply_payload_digest)
+            api = SdocServerAPI(str(task.file_uuid), os.path.basename(task.path), attempt.approved_by)
+            result = api.abort_review_apply(token, str(attempt.apply_attempt_id))
+            if (not isinstance(result, dict)
+                    or str(result.get('apply_attempt_id')) != str(attempt.apply_attempt_id)
+                    or result.get('apply_payload_digest') != attempt.apply_payload_digest
+                    or str(result.get('doc_uuid')) != str(task.file_uuid)):
+                return None
+            return result
+        except Exception:
+            logger.exception('Failed to confirm interrupted SDoc approval.')
+            return None
+
     def _query_apply_result(self, attempt):
         try:
             card = attempt.review_decision.card_revision
             task = card.review_task
-            uuid_map = _get_uuid_map(task.repo_id, task.path)
             query_token = generate_sdoc_service_token(
-                uuid_map.uuid, uuid_map.filename, attempt.approved_by,
+                task.file_uuid, os.path.basename(task.path), attempt.approved_by,
                 'sdoc_agent_apply_result',
                 apply_attempt_id=str(attempt.apply_attempt_id))
             sdoc_api = SdocServerAPI(
-                str(uuid_map.uuid), uuid_map.filename, attempt.approved_by)
+                str(task.file_uuid), os.path.basename(task.path), attempt.approved_by)
             return sdoc_api.get_apply_result(
                 query_token, str(attempt.apply_attempt_id))
         except Exception:
@@ -1751,7 +1775,8 @@ class ReviewTaskApproveView(APIView):
             return None
 
     def _mark_outcome_unknown(self, attempt):
-        ApplyAttempt.objects.filter(id=attempt.id).update(
+        ApplyAttempt.objects.filter(id=attempt.id, status__in=(
+            ApplyAttempt.STATUS_COMMITTING, ApplyAttempt.STATUS_OUTCOME_UNKNOWN)).update(
             status=ApplyAttempt.STATUS_OUTCOME_UNKNOWN,
             error_code='post_commit_indeterminate',
             updated_at=timezone.now())
@@ -1773,12 +1798,18 @@ class ReviewTaskApproveView(APIView):
                 applied_sdoc_version=result.get('applied_sdoc_version'),
                 operation_log_correlation_id=result.get('operation_log_correlation_id'))
         elif status_value == 'preflight_conflicted':
-            ApplyAttempt.objects.filter(id=attempt.id).update(
+            changed = ApplyAttempt.objects.filter(id=attempt.id, status__in=(
+                ApplyAttempt.STATUS_COMMITTING, ApplyAttempt.STATUS_OUTCOME_UNKNOWN)).update(
                 status=ApplyAttempt.STATUS_PREFLIGHT_CONFLICTED, updated_at=timezone.now())
-            self._record_preflight_conflicts(attempt, result.get('conflicts'))
+            if changed:
+                self._record_preflight_conflicts(attempt, result.get('conflicts'))
         elif status_value == 'failed_precommit':
-            ApplyAttempt.objects.filter(id=attempt.id).update(
-                status=ApplyAttempt.STATUS_FAILED_PRECOMMIT, error_code=result.get('error_code'), updated_at=timezone.now())
+            with transaction.atomic():
+                changed = ApplyAttempt.objects.filter(id=attempt.id, status__in=(
+                    ApplyAttempt.STATUS_COMMITTING, ApplyAttempt.STATUS_OUTCOME_UNKNOWN)).update(
+                    status=ApplyAttempt.STATUS_FAILED_PRECOMMIT, error_code=result.get('error_code'), updated_at=timezone.now())
+                if changed and result.get('error_code') == 'apply_interrupted':
+                    ReviewDecisionSelection.objects.filter(decision_id=attempt.review_decision_id).delete()
         elif status_value == 'outcome_unknown':
             self._mark_outcome_unknown(attempt)
         else:
