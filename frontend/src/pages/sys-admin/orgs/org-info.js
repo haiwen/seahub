@@ -11,7 +11,7 @@ import SysAdminSetOrgNameDialog from '@/components/dialog/sysadmin-dialog/sysadm
 import EditIcon from '@/components/edit-icon';
 import Loading from '@/components/loading';
 import toaster from '@/components/toast';
-import { gettext, serviceURL } from '@/utils/constants';
+import { gettext, serviceURL, sysadminTwoFactorAuthEnabled } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import OrgNav from './org-nav';
 
@@ -48,6 +48,10 @@ class Content extends Component {
     this.props.updateForceSSOLogin(key, value);
   };
 
+  updateForce2FA = (key, value) => {
+    this.props.updateForce2FA(key, value);
+  };
+
 
   render() {
     const { loading, errorMsg } = this.props;
@@ -56,7 +60,7 @@ class Content extends Component {
     } else if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
-      const { org_name, users_count, max_user_number, groups_count, quota, quota_usage, monthly_download_traffic_limit, monthly_traffic_usage, enable_saml_login, metadata_url, domain, force_adfs_login, enable_sso } = this.props.orgInfo;
+      const { org_name, users_count, max_user_number, groups_count, quota, quota_usage, monthly_download_traffic_limit, monthly_traffic_usage, enable_saml_login, metadata_url, domain, force_adfs_login, enable_sso, enable_force_2fa } = this.props.orgInfo;
 
       let download_traffic = monthly_traffic_usage.link_file_download + monthly_traffic_usage.sync_file_download + monthly_traffic_usage.web_file_download;
       download_traffic = download_traffic ? download_traffic : 0;
@@ -109,6 +113,20 @@ class Content extends Component {
                     keyText='force_adfs_login'
                     value={force_adfs_login}
                     helpTip={gettext('Force user to use SSO login if SSO account is bound')}
+                  />
+                </dd>
+              </>
+            }
+            {sysadminTwoFactorAuthEnabled &&
+              <>
+                <dt className="info-item-heading">{gettext('Two-Factor Authentication')}</dt>
+                <dd className="info-item-content">
+                  <CheckboxItem
+                    saveSetting={this.updateForce2FA}
+                    displayName={gettext('Force two-factor authentication for all members')}
+                    keyText='enable_force_2fa'
+                    value={enable_force_2fa}
+                    helpTip={gettext('All members of this team must enable two-factor authentication')}
                   />
                 </dd>
               </>
@@ -189,6 +207,7 @@ Content.propTypes = {
   updateName: PropTypes.func.isRequired,
   updateMaxUserNumber: PropTypes.func.isRequired,
   updateForceSSOLogin: PropTypes.func,
+  updateForce2FA: PropTypes.func,
 };
 
 class OrgInfo extends Component {
@@ -282,6 +301,20 @@ class OrgInfo extends Component {
     });
   };
 
+  updateForce2FA = (key, value) => {
+    const data = { force2Fa: value };
+    systemAdminAPI.sysAdminUpdateOrg(this.props.orgID, data).then(res => {
+      const newOrgInfo = Object.assign(this.state.orgInfo, {
+        enable_force_2fa: res.data.enable_force_2fa
+      });
+      this.setState({ orgInfo: newOrgInfo });
+      toaster.success(gettext('Successfully saved.'));
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
   render() {
     const { orgInfo } = this.state;
     return (
@@ -301,6 +334,7 @@ class OrgInfo extends Component {
                 updateName={this.updateName}
                 updateMaxUserNumber={this.updateMaxUserNumber}
                 updateForceSSOLogin={this.updateForceSSOLogin}
+                updateForce2FA={this.updateForce2FA}
               />
             </div>
           </div>

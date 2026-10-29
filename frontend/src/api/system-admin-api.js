@@ -650,6 +650,9 @@ class SystemAdminAPI {
     if (orgInfo.forceSSOLogin != undefined) {
       formData.append('force_adfs_login', orgInfo.forceSSOLogin);
     }
+    if (orgInfo.force2Fa != undefined) {
+      formData.append('enable_force_2fa', orgInfo.force2Fa);
+    }
     return this.req.put(url, formData);
   }
 

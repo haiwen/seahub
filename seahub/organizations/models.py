@@ -190,6 +190,15 @@ def _delete_org_logo_file(org_logo_path):
 
 class OrgAdminSettingsManager(models.Manager):
 
+    def is_enable_force_2fa_by_org_id(self, org_id):
+        setting = self.filter(org_id=org_id, key='enable_force_2fa').first()
+        return setting is not None and setting.value == '1'
+
+    def set_enable_force_2fa(self, org_id, enabled):
+        return self.update_or_create(
+            org_id=org_id, key='enable_force_2fa',
+            defaults={'value': '1' if enabled else '0'})
+
     def save_org_logo(self, org_id, image_file):
 
         obj = self.filter(org_id=org_id, key='org_logo_path').first()

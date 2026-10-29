@@ -13,6 +13,7 @@ from .api.group_members import AdminGroupMembers, AdminGroupMember
 from .api.admin.users import OrgAdminUser, OrgAdminUsers, OrgAdminSearchUser, \
         OrgAdminImportUsers, OrgAdminInviteUser
 from .api.admin.user_set_password import OrgAdminUserSetPassword
+from .api.admin.user_two_factor_auth import OrgAdminUserTwoFactorAuth
 from .api.admin.groups import OrgAdminGroups, OrgAdminGroup, OrgAdminSearchGroup, \
         OrgAdminDepartments, OrgAdminGroupToDeptView, OrgAdminMoveDepartment
 from .api.admin.repos import OrgAdminRepos, OrgAdminRepo
@@ -103,6 +104,7 @@ urlpatterns = [
     path('<int:org_id>/admin/search-user/', OrgAdminSearchUser.as_view(), name='api-v2.1-org-admin-search-user'),
     path('<int:org_id>/admin/users/<str:email>/', OrgAdminUser.as_view(), name='api-v2.1-org-admin-user'),
     re_path(r'^(?P<org_id>\d+)/admin/users/(?P<email>[^/]+)/set-password/', OrgAdminUserSetPassword.as_view(), name='api-v2.1-org-admin-user-reset-password'),
+    re_path(r'^(?P<org_id>\d+)/admin/users/(?P<email>[^/]+)/two-factor-auth/', OrgAdminUserTwoFactorAuth.as_view(), name='api-v2.1-org-admin-user-two-factor-auth'),
     path('<int:org_id>/admin/users/<str:email>/repos/', OrgAdminUserRepos.as_view(), name='api-v2.1-org-admin-user-repos'),
     path('<int:org_id>/admin/users/<str:email>/beshared-repos/', OrgAdminUserBesharedRepos.as_view(), name='api-v2.1-org-admin-user-beshared-repos'),
     path('<int:org_id>/admin/repos/', OrgAdminRepos.as_view(), name='api-v2.1-org-admin-repos'),

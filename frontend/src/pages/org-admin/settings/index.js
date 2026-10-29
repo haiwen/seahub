@@ -9,7 +9,7 @@ import Section from '@/components/admin/web-settings/section';
 import DeleteOrganizationDialog from '@/components/dialog/org-admin-delete-org-dialog';
 import Loading from '@/components/loading';
 import toaster from '@/components/toast';
-import { gettext, mediaUrl, logoPath, orgID, orgEnableAdminCustomLogo, orgEnableAdminCustomName, orgEnableAdminDeleteOrg, enableMultiADFS, enableSSO } from '@/utils/constants';
+import { gettext, mediaUrl, logoPath, orgID, orgEnableAdminCustomLogo, orgEnableAdminCustomName, orgEnableAdminDeleteOrg, enableMultiADFS, enableSSO, orgTwoFactorAuthEnabled } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 
 import '@/css/system-admin-web-settings.css';
@@ -219,6 +219,15 @@ class OrgWebSettings extends Component {
                         helpTip={gettext('Force user to use SSO login if SSO account is bound')}
                       />
                     </Fragment>
+                  }
+                  {orgTwoFactorAuthEnabled &&
+                    <CheckboxItem
+                      saveSetting={this.orgSaveSetting}
+                      displayName={gettext('Force two-factor authentication for all members')}
+                      keyText='enable_force_2fa'
+                      value={config_dict['enable_force_2fa']}
+                      helpTip={gettext('All members of this team must enable two-factor authentication')}
+                    />
                   }
                 </Section>
                 {orgEnableAdminDeleteOrg &&

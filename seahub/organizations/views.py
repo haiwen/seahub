@@ -30,6 +30,7 @@ from seahub.group.views import remove_group_common
 from seahub.profile.models import Profile
 from seahub.utils import get_service_url, render_error
 from seahub.utils.auth import get_login_bg_image_path
+from seahub.utils.two_factor_auth import has_two_factor_auth
 
 from seahub.organizations.models import OrgSettings
 from seahub.organizations.signals import org_operation_signal
@@ -345,6 +346,7 @@ def react_fake_view(request, **kwargs):
         'enable_external_billing_service': ENABLE_EXTERNAL_BILLING_SERVICE,
         'sys_enable_user_clean_trash': config.ENABLE_USER_CLEAN_TRASH,
         'sys_enable_encrypted_library': config.ENABLE_ENCRYPTED_LIBRARY,
+        'two_factor_auth_enabled': has_two_factor_auth(),
         'enable_turnstile': settings.ENABLE_TURNSTILE,
         'turnstile_site_key': settings.TURNSTILE_SITE_KEY,
         })
