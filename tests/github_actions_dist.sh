@@ -55,5 +55,5 @@ echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >~/.npmrc
 
 # make dist
 cd $GITHUB_WORKSPACE
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 tests/dist_and_push.sh
