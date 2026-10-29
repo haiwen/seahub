@@ -22,6 +22,45 @@ class AIUsageStatistics(models.Model):
         db_table = 'ai_usage_statistics'
 
 
+class OrgAdditionalCredit(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    org_id = models.BigIntegerField(unique=True, db_index=True)
+    balance = models.BigIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'org_additional_ai_credit'
+
+
+class UserAdditionalAICredit(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    org_id = models.BigIntegerField(db_index=True)
+    username = models.CharField(max_length=255, db_index=True)
+    balance = models.BigIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'user_additional_ai_credit'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['org_id', 'username'],
+                name='unique_user_additional_ai_credit',
+            ),
+        ]
+
+
+class OrgAdditionalCreditStripeSession(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    stripe_session_id = models.CharField(max_length=255, unique=True, db_index=True, db_collation='utf8mb4_bin')
+    org_id = models.BigIntegerField(db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'org_additional_ai_credit_stripe_session'
+
+
 class ChatSessionsManager(models.Manager):
     def create_session(self, repo_id, session_name, username):
         session_uuid = str(uuid.uuid4())

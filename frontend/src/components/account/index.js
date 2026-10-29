@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Popover } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
+import Icon from '@/components/icon';
+import toaster from '@/components/toast';
 import { siteRoot, isPro, gettext, appAvatarURL, enableSSOToThirdpartWebsite, enableSeafileAI } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
-import Icon from '../icon';
-import toaster from '../toast';
 
 const {
   isOrgContext,
@@ -54,9 +54,9 @@ class Account extends Component {
           isInstAdmin: resp.data.is_inst_admin,
           isOrgStaff: resp.data.is_org_staff === 1 ? true : false,
           enableSubscription: resp.data.enable_subscription,
-          aiCredit: resp.data.ai_credit,
-          aiCreditUsed: resp.data.ai_credit_used,
-          aiUsageRate: resp.data.ai_usage_rate
+          aiCredit: isOrgContext ? resp.data.role_monthly_ai_credit : resp.data.ai_credit,
+          aiCreditUsed: isOrgContext ? resp.data.role_ai_credit_used : resp.data.ai_credit_used,
+          aiUsageRate: resp.data.ai_usage_rate,
         });
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
@@ -137,7 +137,7 @@ class Account extends Component {
             </div>
             {enableSeafileAI &&
               <div className="space-traffic">
-                <p>{gettext('AI credit used:')}{' '}{this.state.aiCreditUsed} / {this.state.aiCredit > 0 ? this.state.aiCredit : '--'}</p>
+                <p>{gettext('AI credit used:')}{' '}{this.state.aiCreditUsed} / {this.state.aiCredit >= 0 ? this.state.aiCredit : '--'}</p>
                 <div id="quota-bar">
                   <span id="quota-usage" className="usage" style={{ width: this.state.aiUsageRate }}>
                   </span>

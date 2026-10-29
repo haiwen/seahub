@@ -8,10 +8,11 @@ import SysAdminSetOrgQuotaDialog from '@/components/dialog/sysadmin-dialog/set-q
 import SysAdminSetOrgMaxUserNumberDialog from '@/components/dialog/sysadmin-dialog/sysadmin-set-org-max-user-number-dialog';
 import SysAdminSetOrgMonthlyDownloadTrafficLimitDialog from '@/components/dialog/sysadmin-dialog/sysadmin-set-org-monthly-download-traffic-limit-dialog';
 import SysAdminSetOrgNameDialog from '@/components/dialog/sysadmin-dialog/sysadmin-set-org-name-dialog';
+import SysAdminSetOrgAICreditDialog from '@/components/dialog/sysadmin-dialog/sysadmin-set-org-ai-credit-dialog';
 import EditIcon from '@/components/edit-icon';
 import Loading from '@/components/loading';
 import toaster from '@/components/toast';
-import { gettext, serviceURL } from '@/utils/constants';
+import { enableSeafileAI, gettext, serviceURL } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import OrgNav from './org-nav';
 
@@ -23,7 +24,8 @@ class Content extends Component {
       isSetQuotaDialogOpen: false,
       isSetMonthlyDownloadTrafficLimitDialogOpen: false,
       isSetNameDialogOpen: false,
-      isSetMaxUserNumberDialogOpen: false
+      isSetMaxUserNumberDialogOpen: false,
+      isSetAICreditDialogOpen: false
     };
   }
 
@@ -41,6 +43,10 @@ class Content extends Component {
 
   toggleSetMaxUserNumberDialog = () => {
     this.setState({ isSetMaxUserNumberDialogOpen: !this.state.isSetMaxUserNumberDialogOpen });
+  };
+
+  toggleSetAICreditDialog = () => {
+    this.setState({ isSetAICreditDialogOpen: !this.state.isSetAICreditDialogOpen });
   };
 
 
@@ -61,7 +67,7 @@ class Content extends Component {
       let download_traffic = monthly_traffic_usage.link_file_download + monthly_traffic_usage.sync_file_download + monthly_traffic_usage.web_file_download;
       download_traffic = download_traffic ? download_traffic : 0;
 
-      const { isSetQuotaDialogOpen, isSetMonthlyDownloadTrafficLimitDialogOpen, isSetNameDialogOpen, isSetMaxUserNumberDialogOpen } = this.state;
+      const { isSetQuotaDialogOpen, isSetMonthlyDownloadTrafficLimitDialogOpen, isSetNameDialogOpen, isSetMaxUserNumberDialogOpen, isSetAICreditDialogOpen } = this.state;
       return (
         <>
           <dl className="m-0">
@@ -142,6 +148,17 @@ class Content extends Component {
                 </dd>
               </>
             }
+            {enableSeafileAI &&
+              <>
+                <dt className="info-item-heading">{gettext('Additional AI credits')}</dt>
+                <dd className="info-item-content">
+                  {this.props.additionalAICredit ?? '--'}
+                  {this.props.additionalAICredit !== null &&
+                    <EditIcon onClick={this.toggleSetAICreditDialog} />
+                  }
+                </dd>
+              </>
+            }
           </dl>
           {isSetQuotaDialogOpen &&
           <SysAdminSetOrgQuotaDialog
@@ -169,6 +186,13 @@ class Content extends Component {
             toggle={this.toggleSetMaxUserNumberDialog}
           />
           }
+          {isSetAICreditDialogOpen &&
+          <SysAdminSetOrgAICreditDialog
+            value={this.props.additionalAICredit}
+            updateValue={this.props.updateAICredit}
+            toggle={this.toggleSetAICreditDialog}
+          />
+          }
         </>
       );
     }
@@ -189,6 +213,8 @@ Content.propTypes = {
   updateName: PropTypes.func.isRequired,
   updateMaxUserNumber: PropTypes.func.isRequired,
   updateForceSSOLogin: PropTypes.func,
+  additionalAICredit: PropTypes.number,
+  updateAICredit: PropTypes.func.isRequired,
 };
 
 class OrgInfo extends Component {
@@ -198,7 +224,8 @@ class OrgInfo extends Component {
     this.state = {
       loading: true,
       errorMsg: '',
-      orgInfo: {}
+      orgInfo: {},
+      additionalAICredit: null
     };
   }
 
@@ -214,7 +241,22 @@ class OrgInfo extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
+
+    if (enableSeafileAI) {
+      systemAdminAPI.sysAdminGetOrgAICredit(this.props.orgID).then(res => {
+        this.setState({ additionalAICredit: res.data.additional_ai_credit });
+      }).catch(error => {
+        toaster.danger(Utils.getErrorMsg(error));
+      });
+    }
   }
+
+  updateAICredit = (balance) => {
+    return systemAdminAPI.sysAdminSetOrgAICredit(this.props.orgID, balance).then(res => {
+      this.setState({ additionalAICredit: res.data.additional_ai_credit });
+      toaster.success(gettext('Successfully saved.'));
+    });
+  };
 
   updateQuota = (quota) => {
     const data = { quota: quota };
@@ -301,6 +343,8 @@ class OrgInfo extends Component {
                 updateName={this.updateName}
                 updateMaxUserNumber={this.updateMaxUserNumber}
                 updateForceSSOLogin={this.updateForceSSOLogin}
+                additionalAICredit={this.state.additionalAICredit}
+                updateAICredit={this.updateAICredit}
               />
             </div>
           </div>

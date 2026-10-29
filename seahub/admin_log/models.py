@@ -35,9 +35,13 @@ USER_DELETE = 'user_delete'
 # 'user_migrate': {'from': from_user, 'to': to_user}
 USER_MIGRATE = 'user_migrate'
 
+ORG_AI_CREDIT_SET = 'org_ai_credit_set'
+ORG_AI_CREDIT_ADJUST = 'org_ai_credit_adjust'
+
 ADMIN_LOG_OPERATION_TYPE = (REPO_TRANSFER, REPO_DELETE,
         GROUP_CREATE, GROUP_TRANSFER, GROUP_DELETE, GROUP_MEMBER_ADD,
-        GROUP_MEMBER_DELETE, USER_ADD, USER_DELETE, USER_MIGRATE)
+        GROUP_MEMBER_DELETE, USER_ADD, USER_DELETE, USER_MIGRATE,
+        ORG_AI_CREDIT_SET, ORG_AI_CREDIT_ADJUST)
 
 
 class AdminLogManager(models.Manager):
