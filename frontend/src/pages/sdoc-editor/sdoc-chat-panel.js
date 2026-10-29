@@ -1,14 +1,17 @@
 import React, { useCallback, useLayoutEffect, useMemo } from 'react';
 import { Tooltip } from '@seafile/sdoc-editor';
 import PropTypes from 'prop-types';
+import { chatAPI } from '@/api/chat-api';
 import DirChat from '@/components/dir-chat';
-import { ASK_PAGE_SLUG_ID } from '@/components/dir-chat/constants';
-import { AttachmentObject } from '@/components/dir-chat/models';
+import { ASK_PAGE_SLUG_ID, CHAT_MESSAGE_TYPE } from '@/components/dir-chat/constants';
+import { AttachmentObject, ChatMessage } from '@/components/dir-chat/models';
 import Icon from '@/components/icon';
 import OpIcon from '@/components/op-icon';
 import ChatToolbar from '@/components/toolbar/chat-toolbar';
 import { gettext } from '@/utils/constants';
 import { getDocSessionIds, getLatestDocSessionId, removeDocSession, removeDocSessions, touchDocSession } from './sdoc-chat-session-storage';
+import SdocReviewCard from './sdoc-review-card';
+import SdocReviewProgress from './sdoc-review-progress';
 
 import './sdoc-chat-panel.css';
 
@@ -42,6 +45,90 @@ const SdocChatPanel = ({ onClose, width }) => {
   const onSessionIdsMissing = useCallback((sessionIds) => {
     removeDocSessions(repoID, docPath, sessionIds);
   }, [docPath, repoID]);
+
+  const submitReview = useCallback(async ({ sessionId, message, createSession, onProgress }) => {
+    const progressId = `review-progress-${Date.now()}`;
+    const showProgress = (phase) => onProgress(new ChatMessage({
+      id: progressId,
+      message: {},
+      type: CHAT_MESSAGE_TYPE.TIP,
+      extensions: [{ type: 'sdoc_review_progress', phase }],
+    }));
+    showProgress('reading_document');
+    let reviewSessionId = sessionId;
+    if (reviewSessionId === ASK_PAGE_SLUG_ID.NEW) {
+      const session = await createSession(message.slice(0, 100));
+      reviewSessionId = session._id;
+    }
+
+    const improvingTimer = window.setTimeout(() => showProgress('drafting_suggestion'), 700);
+    const response = await chatAPI.createSdocReview({
+      repo_id: repoID,
+      path: docPath,
+      prompt: message,
+      session_uuid: reviewSessionId,
+    }).finally(() => {
+      window.clearTimeout(improvingTimer);
+    });
+
+    const route = response.data.route;
+    if (route === 'answer') {
+      return { sessionId: reviewSessionId, fallbackToChat: true, message };
+    }
+
+    const task = response.data.task || {};
+    const userMessages = (response.data.messages || []).map(ChatMessage.fromServer);
+    if (['queued', 'reading', 'drafting'].includes(task.generation_status)) {
+      return {
+        sessionId: reviewSessionId,
+        messages: [
+          ...userMessages,
+          new ChatMessage({
+            type: CHAT_MESSAGE_TYPE.GROUP,
+            extensions: [{ type: 'sdoc_review', review_task_id: task.id }],
+            message: { [CHAT_MESSAGE_TYPE.AI_REPLY]: gettext('Reviewing the document…') },
+          }),
+        ],
+        runningTask: true,
+      };
+    }
+
+    return { sessionId: reviewSessionId, messages: userMessages };
+  }, [docPath, repoID]);
+
+  const cancelReview = useCallback(async (taskId) => {
+    const response = await chatAPI.cancelSdocReview(taskId);
+    const content = response.data.task.assistant_content || gettext('Review stopped.');
+    return (messages) => messages.map((chat) => {
+      if (!chat.extensions.some((extension) => extension.type === 'sdoc_review' && extension.review_task_id === taskId)) return chat;
+      return new ChatMessage({
+        id: chat._id,
+        message: { ...chat.message, [CHAT_MESSAGE_TYPE.AI_REPLY]: content },
+        isUserSpeak: chat.isUserSpeak,
+        type: chat.type,
+        extensions: chat.extensions.filter((extension) => extension.review_task_id !== taskId),
+      });
+    });
+  }, []);
+
+  const messageWorkflow = useMemo(() => ({
+    submit: submitReview,
+    cancel: cancelReview,
+    handlesTask: (type) => type === 'sdoc_review',
+  }), [submitReview, cancelReview]);
+
+  const messageRenderers = useMemo(() => ({
+    sdoc_review: ({ extension, onMessageContentChange, onTaskRunningChange }) => (
+      <SdocReviewCard
+        reviewTaskId={extension.review_task_id}
+        onMessageContentChange={onMessageContentChange}
+        onTaskRunningChange={onTaskRunningChange}
+      />
+    ),
+    sdoc_review_progress: ({ extension }) => (
+      <SdocReviewProgress phase={extension.phase} />
+    ),
+  }), []);
 
   useLayoutEffect(() => {
     const panel = document.getElementById('sdoc-content-right-panel');
@@ -106,6 +193,8 @@ const SdocChatPanel = ({ onClose, width }) => {
             onSessionDelete={onSessionDelete}
             onSessionIdsMissing={onSessionIdsMissing}
             fallbackToNewWhenSessionMissing={true}
+            messageRenderers={messageRenderers}
+            messageWorkflow={messageWorkflow}
           />
         </div>
       </div>
