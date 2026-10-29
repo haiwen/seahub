@@ -64,54 +64,33 @@ const SdocReviewCard = ({ reviewTaskId, onMessageContentChange, onTaskRunningCha
   const [isExpanded, setExpanded] = useState(true);
   const [expandedItemIds, setExpandedItemIds] = useState(() => new Set());
   const messageContentCallbackRef = useRef(onMessageContentChange);
-  const snapshotRef = useRef(null);
+  const requestQueueRef = useRef(Promise.resolve());
 
   useEffect(() => {
     messageContentCallbackRef.current = onMessageContentChange;
   }, [onMessageContentChange]);
 
-  const updateSnapshot = useCallback((data) => {
-    const previous = snapshotRef.current;
-    let next = data;
-    if (previous?.card && previous.task.id === data.task.id &&
-        (!data.card || previous.card.task_id === data.card.task_id)) {
-      if (!data.card || previous.card.card_revision > data.card.card_revision) return previous;
-      if (previous.card.card_revision === data.card.card_revision) {
-        const previousItems = new Map(previous.card.items.map((item) => [item.item_id, item]));
-        const items = data.card.items.map((item) => {
-          const current = previousItems.get(item.item_id);
-          // A decision cannot be undone by an older HTTP response. Unknown
-          // outcomes may still advance, and preflight-blocked pending items
-          // remain retryable rather than being frozen as approved.
-          if (['applied', 'rejected', 'apply_failed', 'conflicted'].includes(current?.state) ||
-              (current?.state === 'outcome_unknown' && ['pending', 'approved'].includes(item.state))) {
-            return current;
-          }
-          return item;
-        });
-        const nextItemIds = new Set(items.map((item) => item.item_id));
-        previous.card.items.forEach((item) => {
-          if (!nextItemIds.has(item.item_id)) items.push(item);
-        });
-        const active = ['queued', 'reading', 'drafting'];
-        const nextTask = !active.includes(previous.task.generation_status) && active.includes(data.task.generation_status)
-          ? previous.task : data.task;
-        next = { ...data, task: nextTask, card: { ...data.card, generation_status: nextTask.generation_status, items } };
+  const requestSnapshot = useCallback((request) => {
+    // Start the next request only after accepting the previous response.
+    // Local sequence numbers cannot order concurrent server snapshots, and
+    // freezing approved would prevent legitimate preflight-conflict retries.
+    const next = requestQueueRef.current.catch(() => {}).then(async () => {
+      const response = await request();
+      setTask(response.data.task);
+      setCard(response.data.card);
+      if (response.data.task?.assistant_content) {
+        messageContentCallbackRef.current?.(response.data.task.assistant_content);
       }
-    }
-    snapshotRef.current = next;
-    setTask(next.task);
-    setCard(next.card);
-    if (next.task?.assistant_content) {
-      messageContentCallbackRef.current?.(next.task.assistant_content);
-    }
+      return response;
+    });
+    requestQueueRef.current = next;
     return next;
   }, []);
 
   const loadCard = useCallback(async () => {
-    const response = await chatAPI.getSdocReview(reviewTaskId);
-    return updateSnapshot(response.data);
-  }, [reviewTaskId, updateSnapshot]);
+    const response = await requestSnapshot(() => chatAPI.getSdocReview(reviewTaskId));
+    return response.data;
+  }, [reviewTaskId, requestSnapshot]);
 
   useEffect(() => {
     loadCard().catch((error) => toaster.danger(Utils.getErrorMsg(error)));
@@ -253,16 +232,15 @@ const SdocReviewCard = ({ reviewTaskId, onMessageContentChange, onTaskRunningCha
   const decideItem = useCallback(async (itemId, action) => {
     setPendingItemIds((prev) => ({ ...prev, [itemId]: action }));
     try {
-      const response = action === 'approve'
-        ? await chatAPI.approveSdocReview(reviewTaskId, [itemId])
-        : await chatAPI.rejectSdocReview(reviewTaskId, [itemId]);
-      updateSnapshot(response.data);
+      await requestSnapshot(() => action === 'approve'
+        ? chatAPI.approveSdocReview(reviewTaskId, [itemId])
+        : chatAPI.rejectSdocReview(reviewTaskId, [itemId]));
     } catch (error) {
       toaster.danger(Utils.getErrorMsg(error));
     } finally {
       setPendingItemIds((prev) => ({ ...prev, [itemId]: null }));
     }
-  }, [reviewTaskId, updateSnapshot]);
+  }, [reviewTaskId, requestSnapshot]);
 
   const collapseAfterBulkDecision = useCallback((response) => {
     const resultItems = response?.data.card?.items || [];
@@ -277,8 +255,7 @@ const SdocReviewCard = ({ reviewTaskId, onMessageContentChange, onTaskRunningCha
       let response;
       const approveBatch = async (itemIds) => {
         try {
-          response = await chatAPI.approveSdocReview(reviewTaskId, itemIds);
-          updateSnapshot(response.data);
+          response = await requestSnapshot(() => chatAPI.approveSdocReview(reviewTaskId, itemIds));
         } catch (error) {
           const code = error.response?.data?.error_code;
           const isSizeError = error.response?.status === 413 &&
@@ -304,20 +281,19 @@ const SdocReviewCard = ({ reviewTaskId, onMessageContentChange, onTaskRunningCha
     } finally {
       setBulkPending(null);
     }
-  }, [reviewTaskId, pendingIds, collapseAfterBulkDecision, updateSnapshot]);
+  }, [reviewTaskId, pendingIds, collapseAfterBulkDecision, requestSnapshot]);
 
   const rejectAll = useCallback(async () => {
     setBulkPending('reject');
     try {
-      const response = await chatAPI.rejectSdocReview(reviewTaskId, pendingIds);
-      updateSnapshot(response.data);
+      const response = await requestSnapshot(() => chatAPI.rejectSdocReview(reviewTaskId, pendingIds));
       collapseAfterBulkDecision(response);
     } catch (error) {
       toaster.danger(Utils.getErrorMsg(error));
     } finally {
       setBulkPending(null);
     }
-  }, [reviewTaskId, pendingIds, collapseAfterBulkDecision, updateSnapshot]);
+  }, [reviewTaskId, pendingIds, collapseAfterBulkDecision, requestSnapshot]);
 
   if (!task) return null;
   if (generationStatus === 'cancelled') return null;
