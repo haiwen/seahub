@@ -1049,6 +1049,28 @@ class ReviewTasksView(APIView):
         ChatSessions.objects.filter(session_uuid=session_uuid).update(updated_at=timezone.now())
 
 
+def _release_undispatched_apply(attempt, now):
+    """Release only an expired claim that no dispatcher has acquired."""
+    with transaction.atomic():
+        released = ApplyAttempt.objects.filter(
+            id=attempt.id, status=ApplyAttempt.STATUS_PENDING,
+            created_at__lt=now - timezone.timedelta(seconds=60),
+        ).update(
+            status=ApplyAttempt.STATUS_FAILED_PRECOMMIT,
+            error_code='dispatch_not_started', updated_at=now)
+        if released:
+            ReviewDecisionSelection.objects.filter(decision_id=attempt.review_decision_id).delete()
+    return bool(released)
+
+
+def _claim_apply_dispatch(attempt):
+    # Compete atomically with release: a request whose claim was released must
+    # never send its old commands, even if it resumes after a long pause.
+    return bool(ApplyAttempt.objects.filter(
+        id=attempt.id, status=ApplyAttempt.STATUS_PENDING,
+    ).update(status=ApplyAttempt.STATUS_COMMITTING, updated_at=timezone.now()))
+
+
 class ReviewWorkerPendingView(APIView):
     """Reconcile durable ReviewTask rows with the SeafEvents Redis queue."""
     authentication_classes = ()
@@ -1060,6 +1082,12 @@ class ReviewWorkerPendingView(APIView):
             return error
 
         now = timezone.now()
+        undispatched = ApplyAttempt.objects.filter(
+            status=ApplyAttempt.STATUS_PENDING,
+            created_at__lt=now - timezone.timedelta(seconds=60),
+        ).order_by('created_at')[:100]
+        for attempt in undispatched:
+            _release_undispatched_apply(attempt, now)
         stale_tasks = list(ReviewTask.objects.filter(
             generation_status__in=(ReviewTask.GENERATION_READING, ReviewTask.GENERATION_DRAFTING),
             generation_deadline_at__lt=now,
@@ -1120,6 +1148,11 @@ class ReviewWorkerApplyReconcileView(APIView):
                 apply_attempt_id=apply_attempt_id).first()
         if not attempt:
             return api_error(status.HTTP_404_NOT_FOUND, 'Apply attempt not found.')
+        if attempt.status == ApplyAttempt.STATUS_PENDING:
+            _release_undispatched_apply(attempt, timezone.now())
+            attempt.refresh_from_db()
+            if attempt.status == ApplyAttempt.STATUS_PENDING:
+                return Response({'terminal': False, 'attempt': attempt.to_dict()})
         if attempt.status not in (
                 ApplyAttempt.STATUS_COMMITTING, ApplyAttempt.STATUS_OUTCOME_UNKNOWN):
             return Response({'terminal': True, 'attempt': attempt.to_dict()})
@@ -1658,8 +1691,8 @@ class ReviewTaskApproveView(APIView):
             # claims the same item outside this code path.
             return api_error(status.HTTP_409_CONFLICT, 'Selected item is already decided.')
 
-        ApplyAttempt.objects.filter(id=attempt.id, status=ApplyAttempt.STATUS_PENDING).update(
-            status=ApplyAttempt.STATUS_COMMITTING, updated_at=timezone.now())
+        if not _claim_apply_dispatch(attempt):
+            return api_error(status.HTTP_409_CONFLICT, 'Approval claim is no longer active. Reload and retry.')
 
         try:
             sdoc_api = SdocServerAPI(str(uuid_map.uuid), uuid_map.filename, request.user.username)

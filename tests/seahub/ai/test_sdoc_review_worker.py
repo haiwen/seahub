@@ -24,6 +24,7 @@ from seahub.ai.review_views import (
     _update_apply_persistence,
     _build_card_dict, _map_suggestions, ReviewWorkerPendingView,
     ReviewWorkerApplyReconcileView, _decided_item_ids,
+    _release_undispatched_apply, _claim_apply_dispatch,
 )
 from seahub.ai.utils import (
     enqueue_sdoc_review_apply_attempt, enqueue_sdoc_review_task,
@@ -36,6 +37,38 @@ INTERNAL_KEY = 'internal-review-key-at-least-32-bytes-long'
 
 
 class SDocReviewRequestSizeTest(SimpleTestCase):
+    @patch('seahub.ai.review_views.transaction.atomic', return_value=nullcontext())
+    @patch('seahub.ai.review_views.ReviewDecisionSelection.objects.filter')
+    @patch('seahub.ai.review_views.ApplyAttempt.objects.filter')
+    def test_expired_undispatched_claim_releases_selection_atomically(self, attempts, selections, _atomic):
+        attempt = SimpleNamespace(id=uuid.uuid4(), review_decision_id=uuid.uuid4())
+        now = timezone.now()
+        attempts.return_value.update.return_value = 1
+        self.assertTrue(_release_undispatched_apply(attempt, now))
+        attempts.assert_called_once_with(
+            id=attempt.id, status=ApplyAttempt.STATUS_PENDING,
+            created_at__lt=now - timezone.timedelta(seconds=60))
+        selections.assert_called_once_with(decision_id=attempt.review_decision_id)
+        selections.return_value.delete.assert_called_once()
+
+    @patch('seahub.ai.review_views.transaction.atomic', return_value=nullcontext())
+    @patch('seahub.ai.review_views.ReviewDecisionSelection.objects.filter')
+    @patch('seahub.ai.review_views.ApplyAttempt.objects.filter')
+    def test_dispatch_winner_prevents_release(self, attempts, selections, _atomic):
+        attempts.return_value.update.return_value = 0
+        self.assertFalse(_release_undispatched_apply(
+            SimpleNamespace(id=uuid.uuid4(), review_decision_id=uuid.uuid4()), timezone.now()))
+        selections.assert_not_called()
+
+    @patch('seahub.ai.review_views.ApplyAttempt.objects.filter')
+    def test_released_claim_cannot_dispatch(self, attempts):
+        attempts.return_value.update.return_value = 0
+        attempt = SimpleNamespace(id=uuid.uuid4())
+        self.assertFalse(_claim_apply_dispatch(attempt))
+        attempts.assert_called_once_with(id=attempt.id, status=ApplyAttempt.STATUS_PENDING)
+        attempts.return_value.update.return_value = 1
+        self.assertTrue(_claim_apply_dispatch(attempt))
+
     def test_frozen_scope_carries_literal_operation(self):
         operation = {'kind': 'remove_text', 'old_text': '*', 'new_text': '', 'occurrences': 'all'}
         task = SimpleNamespace(
@@ -588,6 +621,33 @@ class SDocReviewScopeTest(SimpleTestCase):
         with patch('seahub.ai.review_views.timezone.now', return_value=now):
             response = ReviewWorkerPendingView().post(RequestFactory().post('/'))
         self.assertEqual(response.data['apply_attempt_ids'], ['commit', 'unknown'])
+
+    @patch('seahub.ai.review_views._release_undispatched_apply')
+    @patch('seahub.ai.review_views._review_worker_forbidden', return_value=None)
+    @patch('seahub.ai.review_views.ApplyAttempt.objects.filter')
+    @patch('seahub.ai.review_views.ReviewTask.objects.filter')
+    def test_pending_sweep_recovers_undispatched_claims(self, tasks, attempts, _auth, release):
+        row = SimpleNamespace(id=uuid.uuid4())
+        tasks.side_effect = [[], MagicMock()]
+        attempts.return_value.order_by.return_value.__getitem__.return_value = [row]
+        response = ReviewWorkerPendingView().post(RequestFactory().post('/'))
+        self.assertEqual(response.status_code, 200)
+        release.assert_called_once()
+        self.assertEqual(release.call_args.args[0], row)
+
+    @patch('seahub.ai.review_views._release_undispatched_apply')
+    @patch('seahub.ai.review_views._review_worker_forbidden', return_value=None)
+    @patch('seahub.ai.review_views.ApplyAttempt.objects.select_related')
+    def test_pending_reconcile_waits_then_releases(self, select, _auth, release):
+        row = SimpleNamespace(status=ApplyAttempt.STATUS_PENDING,
+                              refresh_from_db=lambda: None, to_dict=lambda: {'status': row.status})
+        select.return_value.filter.return_value.first.return_value = row
+        response = ReviewWorkerApplyReconcileView().post(RequestFactory().post('/'), uuid.uuid4())
+        self.assertFalse(response.data['terminal'])
+        release.assert_called_once()
+        release.side_effect = lambda *args: setattr(row, 'status', ApplyAttempt.STATUS_FAILED_PRECOMMIT)
+        response = ReviewWorkerApplyReconcileView().post(RequestFactory().post('/'), uuid.uuid4())
+        self.assertTrue(response.data['terminal'])
 
     @patch('seahub.ai.review_views._review_worker_forbidden', return_value=None)
     @patch('seahub.ai.review_views.ApplyAttempt.objects.select_related')
