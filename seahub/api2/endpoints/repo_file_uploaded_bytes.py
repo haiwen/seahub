@@ -2,6 +2,8 @@
 import logging
 import posixpath
 
+import dateutil.parser
+
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -22,6 +24,8 @@ class RepoFileUploadedBytesView(APIView):
 
     def get(self, request, repo_id):
         """ For resumable fileupload
+
+        Optional last_modify is an ISO 8601 timestamp with timezone.
         """
 
         # argument check
@@ -35,6 +39,18 @@ class RepoFileUploadedBytesView(APIView):
             error_msg = 'file_name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        last_modify_str = request.GET.get('last_modify')
+        last_modify = 0
+        if last_modify_str:
+            try:
+                mtime = dateutil.parser.isoparse(last_modify_str)
+                if mtime.tzinfo is None:
+                    raise ValueError('Timezone is required.')
+                last_modify = int(mtime.timestamp())
+            except (TypeError, ValueError, OverflowError):
+                error_msg = 'last_modify invalid, should be ISO 8601 format with timezone.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -47,7 +63,7 @@ class RepoFileUploadedBytesView(APIView):
 
         file_path = posixpath.join(parent_dir, file_name)
         try:
-            uploadedBytes = seafile_api.get_upload_tmp_file_offset(repo_id, file_path)
+            uploadedBytes = seafile_api.get_upload_tmp_file_offset(repo_id, file_path, last_modify)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
