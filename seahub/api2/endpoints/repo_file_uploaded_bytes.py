@@ -25,7 +25,7 @@ class RepoFileUploadedBytesView(APIView):
     def get(self, request, repo_id):
         """ For resumable fileupload
 
-        Optional file_mtime is an ISO 8601 timestamp with timezone.
+        Optional last_modify is an ISO 8601 timestamp with timezone.
         """
 
         # argument check
@@ -39,16 +39,16 @@ class RepoFileUploadedBytesView(APIView):
             error_msg = 'file_name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        file_mtime = request.GET.get('file_mtime')
+        last_modify_str = request.GET.get('last_modify')
         last_modify = 0
-        if file_mtime:
+        if last_modify_str:
             try:
-                mtime = dateutil.parser.isoparse(file_mtime)
+                mtime = dateutil.parser.isoparse(last_modify_str)
                 if mtime.tzinfo is None:
                     raise ValueError('Timezone is required.')
                 last_modify = int(mtime.timestamp())
             except (TypeError, ValueError, OverflowError):
-                error_msg = 'file_mtime invalid, should be ISO 8601 format with timezone.'
+                error_msg = 'last_modify invalid, should be ISO 8601 format with timezone.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
