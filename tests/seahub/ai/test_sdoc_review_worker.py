@@ -1,7 +1,7 @@
 import re
 import time
 import uuid
-from contextlib import nullcontext
+from contextlib import ExitStack, nullcontext
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
@@ -34,6 +34,79 @@ from seahub.seadoc.sdoc_server_api import SdocServerAPI
 
 
 INTERNAL_KEY = 'internal-review-key-at-least-32-bytes-long'
+
+
+class SDocReviewLibraryCapabilityTest(SimpleTestCase):
+    def setUp(self):
+        stack = ExitStack()
+        self.addCleanup(stack.close)
+
+        def mock(name, value=None):
+            return stack.enter_context(patch(
+                'seahub.ai.review_views.' + name, return_value=value))
+
+        mock('get_sdoc_review_target', (SimpleNamespace(uuid='doc', filename='test.sdoc'), None))
+        mock('verify_chat_ai_config', True)
+        mock('user_passes_ai_chat_folder_permissions', True)
+        mock('_get_session', SimpleNamespace(pk=1))
+        mock('get_running_sdoc_review_task')
+        mock('resolve_repo_ai_usage_context', {'repo_owner': 'owner', 'org_id': None})
+        mock('is_ai_usage_over_limit', False)
+        mock('gen_message_id', 'message')
+        cache_mock = stack.enter_context(patch('seahub.ai.review_views.cache'))
+        cache_mock.get.return_value = None
+        self.fetch = mock('_fetch_document_context', {
+            'snapshot_id': 'snapshot', 'document_incarnation': 'incarnation',
+            'exact_sdoc_version': 1,
+            'blocks': [{'block_id': 'p1', 'text_node_id': 't1', 'supported': True}],
+            'lists': [],
+        })
+        self.understand = mock('understand_sdoc_request', {
+            'route': 'review', 'instruction': 'Revise the first paragraph.',
+            'scope': {'allowed_block_ids': ['p1'], 'allowed_text_targets': [
+                {'block_id': 'p1', 'text_node_id': 't1', 'operation': {'kind': 'rewrite'}}]},
+        })
+        self.tasks = stack.enter_context(patch('seahub.ai.review_views.ReviewTask.objects'))
+        self.tasks.filter.return_value.exists.return_value = False
+        self.attempts = stack.enter_context(patch('seahub.ai.review_views.ApplyAttempt.objects'))
+        self.attempts.filter.return_value.exists.return_value = False
+        self.messages = stack.enter_context(patch('seahub.ai.review_views.ChatMessages.objects'))
+        stack.enter_context(patch('seahub.ai.review_views.ChatSessions.objects'))
+        stack.enter_context(patch(
+            'seahub.ai.review_views.transaction.atomic', side_effect=lambda: nullcontext()))
+        self.enqueue = mock('enqueue_sdoc_review_task')
+        stack.enter_context(patch('seahub.ai.apis.verify_chat_ai_config', return_value=True))
+        self.metadata = stack.enter_context(patch('seahub.ai.apis.RepoMetadata.objects.filter'))
+        self.metadata.return_value.first.return_value = SimpleNamespace(
+            enabled=True, summary_enabled=True)
+
+    def _request(self):
+        request = SimpleNamespace(
+            data={'repo_id': 'repo', 'path': '/test.sdoc', 'prompt': 'Revise this paragraph.',
+                  'session_uuid': 'existing-session'},
+            user=SimpleNamespace(username='reviewer@example.com', org=None))
+        return ReviewTasksView().post(request)
+
+    def test_disabled_library_blocks_existing_session_before_document_or_model(self):
+        for metadata in (None, SimpleNamespace(enabled=False, summary_enabled=True),
+                         SimpleNamespace(enabled=True, summary_enabled=False)):
+            with self.subTest(metadata=metadata):
+                self.metadata.return_value.first.return_value = metadata
+                response = self._request()
+                self.assertEqual(response.status_code, 403)
+                self.fetch.assert_not_called()
+                self.understand.assert_not_called()
+                self.tasks.create.assert_not_called()
+                self.messages.create_message.assert_not_called()
+                self.enqueue.assert_not_called()
+
+    def test_enabled_library_allows_existing_session_to_create_review(self):
+        self.assertEqual(self._request().status_code, 202)
+        self.metadata.assert_called_once_with(repo_id='repo')
+        self.fetch.assert_called_once()
+        self.understand.assert_called_once()
+        self.tasks.create.assert_called_once()
+        self.enqueue.assert_called_once_with(self.tasks.create.return_value.id)
 
 
 class SDocReviewRequestSizeTest(SimpleTestCase):

@@ -47,7 +47,7 @@ from seahub.ai.utils import (
 )
 from seahub.ai.apis import (
     get_sdoc_review_target, get_running_sdoc_review_task, generate_sdoc_service_token,
-    is_indeterminate_sdoc_apply_error,
+    is_indeterminate_sdoc_apply_error, is_chat_and_search_enabled,
 )
 
 logger = logging.getLogger(__name__)
@@ -756,6 +756,8 @@ class ReviewTasksView(APIView):
 
         if not verify_chat_ai_config():
             return api_error(status.HTTP_400_BAD_REQUEST, 'AI server not configured')
+        if not is_chat_and_search_enabled(repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'AI Chat and Search is not enabled for this library.')
         if not user_passes_ai_chat_folder_permissions(request, repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         session = _get_session(request, session_uuid, repo_id)
