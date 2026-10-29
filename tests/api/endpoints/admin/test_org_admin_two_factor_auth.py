@@ -1,6 +1,8 @@
 import json
+from unittest import skipUnless
 from unittest.mock import patch
 
+from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 
@@ -26,6 +28,7 @@ class OrgAdminSettingsTwoFactorAuthTest(TestCase):
             org_id=1, key='enable_force_2fa').count() == 1
 
 
+@skipUnless(getattr(settings, 'MULTI_TENANCY', False), 'Requires multi-tenancy')
 class OrgAdminUserTwoFactorAuthTest(BaseTestCase):
 
     def setUp(self):
@@ -95,6 +98,7 @@ class OrgAdminUserTwoFactorAuthTest(BaseTestCase):
         self.assertEqual(403, resp.status_code)
 
 
+@skipUnless(getattr(settings, 'MULTI_TENANCY', False), 'Requires multi-tenancy')
 class OrgAdminForceTwoFactorAuthSettingTest(BaseTestCase):
 
     def setUp(self):
@@ -184,6 +188,7 @@ class OrgAdminForceTwoFactorAuthSettingTest(BaseTestCase):
         assert json_resp['enable_force_2fa'] is True
 
 
+@skipUnless(getattr(settings, 'MULTI_TENANCY', False), 'Requires multi-tenancy')
 class OrgAdminUserInfoTwoFactorAuthTest(BaseTestCase):
 
     def setUp(self):

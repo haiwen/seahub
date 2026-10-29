@@ -1,12 +1,15 @@
 import json
+from unittest import skipUnless
 from unittest.mock import patch
 
+from django.conf import settings
 from django.urls import reverse
 
 from seahub.organizations.models import OrgAdminSettings
 from seahub.test_utils import BaseTestCase
 
 
+@skipUnless(getattr(settings, 'MULTI_TENANCY', False), 'Requires multi-tenancy')
 class OrgAdminPageTwoFactorAuthTest(BaseTestCase):
     """The org admin page must expose the switch only when 2FA is enabled."""
 
