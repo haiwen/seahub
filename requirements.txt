@@ -7,7 +7,7 @@ django_simple_captcha==0.6.*
 djangosaml2==1.11.*
 djangorestframework==3.16.*
 python-dateutil==2.9.*
-pyjwt==2.13.*
+pyjwt==2.15.*
 pycryptodome==3.23.*
 python-cas==1.7.*
 pysaml2==7.5.*
