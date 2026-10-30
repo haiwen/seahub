@@ -41,7 +41,7 @@ html, body, #wrapper { height:100%; }
     <form action="" method="post" class="con">{% csrf_token %}
       <div class="position-relative">
         <input id="password-input" type="password" name="password" placeholder="{% trans "Password" %}" aria-label="{% trans "Password" %}" title="{% trans "Password" %}" value="" class="input" autocomplete="off" />
-        <span id="toggle-show-password" class="password-visibility-icon" aria-hidden="true"></span>
+        <button type="button" id="toggle-show-password" class="password-visibility-icon" title="{% trans 'Show password' %}" aria-label="{% trans 'Show password' %}" data-show-label="{% trans 'Show password' %}" data-hide-label="{% trans 'Hide password' %}" aria-pressed="false"></button>
       </div>
       {% if password_error %}
       <p class="error mt-1">{% trans "Incorrect password" %}</p>
@@ -72,12 +72,14 @@ $el.removeClass('vh');
 $('input[name="password"]').trigger('focus');
 
 $('#toggle-show-password').on('click', function() {
-  $(this).toggleClass('password-visibility-icon-visible');
-  if (!$(this).hasClass('password-visibility-icon-visible')) {
-    $('#password-input').attr('type', 'password');
-  } else {
-    $('#password-input').attr('type', 'text');
-  }
+  var isPasswordVisible = $(this).toggleClass('password-visibility-icon-visible').hasClass('password-visibility-icon-visible');
+  $('#password-input').attr('type', isPasswordVisible ? 'text' : 'password');
+  var passwordToggleLabel = $(this).attr(isPasswordVisible ? 'data-hide-label' : 'data-show-label');
+  $(this).attr({
+    title: passwordToggleLabel,
+    'aria-label': passwordToggleLabel,
+    'aria-pressed': isPasswordVisible ? 'true' : 'false'
+  });
 });
 
 $('[type="submit"]').on('click', function(){
