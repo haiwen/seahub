@@ -4,11 +4,7 @@
 <html>
 <head>
 <title>{{doc_title}}</title>
-{% if request.is_mobile or request.is_tablet %}
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-{% else %}
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-{% endif %}
 <meta property="og:type" content="object">
 <meta property="og:site_name" content="{{ site_name }}">
 <meta property="og:url" content="{{ service_url }}{{ file_share_link }}">
