@@ -27,7 +27,7 @@
         {% if request.user.is_authenticated and request.cur_note %}
         <div id="info-bar" class="d-flex justify-content-between align-items-center">
             <p id="info-bar-info" class="m-0">{{ request.cur_note.message|urlize }}</p>
-            <span class="close d-flex align-items-center" data="{{ request.cur_note.id }}" title="{% trans "Close" %}" role="button" aria-label="{% trans 'Close' %}"><span class="info-bar-close-icon" aria-hidden="true"></span></span>
+            <span class="close d-flex align-items-center" data="{{ request.cur_note.id }}" title="{% trans "Close" %}" role="button" aria-label="{% trans 'Close' %}" tabindex="0"><span class="info-bar-close-icon" aria-hidden="true"></span></span>
         </div>
         {% endif %}
         {% endblock info_bar_message %}
@@ -126,6 +126,12 @@ $('#info-bar .close').on('click', function() {
         if (!info_id_exist) {
             document.cookie = 'info_id=' + new_info_id;
         }
+    }
+});
+$('#info-bar .close').on('keydown', function(event) {
+    if (event.which === 13 || event.which === 32) {
+        event.preventDefault();
+        $(this).trigger('click');
     }
 });
 {% endif %}
