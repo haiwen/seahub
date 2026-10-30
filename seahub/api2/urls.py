@@ -51,7 +51,8 @@ urlpatterns = [
     re_path(r'^repos/(?P<repo_id>[-0-9a-f]{36})/update-link/$', UpdateLinkView.as_view()),
     re_path(r'^repos/(?P<repo_id>[-0-9a-f]{36})/upload-blks-link/$', UploadBlksLinkView.as_view()),
     re_path(r'^repos/(?P<repo_id>[-0-9a-f]{36})/update-blks-link/$', UpdateBlksLinkView.as_view()),
-    re_path(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/owa-file/$', OwaFileView.as_view(), name='api2-owa-file-view'),
+    # Disabled unused API: it can issue editable WOPI tokens without an edit-permission check.
+    # re_path(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/owa-file/$', OwaFileView.as_view(), name='api2-owa-file-view'),
     re_path(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/$', FileView.as_view(), name='FileView'),
     re_path(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/metadata/$', FileMetaDataView.as_view(), name='FileMetaDataView'),
     re_path(r'^repos/(?P<repo_id>[-0-9a-f]{36})/files/(?P<file_id>[0-9a-f]{40})/blks/(?P<block_id>[0-9a-f]{40})/download-link/$', FileBlockDownloadLinkView.as_view()),

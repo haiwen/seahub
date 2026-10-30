@@ -4,6 +4,7 @@ import MD5 from 'MD5';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '@/api/seafile-api';
 import { gettext, resumableUploadFileBlockSize, maxUploadFileSize, maxNumberOfFilesForFileupload } from '@/utils/constants';
+import dayjs from '@/utils/dayjs';
 import { Utils } from '@/utils/utils';
 import UploadRemindDialog from '../dialog/upload-remind-dialog';
 import toaster from '../toast';
@@ -178,6 +179,8 @@ class FileUploader extends React.Component {
         relative_path: relative_path
       };
     }
+    const lastModified = resumableFile.file.lastModified;
+    resumableFile.formData['last_modify'] = dayjs(lastModified).format('YYYY-MM-DDTHH:mm:ssZ');
   };
 
   onFileAdded = (resumableFile, files) => {
@@ -241,7 +244,7 @@ class FileUploader extends React.Component {
     if (resumableFile.uploadLink) {
       this.resumable.opts.target = resumableFile.uploadLink;
     }
-    seafileAPI.getFileUploadedBytes(repoID, path, resumableFile.fileName).then(res => {
+    seafileAPI.getFileUploadedBytes(repoID, path, resumableFile.fileName, resumableFile.formData.last_modify).then(res => {
       if (this.isCancellingAll || this.suppressAdds || this.uploadSession !== sessionAtRequest) return;
       let uploadedBytes = res.data.uploadedBytes;
       let blockSize = parseInt(resumableUploadFileBlockSize) * 1024 * 1024 || 1024 * 1024;
@@ -723,7 +726,7 @@ class FileUploader extends React.Component {
     var firedRetry = false;
     resumableFile.resumableObj.on('chunkingComplete', () => {
       if (!firedRetry) {
-        seafileAPI.getFileUploadedBytes(repoID, path, fileName).then(res => {
+        seafileAPI.getFileUploadedBytes(repoID, path, fileName, resumableFile.formData.last_modify).then(res => {
           let uploadedBytes = res.data.uploadedBytes;
           let blockSize = parseInt(resumableUploadFileBlockSize) * 1024 * 1024 || 1024 * 1024;
           let offset = Math.floor(uploadedBytes / blockSize);

@@ -10,8 +10,9 @@ set -x
 SEAHUB_TESTSDIR=$(python -c "import os; print(os.path.dirname(os.path.realpath('$0')))")
 SEAHUB_SRCDIR=$(dirname "${SEAHUB_TESTSDIR}")
 
-# Let the active Python interpreter resolve its own installed dependencies.
-export PYTHONPATH="${PYTHONPATH:+${PYTHONPATH}:}${SEAHUB_SRCDIR}/thirdpart"
+# Use the active interpreter's packages before any inherited paths.
+PYTHON_SITE_PACKAGES=$($PYTHON -c "import os, site; print(os.pathsep.join(site.getsitepackages()))")
+export PYTHONPATH="${PYTHON_SITE_PACKAGES}:${SEAHUB_SRCDIR}/thirdpart${PYTHONPATH:+:${PYTHONPATH}}"
 cd "$SEAHUB_SRCDIR"
 set +x
 
