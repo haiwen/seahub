@@ -23,7 +23,7 @@ from ldap import filter
 from seahub.auth import login
 from seahub.auth.utils import get_virtual_id_by_email
 from seahub.constants import DEFAULT_USER, DEFAULT_ORG, DEFAULT_ADMIN
-from seahub.profile.models import Profile, DetailedProfile
+from seahub.profile.models import Profile, DetailedProfile, DuplicatedContactEmailError
 from seahub.role_permissions.models import AdminRole
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role, \
         get_enabled_admin_role_permissions_by_role
@@ -111,7 +111,11 @@ class UserManager(object):
         user.save()
 
         # Set email as contact email.
-        Profile.objects.add_or_update(username=virtual_id, contact_email=email)
+        try:
+            Profile.objects.add_or_update(username=virtual_id, contact_email=email)
+        except DuplicatedContactEmailError:
+            ccnet_api.remove_emailuser('DB', virtual_id)
+            raise
 
         return self.get(email=virtual_id)
 
