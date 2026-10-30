@@ -50,12 +50,12 @@ html, body, #wrapper { height:100%; }
         <input type="text" name="login" placeholder="{% trans "Email or Username" %}" aria-label="{% trans "Email or Username" %}" title="{% trans "Email or Username" %}" value="" class="input mb-3" />
         <div class="position-relative">
           <input id="password-input" type="password" name="password" placeholder="{% trans "Password" %}" aria-label="{% trans "Password" %}" title="{% trans "Password" %}" value="" class="input" autocomplete="off" />
-          <span id="toggle-show-password" class="password-visibility-icon" aria-hidden="true"></span>
+          <button type="button" id="toggle-show-password" class="password-visibility-icon" title="{% trans 'Show password' %}" aria-label="{% trans 'Show password' %}" data-show-label="{% trans 'Show password' %}" data-hide-label="{% trans 'Hide password' %}" aria-pressed="false"></button>
         </div>
 
         {% if form.captcha %}
         <div class="ovhd mt-3">
-            <span id="refresh-captcha" title="{% trans "Refresh" %}" class="icon-refresh op-icon fright"></span>
+            <button type="button" id="refresh-captcha" title="{% trans "Refresh" %}" aria-label="{% trans "Refresh" %}" class="op-icon fright"></button>
             {{ form.captcha }}
         </div>
         {% endif %}
@@ -170,12 +170,14 @@ $('#lang-context').on('click', function() {
 $('[name="login"]').trigger('focus');
 
 $('#toggle-show-password').on('click', function() {
-  $(this).toggleClass('password-visibility-icon-visible');
-  if (!$(this).hasClass('password-visibility-icon-visible')) {
-    $('#password-input').attr('type', 'password');
-  } else {
-    $('#password-input').attr('type', 'text');
-  }
+  var isPasswordVisible = $(this).toggleClass('password-visibility-icon-visible').hasClass('password-visibility-icon-visible');
+  $('#password-input').attr('type', isPasswordVisible ? 'text' : 'password');
+  var passwordToggleLabel = $(this).attr(isPasswordVisible ? 'data-hide-label' : 'data-show-label');
+  $(this).attr({
+    title: passwordToggleLabel,
+    'aria-label': passwordToggleLabel,
+    'aria-pressed': isPasswordVisible ? 'true' : 'false'
+  });
 });
 
 function setCaptchaInputWidth() {
