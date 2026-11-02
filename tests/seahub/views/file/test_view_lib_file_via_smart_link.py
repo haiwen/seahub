@@ -1,10 +1,9 @@
 import json
 from types import SimpleNamespace
-from unittest import TestCase
 from unittest.mock import patch
 
 from django.http import Http404, HttpResponse
-from django.test import RequestFactory
+from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
 from seahub.test_utils import BaseTestCase
