@@ -1447,9 +1447,8 @@ class GroupOwnedLibraryTransferView(APIView):
             error_msg = f'Library {repo_id} not found'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if not seafile_api.get_group_shared_repo_by_path(repo_id, None,
-                                                         group_id,
-                                                         org_id is not None):
+        repo_owner = get_repo_owner(request, repo_id)
+        if repo_owner != f'{current_group_id}@seafile_group':
             error_msg = f'Library {repo_id} not belongs to group {group_id}'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -1495,7 +1494,6 @@ class GroupOwnedLibraryTransferView(APIView):
 
         # preparation before transfer repo
         pub_repos = []
-        repo_owner = get_repo_owner(request, repo_id)
         if org_id:
             # get all org pub repos
             pub_repos = seafile_api.list_org_inner_pub_repos_by_owner(
