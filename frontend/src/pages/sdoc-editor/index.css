@@ -2,6 +2,18 @@
   overflow: hidden;
 }
 
+#wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+#sdoc-editor-wrapper .metadata-status-loading-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
 .sdoc-content-right-panel .cur-view-detail {
   border-left: none;
   height: calc(100vh - 100px);
