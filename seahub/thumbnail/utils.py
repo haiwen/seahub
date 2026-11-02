@@ -338,8 +338,8 @@ def create_svg_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
             bytestring=svg_file_content,
             write_to=tmp_png_path,
             dpi=200,
-            output_width=size,
-            output_height=size
+            output_width=1024,
+            output_height=1024
         )
 
         t2 = timeit.default_timer()
