@@ -508,8 +508,8 @@ def create_svg_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
             bytestring=svg_file_content,
             write_to=tmp_png_path,
             dpi=200,
-            output_width=size,
-            output_height=size
+            output_width=1024,
+            output_height=1024
         )
 
         t2 = timeit.default_timer()
@@ -530,7 +530,7 @@ def _create_thumbnail_common(fp, thumbnail_file, size):
 
     `fp` can be a filename (string) or a file object.
     """
-    image = Image.open(fp)
+    image = Image.open(fp, formats=['JPEG', 'PNG', 'GIF', 'ICO', 'BMP', 'TIFF', 'WEBP', 'HEIF'])
 
     # check image memory cost size limit
     # use RGBA as default mode(4x8-bit pixels, true colour with transparency mask)

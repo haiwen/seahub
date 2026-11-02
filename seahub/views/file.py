@@ -489,34 +489,41 @@ def view_lib_file_via_smart_link(request, dirent_uuid, dirent_name):
     dirent_path = posixpath.join(parent_path, dirent_name_from_uuid_map.strip('/'))
 
     readonly = request.GET.get('readonly', 'false')
-    filetype = request.GET.get('filetype', 'Excalidraw')
-    if readonly.lower() == 'true' and filetype == 'Excalidraw':
+    filetype, fileext = get_file_type_and_ext(dirent_name_from_uuid_map)
+    if readonly.lower() == 'true' and not is_dir and filetype == EXCALIDRAW:
+
+        permission = check_folder_permission(request, repo_id, parent_path)
+        if not permission:
+            return render_permission_error(request, _('Unable to view file'))
+
+        op_perms = parse_repo_perm(permission)
+        # This view exposes a raw file URL, so preview permission alone is insufficient.
+        if not op_perms.can_preview or not op_perms.can_download:
+            return render_permission_error(request, _('Unable to view file'))
 
         template = 'shared_file_view_react.html'
 
-        req_path = os.path.join(parent_path, uuid_map.filename)
+        req_path = dirent_path
         filename = dirent_name_from_uuid_map
-        redirect_to = reverse('view_lib_file', args=[repo_id, dirent_path])
-        fileext = 'exdraw'
-        filetype = 'Excalidraw'
         file_id = seafile_api.get_file_id_by_path(repo_id, req_path)
-        file_uuid = get_exdraw_file_uuid(repo, req_path)
+        if not file_id:
+            raise Http404
+
         username = request.user.username
+        token = seafile_api.get_fileserver_access_token(
+            repo_id, file_id, 'view', username, use_onetime=True)
+        if not token:
+            return render_permission_error(request, _('Unable to view file'))
+
+        raw_path = gen_file_get_url(token, filename)
+        file_uuid = get_exdraw_file_uuid(repo, req_path)
         exdraw_perm = 'r'
         excalidraw_access_token = gen_exdraw_access_token(file_uuid, filename, username, permission=exdraw_perm)
-        use_onetime = False if filetype in (VIDEO, AUDIO) else True
-        token = seafile_api.get_fileserver_access_token(repo_id, file_id,
-                                                    'view', username,
-                                                    use_onetime=use_onetime)
-        if token:
-            raw_path = gen_file_get_url(token, filename)
 
-        obj_id = get_file_id_by_path(repo_id, req_path)
         file_size = seafile_api.get_file_size(repo.store_id, repo.version, file_id)
-        shared_by = username
         data = {
             'repo': repo,
-            'obj_id': obj_id,
+            'obj_id': file_id,
             'from_shared_dir': True,
             'path': req_path,
             'file_name': filename,

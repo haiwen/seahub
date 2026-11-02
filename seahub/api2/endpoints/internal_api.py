@@ -2,10 +2,14 @@
 import logging
 import os
 import re
+import ipaddress
+import socket
 import tempfile
 from io import BytesIO
 from urllib.parse import quote as urlquote
+from urllib.parse import urlsplit, urlunsplit
 import requests
+import urllib3
 import json
 from rest_framework import status
 from rest_framework.response import Response
@@ -194,11 +198,17 @@ class InternalCheckFileOperationAccess(APIView):
             username = self._get_user_by_accont_token(token)
         
         if username:
-            op_perms = parse_repo_perm(seafile_api.check_permission_by_path(
-                        repo_id, '/', username))
+            permission = seafile_api.check_permission_by_path(
+                repo_id, os.path.dirname(file_path), username)
+            if not permission:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            op_perms = parse_repo_perm(permission)
 
             if op == OP_DOWNLOAD:
-                if not (ignore_download_perms or op_perms.can_download):
+                if not (op_perms.can_download or
+                        (ignore_download_perms and op_perms.can_preview)):
                     error_msg = 'Permission denied.'
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
             if op == OP_UPLOAD and not op_perms.can_upload:
@@ -416,8 +426,35 @@ class InternalConvertSeadocImage(APIView):
     throttle_classes = (UserRateThrottle,)
     
     def _handle_outer_image(self, repo_id, doc_uuid, image_url, image_name):
-        resp = requests.get(image_url)
-        image_content = resp.content
+        url = urlsplit(image_url)
+        if (url.scheme not in ('http', 'https') or not url.hostname
+                or url.username is not None or url.password is not None):
+            raise ValueError('Invalid image URL.')
+
+        port = url.port or (443 if url.scheme == 'https' else 80)
+        addresses = socket.getaddrinfo(url.hostname, port, type=socket.SOCK_STREAM)
+        if not addresses:
+            raise ValueError('Image host could not be resolved.')
+        for address in addresses:
+            ip = ipaddress.ip_address(address[4][0])
+            ip = getattr(ip, 'ipv4_mapped', None) or ip
+            if not ip.is_global:
+                raise ValueError('Non-public image address is not allowed.')
+
+        # Connect to the checked IP without resolving the host again.
+        pool_class = urllib3.HTTPConnectionPool
+        tls_options = {}
+        if url.scheme == 'https':
+            pool_class = urllib3.HTTPSConnectionPool
+            tls_options = {'server_hostname': url.hostname, 'assert_hostname': url.hostname}
+        target = urlunsplit(('', '', url.path or '/', url.query, ''))
+        with pool_class(addresses[0][4][0], port=port, **tls_options) as pool:
+            resp = pool.request('GET', target, headers={'Host': url.netloc},
+                                redirect=False, retries=False,
+                                timeout=urllib3.Timeout(connect=5, read=30))
+            if resp.status != 200:
+                raise ValueError('Failed to download image.')
+            image_content = resp.data
         parent_path = gen_seadoc_image_parent_path(doc_uuid, repo_id, '')
 
         upload_link = get_seadoc_asset_upload_link(repo_id, parent_path, '')
