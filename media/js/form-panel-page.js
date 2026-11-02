@@ -7,15 +7,19 @@
    }
    $panel.removeClass('invisible');
 
-   // set eye/eyeSlash icons
+   // set eye/eyeSlash icons and keep password toggles accessible
    $('.input-group .btn').html(eyeSlashIcon).on('click', function() {
-     var $prev = $(this).prev('input');
-     var currentInputType = $prev.attr('type');
-     var nextInputType = currentInputType == 'text' ? 'password' : 'text';
-     $prev.attr('type', nextInputType)
-     if (nextInputType == 'text') {
-       $(this).html(eyeIcon);
-     } else {
-       $(this).html(eyeSlashIcon);
-     }
+     var $button = $(this);
+     var $prev = $button.prev('input');
+     var nextInputType = $prev.attr('type') == 'text' ? 'password' : 'text';
+     var isPasswordVisible = nextInputType == 'text';
+     var label = $button.attr(isPasswordVisible ? 'data-hide-label' : 'data-show-label');
+
+     $prev.attr('type', nextInputType);
+     $button.html(isPasswordVisible ? eyeIcon : eyeSlashIcon);
+     $button.attr({
+       title: label,
+       'aria-label': label,
+       'aria-pressed': isPasswordVisible ? 'true' : 'false'
+     });
    });
