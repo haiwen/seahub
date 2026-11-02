@@ -58,7 +58,7 @@
             {% endblock %}
         </div>
 
-        <div id="main" class="container-fluid w100 flex-auto {% block main_class %}ov-auto{% endblock %}">{# since #wrapper is `d-flex`, 'w100' is necessary here. #}
+        <main id="main" class="container-fluid w100 flex-auto {% block main_class %}ov-auto{% endblock %}">{# since #wrapper is `d-flex`, 'w100' is necessary here. #}
             {% block main_content %}
             <div class="row">
                 <div id="main-panel" class="w100 ovhd">
@@ -66,7 +66,7 @@
                 </div>
             </div>
             {% endblock %}
-        </div>
+        </main>
 
         {% if messages %}
         <ul class="messages hide">
