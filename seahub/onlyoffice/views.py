@@ -143,6 +143,12 @@ def onlyoffice_editor_callback(request):
 
         return HttpResponse('{"error": 0}')
 
+    if status in (3, 7):
+        operation = 'force saving' if status == 7 else 'saving'
+        logger.warning('status {}: OnlyOffice reported an error while {}; doc_key {}.'
+                       .format(status, operation, doc_key))
+        return HttpResponse('{"error": 1}')
+
     if status not in (2, 4, 6):
         logger.error('status {}: invalid status; doc_key {}.'.format(status, doc_key))
         return HttpResponse('{"error": 1}')
