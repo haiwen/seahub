@@ -42,6 +42,29 @@ json_content_type = 'application/json; charset=utf-8'
 
 WOPI_LOCK_EXPIRATION = 30 * 60
 
+# WOPI overrides that change the file or its lock state
+EDIT_REQUIRED_OVERRIDES = ('LOCK', 'REFRESH_LOCK', 'UNLOCK')
+
+
+def check_edit_permission(request):
+    """Return a 403 response if the access token has no edit permission.
+
+    The token is generated when the file is opened and records whether that
+    session may edit the file (e.g. a preview or a read-only share link does
+    not). Every operation that changes the file must honour it.
+    """
+
+    token = request.GET.get('access_token', None)
+    info_dict = get_file_info_by_token(token)
+    if info_dict and info_dict.get('can_edit'):
+        return None
+
+    logger.warning('WOPI request with a read-only access token, user: %s, repo: %s, path: %s',
+                   info_dict.get('request_user') if info_dict else None,
+                   info_dict.get('repo_id') if info_dict else None,
+                   info_dict.get('file_path') if info_dict else None)
+    return HttpResponse(json.dumps({}), status=403, content_type=json_content_type)
+
 
 def generate_file_lock_key_value(request):
 
@@ -437,6 +460,11 @@ class WOPIFilesView(APIView):
         x_wopi_oldlock = request.headers.get('x-wopi-oldlock', None)
         current_lock_id = get_current_lock_id(request)
 
+        if x_wopi_override in EDIT_REQUIRED_OVERRIDES:
+            error_response = check_edit_permission(request)
+            if error_response:
+                return error_response
+
         if x_wopi_override == 'LOCK':
 
             if x_wopi_oldlock:
@@ -660,6 +688,10 @@ class WOPIFilesContentsView(APIView):
 
     @access_token_check
     def post(self, request, file_id, format=None):
+
+        error_response = check_edit_permission(request)
+        if error_response:
+            return error_response
 
         wopi_access_token = get_access_token(request)
         info_dict = get_file_info_by_token(wopi_access_token)
