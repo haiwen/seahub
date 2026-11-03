@@ -1,4 +1,5 @@
 import os
+import json
 import openpyxl
 from io import BytesIO
 from mock import patch
@@ -13,6 +14,31 @@ import pytest
 pytestmark = pytest.mark.django_db
 
 from seaserv import ccnet_threaded_rpc
+
+
+@patch('seahub.base.decorators.ENABLE_SUDO_MODE', False)
+class CheckLicenseErrorTest(BaseTestCase):
+    def test_missing_expiration_does_not_expose_exception(self):
+        self.login_as(self.admin)
+        with patch('seahub.views.sysadmin.is_pro_version', return_value=True), \
+             patch('seahub.views.sysadmin.parse_license', return_value={'Name': 'test'}), \
+             patch('seahub.views.sysadmin.logger.exception') as log_exception:
+            response = self.client.get(
+                reverse('sys_check_license'), HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(set(json.loads(response.content)), {'error'})
+        self.assertNotIn('Expiration', response.content.decode())
+        log_exception.assert_called_once()
+
+    def test_normal_user_cannot_check_license(self):
+        self.login_as(self.user)
+        with patch('seahub.views.sysadmin.parse_license') as parse_license:
+            response = self.client.get(
+                reverse('sys_check_license'), HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 404)
+        parse_license.assert_not_called()
+
 
 class BatchUserMakeAdminTest(BaseTestCase):
     def setUp(self):
