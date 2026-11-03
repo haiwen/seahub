@@ -3,6 +3,7 @@
 import os
 import sys
 import logging
+from django.conf import settings as django_settings
 from django.http import HttpResponseRedirect
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _
@@ -317,8 +318,11 @@ def oauth_callback(request):
 
     # redirect user to home page
     response = HttpResponseRedirect(request.session.get('oauth_redirect', '/'))
-    response.set_cookie('seahub_auth', email + '@' + api_token.key)
-    response.set_cookie('via_oauth', 'true')
+    response.set_cookie('seahub_auth', email + '@' + api_token.key,
+                        secure=django_settings.SESSION_COOKIE_SECURE)
+    response.set_cookie('via_oauth', 'true',
+                        secure=django_settings.SESSION_COOKIE_SECURE,
+                        httponly=django_settings.SESSION_COOKIE_HTTPONLY)
     return response
 
 
