@@ -1,5 +1,6 @@
 import os
 import json
+from unittest.mock import patch
 
 from django.urls import reverse
 
@@ -56,6 +57,46 @@ class RepoTrashTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert json_resp['data'][0]['obj_name'] == self.file_name
         assert json_resp['data'][0]['is_dir'] == False
+
+    def test_restore_errors_do_not_expose_exception_details(self):
+        self.login_as(self.user)
+        commit_id = 'a' * 40
+        for url_name in ('api-v2.1-repo-trash-revert-dirents',
+                         'api-v2.1-repo-trash2-revert'):
+            with self.subTest(url_name=url_name):
+                data = ({'path': ['/failed.txt', '/restored.txt'], 'commit_id': commit_id}
+                        if url_name.endswith('dirents') else
+                        {commit_id: ['/failed.txt', '/restored.txt']})
+                with patch('seahub.api2.endpoints.repo_trash.seafile_api.get_dir_id_by_commit_and_path',
+                           side_effect=[RuntimeError('private backend details'), 'dir-id']), \
+                     patch('seahub.api2.endpoints.repo_trash.seafile_api.revert_dir'), \
+                     patch('seahub.api2.endpoints.repo_trash.logger.exception') as log_exception:
+                    url = reverse(url_name, args=[self.repo_id])
+                    if url_name.endswith('dirents'):
+                        response = self.client.post(url, data)
+                    else:
+                        response = self.client.post(
+                            url, json.dumps(data), content_type='application/json')
+
+                self.assertEqual(response.status_code, 200)
+                result = json.loads(response.content)
+                self.assertEqual(result['failed'][0]['path'], '/failed.txt')
+                self.assertEqual(result['failed'][0]['error_msg'], 'Internal Server Error')
+                self.assertEqual(result['success'], [{'path': '/restored.txt', 'is_dir': True}])
+                self.assertNotIn('private backend details', response.content.decode())
+                log_exception.assert_called_once()
+
+    def test_restore_requires_write_permission(self):
+        self.login_as(self.admin)
+        for url_name in ('api-v2.1-repo-trash-revert-dirents',
+                         'api-v2.1-repo-trash2-revert'):
+            with self.subTest(url_name=url_name):
+                with patch('seahub.api2.endpoints.repo_trash.seafile_api.revert_dir') as revert_dir:
+                    response = self.client.post(
+                        reverse(url_name, args=[self.repo_id]),
+                        {'path': ['/file.txt'], 'commit_id': 'a' * 40})
+                self.assertEqual(response.status_code, 403)
+                revert_dir.assert_not_called()
 
     def test_can_not_get_with_invalid_repo_permission(self):
 

@@ -307,10 +307,11 @@ class RepoTrashRevertDirents(APIView):
                         'path': path,
                         'error_msg': f'Dirent {path} not found.'
                     })
-            except Exception as e:
+            except Exception:
+                logger.exception('Failed to restore trash entry in library %s', repo_id)
                 result['failed'].append({
                     'path': path,
-                    'error_msg': str(e)
+                    'error_msg': 'Internal Server Error'
                 })
 
         return Response(result)
@@ -583,10 +584,11 @@ class RevertRepoTrash2(APIView):
                             'path': path,
                             'error_msg': f'Dirent {path} not found.'
                         })
-                except Exception as e:
+                except Exception:
+                    logger.exception('Failed to restore trash entry in library %s', repo_id)
                     result['failed'].append({
                         'commit_id': commit_id,
                         'path': path,
-                        'error_msg': str(e)
+                        'error_msg': 'Internal Server Error'
                     })
         return Response(result)

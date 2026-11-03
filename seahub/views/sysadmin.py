@@ -969,9 +969,9 @@ def sys_check_license(request):
     if license_dict:
         try:
             expiration = license_dict['Expiration']
-        except KeyError as e:
-            logger.error(e)
-            result['error'] = str(e)
+        except KeyError:
+            logger.exception('License data is missing the expiration field')
+            result['error'] = _('Invalid license data.')
             return HttpResponse(json.dumps(result), status=500, content_type=content_type)
 
         struct_time = datetime.datetime.strptime(expiration, "%Y-%m-%d")
