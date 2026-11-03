@@ -73,14 +73,11 @@ def save_doc_key(doc_key, username, repo_id, file_path):
 
     md5 = hashlib.md5(force_bytes(repo_id + file_path)).hexdigest()
     try:
-        doc_key_obj, _ = OnlyOfficeDocKey.objects.get_or_create(
-            repo_id_file_path_md5=md5,
-            defaults={
-                'doc_key': doc_key,
-                'username': username,
-                'repo_id': repo_id,
-                'file_path': file_path,
-            })
+        doc_key_obj = OnlyOfficeDocKey.objects.create(doc_key=doc_key,
+                                                      username=username,
+                                                      repo_id=repo_id,
+                                                      file_path=file_path,
+                                                      repo_id_file_path_md5=md5)
     except IntegrityError as e:
         logger.info(e)
         return
