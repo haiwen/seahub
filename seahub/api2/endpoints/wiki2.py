@@ -1010,7 +1010,7 @@ class Wiki2PageConfigView(APIView):
         wiki.owner = repo_owner
 
         username = request.user.username
-        if not check_wiki_permission(wiki, username):
+        if check_wiki_permission(wiki, username) != PERMISSION_READ_WRITE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -2332,6 +2332,17 @@ class Wiki2FileViews(APIView):
 
         view_type = request.data.get('type', 'table')
 
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = request.user.username
+        permission = check_wiki_permission(wiki, username)
+        if permission != PERMISSION_READ_WRITE:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
         if not wiki_settings or not wiki_settings.enable_link_repos:
             error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
@@ -2401,7 +2412,7 @@ class Wiki2FileView(APIView):
 
         username = request.user.username
         permission = check_wiki_permission(wiki, username)
-        if not permission:
+        if permission != PERMISSION_READ_WRITE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -2456,7 +2467,7 @@ class Wiki2FileView(APIView):
 
         username = request.user.username
         permission = check_wiki_permission(wiki, username)
-        if not permission:
+        if permission != PERMISSION_READ_WRITE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -2488,7 +2499,7 @@ class Wiki2FileViewDuplicateView(APIView):
 
         username = request.user.username
         permission = check_wiki_permission(wiki, username)
-        if not permission:
+        if permission != PERMISSION_READ_WRITE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
