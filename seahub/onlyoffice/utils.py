@@ -4,6 +4,7 @@ import logging
 import urllib.parse
 import posixpath
 import time
+from django.db import IntegrityError
 from django.urls import reverse
 from django.utils.encoding import force_bytes
 
@@ -77,6 +78,9 @@ def save_doc_key(doc_key, username, repo_id, file_path):
                                                       repo_id=repo_id,
                                                       file_path=file_path,
                                                       repo_id_file_path_md5=md5)
+    except IntegrityError as e:
+        logger.info(e)
+        return
     except Exception as e:
         logger.error(e)
         return
