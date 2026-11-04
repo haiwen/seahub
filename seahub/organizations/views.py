@@ -27,7 +27,7 @@ from seahub.auth import login
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.base.accounts import User
 from seahub.group.views import remove_group_common
-from seahub.profile.models import Profile
+from seahub.profile.models import Profile, DuplicatedContactEmailError
 from seahub.utils import get_service_url, render_error
 from seahub.utils.auth import get_login_bg_image_path
 from seahub.utils.two_factor_auth import has_two_factor_auth
@@ -250,16 +250,19 @@ def org_register(request):
 
             username = email
             site = get_current_site(request)
-            if bool(config.ACTIVATE_AFTER_REGISTRATION) is True:
-                new_user = RegistrationProfile.objects.create_active_user(username, email,
-                                                                          password, site,
-                                                                          send_email=False)
-            else:
-                # create inactive user, user can be activated by admin,
-                # or through activated email
-                new_user = RegistrationProfile.objects.create_inactive_user(username, email,
-                                                                            password, site,
-                                                                            send_email=config.REGISTRATION_SEND_MAIL)
+            try:
+                if bool(config.ACTIVATE_AFTER_REGISTRATION) is True:
+                    new_user = RegistrationProfile.objects.create_active_user(username, email,
+                                                                              password, site,
+                                                                              send_email=False)
+                else:
+                    # create inactive user, user can be activated by admin,
+                    # or through activated email
+                    new_user = RegistrationProfile.objects.create_inactive_user(username, email,
+                                                                                password, site,
+                                                                                send_email=config.REGISTRATION_SEND_MAIL)
+            except DuplicatedContactEmailError:
+                return render_error(request, _("A user with this email already exists."))
 
             create_org(org_name, url_prefix, new_user.username)
             new_org = get_org_by_url_prefix(url_prefix)
