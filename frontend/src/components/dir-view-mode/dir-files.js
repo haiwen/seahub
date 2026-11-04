@@ -347,6 +347,10 @@ class DirFiles extends React.Component {
   render() {
     const { repoID, currentRepoInfo, userPerm } = this.props;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
+    const currentImagePermission = this.state.imageNodeItems[this.state.imageIndex]?.node?.object?.permission || '';
+    const { isCustomPermission: isImageCustomPermission, customPermission: imageCustomPermission } = Utils.getUserPermission(currentImagePermission);
+    const canDeleteImage = ['rw', 'cloud-edit'].indexOf(currentImagePermission) !== -1 ||
+      (isImageCustomPermission && imageCustomPermission.permission.delete);
     let canModifyFile = false;
     if (['rw', 'cloud-edit'].indexOf(userPerm) != -1) {
       canModifyFile = true;
@@ -392,7 +396,7 @@ class DirFiles extends React.Component {
               closeImagePopup={this.closeNodeImagePopup}
               moveToPrevImage={this.moveToPrevImage}
               moveToNextImage={this.moveToNextImage}
-              onDeleteImage={this.deleteImage}
+              onDeleteImage={canDeleteImage ? this.deleteImage : null}
               onRotateImage={this.rotateImage}
               enableRotate={canModifyFile}
               isCustomPermission={isCustomPermission}
