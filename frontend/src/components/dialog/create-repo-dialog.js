@@ -167,7 +167,7 @@ class CreateRepoDialog extends React.Component {
     }
 
     const storage_id = this.state.storage_id;
-    if (storage_id) {
+    if (storage_id && libraryType !== 'group') {
       repo.storage_id = storage_id;
     }
 
@@ -209,7 +209,7 @@ class CreateRepoDialog extends React.Component {
               </FormGroup>
             )}
 
-            {storages.length > 0 && (
+            {storages.length > 0 && this.props.libraryType !== 'group' && (
               <FormGroup>
                 <Label>{gettext('Storage Backend')}</Label>
                 <SeahubSelect
