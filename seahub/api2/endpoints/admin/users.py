@@ -58,7 +58,8 @@ from seahub.utils.licenseparse import user_number_over_limit
 from seahub.institutions.models import Institution
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.admin_log.signals import admin_operation
-from seahub.admin_log.models import USER_DELETE, USER_ADD
+from seahub.admin_log.models import USER_DELETE, USER_ADD, \
+        USER_ACTIVATE, USER_DEACTIVATE
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 from seahub.group.utils import group_id_to_name
 from seahub.institutions.models import InstitutionAdmin
@@ -350,7 +351,7 @@ def update_user_info(request, user, password, is_active, is_staff, role,
         user.is_staff = is_staff
 
     # update user
-    user.save()
+    result_code = user.save()
 
     # update additional user info
     if is_pro_version() and role:
@@ -388,6 +389,9 @@ def update_user_info(request, user, password, is_active, is_staff, role,
 
     if is_pro_version() and download_rate_limit is not None:
         seafile_api.set_user_download_rate_limit(email, download_rate_limit * 1000)
+
+    # -1 stands for failed; 0 stands for success
+    return result_code
 
 
 def get_user_info(email):
@@ -1397,32 +1401,45 @@ class AdminUser(APIView):
         if password and not user_local_password_enabled(user_obj):
             return api_error(status.HTTP_400_BAD_REQUEST, _('Unable to reset password.'))
 
+        old_is_active = user_obj.is_active
         try:
-            update_user_info(request,
-                             user=user_obj,
-                             password=password,
-                             is_active=is_active,
-                             is_staff=is_staff,
-                             role=role,
-                             nickname=name,
-                             login_id=login_id,
-                             contact_email=contact_email,
-                             quota_total_mb=quota_total_mb,
-                             institution_name=institution,
-                             upload_rate_limit=upload_rate_limit,
-                             download_rate_limit=download_rate_limit)
+            result_code = update_user_info(
+                request,
+                user=user_obj,
+                password=password,
+                is_active=is_active,
+                is_staff=is_staff,
+                role=role,
+                nickname=name,
+                login_id=login_id,
+                contact_email=contact_email,
+                quota_total_mb=quota_total_mb,
+                institution_name=institution,
+                upload_rate_limit=upload_rate_limit,
+                download_rate_limit=download_rate_limit)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        # update user
-        try:
-            user_obj.save()
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
+        # -1 stands for failed; do not write the operation log (or send the
+        # activation email) when the change was not persisted.
+        if result_code == -1:
+            error_msg = 'Fail to update user %s.' % email
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if is_active is not None and old_is_active != user_obj.is_active:
+            # send admin operation log signal
+            profile = Profile.objects.get_profile_by_user(user_obj.email)
+            admin_op_detail = {
+                # login email, used to link to the user page
+                "email": user_obj.email,
+                # shown in the log page, empty if the user has not set it
+                "contact_email": profile.contact_email if profile and profile.contact_email else '',
+            }
+            operation = USER_ACTIVATE if user_obj.is_active else USER_DEACTIVATE
+            admin_operation.send(sender=None, admin_name=request.user.username,
+                                 operation=operation, detail=admin_op_detail)
 
         update_status_tip = ''
         if is_active is not None:

@@ -24,6 +24,8 @@ from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.profile.models import Profile
+from seahub.admin_log.signals import admin_operation
+from seahub.admin_log.models import USER_ACTIVATE, USER_DEACTIVATE
 from seahub.options.models import UserOptions
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
@@ -296,6 +298,7 @@ class AdminOrgUser(APIView):
                 error_msg = "active invalid, should be 'true' or 'false'."
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+            old_is_active = user.is_active
             if active == 'true':
                 if not user.is_active:
                     ccnet_db = CcnetDB()
@@ -333,6 +336,19 @@ class AdminOrgUser(APIView):
             if result_code == -1:
                 error_msg = 'Fail to update user %s.' % email
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            if old_is_active != user.is_active:
+                # send admin operation log signal
+                profile = Profile.objects.get_profile_by_user(email)
+                admin_op_detail = {
+                    # login email, used to link to the user page
+                    "email": email,
+                    # shown in the log page, empty if the user has not set it
+                    "contact_email": profile.contact_email if profile and profile.contact_email else '',
+                }
+                operation = USER_ACTIVATE if user.is_active else USER_DEACTIVATE
+                admin_operation.send(sender=None, admin_name=request.user.username,
+                                     operation=operation, detail=admin_op_detail)
 
         # update name
         name = request.data.get('name', None)

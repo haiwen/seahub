@@ -9,10 +9,11 @@ from rest_framework import status
 from django.urls import reverse
 
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
-from seahub.admin_log.models import AdminLog, ADMIN_LOG_OPERATION_TYPE
+from seahub.admin_log.models import AdminLog, ADMIN_LOG_OPERATION_TYPE, \
+        USER_ACTIVATE, USER_DEACTIVATE
 
 from seahub.api2.permissions import IsProVersion
-from seahub.api2.utils import api_error
+from seahub.api2.utils import api_error, get_user_contact_email
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.endpoints.utils import generate_links_header_for_paginator
@@ -29,6 +30,11 @@ def get_log_info(log_obj):
         "detail": json.loads(log_obj.detail),
         "datetime": isoformat_timestr,
     }
+
+    # `contact_email` is only used by the user activation status logs, so only
+    # query it for them to avoid an extra profile lookup for every other log.
+    if log_obj.operation in (USER_ACTIVATE, USER_DEACTIVATE):
+        log_info["contact_email"] = get_user_contact_email(log_obj.email)
 
     return log_info
 

@@ -220,6 +220,120 @@ class AdminUserTest(BaseTestCase):
         ccnet_email = ccnet_api.get_emailuser(self.tmp_email)
         assert ccnet_email.is_active == False
 
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
+    def test_update_is_active_logs_admin_operation(self, mock_has_permission):
+
+        mock_has_permission.return_value = True
+        self.login_as(self.admin)
+
+        url = reverse('api-v2.1-admin-admin-operation-logs')
+
+        # the user is inactive by default, so setting it inactive again
+        # should not write a log
+        data = {"email": self.tmp_email, "is_active": 'False'}
+        resp = self.client.put(self.url, json.dumps(data),
+                'application/json')
+        self.assertEqual(200, resp.status_code)
+
+        resp = self.client.get(url)
+        json_resp = json.loads(resp.content)
+        assert json_resp['total_count'] == 0
+
+        # active the user
+        data = {"email": self.tmp_email, "is_active": 'true'}
+        resp = self.client.put(self.url, json.dumps(data),
+                'application/json')
+        self.assertEqual(200, resp.status_code)
+
+        resp = self.client.get(url)
+        json_resp = json.loads(resp.content)
+        assert json_resp['total_count'] == 1
+        log = json_resp['data'][0]
+        assert log['operation'] == 'user_activate'
+        assert log['email'] == self.admin.username
+        # `detail.email` is the login email used for the user page link,
+        # `detail.contact_email` is shown in the log page
+        assert log['detail']['email'] == self.tmp_email
+        assert log['detail']['contact_email'] == ''
+
+        # active the user again, nothing changed, so no new log
+        resp = self.client.put(self.url, json.dumps(data),
+                'application/json')
+        self.assertEqual(200, resp.status_code)
+
+        resp = self.client.get(url)
+        json_resp = json.loads(resp.content)
+        assert json_resp['total_count'] == 1
+
+        # inactive the user
+        data = {"email": self.tmp_email, "is_active": 'False'}
+        resp = self.client.put(self.url, json.dumps(data),
+                'application/json')
+        self.assertEqual(200, resp.status_code)
+
+        resp = self.client.get(url)
+        json_resp = json.loads(resp.content)
+        assert json_resp['total_count'] == 2
+        assert json_resp['data'][0]['operation'] == 'user_deactivate'
+
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
+    def test_update_is_active_logs_contact_email(self, mock_has_permission):
+        """The activation log should carry the affected user's contact email.
+
+        Set the contact email before changing the status, so the non-empty
+        branch of `detail.contact_email` is exercised; the empty branch is
+        covered by `test_update_is_active_logs_admin_operation`.
+        """
+
+        mock_has_permission.return_value = True
+        self.login_as(self.admin)
+
+        contact_email = 'contact-%s@example.com' % randstring(10)
+        data = {"email": self.tmp_email, "contact_email": contact_email}
+        resp = self.client.put(self.url, json.dumps(data),
+                'application/json')
+        self.assertEqual(200, resp.status_code)
+
+        # active the user, which should write an activation log
+        data = {"email": self.tmp_email, "is_active": 'true'}
+        resp = self.client.put(self.url, json.dumps(data),
+                'application/json')
+        self.assertEqual(200, resp.status_code)
+
+        url = reverse('api-v2.1-admin-admin-operation-logs')
+        resp = self.client.get(url)
+        json_resp = json.loads(resp.content)
+        assert json_resp['total_count'] == 1
+        log = json_resp['data'][0]
+        assert log['operation'] == 'user_activate'
+        assert log['detail']['email'] == self.tmp_email
+        assert log['detail']['contact_email'] == contact_email
+        # the activation logs expose the operator's contact email
+        assert 'contact_email' in log
+
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
+    def test_update_is_active_save_failed_no_log(self, mock_has_permission):
+        """A failed save must not write an activation log."""
+
+        mock_has_permission.return_value = True
+        self.login_as(self.admin)
+
+        url = reverse('api-v2.1-admin-admin-operation-logs')
+
+        with patch('seahub.base.accounts.User.save', return_value=-1):
+            data = {"email": self.tmp_email, "is_active": 'true'}
+            resp = self.client.put(self.url, json.dumps(data),
+                    'application/json')
+        self.assertEqual(500, resp.status_code)
+
+        resp = self.client.get(url)
+        json_resp = json.loads(resp.content)
+        assert json_resp['total_count'] == 0
+
+        # the real state is unchanged: the user is still inactive
+        ccnet_email = ccnet_api.get_emailuser(self.tmp_email)
+        assert ccnet_email.is_active == False
+
     def test_update_is_staff(self):
 
         self.login_as(self.admin)
