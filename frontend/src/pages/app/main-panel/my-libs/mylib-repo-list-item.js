@@ -391,7 +391,7 @@ class MylibRepoListItem extends React.Component {
           )}
         </div>
         <div className="repo-item-size">{repo.size}</div>
-        {(storages.length > 0 && !inAllLibs) && <div className="repo-item-size">{repo.storage_name}</div>}
+        {(storages.length > 0 && !inAllLibs) && <div className="repo-list-card__storage" title={repo.storage_name}>{repo.storage_name}</div>}
         <div className="repo-item-time" title={formatWithTimezone(repo.last_modified)}>{dayjs(repo.last_modified).fromNow()}</div>
       </div>
     ) : (

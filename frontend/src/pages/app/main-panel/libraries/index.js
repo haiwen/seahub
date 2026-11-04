@@ -576,6 +576,7 @@ class Libraries extends Component {
                           ? <p className={`libraries-empty-tip-in-${isDesktop ? currentViewMode : LIST_MODE}-mode`}>{gettext('No libraries')}</p>
                           : (
                             <MylibRepoListView
+                              inAllLibs={true}
                               sortBy={this.state.sortBy}
                               sortOrder={this.state.sortOrder}
                               repoList={this.state.repoList}
