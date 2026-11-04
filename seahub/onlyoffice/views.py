@@ -56,6 +56,10 @@ def get_verified_callback_payload(request, body_data):
 
     Return the decoded token payload, or None when the request can not be
     trusted.
+
+    https://api.onlyoffice.com/docs/docs-api/additional-api/signature/request
+    https://api.onlyoffice.com/docs/docs-api/get-started/how-it-works/security
+    https://api.onlyoffice.com/docs/docs-api/additional-api/signature/request/token-in-body
     """
     if not ONLYOFFICE_JWT_SECRET:
         logger.error('[OnlyOffice] ONLYOFFICE_JWT_SECRET is not set, reject callback.')
