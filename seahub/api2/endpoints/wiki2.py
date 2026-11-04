@@ -22,7 +22,7 @@ from django.utils.translation import gettext as _
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
-from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthentication
+from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.endpoints.utils import sdoc_export_to_md
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, is_wiki_repo, to_python_boolean
@@ -37,12 +37,11 @@ from seahub.wiki2.utils import get_wiki_config, WIKI_PAGES_DIR, is_group_wiki, \
     import_confluence_to_wiki, import_wiki_page, import_sdoc_wiki_page, InvalidSdocImportError, WikiPageNotFoundError
 
 from seahub.utils import is_org_context, get_user_repos, is_pro_version, is_valid_dirent_name, \
-    get_no_duplicate_obj_name, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_get_url, get_service_url, normalize_dir_path, normalize_file_path
+    get_no_duplicate_obj_name, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_get_url, get_service_url, normalize_file_path
 if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
     from seahub.search.utils import search_wikis, ai_search_wikis, SEARCH_REPOS_LIMIT
 
 from seahub.views import check_folder_permission
-from seahub.api2.endpoints.dir import get_dir_file_info_list
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.file_op import check_file_lock
 from seahub.utils.repo import get_repo_owner, is_valid_repo_id_format, is_group_repo_staff, is_repo_owner
@@ -2118,171 +2117,3 @@ class Wiki2ImportPageView(APIView):
             'docUuid': sdoc_uuid_str,
             'task_id': task_id
         })
-
-
-class Wiki2LinkedRepoDirView(APIView):
-    '''
-    Authentication notes:
-    
-    1. Authentication: Any of SdocJWTTokenAuthentication (JWT-based for SDoc),
-       TokenAuthentication (API token), or SessionAuthentication (web session)
-       can authenticate the user. The request must provide valid credentials
-       via at least one of these methods. 
-
-       Note that: If use JWT-based authentication,the request must also provide a
-       file_uuid of a page in a wiki in the url query parameters
-    
-    2. Wiki permission: check_wiki_permission() verifies the user has read
-        access to the target wiki. This is the primary authorization gate.
-    
-    3. Wiki settings: The wiki must have enable_link_repos turned on, and the
-       requested linked_repo_id must be in the wiki's linked repos list.
-    
-    4. Repo permission: check_folder_permission() verifies the user has read
-        access to the linked repo itself, independent of wiki access.
-    
-    '''
-    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated, )
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, wiki_id, linked_repo_id):
-        # resource check
-        wiki = Wiki.objects.get(wiki_id=wiki_id)
-        if not wiki:
-            error_msg = 'Wiki not found.'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        repo_owner = get_repo_owner(request, wiki_id)
-        wiki.owner = repo_owner
-
-        username = request.user.username
-        permission = check_wiki_permission(wiki, username)
-        if not permission:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
-        if not wiki_settings or not wiki_settings.enable_link_repos:
-            error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        linked_repos = wiki_settings.get_linked_repos()
-        if linked_repo_id not in linked_repos:
-            error_msg = f'The repo {linked_repo_id} is not linked to wiki {wiki_id}.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        repo = seafile_api.get_repo(linked_repo_id)
-        if not repo:
-            error_msg = f'Library {linked_repo_id} not found.'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        parent_dir = request.GET.get('p', '/')
-        parent_dir = normalize_dir_path(parent_dir)
-
-        dir_id = seafile_api.get_dir_id_by_path(linked_repo_id, parent_dir)
-        if not dir_id:
-            error_msg = f'Folder {parent_dir} not found.'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # permission check
-        repo_perm = check_folder_permission(request, linked_repo_id, '/')
-        if not repo_perm:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        try:
-            dir_info_list, file_info_list = get_dir_file_info_list(username,
-                    '', repo, parent_dir, False, 0)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        response_dict = {}
-        response_dict['dirent_list'] = dir_info_list + file_info_list
-
-        return Response(response_dict)
-
-class Wiki2LinkedRepoFileUuidView(APIView):
-
-    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated, )
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, wiki_id, linked_repo_id):
-        """ Get file_uuid of a file/dir.
-        """
-        # resource check
-        repo_id = linked_repo_id
-        wiki = Wiki.objects.get(wiki_id=wiki_id)
-        if not wiki:
-            error_msg = 'Wiki not found.'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        repo_owner = get_repo_owner(request, wiki_id)
-        wiki.owner = repo_owner
-
-        path = request.GET.get('p', None)
-        if not path:
-            error_msg = 'path invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        username = request.user.username
-        permission = check_wiki_permission(wiki, username)
-        if not permission:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
-        wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
-        if not wiki_settings or not wiki_settings.enable_link_repos:
-            error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        linked_repos = wiki_settings.get_linked_repos()
-        if repo_id not in linked_repos:
-            error_msg = f'The repo {repo_id} is not linked to wiki {wiki_id}.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        if not seafile_api.get_file_id_by_path(repo_id, normalize_file_path(path)):
-            error_msg = 'File %s not found.' % path
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # permission check
-        if not check_folder_permission(request, repo_id, path):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        # make sure path:
-        # 1. starts with '/'
-        # 2. NOT ends with '/'
-        path = normalize_file_path(path)
-        parent_dir = os.path.dirname(path)
-        dirent_name = os.path.basename(path)
-
-        # get file/dir uuid
-        if repo.is_virtual:
-            repo_id = repo.origin_repo_id
-            path = posixpath.join(repo.origin_path, path.strip('/'))
-            path = os.path.normpath(path)
-
-            path = normalize_file_path(path)
-            parent_dir = os.path.dirname(path)
-            dirent_name = os.path.basename(path)
-
-        try:
-            uuid_map = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id,
-                                                                     parent_dir,
-                                                                     dirent_name,
-                                                                     is_dir=False)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        return Response({'file_uuid': str(uuid_map.uuid)}) 
