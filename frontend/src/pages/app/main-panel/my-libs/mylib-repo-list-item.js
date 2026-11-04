@@ -25,7 +25,7 @@ import Rename from '@/components/rename';
 import toaster from '@/components/toast';
 import { EVENT_BUS_TYPE } from '@/constants/event-bus-type';
 import { LIST_MODE } from '@/constants/view-mode';
-import { gettext, siteRoot } from '@/utils/constants';
+import { gettext, siteRoot, storages } from '@/utils/constants';
 import dayjs from '@/utils/dayjs';
 import EventBus from '@/utils/event-bus';
 import { formatWithTimezone } from '@/utils/time';
@@ -35,6 +35,7 @@ const propTypes = {
   idx: PropTypes.number,
   currentViewMode: PropTypes.string,
   repo: PropTypes.object.isRequired,
+  inAllLibs: PropTypes.bool,
   isItemFreezed: PropTypes.bool.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
@@ -340,7 +341,7 @@ class MylibRepoListItem extends React.Component {
   };
 
   renderPCUI = () => {
-    const { idx, repo, currentViewMode = LIST_MODE } = this.props;
+    const { idx, repo, currentViewMode = LIST_MODE, inAllLibs } = this.props;
     let iconUrl = Utils.getLibIconUrl(repo);
     let iconTitle = Utils.getLibIconTitle(repo);
     let repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
@@ -390,6 +391,7 @@ class MylibRepoListItem extends React.Component {
           )}
         </div>
         <div className="repo-item-size">{repo.size}</div>
+        {(storages.length > 0 && !inAllLibs) && <div className="repo-item-size">{repo.storage_name}</div>}
         <div className="repo-item-time" title={formatWithTimezone(repo.last_modified)}>{dayjs(repo.last_modified).fromNow()}</div>
       </div>
     ) : (
