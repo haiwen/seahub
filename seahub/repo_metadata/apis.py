@@ -140,7 +140,7 @@ class MetadataManage(APIView):
         }
 
         try:
-            RepoMetadata.objects.enable_metadata_and_tags(repo_id)
+            metadata = RepoMetadata.objects.enable_metadata_and_tags(repo_id)
         except Exception as e:
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
@@ -173,7 +173,10 @@ class MetadataManage(APIView):
             logger.error(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
-        return Response({'task_id': task_id})
+        return Response({
+            'task_id': task_id,
+            'global_hidden_columns': json.loads(metadata.global_hidden_columns),
+        })
 
     def delete(self, request, repo_id):
         """

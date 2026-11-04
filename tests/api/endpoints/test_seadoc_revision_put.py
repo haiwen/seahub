@@ -117,7 +117,7 @@ class SeadocRevisionPutTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, {'origin_file_version': 'origin-version'})
         self.get_seadoc_upload_link.assert_called_once_with(
-            self.revision_map, self.user.username)
+            self.revision_map, self.user.username, is_inner=True)
         self.requests.post.assert_called_once()
         upload = self.requests.post.call_args
         self.assertEqual(upload.args, ('https://fileserver.test/update',))
