@@ -1,9 +1,47 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-from django.test import TestCase, RequestFactory
+from django.test import TestCase, SimpleTestCase, RequestFactory
 from django.http import HttpResponse
 from unittest.mock import Mock, patch
 from . import middleware
 from .middleware import RedirectMiddleware, get_subdomain, construct_org_url
+from .forms import OrgRegistrationForm
+
+
+class OrgRegistrationFormTest(SimpleTestCase):
+
+    @patch('seahub.organizations.forms.User.objects.get')
+    @patch('seahub.organizations.forms.Profile.objects.filter')
+    def test_rejects_email_with_profile_but_no_user(self, mock_filter, mock_get):
+        mock_filter.return_value.exists.return_value = True
+        form = OrgRegistrationForm({'email': 'Existing@Example.com'})
+
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['email'], ['A user with this email already exists.'])
+        mock_filter.assert_called_once_with(contact_email='existing@example.com')
+        mock_get.assert_not_called()
+
+    @patch('seahub.organizations.forms.User.objects.get')
+    @patch('seahub.organizations.forms.Profile.objects.filter')
+    def test_rejects_existing_user_without_profile(self, mock_filter, mock_get):
+        mock_filter.return_value.exists.return_value = False
+        form = OrgRegistrationForm({'email': 'existing@example.com'})
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('email', form.errors)
+        mock_get.assert_called_once_with(email='existing@example.com')
+
+    @patch('seahub.organizations.forms.User.objects.get')
+    @patch('seahub.organizations.forms.Profile.objects.filter')
+    def test_accepts_unused_email(self, mock_filter, mock_get):
+        from seahub.base.accounts import User
+        mock_filter.return_value.exists.return_value = False
+        mock_get.side_effect = User.DoesNotExist
+        form = OrgRegistrationForm({'email': 'New@Example.com'})
+
+        form.is_valid()
+
+        self.assertNotIn('email', form.errors)
+        self.assertEqual(form.cleaned_data['email'], 'new@example.com')
 
 
 class RedirectMiddlewareTest(TestCase):
