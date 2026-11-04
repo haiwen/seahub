@@ -5,7 +5,7 @@ from unittest.mock import patch
 from django.test import RequestFactory, SimpleTestCase
 
 from seahub.ai.sdoc.compiler import compile_sdoc
-from seahub.ai.sdoc.schema import SdocArtifactError, normalize_sdoc_request
+from seahub.ai.sdoc.schema import SdocArtifactError, SdocRequestValidator
 from seahub.ai.sdoc.service import create_sdoc
 from seahub.ai.sdoc.validator import validate_sdoc
 
@@ -52,7 +52,7 @@ def complex_request():
 
 class SdocContentTest(SimpleTestCase):
     def test_compiles_representative_complex_document(self):
-        normalized = normalize_sdoc_request(complex_request())
+        normalized = SdocRequestValidator.validate(complex_request())
         content = validate_sdoc(compile_sdoc(normalized, 'user@example.com'))
 
         self.assertEqual(content['format_version'], 4)
@@ -74,14 +74,14 @@ class SdocContentTest(SimpleTestCase):
     def test_rejects_deferred_element(self):
         request_data = complex_request()
         request_data['elements'] = [{'type': 'image'}]
-        with self.assertRaisesRegex(SdocArtifactError, 'unsupported_element_type'):
-            normalize_sdoc_request(request_data)
+        with self.assertRaisesRegex(SdocArtifactError, 'invalid_artifact'):
+            SdocRequestValidator.validate(request_data)
 
     def test_rejects_internal_reference_token(self):
         request_data = complex_request()
         request_data['elements'] = [{'type': 'paragraph', 'children': [text('Source <reference_0>')]}]
         with self.assertRaisesRegex(SdocArtifactError, 'invalid_artifact'):
-            normalize_sdoc_request(request_data)
+            SdocRequestValidator.validate(request_data)
 
     def test_rejects_ragged_table(self):
         request_data = complex_request()
@@ -90,14 +90,14 @@ class SdocContentTest(SimpleTestCase):
             {'cells': [{'children': [text('A')]}, {'children': [text('B')]}]},
         ]}]
         with self.assertRaisesRegex(SdocArtifactError, 'invalid_artifact'):
-            normalize_sdoc_request(request_data)
+            SdocRequestValidator.validate(request_data)
 
     def test_preserves_description_and_accepts_nested_nodes_over_old_limit(self):
         request_data = complex_request()
         request_data['elements'] = [{'type': 'table', 'rows': [
             {'cells': [{'children': [text('Cell')]} for _ in range(20)]} for _ in range(20)
         ]}]
-        normalized = normalize_sdoc_request(request_data)
+        normalized = SdocRequestValidator.validate(request_data)
         self.assertEqual(normalized['description'], 'A representative document.')
         validate_sdoc(compile_sdoc(normalized, 'user@example.com'))
 
@@ -129,10 +129,10 @@ class SdocServiceTest(SimpleTestCase):
         result = create_sdoc(complex_request(), '12345678-1234-1234-1234-123456789abc', self.request, 'user@example.com')
 
         self.assertEqual(result['status'], 'created')
-        self.assertEqual(result['schema_version'], 1)
         self.assertEqual(result['name'], 'Plan (1).sdoc')
         self.assertEqual(result['path'], '/AI Generated/Plan (1).sdoc')
-        self.assertEqual(result['relative_path'], 'Plan (1).sdoc')
+        self.assertEqual(result['description'], 'A representative document.')
+        self.assertEqual(set(result), {'status', 'name', 'path', 'doc_uuid', 'description'})
         mock_rename.assert_called_once_with('12345678-1234-1234-1234-123456789abc', '/AI Generated/', 'Plan.sdoc')
         mock_post.assert_called_once()
         self.assertFalse(os.path.exists(temp_paths[0]))
@@ -156,3 +156,14 @@ class SdocServiceTest(SimpleTestCase):
         self.assertEqual(result['status'], 'failed')
         self.assertEqual(result['error_code'], 'invalid_artifact')
         mock_get_dir.assert_not_called()
+
+    @patch('seahub.ai.sdoc.service.ENABLE_SEADOC', True)
+    @patch('seahub.ai.sdoc.service.seafile_api.post_file')
+    @patch('seahub.ai.sdoc.service.seafile_api.get_dir_id_by_path')
+    def test_unsafe_filename_is_rejected_before_file_operations(self, mock_get_dir, mock_post):
+        request_data = complex_request()
+        request_data['file_name'] = '../Plan'
+        result = create_sdoc(request_data, 'repo-id', self.request, 'user@example.com')
+        self.assertEqual(result, {'status': 'failed', 'error_code': 'invalid_file_name'})
+        mock_get_dir.assert_not_called()
+        mock_post.assert_not_called()

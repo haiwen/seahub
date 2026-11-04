@@ -3,7 +3,6 @@ import logging
 import os
 import posixpath
 
-from django.urls import reverse
 from seaserv import seafile_api
 
 from seahub.settings import ENABLE_SEADOC
@@ -13,7 +12,7 @@ from seahub.utils.repo import parse_repo_perm
 from seahub.views import check_folder_permission
 
 from .compiler import compile_sdoc
-from .schema import SCHEMA_VERSION, SdocArtifactError, normalize_sdoc_request
+from .schema import SdocArtifactError, SdocRequestValidator
 from .validator import validate_sdoc
 
 
@@ -54,14 +53,8 @@ def _normalize_file_name(raw_file_name):
     return file_name
 
 
-def _plain_title(title):
-    return ''.join(child['text'] for child in title['children'])
-
-
 def _failed(error_code, file_name=None):
     result = {
-        'type': 'sdoc',
-        'schema_version': SCHEMA_VERSION,
         'status': 'failed',
         'error_code': error_code,
     }
@@ -79,7 +72,7 @@ def create_sdoc(draft, repo_id, request, username):
     directory = None
     tmp_file = None
     try:
-        normalized = normalize_sdoc_request(draft)
+        normalized = SdocRequestValidator.validate(draft)
         file_name = _normalize_file_name(normalized['file_name'])
         content = validate_sdoc(compile_sdoc(normalized, username))
         directory = _resolve_directory(request, repo_id, username)
@@ -99,18 +92,12 @@ def create_sdoc(draft, repo_id, request, username):
         repo = seafile_api.get_repo(repo_id)
         doc_uuid = get_seadoc_file_uuid(repo, file_path)
         result = {
-            'type': 'sdoc',
-            'schema_version': SCHEMA_VERSION,
             'status': 'created',
             'name': file_name,
             'path': file_path,
-            'relative_path': file_name,
-            'repo_id': repo_id,
             'doc_uuid': doc_uuid,
-            'url': reverse('view_lib_file', args=[repo_id, file_path]),
-            'title': _plain_title(normalized['title']),
+            'description': normalized['description'],
         }
-        result['description'] = normalized['description']
         return result
     except SdocArtifactError as error:
         logger.warning('Invalid AI generated SDoc artifact: %s', error)

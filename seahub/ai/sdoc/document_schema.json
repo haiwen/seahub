@@ -1,0 +1,139 @@
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "object",
+      "properties": {
+        "children": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {"type": "string", "enum": ["text"]}, "text": {"type": "string"},
+              "bold": {"type": "boolean"}, "italic": {"type": "boolean"}, "underline": {"type": "boolean"},
+              "strikethrough": {"type": "boolean"}, "superscript": {"type": "boolean"}, "subscript": {"type": "boolean"},
+              "code": {"type": "boolean"}, "color": {"type": "string"}, "highlight_color": {"type": "string"},
+              "font": {"type": "string"}, "font_size": {"type": "number"}
+            },
+            "required": ["type", "text"], "additionalProperties": false
+          },
+          "minItems": 1
+        }
+      },
+      "required": ["children"], "additionalProperties": false
+    },
+    "elements": {
+      "type": "array",
+      "items": {"oneOf": [
+        {"$ref": "#/$defs/paragraph"}, {"$ref": "#/$defs/heading"}, {"$ref": "#/$defs/callout"},
+        {"$ref": "#/$defs/checkListItem"}, {"$ref": "#/$defs/codeBlock"}, {"$ref": "#/$defs/list"},
+        {"$ref": "#/$defs/divider"}, {"$ref": "#/$defs/formula"}, {"$ref": "#/$defs/embedLink"},
+        {"$ref": "#/$defs/table"}, {"$ref": "#/$defs/multiColumn"}
+      ]},
+      "minItems": 1, "maxItems": 200
+    }
+  },
+  "required": ["title", "elements"], "additionalProperties": false,
+  "$defs": {
+    "text": {
+      "type": "object",
+      "properties": {
+        "type": {"type": "string", "enum": ["text"]}, "text": {"type": "string"},
+        "bold": {"type": "boolean"}, "italic": {"type": "boolean"}, "underline": {"type": "boolean"},
+        "strikethrough": {"type": "boolean"}, "superscript": {"type": "boolean"}, "subscript": {"type": "boolean"},
+        "code": {"type": "boolean"}, "color": {"type": "string"}, "highlight_color": {"type": "string"},
+        "font": {"type": "string"}, "font_size": {"type": "number"}
+      },
+      "required": ["type", "text"], "additionalProperties": false
+    },
+    "link": {
+      "type": "object",
+      "properties": {
+        "type": {"type": "string", "enum": ["link"]}, "href": {"type": "string"}, "title": {"type": "string"},
+        "children": {"type": "array", "items": {"$ref": "#/$defs/text"}, "minItems": 1}
+      },
+      "required": ["type", "href", "title", "children"], "additionalProperties": false
+    },
+    "inline": {"oneOf": [{"$ref": "#/$defs/text"}, {"$ref": "#/$defs/link"}]},
+    "inlineChildren": {"type": "array", "items": {"$ref": "#/$defs/inline"}, "minItems": 1},
+    "paragraph": {
+      "type": "object",
+      "properties": {"type": {"type": "string", "enum": ["paragraph", "blockquote"]}, "children": {"$ref": "#/$defs/inlineChildren"}},
+      "required": ["type", "children"], "additionalProperties": false
+    },
+    "heading": {
+      "type": "object",
+      "properties": {
+        "type": {"type": "string", "enum": ["header1", "header2", "header3", "header4", "header5", "header6", "subtitle"]},
+        "children": {"$ref": "#/$defs/textChildren"}
+      },
+      "required": ["type", "children"], "additionalProperties": false
+    },
+    "textChildren": {"type": "array", "items": {"$ref": "#/$defs/text"}, "minItems": 1},
+    "calloutParagraph": {
+      "type": "object",
+      "properties": {"type": {"type": "string", "enum": ["paragraph"]}, "children": {"$ref": "#/$defs/inlineChildren"}},
+      "required": ["type", "children"], "additionalProperties": false
+    },
+    "callout": {
+      "type": "object",
+      "properties": {
+        "type": {"type": "string", "enum": ["callout"]},
+        "style": {"type": "object", "properties": {"background_color": {"type": "string"}}, "required": ["background_color"], "additionalProperties": false},
+        "children": {"type": "array", "items": {"$ref": "#/$defs/calloutParagraph"}, "minItems": 1}
+      },
+      "required": ["type", "children"], "additionalProperties": false
+    },
+    "checkListItem": {
+      "type": "object",
+      "properties": {"type": {"type": "string", "enum": ["check_list_item"]}, "checked": {"type": "boolean"}, "children": {"$ref": "#/$defs/inlineChildren"}},
+      "required": ["type", "checked", "children"], "additionalProperties": false
+    },
+    "codeBlock": {
+      "type": "object",
+      "properties": {"type": {"type": "string", "enum": ["code_block"]}, "language": {"type": "string"}, "text": {"type": "string"}},
+      "required": ["type", "language", "text"], "additionalProperties": false
+    },
+    "listItem": {"type": "object", "properties": {"children": {"$ref": "#/$defs/inlineChildren"}}, "required": ["children"], "additionalProperties": false},
+    "list": {
+      "type": "object",
+      "properties": {"type": {"type": "string", "enum": ["ordered_list", "unordered_list"]}, "items": {"type": "array", "items": {"$ref": "#/$defs/listItem"}, "minItems": 1}},
+      "required": ["type", "items"], "additionalProperties": false
+    },
+    "divider": {"type": "object", "properties": {"type": {"type": "string", "enum": ["divider"]}}, "required": ["type"], "additionalProperties": false},
+    "formula": {
+      "type": "object",
+      "properties": {"type": {"type": "string", "enum": ["formula"]}, "data": {"type": "object", "properties": {"formula": {"type": "string"}}, "required": ["formula"], "additionalProperties": false}},
+      "required": ["type", "data"], "additionalProperties": false
+    },
+    "embedLink": {
+      "type": "object",
+      "properties": {
+        "type": {"type": "string", "enum": ["embed_link"]}, "link": {"type": "string"}, "link_type": {"type": "string", "enum": ["seatable", "figma"]},
+        "data": {"type": "object", "properties": {"height": {"type": "integer", "minimum": 200, "maximum": 1200}}, "required": ["height"], "additionalProperties": false}
+      },
+      "required": ["type", "link", "link_type"], "additionalProperties": false
+    },
+    "tableCell": {"type": "object", "properties": {"children": {"$ref": "#/$defs/inlineChildren"}}, "required": ["children"], "additionalProperties": false},
+    "tableRow": {
+      "type": "object", "properties": {"cells": {"type": "array", "items": {"$ref": "#/$defs/tableCell"}, "minItems": 1, "maxItems": 20}},
+      "required": ["cells"], "additionalProperties": false
+    },
+    "table": {
+      "type": "object", "properties": {"type": {"type": "string", "enum": ["table"]}, "rows": {"type": "array", "items": {"$ref": "#/$defs/tableRow"}, "minItems": 1, "maxItems": 100}},
+      "required": ["type", "rows"], "additionalProperties": false
+    },
+    "multiColumnChild": {"oneOf": [
+      {"$ref": "#/$defs/paragraph"}, {"$ref": "#/$defs/heading"}, {"$ref": "#/$defs/checkListItem"},
+      {"$ref": "#/$defs/codeBlock"}, {"$ref": "#/$defs/list"}, {"$ref": "#/$defs/divider"}, {"$ref": "#/$defs/formula"}
+    ]},
+    "column": {
+      "type": "object", "properties": {"children": {"type": "array", "items": {"$ref": "#/$defs/multiColumnChild"}, "minItems": 1}},
+      "required": ["children"], "additionalProperties": false
+    },
+    "multiColumn": {
+      "type": "object", "properties": {"type": {"type": "string", "enum": ["multi_column"]}, "columns": {"type": "array", "items": {"$ref": "#/$defs/column"}, "minItems": 2, "maxItems": 4}},
+      "required": ["type", "columns"], "additionalProperties": false
+    }
+  }
+}
