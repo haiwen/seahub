@@ -7,7 +7,7 @@ from seahub.api2.endpoints.file_comments import FileCommentsView, FileCommentVie
 from seahub.api2.endpoints.share_link_auth import ShareLinkUserAuthView, ShareLinkEmailAuthView
 from seahub.api2.endpoints.internal_api import InternalUserListView, InternalCheckShareLinkAccess, \
     InternalCheckFileOperationAccess, CheckThumbnailAccess, CheckShareLinkThumbnailAccess, \
-    CheckThumbnailAccessByUserToken, InternalBatchFileDownloadTokensView, InternalConvertSeadocImage, SeafileSaveFaceView
+    CheckThumbnailAccessByUserToken, InternalBatchFileDownloadTokensView, InternalConvertSeadocImage, SeafileSaveFaceView, InternalConverterFile
 from seahub.auth.views import multi_adfs_sso, login_simple_check
 from seahub.views import *
 from seahub.views.mobile import mobile_login
@@ -899,6 +899,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/internal/repos/(?P<repo_id>[-0-9a-f]{36})/save-face/$', SeafileSaveFaceView.as_view(), name='api-v2.1-internal-save-face'),
     re_path(r'^api/v2.1/internal/check-share-link-thumbnail/$', CheckShareLinkThumbnailAccess.as_view(), name='api-v2.1-internal-check-share-link-thumbnail-access'),
     re_path(r'^api/v2.1/internal/convert-seadoc-image/(?P<doc_uuid>[-0-9a-f]{36})/$', InternalConvertSeadocImage.as_view(), name="api-v2.1-internal-file-download-link-access"),
+    re_path(r'^api/v2.1/internal/converter-file/$', InternalConverterFile.as_view(), name='internal-converter-file'),
 
     ### system admin ###
     re_path(r'^sys/seafadmin/delete/(?P<repo_id>[-0-9a-f]{36})/$', sys_repo_delete, name='sys_repo_delete'),
