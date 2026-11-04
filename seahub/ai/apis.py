@@ -36,6 +36,7 @@ from seahub.views.file import get_file_view_path_and_perm, get_file_content
 from seahub.base.accounts import User
 from seahub.settings import SEAFILE_AI_SECRET_KEY
 from seahub.ai.sdoc import create_sdoc
+from seahub.ai.skills import extract_skill_command, get_builtin_skills
 
 logger = logging.getLogger(__name__)
 
@@ -80,6 +81,8 @@ class ChatSdocCreateView(APIView):
         task = cache.get(gen_chat_task_id(context['session_uuid']))
         if not task or task.get('message_id') != context['message_id']:
             return api_error(status.HTTP_403_FORBIDDEN, 'Chat request is no longer active.')
+        if task.get('selected_skill_id') != 'sdoc-create':
+            return api_error(status.HTTP_403_FORBIDDEN, 'SDoc creation requires /sdoc-create.')
         repo = seafile_api.get_repo(repo_id)
         if not repo or repo.is_virtual or not is_chat_and_search_enabled(repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Library is unavailable.')
@@ -805,6 +808,21 @@ class ChatMarkdownArtifactView(APIView):
         })
 
 
+class ChatSkillsView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        if not verify_chat_ai_config():
+            return api_error(status.HTTP_400_BAD_REQUEST, 'AI server not configured')
+        try:
+            return Response({'skills': get_builtin_skills()})
+        except Exception:
+            logger.exception('Failed to load builtin skills')
+            return api_error(status.HTTP_502_BAD_GATEWAY, 'Failed to load builtin skills.')
+
+
 class ChatView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
@@ -839,7 +857,6 @@ class ChatView(APIView):
             'ai_reply': ai_reply.content,
             'ai_reply_message_id': ai_reply.id,
             'sources': ai_reply.to_dict()['sources'],
-            'artifacts': ai_reply.to_dict()['artifacts'],
             'session_uuid': session_uuid,
         }
         result['thought_process'] = ChatMessageThoughtProcess.objects.get_thought_process_from_session_uuid_and_message_id(
@@ -859,6 +876,19 @@ class ChatView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id parameter is required.')
         if not query:
             return api_error(status.HTTP_400_BAD_REQUEST, 'query invalid.')
+        if not isinstance(query, str):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'query invalid.')
+        selected_skill_id, skill_input = extract_skill_command(query)
+        if selected_skill_id:
+            try:
+                available_names = {skill['name'] for skill in get_builtin_skills()}
+            except Exception:
+                logger.exception('Failed to validate skill command')
+                return api_error(status.HTTP_502_BAD_GATEWAY, 'Failed to load builtin skills.')
+            if selected_skill_id not in available_names:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Unknown skill command.')
+            if not skill_input.strip():
+                return api_error(status.HTTP_400_BAD_REQUEST, 'A skill command must include a task.')
         if not isinstance(attachments, list):
             return api_error(status.HTTP_400_BAD_REQUEST, 'attachments invalid.')
 
@@ -921,18 +951,20 @@ class ChatView(APIView):
             'repo_prompt': get_repo_prompt(repo_id),
             'scenario': AI_SCENARIO_CHAT,
             'message_id': message_id,
-            'sdoc_create_token': jwt.encode({
+        }
+        if selected_skill_id == 'sdoc-create':
+            params['sdoc_create_token'] = jwt.encode({
                 'exp': int(time.time()) + AI_REPLY_TIMEOUT,
                 'purpose': 'ai-chat-create-sdoc',
                 'username': request.user.username,
                 'repo_id': repo_id,
                 'session_uuid': session_uuid,
                 'message_id': message_id,
-            }, SEAFILE_AI_SECRET_KEY, algorithm='HS256'),
-        }
+            }, SEAFILE_AI_SECRET_KEY, algorithm='HS256')
 
         task_info = {
             'message_id': message_id,
+            'selected_skill_id': selected_skill_id,
             'user_input': {
                 'message': query,
                 'attachments': strip_content_details_from_attachments(attachments),
@@ -950,7 +982,6 @@ class ChatView(APIView):
                     query,
                     attachments,
                     repo_id,
-                    request,
                     request.user.username,
                     can_upload,
                 ),

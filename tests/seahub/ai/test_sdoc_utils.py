@@ -8,7 +8,6 @@ from seahub.ai.sdoc.compiler import compile_sdoc
 from seahub.ai.sdoc.schema import SdocArtifactError, normalize_sdoc_request
 from seahub.ai.sdoc.service import create_sdoc
 from seahub.ai.sdoc.validator import validate_sdoc
-from seahub.ai.utils import process_sdoc_artifacts
 
 
 def text(value, **marks):
@@ -21,7 +20,7 @@ def complex_request():
         'schema_version': 1,
         'file_name': 'Plan',
         'title': {'children': [text('Release ', bold=True), text('Plan')]},
-        'summary': 'A representative document.',
+        'description': 'A representative document.',
         'elements': [
             {'type': 'header1', 'children': [text('Goals')]},
             {'type': 'paragraph', 'children': [
@@ -93,6 +92,15 @@ class SdocContentTest(SimpleTestCase):
         with self.assertRaisesRegex(SdocArtifactError, 'invalid_artifact'):
             normalize_sdoc_request(request_data)
 
+    def test_preserves_description_and_accepts_nested_nodes_over_old_limit(self):
+        request_data = complex_request()
+        request_data['elements'] = [{'type': 'table', 'rows': [
+            {'cells': [{'children': [text('Cell')]} for _ in range(20)]} for _ in range(20)
+        ]}]
+        normalized = normalize_sdoc_request(request_data)
+        self.assertEqual(normalized['description'], 'A representative document.')
+        validate_sdoc(compile_sdoc(normalized, 'user@example.com'))
+
 
 class SdocServiceTest(SimpleTestCase):
     def setUp(self):
@@ -148,23 +156,3 @@ class SdocServiceTest(SimpleTestCase):
         self.assertEqual(result['status'], 'failed')
         self.assertEqual(result['error_code'], 'invalid_artifact')
         mock_get_dir.assert_not_called()
-
-
-class SdocArtifactTest(SimpleTestCase):
-    @patch('seahub.ai.sdoc.service.seafile_api.post_file')
-    def test_final_result_only_contains_file_reference_without_writing(self, mock_post):
-        artifact = {
-            'type': 'sdoc', 'status': 'created', 'relative_path': 'Plan.sdoc',
-            'elements': [{'text': 'must not reach the browser'}],
-        }
-        result = process_sdoc_artifacts({'artifacts': [artifact]})
-        self.assertEqual(result['artifacts'], [{
-            'type': 'sdoc', 'status': 'created', 'relative_path': 'Plan.sdoc',
-        }])
-        mock_post.assert_not_called()
-
-    @patch('seahub.ai.sdoc.service.seafile_api.post_file')
-    def test_final_result_does_not_execute_legacy_creation_requests(self, mock_post):
-        result = process_sdoc_artifacts({'artifacts': [complex_request()]})
-        self.assertEqual(result['artifacts'], [])
-        mock_post.assert_not_called()

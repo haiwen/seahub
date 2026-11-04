@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 import { gettext, siteRoot } from '@/utils/constants';
 import Icon from '../../../icon';
+import ToolBlock from '../tool-blocks';
 
 import './index.css';
 
@@ -15,6 +16,7 @@ const CustomizeLink = ({
   attributes,
   children,
   mdFiles = [],
+  toolBlocks = [],
   openDocument,
   repoID,
 }) => {
@@ -41,6 +43,11 @@ const CustomizeLink = ({
     }
     handleOpenDocument(event);
   }, [handleOpenDocument]);
+
+  const toolBlock = toolBlocks.find((block) => block.url === element.url);
+  if (toolBlock) {
+    return <ToolBlock block={toolBlock} repoID={repoID} />;
+  }
 
   const isLibraryFile = repoID && element.url.startsWith(`${siteRoot}lib/${repoID}/file/`);
 

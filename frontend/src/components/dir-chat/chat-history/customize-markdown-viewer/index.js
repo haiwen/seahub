@@ -9,6 +9,8 @@ import { useDocuments } from '../../hooks';
 import CustomizeDefinition from '../customize-definition';
 import CustomizeLink from '../customize-link';
 import CustomizeLinkReference from '../customize-link-reference';
+import { transformToolBlocksForCopy } from '../tool-blocks';
+import { transformToolBlocks } from '../tool-blocks/utils';
 import { buildAIReply, normalizeSources } from '../utils';
 
 import './index.css';
@@ -31,19 +33,21 @@ const CustomizeMarkdownViewer = forwardRef(({ chatId, message, repoID, isStreami
   const retryCountRef = useRef(0);
   const [viewerKey, setViewerKey] = useState(0);
   const [aiMessageType, setAIMessageType] = useState('rich-text');
-  const { value, sources, mdFiles } = useMemo(() => {
+  const { value, sources, mdFiles, toolBlocks } = useMemo(() => {
     const nextSources = normalizeSources(message?.[CHAT_MESSAGE_TYPE.SOURCES] || [], repoID);
     const nextMdFiles = [];
+    const { value: content, blocks } = transformToolBlocks(message?.[CHAT_MESSAGE_TYPE.AI_REPLY] || '', isStreaming);
     return {
-      value: buildAIReply(message?.[CHAT_MESSAGE_TYPE.AI_REPLY] || '', nextSources, chatId, nextMdFiles, repoID),
+      value: buildAIReply(content, nextSources, chatId, nextMdFiles, repoID),
       sources: nextSources,
       mdFiles: nextMdFiles,
+      toolBlocks: blocks,
     };
-  }, [chatId, message, repoID]);
+  }, [chatId, message, repoID, isStreaming]);
 
   useImperativeHandle(ref, () => ({
-    getAIReply: () => value,
-  }), [value]);
+    getAIReply: () => transformToolBlocksForCopy(value, toolBlocks, repoID),
+  }), [value, toolBlocks, repoID]);
 
   useEffect(() => {
     if (isStreaming) {
@@ -101,13 +105,14 @@ const CustomizeMarkdownViewer = forwardRef(({ chatId, message, repoID, isStreami
         render: (
           <CustomizeLink
             mdFiles={mdFiles}
+            toolBlocks={toolBlocks}
             openDocument={openDocument}
             repoID={repoID}
           />
         ),
       },
     };
-  }, [handleOpenDocument, mdFiles, openDocument, repoID, sources]);
+  }, [handleOpenDocument, mdFiles, toolBlocks, openDocument, repoID, sources]);
 
   const beforeRenderCallback = useCallback((nodes) => {
     if (isStreaming) {

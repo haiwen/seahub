@@ -101,6 +101,10 @@ class ChatAPI {
     return this.req.get(this.server + '/api/v2.1/ai/chat/sessions/' + sessionUUID + '/messages/');
   }
 
+  getBuiltinSkills() {
+    return this.req.get(this.server + '/api/v2.1/ai/chat/skills/');
+  }
+
   getMarkdownArtifact(fileUUID) {
     return this.req.get(this.server + '/api/v2.1/ai/chat/markdown-artifacts/' + fileUUID + '/');
   }

@@ -110,13 +110,14 @@ def create_sdoc(draft, repo_id, request, username):
             'url': reverse('view_lib_file', args=[repo_id, file_path]),
             'title': _plain_title(normalized['title']),
         }
-        if normalized.get('summary'):
-            result['summary'] = normalized['summary']
+        result['description'] = normalized['description']
         return result
     except SdocArtifactError as error:
+        logger.warning('Invalid AI generated SDoc artifact: %s', error)
         error_code = error.code
     except ValueError as error:
-        error_code = str(error) if str(error) else 'invalid_artifact'
+        logger.warning('Invalid AI generated SDoc artifact: %s', error)
+        error_code = 'invalid_artifact'
     except Exception as error:
         logger.exception('Failed to create AI generated SDoc: %s', error)
         error_code = 'create_failed'

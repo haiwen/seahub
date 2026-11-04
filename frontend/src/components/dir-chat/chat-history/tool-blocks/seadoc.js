@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { gettext, siteRoot } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 
-import './index.css';
+import './seadoc.css';
 
 const ERROR_MESSAGES = {
   sdoc_not_enabled: gettext('The document was generated, but no file was created because SDoc is not enabled.'),
@@ -23,41 +23,32 @@ const ERROR_MESSAGES = {
   creation_unconfirmed: gettext('Document creation could not be confirmed. Please check the AI Generated folder before trying again.'),
 };
 
-const SdocArtifacts = ({ artifacts = [] }) => {
-  const sdocArtifacts = artifacts.filter((artifact) => artifact?.type === 'sdoc');
-  if (sdocArtifacts.length === 0) {
-    return null;
+export const getSeadocError = (data) => {
+  if (data.status === 'unknown') {
+    return ERROR_MESSAGES.creation_unconfirmed;
   }
+  return ERROR_MESSAGES[data.error_code] || ERROR_MESSAGES.create_failed;
+};
 
+export const getSeadocUrl = (data, repoID) => `${siteRoot}lib/${repoID}/file${Utils.encodePath(data.path)}`;
+
+const Seadoc = ({ data, repoID }) => {
+  if (data.status !== 'created') {
+    return <div className="sea-ai-seadoc failure">{getSeadocError(data)}</div>;
+  }
   return (
-    <div className="sea-ai-sdoc-artifacts">
-      {sdocArtifacts.map((artifact, index) => {
-        const relativePath = artifact.relative_path;
-        const path = relativePath ? `/AI Generated/${relativePath}` : artifact.path;
-        const url = relativePath && artifact.repo_id ? `${siteRoot}lib/${artifact.repo_id}/file${Utils.encodePath(path)}` : artifact.url;
-        const artifactKey = `${artifact.path || artifact.error_code || 'sdoc'}-${index}`;
-        if (artifact.status !== 'created') {
-          return (
-            <div className="sea-ai-sdoc-artifact failure" key={artifactKey}>
-              <div>{ERROR_MESSAGES[artifact.error_code] || ERROR_MESSAGES.create_failed}</div>
-            </div>
-          );
-        }
-        return (
-          <div className="sea-ai-sdoc-artifact" key={artifactKey}>
-            <div className="sea-ai-sdoc-artifact-name">{gettext('Created')} {artifact.name}</div>
-            <div className="sea-ai-sdoc-artifact-path">{gettext('Location')}: {path}</div>
-            {artifact.summary && <div className="sea-ai-sdoc-artifact-summary">{artifact.summary}</div>}
-            <a href={url} target="_blank" rel="noopener noreferrer" className="sea-ai-sdoc-artifact-link">{gettext('Open document')}</a>
-          </div>
-        );
-      })}
+    <div className="sea-ai-seadoc">
+      <div className="sea-ai-seadoc-name">{gettext('Created')} {data.name}</div>
+      <div className="sea-ai-seadoc-path">{gettext('Location')}: {data.path}</div>
+      {data.description && <div className="sea-ai-seadoc-description">{data.description}</div>}
+      {repoID && <a href={getSeadocUrl(data, repoID)} target="_blank" rel="noopener noreferrer" className="sea-ai-seadoc-link">{gettext('Open document')}</a>}
     </div>
   );
 };
 
-SdocArtifacts.propTypes = {
-  artifacts: PropTypes.array,
+Seadoc.propTypes = {
+  data: PropTypes.object.isRequired,
+  repoID: PropTypes.string,
 };
 
-export default SdocArtifacts;
+export default Seadoc;

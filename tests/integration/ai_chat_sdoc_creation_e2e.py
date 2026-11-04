@@ -6,6 +6,7 @@ import json
 import os
 import sys
 import uuid
+from html.parser import HTMLParser
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urlencode
 from urllib.request import Request, urlopen
@@ -13,6 +14,21 @@ from urllib.request import Request, urlopen
 
 class E2EError(RuntimeError):
     pass
+
+
+def seadoc_references(content):
+    class SeadocParser(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.references = []
+
+        def handle_startendtag(self, tag, attrs):
+            if tag == 'seadoc':
+                self.references.append(dict(attrs))
+
+    parser = SeadocParser()
+    parser.feed(content or '')
+    return parser.references
 
 
 def required_env(name):
@@ -130,7 +146,7 @@ def main():
         })
         session_uuid = session_data['session']['session_uuid']
         prompt = (
-            'Create and save an SDoc named %s. Include the exact marker %s. '
+            '/sdoc-create Create and save an SDoc named %s. Include the exact marker %s. '
             'Use rich text, an HTTPS inline link, a blockquote or callout, a list, '
             'a multiline code block, a formula, a 2 by 2 table, and a two-column layout.'
         ) % (file_name, marker)
@@ -140,19 +156,20 @@ def main():
             'session_uuid': session_uuid,
             'attachments': [],
         })
-        artifacts = result.get('artifacts', [])
-        artifact = next((item for item in artifacts if item.get('type') == 'sdoc' and item.get('status') == 'created'), None)
+        references = seadoc_references(result.get('ai_reply'))
+        artifact = next((item for item in references if item.get('status') == 'created'), None)
         if not artifact:
-            raise E2EError('Chat did not return a created SDoc artifact: %s' % json.dumps(result, ensure_ascii=False))
-        relative_path = artifact.get('relative_path')
-        if not relative_path or '/' in relative_path or '\\' in relative_path:
-            raise E2EError('Chat did not return a path relative to AI Generated.')
+            raise E2EError('Chat did not return a created <seadoc /> reference: %s' % json.dumps(result, ensure_ascii=False))
+        path = artifact.get('path', '')
+        if not path.startswith('/AI Generated/') or '..' in path.split('/') or '\\' in path:
+            raise E2EError('Chat did not return a valid path in AI Generated.')
         if 'elements' in artifact or 'content' in artifact:
             raise E2EError('Chat returned document content instead of a file reference.')
-        artifact['path'] = '/AI Generated/' + relative_path
+        artifact['repo_id'] = args.repo_id
 
         history = request_json('GET', seahub_url + '/api/v2.1/ai/chat/sessions/%s/messages/' % session_uuid, seahub_token)
-        persisted = [item for message in history.get('messages', []) for item in message.get('artifacts', []) if item.get('doc_uuid') == artifact['doc_uuid']]
+        persisted = [item for message in history.get('messages', []) if message.get('role') == 'assistant'
+                     for item in seadoc_references(message.get('content')) if item.get('doc_uuid') == artifact['doc_uuid']]
         if not persisted:
             raise E2EError('Created artifact was not persisted in Chat history.')
 

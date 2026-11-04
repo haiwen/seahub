@@ -24,10 +24,8 @@ from seahub.constants import DEFAULT_USER, PERMISSION_INVISIBLE
 from seahub.share.utils import is_repo_admin
 from seahub.utils import gen_inner_file_upload_url, get_service_url, is_org_context, is_pro_version, mkstemp
 from seahub.utils.user_permissions import get_user_role
-from seahub.utils.ccnet_db import CcnetDB
 from seahub.organizations.models import OrgMemberQuota, OrgSettings
 from seahub.ai.models import AIUsageStatistics, ChatMessageThoughtProcess, ChatMessages, ChatSessions
-from seahub.ai.sdoc import compile_sdoc, normalize_sdoc_request
 
 
 logger = logging.getLogger(__name__)
@@ -53,8 +51,6 @@ AI_SCENARIO_WRITING_ASSISTANT = 'writing-assistant'
 AI_SCENARIO_CHAT = 'chat'
 AI_SCENARIO_UNKNOWN = 'unknown'
 AI_SCENARIO_SEARCH_ICONS = 'search-icons'
-
-SDOC_ARTIFACT_TYPE = 'sdoc_create_request'
 
 
 # API
@@ -461,42 +457,6 @@ def process_generated_markdown_result(ai_result, repo_id, username, can_upload=T
     return ai_result
 
 
-def build_sdoc_content(title, elements, username):
-    request_data = normalize_sdoc_request({
-        'type': SDOC_ARTIFACT_TYPE,
-        'schema_version': 1,
-        'file_name': 'document.sdoc',
-        'title': title,
-        'elements': elements,
-    })
-    return compile_sdoc(request_data, username)
-
-
-def process_sdoc_artifacts(ai_result):
-    if not isinstance(ai_result, dict):
-        return ai_result
-    artifacts = ai_result.get('artifacts', [])
-    if not isinstance(artifacts, list):
-        artifacts = []
-    results = []
-    has_sdoc = False
-    for artifact in artifacts:
-        if isinstance(artifact, dict) and artifact.get('type') == SDOC_ARTIFACT_TYPE:
-            continue
-        if not isinstance(artifact, dict) or artifact.get('type') != 'sdoc':
-            results.append(artifact)
-            continue
-        if has_sdoc:
-            continue
-        results.append({key: artifact[key] for key in (
-            'type', 'schema_version', 'status', 'name', 'relative_path', 'path',
-            'repo_id', 'doc_uuid', 'url', 'title', 'summary', 'error_code',
-        ) if key in artifact})
-        has_sdoc = True
-    ai_result['artifacts'] = results
-    return ai_result
-
-
 def record_message_to_db(ai_result, session_uuid, message_id, query, attachments):
     if not isinstance(ai_result, dict):
         ai_result = {
@@ -535,7 +495,6 @@ def record_message_to_db(ai_result, session_uuid, message_id, query, attachments
             'assistant',
             ai_result['ai_reply'],
             sources=json.dumps(ai_result.get('sources', [])),
-            artifacts=ai_result.get('artifacts', []),
         )
         ChatSessions.objects.filter(session_uuid=session_uuid).update(updated_at=timezone.now())
         ai_result.update({
@@ -548,7 +507,7 @@ def record_message_to_db(ai_result, session_uuid, message_id, query, attachments
     return ai_result
 
 
-def process_stream_ai_reply(chat_task_id, ai_response, session_uuid, message_id, query, attachments, repo_id, request, username, can_upload=True):
+def process_stream_ai_reply(chat_task_id, ai_response, session_uuid, message_id, query, attachments, repo_id, username, can_upload=True):
     has_recorded_result = False
     has_generator_exit = False
     error_msg = None
@@ -563,7 +522,6 @@ def process_stream_ai_reply(chat_task_id, ai_response, session_uuid, message_id,
             if content.startswith('{"results": ') and content.endswith('}'):
                 results = json.loads(content)['results']
                 results = process_generated_markdown_result(results, repo_id, username, can_upload=can_upload)
-                results = process_sdoc_artifacts(results)
                 item = 'data: %s\n\n' % json.dumps({
                     'results': record_message_to_db(results, session_uuid, message_id, query, attachments),
                 })

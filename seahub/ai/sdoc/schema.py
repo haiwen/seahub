@@ -1,10 +1,12 @@
 import json
+import math
 import re
 from urllib.parse import urlparse
 
 
 SCHEMA_VERSION = 1
 MAX_ELEMENTS = 200
+MAX_NODES = 20000
 MAX_TEXT_LENGTH = 100000
 MAX_TABLE_ROWS = 100
 MAX_TABLE_COLUMNS = 20
@@ -45,7 +47,7 @@ class _ValidationState:
 
     def add_node(self):
         self.node_count += 1
-        if self.node_count > MAX_ELEMENTS:
+        if self.node_count > MAX_NODES:
             raise SdocArtifactError('content_too_large')
 
     def add_text(self, text):
@@ -94,6 +96,8 @@ def _normalize_text(value, state):
         if isinstance(mark_value, bool) and expected_type != bool:
             raise SdocArtifactError()
         if not isinstance(mark_value, expected_type):
+            raise SdocArtifactError()
+        if isinstance(mark_value, float) and not math.isfinite(mark_value):
             raise SdocArtifactError()
         if mark in ('color', 'highlight_color') and not COLOR_RE.match(mark_value):
             raise SdocArtifactError()
@@ -267,21 +271,19 @@ def _normalize_element(value, state, depth=1):
 
 
 def normalize_sdoc_request(value):
-    _exact_keys(value, {'type', 'schema_version', 'file_name', 'title', 'elements'}, {'summary'})
+    _exact_keys(value, {'type', 'schema_version', 'file_name', 'title', 'elements', 'description'})
     if value.get('type') != 'sdoc_create_request':
         raise SdocArtifactError()
     if value.get('schema_version') != SCHEMA_VERSION:
         raise SdocArtifactError('unsupported_schema_version')
     file_name = _string(value.get('file_name')).strip()
-    summary = value.get('summary')
-    if summary is not None:
-        summary = _string(summary).strip()
+    description = _string(value.get('description')).strip()
     title = value.get('title')
     _exact_keys(title, {'children'})
     state = _ValidationState()
     title_children = _normalize_children(title['children'], state, text_only=True)
     elements = value.get('elements')
-    if not isinstance(elements, list) or not elements:
+    if not isinstance(elements, list) or not elements or len(elements) > MAX_ELEMENTS:
         raise SdocArtifactError()
     normalized_elements = [_normalize_element(element, state) for element in elements]
     normalized = {
@@ -291,8 +293,7 @@ def normalize_sdoc_request(value):
         'title': {'children': title_children},
         'elements': normalized_elements,
     }
-    if summary is not None:
-        normalized['summary'] = summary
+    normalized['description'] = description
     if len(json.dumps(normalized, ensure_ascii=False)) > MAX_TEXT_LENGTH * 4:
         raise SdocArtifactError('content_too_large')
     return normalized
