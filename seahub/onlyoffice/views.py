@@ -28,7 +28,7 @@ from seaserv import seafile_api
 
 
 from seahub.onlyoffice.settings import VERIFY_ONLYOFFICE_CERTIFICATE, \
-        ONLYOFFICE_JWT_SECRET, ONLYOFFICE_FILE_EXTENSION
+        ONLYOFFICE_JWT_SECRET, ONLYOFFICE_JWT_HEADER, ONLYOFFICE_FILE_EXTENSION
 from seahub.onlyoffice.utils import get_onlyoffice_dict, get_doc_key_by_repo_id_file_path
 from seahub.onlyoffice.utils import delete_doc_key, get_file_info_by_doc_key
 from seahub.onlyoffice.converter_utils import get_file_name_without_ext, \
@@ -43,6 +43,53 @@ from seahub.views import check_folder_permission
 
 # Get an instance of a logger
 logger = logging.getLogger('onlyoffice')
+
+
+def get_verified_callback_payload(request, body_data):
+    """ Get the verified parameters of a callback request.
+
+    The document server signs the callback parameters with ONLYOFFICE_JWT_SECRET
+    and sends the token in the request body, or in the ONLYOFFICE_JWT_HEADER
+    header. The token is the only trusted source of the parameters: when the
+    token in body is enabled the document server sends a body that carries
+    nothing but the token.
+
+    Return the decoded token payload, or None when the request can not be
+    trusted.
+    """
+    if not ONLYOFFICE_JWT_SECRET:
+        logger.error('[OnlyOffice] ONLYOFFICE_JWT_SECRET is not set, reject callback.')
+        return None
+
+    token = body_data.get('token') or ''
+    if not token:
+        authorization = request.headers.get(ONLYOFFICE_JWT_HEADER, '')
+        if authorization.lower().startswith('bearer '):
+            token = authorization.split(' ', 1)[1].strip()
+
+    if not token:
+        logger.error('[OnlyOffice] Callback request has no JWT.')
+        return None
+
+    try:
+        payload = jwt.decode(token, ONLYOFFICE_JWT_SECRET, algorithms=['HS256'])
+    except Exception as e:
+        logger.error('[OnlyOffice] Failed to verify callback JWT: {}'.format(e))
+        return None
+
+    if not isinstance(payload, dict):
+        logger.error('[OnlyOffice] Callback JWT payload is not an object.')
+        return None
+
+    # A token sent in a header wraps the callback parameters in a "payload" field.
+    if isinstance(payload.get('payload'), dict):
+        payload = payload['payload']
+
+    if not payload.get('key'):
+        logger.error('[OnlyOffice] Callback JWT has no document key.')
+        return None
+
+    return payload
 
 
 @csrf_exempt
@@ -104,7 +151,14 @@ def onlyoffice_editor_callback(request):
     #
     # Status 6 (7) is received when the force saving request is performed.
 
-    post_data = json.loads(request.body)
+    body_data = json.loads(request.body)
+
+    # The parameters signed by the document server are the only trusted source;
+    # the request body itself may carry nothing but the token.
+    post_data = get_verified_callback_payload(request, body_data)
+    if not post_data:
+        return HttpResponse('{"error": 1}')
+
     status = int(post_data.get('status', -1))
 
     # get doc key and file basic info from database

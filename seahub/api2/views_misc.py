@@ -3,6 +3,7 @@ from seahub.api2.base import APIView
 from seahub.api2.utils import json_response
 from seahub import settings
 from seahub.utils import HAS_FILE_SEARCH, is_pro_version, HAS_FILE_SEASEARCH
+from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE
 
 from constance import config
 
@@ -47,8 +48,7 @@ class ServerInfoView(APIView):
         if hasattr(settings, 'DESKTOP_CUSTOM_BRAND'):
             info['desktop-custom-brand'] = getattr(settings, 'DESKTOP_CUSTOM_BRAND')
             
-        enable_onlyoffice = getattr(settings, 'ENABLE_ONLYOFFICE', False)
-        if enable_onlyoffice:
+        if ENABLE_ONLYOFFICE:
             features.append('onlyoffice')
 
         info['features'] = features

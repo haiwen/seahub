@@ -76,3 +76,14 @@ if ENABLE_MULTIPLE_OFFICE_SUITE:
     VERIFY_ONLYOFFICE_CERTIFICATE = office_info.get('VERIFY_ONLYOFFICE_CERTIFICATE', True)
     ONLYOFFICE_FILE_EXTENSION = OFFICE_SUITE_ENABLED_FILE_TYPES
     ONLYOFFICE_EDIT_FILE_EXTENSION = OFFICE_SUITE_ENABLED_EDIT_FILE_TYPES
+
+
+# OnlyOffice counts as enabled only when it is configured and the JWT secret is
+# set. Without the secret the document server can not sign a callback, so the
+# callback can not be authenticated and the editor must not be offered.
+if ENABLE_MULTIPLE_OFFICE_SUITE:
+    onlyoffice_configured = bool(office_info)
+else:
+    onlyoffice_configured = ENABLE_ONLYOFFICE
+
+ENABLE_ONLYOFFICE = bool(onlyoffice_configured and ONLYOFFICE_JWT_SECRET)

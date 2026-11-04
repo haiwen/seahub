@@ -177,12 +177,12 @@ def get_office_feature_by_repo(repo):
                 default_suite = s
                 break
         if default_suite.get('id') == 'onlyoffice':
-            enable_onlyoffice = True
+            enable_onlyoffice = ENABLE_ONLYOFFICE
         if default_suite.get('id') == 'collabora':
             enable_office_app = True
     else:
         if repo_feature == 'onlyoffice':
-            enable_onlyoffice = True
+            enable_onlyoffice = ENABLE_ONLYOFFICE
         if repo_feature == 'collabora':
             enable_office_app = True
 
