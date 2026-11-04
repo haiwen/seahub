@@ -1,8 +1,31 @@
 // Tool results are data, not arbitrary HTML. Register each supported tag explicitly.
 const TOOL_TAGS = new Set(['seadoc']);
 const ATTRIBUTE_NAMES = new Set(['status', 'name', 'path', 'doc_uuid', 'description', 'error_code']);
-// Match code before tags so examples in fenced, indented and inline code stay literal.
-const TOKEN_RE = /(^ {0,3}(`{3,}|~{3,})[^\n]*\n[\s\S]*?(?:^ {0,3}\2[\t ]*$|(?![\s\S])))|(^ {4}[^\n]*(?:\n|$))|(`+)(?:[^`]|(?!\4)`)*?\4|<seadoc(?=\s|\/|>|$)(?:[^>"']|"[^"]*"|'[^']*')*(?:>|"[^"]*$|'[^']*$|$)/gm;
+// Fenced code is skipped separately; match indented and inline code before tags.
+const TOKEN_RE = /(^ {4}[^\n]*(?:\n|$))|(`+)(?:[^`]|(?!\2)`)*?\2|<seadoc(?=\s|\/|>|$)(?:[^>"']|"[^"]*"|'[^']*')*(?:>|"[^"]*$|'[^']*$|$)/gm;
+
+const transformOutsideFences = (value, transform) => {
+  const fenceLines = /^ {0,3}(`{3,}|~{3,})([^\n]*)(?:\n|$)/gm;
+  const parts = [];
+  let opening = null;
+  let offset = 0;
+  let match;
+  while ((match = fenceLines.exec(value))) {
+    const [, fence, rest] = match;
+    if (!opening) {
+      // Backtick fence info strings cannot contain backticks.
+      if (fence[0] === '`' && rest.includes('`')) continue;
+      parts.push(transform(value.slice(offset, match.index)));
+      opening = { character: fence[0], length: fence.length, start: match.index };
+    } else if (fence[0] === opening.character && fence.length >= opening.length && /^[\t \r]*$/.test(rest)) {
+      parts.push(value.slice(opening.start, fenceLines.lastIndex));
+      offset = fenceLines.lastIndex;
+      opening = null;
+    }
+  }
+  parts.push(opening ? value.slice(opening.start) : transform(value.slice(offset)));
+  return parts.join('');
+};
 
 const decodeAttribute = (value) => {
   const element = document.createElement('textarea');
@@ -40,7 +63,7 @@ export const transformToolBlocks = (value = '', isStreaming = false) => {
     blocks.push({ type: 'seadoc', data, url });
     return `[tool result](${url})`;
   };
-  const nextValue = value.replace(TOKEN_RE, (token) => {
+  const nextValue = transformOutsideFences(value, (text) => text.replace(TOKEN_RE, (token) => {
     const tagName = token.match(/^<(\w+)/)?.[1];
     if (!TOOL_TAGS.has(tagName)) {
       return token;
@@ -55,6 +78,6 @@ export const transformToolBlocks = (value = '', isStreaming = false) => {
       return addBlock({ status: 'failed', error_code: 'invalid_artifact' });
     }
     return addBlock(data);
-  });
+  }));
   return { value: nextValue, blocks };
 };
