@@ -1,6 +1,8 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
 import os
+import posixpath
+import jwt
 import re
 import ipaddress
 import socket
@@ -14,6 +16,7 @@ import json
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.http import HttpResponse
 
 from seahub.api2.authentication import SessionCRSFCheckFreeAuthentication, TokenAuthentication
 from seahub.api2.models import Token
@@ -22,7 +25,8 @@ from seahub.api2.utils import api_error, is_valid_internal_jwt, get_user_common_
 from seahub.base.accounts import User
 from seahub.repo_api_tokens.models import RepoAPITokens
 from seahub.seadoc.utils import gen_seadoc_image_parent_path, get_seadoc_asset_upload_link
-from seahub.settings import SERVICE_URL
+from seahub.settings import SERVICE_URL, SEADOC_PRIVATE_KEY
+from seahub.seadoc.settings import SDOC_IMAGES_DIR
 from seahub.share.models import UploadLinkShare, FileShare, check_share_link_access, check_share_link_access_by_scope
 from seaserv import seafile_api
 
@@ -30,7 +34,7 @@ from seahub.tags.models import FileUUIDMap
 from seahub.repo_metadata.utils import FACES_SAVE_PATH
 from seahub.utils.repo import parse_repo_perm
 from seahub.views.file import send_file_access_msg, FILE_TYPE_FOR_NEW_FILE_LINK
-from seahub.utils import normalize_file_path, get_file_type_and_ext
+from seahub.utils import normalize_file_path, get_file_type_and_ext, gen_inner_file_get_url
 from seahub.views import check_folder_permission
 
 
@@ -309,6 +313,92 @@ class CheckThumbnailAccess(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         return Response({'success': True})
+
+
+class InternalConverterFile(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+    throttle_classes = (UserRateThrottle,)
+
+    def _claims(self, request):
+        auth = request.headers.get('Authorization', '').split()
+        if len(auth) != 2 or auth[0].lower() != 'token':
+            return None
+        try:
+            return jwt.decode(
+                auth[1], SEADOC_PRIVATE_KEY, algorithms=['HS256'],
+                audience='seadoc-converter-file',
+                options={'require': ['exp', 'aud', 'repo_id', 'file_id', 'filename', 'username']})
+        except jwt.InvalidTokenError:
+            return None
+
+    def get(self, request):
+        claims = self._claims(request)
+        if claims is None:
+            return api_error(403, 'Permission denied.')
+        try:
+            repo_id, file_id, filename = claims['repo_id'], claims['file_id'], claims['filename']
+            image_name = request.query_params.get('image_name')
+            if image_name is not None:
+                if (not image_name or any(c in image_name for c in ('/', '\\', '\x00'))
+                        or image_name in ('.', '..')):
+                    return api_error(400, 'image_name invalid.')
+                doc_uuid = claims.get('doc_uuid')
+                uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(doc_uuid) if doc_uuid else None
+                if not uuid_map or uuid_map.repo_id != repo_id:
+                    return api_error(403, 'Permission denied.')
+                image_path = posixpath.join(SDOC_IMAGES_DIR, str(doc_uuid), image_name)
+                file_id = seafile_api.get_file_id_by_path(repo_id, image_path)
+                filename = image_name
+            if not file_id:
+                return api_error(404, 'File not found.')
+            token = seafile_api.get_fileserver_access_token(
+                repo_id, file_id, 'download', claims['username'], use_onetime=True)
+            if not token:
+                return api_error(404, 'File not found.')
+            # Only this configured internal fileserver is contacted; never follow redirects.
+            resp = requests.get(gen_inner_file_get_url(token, filename),
+                                timeout=30, allow_redirects=False)
+            if resp.status_code != 200:
+                logger.error('Converter source download failed: %s', resp.status_code)
+                return api_error(502, 'Failed to read conversion file.')
+            return HttpResponse(resp.content, content_type='application/octet-stream')
+        except Exception:
+            logger.exception('Failed to read conversion file')
+            return api_error(500, 'Internal Server Error')
+
+    def post(self, request):
+        claims = self._claims(request)
+        if claims is None or not claims.get('output_path'):
+            return api_error(403, 'Permission denied.')
+        uploaded = request.FILES.get('file')
+        if uploaded is None:
+            return api_error(400, 'file invalid.')
+        # Destination and author come exclusively from the upstream-signed grant.
+        output_path = claims['output_path']
+        parent_dir, filename = posixpath.split(output_path)
+        if (not output_path.startswith('/') or not filename or filename in ('.', '..')
+                or '\\' in output_path or '\x00' in output_path
+                or '..' in output_path.split('/')):
+            return api_error(400, 'output_path invalid.')
+        tmp_path = None
+        try:
+            with tempfile.NamedTemporaryFile(prefix='converter-', delete=False) as tmp:
+                tmp_path = tmp.name
+                for chunk in uploaded.chunks():
+                    tmp.write(chunk)
+            seafile_api.post_file(claims['repo_id'], tmp_path, parent_dir,
+                                 filename, claims['username'])
+            return Response({'success': True})
+        except Exception:
+            logger.exception('Failed to save conversion result')
+            return api_error(500, 'Internal Server Error')
+        finally:
+            if tmp_path is not None:
+                try:
+                    os.unlink(tmp_path)
+                except FileNotFoundError:
+                    pass
     
 class CheckThumbnailAccessByUserToken(APIView):
     authentication_classes = (TokenAuthentication, )
