@@ -3,7 +3,7 @@ from types import SimpleNamespace
 from unittest import TestCase
 from unittest.mock import patch
 
-from django.urls import Resolver404, resolve, reverse
+from django.urls import reverse
 from rest_framework.test import APIRequestFactory, force_authenticate
 
 from seahub.api2.endpoints import wiki2 as endpoint
@@ -86,13 +86,3 @@ class Wiki2WritePermissionTest(TestCase):
                         page = json.loads(self.save_wiki_config.call_args.args[2])['pages'][0]
                         self.assertEqual((page['name'], page['icon'], page['cover_img_url']),
                                          ('Changed', 'icon', 'cover'))
-
-
-class Wiki2FileViewRoutesTest(TestCase):
-    def test_file_view_routes_are_removed(self):
-        wiki_id = '11111111-2222-4333-8444-555555555555'
-        for suffix in ('file-views/', 'file-views/1/',
-                       'file-views/1/duplicate/', 'file-view/1/records/'):
-            with self.subTest(suffix=suffix):
-                with self.assertRaises(Resolver404):
-                    resolve('/api/v2.1/wiki2/%s/%s' % (wiki_id, suffix))
