@@ -10,11 +10,7 @@ GROUP_OWNER = 'group@seafile_group'
 
 
 class GetOfficeFeatureByRepoTest(SimpleTestCase):
-    """A library must never be routed to an office suite that is not enabled.
-
-    The OnlyOffice editor renders the callback URL, and that URL is only
-    registered when OnlyOffice is enabled.
-    """
+    """Multiple-suite selection remains independent of the single-suite flag."""
 
     def setUp(self):
         self.repo = Mock()
@@ -38,10 +34,10 @@ class GetOfficeFeatureByRepoTest(SimpleTestCase):
             mock_seafile_api.get_repo_owner.return_value = repo_owner
             return get_office_feature_by_repo(self.repo)
 
-    def test_onlyoffice_not_selected_when_disabled(self):
+    def test_default_onlyoffice_selected_without_single_suite_flag(self):
         enable_onlyoffice, enable_office_app = self._call(ONLYOFFICE_SUITE, False)
 
-        self.assertFalse(enable_onlyoffice)
+        self.assertTrue(enable_onlyoffice)
         self.assertFalse(enable_office_app)
 
     def test_onlyoffice_selected_when_enabled(self):
@@ -50,10 +46,10 @@ class GetOfficeFeatureByRepoTest(SimpleTestCase):
         self.assertTrue(enable_onlyoffice)
         self.assertFalse(enable_office_app)
 
-    def test_onlyoffice_not_selected_for_a_library_when_disabled(self):
+    def test_library_onlyoffice_selected_without_single_suite_flag(self):
         enable_onlyoffice, _ = self._call(ONLYOFFICE_SUITE, False, repo_feature='onlyoffice')
 
-        self.assertFalse(enable_onlyoffice)
+        self.assertTrue(enable_onlyoffice)
 
     def test_collabora_selected_whatever_onlyoffice_is_enabled(self):
         enable_onlyoffice, enable_office_app = self._call(COLLABORA_SUITE, False)

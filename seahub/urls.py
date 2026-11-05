@@ -1068,12 +1068,7 @@ if getattr(settings, 'ENABLE_MULTI_ADFS', False) or getattr(settings, 'ENABLE_AD
         path('saml2/complete/', auth_complete, name='saml2_complete'),
     ]
 
-try:
-    from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE
-except ImportError:
-    ENABLE_ONLYOFFICE = False
-
-if ENABLE_ONLYOFFICE:
+if getattr(settings, 'ENABLE_ONLYOFFICE', False) or getattr(settings, 'ENABLE_MULTIPLE_OFFICE_SUITE', False):
     urlpatterns += [
         path('onlyoffice/', include('seahub.onlyoffice.urls')),
         path('onlyoffice-api/', include('seahub.onlyoffice.api_urls')),
@@ -1124,4 +1119,3 @@ if getattr(settings, 'ENABLE_METADATA_MANAGEMENT', False):
         urlpatterns += [
             re_path(r'^api/v2.1/ai/', include('seahub.ai.urls')),
         ]
-

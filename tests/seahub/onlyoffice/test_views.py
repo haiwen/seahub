@@ -76,14 +76,22 @@ class OnlyofficeEditorCallbackJwtTest(TestCase):
         mock_requests.post.assert_not_called()
 
     @patch('seahub.onlyoffice.views.ONLYOFFICE_JWT_SECRET', '')
+    @patch('seahub.onlyoffice.views.gen_inner_file_upload_url', return_value='http://inner/update')
+    @patch('seahub.onlyoffice.views.cache')
+    @patch('seahub.onlyoffice.views.seafile_api')
     @patch('seahub.onlyoffice.views.requests')
-    def test_callback_is_rejected_when_jwt_secret_is_not_configured(self, mock_requests):
-        token = self._encode()
+    def test_legacy_callback_saves_when_jwt_secret_is_not_configured(
+            self, mock_requests, mock_seafile_api, mock_cache, mock_upload_url):
+        mock_seafile_api.get_fileserver_access_token.return_value = 'update_token'
+        mock_requests.get.return_value.content = b'saved content'
+        mock_requests.post.return_value.status_code = 200
 
-        resp = self._post({'key': DOC_KEY, 'status': 2, 'url': FILE_URL}, token=token)
+        resp = self._post({'key': DOC_KEY, 'status': 2, 'url': FILE_URL})
 
-        self.assertEqual(resp.content, b'{"error": 1}')
-        mock_requests.get.assert_not_called()
+        self.assertEqual(resp.content, b'{"error": 0}')
+        mock_requests.get.assert_called_once()
+        self.assertEqual(mock_requests.get.call_args.args[0], FILE_URL)
+        mock_requests.post.assert_called_once()
 
     @patch('seahub.onlyoffice.views.ONLYOFFICE_JWT_SECRET', SECRET)
     @patch('seahub.onlyoffice.views.requests')

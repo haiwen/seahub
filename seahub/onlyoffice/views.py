@@ -46,7 +46,7 @@ logger = logging.getLogger('onlyoffice')
 
 
 def get_verified_callback_payload(request, body_data):
-    """ Get the verified parameters of a callback request.
+    """Get signed callback parameters, or legacy body parameters without a secret.
 
     The document server signs the callback parameters with ONLYOFFICE_JWT_SECRET
     and sends the token in the request body, or in the ONLYOFFICE_JWT_HEADER
@@ -54,16 +54,18 @@ def get_verified_callback_payload(request, body_data):
     token in body is enabled the document server sends a body that carries
     nothing but the token.
 
-    Return the decoded token payload, or None when the request can not be
-    trusted.
+    When a secret is configured, return the decoded token payload or None on
+    authentication failure. Without a secret, preserve the legacy body format.
 
     https://api.onlyoffice.com/docs/docs-api/additional-api/signature/request
     https://api.onlyoffice.com/docs/docs-api/get-started/how-it-works/security
     https://api.onlyoffice.com/docs/docs-api/additional-api/signature/request/token-in-body
     """
-    if not ONLYOFFICE_JWT_SECRET:
-        logger.error('[OnlyOffice] ONLYOFFICE_JWT_SECRET is not set, reject callback.')
+    if not isinstance(body_data, dict):
         return None
+
+    if not ONLYOFFICE_JWT_SECRET:
+        return body_data
 
     token = body_data.get('token') or ''
     if not token:
@@ -157,8 +159,7 @@ def onlyoffice_editor_callback(request):
 
     body_data = json.loads(request.body)
 
-    # The parameters signed by the document server are the only trusted source;
-    # the request body itself may carry nothing but the token.
+    # With JWT enabled, use only signed parameters; otherwise keep legacy callbacks.
     post_data = get_verified_callback_payload(request, body_data)
     if not post_data:
         return HttpResponse('{"error": 1}')

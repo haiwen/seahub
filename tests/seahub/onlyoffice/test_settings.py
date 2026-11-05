@@ -10,11 +10,7 @@ APIJS_URL = 'http://docserver/web-apps/apps/api/documents/api.js'
 
 
 class OnlyofficeEnabledTest(SimpleTestCase):
-    """OnlyOffice counts as enabled only when the JWT secret is configured.
-
-    Without the secret the document server can not sign a callback, so the
-    callback can not be authenticated and the editor must not be offered.
-    """
+    """JWT settings must not disable legacy OnlyOffice configurations."""
 
     def setUp(self):
         self.addCleanup(importlib.reload, onlyoffice_settings)
@@ -26,8 +22,8 @@ class OnlyofficeEnabledTest(SimpleTestCase):
     @override_settings(ENABLE_MULTIPLE_OFFICE_SUITE=False,
                        ENABLE_ONLYOFFICE=True,
                        ONLYOFFICE_JWT_SECRET='')
-    def test_disabled_when_jwt_secret_is_missing(self):
-        self.assertFalse(self._reload())
+    def test_enabled_when_jwt_secret_is_missing(self):
+        self.assertTrue(self._reload())
 
     @override_settings(ENABLE_MULTIPLE_OFFICE_SUITE=False,
                        ENABLE_ONLYOFFICE=True,
@@ -41,14 +37,16 @@ class OnlyofficeEnabledTest(SimpleTestCase):
     def test_disabled_when_onlyoffice_is_not_configured(self):
         self.assertFalse(self._reload())
 
-    def test_disabled_in_office_suite_mode_when_jwt_secret_is_missing(self):
+    def test_office_suite_without_secret_keeps_legacy_settings(self):
         with patch('seahub.settings.ENABLE_MULTIPLE_OFFICE_SUITE', True), \
                 patch('seahub.settings.OFFICE_SUITE_LIST', [{
                     'id': 'onlyoffice',
                     'ONLYOFFICE_APIJS_URL': APIJS_URL,
                     'ONLYOFFICE_JWT_SECRET': '',
                 }]):
-            self.assertFalse(self._reload())
+            self._reload()
+            self.assertEqual(onlyoffice_settings.ONLYOFFICE_APIJS_URL, APIJS_URL)
+            self.assertEqual(onlyoffice_settings.ONLYOFFICE_JWT_SECRET, '')
 
     def test_enabled_in_office_suite_mode_when_jwt_secret_is_configured(self):
         with patch('seahub.settings.ENABLE_MULTIPLE_OFFICE_SUITE', True), \
@@ -57,4 +55,6 @@ class OnlyofficeEnabledTest(SimpleTestCase):
                     'ONLYOFFICE_APIJS_URL': APIJS_URL,
                     'ONLYOFFICE_JWT_SECRET': SECRET,
                 }]):
-            self.assertTrue(self._reload())
+            self._reload()
+            self.assertEqual(onlyoffice_settings.ONLYOFFICE_APIJS_URL, APIJS_URL)
+            self.assertEqual(onlyoffice_settings.ONLYOFFICE_JWT_SECRET, SECRET)
