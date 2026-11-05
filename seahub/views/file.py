@@ -549,6 +549,57 @@ def view_lib_file_via_smart_link(request, dirent_uuid, dirent_name):
 
     return HttpResponseRedirect(redirect_to)
 
+
+def view_lib_file_via_embed_link(request, dirent_uuid):
+    uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(dirent_uuid)
+    if not uuid_map or uuid_map.is_dir:
+        raise Http404
+
+    filename = uuid_map.filename
+    filetype, fileext = get_file_type_and_ext(filename)
+    if filetype != EXCALIDRAW:
+        raise Http404
+
+    repo_id = uuid_map.repo_id
+    repo = seafile_api.get_repo(repo_id)
+    if not repo or repo.encrypted:
+        raise Http404
+
+    path = posixpath.join(uuid_map.parent_path, filename.strip('/'))
+    file_id = seafile_api.get_file_id_by_path(repo_id, path)
+    if not file_id:
+        raise Http404
+
+    username = request.user.username if request.user.is_authenticated else ANONYMOUS_EMAIL
+    file_uuid = get_exdraw_file_uuid(repo, path)
+    access_token = gen_exdraw_access_token(file_uuid, filename, username, permission='r')
+
+    data = {
+        'repo': repo,
+        'obj_id': file_id,
+        'from_shared_dir': True,
+        'path': path,
+        'file_name': filename,
+        'file_size': seafile_api.get_file_size(repo.store_id, repo.version, file_id),
+        'filetype': filetype,
+        'fileext': fileext,
+        'raw_path': '',
+        'traffic_over_limit': False,
+        'permissions': {'can_edit': False, 'can_download': False},
+        'can_edit_file': False,
+        'file_perm': 'r',
+        'file_uuid': file_uuid,
+        'excalidraw_server_url': EXCALIDRAW_SERVER_URL,
+        'excalidraw_access_token': access_token,
+    }
+    request.session['exdraw_share_session'] = {
+        'file_uuid': file_uuid,
+        'permission': 'r',
+        'excalidraw_access_token': access_token,
+    }
+    return render(request, 'shared_file_view_react.html', data)
+
+
 def convert_repo_path_when_can_not_view_file(request, repo_id, path):
 
     path = normalize_file_path(path)
