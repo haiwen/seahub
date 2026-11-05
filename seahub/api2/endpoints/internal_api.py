@@ -383,6 +383,8 @@ class InternalConverterFile(APIView):
             return api_error(400, 'output_path invalid.')
         tmp_path = None
         try:
+            if seafile_api.check_quota(claims['repo_id'], uploaded.size) < 0:
+                return api_error(400, 'Out of quota.')
             with tempfile.NamedTemporaryFile(prefix='converter-', delete=False) as tmp:
                 tmp_path = tmp.name
                 for chunk in uploaded.chunks():
