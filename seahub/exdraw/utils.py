@@ -174,10 +174,6 @@ def get_exdraw_asset_download_link(repo_id, parent_path, filename, username):
     return download_link
 
 def can_access_exdraw_asset(request, repo_id, path, file_uuid):
-    access_token = request.GET.get('access_token')
-    if access_token and is_valid_exdraw_access_token(['Token', access_token], file_uuid):
-        return True
-
     # login user
     if request.user.username and check_folder_permission(request, repo_id, path):
         return True

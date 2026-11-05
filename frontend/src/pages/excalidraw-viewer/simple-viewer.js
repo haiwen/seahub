@@ -14,9 +14,9 @@ const { repoID, sharedToken } = window.shared.pageOptions;
 
 export const getImageUrl = (fileName) => {
   const { serviceURL } = window.app.config;
-  const { docUuid, exdrawAccessToken } = window.shared.pageOptions;
+  const { docUuid } = window.shared.pageOptions;
   const url = `${serviceURL}/api/v2.1/exdraw/download-image/${docUuid}/${fileName}`;
-  return exdrawAccessToken ? `${url}?access_token=${encodeURIComponent(exdrawAccessToken)}` : url;
+  return url;
 };
 
 const fetchImageFilesFromServer = (elements) => {
